@@ -37,7 +37,7 @@
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIView;
 class ViewElementsManager;
-class TrackItem;
+class SegmentItem;
 
 /**
   * RosegardenGUIDoc provides a document object for a document-view model.
@@ -153,7 +153,7 @@ public:
     Rosegarden::Composition&       getComposition()       { return m_composition; }
     const Rosegarden::Composition& getComposition() const { return m_composition; }
 
-    unsigned int getNbTracks() const { return m_composition.getNbTracks(); }
+    unsigned int getNbSegments() const { return m_composition.getNbSegments(); }
     unsigned int getDuration() const { return m_composition.getDuration(); }
     unsigned int getNbBars()	     { return m_composition.getNbBars();   }
 
@@ -168,10 +168,10 @@ public slots:
     void slotUpdateAllViews(RosegardenGUIView *sender);
 
     /**
-     * Create a new track according to the data in the specified
-     * TrackItem, and set the track's instrument to \a instrument
+     * Create a new segment according to the data in the specified
+     * SegmentItem, and set the segment's instrument to \a instrument
      */
-    void createNewTrack(TrackItem*, int instrument);
+    void createNewSegment(SegmentItem*, int instrument);
 
 protected:
 

@@ -47,5 +47,10 @@ const Rosegarden::PropertyName BEAM_NEXT_PART_BEAMS = "BeamNextPartBeams";
 const Rosegarden::PropertyName BEAM_THIS_PART_BEAMS = "BeamThisPartBeams";
 const Rosegarden::PropertyName BEAM_MY_Y            = "BeamMyY";
 
+const Rosegarden::PropertyName TUPLING_LINE_MY_Y    = "TuplingLineMyY";
+const Rosegarden::PropertyName TUPLING_LINE_WIDTH   = "TuplingLineWidth";
+const Rosegarden::PropertyName TUPLING_LINE_GRADIENT= "TuplingLineGradient";
+
 }
+
 

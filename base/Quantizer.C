@@ -164,7 +164,7 @@ Quantizer::LegatoQuantizer::quantize(int unit, int maxDots, timeT duration,
 
 
 void
-Quantizer::quantize(Track::iterator from, Track::iterator to,
+Quantizer::quantize(Segment::iterator from, Segment::iterator to,
 		    const SingleQuantizer &aq, const SingleQuantizer &dq,
 		    PropertyName durationProperty, bool legato) const
 {
@@ -218,10 +218,10 @@ Quantizer::quantize(Track::iterator from, Track::iterator to,
 
 
 timeT
-Quantizer::findFollowingRestDuration(Track::iterator from,
-				     Track::iterator to) const
+Quantizer::findFollowingRestDuration(Segment::iterator from,
+				     Segment::iterator to) const
 {
-    Track::iterator j(from);
+    Segment::iterator j(from);
     timeT nextTime = (*j)->getAbsoluteTime() + (*j)->getDuration();
 
     while (j != to && (*j)->getAbsoluteTime() < nextTime) ++j;
@@ -236,7 +236,7 @@ Quantizer::findFollowingRestDuration(Track::iterator from,
 
 
 void
-Quantizer::quantizeByUnit(Track::iterator from, Track::iterator to) const
+Quantizer::quantizeByUnit(Segment::iterator from, Segment::iterator to) const
 {
     quantize(from, to,
 	     UnitQuantizer(), UnitQuantizer(), DurationProperty, false);
@@ -266,7 +266,7 @@ Quantizer::getUnitQuantizedAbsoluteTime(Event *e) const
 
 
 void
-Quantizer::quantizeByNote(Track::iterator from, Track::iterator to) const
+Quantizer::quantizeByNote(Segment::iterator from, Segment::iterator to) const
 {
     quantize(from, to,
 	     UnitQuantizer(), NoteQuantizer(), NoteDurationProperty, false);
@@ -280,7 +280,7 @@ Quantizer::quantizeByNote(Track::iterator from, Track::iterator to) const
 }
 
 void
-Quantizer::quantizeLegato(Track::iterator from, Track::iterator to) const
+Quantizer::quantizeLegato(Segment::iterator from, Segment::iterator to) const
 {
     quantize(from, to,
 	     UnitQuantizer(), LegatoQuantizer(), LegatoDurationProperty, true);

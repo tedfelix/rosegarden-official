@@ -348,27 +348,27 @@ public slots:
     void statusHelpMsg(const QString &text);
 
     /**
-     * track eraser tool is selected
+     * segment eraser tool is selected
      */
     void eraseSelected();
     
     /**
-     * track draw tool is selected
+     * segment draw tool is selected
      */
     void drawSelected();
     
     /**
-     * track move tool is selected
+     * segment move tool is selected
      */
     void moveSelected();
 
     /**
-     * track resize tool is selected
+     * segment resize tool is selected
      */
     void resizeSelected();
 
     /**
-     * change the resolution of the track display
+     * change the resolution of the segment display
      */
     void changeTimeResolution();
 

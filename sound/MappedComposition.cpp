@@ -64,14 +64,14 @@ MappedComposition::MappedComposition(Rosegarden::Composition &comp,
 
     for (Composition::iterator i = comp.begin(); i != comp.end(); i++ )
     {
-	// Skip the Track if it starts too late to be of
+	// Skip the Segment if it starts too late to be of
 	// interest to our slice.
 	if ( (*i)->getStartIndex() > int(m_endTime) )
 	    continue;
 
-	TrackPerformanceHelper helper(**i);
+	SegmentPerformanceHelper helper(**i);
 
-	for ( Track::iterator j = (*i)->begin(); j != (*i)->end(); j++ )
+	for ( Segment::iterator j = (*i)->begin(); j != (*i)->end(); j++ )
 	{
 	    // for the moment ensure we're all positive
 	    assert((*j)->getAbsoluteTime() >= 0 );

@@ -29,7 +29,7 @@
 #include "NotationTypes.h"
 
 class Rosegarden::Composition;
-class Rosegarden::Track;
+class Rosegarden::Segment;
 
 /**
  * Rosegarden 2.1 file import
@@ -67,7 +67,7 @@ protected:
 
     void closeGroup();
     void closeMark();
-    void closeTrackOrComposition();
+    void closeSegmentOrComposition();
 
     void setGroupProperties(Rosegarden::Event *);
 
@@ -80,9 +80,9 @@ protected:
     QTextStream *m_stream;
 
     Rosegarden::Composition* m_composition;
-    Rosegarden::Track* m_currentTrack;
-    unsigned int m_currentTrackTime;
-    unsigned int m_currentTrackNb;
+    Rosegarden::Segment* m_currentSegment;
+    unsigned int m_currentSegmentTime;
+    unsigned int m_currentSegmentNb;
     Rosegarden::Clef m_currentClef;
     Rosegarden::Key m_currentKey;
 

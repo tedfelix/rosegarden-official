@@ -37,7 +37,7 @@ using Rosegarden::Bool;
 using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::Note;
-using Rosegarden::Track;
+using Rosegarden::Segment;
 using Rosegarden::Equation;
 using Rosegarden::Quantizer;
 using Rosegarden::timeT;
@@ -684,10 +684,14 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 
     NELIterator initialNote(getInitialNote()),
 	          finalNote(  getFinalNote());
+
     int initialX = (int)(*initialNote)->getLayoutX();
+    int   finalX = (int)(*  finalNote)->getLayoutX();
+    int initialY = staff.yCoordOfHeight(height(initialNote));
+    int   startY = initialY - (beam.startY - initialY);
 
-    //!!!
-    //...
-
+    (*initialNote)->event()->set<Int>(TUPLING_LINE_MY_Y, startY);
+    (*initialNote)->event()->set<Int>(TUPLING_LINE_WIDTH, finalX - initialX);
+    (*initialNote)->event()->set<Int>(TUPLING_LINE_GRADIENT, beam.gradient);
 }
 

@@ -80,7 +80,11 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_thisPartialBeams(false),
     m_nextPartialBeams(false),
     m_width(1),
-    m_gradient(0.0)
+    m_gradient(0.0),
+    m_tupledCount(0),
+    m_tuplingLineY(0),
+    m_tuplingLineWidth(0),
+    m_tuplingLineGradient(0.0)
 {
     // nothing else
 }

@@ -32,27 +32,27 @@ namespace Rosegarden
     
 /**
  * Composition contains a complete representation of a piece of music.
- * It is a container for multiple Tracks, as well as any associated
+ * It is a container for multiple Segments, as well as any associated
  * non-Event data.
  * 
- * The Composition owns the Tracks it holds, and deletes them on
- * destruction.  When tracks are removed, it will also delete them.
+ * The Composition owns the Segments it holds, and deletes them on
+ * destruction.  When segments are removed, it will also delete them.
  */
 
 //!!! This could usefully do with a bit more tidying up.  We're
 // gradually increasing the amount of stuff stored in the Composition
-// as opposed to in individual Tracks.
+// as opposed to in individual Segments.
 
-class Composition : public TrackObserver
+class Composition : public SegmentObserver
 {
     
 public:
     static const std::string BarEventType;
 
-    typedef std::set<Track*, Track::TrackCmp> trackcontainer;
+    typedef std::set<Segment*, Segment::SegmentCmp> segmentcontainer;
 
-    typedef trackcontainer::iterator iterator;
-    typedef trackcontainer::const_iterator const_iterator;
+    typedef segmentcontainer::iterator iterator;
+    typedef segmentcontainer::const_iterator const_iterator;
 
     Composition();
     virtual ~Composition();
@@ -61,10 +61,10 @@ public:
     void swap(Composition&);
 
     /**
-     * Returns the track storing Bar and TimeSignature events
+     * Returns the segment storing Bar and TimeSignature events
      */
-    Track *getReferenceTrack() {
-	referenceTrackRequested(0);
+    Segment *getReferenceSegment() {
+	referenceSegmentRequested(0);
 	return &m_timeReference;
     }
 
@@ -72,41 +72,41 @@ public:
 	return &m_quantizer;
     }
 
-    trackcontainer& getTracks() { return m_tracks; }
-    const trackcontainer& getTracks() const { return m_tracks; }
+    segmentcontainer& getSegments() { return m_segments; }
+    const segmentcontainer& getSegments() const { return m_segments; }
 
     /**
-     * Add a new track and return an iterator pointing to it
-     * The inserted Track is owned by the Composition object
+     * Add a new segment and return an iterator pointing to it
+     * The inserted Segment is owned by the Composition object
      */
-    iterator addTrack(Track*);
+    iterator addSegment(Segment*);
 
     /**
-     * Delete the track pointed to by the specified iterator
+     * Delete the segment pointed to by the specified iterator
      *
-     * NOTE: The track is deleted from the composition and
+     * NOTE: The segment is deleted from the composition and
      * destroyed
      */
-    void deleteTrack(iterator);
+    void deleteSegment(iterator);
 
     /**
-     * Delete the track if it is part of the Composition
-     * \return true if the track was found and deleted
+     * Delete the segment if it is part of the Composition
+     * \return true if the segment was found and deleted
      *
-     * NOTE: The track is deleted from the composition and
+     * NOTE: The segment is deleted from the composition and
      * destroyed
      */
-    bool deleteTrack(Track*);
+    bool deleteSegment(Segment*);
 
-    unsigned int getNbTracks() const { return m_tracks.size(); }
+    unsigned int getNbSegments() const { return m_segments.size(); }
 
-    /// returns the absolute end time of the track that ends last
+    /// returns the absolute end time of the segment that ends last
     timeT getDuration() const;
 
     /// returns the total number of bars in the composition
     unsigned int getNbBars() { return getBarNumber(getDuration()) + 1; }
 
-    /// Removes all Tracks from the Composition and destroys them
+    /// Removes all Segments from the Composition and destroys them
     void clear();
 
 
@@ -127,19 +127,19 @@ public:
 
     /**
      * Return the time range of bar n.  Relatively inefficient.
-     * If truncate is true, will stop at end of track and return last
+     * If truncate is true, will stop at end of segment and return last
      * real bar if n is out of range; otherwise will happily return
      * theoretical timings for bars beyond the real end of composition
-     * (this is used when extending tracks on the track editor).
+     * (this is used when extending segments on the segment editor).
      */
     std::pair<timeT, timeT> getBarRange(int n, bool truncate = false);
 
 
     // Some set<> API delegation
-    iterator       begin()       { return m_tracks.begin(); }
-    const_iterator begin() const { return m_tracks.begin(); }
-    iterator       end()         { return m_tracks.end(); }
-    const_iterator end() const   { return m_tracks.end(); }
+    iterator       begin()       { return m_segments.begin(); }
+    const_iterator begin() const { return m_segments.begin(); }
+    iterator       end()         { return m_segments.end(); }
+    const_iterator end() const   { return m_segments.end(); }
 
     // Tempo here is only our current Transport tempo which we use on
     // the GUI and is sent to the Sequencer.
@@ -154,20 +154,20 @@ public:
     void setPosition(const timeT& position) { m_position = position; }
 
 
-    // TrackObserver methods:
+    // SegmentObserver methods:
 
-    virtual void eventAdded(const Track *, Event *);
-    virtual void eventRemoved(const Track *, Event *);
-    virtual void referenceTrackRequested(const Track *);
+    virtual void eventAdded(const Segment *, Event *);
+    virtual void eventRemoved(const Segment *, Event *);
+    virtual void referenceSegmentRequested(const Segment *);
 
 protected:
-    trackcontainer m_tracks;
+    segmentcontainer m_segments;
 
     /// Contains time signature and new-bar events.
-    Track m_timeReference;
+    Segment m_timeReference;
 
     // called from calculateBarPositions
-    Track::iterator addNewBar(timeT time);
+    Segment::iterator addNewBar(timeT time);
 
     Quantizer m_quantizer;
 
@@ -175,7 +175,7 @@ protected:
 
     timeT m_position;
 
-    /// affects the reference track in m_timeReference
+    /// affects the reference segment in m_timeReference
     void calculateBarPositions();
     bool m_barPositionsNeedCalculating;
 

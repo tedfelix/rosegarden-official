@@ -70,7 +70,7 @@ public:
 
 protected:
     Rosegarden::Composition &m_composition;
-    Rosegarden::Track *m_currentTrack;
+    Rosegarden::Segment *m_currentSegment;
     XmlStorableEvent *m_currentEvent;
 
     Rosegarden::timeT m_currentTime;

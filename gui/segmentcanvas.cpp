@@ -30,122 +30,122 @@
 
 #include "rosedebug.h"
 
-using Rosegarden::Track;
+using Rosegarden::Segment;
 
 //////////////////////////////////////////////////////////////////////
-//                TrackItem
+//                SegmentItem
 //////////////////////////////////////////////////////////////////////
 
-TrackItem::TrackItem(int x, int y,
+SegmentItem::SegmentItem(int x, int y,
                      int nbSteps,
                      QCanvas* canvas)
     : QCanvasRectangle(x, y,
                        nbBarsToWidth(nbSteps), m_itemHeight,
                        canvas),
-      m_track(0)
+      m_segment(0)
 {
 }
 
-int TrackItem::getItemNbBars() const
+int SegmentItem::getItemNbBars() const
 {
-    kdDebug(KDEBUG_AREA) << "TrackItem::getItemNbBars() : "
+    kdDebug(KDEBUG_AREA) << "SegmentItem::getItemNbBars() : "
                          << rect().width() / m_widthToDurationRatio
                          << endl;
 
     return widthToNbBars(width());
 }
 
-int TrackItem::getStartBar() const
+int SegmentItem::getStartBar() const
 {
     return (int)(x() / m_widthToDurationRatio * m_barResolution);
 }
 
-int TrackItem::getInstrument() const
+int SegmentItem::getInstrument() const
 {
-    return m_track->getInstrument();
+    return m_segment->getInstrument();
 }
 
-void TrackItem::setInstrument(int i)
+void SegmentItem::setInstrument(int i)
 {
-    m_track->setInstrument(i);
+    m_segment->setInstrument(i);
 }
 
-void TrackItem::setWidthToDurationRatio(unsigned int r)
+void SegmentItem::setWidthToDurationRatio(unsigned int r)
 {
     m_widthToDurationRatio = r;
 }
 
-void TrackItem::setBarResolution(unsigned int r)
+void SegmentItem::setBarResolution(unsigned int r)
 {
     m_barResolution = r;
 }
 
-unsigned int TrackItem::getBarResolution()
+unsigned int SegmentItem::getBarResolution()
 {
     return m_barResolution;
 }
 
-void TrackItem::setItemHeight(unsigned int h)
+void SegmentItem::setItemHeight(unsigned int h)
 {
     m_itemHeight = h;
 }
 
-unsigned int TrackItem::nbBarsToWidth(unsigned int nbBars)
+unsigned int SegmentItem::nbBarsToWidth(unsigned int nbBars)
 {
     if (nbBars < m_barResolution) nbBars = m_barResolution;
 
     return nbBars * m_widthToDurationRatio / m_barResolution;
 }
 
-unsigned int TrackItem::widthToNbBars(unsigned int width)
+unsigned int SegmentItem::widthToNbBars(unsigned int width)
 {
     return width * m_barResolution / m_widthToDurationRatio;
 }
 
 
-unsigned int TrackItem::m_widthToDurationRatio = 1;
-unsigned int TrackItem::m_barResolution = 1;
-unsigned int TrackItem::m_itemHeight = 10;
+unsigned int SegmentItem::m_widthToDurationRatio = 1;
+unsigned int SegmentItem::m_barResolution = 1;
+unsigned int SegmentItem::m_itemHeight = 10;
 
 
 
 //////////////////////////////////////////////////////////////////////
-//                TracksCanvas
+//                SegmentCanvas
 //////////////////////////////////////////////////////////////////////
 
 
-TracksCanvas::TracksCanvas(int gridH, int gridV,
+SegmentCanvas::SegmentCanvas(int gridH, int gridV,
                            QCanvas& c, QWidget* parent,
                            const char* name, WFlags f) :
     QCanvasView(&c,parent,name,f),
     m_toolType(Pencil),
-    m_tool(new TrackPencil(this)),
+    m_tool(new SegmentPencil(this)),
     m_grid(gridH, gridV),
     m_brush(Qt::blue),
     m_pen(Qt::black),
     m_editMenu(new QPopupMenu(this))
 {
-    QWhatsThis::add(this, i18n("Tracks Canvas - Create and manipulate your tracks here"));
+    QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
 
-    TrackItem::setWidthToDurationRatio(m_grid.hstep());
-    TrackItem::setItemHeight(m_grid.vstep());
+    SegmentItem::setWidthToDurationRatio(m_grid.hstep());
+    SegmentItem::setItemHeight(m_grid.vstep());
 
     m_editMenu->insertItem(I18N_NOOP("Edit as Score"),
                            this, SLOT(onEdit()));
 }
 
-TracksCanvas::~TracksCanvas()
+SegmentCanvas::~SegmentCanvas()
 {
 }
 
 void
-TracksCanvas::update()
+SegmentCanvas::update()
 {
     canvas()->update();
 }
 
 void
-TracksCanvas::setTool(ToolType t)
+SegmentCanvas::setTool(ToolType t)
 {
     if (t == m_toolType) return;
 
@@ -155,31 +155,31 @@ TracksCanvas::setTool(ToolType t)
 
     switch(t) {
     case Pencil:
-        m_tool = new TrackPencil(this);
+        m_tool = new SegmentPencil(this);
         break;
     case Eraser:
-        m_tool = new TrackEraser(this);
+        m_tool = new SegmentEraser(this);
         break;
     case Mover:
-        m_tool = new TrackMover(this);
+        m_tool = new SegmentMover(this);
         break;
     case Resizer:
-        m_tool = new TrackResizer(this);
+        m_tool = new SegmentResizer(this);
         break;
     default:
-        KMessageBox::error(0, QString("TracksCanvas::setTool() : unknown tool id %1").arg(t));
+        KMessageBox::error(0, QString("SegmentCanvas::setTool() : unknown tool id %1").arg(t));
     }
 }
 
-TrackItem*
-TracksCanvas::findPartClickedOn(QPoint pos)
+SegmentItem*
+SegmentCanvas::findPartClickedOn(QPoint pos)
 {
     QCanvasItemList l=canvas()->collisions(pos);
 
     if (l.count()) {
 
         for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
-            if (TrackItem *item = dynamic_cast<TrackItem*>(*it))
+            if (SegmentItem *item = dynamic_cast<SegmentItem*>(*it))
                 return item;
         }
 
@@ -188,7 +188,7 @@ TracksCanvas::findPartClickedOn(QPoint pos)
     return 0;
 }
 
-void TracksCanvas::contentsMousePressEvent(QMouseEvent* e)
+void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
 {
     if (e->button() == LeftButton) { // delegate event handling to tool
 
@@ -196,11 +196,11 @@ void TracksCanvas::contentsMousePressEvent(QMouseEvent* e)
 
     } else if (e->button() == RightButton) { // popup menu if over a part
 
-        TrackItem *item = findPartClickedOn(e->pos());
+        SegmentItem *item = findPartClickedOn(e->pos());
 
         if (item) {
             m_currentItem = item;
-            //             kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMousePressEvent() : edit m_currentItem = "
+            //             kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMousePressEvent() : edit m_currentItem = "
             //                                  << m_currentItem << endl;
 
             m_editMenu->exec(QCursor::pos());
@@ -208,34 +208,34 @@ void TracksCanvas::contentsMousePressEvent(QMouseEvent* e)
     }
 }
 
-void TracksCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
+void SegmentCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
 {
-    TrackItem *item = findPartClickedOn(e->pos());
+    SegmentItem *item = findPartClickedOn(e->pos());
 
     if (item) {
         m_currentItem = item;
-        emit editTrack(m_currentItem->getTrack());
+        emit editSegment(m_currentItem->getSegment());
     }
 }
 
-void TracksCanvas::contentsMouseReleaseEvent(QMouseEvent *e)
+void SegmentCanvas::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == LeftButton) m_tool->handleMouseButtonRelease(e);
 }
 
-void TracksCanvas::contentsMouseMoveEvent(QMouseEvent* e)
+void SegmentCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 {
     m_tool->handleMouseMove(e);
 }
 
 void
-TracksCanvas::wheelEvent(QWheelEvent *e)
+SegmentCanvas::wheelEvent(QWheelEvent *e)
 {
     e->ignore();
 }
 
 
-void TracksCanvas::clear()
+void SegmentCanvas::clear()
 {
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
@@ -246,71 +246,71 @@ void TracksCanvas::clear()
 }
 
 /// called when reading a music file
-TrackItem*
-TracksCanvas::addPartItem(int x, int y, unsigned int nbBars)
+SegmentItem*
+SegmentCanvas::addPartItem(int x, int y, unsigned int nbBars)
 {
-    TrackItem* newPartItem = new TrackItem(x, y, nbBars, canvas());
+    SegmentItem* newPartItem = new SegmentItem(x, y, nbBars, canvas());
 
     newPartItem->setPen(m_pen);
     newPartItem->setBrush(m_brush);
     newPartItem->setVisible(true);     
-    newPartItem->setZ(1);           // Track at Z=1, Pointer at Z=10 [rwb]
+    newPartItem->setZ(1);           // Segment at Z=1, Pointer at Z=10 [rwb]
 
     return newPartItem;
 }
 
 
 void
-TracksCanvas::onEdit()
+SegmentCanvas::onEdit()
 {
-    emit editTrack(m_currentItem->getTrack());
+    emit editSegment(m_currentItem->getSegment());
 }
 
 
 //////////////////////////////////////////////////////////////////////
-//                 Track Tools
+//                 Segment Tools
 //////////////////////////////////////////////////////////////////////
 
-TrackTool::TrackTool(TracksCanvas* canvas)
+SegmentTool::SegmentTool(SegmentCanvas* canvas)
     : m_canvas(canvas),
       m_currentItem(0)
 {
     m_canvas->setCursor(Qt::arrowCursor);
 }
 
-TrackTool::~TrackTool()
+SegmentTool::~SegmentTool()
 {
 }
 
 
 //////////////////////////////
-// TrackPencil
+// SegmentPencil
 //////////////////////////////
 
-TrackPencil::TrackPencil(TracksCanvas *c)
-    : TrackTool(c),
+SegmentPencil::SegmentPencil(SegmentCanvas *c)
+    : SegmentTool(c),
       m_newRect(false)
 {
 //    m_canvas->setCursor(Qt::ibeamCursor);
 
-    connect(this, SIGNAL(addTrack(TrackItem*)),
-            c,    SIGNAL(addTrack(TrackItem*)));
-    connect(this, SIGNAL(deleteTrack(Rosegarden::Track*)),
-            c,    SIGNAL(deleteTrack(Rosegarden::Track*)));
-    connect(this, SIGNAL(setTrackDuration(TrackItem*)),
-            c,    SIGNAL(updateTrackDuration(TrackItem*)));
+    connect(this, SIGNAL(addSegment(SegmentItem*)),
+            c,    SIGNAL(addSegment(SegmentItem*)));
+    connect(this, SIGNAL(deleteSegment(Rosegarden::Segment*)),
+            c,    SIGNAL(deleteSegment(Rosegarden::Segment*)));
+    connect(this, SIGNAL(setSegmentDuration(SegmentItem*)),
+            c,    SIGNAL(updateSegmentDuration(SegmentItem*)));
 
-    kdDebug(KDEBUG_AREA) << "TrackPencil()\n";
+    kdDebug(KDEBUG_AREA) << "SegmentPencil()\n";
 }
 
-void TrackPencil::handleMouseButtonPress(QMouseEvent *e)
+void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 {
     m_newRect = false;
     m_currentItem = 0;
 
     // Check if we're clicking on a rect
     //
-    TrackItem *item = m_canvas->findPartClickedOn(e->pos());
+    SegmentItem *item = m_canvas->findPartClickedOn(e->pos());
 
     if (item) {
         // we are, so set currentItem to it
@@ -322,14 +322,14 @@ void TrackPencil::handleMouseButtonPress(QMouseEvent *e)
         int gx = m_canvas->grid().snapX(e->pos().x()),
             gy = m_canvas->grid().snapY(e->pos().y());
 
-        m_currentItem = new TrackItem(gx, gy,
-                                      TrackItem::getBarResolution(),
+        m_currentItem = new SegmentItem(gx, gy,
+                                      SegmentItem::getBarResolution(),
                                       m_canvas->canvas());
         
         m_currentItem->setPen(m_canvas->pen());
         m_currentItem->setBrush(m_canvas->brush());
         m_currentItem->setVisible(true);
-        m_currentItem->setZ(1);          // Track at Z=1, Pointer at Z=10 [rwb]
+        m_currentItem->setZ(1);          // Segment at Z=1, Pointer at Z=10 [rwb]
 
         m_newRect = true;
 
@@ -338,20 +338,20 @@ void TrackPencil::handleMouseButtonPress(QMouseEvent *e)
 
 }
 
-void TrackPencil::handleMouseButtonRelease(QMouseEvent*)
+void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
 {
     if (!m_currentItem) return;
 
-    if (m_currentItem->width() < 0) { // track was drawn from right to left
+    if (m_currentItem->width() < 0) { // segment was drawn from right to left
         double itemX = m_currentItem->x();
         double itemW = m_currentItem->width();
-        kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : itemX = "
+        kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMouseReleaseEvent() : itemX = "
                              << itemX << " - width : " << itemW << endl;
 
         m_currentItem->setX(itemX + itemW);
         m_currentItem->setSize(int(-itemW), m_currentItem->height());
 
-        kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() after correction : itemX = "
+        kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMouseReleaseEvent() after correction : itemX = "
                              << m_currentItem->x()
                              << " - width : " << m_currentItem->width()
                              << endl;
@@ -360,29 +360,29 @@ void TrackPencil::handleMouseButtonRelease(QMouseEvent*)
 
     if (m_currentItem->width() == 0 && ! m_newRect) {
 
-        kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : track deleted"
+        kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMouseReleaseEvent() : segment deleted"
                              << endl;
-        emit deleteTrack(m_currentItem->getTrack());
+        emit deleteSegment(m_currentItem->getSegment());
         delete m_currentItem;
         m_canvas->canvas()->update();
 
     } else if (m_newRect && m_currentItem->width() > 0) {
 
-        emit addTrack(m_currentItem);
+        emit addSegment(m_currentItem);
 
     } else if (m_currentItem->width() > 0) {
 
-        kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : shorten m_currentItem = "
+        kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMouseReleaseEvent() : shorten m_currentItem = "
                              << m_currentItem << endl;
 
-	emit setTrackDuration(m_currentItem);
+	emit setSegmentDuration(m_currentItem);
     }
 
     m_currentItem = 0;
     m_newRect = false;
 }
 
-void TrackPencil::handleMouseMove(QMouseEvent *e)
+void SegmentPencil::handleMouseMove(QMouseEvent *e)
 {
     if (m_currentItem) {
 
@@ -393,56 +393,56 @@ void TrackPencil::handleMouseMove(QMouseEvent *e)
 }
 
 //////////////////////////////
-// TrackEraser
+// SegmentEraser
 //////////////////////////////
 
-TrackEraser::TrackEraser(TracksCanvas *c)
-    : TrackTool(c)
+SegmentEraser::SegmentEraser(SegmentCanvas *c)
+    : SegmentTool(c)
 {
     m_canvas->setCursor(Qt::pointingHandCursor);
 
-    connect(this, SIGNAL(deleteTrack(Rosegarden::Track*)),
-            c,    SIGNAL(deleteTrack(Rosegarden::Track*)));
+    connect(this, SIGNAL(deleteSegment(Rosegarden::Segment*)),
+            c,    SIGNAL(deleteSegment(Rosegarden::Segment*)));
 
-    kdDebug(KDEBUG_AREA) << "TrackEraser()\n";
+    kdDebug(KDEBUG_AREA) << "SegmentEraser()\n";
 }
 
-void TrackEraser::handleMouseButtonPress(QMouseEvent *e)
+void SegmentEraser::handleMouseButtonPress(QMouseEvent *e)
 {
     m_currentItem = m_canvas->findPartClickedOn(e->pos());
 }
 
-void TrackEraser::handleMouseButtonRelease(QMouseEvent*)
+void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
 {
-    if (m_currentItem) emit deleteTrack(m_currentItem->getTrack());
+    if (m_currentItem) emit deleteSegment(m_currentItem->getSegment());
     delete m_currentItem;
     m_canvas->canvas()->update();
     
     m_currentItem = 0;
 }
 
-void TrackEraser::handleMouseMove(QMouseEvent*)
+void SegmentEraser::handleMouseMove(QMouseEvent*)
 {
 }
 
 //////////////////////////////
-// TrackMover
+// SegmentMover
 //////////////////////////////
 
-TrackMover::TrackMover(TracksCanvas *c)
-    : TrackTool(c)
+SegmentMover::SegmentMover(SegmentCanvas *c)
+    : SegmentTool(c)
 {
     m_canvas->setCursor(Qt::sizeAllCursor);
 
-    connect(this, SIGNAL(updateTrackInstrumentAndStartIndex(TrackItem*)),
-            c,    SIGNAL(updateTrackInstrumentAndStartIndex(TrackItem*)));
+    connect(this, SIGNAL(updateSegmentInstrumentAndStartIndex(SegmentItem*)),
+            c,    SIGNAL(updateSegmentInstrumentAndStartIndex(SegmentItem*)));
 
-    kdDebug(KDEBUG_AREA) << "TrackMover()\n";
+    kdDebug(KDEBUG_AREA) << "SegmentMover()\n";
 }
 
-void TrackMover::handleMouseButtonPress(QMouseEvent *e)
+void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 {
-    TrackItem *item = m_canvas->findPartClickedOn(e->pos());
+    SegmentItem *item = m_canvas->findPartClickedOn(e->pos());
 
     if (item) {
         m_currentItem = item;
@@ -450,15 +450,15 @@ void TrackMover::handleMouseButtonPress(QMouseEvent *e)
     }
 }
 
-void TrackMover::handleMouseButtonRelease(QMouseEvent*)
+void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentItem)
-        emit updateTrackInstrumentAndStartIndex(m_currentItem);
+        emit updateSegmentInstrumentAndStartIndex(m_currentItem);
 
     m_currentItem = 0;
 }
 
-void TrackMover::handleMouseMove(QMouseEvent *e)
+void SegmentMover::handleMouseMove(QMouseEvent *e)
 {
     if (m_currentItem) {
         m_currentItem->setX(m_canvas->grid().snapX(e->pos().x()));
@@ -468,48 +468,48 @@ void TrackMover::handleMouseMove(QMouseEvent *e)
 }
 
 //////////////////////////////
-// TrackResizer
+// SegmentResizer
 //////////////////////////////
 
-TrackResizer::TrackResizer(TracksCanvas *c)
-    : TrackTool(c),
+SegmentResizer::SegmentResizer(SegmentCanvas *c)
+    : SegmentTool(c),
       m_edgeThreshold(10)
 {
     m_canvas->setCursor(Qt::sizeHorCursor);
 
-    connect(this, SIGNAL(deleteTrack(Rosegarden::Track*)),
-            c,    SIGNAL(deleteTrack(Rosegarden::Track*)));
+    connect(this, SIGNAL(deleteSegment(Rosegarden::Segment*)),
+            c,    SIGNAL(deleteSegment(Rosegarden::Segment*)));
 
-    connect(this, SIGNAL(setTrackDuration(Rosegarden::Track*)),
-            c,    SIGNAL(updateTrackDuration(Rosegarden::Track*)));
+    connect(this, SIGNAL(setSegmentDuration(Rosegarden::Segment*)),
+            c,    SIGNAL(updateSegmentDuration(Rosegarden::Segment*)));
 
-    kdDebug(KDEBUG_AREA) << "TrackResizer()\n";
+    kdDebug(KDEBUG_AREA) << "SegmentResizer()\n";
 }
 
-void TrackResizer::handleMouseButtonPress(QMouseEvent *e)
+void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 {
-    TrackItem* item = m_canvas->findPartClickedOn(e->pos());
+    SegmentItem* item = m_canvas->findPartClickedOn(e->pos());
 
     if (item && cursorIsCloseEnoughToEdge(item, e)) {
         m_currentItem = item;
     }
 }
 
-void TrackResizer::handleMouseButtonRelease(QMouseEvent*)
+void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 {
     if (!m_currentItem) return;
 
     unsigned int newNbBars = m_currentItem->getItemNbBars();
 
-    kdDebug(KDEBUG_AREA) << "TrackResizer: set track nb bars to "
+    kdDebug(KDEBUG_AREA) << "SegmentResizer: set segment nb bars to "
                          << newNbBars << endl;
     
-    emit setTrackDuration(m_currentItem);
+    emit setSegmentDuration(m_currentItem);
 
     m_currentItem = 0;
 }
 
-void TrackResizer::handleMouseMove(QMouseEvent *e)
+void SegmentResizer::handleMouseMove(QMouseEvent *e)
 {
     if (!m_currentItem) return;
 
@@ -522,7 +522,7 @@ void TrackResizer::handleMouseMove(QMouseEvent *e)
     
 }
 
-bool TrackResizer::cursorIsCloseEnoughToEdge(TrackItem* p, QMouseEvent* e)
+bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, QMouseEvent* e)
 {
     return ( abs(p->rect().x() + p->rect().width() - e->x()) < m_edgeThreshold);
 }

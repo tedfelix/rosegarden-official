@@ -132,7 +132,7 @@ protected:
      */
     struct BarData
     {
-        int barNo;              // of corresponding BarPosition in Track
+        int barNo;              // of corresponding BarPosition in Segment
         NotationElementList::iterator start; // i.e. event following barline
         int x;                // coordinate for display of barline
         int idealWidth;       // theoretical width of bar following barline

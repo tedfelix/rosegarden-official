@@ -20,7 +20,7 @@
   1 Store an absolute time with each element.  I wouldn't want to put
     these _in_ the element structures, as I'd prefer elements to be as
     far as possible self-contained and transportable from one place in
-    a track to another without having to be rewritten for the new
+    a segment to another without having to be rewritten for the new
     timing.
 
   2 Store the time that has elapsed since the start of the previous

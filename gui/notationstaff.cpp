@@ -36,14 +36,14 @@
 #include "NotationTypes.h"
 
 using Rosegarden::timeT;
-using Rosegarden::Track;
+using Rosegarden::Segment;
 using Rosegarden::Event;
 using Rosegarden::Int;
 using Rosegarden::Bool;
 using Rosegarden::String;
 using Rosegarden::NoAccidental;
 using Rosegarden::Note;
-using Rosegarden::Track;
+using Rosegarden::Segment;
 using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::Accidental;
@@ -59,10 +59,10 @@ const int NotationStaff::linesOffset  = 55;
 
 using std::string;
 
-NotationStaff::NotationStaff(QCanvas *canvas, Track *track,
+NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
                              unsigned int id,
                              string fontName, int resolution) :
-    Rosegarden::Staff<NotationElement>(*track),
+    Rosegarden::Staff<NotationElement>(*segment),
     QCanvasItemGroup(canvas),
     m_id(id),
     m_barLineHeight(0),
@@ -176,7 +176,7 @@ NotationStaff::setLegatoDuration(Rosegarden::timeT duration)
 //!!!
     kdDebug(KDEBUG_AREA) << "NotationStaff::setLegatoDuration" << endl;
 
-    const Rosegarden::Quantizer *q = getTrack().getQuantizer();
+    const Rosegarden::Quantizer *q = getSegment().getQuantizer();
 
 
     kdDebug(KDEBUG_AREA) << "NotationStaff: Quantizer status is:\n"
@@ -595,6 +595,25 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
         }
     }
     
+    params.setTupledCount(0);
+    long tuplingLineY = 0;
+    bool tupled = ((*it)->event()->get<Int>(TUPLING_LINE_MY_Y, tuplingLineY));
+
+    if (tupled) {
+	int tuplingLineWidth =
+	    (*it)->event()->get<Int>(TUPLING_LINE_WIDTH);
+	double tuplingLineGradient =
+	    (double)((*it)->event()->get<Int>(TUPLING_LINE_GRADIENT)) / 100.0;
+
+	long tupledCount;
+	if ((*it)->event()->get<Int>(BEAMED_GROUP_TUPLED_COUNT, tupledCount)) {
+	    params.setTupledCount(tupledCount);
+	    params.setTuplingLineY(tuplingLineY - (int)(*it)->getLayoutY());
+	    params.setTuplingLineWidth(tuplingLineWidth);
+	    params.setTuplingLineGradient(tuplingLineGradient);
+	}
+    }
+
     params.setStemLength(stemLength);
     QCanvasPixmap notePixmap(m_npf->makeNotePixmap(params));
     return new QCanvasNotationSprite(*(*it),
@@ -624,8 +643,8 @@ bool NotationStaff::showSelection(const EventSelection *selection)
 	return shown;
     }
 
-    const Track *track = &(selection->getTrack());
-    if (track != &getTrack()) return false;
+    const Segment *segment = &(selection->getSegment());
+    if (segment != &getSegment()) return false;
 
     shown = showElements
 	(notes->begin(), notes->end(), SelectionRefresh, selection);

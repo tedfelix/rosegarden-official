@@ -53,12 +53,12 @@ operator<<(kdbgstream &dbg, const Rosegarden::Event &e)
 }
 
 kdbgstream&
-operator<<(kdbgstream &dbg, const Rosegarden::Track &t)
+operator<<(kdbgstream &dbg, const Rosegarden::Segment &t)
 {
-    dbg << "Track for instrument " << t.getInstrument()
+    dbg << "Segment for instrument " << t.getInstrument()
         << " starting at " << t.getStartIndex() << endl;
 
-    for(Rosegarden::Track::const_iterator i = t.begin();
+    for(Rosegarden::Segment::const_iterator i = t.begin();
         i != t.end(); ++i) {
         if (!(*i)) {
             dbg << "WARNING : skipping null event ptr\n";

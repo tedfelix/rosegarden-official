@@ -27,7 +27,7 @@
 //
 // At this level we accept MappedCompositions (single point
 // representation - NOTE ONs with durations) and turn them
-// into MIDI events (generate and track NOTE OFFs).
+// into MIDI events (generate and segment NOTE OFFs).
 //
 
 #ifndef _ROSEGARDEN_SEQUENCER_H_
@@ -231,7 +231,7 @@ private:
     unsigned int           m_ppq;   // sequencer resolution
     double                 m_tempo; // Beats Per Minute
 
-    Rosegarden::Track     *m_recordTrack;
+    Rosegarden::Segment     *m_recordSegment;
 
     std::map<unsigned int, Event*> m_noteOnMap;
 

@@ -94,7 +94,7 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
         }
     }
 
-    // if(tracking) ??
+    // if(segmenting) ??
     emit mouseMove(e);
 }
 

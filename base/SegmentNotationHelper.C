@@ -21,17 +21,17 @@ using std::list;
 using namespace BaseProperties;
 
 
-TrackNotationHelper::~TrackNotationHelper() { }
+SegmentNotationHelper::~SegmentNotationHelper() { }
 
 
-bool TrackNotationHelper::collapse(Event* e, bool& collapseForward)
+bool SegmentNotationHelper::collapse(Event* e, bool& collapseForward)
 {
-    iterator elPos = track().findSingle(e);
+    iterator elPos = segment().findSingle(e);
     if (elPos == end()) return false;
 
     timeT   myDuration = quantizer().getNoteQuantizedDuration(*elPos);
-    iterator nextEvent = track().findContiguousNext(elPos),
-         previousEvent = track().findContiguousPrevious(elPos);
+    iterator nextEvent = segment().findContiguousNext(elPos),
+         previousEvent = segment().findContiguousPrevious(elPos);
 
     // collapse to right if (a) not at end...
     if (nextEvent != end() &&
@@ -40,7 +40,7 @@ bool TrackNotationHelper::collapse(Event* e, bool& collapseForward)
 			myDuration) &&
 	// ...(c) event is in same bar (no cross-bar collapsing)
 	(*nextEvent)->getAbsoluteTime() <
-	    track().findBarEndTime(e->getAbsoluteTime())) {
+	    segment().findBarEndTime(e->getAbsoluteTime())) {
 
         // collapse right is OK; collapse e with nextEvent
 
@@ -58,7 +58,7 @@ bool TrackNotationHelper::collapse(Event* e, bool& collapseForward)
 	isCollapseValid(quantizer().getNoteQuantizedDuration(*previousEvent),
 			myDuration) &&
 	(*previousEvent)->getAbsoluteTime() >
-	    track().findBarStartTime(e->getAbsoluteTime())) {
+	    segment().findBarStartTime(e->getAbsoluteTime())) {
 	
         // collapse left is OK; collapse e with previousEvent
         (*previousEvent)->setDuration(e->getDuration() +
@@ -75,27 +75,27 @@ bool TrackNotationHelper::collapse(Event* e, bool& collapseForward)
 }
 
 
-bool TrackNotationHelper::isCollapseValid(timeT a, timeT b)
+bool SegmentNotationHelper::isCollapseValid(timeT a, timeT b)
 {
     return (isViable(a + b));
 }
 
 
-bool TrackNotationHelper::isExpandValid(timeT a, timeT b)
+bool SegmentNotationHelper::isExpandValid(timeT a, timeT b)
 {
     return (isViable(a) && isViable(b));
 }
 
 
-Track::iterator TrackNotationHelper::expandIntoTie(iterator i, timeT baseDuration)
+Segment::iterator SegmentNotationHelper::expandIntoTie(iterator i, timeT baseDuration)
 {
     if (i == end()) return end();
     iterator i2;
-    track().getTimeSlice((*i)->getAbsoluteTime(), i, i2);
+    segment().getTimeSlice((*i)->getAbsoluteTime(), i, i2);
     return expandIntoTie(i, i2, baseDuration);
 }
 
-Track::iterator TrackNotationHelper::expandIntoTie(iterator from, iterator to, timeT baseDuration)
+Segment::iterator SegmentNotationHelper::expandIntoTie(iterator from, iterator to, timeT baseDuration)
 {
     // so long as we do the quantization checks for validity before
     // calling this method, we should be fine splitting precise times
@@ -126,17 +126,17 @@ Track::iterator TrackNotationHelper::expandIntoTie(iterator from, iterator to, t
 	    // no way to really cope with an error, because at this
 	    // point we may already have expanded some events. Best to
 	    // skip this event
-	    cerr << "WARNING: TrackNotationHelper::expandIntoTie(): (*i)->getAbsoluteTime() != baseTime (" << (*i)->getAbsoluteTime() << " vs " << baseTime << "), ignoring this event\n";
+	    cerr << "WARNING: SegmentNotationHelper::expandIntoTie(): (*i)->getAbsoluteTime() != baseTime (" << (*i)->getAbsoluteTime() << " vs " << baseTime << "), ignoring this event\n";
 	    continue;
 	}
 
         if ((*i)->getDuration() != eventDuration) {
-	    cerr << "WARNING: TrackNotationHelper::expandIntoTie(): (*i)->getDuration() != eventDuration (" << (*i)->getDuration() << " vs " << eventDuration << "), changing eventDuration to match\n";
+	    cerr << "WARNING: SegmentNotationHelper::expandIntoTie(): (*i)->getDuration() != eventDuration (" << (*i)->getDuration() << " vs " << eventDuration << "), changing eventDuration to match\n";
             eventDuration = (*i)->getDuration();
         }
 
         if (baseDuration >= eventDuration) {
-            cerr << "TrackNotationHelper::expandIntoTie() : baseDuration >= eventDuration, ignoring event\n";
+            cerr << "SegmentNotationHelper::expandIntoTie() : baseDuration >= eventDuration, ignoring event\n";
             continue;
         }
 
@@ -199,7 +199,7 @@ Track::iterator TrackNotationHelper::expandIntoTie(iterator from, iterator to, t
     return last;
 }
 
-bool TrackNotationHelper::isViable(timeT duration, int dots)
+bool SegmentNotationHelper::isViable(timeT duration, int dots)
 {
     bool viable;
     duration = quantizer().quantizeByUnit(duration);
@@ -214,18 +214,18 @@ bool TrackNotationHelper::isViable(timeT duration, int dots)
 }
 
 
-void TrackNotationHelper::makeRestViable(iterator i)
+void SegmentNotationHelper::makeRestViable(iterator i)
 {
     DurationList dl;
     timeT absTime = (*i)->getAbsoluteTime(); 
 
     TimeSignature timeSig;
-    timeT sigTime = track().findTimeSignatureAt(absTime, timeSig);
+    timeT sigTime = segment().findTimeSignatureAt(absTime, timeSig);
 
     timeSig.getDurationListForInterval
 	(dl, (*i)->getDuration(), absTime - sigTime);
 
-    cerr << "TrackNotationHelper::makeRestViable: Removing rest of duration "
+    cerr << "SegmentNotationHelper::makeRestViable: Removing rest of duration "
 	 << (*i)->getDuration() << " from time " << absTime << endl;
 
     erase(i);
@@ -233,7 +233,7 @@ void TrackNotationHelper::makeRestViable(iterator i)
     for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
 	int duration = *i;
 	
-	cerr << "TrackNotationHelper::makeRestViable: Inserting rest of duration "
+	cerr << "SegmentNotationHelper::makeRestViable: Inserting rest of duration "
 	     << duration << " at time " << absTime << endl;
 
 	Event *e = new Event(Note::EventRestType);
@@ -247,7 +247,7 @@ void TrackNotationHelper::makeRestViable(iterator i)
 }
 
 
-void TrackNotationHelper::makeNoteViable(iterator i)
+void SegmentNotationHelper::makeNoteViable(iterator i)
 {
     // We don't use quantized values here; we want a precise division.
     // Even if it doesn't look precise on the score (because the score
@@ -295,8 +295,8 @@ void TrackNotationHelper::makeNoteViable(iterator i)
 }
 
 
-Track::iterator
-TrackNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
+Segment::iterator
+SegmentNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
 				Accidental explicitAccidental)
 {
 
@@ -307,34 +307,34 @@ TrackNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
     //... 
 
     iterator i, j;
-    track().getTimeSlice(absoluteTime, i, j);
+    segment().getTimeSlice(absoluteTime, i, j);
 
     //!!! Deal with end-of-bar issues!
 
-//    int barNo = track().getBarNumber(i);
+//    int barNo = segment().getBarNumber(i);
 
     return insertSomething(i, note.getDuration(), pitch, false, false,
 			   explicitAccidental);
 }
 
 
-Track::iterator
-TrackNotationHelper::insertRest(timeT absoluteTime, Note note)
+Segment::iterator
+SegmentNotationHelper::insertRest(timeT absoluteTime, Note note)
 {
     iterator i, j;
-    track().getTimeSlice(absoluteTime, i, j);
+    segment().getTimeSlice(absoluteTime, i, j);
 
     //!!! Deal with end-of-bar issues!
 
-//    int barNo = track().getBarNumber(i);
+//    int barNo = segment().getBarNumber(i);
 
     return insertSomething(i, note.getDuration(), 0, true, false,
 			   NoAccidental);
 }
 
 
-Track::iterator
-TrackNotationHelper::collapseRestsForInsert(iterator i,
+Segment::iterator
+SegmentNotationHelper::collapseRestsForInsert(iterator i,
 					    timeT desiredDuration)
 {
     // collapse at most once, then recurse
@@ -342,7 +342,7 @@ TrackNotationHelper::collapseRestsForInsert(iterator i,
     if (i == end() || !(*i)->isa(Note::EventRestType)) return i;
 
     timeT d = (*i)->getDuration();
-    iterator j = track().findContiguousNext(i);
+    iterator j = segment().findContiguousNext(i);
     if (d >= desiredDuration || j == end()) return ++i;
 
     (*i)->setDuration(d + (*j)->getDuration());
@@ -353,8 +353,8 @@ TrackNotationHelper::collapseRestsForInsert(iterator i,
 }
 
 
-Track::iterator
-TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
+Segment::iterator
+SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
 				     bool isRest, bool tiedBack,
 				     Accidental acc)
 {
@@ -389,7 +389,7 @@ TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
     timeT existingDuration = (*i)->getDuration();
 
-    cerr << "TrackNotationHelper::insertSomething: asked to insert duration " << duration
+    cerr << "SegmentNotationHelper::insertSomething: asked to insert duration " << duration
 	 << " over this event:" << endl;
     (*i)->dump(cerr);
 
@@ -448,7 +448,7 @@ TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
 	bool needToSplit = true;
 
 	// special case: existing event is a rest, and it's at the end
-	// of the track
+	// of the segment
 
 	if ((*i)->isa(Note::EventRestType)) {
 	    iterator j;
@@ -475,7 +475,7 @@ TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
 	    if (!isRest) (*i)->set<Bool>(TIED_FORWARD, true);
 
-            i = track().findTime((*i)->getAbsoluteTime() + existingDuration);
+            i = segment().findTime((*i)->getAbsoluteTime() + existingDuration);
 
 	    return insertSomething
 		(i, duration - existingDuration, pitch, isRest, true, acc);
@@ -490,8 +490,8 @@ TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
     }
 }
 
-Track::iterator
-TrackNotationHelper::insertSingleSomething(iterator i, int duration,
+Segment::iterator
+SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
                                            int pitch, bool isRest,
                                            bool tiedBack,
                                            Accidental acc)
@@ -500,7 +500,7 @@ TrackNotationHelper::insertSingleSomething(iterator i, int duration,
     bool eraseI = false;
 
     if (i == end()) {
-	time = track().getDuration();
+	time = segment().getDuration();
     } else {
 	time = (*i)->getAbsoluteTime();
 	if (isRest || (*i)->isa(Note::EventRestType)) eraseI = true;
@@ -529,11 +529,11 @@ TrackNotationHelper::insertSingleSomething(iterator i, int duration,
 }
 
 void
-TrackNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
+SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
 {
     if (i == begin() || i == end() || !((*i)->isa(Note::EventType))) return;
 
-    iterator j = track().findContiguousPrevious(i);
+    iterator j = segment().findContiguousPrevious(i);
     if (j == end()) return;
 
     if ((*i)->has(BEAMED_GROUP_ID) &&
@@ -549,18 +549,18 @@ TrackNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
 }
 
 
-Track::iterator
-TrackNotationHelper::insertClef(timeT absoluteTime, Clef clef)
+Segment::iterator
+SegmentNotationHelper::insertClef(timeT absoluteTime, Clef clef)
 {
     return insert(clef.getAsEvent(absoluteTime));
 }
 
 
-void TrackNotationHelper::deleteNote(Event *e, bool collapseRest)
+void SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
 {
-    iterator i = track().findSingle(e);
+    iterator i = segment().findSingle(e);
 
-    if (track().noteIsInChord(e)) {
+    if (segment().noteIsInChord(e)) {
 
 	erase(i);
 
@@ -582,7 +582,7 @@ void TrackNotationHelper::deleteNote(Event *e, bool collapseRest)
     }
 }
 
-bool TrackNotationHelper::deleteRest(Event *e)
+bool SegmentNotationHelper::deleteRest(Event *e)
 {
     //!!! can we do anything useful with collapseForward? should we return it?
 
@@ -590,7 +590,7 @@ bool TrackNotationHelper::deleteRest(Event *e)
     return collapse(e, collapseForward);
 }
 
-bool TrackNotationHelper::deleteEvent(Event *e)
+bool SegmentNotationHelper::deleteEvent(Event *e)
 {
     bool res = true;
 
@@ -598,7 +598,7 @@ bool TrackNotationHelper::deleteEvent(Event *e)
     else if (e->isa(Note::EventRestType)) res = deleteRest(e);
     else {
         // just plain delete
-        iterator i = track().findSingle(e);
+        iterator i = segment().findSingle(e);
         erase(i);
     }
 
@@ -606,7 +606,7 @@ bool TrackNotationHelper::deleteEvent(Event *e)
 }
 
 
-bool TrackNotationHelper::hasEffectiveDuration(iterator i)
+bool SegmentNotationHelper::hasEffectiveDuration(iterator i)
 {
     bool hasDuration = ((*i)->getDuration() > 0);
 
@@ -624,25 +624,25 @@ bool TrackNotationHelper::hasEffectiveDuration(iterator i)
 
 
 void
-TrackNotationHelper::makeBeamedGroup(timeT from, timeT to, string type)
+SegmentNotationHelper::makeBeamedGroup(timeT from, timeT to, string type)
 {
-    makeBeamedGroupAux(track().findTime(from), track().findTime(to), type);
+    makeBeamedGroupAux(segment().findTime(from), segment().findTime(to), type);
 }
 
 void
-TrackNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
+SegmentNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
 {
     makeBeamedGroupAux
-	(track().findTime((*from)->getAbsoluteTime()),
-	 (to == end()) ? to : track().findTime((*to)->getAbsoluteTime()),
+	(segment().findTime((*from)->getAbsoluteTime()),
+	 (to == end()) ? to : segment().findTime((*to)->getAbsoluteTime()),
 	 type);
 }
 
 void
-TrackNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
+SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 					string type)
 {
-    int groupId = track().getNextId();
+    int groupId = segment().getNextId();
     
     for (iterator i = from; i != to; ++i) {
         (*i)->setMaybe<Int>(BEAMED_GROUP_ID, groupId);
@@ -651,21 +651,21 @@ TrackNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 }
 
 void
-TrackNotationHelper::unbeam(timeT from, timeT to)
+SegmentNotationHelper::unbeam(timeT from, timeT to)
 {
-    unbeamAux(track().findTime(from), track().findTime(to));
+    unbeamAux(segment().findTime(from), segment().findTime(to));
 }
 
 void
-TrackNotationHelper::unbeam(iterator from, iterator to)
+SegmentNotationHelper::unbeam(iterator from, iterator to)
 {
     unbeamAux
-	(track().findTime((*from)->getAbsoluteTime()),
-	 (to == end()) ? to : track().findTime((*to)->getAbsoluteTime()));
+	(segment().findTime((*from)->getAbsoluteTime()),
+	 (to == end()) ? to : segment().findTime((*to)->getAbsoluteTime()));
 }
 
 void
-TrackNotationHelper::unbeamAux(iterator from, iterator to)
+SegmentNotationHelper::unbeamAux(iterator from, iterator to)
 {
     for (iterator i = from; i != to; ++i) {
 	(*i)->unset(BEAMED_GROUP_ID);
@@ -682,12 +682,12 @@ TrackNotationHelper::unbeamAux(iterator from, iterator to)
   
 */
 
-void TrackNotationHelper::autoBeam(timeT from, timeT to, string type)
+void SegmentNotationHelper::autoBeam(timeT from, timeT to, string type)
 {
-    autoBeam(track().findTime(from), track().findTime(to), type);
+    autoBeam(segment().findTime(from), segment().findTime(to), type);
 }
 
-void TrackNotationHelper::autoBeam(iterator from, iterator to, string type)
+void SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 {
     // This can only manage whole bars at a time, and it will expand
     // the from-to range out to encompass the whole bars in which they
@@ -697,13 +697,13 @@ void TrackNotationHelper::autoBeam(iterator from, iterator to, string type)
 
 	timeT t = (*from)->getAbsoluteTime();
 
-	iterator barStart = track().findStartOfBar(t);
-	iterator barEnd = track().findStartOfNextBar(t);
+	iterator barStart = segment().findStartOfBar(t);
+	iterator barEnd = segment().findStartOfNextBar(t);
 
 	TimeSignature timeSig;
-	track().findTimeSignatureAt(t, timeSig);
+	segment().findTimeSignatureAt(t, timeSig);
 
-//	cerr << "TrackNotationHelper::autoBeam: t is " << t << "; from time " <<
+//	cerr << "SegmentNotationHelper::autoBeam: t is " << t << "; from time " <<
 //	    (*barStart)->getAbsoluteTime() << " to time " <<
 //	    (barEnd == end() ? -1 : (*barEnd)->getAbsoluteTime()) << endl;
  
@@ -731,7 +731,7 @@ void TrackNotationHelper::autoBeam(iterator from, iterator to, string type)
   
 */
 
-void TrackNotationHelper::autoBeamBar(iterator from, iterator to,
+void SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
                                       TimeSignature tsig, string type)
 {
     int num = tsig.getNumerator();
@@ -771,7 +771,7 @@ void TrackNotationHelper::autoBeamBar(iterator from, iterator to,
 }
 
 
-void TrackNotationHelper::autoBeamBar(iterator from, iterator to,
+void SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
                                       timeT average, timeT minimum,
                                       timeT maximum, string type)
 {
@@ -893,7 +893,7 @@ void TrackNotationHelper::autoBeamBar(iterator from, iterator to,
 
 // based on Rosegarden 2.1's GuessItemListClef in editor/src/MidiIn.c
 
-Clef TrackNotationHelper::guessClef(iterator from, iterator to)
+Clef SegmentNotationHelper::guessClef(iterator from, iterator to)
 {
     long totalHeight = 0;
     int noteCount = 0;
@@ -920,22 +920,22 @@ Clef TrackNotationHelper::guessClef(iterator from, iterator to)
     else                   return Clef(Clef::Treble);
 }
 
-bool TrackNotationHelper::removeRests(timeT time, timeT duration)
+bool SegmentNotationHelper::removeRests(timeT time, timeT duration)
 {
     Event dummy;
     
     dummy.setAbsoluteTime(time);
 
-    cerr << "TrackNotationHelper::removeRests(" << time
+    cerr << "SegmentNotationHelper::removeRests(" << time
          << ", " << duration << ")\n";
 
-    iterator from = track().lower_bound(&dummy);
+    iterator from = segment().lower_bound(&dummy);
 
-    if (from == track().end()) return false;
+    if (from == segment().end()) return false;
     
     iterator to = from;
 
-    cerr << "TrackNotationHelper::removeRests : start at "
+    cerr << "SegmentNotationHelper::removeRests : start at "
          << (*to)->getAbsoluteTime() << endl;
 
     timeT eventTime = time;
@@ -945,19 +945,19 @@ bool TrackNotationHelper::removeRests(timeT time, timeT duration)
     //
     while ((eventTime < finalTime) && (to != end())) {
 
-        cerr << "TrackNotationHelper::removeRests : eventTime : "
+        cerr << "SegmentNotationHelper::removeRests : eventTime : "
              << eventTime << " finalTime : " << finalTime << endl;
         
         if (!(*to)->isa(Note::EventRestType)) {
             // a non-rest was found
-            cerr << "TrackNotationHelper::removeRests : an event of type "
+            cerr << "SegmentNotationHelper::removeRests : an event of type "
                  << (*to)->getType() << " was found - abort\n";
             return false;
         }
 
         timeT nextEventDuration = (*to)->getDuration();
 
-        cerr << "TrackNotationHelper::removeRests : nextEventDuration : "
+        cerr << "SegmentNotationHelper::removeRests : nextEventDuration : "
              << nextEventDuration << endl;
 
         if ((eventTime + nextEventDuration) <= finalTime)
@@ -976,11 +976,11 @@ bool TrackNotationHelper::removeRests(timeT time, timeT duration)
 
 
         if (lastEvent == end()) {
-            cerr << "TrackNotationHelper::removeRests : not enough rest space\n";
+            cerr << "SegmentNotationHelper::removeRests : not enough rest space\n";
             return false;
         }
 
-        cerr << "TrackNotationHelper::removeRests : shorten last event duration from "
+        cerr << "SegmentNotationHelper::removeRests : shorten last event duration from "
              << (*lastEvent)->getDuration() << " to "
              << (*lastEvent)->getDuration() - (finalTime - eventTime)
              << endl;
@@ -990,7 +990,7 @@ bool TrackNotationHelper::removeRests(timeT time, timeT duration)
         checkLastRest = true;
     }
 
-    track().erase(from, to);
+    segment().erase(from, to);
 
     // we must defer calling makeRestViable() until after erase,
     // because it will invalidate 'to'
@@ -1001,7 +1001,7 @@ bool TrackNotationHelper::removeRests(timeT time, timeT duration)
 }
 
 void
-TrackNotationHelper::quantize()
+SegmentNotationHelper::quantize()
 {
     quantizer().quantizeLegato(begin(), end());
 

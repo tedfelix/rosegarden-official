@@ -19,8 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef TRACKSEDITOR_H
-#define TRACKSEDITOR_H
+#ifndef SEGMENTSEDITOR_H
+#define SEGMENTSEDITOR_H
 
 #include <list>
 #include <qwidget.h>
@@ -32,66 +32,66 @@
 
 #include "Event.h" // for timeT
 
-namespace Rosegarden { class Track; }
-class TrackItem;
-class TracksCanvas;
+namespace Rosegarden { class Segment; }
+class SegmentItem;
+class SegmentCanvas;
 class RosegardenGUIDoc;
 
 /**
- * Global widget for track edition.
+ * Global widget for segment edition.
  *
  * Shows a global overview of the composition, and lets the user
- * manipulate the tracks
+ * manipulate the segments
  *
- * @see TracksCanvas
+ * @see SegmentCanvas
  */
-class TracksEditor : public QWidget, virtual public TracksEditorIface
+class TrackEditor : public QWidget, virtual public TrackEditorIface
 {
     Q_OBJECT
 public:
     /**
-     * Create a new TracksEditor representing the document \a doc
+     * Create a new TrackEditor representing the document \a doc
      */
-    TracksEditor(RosegardenGUIDoc* doc,
+    TrackEditor(RosegardenGUIDoc* doc,
                  QWidget* parent = 0, const char* name = 0,
                  WFlags f=0);
 
     /**
-     * Create a new empty TracksEditor 
+     * Create a new empty TrackEditor 
      *
-     * The TracksEditor will have \a nbTracks available tracks, and
+     * The TrackEditor will have \a nbSegments available segments, and
      * ( \a nbBars * time resolution ) time steps.
      *
      * @see setTimeStepsResolution()
      */
-    TracksEditor(unsigned int nbTracks,
+    TrackEditor(unsigned int nbSegments,
                  unsigned int nbBars,
                  QWidget* parent = 0, const char* name = 0,
                  WFlags f=0);
 
-    /// Clear the TracksCanvas
+    /// Clear the SegmentCanvas
     void clear();
 
     /**
-     * Reset all the tracks Y coordinates after the order of the
+     * Reset all the segments Y coordinates after the order of the
      * instruments has been changed
      */
-    void updateTrackOrder();
+    void updateSegmentOrder();
 
-    TracksCanvas*       canvas()       { return m_tracksCanvas; }
-    const TracksCanvas* canvas() const { return m_tracksCanvas; }
+    SegmentCanvas*       canvas()       { return m_segmentsCanvas; }
+    const SegmentCanvas* canvas() const { return m_segmentsCanvas; }
 
     /**
      * Must be called after construction and signal connection
-     * if a document was passed to ctor, otherwise tracks will
+     * if a document was passed to ctor, otherwise segments will
      * be created but not registered in the main doc
      */
-    void setupTracks();
+    void setupSegments();
 
     /**
-     * Add a new track - DCOP interface
+     * Add a new segment - DCOP interface
      */
-    virtual void addTrack(int instrument, int start, unsigned int nbTimeSteps);
+    virtual void addSegment(int instrument, int start, unsigned int nbTimeSteps);
 
 
 public slots:
@@ -101,41 +101,41 @@ public slots:
     void setPointerPosition(Rosegarden::timeT position);
 
 protected slots:
-    void trackOrderChanged(int section, int fromIdx, int toIdx);
-    void addTrack(TrackItem*);
-    void deleteTrack(Rosegarden::Track*);
-    void updateTrackDuration(TrackItem*);
-    void updateTrackInstrumentAndStartIndex(TrackItem*);
+    void segmentOrderChanged(int section, int fromIdx, int toIdx);
+    void addSegment(SegmentItem*);
+    void deleteSegment(Rosegarden::Segment*);
+    void updateSegmentDuration(SegmentItem*);
+    void updateSegmentInstrumentAndStartIndex(SegmentItem*);
 
 signals:
     /**
-     * Emitted when the represented data changed and the TracksCanvas
+     * Emitted when the represented data changed and the SegmentCanvas
      * needs to update itself
      *
-     * @see TracksCanvas::update()
+     * @see SegmentCanvas::update()
      */
     void needUpdate();
 
     /**
-     * Emitted when a new track is created by the user
-     * \a item is the TrackItem representing the track on the TracksCanvas
-     * \a instrument is the instrument for the track
+     * Emitted when a new segment is created by the user
+     * \a item is the SegmentItem representing the segment on the SegmentCanvas
+     * \a instrument is the instrument for the segment
      *
-     * It is up to the slot to create the new Track, to insert it in the
+     * It is up to the slot to create the new Segment, to insert it in the
      * Composition and to set its instrument.
      *
-     * @see RosegardenGUIDoc::createNewTrack()
+     * @see RosegardenGUIDoc::createNewSegment()
      */
-    void createNewTrack(TrackItem* item, int instrument);
+    void createNewSegment(SegmentItem* item, int instrument);
 
 protected:
 
-    void init(unsigned int nbTracks, unsigned int nbBars);
+    void init(unsigned int nbSegments, unsigned int nbBars);
     void setupHorizontalHeader();
 
     RosegardenGUIDoc* m_document;
 
-    TracksCanvas *m_tracksCanvas;
+    SegmentCanvas *m_segmentsCanvas;
     QHeader *m_hHeader;
     Rosegarden::TrackHeader *m_vHeader;
 

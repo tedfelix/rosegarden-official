@@ -37,8 +37,8 @@ class EventSelection;
 
 /**
  * The Staff is a repository for information about the notation
- * representation of a single Track.  This includes all of the
- * NotationElements representing the Events on that Track, the staff
+ * representation of a single Segment.  This includes all of the
+ * NotationElements representing the Events on that Segment, the staff
  * lines, as well as basic positional and size data.  This class
  * used to be in gui/staff.h, but it's been moved and renamed
  * following the introduction of the core Staff base class.
@@ -51,10 +51,10 @@ public:
     typedef std::set<QCanvasSimpleSprite *> SpriteSet;
     
     /**
-     * Creates a new NotationStaff for the specified Track
+     * Creates a new NotationStaff for the specified Segment
      * \a id is the id of the staff in the NotationView
      */
-    NotationStaff(QCanvas*, Rosegarden::Track*, unsigned int id,
+    NotationStaff(QCanvas*, Rosegarden::Segment*, unsigned int id,
                   std::string fontName, int resolution);
     ~NotationStaff();
 

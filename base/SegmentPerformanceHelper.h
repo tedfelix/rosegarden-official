@@ -20,19 +20,19 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _TRACK_PERFORMANCE_HELPER_H_
-#define _TRACK_PERFORMANCE_HELPER_H_
+#ifndef _SEGMENT_PERFORMANCE_HELPER_H_
+#define _SEGMENT_PERFORMANCE_HELPER_H_
 
 #include "Track.h"
 
 namespace Rosegarden 
 {
 
-class TrackPerformanceHelper : protected TrackHelper
+class SegmentPerformanceHelper : protected SegmentHelper
 {
 public:
-    TrackPerformanceHelper(Track &t) : TrackHelper(t) { }
-    virtual ~TrackPerformanceHelper();
+    SegmentPerformanceHelper(Segment &t) : SegmentHelper(t) { }
+    virtual ~SegmentPerformanceHelper();
 
     /**
      * Returns the duration of the note event pointed to by i, taking

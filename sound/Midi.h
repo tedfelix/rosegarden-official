@@ -39,7 +39,7 @@ namespace Rosegarden
 typedef unsigned char MidiByte;
 
 const std::string MIDI_FILE_HEADER              = "MThd";
-const std::string MIDI_TRACK_HEADER             = "MTrk";
+const std::string MIDI_SEGMENT_HEADER             = "MTrk";
 
 const MidiByte MIDI_STATUS_BYTE_MASK       = 0x80;
 const MidiByte MIDI_MESSAGE_TYPE_MASK      = 0xF0;
@@ -83,7 +83,7 @@ const MidiByte MIDI_FILE_META_EVENT        = 0xFF;
 const MidiByte MIDI_SEQUENCE_NUMBER        = 0x00;
 const MidiByte MIDI_TEXT_EVENT             = 0x01;
 const MidiByte MIDI_COPYRIGHT_NOTICE       = 0x02;
-const MidiByte MIDI_TRACK_NAME             = 0x03;
+const MidiByte MIDI_SEGMENT_NAME             = 0x03;
 const MidiByte MIDI_INSTRUMENT_NAME        = 0x04;
 const MidiByte MIDI_LYRIC                  = 0x05;
 const MidiByte MIDI_TEXT_MARKER            = 0x06;
@@ -98,7 +98,7 @@ const MidiByte MIDI_CHANNEL_PREFIX         = 0x20;
 // exist.
 const MidiByte MIDI_CHANNEL_PREFIX_OR_PORT = 0x21;
 
-const MidiByte MIDI_END_OF_TRACK           = 0x2F;
+const MidiByte MIDI_END_OF_SEGMENT           = 0x2F;
 const MidiByte MIDI_SET_TEMPO              = 0x51;
 const MidiByte MIDI_SMPTE_OFFSET           = 0x54;
 const MidiByte MIDI_TIME_SIGNATURE         = 0x58;

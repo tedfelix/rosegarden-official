@@ -57,8 +57,8 @@ using Rosegarden::Bool;
 using Rosegarden::String;
 using Rosegarden::NoAccidental;
 using Rosegarden::Note;
-using Rosegarden::Track;
-using Rosegarden::TrackNotationHelper;
+using Rosegarden::Segment;
+using Rosegarden::SegmentNotationHelper;
 using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::Accidental;
@@ -72,8 +72,8 @@ using std::set;
 #define ID_STATUS_MSG 1
 
 
-EventSelection::EventSelection(Track& t)
-    : m_originalTrack(t),
+EventSelection::EventSelection(Segment& t)
+    : m_originalSegment(t),
       m_beginTime(-1),
       m_endTime(-1)
 {
@@ -90,37 +90,37 @@ EventSelection::~EventSelection()
 
 bool EventSelection::contains(Event *e) const
 {
-    return m_trackEvents.find(e) != m_trackEvents.end();
+    return m_segmentEvents.find(e) != m_segmentEvents.end();
 }
 
 void EventSelection::cut()
 {
-    if (!m_trackEvents.size()) return;
+    if (!m_segmentEvents.size()) return;
 
-    TrackNotationHelper nt(m_originalTrack);
+    SegmentNotationHelper nt(m_originalSegment);
 
-    // copy Events from original Track and erase them
-    // from that Track
+    // copy Events from original Segment and erase them
+    // from that Segment
     //
-    for(eventcontainer::iterator i = m_trackEvents.begin();
-        i != m_trackEvents.end(); ++i) {
+    for(eventcontainer::iterator i = m_segmentEvents.begin();
+        i != m_segmentEvents.end(); ++i) {
 
         m_ownEvents.insert(new Event(*(*i)));
 
-        // delete Event from Track
+        // delete Event from Segment
         nt.deleteEvent(*i);
     }
 
     updateBeginEndTime();
 
-    m_trackEvents.clear();
+    m_segmentEvents.clear();
 }
 
 void EventSelection::copy()
 {
-    // copy  Events from original Track
-    for(eventcontainer::iterator i = m_trackEvents.begin();
-        i != m_trackEvents.end(); ++i) {
+    // copy  Events from original Segment
+    for(eventcontainer::iterator i = m_segmentEvents.begin();
+        i != m_segmentEvents.end(); ++i) {
 
         // store copy of Event
         m_ownEvents.insert(new Event(*(*i)));
@@ -128,12 +128,12 @@ void EventSelection::copy()
 
     updateBeginEndTime();
 
-    m_trackEvents.clear();
+    m_segmentEvents.clear();
 }
 
-bool EventSelection::pasteToTrack(Track& t, timeT atTime)
+bool EventSelection::pasteToSegment(Segment& t, timeT atTime)
 {
-    TrackNotationHelper nt(t);
+    SegmentNotationHelper nt(t);
 
     if (! nt.removeRests(atTime, getTotalDuration())) {
         return false;
@@ -180,12 +180,12 @@ void EventSelection::updateBeginEndTime() const
         // this has already been calculated
         return;
 
-    if (m_ownEvents.empty() && m_trackEvents.empty())
+    if (m_ownEvents.empty() && m_segmentEvents.empty())
         // selection is empty
         return;
 
     const eventcontainer* selectedEvents = m_ownEvents.empty() ?
-        &m_trackEvents : &m_ownEvents;
+        &m_segmentEvents : &m_ownEvents;
     
     eventcontainer::const_iterator iter = selectedEvents->begin();
     
@@ -206,7 +206,7 @@ void EventSelection::updateBeginEndTime() const
 NotationView::NotationViewSet NotationView::m_viewsExtant;
 
 NotationView::NotationView(RosegardenGUIDoc* doc,
-                           std::vector<Track *> tracks,
+                           std::vector<Segment *> segments,
                            QWidget *parent) :
     KMainWindow(parent),
     m_config(kapp->config()),
@@ -227,7 +227,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_selectDefaultNote(0),
     m_pointer(0)
 {
-    assert(tracks.size() > 0);
+    assert(segments.size() > 0);
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
 
     m_fontName = NotePixmapFactory::getDefaultFont();
@@ -237,11 +237,11 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     setupActions();
 
     kdDebug(KDEBUG_AREA) << "NotationView: Quantizer status is:\n"
-			 << "Unit = " << tracks[0]->getQuantizer()->getUnit()
+			 << "Unit = " << segments[0]->getQuantizer()->getUnit()
 			 << "\nMax Dots = "
-			 << tracks[0]->getQuantizer()->getMaxDots() << endl;
+			 << segments[0]->getQuantizer()->getMaxDots() << endl;
 
-    initFontToolbar(tracks[0]->getQuantizer()->getUnit());
+    initFontToolbar(segments[0]->getQuantizer()->getUnit());
     initStatusBar();
     
     setBackgroundMode(PaletteBase);
@@ -274,21 +274,21 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 
     readOptions();
 
-    if (tracks.size() == 1) {
-        setCaption(QString("%1 - Track Instrument #%2")
+    if (segments.size() == 1) {
+        setCaption(QString("%1 - Segment Instrument #%2")
                    .arg(doc->getTitle())
-                   .arg(tracks[0]->getInstrument()));
-    } else if (tracks.size() == doc->getComposition().getNbTracks()) {
-        setCaption(QString("%1 - All Tracks")
+                   .arg(segments[0]->getInstrument()));
+    } else if (segments.size() == doc->getComposition().getNbSegments()) {
+        setCaption(QString("%1 - All Segments")
                    .arg(doc->getTitle()));
     } else {
-        setCaption(QString("%1 - %2-Track Partial View")
+        setCaption(QString("%1 - %2-Segment Partial View")
                    .arg(doc->getTitle())
-                   .arg(tracks.size()));
+                   .arg(segments.size()));
     }
 
-    for (unsigned int i = 0; i < tracks.size(); ++i) {
-        m_staffs.push_back(new NotationStaff(canvas(), tracks[i], i,
+    for (unsigned int i = 0; i < segments.size(); ++i) {
+        m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,
                                              m_fontName, m_fontSize));
         m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 45);
         m_staffs[i]->show();
@@ -655,10 +655,10 @@ NotationView::ZoomSlider<T>::reinitialise(const vector<T> &sizes, T size)
 }
 
 NotationStaff *
-NotationView::getStaff(const Track &track)
+NotationView::getStaff(const Segment &segment)
 {
     for (int i = 0; i < m_staffs.size(); ++i) {
-	if (&(m_staffs[i]->getTrack()) == &track) return m_staffs[i];
+	if (&(m_staffs[i]->getSegment()) == &segment) return m_staffs[i];
     }
     return 0;
 }
@@ -975,25 +975,25 @@ void NotationView::setCurrentSelectedNote(const char *pixmapName,
 void NotationView::setCurrentSelection(EventSelection* s)
 {
     if (m_currentEventSelection && s != m_currentEventSelection) {
-	getStaff(m_currentEventSelection->getTrack())->showSelection(0);
+	getStaff(m_currentEventSelection->getSegment())->showSelection(0);
     }
 
     delete m_currentEventSelection;
     m_currentEventSelection = s;
 
-    if (s) getStaff(s->getTrack())->showSelection(s);
+    if (s) getStaff(s->getSegment())->showSelection(s);
 
     canvas()->update();
 }
 
 void NotationView::setSingleSelectedEvent(int staffNo, Event *event)
 {
-    setSingleSelectedEvent(getStaff(staffNo)->getTrack(), event);
+    setSingleSelectedEvent(getStaff(staffNo)->getSegment(), event);
 }
 
-void NotationView::setSingleSelectedEvent(Track &track, Event *event)
+void NotationView::setSingleSelectedEvent(Segment &segment, Event *event)
 {
-    EventSelection *selection = new EventSelection(track);
+    EventSelection *selection = new EventSelection(segment);
     selection->addEvent(event);
     setCurrentSelection(selection);
 }
@@ -1060,7 +1060,7 @@ void NotationView::slotEditCut()
 
     emit usedSelection();
 
-    redoLayout(getStaff(m_currentEventSelection->getTrack())->getId(),
+    redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
                m_currentEventSelection->getBeginTime(),
                m_currentEventSelection->getEndTime());
 
@@ -1108,9 +1108,9 @@ void NotationView::slotEditPaste()
 
     timeT time = (*closestNote)->getAbsoluteTime();
 
-    Track& track = getStaff(staffNo)->getTrack();
+    Segment& segment = getStaff(staffNo)->getSegment();
 
-    if (m_currentEventSelection->pasteToTrack(track, time)) {
+    if (m_currentEventSelection->pasteToSegment(segment, time)) {
 
         redoLayout(staffNo,
                    0,
@@ -1192,8 +1192,8 @@ void NotationView::slotGroupBeam()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Beaming group..."), statusBar());
 
-    Track &track = m_currentEventSelection->getTrack();
-    TrackNotationHelper helper(track);
+    Segment &segment = m_currentEventSelection->getSegment();
+    SegmentNotationHelper helper(segment);
 
     helper.makeBeamedGroup(m_currentEventSelection->getBeginTime(),
 			   m_currentEventSelection->getEndTime(),
@@ -1201,7 +1201,7 @@ void NotationView::slotGroupBeam()
 
     emit usedSelection();
 
-    redoLayout(getStaff(m_currentEventSelection->getTrack())->getId(),
+    redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
 	       m_currentEventSelection->getBeginTime(),
 	       m_currentEventSelection->getEndTime());
 }
@@ -1213,8 +1213,8 @@ void NotationView::slotGroupAutoBeam()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Auto-beaming selection..."), statusBar());
 
-    Track &track = m_currentEventSelection->getTrack();
-    TrackNotationHelper helper(track);
+    Segment &segment = m_currentEventSelection->getSegment();
+    SegmentNotationHelper helper(segment);
 
     helper.autoBeam(m_currentEventSelection->getBeginTime(),
 		    m_currentEventSelection->getEndTime(),
@@ -1222,7 +1222,7 @@ void NotationView::slotGroupAutoBeam()
 
     emit usedSelection();
 
-    redoLayout(getStaff(m_currentEventSelection->getTrack())->getId(),
+    redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
 	       m_currentEventSelection->getBeginTime(),
 	       m_currentEventSelection->getEndTime());
 }
@@ -1234,15 +1234,15 @@ void NotationView::slotGroupBreak()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Breaking groups..."), statusBar());
 
-    Track &track = m_currentEventSelection->getTrack();
-    TrackNotationHelper helper(track);
+    Segment &segment = m_currentEventSelection->getSegment();
+    SegmentNotationHelper helper(segment);
 
     helper.unbeam(m_currentEventSelection->getBeginTime(),
 		  m_currentEventSelection->getEndTime());
 
     emit usedSelection();
 
-    redoLayout(getStaff(m_currentEventSelection->getTrack())->getId(),
+    redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
 	       m_currentEventSelection->getBeginTime(),
 	       m_currentEventSelection->getEndTime());
 }
@@ -1719,36 +1719,36 @@ NotationView::findClosestNote(double eventX, Event *&timeSignature,
 
 void NotationView::redoLayout(int staffNo, timeT startTime, timeT endTime)
 {
-    Track *track = 0;
-    if (staffNo >= 0) track = &m_staffs[staffNo]->getTrack();
+    Segment *segment = 0;
+    if (staffNo >= 0) segment = &m_staffs[staffNo]->getSegment();
     for (NotationViewSet::iterator i = m_viewsExtant.begin();
 	 i != m_viewsExtant.end(); ++i) {
-	(*i)->redoLayoutAdvised(track, startTime, endTime);
+	(*i)->redoLayoutAdvised(segment, startTime, endTime);
     }
 }
 
-void NotationView::redoLayoutAdvised(Track *track, timeT startTime, timeT endTime)
+void NotationView::redoLayoutAdvised(Segment *segment, timeT startTime, timeT endTime)
 {
-    if (track == 0) applyLayout();
+    if (segment == 0) applyLayout();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
-        Track *strack = &m_staffs[i]->getTrack();
-	bool thisStaff = (strack == track || track == 0);
+        Segment *ssegment = &m_staffs[i]->getSegment();
+	bool thisStaff = (ssegment == segment || segment == 0);
 
-	if (thisStaff && (track != 0)) applyLayout(i);
+	if (thisStaff && (segment != 0)) applyLayout(i);
 
         NotationElementList *notes = m_staffs[i]->getViewElementList();
         NotationElementList::iterator starti = notes->begin();
         NotationElementList::iterator endi = notes->end();
 
         if (startTime > 0) {
-            timeT barStartTime = strack->findBarStartTime(startTime);
+            timeT barStartTime = ssegment->findBarStartTime(startTime);
             starti = notes->findTime(barStartTime);
         }
 
         if (endTime >= 0) {
-            timeT barEndTime = strack->findBarEndTime(endTime);
+            timeT barEndTime = ssegment->findBarEndTime(endTime);
             endi = notes->findTime(barEndTime);
         }
 
@@ -1898,24 +1898,24 @@ NoteInserter::handleMousePress(int height, int staffNo,
     m_parentView.getDocument()->setModified();
 
     Note note(m_noteType, m_noteDots);
-    TrackNotationHelper nt(m_parentView.getStaff(staffNo)->getTrack());
+    SegmentNotationHelper nt(m_parentView.getStaff(staffNo)->getSegment());
 
     timeT time = (*closestNote)->getAbsoluteTime();
     timeT endTime = time + note.getDuration(); //???
     Event *newEvent = doInsert(nt, time, note, pitch, m_accidental);
 
-    m_parentView.setSingleSelectedEvent(staffNo, newEvent);
     m_parentView.redoLayout(staffNo, time, endTime);
+    m_parentView.setSingleSelectedEvent(staffNo, newEvent);
 }
 
-Event *NoteInserter::doInsert(TrackNotationHelper& nt,
+Event *NoteInserter::doInsert(SegmentNotationHelper& nt,
 			      Rosegarden::timeT absTime,
 			      const Note& note, int pitch,
 			      Accidental accidental)
 {
-    Track::iterator i = nt.insertNote(absTime, note, pitch, accidental);
+    Segment::iterator i = nt.insertNote(absTime, note, pitch, accidental);
 
-    if (i != nt.track().end()) {
+    if (i != nt.segment().end()) {
 	return (*i);
     } else {
 	return 0;
@@ -1937,14 +1937,14 @@ RestInserter::RestInserter(Rosegarden::Note::Type type,
 {
 }
 
-Event *RestInserter::doInsert(TrackNotationHelper& nt,
+Event *RestInserter::doInsert(SegmentNotationHelper& nt,
 			      Rosegarden::timeT absTime,
 			      const Note& note, int,
 			      Accidental)
 {
-    Track::iterator i = nt.insertRest(absTime, note);
+    Segment::iterator i = nt.insertRest(absTime, note);
 
-    if (i != nt.track().end()) {
+    if (i != nt.segment().end()) {
 	return (*i);
     } else {
 	return 0;
@@ -1978,17 +1978,17 @@ void ClefInserter::handleMousePress(int, int staffNo,
     }
 
     timeT time = (*closestNote)->getAbsoluteTime();
-    TrackNotationHelper nt
-        (m_parentView.getStaff(staffNo)->getTrack());
+    SegmentNotationHelper nt
+        (m_parentView.getStaff(staffNo)->getSegment());
 
     m_parentView.getDocument()->setModified();
 
-    Track::iterator i = nt.insertClef(time, m_clef);
+    Segment::iterator i = nt.insertClef(time, m_clef);
     Event *newEvent = 0;
-    if (i != nt.track().end()) newEvent = *i;
+    if (i != nt.segment().end()) newEvent = *i;
 
-    m_parentView.setSingleSelectedEvent(staffNo, newEvent);
     m_parentView.redoLayout(staffNo, time, time + 1);
+    m_parentView.setSingleSelectedEvent(staffNo, newEvent);
 }
 
 
@@ -2024,8 +2024,8 @@ void NotationEraser::_handleMousePress(int staffNo,
     bool needLayout = false;
     if (!element || staffNo < 0) return;
 
-    TrackNotationHelper nt
-        (m_parentView.getStaff(staffNo)->getTrack());
+    SegmentNotationHelper nt
+        (m_parentView.getStaff(staffNo)->getSegment());
 
     timeT absTime = 0;
 
@@ -2154,9 +2154,9 @@ EventSelection* NotationSelector::getSelection()
     double middleY = m_selectionRect->y() + m_selectionRect->height()/2;
     int staffNo = m_parentView.findClosestStaff(middleY);
     if (staffNo < 0) return 0;
-    Track& originalTrack = m_parentView.getStaff(staffNo)->getTrack();
+    Segment& originalSegment = m_parentView.getStaff(staffNo)->getSegment();
     
-    EventSelection* selection = new EventSelection(originalTrack);
+    EventSelection* selection = new EventSelection(originalSegment);
 
     QCanvasItemList itemList = m_selectionRect->collisions(true);
     QCanvasItemList::Iterator it;
@@ -2242,9 +2242,9 @@ void NotationSelectionPaster::handleMousePress(int, int staffNo,
 
     timeT time = (*closestNote)->getAbsoluteTime();
 
-    Track& track = m_parentView.getStaff(staffNo)->getTrack();
+    Segment& segment = m_parentView.getStaff(staffNo)->getSegment();
 
-    if (m_selection.pasteToTrack(track, time)) {
+    if (m_selection.pasteToSegment(segment, time)) {
 
         m_parentView.redoLayout(staffNo,
                                 0,

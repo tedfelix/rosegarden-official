@@ -166,25 +166,25 @@ void RosegardenGUIApp::setupActions()
                               0,
                               this, SLOT(eraseSelected()),
                               actionCollection(), "erase");
-    action->setExclusiveGroup("tracktools");
+    action->setExclusiveGroup("segmenttools");
 
     action = new KRadioAction(i18n("Draw"), "pencil",
                               0,
                               this, SLOT(drawSelected()),
                               actionCollection(), "draw");
-    action->setExclusiveGroup("tracktools");
+    action->setExclusiveGroup("segmenttools");
 
     action = new KRadioAction(i18n("Move"), "move",
                               0,
                               this, SLOT(moveSelected()),
                               actionCollection(), "move");
-    action->setExclusiveGroup("tracktools");
+    action->setExclusiveGroup("segmenttools");
 
     action = new KRadioAction(i18n("Resize"), "misc", // TODO : find a better icon
                               0,
                               this, SLOT(resizeSelected()),
                               actionCollection(), "resize");
-    action->setExclusiveGroup("tracktools");
+    action->setExclusiveGroup("segmenttools");
 
     new KAction(i18n("Change Time Resolution..."), 
                 0,
@@ -904,14 +904,14 @@ RosegardenGUIApp::getSequencerSlice(const Rosegarden::timeT &sliceStart,
     for (Rosegarden::Composition::iterator i = m_doc->getComposition().begin();
                              i != m_doc->getComposition().end(); i++ )
     {
-        // Skip the Track if it starts too late to be of
+        // Skip the Segment if it starts too late to be of
         // interest to our slice.
         if ( (*i)->getStartIndex() > sliceEnd )
             continue;
 
-        Rosegarden::TrackPerformanceHelper helper(**i);
+        Rosegarden::SegmentPerformanceHelper helper(**i);
 
-        for ( Rosegarden::Track::iterator j = (*i)->begin();
+        for ( Rosegarden::Segment::iterator j = (*i)->begin();
                                           j != (*i)->end(); j++ )
         {
             // for the moment ensure we're all positive
@@ -1141,7 +1141,7 @@ void RosegardenGUIApp::play()
 }
 
 // Send stop request to Sequencer if playing, else
-// return to start of track
+// return to start of segment
 void RosegardenGUIApp::stop()
 {
     // Animate the stop button - this seems to get caught looping

@@ -49,7 +49,7 @@ typedef int timeT;
  *
  * An Event has a type; a duration, often zero for events other than
  * notes; an absolute time, the time at which the event begins, which
- * is used to order events within a Track; and a "sub-ordering", used
+ * is used to order events within a Segment; and a "sub-ordering", used
  * to determine an order for events that have the same absolute time
  * (for example to ensure that the clef always appears before the key
  * signature at the start of a piece).  Besides these, an event can

@@ -111,7 +111,7 @@ private:
 /**
  * Chord is subclassed from a vector of notation list iterators; this
  * vector contains iterators pointing at all the notes in the chord,
- * in ascending order of pitch.  (You can also track through all the
+ * in ascending order of pitch.  (You can also segment through all the
  * notes in the chord by iterating from getInitialElement() to
  * getFinalElement(), but this will only get them in the order in
  * which they appear in the original notation list.)

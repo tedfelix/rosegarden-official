@@ -201,27 +201,27 @@ int main(int argc, char **argv)
 #endif // TEST_SPEED
 
 #ifdef NOT_DEFINED
-        cout << "Testing track shrinking\n";
+        cout << "Testing segment shrinking\n";
         
-        Track track(5, 0);
-        unsigned int nbBars = track.getNbBars();
+        Segment segment(5, 0);
+        unsigned int nbBars = segment.getNbBars();
 
-        cout << "Track nbBars : " << nbBars << endl;
+        cout << "Segment nbBars : " << nbBars << endl;
         if (nbBars != 5) {
-                cerr << "%%%ERROR : track nbBars should be 5\n";
+                cerr << "%%%ERROR : segment nbBars should be 5\n";
         }
 
-        Track::iterator iter = track.end();
+        Segment::iterator iter = segment.end();
         --iter;
-        cout << "Last track el. time : " << (*iter)->getAbsoluteTime() << endl;
+        cout << "Last segment el. time : " << (*iter)->getAbsoluteTime() << endl;
 
-        cout << "Shrinking track to 3 bars : \n";
-        track.setNbBars(3);
-        nbBars = track.getNbBars();
+        cout << "Shrinking segment to 3 bars : \n";
+        segment.setNbBars(3);
+        nbBars = segment.getNbBars();
 
-        cout << "Track new nbBars : " << nbBars << endl;
+        cout << "Segment new nbBars : " << nbBars << endl;
         if (nbBars != 3) {
-                cerr << "%%%ERROR : track new nbBars should be 3\n";
+                cerr << "%%%ERROR : segment new nbBars should be 3\n";
         }
 #endif // NOT_DEFINED
 
@@ -308,14 +308,14 @@ int main(int argc, char **argv)
         }
         cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
 
-        cout << "Testing Track::expandIntoTie() - expanding 384 -> 2*192\n";
+        cout << "Testing Segment::expandIntoTie() - expanding 384 -> 2*192\n";
 
 	Composition c;
-	Track *ht = new Track();
-	c.addTrack(ht);
-        Track &t(*ht);
-        TrackNotationHelper nh(t);
-        TrackPerformanceHelper ph(t);
+	Segment *ht = new Segment();
+	c.addSegment(ht);
+        Segment &t(*ht);
+        SegmentNotationHelper nh(t);
+        SegmentPerformanceHelper ph(t);
 
         Event *ev = new Event("note");
         ev->setAbsoluteTime(0);
@@ -325,19 +325,19 @@ int main(int argc, char **argv)
 
         nh.expandIntoTie(t.begin(), 384/2);
 
-        for(Track::iterator i = t.begin(); i != t.end(); ++i) {
+        for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
                 cout << "Event at " << (*i)->getAbsoluteTime()
                      << " - duration : " << (*i)->getDuration()
                      << endl;
         }
 
-        Track::iterator half2 = t.begin(); ++half2;
+        Segment::iterator half2 = t.begin(); ++half2;
         
         cout << "Expanding 192 -> (48 + 144) : \n";
 
         nh.expandIntoTie(t.begin(), 48);
 
-        for(Track::iterator i = t.begin(); i != t.end(); ++i) {
+        for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
                 cout << "Event at " << (*i)->getAbsoluteTime()
                      << " - duration : " << (*i)->getDuration()
                      << endl;
@@ -348,7 +348,7 @@ int main(int argc, char **argv)
         nh.expandIntoTie(half2, 144);
 
 
-        for(Track::iterator i = t.begin(); i != t.end(); ++i) {
+        for(Segment::iterator i = t.begin(); i != t.end(); ++i) {
                 cout << "Event at " << (*i)->getAbsoluteTime()
                      << " - duration : " << (*i)->getDuration()
                      << " - performance duration : " <<

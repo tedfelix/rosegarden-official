@@ -56,7 +56,7 @@ public:
      * Precomputes layout data for a single staff, updating any
      * internal data stores associated with that staff and updating
      * any layout-related properties in the events on the staff's
-     * track.
+     * segment.
      */
     virtual void scanStaff(Staff<T> &staff) = 0;
 

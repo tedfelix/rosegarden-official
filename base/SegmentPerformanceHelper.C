@@ -13,11 +13,11 @@ using std::string;
 
 using namespace BaseProperties;
 
-TrackPerformanceHelper::~TrackPerformanceHelper() { }
+SegmentPerformanceHelper::~SegmentPerformanceHelper() { }
 
 
 timeT
-TrackPerformanceHelper::getSoundingDuration(iterator i)
+SegmentPerformanceHelper::getSoundingDuration(iterator i)
 {
     Event *e = *i;
     timeT d = getDurationWithTupling(e);
@@ -36,7 +36,7 @@ TrackPerformanceHelper::getSoundingDuration(iterator i)
     int pitch = e->get<Int>("pitch");
 
     for (;;) {
-        i = track().findContiguousNext(i);
+        i = segment().findContiguousNext(i);
    
         // Chris' own fix to stop this fux [rwb]
         //
@@ -62,7 +62,7 @@ TrackPerformanceHelper::getSoundingDuration(iterator i)
 }
 
 
-timeT TrackPerformanceHelper::getDurationWithTupling(Event *e)
+timeT SegmentPerformanceHelper::getDurationWithTupling(Event *e)
 {
     timeT d = e->getDuration();
 
@@ -84,7 +84,7 @@ timeT TrackPerformanceHelper::getDurationWithTupling(Event *e)
 	if (e->get<Int>(BEAMED_GROUP_UNTUPLED_LENGTH, untupledLength)) {
 	    return (d * tupledLength) / untupledLength;
 	} else {
-	    cerr << "TrackPerformanceHelper::getDurationWithTupling: WARNING: "
+	    cerr << "SegmentPerformanceHelper::getDurationWithTupling: WARNING: "
 		 << "Found tupled length without untupled length property"
 		 << endl;
 	}

@@ -34,7 +34,7 @@
 #include "NotationTypes.h"
 
 class QCanvasItem;
-namespace Rosegarden { class Track; }
+namespace Rosegarden { class Segment; }
 class RosegardenGUIDoc;
 class NotationTool;
 class StaffRuler;
@@ -46,45 +46,45 @@ class ActiveItem;
  * operations
  *
  * When created, the EventSelection holds pointers to Events in a
- * Track. 
+ * Segment. 
  */
 class EventSelection
 {
 public:
     typedef std::multiset<Rosegarden::Event*, Rosegarden::Event::EventCmp> eventcontainer;
     
-    EventSelection(Rosegarden::Track&);
+    EventSelection(Rosegarden::Segment&);
 
     ~EventSelection();
 
     /**
-     * Remove the selected events from the original track
+     * Remove the selected events from the original segment
      * and shallow-copy them internally
      * (just copy the pointers)
      */
     void cut();
 
     /**
-     * Deep-copy the selected events from the original track
+     * Deep-copy the selected events from the original segment
      * (create new Events from the selected ones)
      */
     void copy();
 
     /**
-     * Copy the selected Events to the specified track
+     * Copy the selected Events to the specified segment
      * This requires that enough rest space is available at the
      * paste point.
      *
      * @return false if the paste could not be performed (if there
      * wasn't enough rest space to hold all notes)
      */
-    bool pasteToTrack(Rosegarden::Track&, Rosegarden::timeT);
+    bool pasteToSegment(Rosegarden::Segment&, Rosegarden::timeT);
 
     /**
      * Add an event to the selection.
      * @see NotationSelector#getSelection()
      */
-    void addEvent(Rosegarden::Event* e) { m_trackEvents.insert(e); }
+    void addEvent(Rosegarden::Event* e) { m_segmentEvents.insert(e); }
 
     bool contains(Rosegarden::Event *e) const;
 
@@ -98,9 +98,9 @@ public:
 
     Rosegarden::timeT getTotalDuration()   const;
     unsigned int      getNbEvents()        const { return m_ownEvents.size(); }
-    unsigned int      getAddedEvents()     const { return m_trackEvents.size(); }
+    unsigned int      getAddedEvents()     const { return m_segmentEvents.size(); }
 
-    const Rosegarden::Track &getTrack() const { return m_originalTrack; }
+    const Rosegarden::Segment &getSegment() const { return m_originalSegment; }
     
 private:
     EventSelection(const EventSelection&);
@@ -108,13 +108,13 @@ private:
 protected:
     void updateBeginEndTime() const;
 
-    Rosegarden::Track& m_originalTrack;
+    Rosegarden::Segment& m_originalSegment;
 
-    /// iterators pointing to Events from the original Track
-    eventcontainer m_trackEvents;
+    /// iterators pointing to Events from the original Segment
+    eventcontainer m_segmentEvents;
 
     /**
-     * our own set of Events copied from m_trackEvents.
+     * our own set of Events copied from m_segmentEvents.
      * These are the events we paste from.
      */
     eventcontainer m_ownEvents;
@@ -127,7 +127,7 @@ protected:
 
 /**
  * NotationView is a view for one or more Staff objects, each of
- * which contains the notation data associated with a Track.
+ * which contains the notation data associated with a Segment.
  * NotationView owns the Staff objects it displays.
  * 
  * This class manages the relationship between NotationHLayout/
@@ -145,7 +145,7 @@ class NotationView : public KMainWindow
 
 public:
     NotationView(RosegardenGUIDoc *doc,
-                 std::vector<Rosegarden::Track *> tracks,
+                 std::vector<Rosegarden::Segment *> segments,
                  QWidget *parent);
     ~NotationView();
 
@@ -161,8 +161,8 @@ public:
     /// Return a pointer to the staff at the specified index
     NotationStaff *getStaff(int i) { return m_staffs[i]; }
 
-    /// Return a pointer to the staff corresponding to the given track
-    NotationStaff *getStaff(const Rosegarden::Track &track);
+    /// Return a pointer to the staff corresponding to the given segment
+    NotationStaff *getStaff(const Rosegarden::Segment &segment);
 
     QCanvas* canvas() { return m_canvasView->canvas(); }
     
@@ -192,7 +192,7 @@ public:
     /**
      * Set the current event selection to a single event
      */
-    void setSingleSelectedEvent(Rosegarden::Track &track,
+    void setSingleSelectedEvent(Rosegarden::Segment &segment,
 				Rosegarden::Event *event);
 
     /// Changes the font of the staffs on the view
@@ -605,7 +605,7 @@ protected:
     typedef std::set<NotationView *> NotationViewSet;
     static NotationViewSet m_viewsExtant;
 
-    void redoLayoutAdvised(Rosegarden::Track *track = 0,
+    void redoLayoutAdvised(Rosegarden::Segment *segment = 0,
 			   Rosegarden::timeT startTime = 0,
 			   Rosegarden::timeT endTime = -1); // -1 => end of staff
 };
@@ -648,7 +648,7 @@ protected:
     NotationView& m_parentView;
 };
 
-namespace Rosegarden { class TrackNotationHelper; }
+namespace Rosegarden { class SegmentNotationHelper; }
 
 /**
  * This tool will insert notes on mouse click events
@@ -667,7 +667,7 @@ public:
     static void setAccidental(Rosegarden::Accidental);
 
 protected:
-    virtual Rosegarden::Event *doInsert(Rosegarden::TrackNotationHelper&,
+    virtual Rosegarden::Event *doInsert(Rosegarden::SegmentNotationHelper&,
 					Rosegarden::timeT absTime,
 					const Rosegarden::Note&, int pitch,
 					Rosegarden::Accidental);
@@ -687,7 +687,7 @@ public:
     RestInserter(Rosegarden::Note::Type, unsigned int dots, NotationView&);
     
 protected:
-    virtual Rosegarden::Event *doInsert(Rosegarden::TrackNotationHelper&,
+    virtual Rosegarden::Event *doInsert(Rosegarden::SegmentNotationHelper&,
 					Rosegarden::timeT absTime,
 					const Rosegarden::Note&, int pitch,
 					Rosegarden::Accidental);

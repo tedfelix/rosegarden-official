@@ -36,7 +36,7 @@ using std::string;
     
 
 
-Track::Track(timeT startIdx) :
+Segment::Segment(timeT startIdx) :
     std::multiset<Event*, Event::EventCmp>(),
     m_startIdx(startIdx),
     m_instrument(0),
@@ -46,14 +46,14 @@ Track::Track(timeT startIdx) :
     invalidateTimeSigAtEnd();
 }
 
-Track::~Track()
+Segment::~Segment()
 {
     // delete content
     for (iterator it = begin(); it != end(); ++it) delete (*it);
 }
 
 
-void Track::setStartIndex(timeT idx)
+void Segment::setStartIndex(timeT idx)
 {
     int idxDiff = idx - m_startIdx;
 
@@ -70,8 +70,8 @@ static bool isTimeSig(const Event* e)
 }
 
 
-//!!! No longer correct -- time sigs no longer in track -- check usage
-TimeSignature Track::getTimeSigAtEnd(timeT &absTimeOfSig)
+//!!! No longer correct -- time sigs no longer in segment -- check usage
+TimeSignature Segment::getTimeSigAtEnd(timeT &absTimeOfSig)
 {
     absTimeOfSig = 0;
 
@@ -82,7 +82,7 @@ TimeSignature Track::getTimeSigAtEnd(timeT &absTimeOfSig)
 }
 
 
-void Track::findTimeSigAtEnd() 
+void Segment::findTimeSigAtEnd() 
 {
     m_timeSigAtEnd = TimeSignature();
     m_timeSigTime = 0;
@@ -97,7 +97,7 @@ void Track::findTimeSigAtEnd()
 }
 
 
-timeT Track::getDuration() const
+timeT Segment::getDuration() const
 {
     const_iterator lastEl = end();
     if (lastEl == begin()) return 0;
@@ -108,11 +108,11 @@ timeT Track::getDuration() const
 }
 
 
-void Track::setDuration(timeT d)
+void Segment::setDuration(timeT d)
 {
     timeT currentDuration = getDuration();
 
-    cerr << "Track::setDuration() : current = " << currentDuration
+    cerr << "Segment::setDuration() : current = " << currentDuration
          << " - new : " << d << endl;
 
     if (d == currentDuration) return; // nothing to do
@@ -136,7 +136,7 @@ void Track::setDuration(timeT d)
 //                                                  cutTime,
 //                                                  Event::compareTime2Event);
 //         if (lastElToKeep == end()) {
-//             cerr << "Track::setNbBars() : upper_bound returned end\n";
+//             cerr << "Segment::setNbBars() : upper_bound returned end\n";
 //             return;
 //         }
 
@@ -145,7 +145,7 @@ void Track::setDuration(timeT d)
     
 }
 
-void Track::erase(iterator pos)
+void Segment::erase(iterator pos)
 {
     Event *e = *pos;
     if (e->isa(TimeSignature::EventType)) invalidateTimeSigAtEnd();
@@ -155,7 +155,7 @@ void Track::erase(iterator pos)
 }
 
 
-Track::iterator Track::insert(Event *e)
+Segment::iterator Segment::insert(Event *e)
 {
     if (e->isa(TimeSignature::EventType)) invalidateTimeSigAtEnd();
     iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
@@ -164,14 +164,14 @@ Track::iterator Track::insert(Event *e)
 }
 
 
-void Track::erase(iterator from, iterator to)
+void Segment::erase(iterator from, iterator to)
 {
     //!!! not very efficient, but without an observer event for
     //multiple erase we can't do any better:
 
     // We can't do this :
     //
-    //for (Track::iterator i = from; i != to; ++i) erase(i);
+    //for (Segment::iterator i = from; i != to; ++i) erase(i);
     //
     // because erasing an iterator invalidates it
 
@@ -179,7 +179,7 @@ void Track::erase(iterator from, iterator to)
     // call notifyRemove() for each of them,
     // and finally call std::multiset<>::erase(from, to)
 
-    for (Track::iterator i = from; i != to; ++i) {
+    for (Segment::iterator i = from; i != to; ++i) {
         Event *e = *i;
         if (e->isa(TimeSignature::EventType)) invalidateTimeSigAtEnd();
         notifyRemove(e);
@@ -191,7 +191,7 @@ void Track::erase(iterator from, iterator to)
 }
 
 
-bool Track::eraseSingle(Event* e)
+bool Segment::eraseSingle(Event* e)
 {
     iterator elPos = findSingle(e);
 
@@ -205,7 +205,7 @@ bool Track::eraseSingle(Event* e)
 }
 
 
-Track::iterator Track::findContiguousNext(Track::iterator el) const
+Segment::iterator Segment::findContiguousNext(Segment::iterator el) const
 {
     std::string elType = (*el)->getType(),
         reject, accept;
@@ -243,7 +243,7 @@ Track::iterator Track::findContiguousNext(Track::iterator el) const
     
 }
 
-Track::iterator Track::findContiguousPrevious(Track::iterator el) const
+Segment::iterator Segment::findContiguousPrevious(Segment::iterator el) const
 {
     if (el == begin()) return end();
 
@@ -285,7 +285,7 @@ Track::iterator Track::findContiguousPrevious(Track::iterator el) const
 }
 
 
-Track::iterator Track::findSingle(Event* e) const
+Segment::iterator Segment::findSingle(Event* e) const
 {
     iterator res = end();
 
@@ -301,7 +301,7 @@ Track::iterator Track::findSingle(Event* e) const
 }
 
 
-Track::iterator Track::findTime(timeT t) const
+Segment::iterator Segment::findTime(timeT t) const
 {
     Event dummy;
     dummy.setAbsoluteTime(t);
@@ -310,9 +310,9 @@ Track::iterator Track::findTime(timeT t) const
 }
 
 
-Track::iterator Track::findBarAt(timeT t) const
+Segment::iterator Segment::findBarAt(timeT t) const
 {
-    const Track *ref = getReferenceTrack();
+    const Segment *ref = getReferenceSegment();
     iterator i = ref->findTime(t);
     if (i != ref->begin() &&
 	(i == ref->end() || (*i)->getAbsoluteTime() > t)) --i;
@@ -320,18 +320,18 @@ Track::iterator Track::findBarAt(timeT t) const
 }
 
 
-Track::iterator Track::findBarAfter(timeT t) const
+Segment::iterator Segment::findBarAfter(timeT t) const
 {
-    const Track *ref = getReferenceTrack();
+    const Segment *ref = getReferenceSegment();
     iterator i = ref->findTime(t);
     return i;
 }
 
 
-Track::iterator Track::findTimeSignatureAt(timeT t) const
+Segment::iterator Segment::findTimeSignatureAt(timeT t) const
 {
     iterator i = findBarAt(t);
-    const Track *ref = m_referenceTrack;
+    const Segment *ref = m_referenceSegment;
 
     while (i != ref->begin() &&
 	   (i == ref->end() || !isTimeSig(*i))) {
@@ -345,11 +345,11 @@ Track::iterator Track::findTimeSignatureAt(timeT t) const
     return i;
 }
 
-timeT Track::findTimeSignatureAt(timeT t, TimeSignature &timeSig) const
+timeT Segment::findTimeSignatureAt(timeT t, TimeSignature &timeSig) const
 {
     iterator i = findTimeSignatureAt(t);
 
-    if (i == m_referenceTrack->end()) {
+    if (i == m_referenceSegment->end()) {
 	timeSig = TimeSignature();
 	return 0;
     }
@@ -358,42 +358,42 @@ timeT Track::findTimeSignatureAt(timeT t, TimeSignature &timeSig) const
     return (*i)->getAbsoluteTime();
 }
 
-timeT Track::findBarStartTime(timeT t) const
+timeT Segment::findBarStartTime(timeT t) const
 {
     iterator barItr = findBarAt(t);
-    if (barItr == m_referenceTrack->end()) return getEndIndex();
+    if (barItr == m_referenceSegment->end()) return getEndIndex();
     return (*barItr)->getAbsoluteTime();
 }
 
-timeT Track::findBarEndTime(timeT t) const
+timeT Segment::findBarEndTime(timeT t) const
 {
     iterator barItr = findBarAt(t);
-    if (barItr == m_referenceTrack->end() ||
-	++barItr == m_referenceTrack->end()) return getEndIndex();
+    if (barItr == m_referenceSegment->end() ||
+	++barItr == m_referenceSegment->end()) return getEndIndex();
     return (*barItr)->getAbsoluteTime();
 }
 
-Track::iterator Track::findStartOfBar(timeT t) const
+Segment::iterator Segment::findStartOfBar(timeT t) const
 {
     t = findBarStartTime(t);
     return findTime(t);
 }
 
-Track::iterator Track::findStartOfNextBar(timeT t) const
+Segment::iterator Segment::findStartOfNextBar(timeT t) const
 {
     t = findBarEndTime(t);
     return findTime(t);
 }
 
 
-int Track::getNextId() const
+int Segment::getNextId() const
 {
     return m_id++;
 }
 
 
 
-void Track::fillWithRests(timeT endTime)
+void Segment::fillWithRests(timeT endTime)
 {
     timeT sigTime;
     TimeSignature ts(getTimeSigAtEnd(sigTime));
@@ -415,7 +415,7 @@ void Track::fillWithRests(timeT endTime)
 
 
 
-void Track::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
+void Segment::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
     const
 {
     Event dummy;
@@ -442,7 +442,7 @@ void Track::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
 }
 
 
-bool Track::noteIsInChord(Event *note) const
+bool Segment::noteIsInChord(Event *note) const
 {
     std::pair<iterator, iterator> res = equal_range(note);
 
@@ -454,8 +454,8 @@ bool Track::noteIsInChord(Event *note) const
 }
 
 
-Track::iterator
-Track::getNoteTiedWith(Event *note, bool forwards) const
+Segment::iterator
+Segment::getNoteTiedWith(Event *note, bool forwards) const
 {
     bool tied = false;
 
@@ -498,7 +498,7 @@ Track::getNoteTiedWith(Event *note, bool forwards) const
     return end();
 }
 
-void Track::notifyAdd(Event *e) const
+void Segment::notifyAdd(Event *e) const
 {
     for (ObserverSet::iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
@@ -507,7 +507,7 @@ void Track::notifyAdd(Event *e) const
 }
 
  
-void Track::notifyRemove(Event *e) const
+void Segment::notifyRemove(Event *e) const
 {
     for (ObserverSet::iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
@@ -516,16 +516,16 @@ void Track::notifyRemove(Event *e) const
 }
 
 
-void Track::notifyReferenceTrackRequested() const
+void Segment::notifyReferenceSegmentRequested() const
 {
     for (ObserverSet::iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
-	(*i)->referenceTrackRequested(this);
+	(*i)->referenceSegmentRequested(this);
     }
 }
 
 
-TrackHelper::~TrackHelper() { }
+SegmentHelper::~SegmentHelper() { }
 
  
 }

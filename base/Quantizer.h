@@ -68,7 +68,7 @@ namespace Rosegarden {
    Note that although the quantizer may give rest events a duration of
    zero, it will never do so to note events.
 
-   For best results, always quantize a whole track or section of track
+   For best results, always quantize a whole segment or section of segment
    at once.  The quantizer can only do the right thing for rest events
    if given a whole section to consider at once.
 */
@@ -98,27 +98,27 @@ public:
     int getMaxDots() const        { return m_maxDots; }
 
     /**
-     * Unit-quantizes a section of a track.  Sets the DurationProperty
+     * Unit-quantizes a section of a segment.  Sets the DurationProperty
      * and AbsoluteTimeProperty on all note and rest events; does not
      * change the event's intrinsic absoluteTime and duration.
      */
-    void quantizeByUnit(Track::iterator from, Track::iterator to) const;
+    void quantizeByUnit(Segment::iterator from, Segment::iterator to) const;
 
     /**
-     * Note-quantizes a section of a track.  Sets the
+     * Note-quantizes a section of a segment.  Sets the
      * DurationProperty, NoteDurationProperty and AbsoluteTimeProperty
      * properties on all note and rest events; does not change the
      * event's intrinsic absoluteTime and duration.
      */
-    void quantizeByNote(Track::iterator from, Track::iterator to) const;
+    void quantizeByNote(Segment::iterator from, Segment::iterator to) const;
 
     /**
-     * Legato-quantizes a section of a track.  Sets the
+     * Legato-quantizes a section of a segment.  Sets the
      * DurationProperty, LegatoDurationProperty and AbsoluteTimeProperty
      * properties on all note and rest events; does not change the
      * event's intrinsic absoluteTime and duration.
      */
-    void quantizeLegato(Track::iterator from, Track::iterator to) const;
+    void quantizeLegato(Segment::iterator from, Segment::iterator to) const;
 
     /**
      * Returns the DurationProperty if it exists; otherwise quantizes
@@ -127,7 +127,7 @@ public:
      * or the last quantization used a different unit, this method may
      * return the wrong value.  Also, this method cannot take into
      * account the proper relationship between notes and rests; you
-     * should always prefer to quantize whole tracks where possible.
+     * should always prefer to quantize whole segments where possible.
      */
     timeT getUnitQuantizedDuration(Rosegarden::Event *el) const;
 
@@ -138,7 +138,7 @@ public:
      * quantized, or the last quantization used a different unit, this
      * method may return the wrong value.  Also, this method cannot
      * take into account the proper relationship between notes and
-     * rests; you should always prefer to quantize whole tracks where
+     * rests; you should always prefer to quantize whole segments where
      * possible.
      */
     timeT getUnitQuantizedAbsoluteTime(Rosegarden::Event *el) const;
@@ -150,7 +150,7 @@ public:
      * quantized, or the last quantization used a different maxDots
      * value, this may return the wrong value.  Also, this method
      * cannot take into account the proper relationship between notes
-     * and rests; you should always prefer to quantize whole tracks
+     * and rests; you should always prefer to quantize whole segments
      * where possible.
      */
     timeT getNoteQuantizedDuration(Rosegarden::Event *el) const;
@@ -205,12 +205,12 @@ protected:
 			       timeT followingRestDuration) const;
     };
 
-    void quantize(Track::iterator from, Track::iterator to,
+    void quantize(Segment::iterator from, Segment::iterator to,
 		  const SingleQuantizer &absq, const SingleQuantizer &dq,
 		  PropertyName durationProperty, bool legato) const;
 
-    timeT findFollowingRestDuration(Track::iterator from,
-				    Track::iterator to) const;
+    timeT findFollowingRestDuration(Segment::iterator from,
+				    Segment::iterator to) const;
 
     int m_unit;
     int m_maxDots;

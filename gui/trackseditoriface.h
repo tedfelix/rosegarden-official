@@ -1,20 +1,20 @@
 // -*- c-basic-offset: 4 -*-
-#ifndef TRACKSEDITORIFACE_H
-#define TRACKSEDITORIFACE_H
+#ifndef SEGMENTSEDITORIFACE_H
+#define SEGMENTSEDITORIFACE_H
 
 #include <dcopobject.h>
 
 /**
- * TracksEditor DCOP Interface
+ * TrackEditor DCOP Interface
  *
- * @see TracksEditor
+ * @see TrackEditor
  */
-class TracksEditorIface : virtual public DCOPObject
+class TrackEditorIface : virtual public DCOPObject
 {
     K_DCOP
 public:
 k_dcop:
-    virtual void addTrack(int instrument, int start, unsigned int length) = 0;
+    virtual void addSegment(int instrument, int start, unsigned int length) = 0;
 };
 
 #endif

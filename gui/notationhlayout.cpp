@@ -43,8 +43,8 @@ using Rosegarden::Sharp;
 using Rosegarden::Flat;
 using Rosegarden::Natural;
 using Rosegarden::Note;
-using Rosegarden::Track;
-using Rosegarden::TrackNotationHelper;
+using Rosegarden::Segment;
+using Rosegarden::SegmentNotationHelper;
 using Rosegarden::TimeSignature;
 using Rosegarden::timeT;
 using Rosegarden::Quantizer;
@@ -190,11 +190,11 @@ NotationHLayout::scanStaff(StaffType &staff)
 {
     START_TIMING;
 
-    Track &t(staff.getTrack());
-    const Track *timeRef = t.getReferenceTrack();
+    Segment &t(staff.getSegment());
+    const Segment *timeRef = t.getReferenceSegment();
 
     if (timeRef == 0) {
-	kdDebug(KDEBUG_AREA) << "ERROR: NotationHLayout::scanStaff: reference track required (at least until code\nis written to render a track without bar lines)" << endl;
+	kdDebug(KDEBUG_AREA) << "ERROR: NotationHLayout::scanStaff: reference segment required (at least until code\nis written to render a segment without bar lines)" << endl;
 	return;
     }
 
@@ -208,23 +208,23 @@ NotationHLayout::scanStaff(StaffType &staff)
 
     barList.clear();
 
-    Track::iterator refStart = t.findBarAt(t.getStartIndex());
-    Track::iterator refEnd = t.findBarAfter(t.getEndIndex());
+    Segment::iterator refStart = t.findBarAt(t.getStartIndex());
+    Segment::iterator refEnd = t.findBarAfter(t.getEndIndex());
     
     int barNo = 0;
 
-    TrackNotationHelper nh(t);
+    SegmentNotationHelper nh(t);
     nh.quantize();
 
     addNewBar(staff, barNo, notes->begin(), 0, 0, true, 0); 
     ++barNo;
 
-    for (Track::iterator refi = refStart; refi != refEnd; ++refi) {
+    for (Segment::iterator refi = refStart; refi != refEnd; ++refi) {
 
 	timeT barStartTime = (*refi)->getAbsoluteTime();
 	timeT   barEndTime;
 
-	Track::iterator refi0(refi);
+	Segment::iterator refi0(refi);
 	if (++refi0 != refEnd) {
 	    barEndTime = (*refi0)->getAbsoluteTime();
 	} else {
@@ -447,13 +447,13 @@ NotationHLayout::reconcileBars()
 
         if (list.size() > 0 && list[0].barNo < 0) continue; // done it already
 
-        Track &track = staff->getTrack();
-        const Track &refTrack = *(track.getReferenceTrack());
+        Segment &segment = staff->getSegment();
+        const Segment &refSegment = *(segment.getReferenceSegment());
 
-        for (Track::const_iterator j = refTrack.begin();
-             j != refTrack.end(); ++j) {
+        for (Segment::const_iterator j = refSegment.begin();
+             j != refSegment.end(); ++j) {
 
-            if ((*j)->getAbsoluteTime() >= track.getStartIndex()) break;
+            if ((*j)->getAbsoluteTime() >= segment.getStartIndex()) break;
             list.push_front
                 (BarData
                  (-1, staff->getViewElementList()->end(), -1, 0, 0, true, 0));
@@ -874,7 +874,10 @@ NotationHLayout::positionNote(StaffType &staff,
 
     long groupNo = -1;
     (void)note->event()->get<Int>(BEAMED_GROUP_ID, groupNo);
-    if (groupNo == -1) return delta;
+    if (groupNo == -1) {
+	note->event()->unset(BEAMED);
+	return delta;
+    }
 
     long nextGroupNo = -1;
     NotationElementList::iterator it0(itr);

@@ -59,6 +59,9 @@ extern const Rosegarden::PropertyName BEAM_NEXT_BEAM_COUNT;
 extern const Rosegarden::PropertyName BEAM_NEXT_PART_BEAMS;
 extern const Rosegarden::PropertyName BEAM_THIS_PART_BEAMS;
 extern const Rosegarden::PropertyName BEAM_MY_Y;
+extern const Rosegarden::PropertyName TUPLING_LINE_MY_Y;
+extern const Rosegarden::PropertyName TUPLING_LINE_WIDTH;
+extern const Rosegarden::PropertyName TUPLING_LINE_GRADIENT;
 
 }
 

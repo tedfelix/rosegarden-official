@@ -46,8 +46,8 @@
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
 
 using Rosegarden::Composition;
-using Rosegarden::Track;
-using Rosegarden::TrackNotationHelper;
+using Rosegarden::Segment;
+using Rosegarden::SegmentNotationHelper;
 using Rosegarden::Event;
 using Rosegarden::Int;
 using Rosegarden::String;
@@ -213,8 +213,8 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::openDocument() end - "
                          << "m_composition : " << &m_composition
-                         << " - m_composition->getNbTracks() : "
-                         << m_composition.getNbTracks()
+                         << " - m_composition->getNbSegments() : "
+                         << m_composition.getNbSegments()
                          << " - m_composition->getDuration() : "
                          << m_composition.getDuration() << endl;
 
@@ -238,10 +238,10 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                << "<!DOCTYPE rosegarden-data>\n"
                << "<rosegarden-data>\n";
 
-    // output reference track
-    fileStream << "<reference-track>" << endl;
-    const Track *refTrack = m_composition.getReferenceTrack();
-    for (Track::iterator i = refTrack->begin(); i != refTrack->end(); ++i) {
+    // output reference segment
+    fileStream << "<reference-segment>" << endl;
+    const Segment *refSegment = m_composition.getReferenceSegment();
+    for (Segment::iterator i = refSegment->begin(); i != refSegment->end(); ++i) {
 	if (!(*i)->isa(Composition::BarEventType)) {
 	    if ((*i)->getAbsoluteTime() > 0) {
 		fileStream << "<resync time=\"" << (*i)->getAbsoluteTime()
@@ -250,22 +250,22 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	    fileStream << XmlStorableEvent::toXmlString(*(*i)) << endl;
 	}
     }
-    fileStream << "</reference-track>" << endl;
+    fileStream << "</reference-segment>" << endl;
 
     // output all elements
     //
-    // Iterate on tracks
+    // Iterate on segments
     for (Composition::iterator trks = m_composition.begin();
          trks != m_composition.end(); ++trks) {
 
         //--------------------------
-        fileStream << QString("<track instrument=\"%1\" start=\"%2\">")
+        fileStream << QString("<segment instrument=\"%1\" start=\"%2\">")
             .arg((*trks)->getInstrument())
             .arg((*trks)->getStartIndex()) << endl;
 
         long currentGroup = -1;
 
-        for (Track::iterator i = (*trks)->begin();
+        for (Segment::iterator i = (*trks)->begin();
              i != (*trks)->end(); ++i) {
 
             long group;
@@ -293,7 +293,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                 currentGroup = -1;
             }
 
-            Track::iterator nextEl = i;
+            Segment::iterator nextEl = i;
             ++nextEl;
 
             if (nextEl != (*trks)->end()) {
@@ -327,7 +327,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
             fileStream << "</group>" << endl;
         }
 
-        fileStream << "</track>" << endl; //-------------------------
+        fileStream << "</segment>" << endl; //-------------------------
 
     }
     
@@ -378,37 +378,37 @@ RosegardenGUIDoc::xmlParse(QFile &file, QString &errMsg)
 
 
 void
-RosegardenGUIDoc::createNewTrack(TrackItem *p, int instrument)
+RosegardenGUIDoc::createNewSegment(SegmentItem *p, int instrument)
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewTrack(item : "
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment(item : "
                          << p << ")\n";
 
-    Track *newTrack = new Track();
-    newTrack->setInstrument(instrument);
+    Segment *newSegment = new Segment();
+    newSegment->setInstrument(instrument);
 
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewTrack() new track = "
-                         << newTrack << endl;
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment() new segment = "
+                         << newSegment << endl;
     
-    m_composition.addTrack(newTrack);
+    m_composition.addSegment(newSegment);
 
     int startBar = p->getStartBar();
     int barCount = p->getItemNbBars();
 
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewTrack() startBar = " 
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment() startBar = " 
 			 << startBar << ", barCount = " << barCount << endl;
 
     timeT startIndex = m_composition.getBarRange(startBar).first;
     timeT duration = m_composition.getBarRange(startBar + barCount).first -
 	startIndex;
 
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewTrack() startIndex = " 
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment() startIndex = " 
 			 << startIndex << ", duration = " << duration << endl;
 
-    newTrack->setStartIndex(startIndex);
-    newTrack->setDuration(duration);
+    newSegment->setStartIndex(startIndex);
+    newSegment->setDuration(duration);
 
-    // store ptr to new track in track part item
-    p->setTrack(newTrack);
+    // store ptr to new segment in segment part item
+    p->setSegment(newSegment);
 
     setModified();
 }

@@ -77,7 +77,7 @@ main(int argc, char **argv)
     Arts::TimeStamp midiTime;
     Arts::MidiEvent event;
 
-    cout << "Number of Tracks in Composition = " << comp->getNbTracks() << endl;
+    cout << "Number of Segments in Composition = " << comp->getNbSegments() << endl;
 //    cout << "Number of Ticks per Bar = " << comp->getNbTicksPerBar() << endl;
 
 
@@ -119,7 +119,7 @@ main(int argc, char **argv)
     midiQueueIt != midiQueue->end();
     midiQueueIt++)
     {
-    // want to send the event both ways - to the track and to the GUI
+    // want to send the event both ways - to the segment and to the GUI
     // so we process the midi commands individually from the small clump
     // we've received back in the queue.  Dependent on performance
     // this may allow us to update our GUI and keep reading in the

@@ -20,8 +20,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _TRACK_H_
-#define _TRACK_H_
+#ifndef _SEGMENT_H_
+#define _SEGMENT_H_
 
 #include <set>
 #include <string>
@@ -33,32 +33,32 @@ namespace Rosegarden
 {
 
 /**
- * Track is the container for a set of Events that are all played on
+ * Segment is the container for a set of Events that are all played on
  * the same instrument.  Each event has an absolute starting time,
- * which is used as the index within the track.  Multiple events may
+ * which is used as the index within the segment.  Multiple events may
  * have the same absolute time.
  * 
  * (For example, chords are represented simply as a sequence of notes
- * that share a starting time.  The Track can contain counterpoint --
+ * that share a starting time.  The Segment can contain counterpoint --
  * notes that overlap, rather than starting and ending together -- but
  * in practice it's probably too hard to display so we should make
- * more than one Track if we want to represent true counterpoint.)
+ * more than one Segment if we want to represent true counterpoint.)
  *
  * If you want to carry out notation-related editing operations on
- * a Track, take a look at TrackNotationHelper.  If you want to play a
- * Track, try TrackPerformanceHelper for duration calculations.
+ * a Segment, take a look at SegmentNotationHelper.  If you want to play a
+ * Segment, try SegmentPerformanceHelper for duration calculations.
  *
- * The Track owns the Events its items are pointing at.
+ * The Segment owns the Events its items are pointing at.
  */
 
-class TrackObserver;
+class SegmentObserver;
 class Quantizer;
 
-class Track : public std::multiset<Event*, Event::EventCmp>
+class Segment : public std::multiset<Event*, Event::EventCmp>
 {
 public:
-    Track(timeT startIdx = 0);
-    ~Track();
+    Segment(timeT startIdx = 0);
+    ~Segment();
     
     timeT getStartIndex() const { return m_startIdx; }
     void  setStartIndex(timeT i);
@@ -72,18 +72,18 @@ public:
     void         setInstrument(unsigned int i) { m_instrument = i; }
 
     /**
-     * Returns the track storing Bar and TimeSignature events,
-     * or null if none (which should be the case iff the Track is
+     * Returns the segment storing Bar and TimeSignature events,
+     * or null if none (which should be the case iff the Segment is
      * not contained in a Composition).
      */
-    const Track *getReferenceTrack() const {
-	notifyReferenceTrackRequested();
-	return m_referenceTrack;
+    const Segment *getReferenceSegment() const {
+	notifyReferenceSegmentRequested();
+	return m_referenceSegment;
     }
 
     /// Should only be called by Composition
-    void setReferenceTrack(const Track *reftrack) {
-	m_referenceTrack = reftrack;
+    void setReferenceSegment(const Segment *refsegment) {
+	m_referenceSegment = refsegment;
     }
 
     /// Should only be called by Composition
@@ -93,32 +93,32 @@ public:
     const Quantizer *getQuantizer() const { return m_quantizer; }
 
     /**
-     * Returns an iterator onto the reference track, pointing to the
+     * Returns an iterator onto the reference segment, pointing to the
      * last bar or time signature event before (or at) the absolute
-     * time given.  Returns end() of reference track if there are no
+     * time given.  Returns end() of reference segment if there are no
      * bar or time signature events before this time.
      *
-     * Do not call this unless the track is in a Composition.
+     * Do not call this unless the segment is in a Composition.
      */
     iterator findBarAt(timeT) const;
 
     /**
-     * Returns an iterator onto the reference track, pointing to the
+     * Returns an iterator onto the reference segment, pointing to the
      * next bar or time signature event after (or at) the absolute
-     * time given.  Returns end() of reference track if there are no
+     * time given.  Returns end() of reference segment if there are no
      * bar or time signature events after this time.
      *
-     * Do not call this unless the track is in a Composition.
+     * Do not call this unless the segment is in a Composition.
      */
     iterator findBarAfter(timeT) const;
 
     /**
-     * Returns an iterator onto the reference track, pointing to the
+     * Returns an iterator onto the reference segment, pointing to the
      * last time signature before (or at) the absolute time given.
-     * Returns end() of reference track if there was no time signature
+     * Returns end() of reference segment if there was no time signature
      * before this time.
      * 
-     * Do not call this unless the track is in a Composition.
+     * Do not call this unless the segment is in a Composition.
      */
     iterator findTimeSignatureAt(timeT) const;
 
@@ -132,51 +132,51 @@ public:
      * this case and a real default time signature at time 0; use the
      * previous method if this matters to you.)
      * 
-     * Do not call this unless the track is in a Composition.
+     * Do not call this unless the segment is in a Composition.
      */
     timeT findTimeSignatureAt(timeT, TimeSignature &) const;
 
     /**
      * Returns the time at which the bar containing the given time
-     * starts.  Returns end-of-track if the given time exceeds the
-     * track's length.
+     * starts.  Returns end-of-segment if the given time exceeds the
+     * segment's length.
      *
-     * Do not call this unless the track is in a Composition.
+     * Do not call this unless the segment is in a Composition.
      */
     timeT findBarStartTime(timeT) const;
 
     /**
      * Returns the time at which the bar containing the given time
-     * ends.  Returns end-of-track if the given time exceeds the
-     * track's length.
+     * ends.  Returns end-of-segment if the given time exceeds the
+     * segment's length.
      *
-     * Do not call this unless the track is in a Composition.
+     * Do not call this unless the segment is in a Composition.
      */
     timeT findBarEndTime(timeT) const;
 
     /**
-     * Returns an iterator onto this track, pointing to the first item
+     * Returns an iterator onto this segment, pointing to the first item
      * in the bar containing the given time.
      *
-     * Do not call this unless the track is in a Composition.
+     * Do not call this unless the segment is in a Composition.
      */
     iterator findStartOfBar(timeT) const;
 
     /**
-     * Returns an iterator onto this track, pointing to the first item
+     * Returns an iterator onto this segment, pointing to the first item
      * in the bar following the one containing the given time.
      *
-     * Do not call this unless the track is in a Composition.
+     * Do not call this unless the segment is in a Composition.
      */
     iterator findStartOfNextBar(timeT) const;
 
     /**
-     * Returns the time signature in effect at the end of the track,
+     * Returns the time signature in effect at the end of the segment,
      * without referring to the bar position data.  Inefficient unless
-     * the time signature changes very close to the end of the track.
+     * the time signature changes very close to the end of the segment.
      * 
-     * Does not require the reference track to exist (i.e. okay if
-     * track is not in a Composition).
+     * Does not require the reference segment to exist (i.e. okay if
+     * segment is not in a Composition).
      */
     TimeSignature getTimeSigAtEnd(timeT &absTimeOfSig);
 
@@ -235,7 +235,7 @@ public:
     
     /**
      * Returns a numeric id of some sort
-     * The id is guaranteed to be unique within the track, but not to
+     * The id is guaranteed to be unique within the segment, but not to
      * have any other interesting properties
      */
     int getNextId() const;
@@ -261,9 +261,9 @@ public:
     iterator getNoteTiedWith(Event *note, bool goForwards) const;
 
     /**
-     * Fill up the track with rests, from the end of the last event
-     * currently on the track to the endTime given.  Actually, this
-     * does much the same as setDuration does when it extends a track.
+     * Fill up the segment with rests, from the end of the last event
+     * currently on the segment to the endTime given.  Actually, this
+     * does much the same as setDuration does when it extends a segment.
      * Hm.
      */
     void fillWithRests(timeT endTime);
@@ -271,9 +271,9 @@ public:
     /**
      * The compare class used by Composition
      */
-    struct TrackCmp
+    struct SegmentCmp
     {
-        bool operator()(const Track* a, const Track* b) const 
+        bool operator()(const Segment* a, const Segment* b) const 
         {
             if (a->getInstrument() == b->getInstrument())
                 return a->getStartIndex() < b->getStartIndex();
@@ -285,18 +285,18 @@ public:
     /**
      * An alternative compare class that orders by start time first
      */
-    struct TrackTimeCmp
+    struct SegmentTimeCmp
     {
-	bool operator()(const Track *a, const Track *b) const {
+	bool operator()(const Segment *a, const Segment *b) const {
 	    return a->getStartIndex() < b->getStartIndex();
 	}
     };
 
-    /// For use by TrackObserver objects like Composition & ViewElementsManager
-    void    addObserver(TrackObserver *obs) { m_observers.insert(obs); }
+    /// For use by SegmentObserver objects like Composition & ViewElementsManager
+    void    addObserver(SegmentObserver *obs) { m_observers.insert(obs); }
 
-    /// For use by TrackObserver objects like Composition & ViewElementsManager
-    void removeObserver(TrackObserver *obs) { m_observers.erase (obs); }
+    /// For use by SegmentObserver objects like Composition & ViewElementsManager
+    void removeObserver(SegmentObserver *obs) { m_observers.erase (obs); }
 
 private:
     timeT m_startIdx;
@@ -305,16 +305,16 @@ private:
     mutable int m_id;
 
     /// contains bar position data etc. I do not own this
-    const Track *m_referenceTrack;
+    const Segment *m_referenceSegment;
 
-    typedef std::set<TrackObserver *> ObserverSet;
+    typedef std::set<SegmentObserver *> ObserverSet;
     ObserverSet m_observers;
 
     const Quantizer *m_quantizer;
 
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;
-    void notifyReferenceTrackRequested() const;
+    void notifyReferenceSegmentRequested() const;
 
     // cache to optimise otherwise-disgusting-inefficiency in fillWithRests
     // that seriously affects MIDI file loading for files in which notes
@@ -325,47 +325,47 @@ private:
     void findTimeSigAtEnd();
 
 private:
-    Track(const Track &);
-    Track &operator=(const Track &);
+    Segment(const Segment &);
+    Segment &operator=(const Segment &);
 };
 
 
-class TrackObserver
+class SegmentObserver
 {
 public:
-    // called after the event has been added to the track:
-    virtual void eventAdded(const Track *, Event *) = 0;
+    // called after the event has been added to the segment:
+    virtual void eventAdded(const Segment *, Event *) = 0;
 
-    // called after the event has been removed from the track,
+    // called after the event has been removed from the segment,
     // and just before it is deleted:
-    virtual void eventRemoved(const Track *, Event *) = 0;
+    virtual void eventRemoved(const Segment *, Event *) = 0;
 
     // probably only of interest to Composition
-    virtual void referenceTrackRequested(const Track *) { }
+    virtual void referenceSegmentRequested(const Segment *) { }
 };
 
 
 // an abstract base
 
-class TrackHelper
+class SegmentHelper
 {
 protected:
-    TrackHelper(Track &t) : m_track(t) { }
-    virtual ~TrackHelper();
+    SegmentHelper(Segment &t) : m_segment(t) { }
+    virtual ~SegmentHelper();
 
-    typedef Track::iterator iterator;
+    typedef Segment::iterator iterator;
 
-    Track &track() { return m_track; }
-    const Quantizer &quantizer() { return *(track().getQuantizer()); }
+    Segment &segment() { return m_segment; }
+    const Quantizer &quantizer() { return *(segment().getQuantizer()); }
 
-    Track::iterator begin() { return track().begin(); }
-    Track::iterator end()   { return track().end();   }
+    Segment::iterator begin() { return segment().begin(); }
+    Segment::iterator end()   { return segment().end();   }
 
-    Track::iterator insert(Event *e) { return track().insert(e); }
-    void erase(Track::iterator i)    { track().erase(i); }
+    Segment::iterator insert(Event *e) { return segment().insert(e); }
+    void erase(Segment::iterator i)    { segment().erase(i); }
 
 private:
-    Track &m_track;
+    Segment &m_segment;
 };
 
 }

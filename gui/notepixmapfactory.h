@@ -58,6 +58,11 @@ public:
     void setWidth(int width)              { m_width            = width;     }
     void setGradient(double gradient)     { m_gradient         = gradient;  }
 
+    void setTupledCount(int count)	  { m_tupledCount      = count;	    }
+    void setTuplingLineY(int y)		  { m_tuplingLineY     = y;	    }
+    void setTuplingLineWidth(int width)	  { m_tuplingLineWidth = width;	    }
+    void setTuplingLineGradient(double g) { m_tuplingLineGradient = g;      }
+
     void setTied(bool tied)               { m_tied             = tied;      }
     void setTieLength(int tieLength)      { m_tieLength        = tieLength; }
 
@@ -82,6 +87,11 @@ private:
     bool    m_nextPartialBeams;
     int     m_width;
     double  m_gradient;
+
+    int	    m_tupledCount;
+    int     m_tuplingLineY;
+    int	    m_tuplingLineWidth;
+    double  m_tuplingLineGradient;
 
     bool    m_tied;
     int     m_tieLength;

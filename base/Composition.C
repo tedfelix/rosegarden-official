@@ -58,20 +58,20 @@ void Composition::swap(Composition& c)
 
     m_timeReference.swap(c.m_timeReference);
 
-    m_tracks.swap(c.m_tracks);
+    m_segments.swap(c.m_segments);
 
-    for (trackcontainer::iterator i = that->m_tracks.begin();
-	 i != that->m_tracks.end(); ++i) {
+    for (segmentcontainer::iterator i = that->m_segments.begin();
+	 i != that->m_segments.end(); ++i) {
 	(*i)->removeObserver(this);
 	(*i)->addObserver(that);
-	(*i)->setReferenceTrack(&that->m_timeReference);
+	(*i)->setReferenceSegment(&that->m_timeReference);
     }
 
-    for (trackcontainer::iterator i = this->m_tracks.begin();
-	 i != this->m_tracks.end(); ++i) {
+    for (segmentcontainer::iterator i = this->m_segments.begin();
+	 i != this->m_segments.end(); ++i) {
 	(*i)->removeObserver(that);
 	(*i)->addObserver(this);
-	(*i)->setReferenceTrack(&this->m_timeReference);
+	(*i)->setReferenceSegment(&this->m_timeReference);
     }
 
     this->m_barPositionsNeedCalculating = true;
@@ -80,38 +80,38 @@ void Composition::swap(Composition& c)
 }
 
 Composition::iterator
-Composition::addTrack(Track *track)
+Composition::addSegment(Segment *segment)
 {
-    if (!track) return end();
+    if (!segment) return end();
     
-    std::pair<iterator, bool> res = m_tracks.insert(track);
-    track->addObserver(this);
-    track->setReferenceTrack(&m_timeReference);
-    track->setQuantizer(getQuantizer());
+    std::pair<iterator, bool> res = m_segments.insert(segment);
+    segment->addObserver(this);
+    segment->setReferenceSegment(&m_timeReference);
+    segment->setQuantizer(getQuantizer());
 
     return res.first;
 }
 
 void
-Composition::deleteTrack(Composition::iterator i)
+Composition::deleteSegment(Composition::iterator i)
 {
     if (i == end()) return;
 
-    Track *p = (*i);
+    Segment *p = (*i);
     p->removeObserver(this);
-    p->setReferenceTrack(0);
+    p->setReferenceSegment(0);
 
     delete p;
-    m_tracks.erase(i);
+    m_segments.erase(i);
 }
 
 bool
-Composition::deleteTrack(Track *p)
+Composition::deleteSegment(Segment *p)
 {
     iterator i = find(begin(), end(), p);
     if (i == end()) return false;
     
-    deleteTrack(i);
+    deleteSegment(i);
     return true;
 }
 
@@ -120,13 +120,13 @@ Composition::getDuration() const
 {
     unsigned int maxDuration = 0;
 
-    for (trackcontainer::const_iterator i = m_tracks.begin();
-         i != m_tracks.end(); ++i) {
+    for (segmentcontainer::const_iterator i = m_segments.begin();
+         i != m_segments.end(); ++i) {
 
-        unsigned int trackTotal = (*i)->getDuration() + (*i)->getStartIndex();
+        unsigned int segmentTotal = (*i)->getDuration() + (*i)->getStartIndex();
         
-        if (trackTotal > maxDuration) {
-            maxDuration = trackTotal;
+        if (segmentTotal > maxDuration) {
+            maxDuration = segmentTotal;
         }
     }
     
@@ -136,17 +136,17 @@ Composition::getDuration() const
 void
 Composition::clear()
 {
-    for (trackcontainer::iterator i = m_tracks.begin();
-        i != m_tracks.end(); ++i) {
+    for (segmentcontainer::iterator i = m_segments.begin();
+        i != m_segments.end(); ++i) {
         (*i)->removeObserver(this);
-	(*i)->setReferenceTrack(0);
+	(*i)->setReferenceSegment(0);
         delete (*i);
     }
-    m_tracks.erase(begin(), end());
+    m_segments.erase(begin(), end());
     m_timeReference.erase(m_timeReference.begin(), m_timeReference.end());
 }
 
-Track::iterator
+Segment::iterator
 Composition::addNewBar(timeT time)
 {
 //    std::cerr << "Composition::addNewBar" << std::endl;
@@ -162,13 +162,13 @@ Composition::calculateBarPositions()
 
     if (!m_barPositionsNeedCalculating) return;
 
-    Track &t = m_timeReference;
-    Track::iterator i;
+    Segment &t = m_timeReference;
+    Segment::iterator i;
 
     FastVector<timeT> segments;
     FastVector<timeT> segmentTimes;
 
-    FastVector<Track::iterator> baritrs;
+    FastVector<Segment::iterator> baritrs;
 
     for (i = t.begin(); i != t.end(); ++i) {
 	if ((*i)->isa(BarEventType)) baritrs.push_back(i);
@@ -183,7 +183,7 @@ Composition::calculateBarPositions()
 	t.erase(baritrs[j]);
     }
 
-    std::cerr << "have " << t.size() << " non-bars in ref track" << std::endl;
+    std::cerr << "have " << t.size() << " non-bars in ref segment" << std::endl;
 
     bool segment0isTimeSig = true;
     if (segments.size() == 0 || segments[0] != 0) {
@@ -218,7 +218,7 @@ Composition::calculateBarPositions()
     m_barPositionsNeedCalculating = false;
     std::cerr << "Composition::calculateBarPositions ending" << std::endl;
 
-    std::cerr << "Reference track contains:" << std::endl;
+    std::cerr << "Reference segment contains:" << std::endl;
     for (i = t.begin(); i != t.end(); ++i) {
 	(*i)->dump(std::cerr);
     }
@@ -229,7 +229,7 @@ Composition::getBarNumber(timeT t)
 {
     calculateBarPositions();
 
-    Track::iterator i = m_timeReference.findTime(t);
+    Segment::iterator i = m_timeReference.findTime(t);
     return distance(m_timeReference.begin(), i);
 }
 
@@ -238,7 +238,7 @@ Composition::getBarStart(timeT t)
 {
     calculateBarPositions();
 
-    Track::iterator i = m_timeReference.findTime(t);
+    Segment::iterator i = m_timeReference.findTime(t);
     if (i != m_timeReference.begin()) --i;
     if (i == m_timeReference.end()) return 0;
 
@@ -250,7 +250,7 @@ Composition::getBarEnd(timeT t)
 {
     calculateBarPositions();
 
-    Track::iterator i = m_timeReference.findTime(t);
+    Segment::iterator i = m_timeReference.findTime(t);
     if (i == m_timeReference.end() || ++i == m_timeReference.end()) {
         return m_timeReference.getDuration();
     }
@@ -263,7 +263,7 @@ Composition::getBarRange(int n, bool truncate)
 {
     calculateBarPositions();
 
-    Track::iterator i = m_timeReference.begin();
+    Segment::iterator i = m_timeReference.begin();
 
     timeT start = 0, finish = start;
     
@@ -309,25 +309,25 @@ Composition::getBarRange(int n, bool truncate)
 }
 
 
-void Composition::eventAdded(const Track *t, Event *e)
+void Composition::eventAdded(const Segment *t, Event *e)
 {
     // in theory this should only be true if we insert something after
     // the former end of the composition -- or add a time sig to the
-    // reference track
+    // reference segment
     m_barPositionsNeedCalculating = true;
 }
 
 
-void Composition::eventRemoved(const Track *t, Event *e)
+void Composition::eventRemoved(const Segment *t, Event *e)
 {
     // in theory this should only be true if we remove something at
     // the very end of the composition -- or remove a time sig from
-    // the reference track
+    // the reference segment
     m_barPositionsNeedCalculating = true;
 }
 
 
-void Composition::referenceTrackRequested(const Track *)
+void Composition::referenceSegmentRequested(const Segment *)
 {
     calculateBarPositions();
 }

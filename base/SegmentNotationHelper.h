@@ -20,21 +20,21 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _TRACK_NOTATION_HELPER_H_
-#define _TRACK_NOTATION_HELPER_H_
+#ifndef _SEGMENT_NOTATION_HELPER_H_
+#define _SEGMENT_NOTATION_HELPER_H_
 
 #include "Track.h"
 
 namespace Rosegarden 
 {
 
-class TrackNotationHelper : protected TrackHelper
+class SegmentNotationHelper : protected SegmentHelper
 {
 public:
-    TrackNotationHelper(Track &t) : TrackHelper(t) { }
-    virtual ~TrackNotationHelper();
+    SegmentNotationHelper(Segment &t) : SegmentHelper(t) { }
+    virtual ~SegmentNotationHelper();
 
-    TrackHelper::track;
+    SegmentHelper::segment;
 
 
     /**
@@ -163,7 +163,7 @@ public:
      * If dots is specified, a true value will only be returned if the
      * best-fit note has no more than that number of dots.  e.g. if
      * dots = 0, only notes that are viable without the use of dots
-     * will be acceptable.  The default is whatever the track's
+     * will be acceptable.  The default is whatever the segment's
      * quantizer considers acceptable (probably either 1 or 2 dots).
      */
     bool isViable(Event *e, int dots = -1) {
@@ -178,7 +178,7 @@ public:
      * If dots is specified, a true value will only be returned if the
      * best-fit note has no more than that number of dots.  e.g. if
      * dots = 0, only notes that are viable without the use of dots
-     * will be acceptable.  The default is whatever the track's
+     * will be acceptable.  The default is whatever the segment's
      * quantizer considers acceptable (probably either 1 or 2 dots).
      */
     bool isViable(timeT duration, int dots = -1);
@@ -270,9 +270,9 @@ public:
 
 
     /**
-     * Note-quantize the Track and set the NoteType and NoteDots
+     * Note-quantize the Segment and set the NoteType and NoteDots
      * properties on note and rest events.  Only works when the
-     * Track is in a Composition.
+     * Segment is in a Composition.
      */
     void quantize();
 
@@ -319,7 +319,7 @@ private:
     void autoBeamBar(iterator from, iterator to, timeT average,
                      timeT minimum, timeT maximum, std::string type);
 
-    /// used by autoBeamAux (duplicate of private method in Track)
+    /// used by autoBeamAux (duplicate of private method in Segment)
     bool hasEffectiveDuration(iterator i);
 };
 

@@ -19,8 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef TRACKSCANVAS_H
-#define TRACKSCANVAS_H
+#ifndef SEGMENTCANVAS_H
+#define SEGMENTCANVAS_H
 
 #include "Event.h"
 
@@ -28,52 +28,52 @@
 #include <qcanvas.h>
 
 using Rosegarden::timeT;
-namespace Rosegarden { class Track; }
+namespace Rosegarden { class Segment; }
 
 
 /**
- * The graphical item (rectangle) which represents a Track
- * on the TracksCanvas.
+ * The graphical item (rectangle) which represents a Segment
+ * on the SegmentCanvas.
  */
-class TrackItem : public QCanvasRectangle
+class SegmentItem : public QCanvasRectangle
 {
 public:
     /**
-     * Create a new track item
+     * Create a new segment item
      *
      * The item will be at coordinates \a x, \a y, representing a time
      * segment of \a nbSteps time steps.
      */
-    TrackItem(int x, int y, int nbSteps, QCanvas* canvas);
+    SegmentItem(int x, int y, int nbSteps, QCanvas* canvas);
 
     /// Return the nb of bars the item represents
     int getItemNbBars() const;
 
-    /// Return the number of the bar at which the item's track starts
+    /// Return the number of the bar at which the item's segment starts
     int getStartBar() const;
 
-    /// Return the instrument for the item's track
+    /// Return the instrument for the item's segment
     int getInstrument() const;
 
-    /// Set the instrument for the item's track
+    /// Set the instrument for the item's segment
     void setInstrument(int i);
 
-    /// Set the track this TrackItem will represent
-    void setTrack(Rosegarden::Track *p)  { m_track = p; }
+    /// Set the segment this SegmentItem will represent
+    void setSegment(Rosegarden::Segment *p)  { m_segment = p; }
 
-    /// Return the item's associated track 
-    Rosegarden::Track* getTrack() const  { return m_track; }
+    /// Return the item's associated segment 
+    Rosegarden::Segment* getSegment() const  { return m_segment; }
 
-    /// Set the width to duration ratio for all TrackItem objects
+    /// Set the width to duration ratio for all SegmentItem objects
     static void setWidthToDurationRatio(unsigned int);
 
-    /// Set the resolution in bars for all new TrackItem objects
+    /// Set the resolution in bars for all new SegmentItem objects
     static void setBarResolution(unsigned int);
 
-    /// Return the bar resolution used by all TrackItem objects
+    /// Return the bar resolution used by all SegmentItem objects
     static unsigned int getBarResolution();
 
-    /// Set the height of all new TrackItem objects
+    /// Set the height of all new SegmentItem objects
     static void setItemHeight(unsigned int);
 
     /**
@@ -90,7 +90,7 @@ public:
 protected:
     int m_instrument;
 
-    Rosegarden::Track* m_track;
+    Rosegarden::Segment* m_segment;
 
     static unsigned int m_widthToDurationRatio;
     static unsigned int m_barResolution;
@@ -98,20 +98,20 @@ protected:
 
 };
 
-class TrackTool;
+class SegmentTool;
 
 /**
- * A class to visualize and edit track parts
+ * A class to visualize and edit segment parts
  *
- * A coordinate grid is used to align TrackItem objects, which can be
+ * A coordinate grid is used to align SegmentItem objects, which can be
  * manipulated with a set of tools : pencil, eraser, mover, resizer.
  *
- * There are no restrictions as to when a track part starts and how
+ * There are no restrictions as to when a segment part starts and how
  * long it lasts. Several parts can overlap partially or completely.
  *
- * @see TracksEditor
+ * @see TrackEditor
  */
-class TracksCanvas : public QCanvasView
+class SegmentCanvas : public QCanvasView
 {
     Q_OBJECT
 
@@ -119,10 +119,10 @@ public:
     /// Available tools
     enum ToolType { Pencil, Eraser, Mover, Resizer };
     
-    TracksCanvas(int gridH, int gridV,
+    SegmentCanvas(int gridH, int gridV,
                  QCanvas&,
                  QWidget* parent=0, const char* name=0, WFlags f=0);
-    ~TracksCanvas();
+    ~SegmentCanvas();
 
     /// Remove all items
     void clear();
@@ -131,7 +131,7 @@ public:
     unsigned int gridHStep() const { return m_grid.hstep(); }
 
     /**
-     * The coordinate grid used to align TrackItem objects
+     * The coordinate grid used to align SegmentItem objects
      */
     class SnapGrid
     {
@@ -153,30 +153,30 @@ public:
 
     const SnapGrid& grid() const { return m_grid; }
 
-    /// Return the brush used by all TrackItem objects (normally, solid blue)
+    /// Return the brush used by all SegmentItem objects (normally, solid blue)
     const QBrush& brush()  const { return m_brush; }
 
-    /// Return the pen used by all TrackItem objects
+    /// Return the pen used by all SegmentItem objects
     const QPen& pen()      const { return m_pen; }
 
     /**
      * Add a part item at the specified coordinates, lasting \a nbSteps
      * Called when reading a music file
      */
-    TrackItem* addPartItem(int x, int y, unsigned int nbSteps);
+    SegmentItem* addPartItem(int x, int y, unsigned int nbSteps);
 
     /**
-     * Find which TrackItem is under the specified point
+     * Find which SegmentItem is under the specified point
      *
-     * Note : this doesn't handle overlapping TrackItems yet
+     * Note : this doesn't handle overlapping SegmentItems yet
      */
-    TrackItem* findPartClickedOn(QPoint);
+    SegmentItem* findPartClickedOn(QPoint);
 
 public slots:
-    /// Set the current track edition tool
-    void setTool(TracksCanvas::ToolType);
+    /// Set the current segment edition tool
+    void setTool(SegmentCanvas::ToolType);
 
-    /// Update the TracksCanvas after a change of content
+    /// Update the SegmentCanvas after a change of content
     virtual void update();
 
 protected:
@@ -189,43 +189,43 @@ protected:
 protected slots:
     /**
      * connected to the 'Edit' item of the RMB popup menu - re-emits
-     * editTrack(Track*)
+     * editSegment(Segment*)
      */
     void onEdit();
 
 signals:
     /**
-     * Emitted when a new Track is created, the argument is the
-     * corresponding TrackItem
+     * Emitted when a new Segment is created, the argument is the
+     * corresponding SegmentItem
      */
-    void addTrack(TrackItem*);
+    void addSegment(SegmentItem*);
 
     /**
-     * Emitted when a Track is deleted, the argument is a pointer to
-     * the Track being deleted
+     * Emitted when a Segment is deleted, the argument is a pointer to
+     * the Segment being deleted
      */
-    void deleteTrack(Rosegarden::Track*);
+    void deleteSegment(Rosegarden::Segment*);
 
     /**
-     * Emitted when a Track's duration is changed
+     * Emitted when a Segment's duration is changed
      */
-    void updateTrackDuration(TrackItem*);
+    void updateSegmentDuration(SegmentItem*);
 
     /**
-     * Emitted when a Track is moved to a different start time
+     * Emitted when a Segment is moved to a different start time
      * (horizontally) or instrument (vertically)
      */
-    void updateTrackInstrumentAndStartIndex(TrackItem*);
+    void updateSegmentInstrumentAndStartIndex(SegmentItem*);
 
-    void editTrack(Rosegarden::Track*);
+    void editSegment(Rosegarden::Segment*);
 
 private:
     ToolType m_toolType;
-    TrackTool *m_tool;
+    SegmentTool *m_tool;
 
     SnapGrid m_grid;
 
-    TrackItem* m_currentItem;
+    SegmentItem* m_currentItem;
 
     QCanvasItem* m_moving;
 
@@ -237,94 +237,94 @@ private:
 };
 
 //////////////////////////////////////////////////////////////////////
-//                 Track Tools
+//                 Segment Tools
 //////////////////////////////////////////////////////////////////////
 
-class TrackTool : public QObject
+class SegmentTool : public QObject
 {
 public:
-    TrackTool(TracksCanvas*);
-    virtual ~TrackTool();
+    SegmentTool(SegmentCanvas*);
+    virtual ~SegmentTool();
 
     virtual void handleMouseButtonPress(QMouseEvent*)  = 0;
     virtual void handleMouseButtonRelease(QMouseEvent*) = 0;
     virtual void handleMouseMove(QMouseEvent*)         = 0;
 
 protected:
-    TracksCanvas*  m_canvas;
-    TrackItem* m_currentItem;
+    SegmentCanvas*  m_canvas;
+    SegmentItem* m_currentItem;
 };
 
 //////////////////////////////
-// TrackPencil
+// SegmentPencil
 //////////////////////////////
 
-class TrackPencil : public TrackTool
+class SegmentPencil : public SegmentTool
 {
     Q_OBJECT
 public:
-    TrackPencil(TracksCanvas*);
+    SegmentPencil(SegmentCanvas*);
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
-    void addTrack(TrackItem*);
-    void deleteTrack(Rosegarden::Track*);
-    void setTrackDuration(TrackItem*);
+    void addSegment(SegmentItem*);
+    void deleteSegment(Rosegarden::Segment*);
+    void setSegmentDuration(SegmentItem*);
 
 protected:
     bool m_newRect;
 };
 
-class TrackEraser : public TrackTool
+class SegmentEraser : public SegmentTool
 {
     Q_OBJECT
 public:
-    TrackEraser(TracksCanvas*);
+    SegmentEraser(SegmentCanvas*);
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
-    void deleteTrack(Rosegarden::Track*);
+    void deleteSegment(Rosegarden::Segment*);
 };
 
-class TrackMover : public TrackTool
+class SegmentMover : public SegmentTool
 {
     Q_OBJECT
 public:
-    TrackMover(TracksCanvas*);
+    SegmentMover(SegmentCanvas*);
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
-    void updateTrackInstrumentAndStartIndex(TrackItem*);
+    void updateSegmentInstrumentAndStartIndex(SegmentItem*);
 };
 
 /**
- * Track Resizer tool. Allows resizing only at the end of the track part
+ * Segment Resizer tool. Allows resizing only at the end of the segment part
  */
-class TrackResizer : public TrackTool
+class SegmentResizer : public SegmentTool
 {
     Q_OBJECT
 public:
-    TrackResizer(TracksCanvas*);
+    SegmentResizer(SegmentCanvas*);
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
-    void deleteTrack(Rosegarden::Track*);
-    void setTrackDuration(TrackItem*);
+    void deleteSegment(Rosegarden::Segment*);
+    void setSegmentDuration(SegmentItem*);
 
 protected:
-    bool cursorIsCloseEnoughToEdge(TrackItem*, QMouseEvent*);
+    bool cursorIsCloseEnoughToEdge(SegmentItem*, QMouseEvent*);
 
     unsigned int m_edgeThreshold;
 };

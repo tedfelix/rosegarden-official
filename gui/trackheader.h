@@ -20,8 +20,8 @@
 */
 
 
-#ifndef _TRACKHEADER_H_
-#define _TRACKHEADER_H_
+#ifndef _SEGMENTHEADER_H_
+#define _SEGMENTHEADER_H_
 
 #include <qwidget.h>
 #include <qheader.h>
@@ -51,4 +51,4 @@ private:
 
 }
 
-#endif // _TRACKHEADER_H_
+#endif // _SEGMENTHEADER_H_

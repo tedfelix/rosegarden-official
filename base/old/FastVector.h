@@ -298,7 +298,7 @@ template <class T> void *operator new(size_t size, FastVector<T> *list,
 /** RobustIteratorVector is an example of a class that provides an
     iterator derived from the basic one and requesting notifications.
     This one keeps each iterator pointing at the same element, by
-    moving it to track when other elements are inserted or deleted
+    moving it to segment when other elements are inserted or deleted
     before it.
 */
 

@@ -24,7 +24,7 @@
 
 // Used as a transformation stage between Composition Events and output
 // at the Sequencer this class and MidiComposition eliminates the notion
-// of Track.  The MappedEvents are ripe for playing.
+// of Segment.  The MappedEvents are ripe for playing.
 //
 // NOTE: for the moment until the Composition handles it we're hard
 // coding the velocity components of all MappedEvents to maximum (127)

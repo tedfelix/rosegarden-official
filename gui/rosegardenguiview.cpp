@@ -40,36 +40,36 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     QScrollView *scrollView = new QScrollView(this);
     
     RosegardenGUIDoc* doc = getDocument();
-    TracksEditor *tracksEditor = 0;
+    TrackEditor *tracksEditor = 0;
     
     if (doc) {
 
         kdDebug(KDEBUG_AREA) << "RosegardenGUIView() : doc != 0\n";
-        tracksEditor = new TracksEditor(doc, this);
+        tracksEditor = new TrackEditor(doc, this);
 
     } else {
 
         kdDebug(KDEBUG_AREA) << "RosegardenGUIView() : no doc\n";
-        tracksEditor = new TracksEditor(12, 50, this);
+        tracksEditor = new TrackEditor(12, 50, this);
 
     }
     
     scrollView->addChild(tracksEditor);
 
-    connect(tracksEditor->canvas(), SIGNAL(editTrack(Rosegarden::Track*)),
-            SLOT(editTrackNotation(Rosegarden::Track*)));
+    connect(tracksEditor->canvas(), SIGNAL(editSegment(Rosegarden::Segment*)),
+            SLOT(editSegmentNotation(Rosegarden::Segment*)));
 
-    connect(tracksEditor,  SIGNAL(createNewTrack(TrackItem*,int)),
-            getDocument(), SLOT  (createNewTrack(TrackItem*,int)));
+    connect(tracksEditor,  SIGNAL(createNewSegment(SegmentItem*,int)),
+            getDocument(), SLOT  (createNewSegment(SegmentItem*,int)));
 
-    connect(this,                   SIGNAL(setTool(TracksCanvas::ToolType)),
-            tracksEditor->canvas(), SLOT(setTool(TracksCanvas::ToolType)));
+    connect(this,                   SIGNAL(setTool(SegmentCanvas::ToolType)),
+            tracksEditor->canvas(), SLOT(setTool(SegmentCanvas::ToolType)));
 
     connect(this,                   SIGNAL(setPositionPointer(int)),
             tracksEditor,           SLOT(setPointerPosition(int)));
 
     if (doc)
-        tracksEditor->setupTracks();
+        tracksEditor->setupSegments();
 
 //     if (getDocument()) {
         
@@ -117,45 +117,45 @@ void RosegardenGUIView::print(QPrinter *pPrinter)
 
 void RosegardenGUIView::drawSelected()
 {
-    emit setTool(TracksCanvas::Pencil);
+    emit setTool(SegmentCanvas::Pencil);
 }
 
 void RosegardenGUIView::eraseSelected()
 {
-    emit setTool(TracksCanvas::Eraser);
+    emit setTool(SegmentCanvas::Eraser);
 }
 
 void RosegardenGUIView::moveSelected()
 {
-    emit setTool(TracksCanvas::Mover);
+    emit setTool(SegmentCanvas::Mover);
 }
 
 void RosegardenGUIView::resizeSelected()
 {
-    emit setTool(TracksCanvas::Resizer);
+    emit setTool(SegmentCanvas::Resizer);
 }
 
 
 void
-RosegardenGUIView::editTrackNotation(Rosegarden::Track* p)
+RosegardenGUIView::editSegmentNotation(Rosegarden::Segment* p)
 {
-    std::vector<Rosegarden::Track *> tracksToEdit;
-    tracksToEdit.push_back(p);
+    std::vector<Rosegarden::Segment *> segmentsToEdit;
+    segmentsToEdit.push_back(p);
 
-    m_notationView = new NotationView(getDocument(), tracksToEdit, this);
+    m_notationView = new NotationView(getDocument(), segmentsToEdit, this);
     m_notationView->show();
 }
 
 void
 RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
 {
-    std::vector<Rosegarden::Track *> tracksToEdit;
+    std::vector<Rosegarden::Segment *> segmentsToEdit;
 
     for (Rosegarden::Composition::iterator i = p->begin(); i != p->end(); ++i) {
-        tracksToEdit.push_back(*i);
+        segmentsToEdit.push_back(*i);
     }
 
-    m_notationView = new NotationView(getDocument(), tracksToEdit, this);
+    m_notationView = new NotationView(getDocument(), segmentsToEdit, this);
     m_notationView->show();
 }
 

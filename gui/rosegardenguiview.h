@@ -29,7 +29,7 @@
 // include files for Qt
 #include <qvbox.h>
 
-#include "trackscanvas.h" // needed for TracksCanvas::ToolType
+#include "trackscanvas.h" // needed for SegmentCanvas::ToolType
 
 #include "rosedebug.h"
 
@@ -37,7 +37,7 @@ namespace Rosegarden { class Composition; }
 
 class RosegardenGUIDoc;
 class NotationView;
-class TracksEditor;
+class TrackEditor;
 
 /**
  * The RosegardenGUIView class provides the view widget for the
@@ -85,27 +85,27 @@ public:
     // RosegardenGUIApp
 
     /**
-     * track eraser tool is selected
+     * segment eraser tool is selected
      */
     void eraseSelected();
     
     /**
-     * track draw tool is selected
+     * segment draw tool is selected
      */
     void drawSelected();
     
     /**
-     * track move tool is selected
+     * segment move tool is selected
      */
     void moveSelected();
 
     /**
-     * track resize tool is selected
+     * segment resize tool is selected
      */
     void resizeSelected();
 
     /**
-     * Edit all the track at once
+     * Edit all the segment at once
      *
      * Show all the tracks in a single Notation window
      */
@@ -117,10 +117,10 @@ public:
     void setPointerPosition(const int &position);
     
 public slots:
-    void editTrackNotation(Rosegarden::Track*);
+    void editSegmentNotation(Rosegarden::Segment*);
 
 signals:
-    void setTool(TracksCanvas::ToolType);
+    void setTool(SegmentCanvas::ToolType);
     void setPositionPointer(int);
 
 protected:

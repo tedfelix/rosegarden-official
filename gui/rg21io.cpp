@@ -32,8 +32,8 @@
 #include "rosedebug.h"
 
 using Rosegarden::Event;
-using Rosegarden::Track;
-using Rosegarden::TrackNotationHelper;
+using Rosegarden::Segment;
+using Rosegarden::SegmentNotationHelper;
 using Rosegarden::Int;
 using Rosegarden::String;
 using Rosegarden::Bool;
@@ -52,9 +52,9 @@ RG21Loader::RG21Loader(const QString& fileName)
     : m_file(fileName),
       m_stream(0),
       m_composition(0),
-      m_currentTrack(0),
-      m_currentTrackTime(0),
-      m_currentTrackNb(0),
+      m_currentSegment(0),
+      m_currentSegmentTime(0),
+      m_currentSegmentNb(0),
       m_currentClef(Clef::Treble),
       m_inGroup(false),
       m_tieStatus(0),
@@ -77,28 +77,28 @@ RG21Loader::~RG21Loader()
 
 bool RG21Loader::parseClef()
 {
-    if (m_tokens.count() != 3 || !m_currentTrack) return false;
+    if (m_tokens.count() != 3 || !m_currentSegment) return false;
     
     std::string clefName = m_tokens[2].lower().data();
 
     m_currentClef = Clef(clefName);
-    Event *clefEvent = m_currentClef.getAsEvent(m_currentTrackTime);
-    m_currentTrack->insert(clefEvent);
+    Event *clefEvent = m_currentClef.getAsEvent(m_currentSegmentTime);
+    m_currentSegment->insert(clefEvent);
 
     return true;
 }
 
 bool RG21Loader::parseKey()
 {
-    if (m_tokens.count() < 3 || !m_currentTrack) return false;
+    if (m_tokens.count() < 3 || !m_currentSegment) return false;
     
     QString keyName = QString("%1 %2or")
         .arg(m_tokens[2].upper())
         .arg(m_tokens[3].lower());
 
     m_currentKey = Rosegarden::Key(std::string(keyName.data()));
-    Event *keyEvent = m_currentKey.getAsEvent(m_currentTrackTime);
-    m_currentTrack->insert(keyEvent);
+    Event *keyEvent = m_currentKey.getAsEvent(m_currentSegmentTime);
+    m_currentSegment->insert(keyEvent);
 
     return true;
 }
@@ -124,7 +124,7 @@ bool RG21Loader::parseChordItem()
 
         Event *noteEvent = new Event(Rosegarden::Note::EventType);
         noteEvent->setDuration(duration);
-        noteEvent->setAbsoluteTime(m_currentTrackTime);
+        noteEvent->setAbsoluteTime(m_currentSegmentTime);
         noteEvent->set<Int>("pitch", pitch);
 
 	if (m_tieStatus == 1) {
@@ -134,14 +134,14 @@ bool RG21Loader::parseChordItem()
 	}	    
 
 //         kdDebug(KDEBUG_AREA) << "RG21Loader::parseChordItem() : insert note pitch " << pitch
-//                              << " at time " << m_currentTrackTime << endl;
+//                              << " at time " << m_currentSegmentTime << endl;
 
 	setGroupProperties(noteEvent);
         
-        m_currentTrack->insert(noteEvent);
+        m_currentSegment->insert(noteEvent);
     }
 
-    m_currentTrackTime += duration;
+    m_currentSegmentTime += duration;
     if (m_tieStatus == 2) m_tieStatus = 0;
     else if (m_tieStatus == 1) m_tieStatus = 2;
     
@@ -157,12 +157,12 @@ bool RG21Loader::parseRest()
     
     Event *restEvent = new Event(Rosegarden::Note::EventRestType);
     restEvent->setDuration(duration);
-    restEvent->setAbsoluteTime(m_currentTrackTime);
+    restEvent->setAbsoluteTime(m_currentSegmentTime);
 
     setGroupProperties(restEvent);
 
-    m_currentTrack->insert(restEvent);
-    m_currentTrackTime += duration;
+    m_currentSegment->insert(restEvent);
+    m_currentSegmentTime += duration;
 
     return true;
 }
@@ -174,7 +174,7 @@ void RG21Loader::setGroupProperties(Event *e)
 	e->setMaybe<Int>(BEAMED_GROUP_ID, m_groupId);
 	e->setMaybe<String>(BEAMED_GROUP_TYPE, m_groupType);
 
-	if (m_groupType == "tupled") { //!!! Should be converting to a property value, but there is no property value for this yet (see notationsets.cpp and TrackNotationHelper.C)
+	if (m_groupType == "tupled") { //!!! Should be converting to a property value, but there is no property value for this yet (see notationsets.cpp and SegmentNotationHelper.C)
 	    e->setMaybe<Int>(BEAMED_GROUP_TUPLED_LENGTH, m_groupTupledLength);
 	    e->setMaybe<Int>(BEAMED_GROUP_TUPLED_COUNT, m_groupTupledCount);
 	}
@@ -188,8 +188,8 @@ bool RG21Loader::parseGroupStart()
 {
     m_groupType = m_tokens[0].lower();
     m_inGroup = true;
-    m_groupId = m_currentTrack->getNextId();
-    m_groupStartTime = m_currentTrackTime;
+    m_groupId = m_currentSegment->getNextId();
+    m_groupStartTime = m_currentSegmentTime;
 
     if (m_groupType == "beamed") {
 
@@ -229,13 +229,13 @@ bool RG21Loader::parseMarkStart()
 	}
 	// m_tieStatus = 1;
 
-	Track::iterator i = m_currentTrack->end();
-	if (i != m_currentTrack->begin()) {
+	Segment::iterator i = m_currentSegment->end();
+	if (i != m_currentSegment->begin()) {
 	    --i;
 	    timeT t = (*i)->getAbsoluteTime();
 	    while ((*i)->getAbsoluteTime() == t) {
 		(*i)->set<Bool>(TIED_FORWARD, true);
-		if (i == m_currentTrack->begin()) break;
+		if (i == m_currentSegment->begin()) break;
 		--i;
 	    }
 	}
@@ -254,13 +254,13 @@ void RG21Loader::closeGroup()
 {
     if (m_groupType == "tupled") {
 
-	Track::iterator i = m_currentTrack->end();
-	Track::iterator final = i;
+	Segment::iterator i = m_currentSegment->end();
+	Segment::iterator final = i;
 
-	if (i != m_currentTrack->begin()) {
+	if (i != m_currentSegment->begin()) {
 
 	    --i;
-	    if (final == m_currentTrack->end()) final = i;
+	    if (final == m_currentSegment->end()) final = i;
 	    long groupId;
 
 	    while ((*i)->get<Int>(BEAMED_GROUP_ID, groupId) &&
@@ -290,15 +290,15 @@ void RG21Loader::closeGroup()
 		(*i)->addAbsoluteTime(intended - offset);
 		(*i)->set<Int>(TUPLET_NOMINAL_DURATION, duration);
 
-		if (i == m_currentTrack->begin()) break;
+		if (i == m_currentSegment->begin()) break;
 		--i;
 	    }
 	}
 
-	m_currentTrackTime = m_groupStartTime + m_groupTupledLength;
-	if (final != m_currentTrack->end()) {
+	m_currentSegmentTime = m_groupStartTime + m_groupTupledLength;
+	if (final != m_currentSegment->end()) {
 	    //!!! problematic if the final note is actually a chord
-	    (*final)->setDuration(m_currentTrackTime -
+	    (*final)->setDuration(m_currentSegmentTime -
 				  (*final)->getAbsoluteTime());
 	}
     }
@@ -335,13 +335,13 @@ timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
 }
 
 
-void RG21Loader::closeTrackOrComposition()
+void RG21Loader::closeSegmentOrComposition()
 {
-    if (m_currentTrack) {
-        m_currentTrack->setInstrument(m_currentTrackNb - 1);
-        m_composition->addTrack(m_currentTrack);
-        m_currentTrack = 0;
-        m_currentTrackTime = 0;
+    if (m_currentSegment) {
+        m_currentSegment->setInstrument(m_currentSegmentNb - 1);
+        m_composition->addSegment(m_currentSegment);
+        m_currentSegment = 0;
+        m_currentSegmentTime = 0;
         m_currentClef = Clef(Clef::Treble);
     } else {
         // ??
@@ -406,8 +406,8 @@ bool RG21Loader::parse()
         } else if (firstToken == "Name") { // Staff name
 
             m_currentStaffName = m_tokens[1]; // we don't do anything with it yet
-            m_currentTrack = new Rosegarden::Track;
-            ++m_currentTrackNb;
+            m_currentSegment = new Rosegarden::Segment;
+            ++m_currentSegmentNb;
             
         } else if (firstToken == "Clef") {
 
@@ -446,7 +446,7 @@ bool RG21Loader::parse()
             if (m_inGroup)
                 closeGroup();
             else
-                closeTrackOrComposition();
+                closeSegmentOrComposition();
             
         }
         

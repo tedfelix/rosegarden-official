@@ -30,15 +30,15 @@
 using Rosegarden::Composition;
 using Rosegarden::Int;
 using Rosegarden::String;
-using Rosegarden::Track;
-using Rosegarden::TrackNotationHelper;
+using Rosegarden::Segment;
+using Rosegarden::SegmentNotationHelper;
 
 using namespace Rosegarden::BaseProperties;
 
 
 RoseXmlHandler::RoseXmlHandler(Composition &composition)
     : m_composition(composition),
-      m_currentTrack(0),
+      m_currentSegment(0),
       m_currentEvent(0),
       m_currentTime(0),
       m_chordDuration(0),
@@ -48,7 +48,7 @@ RoseXmlHandler::RoseXmlHandler(Composition &composition)
       m_foundTempo(false)
 {
 //     kdDebug(KDEBUG_AREA) << "RoseXmlHandler() : composition size : "
-//                          << m_composition.getNbTracks()
+//                          << m_composition.getNbSegments()
 //                          << " addr : " << &m_composition
 //                          << endl;
 }
@@ -74,14 +74,14 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
     if (lcName == "rosegarden-data") {
         // set to some state which says it's ok to parse the rest
 
-    } else if (lcName == "reference-track") {
+    } else if (lcName == "reference-segment") {
 
-	if (m_currentTrack != 0) {
-            m_errorString = i18n("Reference track too late, one or more tracks already read");
+	if (m_currentSegment != 0) {
+            m_errorString = i18n("Reference segment too late, one or more segments already read");
             return false;
 	}
 
-	m_currentTrack = m_composition.getReferenceTrack();
+	m_currentSegment = m_composition.getReferenceSegment();
 	m_currentTime = 0;
 
     } else if (lcName == "tempo") {
@@ -90,29 +90,29 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	m_composition.setTempo(tempoString.toInt());
 	m_foundTempo = true;
 
-    } else if (lcName == "track") {
+    } else if (lcName == "segment") {
 
         int instrument = -1, startIndex = 0;
         QString instrumentNbStr = atts.value("instrument");
         if (instrumentNbStr) {
             instrument = instrumentNbStr.toInt();
-//             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : track instr. nb = "
+//             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : segment instr. nb = "
 //                                  << instrumentNb << endl;
         }
 
         QString startIdxStr = atts.value("start");
         if (startIdxStr) {
             startIndex = startIdxStr.toInt();
-//             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : track start idx = "
+//             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : segment start idx = "
 //                                  << startIndex << endl;
         }
         
-        m_currentTrack = new Track;
-        m_currentTrack->setInstrument(instrument);
-        m_currentTrack->setStartIndex(startIndex);
+        m_currentSegment = new Segment;
+        m_currentSegment->setInstrument(instrument);
+        m_currentSegment->setStartIndex(startIndex);
 	m_currentTime = startIndex;
 
-        m_composition.addTrack(m_currentTrack);
+        m_composition.addSegment(m_currentSegment);
     
     } else if (lcName == "event") {
 
@@ -168,13 +168,13 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
     } else if (lcName == "group") {
 
-        if (!m_currentTrack) {
-            m_errorString = i18n("Got group outside of a track");
+        if (!m_currentSegment) {
+            m_errorString = i18n("Got group outside of a segment");
             return false;
         }
         
         m_inGroup = true;
-        m_groupId = m_currentTrack->getNextId();
+        m_groupId = m_currentSegment->getNextId();
         m_groupType = atts.value("type");
 
 	if (m_groupType == "tupled") { //!!!
@@ -206,11 +206,11 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
 
     if (lcName == "event") {
 
-        if (m_currentTrack && m_currentEvent) {
-            m_currentTrack->insert(m_currentEvent);
+        if (m_currentSegment && m_currentEvent) {
+            m_currentSegment->insert(m_currentEvent);
             m_currentEvent = 0;
-        } else if (!m_currentTrack && m_currentEvent) {
-            m_errorString = i18n("Got event outside of a Track");
+        } else if (!m_currentSegment && m_currentEvent) {
+            m_errorString = i18n("Got event outside of a Segment");
             return false;
         }
         
@@ -224,9 +224,9 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
 
         m_inGroup = false;
 
-    } else if (lcName == "track") {
+    } else if (lcName == "segment") {
 
-        m_currentTrack = 0;
+        m_currentSegment = 0;
 
     }
 

@@ -44,7 +44,7 @@ Sequencer::Sequencer():
     m_playing(false),
     m_ppq(Note(Note::Crotchet).getDuration()),
     m_tempo(120.0),     // default tempo
-    m_recordTrack(0)
+    m_recordSegment(0)
 {
     initializeMidi();
 }
@@ -141,9 +141,9 @@ Sequencer::record(const RecordStatus& recordStatus)
 	cout << "Recording Started at : " << m_recordStartTime.sec << " : "
 	     << m_recordStartTime.usec << endl;
                                      
-	m_recordTrack = new Track;
-	m_recordTrack->setInstrument(1);
-	m_recordTrack->setStartIndex(0);
+	m_recordSegment = new Segment;
+	m_recordSegment->setInstrument(1);
+	m_recordSegment->setStartIndex(0);
 
     }
     else
@@ -188,9 +188,9 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
     Rosegarden::MidiByte message;
     //Rosegarden::Event *event;
 
-    if (m_recordTrack == 0)
+    if (m_recordSegment == 0)
     {
-	cerr << "RosegardenSequencer - no Track created to processMidi on to - is recording enabled?" << endl;
+	cerr << "RosegardenSequencer - no Segment created to processMidi on to - is recording enabled?" << endl;
 	exit(1);
     }
 
@@ -247,7 +247,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 
 	    // insert the record
 	    //
-	    m_recordTrack->insert(m_noteOnMap[chanNoteKey]);
+	    m_recordSegment->insert(m_noteOnMap[chanNoteKey]);
 
 	    // tell us about it
 	    cout << "INSERTED NOTE at time " 

@@ -29,8 +29,8 @@ namespace Rosegarden
 {
 
 /**
- * Staff is the base class for classes which represent a Track as an
- * on-screen graphic.  It manages the relationship between Track/Event
+ * Staff is the base class for classes which represent a Segment as an
+ * on-screen graphic.  It manages the relationship between Segment/Event
  * and specific implementations of ViewElement.
  *
  * The template argument T must be a subclass of ViewElement.
@@ -39,14 +39,14 @@ namespace Rosegarden
  */
 
 template <class T>
-class Staff : public TrackObserver
+class Staff : public SegmentObserver
 {
 public: 
     virtual ~Staff();
 
     /**
      * Create a new ViewElementList wrapping all Events in the
-     * track, or return the previously created one
+     * segment, or return the previously created one
      */
     ViewElementList<T> *getViewElementList();
 
@@ -55,56 +55,56 @@ public:
      * [from, to[ interval, or return the previously created one
      * (even if passed new arguments)
      */
-    ViewElementList<T> *getViewElementList(Track::iterator from,
-					   Track::iterator to);
+    ViewElementList<T> *getViewElementList(Segment::iterator from,
+					   Segment::iterator to);
 
     /**
      * Wrap Event in a ViewElement if it doesn't have one already, and
      * insert it in a ViewElements list.
      *
-     * If insertInTrack is true, insert the Event itself in the
-     * wrapped Track as well.  In this case behaviour is equivalent to
-     * simply inserting in the track instead of calling this method,
+     * If insertInSegment is true, insert the Event itself in the
+     * wrapped Segment as well.  In this case behaviour is equivalent to
+     * simply inserting in the segment instead of calling this method,
      * so you should usually only use this method if you don't want
-     * the event to appear in the underlying track.
+     * the event to appear in the underlying segment.
      */
-    void insert(Event *, bool insertInTrack = false);
+    void insert(Event *, bool insertInSegment = false);
 
     /**
-     * Erase the element pointed to by iterator.  If eraseFromTrack is
-     * true, erase the Event from the wrapped Track as well.  In this
-     * case behaviour is equivalent to simply erasing from the track
+     * Erase the element pointed to by iterator.  If eraseFromSegment is
+     * true, erase the Event from the wrapped Segment as well.  In this
+     * case behaviour is equivalent to simply erasing from the segment
      * instead of calling this method, so you should usually only use
-     * this method if you know that the event is not in the Track.
+     * this method if you know that the event is not in the Segment.
      */
-    void erase(ViewElementList<T>::iterator, bool eraseFromTrack = false);
+    void erase(ViewElementList<T>::iterator, bool eraseFromSegment = false);
 
     /**
-     * Return the Track wrapped by this object 
+     * Return the Segment wrapped by this object 
      */
-    Track &getTrack() { return m_track; }
+    Segment &getSegment() { return m_segment; }
 
     /**
-     * Return the Track wrapped by this object 
+     * Return the Segment wrapped by this object 
      */
-    const Track &getTrack() const { return m_track; }
+    const Segment &getSegment() const { return m_segment; }
 
     /**
-     * TrackObserver method - called after the event has been added to
-     * the track
+     * SegmentObserver method - called after the event has been added to
+     * the segment
      */
-    virtual void eventAdded(const Track *, Event *);
+    virtual void eventAdded(const Segment *, Event *);
 
     /**
-     * TrackObserver method - called after the event has been removed
-     * from the track, and just before it is deleted
+     * SegmentObserver method - called after the event has been removed
+     * from the segment, and just before it is deleted
      */
-    virtual void eventRemoved(const Track *, Event *);
+    virtual void eventRemoved(const Segment *, Event *);
 
 protected:
-    Staff(Track &);
+    Staff(Segment &);
 
-    Track &m_track;
+    Segment &m_segment;
     ViewElementList<T> *m_viewElementList;
     ViewElementList<T>::iterator findEvent(Rosegarden::Event *);
 };
@@ -112,8 +112,8 @@ protected:
 
 
 template <class T>
-Staff<T>::Staff(Track &t) :
-    m_track(t),
+Staff<T>::Staff(Segment &t) :
+    m_segment(t),
     m_viewElementList(0)
 {
     // empty
@@ -122,40 +122,40 @@ Staff<T>::Staff(Track &t) :
 template <class T>
 Staff<T>::~Staff()
 {
-    if (m_viewElementList) m_track.removeObserver(this);
+    if (m_viewElementList) m_segment.removeObserver(this);
 }
 
 template <class T>
 ViewElementList<T> *
 Staff<T>::getViewElementList()
 {
-    return getViewElementList(m_track.begin(), m_track.end());
+    return getViewElementList(m_segment.begin(), m_segment.end());
 }
 
 template <class T>
 ViewElementList<T> *
-Staff<T>::getViewElementList(Track::iterator from,
-			     Track::iterator to)
+Staff<T>::getViewElementList(Segment::iterator from,
+			     Segment::iterator to)
 {
     if (m_viewElementList) return m_viewElementList;
 
     m_viewElementList = new ViewElementList<T>;
 
-    for (Track::iterator i = from; i != to; ++i) {
+    for (Segment::iterator i = from; i != to; ++i) {
         T *el = new T(*i);
         m_viewElementList->insert(el);
     }
 
-    m_track.addObserver(this);
+    m_segment.addObserver(this);
     return m_viewElementList;
 }
 
 template <class T>
 void
-Staff<T>::insert(Event *e, bool insertInTrack)
+Staff<T>::insert(Event *e, bool insertInSegment)
 {
-    if (insertInTrack) {
-        m_track.insert(e);
+    if (insertInSegment) {
+        m_segment.insert(e);
         // and let the eventAdded callback do the wrapping
     } else {
 	if (!e->hasViewElement()) {
@@ -168,10 +168,10 @@ Staff<T>::insert(Event *e, bool insertInTrack)
 template <class T>
 void
 Staff<T>::erase(ViewElementList<T>::iterator it,
-				   bool eraseFromTrack)
+				   bool eraseFromSegment)
 {
-    if (eraseFromTrack) {
-        m_track.eraseSingle((*it)->event());
+    if (eraseFromSegment) {
+        m_segment.eraseSingle((*it)->event());
         // and let the eventRemoved callback do the unwrapping
     } else {
         m_viewElementList->erase(it);
@@ -201,9 +201,9 @@ Staff<T>::findEvent(Event *e)
 
 template <class T>
 void
-Staff<T>::eventAdded(const Track *t, Event *e)
+Staff<T>::eventAdded(const Segment *t, Event *e)
 {
-    assert(t == &m_track);
+    assert(t == &m_segment);
 
     // If it isn't already wrapped, wrap it.  The already-wrapped test
     // is rather slow, and if all goes according to plan we should
@@ -219,9 +219,9 @@ Staff<T>::eventAdded(const Track *t, Event *e)
 
 template <class T>
 void
-Staff<T>::eventRemoved(const Track *t, Event *e)
+Staff<T>::eventRemoved(const Segment *t, Event *e)
 {
-    assert(t == &m_track);
+    assert(t == &m_segment);
 
     // If we have it, lose it
 
