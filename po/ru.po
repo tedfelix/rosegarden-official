@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "POT-Creation-Date: 2003-07-20 16:06+0400\n"
-"PO-Revision-Date: 2003-07-20 16:17+0400\n"
+"PO-Revision-Date: 2003-07-26 16:46+0400\n"
 "Last-Translator: Alexandre Prokoudine <avp@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -975,7 +975,7 @@ msgstr "минут в"
 
 #: editview.cpp:532
 msgid "Show Velocity Control Ruler"
-msgstr "Показаь контрольную шкалу силы нажатия"
+msgstr "Показать контрольную шкалу силы нажатия"
 
 #: editview.cpp:536
 msgid "Show Controllers Events Ruler"
@@ -3536,7 +3536,7 @@ msgstr "Добавить %1"
 
 #: notationcommands.cpp:1450
 msgid "Force to %1"
-msgstr ""
+msgstr "Принудительно изменить на %1"
 
 #: notationcommands.cpp:1453
 msgid "Do&uble Sharp"
@@ -4941,7 +4941,7 @@ msgstr "Интерпретировать"
 
 #: dialogs.cpp:3699
 msgid "Interpretations to apply"
-msgstr "Применяемые интерпретации"
+msgstr " Применяемые интерпретации "
 
 #: dialogs.cpp:3702
 msgid "Apply text dynamics (p, mf, ff etc)"
@@ -4953,7 +4953,7 @@ msgstr "Применить динамику"
 
 #: dialogs.cpp:3706
 msgid "Stress beats"
-msgstr "Акцентированные такты"
+msgstr "Акцентировать доли"
 
 #: dialogs.cpp:3708
 msgid "Articulate slurs, staccato, tenuto etc"
@@ -5747,11 +5747,16 @@ msgstr ""
 "слева в самом верх окна.</p>\n"
 
 #: tips.cpp:151
+#, fuzzy
 msgid ""
 "<p>...that you can select all notes of a particular pitch in the matrix "
 "view, by shift-clicking on that pitch on the piano keyboard at the left?  If "
 "you shift-click-drag, you can select whole ranges too.</p>\n"
 msgstr ""
+"<p>...то вы можете выбрать все ноты одинаковой высоты в матрчином "
+"редакторе, удерживая Shift и щёлкая мышкой по соответствующей "
+"клавише на клавиатуре слева? If you shift-click-drag, you can select whole "
+"ranges too.</p>\n"
 
 #: tips.cpp:155
 msgid ""
