@@ -1334,7 +1334,13 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		if (!showInvisibles) continue;
 	    }
 */
-	    NOTATION_DEBUG << "element is a " << el->event()->getType() << endl;
+	    if (el->event()->isa(Note::EventType)) {
+		long pitch = 0;
+		el->event()->get<Int>(PITCH, pitch);
+		NOTATION_DEBUG << "element is a " << el->event()->getType() << " (pitch " << pitch << ")" << endl;
+	    } else {
+		NOTATION_DEBUG << "element is a " << el->event()->getType() << endl;
+	    }
 
 	    if (chunkitr != chunks.end()) {
 		NOTATION_DEBUG << "new chunk: addr " << &(*chunkitr) << " duration=" << (*chunkitr).duration << " subordering=" << (*chunkitr).subordering << " fixed=" << (*chunkitr).fixed << " stretchy=" << (*chunkitr).stretchy << " x=" << (*chunkitr).x << endl;
@@ -1378,10 +1384,17 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    el->setLayoutX(x + displacedX);
 	    el->setLayoutAirspace(x, int(delta));
 
+	    // #704958 (multiple tuplet spanners created when entering
+	    // triplet chord) -- only do this here for non-notes,
+	    // notes get it from positionChord
+	    if (!el->isNote()) {
+		sampleGroupElement(staff, clef, key, it);
+	    }
+
 	    if (el->isNote()) {
 
 		// This modifies "it" and "tieMap"
-		positionChord(staff, it, bdi, timeSignature, clef, key, tieMap, to);
+		positionChord(staff, it, clef, key, tieMap, to);
 
 	    } else if (el->isRest()) {
 
@@ -1437,7 +1450,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
 		// nothing else
 	    }
-
+/*!!!
 	    if (it != to && el->event()->has(BEAMED_GROUP_ID)) {
 
 		//!!! Gosh.  We need some clever logic to establish
@@ -1462,7 +1475,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		}
 		m_groupsExtant[groupId]->sample(it, true);
 	    }
-
+*/
 	    if (m_timePerProgressIncrement > 0 && (++count == 100)) {
 		count = 0;
 		timeT sinceIncrement = el->getViewAbsoluteTime() - lastIncrement;
@@ -1498,6 +1511,37 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
     }
 }
 
+void
+NotationHLayout::sampleGroupElement(Staff &staff,
+				    const Clef &clef,
+				    const Rosegarden::Key &key,
+				    const NotationElementList::iterator &itr)
+{
+    NotationElement *el = static_cast<NotationElement *>(*itr);
+
+    if (el->event()->has(BEAMED_GROUP_ID)) {
+
+	//!!! Gosh.  We need some clever logic to establish whether
+	// one group is happening while another has not yet ended --
+	// perhaps we decide one has ended if we see another, and then
+	// re-open the case of the first if we meet another note that
+	// claims to be in it.  Then we need to hint to both of the
+	// groups that they should choose appropriate stem directions
+	// -- we could just use HEIGHT_ON_STAFF of their first notes
+	// to determine this, as if that doesn't work, nothing will
+
+	long groupId = el->event()->get<Int>(BEAMED_GROUP_ID);
+	NOTATION_DEBUG << "group id: " << groupId << endl;
+	if (m_groupsExtant.find(groupId) == m_groupsExtant.end()) {
+	    NOTATION_DEBUG << "(new group)" << endl;
+	    m_groupsExtant[groupId] =
+		new NotationGroup(*staff.getViewElementList(),
+				  m_notationQuantizer,
+				  m_properties, clef, key);
+	}
+	m_groupsExtant[groupId]->sample(itr, true);
+    }
+}
 
 timeT
 NotationHLayout::getSpacingDuration(Staff &staff,
@@ -1539,8 +1583,6 @@ NotationHLayout::getSpacingDuration(Staff &staff,
 void
 NotationHLayout::positionChord(Staff &staff,
                                NotationElementList::iterator &itr,
-				const BarDataList::iterator &, //!!!unreqd?
-				const TimeSignature &, //!!! unreqd?
 			       const Clef &clef, const Rosegarden::Key &key,
 			       TieMap &tieMap, 
 			       NotationElementList::iterator &to)
@@ -1564,6 +1606,12 @@ NotationHLayout::positionChord(Staff &staff,
 	 citr != staff.getViewElementList()->end(); ++citr) {
 	
 	if (citr == to) barEndsInChord = true;
+
+	// #704958 (multiple tuplet spanners created when entering
+	// triplet chord) -- layout() updates the beamed group data
+	// for non-notes, but we have to do it for notes so as to
+	// ensure every note in the chord is accounted for
+	sampleGroupElement(staff, clef, key, citr);
 
 	NotationElement *elt = static_cast<NotationElement*>(*citr);//!!!
 

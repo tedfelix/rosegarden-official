@@ -450,8 +450,8 @@ NotationGroup::sample(const NELIterator &i, bool goingForwards)
     // e.g. BEAM_GRADIENT to indicate that a beam should be drawn;
     // it's possible the gradient might be left over from a previous
     // calculation and the group might have changed since.  Instead it
-    // should test BEAM_NECESSARY, which may be false even if there
-    // is a gradient present.
+    // should test BEAMED, which may be false even if there is a
+    // gradient present.
     (*i)->event()->setMaybe<Bool>(NotationProperties::BEAMED, false);
 
     int h = height(i);
@@ -820,13 +820,13 @@ void
 NotationGroup::applyBeam(NotationStaff &staff)
 {
 //    NOTATION_DEBUG << "NotationGroup::applyBeam, group no is " << m_groupNo << endl;
-/*!!!
+/*
     NOTATION_DEBUG << "\nNotationGroup::applyBeam" << endl;
     NOTATION_DEBUG << "Group id: " << m_groupNo << ", type " << m_type << endl;
     NOTATION_DEBUG << "Coverage:" << endl;
     int i = 0;
     for (NELIterator i = getInitialElement(); i != getContainer().end(); ++i) {
-	(*i)->event()->dump(NOTATION_DEBUG);
+	(*i)->event()->dump(cerr);
 	if (i == getFinalElement()) break;
     }
     {
@@ -846,11 +846,11 @@ NotationGroup::applyBeam(NotationStaff &staff)
 	NOTATION_DEBUG << "Lowest note: " << (i == getContainer().end() ? -1 : (*i)->event()->getAbsoluteTime()) << endl;
     }
 */
-
     Beam beam(calculateBeam(staff));
     if (!beam.necessary) {
 	for (NELIterator i = getInitialNote(); i != getContainer().end(); ++i) {
 	    (*i)->event()->unset(NotationProperties::BEAMED);
+	    (*i)->event()->unset(m_properties.TUPLING_LINE_MY_Y);
 	    if (i == getFinalNote()) break;
 	}
 	return;
@@ -891,6 +891,13 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
     for (NELIterator i = getInitialNote(); i != getContainer().end(); ++i) {
         NotationElement* el = static_cast<NotationElement*>(*i);
+
+	// Clear tuplingness for all events in the group, to be
+	// reinstated by any subsequent call to applyTuplingLine.  We
+	// do this because applyTuplingLine doesn't clear these
+	// properties from notes that don't need them; it only applies
+	// them to notes that do.
+	el->event()->unset(m_properties.TUPLING_LINE_MY_Y);
         
         if (el->isNote() &&
 	    el->event()->get<Int>(NOTE_TYPE) < Note::Crotchet &&

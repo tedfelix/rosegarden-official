@@ -365,9 +365,12 @@ protected:
     // note within the chord
     void positionChord
     (Rosegarden::Staff &staff, 
-     NotationElementList::iterator &, const BarDataList::iterator &,
-     const Rosegarden::TimeSignature &, const Rosegarden::Clef &clef,
+     NotationElementList::iterator &, const Rosegarden::Clef &clef,
      const Rosegarden::Key &key, TieMap &, NotationElementList::iterator &to);
+
+    void sampleGroupElement
+    (Rosegarden::Staff &staff, const Rosegarden::Clef &clef,
+     const Rosegarden::Key &key, const NotationElementList::iterator &);
 
     /// Difference between absolute time of next event and of this
     Rosegarden::timeT getSpacingDuration
