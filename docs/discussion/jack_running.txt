@@ -1,0 +1,53 @@
+Re: [Jackit-devel] Orthodox jacking
+From: Paul Davis <pbd@op.net>
+To: Miha Tom i <miha.tomsic@guest.arnes.si>
+Cc: jackit-devel@lists.sourceforge.net
+>On Wed, 22 May 2002 22:09:58 -0400 Paul Davis <pbd@op.net> wrote:
+>> if jackd is run with SCHED_FIFO scheduling (implying it has root
+        >> priviledge of CAP_RESOURCE), it will force clients to try to run with
+>> the same scheduling. They can't do that unless that have either root
+>> priviledge or CAP_RESOURCE.
+>
+>OK. For what I understand I have to run jack suid root with cap enabled kernel
+>and jack clients as a regular user. 
+
+Lets back up.
+
+There are two main ways to run JACK: with realtime scheduling and
+without. The first is absolutely necessary for low latency, though its
+also useful at longer latencies. Runing without realtime scheduling
+works, but is less reliable. I do most of my testing without it, for
+example, but anytime I want to do something for real, I use it.
+
+Now, to use realtime scheduling, jackd and all its clients have to
+have either root priviledges or CAP_RESOURCE. There is no way around
+this restriction.
+
+However, there is another issue that isn't made clear in anything that
+we've written to date. The user that runs jackd, whether its with
+realtime scheduling or not, is the same user that must run the
+clients. Thats because of the access to the shared memory used by
+jackd. The memory is not public - it is private to the jackd owner.
+
+So, if you run jackd as root, all clients must be run as root. If you
+run jackd as "nobody", all clients must be run as "nobody".
+
+This is why capabilities matter: it allows "nobody" to run jackd with
+RT scheduling, and still control all the clients. Without
+capabilities, having everything has to be run as root is the only way
+to get RT scheduling and hence low latency.
+
+You might consider this "single-userness" of jackd a design error. it
+has been raised here before. I am ambivalent about it. On the one
+hand, it *is* the likely situation under which 95%+ of all JACK
+systems will be run. It is also better from a security
+standpoint. However, if anyone can make a case for why jackd should
+allow clients run by users other than the one who started it, please
+do so. If you plan to do so, please keep this mind: jack is NOT a
+replacement for esd or artsd. We are not trying to provide multiuser
+access to a hardware device, we are trying to provide
+multi-application device and data sharing. This is a very, very
+important distinction.
+
+--p
+
