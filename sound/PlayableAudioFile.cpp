@@ -26,7 +26,7 @@ namespace Rosegarden
 {
 
 //#define DEBUG_RING_BUFFER_POOL 1
-#define DEBUG_PLAYABLE 1
+//#define DEBUG_PLAYABLE 1
 //#define DEBUG_RECORDABLE 1
 
 class RingBufferPool
