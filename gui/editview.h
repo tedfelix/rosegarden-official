@@ -24,7 +24,6 @@
 
 #include <vector>
 
-#include <qcanvas.h>
 #include <kmainwindow.h>
 
 namespace Rosegarden { class Segment; }
@@ -46,6 +45,14 @@ public:
     RosegardenGUIDoc *getDocument() { return m_document; }
 
     virtual bool applyLayout() = 0;
+
+    /**
+     * "Clever" readjustment of the view size
+     * If the new size is larger, enlarge to that size plus a margin
+     * If it is smaller, only shrink if the reduction is significant
+     * (e.g. new size is less than 75% of the old one)
+     */
+    virtual void readjustViewSize(QSize newSize);
 
 public slots:
     /**
@@ -130,6 +137,19 @@ protected:
      * setup status bar
      */
     virtual void initStatusBar() = 0;
+
+
+    /**
+     * Abstract method to get the view size
+     * Typically implemented as canvas()->size().
+     */
+    virtual QSize getViewSize() = 0;
+
+    /**
+     * Abstract method to set the view size
+     * Typically implemented as canvas()->resize().
+     */
+    virtual void setViewSize(QSize) = 0;
 
     //--------------- Data members ---------------------------------
 

@@ -33,8 +33,8 @@
 const unsigned int EditView::ID_STATUS_MSG = 1;
 
 EditView::EditView(RosegardenGUIDoc *doc,
-                         std::vector<Rosegarden::Segment *> segments,
-                         QWidget *parent)
+                   std::vector<Rosegarden::Segment *> segments,
+                   QWidget *parent)
     : KMainWindow(parent),
       m_config(kapp->config()),
       m_document(doc)
@@ -43,6 +43,36 @@ EditView::EditView(RosegardenGUIDoc *doc,
 
 EditView::~EditView()
 {
+}
+
+void EditView::readjustViewSize(QSize requestedSize)
+{
+    QSize currentSize = getViewSize();
+    
+    int requestedWidth = requestedSize.width(),
+        requestedHeight = requestedSize.height(),
+        currentWidth = currentSize.width(),
+        currentHeight = currentSize.height();
+
+    QSize newSize = requestedSize;
+
+    if ((requestedWidth < currentWidth) &&
+        ((requestedWidth / currentWidth) < 0.75))
+
+        newSize.setWidth(requestedWidth);
+
+    else // requestedWidth >= currentWidth
+        newSize.setWidth(requestedWidth + requestedWidth / 2);
+
+    if ((requestedHeight < currentHeight) &&
+        ((requestedHeight / currentHeight) < 0.75))
+
+        newSize.setHeight(requestedHeight);
+
+    else // requestedHeight >= currentHeight
+        newSize.setHeight(requestedHeight + requestedHeight / 2);
+
+    setViewSize(newSize);
 }
 
 //////////////////////////////////////////////////////////////////////
