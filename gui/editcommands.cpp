@@ -253,8 +253,9 @@ PasteCommand::modifySegment()
 	destination->insert(e);
 
 	if (e->isa(Note::EventType)) {
-	    helper.normalizeRests(e->getAbsoluteTime(),
-				  e->getAbsoluteTime() + e->getDuration());
+	    destination->normalizeRests
+		(e->getAbsoluteTime(),
+		 e->getAbsoluteTime() + e->getDuration());
 	}
     }
 }

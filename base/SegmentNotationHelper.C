@@ -342,32 +342,10 @@ SegmentNotationHelper::isViable(timeT duration, int dots)
 void
 SegmentNotationHelper::makeRestViable(iterator i)
 {
-    DurationList dl;
     timeT absTime = (*i)->getAbsoluteTime(); 
-
-    TimeSignature timeSig;
-    timeT sigTime = segment().getComposition()->getTimeSignatureAt
-	(absTime, timeSig);
-
-    timeSig.getDurationListForInterval
-	(dl, (*i)->getDuration(), absTime - sigTime);
-
-    cerr << "SegmentNotationHelper::makeRestViable: Removing rest of duration "
-	 << (*i)->getDuration() << " from time " << absTime << endl;
-
+    timeT duration = (*i)->getDuration();
     erase(i);
-    
-    for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
-	int duration = *i;
-	
-	cerr << "SegmentNotationHelper::makeRestViable: Inserting rest of duration "
-	     << duration << " at time " << absTime << endl;
-
-	Event *e = new Event(Note::EventRestType, absTime, duration);
-
-	insert(e);
-	absTime += duration;
-    }
+    segment().fillWithRests(absTime, absTime + duration, true);
 }
 
 
@@ -1231,109 +1209,6 @@ SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
 		    &SegmentNotationHelper::normalizeContiguousRests);
 }
 */
-
-void
-SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
-{
-    // First stage: erase all existing rests in this range.
-
-//    cerr << "SegmentNotationHelper::normalizeRests " << startTime << " -> "
-//	 << endTime << endl;
-
-    iterator ia = segment().findTime(startTime);
-    iterator ib = segment().findTime(endTime);
-    if (!(ib == end())) endTime = (*ib)->getAbsoluteTime();
-
-    // If there's a rest preceding the start time, with no notes
-    // between us and it, and if it doesn't have precisely the
-    // right duration, then we need to normalize it too
-    iterator scooter = ia;
-    while (scooter-- != begin()) {
-	if ((*scooter)->isa(Note::EventRestType)) {
-	    if ((*scooter)->getAbsoluteTime() + (*scooter)->getDuration() !=
-		startTime) {
-		startTime = (*scooter)->getAbsoluteTime();
-//		cerr << "Scooting back to " << startTime << endl;
-		ia = scooter;
-	    }
-	    break;
-	} else if ((*scooter)->getDuration() > 0) {
-	    break;
-	}
-    }
-    
-    if (ia == end()) return;
-
-    std::vector<iterator> erasable;
-
-    for (iterator i = ia; i != ib && i != end(); ++i) {
-	if ((*i)->isa(Note::EventRestType)) erasable.push_back(i);
-    }
-
-    for (unsigned int ei = 0; ei < erasable.size(); ++ei) {
-	segment().erase(erasable[ei]);
-    }
-    
-    // Second stage: find the gaps that need to be filled with
-    // rests.  We don't mind about the case where two simultaneous
-    // notes end at different times -- we're only interested in
-    // the one ending sooner.  Each time an event ends, we start
-    // a candidate gap.
-    
-    // Re-find this, as it might have been erased
-    ia = segment().findTime(startTime);
-    if (ib != end()) ++ib;
-    
-    std::vector<std::pair<timeT, timeT> > gaps;
-    timeT lastNoteEnds = startTime;
-    Segment::iterator i = ia;
-
-    for (; i != ib && i != end(); ++i) {
-
-	if (!(*i)->isa(Note::EventType)) continue;
-
-	timeT thisNoteStarts = (*i)->getAbsoluteTime();
-
-	if (thisNoteStarts > lastNoteEnds) {
-	    gaps.push_back(std::pair<timeT, timeT>
-			   (lastNoteEnds,
-			    thisNoteStarts - lastNoteEnds));
-	}
-	lastNoteEnds = thisNoteStarts + (*i)->getDuration();
-    }
-
-    if (endTime > lastNoteEnds) {
-	gaps.push_back(std::pair<timeT, timeT>
-		       (lastNoteEnds, endTime - lastNoteEnds));
-    }
-
-    timeT duration;
-
-    for (unsigned int gi = 0; gi < gaps.size(); ++gi) {
-
-        startTime = gaps[gi].first;
-	duration = gaps[gi].second;
-
-//	cerr << "Gap: " << startTime << " , " << duration << endl;
-
-	TimeSignature ts;
-	timeT sigTime =
-	    segment().getComposition()->getTimeSignatureAt(startTime, ts);
-
-	DurationList dl;
-	ts.getDurationListForInterval(dl, duration, startTime - sigTime);
-
-	timeT acc = startTime;
-
-	for (DurationList::iterator di = dl.begin(); di != dl.end(); ++di) {
-	    Event *e = new Event(Note::EventRestType, acc, *di);
-//	    cerr<<"inserting:\n"<<endl;
-//	    e->dump(cerr);
-	    segment().insert(e);
-	    acc += *di;
-	}
-    }
-}
 
 
 void

@@ -687,12 +687,6 @@ MidiFile::convertToRosegarden()
                 if ((*midiEvent)->getVelocity() == 0)
                     break;
 
-                // insert rests if we need them
-                //
-//!!!                if (endOfLastNote < rosegardenTime ) {
-//!!!                    rosegardenSegment->fillWithRests(rosegardenTime, true);
-//!!!                }
-
                 endOfLastNote = rosegardenTime + rosegardenDuration;
 
                 // create and populate event
@@ -758,9 +752,9 @@ MidiFile::convertToRosegarden()
                 (helper.guessClef(rosegardenSegment->begin(),
                                   rosegardenSegment->end()).getAsEvent(0));
 
-//!!! doing this instead of the fillWithRests further up, as much to test normalizeRests as anything
-	    helper.normalizeRests(rosegardenSegment->getStartTime(),
-				  rosegardenSegment->getEndTime());
+	    rosegardenSegment->normalizeRests
+		(rosegardenSegment->getStartTime(),
+		 rosegardenSegment->getEndTime());
 
             helper.autoBeam(rosegardenSegment->begin(),
                             rosegardenSegment->end(),

@@ -330,8 +330,7 @@ GroupMenuAddIndicationCommand::name(std::string indicationType)
 
 void TransformsMenuNormalizeRestsCommand::modifySegment()
 {
-    SegmentNotationHelper helper(getSegment());
-    helper.normalizeRests(getBeginTime(), getEndTime());
+    getSegment().normalizeRests(getBeginTime(), getEndTime());
 }
 
 void TransformsMenuCollapseRestsCommand::modifySegment()

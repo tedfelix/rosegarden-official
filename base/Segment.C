@@ -388,6 +388,92 @@ void Segment::fillWithRests(timeT startTime,
     }
 }
 
+void
+Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
+{
+    // First stage: erase all existing rests in this range.
+
+//    cerr << "Segment::normalizeRests " << startTime << " -> "
+//	 << endTime << endl;
+
+    iterator ia = findTime(startTime);
+    iterator ib = findTime(endTime);
+    if (!(ib == end())) endTime = (*ib)->getAbsoluteTime();
+
+    // If there's a rest preceding the start time, with no notes
+    // between us and it, and if it doesn't have precisely the
+    // right duration, then we need to normalize it too
+    iterator scooter = ia;
+    while (scooter-- != begin()) {
+	if ((*scooter)->isa(Note::EventRestType)) {
+	    if ((*scooter)->getAbsoluteTime() + (*scooter)->getDuration() !=
+		startTime) {
+		startTime = (*scooter)->getAbsoluteTime();
+//		cerr << "Scooting back to " << startTime << endl;
+		ia = scooter;
+	    }
+	    break;
+	} else if ((*scooter)->getDuration() > 0) {
+	    break;
+	}
+    }
+    
+    if (ia == end()) return;
+
+    std::vector<iterator> erasable;
+
+    for (iterator i = ia; i != ib && i != end(); ++i) {
+	if ((*i)->isa(Note::EventRestType)) erasable.push_back(i);
+    }
+
+    for (unsigned int ei = 0; ei < erasable.size(); ++ei) {
+	erase(erasable[ei]);
+    }
+    
+    // Second stage: find the gaps that need to be filled with
+    // rests.  We don't mind about the case where two simultaneous
+    // notes end at different times -- we're only interested in
+    // the one ending sooner.  Each time an event ends, we start
+    // a candidate gap.
+    
+    // Re-find this, as it might have been erased
+    ia = findTime(startTime);
+    if (ib != end()) ++ib;
+    
+    std::vector<std::pair<timeT, timeT> > gaps;
+    timeT lastNoteEnds = startTime;
+    iterator i = ia;
+
+    for (; i != ib && i != end(); ++i) {
+
+	if (!(*i)->isa(Note::EventType)) continue;
+
+	timeT thisNoteStarts = (*i)->getAbsoluteTime();
+
+	if (thisNoteStarts > lastNoteEnds) {
+	    gaps.push_back(std::pair<timeT, timeT>
+			   (lastNoteEnds,
+			    thisNoteStarts - lastNoteEnds));
+	}
+	lastNoteEnds = thisNoteStarts + (*i)->getDuration();
+    }
+
+    if (endTime > lastNoteEnds) {
+	gaps.push_back(std::pair<timeT, timeT>
+		       (lastNoteEnds, endTime - lastNoteEnds));
+    }
+
+    timeT duration;
+
+    for (unsigned int gi = 0; gi < gaps.size(); ++gi) {
+
+        startTime = gaps[gi].first;
+	duration = gaps[gi].second;
+
+	fillWithRests(startTime, startTime + duration, permitQuantize);
+    }
+}
+
 
 
 void Segment::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)

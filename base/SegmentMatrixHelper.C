@@ -27,8 +27,8 @@ namespace Rosegarden
 Segment::iterator SegmentMatrixHelper::insertNote(Event* e)
 {
     segment().insert(e);
-    normalizeRests(e->getAbsoluteTime(),
-		   e->getAbsoluteTime() + e->getDuration());
+    segment().normalizeRests(e->getAbsoluteTime(),
+			     e->getAbsoluteTime() + e->getDuration());
 
 #ifdef NOT_DEFINED
     iterator i, j;

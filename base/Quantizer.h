@@ -200,22 +200,30 @@ public:
 	const;
 
     /**
-     * Get the contents of the quantized duration property of
-     * the given event, or quantize it if the property is so far
-     * unset.  Could return an incorrect result if the real
-     * duration of the event has changed since it was last
-     * quantized.  Note that quantizing individual events may be
-     * less reliable than quantizing whole Segments; this should
-     * not be used as a substitute for batch-style quantization.
+     * Return the quantized duration of the event, by retrieving
+     * it from the target if possible and otherwise by quantizing
+     * the source duration.  In no case does this ever write the
+     * quantized values into the event, so this is not a good
+     * substitute for actually quantizing something.
+     *
+     * (If the target is RawEventData, this will always return
+     * the raw duration regardless of whether the event appears
+     * to have actually been quantized.  This method is thus
+     * only useful if target is not RawEventData.)
      */
     timeT getQuantizedDuration(Event *el) const;
 
     /**
-     * Get the contents of the quantized absolute time property of
-     * the given event, or quantize it if the property is so far
-     * unset.  Note that quantizing individual events may be
-     * less reliable than quantizing whole Segments; this should
-     * not be used as a substitute for batch-style quantization.
+     * Return the quantized absolute time of the event, by
+     * retrieving it from the target if possible and otherwise by
+     * quantizing the source time.  In no case does this ever
+     * write the quantized values into the event, so this is not
+     * a good substitute for actually quantizing something.
+     *
+     * (If the target is RawEventData, this will always return
+     * the raw time regardless of whether the event appears
+     * to have actually been quantized.  This method is thus
+     * only useful if target is not RawEventData.)
      */
     timeT getQuantizedAbsoluteTime(Event *el) const;
 

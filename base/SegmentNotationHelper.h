@@ -340,15 +340,6 @@ public:
     /**
      * For each series of contiguous rests found between the start and
      * end time, replace the series of rests with another series of
-     * the same duration but composed of the theoretically "correct"
-     * rest durations to fill the gap in the current time signature.
-     */
-    void normalizeRests(timeT startTime, timeT endTime);
-
-
-    /**
-     * For each series of contiguous rests found between the start and
-     * end time, replace the series of rests with another series of
      * the same duration but composed of the longest possible valid
      * rest plus the remainder
      */

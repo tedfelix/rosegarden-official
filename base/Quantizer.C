@@ -259,41 +259,30 @@ Quantizer::fixQuantizedValues(Segment::iterator from,
 timeT
 Quantizer::getQuantizedDuration(Event *e) const
 {
-//!!! not correct -- if m_target == RawEventData but it's never
-// been quantized before, this will be plainly wrong
-    if ((m_target != RawEventData) &&
-	(!e->has(m_target + "Duration"))) {
-	return quantizeDuration(e->getDuration());
+    if (m_target == RawEventData) {
+	return e->getDuration();
     } else {
-	return getFromTarget(e, DurationValue);
+	if (e->has(m_target + "Duration")) {
+	    return e->get<Int>(m_target + "Duration");
+	} else {
+	    return quantizeDuration(e->getDuration());
+	}
     }
-
-/*!!!
-    long d;
-    if (e->get<Int>(getDurationProperty(), d)) return (timeT)d;
-    else return quantizeDuration(e->getDuration());
-*/
 }
 
 
 timeT
 Quantizer::getQuantizedAbsoluteTime(Event *e) const
 {
-//!!! not correct -- if m_target == RawEventData but it's never
-// been quantized before, this will be plainly wrong
-    if ((m_target != RawEventData) &&
-	(!e->has(m_target + "AbsoluteTime"))) {
-	return quantizeAbsoluteTime(e->getAbsoluteTime());
+    if (m_target == RawEventData) {
+	return e->getAbsoluteTime();
     } else {
-	return getFromTarget(e, AbsoluteTimeValue);
+	if (e->has(m_target + "AbsoluteTime")) {
+	    return e->get<Int>(m_target + "AbsoluteTime");
+	} else {
+	    return quantizeAbsoluteTime(e->getAbsoluteTime());
+	}
     }
-
-/*!!!
-
-    long d;
-    if (e->get<Int>(getAbsoluteTimeProperty(), d)) return (timeT)d;
-    else return quantizeAbsoluteTime(e->getAbsoluteTime());
-*/
 }
 
 
