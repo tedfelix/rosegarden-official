@@ -318,7 +318,7 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
                          loadIcon(PlaybackConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new PlaybackConfigurationPage(m_doc, pageWidget);
-    vlay->addWidget(pageWidget);
+    vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
 
