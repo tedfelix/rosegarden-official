@@ -922,7 +922,9 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 
 //    bool first = true;
     
-    y -= (getLegerLineThickness() - getStaffLineThickness()) /2;
+    if (getLegerLineThickness() > getStaffLineThickness()) {
+	y -= (getLegerLineThickness() - getStaffLineThickness() + 1) /2;
+    }
 
     for (int i = legerLines - 1; i >= 0; --i) { 
 	if (i % 2) {

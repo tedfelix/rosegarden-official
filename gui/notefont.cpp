@@ -1233,14 +1233,14 @@ NoteFont::getFlagSpacing(unsigned int &spacing) const
 bool
 NoteFont::getStaffLineThickness(unsigned int &thickness) const
 {
-    thickness = (m_size < 16 ? 1 : m_size / 16);
+    thickness = (m_size < 7 ? 1 : m_size / 7);
     return m_fontMap.getStaffLineThickness(m_size, thickness);
 }
 
 bool
 NoteFont::getLegerLineThickness(unsigned int &thickness) const
 {
-    thickness = (m_size < 12 ? 1 : m_size / 12);
+    thickness = (m_size < 6 ? 1 : m_size / 6);
     return m_fontMap.getLegerLineThickness(m_size, thickness);
 }
 
