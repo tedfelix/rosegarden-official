@@ -46,8 +46,6 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-#define HAVE_XFT 1
-
 #ifdef HAVE_XFT
 #include <X11/Xft/Xft.h>
 #endif
