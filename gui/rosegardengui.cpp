@@ -2907,6 +2907,10 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
     m_originatingJump = false;
 
     if (m_seqManager->getTransportStatus() == RECORDING_MIDI) {
+	Rosegarden::MappedComposition mC;
+	if (mapper->getRecordedEvents(mC) > 0) {
+	    m_doc->insertRecordedMidi(mC, RECORDING_MIDI);
+	}
 	m_doc->updateRecordingSegment();
     }
 
@@ -3698,9 +3702,9 @@ RosegardenGUIApp::slotRecord()
     plugAccelerators(m_seqManager->getCountdownDialog(),
                      m_seqManager->getCountdownDialog()->getAccelerators());
 
-    // Start the playback timer - this fetches the current sequencer position every 20ms
+    // Start the playback timer - this fetches the current sequencer position &c
     //
-    m_playTimer->start(19); // 20ms update (...ish.  Actually we want
+    m_playTimer->start(37); // 40ms update (...ish.  Actually we want
 			    // to avoid precise multiples just so as
 			    // to avoid always having the same digit
 			    // in one place on the transport.  How
@@ -3805,9 +3809,9 @@ void RosegardenGUIApp::slotPlay()
         KMessageBox::error(this, s);
     }
 
-    // Start the playback timer - this fetches the current sequencer position every 20ms
+    // Start the playback timer - this fetches the current sequencer position &c
     //
-    m_playTimer->start(20);
+    m_playTimer->start(37);
 }
 
 // Send stop request to Sequencer.  This'll set the flag 

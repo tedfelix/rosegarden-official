@@ -24,7 +24,7 @@
 #include <qstring.h>
 #include "RealTime.h"
 
-namespace Rosegarden { class MappedEvent; }
+namespace Rosegarden { class MappedEvent; class MappedComposition; }
 
 class SequencerMmapper
 {
@@ -34,11 +34,11 @@ public:
     
     void updatePositionPointer(Rosegarden::RealTime time);
     void updateVisual(Rosegarden::MappedEvent *ev);
+    void updateRecordingBuffer(Rosegarden::MappedComposition *mC);
 
     QString getFileName() { return m_fileName; }
 
 protected:
-
     void init();
     void setFileSize(size_t);
     QString createFileName();
@@ -49,6 +49,15 @@ protected:
     int                   m_fd;
     void*                 m_mmappedBuffer;
     size_t                m_mmappedSize;
+    static const int      m_recordingBufferSize;
+
+    //!!! nasty -- move to another class with placement new a la ControlBlock
+    Rosegarden::RealTime    *m_positionPtrPtr;
+    int                     *m_eventIndexPtr;
+    bool                    *m_haveEventPtr;
+    Rosegarden::MappedEvent *m_eventPtr;
+    int                     *m_recordEventIndexPtr;
+    Rosegarden::MappedEvent *m_recordEventBuffer;
 };
 
 

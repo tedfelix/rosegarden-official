@@ -35,20 +35,25 @@
 #include "RealTime.h"
 #include "Exception.h"
 #include "MappedEvent.h"
+#include "MappedComposition.h"
 
 // Seems not to be properly defined under some gcc 2.95 setups
 #ifndef MREMAP_MAYMOVE
 #define MREMAP_MAYMOVE 1
 #endif
 
+const int SequencerMmapper::m_recordingBufferSize = 1000; // events
+
 SequencerMmapper::SequencerMmapper():
     m_fileName(createFileName()),
     m_fd(-1),
     m_mmappedBuffer(0),
     m_mmappedSize(sizeof(Rosegarden::RealTime) +
-		  sizeof(unsigned long) +
+		  sizeof(int) +
 		  sizeof(bool) +
-		  sizeof(Rosegarden::MappedEvent))
+		  sizeof(Rosegarden::MappedEvent) +
+		  sizeof(int) +
+		  m_recordingBufferSize * sizeof(Rosegarden::MappedEvent))
 {
     // just in case
     QFile::remove(m_fileName);
@@ -95,41 +100,54 @@ SequencerMmapper::~SequencerMmapper()
 void
 SequencerMmapper::updatePositionPointer(Rosegarden::RealTime time)
 {
-    Rosegarden::RealTime *ptr = (Rosegarden::RealTime *)m_mmappedBuffer;
-    *ptr = time;
+    *m_positionPtrPtr = time;
 }
 
 void
 SequencerMmapper::updateVisual(Rosegarden::MappedEvent *ev)
 {
-    static unsigned long eventIndex = 0;
+    static int eventIndex = 0;
 
-    char *buf = (char *)m_mmappedBuffer;
-    buf += sizeof(Rosegarden::RealTime);
-
-    unsigned long *eventIndexPtr = (unsigned long *)buf;
-    buf += sizeof(unsigned long);
-
-    bool *haveEventPtr = (bool *)buf;
-    buf += sizeof(bool);
-
-    Rosegarden::MappedEvent *eventPtr = (Rosegarden::MappedEvent *)buf;
-
-    *haveEventPtr = false; // until written
+    *m_haveEventPtr = false; // until written
 
     if (ev) {
 	++eventIndex;
-	*eventPtr = *ev;
-	*eventIndexPtr = eventIndex;
-	*haveEventPtr = true;
+	*m_eventPtr = *ev;
+	*m_eventIndexPtr = eventIndex;
+	*m_haveEventPtr = true;
     }
 }
 
+void
+SequencerMmapper::updateRecordingBuffer(Rosegarden::MappedComposition *mC)
+{
+    // ringbuffer it
+    for (Rosegarden::MappedComposition::iterator i = mC->begin();
+	 i != mC->end(); ++i) {
+	int index = *m_recordEventIndexPtr;
+	m_recordEventBuffer[index] = **i;
+	if (++index == m_recordingBufferSize) index = 0;
+	*m_recordEventIndexPtr = index;
+    }
+}
 
 void
 SequencerMmapper::init()
 {
     SEQUENCER_DEBUG << "SequencerMmapper::initControlBlock()\n";
+
+    // adding 1 at each stage will work because the pointer arithmetic
+    // is in multiples of the size of the type of the pointer
+    m_positionPtrPtr = (Rosegarden::RealTime *)(m_mmappedBuffer);
+    m_eventIndexPtr = (int *)(m_positionPtrPtr + 1);
+    m_haveEventPtr = (bool *)(m_eventIndexPtr + 1);
+    m_eventPtr = (Rosegarden::MappedEvent *)(m_haveEventPtr + 1);
+    m_recordEventIndexPtr = (int *)(m_eventPtr + 1);
+    m_recordEventBuffer = (Rosegarden::MappedEvent *)(m_recordEventIndexPtr + 1);
+
+    *m_positionPtrPtr = Rosegarden::RealTime::zeroTime;
+    *m_eventIndexPtr = 0;
+    *m_recordEventIndexPtr = 0;
 
     updatePositionPointer(Rosegarden::RealTime::zeroTime);
     updateVisual(0);

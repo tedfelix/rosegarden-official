@@ -448,22 +448,25 @@ RosegardenSequencerApp::processRecordedMidi()
 	(*i)->setInstrument(instrumentId);
     }
 
+    m_sequencerMapper.updateRecordingBuffer(mC);
+
     // Stream the composition to the DCOP arg but don't send it yet,
     // because playing MIDI thru is quicker and more urgent than
     // updating the GUI
+/*!!!
     QByteArray data;
     QDataStream arg(data, IO_WriteOnly);
     arg << mC;
-
+*/
     // Now it's safely streamed, we can filter for MIDI thru and 
     // play it immediately
     applyFiltering(mC, m_controlBlockMmapper->getThruFilter());
     m_sequencer->processEventsOut(*mC, Rosegarden::RealTime::zeroTime, true);
-
+/*!!!
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
                                  "processRecordedMidi(Rosegarden::MappedComposition)",
-                                  data/*, replyType, replyData, true*/))
+                                  data))
     {
         SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi() - " 
                         <<   "can't call RosegardenGUI client" 
@@ -473,6 +476,7 @@ RosegardenSequencerApp::processRecordedMidi()
         //
         stop();
     }
+*/
 }
 
 

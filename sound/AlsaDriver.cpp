@@ -2429,9 +2429,9 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
 	Rosegarden::RealTime alsaTimeNow = getAlsaTime();
 	if (midiRelativeTime < alsaTimeNow) {
-	    std::cerr << "WARNING: processMidiOut: event is at "
-		      << midiRelativeTime << " but queue is already at "
-		      << alsaTimeNow << std::endl;
+//!!!	    std::cerr << "WARNING: processMidiOut: event is at "
+//		      << midiRelativeTime << " but queue is already at "
+//		      << alsaTimeNow << std::endl;
 	}
 
         // Second and nanoseconds for ALSA

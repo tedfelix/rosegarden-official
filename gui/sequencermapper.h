@@ -24,7 +24,7 @@
 #include <qstring.h>
 #include "RealTime.h"
 
-namespace Rosegarden { class MappedEvent; }
+namespace Rosegarden { class MappedEvent; class MappedComposition; }
 
 class SequencerMapper
 {
@@ -34,6 +34,7 @@ public:
 
     Rosegarden::RealTime getPositionPointer() const;
     bool getVisual(Rosegarden::MappedEvent &) const;
+    int getRecordedEvents(Rosegarden::MappedComposition &) const;
     
     QString getFileName() const { return m_filename; }
 
@@ -45,6 +46,16 @@ protected:
     size_t       m_mmappedSize;
     void*        m_mmappedBuffer;
     QString      m_filename;
+    static const int m_recordingBufferSize;
+
+    //!!! nasty -- move to another class with placement new a la ControlBlock.  plus ew ew, we're even duplicating consts with the same file in sequencer
+
+    Rosegarden::RealTime    *m_positionPtrPtr;
+    int                     *m_eventIndexPtr;
+    bool                    *m_haveEventPtr;
+    Rosegarden::MappedEvent *m_eventPtr;
+    int                     *m_recordEventIndexPtr;
+    Rosegarden::MappedEvent *m_recordEventBuffer;
 
 };
 
