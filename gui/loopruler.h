@@ -23,7 +23,7 @@
 #ifndef _LOOPRULER_H_
 #define _LOOPRULER_H_
 
-#include <qcanvas.h>
+#include <qwidget.h>
 #include "Event.h"
 #include "rosegardenguidoc.h"
 
@@ -38,30 +38,31 @@
 //
 //
 
-class LoopRuler : public QCanvasView
+class LoopRuler : public QWidget
 {
     Q_OBJECT
 
 public:
     LoopRuler(RosegardenGUIDoc *doc,
-              QCanvas* canvas = 0,
-              QWidget* parent = 0,
               const int &bars = 0,
               const int &barWidth = 0,
               const int &height = 0,
+              QWidget* parent = 0,
               const char *name = 0);
 
     ~LoopRuler();
+
+    virtual void paintEvent(QPaintEvent*);
 
 public slots:
     void setLoopingMode(bool value) { m_loop = value; }
 
 protected:
     // ActiveItem interface
-    virtual void contentsMousePressEvent(QMouseEvent *mE);
-    virtual void contentsMouseReleaseEvent(QMouseEvent *mE);
-    virtual void contentsMouseDoubleClickEvent(QMouseEvent *mE);
-    virtual void contentsMouseMoveEvent(QMouseEvent *mE);
+    virtual void mousePressEvent       (QMouseEvent *mE);
+    virtual void mouseReleaseEvent     (QMouseEvent *mE);
+    virtual void mouseDoubleClickEvent (QMouseEvent *mE);
+    virtual void mouseMoveEvent        (QMouseEvent *mE);
 
 signals:
     // The three main functions that this class performs
@@ -81,8 +82,8 @@ signals:
 
 private:
 
-    void drawBarSections();
-    void drawLoopMarker();  // between loop positions
+    void drawBarSections(QPainter*);
+    void drawLoopMarker(QPainter*);  // between loop positions
 
     // Get drawing position from pointer position and vice versa
     //
@@ -93,14 +94,12 @@ private:
     int m_barWidth;
     int m_height;
     int m_snap;            // snap the loop to the nearest
-    QCanvas          *m_canvas;
+
     RosegardenGUIDoc *m_doc;
    
     bool m_loop;
     Rosegarden::timeT m_startLoop;
     Rosegarden::timeT m_endLoop;
-
-    QCanvasRectangle *m_loopMarker;
 
     std::map<int, int> m_barWidthMap;
 

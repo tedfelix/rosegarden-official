@@ -19,31 +19,25 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qpainter.h>
 
 #include "loopruler.h"
 #include "colours.h"
-#include <iostream>
 #include "Event.h"
-
-using std::cerr;
-using std::cout;
-using std::endl;
+#include "rosedebug.h"
 
 LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
-                     QCanvas *canvas,
-                     QWidget *parent,
                      const int &bars,
                      const int &barWidth,
                      const int &height,
+                     QWidget *parent,
                      const char *name):
-    QCanvasView(canvas, parent, name),
+    QWidget(parent, name),
     m_bars(bars), m_barWidth(barWidth), m_height(height),
-    m_canvas(canvas), m_doc(doc), m_loop(false), m_startLoop(0),
-    m_loopMarker(0)
+    m_doc(doc), m_loop(false), m_startLoop(0)
 {
     setMinimumSize(bars * barWidth, height);
     setMaximumSize(bars * barWidth, height);
-    setFrameStyle(NoFrame);
 
     // Load in our bar widths from the Composition
     //
@@ -53,27 +47,26 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
         barMarkers = m_doc->getComposition().getBarRange(i, false);
         m_barWidthMap[i] = barMarkers.second - barMarkers.first;
     }
- 
-    // Turn off all scrollbars on this view
-    //
-    setHScrollBarMode(QScrollView::AlwaysOff);
-    setVScrollBarMode(QScrollView::AlwaysOff);
- 
-    // Draw out the sections according to the bar widths
-    //
-    drawBarSections();
 }
 
 LoopRuler::~LoopRuler()
 {
 }
 
-void
-LoopRuler::drawBarSections()
+void LoopRuler::paintEvent(QPaintEvent*)
 {
-    QCanvasLine *line;
+    QPainter paint(this);
+    paint.setBrush(colorGroup().foreground());
+    drawBarSections(&paint);
+    drawLoopMarker(&paint);
+}
+
+void LoopRuler::drawBarSections(QPainter* paint)
+{
     int subSectionLinePos, barWidth;
     int runningWidth = 0;
+
+    paint->setPen(RosegardenGUIColours::LoopRulerForeground);
 
     for (int i = 0; i < m_bars; i++)
     {
@@ -81,10 +74,7 @@ LoopRuler::drawBarSections()
         //
         barWidth = m_barWidth * m_barWidthMap[i] / m_barWidthMap[0];
 
-        line = new QCanvasLine(m_canvas);
-        line->setPoints(runningWidth, 2 * m_height / 7, runningWidth, m_height);
-        line->setPen(RosegardenGUIColours::LoopRulerForeground);
-        line->show();
+        paint->drawLine(runningWidth, 2 * m_height / 7, runningWidth, m_height);
 
         int beatsBar = m_doc->getComposition().getTimeSignatureAt(runningWidth).getBeatsPerBar();
 
@@ -94,11 +84,9 @@ LoopRuler::drawBarSections()
             
             subSectionLinePos = (runningWidth) + (barWidth * j/beatsBar);
 
-            line = new QCanvasLine(m_canvas);
-            line->setPoints(subSectionLinePos, m_height,
+            paint->drawLine(subSectionLinePos, m_height,
                             subSectionLinePos, 5 * m_height / 7);
-            line->setPen(RosegardenGUIColours::LoopRulerForeground);
-            line->show();
+
         }
 
         runningWidth += barWidth;
@@ -108,7 +96,27 @@ LoopRuler::drawBarSections()
 }
 
 void
-LoopRuler::contentsMousePressEvent(QMouseEvent *mE)
+LoopRuler::drawLoopMarker(QPainter* paint)
+{
+    int x1 = getXPosition(m_startLoop);
+    int x2 = getXPosition(m_endLoop);
+
+    if (x1 > x2) 
+    {
+        x2 = x1;
+        x1 = getXPosition(m_endLoop);
+    }
+
+    paint->save();
+    paint->setBrush(RosegardenGUIColours::LoopHighlight);
+    paint->setPen(RosegardenGUIColours::LoopHighlight);
+    paint->drawRect(x1, 0, x2 - x1, m_height);
+    paint->restore();
+
+}
+
+void
+LoopRuler::mousePressEvent(QMouseEvent *mE)
 {
     if (mE->button() == LeftButton)
     {
@@ -120,7 +128,7 @@ LoopRuler::contentsMousePressEvent(QMouseEvent *mE)
 }
 
 void
-LoopRuler::contentsMouseReleaseEvent(QMouseEvent *mE)
+LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
 {
     int position = mE->pos().x();
     if (position < 0) position = 0;
@@ -134,8 +142,7 @@ LoopRuler::contentsMouseReleaseEvent(QMouseEvent *mE)
             if (m_endLoop == m_startLoop)
             {
                 m_endLoop = m_startLoop = 0;
-                m_loopMarker->hide();
-                m_canvas->update();
+                update();
             }
 
             // emit with the args around the right way
@@ -149,7 +156,7 @@ LoopRuler::contentsMouseReleaseEvent(QMouseEvent *mE)
 }
 
 void
-LoopRuler::contentsMouseDoubleClickEvent(QMouseEvent *mE)
+LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
 {
     int position = mE->pos().x();
     if (position < 0) position = 0;
@@ -159,7 +166,7 @@ LoopRuler::contentsMouseDoubleClickEvent(QMouseEvent *mE)
 }
 
 void
-LoopRuler::contentsMouseMoveEvent(QMouseEvent *mE)
+LoopRuler::mouseMoveEvent(QMouseEvent *mE)
 {
     int position = mE->pos().x();
     if (position < 0) position = 0;
@@ -167,7 +174,8 @@ LoopRuler::contentsMouseMoveEvent(QMouseEvent *mE)
     if (m_loop)
     {
         m_endLoop = getPointerPosition(position);
-        drawLoopMarker();
+        update();
+
     }
     else
         emit setPointerPosition(getPointerPosition(position));
@@ -226,29 +234,4 @@ LoopRuler::getXPosition(const Rosegarden::timeT &pos)
               * m_barWidthMap[thisBar]/m_barWidthMap[0];
 
     return result;
-}
-
-
-void
-LoopRuler::drawLoopMarker()
-{
-    if (m_loopMarker == 0)
-        m_loopMarker = new QCanvasRectangle(m_canvas);
-
-    int x1 = getXPosition(m_startLoop);
-    int x2 = getXPosition(m_endLoop);
-
-    if (x1 > x2) 
-    {
-        x2 = x1;
-        x1 = getXPosition(m_endLoop);
-    }
-
-    m_loopMarker->setX(x1);
-    m_loopMarker->setY(0);
-    m_loopMarker->setSize(x2 - x1, m_height);
-    m_loopMarker->setBrush(RosegardenGUIColours::LoopHighlight);
-    m_loopMarker->setPen(RosegardenGUIColours::LoopHighlight);
-    m_loopMarker->show();
-    m_canvas->update();
 }

@@ -80,24 +80,16 @@ BarButtons::drawButtons()
     buttonBar->setMinimumSize(m_bars * m_barWidth, m_barHeight);
     buttonBar->setMaximumSize(m_bars * m_barWidth, m_barHeight);
 
-    // The loop bar is where we're going to be defining our loops
-    //
-    QCanvas *canvas = new QCanvas(buttonBar);
-    canvas->resize(m_bars * m_barWidth, loopBarHeight);
-    canvas->setBackgroundColor(RosegardenGUIColours::LoopRulerBackground);
-
-
     // Loop ruler works its bar spacing out from the m_doc just
     // like we do in this class.  Then connect up the LoopRuler
     // signals passing back through the outside world.
     //
     //
     LoopRuler *loopRuler = new LoopRuler(m_doc,
-                                         canvas,
-                                         buttonBar,
                                          m_bars,
                                          m_barWidth,
-                                         loopBarHeight);
+                                         loopBarHeight,
+                                         buttonBar);
 
     connect(loopRuler, SIGNAL(setPointerPosition(Rosegarden::timeT)),
             this,      SLOT(slotSetPointerPosition(Rosegarden::timeT)));
