@@ -126,22 +126,26 @@ TrackButtons::~TrackButtons()
 void
 TrackButtons::makeButtons()
 {
+    if (!m_doc) return;
+
     // Create a horizontal box for each track
     // plus the two buttons
     //
+    unsigned int nbTracks = m_doc->getComposition().getNbTracks();
 
-    Rosegarden::Composition::trackcontainer &tracks =
-        m_doc->getComposition().getTracks();
-    Rosegarden::Composition::trackiterator it;
-
-    for (it = tracks.begin(); it != tracks.end(); ++it)
+    for (unsigned int i = 0; i < nbTracks; ++i)
     {
-        QFrame *trackHBox = makeButton((*it).second->getId());
+        Rosegarden::Track *track = m_doc->getComposition().getTrackByPosition(i);
 
-        if (trackHBox)
+        if (track)
         {
-            m_layout->addWidget(trackHBox);
-            m_trackHBoxes.push_back(trackHBox);
+            QFrame *trackHBox = makeButton(track->getId());
+
+            if (trackHBox)
+            {
+                m_layout->addWidget(trackHBox);
+                m_trackHBoxes.push_back(trackHBox);
+            }
         }
     }
 
@@ -477,17 +481,12 @@ TrackButtons::slotUpdateTracks()
     if (track)
         setRecordTrack(track->getPosition());
 
-    if (newNbTracks == m_tracks)
-    {
-        populateButtons();
-        return;
-    }
-    else if (newNbTracks < m_tracks)
+    if (newNbTracks < m_tracks)
     {
         for (unsigned int i = m_tracks; i > newNbTracks; --i)
             removeButtons(i - 1);
     }
-    else // newNbTracks > m_tracks
+    else if (newNbTracks > m_tracks)
     {
         for (unsigned int i = m_tracks; i < newNbTracks; ++i)
         {
@@ -519,6 +518,21 @@ TrackButtons::slotUpdateTracks()
 
             if (track) {
                 m_trackLabels[i]->setId(track->getId());
+
+                QLabel *trackLabel = m_trackLabels[i]->getTrackLabel();
+
+                if (track->getLabel() == std::string("")) {
+                    Rosegarden::Instrument *ins =
+                        m_doc->getStudio().getInstrumentById(track->getInstrument());
+                    if (ins && ins->getType() == Rosegarden::Instrument::Audio) {
+                        trackLabel->setText(i18n("<untitled audio>"));
+                    } else {
+                        trackLabel->setText(i18n("<untitled>"));
+                    }
+                }
+                else
+                    trackLabel->setText(strtoqstr(track->getLabel()));
+
                 setButtonMapping(m_trackLabels[i], track->getId());
             }
             
