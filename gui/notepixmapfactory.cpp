@@ -728,6 +728,11 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
 
     if (isStemmed && params.m_drawStem) {
 
+	if (m_selected)
+	    m_p->painter().setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement));
+	else
+	    m_p->painter().setPen(Qt::black);
+
 	if (flagCount > 0 && !drawFlag && params.m_beamed) {
 	    drawBeams(endPoint, params, flagCount);
         }
@@ -1043,6 +1048,10 @@ NotePixmapFactory::drawMarks(bool isStemmed,
     for (std::vector<Rosegarden::Mark>::iterator i = aboveMarks.begin();
 	 i != aboveMarks.end(); ++i) {
 
+	if (m_selected)
+	    m_p->painter().setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement));
+	else
+	    m_p->painter().setPen(Qt::black);
 	if (!Rosegarden::Marks::isFingeringMark(*i)) {
 
 	    int x = m_left + m_noteBodyWidth/2;
@@ -1138,6 +1147,12 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 
     if (params.m_legerLines == 0) return;
 
+    if (params.m_restOutsideStave) {
+	if (m_selected)
+	    m_p->painter().setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement));
+	else
+	    m_p->painter().setPen(Qt::black);
+    }
     x0 = m_left - m_noteBodyWidth / 5 - 1;
     x1 = m_left + m_noteBodyWidth + m_noteBodyWidth / 5 /* + 1 */;
 
@@ -1431,6 +1446,12 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
 {
     if (!smooth || m_inPrinterMethod || (y0 == y1)) {
 
+	if (!m_inPrinterMethod) {
+	    if (m_selected)
+	        m_p->painter().setBrush(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement));
+	    else
+	        m_p->painter().setBrush(Qt::black);
+	}
 	if (thickness < 4) {
 	    for (int i = 0; i < thickness; ++i) {
 		m_p->drawLine(x0, y0 + i, x1, y1 + i);
