@@ -113,6 +113,16 @@ private:
 
 };
 
+// Comparator for sorting
+//
+struct MidiEventCmp
+{
+    bool operator()(const MidiEvent &mE1, const MidiEvent &mE2) const
+                    { return mE1.getTime() < mE2.getTime(); }
+    bool operator()(const MidiEvent *mE1, const MidiEvent *mE2) const
+                    { return mE1->getTime() < mE2->getTime(); }
+};
+
 }
 
 #endif // _ROSEGARDEN_MIDI_EVENT_H_

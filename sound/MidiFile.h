@@ -57,8 +57,8 @@ namespace Rosegarden
 // (necessary when converting Composition absolute times to
 // MIDI delta times).
 //
-typedef std::map<unsigned int, std::list<MidiEvent*> > MidiComposition;
-typedef std::list<MidiEvent*>::iterator MidiTrackIterator;
+typedef std::map<unsigned int, std::vector<MidiEvent*> > MidiComposition;
+typedef std::vector<MidiEvent*>::iterator MidiTrackIterator;
 
 class MidiFile : public SoundFile
 {

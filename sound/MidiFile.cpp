@@ -881,11 +881,11 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
                                       //trackName.str());
                           comp.getTrackByIndex((*trk)->getTrack())->getLabel());
 
-            m_midiComposition[trackNumber].push_front(midiEvent);
+            m_midiComposition[trackNumber].push_back(midiEvent);
 
             // insert a program change
             midiEvent = new MidiEvent(0, MIDI_PROG_CHANGE | midiChannel, 0);
-            m_midiComposition[trackNumber].push_front(midiEvent);
+            m_midiComposition[trackNumber].push_back(midiEvent);
         }
 
  
@@ -971,11 +971,11 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
     {
         lastMidiTime = 0;
 
-        // First sort the list
+        // First sort the track with the MidiEvent comparator
         //
-        //m_midiComposition[i].sort();
-
-        // insert end of track event
+        sort(m_midiComposition[i].begin(),
+             m_midiComposition[i].end(),
+             MidiEventCmp());
 
         for (it = m_midiComposition[i].begin();
              it != m_midiComposition[i].end();
@@ -986,6 +986,8 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
             (*it)->setTime(deltaTime);
         }
 
+        // Insert end of track event (delta time = 0)
+        //
         midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT,
                                   MIDI_END_OF_TRACK, "");
 
