@@ -36,6 +36,7 @@
 #include "Instrument.h"
 #include "Composition.h"
 #include "Event.h"
+#include "Quantizer.h"
 
 #include "BaseProperties.h"
 #include "matrixview.h"
@@ -43,6 +44,7 @@
 #include "matrixhlayout.h"
 #include "matrixvlayout.h"
 #include "matrixtool.h"
+#include "dialogs.h"
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
 #include "ktmpstatusmsg.h"
@@ -329,6 +331,10 @@ void MatrixView::setupActions()
                                   actionCollection(), "resize");
     toolAction->setExclusiveGroup("tools");
 
+    new KAction(EventQuantizeCommand::getGlobalName(), 0, this,
+                SLOT(slotTransformsQuantize()), actionCollection(),
+                "quantize");
+
     KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
     KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
 
@@ -492,6 +498,29 @@ void MatrixView::slotResizeSelected()
     EditTool* resizer = m_toolBox->getTool(MatrixResizer::ToolName);
 
     setTool(resizer);
+}
+
+void MatrixView::slotTransformsQuantize()
+{
+    using Rosegarden::Quantizer;
+
+    if (!m_currentEventSelection) return;
+
+    QuantizeDialog *dialog = new QuantizeDialog(this,
+						Quantizer::RawEventData,
+						Quantizer::RawEventData);
+
+    if (dialog->exec() == QDialog::Accepted) {
+	KTmpStatusMsg msg(i18n("Quantizing..."), statusBar());
+	addCommandToHistory(new EventQuantizeCommand
+/*!!!
+			    (m_staffs[m_currentStaff]->getSegment(),
+			     m_currentEventSelection->getBeginTime(),
+			     m_currentEventSelection->getEndTime(),
+*/
+			    (*m_currentEventSelection,
+			     dialog->getQuantizer()));
+    }
 }
 
 void MatrixView::slotMousePressed(Rosegarden::timeT time, int pitch,

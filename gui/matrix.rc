@@ -2,6 +2,17 @@
 
 <kpartgui name="Rosegarden::Matrix" version="1">
 
+<MenuBar>
+
+<Menu name="Transforms">
+  <text>Trans&amp;forms</text>
+
+  <Action name="quantize"/>
+</Menu>
+
+</MenuBar>
+
+
 <ToolBar name="toolsToolBar">
   <Action name="paint" />
   <Action name="erase" />

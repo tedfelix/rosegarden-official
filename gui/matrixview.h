@@ -49,25 +49,6 @@ class PianoKeyboard;
 class QMouseEvent;
 class QLabel;
 
-// class RefreshStack
-// {
-// public:
-//     RefreshStack() : m_from(0), m_to(0), m_needsRefresh(true) {}
-//     void push(Rosegarden::timeT from, Rosegarden::timeT to);
-
-//     Rosegarden::timeT from() { return m_from; }
-//     Rosegarden::timeT to()   { return m_to; }
-
-//     bool needsRefresh() { return m_needsRefresh; }
-//     bool setNeedsRefresh(bool s) { m_needsRefresh = s; }
-
-// protected:
-//     Rosegarden::timeT m_from;
-//     Rosegarden::timeT m_to;
-//     bool m_needsRefresh;
-// };
-
-
 /**
  * Matrix ("Piano Roll") View
  *
@@ -149,6 +130,9 @@ public slots:
     void slotSelectSelected();
     void slotMoveSelected();
     void slotResizeSelected();
+
+    /// transforms
+    void slotTransformsQuantize();
 
     /// Canvas actions slots
 
