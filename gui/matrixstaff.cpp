@@ -111,3 +111,13 @@ void MatrixStaff::eventAdded(const Rosegarden::Segment *segment,
 
     LinedStaff<MatrixElement>::eventAdded(segment, e);
 }
+
+int MatrixStaff::snapX(int x)
+{
+    return (x / m_resolution) * m_resolution;
+}
+
+int MatrixStaff::snapY(int y)
+{
+    return (y / getLineSpacing()) * getLineSpacing();
+}

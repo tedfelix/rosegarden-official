@@ -209,6 +209,7 @@ protected:
     bool m_updateRect;
 
     int m_clickedStaff;
+    MatrixStaff* m_currentStaff;
 
     MatrixElement* m_clickedElement;
 };

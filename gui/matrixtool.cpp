@@ -45,7 +45,7 @@ EditTool* MatrixToolBox::createTool(const QString& toolName)
     MatrixTool* tool = 0;
 
     QString toolNamelc = toolName.lower();
-    
+
     if (toolNamelc == MatrixPainter::ToolName)
 
         tool = new MatrixPainter(m_mParentView);
@@ -53,6 +53,10 @@ EditTool* MatrixToolBox::createTool(const QString& toolName)
     else if (toolNamelc == MatrixEraser::ToolName)
 
         tool = new MatrixEraser(m_mParentView);
+
+    else if (toolNamelc == MatrixSelector::ToolName)
+
+        tool = new MatrixSelector(m_mParentView);
 
     else {
         KMessageBox::error(0, QString("NotationToolBox::createTool : unrecognised toolname %1 (%2)")
@@ -374,7 +378,7 @@ MatrixSelector::MatrixSelector(MatrixView* view)
     : MatrixTool("MatrixSelector", view),
       m_selectionRect(0),
       m_updateRect(false),
-      m_clickedStaff(-1),
+      m_currentStaff(0),
       m_clickedElement(0)
 {
 }
@@ -386,11 +390,13 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT,
                                            Rosegarden::ViewElement *element)
 {
     kdDebug(KDEBUG_AREA) << "MatrixSelector::handleMousePress" << endl;
-    m_clickedStaff = staffNo;
+
+    m_currentStaff = m_mParentView->getStaff(staffNo);
+
     m_clickedElement = dynamic_cast<MatrixElement*>(element);
 
-    m_selectionRect->setX(e->x());
-    m_selectionRect->setY(e->y());
+    m_selectionRect->setX(m_currentStaff->snapX(e->x()));
+    m_selectionRect->setY(m_currentStaff->snapY(e->y()));
     m_selectionRect->setSize(0,0);
 
     m_selectionRect->show();
@@ -428,8 +434,8 @@ void MatrixSelector::handleMouseMove(timeT, int,
 {
     if (!m_updateRect) return;
 
-    int w = int(e->x() - m_selectionRect->x());
-    int h = int(e->y() - m_selectionRect->y());
+    int w = int(m_currentStaff->snapX(e->x()) - m_selectionRect->x());
+    int h = int(m_currentStaff->snapY(e->y()) - m_selectionRect->y());
 
     // Qt rectangle dimensions appear to be 1-based
     if (w > 0) ++w; else --w;
@@ -513,13 +519,9 @@ EventSelection* MatrixSelector::getSelection()
         m_selectionRect->height() > -3 &&
         m_selectionRect->height() <  3) return 0;
 
-    if (m_clickedStaff == -1) return 0;
-    
-    MatrixStaff *staff = m_mParentView->getStaff(m_clickedStaff);
+    if (!m_currentStaff) return 0;
 
-    if (!staff) return 0;
-
-    Rosegarden::Segment& originalSegment = staff->getSegment();
+    Rosegarden::Segment& originalSegment = m_currentStaff->getSegment();
     
     EventSelection* selection = new EventSelection(originalSegment);
 

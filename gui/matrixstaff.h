@@ -70,6 +70,9 @@ public:
 
     void setWrapAddedEvents(bool wrap = true) { m_wrapAddedEvents = wrap; }
 
+    int snapX(int x);
+    int snapY(int y);
+
 private:
     double m_scaleFactor;
 
