@@ -1,16 +1,17 @@
 
-Rosegarden 4 Coding Guidelines
+Rosegarden-4 Coding Guidelines
 ==============================
 
-Rosegarden 4 is written in C++, and makes fairly full use of recent
-language features and the standard library.  We definitely aim to
-write C++ rather than C-with-classes or a-better-C.
+Rosegarden-4 is written in C++ and makes fairly full use of modern
+features of the language and of the standard library.  We definitely
+aim to write C++ rather than C-with-classes or a-better-C.
 
 Code should be readable and well-presented.  We have guidelines for
 coding style, but we don't always follow them; Richard's code in
 sound/, for example, is quite different from Chris's in core/.  But
-it's still clear and readable, so it's fine.  If in doubt though,
-follow the guidelines:
+it's clear and readable, so it's fine.  If in doubt though, and
+particularly when developing in libraries with a wide mix of code
+(such as gui/), follow these guidelines:
 
 
 Style and naming conventions
