@@ -153,7 +153,7 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 	    // stave-line spacing. The outside-stave glyphs match the character
 	    // numbers 1D13A, 1D13B and 1D13C in the Unicode 4.0 standard.
 
-	    if (hasNoteType && noteType >= Note::Minim) {
+	    if (hasNoteType) {
 		// a fiddly check for transition from inside to outside:
 		if ((noteType == Note::Breve &&
 		    (nearbyint(displacedY) < -m_npf->getLineSpacing() ||
@@ -163,7 +163,22 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 		     (int)displacedY > 3 * m_npf->getLineSpacing())) ||
 		    (noteType == Note::Minim &&
 		    ((int)displacedY < -2 * m_npf->getLineSpacing() ||
-		     (int)displacedY > 2 * m_npf->getLineSpacing()))) {
+		     (int)displacedY > 2 * m_npf->getLineSpacing())) ||
+		    (noteType == Note::Crotchet &&
+		    ((int)displacedY < -m_npf->getLineSpacing() ||
+		     (int)displacedY > 3 * m_npf->getLineSpacing())) ||
+		    (noteType == Note::Quaver &&
+		    ((int)displacedY < -2 * m_npf->getLineSpacing() ||
+		     (int)displacedY > 3 * m_npf->getLineSpacing())) ||
+		    (noteType == Note::Semiquaver &&
+		    ((int)displacedY < -3 * m_npf->getLineSpacing() ||
+		     (int)displacedY > 3 * m_npf->getLineSpacing())) ||
+		    (noteType == Note::Demisemiquaver &&
+		    ((int)displacedY < -3 * m_npf->getLineSpacing() ||
+		     (int)displacedY > 4 * m_npf->getLineSpacing())) ||
+		    (noteType == Note::Hemidemisemiquaver &&
+		    ((int)displacedY < -4 * m_npf->getLineSpacing() ||
+		     (int)displacedY > 4 * m_npf->getLineSpacing()))) {
 		    el->event()->setMaybe<Bool>(m_properties.REST_OUTSIDE_STAVE,
 						true);
 		}
