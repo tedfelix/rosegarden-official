@@ -98,10 +98,12 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
                                               2); // margin
  
 
+    /*
     gridLayout->addWidget(new QLabel(i18n("Bank Name"), m_mainFrame),
-                          0, 4, AlignLeft);
+                          0, 1, AlignLeft);
+                          */
 
-    gridLayout->addWidget(m_bankName, 0, 5, AlignRight);
+    gridLayout->addMultiCellWidget(m_bankName, 0, 0, 3, 4, AlignRight);
 
     gridLayout->addWidget(new QLabel(i18n("MSB Value"), m_mainFrame),
                           1, 4, AlignLeft);
@@ -560,8 +562,7 @@ BankEditorDialog::initDialog()
             Rosegarden::MidiDevice* midiDevice = dynamic_cast<Rosegarden::MidiDevice*>(*it);
             
             m_deviceList.push_back(midiDevice->getName());
-            QString itemName = QString("[%1] %2").
-                arg(deviceIdx).arg(strtoqstr(midiDevice->getName()));
+            QString itemName = strtoqstr(midiDevice->getName());
 
             RG_DEBUG << "BankEditorDialog : adding "
                      << itemName << endl;
@@ -617,12 +618,33 @@ BankEditorDialog::slotPopulateDevice(QListViewItem* item)
 
         if (reply == KMessageBox::Yes)
         {
-            ModifyDeviceCommand *command =
-                new ModifyDeviceCommand(m_studio,
-                                        m_lastDevice,
-                                        m_deviceList[m_lastDevice],
-                                        m_bankList,
-                                        m_programList);
+            ModifyDeviceCommand *command;
+
+            if (m_bankList.size() == 0 && m_programList.size() == 0)
+            {
+                Rosegarden::MidiDevice *device = getMidiDevice(m_lastDevice);
+
+                std::vector<Rosegarden::MidiBank>
+                    tempBank = device->getBanks();
+                std::vector<Rosegarden::MidiProgram> tempProg =
+                    device->getPrograms();
+
+                command = new ModifyDeviceCommand(m_studio,
+                                                  m_lastDevice,
+                                                  m_deviceList[m_lastDevice],
+                                                  tempBank,
+                                                  tempProg,
+                                                  true); // overwrite
+            }
+            else
+            {
+                command = new ModifyDeviceCommand(m_studio,
+                                                  m_lastDevice,
+                                                  m_deviceList[m_lastDevice],
+                                                  m_bankList,
+                                                  m_programList,
+                                                  true);
+            }
 
             addCommandToHistory(command);
         }
@@ -635,20 +657,16 @@ BankEditorDialog::slotPopulateDevice(QListViewItem* item)
         RG_DEBUG << "BankEditorDialog::slotPopulateDevice : not a bank item - disabling\n";
         m_deleteBank->setEnabled(false);
         m_deleteAllBanks->setEnabled(false);
-        m_importBanks->setEnabled(true);
-        m_exportBanks->setEnabled(true);
         m_programEditor->clearAll();
         return;
     }
     
     m_deleteBank->setEnabled(true);
     m_deleteAllBanks->setEnabled(true);
-    m_importBanks->setEnabled(false);
-    m_exportBanks->setEnabled(false);
 
     Rosegarden::MidiDevice *device = getMidiDevice(bankItem->getDevice());
 
-    if (!m_keepBankList)
+    if (!m_keepBankList || m_bankList.size() == 0)
         m_bankList    = device->getBanks();
     else
         m_keepBankList = false;
@@ -676,14 +694,38 @@ BankEditorDialog::slotApply()
 {
     if (m_modified)
     {
-        ModifyDeviceCommand *command =
-            new ModifyDeviceCommand(m_studio,
-                                    m_lastDevice,
-                                    m_deviceList[m_lastDevice],
-                                    m_bankList,
-                                    m_programList);
+        ModifyDeviceCommand *command;
+
+        // Make sure that we don't delete all the banks and programs
+        // if we've not populated them here yet.
+        //
+        if (m_bankList.size() == 0 && m_programList.size() == 0)
+        {
+            Rosegarden::MidiDevice *device = getMidiDevice(m_lastDevice);
+
+            std::vector<Rosegarden::MidiBank> tempBank = device->getBanks();
+            std::vector<Rosegarden::MidiProgram> tempProg =
+                device->getPrograms();
+
+            command = new ModifyDeviceCommand(m_studio,
+                                              m_lastDevice,
+                                              m_deviceList[m_lastDevice],
+                                              tempBank,
+                                              tempProg,
+                                              true);
+        }
+        else
+        {
+            command = new ModifyDeviceCommand(m_studio,
+                                              m_lastDevice,
+                                              m_deviceList[m_lastDevice],
+                                              m_bankList,
+                                              m_programList,
+                                              true);
+        }
 
         addCommandToHistory(command);
+        initDialog();
     }
 }
 
@@ -1003,6 +1045,15 @@ BankEditorDialog::slotImportBank()
 
                 int res = dialog->exec();
 
+                // Check for overwrite flag and reset res as necessary
+                //
+                bool overwrite = false;
+                if (res >> 24)
+                {
+                    overwrite = true;
+                    res &= 0xffffff;
+                }
+
                 if (res > -1)
                 {
                     count = 0;
@@ -1044,8 +1095,8 @@ BankEditorDialog::slotImportBank()
                                         deviceItem->getDevice(),
                                         qstrtostr(importList[res]),
                                         banks,
-                                        programs);
-
+                                        programs,
+                                        overwrite);
                             addCommandToHistory(command);
 
                             // Redraw the dialog
@@ -1240,7 +1291,20 @@ ImportDeviceDialog::ImportDeviceDialog(QWidget *parent,
                 Ok | Cancel, Ok, true)
 {
     QVBox* mainFrame = makeVBoxMainWidget();
-    m_deviceCombo = new RosegardenComboBox(mainFrame);
+
+    QGroupBox *groupBox = new QGroupBox(2, Qt::Horizontal,
+                                        i18n("Source device"),
+                                        mainFrame);
+    m_deviceCombo = new RosegardenComboBox(groupBox);
+
+    m_buttonGroup = new QButtonGroup(1, Qt::Horizontal,
+                                     i18n("Import behaviour"),
+                                     mainFrame);
+    m_mergeBanks = new QRadioButton(i18n("Merge Banks"), m_buttonGroup);
+    m_overwriteBanks =
+        new QRadioButton(i18n("Overwrite Banks"), m_buttonGroup);
+
+    m_buttonGroup->setButton(0);
 
     // Create the combo
     //
@@ -1252,7 +1316,8 @@ ImportDeviceDialog::ImportDeviceDialog(QWidget *parent,
 void
 ImportDeviceDialog::slotOk()
 {
-    done(m_deviceCombo->currentItem());
+    int beh = m_buttonGroup->id(m_buttonGroup->selected());
+    done(m_deviceCombo->currentItem() + (beh << 24));
 }
 
 void

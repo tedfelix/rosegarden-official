@@ -621,7 +621,9 @@ AlsaDriver::initialiseMidi()
                                (*it)->m_port) < 0)
         {
             std::cerr << "AlsaDriver::initialiseMidi - "
-                      << "can't subscribe output client/port"
+                      << "can't subscribe output client/port ("
+                      << (*it)->m_client << ", "
+                      << (*it)->m_port << ")"
                       << std::endl;
         }
     }

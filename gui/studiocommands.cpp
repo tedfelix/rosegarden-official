@@ -30,13 +30,15 @@ ModifyDeviceCommand::ModifyDeviceCommand(
         int device,
         const std::string &name,
         std::vector<Rosegarden::MidiBank> bankList,
-        std::vector<Rosegarden::MidiProgram> programList):
+        std::vector<Rosegarden::MidiProgram> programList,
+        bool overwrite):
     KNamedCommand(getGlobalName()),
     m_studio(studio),
     m_device(device),
     m_name(name),
     m_bankList(bankList),
-    m_programList(programList)
+    m_programList(programList),
+    m_overwrite(overwrite)
 {
 }
 
@@ -49,9 +51,22 @@ ModifyDeviceCommand::execute()
     m_oldBankList = device->getBanks();
     m_oldProgramList = device->getPrograms();
 
-    device->setName(m_name);
-    device->replaceBankList(m_bankList);
-    device->replaceProgramList(m_programList);
+
+    if (m_overwrite)
+    {
+        device->replaceBankList(m_bankList);
+        device->replaceProgramList(m_programList);
+        device->setName(m_name);
+    }
+    else
+    {
+        device->mergeBankList(m_bankList);
+        device->mergeProgramList(m_programList);
+
+        std::string mergeName = device->getName() + std::string("/") + m_name;
+        device->setName(mergeName);
+    }
+
 }
 
 void
@@ -147,7 +162,7 @@ ModifyDeviceMappingCommand::execute()
 
                 // skip if we can't match
                 //
-                if (index > destList.size() - 1)
+                if (index > (int)(destList.size() - 1))
                     continue;
 
                 m_mapping.push_back(

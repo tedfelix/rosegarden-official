@@ -91,6 +91,9 @@ public:
     void replaceBankList(const std::vector<Rosegarden::MidiBank> &bank);
     void replaceProgramList(const std::vector<Rosegarden::MidiProgram> &program);
 
+    void mergeBankList(const std::vector<Rosegarden::MidiBank> &bank);
+    void mergeProgramList(const std::vector<Rosegarden::MidiProgram> &program);
+
 private:
     void generatePresentationList();
 

@@ -29,6 +29,9 @@
 class RosegardenGUIDoc;
 namespace Rosegarden { class Studio; }
 
+// Use the overwrite flag to overwrite banks and programs rather
+// than merging (default behaviour).
+//
 class ModifyDeviceCommand : public KNamedCommand
 {
 public:
@@ -36,7 +39,8 @@ public:
                         int device,
                         const std::string &name,
                         std::vector<Rosegarden::MidiBank> bankList,
-                        std::vector<Rosegarden::MidiProgram> programList);
+                        std::vector<Rosegarden::MidiProgram> programList,
+                        bool overwrite);
 
     static QString getGlobalName() { return i18n("Modify &MIDI Bank"); }
 
@@ -54,6 +58,8 @@ protected:
     std::string                            m_oldName;
     std::vector<Rosegarden::MidiBank>      m_oldBankList;
     std::vector<Rosegarden::MidiProgram>   m_oldProgramList;
+
+    bool                                   m_overwrite;
 
 };
 

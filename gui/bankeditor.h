@@ -276,6 +276,10 @@ public slots:
 protected:
     RosegardenComboBox *m_deviceCombo;
 
+    QButtonGroup        *m_buttonGroup;
+    QRadioButton       *m_mergeBanks;
+    QRadioButton       *m_overwriteBanks;
+
 };
 #endif // _BANKEDITOR_H_
 

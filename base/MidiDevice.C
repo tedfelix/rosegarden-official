@@ -366,6 +366,60 @@ MidiDevice::replaceProgramList(const std::vector<Rosegarden::MidiProgram> &progr
     }
 }
 
+// Merge the new bank list in without duplication
+//
+void
+MidiDevice::mergeBankList(const std::vector<Rosegarden::MidiBank> &bank)
+{
+    std::vector<Rosegarden::MidiBank>::const_iterator it;
+    BankList::iterator oIt;
+    bool clash = false;
+    
+    for (it = bank.begin(); it != bank.end(); it++)
+    {
+        for (oIt = m_bankList->begin(); oIt != m_bankList->end(); oIt++)
+        {
+            if (it->msb == (*oIt)->msb && it->lsb == (*oIt)->lsb)
+            {
+                clash = true;
+                break;
+            }
+        }
+
+        if (clash == false)
+            addBank(new MidiBank(*it));
+        else
+            clash = false;
+    }
+
+}
+
+void
+MidiDevice::mergeProgramList(const std::vector<Rosegarden::MidiProgram> &program)
+{
+    std::vector<Rosegarden::MidiProgram>::const_iterator it;
+    ProgramList::iterator oIt;
+    bool clash = false;
+
+    for (it = program.begin(); it != program.end(); it++)
+    {
+        for (oIt = m_programList->begin(); oIt != m_programList->end(); oIt++)
+        {
+            if (it->msb == (*oIt)->msb && it->lsb == (*oIt)->lsb &&
+                it->program == (*oIt)->program)
+            {
+                clash = true;
+                break;
+            }
+        }
+
+        if (clash == false)
+            addProgram(new MidiProgram(*it));
+        else
+            clash = false;
+    }
+}
+
 
 }
 
