@@ -11,6 +11,8 @@ o aRts 1.0.0 support
 
 o Fix segment audio drag and drop
 
+o Sequencer Commands undoable audio file and sequencer studio
+
 o Finite audio recording time - check for available disk space
 
 o Toggle record mode for punch in/out [Half complete]

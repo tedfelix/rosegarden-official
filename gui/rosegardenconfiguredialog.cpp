@@ -573,7 +573,6 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
                                  "jackplaybacklatencysec", 0) * 1000);
 
     m_jackPlayback = new QSlider(Horizontal, frame);
-    m_jackPlayback->setValue(jackPlaybackValue);
     m_jackPlayback->setTickmarks(QSlider::Below);
     layout->addMultiCellWidget(m_jackPlayback, 3, 3, 2, 3);
 
@@ -589,13 +588,14 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     m_jackPlayback->setMaxValue(500);
     layout->addWidget(new QLabel("500", frame), 3, 4, Qt::AlignLeft);
 
+    m_jackPlayback->setValue(jackPlaybackValue);
+
     int jackRecordValue = (m_cfg->readLongNumEntry(
                               "jackrecordlatencyusec", 0)/1000) +
                           (m_cfg->readLongNumEntry(
                               "jackrecordlatencysec", 0) * 1000);
 
     m_jackRecord = new QSlider(Horizontal, frame);
-    m_jackRecord->setValue(jackRecordValue);
     m_jackRecord->setTickmarks(QSlider::Below);
     layout->addMultiCellWidget(m_jackRecord, 5, 5, 2, 3);
 
@@ -609,6 +609,7 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(new QLabel("0", frame), 5, 1, Qt::AlignRight);
 
     m_jackRecord->setMaxValue(500);
+    m_jackRecord->setValue(jackRecordValue);
     layout->addWidget(new QLabel("500", frame), 5, 4, Qt::AlignLeft);
 
     addTab(frame, i18n("JACK Latency"));

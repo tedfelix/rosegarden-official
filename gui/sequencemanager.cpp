@@ -170,6 +170,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             //
             segmentStartTime -= jackPlaybackLatencyTimeT;
 
+
             Rosegarden::RealTime segmentStart =
                 comp.getElapsedRealTime(segmentStartTime);
 
@@ -184,14 +185,56 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                                             (*it)->getAudioStartTime() +
                                             segmentStart;
 
-            // Oh this freak fuction just does my head - take a guess,
-            // move a clause - see if it still works.  Bet it doesn't.
+            // If someone could explain this algorithm to me then
+            // I'd be very grateful.
             //
-            if ((segmentStartTime < sliceStartElapsed ||
-                 segmentStartTime > sliceEndElapsed) &&
-                 firstFetch == false)
+            // 
+            if (firstFetch)
             {
-                if ((*it)->isRepeating())
+                // If we're starting in the middle of a Segment then
+                // make an adjustment to start time and duration.
+                //
+                if (segmentStart < sliceStart)
+                {
+                    if (audioEnd < sliceStart && (*it)->isRepeating())
+                    {
+                        Rosegarden::RealTime repeatEnd =
+                            comp.getElapsedRealTime((*it)->getRepeatEndTime());
+
+                        // If we've stopped repeating
+                        if (sliceStart > repeatEnd)
+                            continue;
+                    
+                        while (segmentStart < sliceStart)
+                            segmentStart = segmentStart + audioDuration;
+    
+                        if (segmentStart > sliceEnd)
+                            continue;
+                    }
+
+                    Rosegarden::RealTime moveTime =
+                        comp.getElapsedRealTime(
+                                sliceStartElapsed - segmentStartTime);
+
+                    audioStart = audioStart + moveTime;
+                    audioDuration = audioDuration - moveTime;
+                }
+                else if (segmentStart < sliceEnd)
+                {
+                    ; // play
+                }
+                else
+                    continue;
+            }
+            else
+            {
+                if (segmentStart >= sliceStart &&
+                    segmentStart < sliceEnd)
+                {
+                    ; // play
+                }
+                else if (segmentStart < sliceStart &&
+                         (*it)->isRepeating())
                 {
                     Rosegarden::RealTime repeatEnd =
                         comp.getElapsedRealTime((*it)->getRepeatEndTime());
@@ -203,42 +246,13 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                     // Otherwise see if repeat event lies within
                     // this slice
                     //
-                    Rosegarden::RealTime segmentDuration =
-                        segmentEnd - segmentStart;
-
                     while (segmentStart < sliceStart)
-                    {
-                        segmentStart = segmentStart + segmentDuration;
-                    }
+                        segmentStart = segmentStart + audioDuration;
 
                     if (segmentStart > sliceEnd)
                         continue;
                 }
                 else
-                    continue;
-            }
-
-            // If we're starting in the middle of a Segment then
-            // make an adjustment to start time and duration.
-            //
-            if (firstFetch == true &&
-                segmentStartTime <= sliceStartElapsed &&
-                audioEnd >= sliceStart)
-            {
-                // reset audioStart and duration to shorter values
-                Rosegarden::RealTime moveTime = comp.
-                    getElapsedRealTime(sliceStartElapsed - segmentStartTime);
-
-                //cout << "DURATION was   " << duration << endl;
-                audioStart = audioStart + moveTime;
-                audioDuration = audioDuration - moveTime;
-                //cout << "DURATION is now " << duration << endl;
-            }
-            else
-            {
-                // bail out if we're first fetching and the above
-                // condition doesn't hold.
-                if (firstFetch)
                     continue;
             }
 

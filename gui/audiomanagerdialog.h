@@ -125,6 +125,7 @@ signals:
                        const Rosegarden::RealTime &,
                        const Rosegarden::RealTime &);
     void cancelPlayingAudioFile(Rosegarden::AudioFileId);
+    void deleteAllAudioFiles();
 
     // We've selected a segment here, make the canvas select it too
     //

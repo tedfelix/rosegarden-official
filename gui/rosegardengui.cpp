@@ -2861,6 +2861,10 @@ RosegardenGUIApp::slotAudioManager()
                 SIGNAL(cancelPlayingAudioFile(Rosegarden::AudioFileId)),
                 SLOT(slotCancelAudioPlayingFile(Rosegarden::AudioFileId)));
 
+        connect(m_audioManagerDialog,
+                SIGNAL(deleteAllAudioFiles()),
+                SLOT(slotDeleteAllAudioFiles()));
+
         m_audioManagerDialog->setAudioSubsystemStatus(
                 m_seqManager->getSoundDriverStatus() & Rosegarden::AUDIO_OK);
 
@@ -2968,7 +2972,7 @@ RosegardenGUIApp::slotDeleteAudioFile(unsigned int id)
                                   replyType, replyData))
     {
         std::cerr << "RosegardenGUIApp::slotDeleteAudioFile - "
-                  << "couldn't add audio file"
+                  << "couldn't delete audio file"
                   << std::endl;
         return;
     }
@@ -3049,5 +3053,28 @@ RosegardenGUIApp::slotCancelAudioPlayingFile(Rosegarden::AudioFileId id)
     }
     catch(...) {;}
 }
+
+void
+RosegardenGUIApp::slotDeleteAllAudioFiles()
+{
+    // Clear at the sequencer
+    //
+    QCString replyType;
+    QByteArray replyData;
+    QByteArray data;
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "clearAllAudioFiles()", data,
+                                  replyType, replyData))
+    {
+        std::cerr << "RosegardenGUIApp::slotDeleteAudioFile - "
+                  << "couldn't delete all audio files"
+                  << std::endl;
+        return;
+    }
+
+}
+
 
 

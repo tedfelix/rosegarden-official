@@ -476,9 +476,10 @@ AudioManagerDialog::slotDelete()
         return;
     }
 
-    QString question = i18n("Really delete \"") +
+    QString question = i18n("Really delete audio file \"") +
                        QString(audioFile->getFilename().c_str()) +
-                       QString("\" ?");
+                       QString("\"\n") +
+                       i18n("and all associated audio segments?");
 
     // Ask the question
     int reply = KMessageBox::questionYesNo(this, question);
@@ -625,6 +626,8 @@ AudioManagerDialog::slotDeleteAll()
 
     if (reply != KMessageBox::Yes)
         return;
+
+    emit deleteAllAudioFiles();
 }
 
 void
