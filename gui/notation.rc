@@ -4,6 +4,11 @@
 
 <MenuBar>
 
+<Menu name="file" append="new_merge">
+  <Action name="open_in_event_list"/>
+  <Action name="open_in_matrix"/>
+</Menu>
+
 <Menu name="View">
   <text>&amp;View</text>
 <!--

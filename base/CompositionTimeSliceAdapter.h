@@ -4,7 +4,7 @@
     Rosegarden-4
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2003
+    This program is Copyright 2000-2004
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -38,10 +38,15 @@ class Composition;
 class SegmentSelection;
 
 /**
- * CompositionTimeSliceAdapter makes a Composition act like a sorted
- * list of all the events in a timeslice. Unlike with Segment, you can
- * only iterate from begin() to end() -- there's no random access or
- * decrement.
+ * CompositionTimeSliceAdapter provides the ability to iterate through
+ * all the events in a Composition in time order, across many segments
+ * at once.
+ *
+ * The CompositionTimeSliceAdapter is suitable for use as the backing
+ * container for the Set classes, notably GenericChord (see Sets.h).
+ * This combination enables you to iterate through a Composition as a
+ * sequence of chords composed of all Events on a set of Segments that
+ * lie within a particular quantize range of one another.
  */
 
 class CompositionTimeSliceAdapter

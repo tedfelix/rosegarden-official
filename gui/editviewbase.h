@@ -4,7 +4,7 @@
     Rosegarden-4
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2003
+    This program is Copyright 2000-2004
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -140,6 +140,18 @@ public:
 
 signals:
     /**
+     * Tell the app to save the file.
+     */
+    void saveFile();
+
+    /** 
+     * Reopen the given segments in another sort of editor.
+     */
+    void openInNotation(std::vector<Rosegarden::Segment *>);
+    void openInMatrix(std::vector<Rosegarden::Segment *>);
+    void openInEventList(std::vector<Rosegarden::Segment *>);
+    
+    /**
      * Tell the main view that the track being edited is the
      * current selected track
      * This is used by #slotToggleSolo
@@ -206,6 +218,10 @@ public slots:
 
     void slotStateChanged(const QString&, bool noReverse);
 
+    virtual void slotOpenInMatrix();
+    virtual void slotOpenInNotation();
+    virtual void slotOpenInEventList();
+    
 protected:
 
     virtual void paintEvent(QPaintEvent* e);
@@ -259,7 +275,7 @@ protected slots:
     virtual void slotEditKeys();
     virtual void slotEditToolbars();
     virtual void slotUpdateToolbars();
-    
+
 protected:
     QWidget* getCentralWidget() { return m_centralFrame; }
 

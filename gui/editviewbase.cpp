@@ -4,7 +4,7 @@
     Rosegarden-4
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2003
+    This program is Copyright 2000-2004
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -25,6 +25,8 @@
 #include <kconfig.h>
 #include <kaction.h>
 #include <klocale.h>
+#include <kstddirs.h>
+#include <kglobal.h>
 #include <kstdaction.h>
 #include <kstatusbar.h>
 #include <kmessagebox.h>
@@ -151,7 +153,8 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
 
 
     // File menu
-    KStdAction::close (this, SLOT(slotCloseWindow()),      actionCollection());
+    KStdAction::save (this, SIGNAL(saveFile()),      actionCollection());
+    KStdAction::close(this, SLOT(slotCloseWindow()), actionCollection());
 
     if (haveClipboard) {
 	KStdAction::cut     (this, SLOT(slotEditCut()),    actionCollection());
@@ -171,6 +174,22 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
                             actionCollection(),
                             KStdAction::stdName(KStdAction::Redo));
 
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+
+    QIconSet icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/matrix.xpm"));
+    new KAction(i18n("Open in Matri&x Editor"), icon, 0, this,
+                SLOT(slotOpenInMatrix()), actionCollection(),
+                "open_in_matrix");
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/notation.xpm"));
+    new KAction(i18n("Open in &Notation Editor"), icon, 0, this,
+                SLOT(slotOpenInNotation()), actionCollection(),
+                "open_in_notation");
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventlist.xpm"));
+    new KAction(i18n("Open in &Event List Editor"), icon, 0, this,
+                SLOT(slotOpenInEventList()), actionCollection(),
+                "open_in_event_list");
 
     // add undo and redo to edit menu and toolbar
     getCommandHistory()->attachView(actionCollection());
@@ -206,6 +225,25 @@ void EditViewBase::slotUpdateToolbars()
 {
   createGUI(getRCFileName());
   //m_viewToolBar->setChecked(!toolBar()->isHidden());
+}
+
+
+void
+EditViewBase::slotOpenInNotation()
+{
+    emit openInNotation(m_segments);
+}
+
+void
+EditViewBase::slotOpenInMatrix()
+{
+    emit openInMatrix(m_segments);
+}
+
+void
+EditViewBase::slotOpenInEventList()
+{
+    emit openInEventList(m_segments);
 }
 
 

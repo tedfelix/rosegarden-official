@@ -4,6 +4,11 @@
 
 <MenuBar>
 
+<Menu name="file" append="new_merge">
+  <Action name="open_in_matrix"/>
+  <Action name="open_in_notation"/>
+</Menu>
+
 <Menu name="edit" append="new_merge">
   <Action name="insert"/>
   <Action name="delete"/>

@@ -4,7 +4,7 @@
     Rosegarden-4
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2003
+    This program is Copyright 2000-2004
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -157,22 +157,23 @@ public:
 public slots:
     void slotEditSegment(Rosegarden::Segment*);
     void slotEditSegmentNotation(Rosegarden::Segment*);
+    void slotEditSegmentsNotation(std::vector<Rosegarden::Segment*>);
     void slotEditSegmentMatrix(Rosegarden::Segment*);
-    void slotEditSegmentAudio(Rosegarden::Segment*);
+    void slotEditSegmentsMatrix(std::vector<Rosegarden::Segment*>);
     void slotEditSegmentEventList(Rosegarden::Segment*);
+    void slotEditSegmentsEventList(std::vector<Rosegarden::Segment*>);
+    void slotEditSegmentAudio(Rosegarden::Segment*);
     void slotSegmentAutoSplit(Rosegarden::Segment*);
     void slotEditRepeat(Rosegarden::Segment*, Rosegarden::timeT);
     void slotEditTempos(Rosegarden::timeT);
 
     /**
-     *
      * Highlight all the Segments on a Track because the Track has
      * been selected * We have to ensure we create a Selector object
      * before we can highlight * these tracks.
      *
      * Called by signal from Track selection routine to highlight
      * all available Segments on a Track
-     *
      */
     void slotSelectTrackSegments(int);
 

@@ -5,7 +5,7 @@
     Rosegarden-4
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2003
+    This program is Copyright 2000-2004
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -540,15 +540,19 @@ BasicQuantizer::quantizeSingle(Segment *s, Segment::iterator i) const
     timeT t = getFromSource(*i, AbsoluteTimeValue);
     timeT d0(d), t0(t);
 
+    timeT barStart = s->getBarStartForTime(t);
+
     if (m_durations && d != 0) {
 	timeT low = (d / m_unit) * m_unit;
 	timeT high = low + m_unit;
 	d = ((low > 0 && (high - d > d - low)) ? low : high);
     }
 
+    t -= barStart;
     timeT low = (t / m_unit) * m_unit;
     timeT high = low + m_unit;
     t = ((high - t > t - low) ? low : high);
+    t += barStart;
     
     if (t0 != t || d0 != d) setToTarget(s, i, t, d);
 }
@@ -677,11 +681,20 @@ LegatoQuantizer::quantizeSingle(Segment *s, Segment::iterator i) const
 
     timeT d0(d), t0(t);
 
+    timeT barStart = s->getBarStartForTime(t);
+
+    t -= barStart;
     t = quantizeTime(t);
+    t += barStart;
 
     for (Segment::iterator j = i; s->isBeforeEndMarker(j); ++j) {
 	if (!(*j)->isa(Note::EventType)) continue;
-	timeT qt = quantizeTime((*j)->getAbsoluteTime());
+	
+	timeT qt = (*j)->getAbsoluteTime();
+	qt -= barStart;
+	qt = quantizeTime(qt);
+	qt += barStart;
+
 	if (qt >= t + d) {
 	    d = qt - t;
 	    break;

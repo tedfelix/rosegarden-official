@@ -4,7 +4,12 @@
   
 <MenuBar>
 
-<Menu name="edit" append="new_merge">
+<Menu name="file" append="new_merge">
+  <Action name="open_in_event_list"/>
+  <Action name="open_in_notation"/>
+</Menu>
+
+<Menu name="edit">
   <Action name="delete"/>
   <Action name="select_all"/>
   <Action name="clear_selection"/>
@@ -183,7 +188,7 @@
     <Action name="edit_cut"/>
     <Action name="edit_copy"/>
     <Action name="quantize"/>
-    <Action name="legato"/>
+    <Action name="legatoize"/>
     <Action name="rescale"/>
     <Action name="double_speed"/>
     <Action name="half_speed"/>

@@ -4,7 +4,7 @@
     Rosegarden-4
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2003
+    This program is Copyright 2000-2004
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -272,6 +272,9 @@ RosegardenGUIView::slotEditTempos(Rosegarden::timeT t)
             SLOT(slotChangeTempo(Rosegarden::timeT,
                                  double, TempoDialog::TempoDialogAction)));
 
+    connect(tempoView, SIGNAL(saveFile()),
+	    RosegardenGUIApp::self(), SLOT(slotFileSave()));
+
     tempoView->show();
 }
 
@@ -379,6 +382,11 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 	return;
     }
 
+    slotEditSegmentsNotation(segmentsToEdit);
+}
+
+void RosegardenGUIView::slotEditSegmentsNotation(std::vector<Rosegarden::Segment *> segmentsToEdit)
+{
     NotationView *view = createNotationView(segmentsToEdit);
     if (view) view->show();
 }
@@ -418,8 +426,16 @@ RosegardenGUIView::createNotationView(std::vector<Rosegarden::Segment *> segment
             RosegardenGUIApp::self(), SLOT(slotFastForwardToEnd()));
     connect(notationView, SIGNAL(rewindPlaybackToBeginning()),
             RosegardenGUIApp::self(), SLOT(slotRewindToBeginning()));
+    connect(notationView, SIGNAL(saveFile()),
+            RosegardenGUIApp::self(), SLOT(slotFileSave()));
     connect(notationView, SIGNAL(jumpPlaybackTo(Rosegarden::timeT)),
 	    getDocument(), SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+    connect(notationView, SIGNAL(openInNotation(std::vector<Rosegarden::Segment *>)),
+	    this, SLOT(slotEditSegmentsNotation(std::vector<Rosegarden::Segment *>)));
+    connect(notationView, SIGNAL(openInMatrix(std::vector<Rosegarden::Segment *>)),
+	    this, SLOT(slotEditSegmentsMatrix(std::vector<Rosegarden::Segment *>)));
+    connect(notationView, SIGNAL(openInEventList(std::vector<Rosegarden::Segment *>)),
+	    this, SLOT(slotEditSegmentsEventList(std::vector<Rosegarden::Segment *>)));
 
     Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
 
@@ -476,8 +492,13 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
 	return;
     }
 
+    slotEditSegmentsMatrix(segmentsToEdit);
+}
+
+void RosegardenGUIView::slotEditSegmentsMatrix(std::vector<Rosegarden::Segment *> segmentsToEdit)
+{
     MatrixView *view = createMatrixView(segmentsToEdit);
-    view->show();
+    if (view) view->show();
 }
 
 MatrixView *
@@ -510,8 +531,16 @@ RosegardenGUIView::createMatrixView(std::vector<Rosegarden::Segment *> segmentsT
 		    RosegardenGUIApp::self(), SLOT(slotFastForwardToEnd()));
     connect(matrixView, SIGNAL(rewindPlaybackToBeginning()),
 		    RosegardenGUIApp::self(), SLOT(slotRewindToBeginning()));
+    connect(matrixView, SIGNAL(saveFile()),
+		    RosegardenGUIApp::self(), SLOT(slotFileSave()));
     connect(matrixView, SIGNAL(jumpPlaybackTo(Rosegarden::timeT)),
 	    getDocument(), SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+    connect(matrixView, SIGNAL(openInNotation(std::vector<Rosegarden::Segment *>)),
+	    this, SLOT(slotEditSegmentsNotation(std::vector<Rosegarden::Segment *>)));
+    connect(matrixView, SIGNAL(openInMatrix(std::vector<Rosegarden::Segment *>)),
+	    this, SLOT(slotEditSegmentsMatrix(std::vector<Rosegarden::Segment *>)));
+    connect(matrixView, SIGNAL(openInEventList(std::vector<Rosegarden::Segment *>)),
+	    this, SLOT(slotEditSegmentsEventList(std::vector<Rosegarden::Segment *>)));
 
     Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
 
@@ -569,6 +598,11 @@ void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
 	return;
     }
 
+    slotEditSegmentsEventList(segmentsToEdit);
+}
+
+void RosegardenGUIView::slotEditSegmentsEventList(std::vector<Rosegarden::Segment *> segmentsToEdit)
+{
     EventView *eventView = new EventView(getDocument(),
                                          segmentsToEdit,
                                          this);
@@ -576,12 +610,23 @@ void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
     connect(eventView, SIGNAL(selectTrack(int)),
             this, SLOT(slotSelectTrackSegments(int)));
 
+    connect(eventView, SIGNAL(saveFile()),
+	    RosegardenGUIApp::self(), SLOT(slotFileSave()));
+
+    connect(eventView, SIGNAL(openInNotation(std::vector<Rosegarden::Segment *>)),
+	    this, SLOT(slotEditSegmentsNotation(std::vector<Rosegarden::Segment *>)));
+    connect(eventView, SIGNAL(openInMatrix(std::vector<Rosegarden::Segment *>)),
+	    this, SLOT(slotEditSegmentsMatrix(std::vector<Rosegarden::Segment *>)));
+    connect(eventView, SIGNAL(openInEventList(std::vector<Rosegarden::Segment *>)),
+	    this, SLOT(slotEditSegmentsEventList(std::vector<Rosegarden::Segment *>)));
+
     // create keyboard accelerators on view
     //
     RosegardenGUIApp *par = dynamic_cast<RosegardenGUIApp*>(parent());
 
-    if (par)
+    if (par) {
         par->plugAccelerators(eventView, eventView->getAccelerators());
+    }
 
     eventView->show();
 }
