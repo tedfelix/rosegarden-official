@@ -2172,6 +2172,7 @@ ConfigureDialogBase::ConfigureDialogBase(QWidget *parent,
     KDialogBase(IconList, i18n("Configure"), Help|Apply|Ok|Cancel,
                 Ok, parent, name, true) // modal
 {
+    setWFlags(WDestructiveClose);
 }
 
 ConfigureDialogBase::~ConfigureDialogBase()
@@ -2214,8 +2215,6 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     QWidget *pageWidget = 0;
     QVBoxLayout *vlay = 0;
     ConfigurationPage* page = 0;
-
-    setWFlags(WDestructiveClose);
 
     // General Page
     //
