@@ -106,6 +106,8 @@ public:
     Track* getTrackByIndex(const unsigned int &track) {
 	return m_tracks[track];
     }
+
+    Track* getTrackByPosition(int position);
  
     trackcontainer* getTracks() {
 	return &m_tracks;

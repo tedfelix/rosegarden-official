@@ -45,6 +45,13 @@ class InstrumentLabel;
 class TrackButtons : public QFrame
 {
     
+    typedef enum
+    {
+        ShowTrack,
+        ShowInstrument,
+        ShowBoth
+    } InstrumentTrackLabels;
+
     Q_OBJECT
 
 public:
@@ -67,7 +74,7 @@ public:
 
     // Return a vector of highlighted tracks
     //
-    std::vector<int> getHighLightedTracks();
+    std::vector<int> getHighlightedTracks();
 
 signals:
     // to emit what Track has been selected
@@ -89,6 +96,8 @@ public slots:
     void slotInstrumentSelection(int);
     void slotInstrumentPopupActivated(int);
     void slotInstrumentPopupHiding();
+
+    void slotChangeTrackInstrumentLabels(InstrumentTrackLabels label);
 
 private:
 
@@ -122,6 +131,8 @@ private:
     int m_lastID;
     int m_trackLabelWidth;
     int m_popupItem;
+
+    InstrumentTrackLabels m_trackInstrumentLabels;
 
 };
 

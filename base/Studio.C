@@ -86,7 +86,7 @@ Studio::getInstruments()
 }
 
 Instrument*
-Studio::getInstrumentByIndex(InstrumentId id)
+Studio::getInstrumentById(InstrumentId id)
 {
     std::vector<Device*>::iterator it;
     InstrumentList list;
@@ -96,13 +96,67 @@ Studio::getInstrumentByIndex(InstrumentId id)
     {
         list = (*it)->getInstruments();
 
-        for (iit = list.begin(); iit != list.end(); it++)
+        for (iit = list.begin(); iit != list.end(); iit++)
             if ((*iit)->getID() == id)
                 return (*iit);
     }
 
     return 0;
 
+}
+
+Instrument*
+Studio::getInstrumentFromList(int index)
+{
+    std::vector<Device*>::iterator it;
+    InstrumentList list;
+    InstrumentList::iterator iit;
+    int count = 0;
+
+    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    {
+        list = (*it)->getInstruments();
+
+        for (iit = list.begin(); iit != list.end(); iit++)
+        {
+            if (count == index)
+                return (*iit);
+
+            count++;
+        }
+    }
+
+    return 0;
+
+}
+
+
+
+// Clear down the devices and the Instruments
+void
+Studio::clear()
+{
+    std::vector<Device*>::iterator it;
+
+    InstrumentList list;
+    InstrumentList::iterator iit;
+
+    // Append lists
+    //
+    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    {
+        // get sub list
+        list = (*it)->getInstruments();
+
+        for (iit = list.begin(); iit != list.end(); iit++)
+            delete(*iit);
+
+        list.erase(list.begin(), list.end());
+
+        delete *it;
+    }
+
+    m_devices.erase(m_devices.begin(), m_devices.end());
 }
 
 

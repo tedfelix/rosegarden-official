@@ -20,14 +20,59 @@
 #include "instrumentlabel.h"
 
 
-InstrumentLabel::InstrumentLabel(Rosegarden::InstrumentId id,
+InstrumentLabel::InstrumentLabel(const QString & text,
+                                 int position,
                                  QWidget *parent, const char *name):
-    QLabel(parent, name), m_id(id)
+    QLabel(text, parent, name),
+    m_position(position), m_pressPosition(0, 0)
 {
+    m_pressTimer = new QTimer();
+
+    connect(m_pressTimer, SIGNAL(timeout()),
+            this, SLOT(slotChangeToInstrumentList()));
+}
+
+InstrumentLabel::InstrumentLabel(int position,
+                                 QWidget *parent, const char *name):
+    QLabel(parent, name),
+    m_position(position), m_pressPosition(0, 0)
+{
+    m_pressTimer = new QTimer();
+
+    connect(m_pressTimer, SIGNAL(timeout()),
+            this, SLOT(slotChangeToInstrumentList()));
 }
 
 InstrumentLabel::~InstrumentLabel()
 {
+}
+
+void
+InstrumentLabel::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() != LeftButton)
+                return;
+
+    // store the press coords for positioning the popup
+    m_pressPosition = e->globalPos();
+
+    // start a timer on this hold
+    m_pressTimer->start(100, true); // 400ms, single shot
+
+}
+
+void
+InstrumentLabel::mouseReleaseEvent(QMouseEvent *e)
+{
+    // stop the timer if running
+    if (m_pressTimer->isActive())
+        m_pressTimer->stop();
+}
+
+void
+InstrumentLabel::slotChangeToInstrumentList()
+{
+    emit changeToInstrumentList(m_position);
 }
 
 

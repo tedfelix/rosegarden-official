@@ -75,6 +75,7 @@ bool
 RoseXmlHandler::startDocument()
 {
     m_composition.clearTracks();
+    m_studio.clear();
 
     // and the loop
     //
@@ -320,7 +321,6 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         Rosegarden::Track *track = new Rosegarden::Track(id, muted,
                                                          label, position,
                                                          instrument);
-
         m_composition.addTrack(track);
 
 
@@ -493,20 +493,11 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             m_device = new Rosegarden::MidiDevice(atts.value("name").data());
             m_studio.addDevice(m_device);
 
-            /*
-            m_studio.addDevice(std::string(atts.value("name").data()),
-                               Rosegarden::Device::Midi);
-                               */
         }
         else if (type == "audio")
         {
             m_device = new Rosegarden::AudioDevice(atts.value("name").data());
             m_studio.addDevice(m_device);
-
-            /*
-            m_studio.addDevice(std::string(atts.value("name").data()),
-                               Rosegarden::Device::Audio);
-                               */
         }
         else
         {

@@ -54,7 +54,11 @@ public:
     InstrumentList getInstruments();
 
     // Return an Instrument
-    Instrument* getInstrumentByIndex(InstrumentId id);
+    Instrument* getInstrumentById(InstrumentId id);
+    Instrument* getInstrumentFromList(int index);
+
+    // Clear down
+    void clear();
 
 private:
 

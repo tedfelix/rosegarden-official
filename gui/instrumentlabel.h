@@ -18,9 +18,13 @@
 */
 
 #include <qlabel.h>
+#include <qtimer.h>
 
 #include "Instrument.h"
 
+//  Display an Instrument name and can also send signals
+//  to pop up an instrument list.
+//
 
 #ifndef _INSTRUMENTLABEL_H_
 #define _INSTRUMENTLABEL_H_
@@ -29,15 +33,37 @@ class InstrumentLabel : public QLabel
 {
 Q_OBJECT
 public:
-    InstrumentLabel(Rosegarden::InstrumentId id,
+    InstrumentLabel(const QString & text, int position,
                     QWidget *parent=0, const char *name=0);
+
+    InstrumentLabel(int position, QWidget *parent=0, const char *name=0);
 
     ~InstrumentLabel();
 
-    Rosegarden::InstrumentId getId() const { return m_id; }
+    int getPosition() const { return m_position; }
+
+    QPoint getPressPosition() const { return m_pressPosition; }
+
+
+public slots:
+    void slotChangeToInstrumentList();
+
+
+protected:
+    virtual void mousePressEvent(QMouseEvent *e);
+    virtual void mouseReleaseEvent(QMouseEvent *e);
+
+
+signals:
+    void changeToInstrumentList(int);
+
 
 private:
-    Rosegarden::InstrumentId m_id;
+    int m_position;
+
+    QTimer *m_pressTimer;
+    QPoint m_pressPosition;
+
 
 };
 

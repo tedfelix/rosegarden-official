@@ -60,7 +60,7 @@ protected:
     virtual void mouseDoubleClickEvent(QMouseEvent *e);
 
 public slots:
-        void slotChangeToInstrumentList();
+    void slotChangeToInstrumentList();
 
 signals:
     // Our version of released() has an int id associated with it

@@ -536,7 +536,7 @@ SequenceManager::record()
     int rID = comp.getRecordTrack();
     Rosegarden::InstrumentId inst= comp.getTrackByIndex(rID)->getInstrument();
 
-    switch (studio.getInstrumentByIndex(inst)->getType())
+    switch (studio.getInstrumentById(inst)->getType())
     {
         case Rosegarden::Instrument::Midi:
             recordType = STARTING_TO_RECORD_MIDI;
