@@ -155,7 +155,7 @@ Segment::setStartTime(timeT t)
     int dt = t - m_startTime;
     if (dt == 0) return;
     Composition *c = m_composition;
-    if (c) c->detachSegment(this);
+    //if (c) c->detachSegment(this);
 
     // reset the time of all events.  can't just setAbsoluteTime on these,
     // partly 'cos we're not allowed, partly 'cos it might screw up the
@@ -172,13 +172,14 @@ Segment::setStartTime(timeT t)
     erase(begin(), end());
     if (m_endMarkerTime) *m_endMarkerTime += dt;
     m_endTime += dt;
-    m_startTime = t;
+    // m_startTime = t;
+    if (c) c->setSegmentStartTime(this, t);
 
     for (int i = 0; i < events.size(); ++i) {
 	insert(events[i]);
     }
 
-    if (c) c->addSegment(this);
+    //if (c) c->addSegment(this);
 }
 
 void
@@ -289,9 +290,10 @@ Segment::insert(Event *e)
 	(begin() == end() && t0 > m_startTime)) {
 
 	Composition *c = m_composition;
-	if (c) c->detachSegment(this); // sets m_composition to 0
-	m_startTime = t0;
-	if (c) c->addSegment(this);
+// 	if (c) c->detachSegment(this); // sets m_composition to 0
+// 	m_startTime = t0;
+// 	if (c) c->addSegment(this);
+        if (c) c->setSegmentStartTime(this, t0);
     }
 
     if (t1 > m_endTime ||
@@ -335,9 +337,10 @@ Segment::erase(iterator pos)
 
     if (t0 == m_startTime && begin() != end()) {
 	Composition *c = m_composition;
-	if (c) c->detachSegment(this); // sets m_composition to 0
-	m_startTime = (*begin())->getAbsoluteTime();
-	if (c) c->addSegment(this);
+// 	if (c) c->detachSegment(this); // sets m_composition to 0
+// 	m_startTime = (*begin())->getAbsoluteTime();
+// 	if (c) c->addSegment(this);
+        if (c) c->setSegmentStartTime(this, (*begin())->getAbsoluteTime());
     }
     if (t1 == m_endTime) {
 	updateEndTime();
@@ -372,9 +375,10 @@ Segment::erase(iterator from, iterator to)
 
     if (startTime == m_startTime && begin() != end()) {
 	Composition *c = m_composition;
-	if (c) c->detachSegment(this); // sets m_composition to 0
-	m_startTime = (*begin())->getAbsoluteTime();
-	if (c) c->addSegment(this);
+// 	if (c) c->detachSegment(this); // sets m_composition to 0
+// 	m_startTime = (*begin())->getAbsoluteTime();
+// 	if (c) c->addSegment(this);
+        if (c) c->setSegmentStartTime(this, (*begin())->getAbsoluteTime());
     }
 
     if (endTime == m_endTime) {
@@ -470,9 +474,10 @@ Segment::fillWithRests(timeT startTime, timeT endTime)
 {
     if (startTime < m_startTime) {
 	Composition *c = m_composition;
-	if (c) c->detachSegment(this); // sets m_composition to 0
-	m_startTime = startTime;
-	if (c) c->addSegment(this);
+// 	if (c) c->detachSegment(this); // sets m_composition to 0
+// 	m_startTime = startTime;
+// 	if (c) c->addSegment(this);
+        if (c) c->setSegmentStartTime(this, startTime);
     }
 
     TimeSignature ts;
@@ -507,9 +512,10 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 {
     if (startTime < m_startTime) {
 	Composition *c = m_composition;
-	if (c) c->detachSegment(this); // sets m_composition to 0
-	m_startTime = startTime;
-	if (c) c->addSegment(this);
+// 	if (c) c->detachSegment(this); // sets m_composition to 0
+// 	m_startTime = startTime;
+// 	if (c) c->addSegment(this);
+        if (c) c->setSegmentStartTime(this, startTime);
     }
 
     //!!! Need to remove the rests then relocate the start time
