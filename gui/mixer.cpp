@@ -1420,7 +1420,7 @@ MidiMixerWindow::setupTabs()
                 // Pan rotary
                 //
                 MidiMixerVUMeter *meter = 
-                    new MidiMixerVUMeter(frame, VUMeter::FixedHeightVisiblePeakHold, 10, 40);
+                    new MidiMixerVUMeter(frame, VUMeter::FixedHeightVisiblePeakHold, 6, 30);
                 mainLayout->addWidget(meter, controls.size() + 1, posCount, Qt::AlignCenter);
                 m_faders[faderCount]->m_vuMeter = meter;
 
@@ -1669,7 +1669,7 @@ MidiMixerWindow::updateMeters(SequencerMapper *mapper)
     {
 	Rosegarden::LevelInfo info;
 	if (!mapper->getInstrumentLevel(m_faders[i]->m_id, info)) continue;
-        m_faders[i]->m_vuMeter->setLevel(info.level);
+        m_faders[i]->m_vuMeter->setLevel(double(info.level/127.0));
         //RG_DEBUG << "MidiMixerWindow::updateMeters - level  " << info.level << endl;
     }
 }

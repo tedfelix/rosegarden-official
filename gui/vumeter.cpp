@@ -352,8 +352,6 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
 
 	    QColor mixedColour = m_velocityColour->getColour(m_levelLeft);
 
-            RG_DEBUG << "VUMeter::drawColouredBar - level = " << m_levelLeft << endl;
-	    
             paint->setPen(mixedColour);
             paint->setBrush(mixedColour);
 
@@ -364,6 +362,8 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
             paint->setPen(mixedColour);
             paint->setBrush(mixedColour);
 	}
+
+        //RG_DEBUG << "VUMeter::drawColouredBar - level = " << m_levelLeft << endl;
 
 	paint->drawRect(x, y, w, h);
     }
@@ -459,13 +459,16 @@ VUMeter::drawMeterLevel(QPainter* paint)
         {
             int y = height() - (m_levelLeft * height()) / m_maxLevel;
 //            paint->drawRect(0, height(), width(), y);
-	    drawColouredBar(paint, 0, 0, 0, width(), y);
+	    drawColouredBar(paint, 0, 0, y, width(), height());
 
 	    paint->setPen(m_background);
 	    paint->setBrush(m_background);
 	    paint->drawRect(0, 0, width(), y);
 
-            RG_DEBUG << "VUMeter::drawMeterLevel - vertical rect height = " << y << endl;
+            /*
+            RG_DEBUG << "VUMeter::drawMeterLevel - height = " << height() 
+                     << ", vertical rect height = " << y << endl;
+                     */
 
             if (m_showPeakLevel)
             {
@@ -473,13 +476,6 @@ VUMeter::drawMeterLevel(QPainter* paint)
                 paint->setBrush(Qt::white);
 
                 y = height() - (m_peakLevelLeft * height()) / m_maxLevel;
-
-                /*
-                if (y < (height() - 1))
-                    x++;
-                else
-                    x = width() - 1;
-                    */
 
                 paint->drawLine(0, y, width(), y);
             }
