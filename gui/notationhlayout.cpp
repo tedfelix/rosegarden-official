@@ -421,6 +421,10 @@ NotationHLayout::AccidentalTable::update(Accidental accidental, int height)
 void
 NotationHLayout::reconcileBars()
 {
+    // Ensure that concurrent bars on all staffs have the same width,
+    // which for now we make the maximum width required for this bar
+    // on any staff
+
     unsigned int barNo = 0;
     bool reachedEnd = false;
 
