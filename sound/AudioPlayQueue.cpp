@@ -326,7 +326,7 @@ AudioPlayQueue::getPlayingFilesForInstrument(const RealTime &sliceStart,
 #endif
 
 	    size_t j = 0;
-	    for (size_t j = 0; j < written; ++j) {
+	    for (j = 0; j < written; ++j) {
 		if (playing[j] == f) break;
 	    }
 	    if (j < written) break; // already have it
