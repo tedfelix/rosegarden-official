@@ -45,6 +45,11 @@ class MidiEvent
 public:
     MidiEvent();
 
+    // No data event
+    //
+    MidiEvent(Rosegarden::timeT deltaTime,
+              MidiByte eventCode);
+
     // single data byte case
     //
     MidiEvent(Rosegarden::timeT deltaTime,
@@ -102,6 +107,7 @@ public:
 
     MidiByte getMetaEventCode() const { return m_metaEventCode; }
     std::string getMetaMessage() const { return m_metaMessage; }
+    void setMetaMessage(const std::string &meta) { m_metaMessage = meta; }
 
     friend bool operator<(const MidiEvent &a, const MidiEvent &b);
 

@@ -1652,9 +1652,9 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
 
     if (!midiFile->open())
     {
+        delete progressDlg;
         KMessageBox::error(this,
           i18n("Couldn't understand MIDI file.\nIt might be corrupted."));
-        delete progressDlg;
         return;
     }
 
@@ -1680,7 +1680,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
     // Set the caption
     //
     m_doc->setTitle(file);
-
+    m_fileRecent->addURL(file);
     // Reinitialise
     //
     initView();

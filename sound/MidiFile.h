@@ -126,11 +126,11 @@ private:
     // Split the tasks up with these top level private methods
     //
     bool parseHeader(const std::string& midiHeader);
-    bool parseTrack(std::ifstream* midiFile, const unsigned int &trackNum);
+    bool parseTrack(std::ifstream* midiFile, unsigned int trackNum);
     bool writeHeader(std::ofstream* midiFile);
-    bool writeTrack(std::ofstream* midiFile, const unsigned int &trackNum);
+    bool writeTrack(std::ofstream* midiFile, unsigned int trackNum);
 
-    bool consolidateNoteOffEvents(const Rosegarden::TrackId &track);
+    bool consolidateNoteOffEvents(Rosegarden::TrackId track);
 
     // Internal convenience functions
     //
@@ -138,11 +138,11 @@ private:
     const long midiBytesToLong(const std::string& bytes);
     const long getNumberFromMidiBytes(std::ifstream* midiFile);
     const std::string getMidiBytes(std::ifstream* midiFile,
-                                   const unsigned long &bytes);
+                                   unsigned long bytes);
     bool skipToNextTrack(std::ifstream *midiFile);
     void intToMidiBytes(std::ofstream* midiFile, int number);
-    void longToMidiBytes(std::ofstream* midiFile, const unsigned long &number);
-    void longToVarBuffer(std::string &buffer, const unsigned long &number);
+    void longToMidiBytes(std::ofstream* midiFile, unsigned long number);
+    std::string longToVarBuffer(unsigned long number);
 
     // The pointer to the Studio for Instrument stuff
     //

@@ -130,7 +130,7 @@ MidiFile::midiBytesToInt(const string& bytes)
 //
 //
 const string
-MidiFile::getMidiBytes(ifstream* midiFile, const unsigned long &numberOfBytes)
+MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
 {
     string stringRet;
     char fileMidiByte;
@@ -403,10 +403,11 @@ MidiFile::parseHeader(const string &midiHeader)
 //
 //
 bool
-MidiFile::parseTrack(ifstream* midiFile, const Rosegarden::TrackId &trackNum)
+MidiFile::parseTrack(ifstream* midiFile, Rosegarden::TrackId trackNum)
 {
     MidiByte midiByte, metaEventCode, data1, data2;
     MidiByte eventCode = 0x80;
+    std::string metaMessage;
     unsigned int messageLength;
     unsigned long deltaTime;
 
@@ -431,7 +432,7 @@ MidiFile::parseTrack(ifstream* midiFile, const Rosegarden::TrackId &trackNum)
         { 
             metaEventCode = getMidiBytes(midiFile,1)[0];
             messageLength = getNumberFromMidiBytes(midiFile);
-            std::string metaMessage = getMidiBytes(midiFile, messageLength);
+            metaMessage = getMidiBytes(midiFile, messageLength);
 
             MidiEvent *e = new MidiEvent(deltaTime,
                                          MIDI_FILE_META_EVENT,
@@ -440,38 +441,6 @@ MidiFile::parseTrack(ifstream* midiFile, const Rosegarden::TrackId &trackNum)
 
             m_midiComposition[trackNum].push_back(e);
         }
-        else if (eventCode == MIDI_SYSTEM_EXCLUSIVE) // system messages
-        {
-            // Read in the whole message from here and form it up
-            //
-            messageLength = getNumberFromMidiBytes(midiFile);
-            std::string sysexMessage= getMidiBytes(midiFile, messageLength);
-
-            if (MidiByte(sysexMessage[sysexMessage.length() - 1]) !=
-                    MIDI_END_OF_EXCLUSIVE)
-            {
-                std::cerr << "MidiFile::parseTrack() - "
-                          << "malformed or unsupported SysEx type"
-                          << std::endl;
-                continue;
-            }
-
-            // chop off the EOX
-            sysexMessage = sysexMessage.substr(0, sysexMessage.length() - 2);
-
-            MidiEvent *e = new MidiEvent(deltaTime,
-                                         MIDI_SYSTEM_EXCLUSIVE,
-                                         sysexMessage);
-
-            m_midiComposition[trackNum].push_back(e);
-        }
-        /*
-        else if (eventCode == MIDI_END_OF_EXCLUSIVE)
-        {
-            std::cout << "MidiFile::parseTrack() - "
-                      << "SysEx END" << std::endl;
-        }
-        */
         else // the rest
         {
 
@@ -503,6 +472,33 @@ MidiFile::parseTrack(ifstream* midiFile, const Rosegarden::TrackId &trackNum)
                 // create and store our event
                 midiEvent = new MidiEvent(deltaTime, eventCode, data1);
                 m_midiComposition[trackNum].push_back(midiEvent);
+                break;
+
+            case MIDI_SYSTEM_EXCLUSIVE:
+                messageLength = getNumberFromMidiBytes(midiFile);
+                metaMessage= getMidiBytes(midiFile, messageLength);
+
+                if (MidiByte(metaMessage[metaMessage.length() - 1]) !=
+                        MIDI_END_OF_EXCLUSIVE)
+                {
+                    std::cerr << "MidiFile::parseTrack() - "
+                              << "malformed or unsupported SysEx type"
+                              << std::endl;
+                    continue;
+                }
+
+                // chop off the EOX
+                metaMessage = metaMessage.substr(0, metaMessage.length()-2);
+
+                midiEvent = new MidiEvent(deltaTime,
+                                          MIDI_SYSTEM_EXCLUSIVE,
+                                          metaMessage);
+                m_midiComposition[trackNum].push_back(midiEvent);
+                break;
+
+            case MIDI_END_OF_EXCLUSIVE:
+                std::cerr << "MidiFile::parseTrack() - "
+                          << "Found a stray MIDI_END_OF_EXCLUSIVE" << std::endl;
                 break;
 
             default:
@@ -708,8 +704,20 @@ MidiFile::convertToRosegarden()
                     accidentals = accidentals < 0 ?  -accidentals :  accidentals;
                     // create and insert the key event
                     //
-                    rosegardenEvent = Rosegarden::Key
-                        (accidentals, isSharp, isMinor).getAsEvent(rosegardenTime);
+                    try
+                    {
+                        rosegardenEvent = Rosegarden::Key
+                            (accidentals, isSharp, isMinor).
+                                getAsEvent(rosegardenTime);
+                    }
+
+                    catch(...)
+                    {
+                        std::cerr << "MidiFile::convertToRosegarden - "
+                                  << " badly formed key signature"
+                                  << std::endl;
+                        break;
+                    }
                     rosegardenSegment->insert(rosegardenEvent);
                     break;
 
@@ -1132,24 +1140,17 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
             }
             else if ((*el)->isa(Key::EventType))
             {
-                Rosegarden::Key key = Rosegarden::Key(**el);
+                Key key(**el);
 
                 int accidentals = key.getAccidentalCount();
-                if (!key.isSharp()) accidentals = -accidentals;
+                if (!Rosegarden::Key(**el).isSharp())
+                    accidentals = -accidentals;
 
                 // stack out onto the meta string
                 //
-                char out[2];
-                sprintf(out, "%c", MidiByte(accidentals));
-                cout << out << endl;
-                std::string metaMessage = out;
-                sprintf(out, "%c", MidiByte(key.isMinor()));
-                cout << out << endl;
-                metaMessage += out;
-
-                cout << "LENGTH = " << metaMessage.length() << endl;
-                cout << "ACC = " << accidentals << endl;
-                cout << "MINOR = " << key.isMinor() << endl;
+                std::string metaMessage;
+                metaMessage += MidiByte(accidentals);
+                metaMessage += MidiByte(key.isMinor());
 
                 midiEvent =
                     new MidiEvent(midiEventAbsoluteTime,
@@ -1157,7 +1158,7 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
                                   MIDI_KEY_SIGNATURE,
                                   metaMessage);
 
-                m_midiComposition[trackNumber].push_back(midiEvent);
+                //m_midiComposition[trackNumber].push_back(midiEvent);
 
             }
             else if ((*el)->isa(Controller::EventType))
@@ -1184,23 +1185,20 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
                 std::string data = 
                     (*el)->get<String>(SystemExclusive::DATABLOCK);
 
-
                 // check for closing EOX and add one if none found
                 //
                 if (MidiByte(data[data.length() - 1]) != MIDI_END_OF_EXCLUSIVE)
                 {
-                    char out[2];
-                    sprintf(out, "%c", MIDI_END_OF_EXCLUSIVE);
-                    data += out;
+                    data += MIDI_END_OF_EXCLUSIVE;
                 }
 
-                midiEvent =
-                    new MidiEvent(midiEventAbsoluteTime,
-                                  MIDI_SYSTEM_EXCLUSIVE,
-                                  0, // redundant meta event code
-                                  data);
+                // construct plain SYSEX event
+                //
+                midiEvent = new MidiEvent(midiEventAbsoluteTime,
+                                          MIDI_SYSTEM_EXCLUSIVE,
+                                          data);
 
-                //m_midiComposition[trackNumber].push_back(midiEvent);
+                m_midiComposition[trackNumber].push_back(midiEvent);
 
             }
             else if ((*el)->isa(ChannelPressure::EventType))
@@ -1228,11 +1226,13 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
             }
             else
             {  
+                /*
                 std::cerr << "MidiFile::convertToMidi - "
                           << "unsupported MidiType \""
                           << (*el)->getType()
                           << "\" at export"
                           << std::endl;
+                          */
             }
 
         }
@@ -1303,7 +1303,7 @@ MidiFile::intToMidiBytes(std::ofstream* midiFile, int number)
 } 
 
 void
-MidiFile::longToMidiBytes(std::ofstream* midiFile, const unsigned long &number)
+MidiFile::longToMidiBytes(std::ofstream* midiFile, unsigned long number)
 {
     MidiByte upper1;
     MidiByte lower1;
@@ -1326,9 +1326,11 @@ MidiFile::longToMidiBytes(std::ofstream* midiFile, const unsigned long &number)
 // a maximum of four bytes using the MSB as the carry on
 // flag.
 //
-void
-MidiFile::longToVarBuffer(std::string &buffer, const unsigned long &number)
+std::string
+MidiFile::longToVarBuffer(unsigned long number)
 {
+    std::string rS;
+
     long inNumber = number;
     long outNumber;
 
@@ -1350,13 +1352,14 @@ MidiFile::longToVarBuffer(std::string &buffer, const unsigned long &number)
     //
     while(true)
     {
-        buffer += (MidiByte) ( outNumber & 0xff );
-        if ( outNumber & 0x80 )
+        rS += (MidiByte)(outNumber & 0xff);
+        if (outNumber & 0x80)
             outNumber >>= 8;
         else
             break;
     }
 
+    return rS;
 }
 
 
@@ -1396,8 +1399,7 @@ MidiFile::writeHeader(std::ofstream* midiFile)
 // Write a MIDI track to file
 //
 bool
-MidiFile::writeTrack(std::ofstream* midiFile,
-                     const Rosegarden::TrackId &trackNumber)
+MidiFile::writeTrack(std::ofstream* midiFile, Rosegarden::TrackId trackNumber)
 {
     bool retOK = true;
     MidiByte eventCode = 0;
@@ -1415,7 +1417,7 @@ MidiFile::writeTrack(std::ofstream* midiFile,
         // Write the time to the buffer in MIDI format
         //
         //
-        longToVarBuffer(trackBuffer, (*midiEvent)->getTime());
+        trackBuffer += longToVarBuffer((*midiEvent)->getTime());
 
         if ((*midiEvent)->isMeta())
         {
@@ -1423,8 +1425,8 @@ MidiFile::writeTrack(std::ofstream* midiFile,
             trackBuffer += (*midiEvent)->getMetaEventCode();
 
             // Variable length number field
-            longToVarBuffer(trackBuffer,
-                            (*midiEvent)->getMetaMessage().length());
+            trackBuffer += longToVarBuffer((*midiEvent)->
+                                               getMetaMessage().length());
 
             trackBuffer += (*midiEvent)->getMetaMessage();
         }
@@ -1468,7 +1470,19 @@ MidiFile::writeTrack(std::ofstream* midiFile,
                 break;
 
             case MIDI_SYSTEM_EXCLUSIVE:
+
+                /* 
+                   This simply isn't working and I haven't got a clue why
+
+                // write out message length
+                trackBuffer +=
+                    longToVarBuffer((*midiEvent)->getMetaMessage().length());
+
+                // now the message
                 trackBuffer += (*midiEvent)->getMetaMessage();
+
+                */
+
                 break;
 
             default:
@@ -1547,7 +1561,7 @@ MidiFile::write()
 // reading them and modifying their relevant NOTE ONs
 //
 bool
-MidiFile::consolidateNoteOffEvents(const Rosegarden::TrackId &track)
+MidiFile::consolidateNoteOffEvents(Rosegarden::TrackId track)
 {
     MidiTrackIterator nOE, mE = m_midiComposition[track].begin();
     bool notesOnTrack = false;

@@ -39,6 +39,17 @@ MidiEvent::MidiEvent()
 }
 
 MidiEvent::MidiEvent(Rosegarden::timeT deltaTime,
+                     MidiByte eventCode):
+    m_deltaTime(deltaTime),
+    m_eventCode(eventCode),
+    m_data1(0),
+    m_data2(0),
+    m_metaEventCode(0),
+    m_metaMessage("")
+{
+}
+
+MidiEvent::MidiEvent(Rosegarden::timeT deltaTime,
                      MidiByte eventCode,
                      MidiByte data1):
     m_deltaTime(deltaTime),
