@@ -161,6 +161,7 @@ public:
     Rosegarden::Composition&       getComposition()       { return m_composition; }
     const Rosegarden::Composition& getComposition() const { return m_composition; }
 
+    int getNbTracks() const { return m_composition.getNbTracks(); }
     unsigned int getNbSegments() const { return m_composition.getNbSegments(); }
     unsigned int getDuration() const { return m_composition.getDuration(); }
     unsigned int getNbBars()	     { return m_composition.getNbBars();   }

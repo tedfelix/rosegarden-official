@@ -561,6 +561,8 @@ void Composition::addInstrument(const Instrument &inst)
 
 }
 
+// Insert a Track representation into the Composition
+//
 void Composition::addTrack(const Track &track)
 {
     m_tracks[track.getID()] = track;

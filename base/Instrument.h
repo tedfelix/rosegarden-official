@@ -24,8 +24,9 @@
 
 #include <string>
 
-// An Instrument connects a Track (containing or comparable to
-// a list of Segments) to a device that can play that Track.
+// An Instrument connects a Track (which itself contains
+// a list of Segments) to a device that can play that
+// Track.
 //
 //
 
@@ -47,6 +48,10 @@ public:
 
     int getMidiChannel() { return m_midiChannel; }
     int getMidiTranspose() { return m_midiTranspose; }
+
+    void setID(const int &id) { m_id = id; }
+    void setName(const string &name) { m_name = name; }
+    void setType(const InstrumentType &type) { m_type = type; }
 
     void setMidiChannel(const int &mC) { m_midiChannel = mC; }
     void setMidiTranspose(const int &mT) { m_midiTranspose = mT; }

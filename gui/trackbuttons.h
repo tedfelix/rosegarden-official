@@ -30,8 +30,7 @@
 #include <list>
 
 #include "trackheader.h"
-
-class RosegardenGUIDoc;
+#include "rosegardenguidoc.h"
 
 
 // This class creates a list of mute and record buttons

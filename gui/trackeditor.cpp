@@ -46,20 +46,17 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     m_hHeader(0),
     m_vHeader(0)
 {
-    int segments(doc->getNbSegments());
-    int bars(doc->getNbBars());
-/*
-    if (segments == 0) segments = 64;
-    if (bars == 0) bars = 100;
-*/
-    segments = 64;
-    bars = 100;
+    int tracks = doc->getNbTracks();
+    int bars = doc->getNbBars();
 
-    init(segments, bars);
+    if (tracks == 0) tracks = 20;
+    if (bars == 0) bars = 100;
+
+    init(tracks, bars);
 }
 
 
-TrackEditor::TrackEditor(unsigned int nbSegments,
+TrackEditor::TrackEditor(unsigned int nbTracks,
                            unsigned int nbBars,
                            QWidget *parent,
                            const char *name,
@@ -70,22 +67,22 @@ TrackEditor::TrackEditor(unsigned int nbSegments,
     m_hHeader(0),
     m_vHeader(0)
 {
-    init(nbSegments, nbBars);
+    init(nbTracks, nbBars);
 }
 
 
 void
-TrackEditor::init(unsigned int nbSegments, unsigned int nbBars)
+TrackEditor::init(unsigned int nbTracks, unsigned int nbBars)
 {
-    kdDebug(KDEBUG_AREA) << "TrackEditor::init(nbSegments = "
-                         << nbSegments << ", nbBars = " << nbBars
+    kdDebug(KDEBUG_AREA) << "TrackEditor::init(nbTracks = "
+                         << nbTracks << ", nbBars = " << nbBars
                          << ")" << endl;
 
     QGridLayout *grid = new QGridLayout(this, 2, 2);
 
     grid->addWidget(m_hHeader = new QHeader(nbBars, this), 0, 1);
     grid->addWidget(m_vHeader =
-         new Rosegarden::TrackHeader(nbSegments, this), 1, 0);
+         new Rosegarden::TrackHeader(nbTracks, this), 1, 0);
     m_vHeader->setOrientation(Qt::Vertical);
 
     setupHorizontalHeader();
@@ -104,7 +101,7 @@ TrackEditor::init(unsigned int nbSegments, unsigned int nbBars)
 
     QCanvas *canvas = new QCanvas(this);
     canvas->resize(m_hHeader->sectionSize(0) * nbBars,
-                   m_vHeader->sectionSize(0) * nbSegments);
+                   m_vHeader->sectionSize(0) * nbTracks);
 
     canvas->setBackgroundColor(Qt::lightGray);
 

@@ -24,6 +24,7 @@
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <assert.h>
+#include "Track.h"
 
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            QWidget* parent,
@@ -144,7 +145,20 @@ TrackButtons::drawButtons()
         // Create a label
         //
         label = new QLabel(track);
-        label->setText(QString("Track %1").arg(i));
+
+
+        // Set the label from the Track object on the Composition
+        //
+        Rosegarden::Track *track = m_doc->getComposition().getTrack(i);
+
+        // Enforce this
+        //
+        assert(track != 0);
+
+        label->setText(QString(track->getLabel().c_str()));
+        //label->setText(QString(m_doc->getComposition().getTracks()[i].getLabel().c_str()));
+        //label->setText(QString("Track %1").arg(i));
+
         label->setMinimumSize(80, m_cellSize - buttonGap);
         label->setMaximumSize(80, m_cellSize - buttonGap);
         label->setIndent(7);
@@ -165,6 +179,9 @@ TrackButtons::drawButtons()
 
         record->setMinimumSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
         record->setMaximumSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
+
+        if (track->isMuted())
+            mute->setDown(true);
 
     }
 

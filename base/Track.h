@@ -33,6 +33,10 @@
 // track on the sequencer.  This class is basically an
 // abstract concept (not an abstract class) which has no
 // dependency upon a specific system or sound hardware.
+// A Track is owned by a Composition and enhances its
+// relationships with Segments.   A Segment can only
+// exist on a Track.
+//
 //
 //
 
@@ -53,7 +57,17 @@ public:
 
     int getID() const { return m_id; }
     bool isMuted() { return m_muted; }
-    
+    int getPosition() { return m_position; }
+    int getInstrument() { return m_instrument; }
+    string const getLabel() { return m_label; }
+    TrackType getType() { return m_type; }
+
+    void setID(const int &id) { m_id = id; }
+    void setMuted(const bool& muted) { m_muted = muted; }
+    void setType(const TrackType &type) { m_type = type; }
+    void setPosition(const int &position) { m_position = position; }
+    void setLabel(const string &label) { m_label = label; }
+    void setInstrument(const int &instrument) { m_instrument = instrument; }
 
 private:
 

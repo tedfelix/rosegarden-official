@@ -10,9 +10,10 @@
 <instrument id="2" type="Midi" name="Piano"/>
 <instrument id="3" type="Audio" name="Audio Samples"/>
 
-<track id="0" type="Midi" position="0" instrument="0" label="XML Track 0" muted="false"/>
-<track id="1" type="Midi" position="1" instrument="0" label="XML Track 1" muted="false"/>
-<track id="2" type="Midi" position="2" instrument="0" label="XML Track 2" muted="false"/>
+<track id="0" type="Midi" position="0" instrument="0" label="XML Trk 0" muted="false"/>
+<track id="1" type="Midi" position="1" instrument="0" label="XML Trk 1" muted="false"/>
+<track id="2" type="Midi" position="2" instrument="0" label="XML Trk 2" muted="false"/>
+<track id="3" type="Midi" position="2" instrument="0" label="XML Trk 3" muted="true"/>
 
 <segment track="0" start="0">
 <chord>

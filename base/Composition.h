@@ -84,10 +84,15 @@ public:
     segmentcontainer& getSegments() { return m_segments; }
     const segmentcontainer& getSegments() const { return m_segments; }
 
+    Track* getTrack(const int &track) { return &(m_tracks[track]); }
+    Instrument* getInstrument(const int &instr)
+            { return &(m_instruments[instr]); }
+ 
     trackcontainer getTracks() { return m_tracks; }
     instrumentcontainer getInstruments() { return m_instruments; }
 
     unsigned int getNbSegments() const { return m_segments.size(); }
+    int getNbTracks() const { return m_tracks.size(); }
 
     /**
      * Add a new segment and return an iterator pointing to it

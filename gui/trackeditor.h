@@ -59,12 +59,12 @@ public:
     /**
      * Create a new empty TrackEditor 
      *
-     * The TrackEditor will have \a nbSegments available segments, and
+     * The TrackEditor will have \a nbTracks available segments, and
      * ( \a nbBars * time resolution ) time steps.
      *
      * @see setTimeStepsResolution()
      */
-    TrackEditor(unsigned int nbSegments,
+    TrackEditor(unsigned int nbTracks,
                  unsigned int nbBars,
                  QWidget* parent = 0, const char* name = 0,
                  WFlags f=0);
@@ -136,7 +136,7 @@ signals:
 
 protected:
 
-    void init(unsigned int nbSegments, unsigned int nbBars);
+    void init(unsigned int nbTracks, unsigned int nbBars);
     void setupHorizontalHeader();
 
     RosegardenGUIDoc* m_document;
