@@ -907,11 +907,17 @@ bool TrackNotationHelper::removeRests(timeT time, timeT duration)
         ++to;
     }
 
+    bool checkLastRest = false;
+    iterator lastEvent = to;
+    
     if (eventTime < finalTime) {
-        // shorten last event's duration 
+        // shorten last event's duration, if possible
 
-        iterator lastEvent = to;
-        ++lastEvent;
+
+        if (lastEvent == end()) {
+            cerr << "TrackNotationHelper::removeRests : not enough rest space\n";
+            return false;
+        }
 
         cerr << "TrackNotationHelper::removeRests : shorten last event duration from "
              << (*lastEvent)->getDuration() << " to "
@@ -920,9 +926,15 @@ bool TrackNotationHelper::removeRests(timeT time, timeT duration)
 
         (*lastEvent)->setAbsoluteTime(finalTime);
         (*lastEvent)->setDuration((*lastEvent)->getDuration() - (finalTime - eventTime));
+        checkLastRest = true;
     }
 
     track().erase(from, to);
+
+    // we must defer calling makeRestViable() until after erase,
+    // because it will invalidate 'to'
+    //
+    if (checkLastRest) makeRestViable(lastEvent);
 
     return true;
 }
