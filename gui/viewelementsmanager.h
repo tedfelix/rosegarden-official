@@ -51,16 +51,29 @@ public:
                          Rosegarden::Track::iterator to);
 
     /**
-     * Wrap Event in a ViewElement if it doesn't have one already
+     * Wrap Event in a ViewElement if it doesn't have one already, and
+     * inserts it in all ViewElements list.
+     *
+     * If insertInTrack is true, insert the Event itself in the wrapped
+     * Track as well.
      */
-    void insert(Rosegarden::Event*);
+    void wrapAndInsert(Rosegarden::Event*, bool insertInTrack = false);
 
     // overload these for each ViewElement type
 
     /**
      * Insert a new NotationElement
+     *
+     * Think about using wrapAndInsert() before using this. This is
+     * for cases where you need control over the NotationElement after
+     * its creation (like changing the note it represents) and therefore
+     * need to create the NotationElement yourself. See
+     * NotationView::chordEvent() for an example of this.
+     *
+     * If insertInTrack is true, also insert the Event which the
+     * NotationElement points to in the wrapped Track.
      */
-    void insert(NotationElement*);
+    void insert(NotationElement*, bool insertInTrack = false);
 
     /**
      * Erase the element pointed to by iterator
@@ -72,7 +85,7 @@ public:
      * Erase the element
      * Also erase it from the wrapped Track
      */
-    void erase(NotationElement*);
+    void eraseSingle(NotationElement*);
 
     Rosegarden::Track& getTrack() { return m_track; }
 

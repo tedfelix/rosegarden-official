@@ -92,22 +92,31 @@ void ViewElementsManager::insertNewEvents(Rosegarden::Track::iterator from,
 
 }
 
-void ViewElementsManager::insert(Rosegarden::Event* e)
+void ViewElementsManager::wrapAndInsert(Rosegarden::Event* e,
+                                        bool insertInTrack)
 {
     if (!e->hasViewElement()) {
         NotationElement *el = new NotationElement(e);
         m_notationElements->insert(el);
+
+        if (insertInTrack)
+            m_track.insert(e);
+            
+    } else {
+        KMessageBox::error(0, "ViewElementsManager::insert() : trying to insert an Event which already has a ViewElement");
     }
 }
 
 
-void ViewElementsManager::insert(NotationElement *e)
+void ViewElementsManager::insert(NotationElement *e, bool insertInTrack)
 {
-//     kdDebug(KDEBUG_AREA) << "ViewElementsManager::insert("
-//                          << e->event()->getType() << ")\n";
+    kdDebug(KDEBUG_AREA) << "ViewElementsManager::insert("
+                         << e->event()->getType() << ")\n";
 
     m_notationElements->insert(e);
-    m_track.insert(e->event());
+
+    if (insertInTrack)
+        m_track.insert(e->event());
 }
 
 void ViewElementsManager::erase(NotationElementList::iterator it)
@@ -128,8 +137,7 @@ void ViewElementsManager::erase(NotationElementList::iterator it)
             kdDebug(KDEBUG_AREA) << "ViewElementsManager::erase() : Found Event : "
                                  << (*it) << endl;
 
-            //delete *eIter; - the track will delete it
-            m_track.erase(eIter);
+            m_track.erase(eIter); // this will delete *eIter
             foundEvent = true;
             break;
         }
@@ -147,13 +155,13 @@ void ViewElementsManager::erase(NotationElementList::iterator it)
 
 }
 
-void ViewElementsManager::erase(NotationElement* el)
+void ViewElementsManager::eraseSingle(NotationElement* el)
 {
     kdDebug(KDEBUG_AREA) << "ViewElementsManager::erase() erasing : "
                          << el << endl;
     
     Rosegarden::Event* ev = el->event();
-    m_notationElements->erase(el); // this will delete el
-    m_track.erase(ev);
+    m_notationElements->eraseSingle(el); // this will delete el
+    m_track.eraseSingle(ev);
 }
 
