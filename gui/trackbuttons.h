@@ -86,8 +86,9 @@ public:
 signals:
     // to emit what Track has been selected
     //
-    void trackSelected(int);
     void widthChanged();
+    void trackSelected(int);
+    void instrumentSelected(int);
 
 public slots:
 

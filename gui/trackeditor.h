@@ -191,6 +191,12 @@ signals:
      * Send up to RosegardenGUIView
      *
      */
+    void instrumentSelected(int);
+
+    /*
+     * Send up to RosegardenGUIView
+     *
+     */
     void selectedSegments(std::vector<Rosegarden::Segment*> segments);
 
 protected:

@@ -104,6 +104,9 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     connect(m_trackEditor, SIGNAL(trackSelected(int)),
             SLOT(slotSelectTrackSegments(int)));
 
+    connect(m_trackEditor, SIGNAL(instrumentSelected(int)),
+            SLOT(slotUpdateInstrumentParameterBox(int)));
+
     connect(m_trackEditor,
            SIGNAL(selectedSegments(std::vector<Rosegarden::Segment*>)),
            this,
@@ -266,18 +269,24 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
 
     // update the instrument parameter box
     Rosegarden::Composition &comp = getDocument()->getComposition();
-    Rosegarden::Studio &studio = getDocument()->getStudio();
-
-    Rosegarden::Instrument *instrument = 
-        studio.getInstrumentById(
-                comp.getTrackByIndex(trackId)->getInstrument());
-
-    m_instrumentParameterBox->useInstrument(instrument);
+    slotUpdateInstrumentParameterBox(comp.getTrackByIndex(trackId)->
+                                     getInstrument());
 
     // Store the selected Track in the Composition
     //
     comp.setSelectedTrack(trackId);
 }
+
+void RosegardenGUIView::slotUpdateInstrumentParameterBox(int id)
+{
+    Rosegarden::Studio &studio = getDocument()->getStudio();
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+
+    Rosegarden::Instrument *instrument = studio.getInstrumentById(id);
+
+    m_instrumentParameterBox->useInstrument(instrument);
+}
+
 
 // Show a segment as it records
 //

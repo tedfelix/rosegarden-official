@@ -613,6 +613,8 @@ TrackButtons::slotInstrumentPopupActivated(int item)
         {
             track->setInstrument(inst->getID());
             m_instrumentLabels[m_popupItem]->setText(QString(inst->getName().c_str()));
+
+            emit instrumentSelected((int)inst->getID());
         }
         else
             cerr << "slotInstrumentPopupActivated() - can't find item!" << endl;
@@ -658,8 +660,7 @@ TrackButtons::changeTrackInstrumentLabels(InstrumentTrackLabels label)
 
                 default:
                     break;
-        }
-
+            }
         }
     }
 

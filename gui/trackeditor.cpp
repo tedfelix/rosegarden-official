@@ -207,6 +207,8 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     connect(m_trackButtons, SIGNAL(trackSelected(int)),
             SIGNAL(trackSelected(int)));
 
+    connect(m_trackButtons, SIGNAL(instrumentSelected(int)),
+            SIGNAL(instrumentSelected(int)));
 
     //grid->addWidget(m_trackButtons, 1, 0);
 

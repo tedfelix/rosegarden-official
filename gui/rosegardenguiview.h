@@ -157,6 +157,8 @@ public slots:
     */
     void slotSelectTrackSegments(int);
 
+    void slotUpdateInstrumentParameterBox(int id);
+
     void slotSelectedSegments(std::vector<Rosegarden::Segment*> segments);
 
     void slotShowSegmentParameters(bool);
