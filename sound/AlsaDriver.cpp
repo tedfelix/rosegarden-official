@@ -1902,6 +1902,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         midiRelativeTime = (*i)->getEventTime() - m_playStartPosition +
                            m_alsaPlayStartTime;
 
+#define DEBUG_PROCESS_MIDI_OUT 1
 #ifdef DEBUG_PROCESS_MIDI_OUT
 	RealTime alsaTimeNow = getAlsaTime();
 	std::cerr << "processMidiOut[" << now << "]: event is at " << midiRelativeTime << " (" << midiRelativeTime - alsaTimeNow << " ahead of queue time)" << std::endl;

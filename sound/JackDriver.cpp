@@ -36,6 +36,10 @@
 namespace Rosegarden
 {
 
+//!!! debug
+static unsigned long framesProcessed = 0;
+static RealTime startTime;
+
 JackDriver::JackDriver(AlsaDriver *alsaDriver) :
     m_client(0),
     m_bufferSize(0),
@@ -851,7 +855,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     }
 
     m_framesProcessed += nframes;
-
+    framesProcessed += nframes; //!!!
+    
     return 0;
 }
 
@@ -889,6 +894,7 @@ JackDriver::jackProcessEmpty(jack_nframes_t nframes)
     }
 
     m_framesProcessed += nframes;
+    framesProcessed += nframes; //!!!
 
     return 0;
 }
@@ -1131,6 +1137,11 @@ JackDriver::start()
 	return false;
     }
     
+    framesProcessed = 0; //!!!
+    struct timeval tv;
+    (void)gettimeofday(&tv, 0);
+    startTime = RealTime(tv.tv_sec, tv.tv_usec * 1000); //!!!
+
     std::cout << "start: not on transport" << std::endl;
     return true;
 }
@@ -1139,6 +1150,11 @@ void
 JackDriver::stop()
 {
     if (!m_client) return;
+
+    struct timeval tv;
+    (void)gettimeofday(&tv, 0);
+    RealTime endTime = RealTime(tv.tv_sec, tv.tv_usec * 1000);//!!!
+    std::cerr << "JackDriver::stop: framesProcessed: " << framesProcessed << ", elapsed " << (endTime - startTime) << std::endl;
 
     flushAudio();
 
@@ -1361,9 +1377,6 @@ JackDriver::updateAudioData()
 		} else if (obj->getType() == MappedObject::AudioBuss) {
 		    m_recordInput = (int)((MappedAudioBuss *)obj)->getBussId();
 		} else if (obj->getType() == MappedObject::AudioInput) {
-		    std::cerr << "Connected to input "
-			      << ((MappedAudioInput *)obj)->getInputNumber() << std::endl;
-
 		    m_recordInput = (int)((MappedAudioInput *)obj)->getInputNumber()
 			+ 1000;
 		} else {
