@@ -28,14 +28,13 @@
 // by a WAV) or be accomodated inside a BWF format file.
 //
 //
-//
 
-#include "RIFFPeakChunkGenerator.h"
+#include "RIFFPeakManager.h"
 
 namespace Rosegarden
 {
 
-RIFFPeakChunkGenerator::RIFFPeakChunkGenerator(std::ifstream *in,
+RIFFPeakManager::RIFFPeakManager(std::ifstream *in,
                                                std::ofstream *out,
                                                unsigned bitsPerSample,
                                                unsigned int channels,
@@ -48,7 +47,7 @@ RIFFPeakChunkGenerator::RIFFPeakChunkGenerator(std::ifstream *in,
 {
 }
 
-RIFFPeakChunkGenerator::~RIFFPeakChunkGenerator()
+RIFFPeakManager::~RIFFPeakManager()
 {
 }
 
@@ -61,7 +60,7 @@ RIFFPeakChunkGenerator::~RIFFPeakChunkGenerator()
 //
 
 void
-RIFFPeakChunkGenerator::generate()
+RIFFPeakManager::generate()
 {
 }
 

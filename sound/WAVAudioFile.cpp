@@ -23,6 +23,7 @@
 #include "WAVAudioFile.h"
 #include "RealTime.h"
 #include "Sound.h"
+#include "RIFFPeakManager.h"
 
 using std::cout;
 using std::cerr;
@@ -35,9 +36,11 @@ namespace Rosegarden
 WAVAudioFile::WAVAudioFile(const unsigned int &id,
                            const std::string &name,
                            const std::string &fileName):
-    RIFFAudioFile(id, name, fileName)
+    RIFFAudioFile(id, name, fileName),
+    m_peakManager(0)
 {
     m_type = WAV;
+
 }
 
 WAVAudioFile::WAVAudioFile(const std::string &fileName,
@@ -175,6 +178,26 @@ WAVAudioFile::getPreview(const RealTime &resolution)
 
     if (m_inFile == 0)
         return preview;
+
+
+    // If we don't already have a peak manage for this WAV then
+    // we generate one here.
+    //
+    if (m_peakManager == 0)
+    {
+        // Move past header to beginning of the data and then 
+        // send this position when we create the manager
+        //
+        scanTo(m_inFile, RealTime(0, 0));
+
+        m_peakManager = new RIFFPeakManager(m_fileName,
+                                            m_inFile->tellg(),
+                                            m_bitsPerSample,
+                                            m_channels,
+                                            false, // not internal peak chunk
+                                            1);    // update percentage
+    }
+
     /*
     std::ifstream *previewFile = new std::ifstream(m_fileName.c_str(),
                                                    std::ios::in |
@@ -183,8 +206,6 @@ WAVAudioFile::getPreview(const RealTime &resolution)
     try
     {
 
-    // move past header to beginning of the data
-    scanTo(m_inFile, RealTime(0, 0));
 
     unsigned int totalSample, totalBytes;
     std::string samples;

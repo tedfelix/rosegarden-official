@@ -34,6 +34,8 @@
 namespace Rosegarden
 {
 
+class RIFFPeakManager;
+
 class WAVAudioFile : public RIFFAudioFile
 {
 public:
@@ -66,6 +68,7 @@ public:
 
 protected:
 
+    RIFFPeakManager *m_peakManager;
 
 };
 
