@@ -112,6 +112,7 @@ protected slots:
 signals:
     void addTrackPart(TrackPart*);
     void deleteTrackPart(TrackPart*);
+    void resizeTrackPart(TrackPart*);
     void editTrackPart(TrackPart*);
     void editTrackPartSmall(TrackPart*);
 
@@ -223,9 +224,12 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
 };
 
-
+/**
+ * TrackPart Resizer tool. Allows resizing only at the end of the track part
+ */
 class TrackResizer : public TrackTool
 {
+    Q_OBJECT
 public:
     TrackResizer(TracksCanvas*);
 
@@ -233,13 +237,14 @@ public:
     virtual void handleMouseButtonRelase(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
 
+signals:
+    void deleteTrackPart(TrackPart*);
+    void resizeTrackPart(TrackPart*);
+
 protected:
     bool cursorIsCloseEnoughToEdge(TrackPartItem*, QMouseEvent*);
 
     unsigned int m_edgeThreshold;
-
-    // true if the user clicked on the left side of a part rectangle
-    bool m_onLeftSide;
 };
 
 

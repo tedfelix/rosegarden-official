@@ -348,7 +348,7 @@ void TrackPencil::handleMouseButtonRelase(QMouseEvent*)
 
 void TrackPencil::handleMouseMove(QMouseEvent *e)
 {
-    if ( m_currentItem ) {
+    if (m_currentItem) {
 
 	m_currentItem->setSize(m_canvas->grid().snapX(e->pos().x()) - m_currentItem->rect().x(),
                                m_currentItem->rect().height());
@@ -436,9 +436,15 @@ void TrackMover::handleMouseMove(QMouseEvent *e)
 
 TrackResizer::TrackResizer(TracksCanvas *c)
     : TrackTool(c),
-      m_edgeThreshold(10),
-      m_onLeftSide(true)
+      m_edgeThreshold(10)
 {
+    m_canvas->setCursor(Qt::sizeHorCursor);
+
+    connect(this, SIGNAL(deleteTrackPart(TrackPart*)),
+            c,    SIGNAL(deleteTrackPart(TrackPart*)));
+    connect(this, SIGNAL(resizeTrackPart(TrackPart*)),
+            c,    SIGNAL(resizeTrackPart(TrackPart*)));
+
     kdDebug(KDEBUG_AREA) << "TrackResizer()\n";
 }
 
@@ -460,21 +466,10 @@ void TrackResizer::handleMouseMove(QMouseEvent *e)
 {
     if (!m_currentItem) return;
 
-    if (m_onLeftSide) { // change x and width
-        int oldX = m_currentItem->x(),
-            newX = m_canvas->grid().snapX(e->pos().x()),
-            offSet = oldX - newX;
-        
-        m_currentItem->setX(newX);
+    // change width only
 
-        m_currentItem->setSize(m_currentItem->rect().width() + offSet,
-                               m_currentItem->rect().height());
-
-    } else { // change width only
-
-        m_currentItem->setSize(m_canvas->grid().snapX(e->pos().x()) - m_currentItem->rect().x(),
-                               m_currentItem->rect().height());
-    }
+    m_currentItem->setSize(m_canvas->grid().snapX(e->pos().x()) - m_currentItem->rect().x(),
+                           m_currentItem->rect().height());
     
     m_canvas->canvas()->update();
     
@@ -482,13 +477,5 @@ void TrackResizer::handleMouseMove(QMouseEvent *e)
 
 bool TrackResizer::cursorIsCloseEnoughToEdge(TrackPartItem* p, QMouseEvent* e)
 {
-    if ( abs(p->rect().x() - e->x()) < m_edgeThreshold) {
-        m_onLeftSide = true;
-        return true;
-    } else if ( abs(p->rect().x() + p->rect().width() - e->x()) < m_edgeThreshold) {
-        m_onLeftSide = false;
-        return true;
-    }
-    
-    return false;
+    return ( abs(p->rect().x() + p->rect().width() - e->x()) < m_edgeThreshold);
 }
