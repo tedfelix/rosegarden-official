@@ -561,7 +561,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_cfg->setGroup(NotationView::ConfigGroup);
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 7, 2, 10, 5);
+    layout = new QGridLayout(frame, 8, 2, 10, 5);
 
     layout->addWidget(new QLabel(
         i18n("Paper size to use in \\paper block"), frame), 0, 0);
@@ -617,6 +617,16 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
         i18n("Write bar checks at end of measure"), frame);
     m_lilyExportBarChecks->setChecked(m_cfg->readBoolEntry("lilyexportbarchecks", false));
     layout->addWidget(m_lilyExportBarChecks, 4, 1);
+    
+    m_lilyExportBeams = new QCheckBox(
+        i18n("Export beamings"), frame);
+    m_lilyExportBeams->setChecked(m_cfg->readBoolEntry("lilyexportbeamings", false));
+    layout->addWidget(m_lilyExportBeams, 5, 0);
+    
+    m_lilyExportStems = new QCheckBox(
+        i18n("Export explicit stem directions"), frame);
+    m_lilyExportStems->setChecked(m_cfg->readBoolEntry("lilyexportstems", true));
+    layout->addWidget(m_lilyExportStems, 5, 1);
     
     addTab(frame, i18n("Lilypond"));  
 }
@@ -708,6 +718,8 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("lilyexportunmuted", m_lilyExportUnmuted->isChecked());
     m_cfg->writeEntry("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
     m_cfg->writeEntry("lilyexportbarchecks", m_lilyExportBarChecks->isChecked());
+    m_cfg->writeEntry("lilyexportbeamings", m_lilyExportBeams->isChecked());
+    m_cfg->writeEntry("lilyexportstems", m_lilyExportStems->isChecked());
 
     (void)m_quantizeFrame->getQuantizer(); // this also writes to the config
 }

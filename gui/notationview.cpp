@@ -1999,6 +1999,10 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
 	    m_tempoRuler->show();
     }
 
+    stateChanged("linear_mode",
+		 (pageMode == LinedStaff::LinearMode ? KXMLGUIClient::StateNoReverse :
+		                                       KXMLGUIClient::StateReverse));
+
     int pageWidth = getPageWidth();
     int topMargin = 0, leftMargin = 0;
     getPageMargins(leftMargin, topMargin);

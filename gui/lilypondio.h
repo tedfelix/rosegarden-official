@@ -80,21 +80,11 @@ protected:
     // return a string full of column tabs
     std::string indent(const int &column);
                   
-    // close chord if necessary, and/or add tie if necessary; can do one or
-    // both independantly
-/*!!!
-    void closeChordWriteTie(bool &addTie, bool &currentlyWritingChord, std::ofstream &str);
-*/
-/*!!!
-    // start/stop tuplet bracket
-    void startStopTuplet(bool &thisNoteIsTupled, bool &previouslyWritingTuplet,
-                         const int &numerator, const int &denominator,
-                         std::ofstream &str);
-*/
-    void writeInventedRests(Rosegarden::TimeSignature &timeSig,
-			    Rosegarden::timeT offset,
-			    Rosegarden::timeT duration,
-			    std::ofstream &);
+    void writeSkip(Rosegarden::TimeSignature &timeSig,
+		   Rosegarden::timeT offset,
+		   Rosegarden::timeT duration,
+		   bool useRests,
+		   std::ofstream &);
 
     void handleText(Rosegarden::Event *, std::string &lilyText, std::string &lilyLyrics);
     void writePitch(Rosegarden::Event *note, Rosegarden::Key &key, std::ofstream &);

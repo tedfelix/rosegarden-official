@@ -13,9 +13,6 @@
   <Action name="note_font_actionmenu"/>
   <Action name="note_font_size_actionmenu"/>
   <Action name="stretch_actionmenu"/>
-<!--
-  <Action name="smoothing_actionmenu"/>
--->
 <Separator/>
   <Action name="linear_mode"/>
   <Action name="continuous_page_mode"/>
@@ -561,6 +558,17 @@
   <enable>
     <Action name="cursor_up_staff"/>
     <Action name="cursor_down_staff"/>
+  </enable>
+</State>
+
+<State name="linear_mode">
+  <enable>
+    <Action name="show_velocity_control_ruler"/>
+    <Action name="show_controller_events_ruler"/>
+    <Action name="add_control_ruler"/>
+    <Action name="show_chords_ruler"/>
+    <Action name="show_raw_note_ruler"/>
+    <Action name="show_tempo_ruler"/>
   </enable>
 </State>
 
