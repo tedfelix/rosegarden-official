@@ -1283,20 +1283,32 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
 
             case SND_SEQ_EVENT_SYSEX:
                {
+                   // Check whether we've got a start or end block
+                   // or whataver the hell we're doing.
+                   //
                    std::cout  << "AlsaDriver::getMappedComposition - "
                               << "System Exclusive message length = "
                               << event->data.ext.len << std::endl;
 
-                   // data is in event->data.ext.ptr
+                   // Data is stored in event->data.ext.ptr.
+                   // Construct and populate DataBlock.
+                   //
+                   //
 
-                   // Construct a bung of messages
                    /*
+                   std::string data;
+                   char *ptr = (char*)(event->data.ext.ptr);
+                   for (unsigned int i = 0; i < event->data.ext.len; i++)
+                       data += *(ptr++);
+
                    MappedEvent *mE = new MappedEvent();
                    mE->setType(MappedEvent::MidiSystemExclusive);
+                   mE->setDataBlock(data);
+                   m_recordComposition.insert(mE);
                    */
                }
-
                break;
+
             default:
                std::cerr << "AlsaDriver::getMappedComposition - "
                          << "got unrecognised MIDI event" << std::endl;

@@ -20,6 +20,7 @@
 */
 
 #include <multiset.h>
+#include <string>
 
 #include <qdatastream.h>
 
@@ -244,6 +245,11 @@ public:
 
     MappedEventType getType() const { return m_type; }
     void setType(const MappedEventType &value) { m_type = value; }
+
+    // Data block
+    //
+    std::string getDataBlock() const { return m_dataBlock; }
+    void setDataBlock(const std::string &dataBlock) { m_dataBlock = dataBlock; }
     
     // How MappedEvents are ordered in the MappedComposition
     //
@@ -273,6 +279,11 @@ private:
     RealTime         m_eventTime;
     RealTime         m_duration;
     RealTime         m_audioStartMarker;
+
+    // Use this when we want to store something in addition to the
+    // other bytes in this type, e.g. System Exclusive.
+    //
+    std::string      m_dataBlock;
 
 };
 
