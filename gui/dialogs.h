@@ -655,15 +655,19 @@ class CountdownDialog : public KDialogBase
     Q_OBJECT
 
 public:
-    CountdownDialog(QWidget *parent);
+    CountdownDialog(QWidget *parent, int seconds);
 
     void setLabel(const QString &label);
-    void setTime(int seconds);
+    void setElapsedTime(int seconds);
+
+signals:
+    void completed(); // m_totalTime has elapsed
 
 protected:
-    QLabel  *m_label;
-    int      m_time;
+    int      m_totalTime;
 
+    QLabel  *m_label;
+    QLabel  *m_time;
     QFrame  *m_progressBar;
 };
 

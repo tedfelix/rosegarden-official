@@ -2812,17 +2812,28 @@ InterpretDialog::getInterpretations()
 
 // ------------------ CountdownDialog -------------------
 //
-CountdownDialog::CountdownDialog(QWidget *parent):
-    KDialogBase(parent, 0, false, i18n("Countdown Dialog"),  Cancel),
-    m_time(0)
+//
+
+CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
+    KDialogBase(parent, "", false, i18n("Audio recording countdown"),  Cancel),
+    m_totalTime(seconds)
 {
+    // Ha!  It'll never work
+    //
+    setWFlags(getWFlags() | WStyle_StaysOnTop);
+
     QVBox *vBox = makeVBoxMainWidget();
     QFrame *frame = new QFrame(vBox);
 
-    m_label = new QLabel(vBox);
+    QHBox *hBox = new QHBox(vBox);
+    m_label = new QLabel(hBox);
+    m_time = new QLabel(hBox);
+
+    m_label->setText(i18n("Audio recording time left"));
     m_progressBar = new QFrame(vBox);
 
-    m_label->setText(i18n("Value"));
+    // set the total time
+    setElapsedTime(0);
 }
 
 
@@ -2833,8 +2844,36 @@ CountdownDialog::setLabel(const QString &label)
 }
 
 void
-CountdownDialog::setTime(int seconds)
+CountdownDialog::setElapsedTime(int elapsedSeconds)
 {
-    m_time = seconds;
+    int seconds = m_totalTime - elapsedSeconds;
+
+    if (seconds < 0)
+    {
+        m_time->setText(i18n("<timing has gone astray>"));
+        return;
+    }
+
+    QString h, m, s;
+    h.sprintf("%02d", seconds/3600);
+    m.sprintf("%02d", seconds/60);
+    s.sprintf("%02d", seconds % 60);
+
+    if (seconds < 3600) // less than an hour
+    {
+        m_time->setText(QString("%1:%2").arg(m).arg(s));
+    }
+    else if (seconds < 86400) // less than a day
+    {
+        m_time->setText(QString("%1:%2:%3").arg(h).arg(m).arg(s));
+    }
+    else
+    {
+        m_time->setText(i18n("Just how big is your hard disk?"));
+    }
+
+    // Dialog complete if the display time is zero
+    if (seconds == 0) emit completed();
+
 }
 

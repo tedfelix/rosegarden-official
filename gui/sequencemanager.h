@@ -48,7 +48,9 @@
 //
 
 class RosegardenGUIDoc;
+class CountdownDialog;
 class QTimer;
+class QTime;
 
 namespace Rosegarden
 {
@@ -200,7 +202,12 @@ signals:
     void insertableNoteOnReceived(int pitch);
     void insertableNoteOffReceived(int pitch);
     
-private:
+protected slots:
+    void slotCountdownCancelled();
+    void slotCountdownTimerTimeout();
+    void slotCountdownStop();
+
+protected:
     Rosegarden::MappedComposition m_mC;
     RosegardenGUIDoc *m_doc;
 
@@ -221,6 +228,13 @@ private:
     clock_t                    m_lastRewoundAt;
 
     bool                       m_sliceFetched;
+
+    CountdownDialog           *m_countdownDialog;
+    QTimer                    *m_countdownTimer;
+
+    // Keep a track of elapsed record time with this object
+    //
+    QTime                     *m_recordTime;
 };
 
 }

@@ -41,6 +41,7 @@
 #include "studiocontrol.h"
 #include "MidiDevice.h"
 #include "widgets.h"
+#include "dialogs.h"
 
 using std::cout;
 using std::cerr;
@@ -57,8 +58,15 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_transport(transport),
     m_sendStop(false),
     m_lastRewoundAt(clock()),
-    m_sliceFetched(true) // default to true (usually ignored)
+    m_sliceFetched(true), // default to true (usually ignored)
+    m_countdownDialog(0),
+    m_countdownTimer(new QTimer(doc)),
+    m_recordTime(new QTime())
 {
+    // Connect this for use later
+    //
+    connect(m_countdownTimer, SIGNAL(timeout()),
+            this, SLOT(slotCountdownTimerTimeout()));
 }
 
 
@@ -667,6 +675,16 @@ SequenceManager::stop()
         m_transport->RecordButton()->setOn(false);
         m_transport->MetronomeButton()->
             setOn(m_doc->getComposition().usePlayMetronome());
+
+        // Remove the countdown dialog if any
+        //
+        /*
+        if (m_countdownDialog)
+        {
+            delete m_countdownDialog;
+            m_countdownDialog = 0;
+        }
+        */
     }
 
     // Now playback
@@ -1044,8 +1062,38 @@ SequenceManager::record(bool toggled)
 
                 if (recordType == STARTING_TO_RECORD_AUDIO)
                 {
-                    // pop up the countdown timer for recording the audio
-                    //CountdownDialog *dialog = new CountdownDialog(this);
+                    // Create the countdown timer dialog for limiting the
+                    // audio recording time.
+                    //
+                    KConfig* config = kapp->config();
+                    config->setGroup("Sequencer Options");
+
+                    int seconds = 60 * 
+                        (config->readNumEntry("audiorecordminutes", 5));
+
+                    m_countdownDialog =
+                        new CountdownDialog(dynamic_cast<QWidget*>
+                                (m_doc->parent())->parentWidget(), seconds);
+
+                    connect(m_countdownDialog, SIGNAL(cancelClicked()),
+                            this, SLOT(slotCountdownCancelled()));
+
+                    connect(m_countdownDialog, SIGNAL(completed()),
+                            this, SLOT(slotCountdownStop()));
+
+                    // Create the timer
+                    //
+                    m_recordTime->start();
+
+                    // Start an elapse timer for updating the dialog -
+                    // it will fire every second.
+                    //
+                    m_countdownTimer->start(1000);
+
+                    // Pop-up the dialog (don't use exec())
+                    //
+                    m_countdownDialog->show();
+
                 }
             }
             else
@@ -2004,6 +2052,47 @@ SequenceManager::sendTransportControlStatuses()
 
 
 }
+
+void
+SequenceManager::slotCountdownCancelled()
+{
+    SEQMAN_DEBUG << "SequenceManager::slotCountdownCancelled - "
+                 << "stopping" << endl;
+
+    // stop timer
+    m_countdownTimer->stop();
+
+    // clear down dialog
+    /*
+    delete m_countdownDialog;
+    m_countdownDialog = 0;
+    */
+
+    // stop recording
+    stopping();
+}
+
+void
+SequenceManager::slotCountdownTimerTimeout()
+{
+    // Set the elapsed time in seconds
+    //
+    m_countdownDialog->setElapsedTime(m_recordTime->elapsed() / 1000);
+}
+
+// The countdown has completed - stop recording
+//
+void
+SequenceManager::slotCountdownStop()
+{
+    SEQMAN_DEBUG << "SequenceManager::slotCountdownStop - "
+                 << "countdown timed out - automatically stopping recording"
+                 << endl;
+
+    stopping(); // erm - simple as that
+}
+
+
 
 }
 
