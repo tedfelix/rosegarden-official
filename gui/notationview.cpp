@@ -2218,6 +2218,9 @@ NotationView::getPageWidth()
 	if (isInPrintMode() && getCanvasView() && getCanvasView()->canvas())
 	    return getCanvasView()->canvas()->width();
 	
+	if (getCanvasView())
+	    return getCanvasView()->width() - 50;
+
 	return width() - 50;
 
     } else {
