@@ -130,7 +130,8 @@ QDragObject* AudioListView::dragObject()
 
     QString audioData;
     QTextOStream ts(&audioData);
-    ts << item->getId() << '\n'
+    ts << "AudioFileManager\n"
+       << item->getId() << '\n'
        << item->getStartTime().sec << '\n'
        << item->getStartTime().usec << '\n'
        << item->getDuration().sec << '\n'

@@ -844,6 +844,10 @@ void RosegardenGUIApp::initView()
             SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection &)),
             SLOT(slotSegmentsSelected(const Rosegarden::SegmentSelection &)));
 
+    connect(m_swapView,
+            SIGNAL(addAudioFile(Rosegarden::AudioFileId)),
+            SLOT(slotAddAudioFile(Rosegarden::AudioFileId)));
+
     connect(m_swapView, SIGNAL(toggleSolo(bool)), SLOT(slotToggleSolo(bool)));
 
     m_doc->attachView(m_swapView);

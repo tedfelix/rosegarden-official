@@ -1075,7 +1075,6 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
             // get the last added audio file id and insert the segment
             //
             audioFileId = aFM.getLastAudioFile()->getId();
-
         }
         else
         {
@@ -1095,6 +1094,9 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
                 KMessageBox::sorry(this, errorString);
                 return;
             }
+
+            // add the file at the sequencer
+            emit addAudioFile(audioFileId);
         }
 
         // Now fetch file details

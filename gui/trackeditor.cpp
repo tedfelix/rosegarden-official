@@ -729,24 +729,19 @@ void TrackEditor::dropEvent(QDropEvent* event)
 
             QTextIStream s(&text);
 
+            QString id;
             Rosegarden::AudioFileId audioFileId;
-            Rosegarden::InstrumentId instrumentId;
             Rosegarden::RealTime startTime, endTime;
-            bool wellFormed = true;
 
             // read the audio info checking for end of stream
+            s >> id;
             s >> audioFileId;
-            if (s.atEnd()) wellFormed = false;
-
-            s >> instrumentId;
             s >> startTime.sec;
             s >> startTime.usec;
             s >> endTime.sec;
-            if (s.atEnd()) wellFormed = false;
-
             s >> endTime.usec;
 
-            if (wellFormed) // only create something if this Text data is valid
+            if (id == "AudioFileManager") // only create something if this is data from the right client
             {
                 // create a track
 

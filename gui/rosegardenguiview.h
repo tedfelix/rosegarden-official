@@ -265,6 +265,12 @@ signals:
      */
     void stepByStepTargetRequested(QObject *);
 
+    /*
+     * Add an audio file at the sequencer - when we drop a new file
+     * on the segment canvas.
+     */
+    void addAudioFile(Rosegarden::AudioFileId);
+
 protected:
 
     //--------------- Data members ---------------------------------
