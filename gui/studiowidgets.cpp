@@ -726,26 +726,14 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
 	setFrameStyle(Box | Sunken);
 	setLineWidth(1);
 
-//!!! For temporary demo purposes
-#define REMOVE_NONWORKING_STUFF 1
-
-#ifdef REMOVE_NONWORKING_STUFF
-        grid = new QGridLayout(this, 4, 2, 0, 1);
-#else
         grid = new QGridLayout(this, haveInOut ? 7 : 5, 2, 0, 1);
-#endif
 
 	int row = 0;
-#ifdef REMOVE_NONWORKING_STUFF
-	if (m_audioInput) m_audioInput->hide();
-	if (m_audioOutput) m_audioOutput->hide();
-#else
 	if (haveInOut) {
 	    grid->addMultiCellWidget(m_audioInput, 0, 0, 0, 1, AlignCenter);
 	    grid->addMultiCellWidget(m_audioOutput, 1, 1, 0, 1, AlignCenter);
 	    row = 2;
 	}
-#endif
 
 	if (id != "") {
 	    grid->addWidget(new QLabel(id, this), row, 0, AlignCenter);
@@ -767,12 +755,8 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
 	grid->addWidget(m_recordButton, row, 0, AlignCenter);	
 	grid->addWidget(m_stereoButton, row, 1, AlignCenter);
 	
-#ifdef REMOVE_NONWORKING_STUFF
-	pluginVbox->hide();
-#else
 	++row;
         grid->addMultiCellWidget(pluginVbox, row, row, 0, 1, AlignCenter);
-#endif
     }
     else
     {
