@@ -349,6 +349,8 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
 void
 RawNoteRuler::paintEvent(QPaintEvent* e)
 {
+    START_TIMING;
+
     QPainter paint(this);
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());
@@ -409,6 +411,8 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 	}
     }
 
+    PRINT_ELAPSED("RawNoteRuler::paintEvent: drawing bar lines and divisions");
+
     DefaultVelocityColour vc;
 
 #ifdef DEBUG_RAW_NOTE_RULER
@@ -421,7 +425,12 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
     //!!! experimental
     Segment::iterator j = m_segment->findTime(to);
     buildForest(m_segment, i, j);
+
+    PRINT_ELAPSED("RawNoteRuler::paintEvent: buildForest");
+
     dumpForest(&m_forest);
+
+    PRINT_ELAPSED("RawNoteRuler::paintEvent: dumpForest");
 
     for (EventTreeNode::NodeList::iterator fi = m_forest.begin();
 	 fi != m_forest.end(); ++fi) {
@@ -436,5 +445,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 	drawNode(paint, vc, *fi, m_height - 3, 2);
 
     }
+
+    PRINT_ELAPSED("RawNoteRuler::paintEvent: complete");
 }
 

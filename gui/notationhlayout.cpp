@@ -222,15 +222,9 @@ double NotationHLayout::getIdealBarWidth(StaffType &staff,
 
     NOTATION_DEBUG << "d is " << d << ", gapPer is " << gapPer << endl;
 
-    double w = fixedWidth + ((timeSignature.getBarDuration() * gapPer) / d);
-
-    NOTATION_DEBUG << "NotationHLayout::getIdealBarWidth: calculated: "
-		   << w << endl;
-
-    w *= m_spacing / 100.0;
-
-    NOTATION_DEBUG << "NotationHLayout::getIdealBarWidth: after spacing: "
-		   << w << endl;
+    double w = ((timeSignature.getBarDuration() * gapPer) / d);
+    w *= m_spacing / 170.0;
+    w += baseWidth + fixedWidth;
 
     if (w < (fixedWidth + baseWidth)) {
 	w = (double)(fixedWidth + baseWidth);
