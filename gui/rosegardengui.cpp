@@ -868,16 +868,6 @@ void RosegardenGUIApp::slotFileNew()
     }
 }
 
-/**
- * Temporarily change the global cursor to waitCursor
- */
-class SetWaitCursor
-{
-public:
-    SetWaitCursor() { QApplication::setOverrideCursor(QCursor(Qt::waitCursor)); }
-    ~SetWaitCursor() { QApplication::restoreOverrideCursor(); }
-};
-
 void RosegardenGUIApp::openURL(const KURL& url)
 {
     SetWaitCursor waitCursor;
@@ -951,8 +941,10 @@ void RosegardenGUIApp::slotFileSave()
 
     if (!m_doc->getAbsFilePath())
        slotFileSaveAs();
-    else
+    else {
+	SetWaitCursor waitCursor;
         m_doc->saveDocument(m_doc->getAbsFilePath());
+    }
 }
 
 void RosegardenGUIApp::slotFileSaveAs()
@@ -964,6 +956,7 @@ void RosegardenGUIApp::slotFileSaveAs()
     QString newName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
                                                  i18n("*.rg"), this, i18n("Save as..."));
     if (!newName.isEmpty()) {
+	SetWaitCursor waitCursor;
         QFileInfo saveAsInfo(newName);
         m_doc->setTitle(saveAsInfo.fileName());
         m_doc->setAbsFilePath(saveAsInfo.absFilePath());
@@ -1278,6 +1271,8 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
 
     m_doc->newDocument();
 
+    SetWaitCursor waitCursor;
+
     Rosegarden::Composition *tmpComp = midiFile->convertToRosegarden();
 
     m_doc->getComposition().swap(*tmpComp);
@@ -1316,6 +1311,8 @@ void RosegardenGUIApp::slotImportRG21()
 
 void RosegardenGUIApp::importRG21File(const QString &file)
 {
+    SetWaitCursor waitCursor;
+
     RG21Loader rg21Loader(file);
 
     m_doc->closeDocument();
@@ -1548,6 +1545,8 @@ void RosegardenGUIApp::slotExportMIDI()
 
 void RosegardenGUIApp::exportMIDIFile(const QString &file)
 {
+    SetWaitCursor waitCursor;
+
     Rosegarden::MidiFile midiFile(file.data(), &m_doc->getStudio());
 
     midiFile.convertToMidi(m_doc->getComposition());

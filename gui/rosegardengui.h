@@ -674,5 +674,15 @@ private:
     Rosegarden::timeT m_storedLoopEnd;
 
 };
+
+/**
+ * Temporarily change the global cursor to waitCursor
+ */
+class SetWaitCursor
+{
+public:
+    SetWaitCursor() { QApplication::setOverrideCursor(QCursor(Qt::waitCursor)); }
+    ~SetWaitCursor() { QApplication::restoreOverrideCursor(); }
+};
  
 #endif // ROSEGARDENGUI_H

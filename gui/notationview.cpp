@@ -182,6 +182,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                    .arg(doc->getTitle())
                    .arg(segments.size()));
     }
+    
+    show();
+//    kapp->processEvents();
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,
@@ -201,6 +204,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
             m_staffs[i]->renderAllElements();
             m_staffs[i]->positionAllElements();
             m_staffs[i]->getSegment().refreshStatus(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
+	    canvas()->update();
+
         }
     }
 

@@ -149,6 +149,8 @@ RosegardenGUIView::getDocument() const
 
 void RosegardenGUIView::print(KPrinter *pPrinter, Rosegarden::Composition* p)
 {
+    SetWaitCursor waitCursor;
+
     QPainter printpainter;
     printpainter.begin(pPrinter);
 
@@ -174,6 +176,8 @@ void RosegardenGUIView::selectTool(SegmentCanvas::ToolType tool)
 
 void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 {
+    SetWaitCursor waitCursor;
+
     std::vector<Rosegarden::Segment *> segmentsToEdit;
     segmentsToEdit.push_back(p);
 
@@ -183,6 +187,8 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 
 void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
 {
+    SetWaitCursor waitCursor;
+
     std::vector<Rosegarden::Segment *> segmentsToEdit;
     segmentsToEdit.push_back(p);
 
@@ -207,6 +213,8 @@ void RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
         KMessageBox::sorry(0, "Please create some tracks first (until we implement menu state management)");
         return;
     }
+
+    SetWaitCursor waitCursor;
 
     std::vector<Rosegarden::Segment *> segmentsToEdit;
 
