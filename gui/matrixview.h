@@ -400,6 +400,11 @@ public slots:
     void slotTriggerSegment();
 
     /**
+     * Clear triggers from selection
+     */
+    void slotRemoveTriggers();
+
+    /**
      * Change horizontal zoom
      */
     void slotChangeHorizontalZoom(int);

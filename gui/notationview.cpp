@@ -1737,13 +1737,17 @@ void NotationView::setupActions()
                 SLOT(slotMarksRemoveFingeringMarks()), actionCollection(),
                 "remove_fingering_marks");
 
-    new KAction(i18n("Make &Ornament..."), 0, this,
+    new KAction(i18n("Ma&ke Ornament..."), 0, this,
 		SLOT(slotMakeOrnament()), actionCollection(),
 		"make_ornament");
 
-    new KAction(i18n("&Use Ornament..."), 0, this,
+    new KAction(i18n("Trigger &Ornament..."), 0, this,
 		SLOT(slotUseOrnament()), actionCollection(),
 		"use_ornament");
+
+    new KAction(i18n("Remove Ornament..."), 0, this,
+		SLOT(slotRemoveOrnament()), actionCollection(),
+		"remove_ornament");
 
     static QString slashTitles[] = {
 	i18n("&None"), "&1", "&2", "&3", "&4", "&5"

@@ -1471,6 +1471,15 @@ NotationView::slotUseOrnament()
 					      i18n("Use Ornament")));
 }
 
+void
+NotationView::slotRemoveOrnament()
+{
+    if (!m_currentEventSelection) return;
+
+    addCommandToHistory(new ClearTriggersCommand(*m_currentEventSelection,
+						 i18n("Remove Ornaments")));
+}
+
 
 void NotationView::slotEditAddClef()
 {

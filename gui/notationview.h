@@ -475,6 +475,7 @@ public slots:
     void slotMarksRemoveFingeringMarks();
     void slotMakeOrnament();
     void slotUseOrnament();
+    void slotRemoveOrnament();
 
     void slotAddSlashes();
 

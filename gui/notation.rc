@@ -151,6 +151,7 @@
     <Action name="add_text_mark"/>
     <Separator/>
     <Action name="use_ornament"/>
+    <Action name="remove_ornament"/>
     <Action name="make_ornament"/>
   </Menu>
 
@@ -611,6 +612,7 @@
     <Action name="add_down-bow"/>
     <Action name="add_text_mark"/>
     <Action name="make_ornament"/>
+    <Action name="remove_ornament"/>
     <Action name="use_ornament"/>
     <Action name="collapse_notes"/>
     <Action name="tie_notes"/>

@@ -551,6 +551,10 @@ void MatrixView::setupActions()
                 SLOT(slotTriggerSegment()), actionCollection(),
                 "trigger_segment");
 
+    new KAction(i18n("Remove Triggers..."), 0, this,
+                SLOT(slotRemoveTriggers()), actionCollection(),
+                "remove_trigger");
+
     new KAction(i18n("Select &All"), Key_A + CTRL, this,
                 SLOT(slotSelectAll()), actionCollection(),
                 "select_all");
@@ -2304,6 +2308,15 @@ MatrixView::slotTriggerSegment()
 					      dialog.getTimeAdjust(),
 					      Rosegarden::Marks::NoMark,
 					      i18n("Trigger Segment")));
+}
+
+void
+MatrixView::slotRemoveTriggers()
+{
+    if (!m_currentEventSelection) return;
+
+    addCommandToHistory(new ClearTriggersCommand(*m_currentEventSelection,
+						 i18n("Remove Triggers")));
 }
 
 
