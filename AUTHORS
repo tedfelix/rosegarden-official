@@ -54,6 +54,9 @@ Daniele Medri
 Stefan Asserhäll
     * Swedish translation
 
+Hasso Tepper
+    * Estonian translation
+
 ##
 ## Names in there should also be credited in gui/main.cpp, with aboutData.addCredit()
 ##
