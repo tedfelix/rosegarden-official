@@ -194,15 +194,16 @@ public:
     enum Format { Compact, Regular };
 
     AudioRouteMenu(QWidget *parent,
-		   Rosegarden::Studio *studio,
-		   Rosegarden::Instrument *instrument,
 		   Direction direction,
-		   Format format);
+		   Format format,
+		   Rosegarden::Studio *studio = 0,
+		   Rosegarden::Instrument *instrument = 0);
 
     QWidget *getWidget();
 
 public slots:
     void slotRepopulate();
+    void slotSetInstrument(Rosegarden::Studio *, Rosegarden::Instrument *);
     
 protected slots:
     void slotWheel(bool up);
@@ -262,6 +263,13 @@ public:
 	FaderStrip,
 	FaderBox
     };
+
+    //!!! We've rather abandoned the FaderStrip mode -- the mixer no
+    //longer uses it.  Maybe we should rip it out again rather than
+    //just let it rot.  This class is a complete mess anyway, not
+    //least because it now needs to know the studio &c (in order to
+    //construct the audio route menus) yet still expects its owner to
+    //set instrument-related data on all the other widgets.
     
     AudioFaderWidget(QWidget *parent,
                      LayoutType type,
@@ -292,8 +300,8 @@ public:
 
     QSignalMapper             *m_signalMapper;
 
-    KComboBox                 *m_audioInput; 
-    KComboBox                 *m_audioOutput; 
+    AudioRouteMenu            *m_audioInput; 
+    AudioRouteMenu            *m_audioOutput; 
 
     QString                    m_id;
 
@@ -303,7 +311,8 @@ signals:
     void audioChannelsChanged(int);
 
 public slots:
-    void updateFromInstrument(Rosegarden::Studio *, Rosegarden::InstrumentId);
+    void slotSetInstrument(Rosegarden::Studio *studio,
+			   Rosegarden::Instrument *instrument);
 
 protected slots:
     void slotChannelStateChanged();

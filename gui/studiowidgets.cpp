@@ -592,10 +592,10 @@ AudioVUMeter::AudioVUMeterImpl::AudioVUMeterImpl(QWidget *parent,
 //
 
 AudioRouteMenu::AudioRouteMenu(QWidget *par,
-			       Rosegarden::Studio *studio,
-			       Rosegarden::Instrument *instrument,
 			       Direction direction,
-			       Format format) :
+			       Format format,
+			       Rosegarden::Studio *studio,
+			       Rosegarden::Instrument *instrument) :
     QObject(par),
     m_studio(studio),
     m_instrument(instrument),
@@ -653,6 +653,15 @@ AudioRouteMenu::slotRepopulate()
 }
 
 void
+AudioRouteMenu::slotSetInstrument(Rosegarden::Studio *studio,
+				  Rosegarden::Instrument *instrument)
+{
+    m_studio = studio;
+    m_instrument = instrument;
+    slotRepopulate();
+}
+
+void
 AudioRouteMenu::slotWheel(bool up)
 {
     int current = getCurrentEntry();
@@ -674,6 +683,8 @@ public:
 void
 AudioRouteMenu::slotShowMenu()
 {
+    if (getNumEntries() == 0) return;
+
     BlahPopupMenu *menu = new BlahPopupMenu((QWidget *)parent());
 
     for (int i = 0; i < getNumEntries(); ++i) {
@@ -695,6 +706,8 @@ AudioRouteMenu::slotShowMenu()
 int
 AudioRouteMenu::getNumEntries()
 {
+    if (!m_instrument) return 0;
+
     switch (m_direction) {
 
     case In:
@@ -722,6 +735,8 @@ AudioRouteMenu::getNumEntries()
 int
 AudioRouteMenu::getCurrentEntry()
 {
+    if (!m_instrument) return 0;
+
     switch (m_direction) {
 
     case In:
@@ -1032,8 +1047,12 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     }
 
     if (haveInOut) {
-	m_audioInput = new KComboBox(this);
-	m_audioOutput = new KComboBox(this);
+	m_audioInput  = new AudioRouteMenu(this,
+					   AudioRouteMenu::In,
+					   AudioRouteMenu::Regular);
+	m_audioOutput = new AudioRouteMenu(this,
+					   AudioRouteMenu::Out,
+					   AudioRouteMenu::Regular);
     } else {
 	m_pan->setKnobColour(RosegardenGUIColours::RotaryPastelOrange);
 
@@ -1081,8 +1100,8 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
 
 	int row = 0;
 	if (haveInOut) {
-	    grid->addMultiCellWidget(m_audioInput, 0, 0, 0, 1, AlignCenter);
-	    grid->addMultiCellWidget(m_audioOutput, 1, 1, 0, 1, AlignCenter);
+	    grid->addMultiCellWidget(m_audioInput->getWidget(), 0, 0, 0, 1, AlignCenter);
+	    grid->addMultiCellWidget(m_audioOutput->getWidget(), 1, 1, 0, 1, AlignCenter);
 	    row = 2;
 	}
 
@@ -1146,11 +1165,11 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
 
 	    QLabel *inputLabel = new QLabel(i18n("In:"), this);
 	    grid->addWidget(inputLabel,             0, 1, AlignRight);
-	    grid->addMultiCellWidget(m_audioInput,  0, 0, 2, 5, AlignLeft);
+	    grid->addMultiCellWidget(m_audioInput->getWidget(),  0, 0, 2, 5, AlignLeft);
 
 	    QLabel *outputLabel = new QLabel(i18n("Out:"), this);
 	    grid->addWidget(outputLabel,             1, 1, AlignRight);
-	    grid->addMultiCellWidget(m_audioOutput,  1, 1, 2, 5, AlignLeft);
+	    grid->addMultiCellWidget(m_audioOutput->getWidget(),  1, 1, 2, 5, AlignLeft);
 	}
     }
 
@@ -1161,16 +1180,26 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
 		m_plugins[i]->setMaximumWidth(50);
 	    }
 	    if (haveInOut) {
-		m_audioInput->setMaximumWidth(50);
-		m_audioOutput->setMaximumWidth(50);
+		m_audioInput->getWidget()->setMaximumWidth(50);
+		m_audioOutput->getWidget()->setMaximumWidth(50);
 	    }
 	} else {
 	    if (havePlugins) {
 		m_plugins[i]->setFixedWidth(m_plugins[i]->width());
 	    }
-	}
+	} 
     }
 
+}
+
+
+void
+AudioFaderWidget::slotSetInstrument(Rosegarden::Studio *studio,
+				    Rosegarden::Instrument *instrument)
+{
+    if (m_audioInput) m_audioInput->slotSetInstrument(studio, instrument);
+    if (m_audioOutput) m_audioOutput->slotSetInstrument(studio, instrument);
+    if (instrument) setAudioChannels(instrument->getAudioChannels());
 }
 
 bool
@@ -1179,16 +1208,6 @@ AudioFaderWidget::owns(const QObject *object)
     return (object &&
 	    ((object->parent() == this) ||
 	     (object->parent() && (object->parent()->parent() == this))));
-}
-
-void
-AudioFaderWidget::updateFromInstrument(Rosegarden::Studio *studio,
-				       Rosegarden::InstrumentId id)
-{
-    Rosegarden::Instrument *instrument = studio->getInstrumentById(id);
-    
-    //...
-    //!!!
 }
 
 void
@@ -1212,46 +1231,8 @@ AudioFaderWidget::setAudioChannels(int channels)
 	    return;
     }
 
-    if (!m_audioInput) return;
-
-    // Populate audio inputs accordingly
-    //
-    KConfig* config = kapp->config();
-    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-
-    int jackAudioInputs = config->readNumEntry("audioinputs", 2);
-
-    QString inputName;
-
-    // clear existing entries
-    m_audioInput->clear();
-
-    for (int i = 0; i < jackAudioInputs; ++i) {
-	if (channels == 1) {
-	    m_audioInput->insertItem(i18n("In %1 L").arg(i+1));
-	    m_audioInput->insertItem(i18n("In %1 R").arg(i+1));
-	} else {
-	    m_audioInput->insertItem(i18n("In %1").arg(i+1));
-	}
-    }
-
-    int submasterCount = config->readNumEntry("audiosubmasters", 4);
-
-    for (int i = 0; i < submasterCount; ++i) {
-	if (channels == 1) {
-	    m_audioInput->insertItem(i18n("Sub %1 L").arg(i+1));
-	    m_audioInput->insertItem(i18n("Sub %1 R").arg(i+1));
-	} else {
-	    m_audioInput->insertItem(i18n("Sub %1").arg(i+1));
-	}
-    }
-
-    if (channels == 1) {
-	m_audioInput->insertItem(i18n("Master L"));
-	m_audioInput->insertItem(i18n("Master R"));
-    } else {
-	m_audioInput->insertItem(i18n("Master"));
-    }
+    if (m_audioInput) m_audioInput->slotRepopulate();
+    if (m_audioOutput) m_audioOutput->slotRepopulate();
 }
 
 void

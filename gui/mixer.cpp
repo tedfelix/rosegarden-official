@@ -85,12 +85,14 @@ MixerWindow::MixerWindow(QWidget *parent,
 
 //!!! bring across the tooltips
 
-	rec.m_input  = new AudioRouteMenu(mainBox, m_studio, *i,
+	rec.m_input  = new AudioRouteMenu(mainBox,
 					  AudioRouteMenu::In,
-					  AudioRouteMenu::Compact);
-	rec.m_output = new AudioRouteMenu(mainBox, m_studio, *i,
+					  AudioRouteMenu::Compact,
+					  m_studio, *i);
+	rec.m_output = new AudioRouteMenu(mainBox,
 					  AudioRouteMenu::Out,
-					  AudioRouteMenu::Compact);
+					  AudioRouteMenu::Compact,
+					  m_studio, *i);
 
 	rec.m_input->getWidget()->setMaximumWidth(45);
 	rec.m_output->getWidget()->setMaximumWidth(45);

@@ -109,7 +109,7 @@ LilypondExporter::handleStartingEvents(eventstartlist &eventsToStart,
 	    Indication i(**m);
 
 	    if (i.getIndicationType() == Indication::Slur) {
-		str << "( ";
+		str << "\\( ";
 	    } else if (i.getIndicationType() == Indication::Crescendo) {
 		str << "\\< ";
 	    } else if (i.getIndicationType() == Indication::Decrescendo) {
@@ -157,7 +157,7 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress,
 		 indicationEnd == eventEnd)) {
 
                 if (i.getIndicationType() == Indication::Slur) {
-                    str << ") ";
+                    str << "\\) ";
                 } else if (i.getIndicationType() == Indication::Crescendo ||
                            i.getIndicationType() == Indication::Decrescendo) {
                     str << "\\! "; 

@@ -1391,8 +1391,12 @@ RosegardenSequencerApp::connectMappedObjects(int id1, int id2)
     
     // When this happens we need to resynchronise our audio processing,
     // and this is the easiest (and most brutal) way to do it.
-    Rosegarden::RealTime seqTime = m_sequencer->getSequencerTime();
-    jumpTo(seqTime.sec, seqTime.nsec);
+    if (m_transportStatus == PLAYING ||
+	m_transportStatus == RECORDING_MIDI ||
+	m_transportStatus == RECORDING_AUDIO) {
+	Rosegarden::RealTime seqTime = m_sequencer->getSequencerTime();
+	jumpTo(seqTime.sec, seqTime.nsec);
+    }
 }
     
 // Disconnect two objects

@@ -658,6 +658,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
         m_audioFader->m_fader->setFader(instrument->getVolume());
         */
 
+    m_audioFader->slotSetInstrument(&m_doc->getStudio(), instrument);
 
     for (unsigned int i = 0; i < m_audioFader->m_plugins.size(); i++)
     {
