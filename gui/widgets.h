@@ -316,7 +316,8 @@ public:
                      float step,
                      float pageStep,
                      float initialPosition,
-                     int size);
+                     int size,
+                     float multipler = 1.0);
 
     void setMinValue(float min) { m_minValue = min; }
     float getMinValue() const { return m_minValue; }
@@ -354,21 +355,23 @@ protected:
 
     void drawPosition();
 
-    float m_minValue;
-    float m_maxValue;
-    float m_step;
-    float m_pageStep;
-    int   m_size;
+    float                m_minValue;
+    float                m_maxValue;
+    float                m_step;
+    float                m_pageStep;
+    int                  m_size;
 
-    float m_lastPosition;
-    float m_position;
-    bool  m_buttonPressed;
-    int   m_lastY;
-    int   m_lastX;
+    float                m_lastPosition;
+    float                m_position;
+    bool                 m_buttonPressed;
+    int                  m_lastY;
+    int                  m_lastX;
 
-    QColor m_knobColour;
+    QColor               m_knobColour;
 
     RosegardenTextFloat *m_float;
+
+    float                m_multiplier;
 };
 
 namespace Rosegarden { class Quantizer; }

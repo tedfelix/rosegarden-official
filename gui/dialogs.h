@@ -650,6 +650,22 @@ private:
 
 // Timer dialog for counting down
 //
+
+class CountdownBar : public QFrame
+{
+    Q_OBJECT
+public:
+    CountdownBar(QWidget *parent, int width, int height);
+    void setPosition(int position);
+
+protected:
+    virtual void paintEvent(QPaintEvent *e);
+
+    int m_width;
+    int m_height;
+    int m_position;
+};
+
 class CountdownDialog : public QDialog // KDialogBase
 {
     Q_OBJECT
@@ -668,16 +684,16 @@ signals:
     void stopped();   // someone pushed the stop button
 
 protected:
-    int          m_totalTime;
+    int           m_totalTime;
 
-    QLabel      *m_label;
-    QLabel      *m_time;
-    QFrame      *m_progressBar;
+    QLabel       *m_label;
+    QLabel       *m_time;
+    CountdownBar *m_progressBar;
 
-    QPushButton *m_stopButton;
+    QPushButton  *m_stopButton;
 
-    int          m_progressBarWidth;
-    int          m_progressBarHeight;
+    int           m_progressBarWidth;
+    int           m_progressBarHeight;
 };
 
 #endif

@@ -506,7 +506,8 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
                                    float step,
                                    float pageStep,
                                    float initialPosition,
-                                   int size):
+                                   int size,
+                                   float multiplier):
     QWidget(parent),
     m_minValue(minValue),
     m_maxValue(maxValue),
@@ -518,7 +519,8 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
     m_buttonPressed(false),
     m_lastY(0),
     m_lastX(0),
-    m_knobColour(0, 0, 0)
+    m_knobColour(0, 0, 0),
+    m_multiplier(multiplier)
 {
     QToolTip::add(this,
                  "Click and drag up and down or left and right to modify");

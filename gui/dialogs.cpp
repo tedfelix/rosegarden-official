@@ -2831,12 +2831,10 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     layout->addWidget(hBox, 0, AlignCenter);
 
     m_label->setText(i18n("Audio recording time left:  "));
-    m_progressBar = new QFrame(this);
-    m_progressBar->setFixedSize(m_progressBarWidth, m_progressBarHeight);
+    m_progressBar =
+        new CountdownBar(this, m_progressBarWidth, m_progressBarHeight);
 
-    // Set the total time
-    //
-    setElapsedTime(0);
+    m_progressBar->setFixedSize(m_progressBarWidth, m_progressBarHeight);
 
     // Simply re-emit from Stop button
     //
@@ -2847,6 +2845,11 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     layout->addWidget(m_stopButton, 0, AlignRight);
 
     connect (m_stopButton, SIGNAL(released()), this, SIGNAL(stopped()));
+
+    // Set the total time to show the bar in initial position
+    //
+    setElapsedTime(0);
+
 }
 
 
@@ -2897,17 +2900,42 @@ CountdownDialog::setElapsedTime(int elapsedSeconds)
     //
     int barPosition = m_progressBarWidth - 
         (elapsedSeconds * m_progressBarWidth) / m_totalTime;
-
-    QPainter p(m_progressBar);
-    p.setPen(RosegardenGUIColours::AudioCountdownBackground);
-    p.setBrush(RosegardenGUIColours::AudioCountdownBackground);
-    p.drawRect(0, 0, barPosition, m_progressBarHeight);
-    p.setPen(RosegardenGUIColours::AudioCountdownForeground);
-    p.setBrush(RosegardenGUIColours::AudioCountdownForeground);
-    p.drawRect(barPosition, 0, m_progressBarWidth, m_progressBarHeight);
+    m_progressBar->setPosition(barPosition);
 
     // Dialog complete if the display time is zero
     if (seconds == 0) emit completed();
 
 }
 
+
+// --- CountdownBar ---
+//
+CountdownBar::CountdownBar(QWidget *parent, int width, int height):
+    QFrame(parent), m_width(width), m_height(height), m_position(0)
+{
+    resize(m_width, m_height);
+    repaint();
+}
+
+void
+CountdownBar::paintEvent(QPaintEvent *e)
+{
+    QPainter p(this);
+
+    p.setClipRegion(e->region());
+    p.setClipRect(e->rect().normalize());
+
+    p.setPen(RosegardenGUIColours::AudioCountdownBackground);
+    p.setBrush(RosegardenGUIColours::AudioCountdownBackground);
+    p.drawRect(0, 0, m_position, m_height);
+    p.setPen(RosegardenGUIColours::AudioCountdownForeground);
+    p.setBrush(RosegardenGUIColours::AudioCountdownForeground);
+    p.drawRect(m_position, 0, m_width, m_height);
+}
+
+void
+CountdownBar::setPosition(int position)
+{
+    m_position = position;
+    repaint();
+}

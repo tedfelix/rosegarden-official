@@ -360,19 +360,21 @@ PluginControl::PluginControl(QWidget *parent,
         //cout << "MULT = " << m_multiplier << endl;
         //cout << "STEP = " << step << endl;
 
+        // Ensure that we always have at least fifty steps
+        //
+        while ((fabs(upperBound - lowerBound)) * m_multiplier < 50.0)
+            m_multiplier *= 10.0;
+
         m_dial = new RosegardenRotary(parent,
                                       lowerBound * m_multiplier, // min
                                       upperBound * m_multiplier, // max
                                       step,                      // step
                                       step * 10.0,
                                       lowerBound * m_multiplier, // initial
-                                      30);                       // size
+                                      30,                        // size
+                                      m_multiplier);
         //setStretchFactor(m_dial, 8);
 
-        // Ensure that we always have at least fifty steps
-        //
-        while ((fabs(upperBound - lowerBound)) * m_multiplier < 50.0)
-            m_multiplier *= 10.0;
 
         //cout << "LOWER = " << lowerBound * m_multiplier << endl;
         //cout << "UPPER = " << upperBound * m_multiplier << endl;
@@ -428,9 +430,5 @@ PluginControl::slotValueChanged(float value)
 {
     emit valueChanged(value/m_multiplier);
 }
-
-
-
-
 
 }
