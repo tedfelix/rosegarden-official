@@ -1099,6 +1099,8 @@ RosegardenGUIDoc::stopRecordingMidi()
 void
 RosegardenGUIDoc::prepareAudio()
 {
+    if (!isSequencerRunning()) return;
+
     QCString replyType;
     QByteArray replyData;
 
@@ -1133,7 +1135,8 @@ RosegardenGUIDoc::prepareAudio()
                                       ROSEGARDEN_SEQUENCER_IFACE_NAME,
                                       "addAudioFile(QString, int)", data, replyType, replyData))
         {
-            SEQMAN_DEBUG << "prepareAudio() - couldn't add audio file"
+            SEQMAN_DEBUG << "prepareAudio() - couldn't add audio file "
+                         << (*it)->getFilename()
                          << endl;
             return;
         }
