@@ -323,6 +323,11 @@ public:
      */
     virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
 
+    /**
+     * Return the view-local PropertyName definitions for this staff's view
+     */
+    const NotationProperties &getProperties() const;
+
 protected:
 
     virtual Rosegarden::ViewElement* makeViewElement(Rosegarden::Event*);

@@ -557,6 +557,12 @@ NotationStaff::renderPrintable(timeT from, timeT to)
 //			 << elementCount << " elements rendered" << endl;
 }	
 
+const NotationProperties &
+NotationStaff::getProperties() const
+{
+    return m_notationView->getProperties();
+}
+
 void
 NotationStaff::positionElements(timeT from, timeT to)
 {
@@ -568,7 +574,7 @@ NotationStaff::positionElements(timeT from, timeT to)
     emit setProgress(0);
     throwIfCancelled();
 
-    const NotationProperties &properties(m_notationView->getProperties());
+    const NotationProperties &properties(getProperties());
 
     int elementsPositioned = 0;
     int elementsRendered = 0; // diagnostic
@@ -882,7 +888,7 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 				   const Rosegarden::Key &currentKey,
 				   bool selected)
 {
-    const NotationProperties &properties(m_notationView->getProperties());
+    const NotationProperties &properties(getProperties());
     static NotePixmapParameters restParams(Note::Crotchet, 0);
 
     NotationElement* elt = static_cast<NotationElement*>(*vli);
@@ -1394,7 +1400,7 @@ NotationStaff::renderNote(Rosegarden::ViewElementList::iterator &vli)
 {
     NotationElement* elt = static_cast<NotationElement*>(*vli);
 
-    const NotationProperties &properties(m_notationView->getProperties());
+    const NotationProperties &properties(getProperties());
     static NotePixmapParameters params(Note::Crotchet, 0);
 
     Note::Type note = elt->event()->get<Int>(NOTE_TYPE);
@@ -1613,7 +1619,7 @@ void
 NotationStaff::setTuplingParameters(NotationElement *elt,
 				    NotePixmapParameters &params)
 {
-    const NotationProperties &properties(m_notationView->getProperties());
+    const NotationProperties &properties(getProperties());
 
     params.setTupletCount(0);
     long tuplingLineY = 0;

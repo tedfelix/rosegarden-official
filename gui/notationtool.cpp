@@ -566,9 +566,16 @@ Event *
 NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 			   const Note &note, int pitch, Accidental accidental)
 {
+    timeT noteEnd = time + note.getDuration();
+
+    // #1046934: make it possible to insert triplet at end of segment!
+    if (m_nParentView->isInTripletMode()) {
+	noteEnd = time + (note.getDuration() * 2 / 3);
+    }
+
     if (time < segment.getStartTime() ||
 	endTime > segment.getEndMarkerTime() ||
-	time + note.getDuration() > segment.getEndMarkerTime()) {
+	noteEnd > segment.getEndMarkerTime()) {
 	return 0;
     }
 
@@ -590,7 +597,8 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 
 	    KMacroCommand *command = new KMacroCommand(insertionCommand->name());
 	    command->addCommand(new AdjustMenuTupletCommand
-				(segment, time, note.getDuration()));
+				(segment, time, note.getDuration(),
+				 3, 2, true)); // #1046934: "has timing already"
 	    command->addCommand(insertionCommand);
 	    activeCommand = command;
 	}
@@ -1674,7 +1682,7 @@ EventSelection* NotationSelector::getSelection()
         m_selectionRect->height() > -3 &&
         m_selectionRect->height() <  3) return 0;
 
-    QCanvasItemList itemList = m_selectionRect->collisions(true);
+    QCanvasItemList itemList = m_selectionRect->collisions(false);
     QCanvasItemList::Iterator it;
 
     QRect rect = m_selectionRect->rect().normalize();
@@ -1692,11 +1700,34 @@ EventSelection* NotationSelector::getSelection()
         
 	    if ((sprite = dynamic_cast<QCanvasNotationSprite*>(*it))) {
 
-		if (!rect.contains(int((*it)->x()), int((*it)->y()), true)) 
-		    continue;
-            
 		NotationElement &el = sprite->getNotationElement();
-		m_selectedStaff = getStaffForElement(&el);
+
+		NotationStaff *staff = getStaffForElement(&el);
+		if (!staff) continue;
+	    
+		int x = (int)(*it)->x();
+		bool shifted = false;
+		int nbw = staff->getNotePixmapFactory(false).getNoteBodyWidth();
+
+		
+		// #957364 (Notation: Hard to select upper note in
+		// chords of seconds) -- adjust x-coord for shifted
+		// note head
+		if (el.event()->get<Rosegarden::Bool>
+		    (staff->getProperties().NOTE_HEAD_SHIFTED, shifted) && shifted) {
+		    x += nbw;
+		}
+
+		if (!rect.contains(x, int((*it)->y()), true)) {
+		    // #988217 (Notation: Special column of pixels
+		    // prevents sweep selection) -- for notes, test
+		    // again with centred x-coord
+		    if (!el.isNote() || !rect.contains(x + nbw/2, int((*it)->y()), true)) {
+			continue;
+		    }
+		}
+            
+		m_selectedStaff = staff;
 		break;
 	    }
 	}
@@ -1725,14 +1756,31 @@ EventSelection* NotationSelector::getSelection()
 
         if ((sprite = dynamic_cast<QCanvasNotationSprite*>(*it))) {
 
+	    NotationElement &el = sprite->getNotationElement();
+	    
+	    int x = (int)(*it)->x();
+	    bool shifted = false;
+	    int nbw = m_selectedStaff->getNotePixmapFactory(false).getNoteBodyWidth();
+
+	    // #957364 (Notation: Hard to select upper note in chords
+	    // of seconds) -- adjust x-coord for shifted note head
+	    if (el.event()->get<Rosegarden::Bool>
+		(m_selectedStaff->getProperties().NOTE_HEAD_SHIFTED, shifted) && shifted) {
+		x += nbw;
+	    }
+
             // check if the element's rect
             // is actually included in the selection rect.
             //
-            if (!rect.contains(int((*it)->x()), int((*it)->y()), true)) 
-		continue;
+            if (!rect.contains(x, int((*it)->y()), true))  {
+		// #988217 (Notation: Special column of pixels
+		// prevents sweep selection) -- for notes, test again
+		// with centred x-coord
+		if (!el.isNote() || !rect.contains(x + nbw/2, int((*it)->y()), true)) {
+		    continue;
+		}
+	    }
             
-            NotationElement &el = sprite->getNotationElement();
-
 	    // must be in the same segment as we first started on,
 	    // we can't select events across multiple segments
 	    if (selection->getSegment().findSingle(el.event()) !=
