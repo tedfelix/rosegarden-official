@@ -1772,6 +1772,7 @@ SequenceManager::setTemporarySequencerSliceSize(const RealTime& time)
 
 void SequenceManager::resetCompositionMmapper()
 {
+    SEQMAN_DEBUG << "SequenceManager::resetCompositionMmapper()\n";
     delete m_compositionMmapper;
     m_compositionMmapper = new CompositionMmapper(m_doc);
 }

@@ -1018,14 +1018,6 @@ RosegardenGUIApp::openFile(const QString &filePath)
         setDocument(doc);
         m_fileRecent->addURL(filePath);
     }
-     
-    if (m_seqManager) {
-        // Tell the sequence manager a new file has been loaded
-        QTime chrono;
-        chrono.start();
-        m_seqManager->resetCompositionMmapper();
-        RG_DEBUG << "Time to dump on disk : " << chrono.elapsed() << "ms\n";
-    }
 }
 
 RosegardenGUIDoc*
