@@ -92,6 +92,17 @@ IMPORTANT : just in case, make sure the various binaries
 ('gui/rosegarden', 'sequencer/rosegardensequencer') aren't included in
 the final tarball.
 
+2a Ensure that make dist worked correctly
+-----------------------------------------
+
+Recently we've seen "make dist" building bits of the system that it
+shouldn't.  Ensure that the tarball doesn't contain any of the following:
+
+rosegarden/docs/web (has to be currently manually removed anyway)
+rosegarden/sound/MidiArts.cc
+rosegarden/gui/rosegardentransport.h
+rosegarden/gui/rosegardentransport.cpp
+
 3. Verify the Tarball and get release notes from developers
 -----------------------------------------------------------
 
