@@ -90,6 +90,8 @@ void RosegardenCanvasView::slotUpdate()
 const int RosegardenCanvasView::AutoscrollMargin = 16;
 const int RosegardenCanvasView::InitialScrollTime = 30;
 const int RosegardenCanvasView::InitialScrollAccel = 5;
+const int RosegardenCanvasView::MaxScrollDelta = 100;      // max a.scroll speed
+const double RosegardenCanvasView::ScrollAccelValue = 1.04;// acceleration rate
 
 /// Copied from QScrollView
 void RosegardenCanvasView::startAutoScroll()
@@ -127,7 +129,10 @@ void RosegardenCanvasView::doAutoScroll()
 {
     RG_DEBUG << "RosegardenCanvasView::doAutoScroll()\n";
 
+    static QPoint previousP;
     QPoint p = viewport()->mapFromGlobal( QCursor::pos() );
+    QPoint dp = p - previousP;
+    previousP = p;
 
     m_autoScrollTimer.start( m_autoScrollTime );
     ScrollDirection scrollDirection = None;
@@ -135,28 +140,41 @@ void RosegardenCanvasView::doAutoScroll()
     int dx = 0, dy = 0;
     if (m_scrollDirectionConstraint & FollowVertical) {
         if ( p.y() < m_autoScrollYMargin ) {
-            dy = -m_minDeltaScroll;
+            dy = -(int(m_minDeltaScroll));
             scrollDirection = Left;
         } else if ( p.y() > visibleHeight() - m_autoScrollYMargin ) {
-            dy = +m_minDeltaScroll;
+            dy = +(int(m_minDeltaScroll));
             scrollDirection = Right;
         }
     }
+    bool startDecelerating = false;
     if (m_scrollDirectionConstraint & FollowHorizontal) {
         if ( p.x() < m_autoScrollXMargin ) {
-            dx = -m_minDeltaScroll;
+	    if ( dp.x() > 0 ) {
+		startDecelerating = true;
+	        m_minDeltaScroll /= ScrollAccelValue;
+	    }
             scrollDirection = Top;
+            dx = -(int(m_minDeltaScroll));
         } else if ( p.x() > visibleWidth() - m_autoScrollXMargin ) {
-            dx = +m_minDeltaScroll;
+	    if ( dp.x() < 0 ) {
+		startDecelerating = true;
+	        m_minDeltaScroll /= ScrollAccelValue;
+	    }
             scrollDirection = Bottom;
+            dx = +(int(m_minDeltaScroll));
         }
     }
     
     if ( (dx || dy) &&
          ((scrollDirection == m_currentScrollDirection) || (m_currentScrollDirection == None)) ) {
         scrollBy(dx,dy);
-        m_minDeltaScroll *= 1.08;
-	if (m_minDeltaScroll > 60) m_minDeltaScroll = 60;
+	if ( startDecelerating )
+           m_minDeltaScroll /= ScrollAccelValue;
+	else
+           m_minDeltaScroll *= ScrollAccelValue;
+	if (m_minDeltaScroll > MaxScrollDelta )
+	    m_minDeltaScroll = MaxScrollDelta;
         m_currentScrollDirection = scrollDirection;
     } else {
         stopAutoScroll();
@@ -164,7 +182,7 @@ void RosegardenCanvasView::doAutoScroll()
 }
 
 
-const int RosegardenCanvasView::DefaultSmoothScrollTimeInterval = 20;
+const int RosegardenCanvasView::DefaultSmoothScrollTimeInterval = 10;
 const int RosegardenCanvasView::DefaultMinDeltaScroll = 1;
 
 bool RosegardenCanvasView::isTimeForSmoothScroll()

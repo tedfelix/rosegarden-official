@@ -158,6 +158,8 @@ protected:
     static const int AutoscrollMargin;
     static const int InitialScrollTime;
     static const int InitialScrollAccel;
+    static const int MaxScrollDelta;
+    static const double ScrollAccelValue;
 
 };
 
