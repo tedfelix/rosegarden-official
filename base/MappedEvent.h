@@ -21,10 +21,12 @@
 #ifndef _MAPPEDEVENT_H_
 #define _MAPPEDEVENT_H_
 
-// Used as a transformation stage between Composition Events and MIDI
-// events this eliminates the notion of Track.  The Composition is
-// converted into a MappedComposition containing ordered Events with
-// MIDI friendly information.
+// Used as a transformation stage between Composition Events and output
+// at the Sequencer this class and MidiComposition eliminates the notion
+// of Track.  The MappedEvents are ripe for playing.
+//
+// NOTE: for the moment until the Composition handles it we're hard
+// coding the velocity components of all MappedEvents to maximum (127)
 //
 
 #include "Event.h"
@@ -35,32 +37,40 @@ namespace Rosegarden
 {
 
 typedef unsigned int instrumentT;
+typedef unsigned int velocityT;
 
 class MappedEvent
 {
 public:
   MappedEvent() {;}
+
+  // Our main constructor used to convert from the Track Events
+  //
   MappedEvent(const Event &e): _pitch(e.get<Int>("pitch")),
-                              _absoluteTime(e.getAbsoluteTime()),
-                              _duration(e.getDuration()) {;}
+                               _absoluteTime(e.getAbsoluteTime()),
+                               _duration(e.getDuration()),
+                               _velocity(127) {;}
 
   MappedEvent(const int &pitch, const timeT &absTime, const timeT &duration,
-              const instrumentT &instrument):
+              const velocityT &velocity, const instrumentT &instrument):
                               _pitch(pitch),
                               _absoluteTime(absTime),
                               _duration(duration),
+                              _velocity(velocity),
                               _instrument(instrument) {;}
   ~MappedEvent() {;}
 
-  void setInstrument(const instrumentT &i) { _instrument = i; }
-  void setDuration(const timeT &d) { _duration = d; }
-  void setAbsoluteTime(const timeT &a) { _absoluteTime = a; }
   void setPitch(const int &p) { _pitch = p; }
+  void setAbsoluteTime(const timeT &a) { _absoluteTime = a; }
+  void setDuration(const timeT &d) { _duration = d; }
+  void setInstrument(const instrumentT &i) { _instrument = i; }
+  void setVelocity(const velocityT &v) { _velocity = v; }
 
-  instrumentT getInstrument() const { return _instrument; }
-  timeT getDuration() const { return _duration; }
-  timeT getAbsoluteTime() const { return _absoluteTime; }
   int   getPitch() const { return _pitch; }
+  timeT getAbsoluteTime() const { return _absoluteTime; }
+  timeT getDuration() const { return _duration; }
+  velocityT getVelocity() const { return _velocity; }
+  instrumentT getInstrument() const { return _instrument; }
 
   struct MappedEventCmp
   {
@@ -74,10 +84,11 @@ public:
 
 private:
 
-  int _pitch;
-  timeT _absoluteTime;
-  timeT _duration;
-  instrumentT _instrument;
+  int          _pitch;
+  timeT        _absoluteTime;
+  timeT        _duration;
+  velocityT    _velocity;
+  instrumentT  _instrument;
 
 };
 

@@ -117,17 +117,18 @@ Composition::getMappedComposition(const unsigned int &sliceStart,
 
   assert(sliceEnd >= sliceStart);
 
-  for (Composition::iterator i = begin(); i != end(); ++i )
+  for (Composition::iterator i = begin(); i != end(); i++ )
   {
     if ( (*i)->getStartIndex() >= int(sliceEnd) )
       continue;
 
-    for ( Track::iterator j = (*i)->begin(); j != (*i)->end(); ++j )
+    for ( Track::iterator j = (*i)->begin(); j != (*i)->end(); j++ )
     {
       // for the moment ensure we're all positive
       //assert((*j)->getAbsoluteTime() >= 0 );
 
-      // skip this event if it doesn't have pitch
+      // Skip this event if it doesn't have pitch
+      // (check that the event has "velocity" soon as well)
       //
       if (!(*j)->has("pitch"))
         continue;

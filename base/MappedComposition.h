@@ -18,13 +18,19 @@
     COPYING included with this distribution for more information.
 */
 
+
+#include <qdatastream.h>
+#include "MappedEvent.h"
+
+
 #ifndef _MAPPEDCOMPOSITION_H_
 #define _MAPPEDCOMPOSITION_H_
 
-// Used as a transformation stage between Composition Events and MIDI
-// events this eliminates the notion of Track.  The Composition is
-// converted into a MappedComposition containing ordered Events with
-// MIDI friendly information.
+
+// MappedComposition is used with MappedEvent to create a sequence
+// of MIDI ready events ready for playing.  The QDataStream operators
+// are a necessary part of the DCOP transmission process allowing 
+// the whole class to be serialized.
 //
 
 #include "MappedEvent.h"
@@ -55,9 +61,6 @@ public:
 private:
   unsigned int _startTime;
   unsigned int _endTime;
-
-  QDataStream _conversion;
-
 
 };
 

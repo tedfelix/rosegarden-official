@@ -29,15 +29,17 @@ using std::cerr;
 using std::cout;
 using std::endl;
 
-// globals for speed efficiency
+// We use some globals here for speed - we're
+// making a lot of these conversions.
 //
 MappedCompositionIterator it;
-MappedEvent *insertEvent;
-int sliceSize;
-timeT absTime;
-timeT duration;
-int pitch;
-instrumentT instrument;
+MappedEvent               *insertEvent;
+int                       sliceSize;
+int                       pitch;
+timeT                     absTime;
+timeT                     duration;
+instrumentT               instrument;
+velocityT                 velocity;
 
 // turn a MappedComposition into a data stream
 //
@@ -52,6 +54,7 @@ operator<<(QDataStream &dS, const MappedComposition &mC)
     dS << (*it)->getPitch();
     dS << (*it)->getAbsoluteTime();
     dS << (*it)->getDuration();
+    dS << (*it)->getVelocity();
     dS << (*it)->getInstrument();
   }
 
@@ -71,9 +74,11 @@ operator>>(QDataStream &dS, MappedComposition &mC)
     dS >> pitch;
     dS >> absTime;
     dS >> duration;
+    dS >> velocity;
     dS >> instrument;
 
-    insertEvent = new MappedEvent(pitch, absTime, duration, instrument);
+    insertEvent = new MappedEvent(pitch, absTime, duration,
+                                  velocity, instrument);
     mC.insert(insertEvent);
 
     sliceSize--;
