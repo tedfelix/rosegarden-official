@@ -79,35 +79,27 @@ MarkerEditorDialog::MarkerEditorDialog(QWidget *parent,
 
     m_addButton = new QPushButton(i18n("Add"), btnBox);
     m_deleteButton = new QPushButton(i18n("Delete"), btnBox);
+    m_deleteAllButton = new QPushButton(i18n("Delete All"), btnBox);
 
     m_closeButton = new QPushButton(i18n("Close"), btnBox);
 
-    m_copyButton = new QPushButton(i18n("Copy"), btnBox);
-    m_pasteButton = new QPushButton(i18n("Paste"), btnBox);
-
     QToolTip::add(m_addButton,
-                  i18n("Add a Marker to the Studio"));
+                  i18n("Add a Marker"));
 
     QToolTip::add(m_deleteButton,
-                  i18n("Delete a Marker from the Studio"));
+                  i18n("Delete a Marker"));
+
+    QToolTip::add(m_deleteAllButton,
+                  i18n("Delete All Markers"));
 
     QToolTip::add(m_closeButton,
-                  i18n("Close the Marker editor"));
-
-    QToolTip::add(m_copyButton,
-                  i18n("Copy a Marker"));
-
-    QToolTip::add(m_pasteButton,
-                  i18n("Paste a Marker"));
+                  i18n("Close the Marker Editor"));
 
     layout->addStretch(10);
     layout->addWidget(m_addButton);
     layout->addWidget(m_deleteButton);
+    layout->addWidget(m_deleteAllButton);
     layout->addSpacing(30);
-
-    layout->addWidget(m_copyButton);
-    layout->addWidget(m_pasteButton);
-    layout->addSpacing(15);
 
     layout->addWidget(m_closeButton);
     layout->addSpacing(5);
@@ -121,11 +113,9 @@ MarkerEditorDialog::MarkerEditorDialog(QWidget *parent,
     connect(m_closeButton, SIGNAL(released()),
             SLOT(slotClose()));
 
-    connect(m_copyButton, SIGNAL(released()),
-            SLOT(slotEditCopy()));
+    connect(m_deleteAllButton, SIGNAL(released()),
+            SLOT(slotDeleteAll()));
 
-    connect(m_pasteButton, SIGNAL(released()),
-            SLOT(slotEditPaste()));
     setupActions();
 
     m_doc->getCommandHistory()->attachView(actionCollection());
@@ -139,6 +129,7 @@ MarkerEditorDialog::MarkerEditorDialog(QWidget *parent,
     //
     m_listView->setAllColumnsShowFocus(true);
     m_listView->setSelectionMode(QListView::Extended);
+    m_listView->setItemsRenameable(true);
 
     initDialog();
 
@@ -260,9 +251,9 @@ MarkerEditorDialog::slotAdd()
 
     AddMarkerCommand *command =
         new AddMarkerCommand(&m_doc->getComposition(),
-                             0,
+                             m_doc->getComposition().getPosition(),
                              std::string("new marker"),
-                             std::string("new marker"));
+                             std::string("no description"));
 
     addCommandToHistory(command);
 }
@@ -353,6 +344,22 @@ void
 MarkerEditorDialog::slotEdit(QListViewItem *i)
 {
     RG_DEBUG << "MarkerEditorDialog::slotEdit" << endl;
+
+    MarkerModifyDialog *dialog = 
+        new MarkerModifyDialog(this, i->text(1), i->text(2));
+
+    if (dialog->exec() == QDialog::Accepted)
+    {
+        ModifyMarkerCommand *command =
+            new ModifyMarkerCommand(&m_doc->getComposition(),
+                                    i->text(0).toInt(),
+                                    qstrtostr(dialog->getName()),
+                                    qstrtostr(dialog->getDescription()));
+
+        addCommandToHistory(command);
+    }
+
+
 }
 
 void
@@ -374,5 +381,28 @@ MarkerEditorDialog::setDocument(RosegardenGUIDoc *doc)
     slotUpdate();
 }
 
+
+MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
+                                       const QString &name,
+                                       const QString &des):
+    KDialogBase(parent, 0, true, i18n("Edit Marker"), Ok | Cancel)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+
+    QGroupBox *groupBox = new QGroupBox
+        (1, Horizontal, i18n("Marker Properties"), vbox);
+
+    QFrame *frame = new QFrame(groupBox);
+
+    QGridLayout *layout = new QGridLayout(frame, 4, 2, 10, 5);
+
+    layout->addWidget(new QLabel(i18n("Name:"), frame), 0, 0);
+    m_nameEdit = new QLineEdit(name, frame);
+    layout->addWidget(m_nameEdit, 0, 1);
+
+    layout->addWidget(new QLabel(i18n("Description:"), frame), 1, 0);
+    m_desEdit = new QLineEdit(des, frame);
+    layout->addWidget(m_desEdit, 1, 1);
+}
 
 const char* const MarkerEditorDialog::MarkerEditorConfigGroup = "Marker Editor";

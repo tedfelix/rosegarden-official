@@ -1248,6 +1248,25 @@ Composition::detachMarker(Rosegarden::timeT time)
 }
 
 bool
+Composition::modifyMarker(Rosegarden::timeT time,
+                          const std::string &name,
+                          const std::string &des)
+{
+    markeriterator it = m_markers.begin();
+
+    for (; it != m_markers.end(); ++it)
+    {
+        if ((*it)->getTime() == time)
+        {
+            (*it)->setName(name);
+            (*it)->setDescription(des);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool
 Composition::isMarkerAtPosition(Rosegarden::timeT time) const
 {
     markerconstiterator it = m_markers.begin();
@@ -1257,6 +1276,7 @@ Composition::isMarkerAtPosition(Rosegarden::timeT time) const
 
     return false;
 }
+
 
 
 

@@ -1129,7 +1129,6 @@ RemoveMarkerCommand::~RemoveMarkerCommand()
 {
 }
 
-
 void
 RemoveMarkerCommand::execute()
 {
@@ -1154,4 +1153,64 @@ RemoveMarkerCommand::unexecute()
 {
     if (m_marker) m_composition->addMarker(m_marker);
 }
+
+ModifyMarkerCommand::ModifyMarkerCommand(Rosegarden::Composition *comp,
+                                         Rosegarden::timeT time,
+                                         const std::string &name,
+                                         const std::string &des):
+    KNamedCommand(getGlobalName()),
+    m_composition(comp),
+    m_time(time),
+    m_name(name),
+    m_description(des),
+    m_oldName(""),
+    m_oldDescription("")
+{
+}
+
+ModifyMarkerCommand::~ModifyMarkerCommand()
+{
+}
+
+void
+ModifyMarkerCommand::execute()
+{
+    Rosegarden::Composition::markercontainer markers = 
+        m_composition->getMarkers();
+
+    Rosegarden::Composition::markerconstiterator it = markers.begin();
+
+    for (; it != markers.end(); ++it)
+    {
+        if ((*it)->getTime() == m_time)
+        {
+            if (m_oldName.empty()) m_oldName = (*it)->getName();
+            if (m_oldDescription.empty()) 
+                m_oldDescription = (*it)->getDescription();
+
+            (*it)->setName(m_name);
+            (*it)->setDescription(m_description);
+            return;
+        }
+    }
+}
+
+void
+ModifyMarkerCommand::unexecute()
+{
+    Rosegarden::Composition::markercontainer markers = 
+        m_composition->getMarkers();
+
+    Rosegarden::Composition::markerconstiterator it = markers.begin();
+
+    for (; it != markers.end(); ++it)
+    {
+        if ((*it)->getTime() == m_time)
+        {
+            (*it)->setName(m_oldName);
+            (*it)->setDescription(m_oldDescription);
+        }
+    }
+}
+
 

@@ -180,6 +180,9 @@ public:
     //
     void addMarker(Rosegarden::Marker *marker);
     bool detachMarker(Rosegarden::timeT time);
+    bool modifyMarker(Rosegarden::timeT time,
+                      const std::string &name,
+                      const std::string &des);
 
     // Is there a marker at given time?
     //

@@ -434,4 +434,30 @@ protected:
 
 };
 
+class ModifyMarkerCommand : public KNamedCommand
+{
+public:
+    ModifyMarkerCommand(Rosegarden::Composition *comp,
+                        Rosegarden::timeT time,
+                        const std::string &name,
+                        const std::string &des);
+    ~ModifyMarkerCommand();
+
+    static QString getGlobalName() { return i18n("&Modify Marker"); }
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+
+    Rosegarden::Composition     *m_composition;
+    Rosegarden::timeT            m_time;
+
+    std::string                  m_name;
+    std::string                  m_description;
+    std::string                  m_oldName;
+    std::string                  m_oldDescription;
+
+};
+
 #endif

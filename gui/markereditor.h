@@ -25,9 +25,11 @@
 
 #include <kmainwindow.h>
 #include <klistview.h>
+#include <kdialogbase.h>
 
 #include <qpushbutton.h>
 #include <qstring.h>
+#include <qlineedit.h>
 
 #include "Composition.h"
 
@@ -37,8 +39,26 @@ class MultiViewCommandHistory;
 class QSpinBox;
 class RosegardenComboBox;
 class QLabel;
-class QLineEdit;
 class QAccel;
+
+class MarkerModifyDialog : public KDialogBase
+{
+    Q_OBJECT
+public:
+    MarkerModifyDialog(QWidget *parent,
+                       const QString &name,
+                       const QString &des);
+
+    QString getName() const { return m_nameEdit->text(); }
+    QString getDescription() const { return m_desEdit->text(); }
+
+protected:
+    RosegardenGUIDoc             *m_doc;
+
+    QLineEdit                    *m_nameEdit;
+    QLineEdit                    *m_desEdit;
+
+};
 
 
 
@@ -94,11 +114,10 @@ protected:
 
     QPushButton             *m_closeButton;
 
-    QPushButton             *m_copyButton;
-    QPushButton             *m_pasteButton;
 
     QPushButton             *m_addButton;
     QPushButton             *m_deleteButton;
+    QPushButton             *m_deleteAllButton;
 
     KListView               *m_listView;
 
