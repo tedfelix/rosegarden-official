@@ -40,7 +40,8 @@
 namespace Rosegarden
 {
 
-AudioFileManager::AudioFileManager()
+AudioFileManager::AudioFileManager():
+    m_previewResolution(0, 200)
 {
     // Set this through the set method so that the tilde gets
     // shaken out.
@@ -374,7 +375,7 @@ AudioFileManager::generatePreviews()
                   << "generating preview for \""
                   << (*it)->getFilename() << "\"" << std::endl;
         m_previewMap[(*it)->getId()] =
-            (*it)->getPreview(Rosegarden::RealTime(0, 2000));
+            (*it)->getPreview(m_previewResolution);
     }
 }
 
@@ -396,7 +397,7 @@ AudioFileManager::generatePreview(unsigned int id)
     m_previewMap[id].clear();
 
     // insert new map
-    m_previewMap[id] = audioFile->getPreview(Rosegarden::RealTime(0, 2000));
+    m_previewMap[id] = audioFile->getPreview(m_previewResolution);
 
     return true;
 }
@@ -414,6 +415,52 @@ AudioFileManager::getAudioFile(unsigned int id)
             return (*it);
     }
     return 0;
+}
+
+std::vector<float>
+AudioFileManager::getPreview(unsigned int id,
+                             const RealTime &startIndex,
+                             const RealTime &endIndex,
+                             int x)
+{
+    // preview has been generated over the entire sample file
+    // and we may just want a subset of that - calculate the
+    // start and end indicies of the float vector based on
+    // the initial m_previewResolution
+
+    double res = m_previewResolution.sec * 1000000.0 +
+                 m_previewResolution.usec;
+
+    double start = startIndex.sec * 1000000.0 + startIndex.usec;
+    double end   = endIndex.sec * 1000000.0 + endIndex.usec;
+
+    int startSample = (int)(start / res);
+    int endSample = (int)(end / res);
+
+    std::vector<float> renderPreview;
+
+    // Insert the subset preview into an intermediate vector prior
+    // to dithering to proper output resolution.  If we run off
+    // the end of the sample data just fill in with zeros.
+    //
+    for (int i = startSample; i < endSample; i++)
+    {
+        if(i < m_previewMap[id].size())
+            renderPreview.push_back(m_previewMap[id][i]);
+        else
+            renderPreview.push_back(0.0);
+    }
+
+    // Now we should have renderPreview.size() samples which
+    // we need to dither to x values to return to the caller
+    //
+    std::vector<float> returnPreview;
+    double samplePoint = renderPreview.size() / x;
+
+    for (int i = 0; i < x; i++)
+        returnPreview.push_back(renderPreview[i * samplePoint]);
+
+    return returnPreview;
 }
 
 

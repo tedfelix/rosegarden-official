@@ -140,10 +140,12 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                  firstFetch == false)
                 continue;
 
+            /*
             cout << "AUDIO START = " << (*it)->getAudioStartTime() << endl;
             cout << "AUDIO END   = " << (*it)->getAudioEndTime() << endl;
             cout << "SLICE START = " << sliceStartElapsed << endl;
             cout << "SLICE END   = " << sliceEndElapsed << endl << endl;
+            */
 
             eventTime = comp.getElapsedRealTime(segmentStartTime);
             Rosegarden::RealTime startTime;

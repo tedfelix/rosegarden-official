@@ -147,14 +147,50 @@ void SegmentItem::drawShape(QPainter& painter)
 
     if (m_segment && m_segment->getType() == Rosegarden::Segment::Audio)
     {
-        // draw preview
-        Rosegarden::AudioFileManager &aFM = m_doc->getAudioFileManager();
+        // Draw waveform preview - fetch the audio waveform data as
+        // a vector of floats (normalised between -1.0 and +1.0)
+        // and then draw over the period we're viewing.
+        //
 
-        // draw label
+        // Set up pen and get rectangle
+        painter.setPen(Qt::black);
+        QRect previewRect = rect();
+        
+        // Fetch vector of floats adjusted to our resolution
+        //
+        Rosegarden::AudioFileManager &aFM = m_doc->getAudioFileManager();
+        Rosegarden::Composition &comp = m_doc->getComposition();
+
+        std::vector<float> values =
+            aFM.getPreview(m_segment->getAudioFileID(),
+                           comp.getElapsedRealTime(
+                               m_segment->getAudioStartTime()),
+                           comp.getElapsedRealTime(
+                               m_segment->getAudioEndTime()),
+                           previewRect.width());
+
+        std::vector<float>::iterator it;
+
+        // perhaps antialias this somehow at some point
+        int i = 0;
+        for (it = values.begin(); it != values.end(); it++)
+        {
+            painter.drawLine(previewRect.x() + i,
+                             previewRect.y() + rect().height()/2
+                                 + (*it) * rect().height()/2,
+                             previewRect.x() + i,
+                             previewRect.y() + rect().height()/2
+                                 - (*it) * rect().height()/2);
+            i++;
+        }
+
+        // perhaps draw an XOR'd label at some point
+        /*
         painter.setFont(*m_font);
         QRect labelRect = rect();
         labelRect.setX(labelRect.x() + 3);
         painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
+        */
     }
     else
     {

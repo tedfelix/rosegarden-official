@@ -359,7 +359,7 @@ AudioFile::scanForward(std::ifstream *file, const RealTime &time)
 
     unsigned int totalSamples = m_sampleRate * time.sec +
                         ( ( m_sampleRate * time.usec ) / 1000000 );
-    unsigned int totalBytes = totalSamples * m_channels * m_bytesPerSample;
+    unsigned int totalBytes = totalSamples * m_bytesPerSample;
 
     // do the seek
     file->seekg(totalBytes, std::ios::cur);
@@ -509,30 +509,31 @@ AudioFile::getPreview(const RealTime &resolution)
     {
         meanValue = 0.0f; // reset
 
-        samples = getBytes(previewFile, m_bytesPerSample * m_channels);
+        samples = getBytes(previewFile, m_bytesPerSample);
         samplePtr = (char *)samples.c_str();
 
         for (unsigned int i = 0; i < m_channels; i++)
         {
 
             // get the whole frame
-            switch(m_bytesPerSample)
+            switch(m_bitsPerSample)
             {
-                case 1: // 8 bit
+                case 8: // 8 bit
                     meanValue += (*((unsigned char *)samplePtr))
                                  / SAMPLE_MAX_8BIT;
                     samplePtr++;
                     break;
 
-                case 2: // 16 bit
+                case 16: // 16 bit
                     meanValue += (*((short*)samplePtr)) / SAMPLE_MAX_16BIT;
                     samplePtr += 2;
                     break;
 
-                case 3: // 24 bit
+                case 24: // 24 bit
                 default:
                     std::cerr << "AudioFile::getPreview - "
-                              << "unsupported bit depth"
+                              << "unsupported bit depth of "
+                              << m_bytesPerSample * 8
                               << std::endl;
                     break;
             }
@@ -542,7 +543,6 @@ AudioFile::getPreview(const RealTime &resolution)
 
         // store
         preview.push_back(meanValue);
-        cout << "MEAN = " << meanValue << endl;
     }
     while(scanForward(previewFile, resolution));
 

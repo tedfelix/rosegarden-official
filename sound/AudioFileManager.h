@@ -113,14 +113,24 @@ public:
     //
     bool generatePreview(unsigned int id);
 
+    // Get a preview for an AudioFile adjusted to Segment start and
+    // end parameters (assuming they fall within boundaries) and
+    // also the length of the SegmentItem in pixels
+    //
+    std::vector<float> getPreview(unsigned int id,             // audio file id
+                                  const RealTime &startIndex, 
+                                  const RealTime &endIndex,
+                                  int x);                      // x length
+
 private:
     std::string getFileInPath(const std::string &file);
 
     unsigned int getFirstUnusedID();
 
-    std::vector<AudioFile*> m_audioFiles;
-    std::string m_audioPath;
-    std::map<unsigned int, std::vector<float> > m_previewMap;
+    std::vector<AudioFile*>                       m_audioFiles;
+    std::string                                   m_audioPath;
+    std::map<unsigned int, std::vector<float> >   m_previewMap;
+    Rosegarden::RealTime                          m_previewResolution;
 
 };
 
