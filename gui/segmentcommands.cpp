@@ -156,11 +156,11 @@ SegmentInsertCommand::execute()
 
             // if not use the track label
             //
-            if (label == "")
-                label = track->getLabel();
+            if (label.length() > 0)
+                m_segment->setLabel(label);
+            
         }
 
-        m_segment->setLabel(label);
     }
     else
     {

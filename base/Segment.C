@@ -55,7 +55,11 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_transpose(0),
     m_delay(0)
 {
-    // nothing
+    static unsigned int untitledSegCount = 0;
+    char tmp[256];
+    sprintf(tmp, " #%d", untitledSegCount);
+    m_label += tmp;
+    ++untitledSegCount;
 }
 
 Segment::Segment(const Segment &segment):
