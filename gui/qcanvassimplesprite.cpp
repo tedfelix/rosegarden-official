@@ -153,5 +153,8 @@ std::vector<QCanvasPixmapArray*> PixmapArrayGC::m_pixmapArrays;
 
 void ConstantWidthRectangle::drawShape(QPainter &p)
 {
-    p.drawRect((int)x(), (int)y(), width() / p.worldMatrix().m11(), height());
+    int w = width() / p.worldMatrix().m11();
+    if (w < 1) w = 1;
+
+    p.drawRect((int)x(), (int)y(), w, height());
 }
