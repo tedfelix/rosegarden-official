@@ -41,7 +41,8 @@ arts/artsmidi.idl not found
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You may be missing the kdemultimedia package (and associated -devel
-package, if appropriate to your distribution).
+package, if appropriate to your distribution).  Note that you need
+this even if you're building --with-alsa.
 
 
 "Cannot convert a null image" and other errors at startup
@@ -132,10 +133,47 @@ Playback and recording
 ----------------------
 
 
+aRts?  ALSA?  Huh?
+~~~~~~~~~~~~~~~~~~
+
+Right, it's like this.  Rosegarden-4 can be built without any sound
+support ("configure --disable-sound"), with aRts support (the default
+configure option), or with ALSA support ("configure --with-alsa").
+You have to choose one option when you run configure: you can't
+currently have more than one compiled in.
+
+aRts (<URL:http://www.arts-project.org/>) is the standard KDE sound
+server.  In theory, it supports audio, MIDI soft synths and outboard
+MIDI devices.  In practice the only way you're likely to get good
+performance from Rosegarden using aRts is if you have a small number
+of outboard hardware MIDI synths and they're all you want to use.
+aRts will not drive your soundcard's onboard MIDI synth, the standard
+soft synths sound ghastly, and audio/MIDI synchronisation doesn't work
+yet.  On the plus side, aRts has a potentially sophisticated
+soft-synth architecture if you want to develop your own synths, and it
+may be possible to use it on systems other than Linux.
+
+ALSA (<URL:http://www.alsa-project.org/>) is the standard sound system
+in Linux 2.5+, and is available for installation on earlier versions
+of Linux.  (Some distributions also include it as an optional
+package.)  Rosegarden-4 supports ALSA version 0.9.0 (_not_ 0.5.x),
+with which it can play to outboard MIDI synths, onboard soundcard MIDI
+synths, and ALSA soft-synths, and can record from outboard MIDI
+devices.  Setup is easier than with aRts, at least once ALSA is
+installed.  For audio support with ALSA, you will also need to obtain
+and use JACK (<URL:http://jackit.sourceforge.net/>).
+
+We strongly recommend you use ALSA unless you already know you prefer
+aRts or you simply can't get ALSA for your platform.  Every
+Rosegarden-4 feature that works with aRts also works with ALSA, and
+then some.  The only reason aRts is the default configure option is
+that we wrote the aRts driver before the ALSA driver.
+
+
 Can I use an ALSA soft synth, such as iiwusynth?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Yep.  Make sure you're running iiwusynth in the -alsa-seq mode and make
+Yep.  Make sure you're running iiwusynth in the alsa-seq mode and make
 sure you run it up _before_ you run up Rosegarden.  They you should get
 iiwusynth channels available in the Instrument dropdowns (click and hold
 on the Track labels).

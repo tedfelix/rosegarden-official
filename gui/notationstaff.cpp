@@ -612,6 +612,7 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	QCanvasItem *canvasItem = 0;
 
 	m_npf->setSelected(selected);
+	int z = selected ? 2 : 0;
 
 	if (elt->isNote()) {
 
@@ -741,7 +742,7 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		(elt->getLayoutX(), (int)elt->getLayoutY());
 	    elt->setCanvasItem
 		(canvasItem, coords.first, (double)coords.second);
-	    canvasItem->setZ(selected ? 2 : 0);
+	    canvasItem->setZ(z);
 	    canvasItem->show();
 	} else {
 	    elt->removeCanvasItem();

@@ -1,0 +1,73 @@
+
+Description of the tests in exercise_notation.rg
+================================================
+
+
+First segment
+-------------
+
+Bar 1: Treble clef, 4/4 time.  Four crotchets ascending from bottom-line E,
+no accidentals, slurred.
+
+Bar 2: Four crotchets ascending from middle-line B, no accidentals, slurred.
+
+Bar 3: Bass clef.  Four crotchets ascending from E, crescendo.
+
+Bar 4: Four crotchets ascending from B, decrescendo.
+
+Bar 5: Treble clef.  Five notes (second and third are quavers) ascending
+from D sharp.  The quavers are E and E sharp (should be E sharp, not F).
+
+Bar 6: Five notes (second and third are quavers) ascending
+from A sharp.  The quavers are B and B sharp (should be B sharp, not C).
+
+Bar 7: Bass clef.  Five notes (second and third are quavers) ascending
+from D sharp.  The quavers are E and E sharp (should be E sharp, not F).
+
+Bar 8: Five notes (second and third are quavers) ascending
+from A sharp.  The quavers are B and B sharp (should be B sharp, not C).
+
+NEED: same as last couple of tests, but for flats.
+
+
+Second segment
+--------------
+
+Bar 1: Tenor clef, 4/4 time.  Four crotchets all C, stems down, with
+(respectively) accent and sforzando; tenuto and trill; staccato;
+staccatissimo and up-bow.
+
+Bar 2: Four crotchets all C, stems down, with (respectively) marcato;
+turn; pause and rinforzando; down-bow and text mark saying "text".
+
+Bar 3: Four crotchets all C, stems up, with (respectively) accent and
+sforzando; tenuto and trill; staccato; staccatissimo and up-bow.
+
+Bar 4: Four crotchets all C, stems up, with (respectively) marcato;
+turn; pause and rinforzando; down-bow and text mark saying "text".
+
+Bar 5: Alto clef.  Four crotchet chords.  Top notes ascend from E, no
+accidentals; bottom notes ascend from D-double-sharp, all with a
+double-sharp.
+
+Bar 6: Four crotchet chords.  Top notes ascend from B, no accidentals;
+bottom notes ascend from A-double-sharp, all with a double-sharp.
+
+Bar 7: Bass clef.  Four crotchet chords.  Bottom notes ascend from E,
+no accidentals; top notes ascend from F-double-flat, all with a
+double-flat.
+
+Bar 8: Four crotchet chords.  Bottom notes ascend from B, no
+accidentals; top notes ascend from C-double-flat, all with a
+double-flat.
+
+NEED: notes of same pitch, different accidentals in the same bar
+(to test cancelling/changing accidentals); notes with accidentals
+and naturals in various key signatures
+
+
+Third segment
+-------------
+
+Bar 1: 4/4 time.  Three crotchets, all C, tied.
+

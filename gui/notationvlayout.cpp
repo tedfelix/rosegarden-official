@@ -208,7 +208,8 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
 		    type == Text::LocalDirection ||
 		    type == Text::UnspecifiedType) {
 		    el->setLayoutY(staff.getLayoutYForHeight(-7));
-		} else if (type == Text::Lyric) {
+		} else if (type == Text::Lyric ||
+			   type == Text::Annotation) {
 		    el->setLayoutY(staff.getLayoutYForHeight(-13));
 		} else {
 		    el->setLayoutY(staff.getLayoutYForHeight(22));

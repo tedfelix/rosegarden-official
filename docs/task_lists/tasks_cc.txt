@@ -38,8 +38,9 @@ Post-0.1.5-and-a-bit task list
     now sorted by pitch, which should make this easier.  Can we assign
     stem directions sensibly for chords that begin during other chords? 
 
-10. Test and debug the Paste types from Paste... dialog; also
-    implement Cut-&-Close
+10. Test and debug the Paste types from Paste... dialog
+
+10a. Also implement Cut-&-Close [DONE]
 
 11. Ties don't always appear (e.g. load davy.mid with viability switched
     on in MidiFile.cpp)

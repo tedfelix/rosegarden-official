@@ -72,6 +72,8 @@ namespace RosegardenGUIColours
     const QColor SelectedElement = QColor(0, 54, 232);
     const int SelectedElementHue = 225;
     const int HighlightedElementHue = 25;
+
+    const QColor TextAnnotationBackground = QColor(255, 255, 180);
 }
 
 

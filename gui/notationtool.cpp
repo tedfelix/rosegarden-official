@@ -21,6 +21,7 @@
 
 #include <qpopupmenu.h>
 #include <qtimer.h>
+#include <qapplication.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -929,7 +930,8 @@ void NotationSelector::handleMouseDblClick(Rosegarden::timeT,
 	m_updateRect = false;
 	
 	m_justSelectedBar = true;
-	QTimer::singleShot(300, this, SLOT(slotClickTimeout()));
+	QTimer::singleShot(QApplication::doubleClickInterval(), this,
+			   SLOT(slotClickTimeout()));
     }
 
     return;

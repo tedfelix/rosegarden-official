@@ -199,6 +199,10 @@ protected:
                          bool smooth);
     void drawTie(bool above, int length);
 
+    QFont getTextFont(const Rosegarden::Text &text) const;
+
+    QCanvasPixmap makeAnnotationPixmap(const Rosegarden::Text &text);
+
     void createPixmapAndMask(int width, int height);
     QCanvasPixmap makeCanvasPixmap(QPoint hotspot);
 
@@ -232,8 +236,11 @@ protected:
     QPainter m_pm;
 
     typedef __HASH_NS::hash_map<CharName, QCanvasPixmap,
-	                  CharNameHash, CharNamesEqual> NotePixmapCache;
-    NotePixmapCache m_dottedRestCache;
+	                        CharNameHash, CharNamesEqual> NotePixmapCache;
+    mutable NotePixmapCache m_dottedRestCache;
+
+    typedef __HASH_NS::hash_map<const char *, QFont> TextFontCache;
+    mutable TextFontCache m_textFontCache;
 
     static QPoint m_pointZero;
 };

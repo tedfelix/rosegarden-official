@@ -499,6 +499,7 @@ public:
     static const std::string LocalDirection;
     static const std::string Tempo;
     static const std::string LocalTempo;
+    static const std::string Annotation;
 
     Text(const Event &e)
 	/* throw (Event::NoData, Event::BadType) */;

@@ -83,6 +83,8 @@ namespace RosegardenGUIColours
     extern const QColor SelectedElement;
     extern const int SelectedElementHue;
     extern const int HighlightedElementHue;
+
+    extern const QColor TextAnnotationBackground;
 }
 
 #endif

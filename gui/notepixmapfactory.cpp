@@ -661,7 +661,7 @@ NotePixmapFactory::makeRoomForMarks(bool isStemmed,
 	    if (pixmap.width() > width) width = pixmap.width();
 
 	} else {
-	    // inefficient to do this here _and_ in drawMarks
+	    //!!! inefficient to do this here _and_ in drawMarks
 
 	    QString text = strtoqstr(Rosegarden::Marks::getTextFromMark
 				     (params.m_marks[i]));
@@ -1513,62 +1513,82 @@ int NotePixmapFactory::getTimeSigWidth(const TimeSignature &sig) const
     }
 }
 
-QCanvasPixmap
-NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
+QFont
+NotePixmapFactory::getTextFont(const Rosegarden::Text &text) const
 {
-    QString s(strtoqstr(text.getText()));
     std::string type(text.getTextType());
-
-    //!!! Calls for big optimisation -- move all the font construction
-    //code out into a separate init() method called the first time we
-    //reach here, and keep 'em in a map or array
+    TextFontCache::iterator i = m_textFontCache.find(type.c_str());
+    if (i != m_textFontCache.end()) return i->second;
 
     /*
      * Text types:
      *
      * UnspecifiedType:    Nothing known, use small roman
-     * StaffName:	   Large roman, to left of start of staff
-     * ChordName:	   Not normally shown in score, use small roman
-     * KeyName:		   Not normally shown in score, use small roman
-     * Lyric:		   Small roman, below staff and dynamic texts
-     * Dynamic:		   Small italic, below staff
-     * Direction:	   Large roman, above staff (by barline?)
-     * LocalDirection:	   Small bold italic, below staff (by barline?)
-     * Tempo:		   Large bold roman, above staff
-     * LocalTempo:	   Small bold roman, above staff
+     * StaffName:          Large roman, to left of start of staff
+     * ChordName:          Not normally shown in score, use small roman
+     * KeyName:            Not normally shown in score, use small roman
+     * Lyric:              Small roman, below staff and dynamic texts
+     * Dynamic:	           Small italic, below staff
+     * Direction:          Large roman, above staff (by barline?)
+     * LocalDirection:     Small bold italic, below staff (by barline?)
+     * Tempo:              Large bold roman, above staff
+     * LocalTempo:         Small bold roman, above staff
+     * Annotation:         Very small sans-serif, in a box
      */
-
+	
     int weight = QFont::Normal;
     bool italic = false;
     bool large = false;
-
+    bool serif = true;
+	
     if (type == Rosegarden::Text::Tempo ||
 	type == Rosegarden::Text::LocalTempo ||
 	type == Rosegarden::Text::LocalDirection) {
 	weight = QFont::Bold;
     }
-
+	
     if (type == Rosegarden::Text::Dynamic ||
 	type == Rosegarden::Text::LocalDirection) {
 	italic = true;
     }
-
+	
     if (type == Rosegarden::Text::StaffName ||
 	type == Rosegarden::Text::Direction ||
 	type == Rosegarden::Text::Tempo) {
 	large = true;
     }
 
-    QFont textFont;
-    textFont.setStyleHint(QFont::Serif);
-    textFont.setPixelSize(large ? 16 : 12);
+    QFont textFont("new century schoolbook");
+
+    if (type == Rosegarden::Text::Annotation) {
+	serif = false;
+	textFont = QFont("lucida");
+    }
+	
+    textFont.setStyleHint(serif ? QFont::Serif : QFont::SansSerif);
+    textFont.setPixelSize(large ? 16 : (serif ? 12 : 10));
     textFont.setWeight(weight);
     textFont.setItalic(italic);
-//!!!	("new century schoolbook", (large ? 16 : 12), weight, italic);
 
     if (large) textFont.setPixelSize(getLineSpacing() * 2);
-    else textFont.setPixelSize(getLineSpacing() * 5 / 3);
+    else if (serif) textFont.setPixelSize(getLineSpacing() * 5 / 3);
+    else textFont.setPixelSize(getLineSpacing() * 6 / 5);
 
+    m_textFontCache[type.c_str()] = textFont;
+    return textFont;
+}    
+
+QCanvasPixmap
+NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
+{
+    QString s(strtoqstr(text.getText()));
+    std::string type(text.getTextType());
+
+    if (type == Rosegarden::Text::Annotation) {
+	return makeAnnotationPixmap(text);
+    }
+
+    QFont textFont(getTextFont(text));
     QFontMetrics textMetrics(textFont);
     QRect r = textMetrics.boundingRect(s);
 
@@ -1586,6 +1606,52 @@ NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
     return makeCanvasPixmap(QPoint(2, 2));
 }
     
+QCanvasPixmap
+NotePixmapFactory::makeAnnotationPixmap(const Rosegarden::Text &text)
+{
+    QString s(strtoqstr(text.getText()));
+
+    QFont textFont(getTextFont(text));
+    QFontMetrics textMetrics(textFont);
+
+    int annotationWidth = getLineSpacing() * 16;
+    int annotationHeight = getLineSpacing() * 6;
+
+    int    topGap = getLineSpacing() / 4 + 1;
+    int bottomGap = getLineSpacing() / 3 + 1;
+    int   sideGap = getLineSpacing() / 4 + 1;
+
+    QRect r = textMetrics.boundingRect
+	(0, 0, annotationWidth, annotationHeight, Qt::WordBreak, s);
+    
+    int pixmapWidth = r.width() + sideGap * 2;
+    int pixmapHeight = r.height() + topGap + bottomGap;
+
+    createPixmapAndMask(pixmapWidth, pixmapHeight);
+
+    if (m_selected) m_p.setPen(RosegardenGUIColours::SelectedElement);
+
+    m_p.setFont(textFont);
+    m_pm.setFont(textFont);
+
+    m_p.setBrush(RosegardenGUIColours::TextAnnotationBackground);
+    m_p.drawRect(QRect(0, 0, pixmapWidth, pixmapHeight));
+    m_pm.drawRect(QRect(0, 0, pixmapWidth, pixmapHeight));
+
+    m_p.setBrush(Qt::black);
+    m_p.drawText(QRect(sideGap, topGap,
+		       annotationWidth + sideGap, annotationHeight + topGap),
+		 Qt::WordBreak, s);
+
+/* unnecessary following the rectangle draw
+    m_pm.drawText(QRect(sideGap, topGap,
+			annotationWidth + sideGap, annotationHeight + topGap),
+		  Qt::WordBreak, s);
+*/
+    
+    return makeCanvasPixmap(QPoint(0, 0));
+}
+
 
 void
 NotePixmapFactory::createPixmapAndMask(int width, int height)
@@ -1685,11 +1751,7 @@ int NotePixmapFactory::getKeyWidth(const Rosegarden::Key &key) const {
 }
 
 int NotePixmapFactory::getTextWidth(const Rosegarden::Text &text) const {
-    //!!! Very slow, but not worth optimising until we've dealt with
-    // the makeTextPixmap optimisation which should make font metrics
-    // available to us immediately here.  Also we're messing with
-    // constness here on the assumption that we won't need to when
-    // that's dealt with
-    return ((NotePixmapFactory *)this)->makeTextPixmap(text).width();
+    QFontMetrics metrics(getTextFont(text));
+    return metrics.boundingRect(strtoqstr(text.getText())).width() + 4;
 }
 

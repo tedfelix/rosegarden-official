@@ -555,6 +555,7 @@ const std::string Text::Direction	= "direction";
 const std::string Text::LocalDirection	= "local_direction";
 const std::string Text::Tempo		= "tempo";
 const std::string Text::LocalTempo	= "local_tempo";
+const std::string Text::Annotation	= "annotation";
 
 Text::Text(const Event &e)
 {
@@ -589,6 +590,7 @@ Text::getUserStyles()
     v.push_back(LocalDirection);
     v.push_back(Tempo);
     v.push_back(LocalTempo);
+    v.push_back(Annotation);
 
     return v;
 }
