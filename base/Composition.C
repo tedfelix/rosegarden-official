@@ -124,7 +124,6 @@ Composition::getMappedComposition(const unsigned int &sliceStart,
 {
   MappedComposition *returnSlice = new MappedComposition(sliceStart, sliceEnd);
   unsigned int eventTime;
-  Track::iterator nextEl;
 
   assert(sliceEnd >= sliceStart);
 
@@ -135,27 +134,19 @@ Composition::getMappedComposition(const unsigned int &sliceStart,
 
     for ( Track::iterator j = (*i)->begin(); j != (*i)->end(); ++j )
     {
-      cout << "ELEMENT = " << *j << endl;    
-      nextEl = j;
-      ++nextEl;
+      // for the moment ensure we're all positive
+      assert((*j)->getAbsoluteTime() >= 0 );
 
-      if (nextEl != (*i)->end())
-      {
-        // for the moment ensure we're all positive
-        assert((*j)->getAbsoluteTime() > 0 );
-
-        // get the eventTime
-        eventTime = (unsigned int) (*j)->getAbsoluteTime();
+      // get the eventTime
+      eventTime = (unsigned int) (*j)->getAbsoluteTime();
   
-        // eventually filter only for the events we're interested in
-        if ( eventTime >= sliceStart && eventTime <= sliceEnd )
-        {
-          // insert event
-          MappedEvent *me = new MappedEvent(**j);
-          me->instrument((*i)->getInstrument());
-          returnSlice->insert(me);
-          cout << "INSERTED EVENT" << endl;
-        }
+      // eventually filter only for the events we're interested in
+      if ( eventTime >= sliceStart && eventTime <= sliceEnd )
+      {
+        // insert event
+        MappedEvent *me = new MappedEvent(**j);
+        me->instrument((*i)->getInstrument());
+        returnSlice->insert(me);
       }
     }
   }

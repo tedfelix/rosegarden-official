@@ -382,7 +382,7 @@ MidiFile::parseTrack(ifstream* midiFile, const unsigned int &trackNum)
 // more useful to others we'd make this method and the return
 // one pure virtual.
 //
-const Rosegarden::Composition
+Rosegarden::Composition*
 MidiFile::convertToRosegarden()
 {
   MidiTrackIterator midiEvent, noteOffSearch;
@@ -393,10 +393,10 @@ MidiFile::convertToRosegarden()
   bool noteOffFound;
   bool notesOnTrack;
 
-  Rosegarden::Composition composition(_numberOfTracks);
+  Rosegarden::Composition *composition = new Composition(_numberOfTracks);
 
-  // preset tempo
-  composition.setTempo(0);
+  // preset tempo to zero
+  composition->setTempo(0);
 
   for ( unsigned int i = 0; i < _numberOfTracks; i++ )
   {
@@ -459,6 +459,12 @@ MidiFile::convertToRosegarden()
       rosegardenTrack = new Track;
       rosegardenTrack->setInstrument(compositionTrack);
       rosegardenTrack->setStartIndex(0);
+
+      // add the Track to the Composition and increment the
+      // Rosegarden track number
+      //
+      composition->addTrack(rosegardenTrack);
+      compositionTrack++;
 
       for ( midiEvent = (_midiComposition[i].begin());
             midiEvent != (_midiComposition[i].end());
@@ -578,23 +584,17 @@ MidiFile::convertToRosegarden()
             //<< endl;
             break;
         }
-
-        // add the Track to the Composition and increment the
-        // Rosegarden track number
-        //
-        composition.addTrack(rosegardenTrack);
-        compositionTrack++;
       }
     }
   }
 
   // set a default tempo
-  if (composition.getTempo() == 0)
+  if (composition->getTempo() == 0)
   {
-    composition.setTempo(120);
+    composition->setTempo(120);
   }
 
-  return(composition);
+  return composition;
 }
 
 void

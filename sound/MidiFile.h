@@ -78,7 +78,7 @@ namespace Rosegarden
 
     // Conversion in and out of Rosegarden
     //
-    const Rosegarden::Composition convertToRosegarden();
+    Rosegarden::Composition* convertToRosegarden();
     void convertToMidi(const Rosegarden::Composition &comp);
 
   private:

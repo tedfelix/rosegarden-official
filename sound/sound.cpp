@@ -37,55 +37,58 @@ main(int argc, char **argv)
 {
   // Create a Rosegarden MIDI file
   //
-  //Rosegarden::MidiFile *midiFile = new Rosegarden::MidiFile("glazunov.mid");
-  Rosegarden::MidiFile *midiFile = new Rosegarden::MidiFile("Kathzy.mid");
+  Rosegarden::MidiFile *midiFile = new Rosegarden::MidiFile("glazunov.mid");
+  //Rosegarden::MidiFile *midiFile = new Rosegarden::MidiFile("Kathzy.mid");
 
   // open the MIDI file
   midiFile->open();
 
-  // Create a Rosegarden composition
-  Rosegarden::Composition comp = midiFile->convertToRosegarden();
+  // Create a Rosegarden composition from the file
+  Rosegarden::Composition *comp = midiFile->convertToRosegarden();
 
   // initialize MIDI and audio subsystems
   //
   Rosegarden::Sequencer sequencer;
 
-  // set the tempo
-  sequencer.tempo(120);
+  // set the tempo - fudge this for the moment
+  //sequencer.tempo(comp->getTempo());
+  sequencer.tempo(40);
 
-  unsigned long i;
+  unsigned long long i;
   vector<Arts::MidiEvent>::iterator midiQueueIt;
   vector<Arts::MidiEvent> *midiQueue;
   Arts::TimeStamp midiTime;
   Arts::MidiEvent event;
-  
-  int noteVal = 50;
+
+  cout << "Number of Tracks in Composition = " << comp->getNbTracks() << endl;
+  cout << "Number of Ticks per Bar = " << comp->getNbTicksPerBar() << endl;
+
+
+  // allow for a pause while we connect the inputs and outputs
+  // in the MidiManager
+  for (i = 0; i < 2000000000; i++);
 
   // turn MIDI recording on
   //
-  //sequencer.record(Rosegarden::Sequencer::RECORD_MIDI);
-
+  sequencer.record(Rosegarden::Sequencer::RECORD_MIDI);
   // turn on playing
   sequencer.play();
 
-
-  cout << "Number of Tracks in Composition = " << comp.getNbTracks() << endl;
-  cout << "Number of Ticks per Bar = " << comp.getNbTicksPerBar() << endl;
-
   while(true)
   {
+    if (sequencer.isPlaying())
+    {
+      Arts::TimeStamp ts = sequencer.convertToTimeStamp(sequencer.songPosition());
+      cout << "CLOCK @ " << sequencer.songPosition() << " TIME = " << ts.sec << " and " << ts.usec << endl;
+      sequencer.processMidiOut(comp);
+    }
     
     // pause - to keep things in check
-    for (i = 0; i < 1000000; i++);
+    for (i = 0; i < 10000000; i++);
 
     // set the song position to the current time
     sequencer.updateSongPosition();
 
-    if (sequencer.isPlaying())
-    {
-      cout << "CLOCK @ " << sequencer.songPosition() << endl;
-      sequencer.processMidiOut(comp);
-    }
  
     // the recording section
     switch(sequencer.recordStatus())

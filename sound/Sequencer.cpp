@@ -38,6 +38,7 @@ Sequencer::Sequencer():
                        _songPosition(0),
                        _songPlayPosition(0),
                        _songRecordPosition(0),
+                       _lastFetchPosition(0),
                        _playStartTime(0, 0),
                        _recordStartTime(0, 0)
 {
@@ -135,17 +136,14 @@ Sequencer::record(const RecordStatus& recordStatus)
     // turn MIDI event recording on 
     _midiRecordPort.record(true);
 
-    // if we're already playing the just toggle recording
+    // if we're already playing then just toggle recording
     // at this point, if not we jump back by the count in
     if ( !_playing )
-    {
-      _playing = true;
-      //_songTime.sec -= 2;  // arbitrary for the moment
-    }
+      play();
 
     // set status and the record start position
     _recordStatus = RECORD_MIDI;
-    _playStartTime = _recordStartTime = _midiRecordPort.time();
+    _recordStartTime = _midiRecordPort.time();
 
     cout << "Recording Started at : " << _recordStartTime.sec << " : "
                                       << _recordStartTime.usec << endl;
@@ -168,18 +166,21 @@ Sequencer::play()
    if ( !_playing)
    {
      _playing = true;
-     _playStartTime = _midiRecordPort.time();
+     _playStartTime = _midiPlayPort.time();
 
-     // record where we started playing from
-     _songPlayPosition = _songPosition;
+     // store where we started playing from and initialise the
+     // playback slice marker (_lastFetchPosition)
+     //
+     _lastFetchPosition = _songPlayPosition = _songPosition;
    }
    else
    {
      // jump back to last start position in MIDI clocks
-     _songPosition = _songPlayPosition;
+     _lastFetchPosition = _songPosition = _songPlayPosition;
 
      // reset the playStartTime to now  like this
-     _playStartTime = deltaTime(_midiPlayPort.time(), _playStartTime);
+     //_playStartTime = deltaTime(_midiPlayPort.time(), _playStartTime);
+     _playStartTime = _midiPlayPort.time();
    }
 }
 
@@ -203,8 +204,8 @@ Sequencer::stop()
 Arts::TimeStamp
 Sequencer::deltaTime(const Arts::TimeStamp &ts1, const Arts::TimeStamp &ts2)
 {
-  long usec = ts1.usec - ts2.usec;
-  long sec = ts1.sec - ts2.sec;
+  int usec = ts1.usec - ts2.usec;
+  int sec = ts1.sec - ts2.sec;
 
   if ( usec < 0 )
   {
@@ -216,6 +217,16 @@ Sequencer::deltaTime(const Arts::TimeStamp &ts1, const Arts::TimeStamp &ts2)
 
   return (Arts::TimeStamp(sec, usec));
 }
+
+Arts::TimeStamp
+Sequencer::aggregateTime(const Arts::TimeStamp &ts1, const Arts::TimeStamp &ts2)
+{
+  int usec = ts1.usec + ts2.usec;
+  int sec = ( usec / 1000000 ) + ts1.sec + ts2.sec;
+  usec %= 1000000;
+  return(Arts::TimeStamp(sec, usec));
+}
+
 
 void
 Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
@@ -255,7 +266,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 
         // set time since recording started in Absolute internal time
         _noteOnMap[chanNoteKey]->
-            setAbsoluteTime(convertToAbsoluteTime(timeStamp));
+            setAbsoluteTime(convertToMidiTime(timeStamp));
 
         // set note type and pitch
         _noteOnMap[chanNoteKey]->setType(Note::EventType);
@@ -268,7 +279,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
       //
       if ( _noteOnMap[chanNoteKey] != 0 )
       {
-        duration = convertToAbsoluteTime(timeStamp) -
+        duration = convertToMidiTime(timeStamp) -
                    _noteOnMap[chanNoteKey]->getAbsoluteTime();
 
         // for the moment, ensure we're positive like this
@@ -302,25 +313,93 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
   }
 }
 
+
 void
 Sequencer::updateSongPosition()
 {
-  unsigned int newSongPosition = convertToAbsoluteTime(
+  unsigned int deltaPosition = convertToMidiTime(
                                     deltaTime(_midiPlayPort.time(),
                                               _playStartTime));
-  assert(newSongPosition >= _songPosition);
-
-  _songPosition = newSongPosition;
+  assert(deltaPosition >= 0);
+  _songPosition = _songPlayPosition + deltaPosition;
 }
 
 void
-Sequencer::processMidiOut(Rosegarden::Composition &composition)
+Sequencer::processMidiOut(Rosegarden::Composition *composition)
 {
+  //updateSongPosition();
 
-  // send the event out
-  // _midiPlayPort.processEvent(midiEvent)
-  MappedComposition *mappedComp = composition.getMappedComposition(0, 3000);
+  // set the position of events we're fetching to into the
+  // future to give us a small buffer of MIDI events sent
+  // to the output queue
+  unsigned int fetchToPosition = _songPosition + 100;
+  Arts::TimeStamp playPortTime = _midiPlayPort.time();
 
+  MappedComposition *mappedComp =
+         composition->getMappedComposition(_lastFetchPosition, fetchToPosition);
+
+  Arts::MidiEvent event;
+
+  // MidiCommandStatus
+  //   mcsCommandMask
+  //   mcsChannelMask
+  //   mcsNoteOff
+  //   mcsNoteOn
+  //   mcsKeyPressure
+  //   mcsParameter
+  //   mcsProgram 
+  //   mcsChannelPressure
+  //   mcsPitchWheel
+
+  // for the moment hardcode the channel
+  MidiByte channel = 0;
+
+  unsigned int midiPlayPosition;
+
+  for ( MappedComposition::iterator i = mappedComp->begin();
+                                    i != mappedComp->end(); ++i )
+  {
+    //(*i)->getDuration()
+
+   cout << "ABS = " << (*i)->getAbsoluteTime() << " : POS = " << _songPosition << endl;
+    // sort out the correct TimeStamp for playback
+    assert((*i)->getAbsoluteTime() >= _songPosition);
+
+    midiPlayPosition = (*i)->getAbsoluteTime() - _songPosition;
+    
+    event.time = aggregateTime(playPortTime, convertToTimeStamp(midiPlayPosition));
+
+    // load the command structure
+    event.command.status = Arts::mcsNoteOn | channel;
+    event.command.data1 = (*i)->get<Int>("pitch");   // pitch
+    event.command.data2 = 127;  // hardcode velocity
+
+    // if a NOTE ON
+    // send the event out
+    _midiPlayPort.processEvent(event);
+
+    // and log it on the Note OFF stack
+/*
+    NoteOffEvent *noteOffEvent =
+           new NoteOffEvent((*i)->getAbsoluteTime() + (*i)->getDuration(),
+                            (Rosegarden::MidiByte)event.command.data1,
+                            (Rosegarden::MidiByte)event.command.status);
+
+    _noteOffQueue.insert(noteOffEvent);
+*/
+    event.command.status = Arts::mcsNoteOff | channel;
+    event.time = aggregateTime(playPortTime,
+                  convertToTimeStamp(midiPlayPosition + (*i)->getDuration()));
+
+    _midiPlayPort.processEvent(event);
+
+  }
+
+  _lastFetchPosition = fetchToPosition;
+  
+  //cout << "GOT " << mappedComp->size() << " EVENTS " << endl;
+  
 }
+
 
 }
