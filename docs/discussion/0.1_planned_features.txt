@@ -35,6 +35,7 @@ A.  Features without which nobody will even believe we're serious:
 
 12. the basics of Rosegarden 2.1 file loading
 
+13. Get 'make install' working (icons)
 
 ===
 
