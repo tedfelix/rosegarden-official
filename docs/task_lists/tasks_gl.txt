@@ -6,7 +6,7 @@ Current Task list
 
 1.0 stuff :
 
-- save & restore dialog sizes, ListView layout.
+- save & restore dialog sizes, ListView layout DONE (on the dialogs which may be useful to resize)
 - use KConfigGroupSaver
 - fix MIDI import CAN'T REPRODUCE PROBLEMS
 - 'add' features in Control Rulers DONE
