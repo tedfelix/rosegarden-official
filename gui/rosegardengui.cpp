@@ -86,7 +86,7 @@ RosegardenGUIApp::RosegardenGUIApp()
 	
     readOptions();
 
-    actionCollection()->action("select")->activate();
+    actionCollection()->action("draw")->activate();
 
 //     ///////////////////////////////////////////////////////////////////
 //     // disable menu and toolbar items at startup
@@ -630,7 +630,7 @@ void RosegardenGUIApp::fileNew()
 
         QString caption=kapp->caption();	
         setCaption(caption+": "+m_doc->getTitle());
-        actionCollection()->action("select")->activate();
+        actionCollection()->action("draw")->activate();
     }
 }
 
