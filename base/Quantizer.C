@@ -756,6 +756,8 @@ LegatoQuantizer::quantizeSingle(Segment *s, Segment::iterator i) const
 
 	if (qt >= t + d) {
 	    d = qt - t;
+	}
+	if (qt > t) {
 	    break;
 	}
     }
