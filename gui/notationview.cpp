@@ -1960,24 +1960,7 @@ EventSelection* NotationSelector::getSelection()
     QCanvasItemList itemList = m_selectionRect->collisions(true);
     QCanvasItemList::Iterator it;
 
-    // The QRect returned by rect() appears to be pretty useless for
-    // our purposes if width or height is negative, which rather loses
-    // much of the point of using it
-
-    int x = m_selectionRect->x(),
-	y = m_selectionRect->y(),
-	w = m_selectionRect->width(),
-	h = m_selectionRect->height();
-    
-    if (w < 0) {
-	x += w;
-	w = -w;
-    }
-    if (h < 0) {
-	y += h;
-	h = -h;
-    }
-    QRect rect(x, y, w, h);
+    QRect rect = m_selectionRect->rect().normalize();
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
 
@@ -1987,14 +1970,21 @@ EventSelection* NotationSelector::getSelection()
         if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item))) {
 
             if (!rect.contains(int(item->x()), int(item->y()), true)) {
-//                 kdDebug(KDEBUG_AREA) << "Skipping item not really in selection rect\n";
-//		 kdDebug(KDEBUG_AREA) << "Rect: x,y: " << rect.x() << ","
-//				      << rect.y() << "; w,h: " << rect.width()
-//				      << "," << rect.height() << " / Item: x,y: "
-//				      << item->x() << "," << item->y() << endl;
-                continue;
-            }
 
+                kdDebug(KDEBUG_AREA) << "NotationSelector::getSelection Skipping item not really in selection rect\n";
+                kdDebug(KDEBUG_AREA) << "NotationSelector::getSelection Rect: x,y: " << rect.x() << ","
+                                     << rect.y() << "; w,h: " << rect.width()
+                                     << "," << rect.height() << " / Item: x,y: "
+                                     << item->x() << "," << item->y() << endl;
+                continue;
+            } else {
+                
+                kdDebug(KDEBUG_AREA) << "NotationSelector::getSelection Item in rect : Rect: x,y: " << rect.x() << ","
+                                     << rect.y() << "; w,h: " << rect.width()
+                                     << "," << rect.height() << " / Item: x,y: "
+                                     << item->x() << "," << item->y() << endl;
+            }
+            
             NotationElement &el = sprite->getNotationElement();
 
             selection->addEvent(el.event());
