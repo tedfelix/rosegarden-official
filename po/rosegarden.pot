@@ -1,0 +1,2629 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2002-08-31 11:42+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: rosegardentransportdialog.cpp:592 rosegardentransportdialog.cpp:665
+msgid "PITCH WHEEL"
+msgstr ""
+
+#: rosegardentransportdialog.cpp:598 rosegardentransportdialog.cpp:671
+msgid "CONTROLLER"
+msgstr ""
+
+#: rosegardentransportdialog.cpp:603 rosegardentransportdialog.cpp:676
+msgid "PROG CHNGE"
+msgstr ""
+
+#: rosegardentransportdialog.cpp:610 rosegardentransportdialog.cpp:683
+msgid "PRESSURE"
+msgstr ""
+
+#: rosegardentransportdialog.cpp:616 rosegardentransportdialog.cpp:689
+msgid "SYS EXCLSVE"
+msgstr ""
+
+#: rosegardentransport.cpp:1469 rosegardentransport.cpp:1631
+#: rosegardentransportdialog.cpp:641 rosegardentransportdialog.cpp:713
+msgid "NO EVENTS"
+msgstr ""
+
+#: eventview.moc.cpp:34 eventview.moc.cpp:42
+msgid "EventView"
+msgstr ""
+
+#: eventview.cpp:157
+msgid "Event filters"
+msgstr ""
+
+#: eventview.cpp:159
+msgid "Note"
+msgstr ""
+
+#: eventview.cpp:160
+msgid "Program Change"
+msgstr ""
+
+#: eventview.cpp:161
+msgid "Controller"
+msgstr ""
+
+#: eventview.cpp:162
+msgid "Pitch Bend"
+msgstr ""
+
+#: eventview.cpp:163
+msgid "System Exclusive"
+msgstr ""
+
+#: eventview.cpp:164
+msgid "Key Pressure"
+msgstr ""
+
+#: eventview.cpp:165
+msgid "Channel Pressure"
+msgstr ""
+
+#: eventview.cpp:166
+msgid "Rest"
+msgstr ""
+
+#: eventview.cpp:167
+msgid "Indication"
+msgstr ""
+
+#: dialogs.cpp:62 dialogs.cpp:952 eventview.cpp:168
+msgid "Text"
+msgstr ""
+
+#: eventview.cpp:169
+msgid "Other"
+msgstr ""
+
+#: eventview.cpp:181
+#, ycp-format
+msgid "%1  - Event List for Segment Track #%2"
+msgstr ""
+
+#: eventview.cpp:187
+msgid "Event List"
+msgstr ""
+
+#: eventview.cpp:198
+msgid "Time  "
+msgstr ""
+
+#: eventview.cpp:199
+msgid "Duration  "
+msgstr ""
+
+#: eventview.cpp:200
+msgid "Type  "
+msgstr ""
+
+#: eventview.cpp:201
+msgid "Pitch  "
+msgstr ""
+
+#: eventview.cpp:202
+msgid "Velocity  "
+msgstr ""
+
+#: eventview.cpp:203
+msgid "Data1  "
+msgstr ""
+
+#: eventview.cpp:204
+msgid "Data2  "
+msgstr ""
+
+#: eventview.cpp:356
+msgid "<no events at this filter level>"
+msgstr ""
+
+#: eventview.cpp:358
+msgid "<no events>"
+msgstr ""
+
+#: matrixcanvasview.moc.cpp:34 matrixcanvasview.moc.cpp:42
+msgid "MatrixCanvasView"
+msgstr ""
+
+#: instrumentparameterbox.moc.cpp:34 instrumentparameterbox.moc.cpp:42
+msgid "InstrumentParameterBox"
+msgstr ""
+
+#: segmentparameterbox.moc.cpp:34 segmentparameterbox.moc.cpp:42
+msgid "SegmentParameterBox"
+msgstr ""
+
+#: matrixtool.moc.cpp:34 matrixtool.moc.cpp:42
+msgid "MatrixPainter"
+msgstr ""
+
+#: matrixtool.moc.cpp:104 matrixtool.moc.cpp:112
+msgid "MatrixSelector"
+msgstr ""
+
+#: sequencemanager.moc.cpp:34 sequencemanager.moc.cpp:42
+msgid "Rosegarden::SequenceManager"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:114
+msgid "Double click on segment opens..."
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:116
+msgid "Number of count-in bars when recording"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:118
+msgid "MIDI pitch to string offset"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:120
+msgid "Selector greedy mode"
+msgstr ""
+
+#: rosegardenconfigurationpage.h:182 rosegardenconfigurationpage.h:183
+#: rosegardenconfiguredialog.cpp:125
+msgid "Notation"
+msgstr ""
+
+#: rosegardenconfigurationpage.h:223 rosegardenconfigurationpage.h:224
+#: rosegardenconfiguredialog.cpp:126
+msgid "Matrix"
+msgstr ""
+
+#: rosegardenconfigurationpage.h:146 rosegardenconfiguredialog.cpp:151
+#: rosegardenconfiguredialog.cpp:526
+msgid "General"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:161
+msgid "External audio editor"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:172 rosegardenconfiguredialog.cpp:812
+msgid "Choose..."
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:178
+msgid "External Editors"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:262
+msgid "Notation font"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:264
+msgid "Font size for single-staff views"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:267
+msgid "Font size for multi-staff views"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:275
+msgid "Origin:"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:276
+msgid "Copyright:"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:277
+msgid "Mapped by:"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:278
+msgid "Type:"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:329
+msgid "Default spacing"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:350
+msgid "Default smoothing"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:372
+msgid "Show smoothed notes in a different colour"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:381
+msgid "Layout"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:387
+msgid "Default note style for new notes"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:410
+msgid "When inserting notes..."
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:417
+msgid "Split notes into ties to make durations match"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:418
+msgid "Ignore existing durations"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:426
+msgid "Auto-beam on insert when appropriate"
+msgstr ""
+
+#: notationtool.cpp:815 rosegardenconfiguredialog.cpp:434
+msgid "Collapse rests after erase"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:439
+msgid "Editing"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:551
+msgid ""
+"Higher latency improves playback quality on slower systems but reduces\n"
+"overall sequencer response.  Modifications to these values take effect\n"
+"from the next time playback or recording begins."
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:555
+msgid "Read ahead (in ms)"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:556
+msgid "Playback (in ms)"
+msgstr ""
+
+#: rosegardenconfigurationpage.h:249 rosegardenconfiguredialog.cpp:598
+msgid "Latency"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:601
+msgid "JACK latency"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:604
+msgid ""
+"Use the \"Fetch JACK latencies\" button to discover the latency values set "
+"at\n"
+"the sequencer.  It's recommended that you use the returned values but it's "
+"also\n"
+"possible to override them manually using the sliders.  Note that if you "
+"change\n"
+"your JACK server parameters you should always fetch the latency values "
+"again.\n"
+"The latency values will be stored by Rosegarden for use next time."
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:608
+msgid "JACK playback latency (in ms)"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:609
+msgid "JACK record latency (in ms)"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:611
+msgid "Fetch JACK latencies"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:664
+msgid "JACK Latency"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:753
+msgid "Filename:"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:756
+msgid "Duration:"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:760
+#, ycp-format
+msgid "%1 minutes %2.%3%4 seconds (%5 units, %6 bars)"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:766
+msgid "Segments:"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:772
+msgid "Copyright"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:806
+msgid "Audio file path"
+msgstr ""
+
+#: rosegardenconfiguredialog.cpp:819
+msgid "Modify audio path"
+msgstr ""
+
+#: loopruler.moc.cpp:34 loopruler.moc.cpp:42
+msgid "LoopRuler"
+msgstr ""
+
+#: notationtool.moc.cpp:34 notationtool.moc.cpp:42
+msgid "NoteInserter"
+msgstr ""
+
+#: notationtool.moc.cpp:173 notationtool.moc.cpp:181
+msgid "RestInserter"
+msgstr ""
+
+#: notationtool.moc.cpp:255 notationtool.moc.cpp:263
+msgid "NotationEraser"
+msgstr ""
+
+#: notationtool.moc.cpp:340 notationtool.moc.cpp:348
+msgid "NotationSelector"
+msgstr ""
+
+#: segmentcanvas.moc.cpp:34 segmentcanvas.moc.cpp:42
+msgid "SegmentCanvas"
+msgstr ""
+
+#: segmentcanvas.moc.cpp:306 segmentcanvas.moc.cpp:314
+msgid "SegmentPencil"
+msgstr ""
+
+#: segmentcanvas.moc.cpp:376 segmentcanvas.moc.cpp:384
+msgid "SegmentEraser"
+msgstr ""
+
+#: segmentcanvas.moc.cpp:446 segmentcanvas.moc.cpp:454
+msgid "SegmentMover"
+msgstr ""
+
+#: segmentcanvas.moc.cpp:516 segmentcanvas.moc.cpp:524
+msgid "SegmentResizer"
+msgstr ""
+
+#: segmentcanvas.moc.cpp:586 segmentcanvas.moc.cpp:594
+msgid "SegmentSelector"
+msgstr ""
+
+#: segmentcanvas.moc.cpp:693 segmentcanvas.moc.cpp:701
+msgid "SegmentSplitter"
+msgstr ""
+
+#: segmentcanvas.moc.cpp:763 segmentcanvas.moc.cpp:771
+msgid "SegmentJoiner"
+msgstr ""
+
+#: editviewbase.moc.cpp:34 editviewbase.moc.cpp:42
+msgid "EditViewBase"
+msgstr ""
+
+#: textruler.moc.cpp:34 textruler.moc.cpp:42
+msgid "TextRuler"
+msgstr ""
+
+#: rosegardencanvasview.moc.cpp:34 rosegardencanvasview.moc.cpp:42
+msgid "RosegardenCanvasView"
+msgstr ""
+
+#: segmentparameterbox.cpp:42
+msgid "Segment Parameters"
+msgstr ""
+
+#: segmentparameterbox.cpp:74
+msgid "Repeat"
+msgstr ""
+
+#: dialogs.cpp:1943 matrixview.cpp:1258 segmentparameterbox.cpp:75
+msgid "Quantize"
+msgstr ""
+
+#: notationviewslots.cpp:700 segmentparameterbox.cpp:76
+msgid "Transpose"
+msgstr ""
+
+#: segmentparameterbox.cpp:77
+msgid "Delay"
+msgstr ""
+
+#: instrumentlabel.moc.cpp:34 instrumentlabel.moc.cpp:42
+msgid "InstrumentLabel"
+msgstr ""
+
+#: rosexmlhandler.cpp:258
+msgid "Got grouped event outside of a segment"
+msgstr ""
+
+#: rosexmlhandler.cpp:317
+msgid "Got group outside of a segment"
+msgstr ""
+
+#: rosexmlhandler.cpp:342
+msgid "Found Studio in another section"
+msgstr ""
+
+#: rosexmlhandler.cpp:359
+msgid "TimeSignature object found outside Composition"
+msgstr ""
+
+#: rosexmlhandler.cpp:402
+msgid "Found Composition in another section"
+msgstr ""
+
+#: rosexmlhandler.cpp:488
+msgid "Track object found outside Composition"
+msgstr ""
+
+#: rosexmlhandler.cpp:538
+msgid "Found Segment in another section"
+msgstr ""
+
+#: rosexmlhandler.cpp:626
+msgid "Audio object found outside Audio section"
+msgstr ""
+
+#: rosexmlhandler.cpp:636
+msgid "Audio object has empty parameters"
+msgstr ""
+
+#: rosexmlhandler.cpp:703
+msgid "Audiopath object found outside AudioFiles section"
+msgstr ""
+
+#: rosexmlhandler.cpp:711
+msgid "Audiopath has no value"
+msgstr ""
+
+#: rosexmlhandler.cpp:730
+msgid "found audio begin index in non audio segment"
+msgstr ""
+
+#: rosexmlhandler.cpp:753
+msgid "found audio end index in non audio segment"
+msgstr ""
+
+#: rosexmlhandler.cpp:763
+msgid "audio end index before audio start marker"
+msgstr ""
+
+#: rosexmlhandler.cpp:783
+msgid "Found Device outside Studio"
+msgstr ""
+
+#: rosexmlhandler.cpp:792
+msgid "No ID on Device tag"
+msgstr ""
+
+#: rosexmlhandler.cpp:803
+msgid "Found unknown Device type"
+msgstr ""
+
+#: rosexmlhandler.cpp:813
+msgid "Found Bank outside Studio or Instrument"
+msgstr ""
+
+#: rosexmlhandler.cpp:887
+msgid "Found Program outside Studio and Instrument"
+msgstr ""
+
+#: rosexmlhandler.cpp:896 rosexmlhandler.cpp:912
+msgid "Found Pan outside Instrument"
+msgstr ""
+
+#: rosexmlhandler.cpp:928
+msgid "Found Metronome outside Studio"
+msgstr ""
+
+#: rosexmlhandler.cpp:955
+msgid "Found Instrument outside Studio"
+msgstr ""
+
+#: rosexmlhandler.cpp:971
+msgid "Found unknown Instrument type"
+msgstr ""
+
+#: rosexmlhandler.cpp:998
+msgid "Found AudioFiles inside another section"
+msgstr ""
+
+#: rosexmlhandler.cpp:1046
+msgid "Got event outside of a Segment"
+msgstr ""
+
+#: deferscrollview.moc.cpp:34 deferscrollview.moc.cpp:42
+msgid "DeferScrollView"
+msgstr ""
+
+#: widgets.cpp:170 widgets.cpp:194
+msgid "Processing..."
+msgstr ""
+
+#: multiviewcommandhistory.moc.cpp:34 multiviewcommandhistory.moc.cpp:42
+msgid "MultiViewCommandHistory"
+msgstr ""
+
+#: rosegardentransport.cpp:719
+msgid "Rosegarden Transport"
+msgstr ""
+
+#: rosegardentransport.cpp:739
+msgid "Show additional controls"
+msgstr ""
+
+#: rosegardentransport.cpp:752
+msgid "Display bar/beat time"
+msgstr ""
+
+#: rosegardentransport.cpp:765
+msgid "Display time to end"
+msgstr ""
+
+#: rosegardentransport.cpp:773
+msgid "Rewind to beginning"
+msgstr ""
+
+#: rosegardentransport.cpp:774
+msgid ""
+"Moves the pointer position to the start of the composition. (This may mean "
+"going forwards if the pointer is currently before the start.)"
+msgstr ""
+
+#: rosegardentransport.cpp:783
+msgid "Stops playback or recording."
+msgstr ""
+
+#: rosegardentransport.cpp:791
+msgid "Fast forward"
+msgstr ""
+
+#: rosegardentransport.cpp:792
+msgid "Moves the current pointer position forwards one bar."
+msgstr ""
+
+#: rosegardentransport.cpp:800
+msgid "Fast forward to end"
+msgstr ""
+
+#: rosegardentransport.cpp:801
+msgid ""
+"Moves the pointer position to the end of the composition.  (This may mean "
+"going backwards if the pointer is already beyond the end.)"
+msgstr ""
+
+#: rosegardentransport.cpp:812
+msgid "Play/Pause"
+msgstr ""
+
+#: rosegardentransport.cpp:813
+msgid ""
+"Plays from the current pointer position, or pauses playback if already in "
+"progress."
+msgstr ""
+
+#: rosegardentransport.cpp:821
+msgid "Rewind"
+msgstr ""
+
+#: rosegardentransport.cpp:822
+msgid "Moves the current pointer position back one bar."
+msgstr ""
+
+#: rosegardentransport.cpp:974
+msgid "SIG"
+msgstr ""
+
+#: rosegardentransport.cpp:1028
+msgid "DIV"
+msgstr ""
+
+#: rosegardentransport.cpp:1082
+msgid "/16"
+msgstr ""
+
+#: rosegardentransport.cpp:1137
+msgid "TEMPO"
+msgstr ""
+
+#: rosegardentransport.cpp:1197
+msgid "END"
+msgstr ""
+
+#: rosegardentransport.cpp:1252
+msgid "BAR"
+msgstr ""
+
+#: rosegardentransport.cpp:1299
+msgid "Hide additional controls"
+msgstr ""
+
+#: rosegardentransport.cpp:1313
+msgid "Solo"
+msgstr ""
+
+#: rosegardentransport.cpp:1327
+msgid "Metronome"
+msgstr ""
+
+#: rosegardentransport.cpp:1337
+msgid "??"
+msgstr ""
+
+#: rosegardentransport.cpp:1340 rosegardentransport.cpp:1354
+msgid "Loop"
+msgstr ""
+
+#: rosegardentransport.cpp:1364
+msgid "Record"
+msgstr ""
+
+#: rosegardentransport.cpp:1523
+msgid "IN"
+msgstr ""
+
+#: rosegardentransport.cpp:1577
+msgid "OUT"
+msgstr ""
+
+#: trackbuttons.moc.cpp:34 trackbuttons.moc.cpp:42
+msgid "TrackButtons"
+msgstr ""
+
+#: pianokeyboard.cpp:114
+#, c-format, ycp-format
+msgid "C %1"
+msgstr ""
+
+#: _translatorinfo.cpp:1
+msgid ""
+"_: NAME OF TRANSLATORS\n"
+"Your names"
+msgstr ""
+
+#: _translatorinfo.cpp:3
+msgid ""
+"_: EMAIL OF TRANSLATORS\n"
+"Your emails"
+msgstr ""
+
+#: segmentcanvas.cpp:693
+msgid "Segments Canvas - Create and manipulate your segments here"
+msgstr ""
+
+#: segmentcanvas.cpp:918
+msgid "Edit Audio"
+msgstr ""
+
+#: segmentcanvas.cpp:920
+msgid "AutoSplit Audio"
+msgstr ""
+
+#: segmentcanvas.cpp:926
+msgid "Edit as Notation"
+msgstr ""
+
+#: segmentcanvas.cpp:929
+msgid "Edit as Matrix"
+msgstr ""
+
+#: segmentcanvas.cpp:932
+msgid "Edit as Event List"
+msgstr ""
+
+#: main.cpp:307
+msgid "Rosegarden - A sequencer and musical notation editor"
+msgstr ""
+
+#: main.cpp:311
+msgid "don't show splash screen"
+msgstr ""
+
+#: main.cpp:312
+msgid "don't use an external sequencer"
+msgstr ""
+
+#: main.cpp:313
+msgid "file to open"
+msgstr ""
+
+#: main.cpp:339
+msgid "Installation contains the wrong version of Rosegarden."
+msgstr ""
+
+#: main.cpp:340
+msgid ""
+" The wrong versions of Rosegarden's data files were\n"
+" found in the standard KDE installation directories.\n"
+" (I am "
+msgstr ""
+
+#: main.cpp:342
+msgid ", but the installed files are for version "
+msgstr ""
+
+#: main.cpp:342
+msgid ""
+".)\n"
+"\n"
+" This may mean one of the following:\n"
+"\n"
+" 1. This is a new upgrade of Rosegarden, and it has not yet been\n"
+"     installed.  If you compiled it yourself, check that you have\n"
+"     run \"make install\" and that the procedure completed\n"
+"     successfully.\n"
+"\n"
+" 2. The upgrade was installed in a non-standard directory,\n"
+"     and an old version was found in a standard directory.  If so,\n"
+"     you will need to add the correct directory to your KDEDIRS\n"
+"     environment variable before you can run it."
+msgstr ""
+
+#: main.cpp:352 main.cpp:370
+msgid "Installation problem"
+msgstr ""
+
+#: main.cpp:358
+msgid "Rosegarden does not appear to have been installed."
+msgstr ""
+
+#: main.cpp:359
+msgid ""
+" One or more of Rosegarden's data files could not be\n"
+" found in the standard KDE installation directories.\n"
+"\n"
+" This may mean one of the following:\n"
+"\n"
+" 1. Rosegarden has not been correctly installed.  If you compiled\n"
+"     it yourself, check that you have run \"make install\" and that\n"
+"     the procedure completed successfully.\n"
+"\n"
+" 2. Rosegarden has been installed in a non-standard directory,\n"
+"     and you need to add this directory to your KDEDIRS environment\n"
+"     variable before you can run it.  This may be the case if you\n"
+"     installed into $HOME or a local third-party package directory\n"
+"     like /usr/local or /opt."
+msgstr ""
+
+#: main.cpp:378
+msgid "Rosegarden"
+msgstr ""
+
+#: sequencemanager.cpp:564
+msgid "Playback failed to contact Rosegarden sequencer"
+msgstr ""
+
+#: sequencemanager.cpp:581
+msgid "Failed to start playback"
+msgstr ""
+
+#: sequencemanager.cpp:665 sequencemanager.cpp:770 sequencemanager.cpp:991
+#: sequencemanager.cpp:1199 sequencemanager.cpp:1216 sequencemanager.cpp:1356
+#: sequencemanager.cpp:1504 sequencemanager.cpp:1616
+msgid "Failed to contact Rosegarden sequencer"
+msgstr ""
+
+#: sequencemanager.cpp:808
+msgid "Audio subsystem is not available - can't record audio"
+msgstr ""
+
+#: sequencemanager.cpp:877
+msgid "No Record instrument selected"
+msgstr ""
+
+#: sequencemanager.cpp:1008
+msgid "Failed to start recording"
+msgstr ""
+
+#: sequencemanager.cpp:1226
+msgid "MIDI and Audio subsystems have failed to initialise"
+msgstr ""
+
+#: sequencemanager.cpp:1229
+msgid "MIDI subsystem has failed to initialise"
+msgstr ""
+
+#: rosegardenconfiguredialog.moc.cpp:34 rosegardenconfiguredialog.moc.cpp:42
+msgid "Rosegarden::ConfigureDialogBase"
+msgstr ""
+
+#: pianokeyboard.moc.cpp:34 pianokeyboard.moc.cpp:42
+msgid "PianoKeyboard"
+msgstr ""
+
+#: notestyle.cpp:516
+msgid "Can't open style file "
+msgstr ""
+
+#: notestyle.cpp:551
+msgid "type is a required attribute of note"
+msgstr ""
+
+#: notestyle.cpp:560
+msgid "Unrecognised note name "
+msgstr ""
+
+#: notestyle.cpp:567
+msgid "global element must precede note elements"
+msgstr ""
+
+#: notestyle.cpp:596
+msgid ""
+"global and note elements may have shape or charname attribute, but not both"
+msgstr ""
+
+#: barbuttons.moc.cpp:34 barbuttons.moc.cpp:42
+msgid "BarButtons"
+msgstr ""
+
+#: segmentcommands.h:371
+msgid "Add Time Si&gnature Change..."
+msgstr ""
+
+#: segmentcommands.h:409
+msgid "Modify &Default Tempo..."
+msgstr ""
+
+#: segmentcommands.h:434
+msgid "Remove &Tempo Change..."
+msgstr ""
+
+#: segmentcommands.h:463
+msgid "Add Te&mpo Change..."
+msgstr ""
+
+#: segmentcommands.h:488
+msgid "Add Tracks..."
+msgstr ""
+
+#: controlruler.cpp:68
+msgid " controller"
+msgstr ""
+
+#: controlruler.cpp:161
+msgid " control box"
+msgstr ""
+
+#: rosegardenguiview.moc.cpp:34 rosegardenguiview.moc.cpp:42
+msgid "RosegardenGUIView"
+msgstr ""
+
+#: kstartuplogo.moc.cpp:34 kstartuplogo.moc.cpp:42
+msgid "KStartupLogo"
+msgstr ""
+
+#: multiviewcommandhistory.cpp:66
+msgid "Und&o"
+msgstr ""
+
+#: multiviewcommandhistory.cpp:87
+msgid "Re&do"
+msgstr ""
+
+#: multiviewcommandhistory.cpp:285
+msgid "Nothing to "
+msgstr ""
+
+#: multiviewcommandhistory.cpp:290 multiviewcommandhistory.cpp:326
+msgid " "
+msgstr ""
+
+#: notationtool.cpp:177
+msgid "Auto-Beam when appropriate"
+msgstr ""
+
+#: notationtool.cpp:198
+msgid "Dotted note"
+msgstr ""
+
+#: notationtool.cpp:204 notationtool.cpp:629 notationtool.cpp:828
+msgid "Switch to Select Tool"
+msgstr ""
+
+#: notationtool.cpp:208 notationtool.cpp:633 notationtool.cpp:895
+msgid "Switch to Erase Tool"
+msgstr ""
+
+#: notationtool.cpp:215
+msgid "Switch to Inserting Rests"
+msgstr ""
+
+#: notationtool.cpp:623
+msgid "Dotted rest"
+msgstr ""
+
+#: notationtool.cpp:640
+msgid "Switch to Inserting Notes"
+msgstr ""
+
+#: notationtool.cpp:822 notationtool.cpp:891
+msgid "Switch to Insert Tool"
+msgstr ""
+
+#: matrixview.cpp:878 notationtool.cpp:1253 notationviewslots.cpp:295
+#: notationviewslots.cpp:338
+msgid "Couldn't paste at this point"
+msgstr ""
+
+#: notationtool.cpp:1256
+msgid "Ready."
+msgstr ""
+
+#: rosegardengui.cpp:185
+msgid "Import &MIDI file..."
+msgstr ""
+
+#: rosegardengui.cpp:189
+msgid "Import &Rosegarden 2.1 file..."
+msgstr ""
+
+#: rosegardengui.cpp:193
+msgid "Export &MIDI file..."
+msgstr ""
+
+#: rosegardengui.cpp:197
+msgid "Export &Lilypond file..."
+msgstr ""
+
+#: rosegardengui.cpp:201
+msgid "Export &Csound score file..."
+msgstr ""
+
+#: rosegardengui.cpp:215
+msgid "Show T&racks Toolbar"
+msgstr ""
+
+#: rosegardengui.cpp:220
+msgid "Show Tra&nsport"
+msgstr ""
+
+#: rosegardengui.cpp:225
+msgid "Show Track &Labels"
+msgstr ""
+
+#: rosegardengui.cpp:230
+msgid "Show &Segment Parameters"
+msgstr ""
+
+#: rosegardengui.cpp:235
+msgid "Show &Instrument Parameters"
+msgstr ""
+
+#: rosegardengui.cpp:240
+msgid "Show R&ulers"
+msgstr ""
+
+#: rosegardengui.cpp:245
+msgid "Show Te&mpo Ruler"
+msgstr ""
+
+#: rosegardengui.cpp:250
+msgid "Show Segment Pre&views"
+msgstr ""
+
+#: notationview.cpp:721 rosegardengui.cpp:281
+msgid "&Select"
+msgstr ""
+
+#: notationview.cpp:715 rosegardengui.cpp:288
+msgid "&Erase"
+msgstr ""
+
+#: rosegardengui.cpp:294
+msgid "&Draw"
+msgstr ""
+
+#: rosegardengui.cpp:300
+msgid "&Move"
+msgstr ""
+
+#: rosegardengui.cpp:307
+msgid "&Resize"
+msgstr ""
+
+#: rosegardengui.cpp:314
+msgid "&Split"
+msgstr ""
+
+#: rosegardengui.cpp:321
+msgid "&Join"
+msgstr ""
+
+#: rosegardengui.cpp:327
+msgid "&Audio File Manager"
+msgstr ""
+
+#: rosegardengui.cpp:332
+msgid "&Add Tracks..."
+msgstr ""
+
+#: rosegardengui.cpp:337
+msgid "Select &Next Track"
+msgstr ""
+
+#: rosegardengui.cpp:342
+msgid "Select &Previous Track"
+msgstr ""
+
+#: rosegardengui.cpp:347
+msgid "Select &All Segments"
+msgstr ""
+
+#: notationview.cpp:751 rosegardengui.cpp:351
+msgid "De&lete"
+msgstr ""
+
+#: rosegardengui.cpp:355
+msgid "&Quantize..."
+msgstr ""
+
+#: rosegardengui.cpp:359
+msgid "&Harmonize"
+msgstr ""
+
+#: rosegardengui.cpp:363
+msgid "Set &Tempo to Audio Segment Length"
+msgstr ""
+
+#: rosegardengui.cpp:375
+msgid "Open in Matri&x Editor"
+msgstr ""
+
+#: rosegardengui.cpp:379
+msgid "Open in &Notation Editor"
+msgstr ""
+
+#: rosegardengui.cpp:393
+msgid "Edit Document P&roperties..."
+msgstr ""
+
+#: rosegardengui.cpp:403
+msgid "&Play"
+msgstr ""
+
+#: rosegardengui.cpp:408
+msgid "&Stop"
+msgstr ""
+
+#: notationview.cpp:986 rosegardengui.cpp:413
+msgid "&Fast Forward"
+msgstr ""
+
+#: notationview.cpp:982 rosegardengui.cpp:419
+msgid "Re&wind"
+msgstr ""
+
+#: rosegardengui.cpp:424
+msgid "&Record"
+msgstr ""
+
+#: notationview.cpp:990 rosegardengui.cpp:430
+msgid "Rewind to &Beginning"
+msgstr ""
+
+#: notationview.cpp:994 notationview.cpp:998 rosegardengui.cpp:436
+msgid "Fast Forward to &End"
+msgstr ""
+
+#: rosegardengui.cpp:485
+msgid "  Zoom:  "
+msgstr ""
+
+#: rosegardengui.cpp:704
+msgid "The specified file does not exist"
+msgstr ""
+
+#: rosegardengui.cpp:709 rosegardengui.cpp:1096
+msgid "You have specified a directory"
+msgstr ""
+
+#: rosegardengui.cpp:716
+msgid "You do not have read permission to this file."
+msgstr ""
+
+#: rosegardengui.cpp:928
+msgid "Opening a new application window..."
+msgstr ""
+
+#: rosegardengui.cpp:938
+msgid "Creating new document..."
+msgstr ""
+
+#: rosegardengui.cpp:986
+#, c-format, ycp-format
+msgid ""
+"Malformed URL\n"
+"%1"
+msgstr ""
+
+#: audiomanagerdialog.cpp:931 rosegardengui.cpp:995
+#, c-format, ycp-format
+msgid "Cannot download file %1"
+msgstr ""
+
+#: rosegardengui.cpp:1008 rosegardengui.cpp:1031
+msgid "Opening file..."
+msgstr ""
+
+#: rosegardengui.cpp:1012
+msgid "Open File"
+msgstr ""
+
+#: rosegardengui.cpp:1051
+msgid "Saving file..."
+msgstr ""
+
+#: rosegardengui.cpp:1084
+msgid "This is not a valid filename.\n"
+msgstr ""
+
+#: rosegardengui.cpp:1089
+msgid "This is not a local file.\n"
+msgstr ""
+
+#: rosegardengui.cpp:1102
+msgid "The specified file exists.  Overwrite?"
+msgstr ""
+
+#: rosegardengui.cpp:1115
+msgid "Saving file with a new filename..."
+msgstr ""
+
+#: rosegardengui.cpp:1137
+msgid "Closing file..."
+msgstr ""
+
+#: rosegardengui.cpp:1155
+msgid "Printing..."
+msgstr ""
+
+#: rosegardengui.cpp:1170
+msgid "Exiting..."
+msgstr ""
+
+#: rosegardengui.cpp:1190
+msgid "Cutting selection..."
+msgstr ""
+
+#: matrixview.cpp:853 notationviewslots.cpp:251 rosegardengui.cpp:1200
+msgid "Copying selection to clipboard..."
+msgstr ""
+
+#: matrixview.cpp:864 notationviewslots.cpp:271 notationviewslots.cpp:310
+#: rosegardengui.cpp:1211
+msgid "Clipboard is empty"
+msgstr ""
+
+#: matrixview.cpp:868 notationviewslots.cpp:279 notationviewslots.cpp:314
+#: rosegardengui.cpp:1214
+msgid "Inserting clipboard contents..."
+msgstr ""
+
+#: rosegardengui.cpp:1376 rosegardengui.cpp:2728
+msgid "Set Global Tempo"
+msgstr ""
+
+#: editviewbase.cpp:342 rosegardengui.cpp:1413
+msgid "Toggle the toolbar..."
+msgstr ""
+
+#: rosegardengui.cpp:1423
+msgid "Toggle the tracks toolbar..."
+msgstr ""
+
+#: rosegardengui.cpp:1433
+msgid "Toggle the Transport"
+msgstr ""
+
+#: editviewbase.cpp:352 rosegardengui.cpp:1486
+msgid "Toggle the statusbar..."
+msgstr ""
+
+#: rosegardengui.cpp:1645
+msgid "Open MIDI File"
+msgstr ""
+
+#: rosegardengui.cpp:1660
+msgid "Importing MIDI file..."
+msgstr ""
+
+#: rosegardengui.cpp:1673
+msgid ""
+"Couldn't understand MIDI file.\n"
+"It might be corrupted."
+msgstr ""
+
+#: rosegardengui.cpp:1713
+msgid "Open Rosegarden 2.1 File"
+msgstr ""
+
+#: rosegardengui.cpp:1732
+msgid "Importing Rosegarden 2.1 file..."
+msgstr ""
+
+#: rosegardengui.cpp:1912
+msgid "Starting the sequencer..."
+msgstr ""
+
+#: rosegardengui.cpp:1924
+msgid "Couldn't start the sequencer"
+msgstr ""
+
+#: rosegardengui.cpp:1942
+msgid "Sequencer exited"
+msgstr ""
+
+#: rosegardengui.cpp:1950
+msgid "Exporting to MIDI file..."
+msgstr ""
+
+#: rosegardengui.cpp:1961
+msgid "Exporting MIDI file..."
+msgstr ""
+
+#: rosegardengui.cpp:1974
+msgid "The MIDI File has not been exported."
+msgstr ""
+
+#: rosegardengui.cpp:1984
+msgid "Exporting to Csound scorefile..."
+msgstr ""
+
+#: rosegardengui.cpp:1995
+msgid "Exporting Csound file..."
+msgstr ""
+
+#: rosegardengui.cpp:2002
+msgid "The Csound file has not been exported."
+msgstr ""
+
+#: rosegardengui.cpp:2010
+msgid "Exporting to Lilypond file..."
+msgstr ""
+
+#: rosegardengui.cpp:2021
+msgid "Exporting Lilypond file..."
+msgstr ""
+
+#: rosegardengui.cpp:2028
+msgid "The Lilypond file has not been exported."
+msgstr ""
+
+#: matrixview.cpp:1335 rosegardengui.cpp:2661
+#, c-format
+msgid "%1%"
+msgstr ""
+
+#: rosegardengui.cpp:2711
+#, c-format, ycp-format
+msgid "Replace Tempo Change at %1"
+msgstr ""
+
+#: rosegardengui.cpp:2745
+msgid "Set Global and Default Tempo"
+msgstr ""
+
+#: matrixparameterbox.moc.cpp:34 matrixparameterbox.moc.cpp:42
+msgid "MatrixParameterBox"
+msgstr ""
+
+#: rosegardenguidoc.moc.cpp:34 rosegardenguidoc.moc.cpp:42
+msgid "RosegardenGUIDoc"
+msgstr ""
+
+#: notepixmapfactory.cpp:214
+msgid "No note font names available, aborting"
+msgstr ""
+
+#: chordnameruler.moc.cpp:34 chordnameruler.moc.cpp:42
+msgid "ChordNameRuler"
+msgstr ""
+
+#: rosegardenguiview.cpp:215
+msgid "No non-audio segments in composition"
+msgstr ""
+
+#: rosegardenguiview.cpp:283
+msgid "No non-audio segments selected"
+msgstr ""
+
+#: rosegardenconfigurationpage.moc.cpp:34
+#: rosegardenconfigurationpage.moc.cpp:42
+msgid "Rosegarden::ConfigurationPage"
+msgstr ""
+
+#: rosegardenconfigurationpage.moc.cpp:104
+#: rosegardenconfigurationpage.moc.cpp:112
+msgid "Rosegarden::TabbedConfigurationPage"
+msgstr ""
+
+#: rosegardenconfigurationpage.moc.cpp:174
+#: rosegardenconfigurationpage.moc.cpp:182
+msgid "Rosegarden::GeneralConfigurationPage"
+msgstr ""
+
+#: rosegardenconfigurationpage.moc.cpp:253
+#: rosegardenconfigurationpage.moc.cpp:261
+msgid "Rosegarden::NotationConfigurationPage"
+msgstr ""
+
+#: rosegardenconfigurationpage.moc.cpp:335
+#: rosegardenconfigurationpage.moc.cpp:343
+msgid "Rosegarden::MatrixConfigurationPage"
+msgstr ""
+
+#: rosegardenconfigurationpage.moc.cpp:405
+#: rosegardenconfigurationpage.moc.cpp:413
+msgid "Rosegarden::LatencyConfigurationPage"
+msgstr ""
+
+#: rosegardenconfigurationpage.moc.cpp:496
+#: rosegardenconfigurationpage.moc.cpp:504
+msgid "Rosegarden::DocumentMetaConfigurationPage"
+msgstr ""
+
+#: rosegardenconfigurationpage.moc.cpp:566
+#: rosegardenconfigurationpage.moc.cpp:574
+msgid "Rosegarden::AudioConfigurationPage"
+msgstr ""
+
+#: notationstaff.cpp:329
+#, ycp-format
+msgid "Rendering staff %1..."
+msgstr ""
+
+#: notationstaff.cpp:389
+#, ycp-format
+msgid "Positioning staff %1..."
+msgstr ""
+
+#: controlruler.moc.cpp:34 controlruler.moc.cpp:42
+msgid "ControlRuler"
+msgstr ""
+
+#: controlruler.moc.cpp:117 controlruler.moc.cpp:125
+msgid "ControlBox"
+msgstr ""
+
+#: rosegardentransportdialog.moc.cpp:34 rosegardentransportdialog.moc.cpp:42
+msgid "Rosegarden::RosegardenTransportDialog"
+msgstr ""
+
+#: trackbuttons.cpp:213
+msgid "<untitled>"
+msgstr ""
+
+#: temporuler.moc.cpp:34 temporuler.moc.cpp:42
+msgid "TempoRuler"
+msgstr ""
+
+#: notationview.cpp:269
+msgid "Starting..."
+msgstr ""
+
+#: notationview.cpp:270
+msgid "Notation progress"
+msgstr ""
+
+#: notationview.cpp:291
+msgid "Couldn't apply score layout"
+msgstr ""
+
+#: notationview.cpp:570
+msgid "Note &Font"
+msgstr ""
+
+#: notationview.cpp:592
+msgid "Si&ze"
+msgstr ""
+
+#: notationview.cpp:599
+msgid "Note &Style"
+msgstr ""
+
+#: notationview.cpp:678
+msgid "&Treble Clef"
+msgstr ""
+
+#: notationview.cpp:685
+msgid "Te&nor Clef"
+msgstr ""
+
+#: notationview.cpp:692
+msgid "&Alto Clef"
+msgstr ""
+
+#: notationview.cpp:699
+msgid "&Bass Clef"
+msgstr ""
+
+#: notationview.cpp:706
+msgid "&Text"
+msgstr ""
+
+#: notationview.cpp:731
+msgid "Select from Sta&rt"
+msgstr ""
+
+#: notationview.cpp:735
+msgid "Select to &End"
+msgstr ""
+
+#: notationview.cpp:739
+msgid "Select Whole St&aff"
+msgstr ""
+
+#: notationview.cpp:743
+msgid "C&ut and Close"
+msgstr ""
+
+#: notationview.cpp:747
+msgid "Pa&ste..."
+msgstr ""
+
+#: notationview.cpp:761
+msgid "&Linear Layout"
+msgstr ""
+
+#: notationview.cpp:767
+msgid "&Page Layout"
+msgstr ""
+
+#: notationview.cpp:772
+msgid "Show &Chord Name Ruler"
+msgstr ""
+
+#: notationview.cpp:776
+msgid "Show &Tempo Ruler"
+msgstr ""
+
+#: notationview.cpp:874
+msgid "&Dump selected events to stderr"
+msgstr ""
+
+#: notationview.cpp:954
+msgid "Cursor &Back"
+msgstr ""
+
+#: notationview.cpp:958
+msgid "Cursor &Forward"
+msgstr ""
+
+#: notationview.cpp:962
+msgid "Cursor Ba&ck Bar"
+msgstr ""
+
+#: notationview.cpp:966
+msgid "Cursor For&ward Bar"
+msgstr ""
+
+#: notationview.cpp:970
+msgid "Cursor &Up Staff"
+msgstr ""
+
+#: notationview.cpp:974
+msgid "Cursor &Down Staff"
+msgstr ""
+
+#: notationview.cpp:978
+msgid "Cursor to &Playback Pointer"
+msgstr ""
+
+#: notationview.cpp:1002
+msgid "Playback Pointer to &Cursor"
+msgstr ""
+
+#: notationview.cpp:1039
+#, ycp-format
+msgid "%1 pixels"
+msgstr ""
+
+#: notationview.cpp:1068
+msgid "  Font:  "
+msgstr ""
+
+#: notationview.cpp:1092
+#, ycp-format
+msgid "Unknown font \"%1\", using default"
+msgstr ""
+
+#: notationview.cpp:1100
+msgid "  Size:  "
+msgstr ""
+
+#: notationview.cpp:1108
+msgid "  Spacing:  "
+msgstr ""
+
+#: notationview.cpp:1121
+msgid "  Smoothing:  "
+msgstr ""
+
+#: notationview.cpp:1240
+msgid "Laying out score..."
+msgstr ""
+
+#: notationview.cpp:1255
+#, ycp-format
+msgid "Laying out staff %1..."
+msgstr ""
+
+#: notationview.cpp:1265
+msgid "Reconciling staffs..."
+msgstr ""
+
+#: matrixview.cpp:639 notationview.cpp:1441
+#, ycp-format
+msgid "  %1 events selected "
+msgstr ""
+
+#: matrixview.cpp:641 notationview.cpp:1443
+msgid "  No selection "
+msgstr ""
+
+#: notationview.cpp:1717
+msgid "Sizing and allocating canvas..."
+msgstr ""
+
+#: segmentcommands.cpp:48
+msgid "Repeat Segments"
+msgstr ""
+
+#: editcommands.cpp:165 segmentcommands.cpp:170
+msgid "(copied)"
+msgstr ""
+
+#: segmentcommands.cpp:882
+msgid "(part)"
+msgstr ""
+
+#: segmentcommands.cpp:951
+msgid "(rescaled)"
+msgstr ""
+
+#: matrixtool.cpp:132
+msgid "Insert Note"
+msgstr ""
+
+#: matrixtool.cpp:176
+msgid "Erase Note"
+msgstr ""
+
+#: matrixtool.cpp:232
+msgid "Move Note"
+msgstr ""
+
+#: matrixtool.cpp:232
+msgid "Modify Note"
+msgstr ""
+
+#: matrixtool.cpp:877
+msgid "Move Event"
+msgstr ""
+
+#: matrixtool.cpp:880
+msgid "Move Events"
+msgstr ""
+
+#: matrixtool.cpp:1022
+msgid "Resize Event"
+msgstr ""
+
+#: matrixtool.cpp:1025
+msgid "Resize Events"
+msgstr ""
+
+#: notationviewslots.cpp:107
+#, c-format, ycp-format
+msgid "Unknown font action %1"
+msgstr ""
+
+#: notationviewslots.cpp:124
+#, c-format, ycp-format
+msgid "Unknown font size %1"
+msgstr ""
+
+#: notationviewslots.cpp:128
+#, c-format, ycp-format
+msgid "Unknown font size action %1"
+msgstr ""
+
+#: matrixview.cpp:844 notationviewslots.cpp:234 notationviewslots.cpp:260
+msgid "Cutting selection to clipboard..."
+msgstr ""
+
+#: matrixview.cpp:887 notationviewslots.cpp:243
+msgid "Deleting selection..."
+msgstr ""
+
+#: notationviewslots.cpp:275
+msgid "Can't paste multiple Segments into one"
+msgstr ""
+
+#: notationviewslots.cpp:431
+msgid "Beaming group..."
+msgstr ""
+
+#: notationviewslots.cpp:440
+msgid "Auto-beaming selection..."
+msgstr ""
+
+#: notationviewslots.cpp:449
+msgid "Breaking groups..."
+msgstr ""
+
+#: notationviewslots.cpp:531
+msgid "Making grace notes..."
+msgstr ""
+
+#: notationviewslots.cpp:539
+msgid "Making non-grace notes..."
+msgstr ""
+
+#: notationviewslots.cpp:552
+msgid "Adding slur..."
+msgstr ""
+
+#: notationviewslots.cpp:567
+msgid "Adding crescendo..."
+msgstr ""
+
+#: notationviewslots.cpp:582
+msgid "Adding decrescendo..."
+msgstr ""
+
+#: notationviewslots.cpp:602
+msgid "Normalizing rests..."
+msgstr ""
+
+#: notationviewslots.cpp:611
+msgid "Collapsing rests..."
+msgstr ""
+
+#: notationviewslots.cpp:620
+msgid "Collapsing notes..."
+msgstr ""
+
+#: notationviewslots.cpp:629
+msgid "Tying notes..."
+msgstr ""
+
+#: notationviewslots.cpp:638
+msgid "Untying notes..."
+msgstr ""
+
+#: notationviewslots.cpp:647
+msgid "Pointing stems up..."
+msgstr ""
+
+#: notationviewslots.cpp:656
+msgid "Pointing stems down..."
+msgstr ""
+
+#: notationviewslots.cpp:666
+msgid "Restoring computed stem directions..."
+msgstr ""
+
+#: notationviewslots.cpp:682
+#, ycp-format
+msgid "Changing to %1 style..."
+msgstr ""
+
+#: notationviewslots.cpp:690
+#, c-format, ycp-format
+msgid "Unknown style action %1"
+msgstr ""
+
+#: notationviewslots.cpp:701
+msgid "Enter the number of semitones to transpose up by:"
+msgstr ""
+
+#: notationviewslots.cpp:705
+msgid "Transposing..."
+msgstr ""
+
+#: notationviewslots.cpp:713
+msgid "Transposing up one semitone..."
+msgstr ""
+
+#: notationviewslots.cpp:722
+msgid "Transposing up one octave..."
+msgstr ""
+
+#: notationviewslots.cpp:731
+msgid "Transposing down one semitone..."
+msgstr ""
+
+#: notationviewslots.cpp:740
+msgid "Transposing down one octave..."
+msgstr ""
+
+#: matrixview.cpp:719 matrixview.cpp:1159 notationviewslots.cpp:756
+msgid "Quantizing..."
+msgstr ""
+
+#: notationviewslots.cpp:864
+msgid "Estimated time signature shown"
+msgstr ""
+
+#: notationviewslots.cpp:917
+msgid "Estimated key signature shown"
+msgstr ""
+
+#: trackeditor.moc.cpp:34 trackeditor.moc.cpp:42
+msgid "TrackEditor"
+msgstr ""
+
+#: rosegardengui.moc.cpp:34 rosegardengui.moc.cpp:42
+msgid "RosegardenGUIApp"
+msgstr ""
+
+#: tracklabel.moc.cpp:34 tracklabel.moc.cpp:42
+msgid "TrackLabel"
+msgstr ""
+
+#: matrixview.moc.cpp:34 matrixview.moc.cpp:42
+msgid "MatrixView"
+msgstr ""
+
+#: widgets.moc.cpp:34 widgets.moc.cpp:42
+msgid "RosegardenTristateCheckBox"
+msgstr ""
+
+#: widgets.moc.cpp:104 widgets.moc.cpp:112
+msgid "RosegardenComboBox"
+msgstr ""
+
+#: widgets.moc.cpp:192 widgets.moc.cpp:200
+msgid "RosegardenLabel"
+msgstr ""
+
+#: widgets.moc.cpp:277 widgets.moc.cpp:285
+msgid "RosegardenSpinBox"
+msgstr ""
+
+#: widgets.moc.cpp:347 widgets.moc.cpp:355
+msgid "RosegardenParameterBox"
+msgstr ""
+
+#: widgets.moc.cpp:417 widgets.moc.cpp:425
+msgid "RosegardenProgressDialog"
+msgstr ""
+
+#: widgets.moc.cpp:500 widgets.moc.cpp:508
+msgid "RosegardenProgressBar"
+msgstr ""
+
+#: widgets.moc.cpp:571 widgets.moc.cpp:579
+msgid "RosegardenFader"
+msgstr ""
+
+#: editcommands.cpp:152
+msgid "(excerpt)"
+msgstr ""
+
+#: editcommands.cpp:592 editcommands.cpp:603
+msgid "Unquantize Events"
+msgstr ""
+
+#: notefont.cpp:59
+msgid "Can't open mapping file "
+msgstr ""
+
+#: notefont.cpp:130
+msgid "note-height not found"
+msgstr ""
+
+#: notefont.cpp:160
+msgid "name is a required attribute of symbol"
+msgstr ""
+
+#: notefont.cpp:166
+msgid ""
+"src is a required attribute of symbol (until real font support is "
+"implemented)"
+msgstr ""
+
+#: notefont.cpp:184
+msgid "name is a required attribute of hotspot"
+msgstr ""
+
+#: notefont.cpp:192
+msgid "when-element must be in hotspot-element"
+msgstr ""
+
+#: notefont.cpp:198
+msgid "note-height is a required attribute of when"
+msgstr ""
+
+#: notefont.cpp:209
+msgid "y is a required attribute of when"
+msgstr ""
+
+#: notationview.moc.cpp:34 notationview.moc.cpp:42
+msgid "NotationView"
+msgstr ""
+
+#: rosegardenguidoc.cpp:200
+msgid ""
+"The current file has been modified.\n"
+"Do you want to save it?"
+msgstr ""
+
+#: rosegardenguidoc.cpp:272
+msgid "Can't open file '"
+msgstr ""
+
+#: rosegardenguidoc.cpp:291
+msgid "Reading file..."
+msgstr ""
+
+#: rosegardenguidoc.cpp:305
+#, ycp-format
+msgid "Error when parsing file '%1' : \"%2\""
+msgstr ""
+
+#: rosegardenguidoc.cpp:324
+msgid "Generating audio previews..."
+msgstr ""
+
+#: rosegardenguidoc.cpp:565
+msgid ""
+"This file contains one or more old element types that are now deprecated.\n"
+"Support for these elements may disappear in future versions of Rosegarden.\n"
+"We recommend you re-save this file from this version of Rosegarden,\n"
+"to ensure that it can still be re-loaded in future versions."
+msgstr ""
+
+#: audiomanagerdialog.cpp:919 rosegardenguidoc.cpp:1375
+msgid "Generating audio preview..."
+msgstr ""
+
+#: instrumentparameterbox.cpp:46
+msgid "Instrument Parameters"
+msgstr ""
+
+#: instrumentparameterbox.cpp:48
+msgid "Channel"
+msgstr ""
+
+#: instrumentparameterbox.cpp:49
+msgid "Pan"
+msgstr ""
+
+#: instrumentparameterbox.cpp:50
+msgid "Velocity"
+msgstr ""
+
+#: instrumentparameterbox.cpp:51
+msgid "Program"
+msgstr ""
+
+#: instrumentparameterbox.cpp:52
+msgid "Bank"
+msgstr ""
+
+#: audiomanagerdialog.moc.cpp:34 audiomanagerdialog.moc.cpp:42
+msgid "Rosegarden::AudioManagerDialog"
+msgstr ""
+
+#: dialogs.moc.cpp:34 dialogs.moc.cpp:42
+msgid "SimpleTextDialog"
+msgstr ""
+
+#: dialogs.moc.cpp:104 dialogs.moc.cpp:112
+msgid "TimeSignatureDialog"
+msgstr ""
+
+#: dialogs.moc.cpp:195 dialogs.moc.cpp:203
+msgid "KeySignatureDialog"
+msgstr ""
+
+#: dialogs.moc.cpp:289 dialogs.moc.cpp:297
+msgid "PasteNotationDialog"
+msgstr ""
+
+#: dialogs.moc.cpp:368 dialogs.moc.cpp:376
+msgid "TupletDialog"
+msgstr ""
+
+#: dialogs.moc.cpp:462 dialogs.moc.cpp:470
+msgid "TextEventDialog"
+msgstr ""
+
+#: dialogs.moc.cpp:550 dialogs.moc.cpp:558
+msgid "EventEditDialog"
+msgstr ""
+
+#: dialogs.moc.cpp:677 dialogs.moc.cpp:685
+msgid "TempoDialog"
+msgstr ""
+
+#: dialogs.moc.cpp:797 dialogs.moc.cpp:805
+msgid "ClefDialog"
+msgstr ""
+
+#: dialogs.moc.cpp:879 dialogs.moc.cpp:887
+msgid "QuantizeDialog"
+msgstr ""
+
+#: dialogs.moc.cpp:976 dialogs.moc.cpp:984
+msgid "RescaleDialog"
+msgstr ""
+
+#: dialogs.moc.cpp:1064 dialogs.moc.cpp:1072
+msgid "FileLocateDialog"
+msgstr ""
+
+#: dialogs.moc.cpp:1134 dialogs.moc.cpp:1142
+msgid "AudioPlayingDialog"
+msgstr ""
+
+#: dialogs.moc.cpp:1204 dialogs.moc.cpp:1212
+msgid "AudioSplitDialog"
+msgstr ""
+
+#: vumeter.moc.cpp:34 vumeter.moc.cpp:42
+msgid "VUMeter"
+msgstr ""
+
+#: rosegardenconfigurationpage.h:147
+msgid "General Configuration"
+msgstr ""
+
+#: rosegardenconfigurationpage.h:250
+msgid "Sequencer Latency"
+msgstr ""
+
+#: rosegardenconfigurationpage.h:326
+msgid "Audio"
+msgstr ""
+
+#: rosegardenconfigurationpage.h:327
+msgid "Audio Settings"
+msgstr ""
+
+#: editview.moc.cpp:34 editview.moc.cpp:42
+msgid "EditView"
+msgstr ""
+
+#: matrixview.cpp:230
+msgid "Couldn't apply piano roll layout"
+msgstr ""
+
+#: matrixview.cpp:401
+msgid "Select"
+msgstr ""
+
+#: matrixview.cpp:406
+msgid "Paint"
+msgstr ""
+
+#: matrixview.cpp:411
+msgid "Erase"
+msgstr ""
+
+#: matrixview.cpp:422
+msgid "Resize"
+msgstr ""
+
+#: matrixview.cpp:431
+msgid "Select All"
+msgstr ""
+
+#: matrixview.cpp:1165
+msgid "Unquantizing..."
+msgstr ""
+
+#: matrixview.cpp:1190
+msgid "Grid"
+msgstr ""
+
+#: matrixview.cpp:1227
+msgid "None"
+msgstr ""
+
+#: matrixview.cpp:1229
+msgid "Unit"
+msgstr ""
+
+#: matrixview.cpp:1231
+msgid "Beat"
+msgstr ""
+
+#: matrixview.cpp:1233
+msgid "Bar"
+msgstr ""
+
+#: matrixview.cpp:1240
+#, c-format, ycp-format
+msgid "1/%1"
+msgstr ""
+
+#: matrixview.cpp:1242
+#, ycp-format
+msgid "%1 ticks"
+msgstr ""
+
+#: qdeferscrollview.moc.cpp:34 qdeferscrollview.moc.cpp:42
+msgid "QDeferScrollView"
+msgstr ""
+
+#: audiomanagerdialog.cpp:154
+msgid "Rosegarden Audio File Manager"
+msgstr ""
+
+#: audiomanagerdialog.cpp:164
+msgid "Audio File actions"
+msgstr ""
+
+#: audiomanagerdialog.cpp:169
+msgid "No RosegardenGUIDoc - internal error"
+msgstr ""
+
+#: audiomanagerdialog.cpp:174
+msgid "Add Audio File"
+msgstr ""
+
+#: audiomanagerdialog.cpp:175
+msgid "Remove Audio FIle"
+msgstr ""
+
+#: audiomanagerdialog.cpp:176
+msgid "Play Preview"
+msgstr ""
+
+#: audiomanagerdialog.cpp:177
+msgid "Rename File"
+msgstr ""
+
+#: audiomanagerdialog.cpp:178
+msgid "Insert into Composition"
+msgstr ""
+
+#: audiomanagerdialog.cpp:179
+msgid "Delete All Audio Files"
+msgstr ""
+
+#: audiomanagerdialog.cpp:182
+msgid "Drag'n Drop .wav files here"
+msgstr ""
+
+#: audiomanagerdialog.cpp:186 dialogs.cpp:1167
+msgid "Name"
+msgstr ""
+
+#: audiomanagerdialog.cpp:187
+msgid "Duration"
+msgstr ""
+
+#: audiomanagerdialog.cpp:188
+msgid "Envelope"
+msgstr ""
+
+#: audiomanagerdialog.cpp:190
+msgid "Resolution"
+msgstr ""
+
+#: audiomanagerdialog.cpp:191
+msgid "Channels"
+msgstr ""
+
+#: audiomanagerdialog.cpp:192
+msgid "Sample rate"
+msgstr ""
+
+#: audiomanagerdialog.cpp:290
+msgid "<no audio files>"
+msgstr ""
+
+#: audiomanagerdialog.cpp:516
+msgid "Really delete audio file \""
+msgstr ""
+
+#: audiomanagerdialog.cpp:519
+msgid "and all associated audio segments?"
+msgstr ""
+
+#: audiomanagerdialog.cpp:589 dialogs.cpp:2174
+msgid "*.wav|WAV files (*.wav)"
+msgstr ""
+
+#: audiomanagerdialog.cpp:590
+msgid "Select one or more Audio Files"
+msgstr ""
+
+#: audiomanagerdialog.cpp:677
+msgid "Really delete all audio files and associated segments?"
+msgstr ""
+
+#: audiomanagerdialog.cpp:949
+msgid ""
+"Can't add File.  WAV file body invalid.\n"
+"\""
+msgstr ""
+
+#: dialogs.cpp:65
+msgid "Text:"
+msgstr ""
+
+#: dialogs.cpp:96
+msgid "Time Signature"
+msgstr ""
+
+#: dialogs.cpp:116
+msgid "Time signature"
+msgstr ""
+
+#: dialogs.cpp:147 dialogs.cpp:324 dialogs.cpp:1592
+msgid "Scope"
+msgstr ""
+
+#: dialogs.cpp:156
+#, c-format, ycp-format
+msgid "Insertion point is at start of bar %1."
+msgstr ""
+
+#: dialogs.cpp:160
+#, c-format, ycp-format
+msgid "Insertion point is in the middle of bar %1."
+msgstr ""
+
+#: dialogs.cpp:165
+msgid "Insertion point is at start of composition."
+msgstr ""
+
+#: dialogs.cpp:170
+#, ycp-format
+msgid "Start bar %1 here"
+msgstr ""
+
+#: dialogs.cpp:174
+#, c-format, ycp-format
+msgid "Change time from start of bar %1"
+msgstr ""
+
+#: dialogs.cpp:181
+#, c-format, ycp-format
+msgid "Time change will take effect at the start of bar %1."
+msgstr ""
+
+#: dialogs.cpp:187
+msgid "Make the new time signature hidden"
+msgstr ""
+
+#: dialogs.cpp:190
+msgid "Show as common time"
+msgstr ""
+
+#: dialogs.cpp:193
+msgid "Normalize subsequent rests"
+msgstr ""
+
+#: dialogs.cpp:267
+msgid "Display as common time"
+msgstr ""
+
+#: dialogs.cpp:271
+msgid "Display as cut common time"
+msgstr ""
+
+#: dialogs.cpp:307
+msgid "Key Change"
+msgstr ""
+
+#: dialogs.cpp:321
+msgid "Key signature"
+msgstr ""
+
+#: dialogs.cpp:327
+msgid "Existing notes following key change"
+msgstr ""
+
+#: dialogs.cpp:338
+msgid "Flatten"
+msgstr ""
+
+#: dialogs.cpp:340
+msgid "Key"
+msgstr ""
+
+#: dialogs.cpp:344
+msgid "Sharpen"
+msgstr ""
+
+#: dialogs.cpp:363
+msgid "Apply to current segment only"
+msgstr ""
+
+#: dialogs.cpp:366
+msgid "Apply to all segments at this time"
+msgstr ""
+
+#: dialogs.cpp:377 dialogs.cpp:1851
+msgid "Maintain current pitches"
+msgstr ""
+
+#: dialogs.cpp:380
+msgid "Maintain current accidentals"
+msgstr ""
+
+#: dialogs.cpp:383
+msgid "Transpose into this key"
+msgstr ""
+
+#: dialogs.cpp:532
+msgid "No such key"
+msgstr ""
+
+#: dialogs.cpp:603
+msgid "Paste type"
+msgstr ""
+
+#: dialogs.cpp:606
+msgid "Paste into an existing gap [\"restricted\"]"
+msgstr ""
+
+#: dialogs.cpp:611
+msgid "Erase existing events to make room [\"simple\"]"
+msgstr ""
+
+#: dialogs.cpp:616
+msgid "Move existing events out of the way [\"open-n-paste\"]"
+msgstr ""
+
+#: dialogs.cpp:621
+msgid "Overlay notes, tying against present notes [\"note-overlay\"]"
+msgstr ""
+
+#: dialogs.cpp:626
+msgid "Overlay notes, ignoring present notes [\"matrix-overlay\"]"
+msgstr ""
+
+#: dialogs.cpp:635
+msgid "Make this the default paste type"
+msgstr ""
+
+#: dialogs.cpp:682
+msgid "Tuplet"
+msgstr ""
+
+#: dialogs.cpp:688
+msgid "New timing for tuplet group"
+msgstr ""
+
+#: dialogs.cpp:704 dialogs.cpp:2079
+msgid "Play "
+msgstr ""
+
+#: dialogs.cpp:723
+msgid "in the time of  "
+msgstr ""
+
+#: dialogs.cpp:728
+msgid "Timing calculations"
+msgstr ""
+
+#: dialogs.cpp:734
+msgid "Selected region:"
+msgstr ""
+
+#: dialogs.cpp:743
+msgid "Group with current timing:"
+msgstr ""
+
+#: dialogs.cpp:749
+msgid "Group with new timing:"
+msgstr ""
+
+#: dialogs.cpp:755
+msgid "Gap created by timing change:"
+msgstr ""
+
+#: dialogs.cpp:763
+msgid "Unchanged at end of selection:"
+msgstr ""
+
+#: dialogs.cpp:959
+msgid "Specification"
+msgstr ""
+
+#: dialogs.cpp:961
+msgid "Preview"
+msgstr ""
+
+#: dialogs.cpp:965
+msgid "Text:  "
+msgstr ""
+
+#: dialogs.cpp:970
+msgid "Style:  "
+msgstr ""
+
+#: dialogs.cpp:1027
+msgid "Example"
+msgstr ""
+
+#: dialogs.cpp:1102 dialogs.cpp:1456 dialogs.cpp:1485
+msgid "Edit Event"
+msgstr ""
+
+#: dialogs.cpp:1102
+msgid "View Event"
+msgstr ""
+
+#: dialogs.cpp:1120
+msgid "Intrinsics"
+msgstr ""
+
+#: dialogs.cpp:1124
+msgid "Event type: "
+msgstr ""
+
+#: dialogs.cpp:1130
+msgid "Absolute time: "
+msgstr ""
+
+#: dialogs.cpp:1140
+msgid "Duration: "
+msgstr ""
+
+#: dialogs.cpp:1153
+msgid "Sub-ordering: "
+msgstr ""
+
+#: dialogs.cpp:1164
+msgid "Persistent properties"
+msgstr ""
+
+#: dialogs.cpp:1172
+msgid "Type"
+msgstr ""
+
+#: dialogs.cpp:1174
+msgid "Value"
+msgstr ""
+
+#: dialogs.cpp:1194
+msgid "Non-persistent properties"
+msgstr ""
+
+#: dialogs.cpp:1195
+msgid "These are cached values, lost if the event is modified."
+msgstr ""
+
+#: dialogs.cpp:1209
+msgid "Name       "
+msgstr ""
+
+#: dialogs.cpp:1211
+msgid "Type       "
+msgstr ""
+
+#: dialogs.cpp:1213
+msgid "Value      "
+msgstr ""
+
+#: dialogs.cpp:1226
+msgid "Make persistent"
+msgstr ""
+
+#: dialogs.cpp:1312
+msgid "Delete this property"
+msgstr ""
+
+#: dialogs.cpp:1457
+#, ycp-format
+msgid ""
+"Are you sure you want to delete the \"%1\" property?\n"
+"\n"
+"Removing necessary properties may cause unexpected behaviour."
+msgstr ""
+
+#: dialogs.cpp:1486
+#, ycp-format
+msgid ""
+"Are you sure you want to make the \"%1\" property persistent?\n"
+"\n"
+"This could cause problems if it overrides a different computed value later "
+"on."
+msgstr ""
+
+#: dialogs.cpp:1490
+msgid "Make &Persistent"
+msgstr ""
+
+#: dialogs.cpp:1563 dialogs.cpp:1569
+msgid "Tempo"
+msgstr ""
+
+#: dialogs.cpp:1573
+msgid "New tempo"
+msgstr ""
+
+#: dialogs.cpp:1597
+msgid "The pointer is currently at "
+msgstr ""
+
+#: dialogs.cpp:1605
+msgid "Apply this tempo from here onwards"
+msgstr ""
+
+#: dialogs.cpp:1608
+msgid "Replace the last tempo change"
+msgstr ""
+
+#: dialogs.cpp:1613
+msgid "Apply this tempo from the start of this bar"
+msgstr ""
+
+#: dialogs.cpp:1616
+msgid "Apply this tempo to the whole composition"
+msgstr ""
+
+#: dialogs.cpp:1621
+msgid "Also make this the default tempo"
+msgstr ""
+
+#: dialogs.cpp:1676
+#, c-format, ycp-format
+msgid "%1.%2 s,"
+msgstr ""
+
+#: dialogs.cpp:1682
+#, c-format, ycp-format
+msgid "at the start of bar %1."
+msgstr ""
+
+#: dialogs.cpp:1686
+#, c-format, ycp-format
+msgid "in the middle of bar %1."
+msgstr ""
+
+#: dialogs.cpp:1706
+#, ycp-format
+msgid "        (at %1.%2 s, in bar %3)"
+msgstr ""
+
+#: dialogs.cpp:1723
+msgid "There are no preceding tempo changes."
+msgstr ""
+
+#: dialogs.cpp:1731
+msgid "There are no other tempo changes."
+msgstr ""
+
+#: dialogs.cpp:1820 dialogs.cpp:1827 dialogs.cpp:1839 dialogs.cpp:1842
+msgid "Clef"
+msgstr ""
+
+#: dialogs.cpp:1830
+msgid "Existing notes following clef change"
+msgstr ""
+
+#: dialogs.cpp:1835
+msgid "Lower clef"
+msgstr ""
+
+#: dialogs.cpp:1846
+msgid "Higher clef"
+msgstr ""
+
+#: dialogs.cpp:1854
+msgid "Transpose into appropriate octave"
+msgstr ""
+
+#: dialogs.cpp:1952
+msgid "Basic quantization"
+msgstr ""
+
+#: dialogs.cpp:1955
+msgid "Quantize:"
+msgstr ""
+
+#: dialogs.cpp:1957
+msgid "Event positions only"
+msgstr ""
+
+#: dialogs.cpp:1958
+msgid "Event positions and durations"
+msgstr ""
+
+#: dialogs.cpp:1959
+msgid "Event positions, and round durations to exact notes"
+msgstr ""
+
+#: dialogs.cpp:1962
+msgid "Base duration unit:"
+msgstr ""
+
+#: dialogs.cpp:1984
+msgid "Note rounding"
+msgstr ""
+
+#: dialogs.cpp:1987
+msgid "Maximum number of dots:"
+msgstr ""
+
+#: dialogs.cpp:1996
+msgid "Only round durations up if following rests permit"
+msgstr ""
+
+#: dialogs.cpp:2070
+msgid "Rescale"
+msgstr ""
+
+#: dialogs.cpp:2075
+msgid "Rescale ratio"
+msgstr ""
+
+#: dialogs.cpp:2082
+msgid " beats in time of "
+msgstr ""
+
+#: dialogs.cpp:2094
+msgid "As percentage: "
+msgstr ""
+
+#: dialogs.cpp:2149
+msgid "Locate audio file"
+msgstr ""
+
+#: dialogs.cpp:2153
+msgid "&Skip"
+msgstr ""
+
+#: dialogs.cpp:2154
+msgid "&Locate"
+msgstr ""
+
+#: dialogs.cpp:2159
+#, ycp-format
+msgid ""
+"Can't find file \"%1\".\n"
+"Would you like to try and locate this file or skip it?"
+msgstr ""
+
+#: dialogs.cpp:2175
+msgid "Select an Audio File"
+msgstr ""
+
+#: dialogs.cpp:2197
+msgid "Playing audio file"
+msgstr ""
+
+#: dialogs.cpp:2202
+msgid "Playing audio file \""
+msgstr ""
+
+#: dialogs.cpp:2214
+msgid "Autosplit Audio Segment"
+msgstr ""
+
+#: dialogs.cpp:2227
+msgid "AutoSplit Segment \""
+msgstr ""
+
+#: dialogs.cpp:2239
+msgid "Threshold"
+msgstr ""
+
+#: ktmpstatusmsg.cpp:68
+msgid "  Ready."
+msgstr ""
+
+#: notationcanvasview.moc.cpp:34 notationcanvasview.moc.cpp:42
+msgid "NotationCanvasView"
+msgstr ""
