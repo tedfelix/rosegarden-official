@@ -71,6 +71,19 @@ VUMeter::setLevel(const double &level)
         m_fallTimer.start(40); // 40 ms per level fall iteration
         meterStart();
     }
+    // Reset level and reset timer if we're exceeding the
+    // current peak
+    //
+    if (m_level >= m_peakLevel)
+    {
+        m_peakLevel = m_level;
+        m_showPeakLevel = true;
+
+        if (m_peakTimer.isActive())
+            m_peakTimer.stop();
+
+        m_peakTimer.start(1000); // milliseconds of peak hold
+    }
 
     QPainter paint(this);
     drawMeterLevel(&paint);
@@ -102,37 +115,68 @@ VUMeter::drawMeterLevel(QPainter* paint)
 
     paint->setPen(colorGroup().background());
     paint->setBrush(colorGroup().background());
-    //paint->setPen(colorGroup().color(QColorGroup::Dark));
-    //paint->setBrush(colorGroup().color(QColorGroup::Dark));
 
-    if (m_type == PeakHold) // peak-hold functionality
+    if (m_type == PeakHold && m_showPeakLevel)
     {
-        // Reset level and reset timer if we're exceeding the
-        // current peak
-        //
-        if (m_level > m_peakLevel)
-        {
-            m_peakLevel = m_level;
-            m_showPeakLevel = true;
-            m_peakTimer.start(750); // milliseconds of peak hold
-        }
+        paint->setPen(Qt::white);
+        paint->setBrush(Qt::white);
 
-        if (m_showPeakLevel)
-        {
-            paint->setPen(Qt::white);
-            paint->setBrush(Qt::white);
-            // show peak level
-            int x = m_peakLevel * width() / 100;
-            paint->drawLine(x, 0, x, height());
-        }
+        // show peak level
+        int x = m_peakLevel * width() / 100;
+        if (x < (width() - 1))
+            x++;
+        else
+            x = width() - 1;
+
+        paint->drawLine(x, 0, x, height());
     }
 
-    if (m_level > 80)
+    /*
+    if (m_level < 20)
+    {
+        paint->setPen(RosegardenGUIColours::LevelMeterGreen);
+        paint->setBrush(RosegardenGUIColours::LevelMeterGreen);
+    }
+    else //if (m_level < 60) // fade from green to orange
+    {
+        int redSign = 1;
+        int blueSign = 1;
+        int greenSign = 1;
+
+        int startRed = RosegardenGUIColours::LevelMeterGreen.red();
+        int startBlue = RosegardenGUIColours::LevelMeterGreen.blue();
+        int startGreen = RosegardenGUIColours::LevelMeterGreen.green();
+
+        int endRed = RosegardenGUIColours::LevelMeterOrange.red();
+        int endBlue = RosegardenGUIColours::LevelMeterOrange.blue();
+        int endGreen = RosegardenGUIColours::LevelMeterOrange.green();
+
+        if (startRed > endRed) redSign = -1;
+        if (startBlue > endBlue) blueSign = -1;
+        if (startGreen > endGreen) greenSign = -1;
+
+        QColor mix(redSign * (int)(((double)(endRed - startRed))/((double)(m_level - 19))),
+                   blueSign * (int)(((double)(endBlue - startBlue))/((double)(m_level - 19))),
+                   greenSign * (int)(((double)(endGreen - startGreen))/((double)(m_level - 19))));
+
+        //cout << "RED = " << mix.red() << endl;
+        //cout << "BLUE = " << mix.blue() << endl;
+        //cout << "GREEN = " << mix.green() << endl;
+
+        paint->setPen(mix);
+        paint->setBrush(mix);
+    }
+    else // fade from orange to red
+    {
+    }
+    */
+
+    if (m_level > 75)
     {
         paint->setPen(RosegardenGUIColours::LevelMeterRed);
         paint->setBrush(RosegardenGUIColours::LevelMeterRed);
     }
-    else if (m_level > 55)
+    else if (m_level > 50)
     {
         paint->setPen(RosegardenGUIColours::LevelMeterOrange);
         paint->setBrush(RosegardenGUIColours::LevelMeterOrange);
@@ -143,8 +187,11 @@ VUMeter::drawMeterLevel(QPainter* paint)
         paint->setBrush(RosegardenGUIColours::LevelMeterGreen);
     }
 
-
     int x = m_level * width() / 100;
+
+    // Make room for a peak hold marker if we need to
+    if (m_type == PeakHold && x >= width() - 1) x--;
+
     paint->drawRect(0, 0, x, height());
 }
 
