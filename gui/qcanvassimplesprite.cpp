@@ -22,6 +22,10 @@ QCanvasSimpleSprite::QCanvasSimpleSprite(QPixmap *pixmap, QCanvas *canvas)
 {
 }
 
+QCanvasSimpleSprite::QCanvasSimpleSprite(QCanvasPixmap *pixmap, QCanvas *canvas)
+    : QCanvasSprite(makePixmapArray(this, pixmap), canvas)
+{
+}
 
 QCanvasSimpleSprite::QCanvasSimpleSprite(const QString &pixmapfile,
                                          QCanvas *canvas)
@@ -34,7 +38,6 @@ QCanvasSimpleSprite::~QCanvasSimpleSprite()
     delete m_pixmapArray;
 }
 
-
 QCanvasPixmapArray*
 QCanvasSimpleSprite::makePixmapArray(QCanvasSimpleSprite *self,
                                      QPixmap *pixmap)
@@ -43,7 +46,24 @@ QCanvasSimpleSprite::makePixmapArray(QCanvasSimpleSprite *self,
     pixlist.append(pixmap);
 
     QList<QPoint> spotlist;
+    spotlist.setAutoDelete(true);
     spotlist.append(new QPoint(0,0));
+
+    self->m_pixmapArray = new QCanvasPixmapArray(pixlist, spotlist);
+
+    return self->m_pixmapArray;
+}
+
+QCanvasPixmapArray*
+QCanvasSimpleSprite::makePixmapArray(QCanvasSimpleSprite *self,
+                                     QCanvasPixmap *pixmap)
+{
+    QList<QPixmap> pixlist;
+    pixlist.append(pixmap);
+
+    QList<QPoint> spotlist;
+    spotlist.setAutoDelete(true);
+    spotlist.append(new QPoint(pixmap->offsetX(),pixmap->offsetY()));
 
     self->m_pixmapArray = new QCanvasPixmapArray(pixlist, spotlist);
 

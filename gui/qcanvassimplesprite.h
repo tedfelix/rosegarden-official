@@ -27,7 +27,9 @@
 class QCanvasSimpleSprite : public QCanvasSprite  {
 public:
     QCanvasSimpleSprite(QPixmap *pixmap, QCanvas *canvas);
+    QCanvasSimpleSprite(QCanvasPixmap *pixmap, QCanvas *canvas);
     QCanvasSimpleSprite(const QString &pixmapfile, QCanvas *canvas);
+
     virtual ~QCanvasSimpleSprite();
 
 protected:
@@ -35,6 +37,9 @@ protected:
 
     static QCanvasPixmapArray* makePixmapArray(QCanvasSimpleSprite*,
                                                QPixmap *pixmap);
+
+    static QCanvasPixmapArray* makePixmapArray(QCanvasSimpleSprite*,
+                                               QCanvasPixmap *pixmap);
 
     static QCanvasPixmapArray* makePixmapArray(QCanvasSimpleSprite*,
                                                const QString &pixmapfile);
