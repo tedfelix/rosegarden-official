@@ -836,8 +836,6 @@ void MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
 
     timeT newDuration = newTime - m_currentElement->getAbsoluteTime();
 
-    m_currentElement->setDuration(newDuration);
-
     double width = newDuration * m_currentStaff->getTimeScaleFactor();
     m_currentElement->setWidth(int(width));
 
@@ -856,8 +854,6 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
     // if (newTime == m_currentElement->getAbsoluteTime()) // what to do ? erase element ?
 
     timeT newDuration = newTime - m_currentElement->getAbsoluteTime();
-
-    m_currentElement->setDuration(newDuration);
 
     double width = newDuration * m_currentStaff->getTimeScaleFactor();
     m_currentElement->setWidth(int(width));
