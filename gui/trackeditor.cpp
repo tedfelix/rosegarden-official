@@ -240,7 +240,7 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
  
     // create the position pointer
     m_pointer = new QCanvasLine(canvas);
-    m_pointer->setPen(RosegardenGUIColours::TimePointer);
+    m_pointer->setPen(RosegardenGUIColours::Pointer);
     m_pointer->setPoints(0, 0, 0, canvas->height());
     m_pointer->setZ(10);
     m_pointer->show();

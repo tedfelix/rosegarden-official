@@ -61,8 +61,12 @@ namespace RosegardenGUIColours
     extern const QColor StaffConnectingTerminatingLine;
     extern const QColor StaffRulerBackground;
     
-    extern const QColor TimePointer;
-    extern const QColor PositionCursor;
+    extern const QColor Pointer;
+    extern const QColor PointerRuler;
+
+    extern const QColor InsertCursor;
+    extern const QColor InsertCursorRuler;
+
     extern const QColor SelectionRectangle;
     extern const QColor SelectedElement;
     extern const int SelectedElementHue;

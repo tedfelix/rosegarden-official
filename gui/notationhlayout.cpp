@@ -1393,11 +1393,14 @@ NotationHLayout::getLastVisibleBarOnStaff(StaffType &staff)
 double
 NotationHLayout::getBarPosition(int bar)
 {
+    if (bar < 0) bar = 0;
+
     for (BarDataMap::iterator i = m_barData.begin();
 	 i != m_barData.end(); ++i) {
 	int barHere = i->second.size() - 1;
 	if (barHere >= bar) return i->second[bar].x;
     }
+
     return getBarPosition(getLastVisibleBar());
 }
 

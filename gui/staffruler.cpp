@@ -257,9 +257,9 @@ PositionCursor::PositionCursor(int gripHeight, QCanvas* c, QObject* parent)
     m_grip->setX(-5);
     m_grip->setY(gripHeight);
     m_grip->setSize(11, 10);
-    m_grip->setBrush(RosegardenGUIColours::PositionCursor);
+    m_grip->setBrush(RosegardenGUIColours::InsertCursor);
     m_line->setPoints(0, 0, 0, canvas()->height());
-    m_line->setPen(RosegardenGUIColours::PositionCursor);
+    m_line->setPen(RosegardenGUIColours::InsertCursor);
 
     setActive(true);
 }

@@ -43,11 +43,9 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_currentRow(0),
     m_pointer(new QCanvasLine(canvas)),
     m_insertCursor(new QCanvasLine(canvas))
-//    m_ruler(new StaffRuler(0, 0, getStaffRulerHeight(), canvas))
 {
-    m_pointer->setPen(RosegardenGUIColours::TimePointer);
-    m_insertCursor->setPen(RosegardenGUIColours::PositionCursor);
-//!!!    m_ruler->hide(); // we are not the current staff unless indicated
+    m_pointer->setPen(RosegardenGUIColours::Pointer);
+    m_insertCursor->setPen(RosegardenGUIColours::InsertCursor);
 }
 
 template <class T>
@@ -71,11 +69,9 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_currentRow(0),
     m_pointer(new QCanvasLine(canvas)),
     m_insertCursor(new QCanvasLine(canvas))
-//    m_ruler(new StaffRuler(0, 0, getStaffRulerHeight(), canvas))
 {
-    m_pointer->setPen(RosegardenGUIColours::TimePointer);
-    m_insertCursor->setPen(RosegardenGUIColours::PositionCursor);
-//    m_ruler->hide(); // we are not the current staff unless indicated
+    m_pointer->setPen(RosegardenGUIColours::Pointer);
+    m_insertCursor->setPen(RosegardenGUIColours::InsertCursor);
 }
 
 template <class T>
@@ -99,11 +95,9 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_currentRow(0),
     m_pointer(new QCanvasLine(canvas)),
     m_insertCursor(new QCanvasLine(canvas))
-//    m_ruler(new StaffRuler(0, 0, getStaffRulerHeight(), canvas))
 {
-    m_pointer->setPen(RosegardenGUIColours::TimePointer);
-    m_insertCursor->setPen(RosegardenGUIColours::PositionCursor);
-//    m_ruler->hide(); // we are not the current staff unless indicated
+    m_pointer->setPen(RosegardenGUIColours::Pointer);
+    m_insertCursor->setPen(RosegardenGUIColours::InsertCursor);
 }
 
 template <class T>
@@ -111,7 +105,6 @@ LinedStaff<T>::~LinedStaff()
 {
     deleteBars();
     for (int i = 0; i < (int)m_staffLines.size(); ++i) clearStaffLineRow(i);
-//    delete m_ruler;
 }
 
 template <class T>
@@ -167,7 +160,8 @@ template <class T>
 void
 LinedStaff<T>::setX(double x)
 {
-//!!! move pointers?    m_ruler->setXPos((int)x);
+    m_pointer->moveBy(x - m_x, 0);
+    m_insertCursor->moveBy(x - m_x, 0);
     m_x = x;
 }
 
@@ -182,7 +176,8 @@ template <class T>
 void
 LinedStaff<T>::setY(int y)
 {
-//!!! move pointers?    m_ruler->setYPos(y);
+    m_pointer->moveBy(0, y - m_y);
+    m_insertCursor->moveBy(0, y - m_y);
     m_y = y;
 }
 
@@ -395,7 +390,6 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
     m_endLayoutX = xright;
 
     resizeStaffLines();
-//!!!    updateRuler(layout);
 }
 
 template <class T>
@@ -723,13 +717,9 @@ LinedStaff<T>::setCurrent(bool current, int canvasY)
 	    ((m_pageMode && (canvasY >= 0)) ?
 	     getRowForCanvasCoords(0, canvasY) : 0);
 	m_insertCursor->show();
-	//!!! If the current row changes, move the staff ruler
-//!!! no, show it some other way	m_ruler->show();
-//	m_ruler->getCursor()->show();
+	//!!! how should we show which row is current? shade the background?
     } else {
 	m_insertCursor->hide();
-//!!!	m_ruler->hide();
-//	m_ruler->getCursor()->hide();
     }
 }
 
@@ -788,7 +778,7 @@ LinedStaff<T>::setInsertCursorPosition(double canvasX, int canvasY)
     
     int row = getRowForCanvasCoords(canvasX, canvasY);
     if (row != m_currentRow) {
-	//!!! move the staff ruler -- no, show some other way
+	//!!! show current row somehow
 	m_currentRow = row;
     }
 
@@ -796,8 +786,6 @@ LinedStaff<T>::setInsertCursorPosition(double canvasX, int canvasY)
     m_insertCursor->setPoints(canvasX, canvasY,
 			      canvasX, canvasY + getHeightOfRow() - 1);
     m_insertCursor->show();
-//!!!    m_ruler->getCursor()->setPosition(int(canvasX));
-//    m_ruler->getCursor()->show();
 }
 
 template <class T>
@@ -816,34 +804,6 @@ LinedStaff<T>::hideInsertCursor()
 {
     m_insertCursor->hide();
 }
-
-/*!!!
-template <class T>
-void
-LinedStaff<T>::updateRuler(Rosegarden::HorizontalLayoutEngine<T> &layout)
-{
-    Rosegarden::TimeSignature timeSignature;
-
-    m_ruler->clearSteps();
-    
-    for (int barNo = layout.getFirstVisibleBar();
-	 barNo <= layout.getLastVisibleBar(); ++barNo) {
-
-        double x;
-        Rosegarden::Event *timeSigEvent =
-	    layout.getTimeSignaturePosition(*this, barNo, x);
-
-        if (timeSigEvent)
-	    timeSignature = Rosegarden::TimeSignature(*timeSigEvent);
-
-        m_ruler->addStep(layout.getBarPosition(barNo),
-                         timeSignature.getBeatsPerBar());
-    }
-
-    m_ruler->update();
-    if (m_current) m_ruler->show();
-}
-*/
 
 template <class T>
 void

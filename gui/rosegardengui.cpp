@@ -1155,21 +1155,17 @@ RosegardenGUIApp::slotSetPointerPosition(Rosegarden::RealTime time)
 void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
-//!!!???
+
     if ( m_seqManager->getTransportStatus() == PLAYING ||
          m_seqManager->getTransportStatus() == RECORDING_MIDI ||
          m_seqManager->getTransportStatus() == RECORDING_AUDIO )
     {
-	//!!!??? for this to be here is somewhat inconsistent with
-	// having the document do the biz of setting the position
-	// in the composition.  perhaps if it's out of range, we
-	// should set the position back in range on the doc (thus
-	// firing the signals again) and then return (because the
-	// new signal will make us do the required work anyway)
-        if (t >= comp.getEndMarker())
+        if (t > comp.getEndMarker())
         {
             slotStop();
             t = comp.getEndMarker();
+	    m_doc->setPointerPosition(t); //causes this method to be re-invoked
+	    return;
         }
 
         try
@@ -1184,9 +1180,10 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
         }
     }
 
-    //!!!???
-    if (t >= comp.getEndMarker())
-        t = 0;
+    if (t != comp.getStartMarker() && t > comp.getEndMarker()) {
+        m_doc->setPointerPosition(comp.getStartMarker());
+	return;
+    }
 
     // and the tempo
     m_transport->setTempo(comp.getTempoAt(t));

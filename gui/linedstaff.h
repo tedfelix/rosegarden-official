@@ -27,8 +27,6 @@
 #include "LayoutEngine.h"
 #include "FastVector.h"
 
-//!!!#include "staffruler.h"
-
 #include <string>
 #include <vector>
 
@@ -177,11 +175,6 @@ protected:
      */
     virtual bool showBeatLines() const {
 	return false;
-    }
-
-    virtual int getStaffRulerHeight() const {
-	return 0;
-//!!!	return 45;
     }
 
 protected:
@@ -422,7 +415,7 @@ protected:
     // canvas lines rather than a smaller number of very long ones.)
 
     int getTopLineOffset() const {
-	return getStaffRulerHeight() + getLineSpacing() * getLegerLineCount();
+	return getLineSpacing() * getLegerLineCount();
     }
 
     int getBarLineHeight() const {
@@ -504,8 +497,6 @@ protected:
     virtual void deleteTimeSignatures();
     virtual void insertTimeSignature(double layoutX,
 				     const Rosegarden::TimeSignature &);
-
-//!!!    virtual void updateRuler(Rosegarden::HorizontalLayoutEngine<T> &layout);
 
 protected:
 

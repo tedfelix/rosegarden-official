@@ -216,7 +216,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
 
     m_bottomBarButtons->getLoopRuler()->setBackgroundColor
-	(RosegardenGUIColours::PositionCursor);
+	(RosegardenGUIColours::InsertCursorRuler);
     m_bottomBarButtons->setMinimumWidth(canvas()->width());
     m_bottomBarButtonsView->addChild(m_bottomBarButtons);
 
@@ -1665,6 +1665,9 @@ NotationView::slotSetInsertCursorPosition(timeT time)
     // enough already.  Should we bother showing the playback pointer
     // in page mode?  Probably, in which case I suppose that should
     // go in LinedStaff too).
+
+    kdDebug(KDEBUG_AREA) << "NotationView::slotSetInsertCursorPosition "
+			 << time << endl;
 
     m_staffs[m_currentStaff]->setInsertCursorPosition(*m_hlayout, time);
     update();
