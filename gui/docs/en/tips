@@ -173,7 +173,7 @@ feature.<br><br>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that if you're editing a section in the matrix or notation view, you can set that section to loop while you edit it?  Select it and use <b>Move -> Set Loop to Selection</b>, then hit Play.</p>
+<p>...that if you're editing a section in the matrix or notation view, you can set that section to loop while you edit it?  Select it and use <b>Tools -> Local Cursor -> Set Loop to Selection</b>, then hit Play.</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">

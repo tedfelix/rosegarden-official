@@ -816,6 +816,15 @@ NotesMenuAddIndicationCommand::getGlobalName(std::string indicationType)
 	return i18n("Add Octave &Down");
     } else if (indicationType == Rosegarden::Indication::QuindicesimaDown) {
 	return i18n("Add Double Octave Down");
+
+    // We used to generate these ones from the internal names plus
+    // caps, but that makes them untranslateable:
+    } else if (indicationType == Rosegarden::Indication::Crescendo) {
+	return i18n("Add &Crescendo");
+    } else if (indicationType == Rosegarden::Indication::Decrescendo) {
+	return i18n("Add &Decrescendo");
+    } else if (indicationType == Rosegarden::Indication::Glissando) {
+	return i18n("Add &Glissando");
     }
 
     QString n = i18n("Add &%1%2").arg((char)toupper(indicationType[0])).arg(strtoqstr(indicationType.substr(1)));
