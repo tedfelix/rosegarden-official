@@ -59,9 +59,7 @@ class Track : public std::multiset<Event*, Event::EventCmp>
 public:
     Track(timeT startIdx = 0);
     ~Track();
-
-    const Quantizer &getQuantizer() const { return *m_quantizer; }
-
+    
     timeT getStartIndex() const { return m_startIdx; }
     void  setStartIndex(timeT i);
 
@@ -87,6 +85,12 @@ public:
     void setReferenceTrack(const Track *reftrack) {
 	m_referenceTrack = reftrack;
     }
+
+    /// Should only be called by Composition
+    void setQuantizer(const Quantizer *q) { m_quantizer = q; }
+
+    /// Only valid when in a Composition
+    const Quantizer *getQuantizer() const { return m_quantizer; }
 
     /**
      * Returns an iterator onto the reference track, pointing to the
@@ -295,7 +299,6 @@ public:
     void removeObserver(TrackObserver *obs) { m_observers.erase (obs); }
 
 private:
-
     timeT m_startIdx;
     unsigned int m_instrument;
 
@@ -307,7 +310,7 @@ private:
     typedef std::set<TrackObserver *> ObserverSet;
     ObserverSet m_observers;
 
-    Quantizer *m_quantizer;
+    const Quantizer *m_quantizer;
 
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;
@@ -353,7 +356,7 @@ protected:
     typedef Track::iterator iterator;
 
     Track &track() { return m_track; }
-    const Quantizer &quantizer() { return track().getQuantizer(); }
+    const Quantizer &quantizer() { return *(track().getQuantizer()); }
 
     Track::iterator begin() { return track().begin(); }
     Track::iterator end()   { return track().end();   }

@@ -109,8 +109,16 @@ NotationElement::setCanvasItem(QCanvasItem *e, double dxoffset, double dyoffset)
 }
 
 void
+NotationElement::removeCanvasItem()
+{
+    delete m_canvasItem;
+    m_canvasItem = 0;
+}
+
+void
 NotationElement::reposition(double dxoffset, double dyoffset)
 {
+    if (!m_canvasItem) return;
     m_canvasItem->move(m_x + dxoffset, m_y + dyoffset);
 }
 

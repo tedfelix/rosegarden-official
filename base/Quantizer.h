@@ -87,15 +87,8 @@ public:
      * shortest note duration), and note quantization with up to
      * "maxDots" dots per note.
      */
-    Quantizer(int unit = -1, int maxDots = 2,
-	      PropertyName absTimeProperty = AbsoluteTimeProperty,
-              PropertyName durationProperty = DurationProperty,
-              PropertyName noteDurationProperty = NoteDurationProperty) :
-	m_unit(unit), m_maxDots(maxDots),
-	m_absoluteTimeProperty(absTimeProperty),
-        m_durationProperty(durationProperty),
-        m_noteDurationProperty(noteDurationProperty)
-    {
+    Quantizer(int unit = -1, int maxDots = 2) :
+	m_unit(unit), m_maxDots(maxDots) {
 	if (unit < 0) setUnit(Note(Note::Shortest));
     }
 
@@ -104,14 +97,7 @@ public:
     static const PropertyName AbsoluteTimeProperty;
     static const PropertyName DurationProperty;
     static const PropertyName NoteDurationProperty;
-
-    PropertyName getDurationProperty() const {
-        return m_durationProperty;
-    }
-    PropertyName getNoteDurationProperty() const {
-        return m_noteDurationProperty;
-    }
-
+    
     void setUnit(int unit)        { m_unit = unit; }
     void setUnit(Note note)	  { m_unit = note.getDuration(); }
     void setMaxDots(int maxDots)  { m_maxDots = maxDots; }
@@ -160,7 +146,7 @@ public:
      *
      * @return Quantized duration (same as DurationProperty)
      */
-    timeT quantizeByUnit(Rosegarden::Event *el) const;
+//!!!    timeT quantizeByUnit(Rosegarden::Event *el) const;
 
     /**
      * Quantizes a duration.  
@@ -177,7 +163,7 @@ public:
      *
      * @return Quantized note duration (same as NoteDurationProperty)
      */
-    timeT quantizeByNote(Rosegarden::Event *el) const;
+//!!!    timeT quantizeByNote(Rosegarden::Event *el) const;
 
     /**
      * Quantizes a duration.
@@ -203,14 +189,38 @@ public:
     void unquantize(Rosegarden::Event *el) const;
 
 protected:
-    Note requantizeByNote(timeT &unitQuantizedDuration) const;
-    void requantizeByNote(Event *event) const;
+    class SingleQuantizer {
+    public:
+	virtual ~SingleQuantizer();
+	virtual timeT quantize(int unit, int maxDots, timeT duration) const = 0;
+    };
+
+    class UnitQuantizer : public SingleQuantizer {
+    public:
+	virtual ~UnitQuantizer();
+	virtual timeT quantize(int unit, int maxDots, timeT duration) const;
+    };
+
+    class NoteQuantizer : public SingleQuantizer {
+    public:
+	virtual ~NoteQuantizer();
+	virtual timeT quantize(int unit, int maxDots, timeT duration) const;
+    };
+
+    void quantize(Track::iterator from, Track::iterator to,
+		  const SingleQuantizer &absq, const SingleQuantizer &dq,
+		  PropertyName durationProperty) const;
+
+//!!!    Note requantizeByNote(timeT &unitQuantizedDuration) const;
+//!!!    void requantizeByNote(Event *event) const;
 
     int m_unit;
     int m_maxDots;
+/*!!!
     PropertyName m_absoluteTimeProperty;
     PropertyName m_durationProperty;
     PropertyName m_noteDurationProperty;
+*/
 };
 
 }

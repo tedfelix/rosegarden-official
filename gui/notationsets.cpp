@@ -45,8 +45,7 @@ using Rosegarden::timeT;
 
 using namespace NotationProperties;
 
-NotationSet::NotationSet(const NotationElementList &nel,
-                         NELIterator i, const Quantizer *quantizer) :
+NotationSet::NotationSet(const NotationElementList &nel, NELIterator i) :
     m_nel(nel),
     m_initial(nel.end()),
     m_final(nel.end()),
@@ -54,7 +53,6 @@ NotationSet::NotationSet(const NotationElementList &nel,
     m_longest(nel.end()),
     m_highest(nel.end()),
     m_lowest(nel.end()),
-    m_quantizer(quantizer),
     m_baseIterator(i)
 {
     // ...
@@ -120,20 +118,7 @@ NotationSet::sample(const NELIterator &i)
 timeT
 NotationSet::durationOf(const NELIterator &i)
 {
-    if (m_quantizer) {
-        long d;
-        bool done = (*i)->event()->get<Int>
-            (m_quantizer->getNoteDurationProperty(), d);
-        if (done) {
-            return d;
-        } else {
-            m_quantizer->quantizeByNote((*i)->event());
-            return (*i)->event()->get<Int>
-                (m_quantizer->getNoteDurationProperty());
-        }
-    } else {
-        return (*i)->event()->getDuration();
-    }
+    return (*i)->event()->get<Int>(Quantizer::NoteDurationProperty);
 }
 
 NotationSet::NELIterator
@@ -186,8 +171,8 @@ public:
 //////////////////////////////////////////////////////////////////////
 
 Chord::Chord(const NotationElementList &nel, NELIterator i,
-             const Quantizer *quantizer, const Clef &clef, const Key &key) :
-    NotationSet(nel, i, quantizer),
+             const Clef &clef, const Key &key) :
+    NotationSet(nel, i),
     m_clef(clef),
     m_key(key),
     m_time((*i)->getAbsoluteTime())
@@ -311,7 +296,7 @@ bool Chord::isNoteHeadShifted(const NELIterator &itr) const
 
 NotationGroup::NotationGroup(const NotationElementList &nel,
                              NELIterator i, const Clef &clef, const Key &key) :
-    NotationSet(nel, i, 0),
+    NotationSet(nel, i),
     //!!! What if the clef and/or key change in the course of the group?
     m_clef(clef),
     m_key(key),
@@ -441,11 +426,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
         && (*finalNote)->getAbsoluteTime() > (*initialNote)->getAbsoluteTime();
     if (!beam.necessary) return beam;
 
-//!!! shouldn't be using legato quantizer
-    Chord initialChord(getList(), initialNote,
-                       &staff.getLegatoQuantizer(), m_clef, m_key),
-            finalChord(getList(),   finalNote,
-                       &staff.getLegatoQuantizer(), m_clef, m_key);
+    Chord initialChord(getList(), initialNote, m_clef, m_key),
+            finalChord(getList(),   finalNote, m_clef, m_key);
 
     if (initialChord.getInitialElement() == finalChord.getInitialElement()) {
         return beam;
@@ -587,8 +569,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
         if ((*i)->isNote()) {
 
-//!!! shouldn't be using legato quantizer
-	    Chord chord(getList(), i, &staff.getLegatoQuantizer(), m_clef, m_key);
+	    Chord chord(getList(), i, m_clef, m_key);
 	    unsigned int j;
 
             kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: Found chord" << endl;

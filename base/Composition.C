@@ -93,6 +93,7 @@ Composition::addTrack(Track *track)
     std::pair<iterator, bool> res = m_tracks.insert(track);
     track->addObserver(this);
     track->setReferenceTrack(&m_timeReference);
+    track->setQuantizer(getQuantizer());
 
     return res.first;
 }

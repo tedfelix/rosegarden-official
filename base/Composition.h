@@ -25,6 +25,7 @@
 #include <set>
 
 #include "Track.h"
+#include "Quantizer.h"
 
 namespace Rosegarden 
 {
@@ -65,6 +66,10 @@ public:
     Track *getReferenceTrack() {
 	referenceTrackRequested(0);
 	return &m_timeReference;
+    }
+
+    const Quantizer *getQuantizer() const {
+	return &m_quantizer;
     }
 
     trackcontainer& getTracks() { return m_tracks; }
@@ -162,7 +167,10 @@ protected:
     /// Contains time signature and new-bar events.
     Track m_timeReference;
 
+    // called from calculateBarPositions
     Track::iterator addNewBar(timeT time);
+
+    Quantizer m_quantizer;
 
     unsigned int m_nbTicksPerBar; //!!! must lose this
     double m_tempo;

@@ -939,6 +939,23 @@ bool TrackNotationHelper::removeRests(timeT time, timeT duration)
     return true;
 }
 
+void
+TrackNotationHelper::quantize()
+{
+    quantizer().quantizeByNote(begin(), end());
+
+    for (iterator i = begin(); i != end(); ++i) {
+
+	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
+
+	    timeT duration = (*i)->get<Int>(Quantizer::NoteDurationProperty);
+	    Note n(Note::getNearestNote(duration));
+	    (*i)->setMaybe<Int>(Note::NoteType, n.getNoteType());
+	    (*i)->setMaybe<Int>(Note::NoteDots, n.getDots());
+	}
+    }
+}
+
 
 
 } // end of namespace

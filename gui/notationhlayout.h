@@ -38,8 +38,6 @@
  * computes the X coordinates of notation elements
  */
 
-class Rosegarden::Quantizer;
-
 class NotationHLayout : public Rosegarden::HorizontalLayoutEngine<NotationElement>
 {
 public:
@@ -211,8 +209,6 @@ protected:
     int getFixedItemSpacing() const {
 	return (int)((m_npf.getNoteBodyWidth() / 5) * m_spacing);
     }
-
-    const Rosegarden::Quantizer &getQuantizer(const StaffType &staff) const;
 
     double m_totalWidth;
     double m_spacing;

@@ -219,7 +219,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_notePixmapFactory = new NotePixmapFactory(m_fontName, m_fontSize);
 
     setupActions();
-    initFontToolbar();
+    initFontToolbar(tracks[0]->getQuantizer()->getUnit());
     initStatusBar();
     
     setBackgroundMode(PaletteBase);
@@ -620,7 +620,7 @@ NotationView::ZoomSlider<T>::reinitialise(const vector<T> &sizes, T size)
     setTickmarks(Below);
 }
 
-void NotationView::initFontToolbar()
+void NotationView::initFontToolbar(int legatoUnit)
 {
     KToolBar *fontToolbar = toolBar("fontToolBar");
     
@@ -674,8 +674,7 @@ void NotationView::initFontToolbar()
         }
     }
     QSlider *quantizeSlider = new ZoomSlider<int>
-        (m_legatoDurations, Note(Note::Shortest).getDuration(),
-         QSlider::Horizontal, fontToolbar);
+        (m_legatoDurations, legatoUnit, QSlider::Horizontal, fontToolbar);
     connect(quantizeSlider, SIGNAL(valueChanged(int)),
             this, SLOT(changeLegato(int)));
 }
@@ -790,7 +789,7 @@ void NotationView::changeLegato(int n)
         NotationElementList *notes = m_staffs[i]->getViewElementList();
         NotationElementList::iterator starti = notes->begin();
         NotationElementList::iterator endi = notes->end();
-        m_staffs[i]->showElements(starti, endi, true);
+        m_staffs[i]->showElements(starti, endi);
         showBars(i);
     }
 

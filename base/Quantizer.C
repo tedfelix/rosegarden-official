@@ -27,15 +27,111 @@
 namespace Rosegarden {
 
 const PropertyName Quantizer::AbsoluteTimeProperty = "QuantizedAbsoluteTime";
-const PropertyName Quantizer::DurationProperty = "QuantizedDuration";
+const PropertyName Quantizer::DurationProperty	   = "QuantizedDuration";
 const PropertyName Quantizer::NoteDurationProperty = "QuantizedNoteDuration";
+
+Quantizer::SingleQuantizer::~SingleQuantizer() { }
+Quantizer::UnitQuantizer::~UnitQuantizer() { }
+Quantizer::NoteQuantizer::~NoteQuantizer() { }
+
+timeT Quantizer::UnitQuantizer::quantize(int unit, int, timeT duration) const
+{
+    if (duration != 0) {
+	timeT low = (duration / unit) * unit;
+	timeT high = low + unit;
+	if (high - duration > duration - low) duration = low;
+	else duration = high;
+    }
+
+    return duration;
+}
+
+timeT Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
+					 timeT duration) const
+{
+    duration = UnitQuantizer().quantize(unit, maxDots, duration);
+    Note shortNote = Note::getNearestNote(duration, maxDots);
+
+    timeT shortTime = shortNote.getDuration();
+    if   (shortTime == duration) return shortTime;
+
+    Note  longNote(shortNote);
+
+    if ((shortNote.getDots() > 0 ||
+         shortNote.getNoteType() == Note::Shortest)) { // can't dot that
+
+        if (shortNote.getNoteType() == Note::Longest) {
+            return shortTime;
+        }
+
+        longNote = Note(shortNote.getNoteType() + 1, 0);
+    } else {
+        longNote = Note(shortNote.getNoteType(), 1);
+    }
+
+    timeT longTime = longNote.getDuration();
+    if (shortTime < unit || 
+	(longTime - duration < duration - shortTime)) {
+	return longTime;
+    } else {
+	return shortTime;
+    }
+};
+
+
+void
+Quantizer::quantize(Track::iterator from, Track::iterator to,
+		    const SingleQuantizer &aq, const SingleQuantizer &dq,
+		    PropertyName durationProperty) const
+{
+    timeT excess = 0;
+
+    for ( ; from != to; ++from) {
+
+	timeT absoluteTime   = (*from)->getAbsoluteTime();
+	timeT duration	     = (*from)->getDuration();
+	timeT qAbsoluteTime  = aq.quantize(m_unit, m_maxDots, absoluteTime);
+	timeT qDuration	     = 0;
+
+	if ((*from)->isa(Note::EventType)) {
+
+	    qDuration = dq.quantize(m_unit, m_maxDots, duration);
+	    excess = (qAbsoluteTime + qDuration) - (absoluteTime + duration);
+
+	} else if ((*from)->isa(Note::EventRestType)) {
+
+	    if (excess >= duration) {
+		
+		qDuration = 0;
+		excess -= duration;
+
+	    } else {
+
+		if (excess != 0) {
+		    qAbsoluteTime += excess;
+		    duration	  -= excess;
+		}
+
+		qDuration = dq.quantize(m_unit, m_maxDots, duration);
+	    }
+	}
+	//!!! should skip this for non-note/rest events, but can't
+	//while we still have the next two methods working the way
+	//they do -- really want to drop per-Event quantization
+	//altogether, because it's inconsistent
+
+	(*from)->setMaybe<Int>(AbsoluteTimeProperty, qAbsoluteTime);
+	(*from)->setMaybe<Int>(durationProperty, qDuration);
+    }
+}
+
 
 void
 Quantizer::quantizeByUnit(Track::iterator from, Track::iterator to) const
 {
-    for ( ; from != to; ++from) quantizeByUnit(*from);
+    quantize(from, to, UnitQuantizer(), UnitQuantizer(), DurationProperty);
 }
-
+/*
 
 timeT
 Quantizer::quantizeByUnit(Event *e) const
@@ -44,37 +140,50 @@ Quantizer::quantizeByUnit(Event *e) const
     e->setMaybe<Int>(m_durationProperty, duration);
     return duration;
 }
-
+*/
 
 timeT
 Quantizer::quantizeByUnit(timeT duration) const
 {
-//    std::cerr << "Quantizer(" << m_unit << ")::quantizeByUnit: duration from " << duration;
-    if (duration != 0) {
-        timeT low = (duration / m_unit) * m_unit;
-        timeT high = low + m_unit;
-        if (high - duration > duration - low) duration = low;
-        else duration = high;
-    }
-    
-//    std::cerr << " to " << duration << endl;
-    return duration;
+    return UnitQuantizer().quantize(m_unit, m_maxDots, duration);
 }
-
 
 timeT
 Quantizer::getUnitQuantizedDuration(Event *e) const
 {
     long d;
-    if (e->get<Int>(m_durationProperty, d)) return (timeT)d;
-    else return quantizeByUnit(e);
+    if (e->get<Int>(DurationProperty, d)) return (timeT)d;
+    else return quantizeByUnit(e->getDuration());
+}
+
+timeT
+Quantizer::getUnitQuantizedAbsoluteTime(Event *e) const
+{
+    long d;
+    if (e->get<Int>(AbsoluteTimeProperty, d)) return (timeT)d;
+    else return quantizeByUnit(e->getAbsoluteTime());
 }
 
 
 void
 Quantizer::quantizeByNote(Track::iterator from, Track::iterator to) const
 {
-//    for ( ; from != to; ++from) quantizeByNote(*from);
+    quantize(from, to, UnitQuantizer(), NoteQuantizer(), NoteDurationProperty);
+/*
+
+    quantizeByUnit(from, to);
+
+    for ( ; from != to; ++from) {
+
+	timeT duration(getUnitQuantizedDuration(*from));
+	Note note(requantizeByNote(duration));
+
+	(*from)->setMaybe<Int>(m_noteDurationProperty, duration);
+	(*from)->setMaybe<Int>(Note::NoteType, note.getNoteType());
+	(*from)->setMaybe<Int>(Note::NoteDots, note.getDots());
+    }
+*/
+#ifdef NOT_DEFINED
 
     timeT excess = 0;
 
@@ -129,8 +238,9 @@ Quantizer::quantizeByNote(Track::iterator from, Track::iterator to) const
 	    }
 	}
     }
+#endif
 }
-
+/*
 
 timeT
 Quantizer::quantizeByNote(Event *e) const
@@ -146,17 +256,15 @@ Quantizer::quantizeByNote(Event *e) const
 
     return duration;
 }
-
+*/
 
 timeT 
 Quantizer::quantizeByNote(timeT duration) const
 {
-    duration = quantizeByUnit(duration);
-    (void)requantizeByNote(duration);
-    return duration;
+    return NoteQuantizer().quantize(m_unit, m_maxDots, duration);
 }
 
-
+/*
 Note
 Quantizer::requantizeByNote(timeT &duration) const
 {
@@ -190,24 +298,26 @@ Quantizer::requantizeByNote(timeT &duration) const
     return shortNote;
 }
 
+*/
 
 timeT
 Quantizer::getNoteQuantizedDuration(Event *e) const
 {
     long d;
-    if (e->get<Int>(m_noteDurationProperty, d)) return (timeT)d;
-    else return quantizeByNote(e);
+    if (e->get<Int>(NoteDurationProperty, d)) return (timeT)d;
+    else return quantizeByNote(e->getDuration());
 }
 
 
 void Quantizer::unquantize(Event *e) const
 {
-    e->unset(m_durationProperty);
-    e->unset(m_noteDurationProperty);
+    e->unset(DurationProperty);
+    e->unset(NoteDurationProperty);
+    e->unset(AbsoluteTimeProperty);
 
     // should we do this?  not entirely sure, but probably
-    e->unset(Note::NoteType);
-    e->unset(Note::NoteDots);
+/*    e->unset(Note::NoteType);
+      e->unset(Note::NoteDots);*/
 }
 
 

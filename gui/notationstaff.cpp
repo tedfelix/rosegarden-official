@@ -32,8 +32,10 @@
 
 #include "Event.h"
 #include "Track.h"
+#include "Quantizer.h"
 #include "NotationTypes.h"
 
+using Rosegarden::timeT;
 using Rosegarden::Track;
 using Rosegarden::Event;
 using Rosegarden::Int;
@@ -170,7 +172,12 @@ NotationStaff::changeFont(string fontName, int resolution)
 void
 NotationStaff::setLegatoDuration(Rosegarden::timeT duration)
 {
-    m_quantizer = Rosegarden::Quantizer(duration, 2);
+//!!!
+    kdDebug(KDEBUG_AREA) << "NotationStaff::setLegatoDuration" << endl;
+
+    const Rosegarden::Quantizer *q = getTrack().getQuantizer();
+    Rosegarden::Quantizer *wq = const_cast<Rosegarden::Quantizer *>(q);
+    wq->setUnit(duration);
 }
 
 int NotationStaff::yCoordOfHeight(int h) const
@@ -381,22 +388,31 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
 
         try {
 
-            QCanvasPixmap *pixmap;
+            QCanvasPixmap *pixmap = 0;
             QCanvasSimpleSprite *sprite = 0;
+
+	    kdDebug(KDEBUG_AREA) << "\nNotationStaff::showElements: Event is:" << endl;
+	    (*it)->event()->dump(std::cerr);
 
             if ((*it)->isNote()) {
 
                 sprite = makeNoteSprite(it);
-		pixmap = (QCanvasPixmap *)0;    // to suppress warning only
 
             } else if ((*it)->isRest()) {
 
-                Note::Type note =
-                    (*it)->event()->get<Int>(Rosegarden::Note::NoteType);
-                int dots =
-                    (*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
-                pixmap = new QCanvasPixmap
-                    (m_npf->makeRestPixmap(Note(note, dots)));
+		timeT duration = (*it)->event()->get<Int>
+		    (Rosegarden::Quantizer::NoteDurationProperty);
+
+		if (duration > 0) {
+		    Note::Type note =
+			(*it)->event()->get<Int>(Rosegarden::Note::NoteType);
+		    int dots =
+			(*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
+		    pixmap = new QCanvasPixmap
+			(m_npf->makeRestPixmap(Note(note, dots)));
+		} else {
+		    kdDebug(KDEBUG_AREA) << "Omitting too-short rest" << endl;
+		}
 
             } else if ((*it)->event()->isa(Clef::EventType)) {
 
@@ -420,7 +436,7 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
                 pixmap = new QCanvasPixmap(m_npf->makeUnknownPixmap());
             }
 
-            if (!sprite) {
+            if (!sprite && pixmap) {
                 sprite = new QCanvasNotationSprite(*(*it), pixmap, canvas());
             }
 
@@ -431,7 +447,9 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
 		if (needBlueSprite) sprite->setZ(2);
 		else sprite->setZ(0);
                 sprite->show();
-            }
+            } else {
+		(*it)->removeCanvasItem();
+	    }
             
         } catch (...) {
             kdDebug(KDEBUG_AREA) << "Event lacks the proper properties: "

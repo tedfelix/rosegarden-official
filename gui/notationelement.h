@@ -103,6 +103,8 @@ public:
      */
     void setCanvasItem(QCanvasItem *e, double dxoffset, double dyoffset);
 
+    void removeCanvasItem();
+
     /**
      * Reset the position of the canvas item (which is assumed to
      * exist already) to the stored x and y coordinates with the given

@@ -238,6 +238,15 @@ public:
      * Used for Event pasting.
      */ 
     bool removeRests(timeT time, timeT duration);
+
+
+    /**
+     * Note-quantize the Track and set the NoteType and NoteDots
+     * properties on note and rest events.  Only works when the
+     * Track is in a Composition.
+     */
+    void quantize();
+
     
 private:
 

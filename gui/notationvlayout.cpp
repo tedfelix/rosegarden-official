@@ -85,8 +85,7 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 
         } else if (el->isNote()) {
 
-//!!! shouldn't be using legato quantizer? should chord be quantizing at all?
-            Chord chord(*notes, i, &staff.getLegatoQuantizer());
+            Chord chord(*notes, i);
             if (chord.size() == 0) continue;
 
             std::vector<int> h;

@@ -40,7 +40,7 @@ Track::Track(timeT startIdx) :
     m_startIdx(startIdx),
     m_instrument(0),
     m_id(0),
-    m_quantizer(new Quantizer())
+    m_quantizer(0)
 {
     invalidateTimeSigAtEnd();
 }
@@ -49,8 +49,6 @@ Track::~Track()
 {
     // delete content
     for (iterator it = begin(); it != end(); ++it) delete (*it);
-
-    delete m_quantizer;
 }
 
 
@@ -159,7 +157,6 @@ void Track::erase(iterator pos)
 Track::iterator Track::insert(Event *e)
 {
     if (e->isa(TimeSignature::EventType)) invalidateTimeSigAtEnd();
-    m_quantizer->quantizeByNote(e);
     iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
     notifyAdd(e);
     return i;

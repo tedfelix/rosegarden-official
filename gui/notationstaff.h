@@ -30,7 +30,6 @@
 #include "notationelement.h"
 
 #include "Staff.h"
-#include "Quantizer.h"
 
 class QCanvasLineGroupable;
 class QCanvasSimpleSprite;
@@ -67,9 +66,6 @@ public:
     void changeFont(std::string fontName, int resolution);
 
     void setLegatoDuration(Rosegarden::timeT duration);
-    const Rosegarden::Quantizer &getLegatoQuantizer() const {
-	return m_quantizer;
-    }
 
     /**
      * Gets a read-only reference to the pixmap factory used by the
@@ -190,7 +186,6 @@ protected:
 
     QCanvasLineGroupable *m_initialBarA, *m_initialBarB;
     NotePixmapFactory *m_npf;
-    Rosegarden::Quantizer m_quantizer;
 
     bool m_haveSelection;
 };

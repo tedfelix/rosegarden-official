@@ -118,8 +118,8 @@ Event::dump(ostream& out) const
 {
     out << "Event type : " << m_data->m_type.c_str() << '\n';
 
-    out << "\tDuration : " << m_data->m_duration
-        << "\n\tAbsolute Time : " << m_data->m_absoluteTime
+    out << "\tAbsolute Time : " << m_data->m_absoluteTime
+	<< "\n\tDuration : " << m_data->m_duration
         << "\n\tSub-ordering : " << m_data->m_subOrdering
         << "\n\tProperties : \n";
 

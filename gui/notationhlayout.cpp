@@ -151,8 +151,7 @@ int NotationHLayout::getIdealBarWidth(StaffType &staff,
         return fixedWidth;
     }
 
-    int d = (*shortest)->event()->get<Int>
-        (getQuantizer(staff).getNoteDurationProperty());
+    int d = (*shortest)->event()->get<Int>(Quantizer::NoteDurationProperty);
     if (d == 0) {
         kdDebug(KDEBUG_AREA) << "Second trivial return" << endl;
         return fixedWidth;
@@ -211,9 +210,9 @@ NotationHLayout::scanStaff(StaffType &staff)
     Track::iterator refEnd = t.findBarAfter(t.getEndIndex());
     
     int barNo = 0;
-    kdDebug(KDEBUG_AREA) << "Quantizer: unit is " << getQuantizer(staff).getUnit() << endl;
 
-    getQuantizer(staff).quantizeByNote(t.begin(), t.end());
+    TrackNotationHelper nh(t);
+    nh.quantize();
 
     addNewBar(staff, barNo, notes->begin(), 0, 0, true, 0); 
     ++barNo;
@@ -337,7 +336,7 @@ NotationHLayout::scanStaff(StaffType &staff)
                         fixedWidth += m_npf.getAccidentalWidth(dacc);
                     }
 
-                    Chord chord(*notes, it, &getQuantizer(staff));
+                    Chord chord(*notes, it);
                     if (chord.size() >= 2 && it != chord.getFinalElement()) {
                         // we're in a chord, but not at the end of it yet
                         hasDuration = false;
@@ -356,8 +355,7 @@ NotationHLayout::scanStaff(StaffType &staff)
 
                     int d = 0;
                     try {
-                        d = el->event()->get<Int>
-                            (getQuantizer(staff).getNoteDurationProperty());
+                        d = el->event()->get<Int>(Quantizer::NoteDurationProperty);
                     } catch (Event::NoData e) {
                         kdDebug(KDEBUG_AREA) << "No quantized duration in note/rest! event is " << *(el->event()) << endl;
                     }
@@ -367,10 +365,10 @@ NotationHLayout::scanStaff(StaffType &staff)
 
                     int sd = 0;
                     try {
-			if (shortest == notes->end() ||
-			    d <= (sd = (*shortest)->event()->get<Int>
-				  (getQuantizer(staff).
-                                   getNoteDurationProperty()))) {
+			if (d > 0 &&
+			    (shortest == notes->end() ||
+			     d <= (sd = (*shortest)->event()->get<Int>
+				   (Quantizer::NoteDurationProperty)))) {
 			    if (d == sd) {
 
                                 // assumption: rests are wider than notes
@@ -686,7 +684,10 @@ NotationHLayout::layout(BarDataMap::iterator i)
 
 		} else if (el->isRest()) {
 
+		    kdDebug(KDEBUG_AREA) << "rest: delta (before) is " << delta << endl;
 		    delta = positionRest(staff, it, bdi, timeSignature);
+
+		    kdDebug(KDEBUG_AREA) << "rest: delta (after) is " << delta << endl;
 
 		} else if (el->isNote()) {
 
@@ -827,7 +828,7 @@ NotationHLayout::positionNote(StaffType &staff,
         acc = (Accidental)acc0;
     }
 
-    Chord chord(*staff.getViewElementList(), itr, &getQuantizer(staff));
+    Chord chord(*staff.getViewElementList(), itr);
     if (acc != NoAccidental || itr == chord.getInitialElement()) {
         accidentalInThisChord = acc;
     }
@@ -998,13 +999,5 @@ Event *NotationHLayout::getTimeSignatureInBar(StaffType &staff,
     BarData &bd(getBarData(staff)[i]);
     timeSigX = bd.timeSigX;
     return bd.timeSignature;
-}
-
-const Rosegarden::Quantizer &
-NotationHLayout::getQuantizer(const StaffType &staff) const
-{
-    const NotationStaff &notationStaff = 
-        dynamic_cast<const NotationStaff &>(staff);
-    return notationStaff.getLegatoQuantizer();
 }
 
