@@ -156,6 +156,9 @@ public slots:
     void slotR32nd();
     void slotR64th();
 
+    // note eraser
+    void slotEraseSelected();
+
     // Canvas actions slots
     void insertNote(int height, const QPoint&);
     void hoveredOverNoteChanged(const QString&);

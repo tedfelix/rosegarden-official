@@ -83,7 +83,9 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
                 emit hoveredOverNoteChange(noteName);
 
             } else if ((noteSprite = dynamic_cast<QCanvasSimpleSprite*>(item))) {
-                // TODO : fetch element's absolute time
+                // TODO : fetch element's absolute time - can't do that right
+                // now because the noteSprite doesn't have a link back to
+                // the event it represents
 //                 unsigned int elAbsoluteTime = el->event()->getAbsoluteTime();
 //                 kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMouseMoveEvent() : abs. Time : " << elAbsoluteTime << endl;
 //                 emit hoveredOverAbsoluteTimeChange(elAbsoluteTime);

@@ -396,6 +396,13 @@ NotationView::setupActions()
                                   SLOT(slotR64th()),
                                   actionCollection(), "64th_rest" );
     noteAction->setExclusiveGroup("notes");
+
+    // Eraser
+    noteAction = new KRadioAction(i18n("Erase"), "eraser",
+                                  0,
+                                  this, SLOT(slotEraseSelected()),
+                                  actionCollection(), "erase");
+    noteAction->setExclusiveGroup("notes");
     
 
     // setup edit menu
@@ -931,6 +938,13 @@ NotationView::slotR64th()
 }
 
 void
+NotationView::slotEraseSelected()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotEraseSelected()\n";
+    KMessageBox::sorry(this, "Not implemented yet");
+}
+
+void
 NotationView::insertNote(int height, const QPoint &eventPos)
 {
     Rosegarden::Key key;
@@ -1188,24 +1202,23 @@ NotationView::replaceRestWithNote(NotationElementList::iterator rest,
     // if the new note's duration is longer than the rest it's
     // supposed to replace, set it to the rest's duration
     //
-    if ((*rest)->event()->getDuration() < newNote->event()->getDuration()) {
+    if ((*rest)->getDuration() < newNote->getDuration()) {
 
-        newNote->setNote(Note::getNearestNote((*rest)->event()->getDuration()));
+        newNote->setNote(Note::getNearestNote((*rest)->getDuration()));
     }
 
-    bool newNoteIsSameDurationAsRest = (*rest)->event()->getDuration() == newNote->event()->getDuration();
+    bool newNoteIsSameDurationAsRest = (*rest)->getDuration() == newNote->getDuration();
 
     // set new note absolute time to the one of the rest it's replacing
     //
-    newNote->setAbsoluteTime((*rest)->event()->getAbsoluteTime());
+    newNote->setAbsoluteTime((*rest)->getAbsoluteTime());
 
     if (!newNoteIsSameDurationAsRest) { // we need to insert shorter rests
         
-        RestSplitter splitter((*rest)->event()->getDuration(),
-                              newNote->event()->getDuration());
+        RestSplitter splitter((*rest)->getDuration(),
+                              newNote->getDuration());
 
-        timeT restAbsoluteTime = newNote->event()->getAbsoluteTime() +
-            newNote->event()->getDuration();
+        timeT restAbsoluteTime = newNote->getAbsoluteTime() + newNote->getDuration();
     
         while(timeT bit = splitter.nextBit()) {
             kdDebug(KDEBUG_AREA) << "Inserting rest of duration " << bit
@@ -1218,14 +1231,11 @@ NotationView::replaceRestWithNote(NotationElementList::iterator rest,
             newRest->setMaybe<String>("Name", "INSERTED_REST");
             NotationElement *newNotationRest = new NotationElement(newRest);
             restAbsoluteTime += bit;
-            // m_notationElements->insert(newNotationRest);
+
             m_viewElementsManager->insert(newNotationRest);
         }
     }
     
-//     m_notationElements->insert(newNote);
-//     m_notationElements->erase(rest);
-
     m_viewElementsManager->insert(newNote);
     m_viewElementsManager->erase(rest);
 
