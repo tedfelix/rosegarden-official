@@ -31,7 +31,7 @@ class NotationElement;
 /**
  * Central widget for the NotationView window
  *
- *@author Guillaume Laurent, Chris Cannam, Rich Bown
+ *@author Guillaume Laurent, Chris Cannam, Richard Bown
  *@see NotationView
  */
 

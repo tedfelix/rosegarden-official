@@ -26,7 +26,7 @@
 /**
  * A staff line as a canvas item
  *
- *@author Guillaume Laurent, Chris Cannam, Rich Bown
+ *@author Guillaume Laurent, Chris Cannam, Richard Bown
  */
 class StaffLine : public QCanvasLineGroupable
 {

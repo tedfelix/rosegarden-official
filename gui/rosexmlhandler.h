@@ -27,7 +27,7 @@
 
 /**Handler for the Rosegarden XML format
  *
- *@author Guillaume Laurent, Chris Cannam, Rich Bown
+ *@author Guillaume Laurent, Chris Cannam, Richard Bown
  */
 
 class XmlStorableEvent;

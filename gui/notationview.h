@@ -37,7 +37,7 @@ class RosegardenGUIDoc;
 class NotationTool;
 
 /**
-  *@author Guillaume Laurent, Chris Cannam, Rich Bown
+  *@author Guillaume Laurent, Chris Cannam, Richard Bown
   */
 
 class NotationView : public KMainWindow

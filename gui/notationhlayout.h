@@ -27,7 +27,7 @@
 #include "Track.h"
 
 /**
-  *@author Guillaume Laurent, Chris Cannam, Rich Bown
+  *@author Guillaume Laurent, Chris Cannam, Richard Bown
   */
 
 class NotationHLayout : public LayoutEngine

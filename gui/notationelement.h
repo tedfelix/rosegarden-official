@@ -34,7 +34,7 @@ class NotationElementList;
  * affected a QCanvasItem which is set at these coords.
  *
  * @see see NotationView::showElements()
- * @author Guillaume Laurent, Chris Cannam, Rich Bown
+ * @author Guillaume Laurent, Chris Cannam, Richard Bown
  */
 
 class NotationElement : public Rosegarden::ViewElement

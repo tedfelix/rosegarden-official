@@ -31,7 +31,7 @@
  * and NotationElementList/NotationElement objects.  For most
  * purposes the only interesting method is getNotationElementList.
  * 
- * @author Guillaume Laurent, Chris Cannam, Rich Bown
+ * @author Guillaume Laurent, Chris Cannam, Richard Bown
  */
 
 class ViewElementsManager : public Rosegarden::TrackObserver

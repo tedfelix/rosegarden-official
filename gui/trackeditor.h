@@ -37,7 +37,7 @@ class RosegardenGUIDoc;
  * Global widget for track edition.
  * Shows a global overview of the composition.
  *
- *@author Guillaume Laurent, Chris Cannam, Rich Bown
+ *@author Guillaume Laurent, Chris Cannam, Richard Bown
  */
 
 class TracksEditor : public QWidget, virtual public TracksEditorIface

@@ -26,7 +26,7 @@
 #include "notationelement.h"
 
 /**
-  *@author Guillaume Laurent, Chris Cannam, Rich Bown
+  *@author Guillaume Laurent, Chris Cannam, Richard Bown
   */
 
 class NotationVLayout : public LayoutEngine /* : public NotationLayout */

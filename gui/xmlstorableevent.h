@@ -26,7 +26,7 @@
 #include "Event.h"
 
 /**
-  *@author Guillaume Laurent, Chris Cannam, Rich Bown
+  *@author Guillaume Laurent, Chris Cannam, Richard Bown
   */
 class XmlStorableEvent : public Rosegarden::Event
 {

@@ -68,7 +68,7 @@ class TrackTool;
 /**
  * A class to visualize and edit track parts
  *
- * @author Guillaume Laurent, Chris Cannam, Rich Bown
+ * @author Guillaume Laurent, Chris Cannam, Richard Bown
  */
 
 class TracksCanvas : public QCanvasView
