@@ -874,24 +874,32 @@ public slots:
     void slotResolutionChanged(int);
     void slotPreviewPitch(int);
     void slotInstrumentChanged(int);
+    void slotPitchSelectorChanged(int);
+    void slotPitchChanged(int);
     void populate(int dev);
 
 protected:
 
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc   *m_doc;
+    RosegardenGUIDoc       *m_doc;
 
     KComboBox              *m_metronomeDevice;
     KComboBox              *m_metronomeInstrument;
     KComboBox              *m_metronomeResolution;
+    KComboBox              *m_metronomePitchSelector;
     RosegardenPitchChooser *m_metronomePitch;
     QSpinBox               *m_metronomeBarVely;
     QSpinBox               *m_metronomeBeatVely;
     QSpinBox               *m_metronomeSubBeatVely;
     InstrumentParameterBox *m_instrumentParameterBox;
-
-    bool                m_modified;
+    QCheckBox              *m_playEnabled;
+    QCheckBox              *m_recordEnabled;
+    	
+    bool                   m_modified;
+    Rosegarden::MidiByte   m_barPitch;
+    Rosegarden::MidiByte   m_beatPitch;
+    Rosegarden::MidiByte   m_subBeatPitch;
 };
 
 class LilypondOptionsDialog : public KDialogBase

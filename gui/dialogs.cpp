@@ -4465,9 +4465,21 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
 
     vbox = new QVBox(hbox);
 
+    m_metronomePitchSelector = new KComboBox(vbox);
+    m_metronomePitchSelector->insertItem(i18n("Bar Pitch"));
+    m_metronomePitchSelector->insertItem(i18n("Beat Pitch"));
+    m_metronomePitchSelector->insertItem(i18n("Sub-beat Pitch"));    
+    connect(m_metronomePitchSelector, SIGNAL(activated(int)), this, SLOT(slotPitchSelectorChanged(int)));
     m_metronomePitch = new RosegardenPitchChooser(i18n("Pitch"), vbox);
-    connect(m_metronomePitch, SIGNAL(pitchChanged(int)), this, SLOT(slotSetModified()));
+    connect(m_metronomePitch, SIGNAL(pitchChanged(int)), this, SLOT(slotPitchChanged(int)));
     connect(m_metronomePitch, SIGNAL(preview(int)), this, SLOT(slotPreviewPitch(int)));
+
+    QGroupBox *enableBox = new QGroupBox
+	(1, Horizontal, i18n("Metronome Activated"), vbox);
+    m_playEnabled = new QCheckBox(i18n("Playing"), enableBox);
+    m_recordEnabled = new QCheckBox(i18n("Recording"), enableBox);
+    connect(m_playEnabled, SIGNAL(clicked()), this, SLOT(slotSetModified()));
+    connect(m_recordEnabled, SIGNAL(clicked()), this, SLOT(slotSetModified()));
 
     // populate the dialog
     populate(m_metronomeDevice->currentItem());
@@ -4485,8 +4497,8 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
 void
 ManageMetronomeDialog::slotResolutionChanged(int depth)
 {
-    m_metronomeBeatVely->setEnabled(depth > 0);
-    m_metronomeSubBeatVely->setEnabled(depth > 1);
+    m_metronomeBeatVely->setEnabled(depth > 1);
+    m_metronomeSubBeatVely->setEnabled(depth > 2);
     slotSetModified();
 }
 
@@ -4576,11 +4588,16 @@ ManageMetronomeDialog::populate(int deviceIndex)
         m_metronomeInstrument->setCurrentItem(position);
 	slotInstrumentChanged(position);
 
-        m_metronomePitch->slotSetPitch(metronome->getPitch());
+	m_barPitch = metronome->getBarPitch();
+	m_beatPitch = metronome->getBeatPitch();
+	m_subBeatPitch = metronome->getSubBeatPitch();
+	slotPitchSelectorChanged(0);
 	m_metronomeResolution->setCurrentItem(metronome->getDepth());
         m_metronomeBarVely->setValue(metronome->getBarVelocity());
         m_metronomeBeatVely->setValue(metronome->getBeatVelocity());
         m_metronomeSubBeatVely->setValue(metronome->getSubBeatVelocity());
+        m_playEnabled->setChecked(m_doc->getComposition().usePlayMetronome());
+        m_recordEnabled->setChecked(m_doc->getComposition().useRecordMetronome());
 	slotResolutionChanged(metronome->getDepth());
     }
 }
@@ -4699,8 +4716,9 @@ ManageMetronomeDialog::slotApply()
 	metronome.setInstrument(inst->getId());
     }
 
-    metronome.setPitch(
-            Rosegarden::MidiByte(m_metronomePitch->getPitch()));
+    metronome.setBarPitch(m_barPitch);
+    metronome.setBeatPitch(m_beatPitch);
+    metronome.setSubBeatPitch(m_subBeatPitch);
 
     metronome.setDepth(
 	    m_metronomeResolution->currentItem());
@@ -4715,7 +4733,10 @@ ManageMetronomeDialog::slotApply()
             Rosegarden::MidiByte(m_metronomeSubBeatVely->value()));
 
     dev->setMetronome(metronome);
-
+    
+    m_doc->getComposition().setPlayMetronome(m_playEnabled->isChecked());
+    m_doc->getComposition().setRecordMetronome(m_recordEnabled->isChecked());
+    
     m_doc->getSequenceManager()->metronomeChanged(inst->getId(), true);
     m_doc->slotDocumentModified();
     setModified(false);
@@ -4770,6 +4791,38 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
     }
 }
 
+void 
+ManageMetronomeDialog::slotPitchChanged(int pitch) 
+{
+    switch(m_metronomePitchSelector->currentItem()) {
+	case 0:
+	    m_barPitch = pitch;
+	    break;
+	case 1:
+	    m_beatPitch = pitch;
+	    break;
+	case 2:
+	    m_subBeatPitch = pitch;
+	    break;
+    }
+    setModified(true);
+}
+
+void 
+ManageMetronomeDialog::slotPitchSelectorChanged(int selection) 
+{
+    switch(selection) {
+	case 0:
+	    m_metronomePitch->slotSetPitch(m_barPitch);
+	    break;
+	case 1:
+	    m_metronomePitch->slotSetPitch(m_beatPitch);
+	    break;
+	case 2:
+	    m_metronomePitch->slotSetPitch(m_subBeatPitch);
+	    break;
+    }
+}
 
 LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent) :
     KDialogBase(parent, 0, true, i18n("Lilypond Export"), Ok | Cancel)

@@ -1105,15 +1105,25 @@ void MetronomeMmapper::dump()
         else
         {
             Rosegarden::MidiByte velocity;
+            Rosegarden::MidiByte pitch;
 	    switch (i->second) {
-	    case 0:  velocity = m_metronome->getBarVelocity(); break;
-	    case 1:  velocity = m_metronome->getBeatVelocity(); break;
-	    default: velocity = m_metronome->getSubBeatVelocity(); break;
+	    case 0:  
+	    	velocity = m_metronome->getBarVelocity(); 
+	    	pitch = m_metronome->getBarPitch();
+	    	break;
+	    case 1:  
+	    	velocity = m_metronome->getBeatVelocity(); 
+	    	pitch = m_metronome->getBeatPitch();
+	    	break;
+	    default: 
+	    	velocity = m_metronome->getSubBeatVelocity(); 
+	    	pitch = m_metronome->getSubBeatPitch();
+	    	break;
             }
 
             new (bufPos) MappedEvent(m_metronome->getInstrument(),
 				     MappedEvent::MidiNoteOneShot,
-                                     m_metronome->getPitch(),
+                                     pitch,
                                      velocity,
                                      eventTime,
                                      m_tickDuration,

@@ -85,21 +85,27 @@ class MidiMetronome
 {
 public:
     MidiMetronome(InstrumentId instrument,
-                  MidiByte pitch = 37,
+                  MidiByte barPitch = 37,
+                  MidiByte beatPitch = 37,
+                  MidiByte subBeatPitch = 37,
 		  int depth = 2,
                   MidiByte barVely = 120,
                   MidiByte beatVely = 100,
 		  MidiByte subBeatVely = 80);
 
     InstrumentId        getInstrument() const { return m_instrument; }
-    MidiByte            getPitch() const { return m_pitch; }
+    MidiByte            getBarPitch() const { return m_barPitch; }
+    MidiByte            getBeatPitch() const { return m_beatPitch; }
+    MidiByte            getSubBeatPitch() const { return m_subBeatPitch; }
     int                 getDepth() const { return m_depth; }
     MidiByte            getBarVelocity() const { return m_barVelocity; }
     MidiByte            getBeatVelocity() const { return m_beatVelocity; }
     MidiByte            getSubBeatVelocity() const { return m_subBeatVelocity; }
 
     void setInstrument(InstrumentId id) { m_instrument = id; }
-    void setPitch(MidiByte pitch) { m_pitch = pitch; }
+    void setBarPitch(MidiByte pitch) { m_barPitch = pitch; }
+    void setBeatPitch(MidiByte pitch) { m_beatPitch = pitch; }
+    void setSubBeatPitch(MidiByte pitch) { m_subBeatPitch = pitch; }
     void setDepth(int depth) { m_depth = depth; }
     void setBarVelocity(MidiByte barVely) { m_barVelocity = barVely; }
     void setBeatVelocity(MidiByte beatVely) { m_beatVelocity = beatVely; }
@@ -107,7 +113,9 @@ public:
 
 private:
     InstrumentId    m_instrument;
-    MidiByte        m_pitch;
+    MidiByte        m_barPitch;
+    MidiByte        m_beatPitch;
+    MidiByte        m_subBeatPitch;
     int             m_depth;
     MidiByte        m_barVelocity;
     MidiByte        m_beatVelocity;

@@ -1740,8 +1740,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
 	    Rosegarden::MidiMetronome metronome(instrument);
 	    
-	    if (atts.value("pitch"))
-		metronome.setPitch(atts.value("pitch").toInt());
+	    if (atts.value("barpitch"))
+		metronome.setBarPitch(atts.value("barpitch").toInt());
+	    if (atts.value("beatpitch"))
+		metronome.setBarPitch(atts.value("beatpitch").toInt());
+	    if (atts.value("subbeatpitch"))
+		metronome.setBarPitch(atts.value("subbeatpitch").toInt());
 	    if (atts.value("depth"))
 		metronome.setDepth(atts.value("depth").toInt());
 	    if (atts.value("barvelocity"))
