@@ -484,6 +484,38 @@ AudioPluginDialog::slotPluginProgramChanged(const QString &value)
 }
 
 void
+AudioPluginDialog::updatePluginPortControl(int port)
+{        
+    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    if (inst) {
+	PluginPortInstance *pti = inst->getPort(port);
+	if (pti) {
+	    for (std::vector<PluginControl *>::iterator i = m_pluginWidgets.begin();
+		 i != m_pluginWidgets.end(); ++i) {
+		if ((*i)->getIndex() == port) {
+		    (*i)->setValue(pti->value, false);
+		    return;
+		}
+	    }
+	}
+    }
+}
+
+void
+AudioPluginDialog::updatePluginProgramControl()
+{
+    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    if (inst) {
+	std::string program = inst->getProgram();
+	if (m_programCombo) {
+	    m_programCombo->blockSignals(true);
+	    m_programCombo->setCurrentText(strtoqstr(program));
+	    m_programCombo->blockSignals(false);
+	}
+    }
+}
+
+void
 AudioPluginDialog::slotBypassChanged(bool bp)
 {
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
@@ -690,9 +722,11 @@ PluginControl::PluginControl(QWidget *parent,
 }
 
 void
-PluginControl::setValue(float value)
+PluginControl::setValue(float value, bool emitSignals)
 {
+    if (!emitSignals) m_dial->blockSignals(true);
     m_dial->setPosition(value);
+    if (!emitSignals) m_dial->blockSignals(false);
 }
 
 float

@@ -75,6 +75,7 @@ public:
 
     virtual QStringList getPrograms() { return QStringList(); }
     virtual QString getCurrentProgram() { return QString(); }
+    virtual QString getProgram(int bank, int program) { return QString(); }
     virtual void selectProgram(QString) { }
 
     virtual void setPortValue(unsigned int port, float value) = 0;

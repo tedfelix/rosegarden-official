@@ -1258,7 +1258,7 @@ MappedPluginSlot::getPropertyList(const MappedObjectProperty &property)
 	if (studio) {
 	    QStringList programs =
 		studio->getSoundDriver()->getPluginInstancePrograms(m_instrument,
-								  m_position);
+								    m_position);
 
 	    for (int i = 0; i < int(programs.count()); ++i) {
 		list.push_back(programs[i]);
@@ -1328,6 +1328,23 @@ MappedPluginSlot::getProperty(const MappedObjectProperty &property,
         return false;
     }
     return true;
+}
+
+QString
+MappedPluginSlot::getProgram(int bank, int program)
+{
+    MappedStudio *studio =
+	dynamic_cast<MappedStudio*>(getParent());
+    
+    if (studio) {
+	return 
+	    studio->getSoundDriver()->getPluginInstanceProgram(m_instrument,
+							       m_position,
+							       bank,
+							       program);
+    }
+    
+    return QString();
 }
 
 void

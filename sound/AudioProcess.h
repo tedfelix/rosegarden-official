@@ -187,6 +187,7 @@ public:
     void setPluginBypass(InstrumentId, int position, bool bypass);
     QStringList getPluginPrograms(InstrumentId, int);
     QString getPluginProgram(InstrumentId, int);
+    QString getPluginProgram(InstrumentId, int, int, int);
     void setPluginProgram(InstrumentId, int, QString);
     void configurePlugin(InstrumentId, int, QString, QString);
     void resetAllPlugins();

@@ -80,6 +80,9 @@ public:
     //
     static MappedObjectPropertyList getPluginInformation();
 
+    // Get program name for a given program
+    // 
+    static QString getPluginProgram(MappedObjectId, int bank, int program);
 
     // Connection
     //

@@ -5709,6 +5709,16 @@ RosegardenGUIApp::slotPluginPortChanged(Rosegarden::InstrumentId instrumentId,
             setStudioPluginPort(inst->getMappedId(),
                                 portIndex,
                                 value);
+
+	bool update = false;
+	Rosegarden::PluginPortInstance *port = inst->getPort(portIndex);
+	if (!port) {
+	    RG_DEBUG << "RosegardenGUIApp::slotPluginPortChanged - no port " << portIndex
+		     << endl;
+	} else {
+	    if (fabs(port->value - value) > 1e-7) update = true;
+	    port->value = value;
+	}
                                 
         RG_DEBUG << "RosegardenGUIApp::slotPluginPortChanged - "
                  << "setting plugin port ("
@@ -5717,8 +5727,14 @@ RosegardenGUIApp::slotPluginPortChanged(Rosegarden::InstrumentId instrumentId,
 
         // Set modified
         m_doc->slotDocumentModified();
-    }
 
+	if (update) {
+	    int key = (pluginIndex << 16) + instrumentId;
+	    if (m_pluginDialogs[key]) {
+		m_pluginDialogs[key]->updatePluginPortControl(portIndex);
+	    }
+	}
+    }
 }
 
 void
@@ -5737,7 +5753,14 @@ RosegardenGUIApp::slotPluginProgramChanged(Rosegarden::InstrumentId instrumentId
             setStudioObjectProperty(inst->getMappedId(),
 				    Rosegarden::MappedPluginSlot::Program,
 				    program);
-                                
+            
+	bool update = false;
+                    
+	if (inst->getProgram() != qstrtostr(program)) {
+	    update = true;
+	    inst->setProgram(qstrtostr(program));
+	}
+
         RG_DEBUG << "RosegardenGUIApp::slotPluginProgramChanged - "
                  << "setting plugin program ("
 		 << inst->getMappedId() << ") to "
@@ -5745,16 +5768,14 @@ RosegardenGUIApp::slotPluginProgramChanged(Rosegarden::InstrumentId instrumentId
 
         // Set modified
         m_doc->slotDocumentModified();
-    }
-}
 
-void
-RosegardenGUIApp::slotPluginProgramChanged(Rosegarden::InstrumentId instrumentId,
-					   int pluginIndex,
-					   int bank,
-					   int program)
-{
-    //!!! how to do this?
+	if (update) {
+	    int key = (pluginIndex << 16) + instrumentId;
+	    if (m_pluginDialogs[key]) {
+		m_pluginDialogs[key]->updatePluginProgramControl();
+	    }
+	}
+    }
 }
 
 void

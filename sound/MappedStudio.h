@@ -481,6 +481,8 @@ public:
     InstrumentId getInstrument() const { return m_instrument; }
     int getPosition() const { return m_position; }
 
+    QString getProgram(int bank, int program);
+
 protected:
     QString                   m_identifier;
 

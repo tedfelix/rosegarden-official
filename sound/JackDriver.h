@@ -96,6 +96,11 @@ public:
     virtual QString getPluginInstanceProgram(InstrumentId id,
 					     int position); 
   
+    virtual QString getPluginInstanceProgram(InstrumentId id,
+					     int position,
+					     int bank,
+					     int program); 
+  
     virtual void setPluginInstanceProgram(InstrumentId id,
 					  int position,
 					  QString program);

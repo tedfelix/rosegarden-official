@@ -240,6 +240,37 @@ StudioControl::getPluginInformation()
 }
 
 
+QString
+StudioControl::getPluginProgram(MappedObjectId id, int bank, int program)
+{
+    QByteArray data;
+    QCString replyType;
+    QByteArray replyData;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    streamOut << id;
+    streamOut << bank;
+    streamOut << program;
+
+    QString programName;
+
+    if (!rgapp->sequencerCall("getPluginProgram(int, int, int)",
+                              replyType, replyData, data))
+    {
+        SEQMAN_DEBUG << "getPluginProgram - "
+                     << "failed to contact Rosegarden sequencer"
+                     << endl;
+    }
+    else
+    {
+	QDataStream streamIn(replyData, IO_ReadOnly);
+	streamIn >> programName;
+    }
+
+    return programName;
+}
+
+
 void
 StudioControl::connectStudioObjects(MappedObjectId id1,
 				    MappedObjectId id2)

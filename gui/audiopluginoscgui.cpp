@@ -475,9 +475,10 @@ AudioPluginOSCGUIManager::dispatch()
 	    }
 	    int program = arg->i;
 
-	    //!!! locate correct program
+	    QString programName = Rosegarden::StudioControl::getPluginProgram
+		(pluginInstance->getMappedId(), bank, program);
 
-//	    emit pluginPortChanged(instrument, position, port, value);
+	    m_app->slotPluginProgramChanged(instrument, position, programName);
 
 	} else if (method == "update") {
 
@@ -532,6 +533,7 @@ AudioPluginOSCGUIManager::dispatch()
 
 	    RG_DEBUG << "AudioPluginOSCGUIManager: configure(" << key << "," << value
 		     << ")" << endl;
+
 
 	    m_app->slotPluginConfigurationChanged(instrument, position, key, value);
 

@@ -252,6 +252,8 @@ public:
 
     virtual std::vector<QString> getPluginInformation();
 
+    virtual QString getPluginProgram(int id, int bank, int program);
+
     // Set a plugin port
     //
     virtual void setMappedPort(int pluginId,

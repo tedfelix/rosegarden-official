@@ -81,7 +81,7 @@ public:
                   int index,
                   float initialValue);
  
-    void setValue(float value);
+    void setValue(float value, bool emitSignals = true);
     float getValue() const;
 
     int getIndex() const { return m_index; }
@@ -129,6 +129,9 @@ public:
     QAccel* getAccelerators() { return m_accelerators; }
 
     bool isSynth() { return m_index == int(Instrument::SYNTH_PLUGIN_POSITION); }
+
+    void updatePluginPortControl(int port);
+    void updatePluginProgramControl();
 
 public slots:
     void slotCategorySelected(int);

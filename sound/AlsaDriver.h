@@ -172,6 +172,16 @@ public:
 #endif
 	return QString();
     }
+
+    virtual QString getPluginInstanceProgram(InstrumentId id,
+					     int position,
+					     int bank,
+					     int program) {
+#ifdef HAVE_LIBJACK
+	if (m_jackDriver) return m_jackDriver->getPluginInstanceProgram(id, position, bank, program);
+#endif
+	return QString();
+    }
     
     virtual void setPluginInstanceProgram(InstrumentId id,
 					  int position,
