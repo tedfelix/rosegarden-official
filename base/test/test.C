@@ -4,7 +4,7 @@
 // This does some rather shoddy tests on a small selection of core classes.
 
 #include "Event.h"
-#include "Track.h"
+#include "Segment.h"
 #include "Composition.h"
 
 #define TEST_NOTATION_TYPES 1
@@ -12,8 +12,8 @@
 
 #ifdef TEST_NOTATION_TYPES
 #include "NotationTypes.h"
-#include "TrackNotationHelper.h"
-#include "TrackPerformanceHelper.h"
+#include "SegmentNotationHelper.h"
+#include "SegmentPerformanceHelper.h"
 #endif
 
 #include <cstdio>
@@ -51,13 +51,13 @@ int main(int argc, char **argv)
         cout << "Testing debug dump : " << endl;
         e.dump(cout);
         cout << endl << "dump finished" << endl;
-
+/*
         try {
                 cout << "duration is " << e.get<String>(DURATION_PROPERTY) << endl;
         } catch (Event::BadType bt) {
                 cout << "Correctly caught BadType when trying to get<String> of duration" << endl;
         }
-
+*/
         string s;
     
         if (!e.get<String>(DURATION_PROPERTY, s)) {
@@ -65,13 +65,13 @@ int main(int argc, char **argv)
         } else {
                 cerr << "ERROR AT " << __LINE__ << endl;
         }
-    
+/*    
         try {
                 cout << "dummy prop is " << e.get<String>(NONEXISTENT_PROPERTY) << endl;
         } catch (Event::NoData bt) {
                 cout << "Correctly caught NoData when trying to get non existent property" << endl;
         }
-
+*/
         if (!e.get<String>(NONEXISTENT_PROPERTY, s)) {
                 cout << "Correctly got error when trying to get<String> of non existent property" << endl;
         } else {

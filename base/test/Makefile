@@ -26,4 +26,4 @@ depend:
 	makedepend $(INCPATH) -- $(CPPFLAGS) -- $(SRCS)
 
 # DO NOT DELETE
-test.o: ../Event.h ../Property.h ../Track.h ../NotationTypes.h
+test.o: ../Event.h ../Property.h ../Segment.h ../NotationTypes.h
