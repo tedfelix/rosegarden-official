@@ -205,7 +205,9 @@ StudioControl::sendMappedEvent(const Rosegarden::MappedEvent &mE)
     
     mEs = mE; // just in case the passed mapped event has dubious
               // origins and taking its address isn't safe
-    
+
+    mEs.setPersistent(true); // to avoid that MappedComposition dtor try to free it
+
     Rosegarden::MappedComposition mC;
     mC.insert(&mEs);
     StudioControl::sendMappedComposition(mC);
