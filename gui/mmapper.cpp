@@ -718,7 +718,7 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
     Rosegarden::Configuration &config = m_doc->getConfiguration();
     int device = config.get<Rosegarden::Int>("metronomedevice", 0);
 
-    Rosegarden::MidiMetronome *metronome = 
+    const Rosegarden::MidiMetronome *metronome = 
         m_doc->getStudio().getMetronomeFromDevice(device);
 
     if (metronome) {
