@@ -498,34 +498,39 @@ void NotationView::slotEditSelectWholeStaff()
 					   segment.getEndMarkerTime()));
 }
 
+void NotationView::slotToggleToolsToolBar()
+{
+    toggleNamedToolBar("Tools Toolbar");
+}
+
 void NotationView::slotToggleNotesToolBar()
 {
-    toggleNamedToolBar("notesToolBar");
+    toggleNamedToolBar("Notes Toolbar");
 }
 
 void NotationView::slotToggleRestsToolBar()
 {
-    toggleNamedToolBar("restsToolBar");
+    toggleNamedToolBar("Rests Toolbar");
 }
 
 void NotationView::slotToggleAccidentalsToolBar()
 {
-    toggleNamedToolBar("accidentalsToolBar");
+    toggleNamedToolBar("Accidentals Toolbar");
 }
 
 void NotationView::slotToggleClefsToolBar()
 {
-    toggleNamedToolBar("clefsToolBar");
+    toggleNamedToolBar("Clefs Toolbar");
 }
 
 void NotationView::slotToggleFontToolBar()
 {
-    toggleNamedToolBar("fontToolBar");
+    toggleNamedToolBar("Font Toolbar");
 }
 
 void NotationView::slotToggleTransportToolBar()
 {
-    toggleNamedToolBar("transportToolBar");
+    toggleNamedToolBar("Transport Toolbar");
 }
 
 void NotationView::toggleNamedToolBar(const QString& toolBarName, bool* force)

@@ -329,6 +329,7 @@ AlsaDriver::generateInstruments()
     m_alsaPorts.clear();
 #ifdef EXPERIMENTAL_ALSA_DRIVER
     m_devicePortMap.clear();
+    int systemClientNo = 0, hardwareClientNo = 0, softwareClientNo = 0;
 #endif
 
     std::cout << std::endl << "  ALSA Client information:"
@@ -386,23 +387,30 @@ AlsaDriver::generateInstruments()
 
                 // Generate a unique name using the client id
                 //
-#ifndef EXPERIMENTAL_ALSA_DRIVER
-                char clientId[10];
-                sprintf(clientId,
-                        "%d ",
-                        snd_seq_port_info_get_client(pinfo));
-#else
-		char clientId[60];
-		sprintf(clientId, "MIDI Device at %d:%d ",
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+		char clientId[40];
+		sprintf(clientId, "%d:%d ",
 			snd_seq_port_info_get_client(pinfo),
 			snd_seq_port_info_get_port(pinfo));
-#endif
 
                 std::string fullClientName = 
                     std::string(snd_seq_client_info_get_name(cinfo));
 
                 std::string clientName =
                     std::string(clientId) + fullClientName;
+
+#else
+                char clientId[10];
+                sprintf(clientId,
+                        "%d ",
+                        snd_seq_port_info_get_client(pinfo));
+
+                std::string fullClientName = 
+                    std::string(snd_seq_client_info_get_name(cinfo));
+
+                std::string clientName =
+                    std::string(clientId) + fullClientName;
+#endif
 
                 AlsaPortDescription *portDescription = 
                     new AlsaPortDescription(
@@ -433,8 +441,29 @@ AlsaDriver::generateInstruments()
              << " port = " << (*it)->m_port << endl;
              */
 
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+	char clientId[60];
+
+	if ((*it)->m_client < 64)
+	    sprintf(clientId, "System MIDI device %d",
+		    systemClientNo++);
+	else if ((*it)->m_client < 128)
+	    sprintf(clientId, "Hardware MIDI device %d",
+		    hardwareClientNo++);
+	else
+	    sprintf(clientId, "Software MIDI device %d",
+		    softwareClientNo++);
+
+	std::string clientName = clientId;
+#endif
+
         addInstrumentsForPort((*it)->m_type,
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+			      clientName,
                               (*it)->m_name,
+#else
+                              (*it)->m_name,
+#endif
                               (*it)->m_client,
                               (*it)->m_port,
                               (*it)->m_direction);
@@ -502,7 +531,10 @@ AlsaDriver::generateInstruments()
 //
 void
 AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
-                                  const std::string &name, 
+                                  std::string name,
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+				  std::string connectionName,
+#endif
                                   int client,
                                   int port,
                                   PortDirection direction)
@@ -533,7 +565,11 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
         {
             alsaInstr = new AlsaPort(0,
                                      0,
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+				     connectionName,
+#else
                                      name,
+#endif
                                      client,
                                      port,
                                      direction);  // port direction
@@ -563,7 +599,11 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
         //
         alsaInstr = new AlsaPort(m_midiRunningId,
                                  m_midiRunningId + 15,
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+				 connectionName,
+#else
                                  name,
+#endif
                                  client,
                                  port,
                                  direction);
@@ -598,12 +638,10 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
         MappedDevice *device =
                 new MappedDevice(m_deviceRunningId,
                                  Rosegarden::Device::Midi,
+                                 name);
 #ifdef EXPERIMENTAL_ALSA_DRIVER
-                                 "Some MIDI Device");
-	cout << "AlsaDriver: connection is " << name << endl;
-	device->setConnection(name);
-#else
-	                         name);
+	cout << "AlsaDriver: connection is " << connectionName << endl;
+	device->setConnection(connectionName);
 #endif
         m_devices.push_back(device);
     }
@@ -612,6 +650,21 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
     m_currentPair.first = client;
     m_currentPair.second = port;
 }
+
+
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+unsigned int
+AlsaDriver::getConnections(unsigned int)
+{
+    return m_alsaPorts.size();
+}
+
+QString
+AlsaDriver::getConnection(unsigned int, unsigned int connectionNo)
+{
+    return QString(m_alsaPorts[connectionNo]->m_name.c_str());
+}
+#endif
 
 
 void

@@ -41,16 +41,17 @@
       	<Action name="edit_notation"/>
       	<Action name="edit_event_list"/>
 	<Separator/>
+        <Action name="relabel_segment"/>
 	<Action name="quantize_selection"/>
 	<Action name="rescale"/>
+<!-- 	<Action name="harmonize_selection"/> -->
+	<Separator/>
 	<Action name="auto_split"/>
 	<Action name="split_by_pitch"/>
 	<Action name="collapse"/>
-<!-- 	<Action name="harmonize_selection"/> -->
-        <Action name="set_tempo_to_segment_length"/>
         <Action name="repeats_to_real_copies"/>
-        <Action name="relabel_segment"/>
 	<Separator/>
+        <Action name="set_tempo_to_segment_length"/>
       <Action name="audio_manager"/>
   </Menu>
   <Menu name="Tracks">
@@ -106,7 +107,7 @@
 
 </MenuBar>
 
-<ToolBar name="tracksToolBar">
+<ToolBar name="Tools Toolbar">
         <Action name="select"/>
 	<Action name="move"/>
 	<Action name="resize"/>
@@ -116,13 +117,13 @@
         <Action name="join"/>
 </ToolBar>
 
-<ToolBar name="editorsToolBar">
+<ToolBar name="Editors Toolbar">
 	<Action name="edit_matrix"/>
 	<Action name="edit_notation"/>
 	<Action name="edit_event_list"/>
 </ToolBar>
 
-<ToolBar name="transportToolBar">
+<ToolBar name="Transport Toolbar">
   <Action name="rewindtobeginning" />
   <Action name="rewind" />
   <Action name="play" />
@@ -132,7 +133,7 @@
   <Action name="record" />
 </ToolBar>
 
-<ToolBar name="zoomToolBar">
+<ToolBar name="Zoom Toolbar">
 </ToolBar>
 
 <!--     RMB Menus           -->

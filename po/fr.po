@@ -1335,7 +1335,7 @@ msgid "&No Snap"
 msgstr ""
 
 #: matrixview.cpp:637 notationview.cpp:1050 rosegardengui.cpp:326
-msgid "Show Ch&ord Name Ruler"
+msgid "Show Cho&rd Name Ruler"
 msgstr ""
 
 #: matrixview.cpp:641 notationview.cpp:1058
@@ -2483,7 +2483,7 @@ msgid "Export &Csound score file..."
 msgstr ""
 
 #: rosegardengui.cpp:278
-msgid "Show T&racks Toolbar"
+msgid "Show T&ools Toolbar"
 msgstr ""
 
 #: rosegardengui.cpp:282

@@ -294,7 +294,7 @@ void RosegardenGUIApp::setupActions()
     //
     m_viewToolBar = KStdAction::showToolbar  (this, SLOT(slotToggleToolBar()),   actionCollection());
 
-    m_viewTracksToolBar = new KToggleAction(i18n("Show T&racks Toolbar"), 0, this,
+    m_viewTracksToolBar = new KToggleAction(i18n("Show T&ools Toolbar"), 0, this,
                                             SLOT(slotToggleTracksToolBar()), actionCollection(),
                                             "show_tracks_toolbar");
 
@@ -342,7 +342,7 @@ void RosegardenGUIApp::setupActions()
                                      actionCollection(),
                                      "show_tempo_ruler");
 
-    m_viewChordNameRuler = new KToggleAction(i18n("Show Ch&ord Name Ruler"), 0, this,
+    m_viewChordNameRuler = new KToggleAction(i18n("Show Cho&rd Name Ruler"), 0, this,
 					     SLOT(slotToggleChordNameRuler()),
 					     actionCollection(),
 					     "show_chord_name_ruler");
@@ -424,6 +424,8 @@ void RosegardenGUIApp::setupActions()
                               actionCollection(), "join");
     action->setExclusiveGroup("segmenttools");
 
+    // arf -- the action's called Collapse, the command's called Merge,
+    // and the menu text says Join
     new KAction(i18n(SegmentMergeCommand::getGlobalName()),
                 0,
                 this, SLOT(slotMergeSegments()),
@@ -434,7 +436,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotRepeatingSegments()),
                 actionCollection(), "repeats_to_real_copies");
 
-    new KAction(i18n("Re&label Segments"),
+    new KAction(i18n(SegmentLabelCommand::getGlobalName()),
                 0,
                 this, SLOT(slotRelabelSegments()),
                 actionCollection(), "relabel_segment");
@@ -638,13 +640,13 @@ void RosegardenGUIApp::setupActions()
 
     // transport toolbar is hidden by default - TODO : this should be in options
     //
-    toolBar("transportToolBar")->hide();
+    toolBar("Transport Toolbar")->hide();
 }
 
 
 void RosegardenGUIApp::initZoomToolbar()
 {
-    KToolBar *zoomToolbar = toolBar("zoomToolBar");
+    KToolBar *zoomToolbar = toolBar("Zoom Toolbar");
     if (!zoomToolbar) {
 	RG_DEBUG << "RosegardenGUIApp::initZoomToolbar() : "
 			     << "zoom toolbar not found" << endl;
@@ -1028,10 +1030,10 @@ void RosegardenGUIApp::readOptions()
     //
     m_viewStatusBar       ->setChecked(!statusBar()                ->isHidden());
     m_viewToolBar         ->setChecked(!toolBar()                  ->isHidden());
-    m_viewTracksToolBar   ->setChecked(!toolBar("tracksToolBar")   ->isHidden());
-    m_viewEditorsToolBar  ->setChecked(!toolBar("editorsToolBar")  ->isHidden());
-    m_viewTransportToolBar->setChecked(!toolBar("transportToolBar")->isHidden());
-    m_viewZoomToolBar     ->setChecked(!toolBar("zoomToolBar")     ->isHidden());
+    m_viewTracksToolBar   ->setChecked(!toolBar("Tracks Toolbar")   ->isHidden());
+    m_viewEditorsToolBar  ->setChecked(!toolBar("Editors Toolbar")  ->isHidden());
+    m_viewTransportToolBar->setChecked(!toolBar("Transport Toolbar")->isHidden());
+    m_viewZoomToolBar     ->setChecked(!toolBar("Zoom Toolbar")     ->isHidden());
 
     bool opt;
 
@@ -1517,7 +1519,7 @@ void RosegardenGUIApp::slotMergeSegments()
     for (Rosegarden::SegmentSelection::iterator i = selection.begin();
 	 i != selection.end(); ++i) {
 	if ((*i)->getType() != Rosegarden::Segment::Internal) {
-	    KMessageBox::sorry(this, i18n("Can't collapse Audio segments"));
+	    KMessageBox::sorry(this, i18n("Can't join Audio segments"));
 	    return;
 	}
     }
@@ -1733,9 +1735,9 @@ void RosegardenGUIApp::slotToggleTracksToolBar()
     KTmpStatusMsg msg(i18n("Toggle the tracks toolbar..."), this);
 
     if (m_viewTracksToolBar->isChecked())
-        toolBar("tracksToolBar")->show();
+        toolBar("Tools Toolbar")->show();
     else
-        toolBar("tracksToolBar")->hide();
+        toolBar("Tools Toolbar")->hide();
 }
 
 void RosegardenGUIApp::slotToggleEditorsToolBar()
@@ -1743,9 +1745,9 @@ void RosegardenGUIApp::slotToggleEditorsToolBar()
     KTmpStatusMsg msg(i18n("Toggle the editor toolbar..."), this);
 
     if (m_viewEditorsToolBar->isChecked())
-        toolBar("editorsToolBar")->show();
+        toolBar("Editors Toolbar")->show();
     else
-        toolBar("editorsToolBar")->hide();
+        toolBar("Editors Toolbar")->hide();
 }
 
 void RosegardenGUIApp::slotToggleTransportToolBar()
@@ -1753,9 +1755,9 @@ void RosegardenGUIApp::slotToggleTransportToolBar()
     KTmpStatusMsg msg(i18n("Toggle the transport toolbar..."), this);
 
     if (m_viewTransportToolBar->isChecked())
-        toolBar("transportToolBar")->show();
+        toolBar("Transport Toolbar")->show();
     else
-        toolBar("transportToolBar")->hide();
+        toolBar("Transport Toolbar")->hide();
 }
 
 void RosegardenGUIApp::slotToggleZoomToolBar()
@@ -1763,9 +1765,9 @@ void RosegardenGUIApp::slotToggleZoomToolBar()
     KTmpStatusMsg msg(i18n("Toggle the zoom toolbar..."), this);
 
     if (m_viewZoomToolBar->isChecked())
-        toolBar("zoomToolBar")->show();
+        toolBar("Zoom Toolbar")->show();
     else
-        toolBar("zoomToolBar")->hide();
+        toolBar("Zoom Toolbar")->hide();
 }
 
 void RosegardenGUIApp::slotToggleTransport()
@@ -4095,7 +4097,7 @@ RosegardenGUIApp::slotAutoSave()
         m_seqManager->getTransportStatus() == RECORDING_AUDIO)
         return;
 
-    RG_DEBUG << "RosegardenGUIApp::slotAutoSave" << endl;
+//    RG_DEBUG << "RosegardenGUIApp::slotAutoSave" << endl;
     m_doc->slotAutoSave();
 }
 

@@ -227,10 +227,7 @@ void RosegardenGUIDoc::slotAutoSave()
 {
 //     RG_DEBUG << "RosegardenGUIDoc::slotAutoSave()\n" << endl;
 
-    if (isAutoSaved()) {
-        RG_DEBUG << "RosegardenGUIDoc::slotAutoSave() - doc already autosaved\n";
-        return;
-    }
+    if (isAutoSaved()) return;
       
     QString autoSaveFileName = getAutoSaveFileName();
 

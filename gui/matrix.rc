@@ -93,6 +93,7 @@
 </Menu>
 
 <Menu  name="settings"><text>&amp;Settings</text>
+  <Action name="show_tools_toolbar"        append="show_merge" />
   <Action name="show_chords_ruler"         append="show_merge" />
   <Action name="show_tempo_ruler"          append="show_merge" />
 </Menu> 
@@ -100,7 +101,7 @@
 
 </MenuBar>
 
-<ToolBar name="toolsToolBar">
+<ToolBar name="Tools Toolbar">
   <Action name="select" />
   <Action name="move" />
   <Action name="draw" />
@@ -108,7 +109,7 @@
   <Action name="resize" />
 </ToolBar>
 
-<ToolBar name="transportToolBar">
+<ToolBar name="Transport Toolbar">
   <Action name="playback_pointer_start" />
   <Action name="playback_pointer_back_bar" />
   <Action name="play" />
@@ -120,10 +121,10 @@
   <Action name="toggle_solo"/>
 </ToolBar>
 
-<ToolBar name="actionsToolBar">
+<ToolBar name="Actions Toolbar">
 </ToolBar>
 
-<ToolBar name="zoomToolBar">
+<ToolBar name="Zoom Toolbar">
 </ToolBar>
 
 <State name="have_selection">

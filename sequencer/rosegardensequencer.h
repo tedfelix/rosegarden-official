@@ -180,6 +180,9 @@ public:
     virtual unsigned int getDevices();
     virtual Rosegarden::MappedDevice getMappedDevice(unsigned int id);
 
+    virtual unsigned int getConnections(unsigned int deviceId);
+    virtual QString getConnection(unsigned int deviceId, unsigned int connectionNo);
+
     // Audio monitoring
     //
     virtual void setAudioMonitoring(long value);

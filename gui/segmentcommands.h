@@ -296,7 +296,7 @@ public:
     virtual void execute();
     virtual void unexecute();
     
-    static QString getGlobalName() { return "&Auto-Split"; }
+    static QString getGlobalName() { return "&Split on Silence"; }
 
 private:
     Rosegarden::Segment                *m_segment;
@@ -316,7 +316,7 @@ public:
     virtual void execute();
     virtual void unexecute();
     
-    static QString getGlobalName() { return "&Auto-Split"; }
+    static QString getGlobalName() { return "&Split on Silence"; }
 
 private:
     Rosegarden::Segment *m_segment;
@@ -335,7 +335,7 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-    static QString getGlobalName() { return "&Collapse Segments"; }
+    static QString getGlobalName() { return "&Join"; }
     
 private:
     std::vector<Rosegarden::Segment *> m_oldSegments;
@@ -638,7 +638,7 @@ public:
     virtual ~SegmentLabelCommand();
 
     static QString getGlobalName()
-        { return i18n("&Rename Segments..."); }
+        { return i18n("Re&label..."); }
 
     virtual void execute();
     virtual void unexecute();

@@ -913,6 +913,18 @@ RosegardenSequencerApp::getDevices()
     return m_sequencer->getDevices();
 }
 
+unsigned int
+RosegardenSequencerApp::getConnections(unsigned int deviceId)
+{
+    return m_sequencer->getConnections(deviceId);
+}
+
+QString
+RosegardenSequencerApp::getConnection(unsigned int deviceId,
+				      unsigned int connectionNo)
+{
+    return m_sequencer->getConnection(deviceId, connectionNo);
+}
 
 void
 RosegardenSequencerApp::sequencerAlive()

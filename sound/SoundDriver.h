@@ -311,6 +311,9 @@ public:
     //
     unsigned int getDevices();
 
+    virtual unsigned int getConnections(unsigned int deviceId) { return 0; }
+    virtual QString getConnection(unsigned int deviceId, unsigned int connectionNo) { return ""; }
+
     // Return the audio play queue
     //
     std::vector<PlayableAudioFile*>& getAudioPlayQueue()

@@ -290,6 +290,8 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     SetWaitCursor waitCursor;
     std::vector<Rosegarden::Segment *> segmentsToEdit;
 
+    cerr << "\n\n\n\nRosegardenGUIView::slotEditSegmentNotation: p is " << p << endl;
+
     // The logic here is: If we're calling for this operation to
     // happen on a particular segment, then open that segment and if
     // it's part of a selection open all other selected segments too.

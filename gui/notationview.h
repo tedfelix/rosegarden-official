@@ -284,6 +284,11 @@ public slots:
     void slotEditDelete();
 
     /**
+     * toggles the tools toolbar
+     */
+    void slotToggleToolsToolBar();
+
+    /**
      * toggles the notes toolbar
      */
     void slotToggleNotesToolBar();

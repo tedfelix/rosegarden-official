@@ -55,12 +55,14 @@
 
 10. Dragging notes &c
 
+11. Dialog to control Interpret function
+
 
 20020729 task list
 ==================
 
  1. Lyrics. [DONEish]
-    And a bouncing ball to track them with during playback.
+    And a bouncing ball to track them with during playback. [STILL NOT DONE!]
 
  2. Better-calculated progress bars in notation view [DONEish]
     [No -- still open.  Need to manage them better across multiple

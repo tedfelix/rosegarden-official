@@ -706,12 +706,13 @@ void NotationView::readOptions()
 {
     EditView::readOptions();
 
-    getToggleAction("show_notes_toolbar")      ->setChecked(!toolBar("notesToolBar")      ->isHidden());
-    getToggleAction("show_rests_toolbar")      ->setChecked(!toolBar("restsToolBar")      ->isHidden());
-    getToggleAction("show_clefs_toolbar")      ->setChecked(!toolBar("clefsToolBar")      ->isHidden());
-    getToggleAction("show_font_toolbar")       ->setChecked(!toolBar("fontToolBar")       ->isHidden());
-    getToggleAction("show_transport_toolbar")  ->setChecked(!toolBar("transportToolBar")  ->isHidden());
-    getToggleAction("show_accidentals_toolbar")->setChecked(!toolBar("accidentalsToolBar")->isHidden());
+    getToggleAction("show_tools_toolbar")      ->setChecked(!toolBar("Tools Toolbar")      ->isHidden());
+    getToggleAction("show_notes_toolbar")      ->setChecked(!toolBar("Notes Toolbar")      ->isHidden());
+    getToggleAction("show_rests_toolbar")      ->setChecked(!toolBar("Rests Toolbar")      ->isHidden());
+    getToggleAction("show_clefs_toolbar")      ->setChecked(!toolBar("Clefs Toolbar")      ->isHidden());
+    getToggleAction("show_font_toolbar")       ->setChecked(!toolBar("Font Toolbar")       ->isHidden());
+    getToggleAction("show_transport_toolbar")  ->setChecked(!toolBar("Transport Toolbar")  ->isHidden());
+    getToggleAction("show_accidentals_toolbar")->setChecked(!toolBar("Accidentals Toolbar")->isHidden());
 
     m_config->setGroup("Notation Options");
 
@@ -1188,6 +1189,7 @@ void NotationView::setupActions()
     // setup Settings menu
     static const char* actionsToolbars[][4] = 
         {
+            { "Show T&ools Toolbar",  "1slotToggleToolsToolBar()",  "show_tools_toolbar",                    "palette-tools" },
             { "Show &Notes Toolbar",  "1slotToggleNotesToolBar()",  "show_notes_toolbar",                    "palette-notes" },
             { "Show &Rests Toolbar",  "1slotToggleRestsToolBar()",  "show_rests_toolbar",                    "palette-rests" },
             { "Show &Accidentals Toolbar",   "1slotToggleAccidentalsToolBar()",  "show_accidentals_toolbar", "palette-accidentals" },
@@ -1385,7 +1387,7 @@ NotationView::getStaff(const Segment &segment)
 
 void NotationView::initFontToolbar()
 {
-    KToolBar *fontToolbar = toolBar("fontToolBar");
+    KToolBar *fontToolbar = toolBar("Font Toolbar");
     
     if (!fontToolbar) {
         NOTATION_DEBUG

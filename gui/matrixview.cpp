@@ -1668,7 +1668,7 @@ MatrixView::initActionsToolbar()
 {
     MATRIX_DEBUG << "MatrixView::initActionsToolbar" << endl;
 
-    KToolBar *actionsToolbar = toolBar("actionsToolBar");
+    KToolBar *actionsToolbar = toolBar("Actions Toolbar");
 
     if (!actionsToolbar)
     {
@@ -1759,7 +1759,7 @@ MatrixView::initZoomToolbar()
 {
     MATRIX_DEBUG << "MatrixView::initZoomToolbar" << endl;
 
-    KToolBar *zoomToolbar = toolBar("zoomToolBar");
+    KToolBar *zoomToolbar = toolBar("Zoom Toolbar");
 
     if (!zoomToolbar)
     {

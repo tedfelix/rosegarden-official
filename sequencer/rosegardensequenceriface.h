@@ -132,6 +132,12 @@ public:
     //
     virtual Rosegarden::MappedDevice getMappedDevice(unsigned int id) = 0;
 
+    // Return permissible connections by device
+    // This API will change when connection classes happen
+    //
+    virtual unsigned int getConnections(unsigned int deviceId) = 0;
+    virtual QString getConnection(unsigned int deviceId, unsigned int connectionNo) = 0;
+
     // Set audio monitoring Instrument - tells the sequencer that the
     // gui is currently monitoring audio and which Instrument to report
     // the input level against - this is so we can get a real time

@@ -77,7 +77,10 @@ public:
     virtual bool record(const RecordStatus& recordStatus);
 
     void addInstrumentsForPort(Instrument::InstrumentType type,
-                               const std::string &name, 
+                               std::string name, 
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+			       std::string connectionName,
+#endif
                                int client,
                                int port,
                                PortDirection direction);
@@ -205,6 +208,14 @@ public:
     //
     bool createAudioFile(const std::string &fileName);
     void appendToAudioFile(const std::string &buffer);
+
+#endif
+
+
+#ifdef EXPERIMENTAL_ALSA_DRIVER
+
+    virtual unsigned int getConnections(unsigned int deviceId);
+    virtual QString getConnection(unsigned int deviceId, unsigned int connectionNo);
 
 #endif
 

@@ -177,6 +177,19 @@ public:
         return m_soundDriver->getDevices();
     }
 
+    // Get total number of permissible connections for a given device
+    //
+    unsigned int getConnections(unsigned int deviceId)
+    {
+	return m_soundDriver->getConnections(deviceId);
+    }
+
+    // Get a single connection for a given device
+    //
+    QString getConnection(unsigned int deviceId, unsigned int connectionNo)
+    {
+	return m_soundDriver->getConnection(deviceId, connectionNo);
+    }
 
     // Process anything that needs to go on in the background 
     // (NoteOffs etc).
