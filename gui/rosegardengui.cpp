@@ -185,8 +185,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_markerEditor(0),
       m_triggerSegmentManager(0),
 #ifdef HAVE_LIBLO
-      //!!! better to create this only if/when needed -- perhaps make it
-      // a singleton that creates itself on demand
       m_pluginGUIManager(new AudioPluginOSCGUIManager(this)),
 #endif
       m_playTimer(new QTimer(this)),
@@ -1258,6 +1256,7 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 
 #ifdef HAVE_LIBLO
     if (m_pluginGUIManager) {
+	m_pluginGUIManager->stopAllGUIs();
 	m_pluginGUIManager->setStudio(&m_doc->getStudio());
     }
 #endif
@@ -5859,6 +5858,11 @@ RosegardenGUIApp::slotPluginConfigurationChanged(Rosegarden::InstrumentId instru
 
         // Set modified
         m_doc->slotDocumentModified();
+
+	int key = (index << 16) + instrumentId;
+	if (m_pluginDialogs[key]) {
+	    m_pluginDialogs[key]->updatePluginProgramList();
+	}
     }
 }
 

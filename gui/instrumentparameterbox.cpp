@@ -672,11 +672,13 @@ AudioInstrumentParameterPanel::setAudioMeter(float dBleft, float dBright)
     
     if (m_selectedInstrument)
     {
-        if (m_selectedInstrument->getAudioChannels() == 1) {
-	    m_audioFader->m_vuMeter->setLevel(dBleft);
-	} else {
+	// Always set stereo, because we have to reflect what's happening
+	// with the pan setting even on mono tracks
+//        if (m_selectedInstrument->getAudioChannels() == 1) {
+//	    m_audioFader->m_vuMeter->setLevel(dBleft);
+//	} else {
 	    m_audioFader->m_vuMeter->setLevel(dBleft, dBright);
-	}
+//	}
     }
 }
 

@@ -19,14 +19,15 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef _DSSIPLUGININSTANCE_H_
+#define _DSSIPLUGININSTANCE_H_
+
 #include <vector>
 #include <set>
+#include <map>
 #include <qstring.h>
 #include "config.h"
 #include "Instrument.h"
-
-#ifndef _DSSIPLUGININSTANCE_H_
-#define _DSSIPLUGININSTANCE_H_
 
 #ifdef HAVE_DSSI
 
@@ -73,6 +74,9 @@ public:
     virtual void silence();
     virtual void setIdealChannelCount(size_t channels); // may re-instantiate
 
+    virtual bool isInGroup() const { return m_grouped; }
+    virtual void detachFromGroup();
+
 protected:
     // To be constructed only by DSSIPluginFactory
     friend class DSSIPluginFactory;
@@ -105,10 +109,10 @@ protected:
     void cleanup();
     void activate();
     void deactivate();
-
-    // Connection of data (and behind the scenes control) ports
-    //
     void connectPorts();
+
+    void initialiseGroupMembership();
+    void runGrouped(const RealTime &);
     
     Rosegarden::InstrumentId   m_instrument;
     int                        m_position;
@@ -133,6 +137,14 @@ protected:
     
     bool                      m_bypassed;
     QString                   m_program;
+    bool                      m_grouped;
+    RealTime                  m_lastRunTime;
+
+    typedef std::set<DSSIPluginInstance *> PluginSet;
+    typedef std::map<QString, PluginSet> GroupMap;
+    static GroupMap m_groupMap;
+    static snd_seq_event_t **m_groupLocalEventBuffers;
+    static size_t m_groupLocalEventBufferCount;
 };
 
 };

@@ -132,6 +132,7 @@ public:
 
     void updatePluginPortControl(int port);
     void updatePluginProgramControl();
+    void updatePluginProgramList();
 
 public slots:
     void slotCategorySelected(int);
@@ -189,7 +190,8 @@ protected:
     QPushButton         *m_pasteButton;
     QPushButton         *m_defaultButton;
     QPushButton         *m_guiButton;
-
+    
+    QLabel              *m_programLabel;
     KComboBox           *m_programCombo;
     std::vector<PluginControl*> m_pluginWidgets;
     QGridLayout         *m_gridLayout;

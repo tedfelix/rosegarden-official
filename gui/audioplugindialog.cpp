@@ -76,6 +76,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_pluginGUIManager(aGM),
 #endif
     m_instrument(instrument),
+    m_programLabel(0),
     m_index(index),
     m_generating(true),
     m_guiShown(false)
@@ -327,9 +328,9 @@ AudioPluginDialog::slotPluginSelected(int i)
 
     if (plugin && plugin->isSynth()) {
 
-	programLabel = new QLabel(i18n("Program:  "), m_pluginParamsBox);
+	m_programLabel = new QLabel(i18n("Program:  "), m_pluginParamsBox);
 	m_programCombo = new KComboBox(m_pluginParamsBox);
-	m_gridLayout->addMultiCellWidget(programLabel,
+	m_gridLayout->addMultiCellWidget(m_programLabel,
 					 0, 0, 0, 0, Qt::AlignRight);
 	m_gridLayout->addMultiCellWidget(m_programCombo,
 					 0, 0, 1, m_gridLayout->numCols()-1,
@@ -428,7 +429,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 	    m_programCombo->insertStringList(programs);
 	    m_programCombo->setCurrentItem(current);
 	} else {
-	    programLabel->hide();
+	    m_programLabel->hide();
 	    m_programCombo->hide();
 	}
     }
@@ -521,6 +522,36 @@ AudioPluginDialog::updatePluginProgramControl()
 	    m_programCombo->blockSignals(false);
 	}
     }
+}
+
+void
+AudioPluginDialog::updatePluginProgramList()
+{
+    if (!m_programLabel) return;
+
+    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    if (!inst) return;
+
+    m_programCombo->blockSignals(true);
+
+    while (m_programCombo->count() > 0) {
+	m_programCombo->removeItem(0);
+    }
+
+    int current = 0;
+    QStringList programs = getProgramsForInstance(inst, current);
+    
+    if (programs.count() > 0) {
+	m_programCombo->show();
+	m_programLabel->show();
+	m_programCombo->insertStringList(programs);
+	m_programCombo->setCurrentItem(current);
+    } else {
+	m_programLabel->hide();
+	m_programCombo->hide();
+    }
+
+    m_programCombo->blockSignals(false);
 }
 
 void

@@ -121,7 +121,7 @@ AudioPluginInstance::toXmlString()
 
     for (ConfigMap::iterator i = m_config.begin(); i != m_config.end(); ++i) {
 	plugin << "                <configure key=\""
-	       << encode(i->first) << "\"=\""
+	       << encode(i->first) << "\" value=\""
 	       << encode(i->second) << "\"/>" << std::endl;
     }
 

@@ -134,19 +134,10 @@ static int osc_message_handler(const char *path, const char *types, lo_arg **arg
 AudioPluginOSCGUIManager::AudioPluginOSCGUIManager(RosegardenGUIApp *app) :
     m_app(app),
     m_studio(0),
-    m_oscBuffer(1023)
+    m_haveOSCThread(false),
+    m_oscBuffer(1023),
+    m_dispatchTimer(0)
 {
-    m_serverThread = lo_server_thread_new(NULL, osc_error);
-
-    lo_server_thread_add_method(m_serverThread, NULL, NULL,
-				osc_message_handler, this);
-
-    lo_server_thread_start(m_serverThread);
-
-    RG_DEBUG << "AudioPluginOSCGUIManager: Base OSC URL is "
-	     << lo_server_thread_get_url(m_serverThread) << endl;
-
-    m_dispatchTimer = new TimerCallbackAssistant(20, timerCallback, this);
 }
 
 AudioPluginOSCGUIManager::~AudioPluginOSCGUIManager()
@@ -161,7 +152,29 @@ AudioPluginOSCGUIManager::~AudioPluginOSCGUIManager()
     }
     m_guis.clear();
 
-    //!!! arse -- there is no lo_server_thread_terminate
+#ifdef HAVE_LIBLO_THREADSTOP
+    if (m_haveOSCThread) lo_server_thread_stop(m_serverThread);
+#endif
+}
+
+void
+AudioPluginOSCGUIManager::checkOSCThread()
+{
+    if (m_haveOSCThread) return;
+
+    m_serverThread = lo_server_thread_new(NULL, osc_error);
+
+    lo_server_thread_add_method(m_serverThread, NULL, NULL,
+				osc_message_handler, this);
+
+    lo_server_thread_start(m_serverThread);
+
+    RG_DEBUG << "AudioPluginOSCGUIManager: Base OSC URL is "
+	     << lo_server_thread_get_url(m_serverThread) << endl;
+
+    m_dispatchTimer = new TimerCallbackAssistant(20, timerCallback, this);
+    
+    m_haveOSCThread = true;
 }
 
 bool
@@ -187,6 +200,8 @@ AudioPluginOSCGUIManager::startGUI(InstrumentId instrument, int position)
 {
     RG_DEBUG << "AudioPluginOSCGUIManager::startGUI: " << instrument << "," << position
 	     << endl;
+
+    checkOSCThread();
 
     if (m_guis.find(instrument) != m_guis.end() &&
 	m_guis[instrument].find(position) != m_guis[instrument].end()) {
@@ -246,6 +261,18 @@ AudioPluginOSCGUIManager::stopGUI(InstrumentId instrument, int position)
 	delete m_guis[instrument][position];
 	m_guis[instrument].erase(position);
 	if (m_guis[instrument].empty()) m_guis.erase(instrument);
+    }
+}
+
+void
+AudioPluginOSCGUIManager::stopAllGUIs()
+{
+    while (!m_guis.empty()) {
+	while (!m_guis.begin()->second.empty()) {
+	    delete (m_guis.begin()->second.begin()->second);
+	    m_guis.begin()->second.erase(m_guis.begin()->second.begin());
+	}
+	m_guis.erase(m_guis.begin());
     }
 }
 

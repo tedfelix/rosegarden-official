@@ -114,10 +114,14 @@ else
 
   if test "$with_liblo" = "yes"; then
       PKG_CHECK_MODULES(LIBLO,liblo >= 0.5,,[with_liblo="no"])
+      PKG_CHECK_MODULES(LIBLO7,liblo >= 0.7,[with_liblo_threadstop="yes"],[with_liblo_threadstop="no"])
   fi
 
   if test "$with_liblo" = "yes"; then
       AC_DEFINE(HAVE_LIBLO, 1, [Define if you have the Lite OSC library])
+  fi
+  if test "$with_liblo_threadstop" = "yes"; then
+      AC_DEFINE(HAVE_LIBLO_THREADSTOP, 1, [Define if your Lite OSC library has the lo_server_thread_stop function])
   fi
 
   dnl check whether user wants to have LADSPA

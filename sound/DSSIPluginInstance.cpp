@@ -34,6 +34,11 @@ namespace Rosegarden
 
 #define EVENT_BUFFER_SIZE 1023
 
+DSSIPluginInstance::GroupMap DSSIPluginInstance::m_groupMap;
+snd_seq_event_t **DSSIPluginInstance::m_groupLocalEventBuffers = 0;
+size_t DSSIPluginInstance::m_groupLocalEventBufferCount = 0;
+
+
 DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
 				       Rosegarden::InstrumentId instrument,
 				       QString identifier,
@@ -50,7 +55,8 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
     m_blockSize(blockSize),
     m_idealChannelCount(idealChannelCount),
     m_sampleRate(sampleRate),
-    m_bypassed(false)
+    m_bypassed(false),
+    m_grouped(false)
 {
 #ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance::DSSIPluginInstance(" << identifier << ")"
@@ -75,6 +81,7 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
     if (isOK()) {
 	connectPorts();
 	activate();
+	initialiseGroupMembership();
     }
 }
 
@@ -98,7 +105,8 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
     m_ownBuffers(false),
     m_idealChannelCount(0),
     m_sampleRate(sampleRate),
-    m_bypassed(false)
+    m_bypassed(false),
+    m_grouped(false)
 {
 #ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance::DSSIPluginInstance[buffers supplied](" << identifier << ")"
@@ -111,6 +119,10 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
     if (isOK()) {
 	connectPorts();
 	activate();
+	if (m_descriptor->run_multiple_synths) {
+	    m_grouped = true;
+	    initialiseGroupMembership();
+	}
     }
 }
 
@@ -210,9 +222,51 @@ DSSIPluginInstance::setIdealChannelCount(size_t channels)
     }
 }
 
+void
+DSSIPluginInstance::detachFromGroup()
+{
+    if (!m_grouped) return;
+    m_groupMap[m_identifier].erase(this);
+    m_grouped = false;
+}
+
+void
+DSSIPluginInstance::initialiseGroupMembership()
+{
+    if (!m_descriptor->run_multiple_synths) {
+	m_grouped = false;
+	return;
+    }
+
+    //!!! GroupMap is not actually thread-safe.
+
+    size_t pluginsInGroup = m_groupMap[m_identifier].size();
+
+    if (++pluginsInGroup > m_groupLocalEventBufferCount) {
+
+	snd_seq_event_t **eventLocalBuffers = new snd_seq_event_t *[pluginsInGroup];
+	for (size_t i = 0; i < m_groupLocalEventBufferCount; ++i) {
+	    eventLocalBuffers[i] = m_groupLocalEventBuffers[i];
+	}
+	for (size_t i = m_groupLocalEventBufferCount; i < pluginsInGroup; ++i) {
+	    eventLocalBuffers[i] = new snd_seq_event_t[EVENT_BUFFER_SIZE];
+	}
+
+	m_groupLocalEventBuffers = eventLocalBuffers;
+	m_groupLocalEventBufferCount = pluginsInGroup;
+
+	//!!! need to scavenge old event buffer thingy
+    }
+
+    m_grouped = true;
+    m_groupMap[m_identifier].insert(this);
+}
+
 DSSIPluginInstance::~DSSIPluginInstance()
 {
     std::cerr << "DSSIPluginInstance::~DSSIPluginInstance" << std::endl;
+
+    detachFromGroup();
 
     if (m_instanceHandle != 0) {
 	deactivate();
@@ -306,8 +360,8 @@ DSSIPluginInstance::getProgram(int bank, int program)
 
     while (m_descriptor->get_program(m_instanceHandle, index, &programDescriptor)) {
 	++index;
-	if (programDescriptor.Bank == bank &&
-	    programDescriptor.Program == program) {
+	if (int(programDescriptor.Bank) == bank &&
+	    int(programDescriptor.Program) == program) {
 	    programName = QString("%1. %2").arg(index).arg(programDescriptor.Name);
 	    free(programDescriptor.Name);
 	    break;
@@ -384,6 +438,7 @@ DSSIPluginInstance::selectProgram(QString program)
     }
 
     if (found) {
+	//!!! no -- must be scheduled for call from audio context, with run()
 	m_descriptor->select_program(m_instanceHandle, bankNo, programNo);
 	m_program = program;
     }
@@ -502,14 +557,24 @@ DSSIPluginInstance::sendEvent(const RealTime &eventTime,
 void
 DSSIPluginInstance::run(const RealTime &blockTime)
 {
-    if (!m_descriptor || !m_descriptor->run_synth) return;
- 
+    static snd_seq_event_t localEventBuffer[EVENT_BUFFER_SIZE];
+    int evCount = 0;
+
+    if (m_grouped) {
+	runGrouped(blockTime);
+	goto done;
+    }
+
+    if (!m_descriptor || !m_descriptor->run_synth) {
+	for (size_t ch = 0; ch < m_audioPortsOut.size(); ++ch) {
+	    memset(m_outputBuffers[ch], 0, m_blockSize * sizeof(sample_t));
+	}
+	return;
+    }
+
 #ifdef DEBUG_DSSI_PROCESS
     std::cerr << "DSSIPluginInstance::run(" << blockTime << ")" << std::endl;
 #endif
-   
-    static snd_seq_event_t localEventBuffer[EVENT_BUFFER_SIZE];
-    int evCount = 0;
 
 #ifdef DEBUG_DSSI_PROCESS
     if (m_eventBuffer.getReadSpace() > 0) {
@@ -558,6 +623,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 //    }
 #endif
 
+ done:
     if (m_idealChannelCount < m_audioPortsOut.size()) {
 	if (m_idealChannelCount == 1) {
 	    // mix down to mono
@@ -576,7 +642,103 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 	    }
 	}
     }	
+
+    m_lastRunTime = blockTime;
 }
+
+void
+DSSIPluginInstance::runGrouped(const RealTime &blockTime)
+{
+    // If something else in our group has just been called for this
+    // block time (but we haven't) then we should just write out the
+    // results and return; if we have just been called for this block
+    // time or nothing else in the group has been, we should run the
+    // whole group.
+
+    bool needRun = true;
+
+    PluginSet &s = m_groupMap[m_identifier];
+
+#ifdef DEBUG_DSSI_PROCESS
+    std::cerr << "DSSIPluginInstance::runGrouped(" << blockTime << "): this is " << this << "; " << s.size() << " elements in m_groupMap[" << m_identifier << "]" << std::endl;
+#endif
+
+    if (m_lastRunTime != blockTime) {
+	for (PluginSet::iterator i = s.begin(); i != s.end(); ++i) {
+	    DSSIPluginInstance *instance = *i;
+	    if (instance != this && instance->m_lastRunTime == blockTime) {
+#ifdef DEBUG_DSSI_PROCESS
+		std::cerr << "DSSIPluginInstance::runGrouped(" << blockTime << "): plugin " << instance << " has already been run" << std::endl;
+#endif
+		needRun = false;
+	    }
+	}
+    }
+
+    if (!needRun) {
+#ifdef DEBUG_DSSI_PROCESS
+	std::cerr << "DSSIPluginInstance::runGrouped(" << blockTime << "): already run, returning" << std::endl;
+#endif
+	return;
+    }
+
+#ifdef DEBUG_DSSI_PROCESS
+    std::cerr << "DSSIPluginInstance::runGrouped(" << blockTime << "): I'm the first, running" << std::endl;
+#endif
+
+    size_t index = 0;
+    unsigned long *counts = (unsigned long *)
+	alloca(m_groupLocalEventBufferCount * sizeof(unsigned long));
+    LADSPA_Handle *instances = (LADSPA_Handle *)
+	alloca(m_groupLocalEventBufferCount * sizeof(LADSPA_Handle));
+
+    for (PluginSet::iterator i = s.begin(); i != s.end(); ++i) {
+
+	if (index >= m_groupLocalEventBufferCount) break;
+
+	DSSIPluginInstance *instance = *i;
+	counts[index] = 0;
+	instances[index] = instance->m_instanceHandle;
+
+#ifdef DEBUG_DSSI_PROCESS
+	std::cerr << "DSSIPluginInstance::runGrouped(" << blockTime << "): running " << instance << std::endl;
+#endif
+
+	while (instance->m_eventBuffer.getReadSpace() > 0) {
+
+	    snd_seq_event_t *ev = m_groupLocalEventBuffers[index] + counts[index];
+	    *ev = instance->m_eventBuffer.peek();
+
+	    RealTime evTime(ev->time.time.tv_sec, ev->time.time.tv_nsec);
+
+	    int frameOffset = 0;
+	    if (evTime > blockTime) {
+		frameOffset = RealTime::realTime2Frame(evTime - blockTime, m_sampleRate);
+	    }
+
+#ifdef DEBUG_DSSI_PROCESS
+	    std::cerr << "DSSIPluginInstance::runGrouped: evTime " << evTime << ", frameOffset " << frameOffset
+		      << ", block size " << m_blockSize << std::endl;
+#endif
+
+	    if (frameOffset >= int(m_blockSize)) break;
+	    if (frameOffset < 0) frameOffset = 0;
+
+	    ev->time.tick = frameOffset;
+	    instance->m_eventBuffer.skip(1);
+	    if (++counts[index] >= EVENT_BUFFER_SIZE) break;
+	}
+
+	++index;
+    }
+
+    m_descriptor->run_multiple_synths(index,
+				      instances,
+				      m_blockSize,
+				      m_groupLocalEventBuffers,
+				      counts);
+}
+
 
 void
 DSSIPluginInstance::deactivate()

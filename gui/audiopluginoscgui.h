@@ -85,6 +85,7 @@ public:
     void startGUI(Rosegarden::InstrumentId id, int position);
     void showGUI(Rosegarden::InstrumentId id, int position);
     void stopGUI(Rosegarden::InstrumentId id, int position);
+    void stopAllGUIs();
 
     void postMessage(OSCMessage *message); // I take over ownership of message
     void dispatch();
@@ -104,6 +105,9 @@ public:
 protected:
     RosegardenGUIApp *m_app;
     Rosegarden::Studio *m_studio;
+
+    bool m_haveOSCThread;
+    void checkOSCThread();
 
     lo_server_thread m_serverThread;
     Rosegarden::RingBuffer<OSCMessage *> m_oscBuffer;
