@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-3">
+	<TITLE>Using Rosegarden, Chapter 6</TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.0.1  (Linux)">
+	<META NAME="CREATED" CONTENT="20040411;1502800">
+	<META NAME="CHANGED" CONTENT="20040411;3143500">
+	<META NAME="DESCRIPTION" CONTENT="Using Rosegarden is a ">
+	<META NAME="KEYWORDS" CONTENT="Rosegarden tutorial, music notation, score, MIDI, sequencer, open source, free, shareware, Unix, Linux, SGI">
+	<META NAME="robots" CONTENT="index">
+	<STYLE>
+	<!--
+		P { margin-top: 0.08in; margin-bottom: 0in; font-family: "georgia", "book antiqua", "palatino", "garamond", serif; font-style: normal }
+		H1 { margin-top: 0.25in; font-family: sans-serif; font-style: normal }
+		H2 { margin-top: 0.25in; font-family: sans-serif; font-style: normal }
+		A:link { color: #ba2c2c; font-weight: bold; text-decoration: none }
+		A:visited { color: #ba2c2c }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" LINK="#ba2c2c" VLINK="#ba2c2c" BGCOLOR="#ffffff">
+<DIV ID="heading" STYLE="background: #ccd4a0">
+	<P STYLE="margin-bottom: 0.2in"><IMG SRC="../roses.png" NAME="Graphic1" ALIGN=BOTTOM WIDTH=183 HEIGHT=104 BORDER=0>
+		<IMG SRC="../title-rosegarden.png" NAME="Graphic2" ALT="Rosegarden" ALIGN=BOTTOM WIDTH=400 HEIGHT=104 BORDER=0></P>
+</DIV>
+<DIV ID="main">
+	<H1><A NAME="6"></A>6 Using Audio</H1>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Those of
+	you with a keen interest in matters audio have probably been
+	wondering why it took me so long to get to this. The truth is, I've
+	just never gotten around to trying to do anything serious in this
+	area, and I haven't really done much with these features. As I said
+	in the introduction, I am not an audio guy.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">At
+	present, I can't offer the same level of detail as in the rest of
+	this guide, because what I say here is not based on real experience.
+	Still, there is great demand for information on this subject, so I
+	will do what I can to show you how to make use of the features.<I>
+	(If I'm leaving something important out, or my explanation is really
+	off, feel free to let me know.)</I></P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	We'll start by loading the composition we worked on in Project 1,
+	then add some audio to it and look at how to manipulate it.</P>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="6_1"></A>6.1
+	Configuring an Audio Editor</H2>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Rosegarden
+	has no built-in facility for editing audio. Instead, it provides a
+	mechanism for you to configure an external editor, via<B> Settings
+	-&gt; Configure Rosegarden<!--SPAN STYLE="font-weight: medium"--></B>
+	on the<B> External Editors<!--SPAN STYLE="font-weight: medium"--></B>
+	tab:</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="using-rosegarden_html_m6fa8034d.png" NAME="Graphic74" ALIGN=BOTTOM WIDTH=723 HEIGHT=380 BORDER=0>
+		</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	You can browse to your editor of choice via the<B> Choose...</B>
+	button, or type the name of the executable. My personal preference
+	is for Audacity (<!--SPAN STYLE="font-weight: medium"--><A HREF="http://audacity.sourceforge.net/">
+	http://audacity.sourceforge.net/<!--SPAN STYLE="font-weight: medium"--></A>
+	), which I really like, but there are many suitable editors
+	available.</P>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="6_2"></A>6.2
+	Importing Existing Audio</H2>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">There
+	are two ways to get audio into Rosegarden. If you wish to import
+	projects that you have been working on with some other application,
+	you can import the audio files and insert them into your
+	composition. The heart of this facility is the<!--SPAN STYLE="font-weight: medium"--><!--SPAN STYLE="font-style: normal"-->
+	segment<B>s -&gt; Manage Audio<!--SPAN STYLE="font-weight: medium"--><!--SPAN STYLE="font-style: normal"--></B>
+	segment<B>s...<!--SPAN STYLE="font-weight: medium"--></B> menu,
+	tucked away at the bottom, below the divider:</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="using-rosegarden_html_3e0d1475.png" NAME="Graphic47" ALIGN=BOTTOM WIDTH=345 HEIGHT=242 BORDER=0>
+		</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	This takes you to the dialog you use to select audio files for
+	insertion into your compositions:</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
+	</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="using-rosegarden_html_m4e2b1e73.png" NAME="Graphic61" ALIGN=BOTTOM WIDTH=742 HEIGHT=275 BORDER=0>
+		</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Using this is fairly straightforward. Use the<B> Add Audio File</B>
+	button to pick a file, which will then appear in the list. I'll just
+	grab some .wav files that I have handy, since I haven't actually
+	recorded anything related to this composition:</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="using-rosegarden_html_344dd7d6.png" NAME="Graphic69" ALIGN=BOTTOM WIDTH=742 HEIGHT=275 BORDER=0>
+		</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Once the files are loaded, some statistics are printed, and a brief
+	preview appears. You can us the<B> Play Preview</B> button to hear
+	what you've got.</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<FONT SIZE=2><I>NOTE: If the<B> Play Preview</B> button is grayed
+	out, as in the above example, it probably means that either
+	Rosegarden wasn't compiled with audio features enabled, or else your
+	audio server is not running. In my case, I forgot to run Jack before
+	starting Rosegarden.</I></FONT></P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Once you're satisfied that you've selected the correct files, you
+	can insert them into your composition one by one with the<B> Insert
+	into Composition</B> button. Let's insert &quot;rouen.wav&quot; and
+	make both Dave Barry and Guillaume Laurent proud:</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="using-rosegarden_html_12ab5630.png" NAME="Graphic75" ALIGN=BOTTOM WIDTH=397 HEIGHT=61 BORDER=0>
+		</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Newly-inserted audio segments go into a new track of their own, and
+	it's always appended to the bottom of the<B> Tracklist</B>.</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<FONT SIZE=2><I>TIP: If you're working on a newly-created
+	composition, rather than one that is based on a MIDI import, it will
+	start with a large number of tracks. It may appear that nothing
+	happened after you hit the<B> Insert into Composition...</B> button.
+	Scroll down to the bottom, and you should see a new track with your
+	audio segment inserted.</I></FONT></P>
+	<H2 STYLE="border: none; padding: 0in; font-weight: medium"><A NAME="6_3"></A>
+	6.3 Recording</H2>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	It is possible to record directly into Rosegarden. First you'll want
+	to point the track to a Jack source in the same fashion used to
+	assign tracks to MIDI devices.</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="using-rosegarden_html_m1bb3bee5.png" NAME="Graphic76" ALIGN=BOTTOM WIDTH=371 HEIGHT=378 BORDER=0>
+		</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<FONT SIZE=2><I>NOTE: I honestly have no idea what JACK Audio #0
+	through #15 mean.</I></FONT></P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Now if
+	the 
+	<IMG SRC="record-button.png" NAME="Graphic77" ALIGN=BOTTOM WIDTH=15 HEIGHT=16 BORDER=0>
+	button is toggled for the track, making it the destination for
+	record operations, any signal on the mixer channel you've selected
+	as the record source (via KMix or the like) should be recorded, and
+	should wind up in an audio segment.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><FONT SIZE=2><I>NOTE:
+	The one time I tried that, it didn't work very well, and I haven't
+	tried to do it since. I'm not sure whether or not this is actually
+	supposed to work. I need to play with that, but at this writing I am
+	quickly running out of time, and want to get this out the door. I
+	don't currently have Jack working, and don't have time to figure out
+	why it's broken.</I></FONT></P>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="6_4"></A>6.4
+	Manipulating Audio Segments</H2>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><I>Audio
+	segments behave in the same fashion as segments containing notation
+	data. You can drag them around, drag them from track to track, and
+	so on. You can split them, move bits of them around. I don't have
+	time to show you any of that at this writing. I need to go to work,
+	and I want to get this published before I go.</I></P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><I>I
+	plan to:</I></P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><I>check
+	on recording</I></P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><I>find
+	out what jack #0 15 mean</I></P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><I>explain
+	how to use Edit Audio and Auto-Split Audio</I></P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><I>do a
+	real project with a mixture of MIDI and audio</I></P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><I>demonstrate
+	the use of LADSPA plugins</I></P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><I>???</I></P>
+</DIV>
+</BODY>
+</HTML>
