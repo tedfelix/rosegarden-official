@@ -178,8 +178,8 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
 
     QRegExpValidator validator(QRegExp(".*"), this); // empty is OK
 
-    QString newText = KLineEditDlg::getText(QString("Change track name"),
-                                            QString("Enter new track name"),
+    QString newText = KLineEditDlg::getText(i18n("Change track name"),
+                                            i18n("Enter new track name"),
                                             m_trackLabel->text(),
                                             &ok,
                                             this,

@@ -306,5 +306,6 @@ messages: rc.cpp
 	  'while (<STDIN>) { if(/(encoding name|origin|copyright|mapped-by|type)\s*=\s*\"(.*)\"/) { print "i18n(\"$$2\")\;\n";} }' \
 	  > ../../fonts.cpp)
 	(cd styles && ls *.xml | perl -e 'while (<STDIN>) { if(/(.*)\.xml/) { print "i18n(\"$$1\")\;\n";} }' > ../styles.cpp)
+	$(EXTRACTRC) `find . -name "*.rc" -o -name "*.ui"` > rc.cpp
 	$(XGETTEXT) -C -ki18n -x $(KDEDIR)/include/kde.pot `find . -name \*.h -o -name \*.cpp -o -name \*.cc` -o ../po/rosegarden.pot 
 

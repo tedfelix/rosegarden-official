@@ -328,19 +328,19 @@ RosegardenTransportDialog::slotChangeTimeDisplay()
 
     case SMPTEMode:
 	m_clearMetronomeTimer->stop();
-	m_transport->TimeDisplayLabel->setText("SMPTE");
+	m_transport->TimeDisplayLabel->setText(i18n("SMPTE"));
 	m_transport->TimeDisplayLabel->show();
 	break;
 
     case BarMode:
 	m_clearMetronomeTimer->stop();
-	m_transport->TimeDisplayLabel->setText("BAR");
+	m_transport->TimeDisplayLabel->setText(i18n("BAR"));
 	m_transport->TimeDisplayLabel->show();
 	break;
 
     case BarMetronomeMode:
 	m_clearMetronomeTimer->start(1700, FALSE);
-	m_transport->TimeDisplayLabel->setText("MET");
+	m_transport->TimeDisplayLabel->setText(i18n("MET"));
 	m_transport->TimeDisplayLabel->show();
 	break;
 

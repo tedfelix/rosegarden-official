@@ -195,7 +195,7 @@
 -->
 
 
-<book id="rosegarden" lang="en">
+<book id="rosegarden" lang="&language;">
 
   <!-- This header contains all of the meta-information for the document such
   as Authors, publish date, the abstract, and Keywords -->
@@ -6082,7 +6082,7 @@ Changing the Time Signature
 
 	<sect3 id="developers-note-fonts-mapping-format-font-hotspots">
 	  <title>font-hotspots</title>
-	  <para>
+	  <para>&nbsp;
 	  </para>
 	</sect3>
 

@@ -420,8 +420,8 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 
     m_keyCombo = new KComboBox(nameBox);
     m_majorMinorCombo = new KComboBox(nameBox);
-    m_majorMinorCombo->insertItem("Major");
-    m_majorMinorCombo->insertItem("Minor");
+    m_majorMinorCombo->insertItem(i18n("Major"));
+    m_majorMinorCombo->insertItem(i18n("Minor"));
     if (m_key.isMinor()) {
 	m_majorMinorCombo->setCurrentItem(m_majorMinorCombo->count() - 1);
     }
