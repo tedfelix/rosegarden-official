@@ -502,6 +502,10 @@ void RosegardenGUIApp::setupActions()
             SLOT(slotEditTimeSignature(QWidget*)));
     
     m_actionsSetup = true;
+
+    // transport toolbar is hidden by default
+    //
+    toolBar("transportToolBar")->hide();
 }
 
 
@@ -1152,9 +1156,7 @@ void RosegardenGUIApp::slotFilePrint()
 
     KTmpStatusMsg msg(i18n("Printing..."), this);
 
-    KPrinter printer;
-
-    printer.setFullPage(true);
+    KPrinter printer(QPrinter::HighResolution);
 
     if (printer.setup(this)) {
         m_view->print(&printer, &m_doc->getComposition());
