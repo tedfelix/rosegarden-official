@@ -949,8 +949,8 @@ void
 EventView::createMenu()
 {
     m_menu = new QPopupMenu(this);
-    m_menu->insertItem(i18n("Open in Simple Event Editor"));
-    m_menu->insertItem(i18n("Open in Full Event Editor"));
+    m_menu->insertItem(i18n("Open in Simple Event Editor"), 0);
+    m_menu->insertItem(i18n("Open in Full Event Editor"), 1);
 
     connect(m_menu, SIGNAL(activated(int)),
             SLOT(slotMenuActivated(int)));
@@ -959,6 +959,8 @@ EventView::createMenu()
 void
 EventView::slotMenuActivated(int value)
 {
+    RG_DEBUG << "EventView::slotMenuActivated - value = " << value << endl;
+
     if (value == 0)
     {
         EventViewItem *eItem = dynamic_cast<EventViewItem*>
