@@ -13,9 +13,6 @@ Current Task list
 
 - printing (at least the beginnings of it) DONE
 
-- turn loop/position pointers into widgets
-
-
 Task list from 18/19th August meetings
 ======================================
 
