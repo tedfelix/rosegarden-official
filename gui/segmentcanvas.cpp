@@ -199,22 +199,21 @@ void SegmentItem::drawShape(QPainter& painter)
         Rosegarden::AudioFileManager &aFM = m_doc->getAudioFileManager();
         Rosegarden::Composition &comp = m_doc->getComposition();
 
-	timeT audioStart =
-	    (startTime - m_segment->getStartTime()) +
-	    m_segment->getAudioStartTime();
+	timeT audioStart = startTime - m_segment->getStartTime();
+	timeT audioEnd = endTime - m_segment->getStartTime();
 
-	timeT audioEnd = 
-	    (endTime - m_segment->getStartTime()) +
-	    m_segment->getAudioStartTime();
-
+        /*
 	if (audioEnd > m_segment->getAudioEndTime()) {
 	    audioEnd = m_segment->getAudioEndTime();
 	}
+        */
 
         std::vector<float> values =
             aFM.getPreview(m_segment->getAudioFileID(),
-                           comp.getElapsedRealTime(audioStart),
-			   comp.getElapsedRealTime(audioEnd),
+                           comp.getElapsedRealTime(audioStart) +
+	                       m_segment->getAudioStartTime(),
+			   comp.getElapsedRealTime(audioEnd) +
+	                       m_segment->getAudioStartTime(),
                            previewRect.width());
 
         std::vector<float>::iterator it;

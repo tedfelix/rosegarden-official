@@ -152,22 +152,20 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             eventTime = comp.getElapsedRealTime(segmentStartTime);
             Rosegarden::RealTime startTime;
 
-            startTime = comp.
-                getElapsedRealTime(((*it)->getAudioStartTime()));
-            duration = comp.
-                    getElapsedRealTime(((*it)->getAudioEndTime())) - startTime;
+            startTime = (*it)->getAudioStartTime();
+            duration = (*it)->getAudioEndTime() - startTime;
 
             // If we're first fetching and an audio Segment overlaps
             // the current slice with it's duration then we should
             // adjust for the slice and play the sample.
             //
-            Rosegarden::timeT audioEnd = (*it)->getAudioEndTime() -
-                                         (*it)->getAudioStartTime() +
-                                         segmentStartTime;
+            Rosegarden::RealTime audioEnd = (*it)->getAudioEndTime() -
+                                            (*it)->getAudioStartTime() +
+                                            eventTime;
 
             if (firstFetch == true &&
                 segmentStartTime <= sliceStartElapsed &&
-                audioEnd >= sliceStartElapsed)
+                audioEnd >= sliceStart)
             {
                 // reset startTime and duration to shorter values
                 Rosegarden::RealTime moveTime = comp.

@@ -316,6 +316,8 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     outStream << QString(strtoqstr(m_audioFileManager.toXmlString()))
               << endl << endl;
 
+    QString time;
+
     // output all elements
     //
     // Iterate on segments
@@ -338,12 +340,21 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                       << segment->getAudioFileID()
                       << "\">\n";
 
+            // convert out - should do this as XmlExportable really
+            // once all this code is centralised
+            //
+            time.sprintf("%ld.%06ld", segment->getAudioStartTime().sec,
+                                      segment->getAudioStartTime().usec);
+
             outStream << "   <begin index=\""
-                      << segment->getAudioStartTime()
+                      << time
                       << "\"/>\n";
 
+            time.sprintf("%ld.%06ld", segment->getAudioEndTime().sec,
+                                      segment->getAudioEndTime().usec);
+
             outStream << "   <end index=\""
-                      << segment->getAudioEndTime()
+                      << time
                       << "\"/>\n";
         }
         else // Internal type
@@ -1069,7 +1080,7 @@ RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime &time,
         m_recordSegment = new Segment(Rosegarden::Segment::Audio);
         m_recordSegment->setTrack(m_composition.getRecordTrack());
         m_recordSegment->setStartTime(m_composition.getPosition());
-        m_recordSegment->setAudioStartTime(m_composition.getPosition());
+        m_recordSegment->setAudioStartTime(Rosegarden::RealTime(0, 0));
         m_recordSegment->setLabel("recorded audio");
 
         // new audio file will have been pushed to the back of the
@@ -1126,10 +1137,11 @@ RosegardenGUIDoc::stopRecordingAudio()
         }
     }
 
-
     // set the audio end time
     //
-    m_recordSegment->setAudioEndTime(m_composition.getPosition());
+    m_recordSegment->setAudioEndTime(
+        m_composition.getRealTimeDifference(m_recordSegment->getStartTime(),
+                                            m_composition.getPosition()));
 
     // now add the Segment
     std::cout << "RosegardenGUIDoc::stopRecordingAudio - "

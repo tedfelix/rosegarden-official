@@ -30,6 +30,7 @@
 #include "Event.h"
 #include "NotationTypes.h"
 #include "RefreshStatus.h"
+#include "RealTime.h"
 
 namespace Rosegarden 
 {
@@ -411,23 +412,14 @@ public:
     unsigned int getAudioFileID() const { return m_audioFileID; }
     void setAudioFileID(const unsigned int &id) { m_audioFileID = id; }
 
-    // The audio start and end indices tell us how far into
+    // The audio start and end times tell us how far into
     // audio file "m_audioFileID" this Segment starts and
     // how far into the sample the Segment finishes.
     //
-    // The absolute time this Segment finishes is:
-    //
-    //    audioEnd - audioStart + start of Segment
-    //
-    void setAudioStartTime(const timeT& audioStart)
-        { m_audioStartIdx = audioStart; }
-
-    void setAudioEndTime(const timeT & audioEnd)
-        { m_audioEndIdx = audioEnd; }
-
-    timeT getAudioStartTime() const { return m_audioStartIdx; }
-    timeT getAudioEndTime() const { return m_audioEndIdx; }
-
+    void setAudioStartTime(const RealTime&time) { m_audioStartTime = time; }
+    void setAudioEndTime(const RealTime &time) { m_audioEndTime = time; }
+    RealTime getAudioStartTime() const { return m_audioStartTime; }
+    RealTime getAudioEndTime() const { return m_audioEndTime; }
 
     //////
     //
@@ -497,8 +489,8 @@ private:
     mutable int m_id; // not id of Segment, but a value for return by getNextId
 
     unsigned int m_audioFileID; // audio file ID (see AudioFileManager)
-    timeT m_audioStartIdx;      // how far into m_audioFileID our Segment starts
-    timeT m_audioEndIdx;        // how far into m_audioFileID our Segment ends
+    RealTime m_audioStartTime;   // start time relative to start of audio file
+    RealTime m_audioEndTime;     // end time relative to start of audio file
 
     bool m_repeating;           // is this segment repeating?
 

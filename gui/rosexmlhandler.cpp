@@ -499,7 +499,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         m_audioFileManager.setLastAddPath(qstrtostr(path));
 
     } else if (lcName == "begin") {
-        int marker = atts.value("index").toInt();
+        float marker = atts.value("index").toFloat();
 
         if (!m_currentSegment)
         {
@@ -513,11 +513,14 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             return false;
         }
 
-        m_currentSegment->setAudioStartTime(marker);
+        // convert to RealTime from float
+        int sec = (int)marker;
+        int usec = (int)((marker - ((float)sec)) * 1000000.0);
+        m_currentSegment->setAudioStartTime(Rosegarden::RealTime(sec, usec));
 
 
     } else if (lcName == "end") {
-        int marker = atts.value("index").toInt();
+        float marker = atts.value("index").toFloat();
 
         if (!m_currentSegment)
         {
@@ -531,15 +534,26 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             return false;
         }
 
-        if (marker < m_currentSegment->getAudioStartTime())
+        int sec = (int)marker;
+        int usec = (int)((marker - ((float)sec)) * 1000000.0);
+        Rosegarden::RealTime markerTime(sec, usec);
+
+        if (markerTime < m_currentSegment->getAudioStartTime())
         {
             m_errorString = i18n("audio end index before audio start marker");
             return false;
         }
 
-        m_currentSegment->setAudioEndTime(marker);
-        m_currentSegment->setDuration(marker -
-                               m_currentSegment->getAudioStartTime());
+        m_currentSegment->setAudioEndTime(markerTime);
+
+        // convert both times independently and then set duration
+        // according to difference.
+        timeT absStart =
+            m_composition.getElapsedTimeForRealTime(
+                    m_currentSegment->getAudioStartTime());
+
+        timeT absEnd = m_composition.getElapsedTimeForRealTime(markerTime);
+        m_currentSegment->setDuration(absEnd - absStart);
 
     } else if (lcName == "device") {
 

@@ -1,7 +1,9 @@
 0.2 tasks
 =========
 
-o Saving RG files with audio [HALF COMPLETE - absolute paths need sorting]
+o Saving RG files with audio [DONE]
+
+o Audio file indexes to RealTime incl. saving and loading
 
 o Saving RG files should always append .rg extension [DONE]
 
