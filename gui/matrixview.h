@@ -143,6 +143,7 @@ public slots:
     void slotPaintSelected();
     void slotEraseSelected();
     void slotSelectSelected();
+    void slotMoveSelected();
 
     /// Canvas actions slots
 
@@ -153,8 +154,8 @@ public slots:
     void slotMousePressed(Rosegarden::timeT time, int pitch,
                       QMouseEvent*, MatrixElement*);
 
-    void slotMouseMoved(Rosegarden::timeT time, QMouseEvent*);
-    void slotMouseReleased(Rosegarden::timeT time, QMouseEvent*);
+    void slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent*);
+    void slotMouseReleased(Rosegarden::timeT time, int pitch, QMouseEvent*);
 
     /**
      * Called when the mouse cursor moves over a different height on

@@ -70,9 +70,9 @@ signals:
     void mousePressed(Rosegarden::timeT time, int pitch,
                       QMouseEvent*, MatrixElement*);
 
-    void mouseMoved(Rosegarden::timeT time, QMouseEvent*);
+    void mouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent*);
 
-    void mouseReleased(Rosegarden::timeT time, QMouseEvent*);
+    void mouseReleased(Rosegarden::timeT time, int pitch, QMouseEvent*);
 
 public slots:
     void slotExternalWheelEvent(QWheelEvent*);

@@ -109,7 +109,7 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
         m_previousEvPitch = evPitch;
     }
 
-    if (m_mouseWasPressed) emit mouseMoved(evTime, e);
+    if (m_mouseWasPressed) emit mouseMoved(evTime, evPitch, e);
     
 }
 
@@ -130,8 +130,9 @@ void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
     }
 
     timeT evTime = m_staff.getTimeForCanvasX(e->x());
+    int evPitch = m_staff.getHeightAtCanvasY(e->y());
 
-    emit mouseReleased(evTime, e);
+    emit mouseReleased(evTime, evPitch, e);
     m_mouseWasPressed = false;
 }
 
