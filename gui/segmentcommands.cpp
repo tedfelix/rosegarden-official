@@ -414,7 +414,7 @@ SegmentSplitCommand::unexecute()
 
 
 SegmentChangeQuantizationCommand::SegmentChangeQuantizationCommand(Rosegarden::StandardQuantization *sq) :
-    XKCommand(name(sq)),
+    XKCommand(getGlobalName(sq)),
     m_quantization(sq)
 {
     // nothing
@@ -482,7 +482,7 @@ SegmentChangeQuantizationCommand::addSegment(Rosegarden::Segment *s)
 }
     
 QString
-SegmentChangeQuantizationCommand::name(Rosegarden::StandardQuantization *sq)
+SegmentChangeQuantizationCommand::getGlobalName(Rosegarden::StandardQuantization *sq)
 {
     if (!sq) {
 	return "Unquantize";
@@ -540,7 +540,7 @@ AddTimeSignatureCommand::unexecute()
 
 AddTimeSignatureAndNormalizeCommand::AddTimeSignatureAndNormalizeCommand
 (Composition *composition, timeT time, Rosegarden::TimeSignature timeSig) :
-    KMacroCommand(AddTimeSignatureCommand::name())
+    KMacroCommand(AddTimeSignatureCommand::getGlobalName())
 {
     addCommand(new AddTimeSignatureCommand(composition, time, timeSig));
 

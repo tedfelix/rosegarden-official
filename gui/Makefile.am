@@ -72,7 +72,7 @@ rosegarden_SOURCES = \
         widgets.cpp \
 	xmlstorableevent.cpp
 
-rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lqt -lkfile -lkdeui -lkdecore -lkdeprint -lXext -lX11 $(LIBSOCKET)
+rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lkfile -lkdeui -lkdecore -lkdeprint $(LIB_QT) $(LIBSOCKET)
 
 SUBDIRS = docs
 

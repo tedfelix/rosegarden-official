@@ -316,7 +316,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                             .arg(segment->getTrack())
                             .arg(segment->getStartTime());
 
-        outStream << "label=\"" << segment->getLabel().c_str() << "\">" << std::endl;
+        outStream << "label=\"" << segment->getLabel().c_str() << "\">\n";
 
         long currentGroup = -1;
 	bool inChord = false;
@@ -343,11 +343,11 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 			    << "\"";
 		    }
 			    
-		    outStream << ">" << endl;
+		    outStream << ">\n";
                     currentGroup = group;
                 }
             } else if (currentGroup != -1) {
-                outStream << "</group>" << endl;
+                outStream << "</group>\n";
                 currentGroup = -1;
             }
 
@@ -388,7 +388,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	    if (nextEl != segment->end() &&
 		(*nextEl)->getAbsoluteTime() != absTime &&
 		inChord) {
-		outStream << "</chord>" << endl;
+		outStream << "</chord>\n";
 		inChord = false;
 		expectedTime = chordStart + chordDuration;
 	    } else if (inChord) {
@@ -399,14 +399,14 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
         }
 
 	if (inChord) {
-	    outStream << "</chord>" << endl;
+	    outStream << "</chord>\n";
 	}
 
         if (currentGroup != -1) {
-            outStream << "</group>" << endl;
+            outStream << "</group>\n";
         }
 
-        outStream << "</segment>" << endl; //-------------------------
+        outStream << "</segment>\n"; //-------------------------
 
     }
 
@@ -425,8 +425,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     bool okay = writeToFile(filename, outText);
     if (!okay) return false;
 
-    kdDebug(KDEBUG_AREA) << endl << "RosegardenGUIDoc::saveDocument() finished"
-                         << endl;
+    kdDebug(KDEBUG_AREA) << endl << "RosegardenGUIDoc::saveDocument() finished\n";
 
     m_modified = false;
     m_commandHistory->documentSaved();
@@ -435,7 +434,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
 void RosegardenGUIDoc::deleteContents()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::deleteContents()" << endl;
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::deleteContents()\n";
 
     deleteViews();
 

@@ -314,12 +314,12 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotEditAsNotation()), actionCollection(),
 		"edit_as_notation");
 
-    new KAction(AddTempoChangeCommand::name(),
+    new KAction(AddTempoChangeCommand::getGlobalName(),
                 0,
                 this, SLOT(slotEditTempo()),
                 actionCollection(), "add_tempo");
 
-    new KAction(AddTimeSignatureCommand::name(),
+    new KAction(AddTimeSignatureCommand::getGlobalName(),
                 0,
                 this, SLOT(slotEditTimeSignature()),
                 actionCollection(), "add_time_signature");

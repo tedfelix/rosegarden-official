@@ -180,7 +180,7 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-    static QString name(Rosegarden::StandardQuantization *sq);
+    static QString getGlobalName(Rosegarden::StandardQuantization *sq);
 
 private:
     struct SegmentRec {
@@ -203,11 +203,9 @@ public:
                             Rosegarden::TimeSignature timeSig);
     virtual ~AddTimeSignatureCommand();
 
-#ifdef RGKDE3
-    virtual QString name() { return i18n("Add Time Si&gnature Change..."); }
-#else
-    static QString name() { return i18n("Add Time Si&gnature Change..."); }
-#endif
+//     virtual QString name() { return i18n("Add Time Si&gnature Change..."); }
+
+    static QString getGlobalName() { return i18n("Add Time Si&gnature Change..."); }
 
     virtual void execute();
     virtual void unexecute();
@@ -245,11 +243,9 @@ public:
 
     virtual ~ModifyDefaultTempoCommand() {}
 
-#ifdef RGKDE3
-    virtual QString name() { return i18n("Modify &Default Tempo..."); }
-#else
-    static QString name() { return i18n("Modify &Default Tempo..."); }
-#endif
+//     virtual QString name() { return i18n("Modify &Default Tempo..."); }
+
+    static QString getGlobalName() { return i18n("Modify &Default Tempo..."); }
 
     virtual void execute();
     virtual void unexecute();
@@ -274,11 +270,9 @@ public:
 
     virtual ~RemoveTempoChangeCommand() {}
 
-#ifdef RGKDE3
-    virtual QString name() { return i18n("Remove &Tempo Change..."); }
-#else
-    static QString name() { return i18n("Remove &Tempo Change..."); }
-#endif
+//     virtual QString name() { return i18n("Remove &Tempo Change..."); }
+
+    static QString getGlobalName() { return i18n("Remove &Tempo Change..."); }
 
     virtual void execute();
     virtual void unexecute();
@@ -307,11 +301,9 @@ public:
 
     virtual ~AddTempoChangeCommand();
 
-#ifdef RGKDE3
-    virtual QString name() { return i18n("Add &Tempo Change..."); }
-#else
-    static QString name() { return i18n("Add &Tempo Change..."); }
-#endif
+//     virtual QString name() { return i18n("Add &Tempo Change..."); }
+
+    static QString getGlobalName() { return i18n("Add &Tempo Change..."); }
 
     virtual void execute();
     virtual void unexecute();
@@ -334,11 +326,9 @@ public:
         m_composition(composition),
         m_nbNewTracks(nbTracks) {}
 
-#ifdef RGKDE3
-    virtual QString name() { return i18n("Add Tracks..."); }
-#else
-    static QString name() { return i18n("Add Tracks..."); }
-#endif
+//     virtual QString name() { return i18n("Add Tracks..."); }
+
+    static QString getGlobalName() { return i18n("Add Tracks..."); }
 
     virtual void execute();
     virtual void unexecute();

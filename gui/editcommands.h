@@ -43,11 +43,10 @@ public:
     CutCommand(Rosegarden::SegmentSelection &selection,
 	       Rosegarden::Clipboard *clipboard);
 
-#ifdef RGKDE3
-    virtual QString name() { return "Cu&t"; }
-#else
-    static QString name() { return "Cu&t"; }
-#endif
+//     virtual QString name() { return getGlobalName(); }
+
+    static QString getGlobalName() { return "Cu&t"; }
+
 };
 
 
@@ -66,11 +65,9 @@ public:
 
     virtual ~CopyCommand();
 
-#ifdef RGKDE3
-    virtual QString name() { return "&Copy"; }
-#else
-    static QString name() { return "&Copy"; }
-#endif
+//     virtual QString name() { return getGlobalName(); }
+
+    static QString getGlobalName() { return "&Copy"; }
 
     virtual void execute();
     virtual void unexecute();
@@ -92,11 +89,9 @@ public:
 
     virtual ~PasteSegmentsCommand();
 
-#ifdef RGKDE3
-    virtual QString name() { return "&Paste"; }
-#else
-    static QString name() { return "&Paste"; }
-#endif
+//     virtual QString name() { return "&Paste"; }
+
+    static QString getGlobalName() { return "&Paste"; }
 
     virtual void execute();
     virtual void unexecute();
@@ -127,11 +122,9 @@ public:
 		       Rosegarden::timeT pasteTime,
 		       PasteType pasteType = getDefaultPasteType());
 
-#ifdef RGKDE3
-    virtual QString name() { return "&Paste"; }
-#else
-    static QString name() { return "&Paste"; }
-#endif
+//     virtual QString name() { return "&Paste"; }
+
+    static QString getGlobalName() { return "&Paste"; }
 
     /// Determine whether this paste will succeed (without executing it yet)
     bool isPossible();
@@ -161,11 +154,9 @@ class EraseCommand : public BasicSelectionCommand
 public:
     EraseCommand(Rosegarden::EventSelection &selection);
 
-#ifdef RGKDE3
-    virtual QString name() { return "&Erase"; }
-#else
-    static QString name() { return "&Erase"; }
-#endif
+//     virtual QString name() { return "&Erase"; }
+
+    static QString getGlobalName() { return "&Erase"; }
 
     virtual Rosegarden::timeT getRelayoutEndTime();
 
@@ -190,11 +181,9 @@ public:
 		     Rosegarden::Event *eventToModify,
 		     const Rosegarden::Event &newEvent);
 
-#ifdef RGKDE3
-    virtual QString name() { return "Edit E&vent"; }
-#else
-    static QString name() { return "Edit E&vent"; }
-#endif
+//     virtual QString name() { return "Edit E&vent"; }
+
+    static QString getGlobalName() { return "Edit E&vent"; }
 
 protected:
     virtual void modifySegment();

@@ -195,7 +195,7 @@ KeyInsertionCommand::KeyInsertionCommand(Segment &segment, timeT time,
 					 Rosegarden::Key key,
 					 bool convert,
 					 bool transpose) :
-    BasicCommand(name(&key), segment, time,
+    BasicCommand(getGlobalName(&key), segment, time,
 		 ((convert || transpose) ? segment.getEndTime() : time + 1)),
     m_key(key),
     m_lastInsertedEvent(0),
@@ -260,7 +260,7 @@ MultiKeyInsertionCommand::MultiKeyInsertionCommand(Rosegarden::Composition &c,
 						   Rosegarden::Key key,
 						   bool convert,
 						   bool transpose) :
-    KMacroCommand(name(&key))
+    KMacroCommand(getGlobalName(&key))
 {
     for (Rosegarden::Composition::iterator i = c.begin(); i != c.end(); ++i) {
        addCommand(new KeyInsertionCommand(**i, time, key, convert, transpose));
@@ -343,7 +343,7 @@ GroupMenuTupletCommand::GroupMenuTupletCommand(Rosegarden::Segment &segment,
 					       timeT startTime,
 					       timeT unit,
 					       int untupled, int tupled) :
-    BasicCommand(name((untupled == 3) && (tupled == 2)),
+    BasicCommand(getGlobalName((untupled == 3) && (tupled == 2)),
 		 segment, startTime, startTime + (unit * untupled)),
     m_unit(unit),
     m_untupled(untupled),
@@ -371,7 +371,7 @@ GroupMenuBreakCommand::modifySegment()
 
 GroupMenuAddIndicationCommand::GroupMenuAddIndicationCommand(std::string indicationType, 
 							     EventSelection &selection) :
-    BasicCommand(name(indicationType),
+    BasicCommand(getGlobalName(indicationType),
 		 selection.getSegment(), selection.getBeginTime(),
 		 selection.getBeginTime() + 1),
     m_indicationType(indicationType),
@@ -398,7 +398,7 @@ GroupMenuAddIndicationCommand::modifySegment()
 }
 
 QString
-GroupMenuAddIndicationCommand::name(std::string indicationType)
+GroupMenuAddIndicationCommand::getGlobalName(std::string indicationType)
 {
     if (indicationType == Rosegarden::Indication::Slur) {
 	return "Add S&lur";
@@ -412,7 +412,7 @@ GroupMenuAddIndicationCommand::name(std::string indicationType)
 
 TransformsMenuNormalizeRestsCommand::TransformsMenuNormalizeRestsCommand
 (Rosegarden::EventSelection &selection) :
-    BasicCommand(name(),
+    BasicCommand(getGlobalName(),
 		 selection.getSegment(),
 		 selection.getBeginTime(),
 		 selection.getEndTime())
@@ -427,7 +427,7 @@ void TransformsMenuNormalizeRestsCommand::modifySegment()
 
 TransformsMenuCollapseRestsCommand::TransformsMenuCollapseRestsCommand
 (Rosegarden::EventSelection &selection) :
-    BasicCommand(name(),
+    BasicCommand(getGlobalName(),
 		 selection.getSegment(),
 		 selection.getBeginTime(),
 		 selection.getEndTime())
@@ -562,7 +562,7 @@ TransformsMenuTransposeOctaveCommand::modifySegment()
 
 
 QString
-TransformsMenuAddMarkCommand::name(Rosegarden::Mark markType)
+TransformsMenuAddMarkCommand::getGlobalName(Rosegarden::Mark markType)
 {
     std::string m = markType;
 

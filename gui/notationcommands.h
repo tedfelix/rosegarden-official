@@ -111,7 +111,7 @@ public:
 			bool shouldTranspose);
     virtual ~KeyInsertionCommand();
 
-    static QString name(Rosegarden::Key *key = 0) {
+    static QString getGlobalName(Rosegarden::Key *key = 0) {
 	if (key) {
 	    return QString("Change to &Key ") + key->getName().c_str() + "...";
 	} else {
@@ -140,7 +140,7 @@ public:
 			     bool shouldTranspose);
     virtual ~MultiKeyInsertionCommand();
 
-    static QString name(Rosegarden::Key *key = 0) {
+    static QString getGlobalName(Rosegarden::Key *key = 0) {
 	if (key) {
 	    return QString("Change all to &Key ") + key->getName().c_str() + "...";
 	} else {
@@ -179,13 +179,9 @@ class GroupMenuBeamCommand : public BasicSelectionCommand
 {
 public:
     GroupMenuBeamCommand(Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(name(), selection) { }
+	BasicSelectionCommand(getGlobalName(), selection) { }
 
-#ifdef RGKDE3
-    virtual QString name() { return "&Beam Group"; }
-#else
-    static QString name() { return "&Beam Group"; }
-#endif
+    static QString getGlobalName() { return "&Beam Group"; }
 
 protected:
     virtual void modifySegment();
@@ -196,13 +192,9 @@ class GroupMenuAutoBeamCommand : public BasicSelectionCommand
 {
 public:
     GroupMenuAutoBeamCommand(Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(name(), selection) { }
+	BasicSelectionCommand(getGlobalName(), selection) { }
 
-#ifdef RGKDE3
-    virtual QString name() { return "&Auto-Beam"; }
-#else
-    static QString name() { return "&Auto-Beam"; }
-#endif
+    static QString getGlobalName() { return "&Auto-Beam"; }
 
 protected:
     virtual void modifySegment();
@@ -217,17 +209,10 @@ public:
 			   Rosegarden::timeT unit,
 			   int untupled = 3, int tupled = 2);
 
-#ifdef RGKDE3
-    virtual QString name(bool simple = true) {
+    static QString getGlobalName(bool simple = true) {
 	if (simple) return "&Simple Tuplet";
 	else return "Tu&plet...";
     }
-#else
-    static QString name(bool simple = true) {
-	if (simple) return "&Simple Tuplet";
-	else return "Tu&plet...";
-    }
-#endif
 
 protected:
     virtual void modifySegment();
@@ -243,13 +228,9 @@ class GroupMenuBreakCommand : public BasicSelectionCommand
 {
 public:
     GroupMenuBreakCommand(Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(name(), selection) { }
+	BasicSelectionCommand(getGlobalName(), selection) { }
 
-#ifdef RGKDE3
-    virtual QString name() { return "&Unbeam"; }
-#else
-    static QString name() { return "&Unbeam"; }
-#endif
+    static QString getGlobalName() { return "&Unbeam"; }
 
 protected:
     virtual void modifySegment();
@@ -270,11 +251,7 @@ public:
 	return getBeginTime() + m_indicationDuration;
     }
 
-#ifdef RGKDE3
-    virtual QString name(std::string indicationType);
-#else
-    static QString name(std::string indicationType);
-#endif
+    static QString getGlobalName(std::string indicationType);
 
 protected:
     virtual void modifySegment();
@@ -295,15 +272,11 @@ public:
     TransformsMenuNormalizeRestsCommand(Rosegarden::Segment &s,
 					Rosegarden::timeT beginTime,
 					Rosegarden::timeT endTime) :
-	BasicCommand(name(), s, beginTime, endTime) { }
+	BasicCommand(getGlobalName(), s, beginTime, endTime) { }
 
     TransformsMenuNormalizeRestsCommand(Rosegarden::EventSelection &selection);
 
-#ifdef RGKDE3
-    virtual QString name() { return "&Normalize Rests"; }
-#else
-    static QString name() { return "&Normalize Rests"; }
-#endif
+    static QString getGlobalName() { return "&Normalize Rests"; }
 
 protected:
     virtual void modifySegment();
@@ -316,15 +289,11 @@ public:
     TransformsMenuCollapseRestsCommand(Rosegarden::Segment &s,
 				       Rosegarden::timeT beginTime,
 				       Rosegarden::timeT endTime) :
-	BasicCommand(name(), s, beginTime, endTime) { }
+	BasicCommand(getGlobalName(), s, beginTime, endTime) { }
 
     TransformsMenuCollapseRestsCommand(Rosegarden::EventSelection &selection);
 
-#ifdef RGKDE3
-    virtual QString name() { return "&Collapse Rests"; }
-#else
-    static QString name() { return "&Collapse Rests"; }
-#endif
+    static QString getGlobalName() { return "&Collapse Rests"; }
 
 protected:
     virtual void modifySegment();
@@ -335,14 +304,10 @@ class TransformsMenuCollapseNotesCommand : public BasicSelectionCommand
 {
 public:
     TransformsMenuCollapseNotesCommand(Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(name(), selection, true),
+	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
-#ifdef RGKDE3
-    virtual QString name() { return "&Collapse Equal-Pitch Notes"; }
-#else
-    static QString name() { return "&Collapse Equal-Pitch Notes"; }
-#endif
+    static QString getGlobalName() { return "&Collapse Equal-Pitch Notes"; }
 
 protected:
     virtual void modifySegment();
@@ -356,18 +321,12 @@ class TransformsMenuChangeStemsCommand : public BasicSelectionCommand
 {
 public:
     TransformsMenuChangeStemsCommand(bool up, Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(name(up), selection, true),
+	BasicSelectionCommand(getGlobalName(up), selection, true),
 	m_selection(&selection), m_up(up) { }
 
-#ifdef RGKDE3
-    virtual QString name(bool up) {
+    static QString getGlobalName(bool up) {
 	return up ? "Stems &Up" : "Stems &Down";
     }
-#else
-    static QString name(bool up) {
-	return up ? "Stems &Up" : "Stems &Down";
-    }
-#endif
 
 protected:
     virtual void modifySegment();
@@ -382,18 +341,10 @@ class TransformsMenuRestoreStemsCommand : public BasicSelectionCommand
 {
 public:
     TransformsMenuRestoreStemsCommand(Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(name(), selection, true),
+	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
-#ifdef RGKDE3
-    virtual QString name() {
-	return "&Restore Computed Stems";
-    }
-#else
-    static QString name() {
-	return "&Restore Computed Stems";
-    }
-#endif
+    static QString getGlobalName() { return "&Restore Computed Stems"; }
 
 protected:
     virtual void modifySegment();
@@ -407,18 +358,10 @@ class TransformsMenuTransposeCommand : public BasicSelectionCommand
 {
 public:
     TransformsMenuTransposeCommand(int semitones, Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(name(), selection, true),
+	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection), m_semitones(semitones) { }
 
-#ifdef RGKDE3
-    virtual QString name() {
-	return "&Transpose...";
-    }
-#else
-    static QString name() {
-	return "&Transpose...";
-    }
-#endif
+    static QString getGlobalName() { return "&Transpose..."; }
 
 protected:
     virtual void modifySegment();
@@ -433,18 +376,12 @@ class TransformsMenuTransposeOneStepCommand : public BasicSelectionCommand
 {
 public:
     TransformsMenuTransposeOneStepCommand(bool up, Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(name(up), selection, true),
+	BasicSelectionCommand(getGlobalName(up), selection, true),
 	m_selection(&selection), m_up(up) { }
 
-#ifdef RGKDE3
-    virtual QString name(bool up) {
+    static QString getGlobalName(bool up) {
 	return up ? "&Up a Semitone" : "&Down a Semitone";
     }
-#else
-    static QString name(bool up) {
-	return up ? "&Up a Semitone" : "&Down a Semitone";
-    }
-#endif
 
 protected:
     virtual void modifySegment();
@@ -459,18 +396,12 @@ class TransformsMenuTransposeOctaveCommand : public BasicSelectionCommand
 {
 public:
     TransformsMenuTransposeOctaveCommand(bool up, Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(name(up), selection, true),
+	BasicSelectionCommand(getGlobalName(up), selection, true),
 	m_selection(&selection), m_up(up) { }
 
-#ifdef RGKDE3
-    virtual QString name(bool up) {
+    static QString getGlobalName(bool up) {
 	return up ? "Up an &Octave" : "Down an Octa&ve";
     }
-#else
-    static QString name(bool up) {
-	return up ? "Up an &Octave" : "Down an Octa&ve";
-    }
-#endif
 
 protected:
     virtual void modifySegment();
@@ -486,14 +417,10 @@ class TransformsMenuAddMarkCommand : public BasicSelectionCommand
 public:
     TransformsMenuAddMarkCommand(Rosegarden::Mark mark,
 				 Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(name(mark), selection, true),
+	BasicSelectionCommand(getGlobalName(mark), selection, true),
 	m_selection(&selection), m_mark(mark) { }
 
-#ifdef RGKDE3
-    virtual QString name(Rosegarden::Mark mark);
-#else
-    static QString name(Rosegarden::Mark mark);
-#endif
+    static QString getGlobalName(Rosegarden::Mark mark);
 
 protected:
     virtual void modifySegment();
@@ -509,18 +436,10 @@ class TransformsMenuAddTextMarkCommand : public BasicSelectionCommand
 public:
     TransformsMenuAddTextMarkCommand(std::string text,
 				     Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(name(), selection, true),
+	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection), m_text(text) { }
 
-#ifdef RGKDE3
-    virtual QString name() {
-	return "Add Te&xt Mark...";
-    }
-#else
-    static QString name() {
-	return "Add Te&xt Mark...";
-    }
-#endif
+    static QString getGlobalName() { return "Add Te&xt Mark..."; }
 
 protected:
     virtual void modifySegment();
@@ -535,18 +454,10 @@ class TransformsMenuRemoveMarksCommand : public BasicSelectionCommand
 {
 public:
     TransformsMenuRemoveMarksCommand(Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(name(), selection, true),
+	BasicSelectionCommand(getGlobalName(), selection, true),
 	m_selection(&selection) { }
 
-#ifdef RGKDE3
-    virtual QString name() {
-	return "&Remove All Marks";
-    }
-#else
-    static QString name() {
-	return "&Remove All Marks";
-    }
-#endif
+    static QString getGlobalName() { return "&Remove All Marks"; }
 
 protected:
     virtual void modifySegment();

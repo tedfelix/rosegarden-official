@@ -26,6 +26,7 @@
 #include <qcombobox.h>
 #include <qinputdialog.h>
 #include <qvbox.h>
+#include <qregexp.h>
 
 #include <kmessagebox.h>
 #include <kmenubar.h>
@@ -527,75 +528,75 @@ void NotationView::setupActions()
 	 actionCollection(), "label_chords");
 
     // setup Group menu
-    new KAction(GroupMenuBeamCommand::name(), 0, this,
+    new KAction(GroupMenuBeamCommand::getGlobalName(), 0, this,
                 SLOT(slotGroupBeam()), actionCollection(), "beam");
 
-    new KAction(GroupMenuAutoBeamCommand::name(), 0, this,
+    new KAction(GroupMenuAutoBeamCommand::getGlobalName(), 0, this,
                 SLOT(slotGroupAutoBeam()), actionCollection(), "auto_beam");
 
-    new KAction(GroupMenuBreakCommand::name(), 0, this,
+    new KAction(GroupMenuBreakCommand::getGlobalName(), 0, this,
                 SLOT(slotGroupBreak()), actionCollection(), "break_group");
 
-    new KAction(GroupMenuTupletCommand::name(true), 0, this,
+    new KAction(GroupMenuTupletCommand::getGlobalName(true), 0, this,
 		SLOT(slotGroupSimpleTuplet()), actionCollection(), "simple_tuplet");
 
-    new KAction(GroupMenuTupletCommand::name(false), 0, this,
+    new KAction(GroupMenuTupletCommand::getGlobalName(false), 0, this,
 		SLOT(slotGroupGeneralTuplet()), actionCollection(), "tuplet");
 
-    new KAction(GroupMenuAddIndicationCommand::name
+    new KAction(GroupMenuAddIndicationCommand::getGlobalName
                 (Rosegarden::Indication::Slur), 0, this,
                 SLOT(slotGroupSlur()), actionCollection(), "slur");
 
-    new KAction(GroupMenuAddIndicationCommand::name
+    new KAction(GroupMenuAddIndicationCommand::getGlobalName
                 (Rosegarden::Indication::Crescendo), 0, this,
                 SLOT(slotGroupCrescendo()), actionCollection(), "crescendo");
 
-    new KAction(GroupMenuAddIndicationCommand::name
+    new KAction(GroupMenuAddIndicationCommand::getGlobalName
                 (Rosegarden::Indication::Decrescendo), 0, this,
                 SLOT(slotGroupDecrescendo()), actionCollection(), "decrescendo");
 
     // setup Transforms menu
-    new KAction(TransformsMenuNormalizeRestsCommand::name(), 0, this,
+    new KAction(TransformsMenuNormalizeRestsCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsNormalizeRests()), actionCollection(),
                 "normalize_rests");
 
-    new KAction(TransformsMenuCollapseRestsCommand::name(), 0, this,
+    new KAction(TransformsMenuCollapseRestsCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsCollapseRests()), actionCollection(),
                 "collapse_rests_aggressively");
 
-    new KAction(TransformsMenuCollapseNotesCommand::name(), 0, this,
+    new KAction(TransformsMenuCollapseNotesCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsCollapseNotes()), actionCollection(),
                 "collapse_notes");
 
-    new KAction(TransformsMenuChangeStemsCommand::name(true), 0, this,
+    new KAction(TransformsMenuChangeStemsCommand::getGlobalName(true), 0, this,
                 SLOT(slotTransformsStemsUp()), actionCollection(),
                 "stems_up");
 
-    new KAction(TransformsMenuChangeStemsCommand::name(false), 0, this,
+    new KAction(TransformsMenuChangeStemsCommand::getGlobalName(false), 0, this,
                 SLOT(slotTransformsStemsDown()), actionCollection(),
                 "stems_down");
 
-    new KAction(TransformsMenuRestoreStemsCommand::name(), 0, this,
+    new KAction(TransformsMenuRestoreStemsCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
 
-    new KAction(TransformsMenuTransposeOneStepCommand::name(true), 0, this,
+    new KAction(TransformsMenuTransposeOneStepCommand::getGlobalName(true), 0, this,
                 SLOT(slotTransformsTransposeUp()), actionCollection(),
                 "transpose_up");
 
-    new KAction(TransformsMenuTransposeOctaveCommand::name(true), 0, this,
+    new KAction(TransformsMenuTransposeOctaveCommand::getGlobalName(true), 0, this,
                 SLOT(slotTransformsTransposeUpOctave()), actionCollection(),
                 "transpose_up_octave");
 
-    new KAction(TransformsMenuTransposeOneStepCommand::name(false), 0, this,
+    new KAction(TransformsMenuTransposeOneStepCommand::getGlobalName(false), 0, this,
                 SLOT(slotTransformsTransposeDown()), actionCollection(),
                 "transpose_down");
 
-    new KAction(TransformsMenuTransposeOctaveCommand::name(false), 0, this,
+    new KAction(TransformsMenuTransposeOctaveCommand::getGlobalName(false), 0, this,
                 SLOT(slotTransformsTransposeDownOctave()), actionCollection(),
                 "transpose_down_octave");
 
-    new KAction(TransformsMenuTransposeCommand::name(), 0, this,
+    new KAction(TransformsMenuTransposeCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsTranspose()), actionCollection(),
                 "general_transpose");
 
@@ -613,24 +614,24 @@ void NotationView::setupActions()
       "1slotTransformsAddUpBow()",       "1slotTransformsAddDownBow()" };
 
     for (unsigned int i = 0; i < 10; ++i) {
-        new KAction(TransformsMenuAddMarkCommand::name(marks[i]), 0, this,
+        new KAction(TransformsMenuAddMarkCommand::getGlobalName(marks[i]), 0, this,
                     markSlots[i], actionCollection(),
                     QString("add_%1").arg(marks[i].c_str()));
     }
 
-    new KAction(TransformsMenuAddTextMarkCommand::name(), 0, this,
+    new KAction(TransformsMenuAddTextMarkCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsAddTextMark()), actionCollection(),
                 "add_text_mark");
 
-    new KAction(TransformsMenuRemoveMarksCommand::name(), 0, this,
+    new KAction(TransformsMenuRemoveMarksCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsRemoveMarks()), actionCollection(),
                 "remove_marks");
 
-    new KAction(AddTimeSignatureCommand::name(), 0, this,
+    new KAction(AddTimeSignatureCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsAddTimeSignature()), actionCollection(),
                 "add_time_signature");
 
-    new KAction(KeyInsertionCommand::name(), 0, this,
+    new KAction(KeyInsertionCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsAddKeySignature()), actionCollection(),
                 "add_key_signature");
 
