@@ -1,0 +1,12 @@
+.deps
+.libs
+Makefile
+Makefile.in
+*.lo
+*.la
+sound
+*.closure
+*.moc.cpp
+*_skel.cpp
+*_meta_unload.cpp
+*.kidl
