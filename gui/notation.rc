@@ -44,6 +44,15 @@
   <Action name="dotted_32nd_rest" />
   <Action name="dotted_64th_rest" />
 </Menu>
+
+<Menu noMerge="1" name="Clefs">
+  <text>Clefs</text>
+  <Action name="treble_clef" />
+  <Action name="tenor_clef" />
+  <Action name="alto_clef" />
+  <Action name="bass_clef" />
+</Menu>
+
 </MenuBar>
 
 <ToolBar name="notesToolBar" newline="true">
@@ -66,7 +75,7 @@
   <Action name="dotted_64th" />
 </ToolBar>
 
-<ToolBar name="restsToolBar" newline="true">
+<ToolBar name="restsToolBar">
 
   <Action name="breve_rest" />
   <Action name="whole_note_rest" />
@@ -86,6 +95,13 @@
   <Action name="dotted_32nd_rest" />
   <Action name="dotted_64th_rest" />
 
+</ToolBar>
+
+<ToolBar name="clefToolBar">
+  <Action name="treble_clef" />
+  <Action name="tenor_clef" />
+  <Action name="alto_clef" />
+  <Action name="bass_clef" />
 </ToolBar>
 
 
