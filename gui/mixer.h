@@ -52,10 +52,6 @@ signals:
     void rewindPlaybackToBeginning();
 
 protected slots:
-    void slotRoutingButtonPressed();
-    void slotRoutingButtonWheeled(bool up);
-    void slotInputChanged(int);
-    void slotOutputChanged(int);
     void slotFaderLevelChanged(float level);
     void slotPanChanged(float value);
     void slotChannelsChanged();
@@ -84,8 +80,8 @@ private:
 	    m_stereoButton(0), m_stereoness(false), m_pluginBox(0)
 	{ }
 
-	QPushButton *m_input;
-	QPushButton *m_output;
+	AudioRouteMenu *m_input;
+	AudioRouteMenu *m_output;
 
 	RosegardenRotary *m_pan;
 	RosegardenFader *m_fader;
@@ -117,23 +113,6 @@ private:
     QPixmap m_stereoPixmap;
 
     Rosegarden::InstrumentId m_currentId;
-};
-
-class WheelyButton : public QPushButton
-{
-    Q_OBJECT
-
-public:
-    WheelyButton(QWidget *w) : QPushButton(w) { }
-    virtual ~WheelyButton();
-
-signals:
-    void wheel(bool up);
-
-protected:
-    void wheelEvent(QWheelEvent *e) {
-	emit wheel(e->delta() > 0);
-    }
 };
 
 #endif

@@ -31,6 +31,11 @@
 #include "vumeter.h"
 
 #include "AudioLevel.h"
+#include "Instrument.h"
+
+namespace Rosegarden {
+    class Studio;
+}
 
 
 class RosegardenFader : public QWidget
@@ -153,7 +158,77 @@ protected:
     int m_xoff;
 };
 
+
+// A push button that emits wheel events.  Used by AudioRouteMenu.
+//
+class WheelyButton : public QPushButton
+{
+    Q_OBJECT
+
+public:
+    WheelyButton(QWidget *w) : QPushButton(w) { }
+    virtual ~WheelyButton() { }
+
+signals:
+    void wheel(bool up);
+
+protected:
+    void wheelEvent(QWheelEvent *e) {
+	emit wheel(e->delta() > 0);
+    }
+};
+
+
+
+// A specialised menu for selecting audio inputs or outputs, that
+// queries the studio and instrument to find out what it should show.
+// Available in a "compact" size, which is a push button with a popup
+// menu attached, or a regular size which is a combobox.
+//
+class AudioRouteMenu : public QObject
+{
+    Q_OBJECT
+
+public:
+    enum Direction { In, Out };
+    enum Format { Compact, Regular };
+
+    AudioRouteMenu(QWidget *parent,
+		   Rosegarden::Studio *studio,
+		   Rosegarden::Instrument *instrument,
+		   Direction direction,
+		   Format format);
+
+    QWidget *getWidget();
+
+public slots:
+    void slotRepopulate();
     
+protected slots:
+    void slotWheel(bool up);
+    void slotShowMenu();
+    void slotEntrySelected(int);
+
+signals:
+    // The menu writes changes directly to the instrument, but it
+    // also emits this to let you know something has changed
+    void changed();
+
+private:
+    Rosegarden::Studio *m_studio;
+    Rosegarden::Instrument *m_instrument;
+    Direction m_direction;
+    Format m_format;
+
+    WheelyButton *m_button;
+    KComboBox *m_combo;
+
+    int getNumEntries();
+    int getCurrentEntry(); // for instrument
+    QString getEntryText(int n);
+};
+
+
 
 class MidiFaderWidget : public QFrame
 {
@@ -228,6 +303,7 @@ signals:
     void audioChannelsChanged(int);
 
 public slots:
+    void updateFromInstrument(Rosegarden::Studio *, Rosegarden::InstrumentId);
 
 protected slots:
     void slotChannelStateChanged();

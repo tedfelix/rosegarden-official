@@ -162,10 +162,11 @@ public:
     void setAudioChannels(unsigned int ch) { m_channel = MidiByte(ch); }
     unsigned int getAudioChannels() const { return (unsigned int)(m_channel); }
 
-    // an audio input can be a buss or a record input
-    void setAudioInputToBuss(BussId buss);
-    void setAudioInputToRecord(int recordIn);
-    int getAudioInput(bool &isBuss) const;
+    // An audio input can be a buss or a record input. The channel number
+    // is required for mono instruments, ignored for stereo ones.
+    void setAudioInputToBuss(BussId buss, int channel = 0);
+    void setAudioInputToRecord(int recordIn, int channel = 0);
+    int getAudioInput(bool &isBuss, int &channel) const;
 
     void setAudioOutput(BussId buss) { m_audioOutput = buss; }
     BussId getAudioOutput() const { return m_audioOutput; }
@@ -246,10 +247,12 @@ private:
     //
     int              m_mappedId;
 
-    // Which input terminal we're connected to - this is a BussId
-    // if less than 1000 or a record input number (plus 1000) if >= 1000.
+    // Which input terminal we're connected to.  This is a BussId if
+    // less than 1000 or a record input number (plus 1000) if >= 1000.
+    // The channel number is only used for mono instruments.
     //
     int              m_audioInput;
+    int              m_audioInputChannel;
 
     // Which buss we output to.  Zero is always the master.
     //

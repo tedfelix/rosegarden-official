@@ -664,7 +664,8 @@ void RosegardenGUIDoc::initialiseStudio()
 	    // then the input
 	    // 
 	    bool isBuss;
-	    int input = (*it)->getAudioInput(isBuss);
+	    int channel;
+	    int input = (*it)->getAudioInput(isBuss, channel);
 	    Rosegarden::MappedObjectId rmi = 0;
 
 	    if (isBuss) {
@@ -676,6 +677,10 @@ void RosegardenGUIDoc::initialiseStudio()
 		    rmi = recordIns[input]->getMappedId();
 		}
 	    }
+
+            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
+                Rosegarden::MappedAudioFader::InputChannel, 
+                Rosegarden::MappedObjectValue(channel));
 
 	    if (rmi > 0) {
 		Rosegarden::StudioControl::connectStudioObjects(rmi, mappedId);

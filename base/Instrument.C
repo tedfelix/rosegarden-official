@@ -54,6 +54,7 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_sendVolume(false),
     m_mappedId(0),
     m_audioInput(1000),
+    m_audioInputChannel(0),
     m_audioOutput(0)
 {
     if (it == Audio)
@@ -98,6 +99,7 @@ Instrument::Instrument(InstrumentId id,
     m_sendVolume(false),
     m_mappedId(0),
     m_audioInput(1000),
+    m_audioInputChannel(0),
     m_audioOutput(0)
 {
     // Add a number of plugin place holders (unassigned)
@@ -153,6 +155,7 @@ Instrument::Instrument(const Instrument &ins):
     m_sendVolume(ins.sendsVolume()),
     m_mappedId(ins.getMappedId()),
     m_audioInput(ins.m_audioInput),
+    m_audioInputChannel(ins.m_audioInputChannel),
     m_audioOutput(ins.m_audioOutput)
 {
     // Add a number of plugin place holders (unassigned)
@@ -195,6 +198,7 @@ Instrument::operator=(const Instrument &ins)
     m_sendVolume = ins.sendsVolume();
     m_mappedId = ins.getMappedId();
     m_audioInput = ins.m_audioInput;
+    m_audioInputChannel = ins.m_audioInputChannel;
     m_audioOutput = ins.m_audioOutput;
 
     return *this;
@@ -273,20 +277,24 @@ Instrument::isPercussion() const
 }
 
 void
-Instrument::setAudioInputToBuss(BussId buss)
+Instrument::setAudioInputToBuss(BussId buss, int channel)
 {
     m_audioInput = buss;
+    m_audioInputChannel = channel;
 }
 
 void
-Instrument::setAudioInputToRecord(int recordIn)
+Instrument::setAudioInputToRecord(int recordIn, int channel)
 {
     m_audioInput = recordIn + 1000;
+    m_audioInputChannel = channel;
 }
 
 int
-Instrument::getAudioInput(bool &isBuss) const
+Instrument::getAudioInput(bool &isBuss, int &channel) const
 {
+    channel = m_audioInputChannel;
+
     if (m_audioInput >= 1000) {
 	isBuss = false;
 	return m_audioInput - 1000;
@@ -370,11 +378,14 @@ Instrument::toXmlString()
                    << m_recordLevel << "\"/>" << std::endl;
 
 	bool aibuss;
-	int ai = getAudioInput(aibuss);
+	int channel;
+	int ai = getAudioInput(aibuss, channel);
 
         instrument << "            <audioInput value=\""
                    << ai << "\" type=\""
-		   << (aibuss ? "buss" : "record") << "\"/>" << std::endl;
+		   << (aibuss ? "buss" : "record")
+		   << "\" channel=\"" << channel
+		   << "\"/>" << std::endl;
 
         instrument << "            <audioOutput value=\""
                    << m_audioOutput << "\"/>" << std::endl;

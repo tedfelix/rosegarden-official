@@ -112,6 +112,7 @@ const MappedObjectProperty MappedAudioFader::Channels = "channels";
 const MappedObjectProperty MappedAudioFader::FaderLevel = "faderLevel";
 const MappedObjectProperty MappedAudioFader::FaderRecordLevel = "faderRecordLevel";
 const MappedObjectProperty MappedAudioFader::Pan = "pan";
+const MappedObjectProperty MappedAudioFader::InputChannel = "inputChannel";
 
 const MappedObjectProperty MappedAudioBuss::Level = "level";
 const MappedObjectProperty MappedAudioBuss::Pan = "pan";
@@ -1040,7 +1041,8 @@ MappedAudioFader::MappedAudioFader(MappedObject *parent,
     m_recordLevel(0.0),
     m_instrumentId(0),
     m_pan(0),
-    m_channels(channels)
+    m_channels(channels),
+    m_inputChannel(0)
 {
 }
 
@@ -1079,6 +1081,10 @@ MappedAudioFader::getPropertyList(const MappedObjectProperty &property)
     else if (property == MappedAudioFader::Channels)
     {
         list.push_back(MappedObjectProperty("%1").arg(m_channels));
+    }
+    else if (property == MappedAudioFader::InputChannel)
+    {
+        list.push_back(MappedObjectProperty("%1").arg(m_inputChannel));
     }
     else if (property == MappedAudioFader::Pan)
     {
@@ -1120,6 +1126,8 @@ MappedAudioFader::getProperty(const MappedObjectProperty &property,
 	value = m_recordLevel;
     } else if (property == Channels) {
 	value = m_channels;
+    } else if (property == InputChannel) {
+	value = m_inputChannel;
     } else if (property == Pan) {
 	value = m_pan;
     } else {
@@ -1151,6 +1159,10 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
     else if (property ==  MappedAudioFader::Channels)
     {
         m_channels = value;
+    }
+    else if (property ==  MappedAudioFader::InputChannel)
+    {
+        m_inputChannel = value;
     }
     else if (property ==  MappedAudioFader::Pan)
     {

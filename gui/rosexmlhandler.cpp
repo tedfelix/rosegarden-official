@@ -1629,13 +1629,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         int value = atts.value("value").toInt();
+	int channel = atts.value("channel").toInt();
 
 	QString type = atts.value("type");
 	if (type) {
 	    if (type.lower() == "buss") {
-		if (m_instrument) m_instrument->setAudioInputToBuss(value);
+		if (m_instrument) m_instrument->setAudioInputToBuss(value, channel);
 	    } else if (type.lower() == "record") {
-		if (m_instrument) m_instrument->setAudioInputToRecord(value);
+		if (m_instrument) m_instrument->setAudioInputToRecord(value, channel);
 	    }
 	}
 

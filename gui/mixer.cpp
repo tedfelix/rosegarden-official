@@ -40,8 +40,6 @@
 #include <qpopupmenu.h>
 
 
-WheelyButton::~WheelyButton() { }
-
 MixerWindow::MixerWindow(QWidget *parent,
 			 RosegardenGUIDoc *document) :
     KMainWindow(parent, "mixerwindow"),
@@ -87,8 +85,12 @@ MixerWindow::MixerWindow(QWidget *parent,
 
 //!!! bring across the tooltips
 
-	rec.m_input = new WheelyButton(mainBox);
-	rec.m_output = new WheelyButton(mainBox);
+	rec.m_input  = new AudioRouteMenu(mainBox, m_studio, *i,
+					  AudioRouteMenu::In,
+					  AudioRouteMenu::Compact);
+	rec.m_output = new AudioRouteMenu(mainBox, m_studio, *i,
+					  AudioRouteMenu::Out,
+					  AudioRouteMenu::Compact);
 
 	rec.m_pan = new RosegardenRotary
 	    (mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20);
@@ -138,8 +140,8 @@ MixerWindow::MixerWindow(QWidget *parent,
 	QLabel *idLabel = new QLabel(QString("%1").arg(count), mainBox);
 	idLabel->setFont(boldFont);
 
-	mainLayout->addMultiCellWidget(rec.m_input, 0, 0, col, col+1);
-	mainLayout->addMultiCellWidget(rec.m_output, 1, 1, col, col+1);
+	mainLayout->addMultiCellWidget(rec.m_input->getWidget(), 0, 0, col, col+1);
+	mainLayout->addMultiCellWidget(rec.m_output->getWidget(), 1, 1, col, col+1);
 	mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
 	mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
 	mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
@@ -154,18 +156,6 @@ MixerWindow::MixerWindow(QWidget *parent,
 	updateFader((*i)->getId());
 	updateRouteButtons((*i)->getId());
 	updateStereoButton((*i)->getId());
-
-	connect(rec.m_input, SIGNAL(wheel(bool)),
-		this, SLOT(slotRoutingButtonWheeled(bool)));
-		
-	connect(rec.m_input, SIGNAL(clicked()),
-		this, SLOT(slotRoutingButtonPressed()));
-
-	connect(rec.m_output, SIGNAL(wheel(bool)),
-		this, SLOT(slotRoutingButtonWheeled(bool)));
-		
-	connect(rec.m_output, SIGNAL(clicked()),
-		this, SLOT(slotRoutingButtonPressed()));
 
 	connect(rec.m_fader, SIGNAL(faderChanged(float)),
 		this, SLOT(slotFaderLevelChanged(float)));
@@ -385,57 +375,9 @@ void
 MixerWindow::updateRouteButtons(int id)
 {
     if (id >= (int)Rosegarden::AudioInstrumentBase) {
-
 	FaderRec &rec = m_faders[id];
-	Rosegarden::Instrument *i = m_studio->getInstrumentById(id);
-
-	bool isBuss = false;
-	int index = i->getAudioInput(isBuss);
-	int channel = 0;
-
-	bool stereo = (i->getAudioChannels() > 1);
-
-	//!!! erch, not right -- elsewhere we treat the value in the
-	//same way as a stereo one
-	if (!stereo) {
-	    channel = index % 2;
-	    index /= 2;
-	}
-
-	if (isBuss) {
-	    if (index > 0) {
-		if (stereo) {
-		    rec.m_input->setText(i18n("Sub %1").arg(index));
-		} else {
-		    rec.m_input->setText((channel ?
-					  i18n("Sub %1 R") :
-					  i18n("Sub %1 L")).arg(index));
-		}
-	    } else {
-		if (stereo) {
-		    rec.m_input->setText(i18n("Master"));
-		} else {
-		    rec.m_input->setText(channel ?
-					 i18n("Master R") :
-					 i18n("Master L"));
-		}
-	    }
-	} else {
-	    if (stereo) {
-		rec.m_input->setText(i18n("In %1").arg(index+1));
-	    } else {
-		rec.m_input->setText((channel ?
-				      i18n("In %1 R") :
-				      i18n("In %1 L")).arg(index+1));
-	    }
-	}
-
-	Rosegarden::BussId bussId = i->getAudioOutput();
-	if (bussId > 0) {
-	    rec.m_output->setText(i18n("Sub %1").arg(bussId));
-	} else {
-	    rec.m_output->setText(i18n("Master"));
-	}
+	rec.m_input->slotRepopulate();
+	rec.m_output->slotRepopulate();
     }
 }
 
@@ -458,206 +400,6 @@ MixerWindow::updateStereoButton(int id)
     }
 }
 	
-
-void
-MixerWindow::slotRoutingButtonWheeled(bool up)
-{
-    const QObject *s = sender();
-
-    Rosegarden::InstrumentId id = 0;
-    bool output = false;
-    bool stereo = false;
-
-    for (FaderMap::iterator i = m_faders.begin();
-	 i != m_faders.end(); ++i) {
-
-	if (i->second.m_input == s) {
-	    id = i->first;
-	    stereo = i->second.m_stereoness;
-	    break;
-	} else if (i->second.m_output == s) {
-	    id = i->first;
-	    stereo = i->second.m_stereoness;
-	    output = true;
-	    break;
-	}
-    }
-
-    if (id == 0) return;
-    Rosegarden::Instrument *instrument = m_studio->getInstrumentById(id);
-    if (!instrument) return;
-
-    if (output) {
-
-	int max, min = 0;
-	if (stereo) {
-	    max = m_studio->getBusses().size() - 1;
-	} else {
-	    max = m_studio->getBusses().size() * 2 - 1;
-	}
-
-	Rosegarden::BussId out = instrument->getAudioOutput();
-	if (up) {
-	    if (out < max) slotOutputChanged(out+1);
-	} else {
-	    if (out > min) slotOutputChanged(out-1);
-	}
-    } else {
-
-	//!!!
-    }
-}
-
-
-void
-MixerWindow::slotRoutingButtonPressed()
-{
-    const QObject *s = sender();
-
-    Rosegarden::InstrumentId id = 0;
-    bool output = false;
-    bool stereo = false;
-
-    for (FaderMap::iterator i = m_faders.begin();
-	 i != m_faders.end(); ++i) {
-
-	if (i->second.m_input == s) {
-	    id = i->first;
-	    stereo = i->second.m_stereoness;
-	    break;
-	} else if (i->second.m_output == s) {
-	    id = i->first;
-	    stereo = i->second.m_stereoness;
-	    output = true;
-	    break;
-	}
-    }
-
-    if (id == 0) return;
-
-    QPopupMenu *menu = new QPopupMenu(this);
-
-    int submasterCount = m_studio->getBusses().size() - 1;
-    int mid = 1;
-
-    if (output) {
-
-	menu->insertItem(i18n("Master"),
-			 this, SLOT(slotOutputChanged(int)), 0, mid);
-	menu->setItemParameter(mid, mid-1);
-	++mid;
-
-	for (int i = 0; i < submasterCount; ++i) {
-	    menu->insertItem(i18n("Sub %1").arg(i+1),
-			     this, SLOT(slotOutputChanged(int)), 0, mid);
-	    menu->setItemParameter(mid, mid-1);
-	    ++mid;
-	}
-
-    } else {
-
-	// id/param stuff as above
-
-	int jackAudioInputs = m_studio->getRecordIns().size();
-
-	for (int i = 0; i < jackAudioInputs; ++i) {
-	    if (!stereo) {
-		menu->insertItem(i18n("In %1 L").arg(i+1),
-				 this, SLOT(slotInputChanged(int)), 0, mid);
-		menu->setItemParameter(mid, mid-1);
-		++mid;
-		menu->insertItem(i18n("In %1 R").arg(i+1),
-				 this, SLOT(slotInputChanged(int)), 0, mid);
-		menu->setItemParameter(mid, mid-1);
-		++mid;
-	    } else {
-		menu->insertItem(i18n("In %1").arg(i+1),
-				 this, SLOT(slotInputChanged(int)), 0, mid);
-		menu->setItemParameter(mid, mid-1);
-		++mid;
-	    }
-	}
-	
-	for (int i = 0; i < submasterCount; ++i) {
-	    if (!stereo) {
-		menu->insertItem(i18n("Sub %1 L").arg(i+1),
-				 this, SLOT(slotInputChanged(int)), 0, mid);
-		menu->setItemParameter(mid, mid-1);
-		++mid;
-		menu->insertItem(i18n("Sub %1 R").arg(i+1),
-				 this, SLOT(slotInputChanged(int)), 0, mid);
-		menu->setItemParameter(mid, mid-1);
-		++mid;
-	    } else {
-		menu->insertItem(i18n("Sub %1").arg(i+1),
-				 this, SLOT(slotInputChanged(int)), 0, mid);
-		menu->setItemParameter(mid, mid-1);
-		++mid;
-	    }
-	}
-	
-	if (!stereo) {
-	    menu->insertItem(i18n("Master L"),
-			     this, SLOT(slotInputChanged(int)), 0, mid);
-	    menu->setItemParameter(mid, mid-1);
-	    ++mid;
-	    menu->insertItem(i18n("Master R"),
-			     this, SLOT(slotInputChanged(int)), 0, mid);
-	    menu->setItemParameter(mid, mid-1);
-	    ++mid;
-	} else {
-	    menu->insertItem(i18n("Master"),
-			     this, SLOT(slotInputChanged(int)), 0, mid);
-	    menu->setItemParameter(mid, mid-1);
-	    ++mid;
-	}
-    }
-
-    m_currentId = id;
-
-    //!!! need to popup with current item under pointer
-    menu->popup(QCursor::pos());
-}
-
-void
-MixerWindow::slotInputChanged(int i)
-{
-    //!!!
-
-}
-
-void
-MixerWindow::slotOutputChanged(int i)
-{
-    RG_DEBUG << "MixerWindow::slotOutputChanged(" << i << ") for instrument "
-	     << m_currentId << endl;
-
-    Rosegarden::Instrument *instrument = m_studio->getInstrumentById(m_currentId);
-    if (!instrument) return;
-
-    Rosegarden::BussId bussId = instrument->getAudioOutput();
-    RG_DEBUG << "MixerWindow::slotOutputChanged(" << i << ") for instrument "
-	     << m_currentId << endl;
-
-    Rosegarden::Buss *oldBuss = m_studio->getBussById(bussId);
-    Rosegarden::Buss *newBuss = m_studio->getBussById(i);
-    if (!newBuss) return;
-
-    if (oldBuss) {
-	Rosegarden::StudioControl::disconnectStudioObjects(instrument->getMappedId(),
-							   oldBuss->getMappedId());
-    } else {
-	Rosegarden::StudioControl::disconnectStudioObject(instrument->getMappedId());
-    }
-
-    Rosegarden::StudioControl::connectStudioObjects(instrument->getMappedId(),
-						    newBuss->getMappedId());
-
-    instrument->setAudioOutput(i);
-
-    m_faders[m_currentId].m_output->
-	setText(i > 0 ? i18n("Sub %1").arg(i) : i18n("Master"));
-}
 
 void
 MixerWindow::slotSelectPlugin()
@@ -785,7 +527,27 @@ MixerWindow::slotPanChanged(float pan)
 void
 MixerWindow::slotChannelsChanged()
 {
-    //...
+    const QObject *s = sender();
+
+    // channels are only switchable on instruments
+
+    for (FaderMap::iterator i = m_faders.begin();
+	 i != m_faders.end(); ++i) {
+
+	if (s == i->second.m_stereoButton) {
+	    
+	    Rosegarden::Instrument *instrument =
+		m_studio->getInstrumentById(i->first);
+	    
+	    if (instrument) {
+		instrument->setAudioChannels
+		    ((instrument->getAudioChannels() > 1) ? 1 : 2);
+		updateStereoButton(instrument->getId());
+		updateRouteButtons(instrument->getId());
+		return;
+	    }
+	}
+    }
 }
 
 void

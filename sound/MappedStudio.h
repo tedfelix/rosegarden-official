@@ -402,6 +402,7 @@ public:
     static const MappedObjectProperty FaderLevel;
     static const MappedObjectProperty FaderRecordLevel;
     static const MappedObjectProperty Pan;
+    static const MappedObjectProperty InputChannel;
 
     MappedAudioFader(MappedObject *parent,
                      MappedObjectId id,
@@ -433,6 +434,11 @@ protected:
     // How many channels we carry
     //
     MappedObjectValue             m_channels;
+
+    // If we have an input, which channel we take from it (if we are
+    // a mono fader at least)
+    //
+    MappedObjectValue             m_inputChannel;
 };
 
 class MappedAudioBuss : public MappedConnectableObject

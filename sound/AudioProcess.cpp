@@ -341,6 +341,11 @@ AudioBussMixer::processBlocks()
 	std::cerr << "AudioBussMixer::processBlocks" << std::endl;
 #endif
 
+    std::set<InstrumentId> processedInstruments;
+
+    int minBlocks = 0;
+    bool haveMinBlocks = false;
+
     for (int buss = 0; buss < m_bussCount; ++buss) {
 
 	MappedAudioBuss *mbuss =
@@ -392,6 +397,10 @@ AudioBussMixer::processBlocks()
 	}
 
 	int blocks = minSpace / m_blockSize;
+	if (!haveMinBlocks || (blocks < minBlocks)) {
+	    minBlocks = blocks;
+	    haveMinBlocks = true;
+	}
 	
 #ifdef DEBUG_BUSS_MIXER
 	if (m_driver->isPlaying())
@@ -407,6 +416,15 @@ AudioBussMixer::processBlocks()
 
 	    for (std::vector<InstrumentId>::iterator ii = instruments.begin();
 		 ii != instruments.end(); ++ii) {
+
+		if (processedInstruments.find(*ii) !=
+		    processedInstruments.end()) {
+		    // we aren't set up to process any instrument to
+		    // more than one buss
+		    continue;
+		} else {
+		    processedInstruments.insert(*ii);
+		}
 
 		if (m_instrumentMixer->isInstrumentDormant(*ii)) {
 
@@ -450,6 +468,30 @@ AudioBussMixer::processBlocks()
 #endif
 	}
     }
+
+    // any unprocessed instruments need to be skipped, or they'll block
+
+    InstrumentId instrumentBase;
+    int instruments;
+    m_driver->getAudioInstrumentNumbers(instrumentBase, instruments);
+
+    if (processedInstruments.size() != instruments) {
+
+	for (InstrumentId id = instrumentBase; 
+	     id < instrumentBase + instruments; ++id) {
+
+	    if (processedInstruments.find(id) == processedInstruments.end()) {
+		for (int ch = 0; ch < 2; ++ch) {
+		    RingBuffer<sample_t, 2> *rb =
+			m_instrumentMixer->getRingBuffer(id, ch);
+
+		    if (rb) rb->skip(m_blockSize * minBlocks,
+				     1);
+		}
+	    }
+	}
+    }
+    
 
 #ifdef DEBUG_BUSS_MIXER
     std::cerr << "AudioBussMixer::processBlocks: done" << std::endl;

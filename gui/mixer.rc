@@ -6,12 +6,12 @@
 
   <Menu name="Transport">
         <text>T&amp;ransport</text>
-        <Action name="play"/> 
-        <Action name="stop"/> 
-        <Action name="fast_forward"/> 
-        <Action name="rewind"/> 
-        <Action name="record"/>
-        <Action name="recordtoggle"/>
+  <Action name="play" />
+  <Action name="stop" />
+  <Action name="playback_pointer_back_bar" />
+  <Action name="playback_pointer_forward_bar" />
+  <Action name="playback_pointer_start" />
+  <Action name="playback_pointer_end" />
   </Menu>
 
 <Menu name="settings"><text>&amp;Settings</text>

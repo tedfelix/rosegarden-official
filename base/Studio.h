@@ -86,6 +86,7 @@ public:
     void addBuss(Buss *buss);
 
     RecordInList getRecordIns() { return m_recordIns; }
+    RecordIn *getRecordIn(int number);
     void addRecordIn(RecordIn *ri) { m_recordIns.push_back(ri); }
 
     // A clever method to best guess MIDI file program mappings

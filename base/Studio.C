@@ -243,6 +243,13 @@ Studio::addBuss(Buss *buss)
     m_busses.push_back(buss);
 }
 
+RecordIn *
+Studio::getRecordIn(int number)
+{
+    if (number >= 0 && number < m_recordIns.size()) return m_recordIns[number];
+    else return 0;
+}
+
 // Clear down the devices  - the devices will clear down their
 // own Instruments.
 //
