@@ -92,6 +92,9 @@ public slots:
      */
     void slotSetScrollPos(const QPoint &);
 
+signals:
+    void bottomWidgetHeightChanged(int);
+
 protected:
     
     virtual void resizeEvent(QResizeEvent*);
@@ -100,6 +103,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     QWidget* m_bottomWidget;
+    int m_currentBottomWidgetHeight;
 };
 
 

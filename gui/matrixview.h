@@ -196,8 +196,6 @@ public:
      */
     void scrollToTime(Rosegarden::timeT t);
 
-    virtual void polish();
-
 signals:    
     /**
      * Emitted when the selection has been cut or copied
@@ -402,6 +400,9 @@ public slots:
     /// The given QObject has originated a step-by-step-editing request
     void slotStepByStepTargetRequested(QObject *);
 
+protected slots:
+     void slotCanvasBottomWidgetHeightChanged(int newHeight);
+    
 protected:
     virtual Rosegarden::RulerScale* getHLayout();
 

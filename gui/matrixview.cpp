@@ -196,6 +196,12 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     connect(m_pianoView, SIGNAL(gotWheelEvent(QWheelEvent*)),
             m_canvasView, SLOT(slotExternalWheelEvent(QWheelEvent*)));
 
+    // ensure the piano keyb keeps the right margins when the user toggles
+    // the canvas view rulers
+    //
+    connect(m_canvasView, SIGNAL(bottomWidgetHeightChanged(int)),
+            this, SLOT(slotCanvasBottomWidgetHeightChanged(int)));
+
     /*
     QObject::connect
         (getCanvasView(), SIGNAL(activeItemPressed(QMouseEvent*, QCanvasItem*)),
@@ -342,21 +348,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     setOutOfCtor();
     setupControllerTabs();
 
-    m_pianoView->setBottomMargin(m_bottomBox->sizeHint().height() +
-                                 m_canvasView->horizontalScrollBar()->height());
-
     setRewFFwdToAutoRepeat();
 }
-
-void MatrixView::polish()
-{
-    EditView::polish();
-//     m_pianoView->setBottomMargin(m_bottomBox->height() +
-//                                  m_canvasView->horizontalScrollBar()->height());
-    
-}
-
-
 
 MatrixView::~MatrixView()
 {
@@ -2184,6 +2177,14 @@ MatrixView::slotStepByStepTargetRequested(QObject *obj)
     }
     action->setChecked(obj == this);
 }
+
+void
+MatrixView::slotCanvasBottomWidgetHeightChanged(int newHeight)
+{
+    m_pianoView->setBottomMargin(newHeight +
+                                 m_canvasView->horizontalScrollBar()->height());
+}
+
 
 const char* const MatrixView::ConfigGroup = "Matrix Options";
 

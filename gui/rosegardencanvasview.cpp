@@ -30,7 +30,8 @@ RosegardenCanvasView::RosegardenCanvasView(QCanvas* canvas,
                                            QWidget* parent,
                                            const char* name, WFlags f)
     : QCanvasView(canvas, parent, name, f),
-      m_bottomWidget(0)
+      m_bottomWidget(0),
+      m_currentBottomWidgetHeight(-1)
 {
 
 }
@@ -207,6 +208,12 @@ void RosegardenCanvasView::updateBottomWidgetGeometry()
                                 r.y() + r.height() - bottomWidgetHeight - hScrollBarHeight,
                                 r.width() - vScrollBarWidth,
                                 bottomWidgetHeight);
+
+    if (bottomWidgetHeight != m_currentBottomWidgetHeight) {
+        emit bottomWidgetHeightChanged(bottomWidgetHeight);
+        m_currentBottomWidgetHeight = bottomWidgetHeight;
+    }
+    
 }
 
 //----------------------------------------------------------------------

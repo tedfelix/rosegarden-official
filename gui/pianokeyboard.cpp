@@ -43,6 +43,8 @@ PianoKeyboard::PianoKeyboard(QWidget *parent)
     m_hoverHighlight->hide();
     m_hoverHighlight->setPaletteBackgroundColor(RosegardenGUIColours::MatrixKeyboardFocus);
 
+    setPaletteBackgroundColor(QColor(238, 238, 224));
+
     computeKeyPos();
     setMouseTracking(true);
 }
