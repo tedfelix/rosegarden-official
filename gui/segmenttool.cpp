@@ -205,7 +205,7 @@ void SegmentPencil::ready()
 
 void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 {
-    if (e->button() != LeftButton) return;
+    if (e->button() == RightButton) return;
     
     m_newRect = false;
     m_currentItem = 0;
@@ -242,7 +242,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
 void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 {
-    if (e->button() != LeftButton) return;
+    if (e->button() == RightButton) return;
 
     if (!m_currentItem) return;
     m_currentItem->normalize();
