@@ -328,10 +328,7 @@ void Segment::fillWithRests(timeT startTime,
     timeT restDuration = endTime - startTime;
 
     if (permitQuantize) {
-	restDuration =
-	    (getComposition() ? 
-	     getComposition()->getBasicQuantizer()->quantizeDuration(restDuration) :
-	     Quantizer().quantizeDuration(restDuration));
+	restDuration = Quantizer().quantizeDuration(restDuration);
     }
 /*
     cerr << "Segment(" << this << ")::fillWithRests: endTime "

@@ -239,7 +239,7 @@ etc
   <Action name="double_flat_accidental" />
 </ToolBar>
 
-<ToolBar name="clefsToolBar">
+<ToolBar name="clefsToolBar" hidden="true">
   <Action name="treble_clef" />
   <Action name="tenor_clef" />
   <Action name="alto_clef" />

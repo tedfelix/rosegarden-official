@@ -45,6 +45,7 @@ class NotationHLayout : public Rosegarden::HorizontalLayoutEngine<NotationElemen
 {
 public:
     NotationHLayout(Rosegarden::Composition *c, NotePixmapFactory *npf,
+		    Rosegarden::Quantizer *legatoQuantizer,
 		    const NotationProperties &properties);
     virtual ~NotationHLayout();
 
@@ -335,8 +336,6 @@ protected:
 	return (int)((m_npf->getNoteBodyWidth() / 5) * m_spacing);
     }
 
-    const Rosegarden::Quantizer *getQuantizer() const;
-
     //--------------- Data members ---------------------------------
 
     BarDataMap m_barData;
@@ -351,6 +350,7 @@ protected:
 
     static std::vector<double> m_availableSpacings;
 
+    Rosegarden::Quantizer *m_legatoQuantizer;
     const NotationProperties &m_properties;
 };
 

@@ -41,6 +41,7 @@ class NotationVLayout : public Rosegarden::VerticalLayoutEngine<NotationElement>
 {
 public:
     NotationVLayout(Rosegarden::Composition *c,
+		    Rosegarden::Quantizer *legatoQuantizer,
 		    const NotationProperties &properties);
     virtual ~NotationVLayout();
 
@@ -79,12 +80,11 @@ private:
     typedef FastVector<NotationElementList::iterator> SlurList;
     typedef std::map<StaffType *, SlurList> SlurListMap;
 
-    const Rosegarden::Quantizer *getQuantizer();
-
     SlurListMap m_slurs;
     SlurList &getSlurList(StaffType &);
 
     Rosegarden::Composition *m_composition;
+    Rosegarden::Quantizer *m_legatoQuantizer;
     const NotationProperties &m_properties;
 };
 

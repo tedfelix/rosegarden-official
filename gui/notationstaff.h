@@ -28,6 +28,8 @@
 #include "notationelement.h"
 #include "linedstaff.h"
 
+namespace Rosegarden { class Quantizer; }
+
 class QCanvasSimpleSprite;
 class NotationProperties;
 
@@ -52,6 +54,7 @@ public:
      * \a id is the id of the staff in the NotationView
      */
     NotationStaff(QCanvas *, Rosegarden::Segment *, int id,
+		  Rosegarden::Quantizer *legatoQuantizer,
 		  const NotationProperties &properties,
 		  bool pageMode, double pageWidth,
                   std::string fontName, int resolution);
@@ -309,6 +312,7 @@ protected:
     NotePixmapFactory *m_npf;
     QCanvasSimpleSprite *m_previewSprite;
     QCanvasSimpleSprite *m_staffName;
+    Rosegarden::Quantizer *m_legatoQuantizer;
     const NotationProperties &m_properties;
 };
 

@@ -47,23 +47,25 @@ const unsigned int EditView::ID_STATUS_MSG = 1;
 EditView::EditView(RosegardenGUIDoc *doc,
                    std::vector<Rosegarden::Segment *> segments,
                    bool hasTwoCols,
-                   QWidget *parent, const char *name)
-    : KMainWindow(parent, name),
-      m_config(kapp->config()),
-      m_document(doc),
-      m_segments(segments),
-      m_tool(0),
-      m_toolBox(0),
-      m_activeItem(0),
-      m_canvasView(0),
-      m_centralFrame(new QFrame(this)),
-      m_horizontalScrollBar(new QScrollBar(Horizontal, m_centralFrame)),
-      m_grid(new QGridLayout(m_centralFrame, 5, hasTwoCols ? 2 : 1)),
-      m_rulerBox(new QVBoxLayout), // added to grid later on
-      m_topBarButtons(0),
-      m_bottomBarButtons(0),
-      m_mainCol(hasTwoCols ? 1 : 0),
-      m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId())
+                   QWidget *parent, const char *name) :
+    KMainWindow(parent, name),
+    m_viewNumber(-1),
+    m_viewLocalPropertyPrefix(makeViewLocalPropertyPrefix()),
+    m_config(kapp->config()),
+    m_document(doc),
+    m_segments(segments),
+    m_tool(0),
+    m_toolBox(0),
+    m_activeItem(0),
+    m_canvasView(0),
+    m_centralFrame(new QFrame(this)),
+    m_horizontalScrollBar(new QScrollBar(Horizontal, m_centralFrame)),
+    m_grid(new QGridLayout(m_centralFrame, 5, hasTwoCols ? 2 : 1)),
+    m_rulerBox(new QVBoxLayout), // added to grid later on
+    m_topBarButtons(0),
+    m_bottomBarButtons(0),
+    m_mainCol(hasTwoCols ? 1 : 0),
+    m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId())
 {
     initSegmentRefreshStatusIds();
 
@@ -89,6 +91,22 @@ EditView::EditView(RosegardenGUIDoc *doc,
 EditView::~EditView()
 {
     getCommandHistory()->detachView(actionCollection());
+    m_viewNumberPool.erase(m_viewNumber);
+}
+
+std::set<int>
+EditView::m_viewNumberPool;
+
+std::string
+EditView::makeViewLocalPropertyPrefix()
+{
+    static char buffer[100];
+    int i = 0;
+    while (m_viewNumberPool.find(i) != m_viewNumberPool.end()) ++i;
+    m_viewNumber = i;
+    m_viewNumberPool.insert(i);
+    sprintf(buffer, "View%d::", i);
+    return buffer;
 }
 
 void EditView::paintEvent(QPaintEvent* e)

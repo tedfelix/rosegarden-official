@@ -48,14 +48,17 @@ using Rosegarden::TimeSignature;
 using Rosegarden::Note;
 using Rosegarden::Text;
 using Rosegarden::Indication;
+using Rosegarden::Quantizer;
 using Rosegarden::timeT;
 
 using namespace Rosegarden::BaseProperties;
 
 
 NotationVLayout::NotationVLayout(Rosegarden::Composition *c,
+				 Rosegarden::Quantizer *legatoQuantizer,
 				 const NotationProperties &properties) :
     m_composition(c),
+    m_legatoQuantizer(legatoQuantizer),
     m_properties(properties)
 {
     // empty
@@ -64,12 +67,6 @@ NotationVLayout::NotationVLayout(Rosegarden::Composition *c,
 NotationVLayout::~NotationVLayout()
 {
     // empty
-}
-
-const Rosegarden::Quantizer *
-NotationVLayout::getQuantizer()
-{
-    return m_composition->getLegatoQuantizer();
 }
 
 NotationVLayout::SlurList &
@@ -127,7 +124,7 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
 
         } else if (el->isNote()) {
 
-            Chord chord(*notes, i, getQuantizer());
+            Chord chord(*notes, i, m_legatoQuantizer);
             if (chord.size() == 0) continue;
 
             std::vector<int> h;
@@ -304,7 +301,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 		(m_properties.CHORD_PRIMARY_NOTE, primary) && primary) {
 
 		Chord chord(*(staff.getViewElementList()), scooter,
-			    getQuantizer());
+			    m_legatoQuantizer);
 
 		if (beamed) {
 		    if (stemUp) beamAbove = true;

@@ -153,9 +153,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                            vector<Segment *> segments,
                            QWidget *parent) :
     EditView(doc, segments, false, parent, "notationview"),
-    m_viewLocalPropertyPrefix(makeViewLocalPropertyPrefix()),
-    m_properties(m_viewLocalPropertyPrefix),
+    m_properties(getViewLocalPropertyPrefix()),
     m_currentEventSelection(0),
+    m_legatoQuantizer(new Quantizer(Quantizer::RawEventData,
+				    getViewLocalPropertyPrefix() + "Q",
+				    Quantizer::LegatoQuantize)),
     m_currentNotePixmap(0),
     m_hoveredOverNoteName(0),
     m_hoveredOverAbsoluteTime(0),
@@ -164,8 +166,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontName(NotePixmapFactory::getDefaultFont()),
     m_fontSize(NotePixmapFactory::getDefaultSize(m_fontName)),
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
-    m_hlayout(&doc->getComposition(), m_notePixmapFactory, m_properties),
-    m_vlayout(&doc->getComposition(), m_properties),
+    m_hlayout(&doc->getComposition(), m_notePixmapFactory,
+	      m_legatoQuantizer, m_properties),
+    m_vlayout(&doc->getComposition(),
+	      m_legatoQuantizer, m_properties),
     m_topBarButtons(0),
     m_bottomBarButtons(0),
     m_tupletMode(false),
@@ -181,8 +185,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     setupActions();
 
-    initFontToolbar
-	(m_document->getComposition().getLegatoQuantizer()->getUnit());
+    initFontToolbar(m_legatoQuantizer->getUnit());
     initStatusBar();
     
     setBackgroundMode(PaletteBase);
@@ -239,6 +242,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,
+					     m_legatoQuantizer,
 					     m_properties, false, width() - 50,
                                              m_fontName, m_fontSize));
     }
@@ -331,30 +335,16 @@ NotationView::~NotationView()
     kdDebug(KDEBUG_AREA) << "<- ~NotationView()\n";
 }
     
-
-std::set<int>
-NotationView::m_viewNumberPool;
-
-std::string
-NotationView::makeViewLocalPropertyPrefix()
-{
-    static char buffer[100];
-    int i = 0;
-    while (m_viewNumberPool.find(i) != m_viewNumberPool.end()) ++i;
-    m_viewNumberPool.insert(i);
-    sprintf(buffer, "View%d::", i);
-    return buffer;
-}
-
 void
 NotationView::removeViewLocalProperties(Rosegarden::Event *e)
 {
     //!!! Terribly inefficient
     Event::PropertyNames names(e->getPropertyNames());
+    std::string prefix(getViewLocalPropertyPrefix());
+
     for (Event::PropertyNames::iterator i = names.begin();
 	 i != names.end(); ++i) {
-	if (i->getName().substr(0, m_viewLocalPropertyPrefix.size()) ==
-	    m_viewLocalPropertyPrefix) {
+	if (i->getName().substr(0, prefix.size()) == prefix) {
 	    e->unset(*i);
 	}
     }
@@ -903,8 +893,10 @@ void NotationView::slotChangeLegato(int n)
     if (n >= (int)m_legatoDurations.size())
         n = m_legatoDurations.size() - 1;
 
-    m_document->getComposition().setLegatoQuantizerDuration
-	(m_legatoDurations[n]);
+    Quantizer q(Quantizer::RawEventData,
+		getViewLocalPropertyPrefix() + "Q",
+		Quantizer::LegatoQuantize, m_legatoDurations[n]);
+    *m_legatoQuantizer = q;
     
     applyLayout();
 

@@ -82,6 +82,8 @@ Post-0.1.5-and-a-bit task list
 
 21. Implement view-local properties in NotationElement
 
+22. Event dialog really needs to be scrollable or something
+
 
 Post-0.1.4 task list
 ====================

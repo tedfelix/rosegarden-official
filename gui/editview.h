@@ -23,6 +23,7 @@
 #define EDITIONVIEW_H
 
 #include <vector>
+#include <set>
 
 #include <qaccel.h>
 #include <kmainwindow.h>
@@ -141,6 +142,17 @@ public:
      * Return our local accelerator object
      */
     QAccel* getAccelerators() { return m_accelerators; }
+
+    /**
+     * Return a string unique to this view (amongst views currently
+     * extant) that can be used (e.g. as a prefix) to distinguish
+     * view-local properties.  It's up to the subclass or other user
+     * of this string to manage the properties correctly, for example
+     * by deleting them from the events when the view closes.
+     */
+    std::string getViewLocalPropertyPrefix() {
+	return m_viewLocalPropertyPrefix;
+    }
 
 public slots:
     /**
@@ -278,6 +290,11 @@ protected:
     void setCompositionModified(bool);
 
     //--------------- Data members ---------------------------------
+
+    static std::set<int> m_viewNumberPool;
+    std::string makeViewLocalPropertyPrefix();
+    int m_viewNumber;
+    std::string m_viewLocalPropertyPrefix;
 
     KConfig* m_config;
 

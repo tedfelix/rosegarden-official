@@ -60,6 +60,7 @@ std::vector<double> NotationHLayout::m_availableSpacings;
 
 
 NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
+				 Quantizer *legatoQuantizer,
 				 const NotationProperties &properties) :
     Rosegarden::HorizontalLayoutEngine<NotationElement>(c),
     m_totalWidth(0.),
@@ -67,6 +68,7 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     m_pageWidth(0.),
     m_spacing(1.0),
     m_npf(npf),
+    m_legatoQuantizer(legatoQuantizer),
     m_properties(properties)
 {
 //    kdDebug(KDEBUG_AREA) << "NotationHLayout::NotationHLayout()" << endl;
@@ -90,12 +92,6 @@ NotationHLayout::getAvailableSpacings()
         m_availableSpacings.push_back(2.2);
     }
     return m_availableSpacings;
-}
-
-const Quantizer *
-NotationHLayout::getQuantizer() const
-{
-    return getComposition()->getLegatoQuantizer();
 }
 
 NotationHLayout::BarDataList &
@@ -218,7 +214,7 @@ NotationHLayout::getStartOfQuantizedSlice(const NotationElementList *notes,
 	if ((*j)->event()->has(BEAMED_GROUP_TUPLET_BASE)) {
 	    absTime = (*j)->getAbsoluteTime();
 	} else {
-	    absTime = getQuantizer()->getQuantizedAbsoluteTime((*j)->event());
+	    absTime = m_legatoQuantizer->getQuantizedAbsoluteTime((*j)->event());
 	}
 
 	if (absTime < t) return i;
@@ -498,7 +494,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
 			   int &shortCount,
 			   NotationElementList::iterator &to)
 {
-    Chord chord(*notes, itr, getQuantizer());
+    Chord chord(*notes, itr, m_legatoQuantizer);
     AccidentalTable newAccTable(accTable);
     Accidental someAccidental = NoAccidental;
     bool barEndsInChord = false;
@@ -551,12 +547,12 @@ NotationHLayout::scanChord(NotationElementList *notes,
 
     NotationElementList::iterator myShortest = chord.getShortestElement();
 
-    timeT d = getQuantizer()->getQuantizedDuration((*myShortest)->event());
+    timeT d = m_legatoQuantizer->getQuantizedDuration((*myShortest)->event());
     baseWidth += getMinWidth(**myShortest);
 
     timeT sd = 0;
     if (shortest != notes->end()) {
-	sd = getQuantizer()->getQuantizedDuration((*shortest)->event());
+	sd = m_legatoQuantizer->getQuantizedDuration((*shortest)->event());
     }
 
     if (d > 0 && (sd == 0 || d <= sd)) {
@@ -579,12 +575,12 @@ NotationHLayout::scanRest
  int &, int &baseWidth,
  NotationElementList::iterator &shortest, int &shortCount)
 {
-    timeT d = getQuantizer()->getQuantizedDuration((*itr)->event());
+    timeT d = m_legatoQuantizer->getQuantizedDuration((*itr)->event());
     baseWidth += getMinWidth(**itr);
 
     timeT sd = 0;
     if (shortest != notes->end()) {
-	sd = getQuantizer()->getQuantizedDuration((*shortest)->event());
+	sd = m_legatoQuantizer->getQuantizedDuration((*shortest)->event());
     }
 
     if (d > 0 && (sd == 0 || d <= sd)) {
@@ -1143,7 +1139,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		    NotationStaff &notationStaff =
 			dynamic_cast<NotationStaff &>(staff);
 		    NotationGroup group(*staff.getViewElementList(), it,
-					getQuantizer(), clef, key);
+					m_legatoQuantizer, clef, key);
 		    group.applyBeam(notationStaff, m_properties);
 		    group.applyTuplingLine(notationStaff, m_properties);
 		}
@@ -1226,7 +1222,7 @@ NotationHLayout::positionChord(StaffType &staff,
 			       TieMap &tieMap,
 			       NotationElementList::iterator &to)
 {
-    Chord chord(*staff.getViewElementList(), itr, getQuantizer(), clef, key);
+    Chord chord(*staff.getViewElementList(), itr, m_legatoQuantizer, clef, key);
     double baseX = (*itr)->getLayoutX();
 
     // To work out how much space to allot a note (or chord), start

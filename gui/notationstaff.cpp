@@ -59,6 +59,7 @@ using std::string;
 
 
 NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment, int id,
+			     Rosegarden::Quantizer *legatoQuantizer,
 			     const NotationProperties &properties,
 			     bool pageMode, double pageWidth, 
                              string fontName, int resolution) :
@@ -70,6 +71,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment, int id,
     m_npf(0),
     m_previewSprite(0),
     m_staffName(0),
+    m_legatoQuantizer(legatoQuantizer),
     m_properties(properties)
 {
     changeFont(fontName, resolution);
@@ -599,11 +601,13 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 //	    kdDebug(KDEBUG_AREA) << "NotationStaff::renderSingleElement: about to query legato duration property" << endl;
 
-	    const Rosegarden::Quantizer *q =
-		getSegment().getComposition()->getLegatoQuantizer();
-	    timeT duration = q->getQuantizedDuration(elt->event());
+	    timeT duration = m_legatoQuantizer->getQuantizedDuration
+		(elt->event());
 
 //	    kdDebug(KDEBUG_AREA) << "done" <<endl;
+	    
+	    //!!! perhaps better not to have the quantizer here but instead
+	    // have marked the event as not-for-display in notationhlayout
 
 	    if (duration > 0) {
 
@@ -917,14 +921,6 @@ NotationStaff::clearPreviewNote()
 bool
 NotationStaff::wrapEvent(Rosegarden::Event *e)
 {
-/*!!!
-    if (e->isa(Note::EventRestType)) {
-	const Rosegarden::Quantizer *q =
-	    getSegment().getComposition()->getLegatoQuantizer();
-//	q->quantize(e);//!!!
-	if (q->getQuantizedDuration(e) == 0) return false;
-    }
-*/
     return true;
 }
 

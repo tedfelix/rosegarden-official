@@ -27,7 +27,7 @@ libRosegardenSequencer_la_SOURCES = MidiArts.cc \
                                     Sequencer.cpp \
                                     SoundDriver.cpp
 libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined
-libRosegardenSequencer_la_LIBADD   = -lartsmidi $(LIB_QT) -lsoundserver_idl libRosegardenSound.la ../base/libbase.la -lartsflow -lartsmodules -lasound @JACKLIB@
+libRosegardenSequencer_la_LIBADD   = -lartsmidi $(LIB_QT) -lsoundserver_idl libRosegardenSound.la ../base/libbase.la -lartsflow -lartsmodules @LIBASOUND@ @JACKLIB@
 
 
 # aRts stubs generated from idl
