@@ -247,17 +247,18 @@ print >> OUT_FH, "<device id=\"0\" name=\"Unnamed\" type=\"midi\">\n"
 print >> OUT_FH, "\t<librarian name=\"Unknown\" email=\"unknown\"/>\n"
 
 # Add instruments, required ('midi' type instruments start at 2000)
-for i in range(16) :
-    print >> OUT_FH, "\t<instrument id=\"%u\" channel=\"%u\" type=\"midi\">" %(2000 + i, i)
-    print >> OUT_FH, "\t\t<pan value=\"64\"/>"
-    print >> OUT_FH, "\t\t<volume value=\"100\"/>"
-    print >> OUT_FH, "\t\t<reverb value=\"0\"/>"
-    print >> OUT_FH, "\t\t<chorus value=\"0\"/>"
-    print >> OUT_FH, "\t\t<filter value=\"127\"/>"
-    print >> OUT_FH, "\t\t<resonance value=\"0\"/>"
-    print >> OUT_FH, "\t\t<attack value=\"0\"/>"
-    print >> OUT_FH, "\t\t<release value=\"0\"/>"
-    print >> OUT_FH, "\t</instrument>\n"
+# *** These should no longer be necessary
+#for i in range(16) :
+#    print >> OUT_FH, "\t<instrument id=\"%u\" channel=\"%u\" type=\"midi\">" %(2000 + i, i)
+#    print >> OUT_FH, "\t\t<pan value=\"64\"/>"
+#    print >> OUT_FH, "\t\t<volume value=\"100\"/>"
+#    print >> OUT_FH, "\t\t<reverb value=\"0\"/>"
+#    print >> OUT_FH, "\t\t<chorus value=\"0\"/>"
+#    print >> OUT_FH, "\t\t<filter value=\"127\"/>"
+#    print >> OUT_FH, "\t\t<resonance value=\"0\"/>"
+#    print >> OUT_FH, "\t\t<attack value=\"0\"/>"
+#    print >> OUT_FH, "\t\t<release value=\"0\"/>"
+#    print >> OUT_FH, "\t</instrument>\n"
 
 for MSB in data.keys() :
     for LSB in data[MSB].keys() :
