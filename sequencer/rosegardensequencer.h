@@ -293,6 +293,9 @@ public:
     // Sends status changes up to GUI
     void notifySequencerStatus();
 
+    // Send latest slice information back to GUI for display
+    void notifyVisuals(Rosegarden::MappedComposition *mC);
+
     // These two methods process any pending MIDI or audio
     // and send them up to the gui for storage and display
     //
@@ -412,23 +415,25 @@ protected:
     // so you can reconstruct it at either end of the link for 
     // presentation, storage etc.
     //
-    Rosegarden::MappedStudio *m_studio;
+    Rosegarden::MappedStudio       *m_studio;
 
     // Slice revert storage
     //
-    Rosegarden::RealTime      m_oldSliceSize;
-    QTimer                   *m_sliceTimer;
+    Rosegarden::RealTime            m_oldSliceSize;
+    QTimer                         *m_sliceTimer;
 
     // Timer to check for new clients
     //
-    QTimer                   *m_newClientTimer;
+    QTimer                         *m_newClientTimer;
 
     // mmap segments
     //
-    QString m_segmentFilesPath;
-    mmappedsegments m_mmappedSegments;
-    MmappedSegmentsMetaIterator* m_metaIterator;
-    Rosegarden::RealTime m_lastStartTime;
+    QString                         m_segmentFilesPath;
+    mmappedsegments                 m_mmappedSegments;
+    MmappedSegmentsMetaIterator*    m_metaIterator;
+    Rosegarden::RealTime            m_lastStartTime;
+
+    Rosegarden::MappedComposition   m_mC;
 };
  
 #endif // _ROSEGARDEN_SEQUENCER_APP_H_

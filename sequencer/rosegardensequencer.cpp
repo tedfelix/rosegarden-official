@@ -763,19 +763,25 @@ RosegardenSequencerApp::startPlaying()
     // ready for new playback
     m_sequencer->initialisePlayback(m_songPosition, m_playLatency);
 
-    // Send the first events (starting the clock)
-    Rosegarden::MappedComposition *mC =
-        fetchEvents(m_songPosition, m_songPosition + m_readAhead, true);
+    m_mC.clear();
+    m_mC = *fetchEvents(m_songPosition, m_songPosition + m_readAhead, true);
 
     // process whether we need to or not as this also processes
     // the audio queue for us
     //
-    m_sequencer->processEventsOut(*mC, m_playLatency, false);
+    m_sequencer->processEventsOut(m_mC, m_playLatency, false);
 
+    // tell the gui about this slice of events
+    notifyVisuals(&m_mC);
+
+    return true;
+}
+
+void
+RosegardenSequencerApp::notifyVisuals(Rosegarden::MappedComposition *mC)
+{
     // Tell the gui that we're processing these events next
     //
-
-    /*
     QByteArray data;
     QDataStream arg(data, IO_WriteOnly);
     arg << *mC;
@@ -789,10 +795,6 @@ RosegardenSequencerApp::startPlaying()
                         << " - can't call RosegardenGUI client"
                         << endl;
     }
-    */
-
-
-    return true;
 }
 
 // Keep playing our fetched events, only top up the queued events
@@ -858,16 +860,18 @@ RosegardenSequencerApp::keepPlaying()
 //             }
         }
 
-        Rosegarden::MappedComposition *mC =
-                        fetchEvents(m_lastFetchSongPosition,
-                                    m_lastFetchSongPosition + m_readAhead,
-                                    false);
+        m_mC.clear();
+        m_mC = *fetchEvents(m_lastFetchSongPosition,
+                            m_lastFetchSongPosition + m_readAhead,
+                            false);
 
         // Again, process whether we need to or not to keep
         // the Sequencer up-to-date with audio events
         //
-        m_sequencer->processEventsOut(*mC, m_playLatency, false);
-        delete mC;
+        m_sequencer->processEventsOut(m_mC, m_playLatency, false);
+
+        // tell the gui about this slice of events
+        notifyVisuals(&m_mC);
 
         m_lastFetchSongPosition = m_lastFetchSongPosition + m_readAhead;
     }
