@@ -266,11 +266,15 @@ PositionCursor::PositionCursor(int gripHeight, QCanvas* c, QObject* parent)
 
 void PositionCursor::setPosition(int pos)
 {
+    // stealthly readjust length in case the canvas has changed height
+    m_line->setPoints(0, 0, 0, canvas()->height());
+
     setX((pos > getMinPosition()) ? pos : getMinPosition());
 }
 
 void PositionCursor::handleMousePress(QMouseEvent*)
 {
+    m_line->setPoints(0, 0, 0, canvas()->height());
 }
 
 void PositionCursor::handleMouseMove(QMouseEvent* e)
