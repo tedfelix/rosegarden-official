@@ -1,0 +1,164 @@
+
+Quaver or eighth-note?
+======================
+
+
+To: rosegarden@lists.bath.ac.uk
+Subject: 'quaver' or 'hemidemisemiquaver' ?
+From: "Michael Gerdau" <m.gerdau@elmshorn.netsurf.de>
+Date: Tue, 09 Jun 1998 17:34:39 +0200
+
+[...]
+
+What actually is 'quaver' or 'hemidemisemiquaver' ?
+(living in Germany and never came across that one; at
+least not under that name)
+
+I always thought this is some slang :-)
+
+Could someone please explain this in 1/2, 1/4, etc. ?
+
+Best,
+Michael
+
+
+
+To: rosegarden@lists.bath.ac.uk
+Subject: Re: 'quaver' or 'hemidemisemiquaver' ?
+From: Chris Cannam <chrisc@msi-uk.com>
+Date: Tue, 09 Jun 1998 17:01:05 +0100
+
+Michael Gerdau wrote:
+> > What actually is 'quaver' or 'hemidemisemiquaver' ?
+
+Well I guess that's one more country that doesn't use them, then.
+What are the notes called in German?  And French, and Swedish and
+any other languages of countries that people on this list live in?
+
+As far as I know, this system originally started with the "long"
+and the "breve" which were the equivalent of four and two whole
+notes respectively.  (Rosegarden 2.1 offers the breve as its
+longest note.)  As the usual demands for high-performance high-
+speed music percolated through from the masses, the music companies
+were forced to introduce the semibreve (whole note), minim (half
+note), crotchet (quarter), quaver (eighth), semiquaver (sixteenth),
+demisemiquaver, hemidemisemiquaver, semihemidemisemiquaver and so
+on, with only the reassuring lengths of the names compensating for
+the shortness of the notes.  (This cycle of increasingly rabid
+fast-music madness was only halted by the discovery of Bruckner.)
+
+I may as well add that these are the only note names that I was
+ever taught, and I still have to do a bit of mental arithmetic to
+comprehend the American quarter-, eighth- and so on.  (Are they
+American?  I always assumed so.)  Needless to say, the use of the
+proper names leads one inevitably to perform refined English music,
+whereas the use of degenerate colonial names leads to dissonance,
+meaningless arhythm, and finally absolute incomprehensible chaos.
+
+
+Chris
+
+
+
+To: cannam@all-day-breakfast.com
+Subject: Re: 'quaver' or 'hemidemisemiquaver' ?
+From: Eric Brunet <ebrunet@clipper.ens.fr>
+Date: Tue, 9 Jun 1998 18:57:12 +0200
+Cc: rosegarden@lists.bath.ac.uk
+
+[...]
+
+Ok, french lesson :-)
+
+Here, the notes are named according to what they look like:
+
+semibreve (whole note)	« Ronde »	(because it is a little circle)
+minim (half note)	« Blanche »	(because it is white)
+crotchet (quarter)	« Noire »	(because it is black)
+quaver (eighth)		« Croche »	(very confusing with crotchet...
+					 a « crochet » is something to
+					 which you hang something, and
+					 the little flag on the note
+					 looks just like that.)
+semiquaver (sixteenth)	« Double croche » (there are two little flags...)
+demisemiquaver		« Triple croche » (three little flags.)
+hemidemisemiquaver	« Quadruple croche » (guess... Yes ! four little flags)
+ ....
+					     
+     Éric Brunet
+
+
+
+To: rosegarden@lists.bath.ac.uk
+Subject: Re: 'quaver' or 'hemidemisemiquaver' ?
+From: "Michael Gerdau" <m.gerdau@elmshorn.netsurf.de>
+Date: Tue, 09 Jun 1998 18:58:07 +0200
+
+>Well I guess that's one more country that doesn't use them, then.
+>What are the notes called in German?
+
+I'm not sure about equivalents for long (never actually came across
+such a note in notation) or breve (at least know how to write them :-)
+
+The others are (in german):
+breve = 2 Ganze (Noten; usually omitted)
+semibreve = Ganze (Note; usually omitted)
+minim = Halbe (Note; usually omitted)
+crotchet = Viertel (...)
+quaver = Achtel (...)
+semiquaver = Sechzehntel
+demisemiquaver = Zweiunddreissigstel
+hemidemisemiquaver = Vierundsechzigstel
+etc.
+
+The german words are direkt translations of 1/1, 1/2, 1/4, 1/8, etc.
+
+We also have dotted (punktiert), doubledotted (zweifach punktiert),
+tripledotted (dreifach punktiert) etc. as a prefix to any of the above.
+
+[...]
+
+>whereas the use of degenerate colonial names leads to dissonance,
+>meaningless arhythm, and finally absolute incomprehensible chaos.
+
+Now I understand. I'll immediately start learning proper names.
+
+Best,
+Michael
+
+
+
+To: Chris Cannam <chrisc@msi-uk.com>
+Subject: Re: 'quaver' or 'hemidemisemiquaver' ?
+From: Simon Kagedal <simon@sdf.se>
+Date: Tue, 9 Jun 1998 19:14:26 +0200
+Cc: rosegarden@lists.bath.ac.uk
+
+[...]
+
+Swedish: Just like Michael Gerdau just posted about German, but
+in Swedish. Ie 1/4 = "fjärdedelsnot" = "quarter note", or something.
+Very simple, just like the meter system. :)
+
+--
+Simon Kågedal <simon@sdf.se> - Homepage: http://www.sdf.se/~simon/
+
+
+
+To: rosegarden@lists.bath.AC.UK
+Subject: Re: 'quaver' or 'hemidemisemiquaver' ?
+From: jpff@maths.bath.ac.uk
+Date: Thu, 11 Jun 98 13:50:16 BST
+
+The Crotchet is so named as the sign was like a hook or crook.  The
+word is French.  It all goes to show how music degenerated when the
+breve was introduced into plainchant; I agree fully with Chris.
+  While we are at it, a Minim was so called as it was the smallest
+note (minimum length). Quaver relates to the wobble in a voice and
+hence the length of time one holds a pitch when wobbling.  So you lot
+who use that strange 16th note are splitting wobbles.  Like Chris I
+need a translation table for this fraction thing.  1/8 sounds to me
+like a weird time signature as found in Dohnanyi.
+
+==John
+
