@@ -2750,13 +2750,15 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                 // Create this event in this thread and push it onto audio queue.
                 // All initialisation will occur in the disk thread.
                 //
+                AudioFile *aF = getAudioFile((*i)->getAudioID());
                 PlayableAudioFile *audioFile =
                     new PlayableAudioFile((*i)->getInstrument(),
-                                          getAudioFile((*i)->getAudioID()),
+                                          aF,
                                           adjustedEventTime - playLatency,
                                           (*i)->getAudioStartMarker(),
                                           (*i)->getDuration(),
-                                          4096, // play buffer size
+                                          _jackBufferSize * // play buffer size
+                                          aF->getChannels() * aF->getBitsPerSample()/8,
                                           ringBuffer);
 
                 // segment runtime id
