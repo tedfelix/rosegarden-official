@@ -6,10 +6,15 @@
 //
 //
 
+#include <iostream>
+#include <fstream>
+#include <string>
+
 namespace Rosegarden
 {
 
-#include <string>
+
+typedef unsigned char FileByte; 
 
 class SoundFile
 {
@@ -26,6 +31,15 @@ public:
 
 protected:
     std::string m_fileName;
+
+    // get some bytes from an input stream
+    const std::string getBytes(std::ifstream *file,
+                               const unsigned int &numberOfBytes);
+ 
+    // write some bytes to an output stream
+    void putBytes(std::ofstream *file,
+                  const std::string outputString);
+
 
 };
 

@@ -33,23 +33,41 @@ namespace Rosegarden
 class AudioFile : public SoundFile
 {
 public:
+
+    typedef enum
+    {
+        AUDIO_NOT_LOADED,
+        AUDIO_NOT_RECOGNISED,
+        AUDIO_WAV
+    } AudioFileType;
+
     AudioFile(const int &id, const string &name, const string &fileName);
     ~AudioFile();
 
-    string getName() const { return m_name; }
-    string getFileName() const { return m_fileName;}
+    std::string getName() const { return m_name; }
     int getID() const { return m_id; }
     int getBits() const { return m_bits; }
     int getResolution() const { return m_resolution; }
     bool getStereo() const { return m_stereo; }
+    
+    AudioFileType getType() { return m_type; }
+
+    // We must define our two abstract methods in this class
+    //
+    virtual bool open();
+    virtual bool write();
 
 private:
+
+    void parseHeader(const std::string &headerString);
+    void parseBody();
+
     int m_id;
     string m_name;
-    string m_fileName;
     int m_bits;
     int m_resolution;
     bool m_stereo;
+    AudioFileType m_type;
 
 };
 

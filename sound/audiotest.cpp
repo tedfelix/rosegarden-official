@@ -1,6 +1,7 @@
 #include <iostream>
 #include <artsmidi.h>
 #include "Sequencer.h"
+#include "AudioFile.h"
 #include <arts/artsflow.h>
 #include <arts/artsmodules.h>
 #include <arts/soundserver.h>
@@ -20,7 +21,20 @@ main(int argc, char **argv)
         exit(1);
     }
 
+
     string wavFile = argv[1];
+
+    Rosegarden::AudioFile *audioFile;
+
+    // create a new AudioFile
+    //
+    audioFile = new Rosegarden::AudioFile(0, "firstwav", string(wavFile));
+
+    if(!(audioFile->open()))
+        cout << "COULDN'T OPEN FILE" << endl;
+
+    exit(0);
+
 
     // start sequencer
     //
