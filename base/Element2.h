@@ -4,6 +4,7 @@
 
 // Std
 #include <list>
+#include <multiset.h>
 //#include <map>
 #include <hash_map>
 #include <string>
@@ -203,25 +204,13 @@ PropertyStore<P>::dump(ostream &out) const
 
 //////////////////////////////////////////////////////////////////////
 
-class ViewElement;
+class ViewElement; // defined below
 class ViewElements : public vector<ViewElement*>
 {
 public:
     ViewElements() : vector<ViewElement*>() {}
     ViewElements(const ViewElements &e) : vector<ViewElement*>(e) {}
     ~ViewElements();
-};
-
-
-// see rosegarden/docs/discussion/names.txt - Events are the basic datatype
-class Element2;
-typedef Element2 Event;
-class EventList : public list<Event*>
-{
-public:
-    EventList() : list<Event*>() {}
-    EventList(const EventList &e) : list<Event*>(e) {}
-    ~EventList();
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -375,6 +364,33 @@ Element2::setFromString(const string &name, string value)
     set<P>(name, PropertyDefn<P>::parse(value));
 }
 
+//////////////////////////////////////////////////////////////////////
+
+// see rosegarden/docs/discussion/names.txt - Events are the basic datatype
+typedef Element2 Event;
+
+class EventCmp
+{
+public:
+    bool operator()(const Event *e1, const Event *e2) const
+    {
+        return *e1 < *e2;
+    }
+};
+
+
+/**
+ * This class owns the Events its items are pointing at
+ */
+class EventList : public multiset<Event*, EventCmp>
+{
+public:
+    EventList() : multiset<Event*, EventCmp>() {}
+    ~EventList();
+};
+
+//////////////////////////////////////////////////////////////////////
+
 
 class ViewElement
 {
@@ -395,7 +411,5 @@ public:
 protected:
     Event *m_event;
 };
-
-typedef list<ViewElement*> ViewElementList;
 
 #endif

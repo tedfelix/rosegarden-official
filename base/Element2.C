@@ -187,6 +187,8 @@ ViewElement::~ViewElement()
 {
 }
 
+//////////////////////////////////////////////////////////////////////
+
 EventList::~EventList()
 {
     // delete content
