@@ -341,7 +341,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     NotationElementList::iterator scooter = i;
 
     timeT slurDuration = (*i)->event()->getDuration();
-    if (slurDuration == 0) {
+    if (slurDuration == 0 && (*i)->event()->has("indicationduration")) {
 	slurDuration = (*i)->event()->get<Int>("indicationduration"); // obs property
     }
     timeT endTime = (*i)->getViewAbsoluteTime() + slurDuration;
@@ -448,12 +448,14 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 	    }
 
 	} else if (event->isa(Indication::EventType)) {
-	    
-	    std::string indicationType =
-		event->get<String>(Indication::IndicationTypePropertyName);
 
-	    if (indicationType == Indication::Crescendo ||
-		indicationType == Indication::Decrescendo) dynamic = true;
+	    try {
+		std::string indicationType =
+		    event->get<String>(Indication::IndicationTypePropertyName);
+		
+		if (indicationType == Indication::Crescendo ||
+		    indicationType == Indication::Decrescendo) dynamic = true;
+	    } catch (...) { }
 	}
 
 	++scooter;

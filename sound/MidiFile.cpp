@@ -1503,7 +1503,8 @@ MidiFile::convertToMidi(Composition &comp)
 				soundingDuration * m_timingDivision /
 				crotchetDuration;
 
-			    int pitch = (*el)->get<Int>(BaseProperties::PITCH);
+			    int pitch = 60;
+			    (*el)->get<Int>(BaseProperties::PITCH, pitch);
 			    pitch += (*segment)->getTranspose();
                               
 			    // insert the NOTE_ON at the appropriate channel

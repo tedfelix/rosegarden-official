@@ -224,7 +224,8 @@ MusicXmlExporter::writeTime(TimeSignature timeSignature, std::ofstream &str) {
 void
 MusicXmlExporter::writeClef(Event *event, std::ofstream &str) {
     str << "\t\t\t\t<clef>" << std::endl;
-    std::string whichClef(event->get<String>(Clef::ClefPropertyName));
+    std::string whichClef = Clef::Treble;
+    event->get<String>(Clef::ClefPropertyName, whichClef);
     if (whichClef == Clef::Treble) {
         str << "\t\t\t\t<sign>G</sign>" << std::endl;
         str << "\t\t\t\t<line>2</line>" << std::endl;

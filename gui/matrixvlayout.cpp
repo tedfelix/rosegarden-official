@@ -75,7 +75,8 @@ void MatrixVLayout::scanStaff(Rosegarden::Staff& staffBase,
 
         if (!el->isNote()) continue; // notes only
         
-        int pitch = el->event()->get<Rosegarden::Int>(PITCH);
+	long pitch = 60;
+	el->event()->get<Rosegarden::Int>(PITCH, pitch);
 
 	int y = staff.getLayoutYForHeight(pitch) - staff.getElementHeight()/2;
 
