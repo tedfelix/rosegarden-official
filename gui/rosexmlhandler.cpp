@@ -74,7 +74,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
     } else if (lcName == "track") {
         m_currentTime = 0;
         int instrument = -1, startIndex = 0;
-        QString instrumentNbStr = atts.value("nb");
+        QString instrumentNbStr = atts.value("instrument");
         if (instrumentNbStr) {
             instrument = instrumentNbStr.toInt();
 //             kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : track instr. nb = "

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
-<track nb="1" start="0">
+<track instrument="1" start="0">
 	<event type="clefchange">
 		<property name="clef" string="treble"/>
 	</event>

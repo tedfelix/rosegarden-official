@@ -2,7 +2,7 @@
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
 <tempo value="120"/>
-<track nb="1" start="0">
+<track instrument="1" start="0">
         <event type="timesignature" numerator="9" denominator="16"/>
         <event type="keychange"><property name="key" string="C# major"/></event>
         <event type="clefchange" clef="treble"/>
