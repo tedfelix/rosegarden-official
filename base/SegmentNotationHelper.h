@@ -165,6 +165,12 @@ public:
     iterator insertClef(timeT absoluteTime, Clef clef);
 
     /**
+     * Insert a key.
+     * Returns iterator pointing to key.
+     */
+    iterator insertKey(timeT absoluteTime, Key key);
+
+    /**
      * Deletes a note, doing all the clever split/merge stuff as
      * appropriate.  Requires segment to be in a composition.  
      */

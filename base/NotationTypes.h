@@ -216,6 +216,10 @@ public:
 
     Key &operator=(const Key &kc);
 
+    bool operator==(const Key &k) {
+	return k.m_name == m_name;
+    }
+
     bool isMinor() const {
         return m_keyDetailMap[m_name].m_minor;
     }
@@ -258,7 +262,8 @@ public:
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
 
-    static std::vector<Key> getKeys(bool minor = false);
+    typedef std::vector<Key> KeySet;
+    static KeySet getKeys(bool minor = false);
 
 private:
     std::string m_name;
@@ -270,7 +275,7 @@ private:
         int    m_sharpCount;
         std::string m_equivalence;
         std::string m_rg2name;
-		int    m_tonicPitch;
+	int    m_tonicPitch;
 
         KeyDetails(); // ctor needed in order to live in a hash_map
 

@@ -300,6 +300,7 @@ public slots:
     void slotTransformsRemoveMarks();
 
     void slotTransformsAddTimeSignature();
+    void slotTransformsAddKeySignature();
 
     void slotDebugDump();
 

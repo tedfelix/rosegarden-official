@@ -83,6 +83,28 @@ protected:
     Rosegarden::Event *m_lastInsertedEvent;
 };
 
+class KeyInsertionCommand : public BasicCommand
+{
+public:
+    //!!! deal with transposition
+    KeyInsertionCommand(Rosegarden::Segment &segment,
+			Rosegarden::timeT time,
+			Rosegarden::Key key);
+    virtual ~KeyInsertionCommand();
+
+    static QString name() {
+	return "Add &Key Change...";
+    }
+
+    Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
+
+protected:
+    virtual void modifySegment();
+
+    Rosegarden::Key m_key;
+    Rosegarden::Event *m_lastInsertedEvent;
+};
+
 
 class EraseCommand : public BasicCommand
 {

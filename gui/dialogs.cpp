@@ -18,12 +18,15 @@
 */
 
 #include "dialogs.h"
+#include "notepixmapfactory.h"
 
 #include <qwidget.h>
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qhbox.h>
 #include <qvbox.h>
+#include <qcombobox.h>
+#include <qcheckbox.h>
 #include <qlayout.h>
 
 #include <klocale.h>
@@ -142,4 +145,93 @@ TimeSignatureDialog::slotDenomUp()
     }
 }
 
+
+KeySignatureDialog::KeySignatureDialog(QWidget *parent,
+				       NotePixmapFactory *npf,
+				       Rosegarden::Clef clef,
+				       Rosegarden::Key defaultKey) :
+    KDialogBase(parent, 0, true, i18n("Key Signature"), Ok | Cancel),
+    m_key(defaultKey),
+    m_clef(clef)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+    QHBox *keyBox = new QHBox(vbox);
+    
+    BigArrowButton *keyUp = new BigArrowButton(keyBox, Qt::LeftArrow);
+    m_keyLabel = new QLabel(i18n("Key"), keyBox);
+    BigArrowButton *keyDown = new BigArrowButton(keyBox, Qt::RightArrow);
+
+    QHBox *nameBox = new QHBox(vbox);
+
+    m_keyCombo = new QComboBox(false, nameBox);
+    m_majorMinorCombo = new QComboBox(false, nameBox);
+    m_majorMinorCombo->insertItem("Major");
+    m_majorMinorCombo->insertItem("Minor");
+    regenerateKeyCombo();
+
+    m_transposeButton = new QCheckBox(i18n("Transpose rest of staff"), vbox);
+    
+    QObject::connect(keyUp, SIGNAL(pressed()), this, SLOT(slotKeyUp()));
+    QObject::connect(keyDown, SIGNAL(pressed()), this, SLOT(slotKeyDown()));
+}
+
+bool
+KeySignatureDialog::shouldTranspose() const
+{
+    return m_transposeButton && m_transposeButton->isOn();
+}
+
+void
+KeySignatureDialog::slotKeyUp()
+{
+}
+
+void
+KeySignatureDialog::slotKeyDown()
+{
+}
+
+bool
+KeySignatureDialog::isMinor() const
+{
+    return m_majorMinorCombo->currentItem() != 0;
+}
+
+void
+KeySignatureDialog::regenerateKeyCombo()
+{
+    Rosegarden::Key::KeySet keys(Rosegarden::Key::getKeys(isMinor()));
+    m_keyCombo->clear();
+
+    for (Rosegarden::Key::KeySet::iterator i = keys.begin();
+	 i != keys.end(); ++i) {
+	m_keyCombo->insertItem(i->getName().c_str());
+	if (*i == m_key) {
+	    m_keyCombo->setCurrentItem(m_keyCombo->count() - 1);
+	}
+    }
+}
+
+void
+KeySignatureDialog::redrawKeyPixmap()
+{
+
+}
+
+void
+KeySignatureDialog::slotKeyComboActivated(const QString &s)
+{
+    std::string name(s.latin1());
+    m_key = Rosegarden::Key(name);
+}
+
+void
+KeySignatureDialog::slotMajorMinorChanged(const QString &)
+{
+    regenerateKeyCombo();
+    m_key = Rosegarden::Key(m_key.getAccidentalCount(),
+			    m_key.isSharp(),
+			    isMinor());
+    redrawKeyPixmap();
+}
 

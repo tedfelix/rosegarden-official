@@ -159,6 +159,7 @@ etc
     <Action name="add_text_mark"/>
   </Menu>
   <Separator/>
+  <Action name="add_key_signature"/>
   <Action name="add_time_signature"/>
 </Menu>
 

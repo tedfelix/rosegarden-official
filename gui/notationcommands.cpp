@@ -133,6 +133,30 @@ ClefInsertionCommand::modifySegment()
 }
 
 
+KeyInsertionCommand::KeyInsertionCommand(Segment &segment, timeT time,
+					 Rosegarden::Key key) :
+    BasicCommand("Insert Key", segment, time, time + 1),
+    m_key(key),
+    m_lastInsertedEvent(0)
+{
+    // nothing
+}
+
+KeyInsertionCommand::~KeyInsertionCommand()
+{
+    // nothing
+}
+
+void
+KeyInsertionCommand::modifySegment()
+{
+    SegmentNotationHelper helper(getSegment());
+
+    Segment::iterator i = helper.insertKey(getBeginTime(), m_key);
+    if (i != helper.segment().end()) m_lastInsertedEvent = *i;
+}
+
+
 EraseCommand::EraseCommand(Segment &segment,
 			   Event *event,
 			   bool collapseRest) :

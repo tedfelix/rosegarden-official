@@ -603,6 +603,10 @@ void NotationView::setupActions()
                 SLOT(slotTransformsAddTimeSignature()), actionCollection(),
                 "add_time_signature");
 
+    new KAction(KeyInsertionCommand::name(), 0, this,
+                SLOT(slotTransformsAddKeySignature()), actionCollection(),
+                "add_key_signature");
+
     // setup Settings menu
     KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
 
@@ -1519,7 +1523,7 @@ void NotationView::slotTransformsAddTimeSignature()
     double layoutX = staff->getLayoutXOfCursor();
     if (layoutX >= 0) {
 
-	Rosegarden::Event *timeSigEvt, *clefEvt, *keyEvt;
+	Rosegarden::Event *timeSigEvt = 0, *clefEvt = 0, *keyEvt = 0;
 	Segment &segment = staff->getSegment();
 
 	NotationElementList::iterator i = staff->getClosestElementToLayoutX
@@ -1539,6 +1543,41 @@ void NotationView::slotTransformsAddTimeSignature()
 		(new AddTimeSignatureCommand
 		 (m_staffs[m_currentStaff]->getSegment().getComposition(),
 		  insertionTime, dialog->getTimeSignature()));
+	}
+	delete dialog;
+    }
+}			
+
+void NotationView::slotTransformsAddKeySignature()
+{
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    double layoutX = staff->getLayoutXOfCursor();
+    if (layoutX >= 0) {
+
+	Rosegarden::Event *timeSigEvt = 0, *clefEvt = 0, *keyEvt = 0;
+	Segment &segment = staff->getSegment();
+
+	NotationElementList::iterator i = staff->getClosestElementToLayoutX
+	    (layoutX, timeSigEvt, clefEvt, keyEvt, false, -1);
+
+	timeT insertionTime = segment.getEndTime();
+	if (i != staff->getViewElementList()->end()) {
+	    insertionTime = (*i)->getAbsoluteTime();
+	}
+
+	Rosegarden::Key key;
+	if (keyEvt) key = Rosegarden::Key(*keyEvt);
+
+	Rosegarden::Clef clef;
+	if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
+
+	KeySignatureDialog *dialog =
+	    new KeySignatureDialog(this, m_notePixmapFactory, clef, key);
+	if (dialog->exec() == QDialog::Accepted) {
+	    addCommandToHistory
+		(new KeyInsertionCommand
+		 (m_staffs[m_currentStaff]->getSegment(),
+		  insertionTime, dialog->getKey()));
 	}
 	delete dialog;
     }

@@ -643,6 +643,13 @@ SegmentNotationHelper::insertClef(timeT absoluteTime, Clef clef)
 }
 
 
+Segment::iterator
+SegmentNotationHelper::insertKey(timeT absoluteTime, Key key)
+{
+    return insert(key.getAsEvent(absoluteTime));
+}
+
+
 void
 SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
 {

@@ -29,6 +29,11 @@
 
 class QWidget;
 class QLineEdit;
+class QCheckBox;
+class QLabel;
+class QComboBox;
+class NotePixmapFactory;
+
 
 // Definitions of various simple dialogs that may be used in multiple
 // different editing views.
@@ -73,6 +78,40 @@ public slots:
     void slotNumDown();
     void slotDenomUp();
     void slotDenomDown();
+};
+
+
+class KeySignatureDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    KeySignatureDialog(QWidget *parent,
+		       NotePixmapFactory *npf,
+		       Rosegarden::Clef clef,
+		       Rosegarden::Key defaultKey =
+		       Rosegarden::Key::DefaultKey);
+
+    Rosegarden::Key getKey() const;
+    bool shouldTranspose() const;
+
+protected:
+    Rosegarden::Key m_key;
+    Rosegarden::Clef m_clef;
+    QLabel *m_keyLabel;
+    QComboBox *m_keyCombo;
+    QComboBox *m_majorMinorCombo;
+    QCheckBox *m_transposeButton;
+
+    void redrawKeyPixmap();
+    void regenerateKeyCombo();
+    bool isMinor() const;
+    
+public slots:
+    void slotKeyUp();
+    void slotKeyDown();
+    void slotKeyComboActivated(const QString &);
+    void slotMajorMinorChanged(const QString &);
 };
 
 
