@@ -2023,7 +2023,9 @@ AlsaDriver::processNotesOff(const RealTime &time)
 void
 AlsaDriver::processAudioQueue(const RealTime &playLatency, bool now)
 {
+#ifdef HAVE_LIBJACK
     pthread_mutex_lock(&_diskThreadLock);
+#endif // HAVE_LIBJACK
 
     std::vector<PlayableAudioFile*>::iterator it;
     RealTime currentTime = getSequencerTime() - playLatency;
@@ -2080,7 +2082,9 @@ AlsaDriver::processAudioQueue(const RealTime &playLatency, bool now)
 
     }
 
+#ifdef HAVE_LIBJACK
     pthread_mutex_unlock(&_diskThreadLock);
+#endif // HAVE_LIBJACK
 
 }
 
