@@ -28,23 +28,29 @@ EXTRA_libRosegardenSequencer_la_SOURCES = MidiArts.cc \
                                           MidiRecord.cpp \
                                           AlsaDriver.cpp
 
-# For the moment while we work out the conditionals if you're
-# building with sound disabled (--disable-sound) you can remove
-# the following files from the next line:
-#     MidiArts.cc
-#     ArtsDriver.cpp
-#     MidiRecord.cpp
-#     AlsaDriver.cpp
+# Conditional compile for the different types of sound support.
 #
-# This will ll help when building on systems which don't have
-# support for these drivers
 #
+if NO_SOUND
+# No sound support (use DummyDriver)
+libRosegardenSequencer_la_SOURCES = SoundDriver.cpp \
+                                    Sequencer.cpp
+else
+
+if HAVE_ALSA
+# ALSA 
+libRosegardenSequencer_la_SOURCES = AlsaDriver.cpp \
+                                    SoundDriver.cpp \
+                                    Sequencer.cpp
+else
+# aRts, the default case
 libRosegardenSequencer_la_SOURCES = MidiArts.cc \
                                     ArtsDriver.cpp \
                                     MidiRecord.cpp \
-                                    AlsaDriver.cpp \
                                     SoundDriver.cpp \
                                     Sequencer.cpp
+endif
+endif
 
 libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined
 libRosegardenSequencer_la_LIBADD   = -lartsmidi $(LIB_QT) -lsoundserver_idl libRosegardenSound.la ../base/libbase.la -lartsflow -lartsmodules @LIBASOUND@ @JACKLIB@
