@@ -270,11 +270,6 @@ int main(int argc, char *argv[])
             }
         }
 
-        if (lastSeqStatus != roseSeq->getStatus())
-            roseSeq->notifySequencerStatus();
-
-        lastSeqStatus = roseSeq->getStatus();
-
         // Update internal clock and send pointer position
         // change event to GUI - this is the heartbeat of
         // the Sequencer - it doesn't tick over without
@@ -283,6 +278,11 @@ int main(int argc, char *argv[])
         // Also attempt to send the MIDI clock at this point.
         //
         roseSeq->updateClocks();
+
+        if (lastSeqStatus != roseSeq->getStatus())
+            roseSeq->notifySequencerStatus();
+
+        lastSeqStatus = roseSeq->getStatus();
 
         // Pause for breath while we're gnashing this loop
         //

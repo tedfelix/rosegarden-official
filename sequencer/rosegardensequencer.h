@@ -367,6 +367,10 @@ protected:
     void cleanupMmapData();
     void initMetaIterator();
 
+    void setEndOfCompReached(bool e) { m_isEndOfCompReached = e; }
+    bool isEndOfCompReached() { return m_isEndOfCompReached; }
+
+    //--------------- Data members ---------------------------------
 
     Rosegarden::Sequencer *m_sequencer;
     TransportStatus m_transportStatus;
@@ -437,6 +441,9 @@ protected:
 
     Rosegarden::MappedComposition   m_mC;
     ControlBlockMmapper*            m_controlBlockMmapper;
+
+    bool                            m_isEndOfCompReached;
+    
 };
  
 #endif // _ROSEGARDEN_SEQUENCER_APP_H_

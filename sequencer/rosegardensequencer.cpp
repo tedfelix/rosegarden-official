@@ -430,8 +430,14 @@ public:
     /// reset all iterators to beginning
     void reset();
     bool jumpToTime(const Rosegarden::RealTime&);
+
+    /**
+     * Fill mapped composition with events from current point until specified time
+     * @return true if there are non-metronome events remaining, false if end of composition was reached
+     */
     bool fillCompositionWithEventsUntil(Rosegarden::MappedComposition*,
                                         const Rosegarden::RealTime&);
+
     void resetIteratorForSegment(const QString& filename);
 
     void addSegment(MmappedSegment*);
@@ -555,7 +561,7 @@ bool MmappedSegmentsMetaIterator::acceptEvent(MappedEvent *evt, bool evtIsFromMe
 
 
 bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::MappedComposition* c,
-                                                                   const Rosegarden::RealTime& endTime)
+                                                                 const Rosegarden::RealTime& endTime)
 {
 //     SEQUENCER_DEBUG << "fillCompositionWithEventsUntil " << endTime << endl;
 
@@ -565,7 +571,7 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
     std::vector<bool> validSegments;
     for(unsigned int i = 0; i < m_segments.size(); ++i) validSegments.push_back(true);
 
-    bool foundOneEvent = false;
+    bool foundOneEvent = false, eventsRemaining = false;
 
     do {
         foundOneEvent = false;
@@ -589,6 +595,8 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
 //                                 << " reached end of segment #"
 //                                 << i << endl;
                 continue;
+            } else if (!evtIsFromMetronome) {
+                eventsRemaining = true;
             }
 
             MappedEvent *evt = new MappedEvent(*(*iter));
@@ -620,7 +628,7 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
                     SEQUENCER_DEBUG << "skipping event\n";
                 }
             
-                foundOneEvent = true;
+                if (!evtIsFromMetronome) foundOneEvent = true;
                 ++(*iter);
 
             } else {
@@ -633,7 +641,9 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
 
     } while (foundOneEvent);
 
-    return true;
+    SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : eventsRemaining = " << eventsRemaining << endl;
+
+    return eventsRemaining || foundOneEvent;
 }
 
 void MmappedSegmentsMetaIterator::resetIteratorForSegment(const QString& filename)
@@ -677,7 +687,8 @@ RosegardenSequencerApp::RosegardenSequencerApp(
     m_oldSliceSize(0, 0),
     m_segmentFilesPath(KGlobal::dirs()->resourceDirs("tmp").first()),
     m_metaIterator(0),
-    m_controlBlockMmapper(0)
+    m_controlBlockMmapper(0),
+    m_isEndOfCompReached(false)
 {
     SEQUENCER_DEBUG << "Registering with DCOP server" << endl;
 
@@ -830,7 +841,9 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
         m_metaIterator->jumpToTime(start);
     }
 
-    m_metaIterator->fillCompositionWithEventsUntil(mC, end);
+    bool eventsRemaining = m_metaIterator->fillCompositionWithEventsUntil(mC, end);
+
+    setEndOfCompReached(eventsRemaining);
 
     m_lastStartTime = start;
 
@@ -865,7 +878,7 @@ RosegardenSequencerApp::startPlaying()
     // tell the gui about this slice of events
     notifyVisuals(&m_mC);
 
-    return true;
+    return isEndOfCompReached();
 }
 
 void
@@ -888,68 +901,10 @@ RosegardenSequencerApp::notifyVisuals(Rosegarden::MappedComposition *mC)
     }
 }
 
-// Keep playing our fetched events, only top up the queued events
-// once we're within m_fetchLatency of the last fetch.  Make sure
-// that we're fetching *past* the end of what we've already fetched
-// and ensure that we don't duplicate events fetch unnecessarily
-// by incrementing m_lastFetchSongPosition before we do anything.
-//
-//
 bool
 RosegardenSequencerApp::keepPlaying()
 {
-    if (m_songPosition > ( m_lastFetchSongPosition - m_fetchLatency))
-    {
-
-        // Check to make sure that we haven't got ahead of the GUI
-        // and adjust as necessary (drop some "slices" if you like)
-        //
-        Rosegarden::RealTime sequencerTime = m_sequencer->getSequencerTime();
-        Rosegarden::RealTime dropBoundary = m_lastFetchSongPosition
-                                            + m_readAhead + m_readAhead;
-
-        if (sequencerTime > dropBoundary &&  // we've overstepped boundary
-            !isLooping() &&                  // we're not looping or recording
-            m_transportStatus != RECORDING_MIDI &&
-            m_transportStatus != RECORDING_AUDIO)
-        {
-            // Catch up
-            m_lastFetchSongPosition = sequencerTime;
-
-            // Comment on droppage
-            //
-            Rosegarden::RealTime gapTime = sequencerTime - dropBoundary;
-            int gapLength = gapTime.sec * 1000000 + gapTime.usec;
-            int sliceSize = m_readAhead.sec * 1000000 + m_readAhead.usec;
-            unsigned int slices = 
-                (gapLength/sliceSize == 0) ? 1 : gapLength/sliceSize;
-
-            QString plural = "";
-
-            if (slices > 1) plural = QString("S");
-
-            SEQUENCER_DEBUG << "RosegardenSequencerApp::keepPlaying() - "
-                            << "GUI COULDN'T SERVICE SLICE REQUEST(S)\n" 
-                            << "                                        "
-                            << "      -- DROPPED "
-                            << slices
-                            << " SLICE"
-                            << plural
-                            <<"! --\n";
-
-//             QByteArray data;
-//             QDataStream arg(data, IO_WriteOnly);
-        
-//             arg << slices;
-//             if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-//                                           ROSEGARDEN_GUI_IFACE_NAME,
-//                                           "skippedSlices(unsigned int)",
-//                                           data)) 
-//             {
-//                 SEQUENCER_DEBUG << "RosegardenSequencer::keepPlaying()"
-//                      << " - can't send to RosegardenGUI client" << endl;
-//             }
-        }
+    if (m_songPosition > ( m_lastFetchSongPosition - m_fetchLatency)) {
 
         m_mC.clear();
         m_mC = *fetchEvents(m_lastFetchSongPosition,
@@ -967,7 +922,7 @@ RosegardenSequencerApp::keepPlaying()
         m_lastFetchSongPosition = m_lastFetchSongPosition + m_readAhead;
     }
 
-    return true;
+    return isEndOfCompReached();
 }
 
 // Return current Sequencer time in GUI compatible terms
@@ -1038,9 +993,7 @@ RosegardenSequencerApp::updateClocks()
                       "setPointerPosition(long int, long int)",
                       data))
     {
-        SEQUENCER_DEBUG << "RosegardenSequencer::updateClocks()"
-                        << " - can't send to RosegardenGUI client"
-                        << endl;
+        SEQUENCER_DEBUG << "RosegardenSequencer::updateClocks() - can't send to RosegardenGUI client\n";
 
         // Stop the sequencer so we can see if we can try again later
         //
