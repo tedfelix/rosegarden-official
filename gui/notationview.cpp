@@ -738,12 +738,21 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
                              << (*closestNote)->getAbsoluteTime()
                              << endl;
 
+        /*
+         * Alter inserted note's duration if needed
+         */
         if ((*closestNote)->event()->getDuration() < insertedEvent->getDuration()) {
             // new note is being chorded with notes which are shorter
-            // set its duration to same one as other notes
+            // shorten its duration to same one as other notes
             newNotationElement->setNote((*closestNote)->getNote());
+
+        } else if ((*closestNote)->event()->getDuration() > insertedEvent->getDuration()) {
+
+            // new note is being chorded with notes which are longer
+            // for the moment, do the same as in other case
+            newNotationElement->setNote((*closestNote)->getNote());
+            
         }
-        
 
         newNotationElement->setAbsoluteTime((*closestNote)->getAbsoluteTime());
         // m_notationElements->insert(newNotationElement);
