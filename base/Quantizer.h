@@ -96,9 +96,7 @@ public:
 
 protected:
 
-    void quantizeByNote(timeT duration, int dots,
-                        timeT &low,  Note &lowNote,
-                        timeT &high, Note &highNote);
+    Note quantizeByNote(timeT &duration, int dots);
 };
 
 }

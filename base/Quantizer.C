@@ -66,19 +66,7 @@ Quantizer::quantizeByNote(Event *e, int maxDots)
     timeT duration = quantizeByUnit(e, Note(Note::Shortest).getDuration());
     if (duration == 0 && e->getDuration() == 0) return 0;
 
-    timeT low, high;
-    Note lowNote(Note::Shortest, false), highNote(lowNote);
-
-    quantizeByNote(duration, maxDots, low, lowNote, high, highNote);
-
-    Note &note(lowNote);
-
-    if (high - duration > duration - low) {
-        duration = low;
-    } else {
-        duration = high;
-        note = highNote;
-    }
+    Note note(quantizeByNote(duration, maxDots));
 
     e->setMaybe<Int>(NoteDurationProperty, duration);
     e->setMaybe<Int>(Note::NoteType, note.getNoteType());
@@ -88,38 +76,36 @@ Quantizer::quantizeByNote(Event *e, int maxDots)
 }
 
 
-void
-Quantizer::quantizeByNote(timeT duration, int maxDots,
-                          timeT &low,  Note &lowNote,
-                          timeT &high, Note &highNote)
+Note
+Quantizer::quantizeByNote(timeT &duration, int maxDots)
 {
-    lowNote = Note::getNearestNote(duration, maxDots);
+    Note  shortNote = Note::getNearestNote(duration, maxDots);
+    timeT shortTime = shortNote.getDuration();
+    if   (shortTime == duration) return shortNote;
 
-    low  = lowNote.getDuration();
-    high = 1000000; //!!!
+    Note  longNote(shortNote);
 
-    try {
-	if (lowNote.getDots() > 0 ||
-            lowNote.getNoteType() == Note::Shortest) { // can't dot that
+    if ((shortNote.getDots() > 0 ||
+         shortNote.getNoteType() == Note::Shortest)) { // can't dot that
 
-	    highNote = Note(lowNote.getNoteType() + 1, 0);
+        if (shortNote.getNoteType() == Note::Longest) {
+            duration = shortTime;
+            return shortNote;
+        }
 
-	    if (highNote.getDuration() > duration)
-                high = highNote.getDuration();
-
-	} else {
-
-	    highNote = Note(lowNote.getNoteType(), 1);
-
-	    if (highNote.getDuration() > duration)
-                high = highNote.getDuration();
-	}
-
-    } catch (Note::BadType) {
-        // lowNote is already the longest there is
+        longNote = Note(shortNote.getNoteType() + 1, 0);
+    } else {
+        longNote = Note(shortNote.getNoteType(), 1);
     }
-    
-    return;
+
+    timeT longTime = longNote.getDuration();
+    if (longTime - duration < duration - shortTime) {
+        duration = longTime;
+        return longNote;
+    }
+
+    duration = shortTime;
+    return shortNote;
 }
 
 
