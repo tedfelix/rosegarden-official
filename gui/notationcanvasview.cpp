@@ -399,20 +399,12 @@ NotationCanvasView::getElementAtXCoord(QMouseEvent *e) // any old element
     return 0;
 }
 
-
-//!!!
 void
 NotationCanvasView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 {
+    emit renderRequired(std::min(contentsX(), cx),
+			std::max(contentsX() + visibleWidth(), cx + cw));
 
-    NOTATION_DEBUG << "NotationCanvasView::drawContents (" << cx << "," << cy
-		   << ") " << cw << "x" << ch << " [contents " << contentsX() << "," << contentsY() << " " << visibleWidth() << "x" << visibleHeight() << "]" << endl;
-
-    NotationView *nview = (NotationView *)(&m_linedStaffManager);
-    
-    nview->checkRendered(std::min(contentsX(), cx),
-			 std::max(contentsX() + visibleWidth(), cx + cw));
     QCanvasView::drawContents(p, cx, cy, cw, ch);
 }
-
 

@@ -144,12 +144,28 @@ public:
     virtual void positionElements(Rosegarden::timeT from,
 				  Rosegarden::timeT to);
 
+    /**
+     * Re-render and position elements as necessary, based on the
+     * given extents and any information obtained from calls to
+     * markChanged().  This provides a render-on-demand mechanism.  If
+     * you are going to use this rendering mechanism, it's generally
+     * wise to avoid explicitly calling
+     * renderElements/positionElements as well.
+     */
+    virtual void checkRendered(Rosegarden::timeT from,
+			       Rosegarden::timeT to);
+
+    /**
+     * Mark a region of staff as changed, for use by the on-demand
+     * rendering mechanism.  If fromBar == toBar == -1, mark the
+     * entire staff as changed.  Pass movedOnly as true to indicate
+     * that elements have not changed but only been repositioned (for
+     * example as a consequence of a modification on another staff
+     * that caused a relayout).
+     */
     virtual void markChanged(Rosegarden::timeT from = 0,
 			     Rosegarden::timeT to = 0,
 			     bool movedOnly = false);
-
-    virtual void checkRendered(Rosegarden::timeT from,
-			       Rosegarden::timeT to);
     
     /**
      * Insert time signature at x-coordinate \a x.

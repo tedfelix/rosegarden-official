@@ -104,6 +104,13 @@ signals:
      * Emitted when the mouse button is released
      */
     void mouseReleased(QMouseEvent*);
+
+    /**
+     * Emitted when a region is about to be drawn by the canvas view.
+     * Indicates that any on-demand rendering for that region should
+     * be carried out.
+     */
+    void renderRequired(double cx0, double cx1);
     
 protected:
 

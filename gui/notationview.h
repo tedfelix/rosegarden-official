@@ -263,9 +263,6 @@ public:
     virtual void print(bool previewOnly = false);
 
     
-    void checkRendered(double cx0, double cx1);
-
-
 public slots:
 
     /**
@@ -601,6 +598,9 @@ public slots:
 
     /// The given QObject has originated a step-by-step-editing request
     void slotStepByStepTargetRequested(QObject *);
+
+    /// Do on-demand rendering for a region.
+    void slotCheckRendered(double cx0, double cx1);
 
 signals:
     /**

@@ -1126,19 +1126,28 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 {
     // first time through this, m_ready is false -- we mark it true
 
-    NOTATION_DEBUG << "NotationStaff::markChanged (" << from << " -> " << to << ") " << movedOnly << endl;
+//    NOTATION_DEBUG << "NotationStaff::markChanged (" << from << " -> " << to << ") " << movedOnly << endl;
 
-    if (from == to) m_status.clear();
-    else {
+    if (from == to) {
+
+	m_status.clear();
 	
-	Rosegarden::Composition *composition = getSegment().getComposition();
+	if (!movedOnly && m_ready) { // undo all the rendering we've already done
+	    for (NotationElementList::iterator i = getViewElementList()->begin();
+		 i != getViewElementList()->end(); ++i) {
+		static_cast<NotationElement *>(*i)->removeCanvasItem();
+	    }
+	}
 
-	//!!! should do this using segment end times etc., not composition's
+    } else {
+	
+	Rosegarden::Segment *segment = &getSegment();
+	Rosegarden::Composition *composition = segment->getComposition();
 
 	timeT nextBarTime = 0; // we only use this -- not an ideal api any more
 	NotationElementList::iterator i = findUnchangedBarEnd(to, nextBarTime);
 
-	int finalBar = composition->getNbBars() - 1;
+	int finalBar = composition->getBarNumber(segment->getEndMarkerTime());
 	if (nextBarTime > 0) finalBar = composition->getBarNumber(nextBarTime);
 
 	int fromBar = composition->getBarNumber(from);
@@ -1184,7 +1193,7 @@ NotationStaff::checkRendered(timeT from, timeT to)
     if (!m_ready) return;
     Rosegarden::Composition *composition = getSegment().getComposition();
 
-    NOTATION_DEBUG << "NotationStaff::checkRendered: " << from << " -> " << to << endl;
+//    NOTATION_DEBUG << "NotationStaff::checkRendered: " << from << " -> " << to << endl;
 
     int fromBar = composition->getBarNumber(from);
     int toBar   = composition->getBarNumber(to);
@@ -1206,49 +1215,13 @@ NotationStaff::checkRendered(timeT from, timeT to)
 	    positionElements
 		(composition->getBarStart(bar),
 		 composition->getBarEnd(bar));
+	    
+	case Positioned:
+	    break;
 	}
 
 	m_status[bar] = Positioned;
     }
 
     m_lastRenderCheck = std::pair<int, int>(fromBar, toBar);
-
-/*
-    int rangeStart = fromBar;
-
-    for (int bar = fromBar; bar <= toBar; ++bar) {
-	NOTATION_DEBUG << "NotationStaff::checkRendered: bar " << bar << " status "
-		       << m_status[bar] << endl;
-    
-	if (m_status[bar]) {
-	    if (bar > rangeStart) {
-		positionElements(composition->getBarStart(rangeStart),
-				 composition->getBarStart(bar),
-				 true);
-	    }
-	    rangeStart = bar + 1;
-	} else {
-	    m_status[bar] = true;
-	}
-    }
-    if (toBar >= rangeStart) {
-	positionElements(composition->getBarStart(rangeStart),
-			 composition->getBarEnd(toBar),
-			 true);
-    }
-*/
-/*
-    if (from >= m_rendered.from() && to <= m_rendered.to()) return;
-
-    if (from < m_rendered.from()) {
-	if (to <= m_rendered.to()) {
-	    to = m_rendered.from();
-	}
-    } else {
-	from = m_rendered.to();
-    }
-
-    positionElements(from, to);
-    m_rendered.push(from, to);
-*/
 }

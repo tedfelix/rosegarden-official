@@ -685,7 +685,9 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     if (dots) m_label += "...";
     canvas()->setChanged(rect());
 
-    if (m_preview) m_preview->setPreviewCurrent(false);
+    if (m_preview) {
+	m_preview->setPreviewCurrent(false);
+    }
 }
 
 Segment* SegmentItem::getSegment() const
@@ -1011,11 +1013,11 @@ void SegmentCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
     } else {
 	SegmentRepeatRectangle *rect = findRepeatClickedOn(e->pos());
         if (rect) {
-	Rosegarden::timeT time = rect->getRepeatStartTime(e->x());
+	    Rosegarden::timeT time = rect->getRepeatStartTime(e->x());
 
-	RG_DEBUG << "editRepeat at time " << time << endl;
+	    RG_DEBUG << "editRepeat at time " << time << endl;
 	
-	emit editRepeat(rect->getSegment(), time);
+	    emit editRepeat(rect->getSegment(), time);
         }
     }
 }

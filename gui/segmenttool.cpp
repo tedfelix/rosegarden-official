@@ -637,7 +637,10 @@ SegmentSelector::addToSelection(SegmentItem* item)
     for (SegmentItemList::iterator i = m_selectedItems.begin();
 	 i != m_selectedItems.end(); ++i) {
 //         RG_DEBUG << "SegmentSelector::addToSelection() SegmentItem already in selection\n";
-	if (i->second == item) return;
+	if (i->second == item) {
+	    i->first = QPoint(int(item->x()), int(item->y()));
+	    return;
+	}
     }
 
     m_selectedItems.push_back
@@ -1060,6 +1063,9 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             // Make sure we don't set a non-existing track
             if (newY < 0) { newY = 0; }
             track = m_canvas->grid().getYBin(newY);
+
+	    RG_DEBUG << "SegmentSelector::handleMouseMove: orig y " << it->first.y()
+		     << ", dy " << y << ", newY " << newY << ", track " << track << endl;
 
             // Make sure we don't set a non-existing track (c'td)
             // TODO: make this suck less. Either the tool should
