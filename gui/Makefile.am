@@ -1,11 +1,11 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = rosegardengui
-rosegardengui_SOURCES = quantizer.cpp rosexmlhandler.cpp xmlstorableevent.cpp notationvlayout.cpp notationhlayout.cpp layoutengine.cpp qcanvassimplesprite.cpp staff.cpp qcanvasspritegroupable.cpp qcanvaslinegroupable.cpp qcanvasitemgroup.cpp qcanvasgroupableitem.cpp pitchtoheight.cpp notepixmapfactory.cpp chord.cpp rosegardenguiview.cpp rosegardenguidoc.cpp rosegardengui.cpp main.cpp 
+rosegardengui_SOURCES = quantizer.cpp rosexmlhandler.cpp xmlstorableevent.cpp notationvlayout.cpp notationhlayout.cpp layoutengine.cpp qcanvassimplesprite.cpp staff.cpp qcanvasspritegroupable.cpp qcanvaslinegroupable.cpp qcanvasitemgroup.cpp qcanvasgroupableitem.cpp pitchtoheight.cpp notepixmapfactory.cpp rosegardenguiview.cpp rosegardenguidoc.cpp rosegardengui.cpp main.cpp 
 rosegardengui_LDADD   = -Lrosegarden_core -lcore -lkfile -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
 
 SUBDIRS = docs 
 
-EXTRA_DIST = main.cpp rosegardengui.cpp rosegardengui.h rosegardenguidoc.cpp rosegardenguidoc.h rosegardenguiview.cpp rosegardenguiview.h resource.h rosegardengui.desktop rosegardengui.xpm mini-rosegardengui.xpm chord.cpp chord.h notepixmapfactory.cpp notepixmapfactory.h pitchtoheight.cpp pitchtoheight.h qcanvasgroupableitem.cpp qcanvasgroupableitem.h qcanvasitemgroup.cpp qcanvasitemgroup.h qcanvaslinegroupable.cpp qcanvaslinegroupable.h qcanvasspritegroupable.cpp qcanvasspritegroupable.h staff.cpp staff.h qcanvassimplesprite.cpp qcanvassimplesprite.h layoutengine.cpp layoutengine.h notationhlayout.cpp notationhlayout.h notationvlayout.cpp notationvlayout.h xmlstorableevent.cpp xmlstorableevent.h rosexmlhandler.cpp rosexmlhandler.h quantizer.cpp quantizer.h rosedebug.h 
+EXTRA_DIST = main.cpp rosegardengui.cpp rosegardengui.h rosegardenguidoc.cpp rosegardenguidoc.h rosegardenguiview.cpp rosegardenguiview.h resource.h rosegardengui.desktop rosegardengui.xpm mini-rosegardengui.xpm notepixmapfactory.cpp notepixmapfactory.h pitchtoheight.cpp pitchtoheight.h qcanvasgroupableitem.cpp qcanvasgroupableitem.h qcanvasitemgroup.cpp qcanvasitemgroup.h qcanvaslinegroupable.cpp qcanvaslinegroupable.h qcanvasspritegroupable.cpp qcanvasspritegroupable.h staff.cpp staff.h qcanvassimplesprite.cpp qcanvassimplesprite.h layoutengine.cpp layoutengine.h notationhlayout.cpp notationhlayout.h notationvlayout.cpp notationvlayout.h xmlstorableevent.cpp xmlstorableevent.h rosexmlhandler.cpp rosexmlhandler.h quantizer.cpp quantizer.h rosedebug.h 
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/
