@@ -1465,7 +1465,7 @@ void RosegardenGUIApp::slotSaveOptions()
 
     m_fileRecent->saveEntries(kapp->config());
 
-    saveMainWindowSettings(kapp->config(), RosegardenGUIApp::MainWindowConfigGroup);
+//     saveMainWindowSettings(kapp->config(), RosegardenGUIApp::MainWindowConfigGroup);
     kapp->config()->sync();
 }
 
