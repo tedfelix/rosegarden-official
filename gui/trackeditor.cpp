@@ -38,6 +38,7 @@
 #include "multiviewcommandhistory.h"
 #include "segmentcommands.h"
 #include "barbuttons.h"
+#include "trackbuttons.h"
 
 #include "rosedebug.h"
 
@@ -56,6 +57,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     m_document(doc),
     m_rulerScale(rulerScale),
     m_barButtons(0),
+    m_trackButtons(0),
     m_segmentCanvas(0)
 {
     Composition &comp = doc->getComposition();
@@ -101,16 +103,7 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
                          << nbTracks << ", firstBar = " << firstBar
                          << ", lastBar = " << lastBar << ")" << endl;
 
-    QGridLayout *grid = new QGridLayout(this, 2, 2);
-
-    m_barButtons = new BarButtons(m_document,
-                                  m_rulerScale,
-                                  30, // getVHeader()->sectionSize(0)
-                                  false, 
-                                  this);
-
-    grid->addWidget(m_barButtons, 0, 1);
-
+    QHBoxLayout *hbox = new QHBoxLayout(this);
 
     QCanvas *canvas = new QCanvas(this);
 
@@ -123,7 +116,26 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     m_segmentCanvas = new SegmentCanvas
 	(m_rulerScale,  getTrackCellHeight(), *canvas, this);
 
-    grid->addWidget(m_segmentCanvas, 1, 1);
+    hbox->addWidget(m_segmentCanvas);
+
+    QGridLayout *canvasGrid = new QGridLayout(m_segmentCanvas, 2, 2);
+
+    m_barButtons = new BarButtons(m_document,
+                                  m_rulerScale,
+                                  30,
+                                  false,
+                                  m_segmentCanvas);
+
+    canvasGrid->addWidget(m_barButtons, 0,1);
+
+    int trackLabelWidth = 156;
+
+    m_trackButtons = new TrackButtons(m_document,
+                                      getTrackCellHeight(),
+                                      trackLabelWidth,
+                                      m_segmentCanvas);
+
+    canvasGrid->addWidget(m_trackButtons, 1,0);
 
     connect(this, SIGNAL(needUpdate()),
             m_segmentCanvas, SLOT(update()));
@@ -159,7 +171,7 @@ int TrackEditor::getTrackCellHeight() const
 {
     static QFont defaultFont;
     
-    return defaultFont.pixelSize() + 5; // For the moment
+    return defaultFont.pixelSize() + 8; // For the moment
 }
 
 void

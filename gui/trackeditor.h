@@ -39,7 +39,7 @@ class SegmentItem;
 class SegmentCanvas;
 class RosegardenGUIDoc;
 class BarButtons;
-
+class TrackButtons;
 
 /**
  * Global widget for segment edition.
@@ -202,6 +202,7 @@ protected:
     RosegardenGUIDoc        *m_document;
     Rosegarden::RulerScale  *m_rulerScale;
     BarButtons              *m_barButtons;
+    TrackButtons            *m_trackButtons;
     SegmentCanvas           *m_segmentCanvas;
     QCanvasLine             *m_pointer;
 };

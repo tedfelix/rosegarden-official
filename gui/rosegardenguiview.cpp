@@ -133,24 +133,24 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     // --------------- create the track buttons ----------------
     //
     //
-    QScrollView *trackButtonsView = new QScrollView(mainPane);
-    m_trackButtons = new TrackButtons(doc,
-                                      m_trackEditor->getTrackCellHeight(),
-                                      trackLabelWidth,
-                                      trackButtonsView);
+//     QScrollView *trackButtonsView = new QScrollView(mainPane);
+//     m_trackButtons = new TrackButtons(doc,
+//                                       m_trackEditor->getTrackCellHeight(),
+//                                       trackLabelWidth,
+//                                       trackButtonsView);
 
-    trackButtonsView->addChild(m_trackButtons);
-    trackButtonsView->setFrameStyle(Plain);
+//     trackButtonsView->addChild(m_trackButtons);
+//     trackButtonsView->setFrameStyle(Plain);
 
-    connect(m_trackButtons, SIGNAL(trackSelected(int)),
-            this,         SLOT(selectTrackSegments(int)));
+//     connect(m_trackButtons, SIGNAL(trackSelected(int)),
+//             this,         SLOT(selectTrackSegments(int)));
 
-    // turn off the scrollbars on the track buttons and set width
-    //
-    trackButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
-    trackButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
-    trackButtonsView->setMinimumWidth(trackLabelWidth);
-    trackButtonsView->setMaximumWidth(trackLabelWidth);
+//     // turn off the scrollbars on the track buttons and set width
+//     //
+//     trackButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
+//     trackButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
+//     trackButtonsView->setMinimumWidth(trackLabelWidth);
+//     trackButtonsView->setMaximumWidth(trackLabelWidth);
 
    
     // --------------- create the scrollview ----------------
@@ -161,8 +161,8 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     // Now link up the vertical scrollbar to the track buttons
     // and the bar buttons
     //
-    connect(m_trackEditorScrollView, SIGNAL(contentsMoving(int, int)),
-            trackButtonsView,        SLOT(setContentsPos(int, int)));
+//     connect(m_trackEditorScrollView, SIGNAL(contentsMoving(int, int)),
+//             trackButtonsView,        SLOT(setContentsPos(int, int)));
 
 //     connect(m_trackEditorScrollView, SIGNAL(contentsMoving(int, int)),
 //             barButtonsView,          SLOT(setContentsPos(int, int)));
