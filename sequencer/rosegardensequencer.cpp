@@ -1537,7 +1537,29 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
                 driver = true;
                 break;
             }
+            /*
+            else
+            {
+                std::cout << "MISMATCH" << std::endl;
+                std::cout << "DRIVER ID = " << (*it)->getRuntimeSegmentId() 
+                          << ", SEGMENT ID = " << (*sIt)->getRuntimeSegmentId()
+                          << std::endl;
+                std::cout << "DRIVER INS = " << (*it)->getInstrument()
+                          << std::endl;
+                std::cout << ", SEGMENT INS = " << (*sIt)->getInstrument()
+                          << std::endl;
+                std::cout << "DRIVER TIME = " << (*it)->getEndTime() + m_playLatency
+                          << ", SEGMENT TIME = " << (*sIt)->getEventTime() + (*sIt)->getDuration()
+                          << std::endl << std::endl;
+            }
+            */
+
         }
+
+        /*
+        if (driverAudio.size() == 0)
+            std::cout << "NO DRIVER AUDIO" << std::endl;
+            */
 
         if (driver == false)
         {

@@ -1878,27 +1878,24 @@ AlsaDriver::resetPlayback(const RealTime &position, const RealTime &latency)
 
     // Clear down all playing audio files
     //
-    if(pthread_mutex_trylock(&_diskThreadLock) != EBUSY)
+    pthread_mutex_lock(&_diskThreadLock);
+
+    std::vector<PlayableAudioFile*>::iterator it;
+    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
     {
-        std::vector<PlayableAudioFile*>::iterator it;
-        for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
-        {
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::resetPlayback - resetting audio file" << std::endl;
-#endif // DEBU_ALSA
+        std::cerr << "AlsaDriver::resetPlayback - stopping audio file"
+                  << std::endl;
+#endif // DEBUG_ALSA
 
-            // only interested in playing files
-            if ((*it)->getStatus() != PlayableAudioFile::PLAYING)
-                continue;
-
-            if (modifyNoteOff <= RealTime::zeroTime) // if ffwding
-                (*it)->setStatus(PlayableAudioFile::DEFUNCT); // for the moment do the same
-            else // rewinding - mark this file as DEFUNCT
-                (*it)->setStatus(PlayableAudioFile::DEFUNCT);
-        }
-
-        pthread_mutex_unlock(&_diskThreadLock);
+        if ((*it)->getStatus() == PlayableAudioFile::PLAYING)
+            (*it)->setStatus(PlayableAudioFile::DEFUNCT);
     }
+
+    // clear out defunct
+    clearDefunctFromAudioPlayQueue();
+
+    pthread_mutex_unlock(&_diskThreadLock);
 
 #endif
 }
@@ -4865,12 +4862,13 @@ AlsaDriver::jackDiskThread(void *arg)
 
         while(_threadJackClosing == false)
         {
-            inst->clearPlayingAudioFiles();
 
             // Try to lock this mutex but don't worry if it's busy
             //
             if(pthread_mutex_trylock(&_diskThreadLock) != EBUSY)
             {
+                inst->clearPlayingAudioFiles();
+
                 audioQueue = inst->getAudioPlayQueueNotDefunct();
 
                 for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
@@ -4918,23 +4916,17 @@ AlsaDriver::jackDiskThread(void *arg)
 std::vector<PlayableAudioFile*>
 AlsaDriver::getPlayingAudioFiles()
 {
-#ifdef HAVE_LIBJACK
-    if (pthread_mutex_trylock(&_diskThreadLock) != EBUSY)
-    {
-        std::vector<PlayableAudioFile*> tempVector;
-        for (std::vector<PlayableAudioFile*>::iterator it = m_playingAudioFiles.begin();
-             it != m_playingAudioFiles.end(); ++it)
-            tempVector.push_back(*it);
+    std::vector<PlayableAudioFile*> retVect;
+    std::vector<PlayableAudioFile*>::const_iterator it;
 
-        pthread_mutex_unlock(&_diskThreadLock);
-        return tempVector;
-    }
+    pthread_mutex_lock(&_diskThreadLock);
 
-    return std::vector<PlayableAudioFile*>();
+    for (it = m_playingAudioFiles.begin(); 
+         it != m_playingAudioFiles.end(); ++it) retVect.push_back(*it);
 
-#else
-    return m_playingAudioFiles;
-#endif
+    pthread_mutex_unlock(&_diskThreadLock);
+
+    return retVect;
 }
 
 bool

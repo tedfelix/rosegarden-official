@@ -368,7 +368,8 @@ private:
 
     DeviceId getSpareDeviceId();
 
-    // Vector of currently playing audio segments
+    // Vector of currently playing audio segments - to inform the
+    // sequencer what we have playing at the driver currently.
     //
     std::vector<PlayableAudioFile*> m_playingAudioFiles;
 };
