@@ -26,6 +26,8 @@
 #include <string>
 #include <algorithm>
 
+#include <qbitmap.h>
+
 #include <kmessagebox.h>
 #include <kglobal.h>
 #include <kstddirs.h>

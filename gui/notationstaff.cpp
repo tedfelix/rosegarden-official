@@ -314,7 +314,7 @@ void
 NotationStaff::positionElements(timeT from, timeT to)
 {
     kdDebug(KDEBUG_AREA) << "NotationStaff " << this << "::positionElements()"
-                         << from << " -> " << to << std::endl;
+                         << from << " -> " << to << "\n";
     START_TIMING;
 
     int elementsPositioned = 0, elementsRendered = 0; // diagnostic
@@ -404,7 +404,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 			 << endl;
 
     PRINT_ELAPSED("NotationStaff::positionElements");
-    NotePixmapFactory::dumpStats(cerr);
+    NotePixmapFactory::dumpStats(std::cerr);
 }
 
 void

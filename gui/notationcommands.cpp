@@ -117,7 +117,7 @@ RestInsertionCommand::RestInsertionCommand(Segment &segment, timeT time,
                                            timeT endTime, Note note) :
     NoteInsertionCommand(segment, time, endTime, note, 0, NoAccidental, false)
 {
-    KCommand::setName("Insert Rest");
+    setName("Insert Rest");
 }
 
 RestInsertionCommand::~RestInsertionCommand()

@@ -21,7 +21,6 @@
 #include "notepixmapfactory.h"
 #include "rosedebug.h"
 
-#include <qwidget.h>
 #include <qlineedit.h>
 #include <qlabel.h>
 #include <qhbox.h>
@@ -37,6 +36,8 @@
 #include <qtooltip.h>
 #include <qobjectlist.h>
 #include <qmessagebox.h>
+#include <qgrid.h>
+#include <qbitmap.h>
 
 #include <klocale.h>
 #include <karrowbutton.h>

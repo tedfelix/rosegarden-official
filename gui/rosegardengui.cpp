@@ -21,6 +21,9 @@
 
 // include files for QT
 #include <qdragobject.h>
+#include <qpushbutton.h>
+#include <qregexp.h>
+#include <qlabel.h>
 
 // include files for KDE
 #include <kstdaccel.h>
@@ -37,6 +40,7 @@
 #include <dcopclient.h>
 #include <qiconset.h>
 #include <kstddirs.h>
+#include <kstatusbar.h>
 
 #include <kaction.h>
 #include <kstdaction.h>
@@ -2020,8 +2024,7 @@ bool RosegardenGUIApp::performAutoload()
     {
         kdDebug(KDEBUG_AREA)
             << "RosegardenGUIApp::performAutoload() - "
-            << "Can't find autoload file - no default Studio loaded"
-            << endl;
+            << "Can't find autoload file - no default Studio loaded\n";
 
         return false;
     }
@@ -2029,7 +2032,7 @@ bool RosegardenGUIApp::performAutoload()
     // Else we try to open it
     //
     kdDebug(KDEBUG_AREA)
-        << "RosegardenGUIApp::performAutoload() - autoloading" << endl;
+        << "RosegardenGUIApp::performAutoload() - autoloading\n";
 
     bool res = openDocumentFile(autoloadFile.data());
 
@@ -2048,7 +2051,7 @@ bool RosegardenGUIApp::performAutoload()
 //
 void RosegardenGUIApp::slotToggleSolo()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotToggleSolo" << std::endl;
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotToggleSolo\n";
 
     m_doc->getComposition().setSolo(m_transport->SoloButton->isOn());
     m_doc->setModified();
@@ -2096,7 +2099,7 @@ void RosegardenGUIApp::slotTrackDown()
 
 void RosegardenGUIApp::slotConfigure()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotConfigure" << std::endl;
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotConfigure\n";
 
     Rosegarden::RosegardenConfigureDialog *configDlg = 
         new Rosegarden::RosegardenConfigureDialog(m_doc, this);
@@ -2106,13 +2109,13 @@ void RosegardenGUIApp::slotConfigure()
 
 void RosegardenGUIApp::slotEditKeys()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditKeys" << std::endl;
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditKeys\n";
 }
 
 
 void RosegardenGUIApp::slotEditToolbars()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditToolbars" << std::endl;
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditToolbars\n";
 }
 
 void RosegardenGUIApp::slotEditTempo()
@@ -2127,7 +2130,7 @@ void RosegardenGUIApp::slotEditTimeSignature()
 
 void RosegardenGUIApp::slotEditTempo(QWidget *parent)
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditTempo" << std::endl;
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditTempo\n";
 
     Rosegarden::RosegardenTempoDialog *tempoDlg = 
         new Rosegarden::RosegardenTempoDialog(m_doc, parent);

@@ -19,13 +19,14 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qlayout.h>
+
 #include <kapp.h>
 #include <kconfig.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kstdaction.h>
-
-#include <qlayout.h>
+#include <kstatusbar.h>
 
 #include "editview.h"
 #include "rosegardencanvasview.h"

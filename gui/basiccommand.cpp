@@ -33,7 +33,7 @@ using Rosegarden::timeT;
 
 BasicCommand::BasicCommand(const QString &name, Segment &segment,
 			   timeT begin, timeT end, bool bruteForceRedo) :
-    KCommand(name),
+    KNamedCommand(name),
     m_segment(segment),
     m_savedEvents(segment.getType(), begin),
     m_endTime(end),

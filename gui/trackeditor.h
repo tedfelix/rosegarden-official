@@ -46,6 +46,7 @@ class MultiViewCommandHistory;
 class KCommand;
 class QCanvasRectangle;
 class QScrollView;
+class QScrollBar;
 
 /**
  * Global widget for segment edition.

@@ -24,7 +24,9 @@
 
 #include <vector>
 #include <set>
+
 #include <qcanvas.h>
+#include <qpainter.h>
 
 #include "NotationTypes.h"
 #include "notefont.h"

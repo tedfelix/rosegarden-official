@@ -47,6 +47,7 @@ class MatrixCanvasView;
 class PianoKeyboard;
 
 class QMouseEvent;
+class QLabel;
 
 // class RefreshStack
 // {

@@ -29,8 +29,13 @@
 #include "NotationTypes.h"
 #include "rosegardenguidoc.h"
 
+#ifdef RGKDE3
+typedef KNamedCommand XKCommand;
+#else
+typedef KCommand XKCommand;
+#endif
 
-class SegmentEraseCommand : public KCommand
+class SegmentEraseCommand : public XKCommand
 {
 public:
     SegmentEraseCommand(Rosegarden::Segment *segment);
@@ -44,7 +49,7 @@ private:
     Rosegarden::Segment *m_segment;
 };
 
-class SegmentCopyCommand : public KCommand
+class SegmentCopyCommand : public XKCommand
 {
 public:
     SegmentCopyCommand(Rosegarden::Segment *segment);
@@ -64,7 +69,7 @@ private:
 };
 
 
-class SegmentInsertCommand : public KCommand
+class SegmentInsertCommand : public XKCommand
 {
 public:
     SegmentInsertCommand(Rosegarden::Composition *composition,
@@ -92,7 +97,7 @@ private:
  * correctly, and it provides the ability to undo recording.  (The
  * unexecute does remove the segment, it doesn't just pretend to.)
  */
-class SegmentRecordCommand : public KCommand
+class SegmentRecordCommand : public XKCommand
 {
 public:
     SegmentRecordCommand(Rosegarden::Segment *segment);
@@ -111,7 +116,7 @@ private:
  * SegmentReconfigureCommand is a general-purpose command for
  * moving, resizing or changing the track of one or more segments
  */
-class SegmentReconfigureCommand : public KCommand
+class SegmentReconfigureCommand : public XKCommand
 {
 public:
     SegmentReconfigureCommand(QString name);
@@ -141,7 +146,7 @@ private:
 };
 
 
-class SegmentSplitCommand : public KCommand
+class SegmentSplitCommand : public XKCommand
 {
 public:
     SegmentSplitCommand(Rosegarden::Segment *segment,
@@ -158,7 +163,7 @@ private:
 };
 
 
-class SegmentChangeQuantizationCommand : public KCommand
+class SegmentChangeQuantizationCommand : public XKCommand
 {
 public:
     /// Set quantization on segments.  If sq is null, switch quantization off.
@@ -185,7 +190,7 @@ private:
 };
 
 
-class AddTimeSignatureCommand : public KCommand
+class AddTimeSignatureCommand : public XKCommand
 {
 public:
     AddTimeSignatureCommand(Rosegarden::Composition *composition,
@@ -193,9 +198,11 @@ public:
                             Rosegarden::TimeSignature timeSig);
     virtual ~AddTimeSignatureCommand();
 
-    static QString name() {
-        return i18n("Add Time Si&gnature Change...");
-    }
+#ifdef RGKDE3
+    virtual QString name() { return i18n("Add Time Si&gnature Change..."); }
+#else
+    static QString name() { return i18n("Add Time Si&gnature Change..."); }
+#endif
 
     virtual void execute();
     virtual void unexecute();
@@ -222,13 +229,13 @@ public:
 
 
 
-class AddTempoChangeCommand : public KCommand
+class AddTempoChangeCommand : public XKCommand
 {
 public:
     AddTempoChangeCommand(Rosegarden::Composition *composition,
                           Rosegarden::timeT time,
                           double tempo):
-	KCommand(name()),
+	XKCommand(name()),
         m_composition(composition),
         m_time(time),
         m_tempo(tempo),
@@ -237,10 +244,12 @@ public:
 
     virtual ~AddTempoChangeCommand();
 
-    static QString name()
-    {
-        return i18n("Add &Tempo Change...");
-    }
+#ifdef RGKDE3
+    virtual QString name() { return i18n("Add &Tempo Change..."); }
+#else
+    static QString name() { return i18n("Add &Tempo Change..."); }
+#endif
+
     virtual void execute();
     virtual void unexecute();
 
@@ -253,19 +262,21 @@ private:
 };
 
 
-class AddTracksCommand : public KCommand
+class AddTracksCommand : public XKCommand
 {
 public:
     AddTracksCommand(Rosegarden::Composition *composition,
                      unsigned int nbTracks): 
-        KCommand(name()),
+        XKCommand(name()),
         m_composition(composition),
         m_nbNewTracks(nbTracks) {}
 
-    static QString name()
-    {
-        return i18n("Add Tracks...");
-    }
+#ifdef RGKDE3
+    virtual QString name() { return i18n("Add Tracks..."); }
+#else
+    static QString name() { return i18n("Add Tracks..."); }
+#endif
+
     virtual void execute();
     virtual void unexecute();
 

@@ -43,6 +43,7 @@ class BarButtons;
 class QVBox;
 class QGridLayout;
 class QVBoxLayout;
+class QScrollBar;
 class RosegardenCanvasView;
 
 /**

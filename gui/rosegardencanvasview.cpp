@@ -65,7 +65,7 @@ void CanvasItemGC::gc()
 {
     for(unsigned int i = 0; i < m_garbage.size(); ++i) {
         kdDebug(KDEBUG_AREA) << "CanvasItemGC::gc() : delete "
-                             << m_garbage[i] << std::endl;
+                             << m_garbage[i] << "\n";
         delete m_garbage[i];
     }
 

@@ -373,7 +373,7 @@ bool RG21Loader::parseIndicationStart()
 	m_currentSegment->insert(e);
 
 	kdDebug(KDEBUG_AREA) << "rg21io: Indication start: it's a real indication; id is " << indicationId << ", event is:" << endl;
-	e->dump(cerr);
+	e->dump(std::cerr);
 
     }
 

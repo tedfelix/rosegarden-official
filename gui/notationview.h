@@ -34,6 +34,7 @@
 #include "zoomslider.h"
 #include "NotationTypes.h"
 
+class QLabel;
 class QCanvasItem;
 namespace Rosegarden { class Segment; class EventSelection; class MappedEvent; }
 class RosegardenGUIDoc;

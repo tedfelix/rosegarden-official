@@ -29,6 +29,7 @@
 
 // include files for Qt
 #include <qstrlist.h>
+#include <qcursor.h>
 
 // include files for KDE 
 #include <kapp.h>

@@ -35,6 +35,7 @@
 
 #include <kstdaction.h>
 #include <kapp.h>
+#include <kstatusbar.h>
 
 #include "rosegardenguiview.h"
 #include "rosegardenguidoc.h"

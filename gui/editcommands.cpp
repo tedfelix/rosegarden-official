@@ -75,7 +75,7 @@ CutCommand::CutCommand(SegmentSelection &selection,
 
 CopyCommand::CopyCommand(EventSelection &selection,
 			 Rosegarden::Clipboard *clipboard) :
-    KCommand(name()),
+    XKCommand(name()),
     m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Rosegarden::Clipboard;
@@ -84,7 +84,7 @@ CopyCommand::CopyCommand(EventSelection &selection,
 
 CopyCommand::CopyCommand(SegmentSelection &selection,
 			 Rosegarden::Clipboard *clipboard) :
-    KCommand(name()),
+    XKCommand(name()),
     m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Rosegarden::Clipboard;
@@ -120,7 +120,7 @@ CopyCommand::unexecute()
 PasteSegmentsCommand::PasteSegmentsCommand(Rosegarden::Composition *composition,
 					   Rosegarden::Clipboard *clipboard,
 					   Rosegarden::timeT pasteTime) :
-    KCommand(name()),
+    XKCommand(name()),
     m_composition(composition),
     m_clipboard(clipboard),
     m_pasteTime(pasteTime)

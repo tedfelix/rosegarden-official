@@ -19,8 +19,7 @@
 
 #include "multiviewcommandhistory.h"
 
-#include "rosedebug.h"
-#include <iostream>
+#include <qregexp.h>
 
 #include <kaction.h>
 #include <kstdaction.h>
@@ -28,10 +27,9 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <ktoolbar.h>
+#include <kstdaccel.h>
 
-using std::cerr;
-using std::endl;
-
+#include "rosedebug.h"
 
 MultiViewCommandHistory::MultiViewCommandHistory() :
     m_undoLimit(50),

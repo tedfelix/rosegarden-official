@@ -98,12 +98,22 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
     setLabelHighlight(true);
 
     bool ok = false;
+#ifdef RGKDE3
+    QString newText = QInputDialog::getText(
+                                 QString("Change track name"),
+                                 QString("Enter new track name"),
+                                 QLineEdit::Normal, 
+                                 text(),
+                                 &ok,
+                                 this);
+#else
     QString newText = QInputDialog::getText(
                                  QString("Change track name"),
                                  QString("Enter new track name"),
                                  text(),
                                  &ok,
                                  this);
+#endif
 
     if ( ok && !newText.isEmpty() )
         emit renameTrack(newText, m_position);

@@ -19,11 +19,13 @@
   COPYING included with this distribution for more information.
 */
 
-#include "rosedebug.h"
+#include <qpopupmenu.h>
+#include <qcursor.h>
 
 #include "edittool.h"
-
 #include "editview.h"
+
+#include "rosedebug.h"
 
 EditToolBox::EditToolBox(EditView *parent)
     : QObject(parent),

@@ -22,6 +22,7 @@
 
 #include <qiconset.h>
 #include <qlayout.h>
+#include <qlabel.h>
 
 #include <kapp.h>
 #include <kconfig.h>
@@ -30,6 +31,7 @@
 #include <klocale.h>
 #include <kstdaction.h>
 #include <kmessagebox.h>
+#include <kstatusbar.h>
 
 #include "Instrument.h"
 #include "Composition.h"

@@ -792,8 +792,7 @@ RosegardenGUIDoc::alive()
            isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
     {
         kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - "
-                             << "waiting for Sequencer to come up"
-                             << std::endl;
+                             << "waiting for Sequencer to come up\n";
 
         kapp->processEvents(1000);
         sleep(1); // 1s
@@ -807,7 +806,7 @@ RosegardenGUIDoc::alive()
                                   data))
     {
         kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - "
-                             << "can't call the Sequencer" << std::endl;
+                             << "can't call the Sequencer\n";
         return;
     }
 
@@ -823,7 +822,7 @@ RosegardenGUIDoc::alive()
                                   data, replyType, replyData, true))
     {
         kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - "
-                             << "can't get number of devices" << std::endl;
+                             << "can't get number of devices\n";
         return;
     }
 
@@ -837,8 +836,7 @@ RosegardenGUIDoc::alive()
     else
     {
         kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - "
-                             << "got unknown returntype from getDevices()"
-                             << std::endl;
+                             << "got unknown returntype from getDevices()\n";
         return;
     }
 
@@ -852,8 +850,7 @@ RosegardenGUIDoc::alive()
     }
 
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - "
-                         << "Sequencer alive - Instruments synced"
-                         << std::endl;
+                         << "Sequencer alive - Instruments synced\n";
 
     // Ok, we've sync'd - make sure that this app doesn't
     // drive this sync again by switching our startUpSync
@@ -880,7 +877,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
                                   data, replyType, replyData, false))
     {
         kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice() - "
-                             << "can't call Sequencer" << std::endl;
+                             << "can't call Sequencer\n";
         return;
     }
 
@@ -890,7 +887,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     if (replyType == "Rosegarden::MappedDevice")
     {
         kdDebug(KDEBUG_AREA)  << "RosegardenGUIDoc::getMappedDevice() - "
-                              << "got Rosegarden::MappedDevice" << std::endl;
+                              << "got Rosegarden::MappedDevice\n";
 
         // unfurl
         reply >> mD;
@@ -899,7 +896,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     {
         kdDebug(KDEBUG_AREA)  << "RosegardenGUIDoc::getMappedDevice() - "
                               << "didn't get MappedDevice " 
-                              << id << std::endl;
+                              << id << "\n";
         return;
     }
 
@@ -925,7 +922,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
         else
         {
             kdDebug(KDEBUG_AREA)  << "RosegardenGUIDoc::getMappedDevice - "
-                                  << "unknown device" << std::endl;
+                                  << "unknown device\n";
         }
     }
 

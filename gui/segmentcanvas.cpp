@@ -19,6 +19,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qpainter.h>
 #include <qpopupmenu.h>
 #include <qwhatsthis.h>
 #include <qfont.h>
@@ -537,7 +538,7 @@ void SegmentCanvas::clear()
     QCanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it) {
 	if ( *it ) {
-            kdDebug(KDEBUG_AREA) << "SegmentCanvas::clear() : deleting " << *it << std::endl;
+            kdDebug(KDEBUG_AREA) << "SegmentCanvas::clear() : deleting " << *it << "\n";
 	    delete *it;
         }
     }

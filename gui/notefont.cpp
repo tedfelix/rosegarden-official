@@ -23,6 +23,7 @@
 
 #include <qfileinfo.h>
 #include <qimage.h>
+#include <qbitmap.h>
 #include <qdir.h>
 
 #include <kglobal.h>

@@ -61,7 +61,7 @@ protected:
 
 
 template<class T>
-ZoomSlider<T>::ZoomSlider(const vector<T> &sizes,
+ZoomSlider<T>::ZoomSlider(const std::vector<T> &sizes,
 			  T initialSize, Orientation o,
 			  QWidget *parent, const char *name) :
     QSlider(0, sizes.size()-1, 1,
@@ -80,7 +80,7 @@ ZoomSlider<T>::~ZoomSlider() { }
 
 template<class T>
 int
-ZoomSlider<T>::getIndex(const vector<T> &sizes, T size)
+ZoomSlider<T>::getIndex(const std::vector<T> &sizes, T size)
 {
     for (unsigned int i = 0; i < sizes.size(); ++i) {
         if (sizes[i] == size) return i;
@@ -90,7 +90,7 @@ ZoomSlider<T>::getIndex(const vector<T> &sizes, T size)
 
 template<class T>
 void
-ZoomSlider<T>::reinitialise(const vector<T> &sizes, T size)
+ZoomSlider<T>::reinitialise(const std::vector<T> &sizes, T size)
 { 
     m_sizes = sizes;
     setMinValue(0);

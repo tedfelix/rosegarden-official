@@ -43,13 +43,17 @@ public:
     CutCommand(Rosegarden::SegmentSelection &selection,
 	       Rosegarden::Clipboard *clipboard);
 
+#ifdef RGKDE3
+    virtual QString name() { return "Cu&t"; }
+#else
     static QString name() { return "Cu&t"; }
+#endif
 };
 
 
 /// Copy a selection
 
-class CopyCommand : public KCommand
+class CopyCommand : public XKCommand
 {
 public:
     /// Make a CopyCommand that copies events from within a Segment
@@ -62,7 +66,11 @@ public:
 
     virtual ~CopyCommand();
 
+#ifdef RGKDE3
+    virtual QString name() { return "&Copy"; }
+#else
     static QString name() { return "&Copy"; }
+#endif
 
     virtual void execute();
     virtual void unexecute();
@@ -75,7 +83,7 @@ protected:
 
 /// Paste one or more segments from the clipboard into the composition
 
-class PasteSegmentsCommand : public KCommand
+class PasteSegmentsCommand : public XKCommand
 {
 public:
     PasteSegmentsCommand(Rosegarden::Composition *composition,
@@ -84,8 +92,12 @@ public:
 
     virtual ~PasteSegmentsCommand();
 
+#ifdef RGKDE3
+    virtual QString name() { return "&Paste"; }
+#else
     static QString name() { return "&Paste"; }
-    
+#endif
+
     virtual void execute();
     virtual void unexecute();
 
@@ -115,7 +127,11 @@ public:
 		       Rosegarden::timeT pasteTime,
 		       PasteType pasteType = getDefaultPasteType());
 
+#ifdef RGKDE3
+    virtual QString name() { return "&Paste"; }
+#else
     static QString name() { return "&Paste"; }
+#endif
 
     /// Determine whether this paste will succeed (without executing it yet)
     bool isPossible();
@@ -145,7 +161,11 @@ class EraseCommand : public BasicSelectionCommand
 public:
     EraseCommand(Rosegarden::EventSelection &selection);
 
+#ifdef RGKDE3
+    virtual QString name() { return "&Erase"; }
+#else
     static QString name() { return "&Erase"; }
+#endif
 
     virtual Rosegarden::timeT getRelayoutEndTime();
 
@@ -170,9 +190,11 @@ public:
 		     Rosegarden::Event *eventToModify,
 		     const Rosegarden::Event &newEvent);
 
-    static QString name() {
-	return "Edit E&vent";
-    }
+#ifdef RGKDE3
+    virtual QString name() { return "Edit E&vent"; }
+#else
+    static QString name() { return "Edit E&vent"; }
+#endif
 
 protected:
     virtual void modifySegment();
