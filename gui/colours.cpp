@@ -41,9 +41,9 @@ namespace RosegardenGUIColours
     const QColor LoopRulerForeground = Qt::white;
     const QColor LoopHighlight = Qt::white;
   
-    const QColor LevelMeterGreen = QColor(0, 100, 0);
-    const QColor LevelMeterOrange = QColor(255, 140, 0);
-    const QColor LevelMeterRed = QColor(100, 0, 0);
+    const QColor LevelMeterGreen = QColor(0, 200, 0);
+    const QColor LevelMeterOrange = QColor(255, 165, 0);
+    const QColor LevelMeterRed = QColor(200, 0, 0);
 
     const QColor BarLine = Qt::black;
     const QColor BarLineIncorrect = QColor(211, 0, 31);

@@ -40,7 +40,8 @@ VUMeter::VUMeter(QWidget *parent,
     m_level(0),
     m_peakLevel(0),
     m_levelStep(3),
-    m_showPeakLevel(true)
+    m_showPeakLevel(true),
+    m_colourKnee(65)
 {
     setMinimumSize(width, m_originalHeight);
     setMaximumSize(width, m_originalHeight);
@@ -50,6 +51,38 @@ VUMeter::VUMeter(QWidget *parent,
 
     connect(&m_peakTimer, SIGNAL(timeout()),
             this,         SLOT(stopShowingPeak()));
+
+
+    // Set up the colours - first the low band (green -> orange)
+    //
+    m_loStartRed = RosegardenGUIColours::LevelMeterGreen.red();
+    m_loStartGreen = RosegardenGUIColours::LevelMeterGreen.green();
+    m_loStartBlue = RosegardenGUIColours::LevelMeterGreen.blue();
+
+    m_loStepRed = (RosegardenGUIColours::LevelMeterOrange.red() -
+                          m_loStartRed) / m_colourKnee;
+
+    m_loStepGreen = (RosegardenGUIColours::LevelMeterOrange.green() -
+                            m_loStartGreen) / m_colourKnee;
+
+    m_loStepBlue = (RosegardenGUIColours::LevelMeterOrange.blue() -
+                           m_loStartBlue) / m_colourKnee;
+
+
+    // Set up the colours for mixing between orange and red
+    //
+    m_hiStartRed = RosegardenGUIColours::LevelMeterOrange.red();
+    m_hiStartGreen = RosegardenGUIColours::LevelMeterOrange.green();
+    m_hiStartBlue = RosegardenGUIColours::LevelMeterOrange.blue();
+
+    m_hiStepRed = (RosegardenGUIColours::LevelMeterRed.red() -
+                          m_hiStartRed) / m_colourKnee;
+
+    m_hiStepGreen = (RosegardenGUIColours::LevelMeterRed.green() -
+                          m_hiStartGreen) / m_colourKnee;
+
+    m_hiStepBlue = (RosegardenGUIColours::LevelMeterRed.blue() -
+                          m_hiStartBlue) / m_colourKnee;
 
 }
 
@@ -131,67 +164,50 @@ VUMeter::drawMeterLevel(QPainter* paint)
         paint->drawLine(x, 0, x, height());
     }
 
-    /*
-    if (m_level < 20)
+    // Set the colour according to current level -
+    // mix colours from green to orange to red.
+    //
+    if (m_level < 15) // bottom 15% get pure green
     {
         paint->setPen(RosegardenGUIColours::LevelMeterGreen);
         paint->setBrush(RosegardenGUIColours::LevelMeterGreen);
     }
-    else //if (m_level < 60) // fade from green to orange
+    else if (m_level < m_colourKnee) // now green to orange
     {
-        int redSign = 1;
-        int blueSign = 1;
-        int greenSign = 1;
+        QColor mixedColour((int)(m_loStartRed + m_loStepRed * m_level),
+                           (int)(m_loStartGreen + m_loStepGreen * m_level),
+                           (int)(m_loStartBlue + m_loStepBlue * m_level));
 
-        int startRed = RosegardenGUIColours::LevelMeterGreen.red();
-        int startBlue = RosegardenGUIColours::LevelMeterGreen.blue();
-        int startGreen = RosegardenGUIColours::LevelMeterGreen.green();
-
-        int endRed = RosegardenGUIColours::LevelMeterOrange.red();
-        int endBlue = RosegardenGUIColours::LevelMeterOrange.blue();
-        int endGreen = RosegardenGUIColours::LevelMeterOrange.green();
-
-        if (startRed > endRed) redSign = -1;
-        if (startBlue > endBlue) blueSign = -1;
-        if (startGreen > endGreen) greenSign = -1;
-
-        QColor mix(redSign * (int)(((double)(endRed - startRed))/((double)(m_level - 19))),
-                   blueSign * (int)(((double)(endBlue - startBlue))/((double)(m_level - 19))),
-                   greenSign * (int)(((double)(endGreen - startGreen))/((double)(m_level - 19))));
-
-        //cout << "RED = " << mix.red() << endl;
-        //cout << "BLUE = " << mix.blue() << endl;
-        //cout << "GREEN = " << mix.green() << endl;
-
-        paint->setPen(mix);
-        paint->setBrush(mix);
+        paint->setPen(mixedColour);
+        paint->setBrush(mixedColour);
     }
-    else // fade from orange to red
+    else if (m_level >= m_colourKnee && m_level < 95)
     {
-    }
-    */
+        double mixFactor = (double)m_level - m_colourKnee;
 
-    if (m_level > 75)
+        QColor mixedColour((int)(m_hiStartRed + m_hiStepRed * mixFactor),
+                           (int)(m_hiStartGreen + m_hiStepGreen * mixFactor),
+                           (int)(m_hiStartBlue + m_hiStepBlue * mixFactor));
+
+        paint->setPen(mixedColour);
+        paint->setBrush(mixedColour);
+    }
+    else  // top 5% get complete red
     {
         paint->setPen(RosegardenGUIColours::LevelMeterRed);
         paint->setBrush(RosegardenGUIColours::LevelMeterRed);
     }
-    else if (m_level > 50)
-    {
-        paint->setPen(RosegardenGUIColours::LevelMeterOrange);
-        paint->setBrush(RosegardenGUIColours::LevelMeterOrange);
-    }
-    else
-    {
-        paint->setPen(RosegardenGUIColours::LevelMeterGreen);
-        paint->setBrush(RosegardenGUIColours::LevelMeterGreen);
-    }
 
+    // Proper width
+    //
     int x = m_level * width() / 100;
 
-    // Make room for a peak hold marker if we need to
+    // Make room for a peak hold marker
+    //
     if (m_type == PeakHold && x >= width() - 1) x--;
 
+    // Paint the meter
+    //
     paint->drawRect(0, 0, x, height());
 }
 
