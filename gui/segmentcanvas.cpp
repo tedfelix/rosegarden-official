@@ -311,6 +311,12 @@ SegmentCanvas::addPartItem(int x, int y, unsigned int nbBars)
     return newPartItem;
 }
 
+void
+SegmentCanvas::showRecordingSegmentItem(int x, int y,
+                                        Rosegarden::Segment *segment)
+{
+}
+
 
 void SegmentCanvas::onEditNotation()
 {
@@ -349,7 +355,7 @@ SegmentCanvas::selectSegments(std::list<Rosegarden::Segment*> segments)
     selTool->clearSelected();
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
-        if ((*it)->rtti() == 5) { // urgh, hard-coded real time id
+        if ((*it)->rtti() == SegmentItem::SegmentItemRTTI) { 
 
             for (segIt = segments.begin(); segIt != segments.end(); segIt++) {
 

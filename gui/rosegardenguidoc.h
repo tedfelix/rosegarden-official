@@ -190,6 +190,7 @@ public:
      */
     void setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop);
 
+
 public slots:
 
     /**

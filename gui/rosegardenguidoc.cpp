@@ -506,14 +506,12 @@ RosegardenGUIDoc::createNewSegment(SegmentItem *p, int track)
 }
 
 // Take a MappedComposition from the Sequencer and turn it into an
-// Event-rich, Composition-inserted, mouthwateringly ripe Segment.
+// Event-rich, Composition-inserted, mouthwateringly-ripe Segment.
 //
 //
 void
 RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 {
-    bool firstEvent = false;
-
     // Just create a new record Segment if we don't have one
     // currently open and running
     //
@@ -521,67 +519,77 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
     {
         m_recordSegment = new Segment();
         m_recordSegment->setTrack(m_composition.getRecordTrack());
-        m_endOfLastRecordedNote = 0;
-
-        firstEvent = true; // use this flag to move the start index 
+        m_recordSegment->setStartIndex(m_composition.getPosition());
     }
 
-    
-    Rosegarden::MappedComposition::iterator i;
-    Rosegarden::Event *rEvent;
-    timeT duration, absTime;
 
-    // process all the incoming MappedEvents
-    //
-    for (i = mC.begin(); i != mC.end(); ++i)
-    {
-        // Create and populate a new Event (for the moment
-        // all we get from the Sequencer is Notes)
+    if (mC.size() > 0)
+    { 
+        Rosegarden::MappedComposition::iterator i;
+        Rosegarden::Event *rEvent;
+        timeT duration, absTime;
+
+        // process all the incoming MappedEvents
         //
-        //
-        rEvent = new Event(Rosegarden::Note::EventType);
-
-        absTime = m_composition.
-                          getElapsedTimeForRealTime((*i)->getAbsoluteTime());
-        duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
-
-        rEvent->setAbsoluteTime(absTime);
-        rEvent->setDuration(duration);
-        rEvent->set<Int>(PITCH, (*i)->getPitch());
-        rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
-
-        // Set the start index and then insert into the Composition
-        //
-        if (firstEvent)
+        for (i = mC.begin(); i != mC.end(); ++i)
         {
-            m_recordSegment->setStartIndex(absTime);
-            m_composition.addSegment(m_recordSegment);
-            firstEvent = false;
+            // Create and populate a new Event (for the moment
+            // all we get from the Sequencer is Notes)
+            //
+            //
+            rEvent = new Event(Rosegarden::Note::EventType);
+
+            absTime = m_composition.
+                          getElapsedTimeForRealTime((*i)->getAbsoluteTime());
+            duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
+
+            rEvent->setAbsoluteTime(absTime);
+            rEvent->setDuration(duration);
+            rEvent->set<Int>(PITCH, (*i)->getPitch());
+            rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
+
+            // Set the start index and then insert into the Composition
+            //
+            if (m_recordSegment->size() == 0)
+            {
+                m_endOfLastRecordedNote = m_composition.getPosition();
+                m_composition.addSegment(m_recordSegment);
+            }
+
+            // If there was a gap between the last note and this one
+            // then fill it with rests
+            //
+            if ( (absTime + duration) > m_endOfLastRecordedNote)
+                m_recordSegment->fillWithRests(absTime + duration);
+
+            // Now insert the new event
+            //
+            Segment::iterator loc = m_recordSegment->insert(rEvent);
+
+            // And now fiddle with it
+            //
+            SegmentNotationHelper helper(*m_recordSegment);
+            if (!helper.isViable(rEvent))
+                helper.makeNoteViable(loc);
+
+            // Update our counter
+            //
+            m_endOfLastRecordedNote = absTime + duration;
+
         }
-
-        // If there was a gap between the last note and this one
-        // then fill it with rests
-        //
-        if ( (absTime + duration) > m_endOfLastRecordedNote)
-            m_recordSegment->fillWithRests(absTime + duration);
-
-        // Now insert the new event
-        //
-        Segment::iterator loc = m_recordSegment->insert(rEvent);
-
-        // And now fiddle with it
-        //
-        SegmentNotationHelper helper(*m_recordSegment);
-        if (!helper.isViable(rEvent))
-            helper.makeNoteViable(loc);
-
-        // Update our counter
-        //
-        m_endOfLastRecordedNote = absTime + duration;
-
     }
 
+    // update this segment on the GUI
+    RosegardenGUIView *w;
+    if(pViewList)
+    {
+        for(w=pViewList->first(); w!=0; w=pViewList->next())
+        {
+            w->showRecordingSegmentItem(m_recordSegment);
+        }
+    }
 }
+
 
 // Tidy up a recorded Segment when we've finished recording
 //

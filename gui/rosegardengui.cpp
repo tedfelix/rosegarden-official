@@ -1875,10 +1875,12 @@ RosegardenGUIApp::processRecordedMidi(const Rosegarden::MappedComposition &mC)
             m_transport->setMidiInLabel(*i);
         }
 
-        // send the events to a Segment for storage and display
-        //
-        m_doc->insertRecordedMidi(mC);
     }
+
+    // send any recorded Events to a Segment for storage and display
+    //
+    m_doc->insertRecordedMidi(mC);
+
 }
 
 

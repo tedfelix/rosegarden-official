@@ -102,6 +102,11 @@ public slots:
     void addSegmentItem(Rosegarden::Segment *segment);
 
     /**
+     * Show a Segment as it records
+     */
+    void updateRecordingSegmentItem(Rosegarden::Segment *segment);
+
+    /**
      * c.f. what we have in rosegardenguiview.h
      * These are instrumental in passing through
      * key presses from GUI front panel down to

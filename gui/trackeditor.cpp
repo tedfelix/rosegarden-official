@@ -400,5 +400,25 @@ TrackEditor::addSegmentItem(Rosegarden::Segment *segment)
 
 }
 
+// Show a Segment as its being recorded
+//
+void
+TrackEditor::updateRecordingSegmentItem(Rosegarden::Segment *segment)
+{
+    Composition &comp = m_document->getComposition();
+
+/*
+    cout << "START = " << segment->getStartIndex() << " : " <<
+            "END = " << comp.getPosition() << endl;
+*/
+    int y = m_vHeader->sectionPos(segment->getTrack());
+    //int x = m_hHeader->sectionPos(startBar);
+
+    m_segmentCanvas->showRecordingSegmentItem(comp.getPosition(), y, segment);
+    //QCanvasRectangle(segment->getStartIndex(), y, comp.getPosition() - segment->getStartIndex(), 10);
+}
+
+
+
 
 

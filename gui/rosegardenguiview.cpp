@@ -219,6 +219,9 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(this,         SIGNAL(addSegmentItem(Rosegarden::Segment*)),
             trackEditor, SLOT(addSegmentItem(Rosegarden::Segment*)));
 
+    connect(this,         SIGNAL(updateRecordingSegmentItem(Rosegarden::Segment*)),
+            trackEditor, SLOT(updateRecordingSegmentItem(Rosegarden::Segment*)));
+
     // Connections upwards from LoopRuler - re-emission of signals
     //
     connect(barButtons, SIGNAL(setPointerPosition(Rosegarden::timeT)),
@@ -412,6 +415,14 @@ void RosegardenGUIView::createSegmentItem(Rosegarden::Segment* segment)
 {
     emit addSegmentItem(segment);
 }
+
+// Show a segment as it records
+//
+void RosegardenGUIView::showRecordingSegmentItem(Rosegarden::Segment* segment)
+{
+    emit updateRecordingSegmentItem(segment);
+}
+
 
 // Set the visible loop markers on all clients and the SegmentCanvas.
 // Used when we've loaded a file or somehow set the loop marker from

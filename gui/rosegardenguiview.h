@@ -142,6 +142,10 @@ public:
      */
     void createSegmentItem(Rosegarden::Segment* segment);
 
+    /**
+     * Show a Segment as it records
+     */
+    void showRecordingSegmentItem(Rosegarden::Segment* segment);
 
     /**
      * set the viewable loop on the clients and SegmentCanvas
@@ -199,11 +203,13 @@ signals:
     void signalSetLoop(bool);
 
     void addSegmentItem(Rosegarden::Segment*);
+    void updateRecordingSegmentItem(Rosegarden::Segment*);
 
     void signalSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT);
 
     // Send a value to the a track meter
     void signalSetTrackMeter(double, int);
+
 
 
 protected:

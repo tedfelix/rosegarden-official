@@ -96,7 +96,7 @@ public:
     bool const isSelected() { return m_selected; }
     void setSelected(const bool &select, const QBrush &highlightBrush);
 
-    virtual int rtti() { return SegmentItemRTTI; }
+    virtual int rtti() const { return SegmentItemRTTI; }
     
 protected:
 
@@ -206,6 +206,11 @@ public:
      * Get the normal segment brush
      */
     QBrush getSegmentBrush() const { return m_brush; }
+
+    /*
+     * Show a preview of the Segment we're recording
+     */
+    void showRecordingSegmentItem(int x, int y, Rosegarden::Segment *segment);
 
 public slots:
     /// Set the current segment edition tool
