@@ -27,6 +27,7 @@
 #include <qgroupbox.h>
 #include <qfont.h>
 #include <qprogressdialog.h>
+#include <qprogressbar.h>
 
 #include "Progress.h"
 
@@ -160,13 +161,13 @@ public:
 
     ~RosegardenProgressDialog();
 
+    // Set the name of the current operation
+    //
+    virtual void setOperationName(std::string);
+
     // Set the progress
     //
     virtual void setCompleted(int value);
-
-    // Add to the progress
-    //
-    virtual void incrementCompletion(int value);
 
     // Process some X events - gets called by the file access (say) class
     // to ensure our gui is still working.
@@ -176,6 +177,10 @@ public:
     // Destroy
     //
     virtual void destroy();
+
+    virtual bool wasOperationCancelled() {
+	return QProgressDialog::wasCancelled();
+    }
 
 public slots:
     // After a timeout, judge whether we should show ourselves yet
@@ -193,5 +198,27 @@ private:
     bool m_firstTimeout;
     bool m_shown;
 };
+
+
+class RosegardenProgressBar : public QProgressBar,
+			      public Rosegarden::Progress
+{
+    Q_OBJECT
+
+public:
+    RosegardenProgressBar(int totalSteps,
+			  QWidget *creator = 0,
+			  const char *name = 0,
+			  WFlags f = 0);
+
+    ~RosegardenProgressBar();
+
+    virtual void setOperationName(std::string) { }
+    virtual void setCompleted(int value);
+    virtual void processEvents();
+    virtual void destroy();
+};
+   
+			      
 
 #endif // _WIDGETS_H_

@@ -41,6 +41,7 @@
 
 #include "Event.h"
 #include "Segment.h"
+#include "Progress.h"
 #include "Quantizer.h"
 #include "NotationTypes.h"
 
@@ -81,7 +82,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment, int id,
     m_staffName(0),
     m_legatoQuantizer(legatoQuantizer),
     m_properties(properties),
-    m_progressDlg(0)
+    m_progress(0)
 {
     changeFont(fontName, resolution);
     
@@ -323,11 +324,11 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 {
     NOTATION_DEBUG << "NotationStaff " << this << "::renderElements()" << endl;
     START_TIMING;
-    if (m_progressDlg) {
-	m_progressDlg->setLabelText
-	    (i18n("Rendering staff %1...").arg(getId() + 1));
-	m_progressDlg->processEvents();
-	if (m_progressDlg->wasCancelled()) {
+    if (m_progress) {
+	m_progress->setOperationName
+	    (qstrtostr(i18n("Rendering staff %1...").arg(getId() + 1)));
+	m_progress->processEvents();
+	if (m_progress->wasOperationCancelled()) {
 	    throw std::string("Action cancelled");
 	}
     }
@@ -358,15 +359,15 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	renderSingleElement(*it, (nextIt == to ? 0 : *nextIt),
 			    currentClef, selected);
 
-	if (m_progressDlg &&
+	if (m_progress &&
 	    (endTime > startTime) &&
 	    (++elementCount % 20 == 0)) {
 
 	    timeT myTime = (*it)->getAbsoluteTime();
-	    m_progressDlg->setCompleted
+	    m_progress->setCompleted
 		((myTime - startTime) * 100 / (endTime - startTime));
-	    m_progressDlg->processEvents();
-	    if (m_progressDlg->wasCancelled()) {
+	    m_progress->processEvents();
+	    if (m_progress->wasOperationCancelled()) {
 		throw std::string("Action cancelled");
 	    }
 	}
@@ -384,11 +385,11 @@ NotationStaff::positionElements(timeT from, timeT to)
     NOTATION_DEBUG << "NotationStaff " << this << "::positionElements()"
                          << from << " -> " << to << "\n";
     START_TIMING;
-    if (m_progressDlg) {
-	m_progressDlg->setLabelText
-	    (i18n("Positioning staff %1...").arg(getId() + 1));
-	m_progressDlg->processEvents();
-	if (m_progressDlg->wasCancelled()) {
+    if (m_progress) {
+	m_progress->setOperationName
+	    (qstrtostr(i18n("Positioning staff %1...").arg(getId() + 1)));
+	m_progress->processEvents();
+	if (m_progress->wasOperationCancelled()) {
 	    throw std::string("Action cancelled");
 	}
     }
@@ -479,13 +480,13 @@ NotationStaff::positionElements(timeT from, timeT to)
 	(*it)->reposition(coords.first, (double)coords.second);
 	(*it)->setSelected(selected);
 
-	if (m_progressDlg &&
+	if (m_progress &&
 	    (to > from) &&
 	    (++elementsPositioned % 20 == 0)) {
 	    timeT myTime = (*it)->getAbsoluteTime();
-	    m_progressDlg->setCompleted((myTime - from) * 100 / (to - from));
-	    m_progressDlg->processEvents();
-	    if (m_progressDlg->wasCancelled()) {
+	    m_progress->setCompleted((myTime - from) * 100 / (to - from));
+	    m_progress->processEvents();
+	    if (m_progress->wasOperationCancelled()) {
 		throw std::string("Action cancelled");
 	    }
 	}

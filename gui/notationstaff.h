@@ -28,11 +28,10 @@
 #include "notationelement.h"
 #include "linedstaff.h"
 
-namespace Rosegarden { class Quantizer; }
+namespace Rosegarden { class Quantizer; class Progress; }
 
 class QCanvasSimpleSprite;
 class NotationProperties;
-class RosegardenProgressDialog;
 
 
 /**
@@ -238,8 +237,8 @@ public:
      */
     virtual bool wrapEvent(Rosegarden::Event *);
 
-    void setProgressDialog(RosegardenProgressDialog *dialog) {
-	m_progressDlg = dialog;
+    void setProgressReporter(Rosegarden::Progress *progress) {
+	m_progress = progress;
     }
 
 protected:
@@ -323,7 +322,7 @@ protected:
     QCanvasSimpleSprite *m_staffName;
     Rosegarden::Quantizer *m_legatoQuantizer;
     const NotationProperties &m_properties;
-    RosegardenProgressDialog *m_progressDlg;
+    Rosegarden::Progress *m_progress;
     bool m_colourQuantize;
 };
 

@@ -21,6 +21,7 @@
 #define _PROGRESS_H_
 
 #include <iostream>
+#include <string>
 
 // An abstract progress framework.  Inherited by gui progress counting
 // components this allows base/ or sound/ to interract without direct
@@ -40,10 +41,20 @@ public:
     int getMax() { return m_max; }
     int getValue() { return m_value; }
 
+    // Set the name of the current operation
+    //
+    virtual void setOperationName(std::string) = 0;
+
     // Set the progress bar value - we have to use unusual naming
     // here to avoid clashes in future.
     //
     virtual void setCompleted(int value) = 0;
+
+    // Add to the progress 
+    //
+    virtual void incrementCompletion(int value) {
+	setCompleted(value + m_value);
+    }
 
     // Process GUI events
     //
@@ -52,6 +63,10 @@ public:
     // Kill this progress instance
     //
     virtual void destroy() = 0;
+
+    // Return true if the operation has been cancelled
+    //
+    virtual bool wasOperationCancelled() { return false; }
     
 protected:
     int m_max;

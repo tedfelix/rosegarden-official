@@ -31,6 +31,7 @@
 #include "widgets.h"
 #include "Quantizer.h"
 #include "Composition.h"
+#include "Progress.h"
 #include "SegmentNotationHelper.h"
 
 #include <cmath> // for fabs()
@@ -71,7 +72,7 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     m_npf(npf),
     m_legatoQuantizer(legatoQuantizer),
     m_properties(properties),
-    m_progressDlg(0),
+    m_progress(0),
     m_staffCount(0)
 {
 //    NOTATION_DEBUG << "NotationHLayout::NotationHLayout()" << endl;
@@ -466,11 +467,11 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 			   actualBarEnd - barTimes.first);
 	}
 
-	if (m_progressDlg && (endTime > startTime)) {
-	    m_progressDlg->setCompleted
+	if (m_progress && (endTime > startTime)) {
+	    m_progress->setCompleted
 		((barTimes.second - startTime) * 95 / (endTime - startTime));
-	    m_progressDlg->processEvents();
-	    if (m_progressDlg->wasCancelled()) {
+	    m_progress->processEvents();
+	    if (m_progress->wasOperationCancelled()) {
 		throw std::string("Action cancelled");
 	    }
 	}
@@ -1046,12 +1047,12 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
     for (BarDataMap::iterator i(m_barData.begin());
 	 i != m_barData.end(); ++i) {
 	
-	if (m_progressDlg) {
+	if (m_progress) {
 
-	    m_progressDlg->setCompleted(100 * staffNo / m_barData.size());
+	    m_progress->setCompleted(100 * staffNo / m_barData.size());
 
-	    m_progressDlg->processEvents();
-	    if (m_progressDlg->wasCancelled()) {
+	    m_progress->processEvents();
+	    if (m_progress->wasOperationCancelled()) {
 		throw std::string("Action cancelled");
 	    }
 
@@ -1264,16 +1265,16 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             x += delta;
 	    
-	    if (m_progressDlg && m_timePerProgressIncrement > 0) {
+	    if (m_progress && m_timePerProgressIncrement > 0) {
 		timeT sinceIncrement = el->getAbsoluteTime() - lastIncrement;
 		if (sinceIncrement > m_timePerProgressIncrement) {
-		    m_progressDlg->incrementCompletion
+		    m_progress->incrementCompletion
 			(sinceIncrement / m_timePerProgressIncrement);
 		    lastIncrement +=
 			(sinceIncrement / m_timePerProgressIncrement)
 			* m_timePerProgressIncrement;
-		    m_progressDlg->processEvents();
-		    if (m_progressDlg->wasCancelled()) {
+		    m_progress->processEvents();
+		    if (m_progress->wasOperationCancelled()) {
 			throw std::string("Action cancelled");
 		    }
 		}

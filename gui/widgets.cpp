@@ -30,6 +30,7 @@
 
 #include "widgets.h"
 #include "rosedebug.h"
+#include "rosestrings.h"
 
 void
 RosegardenComboBox::wheelEvent(QWheelEvent *e)
@@ -180,17 +181,17 @@ RosegardenProgressDialog::RosegardenProgressDialog(
                 QWidget *creator,
                 const char *name,
                 bool modal,
-                WFlags f):
-        QProgressDialog(labelText,
-                        cancelButtonText,
-                        totalSteps,
-                        creator,
-                        name,
-                        modal,
-                        f | WDestructiveClose),
-        Rosegarden::Progress(100), // default to percent
-        m_firstTimeout(true),
-	m_shown(false)
+                WFlags f) :
+    QProgressDialog(labelText,
+		    cancelButtonText,
+		    totalSteps,
+		    creator,
+		    name,
+		    modal,
+		    f | WDestructiveClose),
+    Rosegarden::Progress(totalSteps),
+    m_firstTimeout(true),
+    m_shown(false)
 {
     setCaption(i18n("Processing..."));
     QTimer::singleShot(700, this, SLOT(slotTimerElapsed()));
@@ -208,6 +209,12 @@ RosegardenProgressDialog::~RosegardenProgressDialog()
 }
 
 void
+RosegardenProgressDialog::setOperationName(std::string name)
+{
+    setLabelText(strtoqstr(name));
+}
+
+void
 RosegardenProgressDialog::setCompleted(int value)
 {
     if (value > m_max)
@@ -216,12 +223,6 @@ RosegardenProgressDialog::setCompleted(int value)
 	m_value = value; //???
 
     if (m_shown) setProgress(value);
-}
-
-void
-RosegardenProgressDialog::incrementCompletion(int value)
-{
-    setCompleted(m_value + value);
 }
 
 void
@@ -262,5 +263,41 @@ RosegardenProgressDialog::destroy()
 {
     QApplication::restoreOverrideCursor();
     close();
+}
+
+RosegardenProgressBar::RosegardenProgressBar(int totalSteps,
+					     QWidget *creator,
+					     const char *name,
+					     WFlags f) :
+    QProgressBar(totalSteps, creator, name, f),
+    Rosegarden::Progress(totalSteps)
+{
+}
+
+RosegardenProgressBar::~RosegardenProgressBar()
+{
+}
+
+void
+RosegardenProgressBar::setCompleted(int value)
+{
+    if (value > m_max)
+        m_value = m_max;
+    else
+	m_value = value; //???
+
+    setProgress(value);
+}    
+
+void
+RosegardenProgressBar::processEvents()
+{
+    kapp->processEvents(50);
+}
+
+void
+RosegardenProgressBar::destroy()
+{
+    setCompleted(0);
 }
 

@@ -39,7 +39,7 @@
 class QLabel;
 class QCanvasItem;
 class KActionMenu;
-namespace Rosegarden { class Segment; class EventSelection; class MappedEvent; }
+namespace Rosegarden { class Progress; class Segment; class EventSelection; class MappedEvent; }
 class RosegardenGUIDoc;
 class NotationTool;
 class NotationToolBox;
@@ -49,6 +49,7 @@ class NoteActionData;
 class MarkActionData;
 class ChordNameRuler;
 class RosegardenProgressDialog;
+class RosegardenProgressBar;
 
 /**
  * NotationView is a view for one or more Staff objects, each of
@@ -595,6 +596,9 @@ protected:
 
     Rosegarden::Quantizer *m_legatoQuantizer;
 
+    /// Displayed in the status bar, shows progress of current operation
+    RosegardenProgressBar *m_progressBar;
+
     /// Displayed in the status bar, holds the pixmap of the current note
     QLabel* m_currentNotePixmap;
 
@@ -653,7 +657,7 @@ protected:
     ZoomSlider<int> *m_smoothingSlider;
     KActionMenu *m_fontSizeActionMenu;
 
-    RosegardenProgressDialog *m_progressDlg;
+    Rosegarden::Progress *m_progress;
     bool m_inhibitRefresh;
     bool m_documentDestroyed;
     bool m_ok;

@@ -35,7 +35,7 @@
 class NotationProperties;
 class NotationGroup;
 class Chord;
-class RosegardenProgressDialog;
+namespace Rosegarden { class Progress; }
 
 /**
  * Horizontal notation layout
@@ -173,8 +173,8 @@ public:
     virtual Rosegarden::Event *getTimeSignaturePosition
     (StaffType &staff, int barNo, double &timeSigX);
 
-    void setProgressDialog(RosegardenProgressDialog *dialog) {
-	m_progressDlg = dialog;
+    void setProgressReporter(Rosegarden::Progress *progress) {
+	m_progress = progress;
     }
 
     /// purely optional, used only for progress reporting
@@ -371,7 +371,7 @@ protected:
 
     Rosegarden::Quantizer *m_legatoQuantizer;
     const NotationProperties &m_properties;
-    RosegardenProgressDialog *m_progressDlg;
+    Rosegarden::Progress *m_progress;
     int m_timePerProgressIncrement;
     int m_staffCount; // purely for progress reporting
 };

@@ -36,6 +36,7 @@
 #include "NotationTypes.h"
 #include "Quantizer.h"
 #include "Selection.h"
+#include "Progress.h"
 
 #include "Profiler.h"
 
@@ -178,7 +179,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_spacingSlider(0),
     m_smoothingSlider(0),
     m_fontSizeActionMenu(0),
-    m_progressDlg(0),
+    m_progress(0),
     m_inhibitRefresh(true),
     m_documentDestroyed(false),
     m_ok(false)
@@ -261,14 +262,15 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     if (showProgressive) {
 	show();
-	m_progressDlg = new RosegardenProgressDialog
+	RosegardenProgressDialog *progressDlg = new RosegardenProgressDialog
 	    (i18n("Starting..."), i18n("Cancel"), 100, this,
 	     i18n("Notation progress"), true);
-	m_progressDlg->setAutoClose(false);
+	progressDlg->setAutoClose(false);
+	m_progress = progressDlg;
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->setProgressDialog(m_progressDlg);
+	    m_staffs[i]->setProgressReporter(m_progress);
 	}
-	m_progressDlg->hide();
+	progressDlg->hide();
     }
 
     m_chordNameRuler->setComposition(&doc->getComposition());
@@ -304,10 +306,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     }
 
     if (showProgressive) {
-	delete m_progressDlg;
-	m_progressDlg = 0;
+	delete m_progress;
+	m_progress = 0;
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->setProgressDialog(0);
+	    m_staffs[i]->setProgressReporter(0);
 	}
     }
 
@@ -1124,7 +1126,7 @@ void NotationView::initFontToolbar()
 void NotationView::initStatusBar()
 {
     KStatusBar* sb = statusBar();
-    
+
     m_currentNotePixmap       = new QLabel(sb);
     m_hoveredOverNoteName     = new QLabel(sb);
     m_hoveredOverAbsoluteTime = new QLabel(sb);
@@ -1141,6 +1143,9 @@ void NotationView::initStatusBar()
                    KTmpStatusMsg::getDefaultId(), 1);
     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(), 
                          AlignLeft | AlignVCenter);
+
+    m_progressBar = new RosegardenProgressBar(100, sb);
+    sb->addWidget(m_progressBar);
 }
 
 QSize NotationView::getViewSize()
@@ -1206,10 +1211,10 @@ NotationView::paintEvent(QPaintEvent *e)
 
 bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 {
-    if (m_progressDlg) {
-	m_progressDlg->setLabelText(i18n("Laying out score..."));
-	m_progressDlg->processEvents();
-	m_hlayout.setProgressDialog(m_progressDlg);
+    if (m_progress) {
+	m_progress->setOperationName(qstrtostr(i18n("Laying out score...")));
+	m_progress->processEvents();
+	m_hlayout.setProgressReporter(m_progress);
 	m_hlayout.setStaffCount(m_staffs.size());
     }
 
@@ -1220,9 +1225,9 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 
         if (staffNo >= 0 && (int)i != staffNo) continue;
 
-	if (m_progressDlg) {
-	    m_progressDlg->setLabelText
-		(i18n("Laying out staff %1...").arg(i + 1));
+	if (m_progress) {
+	    m_progress->setOperationName
+		(qstrtostr(i18n("Laying out staff %1...").arg(i + 1)));
 	}
 
         m_hlayout.resetStaff(*m_staffs[i], startTime, endTime);
@@ -1231,13 +1236,13 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
         m_vlayout.scanStaff(*m_staffs[i], startTime, endTime);
     }
 
-    if (m_progressDlg) {
-	m_progressDlg->setLabelText(i18n("Reconciling staffs..."));
+    if (m_progress) {
+	m_progress->setOperationName(qstrtostr(i18n("Reconciling staffs...")));
     }
 
     m_hlayout.finishLayout(startTime, endTime);
     m_vlayout.finishLayout(startTime, endTime);
-    m_hlayout.setProgressDialog(0);
+    m_hlayout.setProgressReporter(0);
 
     // find the last finishing staff for future use
 
@@ -1477,14 +1482,17 @@ void NotationView::refreshSegment(Segment *segment,
 
     bool ownProgressDlg = false;
 
-    if (!m_progressDlg) {
-	m_progressDlg = new RosegardenProgressDialog
+    if (!m_progress) {
+/*!!!
+	m_progress = new RosegardenProgressDialog
 	    (i18n("Updating..."), 0, 100, this,
 	     i18n("Notation progress"), true);
-	m_progressDlg->setAutoClose(false);
+	m_progress->setAutoClose(false);
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->setProgressDialog(m_progressDlg);
+	    m_staffs[i]->setProgressReporter(m_progress);
 	}
+*/
+	m_progress = m_progressBar;
 	ownProgressDlg = true;
     }
 
@@ -1530,10 +1538,10 @@ void NotationView::refreshSegment(Segment *segment,
 
     PixmapArrayGC::deleteAll();
     if (ownProgressDlg) {
-	delete m_progressDlg;
-	m_progressDlg = 0;
+//!!!   delete m_progress;
+	m_progress = 0;
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->setProgressDialog(0);
+	    m_staffs[i]->setProgressReporter(0);
 	}
     }	
 
@@ -1549,9 +1557,9 @@ void NotationView::refreshSegment(Segment *segment,
 
 #define UPDATE_PROGRESS(n) \
 	progressCount += (n); \
-	if (m_progressDlg && (progressTotal > 0)) { \
-	    m_progressDlg->setCompleted(progressCount * 100 / progressTotal); \
-	    m_progressDlg->processEvents(); \
+	if (m_progress && (progressTotal > 0)) { \
+	    m_progress->setCompleted(progressCount * 100 / progressTotal); \
+	    m_progress->processEvents(); \
 	}
 
 void NotationView::readjustCanvasSize()
@@ -1561,9 +1569,10 @@ void NotationView::readjustCanvasSize()
     double maxWidth = 0.0;
     int maxHeight = 0;
 
-    if (m_progressDlg) {
-	m_progressDlg->setLabelText(i18n("Sizing and allocating canvas..."));
-	m_progressDlg->processEvents();
+    if (m_progress) {
+	m_progress->setOperationName
+	    (qstrtostr(i18n("Sizing and allocating canvas...")));
+	m_progress->processEvents();
     }
 
     int progressTotal = m_staffs.size() + 2;
