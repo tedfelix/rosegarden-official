@@ -57,7 +57,7 @@ using Rosegarden::Quantizer;
 
 
 SimpleTextDialog::SimpleTextDialog(QWidget *parent, int maxLength) :
-    KDialogBase(parent, 0, true, i18n("Text"), Ok | Cancel)
+    KDialogBase(parent, "", true, i18n("Text"), Ok | Cancel)
 {
     QHBox *w = makeHBoxMainWidget();
     new QLabel(i18n("Text:"), w);
@@ -90,7 +90,7 @@ public:
 TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 					 Rosegarden::TimeSignature sig,
 					 int barNo, bool atStartOfBar) :
-    KDialogBase(parent, 0, true, i18n("Time Signature"), Ok | Cancel),
+    KDialogBase(parent, "", true, i18n("Time Signature"), Ok | Cancel),
     m_timeSignature(sig),
     m_commonTimeButton(0),
     m_hideSignatureButton(0),
@@ -292,7 +292,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 				       Rosegarden::Key defaultKey,
 				       bool showApplyToAll,
 				       bool showConversionOptions) :
-    KDialogBase(parent, 0, true, i18n("Key Change"), Ok | Cancel),
+    KDialogBase(parent, "", true, i18n("Key Change"), Ok | Cancel),
     m_notePixmapFactory(npf),
     m_key(defaultKey),
     m_clef(clef),
@@ -573,7 +573,7 @@ KeySignatureDialog::getKeyName(const QString &s, bool minor)
 
 PasteNotationDialog::PasteNotationDialog(QWidget *parent,
 					 PasteEventsCommand::PasteType defaultType) :
-    KDialogBase(parent, 0, true, i18n("Paste"), Ok | Cancel),
+    KDialogBase(parent, "", true, i18n("Paste"), Ok | Cancel),
     m_defaultType(defaultType)
 {
     QVBox *vbox = makeVBoxMainWidget();
@@ -658,7 +658,7 @@ PasteNotationDialog::slotPasteTypeChanged()
 
 TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 			   timeT maxDuration) :
-    KDialogBase(parent, 0, true, i18n("Tuplet"), Ok | Cancel),
+    KDialogBase(parent, "", true, i18n("Tuplet"), Ok | Cancel),
     m_maxDuration(maxDuration)
 {
     QVBox *vbox = makeVBoxMainWidget();
@@ -928,7 +928,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 				 NotePixmapFactory *npf,
 				 Rosegarden::Text defaultText,
 				 int maxLength) :
-    KDialogBase(parent, 0, true, i18n("Text"), Ok | Cancel),
+    KDialogBase(parent, "", true, i18n("Text"), Ok | Cancel),
     m_notePixmapFactory(npf),
     m_styles(Rosegarden::Text::getUserStyles())
 {
@@ -1078,7 +1078,7 @@ EventEditDialog::EventEditDialog(QWidget *parent,
 				 NotePixmapFactory *npf,
 				 const Rosegarden::Event &event,
 				 bool editable) :
-    KDialogBase(parent, 0, true, i18n(editable ? "Edit Event" : "View Event"),
+    KDialogBase(parent, "", true, i18n(editable ? "Edit Event" : "View Event"),
 		(editable ? (Ok | Cancel) : Ok)),
     m_notePixmapFactory(npf),
     m_durationDisplay(0),
@@ -1535,7 +1535,7 @@ private:
 
 
 TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
-    KDialogBase(parent, 0, true, i18n("Tempo"), Ok | Cancel),
+    KDialogBase(parent, "", true, i18n("Tempo"), Ok | Cancel),
     m_doc(doc),
     m_tempoTime(0),
     m_tempoValue(0.0)
@@ -1792,7 +1792,7 @@ ClefDialog::ClefDialog(QWidget *parent,
 		       NotePixmapFactory *npf,
 		       Rosegarden::Clef defaultClef,
 		       bool showConversionOptions) :
-    KDialogBase(parent, 0, true, i18n("Clef"), Ok | Cancel),
+    KDialogBase(parent, "", true, i18n("Clef"), Ok | Cancel),
     m_notePixmapFactory(npf),
     m_clef(defaultClef)
 {
@@ -1915,7 +1915,7 @@ ClefDialog::redrawClefPixmap()
 QuantizeDialog::QuantizeDialog(QWidget *parent,
 			       std::string source,
 			       std::string target) :
-    KDialogBase(parent, 0, true, i18n("Quantize"), Ok | Cancel),
+    KDialogBase(parent, "", true, i18n("Quantize"), Ok | Cancel),
     m_source(source),
     m_target(target),
     m_standardQuantizations

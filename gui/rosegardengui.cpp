@@ -81,8 +81,8 @@ using Rosegarden::timeT;
 
 RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     : KMainWindow(0), RosegardenIface(this), DCOPObject("RosegardenIface"),
-      m_config(kapp->config()),
       m_actionsSetup(false),
+      m_config(kapp->config()),
       m_fileRecent(0),
       m_view(0),
       m_doc(0),
@@ -2532,9 +2532,11 @@ RosegardenGUIApp::slotAudioManager()
 {
     if (m_audioManagerDialog == 0)
     {
-        m_audioManagerDialog = new Rosegarden::AudioManagerDialog(this);
+        m_audioManagerDialog =
+            new Rosegarden::AudioManagerDialog(this,
+                                               &m_doc->getAudioFileManager());
 
-        connect(m_audioManagerDialog, SIGNAL(destroyed()),
+        connect(m_audioManagerDialog, SIGNAL(closeClicked()),
                 SLOT(slotAudioManagerClosed()));
         m_audioManagerDialog->show();
     }
@@ -2543,8 +2545,8 @@ RosegardenGUIApp::slotAudioManager()
 void
 RosegardenGUIApp::slotAudioManagerClosed()
 {
-    cout << "slotAudioManagerClosed::HERE" << endl;
-    m_audioManagerDialog = 0;
+    if (m_audioManagerDialog)
+        m_audioManagerDialog = 0;
 }
 
 
