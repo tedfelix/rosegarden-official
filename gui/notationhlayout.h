@@ -185,12 +185,22 @@ protected:
 
     typedef std::map<int, NotationElementList::iterator> TieMap;
 
+    //!!! hope to replace this with positionChord
     long positionNote
     (StaffType &staff, 
      const NotationElementList::iterator &, const BarDataList::iterator &,
      const Rosegarden::TimeSignature &, const Rosegarden::Clef &clef,
      const Rosegarden::Key &key, TieMap &,
      Rosegarden::Accidental &accidentalInThisChord);
+
+    // This modifies the NotationElementList::iterator passed to it,
+    // moving it on to the last note in the chord, and modifies the
+    // TieMap as well
+    long positionChord
+    (StaffType &staff, 
+     NotationElementList::iterator &, const BarDataList::iterator &,
+     const Rosegarden::TimeSignature &, const Rosegarden::Clef &clef,
+     const Rosegarden::Key &key, TieMap &);
 
     class AccidentalTable : public std::vector<Rosegarden::Accidental>
     {

@@ -69,6 +69,7 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_accidental(accidental),
     m_shifted(false),
     m_drawFlag(true),
+    m_drawStem(true),
     m_stemGoesUp(true),
     m_stemLength(-1),
     m_legerLines(0),
@@ -230,7 +231,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 	makeRoomForMarks(isStemmed, params);
     }
     
-    if (isStemmed) {
+    if (isStemmed && params.m_drawStem) {
         if (params.m_stemGoesUp) {
             m_above = std::max
                 (m_above, stemLength - m_noteBodyHeight/2);
@@ -332,7 +333,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 
     QPoint s0, s1;
 
-    if (isStemmed) {
+    if (isStemmed && params.m_drawStem) {
 
         s0.setY(m_above + m_noteBodyHeight/2);
 
@@ -413,7 +414,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
         }
     }
 
-    if (isStemmed) {
+    if (isStemmed && params.m_drawStem) {
         unsigned int thickness;
         m_font->getStemThickness(thickness);
         for (unsigned int i = 0; i < thickness; ++i) {

@@ -45,6 +45,7 @@ public:
     
     void setNoteHeadShifted(bool shifted) { m_shifted          = shifted;   }
     void setDrawFlag(bool df)             { m_drawFlag         = df;        }
+    void setDrawStem(bool ds)             { m_drawStem         = ds;        }
     void setStemGoesUp(bool up)           { m_stemGoesUp       = up;        }
     void setStemLength(int length)        { m_stemLength       = length;    }
     void setLegerLines(int lines)         { m_legerLines       = lines;     }
@@ -82,6 +83,7 @@ private:
 
     bool    m_shifted;
     bool    m_drawFlag;
+    bool    m_drawStem;
     bool    m_stemGoesUp;
     int     m_stemLength;
     int     m_legerLines;

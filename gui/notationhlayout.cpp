@@ -214,10 +214,7 @@ NotationHLayout::scanStaff(StaffType &staff)
     TimeSignature timeSignature;
 
     barList.clear();
-/*!!!
-    Segment::iterator refStart = t.findBarAt(t.getStartIndex());
-    Segment::iterator refEnd = t.findBarAfter(t.getEndIndex());
-*/
+
     Segment::iterator refStart = timeRef->findTime(t.getStartIndex());
     Segment::iterator refEnd = timeRef->findTime(t.getEndIndex());
     if (refEnd != timeRef->end()) ++refEnd;
@@ -321,8 +318,6 @@ NotationHLayout::scanStaff(StaffType &staff)
 
                     el->event()->setMaybe<Int>(HEIGHT_ON_STAFF, h);
                     el->event()->setMaybe<String>(CALCULATED_ACCIDENTAL, acc);
-//!!!                    el->event()->setMaybe<String>
-//                        (NOTE_NAME, p.getAsString(clef, key));
 
                     // update display acc for note according to the
                     // accTable (accidentals in force when the last
@@ -667,13 +662,13 @@ NotationHLayout::layout(BarDataMap::iterator i)
 	    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): there's a time sig in this bar" << endl;
 	}
 
-        Accidental accidentalInThisChord = NoAccidental;
+//!!!        Accidental accidentalInThisChord = NoAccidental;
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
             
             NotationElement *el = (*it);
             el->setLayoutX(x);
-//            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): setting element's x to " << x << endl;
+            kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): setting element's x to " << x << endl;
 
             long delta = el->event()->get<Int>(MIN_WIDTH);
 
@@ -688,10 +683,13 @@ NotationHLayout::layout(BarDataMap::iterator i)
 	    }
 
 	    if (el->isNote()) {
-
+/*!!!
 		delta = positionNote
 		    (staff, it, bdi, timeSignature, clef, key, tieMap,
 		     accidentalInThisChord);
+*/
+		delta = positionChord
+		    (staff, it, bdi, timeSignature, clef, key, tieMap);
 
 	    } else if (el->isRest()) {
 
@@ -900,6 +898,159 @@ NotationHLayout::positionNote(StaffType &staff,
         group.applyTuplingLine(notationStaff);
     }
     
+    return delta;
+}
+
+
+long
+NotationHLayout::positionChord(StaffType &staff,
+                               NotationElementList::iterator &itr,
+			       const BarDataList::iterator &bdi,
+			       const TimeSignature &timeSignature,
+			       const Clef &clef, const Key &key,
+			       TieMap &tieMap)
+{
+    Chord chord(*staff.getViewElementList(), itr, clef, key);
+    double baseX = (*itr)->getLayoutX();
+
+    // To work out how much space to allot a note (or chord), start
+    // with the amount alloted to the whole bar, subtract that
+    // reserved for fixed-width items, and take the same proportion of
+    // the remainder as our duration is of the whole bar's duration.
+    // We use the shortest note in the chord, should the durations vary
+                    
+    long delta = ((bdi->idealWidth - bdi->fixedWidth) *
+                  (*chord.getShortestElement())->event()->getDuration()) /
+        //!!! not right for partial bar?
+        timeSignature.getBarDuration();
+
+    int noteWidth = m_npf.getNoteBodyWidth();
+
+    // If the chord's allowed a lot of space, situate it somewhat
+    // further into its allotted space.  Not convinced this is always
+    // the right thing to do.
+
+    if (delta > 2 * noteWidth) {
+        int shift = (delta - 2 * noteWidth) / 5;
+	baseX += std::min(shift, (m_npf.getNoteBodyWidth() * 3 / 2));
+    }
+
+    // Find out whether the chord contains any accidentals, and if so,
+    // make space, and also shift the notes' positions right somewhat.
+    // (notepixmapfactory quite reasonably places the hot spot at the
+    // start of the note head, not at the start of the whole pixmap.)
+    // Also use this loop to check for beamed-group information.
+
+    unsigned int i;
+    int accWidth = 0;
+    long groupId = -1;
+
+    for (i = 0; i < chord.size(); ++i) {
+
+	NotationElement *note = *(chord[i]);
+	if (!note->isNote()) continue;
+
+	Accidental acc = NoAccidental;
+	if (note->event()->get<String>(DISPLAY_ACCIDENTAL, acc) &&
+	    acc != NoAccidental) {
+            accWidth = std::max(accWidth, m_npf.getAccidentalWidth(acc));
+	}
+
+	if (groupId != -2) {
+	    long myGroupId = -1;
+	    if (note->event()->get<Int>(BEAMED_GROUP_ID, myGroupId) &&
+		(groupId == -1 || myGroupId == groupId)) {
+		groupId = myGroupId;
+	    } else {
+		groupId = -2; // not all note-heads think they're in the group
+	    }
+	}
+    }
+
+    baseX += accWidth;
+    delta += accWidth;
+
+    // Cope with the presence of shifted note-heads
+
+    bool shifted = chord.hasNoteHeadShifted();
+
+    if (shifted) {
+	if (delta < noteWidth * 2) delta = noteWidth * 2;
+	if (!chord.hasStemUp()) baseX += noteWidth;
+    }
+
+    // Check for any ties going back, and if so work out how long it
+    // must have been and assign accordingly.
+
+    for (i = 0; i < chord.size(); ++i) {
+
+	NotationElement *note = *(chord[i]);
+	if (!note->isNote()) continue;
+
+	bool tiedForwards = false;
+	bool tiedBack = false;
+
+	note->event()->get<Bool>(TIED_FORWARD,  tiedForwards);
+	note->event()->get<Bool>(TIED_BACKWARD, tiedBack);
+
+	int pitch = note->event()->get<Int>(PITCH);
+	if (tiedForwards) {
+	    note->event()->setMaybe<Int>(TIE_LENGTH, 0);
+	    tieMap[pitch] = itr;
+	} else {
+	    note->event()->unset(TIE_LENGTH);
+	}
+
+	if (tiedBack) {
+	    TieMap::iterator ti(tieMap.find(pitch));
+
+	    if (ti != tieMap.end()) {
+		NotationElementList::iterator otherItr(ti->second);
+		
+		if ((*otherItr)->getAbsoluteTime() +
+		    (*otherItr)->getDuration() ==
+		    note->getAbsoluteTime()) {
+		    
+		    (*otherItr)->event()->setMaybe<Int>
+			(TIE_LENGTH,
+			 (int)(baseX - (*otherItr)->getLayoutX()));
+		    
+		} else {
+		    tieMap.erase(pitch);
+		}
+	    }
+	}
+    }
+
+    // Now set the positions of all the notes in the chord.  We don't
+    // need to shift the positions of shifted notes, because that will
+    // be taken into account when making their pixmaps later (in
+    // NotationStaff::makeNoteSprite / NotePixmapFactory::makeNotePixmap).
+
+    for (i = 0; i < chord.size(); ++i) {
+	(*(chord[i]))->setLayoutX(baseX);
+    }
+
+    itr = chord.getFinalElement();
+    if (groupId < 0) return delta;
+
+    // Finally set the beam data
+
+    long nextGroupId = -1;
+    NotationElementList::iterator scooter(itr);
+    ++scooter;
+
+    if (scooter == staff.getViewElementList()->end() ||
+	!(*scooter)->event()->get<Int>(BEAMED_GROUP_ID, nextGroupId) ||
+	nextGroupId != groupId) {
+	
+	//!!! not very nice
+	NotationStaff &notationStaff = dynamic_cast<NotationStaff &>(staff);
+	NotationGroup group(*staff.getViewElementList(), itr, clef, key);
+	group.applyBeam(notationStaff);
+	group.applyTuplingLine(notationStaff);
+    }
+
     return delta;
 }
 

@@ -121,8 +121,10 @@ class Chord : public NotationSet,
               public std::vector<NotationElementList::iterator>
 {
 public:
-    /* You need to provide the clef and key if the notes
-       making up your chord lack HEIGHT_ON_STAFF properties */
+    /* You only need to provide the clef and key if the notes
+       making up your chord lack HEIGHT_ON_STAFF properties, in
+       which case this constructor will write those properties
+       in to the chord for you */
     Chord(const NotationElementList &nel, NELIterator elementInChord,
           const Rosegarden::Clef &clef = Rosegarden::Clef::DefaultClef,
           const Rosegarden::Key &key = Rosegarden::Key::DefaultKey);
@@ -138,7 +140,6 @@ public:
 
     virtual bool hasStem() const;
     virtual bool hasStemUp() const;
-    virtual bool hasShiftedNoteHeads() const;
     virtual bool hasNoteHeadShifted() const;
     virtual bool isNoteHeadShifted(const NELIterator &itr) const;
     virtual std::vector<Rosegarden::Mark> getMarksForChord() const;

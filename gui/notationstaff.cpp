@@ -699,9 +699,10 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     params.setAccidental(accidental);
     params.setNoteHeadShifted(shifted);
     params.setDrawFlag(flag);
+    params.setDrawStem(true);
     params.setStemGoesUp(up);
     params.setLegerLines(legerLines);
-    params.setBeamed(beamed);
+    params.setBeamed(false);
     params.setIsOnLine(heightOnStaff % 2 == 0);
     params.removeMarks();
 
@@ -721,7 +722,7 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 	}
     }
 
-    long tieLength;
+    long tieLength = 0;
     (void)(elt->event()->get<Int>(TIE_LENGTH, tieLength));
     if (tieLength > 0) {
         params.setTied(true);
@@ -752,6 +753,7 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
             (void)elt->event()->get<Bool>
                 (BEAM_NEXT_PART_BEAMS, nextPartialBeams);
 
+	    params.setBeamed(true);
             params.setNextBeamCount(nextBeamCount);
             params.setThisPartialBeams(thisPartialBeams);
             params.setNextPartialBeams(nextPartialBeams);
@@ -760,9 +762,11 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 
         } else {
             params.setBeamed(false);
+            params.setDrawStem(false);
         }
     }
     
+    params.setStemLength(stemLength);
     params.setTupledCount(0);
     long tuplingLineY = 0;
     bool tupled = (elt->event()->get<Int>(TUPLING_LINE_MY_Y, tuplingLineY));
@@ -782,7 +786,6 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 	}
     }
 
-    params.setStemLength(stemLength);
     QCanvasPixmap notePixmap(m_npf->makeNotePixmap(params));
     return new QCanvasNotationSprite(*elt,
                                      new QCanvasPixmap(notePixmap), canvas());

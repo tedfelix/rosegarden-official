@@ -112,9 +112,9 @@ Basis for later features
     for this version, and possibly higher than any other printing
     method too)
 
-7.  NIFF I/O?  (It'd be nice to get independent contributors to
-    work on Lilypond and NIFF I/O -- although I can imagine doing
-    the basic Lilypond stuff myself if need be)
+7.  NIFF I/O?  Or MusicXML may be more productive.  (It'd be nice to
+    get independent contributors to work on I/O -- although I can
+    imagine doing the basic Lilypond stuff myself if need be)
 
 8.  Brahms file I/O -- I'd ideally like to see export as well as
     import, if only as a matter of goodwill.  The Brahms file

@@ -192,7 +192,8 @@ Chord::Chord(const NotationElementList &nel, NELIterator i,
         std::stable_sort(begin(), end(), PitchGreater());
     }
 
-    kdDebug(KDEBUG_AREA) << "Chord::Chord: pitches are:" << endl;
+//!!! this should all be removed ultimately
+//    kdDebug(KDEBUG_AREA) << "Chord::Chord: pitches are:" << endl;
     int prevPitch = -999;
     for (unsigned int i = 0; i < size(); ++i) {
         try {
@@ -228,12 +229,16 @@ void Chord::sample(const NELIterator &i)
 int
 Chord::height(const NELIterator &i) const
 {
+    //!!! We use HEIGHT_ON_STAFF in preference to the passed clef/key,
+    //but what if the clef/key changed since HEIGHT_ON_STAFF was
+    //written?  Who updates the properties then?  Check this.
+
     long h;
     if ((*i)->event()->get<Int>(HEIGHT_ON_STAFF, h)) return h;
     int pitch = (*i)->event()->get<Int>(PITCH);
     Rosegarden::NotationDisplayPitch p(pitch, m_clef, m_key);
     h = p.getHeightOnStaff();
-    // not setMaybe, as we know the property is absent:
+    // set non-persistent, not setMaybe, as we know the property is absent:
     (*i)->event()->set<Int>(HEIGHT_ON_STAFF, h, false);
     return h;
 }
@@ -268,17 +273,6 @@ bool Chord::hasStemUp() const
     } else return true;
 }
 
-bool Chord::hasShiftedNoteHeads() const
-{
-    int prevH = 10000;
-    for (unsigned int i = 0; i < size(); ++i) {
-        int h = height((*this)[i]);
-        if (h == prevH + 1) return true;
-        prevH = h;
-    }
-    return false;
-}
-
 bool Chord::contains(const NELIterator &itr) const
 {
     for (const_iterator i = begin(); i != end(); ++i) {
@@ -289,7 +283,7 @@ bool Chord::contains(const NELIterator &itr) const
 
 bool Chord::hasNoteHeadShifted() const
 {
-    int ph = 999;
+    int ph = 10000;
 
     for (unsigned int i = 0; i < size(); ++i) {
         int h = height((*this)[i]);
