@@ -68,7 +68,7 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_fileRecent(0),
       m_view(0),
       m_doc(0),
-      m_playbackLatency(0, 200000),
+      m_playbackLatency(0, 300000),
       m_fetchLatency(0, 100000),
       m_transportStatus(STOPPED),
       m_sequencerProcess(0)
