@@ -33,12 +33,13 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
       m_notationView(0)
 {
     new QLabel("environment view here", this);
-    m_notationView = new NotationView(getDocument(), 0);
 
-    QObject::connect(m_notationView, SIGNAL(closed()),
-                     this, SLOT(notationViewClosed()));
+    if (getDocument()) {
+        
+        m_notationView = new NotationView(getDocument(), this);
 
-    m_notationView->show();
+        m_notationView->show();
+    }
 }
 
 
