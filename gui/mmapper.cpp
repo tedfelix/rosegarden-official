@@ -763,6 +763,26 @@ void AudioSegmentMmapper::dump()
                                                  audioStart);
         mE->setTrackId(track->getId());
         mE->setRuntimeSegmentId(m_segment->getRuntimeId());
+
+        // Send the autofade if required
+        //
+        if (m_segment->isAutoFading())
+        {
+            mE->setAutoFade(true);
+            mE->setFadeInTime(m_segment->getFadeInTime());
+            mE->setFadeOutTime(m_segment->getFadeOutTime());
+            std::cout << "AudioSegmentMmapper::dump - "
+                      << "SETTING AUTOFADE "
+                      << "in = " << m_segment->getFadeInTime()
+                      << ", out = " << m_segment->getFadeOutTime()
+                      << std::endl;
+        }
+        else
+        {
+            std::cout << "AudioSegmentMmapper::dump - "
+                      << "NO AUTOFADE SET ON SEGMENT" << std::endl;
+        }
+
         ++bufPos;
     }
 

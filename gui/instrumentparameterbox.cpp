@@ -472,7 +472,7 @@ AudioInstrumentParameterPanel::slotPluginBypassed(Rosegarden::InstrumentId instr
         Rosegarden::AudioPlugin *pluginClass 
             = m_doc->getPluginManager()->getPlugin(
                     m_doc->getPluginManager()->
-                        getPositionByUniqueId(inst->getId()));
+                        getPositionByIdentifier(inst->getIdentifier().c_str()));
 
         /// Set the colour on the button
         //
@@ -638,6 +638,8 @@ AudioInstrumentParameterPanel::setAudioMeter(float dBleft, float dBright)
 void
 AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 {
+    blockSignals(true);
+
     m_selectedInstrument = instrument;
 
     m_instrumentLabel->setText(strtoqstr(instrument->getName()));
@@ -658,7 +660,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
             Rosegarden::AudioPlugin *pluginClass 
                 = m_doc->getPluginManager()->getPlugin(
                         m_doc->getPluginManager()->
-                            getPositionByUniqueId(inst->getId()));
+                            getPositionByIdentifier(inst->getIdentifier().c_str()));
 
             if (pluginClass)
             {
@@ -688,6 +690,8 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
     // Pan - adjusted backwards
     //
     m_audioFader->m_pan->setPosition(instrument->getPan() - 100);
+
+    blockSignals(false);
 }
 
 void
@@ -1027,7 +1031,10 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 		 smallStep,
 		 bigStep,
 		 it->getDefault(),
-		 20);
+		 20,
+		 RosegardenRotary::NoTicks,
+		 false,
+		 it->getDefault() == 64); //!!! hacky
 
 	    rotary->setKnobColour(knobColour);
 

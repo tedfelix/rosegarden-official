@@ -119,6 +119,8 @@ namespace RosegardenGUIColours
 
     extern const QColor RotaryPlugin;
 
+    extern const QColor RotaryMeter;
+
     extern const QColor MatrixKeyboardFocus;
 
     extern const QColor MarkerBackground;

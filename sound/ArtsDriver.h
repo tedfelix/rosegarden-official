@@ -67,6 +67,8 @@ public:
 
     virtual void processPending();
 
+    virtual bool areClocksRunning() const { return true; }
+
     // Not supported
     //
     virtual unsigned int getSampleRate() const { return 0; }

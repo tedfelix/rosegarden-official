@@ -100,6 +100,25 @@ SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
     return rS;
 }
 
+// Read a specified number of bytes into a buffer.
+//
+size_t
+SoundFile::getBytes(std::ifstream *file, char *buf, size_t n)
+{
+    if (!(*file)) {
+        std::cerr << "SoundFile::getBytes() -  stream is not well";
+	return 0;
+    }
+
+    if (file->eof()) {
+        file->clear();
+	return 0;
+    }
+    
+    file->read(buf, n);
+    return file->gcount();
+}
+
 // A buffered read based on the current file handle.
 //
 std::string

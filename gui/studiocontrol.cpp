@@ -137,6 +137,25 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
 bool
 StudioControl::setStudioObjectProperty(MappedObjectId id,
                         const MappedObjectProperty &property,
+                        const QString &value)
+{
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    // Use new MappedEvent interface
+    //
+    streamOut << id;
+    streamOut << property;
+    streamOut << value;
+
+    rgapp->sequencerSend("setMappedProperty(int, QString, QString)", data);
+
+    return true;
+}
+
+bool
+StudioControl::setStudioObjectProperty(MappedObjectId id,
+                        const MappedObjectProperty &property,
                         MappedObjectValueList value)
 {
     QByteArray data;
@@ -196,6 +215,32 @@ StudioControl::setStudioPluginPort(MappedObjectId pluginId,
     streamOut << value;
 
     rgapp->sequencerSend("setMappedPort(int, unsigned long int, float)", data);
+}
+
+
+MappedObjectPropertyList
+StudioControl::getPluginInformation()
+{
+    MappedObjectPropertyList list;
+
+    QByteArray data;
+    QCString replyType;
+    QByteArray replyData;
+
+    if (!rgapp->sequencerCall("getPluginInformation()",
+                              replyType, replyData, data))
+    {
+        SEQMAN_DEBUG << "getPluginInformation - "
+                     << "failed to contact Rosegarden sequencer"
+                     << endl;
+    }
+    else
+    {
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        streamIn >> list;
+    }
+
+    return list;
 }
 
 

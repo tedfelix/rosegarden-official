@@ -1279,6 +1279,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
             m_jackTransport->setCurrentItem(0);
     }
 
+    /*
     // MMC Transport
     //
     label = new QLabel(i18n("MMC transport mode"), frame);
@@ -1318,6 +1319,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     bool mtcMaster = m_cfg->readBoolEntry("mtcmaster", false);
 
     if (mtcMaster) m_mtcTransport->setCurrentItem(1);
+    */
 
     addTab(frame, i18n("Synchronisation"));
 }

@@ -74,6 +74,7 @@ public:
                   float initialValue);
  
     void setValue(float value);
+    float getValue() const;
 
     int getIndex() const { return m_index; }
 
@@ -121,6 +122,9 @@ public slots:
     void slotPluginSelected(int index);
     void slotPluginPortChanged(float value);
     void slotBypassChanged(bool);
+    void slotCopy();
+    void slotPaste();
+    void slotDefault();
 
 signals:
     void pluginSelected(Rosegarden::InstrumentId, int pluginIndex, int plugin);
@@ -152,6 +156,9 @@ protected:
     QLabel              *m_insOuts;
     QLabel              *m_pluginId;
     QCheckBox		*m_bypass;
+    QPushButton         *m_copyButton;
+    QPushButton         *m_pasteButton;
+    QPushButton         *m_defaultButton;
 
     std::vector<PluginControl*> m_pluginWidgets;
     QGridLayout         *m_gridLayout;

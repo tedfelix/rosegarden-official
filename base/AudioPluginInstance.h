@@ -42,6 +42,7 @@ public:
     {
     // Currently things will go wrong if these values differ
     // from the same constants in LADSPA.  That's bad.
+	//!!! no longer true
         Input    = 0x01,
         Output   = 0x02,
         Control  = 0x04,
@@ -57,7 +58,7 @@ public:
 	Logarithmic = 0x04
     } PortDisplayHint;
 
-    PluginPort(int id,
+    PluginPort(int number,
                std::string m_name,
                PortType type,
                PortDisplayHint displayHint,
@@ -65,7 +66,7 @@ public:
                PortData upperBound,
 	       PortData defaultValue);
 
-    int getId() const { return m_id; }
+    int getNumber() const { return m_number; }
     std::string getName() const { return m_name; }
     PortType getType() const { return m_type; }
     PortDisplayHint getDisplayHint() const { return m_displayHint; }
@@ -75,7 +76,7 @@ public:
 
 protected:
 
-    int             m_id;
+    int             m_number;
     std::string     m_name;
     PortType        m_type;
     PortDisplayHint m_displayHint;
@@ -87,11 +88,11 @@ protected:
 class PluginPortInstance
 {
 public:
-    PluginPortInstance(unsigned int i,
-                       float v):id(i), value(v) {;}
+    PluginPortInstance(unsigned int n,
+                       float v):number(n), value(v) {;}
 
-    unsigned int id;
-    PortData     value;
+    int number;
+    PortData value;
 };
 
 typedef std::vector<PluginPortInstance*>::iterator PortInstanceIterator;
@@ -100,11 +101,12 @@ class AudioPluginInstance : public XmlExportable
 {
 public:
     AudioPluginInstance(unsigned int position);
-    AudioPluginInstance(unsigned long id,
-                        unsigned int position);
 
-    void setId(unsigned long id) { m_id = id; }
-    unsigned long getId() const { return m_id; }
+    AudioPluginInstance(std::string identifier,
+			unsigned int position);
+
+    void setIdentifier(std::string identifier) { m_identifier = identifier; }
+    std::string getIdentifier() const { return m_identifier; }
 
     void setPosition(unsigned int position) { m_position = position; }
     unsigned int getPosition() const { return m_position; }
@@ -114,9 +116,9 @@ public:
 
     // Port management
     //
-    void addPort(unsigned int id, PortData value);
-    bool removePort(unsigned int id);
-    PluginPortInstance* getPort(unsigned int it);
+    void addPort(int number, PortData value);
+    bool removePort(int number);
+    PluginPortInstance* getPort(int number);
     void clearPorts();
 
     unsigned int getPortCount() const { return m_ports.size(); }
@@ -138,7 +140,7 @@ public:
 protected:
 
     int                                m_mappedId;
-    unsigned long                      m_id;
+    std::string                        m_identifier;
     std::vector<PluginPortInstance*>   m_ports;
     unsigned int                       m_position;
 

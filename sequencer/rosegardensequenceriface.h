@@ -234,6 +234,12 @@ public:
                                    const QString &property,
                                    float value) = 0;
 
+    // Set a string property on a MappedObject
+    //
+    virtual void setMappedProperty(int id,
+                                   const QString &property,
+                                   const QString &value) = 0;
+
     // Set a MappedObject to a property list
     //
     virtual void setMappedProperty(
@@ -249,6 +255,10 @@ public:
     //
     virtual std::vector<QString> getPropertyList(int id,
                                                  const QString &property) = 0;
+
+    // Get a list of properties of a certain type from an object
+    //
+    virtual std::vector<QString> getPluginInformation() = 0;
 
     // Cheat - we can't use a call (getPropertyList) during playback
     // so we use this method to set port N on plugin X.

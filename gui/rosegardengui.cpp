@@ -5492,8 +5492,10 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
 	if (inst->isAssigned())
 	{
 	    // unassign, destory and recreate
+/*
 	    std::cout << "MAPPED ID = " << inst->getMappedId() 
-		      << " for Instrument " << inst->getId() << std::endl;
+		      << " for Instrument " << inst->getIdentifier() << std::endl;
+*/
 	    
 	    RG_DEBUG << "RosegardenGUIApp::slotPluginSelected - "
 		     << "MappedObjectId = "
@@ -5504,8 +5506,8 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
 #ifdef HAVE_LADSPA
 	    Rosegarden::StudioControl::setStudioObjectProperty
 		(inst->getMappedId(),
-		 Rosegarden::MappedLADSPAPlugin::UniqueId,
-		 plgn->getUniqueId());
+		 Rosegarden::MappedPluginSlot::Identifier,
+		 plgn->getIdentifier());
 #endif
 	}
 	else
@@ -5513,7 +5515,7 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
 	    // create a studio object at the sequencer
 	    Rosegarden::MappedObjectId newId =
 		Rosegarden::StudioControl::createStudioObject
-		(Rosegarden::MappedObject::LADSPAPlugin);
+		(Rosegarden::MappedObject::PluginSlot);
 	    
 	    RG_DEBUG << "RosegardenGUIApp::slotPluginSelected - "
 		     << " new MappedObjectId = " << newId << endl;
@@ -5539,9 +5541,8 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
 	    // set the plugin id
 	    Rosegarden::StudioControl::setStudioObjectProperty
 		(newId,
-		 Rosegarden::MappedLADSPAPlugin::UniqueId,
-		 Rosegarden::MappedObjectValue(
-		     plgn->getUniqueId()));
+		 Rosegarden::MappedPluginSlot::Identifier,
+		     plgn->getIdentifier());
 #endif
 	}
     }
@@ -5608,7 +5609,7 @@ RosegardenGUIApp::slotPluginBypassed(Rosegarden::InstrumentId instrumentId,
 #ifdef HAVE_LADSPA
         Rosegarden::StudioControl::setStudioObjectProperty
             (inst->getMappedId(),
-             Rosegarden::MappedLADSPAPlugin::Bypassed,
+             Rosegarden::MappedPluginSlot::Bypassed,
              Rosegarden::MappedObjectValue(bp));
 #endif // HAVE_LADSPA
 

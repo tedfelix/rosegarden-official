@@ -114,6 +114,8 @@ namespace RosegardenGUIColours
 
     const QColor RotaryPlugin = QColor(185, 255, 248);
 
+    const QColor RotaryMeter = QColor(255, 100, 0);
+
     const QColor MarkerBackground = QColor(185, 255, 248);
 
 //    const QColor MuteTrackLED = QColor(218, 190, 230, QColor::Hsv);

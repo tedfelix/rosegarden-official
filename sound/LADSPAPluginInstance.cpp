@@ -31,15 +31,16 @@ namespace Rosegarden
 {
 
 
-LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
-                                           unsigned long ladspaId,
+LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
+					   Rosegarden::InstrumentId instrument,
+					   QString identifier,
                                            int position,
 					   unsigned long sampleRate,
 					   size_t bufferSize,
 					   int idealChannelCount,
-                                           const LADSPA_Descriptor* descriptor):
+                                           const LADSPA_Descriptor* descriptor) :
+    RunnablePluginInstance(factory, identifier),
     m_instrument(instrument),
-    m_ladspaId(ladspaId),
     m_position(position),
     m_instanceCount(0),
     m_descriptor(descriptor),
@@ -64,16 +65,17 @@ LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
     if (isOK()) connectPorts();
 }
 
-LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
-                                           unsigned long ladspaId,
+LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
+					   Rosegarden::InstrumentId instrument,
+					   QString identifier,
                                            int position,
 					   unsigned long sampleRate,
 					   size_t bufferSize,
 					   sample_t **inputBuffers,
 					   sample_t **outputBuffers,
-                                           const LADSPA_Descriptor* descriptor):
+                                           const LADSPA_Descriptor* descriptor) :
+    RunnablePluginInstance(factory, identifier),
     m_instrument(instrument),
-    m_ladspaId(ladspaId),
     m_position(position),
     m_instanceCount(0),
     m_descriptor(descriptor),
@@ -140,6 +142,8 @@ LADSPAPluginInstance::updateIdealChannelCount(unsigned long sampleRate, int chan
     if (m_audioPortsIn.size() != 1) return;
     if (channels == m_instanceCount) return;
 
+    //!!! don't we need to reallocate inputBuffers and outputBuffers?
+
     cleanup();
     m_instanceCount = channels;
     instantiate(sampleRate);
@@ -149,6 +153,8 @@ LADSPAPluginInstance::updateIdealChannelCount(unsigned long sampleRate, int chan
 
 LADSPAPluginInstance::~LADSPAPluginInstance()
 {
+    std::cerr << "LADSPAPluginInstance::~LADSPAPluginInstance" << std::endl;
+
     cleanup();
 
     for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i)

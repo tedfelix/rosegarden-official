@@ -27,9 +27,8 @@
 #include "MappedCommon.h"
 #include "Instrument.h"
 #include "Device.h"
-#include "Plugins.h"
 
-#include "AudioPluginInstance.h" // for PluginPort::PortDisplayHint
+#include "AudioPluginInstance.h" // for PluginPort::PortDisplayHint //!!!???
 
 #ifndef _MAPPEDSTUDIO_H_
 #define _MAPPEDSTUDIO_H_
@@ -39,8 +38,6 @@
 // gui that enables us to control outgoing or incoming audio
 // and MIDI with run-time only persistence.  Placeholders for
 // our Studio elements on the sequencer.
-//
-//
 
 namespace Rosegarden
 {
@@ -49,11 +46,6 @@ class Sequencer;
 
 
 // Types are in MappedCommon.h
-//
-
-// Every MappedStudio object derives from this class - if an
-// object is static then you're only allowed one per Studio
-// (as in the case of a PluginManager).
 //
 class MappedObject
 {
@@ -73,36 +65,19 @@ public:
         AudioFader,          // connectable fader - interfaces with devices
         AudioBuss,           // connectable buss - inferfaces with faders
 	AudioInput,          // connectable record input
-        AudioPluginManager,
-        LADSPAPlugin,
-        LADSPAPort
-   
+	PluginSlot,
+	PluginPort
+
     } MappedObjectType;
 
     MappedObject(MappedObject *parent,
                  const std::string &name,
                  MappedObjectType type,
-                 MappedObjectId id,
-                 bool readOnly):
+                 MappedObjectId id):
         m_type(type),
         m_id(id), 
         m_name(name),
-        m_parent(parent),
-        m_static(false), 
-        m_readOnly(readOnly) {;}
-
-    MappedObject(MappedObject *parent, 
-                 const std::string &name,
-                 MappedObjectType type,
-                 MappedObjectId id,
-                 bool readOnly,
-                 bool s):
-        m_type(type),
-        m_id(id),
-        m_name(name),
-        m_parent(parent),
-        m_static(s),
-        m_readOnly(readOnly) {;}
+        m_parent(parent) {;}
 
     virtual ~MappedObject() {;}
 
@@ -120,24 +95,23 @@ public:
     virtual bool getProperty(const MappedObjectProperty &property,
 			     MappedObjectValue &value) = 0;
 
+    // Only relevant to objects that have string properties
+    // 
+    virtual bool getProperty(const MappedObjectProperty &property,
+			     QString &value) { return false; }
+
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value) = 0;
+
+    // Only relevant to objects that have string properties
+    // 
+    virtual void setProperty(const MappedObjectProperty &property,
+                             QString value) { }
 
     // Not a requirement - but an occasionally useful method
     //
     virtual void setProperty(const MappedObjectProperty & /*property*/,
                              MappedObjectValueList /*value*/) {;}
-
-    // Accepts a MappedObject* which to clone the current object into.
-    // All children of the passed MappedObject are free'd and new children
-    // created as part of the clone process.  This operation turns readonly
-    // objects into real objects.
-    //
-    // For the moment we allow this method to be overwritten so that
-    // in the case of child (end of line) classes we can implement
-    // attribute copying easily.
-    //
-    virtual void clone(MappedObject *object);
 
     // Ownership
     //
@@ -155,15 +129,12 @@ public:
     void addChild(MappedObject *mO);
     void removeChild(MappedObject *mO);
 
-
     // Destruction
     //
     void destroy();
     void destroyChildren();
 
     std::vector<MappedObject*> getChildObjects() { return m_children; }
-
-    bool isReadOnly() const { return m_readOnly; }
 
 protected:
 
@@ -173,12 +144,6 @@ protected:
 
     MappedObject                *m_parent;
     std::vector<MappedObject*>   m_children;
-
-private:
-
-    bool             m_static;
-    bool             m_readOnly;
-
 };
 
 
@@ -200,14 +165,12 @@ public:
     // Create a new slider of a certain type for a certain
     // type of device.
     //
-    MappedObject* createObject(MappedObjectType type,
-                               bool readOnly);
+    MappedObject* createObject(MappedObjectType type);
 
     // And create an object with a specified id
     //
     MappedObject* createObject(MappedObjectType type, 
-                               MappedObjectId id,
-                               bool readOnly);
+                               MappedObjectId id);
 
     bool connectObjects(MappedObjectId mId1, MappedObjectId mId2);
     bool disconnectObjects(MappedObjectId mId1, MappedObjectId mId2);
@@ -245,11 +208,6 @@ public:
     //
     void clear();
 
-    // Clear the temporary elements leaving all read-only (system)
-    // elements in place.
-    //
-    void clearTemporaries();
-
     // Clear a MappedObject reference from the Studio
     //
     bool clearObject(MappedObjectId id);
@@ -270,8 +228,6 @@ public:
     MappedAudioFader *getAudioFader(InstrumentId id);
     MappedAudioBuss *getAudioBuss(int bussNumber); // not buss no., not object id
     MappedAudioInput *getAudioInput(int inputNumber); // likewise
-
-    MappedObject* getPluginInstance(InstrumentId id, int position);
 
     // Return the object vector
     //
@@ -294,29 +250,6 @@ public:
     const Sequencer* getSequencer() const { return m_sequencer; }
     void setSequencer(Sequencer *sequencer)
         { m_sequencer = sequencer; }
-
-#ifdef HAVE_LADSPA
-
-    // Create a plugin instance
-    //
-    const LADSPA_Descriptor* createPluginDescriptor(unsigned long uniqueId);
-
-    // Remove a plugin instance - and potentially unload the library
-    //
-    void unloadPlugin(unsigned long uniqueId);
-
-    // Unload all the plugin libraries
-    //
-    void unloadAllPluginLibraries();
-
-    // Modify a port
-    //
-    void setPluginInstancePort(InstrumentId id,
-                               int position,
-                               unsigned long portNumber,
-                               LADSPA_Data value);
-
-#endif // HAVE_LADSPA
 
 protected:
 
@@ -368,8 +301,7 @@ public:
     MappedConnectableObject(MappedObject *parent,
 			    const std::string &name,
 			    MappedObjectType type,
-			    MappedObjectId id,
-			    bool readOnly);
+			    MappedObjectId id);
 
     ~MappedConnectableObject();
 
@@ -405,8 +337,7 @@ public:
 
     MappedAudioFader(MappedObject *parent,
                      MappedObjectId id,
-                     MappedObjectValue channels = 2, // stereo default
-                     bool readOnly = false);
+                     MappedObjectValue channels = 2); // stereo default
     ~MappedAudioFader();
 
     virtual MappedObjectPropertyList getPropertyList(
@@ -455,8 +386,7 @@ public:
     static const MappedObjectProperty Level;
 
     MappedAudioBuss(MappedObject *parent,
-                    MappedObjectId id,
-                    bool readOnly = false);
+                    MappedObjectId id);
     ~MappedAudioBuss();
 
     virtual MappedObjectPropertyList getPropertyList(
@@ -489,8 +419,7 @@ public:
     static const MappedObjectProperty InputNumber;
 
     MappedAudioInput(MappedObject *parent,
-		     MappedObjectId id,
-		     bool readOnly = false);
+		     MappedObjectId id);
     ~MappedAudioInput();
 
     virtual MappedObjectPropertyList getPropertyList(
@@ -508,12 +437,10 @@ protected:
     MappedObjectValue m_inputNumber;
 };
 
-#ifdef HAVE_LADSPA
-class MappedLADSPAPlugin : public MappedObject, public LADSPAPlugin
+class MappedPluginSlot : public MappedObject
 {
 public:
-    // properties
-    static const MappedObjectProperty UniqueId;
+    static const MappedObjectProperty Identifier;
     static const MappedObjectProperty PluginName;
     static const MappedObjectProperty Label;
     static const MappedObjectProperty Author;
@@ -521,32 +448,12 @@ public:
     static const MappedObjectProperty Category;
     static const MappedObjectProperty PortCount;
     static const MappedObjectProperty Ports;
+    static const MappedObjectProperty Instrument;
+    static const MappedObjectProperty Position;
     static const MappedObjectProperty Bypassed;
 
-    MappedLADSPAPlugin(MappedObject *parent,
-                       MappedObjectId id,
-                       bool readOnly):
-        MappedObject(parent,
-                     "MappedLADSPAPlugin",
-                     MappedObject::LADSPAPlugin,
-                     id,
-                     readOnly),
-                     m_instrument(0),
-                     m_position(0),
-                     m_bypassed(false) {;}
-
-    MappedLADSPAPlugin(MappedObject *parent,
-                       MappedObjectId id):
-        MappedObject(parent,
-                     "MappedLADSPAPlugin",
-                     MappedObject::LADSPAPlugin,
-                     id,
-                     false),
-                     m_instrument(0),
-                     m_position(0),
-                     m_bypassed(false) {;}
-
-    ~MappedLADSPAPlugin();
+    MappedPluginSlot(MappedObject *parent, MappedObjectId id);
+    ~MappedPluginSlot();
 
     virtual MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property);
@@ -554,65 +461,48 @@ public:
     virtual bool getProperty(const MappedObjectProperty &property,
 			     MappedObjectValue &value);
 
+    virtual bool getProperty(const MappedObjectProperty &property,
+			     QString &value);
+
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
 
-    unsigned long getUniqueId() const { return m_uniqueId;}
-    std::string getLabel() const { return m_label; }
-    std::string getAuthor() const { return m_author; }
-    std::string getCopyright() const { return m_copyright; }
-    std::string getCategory() const { return m_category; }
-    unsigned long getPortCount() const { return m_portCount; }
+    virtual void setProperty(const MappedObjectProperty &property,
+                             QString value);
+
+    void setPort(unsigned long portNumber, float value);
 
     InstrumentId getInstrument() const { return m_instrument; }
     int getPosition() const { return m_position; }
 
-    // populate this object with descriptor information
-    void populate(const LADSPA_Descriptor *descriptor, std::string category);
-
-    // redefine
-    virtual void clone(MappedObject *object);
-
-    // Cheat - we want to use a thin interface to ports from
-    // the gui - this sets port values on port number.
-    //
-    void setPort(unsigned long portNumber, float value);
-
-    bool isBypassed() const { return m_bypassed; }
-
 protected:
+    QString                   m_identifier;
 
-    unsigned long             m_uniqueId;
-    std::string               m_label;
-    std::string               m_author;
-    std::string               m_copyright;
-    std::string               m_category;
+    QString                   m_name;
+    QString                   m_label;
+    QString                   m_author;
+    QString                   m_copyright;
+    QString                   m_category;
     unsigned long             m_portCount;
 
     InstrumentId              m_instrument;
     int                       m_position;
     bool                      m_bypassed;
-
 };
 
-class MappedLADSPAPort : public MappedObject
+class MappedPluginPort : public MappedObject
 {
 public:
-
-    // properties
-    //
-    static const MappedObjectProperty Descriptor;
-    static const MappedObjectProperty RangeHint;
-    static const MappedObjectProperty RangeLower;
-    static const MappedObjectProperty RangeUpper;
-    static const MappedObjectProperty Value;
-    static const MappedObjectProperty Default;
-
     static const MappedObjectProperty PortNumber;
+    static const MappedObjectProperty Name;
+    static const MappedObjectProperty Minimum;
+    static const MappedObjectProperty Maximum;
+    static const MappedObjectProperty Default;
+    static const MappedObjectProperty DisplayHint;
+    static const MappedObjectProperty Value;
 
-    MappedLADSPAPort(MappedObject *parent,
-                     MappedObjectId id,
-                     bool readOnly);
+    MappedPluginPort(MappedObject *parent, MappedObjectId id);
+    ~MappedPluginPort();
 
     virtual MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property);
@@ -620,176 +510,32 @@ public:
     virtual bool getProperty(const MappedObjectProperty &property,
 			     MappedObjectValue &value);
 
+    virtual bool getProperty(const MappedObjectProperty &property,
+			     QString &value);
+
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
 
-    void setPortName(const std::string &name) { m_portName = name; }
-    std::string getPortName() const { return m_portName; }
+    virtual void setProperty(const MappedObjectProperty &property,
+                             QString value);
 
-    void setRangeHint(LADSPA_PortRangeHintDescriptor hd,
-                      LADSPA_Data lowerBound,
-                      LADSPA_Data upperBound)
-        { m_portRangeHint.HintDescriptor = hd;
-          m_portRangeHint.LowerBound = lowerBound;
-          m_portRangeHint.UpperBound= upperBound; }
-    LADSPA_PortRangeHint getRangeHint() const { return m_portRangeHint; }
-
-    void setDescriptor(const LADSPA_PortDescriptor &pD)
-        { m_portDescriptor = pD; }
-    LADSPA_PortDescriptor getDescriptor() const { return m_portDescriptor; }
- 
-    // Convenience functions that interpret the range hint.  LADPSA
-    // plugins are not required to provide bounds, but all our
-    // controls for them are bounded, so a plugin that doesn't provide
-    // any will just get some unsuitable ones invented for it.
-    MappedObjectValue getMinimum() const;
-    MappedObjectValue getMaximum() const;
-
-    // Another convenience function.
-    // PortDisplayHint (base/AudioPluginInstance.h) encapsulates the
-    // parts of the LADSPA hint descriptor that are relevant to us and
-    // are not about range.
-    PluginPort::PortDisplayHint getDisplayHint() const;
-
-    void setPortNumber(unsigned long portNumber) { m_portNumber = portNumber; }
-    unsigned long getPortNumber() const { return m_portNumber; }
-
-    void setValue(MappedObjectValue value) { m_value = value; }
+    void setValue(MappedObjectValue value);
     MappedObjectValue getValue() const { return m_value; }
 
-    void setDefault(MappedObjectValue value) {
-	m_default = value; 
-	m_haveDefault = true;
-    }
-    MappedObjectValue getDefault() const; // return set value or calculate
-
-    // redefine clone() here to copy across value only
-    //
-    virtual void clone(MappedObject *object);
+    int getPortNumber() const { return m_portNumber; }
 
 protected:
-    unsigned int getSampleRate() const;
-
-    std::string           m_portName;
-    LADSPA_PortRangeHint  m_portRangeHint;
-    LADSPA_PortDescriptor m_portDescriptor;
-
-    MappedObjectValue     m_value;
-    MappedObjectValue     m_default;  // default value
-    bool                  m_haveDefault;
-    unsigned long         m_portNumber;
+    int                     m_portNumber;
+    QString                 m_name;
+    MappedObjectValue       m_minimum;
+    MappedObjectValue       m_maximum;
+    MappedObjectValue       m_default;
+    PluginPort::PortDisplayHint m_displayHint;
+    MappedObjectValue       m_value;
 
 };
 
-#endif // HAVE_LADSPA
-
-
-// MappedPluginManager locates and lists plugins and
-// provides an interface for plugging them into the
-// faders/Instruments.
-//
-// Rather confusingly this manager holds both the class of 
-// the plugin (in a read-only manner) as well as the actual
-// live instances of the plugin.  While this isn't very
-// clever or very efficient it works for the moment until
-// we have the energy or patience to change it.
-//
-//
-
-#ifdef HAVE_LADSPA
-typedef std::vector<std::pair<std::string, void*> > LADSPAPluginHandles;
-typedef std::vector<std::pair<std::string, void*> >::iterator LADSPAIterator;
-#endif // HAVE_LADSPA
-
-class MappedAudioPluginManager : public MappedObject
-{
-public:
-
-    // public properties for the query interface
-    //
-    static const MappedObjectProperty Plugins;
-    static const MappedObjectProperty PluginIds;
-
-    MappedAudioPluginManager(MappedObject *parent,
-                             MappedObjectId id,
-                             bool readOnly);
-    ~MappedAudioPluginManager();
-
-    // Property list
-    //
-    virtual MappedObjectPropertyList getPropertyList(
-            const MappedObjectProperty &property);
-
-    virtual bool getProperty(const MappedObjectProperty &property,
-			     MappedObjectValue &value);
-
-    virtual void setProperty(const MappedObjectProperty &property,
-                             MappedObjectValue value);
-
-    // Get a list of plugins and create MappedObjects out of them
-    //
-    void discoverPlugins(MappedStudio *studio);
-    void clearPlugins(MappedStudio *studio);
-
-#ifdef HAVE_LADSPA
-    // Locate and load a plugin from its uniqueId.  The caller
-    // can then use the descriptor to create and control a plugin 
-    // instance.
-    //
-    const LADSPA_Descriptor* getPluginDescriptor(unsigned long uniqueId);
-
-    // Using this method we unload a plugin from the list of pluginHandles
-    // and we check to see if we can unload the file completely.
-    //
-    void unloadPlugin(unsigned long uniqueId);
-
-    // Close down all plugins
-    //
-    void unloadAllPluginLibraries();
-
-    // Get all the plugin IDs from a library
-    //
-    std::vector<unsigned long> getPluginsInLibrary(void *pluginHandle);
-
-#endif
-
-    // Get the class of this plugin so we can clone() it
-    //
-    MappedObject* getReadOnlyPlugin(unsigned long uniqueId);
-
-    // Get a plugin according to read-onlyness
-    //
-    MappedObject* getPluginInstance(unsigned long uniqueId, bool readOnly);
-
-    // Get a plugin instance according to instrument and position
-    //
-    MappedObject* getPluginInstance(InstrumentId instrument, int position);
-
-protected:
-    // Help discover plugins
-    //
-    void enumeratePlugin(MappedStudio *studio, const std::string& path);
-
-#ifdef HAVE_LADSPA
-
-    // Look up and remember the LADSPA path
-    //
-    void getenvLADSPAPath();
-
-    const LADSPA_Descriptor* getDescriptorFromHandle(unsigned long uniqueId,
-                                                     void *pluginHandle);
-
-
-    // Keep a track of plugin handles
-    //
-    LADSPAPluginHandles m_pluginHandles;
-
-#endif // HAVE_LADSPA
-
-    std::vector<std::string> m_path;
-
-};
-
+    
 }
 
 #endif // _MAPPEDSTUDIO_H_

@@ -44,6 +44,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     Selection.C \
 		     Sets.C \
 		     SnapGrid.C \
+		     SoftSynthDevice.C \
 		     Staff.C \
 		     StringHash.C \
                      Studio.C \

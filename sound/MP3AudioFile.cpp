@@ -29,6 +29,24 @@
 namespace Rosegarden
 {
 
+
+/*
+ * This is a private message structure. A generic pointer to this structure
+ * is passed to each of the callback functions. Put here any data you need
+ * to access from within the callbacks.
+ */
+
+struct player {
+  unsigned char const *start;
+  unsigned long length;
+  //int default_driver;
+  //ao_device *device;
+  //ao_sample_format format;
+  //class SoundTouch *touch;
+};
+
+
+
 MP3AudioFile::MP3AudioFile(const unsigned int &id,
                            const std::string &name,
                            const std::string &fileName):
@@ -167,6 +185,44 @@ MP3AudioFile::parseHeader()
 
     m_channels = pcm->channels;
     */
+
+/*
+    struct player player;
+    struct mad_decoder decoder;
+    struct stat stat;
+    void *fdm;
+    int result;
+
+    if (fstat(fd, &stat) == -1 ||
+        stat.st_size == 0)
+      return 0;
+
+    fdm = mmap(0, stat.st_size, PROT_READ, MAP_SHARED, fd, 0);
+    if (fdm == MAP_FAILED) {
+      fprintf(stderr, "mmap failed, aborting...\n");
+      return 0;
+    }
+
+    player.start = (unsigned char *)fdm;
+    player.length = stat.st_size;
+    player.default_driver = ao_default_driver_id();
+    player.device = NULL;
+    player.touch = new SoundTouch;
+    player.touch->setTempo(tempo);
+    player.touch->setPitch(pitch);
+    mad_decoder_init(&decoder, &player,
+                     input, 0 , 0 , process_output,
+                     decode_error, 0);
+
+    result = mad_decoder_run(&decoder, MAD_DECODER_MODE_SYNC);
+    mad_decoder_finish(&decoder);
+    delete player.touch;
+    ao_close(player.device);
+    if (munmap((void *)player.start, stat.st_size) == -1)
+        return 4;
+
+    return result;
+*/
 }
 
 std::streampos
@@ -211,6 +267,14 @@ MP3AudioFile::getSampleFrames(std::ifstream * /*file*/,
                               unsigned int /*frames*/)
 {
     return "";
+}
+
+unsigned int
+MP3AudioFile::getSampleFrames(std::ifstream * /*file*/,
+			      char * /* buf */,
+                              unsigned int /*frames*/)
+{
+    return 0;
 }
 
 std::string

@@ -74,7 +74,7 @@ public:
     // Plugin instance management
     //
     virtual void setPluginInstance(InstrumentId id,
-                                   unsigned long pluginId,
+                                   QString identifier,
                                    int position);
 
     virtual void removePluginInstance(InstrumentId id, int position);

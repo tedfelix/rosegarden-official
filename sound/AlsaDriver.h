@@ -71,7 +71,7 @@ public:
     virtual void startClocks();
     virtual void startClocksApproved(); // called by JACK driver in sync mode
     virtual void stopClocks();
-    virtual bool areClocksRunning() { return m_queueRunning; }
+    virtual bool areClocksRunning() const { return m_queueRunning; }
 
     virtual void processEventsOut(const MappedComposition &mC,
                                   bool now);
@@ -114,10 +114,10 @@ public:
     // Plugin instance management
     //
     virtual void setPluginInstance(InstrumentId id,
-                                   unsigned long pluginId,
+                                   QString identifier,
                                    int position) {
 #ifdef HAVE_LIBJACK
-	if (m_jackDriver) m_jackDriver->setPluginInstance(id, pluginId, position);
+	if (m_jackDriver) m_jackDriver->setPluginInstance(id, identifier, position);
 #endif
     }
 

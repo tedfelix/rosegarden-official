@@ -39,7 +39,8 @@ public:
 
     enum FaderType {
 	ShortFader = 0, // -40 -> +6  dB
-  	 LongFader = 1  // -70 -> +10 dB
+  	 LongFader = 1, // -70 -> +10 dB
+       IEC268Meter = 2  // -70 ->  0  dB
     };
 
     static float multiplier_to_dB(float multiplier);

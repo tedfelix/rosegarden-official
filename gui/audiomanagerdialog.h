@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -193,7 +194,8 @@ protected:
     static const int         m_previewHeight;
 
     bool                     m_audiblePreview;
-
+    int                      m_sampleRate;
+    
     static const char* const AudioManagerDialogConfigGroup;
 };
 

@@ -55,6 +55,7 @@
 #include "MappedRealTime.h"
 #include "MidiDevice.h"
 #include "AudioDevice.h"
+#include "SoftSynthDevice.h"
 #include "Studio.h"
 #include "Profiler.h"
 #include "Midi.h"
@@ -727,6 +728,7 @@ void RosegardenGUIDoc::initialiseStudio()
 
             audioCount++;
 
+//!!! do this regardless of whether we have ladspa or not?
 #ifdef HAVE_LADSPA
 
             // Initialise all the plugins for this Instrument
@@ -742,11 +744,11 @@ void RosegardenGUIDoc::initialiseStudio()
                              //<< " ASSIGNED on INS "
                              //<< (*it)->getId() << endl;
 
-                    // Create the plugin at the sequencer Studio
+                    // Create the plugin slot at the sequencer Studio
                     //
                     Rosegarden::MappedObjectId pluginMappedId =
                         Rosegarden::StudioControl::createStudioObject(
-                                Rosegarden::MappedObject::LADSPAPlugin);
+                                Rosegarden::MappedObject::PluginSlot);
 
                     // Create the back linkage from the instance to the
                     // studio id
@@ -773,14 +775,14 @@ void RosegardenGUIDoc::initialiseStudio()
                     // for port settings
                     Rosegarden::StudioControl::setStudioObjectProperty
                         (pluginMappedId,
-                         Rosegarden::MappedLADSPAPlugin::UniqueId,
-                         Rosegarden::MappedObjectValue(plugin->getId()));
+                         Rosegarden::MappedPluginSlot::Identifier,
+                         plugin->getIdentifier().c_str());
 
                     // Set the bypass
                     //
                     Rosegarden::StudioControl::setStudioObjectProperty
                         (pluginMappedId,
-                         Rosegarden::MappedLADSPAPlugin::Bypassed,
+                         Rosegarden::MappedPluginSlot::Bypassed,
                          Rosegarden::MappedObjectValue(plugin->isBypassed()));
 
                     Rosegarden::PortInstanceIterator portIt;
@@ -790,7 +792,7 @@ void RosegardenGUIDoc::initialiseStudio()
                     {
                         Rosegarden::StudioControl::setStudioPluginPort
                             (pluginMappedId,
-                             (*portIt)->id,
+                             (*portIt)->number,
                              (*portIt)->value);
                         //RG_DEBUG << "SETTING PORT " << (*portIt)->id << " to "
                                  //<< (*portIt)->value << endl;
@@ -807,6 +809,30 @@ void RosegardenGUIDoc::initialiseStudio()
              << " audio faders" << endl;
 
 }
+
+
+// FILE FORMAT VERSION NUMBERS
+// 
+// These should be updated when the file format changes.
+// 
+// Increment the major version number only for updates so
+// substantial that we shouldn't bother even trying to read a file
+// saved with a newer major version number than our own.
+//
+// Increment the minor version number for updates that may break
+// compatibility such that we should warn when reading a file
+// that was saved with a newer minor version than our own.
+//
+// Increment the point version number for updates that shouldn't
+// break compatibility in either direction, just for informational
+// purposes.
+//
+// When updating major, reset minor to zero; when updating minor,
+// reset point to zero.
+//
+int RosegardenGUIDoc::FILE_FORMAT_VERSION_MAJOR = 1;
+int RosegardenGUIDoc::FILE_FORMAT_VERSION_MINOR = 1;
+int RosegardenGUIDoc::FILE_FORMAT_VERSION_POINT = 0;
 
 
 bool RosegardenGUIDoc::saveDocument(const QString& filename,
@@ -828,7 +854,11 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     //
     outStream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 	      << "<!DOCTYPE rosegarden-data>\n"
-	      << "<rosegarden-data version=\"" << VERSION << "\">\n";
+	      << "<rosegarden-data version=\"" << VERSION
+	      << "\" format-version-major=\"" << FILE_FORMAT_VERSION_MAJOR
+	      << "\" format-version-minor=\"" << FILE_FORMAT_VERSION_MINOR
+	      << "\" format-version-point=\"" << FILE_FORMAT_VERSION_POINT
+	      << "\">\n";
 
     RosegardenProgressDialog *progressDlg = 0;
     KProgress *progress = 0;
@@ -1037,16 +1067,34 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment, KPr
         time.sprintf("%d.%06d", segment->getAudioStartTime().sec,
                      segment->getAudioStartTime().usec());
 
-        outStream << "   <begin index=\""
+        outStream << "    <begin index=\""
                   << time
                   << "\"/>\n";
 
         time.sprintf("%d.%06d", segment->getAudioEndTime().sec,
                      segment->getAudioEndTime().usec());
 
-        outStream << "   <end index=\""
+        outStream << "    <end index=\""
                   << time
                   << "\"/>\n";
+
+        if (segment->isAutoFading())
+        {
+            time.sprintf("%d.%06d", segment->getFadeInTime().sec,
+                         segment->getFadeInTime().usec());
+
+            outStream << "    <fadein time=\""
+                      << time
+                      << "\"/>\n";
+
+            time.sprintf("%d.%06d", segment->getFadeOutTime().sec,
+                         segment->getFadeOutTime().usec());
+
+            outStream << "    <fadeout time=\""
+                      << time
+                      << "\"/>\n";
+        }
+
     }
     else // Internal type
         {
@@ -1613,6 +1661,7 @@ RosegardenGUIDoc::syncDevices()
 
     // Set the default timer first (we don't have to do this every
     // time, but this is the most convenient place to do it)
+    //!!! too much overhead in doing this repeatedly
     kapp->config()->setGroup(Rosegarden::SequencerOptionsConfigGroup);
     QString currentTimer = getCurrentTimer();
     currentTimer = kapp->config()->readEntry("timer", currentTimer);
@@ -1739,6 +1788,15 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
                           << device->getName() << "\" id = " << id
 		          << " direction = " << mD->getDirection()
 			  << endl;
+        }
+        else if (mD->getType() == Rosegarden::Device::SoftSynth)
+        {
+            device = new Rosegarden::SoftSynthDevice(id, mD->getName());
+            m_studio.addDevice(device);
+
+            RG_DEBUG  << "RosegardenGUIDoc::getMappedDevice - "
+                          << "adding soft synth Device \""
+                          << device->getName() << "\" id = " << id << endl;
         }
         else if (mD->getType() == Rosegarden::Device::Audio)
         {

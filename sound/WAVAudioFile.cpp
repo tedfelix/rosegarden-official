@@ -174,6 +174,127 @@ WAVAudioFile::getDataOffset()
     return 0;
 }
 
+bool
+WAVAudioFile::decode(const unsigned char *ubuf,
+		     size_t sourceBytes,
+		     size_t targetSampleRate,
+		     size_t targetChannels,
+		     size_t nframes,
+		     std::vector<float *> &target,
+		     bool adding)
+{
+    size_t sourceChannels = getChannels();
+    size_t sourceSampleRate = getSampleRate();
+    size_t fileFrames = sourceBytes / getBytesPerFrame();
 
+    int bitsPerSample = getBitsPerSample();
+    if (bitsPerSample != 8 &&
+	bitsPerSample != 16 &&
+	bitsPerSample != 24) {
+	std::cerr << "WAVAudioFile::decode: unsupported " <<
+	    bitsPerSample << "-bit sample size" << std::endl;
+	return false;
+    }
 
+#ifdef DEBUG_DECODE
+    std::cerr << "WAVAudioFile::decode: " << sourceBytes << " bytes -> " << nframes << " frames, SSR " << getSampleRate() << ", TSR " << targetSampleRate << ", sch " << getChannels() << ", tch " << targetChannels << std::endl;
+#endif
+
+    // If we're reading a stereo file onto a mono target, we mix the
+    // two channels.  If we're reading mono to stereo, we duplicate
+    // the mono channel.  Otherwise if the numbers of channels differ,
+    // we just copy across the ones that do match and zero the rest.
+
+    bool reduceToMono = (targetChannels == 1 && sourceChannels == 2);
+    
+    for (size_t ch = 0; ch < sourceChannels; ++ch) {
+
+	if (!reduceToMono || ch == 0) {
+	    if (ch >= targetChannels) break;
+	    if (!adding) memset(target[ch], 0, nframes * sizeof(float));
+	}
+
+	int tch = ch; // target channel for this data
+	if (reduceToMono && ch == 1) {
+	    tch = 0;
+	}
+
+	float ratio = 1.0;
+	if (sourceSampleRate != targetSampleRate) {
+	    ratio = float(sourceSampleRate) / float(targetSampleRate);
+	}
+
+	for (size_t i = 0; i < nframes; ++i) {
+
+	    size_t j = i;
+	    if (sourceSampleRate != targetSampleRate) {
+		j = i * ratio;
+	    }
+	    if (j >= fileFrames) j = fileFrames - 1;
+
+	    switch (bitsPerSample) {
+	    
+	    case 8:
+	    {
+		// WAV stores 8-bit samples unsigned, other sizes signed.
+		target[tch][i] +=
+		    (float)(ubuf[ch + j * sourceChannels] - 128.0) / 128.0;
+		break;
+	    }
+
+	    case 16:
+	    {
+		// Two's complement little-endian 16-bit integer.
+		// We convert endianness (if necessary) but assume 16-bit short.
+		unsigned char b2 = ubuf[2 * (ch + j * sourceChannels)];
+		unsigned char b1 = ubuf[2 * (ch + j * sourceChannels) + 1];
+		unsigned int bits = (b1 << 8) + b2;
+		target[tch][i] += (float)(short(bits)) / 32767.0;
+		break;
+	    }
+
+	    case 24:
+	    {
+		// Two's complement little-endian 24-bit integer.
+		// Again, convert endianness but assume 32-bit int.
+		unsigned char b3 = ubuf[2 * (ch + j * sourceChannels)];
+		unsigned char b2 = ubuf[2 * (ch + j * sourceChannels) + 1];
+		unsigned char b1 = ubuf[2 * (ch + j * sourceChannels) + 2];
+		// Rotate 8 bits too far in order to get the sign bit
+		// in the right place; this gives us a 32-bit value,
+		// hence the larger float divisor
+		unsigned int bits = (b1 << 24) + (b2 << 16) + (b3 << 8);
+		target[tch][i] += (float)(int(bits)) / 2147483647.0;
+		break;
+	    }
+
+	    default:
+		break;
+	    }
+	}
+    }
+
+    // Now deal with any excess target channels
+
+    for (int ch = sourceChannels; ch < targetChannels; ++ch) {
+	if (ch == 1 && targetChannels == 2) {
+	    // copy mono to stereo
+	    if (!adding) {
+		memcpy(target[ch], target[ch-1], nframes * sizeof(float));
+	    } else {
+		for (size_t i = 0; i < nframes; ++i) {
+		    target[ch][i] += target[ch-1][i];
+		}
+	    }
+	} else {
+	    if (!adding) {
+		memset(target[ch], 0, nframes * sizeof(float));
+	    }
+	}
+    }
+
+    return true;
+}
+
+    
 }

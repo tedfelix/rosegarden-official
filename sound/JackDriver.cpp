@@ -27,6 +27,7 @@
 #include "Profiler.h"
 #include "AudioLevel.h"
 #include "Audit.h"
+#include "PluginFactory.h"
 
 #ifdef HAVE_ALSA
 #ifdef HAVE_LIBJACK
@@ -222,6 +223,8 @@ JackDriver::initialise()
 	  << m_sampleRate << "Hz, buffer size = " << m_bufferSize
 	  << std::endl;
 
+    PluginFactory::setSampleRate(m_sampleRate);
+
     // Get the initial buffer size before we activate the client
     //
 
@@ -245,7 +248,11 @@ JackDriver::initialise()
     m_fileReader->run();
     m_fileWriter->run();
     m_instrumentMixer->run();
-    m_bussMixer->run();
+
+    //!!! experimentally avoid running buss mixer at all if not wanted
+    if (m_bussMixer->getBussCount() > 0) {
+	m_bussMixer->run();
+    }
 
     // Create and connect the default numbers of ports.  We always create
     // one stereo pair each of master and monitor outs, and then we create
@@ -754,7 +761,6 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    } else {
 		size_t actual = rb->read(submaster[ch], nframes);
 		if (actual < nframes) {
-		    std::cerr << "WARNING: buffer underrun in buss ringbuffer " << buss << ":" << ch << std::endl;
 		    reportFailure(Rosegarden::MappedEvent::FailureBussMixUnderrun);
 		}
 		for (size_t i = 0; i < nframes; ++i) {
@@ -845,7 +851,6 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 #endif
 
 		if (actual < nframes) {
-		    std::cerr << "WARNING: buffer underrun in instrument ringbuffer " << id << ":" << ch << std::endl;
 		    reportFailure(Rosegarden::MappedEvent::FailureMixUnderrun);
 		}
 		for (size_t i = 0; i < nframes; ++i) {
@@ -905,7 +910,12 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     }
 
     if (m_alsaDriver->isPlaying()) {
-	m_bussMixer->signal();
+	//!!! experimental -- if no busses, don't care about buss mixer
+	if (m_bussMixer->getBussCount() == 0) {
+	    m_instrumentMixer->signal();
+	} else {
+	    m_bussMixer->signal();
+	}
     }
 
     m_framesProcessed += nframes;
@@ -1448,9 +1458,16 @@ JackDriver::prebufferAudio()
 	    (RealTime::frame2RealTime(position.frame, m_sampleRate));
     } else {
 */
-	m_bussMixer->fillBuffers
-	    (getNextSliceStart(m_alsaDriver->getSequencerTime()));
-//    }
+
+    RealTime sliceStart = getNextSliceStart(m_alsaDriver->getSequencerTime());
+
+    m_fileReader->fillBuffers(sliceStart);
+
+    if (m_bussMixer->getBussCount() > 0) {
+	m_bussMixer->fillBuffers(sliceStart);
+    } else {
+	m_instrumentMixer->fillBuffers(sliceStart);
+    }
 }
 
 void
@@ -1583,6 +1600,17 @@ JackDriver::updateAudioData()
 
     // this will return with no work if the inputs are already correct:
     createRecordInputs(inputs);
+
+    //!!! experimental -- start or stop buss mixer as needed
+    if (m_bussMixer->getBussCount() == 0) {
+	if (m_bussMixer->running()) {
+	    m_bussMixer->terminate();
+	}
+    } else {
+	if (!m_bussMixer->running()) {
+	    m_bussMixer->run();
+	}
+    }
 }
 
 RealTime
@@ -1704,10 +1732,10 @@ JackDriver::releaseAudioQueueLocks()
 // driver I s'pose
 
 void
-JackDriver::setPluginInstance(InstrumentId id, unsigned long pluginId,
+JackDriver::setPluginInstance(InstrumentId id, QString identifier,
 			      int position)
 {
-    if (m_instrumentMixer) m_instrumentMixer->setPlugin(id, position, pluginId);
+    if (m_instrumentMixer) m_instrumentMixer->setPlugin(id, position, identifier);
 }
 
 void

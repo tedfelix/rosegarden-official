@@ -101,6 +101,10 @@ public slots:
     void slotColourSelected(int);
     void slotDocColoursChanged();
 
+    void slotAudioFadeChanged(int);
+    void slotFadeInChanged(int);
+    void slotFadeOutChanged(int);
+
     virtual void update();
 
 signals:
@@ -118,6 +122,15 @@ protected:
     KComboBox                  *m_transposeValue;
     KComboBox                  *m_delayValue;
     KComboBox                  *m_colourValue;
+
+    // Audio autofade
+    //
+    QLabel                     *m_autoFadeLabel;
+    QCheckBox                  *m_autoFadeBox;
+    QLabel                     *m_fadeInLabel;
+    QSpinBox                   *m_fadeInSpin;
+    QLabel                     *m_fadeOutLabel;
+    QSpinBox                   *m_fadeOutSpin;
 
     int                        m_addColourPos;
 

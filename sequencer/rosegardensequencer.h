@@ -230,6 +230,12 @@ public:
                                    const QString &property,
                                    float value);
 
+    // Set a MappedObject to a string
+    //
+    virtual void setMappedProperty(int id,
+                                   const QString &property,
+                                   const QString &value);
+
     // Set a MappedObject to a property list
     //
     virtual void setMappedProperty(int id,
@@ -244,6 +250,8 @@ public:
     //
     virtual std::vector<QString> getPropertyList(int id,
                                                  const QString &property);
+
+    virtual std::vector<QString> getPluginInformation();
 
     // Set a plugin port
     //

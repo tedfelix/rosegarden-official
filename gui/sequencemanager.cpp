@@ -1286,6 +1286,7 @@ SequenceManager::resetMidiNetwork()
 void
 SequenceManager::getSequencerPlugins(AudioPluginManager *aPM)
 {
+/*!!!
     MappedObjectId id =
         StudioControl::getStudioObjectByType(
                 MappedObject::AudioPluginManager);
@@ -1298,41 +1299,44 @@ SequenceManager::getSequencerPlugins(AudioPluginManager *aPM)
 
     SEQMAN_DEBUG << "getSequencerPlugins - got "
                  << seqPlugins.size() << " items" << endl;
+*/
 
-    /*
-    MappedObjectPropertyList seqPluginIds
-        = getSequencerPropertyList(id,
-                               MappedAudioPluginManager::PluginIds);
-                               */
+    //!!! At this point we might be better off querying identifier
+    // and category only... and then filling in the blanks when we
+    // actually want to display the thing.
 
-    //MappedObjectPropertyList::iterator it;
+    SEQMAN_DEBUG << "getSequencerPlugins - getting plugin information" << endl;
+
+    MappedObjectPropertyList seqPlugins = StudioControl::getPluginInformation();
 
     unsigned int i = 0;
 
     while (i < seqPlugins.size())
     {
-        MappedObjectId id = seqPlugins[i++].toInt();
+        QString identifier = seqPlugins[i++];
         QString name = seqPlugins[i++];
         unsigned long uniqueId = seqPlugins[i++].toLong();
         QString label = seqPlugins[i++];
         QString author = seqPlugins[i++];
         QString copyright = seqPlugins[i++];
+	bool isSynth = ((seqPlugins[i++]).lower() == "true");
         QString category = seqPlugins[i++];
         unsigned int portCount = seqPlugins[i++].toInt();
 
-        AudioPlugin *aP = aPM->addPlugin(id,
+	std::cerr << "PLUGIN: " << identifier << " / CATEGORY: \"" << (category ? category : "(null)") << "\"" << std::endl;
+
+        AudioPlugin *aP = aPM->addPlugin(identifier,
                                          name,
                                          uniqueId,
                                          label,
                                          author,
                                          copyright,
+					 isSynth,
 					 category);
-
-        // SEQMAN_DEBUG << "PLUGIN = \"" << name << "\"" << endl;
 
         for (unsigned int j = 0; j < portCount; j++)
         {
-            id = seqPlugins[i++].toInt();
+            int number = seqPlugins[i++].toInt();
             name = seqPlugins[i++];
             PluginPort::PortType type =
                 PluginPort::PortType(seqPlugins[i++].toInt());
@@ -1342,9 +1346,7 @@ SequenceManager::getSequencerPlugins(AudioPluginManager *aPM)
             PortData upperBound = seqPlugins[i++].toFloat();
 	    PortData defaultValue = seqPlugins[i++].toFloat();
 
-//	     SEQMAN_DEBUG << "DEFAULT =  " << defaultValue << endl;
-//             SEQMAN_DEBUG << "ADDED PORT = \"" << name << "\" id " << id << endl;
-            aP->addPort(id,
+            aP->addPort(number,
                         name,
                         type,
                         hint,
@@ -1353,16 +1355,6 @@ SequenceManager::getSequencerPlugins(AudioPluginManager *aPM)
 			defaultValue);
 
         }
-
-        // SEQMAN_DEBUG << " = " << seqPlugins[i] << endl;
-
-        /*
-        MappedObjectPropertyList author =
-            getSequencerPropertyList(seqPluginIds[i].toInt(), "author");
-
-        if (author.size() == 1)
-            SEQMAN_DEBUG << "PLUGIN AUTHOR = \"" << author[0] << "\"" << std::endl;
-            */
     }
 }
 

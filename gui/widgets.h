@@ -289,7 +289,8 @@ public:
                      float initialPosition = 50.0,
                      int size = 20,
 		     TickMode ticks = NoTicks,
-		     bool snapToTicks = false);
+		     bool snapToTicks = false,
+		     bool centred = false);
     ~RosegardenRotary();
 
     void setMinValue(float min) { m_minValue = min; }
@@ -327,11 +328,12 @@ protected:
     virtual void mousePressEvent(QMouseEvent *e);
     virtual void mouseReleaseEvent(QMouseEvent *e);
     virtual void mouseMoveEvent(QMouseEvent *e);
+    virtual void mouseDoubleClickEvent(QMouseEvent *e);
     virtual void wheelEvent(QWheelEvent *e);
 
     void snapPosition();
     void drawPosition();
-    void drawTick(QPainter &paint, double angle);
+    void drawTick(QPainter &paint, double angle, int size, bool internal);
 
     float                m_minValue;
     float                m_maxValue;
@@ -340,8 +342,8 @@ protected:
     int                  m_size;
     TickMode             m_tickMode;
     bool                 m_snapToTicks;
+    bool                 m_centred;
 
-    float                m_lastPosition;
     float                m_position;
     float                m_snapPosition;
     bool                 m_buttonPressed;
@@ -350,6 +352,35 @@ protected:
 
     QColor               m_knobColour;
 
+    struct CacheIndex {
+
+	CacheIndex(int _s, int _c, int _a, int _n, int _ct) :
+	    size(_s), colour(_c), angle(_a), numTicks(_n), centred(_ct) { }
+
+	bool operator<(const CacheIndex &i) const {
+	    // woo!
+	    if (size < i.size) return true;
+	    else if (size > i.size) return false;
+	    else if (colour < i.colour) return true;
+	    else if (colour > i.colour) return false;
+	    else if (angle < i.angle) return true;
+	    else if (angle > i.angle) return false;
+	    else if (numTicks < i.numTicks) return true;
+	    else if (numTicks > i.numTicks) return false;
+	    else if (centred == i.centred) return false;
+	    else if (!centred) return true;
+	    return false;
+	}
+
+	int          size;
+	unsigned int colour;
+	int          angle;
+	int          numTicks;
+	bool         centred;
+    };
+
+    typedef std::map<CacheIndex, QPixmap> PixmapCache;
+    static PixmapCache m_pixmaps;
 };
 
 namespace Rosegarden { class Quantizer; }

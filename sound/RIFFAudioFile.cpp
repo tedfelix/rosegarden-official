@@ -135,7 +135,7 @@ RIFFAudioFile::scanTo(const RealTime &time)
 bool
 RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
 {
-    Rosegarden::Profiler("RIFFAudioFile::scanTo", true); //!!!
+//    Rosegarden::Profiler("RIFFAudioFile::scanTo", true); //!!!
 
     // sanity
     if (file == 0) return false;
@@ -227,6 +227,14 @@ RIFFAudioFile::getSampleFrames(std::ifstream *file, unsigned int frames)
     //
     long totalBytes = frames * m_bytesPerFrame;
     return getBytes(file, totalBytes);
+}
+
+unsigned int
+RIFFAudioFile::getSampleFrames(std::ifstream *file, char *buf,
+			       unsigned int frames)
+{
+    if (file == 0) return 0;
+    return getBytes(file, buf, frames * m_bytesPerFrame) / m_bytesPerFrame;
 }
 
 std::string

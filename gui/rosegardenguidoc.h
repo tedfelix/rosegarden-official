@@ -96,6 +96,10 @@ private:
     RosegardenGUIDoc& operator=(const RosegardenGUIDoc &doc);
 
 public:
+    static int FILE_FORMAT_VERSION_MAJOR;
+    static int FILE_FORMAT_VERSION_MINOR;
+    static int FILE_FORMAT_VERSION_POINT;
+
     /**
      * Destructor for the fileclass of the application
      */

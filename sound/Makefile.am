@@ -17,13 +17,19 @@ COMPILE_FIRST = libRosegardenSound
 # and libRosegardenSequencer
 #
 noinst_LTLIBRARIES = libRosegardenSound.la
-libRosegardenSound_la_SOURCES = AudioFile.cpp \
-                                AudioFileManager.cpp \
+libRosegardenSound_la_SOURCES = AudioCache.cpp \
+				AudioFile.cpp \
+				AudioFileManager.cpp \
+				AudioPlayQueue.cpp \
 				AudioProcess.cpp \
 				Audit.cpp \
                                 BWFAudioFile.cpp \
 				ControlBlock.cpp \
-                                MappedComposition.cpp \
+                                DSSIPluginFactory.cpp \
+                                DSSIPluginInstance.cpp \
+                                LADSPAPluginFactory.cpp \
+                                LADSPAPluginInstance.cpp \
+				MappedComposition.cpp \
                                 MappedDevice.cpp \
                                 MappedEvent.cpp \
                                 MappedInstrument.cpp \
@@ -34,8 +40,9 @@ libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 MP3AudioFile.cpp \
                                 PeakFile.cpp \
                                 PeakFileManager.cpp \
-                                Plugins.cpp \
+				PluginFactory.cpp \
                                 RIFFAudioFile.cpp \
+				RunnablePluginInstance.cpp \
 				SequencerDataBlock.cpp \
                                 SF2PatchExtractor.cpp \
                                 SoundFile.cpp \
@@ -68,7 +75,6 @@ if HAVE_ALSA
 libRosegardenSequencer_la_SOURCES = AlsaDriver.cpp \
                                     AlsaPort.cpp \
 				    JackDriver.cpp \
-                                    LADSPAPluginInstance.cpp \
 				    PlayableAudioFile.cpp \
                                     Sequencer.cpp \
                                     SoundDriver.cpp

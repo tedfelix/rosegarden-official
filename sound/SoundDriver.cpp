@@ -23,6 +23,7 @@
 #include "SoundDriver.h"
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
+#include "AudioPlayQueue.h"
 
 #include <unistd.h>
 #include <sys/time.h>
@@ -37,8 +38,6 @@ namespace Rosegarden
 // ---------- SoundDriver -----------
 //
 
-static pthread_mutex_t _audioQueueLock = PTHREAD_MUTEX_INITIALIZER;
-
 
 SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_name(name),
@@ -50,6 +49,7 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_recordStatus(ASYNCHRONOUS_MIDI),
     m_midiRunningId(MidiInstrumentBase),
     m_audioRunningId(AudioInstrumentBase),
+    m_audioQueue(0),
     m_audioMonitoringInstrument(AudioInstrumentBase),
     m_studio(studio),
     m_sequencerDataBlock(0),
@@ -62,13 +62,14 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_midiClockSendTime(RealTime::zeroTime),
     m_midiSongPositionPointer(0)
 {
-    // nothing else
+    m_audioQueue = new AudioPlayQueue();
 }
 
 
 SoundDriver::~SoundDriver()
 {
     std::cout << "SoundDriver::~SoundDriver (exiting)" << std::endl;
+    delete m_audioQueue;
 }
 
 MappedInstrument*
@@ -85,97 +86,90 @@ SoundDriver::getMappedInstrument(InstrumentId id)
     return 0;
 }
 
-PlayableAudioFileList
-SoundDriver::getAudioPlayQueue()
+void
+SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
 {
-    PlayableAudioFileList rq;
-    std::list<PlayableAudioFile *>::const_iterator it;
+    m_audioQueue->clear();
 
-    pthread_mutex_lock(&_audioQueueLock);
+    for (std::vector<MappedEvent>::const_iterator i = events.begin();
+	 i != events.end(); ++i) {
 
-    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
-    {
-	rq.push_back(*it);
-    }
+	// Check for existence of file - if the sequencer has died
+	// and been restarted then we're not always loaded up with
+	// the audio file references we should have.  In the future
+	// we could make this just get the gui to reload our files
+	// when (or before) this fails.
+	//
+	AudioFile *audioFile = getAudioFile(i->getAudioID());
 
-    pthread_mutex_unlock(&_audioQueueLock);
+	if (audioFile)
+	{ 
+	    MappedAudioFader *fader =
+		dynamic_cast<MappedAudioFader*>
+		(getMappedStudio()->getAudioFader(i->getInstrument()));
 
-    return rq;
-}
+	    if (!fader) {
+		std::cerr << "WARNING: SoundDriver::initialiseAudioQueue: no fader for audio instrument " << i->getInstrument() << std::endl;
+		continue;
+	    }
 
-// Generates a list of queued PlayableAudioFiles that aren't marked
-// as defunct (and hence likely to be garbage collected by another
-// thread).
-//
-PlayableAudioFileList
-SoundDriver::getAudioPlayQueueNotDefunct()
-{
-    PlayableAudioFileList rq;
-    std::list<PlayableAudioFile *>::const_iterator it;
+	    unsigned int channels = fader->getPropertyList(
+		MappedAudioFader::Channels)[0].toInt();
 
-    pthread_mutex_lock(&_audioQueueLock);
-
-    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
-    {
-#ifdef DEBUG_PLAYABLE
-	std::cout << "SoundDriver::getAudioPlayQueueNotDefunct: id "
-		  << (*it)->getRuntimeSegmentId() << ", status " << (*it)->getStatus() << " (defunct is " << PlayableAudioFile::DEFUNCT << ")" /*, initialised " << (*it)->isInitialised()*/ << std::endl;
+//#define DEBUG_PLAYING_AUDIO
+#ifdef DEBUG_PLAYING_AUDIO
+	    std::cout << "Creating playable audio file: id " << audioFile->getId() << ", event time " << i->getEventTime() << ", time now " << getSequencerTime() << ", start marker " << i->getAudioStartMarker() << ", duration " << i->getDuration() << ", instrument " << i->getInstrument() << " channels " << channels <<  std::endl;
 #endif
 
-        if ((*it)->getStatus() != PlayableAudioFile::DEFUNCT) {
-            rq.push_back(*it);
-        }
+	    RealTime bufferLength = getAudioReadBufferLength();
+	    int bufferFrames = RealTime::realTime2Frame
+		(bufferLength, getSampleRate());
+
+	    //!!! previously in AlsaDriver we had a test here to ensure the
+	    // buffer length was at least the JACK buffer size -- otherwise
+	    // we'd get into terrible trouble -- but buffer lengths are
+	    // going to go from here anyway?
+
+	    PlayableAudioFile *paf =
+		new PlayableAudioFile(i->getInstrument(),
+				      audioFile,
+				      i->getEventTime(),
+				      i->getAudioStartMarker(),
+				      i->getDuration(),
+				      bufferFrames,
+				      getSmallFileSize() * 1024,
+				      channels,
+				      getSampleRate());
+
+	    paf->setRuntimeSegmentId(i->getRuntimeSegmentId());
+
+	    m_audioQueue->addScheduled(paf);
+	}
+	else
+	{
+	    std::cerr << "SoundDriver::initialiseAudioQueue - "
+		      << "can't find audio file reference" 
+		      << std::endl;
+
+	    std::cerr << "SoundDriver::initialiseAudioQueue - "
+		      << "try reloading the current Rosegarden file"
+		      << std::endl;
+	}
     }
-
-    pthread_mutex_unlock(&_audioQueueLock);
-
-    return rq;
 }
-
-// Generates a list of queued PlayableAudioFiles on a particular
-// instrument that aren't marked as defunct (and hence likely to be
-// garbage collected by another thread).
-//
-PlayableAudioFileList
-SoundDriver::getAudioPlayQueuePerInstrument(InstrumentId instrument)
-{
-    PlayableAudioFileList rq;
-    std::list<PlayableAudioFile *>::const_iterator it;
-
-    pthread_mutex_lock(&_audioQueueLock);
-
-    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
-    {
-#ifdef DEBUG_PLAYABLE
-	std::cout << "SoundDriver::getAudioPlayQueuePerInstrument(" << instrument << "): id "
-		  << (*it)->getRuntimeSegmentId() << ", instrument " << (*it)->getInstrument() << ", status " << (*it)->getStatus() << " (defunct is " << PlayableAudioFile::DEFUNCT << ")" /*, initialised " << (*it)->isInitialised()*/ << std::endl;
-#endif
-
-        if ((*it)->getStatus() != PlayableAudioFile::DEFUNCT &&
-	    (*it)->getInstrument() == instrument) {
-            rq.push_back(*it);
-        }
-    }
-
-    pthread_mutex_unlock(&_audioQueueLock);
-
-    return rq;
-}
-
 
 void
-SoundDriver::queueAudio(PlayableAudioFile *audioFile)
+SoundDriver::clearAudioQueue()
 {
-#ifdef DEBUG_PLAYABLE
-    std::cout << "SoundDriver::queueAudio called, queueing file " << audioFile << std::endl;
-#endif
-
-    pthread_mutex_lock(&_audioQueueLock);
-
-    m_audioPlayQueue.push_back(audioFile);
-
-    pthread_mutex_unlock(&_audioQueueLock);
+    m_audioQueue->clear();
 }
+
+const AudioPlayQueue *
+SoundDriver::getAudioQueue() const
+{
+    return m_audioQueue;
+}
+
 
 void
 SoundDriver::setMappedInstrument(MappedInstrument *mI)
@@ -240,51 +234,6 @@ SoundDriver::getMappedDevice(DeviceId id)
 }
 
 
-// Clear down the audio play queue
-//
-void
-SoundDriver::clearAudioPlayQueue()
-{
-    std::list<PlayableAudioFile *>::iterator it;
-
-    pthread_mutex_lock(&_audioQueueLock);
-
-    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); it++)
-        delete (*it);
-
-    m_audioPlayQueue.erase(m_audioPlayQueue.begin(), m_audioPlayQueue.end());
-
-    pthread_mutex_unlock(&_audioQueueLock);
-}
-
-
-void
-SoundDriver::clearDefunctFromAudioPlayQueue()
-{
-    std::list<PlayableAudioFile *>::iterator it;
-
-    pthread_mutex_lock(&_audioQueueLock);
-
-    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ) {
-
-        if ((*it)->getStatus() == PlayableAudioFile::DEFUNCT) {
-#ifdef DEBUG_PLAYABLE
-            std::cout << "SoundDriver::clearDefunctFromAudioPlayQueue - "
-                      << "clearing down " << *it << std::endl;
-#endif
-	    std::list<PlayableAudioFile *>::iterator ni = it;
-	    ++ni;
-            delete *it;
-	    m_audioPlayQueue.erase(it);
-	    it = ni;
-
-        } else {
-	    ++it;
-	}
-    }
-
-    pthread_mutex_unlock(&_audioQueueLock);
-}
 
 bool
 SoundDriver::addAudioFile(const std::string &fileName, unsigned int id)
@@ -362,6 +311,9 @@ SoundDriver::cancelAudioFile(MappedEvent *mE)
 {
     std::cout << "SoundDriver::cancelAudioFile" << std::endl;
 
+
+/*!!!
+
     std::list<PlayableAudioFile *>::iterator it;
 
     pthread_mutex_lock(&_audioQueueLock);
@@ -402,6 +354,7 @@ SoundDriver::cancelAudioFile(MappedEvent *mE)
     }
 
     pthread_mutex_unlock(&_audioQueueLock);
+*/
 }
 
 void
@@ -419,6 +372,7 @@ void
 SoundDriver::rationalisePlayingAudio(const std::vector<MappedEvent> &segmentAudio,
 				     const RealTime &playtime)
 {
+/*!!!
     pthread_mutex_lock(&_audioQueueLock);
 
     // The mixer already ensures that anything on the queue gets
@@ -461,11 +415,11 @@ SoundDriver::rationalisePlayingAudio(const std::vector<MappedEvent> &segmentAudi
             mE.setType(MappedEvent::AudioCancel);
             mE.setRuntimeSegmentId((*i)->getRuntimeSegmentId());
 	    mE.setEventTime((*i)->getStartTime());
-/*
+
             std::cout << "SoundDriver::rationalisePlayingAudio - " 
                       << "stopping audio segment = " << (*i)->getRuntimeSegmentId() 
                       << std::endl;
-*/
+
 	    mC.insert(new MappedEvent(mE));
 	}
     }
@@ -498,11 +452,11 @@ SoundDriver::rationalisePlayingAudio(const std::vector<MappedEvent> &segmentAudi
             //
 //            MappedEvent mE(m_metaIterator->
 //                    getAudioSegment(si->getRuntimeSegmentId()));
-/*
+
             std::cout << "SoundDriver::rationalisePlayingAudio - " 
                       << "starting audio segment = " << mE.getRuntimeSegmentId()
                       << std::endl;
-*/
+
 	    mC.insert(new MappedEvent(*si));
 	}
     }
@@ -512,6 +466,7 @@ SoundDriver::rationalisePlayingAudio(const std::vector<MappedEvent> &segmentAudi
     if (!mC.empty()) {
 	processEventsOut(mC, false);
     }
+*/
 }
 	
 

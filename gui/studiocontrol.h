@@ -58,6 +58,12 @@ public:
                                         const MappedObjectProperty &property,
                                         MappedObjectValue value);
 
+    // Set a value to a string 
+    //
+    static bool setStudioObjectProperty(MappedObjectId id,
+                                        const MappedObjectProperty &property,
+					const QString &value);
+
     // Set a value to a list
     //
     static bool setStudioObjectProperty(MappedObjectId id,
@@ -69,6 +75,11 @@ public:
     static void setStudioPluginPort(MappedObjectId pluginId,
                                     unsigned long portId,
                                     MappedObjectValue value);
+
+    // Get all plugin information
+    //
+    static MappedObjectPropertyList getPluginInformation();
+
 
     // Connection
     //

@@ -1,4 +1,3 @@
- 
 // -*- c-basic-offset: 4 -*-
 
 /*
@@ -23,8 +22,14 @@
 #ifndef _RUNNABLE_PLUGIN_INSTANCE_H_
 #define _RUNNABLE_PLUGIN_INSTANCE_H_
 
+#include <config.h>
+#include <qstring.h>
+#include <vector>
+
 namespace Rosegarden
 {
+
+class PluginFactory;
 	
 /**
  * RunnablePluginInstance is a very trivial interface that an audio
@@ -43,6 +48,12 @@ class RunnablePluginInstance
 public:
     typedef float sample_t;
 
+    virtual ~RunnablePluginInstance();
+
+    virtual bool isOK() const = 0;
+
+    virtual QString getIdentifier() const = 0;
+
     virtual void run() = 0;
     
     virtual size_t getBufferSize() = 0;
@@ -57,6 +68,17 @@ public:
 
     virtual bool isBypassed() const = 0;
     virtual void setBypassed(bool value) = 0;
+
+    void setFactory(PluginFactory *f) { m_factory = f; } // ew
+
+protected:
+    RunnablePluginInstance(PluginFactory *factory, QString identifier) :
+	m_factory(factory), m_identifier(identifier) { }
+
+    PluginFactory *m_factory;
+    QString m_identifier;
+
+    friend class PluginFactory;
 };
 
 typedef std::vector<RunnablePluginInstance *> RunnablePluginInstances;

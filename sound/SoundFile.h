@@ -85,6 +85,10 @@ protected:
     // modify the file stream
     std::string getBytes(std::ifstream *file, unsigned int numberOfBytes);
 
+    // Get n bytes from an input stream and write them into buffer.
+    // Return the actual number of bytes read.
+    size_t getBytes(std::ifstream *file, char *buffer, size_t n);
+
     // write some bytes to an output stream
     void putBytes(std::ofstream *file, const std::string outputString);
 

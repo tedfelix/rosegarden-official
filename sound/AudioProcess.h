@@ -29,6 +29,7 @@
 #include "RealTime.h"
 #include "RingBuffer.h"
 #include "RunnablePluginInstance.h"
+#include "AudioPlayQueue.h"
 
 namespace Rosegarden
 {
@@ -51,6 +52,8 @@ public:
     // exit and clean up, before destruction.
     void terminate();
 
+    bool running() const { return m_running; }
+
     int getLock();
     int tryLock();
     int releaseLock();
@@ -68,6 +71,7 @@ protected:
     pthread_t         m_thread;
     pthread_mutex_t   m_lock;
     pthread_cond_t    m_condition;
+    bool              m_running;
     volatile bool     m_exiting;
 
 private:
@@ -170,7 +174,7 @@ public:
 
     void setBussMixer(AudioBussMixer *mixer) { m_bussMixer = mixer; }
 
-    void setPlugin(InstrumentId id, int position, unsigned int pluginId);
+    void setPlugin(InstrumentId id, int position, QString identifier);
     void removePlugin(InstrumentId id, int position);
     void removeAllPlugins();
     void setPluginPortValue(InstrumentId id, int position,
@@ -181,9 +185,6 @@ public:
     /**
      * Prebuffer.  This should be called only when the transport is
      * not running. 
-     *
-     * This function is called from AudioBussMixer::fillBuffers, so
-     * you do not normally need to call it yourself.
      */
     void fillBuffers(const RealTime &currentTime);
 
@@ -221,7 +222,9 @@ protected:
 
     void processBlocks(bool forceFill, bool &readSomething);
     void processEmptyBlocks(InstrumentId id);
-    bool processBlock(InstrumentId id, PlayableAudioFileList&, bool forceFill,
+//!!!    bool processBlock(InstrumentId id, PlayableAudioFileList&, bool forceFill,
+    bool processBlock(InstrumentId id, AudioPlayQueue::FileSet&, bool forceFill,
+
 		      bool &readSomething);
     void generateBuffers();
 
@@ -270,8 +273,11 @@ public:
 
     bool kick(bool wantLock = true);
 
-    void updateReadyStatuses(PlayableAudioFileList &audioQueue);
-    void updateDefunctStatuses();
+    /**
+     * Prebuffer.  This should be called only when the transport is
+     * not running. 
+     */
+    void fillBuffers(const RealTime &currentTime);
 
 protected:
     virtual void threadRun();

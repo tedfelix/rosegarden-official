@@ -42,6 +42,7 @@
 #include "MappedCommon.h"
 #include "MappedEvent.h"
 #include "Audit.h"
+#include "AudioPlayQueue.h"
 
 #include <qregexp.h>
 #include <pthread.h>
@@ -54,13 +55,16 @@
 using std::cerr;
 using std::endl;
 
-static pthread_mutex_t _returnCompositionLock = PTHREAD_MUTEX_INITIALIZER;
-
 #define AUTO_TIMER_NAME "(auto)"
 
 
 namespace Rosegarden
 {
+
+#define FAILURE_REPORT_COUNT 256
+static MappedEvent::FailureCode _failureReports[FAILURE_REPORT_COUNT];
+static int _failureReportWriteIndex = 0;
+static int _failureReportReadIndex = 0;
 
 AlsaDriver::AlsaDriver(MappedStudio *studio):
     SoundDriver(studio, std::string("alsa-lib version ") +
@@ -147,7 +151,7 @@ AlsaDriver::shutdown()
 #ifdef DEBUG_ALSA
     std::cout << "AlsaDriver::shutdown - unloading LADSPA" << std::endl;
 #endif
-    m_studio->unloadAllPluginLibraries();
+//!!!    m_studio->unloadAllPluginLibraries();
 #ifdef DEBUG_ALSA
     std::cout << "AlsaDriver::shutdown - unloading LADSPA done" << std::endl;
 #endif
@@ -558,13 +562,49 @@ AlsaDriver::generateInstruments()
 	}
     }
 
+#ifdef HAVE_DSSI
+    // Create a number of soft synth Instruments
+    //
+    {
+    MappedInstrument *instr;
+    char number[100];
+
+    DeviceId ssiDeviceId = getSpareDeviceId();
+
+    if (m_driverStatus & AUDIO_OK)
+    {
+        for (int i = 0; i < 32; ++i)
+        {
+            sprintf(number, " #%d", i + 1);
+            std::string name = "Synth plugin" + std::string(number);
+            instr = new MappedInstrument(Instrument::SoftSynth,
+                                         i,
+                                         SoftSynthInstrumentBase + i,
+                                         name,
+                                         ssiDeviceId);
+            m_instruments.push_back(instr);
+
+            m_studio->createObject(MappedObject::AudioFader,
+                                   SoftSynthInstrumentBase + i);
+        }
+
+        MappedDevice *device =
+                        new MappedDevice(ssiDeviceId,
+                                         Device::SoftSynth,
+                                         "Synth plugins",
+                                         "Soft synth connection");
+        m_devices.push_back(device);
+    }
+    }
+#endif
+
 #ifdef HAVE_LIBJACK
 
     // Create a number of audio Instruments - these are just
     // logical Instruments anyway and so we can create as 
     // many as we like and then use them as Tracks.
     //
-
+    {
     MappedInstrument *instr;
     char number[100];
     std::string audioName;
@@ -608,8 +648,9 @@ AlsaDriver::generateInstruments()
                                          "Audio connection");
         m_devices.push_back(device);
     }
-
+    }
 #endif
+
 }
 
 MappedDevice *
@@ -1059,6 +1100,8 @@ AlsaDriver::setCurrentTimer(QString timer)
 
     if (timer == getCurrentTimer()) return;
 
+    std::cerr << "AlsaDriver::setCurrentTimer(" << timer << ")" << std::endl;
+
     std::string name(timer.data());
 
     if (name == AUTO_TIMER_NAME) {
@@ -1417,7 +1460,7 @@ AlsaDriver::stopPlayback()
 	m_jackDriver->getAudioQueueLocks();
     }
 #endif
-    clearAudioPlayQueue();
+    clearAudioQueue();
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) {
 	m_jackDriver->releaseAudioQueueLocks();
@@ -1451,33 +1494,6 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
             (*i)->setRealTime(m_playStartPosition);
         }
     }
-
-
-    // Clear down all playing audio files
-    //
-
-    std::list<PlayableAudioFile*>::iterator it;
-    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
-    {
-#ifdef DEBUG_ALSA
-        std::cerr << "AlsaDriver::resetPlayback - stopping audio file"
-                  << std::endl;
-#endif // DEBUG_ALSA
-
-        if ((*it)->getStatus() == PlayableAudioFile::PLAYING)
-            (*it)->setStatus(PlayableAudioFile::DEFUNCT);
-    }
-
-#ifdef HAVE_LIBJACK
-    if (m_jackDriver) m_jackDriver->getAudioQueueLocks();
-#endif
-
-    // clear out defunct
-    clearDefunctFromAudioPlayQueue();
-
-#ifdef HAVE_LIBJACK
-    if (m_jackDriver) m_jackDriver->releaseAudioQueueLocks();
-#endif
 
     // Ensure we clear down output queue on reset - in the case of
     // MIDI clock where we might have a long queue of events already
@@ -1654,7 +1670,7 @@ AlsaDriver::getSequencerTime()
 {
     RealTime t(0, 0);
 
-    if (m_playing)
+//!!!    if (m_playing)
        t = getAlsaTime() + m_playStartPosition - m_alsaPlayStartTime;
 
 //    std::cerr << "AlsaDriver::getSequencerTime: alsa time is "
@@ -1699,7 +1715,16 @@ AlsaDriver::getMappedComposition()
 {
     m_recordComposition.clear();
 
-    pthread_mutex_lock(&_returnCompositionLock);
+    while (_failureReportReadIndex != _failureReportWriteIndex) {
+	MappedEvent::FailureCode code = _failureReports[_failureReportReadIndex];
+	std::cerr << "AlsaDriver::reportFailure(" << code << ")" << std::endl;
+	Rosegarden::MappedEvent *mE = new Rosegarden::MappedEvent
+	    (0, Rosegarden::MappedEvent::SystemFailure, code, 0);
+	m_returnComposition.insert(mE);
+	_failureReportReadIndex =
+	    (_failureReportReadIndex + 1) % FAILURE_REPORT_COUNT;
+    }
+
     if (!m_returnComposition.empty()) {
 	for (MappedComposition::iterator i = m_returnComposition.begin();
 	     i != m_returnComposition.end(); ++i) {
@@ -1707,7 +1732,6 @@ AlsaDriver::getMappedComposition()
 	}
 	m_returnComposition.clear();
     }
-    pthread_mutex_unlock(&_returnCompositionLock);
 
     if (m_recordStatus != RECORD_MIDI &&
         m_recordStatus != RECORD_AUDIO &&
@@ -2480,6 +2504,14 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
         {
 	    if (!m_jackDriver) continue;
 
+	    // This is used for handling asynchronous
+	    // (i.e. unexpected) audio events only
+
+	    if ((*i)->getEventTime() > RealTime(-120, 0)) {
+		// Not an asynchronous event
+		continue;
+	    }
+
             // Check for existence of file - if the sequencer has died
             // and been restarted then we're not always loaded up with
             // the audio file references we should have.  In the future
@@ -2490,28 +2522,6 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
             if (audioFile)
             { 
-                RealTime adjustedEventTime =
-                    (*i)->getEventTime();
-
-                /*
-                    adjustedEventTime == RealTime::zeroTime &&
-                    getSequencerTime() > RealTime(1, 0))
-                    */
-
-                // If we're playing, the event time is two minutes or
-                // more in the past we've sent an async audio event -
-                // if we're playing we have to reset this time to
-                // some point in our playing future - otherwise we
-                // just reset to zero.
-                //
-                if (adjustedEventTime <= RealTime(-120, 0))
-                {
-		    adjustedEventTime = getSequencerTime();
-                }
-
-                // Create this event in this thread and push it onto audio queue.
-                AudioFile *aF = getAudioFile((*i)->getAudioID());
-
 		MappedAudioFader *fader =
 		    dynamic_cast<MappedAudioFader*>
 		    (getMappedStudio()->getAudioFader((*i)->getInstrument()));
@@ -2535,15 +2545,16 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
 #define DEBUG_PLAYING_AUDIO
 #ifdef DEBUG_PLAYING_AUDIO
-		std::cout << "Creating playable audio file: id " << aF->getId() << ", event time " << adjustedEventTime << ", time now " << getAlsaTime() << ", start marker " << (*i)->getAudioStartMarker() << ", duration " << (*i)->getDuration() << ", instrument " << (*i)->getInstrument() << " channels " << channels <<  std::endl;
+		std::cout << "Creating playable audio file: id " << audioFile->getId() << ", event time " << (*i)->getEventTime() << ", time now " << getAlsaTime() << ", start marker " << (*i)->getAudioStartMarker() << ", duration " << (*i)->getDuration() << ", instrument " << (*i)->getInstrument() << " channels " << channels <<  std::endl;
 
 		std::cout << "Read buffer length is " << bufferLength << " (" << RealTime::realTime2Frame(bufferLength, m_jackDriver->getSampleRate()) << " frames)" << std::endl;
 #endif
 
-                PlayableAudioFile *audioFile =
+                PlayableAudioFile *paf =
                     new PlayableAudioFile((*i)->getInstrument(),
-                                          aF,
-                                          adjustedEventTime,
+                                          audioFile,
+                                          getSequencerTime() +
+					  (RealTime(1, 0) / 4),
                                           (*i)->getAudioStartMarker(),
                                           (*i)->getDuration(),
 					  bufferFrames,
@@ -2551,12 +2562,32 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 					  channels,
 					  m_jackDriver->getSampleRate());
 
-                // segment runtime id
-                audioFile->setRuntimeSegmentId((*i)->getRuntimeSegmentId());
+                if ((*i)->isAutoFading())
+                {
+                    paf->setFadeInTime((*i)->getFadeInTime());
+                    paf->setFadeOutTime((*i)->getFadeInTime());
 
-                // Queue the audio file on the driver stack
-                //
-                queueAudio(audioFile);
+#define DEBUG_AUTOFADING
+#ifdef DEBUG_AUTOFADING
+                    std::cout << "PlayableAudioFile is AUTOFADING - "
+                              << "in = " << (*i)->getFadeInTime()
+                              << ", out = " << (*i)->getFadeOutTime()
+                              << std::endl;
+#endif
+                }
+#ifdef DEBUG_AUTOFADING
+                else
+                {
+                    std::cout << "PlayableAudioFile has no AUTOFADE" 
+                              << std::endl;
+                }
+#endif
+
+
+                // segment runtime id
+		paf->setRuntimeSegmentId((*i)->getRuntimeSegmentId());
+
+		m_audioQueue->addUnscheduled(paf);
 
 		haveNewAudio = true;
             }
@@ -2581,7 +2612,14 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
         //
         if ((*i)->getType() == MappedEvent::AudioCancel)
         {
-            cancelAudioFile(*i);
+	    if (m_jackDriver) {
+		m_jackDriver->getAudioQueueLocks();
+	    }
+//!!!            cancelAudioFile(*i);
+//!!!	    m_audioQueue->erase(*i);
+	    if (m_jackDriver) {
+		m_jackDriver->releaseAudioQueueLocks();
+	    }
         }
 
 #endif // HAVE_LIBJACK
@@ -2946,9 +2984,7 @@ AlsaDriver::sendDeviceController(const ClientPortPair &device,
 void
 AlsaDriver::processPending()
 {
-    if (!m_playing)
-        processAudioQueue(true);
-    else
+    if (m_playing)
         processNotesOff(getAlsaTime());
 }
 
@@ -2957,9 +2993,7 @@ AlsaDriver::insertMappedEventForReturn(MappedEvent *mE)
 {
     // Insert the event ready for return at the next opportunity.
     // 
-    pthread_mutex_lock(&_returnCompositionLock);
     m_returnComposition.insert(mE);
-    pthread_mutex_unlock(&_returnCompositionLock);
 }
 
 
@@ -3542,34 +3576,15 @@ AlsaDriver::sleep(const RealTime &rt)
 void 
 AlsaDriver::reportFailure(Rosegarden::MappedEvent::FailureCode code)
 {
-    // We have a mutex here and in other uses of m_returnComposition,
-    // as this can be called to report failures from all sorts of
-    // different threads.  (That includes the JACK process thread,
-    // from which we shouldn't be taking out locks, but if we're
-    // warning of a JACK failure already then it's probably too late.) 
-    // The mutex shouldn't add too much overhead in normal use as
-    // other threads will only take it out on error.
-
-    std::cerr << "AlsaDriver::reportFailure(" << code << ")" << std::endl;
-
-    pthread_mutex_lock(&_returnCompositionLock);
-
-    // If we already have one of this type, ignore the new one
-
-    for (Rosegarden::MappedComposition::iterator i = m_returnComposition.begin();
-	 i != m_returnComposition.end(); ++i) {
-	if ((*i)->getType() == Rosegarden::MappedEvent::SystemFailure &&
-	    (*i)->getData1() == code) {
-	    pthread_mutex_unlock(&_returnCompositionLock);
-	    return;
-	}
+    // Ignore consecutive duplicates
+    if (_failureReportWriteIndex > 0 &&
+	_failureReportWriteIndex != _failureReportReadIndex) {
+	if (code == _failureReports[_failureReportWriteIndex - 1]) return;
     }
 
-    Rosegarden::MappedEvent *mE = new Rosegarden::MappedEvent
-	(0, Rosegarden::MappedEvent::SystemFailure, code, 0);
-    m_returnComposition.insert(mE);
-
-    pthread_mutex_unlock(&_returnCompositionLock);
+    _failureReports[_failureReportWriteIndex] = code;
+    _failureReportWriteIndex =
+	(_failureReportWriteIndex + 1) % FAILURE_REPORT_COUNT;
 }
 
 }

@@ -25,8 +25,6 @@
 
 #include "AudioPluginInstance.h"
 
-#include "MappedCommon.h"
-
 #ifndef _AUDIOPLUGINMANAGER_H_
 #define _AUDIOPLUGINMANAGER_H_
 
@@ -42,9 +40,7 @@
 //
 
 // The AudioPlugin itself holds port information and gui related
-// information (maybe pixmaps etc) and hints for displaying.  The
-// plugin id relates directly to the relevant ID at the
-// MappedStudio's plugin manager.
+// information (maybe pixmaps etc) and hints for displaying.
 //
 //
 
@@ -53,26 +49,37 @@ namespace Rosegarden
 
 typedef std::vector<PluginPort*>::iterator PortIterator;
 
+// We use this to remember what we're copying and pasting
+//
+struct AudioPluginClipboard
+{
+    int                 m_pluginNumber;
+    std::vector<float>  m_controlValues;
+};
+
 class AudioPlugin
 {
 public:
-    AudioPlugin(MappedObjectId id,
+    AudioPlugin(const QString &identifier,
                 const QString &name,
                 unsigned long uniqueId,
                 const QString &label,
                 const QString &author,
                 const QString &copyright,
+		bool isSynth,
 		const QString &category);
 
-    MappedObjectId getId() const { return m_id; }
+    QString getIdentifier() const { return m_identifier; }
+
     QString getName() const { return m_name; }
     unsigned long getUniqueId() const { return m_uniqueId; }
     QString getLabel() const { return m_label; }
     QString getAuthor() const { return m_author; }
     QString getCopyright() const { return m_copyright; }
+    bool isSynth() const { return m_isSynth; }
     QString getCategory() const { return m_category; }
 
-    void addPort(MappedObjectId id,
+    void addPort(int number,
                  const QString &name,
                  PluginPort::PortType type,
                  PluginPort::PortDisplayHint hint,
@@ -88,12 +95,14 @@ public:
 
 protected:
 
-    MappedObjectId             m_id;
+    QString                    m_identifier;
+
     QString                    m_name;
     unsigned long              m_uniqueId;
     QString                    m_label;
     QString                    m_author;
     QString                    m_copyright;
+    bool                       m_isSynth;
     QString                    m_category;
 
     // our ports and associated hints
@@ -111,15 +120,16 @@ class AudioPluginManager
 public:
     AudioPluginManager();
 
-    AudioPlugin* addPlugin(MappedObjectId id,
+    AudioPlugin* addPlugin(const QString &identifier,
                            const QString &name,
                            unsigned long uniqueId,
                            const QString &label,
                            const QString &author,
                            const QString &copyright,
+			   bool isSynth,
 			   const QString &category);
 
-    bool removePlugin(MappedObjectId id);
+    bool removePlugin(const QString &identifier);
 
     // Get a straight list of names
     //
@@ -128,8 +138,19 @@ public:
     // Some useful members
     //
     AudioPlugin* getPlugin(int number);
+
+    AudioPlugin* getPluginByIdentifier(QString identifier);
+    int getPositionByIdentifier(QString identifier);
+
+    // Deprecated -- the GUI shouldn't be using unique ID because it's
+    // bound to a particular plugin type (and not necessarily unique
+    // anyway).  It should use the identifier instead, which is a
+    // structured string managed by the sequencer.  Keep this in only
+    // for compatibility with old .rg files.
+    //
     AudioPlugin* getPluginByUniqueId(unsigned long uniqueId);
-    int getPositionByUniqueId(unsigned long uniqueId);
+
+//    int getPositionByUniqueId(unsigned long uniqueId);
 
     PluginIterator begin() { return m_plugins.begin(); }
     PluginIterator end() { return m_plugins.end(); }
@@ -139,12 +160,16 @@ public:
     void setSampleRate(unsigned int rate) { m_sampleRate = rate; }
     unsigned int getSampleRate() const { return m_sampleRate; }
 
+    AudioPluginClipboard* getPluginClipboard() { return &m_pluginClipboard; }
+
 protected:
     void fetchSampleRate();
 
     std::vector<AudioPlugin*> m_plugins;
 
     unsigned int              m_sampleRate;
+
+    AudioPluginClipboard      m_pluginClipboard;
 
 };
 

@@ -13,6 +13,7 @@ rosegarden_SOURCES = \
 	chordnameruler.cpp \
 	colours.cpp \
 	colourwidgets.cpp \
+        commondialogs.cpp \
         constants.cpp \
         controleditor.cpp \
         controlruler.cpp \

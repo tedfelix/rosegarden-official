@@ -134,6 +134,7 @@ public:
 
     // Audio files
     //
+    //!!! all to be obsoleted
     void clearAudioFiles() { m_soundDriver->clearAudioFiles(); }
     bool addAudioFile(const std::string &fileName, const unsigned int &id)
         { return m_soundDriver->addAudioFile(fileName, id); }
@@ -254,14 +255,10 @@ public:
         { m_soundDriver->setAudioMonitoringInstrument(id); }
     Rosegarden::InstrumentId getAudioMonitoringInstrument()
         { return m_soundDriver->getAudioMonitoringInstrument(); }
-    
-
-    PlayableAudioFileList getAudioPlayQueue()
-    { return m_soundDriver->getAudioPlayQueue(); }
-
-    PlayableAudioFileList getAudioPlayQueueNotDefunct()
-    { return m_soundDriver->getAudioPlayQueueNotDefunct(); }
 	
+    void initialiseAudioQueue(const std::vector<MappedEvent> &events) {
+	m_soundDriver->initialiseAudioQueue(events);
+    }
 
     // Audio latenices from audio driver
     //
@@ -287,9 +284,9 @@ public:
     // have to insert them into a stream and provide management.
     //
     void setPluginInstance(InstrumentId id,
-                           unsigned long pluginId,
+                           QString identifier,
                            int position)
-        { m_soundDriver->setPluginInstance(id, pluginId, position); }
+        { m_soundDriver->setPluginInstance(id, identifier, position); }
 
     void removePluginInstance(InstrumentId id, int position)
         { m_soundDriver->removePluginInstance(id, position); }

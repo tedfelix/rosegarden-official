@@ -81,6 +81,9 @@ SegmentParameterBox::initBox()
     QLabel *transposeLabel = new QLabel(i18n("Transpose"), this);
     QLabel *delayLabel     = new QLabel(i18n("Delay"), this);
     QLabel *colourLabel    = new QLabel(i18n("Color"), this);
+    m_autoFadeLabel        = new QLabel(i18n("Audio auto-fade"), this);
+    m_fadeInLabel          = new QLabel(i18n("Fade in (ms)"), this);
+    m_fadeOutLabel         = new QLabel(i18n("Fade out (ms)"), this);
 
     // HBox for label
     //
@@ -154,7 +157,25 @@ SegmentParameterBox::initBox()
     connect(m_colourValue, SIGNAL(activated(int)),
             SLOT(slotColourSelected(int)));
 
+    // Audio autofade enabled
+    //
+    m_autoFadeBox = new QCheckBox(this);
+    connect(m_autoFadeBox, SIGNAL(stateChanged(int)),
+            this, SLOT(slotAudioFadeChanged(int)));
 
+    // Fade in and out times
+    //
+    m_fadeInSpin = new QSpinBox(this);
+    m_fadeInSpin->setMinValue(0);
+    m_fadeInSpin->setMaxValue(5000);
+    connect(m_fadeInSpin, SIGNAL(valueChanged(int)),
+            this, SLOT(slotFadeInChanged(int)));
+
+    m_fadeOutSpin = new QSpinBox(this);
+    m_fadeOutSpin->setMinValue(0);
+    m_fadeOutSpin->setMaxValue(5000);
+    connect(m_fadeOutSpin, SIGNAL(valueChanged(int)),
+            this, SLOT(slotFadeOutChanged(int)));
 
     label->setFont(font);
     repeatLabel->setFont(font);
@@ -162,6 +183,9 @@ SegmentParameterBox::initBox()
     transposeLabel->setFont(font);
     delayLabel->setFont(font);
     colourLabel->setFont(font);
+    m_autoFadeLabel->setFont(font);
+    m_fadeInLabel->setFont(font);
+    m_fadeOutLabel->setFont(font);
 
     gridLayout->addRowSpacing(0, 8);
 
@@ -182,6 +206,15 @@ SegmentParameterBox::initBox()
 
     gridLayout->addWidget(colourLabel,   6, 0, AlignLeft);
     gridLayout->addWidget(m_colourValue, 6, 1);
+
+    gridLayout->addWidget(m_autoFadeLabel, 7, 0, AlignLeft);
+    gridLayout->addWidget(m_autoFadeBox,  7, 1);
+
+    gridLayout->addWidget(m_fadeInLabel,   8, 0, AlignLeft);
+    gridLayout->addWidget(m_fadeInSpin,  8, 1);
+
+    gridLayout->addWidget(m_fadeOutLabel,  9, 0, AlignLeft);
+    gridLayout->addWidget(m_fadeOutSpin, 9, 1);
 
     // populate the quantize combo
     //
@@ -604,6 +637,52 @@ SegmentParameterBox::populateBoxFromSegments()
 
     m_colourValue->setEnabled(diffcolours != NotApplicable);
 
+    // Enable or disable the fade in/out params
+    if (m_segments.size() == 1 && 
+        (*(m_segments.begin()))->getType() == Rosegarden::Segment::Audio)
+    {
+        m_autoFadeBox->blockSignals(true);
+        m_fadeInSpin->blockSignals(true);
+        m_fadeOutSpin->blockSignals(true);
+
+        m_autoFadeLabel->setEnabled(true);
+        m_autoFadeBox->setEnabled(true);
+        m_fadeInLabel->setEnabled(true);
+        m_fadeInSpin->setEnabled(true);
+        m_fadeOutLabel->setEnabled(true);
+        m_fadeOutSpin->setEnabled(true);
+
+        Rosegarden::Segment *seg = *(m_segments.begin());
+
+        int fadeInTime = seg->getFadeInTime().sec * 1000 +
+            seg->getFadeInTime().msec();
+        m_fadeInSpin->setValue(fadeInTime);
+
+        int fadeOutTime = seg->getFadeOutTime().sec * 1000 +
+            seg->getFadeOutTime().msec();
+        m_fadeOutSpin->setValue(fadeOutTime);
+
+        m_autoFadeBox->setChecked(seg->isAutoFading());
+
+        m_autoFadeBox->blockSignals(false);
+        m_fadeInSpin->blockSignals(false);
+        m_fadeOutSpin->blockSignals(false);
+    }
+    else
+    {
+        m_autoFadeLabel->setEnabled(false);
+        m_autoFadeBox->setEnabled(false);
+        m_fadeInLabel->setEnabled(false);
+        m_fadeInSpin->setEnabled(false);
+        m_fadeOutLabel->setEnabled(false);
+        m_fadeOutSpin->setEnabled(false);
+
+        m_autoFadeBox->setChecked(false);
+        m_fadeInSpin->setValue(0);
+        m_fadeOutSpin->setValue(0);
+    }
+
+
 }
 
 void SegmentParameterBox::slotRepeatPressed()
@@ -839,5 +918,68 @@ SegmentParameterBox::slotEditSegmentLabel()
 
         addCommandToHistory(command);
     }
+}
+
+
+void
+SegmentParameterBox::slotAudioFadeChanged(int value)
+{
+    RG_DEBUG << "SegmentParameterBox::slotAudioFadeChanged - value = "
+             << value << endl;
+
+    if (m_segments.size() == 0)
+        return;
+
+    bool state = false;
+    if (value == QButton::On) state = true;
+
+    std::vector<Rosegarden::Segment*>::iterator it;
+    for (it = m_segments.begin(); it != m_segments.end(); it++) {
+        (*it)->setAutoFade(state);
+    }
+
+}
+
+
+void
+SegmentParameterBox::slotFadeInChanged(int value)
+{
+    RG_DEBUG << "SegmentParameterBox::slotFadeInChanged - value = "
+             << value << endl;
+
+    if (m_segments.size() == 0)
+        return;
+
+    // Convert from ms
+    //
+    Rosegarden::RealTime fadeInTime(value/1000000, (value % 1000) * 1000000);
+
+    std::vector<Rosegarden::Segment*>::iterator it;
+    for (it = m_segments.begin(); it != m_segments.end(); it++) {
+        (*it)->setFadeInTime(fadeInTime);
+    }
+
+    emit documentModified();
+}
+
+void
+SegmentParameterBox::slotFadeOutChanged(int value)
+{
+    RG_DEBUG << "SegmentParameterBox::slotFadeOutChanged - value = "
+             << value << endl;
+
+    if (m_segments.size() == 0)
+        return;
+
+    // Convert from ms
+    //
+    Rosegarden::RealTime fadeOutTime(value/1000000, (value % 1000) * 10000000);
+
+    std::vector<Rosegarden::Segment*>::iterator it;
+    for (it = m_segments.begin(); it != m_segments.end(); it++) {
+        (*it)->setFadeOutTime(fadeOutTime);
+    }
+
+    emit documentModified();
 }
 

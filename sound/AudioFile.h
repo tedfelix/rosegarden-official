@@ -133,6 +133,14 @@ public:
     virtual std::string getSampleFrames(std::ifstream *file,
                                         unsigned int frames) = 0;
 
+    // Return a number of samples - caller will have to
+    // de-interleave n-channel samples themselves.  Place
+    // results in buf, return actual number of frames read.
+    //
+    virtual unsigned int getSampleFrames(std::ifstream *file,
+					 char *buf,
+					 unsigned int frames) = 0;
+
     // Return a number of (possibly) interleaved samples
     // over a time slice from current file pointer position.
     //
@@ -163,6 +171,19 @@ public:
     // Implement in actual file type
     //
     virtual unsigned int getBytesPerFrame() = 0;
+
+    // Decode and de-interleave the given samples that were retrieved
+    // from this file or another with the same format as it.  Place
+    // the results in the given float buffer.  Return true for
+    // success.  This function does crappy resampling if necessary.
+    // 
+    virtual bool decode(const unsigned char *sourceData,
+			size_t sourceBytes,
+			size_t targetSampleRate,
+			size_t targetChannels,
+			size_t targetFrames,
+			std::vector<float *> &targetData,
+			bool addToResultBuffers = false) = 0;
 
 protected:
 

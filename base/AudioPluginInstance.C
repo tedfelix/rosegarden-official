@@ -35,14 +35,14 @@ namespace Rosegarden
 // ------------------ PluginPort ---------------------
 //
 
-PluginPort::PluginPort(int id,
+PluginPort::PluginPort(int number,
                        std::string name,
                        PluginPort::PortType type,
                        PluginPort::PortDisplayHint hint,
                        PortData lowerBound,
                        PortData upperBound,
 		       PortData defaultValue):
-    m_id(id),
+    m_number(number),
     m_name(name),
     m_type(type),
     m_displayHint(hint),
@@ -54,17 +54,17 @@ PluginPort::PluginPort(int id,
 
 AudioPluginInstance::AudioPluginInstance(unsigned int position):
     m_mappedId(-1),
-    m_id(0),
+    m_identifier(""),
     m_position(position),
     m_assigned(false),
     m_bypass(false)
 {
 }
 
-AudioPluginInstance::AudioPluginInstance(unsigned long id,
+AudioPluginInstance::AudioPluginInstance(std::string identifier,
                                          unsigned int position):
                 m_mappedId(-1),
-                m_id(id),
+                m_identifier(identifier),
                 m_position(position),
                 m_assigned(true)
 {
@@ -87,8 +87,8 @@ AudioPluginInstance::toXmlString()
 
     plugin << "            <plugin position=\""
            << m_position
-           << "\" id=\""
-           << m_id
+	   << "\" identifier=\""
+	   << encode(m_identifier)
            << "\" bypassed=\"";
 
     if (m_bypass)
@@ -101,7 +101,7 @@ AudioPluginInstance::toXmlString()
     for (unsigned int i = 0; i < m_ports.size(); i++)
     {
         plugin << "                <port id=\""
-               << m_ports[i]->id
+               << m_ports[i]->number
                << "\" value=\""
                << m_ports[i]->value
                << "\"/>" << std::endl;
@@ -120,20 +120,20 @@ AudioPluginInstance::toXmlString()
 
 
 void
-AudioPluginInstance::addPort(unsigned int id, PortData value)
+AudioPluginInstance::addPort(int number, PortData value)
 {
-    m_ports.push_back(new PluginPortInstance(id, value));
+    m_ports.push_back(new PluginPortInstance(number, value));
 }
 
 
 bool
-AudioPluginInstance::removePort(unsigned int id)
+AudioPluginInstance::removePort(int number)
 {
     PortInstanceIterator it = m_ports.begin();
 
     for (; it != m_ports.end(); ++it)
     {
-        if ((*it)->id == id)
+        if ((*it)->number == number)
         {
             delete (*it);
             m_ports.erase(it);
@@ -146,13 +146,13 @@ AudioPluginInstance::removePort(unsigned int id)
 
 
 PluginPortInstance* 
-AudioPluginInstance::getPort(unsigned int id)
+AudioPluginInstance::getPort(int number)
 {
     PortInstanceIterator it = m_ports.begin();
 
     for (; it != m_ports.end(); ++it)
     {
-        if ((*it)->id == id)
+        if ((*it)->number == number)
             return *it;
     }
 

@@ -411,7 +411,35 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "rosegarden-data") {
 
-        // validate top level open
+	// FILE FORMAT VERSIONING -- see comments in
+	// rosegardenguidoc.cpp.  We only care about major and minor
+	// here, not point.
+
+	QString version = atts.value("version");
+	QString smajor = atts.value("format-version-major");
+	QString sminor = atts.value("format-version-minor");
+
+	if (smajor) {
+
+	    int major = smajor.toInt();
+	    int minor = sminor.toInt();
+
+	    if (major > RosegardenGUIDoc::FILE_FORMAT_VERSION_MAJOR) {
+		m_errorString = i18n("This file was written by Rosegarden %1, and it uses\na different file format that cannot be read by this version.").arg(version);
+		return false;
+	    }
+
+	    if (major == RosegardenGUIDoc::FILE_FORMAT_VERSION_MAJOR &&
+		minor >  RosegardenGUIDoc::FILE_FORMAT_VERSION_MINOR) {
+
+                CurrentProgressDialog::freeze();
+	        KStartupLogo::hideIfStillThere();
+
+		KMessageBox::information(0, i18n("This file was written by Rosegarden %1, which is more recent than this version.\nThere may be some incompatibilities with the file format.").arg(version));
+
+		CurrentProgressDialog::thaw();
+	    }
+	}
 
     } else if (lcName == "studio") {
 
@@ -1070,6 +1098,55 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         timeT absEnd = getComposition().getElapsedTimeForRealTime(realEndTime);
 	m_currentSegment->setEndTime(absEnd);
 
+    } else if (lcName == "fadein") {
+
+        if (!m_currentSegment)
+        {
+            // Don't fail - as this segment could be defunct if we
+            // skipped loading the audio file
+            //
+            return true;
+        }
+
+        if (m_currentSegment->getType() != Rosegarden::Segment::Audio)
+        {
+            m_errorString = "found fade in time in non audio segment";
+            return false;
+        }
+
+        float marker = atts.value("time").toFloat();
+        int sec = (int)marker;
+        int usec = (int)((marker - ((float)sec)) * 1000000.0);
+        Rosegarden::RealTime markerTime(sec, usec * 1000);
+
+        m_currentSegment->setFadeInTime(markerTime);
+        m_currentSegment->setAutoFade(true);
+
+
+    } else if (lcName == "fadeout") {
+
+        if (!m_currentSegment)
+        {
+            // Don't fail - as this segment could be defunct if we
+            // skipped loading the audio file
+            //
+            return true;
+        }
+
+        if (m_currentSegment->getType() != Rosegarden::Segment::Audio)
+        {
+            m_errorString = "found fade out time in non audio segment";
+            return false;
+        }
+
+        float marker = atts.value("time").toFloat();
+        int sec = (int)marker;
+        int usec = (int)((marker - ((float)sec)) * 1000000.0);
+        Rosegarden::RealTime markerTime(sec, usec * 1000);
+
+        m_currentSegment->setFadeOutTime(markerTime);
+        m_currentSegment->setAutoFade(true);
+
     } else if (lcName == "device") {
 
         if (m_section != InStudio)
@@ -1136,6 +1213,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		md->setVariationType(variation);
 	    }
 	}
+	else if (type == "softsynth")
+        {
+            m_device = getStudio().getDevice(id);
+
+            if (m_device && m_device->getType() == Rosegarden::Device::SoftSynth)
+                m_device->setName(qstrtostr(nameStr));
+        }
 	else if (type == "audio")
         {
             m_device = getStudio().getDevice(id);
@@ -1519,23 +1603,32 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         {
             // Get the details
             int position = atts.value("position").toInt();
-            unsigned long id = atts.value("id").toULong();
             QString bpStr = atts.value("bypassed");
             bool bypassed = false;
 
             if (bpStr.lower() == "true")
                 bypassed = true;
 
-            // Check that ID exists
-            //
+	    // Plugins are identified by a structured identifier
+	    // string, but we will accept a LADSPA UniqueId if there's
+	    // no identifier, for backward compatibility
+
+	    QString identifier = atts.value("identifier");
+
             Rosegarden::AudioPlugin *plugin = 0;
-            if (getAudioPluginManager())
-                plugin = getAudioPluginManager()->getPluginByUniqueId(id);
+
+	    if (!identifier) {
+		if (atts.value("id")) {
+		    unsigned long id = atts.value("id").toULong();
+		    plugin = getAudioPluginManager()->getPluginByUniqueId(id);
+		}
+	    } else {
+		plugin = getAudioPluginManager()->getPluginByIdentifier(identifier);
+	    }
 
             // If we find the plugin all is well and good but if
             // we don't we just skip it.
             //
-	
             if (plugin)
             {
                 m_plugin = m_instrument->getPlugin(position);
@@ -1544,7 +1637,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 //RG_DEBUG << "SETTING PLUGIN ASSIGNED AT " << position 
                      //<< " ON INS " << m_instrument->getId() << endl;
 
-                m_plugin->setId(id);
+                m_plugin->setIdentifier(plugin->getIdentifier().data());
             }
             /*
                // we shouldn't be halting import of the RG file just because

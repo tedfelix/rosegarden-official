@@ -431,6 +431,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Hasso Tepper", I18N_NOOP("Estonian translation"), "hasso@estpak.ee");
     aboutData.addCredit("Jelmer Vernooij", I18N_NOOP("Dutch translation"), "jelmer@samba.org");
     aboutData.addCredit("Bernd Weber", I18N_NOOP("German translation (Arbeiten mit Rosegarden)"), "weber.freiburg@freenet.de");
+    aboutData.addCredit("Kevin Liang", I18N_NOOP("HSpinBox class"), "xkliang@rhpcs.mcmaster.ca");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") ,I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
     

@@ -40,6 +40,7 @@ public:
         PeakHold,
 	AudioPeakHoldShort, 
         AudioPeakHoldLong,
+	AudioPeakHoldIEC,
         FixedHeightVisiblePeakHold
     } VUMeterType;
 
@@ -49,9 +50,8 @@ public:
         Vertical
     } VUAlignment;
 
-    // Mono and stereo level setting.  The AudioPeakHold meter type
-    // expects its levels in dB; other types expect levels between 0
-    // and 1.
+    // Mono and stereo level setting.  The AudioPeakHold meter types
+    // expect levels in dB; other types expect levels between 0 and 1.
     //
     void setLevel(double level);
     void setLevel(double leftLevel, double rightLevel);

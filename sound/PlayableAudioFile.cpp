@@ -25,10 +25,197 @@
 namespace Rosegarden
 {
 
+//#define DEBUG_RING_BUFFER_POOL 1
 //#define DEBUG_PLAYABLE 1
 //#define DEBUG_RECORDABLE 1
 
-PlayableAudioFile::SmallFileMap PlayableAudioFile::m_smallFileCache;
+class RingBufferPool
+{
+public:
+    typedef float sample_t;
+
+    RingBufferPool(size_t bufferSize);
+    virtual ~RingBufferPool();
+
+    void mlock();
+
+    /**
+     * Set the default size for buffers.  Buffers currently allocated
+     * will not be resized until they are returned.
+     */
+    void setBufferSize(size_t n);
+
+    size_t getBufferSize() const { return m_bufferSize; }
+
+    /**
+     * Discard or create buffers as necessary so as to have n buffers
+     * in the pool.  This will not discard any buffers that are
+     * currently allocated, so if more than n are allocated, more than
+     * n will remain.
+     */
+    void setPoolSize(size_t n);
+
+    size_t getPoolSize() const { return m_buffers.size(); }
+
+    /**
+     * Return true if n buffers available, false otherwise.
+     */
+    bool getBuffers(size_t n, RingBuffer<sample_t> **buffers);
+
+    /**
+     * Return a buffer to the pool.
+     */
+    void returnBuffer(RingBuffer<sample_t> *buffer);
+
+protected:
+    // Want to avoid memory allocation when marking a buffer
+    // unallocated or allocated, so we use a single container for all
+
+    typedef std::pair<RingBuffer<sample_t> *, bool> AllocPair;
+    typedef std::vector<AllocPair> AllocList;
+    AllocList m_buffers;
+
+    size_t m_bufferSize;
+};
+
+
+RingBufferPool::RingBufferPool(size_t bufferSize) :
+    m_bufferSize(bufferSize)
+{
+    // nothing
+}
+
+RingBufferPool::~RingBufferPool()
+{
+    size_t allocatedCount = 0;
+    for (AllocList::iterator i = m_buffers.begin(); i != m_buffers.end(); ++i) {
+	if (i->second) ++allocatedCount;
+    }
+
+    if (allocatedCount > 0) {
+	std::cerr << "WARNING: RingBufferPool::~RingBufferPool: deleting pool with " << allocatedCount << " allocated buffers" << std::endl;
+    }
+
+    for (AllocList::iterator i = m_buffers.begin(); i != m_buffers.end(); ++i) {
+	delete i->first;
+    }
+
+    m_buffers.clear();
+}
+
+void
+RingBufferPool::mlock()
+{
+    for (AllocList::iterator i = m_buffers.begin(); i != m_buffers.end(); ++i) {
+	i->first->mlock();
+    }
+}
+ 
+void
+RingBufferPool::setBufferSize(size_t n)
+{
+    if (m_bufferSize == n) return;
+
+#ifdef DEBUG_RING_BUFFER_POOL
+    std::cerr << "RingBufferPool::setBufferSize: from " << m_bufferSize
+	      << " to " << n << std::endl;
+#endif
+
+    for (AllocList::iterator i = m_buffers.begin(); i != m_buffers.end(); ++i) {
+	if (!i->second) {
+	    delete i->first;
+	    i->first = new RingBuffer<sample_t>(m_bufferSize);
+	}
+    }
+
+    m_bufferSize = n;
+}    
+
+void
+RingBufferPool::setPoolSize(size_t n)
+{
+#ifdef DEBUG_RING_BUFFER_POOL
+    std::cerr << "RingBufferPool::setPoolSize: from " << m_buffers.size()
+	      << " to " << n << std::endl;
+#endif
+
+    size_t count = 0;
+    for (AllocList::iterator i = m_buffers.begin(); i != m_buffers.end(); ) {
+	if (i->second || count < n) {
+	    ++count;
+	    ++i;
+	} else {
+	    m_buffers.erase(i);
+	}
+    }
+    while (count < n) {
+	m_buffers.push_back(AllocPair(new RingBuffer<sample_t>(m_bufferSize),
+				      false));
+	++count;
+    }
+}
+
+bool
+RingBufferPool::getBuffers(size_t n, RingBuffer<sample_t> **buffers)
+{
+    size_t count = 0;
+
+    for (AllocList::iterator i = m_buffers.begin(); i != m_buffers.end(); ++i) {
+	if (!i->second && ++count == n) break;
+    }
+
+    if (count < n) {
+#ifdef DEBUG_RING_BUFFER_POOL
+	std::cerr << "RingBufferPool::getBuffers(" << n << "): not available" << std::endl;
+#endif
+	return false;
+    }
+    count = 0;
+
+#ifdef DEBUG_RING_BUFFER_POOL
+	std::cerr << "RingBufferPool::getBuffers(" << n << "): available" << std::endl;
+#endif
+
+    for (AllocList::iterator i = m_buffers.begin(); i != m_buffers.end(); ++i) {
+	if (!i->second) {
+	    i->second = true;
+	    i->first->reset();
+	    buffers[count] = i->first;
+	    if (++count == n) break;
+	}
+    }
+
+    return true;
+}
+
+void
+RingBufferPool::returnBuffer(RingBuffer<sample_t> *buffer)
+{
+#ifdef DEBUG_RING_BUFFER_POOL
+    std::cerr << "RingBufferPool::returnBuffer" << std::endl;
+#endif
+
+    for (AllocList::iterator i = m_buffers.begin(); i != m_buffers.end(); ++i) {
+	if (i->first == buffer) {
+	    i->second = false;
+	    if (buffer->getSize() != m_bufferSize) {
+		delete buffer;
+		i->first = new RingBuffer<sample_t>(m_bufferSize);
+	    }
+	}
+    }
+}
+
+
+AudioCache PlayableAudioFile::m_smallFileCache;
+
+std::vector<PlayableAudioFile::sample_t *> PlayableAudioFile::m_workBuffers;
+size_t PlayableAudioFile::m_workBufferSize = 0;
+
+char *PlayableAudioFile::m_rawFileBuffer;
+size_t PlayableAudioFile::m_rawFileBufferSize = 0;
+
+RingBufferPool *PlayableAudioFile::m_ringBufferPool = 0;
 
 PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
                                      AudioFile *audioFile,
@@ -42,57 +229,67 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
     m_startTime(startTime),
     m_startIndex(startIndex),
     m_duration(duration),
-    m_status(IDLE),
     m_file(0),
     m_audioFile(audioFile),
     m_instrumentId(instrumentId),
     m_targetChannels(targetChannels),
     m_targetSampleRate(targetSampleRate),
-    m_initialised(false),
     m_runtimeSegmentId(-1),
-    m_smallFileIndex(0),
-    m_smallFileSize(smallFileSize),
     m_isSmallFile(false),
-    m_workBuffer(0),
-    m_workBufferSize(0),
-    m_totalFrames(0),
+//    m_workBufferSize(0),
+//    m_rawFileBuffer(0),
+//    m_rawFileBufferSize(0),
+    m_currentScanPoint(RealTime::zeroTime),
     m_autoFade(false),
     m_fadeInTime(RealTime::zeroTime),
     m_fadeOutTime(RealTime::zeroTime)
 {
+//    m_smallFileSize = 0;
+
 #ifdef DEBUG_PLAYABLE
     std::cerr << "PlayableAudioFile::PlayableAudioFile - creating " << this << std::endl;
 #endif
-    initialise(bufferSize);
+
+    if (!m_ringBufferPool) {
+	//!!! Problematic -- how do we deal with different playable audio
+	// files requiring different buffer sizes?  That shouldn't be the
+	// usual case, but it's not unthinkable.
+	m_ringBufferPool = new RingBufferPool(bufferSize);
+	m_ringBufferPool->mlock();
+    } else {
+	m_ringBufferPool->setBufferSize
+	    (std::max(bufferSize, m_ringBufferPool->getBufferSize()));
+	m_ringBufferPool->mlock();
+    }
+
+    initialise(bufferSize, smallFileSize);
 }
 
 
 void
-PlayableAudioFile::initialise(size_t bufferSize)
+PlayableAudioFile::setRingBufferPoolSizes(size_t n, size_t nframes)
 {
-    if (m_initialised) return;
+    if (!m_ringBufferPool) {
+	m_ringBufferPool = new RingBufferPool(nframes);
+    } else {
+	m_ringBufferPool->setBufferSize
+	    (std::max(nframes, m_ringBufferPool->getBufferSize()));
+    }
+    m_ringBufferPool->setPoolSize(n);
+    m_ringBufferPool->mlock();
+}
 
-    //!!! This used to have some randomness to try to ensure that not
-    //all simultaneously-starting files would want servicing
-    //simultaneously.  We could perhaps restore that feature.
 
+void
+PlayableAudioFile::initialise(size_t bufferSize, size_t smallFileSize)
+{
 #ifdef DEBUG_PLAYABLE
     std::cerr << "PlayableAudioFile::initialise() " << this << std::endl;
 #endif
 
-    SmallFileMap::iterator smfi = m_smallFileCache.find(m_audioFile);
+    checkSmallFileCache(smallFileSize);
 
-    if (smfi != m_smallFileCache.end()) {
-
-#ifdef DEBUG_PLAYABLE
-	std::cerr << "PlayableAudioFile::initialise: Found file in small file cache" << std::endl;
-#endif
-
-	++(smfi->second.first);
-	m_isSmallFile = true;
-	m_file = 0;
-
-    } else {
+    if (!m_isSmallFile) {
 
 	m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
 				   std::ios::in | std::ios::binary);
@@ -104,20 +301,6 @@ PlayableAudioFile::initialise(size_t bufferSize)
 	//leaking fds?
 	if (!*m_file)
 	    throw(std::string("PlayableAudioFile - can't open file"));
-    }
-
-    if (m_file && m_audioFile->getSize() <= m_smallFileSize) {
-	
-#ifdef DEBUG_PLAYABLE
-	std::cerr << "PlayableAudioFile::initialise: Adding file to small file cache" << std::endl;
-#endif
-
-	m_audioFile->scanTo(m_file, RealTime::zeroTime);
-	std::string contents = m_audioFile->getSampleFrames
-	    (m_file,
-	     m_audioFile->getSize() / m_audioFile->getBytesPerFrame());
-	m_smallFileCache[m_audioFile] = SmallFileData(1, contents);
-	m_isSmallFile = true;
     }
 
     // Scan to the beginning of the data chunk we need
@@ -134,15 +317,10 @@ PlayableAudioFile::initialise(size_t bufferSize)
     if (m_targetChannels <= 0) m_targetChannels = m_audioFile->getChannels();
     if (m_targetSampleRate <= 0) m_targetSampleRate = m_audioFile->getSampleRate();
 
+    m_ringBuffers = new RingBuffer<sample_t> *[m_targetChannels];
     for (int ch = 0; ch < m_targetChannels; ++ch) {
-	m_ringBuffers.push_back(new RingBuffer<sample_t>(bufferSize));
+	m_ringBuffers[ch] = 0;
     }
-    
-#ifdef DEBUG_PLAYABLE
-    std::cerr << "PlayableAudioFile: created " << bufferSize << "-sample ring buffer" << std::endl;
-#endif
-
-    m_initialised = true;
 }
 
 PlayableAudioFile::~PlayableAudioFile()
@@ -152,52 +330,33 @@ PlayableAudioFile::~PlayableAudioFile()
         delete m_file;
     }
 
-    for (size_t i = 0; i < m_ringBuffers.size(); ++i) {
-	delete m_ringBuffers[i];
-    }
+    returnRingBuffers();
+    delete[] m_ringBuffers;
 
     if (m_isSmallFile) {
-	SmallFileMap::iterator i = m_smallFileCache.find(m_audioFile);
-	if (i != m_smallFileCache.end()) {
-	    if (--(i->second.first) == 0) {
-#ifdef DEBUG_PLAYABLE
-		std::cerr << "PlayableAudioFile::~PlayableAudioFile: Removing file with no other references from small file cache" << std::endl;
-#endif
-		m_smallFileCache.erase(i);
-	    }
-	}
+	m_smallFileCache.decrementReference(m_audioFile);
+    }
+/*
+    for (size_t i = 0; i < m_workBuffers.size(); ++i) {
+	delete[] m_workBuffers[i];
     }
 
-    delete[] m_workBuffer;
-
+    delete[] m_rawFileBuffer;
+*/
 #ifdef DEBUG_PLAYABLE
-    std::cerr << "PlayableAudioFile::~PlayableAudioFile - destroying - " << this << std::endl;
+//    std::cerr << "PlayableAudioFile::~PlayableAudioFile - destroying - " << this << std::endl;
 #endif
 }
 
-bool
-PlayableAudioFile::mlock()
+void
+PlayableAudioFile::returnRingBuffers()
 {
-    if (!m_initialised) return false;
-
-    bool success = true;
-    for (int ch = 0; ch < m_targetChannels; ++ch) {
-	if (!m_ringBuffers[ch]->mlock()) {
-	    std::cerr << "WARNING: PlayableAudioFile::initialise: couldn't lock buffer into real memory, performance may be impaired" << std::endl;
-	    success = false;
+    for (int i = 0; i < m_targetChannels; ++i) {
+	if (m_ringBuffers[i]) {
+	    m_ringBufferPool->returnBuffer(m_ringBuffers[i]);
+	    m_ringBuffers[i] = 0;
 	}
     }
-    return success;
-}
- 
-bool
-PlayableAudioFile::isFinished() const
-{
-    if (!m_initialised || !m_fileEnded) return false;
-    for (int ch = 0; ch < m_targetChannels; ++ch) {
-	if (m_ringBuffers[ch]->getReadSpace() > 0) return false;
-    }
-    return true;
 }
 
 bool
@@ -213,21 +372,21 @@ PlayableAudioFile::scanTo(const RealTime &time)
 
     if (m_isSmallFile) {
 
-	size_t frames = RealTime::realTime2Frame
-	    (time, m_audioFile->getSampleRate());
-	m_smallFileIndex = frames * m_audioFile->getBytesPerFrame();
+//!!!	size_t frames = RealTime::realTime2Frame(time, m_targetSampleRate);
+//!!!	m_currentFrameOffset = frames;
+	m_currentScanPoint = time;
 	ok = true;
 
     } else {
 
+//!!!	size_t frames = RealTime::realTime2Frame(time, m_audioFile->getSampleRate());
 	ok = m_audioFile->scanTo(m_file, time);
+//!!!	if (ok) m_currentFrameOffset = frames;
+	if (ok) m_currentScanPoint = time;
     }
 
-    m_totalFrames = Rosegarden::RealTime::realTime2Frame
-	(time, m_audioFile->getSampleRate());
-
 #ifdef DEBUG_PLAYABLE
-    std::cerr << "PlayableAudioFile::scanTo(" << time << "): set m_totalFrames to " << m_totalFrames << std::endl;
+    std::cerr << "PlayableAudioFile::scanTo(" << time << "): set m_currentScanPoint to " << m_currentScanPoint << std::endl;
 #endif
 
     return ok;
@@ -238,67 +397,225 @@ size_t
 PlayableAudioFile::getSampleFramesAvailable()
 {
     size_t actual = 0;
+  
+    if (m_isSmallFile) {
+	size_t cchannels;
+	size_t cframes;
+	(void)m_smallFileCache.getData(m_audioFile, cchannels, cframes);
+	size_t offset = RealTime::realTime2Frame(m_currentScanPoint,
+						 m_targetSampleRate);
+	if (cframes > offset) return cframes - offset;
+	else return 0;
+//	return cframes - m_currentFrameOffset;
+    }
 
     for (int ch = 0; ch < m_targetChannels; ++ch) {
+	if (!m_ringBuffers[ch]) return 0;
 	size_t thisChannel = m_ringBuffers[ch]->getReadSpace();
 	if (ch == 0 || thisChannel < actual) actual = thisChannel;
     }
 
+#ifdef DEBUG_PLAYABLE
+    std::cerr << "PlayableAudioFile::getSampleFramesAvailable: have " << actual << std::endl;
+#endif
+
     return actual;
 }
-
+/*!!!
 size_t
 PlayableAudioFile::getSamples(sample_t *destination, int channel, size_t samples)
 {
+    assert(0);
     return m_ringBuffers[channel]->read(destination, samples);
 }
 
 size_t
 PlayableAudioFile::addSamples(sample_t *destination, int channel, size_t samples)
 {
+    assert(0);
     return m_ringBuffers[channel]->readAdding(destination, samples);
 }
+*/
+size_t
+PlayableAudioFile::addSamples(std::vector<sample_t *> &destination,
+			      size_t channels, size_t nframes, size_t offset)
+{
+#ifdef DEBUG_PLAYABLE
+    std::cerr << "PlayableAudioFile::addSamples(" << nframes << "): channels " << channels << ", my target channels " << m_targetChannels << std::endl;
+#endif
 
+    if (!m_isSmallFile) {
+
+	size_t qty = 0;
+	bool done = m_fileEnded;
+
+	for (int ch = 0; ch < int(channels) && ch < m_targetChannels; ++ch) {
+	    if (!m_ringBuffers[ch]) return 0; //!!! fatal
+	    size_t here = m_ringBuffers[ch]->readAdding(destination[ch] + offset, nframes);
+	    if (ch == 0 || here < qty) qty = here;
+	    if (done && (m_ringBuffers[ch]->getReadSpace() > 0)) done = false;
+	}
+
+	for (int ch = channels; ch < m_targetChannels; ++ch) {
+	    m_ringBuffers[ch]->skip(nframes);
+	}
+
+	if (done) {
+#ifdef DEBUG_PLAYABLE
+	    std::cerr << "PlayableAudioFile::addSamples(" << nframes << "): reached end, returning buffers" << std::endl;
+#endif
+	    returnRingBuffers();
+	}
+
+#ifdef DEBUG_PLAYABLE
+	std::cerr << "PlayableAudioFile::addSamples(" << nframes << "): returning " << qty << " frames (at least " << (m_ringBuffers[0] ? m_ringBuffers[0]->getReadSpace() : 0) << " remaining)" << std::endl;
+#endif
+	return qty;
+
+    } else {
+
+	size_t cchannels;
+	size_t cframes;
+	float **cached = m_smallFileCache.getData(m_audioFile, cchannels, cframes);
+
+	if (!cached) {
+	    std::cerr << "WARNING: PlayableAudioFile::addSamples: Failed to find small file in cache" << std::endl;
+	    m_isSmallFile = false;
+	} else {
+
+	    size_t scanFrame = RealTime::realTime2Frame(m_currentScanPoint,
+							m_targetSampleRate);
+
+	    size_t startFrame = scanFrame;
+	    size_t endFrame = scanFrame + nframes;
+	    if (endFrame >= cframes) m_fileEnded = true;
+
+#ifdef DEBUG_PLAYABLE
+	    std::cerr << "PlayableAudioFile::addSamples: it's a small file: want frames " << startFrame << " to " << endFrame << " of " << cframes << std::endl;
+#endif
+	    
+	    // all this could be neater!
+
+	    if (channels == 1 && cchannels == 2) { // mix
+		for (size_t i = 0; i < nframes; ++i) {
+		    if (scanFrame + i < cframes) {
+			destination[0][i + offset] += 
+			    cached[0][scanFrame + i] +
+			    cached[1][scanFrame + i];
+		    }
+		}
+	    } else {
+		for (size_t ch = 0; ch < channels; ++ch) {
+		    int sch = ch;
+		    if (ch >= cchannels) {
+			if (channels == 2 && cchannels == 1) sch = 0;
+			else break;
+		    } else {
+			for (size_t i = 0; i < nframes; ++i) {
+			    if (scanFrame + i < cframes) {
+				destination[ch][i + offset] +=
+				    cached[sch][scanFrame + i];
+			    }
+			}
+		    }
+		}
+	    }
+
+	    m_currentScanPoint = m_currentScanPoint +
+		RealTime::frame2RealTime(nframes, m_targetSampleRate);
+	    return nframes;
+	}
+    }
+
+    return 0;
+}
+
+/*!!!
 size_t
 PlayableAudioFile::skipSamples(int channel, size_t samples)
 {
-    return m_ringBuffers[channel]->skip(samples);
+    m_bufferFillTime = m_bufferFillTime + RealTime::frame2RealTime(samples, m_targetSampleRate);
+    return true;
+//    return m_ringBuffers[channel]->skip(samples);
 }
-
+*/
+/*!!!
 PlayableAudioFile::sample_t
 PlayableAudioFile::getSample(int channel)
 {
     return m_ringBuffers[channel]->readOne();
-}
+    }*/
 
 void
-PlayableAudioFile::checkSmallFileCache()
+PlayableAudioFile::checkSmallFileCache(size_t smallFileSize)
 {    
-    if (m_isSmallFile) return; // already done this
-
-    SmallFileMap::iterator smfi = m_smallFileCache.find(m_audioFile);
-
-    if (smfi != m_smallFileCache.end()) {
+    if (m_smallFileCache.has(m_audioFile)) {
 
 #ifdef DEBUG_PLAYABLE
 	std::cerr << "PlayableAudioFile::checkSmallFileCache: Found file in small file cache" << std::endl;
 #endif
 
-	++(smfi->second.first);
+	m_smallFileCache.incrementReference(m_audioFile);
 	m_isSmallFile = true;
 
-    } else if (m_audioFile->getSize() <= m_smallFileSize) {
+    } else if (m_audioFile->getSize() <= smallFileSize) {
+
+	std::ifstream file(m_audioFile->getFilename().c_str(),
+			   std::ios::in | std::ios::binary);
+
+	//!!! need to catch this
+	if (!file) throw(std::string("PlayableAudioFile - can't open file"));
 
 #ifdef DEBUG_PLAYABLE
 	std::cerr << "PlayableAudioFile::checkSmallFileCache: Adding file to small file cache" << std::endl;
 #endif
 
-	m_audioFile->scanTo(m_file, RealTime::zeroTime);
+	// We always encache files with their original number of
+	// channels (because they might be called for in any channel
+	// configuration subsequently) but with the current sample
+	// rate, not their original one.
+
+	m_audioFile->scanTo(&file, RealTime::zeroTime);
 	std::string contents = m_audioFile->getSampleFrames
-	    (m_file,
-	     m_audioFile->getSize() / m_audioFile->getBytesPerFrame());
-	m_smallFileCache[m_audioFile] = SmallFileData(1, contents);
-	m_isSmallFile = true;
+	    (&file, m_audioFile->getSize() / m_audioFile->getBytesPerFrame());
+
+	size_t nch = getSourceChannels();
+	size_t nframes = contents.length() / getBytesPerFrame();
+	if (int(getSourceSampleRate()) != m_targetSampleRate) {
+	    nframes = size_t(float(nframes) * float(m_targetSampleRate) /
+			     float(getSourceSampleRate()));
+	}
+
+	std::vector<sample_t *> samples;
+	for (size_t ch = 0; ch < nch; ++ch) {
+	    samples.push_back(new sample_t[nframes]);
+	}
+
+	if (!m_audioFile->decode((const unsigned char *)contents.c_str(),
+				 contents.length(),
+				 m_targetSampleRate,
+				 nch,
+				 nframes,
+				 samples)) {
+	    std::cerr << "PlayableAudioFile::checkSmallFileCache: failed to decode file" << std::endl;
+	} else {
+	    sample_t **toCache = new sample_t *[nch];
+	    for (size_t ch = 0; ch < nch; ++ch) {
+		toCache[ch] = samples[ch];
+	    }
+	    m_smallFileCache.addData(m_audioFile, nch, nframes, toCache);
+	    m_isSmallFile = true;
+	}
+
+	file.close();
+    }
+
+    if (m_isSmallFile) {
+	if (m_file) {
+	    m_file->close();
+	    delete m_file;
+	    m_file = 0;
+	}
     }
 }
 
@@ -306,391 +623,203 @@ PlayableAudioFile::checkSmallFileCache()
 void
 PlayableAudioFile::fillBuffers()
 {
-    if (!m_initialised) {
-	std::cerr << "PlayableAudioFile::fillBuffers() [async]: not initialised" << std::endl;
-	return;
-    }
-
 #ifdef DEBUG_PLAYABLE
     std::cerr << "PlayableAudioFile::fillBuffers() [async] -- scanning to " << m_startIndex << std::endl;
 #endif
 
-    checkSmallFileCache();
     scanTo(m_startIndex);
     updateBuffers();
 }
 
-bool
-PlayableAudioFile::isBufferable(const RealTime &currentTime)
+void
+PlayableAudioFile::clearBuffers()
 {
-    if (m_startTime >= currentTime) {
-
-	RealTime gap = m_startTime - currentTime;
-	if (gap.sec > 0) return false; // nice to be able to forget about .sec
-
-	unsigned int gapFrames =
-	    (unsigned int)(double(gap.nsec) * m_targetSampleRate / 1000000000);
-
-	// Note that all ringbuffers have the same size and all are to be
-	// reset in fillBuffers, so we can just compare against the first here
-
-	if (gapFrames > m_ringBuffers[0]->getSize()) {
-	    return false;
-	}
-
-    } else {
-	RealTime gap = currentTime - m_startTime;
-	if (gap >= m_duration) return false;
-    }
-
-    return true;
+    returnRingBuffers();
 }
 
 bool
 PlayableAudioFile::fillBuffers(const RealTime &currentTime)
 {
-    if (!m_initialised) {
-	std::cerr << "PlayableAudioFile::fillBuffers() [timed]: not initialised" << std::endl;
-	return false;
+#ifdef DEBUG_PLAYABLE
+    if (!m_isSmallFile) {
+	std::cerr << "PlayableAudioFile::fillBuffers(" << currentTime << "): my start time " << m_startTime << ", start index " << m_startIndex << ", duration " << m_duration << std::endl;
+    }
+#endif
+
+    if (currentTime > m_startTime + m_duration) {
+
+#ifdef DEBUG_PLAYABLE
+	std::cerr << "PlayableAudioFile::fillBuffers: seeking past end, returning buffers" << std::endl;
+#endif
+	returnRingBuffers();
+	return true;
     }
 
-    checkSmallFileCache();
+    RealTime scanTime = m_startIndex;
 
-#ifdef DEBUG_PLAYABLE
-    std::cerr << "PlayableAudioFile::fillBuffers(" << currentTime << "): my start time " << m_startTime << ", start index " << m_startIndex << ", duration " << m_duration << std::endl;
-#endif
+    if (currentTime > m_startTime) {
+	scanTime = m_startIndex + currentTime - m_startTime;
+    }
 
-    // We don't bother doing this if we're so far ahead of the audio
-    // file's start time that the first data would be after the end of
-    // the buffer.  This logic is much the same as isBufferable above.
+//    size_t scanFrames = RealTime::realTime2Frame
+//	(scanTime,
+//	 m_isSmallFile ? m_targetSampleRate : m_audioFile->getSampleRate());
 
-    if (m_startTime >= currentTime) {
-
-	RealTime gap = m_startTime - currentTime;
-	if (gap.sec > 0) return false; // nice to be able to forget about .sec
-
-	// If we see the start of the audio file approaching on the
-	// playback horizon, we fill the buffer with zeros until the
-	// precise sample where the audio file starts so that it starts
-	// at the right time even if that's in the middle of a
-	// timeslice.  At this point we need to use the playback
-	// sample rate (from JACK or wherever) so that the audio file
-	// starts at the right time even if it's then playing at the
-	// wrong speed because its own sample rate differs.
-
-	unsigned int gapFrames =
-	    (unsigned int)(double(gap.nsec) * m_targetSampleRate / 1000000000);
-
-	// Note that all ringbuffers have the same size and all are to be
-	// reset, so we can just compare against the first here
-
-	if (gapFrames > m_ringBuffers[0]->getSize()) {
-	    return false;
-	} else {
-#ifdef DEBUG_PLAYABLE
-	    std::cerr << "PlayableAudioFile::fillBuffers: zeroing " << gapFrames << " samples" << std::endl;
-#endif
-
-	    for (int ch = 0; ch < m_targetChannels; ++ch) {
-		m_ringBuffers[ch]->reset();
-		// fill with space, before writing from the start of the file
-		if (gapFrames > 0) m_ringBuffers[ch]->zero(gapFrames);
-	    }
-	}
-
-	scanTo(m_startIndex);
-
-    } else {
-
-	RealTime gap = currentTime - m_startTime;
-	if (gap >= m_duration) return false;
-
-#ifdef DEBUG_PLAYABLE
-	    std::cerr << "PlayableAudioFile::fillBuffers: scanning to " << m_startIndex + gap << std::endl;
-#endif
+    if (scanTime != m_currentScanPoint) {
+	scanTo(scanTime);
+    }
 	
-	// skip to the right point in the file before writing from there
-	scanTo(m_startIndex + gap);
+    if (!m_isSmallFile) {
+	for (int i = 0; i < m_targetChannels; ++i) {
+	    if (m_ringBuffers[i]) m_ringBuffers[i]->reset();
+	}
+	updateBuffers();
     }
-    
-    // now fill whatever space we have available
-    updateBuffers();
 
     return true;
 }
 
-void
+bool
 PlayableAudioFile::updateBuffers()
 {
-    if (!m_initialised) return;
+    if (m_isSmallFile) return false;
 
     if (m_fileEnded) {
 #ifdef DEBUG_PLAYABLE
 	std::cerr << "PlayableAudioFile::updateBuffers: at end of file already" << std::endl;
 #endif
-	return;
+	return false;
     }
 
-    size_t frames = 0;
+    if (!m_ringBuffers[0]) {
+	// need a buffer: can we get one?
+	if (!m_ringBufferPool->getBuffers(m_targetChannels, m_ringBuffers)) {
+#ifdef DEBUG_PLAYABLE
+	    std::cerr << "PlayableAudioFile::updateBuffers: no ring buffers available" << std::endl;
+#endif
+	    return false;
+	}
+    }
+
+    size_t nframes = 0;
 
     for (int ch = 0; ch < m_targetChannels; ++ch) {
 	size_t writeSpace = m_ringBuffers[ch]->getWriteSpace();
-	if (ch == 0 || writeSpace < frames) frames = writeSpace;
+	if (ch == 0 || writeSpace < nframes) nframes = writeSpace;
     }
 
-    if (frames == 0) {
+    if (nframes == 0) {
 #ifdef DEBUG_PLAYABLE
 	std::cerr << "PlayableAudioFile::updateBuffers: frames == 0, ignoring" << std::endl;
-	return;
+	return false;
 #endif
     }
 
 #ifdef DEBUG_PLAYABLE
-    std::cerr << "PlayableAudioFile::updateBuffers: want " << frames << " frames" << std::endl;
+    std::cerr << "PlayableAudioFile::updateBuffers: want " << nframes << " frames" << std::endl;
 #endif
 
-    int sourceChannels = m_audioFile->getChannels();
-    int sourceSampleRate = m_audioFile->getSampleRate();
 
-    bool resample = false;
-    size_t fileFrames = frames;
+    RealTime block = RealTime::frame2RealTime(nframes, m_targetSampleRate);
+    if (m_currentScanPoint + block >= m_startIndex + m_duration) {
+	block = m_startIndex + m_duration - m_currentScanPoint;
+	nframes = RealTime::realTime2Frame(block, m_targetSampleRate);
+	m_fileEnded = true;
+    }
 
-    if (sourceSampleRate != m_targetSampleRate) {
-	resample = true;
-	fileFrames = size_t(float(frames) * float(sourceSampleRate) /
+    size_t fileFrames = nframes;
+    if (m_targetSampleRate != int(getSourceSampleRate())) {
+	fileFrames = size_t(float(fileFrames) * float(getSourceSampleRate()) /
 			    float(m_targetSampleRate));
     }
 
-    const unsigned char *ubuf = 0;
-
-    // Check and adjust for audio end marker
-    //
-    RealTime nextDuration = 
-        Rosegarden::RealTime::frame2RealTime
-            (m_totalFrames + fileFrames, sourceSampleRate);
-
 #ifdef DEBUG_PLAYABLE
-    std::cerr << "PlayableAudioFile::updateBuffers: total frames "
-	      << m_totalFrames << ", plus frames " << fileFrames << ": nextDuration " << nextDuration << ", m_duration " << m_duration << std::endl;
-#endif
-    
-    // Test for file end marker and reset frames accordingly
-    //
-    if (nextDuration > m_startIndex + m_duration)
-    {
-        RealTime diffTime = 
-            (m_startIndex + m_duration) - Rosegarden::RealTime::frame2RealTime
-                (m_totalFrames, sourceSampleRate);
-
-#ifdef DEBUG_PLAYABLE
-        std::cerr << "PlayableAudioFile::updateBuffers: got end file marker."
-            << std::endl;
+    std::cerr << "Want " << fileFrames << " (" << block << ") from file (" << (m_duration + m_startIndex - m_currentScanPoint - block) << " to go)" << std::endl;
 #endif
 
-        // Reset frames
-        frames = Rosegarden::RealTime::realTime2Frame
-            (diffTime, m_targetSampleRate);
+/*
+    size_t endFrames = RealTime::realTime2Frame
+	(m_duration + m_startIndex, getSourceSampleRate());
 
 #ifdef DEBUG_PLAYABLE
-        std::cerr << "PlayableAudioFile::updateBuffers: reset frames to " << frames
-		  << " (duration " << m_duration << " - total frames " << m_totalFrames << " = " << diffTime << "; nextDuration " << nextDuration << ", m_startIndex " << m_startIndex << ")" << std::endl;
+    std::cerr << "Want " << fileFrames << " from file (leaving " << long(endFrames - m_currentFrameOffset - fileFrames) << " to go)" << std::endl;
 #endif
 
-        // After this fetch we're at the end of the file
-        //
-        m_fileEnded = true;
+    if (m_currentFrameOffset + fileFrames > endFrames) {
+	fileFrames = endFrames - m_currentFrameOffset;
+
+	if (m_targetSampleRate != int(getSourceSampleRate())) {
+	    nframes = size_t(float(fileFrames) * float(m_targetSampleRate) /
+			     float(getSourceSampleRate()));
+	} else {
+	    nframes = fileFrames;
+	}
+
+#ifdef DEBUG_PLAYABLE
+	std::cerr << "Adjusted fileFrames to " << fileFrames << ", nframes to " << nframes << std::endl;
+#endif
+	m_fileEnded = true;
+    }
+*/
+
+    //!!! need to be doing this in initialise, want to avoid allocations here
+    if ((getBytesPerFrame() * fileFrames) > m_rawFileBufferSize) {
+	delete[] m_rawFileBuffer;
+	m_rawFileBufferSize = getBytesPerFrame() * fileFrames;
+#ifdef DEBUG_PLAYABLE
+	std::cerr << "Expanding raw file buffer to " << m_rawFileBufferSize << " chars" << std::endl;
+#endif
+	m_rawFileBuffer = new char[m_rawFileBufferSize];
     }
 
-    if (m_isSmallFile) {
+    size_t obtained =
+	m_audioFile->getSampleFrames(m_file, m_rawFileBuffer, fileFrames);
 
-	size_t bytes = m_audioFile->getBytesPerFrame() * fileFrames;
-	std::string &source = m_smallFileCache[m_audioFile].second;
-	
 #ifdef DEBUG_PLAYABLE
-	std::cerr << "PlayableAudioFile::updateBuffers: looking for "
-		  << bytes << " bytes from small file cache" << std::endl;
+    std::cerr << "requested " << fileFrames << " frames from file for " << nframes << " frames, got " << obtained << " bytes" << std::endl;
 #endif
 
-	if (m_smallFileIndex >= source.size()) {
-	    bytes = 0;
-	    m_fileEnded = true;
-	} else {
-	    if (m_smallFileIndex + bytes >= source.size()) {
-		bytes = source.size() - m_smallFileIndex;
-		m_fileEnded = true;
-	    }
-	    ubuf = (const unsigned char *)source.c_str()
-		+ m_smallFileIndex;
-//		data = source.substr(m_smallFileIndex, bytes);
-		
-	    m_smallFileIndex += bytes;
+
+    if (nframes > m_workBufferSize) {
+
+	for (size_t i = 0; i < m_workBuffers.size(); ++i) {
+	    delete[] m_workBuffers[i];
 	}
-	fileFrames = bytes / m_audioFile->getBytesPerFrame();
+
+	m_workBuffers.clear();
+	m_workBufferSize = nframes;
+#ifdef DEBUG_PLAYABLE
+	std::cerr << "Expanding work buffer to " << m_workBufferSize << " frames" << std::endl;
+#endif
+	for (int i = 0; i < m_targetChannels; ++i) {
+	    m_workBuffers.push_back(new sample_t[m_workBufferSize]);
+	}
 
     } else {
 
-	// get the frames
-
-	try {
-#ifdef DEBUG_PLAYABLE
-	    std::cerr << "PlayableAudioFile::updateBuffers: asking file for "
-		      << fileFrames << " frames" << std::endl;
-#endif
-	    m_fileBuffer = m_audioFile->getSampleFrames(m_file, fileFrames);
-#ifdef DEBUG_PLAYABLE
-	    std::cerr << "PlayableAudioFile::updateBuffers: got " << m_fileBuffer.size() << " bytes" << std::endl;
-#endif
-	} catch (std::string e) {
-	    // most likely we've run out of data in the file -
-	    // we can live with this - just write out what we
-	    // have got.
-#ifdef DEBUG_PLAYABLE
-	    std::cerr << "PlayableAudioFile::updateBuffers - "
-		      << e << std::endl;
-#endif
-
-	    m_fileEnded = true;
-	}
-
-	// update frames to the number we actually managed to read
-	fileFrames = m_fileBuffer.size() / m_audioFile->getBytesPerFrame();
-	ubuf = (const unsigned char *)m_fileBuffer.c_str();
-    }
-
-    // Keep a running total of how far into the file we are
-    //
-    m_totalFrames += fileFrames;
-
-    if (!ubuf) {
-#ifdef DEBUG_PLAYABLE
-	std::cerr << "PlayableAudioFile::updateBuffers: nothing left to write"  << std::endl;
-#endif
-	return;
-    } else {
-#ifdef DEBUG_PLAYABLE
-	std::cerr << "PlayableAudioFile::updateBuffers: actually retrieved " << fileFrames << " frames" << std::endl;
-#endif
-    }	
-
-    if (std::max(frames, fileFrames) > m_workBufferSize) {
-	delete[] m_workBuffer;
-	m_workBufferSize = std::max(frames, fileFrames);
-#ifdef DEBUG_PLAYABLE
-	std::cerr << "Expanding work buffer to " << m_workBufferSize << " frames " << " (max of " << frames << " and " << fileFrames << ")" << std::endl;
-#endif
-	m_workBuffer = new sample_t[m_workBufferSize];
-    }
-    sample_t *buffer = m_workBuffer;
-    
-    //!!! optimisation: move this into WAVAudioFile, and make the
-    //small file cache store the float versions instead of the
-    //pre-decoding n-bit interleaved versions.  But we should continue
-    //to do the reduceToMono stuff here: WAVAudioFile and small-file
-    //cache should always deal with the number of channels the file
-    //actually has (because we may have to produce the same file on
-    //mono and stereo tracks).
-
-    // If we're reading a stereo file onto a mono target, we mix the
-    // two channels.  If we're reading mono to stereo, we duplicate
-    // the mono channel.  Otherwise if the numbers of channels differ,
-    // we just copy across the ones that do match and zero the rest.
-
-    bool reduceToMono = (m_targetChannels == 1 && sourceChannels == 2);
-
-    for (int ch = 0; ch < sourceChannels; ++ch) {
-
-	if (!reduceToMono || ch == 0) {
-	    if (ch >= m_targetChannels) break;
-	    memset(buffer, 0, fileFrames * sizeof(sample_t));
-	}
-
-	switch (getBitsPerSample()) {
-	    
-	case 8:
-	    // WAV stores 8-bit samples unsigned, other sizes signed.
-	    for (size_t i = 0; i < fileFrames; ++i) {
-		buffer[i] += (float)(ubuf[ch + i * sourceChannels] - 128.0)
-		    / 128.0;
-	    }
-	    break;
-
-	case 16:
-	    for (size_t i = 0; i < fileFrames; ++i) {
-		// Two's complement little-endian 16-bit integer.
-		// We convert endianness (if necessary) but assume 16-bit short.
-		unsigned char b2 = ubuf[2 * (ch + i * sourceChannels)];
-		unsigned char b1 = ubuf[2 * (ch + i * sourceChannels) + 1];
-		unsigned int bits = (b1 << 8) + b2;
-		buffer[i] += (float)(short(bits)) / 32767.0;
-	    }
-	    break;
-
-	case 24:
-	    for (size_t i = 0; i < fileFrames; ++i) {
-		// Two's complement little-endian 24-bit integer.
-		// Again, convert endianness but assume 32-bit int.
-		unsigned char b3 = ubuf[2 * (ch + i * sourceChannels)];
-		unsigned char b2 = ubuf[2 * (ch + i * sourceChannels) + 1];
-		unsigned char b1 = ubuf[2 * (ch + i * sourceChannels) + 2];
-		// Rotate 8 bits too far in order to get the sign bit
-		// in the right place; this gives us a 32-bit value,
-		// hence the larger float divisor
-		unsigned int bits = (b1 << 24) + (b2 << 16) + (b3 << 8);
-		buffer[i] += (float)(int(bits)) / 2147483647.0;
-	    }
-	    break;
-	    
-	default:
-	    std::cerr << "PlayableAudioFile::updateBuffers: unsupported " <<
-		getBitsPerSample() << "-bit sample size" << std::endl;
-	}
-
-	if (resample && (!reduceToMono || ch == 1)) {
-
-	    // resample (very crudely) in-place
-
-	    float ratio = float(sourceSampleRate) / float(m_targetSampleRate);
-
-	    if (ratio >= 1.0) { // e.g. file 48KHz -> jack 44.1KHz
-		for (size_t i = 0; i < frames; ++i) {
-		    size_t j = size_t(i * ratio);
-		    if (j >= fileFrames) j = fileFrames - 1;
-		    buffer[i] = buffer[j];
-		}
-	    } else { // e.g. file 44.1KHz -> jack 48KHz
-		for (size_t i = frames; i > 0; --i) {
-		    size_t j = size_t((i-1) * ratio);
-		    if (j >= fileFrames) j = fileFrames - 1;
-		    buffer[i-1] = buffer[j];
-		}
-	    }
-	}
-
-	if (!reduceToMono) {
-
-	    m_ringBuffers[ch]->write(buffer, frames);
-
-	} else if (ch == 1) {
-
-	    for (size_t i = 0; i < frames; ++i) {
-		buffer[i] /= 2;
-	    }
-	    m_ringBuffers[0]->write(buffer, frames);
-	}	    
-    }
-
-    // Now deal with any excess target channels
-
-    for (int ch = sourceChannels; ch < m_targetChannels; ++ch) {
-	if (ch == 1 && m_targetChannels == 2) {
-	    // copy mono to stereo -- we still have the mono buffer handy
-	    m_ringBuffers[ch]->write(buffer, frames);
-	} else {
-	    m_ringBuffers[ch]->zero(frames);
+	while (m_targetChannels > m_workBuffers.size()) {
+	    m_workBuffers.push_back(new sample_t[m_workBufferSize]);
 	}
     }
 
-    m_fileBuffer = "";
+    if (m_audioFile->decode((const unsigned char *)m_rawFileBuffer,
+			    obtained * getBytesPerFrame(),
+			    m_targetSampleRate,
+			    m_targetChannels,
+			    nframes,
+			    m_workBuffers,
+			    false)) {
+
+	if (obtained < fileFrames) m_fileEnded = true;
+//	m_currentFrameOffset += obtained;
+	m_currentScanPoint = m_currentScanPoint + block;
+
+	for (int ch = 0; ch < m_targetChannels; ++ch) {
+	    m_ringBuffers[ch]->write(m_workBuffers[ch], nframes);
+	}
+    }
+
+    return true;
 }
 
 

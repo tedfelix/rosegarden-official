@@ -51,9 +51,10 @@ typedef std::vector<std::pair<MidiByte, MidiByte> >::const_iterator StaticContro
 
 // Instrument number groups
 //
-const InstrumentId SystemInstrumentBase = 0;
-const InstrumentId AudioInstrumentBase  = 1000;
-const InstrumentId MidiInstrumentBase   = 2000;
+const InstrumentId SystemInstrumentBase    =  0;
+const InstrumentId AudioInstrumentBase     =  1000;
+const InstrumentId MidiInstrumentBase      =  2000;
+const InstrumentId SoftSynthInstrumentBase = 10000;
 
 const MidiByte MidiMaxValue = 127;
 const MidiByte MidiMidValue = 64;
@@ -68,7 +69,7 @@ class Device;
 class Instrument : public XmlExportable
 {
 public:
-    enum InstrumentType { Midi, Audio };
+    enum InstrumentType { Midi, Audio, SoftSynth };
 
     Instrument(InstrumentId id,
                InstrumentType it,

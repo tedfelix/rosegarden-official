@@ -21,11 +21,12 @@
 
 #include <vector>
 #include <set>
+#include <qstring.h>
 #include "config.h"
 #include "Instrument.h"
 
-#ifndef _LADSPAPLUGIN_H_
-#define _LADSPAPLUGIN_H_
+#ifndef _LADSPAPLUGININSTANCE_H_
+#define _LADSPAPLUGININSTANCE_H_
 
 #ifdef HAVE_LADSPA
 
@@ -42,33 +43,12 @@ namespace Rosegarden
 class LADSPAPluginInstance : public RunnablePluginInstance
 {
 public:
-    // Constructor that creates the buffers internally
-    // 
-    LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
-                         unsigned long ladspaId,
-                         int position,
-			 unsigned long sampleRate,
-			 size_t bufferSize,
-			 int idealChannelCount,
-                         const LADSPA_Descriptor* descriptor);
-
-    // Constructor that uses shared buffers
-    // 
-    LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
-                         unsigned long ladspaId,
-                         int position,
-			 unsigned long sampleRate,
-			 size_t bufferSize,
-			 sample_t **inputBuffers,
-			 sample_t **outputBuffers,
-                         const LADSPA_Descriptor* descriptor);
-
     virtual ~LADSPAPluginInstance();
 
-    bool isOK() const { return m_instanceHandles.size() != 0; }
+    virtual bool isOK() const { return m_instanceHandles.size() != 0; }
 
     Rosegarden::InstrumentId getInstrument() const { return m_instrument; }
-    unsigned long getLADSPAId() const { return m_ladspaId; }
+    virtual QString getIdentifier() const { return m_identifier; }
     int getPosition() const { return m_position; }
 
     // Set control ports
@@ -95,21 +75,33 @@ public:
     void updateIdealChannelCount(unsigned long sampleRate,
 				 int channels); // may re-instantiate
 
-    // Order by instrument and then position
-    //
-    struct PluginCmp
-    {
-        bool operator()(const LADSPAPluginInstance *p1,
-                        const LADSPAPluginInstance *p2)
-        {
-            if (p1->getInstrument() != p2->getInstrument())
-                return p1->getInstrument() < p2->getInstrument();
-            else
-                return p1->getPosition() < p2->getPosition();
-        }
-    };
-
 protected:
+    // To be constructed only by LADSPAPluginFactory
+    friend class LADSPAPluginFactory;
+
+    // Constructor that creates the buffers internally
+    // 
+    LADSPAPluginInstance(PluginFactory *factory,
+			 Rosegarden::InstrumentId instrument,
+			 QString identifier,
+                         int position,
+			 unsigned long sampleRate,
+			 size_t bufferSize,
+			 int idealChannelCount,
+                         const LADSPA_Descriptor* descriptor);
+
+    // Constructor that uses shared buffers
+    // 
+    LADSPAPluginInstance(PluginFactory *factory,
+			 Rosegarden::InstrumentId instrument,
+			 QString identifier,
+                         int position,
+			 unsigned long sampleRate,
+			 size_t bufferSize,
+			 sample_t **inputBuffers,
+			 sample_t **outputBuffers,
+                         const LADSPA_Descriptor* descriptor);
+
     void init(int idealChannelCount = 0);
     void instantiate(unsigned long sampleRate);
     void cleanup();
@@ -119,7 +111,6 @@ protected:
     void connectPorts();
     
     Rosegarden::InstrumentId   m_instrument;
-    unsigned long              m_ladspaId;
     int                        m_position;
     std::vector<LADSPA_Handle> m_instanceHandles;
     int                        m_instanceCount;
@@ -139,14 +130,9 @@ protected:
     bool                      m_bypassed;
 };
 
-typedef std::vector<LADSPAPluginInstance*> PluginInstances;
-
-typedef std::multiset<LADSPAPluginInstance*,
-		      LADSPAPluginInstance::PluginCmp> OrderedPluginList;
-
 };
 
 #endif // HAVE_LADSPA
 
-#endif // _LADSPAPLUGIN_H_
+#endif // _LADSPAPLUGININSTANCE_H_
 

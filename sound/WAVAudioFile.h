@@ -56,13 +56,22 @@ public:
     virtual bool write();
     virtual void close();
 
+    // Decode and de-interleave the given samples that were retrieved
+    // from this file or another with the same format as it.  Place
+    // the results in the given float buffer.  Return true for
+    // success.  This function does crappy resampling if necessary.
+    // 
+    virtual bool decode(const unsigned char *sourceData,
+			size_t sourceBytes,
+			size_t targetSampleRate,
+			size_t targetChannels,
+			size_t targetFrames,
+			std::vector<float *> &targetData,
+			bool addToResultBuffers = false);
+
     // Get all header information
     //
     void parseHeader();
-
-    //
-    // 
-    //virtual std::vector<float> getPreview(const RealTime &resolution);
 
     // Offset to start of sample data
     //

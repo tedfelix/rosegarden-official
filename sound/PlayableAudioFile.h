@@ -26,6 +26,7 @@
 #include "RingBuffer.h"
 #include "RealTime.h"
 #include "AudioFile.h"
+#include "AudioCache.h"
 
 #include <string>
 #include <map>
@@ -33,28 +34,13 @@
 namespace Rosegarden
 {
 
-// PlayableAudioFile is queued on the m_audioPlayQueue and
-// played by processAudioQueue() in Sequencer.  State changes
-// through playback and it's finally discarded when done.
-//
-// To enable us to have multiple file handles on real AudioFile
-// we store the file handle with this class.
-//
+class RingBufferPool;
+
+
 class PlayableAudioFile
 {
 public:
     typedef float sample_t;
-
-    // PlayableAudioFile does not set its own status; the code that
-    // uses it can set it appropriately.
-
-    typedef enum
-    {
-        IDLE,     // on the queue for some point in the future
-	READY,
-        PLAYING,
-        DEFUNCT   // finished, ready to garbage collect
-    } PlayStatus;
 
     PlayableAudioFile(InstrumentId instrumentId,
                       AudioFile *audioFile,
@@ -67,10 +53,7 @@ public:
 		      int targetSampleRate = -1); // default same as file
     ~PlayableAudioFile();
 
-    bool mlock();
-
-    void setStatus(const PlayStatus &status) { m_status = status; }
-    PlayStatus getStatus() const { return m_status; }
+    static void setRingBufferPoolSizes(size_t n, size_t nframes);
 
     void setStartTime(const RealTime &time) { m_startTime = time; }
     RealTime getStartTime() const { return m_startTime; }
@@ -82,6 +65,8 @@ public:
     void setStartIndex(const RealTime &time) { m_startIndex = time; }
     RealTime getStartIndex() const { return m_startIndex; }
 
+    bool isSmallFile() const { return m_isSmallFile; }
+
     // Get audio file for interrogation
     //
     AudioFile* getAudioFile() const { return m_audioFile; }
@@ -91,28 +76,11 @@ public:
     //
     InstrumentId getInstrument() const { return m_instrumentId; }
 
-    // Reaches through to AudioFile interface using our local file handle
-    //
-    bool scanTo(const RealTime &time);
-
     // Return the number of frames currently buffered.  The next call
     // to getSamples on any channel is guaranteed to return at least
     // this many samples.
     //
     size_t getSampleFramesAvailable();
-
-    // Read samples from the given channel on the file and write
-    // them into the destination.
-    //
-    // If insufficient frames are available, this will return zeros
-    // for the excess.  Note that it is theoretically possible for
-    // different numbers of samples to be available on different
-    // channels -- getSampleFramesAvailable will tell you the
-    // minimum across all channels.
-    //
-    // Returns the actual number of samples written.
-    //
-    size_t getSamples(sample_t *destination, int channel, size_t samples);
 
     // Read samples from the given channel on the file and add them
     // into the destination.
@@ -122,19 +90,11 @@ public:
     //
     // Returns the actual number of samples written.
     //
-    size_t addSamples(sample_t *destination, int channel, size_t samples);
-
-    // Skip a bunch of samples from the file.  Useful if you only
-    // want to read a subset of the available channels.
+    // If offset is non-zero, the samples will be written starting at
+    // offset frames from the start of the target block.
     //
-    size_t skipSamples(int channel, size_t samples);
-
-    // Return a single sample from a single channel.  Called
-    // repeatedly this is obviously slower than calling
-    // getSampleFrames once, but it's not too bad if you're
-    // keen to save buffer memory elsewhere.
-    //
-    sample_t getSample(int channel);
+    size_t addSamples(std::vector<sample_t *> &target,
+		      size_t channels, size_t nframes, size_t offset = 0);
 
     unsigned int getSourceChannels();
     unsigned int getTargetChannels();
@@ -144,42 +104,33 @@ public:
     unsigned int getBitsPerSample();
     unsigned int getBytesPerFrame();
 
-    // Test whether the file would be buffered if we called fillBuffers
-    // with the given time argument.
-    //
-    bool isBufferable(const RealTime &currentTime);
-
     // Clear out and refill the ring buffer for immediate
     // (asynchronous) play.
     //
     void fillBuffers();
 
     // Clear out and refill the ring buffer (in preparation for
-    // playback) according to the proposed play time -- which is
-    // assumed to be the start time of the next process slice, rather
-    // than necessarily the time now.  Returns true if the play time
-    // was sufficiently close for the ring buffer to have been updated
-    // with some real data.  You should not set PLAYING status on this
-    // file until you have seen a true return from this method.
+    // playback) according to the proposed play time.
+    //
+    // This call and updateBuffers are not thread-safe (for
+    // performance reasons).  They should be called for all files
+    // sequentially within a single thread.
     //
     bool fillBuffers(const RealTime &currentTime);
 
-    // Update the buffer during playback.  This should only be called
-    // when the file's status is PLAYING, i.e. after fillBuffer
-    // above has found some actual work to do.
+    void clearBuffers();
+
+    // Update the buffer during playback.
     //
-    void updateBuffers();
+    // This call and fillBuffers are not thread-safe (for performance
+    // reasons).  They should be called for all files sequentially
+    // within a single thread.
+    //
+    bool updateBuffers();
 
     // Has all the data in this file now been read into the buffers?
     //
-    bool isFullyBuffered() const { return m_fileEnded; }
-
-    // Has all the data in this file now been read out of the buffers?
-    //
-    bool isFinished() const;
-
-    void setReadyTime(RealTime rt) { m_readyTime = rt; }
-    RealTime getReadyTime() const { return m_readyTime; }
+    bool isFullyBuffered() const { return m_isSmallFile || m_fileEnded; }
 
     // Segment id that allows us to crosscheck against playing audio
     // segments.
@@ -202,13 +153,14 @@ public:
 
 
 protected: 
-    void initialise(size_t bufferSize);
-    void checkSmallFileCache();
+    void initialise(size_t bufferSize, size_t smallFileSize);
+    void checkSmallFileCache(size_t smallFileSize);
+    bool scanTo(const RealTime &time);
+    void returnRingBuffers();
 
     RealTime              m_startTime;
     RealTime              m_startIndex;
     RealTime              m_duration;
-    PlayStatus            m_status;
 
     // Performance file handle - must open non-blocking to
     // allow other potential PlayableAudioFiles access to
@@ -227,31 +179,22 @@ protected:
     int                   m_targetChannels;
     int                   m_targetSampleRate;
 
-    // Have we initialised yet?  Don't do this from the constructor as we want
-    // the disk thread to pick up the slack.
-    //
-    bool                  m_initialised;
     bool                  m_fileEnded;
-
     int                   m_runtimeSegmentId;
-    RealTime              m_readyTime;
 
-    // simple cache: map AudioFile ptr to a buffer containing whole contents
-    typedef std::pair<int, std::string> SmallFileData;
-    typedef std::map<void *, SmallFileData> SmallFileMap;
-
-    static SmallFileMap   m_smallFileCache;
-    size_t                m_smallFileIndex;
-    size_t                m_smallFileSize;
+    static AudioCache     m_smallFileCache;
     bool                  m_isSmallFile;
 
-    std::string           m_fileBuffer;
-    sample_t             *m_workBuffer;
-    size_t                m_workBufferSize;
+    static std::vector<sample_t *> m_workBuffers;
+    static size_t         m_workBufferSize;
+    
+    static char          *m_rawFileBuffer;
+    static size_t         m_rawFileBufferSize;
 
-    std::vector<RingBuffer<sample_t> *> m_ringBuffers; // one per channel
+    RingBuffer<sample_t>  **m_ringBuffers;
+    static RingBufferPool  *m_ringBufferPool;
 
-    size_t                m_totalFrames;  // total frames
+    RealTime              m_currentScanPoint;
 
     bool                  m_autoFade;
     Rosegarden::RealTime  m_fadeInTime;

@@ -123,6 +123,7 @@ private:
 
 class MappedStudio;
 class ExternalTransport;
+class AudioPlayQueue;
 
 typedef std::vector<PlayableAudioFile *> PlayableAudioFileList;
 
@@ -169,7 +170,7 @@ public:
     // Plugin instance management
     //
     virtual void setPluginInstance(InstrumentId id,
-                                   unsigned long pluginId,
+                                   QString identifier,
                                    int position) = 0;
 
     virtual void removePluginInstance(InstrumentId id,
@@ -210,19 +211,14 @@ public:
     //
     unsigned int getStatus() const { return m_driverStatus; }
 
-    // Queue an audio file for playback
-    //
-    void queueAudio(PlayableAudioFile *audioFile);
-
     // Are we playing?
     //
     bool isPlaying() const { return m_playing; }
 
-    // Are we counting?  (Default implementation is always counting,
-    // but if a subclass implements stopClocks/startClocks then that
-    // won't always be the case.)
+    // Are we counting?  By default a subclass probably wants to
+    // return true, if it doesn't know better.
     //
-    virtual bool areClocksRunning() const { return true; }
+    virtual bool areClocksRunning() const = 0;
 
     RealTime getStartPosition() const { return m_playStartPosition; }
     RecordStatus getRecordStatus() const { return m_recordStatus; }
@@ -261,26 +257,6 @@ public:
 
     virtual void getAudioInstrumentNumbers(InstrumentId &, int &) = 0;
 
-    // Return the whole audio play queue
-    //
-    PlayableAudioFileList getAudioPlayQueue();
-
-    // Just non-defunct queue members
-    //
-    PlayableAudioFileList getAudioPlayQueueNotDefunct();
-
-    // Just non-defunct queue members on a particular audio instrument
-    //
-    PlayableAudioFileList getAudioPlayQueuePerInstrument(InstrumentId);
-
-    // Clear the queue
-    //
-    void clearAudioPlayQueue();
-
-    // Does what it says it does
-    //
-    void clearDefunctFromAudioPlayQueue();
-
     // Handle audio file references
     //
     void clearAudioFiles();
@@ -289,6 +265,10 @@ public:
     void rationalisePlayingAudio(const std::vector<MappedEvent> &list,
 				 const RealTime &playtime);
                     
+    void initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents);
+    void clearAudioQueue();
+    const AudioPlayQueue *getAudioQueue() const;
+
     // Recording filename
     //
     void setRecordingFilename(const std::string &file)
@@ -385,7 +365,6 @@ protected:
     //
     virtual void processMidiOut(const MappedComposition &mC,
                                 bool now) = 0;
-    virtual void processAudioQueue(bool now) = 0;
     virtual void generateInstruments() = 0;
 
     // Audio
@@ -424,11 +403,7 @@ protected:
     InstrumentId                                m_midiRunningId;
     InstrumentId                                m_audioRunningId;
 
-    // Audio files playing at the driver are held here - if we're
-    // using threads then make sure you mutex access to this
-    // vector.
-    //
-    std::list<PlayableAudioFile *>              m_audioPlayQueue;
+    AudioPlayQueue                             *m_audioQueue;
 
     // A list of AudioFiles that we can play.
     //

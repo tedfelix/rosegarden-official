@@ -91,6 +91,9 @@ public:
     //
     virtual std::string getSampleFrames(std::ifstream *file,
                                         unsigned int frames);
+    virtual unsigned int getSampleFrames(std::ifstream *file,
+					 char *buf,
+					 unsigned int frames);
     virtual std::string getSampleFrames(unsigned int frames);
 
     // Return a number of (possibly) interleaved samples
@@ -117,6 +120,19 @@ public:
     // Allow easy identification of wav file type
     //
     static AudioFileType identifySubType(const std::string &filename);
+
+    // Decode and de-interleave the given samples that were retrieved
+    // from this file or another with the same format as it.  Place
+    // the results in the given float buffer.  Return true for
+    // success.  This function does crappy resampling if necessary.
+    // 
+    virtual bool decode(const unsigned char *sourceData,
+			size_t sourceBytes,
+			size_t targetSampleRate,
+			size_t targetChannels,
+			size_t targetFrames,
+			std::vector<float *> &targetData,
+			bool addToResultBuffers = false) = 0;
 
 protected:
     //virtual void parseHeader(const std::string &header);

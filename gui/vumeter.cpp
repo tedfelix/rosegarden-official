@@ -63,6 +63,7 @@ VUMeter::VUMeter(QWidget *parent,
         case PeakHold:
         case AudioPeakHoldShort:
         case AudioPeakHoldLong:
+        case AudioPeakHoldIEC:
         case FixedHeightVisiblePeakHold:
             m_showPeakLevel = true;
             break;
@@ -119,9 +120,14 @@ VUMeter::VUMeter(QWidget *parent,
 	green  = AudioLevel::dB_to_fader( -10.0, max, AudioLevel::ShortFader);
 	m_background = QColor(50, 50, 50);
     } else if (m_type == AudioPeakHoldLong) {
-	red    = AudioLevel::dB_to_fader(   0.0, max, AudioLevel::ShortFader);
-	orange = AudioLevel::dB_to_fader(  -2.0, max, AudioLevel::ShortFader);
-	green  = AudioLevel::dB_to_fader( -10.0, max, AudioLevel::ShortFader);
+	red    = AudioLevel::dB_to_fader(   0.0, max, AudioLevel::LongFader);
+	orange = AudioLevel::dB_to_fader(  -2.0, max, AudioLevel::LongFader);
+	green  = AudioLevel::dB_to_fader( -10.0, max, AudioLevel::LongFader);
+	m_background = QColor(50, 50, 50);
+    } else if (m_type == AudioPeakHoldIEC) {
+	red    = AudioLevel::dB_to_fader(  -0.1, max, AudioLevel::IEC268Meter);
+	orange = AudioLevel::dB_to_fader(  -6.0, max, AudioLevel::IEC268Meter);
+	green  = AudioLevel::dB_to_fader( -10.0, max, AudioLevel::IEC268Meter);
 	m_background = QColor(50, 50, 50);
     } else {
 	red    = max * 92 / 100;
@@ -131,7 +137,8 @@ VUMeter::VUMeter(QWidget *parent,
     }
 
     if (m_type == AudioPeakHoldLong ||
-	m_type == AudioPeakHoldShort) {
+	m_type == AudioPeakHoldShort ||
+	m_type == AudioPeakHoldIEC) {
 	m_velocityColour =
 	    new VelocityColour(RosegardenGUIColours::LevelMeterSolidRed,
 			       RosegardenGUIColours::LevelMeterSolidOrange,
@@ -173,6 +180,13 @@ VUMeter::setLevel(double leftLevel, double rightLevel)
 	    (leftLevel, m_maxLevel, AudioLevel::LongFader);
 	m_levelRight = AudioLevel::dB_to_fader
 	    (rightLevel, m_maxLevel, AudioLevel::LongFader);
+	break;
+
+    case AudioPeakHoldIEC:
+	m_levelLeft = AudioLevel::dB_to_fader
+	    (leftLevel, m_maxLevel, AudioLevel::IEC268Meter);
+	m_levelRight = AudioLevel::dB_to_fader
+	    (rightLevel, m_maxLevel, AudioLevel::IEC268Meter);
 	break;
 
     default:
@@ -239,7 +253,8 @@ VUMeter::paintEvent(QPaintEvent*)
     QPainter paint(this);
 
     if (m_type == VUMeter::AudioPeakHoldShort ||
-	m_type == VUMeter::AudioPeakHoldLong)
+	m_type == VUMeter::AudioPeakHoldLong ||
+	m_type == VUMeter::AudioPeakHoldIEC)
     {
 	paint.setPen(m_background);
 	paint.setBrush(m_background);
@@ -292,12 +307,12 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
 			 int x, int y, int w, int h)
 {
     if (m_type == AudioPeakHoldLong ||
-	m_type == AudioPeakHoldShort) {
+	m_type == AudioPeakHoldShort ||
+	m_type == AudioPeakHoldIEC) {
 
 	Qt::BrushStyle style = Qt::SolidPattern;
 
-	int quiet = m_velocityColour->getQuietKnee(),
-	    medium = m_velocityColour->getMediumKnee(),
+	int medium = m_velocityColour->getMediumKnee(),
 	    loud = m_velocityColour->getLoudKnee();
 
 	if (m_alignment == Vertical) {
@@ -373,8 +388,9 @@ VUMeter::drawColouredBar(QPainter *paint, int channel,
 void
 VUMeter::drawMeterLevel(QPainter* paint)
 {
-    // Get the colour from the VelocityColour helper, if appropriate.
-    //
+    int medium = m_velocityColour->getMediumKnee(),
+	loud = m_velocityColour->getLoudKnee();
+
     if (m_stereo)
     {
         if (m_alignment == VUMeter::Vertical)
@@ -393,11 +409,16 @@ VUMeter::drawMeterLevel(QPainter* paint)
 
             if (m_showPeakLevel)
             {
+		int h = (m_peakLevelLeft * height()) / m_maxLevel;
+                y = height() - h;
+
+		if (h > loud) {
+		    paint->setPen(Qt::red); // brighter than the red meter bar
+		    paint->drawLine(0, y-1, hW - 2, y-1); 
+		    paint->drawLine(0, y+1, hW - 2, y+1);
+		}		    
+
                 paint->setPen(Qt::white);
-                paint->setBrush(Qt::white);
-
-                y = height() - (m_peakLevelLeft * height()) / m_maxLevel;
-
                 paint->drawLine(0, y, hW - 2, y);
             }
 
@@ -412,10 +433,17 @@ VUMeter::drawMeterLevel(QPainter* paint)
 
             if (m_showPeakLevel)
             {
+		int h = (m_peakLevelRight * height()) / m_maxLevel;
+                y = height() - h;
+
+		if (h > loud) {
+		    paint->setPen(Qt::red); // brighter than the red meter bar
+		    paint->drawLine(hW + 1, y-1, width(), y-1); 
+		    paint->drawLine(hW + 1, y+1, width(), y+1);
+		}		    
+
                 paint->setPen(Qt::white);
                 paint->setBrush(Qt::white);
-
-                y = height() - (m_peakLevelRight * height()) / m_maxLevel;
 
                 paint->drawLine(hW + 1, y, width(), y);
             }

@@ -145,11 +145,14 @@ public:
     void addSegment(MmappedSegment*);
     void deleteSegment(MmappedSegment*);
 
+    void getAudioEvents(std::vector<MappedEvent> &);
+
     // Manipulate a vector of currently mapped audio segments so that we
     // can cross check them against PlayableAudioFiles (and stop if
     // necessary).  This will account for muting/soloing too I should
     // hope.
     //
+    //!!! to be obsoleted, hopefully
     std::vector<MappedEvent>& getPlayingAudioFiles
     (const Rosegarden::RealTime &songPosition);
 

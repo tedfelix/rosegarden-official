@@ -558,6 +558,41 @@ void MmappedSegmentsMetaIterator::resetIteratorForSegment(const QString& filenam
     }
 }
 
+void
+MmappedSegmentsMetaIterator::getAudioEvents(std::vector<MappedEvent> &v)
+{
+    v.clear();
+    
+    for (mmappedsegments::iterator i = m_segments.begin();
+	 i != m_segments.end(); ++i) {
+
+        MmappedSegment::iterator itr(i->second);
+
+        while (!itr.atEnd()) {
+	    
+	    if ((*itr).getType() != MappedEvent::Audio) {
+		++itr;
+		continue;
+	    }
+	    
+            MappedEvent evt(*itr);
+	    ++itr;
+
+            if (m_controlBlockMmapper->isTrackMuted(evt.getTrackId())) {
+		continue;
+            }
+
+            if (m_controlBlockMmapper->isSolo() == true && 
+                evt.getTrackId() != m_controlBlockMmapper->getSelectedTrack()) {
+                continue;
+            }
+
+	    v.push_back(evt);
+        }
+    }
+}
+
+
 std::vector<MappedEvent>& 
 MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &
 						  songPosition)
@@ -576,6 +611,7 @@ MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &
 
         bool found = false;
 
+	//!!! any point to this loop at all? can found ever fail?
         for (segmentiterators::iterator sI = m_iterators.begin();
 	     sI != m_iterators.end(); ++sI) {
             if ((*sI)->getSegment() == iter.getSegment())

@@ -63,6 +63,9 @@ Jelmer Vernooij
 Bernd Weber
     * German translation (Arbeiten mit Rosegarden)
 
+Kevin Liang
+    * HSpinBox class
+
 ##
 ## Names in there should also be credited in gui/main.cpp, with aboutData.addCredit()
 ##

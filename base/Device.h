@@ -45,7 +45,8 @@ public:
     typedef enum 
     {
         Midi,
-        Audio
+        Audio,
+	SoftSynth
     } DeviceType;
 
     // special device ids

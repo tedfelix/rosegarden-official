@@ -46,6 +46,7 @@
 #include "MappedInstrument.h"
 #include "SoundDriver.h"
 #include "Profiler.h"
+#include "PluginFactory.h"
 
 // The default latency and read-ahead values are actually sent
 // down from the GUI every time playback or recording starts
@@ -126,8 +127,8 @@ RosegardenSequencerApp::~RosegardenSequencerApp()
 {
     SEQUENCER_DEBUG << "RosegardenSequencer - shutting down" << endl;
     m_sequencer->shutdown();
-    delete m_sequencer;
     delete m_studio;
+    delete m_sequencer;
     delete m_controlBlockMmapper;
 }
 
@@ -275,6 +276,10 @@ RosegardenSequencerApp::startPlaying()
     // the audio queue for us
     //
     m_sequencer->processEventsOut(m_mC, false);
+
+    std::vector<Rosegarden::MappedEvent> audioEvents;
+    m_metaIterator->getAudioEvents(audioEvents);
+    m_sequencer->initialiseAudioQueue(audioEvents);
 
 //    SEQUENCER_DEBUG << "RosegardenSequencerApp::startPlaying: pausing to simulate high-load environment" << endl;
 //    ::sleep(1);
@@ -1244,20 +1249,6 @@ RosegardenSequencerApp::initialiseStudio()
     // clear down the studio before we start adding anything
     //
     m_studio->clear();
-
-    // Create a plugin manager
-    //
-    Rosegarden::MappedAudioPluginManager *pM =
-      dynamic_cast<Rosegarden::MappedAudioPluginManager*>(
-        m_studio->createObject(
-            Rosegarden::MappedObject::AudioPluginManager, true)); // read-only
-
-    if (pM)
-        SEQUENCER_DEBUG << "created plugin manager" << endl;
-
-    // This creates new MappedPlugin objects under the studio
-    //
-    pM->discoverPlugins(m_studio);
 }
 
 
@@ -1265,6 +1256,23 @@ void
 RosegardenSequencerApp::setMappedProperty(int id,
                                           const QString &property,
                                           float value)
+{
+
+    SEQUENCER_DEBUG << "setProperty: id = " << id
+                    << " : property = \"" << property << "\""
+		    << ", value = " << value << endl;
+
+
+    Rosegarden::MappedObject *object = m_studio->getObjectById(id);
+
+    if (object)
+        object->setProperty(property, value);
+}
+
+void
+RosegardenSequencerApp::setMappedProperty(int id,
+                                          const QString &property,
+                                          const QString &value)
 {
 
     SEQUENCER_DEBUG << "setProperty: id = " << id
@@ -1331,6 +1339,16 @@ RosegardenSequencerApp::getPropertyList(int id,
     return list;
 }
 
+std::vector<QString>
+RosegardenSequencerApp::getPluginInformation()
+{
+    std::vector<QString> list;
+
+    Rosegarden::PluginFactory::enumerateAllPlugins(list);
+
+    return list;
+}
+
 unsigned int
 RosegardenSequencerApp::getSampleRate() const
 {
@@ -1347,7 +1365,7 @@ RosegardenSequencerApp::createMappedObject(int type)
 {
     Rosegarden::MappedObject *object =
               m_studio->createObject(
-                      Rosegarden::MappedObject::MappedObjectType(type), false);
+                      Rosegarden::MappedObject::MappedObjectType(type));
 
     if (object)
     {
@@ -1365,21 +1383,6 @@ RosegardenSequencerApp::createMappedObject(int type)
 int 
 RosegardenSequencerApp::destroyMappedObject(int id)
 {
-#ifdef HAVE_LADSPA
-    Rosegarden::MappedLADSPAPlugin *plugin =
-        dynamic_cast<Rosegarden::MappedLADSPAPlugin*>
-	(m_studio->getObjectByIdAndType
-	 (id, Rosegarden::MappedObject::LADSPAPlugin));
-
-    if (plugin)
-    {
-        std::cout << "RosegardenSequencerApp::destroyMappedObject - "
-                  << "removing plugin instance" << std::endl;
-        m_sequencer->removePluginInstance(plugin->getInstrument(),
-                                          plugin->getPosition());
-    }
-#endif
-
     return(int(m_studio->destroyObject(Rosegarden::MappedObjectId(id))));
 }
 
@@ -1423,8 +1426,8 @@ void
 RosegardenSequencerApp::clearStudio()
 {
     SEQUENCER_DEBUG << "clearStudio()" << endl;
-    m_sequencer->removePluginInstances();
-    m_studio->clearTemporaries();
+//!!!    m_studio->clearTemporaries();
+    m_studio->clear();
     m_sequencerMapper.getSequencerDataBlock()->clearTemporaries();
 
 } 
@@ -1437,19 +1440,12 @@ RosegardenSequencerApp::setMappedPort(int pluginId,
     Rosegarden::MappedObject *object =
         m_studio->getObjectById(pluginId);
 
-#ifdef HAVE_LADSPA
+    Rosegarden::MappedPluginSlot *slot = 
+        dynamic_cast<Rosegarden::MappedPluginSlot *>(object);
 
-    Rosegarden::MappedLADSPAPlugin *plugin = 
-        dynamic_cast<Rosegarden::MappedLADSPAPlugin*>(object);
-
-    if (plugin)
-    {
-        plugin->setPort(portId, value);
+    if (slot) {
+        slot->setPort(portId, value);
     }
-
-
-#endif // HAVE_LADSPA
-
 }
 
 void
@@ -1520,6 +1516,9 @@ void RosegardenSequencerApp::dumpFirstSegment()
 void
 RosegardenSequencerApp::rationalisePlayingAudio()
 {
+//!!! currently only used in response to mute/unmute etc -- disable for now
+    return; //!!!
+
     if (!m_metaIterator) return;
 
     std::vector<MappedEvent> &segmentAudio =

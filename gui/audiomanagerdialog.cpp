@@ -47,6 +47,7 @@
 #include "multiviewcommandhistory.h"
 #include "rosegardenguiview.h"
 #include "rosestrings.h"
+#include "rgapplication.h"
 #include "rosedebug.h"
 
 #include "WAVAudioFile.h"
@@ -183,6 +184,17 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     h->setMargin(10);
     h->setSpacing(5);
 
+    m_sampleRate = 0;
+    
+    QCString replyType;
+    QByteArray replyData;
+    if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        unsigned int result;
+        streamIn >> result;
+        m_sampleRate = result;
+    }
+
     m_fileList = new AudioListView(h);
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
@@ -229,19 +241,19 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
     // Set the column names
     //
-    m_fileList->addColumn(i18n("Name"));
-    m_fileList->addColumn(i18n("Duration"));
-    m_fileList->addColumn(i18n("Envelope"));
-    m_fileList->addColumn(i18n("File"));
-    m_fileList->addColumn(i18n("Resolution"));
-    m_fileList->addColumn(i18n("Channels"));
-    m_fileList->addColumn(i18n("Sample rate"));
+    m_fileList->addColumn(i18n("Name"));           // 0
+    m_fileList->addColumn(i18n("Duration"));       // 1
+    m_fileList->addColumn(i18n("Envelope"));       // 2
+    m_fileList->addColumn(i18n("Sample rate"));    // 3
+    m_fileList->addColumn(i18n("Channels"));       // 4
+    m_fileList->addColumn(i18n("Resolution"));     // 5
+    m_fileList->addColumn(i18n("File"));           // 6
 
     m_fileList->setColumnAlignment(1, Qt::AlignHCenter);
     m_fileList->setColumnAlignment(2, Qt::AlignHCenter);
+    m_fileList->setColumnAlignment(3, Qt::AlignHCenter);
     m_fileList->setColumnAlignment(4, Qt::AlignHCenter);
     m_fileList->setColumnAlignment(5, Qt::AlignHCenter);
-    m_fileList->setColumnAlignment(6, Qt::AlignHCenter);
 
     m_fileList->restoreLayout(kapp->config(), m_listViewLayoutName);
 
@@ -413,22 +425,26 @@ AudioManagerDialog::slotPopulateFileList()
 
         // File location
         //
-        item->setText(3, QString(
+        item->setText(6, QString(
                     m_doc->getAudioFileManager().
                         substituteHomeForTilde((*it)->getFilename()).c_str()));
                                        
         // Resolution
         //
-        item->setText(4, QString("%1 bits").arg((*it)->getBitsPerSample()));
+        item->setText(5, QString("%1 bits").arg((*it)->getBitsPerSample()));
 
         // Channels
         //
-        item->setText(5, QString("%1").arg((*it)->getChannels()));
+        item->setText(4, QString("%1").arg((*it)->getChannels()));
 
         // Sample rate
         //
-        sRate.sprintf("%.1f KHz", float((*it)->getSampleRate())/ 1000.0);
-        item->setText(6, sRate);
+	if (m_sampleRate != 0 && (*it)->getSampleRate() != m_sampleRate) {
+	    sRate.sprintf("%.1f KHz *", float((*it)->getSampleRate())/ 1000.0);
+	} else {
+	    sRate.sprintf("%.1f KHz", float((*it)->getSampleRate())/ 1000.0);
+	}
+        item->setText(3, sRate);
 
         // Test audio file element for selection criteria
         //
