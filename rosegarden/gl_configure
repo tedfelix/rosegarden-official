@@ -8,4 +8,4 @@
 
 make -f Makefile.cvs
 
-CXXFLAGS="-g3 -gstabs+ -fexceptions" ./configure --enable-debug --with-qt-dir=/usr/lib/qt2 --prefix=/opt/kde2.2
+CXXFLAGS="-g3 -gstabs+" ./configure --enable-debug --with-qt-dir=/usr/lib/qt2 --prefix=/opt/kde2.2
