@@ -141,7 +141,7 @@ void RosegardenGUIView::resizeSelected()
 void
 RosegardenGUIView::editTrackNotation(Rosegarden::Track* p)
 {
-    vector<Rosegarden::Track *> tracksToEdit;
+    std::vector<Rosegarden::Track *> tracksToEdit;
     tracksToEdit.push_back(p);
 
     m_notationView = new NotationView(getDocument(), tracksToEdit, this, 9);
@@ -151,7 +151,7 @@ RosegardenGUIView::editTrackNotation(Rosegarden::Track* p)
 void
 RosegardenGUIView::editTrackNotationSmall(Rosegarden::Track* p)
 {
-    vector<Rosegarden::Track *> tracksToEdit;
+    std::vector<Rosegarden::Track *> tracksToEdit;
     tracksToEdit.push_back(p);
 
     m_notationView = new NotationView(getDocument(), tracksToEdit, this, 5);

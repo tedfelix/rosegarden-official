@@ -145,8 +145,8 @@ void Composition::eventAdded(Track *t, Event *e)
 
 	timeT sigTime = e->getAbsoluteTime();
 
-	cerr << "Composition: noting addition of time signature at "
-	     << sigTime << endl;
+	std::cerr << "Composition: noting addition of time signature at "
+                  << sigTime << std::endl;
 
 
 	Track::iterator found = findTimeSig(&m_timeReference, sigTime);
@@ -154,14 +154,14 @@ void Composition::eventAdded(Track *t, Event *e)
 	m_timeReference.insert(new Event(*e));
 
 	for (iterator i = begin(); i != end(); ++i) {
-	    cerr << "Composition: comparing with a track" << endl;
+	    std::cerr << "Composition: comparing with a track" << std::endl;
 	    if (*i != t) {
 		(*i)->removeObserver(this);
 		found = findTimeSig(*i, sigTime);
 		if (found != (*i)->end()) (*i)->erase(found);
 		(*i)->insert(new Event(*e));
 		(*i)->addObserver(this);
-	    } else cerr << "Composition: skipping" << endl;
+	    } else std::cerr << "Composition: skipping" << std::endl;
 	    (*i)->calculateBarPositions();
 	}
     }
@@ -180,20 +180,20 @@ void Composition::eventRemoved(Track *t, Event *e)
 
 	timeT sigTime = e->getAbsoluteTime();
 
-	cerr << "Composition: noting removal of time signature at "
-	     << sigTime << endl;
+	std::cerr << "Composition: noting removal of time signature at "
+	     << sigTime << std::endl;
 
 	Track::iterator found = findTimeSig(&m_timeReference, sigTime);
 	if (found != m_timeReference.end()) m_timeReference.erase(found);
 
 	for (iterator i = begin(); i != end(); ++i) {
-	    cerr << "Composition: comparing with a track" << endl;
+	    std::cerr << "Composition: comparing with a track" << std::endl;
 	    if (*i != t) {
 		(*i)->removeObserver(this);
 		found = findTimeSig(*i, sigTime);
 		if (found != (*i)->end()) (*i)->erase(found);
 		(*i)->addObserver(this);
-	    } else cerr << "Composition: skipping" << endl;
+	    } else std::cerr << "Composition: skipping" << std::endl;
 	    (*i)->calculateBarPositions();
 	}
     }

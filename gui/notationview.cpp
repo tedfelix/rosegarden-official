@@ -62,7 +62,10 @@ using Rosegarden::TimeSignature;
 using Rosegarden::Quantizer;
 using Rosegarden::timeT;
 
+using std::vector;
+
 #define ID_STATUS_MSG 1
+
 
 
 //////////////////////////////////////////////////////////////////////
