@@ -44,9 +44,66 @@ enum Note {
     LastNote = WholeDotted 
 };
 
+enum Accident { NoAccident, Sharp, Flat, Natural };
+
 
 /**
- * Generates QCanvasPixmaps for single notes
+ * Helper class to compute various offsets
+ * Used by the NotePixmapFactory
+ * @author Guillaume Laurent
+ */
+class NotePixmapOffsets
+{
+public:
+    NotePixmapOffsets();
+
+    void offsetsFor(Note,
+                    Accident,
+                    bool drawTail,
+                    bool stalkGoesUp);
+    
+    const QPoint& bodyOffset() { return m_bodyOffset; }
+    const QSize&  pixmapSize() { return m_pixmapSize; }
+    const QPoint& hotSpot()    { return m_hotSpot; }
+
+    void setNoteBodySizes(QSize empty, QSize filled);
+    void setTailWidth(unsigned int);
+    void setAccidentsWidth(unsigned int sharp,
+                           unsigned int flat,
+                           unsigned int natural);
+
+protected:
+
+    void computePixmapSize();
+    void computeAccidentAndStalkSize();
+    void computeBodyOffset();
+
+    QSize m_noteBodyEmptySize;
+    QSize m_noteBodyFilledSize;
+
+    unsigned int m_tailWidth;
+    unsigned int m_sharpWidth;
+    unsigned int m_flatWidth;
+    unsigned int m_naturalWidth;
+
+    Note m_note;
+    Accident m_accident;
+    bool m_drawTail;
+    bool m_stalkGoesUp;
+    bool m_noteHasStalk;
+
+    QPoint m_bodyOffset;
+    QPoint m_hotSpot;
+    QSize m_bodySize;
+    QSize m_pixmapSize;
+    QSize m_accidentStalkSize;
+
+};
+
+
+/**
+ * Generates QCanvasPixmaps for single notes and chords
+ * (chords unused)
  *
  *@author Guillaume Laurent
  */
@@ -67,6 +124,7 @@ public:
      * @param stalkGoesUp : if the note's stalk should go up or down
      */
     QCanvasPixmap makeNotePixmap(Note note,
+                                 Accident accident = NoAccident,
                                  bool drawTail = true,
                                  bool stalkGoesUp = true);
 
@@ -88,8 +146,9 @@ protected:
     const QPixmap* tailDown(Note note) const;
 
     void drawStalk(Note note, bool drawTail, bool stalkGoesUp);
-    void readjustGeneratedPixmapHeight(Note note);
-    void createPixmapAndMask(unsigned int tailOffset);
+    void createPixmapAndMask();
+
+    NotePixmapOffsets m_offsets;
 
     unsigned int m_generatedPixmapHeight;
     unsigned int m_noteBodyHeight;
@@ -104,6 +163,10 @@ protected:
     QPixmap m_noteBodyFilled;
     QPixmap m_noteBodyEmpty;
 
+    QPixmap m_accidentSharp;
+    QPixmap m_accidentFlat;
+    QPixmap m_accidentNatural;
+
     vector<QPixmap*> m_tailsUp;
     vector<QPixmap*> m_tailsDown;
     vector<QPixmap*> m_rests;
@@ -113,7 +176,7 @@ protected:
 };
 
 /**
- * Generates QCanvasPixmaps for chords
+ * Generates QCanvasPixmaps for chords - currently broken
  *
  *@author Guillaume Laurent
  */

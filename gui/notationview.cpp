@@ -306,7 +306,9 @@ NotationView::showElements(NotationElementList::iterator from,
                 
             if ((*it)->event()->type() == "note") {
 
-                QCanvasPixmap notePixmap(npf.makeNotePixmap(note, true, true));
+                QCanvasPixmap notePixmap(npf.makeNotePixmap(note,
+                                                            NoAccident,
+                                                            true, true));
                 noteSprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 
             } else if ((*it)->event()->type() == "rest") {
@@ -806,8 +808,9 @@ NotationView::test()
 
         for(unsigned int i = 0; i < 7; ++i) {
 
-
-            QPixmap note(npf.makeNotePixmap(Note(i), true, true));
+            QPixmap note(npf.makeNotePixmap(Note(i),
+                                            NoAccident,
+                                            true, true));
 
             QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&note,
                                                                       canvas());
