@@ -1422,7 +1422,7 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
     static std::vector<QColor> colours, selectedColours;
     if (colours.size() == 0) {
 	int h, s, v;
-        QColor c = Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SelectedElement);
+        QColor c = Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement);
 c.hsv(&h, &s, &v);
 	for (int step = 0; step < 256; step += (step == 0 ? 63 : 64)) {
 	    colours.push_back(QColor(-1, 0, step, QColor::Hsv));
@@ -1480,7 +1480,7 @@ c.hsv(&h, &s, &v);
 
 	if (thickness > 1) {
 	    if (m_selected) {
-		m_p->painter().setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SelectedElement));
+		m_p->painter().setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement));
 	    } else {
 		m_p->painter().setPen(Qt::black);
 	    }
@@ -1911,7 +1911,7 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
 			plain.getHeight() + rect.height());
 
     if (m_selected) {
-	m_p->painter().setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SelectedElement));
+	m_p->painter().setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement));
     }
 	
     m_p->drawNoteCharacter(0, oct < 0 ? 0 : rect.height(), plain);
@@ -2271,7 +2271,7 @@ NotePixmapFactory::drawHairpinAux(int length, bool isCrescendo,
     }
 
     if (m_selected) {
-	m_p->painter().setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SelectedElement));
+	m_p->painter().setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement));
     }
 
     int left = 1, right = length - 2*nbw/3 + 1;
@@ -2456,7 +2456,7 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
 	    }
 
 	    if (m_selected)
-		m_p->painter().setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SelectedElement));
+		m_p->painter().setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement));
 	    else if (m_shaded) {
 		m_p->painter().setPen(Qt::gray);
 	    }
@@ -2567,8 +2567,8 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
     QPen pen(Qt::black, thickness, Qt::DotLine);
 
     if (m_selected) {
-	m_p->painter().setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SelectedElement));
-	pen.setColor(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SelectedElement));
+	m_p->painter().setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement));
+	pen.setColor(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement));
     } else if (m_shaded) {
 	m_p->painter().setPen(Qt::gray);
 	pen.setColor(Qt::gray);
@@ -2692,7 +2692,7 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 	createPixmapAndMask(r.width(), r.height() + dy*2);
 
 	if (m_selected) {
-	    m_p->painter().setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SelectedElement));
+	    m_p->painter().setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement));
 	} else if (m_shaded) {
 	    m_p->painter().setPen(Qt::gray);
 	}
@@ -2770,7 +2770,7 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 	createPixmapAndMask(width, denomR.height() * 2 + getNoteBodyHeight());
 	
 	if (m_selected) {
-	    m_p->painter().setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SelectedElement));
+	    m_p->painter().setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement));
 	} else if (m_shaded) {
 	    m_p->painter().setPen(Qt::gray);
 	}
@@ -2951,7 +2951,7 @@ NotePixmapFactory::drawTextAux(const Rosegarden::Text &text,
 	createPixmapAndMask(width, height);
     }
     
-    if (m_selected) m_p->painter().setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SelectedElement));
+    if (m_selected) m_p->painter().setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement));
     else if (m_shaded) m_p->painter().setPen(Qt::gray);
 
     m_p->painter().setFont(textFont);
@@ -2989,13 +2989,13 @@ NotePixmapFactory::makeAnnotationPixmap(const Rosegarden::Text &text)
 
     createPixmapAndMask(pixmapWidth, pixmapHeight);
 
-    if (m_selected) m_p->painter().setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SelectedElement));
+    if (m_selected) m_p->painter().setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement));
     else if (m_shaded) m_p->painter().setPen(Qt::gray);
 
     m_p->painter().setFont(textFont);
     if (!m_inPrinterMethod) m_p->maskPainter().setFont(textFont);
 
-    m_p->painter().setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::TextAnnotationBackground));
+    m_p->painter().setBrush(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::TextAnnotationBackground));
     m_p->drawRect(0, 0, pixmapWidth, pixmapHeight);
 
     m_p->painter().setBrush(Qt::black);

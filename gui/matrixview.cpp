@@ -345,7 +345,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
 
     topBarButtons->getLoopRuler()->setBackgroundColor
-	(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::InsertCursorRuler));
+	(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::InsertCursorRuler));
 
     BarButtons *bottomBarButtons = new BarButtons(getDocument(),
                                                   &m_hlayout, 0, 25,

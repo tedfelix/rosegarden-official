@@ -968,7 +968,7 @@ msgid "Show non-notation events as question marks"
 msgstr "Nicht-Notationsevents als Fragezeichen zeigen"
 
 #: rosegardenconfiguredialog.cpp:506
-msgid "Show notation-quantized notes in a different colour"
+msgid "Show notation-quantized notes in a different color"
 msgstr "Notations-quantisierte Events in einer anderen Farbe anzeigen"
 
 #: rosegardenconfiguredialog.cpp:512

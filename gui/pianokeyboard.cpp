@@ -44,7 +44,7 @@ PianoKeyboard::PianoKeyboard(QWidget *parent)
       m_lastHoverHighlight(0)
 {
     m_hoverHighlight->hide();
-    m_hoverHighlight->setPaletteBackgroundColor(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::MatrixKeyboardFocus));
+    m_hoverHighlight->setPaletteBackgroundColor(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::MatrixKeyboardFocus));
 
     setPaletteBackgroundColor(QColor(238, 238, 224));
 

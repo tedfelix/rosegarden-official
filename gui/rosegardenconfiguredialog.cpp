@@ -535,7 +535,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget(m_showUnknowns, 3, 1);
 
     m_colourQuantize = new QCheckBox
-        (i18n("Show notation-quantized notes in a different colour"), frame);
+        (i18n("Show notation-quantized notes in a different color"), frame);
     bool defaultColourQuantize = m_cfg->readBoolEntry("colourquantize", false);
     m_colourQuantize->setChecked(defaultColourQuantize);
     layout->addWidget(m_colourQuantize, 4, 1);

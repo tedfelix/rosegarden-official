@@ -27,13 +27,13 @@
 
 namespace Rosegarden {
 
-QColor GUIPalette::getColor(const char* const colorName)
+QColor GUIPalette::getColour(const char* const colourName)
 {
     KConfig* config = kapp->config();
     config->setGroup(ColoursConfigGroup);
 
-    QColor res = getInstance()->m_defaultsMap[colorName];
-    config->readColorEntry(colorName, &res);
+    QColor res = getInstance()->m_defaultsMap[colourName];
+    config->readColorEntry(colourName, &res);
     return res;
 }
 

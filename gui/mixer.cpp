@@ -303,9 +303,9 @@ AudioMixerWindow::populate()
 	     RosegardenRotary::NoTicks, false, true);
 
 	if ((*i)->getType() == Rosegarden::Instrument::Audio) {
-	    rec.m_pan->setKnobColour(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RotaryPastelGreen));
+	    rec.m_pan->setKnobColour(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::RotaryPastelGreen));
 	} else {
-	    rec.m_pan->setKnobColour(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RotaryPastelYellow));
+	    rec.m_pan->setKnobColour(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::RotaryPastelYellow));
 	}
 
 	QToolTip::add(rec.m_pan, i18n("Pan"));
@@ -455,7 +455,7 @@ AudioMixerWindow::populate()
 	rec.m_pan = new RosegardenRotary
 	    (m_mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20,
 	     RosegardenRotary::NoTicks, false, true);
-	rec.m_pan->setKnobColour(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RotaryPastelBlue));
+	rec.m_pan->setKnobColour(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::RotaryPastelBlue));
 
 	QToolTip::add(rec.m_pan, i18n("Pan"));
 

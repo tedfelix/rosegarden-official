@@ -958,7 +958,7 @@ msgid "Show non-notation events as question marks"
 msgstr "Dangos digwyddiadau di-nodiant fel gofynnodau"
 
 #: rosegardenconfiguredialog.cpp:506
-msgid "Show notation-quantized notes in a different colour"
+msgid "Show notation-quantized notes in a different color"
 msgstr "Dangos nodau wedi eu cwanteiddio yn y nodiant mewn lliw gwahanol"
 
 #: rosegardenconfiguredialog.cpp:512

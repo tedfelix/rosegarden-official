@@ -1067,7 +1067,7 @@ msgid "Show non-notation events as question marks"
 msgstr "Показывать ненотные события как символы \"?\""
 
 #: rosegardenconfiguredialog.cpp:506
-msgid "Show notation-quantized notes in a different colour"
+msgid "Show notation-quantized notes in a different color"
 msgstr "Отображать квантованные в партитуре ноты другим цветом"
 
 #: rosegardenconfiguredialog.cpp:512

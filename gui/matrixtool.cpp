@@ -669,7 +669,7 @@ void MatrixSelector::ready()
     {
         m_selectionRect = new QCanvasRectangle(m_mParentView->canvas());
         m_selectionRect->hide();
-        m_selectionRect->setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SelectionRectangle));
+        m_selectionRect->setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectionRectangle));
 
         m_mParentView->setCanvasCursor(Qt::arrowCursor);
         //m_mParentView->setPositionTracking(false);

@@ -47,7 +47,7 @@ LoopRuler::LoopRuler(RulerScale *rulerScale,
       m_loop(false),
       m_startLoop(0), m_endLoop(0)
 {
-    setBackgroundColor(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::LoopRulerBackground));
+    setBackgroundColor(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::LoopRulerBackground));
 
     // Only allow loops to be snapped to Beats on this grid
     //
@@ -127,7 +127,7 @@ void LoopRuler::drawBarSections(QPainter* paint)
 	firstBar = m_rulerScale->getFirstVisibleBar();
     }
 
-    paint->setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::LoopRulerForeground));
+    paint->setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::LoopRulerForeground));
 
     for (int i = firstBar; i <= lastBar; ++i) {
 
@@ -177,8 +177,8 @@ LoopRuler::drawLoopMarker(QPainter* paint)
     x2 += m_currentXOffset + m_xorigin;
 
     paint->save();
-    paint->setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::LoopHighlight));
-    paint->setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::LoopHighlight));
+    paint->setBrush(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::LoopHighlight));
+    paint->setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::LoopHighlight));
     paint->drawRect(static_cast<int>(x1), 0, static_cast<int>(x2 - x1), m_height);
     paint->restore();
 

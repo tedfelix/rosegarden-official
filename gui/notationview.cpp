@@ -336,7 +336,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 				    false, getCentralWidget()));
 
     m_topBarButtons->getLoopRuler()->setBackgroundColor
-	(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::InsertCursorRuler));
+	(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::InsertCursorRuler));
 
     m_chordNameRuler = new ChordNameRuler
 	(m_hlayout, doc, segments, m_leftGutter, 20, getCentralWidget());

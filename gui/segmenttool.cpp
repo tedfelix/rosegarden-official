@@ -385,14 +385,14 @@ SegmentMover::SegmentMover(SegmentCanvas *c, RosegardenGUIDoc *d)
     m_foreGuide(new QCanvasRectangle(m_canvas->canvas())),
     m_topGuide(new QCanvasRectangle(m_canvas->canvas()))
 {
-    m_foreGuide->setPen(GUIPalette::getColor(GUIPalette::MovementGuide));
-    m_foreGuide->setBrush(GUIPalette::getColor(GUIPalette::MovementGuide));
+    m_foreGuide->setPen(GUIPalette::getColour(GUIPalette::MovementGuide));
+    m_foreGuide->setBrush(GUIPalette::getColour(GUIPalette::MovementGuide));
     m_foreGuide->setSize(1, m_canvas->canvas()->height());
     m_foreGuide->setZ(10);
     m_foreGuide->hide();
 
-    m_topGuide->setPen(GUIPalette::getColor(GUIPalette::MovementGuide));
-    m_topGuide->setBrush(GUIPalette::getColor(GUIPalette::MovementGuide));
+    m_topGuide->setPen(GUIPalette::getColour(GUIPalette::MovementGuide));
+    m_topGuide->setBrush(GUIPalette::getColour(GUIPalette::MovementGuide));
     m_topGuide->setSize(m_canvas->canvas()->width(), 1);
     m_topGuide->setZ(10);
     m_topGuide->hide();
@@ -798,14 +798,14 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c, RosegardenGUIDoc *d)
 {
     RG_DEBUG << "SegmentSelector()\n";
 
-    m_foreGuide->setPen(GUIPalette::getColor(GUIPalette::MovementGuide));
-    m_foreGuide->setBrush(GUIPalette::getColor(GUIPalette::MovementGuide));
+    m_foreGuide->setPen(GUIPalette::getColour(GUIPalette::MovementGuide));
+    m_foreGuide->setBrush(GUIPalette::getColour(GUIPalette::MovementGuide));
     m_foreGuide->setSize(1, m_canvas->canvas()->height());
     m_foreGuide->setZ(10);
     m_foreGuide->hide();
 
-    m_topGuide->setPen(GUIPalette::getColor(GUIPalette::MovementGuide));
-    m_topGuide->setBrush(GUIPalette::getColor(GUIPalette::MovementGuide));
+    m_topGuide->setPen(GUIPalette::getColour(GUIPalette::MovementGuide));
+    m_topGuide->setBrush(GUIPalette::getColour(GUIPalette::MovementGuide));
     m_topGuide->setSize(m_canvas->canvas()->width(), 1);
     m_topGuide->setZ(10);
     m_topGuide->hide();

@@ -902,8 +902,8 @@ msgid "Show non-notation events as question marks"
 msgstr ""
 
 #: rosegardenconfiguredialog.cpp:506
-msgid "Show notation-quantized notes in a different colour"
-msgstr ""
+msgid "Show notation-quantized notes in a different color"
+msgstr "Show notation-quantized notes in a different colour"
 
 #: rosegardenconfiguredialog.cpp:512
 msgid "Show \"invisible\" events in grey"

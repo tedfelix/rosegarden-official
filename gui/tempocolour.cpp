@@ -27,7 +27,7 @@ QColor
 TempoColour::getColour(double tempo)
 {
     int h, s, v;
-    QColor c = Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::TempoBase);
+    QColor c = Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::TempoBase);
     c.hsv(&h, &s, &v);
     v += 20;
     if (v > 255) v = 255;

@@ -65,7 +65,7 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
 
-    setBackgroundColor(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::TextRulerBackground));
+    setBackgroundColor(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::TextRulerBackground));
 
     QObject::connect
 	(doc->getCommandHistory(), SIGNAL(commandExecuted()),
@@ -136,7 +136,7 @@ void
 TempoRuler::paintEvent(QPaintEvent* e)
 {
     QPainter paint(this);
-    paint.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::TextRulerForeground));
+    paint.setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::TextRulerForeground));
 
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());

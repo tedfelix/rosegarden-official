@@ -40,7 +40,7 @@ namespace Rosegarden {
 class GUIPalette 
 {
 public:
-    static QColor getColor(const char* const colorName);
+    static QColor getColour(const char* const colourName);
 
     static Rosegarden::Colour convertColour(const QColor &input);
     static QColor convertColour(const Rosegarden::Colour &input);
@@ -144,15 +144,15 @@ public:
     
 protected:
     GUIPalette();
-    QColor getDefaultColor(const char* const colorName);
+    QColor getDefaultColour(const char* const colourName);
 
     //--------------- Data members ---------------------------------
     static GUIPalette* getInstance();
     static GUIPalette* m_instance;
 
-    typedef std::map<const char* const, QColor> colormap;
+    typedef std::map<const char* const, QColor> colourmap;
     
-    colormap m_defaultsMap;
+    colourmap m_defaultsMap;
 };
  
 }
