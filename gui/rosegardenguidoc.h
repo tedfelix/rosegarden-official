@@ -475,31 +475,19 @@ protected:
     void performAutoload();
 
     /**
-     * Parse the Rosegarden file \a file
+     * Parse the Rosegarden file in \a file
      *
-     * \errMsg will contains the error messages
+     * \a errMsg will contains the error messages
      * if parsing failed.
      *
      * @return false if parsing failed
      * @see RoseXmlHandler
      */
-    bool xmlParse(QString& fileContents, QString &errMsg,
+    bool xmlParse(QIODevice* file, QString &errMsg,
                   RosegardenProgressDialog *progress,
+                  unsigned int elementCount,
 		  bool permanent,
                   bool &cancelled);
-
-    /**
-     * Write the given string to the given file, compressed.
-     * @return false for failure
-     */
-    bool writeToFile(const QString &fileName, const QString &text);
-
-    /**
-     * Read the contents of the given string into the given text stream,
-     * uncompressing as you go.
-     * @return false for failure
-     */
-    bool readFromFile(const QString &fileName, QString &text);
 
     /**
      * Set the "auto saved" status of the document

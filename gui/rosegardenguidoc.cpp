@@ -24,7 +24,6 @@
 #include <vector>
 
 #include <unistd.h> // sleep
-#include <zlib.h>
 
 // include files for Qt
 #include <qdir.h>
@@ -38,6 +37,7 @@
 #include <kmessagebox.h>
 #include <kconfig.h>
 #include <kstddirs.h>
+#include <kfilterdev.h>
 
 // application specific includes
 #include "Event.h"
@@ -357,7 +357,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     newDocument();
 
-    QFileInfo fileInfo(filename);
+    QFileInfo fileInfo(QFile::encodeName(filename));
     setTitle(fileInfo.fileName());
 
     // Check if file readable with fileInfo ?
@@ -377,15 +377,26 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     QString errMsg;
     QString fileContents;
-    bool cancelled = false;
+    bool cancelled = false, okay = true;
 
-    bool okay = readFromFile(filename, fileContents);
-    if (!okay) errMsg = i18n("Not a Rosegarden-4 file");
-    else {
+    KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(QFile::encodeName(filename),
+                                                                                          "application/x-gzip"));
+    if (fileCompressedDevice == 0) {
+
+        errMsg = i18n("Could not open Rosegarden-4 file");
+
+    } else {
+        fileCompressedDevice->open(IO_ReadOnly);
+
+        unsigned int elementCount = fileInfo.size() / 4; // approx. guess
+//         RG_DEBUG << "RosegardenGUIDoc::xmlParse() : elementCount = " << elementCount
+//                  << " - file size : " << file->size()
+//                  << endl;
+
 
         // parse xml file
-	okay = xmlParse(fileContents, errMsg, &progressDlg,
-			permanent, cancelled);
+	okay = xmlParse(fileCompressedDevice, errMsg, &progressDlg,
+                        elementCount, permanent, cancelled);
 
     }
 
@@ -721,8 +732,11 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     RG_DEBUG << "RosegardenGUIDoc::saveDocument("
                          << filename << ")\n";
 
-    QString outText;
-    QTextStream outStream(&outText, IO_WriteOnly);
+    KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(QFile::encodeName(filename),
+                                                                                          "application/x-gzip"));
+    fileCompressedDevice->setOrigFileName("ROSEGARDEN4");
+    fileCompressedDevice->open(IO_WriteOnly);
+    QTextStream outStream(fileCompressedDevice);
 
     // output XML header
     //
@@ -797,8 +811,10 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     //
     outStream << "</rosegarden-data>\n";
 
-    bool okay = writeToFile(filename, outText);
-    if (!okay) return false;
+    delete fileCompressedDevice; // DO NOT USE outStream AFTER THIS POINT
+
+//     bool okay = writeToFile(filename, outText);
+//     if (!okay) return false;
 
     RG_DEBUG << endl << "RosegardenGUIDoc::saveDocument() finished\n";
 
@@ -823,8 +839,11 @@ bool RosegardenGUIDoc::exportStudio(const QString& filename,
     RG_DEBUG << "RosegardenGUIDoc::exportStudio("
                          << filename << ")\n";
 
-    QString outText;
-    QTextStream outStream(&outText, IO_WriteOnly);
+    KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(QFile::encodeName(filename),
+                                                                                          "application/x-gzip"));
+    fileCompressedDevice->setOrigFileName("ROSEGARDEN4");
+    fileCompressedDevice->open(IO_WriteOnly);
+    QTextStream outStream(fileCompressedDevice);
 
     // output XML header
     //
@@ -839,9 +858,11 @@ bool RosegardenGUIDoc::exportStudio(const QString& filename,
     // close the top-level XML tag
     //
     outStream << "</rosegarden-data>\n";
+
+    delete fileCompressedDevice;
     
-    bool okay = writeToFile(filename, outText);
-    if (!okay) return false;
+//     bool okay = writeToFile(filename, outText);
+//     if (!okay) return false;
     
     RG_DEBUG << endl << "RosegardenGUIDoc::exportStudio() finished\n";
     return true;
@@ -1007,20 +1028,14 @@ bool RosegardenGUIDoc::isSequencerRunning()
 }
 
 bool
-RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
+RosegardenGUIDoc::xmlParse(QIODevice* file, QString &errMsg,
                            RosegardenProgressDialog *progress,
+                           unsigned int elementCount,
 			   bool permanent,
                            bool &cancelled)
 {
     cancelled = false;
-
-    unsigned int elementCount = 0;
-    for (size_t i = 0; i < fileContents.length() - 1; ++i) {
-	if (fileContents[i] == '<' && fileContents[i+1] != '/') {
-	    ++elementCount;
-	}
-    }
-
+    
     RoseXmlHandler handler(this, elementCount, permanent);
 
     if (progress) {
@@ -1032,8 +1047,7 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
 		&handler, SLOT(slotCancel()));
     }
     
-    QXmlInputSource source;
-    source.setData(fileContents);
+    QXmlInputSource source(file);
     QXmlSimpleReader reader;
     reader.setContentHandler(&handler);
     reader.setErrorHandler(&handler);
@@ -1065,45 +1079,6 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
 
     return ok;
 }
-
-
-bool
-RosegardenGUIDoc::writeToFile(const QString &file, const QString &text)
-{
-    std::string stext = qstrtostr(text);
-    const char *ctext = stext.c_str();
-    size_t csize = strlen(ctext);
-
-    gzFile fd = gzopen(qstrtostr(file).c_str(), "wb");
-    if (!fd) return false;
-
-    int actual = gzwrite(fd, (void *)ctext, csize);
-    gzclose(fd);
-
-    return ((size_t)actual == csize);
-}
-
-bool
-RosegardenGUIDoc::readFromFile(const QString &file, QString &text)
-{
-    text = "";
-    gzFile fd = gzopen(QFile::encodeName(file), "rb");
-    if (!fd) return false;
-
-    static char buffer[1000];
-
-    while (gzgets(fd, buffer, 1000)) {
-	text.append(strtoqstr(std::string(buffer)));
-	if (gzeof(fd)) {
-	    gzclose(fd);
-	    return true;
-	}
-    }
-	
-    // gzgets only returns false on error
-    return false;
-}    
-
 
 // Take a MappedComposition from the Sequencer and turn it into an
 // Event-rich, Composition-inserted, mouthwateringly-ripe Segment.
