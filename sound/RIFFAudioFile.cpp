@@ -64,11 +64,13 @@ RIFFAudioFile::~RIFFAudioFile()
 void
 RIFFAudioFile::printStats()
 {
-    cout << "filename        : " << m_fileName  << endl
-         << "number of bits  : " << m_bitsPerSample << endl
-         << "sample rate     : " << m_sampleRate << endl
-         << "file length     : " << m_fileSize << " bytes" << endl
-         << "channels        : " << m_channels << endl
+    cout << "filename         : " << m_fileName  << endl
+         << "channels         : " << m_channels << endl
+         << "sample rate      : " << m_sampleRate << endl
+         << "bytes per second : " << m_bytesPerSecond << endl
+         << "bits per sample  : " << m_bitsPerSample << endl
+         << "bytes per sample : " << m_bytesPerSample << endl
+         << "file length      : " << m_fileSize << " bytes" << endl
          << endl;
 }
 
@@ -307,8 +309,9 @@ RIFFAudioFile::readFormatChunk()
     if (hS.compare(0, 4, Rosegarden::AUDIO_RIFF_ID) != 0)
 #endif
     {
-        std::cerr << "RIFFAudioFile::parseHeader - can't find RIFF identifier\n";
-        throw((std::string("RIFFAudioFile::parseHeader - can't find RIFF identifier")));
+        std::cerr << "RIFFAudioFile::readFormatChunk - "
+                  << "can't find RIFF identifier\n";
+        throw((std::string("RIFFAudioFile::readFormatChunk - can't find RIFF identifier")));
     }
 
     // Look for the WAV identifier
@@ -414,6 +417,7 @@ RIFFAudioFile::readFormatChunk()
     m_bytesPerSample = getIntegerFromLittleEndian(hS.substr(32,2));
     m_bitsPerSample = getIntegerFromLittleEndian(hS.substr(34,2));
 
+    //printStats();
 
 }
 

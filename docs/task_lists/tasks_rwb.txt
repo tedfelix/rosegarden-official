@@ -11,7 +11,7 @@ o Audio
    - new fader widget [DONE]
    - recording stereo WAVs [DONE]
    - audio connection management [FIRST PASS DONE]
-   - hardcoded format segment values
+   - hardcoded format segment values [BETTER but not finished]
    - panning [DONE]
    - plugin bypass [DONE but a couple of bugs]
    - BWF format writing/reading
@@ -24,7 +24,7 @@ o Audio
    - jack process tidy up (Bob Ham inspired) [DONE]
    - notify disk space available on audio path [DONE]
    - countdown dialog for audio recording [DONE]
-   - check disk space on audio record start [DONE]
+   - check disk space on audio record start [ALMOST DONE]
 
 o Audio busses and routing
    - n jack input routes [DONE]

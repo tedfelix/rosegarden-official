@@ -3699,17 +3699,22 @@ AlsaDriver::createAudioFile(const std::string &fileName)
         int channels = fader->
             getPropertyList(MappedAudioFader::Channels)[0].toInt();
 
-        cout << "GOT CHANNELS FROM FADER = " << channels << endl;
+        //cout << "GOT CHANNELS FROM FADER = " << channels << endl;
+
         // we use JACK_DEFAULT_AUDIO_TYPE for all ports currently so
         // we're recording 32 bit float MONO audio.
         //
+        int bytesPerSample = 2 * channels;
+        int bitsPerSample = 16;
+
         _recordFile =
             new WAVAudioFile(fileName,
                              channels,             // channels
-                             _jackSampleRate,      // bits per second
-                             _jackSampleRate/16,   // bytes per second
-                             2,                    // bytes per sample
-                             16);                  // bits per sample
+                             _jackSampleRate,      // samples per second
+                             _jackSampleRate *
+                                  bytesPerSample,  // bytes per second
+                             bytesPerSample,       // bytes per sample
+                             bitsPerSample);       // bits per sample
 
         // open the file for writing
         //
