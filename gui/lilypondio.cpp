@@ -244,18 +244,28 @@ LilypondExporter::write()
             }
         }
 
+	timeT prevTime = 0;
+
         // Write out all events for this Segment
         for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+
+	    // We need to deal with absolute time if we don't have 
+	    // "complete" lines of music and/or nonoverlapping events
+	    // i.e. chords etc.
+	    timeT absoluteTime = (*j)->getAbsoluteTime();
+
+	    // cc: new bar?
+	    if (j == (*i)->begin() ||
+		(prevTime < m_composition->getBarStartForTime(absoluteTime))) {
+		str << "\n\t\t\t";
+	    }
+	    prevTime = absoluteTime;
+
             if ((*j)->isa(Note::EventType) ||
                 (*j)->isa(Note::EventRestType)) {
                   
                 Note tmpNote = Note::getNearestNote((*j)->getDuration(),
                                                     MAX_DOTS);              
-
-                // We need to deal with absolute time if we don't have 
-                // "complete" lines of music and/or nonoverlapping events
-                // i.e. chords etc.
-                timeT absoluteTime = (*j)->getAbsoluteTime();
 
                 if ((*j)->isa(Note::EventType)) {
 		    // Algorithm for writing chords:
@@ -374,12 +384,14 @@ LilypondExporter::write()
 		}
 
 		// Incomplete: Set which note the clef should center on
-		str << "\t\t\t\\clef ";
+//cc		str << "\t\t\t\\clef ";
+		str << "\\clef ";
 		std::string whichClef((*j)->get<String>(Clef::ClefPropertyName));
 		if (whichClef == Clef::Treble) { str << "treble\n"; }
 		else if (whichClef == Clef::Tenor) { str << "tenor\n"; }
 		else if (whichClef == Clef::Alto) { str << "alto\n"; }
 		else if (whichClef == Clef::Bass) { str << "bass\n"; }
+		str << "\t\t\t"; //cc
 
 	    } else if ((*j)->isa(Key::EventType)) {
 		if (currentlyWritingChord) {
@@ -389,7 +401,8 @@ LilypondExporter::write()
 		    str << "> ";
 		}
 
-		str << "\n\t\t\t\\key ";
+//cc		str << "\n\t\t\t\\key ";
+		str << "\\key ";
 		Key whichKey(**j);
 		isFlatKeySignature = !whichKey.isSharp();
 		str << convertPitchToName(whichKey.getTonicPitch(), isFlatKeySignature);
@@ -406,7 +419,7 @@ LilypondExporter::write()
 		} else {
 		    str << " \\major";
 		}
-		str << "\n";
+		str << "\n\t\t\t";
 	    } else if ((*j)->isa(Indication::EventType)) {
 		// Handle the end of these events when it's time
 		eventsToStart.insert(*j);

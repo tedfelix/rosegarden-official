@@ -328,6 +328,23 @@ private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
     
+
+class TransformsMenuTieNotesCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuTieNotesCommand(Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection) { }
+
+    static QString getGlobalName() { return "&Tie Equal-Pitch Notes"; }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+};
+    
   
 class TransformsMenuChangeStemsCommand : public BasicSelectionCommand
 {

@@ -290,6 +290,7 @@ public slots:
     void slotTransformsNormalizeRests();
     void slotTransformsCollapseRests();
     void slotTransformsCollapseNotes();
+    void slotTransformsTieNotes();
     void slotTransformsStemsUp();
     void slotTransformsStemsDown();
     void slotTransformsRestoreStems();

@@ -41,6 +41,7 @@ using Rosegarden::timeT;
 using Rosegarden::Note;
 using Rosegarden::Clef;
 using Rosegarden::Int;
+using Rosegarden::Bool;
 using Rosegarden::String;
 using Rosegarden::Accidental;
 using Rosegarden::Accidentals::NoAccidental;
@@ -520,6 +521,36 @@ TransformsMenuCollapseNotesCommand::modifySegment()
 
     while (i-- != m_selection->getSegmentEvents().begin()) {
 	helper.collapseNoteAggressively((*i), endTime);
+    }
+}
+
+
+void
+TransformsMenuTieNotesCommand::modifySegment()
+{
+    Segment &segment(getSegment());
+    SegmentNotationHelper helper(segment);
+
+    //!!! move part of this to SegmentNotationHelper?
+
+    for (EventSelection::eventcontainer::iterator i =
+	     m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	bool tiedForward;
+	if ((*i)->get<Bool>(TIED_FORWARD, tiedForward) && tiedForward) {
+	    continue;
+	}
+	
+	Segment::iterator si = segment.findSingle(*i);
+	Segment::iterator sj;
+	while ((sj = helper.getNextAdjacentNote(si, true, false)) !=
+	       segment.end()) {
+	    if (!m_selection->contains(*sj)) break;
+	    (*si)->set<Bool>(TIED_FORWARD, true);
+	    (*sj)->set<Bool>(TIED_BACKWARD, true);
+	    si = sj;
+	}
     }
 }
 

@@ -654,6 +654,10 @@ void NotationView::setupActions()
                 SLOT(slotTransformsCollapseNotes()), actionCollection(),
                 "collapse_notes");
 
+    new KAction(TransformsMenuTieNotesCommand::getGlobalName(), 0, this,
+                SLOT(slotTransformsTieNotes()), actionCollection(),
+                "tie_notes");
+
     new KAction(TransformsMenuChangeStemsCommand::getGlobalName(true), 0, this,
                 SLOT(slotTransformsStemsUp()), actionCollection(),
                 "stems_up");
@@ -1667,6 +1671,16 @@ void NotationView::slotTransformsCollapseNotes()
     KTmpStatusMsg msg(i18n("Collapsing notes..."), statusBar());
 
     addCommandToHistory(new TransformsMenuCollapseNotesCommand
+                        (*m_currentEventSelection));
+    setCurrentSelection(0);
+}
+
+void NotationView::slotTransformsTieNotes()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Tying notes..."), statusBar());
+
+    addCommandToHistory(new TransformsMenuTieNotesCommand
                         (*m_currentEventSelection));
     setCurrentSelection(0);
 }
