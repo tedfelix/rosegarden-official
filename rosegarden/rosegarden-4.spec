@@ -1,77 +1,109 @@
-%define version 0.8
-%define release 2
-Summary:   MIDI and audio sequencer and notation editor
-Name:	   rosegarden4
-Version:   %{version}
-Release:   %{release}
-Copyright: GPL
-Group:     Applications/Sound
-Source:    http://prdownloads.sourceforge.net/rosegarden/rosegarden-4-%{version}.tar.gz
-URL:       http://www.all-day-breakfast.com/rosegarden/
-Packager:  Ryurick M. Hristev <ryurick.hristev@canterbury.ac.nz>
+# -orig: %define	desktop_vendor	planetccrma
+%define	desktop_vendor	Rosegarden-4
+%define desktop_utils   %(if which desktop-file-install 2>1 >/dev/null ; then echo "yes" ; fi)
 
-# unfortunately various rpm based distros may have different naming conventions
-# and not all set the 'Provides' field properly
-Requires: alsa-driver >= 0.9.0beta12
-Requires: ladspa
-Requires: jack-audio-connection-kit
-
-BuildRequires: jack-audio-connection-kit-devel
-BuildRoot:     %{_tmppath}/%{name}-buildroot
+Summary: Midi, audio and notation editor
+Name: 	 rosegarden4
+Version: 0.9
+Release: 1_rh
+URL:     http://www.all-day-breakfast.com/rosegarden/
+Source0: rosegarden-4-%{version}.tar.gz
+License: GPL
+Group:   Applications/Multimedia
+BuildRoot: %{_tmppath}/%{name}-root
+Requires:  jack-audio-connection-kit >= 0.40
+Obsoletes: rosegarden
+Obsoletes: rosegarden-4
+# -orig: Distribution: Planet CCRMA
+Distribution: Rosegarden-4
 
 %description
-Rosegarden-4 is an attractive, user-friendly MIDI and audio sequencer, notation
-editor, and general-purpose music composition and editing application for Unix
-and Linux.
+Rosegarden-4 is an attractive, user-friendly MIDI and audio sequencer,
+notation editor, and general-purpose music composition and editing
+application for Unix and Linux
 
-#---------------------------------------------------------------------
 %prep
+%setup -q -n rosegarden-4-%{version}
 
-%setup
-
-# prepare docs for packaging: cleanup CVS stuff
-# BUG: find returns a !=0 err code: Why ?
-#      do it in a subshell to 'exit 0'
-( find docs -name CVS -exec rm -rf '{}' ';' > /dev/null 2>&1 ) 
-
-#---------------------------------------------------------------------
 %build
+./configure --prefix=%{_prefix} --mandir=%{_mandir} --with-jack --with-ladspa
+make
 
-%configure
-# warning: '%make' is not portable, do not use
-make %{_smp_mflags}
-
-#---------------------------------------------------------------------
 %install
+[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
+make DESTDIR=$RPM_BUILD_ROOT install
 
-# BUG: 'make install' reruns configure: Why ?
-%makeinstall
+# redhat menus
+cat << EOF > %{desktop_vendor}-%{name}.desktop
+[Desktop Entry]
+Name=Rosegarden-4
+Comment=Midi, audio and notation editor
+Icon=
+Exec=%{_bindir}/rosegarden
+Terminal=false
+Type=Application
+EOF
 
-#---------------------------------------------------------------------
+%if "%{desktop_utils}" == "yes"
+  mkdir -p %{buildroot}%{_datadir}/applications
+  desktop-file-install --vendor %{desktop_vendor} \
+    --dir %{buildroot}%{_datadir}/applications    \
+    --add-category X-Red-Hat-Base                 \
+    --add-category Application                    \
+    --add-category AudioVideo                     \
+    %{desktop_vendor}-%{name}.desktop
+%else
+  mkdir -p %{buildroot}%{_sysconfdir}/X11/applnk/System
+  cp %{desktop_vendor}-%{name}.desktop \
+     %{buildroot}%{_sysconfdir}/X11/applnk/System/%{desktop_vendor}-%{name}.desktop
+%endif
+
+# rh-added: add the docs
+cd docs
+rm -rf ./CVS ./*/CVS
+cd ..
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/doc/%{name}-%{version}
+cp -a docs/* $RPM_BUILD_ROOT/%{_datadir}/doc/%{name}-%{version}
+
 %clean
+[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
 
-# be paranoid
-[ "${RPM_BUILD_ROOT}" != "/" ] && rm -rf ${RPM_BUILD_ROOT}
-
-#---------------------------------------------------------------------
 %files
+%defattr(-,root,root)
+%{_bindir}/*rosegarden*
+%{_libdir}/libRose*
+%{_datadir}/applnk/Applications/rosegarden.desktop
+%{_datadir}/apps/rosegarden
+%{_datadir}/doc/HTML/en/rosegarden
+%if "%{desktop_utils}" == "yes"
+%{_datadir}/applications/*%{name}.desktop
+%else
+%{_sysconfdir}/X11/applnk/System/%{desktop_vendor}-%{name}.desktop
+%endif
+%{_datadir}/icons/hicolor/16x16/apps/rosegarden.xpm
+%{_datadir}/icons/hicolor/32x32/apps/rosegarden.xpm
+%{_datadir}/icons/locolor/16x16/apps/rosegarden.xpm
+%{_datadir}/icons/locolor/32x32/apps/rosegarden.xpm
 
-%{_bindir}/*
-%{_libdir}/*
-%{_datadir}/applnk/Applications/*
-%dir %{_datadir}/apps/rosegarden
-%{_datadir}/apps/rosegarden/*
-%dir %{_datadir}/doc/HTML/en/rosegarden
-%{_datadir}/doc/HTML/en/rosegarden/*
-%doc AUTHORS ChangeLog INSTALL NEWS README TODO
-%doc docs/* 
+# rh-added: (declare doc dir, no %doc section)
+%{_datadir}/locale/*/LC_MESSAGES/rosegarden.mo
+%dir %{_datadir}/doc/%{name}-%{version}
+%{_datadir}/doc/%{name}-%{version}/*
 
-#---------------------------------------------------------------------
 %changelog
-* Sun Oct 20 2002 Ryurick M. Hristev <ryurick.hristev@canterbury.ac.nz>
-- rebuild wit ladsa & jack-audio-connection-kit
+* Wed May 07 2003 Ryurick M. Hristev <ryurick.hristev@canterbury.ac.nz>
+- update spec to 0.9
 
-* Sat Oct 19 2002 Ryurick M. Hristev <ryurick.hristev@canterbury.ac.nz>
-- first spec
-- tested under RedHat 8.0
+* Wed Dec 18 2002 Fernando Lopez Lezcano <nando@ccrma.stanford.edu> 0.8.5-1
+- changed name to rosegarden, anaconda does not like the current name
+  (anaconda should be fixed, name is legal)
+- update to 0.8.5
+* Sun Nov 10 2002 Fernando Lopez Lezcano <nando@ccrma.stanford.edu> 0.8-2
+- changed name of package to rosegarden-4 (what was I thinking?...)
+- added patch to rename jack alsa ports for jack >= 0.40
+- added explicit dependency to jack
+- added redhat menu entry
+* Fri Oct 18 2002 Fernando Lopez Lezcano <nando@ccrma.stanford.edu>
+- Initial build.
+
 

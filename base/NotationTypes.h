@@ -615,10 +615,10 @@ class Pitch
 {
 public:
     /**
-     * Construct a Pitch object based on the given Event, which must have
-     * a BaseProperties::PITCH property.  If the property is absent, NoData
-     * is thrown.  The BaseProperties::ACCIDENTAL property will also be
-     * used if present.
+     * Construct a Pitch object based on the given Event, which must
+     * have a BaseProperties::PITCH property.  If the property is
+     * absent, NoData is thrown.  The BaseProperties::ACCIDENTAL
+     * property will also be used if present.
      */
     Pitch(const Event &e)
 	/* throw Event::NoData */;
@@ -628,19 +628,52 @@ public:
      */
     Pitch(int performancePitch, 
 	  const Accidental &explicitAccidental = Accidentals::NoAccidental);
-    
-    /**
-     * Construct a Pitch for a particular staff line or space.
-     */
-    Pitch(int heightOnStaff, const Clef &clef, const Key &key,
-	  const Accidental &explicitAccidental = Accidentals::NoAccidental);
 
     /**
-     * Construct a Pitch based on scale position.  Middle C is in
-     * octave 3, and the lowest permissible octave number is -2.
-     * noteInScale must be in the range 0-11.
+     * Construct a Pitch based on octave and pitch in octave.  The
+     * lowest permissible octave number is octaveBase, and middle C is
+     * in octave octaveBase + 5.  pitchInOctave must be in the range
+     * 0-11 where 0 is C, 1 is C sharp, etc.
      */
-    Pitch(int noteInScale, int octave,
+    Pitch(int pitchInOctave, int octave,
+	  const Accidental &explicitAccidental = Accidentals::NoAccidental,
+	  int octaveBase = -2);
+
+    /**
+     * Construct a Pitch based on octave and note in scale.  The
+     * lowest permissible octave number is octaveBase, and middle C is
+     * in octave octaveBase + 5.  The octave supplied should be that
+     * of the root note in the given key, which may be in a different
+     * MIDI octave from the resulting pitch (as MIDI octaves always
+     * begin at C).  noteInScale must be in the range 0-6 where 0 is
+     * the root of the key and so on.  The accidental is relative to
+     * noteInScale: if there is an accidental in the key for this note
+     * already, explicitAccidental will be "added" to it.
+     *
+     * For minor keys, the harmonic scale is used.
+     */
+    Pitch(int noteInScale, int octave, const Key &key,
+	  const Accidental &explicitAccidental = Accidentals::NoAccidental,
+	  int octaveBase = -2);
+
+    /**
+     * Construct a Pitch based on octave and note name.  The lowest
+     * permissible octave number is octaveBase, and middle C is in
+     * octave octaveBase + 5.  noteName must be a character in the
+     * range [CDEFGAB] or lower-case equivalents.  The key is supplied
+     * so that we know how to interpret the NoAccidental case.
+     */
+    Pitch(char noteName, int octave, const Key &key,
+	  const Accidental &explicitAccidental = Accidentals::NoAccidental,
+	  int octaveBase = -2);
+    
+    /**
+     * Construct a Pitch corresponding a staff line or space on a
+     * classical 5-line staff.  The bottom staff line has height 0,
+     * the top has height 8, and both positive and negative values are
+     * permissible.
+     */
+    Pitch(int heightOnStaff, const Clef &clef, const Key &key,
 	  const Accidental &explicitAccidental = Accidentals::NoAccidental);
 
     /**
@@ -662,20 +695,21 @@ public:
      * in a given key.  For example, if the pitch is F-sharp in a key
      * in which F has a sharp, NoAccidental will be returned.  (This
      * is in contrast to getAccidental, which would return Sharp.)
-     * This doesn't take into account things like which accidentals
-     * have already been displayed in the bar, etc.
+     * This obviously can't take into account things like which
+     * accidentals have already been displayed in the bar, etc.
      */
     Accidental getDisplayAccidental(const Key &key = Key::DefaultKey) const;
 
     /**
      * Return the position in the scale for this pitch, as a number in
-     * the range 0 to 6 where 0 is C and 6 is the next B.
+     * the range 0 to 6 where 0 is the root of the key.
      */
     int getNoteInScale(const Key &key) const;
 
     /**
-     * Return the reference name of the note for this pitch, as a
-     * single character in the range A to G.
+     * Return the note name for this pitch, as a single character in
+     * the range A to G.  (This is a reference value that should not
+     * normally be shown directly to the user, for i18n reasons.)
      */
     char getNoteName(const Key &key) const;
 
@@ -714,6 +748,19 @@ public:
     std::string getAsString(bool useSharps,
 			    bool inclOctave = true,
 			    int octaveBase = -2) const;
+
+    /**
+     * Return a number 0-6 corresponding to the given note name, which
+     * must be in the range [CDEFGAB] or lower-case equivalents.  The
+     * return value is in the range 0-6 with 0 for C, 1 for D etc.
+     */
+    static int getIndexForNote(char noteName);
+
+    /**
+     * Return a note name corresponding to the given note index, which
+     * must be in the range 0-6 with 0 for C, 1 for D etc.
+     */
+    static char getNoteForIndex(int index);
 
 private:
     int m_pitch;

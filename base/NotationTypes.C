@@ -951,9 +951,8 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
     // Failsafe...  If this ever executes, there's trouble to fix...
     if (accidental == "") {
         std::cerr << "rawPitchToDisplayPitch(): error! returning null accidental for"
-                  << std::endl << "pitch: " << pitch << "\tuserAccidental: " << userAccidental
-                  << "\tkey: " << accidentalCount << "\t" << (keyIsSharp ? "sharp" : "flat")
-                  << std::endl;
+                  << std::endl << "pitch: " << pitch << "  userAccidental: " << userAccidental
+                  << "  octave: " << octave << "  key: " << key.getName() << std::endl;
     }
     
     // 6.  "Recenter" height in case it's been changed:
@@ -1104,6 +1103,45 @@ Pitch::Pitch(int performancePitch, const Accidental &explicitAccidental) :
     // nothing
 }
 
+Pitch::Pitch(int pitchInOctave, int octave,
+	     const Accidental &explicitAccidental, int octaveBase) :
+    m_pitch((octave - octaveBase) * 12 + pitchInOctave),
+    m_accidental(explicitAccidental)
+{
+    // nothing else
+}
+
+Pitch::Pitch(int noteInScale, int octave, const Key &key,
+	     const Accidental &explicitAccidental, int octaveBase) :
+    m_pitch(0),
+    m_accidental(explicitAccidental)
+{
+    m_pitch = (key.getTonicPitch());
+    m_pitch = (octave - octaveBase) * 12 + m_pitch % 12;
+
+    static int major[]          = { 0, 2, 4, 5, 7, 9, 11 };
+    static int minor_harmonic[] = { 0, 2, 3, 5, 7, 8, 11 };
+    
+    if (key.isMinor()) m_pitch += minor_harmonic[noteInScale];
+    else m_pitch += major[noteInScale];
+
+    //!!!
+
+//    NotationDisplayPitch ndp(noteInScale - 2, explicitAccidental);
+//    m_pitch = ndp.getPerformancePitch(Clef(Clef::Treble), key);
+}
+
+Pitch::Pitch(char noteName, int octave, const Key &key,
+	     const Accidental &explicitAccidental, int octaveBase) :
+    m_pitch(0),
+    m_accidental(explicitAccidental)
+{
+    NotationDisplayPitch ndp(getIndexForNote(noteName) - 2, explicitAccidental);
+    m_pitch = ndp.getPerformancePitch(Clef(Clef::Treble), key);
+    // we now have the pitch within octave octaveBase + 5
+    m_pitch = (octave - octaveBase) * 12 + m_pitch % 12;
+}
+
 Pitch::Pitch(int heightOnStaff, const Clef &clef, const Key &key,
 	     const Accidental &explicitAccidental) :
     m_pitch(0),
@@ -1111,14 +1149,6 @@ Pitch::Pitch(int heightOnStaff, const Clef &clef, const Key &key,
 {
     NotationDisplayPitch ndp(heightOnStaff, explicitAccidental);
     m_pitch = ndp.getPerformancePitch(clef, key);
-}
-
-Pitch::Pitch(int noteInScale, int octave,
-	     const Accidental &explicitAccidental) :
-    m_pitch((octave+2) * 12 + noteInScale),
-    m_accidental(explicitAccidental)
-{
-    // nothing else
 }
 
 int
@@ -1143,13 +1173,15 @@ Pitch::getDisplayAccidental(const Key &key) const
 int
 Pitch::getNoteInScale(const Key &key) const
 {
+    //!!!
     return (getHeightOnStaff(Clef(Clef::Treble), key) + 72) % 7;
 }
 
 char
 Pitch::getNoteName(const Key &key) const
 {
-    return "CDEFGAB"[getNoteInScale(key)];
+    int index = (getHeightOnStaff(Clef(Clef::Treble), key) + 72) % 7;
+    return getNoteForIndex(index);
 }
 
 int
@@ -1187,6 +1219,22 @@ Pitch::getAsString(bool useSharps, bool inclOctave, int octaveBase) const
     char tmp[10];
     sprintf(tmp, "%s%d", s.c_str(), getOctave(octaveBase));
     return std::string(tmp);
+}
+
+int
+Pitch::getIndexForNote(char noteName)
+{
+    //!!! bounds checking etc
+    if (islower(noteName)) noteName = toupper(noteName);
+    if (noteName < 'C') return noteName - 'A' + 5;
+    else return noteName - 'C';
+}
+
+char
+Pitch::getNoteForIndex(int index)
+{
+    //!!! bounds checking etc
+    return "CDEFGAB"[index];
 }
 
 
