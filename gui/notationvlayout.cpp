@@ -41,6 +41,7 @@ using Rosegarden::Event;
 using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::TimeSignature;
+using Rosegarden::Note;
 
 using namespace NotationProperties;
 
@@ -71,9 +72,16 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 
         if (el->isRest()) {
 
-            // rest pixmaps are sized so that they will be correctly
-            // displayed when set to align on the top staff line
-            el->setLayoutY(staff.yCoordOfHeight(8));
+            // rests for notes longer than the minim have hotspots
+            // aligned with the line above the middle line; the rest
+            // are aligned with the middle line
+
+            int noteType = el->event()->get<Int>(Note::NoteType);
+            if (noteType > Note::Minim) {
+                el->setLayoutY(staff.yCoordOfHeight(6));
+            } else {
+                el->setLayoutY(staff.yCoordOfHeight(4));
+            }
 
         } else if (el->isNote()) {
 
@@ -126,10 +134,25 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 
             if (el->event()->isa(Clef::EventType)) {
 
-                // clef pixmaps are sized so that they will be
-                // correctly displayed when set to align one leger
-                // line above the top staff line... well, almost
-                el->setLayoutY(staff.yCoordOfHeight(10) + 1);
+                // clef pixmaps have the hotspot placed to coincide
+                // with the pitch of the clef -- so the alto clef
+                // should be "on" the middle line, the treble clef
+                // "on" the line below the middle, etc
+
+                int height;
+                Clef clef(*el->event());
+
+                if (clef.getClefType() == Clef::Treble) {
+                    height = 2;
+                } else if (clef.getClefType() == Clef::Bass) {
+                    height = 6;
+                } else if (clef.getClefType() == Clef::Tenor) {
+                    height = 6;
+                } else {
+                    height = 4;
+                }
+
+                el->setLayoutY(staff.yCoordOfHeight(height));
 
             } else if (el->event()->isa(Key::EventType)) {
 

@@ -299,9 +299,8 @@ NotationHLayout::scanStaff(StaffType &staff)
 
                     newAccTable.update(acc, h);
 
-                    if (dacc != acc) {
-                        // recalculate min width, as the accidental is
-                        // not what we first thought
+                    if (dacc != NoAccidental) {
+                        // recalculate min width, to make sure we have room
                         mw = getMinWidth(*el);
                     }
 
@@ -779,9 +778,10 @@ int NotationHLayout::getMinWidth(const NotationElement &e) const
 {
     int w = 0;
 
-    if (e.isNote() || e.isRest()) {
+    if (e.isNote()) {
 
-        w += m_npf.getNoteBodyWidth();
+        w += m_npf.getNoteBodyWidth(e.event()->get<Int>(Note::NoteType));
+
         long dots;
         if (e.event()->get<Int>(Rosegarden::Note::NoteDots, dots)) {
             w += m_npf.getDotWidth() * dots;
@@ -792,9 +792,14 @@ int NotationHLayout::getMinWidth(const NotationElement &e) const
             w += m_npf.getAccidentalWidth((Accidental)accidental);
         }
         return w;
-    }
 
-    // rather misleadingly, noteMargin is now only used for non-note events
+    } else if (e.isRest()) {
+
+        w += m_npf.getRestWidth(Note(e.event()->get<Int>(Note::NoteType),
+                                     e.event()->get<Int>(Note::NoteDots)));
+
+        return w;
+    }
 
     w = m_npf.getNoteBodyWidth() / 5;
 

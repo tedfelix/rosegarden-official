@@ -31,7 +31,18 @@
 #include <qcanvas.h>
 #include <qxml.h>
 
+#include "PropertyName.h"
 #include "NotationTypes.h"
+
+#if (__GNUC__ < 3)
+#include <hash_map>
+#else
+#include <ext/hash_map>
+#endif
+
+typedef Rosegarden::PropertyName CharName;
+typedef Rosegarden::PropertyNameHash CharNameHash;
+typedef Rosegarden::PropertyNamesEqual CharNamesEqual;
 
 
 // Helper class for looking up information about a font
@@ -53,15 +64,16 @@ public:
     std::string getMappedBy() const { return m_mappedBy; }
 
     std::set<int> getSizes() const;
-    std::set<std::string> getCharNames() const;
+    std::set<CharName> getCharNames() const;
 
     bool getStaffLineThickness(int size, unsigned int &thickness) const;
     bool getStemThickness(int size, unsigned int &thickness) const;
+    bool getBorderThickness(int size, unsigned int &X, unsigned int &y) const;
 
-    bool getSrc(int size, std::string charName, std::string &src) const;
-    bool getInversionSrc(int size, std::string charName, std::string &src) const;
+    bool getSrc(int size, CharName charName, std::string &src) const;
+    bool getInversionSrc(int size, CharName charName, std::string &src) const;
 
-    bool getHotspot(int size, std::string charName, int &x, int &y) const;
+    bool getHotspot(int size, CharName charName, int &x, int &y) const;
 
     // Xml handler methods:
 
@@ -121,7 +133,8 @@ private:
     class SizeData
     {
     public:
-        SizeData() : m_stemThickness(-1), m_staffLineThickness(-1) { }
+        SizeData() : m_stemThickness(-1), m_staffLineThickness(-1),
+                     m_borderX(-1), m_borderY(-1) { }
         ~SizeData() { }
 
         void setStemThickness(unsigned int i) {
@@ -129,6 +142,12 @@ private:
         }
         void setStaffLineThickness(unsigned int i) {
             m_staffLineThickness = (int)i;
+        }
+        void setBorderX(unsigned int x) {
+            m_borderX = (int)x;
+        }
+        void setBorderY(unsigned int y) {
+            m_borderY = (int)y;
         }
 
         bool getStemThickness(unsigned int &i) const {
@@ -144,10 +163,20 @@ private:
                 return true;
             } else return false;
         }
+
+        bool getBorderThickness(unsigned int &x, unsigned int &y) const {
+            if (m_borderX >= 0) x = m_borderX;
+            else x = 0;
+            if (m_borderY >= 0) y = m_borderY;
+            else y = 0;
+            return (m_borderX >= 0 || m_borderY >= 0);
+        }
        
     private:
         int m_stemThickness;
         int m_staffLineThickness;
+        int m_borderX;
+        int m_borderY;
     };
 
     std::string m_name;
@@ -155,15 +184,18 @@ private:
     std::string m_copyright;
     std::string m_mappedBy;
 
-    typedef std::map<std::string, SymbolData> SymbolDataMap;
+    typedef std::hash_map<CharName, SymbolData,
+                          CharNameHash, CharNamesEqual> SymbolDataMap;
     SymbolDataMap m_data;
 
-    typedef std::map<std::string, HotspotData> HotspotDataMap;
+    typedef std::hash_map<CharName, HotspotData,
+                          CharNameHash, CharNamesEqual> HotspotDataMap;
     HotspotDataMap m_hotspots;
 
-    typedef std::map<int, SizeData> SizeDataMap;
+    typedef std::hash_map<int, SizeData> SizeDataMap;
     SizeDataMap m_sizes;
 
+    // For use when reading the XML file:
     bool m_expectingCharacters;
     std::string *m_characterDestination;
     std::string m_hotspotCharName;
@@ -203,51 +235,63 @@ public:
     /// Returns false + thickness=1 if not specified
     bool getStaffLineThickness(unsigned int &thickness) const;
 
+    /// Returns false + thickness=0x0 if not specified
+    bool getBorderThickness(unsigned int &x, unsigned int &y) const;
+
 
 
     /// Returns false + blank pixmap if it can't find the right one
-    bool getPixmap(std::string charName, QPixmap &pixmap,
+    bool getPixmap(CharName charName, QPixmap &pixmap,
                    bool inverted = false) const;
 
     /// Ignores problems, returning blank pixmap if necessary
-    QPixmap getPixmap(std::string charName, bool inverted = false) const;
+    QPixmap getPixmap(CharName charName, bool inverted = false) const;
 
     /// Ignores problems, returning blank canvas pixmap if necessary
     QCanvasPixmap getCanvasPixmap
-    (std::string charName, bool inverted = false) const;
+    (CharName charName, bool inverted = false) const;
 
 
 
     /// Returns false + dimensions of blank pixmap if none found
-    bool getDimensions(std::string charName, int &x, int &y,
+    bool getDimensions(CharName charName, int &x, int &y,
                        bool inverted = false) const;
 
     /// Ignores problems, returning dimension of blank pixmap if necessary
-    int getWidth(std::string charName) const;
+    int getWidth(CharName charName) const;
 
     /// Ignores problems, returning dimension of blank pixmap if necessary
-    int getHeight(std::string charName) const;
+    int getHeight(CharName charName) const;
 
 
 
     /// Returns false + centre-left of pixmap if no hotspot specified
-    bool getHotspot(std::string charName, int &x, int &y,
+    bool getHotspot(CharName charName, int &x, int &y,
                     bool inverted = false) const;
 
     /// Ignores problems, returns centre-left of pixmap if necessary
-    QPoint getHotspot(std::string charName, bool inverted = false) const;
+    QPoint getHotspot(CharName charName, bool inverted = false) const;
 
 
 private:
     int m_currentSize;
     NoteFontMap m_fontMap;
-    QPixmap m_blankPixmap;
 
-    std::string getKey(std::string charName, bool inverted) const;
+    QPixmap *lookup(CharName charName, bool inverted) const;
+    void add(CharName charName, bool inverted, QPixmap *pixmap) const;
 
-    typedef std::pair<bool, QPixmap> PixmapPair;
-    typedef std::map<std::string, PixmapPair> PixmapMap;
-    static PixmapMap *m_map;
+    typedef std::pair<QPixmap *, QPixmap *>
+            PixmapPair;
+
+    typedef std::hash_map<CharName, PixmapPair, CharNameHash, CharNamesEqual>
+            PixmapMap;
+
+    typedef std::map<std::string, PixmapMap *>
+            FontPixmapMap;
+
+    mutable PixmapMap *m_map; // pointer at a member of m_fontPixmapMap
+    static FontPixmapMap *m_fontPixmapMap;
+    static QPixmap *m_blankPixmap;
 };
 
 
@@ -255,48 +299,48 @@ private:
 
 namespace NoteCharacterNames
 {
-extern const std::string SHARP;
-extern const std::string FLAT;
-extern const std::string NATURAL;
-extern const std::string DOUBLE_SHARP;
-extern const std::string DOUBLE_FLAT;
+extern const CharName SHARP;
+extern const CharName FLAT;
+extern const CharName NATURAL;
+extern const CharName DOUBLE_SHARP;
+extern const CharName DOUBLE_FLAT;
 
-extern const std::string BREVE;
-extern const std::string WHOLE_NOTE;
-extern const std::string VOID_NOTEHEAD;
-extern const std::string NOTEHEAD_BLACK;
+extern const CharName BREVE;
+extern const CharName WHOLE_NOTE;
+extern const CharName VOID_NOTEHEAD;
+extern const CharName NOTEHEAD_BLACK;
 
-extern const std::string FLAG_1;
-extern const std::string FLAG_2;
-extern const std::string FLAG_3;
-extern const std::string FLAG_4;
+extern const CharName FLAG_1;
+extern const CharName FLAG_2;
+extern const CharName FLAG_3;
+extern const CharName FLAG_4;
 
-extern const std::string MULTI_REST;
-extern const std::string WHOLE_REST;
-extern const std::string HALF_REST;
-extern const std::string QUARTER_REST;
-extern const std::string EIGHTH_REST;
-extern const std::string SIXTEENTH_REST;
-extern const std::string THIRTY_SECOND_REST;
-extern const std::string SIXTY_FOURTH_REST;
+extern const CharName MULTI_REST;
+extern const CharName WHOLE_REST;
+extern const CharName HALF_REST;
+extern const CharName QUARTER_REST;
+extern const CharName EIGHTH_REST;
+extern const CharName SIXTEENTH_REST;
+extern const CharName THIRTY_SECOND_REST;
+extern const CharName SIXTY_FOURTH_REST;
 
-extern const std::string DOT;
+extern const CharName DOT;
 
-extern const std::string C_CLEF;
-extern const std::string G_CLEF;
-extern const std::string F_CLEF;
+extern const CharName C_CLEF;
+extern const CharName G_CLEF;
+extern const CharName F_CLEF;
 
-extern const std::string UNKNOWN;
+extern const CharName UNKNOWN;
 }
 
 class NoteCharacterNameLookup
 {
 public:
-    static std::string getAccidentalCharName(const Rosegarden::Accidental &);
-    static std::string getClefCharName(const Rosegarden::Clef &);
-    static std::string getRestCharName(const Rosegarden::Note::Type &);
-    static std::string getFlagCharName(int flagCount);
-    static std::string getNoteHeadCharName(const Rosegarden::Note::Type &);
+    static CharName getAccidentalCharName(const Rosegarden::Accidental &);
+    static CharName getClefCharName(const Rosegarden::Clef &);
+    static CharName getRestCharName(const Rosegarden::Note::Type &);
+    static CharName getFlagCharName(int flagCount);
+    static CharName getNoteHeadCharName(const Rosegarden::Note::Type &);
 };
 
 

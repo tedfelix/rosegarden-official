@@ -426,7 +426,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     // some magic numbers
     if (diff > 4) beam.gradient = 30;
     else if (diff > 3) beam.gradient = 15; // was 17
-    else if (diff > 0) beam.gradient = 10;
+    else if (diff > 1) beam.gradient = 10;
     else beam.gradient = 0;
 
     if (initialHeight < finalHeight) beam.gradient = -beam.gradient;
@@ -465,17 +465,14 @@ NotationGroup::calculateBeam(NotationStaff &staff)
         kdDebug(KDEBUG_AREA) << "NotationGroup::calculateBeam: WARNING: Shortest element has no note-type; should this be possible?" << endl;
     }
     int nh = staff.getNotePixmapFactory().getNoteBodyHeight();
+    int sl = staff.getNotePixmapFactory().getStemLength();
 
     if (beam.aboveNotes) {
-        beam.startY =
-            min(min(c0 - nh*3, c1 - nh*2), c2 - nh*3);
-//                min(c2 - nh*2, max(c0 - nh*4, finalY - nh*4)));
+        beam.startY = min(min(c0 - sl, c1 - nh*2), c2 - sl);
         if (shortestNoteType < Note::Quaver)
             beam.startY -= nh * (Note::Quaver - shortestNoteType) / 2;
     } else {
-        beam.startY =
-            max(max(c0 + nh*3, c1 + nh*2), c2 + nh*3);
-//                max(c2 + nh*2, min(c0 + nh*3, finalY + nh*3)));
+        beam.startY = max(max(c0 + sl, c1 + nh*2), c2 + sl);
         if (shortestNoteType < Note::Quaver)
 	    beam.startY += nh * (Note::Quaver - shortestNoteType) / 2;
     }  

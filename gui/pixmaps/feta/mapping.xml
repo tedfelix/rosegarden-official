@@ -9,9 +9,11 @@
         mapped-by="Chris Cannam"/>
 
 <font-sizes>
-        <font-size note-height="4" staff-line-thickness="1" stem-thickness="1"/>
-        <font-size note-height="8" staff-line-thickness="1" stem-thickness="1"/>
-        <font-size note-height="12" staff-line-thickness="2" stem-thickness="2"/>
+        <font-size note-height="4" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>
+        <font-size note-height="6" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>
+        <font-size note-height="8" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>
+        <font-size note-height="10" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>
+        <font-size note-height="12" staff-line-thickness="2" stem-thickness="2" border-x="1" border-y="1"/>
 </font-sizes>
 
 <font-symbol-map>
@@ -62,11 +64,92 @@
         <symbol name="MUSICAL SYMBOL F CLEF" src="clefs-F"/>
 </font-symbol-map>
 
+<!-- It'd be useful to be able to express these as fractions,   
+     and we'll need that if we ever support scalable fonts: -->
 <font-hotspots>
         <hotspot name="MUSIC FLAT SIGN">
+                <when note-height="4" y="8"/>
+                <when note-height="6" y="12"/>
+                <when note-height="8" y="15"/>
+                <when note-height="10" y="19"/>
+                <when note-height="12" y="22"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL C CLEF">
+                <when note-height="4" y="9"/>
+                <when note-height="6" y="13"/>
+                <when note-height="8" y="16"/>
+                <when note-height="10" y="20"/>
+                <when note-height="12" y="24"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL G CLEF">
+                <when note-height="4" y="19"/>
+                <when note-height="6" y="29"/>
+                <when note-height="8" y="38"/>
+                <when note-height="10" y="48"/>
+                <when note-height="12" y="58"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL F CLEF">
+                <when note-height="4" y="5"/>
+                <when note-height="6" y="7"/>
+                <when note-height="8" y="9"/>
+                <when note-height="10" y="11"/>
+                <when note-height="12" y="13"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL MULTI REST">
+                <when note-height="4" y="0"/>
+                <when note-height="6" y="0"/>
+                <when note-height="8" y="0"/>
+                <when note-height="10" y="0"/>
+                <when note-height="12" y="0"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL WHOLE REST">
+                <when note-height="4" y="1"/>
+                <when note-height="6" y="1"/>
+                <when note-height="8" y="1"/>
+                <when note-height="10" y="1"/>
+                <when note-height="12" y="1"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL HALF REST">
+                <when note-height="4" y="3"/>
+                <when note-height="6" y="4"/>
+                <when note-height="8" y="6"/>
+                <when note-height="10" y="7"/>
+                <when note-height="12" y="8"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL QUARTER REST">
+                <when note-height="4" y="6"/>
+                <when note-height="6" y="9"/>
+                <when note-height="8" y="12"/>
+                <when note-height="10" y="15"/>
+                <when note-height="12" y="19"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL EIGHTH REST">
+                <when note-height="4" y="4"/>
+                <when note-height="6" y="6"/>
+                <when note-height="8" y="7"/>
+                <when note-height="10" y="9"/>
+                <when note-height="12" y="11"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL SIXTEENTH REST">
+                <when note-height="4" y="5"/>
+                <when note-height="6" y="7"/>
+                <when note-height="8" y="8"/>
+                <when note-height="10" y="10"/>
+                <when note-height="12" y="12"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL THIRTY-SECOND REST">
+                <when note-height="4" y="6"/>
+                <when note-height="6" y="8"/>
+                <when note-height="8" y="9"/>
+                <when note-height="10" y="11"/>
+                <when note-height="12" y="13"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL SIXTY-FOURTH REST">
                 <when note-height="4" y="7"/>
-                <when note-height="8" y="14"/>
-                <when note-height="12" y="21"/>
+                <when note-height="6" y="9"/>
+                <when note-height="8" y="10"/>
+                <when note-height="10" y="12"/>
+                <when note-height="12" y="14"/>
         </hotspot>
 </font-hotspots>
 

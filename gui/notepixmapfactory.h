@@ -116,6 +116,8 @@ protected:
 
     void createPixmapAndMask(int width, int height);
 
+    QPoint m_origin;
+
     QFont m_timeSigFont;
     QFontMetrics m_timeSigFontMetrics;
 

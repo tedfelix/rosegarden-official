@@ -128,10 +128,16 @@ TracksCanvas::TracksCanvas(int gridH, int gridV,
     TrackItem::setWidthToDurationRatio(m_grid.hstep());
     TrackItem::setItemHeight(m_grid.vstep());
 
-    m_editMenu->insertItem(I18N_NOOP("Edit"),
-                           this, SLOT(onEdit()));
+    m_editMenu->insertItem(I18N_NOOP("Edit Tiny"),
+                           this, SLOT(onEditTiny()));
     m_editMenu->insertItem(I18N_NOOP("Edit Small"),
                            this, SLOT(onEditSmall()));
+    m_editMenu->insertItem(I18N_NOOP("Edit Medium"),
+                           this, SLOT(onEditMedium()));
+    m_editMenu->insertItem(I18N_NOOP("Edit Large"),
+                           this, SLOT(onEditLarge()));
+    m_editMenu->insertItem(I18N_NOOP("Edit Huge"),
+                           this, SLOT(onEditHuge()));
 }
 
 TracksCanvas::~TracksCanvas()
@@ -214,7 +220,7 @@ void TracksCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
 
     if (item) {
         m_currentItem = item;
-        emit editTrack(m_currentItem->getTrack());
+        emit editTrackMedium(m_currentItem->getTrack());
     }
 }
 
@@ -261,15 +267,33 @@ TracksCanvas::addPartItem(int x, int y, unsigned int nbSteps)
 
 
 void
-TracksCanvas::onEdit()
+TracksCanvas::onEditTiny()
 {
-    emit editTrack(m_currentItem->getTrack());
+    emit editTrackTiny(m_currentItem->getTrack());
 }
 
 void
 TracksCanvas::onEditSmall()
 {
     emit editTrackSmall(m_currentItem->getTrack());
+}
+
+void
+TracksCanvas::onEditMedium()
+{
+    emit editTrackMedium(m_currentItem->getTrack());
+}
+
+void
+TracksCanvas::onEditLarge()
+{
+    emit editTrackLarge(m_currentItem->getTrack());
+}
+
+void
+TracksCanvas::onEditHuge()
+{
+    emit editTrackHuge(m_currentItem->getTrack());
 }
 
 //////////////////////////////////////////////////////////////////////

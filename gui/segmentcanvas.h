@@ -188,16 +188,34 @@ protected:
 
 protected slots:
     /**
-     * connected to the 'Edit' item of the RMB popup menu - re-emits
-     * editTrack(Track*)
+     * connected to the 'Edit Tiny' item of the RMB popup menu - re-emits
+     * editTrackTiny(Track*)
      */
-    void onEdit();
+    void onEditTiny();
 
     /**
      * connected to the 'Edit Small' item of the RMB popup menu - re-emits
      * editTrackSmall(Track*)
      */
     void onEditSmall();
+
+    /**
+     * connected to the 'Edit Medium' item of the RMB popup menu - re-emits
+     * editTrackMedium(Track*)
+     */
+    void onEditMedium();
+
+    /**
+     * connected to the 'Edit Large' item of the RMB popup menu - re-emits
+     * editTrackLarge(Track*)
+     */
+    void onEditLarge();
+
+    /**
+     * connected to the 'Edit Huge' item of the RMB popup menu - re-emits
+     * editTrackHuge(Track*)
+     */
+    void onEditHuge();
 
 signals:
     /**
@@ -218,16 +236,11 @@ signals:
      */
     void updateTrackInstrumentAndStartIndex(TrackItem*);
 
-    /**
-     * Emitted when the user requests the edition of a Track in notation form
-     */
-    void editTrack(Rosegarden::Track*);
-
-    /**
-     * Emitted when the user requests the edition of a Track in
-     * notation form, using small pixmaps
-     */
+    void editTrackTiny(Rosegarden::Track*);
     void editTrackSmall(Rosegarden::Track*);
+    void editTrackMedium(Rosegarden::Track*);
+    void editTrackLarge(Rosegarden::Track*);
+    void editTrackHuge(Rosegarden::Track*);
 
 private:
     ToolType m_toolType;

@@ -1,23 +1,23 @@
 /* XPM */
 static char *magick[] = {
 /* columns rows colors chars-per-pixel */
-"10 9 8 1",
+"12 11 6 1",
 "  c Gray1",
-". c #2c2c2c",
-"X c Gray30",
-"o c #777777",
-"O c #838383",
-"+ c #b7b7b7",
-"@ c #dadada",
-"# c None",
+". c Gray24",
+"X c Gray28",
+"o c Gray53",
+"O c #bbbbbb",
+"+ c None",
 /* pixels */
-"####o @#@@",
-"####.  X..",
-"###O      ",
-"###X     X",
-"##+     X#",
-"##X     +#",
-"#X     X##",
-"       o##",
-"o..X.  ###"
+"++++++++++++",
+"+++++Oo+++++",
+"+++++   .  O",
+"++++o      o",
+"++++X     X+",
+"+++O     X++",
+"+++X     O++",
+"++X     X+++",
+"+o      o+++",
+"+O  .   ++++",
+"++++++oO++++"
 };

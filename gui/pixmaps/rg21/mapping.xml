@@ -64,6 +64,26 @@
                 <when note-height="4" y="4"/>
                 <when note-height="8" y="9"/>
         </hotspot>
+        <hotspot name="MUSICAL SYMBOL C CLEF">
+                <when note-height="4" y="14"/>
+                <when note-height="8" y="26"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL G CLEF">
+                <when note-height="4" y="19"/>
+                <when note-height="8" y="35"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL F CLEF">
+                <when note-height="4" y="9"/>
+                <when note-height="8" y="17"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL MULTI REST">
+                <when note-height="4" y="5"/>
+                <when note-height="8" y="9"/>
+        </hotspot>
+        <hotspot name="MUSICAL SYMBOL WHOLE REST">
+                <when note-height="4" y="5"/>
+                <when note-height="8" y="9"/>
+        </hotspot>
 </font-hotspots>
 
 </rosegarden-font-encoding>

@@ -22,6 +22,8 @@
 #include "notefont.h"
 
 #include <qfileinfo.h>
+#include <kglobal.h>
+#include <kstddirs.h>
 #include <klocale.h>
 #include <iostream>
 
@@ -37,8 +39,7 @@ NoteFontMap::NoteFontMap(string name) :
     m_characterDestination(0),
     m_hotspotCharName("")
 {
-    m_fontDirectory = "./pixmaps";
-//        KGlobal::dirs()->findResource("appdata", "pixmaps");
+    m_fontDirectory = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 
     QString mapFileName = QString("%1/%2/mapping.xml")
         .arg(m_fontDirectory.c_str())
@@ -117,6 +118,12 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         s = attributes.value("stem-thickness");
         if (s) sizeData.setStemThickness(s.toInt());
+
+        s = attributes.value("border-x");
+        if (s) sizeData.setBorderX(s.toInt());
+
+        s = attributes.value("border-y");
+        if (s) sizeData.setBorderY(s.toInt());
 
         m_sizes[noteHeight] = sizeData;
 
@@ -209,10 +216,10 @@ NoteFontMap::getSizes() const
     return sizes;
 }
 
-set<string>
+set<CharName>
 NoteFontMap::getCharNames() const
 {
-    set<string> names;
+    set<CharName> names;
 
     for (SymbolDataMap::const_iterator i = m_data.begin();
          i != m_data.end(); ++i) {
@@ -245,7 +252,7 @@ NoteFontMap::checkFile(int size, string &src) const
 
 
 bool
-NoteFontMap::getSrc(int size, string charName, string &src) const
+NoteFontMap::getSrc(int size, CharName charName, string &src) const
 {
     SymbolDataMap::const_iterator i = m_data.find(charName);
     if (i == m_data.end()) return false;
@@ -255,7 +262,7 @@ NoteFontMap::getSrc(int size, string charName, string &src) const
 }
 
 bool
-NoteFontMap::getInversionSrc(int size, string charName, string &src) const
+NoteFontMap::getInversionSrc(int size, CharName charName, string &src) const
 {
     SymbolDataMap::const_iterator i = m_data.find(charName);
     if (i == m_data.end()) return false;
@@ -284,7 +291,17 @@ NoteFontMap::getStemThickness(int size, unsigned int &thickness) const
 }
 
 bool
-NoteFontMap::getHotspot(int size, string charName, int &x, int &y) const
+NoteFontMap::getBorderThickness(int size,
+                                unsigned int &x, unsigned int &y) const
+{
+    SizeDataMap::const_iterator i = m_sizes.find(size);
+    if (i == m_sizes.end()) return false;
+
+    return i->second.getBorderThickness(x, y);
+}
+
+bool
+NoteFontMap::getHotspot(int size, CharName charName, int &x, int &y) const
 {
     HotspotDataMap::const_iterator i = m_hotspots.find(charName);
     if (i == m_hotspots.end()) return false;
@@ -302,7 +319,7 @@ NoteFontMap::dump() const
          << getMappedBy() << endl;
 
     set<int> sizes = getSizes();
-    set<string> names = getCharNames();
+    set<CharName> names = getCharNames();
 
     for (set<int>::iterator sizei = sizes.begin(); sizei != sizes.end();
          ++sizei) {
@@ -319,10 +336,10 @@ NoteFontMap::dump() const
             cout << "Stem thickness: " << t << endl;
         }
 
-        for (set<string>::iterator namei = names.begin();
+        for (set<CharName>::iterator namei = names.begin();
              namei != names.end(); ++namei) {
 
-            cout << "\nCharacter: " << *namei << endl;
+            cout << "\nCharacter: " << namei->c_str() << endl;
 
             string s;
             int x, y;
@@ -343,33 +360,56 @@ NoteFontMap::dump() const
 }
 
 
-NoteFont::PixmapMap *NoteFont::m_map = 0;
+NoteFont::FontPixmapMap *NoteFont::m_fontPixmapMap = 0;
+QPixmap *NoteFont::m_blankPixmap = 0;
 
 NoteFont::NoteFont(string fontName, int size) :
-    m_fontMap(fontName),
-    m_blankPixmap(10, 10)
+    m_fontMap(fontName)
 {
+    // Do the size checks first, to avoid doing the extra work if they fail
+
     std::set<int> sizes = m_fontMap.getSizes();
 
     if (sizes.size() > 0) {
         m_currentSize = *sizes.begin();
     } else {
-        throw BadFont("No sizes available");
+        throw BadFont(QString("No sizes listed for font \"%1\"")
+                      .arg(fontName.c_str()).latin1());
     }
 
     if (size > 0) {
         if (sizes.find(size) == sizes.end()) {
-            throw BadFont("Font not available in this size");
+            throw BadFont(QString("Font \"%1\" not available in size %2")
+                          .arg(fontName.c_str())
+                          .arg(size).latin1());
         } else {
             m_currentSize = size;
         }
     }
 
-    if (m_map == 0) {
-        m_map = new PixmapMap();
+    // Create the global font map and blank pixmap if necessary
+
+    if (m_fontPixmapMap == 0) {
+        m_fontPixmapMap = new FontPixmapMap();
     }
 
-    m_blankPixmap.setMask(QBitmap(10, 10, TRUE));
+    if (m_blankPixmap == 0) {
+        m_blankPixmap = new QPixmap(10, 10);
+        m_blankPixmap->setMask(QBitmap(10, 10, TRUE));
+    }
+
+    // Locate our font's pixmap map in the font map, create if necessary
+
+    string fontKey = QString("__%1__%2__")
+        .arg(m_fontMap.getName().c_str())
+        .arg(m_currentSize).latin1();
+
+    FontPixmapMap::iterator i = m_fontPixmapMap->find(fontKey);
+    if (i == m_fontPixmapMap->end()) {
+        (*m_fontPixmapMap)[fontKey] = new PixmapMap();
+    }
+
+    m_map = (*m_fontPixmapMap)[fontKey];
 }
 
 NoteFont::~NoteFont()
@@ -391,26 +431,53 @@ NoteFont::getStaffLineThickness(unsigned int &thickness) const
     return m_fontMap.getStaffLineThickness(m_currentSize, thickness);
 }
 
-string
-NoteFont::getKey(string charName, bool inverted) const
+bool
+NoteFont::getBorderThickness(unsigned int &x, unsigned int &y) const
 {
-    QString s = QString("__%1__%2__%3__")
-        .arg(m_fontMap.getName().c_str())
-        .arg(m_currentSize)
-        .arg(charName.c_str());
-    if (inverted) s += "i";
-    return s.latin1();
+    x = 0;
+    y = 0;
+    return m_fontMap.getBorderThickness(m_currentSize, x, y);
+}
+
+QPixmap *
+NoteFont::lookup(CharName charName, bool inverted) const
+{
+    PixmapMap::iterator i = m_map->find(charName);
+    if (i != m_map->end()) {
+        if (inverted) return i->second.second;
+        else return i->second.first;
+    }
+    return 0;
+}
+
+void
+NoteFont::add(CharName charName, bool inverted, QPixmap *pixmap) const
+{
+    PixmapMap::iterator i = m_map->find(charName);
+    if (i != m_map->end()) {
+        if (inverted) {
+            delete i->second.second;
+            i->second.second = pixmap;
+        } else {
+            delete i->second.first;
+            i->second.first = pixmap;
+        }
+    } else {
+        if (inverted) {
+            (*m_map)[charName] = PixmapPair(0, pixmap);
+        } else {
+            (*m_map)[charName] = PixmapPair(pixmap, 0);
+        }
+    }
 }
 
 bool
-NoteFont::getPixmap(string charName, QPixmap &pixmap, bool inverted) const
+NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 {
-    string key(getKey(charName, inverted));
-
-    PixmapMap::iterator i = m_map->find(key);
-    if (i != m_map->end()) {
-        pixmap = i->second.second;
-        return i->second.first;
+    QPixmap *found = lookup(charName, inverted);
+    if (found != 0) {
+        pixmap = *found;
+        return true;
     }
 
     string src;
@@ -422,26 +489,38 @@ NoteFont::getPixmap(string charName, QPixmap &pixmap, bool inverted) const
     if (ok) {
         cerr << "NoteFont::getPixmap: Loading \"" << src << "\"" << endl;
 
-        pixmap = QPixmap(src.c_str());
-        if (!pixmap.isNull()) {
-	    pixmap.setMask(pixmap.createHeuristicMask()); //!!!
-            (*m_map)[key] = PixmapPair(true, pixmap);
+        found = new QPixmap(src.c_str());
+
+        if (!found->isNull()) {
+
+            if (found->mask() == 0) {
+                cerr << "NoteFont::getPixmap: Warning: No automatic mask "
+                     << "for character \"" << charName << "\"" 
+                     << (inverted ? " (inverted)" : "") << " in font \""
+                     << m_fontMap.getName() << "-" << m_currentSize
+                     << "\"; consider making xpm background transparent"
+                     << endl;
+                found->setMask(found->createHeuristicMask());
+            }
+
+            add(charName, inverted, found);
+            pixmap = *found;
             return true;
         }
-        cerr << "Warning: Unable to read pixmap file " << src << endl;
+
+        cerr << "NoteFont::getPixmap: Warning: Unable to read pixmap file " << src << endl;
     } else {
-        cerr << "NoteFont::getPixmap: No pixmap for character \""
+        cerr << "NoteFont::getPixmap: Warning: No pixmap for character \""
 	     << charName << "\"" << (inverted ? " (inverted)" : "")
 	     << " in font \"" << m_fontMap.getName() << "\"" << endl;
     }
 
-    pixmap = m_blankPixmap;
-    (*m_map)[key] = PixmapPair(false, pixmap);
+    pixmap = *m_blankPixmap;
     return false;
 }
 
 QPixmap
-NoteFont::getPixmap(string charName, bool inverted) const
+NoteFont::getPixmap(CharName charName, bool inverted) const
 {
     QPixmap p;
     (void)getPixmap(charName, p, inverted);
@@ -449,7 +528,7 @@ NoteFont::getPixmap(string charName, bool inverted) const
 }
 
 QCanvasPixmap
-NoteFont::getCanvasPixmap(string charName, bool inverted) const
+NoteFont::getCanvasPixmap(CharName charName, bool inverted) const
 {
     QPixmap p;
     (void)getPixmap(charName, p, inverted);
@@ -461,7 +540,7 @@ NoteFont::getCanvasPixmap(string charName, bool inverted) const
 }
 
 bool
-NoteFont::getDimensions(string charName, int &x, int &y, bool inverted) const
+NoteFont::getDimensions(CharName charName, int &x, int &y, bool inverted) const
 {
     QPixmap pixmap;
     bool ok = getPixmap(charName, pixmap, inverted);
@@ -471,7 +550,7 @@ NoteFont::getDimensions(string charName, int &x, int &y, bool inverted) const
 }
 
 int
-NoteFont::getWidth(string charName) const
+NoteFont::getWidth(CharName charName) const
 {
     int x, y;
     getDimensions(charName, x, y);
@@ -479,7 +558,7 @@ NoteFont::getWidth(string charName) const
 }
 
 int
-NoteFont::getHeight(string charName) const
+NoteFont::getHeight(CharName charName) const
 {
     int x, y;
     getDimensions(charName, x, y);
@@ -487,7 +566,7 @@ NoteFont::getHeight(string charName) const
 }
 
 bool
-NoteFont::getHotspot(string charName, int &x, int &y, bool inverted) const
+NoteFont::getHotspot(CharName charName, int &x, int &y, bool inverted) const
 {
     bool ok = m_fontMap.getHotspot(m_currentSize, charName, x, y);
 
@@ -506,7 +585,7 @@ NoteFont::getHotspot(string charName, int &x, int &y, bool inverted) const
 }
 
 QPoint
-NoteFont::getHotspot(string charName, bool inverted) const
+NoteFont::getHotspot(CharName charName, bool inverted) const
 {
     int x, y;
     (void)getHotspot(charName, x, y, inverted);
@@ -516,38 +595,38 @@ NoteFont::getHotspot(string charName, bool inverted) const
 
 namespace NoteCharacterNames {
 
-const std::string SHARP = "MUSIC SHARP SIGN"; 
-const std::string FLAT = "MUSIC FLAT SIGN";
-const std::string NATURAL = "MUSIC NATURAL SIGN";
-const std::string DOUBLE_SHARP = "MUSICAL SYMBOL DOUBLE SHARP";
-const std::string DOUBLE_FLAT = "MUSICAL SYMBOL DOUBLE FLAT";
+const CharName SHARP = "MUSIC SHARP SIGN"; 
+const CharName FLAT = "MUSIC FLAT SIGN";
+const CharName NATURAL = "MUSIC NATURAL SIGN";
+const CharName DOUBLE_SHARP = "MUSICAL SYMBOL DOUBLE SHARP";
+const CharName DOUBLE_FLAT = "MUSICAL SYMBOL DOUBLE FLAT";
 
-const std::string BREVE = "MUSICAL SYMBOL BREVE";
-const std::string WHOLE_NOTE = "MUSICAL SYMBOL WHOLE NOTE";
-const std::string VOID_NOTEHEAD = "MUSICAL SYMBOL VOID NOTEHEAD";
-const std::string NOTEHEAD_BLACK = "MUSICAL SYMBOL NOTEHEAD BLACK";
+const CharName BREVE = "MUSICAL SYMBOL BREVE";
+const CharName WHOLE_NOTE = "MUSICAL SYMBOL WHOLE NOTE";
+const CharName VOID_NOTEHEAD = "MUSICAL SYMBOL VOID NOTEHEAD";
+const CharName NOTEHEAD_BLACK = "MUSICAL SYMBOL NOTEHEAD BLACK";
 
-const std::string FLAG_1 = "MUSICAL SYMBOL COMBINING FLAG-1";
-const std::string FLAG_2 = "MUSICAL SYMBOL COMBINING FLAG-2";
-const std::string FLAG_3 = "MUSICAL SYMBOL COMBINING FLAG-3";
-const std::string FLAG_4 = "MUSICAL SYMBOL COMBINING FLAG-4";
+const CharName FLAG_1 = "MUSICAL SYMBOL COMBINING FLAG-1";
+const CharName FLAG_2 = "MUSICAL SYMBOL COMBINING FLAG-2";
+const CharName FLAG_3 = "MUSICAL SYMBOL COMBINING FLAG-3";
+const CharName FLAG_4 = "MUSICAL SYMBOL COMBINING FLAG-4";
 
-const std::string MULTI_REST = "MUSICAL SYMBOL MULTI REST";
-const std::string WHOLE_REST = "MUSICAL SYMBOL WHOLE REST";
-const std::string HALF_REST = "MUSICAL SYMBOL HALF REST";
-const std::string QUARTER_REST = "MUSICAL SYMBOL QUARTER REST";
-const std::string EIGHTH_REST = "MUSICAL SYMBOL EIGHTH REST";
-const std::string SIXTEENTH_REST = "MUSICAL SYMBOL SIXTEENTH REST";
-const std::string THIRTY_SECOND_REST = "MUSICAL SYMBOL THIRTY-SECOND REST";
-const std::string SIXTY_FOURTH_REST = "MUSICAL SYMBOL SIXTY-FOURTH REST";
+const CharName MULTI_REST = "MUSICAL SYMBOL MULTI REST";
+const CharName WHOLE_REST = "MUSICAL SYMBOL WHOLE REST";
+const CharName HALF_REST = "MUSICAL SYMBOL HALF REST";
+const CharName QUARTER_REST = "MUSICAL SYMBOL QUARTER REST";
+const CharName EIGHTH_REST = "MUSICAL SYMBOL EIGHTH REST";
+const CharName SIXTEENTH_REST = "MUSICAL SYMBOL SIXTEENTH REST";
+const CharName THIRTY_SECOND_REST = "MUSICAL SYMBOL THIRTY-SECOND REST";
+const CharName SIXTY_FOURTH_REST = "MUSICAL SYMBOL SIXTY-FOURTH REST";
 
-const std::string DOT = "MUSICAL SYMBOL COMBINING AUGMENTATION DOT";
+const CharName DOT = "MUSICAL SYMBOL COMBINING AUGMENTATION DOT";
 
-const std::string C_CLEF = "MUSICAL SYMBOL C CLEF";
-const std::string G_CLEF = "MUSICAL SYMBOL G CLEF";
-const std::string F_CLEF = "MUSICAL SYMBOL F CLEF";
+const CharName C_CLEF = "MUSICAL SYMBOL C CLEF";
+const CharName G_CLEF = "MUSICAL SYMBOL G CLEF";
+const CharName F_CLEF = "MUSICAL SYMBOL F CLEF";
 
-const std::string UNKNOWN = "__UNKNOWN__";
+const CharName UNKNOWN = "__UNKNOWN__";
 
 }
 
@@ -556,7 +635,7 @@ using Rosegarden::Accidental;
 using Rosegarden::Clef;
 using Rosegarden::Note;
 
-string NoteCharacterNameLookup::getAccidentalCharName(const Accidental &a)
+CharName NoteCharacterNameLookup::getAccidentalCharName(const Accidental &a)
 {
     switch (a) {
     case Rosegarden::Sharp:        return NoteCharacterNames::SHARP;
@@ -569,7 +648,7 @@ string NoteCharacterNameLookup::getAccidentalCharName(const Accidental &a)
     }
 }
 
-string NoteCharacterNameLookup::getClefCharName(const Clef &clef)
+CharName NoteCharacterNameLookup::getClefCharName(const Clef &clef)
 {
     string clefType(clef.getClefType());
 
@@ -582,7 +661,7 @@ string NoteCharacterNameLookup::getClefCharName(const Clef &clef)
     }
 }
 
-string NoteCharacterNameLookup::getRestCharName(const Note::Type &type)
+CharName NoteCharacterNameLookup::getRestCharName(const Note::Type &type)
 {
     switch (type) {
     case Note::Hemidemisemiquaver:  return NoteCharacterNames::SIXTY_FOURTH_REST;
@@ -598,7 +677,7 @@ string NoteCharacterNameLookup::getRestCharName(const Note::Type &type)
     }
 }
 
-string NoteCharacterNameLookup::getFlagCharName(int flagCount)
+CharName NoteCharacterNameLookup::getFlagCharName(int flagCount)
 {
     switch (flagCount) {
     case 1:  return NoteCharacterNames::FLAG_1;
@@ -609,7 +688,7 @@ string NoteCharacterNameLookup::getFlagCharName(int flagCount)
     }
 }
 
-string NoteCharacterNameLookup::getNoteHeadCharName(const Note::Type &type)
+CharName NoteCharacterNameLookup::getNoteHeadCharName(const Note::Type &type)
 {
     if (type == Note::Breve) return NoteCharacterNames::BREVE;
     else if (type == Note::Semibreve) return NoteCharacterNames::WHOLE_NOTE;

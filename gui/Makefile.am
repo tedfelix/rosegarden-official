@@ -38,8 +38,15 @@ rosegarden_LDADD   = ../sound/libRosegardenSound.la ../core/libcore.la -lqt -lkf
 SUBDIRS = docs
 
 EXTRA_DIST = rosegardenguiiface.kidl trackseditoriface.kidl \
-	pixmaps/5/*.xpm \
-	pixmaps/9/*.xpm \
+	pixmaps/rg21/mapping.xml \
+	pixmaps/rg21/4/*.xpm \
+	pixmaps/rg21/8/*.xpm \
+	pixmaps/feta/mapping.xml \
+	pixmaps/feta/4/*.xpm \
+	pixmaps/feta/6/*.xpm \
+	pixmaps/feta/8/*.xpm \
+	pixmaps/feta/10/*.xpm \
+	pixmaps/feta/12/*.xpm \
 	pixmaps/toolbar/*.xpm
 
 # Where pixmaps for notes, clefs, etc... will be installed
@@ -57,11 +64,25 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/mini-rosegarden.xpm $(kde_icondir)/small/locolor/apps/rosegarden.xpm
 	$(INSTALL_DATA) $(srcdir)/mini-rosegarden.xpm $(kde_icondir)/small/hicolor/apps/rosegarden.xpm
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps
-	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/5
-	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/9
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/rg21
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/rg21/4
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/rg21/8
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/feta
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/feta/4
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/feta/6
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/feta/8
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/feta/10
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/feta/12
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/toolbar
-	$(INSTALL_DATA) $(srcdir)/pixmaps/5/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/5
-	$(INSTALL_DATA) $(srcdir)/pixmaps/9/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/9
+	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/mapping.xml $(kde_datadir)/$(data_dirname)/pixmaps/rg21
+	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/4/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/rg21/4
+	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/8/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/rg21/8
+	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/mapping.xml $(kde_datadir)/$(data_dirname)/pixmaps/feta
+	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/4/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/feta/4
+	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/6/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/feta/6
+	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/8/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/feta/8
+	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/10/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/feta/10
+	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/12/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/feta/12
 	$(INSTALL_DATA) $(srcdir)/pixmaps/toolbar/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/toolbar
 
 uninstall-local:

@@ -50,7 +50,7 @@ using Rosegarden::Natural;
 
 
 NotePixmapFactory::NotePixmapFactory(int size, std::string fontName) :
-    m_timeSigFont("new century schoolbook", 8),
+    m_timeSigFont("new century schoolbook", 8, QFont::Bold),
     m_timeSigFontMetrics(m_timeSigFont)
 {
     --size;
@@ -70,6 +70,10 @@ NotePixmapFactory::NotePixmapFactory(int size, std::string fontName) :
     // 8 => 20, 4 => 10
     m_timeSigFont.setPixelSize((size) * 5 / 2);
     m_timeSigFontMetrics = QFontMetrics(m_timeSigFont);
+
+    unsigned int x, y;
+    m_font->getBorderThickness(x, y);
+    m_origin = QPoint(x, y);
 }
 
 NotePixmapFactory::~NotePixmapFactory()
@@ -115,7 +119,7 @@ QCanvasPixmap
 NotePixmapFactory::makeNotePixmapAux(Rosegarden::Note::Type noteType,
                                      int dots,
                                      Rosegarden::Accidental accidental,
-                                     bool noteHeadShifted,
+                                     bool shifted,
                                      bool drawTail,
                                      bool stemGoesUp,
                                      bool isBeamed,
@@ -136,7 +140,8 @@ NotePixmapFactory::makeNotePixmapAux(Rosegarden::Note::Type noteType,
     // stem, flags, dots, beams
 
     // spacing surrounding the note head
-    m_left = m_right = m_above = m_below = 0;
+    m_left = m_right = m_origin.x();
+    m_above = m_below = m_origin.y();
 
     m_noteBodyWidth  = getNoteBodyWidth(noteType);
     m_noteBodyHeight = getNoteBodyHeight(noteType);
@@ -148,6 +153,8 @@ NotePixmapFactory::makeNotePixmapAux(Rosegarden::Note::Type noteType,
         makeRoomForAccidental(accidental);
     }
 
+    QPixmap dot(m_font->getPixmap(NoteCharacterNames::DOT));
+
     if (stemLength < 0) {
 
         stemLength = getStemLength();
@@ -158,9 +165,9 @@ NotePixmapFactory::makeNotePixmapAux(Rosegarden::Note::Type noteType,
         //than others
 
         switch (tailCount) {
-        case 1: stemLength += nbh / 8; break;
-        case 2: stemLength += nbh / 2; break;
-        case 3: stemLength += nbh + nbh / 8; break;
+        case 1: stemLength += nbh / 3; break;
+        case 2: stemLength += nbh * 3 / 4; break;
+        case 3: stemLength += nbh + nbh / 4; break;
         case 4: stemLength += nbh * 2 - nbh / 4; break;
         default: break;
         }
@@ -201,41 +208,19 @@ NotePixmapFactory::makeNotePixmapAux(Rosegarden::Note::Type noteType,
         }
     }
 
-    m_right = std::max(m_right, dots * getDotWidth());
+    m_right = std::max(m_right, dots * dot.width() + dot.width()/2);
+
+    if (shifted) {
+        m_right += m_noteBodyWidth;
+    }
 
     createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
                         m_noteBodyHeight + m_above + m_below);
 
-    if (accidental != NoAccidental) {
-        drawAccidental(accidental);
-    }
-
-    //!!! Need some cleverness -- I guess there's no mask if the
-    // pixmap has depth > 1?
-
-    QPixmap body(m_font->getPixmap(getNoteHeadCharName(noteType)));
-
-    m_p.drawPixmap (m_left, m_above, body);
-    m_pm.drawPixmap(m_left, m_above, *(body.mask()));
-
-    //!!! These should come back out into other functions again
-
-    if (dots > 0) {
-
-        QPixmap dot(m_font->getPixmap(NoteCharacterNames::DOT));
-        int x = m_left + m_noteBodyWidth;
-        int y = m_above + m_noteBodyHeight/2 - dot.height()/2;
-
-        for (int i = 0; i < dots; ++i) {
-            m_p.drawPixmap(x, y, dot);
-            m_pm.drawPixmap(x, y, *(dot.mask()));
-            x += dot.width();
-        }
-    }
+    QPoint s0, s1;
 
     if (isStemmed) {
 
-        QPoint s0, s1;
         s0.setY(m_above + m_noteBodyHeight/2);
 
         if (stemGoesUp) {
@@ -256,11 +241,11 @@ NotePixmapFactory::makeNotePixmapAux(Rosegarden::Note::Type noteType,
                     (getFlagCharName(tailCount), !stemGoesUp);
 
                 if (stemGoesUp) {
-                    m_p.drawPixmap(s1.x(), s1.y(), tails);
-                    m_pm.drawPixmap(s1.x(), s1.y(), *(tails.mask()));
+                    m_p.drawPixmap(s1.x() - m_origin.x(), s1.y(), tails);
+                    m_pm.drawPixmap(s1.x() - m_origin.x(), s1.y(), *(tails.mask()));
                 } else {
-                    m_p.drawPixmap(s1.x(), s1.y() - tails.height(), tails);
-                    m_pm.drawPixmap(s1.x(), s1.y() - tails.height(), *(tails.mask()));
+                    m_p.drawPixmap(s1.x() - m_origin.x(), s1.y() - tails.height(), tails);
+                    m_pm.drawPixmap(s1.x() - m_origin.x(), s1.y() - tails.height(), *(tails.mask()));
                 }
             } else if (isBeamed) {
 
@@ -270,10 +255,42 @@ NotePixmapFactory::makeNotePixmapAux(Rosegarden::Note::Type noteType,
 
             }
         }
-
-        m_p.drawLine(s0, s1);
-        m_pm.drawLine(s0, s1);
     }
+
+    if (accidental != NoAccidental) {
+        drawAccidental(accidental);
+    }
+
+    QPixmap body(m_font->getPixmap(getNoteHeadCharName(noteType)));
+    QPoint bodyLocation(m_left - m_origin.x(), m_above - m_origin.y());
+    if (shifted) bodyLocation.rx() += m_noteBodyWidth;
+    
+    m_p.drawPixmap (bodyLocation, body);
+    m_pm.drawPixmap(bodyLocation, *(body.mask()));
+
+    if (dots > 0) {
+
+        int x = m_left + m_noteBodyWidth + dot.width()/2;
+        int y = m_above + m_noteBodyHeight/2 - dot.height()/2;
+        if (shifted) x += m_noteBodyWidth;
+
+        for (int i = 0; i < dots; ++i) {
+            m_p.drawPixmap(x, y, dot);
+            m_pm.drawPixmap(x, y, *(dot.mask()));
+            x += dot.width();
+        }
+    }
+
+    if (isStemmed) {
+        unsigned int thickness;
+        m_font->getStemThickness(thickness);
+        for (unsigned int i = 0; i < thickness; ++i) {
+            m_p.drawLine(s0, s1);
+            m_pm.drawLine(s0, s1);
+            ++s0.rx();
+            ++s1.rx();
+        }
+    }        
 
     QPoint hotspot(m_left, m_above + m_noteBodyHeight/2);
 
@@ -366,7 +383,7 @@ NotePixmapFactory::drawAccidental(Accidental a)
     QPixmap ap(m_font->getPixmap(getAccidentalCharName(a)));
     QPoint ah(m_font->getHotspot(getAccidentalCharName(a)));
 
-    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::drawAccidental: m_above is " << m_above << ", hotspot-y is " << ah.y() << ", note body height is " << m_noteBodyHeight << ", accidental height is " << ap.height() << endl;
+//    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::drawAccidental: m_above is " << m_above << ", hotspot-y is " << ah.y() << ", note body height is " << m_noteBodyHeight << ", accidental height is " << ap.height() << endl;
 
     m_p.drawPixmap(0, m_above + m_noteBodyHeight/2 - ah.y(), ap);
     m_pm.drawPixmap(0, m_above + m_noteBodyHeight/2 - ah.y(), *(ap.mask()));
@@ -436,16 +453,16 @@ NotePixmapFactory::drawBeams(const QPoint &s1, bool stemGoesUp,
 QCanvasPixmap
 NotePixmapFactory::makeRestPixmap(const Note &restType) 
 {
-    //!!! hotspot
+    CharName charName(getRestCharName(restType.getNoteType()));
 
-    QPixmap pixmap(m_font->getPixmap(getRestCharName(restType.getNoteType())));
+    QPixmap pixmap(m_font->getPixmap(charName));
+    QPixmap dot(m_font->getPixmap(NoteCharacterNames::DOT));
 
-    createPixmapAndMask(getRestWidth(restType), pixmap.height());
+    createPixmapAndMask(pixmap.width() + dot.width() * restType.getDots(),
+                        pixmap.height());
 
     m_p.drawPixmap(0, 0, pixmap);
     m_pm.drawPixmap(0, 0, *(pixmap.mask()));
-
-    QPixmap dot(m_font->getPixmap(NoteCharacterNames::DOT));
 
     for (int i = 0; i < restType.getDots(); ++i) {
         int x = pixmap.width() + i * dot.width();
@@ -457,7 +474,9 @@ NotePixmapFactory::makeRestPixmap(const Note &restType)
     m_p.end();
     m_pm.end();
 
-    QCanvasPixmap restPixmap(*m_generatedPixmap, m_pointZero);
+    QPoint hotspot(m_font->getHotspot(charName));
+    hotspot.setX(0);
+    QCanvasPixmap restPixmap(*m_generatedPixmap, hotspot);
     QBitmap mask(*m_generatedMask);
     restPixmap.setMask(mask);
 
@@ -480,7 +499,6 @@ NotePixmapFactory::makeUnknownPixmap()
     return m_font->getCanvasPixmap(NoteCharacterNames::UNKNOWN);
 }
 
-//!!!
 QCanvasPixmap
 NotePixmapFactory::makeToolbarPixmap(const char *name)
 {
@@ -493,26 +511,30 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 {
     std::vector<int> ah = key.getAccidentalHeights(clef);
 
-    QPixmap accidentalPixmap
-        (m_font->getPixmap(key.isSharp() ?
-                           NoteCharacterNames::SHARP :
-                           NoteCharacterNames::FLAT));
+    CharName charName = (key.isSharp() ?
+                         NoteCharacterNames::SHARP :
+                         NoteCharacterNames::FLAT);
+
+    QPixmap accidentalPixmap(m_font->getPixmap(charName));
+    QPoint hotspot(m_font->getHotspot(charName));
 
     int x = 0;
     int lw = getLineSpacing();
-    int delta = accidentalPixmap.width() - (key.isSharp() ? 1 : 2); //!!!
+    int delta = accidentalPixmap.width() - 2*m_origin.x(); //!!!
 
-    createPixmapAndMask(delta * ah.size() + 2, lw * 8 + 1);
+    createPixmapAndMask(delta * ah.size() + 2*m_origin.x(), lw * 8 + 1);
 
     for (unsigned int i = 0; i < ah.size(); ++i) {
 
 	int h = ah[i];
-	int y = (lw * 2) + ((8 - h) * lw) / 2// + ((h % 2 == 1) ? 1 : 0)
-	    - (accidentalPixmap.height() / 2);
+	int y = (lw * 2) + ((8 - h) * lw) / 2 - hotspot.y();
 
-	// tricky one: sharps and flats are the same size, but
-	// they have different "centres"
-	if (!key.isSharp()) y -= 2;
+        //!!! Here's an interesting problem.  The masked-out area of
+        //one accidental's mask may end up overlapping the unmasked
+        //area of another accidental's mask, so we lose some of the
+        //right-hand edge of each accidental.  What can we do about
+        //it?  (Apart from not overlapping the accidentals' x-coords,
+        //which wouldn't be a great solution.)
 
 	m_p.drawPixmap(x, y, accidentalPixmap);
 	m_pm.drawPixmap(x, y, *(accidentalPixmap.mask()));
@@ -617,12 +639,12 @@ QPoint
 NotePixmapFactory::m_pointZero;
 
 
-int NotePixmapFactory::getNoteBodyHeight(Note::Type type) const {
-    return m_font->getHeight(getNoteHeadCharName(type));
+int NotePixmapFactory::getNoteBodyWidth(Note::Type type) const {
+    return m_font->getWidth(getNoteHeadCharName(type)) - 2*m_origin.x();
 }
 
-int NotePixmapFactory::getNoteBodyWidth(Note::Type type) const {
-    return m_font->getWidth(getNoteHeadCharName(type));
+int NotePixmapFactory::getNoteBodyHeight(Note::Type type) const {
+    return m_font->getHeight(getNoteHeadCharName(type)) - 2*m_origin.y();
 }
 
 int NotePixmapFactory::getLineSpacing() const {
@@ -638,7 +660,7 @@ int NotePixmapFactory::getAccidentalHeight(Accidental a) const {
 }
 
 int NotePixmapFactory::getStemLength() const {
-    return getNoteBodyHeight() * 11/4;
+    return getNoteBodyHeight() * 13/4;
 }
 
 int NotePixmapFactory::getDotWidth() const {
@@ -654,13 +676,12 @@ int NotePixmapFactory::getBarMargin() const {
 }
 
 int NotePixmapFactory::getRestWidth(const Rosegarden::Note &restType) const {
-    return m_font->getWidth(getRestCharName(restType.getNoteType())) +
-        getDotWidth() * restType.getDots();
+    return m_font->getWidth(getRestCharName(restType.getNoteType()))
+        + (restType.getDots() * getDotWidth());
 }
 
 int NotePixmapFactory::getKeyWidth(const Rosegarden::Key &key) const {
-    return (key.getAccidentalCount() *
-            (getAccidentalWidth
-             (key.isSharp() ? Sharp : Flat) - (key.isSharp()? 1 : 2))); //!!!
+    return 2*m_origin.x() + (key.getAccidentalCount() *
+                             (getAccidentalWidth(key.isSharp() ? Sharp : Flat)));
 }
 
