@@ -55,6 +55,28 @@ installed into a non-standard place which you need to add to your
 KDEDIRS environment variable before you can start it correctly.
 
 
+Rosegarden is crashing at start up
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Try running up the sequencer by itself first to see if it's a problem
+with that or the main part of the program.  Run:
+
+  $ rosegardensequencer
+
+And you should get a few lines of output finishing with:
+
+  RosegardenSequencer - started OK
+
+If the sequencer is alright then try to start the main application
+with the command line switch "--nosequencer".  If that fails then
+export the environment variable KDE_DEBUG as follows (in bash):
+
+  $ export KDE_DEBUG=1
+
+And try again and send the output to the authors or the Rosegarden
+development mailing list.  Also check back to this FAQ regularly as
+we start to add more helpful hints and information.
+
+
 The Composition View
 --------------------
 
