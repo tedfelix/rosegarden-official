@@ -46,12 +46,6 @@ SegmentParameterBox::SegmentParameterBox(RosegardenGUIView *view,
 
 {
     initBox();
-
-    // For Quantization commands (or any other undo/redo commands)
-    //
-    connect(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
-                        this, SLOT(slotCommandExecuted(KCommand *)));
-
 }
 
 
@@ -549,21 +543,3 @@ SegmentParameterBox::addCommandToHistory(KCommand *command)
 {
         m_view->getCommandHistory()->addCommand(command);
 }
-
-/*!!!
-void
-SegmentParameterBox::slotCommandExecuted(Command *command)
-{
-    SegmentChangeQuantizationCommand *qCommand = 
-        dynamic_cast<SegmentChangeQuantizationCommand* >(command);
-
-    if (qCommand)
-    {
-       ; 
-    }
-}
-*/
-
-
-
-
