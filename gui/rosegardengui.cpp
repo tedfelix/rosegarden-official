@@ -436,7 +436,8 @@ void RosegardenGUIApp::setupActions()
     // create the Transport GUI and add the callbacks to the
     // buttons and keyboard accelerators
     //
-    m_transport = new Rosegarden::RosegardenTransportDialog(this, "");
+    m_transport =
+        new Rosegarden::RosegardenTransportDialog(this, "", WStyle_StaysOnTop);
     plugAccelerators(m_transport, m_transport->getAccelerators());
 
     // create main gui
@@ -2281,6 +2282,7 @@ RosegardenGUIApp::slotToggleRecord()
 void
 RosegardenGUIApp::slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
 {
+    cout << "HERE" << endl;
     try
     {
         m_doc->setModified();

@@ -41,7 +41,8 @@ class RosegardenTransportDialog : public RosegardenTransport
 Q_OBJECT
 public:
     RosegardenTransportDialog(QWidget *parent=0,
-                              const char *name=0);
+                              const char *name=0,
+                              WFlags flags = 0);
     ~RosegardenTransportDialog();
 
     enum TimeDisplayMode { RealMode, SMPTEMode, BarMode };
