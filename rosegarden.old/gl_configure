@@ -6,4 +6,6 @@
 # echo "Running configure..."
 # CXX="g++ -O0 -g3 -Wall" ./configure --enable-debug --with-qt-dir=/usr/lib/qt2 --prefix=/opt/kde2.2
 
+make -f Makefile.cvs
+
 CXXFLAGS="-fexceptions" ./configure --enable-debug --with-qt-dir=/usr/lib/qt2 --prefix=/opt/kde2.2
