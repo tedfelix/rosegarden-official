@@ -525,7 +525,7 @@ QString
 DSSIPluginInstance::configure(QString key,
 			      QString value)
 {
-    if (!m_descriptor || !m_descriptor->configure) return;
+    if (!m_descriptor || !m_descriptor->configure) return QString();
     
 #ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance::configure(" << key << "," << value << ")" << std::endl;
@@ -744,7 +744,7 @@ void
 DSSIPluginInstance::deactivate()
 {
 #ifdef DEBUG_DSSI
-    std::cerr << "DSSIPluginInstance::deactivate" << std::endl;
+    std::cerr << "DSSIPluginInstance::deactivate " << m_identifier << std::endl;
 #endif
     if (!m_descriptor || !m_descriptor->LADSPA_Plugin->deactivate) return;
     m_descriptor->LADSPA_Plugin->deactivate(m_instanceHandle);
