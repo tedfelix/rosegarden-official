@@ -165,6 +165,19 @@ public:
     bool deleteSegment(Segment*);
 
     /**
+     * Remove the Segment if it is part of the Composition,
+     * but do not destroy it (passing it to addSegment again
+     * would restore it correctly).
+     * \return true if the Segment was found and removed
+     *
+     * NOTE: Many of the Segment methods will fail if the
+     * Segment is not in a Composition.  You should not
+     * expect to do anything meaningful with a Segment that
+     * has been detached from the Composition in this way.
+     */
+    bool detachSegment(Segment*);
+
+    /**
      * Set the start index and track number the given Segment is
      * associated with.  You should normally use this in preference to
      * Segment::setTrack and Segment::setStartIndex because it

@@ -33,8 +33,6 @@
  * otherwise have put in execute() into modifySegment().
  */
 
-#include <qobject.h>
-
 #include <kcommand.h>
 
 #include "Segment.h"
@@ -43,18 +41,50 @@
 class EventSelection;
 
 
-class BasicCommand : public QObject, public KCommand
-{
-    Q_OBJECT
+// Base-classes used for distinguishing between sorts of command
+// in each view's slotCommandExecuted
 
+/// command that affects one or more entire segments
+class SegmentCommand
+{
+protected:
+    SegmentCommand() { }
+};
+
+/// command that changes Composition-wide timing settings
+class TimeAndTempoChangeCommand
+{
+protected:
+    TimeAndTempoChangeCommand() { }
+};
+
+/// command that modifies events within a single segment
+class PartialSegmentCommand
+{
+public:
+    virtual Rosegarden::Segment &getSegment() = 0;
+protected:
+    PartialSegmentCommand() { }
+};
+
+
+/**
+ * BasicCommand is an abstract subclass of KCommand that manages undo,
+ * redo and notification of changes within a contiguous region of a
+ * single Rosegarden Segment, by brute force.  When a subclass
+ * of BasicCommand executes, it stores a copy of the events that are
+ * modified by the command, ready to be restored verbatim on undo.
+ */
+
+class BasicCommand : public KCommand, public PartialSegmentCommand
+{
 public:
     virtual ~BasicCommand();
 
     virtual void execute();
     virtual void unexecute();
 
-    Rosegarden::Segment &getSegment() { return m_segment; }
-    const Rosegarden::Segment &getSegment() const { return m_segment; }
+    virtual Rosegarden::Segment &getSegment() { return m_segment; }
 
     Rosegarden::timeT getBeginTime() { return m_savedEvents.getStartIndex(); }
     Rosegarden::timeT getEndTime() { return m_endTime; }

@@ -56,6 +56,7 @@
 #include "SegmentNotationHelper.h"
 #include "Quantizer.h"
 #include "notationcommands.h"
+#include "segmentcommands.h"
 #include "dialogs.h"
 
 using Rosegarden::Event;
@@ -586,7 +587,7 @@ void NotationView::setupActions()
                 SLOT(slotTransformsRemoveMarks()), actionCollection(),
                 "remove_marks");
 
-    new KAction(TransformsMenuAddTimeSignatureCommand::name(), 0, this,
+    new KAction(AddTimeSignatureCommand::name(), 0, this,
                 SLOT(slotTransformsAddTimeSignature()), actionCollection(),
                 "add_time_signature");
 
@@ -1487,7 +1488,7 @@ void NotationView::slotTransformsAddTimeSignature()
 
 	TimeSignatureDialog *dialog = new TimeSignatureDialog(this);
 	if (dialog->exec() == QDialog::Accepted) {
-	    addCommandToHistory(new TransformsMenuAddTimeSignatureCommand
+	    addCommandToHistory(new AddTimeSignatureCommand
 				(m_staffs[m_currentStaff]->getSegment().getComposition(),
 				 t, dialog->getTimeSignature()));
 	}

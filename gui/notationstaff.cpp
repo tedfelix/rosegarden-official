@@ -446,11 +446,11 @@ NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
 	    break;
 	}
     }
-
+/*!!!
     kdDebug(KDEBUG_AREA)
 	<< "elementShiftedOnly: elt at " << (*i)->getAbsoluteTime() <<
 	", ok is " << ok << endl;
-
+*/
     return ok;
 }
 

@@ -306,12 +306,12 @@ public slots:
     /**
      * undo
      */
-    void editUndo();
+//!!!    void editUndo();
 
     /**
      * redo
      */
-    void editRedo();
+//!!!    void editRedo();
     
     /**
      * put the marked text/object into the clipboard and remove * it

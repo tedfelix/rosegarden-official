@@ -390,31 +390,4 @@ private:
 };
 
 
-class TransformsMenuAddTimeSignatureCommand : public KCommand
-{
-public:
-    TransformsMenuAddTimeSignatureCommand(Rosegarden::Composition *composition,
-					  Rosegarden::timeT time,
-					  Rosegarden::TimeSignature timeSig) :
-	KCommand(name()),
-	m_composition(composition),
-	m_time(time),
-	m_timeSignature(timeSig) { }
-    virtual ~TransformsMenuAddTimeSignatureCommand() { }
-
-    static QString name() {
-	return "Add &Time Signature Change...";
-    }
-
-    virtual void execute();
-    virtual void unexecute();
-
-protected:
-    Rosegarden::Composition *m_composition;
-    Rosegarden::timeT m_time;
-    Rosegarden::TimeSignature m_timeSignature;
-    int m_timeSigIndex; // for undo
-};    
-
-
 #endif

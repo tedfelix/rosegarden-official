@@ -376,16 +376,3 @@ TransformsMenuLabelChordsCommand::modifySegment(SegmentNotationHelper &helper)
     ah.labelChords(ca, helper.segment());
 }
 
-
-void
-TransformsMenuAddTimeSignatureCommand::execute()
-{
-    m_timeSigIndex = m_composition->addTimeSignature(m_time, m_timeSignature);
-}
-
-void
-TransformsMenuAddTimeSignatureCommand::unexecute()
-{
-    m_composition->removeTimeSignature(m_timeSigIndex);
-}
-

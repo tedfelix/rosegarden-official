@@ -309,6 +309,19 @@ Composition::deleteSegment(Segment *p)
 }
 
 bool
+Composition::detachSegment(Segment *p)
+{
+    iterator i = find(begin(), end(), p);
+    if (i == end()) return false;
+    
+    p->removeObserver(this);
+    p->setComposition(0);
+    m_segments.erase(i);
+
+    return true;
+}
+
+bool
 Composition::setSegmentStartIndexAndTrack(Segment *s, timeT t, unsigned int track)
 {
     iterator i = m_segments.find(s);

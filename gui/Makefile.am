@@ -41,6 +41,7 @@ rosegarden_SOURCES = \
         rosegardentransportdialog.cpp \
 	rosexmlhandler.cpp \
 	segmentcanvas.cpp \
+        segmentcommands.cpp \
         segmentselection.cpp \
 	spline.cpp \
 	staffline.cpp \

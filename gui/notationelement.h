@@ -25,6 +25,7 @@
 #include <set>
 #include "ViewElement.h"
 #include "NotationTypes.h"
+#include "BaseProperties.h"
 
 class QCanvasItem;
 
@@ -128,6 +129,40 @@ protected:
     QCanvasItem *m_canvasItem;
 };
 
+
+// Specialisation of the comparator so as to sort notes by pitch as well
+// as everything else
+
+namespace Rosegarden {
+
+template <>
+class ViewElementComparator<NotationElement>
+{
+public:
+    bool operator()(const NotationElement *e1,
+		    const NotationElement *e2) const {
+
+	const ViewElement &ve1 = *e1;
+	const ViewElement &ve2 = *e2;
+	if (ve1 < ve2) return true;
+	else if (ve2 < ve1) return false;
+
+	// ve1 and ve2 compare equal, so compare by pitch where possible,
+	// sorting events without pitches before those with
+	long p1 = 0, p2 = 0;
+	bool have1 = ve1.event()->get<Int>(BaseProperties::PITCH, p1);
+	bool have2 = ve2.event()->get<Int>(BaseProperties::PITCH, p2);
+	if (have1) {
+	    if (have2) return p1 < p2;
+	    else return false;
+	} else {
+	    if (have2) return true;
+	    else return false;
+	}
+    }
+};
+
+}
 
 typedef Rosegarden::ViewElementList<NotationElement> NotationElementList;
 

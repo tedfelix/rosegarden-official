@@ -143,6 +143,7 @@ void EditView::slotCommandExecuted(KCommand *command)
 	    (&basicCommand->getSegment(), basicCommand->getBeginTime(),
 					  basicCommand->getEndTime());
     } else {
+	//!!! deal with other command superclasses from segmentcommands.h
 	kdDebug(KDEBUG_AREA)
 	    << "Warning: EditView::slotCommandExecuted:\n"
 	    << "KCommand is not a BasicCommand, don't know how to refresh"

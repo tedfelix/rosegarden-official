@@ -139,8 +139,10 @@ void RosegardenGUIApp::setupActions()
     m_fileQuit = KStdAction::quit  (this, SLOT(quit()),              actionCollection());
 
     // setup edit menu
+/*!!!
     KStdAction::undo     (this, SLOT(editUndo()),       actionCollection());
     KStdAction::redo     (this, SLOT(editRedo()),       actionCollection());
+*/
     m_editCut = KStdAction::cut      (this, SLOT(editCut()),        actionCollection());
     m_editCopy = KStdAction::copy     (this, SLOT(editCopy()),       actionCollection());
     m_editPaste = KStdAction::paste    (this, SLOT(editPaste()),      actionCollection());
@@ -368,6 +370,8 @@ void RosegardenGUIApp::initDocument()
 {
     m_doc = new RosegardenGUIDoc(this);
     m_doc->newDocument();
+
+    m_doc->getCommandHistory()->attachView(actionCollection());
 }
 
 void RosegardenGUIApp::initView()
@@ -801,7 +805,7 @@ void RosegardenGUIApp::quit()
         }
     }	
 }
-
+/*!!!
 void RosegardenGUIApp::editUndo()
 {
     KTmpStatusMsg msg(i18n("Undo..."), statusBar());
@@ -811,7 +815,7 @@ void RosegardenGUIApp::editRedo()
 {
     KTmpStatusMsg msg(i18n("Redo..."), statusBar());
 }
-
+*/
 void RosegardenGUIApp::editCut()
 {
     KTmpStatusMsg msg(i18n("Cutting selection..."), statusBar());
