@@ -1,5 +1,7 @@
 #! /bin/bash
 
+test -d documents || mkdir documents
+
 for howto in rgd-HOWTO i18n; do
 
   tmpfile=/tmp/faqdata$$.html
@@ -8,7 +10,7 @@ for howto in rgd-HOWTO i18n; do
       | perl $mydir/tableofcontents.pl \
       | grep -v DOCTYPE | egrep -v '(html|body)>' \
       > $tmpfile
-  sed "/INSERT FAQ/r $tmpfile" $mydir/template.html > $mydir/../../site/$howto.html
+  sed "/INSERT DOCUMENT/r $tmpfile" $mydir/template.html > $mydir/documents/$howto.shtml
   rm $tmpfile
 
 done

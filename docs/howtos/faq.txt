@@ -1,62 +1,46 @@
 
-FAQ for Rosegarden-4
-====================
-
-
-As there still not a great deal of user documentation provided for
-Rosegarden-4, this FAQ includes a number of bits of useful information
-that would normally (and will in the future) be found there instead.
+Rosegarden FAQ
+==============
 
 
 General questions
 -----------------
 
 
-The web page says it's a KDE application.  Can I run it under GNOME/WindowMaker etc?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Do I have to be using a particular desktop environment (KDE or whatever)?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Yes, completely.  You can run Rosegarden under any window manager you
-like.  We build for KDE because we like developing for KDE as it
-lets us get a job done.  You can run the resulting application 
-under any graphical environment you like with no change in
-functionality.
+No.  Rosegarden uses the KDE libraries for various common controls,
+but you can run it under any window manager or graphical environment
+you like with no change in functionality.
 
 
 What are the hardware requirements like?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Reasonably demanding, because of the mixture of graphical and
-interactive GUI stuff with precisely timed audio stuff.  You can do
-simple editing in piano-roll or score on a 400MHz PIII or Celeron with
-64MB of memory, but to be honest you're unlikely to have got that far
-because you probably need more memory than that just to compile the
-thing in the first place.
+interactive GUI stuff with precisely timed audio stuff.  See
+<URL:http://www.rosegardenmusic.com/getting/requirements>) for more
+details.
 
-An 800MHz machine with 256MB should do very nicely for MIDI and score
-plus a few tracks of audio (my laptop has that spec, and I both use
-and develop Rosegarden-4 on it).  If you want to use soft synths,
-you'll probably want more CPU power; I find the sound on my laptop
-starts showing glitches with more than about four tracks played
-through a high-quality orchestral sample-based soft synth.
 
 
 Does it support my soundcard?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We don't deal with the soundcard directly, so we can't answer that.
-We use the ALSA drivers where possible, so see the ALSA project's card
-matrix (<URL:http://www.alsa-project.org/>).  Also see the notes on
-ALSA and aRts below.
+We use the ALSA drivers where possible, so see the ALSA project's soundcard
+matrix (<URL:http://www.alsa-project.org/>).
 
 
 Does it support my language?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Translations are included for Russian, German and Spanish, with French
-in progress.  If you can translate musical or technical documentation
-(no programming required), please let us know!  See
-docs/howtos/i18n.txt in CVS if you are interested in the technical
-aspects of translation.
+Translations are included for Russian, German, Spanish, French,
+Italian, Estonian, Welsh and Swedish.  If you can translate musical or
+technical documentation (no programming required, but it's quite hard
+work), please let us know!  See docs/howtos/i18n.txt in CVS if you are
+interested in the technical aspects of translation.
 
 Rosegarden apparently saves in a binary format, where can I find the format definition ?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -75,7 +59,7 @@ Compilation or installation problems
 Can I build for KDE2 instead of KDE3?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This is no longer possible.
+No.
 
 macro `AM_PATH_ALSA' not found in library
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -102,15 +86,6 @@ arts/artsmidi.idl not found
 You may be missing the kdemultimedia package (and associated -devel
 package, if appropriate to your distribution).  Note that you need
 this even if you're building --with-alsa.
-
-"Cannot convert a null image" and other errors at startup
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If you're getting a stream of errors of this sort followed by a crash
-at startup, with Rosegarden-4 0.1.6 or earlier, then you probably
-haven't run "make install", or it didn't complete successfully, or it
-installed into a non-standard place which you need to add to your
-KDEDIRS environment variable before you can start it correctly.
 
 
 Rosegarden hangs on the splash screen at startup
@@ -191,16 +166,6 @@ dependency, resulting in a broken set of plugins.  If you find that
 installing sfftw2 fixes the problem, you might also want to submit a
 bug report to the maintainer of your distro's swh-plugins package.
 
-I'm having trouble building with Mandrake 8.2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Aren't we all?  Mandrake 8.2 appears to have a badly broken default
-development environment.  The necessary tweaks to make your system
-build Rosegarden correctly are involved and lengthy and probably
-best left to Mandrake themselves to explain.  All in all if it doesn't
-work out of the box for you then it's probably best if you just forgot
-about Mandrake 8.2 altogether and try either 8.1 or a later version.
-
 I'm having trouble with a missing 'gzgets' function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -235,8 +200,8 @@ Until we get around to fixing it the workaround is to:
 and then continue with the build as normal.
 
 
-I'm using RedHat 7.3, what packages do I need?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I'm using RedHat version (whatever), what packages do I need?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This is most often asked by someone who's also using GNOME and hasn't
 built a KDE application before, in which case the answer is that you
@@ -287,6 +252,13 @@ How do I change the instrument for a track?
 Click and hold the left mouse button on the track/instrument label.
 A pop-up will appear from which you can choose a new instrument for
 the track.
+
+
+How do I rename a segment?
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Click the "..." button next to the segment's name shown in the Segment
+Parameters box.
 
 
 Notation and Matrix editing
@@ -367,7 +339,7 @@ Playback and recording
 aRts?  ALSA?  Huh?
 ~~~~~~~~~~~~~~~~~~
 
-Right, it's like this.  Rosegarden-4 can be built without any sound
+Right, it's like this.  Rosegarden can be built without any sound
 support ("configure --disable-sound"), with ALSA support (the default
 configure option), or with aRts support ("configure --with-arts").
 You have to choose one option when you run configure: you can't
@@ -395,9 +367,8 @@ soft-synth architecture if you want to develop your own synths, and it
 may be possible to use it on systems other than Linux.
 
 We strongly recommend you use ALSA unless you already know you prefer
-aRts or you simply can't get ALSA for your platform.  Every
-Rosegarden-4 feature that works with aRts also works with ALSA, and
-then some.
+aRts or you simply can't get ALSA for your platform.  Every Rosegarden
+feature that works with aRts also works with ALSA, and then some.
 
 
 My soundcard has no built-in MIDI synth and I have no external MIDI devices.  How can I get sound?
@@ -406,23 +377,24 @@ My soundcard has no built-in MIDI synth and I have no external MIDI devices.  Ho
 You need a soft synth!  See the next question.
 
 
-How do I use an ALSA soft synth, such as iiwusynth or Timidity?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+How do I use an ALSA soft synth, such as fluidsynth or Timidity?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Well first, here's how to get iiwusynth working with a soundfont.
-Make sure you have a fairly recent version of iiwusynth (0.2.x rather
-than 0.0.x) -- see <URL:http://www.iiwu.org/iiwusynth/>.  Then find a
-soundfont: one reasonable GM example is Musica Theoria 2, available as
-mustheory2.sf2 from the Collections area of
+Well first, here's how to get fluidsynth working with a soundfont.
+First get fluidsynth -- see <URL:http://www.fluidsynth.org/>.  Then
+find a soundfont: one reasonable GM example is Musica Theoria 2,
+available as mustheory2.sf2 from the Collections area of
 <URL:http://www.hammersound.net/>, although it's large and it's packed
 using some stupid Windows-only format (common problem -- a few of the
 soundfonts on there are only zipped, though, so have a look around).
 
-Then run up iiwusynth with
+Then run up fluidsynth with
 
-  $ iiwusynth -m alsa_seq ./mustheory2.sf2
+  $ fluidsynth -m alsa_seq ./mustheory2.sf2
 
-or equivalent for whichever soundfont you want to use.
+or equivalent for whichever soundfont you want to use.  Alternatively
+get hold of qsynth (URL:http://qsynth.sourceforge.net/> which provides
+a nice GUI for fluidsynth.
 
 If you're relatively short on CPU power, also give it "-R no" to turn
 off reverb and you'll get a bit more polyphony before it breaks up.
@@ -430,24 +402,19 @@ off reverb and you'll get a bit more polyphony before it breaks up.
 have to run it as root or else the pitch goes awry, particularly on
 laptops with variable-speed CPUs.
 
-And then run Rosegarden, perhaps checking to make sure there
-are no spare rosegardensequencer processes hanging around from
-before you started iiwusynth (basically the synth needs to be
-started before the rosegardensequencer).
-
-Then you should find that one of the devices (16 instruments) is
-labelled "IIWU Synth", with a GM patch map.  To set a track to one of
-the soft-synth instruments, click and hold on the track label at the
-left of the track until the instrument menu appears and select the
-instrument on there.  (If you have no other MIDI devices at all, then
-the soft-synth should be the default device.)
+Anyway, when fluidsynth is running you should be able to assign tracks
+to it in Rosegarden.  To set a track to one of the soft-synth
+instruments, right-click on the track label at the left of the track
+until the instrument menu appears and select the instrument on there.
+(If you have no other MIDI devices at all, then the soft-synth should
+be the default device.)
 
 You can also use Timidity as an ALSA soft-synth with soundfonts.  Run
 it in ALSA input mode:
 
   $ timidity -iA
 
-In my experience it takes rather more CPU power than iiwusynth for
+In my experience it takes rather more CPU power than fluidsynth for
 rather lower-quality output, though I'm sure these things vary a lot
 depending on how the soundfont is made.
 
@@ -455,13 +422,13 @@ depending on how the soundfont is made.
 How do I select an Instrument?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can check which Instrument is selected for your Track by making sure
-that Settings->Show Track Labels is unchecked.  You can change Instrument
-for a Track by clicking and holding on the Track/Instrument label.  A
-pop up menu will appear from which you can select a different output
-Instrument.  Rosegarden automatically assigns the first available synth
-device on your soundcard for its default output Instrument when importing
-MIDI files.
+You can check which Instrument is selected for your Track by making
+sure that Settings->Show Track Labels is unchecked.  You can change
+Instrument for a Track by right-clicking or clicking and holding on
+the Track/Instrument label.  A pop up menu will appear from which you
+can select a different output Instrument.  Rosegarden automatically
+assigns the first available synth device on your soundcard for its
+default output Instrument when importing MIDI files.
 
 
 I'm using ALSA and I've selected a synth Instrument but I don't hear any sound
@@ -617,24 +584,16 @@ the WAVs directly to CD - 44100Hz (44.1KHz) is the sample rate
 that audio CDs work at.
 
 
-Why are the program names wrong in my MIDI file?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I'm not seeing the right program names for my MIDI device (or any at all)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Rosegarden uses a Studio layer to map your MIDI file's Program Change
-information into meaningful instrument labels.  The default Studio has
-support for General Midi (GM) patch names.  If you want the Program
-Change numbers to map to a different, non-GM device (a different
-soundcard or synth) then you can do this mapping in the Bank Editor
-dialog (Studio->Manage Banks and Programs).  Once you've made changes
-in your current Rosegarden file you can save it off and replace your
-autoload.rg file so that all your subsequent sessions in Rosegarden
+Rosegarden has an internal Studio to map your MIDI Program Change
+information into meaningful instrument labels.  You need to set this
+up do this mapping in the MIDI device manager (Studio->Manage MIDI
+Devices->Banks or Import).  Once you've made changes in your current
+Rosegarden file you can save it as a default studio (replacing your
+autoload.rg file) so that all your subsequent sessions in Rosegarden
 utilise your specialised Studio settings.
-
-It will eventually be possible to share and merge these sections of
-the Studio so that new users won't have to manually replicate the
-work to create these patch files.  It is hoped that Studio library
-will then allow new users to quickly create their own particular
-Studio device settings with the minimum of work on their part.
 
 
 Improving Performance
