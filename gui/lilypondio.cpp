@@ -75,7 +75,7 @@ LilypondExporter::LilypondExporter(QObject *parent,
                                    ProgressReporter(parent, "lilypondExporter"),
                                    m_composition(composition),
                                    m_fileName(fileName) {
-    // nothing
+
 }
 
 LilypondExporter::~LilypondExporter() {
@@ -454,24 +454,6 @@ LilypondExporter::write() {
         return false;
     }
 
-    // define some Lilypond headers as const std::strings because == doesn't
-    // work between std::string and string literals...  putting this right here isn't
-    // very tidy, but it isn't really needed anywhere else, and this seems the
-    // least complicated way to get from hither to thither...
-    const std::string headerTitle = "title";
-    const std::string headerSubtitle = "subtitle";
-    const std::string headerPoet = "poet";
-    const std::string headerComposer = "composer";
-    const std::string headerMeter = "meter";
-    const std::string headerArranger = "arranger";
-    const std::string headerInstrument =  "instrument";
-    const std::string headerDedication = "dedication";
-    const std::string headerPiece =  "piece";
-    const std::string headerHead = "head";
-    const std::string headerCopyright = "copyright";
-    const std::string headerFooter = "footer";
-    const std::string headerTagline = "tagline";
-
     // grab config info
     KConfig *cfg = kapp->config();
     cfg->setGroup("Notation Options");
@@ -507,6 +489,20 @@ LilypondExporter::write() {
     if (!propertyNames.empty() && exportHeaders) {
         str << "\\header {" << std::endl;
         col++;  // indent+
+
+        const std::string headerTitle = "title";
+        const std::string headerSubtitle = "subtitle";
+        const std::string headerPoet = "poet";
+        const std::string headerComposer = "composer";
+        const std::string headerMeter = "meter";
+        const std::string headerArranger = "arranger";
+        const std::string headerInstrument =  "instrument";
+        const std::string headerDedication = "dedication";
+        const std::string headerPiece =  "piece";
+        const std::string headerHead = "head";
+        const std::string headerCopyright = "copyright";
+        const std::string headerFooter = "footer";
+        const std::string headerTagline = "tagline";
 
         bool userTagline = false, userFooter = false;
 
@@ -592,6 +588,12 @@ LilypondExporter::write() {
     int lastNumDots = 0;
 
     int trackNo = 0;
+
+    // some hard-coded styles in order to provide rudimentary style export support
+    const std::string styleMensural = "Mensural";
+    const std::string styleTriangle = "Triangle";
+    const std::string styleCross = "Cross";
+    const std::string styleClassical = "Classical";
 
     // Write out all segments for each Track
     for (Composition::iterator i = m_composition->begin();
@@ -824,13 +826,6 @@ LilypondExporter::write() {
                         std::string style = "";
                         (*j)->get<String>(NotationProperties::NOTE_STYLE, style);
 
-                        // Lilypond can't do anything more than these four
-                        // without extreme black magic
-                        const std::string styleMensural = "Mensural";
-                        const std::string styleTriangle = "Triangle";
-                        const std::string styleCross = "Cross";
-                        const std::string styleClassical = "Classical"; 
-
                         // catch/change style if it differs from before, or is
                         // unspecified (prevStyle is initialized as
                         // "Classical")
@@ -857,21 +852,24 @@ LilypondExporter::write() {
                         //   - if the next note is in a chord
                         //   - and we're not writing one now
                         bool nextNoteIsInChord = tmpHelper.noteIsInChord(*j);
+                        
                         if (currentlyWritingChord &&
                             (!nextNoteIsInChord ||
                              (nextNoteIsInChord && lastChordTime != absoluteTime))) {
                             closeChordWriteTie(addTie, currentlyWritingChord, str);
                         }
 
-                        if (ucount == curTupletNotesRemaining &&
-                            ucount != 0) {
-                            str << "\\times " << tcount << "/" << ucount << " { ";
-                            curTupletNotesRemaining--; // hack to close bracket at right time
-                        } else if (curTupletNotesRemaining > 0) {
+                        if (curTupletNotesRemaining > 0) {
                             curTupletNotesRemaining--;
                             if (curTupletNotesRemaining == 0) {
                                 str << "} ";
                             }
+                        }
+                        
+                        if (ucount == curTupletNotesRemaining &&
+                            ucount != 0) {
+                            str << "\\times " << tcount << "/" << ucount << " { ";
+                            curTupletNotesRemaining--;
                         }
                         
                         if (nextNoteIsInChord && !currentlyWritingChord) {
