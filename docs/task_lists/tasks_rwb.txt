@@ -8,10 +8,11 @@ o MTC/MMC - transport awareness
   - MMC control can't yet be tested at my end [CAN WAIT - LOW PRIORITY]
 
 o Audio
-   - recording stereo WAVs (new fader widget)
+   - new fader widget [DONE]
+   - recording stereo WAVs [ALMOST DONE]
    - hardcoded format segment values
-   - panning
-   - plugin bypass
+   - panning [DONE]
+   - plugin bypass [DONE but a couple of bugs]
    - BWF format writing/reading
    - multithreading
    - autosplitting
@@ -21,7 +22,7 @@ o Audio
    - jack process tidy up (Bob Ham inspired) [DONE]
    - notify disk space available on audio path [DONE]
    - countdown dialog for audio recording [DONE]
-   - check disk space on audio record start
+   - check disk space on audio record start [DONE]
 
 o Audio busses and routing
    - n jack input routes [DONE]
@@ -64,6 +65,8 @@ o Track Moving [DONE]
 o Track Deleting [DONE - might be bugs outstanding]
 
 o Instrument/Device naming [CC - done]
+
+o TextFloats for Rotaries [DONE]
 
 
 Smaller stuff

@@ -15,6 +15,7 @@ rosegarden_SOURCES = \
 	csoundio.cpp \
 	deviceeditor.cpp \
 	dialogs.cpp \
+        diskspace.cpp \
 	editcommands.cpp \
 	edittool.cpp \
 	editviewbase.cpp \

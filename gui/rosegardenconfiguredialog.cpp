@@ -65,6 +65,7 @@
 #include "widgets.h"
 #include "MidiDevice.h"
 #include "audiopluginmanager.h"
+#include "diskspace.h"
 
 namespace Rosegarden
 {
@@ -1415,8 +1416,7 @@ DocumentMetaConfigurationPage::apply()
 AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
                                                QWidget *parent,
                                                const char *name)
-    : TabbedConfigurationPage(doc, parent, name),
-    m_diskSpaceKBytes(0)
+    : TabbedConfigurationPage(doc, parent, name)
 {
     Rosegarden::AudioFileManager &afm = doc->getAudioFileManager();
 
@@ -1460,28 +1460,18 @@ AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
 void
 AudioConfigurationPage::calculateStats()
 {
-    KProcess *proc = new KProcess;
-
-    // df with the path as the only argument
-    //
-    *proc << "/bin/df";
-    *proc << "-k" << m_path->text();
-
-    connect(proc, SIGNAL(receivedStdout (KProcess*, char *, int)),
-            this, SLOT(slotProcessStdout(KProcess*, char *, int)));
-
-    // Start the process as blocking and capture All output
-    //
-    if(proc->start(KProcess::Block, KProcess::All) == false)
+    Rosegarden::DiskSpace *space;
+    try
     {
-        KMessageBox::error(this, i18n("Couldn't determine free disk space"));
+        space = new Rosegarden::DiskSpace(m_path->text());
+    }
+    catch (QString e)
+    {
+        KMessageBox::error(this, e);
         return;
     }
-
-    // it should already be complete by here
-    while(proc->isRunning());
     
-    float mbSize = float(m_diskSpaceKBytes)/1024.0;
+    float mbSize = float(space->getFreeKBytes())/1024.0;
     QString mbSizeStr;
     mbSizeStr.sprintf("%10.3f", mbSize);
     m_diskSpace->setText(QString("%1 MB").arg(mbSizeStr));
@@ -1500,7 +1490,7 @@ AudioConfigurationPage::calculateStats()
     // number of channels (2) times the number of bytes per sample (2)
     // times 60 seconds.
     //
-    float stereoMins = ( float(m_diskSpaceKBytes) * 1024.0 ) / 
+    float stereoMins = ( float(space->getFreeKBytes()) * 1024.0 ) / 
                        ( float(apm->getSampleRate()) * 2.0 * 2.0 * 60.0 );
     QString minsStr;
     minsStr.sprintf("%8.1f", stereoMins);
@@ -1509,37 +1499,6 @@ AudioConfigurationPage::calculateStats()
         setText(QString("%1 %2 %3Hz").arg(minsStr)
                                      .arg(i18n("minutes at"))
                                      .arg(apm->getSampleRate()));
-}
-
-void
-AudioConfigurationPage::slotProcessStdout(KProcess * /*proc*/,
-                                          char *buf, int no)
-{
-    QString outputStr;
-    for (int i = 0; i < no; ++i) outputStr +=buf[i];
-
-    // split by forward slash to begin with
-    QStringList list(QStringList::split("/", outputStr));
-
-    if (list.size() < 4)
-    {
-        m_diskSpaceKBytes = 0;
-        KMessageBox::error(this, 
-                           i18n("Couldn't extract disk space information"));
-        return;
-    }
-
-    QStringList valueList(QStringList::split(" ", list[2]));
-    m_diskSpaceKBytes = valueList[3].toInt();
-
-    /*
-    // Device upon which the record path is mounted - in case we ever
-    // need it.
-    //
-    QString device = QString("/%1/%2").arg(list[1]).arg(valueList[0]);
-    cout << "DEVICE \"" << device << "\" = remaining = " 
-         << m_diskSpaceKBytes << endl;
-         */
 }
 
 void

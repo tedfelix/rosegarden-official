@@ -27,6 +27,7 @@
 
 #include <klocale.h>
 #include <kconfig.h>
+#include <kmessagebox.h>
 
 #include "audiopluginmanager.h"
 #include "ktmpstatusmsg.h"
@@ -42,6 +43,7 @@
 #include "MidiDevice.h"
 #include "widgets.h"
 #include "dialogs.h"
+#include "diskspace.h"
 
 using std::cout;
 using std::cerr;
@@ -976,8 +978,44 @@ SequenceManager::record(bool toggled)
                 break;
 
             case Rosegarden::Instrument::Audio:
-                recordType = STARTING_TO_RECORD_AUDIO;
-                SEQMAN_DEBUG << "SequenceManager::record() - starting to record Audio\n";
+                {
+                    // check for disk space available
+                    Rosegarden::DiskSpace *space;
+                    Rosegarden::AudioFileManager &afm = 
+                        m_doc->getAudioFileManager();
+                    QString audioPath = strtoqstr(afm.getAudioPath());
+
+                    try
+                    {
+                        space = new Rosegarden::DiskSpace(audioPath);
+                    }
+                    catch(QString e)
+                    {
+                        // Add message and re-throw
+                        //
+                        QString m = i18n("Audio record path \"") +
+                           audioPath + QString("\". ") + e + QString("\n") +
+                           i18n("Edit your audio path properties (Edit->Edit Document Properties->Audio)");
+                        throw(m);
+                    }
+
+                    // Check the disk space available is within current
+                    // audio recording limit
+                    //
+                    config->setGroup("Sequencer Options");
+                    int audioRecordMinutes = config->
+                        readNumEntry("audiorecordminutes", 5);
+
+                    Rosegarden::AudioPluginManager *apm = 
+                        m_doc->getPluginManager();
+
+                    // Ok, check disk space and compare to limits
+                    //space->getFreeKBytes()
+
+                    recordType = STARTING_TO_RECORD_AUDIO;
+                    SEQMAN_DEBUG << "SequenceManager::record() - "
+                                 << "starting to record Audio\n";
+                }
                 break;
 
             default:
@@ -1019,6 +1057,9 @@ SequenceManager::record(bool toggled)
         streamOut << startPos.sec;
         streamOut << startPos.usec;
     
+        // set group
+        config->setGroup("Latency Options");
+
         // playback latency
         streamOut << config->readLongNumEntry("playbacklatencysec", 0);
         streamOut << config->readLongNumEntry("playbacklatencyusec", 100000);
