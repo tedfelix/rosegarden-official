@@ -4381,7 +4381,7 @@
 <customwidgets>
     <customwidget>
         <class>RosegardenLabel</class>
-        <header location="local">/home/bownie/rosegarden/gui/widgets.h</header>
+        <header location="local">widgets.h</header>
         <sizehint>
             <width>-1</width>
             <height>-1</height>
