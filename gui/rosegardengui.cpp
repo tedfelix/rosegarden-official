@@ -56,7 +56,9 @@
 #include <kfilemetainfo.h>
 
 // application specific includes
+#ifdef HAVE_LIBJACK
 #include <jack/jack.h>
+#endif
 
 #include "Clipboard.h"
 #include "Configuration.h"
