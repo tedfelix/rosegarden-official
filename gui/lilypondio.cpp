@@ -63,6 +63,7 @@ using Rosegarden::Accidentals;
 using Rosegarden::Text;
 using Rosegarden::PropertyName;
 using Rosegarden::Marks;
+using Rosegarden::Configuration;
 
 LilypondExporter::LilypondExporter(QObject *parent,
                                    Composition *composition,
@@ -70,7 +71,7 @@ LilypondExporter::LilypondExporter(QObject *parent,
                                    ProgressReporter(parent, "lilypondExporter"),
                                    m_composition(composition),
                                    m_fileName(fileName) {
-    // nothing else
+    // nothing
 }
 
 LilypondExporter::~LilypondExporter() {
@@ -423,37 +424,76 @@ LilypondExporter::write() {
         return false;
     }
 
-    // Lilypond header information
+    // define some Lilypond headers as const std::strings because == doesn't
+    // work between std::string and string literals...  putting this right here isn't
+    // very tidy, but it isn't really needed anywhere else, and this seems the
+    // least complicated way to get from hither to thither...
+    const std::string headerTitle = "title";
+    const std::string headerSubtitle = "subtitle";
+    const std::string headerPoet = "poet";
+    const std::string headerComposer = "composer";
+    const std::string headerMeter = "meter";
+    const std::string headerArranger = "arranger";
+    const std::string headerInstrument =  "instrument";
+    const std::string headerDedication = "dedication";
+    const std::string headerPiece =  "piece";
+    const std::string headerHead = "head";
+    const std::string headerCopyright = "copyright";
+    const std::string headerFooter = "footer";
+    const std::string headerTagline = "tagline";
+
+    // Lilypond \header block
     str << "\\version \"1.4.10\"" << std::endl;
-    // user-specified headers coming in from new metadata eventually ???
-    tmp_fileName.replace(QRegExp("&"), "\\&");
-    tmp_fileName.replace(QRegExp("_"), "\\_");
-    str << "\\header {" << std::endl;
 
     // set indention level to make future changes to horizontal layout less
     // tedious, ++col to indent a new level, --col to de-indent
-    int col = 1;
-    
-    str << indent(col) << "title = \"" << tmp_fileName << "\"" << std::endl;
-    str << indent(col) << "subtitle = \"subtitle\"" << std::endl;
-    str << indent(col) << "footer = \"Rosegarden " << VERSION << "\"" << std::endl;
-    str << indent(col) << "tagline = \"Exported from " << tmp_fileName << " by Rosegarden "
-        << VERSION << "\"" << std::endl;
+    int col = 0;
 
-    try {
-       std::string copyrightNote = protectIllegalChars(m_composition->getCopyrightNote());
-       if (copyrightNote != "") {
-           str << indent(col) << "copyright = \"" << copyrightNote << "\"" << std::endl;
-       }
-    }
-
-    catch (...) {
-        // nothing to do?
-        ;
-    }
+    // grab user headers from metadata
+    Configuration metadata = m_composition->getMetadata();
+    std::vector<std::string> propertyNames = metadata.getPropertyNames();
     
-    // close \header
-    str << indent(--col) << "}" << std::endl;
+    // open \header section
+    if (!propertyNames.empty()) {
+        str << "\\header {" << std::endl;
+        col++;  // indent+
+
+        bool userTagline = false, userFooter = false;
+
+        for (unsigned int index = 0; index < propertyNames.size(); ++index) {
+            std::string property = propertyNames [index];
+            if (property == headerTitle || property == headerSubtitle ||
+                property == headerPoet  || property == headerComposer ||
+                property == headerMeter || property == headerArranger ||
+                property == headerInstrument || property == headerDedication ||
+                property == headerPiece || property == headerHead ||
+                property == headerCopyright || property == headerFooter ||
+                property == headerTagline) {
+                std::string header = protectIllegalChars(metadata.get<String>(property));
+                if (header != "") {
+                    str << indent(col) << property << " = \"" << header << "\"" << std::endl;
+                    // let users override defaults, but allow for providing
+                    // defaults if they don't:
+                    if (property == headerTagline) userTagline = true;
+                    if (property == headerFooter) userFooter = true;
+                }
+            }
+        }
+
+        // default tagline/footer
+        if (!userTagline) {
+            str << indent(col) << "tagline = \"" << "Exported by Rosegarden " << VERSION 
+                << "\"" << std::endl;
+        }
+
+        if (!userFooter) {
+            str << indent(col) << "footer = \"" << "Rosegarden " << VERSION
+                << "\"" << std::endl;
+        }
+                
+        // close \header
+        str << indent(--col) << "}" << std::endl;
+    }
 
     // Lilypond music data!   Mapping:
     // Lilypond Voice = Rosegarden Segment
@@ -461,11 +501,13 @@ LilypondExporter::write() {
     // (not the cleanest output but maybe the most reliable)
     // Incomplete: add an option to cram it all into one grand staff
     
+    // open \score section
     str << "\\score {" << std::endl;
     str << indent(++col) << "\\notes <" << std::endl;  // indent+
 
     // Make chords offset colliding notes by default
-    str << indent(++col) << "\\property Score.NoteColumn \\override #\'force-hshift = #1.0" << std::endl;
+    str << indent(++col) << "\\property Score.NoteColumn \\override #\'force-hshift = #1.0"
+        << std::endl;
     
     // set initial time signature
     TimeSignature timeSignature = m_composition->
@@ -510,16 +552,18 @@ LilypondExporter::write() {
 
             // avoid problem with <untitled> tracks yielding a .ly file that
             // jumbles all notes together on a single staff...
+            // every Staff context has to have a unique name, even if the
+            // Staff.instrument property is the same for multiple staffs...
             std::ostringstream staffName;
             staffName << protectIllegalChars(m_composition->
                     getTrackByIndex(lastTrackIndex)->getLabel());
 
             if (staffName.str() == "") {
-                staffName << "track " << (voiceCounter + 1);
+                staffName << "track";
             }
             
             str << indent(col) << "\\context Staff = \"" << staffName.str()
-                << "\" < " << std::endl;
+                << " " << (voiceCounter +1) << "\" < " << std::endl;
 
             str << indent(++col)<< "\\property Staff.instrument = \""  // indent+
                 << staffName.str() <<"\"" << std::endl;;
@@ -544,7 +588,6 @@ LilypondExporter::write() {
         
         str << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
             << "\" {"; // indent+
-//        col++; // indent+ for notes/etc.
         
         timeT segmentStart = (*i)->getStartTime(); // getFirstEventTime
         
@@ -894,7 +937,7 @@ LilypondExporter::write() {
                     str << "> ";
                 }
 
-                // Incomplete: Set which note the clef should center on
+                // Incomplete: Set which note the clef should center on  (DMM - why?)
                 str << "\\clef ";
                 
                 std::string whichClef((*j)->get<String>(Clef::ClefPropertyName));
