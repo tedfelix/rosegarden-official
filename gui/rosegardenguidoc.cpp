@@ -704,3 +704,12 @@ RosegardenGUIDoc::setLoopMarker(Rosegarden::timeT startLoop,
 
 
 
+void
+RosegardenGUIDoc::splitSegment(Rosegarden::Segment *segment,
+                               Rosegarden::timeT splitTime)
+{
+    std::cout << "SPLITTING SEGMENT AT "<< splitTime << endl;
+}
+
+
+

@@ -360,15 +360,15 @@ void SegmentCanvas::clear()
     }
 }
 
-// Show the split line - where we perform Segment splits from
+// Show the split line. This is where we perform Segment splits.
 //
 void
 SegmentCanvas::showSplitLine(int x, int y)
 {
     if (m_splitLine == 0)
         m_splitLine = new SegmentSplitLine(x, y,
-                                           SegmentItem::getItemHeight(),
-                                           m_grid.getRulerScale() - 4,
+                                           SegmentItem::getItemHeight() - 1,
+                                           m_grid.getRulerScale(),
                                            canvas());
     else
         m_splitLine->moveLine(x, y);
@@ -943,6 +943,11 @@ SegmentSplitter::SegmentSplitter(SegmentCanvas *c)
 {
     kdDebug(KDEBUG_AREA) << "SegmentSplitter()\n";
     m_canvas->setCursor(Qt::splitHCursor);
+
+    connect(this,
+            SIGNAL(splitSegment(Rosegarden::Segment*, Rosegarden::timeT)),
+            c,
+            SIGNAL(splitSegment(Rosegarden::Segment*, Rosegarden::timeT)));
 }
 
 SegmentSplitter::~SegmentSplitter()
@@ -972,8 +977,14 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 
     if (item)
     {
-        m_canvas->grid().setSnapTime(SnapGrid::NoSnap);
-        timeT time = m_canvas->grid().snapX(e->pos().x());
+        if (m_fineGrain)
+            m_canvas->grid().setSnapTime(SnapGrid::NoSnap);
+        else
+            m_canvas->grid().setSnapTime(SnapGrid::SnapToBeat);
+
+        // Split this Segment at snapped time
+        emit splitSegment(item->getSegment(),
+                          m_canvas->grid().snapX(e->pos().x()));
     }
  
     // Reinstate the cursor
@@ -993,7 +1004,10 @@ SegmentSplitter::handleMouseMove(QMouseEvent *e)
         drawSplitLine(e);
     }
     else
+    {
         m_canvas->setCursor(Qt::splitHCursor);
+        m_canvas->hideSplitLine();
+    }
 }
 
 void
@@ -1011,14 +1025,6 @@ SegmentSplitter::drawSplitLine(QMouseEvent *e)
     int y = m_canvas->grid().snapY(e->pos().y());
 
     m_canvas->showSplitLine(x, y);
-}
-
-// Split a given Segment at a certain time
-//
-void
-SegmentSplitter::splitSegment(Rosegarden::Segment *segment,
-                              Rosegarden::timeT &splitTime)
-{
 }
 
 

@@ -279,6 +279,11 @@ signals:
      */
     void updateSegmentDuration(SegmentItem*);
 
+    /*
+     * Split a Segment - send it to the doc
+     */
+    void splitSegment(Rosegarden::Segment *, Rosegarden::timeT);
+
     /**
      * Emitted when a Segment is moved to a different start time
      * (horizontally) or instrument (vertically)
@@ -476,6 +481,11 @@ public:
 
     // don't do double clicks
     virtual void contentsMouseDoubleClickEvent(QMouseEvent) {;}
+
+signals:
+    // Emit this when we want to split the Segment
+    //
+    void splitSegment(Rosegarden::Segment *, Rosegarden::timeT);
 
 private:
     void drawSplitLine(QMouseEvent*);

@@ -153,6 +153,11 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     QObject::connect(m_segmentCanvas, SIGNAL(updateSegmentTrackAndStartTime(SegmentItem*)),
                      this,            SLOT  (updateSegmentTrackAndStartTime(SegmentItem*)));
 
+    QObject::connect(m_segmentCanvas,
+            SIGNAL(splitSegment(Rosegarden::Segment*, Rosegarden::timeT)),
+            this,
+            SIGNAL(splitSegment(Rosegarden::Segment*, Rosegarden::timeT)));
+
     // create the position pointer
     m_pointer = new QCanvasLine(canvas);
     m_pointer->setPen(RosegardenGUIColours::TimePointer);

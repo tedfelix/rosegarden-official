@@ -224,6 +224,10 @@ public slots:
     void documentModified();
     void documentRestored();
 
+    // Split a Segment at a given time
+    //
+    void splitSegment(Rosegarden::Segment *segment,
+                      Rosegarden::timeT splitTime);
 
 protected:
 

@@ -177,6 +177,8 @@ signals:
                           Rosegarden::timeT,
                           Rosegarden::TrackId);
 
+    void splitSegment(Rosegarden::Segment*, Rosegarden::timeT);
+
 protected:
 
     void init(unsigned int nbTracks, int firstBar, int lastBar);
