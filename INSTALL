@@ -1,13 +1,13 @@
-KDE3 Build (0.1.5 release notes)
+KDE3 Build (0.1.6 release notes)
 ================================
-The source tree builds for KDE2 as default and should configure as such
-straight out of the box.  To build for KDE3 it's necessary to do a little
+The source tree builds for KDE3 as default and should configure as such
+straight out of the box.  To build for KDE2 it's necessary to do a little
 extra work - namely replacing the admin/ directory.  From the top level
 rosegarden/ or rosegarden-0.x.y/ directory perform the following commands
 to swap over the admin directories:
 
- % mv admin admin_kde2
- % mv admin_kde3 admin
+ % mv admin admin_kde3
+ % mv admin_kde2 admin
 
 It's then necessary to regenerate the "configure" script like so:
 
@@ -17,10 +17,6 @@ and now you can configure and make as usual:
 
   % ./configure --with-qt-dir=/usr/lib/qt3 --prefix=/opt/kde3 --with-alsa=yes
   % make
-
-Note that Rosegarden-4 v0.1.5 is the first release to support KDE3
-so there still might be a few inconsistencies and bugs over and above
-the KDE2 version.
 
 
 ALSA 0.9.0beta12 and above support
