@@ -28,6 +28,7 @@
 
 // include files for KDE
 #include <klocale.h>
+#include <kcmdlineargs.h>
 #include <dcopclient.h>
 #include <kmessagebox.h>
 
@@ -69,12 +70,15 @@ using Rosegarden::timeT;
 using namespace Rosegarden::BaseProperties;
 
 
-RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
+RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
+                                   bool useSequencer,
+                                   const char *name)
     : QObject(parent, name),
       m_recordSegment(0), m_endOfLastRecordedNote(0),
       m_commandHistory(new MultiViewCommandHistory()),
       m_clipboard(new Rosegarden::Clipboard),
-      m_startUpSync(true)
+      m_startUpSync(true),
+      m_useSequencer(useSequencer)
 {
     // Try to tell the sequencer that we're alive only if the
     // sequencer hasn't already forced us to sync
@@ -722,6 +726,9 @@ RosegardenGUIDoc::setLoop(Rosegarden::timeT t0, Rosegarden::timeT t1)
 void
 RosegardenGUIDoc::alive()
 {
+    if (m_useSequencer == false)
+        return;
+
     // Just a quick refreshing sleep here to ensure that we don't
     // mask any call back to the sequencer by being to hasty.
     //

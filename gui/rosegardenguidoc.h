@@ -69,7 +69,9 @@ public:
     /**
      * Constructor for the fileclass of the application
      */
-    RosegardenGUIDoc(QWidget *parent, const char *name=0);
+    RosegardenGUIDoc(QWidget *parent,
+                     bool useSequencer = true,
+                     const char *name=0);
 
     /**
      * Destructor for the fileclass of the application
@@ -332,6 +334,10 @@ private:
     // already requested a sync?
     //
     bool m_startUpSync;
+
+    // Do we start the sequencer? (from command line argument)
+    //
+    bool m_useSequencer;
 };
 
 #endif // ROSEGARDENGUIDOC_H

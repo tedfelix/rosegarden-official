@@ -474,7 +474,7 @@ void RosegardenGUIApp::initStatusBar()
 
 void RosegardenGUIApp::initDocument()
 {
-    m_doc = new RosegardenGUIDoc(this);
+    m_doc = new RosegardenGUIDoc(this, m_useSequencer);
     m_doc->newDocument();
 
     m_doc->getCommandHistory()->attachView(actionCollection());
@@ -1473,6 +1473,9 @@ void RosegardenGUIApp::slotEditAllTracks()
 
 bool RosegardenGUIApp::launchSequencer()
 {
+    if (m_useSequencer == false)
+        return false;
+
     if (m_sequencerProcess) return true;
 
     // If we've already registered a sequencer then don't start another

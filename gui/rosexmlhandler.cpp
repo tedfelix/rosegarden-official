@@ -546,9 +546,8 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             //
             if (m_device == 0)
             {
-                cout << "NOT MIDI DEVICE FOUND" << endl;
-                //m_device = new Rosegarden::MidiDevice(atts.value("name").data());
-                //m_studio.addDevice(m_device);
+                m_device = new Rosegarden::MidiDevice(atts.value("name").data());
+                m_studio.addDevice(m_device);
             }
 
         }
@@ -572,9 +571,9 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             //
             if (m_device == 0)
             {
-                cout << "NOT AUDIO DEVICE FOUND" << endl;
-                //m_device = new Rosegarden::AudioDevice(atts.value("name").data());
-                //m_studio.addDevice(m_device);
+                m_device = new Rosegarden::AudioDevice(atts.value("name").data());
+                m_studio.addDevice(m_device);
+
             }
         }
         else
