@@ -25,10 +25,9 @@
 // include files for Qt
 #include <qcanvas.h>
 
-#include <notationhlayout.h>
-#include <notationvlayout.h>
-
-#define KDEBUG_AREA 1010
+#include "notationhlayout.h"
+#include "notationvlayout.h"
+#inlucde "rosedebug.h"
 
 
 class RosegardenGUIDoc;
