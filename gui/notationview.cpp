@@ -1219,10 +1219,19 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 
         if (staffNo >= 0 && (int)i != staffNo) continue;
 
+	if (m_progressDlg) {
+	    m_progressDlg->setLabelText
+		(i18n("Laying out staff %1...").arg(i + 1));
+	}
+
         m_hlayout.resetStaff(*m_staffs[i], startTime, endTime);
         m_vlayout.resetStaff(*m_staffs[i], startTime, endTime);
         m_hlayout.scanStaff(*m_staffs[i], startTime, endTime);
         m_vlayout.scanStaff(*m_staffs[i], startTime, endTime);
+    }
+
+    if (m_progressDlg) {
+	m_progressDlg->setLabelText(i18n("Reconciling staffs..."));
     }
 
     m_hlayout.finishLayout(startTime, endTime);
