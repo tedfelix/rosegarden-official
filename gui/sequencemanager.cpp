@@ -1148,6 +1148,7 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
         QString label = seqPlugins[i++];
         QString author = seqPlugins[i++];
         QString copyright = seqPlugins[i++];
+        QString category = seqPlugins[i++];
         unsigned int portCount = seqPlugins[i++].toInt();
 
         AudioPlugin *aP = aPM->addPlugin(id,
@@ -1155,7 +1156,8 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
                                          uniqueId,
                                          label,
                                          author,
-                                         copyright);
+                                         copyright,
+					 category);
 
         // SEQMAN_DEBUG << "PLUGIN = \"" << name << "\"" << endl;
 

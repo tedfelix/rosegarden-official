@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -18,6 +19,7 @@
 */
 
 #include <cmath>
+#include <set>
 
 #include <qlabel.h>
 #include <qdial.h>
@@ -47,11 +49,6 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                                      AudioPluginManager *aPM,
                                      Instrument *instrument,
                                      int index):
-    //!!! should be an ok/cancel dialog, but that's trickier to do
-    //    
-    // .. well just make sure that we still send realtime parameters
-    // when changing rotaries etc.
-    //
     KDialogBase(parent, "", false, i18n("Audio Plugin"), Close),
     m_pluginManager(aPM),
     m_instrument(instrument),
@@ -68,8 +65,13 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 
     makePluginParamsBox(vbox);
 
-    m_pluginList = new KComboBox(pluginSelectionBox);
-    m_pluginList->insertItem(i18n("(none)"));
+    m_pluginCategoryBox = new QHBox(pluginSelectionBox);
+    new QLabel(i18n("Category:"), m_pluginCategoryBox);
+    m_pluginCategoryList = new KComboBox(m_pluginCategoryBox);
+
+    QHBox *hbox = new QHBox(pluginSelectionBox);
+    m_pluginLabel = new QLabel(i18n("Plugin:"), hbox);
+    m_pluginList = new KComboBox(hbox);
     QToolTip::add(m_pluginList, i18n("Select a plugin from this list."));
 
     QHBox *h = new QHBox(pluginSelectionBox);
@@ -88,38 +90,88 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     connect(m_pluginList, SIGNAL(activated(int)),
             this, SLOT(slotPluginSelected(int)));
 
-    std::vector<QString> names = m_pluginManager->getPluginNames();
-    std::vector<QString>::iterator it = names.begin();
+    connect(m_pluginCategoryList, SIGNAL(activated(int)),
+            this, SLOT(slotCategorySelected(int)));
 
-    for (; it != names.end(); ++it)
-    {
-        m_pluginList->insertItem(*it);
-    }
-
-    // Check for plugin and setup as required
-    AudioPluginInstance *inst = instrument->getPlugin(index);
-    if (inst)
-    {
-	m_bypass->setChecked(inst->isBypassed());
-
-        if (inst->isAssigned())
-        {
-            // Get the position from the unique id (add one for the first
-            // null entry).
-            //
-            int position = aPM->getPositionByUniqueId(inst->getId()) + 1;
-            m_pluginList->setCurrentItem(position);
-            slotPluginSelected(position);
-        }
-        else
-            slotPluginSelected(m_pluginList->currentItem());
-    }
-    else
-        slotPluginSelected(m_pluginList->currentItem());
+    populatePluginCategoryList();
+    populatePluginList();
 
     m_generating = false;
 
     m_accelerators = new QAccel(this);
+}
+
+void
+AudioPluginDialog::populatePluginCategoryList()
+{
+    std::set<QString> categories;
+    for (PluginIterator i = m_pluginManager->begin();
+	 i != m_pluginManager->end(); ++i) {
+	if ((*i)->getCategory() != "") categories.insert((*i)->getCategory());
+    }
+    if (categories.empty()) {
+	m_pluginCategoryBox->hide();
+	m_pluginLabel->hide();
+    }
+
+    m_pluginCategoryList->clear();
+    m_pluginCategoryList->insertItem(i18n("(any)"));
+    m_pluginCategoryList->insertItem(i18n("(unclassified)"));
+
+    for (std::set<QString>::iterator i = categories.begin();
+	 i != categories.end(); ++i) {
+	m_pluginCategoryList->insertItem(*i);
+    }
+}
+
+void
+AudioPluginDialog::populatePluginList()
+{
+    m_pluginList->clear();
+    m_pluginsInList.clear();
+
+    m_pluginList->insertItem(i18n("(none)"));
+    m_pluginsInList.push_back(0);
+
+    QString category;
+    bool needCategory = false;
+
+    if (m_pluginCategoryList->isVisible() &&
+	m_pluginCategoryList->currentItem() > 0) {
+	needCategory = true;
+	if (m_pluginCategoryList->currentItem() == 1) {
+	    category = "";
+	} else {
+	    category = m_pluginCategoryList->currentText();
+	}
+    }
+
+    // Check for plugin and setup as required
+    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    if (inst) m_bypass->setChecked(inst->isBypassed());
+
+    int count = 0;
+
+    for (PluginIterator i = m_pluginManager->begin();
+	 i != m_pluginManager->end(); ++i) {
+
+	++count;
+
+	if (needCategory) {
+	    if ((*i)->getCategory() != category) continue;
+	}
+	
+	m_pluginList->insertItem((*i)->getName());
+	m_pluginsInList.push_back(count);
+
+	if (inst && inst->isAssigned()) {
+	    if ((*i)->getUniqueId() == inst->getId()) {
+		m_pluginList->setCurrentItem(m_pluginList->count()-1);
+	    }
+	}
+    }
+
+    slotPluginSelected(m_pluginList->currentItem());
 }
 
 void
@@ -135,11 +187,18 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent)
 }
 
 void
-AudioPluginDialog::slotPluginSelected(int number)
+AudioPluginDialog::slotCategorySelected(int)
 {
+    populatePluginList();
+}
+
+void
+AudioPluginDialog::slotPluginSelected(int i)
+{
+    int number = m_pluginsInList[i];
 
     RG_DEBUG << "AudioPluginDialog::::slotPluginSelected - "
-             << "setting up plugin from position " << number << endl;
+             << "setting up plugin from position " << number << " at menu item " << i << endl;
 
     QString caption =
 	strtoqstr(m_instrument->getName()) +

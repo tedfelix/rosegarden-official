@@ -113,7 +113,8 @@ public:
                 unsigned long uniqueId,
                 const QString &label,
                 const QString &author,
-                const QString &copyright);
+                const QString &copyright,
+		const QString &category);
 
     MappedObjectId getId() const { return m_id; }
     QString getName() const { return m_name; }
@@ -121,6 +122,7 @@ public:
     QString getLabel() const { return m_label; }
     QString getAuthor() const { return m_author; }
     QString getCopyright() const { return m_copyright; }
+    QString getCategory() const { return m_category; }
 
     void addPort(MappedObjectId id,
                  const QString &name,
@@ -141,6 +143,7 @@ protected:
     QString                    m_label;
     QString                    m_author;
     QString                    m_copyright;
+    QString                    m_category;
 
     // our ports and associated hints
     std::vector<PluginPort*>   m_ports;
@@ -159,7 +162,8 @@ public:
                            unsigned long uniqueId,
                            const QString &label,
                            const QString &author,
-                           const QString &copyright);
+                           const QString &copyright,
+			   const QString &category);
 
     bool removePlugin(MappedObjectId id);
 

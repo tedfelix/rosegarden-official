@@ -41,14 +41,16 @@ AudioPluginManager::addPlugin(MappedObjectId id,
                               unsigned long uniqueId,
                               const QString &label,
                               const QString &author,
-                              const QString &copyright)
+                              const QString &copyright,
+			      const QString &category)
 {
     AudioPlugin *newPlugin = new AudioPlugin(id, 
                                              name, 
                                              uniqueId,
                                              label,
                                              author,
-                                             copyright);
+                                             copyright,
+					     category);
     m_plugins.push_back(newPlugin);
 
     return newPlugin;
@@ -150,13 +152,15 @@ AudioPlugin::AudioPlugin(MappedObjectId id,
                          unsigned long uniqueId,
                          const QString &label,
                          const QString &author,
-                         const QString &copyright):
+                         const QString &copyright,
+			 const QString &category):
     m_id(id),
     m_name(name),
     m_uniqueId(uniqueId),
     m_label(label),
     m_author(author),
-    m_copyright(copyright)
+    m_copyright(copyright),
+    m_category(category)
 {
 }
 

@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -116,6 +117,7 @@ public:
     QAccel* getAccelerators() { return m_accelerators; }
 
 public slots:
+    void slotCategorySelected(int);
     void slotPluginSelected(int index);
     void slotPluginPortChanged(float value);
     void slotBypassChanged(bool);
@@ -142,7 +144,11 @@ protected:
     Instrument          *m_instrument;
 
     QFrame		*m_pluginParamsBox;
+    QWidget             *m_pluginCategoryBox;
+    KComboBox           *m_pluginCategoryList;
+    QLabel              *m_pluginLabel;
     KComboBox           *m_pluginList;
+    std::vector<int>     m_pluginsInList;
     QLabel              *m_pluginId;
     QCheckBox		*m_bypass;
 
@@ -155,6 +161,8 @@ protected:
 
     QAccel              *m_accelerators;
 
+    void                 populatePluginCategoryList();
+    void                 populatePluginList();
 };
 
 }

@@ -427,6 +427,7 @@ public:
     static const MappedObjectProperty Label;
     static const MappedObjectProperty Author;
     static const MappedObjectProperty Copyright;
+    static const MappedObjectProperty Category;
     static const MappedObjectProperty PortCount;
     static const MappedObjectProperty Ports;
     static const MappedObjectProperty Bypassed;
@@ -466,13 +467,14 @@ public:
     std::string getLabel() const { return m_label; }
     std::string getAuthor() const { return m_author; }
     std::string getCopyright() const { return m_copyright; }
+    std::string getCategory() const { return m_category; }
     unsigned long getPortCount() const { return m_portCount; }
 
     Rosegarden::InstrumentId getInstrument() const { return m_instrument; }
     int getPosition() const { return m_position; }
 
     // populate this object with descriptor information
-    void populate(const LADSPA_Descriptor *descriptor);
+    void populate(const LADSPA_Descriptor *descriptor, std::string category);
 
     // redefine
     virtual void clone(MappedObject *object);
@@ -490,6 +492,7 @@ protected:
     std::string               m_label;
     std::string               m_author;
     std::string               m_copyright;
+    std::string               m_category;
     unsigned long             m_portCount;
 
     Rosegarden::InstrumentId  m_instrument;

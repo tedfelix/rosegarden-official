@@ -27,6 +27,8 @@
 #include "MappedStudio.h"
 #include "Sequencer.h"
 
+#define DEBUG_MAPPEDSTUDIO 1
+
 // liblrdf - LADSPA naming library
 //
 #ifdef HAVE_LIBLRDF
@@ -115,6 +117,7 @@ const MappedObjectProperty MappedLADSPAPlugin::PluginName = "pluginname";
 const MappedObjectProperty MappedLADSPAPlugin::Label = "label";
 const MappedObjectProperty MappedLADSPAPlugin::Author = "author";
 const MappedObjectProperty MappedLADSPAPlugin::Copyright = "copyright";
+const MappedObjectProperty MappedLADSPAPlugin::Category = "category";
 const MappedObjectProperty MappedLADSPAPlugin::PortCount = "portcount";
 const MappedObjectProperty MappedLADSPAPlugin::Ports = "ports";
 const MappedObjectProperty MappedLADSPAPlugin::Bypassed = "bypassed";
@@ -966,6 +969,9 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
                         (plugin->getCopyright().c_str()));
 
                 list.push_back(MappedObjectProperty
+                        (plugin->getCategory().c_str()));
+
+                list.push_back(MappedObjectProperty
                         ("%1").arg(plugin->getPortCount()));
 
                 std::vector<MappedObject*> children =
@@ -1011,38 +1017,84 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
     return list;
 }
 
+#ifdef HAVE_LIBLRDF
+static bool useLRDF = false;
+static std::map<unsigned long, std::string> lrdfTaxonomy;
+static void
+generateTaxonomy(std::string uri, std::string base)
+{
+    lrdf_uris *uris = lrdf_get_instances(uri.c_str());
+
+    if (uris != NULL) {
+	for (int i = 0; i < uris->count; ++i) {
+	    lrdfTaxonomy[lrdf_get_uid(uris->items[i])] = base;
+	}
+	lrdf_free_uris(uris);
+    }
+
+    uris = lrdf_get_subclasses(uri.c_str());
+
+    if (uris != NULL) {
+	for (int i = 0; i < uris->count; ++i) {
+	    char *label = lrdf_get_label(uris->items[i]);
+	    generateTaxonomy(uris->items[i],
+			     base + (base.length() > 0 ? " > " : "") + label);
+	}
+	lrdf_free_uris(uris);
+    }
+}
+#endif
+
 void
 MappedAudioPluginManager::discoverPlugins(MappedStudio *studio)
 {
-    QDir dir(QString(m_path.c_str()), "*.so");
     clearPlugins(studio);
-
 
 #ifdef DEBUG_MAPPEDSTUDIO
     std::cout << "MappedAudioPluginManager::discoverPlugins - "
-	      << "discovering plugins" << std::endl;
+	      << "discovering plugins; path is " << m_path << std::endl;
 #endif
 
 #ifdef HAVE_LIBLRDF
     // Initialise liblrdf and read the description files 
     //
     lrdf_init();
-    if (lrdf_read_file("file:ladspa.rdfs") ||
-        lrdf_read_file("file:example.rdf"))
-    {
+
+    std::vector<QString> lrdfPaths;
+    lrdfPaths.push_back("/usr/share/ladspa/rdf");
+    lrdfPaths.push_back("/usr/local/share/ladspa/rdf");
+    lrdfPaths.push_back(QString(m_path.c_str()) + "/rdf");
+    bool haveSomething = false;
+
+    for (size_t i = 0; i < lrdfPaths.size(); ++i) {
+	QDir dir(lrdfPaths[i], "*.rdf;*.rdfs");
+	for (unsigned int j = 0; j < dir.count(); ++j) {
+	    if (!lrdf_read_file(QString("file:" + lrdfPaths[i] + "/" + dir[j]).data())) {
+#ifdef DEBUG_MAPPEDSTUDIO
+		std::cerr << "MappedAudioPluginManager: read RDF file " << (lrdfPaths[i] + "/" + dir[j]) << std::endl;
+#endif
+		haveSomething = true;
+	    }
+	}
+    }
+    if (!haveSomething) {
 #ifdef DEBUG_MAPPEDSTUDIO
 	std::cerr << "MappedAudioPluginManager::discoverPlugins - "
 	          << "can't find plugin description files" << std::endl;
 #endif
-        return;
+	useLRDF = false;
+    } else {
+	useLRDF = true;
+	generateTaxonomy(LADSPA_BASE "Plugin", "");
     }
-
-
 #endif // HAVE_LIBLRDF
 
-    for (unsigned int i = 0; i < dir.count(); i++ )
+    QDir pluginDir(QString(m_path.c_str()), "*.so");
+
+    for (unsigned int i = 0; i < pluginDir.count(); i++ ) {
         enumeratePlugin(studio,
-                m_path + std::string("/") + std::string(dir[i].data()));
+                m_path + std::string("/") + std::string(pluginDir[i].data()));
+    }
 
 #ifdef HAVE_LIBLRDF
     // Cleanup after the RDF library
@@ -1307,10 +1359,6 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 
     descrFn = (LADSPA_Descriptor_Function)dlsym(pluginHandle,
                                                 "ladspa_descriptor");
-#ifdef HAVE_LIBLRDF
-    char *def_uri;
-    lrdf_defaults *defs = 0;
-#endif // HAVE_LIBLRDF
 
     if (descrFn)
     {
@@ -1330,9 +1378,27 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
                 if (LADSPA_IS_HARD_RT_CAPABLE(descriptor->Properties))
                 {
 
+		    std::string category = "";
+
 #ifdef HAVE_LIBLRDF
-                    def_uri = lrdf_get_default_uri(descriptor->UniqueID);
-		    if (def_uri) defs = lrdf_get_setting_values(def_uri);
+		    char *def_uri = 0;
+		    lrdf_defaults *defs = 0;
+
+		    if (useLRDF) {
+			category = lrdfTaxonomy[descriptor->UniqueID];
+#ifdef DEBUG_MAPPEDSTUDIO
+//			std::cout << "Plugin id is " << descriptor->UniqueID
+//				  << ", category is \""
+//				  << lrdfTaxonomy[descriptor->UniqueID]
+//				  << "\", name is " << descriptor->Name
+//				  << ", label is " << descriptor->Label
+//				  << std::endl;
+#endif
+			def_uri = lrdf_get_default_uri(descriptor->UniqueID);
+			if (def_uri) {
+			    defs = lrdf_get_setting_values(def_uri);
+			}
+		    }
 #endif // HAVE_LIBLRDF
 
                     MappedLADSPAPlugin *plugin =
@@ -1341,7 +1407,7 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
                                  (MappedObject::LADSPAPlugin, true)); // RO
 
                     plugin->setLibraryName(path);
-                    plugin->populate(descriptor);
+                    plugin->populate(descriptor, category);
 
                     for (unsigned long i = 0; i < descriptor->PortCount; i++)
                     {
@@ -1368,27 +1434,12 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 			{
                             for (int j = 0; j < defs->count; j++)
 			    {
-				/*
-                                std::cout << "PORT "
-                                          << defs->items[i].pid
-                                          << " ("
-                                          << defs->items[i].label
-                                          << ") "
-                                          << defs->items[i].value
-                                          << std::endl;
-					  */
 				if (defs->items[j].pid == ((int)i))
 				{
+//				    std::cout << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << std::endl;
 				    port->setProperty(
 					    MappedLADSPAPort::Default,
 					    defs->items[j].value);
-
-                                    /*
-				    std::cout << "PORT " << i
-					      << " default = "
-					      << defs->items[j].value
-					      << std::endl;
-                                              */
 				}
 			    }
 			}
@@ -1397,7 +1448,7 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
                     }
 
 #ifdef HAVE_LIBLRDF
-		    if (def_uri) lrdf_free_setting_values(defs);
+		    if (defs) lrdf_free_setting_values(defs);
 #endif // HAVE_LIBLRDF
 
 		    /*
@@ -1540,7 +1591,8 @@ MappedLADSPAPlugin::~MappedLADSPAPlugin()
 
 
 void
-MappedLADSPAPlugin::populate(const LADSPA_Descriptor *descriptor)
+MappedLADSPAPlugin::populate(const LADSPA_Descriptor *descriptor,
+			     std::string category)
 {
     if (descriptor)
     {
@@ -1551,6 +1603,8 @@ MappedLADSPAPlugin::populate(const LADSPA_Descriptor *descriptor)
         m_portCount = descriptor->PortCount;
         m_pluginName = descriptor->Name;
     }
+   
+    m_category = category;
 
 }
 
@@ -1568,6 +1622,7 @@ MappedLADSPAPlugin::getPropertyList(const MappedObjectProperty &property)
         list.push_back(Label);
         list.push_back(Author);
         list.push_back(Copyright);
+        list.push_back(Category);
         list.push_back(PortCount);
         list.push_back(Bypassed);
     }
@@ -1583,6 +1638,8 @@ MappedLADSPAPlugin::getPropertyList(const MappedObjectProperty &property)
             list.push_back(MappedObjectProperty(m_author.c_str()));
         else if (property == MappedLADSPAPlugin::Copyright)
             list.push_back(MappedObjectProperty(m_copyright.c_str()));
+        else if (property == MappedLADSPAPlugin::Category)
+            list.push_back(MappedObjectProperty(m_category.c_str()));
         else if (property == MappedLADSPAPlugin::PortCount)
             list.push_back(MappedObjectProperty("%1").arg(m_portCount));
         else if (property == MappedObject::Instrument)

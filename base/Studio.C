@@ -486,9 +486,9 @@ Studio::getDevice(DeviceId id)
 
     for (it = m_devices.begin(); it != m_devices.end(); it++) {
 
-	if (it != m_devices.begin()) cerr << ", ";
+//	if (it != m_devices.begin()) cerr << ", ";
 
-	cerr << (*it)->getId();
+//	cerr << (*it)->getId();
         if ((*it)->getId() == id) {
 	    //cerr << ". Found" << endl;
 	    return (*it);

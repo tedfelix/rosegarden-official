@@ -103,7 +103,7 @@ else
 
   if test "$with_ladspa" = "yes"; then
     AC_DEFINE(HAVE_LADSPA, 1, [Define if you have LADSPA])
-    AC_CHECK_LIB(lrdf, lrdf_dump)
+    AC_CHECK_LIB(lrdf, lrdf_init)
   fi
 
   dnl check for mad MP3 library
