@@ -641,6 +641,14 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotSplitSelectionByPitch()), actionCollection(),
                 "split_by_pitch");
 
+    new KAction(i18n("Jog &Left"), Key_Left + ALT, this,
+                SLOT(slotJogLeft()), actionCollection(),
+                "jog_left");
+
+    new KAction(i18n("Jog &Right"), Key_Right + ALT, this,
+                SLOT(slotJogRight()), actionCollection(),
+                "jog_right");
+
     new KAction(i18n("Set Start Time..."), 0, this,
 		SLOT(slotSetSegmentStartTimes()), actionCollection(),
 		"set_segment_start");
@@ -1997,6 +2005,38 @@ void RosegardenGUIApp::slotAutoSplitSelection()
         } else {
             command->addCommand(new SegmentAutoSplitCommand(*i));
         }
+    }
+
+    m_view->slotAddCommandToHistory(command);
+}
+
+void RosegardenGUIApp::slotJogLeft()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotJogLeft" << endl;
+    jogSelection(-Rosegarden::Note(Rosegarden::Note::Demisemiquaver).getDuration());
+}
+
+void RosegardenGUIApp::slotJogRight()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotJogRight" << endl;
+    jogSelection(Rosegarden::Note(Rosegarden::Note::Demisemiquaver).getDuration());
+}
+
+void RosegardenGUIApp::jogSelection(Rosegarden::timeT amount)
+{
+    if (!m_view->haveSelection()) return;
+
+    Rosegarden::SegmentSelection selection = m_view->getSelection();
+
+    SegmentReconfigureCommand *command = new SegmentReconfigureCommand(i18n("Jog Selection"));
+
+    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+         i != selection.end(); ++i) {
+
+        command->addSegment((*i),
+                            (*i)->getStartTime() + amount,
+                            (*i)->getEndTime(),
+                            (*i)->getTrack());
     }
 
     m_view->slotAddCommandToHistory(command);

@@ -56,6 +56,9 @@
         <Action name="set_segment_start"/>
         <Action name="set_segment_duration"/>
 	<Separator/>
+        <Action name="jog_left"/>
+        <Action name="jog_right"/>
+	<Separator/>
         <Action name="auto_split"/>
         <Action name="split_by_pitch"/>
         <Action name="join_segments"/>
@@ -253,6 +256,8 @@
         <Action name="quantize_selection"/>
 <!--    <Action name="harmonize_selection"/> -->
         <Action name="rescale"/>
+        <Action name="jog_left"/>
+        <Action name="jog_right"/>
         <Action name="auto_split"/>
         <Action name="split_by_pitch"/>
         <Action name="set_segment_start"/>
@@ -278,6 +283,8 @@
         <Action name="edit_event_list"/>
         <Action name="quantize_selection"/>
         <Action name="rescale"/>
+        <Action name="jog_left"/>
+        <Action name="jog_right"/>
         <Action name="auto_split"/>
         <Action name="split_by_pitch"/>
         <Action name="collapse"/>

@@ -592,6 +592,12 @@ public slots:
     void slotAutoSplitSelection();
 
     /**
+     * Jog a selection left or right by an amount
+     */
+    void slotJogRight();
+    void slotJogLeft();
+
+    /**
      * Split the selected segments by pitch
      */
     void slotSplitSelectionByPitch();
@@ -1162,7 +1168,14 @@ public slots:
     void slotPluginBypassed(Rosegarden::InstrumentId,
 			    int index, bool bypassed);
 
+protected:
+    /**
+     * Jog a selection of segments by an amount
+     */
+    void jogSelection(Rosegarden::timeT amount);
+
 private:
+
 
     //--------------- Data members ---------------------------------
 

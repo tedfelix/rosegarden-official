@@ -48,6 +48,9 @@
   <Action name="double_speed"/>
   <Action name="rescale"/>
   <Separator/>
+  <Action name="jog_left"/>
+  <Action name="jog_right"/>
+  <Separator/>
   <Menu name="Velocity">
     <text>&amp;Velocity</text>
     <Action name="velocity_up"/>
@@ -184,6 +187,8 @@
     <Action name="half_speed"/>
     <Action name="velocity_up"/>
     <Action name="velocity_down"/>
+    <Action name="jog_left"/>
+    <Action name="jog_right"/>
     <Action name="set_velocities"/>
     <Action name="transpose_up"/>
     <Action name="transpose_down"/>

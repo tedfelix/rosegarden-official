@@ -687,7 +687,14 @@ EditView::setupActions()
                 SLOT(slotTranspose()), actionCollection(),
                 "general_transpose");
 
-    //
+    new KAction(i18n("Jog &Left"), Key_Left + ALT, this,
+                SLOT(slotJogLeft()), actionCollection(),
+                "jog_left");
+
+    new KAction(i18n("Jog &Right"), Key_Right + ALT, this,
+                SLOT(slotJogRight()), actionCollection(),
+                "jog_right");
+
     // Control rulers
     //
     new KAction(i18n("Show Velocity Property Ruler"), 0, this,
@@ -1351,6 +1358,34 @@ void EditView::slotTransposeDownOctave()
     KTmpStatusMsg msg(i18n("Transposing down one octave..."), this);
 
     addCommandToHistory(new TransposeCommand(-12, *m_currentEventSelection));
+}
+
+void EditView::slotJogLeft()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Jogging left..."), this);
+
+    RG_DEBUG << "EditView::slotJogLeft" << endl;
+
+    addCommandToHistory(
+            new MoveCommand(*getCurrentSegment(),
+                -Rosegarden::Note(Rosegarden::Note::Demisemiquaver).getDuration(),
+                false, // don't use notation timings
+                *m_currentEventSelection));
+}
+
+void EditView::slotJogRight()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Jogging right..."), this);
+
+    RG_DEBUG << "EditView::slotJogRight" << endl;
+
+    addCommandToHistory(
+            new MoveCommand(*getCurrentSegment(),
+                Rosegarden::Note(Rosegarden::Note::Demisemiquaver).getDuration(),
+                false, // don't use notation timings
+                *m_currentEventSelection));
 }
 
 void

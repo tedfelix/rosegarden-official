@@ -181,6 +181,9 @@ public slots:
     void slotTransposeDown();
     void slotTransposeDownOctave();
 
+    // jog events
+    void slotJogLeft();
+    void slotJogRight();
 
     /// Control ruler actions
     void slotInsertControlRulerItem();

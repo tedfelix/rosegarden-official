@@ -1241,6 +1241,9 @@ MoveCommand::modifySegment()
 	    jtr = segment.insert(toInsert[j]);
 	}
 
+        // insert new event back into selection
+        m_selection->addEvent(toInsert[j]);
+
 	if (jtr != segment.end()) m_lastInsertedEvent = toInsert[j];
     }
 

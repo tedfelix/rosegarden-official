@@ -122,6 +122,9 @@
   <Action name="normalize_rests"/>
   <Action name="collapse_rests_aggressively"/>
   <Separator/>
+  <Action name="jog_left"/>
+  <Action name="jog_right"/>
+  <Separator/>
   <Action name="collapse_notes"/>
   <Action name="tie_notes"/>
   <Action name="untie_notes"/>
@@ -487,6 +490,8 @@
     <Action name="normalize_rests"/>
     <Action name="clear_selection"/>
     <Action name="filter_selection"/>
+    <Action name="jog_left"/>
+    <Action name="jog_right"/>
   </enable>
 </State>
 
