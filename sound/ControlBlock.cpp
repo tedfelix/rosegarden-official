@@ -42,24 +42,36 @@ void ControlBlock::updateTrackData(Track* t)
 {
     if (t) {
         setInstrumentForTrack(t->getId(), t->getInstrument());
+        setTrackMuted(t->getId(), t->isMuted());
     }
 }
 
 
 void ControlBlock::setInstrumentForTrack(TrackId trackId, InstrumentId instId)
 {
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) m_trackInstruments[trackId] = instId;
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) m_trackInstruments[trackId].instrumentId = instId;
 }
 
 InstrumentId ControlBlock::getInstrumentForTrack(TrackId trackId)
 {
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInstruments[trackId];
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInstruments[trackId].instrumentId;
     return 0;
+}
+
+void ControlBlock::setTrackMuted(TrackId trackId, bool mute)
+{
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) m_trackInstruments[trackId].muted = mute;
+}
+
+bool ControlBlock::isTrackMuted(TrackId trackId)
+{
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInstruments[trackId].muted;
+    return true;
 }
 
 size_t ControlBlock::getSize()
 {
-    return CONTROLBLOCK_MAX_NB_TRACKS * sizeof(InstrumentId) + 20;
+    return CONTROLBLOCK_MAX_NB_TRACKS * sizeof(TrackInfo) + 20;
 }
 
 }

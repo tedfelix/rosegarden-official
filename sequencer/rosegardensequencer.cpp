@@ -365,8 +365,8 @@ public:
     void refresh();
 
     // delegate ControlBlock's interface
-    void setInstrumentForTrack(unsigned int trackNb, InstrumentId);
-    InstrumentId getInstrumentForTrack(unsigned int trackNb);
+    InstrumentId getInstrumentForTrack(unsigned int trackId);
+    bool isTrackMuted(unsigned int trackId);
 
 protected:
 
@@ -422,15 +422,14 @@ void ControlBlockMmapper::refresh()
     ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
 }
 
-void ControlBlockMmapper::setInstrumentForTrack(unsigned int trackNb, InstrumentId id)
-{
-    m_controlBlock->setInstrumentForTrack(trackNb, id);
-    refresh();
-}
-
 InstrumentId ControlBlockMmapper::getInstrumentForTrack(unsigned int trackNb)
 {
     return m_controlBlock->getInstrumentForTrack(trackNb);
+}
+
+bool ControlBlockMmapper::isTrackMuted(unsigned int trackNb)
+{
+    return m_controlBlock->isTrackMuted(trackNb);
 }
 
 //----------------------------------------
@@ -611,7 +610,7 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
                                 << " - data1: " << (unsigned int)evt->getData1()
                                 << " - data2: " << (unsigned int)evt->getData2()
                                 << endl;
-                if (evt->getType() != 0) {
+                if (evt->getType() != 0 && !m_controlBlockMmapper->isTrackMuted(evt->getTrackId())) {
                     c->insert(evt);
                 }
 

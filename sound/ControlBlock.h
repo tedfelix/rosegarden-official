@@ -28,6 +28,17 @@
 namespace Rosegarden 
 {
 
+/**
+ * ONLY PUT PLAIN DATA HERE - NO POINTERS EVER
+ */
+struct TrackInfo 
+{
+    bool muted;
+    InstrumentId instrumentId;
+};
+
+
+
 #define CONTROLBLOCK_MAX_NB_TRACKS 1024 // can't be a symbol
 
 /**
@@ -48,12 +59,16 @@ public:
     void setInstrumentForTrack(TrackId trackId, InstrumentId);
     InstrumentId getInstrumentForTrack(TrackId trackId);
 
+    void setTrackMuted(TrackId trackId, bool);
+    bool isTrackMuted(TrackId trackId);
+
     static size_t getSize(); // update this when adding new members
 
 protected:
     //--------------- Data members ---------------------------------
+    // ONLY PUT PLAIN DATA HERE - NO POINTERS EVER
     int m_nbTracks;
-    InstrumentId m_trackInstruments[CONTROLBLOCK_MAX_NB_TRACKS]; // should be high enough for the moment
+    TrackInfo m_trackInstruments[CONTROLBLOCK_MAX_NB_TRACKS]; // should be high enough for the moment
 };
 
 }
