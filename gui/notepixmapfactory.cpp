@@ -1937,7 +1937,7 @@ int NotePixmapFactory::getTextWidth(const Rosegarden::Text &text) const {
 
 
 
-        it's been a while since we had any poetry in here
+        boundingRect my arse
 
 
 
