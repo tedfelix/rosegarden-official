@@ -298,6 +298,24 @@ public:
     //
     SegmentType getType() const { return m_type; }
 
+
+    // The audio start and end indices tell us how far into
+    // audio file "m_audioFileID" this Segment starts and
+    // how far into the sample the Segment finishes.
+    //
+    // The absolute time this Segment finishes is:
+    //
+    //    audioEnd - audioStart + start of Segment
+    //
+    void setAudioStartIndex(const timeT& audioStart)
+        { m_audioStartIdx = audioStart; }
+
+    void setAudioEndIndex(const timeT & audioEnd)
+        { m_audioEndIdx = audioEnd; }
+
+    timeT getAudioStartIndex() const { return m_audioStartIdx; }
+    timeT getAudioEndIndex() const { return m_audioEndIdx; }
+
 private:
     timeT m_startIdx;
     unsigned int m_track;
@@ -318,6 +336,9 @@ private:
 
     unsigned int m_audioFileID; // audio file ID (see AudioFileManager)
     SegmentType m_type;         // identifies Segment type
+
+    timeT m_audioStartIdx;      // how far into m_audioFileID our Segment starts
+    timeT m_audioEndIdx;        // how far into m_audioFileID our Segment ends
 };
 
 

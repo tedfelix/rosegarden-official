@@ -433,6 +433,49 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         m_audioFileManager.addSearchPath(string(search.data()));
 
+    } else if (lcName == "begin") {
+        int marker = atts.value("marker").toInt();
+
+        if (!m_currentSegment)
+        {
+            m_errorString = i18n("found sample begin marker outside segment");
+            return false;
+        }
+
+        if (m_currentSegment->getType() != Rosegarden::Segment::Audio)
+        {
+            m_errorString = i18n("found sample begin marker in non audio segment");
+            return false;
+        }
+
+        m_currentSegment->setAudioStartIndex(marker);
+
+
+    } else if (lcName == "end") {
+        int marker = atts.value("marker").toInt();
+
+        if (!m_currentSegment)
+        {
+            m_errorString = i18n("found sample end marker outside segment");
+            return false;
+        }
+
+        if (m_currentSegment->getType() != Rosegarden::Segment::Audio)
+        {
+            m_errorString = i18n("found sample end marker in non audio segment");
+            return false;
+        }
+
+        if (marker < m_currentSegment->getAudioStartIndex())
+        {
+            m_errorString = i18n("audio end marker before audio start marker");
+            return false;
+        }
+
+        m_currentSegment->setAudioStartIndex(marker);
+        m_currentSegment->setDuration(marker -
+                               m_currentSegment->getAudioStartIndex());
+
     } else {
         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
     }
