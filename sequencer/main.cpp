@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
 
     // Started OK
     //
-    SEQUENCER_DEBUG << "RosegardenSequencer - started OK" << std::endl;
+    SEQUENCER_DEBUG << "RosegardenSequencer - started OK" << endl;
 
     // Now we can enter our specialised event loop.
     // For each pass through we wait for some pending
@@ -254,7 +254,7 @@ int main(int argc, char *argv[])
                                     << "Sequencer can't enter \""
                                     << "RECORDING_ARMED\" state - "
                                     << "internal error"
-                                    << std::endl;
+                                    << endl;
                     break;
 
                 case STOPPED:

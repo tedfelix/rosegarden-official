@@ -721,19 +721,19 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                 case Rosegarden::MappedEvent::MidiProgramChange:
                    SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
                                 << "got Program Change (unsupported)"
-                                << std::endl;
+                                << endl;
                    break;
 
                 case Rosegarden::MappedEvent::MidiKeyPressure:
                    SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
                                 << "got Key Pressure (unsupported)"
-                                << std::endl;
+                                << endl;
                    break;
 
                 case Rosegarden::MappedEvent::MidiChannelPressure:
                    SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
                                 << "got Channel Pressure (unsupported)"
-                                << std::endl;
+                                << endl;
                    break;
 
                 case Rosegarden::MappedEvent::MidiSystemExclusive:
@@ -747,7 +747,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                 case Rosegarden::MappedEvent::MidiNoteOneShot:
                    SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
                                 << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot"
-                                << std::endl;
+                                << endl;
                    break;
 
                    // Audio control signals - ignore these
@@ -761,7 +761,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                 default:
                    SEQMAN_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
                                 << "GOT UNSUPPORTED MAPPED EVENT"
-                                << std::endl;
+                                << endl;
                    break;
             }
 
