@@ -1407,6 +1407,9 @@ void SequenceManager::segmentModified(Segment* s)
 
         streamOut << m_compositionMmapper->getSegmentFileName(s);
         
+        SEQMAN_DEBUG << "SequenceManager::segmentModified() : DCOP-call sequencer remapSegment"
+                     << m_compositionMmapper->getSegmentFileName(s) << endl;
+
         rgapp->sequencerSend("remapSegment(QString)", data);
     }
     

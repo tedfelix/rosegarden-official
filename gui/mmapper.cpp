@@ -293,16 +293,13 @@ bool SegmentMmapper::refresh()
             m_mmappedSize = 0;
             return true;
 
-        } else if (newMmappedSize > m_mmappedSize) {
+        } else {
 
             setFileSize(newMmappedSize);
             remap(newMmappedSize);
         }
     }
     
-    SEQMAN_DEBUG << "SegmentMmapper::refresh : mmap size = " << m_mmappedSize
-                 << " size changed : " << res << endl;
-
     dump();
 
     return res;
@@ -310,32 +307,45 @@ bool SegmentMmapper::refresh()
 
 void SegmentMmapper::setFileSize(size_t size)
 {
-    SEQMAN_DEBUG << "SegmentMmapper : setting size of "
-                 << m_fileName << " to " << size << endl;
+    SEQMAN_DEBUG << "SegmentMmapper::setFileSize() : setting size of "
+                 << m_fileName << " to " << size
+                 << " - current size = " << m_mmappedSize << endl;
 
-    if (size == 0) {
-        SEQMAN_DEBUG << "SegmentMmapper : size == 0 : no resize to do\n";
-        return;
+    if (size < m_mmappedSize) {
+
+        ftruncate(m_fd, size);
+
+    } else {
+
+        // On linux, ftrunctate can enlarge a file, but this isn't specified by POSIX
+        // so go the safe way
+
+        if (size == 0) {
+            SEQMAN_DEBUG << "SegmentMmapper : size == 0 : no resize to do\n";
+            return;
+        }
+    
+        // rewind
+        ::lseek(m_fd, 0, SEEK_SET);
+
+        //
+        // enlarge the file
+        // (seek() to wanted size, then write a byte)
+        //
+        if (::lseek(m_fd, size - 1, SEEK_SET) == -1) {
+            SEQMAN_DEBUG << "SegmentMmapper : Couldn't lseek in " << m_fileName
+                         << " to " << size << endl;
+            throw Rosegarden::Exception("lseek failed");
+        }
+    
+        if (::write(m_fd, "\0", 1) != 1) {
+            SEQMAN_DEBUG << "SegmentMmapper : Couldn't write byte in  "
+                         << m_fileName << endl;
+            throw Rosegarden::Exception("write failed");
+        }
+    
     }
     
-    // rewind
-    ::lseek(m_fd, 0, SEEK_SET);
-
-    //
-    // enlarge the file
-    // (seek() to wanted size, then write a byte)
-    //
-    if (::lseek(m_fd, size - 1, SEEK_SET) == -1) {
-        SEQMAN_DEBUG << "SegmentMmapper : Couldn't lseek in " << m_fileName
-                     << " to " << size << endl;
-        throw Rosegarden::Exception("lseek failed");
-    }
-    
-    if (::write(m_fd, "\0", 1) != 1) {
-        SEQMAN_DEBUG << "SegmentMmapper : Couldn't write byte in  "
-                     << m_fileName << endl;
-        throw Rosegarden::Exception("write failed");
-    }
     
 }
 

@@ -63,21 +63,21 @@ public:
     ~MmappedSegment();
 
     bool remap();
-    QString getFileName() { return m_filename; }
+    QString getFileName() const { return m_filename; }
     bool isMetronome();
     MappedEvent* getBuffer() { return m_mmappedBuffer; }
-    size_t getSize() { return m_mmappedSize; }
-    unsigned int getNbMappedEvents() { return m_nbMappedEvents; }
+    size_t getSize() const { return m_mmappedSize; }
+    unsigned int getNbMappedEvents() const { return m_nbMappedEvents; }
 
     class iterator 
     {
     public:
-        iterator(MmappedSegment* s, bool atEnd = false);
+        iterator(MmappedSegment* s);
         iterator& operator=(const iterator&);
         bool operator==(const iterator&);
         bool operator!=(const iterator& it) { return !operator==(it); }
 
-        bool atEnd() const { return (m_currentEvent == 0) || (m_currentEvent > (m_s->getBuffer() + m_s->getNbMappedEvents() - 1)); }
+        bool atEnd() const;
 
         /// go back to beginning of stream
         void reset();
@@ -91,6 +91,7 @@ public:
         const MappedEvent* peek() const { return m_currentEvent; }
 
         MmappedSegment* getSegment() { return m_s; }
+        const MmappedSegment* getSegment() const { return m_s; }
 
     private:
          iterator();
@@ -101,9 +102,6 @@ public:
         MmappedSegment* m_s;
         MappedEvent* m_currentEvent;
     };
-
-    iterator begin();
-    iterator end();
 
 protected:
     void map();
@@ -185,9 +183,6 @@ bool MmappedSegment::remap()
         return false;
     }
 
-    SEQUENCER_DEBUG << "MmappedSegment::remap() : resetRawData(" << (void*)m_mmappedBuffer
-                    << "," << m_mmappedSize << ")\n";
-
 #ifdef linux
     m_mmappedBuffer = (MappedEvent*)::mremap(m_mmappedBuffer, m_mmappedSize, newSize, MREMAP_MAYMOVE);
 #else
@@ -201,24 +196,14 @@ bool MmappedSegment::remap()
     }
     
     m_mmappedSize = newSize;
+    m_nbMappedEvents = m_mmappedSize / sizeof(MappedEvent);
 
     return true;
 }
 
-MmappedSegment::iterator MmappedSegment::begin()
-{
-    return iterator(this);
-}
-
-MmappedSegment::iterator MmappedSegment::end()
-{
-    return iterator(this, true);
-}
-
-MmappedSegment::iterator::iterator(MmappedSegment* s, bool endIterator)
+MmappedSegment::iterator::iterator(MmappedSegment* s)
     : m_s(s), m_currentEvent(m_s->getBuffer())
 {
-    if (endIterator) m_currentEvent += m_s->getNbMappedEvents();
 }
 
 MmappedSegment::iterator& MmappedSegment::iterator::operator=(const iterator& it)
@@ -302,6 +287,11 @@ MappedEvent MmappedSegment::iterator::operator*()
     return *m_currentEvent;
 }
 
+bool MmappedSegment::iterator::atEnd() const
+{
+    return (m_currentEvent == 0) || (m_currentEvent > (m_s->getBuffer() + m_s->getNbMappedEvents() - 1));
+}
+
 void RosegardenSequencerApp::dumpFirstSegment()
 {
     SEQUENCER_DEBUG << "Dumping 1st segment data :\n";
@@ -309,9 +299,9 @@ void RosegardenSequencerApp::dumpFirstSegment()
     unsigned int i = 0;
     MmappedSegment* firstMappedSegment = (*(m_mmappedSegments.begin())).second;
 
-    for (MmappedSegment::iterator it = firstMappedSegment->begin();
-         it != firstMappedSegment->end();
-         ++it) {
+    MmappedSegment::iterator it(firstMappedSegment);
+
+    for (; !it.atEnd(); ++it) {
 
         MappedEvent evt = (*it);
         SEQUENCER_DEBUG << i << " : inst = "  << evt.getInstrument()
@@ -578,19 +568,20 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
 
         for(unsigned int i = 0; i < m_iterators.size(); ++i) {
 
+            MmappedSegment::iterator* iter = m_iterators[i];
+
 //             SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : checking segment #"
-//                             << i << endl;
+//                             << i << " " << iter->getSegment()->getFileName() << endl;
 
             if (!validSegments[i]) {
-//                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : no more events in segment #"
+//                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : no more events to get for this slice in segment #"
 //                                 << i << endl;
                 continue; // skip this segment
             }
 
-            MmappedSegment::iterator* iter = m_iterators[i];
             bool evtIsFromMetronome = iter->getSegment()->isMetronome();
 
-            if (*iter == iter->getSegment()->end()) {
+            if (iter->atEnd()) {
 //                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : " << endTime
 //                                 << " reached end of segment #"
 //                                 << i << endl;
@@ -608,24 +599,24 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
                     evt->setInstrument(m_controlBlockMmapper->getInstrumentForTrack(evt->getTrackId()));
                 }
                 
-                SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : " << endTime
-                                << " inserting evt from segment #"
-                                << i
-                                << " : trackId: " << evt->getTrackId()
-                                << " - inst: " << evt->getInstrument()
-                                << " - type: " << evt->getType()
-                                << " - time: " << evt->getEventTime()
-                                << " - duration: " << evt->getDuration()
-                                << " - data1: " << (unsigned int)evt->getData1()
-                                << " - data2: " << (unsigned int)evt->getData2()
-                                << " - metronome event: " << evtIsFromMetronome
-                                << endl;
+//                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : " << endTime
+//                                 << " inserting evt from segment #"
+//                                 << i
+//                                 << " : trackId: " << evt->getTrackId()
+//                                 << " - inst: " << evt->getInstrument()
+//                                 << " - type: " << evt->getType()
+//                                 << " - time: " << evt->getEventTime()
+//                                 << " - duration: " << evt->getDuration()
+//                                 << " - data1: " << (unsigned int)evt->getData1()
+//                                 << " - data2: " << (unsigned int)evt->getData2()
+//                                 << " - metronome event: " << evtIsFromMetronome
+//                                 << endl;
                 if (acceptEvent(evt, evtIsFromMetronome)) {
-                    SEQUENCER_DEBUG << "inserting event\n";
+//                     SEQUENCER_DEBUG << "inserting event\n";
                     c->insert(evt);
                 } else {
                     
-                    SEQUENCER_DEBUG << "skipping event\n";
+//                     SEQUENCER_DEBUG << "skipping event\n";
                 }
             
                 if (!evtIsFromMetronome) foundOneEvent = true;
@@ -641,7 +632,7 @@ bool MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(Rosegarden::Map
 
     } while (foundOneEvent);
 
-    SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : eventsRemaining = " << eventsRemaining << endl;
+//     SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : eventsRemaining = " << eventsRemaining << endl;
 
     return eventsRemaining || foundOneEvent;
 }
@@ -653,6 +644,12 @@ void MmappedSegmentsMetaIterator::resetIteratorForSegment(const QString& filenam
 
         if (iter->getSegment()->getFileName() == filename) {
 //             SEQUENCER_DEBUG << "resetIteratorForSegment(" << filename << ") : found iterator\n";
+            // delete iterator and create another one
+            MmappedSegment* ms = (*i)->getSegment();
+            delete iter;
+            m_iterators.erase(i);
+            iter = new MmappedSegment::iterator(ms);
+            m_iterators.push_back(iter);
             moveIteratorToTime(*iter, m_currentTime);
             break;
         }
@@ -843,7 +840,8 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
 
     bool eventsRemaining = m_metaIterator->fillCompositionWithEventsUntil(mC, end);
 
-    setEndOfCompReached(eventsRemaining);
+//     setEndOfCompReached(eventsRemaining); // don't do that, it breaks recording because
+// playing stops right after it starts.
 
     m_lastStartTime = start;
 
@@ -1363,7 +1361,7 @@ void RosegardenSequencerApp::remapSegment(const QString& filename)
 {
     if (m_transportStatus != PLAYING) return;
 
-    SEQUENCER_DEBUG << "MmappedSegment::remapSegment(" << filename << ")\n";
+    SEQUENCER_DEBUG << "RosegardenSequencerApp::remapSegment(" << filename << ")\n";
 
     MmappedSegment* m = m_mmappedSegments[filename];
     if (m->remap() && m_metaIterator)
@@ -1372,7 +1370,7 @@ void RosegardenSequencerApp::remapSegment(const QString& filename)
 
 void RosegardenSequencerApp::addSegment(const QString& filename)
 {
-//     if (m_transportStatus != PLAYING) return;
+    if (m_transportStatus != PLAYING) return;
 
     SEQUENCER_DEBUG << "MmappedSegment::addSegment(" << filename << ")\n";
 
