@@ -207,7 +207,7 @@ public slots:
      */
     virtual void slotEditPaste();
 
-    /*
+    /**
      * Delete the current selection
      */
     void slotEditDelete();
@@ -277,13 +277,13 @@ public slots:
      */
     void slotHoveredOverAbsoluteTimeChanged(unsigned int);
 
-    /*
+    /**
      * Set the time pointer position during playback
      */
     void slotSetPointerPosition(Rosegarden::timeT time,
 				bool scroll = true);
 
-    /*
+    /**
      * Set the insertion pointer position (from the bottom LoopRuler)
      */
     void slotSetInsertCursorPosition(Rosegarden::timeT position, bool scroll);
@@ -292,59 +292,63 @@ public slots:
 	slotSetInsertCursorPosition(position, true);
     }
 
-    /*
+    /**
      * Catch the keyboard being pressed
      */
     void slotKeyPressed(unsigned int y, bool repeating);
 
-    /*
+    /**
+     * Catch the keyboard being pressed with selection modifier
+     */
+    void slotKeySelected(unsigned int y, bool repeating);
+
+    /**
      * Handle scrolling between view and PianoKeyboard
      */
     void slotVerticalScrollPianoKeyboard(int y);
 
-    /*
+    /**
      * Close
      */
     void closeWindow();
 
-    /*
+    /**
      * A new selection has been acquired by a tool
      */
     void slotNewSelection();
 
-    /*
+    /**
      * Set the snaptime of the grid from an item in the snap combo
      */
     void slotSetSnapFromIndex(int);
 
-    /*
+    /**
      * Set the snaptime of the grid based on the name of the invoking action
      */
     void slotSetSnapFromAction();
 
-    /*
+    /**
      * Set the snaptime of the grid
      */
     void slotSetSnap(Rosegarden::timeT);
 
-    /*
+    /**
      * Quantize a selection to a given level
      */
     void slotQuantizeSelection(int);
 
-    /*
+    /**
      * Pop-up the velocity modificatio dialog
      */
     void slotSetVelocities();
 
-    /*
+    /**
      * Change horizontal zoom
      */
     void slotChangeHorizontalZoom(int);
 
-    /*
+    /**
      * Select all
-     *
      */
     void slotSelectAll();
 
@@ -447,6 +451,11 @@ protected:
     // down the keyboard and don't want repeat notes sending
     //
     Rosegarden::MidiByte m_lastNote;
+
+    // The first note we sent in similar case (only used for
+    // doing effective sweep selections
+    //
+    Rosegarden::MidiByte m_firstNote;
 
     Rosegarden::PropertyName m_selectedProperty;
 

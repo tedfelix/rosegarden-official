@@ -59,12 +59,15 @@ public:
 
     /**
      * Add an Event to the selection.  The Event should come from
-     * the Segment that was passed to the constructor.
+     * the Segment that was passed to the constructor.  Will
+     * silently drop any event that is already in the selection.
      */
     void addEvent(Event* e);
 
     /**
      * Add all the Events in the given Selection to this one.
+     * Will silently drop any events that are already in the
+     * selection.
      */
     void addFromSelection(EventSelection *sel);
 

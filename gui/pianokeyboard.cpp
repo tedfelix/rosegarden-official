@@ -123,23 +123,36 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
 void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
 {
     if (m_mouseDown)
-        emit keyPressed(e->y(), true); // we're swooshing
+	if (m_selecting)
+	    emit keySelected(e->y(), true);
+	else 
+	    emit keyPressed(e->y(), true); // we're swooshing
     else
         emit hoveredOverKeyChanged(e->y());
 }
 
 void PianoKeyboard::mousePressEvent(QMouseEvent *e)
 {
+    Qt::ButtonState bs = e->state();
+
     if (e->button() == LeftButton)
     {
         m_mouseDown = true;
-        emit keyPressed(e->y(), false);
+	m_selecting = (bs & Qt::ShiftButton);
+	
+	if (m_selecting)
+	    emit keySelected(e->y(), false);
+	else
+	    emit keyPressed(e->y(), false);
     }
 }
 
 void PianoKeyboard::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == LeftButton)
+    {
         m_mouseDown = false;
+	m_selecting = false;
+    }
 }
 

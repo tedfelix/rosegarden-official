@@ -216,6 +216,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
          this,            SLOT  (slotKeyPressed(unsigned int, bool)));
 
     QObject::connect
+        (m_pianoKeyboard, SIGNAL(keySelected(unsigned int, bool)),
+         this,            SLOT  (slotKeySelected(unsigned int, bool)));
+
+    QObject::connect
         (getCanvasView(), SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
          this,            SLOT  (slotHoveredOverAbsoluteTimeChanged(unsigned int)));
 
@@ -1170,12 +1174,14 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
     Rosegarden::MidiByte evPitch = staff.getHeightAtCanvasY(y);
 
     // Don't do anything if we're part of a run up the keyboard
+    // and the pitch hasn't changed
     //
     if (m_lastNote == evPitch && repeating)
         return;
 
     // Save value
     m_lastNote = evPitch;
+    if (!repeating) m_firstNote = evPitch;
 
     Rosegarden::Track *track = comp.getTrackByIndex(
             m_staffs[0]->getSegment().getTrack());
@@ -1204,6 +1210,96 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
     }
     catch(...) {;}
 
+}
+
+void MatrixView::slotKeySelected(unsigned int y, bool repeating)
+{
+    getCanvasView()->slotScrollVertSmallSteps(y);
+
+    MatrixStaff& staff = *(m_staffs[0]);
+    Rosegarden::Segment &segment(staff.getSegment());
+    Rosegarden::MidiByte evPitch = staff.getHeightAtCanvasY(y);
+
+    // Don't do anything if we're part of a run up the keyboard
+    // and the pitch hasn't changed
+    //
+    if (m_lastNote == evPitch && repeating)
+        return;
+
+    // Save value
+    m_lastNote = evPitch;
+    if (!repeating) m_firstNote = evPitch;
+
+    EventSelection *s = new EventSelection(segment);
+
+    // slow, but we'll leave it like this unless we decide it's
+    // just too slow
+
+    for (int p = std::min(m_firstNote, evPitch);
+	     p < std::max(m_firstNote, evPitch);
+	 ++p) {
+	for (Rosegarden::Segment::iterator i = segment.begin();
+	     segment.isBeforeEndMarker(i); ++i) {
+	    if ((*i)->isa(Rosegarden::Note::EventType) &&
+		(*i)->has(Rosegarden::BaseProperties::PITCH) &&
+		(*i)->get<Rosegarden::Int>
+		(Rosegarden::BaseProperties::PITCH) == p) {
+		s->addEvent(*i);
+	    }
+	}
+    }
+
+    if (m_currentEventSelection) {
+        // allow addFromSelection to deal with eliminating duplicates
+	s->addFromSelection(m_currentEventSelection);
+    }
+
+    setCurrentSelection(s, false);
+
+    // now play the note as well -- twice, to distinguish the fact
+    // that we're selecting
+    //!!! playing twice doesn't work; clearly the call I'm using
+    // doesn't handle that (hardly surprising I guess)
+
+    Rosegarden::Composition &comp = m_document->getComposition();
+    Rosegarden::Studio &studio = m_document->getStudio();
+    Rosegarden::Track *track = comp.getTrackByIndex(segment.getTrack());
+    Rosegarden::Instrument *ins =
+        studio.getInstrumentById(track->getInstrument());
+
+    // check for null instrument
+    //
+    if (ins == 0)
+        return;
+
+    // Send out two notes of just shy of 1/3 second duration at
+    // 1/3 second intervals approx
+    //
+    try
+    {
+        Rosegarden::MappedComposition mC;
+
+	mC.insert(new Rosegarden::MappedEvent
+		  (ins->getId(),
+		   Rosegarden::MappedEvent::MidiNoteOneShot,
+		   evPitch,
+		   Rosegarden::MidiMaxValue,
+		   Rosegarden::RealTime(0, 0),
+		   Rosegarden::RealTime(0, 250000),
+		   Rosegarden::RealTime(0, 0)));
+
+	mC.insert(new Rosegarden::MappedEvent
+		  (ins->getId(),
+		   Rosegarden::MappedEvent::MidiNoteOneShot,
+		   evPitch,
+		   Rosegarden::MidiMaxValue,
+		   Rosegarden::RealTime(0, 330000),
+		   Rosegarden::RealTime(0, 250000),
+		   Rosegarden::RealTime(0, 0)));
+	
+        Rosegarden::StudioControl::sendMappedComposition(mC);
+    }
+    catch(...) {;}
 }
 
 
