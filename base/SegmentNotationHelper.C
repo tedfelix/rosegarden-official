@@ -556,7 +556,7 @@ SegmentNotationHelper::makeNoteViable(iterator i, bool splitAtBars)
 	    timeT thisNoteStart = (*i)->getAbsoluteTime() + acc;
 	    timeT toNextBar =
 		segment().getBarEndForTime(thisNoteStart) - thisNoteStart;
-	    if (component > toNextBar) component = toNextBar;
+	    if (toNextBar > 0 && component > toNextBar) component = toNextBar;
 	}
         if (component > (required - acc)) dl.push_back(required - acc);
         else dl.push_back(component);

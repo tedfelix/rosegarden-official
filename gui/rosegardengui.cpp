@@ -134,6 +134,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     //
     emit startupStatusMessage(i18n("Initialising..."));
     initStatusBar();
+    // not necessarily true this one, but if it is, it's noticeable
+    emit startupStatusMessage(i18n("Waiting for sequencer..."));
     initDocument();
     emit startupStatusMessage(i18n("Initialising view..."));
     setupActions();
@@ -367,7 +369,7 @@ void RosegardenGUIApp::setupActions()
                               actionCollection(), "join");
     action->setExclusiveGroup("segmenttools");
 
-    new KAction(i18n("Turn Repeating Segments into Real Copies"),
+    new KAction(i18n("Turn Re&peating Segments into Real Copies"),
                 0,
                 this, SLOT(slotRepeatingSegments()),
                 actionCollection(), "repeats_to_real_copies");

@@ -134,7 +134,10 @@
 
 31. Merge Segments in main view
 
-32. Thoroughly scan all following task lists to find more stuff to do...
+32. "Delete Tracks" and "Rename Tracks" on menu in notation view (latter
+    kind of a dup with "make it a command"
+
+33. Thoroughly scan all following task lists to find more stuff to do...
 
 
 Post-0.1.5-and-a-bit task list

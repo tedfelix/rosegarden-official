@@ -86,12 +86,13 @@ possible workarounds.  One fairly simple one is:
      }
 
 where we effectively increment the loop counter before erasing the
-event at its pre-increment position.  We use this quite a lot.
+event at its pre-increment position.  We use this quite a lot (it's
+sometimes referred to in code comments as "the j-iterator trick").
 
 This sort of hack takes some confidence that j will not be
-accidentally compromised, and a safer approach, particularly if the
-body of the loop is long, is to use an intermediate temporary
-container or two:
+accidentally compromised, and a safer and more comprehensible
+approach, particularly if the body of the loop is long, is to use an
+intermediate temporary container or two:
 
      std::vector<Segment::iterator> toErase;
      std::vector<Event *> toInsert;
@@ -131,7 +132,7 @@ but was guaranteed not to erase any event before it, we could do
          --j;
 
 	 if (thisOne) {
-	     helper.collapseNoteAggressively(i);
+	     helper.collapseNoteAggressively(*i);
 	 }
 
 	 // rather than "true" one could perform a test to see
@@ -142,7 +143,7 @@ but was guaranteed not to erase any event before it, we could do
      }
      
      if (thisOne) {
-	 helper.collapseNoteAggressively(i);
+	 helper.collapseNoteAggressively(*i);
      }
 
 This is, of course, disgusting code.  And the situation becomes even

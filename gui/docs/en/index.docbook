@@ -639,89 +639,100 @@
 	<sect3 id="nv-insertion-keyboard">
 	  <title>Typing notes and rests with the PC keyboard</title>
 
-	  <para>You can also insert notes by "typing" their pitches on
-	  the PC's keyboard.</para>
+	  <sect4><title>Duration</title>
 
-	  <para>First, ensure a notation tool is selected to indicate
-	  the duration of note (or rest) you wish to insert.  You can
-	  select the various note types using the number keys:</para>
+	    <para>First, ensure a notation tool is selected to indicate
+	      the duration of note (or rest) you wish to insert.  You can
+	      select the various note types using the number keys:</para>
 
-	  <itemizedlist>
-	    <listitem><para><keycap>5</keycap> - Breve</para></listitem>
-	    <listitem><para><keycap>1</keycap> - Whole note (semibreve)</para></listitem>
-	    <listitem><para><keycap>2</keycap> - Half note (minim)</para></listitem>
-	    <listitem><para><keycap>4</keycap> - Quarter note (crotchet)</para></listitem>
-	    <listitem><para><keycap>8</keycap> - Eighth note (quaver)</para></listitem>
-	    <listitem><para><keycap>6</keycap> - Sixteenth note (semiquaver)</para></listitem>
-	    <listitem><para><keycap>3</keycap> - Thirty-second note (demisemiquaver)</para></listitem>
-	    <listitem><para><keycap>0</keycap> - Sixty-fourth note (hemidemisemiquaver)</para></listitem>
-	  </itemizedlist>
+	    <itemizedlist>
+	      <listitem><para><keycap>5</keycap> - Breve</para></listitem>
+	      <listitem><para><keycap>1</keycap> - Whole note (semibreve)</para></listitem>
+	      <listitem><para><keycap>2</keycap> - Half note (minim)</para></listitem>
+	      <listitem><para><keycap>4</keycap> - Quarter note (crotchet)</para></listitem>
+	      <listitem><para><keycap>8</keycap> - Eighth note (quaver)</para></listitem>
+	      <listitem><para><keycap>6</keycap> - Sixteenth note (semiquaver)</para></listitem>
+	      <listitem><para><keycap>3</keycap> - Thirty-second note (demisemiquaver)</para></listitem>
+	      <listitem><para><keycap>0</keycap> - Sixty-fourth note (hemidemisemiquaver)</para></listitem>
+	    </itemizedlist>
 	    
-	  <para>Holding the <keycap>Ctrl</keycap> key while pressing a
-	  number will select the corresponding dotted-note
-	  tool.</para>
+	    <para>Holding the <keycap>Ctrl</keycap> key while pressing a
+	      number will select the corresponding dotted-note
+	      tool.</para>
 
-	  <para>You can switch to a triplet version of the note
-	  duration by pressing the <keycap>G</keycap> key.  Pressing it
-	  again will switch back to the normal duration.  The status
-	  bar at the bottom of the window will notify you of when a
-	  triplet duration is active.</para>
+	    <para>You can switch to a triplet version of the note
+	      duration by pressing the <keycap>G</keycap> key.  Pressing it
+	      again will switch back to the normal duration.  The status
+	      bar at the bottom of the window will notify you of when a
+	      triplet duration is active.</para>
+	  </sect4>
 
-	  <para>Once a notation tool is selected, you can insert a
-	  note at the current position of the <link
-	  linkend="nv-rulers">insert cursor</link> by pressing one of
-	  the pitch keys:</para>
+	  <sect4><title>Pitch</title>
+	    <para>Once a notation tool is selected, you can insert a
+	      note at the current position of the <link
+		linkend="nv-rulers">insert cursor</link> by pressing one of
+	      the pitch keys:</para>
 
-	  <itemizedlist>
-	    <listitem><para><keycap>A</keycap> - Do (the tonic of the current key in the current clef)</para></listitem>
-	    <listitem><para><keycap>S</keycap> - Re</para></listitem>
-	    <listitem><para><keycap>D</keycap> - Mi</para></listitem>
-	    <listitem><para><keycap>F</keycap> - Fa</para></listitem>
-	    <listitem><para><keycap>J</keycap> - So</para></listitem>
-	    <listitem><para><keycap>K</keycap> - La</para></listitem>
-	    <listitem><para><keycap>L</keycap> - Ti</para></listitem>
-	  </itemizedlist>
+	    <itemizedlist>
+	      <listitem><para><keycap>A</keycap> - Do (the tonic of the current key in the current clef)</para></listitem>
+	      <listitem><para><keycap>S</keycap> - Re</para></listitem>
+	      <listitem><para><keycap>D</keycap> - Mi</para></listitem>
+	      <listitem><para><keycap>F</keycap> - Fa</para></listitem>
+	      <listitem><para><keycap>J</keycap> - So</para></listitem>
+	      <listitem><para><keycap>K</keycap> - La</para></listitem>
+	      <listitem><para><keycap>L</keycap> - Ti</para></listitem>
+	    </itemizedlist>
 
-	  <para>Holding <keycap>Shift</keycap> while pressing a key
-	  will sharpen the note (except for Mi and Ti, which don't
-	  have sharpened versions) and holding <keycap>Shift</keycap>
-	  and <keycap>Ctrl</keycap> together will flatten it (except
-	  for Fa and Do).</para>
+	    <para>Holding <keycap>Shift</keycap> while pressing a key
+	      will sharpen the note (except for Mi and Ti, which don't
+	      have sharpened versions) and holding <keycap>Shift</keycap>
+	      and <keycap>Ctrl</keycap> together will flatten it (except
+	      for Fa and Do).</para>
 
-	  <para>To enter notes an octave higher, use the corresponding
-	  keys on the next row up: <keycap>Q</keycap>,
-	  <keycap>W</keycap>, <keycap>E</keycap>, <keycap>R</keycap>,
-	  <keycap>U</keycap>, <keycap>I</keycap>, and
-	  <keycap>O</keycap>.  Likewise to enter notes an octave
-	  lower, use <keycap>Z</keycap>, <keycap>X</keycap>,
-	  <keycap>C</keycap>, <keycap>V</keycap>, <keycap>B</keycap>,
-	  <keycap>N</keycap> and <keycap>M</keycap>.</para>
+	    <para>To enter notes an octave higher, use the corresponding
+	      keys on the next row up: <keycap>Q</keycap>,
+	      <keycap>W</keycap>, <keycap>E</keycap>, <keycap>R</keycap>,
+	      <keycap>U</keycap>, <keycap>I</keycap>, and
+	      <keycap>O</keycap>.  Likewise to enter notes an octave
+	      lower, use <keycap>Z</keycap>, <keycap>X</keycap>,
+	      <keycap>C</keycap>, <keycap>V</keycap>, <keycap>B</keycap>,
+	      <keycap>N</keycap> and <keycap>M</keycap>.</para>
 
-	  <para>To insert a rest instead of a note, press
-	  <keycap>P</keycap>.  Alternatively, you can use the
-	  <keycap>T</keycap> and <keycap>Y</keycap> keys to switch the
-	  current tool to a rest tool and back to a note tool again.</para>
+	    </sect4>
 
-	  <para>The default behaviour of the notation editor is to
-	  move the insert cursor forward after inserting a note, so as
-	  to be ready to insert another note after it in a melody;
-	  this can be changed using the <keycap>H</keycap> key, which
-	  switches to chord mode so that subsequent insertions occur
-	  at the same time as the last one.  Pressing
-	  <keycap>H</keycap> again switches back to the melody
-	  insertion behaviour.</para>
+	  <sect4><title>Rests</title>
+	    
+	    <para>To insert a rest instead of a note, press
+	      <keycap>P</keycap>.  Alternatively, you can use the
+	      <keycap>T</keycap> and <keycap>Y</keycap> keys to switch the
+	      current tool to a rest tool and back to a note tool again.</para>
 
-	  <para>All of the insertion commands are also available on a
-	  submenu of the Tools menu.  It's unlikely you'd ever want to
-	  navigate the menus just to insert a single note, but the
-	  menus show the keyboard shortcuts and so provide a useful
-	  reference in case you forget which key is which.</para>
+	  </sect4>
 
-	  <para>The keyboard shortcuts are currently designed for use
-	  with a QWERTY-layout keyboard.  There is not yet any way to
-	  remap the keys for another layout, short of reassigning each
-	  key individually using the "Configure Shortcuts..." option
-	  on the Settings menu.</para>
+	  <sect4><title>Chords</title>
+	    <para>The default behaviour of the notation editor is to
+	      move the insert cursor forward after inserting a note, so as
+	      to be ready to insert another note after it in a melody;
+	      this can be changed using the <keycap>H</keycap> key, which
+	      switches to chord mode so that subsequent insertions occur
+	      at the same time as the last one.  Pressing
+	      <keycap>H</keycap> again switches back to the melody
+	      insertion behaviour.</para>
+	  </sect4>
+
+	  <sect4><title>Other remarks</title>
+	    <para>All of the insertion commands are also available on a
+	      submenu of the Tools menu.  It's unlikely you'd ever want to
+	      navigate the menus just to insert a single note, but the
+	      menus show the keyboard shortcuts and so provide a useful
+	      reference in case you forget which key is which.</para>
+
+	    <para>The keyboard shortcuts are currently designed for use
+	      with a QWERTY-layout keyboard.  There is not yet any way to
+	      remap the keys for another layout, short of reassigning each
+	      key individually using the "Configure Shortcuts..." option
+	      on the Settings menu.</para>
+	  </sect4>
 
 	</sect3>
 	
@@ -1736,6 +1747,17 @@
 	    </varlistentry>
 
 
+	  </variablelist>
+	</para>
+
+      </sect2>
+
+      <sect2 id="commands-nv-menu-group">
+	<title>The Group Menu</title>
+	<para>
+	  <variablelist>
+
+
 	    <varlistentry id="commands-nv-menu-group-beam">
 	      <term><menuchoice>
 		  <guimenu>Group</guimenu>
@@ -1947,6 +1969,16 @@
 
 -->
 
+	  </variablelist>
+	</para>
+
+      </sect2>
+
+      <sect2 id="commands-nv-menu-notes">
+	<title>The Notes Menu</title>
+	<para>
+	  <variablelist>
+
 	    <varlistentry id="commands-nv-menu-notes-">
 	      <term><menuchoice>
 		  <guimenu>Notes</guimenu>
@@ -2024,8 +2056,24 @@
 	      </listitem>
 	    </varlistentry>
 
+	  </variablelist>
+	</para>
 
+      </sect2>
 
+      <sect2 id="commands-nv-menu-marks">
+	<title>The Marks Menu</title>
+	<para>
+	  <variablelist>
+	    <varlistentry>
+	      <term><menuchoice>
+		  <guimenu>blah</guimenu>
+		  <guimenuitem>blah</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>to be continued</para>
+	      </listitem>
+	    </varlistentry>
 	  </variablelist>
 	</para>
 
