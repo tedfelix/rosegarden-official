@@ -1517,7 +1517,6 @@ void NotationView::initStatusBar()
     QHBox *hbox = new QHBox(sb);
     m_currentNotePixmap = new QLabel(hbox);
     m_currentNotePixmap->setMinimumWidth(20);
-//!!!    sb->addWidget(m_currentNotePixmap);
     m_insertModeLabel = new QLabel(hbox);
     sb->addWidget(hbox);
 
@@ -2084,7 +2083,6 @@ void NotationView::refreshSegment(Segment *segment,
 
     Event::dumpStats(cerr);
     doDeferredCursorMove();
-//!!!    slotSetInsertCursorPosition(m_insertionTime, false);
     slotSetPointerPosition(m_document->getComposition().getPosition(), false);
 
     if (m_currentEventSelection &&

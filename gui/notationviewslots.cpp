@@ -68,19 +68,18 @@ NotationView::slotUpdateInsertModeStatus()
     QString message;
     if (isInChordMode()) {
 	if (isInTripletMode()) {
-	    message = " Triplet Chord";
+	    message = i18n(" Triplet Chord");
 	} else {
-	    message = " Chord";
+	    message = i18n(" Chord");
 	}
     } else {
 	if (isInTripletMode()) {
-	    message = " Triplet";
+	    message = i18n(" Triplet");
 	} else {
-//	    message = " Normal";
 	    message = "";
 	}
     }
-    m_insertModeLabel->setText(i18n(message));
+    m_insertModeLabel->setText(message);
 }
 
 void
@@ -1477,15 +1476,20 @@ void
 NotationView::slotSetInsertCursorAndRecentre(timeT t, double cx, int,
 					     bool updateNow)
 {
-    // We only do this if cx is in the right two-thirds of
+    m_insertionTime = t;
+
+    // We only do the scroll bit if cx is in the right two-thirds of
     // the window
     
     if (cx < (getCanvasView()->contentsX() +
-	      getCanvasView()->visibleWidth() / 3)) return;
+	      getCanvasView()->visibleWidth() / 3)) {
 
-    m_insertionTime = t;
-    m_deferredCursorMove = CursorMoveAndScrollToPosition;
-    m_deferredCursorScrollToX = cx;
+	m_deferredCursorMove = CursorMoveOnly;
+    } else {
+	m_deferredCursorMove = CursorMoveAndScrollToPosition;
+	m_deferredCursorScrollToX = cx;
+    }
+
     if (updateNow) doDeferredCursorMove();
 }
 
