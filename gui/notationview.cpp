@@ -29,6 +29,7 @@
 
 #include "rosegardenguidoc.h"
 #include "notationview.h"
+#include "notationelement.h"
 
 #include "staff.h"
 #include "notepixmapfactory.h"
@@ -88,7 +89,10 @@ NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
         if (!applyLayout()) {
 
             // Show all elements in the staff
+            kdDebug(KDEBUG_AREA) << "Elements after layout : "
+                                 << *m_notationElements << endl;
             showElements(m_notationElements->begin(), m_notationElements->end(), m_mainStaff);
+            showBars(m_notationElements->begin(), m_notationElements->end());
 
         } else {
             KMessageBox::sorry(0, "Couldn't apply layout");
@@ -260,12 +264,21 @@ NotationView::showElements(NotationElementList::iterator from,
     kdDebug(KDEBUG_AREA) << "NotationElement::showElements() exiting" << endl;
 
     return true;
+}
 
-    // Display bars
+bool
+NotationView::showBars(NotationElementList::iterator from,
+                       NotationElementList::iterator to)
+{
+    if (from == to) return true;
+
     const NotationHLayout::barpositions& barPositions(m_hlayout->barPositions());
 
     NotationElementList::iterator lastElement = to;
     --lastElement;
+    kdDebug(KDEBUG_AREA) << "NotationView::showBars() : from->x = " <<(*from)->x()
+                         << " - lastElement->x = " << (*lastElement)->x() << endl;
+
     m_currentStaff->deleteBars((*from)->x(), (*lastElement)->x());
         
     
@@ -280,7 +293,6 @@ NotationView::showElements(NotationElementList::iterator from,
 
     }
     
-
     return true;
 }
 

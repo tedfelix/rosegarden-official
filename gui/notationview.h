@@ -148,6 +148,13 @@ protected:
      */
     void setupActions();
 
+    /**
+     * show bar lines
+     */
+    bool showBars(NotationElementList::iterator from,
+                  NotationElementList::iterator to);
+
+
     void perfTest();
     void test();
 
