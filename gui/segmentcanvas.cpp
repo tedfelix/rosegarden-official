@@ -152,14 +152,15 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     //
     if (m_segment && inheritFromSegment) {
 
-        if (!m_repeatRectangle) m_repeatRectangle = new QCanvasRepeatRectangle(canvas());
-
 	m_track = m_segment->getTrack();
 	m_startTime = m_segment->getStartTime();
 	m_duration = m_segment->getDuration();
         m_label = m_segment->getLabel().c_str();
 
 	if (m_segment->isRepeating()) {
+
+            if (!m_repeatRectangle)
+                m_repeatRectangle = new QCanvasRepeatRectangle(canvas());
 
 	    timeT repeatStart = m_startTime + m_duration;
 	    timeT repeatEnd = m_segment->getRepeatEndTime();
@@ -177,7 +178,7 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 
             m_repeatRectangle->show();
 
-	} else {
+	} else if (m_repeatRectangle) {
             m_repeatRectangle->hide();
         }
         
