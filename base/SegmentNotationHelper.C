@@ -1186,6 +1186,7 @@ SegmentNotationHelper::quantize()
 	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
 
 	    timeT duration = legatoQuantizer().getQuantizedDuration(*i);
+	    (*i)->get<Int>(TUPLET_NOMINAL_DURATION, duration);
 
 	    Note n(Note::getNearestNote(duration));
 	    (*i)->setMaybe<Int>(NOTE_TYPE, n.getNoteType());

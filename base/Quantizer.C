@@ -125,6 +125,8 @@ Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
 {
 //    cerr << "NoteQuantizer::quantize: unit is " << unit << ", duration is " << duration << std::endl;
 
+    //!!! We probably shouldn't quantize tuplets
+
     duration = UnitQuantizer().quantize(unit, maxDots, duration, 0);
     Note shortNote = Note::getNearestNote(duration, maxDots);
 
@@ -251,7 +253,8 @@ Quantizer::fixQuantizedValues(Segment *s, Segment::iterator from,
 timeT
 Quantizer::getQuantizedDuration(Event *e) const
 {
-    if (m_target == RawEventData) {
+    if (m_target == RawEventData ||
+	!(e->isa(Note::EventType) || e->isa(Note::EventRestType))) {
 	return e->getDuration();
     } else {
 	if (e->has(m_targetProperties[DurationValue])) {

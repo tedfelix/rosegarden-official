@@ -234,9 +234,10 @@ SimpleRulerScale::getXForTime(timeT time)
 //////////////////////////////////////////////////////////////////////
 
 
-const timeT SnapGrid::NoSnap     = -3;
+const timeT SnapGrid::NoSnap     = -1;
 const timeT SnapGrid::SnapToBar  = -2;
-const timeT SnapGrid::SnapToBeat = -1;
+const timeT SnapGrid::SnapToBeat = -3;
+const timeT SnapGrid::SnapToUnit = -4;
 
 SnapGrid::SnapGrid(RulerScale *rulerScale, int vstep) :
     m_rulerScale(rulerScale),
@@ -252,7 +253,8 @@ SnapGrid::setSnapTime(timeT snap)
     assert(snap > 0 ||
 	   snap == NoSnap ||
 	   snap == SnapToBar ||
-	   snap == SnapToBeat);
+	   snap == SnapToBeat ||
+	   snap == SnapToUnit);
     m_snapTime = snap;
 }
 
@@ -270,6 +272,8 @@ SnapGrid::getSnapTime(double x) const
 
     if (m_snapTime == SnapToBeat) {
 	snapTime = composition->getTimeSignatureAt(time).getBeatDuration();
+    } else if (m_snapTime == SnapToUnit) {
+	snapTime = composition->getTimeSignatureAt(time).getUnitDuration();
     } else if (m_snapTime != SnapToBar && m_snapTime < snapTime) {
 	snapTime = m_snapTime;
     }
@@ -291,6 +295,8 @@ SnapGrid::snapX(double x, SnapDirection direction) const
 
     if (m_snapTime == SnapToBeat) {
 	snapTime = composition->getTimeSignatureAt(time).getBeatDuration();
+    } else if (m_snapTime == SnapToBeat) {
+	snapTime = composition->getTimeSignatureAt(time).getUnitDuration();
     } else if (m_snapTime != SnapToBar && m_snapTime < snapTime) {
 	snapTime = m_snapTime;
     }

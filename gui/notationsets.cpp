@@ -662,9 +662,9 @@ NotationGroup::applyBeam(NotationStaff &staff)
 	    for (j = 0; j < chord.size(); ++j) {
 		NotationElement *el = (*chord[j]);
 		el->event()->setMaybe<Bool>(STEM_UP, beam.aboveNotes);
-		el->event()->setMaybe<Bool>(DRAW_FLAG, false);
-		el->event()->setMaybe<Bool>(BEAMED, true);
 		el->event()->setMaybe<Bool>(CHORD_PRIMARY_NOTE, false);
+		el->event()->setMaybe<Bool>(DRAW_FLAG, false);
+		el->event()->setMaybe<Bool>(BEAMED, false); // set later
 	    }
 
 	    if (beam.aboveNotes) j = 0;
@@ -674,6 +674,9 @@ NotationGroup::applyBeam(NotationStaff &staff)
 	    int x = (int)el->getLayoutX();
 
 	    int myY = (int)(gradient * (x - initialX)) + beam.startY;
+
+            int beamCount = Note(el->event()->get<Int>
+                                 (NOTE_TYPE)).getFlagCount();
 
             // If THIS_PART_BEAMS is true, then when drawing the
             // chord, if it requires more beams than the following
@@ -695,9 +698,6 @@ NotationGroup::applyBeam(NotationStaff &staff)
             // have THIS_PART_BEAMS set, until possibly unset again on
             // the next iteration.
 
-            int beamCount = Note(el->event()->get<Int>
-                                 (NOTE_TYPE)).getFlagCount();
-
 	    if (prev != getList().end()) {
 
                 NotationElement *prevEl = (*prev);
@@ -712,7 +712,31 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
                 int prevBeamCount = Note(prevEl->event()->get<Int>
                                          (NOTE_TYPE)).getFlagCount();
-                if (beamCount >= prevBeamCount) {
+
+		if ((beamCount > 0) && (prevBeamCount > 0)) {
+		    el->event()->setMaybe<Bool>(BEAMED, true);
+		    el->event()->setMaybe<Bool>(DRAW_FLAG, false);
+		    prevEl->event()->setMaybe<Bool>(BEAMED, true);
+		    prevEl->event()->setMaybe<Bool>(DRAW_FLAG, false);
+		} else {
+		    el->event()->setMaybe<Bool>(DRAW_FLAG, true);
+		    if (!prevEl->event()->get<Bool>(BEAMED)) {
+			prevEl->event()->set<Bool>(DRAW_FLAG, true);
+		    }
+		}
+/*!!!
+		if (beamCount == 0) {
+		    int prevprevBeamCount = 0;
+		    if (prevprev != getList().end()) {
+			prevprevBeamCount =
+			    Note((*prevprev)->event()->get<Int>
+				 (NOTE_TYPE)).getFlagCount();
+		    }
+		    if (prevprevBeamCount == 0) {
+			prevEl->event()->setMaybe<Bool>(DRAW_FLAG, true);
+			prevEl->event()->setMaybe<Bool>(BEAMED, false);
+		    }
+		    } else*/ if (beamCount >= prevBeamCount) {
                     prevEl->event()->setMaybe<Bool>
                         (BEAM_THIS_PART_BEAMS, false);
                     if (prevprev != getList().end()) {
@@ -721,10 +745,11 @@ NotationGroup::applyBeam(NotationStaff &staff)
                     }
                 }
 
-                if (beamCount > prevBeamCount) {
+		if (beamCount > prevBeamCount) {
                     prevEl->event()->setMaybe<Bool>
                         (BEAM_NEXT_PART_BEAMS, true);
-                }                    
+                }
+
 	    } else {
                 el->event()->setMaybe<Bool>(BEAM_THIS_PART_BEAMS, true);
             }
@@ -767,11 +792,16 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
     Beam beam(calculateBeam(staff));
 
     NELIterator initialNote(getInitialNote()),
-	          finalNote(  getFinalNote());
+	          finalNote(  getFinalNote()),
+   	     initialElement(getInitialElement()),
+	       finalElement(  getFinalElement());
 
+    //!!! We'd like to attach the line to the initial element, even if it's
+    // a rest, but we can't do that in notationstaff or notepixmapfactory
     int initialX = (int)(*initialNote)->getLayoutX();
-    int   finalX = (int)(*  finalNote)->getLayoutX();
+    int   finalX = (int)(*finalElement)->getLayoutX();
     
+    // only notes have height
     int initialY = staff.getLayoutYForHeight(height(initialNote));
     int   finalY = staff.getLayoutYForHeight(height(  finalNote));
 /*

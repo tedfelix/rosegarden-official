@@ -179,13 +179,15 @@ public:
     static const timeT NoSnap;
     static const timeT SnapToBar;
     static const timeT SnapToBeat;
+    static const timeT SnapToUnit;
 
     enum SnapDirection { SnapEither, SnapLeft, SnapRight };
 
     /**
      * Set the snap size of the grid to the given time.
      * The snap time must be positive, or else one of the
-     * special constants NoSnap, SnapToBar or SnapToBeat.
+     * special constants NoSnap, SnapToBar, SnapToBeat or
+     * SnapToUnit.
      * The default is SnapToBeat.
      */
     void setSnapTime(timeT snap);
@@ -193,9 +195,9 @@ public:
     /**
      * Return the snap size of the grid, at the given
      * x-coordinate.  (The x-coordinate is required in
-     * case the built-in snap size is SnapToBar or
-     * SnapToBeat, in which case we need to know the
-     * current time signature.)
+     * case the built-in snap size is SnapToBar,
+     * SnapToBeat or SnapToUnit, in which case we need
+     * to know the current time signature.)
      * Returns zero for NoSnap.
      */
     timeT getSnapTime(double x) const;
