@@ -44,6 +44,9 @@ namespace RosegardenGUIColours
     extern const QColor RecordingSegmentBlock;
     extern const QColor RecordingSegmentBorder;
 
+    extern const QColor RepeatSegmentBlock;
+    extern const QColor RepeatSegmentBorder;
+
     extern const QColor SegmentAudioPreview;
     extern const QColor SegmentInternalPreview;
     extern const QColor SegmentLabel;

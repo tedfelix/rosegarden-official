@@ -57,7 +57,8 @@ using Rosegarden::timeT;
 class QCanvasRepeatRectangle : public QCanvasRectangle
 {
 public:
-    QCanvasRepeatRectangle(QCanvas*);
+    QCanvasRepeatRectangle(QCanvas*,
+                           SnapGrid *);
 
     void setRepeatInterval(unsigned int i) { m_repeatInterval = i; }
 
@@ -65,25 +66,37 @@ public:
 
 protected:
     unsigned int m_repeatInterval;
+    SnapGrid    *m_snapGrid;
 };
 
-QCanvasRepeatRectangle::QCanvasRepeatRectangle(QCanvas* canvas)
+QCanvasRepeatRectangle::QCanvasRepeatRectangle(QCanvas *canvas,
+                                               SnapGrid *snapGrid)
     : QCanvasRectangle(canvas),
-      m_repeatInterval(0)
+      m_repeatInterval(0),
+      m_snapGrid(snapGrid)
 {
+    setBrush(RosegardenGUIColours::RepeatSegmentBlock);
+    setPen(RosegardenGUIColours::RepeatSegmentBorder);
 }
 
 void QCanvasRepeatRectangle::drawShape(QPainter& painter)
 {
     QCanvasRectangle::drawShape(painter);
 
-    int pos = (int)x() + m_repeatInterval - 1,
-        width = rect().width(),
-        height = rect().height();
+    int pos = int(x()); 
+    int width = rect().width();
+    int height = rect().height();
 
-    while (pos < (width + x())) {
-        painter.drawLine(pos, int(y()), pos, int(y()) + height - 1);
-        pos += m_repeatInterval;
+    int rWidth = int(m_snapGrid->getRulerScale()->
+                        getXForTime(m_repeatInterval));
+
+    painter.setBrush(RosegardenGUIColours::RepeatSegmentBlock);
+    painter.setPen(RosegardenGUIColours::RepeatSegmentBorder);
+
+    while (pos < width + rWidth)
+    {
+        painter.drawRect(pos, int(y()), rWidth, height);
+        pos += rWidth;
     }
 }
 
@@ -555,7 +568,8 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 	if (m_segment->isRepeating()) {
 
             if (!m_repeatRectangle)
-                m_repeatRectangle = new QCanvasRepeatRectangle(canvas());
+                m_repeatRectangle = new QCanvasRepeatRectangle(canvas(),
+                                                               m_snapGrid);
 
 	    timeT repeatStart = m_endTime;
 	    timeT repeatEnd = m_segment->getRepeatEndTime();
@@ -569,7 +583,8 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 		 (repeatStart, repeatEnd - repeatStart) + 1,
 		 m_snapGrid->getYSnap());
 
-            m_repeatRectangle->setRepeatInterval(rect().width() - 1);
+            // Let the repeat rectangle do the conversions
+            m_repeatRectangle->setRepeatInterval(m_endTime - m_startTime);
 
             m_repeatRectangle->show();
 
