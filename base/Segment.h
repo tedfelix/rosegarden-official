@@ -78,9 +78,12 @@ public:
      * D = 4*d
      * D = 4*d/3
      */
-    bool expandIntoGroup(iterator i,
-                         timeT baseDuration);
-    
+    bool expandIntoGroup(iterator i, timeT baseDuration);
+
+    /**
+     * Returns the range [start, end[ of events which are at absoluteTime
+     */
+    void getTimeSlice(timeT absoluteTime, iterator &start, iterator &end);
 
     /**
      * The compare class used by Composition

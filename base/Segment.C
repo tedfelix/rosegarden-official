@@ -161,6 +161,13 @@ TimeSignature Track::getTimeSigAtEnd() const
     return defaultSig44;
 }
 
+
+int Track::getNextGroupId() const
+{
+    return m_groupId++;
+}
+
+
 bool Track::expandIntoGroup(iterator i,
                             timeT baseDuration)
 {
@@ -225,10 +232,19 @@ bool Track::expandIntoGroup(iterator from, iterator to,
 
 }
 
-int Track::getNextGroupId() const
+void Track::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
 {
-    return m_groupId++;
+    Event dummy;
+    
+    dummy.setAbsoluteTime(absoluteTime);
+    
+    pair<iterator, iterator> res = equal_range(&dummy);
+
+    start = res.first;
+    end = res.second;
 }
+
+
 
 bool Track::checkExpansionValid(timeT maxDuration, timeT minDuration)
 {
