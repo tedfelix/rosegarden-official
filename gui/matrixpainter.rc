@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::MatrixTool" version="0991">
+<kpartgui name="Rosegarden::MatrixTool" version="1000">
 
 <Menu name="MatrixPainter">
   <Action name="select" />

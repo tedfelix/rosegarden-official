@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="TriggerManager" version="0991">
+<kpartgui name="TriggerManager" version="1000">
 
 <MenuBar>
 

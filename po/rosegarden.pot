@@ -2755,10 +2755,10 @@ msgstr ""
 
 #: main.cpp:413
 msgid ""
-"Copyright 2000 - 2004 Guillaume Laurent, Chris Cannam, Richard Bown\n"
-"Parts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, "
+"Copyright 2000 - 2005 Guillaume Laurent, Chris Cannam, Richard Bown\n"
+"Parts copyright 1994 - 2005 Chris Cannam, Andy Green, Richard Bown, "
 "Guillaume Laurent\n"
-"Lilypond fonts copyright 1997 - 2004 Han-Wen Nienhuys and Jan Nieuwenhuizen"
+"Lilypond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"
 msgstr ""
 
 #: main.cpp:422
