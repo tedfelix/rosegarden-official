@@ -38,10 +38,12 @@ public:
     /**
      * Construct an XmlStorableEvent out of the XML attributes \a atts.
      * If the attributes do not include absoluteTime, use the given
-     * value plus the value of any timeOffset attribute.
+     * value plus the value of any timeOffset attribute.  If the
+     * attributes include absoluteTime or timeOffset, update the given
+     * absoluteTime reference accordingly.
      */
     XmlStorableEvent(const QXmlAttributes& atts,
-		     Rosegarden::timeT absoluteTime);
+		     Rosegarden::timeT &absoluteTime);
 
     /**
      * Construct an XmlStorableEvent from the specified Event

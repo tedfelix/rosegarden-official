@@ -34,7 +34,7 @@ using Rosegarden::timeT;
 
 
 XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
-				   timeT absoluteTime)
+				   timeT &absoluteTime)
 {
     setDuration(0);
 

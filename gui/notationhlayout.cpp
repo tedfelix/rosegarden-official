@@ -335,7 +335,7 @@ NotationHLayout::scanStaff(StaffType &staff)
                         // we're in a chord, but not at the end of it yet
                         hasDuration = false;
                     } else {
-                        accTable = newAccTable;
+                        accTable.copyFrom(newAccTable);
                         if (chord.hasNoteHeadShifted()) {
                             fixedWidth += m_npf.getNoteBodyWidth();
                         }
@@ -693,11 +693,29 @@ NotationHLayout::AccidentalTable::AccidentalTable(Key key, Clef clef) :
 {
     std::vector<int> heights(key.getAccidentalHeights(clef));
     unsigned int i;
-    for (i = 0; i < 7; ++i) push_back(NoAccidental);
+
+    for (i = 0; i < 7; ++i) m_accidentals[i] = NoAccidental;
     for (i = 0; i < heights.size(); ++i) {
-        (*this)[Key::canonicalHeight(heights[i])] =
+        m_accidentals[Key::canonicalHeight(heights[i])] =
             (key.isSharp() ? Sharp : Flat);
     }
+}
+
+NotationHLayout::AccidentalTable::AccidentalTable(const AccidentalTable &t) :
+    m_key(t.m_key), m_clef(t.m_clef)
+{
+    copyFrom(t);
+}
+
+NotationHLayout::AccidentalTable &
+NotationHLayout::AccidentalTable::operator=(const AccidentalTable &t)
+{
+    if (&t != this) {
+	m_key = t.m_key;
+	m_clef = t.m_clef;
+	copyFrom(t);
+    }
+    return *this;
 }
 
 Accidental
@@ -712,9 +730,9 @@ NotationHLayout::AccidentalTable::getDisplayAccidental(Accidental accidental,
 
 //    kdDebug(KDEBUG_AREA) << "accidental = " << accidental << ", stored accidental at height " << height << " is " << (*this)[height] << endl;
 
-    if ((*this)[height] != NoAccidental) {
+    if (m_accidentals[height] != NoAccidental) {
 
-        if (accidental == (*this)[height]) {
+        if (accidental == m_accidentals[height]) {
             return NoAccidental;
         } else if (accidental == NoAccidental || accidental == Natural) {
             return Natural;
@@ -746,8 +764,15 @@ NotationHLayout::AccidentalTable::update(Accidental accidental, int height)
     //we already have an accidental at height but it's not the same
     //accidental
 
-    (*this)[height] = accidental;
+    m_accidentals[height] = accidental;
+}
 
+void
+NotationHLayout::AccidentalTable::copyFrom(const AccidentalTable &t)
+{
+    for (int i = 0; i < 7; ++i) {
+	m_accidentals[i] = t.m_accidentals[i];
+    }
 }
 
 void
@@ -1112,6 +1137,10 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
     } else if (e.event()->isa(Key::EventType)) {
 
         w += m_npf.getKeyWidth(Key(*e.event()));
+
+    } else if (e.event()->isa(Indication::EventType)) {
+
+	w = 0;
 
     } else {
         kdDebug(KDEBUG_AREA) << "NotationHLayout::getMinWidth(): no case for event type " << e.event()->getType() << endl;

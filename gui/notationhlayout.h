@@ -226,16 +226,21 @@ protected:
     Rosegarden::timeT getSpacingDuration
     (StaffType &staff, const NotationElementList::iterator &);
 
-    class AccidentalTable : public std::vector<Rosegarden::Accidental>
+    class AccidentalTable
     {
     public:
         AccidentalTable(Rosegarden::Key, Rosegarden::Clef);
+	AccidentalTable(const AccidentalTable &);
+	AccidentalTable &operator=(const AccidentalTable &);
         Rosegarden::Accidental getDisplayAccidental(Rosegarden::Accidental,
                                                     int height) const;
         void update(Rosegarden::Accidental, int height);
+	void copyFrom(const AccidentalTable &); // must have same clef & key
+
     private:
         Rosegarden::Key m_key;
         Rosegarden::Clef m_clef;
+	Rosegarden::Accidental m_accidentals[7];
     };
 
     int getMinWidth(NotationElement &) const;
