@@ -21,7 +21,7 @@ References in round brackets are to 0.1_planned_features.txt.
 
  4.5. Handling events read from MIDI that don't quantize viably --
  using multiple tied notes (makeNoteViable).  Also handling tied
- events on conversion to MIDI
+ events on conversion to MIDI [DONEish]
 
  5. Making key, clef and time signature appear in correct order
 

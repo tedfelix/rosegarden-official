@@ -21,7 +21,7 @@ References in round brackets are to 0.1_planned_features.txt.
 Older task list
 ===============
 
-* Take up all following rests into account when inserting a note (rest collapsing function ?)
+* Take up all following rests into account when inserting a note (rest collapsing function ?) - moved to tasks_cc and DONE
 
 * when replacing a rest, split it according to where the click
   occurred. E.g. Inserting a 4th over a whole note rest. The final
@@ -30,7 +30,7 @@ Older task list
 
 * give ViewElements a pointer to the Event they represent - DONE
 
-* give Track a pointer to the ViewElementsManager which represents it - Questionnable.
+* give Track a pointer to the ViewElementsManager which represents it - Questionnable. - now DONE via TrackObserver
 
 * status message and beep on input rejection in NotationView.
 
