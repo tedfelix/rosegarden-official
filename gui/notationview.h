@@ -335,7 +335,8 @@ public:
 protected:
     virtual void doInsert(Rosegarden::TrackNotationHelper&,
                           Rosegarden::timeT absTime,
-                          const Rosegarden::Note&, int pitch);
+                          const Rosegarden::Note&, int pitch,
+                          Rosegarden::Accidental);
 
     Rosegarden::Note::Type m_noteType;
     unsigned int m_noteDots;
@@ -351,7 +352,8 @@ public:
 protected:
     virtual void doInsert(Rosegarden::TrackNotationHelper&,
                           Rosegarden::timeT absTime,
-                          const Rosegarden::Note&, int pitch);
+                          const Rosegarden::Note&, int pitch,
+                          Rosegarden::Accidental);
 };
 
 class ClefInserter : public NotationTool

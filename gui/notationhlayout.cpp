@@ -214,44 +214,55 @@ NotationHLayout::preparse(const Track::BarPositionList &barPositions,
 
 		if (el->isNote()) {
 
-		    try {
-			int pitch = el->event()->get<Int>("pitch");
-			kdDebug(KDEBUG_AREA) << "pitch : " << pitch << endl;
-			Rosegarden::NotationDisplayPitch p(pitch, clef, key);
-			int h = p.getHeightOnStaff();
-			Accidental acc = p.getAccidental();
+                    long pitch = 64;
+                    if (!el->event()->get<Int>("pitch", pitch)) {
+                        kdDebug(KDEBUG_AREA) <<
+			    "WARNING: NotationHLayout::preparse: couldn't get pitch for element, using default pitch of " << pitch << endl;
+                    }
 
-			el->event()->setMaybe<Int>(Properties::HEIGHT_ON_STAFF, h);
-			el->event()->setMaybe<Int>(Properties::ACCIDENTAL, acc);
-			el->event()->setMaybe<String>
-			    (Properties::NOTE_NAME, p.getAsString(clef, key));
+                    Accidental explicitAccidental = NoAccidental;
+                    if (el->event()->has("accidental")) {
+                        explicitAccidental =
+                            Rosegarden::NotationDisplayPitch::getAccidentalByName
+                            (el->event()->get<String>("accidental"));
+                    }
 
-			// update display acc for note according to the
-			// accTable (accidentals in force when the last
-			// chord ended) and update newAccTable with
-			// accidentals from this note.  (We don't update
-			// accTable because there may be other notes in
-			// this chord that need accTable to be the same as
-			// it is for this one)
+                    Rosegarden::NotationDisplayPitch p
+                        (pitch, clef, key, explicitAccidental);
+                    int h = p.getHeightOnStaff();
+                    Accidental acc = p.getAccidental();
+
+                    el->event()->setMaybe<Int>
+                        (Properties::HEIGHT_ON_STAFF, h);
+
+                    el->event()->setMaybe<Int>
+                        (Properties::CALCULATED_ACCIDENTAL, acc);
+
+                    el->event()->setMaybe<String>
+                        (Properties::NOTE_NAME, p.getAsString(clef, key));
+
+                    // update display acc for note according to the
+                    // accTable (accidentals in force when the last
+                    // chord ended) and update newAccTable with
+                    // accidentals from this note.  (We don't update
+                    // accTable because there may be other notes in
+                    // this chord that need accTable to be the same as
+                    // it is for this one)
 		    
-			Accidental dacc = accTable.getDisplayAccidental(acc, h);
+                    Accidental dacc = accTable.getDisplayAccidental(acc, h);
 
-			//		kdDebug(KDEBUG_AREA) << "display accidental = " << dacc << endl;
+                    //		kdDebug(KDEBUG_AREA) << "display accidental = " << dacc << endl;
 		    
-			el->event()->setMaybe<Int>(Properties::DISPLAY_ACCIDENTAL, dacc);
-			newAccTable.update(acc, h);
+                    el->event()->setMaybe<Int>
+                        (Properties::DISPLAY_ACCIDENTAL, dacc);
 
-			if (dacc != acc) {
-			    // recalculate min width, as the accidental is
-			    // not what we first thought
-			    mw = getMinWidth(npf, *el);
-			}
+                    newAccTable.update(acc, h);
 
-		    } catch (Event::NoData) {
-			kdDebug(KDEBUG_AREA) <<
-			    "NotationHLayout::preparse: couldn't get pitch for element"
-					     << endl;
-		    }
+                    if (dacc != acc) {
+                        // recalculate min width, as the accidental is
+                        // not what we first thought
+                        mw = getMinWidth(npf, *el);
+                    }
 
 		    Chord chord(m_notationElements, it);
 		    if (chord.size() >= 2 && it != chord.getFinalElement()) {
@@ -489,7 +500,8 @@ NotationHLayout::layout()
 		Accidental acc(NoAccidental);
 		{
 		    long acc0;
-		    if (el->event()->get<Int>(Properties::DISPLAY_ACCIDENTAL, acc0)) {
+		    if (el->event()->get<Int>
+                        (Properties::DISPLAY_ACCIDENTAL, acc0)) {
 			acc = (Accidental)acc0;
 		    }
 		}

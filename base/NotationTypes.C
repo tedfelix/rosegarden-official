@@ -310,16 +310,18 @@ Key::KeyDetails& Key::KeyDetails::operator=(const Key::KeyDetails &d)
 // NotationDisplayPitch
 //////////////////////////////////////////////////////////////////////
 
-NotationDisplayPitch::NotationDisplayPitch(int pitch, const Clef &clef, const Key &key)
-{
-    //!!! explicit accidentals in the note event properties?
-    rawPitchToDisplayPitch(pitch, clef, key, m_heightOnStaff, m_accidental);
-}
-
 NotationDisplayPitch::NotationDisplayPitch(int heightOnStaff, Accidental accidental)
     : m_heightOnStaff(heightOnStaff),
       m_accidental(accidental)
 {
+}
+
+NotationDisplayPitch::NotationDisplayPitch(int pitch, const Clef &clef,
+                                           const Key &key,
+                                           Accidental explicitAccidental) :
+    m_accidental(explicitAccidental)
+{
+    rawPitchToDisplayPitch(pitch, clef, key, m_heightOnStaff, m_accidental);
 }
 
 int
@@ -376,7 +378,6 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
     int octave;
     bool modified = false;
     height = 0;
-    accidental = NoAccidental;
 
     // 1. Calculate with plain pitches, disregarding clef and key
 
@@ -404,8 +405,12 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
 
     bool sharp = key.isSharp();
 
+    if (accidental != NoAccidental) {
+        sharp = (accidental == Sharp || accidental == DoubleSharp);
+    }
+
     accidental = modified ? (sharp ? Sharp : Flat) : NoAccidental;
-    if (modified && !sharp) ++height; // because the modifier has become a flat
+    if (modified && !sharp) ++height; // because the mod has become a flat
 
     vector<int> ah(key.getAccidentalHeights(clef));
     for (vector<int>::const_iterator i = ah.begin(); i != ah.end(); ++i) {
@@ -481,6 +486,31 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
 
     pitch += 12 * octave;
 }
+
+string NotationDisplayPitch::getAccidentalName(Accidental a)
+{
+    switch (a) {
+    case NoAccidental: return "no-accidental";
+    case        Sharp: return "sharp";
+    case         Flat: return "flat";
+    case  DoubleSharp: return "double-sharp";
+    case   DoubleFlat: return "double-flat";
+    case      Natural: return "natural";
+    default: throw BadAccidental();
+    }
+}
+
+Accidental NotationDisplayPitch::getAccidentalByName(const string &s)
+{
+    if      (s == "no-accidental") return NoAccidental;
+    else if (s == "sharp")         return Sharp;
+    else if (s == "flat")          return Flat;
+    else if (s == "double-sharp")  return DoubleSharp;
+    else if (s == "double-flat")   return DoubleFlat;
+    else if (s == "natural")       return Natural;
+    else throw BadAccidental();
+}
+
 
 
 //////////////////////////////////////////////////////////////////////

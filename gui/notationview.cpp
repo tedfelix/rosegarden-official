@@ -1321,7 +1321,8 @@ NoteInserter::handleClick(int height, const QPoint &eventPos,
     Note note(m_noteType, m_noteDots);
     TrackNotationHelper nt(m_parentView.getTrack());
 
-    doInsert(nt, (*closestNote)->getAbsoluteTime(), note, pitch);
+    doInsert(nt, (*closestNote)->getAbsoluteTime(), note, pitch,
+             m_accidental);
 
     // TODO: be less silly
     m_parentView.redoLayout(m_parentView.getNotationElements()->begin());
@@ -1330,9 +1331,10 @@ NoteInserter::handleClick(int height, const QPoint &eventPos,
 
 void NoteInserter::doInsert(TrackNotationHelper& nt,
                             Rosegarden::timeT absTime,
-                            const Note& note, int pitch)
+                            const Note& note, int pitch,
+                            Accidental accidental)
 {
-    nt.insertNote(absTime, note, pitch);
+    nt.insertNote(absTime, note, pitch, accidental);
 }
 
 void NoteInserter::setAccidental(Rosegarden::Accidental accidental)
@@ -1352,7 +1354,8 @@ RestInserter::RestInserter(Rosegarden::Note::Type type,
 
 void RestInserter::doInsert(TrackNotationHelper& nt,
                             Rosegarden::timeT absTime,
-                            const Note& note, int)
+                            const Note& note, int,
+                            Accidental)
 {
     nt.insertRest(absTime, note);
 }

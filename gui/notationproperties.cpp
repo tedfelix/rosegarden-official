@@ -23,7 +23,7 @@
 const Rosegarden::PropertyName Properties::HEIGHT_ON_STAFF      = "HeightOnStaff";
 const Rosegarden::PropertyName Properties::MIN_WIDTH            = "MinWidth";
 
-const Rosegarden::PropertyName Properties::ACCIDENTAL           = "NoteComputedAccidental";
+const Rosegarden::PropertyName Properties::CALCULATED_ACCIDENTAL = "NoteCalculatedAccidental";
 const Rosegarden::PropertyName Properties::DISPLAY_ACCIDENTAL   = "NoteDisplayAccidental";
 const Rosegarden::PropertyName Properties::STEM_UP              = "NoteStemUp";
 const Rosegarden::PropertyName Properties::UNBEAMED_STEM_LENGTH = "UnbeamedStemLength";

@@ -35,7 +35,7 @@ class Properties
 public:
     static const Rosegarden::PropertyName HEIGHT_ON_STAFF;
     static const Rosegarden::PropertyName MIN_WIDTH;
-    static const Rosegarden::PropertyName ACCIDENTAL;
+    static const Rosegarden::PropertyName CALCULATED_ACCIDENTAL;
     static const Rosegarden::PropertyName DISPLAY_ACCIDENTAL;
     static const Rosegarden::PropertyName STEM_UP;
     static const Rosegarden::PropertyName UNBEAMED_STEM_LENGTH;

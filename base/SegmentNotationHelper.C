@@ -367,7 +367,8 @@ void TrackNotationHelper::makeNoteViable(iterator i)
 }
 
 
-void TrackNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch)
+void TrackNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
+                                     Accidental explicitAccidental)
 {
 
     // Rules:
@@ -424,7 +425,8 @@ void TrackNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch)
 
 //    iterator uncollapsed = collapseRestsForInsert(i, note.getDuration());
 
-    insertSomething(i, note.getDuration(), pitch, false, false);
+    insertSomething(i, note.getDuration(), pitch, false, false,
+                    explicitAccidental);
 }
 
 // need to deal with groups, kinda like this code?:
@@ -454,24 +456,25 @@ void TrackNotationHelper::insertRest(timeT absoluteTime, Note note)
 
 //    iterator uncollapsed = collapseRestsForInsert(i, note.getDuration());
 
-    insertSomething(i, note.getDuration(), 0, true, false);
+    insertSomething(i, note.getDuration(), 0, true, false, NoAccidental);
 }
 
 
 void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
-			    bool isRest, bool tiedBack)
+                                          bool isRest, bool tiedBack,
+                                          Accidental acc)
 {
     while (i != end() && (*i)->getDuration() == 0) ++i;
 
     if (i == end()) {
-	insertSingleSomething(i, duration, pitch, isRest, tiedBack);
+	insertSingleSomething(i, duration, pitch, isRest, tiedBack, acc);
 	return;
     }
 
     collapseRestsForInsert(i, duration);
     timeT existingDuration = (*i)->getDuration();
 
-    cerr << "TrackNotationHelper::insertNoteAux: asked to insert duration " << duration
+    cerr << "TrackNotationHelper::insertSomething: asked to insert duration " << duration
 	 << " over this event:" << endl;
     (*i)->dump(cerr);
 
@@ -479,7 +482,7 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
 	cerr << "Durations match; doing simple insert" << endl;
 
-	insertSingleSomething(i, duration, pitch, isRest, tiedBack);
+	insertSingleSomething(i, duration, pitch, isRest, tiedBack, acc);
 
     } else if (duration < existingDuration) {
 
@@ -503,24 +506,13 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
 	    cerr << "Found rest, splitting" << endl;
 	    iterator last = expandIntoTie(i, duration);
 
-	    //!!! In theory, we can do better here -- sometimes the rest
-	    // _is_ viable but the duration-list equivalent would still
-	    // be better.  Unfortunately I'm not currently quite sure how
-	    // to tell.
-
-            if (last != end()) {
-                cerr << "last != end()" << endl;
-
-                if (/*last != end() &&*/ !isViable(*last, 1)) {
-                cerr << "calling makeRestViable" << endl;
+            if (last != end() && !isViable(*last, 1)) {
                 makeRestViable(last);
-                }
-            } else {
-                cerr << "last == end()" << endl;
             }
 	}
 
-	insertSingleSomething(i, duration, pitch, isRest, tiedBack);
+	insertSingleSomething(i, duration, pitch, isRest, tiedBack,
+                              acc);
 
     } else { // duration > existingDuration
 
@@ -547,25 +539,31 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
 	    cerr << "Need to split new note" << endl;
 
-	    i = insertSingleSomething(i, existingDuration, pitch, isRest, tiedBack);
+	    i = insertSingleSomething(i, existingDuration, pitch, isRest,
+                                      tiedBack, acc);
+
 	    if (!isRest) (*i)->set<Bool>(Note::TiedForwardPropertyName, true);
 
             i = track().findTime((*i)->getAbsoluteTime() + existingDuration);
 
-	    insertSomething(i, duration - existingDuration, pitch, isRest, true);
+	    insertSomething(i, duration - existingDuration, pitch, isRest,
+                            true, acc);
 
 	} else {
 
 	    cerr << "No need to split new note" << endl;
 
-	    i = insertSingleSomething(i, duration, pitch, isRest, tiedBack);
+	    i = insertSingleSomething(i, duration, pitch, isRest,
+                                      tiedBack, acc);
 	}
     }
 }
 
 Track::iterator
 TrackNotationHelper::insertSingleSomething(iterator i, int duration,
-                                           int pitch, bool isRest, bool tiedBack)
+                                           int pitch, bool isRest,
+                                           bool tiedBack,
+                                           Accidental acc)
 {
     timeT time;
 
@@ -580,7 +578,14 @@ TrackNotationHelper::insertSingleSomething(iterator i, int duration,
     e->setAbsoluteTime(time);
     e->setDuration(duration);
 
-    if (!isRest) e->set<Int>("pitch", pitch);
+    if (!isRest) {
+        e->set<Int>("pitch", pitch);
+        if (acc != NoAccidental) {
+            e->set<String>("accidental",
+                           NotationDisplayPitch::getAccidentalName(acc));
+        }
+    }
+
     if (tiedBack && !isRest) e->set<Bool>(Note::TiedBackwardPropertyName, true);
 
     return insert(e);

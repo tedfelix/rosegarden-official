@@ -49,7 +49,7 @@ D * Take a careful look at the situations in which accidentals
 D * Handle the principle of hiding an accidental if it's already
     appeared once within the same bar.
 
-  * Make it possible to insert dotted notes and notes with
+gl * Make it possible to insert dotted notes and notes with
     accidentals. (May need help from Guillaume on the Qt side.)
 
 D? * Tidy up the way notes and chords are drawn -- for example,

@@ -31,6 +31,11 @@ namespace Rosegarden
 typedef std::list<int> DurationList;
 
     
+/**
+ * Accidental is hardly worth making a class, but there are conversion
+ * functions to and from strings available in NotationDisplayPitch
+ */
+
 enum Accidental {
     NoAccidental, Sharp, Flat, Natural, DoubleSharp, DoubleFlat
 };
@@ -191,13 +196,16 @@ private:
 };
 
 
-/*
+/**
 
-  When we insert a note, we need to query the height of the staff line
-  next to which it's being inserted, then translate this back to raw
-  pitch according to the clef in force at the x-coordinate at which
-  the note is inserted.  For display, we translate from raw pitch
-  using both the clef and the key in force.
+  NotationDisplayPitch calculates the display height and accidental
+  value corresponding to a given stored note pitch.
+
+  Rationale: When we insert a note, we need to query the height of the
+  staff line next to which it's being inserted, then translate this
+  back to raw pitch according to the clef in force at the x-coordinate
+  at which the note is inserted.  For display, we translate from raw
+  pitch using both the clef and the key in force.
 
   Whether an accidental should be displayed or not depends on the
   current key, on whether we've already shown the same accidental for
@@ -213,8 +221,9 @@ private:
 class NotationDisplayPitch
 {
 public:
-    NotationDisplayPitch(int pitch, const Clef &clef, const Key &key);
     NotationDisplayPitch(int heightOnStaff, Accidental accidental);
+    NotationDisplayPitch(int pitch, const Clef &clef, const Key &key,
+                         Accidental explicitAccidental = NoAccidental);
 
     int        getHeightOnStaff() const { return m_heightOnStaff; }
     Accidental getAccidental()    const { return m_accidental; }
@@ -226,6 +235,14 @@ public:
      * according to http://www.harmony-central.com/MIDI/Doc/table2.html
      */
     std::string getAsString(const Clef &clef, const Key &key) const;
+
+    struct BadAccidental { };
+
+    /**
+     * Utility functions for accidental names; can throw BadAccidental
+     */
+    static std::string getAccidentalName  (Accidental accidental);
+    static Accidental  getAccidentalByName(const std::string &name);
 
 private:
     int m_heightOnStaff;
@@ -239,6 +256,13 @@ private:
 
 
 class TimeSignature;
+
+
+/**
+ * The Note class represents note durations only, not pitch or
+ * accidental; it's therefore just as relevant to rest events as to
+ * note events
+ */
 
 class Note
 {

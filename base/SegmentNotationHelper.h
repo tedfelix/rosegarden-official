@@ -117,7 +117,8 @@ public:
      * This method will only work correctly if there is a note or
      * rest event already starting at absoluteTime.
      */
-    void insertNote(timeT absoluteTime, Note note, int pitch);
+    void insertNote(timeT absoluteTime, Note note, int pitch,
+                    Accidental explicitAccidental);
 
     /**
      * Inserts a rest, doing all the clever split/merge stuff as
@@ -240,11 +241,11 @@ private:
 
     /// for use by insertNote and insertRest
     void insertSomething(iterator position, int duration, int pitch,
-			 bool isRest, bool tiedBack);
+			 bool isRest, bool tiedBack, Accidental explicitAcc);
 
     /// for use by insertSomething
     iterator insertSingleSomething(iterator position, int duration, int pitch,
-				   bool isRest, bool tiedBack);
+				   bool isRest, bool tiedBack, Accidental);
 
     /// for use by autoBeam
 
