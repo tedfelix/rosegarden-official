@@ -42,7 +42,7 @@ Track::Track(timeT startIdx) :
     m_id(0),
     m_quantizer(new Quantizer())
 {
-//    setDuration(duration);
+    invalidateTimeSigAtEnd();
 }
 
 Track::~Track()
@@ -71,22 +71,29 @@ static bool isTimeSig(const Event* e)
 }
 
 
-TimeSignature Track::getTimeSigAtEnd(timeT &absTimeOfSig) const
+TimeSignature Track::getTimeSigAtEnd(timeT &absTimeOfSig)
 {
-//!!! should presumably be based on findTimeSignatureAt?
-
-    TimeSignature timesig;
     absTimeOfSig = 0;
+
+    if (m_timeSigTime < 0) findTimeSigAtEnd();
+    
+    absTimeOfSig = m_timeSigTime;
+    return m_timeSigAtEnd;
+}
+
+
+void Track::findTimeSigAtEnd() 
+{
+    m_timeSigAtEnd = TimeSignature();
+    m_timeSigTime = 0;
 
     const_reverse_iterator sig = std::find_if(rbegin(), rend(), isTimeSig);
 
     if (sig != rend()) {
 	assert(isTimeSig(*sig));
-        absTimeOfSig = (*sig)->getAbsoluteTime();
-	timesig = TimeSignature(*(*sig));
+        m_timeSigAtEnd = TimeSignature(**sig);
+        m_timeSigTime = (*sig)->getAbsoluteTime();
     }
-
-    return timesig;
 }
 
 
@@ -141,6 +148,7 @@ void Track::setDuration(timeT d)
 void Track::erase(iterator pos)
 {
     Event *e = *pos;
+    if (e->isa(TimeSignature::EventType)) invalidateTimeSigAtEnd();
     std::multiset<Event*, Event::EventCmp>::erase(pos);
     notifyRemove(e);
     delete e;
@@ -149,6 +157,7 @@ void Track::erase(iterator pos)
 
 Track::iterator Track::insert(Event *e)
 {
+    if (e->isa(TimeSignature::EventType)) invalidateTimeSigAtEnd();
     m_quantizer->quantizeByNote(e);
     iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
     notifyAdd(e);

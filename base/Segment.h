@@ -174,7 +174,7 @@ public:
      * Does not require the reference track to exist (i.e. okay if
      * track is not in a Composition).
      */
-    TimeSignature getTimeSigAtEnd(timeT &absTimeOfSig) const;
+    TimeSignature getTimeSigAtEnd(timeT &absTimeOfSig);
 
     /**
      * Inserts a single Event
@@ -303,6 +303,14 @@ private:
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;
     void notifyReferenceTrackRequested() const;
+
+    // cache to optimise otherwise-disgusting-inefficiency in fillWithRests
+    // that seriously affects MIDI file loading for files in which notes
+    // are generally truncated somewhat (hence lots of rests)
+    TimeSignature m_timeSigAtEnd;
+    timeT m_timeSigTime;
+    void invalidateTimeSigAtEnd() { m_timeSigTime = -1; }
+    void findTimeSigAtEnd();
 
 private:
     Track(const Track &);

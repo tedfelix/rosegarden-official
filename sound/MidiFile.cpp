@@ -31,29 +31,6 @@
 #include "TrackNotationHelper.h"
 #include "TrackPerformanceHelper.h"
 
-//!!! [cc] Timing code for debugging purposes
-
-#ifndef NO_TIMING
-
-#include <iostream>
-#include <time.h>
-
-#define START_TIMING \
-  clock_t dbgStart = clock();
-#define ELAPSED_TIME \
-  ((clock() - dbgStart) * 1000 / CLOCKS_PER_SEC)
-#define PRINT_ELAPSED(n) \
-  std::cout << n << ": " << ELAPSED_TIME << "ms elapsed" << std::endl;
-
-#else
-
-#define START_TIMING
-#define ELAPSED_TIME  0
-#define PRINT_ELAPSED(n)
-
-#endif
-
-
 
 namespace Rosegarden
 {
@@ -261,8 +238,6 @@ MidiFile::open()
         return(false);
       }
 
-      START_TIMING;
-
       for ( unsigned int i = 0; i < m_numberOfTracks; i++ )
       {
 
@@ -289,11 +264,7 @@ MidiFile::open()
           m_format = MIDI_FILE_NOT_LOADED;
           return(false);
         }
-
-        PRINT_ELAPSED("Parsing track");
       }
-
-      PRINT_ELAPSED("Parsing MIDI file");
     }
     else
     {
@@ -521,20 +492,9 @@ MidiFile::convertToRosegarden()
   // precalculate the timing factor
   //
 
-  //!!! cc -- attempt to avoid floating-point rounding errors
+  // [cc] -- attempt to avoid floating-point rounding errors
   timeT crotchetTime = Note(Note::Crotchet).getDuration();
   int divisor = m_timingDivision ? m_timingDivision : 1;
-
-//  float timingFactor = 0.0;
-
-//  if ( m_timingDivision )
-//    timingFactor = (float) Note(Note::Crotchet).getDuration() /
-//                   (float) m_timingDivision;
-
-//!!! [cc] Timing code for debugging purposes
-  START_TIMING;
-  int fwrTime = 0;
-  int mvTime = 0;
 
   for ( unsigned int i = 0; i < m_numberOfTracks; i++ )
   {
@@ -619,12 +579,10 @@ MidiFile::convertToRosegarden()
         // there might not be, so shouldn't we just use it regardless?
         if (m_timingDivision)
         {
-          //!!! cc -- avoid floating-point
+          // [cc] -- avoid floating-point
           rosegardenTime = ((timeT)midiEvent->time() * crotchetTime) / divisor;
           rosegardenDuration =
 	    ((timeT)midiEvent->duration() * crotchetTime) / divisor;
-//          rosegardenTime = (timeT) ( midiEvent->time() * timingFactor ) ;
-//          rosegardenDuration = (timeT) ( midiEvent->duration() *  timingFactor );
         }
 
 
@@ -634,13 +592,7 @@ MidiFile::convertToRosegarden()
           // insert rests if we need them
           //
           if (endOfLastNote < rosegardenTime ) {
-//!!! [cc] Timing code for debugging purposes
-            START_TIMING;
-
             rosegardenTrack->fillWithRests(rosegardenTime);
-
-//!!! [cc] Timing code for debugging purposes
-            fwrTime += ELAPSED_TIME;
           }
               
 
@@ -745,15 +697,10 @@ MidiFile::convertToRosegarden()
               // insert into Track
               Track::iterator loc = rosegardenTrack->insert(rosegardenEvent);
 
-              // cc -- a bit of an experiment
+              // [cc] -- a bit of an experiment
+
               if (!notationTrack.isViable(rosegardenEvent)) {
-//!!! [cc] Timing code for debugging purposes
-                START_TIMING;
-
                 notationTrack.makeNoteViable(loc);
-
-//!!! [cc] Timing code for debugging purposes
-                mvTime += ELAPSED_TIME;
               }
             }
 
@@ -785,14 +732,7 @@ MidiFile::convertToRosegarden()
         }
       }
 
-//!!! [cc] Timing code for debugging purposes
-      PRINT_ELAPSED("Converting track to Rosegarden format");
-      std::cout << "(Fill with rests: " << fwrTime << "; make viable: "
-                << mvTime << ")" << endl;
-      
-
-      // cc
-
+      // [cc]
       rosegardenTrack->insert
           (notationTrack.guessClef
            (rosegardenTrack->begin(), rosegardenTrack->end()).getAsEvent(0));
@@ -800,8 +740,6 @@ MidiFile::convertToRosegarden()
       notationTrack.autoBeam
           (rosegardenTrack->begin(), rosegardenTrack->end(),
            "beamed"); //!!! probably shouldn't be hardcoded!
-
-      PRINT_ELAPSED("Auto-beaming track");
     }
   }
 
@@ -810,15 +748,11 @@ MidiFile::convertToRosegarden()
   if (composition->getTempo() == 0)
   {
     if (m_timingDivision)
-      //!!! cc -- avoid floating-point
+      // [cc] -- avoid floating-point
       composition->setTempo((120 * crotchetTime) / divisor);
-//      composition->setTempo(((timeT)(timingFactor * 120)));
     else
       composition->setTempo(120);
   }
-
-  PRINT_ELAPSED("Converting Composition to Rosegarden format");
-
 
   return composition;
 }
@@ -1142,14 +1076,6 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
   // file with it's accompanying length.
   //
   string trackBuffer;
-
-  // Our timing factor here converts into the MIDI m_timingDivision
-  //
-  /*!!! cc -- apparently not needed
-  float timingFactor = 0.0;
-  timingFactor = (float) m_timingDivision /
-                 (float) Note(Note::Crotchet).getDuration();
-  */
 
   for ( midiEvent = (m_midiComposition[trackNumber].begin());
         midiEvent != (m_midiComposition[trackNumber].end()); ++midiEvent )
