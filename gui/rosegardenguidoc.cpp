@@ -825,7 +825,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
                                   "getMappedDevice(unsigned int)",
-                                  data, replyType, replyData, true))
+                                  data, replyType, replyData, false))
     {
         kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice() - "
                              << "can't call Sequencer" << std::endl;
@@ -889,10 +889,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
                                              (*it)->getChannel(),
                                              device);
         device->addInstrument(instrument);
-        std::cout << "ADDING " << (*it)->getName() 
-                  << " - " << (*it)->getId() << std::endl;
     }
-    std::cout << std::endl;
 
 }
 

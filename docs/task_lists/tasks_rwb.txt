@@ -15,14 +15,16 @@ o ALSA:
   - start-up bug [FIXED?]
   - metronome broken with ALSA?
 
-o MappedDevice transmission is breaking occasionally [HOPEFULLY FIXED
-  in MappedDevice itself]
+o MappedDevice transmission is breaking occasionally
+  [HOPEFULLY FIXED in MappedDevice itself]
 
-o Multiple devices with multiple bank/programs [DONE]
+o Multiple devices with multiple bank/programs
+  [DONE]
 
 o Recording Segment doesn't appear anymore
 
 o Instrument naming on InstrumentButtons
+  [DONE]
 
 o Looping marker set from file load/top level - Looping
   set from Clients - Looping BUG crashing sequencer
