@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 
 /*
     Rosegarden-4
@@ -378,10 +379,7 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
 
     double xleft = 0, xright = 0;
     bool haveXLeft = false;
-/*!!!
-    if (lastBar >= 0) xright = layout.getBarPosition(lastBar);
-    else xright = layout.getTotalWidth();
-*/
+
     xright = layout.getBarPosition(lastBar);
 
     Rosegarden::TimeSignature currentTimeSignature;
@@ -495,13 +493,13 @@ LinedStaff<T>::insertBar(double layoutX, double width, bool isCorrect,
 
 	if (showBeatLines() && i == 0) {
 
-            int beats;
+	    double beats; // number of grid lines per bar may be fractional
 
             // If the snap time is zero we default to beat markers
             //
             if (m_snapGrid && m_snapGrid->getSnapTime(x))
-                beats = timeSig.getBarDuration() /
-                            m_snapGrid->getSnapTime(x);
+                beats = double(timeSig.getBarDuration()) /
+		        double(m_snapGrid->getSnapTime(x));
             else
                 beats = timeSig.getBeatsPerBar();
 

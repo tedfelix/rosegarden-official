@@ -118,7 +118,7 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase,
 	    Rosegarden::TimeSignature timeSig =
 		composition->getTimeSignatureInBar(barNo, isNew);
 	    
-	    if (isNew) {
+	    if (isNew || barNo == m_firstBar) {
 		m_barData.push_back(BarData((from - startPosition) *
 					    staff.getTimeScaleFactor(),
 					    timeSig.getAsEvent(from)));

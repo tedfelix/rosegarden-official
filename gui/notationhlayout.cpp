@@ -335,9 +335,9 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
     bool allDone = false; // used in partial scans
     bool barCorrect = true;
 
-    int barNo = getComposition()->getBarNumber(segment.getStartTime());
+    int startBarNo = getComposition()->getBarNumber(segment.getStartTime());
     int endBarNo = getComposition()->getBarNumber(segment.getEndMarkerTime());
-    if (endBarNo > barNo &&
+    if (endBarNo > startBarNo &&
 	getComposition()->getBarStart(endBarNo) == segment.getEndMarkerTime()) {
 	--endBarNo;
     }
@@ -348,7 +348,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	endTime = segment.getEndMarkerTime();
     } else {
 	while (barList.begin() != barList.end() &&
-	       barList.begin()->first < barNo) {
+	       barList.begin()->first < startBarNo) {
 	    barList.erase(barList.begin());
 	}
     }
@@ -360,13 +360,13 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	m_npf->getNoteBodyWidth() * 2 +
 	m_npf->getTextWidth(Rosegarden::Text(name,Rosegarden::Text::StaffName));
 
-    NOTATION_DEBUG << "NotationHLayout::scanStaff: full scan " << isFullScan << ", times " << startTime << "->" << endTime << ", bars " << barNo << "->" << endBarNo << ", staff name \"" << segment.getLabel() << "\", width " << m_staffNameWidths[&staff] << endl;
+    NOTATION_DEBUG << "NotationHLayout::scanStaff: full scan " << isFullScan << ", times " << startTime << "->" << endTime << ", bars " << startBarNo << "->" << endBarNo << ", staff name \"" << segment.getLabel() << "\", width " << m_staffNameWidths[&staff] << endl;
 
     setNotationData(segment);
 
     PRINT_ELAPSED("NotationHLayout::scanStaff: after quantize");
 
-    while (barNo <= endBarNo) {
+    for (int barNo = startBarNo; barNo <= endBarNo; ++barNo) {
 
 	std::pair<timeT, timeT> barTimes =
 	    getComposition()->getBarRange(barNo);
@@ -392,7 +392,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	timeSignature = getComposition()->getTimeSignatureInBar
 	    (barNo, newTimeSig);
 
-	if (newTimeSig && !timeSignature.isHidden()) {
+	if ((newTimeSig || barNo == startBarNo) && !timeSignature.isHidden()) {
 	    timeSigEvent = timeSignature.getAsEvent(barTimes.first);
 	    fixedWidth += getFixedItemSpacing() * 2 +
 		m_npf->getTimeSigWidth(timeSignature);
@@ -531,7 +531,6 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	}
 
         throwIfCancelled();
-	++barNo;
     }
 
     BarDataList::iterator ei(barList.end());
