@@ -7,20 +7,24 @@ o MTC/MMC - transport awareness
   - MTC will be in addition to basic real-time clock
   - MMC control can't yet be tested at my end
 
-o Audio - multi-threaded
-
 o Audio - stereo, panning, bypass
 
 o Tidy up AudioFiles:
    - hardcoded format segment values
+   - recording stereo WAVs
    - BWF format writing/reading
-   - exceptions and return values
    - multithreading
    - autosplitting
+   - libsoundfile support (LSFSoundFile class?)
+   - exceptions and return values
 
 o selection of ALSA recording device [HALF COMPLETE]
 
-o Toggle record mode for punch in/out [Half complete]
+o extra cascade level in Instrument selection menu
+
+o Instrument/Device naming
+
+o Toggle record mode for punch in/out [HALF COMPLETE]
 
 o audio/MIDI looping and start position (performance)
 

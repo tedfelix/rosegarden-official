@@ -26,6 +26,7 @@
 #include <qfileinfo.h>
 #include <qwidget.h>
 #include <qtimer.h>
+#include <qregexp.h>
 
 // include files for KDE
 #include <klocale.h>
@@ -330,7 +331,36 @@ bool RosegardenGUIDoc::saveIfModified()
                 if (getTitle() == i18n("Untitled")) {
                     win->fileSaveAs();
                 } else {
-                    saveDocument(getAbsFilePath());
+
+                    {
+                        QRegExp midiFile("\\.mid$"), rg21File("\\.rose$");
+
+                        if (midiFile.match(getAbsFilePath().lower()) != -1)
+                        {
+
+                            QString newFileName =
+                                QString(getAbsFilePath()).
+                                    replace(midiFile, ".rg");
+
+                            KMessageBox::information(win,
+                                    i18n("Imported MIDI file will be saved in Rosegarden-4 format.\nNew filename will be \"") + newFileName + QString("\""));
+
+                            saveDocument(newFileName);
+                        }
+                        else if (rg21File.match(getAbsFilePath().lower()) != -1)
+                        {
+                            QString newFileName =
+                                QString(getAbsFilePath()).
+                                    replace(rg21File, ".rg");
+
+                            KMessageBox::information(win,
+                                    i18n("Imported Rosegarden-2.1 file will be saved in Rosegarden-4 format\n.New filename will be \"") + newFileName + QString("\""));
+                            saveDocument(newFileName);
+                        }
+                        else 
+                            saveDocument(getAbsFilePath());
+
+                    }
                 };
 
                 //deleteContents();

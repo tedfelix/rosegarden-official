@@ -291,8 +291,7 @@ Composition::operator=(const Composition &comp)
 {
     if (&comp == this) return *this;
 
-    m_tracks.clear();
-    m_segments.clear();
+    clear();
 
     // Copy track information
     //
@@ -550,6 +549,9 @@ Composition::clear()
 	(*i)->setComposition(0);
         delete (*i);
     }
+    
+    clearTracks();
+
     m_segments.erase(begin(), end());
     m_timeSigSegment.clear();
     m_tempoSegment.clear();
