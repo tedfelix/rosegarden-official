@@ -1,42 +1,98 @@
 
 #heading {
+    background: #ccd4a0;
+    width: 100%;
+    height: 104px;
 }
 
 #nav {
-   float: left;
-   width: 20%;
-   margin-top: 22px;
-   text-align: bottom;
+    position: absolute;
+    left: 0px;
+    top: 110px;
+    width: 160px;
+    height: 90%;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 0px;
+    text-align: top;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
 }
 
 #main {
-   float: right;
-   width: 75%;
-   margin-top: 20px;
-   padding-bottom: 20px;
-   margin-bottom: 20px;
+    position: absolute;
+    left: 205px;
+    top: 92px;
+    width: auto;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-right: 20px;
 } 
 
+.donate {
+    float: right;
+    width: 140pt;
+    margin-top: 30px;
+    margin-left: 20px;
+    margin-right: 0px;
+    margin-bottom: 20px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    border-width: medium;
+    border-color: #ccd4a0;
+    border-style: solid;
+    font-style: normal;
+    font-weight: medium;
+    font-family: trebuchet, verdana, sans-serif;
+    font-size: 8pt;
+}
+
+.paypal {
+    margin-top: 6px;
+    text-align: center;    
+    margin-bottom: 6px;
+}
+    
+
+#heading {
+    background: #ccd4a0;
+}
+
 body {
-    margin-left: 10px;
-    margin-right: 20px;
-    margin-top: 10px;
     background: #ffffff;
+    background-image: url("bg.png");
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
 }
 
 body,p,td,ul,ol,li,blockquote { 
     font-size: 11pt;
-    font-family: georgia, "book antiqua", palatino, garamond, serif;
-}
-
-code {
-    font-size: 10pt;
-    font-family: "andale mono", "monotype.com", lucidatypewriter, monospaced;
+    font-style: normal;
+    font-family: georgia, "book antiqua", palatino, garamond, serif; 
 }
 
 h1,h2,h3,h4,h5,h6,h7 { 
     font-weight: bold;
-    font-family: georgia, "book antiqua", palatino, garamond, serif;
+    font-style: normal;
+    font-family: trebuchet, verdana, sans-serif;
+}
+
+h1,h2,h3 { 
+    margin-top: 30px;
+}
+
+h4,h5,h6,h7 { 
+    margin-top: 20px;
+}
+
+code {
+    font-size: 10pt;
+    font-style: normal;
+    font-family: "andale mono", "monotype.com", lucidatypewriter, monospaced;
 }
 
 h4,h5,h6,h7 {
@@ -73,14 +129,25 @@ h4,h5,h6,h7 {
     margin-right: 4pt;
     font-family: trebuchet, verdana, sans-serif;
     font-weight: bold;
-    color: #ffffff;
+    color: #e3e8c7;
 }
 
 .navlink {
     font-size: 10pt;
     padding-left: 8pt;
     margin-left: 6pt;
-    margin-top: 6pt;
+    margin-top: 5pt;
+    font-family: trebuchet, verdana, sans-serif;
+    font-weight: bold;
+    color: #ba2c2c;
+}
+
+.navtitle {
+    font-size: 10pt;
+    padding-left: 8pt;
+    margin-left: 6pt;
+    margin-top: 12pt;
+    margin-bottom: 7pt;
     font-family: trebuchet, verdana, sans-serif;
     font-weight: bold;
 }
@@ -92,7 +159,7 @@ small,.navtext {
 }
 
 a {
-    color: #aa0000;
+    color: #ba2c2c; 
     text-decoration: none;
     font-weight: bold;
 }
@@ -103,7 +170,7 @@ a:active {
 }
 
 a:visited {
-    color: #551a8b;
+    color: #64684f;
     text-decoration: none;
 }
 

@@ -1,149 +1,160 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    <title>Rosegarden development</title>
+    <title>Getting involved in Rosegarden Development</title>
     <link rel="stylesheet" href="rose.css" media="screen">
     <script type="text/javascript" src="rosenav.js"></script>
-    <meta name="robots" content="index">
   </head>
   <body>
     <div id="heading">
-      <img src="logo.png" alt="" width="58" height="99"><img src="title-development.png" alt="Rosegarden development" width="400" height="83">
+      <img src="roses.png" alt="" width="183" height="104"><img src="title-development.png" alt="Development" width="400" height="104">
     </div>
 
     <div id="nav">
     <script type="text/javascript">makeNav()</script>
     <noscript>
-        <a href="index.html">home</a><br>
-        <a href="features.html">features</a><br><a href="faq.html">faq</a><br>
-        <a href="pictures.html">screenshots</a><br>
-        <a href="list.html">mailing-list</a><br>
-        <a href="development.html">development</a><br>
-        <a href="download.html">download</a><br>
+    <a href="index.html">Rosegarden-4</a><br>
+        &nbsp;&nbsp;<a href="index.html">home</a><br>
+        &nbsp;&nbsp;<a href="authors.html">authors</a><br>
+        &nbsp;&nbsp;<a href="history.html">history</a><br>
+        &nbsp;&nbsp;<a href="development.html">development</a><br>
+        &nbsp;&nbsp;<a href="pictures.html">pictures</a><br>
+        &nbsp;&nbsp;<a href="http://lists.sourceforge.net/lists/listinfo/rosegarden-devel">mailing-list</a><br>
+    <br><a href="2.1/index.html">Rosegarden-2.1</a><br>
+    <br><a href="download.html">Download</a><br>
     </noscript>
     </div>
 
     <div id="main">
 
-      <h3>Current Rosegarden development works</h3>
+      <h3>How to get involved in Rosegarden development</h3>
+
+      <p>We're always looking for people willing to participate in the
+      project. If you're interested, here are a few clues about how to start.</p>
+
+      <h4>First steps</h4>
+
+      <p>Subscribe to the
+      <a href="http://lists.sourceforge.net/lists/listinfo/rosegarden-devel">rosegarden-devel</a> mailing list.</p>
       
-      <h4>The short answer</h4>
+      <p>As with any software project, the documentation is a little thin
+      on the ground but there are some design documents and howtos in the
+      <a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rosegarden/docs/"><code>docs/</code></a> area of the source tree. You can also browse the
+      <a href="http://rosegarden.sourceforge.net/code_doc">code reference documentation</a> which we try to
+      keep up to date.  You can also generate it yourself with
+      <a href="http://www.doxygen.org/">doxygen</a> and the Doxyfile in CVS.</p>
 
-      <p>Yes, we're still working on it.  "Rosegarden 4", or whatever
-      it ends up being called, will be a KDE-based application that
-      features close integration of a nice sequencer with a
-      good-quality notation editor, and that will be fairly easy to
-      extend.
-      
-      <h4>Motivation</h4>
+      <p>If you're stuck somewhere or don't understand something then
+      please ask on the 
+      <a href="http://lists.sourceforge.net/lists/listinfo/rosegarden-devel">mailing list</a>.</p>
 
-      <p>The Rosegarden 2 code reached the end of its useful life
-      about four years ago.  Its internal representation had become
-      inadequate for the things we were wanting to do, and it was
-      becoming too difficult to extend it without introducing some
-      serious stability issues.  The GUI was looking rather
-      antiquated, and it was too closely coupled with the rest of the
-      application to be straightforward to replace.  We wanted closer
-      communication between the notation-editing and sequencing parts
-      of the application and the existing code just wasn't designed
-      that way.
+      <h4>What next?</h4>
 
-        <h4>History</h4>
+      <p>Pick something that you want to do.  Make it something you're
+      interested in and think you can help with.  This is something you'll
+      have to do for yourself, as we find being prescriptive with tasks just
+      turns people off.  If you're really interested in working with us,
+      it's best if you choose your own job and therefore find your own
+      motivation.</p>
 
-      <p>Over the years, we've made several attempts to rewrite
-      Rosegarden.  Here are some of them:
+      <p>(But be practical.  All the time spent working on one thing
+      is time that can't be spent working on another. If your goal is
+      to make software that other people can use and enjoy, work on
+      the things that will give you the best return in usability on
+      your investment of time. Working on something concrete based on
+      existing code is a better use of your time than trying to change
+      large parts of the design to support something fantastic that
+      you dream of doing one day.)
 
-      <ul>
-        <li>Late 1995: Completely abortive attempt by Chris to port
-        the GUI to Motif.</li>
+      <p>If you want to see what we're working on now then have a look
+      at our
+      <a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rosegarden/docs/task_lists/">task lists</a>.
+      They might be a little out of date but they'll give you a rough
+      idea of what we're up to at the moment.</p>
 
-        <li>1995-1996: Andy makes a sibling version of Rosegarden for
-        Microsoft Windows, adding a significant amount of extra
-        sequencer functionality.  Then he loses the only copy of the
-        source code in a hard disc crash.  You can still have the <a
-        href="ftp://ftp.maths.bath.ac.uk/pub/dream/ROSE/rose10b1.zip">32-bit
-        binaries</a> if you like, but they might not work.  Don't come
-        crying to us if you blow up your computer.</li>
+      <p>If you think your work might clash with someone else's then
+      just ask.  A bit of discussion before coding never hurts and
+      being <b>Sensitive New Age Guys</b> we are big believers in
+      talking about things.  If what you're planning to do is
+      non-trivial then it's probably better to discuss it a little
+      first.
 
-        <li>Early 1996: Inspired by Guillaume's strange fascination
-        with Tcl/Tk, we give serious consideration to rewriting the
-        GUI using Tk.  Rather fortunately, we don't actually get as
-        far as writing any code.</li>
+      <p>Still, contributions of any kind are <b>always</b> welcome.
+      You don't need to ask for permission and if the first thing you send 
+      to the list is a patch we won't be complaining.</p>
 
-        <li>Early 1998: Following a brief dalliance with Objective C,
-        we begin a ground-up rewrite of the notation editor in C++
-        using the GTK-- toolkit.  It reaches the stage of being able
-        to load a Rosegarden 2.1 file (using a new parser written with
-        the PCCTS system) and bring up a few empty windows.  Some
-        amount of core container code written by Chris, and some GUI
-        code by Guillaume.  Abandoned when we decided the basic
-        architecture was still going to be inadequate for the amount
-        of editor-sequencer integration we'd like to be able to do.
-        Here's the <a
-        href="http://www.cannam.demon.co.uk/rosegarden/development/rosegarden-c++-980610.tar.gz">source
-        code</a> as it was when we abandoned it: 5,600 lines of C++
-        that's probably nearly impossible to compile by now.</li>
+      <p>
+      Did we mention the
+      <a href="http://lists.sourceforge.net/lists/listinfo/rosegarden-devel">mailing list</a>?
+      </p>
 
-        <li>June 1998: A session in the pub with Bownie and Chris
-        leads to the start of "Rosegarden 3.0", a Grand Unified
-        Rewrite.  We aimed to produce a system where the music was
-        stored in a separate, server datastore and made available to a
-        set of editing and performance clients via CORBA objects,
-        implemented once again in C++ using GTK--, with MICO as the
-        CORBA ORB to begin with.  This design had a lot of potential:
-        if we'd been three talented programmers working on it
-        full-time, we could have produced a very nice modular,
-        extensible, rather slow system.  In practice, however, we
-        spent a lot of time talking about it, then Chris spent a month
-        writing a working datastore implementation then went on
-        holiday for six months, during which time nobody else managed
-        to get to grips with the rather complicated code.  And when
-        Chris got back, he found he'd also forgotten how it worked.
-        We end up deciding to drop CORBA and do something simpler
-        instead.  You can pick up the <a
-        href="http://www.cannam.demon.co.uk/rosegarden/development/000125.tar.gz">last
-        source code for this version</a> if you like -- it's about
-        12,000 lines of C++ and IDL that's a beastly pain to compile
-        and does nothing worth looking at.  It's very clever
-        though.</li>
+      <h4>But I can't code...</h4>
+	
+      <p>If you're a good technical writer and patient enough to work with
+      lazy and pedantic developers then you can help with the documentation.
+      If you're good at drawing you can draw icons.  If you have experience
+      with other sequencers (Logic, Cubase, Cakewalk) or if you're a
+      musician, music technician or producer you can give us the benefit of
+      that experience.  We'll always need help refining the user interface
+      and overall direction of our design.</p>
 
-        <li>April 2000: Following his departure from the GTK--
-        development team and disillusionment with the GNOME project,
-        Guillaume begins building a Rosegarden GUI using Qt for KDE.
-        By working on the GUI first, with relatively little structure
-        underneath (except a set of generic event objects developed by
-        Chris), he at last manages to get something visible out of it.
-        Project development moves <a
-        href="https://sourceforge.net/projects/rosegarden/">to SourceForge</a>,
-        like all other God-fearing free-software projects. Progress is
-        still slow, partly because Chris and Bownie are far too busy
-        at work to help out much.</li>
-
-        <li>June 2000: Fifth anniversary of the release of Rosegarden
-        1.0.  The oldest Rosegarden code (the help system, strangely
-        enough) is now over seven years old.  It's more than two and a
-        half years since Rosegarden 2.1 came out.</li>
-
-        <li>April 2001: After Chris and Bownie manage to find a bit
-        more spare time and join Guillaume in actually putting in some
-        real work, progress speeds up somewhat.  We decide on a firm
-        set of basic features required for a public 0.1 developer
-        release.</li>
-      </ul>
-      
-      <p>And that's where we are at the moment.  Our mantra is now:
-
-        <blockquote><b>"If we lose focus again, Rosegarden is dead.
-        It has already been brought back from limbo a couple of times,
-        there won't be a next one."</b></blockquote>
-
-      (&copy; Guillaume) <p>At the time of writing, we've made the 0.1
-      release (in October) plus a couple more, have passed 3,500 CVS
-      commits and have written vastly more lines of code than we
-      managed in any of the previous rewrites.  Things are looking
-      modestly positive.
+      <p>If you're just learning to code then Rosegarden probably isn't
+      the best place to start.  Our design is fairly complex and you'll
+      need a reasonable grip of C++ not to mention Qt/KDE programming to
+      understand it.  Despite that we do try to make the code as clear and
+      well commented as possible and if you have the C++ but not the Qt/KDE
+      then have a look at the
+      <a href="http://doc.trolltech.com">Qt documentation</a> and
+      <a href="http://developer.kde.org">KDE Developer's Corner</a>.</p>
 
 
+      <h4>I've got a great idea!</h4>
+
+      <p>
+      Sending <i>cool ideas</i> ("hey wouldn't it be cool if...")
+      with no apparent willingness to implement them is usually met
+      with a even cooler silence.</p>
+
+      <p>
+      It's not that we don't want <i>cool ideas</i>, we <i>like</i>
+      cool ideas, but until Rosegarden is reasonably competent at
+      the basics there's probably no way we'll be implementing them.
+      The chances are also quite good that we've discussed something
+      like them before so
+      always have a search through the <a href="http://www.geocrawler.com/lists/3/SourceForge/16004/0/">mailing list archives</a> before
+      airing your new idea.</p>
+
+      <p>
+      If you're disappointed at our cautious approach to new ideas then
+      please don't see us as dour, humourless corporate drones.  We prefer
+      to be thought of as embittered world-weary hackers with a
+      work ethic built upon a realistic mantra - see the bottom of the 
+      <a href="history.html">development history</a> for more details.
+      </p>
+     
+      <br>
+
+      <h4>So, still here?</h4>
+
+      <p>We've always found <a
+      href="http://www.alt.net/~lk/cathedral-bazaar.html">this
+      description</a> of the open-source volunteering process to be
+      quite true.  It's a short but very worthwhile read so please
+      take a look.
+      </p>
+
+      <p>
+      If you still think you can help and you haven't been put off by
+      much of what you're read here then please
+      <a href="http://lists.sourceforge.net/lists/listinfo/rosegarden-devel">get in touch</a>.
+      </p>
+
+      <br>
+      <br>
+      <br>
+      <br>
+
+    
     </div>
 
   </body>

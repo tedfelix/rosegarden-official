@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Rosegarden-4 development history</title>
+    <link rel="stylesheet" href="rose.css" media="screen">
+    <script type="text/javascript" src="rosenav.js"></script>
+    <meta name="robots" content="index">
+  </head>
+  <body>
+    <div id="heading">
+      <img src="roses.png" alt="" width="183" height="104"><img src="title-history.png" alt="History" width="400" height="104">
+    </div>
+
+    <div id="nav">
+    <script type="text/javascript">makeNav()</script>
+    <noscript>
+    <a href="index.html">Rosegarden-4</a><br>
+        &nbsp;&nbsp;<a href="index.html">home</a><br>
+        &nbsp;&nbsp;<a href="authors.html">authors</a><br>
+        &nbsp;&nbsp;<a href="history.html">history</a><br>
+        &nbsp;&nbsp;<a href="development.html">development</a><br>
+        &nbsp;&nbsp;<a href="pictures.html">pictures</a><br>
+        &nbsp;&nbsp;<a href="http://lists.sourceforge.net/lists/listinfo/rosegarden-devel">mailing-list</a><br>
+    <br><a href="2.1/index.html">Rosegarden-2.1</a><br>
+    <br><a href="download.html">Download</a><br>
+    </noscript>
+    </div>
+
+    <div id="main">
+
+      <h3>Background to the Rosegarden-4 project</h3>
+      
+      <p>From a developer's perspective, the <a
+      href="2.1/index.html">Rosegarden-2.1</a> code reached the end of
+      its useful life about five years ago.
+
+      <p>Its internal representation had become inadequate for the
+      things we were wanting to do, and it was becoming too difficult
+      to extend it without introducing some serious stability issues.
+      The GUI was looking rather antiquated, and it was too closely
+      coupled with the rest of the application to be straightforward
+      to replace.  We wanted closer communication between the
+      notation-editing and sequencing parts of the application and the
+      existing code just wasn't designed that way.
+
+        <h4>Previous attempts</h4>
+
+      <p>Over the years, we've made several attempts to rewrite
+      Rosegarden.  Here are some of them:
+
+      <ul>
+        <li>Late 1995: Completely abortive attempt by Chris to port
+        the GUI to Motif.</li>
+
+        <li>1995-1996: Andy makes a sibling version of Rosegarden for
+        Microsoft Windows, adding a significant amount of extra
+        sequencer functionality.  Then he loses the only copy of the
+        source code in a hard disc crash.  You can still have the <a
+        href="ftp://ftp.maths.bath.ac.uk/pub/dream/ROSE/rose10b1.zip">32-bit
+        binaries</a> if you like, but they might not work.  Don't come
+        crying to us if you blow up your computer.</li>
+
+        <li>Early 1996: Inspired by Guillaume's strange fascination
+        with Tcl/Tk, we give serious consideration to rewriting the
+        GUI using Tk.  Rather fortunately, we don't actually get as
+        far as writing any code.</li>
+
+        <li>Early 1998: Following a brief dalliance with Objective C,
+        we begin a ground-up rewrite of the notation editor in C++
+        using the GTK-- toolkit.  It reaches the stage of being able
+        to load a Rosegarden 2.1 file (using a new parser written with
+        the PCCTS system) and bring up a few empty windows.  Some
+        amount of core container code written by Chris, and some GUI
+        code by Guillaume.  Abandoned when we decided the basic
+        architecture was still going to be inadequate for the amount
+        of editor-sequencer integration we'd like to be able to do.
+        Here's the <a
+        href="http://www.cannam.demon.co.uk/rosegarden/development/rosegarden-c++-980610.tar.gz">source
+        code</a> as it was when we abandoned it: 5,600 lines of C++
+        that's probably nearly impossible to compile by now.</li>
+
+        <li>June 1998: A session in the pub with Bownie and Chris
+        leads to the start of "Rosegarden 3.0", a Grand Unified
+        Rewrite.  We aimed to produce a system where the music was
+        stored in a separate, server datastore and made available to a
+        set of editing and performance clients via CORBA objects,
+        implemented once again in C++ using GTK--, with MICO as the
+        CORBA ORB to begin with.  This design had a lot of potential:
+        if we'd been three talented programmers working on it
+        full-time, we could have produced a very nice modular,
+        extensible, rather slow system.  In practice, however, we
+        spent a lot of time talking about it, then Chris spent a month
+        writing a working datastore implementation then went on
+        holiday for six months, during which time nobody else managed
+        to get to grips with the rather complicated code.  And when
+        Chris got back, he found he'd also forgotten how it worked.
+        We end up deciding to drop CORBA and do something simpler
+        instead.  You can pick up the <a
+        href="http://www.cannam.demon.co.uk/rosegarden/development/000125.tar.gz">last
+        source code for this version</a> if you like -- it's about
+        12,000 lines of C++ and IDL that's a beastly pain to compile
+        and does nothing worth looking at.  It's very clever
+        though.</li>
+
+        <li>April 2000: Following his departure from the GTK--
+        development team and disillusionment with the GNOME project,
+        Guillaume begins building a Rosegarden GUI using Qt for KDE.
+        By working on the GUI first, with relatively little structure
+        underneath (except a set of generic event objects developed by
+        Chris), he at last manages to get something visible out of it.
+        Project development moves <a
+        href="http://sourceforge.net/projects/rosegarden/">to SourceForge</a>,
+        like all other God-fearing free-software projects. Progress is
+        still slow, partly because Chris and Bownie are far too busy
+        at work to help out much.</li>
+
+        <li>June 2000: Fifth anniversary of the release of Rosegarden
+        1.0.  The oldest Rosegarden code (the help system, strangely
+        enough) is now over seven years old.  It's more than two and a
+        half years since Rosegarden 2.1 came out.</li>
+
+        <li>April 2001: After Chris and Bownie manage to find a bit
+        more spare time and join Guillaume in actually putting in some
+        real work, progress speeds up somewhat.  We decide on a firm
+        set of basic features required for a public 0.1 developer
+        release.</li>
+      </ul>
+      
+      <p>And that's where we are at the moment.  Our mantra is now:
+
+        <blockquote><b>"If we lose focus again, Rosegarden is dead.
+        It has already been brought back from limbo a couple of times,
+        there won't be a next one."</b></blockquote>
+
+      (&copy; Guillaume) <p>At the time of writing, we've made the 0.1
+      release (in October) plus a couple more, have passed 3,500 CVS
+      commits and have written vastly more lines of code than we
+      managed in any of the previous rewrites.  Things are looking
+      modestly positive.
+
+
+    </div>
+
+  </body>
+</html> 
+
