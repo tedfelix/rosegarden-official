@@ -776,6 +776,11 @@ void RosegardenGUIApp::fileClose()
 
     initView();
 
+    // See comment in RosegardenGUIApp::openURL()
+    // for an explanation on why we have to do this
+    actionCollection()->action("move")->activate();
+    actionCollection()->action("draw")->activate();
+
     //close();
 }
 
@@ -1093,6 +1098,9 @@ void RosegardenGUIApp::importMIDI()
     KIO::NetAccess::download(url, tmpfile);
     importMIDIFile(tmpfile);
 
+    // See comment in RosegardenGUIApp::openURL()
+    // for an explanation on why we have to do this
+    actionCollection()->action("draw")->activate();
     actionCollection()->action("move")->activate();
   
     KIO::NetAccess::removeTempFile( tmpfile );
