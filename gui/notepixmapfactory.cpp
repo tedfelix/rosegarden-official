@@ -169,7 +169,7 @@ NotePixmapOffsets::computeBodyOffset()
 
         m_stalkPoints.first.setY(m_pixmapSize.height() - m_bodySize.height() / 2 - 1);
 
-        m_stalkPoints.second.setY(0);
+//        m_stalkPoints.second.setY(0);
 
     } else {
 
@@ -177,8 +177,8 @@ NotePixmapOffsets::computeBodyOffset()
 
         m_stalkPoints.first.setY(m_bodySize.height() / 2);
 
-        m_stalkPoints.second.setX(m_stalkPoints.first.x());
-        m_stalkPoints.second.setY(m_pixmapSize.height());
+//        m_stalkPoints.second.setX(m_stalkPoints.first.x());
+//        m_stalkPoints.second.setY(m_pixmapSize.height());
     }   
 
     int accidentalProtrusion =
@@ -251,6 +251,10 @@ NotePixmapOffsets::computeBodyOffset()
 
     m_stalkPoints.second.setX(m_stalkPoints.first.x());
 
+    if (m_stalkGoesUp)
+	m_stalkPoints.second.setY(m_stalkPoints.first.y() - m_stalkLength);
+    else
+	m_stalkPoints.second.setY(m_stalkPoints.first.y() + m_stalkLength);
 }
 
 
@@ -374,7 +378,7 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
 
 	stalkLength = getStalkLength();
 
-        if (note < Note::QuarterNote) {
+	if (note < Note::QuarterNote) {
 
 	    //!!! highly dubious, and incorrect for different resolutions
 	    

@@ -421,10 +421,11 @@ Note Note::getNearestNote(int duration)
 
     //!!! too long -- should subdivide
 //    n = Note(Longest, true);
-
+#ifndef NDEBUG
     cout << "Note::getNearestNote(): duration was " << duration
 	 << ", returning note (" << n.getNoteType() << ", " << n.isDotted()
 	 << ")" << endl;
+#endif
     return n;
 }
 

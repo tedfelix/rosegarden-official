@@ -51,14 +51,5 @@
 #define  P_BEAM_MY_Y		 "BeamMyY"
 #define  P_BEAM_NEXT_Y		 "BeamNextY"
 
-#ifdef NOT_DEFINED
-#define  P_BEAM_NECESSARY        "BeamNecessary"
-#define  P_BEAM_GRADIENT         "BeamGradient"
-#define  P_BEAM_START_HEIGHT     "BeamStartHeight"
-#define  P_BEAM_RELATIVE_X       "BeamRelativeX"
-#define  P_BEAM_MY_Y             "BeamMyY"
-#define  P_BEAM_NEXT_Y           "BeamNextY"
-#endif
-
 #endif
 

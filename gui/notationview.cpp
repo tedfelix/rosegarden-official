@@ -830,6 +830,16 @@ NotationView::insertNote(int height, const QPoint &eventPos)
         newNotationElement->setAbsoluteTime((*closestNote)->getAbsoluteTime());
         // m_notationElements->insert(newNotationElement);
 
+	//!!! should do this if we're between two events in the same
+	//group, as well
+	long groupNo;
+	if ((*closestNote)->event()->get<Int>(P_GROUP_NO, groupNo)) {
+	    newNotationElement->event()->set<Int>(P_GROUP_NO, groupNo);
+	    newNotationElement->event()->set<String>
+		(P_GROUP_TYPE,
+		 (*closestNote)->event()->get<String>(P_GROUP_TYPE));
+	}
+
         kdDebug(KDEBUG_AREA) << "new event is: " << (*newNotationElement) << endl;
 
         m_viewElementsManager->insert(newNotationElement);

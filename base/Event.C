@@ -87,10 +87,10 @@ Event::getAsString(const string &name) const
     }
 }
 
+#ifndef NDEBUG
 void
 Event::dump(ostream& out) const
 {
-#ifndef NDEBUG
     out << "Event type : " << m_type.c_str() << '\n';
 
     out << "\tDuration : " << m_duration
@@ -107,8 +107,8 @@ Event::dump(ostream& out) const
     }
 
     out << "Event storage size : " << getStorageSize() << '\n';
-#endif
 }
+#endif
 
 Event::PropertyNames
 Event::getPropertyNames() const
