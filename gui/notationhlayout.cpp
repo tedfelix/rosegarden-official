@@ -1617,17 +1617,11 @@ NotationHLayout::positionChord(Staff &staff,
 
     if (shifted) {
 
-//	if (delta < noteWidth * 2) delta = noteWidth * 2;
 	delta += noteWidth;
 
-	//!!! This is problematic.  We don't actually know whether the stem is
-	// definitively going to be up or down until later on when any group
-	// that contains this chord has had its applyBeam method invoked.  And
-	// applyBeam can't work until we've established the x-coordinate.  I
-	// think I need to split out the group's beam-calculations so that we
-	// can calculate whether the beam is above or below early in the scan
-	// phase, before we start to work out its height and gradient.  Should
-	// be straightforward to do, actually.
+	// For this to work reliably with notes inside beamed groups,
+	// we depend on the group's applyStemProperties() method
+	// having already been called (as it is in scanStaff above).
 	if (!chord.hasStemUp()) baseX += noteWidth;
     }
 

@@ -77,6 +77,7 @@ public:
     const Rosegarden::PropertyName TUPLING_LINE_MY_Y;
     const Rosegarden::PropertyName TUPLING_LINE_WIDTH;
     const Rosegarden::PropertyName TUPLING_LINE_GRADIENT;
+    const Rosegarden::PropertyName TUPLING_LINE_FOLLOWS_BEAM;
 
 };
 

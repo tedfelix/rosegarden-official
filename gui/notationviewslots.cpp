@@ -1513,13 +1513,15 @@ NotationView::doDeferredCursorMove()
 	    !static_cast<NotationElement*>(*i)->isRest()) {
             NotationElementList::iterator j = i;
             while (j != staff->getViewElementList()->end()) {
-                if (static_cast<NotationElement*>(*j)->getViewAbsoluteTime() !=
-                    static_cast<NotationElement*>(*i)->getViewAbsoluteTime()) break;
-                if (static_cast<NotationElement*>(*j)->isNote() ||
-		    static_cast<NotationElement*>(*j)->isRest()) {
-                    i = j;
-                    break;
-                }
+		if (static_cast<NotationElement*>(*j)->getViewAbsoluteTime() !=
+		    static_cast<NotationElement*>(*i)->getViewAbsoluteTime()) break;
+		if (static_cast<NotationElement*>(*j)->getCanvasItem()) {
+		    if (static_cast<NotationElement*>(*j)->isNote() ||
+			static_cast<NotationElement*>(*j)->isRest()) {
+			i = j;
+			break;
+		    }
+		}
                 ++j;
             }
         }

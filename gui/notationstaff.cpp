@@ -1007,13 +1007,17 @@ NotationStaff::setTuplingParameters(NotationElement *elt,
 	    elt->event()->get<Int>(properties.TUPLING_LINE_WIDTH);
 	double tuplingLineGradient =
 	    (double)(elt->event()->get<Int>(properties.TUPLING_LINE_GRADIENT)) / 100.0;
-
+	bool tuplingLineFollowsBeam = false;
+	elt->event()->get<Bool>(properties.TUPLING_LINE_FOLLOWS_BEAM,
+				tuplingLineFollowsBeam);
+	
 	long tupletCount;
 	if (elt->event()->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT, tupletCount)) {
 	    params.setTupletCount(tupletCount);
 	    params.setTuplingLineY(tuplingLineY - (int)elt->getLayoutY());
 	    params.setTuplingLineWidth(tuplingLineWidth);
 	    params.setTuplingLineGradient(tuplingLineGradient);
+	    params.setTuplingLineFollowsBeam(tuplingLineFollowsBeam);
 	}
     }
 }

@@ -1182,10 +1182,13 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
 */
     bool smooth = m_font->isSmooth();
 
-    m_p.drawLine(startX, startY, startX, startY + tickOffset);
-    m_pm.drawLine(startX, startY, startX, startY + tickOffset);
+    if (!params.m_tuplingLineFollowsBeam) {
 
-    drawShallowLine(startX, startY, endX, endY, thickness, smooth);
+	m_p.drawLine(startX, startY, startX, startY + tickOffset);
+	m_pm.drawLine(startX, startY, startX, startY + tickOffset);
+
+	drawShallowLine(startX, startY, endX, endY, thickness, smooth);
+    }
 
     m_p.setFont(m_tupletCountFont);
     m_pm.setFont(m_tupletCountFont);
@@ -1206,11 +1209,13 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     RG_DEBUG << "line: (" << startX << "," << startY << ") -> ("
 			 << endX << "," << endY << ")" << endl;
 
+    if (!params.m_tuplingLineFollowsBeam) {
 
-    drawShallowLine(startX, startY, endX, endY, thickness, smooth);
+	drawShallowLine(startX, startY, endX, endY, thickness, smooth);
 
-    m_p.drawLine(endX, endY, endX, endY + tickOffset);
-    m_pm.drawLine(endX, endY, endX, endY + tickOffset);
+	m_p.drawLine(endX, endY, endX, endY + tickOffset);
+	m_pm.drawLine(endX, endY, endX, endY + tickOffset);
+    }
 }
 
 

@@ -835,23 +835,46 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 	int initialY = staff.getLayoutYForHeight(height(initialNote));
 	int   finalY = staff.getLayoutYForHeight(height(  finalNote));
 
-	int   startY = initialY - (beam.startY - initialY);
-	int     endY =   startY + (int)((finalX - initialX) *
-					((double)beam.gradient / 100.0));
+	// if we have a beam, place the tupling number over it (that is,
+	// make the tupling line follow the beam and say so); otherwise
+	// make the line follow the gradient a beam would have, but on
+	// the other side of the notes
+	int   startY = (beam.necessary ? beam.startY :
+			initialY - (beam.startY - initialY));
+	int     endY = startY + (int)((finalX - initialX) *
+				      ((double)beam.gradient / 100.0));
 
 	int nh = staff.getNotePixmapFactory(m_type == Grace).getNoteBodyHeight();
-	if (startY < initialY) {
-	    if (initialY - startY > nh * 3) startY  = initialY - nh * 3;
-	    if (  finalY -   endY < nh * 2) startY -= nh * 2 - (finalY - endY);
-	} else {
-	    if (startY - initialY > nh * 3) startY  = initialY + nh * 3;
-	    if (  endY -   finalY < nh * 2) startY += nh * 2 - (endY - finalY);
-	}	
+
+	//!!! should also check that the _final_ note-or-rest is a note:
+	bool followBeam =
+	    (beam.necessary &&
+	     (*initialNoteOrRest)->event()->isa(Note::EventType));
+
+	if (beam.necessary) { // adjust to move text slightly away from beam
+
+	    if (beam.aboveNotes) {
+		startY -= nh; endY -= nh;
+	    } else {
+		startY += nh; endY += nh;
+	    }
+
+	} else { // adjust to place close to note heads
+
+	    if (startY < initialY) {
+		if (initialY - startY > nh * 3) startY  = initialY - nh * 3;
+		if (  finalY -   endY < nh * 2) startY -= nh * 2 - (finalY - endY);
+	    } else {
+		if (startY - initialY > nh * 3) startY  = initialY + nh * 3;
+		if (  endY -   finalY < nh * 2) startY += nh * 2 - (endY - finalY);
+	    }
+	}
 	
 	Event *e = (*initialNoteOrRest)->event();
 	e->setMaybe<Int>(m_properties.TUPLING_LINE_MY_Y, startY);
 	e->setMaybe<Int>(m_properties.TUPLING_LINE_WIDTH, finalX - initialX);
 	e->setMaybe<Int>(m_properties.TUPLING_LINE_GRADIENT, beam.gradient);
+	e->setMaybe<Bool>(m_properties.TUPLING_LINE_FOLLOWS_BEAM, beam.necessary);
     }
 }
 

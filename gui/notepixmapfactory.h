@@ -70,6 +70,7 @@ public:
     void setTuplingLineY(int y)		  { m_tuplingLineY     = y;	    }
     void setTuplingLineWidth(int width)	  { m_tuplingLineWidth = width;	    }
     void setTuplingLineGradient(double g) { m_tuplingLineGradient = g;      }
+    void setTuplingLineFollowsBeam(bool b){ m_tuplingLineFollowsBeam = b;   }
 
     void setTied(bool tied)               { m_tied             = tied;      }
     void setTieLength(int tieLength)      { m_tieLength        = tieLength; }
@@ -113,6 +114,7 @@ private:
     int     m_tuplingLineY;
     int	    m_tuplingLineWidth;
     double  m_tuplingLineGradient;
+    bool    m_tuplingLineFollowsBeam;
 
     bool    m_tied;
     int     m_tieLength;

@@ -54,7 +54,8 @@ NotationProperties::NotationProperties(const std::string &prefix) :
 
     TUPLING_LINE_MY_Y		(prefix + "TuplingLineMyY"),
     TUPLING_LINE_WIDTH		(prefix + "TuplingLineWidth"),
-    TUPLING_LINE_GRADIENT	(prefix + "TuplingLineGradient")
+    TUPLING_LINE_GRADIENT	(prefix + "TuplingLineGradient"),
+    TUPLING_LINE_FOLLOWS_BEAM	(prefix + "TuplingLineFollowsBeam")
 
 {
     // nothing else
