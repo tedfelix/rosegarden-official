@@ -94,6 +94,7 @@ using namespace Rosegarden::BaseProperties;
 
 RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
                                    Rosegarden::AudioPluginManager *pluginManager,
+				   bool skipAutoload,
                                    const char *name)
     : QObject(parent, name),
       m_modified(false),
@@ -115,8 +116,8 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
     connect(m_commandHistory, SIGNAL(documentRestored()),
 	    this, SLOT(slotDocumentRestored()));
 
-    // always autoload a new document
-    performAutoload();
+    // autoload a new document
+    if (!skipAutoload) performAutoload();
 
     // now set it up as a "new document"
     newDocument();
@@ -342,6 +343,7 @@ void RosegardenGUIDoc::performAutoload()
 
 
 bool RosegardenGUIDoc::openDocument(const QString& filename,
+				    bool permanent,
                                     const char* /*format*/ /*=0*/)
 {
     RG_DEBUG << "RosegardenGUIDoc::openDocument("
@@ -379,7 +381,8 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     else {
 
         // parse xml file
-	okay = xmlParse(fileContents, errMsg, &progressDlg, cancelled);
+	okay = xmlParse(fileContents, errMsg, &progressDlg,
+			permanent, cancelled);
 
     }
 
@@ -696,6 +699,7 @@ bool RosegardenGUIDoc::isSequencerRunning()
 bool
 RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
                            RosegardenProgressDialog *progress,
+			   bool permanent,
                            bool &cancelled)
 {
     cancelled = false;
@@ -707,7 +711,7 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
 	}
     }
 
-    RoseXmlHandler handler(this, elementCount);
+    RoseXmlHandler handler(this, elementCount, permanent);
 
     if (progress) {
 	connect(&handler, SIGNAL(setProgress(int)),

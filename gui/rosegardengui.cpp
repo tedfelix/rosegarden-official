@@ -1007,7 +1007,8 @@ void RosegardenGUIApp::openFile(const QString& filePath)
 
     // Create a new blank document
     //
-    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
+    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager,
+						    true); // skipAutoload
 
     if (newDoc->openDocument(effectiveFilePath)) {
 

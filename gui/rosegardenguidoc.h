@@ -82,6 +82,7 @@ public:
      */
     RosegardenGUIDoc(QWidget *parent,
                      Rosegarden::AudioPluginManager *audioPluginManager = 0,
+		     bool skipAutoload = false,
                      const char *name=0);
 
 private:
@@ -131,6 +132,7 @@ protected:
      * 
      */
     void setModified(bool m=true);
+
 public:
     /**
      * returns if the document is modified or not. Use this to
@@ -156,10 +158,15 @@ public:
     unsigned int getAutoSavePeriod() const;
 
     /**
-     * loads the document by filename and format and emits the
-     * updateViews() signal
+     * Load the document by filename and format and emit the
+     * updateViews() signal.  The "permanent" argument should be true
+     * if this document is intended to be loaded to the GUI for real
+     * editing work: in this case, any necessary device-synchronisation
+     * with the sequencer will be carried out.  If permanent is false,
+     * the sequencer's device list will be left alone.
      */
-    bool openDocument(const QString &filename, const char *format=0);
+    bool openDocument(const QString &filename, bool permanent = true,
+		      const char *format=0);
 
     /**
      * saves the document under filename and format.
@@ -422,6 +429,7 @@ protected:
      */
     bool xmlParse(QString& fileContents, QString &errMsg,
                   RosegardenProgressDialog *progress,
+		  bool permanent,
                   bool &cancelled);
 
     /**

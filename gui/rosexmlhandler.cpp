@@ -220,7 +220,8 @@ ConfigurationXmlSubHandler::endElement(const QString&,
 
 
 RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
-                               unsigned int elementCount)
+                               unsigned int elementCount,
+			       bool createNewDevicesWhenNeeded)
     : ProgressReporter(0),
       m_doc(doc),
       m_currentSegment(0),
@@ -244,6 +245,7 @@ RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
       m_elementsSoFar(0),
       m_subHandler(0),
       m_deprecation(false),
+      m_createDevices(createNewDevicesWhenNeeded),
       m_cancelled(false)
 {
 }
@@ -915,8 +917,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		    if (nameStr && nameStr != "") {
 			m_device->setName(qstrtostr(nameStr));
 		    }
-		} else if (nameStr && nameStr != "") {
+		} else if (m_createDevices && nameStr && nameStr != "") {
 		    addMIDIDevice(nameStr); // also sets m_device
+		} else {
+		    m_device = 0;
 		}
 	    }
 	}

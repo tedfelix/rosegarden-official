@@ -236,14 +236,11 @@ MidiDevice::generatePresentationList()
     //
     m_presentationInstrumentList.clear();
 
-    std::cerr<<"MidiDevice " << getId() << "::generatePresentationList" << std::endl;
-
     InstrumentList::iterator it;
     for (it = m_instruments.begin(); it != m_instruments.end(); it++)
     {
         if ((*it)->getId() >= MidiInstrumentBase) {
             m_presentationInstrumentList.push_back(*it);
-	    std::cerr<<"added instr " << (*it)->getId() << " (" << (void *)(*it) << ")" << std::endl;
 	}
     }
 }
@@ -457,18 +454,6 @@ MidiDevice::getAllInstruments() const
 InstrumentList
 MidiDevice::getPresentationInstruments() const
 {
-    std::cerr<<"MidiDevice::getPresentationInstruments(" << getId() << "): we have " << m_presentationInstrumentList.size() << ", as follows:" << std::endl;
-    for (InstrumentList::const_iterator it = m_presentationInstrumentList.begin();
-	 it != m_presentationInstrumentList.end(); ++it) {
-	std::cerr << (void *)(*it) << " (id " << (*it ? (*it)->getId() : -1) << ")" << std::endl;
-    }
-
-    std::cerr<<"MidiDevice::getPresentationInstruments: and we have " << m_instruments.size() << " instruments total, as follows:" << std::endl;
-    for (InstrumentList::const_iterator it = m_instruments.begin();
-	 it != m_instruments.end(); ++it) {
-	std::cerr << (void *)(*it) << " (id " << (*it ? (*it)->getId() : -1) << ")" << std::endl;
-    }
-
     return m_presentationInstrumentList;
 }
 

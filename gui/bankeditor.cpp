@@ -1546,12 +1546,12 @@ BankEditorDialog::slotImport()
 	return;
     }
 
-    RosegardenGUIDoc *doc = new RosegardenGUIDoc(this, 0);
+    RosegardenGUIDoc *doc = new RosegardenGUIDoc(this, 0, true); // skipAutoload
 
     // Add some dummy devices for bank population when we open the document.
-    // We guess that the file won't have more than 8 devices.
+    // We guess that the file won't have more than 16 devices.
     //
-    for (unsigned int i = 0; i < 8; i++)
+    for (unsigned int i = 0; i < 16; i++)
     {
         QString label = QString("MIDI Device %1").arg(i + 1);
         doc->getStudio().addDevice(qstrtostr(label),
@@ -1560,7 +1560,7 @@ BankEditorDialog::slotImport()
 
     }
 
-    if (doc->openDocument(target))
+    if (doc->openDocument(target, false))
     {
         Rosegarden::DeviceList *list = doc->getStudio().getDevices();
         Rosegarden::DeviceListIterator it = list->begin();

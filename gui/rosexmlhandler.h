@@ -57,7 +57,8 @@ public:
      * from the XML file into the specified composition
      */
     RoseXmlHandler(RosegardenGUIDoc *doc,
-                   unsigned int elementCount);
+                   unsigned int elementCount,
+		   bool createNewDevicesWhenNeeded);
 
     virtual ~RoseXmlHandler();
 
@@ -143,6 +144,7 @@ protected:
 
     XmlSubHandler                    *m_subHandler;
     bool		              m_deprecation;
+    bool                              m_createDevices;
     bool                              m_cancelled;
 };
 

@@ -93,11 +93,17 @@ using std::endl;
 
 static std::string _audit;
 
+// I was going to prevent output to cout if NDEBUG was set, but actually
+// it's probably a good idea to continue to send to cout as well -- it
+// shouldn't even get noticed unless someone's actually trying to debug,
+// and it's necessary if the sequencer crashes altogether (because the
+// status button in the GUI won't work if the sequencer's crashed).
+
 #define AUDIT_STREAM _auditStream
 #if (__GNUC__ < 3)
 #include <strstream>
 #define AUDIT_START std::strstream _auditStream
-#ifdef NDEBUG
+#ifdef NOT_DEFINED_NDEBUG
 #define AUDIT_UPDATE _auditStream << std::ends; _audit += _auditStream.str();
 #else
 #define AUDIT_UPDATE _auditStream << std::ends; \
@@ -107,7 +113,7 @@ static std::string _audit;
 #else
 #include <sstream>
 #define AUDIT_START std::stringstream _auditStream
-#ifdef NDEBUG
+#ifdef NOT_DEFINED_NDEBUG
 #define AUDIT_UPDATE _audit += _auditStream.str();
 #else
 #define AUDIT_UPDATE std::string _auditChunk = _auditStream.str(); \
