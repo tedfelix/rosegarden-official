@@ -163,7 +163,7 @@ public:
     /**
      * Given an iterator pointing to a rest, split that rest up
      * according to the durations returned by TimeSignature's
-     * getDurationListForInterval
+     * getDurationListForInterval     
      */
     void makeRestViable(iterator i);
 
@@ -171,7 +171,10 @@ public:
     /**
      * Given an iterator pointing to a note, split that note up into
      * tied notes of viable lengths (longest possible viable duration
-     * first, then longest possible viable component of remainder &c)
+     * first, then longest possible viable component of remainder &c).
+     *
+     * Only splits a single note; unlike expandIntoTie, this does
+     * not by default split all notes at a given timeslice.
      */
     //!!! untested.
     void makeNoteViable(iterator i);

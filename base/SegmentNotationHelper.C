@@ -392,6 +392,10 @@ void TrackNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch)
     //!!! Handle grouping!  (Inserting into the middle of an existing
     // group -- take a cue from NotationView::setupGroup)
 
+    //!!! Put these comments in the right bit of the code!
+    
+    //!!! Deal with end-of-bar issues!
+
     //... 
 
     iterator i, j;
