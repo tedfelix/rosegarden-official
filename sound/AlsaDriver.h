@@ -134,7 +134,14 @@ public:
 
     // Create and send an MMC command
     //
-    void sendMMC(Rosegarden::MidiByte command);
+    void sendMMC(Rosegarden::MidiByte deviceId,
+                 Rosegarden::MidiByte instruction,
+                 bool isCommand,
+                 const std::string &data);
+
+    // Send a System RealTime message
+    //
+    void sendSystemDirect(Rosegarden::MidiByte command);
 
 #ifdef HAVE_LADSPA
 

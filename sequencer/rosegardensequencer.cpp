@@ -1196,4 +1196,16 @@ RosegardenSequencerApp::slotRevertSliceSize()
     m_oldSliceSize = Rosegarden::RealTime(0, 0);
 }
 
+void
+RosegardenSequencerApp::setQuarterNoteLength(long timeSec, long timeUSec)
+{
+    Rosegarden::RealTime quarterNoteLength =
+        Rosegarden::RealTime(timeSec, timeUSec);
+
+    SEQUENCER_DEBUG << "quarter note length changed" << endl;
+
+    m_sequencer->setQuarterNoteLength(quarterNoteLength);
+}
+
+
 

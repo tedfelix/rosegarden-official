@@ -198,6 +198,11 @@ public:
     //
     virtual void setTemporarySliceSize(long timeSec, long timeUSec) = 0;
 
+    // Allow the GUI to tell the sequence the duration of a quarter
+    // note when the TEMPO changes - this is to allow the sequencer
+    // to generate MIDI clock (at 24 PPQN).
+    //
+    virtual void setQuarterNoteLength(long timeSec, long timeUSec) = 0;
 
 };
 

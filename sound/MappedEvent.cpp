@@ -270,6 +270,20 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     return dS;
 }
 
+// Add a single byte to the DataBlock
+//
+void
+MappedEvent::addDataByte(MidiByte byte)
+{
+    m_dataBlock += byte;
+}
+
+void 
+MappedEvent::addDataString(const std::string &data)
+{
+    m_dataBlock += data;
+}
+
 
 }
 

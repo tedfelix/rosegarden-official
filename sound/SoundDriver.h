@@ -399,6 +399,11 @@ public:
     int getMMCId() const { return ((int)(m_mmcId)); }
     void setMMCId(int id) { m_mmcId = (Rosegarden::MidiByte)(id); }
 
+    // Quarter note length
+    //
+    void setQuarterNoteLength(const Rosegarden::RealTime &length)
+        { m_quarterNoteLength = length; }
+
 protected:
     // Helper functions to be implemented by subclasses
     //
@@ -478,6 +483,9 @@ protected:
     bool                         m_mmcMaster;
     Rosegarden::MidiByte         m_mmcId;      // device id
 
+    // Quarter note length
+    //
+    RealTime                     m_quarterNoteLength;
 
 };
 

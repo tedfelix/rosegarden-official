@@ -191,7 +191,20 @@ public:
         m_duration(Rosegarden::RealTime(0, 0)),
         m_audioStartMarker(Rosegarden::RealTime(0, 0)),
         m_dataBlock("") {;}
-                
+
+
+    // Construct SysExs say
+    //
+    MappedEvent(InstrumentId id,
+                MappedEventType type):
+        m_instrument(id),
+        m_type(type),
+        m_data1(0),
+        m_data2(0),
+        m_eventTime(Rosegarden::RealTime(0, 0)),
+        m_duration(Rosegarden::RealTime(0, 0)),
+        m_audioStartMarker(Rosegarden::RealTime(0, 0)),
+        m_dataBlock("") {;}
 
     // Copy constructor
     //
@@ -295,6 +308,10 @@ public:
     friend QDataStream& operator>>(QDataStream &dS, MappedEvent &mE);
     friend QDataStream& operator<<(QDataStream &dS, const MappedEvent &mE);
 
+    // Add a single byte to the datablock (for SysExs)
+    //
+    void addDataByte(MidiByte byte);
+    void addDataString(const std::string &data);
 
 private:
     InstrumentId     m_instrument;

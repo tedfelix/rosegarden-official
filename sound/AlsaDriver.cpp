@@ -913,9 +913,13 @@ AlsaDriver::initialisePlayback(const RealTime &position)
     m_playStartPosition = position;
     m_startPlayback = true;
 
+    // Send sequencer start on to duplex MIDI devices
+    //
+    sendSystemDirect(SND_SEQ_EVENT_START);
+
     if (isMMCMaster())
     {
-        sendMMC(MIDI_MMC_PLAY);
+        sendMMC(127, MIDI_MMC_PLAY, true, "");
     }
 
 }
@@ -926,6 +930,10 @@ AlsaDriver::stopPlayback()
 {
     allNotesOff();
     m_playing = false;
+
+    // Send system stop to duplex MIDI devices
+    //
+    sendSystemDirect(SND_SEQ_EVENT_STOP);
 
     // send sounds-off to all client port pairs
     //
@@ -1311,14 +1319,6 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
                     m_noteOnMap[chanNoteKey]->setVelocity(0);
                     m_noteOnMap[chanNoteKey]->setDuration(duration);
 
-                    /*
-                    std::cout << "Inserted NOTE at "
-                              << m_noteOnMap[chanNoteKey]->getEventTime()
-                              << " with duration "
-                              << m_noteOnMap[chanNoteKey]->getDuration()
-                              << std::endl;
-                    */
-
                     // force shut off of note
                     m_recordComposition.insert(m_noteOnMap[chanNoteKey]);
 
@@ -1393,6 +1393,11 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
                    for (unsigned int i = 0; i < event->data.ext.len; ++i)
                        data += *(ptr++);
 
+                   if ((MidiByte)(data[0]) == MIDI_SYSEX_RT)
+                   {
+                       cout << "REALTIME SYSEX" << endl;
+                   }
+
                    MappedEvent *mE = new MappedEvent();
                    mE->setType(MappedEvent::MidiSystemExclusive);
                    mE->setDataBlock(data);
@@ -1402,14 +1407,41 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
                break;
 
 
-            case SND_SEQ_EVENT_SENSING:
-               // MIDI device is still there
+            case SND_SEQ_EVENT_SENSING: // MIDI device is still there
                break;
 
+            case SND_SEQ_EVENT_CLOCK:
+               /*
+               std::cout << "AlsaDriver::getMappedComposition - "
+                         << "got realtime MIDI clock" << std::endl;
+                         */
+               break;
+
+            case SND_SEQ_EVENT_START:
+               std::cout << "AlsaDriver::getMappedComposition - "
+                         << "START" << std::endl;
+               break;
+
+            case SND_SEQ_EVENT_CONTINUE:
+               std::cout << "AlsaDriver::getMappedComposition - "
+                         << "CONTINUE" << std::endl;
+               break;
+
+            case SND_SEQ_EVENT_STOP:
+               std::cout << "AlsaDriver::getMappedComposition - "
+                         << "STOP" << std::endl;
+               break;
+
+            case SND_SEQ_EVENT_SONGPOS:
+               std::cout << "AlsaDriver::getMappedComposition - "
+                         << "SONG POSITION" << std::endl;
+               break;
+
+            case SND_SEQ_EVENT_TICK:
             default:
                std::cerr << "AlsaDriver::getMappedComposition - "
-                         << "got unrecognised MIDI event type = "
-                         << int(event->type) << std::endl;
+                         << "got unhandled MIDI event type from ALSA sequencer"
+                         << "(" << int(event->type) << ")" << std::endl;
                break;
 
 
@@ -1607,7 +1639,6 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                                           (*i)->getData2());
                 break;
 
-                /*
             case MappedEvent::Audio:
             case MappedEvent::AudioCancel:
             case MappedEvent::AudioLevel:
@@ -1615,7 +1646,6 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
             case MappedEvent::SystemJackTransport:
             case MappedEvent::SystemMMCTransport:
                 break;
-                */
 
             default:
                 std::cout << "AlsaDriver::processMidiOut - "
@@ -1628,10 +1658,13 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
         if (now || m_playing == false)
         {
+            /*
             RealTime nowTime = getAlsaTime();
             snd_seq_real_time_t outTime = { nowTime.sec,
                                          nowTime.usec * 1000 };
             snd_seq_ev_schedule_real(event, m_queue, 0, &outTime);
+            */
+            event->queue = SND_SEQ_QUEUE_DIRECT;
             snd_seq_event_output_direct(m_midiHandle, event);
         }
         else
@@ -3176,23 +3209,102 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id)
         m_midiInputPortConnected = true;
 }
 
+// We send 
 void
-AlsaDriver::sendMMC(Rosegarden::MidiByte command)
+AlsaDriver::sendMMC(Rosegarden::MidiByte deviceId,
+                    Rosegarden::MidiByte instruction,
+                    bool isCommand,
+                    const std::string &data)
 {
     MappedComposition mC;
+    MappedEvent *mE;
 
-/*
-    try
+    std::vector<AlsaPort*>::iterator it = m_alsaPorts.begin();
+    for (; it != m_alsaPorts.end(); ++it)
     {
-         MappedEvent *mE =
-             new MappedEvent(0,
-                             MappedEvent::MidiSystemExclusive,
-                             0);
+        // One message per duplex device
+        //
+        if ((*it)->m_port == 0 && (*it)->m_duplex)
+        {
+            try
+            {
+                // Create a plain SysEx
+                //
+                 mE = new MappedEvent((*it)->m_startId,
+                                      MappedEvent::MidiSystemExclusive);
 
+                 // Make it a RealTime SysEx
+                 mE->addDataByte(MIDI_SYSEX_RT);
+
+                 // Add the destination
+                 mE->addDataByte(deviceId);
+
+                 // Add the command type
+                 if (isCommand)
+                     mE->addDataByte(MIDI_SYSEX_RT_COMMAND);
+                 else
+                     mE->addDataByte(MIDI_SYSEX_RT_RESPONSE);
+
+                 // Add the command
+                 mE->addDataByte(instruction);
+
+                 // Add any data
+                 mE->addDataString(data);
+            }
+            catch(...)
+            {
+                std::cerr << "AlsaDriver::sendMMC - "
+                          << "couldn't create MMC message" << std::endl;
+                return;
+            }
+
+            mC.insert(mE);
+        }
     }
-    catch(...) {;}
-*/
 
+    processMidiOut(mC, RealTime(0, 0), true);
+}
+
+// Send a system real-time message
+//
+void
+AlsaDriver::sendSystemDirect(MidiByte command)
+{
+
+    snd_seq_addr_t sender, dest;
+    sender.client = m_client;
+    sender.port = m_port;
+
+    std::vector<AlsaPort*>::iterator it = m_alsaPorts.begin();
+    for (; it != m_alsaPorts.end(); ++it)
+    {
+        // One message per duplex device
+        //
+        if ((*it)->m_port == 0 && (*it)->m_duplex)
+        {
+            snd_seq_event_t event;
+            memset(&event, 0, sizeof(&event));
+
+            // Set destination and sender
+            dest.client = (*it)->m_client;
+            dest.port = (*it)->m_port;
+        
+            event.dest = dest;
+            event.source = sender;
+            event.queue = SND_SEQ_QUEUE_DIRECT;
+
+            event.type = command;
+
+            int error = snd_seq_event_output_direct(m_midiHandle, &event);
+
+            if (error < 0)
+            {
+                std::cerr << "AlsaDriver::sendSystemDirect - "
+                          << "can't send event (" << int(command) << ")"
+                          << std::endl;
+            }
+        }
+    }
 }
 
 

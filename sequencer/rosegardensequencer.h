@@ -237,6 +237,10 @@ public:
     //
     virtual void setTemporarySliceSize(long timeSec, long timeUSec);
 
+    // Set Quarter note length
+    //
+    virtual void setQuarterNoteLength(long timeSec, long timeUSec);
+
     //
     //
     //

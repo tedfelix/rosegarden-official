@@ -94,6 +94,11 @@ const MidiByte MIDI_SYSEX_NON_RT           = 0x7E;
 //
 const MidiByte MIDI_SYSEX_RT               = 0x7F;
 
+// Sub IDs for RealTime SysExs
+//
+const MidiByte MIDI_SYSEX_RT_COMMAND       = 0x06;
+const MidiByte MIDI_SYSEX_RT_RESPONSE      = 0x07;
+
 // MMC commands
 //
 const MidiByte MIDI_MMC_STOP               = 0x01;

@@ -70,6 +70,10 @@ public:
     // MappedInstrument
     //
     static void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);
+
+    // Send the Quarter Note Length has changed to the sequencer
+    //
+    static void sendQuarterNoteLength(const Rosegarden::RealTime &length);
 };
 
 }

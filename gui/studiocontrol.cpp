@@ -255,6 +255,24 @@ StudioControl::sendMappedInstrument(const Rosegarden::MappedInstrument &mI)
 }
 
 
+void
+StudioControl::sendQuarterNoteLength(const Rosegarden::RealTime &length)
+{
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    streamOut << length.sec;
+    streamOut << length.usec;
+
+    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                           "setQuarterNoteLength(long int, long int)", data))
+    {
+        RG_DEBUG << "failed to contact RG sequencer" << endl;
+    }
+}
+
+
 
 };
 

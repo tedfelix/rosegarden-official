@@ -1,9 +1,13 @@
-0.9 tasks
-=========
+0.9(?) tasks
+============
 
 o Make RG a jack mixer (transport, control client)
 
 o MTC/MMC - transport awareness
+  - we're now sending Midi RealTime sequencer control messages
+    and adding infrastructure for real time clock messages
+  - MTC will be in addition to basic real-time clock
+  - MMC control can't yet be tested at my end
 
 o JACK connection management - stereo, panning, bypass
 
@@ -14,11 +18,19 @@ o Tidy up AudioFiles:
    - multithreading
    - autosplitting
 
-o MIDI export broken for key sig and SysExs [CC?]
-
 o multi-threaded base/
 
-o selection of ALSA recording device
+o selection of ALSA recording device [HALF COMPLETE]
+
+o ALSA client detection bug on laptop - going from no clients
+  to one client causes big loop of death.
+
+o Toggle record mode for punch in/out [Half complete]
+
+o audio/MIDI looping and start position (performance)
+
+o MIDI export broken for key sig and SysExs [CC?]
+
 
 
 Smaller stuff
@@ -37,8 +49,6 @@ o FEATURE - double/half speed event selection in Matrix
 o BUG - Plugin calls() during playback causing usual problem
 
 o BUG - changing audio file path doesn't work
-
-o audio/MIDI looping and start position (performance)
 
 o File loading blank-out
 
@@ -67,8 +77,6 @@ o Realtime downsampling buggy (8 bit)
 o First time run up go to settings and walk user through the
   MIDI and Audio setup to help them understand what they're
   doing.
-
-o Toggle record mode for punch in/out [Half complete]
 
 o aRts 1.0.0 support
 
