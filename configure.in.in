@@ -107,7 +107,7 @@ else
   fi
 
   dnl check whether user wants to have liblrdf
-  AC_ARG_WITH(liblrdf, [  --with-liblrdf           enable liblrdf metadata for LADSPA plugins (enabled by default when installed)],
+  AC_ARG_WITH(liblrdf, [  --with-liblrdf          enable liblrdf metadata for LADSPA plugins (enabled by default when installed)],
   [
     if test "$withval" = "yes"; then
       with_liblrdf=yes
@@ -120,7 +120,7 @@ else
   if test "$with_liblrdf" = "yes"; then
     AC_CHECK_HEADERS(lrdf.h,,[with_liblrdf=no])
       if test "$with_liblrdf" = "yes"; then
-        AC_CHECK_LIB(lrdf, lrdf_init,[with_liblrdf=no])
+        AC_CHECK_LIB(lrdf,lrdf_init,,[with_liblrdf=no])
       fi
   fi
 
