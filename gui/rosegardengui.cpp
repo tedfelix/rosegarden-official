@@ -3799,7 +3799,7 @@ void RosegardenGUIApp::slotEditDocumentProperties()
 
 void RosegardenGUIApp::slotEditKeys()
 {
-    KKeyDialog::configureKeys(actionCollection(), xmlFile(), true, this);
+    KKeyDialog::configure(actionCollection());
 }
 
 

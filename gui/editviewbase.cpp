@@ -173,7 +173,7 @@ void EditViewBase::slotConfigure()
 
 void EditViewBase::slotEditKeys()
 {
-    KKeyDialog::configureKeys(actionCollection(), xmlFile(), true, this);
+    KKeyDialog::configure(actionCollection());
 }
 
 

@@ -729,8 +729,8 @@ EditView::setupControllerTabs()
 void
 EditView::slotAddControlRuler(int controller)
 {
-    std::cout << "EditView::slotAddControlRuler - item = " 
-              << controller << std::endl;
+    RG_DEBUG << "EditView::slotAddControlRuler - item = " 
+             << controller << endl;
 
     Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
 	(getCurrentDevice());
@@ -1149,11 +1149,11 @@ EditView::slotCloseControlRulerItem()
             bool value = staff->getSegment().deleteController(controller->getControllerValue());
 
             if (value) 
-                std::cerr << "slotClearControlRulerItem - removed controller from segment" << std::endl;
+                RG_DEBUG << "slotClearControlRulerItem - removed controller from segment" << endl;
             else
-                std::cerr << "slotClearControlRulerItem - couldn't remove controller from segment - " 
-                          << int(controller->getControllerValue())
-                          << std::endl;
+                RG_DEBUG << "slotClearControlRulerItem - couldn't remove controller from segment - " 
+                         << int(controller->getControllerValue())
+                         << endl;
 
         }
 
@@ -1161,8 +1161,13 @@ EditView::slotCloseControlRulerItem()
         ruler->close();
 
         // if we now have no rulers then reverse this state
-        if (m_controlRulers->count() == 0)
+        if (m_controlRulers->count() == 0) {
             m_controlRulers->hide();
+            getBottomWidget()->layout()->invalidate();
+            getBottomWidget()->updateGeometry();
+            getCanvasView()->updateBottomWidgetGeometry();
+        }
+        
     }
 }
 
