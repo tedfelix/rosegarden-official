@@ -232,6 +232,8 @@ public:
         m_control(control),
         m_id(0) { }
 
+    ~AddControlParameterCommand();
+
     virtual void execute();
     virtual void unexecute();
 
@@ -253,7 +255,10 @@ public:
                                   int id):
         KNamedCommand(getGlobalName()),
         m_studio(studio),
-        m_id(id) { }
+        m_id(id),
+        m_oldControl(0) { }
+
+    ~RemoveControlParameterCommand();
 
     virtual void execute();
     virtual void unexecute();
@@ -278,11 +283,12 @@ public:
         m_studio(studio),
         m_control(control),
         m_id(id) { }
+    ~ModifyControlParameterCommand();
 
-        virtual void execute();
-        virtual void unexecute();
+    virtual void execute();
+    virtual void unexecute();
 
-        static QString getGlobalName() { return i18n("&Modify Control Parameter"); }
+    static QString getGlobalName() { return i18n("&Modify Control Parameter"); }
 
 protected:
 

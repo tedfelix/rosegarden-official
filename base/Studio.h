@@ -176,6 +176,12 @@ public:
 
     ControlList* getControlParameters() { return &m_controls; }
 
+    // Access ControlParameters
+    //
+    ControlParameter* getControlParameter(int id);
+
+    // Modify ControlParameters
+    //
     void addControlParameter(ControlParameter *con);
     void addControlParameter(ControlParameter *con, int id);
     bool removeControlParameter(int id);

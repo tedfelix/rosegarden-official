@@ -864,7 +864,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 	m_optionBox->setDisabled(true);
     }
 
-    setAutoSaveSettings("BankEditor", true);
+    setAutoSaveSettings(BankEditorConfigGroup, true);
 }
 
 BankEditorDialog::~BankEditorDialog()

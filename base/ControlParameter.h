@@ -40,7 +40,8 @@ public:
                      int min = 0,
                      int max = 127,
                      int def = 0,
-                     MidiByte controllerValue = 0);
+                     MidiByte controllerValue = 0,
+                     int colour = 0);
 
     std::string getName() const { return m_name; }
     std::string getType() const { return m_type; }
@@ -52,6 +53,8 @@ public:
 
     MidiByte getControllerValue() const { return m_controllerValue; }
 
+    int getColour() const { return m_colour; }
+
     void setName(const std::string &name) { m_name = name; }
     void setType(const std::string &type) { m_type = type; }
     void setDescription(const std::string &des) { m_type = des; }
@@ -61,6 +64,8 @@ public:
     void setDefault(int def) { m_default = def; }
 
     void setControllerValue(MidiByte con) { m_controllerValue = con; }
+
+    void setColour(int colour) { m_colour = colour; }
 
     virtual std::string toXmlString();
 
@@ -79,6 +84,8 @@ protected:
     int            m_default;
 
     MidiByte       m_controllerValue;
+
+    int            m_colour;
 
 };
 

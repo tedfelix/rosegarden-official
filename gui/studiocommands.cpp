@@ -527,6 +527,10 @@ ReconnectDeviceCommand::unexecute()
 
 // ---- Control Parameter Commands -----
 //
+AddControlParameterCommand::~AddControlParameterCommand()
+{
+}
+
 void
 AddControlParameterCommand::execute()
 {
@@ -542,6 +546,11 @@ AddControlParameterCommand::unexecute()
     m_studio->removeControlParameter(m_id);
 }
 
+RemoveControlParameterCommand::~RemoveControlParameterCommand()
+{
+    //if (m_oldControl) delete m_oldControl;
+}
+
 void
 RemoveControlParameterCommand::execute()
 {
@@ -553,6 +562,11 @@ void
 RemoveControlParameterCommand::unexecute()
 {
     m_studio->addControlParameter(m_oldControl, m_id);
+}
+
+ModifyControlParameterCommand::~ModifyControlParameterCommand()
+{
+    //if (m_originalControl) delete m_originalControl;
 }
 
 void

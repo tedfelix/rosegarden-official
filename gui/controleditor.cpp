@@ -25,6 +25,7 @@
 
 #include <qvbox.h>
 #include <qlayout.h>
+#include <qtooltip.h>
 
 #include "controleditor.h"
 #include "rosegardenguidoc.h"
@@ -45,12 +46,18 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     setCaption(i18n("Manage Control Parameters"));
 
     m_listView = new KListView(mainFrame);
-    m_listView->addColumn(i18n("Controller name"));
-    m_listView->addColumn(i18n("Controller value"));
-    m_listView->addColumn(i18n("Max"));
-    m_listView->addColumn(i18n("Min"));
-    m_listView->addColumn(i18n("Default"));
-    m_listView->addColumn(i18n("Colour"));
+    m_listView->addColumn(i18n("Controller name  "));
+    m_listView->addColumn(i18n("Controller type  "));
+    m_listView->addColumn(i18n("Controller value  "));
+    m_listView->addColumn(i18n("Description  "));
+    m_listView->addColumn(i18n("Max  "));
+    m_listView->addColumn(i18n("Min  "));
+    m_listView->addColumn(i18n("Default  "));
+    m_listView->addColumn(i18n("Colour  "));
+
+    // Align centrally
+    for (int i = 0; i < 8; ++i)
+        m_listView->setColumnAlignment(i, Qt::AlignHCenter);
 
 
     QFrame* btnBox = new QFrame(mainFrame);
@@ -64,16 +71,32 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     m_deleteButton = new QPushButton(i18n("Delete"), btnBox);
 
     m_closeButton = new QPushButton(i18n("Close"), btnBox);
-    m_applyButton = new QPushButton(i18n("Apply"), btnBox);
-    m_resetButton = new QPushButton(i18n("Reset"), btnBox);
+
+    m_copyButton = new QPushButton(i18n("Copy"), btnBox);
+    m_pasteButton = new QPushButton(i18n("Paste"), btnBox);
+
+    QToolTip::add(m_addButton,
+                  i18n("Add a Control Parameter to the Studio"));
+
+    QToolTip::add(m_deleteButton,
+                  i18n("Delete a Control Parameter from the Studio"));
+
+    QToolTip::add(m_closeButton,
+                  i18n("Close the Control Parameter editor"));
+
+    QToolTip::add(m_copyButton,
+                  i18n("Copy a Control Parameter"));
+
+    QToolTip::add(m_pasteButton,
+                  i18n("Paste a Control Parameter"));
 
     layout->addStretch(10);
     layout->addWidget(m_addButton);
     layout->addWidget(m_deleteButton);
     layout->addSpacing(30);
 
-    layout->addWidget(m_applyButton);
-    layout->addWidget(m_resetButton);
+    layout->addWidget(m_copyButton);
+    layout->addWidget(m_pasteButton);
     layout->addSpacing(15);
 
     layout->addWidget(m_closeButton);
@@ -88,62 +111,89 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     connect(m_closeButton, SIGNAL(released()),
             SLOT(slotClose()));
 
-    connect(m_applyButton, SIGNAL(released()),
-            SLOT(slotApply()));
+    connect(m_copyButton, SIGNAL(released()),
+            SLOT(slotEditCopy()));
 
-    connect(m_resetButton, SIGNAL(released()),
-            SLOT(slotReset()));
+    connect(m_pasteButton, SIGNAL(released()),
+            SLOT(slotEditPaste()));
     setupActions();
 
+    m_doc->getCommandHistory()->attachView(actionCollection());
+    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+            this, SLOT(slotUpdate()));
+
+    connect(m_listView, SIGNAL(doubleClicked(QListViewItem *)),
+            SLOT(slotEdit(QListViewItem *)));
+
+    // Highlight all columns - enable extended selection mode
+    //
     m_listView->setAllColumnsShowFocus(true);
+    m_listView->setSelectionMode(QListView::Extended);
 
     initDialog();
+
+    setAutoSaveSettings(ControlEditorConfigGroup, true);
 }
 
 
 ControlEditorDialog::~ControlEditorDialog()
 {
+    RG_DEBUG << "ControlEditorDialog::~ControlEditorDialog" << endl;
+
+    m_listView->saveLayout(kapp->config(), ControlEditorConfigGroup);
+
+    if (m_doc)
+        m_doc->getCommandHistory()->detachView(actionCollection());
 }
 
 void 
 ControlEditorDialog::initDialog()
 {
-    Rosegarden::ControlListConstIterator it = m_studio->beginControllers();
-    QListViewItem *item;
-
-    m_listView->clear();
-
-    for (; it != m_studio->endControllers(); ++it)
-    {
-        item = new QListViewItem(m_listView,
-                                 strtoqstr((*it)->getName()),
-                                 strtoqstr((*it)->getType()),
-                                 strtoqstr((*it)->getDescription()),
-                                 QString("%1").arg((*it)->getMin()),
-                                 QString("%1").arg((*it)->getMax()),
-                                 QString("%1").arg((*it)->getDefault()));
-
-        m_listView->insertItem(item);
-    }
-
-}
-
-void 
-ControlEditorDialog::slotApply()
-{
-    RG_DEBUG << "ControlEditorDialog::slotApply" << endl;
-}
-
-void 
-ControlEditorDialog::slotReset()
-{
-    RG_DEBUG << "ControlEditorDialog::slotReset" << endl;
+    RG_DEBUG << "ControlEditorDialog::initDialog" << endl;
+    slotUpdate();
 }
 
 void
 ControlEditorDialog::slotUpdate()
 {
     RG_DEBUG << "ControlEditorDialog::slotUpdate" << endl;
+
+    //QPtrList<QListViewItem> selection = m_listView->selectedItems();
+
+    Rosegarden::ControlListConstIterator it = m_studio->beginControllers();
+    QListViewItem *item;
+    int i = 0;
+
+    m_listView->clear();
+
+    for (; it != m_studio->endControllers(); ++it)
+    {
+        item = new ControlParameterItem(i++,
+                                        m_listView,
+                                        strtoqstr((*it)->getName()),
+                                        strtoqstr((*it)->getType()),
+                                        QString("%1").arg(
+                                            int((*it)->getControllerValue())),
+                                        strtoqstr((*it)->getDescription()),
+                                        QString("%1").arg((*it)->getMin()),
+                                        QString("%1").arg((*it)->getMax()),
+                                        QString("%1").arg((*it)->getDefault()),
+                                        QString("%1").arg((*it)->getColour()));
+
+        m_listView->insertItem(item);
+    }
+}
+
+void 
+ControlEditorDialog::slotEditCopy()
+{
+    RG_DEBUG << "ControlEditorDialog::slotEditCopy" << endl;
+}
+
+void
+ControlEditorDialog::slotEditPaste()
+{
+    RG_DEBUG << "ControlEditorDialog::slotEditPaste" << endl;
 }
 
 void
@@ -158,15 +208,26 @@ ControlEditorDialog::slotAdd()
 
     addCommandToHistory(command);
 
-    initDialog();
+    slotUpdate();
 }
+
 
 void
 ControlEditorDialog::slotDelete()
 {
+    RG_DEBUG << "ControlEditorDialog::slotDelete" << endl;
+
     if (!m_listView->currentItem()) return;
 
-    RG_DEBUG << "ControlEditorDialog::slotDelete" << endl;
+    int id = dynamic_cast<ControlParameterItem*>
+        (m_listView->currentItem())->getId();
+
+    RemoveControlParameterCommand *command =
+        new RemoveControlParameterCommand(m_studio, id);
+
+    addCommandToHistory(command);
+
+    slotUpdate();
 }
 
 void
@@ -174,7 +235,7 @@ ControlEditorDialog::slotClose()
 {
     RG_DEBUG << "ControlEditorDialog::slotClose" << endl;
 
-    m_doc->getCommandHistory()->detachView(actionCollection());
+    if (m_doc) m_doc->getCommandHistory()->detachView(actionCollection());
     m_doc = 0;
 
     close();
@@ -183,8 +244,15 @@ ControlEditorDialog::slotClose()
 void
 ControlEditorDialog::setupActions()
 {
-    KStdAction::copy     (this, SLOT(slotEditCopy()),       actionCollection());
-    KStdAction::paste    (this, SLOT(slotEditPaste()),      actionCollection());
+    KAction* close = KStdAction::close(this,
+                                       SLOT(slotClose()),
+                                       actionCollection());
+
+    m_closeButton->setText(close->text());
+    connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
+
+    KStdAction::copy   (this, SLOT(slotEditCopy()),     actionCollection());
+    KStdAction::paste  (this, SLOT(slotEditPaste()),    actionCollection());
 
     // some adjustments
     new KToolBarPopupAction(i18n("Und&o"),
@@ -237,5 +305,47 @@ ControlEditorDialog::checkModified()
     RG_DEBUG << "ControlEditorDialog::checkModified(" << m_modified << ")" 
              << endl;
 
+}
+
+
+void
+ControlEditorDialog::slotEdit()
+{
+}
+
+void
+ControlEditorDialog::slotEdit(QListViewItem *i)
+{
+    RG_DEBUG << "ControlEditorDialog::slotEdit" << endl;
+
+    int id = dynamic_cast<ControlParameterItem*>(i)->getId();
+
+    ControlParameterEditDialog *dialog = 
+        new ControlParameterEditDialog::ControlParameterEditDialog(
+                this, m_studio->getControlParameter(id));
+
+    if (dialog->exec() == QDialog::Accepted)
+    {
+        cout << "OK" << endl;
+    }
+
+}
+
+
+const char* const ControlEditorDialog::ControlEditorConfigGroup = "Control Editor";
+
+
+// ----------------- ControlParameterEditDialog ---------------
+//
+//
+
+ControlParameterEditDialog::ControlParameterEditDialog(
+            QWidget *parent,
+            Rosegarden::ControlParameter *control):
+    KDialogBase(parent, 0, true,
+                i18n("Edit Control Parameter"), Ok | Cancel),
+    m_control(control)
+
+{
 }
 

@@ -20,18 +20,20 @@
 */
 
 #include "ControlParameter.h"
+#include "MidiTypes.h"
 
 namespace Rosegarden
 {
 
 ControlParameter::ControlParameter():
-    m_name("<unnamed control parameter>"),
-    m_type("<unknown>"),
-    m_description("<no description>"),
+    m_name("<unnamed>"),
+    m_type(Rosegarden::Controller::EventType),
+    m_description("<none>"),
     m_min(0),
     m_max(127),
     m_default(0),
-    m_controllerValue(0)
+    m_controllerValue(0),
+    m_colour(0)
 {
 }
 
@@ -42,14 +44,16 @@ ControlParameter::ControlParameter(const std::string &name,
                                    int min,
                                    int max,
                                    int def,
-                                   MidiByte controllerValue):
+                                   MidiByte controllerValue,
+                                   int colour):
         m_name(name),
         m_type(type),
         m_description(description),
         m_min(min),
         m_max(max),
         m_default(def),
-        m_controllerValue(controllerValue)
+        m_controllerValue(controllerValue),
+        m_colour(colour)
 {
 }
 

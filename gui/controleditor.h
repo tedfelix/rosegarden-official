@@ -25,14 +25,65 @@
 
 #include <kmainwindow.h>
 #include <klistview.h>
+#include <kdialogbase.h>
 
 #include <qpushbutton.h>
+#include <qstring.h>
+
+#include "Studio.h"
 
 class RosegardenGUIDoc;
 class KCommand;
 class MultiViewCommandHistory;
+class QSpinBox;
+class RosegardenComboBox;
+class QLineEdit;
 
-namespace Rosegarden { class Studio; }
+class ControlParameterItem : public QListViewItem
+{
+public:
+    ControlParameterItem(int id,
+                         QListView *parent,
+                         QString str1,
+                         QString str2,
+                         QString str3,
+                         QString str4,
+                         QString str5,
+                         QString str6,
+                         QString str7,
+                         QString str8):
+        QListViewItem(parent, str1, str2, str3, str4, str5, str6, str7, str8),
+        m_id(id) { }
+
+    int getId() const { return m_id; }
+
+protected:
+
+    int m_id;
+};
+
+class ControlParameterEditDialog : public KDialogBase
+{
+    Q_OBJECT
+public:
+    ControlParameterEditDialog(QWidget *parent,
+                               Rosegarden::ControlParameter *control);
+
+protected:
+    RosegardenGUIDoc             *m_doc;
+    Rosegarden::ControlParameter *m_control;
+
+    QLineEdit                    *m_nameEdit;
+    RosegardenComboBox           *m_typeCombo;
+    QLineEdit                    *m_description;
+    QSpinBox                     *m_controllerBox;
+    QSpinBox                     *m_minBox;
+    QSpinBox                     *m_maxBox;
+    QSpinBox                     *m_defaultBox;
+    RosegardenComboBox           *m_colourCombo;
+
+};
+
 
 class ControlEditorDialog : public KMainWindow
 {
@@ -53,17 +104,22 @@ public:
     void checkModified();
 
 public slots:
-    void slotApply();
-    void slotReset();
     void slotUpdate();
+
+    void slotEditCopy();
+    void slotEditPaste();
 
     void slotAdd();
     void slotDelete();
     void slotClose();
 
+    void slotEdit();
+    void slotEdit(QListViewItem *);
+
 signals:
 
 protected:
+
     void setupActions();
 
     //--------------- Data members ---------------------------------
@@ -71,8 +127,9 @@ protected:
     RosegardenGUIDoc        *m_doc;
 
     QPushButton             *m_closeButton;
-    QPushButton             *m_resetButton;
-    QPushButton             *m_applyButton;
+
+    QPushButton             *m_copyButton;
+    QPushButton             *m_pasteButton;
 
     QPushButton             *m_addButton;
     QPushButton             *m_deleteButton;
@@ -80,6 +137,11 @@ protected:
     KListView               *m_listView;
 
     bool                     m_modified;
+
+    Rosegarden::ControlList  m_clipboard; // local clipboard only
+
+    static const char* const ControlEditorConfigGroup;
+
 };
 
 #endif // _CONTROLEDITOR_H_

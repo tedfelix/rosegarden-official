@@ -613,8 +613,15 @@ Studio::addControlParameter(ControlParameter *con, int id)
 {
     ControlList controls;
 
+    // if we're out of range just add the control
+    if (((unsigned int)id) >= m_controls.size())
+    {
+        m_controls.push_back(con);
+        return;
+    }
+
     // add new controller in at a position
-    for (unsigned int i = 0; i != m_controls.size(); ++i)
+    for (unsigned int i = 0; i < m_controls.size(); ++i)
     {
         if (((unsigned int)id) == i) controls.push_back(con);
         controls.push_back(m_controls[i]);
@@ -638,7 +645,6 @@ Studio::removeControlParameter(int id)
     {
         if (id == i)
         {
-            delete (*it);
             m_controls.erase(it);
             return true;
         }
@@ -686,6 +692,16 @@ Studio::isUniqueControlParameter(ControlParameter *con) const
 
     return true;
 }
+
+ControlParameter*
+Studio::getControlParameter(int id)
+{
+    if (id >=0  && ((unsigned int)id) < m_controls.size())
+        return m_controls[id];
+
+    return 0;
+}
+
 
 
 }
