@@ -1328,12 +1328,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             NotationElement *el = static_cast<NotationElement*>(*it);
 	    delta = 0;
 	    float fixed = 0;
-/*!!!
-	    bool invisible = false;
-	    if (el->event()->get<Bool>(INVISIBLE, invisible) && invisible) {
-		if (!showInvisibles) continue;
-	    }
-*/
+
 	    if (el->event()->isa(Note::EventType)) {
 		long pitch = 0;
 		el->event()->get<Int>(PITCH, pitch);
@@ -1450,32 +1445,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
 		// nothing else
 	    }
-/*!!!
-	    if (it != to && el->event()->has(BEAMED_GROUP_ID)) {
 
-		//!!! Gosh.  We need some clever logic to establish
-		// whether one group is happening while another has
-		// not yet ended -- perhaps we decide one has ended
-		// if we see another, and then re-open the case of
-		// the first if we meet another note that claims to
-		// be in it.  Then we need to hint to both of the
-		// groups that they should choose appropriate stem
-		// directions -- we could just use HEIGHT_ON_STAFF
-		// of their first notes to determine this, as if that
-		// doesn't work, nothing will
-
-		long groupId = el->event()->get<Int>(BEAMED_GROUP_ID);
-//		NOTATION_DEBUG << "group id: " << groupId << endl;
-		if (m_groupsExtant.find(groupId) == m_groupsExtant.end()) {
-//		    NOTATION_DEBUG << "(new group)" << endl;
-		    m_groupsExtant[groupId] =
-			new NotationGroup(*staff.getViewElementList(),
-					  m_notationQuantizer,
-					  m_properties, clef, key);
-		}
-		m_groupsExtant[groupId]->sample(it, true);
-	    }
-*/
 	    if (m_timePerProgressIncrement > 0 && (++count == 100)) {
 		count = 0;
 		timeT sinceIncrement = el->getViewAbsoluteTime() - lastIncrement;
@@ -1492,7 +1462,6 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
 	if (timeSigToPlace) {
 	    // no other events in this bar, so we never managed to place it
-//!!!	    x = x + delta - m_npf->getTimeSigWidth(bdi->second.basicData.timeSignature);
 	    x = barX + offset;
 	    NOTATION_DEBUG << "Placing timesig reluctantly at " << x << endl;
 	    bdi->second.layoutData.timeSigX = (int)(x);
@@ -1613,7 +1582,7 @@ NotationHLayout::positionChord(Staff &staff,
 	// ensure every note in the chord is accounted for
 	sampleGroupElement(staff, clef, key, citr);
 
-	NotationElement *elt = static_cast<NotationElement*>(*citr);//!!!
+	NotationElement *elt = static_cast<NotationElement*>(*citr);
 
 	double displacedX = 0.0;
 	long dxRaw = 0;
@@ -1625,7 +1594,7 @@ NotationHLayout::positionChord(Staff &staff,
 
 	NOTATION_DEBUG << "NotationHLayout::positionChord: assigned x to elt at " << elt->getViewAbsoluteTime() << endl;
 
-	if (citr == chord.getFinalElement()) break;//!!!
+	if (citr == chord.getFinalElement()) break;
     }
 
     // Check for any ties going back, and if so work out how long they
@@ -1634,9 +1603,9 @@ NotationHLayout::positionChord(Staff &staff,
     for (NotationElementList::iterator citr = chord.getInitialElement();
 	 citr != staff.getViewElementList()->end(); ++citr) {
 	
-	NotationElement *note = static_cast<NotationElement*>(*citr);//!!!
+	NotationElement *note = static_cast<NotationElement*>(*citr);
 	if (!note->isNote()) {
-	    if (citr == chord.getFinalElement()) break; //!!!
+	    if (citr == chord.getFinalElement()) break;
 	    continue;
 	}
 
@@ -1749,13 +1718,6 @@ NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve,
 
 	    w += m_npf->getKeyWidth(key, cancelKey);
 
-	    /*!!!
-	    if (key.getAccidentalCount() == 0) {
-		w += m_npf->getKeyWidth(previousKey, true);
-	    } else {
-		w += m_npf->getKeyWidth(key);
-	    }
-	    */
 	} else if (e.event()->isa(Indication::EventType) ||
 		   e.event()->isa(Text::EventType)) {
 
@@ -1972,7 +1934,6 @@ NotationHLayout::getXForTimeByEvent(Rosegarden::timeT time)
 		if (vli == staff->getViewElementList()->end()) break;
 		NotationElement *element = static_cast<NotationElement *>(*vli);
 		if (element->getCanvasItem()) {
-//!!!		    && (element->isNote() || element->isRest())) {
 		    x = element->getLayoutX();
 		    double temp;
 		    element->getLayoutAirspace(temp, dx);
