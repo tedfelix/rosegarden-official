@@ -54,6 +54,9 @@
 using std::cerr;
 using std::endl;
 
+static pthread_mutex_t _returnCompositionLock = PTHREAD_MUTEX_INITIALIZER;
+
+
 
 namespace Rosegarden
 {
@@ -1627,6 +1630,8 @@ MappedComposition*
 AlsaDriver::getMappedComposition()
 {
     m_recordComposition.clear();
+
+    pthread_mutex_lock(&_returnCompositionLock);
     if (!m_returnComposition.empty()) {
 	for (MappedComposition::iterator i = m_returnComposition.begin();
 	     i != m_returnComposition.end(); ++i) {
@@ -1634,6 +1639,7 @@ AlsaDriver::getMappedComposition()
 	}
 	m_returnComposition.clear();
     }
+    pthread_mutex_unlock(&_returnCompositionLock);
 
     if (m_recordStatus != RECORD_MIDI &&
         m_recordStatus != RECORD_AUDIO &&
@@ -2822,9 +2828,11 @@ AlsaDriver::processPending()
 void
 AlsaDriver::insertMappedEventForReturn(MappedEvent *mE)
 {
-    // Insert the event ready for return at the next opportunity
-    //
+    // Insert the event ready for return at the next opportunity.
+    // 
+    pthread_mutex_lock(&_returnCompositionLock);
     m_returnComposition.insert(mE);
+    pthread_mutex_unlock(&_returnCompositionLock);
 }
 
 
@@ -3484,20 +3492,34 @@ AlsaDriver::sleep(const RealTime &rt)
 void 
 AlsaDriver::reportFailure(Rosegarden::MappedEvent::FailureCode code)
 {
-    static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+    // We have a mutex here and in other uses of m_returnComposition,
+    // as this can be called to report failures from all sorts of
+    // different threads.  (That includes the JACK process thread,
+    // from which we shouldn't be taking out locks, but if we're
+    // warning of a JACK failure already then it's probably too late.) 
+    // The mutex shouldn't add too much overhead in normal use as
+    // other threads will only take it out on error.
 
-    // We have a mutex here, as failures can come in from all sorts of
-    // different threads.  This includes the JACK process thread, from
-    // which we shouldn't be taking out locks, but if we're warning of
-    // a JACK failure already then it's probably too late.
+    std::cerr << "AlsaDriver::reportFailure(" << code << ")" << std::endl;
 
-    pthread_mutex_lock(&mutex);
+    pthread_mutex_lock(&_returnCompositionLock);
+
+    // If we already have one of this type, ignore the new one
+
+    for (Rosegarden::MappedComposition::iterator i = m_returnComposition.begin();
+	 i != m_returnComposition.end(); ++i) {
+	if ((*i)->getType() == Rosegarden::MappedEvent::SystemFailure &&
+	    (*i)->getData1() == code) {
+	    pthread_mutex_unlock(&_returnCompositionLock);
+	    return;
+	}
+    }
 
     Rosegarden::MappedEvent *mE = new Rosegarden::MappedEvent
 	(0, Rosegarden::MappedEvent::SystemFailure, code, 0);
-    insertMappedEventForReturn(mE);
+    m_returnComposition.insert(mE);
 
-    pthread_mutex_unlock(&mutex);
+    pthread_mutex_unlock(&_returnCompositionLock);
 }
 
 }

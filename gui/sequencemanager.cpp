@@ -900,6 +900,8 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
             {
 		if ((*i)->getType() == Rosegarden::MappedEvent::SystemFailure) {
 
+		    SEQMAN_DEBUG << "Failure of some sort..." << endl;
+
 		    if ((*i)->getData1() == Rosegarden::MappedEvent::FailureJackDied) {
                     // Something horrible has happened to JACK or we got
                     // bumped out of the graph.  Either way stop playback.
