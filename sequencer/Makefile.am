@@ -5,7 +5,7 @@ rosegardensequencer_SOURCES = rosegardensequencer.cpp \
 			      main.cpp \
 			      rosegardensequenceriface.skel
 
-rosegardensequencer_LDADD   = -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET) ../sound/libRosegardenSound.la ../sound/libRosegardenSequencer.la ../core/libcore.la
+rosegardensequencer_LDADD   = -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET) ../sound/libRosegardenSound.la ../sound/libRosegardenSequencer.la ../base/libbase.la
 
 EXTRA_DIST = rosegardensequenceriface.kidl
 
@@ -23,7 +23,7 @@ EXTRA_DIST = rosegardensequenceriface.kidl
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../core -I../sound -I../gui
+INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../base -I../sound -I../gui
 # claim, which subdirectories you want to install
 # you can add here more. This one gets installed 
 bin_PROGRAMS = rosegardensequencer

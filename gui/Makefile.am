@@ -34,7 +34,7 @@ rosegarden_SOURCES = \
 	xmlstorableevent.cpp \
         RosegardenTransport.ui
 
-rosegarden_LDADD   = ../sound/libRosegardenSound.la ../core/libcore.la -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET)
+rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET)
 
 SUBDIRS = docs
 
@@ -108,7 +108,7 @@ uninstall-local:
 # kde_wallpaperdir  Where general wallpapers should go to.
 
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes) -I../core -I../sound
+INCLUDES= $(all_includes) -I../base -I../sound
 # claim, which subdirectories you want to install
 # you can add here more. This one gets installed 
 

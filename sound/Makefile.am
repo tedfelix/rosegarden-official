@@ -1,7 +1,7 @@
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 # ensure our path is correct
-INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../core
+INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../base
 
 COMPILE_FIRST = libRosegardenSound
 
@@ -18,7 +18,7 @@ libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-un
 
 # the libraries to link against. Be aware of the order. First the libraries,
 # that depend on the following ones.
-libRosegardenSequencer_la_LIBADD   = -lartsmidi -lqt -lsoundserver_idl libRosegardenSound.la ../core/libcore.la
+libRosegardenSequencer_la_LIBADD   = -lartsmidi -lqt -lsoundserver_idl libRosegardenSound.la ../base/libbase.la
 
 # make messages.po. Move this one to ../po/ and "make merge" in po
 # the -x is for skipping messages already translated in kdelibs
@@ -40,4 +40,4 @@ DISTCLEANFILES = $(sound_METASOURCES) MidiArts.h MidiArts.cc
 #
 # bin_P_ROGRAMS = sound
 # sound_S_OURCES = sound.cpp
-# sound_L_DADD = -lartsmidi -lqt -lsoundserver_idl libRosegardenSound.la ../core/libcore.la
+# sound_L_DADD = -lartsmidi -lqt -lsoundserver_idl libRosegardenSound.la ../base/libbase.la
