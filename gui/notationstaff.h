@@ -68,7 +68,7 @@ public:
 
     LinedStaff::setPageMode;
     LinedStaff::setPageWidth;
-    LinedStaff::setPageHeight;
+    LinedStaff::setRowsPerPage;
     LinedStaff::setRowSpacing;
     LinedStaff::setConnectingLineLength;
 

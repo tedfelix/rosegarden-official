@@ -49,7 +49,7 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_lineThickness(lineThickness),
     m_pageMode(LinearMode),
     m_pageWidth(2000.0), // fairly arbitrary, but we need something non-zero
-    m_pageHeight(0),
+    m_rowsPerPage(0),
     m_rowSpacing(0),
     m_connectingLineLength(0),
     m_startLayoutX(0),
@@ -64,7 +64,7 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
 LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
 		       Rosegarden::SnapGrid *snapGrid,
 		       int id, int resolution, int lineThickness,
-		       double pageWidth, int pageHeight, int rowSpacing) :
+		       double pageWidth, int rowsPerPage, int rowSpacing) :
     Rosegarden::Staff(*segment),
     m_canvas(canvas),
     m_snapGrid(snapGrid),
@@ -74,9 +74,9 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_margin(0.0),
     m_resolution(resolution),
     m_lineThickness(lineThickness),
-    m_pageMode(pageHeight ? MultiPageMode : ContinuousPageMode),
+    m_pageMode(rowsPerPage ? MultiPageMode : ContinuousPageMode),
     m_pageWidth(pageWidth),
-    m_pageHeight(pageHeight),
+    m_rowsPerPage(rowsPerPage),
     m_rowSpacing(rowSpacing),
     m_connectingLineLength(0),
     m_startLayoutX(0),
@@ -91,7 +91,7 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
 LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
 		       Rosegarden::SnapGrid *snapGrid,
 		       int id, int resolution, int lineThickness,
-		       PageMode pageMode, double pageWidth, int pageHeight,
+		       PageMode pageMode, double pageWidth, int rowsPerPage,
 		       int rowSpacing) :
     Rosegarden::Staff(*segment),
     m_canvas(canvas),
@@ -104,7 +104,7 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_lineThickness(lineThickness),
     m_pageMode(pageMode),
     m_pageWidth(pageWidth),
-    m_pageHeight(pageHeight),
+    m_rowsPerPage(rowsPerPage),
     m_rowSpacing(rowSpacing),
     m_connectingLineLength(0),
     m_startLayoutX(0),
@@ -162,9 +162,9 @@ LinedStaff::setPageWidth(double pageWidth)
 }
 
 void
-LinedStaff::setPageHeight(int pageHeight)
+LinedStaff::setRowsPerPage(int rowsPerPage)
 {
-    m_pageHeight = pageHeight;
+    m_rowsPerPage = rowsPerPage;
 }
 
 void
@@ -248,7 +248,8 @@ LinedStaff::getTotalHeight() const
 	    getHeightOfRow() - m_y;
 
     case MultiPageMode:
-	return m_pageHeight - m_y;
+	return getCanvasYForTopOfStaff(m_rowsPerPage - 1) +
+	    getHeightOfRow() - m_y;
 
     case LinearMode: default:
 	return getCanvasYForTopOfStaff(0) + getHeightOfRow() - m_y;

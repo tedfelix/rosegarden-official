@@ -849,7 +849,11 @@ void NotationView::positionStaffs()
 	m_staffs[i]->setX(20);
 	m_staffs[i]->setY(trackCoords[track] + (topMargin * 3) / 2);
 	m_staffs[i]->setPageWidth(pageWidth - leftMargin * 2);
-	m_staffs[i]->setPageHeight(pageHeight - topMargin * 2);
+
+	int staffPageHeight = pageHeight - topMargin * 2;
+	int rowsPerPage = staffPageHeight / m_staffs[i]->getRowSpacing();
+	if (rowsPerPage < 1) rowsPerPage = 1;
+	m_staffs[i]->setRowsPerPage(rowsPerPage);
         m_staffs[i]->setPageMode(m_pageMode);
 	m_staffs[i]->setMargin(leftMargin);
 

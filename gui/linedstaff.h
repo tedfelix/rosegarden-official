@@ -111,23 +111,23 @@ protected:
      * \a pageWidth is the width of a page, to determine
      *    when to break lines for page layout
      *
-     * \a pageHeight is the height of a page, or zero for
-     *    a single continuous page
+     * \a rowsPerPage is the number of rows to a page, or zero
+     *    for a single continuous page
      *
      * \a rowSpacing is the distance in pixels between
      *    the tops of consecutive rows on this staff
      */
     LinedStaff(QCanvas *, Rosegarden::Segment *, Rosegarden::SnapGrid *,
                int id, int resolution, int lineThickness,
-	       double pageWidth, int pageHeight, int rowSpacing);
+	       double pageWidth, int rowsPerPage, int rowSpacing);
 
     /**
      * Create a new LinedStaff for the given Segment, with
      * either page or linear layout.
      */
     LinedStaff(QCanvas *, Rosegarden::Segment *, Rosegarden::SnapGrid *,
-               int id, int resolution, int lineThickness,
-	       PageMode pageMode, double pageWidth, int pageHeight, int rowSpacing);
+               int id, int resolution, int lineThickness, PageMode pageMode,
+	       double pageWidth, int rowsPerPage, int rowSpacing);
 
 public:
     virtual ~LinedStaff();
@@ -200,7 +200,7 @@ protected:
     virtual void setPageWidth(double pageWidth);
 
     /// Subclass may wish to expose this
-    virtual void setPageHeight(int pageHeight);
+    virtual void setRowsPerPage(int rowsPerPage);
 
     /// Subclass may wish to expose this
     virtual void setRowSpacing(int rowSpacing);
@@ -462,7 +462,7 @@ public:
     // protected methods below -- but we have some code that needs
     // it and hasn't been supplied with a proper way to do without.
     // Please try to avoid calling this method.
-    //!!! fix NotationView::print
+    //!!! fix NotationView::print etc
     int getRowSpacing() { return m_rowSpacing; }
 
 protected:
@@ -511,12 +511,7 @@ protected:
     }
 
     int getRowsPerPage() const {
-	int rows = 0;
-	if (m_pageMode == MultiPageMode) {
-	    rows = m_pageHeight / m_rowSpacing;
-	    if (rows < 1) rows = 1;
-	}
-	return rows;
+	return m_rowsPerPage;
     }
 
 protected:
@@ -564,7 +559,7 @@ protected:
     
     PageMode m_pageMode;
     double   m_pageWidth;
-    int      m_pageHeight;
+    int      m_rowsPerPage;
     int	     m_rowSpacing;
     int	     m_connectingLineLength;
 
