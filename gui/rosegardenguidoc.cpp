@@ -282,7 +282,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 	// parse xml file
 	RosegardenProgressDialog *progressDlg =
 	    new RosegardenProgressDialog(i18n("Reading file..."),
-					 i18n("Cancel"),
+					 0, // i18n("Cancel"),
 					 100,
 					 (QWidget*)parent());
 

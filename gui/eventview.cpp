@@ -34,6 +34,7 @@
 
 #include "eventview.h"
 #include "rosegardenguidoc.h"
+#include "rosestrings.h"
 #include "Segment.h"
 #include "SegmentPerformanceHelper.h"
 #include "BaseProperties.h"
@@ -65,7 +66,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
     m_restFilter = new QPushButton(i18n("Rests"), filterBox);
     m_programFilter = new QPushButton(i18n("Program Change"), filterBox);
     m_controllerFilter = new QPushButton(i18n("Controller"), filterBox);
-    m_sysExFilter = new QPushButton(i18n("Systerm Exclusive"), filterBox);
+    m_sysExFilter = new QPushButton(i18n("System Exclusive"), filterBox);
     m_textFilter = new QPushButton(i18n("Text"), filterBox);
 
     m_noteFilter->setToggleButton(true);
@@ -109,11 +110,13 @@ EventView::EventView(RosegardenGUIDoc *doc,
     m_eventList->setAllColumnsShowFocus(true);
     m_eventList->setSelectionMode(QListView::Single);
 
-    m_eventList->addColumn(i18n("Time"));
-    m_eventList->addColumn(i18n("Duration"));
-    m_eventList->addColumn(i18n("Event"));
-    m_eventList->addColumn(i18n("Note (Data1)"));
-    m_eventList->addColumn(i18n("Velocity (Data2)"));
+    m_eventList->addColumn(i18n("Time  "));
+    m_eventList->addColumn(i18n("Duration  "));
+    m_eventList->addColumn(i18n("Type  "));
+    m_eventList->addColumn(i18n("Pitch  "));
+    m_eventList->addColumn(i18n("Velocity  "));
+    m_eventList->addColumn(i18n("Data1  "));
+    m_eventList->addColumn(i18n("Data2  "));
 
     setButtonsToFilter();
     applyLayout();
@@ -140,6 +143,7 @@ EventView::applyLayout(int /*staffNo*/)
 
             QString velyStr;
             QString pitchStr;
+	    QString durationStr;
 
             // Event filters
             //
@@ -151,26 +155,36 @@ EventView::applyLayout(int /*staffNo*/)
                !(m_eventFilter & Note))
                 continue;
 
-            try
-            {
-                pitchStr = QString("%1").
+	    // avoid debug stuff going to stderr if no properties found
+
+	    if ((*it)->has(BaseProperties::PITCH)) {
+		pitchStr = QString("%1  ").
                     arg((*it)->get<Int>(BaseProperties::PITCH));
-                velyStr = QString("%1").
+	    } else if ((*it)->isa(Rosegarden::Note::EventType)) {
+		pitchStr = "<not set>";
+	    }
+
+	    if ((*it)->has(BaseProperties::VELOCITY)) {
+		velyStr = QString("%1  ").
                     arg((*it)->get<Int>(BaseProperties::VELOCITY));
-            }
-            catch(...)
-            {
-                velyStr = i18n("<not set>");
-            }
+	    } else if ((*it)->isa(Rosegarden::Note::EventType)) {
+		velyStr = "<not set>";
+	    }
+
+	    if ((*it)->getDuration() > 0 ||
+		(*it)->isa(Rosegarden::Note::EventType) ||
+		(*it)->isa(Rosegarden::Note::EventRestType)) {
+		durationStr = QString("%1  ").arg((*it)->getDuration());
+	    }
 
             new QListViewItem(m_eventList,
-                              QString("%1").arg(eventTime),
-                              QString("%1").arg((*it)->getDuration()),
-                              QString((*it)->getType().c_str()),
+                              QString("%1  ").arg(eventTime),
+			      durationStr,
+			      strtoqstr((*it)->getType()) + "  ",
                               pitchStr,
-                              velyStr);
-
-
+                              velyStr,
+			      "",
+			      "");
         }
     }
 
