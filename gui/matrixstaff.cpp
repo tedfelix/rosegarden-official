@@ -43,8 +43,8 @@ MatrixStaff::MatrixStaff(QCanvas *canvas,
                          int vResolution,
                          MatrixView *view) :
     LinedStaff<MatrixElement>(canvas, segment, snapGrid, id, vResolution, 1),
-    m_scaleFactor
-        (1.5 / Rosegarden::Note(Rosegarden::Note::Shortest).getDuration()),
+    m_scaleFactor(1.0/
+            Rosegarden::Note(Rosegarden::Note::Shortest).getDuration()),
     m_elementColour(0),
     m_view(view)
 {

@@ -69,7 +69,6 @@ class MatrixView : public EditView
 public:
     MatrixView(RosegardenGUIDoc *doc,
                std::vector<Rosegarden::Segment *> segments,
-               Rosegarden::SimpleRulerScale *,
                QWidget *parent);
 
     virtual ~MatrixView();
@@ -366,8 +365,6 @@ protected:
     //
     std::vector<Rosegarden::StandardQuantization> m_quantizations;
     std::vector<Rosegarden::timeT>                m_snapValues;
-
-    Rosegarden::SimpleRulerScale                 *m_rulerScale;
 };
 
 #endif

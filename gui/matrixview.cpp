@@ -74,13 +74,13 @@ using Rosegarden::timeT;
 
 MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        std::vector<Segment *> segments,
-                       Rosegarden::SimpleRulerScale *rulerScale,
                        QWidget *parent)
     : EditView(doc, segments, 3, parent, "matrixview"),
       m_currentEventSelection(0),
       m_pushSegment(0),
       m_hlayout(&doc->getComposition()),
       m_vlayout(),
+      m_snapGrid(new Rosegarden::SnapGrid(&m_hlayout)),
       m_hoveredOverAbsoluteTime(0),
       m_hoveredOverNoteName(0),
       m_selectionCounter(0),
@@ -90,20 +90,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_lastNote(0),
       m_quantizations(
               Rosegarden::StandardQuantization::getStandardQuantizations())
-      //m_rulerScale(rulerScale)
 {
     MATRIX_DEBUG << "MatrixView ctor\n";
-
     Rosegarden::Composition &comp = doc->getComposition();
-
-    double barWidth44 = 100.0;  // so random, so rare
-    double unitsPerPixel =
-        Rosegarden::TimeSignature(4, 4).getBarDuration() / barWidth44;
-
-    m_rulerScale = new Rosegarden::SimpleRulerScale(&comp, 0, unitsPerPixel);
-
-    //m_snapGrid(&m_hlayout),
-    m_snapGrid = new Rosegarden::SnapGrid(m_rulerScale, 10);
 
     m_toolBox = new MatrixToolBox(this);
 
@@ -339,6 +328,8 @@ MatrixView::~MatrixView()
     QCanvasItemList::Iterator it;
 
     for (it = allItems.begin(); it != allItems.end(); ++it) delete *it;
+
+    delete m_snapGrid;
 }
 
 void MatrixView::slotSaveOptions()
@@ -1287,7 +1278,6 @@ MatrixView::initZoomToolbar()
     double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
     static double factors[] = { 0.025, 0.05, 0.1, 0.2, 0.5,
                                 1.0, 1.5, 2.5, 5.0, 10.0, 20.0 };
-
     // Zoom labels
     //
     for (unsigned int i = 0; i < sizeof(factors)/sizeof(factors[0]); ++i)
@@ -1316,12 +1306,17 @@ MatrixView::slotChangeHorizontalZoom(int)
     double value = double(m_hZoomSlider->getCurrentSize());
     m_zoomLabel->setText(i18n("%1%").arg(duration44/value));
     
-    cout << "CURR = " << m_hZoomSlider->getCurrentSize() << endl;
-    m_rulerScale->setUnitsPerPixel(m_hZoomSlider->getCurrentSize());
-
     for (unsigned int i = 0; i < m_staffs.size(); ++i)
+    {
+        m_staffs[i]->setTimeScaleFactor(1.0/m_hZoomSlider->getCurrentSize());
         m_staffs[i]->sizeStaff(m_hlayout);
+    }
 
+
+    if (m_topBarButtons) m_topBarButtons->repaint();
+    if (m_bottomBarButtons) m_bottomBarButtons->repaint();
+
+    refreshSegment(0, 0, 0);
     updateView();
 }
 

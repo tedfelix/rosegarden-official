@@ -322,7 +322,6 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
 
     MatrixView *matrixView = new MatrixView(getDocument(),
                                             segmentsToEdit,
-                                            m_rulerScale,
                                             this);
 
     // create keyboard accelerators on view
