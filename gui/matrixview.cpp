@@ -71,7 +71,8 @@
 #include "editcommands.h"
 #include "notationcommands.h"
 #include "qdeferscrollview.h"
-#include "matrixparameterbox.h"
+//!!!#include "matrixparameterbox.h"
+#include "instrumentparameterbox.h"
 #include "velocitycolour.h"
 #include "widgets.h"
 #include "zoomslider.h"
@@ -180,7 +181,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     m_grid->addWidget(m_pianoView, CANVASVIEW_ROW, 1);
 
-    m_parameterBox = new MatrixParameterBox(getDocument(), m_dockLeft, "matrixparameterbox");
+//    m_parameterBox = new MatrixParameterBox(getDocument(), m_dockLeft, "matrixparameterbox");
+    m_parameterBox = new InstrumentParameterBox(getDocument(), m_dockLeft);
     m_dockLeft->setWidget(m_parameterBox);
 
     // Set the instrument we're using on this segment
@@ -1724,7 +1726,7 @@ MatrixView::slotNewSelection()
 {
     MATRIX_DEBUG << "MatrixView::slotNewSelection\n";
 
-    m_parameterBox->setSelection(m_currentEventSelection);
+//    m_parameterBox->setSelection(m_currentEventSelection);
 }
 
 

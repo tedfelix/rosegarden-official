@@ -1880,6 +1880,7 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 
     Accidental normalAcc = NoAccidental;
     Accidental canonicalAcc = NoAccidental;
+    Accidental prevBarAcc = NoAccidental;
 
     if (m_octaves == OctavesEquivalent ||
 	m_octaves == OctavesCautionary) {
@@ -1896,6 +1897,13 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 	AccidentalMap::iterator i = m_accidentals.find(height);
 	if (i != m_accidentals.end() && !i->second.previousBar) {
 	    normalAcc = i->second.accidental;
+	}
+    }
+
+    if (m_barReset != BarResetTotal) {
+	AccidentalMap::iterator i = m_accidentals.find(height);
+	if (i != m_accidentals.end() && i->second.previousBar) {
+	    prevBarAcc = i->second.accidental;
 	}
     }
 
@@ -1955,6 +1963,8 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 	    }
 	}
     }
+
+
 
     if (acc != NoAccidental) {
 	m_newAccidentals[height] = AccidentalRec(acc, false);

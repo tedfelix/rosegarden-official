@@ -84,6 +84,10 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     m_staffCount(0)
 {
 //    NOTATION_DEBUG << "NotationHLayout::NotationHLayout()" << endl;
+
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+    m_keySigCancelMode = config->readNumEntry("keysigcancelmode", 1);
 }
 
 NotationHLayout::~NotationHLayout()
@@ -245,12 +249,26 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
     //have recorded any accidentals in the previous bar for the
     //desirable BarResetCautionary/BarResetNaturals accidental table
     //modes
-    
-    Rosegarden::AccidentalTable::OctaveType octaveType = 
-	Rosegarden::AccidentalTable::OctavesCautionary;
 
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+
+    int accOctaveMode = config->readNumEntry("accidentaloctavemode", 1);
+    Rosegarden::AccidentalTable::OctaveType octaveType = 
+	(accOctaveMode == 0 ? Rosegarden::AccidentalTable::OctavesIndependent :
+	 accOctaveMode == 1 ? Rosegarden::AccidentalTable::OctavesCautionary :
+	 Rosegarden::AccidentalTable::OctavesEquivalent);
+
+    int accBarMode = config->readNumEntry("accidentalbarmode", 1);
     Rosegarden::AccidentalTable::BarResetType barResetType =
-	Rosegarden::AccidentalTable::BarResetCautionary;
+	(accBarMode == 0 ? Rosegarden::AccidentalTable::BarResetTotal :
+	 accBarMode == 1 ? Rosegarden::AccidentalTable::BarResetCautionary :
+	 Rosegarden::AccidentalTable::BarResetNaturals);
+
+    if (barResetType != Rosegarden::AccidentalTable::BarResetTotal) {
+	//!!! crude and expensive way of making sure we have right accidentals:
+	--startBarNo;
+    }
 
     Rosegarden::AccidentalTable accTable(key, clef, octaveType, barResetType);
 
@@ -1581,12 +1599,29 @@ NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve,
 
 	    Rosegarden::Key key(*e.event());
 
+	    Rosegarden::Key cancelKey = previousKey;
+
+	    if (m_keySigCancelMode == 0) { // only when entering C maj / A min
+
+		if (key.getAccidentalCount() != 0) cancelKey = Rosegarden::Key();
+
+	    } else if (m_keySigCancelMode == 1) { // only when reducing acc count
+
+		if (!(key.isSharp() == cancelKey.isSharp() &&
+		      key.getAccidentalCount() < cancelKey.getAccidentalCount())) {
+		    cancelKey = Rosegarden::Key();
+		}
+	    }
+
+	    w += m_npf->getKeyWidth(key, cancelKey);
+
+	    /*!!!
 	    if (key.getAccidentalCount() == 0) {
 		w += m_npf->getKeyWidth(previousKey, true);
 	    } else {
 		w += m_npf->getKeyWidth(key);
 	    }
-
+	    */
 	} else if (e.event()->isa(Indication::EventType) ||
 		   e.event()->isa(Text::EventType)) {
 

@@ -253,6 +253,9 @@ protected:
     QCheckBox *m_autoBeam;
     QCheckBox *m_collapseRests;
     QComboBox *m_pasteType;
+    QComboBox *m_accOctavePolicy;
+    QComboBox *m_accBarPolicy;
+    QComboBox *m_keySigCancelMode;
     RosegardenQuantizeParameters *m_quantizeFrame;
     QStringList m_untranslatedFont;
     QStringList m_untranslatedNoteStyle;

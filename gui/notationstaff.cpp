@@ -100,6 +100,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
     m_colourQuantize = config->readBoolEntry("colourquantize", false);
     // Shouldn't change this one during the lifetime of the staff, really:
     m_showUnknowns = config->readBoolEntry("showunknowns", false);
+    m_keySigCancelMode = config->readNumEntry("keysigcancelmode", 1);
     changeFont(fontName, resolution);
 }
 
@@ -862,15 +863,23 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 	} else if (elt->event()->isa(Rosegarden::Key::EventType)) {
 
 	    Rosegarden::Key key(*elt->event());
+	    Rosegarden::Key cancelKey = currentKey;
 
-	    if (key.getAccidentalCount() == 0) { // need cancellation
-		pixmap = m_notePixmapFactory->makeKeyPixmap
-		    (currentKey, currentClef, true);
-	    } else {
-		pixmap = m_notePixmapFactory->makeKeyPixmap
-		    (key, currentClef);
+	    if (m_keySigCancelMode == 0) { // only when entering C maj / A min
+
+		if (key.getAccidentalCount() != 0) cancelKey = Rosegarden::Key();
+
+	    } else if (m_keySigCancelMode == 1) { // only when reducing acc count
+
+		if (!(key.isSharp() == cancelKey.isSharp() &&
+		      key.getAccidentalCount() < cancelKey.getAccidentalCount())) {
+		    cancelKey = Rosegarden::Key();
+		}
 	    }
 
+	    pixmap = m_notePixmapFactory->makeKeyPixmap
+		(key, currentClef, cancelKey);
+ 
 	} else if (elt->event()->isa(Rosegarden::Text::EventType)) {
 
 	    policy = MoveBackToFit;

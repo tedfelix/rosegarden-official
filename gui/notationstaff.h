@@ -435,6 +435,7 @@ protected:
     int m_barNumbersEvery;
     bool m_colourQuantize;
     bool m_showUnknowns;
+    int m_keySigCancelMode;
 
     QPainter *m_printPainter;
 

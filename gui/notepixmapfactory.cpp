@@ -1951,53 +1951,100 @@ NotePixmapFactory::makeNoteMenuPixmap(Rosegarden::timeT duration,
 QCanvasPixmap*
 NotePixmapFactory::makeKeyPixmap(const Key &key,
 				 const Clef &clef,
-				 bool cancellation)
+				 Key previousKey)
 {
     Rosegarden::Profiler profiler("NotePixmapFactory::makeKeyPixmap");
-    std::vector<int> ah = key.getAccidentalHeights(clef);
-    if (ah.size() == 0) return 0;
 
-    CharName charName;
+    std::vector<int> ah0 = previousKey.getAccidentalHeights(clef);
+    std::vector<int> ah1 = key.getAccidentalHeights(clef);
 
-    if (cancellation) charName = NoteCharacterNames::NATURAL;
-    else if (key.isSharp()) charName = NoteCharacterNames::SHARP;
-    else charName = NoteCharacterNames::FLAT;
+    int cancelCount = 0;
+    if (key.isSharp() != previousKey.isSharp()) cancelCount = ah0.size();
+    else if (ah1.size() < ah0.size()) cancelCount = ah0.size() - ah1.size();
 
-    NoteCharacter character;
+    CharName keyCharName;
+    if (key.isSharp()) keyCharName = NoteCharacterNames::SHARP;
+    else keyCharName = NoteCharacterNames::FLAT;
+
+    NoteCharacter keyCharacter;
+    NoteCharacter cancelCharacter;
+
     if (m_selected) {
-        character = m_font->getCharacterColoured
-	    (charName,
+        keyCharacter = m_font->getCharacterColoured
+	    (keyCharName,
 	     RosegardenGUIColours::SelectedElementHue,
 	     RosegardenGUIColours::SelectedElementMinValue);
+	if (cancelCount > 0) {
+	    cancelCharacter = m_font->getCharacterColoured
+		(NoteCharacterNames::NATURAL,
+		 RosegardenGUIColours::SelectedElementHue,
+		 RosegardenGUIColours::SelectedElementMinValue);
+	}
     } else {
-        character = m_font->getCharacter(charName);
+        keyCharacter = m_font->getCharacter(keyCharName);
+	if (cancelCount > 0) {
+	    cancelCharacter = m_font->getCharacter(NoteCharacterNames::NATURAL);
+	}
     }
-    QPoint hotspot = character.getHotspot();
 
     int x = 0;
     int lw = getLineSpacing();
-    int delta = character.getWidth() - hotspot.x();
-    
-    // naturals need more space:
-    if (cancellation) delta += character.getWidth()/4;
+    int keyDelta = keyCharacter.getWidth() - keyCharacter.getHotspot().x();
 
-    createPixmapAndMask(delta * ah.size() + character.getWidth()/4, lw * 8 + 1);
+    int cancelDelta = 0;
+    if (cancelCount > 0) {
+	cancelDelta = cancelCharacter.getWidth() + cancelCharacter.getWidth()/3;
+    }
 
-    for (unsigned int i = 0; i < ah.size(); ++i) {
+    createPixmapAndMask(keyDelta * ah1.size() + cancelDelta * cancelCount +
+			keyCharacter.getWidth()/2, lw * 8 + 1);
 
-	int h = ah[i];
-	int y = (lw * 2) + ((8 - h) * lw) / 2 - hotspot.y();
+    if (key.isSharp() != previousKey.isSharp()) {
 
-        //!!! Here's an interesting problem.  The masked-out area of
-        //one accidental's mask may end up overlapping the unmasked
-        //area of another accidental's mask, so we lose some of the
-        //right-hand edge of each accidental.  What can we do about
-        //it?  (Apart from not overlapping the accidentals' x-coords,
-        //which wouldn't be a great solution.)
+	// cancellation first
 
-	m_p->drawNoteCharacter(x, y, character);
+	for (unsigned int i = 0; i < cancelCount; ++i) {
+	    
+	    int h = ah0[ah0.size() - cancelCount + i];
+	    int y = (lw * 2) + ((8 - h) * lw) / 2 - cancelCharacter.getHotspot().y();
+	    
+	    m_p->drawNoteCharacter(x, y, cancelCharacter);
+	    
+	    x += cancelDelta;
+	}
 
-	x += delta;
+	if (cancelCount > 0) {
+	    x += keyCharacter.getWidth()/4;
+	}
+    }
+
+    for (unsigned int i = 0; i < ah1.size(); ++i) {
+
+	int h = ah1[i];
+	int y = (lw * 2) + ((8 - h) * lw) / 2 - keyCharacter.getHotspot().y();
+
+	m_p->drawNoteCharacter(x, y, keyCharacter);
+
+	x += keyDelta;
+    }
+
+    if (key.isSharp() == previousKey.isSharp()) {
+
+	// cancellation afterwards
+
+	if (cancelCount > 0) {
+	    x += keyCharacter.getWidth()/4;
+	}
+
+	for (unsigned int i = 0; i < cancelCount; ++i) {
+	    
+	    int h = ah0[ah0.size() - cancelCount + i];
+	    int y = (lw * 2) + ((8 - h) * lw) / 2 - cancelCharacter.getHotspot().y();
+	    
+	    m_p->drawNoteCharacter(x, y, cancelCharacter);
+	    
+	    x += cancelDelta;
+	}
     }
 
     return makeCanvasPixmap(m_pointZero);
@@ -3027,22 +3074,39 @@ int NotePixmapFactory::getRestWidth(const Rosegarden::Note &restType) const {
         + (restType.getDots() * getDotWidth());
 }
 
-int NotePixmapFactory::getKeyWidth(const Rosegarden::Key &key,
-				   bool cancellation) const
+int NotePixmapFactory::getKeyWidth(const Key &key,
+				   Key previousKey) const
 {
-    CharName charName;
+    std::vector<int> ah0 = previousKey.getAccidentalHeights(Clef());
+    std::vector<int> ah1 = key.getAccidentalHeights(Clef());
 
-    if (cancellation) charName = NoteCharacterNames::NATURAL;
-    else if (key.isSharp()) charName = NoteCharacterNames::SHARP;
-    else charName = NoteCharacterNames::FLAT;
+    int cancelCount = 0;
+    if (key.isSharp() != previousKey.isSharp()) cancelCount = ah0.size();
+    else if (ah1.size() < ah0.size()) cancelCount = ah0.size() - ah1.size();
 
-    int w = m_font->getWidth(charName);
-    int hx = m_font->getHotspot(charName).x();
+    CharName keyCharName;
+    if (key.isSharp()) keyCharName = NoteCharacterNames::SHARP;
+    else keyCharName = NoteCharacterNames::FLAT;
 
-    // naturals need more space:
-    if (cancellation) w += w/4;
+    NoteCharacter keyCharacter;
+    NoteCharacter cancelCharacter;
 
-    return w/4 + (key.getAccidentalCount() * (w - hx));
+    keyCharacter = m_font->getCharacter(keyCharName);
+    if (cancelCount > 0) {
+	cancelCharacter = m_font->getCharacter(NoteCharacterNames::NATURAL);
+    }
+
+    int x = 0;
+    int lw = getLineSpacing();
+    int keyDelta = keyCharacter.getWidth() - keyCharacter.getHotspot().x();
+
+    int cancelDelta = 0;
+    if (cancelCount > 0) {
+	cancelDelta = cancelCharacter.getWidth() + cancelCharacter.getWidth()/3;
+    }
+
+    return (keyDelta * ah1.size() + cancelDelta * cancelCount +
+	    keyCharacter.getWidth()/4);
 }
 
 int NotePixmapFactory::getTextWidth(const Rosegarden::Text &text) const {

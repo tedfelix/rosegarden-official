@@ -393,6 +393,7 @@ protected:
     double m_pageWidth;
     int m_spacing;
     int m_proportion;
+    int m_keySigCancelMode;
     NotePixmapFactory *m_npf;
 
     static std::vector<int> m_availableSpacings;

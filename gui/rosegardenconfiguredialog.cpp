@@ -434,6 +434,8 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     addTab(frame, i18n("Font"));
 
+
+
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame, 6, 2, 10, 5);
 
@@ -445,7 +447,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_layoutMode->insertItem(i18n("Continuous page layout"));
     m_layoutMode->insertItem(i18n("Multiple page layout"));
     int defaultLayoutMode = m_cfg->readNumEntry("layoutmode", 0);
-    if (defaultLayoutMode >= 0 && defaultLayoutMode <= 1) {
+    if (defaultLayoutMode >= 0 && defaultLayoutMode <= 2) {
         m_layoutMode->setCurrentItem(defaultLayoutMode);
     }
     layout->addWidget(m_layoutMode, 0, 1);
@@ -507,6 +509,8 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget(m_colourQuantize, 4, 1);
 
     addTab(frame, i18n("Layout"));
+
+
 
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame, 6, 2, 10, 5);
@@ -586,6 +590,48 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget(m_pasteType, 4, 1);
 
     addTab(frame, i18n("Editing"));
+
+
+
+    frame = new QFrame(m_tabWidget);
+    layout = new QGridLayout(frame, 4, 2, 10, 5);
+
+    layout->addWidget(new QLabel(i18n("Accidentals in one octave..."), frame), 0, 0);
+    m_accOctavePolicy = new KComboBox(frame);
+    m_accOctavePolicy->insertItem(i18n("Affect only that octave"));
+    m_accOctavePolicy->insertItem(i18n("Require cautionaries in other octaves"));
+    m_accOctavePolicy->insertItem(i18n("Affect all octaves"));
+    int accOctaveMode = m_cfg->readNumEntry("accidentaloctavemode", 1);
+    if (accOctaveMode >= 0 && accOctaveMode < 3) {
+	m_accOctavePolicy->setCurrentItem(accOctaveMode);
+    }
+    layout->addWidget(m_accOctavePolicy, 0, 1);
+
+    layout->addWidget(new QLabel(i18n("Accidentals in one bar..."), frame), 1, 0);
+    m_accBarPolicy = new KComboBox(frame);
+    m_accBarPolicy->insertItem(i18n("Affect only that bar"));
+    m_accBarPolicy->insertItem(i18n("Require cautionaries in following bar"));
+    m_accBarPolicy->insertItem(i18n("Require explicit resets in following bar"));
+    int accBarMode = m_cfg->readNumEntry("accidentalbarmode", 1);
+    if (accBarMode >= 0 && accBarMode < 3) {
+	m_accBarPolicy->setCurrentItem(accBarMode);
+    }
+    layout->addWidget(m_accBarPolicy, 1, 1);
+
+    layout->addWidget(new QLabel(i18n("Key signature cancellation style:"), frame), 2, 0);
+    m_keySigCancelMode = new KComboBox(frame);
+    m_keySigCancelMode->insertItem(i18n("Cancel only when entering C major or A minor"));
+    m_keySigCancelMode->insertItem(i18n("Cancel when removing sharps or flats"));
+    m_keySigCancelMode->insertItem(i18n("Cancel always"));
+    int cancelMode = m_cfg->readNumEntry("keysigcancelmode", 1);
+    if (cancelMode >= 0 && cancelMode < 3) {
+	m_keySigCancelMode->setCurrentItem(cancelMode);
+    }
+    layout->addWidget(m_keySigCancelMode, 2, 1);
+
+    addTab(frame, i18n("Accidentals"));
+
+
 
     QString preamble =
         (i18n("Rosegarden can apply automatic quantization to recorded "
@@ -715,6 +761,9 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("autobeam", m_autoBeam->isChecked());
     m_cfg->writeEntry("collapse", m_collapseRests->isChecked());
     m_cfg->writeEntry("pastetype", m_pasteType->currentItem());
+    m_cfg->writeEntry("accidentaloctavemode", m_accOctavePolicy->currentItem());
+    m_cfg->writeEntry("accidentalbarmode", m_accBarPolicy->currentItem());
+    m_cfg->writeEntry("keysigcancelmode", m_keySigCancelMode->currentItem());
 
     (void)m_quantizeFrame->getQuantizer(); // this also writes to the config
 }

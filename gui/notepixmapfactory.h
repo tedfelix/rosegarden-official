@@ -168,7 +168,8 @@ public:
     QCanvasPixmap* makeClefPixmap(const Rosegarden::Clef &clef);
     QCanvasPixmap* makeKeyPixmap(const Rosegarden::Key &key,
 				 const Rosegarden::Clef &clef,
-				 bool cancellation = false);
+				 Rosegarden::Key previousKey =
+				 Rosegarden::Key::DefaultKey);
     QCanvasPixmap* makeTimeSigPixmap(const Rosegarden::TimeSignature& sig);
     QCanvasPixmap* makeHairpinPixmap(int length, bool isCrescendo);
     QCanvasPixmap* makeSlurPixmap(int length, int dy, bool above, bool phrasing);
@@ -227,7 +228,8 @@ public:
     int getClefWidth(const Rosegarden::Clef &clef) const;
     int getTimeSigWidth(const Rosegarden::TimeSignature &timesig) const;
     int getRestWidth(const Rosegarden::Note &restType) const;
-    int getKeyWidth(const Rosegarden::Key &key, bool cancellation = false) const;
+    int getKeyWidth(const Rosegarden::Key &key,
+		    Rosegarden::Key previousKey = Rosegarden::Key::DefaultKey) const;
     int getTextWidth(const Rosegarden::Text &text) const;
 
     /**
