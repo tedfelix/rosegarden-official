@@ -28,7 +28,7 @@ Full duplex audio is provided through the JACK library and server:
 
    http://jackit.sourceforge.net
 
-Audio plugin support is a courtesy of LADSPA:
+Audio plugin support is provided courtesy of LADSPA:
 
   http://www.ladspa.org
 
