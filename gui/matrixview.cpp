@@ -102,6 +102,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_hoveredOverAbsoluteTime(0),
       m_hoveredOverNoteName(0),
       m_selectionCounter(0),
+      m_insertModeLabel(0),
       m_previousEvPitch(0),
       m_dockLeft(0),
       m_canvasView(0),
@@ -475,6 +476,12 @@ void MatrixView::setupActions()
                                   actionCollection(), "resize");
     toolAction->setExclusiveGroup("tools");
 
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("chord")));
+    (new KToggleAction(i18n("C&hord Insert Mode"), icon, Key_H,
+		       this, SLOT(slotUpdateInsertModeStatus()),
+		       actionCollection(), "chord_mode"))->
+	setChecked(false);
+
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/step_by_step.xpm"));
     new KToggleAction(i18n("Ste&p Recording"), icon, 0, this,
                 SLOT(slotToggleStepByStep()), actionCollection(),
@@ -674,6 +681,13 @@ void MatrixView::setupActions()
         actionCollection()->action("select")->activate();
 }
 
+bool
+MatrixView::isInChordMode()
+{
+    return ((KToggleAction *)actionCollection()->action("chord_mode"))->
+	isChecked();
+}
+
 void MatrixView::slotDockParametersBack()
 {
     m_dockLeft->dockBack();
@@ -703,6 +717,9 @@ void MatrixView::initStatusBar()
 
     sb->addWidget(m_hoveredOverAbsoluteTime);
     sb->addWidget(m_hoveredOverNoteName);
+
+    m_insertModeLabel = new QLabel(sb);
+    sb->addWidget(m_insertModeLabel);
 
     sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
                    KTmpStatusMsg::getDefaultId(), 1);
@@ -1401,7 +1418,9 @@ void MatrixView::slotInsertNoteFromAction()
 
     addCommandToHistory(command);
     
-    slotSetInsertCursorPosition(endTime); //!!! + chord mode?
+    if (!isInChordMode()) {
+	slotSetInsertCursorPosition(endTime);
+    }
 }
 
 void MatrixView::closeWindow()
@@ -2186,7 +2205,9 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, bool noteOn)
 
     addCommandToHistory(command);
     
-    slotSetInsertCursorPosition(endTime); //!!! + chord mode?
+    if (!isInChordMode()) {
+	slotSetInsertCursorPosition(endTime);
+    }
 }
 
 void
@@ -2218,6 +2239,19 @@ MatrixView::slotToggleStepByStep()
 	emit stepByStepTargetRequested(0);
     }
 }
+
+void
+MatrixView::slotUpdateInsertModeStatus()
+{
+    QString message;
+    if (isInChordMode()) {
+	message = i18n(" Chord");
+    } else {
+	message = "";
+    }
+    m_insertModeLabel->setText(message);
+}
+
 
 void
 MatrixView::slotStepByStepTargetRequested(QObject *obj)

@@ -105,6 +105,7 @@
 
   <Separator/>
   <Action name="insert_note_actionmenu"/>
+  <Action name="chord_mode"/>
 
   <Separator/>
   <Action name="toggle_step_by_step"/>

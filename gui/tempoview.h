@@ -77,6 +77,11 @@ public:
     //
     void createMenu();
 
+    // Composition Observer callbacks
+    //
+    virtual void timeSignatureChanged(const Rosegarden::Composition *);
+    virtual void tempoChanged(const Rosegarden::Composition *);
+
 signals:
     // forwarded from tempo dialog:
     void changeTempo(Rosegarden::timeT,  // tempo change time
@@ -109,23 +114,6 @@ public slots:
     // Change filter parameters
     //
     void slotModifyFilter(int);
-
-    // Composition Observer callbacks, most of which we don't care about
-
-    virtual void timeSignatureChanged(const Rosegarden::Composition *);
-    virtual void tempoChanged(const Rosegarden::Composition *);
-
-    virtual void segmentAdded(const Rosegarden::Composition *, Rosegarden::Segment *) { }
-    virtual void segmentRemoved(const Rosegarden::Composition *, Rosegarden::Segment *) { }
-    virtual void segmentRepeatChanged(const Rosegarden::Composition *, Rosegarden::Segment *, bool) { }
-    virtual void segmentEventsTimingChanged(const Rosegarden::Composition *, Rosegarden::Segment *, Rosegarden::timeT , Rosegarden::RealTime ) { }
-    virtual void segmentTransposeChanged(const Rosegarden::Composition *, Rosegarden::Segment *, int) { }
-    virtual void segmentTrackChanged(const Rosegarden::Composition *, Rosegarden::Segment *, Rosegarden::TrackId) { }
-    virtual void endMarkerTimeChanged(const Rosegarden::Composition *, bool ) { }
-    virtual void trackChanged(const Rosegarden::Composition *, Rosegarden::Track*) { }
-    virtual void metronomeChanged(const Rosegarden::Composition *) { }
-    virtual void soloChanged(const Rosegarden::Composition *, bool, Rosegarden::TrackId ) { }
-    virtual void compositionDeleted(const Rosegarden::Composition *) { }
 
 protected slots:
 

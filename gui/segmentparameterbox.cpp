@@ -51,6 +51,8 @@ SegmentParameterBox::SegmentParameterBox(RosegardenGUIDoc* doc,
 {
     initBox();
 
+    m_doc->getComposition().addObserver(this);
+
     connect(getCommandHistory(), SIGNAL(commandExecuted()),
 	    this, SLOT(update()));
 }
@@ -58,7 +60,9 @@ SegmentParameterBox::SegmentParameterBox(RosegardenGUIDoc* doc,
 
 SegmentParameterBox::~SegmentParameterBox()
 {
+    m_doc->getComposition().removeObserver(this);
 }
+
 
 void
 SegmentParameterBox::initBox()
@@ -306,6 +310,24 @@ void SegmentParameterBox::update()
 
     populateBoxFromSegments();
 }
+
+void
+SegmentParameterBox::segmentRemoved(const Rosegarden::Composition *composition,
+				    Rosegarden::Segment *segment)
+{
+    if (composition == &m_doc->getComposition()) {
+
+	for (std::vector<Rosegarden::Segment*>::iterator it =
+		 m_segments.begin(); it != m_segments.end(); ++it) {
+
+	    if (*it == segment) {
+		m_segments.erase(it);
+		return;
+	    }
+	}
+    }
+}
+
 
 // Use the currently selected Segments to populate the fields in
 // this box.  All fields (whether they're Checkbox or Combobox)

@@ -30,6 +30,8 @@
 #include <qpushbutton.h>
 
 #include "Quantizer.h"
+#include "Composition.h"
+
 #include "Selection.h"
 #include "colourwidgets.h"
 #include "widgets.h"
@@ -48,7 +50,8 @@ class KCommand;
 #ifndef _SEGMENTPARAMETERBOX_H_
 #define _SEGMENTPARAMETERBOX_H_
 
-class SegmentParameterBox : public RosegardenParameterBox
+class SegmentParameterBox : public RosegardenParameterBox,
+			    public Rosegarden::CompositionObserver
 {
 Q_OBJECT
 
@@ -76,6 +79,11 @@ public:
     void addCommandToHistory(KCommand *command);
 
     void setDocument(RosegardenGUIDoc*);
+
+    // CompositionObserver interface
+    //
+    virtual void segmentRemoved(const Rosegarden::Composition *,
+				Rosegarden::Segment *);
 
 public slots:
     void slotRepeatPressed();

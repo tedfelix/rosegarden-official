@@ -431,7 +431,8 @@ PluginControl::PluginControl(QWidget *parent,
                                       step,         // step
                                       step * 10.0,
                                       initialValue, // initial
-                                      30);          // size
+                                      30,           // size
+				      true);        // showTicks
 
         m_dial->setKnobColour(RosegardenGUIColours::RotaryPlugin);
 

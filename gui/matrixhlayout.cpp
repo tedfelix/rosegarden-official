@@ -184,6 +184,7 @@ double MatrixHLayout::getBarPosition(int barNo)
     if (barNo > getLastVisibleBar()) {
         return getBarPosition(getLastVisibleBar());
     }
+
     return m_barData[barNo - m_firstBar].first;
 }
 

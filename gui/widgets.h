@@ -274,7 +274,8 @@ public:
                      float step = 1.0,
                      float pageStep = 10.0,
                      float initialPosition = 50.0,
-                     int size = 20);
+                     int size = 20,
+		     bool showTicks = false);
 
     void setMinValue(float min) { m_minValue = min; }
     float getMinValue() const { return m_minValue; }
@@ -320,6 +321,7 @@ protected:
     float                m_step;
     float                m_pageStep;
     int                  m_size;
+    bool                 m_showTicks;
 
     float                m_lastPosition;
     float                m_position;

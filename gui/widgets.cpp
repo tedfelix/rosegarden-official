@@ -360,13 +360,15 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
                                    float step,
                                    float pageStep,
                                    float initialPosition,
-                                   int size):
+                                   int size,
+				   bool showTicks) :
     QWidget(parent),
     m_minValue(minValue),
     m_maxValue(maxValue),
     m_step(step),
     m_pageStep(pageStep),
     m_size(size),
+    m_showTicks(showTicks),
     m_lastPosition(initialPosition),
     m_position(initialPosition),
     m_buttonPressed(false),
@@ -420,31 +422,39 @@ RosegardenRotary::paintEvent(QPaintEvent *e)
         paint.setBrush(
                 kapp->palette().color(QPalette::Active, QColorGroup::Base));
 
-    paint.drawEllipse(0, 0, m_size, m_size);
+    if (!m_showTicks) {
 
-    drawPosition();
+	paint.drawEllipse(0, 0, m_size, m_size);
+	drawPosition();
 
-    // draw min and max ticks
+    } else {
 
-    double hyp = double(m_size) / 2.0;
+	paint.drawEllipse(m_size * 0.1, m_size * 0.1,
+			  m_size * 0.8, m_size * 0.8);
+	drawPosition();
 
-    double angle = 0.22 * M_PI;
+	// draw min and max ticks
 
-    double x0 = hyp - hyp * sin(angle);
-    double y0 = hyp + hyp * cos(angle);
-    double x1 = hyp - 1.2 * hyp * sin(angle);
-    double y1 = hyp + 1.2 * hyp * cos(angle);
+	double hyp = double(m_size) / 2.0;
 
-    paint.drawLine(int(x0), int(y0), int(x1), int(y1));
+	double angle = 0.22 * M_PI;
 
-    angle = 0.22 * M_PI + 1.6 * M_PI;
+	double x0 = hyp - hyp * sin(angle);
+	double y0 = hyp + hyp * cos(angle);
+	double x1 = hyp - 1.2 * hyp * sin(angle);
+	double y1 = hyp + 1.2 * hyp * cos(angle);
+
+	paint.drawLine(int(x0), int(y0), int(x1), int(y1));
+
+	angle = 0.22 * M_PI + 1.6 * M_PI;
     
-    x0 = hyp - hyp * sin(angle);
-    y0 = hyp + hyp * cos(angle);
-    x1 = hyp - 1.2 * hyp * sin(angle);
-    y1 = hyp + 1.2 * hyp * cos(angle);
+	x0 = hyp - hyp * sin(angle);
+	y0 = hyp + hyp * cos(angle);
+	x1 = hyp - 1.2 * hyp * sin(angle);
+	y1 = hyp + 1.2 * hyp * cos(angle);
 
-    paint.drawLine(int(x0), int(y0), int(x1), int(y1));
+	paint.drawLine(int(x0), int(y0), int(x1), int(y1));
+    }
 }
 
 

@@ -108,6 +108,12 @@ public:
     virtual void updateView();
 
     /**
+     * Discover whether chord-mode insertions are enabled (as opposed
+     * to the default melody-mode)
+     */
+    bool isInChordMode();
+
+    /**
      * Set the current event selection.
      *
      * If preview is true, sound the selection as well.
@@ -257,6 +263,9 @@ public slots:
     void slotResizeSelected();
 
     void slotToggleStepByStep();
+
+    /// status stuff
+    void slotUpdateInsertModeStatus();
 
     /// transforms
     void slotTransformsQuantize();
@@ -494,6 +503,7 @@ protected:
     QLabel* m_hoveredOverAbsoluteTime;
     QLabel* m_hoveredOverNoteName;
     QLabel *m_selectionCounter;
+    QLabel *m_insertModeLabel;
 
     /**
      * used in slotHoveredOverKeyChanged to track moves over the piano

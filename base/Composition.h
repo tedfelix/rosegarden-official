@@ -825,78 +825,93 @@ protected:
 };
 
 
+/**
+ * If you subclass from CompositionObserver, you can then attach to a
+ * Composition to receive notification when something changes.
+ *
+ * Normally all the methods in this class would be pure virtual.  But
+ * because there are so many, that imposes far too much work on the
+ * subclass implementation in a case where it only really wants to
+ * know about one thing, such as segments being deleted.  So we have
+ * empty default implementations, and you'll just have to take a bit
+ * more care to make sure you really are making the correct
+ * declarations in the subclass.
+ */
+
 class CompositionObserver
 {
 public:
     /**
      * Called after the segment has been added to the composition
      */
-    virtual void segmentAdded(const Composition *, Segment *) = 0;
+    virtual void segmentAdded(const Composition *, Segment *) { }
 
     /**
      * Called after the segment has been removed from the segment,
      * and just before it is deleted
      */
-    virtual void segmentRemoved(const Composition *, Segment *) = 0;
+    virtual void segmentRemoved(const Composition *, Segment *) { }
 
     /**
      * Called when the segment's repeat status has changed
      */
-    virtual void segmentRepeatChanged(const Composition *, Segment *, bool) = 0;
+    virtual void segmentRepeatChanged(const Composition *, Segment *, bool) { }
 
     /**
      * Called when the segment's delay timing has changed
      */
     virtual void segmentEventsTimingChanged(const Composition *, Segment *,
-                                            timeT delay, RealTime rtDelay) = 0;
+                                            timeT /* delay */,
+					    RealTime /* rtDelay */) { }
 
     /**
      * Called when the segment's transpose value has changed
      */
     virtual void segmentTransposeChanged(const Composition *, Segment *,
-                                         int transpose) = 0;
+                                         int /* transpose */) { }
 
     /**
      * Called when the segment's track has changed
      */
     virtual void segmentTrackChanged(const Composition *, Segment *,
-				     TrackId id) = 0;
+				     TrackId /* id */) { }
 
     /**
      * Called after the composition's end marker time has been
      * changed
      */
-    virtual void endMarkerTimeChanged(const Composition *, bool shorten) = 0;
+    virtual void endMarkerTimeChanged(const Composition *, bool /* shorten */) { }
 
     /**
      * Called when a track is changed (instrument id, muted status...)
      */
-    virtual void trackChanged(const Composition *, Track*) = 0;
+    virtual void trackChanged(const Composition *, Track*) { }
 
     /**
      * Called when some time signature has changed
      */
-    virtual void timeSignatureChanged(const Composition *) = 0;
+    virtual void timeSignatureChanged(const Composition *) { }
     
     /**
      * Called when metronome status has changed (on/off)
      */
-    virtual void metronomeChanged(const Composition *) = 0;
+    virtual void metronomeChanged(const Composition *) { }
 
     /**
      * Called when solo status changes (solo on/off, and selected track)
      */
-    virtual void soloChanged(const Composition *, bool solo, TrackId selectedTrack) = 0;
+    virtual void soloChanged(const Composition *, bool /* solo */,
+			     TrackId /* selectedTrack */) { }
 
     /**
      * Called when solo status changes (solo on/off, and selected track)
      */
-    virtual void tempoChanged(const Composition *) = 0;
+    virtual void tempoChanged(const Composition *) { }
     
     /**
      * Called from the composition dtor
      */
-    virtual void compositionDeleted(const Composition *) = 0;
+    virtual void compositionDeleted(const Composition *) { }
 };
 
 }
