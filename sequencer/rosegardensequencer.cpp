@@ -288,9 +288,7 @@ void
 RosegardenSequencerApp::notifyVisuals(Rosegarden::MappedComposition *mC)
 {
     Rosegarden::MappedComposition::iterator i = mC->end();
-    if (i == mC->begin()) {
-	m_sequencerMapper.updateVisual(0);
-    } else {
+    if (i != mC->begin()) {
 	--i;
 	m_sequencerMapper.updateVisual(*i);
     }
