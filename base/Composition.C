@@ -1271,7 +1271,7 @@ Composition::getNewTrackId() const
 
 void breakpoint()
 {
-    std::cerr << "breakpoint()\n";
+    //std::cerr << "breakpoint()\n";
 }
 
 }
