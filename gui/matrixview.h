@@ -325,7 +325,7 @@ public:
 
     virtual ~MatrixView();
 
-    virtual bool applyLayout();
+    virtual bool applyLayout(int staffNo = -1);
 
     QCanvas* canvas() { return m_canvasView->canvas(); }
 

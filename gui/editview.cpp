@@ -26,6 +26,7 @@
 #include <kstdaction.h>
 
 #include "editview.h"
+#include "edittool.h"
 #include "rosegardenguidoc.h"
 #include "ktmpstatusmsg.h"
 
@@ -37,7 +38,10 @@ EditView::EditView(RosegardenGUIDoc *doc,
                    QWidget *parent)
     : KMainWindow(parent),
       m_config(kapp->config()),
-      m_document(doc)
+      m_document(doc),
+      m_tool(0),
+      m_toolBox(0)
+
 {
 }
 
@@ -73,6 +77,18 @@ void EditView::readjustViewSize(QSize requestedSize)
         newSize.setHeight(requestedHeight + requestedHeight / 2);
 
     setViewSize(newSize);
+}
+
+void EditView::setTool(EditTool* tool)
+{
+    if (m_tool)
+        m_tool->stow();
+
+    m_tool = tool;
+
+    if (m_tool)
+        m_tool->ready();
+
 }
 
 //////////////////////////////////////////////////////////////////////

@@ -29,6 +29,8 @@
 namespace Rosegarden { class Segment; }
 
 class RosegardenGUIDoc;
+class EditTool;
+class EditToolBox;
 
 class EditView : public KMainWindow
 {
@@ -37,14 +39,14 @@ class EditView : public KMainWindow
     Q_OBJECT
 public:
     EditView(RosegardenGUIDoc *doc,
-                std::vector<Rosegarden::Segment *> segments,
-                QWidget *parent);
+             std::vector<Rosegarden::Segment *> segments,
+             QWidget *parent);
     virtual ~EditView();
 
     const RosegardenGUIDoc *getDocument() const { return m_document; }
     RosegardenGUIDoc *getDocument() { return m_document; }
 
-    virtual bool applyLayout() = 0;
+    virtual bool applyLayout(int staffNo = -1) = 0;
 
     /**
      * "Clever" readjustment of the view size
@@ -60,15 +62,15 @@ public slots:
      */
     virtual void closeWindow();
 
-    /**
-     * undo
-     */
-    virtual void slotEditUndo() = 0;
+//     /**
+//      * undo
+//      */
+//     virtual void slotEditUndo() = 0;
 
-    /**
-     * redo
-     */
-    virtual void slotEditRedo() = 0;
+//     /**
+//      * redo
+//      */
+//     virtual void slotEditRedo() = 0;
     
     /**
      * put the indicationed text/object into the clipboard and remove * it
@@ -117,6 +119,14 @@ public slots:
 protected:
 
     /**
+     * Set the current Notation tool (note inserter, rest inserter, eraser...)
+     *
+     * Called when the user selects a new item on one of the notation toolbars
+     * (notes toolbars, rests toolbars...)
+     */
+    void setTool(EditTool*);
+
+    /**
      * save general Options like all bar positions and status as well
      * as the geometry and the recent file list to the configuration
      * file
@@ -156,6 +166,9 @@ protected:
     KConfig* m_config;
 
     RosegardenGUIDoc* m_document;
+
+    EditTool*    m_tool;
+    EditToolBox* m_toolBox;
 
 };
 

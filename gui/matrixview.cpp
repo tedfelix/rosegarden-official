@@ -362,11 +362,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 {
     setupActions();
 
-    QCanvas *tCanvas = new QCanvas(width() * 2,
-                                  // Try to guess approximate height
-                                  segments.size() *
-                                  MatrixStaff::defaultPitchScaleFactor *
-                                  MatrixStaff::nbHLines);
+    QCanvas *tCanvas = new QCanvas(segments[0]->getDuration() / 2,
+                                   MatrixStaff::defaultPitchScaleFactor *
+                                   MatrixStaff::nbHLines);
 
     kdDebug(KDEBUG_AREA) << "MatrixView : creating staff\n";
 
@@ -442,7 +440,7 @@ void MatrixView::initStatusBar()
 }
 
 
-bool MatrixView::applyLayout()
+bool MatrixView::applyLayout(int staffNo)
 {
     m_hlayout->reset();
     m_vlayout->reset();

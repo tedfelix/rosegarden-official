@@ -26,6 +26,7 @@
 #include <kmainwindow.h>
 #include <qslider.h>
 
+#include "editview.h"
 #include "notationelement.h"
 #include "notationhlayout.h"
 #include "notationvlayout.h"
@@ -53,7 +54,7 @@ class MultiViewCommandHistory;
  * NotationVLayout and Staff data, as well as using rendering the
  * actual notes (using NotePixmapFactory to generate the pixmaps).
  */
-class NotationView : public KMainWindow,
+class NotationView : public EditView,
 		     public NotationStaffLayout
 {
     friend class NoteInserter;
@@ -68,9 +69,6 @@ public:
                  std::vector<Rosegarden::Segment *> segments,
                  QWidget *parent);
     ~NotationView();
-
-    const RosegardenGUIDoc *getDocument() const { return m_document; }
-    RosegardenGUIDoc *getDocument() { return m_document; }
 
     /// Return the number of staffs
     int getStaffCount() { return m_staffs.size(); }
@@ -185,10 +183,6 @@ public:
 
 
 public slots:
-    /**
-     * close window
-     */
-    void closeWindow();
 
     /**
      * put the indicationed text/object into the clipboard and remove * it
@@ -205,11 +199,6 @@ public slots:
      * paste the clipboard into the document
      */
     void slotEditPaste();
-
-    /**
-     * toggles the main toolbar
-     */
-    void slotToggleToolBar();
 
     /**
      * toggles the notes toolbar
@@ -235,30 +224,6 @@ public slots:
      * toggles the font toolbar
      */
     void slotToggleFontToolBar();
-
-    /**
-     * toggles the statusbar
-     */
-    void slotToggleStatusBar();
-
-    /** 
-     * Changes the statusbar contents for the standard label permanently,
-     * used to indicate current actions.
-     *
-     * @param text the text that is displayed in the statusbar
-     */
-    void slotStatusMsg(const QString &text);
-
-    /**
-     * Changes the status message of the whole statusbar for two
-     * seconds, then restores the last status. This is used to display
-     * statusbar messages that give information about actions for
-     * toolbar icons and menuentries.
-     *
-     * @param text the text that is displayed in the statusbar
-     */
-    void slotStatusHelpMsg(const QString &text);
-
 
     /// note switch slots
     void slotBreve();
@@ -436,22 +401,22 @@ protected:
      * as the geometry and the recent file list to the configuration
      * file
      */
-    void saveOptions();
+    virtual void saveOptions();
 
     /**
      * read general Options again and initialize all variables like the recent file list
      */
-    void readOptions();
+    virtual void readOptions();
 
     /**
      * create menus and toolbars
      */
-    void setupActions();
+    virtual void setupActions();
 
     /**
      * setup status bar
      */
-    void initStatusBar();
+    virtual void initStatusBar();
 
     /**
      * setup the "zoom" toolbar
@@ -474,7 +439,19 @@ protected:
      * @see NotationHLayout#getTotalWidth()
      */
     void readjustCanvasSize();
-    
+
+    /**
+     * Override from EditView
+     * @see EditView#getViewSize
+     */
+    virtual QSize getViewSize();
+
+    /**
+     * Override from EditView
+     * @see EditView#setViewSize
+     */
+    virtual void setViewSize(QSize);
+
     /**
      * show bar lines
      */
@@ -498,14 +475,6 @@ protected:
                                                   Rosegarden::Event *&key,
                                                   int staffNo,
                                                   unsigned int proximityThreshold = 10);
-
-    /**
-     * Set the current Notation tool (note inserter, rest inserter, eraser...)
-     *
-     * Called when the user selects a new item on one of the notation toolbars
-     * (notes toolbars, rests toolbars...)
-     */
-    void setTool(NotationTool*);
 
     /**
      * Set the note pixmap factory
@@ -549,10 +518,6 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    KConfig* m_config;
-
-    RosegardenGUIDoc* m_document;
-
     /// The current selection of Events (for cut/copy/paste)
     EventSelection* m_currentEventSelection;
 
@@ -584,9 +549,6 @@ protected:
     
     NotationHLayout* m_hlayout;
     NotationVLayout* m_vlayout;
-
-    NotationTool*    m_tool;
-    NotationToolBox* m_toolBox;
 
     template <class T>
     class ZoomSlider : public QSlider

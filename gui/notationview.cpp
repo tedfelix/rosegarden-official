@@ -88,9 +88,7 @@ NotationView::NotationViewSet NotationView::m_viewsExtant;
 NotationView::NotationView(RosegardenGUIDoc* doc,
                            vector<Segment *> segments,
                            QWidget *parent) :
-    KMainWindow(parent),
-    m_config(kapp->config()),
-    m_document(doc),
+    EditView(doc, segments, parent),
     m_currentEventSelection(0),
     m_currentNotePixmap(0),
     m_hoveredOverNoteName(0),
@@ -103,12 +101,12 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_activeItem(0),
     m_hlayout(0),
     m_vlayout(0),
-    m_tool(0),
-    m_toolBox(new NotationToolBox(this)),
     m_fontSizeSlider(0),
     m_selectDefaultNote(0),
     m_pointer(0)
 {
+    m_toolBox = new NotationToolBox(this);
+
     assert(segments.size() > 0);
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
 
@@ -731,6 +729,16 @@ NotationView::getCommandHistory()
 //NotationStaff instead (it should be intelligent enough to query the
 //notationhlayout itself)
 
+QSize NotationView::getViewSize()
+{
+    return canvas()->size();
+}
+
+void NotationView::setViewSize(QSize s)
+{
+    canvas()->resize(s.width(), s.height());
+}
+
 void NotationView::showBars(int staffNo)
 {
     NotationStaff &staff = *m_staffs[staffNo];
@@ -1033,18 +1041,6 @@ void NotationView::setSingleSelectedEvent(Segment &segment, Event *event)
     setCurrentSelection(selection);
 }
 
-void NotationView::setTool(NotationTool* tool)
-{
-    if (m_tool)
-        m_tool->stow();
-
-    m_tool = tool;
-
-    if (m_tool)
-        m_tool->ready();
-
-}
-
 void NotationView::setNotePixmapFactory(NotePixmapFactory* f)
 {
     delete m_notePixmapFactory;
@@ -1070,11 +1066,6 @@ PositionCursor* NotationView::getCursor()
 //////////////////////////////////////////////////////////////////////
 //                    Slots
 //////////////////////////////////////////////////////////////////////
-
-void NotationView::closeWindow()
-{
-    close();
-}
 
 //
 // Cut, Copy, Paste
@@ -1155,19 +1146,6 @@ void NotationView::slotEditPaste()
     }
 }
 
-//
-// Toolbar and statusbar toggling
-//
-void NotationView::slotToggleToolBar()
-{
-    KTmpStatusMsg msg(i18n("Toggle the toolbar..."), statusBar());
-
-    if (toolBar()->isVisible())
-        toolBar()->hide();
-    else
-        toolBar()->show();
-}
-
 void NotationView::slotToggleNotesToolBar()
 {
     toggleNamedToolBar("notesToolBar");
@@ -1207,16 +1185,6 @@ void NotationView::toggleNamedToolBar(const QString& toolBarName)
         namedToolBar->hide();
     else
         namedToolBar->show();
-}
-
-void NotationView::slotToggleStatusBar()
-{
-    KTmpStatusMsg msg(i18n("Toggle the statusbar..."), statusBar());
-
-    if (statusBar()->isVisible())
-        statusBar()->hide();
-    else
-        statusBar()->show();
 }
 
 //
@@ -1444,26 +1412,6 @@ void NotationView::slotTransformsRemoveMarks()
 					(*m_currentEventSelection));
 }
 
-
-
-//
-// Status messages
-//
-void NotationView::slotStatusMsg(const QString &text)
-{
-    ///////////////////////////////////////////////////////////////////
-    // change status message permanently
-    statusBar()->clear();
-    statusBar()->changeItem(text, ID_STATUS_MSG);
-}
-
-
-void NotationView::slotStatusHelpMsg(const QString &text)
-{
-    ///////////////////////////////////////////////////////////////////
-    // change status message of whole statusbar temporary (text, msec)
-    statusBar()->message(text, 2000);
-}
 
 
 // Code required to work out where to put the pointer
@@ -1935,7 +1883,7 @@ NotationView::getYSnappedToLine(int y) const
 {
     NotationStaff *staff = getStaffAtY(y);
     if (!staff) return y;
-    return staff->getYOfHeight(staff->getHeightAtY(y), y) + staff->y();
+    return int(staff->getYOfHeight(staff->getHeightAtY(y), y) + staff->y());
 }
 
 void

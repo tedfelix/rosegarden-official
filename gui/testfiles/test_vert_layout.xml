@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
-<Track track="2" start="10">
+<Segment track="1" start="0">
 	<event type="note" duration="quarter" pitch="60"/>
 	<event type="note" duration="quarter" pitch="61"/>
 	<event type="note" duration="quarter" pitch="62"/>
@@ -11,7 +11,6 @@
 	<event type="note" duration="quarter" pitch="66"/>
 	<event type="note" duration="quarter" pitch="67"/>
 	<event type="note" duration="quarter" pitch="68"/>
-	<event type="keychange" key="D minor"/>
 	<event type="note" duration="quarter" pitch="69"/>
 	<event type="note" duration="quarter" pitch="70"/>
 	<event type="note" duration="quarter" pitch="71"/>
@@ -21,6 +20,5 @@
 	<event type="note" duration="quarter" pitch="75"/>
 	<event type="note" duration="quarter" pitch="76"/>
 	<event type="note" duration="quarter" pitch="77"/>
-
-</Track>
+</Segment>
 </rosegarden-data>

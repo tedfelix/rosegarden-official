@@ -4,6 +4,7 @@ bin_PROGRAMS = rosegarden
 
 rosegarden_SOURCES = \
 	colours.cpp \
+	edittool.cpp \
 	editview.cpp \
 	eventselection.cpp \
 	ktmpstatusmsg.cpp \

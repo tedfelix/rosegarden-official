@@ -22,13 +22,10 @@
 #ifndef NOTATIONTOOL_H
 #define NOTATIONTOOL_H
 
-#include <qevent.h>
-#include <qobject.h>
-
-#include <kxmlguiclient.h>
-
 #include "NotationTypes.h"
 #include "Segment.h"
+
+#include "edittool.h"
 
 class QCanvasRectangle;
 
@@ -48,19 +45,14 @@ class NotationTool;
  *
  * Tools are fetched from a name
  */
-class NotationToolBox : public QObject
+class NotationToolBox : public EditToolBox
 {
 public:
     NotationToolBox(NotationView* parent);
 
-    NotationTool* getTool(const QString& toolName);
-
 protected:
-    NotationTool* createTool(const QString& toolName);
+    virtual EditTool* createTool(const QString& toolName);
 
-    NotationView* m_parentView;
-
-    QDict<NotationTool> m_tools;
 };
 
 
@@ -86,7 +78,7 @@ protected:
  * @see NotationView#setTool()
  * @see NotationToolBox
  */
-class NotationTool : public QObject, public KXMLGUIClient
+class NotationTool : public EditTool
 {
     friend NotationToolBox;
 
@@ -99,79 +91,15 @@ public:
      */
     virtual void ready();
 
-    /**
-     * Is called by NotationView after the tool is not used
-     * Add any cleanup here
-     */
-    virtual void stow();
-
-    /**
-     * Dispatch the event to Left/Middle/Right MousePress
-     */
-    virtual void handleMousePress(int height, int staffNo,
-                                  QMouseEvent *event,
-                                  NotationElement*);
-
-    /**
-     * Main operation of the tool
-     */
-    virtual void handleLeftButtonPress(int height, int staffNo,
-                                       QMouseEvent *event,
-                                       NotationElement*) = 0;
-
-    /**
-     * Do nothing
-     */
-    virtual void handleMidButtonPress(int height, int staffNo,
-                                      QMouseEvent*,
-                                      NotationElement*);
-
-    /**
-     * Show option menu
-     */
-    virtual void handleRightButtonPress(int height, int staffNo,
-                                        QMouseEvent*,
-                                        NotationElement*);
-
-    /**
-     * Do nothing
-     */
-    virtual void handleMouseDblClick(int height, int staffNo,
-                                     QMouseEvent*,
-                                     NotationElement*);
-
-    /**
-     * Do nothing
-     */
-    virtual void handleMouseMove(QMouseEvent*);
-
-    /**
-     * Do nothing
-     */
-    virtual void handleMouseRelease(QMouseEvent*);
-
-    /**
-     * Show the menu if there is one
-     */
-    virtual void showMenu();
-
-    void setParentView(NotationView*);
-
 protected:
     /**
      * Create a new NotationTool
      *
      * \a menuName : the name of the menu defined in the XML rc file
      */
-    NotationTool(const QString& menuName, NotationView*);
+    NotationTool(const QString& menuName, EditView*);
 
-    void createMenu(const QString& rcFileName);
-
-    const QString m_menuName;
-
-    NotationView* m_parentView;
-
-    QPopupMenu* m_menu;
+    NotationView* m_nParentView;
 };
 
 namespace Rosegarden { class SegmentNotationHelper; }
@@ -190,7 +118,7 @@ public:
 
     virtual void handleLeftButtonPress(int height, int staffNo,
                                        QMouseEvent*,
-                                       NotationElement* el);
+                                       Rosegarden::ViewElement* el);
 
     virtual void ready();
 
@@ -213,10 +141,10 @@ public slots:
     void setAccidentalSync(Rosegarden::Accidental);
 
 protected:
-    NoteInserter(NotationView*);
+    NoteInserter(EditView*);
 
     /// this ctor is used by RestInserter
-    NoteInserter(const QString& menuName, NotationView*);
+    NoteInserter(const QString& menuName, EditView*);
 
     virtual Rosegarden::Event *doAddCommand(Rosegarden::Segment &,
 					    Rosegarden::timeT time,
@@ -258,7 +186,7 @@ public:
     static const QString ToolName;
 
 protected:
-    RestInserter(NotationView*);
+    RestInserter(EditView*);
 
     virtual Rosegarden::Event *doAddCommand(Rosegarden::Segment &,
 					    Rosegarden::timeT time,
@@ -282,11 +210,11 @@ public:
 
     virtual void handleLeftButtonPress(int height, int staffNo,
                                        QMouseEvent*,
-                                       NotationElement* el);
+                                       Rosegarden::ViewElement* el);
     static const QString ToolName;
 
 protected:
-    ClefInserter(NotationView*);
+    ClefInserter(EditView*);
     
     Rosegarden::Clef m_clef;
 };
@@ -307,14 +235,14 @@ public:
 
     virtual void handleLeftButtonPress(int height, int staffNo,
                                        QMouseEvent*,
-                                       NotationElement* el);
+                                       Rosegarden::ViewElement* el);
     static const QString ToolName;
 
 public slots:
     void toggleRestCollapse();
     
 protected:
-    NotationEraser(NotationView*);
+    NotationEraser(EditView*);
 
     bool m_collapseRest;
 
@@ -333,14 +261,14 @@ public:
 
     virtual void handleLeftButtonPress(int height, int staffNo,
                                        QMouseEvent*,
-                                       NotationElement* el);
+                                       Rosegarden::ViewElement* el);
 
     virtual void handleMouseMove(QMouseEvent*);
     virtual void handleMouseRelease(QMouseEvent*);
 
     virtual void handleMouseDblClick(int height, int staffNo,
                                      QMouseEvent*,
-                                     NotationElement*);
+                                     Rosegarden::ViewElement*);
 
     /**
      * Create the selection rect
@@ -376,7 +304,7 @@ public slots:
     void hideSelection();
     
 protected:
-    NotationSelector(NotationView*);
+    NotationSelector(EditView*);
 
     /**
      * Set the current selection on the parent NotationView
@@ -403,7 +331,7 @@ public:
     
     virtual void handleLeftButtonPress(int height, int staffNo,
                                        QMouseEvent*,
-                                       NotationElement* el);
+                                       Rosegarden::ViewElement* el);
 
 protected:
     NotationSelectionPaster(EventSelection&,
