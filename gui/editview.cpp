@@ -821,7 +821,11 @@ void EditView::slotShowPropertyControlRuler()
 
     int rc = propChooserDialog.exec();
     if (rc == QDialog::Accepted) {
-        QListBoxRGProperty* item = dynamic_cast<QListBoxRGProperty*>(propList->selectedItem());
+        // fix for KDE 3.0
+        //QListBoxRGProperty* item = dynamic_cast<QListBoxRGProperty*>(propList->selectedItem());
+        QListBoxRGProperty* item = dynamic_cast<QListBoxRGProperty*>
+            (propList->item(propList->currentItem()));
+
         if (item) {
             PropertyName property = item->getPropertyName();
             showPropertyControlRuler(property);
