@@ -28,7 +28,7 @@
 # Make a module named 'gui' out of the gui/rosegardengui dir 
 gui gui/rosegardengui
 
-toplevel !gui/rosegardengui !gui/admin !gui/po gui
+toplevel -a !gui/rosegardengui !gui/admin !gui/po gui
 
 # The main 'rosegarden' module holding our source tree
 # The '&gui' below is the module defined above
