@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "xmlstorableevent.h"
+#include "NotationTypes.h"
 
 #include "rosedebug.h"
 
@@ -40,15 +41,17 @@ XMLStorableEvent::XMLStorableEvent(const QXmlAttributes &attributes)
 
             bool isNumeric = true;
             Event::timeT d = attrVal.toUInt(&isNumeric);
-            if (!isNumeric) {
-                // It may be one of the accepted strings : breve, semibreve...
-                // whole, half-note, ...
-                d = noteName2Duration(attrVal);
-                if (!d)
-                    kdDebug(KDEBUG_AREA) << "Bad duration : " << attrVal << endl;
-            }
 
-            setTimeDuration(d);
+            if (!isNumeric) {
+		try {
+		    Note n(attrVal.latin1());
+		    setTimeDuration(n.getDuration());
+		} catch (Note::BadType) {
+                    kdDebug(KDEBUG_AREA) << "Bad duration: " << attrVal << endl;
+		}
+            } else {
+		setTimeDuration(d);
+	    }
 
         } else {
 
@@ -141,7 +144,7 @@ XMLStorableEvent::toXMLString(const Event &e)
     res += "/>";
     return res;
 }
-
+/*!
 Event::timeT
 XMLStorableEvent::noteName2Duration(const QString &nn)
 {
@@ -200,3 +203,4 @@ XMLStorableEvent::namedurationmap
 XMLStorableEvent::m_noteName2DurationMap;
 
 
+*/

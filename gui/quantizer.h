@@ -44,30 +44,10 @@ public:
      */
     void quantize(Event *el);
 
-    /*! no -- whole note duration is fixed
-    unsigned int wholeNoteDuration()           { return m_wholeNoteDuration; }
-    void  setWholeNoteDuration(unsigned int d);
-
-    Event::timeT noteDuration(Note note);
-    */
-
 protected:
-
-/*!    typedef vector<unsigned int> DurationMap; */
 
     /// actual quantizer
     void quantize(Event::timeT duration, int &high, int &low);
-                  
-/*!                  DurationMap::iterator &high, 
-  DurationMap::iterator &low );*/
-
-    /// maps Notes to durations
-/*!    DurationMap m_durationTable; */
-
-/*!    void computeNoteDurations(); */
-
-/*!    unsigned int m_wholeNoteDuration;
-  static unsigned int defaultWholeNoteDuration; */
 };
 
 #endif

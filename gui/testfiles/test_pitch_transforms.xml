@@ -14,6 +14,7 @@
 	<event type="note" duration="half" pitch="64"/>
 	<event type="note" duration="whole" pitch="67"/>
 	<event type="note" duration="whole" pitch="70"/>
+	<event type="clefchange" clef="bass"/>
 	<event type="note" duration="48" pitch="72"/>
 	<event type="note" duration="47" pitch="54"/>
 	<event type="note" duration="49" pitch="67"/>
@@ -28,7 +29,7 @@
 	<event type="rest" duration="half"/>
 
 	<event type="rest" duration="quarter"/>
-	<event type="rest" duration="quarter"/>
+	<event type="rest" duration="wormy"/>
 	<event type="rest" duration="quarter"/>
 	<event type="rest" duration="quarter"/>
 

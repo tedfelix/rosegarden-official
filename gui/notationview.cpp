@@ -332,6 +332,8 @@ NotationView::showElements(NotationElementList::iterator from,
                 if ((*it)->event()->get<Int>("Notation::Accident", acc)) {
                     accident = Accidental(acc);
                 }
+
+		kdDebug(KDEBUG_AREA) << "NotationElement::showElements(): found a note of type " << note << " with accidental " << accident << endl;
                 
                 QCanvasPixmap notePixmap(npf.makeNotePixmap(note,
                                                             accident,

@@ -44,12 +44,14 @@ public:
     static QString toXMLString(const Event&);
     
 protected:
+/*!
     timeT noteName2Duration(const QString &noteName);
     void initMap();
 
     typedef hash_map<string, timeT, hashstring, eqstring> namedurationmap;
 
     static namedurationmap m_noteName2DurationMap;
+*/
 };
 
 #endif
