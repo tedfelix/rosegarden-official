@@ -1016,17 +1016,15 @@ RosegardenGUIDoc::setLoop(Rosegarden::timeT t0, Rosegarden::timeT t1)
 void
 RosegardenGUIDoc::alive()
 {
-    if (m_useSequencer == false)
-        return;
-
     // Just a quick refreshing sleep here to ensure that we don't
     // mask any call back to the sequencer by being to hasty.
     //
     // Probably unnecessary but better safe than sorry.
     //
 
-    while(!kapp->dcopClient()->
-           isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
+    while (m_useSequencer &&
+	   !kapp->dcopClient()->
+            isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
     {
         SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
                      << "waiting for Sequencer to come up" << endl;
@@ -1034,6 +1032,9 @@ RosegardenGUIDoc::alive()
         kapp->processEvents(1000);
         sleep(1); // 1s
     }
+
+    if (m_useSequencer == false)
+        return;
 
     QByteArray data;
 

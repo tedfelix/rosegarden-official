@@ -83,6 +83,26 @@ NotationView::slotUpdateInsertModeStatus()
 }
 
 void
+NotationView::slotUpdateAnnotationsStatus()
+{
+    if (!areAnnotationsVisible()) {
+	for (int i = 0; i < getStaffCount(); ++i) {
+	    Segment &s = getStaff(i)->getSegment();
+	    for (Segment::iterator j = s.begin(); j != s.end(); ++j) {
+		if ((*j)->isa(Rosegarden::Text::EventType) &&
+		    ((*j)->get<Rosegarden::String>
+		     (Rosegarden::Text::TextTypePropertyName)
+		     == Rosegarden::Text::Annotation)) {
+		    m_annotationsLabel->setText(i18n("Hidden annotations"));
+		    return;
+		}
+	    }
+	}
+    }
+    m_annotationsLabel->setText("");
+}
+
+void
 NotationView::slotChangeSpacingFromIndex(int n)
 {
     std::vector<int> spacings = m_hlayout->getAvailableSpacings();
@@ -1407,6 +1427,11 @@ NotationView::doDeferredCursorMove()
 
 	staff->setInsertCursorPosition(*m_hlayout, t);
 
+	if (m_deferredCursorMove == CursorMoveAndMakeVisible) {
+	    getCanvasView()->slotScrollHoriz(staff->getCanvasXForLayoutX
+					     (m_hlayout->getXForTime(t)));
+	}
+
     } else {
 
 	// prefer a note or rest, if there is one, to a non-spacing event
@@ -1459,75 +1484,6 @@ NotationView::doDeferredCursorMove()
     updateView();
 }
 
-/*!!!
-void
-NotationView::slotStepBackward()
-{
-    NotationStaff *staff = m_staffs[m_currentStaff];
-    Segment &segment = staff->getSegment();
-    timeT time = getInsertionTime();
-    Segment::iterator i = segment.findTime(time);
-
-    while (i != segment.begin() &&
-	   (i == segment.end() || (*i)->getAbsoluteTime() == time)) --i;
-
-    if (i != segment.end()) slotSetInsertCursorPosition((*i)->getAbsoluteTime());
-}
-
-void
-NotationView::slotStepForward()
-{
-    NotationStaff *staff = m_staffs[m_currentStaff];
-    Segment &segment = staff->getSegment();
-    timeT time = getInsertionTime();
-    Segment::iterator i = segment.findTime(time);
-
-    while (segment.isBeforeEndMarker(i) &&
-	   (*i)->getAbsoluteTime() == time) ++i;
-
-    if (!segment.isBeforeEndMarker(i)) {
-	slotSetInsertCursorPosition(segment.getEndMarkerTime());
-    } else {
-	slotSetInsertCursorPosition((*i)->getAbsoluteTime());
-    }
-}
-
-void
-NotationView::slotJumpBackward()
-{
-    NotationStaff *staff = m_staffs[m_currentStaff];
-    Segment &segment = staff->getSegment();
-    timeT time = segment.getBarStartForTime(getInsertionTime() - 1);
-    slotSetInsertCursorPosition(time);
-}
-
-void
-NotationView::slotJumpForward()
-{
-    NotationStaff *staff = m_staffs[m_currentStaff];
-    Segment &segment = staff->getSegment();
-    timeT time = segment.getBarEndForTime(getInsertionTime());
-    slotSetInsertCursorPosition(time);
-}
-
-void
-NotationView::slotJumpToStart()
-{
-    NotationStaff *staff = m_staffs[m_currentStaff];
-    Segment &segment = staff->getSegment();
-    timeT time = segment.getStartTime();
-    slotSetInsertCursorPosition(time);
-}    
-
-void
-NotationView::slotJumpToEnd()
-{
-    NotationStaff *staff = m_staffs[m_currentStaff];
-    Segment &segment = staff->getSegment();
-    timeT time = segment.getEndMarkerTime();
-    slotSetInsertCursorPosition(time);
-}    
-*/
 void
 NotationView::slotJumpCursorToPlayback()
 {
@@ -1692,6 +1648,7 @@ void NotationView::slotShowTempos()
 void NotationView::slotShowAnnotations()
 {
     m_annotationsVisible = !m_annotationsVisible;
+    slotUpdateAnnotationsStatus();
     refreshSegment(0, 0, 0);
 }
 

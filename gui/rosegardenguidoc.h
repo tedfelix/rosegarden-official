@@ -209,6 +209,12 @@ public:
     Rosegarden::Clipboard *getClipboard() { return m_clipboard; }
 
     /**
+     * change our mind about whether to use the sequencer (in certain
+     * specific circumstances -- see RosegardenGUIApp::slotSequencerExited)
+     */
+    void setUseSequencer(bool useSequencer) { m_useSequencer = useSequencer; }
+
+    /**
      * insert some recorded MIDI events into our recording Segment
      */
     void insertRecordedMidi(const Rosegarden::MappedComposition &mc,

@@ -2189,6 +2189,10 @@ void RosegardenGUIApp::slotSequencerExited(KProcess*)
     KMessageBox::error(0, i18n("Sequencer exited"));
 
     m_sequencerProcess = 0;
+    m_useSequencer = false;
+    if (getDocument()) {
+	getDocument()->setUseSequencer(false);
+    }
 }
 
 

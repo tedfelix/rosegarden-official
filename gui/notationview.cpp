@@ -423,6 +423,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     setAutoSaveSettings("NotationView", true);
 
     readOptions();
+
+    if (m_annotationsVisible) {
+	// oops
+	refreshSegment(0, 0, 0);
+    }
 }
 
 //
@@ -739,7 +744,7 @@ void NotationView::readOptions()
     opt = m_config->readBoolEntry("Show Annotations", true);
     m_annotationsVisible = opt;
     getToggleAction("show_annotations")->setChecked(opt);
-
+    slotUpdateAnnotationsStatus();
 }
 
 void NotationView::setupActions()
@@ -1503,6 +1508,7 @@ void NotationView::initStatusBar()
     m_currentNotePixmap = new QLabel(hbox);
     m_currentNotePixmap->setMinimumWidth(20);
     m_insertModeLabel = new QLabel(hbox);
+    m_annotationsLabel = new QLabel(hbox);
     sb->addWidget(hbox);
 
     sb->insertItem(KTmpStatusMsg::getDefaultMsg(),

@@ -325,6 +325,7 @@ public slots:
 
     /// status stuff
     void slotUpdateInsertModeStatus();
+    void slotUpdateAnnotationsStatus();
 
     /// edit menu
     void slotPreviewSelection();
@@ -688,6 +689,9 @@ protected:
 
     /// Displayed in the status bar, shows insertion mode
     QLabel *m_insertModeLabel;
+
+    /// Displayed in the status bar, shows when annotations are hidden
+    QLabel *m_annotationsLabel;
 
     /// Displayed in the status bar, shows progress of current operation
     RosegardenProgressBar *m_progressBar;
