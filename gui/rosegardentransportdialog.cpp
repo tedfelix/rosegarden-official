@@ -69,7 +69,7 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     m_transport = new RosegardenTransport(this);
 //     b->setFixedSize(m_transport->sizeHint());
 
-    setCaption(i18n("Transport"));
+    setCaption(i18n("Rosegarden Transport"));
 
     resetFonts();
 
