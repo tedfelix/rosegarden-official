@@ -182,6 +182,7 @@ public slots:
 
 protected:
     MidiDeviceListViewItem* getParentDeviceItem(QListViewItem*);
+    void keepBankListForNextPopulate() { m_keepBankList = true; }
 
     //--------------- Data members ---------------------------------
     Rosegarden::Studio      *m_studio;
@@ -200,7 +201,7 @@ protected:
     MidiProgramsEditor::MidiProgramContainer     m_programList;
 
     bool                     m_modified;
-    bool                     m_replaceBankList;
+    bool                     m_keepBankList;
 
     int                      m_lastDevice;
     int                      m_lastMSB;

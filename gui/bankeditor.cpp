@@ -437,7 +437,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_studio(&doc->getStudio()),
     m_doc(doc),
     m_modified(false),
-    m_replaceBankList(true),
+    m_keepBankList(false),
     m_lastDevice(0),
     m_lastMSB(0),
     m_lastLSB(0)
@@ -619,18 +619,22 @@ BankEditorDialog::slotPopulateDevice(QListViewItem* item)
             m_listView->setCurrentItem(child);
         } else {
             RG_DEBUG << "BankEditorDialog::slotPopulateDevice : not a bank item - no child\n";
+            m_deleteBank->setEnabled(false);
+            m_deleteAllBanks->setEnabled(false);
         }
 
         return;
     }
     
+    m_deleteBank->setEnabled(true);
+    m_deleteAllBanks->setEnabled(true);
 
     Rosegarden::MidiDevice *device = getMidiDevice(bankItem->getDevice());
 
-    if (m_replaceBankList)
+    if (!m_keepBankList)
         m_bankList    = device->getBanks();
     else
-        m_replaceBankList = true;
+        m_keepBankList = false;
 
     m_programList = device->getPrograms();
 
@@ -646,21 +650,8 @@ BankEditorDialog::slotPopulateDevice(QListViewItem* item)
 void
 BankEditorDialog::slotOk()
 {
-    if (m_modified)
-    {
-        RG_DEBUG << "BankEditorDialog::slotOk() bankList size = "
-                 << m_bankList.size() << endl;
-
-        ModifyDeviceCommand *command =
-            new ModifyDeviceCommand(m_studio,
-                                    m_lastDevice,
-                                    m_deviceList[m_lastDevice],
-                                    m_bankList,
-                                    m_programList);
-
-        addCommandToHistory(command);
-        accept();
-    }
+    slotApply();
+    accept();
 }
 
 void
@@ -724,7 +715,7 @@ BankEditorDialog::slotAddBank()
                                                               strtoqstr(newBank.name),
                                                               QString("%1").arg(newBank.msb),
                                                               QString("%1").arg(newBank.lsb));
-        m_replaceBankList = false;
+        keepBankListForNextPopulate();
         m_listView->setCurrentItem(newBankItem);
 
         setModified(true);
@@ -734,40 +725,44 @@ BankEditorDialog::slotAddBank()
 void
 BankEditorDialog::slotDeleteBank()
 {
-//     blockAllSignals(true);
+    if (!m_listView->currentItem()) return;
 
-//     Rosegarden::MidiDevice *device =
-//         getMidiDevice(m_listView->currentItem());
+    QListViewItem* currentItem = m_listView->currentItem();
 
-//     if (device)
-//     {
-//         int newBank = getCurrentBank() - 1;
-//         if (newBank < 0) newBank = 0;
+    MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentItem);
+    MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(currentItem);
 
-//         int msb = m_bankList[getCurrentBank()].msb;
-//         int lsb = m_bankList[getCurrentBank()].lsb;
+    Rosegarden::MidiDevice *device = getMidiDevice(currentItem);
 
-//         // Copy across all programs that aren't in the doomed bank
-//         //
-//         MidiProgramsEditor::MidiProgramContainer::iterator it;
-//         MidiProgramsEditor::MidiProgramContainer tempList;
-//         for (it = m_programList.begin(); it != m_programList.end(); it++)
-//             if (it->msb != msb || it->lsb != lsb)
-//                 tempList.push_back(*it);
+    if (device)
+    {
+        int currentBank = bankItem->getBank();
+        int newBank = currentBank - 1;
+        
+        if (newBank < 0) newBank = 0;
 
-//         // Erase the bank and repopulate
-//         //
-//         MidiProgramsEditor::MidiBankContainer::iterator er = m_bankList.begin();
-//         er += m_programEditor->getCurrentBank();
-//         m_bankList.erase(er);
-//         m_programList = tempList;
+        int msb = m_bankList[currentBank].msb;
+        int lsb = m_bankList[currentBank].lsb;
 
-//         slotPopulateDeviceBank(m_listView->currentItem(), newBank);
+        // Copy across all programs that aren't in the doomed bank
+        //
+        MidiProgramsEditor::MidiProgramContainer::iterator it;
+        MidiProgramsEditor::MidiProgramContainer tempList;
+        for (it = m_programList.begin(); it != m_programList.end(); it++)
+            if (it->msb != msb || it->lsb != lsb)
+                tempList.push_back(*it);
 
-//         setModified(true);
-//     }
+        // Erase the bank and repopulate
+        //
+        MidiProgramsEditor::MidiBankContainer::iterator er = m_bankList.begin();
+        er += currentBank;
+        m_bankList.erase(er);
+        m_programList = tempList;
+        keepBankListForNextPopulate();
 
-//     blockAllSignals(false);
+        delete currentItem; // the listview automatically selects a new current item
+        setModified(true);
+    }
 }
 
 void
