@@ -202,9 +202,9 @@ ClefInsertionCommand::modifySegment()
 
     Clef oldClef;
     Rosegarden::Key key;
-    helper.getClefAndKeyAt(getBeginTime(), oldClef, key);
+    helper.getClefAndKeyAt(getStartTime(), oldClef, key);
 
-    Segment::iterator i = helper.insertClef(getBeginTime(), m_clef);
+    Segment::iterator i = helper.insertClef(getStartTime(), m_clef);
     if (i != helper.segment().end()) m_lastInsertedEvent = *i;
 
     if (m_clef != oldClef) {
@@ -253,7 +253,7 @@ TextInsertionCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
 
-    Segment::iterator i = helper.insertText(getBeginTime(), m_text);
+    Segment::iterator i = helper.insertText(getStartTime(), m_text);
     if (i != helper.segment().end()) m_lastInsertedEvent = *i;
 }
 
@@ -284,10 +284,10 @@ KeyInsertionCommand::modifySegment()
     Rosegarden::Key oldKey;
 
     if (m_convert || m_transpose) {
-	helper.getClefAndKeyAt(getBeginTime(), clef, oldKey);
+	helper.getClefAndKeyAt(getStartTime(), clef, oldKey);
     }
 
-    Segment::iterator i = helper.insertKey(getBeginTime(), m_key);
+    Segment::iterator i = helper.insertKey(getStartTime(), m_key);
 
     if (i != helper.segment().end()) {
 
@@ -393,7 +393,7 @@ GroupMenuBeamCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
 
-    helper.makeBeamedGroup(getBeginTime(), getEndTime(),
+    helper.makeBeamedGroup(getStartTime(), getEndTime(),
                            GROUP_TYPE_BEAMED);
 }
 
@@ -402,7 +402,7 @@ GroupMenuAutoBeamCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
 
-    helper.autoBeam(getBeginTime(), getEndTime(),
+    helper.autoBeam(getStartTime(), getEndTime(),
                     GROUP_TYPE_BEAMED, m_quantizer);
 }
 
@@ -423,7 +423,7 @@ void
 GroupMenuTupletCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
-    helper.makeTupletGroup(getBeginTime(), m_untupled, m_tupled, m_unit);
+    helper.makeTupletGroup(getStartTime(), m_untupled, m_tupled, m_unit);
 }
 
 
@@ -432,17 +432,17 @@ GroupMenuBreakCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
 
-    helper.unbeam(getBeginTime(), getEndTime());
+    helper.unbeam(getStartTime(), getEndTime());
 }
 
 
 GroupMenuAddIndicationCommand::GroupMenuAddIndicationCommand(std::string indicationType, 
 							     EventSelection &selection) :
     BasicCommand(getGlobalName(indicationType),
-		 selection.getSegment(), selection.getBeginTime(),
-		 selection.getBeginTime() + 1),
+		 selection.getSegment(), selection.getStartTime(),
+		 selection.getStartTime() + 1),
     m_indicationType(indicationType),
-    m_indicationDuration(selection.getEndTime() - selection.getBeginTime()),
+    m_indicationDuration(selection.getEndTime() - selection.getStartTime()),
     m_lastInsertedEvent(0)
 {
     // nothing else
@@ -459,7 +459,7 @@ GroupMenuAddIndicationCommand::modifySegment()
     SegmentNotationHelper helper(getSegment());
 
     Indication indication(m_indicationType, m_indicationDuration);
-    Event *e = indication.getAsEvent(getBeginTime());
+    Event *e = indication.getAsEvent(getStartTime());
     helper.segment().insert(e);
     m_lastInsertedEvent = e;
 }
@@ -481,7 +481,7 @@ TransformsMenuNormalizeRestsCommand::TransformsMenuNormalizeRestsCommand
 (Rosegarden::EventSelection &selection) :
     BasicCommand(getGlobalName(),
 		 selection.getSegment(),
-		 selection.getBeginTime(),
+		 selection.getStartTime(),
 		 selection.getEndTime())
 {
     // nothing else
@@ -489,14 +489,14 @@ TransformsMenuNormalizeRestsCommand::TransformsMenuNormalizeRestsCommand
 
 void TransformsMenuNormalizeRestsCommand::modifySegment()
 {
-    getSegment().normalizeRests(getBeginTime(), getEndTime());
+    getSegment().normalizeRests(getStartTime(), getEndTime());
 }
 
 TransformsMenuCollapseRestsCommand::TransformsMenuCollapseRestsCommand
 (Rosegarden::EventSelection &selection) :
     BasicCommand(getGlobalName(),
 		 selection.getSegment(),
-		 selection.getBeginTime(),
+		 selection.getStartTime(),
 		 selection.getEndTime())
 {
     // nothing else
@@ -505,7 +505,7 @@ TransformsMenuCollapseRestsCommand::TransformsMenuCollapseRestsCommand
 void TransformsMenuCollapseRestsCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
-    helper.collapseRestsAggressively(getBeginTime(), getEndTime());
+    helper.collapseRestsAggressively(getStartTime(), getEndTime());
 }
 
 void

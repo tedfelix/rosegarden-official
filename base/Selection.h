@@ -71,7 +71,7 @@ public:
      * Return the time at which the first Event in the selection
      * begins.
      */
-    timeT getBeginTime() const { return m_beginTime; }
+    timeT getStartTime() const { return m_beginTime; }
 
     /**
      * Return the time at which the last Event in the selection ends.
@@ -109,6 +109,7 @@ public:
     // SegmentObserver methods
     virtual void eventAdded(const Segment *, Event *) { }
     virtual void eventRemoved(const Segment *, Event *);
+    virtual void endMarkerTimeChanged(const Segment *) { }
     
 private:
     EventSelection(const EventSelection&);
@@ -123,7 +124,7 @@ protected:
 
     timeT m_beginTime;
     timeT m_endTime;
-    bool m_haveRealBeginTime;
+    bool m_haveRealStartTime;
 };
 
 

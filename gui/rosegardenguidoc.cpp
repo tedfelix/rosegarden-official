@@ -266,21 +266,23 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     m_absFilePath=fileInfo.absFilePath();	
 
     QString errMsg;
-
-    // parse xml file
-    RosegardenProgressDialog *progressDlg =
-        new RosegardenProgressDialog(dynamic_cast<QApplication*>(kapp),
-                                     i18n("Reading file..."),
-                                     i18n("Cancel"),
-                                     100,
-                                     (QWidget*)parent());
-
     QString fileContents;
-    bool okay = readFromFile(filename, fileContents, progressDlg);
+    bool okay = readFromFile(filename, fileContents, 0);
     if (!okay) errMsg = "Couldn't read from file";
-    else okay = xmlParse(fileContents, errMsg, progressDlg);
+    else {
 
-    delete progressDlg;
+	// parse xml file
+	RosegardenProgressDialog *progressDlg =
+	    new RosegardenProgressDialog(kapp,
+					 i18n("Reading file..."),
+					 i18n("Cancel"),
+					 100,
+					 (QWidget*)parent());
+
+	okay = xmlParse(fileContents, errMsg, progressDlg);
+
+	delete progressDlg;
+    }
 
     if (!okay) {
         QString msg(i18n("Error when parsing file '%1' : \"%2\"")
@@ -301,8 +303,8 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     // We might need a progress dialog when we generate previews.
     //
-    progressDlg =
-        new RosegardenProgressDialog(dynamic_cast<QApplication*>(kapp),
+    RosegardenProgressDialog *progressDlg =
+        new RosegardenProgressDialog(kapp,
                                      i18n("Generating audio previews..."),
                                      i18n("Cancel"),
                                      100,
@@ -552,9 +554,15 @@ bool
 RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
                            RosegardenProgressDialog *progress)
 {
+    unsigned int elementCount = 0;
+    for (size_t i = 0; i < fileContents.length() - 1; ++i) {
+	if (fileContents[i] == '<' && fileContents[i+1] != '/') {
+	    ++elementCount;
+	}
+    }
 
     RoseXmlHandler handler(m_composition, m_studio, m_audioFileManager,
-                           fileContents.length(),
+                           elementCount,
                            dynamic_cast<Rosegarden::Progress*>(progress));
     QXmlInputSource source;
     source.setData(fileContents);

@@ -448,7 +448,7 @@ void MatrixView::setCurrentSelection(EventSelection* s)
     if (m_currentEventSelection) {
         m_currentEventSelection->removeSelectionFromSegment
 	    (m_selectedProperty);
-        getStaff(0)->positionElements(m_currentEventSelection->getBeginTime(),
+        getStaff(0)->positionElements(m_currentEventSelection->getStartTime(),
                                       m_currentEventSelection->getEndTime());
     }
 
@@ -457,7 +457,7 @@ void MatrixView::setCurrentSelection(EventSelection* s)
 
     if (s) {
         s->recordSelectionOnSegment(m_selectedProperty);
-        getStaff(0)->positionElements(s->getBeginTime(),
+        getStaff(0)->positionElements(s->getStartTime(),
                                       s->getEndTime());
     }
 

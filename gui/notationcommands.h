@@ -261,7 +261,7 @@ public:
 	return m_lastInsertedEvent;
     }
     virtual Rosegarden::timeT getRelayoutEndTime() {
-	return getBeginTime() + m_indicationDuration;
+	return getStartTime() + m_indicationDuration;
     }
 
     static QString getGlobalName(std::string indicationType);
@@ -283,9 +283,9 @@ class TransformsMenuNormalizeRestsCommand : public BasicCommand
 {
 public:
     TransformsMenuNormalizeRestsCommand(Rosegarden::Segment &s,
-					Rosegarden::timeT beginTime,
+					Rosegarden::timeT startTime,
 					Rosegarden::timeT endTime) :
-	BasicCommand(getGlobalName(), s, beginTime, endTime) { }
+	BasicCommand(getGlobalName(), s, startTime, endTime) { }
 
     TransformsMenuNormalizeRestsCommand(Rosegarden::EventSelection &selection);
 
@@ -300,9 +300,9 @@ class TransformsMenuCollapseRestsCommand : public BasicCommand
 {
 public:
     TransformsMenuCollapseRestsCommand(Rosegarden::Segment &s,
-				       Rosegarden::timeT beginTime,
+				       Rosegarden::timeT startTime,
 				       Rosegarden::timeT endTime) :
-	BasicCommand(getGlobalName(), s, beginTime, endTime) { }
+	BasicCommand(getGlobalName(), s, startTime, endTime) { }
 
     TransformsMenuCollapseRestsCommand(Rosegarden::EventSelection &selection);
 

@@ -81,7 +81,7 @@ BasicCommand::execute()
 	copyFrom(m_redoEvents);
     }
 
-    m_segment.updateRefreshStatuses(getBeginTime(), getRelayoutEndTime());
+    m_segment.updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
 }
 
 void
@@ -94,7 +94,7 @@ BasicCommand::unexecute()
 
     copyFrom(&m_savedEvents);
 
-    m_segment.updateRefreshStatuses(getBeginTime(), getRelayoutEndTime());
+    m_segment.updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
 }
     
 void
@@ -128,7 +128,7 @@ BasicSelectionCommand::BasicSelectionCommand(const QString &name,
 					     bool bruteForceRedo) :
     BasicCommand(name,
 		 selection.getSegment(),
-		 selection.getBeginTime(),
+		 selection.getStartTime(),
 		 selection.getEndTime(),
 		 bruteForceRedo)
 {

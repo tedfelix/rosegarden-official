@@ -35,6 +35,7 @@
 #include "rosedebug.h"
 #include "colours.h"
 #include "notestyle.h"
+#include "widgets.h"
 
 #include "Event.h"
 #include "Segment.h"
@@ -306,7 +307,11 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 
     Clef currentClef; // default is okay to start with
 
-    int elementCount = 0; // purely diagnostic
+    int elementCount = 0;
+    timeT endTime =
+	(to != getViewElementList()->end() ? (*to)->getAbsoluteTime() :
+	 getSegment().getEndMarkerTime());
+    timeT startTime = (from != to ? (*from)->getAbsoluteTime() : endTime);
 
     for (NotationElementList::iterator it = from; it != to; ++it) {
 
@@ -322,7 +327,15 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 
 	renderSingleElement(*it, currentClef, selected);
 
-	++elementCount;
+	if (m_progressDlg &&
+	    (endTime > startTime) &&
+	    (++elementCount % 20 == 0)) {
+
+	    timeT myTime = (*it)->getAbsoluteTime();
+	    m_progressDlg->setCompleted
+		((myTime - startTime) * 100 / (endTime - startTime));
+	    m_progressDlg->processEvents();
+	}
     }
 
     kdDebug(KDEBUG_AREA) << "NotationStaff::renderElements: "
@@ -338,7 +351,8 @@ NotationStaff::positionElements(timeT from, timeT to)
                          << from << " -> " << to << "\n";
     START_TIMING;
 
-    int elementsPositioned = 0, elementsRendered = 0; // diagnostic
+    int elementsPositioned = 0;
+    int elementsRendered = 0; // diagnostic
     
     timeT nextBarTime;
     NotationElementList::iterator beginAt = findUnchangedBarStart(from);
@@ -418,7 +432,14 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    ((*it)->getLayoutX(), (int)(*it)->getLayoutY());
 	(*it)->reposition(coords.first, (double)coords.second);
 	(*it)->setSelected(selected);
-	++elementsPositioned;
+
+	if (m_progressDlg &&
+	    (to > from) &&
+	    (++elementsPositioned % 20 == 0)) {
+	    timeT myTime = (*it)->getAbsoluteTime();
+	    m_progressDlg->setCompleted((myTime - from) * 100 / (to - from));
+	    m_progressDlg->processEvents();
+	}
     }
 
     kdDebug(KDEBUG_AREA) << "NotationStaff::positionElements: "
@@ -946,6 +967,6 @@ NotationStaff::clearPreviewNote()
 bool
 NotationStaff::wrapEvent(Rosegarden::Event *e)
 {
-    return true;
+    return Rosegarden::Staff<NotationElement>::wrapEvent(e);
 }
 

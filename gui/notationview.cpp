@@ -64,6 +64,7 @@
 #include "notationcommands.h"
 #include "segmentcommands.h"
 #include "dialogs.h"
+#include "widgets.h"
 #include "notestyle.h"
 
 #include "chordnameruler.h"
@@ -269,9 +270,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_bottomBarButtons = new BarButtons(&m_hlayout, 20.0, 25,
                                         true, getCentralFrame());
     setBottomBarButtons(m_bottomBarButtons);
-    
+
+    RosegardenProgressDialog *progressDlg = 0;
     if (showProgressive) {
 	show();
+	progressDlg = new RosegardenProgressDialog
+	    (kapp, i18n("Laying out score..."), i18n("Cancel"), 100, this);
 	kapp->processEvents();
     }
     m_chordNameRuler->setComposition(&doc->getComposition());
@@ -291,16 +295,44 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_hlayout.setPageWidth(width() - 50);
 
     bool layoutApplied = applyLayout();
-    if (!layoutApplied) KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
-    else {
+    if (!layoutApplied) {
+	KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
+    } else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
             
-            m_staffs[i]->renderAllElements();
-            m_staffs[i]->positionAllElements();
-            m_staffs[i]->getSegment().getRefreshStatus(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
-	    canvas()->update();
+	    if (showProgressive) {
+		if (m_staffs.size() == 1) {
+		    progressDlg->setLabelText(i18n("Rendering..."));
+		} else {
+		    progressDlg->setLabelText
+			(i18n("Rendering staff %1...").arg(i + 1));
+		}
+		m_staffs[i]->setProgressDialog(progressDlg);
+	    }
 
+            m_staffs[i]->renderAllElements();
+
+	    if (showProgressive) {
+		m_staffs[i]->setProgressDialog(0);
+		if (m_staffs.size() == 1) {
+		    progressDlg->setLabelText(i18n("Positioning..."));
+		} else {
+		    progressDlg->setLabelText
+			(i18n("Positioning staff %1...").arg(i + 1));
+		}
+		progressDlg->processEvents();
+	    }
+
+            m_staffs[i]->positionAllElements();
+            m_staffs[i]->getSegment().getRefreshStatus
+		(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
+
+	    canvas()->update();
         }
+    }
+
+    if (showProgressive) {
+	delete progressDlg;
     }
 
     //
@@ -1279,7 +1311,7 @@ void NotationView::setCurrentSelection(EventSelection* s)
         m_currentEventSelection->removeSelectionFromSegment
 	    (m_properties.SELECTED);
         getStaff(m_currentEventSelection->getSegment())->positionElements
-            (m_currentEventSelection->getBeginTime(),
+            (m_currentEventSelection->getStartTime(),
              m_currentEventSelection->getEndTime());
     }
 
@@ -1288,7 +1320,7 @@ void NotationView::setCurrentSelection(EventSelection* s)
 
     if (s) {
         s->recordSelectionOnSegment(m_properties.SELECTED);
-        getStaff(s->getSegment())->positionElements(s->getBeginTime(),
+        getStaff(s->getSegment())->positionElements(s->getStartTime(),
                                                     s->getEndTime());
     }
 
@@ -1640,7 +1672,7 @@ void NotationView::slotGroupTuplet(bool simple)
     if (m_currentEventSelection &&
 	selector && selector->isRectangleVisible()) {
 
-	t = m_currentEventSelection->getBeginTime();
+	t = m_currentEventSelection->getStartTime();
 
 	timeT duration = m_currentEventSelection->getTotalDuration();
 	Note::Type unitType =

@@ -172,8 +172,13 @@ public:
     virtual void processEvents();
 
 public slots:
-    // Show yourself if a timer expires and we're still around.
+    // After a timeout, judge whether we should show ourselves yet
+    // and do so if so.
     // Hence we only appear for long operations.
+    // 
+    void slotTimerElapsed();
+    
+    // Show ourselves.
     // 
     void slotShowMyself();
 
@@ -182,6 +187,8 @@ private:
     // Application handle
     //
     QApplication *m_app;
+
+    bool m_firstTimeout;
 
 };
 

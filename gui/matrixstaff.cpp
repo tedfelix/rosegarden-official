@@ -75,7 +75,8 @@ bool MatrixStaff::wrapEvent(Rosegarden::Event* e)
     // there should be no time signature events in any ordinary
     // segments, they're only in the composition's ref segment
 
-    return e->isa(Rosegarden::Note::EventType);
+    return e->isa(Rosegarden::Note::EventType) &&
+	Rosegarden::Staff<MatrixElement>::wrapEvent(e);
 }
 
 void

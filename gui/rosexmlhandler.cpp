@@ -52,7 +52,7 @@ using namespace Rosegarden::BaseProperties;
 RoseXmlHandler::RoseXmlHandler(Composition &composition,
                                Studio &studio,
                                Rosegarden::AudioFileManager &audioFileManager,
-                               unsigned int inputSize,
+                               unsigned int elementCount,
                                Rosegarden::Progress *progress)
     : m_composition(composition),
       m_studio(studio),
@@ -71,13 +71,10 @@ RoseXmlHandler::RoseXmlHandler(Composition &composition,
       m_msb(0),
       m_lsb(0),
       m_instrument(0),
-      m_size(inputSize),
+      m_totalElements(elementCount),
+      m_elementsSoFar(0),
       m_progress(progress)
 {
-//     kdDebug(KDEBUG_AREA) << "RoseXmlHandler() : composition size : "
-//                          << m_composition.getNbSegments()
-//                          << " addr : " << &m_composition
-//                          << endl;
 }
 
 RoseXmlHandler::~RoseXmlHandler()
@@ -87,8 +84,6 @@ RoseXmlHandler::~RoseXmlHandler()
 bool
 RoseXmlHandler::startDocument()
 {
-    if (m_progress) m_progress->processEvents();
-
     m_composition.clearTracks();
 
     // and the loop
@@ -106,10 +101,6 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                              const QString& qName, const QXmlAttributes& atts)
 {
     QString lcName = qName.lower();
-
-    // Update gui
-    //
-    if (m_progress) m_progress->processEvents();
 
     if (lcName == "event") {
 
@@ -808,9 +799,15 @@ bool
 RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
                            const QString& /*localName*/, const QString& qName)
 {
-    // Update gui
+    // Set percentage done
     //
-    if (m_progress) m_progress->processEvents();
+    if (m_progress &&
+	(m_totalElements > m_elementsSoFar) &&
+	(++m_elementsSoFar % 50 == 0)) {
+	m_progress->setCompleted
+	    (int(double(m_elementsSoFar) / double(m_totalElements) * 100.0));
+	m_progress->processEvents();
+    }
 
     QString lcName = qName.lower();
 
@@ -870,14 +867,6 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
 bool
 RoseXmlHandler::characters(const QString& string)
 {
-    // Set percentage done
-    //
-    if (m_progress)
-    {
-        m_progress->setCompleted(int(((double)(string.length())/(double)m_size)
-                                 *100.0));
-    }
-
     return true;
 }
 

@@ -28,7 +28,7 @@ EventSelection::EventSelection(Segment& t)
     : m_originalSegment(t),
       m_beginTime(0),
       m_endTime(0),
-      m_haveRealBeginTime(false)
+      m_haveRealStartTime(false)
 {
 }
 
@@ -36,7 +36,7 @@ EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime)
     : m_originalSegment(t),
       m_beginTime(0),
       m_endTime(0),
-      m_haveRealBeginTime(false)
+      m_haveRealStartTime(false)
 {
     Segment::iterator i = t.findTime(beginTime);
     Segment::iterator j = t.findTime(endTime);
@@ -48,7 +48,7 @@ EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime)
 	    m_segmentEvents.insert(*i);
 	    ++i;
 	}
-	m_haveRealBeginTime = true;
+	m_haveRealStartTime = true;
     }
 }
 
@@ -58,9 +58,9 @@ EventSelection::~EventSelection()
 
 void EventSelection::addEvent(Event *e)
 { 
-    if (e->getAbsoluteTime() < m_beginTime || !m_haveRealBeginTime) {
+    if (e->getAbsoluteTime() < m_beginTime || !m_haveRealStartTime) {
 	m_beginTime = e->getAbsoluteTime();
-	m_haveRealBeginTime = true;
+	m_haveRealStartTime = true;
     }
     if (e->getAbsoluteTime() + e->getDuration() > m_endTime) {
 	m_endTime = e->getAbsoluteTime() + e->getDuration();
@@ -75,7 +75,7 @@ bool EventSelection::contains(Event *e) const
 
 timeT EventSelection::getTotalDuration() const
 {
-    return getEndTime() - getBeginTime();
+    return getEndTime() - getStartTime();
 }
 
 void

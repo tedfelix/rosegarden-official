@@ -82,7 +82,7 @@ CutAndCloseCommand::CutAndCloseCommand(Rosegarden::EventSelection &selection,
     addCommand(new CutCommand(selection, clipboard));
     addCommand(new CloseCommand(&selection.getSegment(),
 				selection.getEndTime(),
-				selection.getBeginTime()));
+				selection.getStartTime()));
 }
 
 void
@@ -329,7 +329,7 @@ PasteEventsCommand::isPossible()
 
     Segment *source = m_clipboard->getSingleSegment();
 
-    timeT pasteTime = getBeginTime();
+    timeT pasteTime = getStartTime();
 #ifdef OLD_SEGMENT_API
     timeT origin = source->getFirstEventTime();
     timeT duration = source->getDuration() - origin;
@@ -352,7 +352,7 @@ PasteEventsCommand::modifySegment()
 
     Segment *source = m_clipboard->getSingleSegment();
 
-    timeT pasteTime = getBeginTime();
+    timeT pasteTime = getStartTime();
 #ifdef OLD_SEGMENT_API
     timeT origin = source->getFirstEventTime();
 #else
@@ -482,7 +482,7 @@ EraseCommand::modifySegment()
 	getSegment().eraseSingle(toErase[j]);
     }
 
-    getSegment().normalizeRests(getBeginTime(), getEndTime());
+    getSegment().normalizeRests(getStartTime(), getEndTime());
 }
 
 timeT
@@ -517,16 +517,16 @@ EventEditCommand::modifySegment()
     Segment &segment(getSegment());
     segment.eraseSingle(m_oldEvent);
     segment.insert(new Event(m_newEvent));
-    segment.normalizeRests(getBeginTime(), getEndTime());
+    segment.normalizeRests(getStartTime(), getEndTime());
 }
 
 
 
 EventQuantizeCommand::EventQuantizeCommand(Rosegarden::Segment &segment,
-					   Rosegarden::timeT beginTime,
+					   Rosegarden::timeT startTime,
 					   Rosegarden::timeT endTime,
 					   Rosegarden::Quantizer quantizer) :
-    BasicCommand(getGlobalName(&quantizer), segment, beginTime, endTime,
+    BasicCommand(getGlobalName(&quantizer), segment, startTime, endTime,
 		 true), // bruteForceRedo
     m_quantizer(quantizer),
     m_selection(0)
@@ -538,7 +538,7 @@ EventQuantizeCommand::EventQuantizeCommand(Rosegarden::EventSelection &selection
 					   Rosegarden::Quantizer quantizer) :
     BasicCommand(getGlobalName(&quantizer),
 		 selection.getSegment(),
-		 selection.getBeginTime(),
+		 selection.getStartTime(),
 		 selection.getEndTime(),
 		 true), // bruteForceRedo
     m_quantizer(quantizer),
@@ -584,7 +584,7 @@ EventQuantizeCommand::modifySegment()
 				      Segment::iterator> > RangeList;
 	RangeList ranges;
 
-	Segment::iterator i = segment.findTime(getBeginTime());
+	Segment::iterator i = segment.findTime(getStartTime());
 	Segment::iterator j;
 	Segment::iterator k = segment.findTime(getEndTime());
 
@@ -606,7 +606,7 @@ EventQuantizeCommand::modifySegment()
 
     } else {
 	m_quantizer.quantize(&segment,
-			     segment.findTime(getBeginTime()),
+			     segment.findTime(getStartTime()),
 			     segment.findTime(getEndTime()));
     }
 }

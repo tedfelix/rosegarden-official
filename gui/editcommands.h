@@ -220,7 +220,7 @@ class EventQuantizeCommand : public BasicCommand
 {
 public:
     EventQuantizeCommand(Rosegarden::Segment &segment,
-			 Rosegarden::timeT beginTime,
+			 Rosegarden::timeT startTime,
 			 Rosegarden::timeT endTime,
 			 Rosegarden::Quantizer);
     

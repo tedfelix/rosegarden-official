@@ -62,7 +62,7 @@ public:
 
     virtual Rosegarden::Segment &getSegment();
 
-    Rosegarden::timeT getBeginTime() { return m_savedEvents.getStartTime(); }
+    Rosegarden::timeT getStartTime() { return m_savedEvents.getStartTime(); }
     Rosegarden::timeT getEndTime() { return m_endTime; }
     virtual Rosegarden::timeT getRelayoutEndTime();
 

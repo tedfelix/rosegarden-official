@@ -55,7 +55,7 @@ public:
     RoseXmlHandler(Rosegarden::Composition &composition,
                    Rosegarden::Studio &studio,
                    Rosegarden::AudioFileManager &audioFileManager,
-                   unsigned int inputSize,
+                   unsigned int elementCount,
                    Rosegarden::Progress *progress);
 
     virtual ~RoseXmlHandler();
@@ -114,7 +114,8 @@ protected:
     Rosegarden::MidiByte    m_msb;
     Rosegarden::MidiByte    m_lsb;
     Rosegarden::Instrument *m_instrument;
-    unsigned int            m_size;
+    unsigned int            m_totalElements;
+    unsigned int            m_elementsSoFar;
     Rosegarden::Progress   *m_progress;
 
 };

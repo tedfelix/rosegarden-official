@@ -32,6 +32,7 @@ namespace Rosegarden { class Quantizer; }
 
 class QCanvasSimpleSprite;
 class NotationProperties;
+class RosegardenProgressDialog;
 
 
 /**
@@ -235,6 +236,10 @@ public:
      */
     virtual bool wrapEvent(Rosegarden::Event *);
 
+    void setProgressDialog(RosegardenProgressDialog *dialog) {
+	m_progressDlg = dialog;
+    }
+
 protected:
 
     // definition of staff
@@ -314,6 +319,7 @@ protected:
     QCanvasSimpleSprite *m_staffName;
     Rosegarden::Quantizer *m_legatoQuantizer;
     const NotationProperties &m_properties;
+    RosegardenProgressDialog *m_progressDlg;
 };
 
 #endif
