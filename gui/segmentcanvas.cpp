@@ -653,6 +653,15 @@ SegmentCanvas::getSelectedSegments()
     return *(new std::vector<Rosegarden::Segment*>);
 }
 
+bool
+SegmentCanvas::haveSelection()
+{
+    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
+
+    if (!selTool) return false;
+    return (selTool->getSelectedSegments().size() > 0);
+}
+
 void
 SegmentCanvas::clearSelected()
 {

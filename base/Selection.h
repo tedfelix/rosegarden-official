@@ -121,25 +121,6 @@ protected:
 };
 
 
-/**
- * SegmentSelection is a selection consisting of one or more
- * whole Segments.
- *
- * It isn't implemented yet.
- */
-
-class SegmentSelection  // Sounds like a box of chocolates
-{
-public:
-    SegmentSelection(Rosegarden::Composition &comp);
-    ~SegmentSelection();
-
-private:
-
-   Composition &m_originalComposition;
-
-};
-
 }
 
 #endif

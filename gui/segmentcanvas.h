@@ -266,6 +266,7 @@ public:
     // currently using a "Selector"
     //
     std::vector<Rosegarden::Segment*> getSelectedSegments();
+    bool haveSelection(); // i.e. would getSelectedSegments return anything
     void clearSelected();
 
     /**

@@ -78,11 +78,4 @@ EventSelection::removeSelectionFromSegment()
 }
 
 
-
-SegmentSelection::SegmentSelection(Composition &comp):
-      m_originalComposition(comp)
-{
-}
-
-
 }

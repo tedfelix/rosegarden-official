@@ -59,6 +59,7 @@
 #include "dialogs.h"
 #include "multiviewcommandhistory.h"
 #include "segmentcommands.h"
+#include "zoomslider.h"
 
 #define ID_STATUS_MSG 1
 
@@ -76,6 +77,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
       m_view(0),
       m_doc(0),
       m_sequencerProcess(0),
+      m_zoomSlider(0),
       m_seqManager(0),
       m_transport(0),
       m_originatingJump(false),
@@ -98,6 +100,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     initStatusBar();
     initDocument();
     setupActions();
+    initZoomToolbar();
 
     if (!performAutoload())
         initView();
@@ -461,6 +464,37 @@ void RosegardenGUIApp::setupActions()
 
     connect(m_transport, SIGNAL(editTimeSignature(QWidget*)),
             SLOT(slotEditTimeSignature(QWidget*)));
+}
+
+
+void RosegardenGUIApp::initZoomToolbar()
+{
+    KToolBar *zoomToolbar = toolBar("zoomToolBar");
+    if (!zoomToolbar) {
+	kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::initZoomToolbar() : "
+			     << "zoom toolbar not found" << endl;
+	return;
+    }
+
+    new QLabel(i18n("  Zoom:  "), zoomToolbar);
+
+    std::vector<double> zoomSizes; // in units-per-pixel
+    double defaultBarWidth44 = 100.0;
+    double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
+    zoomSizes.push_back(duration44 / (defaultBarWidth44 *  0.1));
+    zoomSizes.push_back(duration44 / (defaultBarWidth44 *  0.2));
+    zoomSizes.push_back(duration44 / (defaultBarWidth44 *  0.5));
+    zoomSizes.push_back(duration44 / (defaultBarWidth44 *  1.0));
+    zoomSizes.push_back(duration44 / (defaultBarWidth44 *  2.0));
+    zoomSizes.push_back(duration44 / (defaultBarWidth44 *  5.0));
+    zoomSizes.push_back(duration44 / (defaultBarWidth44 * 10.0));
+
+    m_zoomSlider = new ZoomSlider<double>
+	(zoomSizes, -1.0, QSlider::Horizontal, zoomToolbar);
+    m_zoomSlider->setTracking(true);
+
+    connect(m_zoomSlider, SIGNAL(valueChanged(int)),
+	    this, SLOT(slotChangeZoom(int)));
 }
 
 
@@ -2092,6 +2126,11 @@ void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent)
     }
 
     delete dialog;
+}
+
+void RosegardenGUIApp::slotChangeZoom(int)
+{
+    m_view->setZoomSize(m_zoomSlider->getCurrentSize());
 }
 
 

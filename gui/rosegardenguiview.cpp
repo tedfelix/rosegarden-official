@@ -235,6 +235,20 @@ void RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
 }
 
 
+void RosegardenGUIView::setZoomSize(double size)
+{
+    m_rulerScale->setUnitsPerPixel(size);
+
+    m_trackEditor->getSegmentCanvas()->update();
+
+    if (m_trackEditor->getTopBarButtons())
+	m_trackEditor->getTopBarButtons()->update();
+
+    if (m_trackEditor->getBottomBarButtons())
+	m_trackEditor->getBottomBarButtons()->update();
+}
+
+
 // Select a track label and segments (when we load a file or
 // move up a 
 //

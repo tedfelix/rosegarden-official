@@ -53,7 +53,7 @@ class KProcess;
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIDoc;
 class RosegardenGUIView;
-//!!!class Command;
+template <class T> class ZoomSlider;
 
 namespace Rosegarden { class SequenceManager; }
 
@@ -225,6 +225,11 @@ protected:
      * create menus and toolbars
      */
     void setupActions();
+
+    /**
+     * sets up the zoom toolbar
+     */
+    void initZoomToolbar();
 
     /**
      * sets up the statusbar for the main window by initialzing a
@@ -619,6 +624,11 @@ public slots:
     void slotEditTimeSignature();
     void slotEditTimeSignature(QWidget *parent);
 
+    /**
+     * Zoom slider moved
+     */
+    void slotChangeZoom(int index);
+
 private:
 
     //--------------- Data members ---------------------------------
@@ -668,6 +678,8 @@ private:
     KAction *m_ffwdEndTransport;
 
     KProcess* m_sequencerProcess;
+
+    ZoomSlider<double> *m_zoomSlider;
 
     // SequenceManager
     //

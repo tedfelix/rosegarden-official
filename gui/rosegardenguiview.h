@@ -34,7 +34,11 @@
 
 #include "rosedebug.h"
 
-namespace Rosegarden { class Composition; class MappedEvent; class RulerScale; }
+namespace Rosegarden { 
+    class Composition; 
+    class MappedEvent;
+    class SimpleRulerScale;
+}
 
 class QScrollView;
 class RosegardenGUIDoc;
@@ -139,6 +143,11 @@ public:
      *
      */
     void selectTrack(int trackId);
+
+    /**
+     * Change zoom size -- set the RulerScale's units-per-pixel to size
+     */
+    void setZoomSize(double size);
     
 public slots:
     void slotEditSegmentNotation(Rosegarden::Segment*);
@@ -196,11 +205,11 @@ signals:
 protected:
     //--------------- Data members ---------------------------------
 
-    Rosegarden::RulerScale   *m_rulerScale;
-    TrackEditor              *m_trackEditor;
+    Rosegarden::SimpleRulerScale  *m_rulerScale;
+    TrackEditor			  *m_trackEditor;
 
-    SegmentParameterBox     *m_segmentParameterBox;
-    InstrumentParameterBox  *m_instrumentParameterBox;
+    SegmentParameterBox		  *m_segmentParameterBox;
+    InstrumentParameterBox	  *m_instrumentParameterBox;
 
 };
 

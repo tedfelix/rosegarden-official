@@ -66,4 +66,7 @@
         <Action name="join"/>
 </ToolBar>
 
+<ToolBar name="zoomToolBar">
+</ToolBar>
+
 </kpartgui>
