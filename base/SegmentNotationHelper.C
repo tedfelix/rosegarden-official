@@ -637,104 +637,114 @@ SegmentNotationHelper::makeRestViable(iterator i)
 }
 
 
-Segment::iterator
-SegmentNotationHelper::makeNoteViable(iterator i, bool splitAtBars)
+void
+SegmentNotationHelper::makeNotesViable(iterator from, iterator to,
+				       bool splitAtBars)
 {
     // We don't use quantized values here; we want a precise division.
     // Even if it doesn't look precise on the score (because the score
     // is quantized), we want any playback to produce exactly the same
     // duration of note as was originally recorded
 
-//!!! No, we should now use notation-quantized values to determine
-//what we need to split and where, but we should give the split notes
-//the relevant parts of the unquantized note IYSWIM.  Same probably
-//goes for splitting stuff during notation editing?
+    std::vector<Event *> toInsert;
 
-    DurationList dl;
+    for (Segment::iterator i = from, j = i;
+	 segment().isBeforeEndMarker(i) && i != to; i = j) {
 
-    // Behaviour differs from TimeSignature::getDurationListForInterval
+	++j;
 
-    timeT acc = 0;
-    timeT required = (*i)->getNotationDuration();
-
-    while (acc < required) {
-	timeT remaining = required - acc;
-	if (splitAtBars) {
-	    timeT thisNoteStart = (*i)->getNotationAbsoluteTime() + acc;
-	    timeT toNextBar =
-		segment().getBarEndForTime(thisNoteStart) - thisNoteStart;
-	    if (toNextBar > 0 && remaining > toNextBar) remaining = toNextBar;
+	if (!(*i)->isa(Note::EventType) && !(*i)->isa(Note::EventRestType)) {
+	    continue;
 	}
-        timeT component = Note::getNearestNote(remaining).getDuration();
-        if (component > (required - acc)) dl.push_back(required - acc);
-        else dl.push_back(component);
-        acc += component;
-    }
 
-    if (dl.size() < 2) return i; // event is already of the correct duration
+	if ((*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
+	    continue;
+	}
+
+	DurationList dl;
+
+	// Behaviour differs from TimeSignature::getDurationListForInterval
+
+	timeT acc = 0;
+	timeT required = (*i)->getNotationDuration();
+	
+	while (acc < required) {
+	    timeT remaining = required - acc;
+	    if (splitAtBars) {
+		timeT thisNoteStart = (*i)->getNotationAbsoluteTime() + acc;
+		timeT toNextBar =
+		    segment().getBarEndForTime(thisNoteStart) - thisNoteStart;
+		if (toNextBar > 0 && remaining > toNextBar) remaining = toNextBar;
+	    }
+	    timeT component = Note::getNearestNote(remaining).getDuration();
+	    if (component > (required - acc)) dl.push_back(required - acc);
+	    else dl.push_back(component);
+	    acc += component;
+	}
+
+	if (dl.size() < 2) {
+	    // event is already of the correct duration
+	    continue;
+	}
     
-    acc = (*i)->getNotationAbsoluteTime();
-    Event *e = new Event(*(*i));
-    e->setNotationAbsoluteTime(acc);
+	acc = (*i)->getNotationAbsoluteTime();
+	Event *e = new Event(*(*i));
+	e->setNotationAbsoluteTime(acc);
 
-    bool lastTiedForward;
-    e->get<Bool>(TIED_FORWARD, lastTiedForward);
+	bool lastTiedForward;
+	e->get<Bool>(TIED_FORWARD, lastTiedForward);
+	
+	e->set<Bool>(TIED_FORWARD, true);
+	erase(i);
 
-    e->set<Bool>(TIED_FORWARD, true);
-    erase(i);
+	for (DurationList::iterator dli = dl.begin(); dli != dl.end(); ++dli) {
 
-    iterator j;
-    bool havej = false;
-
-    for (DurationList::iterator dli = dl.begin(); dli != dl.end(); ++dli) {
-
-        DurationList::iterator dlj(dli);
-        if (++dlj == dl.end()) {
-	    // end of duration list
-	    if (!lastTiedForward) e->unset(TIED_FORWARD);
-	    return insert(e);
-        }
-
-	std::pair<Event *, Event *> splits =
-	    splitPreservingPerformanceTimes(e, *dli);
-
-	if (!splits.first || !splits.second) {
-	    cerr << "WARNING: SegmentNotationHelper::makeNoteViable(): No valid split for event of duration " << e->getDuration() << " at " << e->getAbsoluteTime() << " (split duration " << *dli << "), ignoring remainder\n";
-	    cerr << "WARNING: This is probably a bug; fix required" << std::endl;
-	    return insert(e);
+	    DurationList::iterator dlj(dli);
+	    if (++dlj == dl.end()) {
+		// end of duration list
+		if (!lastTiedForward) e->unset(TIED_FORWARD);
+		toInsert.push_back(e);
+		e = 0;
+		break;
+	    }
+	    
+	    std::pair<Event *, Event *> splits =
+		splitPreservingPerformanceTimes(e, *dli);
+	    
+	    if (!splits.first || !splits.second) {
+		cerr << "WARNING: SegmentNotationHelper::makeNoteViable(): No valid split for event of duration " << e->getDuration() << " at " << e->getAbsoluteTime() << " (split duration " << *dli << "), ignoring remainder\n";
+		cerr << "WARNING: This is probably a bug; fix required" << std::endl;
+		toInsert.push_back(e);
+		e = 0;
+		break;
+	    }
+	    
+	    toInsert.push_back(splits.first);
+	    delete e;
+	    e = splits.second;
+	    
+	    acc += *dli;
+	    
+	    e->set<Bool>(TIED_BACKWARD, true);
 	}
-
-	iterator k = insert(splits.first);
+	
 	delete e;
-	e = splits.second;
-
-	if (!havej) {
-	    j = k;
-	    havej = true;
-	}
-
-	acc += *dli;
-
-        e->set<Bool>(TIED_BACKWARD, true);
     }
 
-    delete e;
-    return j;
+    for (std::vector<Event *>::iterator ei = toInsert.begin();
+	 ei != toInsert.end(); ++ei) {
+	insert(*ei);
+    }
 }
 
 void
 SegmentNotationHelper::makeNotesViable(timeT startTime, timeT endTime,
 				       bool splitAtBars)
 {
+    Segment::iterator from = segment().findTime(startTime);
     Segment::iterator to = segment().findTime(endTime);
 
-    for (Segment::iterator i = segment().findTime(startTime);
-	 segment().isBeforeEndMarker(i) && i != to; ++i) {
-
-	if (!(*i)->isa(Note::EventType)) continue;
-	if ((*i)->has(BEAMED_GROUP_TUPLET_BASE)) continue;
-	i = makeNoteViable(i, splitAtBars);
-    }
+    makeNotesViable(from, to, splitAtBars);
 }
 
 

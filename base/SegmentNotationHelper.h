@@ -352,20 +352,17 @@ public:
 
     
     /**
-     * Given an iterator pointing to a note, split that note up into
-     * tied notes of viable lengths (longest possible viable duration
-     * first, then longest possible viable component of remainder &c).
-     *
-     * Only splits a single note; unlike splitIntoTie, this does
-     * not by default split all notes at a given timeslice.
-     *
-     * Returns either i or an iterator pointing to the note that
-     * replaced i
+     * Split notes and rests up into tied notes or shorter rests of
+     * viable lengths (longest possible viable duration first, then
+     * longest possible viable component of remainder &c).  Also
+     * optionally splits notes and rests at barlines -- this is
+     * actually the most common user-visible use of this function.
      */
-    iterator makeNoteViable(iterator i, bool splitAtBars = true);
+    void makeNotesViable(iterator i, iterator j, bool splitAtBars = true);
+
 
     /**
-     * Make each note viable within the given range.
+     * As above but given a range in time rather than iterators.
      */
     void makeNotesViable(timeT startTime, timeT endTime,
 			 bool splitAtBars = true);
