@@ -355,7 +355,7 @@ class RosegardenQuantizeParameters : public QFrame
 {
     Q_OBJECT
 public:
-    enum QuantizerType { Grid, Notation };
+    enum QuantizerType { Grid, Legato, Notation };
 
     RosegardenQuantizeParameters(QWidget *parent,
 				 QuantizerType defaultQuantizer,

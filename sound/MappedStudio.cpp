@@ -227,8 +227,6 @@ MappedObject::destroyChildren()
 void
 MappedObject::destroy()
 {
-    std::cerr << "MappedObject::destroy(" << this << ")" << std::endl;
-
     MappedObject *studioObject = getParent();
     while (!dynamic_cast<MappedStudio*>(studioObject))
         studioObject = studioObject->getParent();
@@ -249,8 +247,6 @@ MappedObject::destroy()
     for (; it != children.end(); it++) {
         (*it)->destroy();
     }
-
-    std::cerr << "MappedObject::destroy(" << this << "): removing from studio and topping myself" << std::endl;
 
     (void)studio->clearObject(m_id);
     delete this;
@@ -555,11 +551,6 @@ MappedStudio::disconnectObject(MappedObjectId mId)
 	while (1) {
 	    MappedObjectValueList list = 
 		obj->getConnections(MappedConnectableObject::In);
-	    std::cerr << "In connections for " << mId << ":" << std::endl;
-	    for (MappedObjectValueList::iterator i = list.begin();
-		 i != list.end(); ++i) {
-		std::cerr << *i << std::endl;
-	    }
 	    if (list.empty()) break;
 	    MappedObjectId otherId = MappedObjectId(*list.begin());
 	    disconnectObjects(otherId, mId);
@@ -567,11 +558,6 @@ MappedStudio::disconnectObject(MappedObjectId mId)
 	while (1) {
 	    MappedObjectValueList list = 
 		obj->getConnections(MappedConnectableObject::Out);
-	    std::cerr << "Out connections for " << mId << ":" << std::endl;
-	    for (MappedObjectValueList::iterator i = list.begin();
-		 i != list.end(); ++i) {
-		std::cerr << *i << std::endl;
-	    }
 	    if (list.empty()) break;
 	    MappedObjectId otherId = MappedObjectId(*list.begin());
 	    disconnectObjects(mId, otherId);
@@ -624,9 +610,6 @@ MappedStudio::clearObject(MappedObjectId id)
 
 	MappedObjectCategory::iterator j = i->second.find(id);
 	if (j != i->second.end()) {
-	    std::cerr << "MappedStudio::clearObject: removing object "
-		      << id << " (address " << j->second << ") from category " << i->first << std::endl;
-
 	    // if the object has a parent other than the studio,
 	    // persuade that parent to abandon it
 	    MappedObject *parent = j->second->getParent();
@@ -959,8 +942,6 @@ void
 MappedConnectableObject::setConnections(ConnectionDirection dir,
 					MappedObjectValueList conns)
 {
-    std::cerr << getId() << ": setting connections " << dir << std::endl;
-
     if (dir == In)
         m_connectionsIn = conns;
     else
@@ -974,11 +955,8 @@ MappedConnectableObject::addConnection(ConnectionDirection dir,
     MappedObjectValueList &list =
 	(dir == In ? m_connectionsIn : m_connectionsOut);
 
-    std::cerr << getId() << ": adding connection dir " << dir << ", id " << id << std::endl;
-
     for (MappedObjectValueList::iterator i = list.begin(); i != list.end(); ++i) {
 	if (*i == id) {
-	    std::cerr << "(already have it)" << std::endl;
 	    return;
 	}
     }
@@ -993,11 +971,8 @@ MappedConnectableObject::removeConnection(ConnectionDirection dir,
     MappedObjectValueList &list =
 	(dir == In ? m_connectionsIn : m_connectionsOut);
 
-    std::cerr << getId() << ": removing connection dir " << dir << ", id " << id << std::endl;
-
     for (MappedObjectValueList::iterator i = list.begin(); i != list.end(); ++i) {
 	if (*i == id) {
-	    std::cerr << "found" << std::endl;
 	    list.erase(i);
 	    return;
 	}
@@ -1432,8 +1407,6 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
 {
     MappedObjectPropertyList list;
 
-    std::cerr << "MappedAudioPluginManager::getPropertyList(" << property << ")" << std::endl;
-
     if (property == "")
     {
         list.push_back(MappedAudioPluginManager::Plugins);
@@ -1540,8 +1513,6 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
     }
 
 #endif // HAVE_LADSPA
-
-    std::cerr << "returning" << std::endl;
 
     return list;
 }
@@ -2079,9 +2050,6 @@ MappedAudioPluginManager::getPluginInstance(unsigned long uniqueId,
 
     std::vector<MappedObject*>::iterator it = m_children.begin();
 
-    std::cerr << "MappedAudioPluginManager::getPluginInstance: looking for "
-	      << uniqueId << " (ro " << readOnly << ")" << std::endl;
-
     for(; it != m_children.end(); it++)
     {
         if ((*it)->getType() == LADSPAPlugin &&
@@ -2589,7 +2557,6 @@ MappedObjectValue
 MappedLADSPAPort::getDefault() const
 {
     if (m_haveDefault) {
-	std::cerr << "MappedLADSPAPort::getDefault: have set default of " << m_default << std::endl;
 	return m_default;
     }
 

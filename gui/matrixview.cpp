@@ -488,15 +488,19 @@ void MatrixView::setupActions()
                 "toggle_step_by_step");
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/quantize.xpm"));
-    new KAction(EventQuantizeCommand::getGlobalName(), icon, 0, this,
+    new KAction(EventQuantizeCommand::getGlobalName(), icon, Key_Equal, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 
-    new KAction(i18n("&Halve Speed"), 0, this,
+    new KAction(i18n("&Legato"), Key_Minus, this,
+                SLOT(slotTransformsLegato()), actionCollection(),
+                "legatoize");
+
+    new KAction(i18n("&Halve Speed"), Key_Less, this,
 		SLOT(slotHalfSpeed()), actionCollection(),
 		"half_speed");
 
-    new KAction(i18n("&Double Speed"), 0, this,
+    new KAction(i18n("&Double Speed"), Key_Greater, this,
 		SLOT(slotDoubleSpeed()), actionCollection(),
 		"double_speed");
 
@@ -1047,6 +1051,18 @@ void MatrixView::slotTransformsQuantize()
 			    (*m_currentEventSelection,
 			     dialog->getQuantizer()));
     }
+}
+
+void MatrixView::slotTransformsLegato()
+{
+    using Rosegarden::Quantizer;
+
+    if (!m_currentEventSelection) return;
+
+    KTmpStatusMsg msg(i18n("Making legato..."), this);
+    addCommandToHistory(new EventQuantizeCommand
+			(*m_currentEventSelection,
+			 new Rosegarden::LegatoQuantizer(0))); // no quantization
 }
 
 void

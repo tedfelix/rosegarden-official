@@ -147,8 +147,8 @@ Quantizer::quantize(EventSelection *selection)
 
 void
 Quantizer::fixQuantizedValues(Segment *s,
-				      Segment::iterator from,
-				      Segment::iterator to) const
+			      Segment::iterator from,
+			      Segment::iterator to) const
 {
     assert(m_toInsert.size() == 0);
 
@@ -503,9 +503,9 @@ BasicQuantizer::BasicQuantizer(timeT unit, bool doDurations) :
     if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
 }
 
-BasicQuantizer::BasicQuantizer(std::string target,
+BasicQuantizer::BasicQuantizer(std::string source, std::string target,
 			       timeT unit, bool doDurations) :
-    Quantizer(target),
+    Quantizer(source, target),
     m_unit(unit),
     m_durations(doDurations)
 {
@@ -534,6 +534,8 @@ BasicQuantizer::quantizeSingle(Segment *s, Segment::iterator i) const
 	s->erase(i);
 	return;
     }
+
+    if (m_unit == 0) return;
 
     timeT t = getFromSource(*i, AbsoluteTimeValue);
     timeT d0(d), t0(t);
@@ -637,6 +639,71 @@ std::vector<timeT>
 BasicQuantizer::m_standardQuantizations;
 
 
+LegatoQuantizer::LegatoQuantizer(timeT unit) :
+    Quantizer(RawEventData),
+    m_unit(unit)
+{
+    if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
+}
+
+LegatoQuantizer::LegatoQuantizer(std::string source, std::string target, timeT unit) :
+    Quantizer(source, target),
+    m_unit(unit)
+{
+    if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
+}
+
+LegatoQuantizer::LegatoQuantizer(const LegatoQuantizer &q) :
+    Quantizer(q.m_target),
+    m_unit(q.m_unit)
+{
+    // nothing else
+}
+
+LegatoQuantizer::~LegatoQuantizer()
+{
+    // nothing
+}
+
+void
+LegatoQuantizer::quantizeSingle(Segment *s, Segment::iterator i) const
+{
+    // Stretch each note out to reach the quantized start time of the
+    // next note whose quantized start time is greater than or equal
+    // to the end time of this note after quantization
+
+    timeT t = getFromSource(*i, AbsoluteTimeValue);
+    timeT d = getFromSource(*i, DurationValue);
+
+    timeT d0(d), t0(t);
+
+    t = quantizeTime(t);
+
+    for (Segment::iterator j = i; s->isBeforeEndMarker(j); ++j) {
+	if (!(*j)->isa(Note::EventType)) continue;
+	timeT qt = quantizeTime((*j)->getAbsoluteTime());
+	if (qt >= t + d) {
+	    d = qt - t;
+	    break;
+	}
+    }
+    
+    if (t0 != t || d0 != d) setToTarget(s, i, t, d);
+}
+
+timeT
+LegatoQuantizer::quantizeTime(timeT t) const
+{
+    if (m_unit != 0) {
+	timeT low = (t / m_unit) * m_unit;
+	timeT high = low + m_unit;
+	t = ((high - t > t - low) ? low : high);
+    }
+    return t;
+}
+    
+
+
 class NotationQuantizer::Impl
 {
 public:
@@ -736,8 +803,8 @@ NotationQuantizer::NotationQuantizer() :
     // nothing else 
 }
 
-NotationQuantizer::NotationQuantizer(std::string target) :
-    Quantizer(target),
+NotationQuantizer::NotationQuantizer(std::string source, std::string target) :
+    Quantizer(source, target),
     m_impl(new Impl(this))
 {
     // nothing else 

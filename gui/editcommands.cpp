@@ -809,7 +809,7 @@ EventQuantizeCommand::modifySegment()
 
 Rosegarden::Quantizer *
 EventQuantizeCommand::makeQuantizer(QString configGroup,
-				    bool notation)
+				    bool notationDefault)
 {
     //!!! Excessive duplication with
     // RosegardenQuantizeParameters::getQuantizer in widgets.cpp
@@ -820,9 +820,9 @@ EventQuantizeCommand::makeQuantizer(QString configGroup,
     Rosegarden::timeT defaultUnit = 
 	Rosegarden::Note(Rosegarden::Note::Demisemiquaver).getDuration();
     
-    int type = config->readNumEntry("quantizetype", notation ? 2 : 0);
+    int type = config->readNumEntry("quantizetype", notationDefault ? 2 : 0);
     Rosegarden::timeT unit = config->readNumEntry("quantizeunit",defaultUnit);
-    bool notateOnly = config->readBoolEntry("quantizenotationonly", notation);
+    bool notateOnly = config->readBoolEntry("quantizenotationonly", notationDefault);
     bool durations = config->readBoolEntry("quantizedurations", false);
     int simplicity = config->readNumEntry("quantizesimplicity", 13);
     int maxTuplet = config->readNumEntry("quantizemaxtuplet", 3);
@@ -834,9 +834,22 @@ EventQuantizeCommand::makeQuantizer(QString configGroup,
     if (type == 0) {
 	if (notateOnly) {
 	    m_quantizer = new Rosegarden::BasicQuantizer
-		(Rosegarden::Quantizer::NotationPrefix, unit, durations);
+		(Rosegarden::Quantizer::RawEventData,
+		 Rosegarden::Quantizer::NotationPrefix, unit, durations);
 	} else {
-	    m_quantizer = new Rosegarden::BasicQuantizer (unit, durations);
+	    m_quantizer = new Rosegarden::BasicQuantizer
+		(Rosegarden::Quantizer::RawEventData,
+		 Rosegarden::Quantizer::RawEventData, unit, durations);
+	}
+    } else if (type == 1) {
+	if (notateOnly) {
+	    m_quantizer = new Rosegarden::LegatoQuantizer
+		(Rosegarden::Quantizer::RawEventData,
+		 Rosegarden::Quantizer::NotationPrefix, unit);
+	} else {
+	    m_quantizer = new Rosegarden::LegatoQuantizer
+		(Rosegarden::Quantizer::RawEventData,
+		 Rosegarden::Quantizer::RawEventData, unit);
 	}
     } else {
 	
@@ -846,7 +859,8 @@ EventQuantizeCommand::makeQuantizer(QString configGroup,
 	    nq = new Rosegarden::NotationQuantizer();
 	} else {
 	    nq = new Rosegarden::NotationQuantizer
-		(Rosegarden::Quantizer::RawEventData);
+		(Rosegarden::Quantizer::RawEventData,
+		 Rosegarden::Quantizer::RawEventData);
 	}
 
 	nq->setUnit(unit);

@@ -793,6 +793,7 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     layout->addWidget(new QLabel(i18n("Quantizer type:"), typeFrame), 0, 0);
     m_typeCombo = new KComboBox(typeFrame);
     m_typeCombo->insertItem(i18n("Grid quantizer"));
+    m_typeCombo->insertItem(i18n("Legato quantizer"));
     m_typeCombo->insertItem(i18n("Heuristic notation quantizer"));
     layout->addWidget(m_typeCombo, 0, 1);
 
@@ -912,7 +913,9 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	config->setGroup(m_configCategory);
 	defaultType =
 	    config->readNumEntry("quantizetype",
-				 (defaultQuantizer == Notation) ? 2 : 0);
+				 (defaultQuantizer == Notation) ? 2 :
+				 (defaultQuantizer == Legato) ? 1 :
+				 0);
 	defaultUnit =
 	    config->readNumEntry("quantizeunit", defaultUnit);
 	m_notationTarget->setChecked
@@ -938,7 +941,9 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	    (config->readBoolEntry("quantizearticulate", true));
 	advanced = config->readBoolEntry("quantizeshowadvanced", false);
     } else {
-	defaultType = (defaultQuantizer == Notation) ? 2 : 0;
+	defaultType =
+	    (defaultQuantizer == Notation) ? 2 :
+	    (defaultQuantizer == Legato) ? 1 : 0;
 	m_notationTarget->setChecked(defaultQuantizer == Notation);
 	m_durationCheckBox->setChecked(false);
 	m_simplicityCombo->setCurrentItem(2);
@@ -982,17 +987,21 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     }
 
     switch (defaultType) {
-    case 0:
+    case 0: // grid
 	m_gridBox->show();
 	m_notationBox->hide();
+	m_durationCheckBox->show();
 	m_typeCombo->setCurrentItem(0);
 	break;
-    case 1:
-	// note quantizer, fall through for now
-    case 2:
+    case 1: // legato
+	m_gridBox->show();
+	m_notationBox->hide();
+	m_durationCheckBox->hide();
+	m_typeCombo->setCurrentItem(1);
+    case 2: // notation
 	m_gridBox->hide();
 	m_notationBox->show();
-	m_typeCombo->setCurrentItem(1);
+	m_typeCombo->setCurrentItem(2);
 	break;
     }	
 
@@ -1008,7 +1017,7 @@ RosegardenQuantizeParameters::getQuantizer() const
     int type = m_typeCombo->currentItem();
     Rosegarden::timeT unit = 0;
 
-    if (type == 0) {
+    if (type == 0 || type == 1) {
 	unit = m_standardQuantizations[m_gridUnitCombo->currentItem()];
     } else {
 	unit = m_standardQuantizations[m_notationUnitCombo->currentItem()];
@@ -1019,11 +1028,25 @@ RosegardenQuantizeParameters::getQuantizer() const
     if (type == 0) {
 	if (m_notationTarget->isChecked()) {
 	    quantizer = new Rosegarden::BasicQuantizer
-		(Rosegarden::Quantizer::NotationPrefix,
+		(Rosegarden::Quantizer::RawEventData,
+		 Rosegarden::Quantizer::NotationPrefix,
 		 unit, m_durationCheckBox->isChecked());
 	} else {
 	    quantizer = new Rosegarden::BasicQuantizer
-		(unit, m_durationCheckBox->isChecked());
+		(Rosegarden::Quantizer::RawEventData,
+		 Rosegarden::Quantizer::RawEventData,
+		 unit, m_durationCheckBox->isChecked());
+	}
+    } else if (type == 1) {
+	if (m_notationTarget->isChecked()) {
+	    quantizer = new Rosegarden::LegatoQuantizer
+		(Rosegarden::Quantizer::RawEventData,
+		 Rosegarden::Quantizer::NotationPrefix, unit);
+	} else {
+	    quantizer = new Rosegarden::LegatoQuantizer
+		(Rosegarden::Quantizer::RawEventData,
+		 Rosegarden::Quantizer::RawEventData,
+		 unit);
 	}
     } else {
 	
@@ -1033,7 +1056,8 @@ RosegardenQuantizeParameters::getQuantizer() const
 	    nq = new Rosegarden::NotationQuantizer();
 	} else {
 	    nq = new Rosegarden::NotationQuantizer
-		(Rosegarden::Quantizer::RawEventData);
+		(Rosegarden::Quantizer::RawEventData,
+		 Rosegarden::Quantizer::RawEventData);
 	}
 
 	nq->setUnit(unit);
@@ -1104,6 +1128,11 @@ RosegardenQuantizeParameters::slotTypeChanged(int index)
 {
     if (index == 0) {
 	m_gridBox->show();
+	m_durationCheckBox->show();
+	m_notationBox->hide();
+    } else if (index == 1) {
+	m_gridBox->show();
+	m_durationCheckBox->hide();
 	m_notationBox->hide();
     } else {
 	m_gridBox->hide();

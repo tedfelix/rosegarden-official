@@ -130,8 +130,6 @@ protected:
     bool             m_mlocked;
 };
 
-
-
 template <typename T, int N>
 RingBuffer<T, N>::RingBuffer(size_t n) :
     m_buffer(new T[n]),

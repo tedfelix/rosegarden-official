@@ -43,6 +43,7 @@
 <Menu name="Transforms">
   <text>Trans&amp;forms</text>
   <Action name="quantize"/>
+  <Action name="legatoize"/>
   <Separator/>
   <Action name="half_speed"/>
   <Action name="double_speed"/>

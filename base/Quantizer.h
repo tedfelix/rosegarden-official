@@ -247,8 +247,10 @@ private: // not provided
 class BasicQuantizer : public Quantizer
 {
 public:
+    // The default unit is the shortest note type.  A unit of
+    // zero means do no quantization (rather pointlessly).
     BasicQuantizer(timeT unit = -1, bool doDurations = false);
-    BasicQuantizer(std::string target,
+    BasicQuantizer(std::string source, std::string target,
 		   timeT unit = -1, bool doDurations = false);
     BasicQuantizer(const BasicQuantizer &);
     virtual ~BasicQuantizer();
@@ -297,11 +299,38 @@ private:
 };
 
 
+class LegatoQuantizer : public Quantizer
+{
+public:
+    // The default unit is the shortest note type.  A unit of
+    // zero means do no quantization -- unlike for BasicQuantizer
+    // this does have a purpose, as it still does the legato step
+    LegatoQuantizer(timeT unit = -1);
+    LegatoQuantizer(std::string source, std::string target, timeT unit = -1);
+    LegatoQuantizer(const LegatoQuantizer &);
+    virtual ~LegatoQuantizer();
+
+    void setUnit(timeT unit) { m_unit = unit; }
+    timeT getUnit() const { return m_unit; }
+
+protected:
+    virtual void quantizeSingle(Segment *,
+				Segment::iterator) const;
+
+    timeT quantizeTime(timeT) const;
+
+private:
+    LegatoQuantizer &operator=(const BasicQuantizer &); // not provided
+
+    timeT m_unit;
+};
+
+
 class NotationQuantizer : public Quantizer
 {
 public:
     NotationQuantizer();
-    NotationQuantizer(std::string target);
+    NotationQuantizer(std::string source, std::string target);
     NotationQuantizer(const NotationQuantizer &);
     ~NotationQuantizer();
 
