@@ -49,6 +49,9 @@ protected:
     void insertNote(const StaffLine*, const QPoint&);
 
     StaffLine* m_currentHighlightedLine;
+
+    QCanvasSprite *m_currentNote;
+    
 };
 
 

@@ -18,6 +18,7 @@
 #include "notationcanvasview.h"
 #include "qcanvasgroupableitem.h"
 #include "qcanvasitemgroup.h"
+#include "qcanvassimplesprite.h"
 #include "staffline.h"
 
 #include "rosedebug.h"
@@ -25,8 +26,12 @@
 NotationCanvasView::NotationCanvasView(QCanvas *viewing, QWidget *parent,
                                        const char *name, WFlags f)
     : QCanvasView(viewing, parent, name, f),
-      m_currentHighlightedLine(0)
+      m_currentHighlightedLine(0),
+      m_currentNote(0)
 {
+    m_currentNote = new QCanvasSimpleSprite("pixmaps/note-bodyempty.xpm",
+                                            canvas());
+
     viewport()->setMouseTracking(true);
 }
 
@@ -41,12 +46,11 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 {
     bool needUpdate = false;
     
-    if (m_currentHighlightedLine) {
-        m_currentHighlightedLine->setHighlighted(false);
-        needUpdate = true;
-    }
+//     if (m_currentHighlightedLine)
+//         m_currentHighlightedLine->setHighlighted(false);
 
     m_currentHighlightedLine = 0;
+    m_currentNote->hide();
 
     QCanvasItemList itemList = canvas()->collisions(e->pos());
 
@@ -58,11 +62,21 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 
         QCanvasItem *item = *it;
 
-        StaffLine *staffLine;
+        StaffLine *staffLine = 0;
     
         if ((staffLine = dynamic_cast<StaffLine*>(item))) {
             m_currentHighlightedLine = staffLine;
-            m_currentHighlightedLine->setHighlighted(true);
+
+            // the -10 needed or else it's hidden by the mouse pointer
+            m_currentNote->setX(e->x() - 10);
+
+            QPoint point = m_currentHighlightedLine->startPoint();
+
+            // TODO : change this when Chris finishes pitch<->y stuff
+            //
+            m_currentNote->setY(point.y() + m_currentHighlightedLine->y());
+
+            m_currentNote->show();
             needUpdate = true;
             break;
         }
@@ -77,7 +91,7 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 {
     kdDebug(KDEBUG_AREA) << "mousepress" << endl;
 
-    if (m_currentHighlightedLine) {
+    if (m_currentHighlightedLine && m_currentNote->visible()) {
         kdDebug(KDEBUG_AREA) << "mousepress : m_currentHighlightedLine != 0 - inserting note - staff pitch :"
                              << m_currentHighlightedLine->associatedPitch() << endl;
         insertNote(m_currentHighlightedLine, e->pos());
@@ -111,26 +125,6 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
         }
     }
     
-
-//     QCanvasGroupableItem *gitem;
-
-//     if((gitem = dynamic_cast<QCanvasGroupableItem*>(item))) {
-//         kdDebug(KDEBUG_AREA) << "mousepress : Groupable item" << endl;
-//         QCanvasItemGroup *t = gitem->group();
-
-//         if(t->active())
-//             m_movingItem = t;
-//         else {
-//             kdDebug(KDEBUG_AREA) << "mousepress : Unmoveable groupable item" << endl;
-//             m_movingItem = 0; // this is not a moveable item
-//             return;
-//         }
-//     } else {
-//         m_movingItem = item;
-//     }
-
-//     m_draggingItem = true;
-//     m_movingItem->move(e->x(), e->y());
     canvas()->update();
 }
 
