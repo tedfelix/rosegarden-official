@@ -1869,10 +1869,13 @@ DocumentMetaConfigurationPage::apply()
 {
     Rosegarden::Configuration &metadata = m_doc->getComposition().getMetadata();
     metadata.clear();
+    
+    // If one of the items still has focus, it won't remember edits
+    m_metadata->setFocus();
 
     for (QListViewItem *item = m_metadata->firstChild();
          item != 0; item = item->nextSibling()) {
-        
+
         metadata.set<String>(qstrtostr(item->text(0).lower()),
                              qstrtostr(item->text(1)));
     }
