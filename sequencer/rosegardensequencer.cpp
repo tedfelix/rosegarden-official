@@ -59,7 +59,6 @@ RosegardenSequencerApp::RosegardenSequencerApp(
     m_transportStatus(STOPPED),
     m_songPosition(0, 0),
     m_lastFetchSongPosition(0, 0),
-    m_fetchLatency(0, 30000),      // default value
     m_playLatency(0, 50000),       // default value
     m_readAhead(0, 40000),         // default value
     //m_audioPlayLatency(0, 0),
@@ -251,9 +250,8 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
 
 
 // The first fetch of events from the core/ and initialisation for
-// this session of playback.  We fetch up to m_playLatency microseconds/
-// seconds ahead at first at then top up once we're within m_fetchLatency
-// of the end of the last fetch.
+// this session of playback.  We fetch up to m_readAhead ahead at
+// first at then top up at each slice.
 //
 bool
 RosegardenSequencerApp::startPlaying()
@@ -313,41 +311,37 @@ RosegardenSequencerApp::notifyVisuals(Rosegarden::MappedComposition *mC)
 }
 
 bool
-RosegardenSequencerApp::keepPlaying(Rosegarden::RealTime &waitTime)
+RosegardenSequencerApp::keepPlaying()
 {
     Rosegarden::Profiler profiler("RosegardenSequencerApp::keepPlaying");
 
-    if (m_songPosition > ( m_lastFetchSongPosition - m_fetchLatency)) {
+    m_mC.clear();
 
-	waitTime = Rosegarden::RealTime::zeroTime;
-
-        m_mC.clear();
-        m_mC = *fetchEvents(m_lastFetchSongPosition - m_fetchLatency,
-                            m_lastFetchSongPosition - m_fetchLatency + m_readAhead,
-                            false);
-
-        // Again, process whether we need to or not to keep
-        // the Sequencer up-to-date with audio events
-        //
-        m_sequencer->processEventsOut(m_mC, m_playLatency, false);
-
-        // tell the gui about this slice of events
-        notifyVisuals(&m_mC);
-
-        m_lastFetchSongPosition = m_lastFetchSongPosition + m_readAhead;
-
-        // Ensure that the audio we're playing is the audio we should be playing
-        //
-        if (m_metaIterator)
-        {
-            rationalisePlayingAudio(m_metaIterator->
-                    getPlayingAudioFiles(m_songPosition));
-        }
-
-    } else {
-	waitTime = m_lastFetchSongPosition - m_fetchLatency - m_songPosition;
+    Rosegarden::RealTime fetchEnd = m_songPosition + m_readAhead;
+    if (isLooping() && fetchEnd >= m_loopEnd) {
+	fetchEnd = m_loopEnd - Rosegarden::RealTime(0, 1);
+    }
+    if (fetchEnd > m_lastFetchSongPosition) {
+	m_mC = *fetchEvents(m_lastFetchSongPosition, fetchEnd, false);
+	m_lastFetchSongPosition = fetchEnd;
     }
 
+    // Again, process whether we need to or not to keep
+    // the Sequencer up-to-date with audio events
+    //
+    m_sequencer->processEventsOut(m_mC, m_playLatency, false);
+    
+    // tell the gui about this slice of events
+    notifyVisuals(&m_mC);
+    
+    // Ensure that the audio we're playing is the audio we should be playing
+    //
+    if (m_metaIterator)
+    {
+	rationalisePlayingAudio(m_metaIterator->
+				getPlayingAudioFiles(m_songPosition));
+    }
+    
     return true; // !isEndOfCompReached(); - until we sort this out, we don't stop at end of comp.
 }
 
@@ -379,7 +373,7 @@ RosegardenSequencerApp::updateClocks()
 
     // Go around the loop if we've reached the end
     //
-    if (isLooping() && newPosition > m_loopEnd + m_playLatency)
+    if (isLooping() && newPosition >= m_loopEnd + m_playLatency)
     {
 
         // Remove the loop width from the song position and send

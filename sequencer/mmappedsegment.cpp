@@ -351,7 +351,7 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                                                             const Rosegarden::RealTime& endTime)
 {
 #ifdef DEBUG_META_ITERATOR
-    SEQUENCER_DEBUG << "fillCompositionWithEventsUntil " << endTime << endl;
+    SEQUENCER_DEBUG << "fillCompositionWithEventsUntil " << startTime << " -> " << endTime << endl;
 #endif
 
     m_currentTime = endTime;
@@ -479,8 +479,11 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                     // do something else
                     //SEQUENCER_DEBUG << "tempo event\n";
 
-                } else if (acceptEvent(evt, evtIsFromMetronome)) {
+                } else if (acceptEvent(evt, evtIsFromMetronome) &&
+
+			   (evt->getEventTime() + evt->getDuration() > startTime)) {
                     //SEQUENCER_DEBUG << "inserting event\n";
+
 
                     c->insert(evt);
 

@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
     struct timeval tv;
     (void)gettimeofday(&tv, 0);
     Rosegarden::RealTime lastTick = Rosegarden::RealTime(tv.tv_sec, tv.tv_usec);
-    Rosegarden::RealTime timePerTick = Rosegarden::RealTime(0, 5000);
+    Rosegarden::RealTime timePerTick = Rosegarden::RealTime(0, 10000);
 
     while (roseSeq && roseSeq->getStatus() != QUIT)
     {
@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
 	    break;
 
 	case PLAYING:
-	    if (!roseSeq->keepPlaying(waitTime))
+	    if (!roseSeq->keepPlaying())
 	    {
 		// there's a problem or the piece has
 		// finished - so stop playing
@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
 	    break;
 
 	case RECORDING_MIDI:
-	    if (!roseSeq->keepPlaying(waitTime))
+	    if (!roseSeq->keepPlaying())
 	    {
 		// there's a problem or the piece has
 		// finished - so stop playing
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
 	    break;
 
 	case RECORDING_AUDIO:
-	    if (!roseSeq->keepPlaying(waitTime))
+	    if (!roseSeq->keepPlaying())
 	    {
 		// there's a problem or the piece has
 		// finished - so stop playing

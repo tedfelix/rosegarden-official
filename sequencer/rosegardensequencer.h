@@ -278,7 +278,7 @@ public:
     bool startPlaying();
 
     // Process all subsequent events
-    bool keepPlaying(Rosegarden::RealTime &waitTime);
+    bool keepPlaying();
 
     // Update internal clock and send GUI position pointer movement
     void updateClocks();
@@ -370,20 +370,15 @@ protected:
     Rosegarden::RealTime m_songPosition;
     Rosegarden::RealTime m_lastFetchSongPosition;
 
-    // Latency - m_fetchLatency - how long before we run out of events that
-    //                            we go and fetch some more
+    // Latency - m_playLatency  - how long we add to all events to make
+    //                            sure they play in a synchronised manner
     //
-    //         - m_playLatency  - how long we add to all events to make
-    //                            sure they play in a synchonised manner
-    //
-    //         - m_readAhead    - how large a slice of events we read at a time
-    //                            
+    //         - m_readAhead    - how far ahead in the composition we keep
+    //                            the output queue full to
     //
     // We can throttle these values internally at first, make them
     // user defineable or even auto-throttle them possibly.
     //
-    //
-    Rosegarden::RealTime m_fetchLatency;
     Rosegarden::RealTime m_playLatency;
     Rosegarden::RealTime m_readAhead;
 

@@ -2426,15 +2426,15 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
     {
         if ((*i)->getType() >= MappedEvent::Audio)
             continue;
-	
 
         midiRelativeTime = (*i)->getEventTime() - m_playStartPosition +
                            playLatency + m_alsaPlayStartTime;
 
+
 	Rosegarden::RealTime alsaTimeNow = getAlsaTime();
 	if (midiRelativeTime < alsaTimeNow) {
 	    std::cerr << "WARNING: processMidiOut: event is at "
-		      << midiRelativeTime << " but queue is at "
+		      << midiRelativeTime << " but queue is already at "
 		      << alsaTimeNow << std::endl;
 	}
 
