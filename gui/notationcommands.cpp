@@ -309,6 +309,22 @@ TransformsMenuAddMarkCommand::modifySegment(SegmentNotationHelper &)
 }
 
 void
+TransformsMenuAddTextMarkCommand::modifySegment(SegmentNotationHelper &)
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+	
+	long n = 0;
+	(*i)->get<Int>(Rosegarden::BaseProperties::MARK_COUNT, n);
+	(*i)->set<Int>(Rosegarden::BaseProperties::MARK_COUNT, n + 1);
+	(*i)->set<String>(Rosegarden::BaseProperties::getMarkPropertyName(n),
+			  Rosegarden::Marks::getTextMark(m_text));
+    }
+}
+
+void
 TransformsMenuRemoveMarksCommand::modifySegment(SegmentNotationHelper &)
 {
     EventSelection::eventcontainer::iterator i;

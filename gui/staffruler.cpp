@@ -66,7 +66,7 @@ StaffRuler::StaffRuler(int xPos, int yPos, int thickness,
       m_xPos(xPos),
       m_yPos(yPos),
       m_thickness(thickness),
-      m_mainLinePos(m_yPos + m_thickness / 4),
+      m_mainLinePos(m_thickness / 4),
       m_stepLineHeight(thickness / 6),
       m_subStepLineHeight(thickness / 10),
       m_mainLine(new QCanvasLineGroupable(c, this)),
@@ -93,8 +93,8 @@ StaffRuler::StaffRuler(int xPos, int yPos, int thickness,
     m_whiteBackground->setPen(white);
     m_whiteBackground->setZ(-5);
 
-    m_mainLine->setPoints(0, m_mainLinePos,
-                          canvas()->width(), m_mainLinePos);
+    m_mainLine->setPoints(0, m_mainLinePos + m_yPos,
+                          canvas()->width(), m_mainLinePos + m_yPos);
     m_mainLine->setZ(1);
 
     if (thickness < 30) thickness = 30;

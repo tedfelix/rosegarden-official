@@ -45,8 +45,6 @@ public:
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
-    //--------------- Data members ---------------------------------
-
     Rosegarden::Note m_note;
     int m_pitch;
     Rosegarden::Accidental m_accidental;
@@ -81,8 +79,6 @@ public:
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
-    //--------------- Data members ---------------------------------
-
     Rosegarden::Clef m_clef;
     Rosegarden::Event *m_lastInsertedEvent;
 };
@@ -105,8 +101,6 @@ public:
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
-
-    //--------------- Data members ---------------------------------
 
     bool m_collapseRest;
 
@@ -188,8 +182,6 @@ public:
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
-    //--------------- Data members ---------------------------------
-
     std::string m_indicationType;
     Rosegarden::timeT m_indicationDuration;
     Rosegarden::Event *m_lastInsertedEvent;
@@ -231,6 +223,7 @@ protected:
     }
 };
 
+
 class TransformsMenuChangeStemsCommand : public BasicSelectionCommand
 {
 public:
@@ -247,11 +240,10 @@ protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
 private:
-    //--------------- Data members ---------------------------------
-
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     bool m_up;
 };
+
 
 class TransformsMenuRestoreStemsCommand : public BasicSelectionCommand
 {
@@ -272,6 +264,7 @@ private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 
+
 class TransformsMenuTransposeOneStepCommand : public BasicSelectionCommand
 {
 public:
@@ -288,11 +281,10 @@ protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
 private:
-    //--------------- Data members ---------------------------------
-
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     bool m_up;
 };
+
 
 class TransformsMenuAddMarkCommand : public BasicSelectionCommand
 {
@@ -309,11 +301,32 @@ protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
 private:
-    //--------------- Data members ---------------------------------
-
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     Rosegarden::Mark m_mark;
 };
+
+
+class TransformsMenuAddTextMarkCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuAddTextMarkCommand(std::string text,
+				     EventSelection &selection) :
+	BasicSelectionCommand(name(), selection, true),
+	m_selection(&selection), m_text(text) { }
+    virtual ~TransformsMenuAddTextMarkCommand() { }
+
+    static QString name() {
+	return "Add Te&xt Mark";
+    }
+
+protected:
+    virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
+
+private:
+    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    std::string m_text;
+};
+
 
 class TransformsMenuRemoveMarksCommand : public BasicSelectionCommand
 {
@@ -324,17 +337,16 @@ public:
     virtual ~TransformsMenuRemoveMarksCommand() { }
 
     static QString name() {
-	return "&Remove Marks";
+	return "&Remove All Marks";
     }
 
 protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
 private:
-    //--------------- Data members ---------------------------------
-
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
+
 
 
 class TransformsMenuLabelChordsCommand : public BasicSelectionCommand
@@ -353,9 +365,8 @@ protected:
     virtual void modifySegment(Rosegarden::SegmentNotationHelper &helper);
 
 private:
-    //--------------- Data members ---------------------------------
-
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
+
 
 #endif

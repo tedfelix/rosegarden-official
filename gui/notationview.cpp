@@ -1358,6 +1358,13 @@ void NotationView::slotTransformsAddDownBow()
                             (DownBow, *m_currentEventSelection));
 }
 
+void NotationView::slotTransformsAddTextMark()
+{
+    if (m_currentEventSelection)
+        addCommandToHistory(new TransformsMenuAddTextMarkCommand
+                            ("sample text mark", *m_currentEventSelection));
+}
+
 void NotationView::slotTransformsRemoveMarks()
 {
     if (m_currentEventSelection)
@@ -1384,7 +1391,7 @@ void NotationView::slotDebugDump()
 // it should be currently shown at all for this view
 // (is it within scope)
 //!!! No consideration of scope yet
-//!!! Should be a staff task
+//!!! Should be a staff task?
 // 
 void
 NotationView::setPositionPointer(int position)
@@ -1758,7 +1765,23 @@ void NotationView::itemPressed(int height, int staffNo,
 
     if (btnState & ShiftButton) { // on shift-click, set cursor position
 
-//!!!        setCursorPosition(e->x());
+	int staffNo;
+	for (staffNo = 0; staffNo < m_staffs.size(); ++staffNo) {
+	    if (m_staffs[staffNo]->containsCanvasY((int)e->y())) break;
+	}
+
+	if (staffNo < m_staffs.size()) {
+	    
+	    if (m_currentStaff != staffNo) {
+		m_staffs[m_currentStaff]->setCurrent(false);
+		m_currentStaff = staffNo;
+		m_staffs[m_currentStaff]->setCurrent(true, (int)e->y());
+	    }
+
+	    m_staffs[m_currentStaff]->setCursorPosition(e->x(), (int)e->y());
+	}
+
+	canvas()->update();
 
     } else {
 

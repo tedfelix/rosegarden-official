@@ -155,7 +155,7 @@ template <class T>
 void
 LinedStaff<T>::setX(double x)
 {
-    m_ruler->setXPos(int(x));
+    m_ruler->setXPos((int)x);
     m_x = x;
 }
 
@@ -197,14 +197,15 @@ int
 LinedStaff<T>::getTotalHeight() const
 {
     return getCanvasYForTopOfStaff(getRowForLayoutX(m_endLayoutX)) +
-        getHeightOfRow() + getStaffRulerHeight() - m_y;
+        getHeightOfRow() - m_y;
 }
 
 template <class T>
 int 
 LinedStaff<T>::getHeightOfRow() const
 {
-    return getTopLineOffset() * 2 + getBarLineHeight() + m_lineThickness;
+    return getTopLineOffset() + getLegerLineCount() * getLineSpacing()
+	+ getBarLineHeight() + m_lineThickness;
 }
 
 template <class T>
@@ -382,7 +383,7 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
     m_endLayoutX = xright;
 
     resizeStaffLines();
-    if (m_current) updateRuler(layout);
+    updateRuler(layout);
 }
 
 template <class T>
@@ -724,7 +725,24 @@ LinedStaff<T>::getLayoutXOfCursor() const
 {
     if (!m_current) return -1;
     int cursorPosition = m_ruler->getCursor()->getPosition();
-    return cursorPosition + (m_currentRow * m_pageWidth) - m_x;
+    return getLayoutCoordsForCanvasCoords
+	(cursorPosition, getCanvasYForTopLine(m_currentRow)).first;
+//    return cursorPosition + (m_currentRow * m_pageWidth) - m_x;
+}
+
+template <class T>
+void
+LinedStaff<T>::setCursorPosition(double canvasX, int canvasY)
+{
+    if (!m_current) return;
+    
+    int row = getRowForCanvasCoords(canvasY, canvasY);
+    if (row != m_currentRow) {
+	//!!! move the staff ruler
+	m_currentRow = row;
+    }
+
+    m_ruler->getCursor()->setPosition(canvasX);
 }
 
 template <class T>
@@ -748,9 +766,8 @@ LinedStaff<T>::updateRuler(Rosegarden::HorizontalLayoutEngine<T> &layout)
                          timeSignature.getBeatsPerBar());
     }
 
-//    m_ruler->resize();
     m_ruler->update();
-    m_ruler->show();
+    if (m_current) m_ruler->show();
 }
 
 template <class T>

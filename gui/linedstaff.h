@@ -260,7 +260,7 @@ public:
     }
 
     /**
-     * Returns the total height of a single staff row
+     * Returns the total height of a single staff row, including ruler
      */
     virtual int getHeightOfRow() const;
     
@@ -319,6 +319,12 @@ public:
      * is some other problem.
      */
     virtual double getLayoutXOfCursor() const;
+
+    /**
+     * Move the insertion cursor to the layout-X coordinate
+     * corresponding to the given canvas coordinates.
+     */
+    virtual void setCursorPosition(double x, int y);
 
     /**
      * Query the given horizontal layout object (which is assumed to
@@ -381,7 +387,7 @@ protected:
     // canvas lines rather than a smaller number of very long ones.)
 
     int getTopLineOffset() const {
-	return getLineSpacing() * getLegerLineCount();
+	return getStaffRulerHeight() + getLineSpacing() * getLegerLineCount();
     }
 
     int getBarLineHeight() const {
@@ -394,7 +400,7 @@ protected:
 
     int getRowForCanvasCoords(double x, int y) const {
 	if (!m_pageMode) return (int)((x - m_x) / m_pageWidth);
-	else return ((y - (m_y + getStaffRulerHeight())) / m_rowSpacing);
+	else return ((y - m_y) / m_rowSpacing);
     }
 
     double getCanvasXForLayoutX(double x) const {
@@ -406,8 +412,8 @@ protected:
     }
 
     int getCanvasYForTopOfStaff(int row = -1) const {
-	if (!m_pageMode || row <= 0) return m_y + getStaffRulerHeight();
-	else return m_y + getStaffRulerHeight() + (row * m_rowSpacing);
+	if (!m_pageMode || row <= 0) return m_y;
+	else return m_y + (row * m_rowSpacing);
     }
 
     int getCanvasYForTopLine(int row = -1) const {
@@ -434,6 +440,14 @@ protected:
     getCanvasOffsetsForLayoutCoords(double x, int y) const {
 	LinedStaffCoords cc = getCanvasCoordsForLayoutCoords(x, y);
 	return LinedStaffCoords(cc.first - x, cc.second - y);
+    }
+
+    LinedStaffCoords
+    getLayoutCoordsForCanvasCoords(double x, int y) const {
+	int row = getRowForCanvasCoords(x, y);
+	return LinedStaffCoords
+	    ((row * m_pageWidth) + x - getCanvasXForLeftOfRow(row),
+	     y - getCanvasYForTopOfStaff(row));
     }
 
 protected:

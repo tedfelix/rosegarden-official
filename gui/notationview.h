@@ -276,6 +276,7 @@ public slots:
     void slotTransformsAddPause();
     void slotTransformsAddUpBow();
     void slotTransformsAddDownBow();
+    void slotTransformsAddTextMark();
 
     void slotTransformsRemoveMarks();
 
