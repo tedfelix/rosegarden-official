@@ -335,7 +335,7 @@ void NotationView::setupActions()
 
     // Breve
     icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
-                    (Note::Breve, false));
+                    (Note(Note::Breve, false)));
     noteAction = new KRadioAction(i18n("Breve Rest"), icon, 0, this,
                                   SLOT(slotRBreve()),
                                   actionCollection(), "breve_rest" );
@@ -343,7 +343,7 @@ void NotationView::setupActions()
     
     // Whole
     icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
-                    (Note::WholeNote, false));
+                    (Note(Note::WholeNote, false)));
     noteAction = new KRadioAction(i18n("Whole Rest"), icon, 0, this,
                                   SLOT(slotRWhole()),
                                   actionCollection(), "whole_note_rest" );
@@ -351,7 +351,7 @@ void NotationView::setupActions()
     
     // Half
     icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
-                    (Note::HalfNote, false));
+                    (Note(Note::HalfNote, false)));
     noteAction = new KRadioAction(i18n("Half Rest"), icon, 0, this,
                                   SLOT(slotRHalf()),
                                   actionCollection(), "half_rest" );
@@ -359,7 +359,7 @@ void NotationView::setupActions()
 
     // Quarter
     icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
-                    (Note::QuarterNote, false));
+                    (Note(Note::QuarterNote, false)));
     noteAction = new KRadioAction(i18n("Quarter Rest"), icon, 0, this,
                                   SLOT(slotRQuarter()),
                                   actionCollection(), "quarter_rest" );
@@ -367,7 +367,7 @@ void NotationView::setupActions()
 
     // 8th
     icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
-                    (Note::EighthNote, false));
+                    (Note(Note::EighthNote, false)));
     noteAction = new KRadioAction(i18n("8th Rest"), icon, 0, this,
                                   SLOT(slotR8th()),
                                   actionCollection(), "8th_rest" );
@@ -375,7 +375,7 @@ void NotationView::setupActions()
 
     // 16th
     icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
-                    (Note::SixteenthNote, false));
+                    (Note(Note::SixteenthNote, false)));
     noteAction = new KRadioAction(i18n("16th Rest"), icon, 0, this,
                                   SLOT(slotR16th()),
                                   actionCollection(), "16th_rest" );
@@ -383,7 +383,7 @@ void NotationView::setupActions()
 
     // 32nd
     icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
-                    (Note::ThirtySecondNote, false));
+                    (Note(Note::ThirtySecondNote, false)));
     noteAction = new KRadioAction(i18n("32nd Rest"), icon, 0, this,
                                   SLOT(slotR32nd()),
                                   actionCollection(), "32nd_rest" );
@@ -391,7 +391,7 @@ void NotationView::setupActions()
 
     // 64th
     icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap
-                    (Note::SixtyFourthNote, false));
+                    (Note(Note::SixtyFourthNote, false)));
     noteAction = new KRadioAction(i18n("64th Rest"), icon, 0, this,
                                   SLOT(slotR64th()),
                                   actionCollection(), "64th_rest" );
@@ -566,7 +566,7 @@ bool NotationView::showElements(NotationElementList::iterator from,
                 Note::Type note = (*it)->event()->get<Int>(Rosegarden::Note::NoteType);
                 int dots = (*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
 
-                QCanvasPixmap notePixmap(npf.makeRestPixmap(note, dots));
+                QCanvasPixmap notePixmap(npf.makeRestPixmap(Note(note, dots)));
                 sprite = new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
 
             } else if ((*it)->event()->isa(Clef::EventType)) {
@@ -718,7 +718,7 @@ void NotationView::setCurrentSelectedNote(bool rest, Note::Type n)
     } else {
         m_currentNotePixmap->setPixmap
             (m_toolbarNotePixmapFactory.makeRestPixmap
-             (n, m_currentSelectedNoteDotted ? 1 : 0));
+             (Note(n, m_currentSelectedNoteDotted ? 1 : 0)));
     }
 
     emit changeCurrentNote(rest, n);

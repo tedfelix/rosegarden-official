@@ -154,23 +154,30 @@ public:
 				       int width,
 				       double gradient);
     
-    QCanvasPixmap makeRestPixmap(Rosegarden::Note::Type note, int dots);
+    QCanvasPixmap makeRestPixmap(const Rosegarden::Note &restType);
     QCanvasPixmap makeClefPixmap(const Rosegarden::Clef &clef) const;
     QCanvasPixmap makeKeyPixmap(const Rosegarden::Key &key,
 				const Rosegarden::Clef &clef);
     QCanvasPixmap makeTimeSigPixmap(const Rosegarden::TimeSignature& sig);
     QCanvasPixmap makeUnknownPixmap();
 
-    int getNoteBodyHeight() const   { return m_noteBodyEmpty.height(); }
-    int getNoteBodyWidth() const    { return m_noteBodyEmpty.width(); }
-    int getBreveWidth() const       { return m_breve.width(); }
-    int getLineSpacing() const      { return getNoteBodyHeight() + 1; }
-    int getAccidentalWidth() const  { return m_accidentalSharp.width(); }
-    int getAccidentalHeight() const { return m_accidentalSharp.height(); }
-    int getStalkLength() const      { return getNoteBodyHeight() * 11/4; }
-    int getDotWidth() const         { return m_dot.width(); }
-    int getClefWidth() const;
+    int getNoteBodyHeight()    const { return m_noteBodyEmpty.height(); }
+    int getNoteBodyWidth()     const { return m_noteBodyEmpty.width(); }
+    int getBreveWidth()        const { return m_breve.width(); }
+    int getLineSpacing()       const { return getNoteBodyHeight() + 1; }
+    int getAccidentalWidth()   const { return m_accidentalSharp.width(); }
+    int getAccidentalHeight()  const { return m_accidentalSharp.height(); }
+    int getStalkLength()       const { return getNoteBodyHeight() * 11/4; }
+    int getDotWidth()          const { return m_dot.width(); }
+    int getClefWidth()         const;
+
     int getTimeSigWidth(const Rosegarden::TimeSignature &timesig) const;
+
+    int getRestWidth(const Rosegarden::Note &restType) const {
+        return (m_rests[restType.getNoteType()]->width() +
+                getDotWidth() * restType.getDots());
+    }
+
     int getKeyWidth(const Rosegarden::Key &key) const {
         return (key.getAccidentalCount() *
                 (getAccidentalWidth() - (key.isSharp()? 1 : 2)));

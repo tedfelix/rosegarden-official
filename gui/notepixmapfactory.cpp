@@ -709,31 +709,35 @@ NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
 
 
 QCanvasPixmap
-NotePixmapFactory::makeRestPixmap(Note::Type note, int dots)
+NotePixmapFactory::makeRestPixmap(const Note &restType) 
 {
-    switch (note) {
-    case Note::SixtyFourthNote:
-        return QCanvasPixmap(*m_rests[0], m_pointZero);
-    case Note::ThirtySecondNote:
-        return QCanvasPixmap(*m_rests[1], m_pointZero);
-    case Note::SixteenthNote:
-        return QCanvasPixmap(*m_rests[2], m_pointZero);
-    case Note::EighthNote:
-        return QCanvasPixmap(*m_rests[3], m_pointZero);
-    case Note::QuarterNote:
-        return QCanvasPixmap(*m_rests[4], m_pointZero);
-    case Note::HalfNote:
-        return QCanvasPixmap(*m_rests[5], m_pointZero); // QPoint(0, 19)
-    case Note::WholeNote:
-        return QCanvasPixmap(*m_rests[6], m_pointZero); // QPoint(0, 9)
-    case Note::Breve:
-        return QCanvasPixmap(*m_rests[7], m_pointZero); // QPoint(0, 9)
-    default:
-        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeRestPixmap() for note "
-                             << note << " not yet implemented or note out of range\n";
-        return QCanvasPixmap(*m_rests[0], m_pointZero);
+    QPixmap *pixmap(m_rests[restType.getNoteType()]);
+
+    createPixmapAndMask(getRestWidth(restType), pixmap->height());
+
+    m_p.drawPixmap(0, 0, *pixmap);
+    m_pm.drawPixmap(0, 0, *(pixmap->mask()));
+
+    for (int i = 0; i < restType.getDots(); ++i) {
+        int x = pixmap->width() + i * m_dot.width();
+        int y = getLineSpacing()*5 / 4;
+        m_p.drawPixmap(x, y, m_dot); 
+        m_pm.drawPixmap(x, y, *(m_dot.mask()));
     }
+
+    m_p.end();
+    m_pm.end();
+
+    QCanvasPixmap restPixmap(*m_generatedPixmap, m_pointZero);
+    QBitmap mask(*m_generatedMask);
+    restPixmap.setMask(mask);
+
+    delete m_generatedPixmap;
+    delete m_generatedMask;
+
+    return restPixmap;
 }
+
 
 QCanvasPixmap
 NotePixmapFactory::makeClefPixmap(const Clef &clef) const
