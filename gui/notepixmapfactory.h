@@ -142,6 +142,8 @@ public:
     QCanvasPixmap makeSlurPixmap(int length, int dy, bool above);
     QCanvasPixmap makeUnknownPixmap();
     QCanvasPixmap makeToolbarPixmap(const char *name);
+    QCanvasPixmap makeKeyDisplayPixmap(const Rosegarden::Key &key,
+				       const Rosegarden::Clef &clef);
 
     int getNoteBodyWidth (Rosegarden::Note::Type =
                           Rosegarden::Note::Crotchet) const;

@@ -1019,6 +1019,53 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 }
 
 QCanvasPixmap
+NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
+{
+    std::vector<int> ah = key.getAccidentalHeights(clef);
+
+    CharName charName = (key.isSharp() ?
+                         NoteCharacterNames::SHARP :
+                         NoteCharacterNames::FLAT);
+
+    QCanvasPixmap clefPixmap(m_font->getCanvasPixmap(getClefCharName(clef)));
+    QPixmap accidentalPixmap(m_font->getPixmap(charName));
+    QPoint hotspot(m_font->getHotspot(charName));
+
+    int lw = getLineSpacing();
+    int delta = accidentalPixmap.width() - 2*m_origin.x();
+    int width = 11 * getAccidentalWidth(Rosegarden::Accidentals::Sharp) +
+	clefPixmap.width();
+    int x = clefPixmap.width() + 3 * delta;
+
+    createPixmapAndMask(width, lw * 8 + 1);
+
+    int h = clef.getAxisHeight();
+    int y = (lw * 2) + ((8 - h) * lw) / 2;
+    m_p.drawPixmap(2 * delta, y - clefPixmap.offsetY(), clefPixmap);
+    m_pm.drawPixmap(2 * delta, y - clefPixmap.offsetY(), *(clefPixmap.mask()));
+
+    for (unsigned int i = 0; i < ah.size(); ++i) {
+
+	h = ah[i];
+	y = (lw * 2) + ((8 - h) * lw) / 2 - hotspot.y();
+
+	m_p.drawPixmap(x, y, accidentalPixmap);
+	m_pm.drawPixmap(x, y, *(accidentalPixmap.mask()));
+
+	x += delta;
+    }
+
+    for (h = 0; h <= 8; h += 2) {
+        y = (lw * 2) + ((8 - h) * lw) / 2;
+	m_p.drawLine(delta, y, m_generatedPixmap->width() - 2*delta - 1, y);
+	m_pm.drawLine(delta, y, m_generatedPixmap->width() - 2*delta - 1, y);
+    }
+
+    return makeCanvasPixmap(m_pointZero);
+}
+    
+
+QCanvasPixmap
 NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
 {
     int nbh = getNoteBodyHeight();

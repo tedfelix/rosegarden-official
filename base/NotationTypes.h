@@ -165,6 +165,12 @@ public:
      */
     int getPitchOffset() const;
 
+    /**
+     * Return the height-on-staff (in NotationDisplayPitch terminology)
+     * of the clef's axis -- the line around which the clef is drawn.
+     */
+    int getAxisHeight() const;
+
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
 

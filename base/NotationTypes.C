@@ -153,6 +153,14 @@ int Clef::getPitchOffset() const
     else return -2;
 }
 
+int Clef::getAxisHeight() const
+{
+    if (m_clef == Treble) return 2;
+    else if (m_clef == Tenor) return 6;
+    else if (m_clef == Alto) return 4;
+    else return 6;
+}
+
 Event *Clef::getAsEvent(timeT absoluteTime) const
 {
     Event *e = new Event(EventType);

@@ -161,6 +161,9 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
 
     int firstBar = m_rulerScale->getBarForX(clipRect.x() - m_currentXOffset);
     int  lastBar = m_rulerScale->getLastVisibleBar();
+    if (firstBar < m_rulerScale->getFirstVisibleBar()) {
+	firstBar = m_rulerScale->getFirstVisibleBar();
+    }
 
     painter.drawLine(m_currentXOffset, 0, visibleRect().width(), 0);
 

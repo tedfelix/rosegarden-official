@@ -86,18 +86,21 @@ void LoopRuler::paintEvent(QPaintEvent* e)
     //paint.setClipRect(e->rect().normalize());
 
     paint.setBrush(colorGroup().foreground());
-    drawBarSections(&paint, (e->rect().x() > m_lastXPaint));
+    drawBarSections(&paint);
     drawLoopMarker(&paint);
 
     m_lastXPaint = e->rect().x();
 }
 
-void LoopRuler::drawBarSections(QPainter* paint, bool rightwards)
+void LoopRuler::drawBarSections(QPainter* paint)
 {
     QRect clipRect = visibleRect(); //paint->clipRegion().boundingRect();
 
     int firstBar = m_rulerScale->getBarForX(clipRect.x() - m_currentXOffset);
     int  lastBar = m_rulerScale->getLastVisibleBar();
+    if (firstBar < m_rulerScale->getFirstVisibleBar()) {
+	firstBar = m_rulerScale->getFirstVisibleBar();
+    }
 
     paint->setPen(RosegardenGUIColours::LoopRulerForeground);
 

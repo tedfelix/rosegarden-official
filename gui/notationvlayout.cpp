@@ -178,20 +178,8 @@ NotationVLayout::scanStaff(StaffType &staffBase)
                 // should be "on" the middle line, the treble clef
                 // "on" the line below the middle, etc
 
-                int height;
-                Clef clef(*el->event());
-
-                if (clef.getClefType() == Clef::Treble) {
-                    height = 2;
-                } else if (clef.getClefType() == Clef::Bass) {
-                    height = 6;
-                } else if (clef.getClefType() == Clef::Tenor) {
-                    height = 6;
-                } else {
-                    height = 4;
-                }
-
-                el->setLayoutY(staff.getLayoutYForHeight(height));
+                el->setLayoutY(staff.getLayoutYForHeight
+			       (Clef(*el->event()).getAxisHeight()));
 
             } else if (el->event()->isa(Key::EventType)) {
 

@@ -263,7 +263,8 @@ KeySignatureDialog::getKey() const
 void
 KeySignatureDialog::redrawKeyPixmap()
 {
-    QCanvasPixmap pmap = m_notePixmapFactory->makeKeyPixmap(m_key, m_clef);
+    QCanvasPixmap pmap =
+	m_notePixmapFactory->makeKeyDisplayPixmap(m_key, m_clef);
     m_keyLabel->setPixmap(pmap);
 }
 
@@ -279,9 +280,9 @@ KeySignatureDialog::slotKeyNameChanged(const QString &s)
 void
 KeySignatureDialog::slotMajorMinorChanged(const QString &s)
 {
-    m_key = Rosegarden::Key(m_key.getAccidentalCount(),
-			    m_key.isSharp(),
-			    (s == "Minor"));
+    std::string name(m_keyCombo->currentText().latin1());
+    name = name + " " + (s == "Minor" ? "minor" : "major");
+    m_key = Rosegarden::Key(name);
     regenerateKeyCombo();
     redrawKeyPixmap();
 }

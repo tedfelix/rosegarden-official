@@ -88,7 +88,7 @@ signals:
     void setLoop(Rosegarden::timeT, Rosegarden::timeT);
 
 private:
-    void drawBarSections(QPainter*, bool rightwards = true);
+    void drawBarSections(QPainter*);
     void drawLoopMarker(QPainter*);  // between loop positions
 
     //--------------- Data members ---------------------------------
