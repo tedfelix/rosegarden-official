@@ -120,6 +120,7 @@ public slots:
      */
     void setSelectAdd(bool value);
     void setSelectCopy(bool value);
+    void setFineGrain(bool value);
 
 
 protected slots:

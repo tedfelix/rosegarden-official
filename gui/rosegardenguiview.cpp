@@ -159,6 +159,9 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(this,         SIGNAL(signalSetSelectCopy(bool)), 
             trackEditor, SLOT(setSelectCopy(bool)));
             
+    connect(this,         SIGNAL(signalSetFineGrain(bool)), 
+            trackEditor, SLOT(setFineGrain(bool)));
+            
     connect(this,       SIGNAL(signalSetTrackMeter(double, int)),
             trackButtons, SLOT(setTrackMeter(double, int)));
 

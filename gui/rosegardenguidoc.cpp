@@ -125,7 +125,7 @@ void RosegardenGUIDoc::slotUpdateAllViews(RosegardenGUIView *sender)
 
 void RosegardenGUIDoc::documentModified()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::documentModified()" << endl;
+//    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::documentModified()" << endl;
     setModified(true);
 }
 

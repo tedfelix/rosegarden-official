@@ -37,7 +37,14 @@ Post-0.1.3 task list (superseding older ones)
     We should then be able to substantially simplify getBarRange so as
     never to need to refer to the barSegment at all, only to time sigs.
     Ultimately we may find the barSegment isn't needed in any method,
-    but this could take some testing.
+    but this could take some testing. [DONE]
+
+12. Potential bit of rejigging: make NotationRulerScale into a
+    LayoutRulerScale that likes any sort of HorizontalLayoutEngine,
+    and move it into rulerscale.h and then move that into base/.
+    If we also make the HorizontalLayoutEngine use composition-wide
+    bar numbers (with getFirstVisibleBar() and getLastVisibleBar())
+    then we may be able to simplify things significantly in the end.
 
 
 Post-0.1.1 task list

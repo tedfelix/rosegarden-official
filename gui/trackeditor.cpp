@@ -355,6 +355,12 @@ TrackEditor::setSelectCopy(bool value)
      m_segmentCanvas->setSelectCopy(value);
 }
 
+void
+TrackEditor::setFineGrain(bool value)
+{
+     m_segmentCanvas->setFineGrain(value);
+}
+
 
 // Just like setupSegments() this creates a SegmentItem
 // on the SegmentCanvas after we've recorded a Segment.

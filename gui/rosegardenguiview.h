@@ -131,7 +131,8 @@ public:
      */
     void setShift(const bool &value)
         { emit signalSetSelectAdd(value);
-          emit signalSetLoop(value); }
+          emit signalSetLoop(value);
+	  emit signalSetFineGrain(value); }
 
     void setControl(const bool &value)
         { emit signalSetSelectCopy(value); }
@@ -203,6 +204,7 @@ signals:
     void signalSetSelectAdd(bool);
     void signalSetSelectCopy(bool);
     void signalSetLoop(bool);
+    void signalSetFineGrain(bool);
 
     void addSegmentItem(Rosegarden::Segment*);
     void signalShowRecordingSegmentItem(Rosegarden::Segment*);

@@ -191,7 +191,7 @@ public:
 	int m_vstep;
     };
 
-    const SnapGrid& grid() const { return m_grid; }
+    SnapGrid& grid() { return m_grid; }
 
     /// Return the brush used by all SegmentItem objects (normally, solid blue)
     const QBrush& brush()  const { return m_brush; }
@@ -248,6 +248,7 @@ public slots:
     void setSelectAdd(const bool &value);
     void setSelectCopy(const bool &value);
 
+    void setFineGrain(bool value);
 
 protected:
     virtual void contentsMousePressEvent(QMouseEvent*);
@@ -336,11 +337,14 @@ public:
     virtual void handleMouseButtonRelease(QMouseEvent*) = 0;
     virtual void handleMouseMove(QMouseEvent*)         = 0;
 
+    void setFineGrain(bool value) { m_fineGrain = value; }
+
 protected:
     //--------------- Data members ---------------------------------
 
     SegmentCanvas*  m_canvas;
     SegmentItem* m_currentItem;
+    bool m_fineGrain;
 };
 
 //////////////////////////////
@@ -450,7 +454,6 @@ public:
     //
     void setSegmentAdd(const bool &value)  { m_segmentAddMode = value; }
     void setSegmentCopy(const bool &value) { m_segmentCopyMode = value; }
-
 
 public slots:
     void selectSegmentItem(SegmentItem *selectedItem);

@@ -446,6 +446,13 @@ SegmentCanvas::setSelectCopy(const bool &value)
     selTool->setSegmentCopy(value);
 }
 
+void
+SegmentCanvas::setFineGrain(bool value)
+{
+    kdDebug(KDEBUG_AREA) << "SegmentCanvas::setFineGrain(" << value << ")" << endl;
+    m_tool->setFineGrain(value);
+}
+
 
 //////////////////////////////////////////////////////////////////////
 //                 SnapGrid
@@ -540,7 +547,8 @@ SegmentCanvas::SnapGrid::snapY(int y) const
 
 SegmentTool::SegmentTool(SegmentCanvas* canvas)
     : m_canvas(canvas),
-      m_currentItem(0)
+      m_currentItem(0),
+      m_fineGrain(false)
 {
     m_canvas->setCursor(Qt::arrowCursor);
 }
@@ -586,6 +594,13 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     } else { // we are not, so create one
 
+	// a little hardcoded, for now
+	if (m_fineGrain) {
+	    m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::NoSnap);
+	} else {
+	    m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::SnapToBar);
+	}
+
 	int y = m_canvas->grid().snapY(e->pos().y());
 	timeT time = m_canvas->grid().snapX(e->pos().x());
 	timeT duration = m_canvas->grid().getSnapTime(e->pos().x());
@@ -622,6 +637,12 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
 void SegmentPencil::handleMouseMove(QMouseEvent *e)
 {
     if (!m_currentItem) return;
+
+    if (m_fineGrain) {
+	m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::NoSnap);
+    } else {
+	m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::SnapToBar);
+    }
 
     timeT time = m_canvas->grid().snapX(e->pos().x());
     timeT duration = time - m_currentItem->getStartTime();
@@ -710,6 +731,13 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 void SegmentMover::handleMouseMove(QMouseEvent *e)
 {
     if (m_currentItem) {
+
+	if (m_fineGrain) {
+	    m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::NoSnap);
+	} else {
+	    m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::SnapToBeat);
+	}
+
 	int x = e->pos().x() - m_clickPoint.x();
 	m_currentItem->setStartTime(m_canvas->grid().snapX
 				    (m_currentItemStartX + x));
@@ -757,6 +785,12 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 void SegmentResizer::handleMouseMove(QMouseEvent *e)
 {
     if (!m_currentItem) return;
+
+    if (m_fineGrain) {
+	m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::NoSnap);
+    } else {
+	m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::SnapToBeat);
+    }
 
     timeT time = m_canvas->grid().snapX(e->pos().x());
     timeT duration = time - m_currentItem->getStartTime();
@@ -878,6 +912,12 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
     {
 	std::cout << "Segment quick copy mode not implemented" << std::endl;
 	return;
+    }
+
+    if (m_fineGrain) {
+	m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::NoSnap);
+    } else {
+	m_canvas->grid().setSnapTime(SegmentCanvas::SnapGrid::SnapToBeat);
     }
 
     if (m_currentItem->isSelected())
