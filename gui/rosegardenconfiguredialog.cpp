@@ -1582,6 +1582,7 @@ SequencerConfigurationPage::apply()
     Rosegarden::StudioControl::sendMappedEvent(mEjackValue);
 #endif // HAVE_LIBJACK
 
+	/*
     // Now write the MMC entry
     //
     bool mmcTransport, mmcMaster;
@@ -1617,7 +1618,7 @@ SequencerConfigurationPage::apply()
     m_cfg->writeEntry("mmctransport", mmcTransport);
     m_cfg->writeEntry("mmcmaster", mmcMaster);
     m_cfg->writeEntry("mtcmaster", mtcMaster);
-
+    
 
     // Now send it
     //
@@ -1626,7 +1627,7 @@ SequencerConfigurationPage::apply()
                                        Rosegarden::MidiByte(mmcValue));
 
     Rosegarden::StudioControl::sendMappedEvent(mEmccValue);
-
+	*/
 
     // ------------- MIDI Clock and System messages ------------
     //
