@@ -276,7 +276,7 @@ public:
 		    const Rosegarden::Event &event,
 		    bool editable = true);
 
-    bool isModified() const;
+    bool isModified() const { return m_modified; }
     Rosegarden::Event getEvent() const;
 
 protected:
@@ -295,6 +295,8 @@ protected:
     Rosegarden::timeT m_absoluteTime;
     Rosegarden::timeT m_duration;
     int m_subOrdering;
+
+    bool m_modified;
 
 public slots:
     void slotEventTypeChanged(const QString &);

@@ -1076,7 +1076,8 @@ EventEditDialog::EventEditDialog(QWidget *parent,
     m_type(event.getType()),
     m_absoluteTime(event.getAbsoluteTime()),
     m_duration(event.getDuration()),
-    m_subOrdering(event.getSubOrdering())
+    m_subOrdering(event.getSubOrdering()),
+    m_modified(false)
 {
     QVBox *vbox = makeVBoxMainWidget();
 
@@ -1235,21 +1236,37 @@ EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
 }
 
 
+Rosegarden::Event
+EventEditDialog::getEvent() const
+{
+    return Event(m_event, m_absoluteTime, m_duration, m_subOrdering);
+}
+
+
 void
 EventEditDialog::slotEventTypeChanged(const QString &type)
 {
-    m_type = type.latin1();
+    std::string t(type.latin1());
+    if (t != m_type) {
+	m_modified = true;
+	m_type = t;
+    }
 }
 
 void
 EventEditDialog::slotAbsoluteTimeChanged(int value)
 {
+    if (value == m_absoluteTime) return;
+    m_modified = true;
     m_absoluteTime = value;
 }
 
 void
 EventEditDialog::slotDurationChanged(int value)
 {
+    if (value == m_duration) return;
+
+    m_modified = true;
     m_duration = value;
 
     Note nearestNote = Note::getNearestNote(timeT(value), 1);
@@ -1274,6 +1291,8 @@ EventEditDialog::slotDurationChanged(int value)
 void
 EventEditDialog::slotSubOrderingChanged(int value)
 {
+    if (value == m_subOrdering) return;
+    m_modified = true;
     m_subOrdering = value;
 }
 
@@ -1284,6 +1303,7 @@ EventEditDialog::slotIntPropertyChanged(int value)
     const QSpinBox *spinBox = dynamic_cast<const QSpinBox *>(s);
     if (!spinBox) return;
 
+    m_modified = true;
     QString propertyName = spinBox->name();
     m_event.set<Rosegarden::Int>(propertyName.latin1(), value);
 }
@@ -1295,6 +1315,7 @@ EventEditDialog::slotBoolPropertyChanged()
     const QCheckBox *checkBox = dynamic_cast<const QCheckBox *>(s);
     if (!checkBox) return;
 
+    m_modified = true;
     QString propertyName = checkBox->name();
     bool checked = checkBox->isChecked();
 
@@ -1308,6 +1329,7 @@ EventEditDialog::slotStringPropertyChanged(const QString &value)
     const QLineEdit *lineEdit = dynamic_cast<const QLineEdit *>(s);
     if (!lineEdit) return;
     
+    m_modified = true;
     QString propertyName = lineEdit->name();
     m_event.set<Rosegarden::String>(propertyName.latin1(), value.latin1());
 }
@@ -1328,6 +1350,7 @@ EventEditDialog::slotPropertyDeleted()
 	 arg(propertyName),
 	 i18n("&Delete"), i18n("&Cancel"), 0, 1) != 0) return;
 
+    m_modified = true;
     QObjectList *list = m_persistentGrid->queryList(0, propertyName, false);
     QObjectListIt i(*list);
     QObject *obj;
@@ -1366,6 +1389,7 @@ EventEditDialog::slotPropertyMadePersistent()
     }
     delete list;
 
+    m_modified = true;
     addPersistentProperty(propertyName.latin1());
 
     Rosegarden::PropertyType type =
