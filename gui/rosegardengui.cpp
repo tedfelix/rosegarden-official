@@ -3224,10 +3224,13 @@ void RosegardenGUIApp::slotExportLilypond()
 
 void RosegardenGUIApp::exportLilypondFile(const QString &file)
 {
+    LilypondOptionsDialog *dialog = new LilypondOptionsDialog(this);
+    if (dialog->exec() != QDialog::Accepted) return;
+
     RosegardenProgressDialog progressDlg(i18n("Exporting Lilypond file..."),
                                          100,
                                          this);
-
+    
     LilypondExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setProgress(int)),

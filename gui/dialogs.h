@@ -826,5 +826,28 @@ protected:
     bool                m_modified;
 };
 
+class LilypondOptionsDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    LilypondOptionsDialog(QWidget *parent);
+
+public slots:
+    void slotOk();
+
+protected:
+    QComboBox *m_lilyLanguage;
+    QComboBox *m_lilyPaperSize;
+    QComboBox *m_lilyFontSize;
+    QCheckBox *m_lilyExportHeaders;
+    QCheckBox *m_lilyExportLyrics;
+    QCheckBox *m_lilyExportMidi;
+    QCheckBox *m_lilyExportUnmuted;
+    QCheckBox *m_lilyExportPointAndClick;
+    QCheckBox *m_lilyExportBarChecks;
+    QCheckBox *m_lilyExportBeams;
+};
+
 
 #endif

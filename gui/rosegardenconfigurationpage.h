@@ -249,17 +249,6 @@ protected:
     QComboBox *m_pasteType;
     RosegardenQuantizeParameters *m_quantizeFrame;
 
-    // Lilypond export:
-    QComboBox *m_lilyPaperSize;
-    QComboBox *m_lilyFontSize;
-    QCheckBox *m_lilyExportHeaders;
-    QCheckBox *m_lilyExportLyrics;
-    QCheckBox *m_lilyExportMidi;
-    QCheckBox *m_lilyExportUnmuted;
-    QCheckBox *m_lilyExportPointAndClick;
-    QCheckBox *m_lilyExportBarChecks;
-    QCheckBox *m_lilyExportBeams;
-
     void populateSizeCombo(QComboBox *combo, std::string font, int dfltSize);
 };
 

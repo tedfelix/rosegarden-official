@@ -553,78 +553,6 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 	 false, false, "Notation Options", preamble);
 
     addTab(m_quantizeFrame, i18n("Quantize"));
-
-    // Lilypond (DMM) - I'll just hijack the Notation configurator for the time
-    // being.
-
-    // quantizer setting this elsewhere?  this was evidently getting reset
-    // because all my reads were coming up with defaults
-    m_cfg->setGroup(NotationView::ConfigGroup);
-
-    frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 8, 2, 10, 5);
-
-    layout->addWidget(new QLabel(
-        i18n("Paper size to use in \\paper block"), frame), 0, 0);
-    
-    m_lilyPaperSize = new KComboBox(frame);
-    m_lilyPaperSize->insertItem(i18n("US Letter"));
-    m_lilyPaperSize->insertItem(i18n("A4"));
-    m_lilyPaperSize->insertItem(i18n("Legal"));
-    m_lilyPaperSize->insertItem(i18n("do not specify"));
-    m_lilyPaperSize->setCurrentItem(m_cfg->readUnsignedNumEntry("lilypapersize", 1));
-    layout->addWidget(m_lilyPaperSize, 0, 1);
-
-    layout->addWidget(new QLabel(
-        i18n("Lilypond font size"), frame), 1, 0);
-
-    m_lilyFontSize = new KComboBox(frame);
-    m_lilyFontSize->insertItem("11");
-    m_lilyFontSize->insertItem("13");
-    m_lilyFontSize->insertItem("16");
-    m_lilyFontSize->insertItem("19");
-    m_lilyFontSize->insertItem("20");
-    m_lilyFontSize->insertItem("23");
-    m_lilyFontSize->insertItem("26");
-    m_lilyFontSize->setCurrentItem(m_cfg->readUnsignedNumEntry("lilyfontsize", 4));
-    layout->addWidget(m_lilyFontSize, 1, 1);
-
-    m_lilyExportHeaders = new QCheckBox(
-        i18n("Export Document Properties as \\header block"), frame);
-    m_lilyExportHeaders->setChecked(m_cfg->readBoolEntry("lilyexportheaders", true));
-    layout->addWidget(m_lilyExportHeaders, 2, 0);
-    
-    m_lilyExportLyrics = new QCheckBox(
-        i18n("Export \\lyric blocks"), frame);
-    m_lilyExportLyrics->setChecked(m_cfg->readBoolEntry("lilyexportlyrics", true));
-    layout->addWidget(m_lilyExportLyrics, 2, 1);
-
-    m_lilyExportUnmuted = new QCheckBox(
-        i18n("Do not export muted tracks"), frame);
-    m_lilyExportUnmuted->setChecked(m_cfg->readBoolEntry("lilyexportunmuted", false));
-    layout->addWidget(m_lilyExportUnmuted, 3, 0);
-
-    m_lilyExportMidi = new QCheckBox(
-        i18n("Export \\midi block"), frame);
-    m_lilyExportMidi->setChecked(m_cfg->readBoolEntry("lilyexportmidi", false));
-    layout->addWidget(m_lilyExportMidi, 3, 1);
-    
-    m_lilyExportPointAndClick = new QCheckBox(
-        i18n("Enable \"point and click\" debugging"), frame);
-    m_lilyExportPointAndClick->setChecked(m_cfg->readBoolEntry("lilyexportpointandclick", false));
-    layout->addWidget(m_lilyExportPointAndClick, 4, 0);
-
-    m_lilyExportBarChecks = new QCheckBox(
-        i18n("Write bar checks at end of measures"), frame);
-    m_lilyExportBarChecks->setChecked(m_cfg->readBoolEntry("lilyexportbarchecks", false));
-    layout->addWidget(m_lilyExportBarChecks, 5, 0);
-    
-    m_lilyExportBeams = new QCheckBox(
-        i18n("Export beamings"), frame);
-    m_lilyExportBeams->setChecked(m_cfg->readBoolEntry("lilyexportbeamings", false));
-    layout->addWidget(m_lilyExportBeams, 4, 1);
-    
-    addTab(frame, i18n("Lilypond"));  
 }
 
 void
@@ -704,17 +632,6 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("autobeam", m_autoBeam->isChecked());
     m_cfg->writeEntry("collapse", m_collapseRests->isChecked());
     m_cfg->writeEntry("pastetype", m_pasteType->currentItem());
-
-    // Lilypond (DMM)
-    m_cfg->writeEntry("lilypapersize", m_lilyPaperSize->currentItem());
-    m_cfg->writeEntry("lilyfontsize", m_lilyFontSize->currentItem());
-    m_cfg->writeEntry("lilyexportlyrics", m_lilyExportLyrics->isChecked());
-    m_cfg->writeEntry("lilyexportheader", m_lilyExportHeaders->isChecked());
-    m_cfg->writeEntry("lilyexportmidi", m_lilyExportMidi->isChecked());
-    m_cfg->writeEntry("lilyexportunmuted", m_lilyExportUnmuted->isChecked());
-    m_cfg->writeEntry("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
-    m_cfg->writeEntry("lilyexportbarchecks", m_lilyExportBarChecks->isChecked());
-    m_cfg->writeEntry("lilyexportbeamings", m_lilyExportBeams->isChecked());
 
     (void)m_quantizeFrame->getQuantizer(); // this also writes to the config
 }

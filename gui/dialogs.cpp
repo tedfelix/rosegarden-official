@@ -4200,7 +4200,7 @@ ManageMetronomeDialog::slotInstrumentChanged(int i)
     // populate instrument list
     Rosegarden::InstrumentList list = dev->getPresentationInstruments();
 
-    if (i < 0 || i >= list.size()) return;
+    if (i < 0 || i >= (int)list.size()) return;
 
     m_instrumentParameterBox->useInstrument(list[i]);
 }
@@ -4346,3 +4346,109 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
 	Rosegarden::StudioControl::sendMappedEvent(mE);
     }
 }
+
+
+LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent) :
+    KDialogBase(parent, 0, true, i18n("Lilypond Export"), Ok | Cancel)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+    
+    QGroupBox *optionBox = new QGroupBox
+	(1, Horizontal, i18n("Lilypond export options"), vbox);
+
+    KConfig *config = kapp->config();
+    config->setGroup(NotationView::ConfigGroup);
+
+    QFrame *frame = new QFrame(optionBox);
+    QGridLayout *layout = new QGridLayout(frame, 9, 2, 10, 5);
+
+    layout->addWidget(new QLabel(
+	i18n("Lilypond compatibility level"), frame), 0, 0);
+    
+    m_lilyLanguage = new KComboBox(frame);
+    m_lilyLanguage->insertItem(i18n("Up to 1.8"));
+    m_lilyLanguage->insertItem(i18n("2.0 and onwards"));
+    m_lilyLanguage->setCurrentItem(config->readUnsignedNumEntry("lilylanguage", 1));
+    layout->addWidget(m_lilyLanguage, 0, 1);
+
+    layout->addWidget(new QLabel(
+        i18n("Paper size to use in \\paper block"), frame), 1, 0);
+    
+    m_lilyPaperSize = new KComboBox(frame);
+    m_lilyPaperSize->insertItem(i18n("US Letter"));
+    m_lilyPaperSize->insertItem(i18n("A4"));
+    m_lilyPaperSize->insertItem(i18n("Legal"));
+    m_lilyPaperSize->insertItem(i18n("do not specify"));
+    m_lilyPaperSize->setCurrentItem(config->readUnsignedNumEntry("lilypapersize", 1));
+    layout->addWidget(m_lilyPaperSize, 1, 1);
+
+    layout->addWidget(new QLabel(
+        i18n("Lilypond font size"), frame), 2, 0);
+
+    m_lilyFontSize = new KComboBox(frame);
+    m_lilyFontSize->insertItem("11");
+    m_lilyFontSize->insertItem("13");
+    m_lilyFontSize->insertItem("16");
+    m_lilyFontSize->insertItem("19");
+    m_lilyFontSize->insertItem("20");
+    m_lilyFontSize->insertItem("23");
+    m_lilyFontSize->insertItem("26");
+    m_lilyFontSize->setCurrentItem(config->readUnsignedNumEntry("lilyfontsize", 4));
+    layout->addWidget(m_lilyFontSize, 2, 1);
+
+    m_lilyExportHeaders = new QCheckBox(
+        i18n("Export Document Properties as \\header block"), frame);
+    m_lilyExportHeaders->setChecked(config->readBoolEntry("lilyexportheaders", true));
+    layout->addWidget(m_lilyExportHeaders, 3, 0);
+    
+    m_lilyExportLyrics = new QCheckBox(
+        i18n("Export \\lyric blocks"), frame);
+    m_lilyExportLyrics->setChecked(config->readBoolEntry("lilyexportlyrics", true));
+    layout->addWidget(m_lilyExportLyrics, 3, 1);
+
+    m_lilyExportUnmuted = new QCheckBox(
+        i18n("Do not export muted tracks"), frame);
+    m_lilyExportUnmuted->setChecked(config->readBoolEntry("lilyexportunmuted", false));
+    layout->addWidget(m_lilyExportUnmuted, 4, 0);
+
+    m_lilyExportMidi = new QCheckBox(
+        i18n("Export \\midi block"), frame);
+    m_lilyExportMidi->setChecked(config->readBoolEntry("lilyexportmidi", false));
+    layout->addWidget(m_lilyExportMidi, 4, 1);
+    
+    m_lilyExportPointAndClick = new QCheckBox(
+        i18n("Enable \"point and click\" debugging"), frame);
+    m_lilyExportPointAndClick->setChecked(config->readBoolEntry("lilyexportpointandclick", false));
+    layout->addWidget(m_lilyExportPointAndClick, 5, 0);
+
+    m_lilyExportBarChecks = new QCheckBox(
+        i18n("Write bar checks at end of measures"), frame);
+    m_lilyExportBarChecks->setChecked(config->readBoolEntry("lilyexportbarchecks", false));
+    layout->addWidget(m_lilyExportBarChecks, 6, 0);
+    
+    m_lilyExportBeams = new QCheckBox(
+        i18n("Export beamings"), frame);
+    m_lilyExportBeams->setChecked(config->readBoolEntry("lilyexportbeamings", false));
+    layout->addWidget(m_lilyExportBeams, 5, 1);
+}
+
+void
+LilypondOptionsDialog::slotOk()
+{
+    KConfig *config = kapp->config();
+    config->setGroup(NotationView::ConfigGroup);
+
+    config->writeEntry("lilylanguage", m_lilyLanguage->currentItem());
+    config->writeEntry("lilypapersize", m_lilyPaperSize->currentItem());
+    config->writeEntry("lilyfontsize", m_lilyFontSize->currentItem());
+    config->writeEntry("lilyexportlyrics", m_lilyExportLyrics->isChecked());
+    config->writeEntry("lilyexportheader", m_lilyExportHeaders->isChecked());
+    config->writeEntry("lilyexportmidi", m_lilyExportMidi->isChecked());
+    config->writeEntry("lilyexportunmuted", m_lilyExportUnmuted->isChecked());
+    config->writeEntry("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
+    config->writeEntry("lilyexportbarchecks", m_lilyExportBarChecks->isChecked());
+    config->writeEntry("lilyexportbeamings", m_lilyExportBeams->isChecked());
+
+    accept();
+}
+
