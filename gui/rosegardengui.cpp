@@ -439,7 +439,7 @@ void RosegardenGUIApp::setupActions()
                                        actionCollection(),
                                        "show_previews");
 
-    new KAction(i18n("Show instrument & segment parameters"), 0, this,
+    new KAction(i18n("Show Se&gment and Instrument Parameters"), 0, this,
                 SLOT(slotDockParametersBack()),
                 actionCollection(),
                 "show_inst_segment_parameters");
