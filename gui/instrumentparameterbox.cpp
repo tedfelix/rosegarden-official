@@ -66,18 +66,18 @@ using Rosegarden::MidiDevice;
 InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
                                                QWidget *parent)
     : RosegardenParameterBox(1, Qt::Horizontal, i18n("Instrument Parameters"), parent),
-//      m_widgetStack(new QWidgetStack(this)),
-      m_widgetStack(0), //!!!
+     m_widgetStack(new QWidgetStack(this)),
+//       m_widgetStack(0), //!!!
       m_noInstrumentParameters(new QVBox(this)),
       m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(doc, this)),
       m_audioInstrumentParameters(new AudioInstrumentParameterPanel(doc, this)),
       m_selectedInstrument(0),
       m_doc(doc)
 {
-//!!!    m_widgetStack->setFont(getFont());
-    m_noInstrumentParameters->setFont(getFont());
-    m_midiInstrumentParameters->setFont(getFont());
-    m_audioInstrumentParameters->setFont(getFont());
+    m_widgetStack->setFont(getFont());
+//     m_noInstrumentParameters->setFont(getFont());
+//     m_midiInstrumentParameters->setFont(getFont());
+//     m_audioInstrumentParameters->setFont(getFont());
 
     bool contains = false;
 
@@ -94,9 +94,9 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
     QLabel *label = new QLabel(i18n("<no instrument>"), m_noInstrumentParameters);
     label->setAlignment(label->alignment() | Qt::AlignHCenter);
 
-//!!!    m_widgetStack->addWidget(m_midiInstrumentParameters);
-//    m_widgetStack->addWidget(m_audioInstrumentParameters);
-//    m_widgetStack->addWidget(m_noInstrumentParameters);
+    m_widgetStack->addWidget(m_midiInstrumentParameters);
+    m_widgetStack->addWidget(m_audioInstrumentParameters);
+    m_widgetStack->addWidget(m_noInstrumentParameters);
 
     m_midiInstrumentParameters->adjustSize();
     m_audioInstrumentParameters->adjustSize();
@@ -130,7 +130,7 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
 
 InstrumentParameterBox::~InstrumentParameterBox()
 {
-    // deregister this paramter box
+    // deregister this parameter box
     std::vector<InstrumentParameterBox*>::iterator it =
         instrumentParamBoxes.begin();
 
@@ -157,7 +157,7 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
 
     if (instrument == 0)
     {
-//!!!        m_widgetStack->raiseWidget(m_noInstrumentParameters);
+        m_widgetStack->raiseWidget(m_noInstrumentParameters);
 	m_audioInstrumentParameters->hide();
 	m_midiInstrumentParameters->hide();
 	if (m_noInstrumentParameters->isHidden()) 
@@ -172,23 +172,23 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
     //
     if (instrument->getType() == Instrument::Audio)
     {
-	m_noInstrumentParameters->hide();
-	m_midiInstrumentParameters->hide();
-        m_audioInstrumentParameters->setupForInstrument(m_selectedInstrument);
-	if (m_audioInstrumentParameters->isHidden())
-	    m_audioInstrumentParameters->show();
+// 	m_noInstrumentParameters->hide();
+// 	m_midiInstrumentParameters->hide();
+//         m_audioInstrumentParameters->setupForInstrument(m_selectedInstrument);
+// 	if (m_audioInstrumentParameters->isHidden())
+// 	    m_audioInstrumentParameters->show();
 
-//!!!        m_widgetStack->raiseWidget(m_audioInstrumentParameters);
+        m_widgetStack->raiseWidget(m_audioInstrumentParameters);
 
     } else { // Midi
 
-	m_noInstrumentParameters->hide();
-	m_audioInstrumentParameters->hide();
-        m_midiInstrumentParameters->setupForInstrument(m_selectedInstrument);
-	if (m_midiInstrumentParameters->isHidden())
-	    m_midiInstrumentParameters->show();
+// 	m_noInstrumentParameters->hide();
+// 	m_audioInstrumentParameters->hide();
+//         m_midiInstrumentParameters->setupForInstrument(m_selectedInstrument);
+// 	if (m_midiInstrumentParameters->isHidden())
+// 	    m_midiInstrumentParameters->show();
 
-//!!!        m_widgetStack->raiseWidget(m_midiInstrumentParameters);
+        m_widgetStack->raiseWidget(m_midiInstrumentParameters);
     }
     
 }
