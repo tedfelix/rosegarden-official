@@ -311,16 +311,6 @@ public slots:
     virtual void quit();
     
     /**
-     * undo
-     */
-//!!!    void editUndo();
-
-    /**
-     * redo
-     */
-//!!!    void editRedo();
-    
-    /**
      * put the marked text/object into the clipboard and remove * it
      * from the document
      */

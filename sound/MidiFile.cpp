@@ -791,16 +791,7 @@ MidiFile::convertToRosegarden()
                                            string("MIDI Instrument 1"));
 
     composition->addInstrument(instrument);
-
-
-    // set a tempo based on timing division or default
-    //
-//!!! No, divisor has nothing to do with tempo I think
-//    composition->setDefaultTempo((120 * crotchetTime) / divisor);
-
     return composition;
-
-
 }
 
 // Takes a Composition and turns it into internal MIDI representation

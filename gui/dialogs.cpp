@@ -79,13 +79,6 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     QHBox *numBox = new QHBox(vbox);
     QHBox *denomBox = new QHBox(vbox);
 
-/*!!!
-    QWidget *page = new QWidget(this);
-    setMainWidget(page);
-
-    QGridLayout *layout = new QGridLayout(page, 2, 3);
-*/
-
     BigArrowButton *numDown   = new BigArrowButton(numBox, Qt::LeftArrow);
     BigArrowButton *denomDown = new BigArrowButton(denomBox, Qt::LeftArrow);
 
@@ -107,15 +100,6 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     QObject::connect(numUp,     SIGNAL(pressed()), this, SLOT(slotNumUp()));
     QObject::connect(denomDown, SIGNAL(pressed()), this, SLOT(slotDenomDown()));
     QObject::connect(denomUp,   SIGNAL(pressed()), this, SLOT(slotDenomUp()));
-/*!!!
-    layout->addWidget(numDown,      0, 0);
-    layout->addWidget(m_numLabel,   0, 1);
-    layout->addWidget(numUp,        0, 2);
-    
-    layout->addWidget(denomDown,    1, 0);
-    layout->addWidget(m_denomLabel, 1, 1);
-    layout->addWidget(denomUp,      1, 2);
-*/
 }
 
 void

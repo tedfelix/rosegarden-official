@@ -209,56 +209,9 @@ XmlStorableEvent::toXmlString(timeT expectedTime) const
 	    .arg((*i).c_str())
 	    .arg(QString(getPropertyType(*i).c_str()).lower())
 	    .arg(getAsString(*i).c_str());
-
-//        res += QString(" %1=\"%2\"")
-//            .arg((*i).c_str())
-//            .arg(getAsString(*i).c_str());
     }
   
     res += "</event>";
-//    res += "/>";
     return res;
 }
 
-/*!!!
-QString
-XmlStorableEvent::toXmlString(const Event &e, timeT expectedTime)
-{
-    QString res = "<event";
-
-    if (e.getType().length())
-        res += QString(" type=\"%1\"").arg(e.getType().c_str());
-
-    if (e.getDuration() != 0) {
-	res += QString(" duration=\"%1\"").arg(e.getDuration());
-    }
-
-    if (e.getSubOrdering() != 0) {
-        res += QString(" subordering=\"%1\"").arg(e.getSubOrdering());
-    }
-
-    if (includeAbsoluteTime) {
-	res += QString(" absoluteTime=\"%1\"").arg(e.getAbsoluteTime());
-    }
-
-    res += ">";
-
-    PropertyNames propertyNames(e.getPersistentPropertyNames());
-    for (PropertyNames::const_iterator i = propertyNames.begin();
-         i != propertyNames.end(); ++i) {
-
-	res += QString("<property name=\"%1\" %2=\"%3\"/>")
-	    .arg((*i).c_str())
-	    .arg(QString(e.getPropertyType(*i).c_str()).lower())
-	    .arg(e.getAsString(*i).c_str());
-
-//        res += QString(" %1=\"%2\"")
-//            .arg((*i).c_str())
-//            .arg(e.getAsString(*i).c_str());
-    }
-    
-    res += "</event>";
-//    res += "/>";
-    return res;
-}
-*/

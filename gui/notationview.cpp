@@ -949,23 +949,27 @@ bool NotationView::applyLayout(int staffNo)
 
     // find the last finishing staff for future use
 
-    timeT endTime = -1; //!!! change this: -1 is valid now
+    timeT endTime = 0;
+    bool haveEndTime = false;
     m_lastFinishingStaff = -1;
 
+    timeT startTime = 0;
+    bool haveStartTime = false;
     int firstStartingStaff = -1;
-    timeT startTime = -1; //!!! likewise
 
     for (i = 0; i < m_staffs.size(); ++i) {
 
 	timeT thisStartTime = m_staffs[i]->getSegment().getStartIndex();
-	if (thisStartTime < startTime || startTime == -1) {
+	if (thisStartTime < startTime || !haveStartTime) {
 	    startTime = thisStartTime;
+	    haveStartTime = true;
 	    firstStartingStaff = i;
 	}
 
         timeT thisEndTime = m_staffs[i]->getSegment().getEndIndex();
-        if (thisEndTime > endTime) {
+        if (thisEndTime > endTime || !haveEndTime) {
             endTime = thisEndTime;
+	    haveEndTime = true;
             m_lastFinishingStaff = i;
         }
     }

@@ -94,6 +94,8 @@ public:
 		     int firstBarNo, double origin, double unitsPerPixel);
     virtual ~SimpleRulerScale();
 
+    Rosegarden::Composition *getComposition() { return m_composition; }
+
     int    getFirstBarNumber() { return m_firstBar; }
     void   setFirstBarNumber(int firstBar) { m_firstBar = firstBar; }
     

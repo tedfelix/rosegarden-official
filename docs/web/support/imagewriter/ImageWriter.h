@@ -7,7 +7,7 @@
    Failures are generally catastrophic, we're not attempting to return
    anything meaningful, throw exceptions &c -- we complain and exit(1) */
 
-/* Requires gd-1.7 (which needs libpng & zlib) and libttf from Freetype 1.2 */
+/* Currently uses gd-2.0.1 (which needs libpng & zlib) and Freetype 2.0 */
 
 
 class ImageWriter

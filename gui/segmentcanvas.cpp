@@ -27,39 +27,87 @@
 
 #include "segmentcanvas.h"
 #include "Segment.h"
+#include "Composition.h"
+#include "NotationTypes.h"
 
 #include "rosedebug.h"
 #include "colours.h"
+#include "rulerscale.h"
+
+#include <cassert>
 
 using Rosegarden::Segment;
+using Rosegarden::Note;
 
 //////////////////////////////////////////////////////////////////////
 //                SegmentItem
 //////////////////////////////////////////////////////////////////////
 
-SegmentItem::SegmentItem(int x, int y,
-                     int nbSteps,
-                     QCanvas* canvas)
-    : QCanvasRectangle(x, y,
-                       nbBarsToWidth(nbSteps), m_itemHeight,
-                       canvas),
-      m_segment(0),
-      m_selected(false)
+SegmentItem::SegmentItem(int y, timeT startTime, timeT duration,
+			 double unitsPerPixel, QCanvas *canvas) :
+    QCanvasRectangle((double)startTime / unitsPerPixel, y, 
+		     (double)duration / unitsPerPixel, m_itemHeight, canvas),
+    m_segment(0),
+    m_startTime(startTime),
+    m_duration(duration),
+    m_selected(false),
+    m_unitsPerPixel(unitsPerPixel)
 {
+    // nothing else
 }
 
-int SegmentItem::getItemNbBars() const
+SegmentItem::SegmentItem(int y, Segment *segment,
+			 double unitsPerPixel, QCanvas *canvas) :
+    QCanvasRectangle((double)segment->getStartIndex() / unitsPerPixel, y,
+		     (double)segment->getDuration() / unitsPerPixel,
+		     m_itemHeight, canvas),
+    m_segment(segment),
+    m_startTime(segment->getStartIndex()),
+    m_duration(segment->getDuration()),
+    m_selected(false),
+    m_unitsPerPixel(unitsPerPixel)
 {
-    kdDebug(KDEBUG_AREA) << "SegmentItem::getItemNbBars() : "
-                         << rect().width() / m_widthToDurationRatio
-                         << endl;
-
-    return widthToNbBars(width());
+    // nothing else 
 }
 
-int SegmentItem::getStartBar() const
+Segment *
+SegmentItem::getSegment() const
 {
-    return (int)(x() / m_widthToDurationRatio * m_barResolution);
+    return m_segment;
+}
+
+void
+SegmentItem::setSegment(Segment *segment)
+{
+    m_segment = segment;
+
+    m_startTime = segment->getStartIndex();
+    m_duration = segment->getDuration();
+
+    setX((double)m_startTime / m_unitsPerPixel);
+    setSize((double)m_duration / m_unitsPerPixel, height());
+}
+
+void
+SegmentItem::setStartTime(timeT t)
+{
+    m_startTime = t;
+    setX((double)m_startTime / m_unitsPerPixel);
+}
+
+void
+SegmentItem::setDuration(timeT d)
+{
+    m_duration = d;
+    setSize((double)m_duration / m_unitsPerPixel, height());
+}
+
+void
+SegmentItem::setUnitsPerPixel(double upp)
+{
+    m_unitsPerPixel = upp;
+    setX((double)m_startTime / m_unitsPerPixel);
+    setSize((double)m_duration / m_unitsPerPixel, height());
 }
 
 int SegmentItem::getTrack() const
@@ -67,41 +115,9 @@ int SegmentItem::getTrack() const
     return m_segment->getTrack();
 }
 
-void SegmentItem::setTrack(int t)
-{
-    m_segment->setTrack(t);
-}
-
-void SegmentItem::setWidthToDurationRatio(unsigned int r)
-{
-    m_widthToDurationRatio = r;
-}
-
-void SegmentItem::setBarResolution(unsigned int r)
-{
-    m_barResolution = r;
-}
-
-unsigned int SegmentItem::getBarResolution()
-{
-    return m_barResolution;
-}
-
 void SegmentItem::setItemHeight(unsigned int h)
 {
     m_itemHeight = h;
-}
-
-unsigned int SegmentItem::nbBarsToWidth(unsigned int nbBars)
-{
-    if (nbBars < m_barResolution) nbBars = m_barResolution;
-
-    return nbBars * m_widthToDurationRatio / m_barResolution;
-}
-
-unsigned int SegmentItem::widthToNbBars(unsigned int width)
-{
-    return width * m_barResolution / m_widthToDurationRatio;
 }
 
 // Set this SegmentItem as selected/highlighted - we send
@@ -114,11 +130,6 @@ SegmentItem::setSelected(const bool &select, const QBrush &brush)
     m_selected = select;
 }
 
-
-
-
-unsigned int SegmentItem::m_widthToDurationRatio = 1;
-unsigned int SegmentItem::m_barResolution = 1;
 unsigned int SegmentItem::m_itemHeight = 10;
 
 
@@ -128,12 +139,12 @@ unsigned int SegmentItem::m_itemHeight = 10;
 //////////////////////////////////////////////////////////////////////
 
 
-SegmentCanvas::SegmentCanvas(int gridH, int gridV,
-                           QCanvas& c, QWidget* parent,
-                           const char* name, WFlags f) :
-    QCanvasView(&c,parent,name,f),
+SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, int vStep,
+			     QCanvas& c, QWidget* parent,
+			     const char* name, WFlags f) :
+    QCanvasView(&c, parent, name, f),
     m_tool(0),
-    m_grid(gridH, gridV),
+    m_grid(dynamic_cast<SimpleRulerScale *>(rulerScale), vStep),
     m_brush(RosegardenGUIColours::SegmentBlock),
     m_highlightBrush(RosegardenGUIColours::SegmentHighlightBlock),
     m_pen(RosegardenGUIColours::SegmentBorder),
@@ -142,9 +153,7 @@ SegmentCanvas::SegmentCanvas(int gridH, int gridV,
 {
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
 
-    SegmentItem::setWidthToDurationRatio(m_grid.hstep());
-    SegmentItem::setItemHeight(m_grid.vstep());
-
+    SegmentItem::setItemHeight(vStep);
 }
 
 SegmentCanvas::~SegmentCanvas()
@@ -190,17 +199,15 @@ SegmentCanvas::setTool(ToolType t)
 }
 
 SegmentItem*
-SegmentCanvas::findPartClickedOn(QPoint pos)
+SegmentCanvas::findSegmentClickedOn(QPoint pos)
 {
     QCanvasItemList l=canvas()->collisions(pos);
 
     if (l.count()) {
-
         for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
             if (SegmentItem *item = dynamic_cast<SegmentItem*>(*it))
                 return item;
         }
-
     }
 
     return 0;
@@ -220,7 +227,7 @@ void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
 
     } else if (e->button() == RightButton) { // popup menu if over a part
 
-        SegmentItem *item = findPartClickedOn(e->pos());
+        SegmentItem *item = findSegmentClickedOn(e->pos());
 
         if (item) {
             m_currentItem = item;
@@ -233,7 +240,6 @@ void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
                 m_editMenu->clear();
                 m_editMenu->insertItem(i18n("Edit Audio"),
                                        this, SLOT(onEditAudio()));
-
             }
             else
             {
@@ -252,7 +258,7 @@ void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
 
 void SegmentCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
 {
-    SegmentItem *item = findPartClickedOn(e->pos());
+    SegmentItem *item = findSegmentClickedOn(e->pos());
 
     if (item) {
         m_currentItem = item;
@@ -296,34 +302,38 @@ void SegmentCanvas::clear()
     }
 }
 
-// Called when reading a music file or after we've finished recording
-// a new Segment
-//
-SegmentItem*
-SegmentCanvas::addPartItem(int x, int y, unsigned int nbBars)
+SegmentItem *
+SegmentCanvas::addSegmentItem(int y, timeT startTime, timeT duration)
 {
-    SegmentItem* newPartItem = new SegmentItem(x, y, nbBars, canvas());
+    SegmentItem* newItem = new SegmentItem
+	(y, startTime, duration, m_grid.getUnitsPerPixel(), canvas());
 
-    newPartItem->setPen(m_pen);
-    newPartItem->setBrush(m_brush);
-    newPartItem->setVisible(true);     
-    newPartItem->setZ(1);           // Segment at Z=1, Pointer at Z=10 [rwb]
+    newItem->setPen(m_pen);
+    newItem->setBrush(m_brush);
+    newItem->setVisible(true);     
+    newItem->setZ(1);           // Segment at Z=1, Pointer at Z=10 [rwb]
 
-    return newPartItem;
+    return newItem;
 }
 
 void
-SegmentCanvas::showRecordingSegmentItem(int x, int y, int width)
+SegmentCanvas::showRecordingSegmentItem(int y, timeT startTime, timeT duration)
 {
+    //!!! I think it'd be highly advisable to make the recording
+    // segment item a real SegmentItem rather than just a rectangle
+
+    double startX = startTime / m_grid.getUnitsPerPixel();
+    double endX = (startTime + duration) / m_grid.getUnitsPerPixel();
+
     if(m_recordingSegment)
     {
-        m_recordingSegment->setSize(width, m_grid.vstep());
+	m_recordingSegment->move(startX, y);
+        m_recordingSegment->setSize(endX - startX, m_grid.getYSnap());
     }
     else
     {
-        m_recordingSegment = new QCanvasRectangle(x, y, width,
-                                                  m_grid.vstep(),
-                                                  canvas());
+        m_recordingSegment = new QCanvasRectangle
+	    (startX, y, endX - startX, m_grid.getYSnap(), canvas());
 
         m_recordingSegment->
             setPen(RosegardenGUIColours::RecordingSegmentBorder);
@@ -431,24 +441,93 @@ SegmentCanvas::setSelectCopy(const bool &value)
 }
 
 
-int
-SegmentCanvas::SnapGrid::snappedSegmentSizeX(int x) const
+//////////////////////////////////////////////////////////////////////
+//                 SnapGrid
+//////////////////////////////////////////////////////////////////////
+
+const timeT SegmentCanvas::SnapGrid::NoSnap     = -3;
+const timeT SegmentCanvas::SnapGrid::SnapToBar  = -2;
+const timeT SegmentCanvas::SnapGrid::SnapToBeat = -1;
+
+SegmentCanvas::SnapGrid::SnapGrid(SimpleRulerScale *rulerScale, int vstep) :
+    m_rulerScale(rulerScale),
+    m_snapTime(SnapToBeat),
+    m_vstep(vstep)
 {
-    //!!! just as for snapX below
-    int division = m_hstep;
-    int base = x / division * division;
-    if (x - base <= division / 2) return base;
-    else return base + division;
+    // nothing else 
 }
 
-int 
-SegmentCanvas::SnapGrid::snapX(int x) const
+void
+SegmentCanvas::SnapGrid::setSnapTime(timeT snap)
 {
-//    return x / m_hdiv * m_hdiv; //!!! the following seems to me more responsive for dragging new segments:
-    int division = m_hdiv;
-    int base = x / division * division;
-    if (x - base <= division / 2) return base;
-    else return base + division;
+    assert(snap > 0 ||
+	   snap == NoSnap ||
+	   snap == SnapToBar ||
+	   snap == SnapToBeat);
+    m_snapTime = snap;
+}
+
+timeT
+SegmentCanvas::SnapGrid::getSnapTime(double x) const
+{
+    if (m_snapTime == NoSnap) return 0;
+    timeT time = m_rulerScale->getTimeForX(x);
+
+    Rosegarden::Composition *composition = m_rulerScale->getComposition();
+    int barNo = composition->getBarNumber(time, false);
+    std::pair<timeT, timeT> barRange = composition->getBarRange(barNo, false);
+
+    timeT snapTime = barRange.second - barRange.first;
+
+    if (m_snapTime == SnapToBeat) {
+	snapTime = composition->getTimeSignatureAt(time).getBeatDuration();
+    } else if (m_snapTime != SnapToBar && m_snapTime < snapTime) {
+	snapTime = m_snapTime;
+    }
+
+    kdDebug(KDEBUG_AREA) << "SnapGrid: snap time is " << snapTime << endl;
+    return snapTime;
+}
+
+timeT
+SegmentCanvas::SnapGrid::snapX(double x) const
+{
+    timeT time = m_rulerScale->getTimeForX(x);
+    if (m_snapTime == NoSnap) return time;
+
+    Rosegarden::Composition *composition = m_rulerScale->getComposition();
+    int barNo = composition->getBarNumber(time, false);
+    std::pair<timeT, timeT> barRange = composition->getBarRange(barNo, false);
+
+    timeT snapTime = barRange.second - barRange.first;
+
+    if (m_snapTime == SnapToBeat) {
+	snapTime = composition->getTimeSignatureAt(time).getBeatDuration();
+    } else if (m_snapTime != SnapToBar && m_snapTime < snapTime) {
+	snapTime = m_snapTime;
+    }
+
+    timeT offset = (time - barRange.first);
+    timeT rounded = (offset / snapTime) * snapTime;
+
+    timeT snapped;
+    if ((offset - rounded) > (rounded + snapTime - offset)) {
+	snapped = rounded + snapTime + barRange.first;
+    } else {
+	snapped = rounded + barRange.first;
+    }
+
+    kdDebug(KDEBUG_AREA) << "SnapGrid: before: " << x << " = " << time << "; after: " << snapped << endl;
+    return snapped;
+}
+	
+double
+SegmentCanvas::SnapGrid::getUnitsPerPixel() const
+{
+    // requires a SimpleRulerScale, not just a RulerScale -- which
+    // is quite correct, as SegmentItem requires x-coordinate to be
+    // strictly proportional to time, just as in SimpleRulerScale
+    return m_rulerScale->getUnitsPerPixel();
 }
 
 int
@@ -456,8 +535,6 @@ SegmentCanvas::SnapGrid::snapY(int y) const
 {
     return y / m_vstep * m_vstep;
 }
-
-
 
 
 //////////////////////////////////////////////////////////////////////
@@ -503,7 +580,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     // Check if we're clicking on a rect
     //
-    SegmentItem *item = m_canvas->findPartClickedOn(e->pos());
+    SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
 
     if (item) {
         // we are, so set currentItem to it
@@ -512,29 +589,26 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     } else { // we are not, so create one
 
-        int gx = m_canvas->grid().snappedSegmentSizeX(e->pos().x()),
-            gy = m_canvas->grid().snapY(e->pos().y());
+	int y = m_canvas->grid().snapY(e->pos().y());
+	timeT time = m_canvas->grid().snapX(e->pos().x());
+//	timeT duration = m_canvas->grid().snapWidth(0);
+	timeT duration = m_canvas->grid().getSnapTime(e->pos().x());
+	if (duration == 0) duration = Note(Note::Shortest).getDuration();
 
-        m_currentItem = new SegmentItem(gx, gy,
-                                      SegmentItem::getBarResolution(),
-                                      m_canvas->canvas());
-        
-        m_currentItem->setPen(m_canvas->pen());
-        m_currentItem->setBrush(m_canvas->brush());
-        m_currentItem->setVisible(true);
-        m_currentItem->setZ(1);          // Segment at Z=1, Pointer at Z=10 [rwb]
-
+	m_currentItem = m_canvas->addSegmentItem(y, time, duration);
         m_newRect = true;
 
         m_canvas->update();
     }
-
 }
 
 void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
 {
     if (!m_currentItem) return;
+//!!!    m_currentItem->normalize();
 
+
+/*!!!
     if (m_currentItem->width() < 0) { // segment was drawn from right to left
         double itemX = m_currentItem->x();
         double itemW = m_currentItem->width();
@@ -549,8 +623,8 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
                              << " - width : " << m_currentItem->width()
                              << endl;
     }
-    
-
+*/
+/*
     if (m_currentItem->width() == 0 && ! m_newRect) {
 
         kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMouseReleaseEvent() : segment deleted"
@@ -559,11 +633,11 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
         delete m_currentItem;
         m_canvas->canvas()->update();
 
-    } else if (m_newRect && m_currentItem->width() > 0) {
+	} else*/ if (m_newRect /*&& m_currentItem->width() > 0*/) {
 
         emit addSegment(m_currentItem);
 
-    } else if (m_currentItem->width() > 0) {
+	} else /* if (m_currentItem->width() > 0)*/ {
 
         kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMouseReleaseEvent() : shorten m_currentItem = "
                              << m_currentItem << endl;
@@ -577,8 +651,29 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
 
 void SegmentPencil::handleMouseMove(QMouseEvent *e)
 {
-    if (m_currentItem) {
+    if (!m_currentItem) return;
 
+    timeT time = m_canvas->grid().snapX(e->pos().x());
+
+    if (time < m_currentItem->getStartTime()) {
+
+	timeT duration = m_currentItem->getDuration() +
+	    (m_currentItem->getStartTime() - time);
+	m_currentItem->setStartTime(time);
+	m_currentItem->setDuration(duration);
+
+    } else {
+	timeT duration = time - m_currentItem->getStartTime();
+	m_currentItem->setDuration(duration);
+    }
+
+    timeT snap = m_canvas->grid().getSnapTime(e->pos().x());
+    if (snap == 0) snap = Note(Note::Shortest).getDuration();
+    if (m_currentItem->getDuration() < snap) {
+	m_currentItem->setDuration(snap);
+    }
+
+/*
 	int width = m_canvas->grid().snapX(e->pos().x()) -
 	    m_currentItem->rect().x();
 	if ((width >= 0) && (width < SegmentItem::getBarResolution())) {
@@ -586,8 +681,9 @@ void SegmentPencil::handleMouseMove(QMouseEvent *e)
 	}
 
 	m_currentItem->setSize(width, m_currentItem->height());
-	m_canvas->canvas()->update();
-    }
+*/
+
+    m_canvas->canvas()->update();
 }
 
 //////////////////////////////
@@ -607,7 +703,7 @@ SegmentEraser::SegmentEraser(SegmentCanvas *c)
 
 void SegmentEraser::handleMouseButtonPress(QMouseEvent *e)
 {
-    m_currentItem = m_canvas->findPartClickedOn(e->pos());
+    m_currentItem = m_canvas->findSegmentClickedOn(e->pos());
 }
 
 void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
@@ -640,7 +736,7 @@ SegmentMover::SegmentMover(SegmentCanvas *c)
 
 void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 {
-    SegmentItem *item = m_canvas->findPartClickedOn(e->pos());
+    SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
 
     if (item) {
         m_currentItem = item;
@@ -659,7 +755,9 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 void SegmentMover::handleMouseMove(QMouseEvent *e)
 {
     if (m_currentItem) {
-        m_currentItem->setX(m_canvas->grid().snapX(e->pos().x()));
+	//!!! as SegmentSelector::handleMouseMove -- move into SegmentItem
+//        m_currentItem->setX(m_canvas->grid().snapX(e->pos().x()));
+	m_currentItem->setStartTime(m_canvas->grid().snapX(e->pos().x()));
         m_currentItem->setY(m_canvas->grid().snapY(e->pos().y()));
         m_canvas->canvas()->update();
     }
@@ -686,7 +784,7 @@ SegmentResizer::SegmentResizer(SegmentCanvas *c)
 
 void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 {
-    SegmentItem* item = m_canvas->findPartClickedOn(e->pos());
+    SegmentItem* item = m_canvas->findSegmentClickedOn(e->pos());
 
     if (item && cursorIsCloseEnoughToEdge(item, e)) {
         m_currentItem = item;
@@ -696,14 +794,7 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 {
     if (!m_currentItem) return;
-
-    unsigned int newNbBars = m_currentItem->getItemNbBars();
-
-    kdDebug(KDEBUG_AREA) << "SegmentResizer: set segment nb bars to "
-                         << newNbBars << endl;
-    
     emit setSegmentDuration(m_currentItem);
-
     m_currentItem = 0;
 }
 
@@ -711,10 +802,32 @@ void SegmentResizer::handleMouseMove(QMouseEvent *e)
 {
     if (!m_currentItem) return;
 
-    // change width only
+    //!!! as SegmentPencil::handleMouseMove
+    //!!! move into SegmentItem
 
-    m_currentItem->setSize(m_canvas->grid().snapX(e->pos().x()) - m_currentItem->rect().x(),
-                           m_currentItem->rect().height());
+    timeT time = m_canvas->grid().snapX(e->pos().x());
+
+    if (time < m_currentItem->getStartTime()) {
+
+	timeT duration = m_currentItem->getDuration() +
+	    (m_currentItem->getStartTime() - time);
+	m_currentItem->setStartTime(time);
+	m_currentItem->setDuration(duration);
+
+    } else {
+	timeT duration = time - m_currentItem->getStartTime();
+	m_currentItem->setDuration(duration);
+    }
+
+    timeT snap = m_canvas->grid().getSnapTime(e->pos().x());
+    if (snap == 0) snap = Note(Note::Shortest).getDuration();
+    if (m_currentItem->getDuration() < snap) {
+	m_currentItem->setDuration(snap);
+    }
+
+
+//!!!    m_currentItem->setSize(m_canvas->grid().snapX(e->pos().x()) - m_currentItem->rect().x(),
+//                           m_currentItem->rect().height());
     
     m_canvas->canvas()->update();
     
@@ -773,7 +886,7 @@ SegmentSelector::clearSelected()
 void
 SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 {
-    SegmentItem *item = m_canvas->findPartClickedOn(e->pos());
+    SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
 
     // If we're in segmentAddMode then we don't clear the
     // selection list
@@ -832,8 +945,8 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
                      it != m_selectedItems.end();
                      it++)
                 {
-
-                    (*it)->setX(m_canvas->grid().snapX(e->pos().x()));
+//                    (*it)->setX(m_canvas->grid().snapX(e->pos().x()));
+		    (*it)->setStartTime(m_canvas->grid().snapX(e->pos().x()));
                     (*it)->setY(m_canvas->grid().snapY(e->pos().y()));
                     m_canvas->canvas()->update();
                     emit updateSegmentTrackAndStartIndex(*it);

@@ -284,6 +284,10 @@ Composition::addSegment(Segment *segment)
     segment->addObserver(this);
     segment->setComposition(this);
 
+    if (segment->getEndIndex() > m_barSegment.getDuration()) {
+	m_barPositionsNeedCalculating = true;
+    }
+
     std::cerr << "Composition::addSegment: added segment, now have "
 	      << m_segments.size() << " segments" << std::endl;
 
@@ -343,8 +347,9 @@ Composition::setSegmentStartIndexAndTrack(Segment *s, timeT t, unsigned int trac
 
     m_segments.insert(s);
 
-    // actually only true if we changed the effective end of the composition:
-    m_barPositionsNeedCalculating = true;
+    if (s->getEndIndex() > m_barSegment.getDuration()) {
+	m_barPositionsNeedCalculating = true;
+    }
 
     return true;
 }

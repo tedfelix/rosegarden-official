@@ -155,7 +155,10 @@ NotePixmapFactory::getDefaultFont()
 {
     set<string> fontNames = getAvailableFontNames();
     if (fontNames.find("feta") != fontNames.end()) return "feta";
-    else if (fontNames.size() == 0) throw -1; //!!!
+    else if (fontNames.size() == 0) {
+	cerr << "ERROR: NotePixmapFactory::getDefaultFont: No font names available" << endl;
+	throw -1;
+    }
     else return *fontNames.begin();
 }
 
@@ -330,7 +333,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     }
 
     if (params.m_tied) {
-        m_right = std::max(m_right, params.m_tieLength/*!!! - m_noteBodyWidth/2*/);
+        m_right = std::max(m_right, params.m_tieLength);
         if (params.m_stemGoesUp) {
             m_below = std::max(m_below, m_noteBodyHeight * 2);
         } else {
@@ -840,7 +843,7 @@ NotePixmapFactory::drawTie(bool above, int length)
     int tieThickness = getStaffLineThickness() * 2;
     int tieCurve = m_font->getCurrentSize() * 2 / 3;
     int height = tieCurve + tieThickness;
-    int x = m_left + m_noteBodyWidth /*!!! / 2*/;
+    int x = m_left + m_noteBodyWidth;
     int y = (above ? m_above - height - tieCurve/2 :
                      m_above + m_noteBodyHeight + tieCurve/2 + 1);
     int i;

@@ -30,6 +30,8 @@
 
 using Rosegarden::timeT;
 namespace Rosegarden { class Segment; }
+class RulerScale;
+class SimpleRulerScale;
 
 
 /**
@@ -39,85 +41,74 @@ namespace Rosegarden { class Segment; }
 class SegmentItem : public QCanvasRectangle
 {
 public:
-    /**
-     * Create a new segment item
-     *
-     * The item will be at coordinates \a x, \a y, representing a time
-     * segment of \a nbSteps time steps.
-     */
-
     static const int SegmentItemRTTI = 1001;
 
-    SegmentItem(int x, int y, int nbSteps, QCanvas* canvas);
+    /**
+     * Create a new segment item without an associated segment (yet)
+     */
+    SegmentItem(int y, timeT startTime, timeT duration, double unitsPerPixel,
+		QCanvas* canvas);
 
-    /// Return the nb of bars the item represents
-    int getItemNbBars() const;
+    /**
+     * Create a new segment item with an associated segment
+     */
+    SegmentItem(int y, Rosegarden::Segment *segment, double unitsPerPixel,
+		QCanvas* canvas);
 
-    /// Return the number of the bar at which the item's segment starts
-    int getStartBar() const;
+    /// Return the item's associated segment 
+    Rosegarden::Segment* getSegment() const;
+
+    /// Set the segment this SegmentItem will represent
+    void setSegment(Rosegarden::Segment *s);
+
+    timeT getStartTime() const { return m_startTime; }
+    void setStartTime(timeT t);
+
+    timeT getDuration() const { return m_duration; }
+    void setDuration(timeT d);
+    
+    /**
+     * Modify start time and duration so as to maintain dimensions
+     * while ensuring duration is positive.  (Negative duration is
+     * fine for a SegmentItem but not for a Segment.)  Should only
+     * be called on a SegmentItem that has no Segment yet.
+     */
+//!!!    void normalize();
+
+    double getUnitsPerPixel() const { return m_unitsPerPixel; }
+    void setUnitsPerPixel(double upp);
 
     /// Return the track for the item's segment
     int getTrack() const;
 
-    /// Set the track for the item's segment
-    void setTrack(int t);
-
-    /// Set the segment this SegmentItem will represent
-    void setSegment(Rosegarden::Segment *p)  { m_segment = p; }
-
-    /// Return the item's associated segment 
-    Rosegarden::Segment* getSegment() const  { return m_segment; }
-
-    /// Set the width to duration ratio for all SegmentItem objects
-    static void setWidthToDurationRatio(unsigned int);
-
-    /// Set the resolution in bars for all new SegmentItem objects
-    static void setBarResolution(unsigned int);
-
-    /// Return the bar resolution used by all SegmentItem objects
-    static unsigned int getBarResolution();
-
     /// Set the height of all new SegmentItem objects
     static void setItemHeight(unsigned int);
 
-    /**
-     * Helper function to convert a number of bars to a width in
-     * pixels
-     */
-    static unsigned int nbBarsToWidth(unsigned int);
-    /**
-     * Helper function to convert a width in pixels to a number of
-     * bars
-     */
-    static unsigned int widthToNbBars(unsigned int);
+    bool const isSelected() { return m_selected; }
 
     // Select this SegmentItem
-    //
-    bool const isSelected() { return m_selected; }
     void setSelected(const bool &select, const QBrush &highlightBrush);
 
     virtual int rtti() const { return SegmentItemRTTI; }
     
 protected:
+    Rosegarden::Segment *m_segment;
 
-    //--------------- Data members ---------------------------------
-
-    int m_instrument;
-
-    Rosegarden::Segment* m_segment;
-
-    static unsigned int m_widthToDurationRatio;
-    static unsigned int m_barResolution;
-    static unsigned int m_itemHeight;
-
+    // We need to duplicate these from the segment, because we
+    // frequently want to create SegmentItems before their
+    // associated Segments
+    timeT m_startTime;
+    timeT m_duration;
     bool m_selected;
+    double m_unitsPerPixel;
 
+    static unsigned int m_itemHeight;
 };
 
 class SegmentTool;
 
 /**
- * A class to visualize and edit segment parts
+ * A class to visualize and edit segment items
  *
  * A coordinate grid is used to align SegmentItem objects, which can be
  * manipulated with a set of tools : pencil, eraser, mover, resizer.
@@ -134,17 +125,14 @@ class SegmentCanvas : public QCanvasView
 public:
     /// Available tools
     enum ToolType { NoTool, Pencil, Eraser, Mover, Resizer, Selector };
-    
-    SegmentCanvas(int gridH, int gridV,
-                 QCanvas&,
-                 QWidget* parent=0, const char* name=0, WFlags f=0);
+
+    // ruler scale must be a SimpleRulerScale, in fact
+    SegmentCanvas(RulerScale *, int vStep, QCanvas&,
+		  QWidget* parent=0, const char* name=0, WFlags f=0);
     ~SegmentCanvas();
 
     /// Remove all items
     void clear();
-
-    /// Return the horizontal step of the coordinate grid
-    unsigned int gridHStep() const { return m_grid.hstep(); }
 
     /**
      * The coordinate grid used to align SegmentItem objects
@@ -152,29 +140,55 @@ public:
     class SnapGrid
     {
     public:
-        SnapGrid(unsigned int hstep, unsigned int vstep)
-            : m_hstep(hstep), m_vstep(vstep), m_hdiv(hstep / 1) // disabled
-        {}
+        SnapGrid(SimpleRulerScale *rulerScale,
+		 int vstep);
 
-        // We provide two methods for getting X snap - one for
-        // actual new Segment size (as provided by m_hstep) -
-        // and one to allow us to change the X snap division
-        // (to allow for smaller than m_hstep movement)
-        //
-        int snappedSegmentSizeX(int x) const;
+	static const timeT NoSnap;
+	static const timeT SnapToBar;
+	static const timeT SnapToBeat;
 
-        int snapX(int x) const;
-        int snapY(int y) const;
+	/**
+	 * Set the snap size of the grid to the given time.
+	 * The snap time must be positive, or else one of the
+	 * special constants NoSnap, SnapToBar or SnapToBeat.
+	 * The default is SnapToBeat.
+	 */
+	void setSnapTime(timeT snap);
 
-        unsigned int hstep() const { return m_hstep; }
-        unsigned int vstep() const { return m_vstep; }
+	/**
+	 * Return the snap size of the grid, at the given
+	 * x-coordinate.  (The x-coordinate is required in
+	 * case the built-in snap size is SnapToBar or
+	 * SnapToBeat, in which case we need to know the
+	 * current time signature.)
+	 * Returns zero for NoSnap.
+	 */
+	timeT getSnapTime(double x) const;
+
+	/**
+	 * Snap a given x-coordinate to the nearest time on
+	 * the grid.  Of course this also does x-to-time
+	 * conversion, so it's useful even in NoSnap mode.
+	 * If the snap time is greater than the bar duration
+	 * at this point, the bar duration will be used instead.
+	 */
+        timeT snapX(double x) const;
+
+	/**
+	 * Snap a given y-coordinate to the nearest lower
+	 * multiple of the vstep.
+	 */
+	int snapY(int y) const;
+
+	int getYSnap() const { return m_vstep; }
+
+	double getUnitsPerPixel() const;
 
     protected:
-        unsigned int m_hstep;
-        unsigned int m_vstep;
-        unsigned int m_hdiv;
+	SimpleRulerScale *m_rulerScale; // I don't own this
+	timeT m_snapTime;
+	int m_vstep;
     };
-
 
     const SnapGrid& grid() const { return m_grid; }
 
@@ -185,17 +199,16 @@ public:
     const QPen& pen()      const { return m_pen; }
 
     /**
-     * Add a part item at the specified coordinates, lasting \a nbSteps
-     * Called when reading a music file
+     * Add a SegmentItem at the specified height
      */
-    SegmentItem* addPartItem(int x, int y, unsigned int nbSteps);
+    SegmentItem* addSegmentItem(int y, timeT startTime, timeT duration);
 
     /**
      * Find which SegmentItem is under the specified point
      *
      * Note : this doesn't handle overlapping SegmentItems yet
      */
-    SegmentItem* findPartClickedOn(QPoint);
+    SegmentItem* findSegmentClickedOn(QPoint);
 
     /**
      * get the highlight brush from the canvas
@@ -210,11 +223,11 @@ public:
     /*
      * Show a preview of the Segment we're recording
      */
-    void showRecordingSegmentItem(int x, int y, int width);
+    void showRecordingSegmentItem(int y, timeT startTime, timeT duration);
     void destroyRecordingSegmentItem();
 
 public slots:
-    /// Set the current segment edition tool
+    /// Set the current segment editing tool
     void setTool(SegmentCanvas::ToolType);
 
     /// Update the SegmentCanvas after a change of content
@@ -289,6 +302,9 @@ signals:
     void editSegmentMatrix(Rosegarden::Segment*);
     void editSegmentAudio(Rosegarden::Segment*);
 
+    //!!! what if the staff ruler changes (because of a change in time
+    //sig or whatever)?
+
 private:
     //--------------- Data members ---------------------------------
 
@@ -305,9 +321,7 @@ private:
     QPen m_pen;
 
     QPopupMenu *m_editMenu;
-
     QCanvasRectangle *m_recordingSegment;
-    
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -446,8 +460,8 @@ signals:
 private:
 
     std::list<SegmentItem*> m_selectedItems;
-    bool               m_segmentAddMode;
-    bool               m_segmentCopyMode;
+    bool m_segmentAddMode;
+    bool m_segmentCopyMode;
 
 };
 

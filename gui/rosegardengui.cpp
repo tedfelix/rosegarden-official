@@ -139,10 +139,6 @@ void RosegardenGUIApp::setupActions()
     m_fileQuit = KStdAction::quit  (this, SLOT(quit()),              actionCollection());
 
     // setup edit menu
-/*!!!
-    KStdAction::undo     (this, SLOT(editUndo()),       actionCollection());
-    KStdAction::redo     (this, SLOT(editRedo()),       actionCollection());
-*/
     m_editCut = KStdAction::cut      (this, SLOT(editCut()),        actionCollection());
     m_editCopy = KStdAction::copy     (this, SLOT(editCopy()),       actionCollection());
     m_editPaste = KStdAction::paste    (this, SLOT(editPaste()),      actionCollection());
@@ -853,17 +849,7 @@ void RosegardenGUIApp::quit()
         }
     }	
 }
-/*!!!
-void RosegardenGUIApp::editUndo()
-{
-    KTmpStatusMsg msg(i18n("Undo..."), statusBar());
-}
 
-void RosegardenGUIApp::editRedo()
-{
-    KTmpStatusMsg msg(i18n("Redo..."), statusBar());
-}
-*/
 void RosegardenGUIApp::editCut()
 {
     KTmpStatusMsg msg(i18n("Cutting selection..."), statusBar());
@@ -1387,7 +1373,6 @@ void RosegardenGUIApp::play()
     //
     QDataStream streamOut(data, IO_WriteOnly);
 
-    //!!!
     if (m_doc->getComposition().getTempo() == 0)
     {
       cout <<
@@ -1778,7 +1763,6 @@ RosegardenGUIApp::record()
     //
     QDataStream streamOut(data, IO_WriteOnly);
 
-    //!!!
     if (m_doc->getComposition().getTempo() == 0)
     {
         cout <<
