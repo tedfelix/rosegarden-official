@@ -51,9 +51,12 @@ LoopRuler::~LoopRuler()
 {
 }
 
-void LoopRuler::paintEvent(QPaintEvent*)
+void LoopRuler::paintEvent(QPaintEvent* e)
 {
     QPainter paint(this);
+    paint.setClipRegion(e->region());
+    //paint.setClipRect(e->rect().normalize());
+
     paint.setBrush(colorGroup().foreground());
     drawBarSections(&paint);
     drawLoopMarker(&paint);
@@ -69,31 +72,38 @@ void LoopRuler::drawBarSections(QPainter* paint)
 
     paint->setPen(RosegardenGUIColours::LoopRulerForeground);
 
-    for (int i = firstBar; i <= lastBar; i++)
+    QRect clipRect = paint->clipRegion().boundingRect();
+    
+    for (int i = firstBar; i <= lastBar; ++i)
     {
-	if (m_invert) {
-	    paint->drawLine((int)x, 0, (int)x, 5 * m_height / 7);
-	} else {
-	    paint->drawLine((int)x, 2 * m_height / 7, (int)x, m_height);
-	}
+        double width = m_rulerScale->getBarWidth(i);
 
-	double width = m_rulerScale->getBarWidth(i);
-	double beatAccumulator = 0;
+        if (x >= clipRect.x() && x <= (clipRect.x() + clipRect.width())) {
+
+            if (m_invert) {
+                paint->drawLine((int)x, 0, (int)x, 5 * m_height / 7);
+            } else {
+                paint->drawLine((int)x, 2 * m_height / 7, (int)x, m_height);
+            }
+
+            double beatAccumulator = 0;
 	
-	for (beatAccumulator  = m_rulerScale->getBeatWidth(i);
-	     beatAccumulator < width;
-	     beatAccumulator += m_rulerScale->getBeatWidth(i)) {
+            for (beatAccumulator  = m_rulerScale->getBeatWidth(i);
+                 beatAccumulator < width;
+                 beatAccumulator += m_rulerScale->getBeatWidth(i)) {
 
-	    if (m_invert) {
-		paint->drawLine((int)(x + beatAccumulator), 0,
-				(int)(x + beatAccumulator), 2 * m_height / 7);
-	    } else {
-		paint->drawLine((int)(x + beatAccumulator), 5 * m_height / 7,
-				(int)(x + beatAccumulator), m_height);
-	    }
-	}
-
-	x += width;
+                if (m_invert) {
+                    paint->drawLine((int)(x + beatAccumulator), 0,
+                                    (int)(x + beatAccumulator), 2 * m_height / 7);
+                } else {
+                    paint->drawLine((int)(x + beatAccumulator), 5 * m_height / 7,
+                                    (int)(x + beatAccumulator), m_height);
+                }
+            }
+        }
+        
+        x += width;
+        
     }
 }
 
