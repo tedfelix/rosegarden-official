@@ -667,15 +667,20 @@ void TrackEditor::dropEvent(QDropEvent* event)
 
     // if it's a URI, pass it to parent
     if (QUriDrag::decode(event, uri))
-        {
-            RG_DEBUG << "TrackEditor::dropEvent() : got URI :"
-                                 << uri.first() << endl;
-            emit droppedURI(uri.first());
-            
-        } else if (QTextDrag::decode(event, audioInfo)) {
-            RG_DEBUG << "TrackEditor::dropEvent() : got audio info " << endl;
-                                 //<< audioInfo << endl;
-            emit droppedAudio(audioInfo);
-        }
+    {
+        RG_DEBUG << "TrackEditor::dropEvent() : got URI :"
+                             << uri.first() << endl;
+        emit droppedURI(uri.first());
+        
+    } else if (QTextDrag::decode(event, audioInfo)) {
+        RG_DEBUG << "TrackEditor::dropEvent() : got audio info " << endl;
+                             //<< audioInfo << endl;
+
+        int trackPos = m_segmentCanvas->grid().getYBin(event->pos().y());
+        RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos " 
+                 << trackPos << endl;
+
+        emit droppedAudio(audioInfo);
+    }
     
 }
