@@ -30,8 +30,8 @@ rosegarden_SOURCES = \
 	rosexmlhandler.cpp \
 	staffline.cpp \
 	staffruler.cpp \
-	trackscanvas.cpp \
-	trackseditor.cpp \
+	segmentcanvas.cpp \
+	trackeditor.cpp \
 	trackseditoriface.skel \
 	xmlstorableevent.cpp \
         rosegardentransport.ui \
