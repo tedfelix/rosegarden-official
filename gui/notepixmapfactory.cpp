@@ -129,7 +129,7 @@ NotePixmapOffsets::computePixmapSize()
     case Flat:
 
         if (!m_stalkGoesUp) {
-            m_pixmapSize.rheight() += 4;
+            m_pixmapSize.rheight() += 5;
         }
 
         break;
@@ -173,14 +173,13 @@ NotePixmapOffsets::computeBodyOffset()
             m_bodyOffset.ry() -= 3;
             m_hotSpot.ry() -= 3;
             m_stalkPoints.first.ry() -= 3;
-            m_accidentOffset.setY(m_bodyOffset.y() - 3);
         } else {
             m_bodyOffset.ry() += 3;
             m_hotSpot.ry() += 3;
             m_stalkPoints.first.ry() += 3;
-            m_accidentOffset.setY(m_bodyOffset.y() + 3);
         }
 
+        m_accidentOffset.setY(m_bodyOffset.y() - 3);
         break;
         
     case Flat:
@@ -191,11 +190,9 @@ NotePixmapOffsets::computeBodyOffset()
             m_bodyOffset.ry() += 4;
             m_hotSpot.ry() += 4;
             m_stalkPoints.first.ry() += 4;
-            m_accidentOffset.setY(m_bodyOffset.y() + 4);
-        } else {
-            m_accidentOffset.setY(m_bodyOffset.y() - 5);
         }
 
+        m_accidentOffset.setY(m_bodyOffset.y() - 5);
         break;
         
     case Natural:
@@ -206,14 +203,13 @@ NotePixmapOffsets::computeBodyOffset()
             m_bodyOffset.ry() -= 3;
             m_hotSpot.ry() -= 3;
             m_stalkPoints.first.ry() -= 3;
-            m_accidentOffset.setY(m_bodyOffset.y() - 3);
         } else {
             m_bodyOffset.ry() += 3;
             m_hotSpot.ry() += 3;
             m_stalkPoints.first.ry() += 3;
-            m_accidentOffset.setY(m_bodyOffset.y() + 3);
         }
 
+        m_accidentOffset.setY(m_bodyOffset.y() - 3);
         break;
 
     }
