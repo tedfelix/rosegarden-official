@@ -637,7 +637,16 @@ void RosegardenGUIApp::fileNew()
 
     KTmpStatusMsg msg(i18n("Creating new document..."), statusBar());
 
-    if (m_doc->saveIfModified()) {
+    bool makeNew = false;
+    
+    if (!m_doc->isModified()) {
+        makeNew = true;
+        m_doc->closeDocument();
+    } else if (m_doc->saveIfModified()) {
+        makeNew = true;
+    }
+
+    if (makeNew) {
 
         m_doc->newDocument();
 
