@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: sv\n"
-"POT-Creation-Date: 2003-12-02 18:35-0500\n"
-"PO-Revision-Date: 2004-01-05 15:48+0100\n"
+"POT-Creation-Date: 2004-02-29 08:46+0100\n"
+"PO-Revision-Date: 2004-02-29 09:17+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@comhem.se>\n"
 "Language-Team: Svenska <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -14,65 +14,65 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.3\n"
 
-#: audiomanagerdialog.cpp:157
+#: audiomanagerdialog.cpp:165
 msgid "Rosegarden Audio File Manager"
 msgstr "Rosegarden ljudfilshantering"
 
-#: audiomanagerdialog.cpp:169
+#: audiomanagerdialog.cpp:174
 msgid "Audio File actions"
 msgstr "Ljudfilsåtgärder"
 
-#: audiomanagerdialog.cpp:172
+#: audiomanagerdialog.cpp:177
 msgid "Add Audio File"
 msgstr "Lägg till ljudfil"
 
-#: audiomanagerdialog.cpp:173
+#: audiomanagerdialog.cpp:178
 msgid "Remove Audio File"
 msgstr "Ta bort ljudfil"
 
-#: audiomanagerdialog.cpp:174
+#: audiomanagerdialog.cpp:179
 msgid "Play Preview"
 msgstr "Förhandsgranska uppspelning"
 
-#: audiomanagerdialog.cpp:175
+#: audiomanagerdialog.cpp:180
 msgid "Rename File"
 msgstr "Byt namn på fil"
 
-#: audiomanagerdialog.cpp:176
+#: audiomanagerdialog.cpp:181
 msgid "Insert into Selected Audio Track"
 msgstr "Infoga i markerat ljudspår"
 
-#: audiomanagerdialog.cpp:177
+#: audiomanagerdialog.cpp:182
 msgid "Remove All Audio Files"
 msgstr "Ta bort alla ljudfiler"
 
-#: audiomanagerdialog.cpp:178
+#: audiomanagerdialog.cpp:183
 msgid "Export Audio File"
 msgstr "Exportera ljudfil"
 
-#: audiomanagerdialog.cpp:182
+#: audiomanagerdialog.cpp:187
 msgid "Add an audio file to this manager dialog."
 msgstr "Lägg till en ljudfil i hanteringsdialogrutan."
 
-#: audiomanagerdialog.cpp:185
+#: audiomanagerdialog.cpp:190
 msgid "Remove an audio file from this manager dialog."
 msgstr "Ta bort en ljudfil från hanteringsdialogrutan."
 
-#: audiomanagerdialog.cpp:188
+#: audiomanagerdialog.cpp:193
 msgid "Hear a preview of the currently selected audio file."
 msgstr "Lyssna på en förhandsgranskning av markerad ljudfil."
 
-#: audiomanagerdialog.cpp:191
+#: audiomanagerdialog.cpp:196
 msgid "Rename the currently selected audio file."
 msgstr "Byt namn på nuvarande markerad ljudfil."
 
-#: audiomanagerdialog.cpp:194
+#: audiomanagerdialog.cpp:199
 msgid ""
 "Insert the current audio file in your composition, on the selected audio "
 "track."
 msgstr "Infoga nuvarande ljudfil i kompositionen, på det markerade ljudspåret."
 
-#: audiomanagerdialog.cpp:197
+#: audiomanagerdialog.cpp:202
 msgid ""
 "Remove all audio files (and any representations of them) from this dialog "
 "and the composition."
@@ -80,11 +80,11 @@ msgstr ""
 "Ta bort alla ljudfiler (och alla återgivningar av dem) från dialogrutan "
 "och kompositionen."
 
-#: audiomanagerdialog.cpp:200
+#: audiomanagerdialog.cpp:205
 msgid "Export this audio file."
 msgstr "Exportera ljudfilen."
 
-#: audiomanagerdialog.cpp:203
+#: audiomanagerdialog.cpp:208
 msgid ""
 "You can drag and drop .wav files here to insert them from Konqueror or other "
 "KDE file browsers."
@@ -92,52 +92,52 @@ msgstr ""
 "Du kan dra och släppa .wav-filer här för att infoga dem från Konqueror "
 "eller andra KDE-filbläddrare."
 
-#: audiomanagerdialog.cpp:208 bankeditor.cpp:245 colourwidgets.cpp:46
-#: deviceeditor.cpp:61 dialogs.cpp:1234
+#: audiomanagerdialog.cpp:213 bankeditor.cpp:232 colourwidgets.cpp:46
+#: deviceeditor.cpp:61 dialogs.cpp:1285
 msgid "Name"
 msgstr "Namn"
 
-#: audiomanagerdialog.cpp:209
+#: audiomanagerdialog.cpp:214 rosegardenconfiguredialog.cpp:1627
 msgid "Duration"
 msgstr "Tonlängd"
 
-#: audiomanagerdialog.cpp:210
+#: audiomanagerdialog.cpp:215
 msgid "Envelope"
 msgstr "Envelopp"
 
-#: audiomanagerdialog.cpp:212 dialogs.cpp:4142
+#: audiomanagerdialog.cpp:217 dialogs.cpp:4269
 msgid "Resolution"
 msgstr "Upplösning"
 
-#: audiomanagerdialog.cpp:213
+#: audiomanagerdialog.cpp:218
 msgid "Channels"
 msgstr "Kanaler"
 
-#: audiomanagerdialog.cpp:214
+#: audiomanagerdialog.cpp:219
 msgid "Sample rate"
 msgstr "Samplingsfrekvens"
 
-#: audiomanagerdialog.cpp:314
+#: audiomanagerdialog.cpp:326
 msgid "<no audio files>"
 msgstr "<inga ljudfiler>"
 
-#: audiomanagerdialog.cpp:516 dialogs.cpp:3134
+#: audiomanagerdialog.cpp:528 dialogs.cpp:3261
 msgid "*.wav|WAV files (*.wav)"
 msgstr "*.wav|WAV-filer (*.wav)"
 
-#: audiomanagerdialog.cpp:517
+#: audiomanagerdialog.cpp:529
 msgid "Choose a name to save this file as"
 msgstr "Välj ett namn att spara filen med"
 
-#: audiomanagerdialog.cpp:527
+#: audiomanagerdialog.cpp:539
 msgid "Exporting audio file..."
 msgstr "Exporterar ljudfil..."
 
-#: audiomanagerdialog.cpp:618
-msgid "Really delete audio file \"%1\" and all associated audio segments ?"
+#: audiomanagerdialog.cpp:630
+msgid "Really unload audio file \"%1\" and remove all associated audio segments ?"
 msgstr "Ska verkligen ljudfilen \"%1\" och alla tillhörande ljudsegment tas bort?"
 
-#: audiomanagerdialog.cpp:695
+#: audiomanagerdialog.cpp:707
 msgid ""
 "*.wav|WAV files (*.wav)\n"
 "*.mp3|MP3 files (*.mp3)"
@@ -145,37 +145,38 @@ msgstr ""
 "*.wav|WAV-filer (*.wav)\n"
 "*.mp3|MP3-filer (*.mp3)"
 
-#: audiomanagerdialog.cpp:696
+#: audiomanagerdialog.cpp:708
 msgid "Select one or more audio files"
 msgstr "Markera en eller flera ljudfiler"
 
-#: audiomanagerdialog.cpp:739
+#: audiomanagerdialog.cpp:751
 msgid "Really remove all audio files and associated segments?"
 msgstr "Ska verkligen alla ljudfiler och tillhörande segment tas bort?"
 
-#: audiomanagerdialog.cpp:776
+#: audiomanagerdialog.cpp:788
 msgid "Change Audio File label"
 msgstr "Ändra ljudfilsrubrik"
 
-#: audiomanagerdialog.cpp:777 rosegardengui.cpp:4369
-#: segmentparameterbox.cpp:797
+#: audiomanagerdialog.cpp:789 rosegardengui.cpp:4598
+#: segmentparameterbox.cpp:825
 msgid "Enter new label"
 msgstr "Skriv in ny rubrik"
 
-#: audiomanagerdialog.cpp:960 rosegardenguidoc.cpp:1789
+#: audiomanagerdialog.cpp:972 rosegardenguidoc.cpp:1890
 msgid "Generating audio preview..."
 msgstr "Skapar förhandsgranskning av ljud..."
 
-#: audiomanagerdialog.cpp:973 importdevicedialog.cpp:67 rosegardengui.cpp:1428
-#: rosegardengui.cpp:1485 rosegardengui.cpp:4707
+#: audiomanagerdialog.cpp:985 importdevicedialog.cpp:67 rosegardengui.cpp:1556
+#: rosegardengui.cpp:1613 rosegardengui.cpp:5247
+#, c-format
 msgid "Cannot download file %1"
 msgstr "Kan inte ladda ner filen %1"
 
-#: audiomanagerdialog.cpp:989
+#: audiomanagerdialog.cpp:1001
 msgid "Can't add File.  "
 msgstr "Kan inte lägga till fil.  "
 
-#: audiomanagerdialog.cpp:1015
+#: audiomanagerdialog.cpp:1027
 msgid ""
 "Try copying this file to a directory where you have write permission and "
 "re-add it"
@@ -199,7 +200,7 @@ msgstr "Kategori:"
 msgid "Plugin:"
 msgstr "Insticksmodul:"
 
-#: audioplugindialog.cpp:75 audioplugindialog.cpp:218
+#: audioplugindialog.cpp:75 audioplugindialog.cpp:220
 msgid "Select a plugin from this list."
 msgstr "Välj en insticksmodul i listan."
 
@@ -211,7 +212,7 @@ msgstr "Förbikoppla"
 msgid "Bypass this plugin."
 msgstr "Koppla förbi insticksmodulen."
 
-#: audioplugindialog.cpp:86 audioplugindialog.cpp:213
+#: audioplugindialog.cpp:86 audioplugindialog.cpp:215
 msgid "<id>"
 msgstr "<id>"
 
@@ -231,24 +232,24 @@ msgstr "(obegränsad)"
 msgid "(none)"
 msgstr "(ingen)"
 
-#: audioplugindialog.cpp:212 instrumentparameterbox.cpp:454
-#: instrumentparameterbox.cpp:816 studiowidgets.cpp:57
+#: audioplugindialog.cpp:214 instrumentparameterbox.cpp:433
+#: instrumentparameterbox.cpp:684 studiowidgets.cpp:620
 msgid "<no plugin>"
 msgstr "<ingen insticksmodul>"
 
-#: bankeditor.cpp:176
+#: bankeditor.cpp:176 bankeditor.cpp:335
 msgid "Bank and Program details"
 msgstr "Bank- och programinformation"
 
-#: bankeditor.cpp:206 bankeditor.cpp:737 instrumentparameterbox.cpp:899
+#: bankeditor.cpp:193 bankeditor.cpp:725 instrumentparameterbox.cpp:773
 msgid "Percussion"
 msgstr "Slagverk"
 
-#: bankeditor.cpp:212
+#: bankeditor.cpp:199
 msgid "MSB Value"
 msgstr "Mest signifikant värde"
 
-#: bankeditor.cpp:219
+#: bankeditor.cpp:206
 msgid ""
 "Selects a MSB controller Bank number (MSB/LSB pairs are always unique for "
 "any Device)"
@@ -256,7 +257,7 @@ msgstr ""
 "Väljer mest signifikant banknummer för styrenhet (mest och minst "
 "signifikanta par är alltid unika för en viss enhet)"
 
-#: bankeditor.cpp:222
+#: bankeditor.cpp:209
 msgid ""
 "Selects a LSB controller Bank number (MSB/LSB pairs are always unique for "
 "any Device)"
@@ -264,19 +265,19 @@ msgstr ""
 "Väljer minst signifikant banknummer för styrenhet (mest och minst "
 "signifikanta par är alltid unika för en viss enhet)"
 
-#: bankeditor.cpp:227
+#: bankeditor.cpp:214
 msgid "LSB Value"
 msgstr "Minst signifikant värde"
 
-#: bankeditor.cpp:240
+#: bankeditor.cpp:227
 msgid "Librarian"
 msgstr "Bibliotekarie"
 
-#: bankeditor.cpp:248
+#: bankeditor.cpp:235
 msgid "Email"
 msgstr "E-post"
 
-#: bankeditor.cpp:252
+#: bankeditor.cpp:239
 msgid ""
 "The librarian maintains the generic Bank and Program information for this "
 "device.\n"
@@ -293,174 +294,334 @@ msgstr ""
 "bankinformation,\n"
 "så att andra kan dra nytta av den."
 
-#: bankeditor.cpp:298
+#: bankeditor.cpp:285
 msgid "Programs %1 - %2"
 msgstr "Program %1 - %2"
 
-#: bankeditor.cpp:705
+#: bankeditor.cpp:693
 msgid "Manage MIDI Banks and Programs"
 msgstr "Hantera MIDI-banker och program"
 
-#: bankeditor.cpp:717 dialogs.cpp:1119 dialogs.cpp:1140 dialogs.cpp:1155
+#: bankeditor.cpp:705 dialogs.cpp:1170 dialogs.cpp:1191 dialogs.cpp:1206
+#: dialogs.cpp:3103
 msgid "Reset"
 msgstr "Återställ"
 
-#: bankeditor.cpp:736
+#: bankeditor.cpp:724
 msgid "MIDI Device"
 msgstr "MIDI-enhet"
 
-#: bankeditor.cpp:738 bankeditor.cpp:810
+#: bankeditor.cpp:726 bankeditor.cpp:797
 msgid "MSB"
 msgstr "Mest signifikant"
 
-#: bankeditor.cpp:739 bankeditor.cpp:809
+#: bankeditor.cpp:727 bankeditor.cpp:796
 msgid "LSB"
 msgstr "Minst signifikant"
 
-#: bankeditor.cpp:758
+#: bankeditor.cpp:746
 msgid "Add a Bank to the current device"
 msgstr "Lägg till en bank i nuvarande enhet"
 
-#: bankeditor.cpp:761
+#: bankeditor.cpp:749
 msgid "Delete the current Bank"
 msgstr "Ta bort nuvarande bank"
 
-#: bankeditor.cpp:764
+#: bankeditor.cpp:752
 msgid "Delete all Banks from the current Device"
 msgstr "Ta bort alla banker från nuvarande enhet"
 
-#: bankeditor.cpp:766 devicemanager.cpp:100
+#: bankeditor.cpp:754 devicemanager.cpp:100
 msgid "Import..."
 msgstr "Importera..."
 
-#: bankeditor.cpp:767 devicemanager.cpp:101
+#: bankeditor.cpp:755 devicemanager.cpp:101
 msgid "Export..."
 msgstr "Exportera..."
 
-#: bankeditor.cpp:775
+#: bankeditor.cpp:762
 msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr "Importera bank- och programdata från Rosegarden-fil till nuvarande enhet"
 
-#: bankeditor.cpp:777
+#: bankeditor.cpp:764
 msgid ""
 "Export all Device and Bank information to a Rosegarden format  interchange "
 "file"
 msgstr "Exportera all bank- och programdata till utbytesfil med Rosegarden-format"
 
-#: bankeditor.cpp:787
+#: bankeditor.cpp:774
 msgid "Copy all Program names from current Bank to clipboard"
 msgstr "Kopiera alla programnamn från nuvarande bank till klippbordet"
 
-#: bankeditor.cpp:790
+#: bankeditor.cpp:777
 msgid "Paste Program names from clipboard to current Bank"
 msgstr "Klistra in programnamn från klippbordet till nuvarande bank"
 
-#: bankeditor.cpp:807
+#: bankeditor.cpp:794
 msgid "Show Variation list based on "
 msgstr "Visa variationslista baserad på "
 
-#: bankeditor.cpp:906 controleditor.cpp:296 devicemanager.cpp:202
-#: editviewbase.cpp:147 markereditor.cpp:322 rosegardengui.cpp:317
+#: bankeditor.cpp:893 controleditor.cpp:315 devicemanager.cpp:202
+#: editviewbase.cpp:162 markereditor.cpp:322 rosegardengui.cpp:396
 msgid "Und&o"
 msgstr "Å&ngra"
 
-#: bankeditor.cpp:912 controleditor.cpp:302 devicemanager.cpp:208
-#: editviewbase.cpp:153 markereditor.cpp:328 rosegardengui.cpp:323
+#: bankeditor.cpp:899 controleditor.cpp:321 devicemanager.cpp:208
+#: editviewbase.cpp:168 markereditor.cpp:328 rosegardengui.cpp:402
 msgid "Re&do"
 msgstr "&Gör om"
 
-#: bankeditor.cpp:1491
+#: bankeditor.cpp:1485
 msgid "<new bank>"
 msgstr "<ny bank>"
 
-#: bankeditor.cpp:1525
+#: bankeditor.cpp:1519
 msgid "Really delete this bank?"
 msgstr "Ska banken verkligen tas bort?"
 
-#: bankeditor.cpp:1581
+#: bankeditor.cpp:1573
 msgid "Really delete all banks for "
 msgstr "Ska alla banker tas bort för "
 
-#: bankeditor.cpp:1848
+#: bankeditor.cpp:1840
 msgid "Import Banks from Device in File"
 msgstr "Importera banker från enhet i fil"
 
-#: bankeditor.cpp:1991 devicemanager.cpp:746
+#: bankeditor.cpp:1987 devicemanager.cpp:750
 msgid "Export Device as..."
 msgstr "Exportera enhet som..."
 
-#: bankeditor.cpp:2010 devicemanager.cpp:765 rosegardengui.cpp:1587
+#: bankeditor.cpp:2006 devicemanager.cpp:769 rosegardengui.cpp:1715
 msgid "You have specified a directory"
 msgstr "Du har angivit en katalog"
 
-#: bankeditor.cpp:2017 devicemanager.cpp:772 rosegardengui.cpp:1593
+#: bankeditor.cpp:2013 devicemanager.cpp:776 rosegardengui.cpp:1721
 msgid "The specified file exists.  Overwrite?"
 msgstr "Den angivna filen finns. Skriv över?"
 
-#: bankeditor.cpp:2070
+#: bankeditor.cpp:2059
+msgid ""
+"There are unsaved changes.\n"
+"Do you want to apply the changes before exiting the Bank Editor or discard "
+"the changes ?"
+msgstr ""
+"Det finns osparade ändringar.\n"
+"Vill du verkställa ändringarna innan du avslutar bankeditorn eller "
+"kasta ändringarna?"
+
+#: bankeditor.cpp:2062
+msgid "Unsaved Changes"
+msgstr "Osparade ändringar"
+
+#: bankeditor.cpp:2083
 msgid "Remap Instrument assigments..."
 msgstr "Mappa om instrumenttilldelningar..."
 
-#: bankeditor.cpp:2077
+#: bankeditor.cpp:2090
 msgid "Device or Instrument"
 msgstr "Enhet eller instrument"
 
-#: bankeditor.cpp:2080
+#: bankeditor.cpp:2093
 msgid "Remap Tracks by all Instruments on a Device or by single Instrument"
 msgstr ""
 "Mappa om spår för alla instrument till en enhet eller ett enstaka "
 "instrument"
 
-#: bankeditor.cpp:2081 deviceeditor.cpp:60 devicemanager.cpp:88
-#: devicemanager.cpp:140 dialogs.cpp:4102
+#: bankeditor.cpp:2094 deviceeditor.cpp:60 devicemanager.cpp:88
+#: devicemanager.cpp:140 dialogs.cpp:4229
 msgid "Device"
 msgstr "Enhet"
 
-#: bankeditor.cpp:2082 dialogs.cpp:4130
+#: bankeditor.cpp:2095 dialogs.cpp:4257
 msgid "Instrument"
 msgstr "Instrument"
 
-#: bankeditor.cpp:2089
+#: bankeditor.cpp:2102
 msgid "Choose Source and Destination"
 msgstr "Välj källa och mål"
 
-#: bankeditor.cpp:2092
+#: bankeditor.cpp:2105
 msgid "From"
 msgstr "Från"
 
-#: bankeditor.cpp:2093
+#: bankeditor.cpp:2106
 msgid "To"
 msgstr "Till"
 
-#: bankeditor.cpp:2129 bankeditor.cpp:2130
+#: bankeditor.cpp:2142 bankeditor.cpp:2143
 msgid "<no devices>"
 msgstr "<inga enheter>"
 
-#: controlruler.cpp:436
+#: colourwidgets.cpp:47 rosegardenconfigurationpage.h:397
+#: segmentparameterbox.cpp:83
+msgid "Color"
+msgstr "Färg"
+
+#: colourwidgets.cpp:64
+msgid "Modify Color Name"
+msgstr "Ändra färgnamn"
+
+#: colourwidgets.cpp:64 rosegardenconfiguredialog.cpp:2007
+#: segmentparameterbox.cpp:772
+msgid "Enter new name"
+msgstr "Skriv in nytt namn"
+
+#: colourwidgets.cpp:107 segmentparameterbox.cpp:294
+msgid "Default Color"
+msgstr "Förvald färg"
+
+#: controleditor.cpp:41
+msgid "<not showing>"
+msgstr "<visas inte>"
+
+#: controleditor.cpp:57
+msgid "Manage Control Events"
+msgstr "Hantera styrhändelser"
+
+#: controleditor.cpp:59
+msgid "<no device>"
+msgstr "<ingen enhet>"
+
+#: controleditor.cpp:66
+msgid "  Control Events for %1 (device %2)"
+msgstr "  Styrhändelser för %1 (enhet %2)"
+
+#: controleditor.cpp:71
+msgid "Control Event name  "
+msgstr "Styrhändelsenamn  "
+
+#: controleditor.cpp:72
+msgid "Control Event type  "
+msgstr "Styrhändelsetyp  "
+
+#: controleditor.cpp:73
+msgid "Control Event value  "
+msgstr "Styrhändelsevärde  "
+
+#: controleditor.cpp:74
+msgid "Description  "
+msgstr "Beskrivning  "
+
+#: controleditor.cpp:75
+msgid "Max  "
+msgstr "Maximum  "
+
+#: controleditor.cpp:76
+msgid "Min  "
+msgstr "Minimum  "
+
+#: controleditor.cpp:77
+msgid "Default  "
+msgstr "Standard  "
+
+#: controleditor.cpp:78
+msgid "Color  "
+msgstr "Färg  "
+
+#: controleditor.cpp:79
+msgid "Position on instrument panel"
+msgstr "Plats på instrumentpanelen"
+
+#: controleditor.cpp:102
+msgid "Add a Control Parameter to the Studio"
+msgstr "Lägg till en styrparameter i studion"
+
+#: controleditor.cpp:105
+msgid "Delete a Control Parameter from the Studio"
+msgstr "Ta bort en styrparameter från studion"
+
+#: controleditor.cpp:108
+msgid "Close the Control Parameter editor"
+msgstr "Stäng styrparametereditor"
+
+#: controleditor.cpp:185
+msgid "<default>"
+msgstr "<förval>"
+
+#: controleditor.cpp:236 dialogs.cpp:1738 dialogs.cpp:2110 dialogs.cpp:2111
+#: dialogs.cpp:2166 dialogs.cpp:2201 markereditor.cpp:231 mixer.cpp:128
+#: studiowidgets.cpp:618
+msgid "<none>"
+msgstr "<ingen>"
+
+#: controleditor.cpp:436
+msgid "Edit Control Parameter"
+msgstr "Redigera styrparameter"
+
+#: controleditor.cpp:445
+msgid "Control Event Properties"
+msgstr "Egenskaper för styrhändelser"
+
+#: controleditor.cpp:451 markereditor.cpp:452
+msgid "Name:"
+msgstr "Namn:"
+
+#: controleditor.cpp:455 rosegardenconfiguredialog.cpp:363
+msgid "Type:"
+msgstr "Typ:"
+
+#: controleditor.cpp:459 markereditor.cpp:456
+msgid "Description:"
+msgstr "Beskrivning:"
+
+#: controleditor.cpp:467
+msgid "Control Event value:"
+msgstr "Styrhändelsevärde:"
+
+#: controleditor.cpp:471
+msgid "Minimum value:"
+msgstr "Minimalt värde:"
+
+#: controleditor.cpp:475
+msgid "Maximum value:"
+msgstr "Maximalt värde:"
+
+#: controleditor.cpp:479
+msgid "Default value:"
+msgstr "Standardvärde:"
+
+#: controleditor.cpp:483
+msgid "Color:"
+msgstr "Färg:"
+
+#: controleditor.cpp:487
+msgid "Instrument Parameter Box position:"
+msgstr "Plats för rutan med instrumentparametrar:"
+
+#: controlruler.cpp:528
 msgid "Control Change"
 msgstr "Styrändring"
 
-#: controlruler.cpp:471
+#: controlruler.cpp:570
 msgid "Insert Controller Event"
 msgstr "Infoga styrenhetshändelse"
 
-#: controlruler.cpp:515
+#: controlruler.cpp:625
 msgid "Erase Controller Event(s)"
 msgstr "Ta bort styrenhetshändelse"
 
-#: controlruler.cpp:1038
+#: controlruler.cpp:1250 editview.cpp:773
+msgid "Unsupported Event Type"
+msgstr "Händelsetyp som inte stöds"
+
+#: controlruler.cpp:1263 editview.cpp:771 eventview.cpp:190 midifilter.cpp:50
+#: midifilter.cpp:86
+msgid "Pitch Bend"
+msgstr "Tonhöjdsavvikelse"
+
+#: controlruler.cpp:1268
 msgid "Controller Events"
 msgstr "Styrenhetshändelser"
 
-#: controlruler.cpp:1124
+#: controlruler.cpp:1357
 msgid "Controller Event Number"
 msgstr "Nummer på styrenhetshändelse"
 
-#: controlruler.cpp:1294
+#: controlruler.cpp:1552
 msgid "Add line of controllers"
 msgstr "Lägg till rad med styrenheter"
 
-#: controlruler.cpp:1347
+#: controlruler.cpp:1606
 msgid "%1 controller"
 msgstr "%1 styrenhet"
 
@@ -468,7 +629,7 @@ msgstr "%1 styrenhet"
 msgid "Manage MIDI Devices"
 msgstr "Hantera MIDI-enheter"
 
-#: deviceeditor.cpp:62 dialogs.cpp:1239
+#: deviceeditor.cpp:62 dialogs.cpp:1290 rosegardenconfiguredialog.cpp:1623
 msgid "Type"
 msgstr "Typ"
 
@@ -484,26 +645,27 @@ msgstr "Lägg till uppspelningsenhet"
 msgid "Add Record Device"
 msgstr "Lägg till inspelningsenhet"
 
-#: deviceeditor.cpp:81 studiocommands.h:181
+#: deviceeditor.cpp:81 studiocommands.h:187
 msgid "Delete Device"
 msgstr "Ta bort enhet"
 
 #: deviceeditor.cpp:134 importdevicedialog.cpp:121
+#, c-format
 msgid "Device %1"
 msgstr "Enhet %1"
 
-#: deviceeditor.cpp:142 deviceeditor.cpp:349
+#: deviceeditor.cpp:142 deviceeditor.cpp:349 playlist.cpp:142
 msgid "Play"
 msgstr "Spela"
 
-#: deviceeditor.cpp:142 deviceeditor.cpp:367 rc.cpp:107
+#: deviceeditor.cpp:142 deviceeditor.cpp:367 rc.cpp:115
 #: segmentcommands.cpp:526
 msgid "Record"
 msgstr "Spela in"
 
 #: deviceeditor.cpp:181 deviceeditor.cpp:203 deviceeditor.cpp:215
 #: devicemanager.cpp:171 devicemanager.cpp:406 devicemanager.cpp:418
-#: dialogs.cpp:4121 instrumentparameterbox.cpp:1009
+#: dialogs.cpp:4248 instrumentparameterbox.cpp:883
 msgid "No connection"
 msgstr "Ingen anslutning"
 
@@ -520,275 +682,351 @@ msgstr "<ny enhet>"
 msgid "New Device"
 msgstr "Ny enhet"
 
-#: dialogs.cpp:109
+#: devicemanager.cpp:81
+msgid "Play devices"
+msgstr "Uppspelningsenheter"
+
+#: devicemanager.cpp:98 devicemanager.cpp:151
+#: rosegardenconfiguredialog.cpp:2008 segmentparameterbox.cpp:773
+msgid "New"
+msgstr "Ny"
+
+#: devicemanager.cpp:102
+msgid "Banks..."
+msgstr "Banker..."
+
+#: devicemanager.cpp:103
+msgid "Control Events..."
+msgstr "Styrhändelser..."
+
+#: devicemanager.cpp:108
+msgid "Create a new Play device"
+msgstr "Skapa en ny uppspelningsenhet"
+
+#: devicemanager.cpp:110 devicemanager.cpp:159
+msgid "Delete the selected device"
+msgstr "Ta bort markerad enhet"
+
+#: devicemanager.cpp:112
+msgid ""
+"Import Bank, Program and Controller data from a Rosegarden file to the "
+"selected device"
+msgstr ""
+"Importera bank-, program- och styrenhetsdata från Rosegarden-fil till "
+"markerad enhet"
+
+#: devicemanager.cpp:114
+msgid "Export Bank and Controller data to a Rosegarden interchange file"
+msgstr "Exportera bank- och styrenhetsdata till utbytesfil med Rosegarden-format"
+
+#: devicemanager.cpp:116
+msgid "View and edit Banks and Programs for the selected device"
+msgstr "Visa och redigera banker och program för markerad enhet"
+
+#: devicemanager.cpp:118
+msgid ""
+"View and edit Control Events for the selected device - these are special "
+"Event types that you can define against your device and control through "
+"Control Rulers or the Instrument Parameter Box "
+msgstr ""
+"Visa och redigera styrhändelser för markerad enhet. Dessa är "
+"särskilda händelsetyper som du kan definiera för din enhet och "
+"styra via styrlinjaler eller rutan med instrumentparametrar."
+
+#: devicemanager.cpp:133
+msgid "Record devices"
+msgstr "Inspelningsenheter"
+
+#: devicemanager.cpp:141
+msgid "Current"
+msgstr "Nuvarande"
+
+#: devicemanager.cpp:157
+msgid "Create a new Record device"
+msgstr "Skapa en ny inspelningsenhet"
+
+#: devicemanager.cpp:299 devicemanager.cpp:332
+#, c-format
+msgid "%1"
+msgstr "%1"
+
+#: devicemanager.cpp:434
+msgid "Change Record Device"
+msgstr "Ändra inspelningsenhet"
+
+#: devicemanager.cpp:693
+msgid "Import from Device in File"
+msgstr "Importera från enhet i fil"
+
+#: dialogs.cpp:112 tempoview.cpp:131
 msgid "Time Signature"
 msgstr "Taktartssignatur"
 
-#: dialogs.cpp:129
+#: dialogs.cpp:135
 msgid "Time signature"
 msgstr "Taktartssignatur"
 
-#: dialogs.cpp:160 dialogs.cpp:337 dialogs.cpp:2553
+#: dialogs.cpp:169
+msgid "Time where signature takes effect"
+msgstr "Tid då signaturen får effekt"
+
+#: dialogs.cpp:182 dialogs.cpp:382 dialogs.cpp:2615
 msgid "Scope"
 msgstr "Räckvidd"
 
-#: dialogs.cpp:169
+#: dialogs.cpp:194
+#, c-format
 msgid "Insertion point is at start of bar %1."
 msgstr "Infogningsplatsen är i början av takt %1."
 
-#: dialogs.cpp:173
+#: dialogs.cpp:198
+#, c-format
 msgid "Insertion point is in the middle of bar %1."
 msgstr "Infogningsplatsen är i mitten av takt %1."
 
-#: dialogs.cpp:178
+#: dialogs.cpp:203
 msgid "Insertion point is at start of composition."
 msgstr "Infogningsplatsen är i början på kompositionen."
 
-#: dialogs.cpp:183
+#: dialogs.cpp:208
 msgid "Start bar %1 here"
 msgstr "Börja takt %1 här"
 
-#: dialogs.cpp:187
+#: dialogs.cpp:212
+#, c-format
 msgid "Change time from start of bar %1"
 msgstr "Ändra tid från början av takt %1"
 
-#: dialogs.cpp:194
+#: dialogs.cpp:219
+#, c-format
 msgid "Time change will take effect at the start of bar %1."
 msgstr "Tidsändring får effekt i början på takt %1."
 
-#: dialogs.cpp:200
-msgid "Make the new time signature hidden"
-msgstr "Dölj den nya taktartssignaturen"
+#: dialogs.cpp:229
+msgid "Make the time signature hidden"
+msgstr "Dölj taktartssignaturen"
 
-#: dialogs.cpp:203
+#: dialogs.cpp:234
 msgid "Show as common time"
 msgstr "Visa som gemensam tid"
 
-#: dialogs.cpp:206
+#: dialogs.cpp:239
 msgid "Normalize subsequent rests"
 msgstr "Normalisera följande pauser"
 
-#: dialogs.cpp:280
+#: dialogs.cpp:322
 msgid "Display as common time"
 msgstr "Visa som gemensam tid"
 
-#: dialogs.cpp:284
+#: dialogs.cpp:326
 msgid "Display as cut common time"
 msgstr "Visa som urklippt gemensam tid"
 
-#: dialogs.cpp:320
+#: dialogs.cpp:365
 msgid "Key Change"
 msgstr "Tonartsändring"
 
-#: dialogs.cpp:334
+#: dialogs.cpp:379
 msgid "Key signature"
 msgstr "Tonartssignatur"
 
-#: dialogs.cpp:340
+#: dialogs.cpp:385
 msgid "Existing notes following key change"
 msgstr "Befintliga noter följer tonartsändring"
 
-#: dialogs.cpp:351
+#: dialogs.cpp:396
 msgid "Flatten"
 msgstr "Sänk"
 
-#: dialogs.cpp:353
+#: dialogs.cpp:398
 msgid "Key"
 msgstr "Tangent"
 
-#: dialogs.cpp:357
+#: dialogs.cpp:402
 msgid "Sharpen"
 msgstr "Höj"
 
-#: dialogs.cpp:376
+#: dialogs.cpp:421
 msgid "Apply to current segment only"
 msgstr "Verkställ bara för nuvarande segment"
 
-#: dialogs.cpp:379
+#: dialogs.cpp:424
 msgid "Apply to all segments at this time"
 msgstr "Verkställ för alla segment vid denna tid"
 
-#: dialogs.cpp:390 dialogs.cpp:2822
+#: dialogs.cpp:435 dialogs.cpp:2901
 msgid "Maintain current pitches"
 msgstr "Behåll nuvarande tonhöjder"
 
-#: dialogs.cpp:393
+#: dialogs.cpp:438
 msgid "Maintain current accidentals"
 msgstr "Behåll nuvarande tillfälliga förtecken"
 
-#: dialogs.cpp:396
+#: dialogs.cpp:441
 msgid "Transpose into this key"
 msgstr "Transponera till den här tonarten"
 
-#: dialogs.cpp:545
+#: dialogs.cpp:594
 msgid "No such key"
 msgstr "Tonarten finns inte"
 
-#: dialogs.cpp:616
+#: dialogs.cpp:667
 msgid "Paste type"
 msgstr "Inklistringstyp"
 
-#: dialogs.cpp:636
+#: dialogs.cpp:687
 msgid "Make this the default paste type"
 msgstr "Gör det här till förvald inklistringstyp"
 
-#: dialogs.cpp:668
+#: dialogs.cpp:719
 msgid "Tuplet"
 msgstr "Tupel"
 
-#: dialogs.cpp:674
+#: dialogs.cpp:725
 msgid "New timing for tuplet group"
 msgstr "Ny tid för tupelgrupp"
 
-#: dialogs.cpp:690 dialogs.cpp:3009
+#: dialogs.cpp:741
 msgid "Play "
 msgstr "Spela "
 
-#: dialogs.cpp:710
+#: dialogs.cpp:761
 msgid "in the time of  "
 msgstr "under tiden för "
 
-#: dialogs.cpp:715
+#: dialogs.cpp:766
 msgid "Timing calculations"
 msgstr "Tidsberäkningar"
 
-#: dialogs.cpp:721
+#: dialogs.cpp:772
 msgid "Selected region:"
 msgstr "Markerat område:"
 
-#: dialogs.cpp:730
+#: dialogs.cpp:781
 msgid "Group with current timing:"
 msgstr "Gruppera med nuvarande tid:"
 
-#: dialogs.cpp:736
+#: dialogs.cpp:787
 msgid "Group with new timing:"
 msgstr "Gruppera med ny tid:"
 
-#: dialogs.cpp:742
+#: dialogs.cpp:793
 msgid "Gap created by timing change:"
 msgstr "Gap skapat av tidsändring:"
 
-#: dialogs.cpp:750
+#: dialogs.cpp:801
 msgid "Unchanged at end of selection:"
 msgstr "Oförändrad vid markeringens slut:"
 
-#: dialogs.cpp:939 eventview.cpp:181
+#: dialogs.cpp:990 eventview.cpp:196
 msgid "Text"
 msgstr "Text"
 
-#: dialogs.cpp:946
+#: dialogs.cpp:997
 msgid "Specification"
 msgstr "Specifikation"
 
-#: dialogs.cpp:948
+#: dialogs.cpp:999
 msgid "Preview"
 msgstr "Förhandsgranskning"
 
-#: dialogs.cpp:952
+#: dialogs.cpp:1003
 msgid "Text:  "
 msgstr "Text:  "
 
-#: dialogs.cpp:957
+#: dialogs.cpp:1008
 msgid "Style:  "
 msgstr "Stil:  "
 
-#: dialogs.cpp:967
+#: dialogs.cpp:1018
 msgid "Dynamic"
 msgstr "Dynamisk"
 
-#: dialogs.cpp:970
+#: dialogs.cpp:1021
 msgid "Direction"
 msgstr "Riktning"
 
-#: dialogs.cpp:973
+#: dialogs.cpp:1024
 msgid "Local Direction"
 msgstr "Lokal riktning"
 
-#: dialogs.cpp:976 dialogs.cpp:2530
+#: dialogs.cpp:1027 dialogs.cpp:2582 tempoview.cpp:130
 msgid "Tempo"
 msgstr "Tempo"
 
-#: dialogs.cpp:979
+#: dialogs.cpp:1030
 msgid "Local Tempo"
 msgstr "Lokalt tempo"
 
-#: dialogs.cpp:982
+#: dialogs.cpp:1033
 msgid "Lyric"
 msgstr "Sångtext"
 
-#: dialogs.cpp:985
+#: dialogs.cpp:1036
 msgid "Annotation"
 msgstr "Notering"
 
-#: dialogs.cpp:1041
+#: dialogs.cpp:1092
 msgid "Example"
 msgstr "Exempel"
 
-#: dialogs.cpp:1169
-msgid "Advanced Event Edit"
-msgstr "Avancerad händelseeditor"
-
-#: dialogs.cpp:1169
-msgid "Advanced Event Viewer"
-msgstr "Avancerad händelsevisning"
-
-#: dialogs.cpp:1187
+#: dialogs.cpp:1238
 msgid "Intrinsics"
 msgstr "Inbyggda"
 
-#: dialogs.cpp:1191
+#: dialogs.cpp:1242
 msgid "Event type: "
 msgstr "Händelsetyp: "
 
-#: dialogs.cpp:1197
+#: dialogs.cpp:1248
 msgid "Absolute time: "
 msgstr "Absolut tid: "
 
-#: dialogs.cpp:1207
+#: dialogs.cpp:1258
 msgid "Duration: "
 msgstr "Tonlängd: "
 
-#: dialogs.cpp:1220
+#: dialogs.cpp:1271
 msgid "Sub-ordering: "
 msgstr "Delgruppering: "
 
-#: dialogs.cpp:1231
+#: dialogs.cpp:1282
 msgid "Persistent properties"
 msgstr "Bestående egenskaper"
 
-#: dialogs.cpp:1241 dialogs.cpp:3627 dialogs.cpp:3631 dialogs.cpp:3655
+#: dialogs.cpp:1292 dialogs.cpp:3754 dialogs.cpp:3758 dialogs.cpp:3782
 msgid "Value"
 msgstr "Värde"
 
-#: dialogs.cpp:1261
+#: dialogs.cpp:1312
 msgid "Non-persistent properties"
 msgstr "Flyktiga egenskaper"
 
-#: dialogs.cpp:1262
+#: dialogs.cpp:1313
 msgid "These are cached values, lost if the event is modified."
 msgstr "Det här är värden i cache, som går förlorade om händelsen ändras."
 
-#: dialogs.cpp:1276
+#: dialogs.cpp:1327
 msgid "Name       "
 msgstr "Namn  "
 
-#: dialogs.cpp:1278
+#: dialogs.cpp:1329
 msgid "Type       "
 msgstr "Typ  "
 
-#: dialogs.cpp:1280
+#: dialogs.cpp:1331
 msgid "Value      "
 msgstr "Värde  "
 
-#: dialogs.cpp:1293
+#: dialogs.cpp:1344
 msgid "Make persistent"
 msgstr "Gör bestående"
 
-#: dialogs.cpp:1379
+#: dialogs.cpp:1430
 msgid "Delete this property"
 msgstr "Ta bort egenskap"
 
-#: dialogs.cpp:1514
+#: dialogs.cpp:1565
 msgid ""
 "Are you sure you want to delete the \"%1\" property?\n"
 "\n"
@@ -798,11 +1036,11 @@ msgstr ""
 "\n"
 "Att ta bort egenskaper som krävs kan orsaka oväntat beteende."
 
-#: dialogs.cpp:1517 dialogs.cpp:1548 dialogs.cpp:1606
+#: dialogs.cpp:1568 dialogs.cpp:1599
 msgid "Edit Event"
 msgstr "Redigera händelse"
 
-#: dialogs.cpp:1544
+#: dialogs.cpp:1595
 msgid ""
 "Are you sure you want to make the \"%1\" property persistent?\n"
 "\n"
@@ -813,291 +1051,278 @@ msgstr ""
 "\n"
 "Det kan orsaka problem om den senare överskrider ett annat beräknat värde."
 
-#: dialogs.cpp:1549
+#: dialogs.cpp:1600
 msgid "Make &Persistent"
 msgstr "Gör &bestående"
 
-#: dialogs.cpp:1606 eventcommands.cpp:35
-msgid "Insert Event"
-msgstr "Infoga händelse"
-
-#: dialogs.cpp:1618
+#: dialogs.cpp:1669
 msgid "Event Properties"
 msgstr "Egenskaper för händelse"
 
-#: dialogs.cpp:1624
+#: dialogs.cpp:1675
 msgid "Event type:"
 msgstr "Händelsetyp:"
 
-#: dialogs.cpp:1647 markereditor.cpp:64
+#: dialogs.cpp:1698 markereditor.cpp:64
 msgid "Absolute time:"
 msgstr "Absolut tid:"
 
-#: dialogs.cpp:1659 dialogs.cpp:1727 eventfilter.cpp:141
-#: rosegardenconfiguredialog.cpp:1390
+#: dialogs.cpp:1710 dialogs.cpp:1778 eventfilter.cpp:141
 msgid "Duration:"
 msgstr "Tonlängd:"
 
-#: dialogs.cpp:1671 eventfilter.cpp:135 widgets.cpp:1296
+#: dialogs.cpp:1722 eventfilter.cpp:135 widgets.cpp:1329
 msgid "Pitch:"
 msgstr "Tonhöjd:"
 
-#: dialogs.cpp:1686 dialogs.cpp:1789
+#: dialogs.cpp:1737 dialogs.cpp:1840
 msgid "Controller name:"
 msgstr "Styrenhetsnamn:"
 
-#: controleditor.cpp:217 dialogs.cpp:1687 dialogs.cpp:2059 dialogs.cpp:2060
-#: dialogs.cpp:2115 dialogs.cpp:2150 markereditor.cpp:231
-msgid "<none>"
-msgstr "<ingen>"
-
-#: dialogs.cpp:1693 eventfilter.cpp:138
+#: dialogs.cpp:1744 eventfilter.cpp:138
 msgid "Velocity:"
 msgstr "Hastighet:"
 
-#: dialogs.cpp:1704
+#: dialogs.cpp:1755
 msgid "Meta string:"
 msgstr "Metasträng:"
 
-#: dialogs.cpp:1739
+#: dialogs.cpp:1790
 msgid "Note pitch:"
 msgstr "Nothöjd:"
 
-#: dialogs.cpp:1747
+#: dialogs.cpp:1798
 msgid "Note velocity:"
 msgstr "Nothastighet:"
 
-#: dialogs.cpp:1783
+#: dialogs.cpp:1834
 msgid "Controller number:"
 msgstr "Styrenhetsnummer:"
 
-#: controleditor.cpp:448 dialogs.cpp:1792
+#: dialogs.cpp:1843
 msgid "Controller value:"
 msgstr "Styrenhetsvärde:"
 
-#: dialogs.cpp:1829
+#: dialogs.cpp:1880
 msgid "Key pitch:"
 msgstr "Tonhöjd:"
 
-#: dialogs.cpp:1837
+#: dialogs.cpp:1888
 msgid "Key pressure:"
 msgstr "Tangenttryck:"
 
-#: dialogs.cpp:1873
+#: dialogs.cpp:1924
 msgid "Channel pressure:"
 msgstr "Kanaltryck:"
 
-#: dialogs.cpp:1907
+#: dialogs.cpp:1958
 msgid "Program change:"
 msgstr "Programändring:"
 
-#: dialogs.cpp:1950
+#: dialogs.cpp:2001
 msgid "Data length:"
 msgstr "Datalängd:"
 
-#: dialogs.cpp:1972
+#: dialogs.cpp:2023
 msgid "Pitchbend MSB:"
 msgstr "Tonhöjdsavvikelse för mest signifikanta värdet:"
 
-#: dialogs.cpp:1980
+#: dialogs.cpp:2031
 msgid "Pitchbend LSB:"
 msgstr "Tonhöjdsavvikelse för minst signifikanta värdet:"
 
-#: dialogs.cpp:2047
+#: dialogs.cpp:2098
 msgid "Text type:"
 msgstr "Texttyp:"
 
-#: dialogs.cpp:2048
+#: dialogs.cpp:2099
 msgid "Text:"
 msgstr "Text:"
 
-#: dialogs.cpp:2106
+#: dialogs.cpp:2157
 msgid "Clef type:"
 msgstr "Klavtyp:"
 
-#: dialogs.cpp:2141
+#: dialogs.cpp:2192
 msgid "Key name:"
 msgstr "Tonartsnamn:"
 
-#: dialogs.cpp:2165
+#: dialogs.cpp:2216
 msgid "Unsupported event type:"
 msgstr "Händelsetyp som inte stöds:"
 
-#: dialogs.cpp:2466
+#: dialogs.cpp:2517
 msgid "Edit Event Time"
 msgstr "Redigera händelsetid"
 
-#: dialogs.cpp:2477
+#: dialogs.cpp:2528
 msgid "Edit Duration"
 msgstr "Redigera tonlängd"
 
-#: dialogs.cpp:2489
+#: dialogs.cpp:2540
 msgid "Edit Pitch"
 msgstr "Redigera tonhöjd"
 
-#: dialogs.cpp:2524
+#: dialogs.cpp:2576
 msgid "Insert Tempo Change"
 msgstr "Infoga tempoändring"
 
-#: dialogs.cpp:2534
+#: dialogs.cpp:2586
 msgid "New tempo"
 msgstr "Nytt tempo"
 
-#: dialogs.cpp:2558
+#: dialogs.cpp:2607
+msgid "Time of tempo change"
+msgstr "Tid för tempoändring"
+
+#: dialogs.cpp:2620
 msgid "The pointer is currently at "
 msgstr "Pekaren är för närvarande vid "
 
-#: dialogs.cpp:2566
+#: dialogs.cpp:2628
 msgid "Apply this tempo from here onwards"
 msgstr "Använd tempot härifrån och framåt"
 
-#: dialogs.cpp:2569
+#: dialogs.cpp:2631
 msgid "Replace the last tempo change"
 msgstr "Ersätt senaste tempoändring"
 
-#: dialogs.cpp:2574
+#: dialogs.cpp:2636
 msgid "Apply this tempo from the start of this bar"
 msgstr "Använd tempot från den här taktens början"
 
-#: dialogs.cpp:2577
+#: dialogs.cpp:2639
 msgid "Apply this tempo to the whole composition"
 msgstr "Använd tempot för hela kompositionen"
 
-#: dialogs.cpp:2582
+#: dialogs.cpp:2644
 msgid "Also make this the default tempo"
 msgstr "Gör också detta till standardtempo"
 
-#: dialogs.cpp:2637
-#, c-format
+#: dialogs.cpp:2704
 msgid "%1.%2 s,"
 msgstr "%1.%2 s,"
 
-#: dialogs.cpp:2643
+#: dialogs.cpp:2710
+#, c-format
 msgid "at the start of bar %1."
 msgstr "i början på takt %1."
 
-#: dialogs.cpp:2647
+#: dialogs.cpp:2714
+#, c-format
 msgid "in the middle of bar %1."
 msgstr "i mitten på takt %1."
 
-#: dialogs.cpp:2667
+#: dialogs.cpp:2734
 msgid "        (at %1.%2 s, in bar %3)"
 msgstr " (vid %1.%2 s, i takt %3)"
 
-#: dialogs.cpp:2684
+#: dialogs.cpp:2751
 msgid "There are no preceding tempo changes."
 msgstr "Det finns inga tidigare tempoändringar."
 
-#: dialogs.cpp:2692
+#: dialogs.cpp:2759
 msgid "There are no other tempo changes."
 msgstr "Det finns inga ytterligare tempoändringar."
 
-#: dialogs.cpp:2785 dialogs.cpp:2792 dialogs.cpp:2807 dialogs.cpp:2816
+#: dialogs.cpp:2864 dialogs.cpp:2871 dialogs.cpp:2886 dialogs.cpp:2895
 msgid "Clef"
 msgstr "Klav"
 
-#: dialogs.cpp:2795
+#: dialogs.cpp:2874
 msgid "Existing notes following clef change"
 msgstr "Befintliga noter följer klavändring"
 
-#: dialogs.cpp:2800
+#: dialogs.cpp:2879
 msgid "Lower clef"
 msgstr "Nedre klav"
 
-#: dialogs.cpp:2805
+#: dialogs.cpp:2884
 msgid "Up an Octave"
 msgstr "Upp en oktav"
 
-#: dialogs.cpp:2811
+#: dialogs.cpp:2890
 msgid "Down an Octave"
 msgstr "Ner en oktav"
 
-#: dialogs.cpp:2814
+#: dialogs.cpp:2893
 msgid "Higher clef"
 msgstr "Övre klav"
 
-#: dialogs.cpp:2825
+#: dialogs.cpp:2904
 msgid "Transpose into appropriate octave"
 msgstr "Transponera till lämplig oktav"
 
-#: dialogs.cpp:2964
+#: dialogs.cpp:3043
 msgid "Treble"
 msgstr "Diskant"
 
-#: dialogs.cpp:2965
+#: dialogs.cpp:3044
 msgid "Alto"
 msgstr "Alt"
 
-#: dialogs.cpp:2966
+#: dialogs.cpp:3045
 msgid "Tenor"
 msgstr "Tenor"
 
-#: dialogs.cpp:2967
+#: dialogs.cpp:3046
 msgid "Bass"
 msgstr "Bas"
 
-#: dialogs.cpp:2974 rosegardenconfiguredialog.cpp:603
-#: segmentparameterbox.cpp:76
+#: dialogs.cpp:3053 rosegardenconfiguredialog.cpp:603
+#: rosegardenconfiguredialog.cpp:1631 segmentparameterbox.cpp:80
 msgid "Quantize"
 msgstr "Kvantisera"
 
-#: dialogs.cpp:2984
+#: dialogs.cpp:3063
 msgid "Advanced"
 msgstr "Avancerat"
 
-#: dialogs.cpp:3000
+#: dialogs.cpp:3083
 msgid "Rescale"
 msgstr "Skala om"
 
-#: dialogs.cpp:3005
-msgid "Rescale ratio"
-msgstr "Omskalningsförhållande"
+#: dialogs.cpp:3088
+msgid "Duration of selection"
+msgstr "Markeringens längd"
 
-#: dialogs.cpp:3012
-msgid " beats in time of "
-msgstr " taktslag under tiden "
-
-#: dialogs.cpp:3024
-msgid "As percentage: "
-msgstr "Som procenttal: "
-
-#: dialogs.cpp:3069
+#: dialogs.cpp:3196
 msgid "Merge File"
 msgstr "Sammanfoga med fil"
 
-#: dialogs.cpp:3074
+#: dialogs.cpp:3201
 msgid "Merge new file  "
 msgstr "Sammanfoga med ny fil  "
 
-#: dialogs.cpp:3077
+#: dialogs.cpp:3204
 msgid "At start of existing composition"
 msgstr "Från början på befintlig komposition"
 
-#: dialogs.cpp:3078
+#: dialogs.cpp:3205
 msgid "From end of existing composition"
 msgstr "Från slutet på befintlig komposition"
 
-#: dialogs.cpp:3082
+#: dialogs.cpp:3209
 msgid "The file has different time signatures or tempos."
 msgstr "Filen har flera olika taktartssignaturer eller tempon."
 
-#: dialogs.cpp:3083
+#: dialogs.cpp:3210
 msgid "Import these as well"
 msgstr "Importera också dessa"
 
-#: dialogs.cpp:3109
+#: dialogs.cpp:3236
 msgid "Locate audio file"
 msgstr "Sök efter ljudfil"
 
-#: dialogs.cpp:3113
+#: dialogs.cpp:3240
 msgid "&Skip"
 msgstr "Hoppa &över"
 
-#: dialogs.cpp:3114
+#: dialogs.cpp:3241
 msgid "&Locate"
 msgstr "&Sök"
 
-#: dialogs.cpp:3119
+#: dialogs.cpp:3246
 msgid ""
 "Can't find file \"%1\".\n"
 "Would you like to try and locate this file or skip it?"
@@ -1105,341 +1330,341 @@ msgstr ""
 "Kan inte hitta filen \"%1\".\n"
 "Vill du försöka söka efter filen eller hoppa över den?"
 
-#: dialogs.cpp:3135
+#: dialogs.cpp:3262
 msgid "Select an Audio File"
 msgstr "Markera en ljudfil"
 
-#: dialogs.cpp:3157
+#: dialogs.cpp:3284
 msgid "Playing audio file"
 msgstr "Spelar upp ljudfil"
 
-#: dialogs.cpp:3162
+#: dialogs.cpp:3289
 msgid "Playing audio file \"%1\""
 msgstr "Spelar upp ljudfil \"%1\""
 
-#: dialogs.cpp:3176
+#: dialogs.cpp:3303
 msgid "Autosplit Audio Segment"
 msgstr "Dela ljudsegment automatiskt"
 
-#: dialogs.cpp:3189
+#: dialogs.cpp:3316
 msgid "AutoSplit Segment \""
 msgstr "Dela segment automatiskt \""
 
-#: dialogs.cpp:3201
+#: dialogs.cpp:3328
 msgid "Threshold"
 msgstr "Tröskel"
 
-#: dialogs.cpp:3263
+#: dialogs.cpp:3390
 msgid "<no preview generated for this audio file>"
 msgstr "<ingen förhandsgranskning skapad för ljudfilen>"
 
-#: dialogs.cpp:3489
+#: dialogs.cpp:3616
 msgid "Edit Lyrics"
 msgstr "Redigera sångtext"
 
-#: dialogs.cpp:3495
+#: dialogs.cpp:3622
 msgid "Lyrics for this segment"
 msgstr "Sångtext för segmentet"
 
-#: dialogs.cpp:3599
+#: dialogs.cpp:3726
 msgid "Set the %1 property of the event selection:"
 msgstr "Ställ in egenskapen %1 för händelsemarkeringen:"
 
-#: dialogs.cpp:3604
+#: dialogs.cpp:3731
 msgid "Pattern"
 msgstr "Mönster"
 
-#: dialogs.cpp:3608
+#: dialogs.cpp:3735
 msgid "Flat - set %1 to value"
 msgstr "Jämn: Ställ in %1 till ett värde"
 
-#: dialogs.cpp:3611
+#: dialogs.cpp:3738
 msgid "Alternating - set %1 to max and min on alternate events"
 msgstr "Växlande: Ställ in %1 till maximum och minimum för varannan händelse"
 
-#: dialogs.cpp:3614
+#: dialogs.cpp:3741
 msgid "Crescendo - set %1 rising from min to max"
 msgstr "Crescendo: Ställ in %1 stigande från minimum till maximum"
 
-#: dialogs.cpp:3617
+#: dialogs.cpp:3744
 msgid "Diminuendo - set %1 falling from max to min"
 msgstr "Diminuendo: Ställ in %1 fallande från maximum till minimum"
 
-#: dialogs.cpp:3620
+#: dialogs.cpp:3747
 msgid "Ringing - set %1 alternating from max to min with both dying to zero"
 msgstr ""
 "Ringning: Ställ in %1 växlande från maximum till minimum med båda "
 "bortdöende till tystnad"
 
-#: dialogs.cpp:3663 dialogs.cpp:3672 dialogs.cpp:3682
+#: dialogs.cpp:3790 dialogs.cpp:3799 dialogs.cpp:3809
 msgid "Start Value"
 msgstr "Startvärde"
 
-#: dialogs.cpp:3664 dialogs.cpp:3673 dialogs.cpp:3681
+#: dialogs.cpp:3791 dialogs.cpp:3800 dialogs.cpp:3808
 msgid "End Value"
 msgstr "Slutvärde"
 
-#: dialogs.cpp:3690
+#: dialogs.cpp:3817
 msgid "First Value"
 msgstr "Första värdet"
 
-#: dialogs.cpp:3691
+#: dialogs.cpp:3818
 msgid "Second Value"
 msgstr "Andra värdet"
 
-#: dialogs.cpp:3730
+#: dialogs.cpp:3857
 msgid "Change Composition Length"
 msgstr "Ändra kompositionens längd"
 
-#: dialogs.cpp:3736
+#: dialogs.cpp:3863
 msgid "Set the Start and End bar markers for this Composition"
 msgstr "Ställ in markering av början och slut för kompositionen"
 
-#: dialogs.cpp:3740
+#: dialogs.cpp:3867
 msgid "Start Bar"
 msgstr "Första takten"
 
-#: dialogs.cpp:3748
+#: dialogs.cpp:3875
 msgid "End Bar"
 msgstr "Sista takten"
 
-#: dialogs.cpp:3771 segmentcommands.cpp:1819
+#: dialogs.cpp:3898 segmentcommands.cpp:1859
 msgid "Split by Pitch"
 msgstr "Dela efter tonhöjd"
 
-#: dialogs.cpp:3779
+#: dialogs.cpp:3906
 msgid "Starting split pitch"
 msgstr "Börjar dela efter tonhöjd"
 
-#: dialogs.cpp:3782
+#: dialogs.cpp:3909
 msgid "Range up and down to follow music"
 msgstr "Flytta område upp och ner för att följa musiken"
 
-#: dialogs.cpp:3788
+#: dialogs.cpp:3915
 msgid "Duplicate non-note events"
 msgstr "Duplicera händelser utan noter"
 
-#: dialogs.cpp:3791
+#: dialogs.cpp:3918
 msgid "Clef handling:"
 msgstr "Klavhantering:"
 
-#: dialogs.cpp:3794
+#: dialogs.cpp:3921
 msgid "Leave clefs alone"
 msgstr "Låt klav vara i fred"
 
-#: dialogs.cpp:3795
+#: dialogs.cpp:3922
 msgid "Guess new clefs"
 msgstr "Gissa ny klav"
 
-#: dialogs.cpp:3796
+#: dialogs.cpp:3923
 msgid "Use treble and bass clefs"
 msgstr "Använd diskant- och basklav"
 
-#: dialogs.cpp:3835
+#: dialogs.cpp:3962
 msgid "Interpret"
 msgstr "Tolka"
 
-#: dialogs.cpp:3839
+#: dialogs.cpp:3966
 msgid "Interpretations to apply"
 msgstr "Tolkningar att tillämpa"
 
-#: dialogs.cpp:3842
+#: dialogs.cpp:3969
 msgid "Apply text dynamics (p, mf, ff etc)"
 msgstr "Tillämpa textdynamik (p, mf, ff, etc.)"
 
-#: dialogs.cpp:3844
+#: dialogs.cpp:3971
 msgid "Apply hairpin dynamics"
 msgstr "Använd hårnålsdynamik"
 
-#: dialogs.cpp:3846
+#: dialogs.cpp:3973
 msgid "Stress beats"
 msgstr "Betona taktslag"
 
-#: dialogs.cpp:3848
+#: dialogs.cpp:3975
 msgid "Articulate slurs, staccato, tenuto etc"
 msgstr "Artikulera bågar, staccato, tenuto, etc."
 
-#: dialogs.cpp:3850
+#: dialogs.cpp:3977
 msgid "All available interpretations"
 msgstr "Alla tillgängliga tolkningar"
 
-#: dialogs.cpp:3915 rosegardenconfiguredialog.cpp:965
+#: dialogs.cpp:4042 rosegardenconfiguredialog.cpp:874
 msgid "Sequencer status"
 msgstr "Sequencer-status"
 
-#: dialogs.cpp:3919
+#: dialogs.cpp:4046
 msgid "Sequencer status:"
 msgstr "Sequencer-status:"
 
-#: dialogs.cpp:3921
+#: dialogs.cpp:4048
 msgid "Status not available."
 msgstr "Status inte tillgänglig."
 
-#: dialogs.cpp:3928
+#: dialogs.cpp:4055
 msgid "Sequencer is not running or is not responding."
 msgstr "Sequencern kör inte eller svarar inte."
 
-#: dialogs.cpp:3935
+#: dialogs.cpp:4062
 msgid "Sequencer is not returning a valid status report."
 msgstr "Sequencern returnerar inte en giltig statusrapport."
 
-#: dialogs.cpp:3960
+#: dialogs.cpp:4087
 msgid "Recording audio"
 msgstr "Spelar in ljud"
 
-#: dialogs.cpp:3968
+#: dialogs.cpp:4095
 msgid "Audio recording time left:  "
 msgstr "Kvarvarande tid för ljudinspelning:  "
 
-#: dialogs.cpp:4014
+#: dialogs.cpp:4141
 msgid "<timing has gone astray>"
 msgstr "<tidmätning har gått fel>"
 
-#: dialogs.cpp:4033
+#: dialogs.cpp:4160
 msgid "Just how big is your hard disk?"
 msgstr "Hur stor är din hårddisk egentligen?"
 
-#: dialogs.cpp:4083 rc.cpp:101
+#: dialogs.cpp:4210 rc.cpp:109
 msgid "Metronome"
 msgstr "Metronom"
 
-#: dialogs.cpp:4095
+#: dialogs.cpp:4222
 msgid "Metronome Instrument"
 msgstr "Metronominstrument"
 
-#: dialogs.cpp:4137
+#: dialogs.cpp:4264
 msgid "Beats"
 msgstr "Taktslag"
 
-#: dialogs.cpp:4144
+#: dialogs.cpp:4271
 msgid "Bars only"
 msgstr "Bara takter"
 
-#: dialogs.cpp:4145
+#: dialogs.cpp:4272
 msgid "Bars and beats"
 msgstr "Takter och taktslag"
 
-#: dialogs.cpp:4146
+#: dialogs.cpp:4273
 msgid "Bars, beats, and divisions"
 msgstr "Takter, taktslag och delningar"
 
-#: dialogs.cpp:4150
+#: dialogs.cpp:4277
 msgid "Bar velocity"
 msgstr "Takthastighet"
 
-#: dialogs.cpp:4157
+#: dialogs.cpp:4284
 msgid "Beat velocity"
 msgstr "Taktslagshastighet"
 
-#: dialogs.cpp:4164
+#: dialogs.cpp:4291
 msgid "Sub-beat velocity"
 msgstr "Deltaktslagshastighet"
 
-#: dialogs.cpp:4173
+#: dialogs.cpp:4300
 msgid "Pitch"
 msgstr "Tonhöjd"
 
-#: dialogs.cpp:4476
+#: dialogs.cpp:4603
 msgid "Lilypond Export"
 msgstr "Lilypond-export"
 
-#: dialogs.cpp:4481
+#: dialogs.cpp:4608
 msgid "Lilypond export options"
 msgstr "Lilypond exportinställningar"
 
-#: dialogs.cpp:4490
+#: dialogs.cpp:4617
 msgid "Lilypond compatibility level"
 msgstr "Lilypond kompatibilitetsnivå"
 
-#: dialogs.cpp:4493
+#: dialogs.cpp:4620
 msgid "Lilypond 1.6 or 1.8"
 msgstr "Lilypond 1.6 eller 1.8"
 
-#: dialogs.cpp:4494
-msgid "Lilypond 2.0+"
-msgstr "Lilypond 2.0+"
+#: dialogs.cpp:4621
+msgid "Lilypond 2.0"
+msgstr "Lilypond 2.0"
 
-#: dialogs.cpp:4499
+#: dialogs.cpp:4626
 msgid "Paper size to use in \\paper block"
 msgstr "Pappersstorlek att använda i \\paper-block"
 
-#: dialogs.cpp:4502
+#: dialogs.cpp:4629
 msgid "US Letter"
 msgstr "US Letter"
 
-#: dialogs.cpp:4503
+#: dialogs.cpp:4630
 msgid "A4"
 msgstr "A4"
 
-#: dialogs.cpp:4504
+#: dialogs.cpp:4631
 msgid "Legal"
 msgstr "Legal"
 
-#: dialogs.cpp:4505
+#: dialogs.cpp:4632
 msgid "do not specify"
 msgstr "ange inte"
 
-#: dialogs.cpp:4510
+#: dialogs.cpp:4637
 msgid "Lilypond font size"
 msgstr "Lilypond teckenstorlek"
 
-#: dialogs.cpp:4524
+#: dialogs.cpp:4651
 msgid "Export Document Properties as \\header block"
 msgstr "Exportera dokumentegenskaper som \\header-block"
 
-#: dialogs.cpp:4529
+#: dialogs.cpp:4656
 msgid "Export \\lyric blocks"
 msgstr "Exportera \\lyric-block"
 
-#: dialogs.cpp:4534
+#: dialogs.cpp:4661
 msgid "Do not export muted tracks"
 msgstr "Exportera inte tysta spår"
 
-#: dialogs.cpp:4539
+#: dialogs.cpp:4666
 msgid "Export \\midi block"
 msgstr "Exportera \\midi-block"
 
-#: dialogs.cpp:4544
+#: dialogs.cpp:4671
 msgid "Enable \"point and click\" debugging"
 msgstr "Aktivera felsökning med \"peka och klicka\""
 
-#: dialogs.cpp:4549
+#: dialogs.cpp:4676
 msgid "Write bar checks at end of measures"
 msgstr "Skriv taktkontroller i slutet på takter"
 
-#: dialogs.cpp:4554
+#: dialogs.cpp:4681
 msgid "Export beamings"
 msgstr "Exportera balkar"
 
-#: dialogs.cpp:4581
+#: dialogs.cpp:4708
 msgid "Export Devices..."
 msgstr "Exportera enheter..."
 
-#: dialogs.cpp:4586
+#: dialogs.cpp:4713
 msgid "Export devices"
 msgstr "Exportera enheter"
 
-#: dialogs.cpp:4588
+#: dialogs.cpp:4715
 msgid "Export all devices"
 msgstr "Exportera alla enheter"
 
-#: dialogs.cpp:4589
+#: dialogs.cpp:4716
 msgid "Export selected device only"
 msgstr "Exportera bara markerade enheter"
 
-#: dialogs.cpp:4590
+#: dialogs.cpp:4717
 msgid "         (\"%1\")"
 msgstr "         (\"%1\")"
 
-#: diskspace.cpp:38
-msgid "Directory doesn't exist."
-msgstr "Katalogen finns inte."
+#: diskspace.cpp:40
+msgid "Error checking for diskspace - directory \"%1\" doesn't exist"
+msgstr "Fel vid kontroll av diskutrymme. Katalogen \"%1\" finns inte."
 
-#: diskspace.cpp:53
+#: diskspace.cpp:57
 msgid "Can't determine free disk space."
 msgstr "Kan inte avgöra ledigt diskutrymme."
 
-#: diskspace.cpp:82
+#: diskspace.cpp:86
 msgid "Couldn't extract disk space information."
 msgstr "Kunde inte hämta information om diskutrymme."
 
@@ -1479,7 +1704,7 @@ msgstr "Heuristisk kvantisering av &notskrift"
 msgid "Grid &Quantize"
 msgstr "Rutnäts&kvantisering"
 
-#: editcommands.cpp:730 editcommands.cpp:915 rosegardengui.cpp:552
+#: editcommands.cpp:730 editcommands.cpp:915 rosegardengui.cpp:622
 msgid "&Quantize..."
 msgstr "&Kvantisera..."
 
@@ -1491,12 +1716,12 @@ msgstr "Ta bort kvantisering för händelser"
 msgid "Cu&t"
 msgstr "Klipp u&t"
 
-#: editcommands.h:77 notationview.cpp:1405
+#: editcommands.h:77 notationview.cpp:1417
 msgid "C&ut and Close"
 msgstr "Klipp &ut och stäng"
 
-#: editcommands.h:198 matrixview.cpp:427 notationview.cpp:1375
-#: rosegardengui.cpp:445
+#: editcommands.h:198 matrixview.cpp:463 notationview.cpp:1387
+#: rosegardengui.cpp:518
 msgid "&Erase"
 msgstr "Rad&era"
 
@@ -1532,145 +1757,150 @@ msgstr "Ner en okta&v"
 msgid "&Transpose..."
 msgstr "&Transponera..."
 
-#: editcommands.h:411
+#: editcommands.h:384 segmentcommands.h:385
+msgid "Stretch or S&quash..."
+msgstr "Sträck eller tr&yck ihop..."
+
+#: editcommands.h:433
 msgid "&Increase Velocity"
 msgstr "&Öka hastighet"
 
-#: editcommands.h:412
+#: editcommands.h:434
 msgid "&Reduce Velocity"
 msgstr "&Reducera hastighet"
 
-#: editcommands.h:432
+#: editcommands.h:454
 msgid "&Add Marker"
 msgstr "&Lägg till markör"
 
-#: editcommands.h:454
+#: editcommands.h:476
 msgid "&Remove Marker"
 msgstr "&Ta bort markör"
 
-#: editcommands.h:479
+#: editcommands.h:501
 msgid "&Modify Marker"
 msgstr "Ä&ndra markör"
 
-#: editview.cpp:615
+#: editview.cpp:693
 msgid "Show Velocity Property Ruler"
 msgstr "Visa linjal för hastighetsegenskaper"
 
-#: editview.cpp:634
+#: editview.cpp:712
 msgid "Insert item"
 msgstr "Infoga objekt"
 
-#: editview.cpp:640
+#: editview.cpp:718
 msgid "Erase selected items"
 msgstr "Ta bort markerade objekt"
 
-#: editview.cpp:644
+#: editview.cpp:722
 msgid "Clear ruler"
 msgstr "Rensa linjal"
 
-#: editview.cpp:648
+#: editview.cpp:726
 msgid "Insert line of controllers"
 msgstr "Infoga rad med styrenheter"
 
-#: editview.cpp:652
-msgid "Close Ruler"
-msgstr "Stäng linjal"
+#: editview.cpp:766
+msgid "%1 Controller %2 %3"
+msgstr "%1 styrenhet %2 %3"
 
-#: editview.cpp:680
-msgid "%1 ruler (%2)"
-msgstr "%1 linjal (%2)"
-
-#: editview.cpp:770
+#: editview.cpp:912
 msgid "I"
 msgstr "I"
 
-#: editview.cpp:770
+#: editview.cpp:912
 msgid "II"
 msgstr "II"
 
-#: editview.cpp:770
+#: editview.cpp:912
 msgid "III"
 msgstr "III"
 
-#: editview.cpp:770
+#: editview.cpp:912
 msgid "IV"
 msgstr "IV"
 
-#: editview.cpp:771
+#: editview.cpp:913
 msgid "V"
 msgstr "V"
 
-#: editview.cpp:771
+#: editview.cpp:913
 msgid "VI"
 msgstr "VI"
 
-#: editview.cpp:771
+#: editview.cpp:913
 msgid "VII"
 msgstr "VII"
 
-#: editview.cpp:771
+#: editview.cpp:913
 msgid "VIII"
 msgstr "VIII"
 
-#: editview.cpp:773
+#: editview.cpp:915
 msgid "%1 flat"
 msgstr "%1 beförtecken"
 
-#: editview.cpp:774
+#: editview.cpp:916
 msgid "%1 sharp"
 msgstr "%1 korsförtecken"
 
-#: editview.cpp:789
+#: editview.cpp:931
 msgid "&Insert Note"
 msgstr "&Infoga not"
 
-#: editview.cpp:795
+#: editview.cpp:937
 msgid "&Upper Octave"
 msgstr "&Övre oktav"
 
-#: editview.cpp:800
+#: editview.cpp:942
 msgid "&Lower Octave"
 msgstr "&Undre oktav"
 
-#: editview.cpp:977
+#: editview.cpp:1131
 msgid "Estimated time signature shown"
 msgstr "Uppskattad taktartssignatur visas"
 
-#: editview.cpp:1181 segmentparameterbox.cpp:77
+#: editview.cpp:1314 rosegardenconfiguredialog.cpp:1632
+#: segmentparameterbox.cpp:81
 msgid "Transpose"
 msgstr "Transponera"
 
-#: editview.cpp:1182
+#: editview.cpp:1315
 msgid "Enter the number of semitones to transpose by:"
 msgstr "Skriv in antal halvtoner att transponera:"
 
-#: editview.cpp:1186
+#: editview.cpp:1319
 msgid "Transposing..."
 msgstr "Transponerar..."
 
-#: editview.cpp:1194
+#: editview.cpp:1327
 msgid "Transposing up one semitone..."
 msgstr "Transponerar ner en halvton..."
 
-#: editview.cpp:1202
+#: editview.cpp:1335
 msgid "Transposing up one octave..."
 msgstr "Transponerar upp en oktav..."
 
-#: editview.cpp:1210
+#: editview.cpp:1343
 msgid "Transposing down one semitone..."
 msgstr "Transponerar ner en halvton..."
 
-#: editview.cpp:1218
+#: editview.cpp:1351
 msgid "Transposing down one octave..."
 msgstr "Transponerar ner en oktav..."
 
-#: editviewbase.cpp:344 rosegardengui.cpp:1975
+#: editviewbase.cpp:359 rosegardengui.cpp:2206
 msgid "Toggle the toolbar..."
 msgstr "Växla verktygsraden..."
 
-#: editviewbase.cpp:354 rosegardengui.cpp:2136
+#: editviewbase.cpp:369 rosegardengui.cpp:2365
 msgid "Toggle the statusbar..."
 msgstr "Växla statusraden..."
+
+#: eventcommands.cpp:35
+msgid "Insert Event"
+msgstr "Infoga händelse"
 
 #: eventfilter.cpp:77
 msgid "Event Filter"
@@ -1692,7 +1922,7 @@ msgstr "Undanta alla"
 msgid "Exclude entire range of values"
 msgstr "Undanta hela intervallet med värden"
 
-#: eventfilter.cpp:121 eventview.cpp:172 midifilter.cpp:45 midifilter.cpp:81
+#: eventfilter.cpp:121 eventview.cpp:187 midifilter.cpp:46 midifilter.cpp:82
 msgid "Note"
 msgstr "Not"
 
@@ -1726,7 +1956,7 @@ msgstr "välj tonhöjd med notsystem"
 msgid "unlimited"
 msgstr "obegränsad"
 
-#: eventfilter.cpp:263 eventview.cpp:174 midifilter.cpp:50 midifilter.cpp:86
+#: eventfilter.cpp:263 eventview.cpp:189 midifilter.cpp:51 midifilter.cpp:87
 msgid "Controller"
 msgstr "Styrenhet"
 
@@ -1758,127 +1988,368 @@ msgstr "Tonhöjdsväljare"
 msgid "%1 Pitch"
 msgstr "Tonhöjd %1"
 
-#: eventview.cpp:170
+#: eventview.cpp:185
 msgid "Event filters"
 msgstr "Händelsefilter"
 
-#: eventview.cpp:173 midifilter.cpp:46 midifilter.cpp:82
+#: eventview.cpp:188 midifilter.cpp:47 midifilter.cpp:83
 msgid "Program Change"
 msgstr "Programändring"
 
-#: eventview.cpp:175 midifilter.cpp:49 midifilter.cpp:85
-msgid "Pitch Bend"
-msgstr "Tonhöjdsavvikelse"
-
-#: eventview.cpp:176 midifilter.cpp:51 midifilter.cpp:87
+#: eventview.cpp:191 midifilter.cpp:52 midifilter.cpp:88
 msgid "System Exclusive"
 msgstr "Systemexklusiv"
 
-#: eventview.cpp:177 midifilter.cpp:47 midifilter.cpp:83
+#: eventview.cpp:192 midifilter.cpp:48 midifilter.cpp:84
 msgid "Key Pressure"
 msgstr "Tangenttryck"
 
-#: eventview.cpp:178 midifilter.cpp:48 midifilter.cpp:84
+#: eventview.cpp:193 midifilter.cpp:49 midifilter.cpp:85
 msgid "Channel Pressure"
 msgstr "Kanaltryck"
 
-#: eventview.cpp:179
+#: eventview.cpp:194
 msgid "Rest"
 msgstr "Paus"
 
-#: eventview.cpp:180
+#: eventview.cpp:195
 msgid "Indication"
 msgstr "Indikering"
 
-#: eventview.cpp:182
+#: eventview.cpp:197
 msgid "Other"
 msgstr "Annan"
 
-#: eventview.cpp:224
+#: eventview.cpp:239 tempoview.cpp:157
 msgid "Time  "
 msgstr "Tid  "
 
-#: eventview.cpp:225
+#: eventview.cpp:240
 msgid "Duration  "
 msgstr "Tonlängd  "
 
-#: eventview.cpp:226
+#: eventview.cpp:241
 msgid "Event Type  "
 msgstr "Händelsetyp  "
 
-#: eventview.cpp:227
+#: eventview.cpp:242
 msgid "Pitch  "
 msgstr "Tonhöjd  "
 
-#: eventview.cpp:228
+#: eventview.cpp:243
 msgid "Velocity  "
 msgstr "Hastighet  "
 
-#: eventview.cpp:229
+#: eventview.cpp:244
 msgid "Type (Data1)  "
 msgstr "Typ (data1)  "
 
-#: eventview.cpp:230
+#: eventview.cpp:245
 msgid "Value (Data2)  "
 msgstr "Värde (data2)"
 
-#: eventview.cpp:449
+#: eventview.cpp:473
 msgid "<no events at this filter level>"
 msgstr "<inga händelser på den här filternivån>"
 
-#: eventview.cpp:451
+#: eventview.cpp:475
 msgid "<no events>"
 msgstr "<inga händelser>"
 
-#: eventview.cpp:598 matrixview.cpp:1136 notationviewslots.cpp:474
-#: notationviewslots.cpp:521 rosegardengui.cpp:1709
+#: eventview.cpp:723 matrixview.cpp:1273 notationviewslots.cpp:474
+#: notationviewslots.cpp:521 rosegardengui.cpp:1837
 msgid "Clipboard is empty"
 msgstr "Klippbordet är tomt"
 
-#: eventview.cpp:602 matrixview.cpp:1140 notationviewslots.cpp:482
-#: notationviewslots.cpp:525 rosegardengui.cpp:1712
+#: eventview.cpp:727 matrixview.cpp:1277 notationviewslots.cpp:482
+#: notationviewslots.cpp:525 rosegardengui.cpp:1840
 msgid "Inserting clipboard contents..."
 msgstr "Infogar klippbordets innehåll..."
 
-#: eventview.cpp:635 matrixview.cpp:1147 notationtool.cpp:1606
+#: eventview.cpp:760 matrixview.cpp:1284 notationtool.cpp:1621
 msgid "Couldn't paste at this point"
 msgstr "Kunde inte klistra in på den här platsen"
 
-#: eventview.cpp:857
+#: eventview.cpp:982
 msgid "&Insert Event"
 msgstr "&Infoga händelse"
 
-#: eventview.cpp:863
+#: eventview.cpp:988
 msgid "&Delete Event"
 msgstr "Ta &bort händelse"
 
-#: eventview.cpp:869
+#: eventview.cpp:994
 msgid "&Edit Event"
 msgstr "&Redigera händelse"
 
-#: eventview.cpp:875
+#: eventview.cpp:1000
 msgid "&Advanced Event Editor"
 msgstr "&Avancerad händelseeditor"
 
-#: eventview.cpp:881 matrixview.cpp:580 notationview.cpp:1859
+#: eventview.cpp:1006 matrixview.cpp:634 notationview.cpp:1877
 msgid "&Filter Selection"
 msgstr "&Filtrera markering"
 
-#: eventview.cpp:885 matrixview.cpp:467
+#: eventview.cpp:1010 matrixview.cpp:521 tempoview.cpp:610
 msgid "Select &All"
 msgstr "Markera &alla"
 
-#: eventview.cpp:889 matrixview.cpp:575 notationview.cpp:1852
+#: eventview.cpp:1014 matrixview.cpp:629 notationview.cpp:1870
+#: tempoview.cpp:614
 msgid "Clear Selection"
 msgstr "Rensa markering"
 
-#: eventview.cpp:1177
+#: eventview.cpp:1025 tempoview.cpp:625
+msgid "&Musical Times"
+msgstr "&Musiktider"
+
+#: eventview.cpp:1033 tempoview.cpp:633
+msgid "&Real Times"
+msgstr "&Verkliga tider"
+
+#: eventview.cpp:1041 tempoview.cpp:641
+msgid "Ra&w Times"
+msgstr "&Obehandlade tider"
+
+#: eventview.cpp:1355
 msgid "Open in Event Editor"
 msgstr "Öppna i händelseeditor"
 
-#: eventview.cpp:1178
+#: eventview.cpp:1356
 msgid "Open in Expert Event Editor"
 msgstr "Öppna i experthändelseeditor"
+
+#: importdevicedialog.cpp:53
+msgid "Import from Device..."
+msgstr "Importera från enhet..."
+
+#: importdevicedialog.cpp:80
+#, c-format
+msgid "Cannot open file %1"
+msgstr "Kan inte öppna filen %1"
+
+#: importdevicedialog.cpp:87
+#, c-format
+msgid "No devices found in file %1"
+msgstr "Inga enheter hittades i filen %1"
+
+#: importdevicedialog.cpp:94
+msgid "Source device"
+msgstr "Källenhet"
+
+#: importdevicedialog.cpp:99
+msgid "Import from: "
+msgstr "Importera från: "
+
+#: importdevicedialog.cpp:136
+msgid "Import banks"
+msgstr "Importera banker"
+
+#: importdevicedialog.cpp:137
+msgid "Import controllers"
+msgstr "Importera styrenheter"
+
+#: importdevicedialog.cpp:140
+msgid "Import device name"
+msgstr "Importenhetens namn"
+
+#: importdevicedialog.cpp:146
+msgid "Bank import behaviour"
+msgstr "Importbeteende för banker"
+
+#: importdevicedialog.cpp:148
+msgid "Merge banks"
+msgstr "Sammanfoga banker"
+
+#: importdevicedialog.cpp:149
+msgid "Overwrite banks"
+msgstr "Skriv över banker"
+
+#: importdevicedialog.cpp:331
+msgid "Bank %1:%2"
+msgstr "Bank %1:%2"
+
+#: instrumentparameterbox.cpp:69 matrixview.cpp:119
+msgid "Instrument Parameters"
+msgstr "Instrumentparametrar"
+
+#: instrumentparameterbox.cpp:95 trackbuttons.cpp:294 trackbuttons.cpp:395
+#: trackbuttons.cpp:719 trackbuttons.cpp:1000
+msgid "<no instrument>"
+msgstr "<inget instrument>"
+
+#: instrumentparameterbox.cpp:769
+msgid "Bank"
+msgstr "Bank"
+
+#: instrumentparameterbox.cpp:770
+msgid "Variation"
+msgstr "Variation"
+
+#: instrumentparameterbox.cpp:771
+msgid "Program"
+msgstr "Program"
+
+#: instrumentparameterbox.cpp:772
+msgid "Channel"
+msgstr "Kanal"
+
+#: instrumentparameterbox.cpp:883 instrumentparameterbox.cpp:889
+msgid "[ %1 ]"
+msgstr "[ %1 ]"
+
+#: kde32_ktabbar.cpp:209
+msgid "Close this tab"
+msgstr "Stäng fliken"
+
+#: ktmpstatusmsg.cpp:70
+msgid "  Ready."
+msgstr "  Klar."
+
+#: lilypondio.cpp:501
+msgid ""
+"Lilypond does not allow spaces or backslashes in filenames.\n"
+"\n"
+"Would you like to use\n"
+"\n"
+" %1\n"
+"\n"
+" instead?"
+msgstr ""
+"Lilypond tillåter inte mellanslag eller backsteg i filnamn.\n"
+"\n"
+"Vill du använda\n"
+"\n"
+" %1\n"
+"\n"
+" istället?"
+
+#: lilypondio.cpp:1263
+msgid "warning: overlong bar truncated here"
+msgstr "varning: alltför lång takt avkortad här"
+
+#: lilypondio.cpp:1268
+msgid "warning: bar too short, padding with rests"
+msgstr "varning: takt för kort, fyller ut med pauser"
+
+#: main.cpp:312
+msgid "Rosegarden - A sequencer and musical notation editor"
+msgstr "Rosegarden - En sequencer och notskriftseditor"
+
+#: main.cpp:316
+msgid "Don't use the sequencer (support editing only)"
+msgstr "Använd inte sequencern (stöd bara redigering)"
+
+#: main.cpp:317
+msgid "Don't show the splash screen"
+msgstr "Visa inte startskärm"
+
+#: main.cpp:318
+msgid "Don't automatically run in the background"
+msgstr "Kör inte automatiskt i bakgrunden"
+
+#: main.cpp:319
+msgid "Attach to a running sequencer process, if found"
+msgstr "Anslut till en sequencer-process som kör, om någon hittas"
+
+#: main.cpp:320
+msgid "file to open"
+msgstr "fil att öppna"
+
+#: main.cpp:366
+msgid "Installation contains the wrong version of Rosegarden."
+msgstr "installationen innehåller fel version av Rosegarden."
+
+#: main.cpp:367
+msgid ""
+" The wrong versions of Rosegarden's data files were\n"
+" found in the standard KDE installation directories.\n"
+" (I am %1, but the installed files are for version %2.)\n"
+"\n"
+" This may mean one of the following:\n"
+"\n"
+" 1. This is a new upgrade of Rosegarden, and it has not yet been\n"
+"     installed.  If you compiled it yourself, check that you have\n"
+"     run \"make install\" and that the procedure completed\n"
+"     successfully.\n"
+"\n"
+" 2. The upgrade was installed in a non-standard directory,\n"
+"     and an old version was found in a standard directory.  If so,\n"
+"     you will need to add the correct directory to your KDEDIRS\n"
+"     environment variable before you can run it."
+msgstr ""
+"Fel version av Rosegardens datafiler hittades\n"
+"i KDE-installationens standardkataloger.\n"
+"(Det här är %1, men de installerade filerna är %2.)\n"
+"\n"
+"Det här kan betyda något av följande:\n"
+"\n"
+"1. Det här är en ny uppgradering av Rosegarden, som inte ännu\n"
+"    har installerats. Om du kompilerade den själv, kontrollera att\n"
+"    du har kört \"make install\" och att kommandot slutfördes\n"
+"    med lyckat resultat.\n"
+"\n"
+"2. Uppgraderingen installerades i en annan än standardkatalogen,\n"
+"    och en gammal version hittades i en standardkatalog. Om det\n"
+"    är fallet, måste du lägga till den riktiga katalogen i "
+"miljövariabeln\n"
+"    KDEDIRS innan du kan köra den."
+
+#: main.cpp:379 main.cpp:397
+msgid "Installation problem"
+msgstr "installationsproblem"
+
+#: main.cpp:385
+msgid "Rosegarden does not appear to have been installed."
+msgstr "Rosegarden verkar inte ha installerats."
+
+#: main.cpp:386
+msgid ""
+" One or more of Rosegarden's data files could not be\n"
+" found in the standard KDE installation directories.\n"
+"\n"
+" This may mean one of the following:\n"
+"\n"
+" 1. Rosegarden has not been correctly installed.  If you compiled\n"
+"     it yourself, check that you have run \"make install\" and that\n"
+"     the procedure completed successfully.\n"
+"\n"
+" 2. Rosegarden has been installed in a non-standard directory,\n"
+"     and you need to add this directory to your KDEDIRS environment\n"
+"     variable before you can run it.  This may be the case if you\n"
+"     installed into $HOME or a local third-party package directory\n"
+"     like /usr/local or /opt."
+msgstr ""
+"En eller flera av Rosegardens datafiler hittades\n"
+"i KDE-installationens standardkataloger.\n"
+"\n"
+"Det här kan betyda något av följande:\n"
+"\n"
+"1. Rosegarden har inte installerats på ett riktigt sätt. Om du\n"
+"    kompilerade den själv, kontrollera att du har kört \"make install\"\n"
+"    och att kommandot slutfördes med lyckat resultat.\n"
+"\n"
+"2. Rosegarden har installerats i en annan än standardkatalogen,\n"
+"    och du måste lägga till den här katalogen i miljövariabeln\n"
+"    KDEDIRS innan du kan köra den. Det här kan vara fallet om\n"
+"    du installerade i $HOME eller i en lokal tredjeparts paketkatalog\n"
+"    som /usr/local eller /opt."
+
+#: main.cpp:406
+msgid "Rosegarden"
+msgstr "Rosegarden"
+
+#: _translatorinfo.cpp:1 main.cpp:430
+msgid ""
+"_: NAME OF TRANSLATORS\n"
+"Your names"
+msgstr "Stefan Asserhäll"
+
+#: _translatorinfo.cpp:3 main.cpp:430
+msgid ""
+"_: EMAIL OF TRANSLATORS\n"
+"Your emails"
+msgstr "stefan.asserhall@comhem.se"
 
 #: markereditor.cpp:50
 msgid "Manage Markers"
@@ -1940,190 +2411,6 @@ msgstr "Markörtid"
 msgid "Marker Properties"
 msgstr "Marköregenskaper"
 
-#: controleditor.cpp:432 markereditor.cpp:452
-msgid "Name:"
-msgstr "Namn:"
-
-#: controleditor.cpp:440 markereditor.cpp:456
-msgid "Description:"
-msgstr "Beskrivning:"
-
-#: instrumentparameterbox.cpp:68
-msgid "Instrument Parameters"
-msgstr "Instrumentparametrar"
-
-#: instrumentparameterbox.cpp:94 trackbuttons.cpp:258 trackbuttons.cpp:359
-#: trackbuttons.cpp:675 trackbuttons.cpp:956
-msgid "<no instrument>"
-msgstr "<inget instrument>"
-
-#: instrumentparameterbox.cpp:316
-msgid "Record level = "
-msgstr "Inspelningsnivå = "
-
-#: instrumentparameterbox.cpp:340
-msgid "Playback level = "
-msgstr "Uppspelningsnivå = "
-
-#: instrumentparameterbox.cpp:895
-msgid "Bank"
-msgstr "Bank"
-
-#: instrumentparameterbox.cpp:896
-msgid "Variation"
-msgstr "Variation"
-
-#: instrumentparameterbox.cpp:897
-msgid "Program"
-msgstr "Program"
-
-#: instrumentparameterbox.cpp:898
-msgid "Channel"
-msgstr "Kanal"
-
-#: instrumentparameterbox.cpp:1009 instrumentparameterbox.cpp:1015
-msgid "[ %1 ]"
-msgstr "[ %1 ]"
-
-#: ktmpstatusmsg.cpp:68
-msgid "  Ready."
-msgstr "  Klar."
-
-#: lilypondio.cpp:487
-msgid ""
-"Lilypond does not allow spaces or backslashes in filenames.  Would you like "
-"to use\n"
-"\n"
-" %1\n"
-"\n"
-" instead?"
-msgstr ""
-"Lilypond tillåter inte mellanslag eller backsteg i filnamn. Vill du "
-"använda\n"
-"\n"
-"%1\n"
-"\n"
-"istället?"
-
-#: lilypondio.cpp:1224
-msgid "warning: overlong bar truncated here"
-msgstr "varning: alltför lång takt avkortad här"
-
-#: lilypondio.cpp:1229
-msgid "warning: bar too short, padding with rests"
-msgstr "varning: takt för kort, fyller ut med pauser"
-
-#: main.cpp:311
-msgid "Rosegarden - A sequencer and musical notation editor"
-msgstr "Rosegarden - En sequencer och notskriftseditor"
-
-#: main.cpp:315
-msgid "don't show splash screen"
-msgstr "visa inte startskärm"
-
-#: main.cpp:316
-msgid "don't use an external sequencer"
-msgstr "använd inte en extern sequencer"
-
-#: main.cpp:317
-msgid "file to open"
-msgstr "fil att öppna"
-
-#: main.cpp:363
-msgid "Installation contains the wrong version of Rosegarden."
-msgstr "installationen innehåller fel version av Rosegarden."
-
-#: main.cpp:364
-msgid ""
-" The wrong versions of Rosegarden's data files were\n"
-" found in the standard KDE installation directories.\n"
-" (I am %1, but the installed files are for version %2.)\n"
-"\n"
-" This may mean one of the following:\n"
-"\n"
-" 1. This is a new upgrade of Rosegarden, and it has not yet been\n"
-"     installed.  If you compiled it yourself, check that you have\n"
-"     run \"make install\" and that the procedure completed\n"
-"     successfully.\n"
-"\n"
-" 2. The upgrade was installed in a non-standard directory,\n"
-"     and an old version was found in a standard directory.  If so,\n"
-"     you will need to add the correct directory to your KDEDIRS\n"
-"     environment variable before you can run it."
-msgstr ""
-"Fel version av Rosegardens datafiler hittades\n"
-"i KDE-installationens standardkataloger.\n"
-"(Det här är %1, men de installerade filerna är %2.)\n"
-"\n"
-"Det här kan betyda något av följande:\n"
-"\n"
-"1. Det här är en ny uppgradering av Rosegarden, som inte ännu\n"
-"    har installerats. Om du kompilerade den själv, kontrollera att\n"
-"    du har kört \"make install\" och att kommandot slutfördes\n"
-"    med lyckat resultat.\n"
-"\n"
-"2. Uppgraderingen installerades i en annan än standardkatalogen,\n"
-"    och en gammal version hittades i en standardkatalog. Om det\n"
-"    är fallet, måste du lägga till den riktiga katalogen i "
-"miljövariabeln\n"
-"    KDEDIRS innan du kan köra den."
-
-#: main.cpp:376 main.cpp:394
-msgid "Installation problem"
-msgstr "installationsproblem"
-
-#: main.cpp:382
-msgid "Rosegarden does not appear to have been installed."
-msgstr "Rosegarden verkar inte ha installerats."
-
-#: main.cpp:383
-msgid ""
-" One or more of Rosegarden's data files could not be\n"
-" found in the standard KDE installation directories.\n"
-"\n"
-" This may mean one of the following:\n"
-"\n"
-" 1. Rosegarden has not been correctly installed.  If you compiled\n"
-"     it yourself, check that you have run \"make install\" and that\n"
-"     the procedure completed successfully.\n"
-"\n"
-" 2. Rosegarden has been installed in a non-standard directory,\n"
-"     and you need to add this directory to your KDEDIRS environment\n"
-"     variable before you can run it.  This may be the case if you\n"
-"     installed into $HOME or a local third-party package directory\n"
-"     like /usr/local or /opt."
-msgstr ""
-"En eller flera av Rosegardens datafiler hittades\n"
-"i KDE-installationens standardkataloger.\n"
-"\n"
-"Det här kan betyda något av följande:\n"
-"\n"
-"1. Rosegarden har inte installerats på ett riktigt sätt. Om du\n"
-"    kompilerade den själv, kontrollera att du har kört \"make install\"\n"
-"    och att kommandot slutfördes med lyckat resultat.\n"
-"\n"
-"2. Rosegarden har installerats i en annan än standardkatalogen,\n"
-"    och du måste lägga till den här katalogen i miljövariabeln\n"
-"    KDEDIRS innan du kan köra den. Det här kan vara fallet om\n"
-"    du installerade i $HOME eller i en lokal tredjeparts paketkatalog\n"
-"    som /usr/local eller /opt."
-
-#: main.cpp:403
-msgid "Rosegarden"
-msgstr "Rosegarden"
-
-#: _translatorinfo.cpp:1 main.cpp:425
-msgid ""
-"_: NAME OF TRANSLATORS\n"
-"Your names"
-msgstr "Stefan Asserhäll"
-
-#: _translatorinfo.cpp:3 main.cpp:425
-msgid ""
-"_: EMAIL OF TRANSLATORS\n"
-"Your emails"
-msgstr "stefan.asserhall@comhem.se"
-
 #: matrixcommands.cpp:38 notationcommands.cpp:74
 msgid "Insert Note"
 msgstr "Infoga not"
@@ -2140,357 +2427,506 @@ msgstr "Flytta not"
 msgid "Modify Note"
 msgstr "Ändra not"
 
-#: matrixtool.cpp:788
+#: matrixtool.cpp:163 matrixtool.cpp:337 matrixtool.cpp:718 matrixtool.cpp:999
+#: notationtool.cpp:206 notationtool.cpp:681 notationtool.cpp:769
+#: notationtool.cpp:850 notationtool.cpp:979
+msgid "Switch to Select Tool"
+msgstr "Byt till markeringsverktyg"
+
+#: matrixtool.cpp:167 matrixtool.cpp:404 matrixtool.cpp:726
+#: matrixtool.cpp:1007 notationtool.cpp:210 notationtool.cpp:685
+#: notationtool.cpp:773 notationtool.cpp:854 notationtool.cpp:1045
+msgid "Switch to Erase Tool"
+msgstr "Byt till raderingsverktyg"
+
+#: matrixtool.cpp:171 matrixtool.cpp:345 matrixtool.cpp:408
+#: matrixtool.cpp:1011
+msgid "Switch to Move Tool"
+msgstr "Byt till förflyttningsverktyg"
+
+#: matrixtool.cpp:176 matrixtool.cpp:350 matrixtool.cpp:415 matrixtool.cpp:731
+msgid "Switch to Resize Tool"
+msgstr "Byt till storleksändringsverktyg"
+
+#: matrixtool.cpp:180 matrixtool.cpp:354 matrixtool.cpp:419 matrixtool.cpp:735
+#: matrixtool.cpp:1015
+msgid "Half Speed"
+msgstr "Halv hastighet"
+
+#: matrixtool.cpp:184 matrixtool.cpp:358 matrixtool.cpp:423 matrixtool.cpp:739
+#: matrixtool.cpp:1019
+msgid "Double Speed"
+msgstr "Dubbel hastighet"
+
+#: matrixtool.cpp:341 matrixtool.cpp:400 matrixtool.cpp:722
+#: matrixtool.cpp:1003
+msgid "Switch to Draw Tool"
+msgstr "Byt till ritverktyg"
+
+#: matrixtool.cpp:950
 msgid "Move Event"
 msgstr "Flytta händelse"
 
-#: matrixtool.cpp:791
+#: matrixtool.cpp:953
 msgid "Move Events"
 msgstr "Flytta händelser"
 
-#: matrixtool.cpp:939
+#: matrixtool.cpp:1129
 msgid "Resize Event"
 msgstr "Ändra storlek på händelse"
 
-#: matrixtool.cpp:942
+#: matrixtool.cpp:1132
 msgid "Resize Events"
 msgstr "Ändra storlek på händelser"
 
-#: matrixview.cpp:252
+#: matrixview.cpp:289
 msgid "Couldn't apply piano roll layout"
 msgstr "Kunde inte verkställa pianorullelayout"
 
-#: matrixview.cpp:417 notationview.cpp:1381 rosegardengui.cpp:438
+#: matrixview.cpp:453 notationview.cpp:1393 rosegardengui.cpp:512
 msgid "&Select"
 msgstr "&Markera"
 
-#: matrixview.cpp:422 rosegardengui.cpp:451
+#: matrixview.cpp:458 rosegardengui.cpp:523
 msgid "&Draw"
 msgstr "R&ita"
 
-#: matrixview.cpp:432 rc.cpp:12 rc.cpp:31 rosegardengui.cpp:457
+#: matrixview.cpp:468 rc.cpp:13 rc.cpp:33 rosegardengui.cpp:528
 msgid "&Move"
 msgstr "&Flytta"
 
-#: matrixview.cpp:438
+#: matrixview.cpp:474
 msgid "Resi&ze"
 msgstr "&Ändra storlek"
 
-#: matrixview.cpp:444 notationview.cpp:1387
+#: matrixview.cpp:480 notationview.cpp:1515
+msgid "C&hord Insert Mode"
+msgstr "Infogningsläge för &ackord"
+
+#: matrixview.cpp:486 notationview.cpp:1399
 msgid "Ste&p Recording"
 msgstr "&Stegvis inspelning"
 
-#: matrixview.cpp:463
+#: matrixview.cpp:495
+msgid "&Halve Speed"
+msgstr "&Halvera hastighet"
+
+#: matrixview.cpp:499
+msgid "&Double Speed"
+msgstr "&Dubbla hastighet"
+
+#: matrixview.cpp:517
 msgid "Set Event &Velocities..."
 msgstr "Ställ in &händelsehastigheter..."
 
-#: matrixview.cpp:475 notationview.cpp:1738
+#: matrixview.cpp:529 notationview.cpp:1756
 msgid "Cursor &Back"
 msgstr "Markör &bakåt"
 
-#: matrixview.cpp:479 notationview.cpp:1742
+#: matrixview.cpp:533 notationview.cpp:1760
 msgid "Cursor &Forward"
 msgstr "Markör &framåt"
 
-#: matrixview.cpp:483 notationview.cpp:1746
+#: matrixview.cpp:537 notationview.cpp:1764
 msgid "Cursor Ba&ck Bar"
 msgstr "Ma&rkör bakåt takt"
 
-#: matrixview.cpp:487 notationview.cpp:1750
+#: matrixview.cpp:541 notationview.cpp:1768
 msgid "Cursor For&ward Bar"
 msgstr "Mar&kör framåt takt"
 
-#: matrixview.cpp:491 notationview.cpp:1754
+#: matrixview.cpp:545 notationview.cpp:1772
 msgid "Cursor Back and Se&lect"
 msgstr "Markör bakåt och m&arkera"
 
-#: matrixview.cpp:495 notationview.cpp:1758
+#: matrixview.cpp:549 notationview.cpp:1776
 msgid "Cursor Forward and &Select"
 msgstr "Markör framåt och &markera"
 
-#: matrixview.cpp:499 notationview.cpp:1762
+#: matrixview.cpp:553 notationview.cpp:1780
 msgid "Cursor Back Bar and Select"
 msgstr "Markör bakåt takt och markera"
 
-#: matrixview.cpp:503 notationview.cpp:1766
+#: matrixview.cpp:557 notationview.cpp:1784
 msgid "Cursor Forward Bar and Select"
 msgstr "Markör framåt takt och markera"
 
-#: matrixview.cpp:507 notationview.cpp:1776
+#: matrixview.cpp:561 notationview.cpp:1794
 msgid "Cursor to St&art"
 msgstr "Markör &till början"
 
-#: matrixview.cpp:511 notationview.cpp:1780
+#: matrixview.cpp:565 notationview.cpp:1798
 msgid "Cursor to &End"
 msgstr "Markör till &slutet"
 
-#: matrixview.cpp:517 notationview.cpp:1794
+#: matrixview.cpp:571 notationview.cpp:1812
 msgid "Cursor to &Playback Pointer"
 msgstr "Mark&ör till uppspelningspekare"
 
-#: matrixview.cpp:523 notationview.cpp:1800 rosegardengui.cpp:667
+#: matrixview.cpp:577 notationview.cpp:1818 rosegardengui.cpp:751
 msgid "&Play"
 msgstr "S&pela"
 
-#: matrixview.cpp:528 notationview.cpp:1805 rosegardengui.cpp:673
+#: matrixview.cpp:582 notationview.cpp:1823 rosegardengui.cpp:757
 msgid "&Stop"
 msgstr "&Stoppa"
 
-#: matrixview.cpp:533 notationview.cpp:1810 rosegardengui.cpp:686
+#: matrixview.cpp:587 notationview.cpp:1828 rosegardengui.cpp:770
 msgid "Re&wind"
 msgstr "Spola &tillbaka"
 
-#: matrixview.cpp:539 notationview.cpp:1816 rosegardengui.cpp:679
+#: matrixview.cpp:593 notationview.cpp:1834 rosegardengui.cpp:763
 msgid "&Fast Forward"
 msgstr "Spola &fram"
 
-#: matrixview.cpp:545 notationview.cpp:1822 rosegardengui.cpp:704
+#: matrixview.cpp:599 notationview.cpp:1840 rosegardengui.cpp:788
 msgid "Rewind to &Beginning"
 msgstr "Spola tillbaka till &början"
 
-#: matrixview.cpp:551 notationview.cpp:1828 rosegardengui.cpp:710
+#: matrixview.cpp:605 notationview.cpp:1846 rosegardengui.cpp:794
 msgid "Fast Forward to &End"
 msgstr "Spola fram till s&lutet"
 
-#: matrixview.cpp:557 notationview.cpp:1834
+#: matrixview.cpp:611 notationview.cpp:1852
 msgid "Playback Pointer to &Cursor"
 msgstr "&Uppspelningspekare till markör"
 
-#: matrixview.cpp:563 notationview.cpp:1840
+#: matrixview.cpp:617 notationview.cpp:1858
 msgid "&Solo"
 msgstr "S&olo"
 
-#: matrixview.cpp:567 notationview.cpp:1844
+#: matrixview.cpp:621 notationview.cpp:1862
 msgid "Set Loop to Selection"
 msgstr "Ställ in upprepning till markering"
 
-#: matrixview.cpp:571 notationview.cpp:1848
+#: matrixview.cpp:625 notationview.cpp:1866
 msgid "Clear L&oop"
 msgstr "R&ensa upprepning"
 
-#: matrixview.cpp:585
+#: matrixview.cpp:639
 msgid "Snap to 1/64"
 msgstr "Lås till 1/64"
 
-#: matrixview.cpp:587
+#: matrixview.cpp:641
 msgid "Snap to 1/48"
 msgstr "Lås till 1/48"
 
-#: matrixview.cpp:589
+#: matrixview.cpp:643
 msgid "Snap to 1/32"
 msgstr "Lås till 1/32"
 
-#: matrixview.cpp:591
+#: matrixview.cpp:645
 msgid "Snap to 1/24"
 msgstr "Lås till 1/24"
 
-#: matrixview.cpp:593
+#: matrixview.cpp:647
 msgid "Snap to 1/16"
 msgstr "Lås till 1/16"
 
-#: matrixview.cpp:595
+#: matrixview.cpp:649
 msgid "Snap to 1/12"
 msgstr "Lås till 1/12"
 
-#: matrixview.cpp:597
+#: matrixview.cpp:651
 msgid "Snap to 1/8"
 msgstr "Lås till 1/8"
 
-#: matrixview.cpp:599
+#: matrixview.cpp:653
 msgid "Snap to 1/6"
 msgstr "Lås till 1/6"
 
-#: matrixview.cpp:601
+#: matrixview.cpp:655
 msgid "Snap to 1/4"
 msgstr "Lås till 1/4"
 
-#: matrixview.cpp:603
+#: matrixview.cpp:657
 msgid "Snap to 1/2"
 msgstr "Lås till 1/2"
 
-#: matrixview.cpp:605
+#: matrixview.cpp:659
 msgid "Snap to &Unit"
 msgstr "Lås till &enhet"
 
-#: matrixview.cpp:607
+#: matrixview.cpp:661
 msgid "Snap to Bea&t"
 msgstr "Lås till &taktslag"
 
-#: matrixview.cpp:609
+#: matrixview.cpp:663
 msgid "Snap to &Bar"
 msgstr "Lås t&ill takt"
 
-#: matrixview.cpp:611
+#: matrixview.cpp:665
 msgid "&No Snap"
 msgstr "I&ngen låsning"
 
-#: matrixview.cpp:617 notationview.cpp:1440
+#: matrixview.cpp:671
+msgid "Show Instrument Parameters"
+msgstr "Visa instrumentparametrar"
+
+#: matrixview.cpp:676 notationview.cpp:1452
 msgid "Show Ch&ord Name Ruler"
 msgstr "Visa linjal med a&ckordnamn"
 
-#: matrixview.cpp:621 notationview.cpp:1448
+#: matrixview.cpp:680 notationview.cpp:1460
 msgid "Show &Tempo Ruler"
 msgstr "Visa &tempolinjal"
 
-#: matrixview.cpp:856 notationview.cpp:2408
-msgid "  %1 event%2 selected "
-msgstr " %1 händelse %2 markerad "
+#: matrixview.cpp:942 notationview.cpp:2426
+#, c-format
+msgid ""
+"_n:   1 event selected \n"
+"  %n events selected "
+msgstr ""
+"   1 händelse markerad \n"
+"  %n händelser markerade "
 
-#: matrixview.cpp:859 notationview.cpp:2411
+#: matrixview.cpp:944 notationview.cpp:2428
 msgid "  No selection "
 msgstr "  Ingen markering "
 
-#: matrixview.cpp:960 matrixview.cpp:1554 notationviewslots.cpp:1214
+#: matrixview.cpp:1045 matrixview.cpp:1694 notationviewslots.cpp:1224
 msgid "Quantizing..."
 msgstr "Kvantiserar..."
 
-#: matrixview.cpp:1064
+#: matrixview.cpp:1057
+msgid "Halving speed..."
+msgstr "Halverar hastighet..."
+
+#: matrixview.cpp:1070
+msgid "Doubling speed..."
+msgstr "Dubblar hastighet..."
+
+#: matrixview.cpp:1092
+msgid "Rescaling..."
+msgstr "Ändrar skala..."
+
+#: matrixview.cpp:1201
 msgid "Time: %1 (%2.%3s)"
 msgstr "Tid: %1 (%2.%3 s)"
 
-#: matrixview.cpp:1116 notationviewslots.cpp:425 notationviewslots.cpp:451
+#: matrixview.cpp:1253 notationviewslots.cpp:425 notationviewslots.cpp:451
 msgid "Cutting selection to clipboard..."
 msgstr "Klipper ut markering till klippbordet..."
 
-#: matrixview.cpp:1125 notationviewslots.cpp:442 rosegardengui.cpp:1699
+#: matrixview.cpp:1262 notationviewslots.cpp:442 rosegardengui.cpp:1827
 msgid "Copying selection to clipboard..."
 msgstr "Kopierar markering till klippbord..."
 
-#: matrixview.cpp:1156 notationviewslots.cpp:434
+#: matrixview.cpp:1293 notationviewslots.cpp:434
 msgid "Deleting selection..."
 msgstr "Tar bort markering..."
 
-#: matrixview.cpp:1302 notationviewslots.cpp:1070
+#: matrixview.cpp:1443 notationviewslots.cpp:1070
+#, c-format
 msgid "Unknown note insert action %1"
 msgstr "Okänd notinfogningsåtgärd %1"
 
-#: matrixview.cpp:1306 matrixview.cpp:2086 notationviewslots.cpp:1074
-#: notationviewslots.cpp:1922
+#: matrixview.cpp:1447 matrixview.cpp:2226 notationviewslots.cpp:1074
+#: notationviewslots.cpp:1932
 msgid "Inserting note"
 msgstr "Infogar not"
 
-#: matrixview.cpp:1568
+#: matrixview.cpp:1708
 msgid "Unquantizing..."
 msgstr "Tar bort kvantisering..."
 
-#: matrixview.cpp:1599
+#: matrixview.cpp:1739
 msgid " Grid: "
 msgstr " Rutnät: "
 
-#: matrixview.cpp:1626 notationview.cpp:1228 rosegardenconfiguredialog.cpp:486
-#: widgets.cpp:800
+#: matrixview.cpp:1766 notationview.cpp:1240 rosegardenconfiguredialog.cpp:486
+#: rosegardenconfiguredialog.cpp:1763 widgets.cpp:833
 msgid "None"
 msgstr "Inget"
 
-#: matrixview.cpp:1628
+#: matrixview.cpp:1768
 msgid "Unit"
 msgstr "Enhet"
 
-#: matrixview.cpp:1630
+#: matrixview.cpp:1770
 msgid "Beat"
 msgstr "Taktslag"
 
-#: matrixview.cpp:1632
+#: matrixview.cpp:1772
 msgid "Bar"
 msgstr "Takt"
 
-#: matrixview.cpp:1647
+#: matrixview.cpp:1787
 msgid " Quantize: "
 msgstr " Kvantisera: "
 
-#: matrixview.cpp:1717 rosegardengui.cpp:3893
+#: matrixview.cpp:1857 rosegardengui.cpp:4125
 msgid "%1%"
 msgstr "%1 %"
 
-#: matrixview.cpp:2000
+#: matrixview.cpp:2140
 msgid "Raising velocities..."
 msgstr "Höjer hastigheter..."
 
-#: matrixview.cpp:2009
+#: matrixview.cpp:2149
 msgid "Lowering velocities..."
 msgstr "Sänker hastigheter..."
 
-#: matrixview.cpp:2044
+#: matrixview.cpp:2184
 msgid "Set Event Velocities"
 msgstr "Ställ in händelsehastigheter"
 
-#: matrixview.cpp:2049
+#: matrixview.cpp:2189
 msgid "Setting Velocities..."
 msgstr "Ställer in hastigheter..."
 
-#: midifilter.cpp:33
+#: matrixview.cpp:2284 notationviewslots.cpp:72
+msgid " Chord"
+msgstr " ackord"
+
+#: midifilter.cpp:34
 msgid "Modify MIDI filters..."
 msgstr "Ändra MIDI-filter..."
 
-#: midifilter.cpp:43
+#: midifilter.cpp:44
 msgid "THRU events to ignore"
 msgstr "THRU-händelser att ignorera"
 
-#: midifilter.cpp:79
+#: midifilter.cpp:80
 msgid "RECORD events to ignore"
 msgstr "RECORD-händelser att ignorera"
 
 #: midipitchlabel.cpp:33
+#, c-format
 msgid "C%1"
 msgstr "C%1"
 
 #: midipitchlabel.cpp:33
+#, c-format
 msgid "C#%1"
 msgstr "C#%1"
 
 #: midipitchlabel.cpp:33
+#, c-format
 msgid "D%1"
 msgstr "D%1"
 
 #: midipitchlabel.cpp:33
+#, c-format
 msgid "D#%1"
 msgstr "D#%1"
 
 #: midipitchlabel.cpp:34
+#, c-format
 msgid "E%1"
 msgstr "E%1"
 
 #: midipitchlabel.cpp:34
+#, c-format
 msgid "F%1"
 msgstr "F%1"
 
 #: midipitchlabel.cpp:34
+#, c-format
 msgid "F#%1"
 msgstr "F#%1"
 
 #: midipitchlabel.cpp:34
+#, c-format
 msgid "G%1"
 msgstr "G%1"
 
 #: midipitchlabel.cpp:35
+#, c-format
 msgid "G#%1"
 msgstr "G#%1"
 
 #: midipitchlabel.cpp:35
+#, c-format
 msgid "A%1"
 msgstr "A%1"
 
 #: midipitchlabel.cpp:35
+#, c-format
 msgid "A#%1"
 msgstr "A#%1"
 
 #: midipitchlabel.cpp:35
+#, c-format
 msgid "B%1"
 msgstr "H%1"
 
-#: multiviewcommandhistory.cpp:285
+#: mixer.cpp:73
+msgid "Mixer"
+msgstr "Mixer"
+
+#: mixer.cpp:129 studiowidgets.cpp:623
+msgid "Audio plugin button"
+msgstr "Ljudinsticksknapp"
+
+#: mixer.cpp:209
+#, c-format
+msgid "S%1"
+msgstr "S%1"
+
+#: mixer.cpp:253
+msgid "Rec"
+msgstr "Spela in"
+
+#: mixer.cpp:283
+msgid "M"
+msgstr "M"
+
+#: mixer.cpp:365 mixer.cpp:392 mixer.cpp:458 mixer.cpp:499 mixer.cpp:566
+#: studiowidgets.cpp:906
+#, c-format
+msgid "Sub %1"
+msgstr "Del %1"
+
+#: mixer.cpp:368 mixer.cpp:494 studiowidgets.cpp:904
+msgid "Sub %1 R"
+msgstr "Del %1 H"
+
+#: mixer.cpp:369 mixer.cpp:490 studiowidgets.cpp:903
+msgid "Sub %1 L"
+msgstr "Del %1 V"
+
+#: mixer.cpp:373 mixer.cpp:394 mixer.cpp:452 mixer.cpp:516 mixer.cpp:566
+#: studiowidgets.cpp:914
+msgid "Master"
+msgstr "Master"
+
+#: mixer.cpp:376 mixer.cpp:511 studiowidgets.cpp:912
+msgid "Master R"
+msgstr "Master H"
+
+#: mixer.cpp:377 mixer.cpp:507 studiowidgets.cpp:911
+msgid "Master L"
+msgstr "Master V"
+
+#: mixer.cpp:382 mixer.cpp:481 studiowidgets.cpp:895
+#, c-format
+msgid "In %1"
+msgstr "In %1"
+
+#: mixer.cpp:385 mixer.cpp:476 studiowidgets.cpp:893
+msgid "In %1 R"
+msgstr "In %1 H"
+
+#: mixer.cpp:386 mixer.cpp:472 studiowidgets.cpp:892
+msgid "In %1 L"
+msgstr "In %1 V"
+
+#: multiviewcommandhistory.cpp:301
 msgid "Nothing to undo"
 msgstr "Ingenting att ångra"
 
-#: multiviewcommandhistory.cpp:286
+#: multiviewcommandhistory.cpp:302
 msgid "Nothing to redo"
 msgstr "Ingenting att göra om"
 
-#: multiviewcommandhistory.cpp:292 multiviewcommandhistory.cpp:331
+#: multiviewcommandhistory.cpp:308 multiviewcommandhistory.cpp:347
+#, c-format
 msgid "Und&o %1"
 msgstr "&Ångra %1"
 
-#: multiviewcommandhistory.cpp:293 multiviewcommandhistory.cpp:332
+#: multiviewcommandhistory.cpp:309 multiviewcommandhistory.cpp:348
+#, c-format
 msgid "Re&do %1"
 msgstr "&Gör om %1"
 
@@ -2502,114 +2938,114 @@ msgstr "Lägg till &klavändring..."
 msgid "Insert Text"
 msgstr "Infoga text"
 
-#: notationcommands.cpp:599
+#: notationcommands.cpp:600
 msgid "Add S&lur"
 msgstr "&Lägg till bindebåge"
 
-#: notationcommands.cpp:602
-#, c-format
+#: notationcommands.cpp:603
 msgid "Add &%1%2"
 msgstr "Lägg till &%1%2"
 
-#: notationcommands.cpp:876
+#: notationcommands.cpp:877
 msgid "S&forzando"
 msgstr "S&forzando"
 
-#: notationcommands.cpp:877
+#: notationcommands.cpp:878
 msgid "Sta&ccato"
 msgstr "&Staccato"
 
-#: notationcommands.cpp:878
+#: notationcommands.cpp:879
 msgid "R&inforzando"
 msgstr "&Rinforzando"
 
-#: notationcommands.cpp:879
+#: notationcommands.cpp:880
 msgid "T&enuto"
 msgstr "T&enuto"
 
-#: notationcommands.cpp:880
+#: notationcommands.cpp:881
 msgid "Tri&ll"
 msgstr "Dr&ill"
 
-#: notationcommands.cpp:881
+#: notationcommands.cpp:882
 msgid "&Turn"
 msgstr "&Dubbelslag"
 
-#: notationcommands.cpp:882
+#: notationcommands.cpp:883
 msgid "&Accent"
 msgstr "&Accent"
 
-#: notationcommands.cpp:883
+#: notationcommands.cpp:884
 msgid "&Staccatissimo"
 msgstr "Sta&ccatissimo"
 
-#: notationcommands.cpp:884
+#: notationcommands.cpp:885
 msgid "&Marcato"
 msgstr "&Marcato"
 
-#: notationcommands.cpp:885
+#: notationcommands.cpp:886
 msgid "&Pause"
 msgstr "&Paus"
 
-#: notationcommands.cpp:886
+#: notationcommands.cpp:887
 msgid "&Up-Bow"
 msgstr "&Uppåtriktad bindebåge"
 
-#: notationcommands.cpp:887
+#: notationcommands.cpp:888
 msgid "&Down-Bow"
 msgstr "&Neråtriktad bindebåge"
 
-#: notationcommands.cpp:888
-#, c-format
+#: notationcommands.cpp:889
 msgid "&%1%2"
 msgstr "&%1%2"
 
-#: notationcommands.cpp:893
+#: notationcommands.cpp:894
+#, c-format
 msgid "Add %1"
 msgstr "Lägg till %1"
 
-#: notationcommands.cpp:1490
-msgid "Force to %1"
-msgstr "Tvinga till %1"
+#: notationcommands.cpp:1491
+#, c-format
+msgid "Respell with %1"
+msgstr "Tvinga med %1"
 
-#: notationcommands.cpp:1493
+#: notationcommands.cpp:1494
 msgid "Do&uble Sharp"
 msgstr "D&ubbelkors"
 
-#: notationcommands.cpp:1495
+#: notationcommands.cpp:1496
 msgid "&Sharp"
 msgstr "&Korsförtecken"
 
-#: notationcommands.cpp:1497
+#: notationcommands.cpp:1498
 msgid "&Flat"
 msgstr "&Beförtecken"
 
-#: notationcommands.cpp:1499
+#: notationcommands.cpp:1500
 msgid "Dou&ble Flat"
 msgstr "&Dubbelbe"
 
-#: notationcommands.cpp:1501
+#: notationcommands.cpp:1502
 msgid "&Natural"
 msgstr "&Återställning"
 
-#: notationcommands.cpp:1503
+#: notationcommands.cpp:1504
 msgid "N&one"
 msgstr "In&get"
 
-#: notationcommands.cpp:1509
-msgid "Force Accidentals &Up"
+#: notationcommands.cpp:1510
+msgid "Respell Accidentals &Upward"
 msgstr "Tvinga &upp tillfälliga förtecken"
 
-#: notationcommands.cpp:1512
-msgid "Force Accidentals &Down"
+#: notationcommands.cpp:1513
+msgid "Respell Accidentals &Downward"
 msgstr "Tvinga &ner tillfälliga förtecken"
 
-#: notationcommands.cpp:1515
+#: notationcommands.cpp:1516
 msgid "Restore &Computed Accidentals"
 msgstr "&Återställ beräknade tillfälliga förtecken"
 
-#: notationcommands.cpp:1518
-msgid "Force Accidentals"
+#: notationcommands.cpp:1519
+msgid "Respell Accidentals"
 msgstr "Tvinga tillfälliga förtecken"
 
 #: notationcommands.h:131
@@ -2728,7 +3164,7 @@ msgstr "&Tolka..."
 msgid "Rendering staff %1..."
 msgstr "Ritar upp notsystem %1..."
 
-#: notationstaff.cpp:396
+#: notationstaff.cpp:403
 msgid "Positioning staff %1..."
 msgstr "Placerar notsystem %1..."
 
@@ -2741,10 +3177,12 @@ msgid "%1-dotted %2"
 msgstr "%1-punkterad %2"
 
 #: notationstrings.cpp:45
+#, c-format
 msgid "dotted-%1"
 msgstr "punkterad-%1"
 
 #: notationstrings.cpp:46
+#, c-format
 msgid "dotted %1"
 msgstr "punkterad %1"
 
@@ -2896,287 +3334,269 @@ msgstr "Lägg automatiskt till balkar om lämpligt"
 msgid "Dotted note"
 msgstr "Punkterad not"
 
-#: notationtool.cpp:206 notationtool.cpp:675 notationtool.cpp:758
-#: notationtool.cpp:839 notationtool.cpp:964
-msgid "Switch to Select Tool"
-msgstr "Byt till markeringsverktyg"
-
-#: notationtool.cpp:210 notationtool.cpp:679 notationtool.cpp:762
-#: notationtool.cpp:843 notationtool.cpp:1030
-msgid "Switch to Erase Tool"
-msgstr "Byt till raderingsverktyg"
-
 #: notationtool.cpp:217
 msgid "Switch to Inserting Rests"
 msgstr "Byt till infoga pauser"
 
-#: notationtool.cpp:669
+#: notationtool.cpp:675
 msgid "Dotted rest"
 msgstr "Punkterad paus"
 
-#: notationtool.cpp:686 notationtool.cpp:769 notationtool.cpp:850
+#: notationtool.cpp:692 notationtool.cpp:780 notationtool.cpp:861
 msgid "Switch to Inserting Notes"
 msgstr "Byt till att infoga noter"
 
-#: notationtool.cpp:951 rosegardenconfiguredialog.cpp:561
+#: notationtool.cpp:966 rosegardenconfiguredialog.cpp:561
 msgid "Collapse rests after erase"
 msgstr "Sammanfoga pauser efter radering"
 
-#: notationtool.cpp:958 notationtool.cpp:1026
+#: notationtool.cpp:973 notationtool.cpp:1041
 msgid "Switch to Insert Tool"
 msgstr "Byt till infogningsverktyg"
 
-#: notationtool.cpp:1609
+#: notationtool.cpp:1624
 msgid "Ready."
 msgstr "Klar."
 
-#: notationview.cpp:506 rosegardengui.cpp:225
+#: notationview.cpp:505 rosegardengui.cpp:300
 msgid "Starting..."
 msgstr "Startar..."
 
-#: notationview.cpp:753
+#: notationview.cpp:752
 msgid "Preparing to print..."
 msgstr "Förbereder utskrift..."
 
-#: notationview.cpp:1168
+#: notationview.cpp:1180
 msgid "Note &Font"
 msgstr "Not&teckensnitt"
 
-#: notationview.cpp:1190
+#: notationview.cpp:1202
 msgid "Si&ze"
 msgstr "St&orlek"
 
-#: notationview.cpp:1197
+#: notationview.cpp:1209
 msgid "S&pacing"
 msgstr "&Mellanrum"
 
-#: notationview.cpp:1219
+#: notationview.cpp:1231
 msgid "Du&ration Factor"
 msgstr "&Längdfaktor"
 
-#: notationview.cpp:1244
+#: notationview.cpp:1256
 msgid "Note &Style"
 msgstr "Not&stil"
 
-#: notationview.cpp:1266
+#: notationview.cpp:1278
 msgid "Insert Rest"
 msgstr "Infoga paus"
 
-#: notationview.cpp:1270
+#: notationview.cpp:1282
 msgid "Switch from Note to Rest"
 msgstr "Byt från not till paus"
 
-#: notationview.cpp:1275
+#: notationview.cpp:1287
 msgid "Switch from Rest to Note"
 msgstr "Byt från paus till not"
 
-#: notationview.cpp:1312
+#: notationview.cpp:1324
 msgid "No accidental"
 msgstr "Inga tillfälliga förtecken"
 
-#: notationview.cpp:1313
+#: notationview.cpp:1325
 msgid "Sharp"
 msgstr "Korsförtecken"
 
-#: notationview.cpp:1314
+#: notationview.cpp:1326
 msgid "Flat"
 msgstr "Beförtecken"
 
-#: notationview.cpp:1315
+#: notationview.cpp:1327
 msgid "Natural"
 msgstr "Återställning"
 
-#: notationview.cpp:1316
+#: notationview.cpp:1328
 msgid "Double sharp"
 msgstr "Dubbelkors"
 
-#: notationview.cpp:1317
+#: notationview.cpp:1329
 msgid "Double flat"
 msgstr "Dubbelbe"
 
-#: notationview.cpp:1338
+#: notationview.cpp:1350
 msgid "&Treble Clef"
 msgstr "&Diskantklav"
 
-#: notationview.cpp:1345
+#: notationview.cpp:1357
 msgid "Te&nor Clef"
 msgstr "Te&norklav"
 
-#: notationview.cpp:1352
+#: notationview.cpp:1364
 msgid "&Alto Clef"
 msgstr "&Altklav"
 
-#: notationview.cpp:1359
+#: notationview.cpp:1371
 msgid "&Bass Clef"
 msgstr "&Basklav"
 
-#: notationview.cpp:1366
+#: notationview.cpp:1378
 msgid "&Text"
 msgstr "Te&xt"
 
-#: notationview.cpp:1393
+#: notationview.cpp:1405
 msgid "Select from Sta&rt"
 msgstr "M&arkera från början"
 
-#: notationview.cpp:1397
+#: notationview.cpp:1409
 msgid "Select to &End"
 msgstr "Markera till &slutet"
 
-#: notationview.cpp:1401
+#: notationview.cpp:1413
 msgid "Select Whole St&aff"
 msgstr "Markera hela &notsystemet"
 
-#: notationview.cpp:1409
+#: notationview.cpp:1421
 msgid "Pa&ste..."
 msgstr "&Inklistring..."
 
-#: notationview.cpp:1413 rosegardengui.cpp:497
+#: notationview.cpp:1425 rosegardengui.cpp:567
 msgid "De&lete"
 msgstr "Ta &bort"
 
-#: notationview.cpp:1423
+#: notationview.cpp:1435
 msgid "&Linear Layout"
 msgstr "L&injär layout"
 
-#: notationview.cpp:1429
+#: notationview.cpp:1441
 msgid "&Continuous Page Layout"
 msgstr "&Kontinuerlig sidlayout"
 
-#: notationview.cpp:1435
+#: notationview.cpp:1447
 msgid "&Multiple Page Layout"
 msgstr "&Flersidorslayout"
 
-#: notationview.cpp:1444
+#: notationview.cpp:1456
 msgid "Show Ra&w Note Ruler"
 msgstr "Visa linjal för &obehandlade noter"
 
-#: notationview.cpp:1452
+#: notationview.cpp:1464
 msgid "Show &Annotations"
 msgstr "Visa not&eringar"
 
-#: notationview.cpp:1456
+#: notationview.cpp:1468
 msgid "Open L&yric Editor"
 msgstr "Öppna &sångtexteditor"
 
-#: notationview.cpp:1497
+#: notationview.cpp:1509
 msgid "Trip&let Insert Mode"
 msgstr "Infogningsläge &för trioler"
 
-#: notationview.cpp:1503
-msgid "C&hord Insert Mode"
-msgstr "Infogningsläge för &ackord"
-
-#: notationview.cpp:1657
+#: notationview.cpp:1675
 msgid "&Dump selected events to stderr"
 msgstr "&Skicka markerade händelser till standardfelutmatning"
 
-#: notationview.cpp:1691
+#: notationview.cpp:1709
 msgid "&None"
 msgstr "I&ngen"
 
-#: notationview.cpp:1710 rosegardengui.cpp:336
+#: notationview.cpp:1728 rosegardengui.cpp:415
 msgid "Show T&ools Toolbar"
 msgstr "Visa ver&ktygsrad med verktyg"
 
-#: notationview.cpp:1711
+#: notationview.cpp:1729
 msgid "Show &Notes Toolbar"
 msgstr "Visa notverkt&ygsrad"
 
-#: notationview.cpp:1712
+#: notationview.cpp:1730
 msgid "Show &Rests Toolbar"
 msgstr "Visa &pausverktygsrad"
 
-#: notationview.cpp:1713
+#: notationview.cpp:1731
 msgid "Show &Accidentals Toolbar"
 msgstr "Visa verktygsrad för tillfälliga &förtecken"
 
-#: notationview.cpp:1714
+#: notationview.cpp:1732
 msgid "Show Cle&fs Toolbar"
 msgstr "V&isa klavverktygsrad"
 
-#: notationview.cpp:1716
+#: notationview.cpp:1734
 msgid "Show &Marks Toolbar"
 msgstr "Visa &markörverktygsrad"
 
-#: notationview.cpp:1718
+#: notationview.cpp:1736
 msgid "Show &Group Toolbar"
 msgstr "Visa &gruppverktygsrad"
 
-#: notationview.cpp:1720
+#: notationview.cpp:1738
 msgid "Show &Layout Toolbar"
 msgstr "Visa &layoutverktygsrad"
 
-#: notationview.cpp:1722 rosegardengui.cpp:348
+#: notationview.cpp:1740 rosegardengui.cpp:427
 msgid "Show Trans&port Toolbar"
 msgstr "Visa &överföringsverktygsrad"
 
-#: notationview.cpp:1724
+#: notationview.cpp:1742
 msgid "Show M&eta Toolbar"
 msgstr "Vi&sa metaverktygsrad"
 
-#: notationview.cpp:1784
+#: notationview.cpp:1802
 msgid "Cursor &Up Staff"
 msgstr "Markör upp n&otsystem"
 
-#: notationview.cpp:1788
+#: notationview.cpp:1806
 msgid "Cursor &Down Staff"
 msgstr "Markör &ner notsystem"
 
-#: notationview.cpp:1911
+#: notationview.cpp:1929
 msgid "%1 pixel"
 msgstr "%1 bildpunkt"
 
-#: notationview.cpp:1912
+#: notationview.cpp:1930
 msgid "%1 pixels"
 msgstr "%1 bildpunkter"
 
-#: notationview.cpp:1944
+#: notationview.cpp:1962
 msgid "  Font:  "
 msgstr "  Teckensnitt:  "
 
-#: notationview.cpp:1968
+#: notationview.cpp:1986
 msgid "Unknown font \"%1\", using default"
 msgstr "Okänt teckensnitt \"%1\", använder förval"
 
-#: notationview.cpp:1976
+#: notationview.cpp:1994
 msgid "  Size:  "
 msgstr "  Storlek:  "
 
-#: notationview.cpp:1984
+#: notationview.cpp:2002
 msgid "  Spacing:  "
 msgstr "  Mellanrum:  "
 
-#: notationview.cpp:2186
+#: notationview.cpp:2204
 msgid "Laying out score..."
 msgstr "Placerar ut partitur..."
 
-#: notationview.cpp:2198
+#: notationview.cpp:2216
 msgid "Laying out staff %1..."
 msgstr "Placerar ut notsystem %1..."
 
-#: notationview.cpp:2207
+#: notationview.cpp:2225
 msgid "Reconciling staffs..."
 msgstr "Gör notsystem förenliga..."
 
-#: notationview.cpp:2795
+#: notationview.cpp:2811
 msgid "Sizing and allocating canvas..."
 msgstr "Ställer in storlek och allokerar duk..."
 
-#: notationview.cpp:2926
+#: notationview.cpp:2942
 msgid "note"
 msgstr "not"
 
-#: notationview.cpp:2926
+#: notationview.cpp:2942
 msgid "rest"
 msgstr "paus"
 
 #: notationviewslots.cpp:70
 msgid " Triplet Chord"
 msgstr " Triolackord"
-
-#: notationviewslots.cpp:72
-msgid " Chord"
-msgstr " ackord"
 
 #: notationviewslots.cpp:76
 msgid " Triplet"
@@ -3187,30 +3607,35 @@ msgid "Hidden annotations"
 msgstr "Dolda noteringar"
 
 #: notationviewslots.cpp:126
+#, c-format
 msgid "Unknown spacing action %1"
 msgstr "Okänd mellanrumsåtgärd %1"
 
 #: notationviewslots.cpp:182
+#, c-format
 msgid "Unknown proportion action %1"
 msgstr "Okänd förhållandeåtgärd %1"
 
 #: notationviewslots.cpp:229
+#, c-format
 msgid "Unknown font action %1"
 msgstr "Okänd teckenåtgärd %1"
 
 #: notationviewslots.cpp:246
+#, c-format
 msgid "Unknown font size %1"
 msgstr "Okänd teckenstorlek %1"
 
 #: notationviewslots.cpp:250
+#, c-format
 msgid "Unknown font size action %1"
 msgstr "Okänd teckenstorleksåtgärd %1"
 
-#: notationviewslots.cpp:387 rosegardengui.cpp:1646
+#: notationviewslots.cpp:387 rosegardengui.cpp:1774
 msgid "Printing..."
 msgstr "Skriver ut..."
 
-#: notationviewslots.cpp:404 rosegardengui.cpp:1658
+#: notationviewslots.cpp:404 rosegardengui.cpp:1786
 msgid "Previewing..."
 msgstr "Förhandsgranskar..."
 
@@ -3333,6 +3758,7 @@ msgid "Changing to %1 style..."
 msgstr "Ändrar till stilen %1..."
 
 #: notationviewslots.cpp:1042
+#, c-format
 msgid "Unknown style action %1"
 msgstr "Okänd stilåtgärd %1"
 
@@ -3347,30 +3773,32 @@ msgstr "Ingen pauslängd vald"
 #: notationviewslots.cpp:1140 notationviewslots.cpp:1150
 #: notationviewslots.cpp:1160 notationviewslots.cpp:1170
 #: notationviewslots.cpp:1180 notationviewslots.cpp:1190
+#: notationviewslots.cpp:1200
 msgid "Forcing accidentals..."
 msgstr "Tvingar tillfälliga förtecken..."
 
-#: notationviewslots.cpp:1200
+#: notationviewslots.cpp:1210
 msgid "Restoring accidentals..."
 msgstr "Återställer tillfälliga förtecken..."
 
-#: notationviewslots.cpp:1228
+#: notationviewslots.cpp:1238
 msgid "Interpreting selection..."
 msgstr "Tolkar markering..."
 
-#: notationviewslots.cpp:1255
+#: notationviewslots.cpp:1265
 msgid "Text: "
 msgstr "Text: "
 
-#: notationviewslots.cpp:1315
+#: notationviewslots.cpp:1325
 msgid "Estimated key signature shown"
 msgstr "Uppskattad tonartssignatur visas"
 
-#: notationviewslots.cpp:1897
+#: notationviewslots.cpp:1907
+#, c-format
 msgid "Time: %1"
 msgstr "Tid: %1"
 
-#: notationviewslots.cpp:1918
+#: notationviewslots.cpp:1928
 msgid "Can't insert note: No note duration selected"
 msgstr "Kan inte infoga not: Ingen notlängd vald"
 
@@ -3379,8 +3807,7 @@ msgid ""
 "ERROR: Event in chord at %1 has no HEIGHT_ON_STAFF property!\n"
 "This is a bug (the program would previously have crashed by now)"
 msgstr ""
-"FEL: Händelsen i ackordet vid %1 har ingen egenskap "
-"HEIGHT_ON_STAFF.\n"
+"FEL: Händelsen i ackordet vid %1 har ingen egenskap HEIGHT_ON_STAFF.\n"
 "Det är ett programfel (tidigare skulle programmet redan ha kraschat)."
 
 #: notationvlayout.cpp:319
@@ -3396,6 +3823,7 @@ msgid "Can't open font mapping file %1 or %2"
 msgstr "Kan inte öppna teckensnittskartfilen %1 eller %2"
 
 #: notefont.cpp:92
+#, c-format
 msgid "Can't open font mapping file %1"
 msgstr "Kan inte öppna teckensnittskartfilen %1"
 
@@ -3403,7 +3831,39 @@ msgstr "Kan inte öppna teckensnittskartfilen %1"
 msgid "Can't obtain a default font -- no fonts found"
 msgstr "Kan inte hämta ett standardteckensnitt: Inga teckensnitt hittades."
 
+#: notefontviewer.cpp:100
+#, c-format
+msgid "Error: Unable to match font name %1"
+msgstr "Fel: Kan inte hitta passande teckensnitt för namnet %1"
+
+#: notefontviewer.cpp:108
+msgid "Warning: No good match for font name %1 (best is %2)"
+msgstr "Varning: Ingen bra motsvarighet för teckensnittsnamnet %1 (%2 är bäst)"
+
+#: notefontviewer.cpp:116
+#, c-format
+msgid "Error: Unable to open best-match font %1"
+msgstr "Fel: Kan inte öppna teckensnitt %1 som passar bäst"
+
+#: notefontviewer.cpp:290
+#, c-format
+msgid "Note Font Viewer: %1"
+msgstr "Notteckenvisning: %1"
+
+#: notefontviewer.cpp:296
+msgid "  Component: "
+msgstr "  Komponent:  "
+
+#: notefontviewer.cpp:304
+msgid "  View: "
+msgstr "  Vy:  "
+
+#: notefontviewer.cpp:310
+msgid "  Page: "
+msgstr "  Sida:  "
+
 #: notestyle.cpp:540
+#, c-format
 msgid "Can't open style file %1"
 msgstr "Kan inte öppna stilfil %1"
 
@@ -3412,6 +3872,7 @@ msgid "type is a required attribute of note"
 msgstr "typ är en nödvändig notegenskap"
 
 #: notestyle.cpp:584
+#, c-format
 msgid "Unrecognised note name %1"
 msgstr "Notnamnet %1 känns inte igen"
 
@@ -3425,8 +3886,32 @@ msgstr ""
 "globala och notelement kan ha egenskapen form eller teckennamn, men inte "
 "båda"
 
+#: playlist.cpp:82
+msgid "Title"
+msgstr "Titel"
+
+#: playlist.cpp:83
+msgid "File name"
+msgstr "Filnamn"
+
+#: playlist.cpp:141
+msgid "Add..."
+msgstr "Lägg till..."
+
+#: playlist.cpp:143
+msgid "Move Up"
+msgstr "Flytta upp"
+
+#: playlist.cpp:144
+msgid "Move Down"
+msgstr "Flytta ner"
+
+#: playlist.cpp:194
+msgid "Select one or more Rosegarden files"
+msgstr "Markera en eller flera Rosegarden-filer"
+
 #: rosegardenconfigurationpage.h:178 rosegardenconfiguredialog.cpp:733
-#: rosegardenconfiguredialog.cpp:1017
+#: rosegardenconfiguredialog.cpp:926
 msgid "General"
 msgstr "Allmänt"
 
@@ -3452,28 +3937,23 @@ msgstr "Latenstid"
 msgid "Sequencer Latency"
 msgstr "Sequencer-latenstid"
 
-#: rosegardenconfigurationpage.h:374
+#: rosegardenconfigurationpage.h:360 rosegardenconfiguredialog.cpp:1658
 msgid "Audio"
 msgstr "Ljud"
 
-#: rosegardenconfigurationpage.h:375
+#: rosegardenconfigurationpage.h:361
 msgid "Audio Settings"
 msgstr "Ljudinställningar"
 
-#: colourwidgets.cpp:47 rosegardenconfigurationpage.h:411
-#: segmentparameterbox.cpp:79
-msgid "Color"
-msgstr "Färg"
-
-#: rosegardenconfigurationpage.h:412
+#: rosegardenconfigurationpage.h:398
 msgid "Color Settings"
 msgstr "Färginställningar"
 
-#: rosegardenconfigurationpage.h:445
+#: rosegardenconfigurationpage.h:431
 msgid "Sequencer"
 msgstr "Sequencer"
 
-#: rosegardenconfigurationpage.h:446
+#: rosegardenconfigurationpage.h:432
 msgid "Sequencer Settings"
 msgstr "Sequencerinställningar"
 
@@ -3529,7 +4009,7 @@ msgstr "Beteende"
 msgid "External audio editor"
 msgstr "Extern ljudeditor"
 
-#: rosegardenconfiguredialog.cpp:237 rosegardenconfiguredialog.cpp:1465
+#: rosegardenconfiguredialog.cpp:237 rosegardenconfiguredialog.cpp:1831
 msgid "Choose..."
 msgstr "Välj..."
 
@@ -3572,10 +4052,6 @@ msgstr "Copyright:"
 #: rosegardenconfiguredialog.cpp:362
 msgid "Mapped by:"
 msgstr "Mappad av:"
-
-#: controleditor.cpp:436 rosegardenconfiguredialog.cpp:363
-msgid "Type:"
-msgstr "Typ:"
 
 #: rosegardenconfiguredialog.cpp:440
 msgid "Default layout mode"
@@ -3656,34 +4132,11 @@ msgstr ""
 "uppspelning, och påverkar inte redigering i någon av vyerna utom "
 "notskriftsvyn."
 
-#: rosegardenconfiguredialog.cpp:757
-msgid ""
-"Higher latency improves playback quality on slower systems but reduces\n"
-"overall sequencer response.  Modifications to these values take effect\n"
-"from the next time playback or recording begins."
-msgstr ""
-"Längre latenstider förbättrar uppspelningskvalitet på långsamma "
-"system,\n"
-"men reducerar sequencerns totala svarstid. Ändringar av dessa värden\n"
-"får effekt nästa gång uppspelning eller inspelning inleds."
-
-#: rosegardenconfiguredialog.cpp:761
-msgid "Read ahead (in ms)"
-msgstr "Läs i förväg (i ms)"
-
-#: rosegardenconfiguredialog.cpp:762
-msgid "Playback (in ms)"
-msgstr "Uppspelning (i ms)"
-
-#: rosegardenconfiguredialog.cpp:804
-msgid "MIDI Latency"
-msgstr "MIDI-latenstid"
-
-#: rosegardenconfiguredialog.cpp:807
+#: rosegardenconfiguredialog.cpp:753
 msgid "JACK latency"
 msgstr "JACK-latenstid"
 
-#: rosegardenconfiguredialog.cpp:810
+#: rosegardenconfiguredialog.cpp:756
 msgid ""
 "Use the \"Fetch JACK latencies\" button to discover the latency values set "
 "at\n"
@@ -3703,47 +4156,47 @@ msgstr ""
 "serverparametrar för JACK, ska du alltid hämta latenstidsvärden igen.\n"
 "Latenstidsvärden lagras av Rosegarden för användning nästa gång."
 
-#: rosegardenconfiguredialog.cpp:814
+#: rosegardenconfiguredialog.cpp:760
 msgid "JACK playback latency (in ms)"
 msgstr "JACK-uppspelningslatenstid (i ms)"
 
-#: rosegardenconfiguredialog.cpp:815
+#: rosegardenconfiguredialog.cpp:761
 msgid "JACK record latency (in ms)"
 msgstr "JACK-inspelningslatenstid (i ms)"
 
-#: rosegardenconfiguredialog.cpp:817
+#: rosegardenconfiguredialog.cpp:763
 msgid "Fetch JACK latencies"
 msgstr "Hämta latenstider från JACK"
 
-#: rosegardenconfiguredialog.cpp:870
+#: rosegardenconfiguredialog.cpp:816
 msgid "JACK Latency"
 msgstr "JACK-latenstid"
 
-#: rosegardenconfiguredialog.cpp:967
+#: rosegardenconfiguredialog.cpp:876
 msgid "Unknown"
 msgstr "Okänd"
 
-#: rosegardenconfiguredialog.cpp:973
+#: rosegardenconfiguredialog.cpp:882
 msgid "No MIDI, audio OK"
 msgstr "Ingen MIDI, ljud ok"
 
-#: rosegardenconfiguredialog.cpp:975
+#: rosegardenconfiguredialog.cpp:884
 msgid "MIDI OK, no audio"
 msgstr "MIDI ok, inget ljud"
 
-#: rosegardenconfiguredialog.cpp:977
+#: rosegardenconfiguredialog.cpp:886
 msgid "MIDI OK, audio OK"
 msgstr "MIDI ok, ljud ok"
 
-#: rosegardenconfiguredialog.cpp:979
+#: rosegardenconfiguredialog.cpp:888
 msgid "No driver"
 msgstr "Ingen drivrutin"
 
-#: rosegardenconfiguredialog.cpp:985
+#: rosegardenconfiguredialog.cpp:894
 msgid "Show detailed status"
 msgstr "Visa detaljerad status"
 
-#: rosegardenconfiguredialog.cpp:993
+#: rosegardenconfiguredialog.cpp:902
 msgid ""
 "Send MIDI Controllers at start of playback\n"
 "     (will incur noticeable initial delay)"
@@ -3751,7 +4204,7 @@ msgstr ""
 "Skicka MIDI-styrenheter vid start av uppspelning\n"
 "(orsakar märkbar initial fördröjning)"
 
-#: rosegardenconfiguredialog.cpp:995
+#: rosegardenconfiguredialog.cpp:904
 msgid ""
 "Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all MIDI "
 "devices every\n"
@@ -3766,7 +4219,7 @@ msgstr ""
 "fördröjning vid uppspelningens start, på grund av mängden data som "
 "skickas."
 
-#: rosegardenconfiguredialog.cpp:1007
+#: rosegardenconfiguredialog.cpp:916
 msgid ""
 "Sequencer command line options\n"
 "     (takes effect only from next restart)"
@@ -3774,11 +4227,7 @@ msgstr ""
 "Kommandoradsväljare för sequencer\n"
 "(får inte effekt förrän vid nästa omstart)"
 
-#: rosegardenconfiguredialog.cpp:1026
-msgid "Clear down all Rosegarden sequencer processes at restart"
-msgstr "Ta bort alla Rosegarden sequencer-processer vid omstart"
-
-#: rosegardenconfiguredialog.cpp:1036
+#: rosegardenconfiguredialog.cpp:935
 msgid ""
 "Rosegarden can start the JACK audio daemon (jackd) for you\n"
 "automatically if it isn't already running when Rosegarden starts.\n"
@@ -3805,157 +4254,251 @@ msgstr ""
 "\n"
 "Till exempel: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n"
 
-#: rosegardenconfiguredialog.cpp:1049
+#: rosegardenconfiguredialog.cpp:948
 msgid "Start JACK when Rosegarden starts"
 msgstr "Starta JACK när Rosegarden startas"
 
-#: rosegardenconfiguredialog.cpp:1053
+#: rosegardenconfiguredialog.cpp:952
 msgid "JACK command (including path as necessary)"
 msgstr "JACK-kommando (inklusive sökvägar om nödvändigt)"
 
-#: rosegardenconfiguredialog.cpp:1067
+#: rosegardenconfiguredialog.cpp:966
 msgid "Startup"
 msgstr "Start"
 
-#: rosegardenconfiguredialog.cpp:1079
-msgid "Number of JACK audio inputs"
-msgstr "Antal JACK-ljudingångar"
+#: rosegardenconfiguredialog.cpp:972
+msgid ""
+"Longer buffers usually improve playback quality, but use more memory and "
+"slow response."
+msgstr ""
+"Längre buffrar förbättrar oftast uppspelningskvalitet, men använder "
+"mer minne och ger längre svarstider."
 
-#: rosegardenconfiguredialog.cpp:1093
-msgid "Minutes of audio recording"
-msgstr "Minuter ljudinspelning"
+#: rosegardenconfiguredialog.cpp:976
+msgid "Event read-ahead (ms)"
+msgstr "Läs händelser i förväg (ms)"
+
+#: rosegardenconfiguredialog.cpp:977
+msgid "Audio mix buffer (ms)"
+msgstr "Buffer för ljudmixning (ms)"
+
+#: rosegardenconfiguredialog.cpp:978
+msgid "Audio file read buffer (ms)"
+msgstr "Buffer för läsning av ljudfil (ms)"
+
+#: rosegardenconfiguredialog.cpp:979
+msgid "Audio file write buffer (ms)"
+msgstr "Buffer för skrivning av ljudfil (ms)"
+
+#: rosegardenconfiguredialog.cpp:980
+msgid "Per-file limit for cacheable audio files"
+msgstr "Gräns för varje cachebar ljudfil"
 
 #: rosegardenconfiguredialog.cpp:1105
-msgid "Recording"
-msgstr "Inspelning"
+msgid "Buffers"
+msgstr "Buffrar"
 
-#: rosegardenconfiguredialog.cpp:1114
+#: rosegardenconfiguredialog.cpp:1120
+msgid "Number of stereo audio inputs:"
+msgstr "Antal ingångar för stereoljud:"
+
+#: rosegardenconfiguredialog.cpp:1133
+msgid "Number of stereo audio submasters:"
+msgstr "Antal delmastrar för stereoljud:"
+
+#: rosegardenconfiguredialog.cpp:1145
+msgid "Create post-fader outputs for audio instruments"
+msgstr "Skapa utgångar för efternertoning för ljudinstrument"
+
+#: rosegardenconfiguredialog.cpp:1153
+msgid "Create post-fader outputs for submasters"
+msgstr "Skapa utgångar för efternertoning för delmastrar"
+
+#: rosegardenconfiguredialog.cpp:1164
+msgid "Minutes of audio recording:"
+msgstr "Minuter ljudinspelning:"
+
+#: rosegardenconfiguredialog.cpp:1176
+msgid "Record and Mix"
+msgstr "Spela in och mixa"
+
+#: rosegardenconfiguredialog.cpp:1185
+msgid "Sequencer timer"
+msgstr "Sequencer tidtagare"
+
+#: rosegardenconfiguredialog.cpp:1202
 msgid "Send MIDI Clock and System messages"
 msgstr "Skicka MIDI-klockmeddelanden och systemmeddelanden"
 
-#: rosegardenconfiguredialog.cpp:1124
+#: rosegardenconfiguredialog.cpp:1212
 msgid "JACK transport mode"
 msgstr "JACK överföringsläge"
 
-#: rosegardenconfiguredialog.cpp:1130 rosegardenconfiguredialog.cpp:1155
-msgid "off"
-msgstr "av"
+#: rosegardenconfiguredialog.cpp:1218
+msgid "Ignore JACK transport"
+msgstr "Ignorera JACK-överföring"
 
-#: rosegardenconfiguredialog.cpp:1131
-msgid "JACK Slave"
-msgstr "JACK-slav"
+#: rosegardenconfiguredialog.cpp:1219
+msgid "Sync"
+msgstr "Synkronisera"
 
-#: rosegardenconfiguredialog.cpp:1132
-msgid "JACK Master"
-msgstr "JACK-mästare"
+#: rosegardenconfiguredialog.cpp:1220
+msgid "Sync, and offer timebase master"
+msgstr "Synkronisera, och erbjud tidbasmaster"
 
-#: rosegardenconfiguredialog.cpp:1149
+#: rosegardenconfiguredialog.cpp:1237
 msgid "MMC transport mode"
 msgstr "MMC-överföringsläge"
 
-#: rosegardenconfiguredialog.cpp:1156
+#: rosegardenconfiguredialog.cpp:1244
 msgid "MMC Slave"
 msgstr "MMC-slav"
 
-#: rosegardenconfiguredialog.cpp:1157
+#: rosegardenconfiguredialog.cpp:1245
 msgid "MMC Master"
-msgstr "MMC-mästare"
+msgstr "MMC-master"
 
-#: rosegardenconfiguredialog.cpp:1173
+#: rosegardenconfiguredialog.cpp:1261
 msgid "Synchronisation"
 msgstr "Synkronisering"
 
-#: rosegardenconfiguredialog.cpp:1366
-msgid "Add New Property"
-msgstr "Lägg till ny egenskap"
-
-#: rosegardenconfiguredialog.cpp:1370
-msgid "Delete Property"
-msgstr "Ta bort egenskap"
-
-#: rosegardenconfiguredialog.cpp:1380
-msgid "Description"
-msgstr "Beskrivning"
-
-#: rosegardenconfiguredialog.cpp:1387
-msgid "Filename:"
-msgstr "Filnamn:"
-
-#: rosegardenconfiguredialog.cpp:1394
+#: rosegardenconfiguredialog.cpp:1510
 msgid "%1 minutes %2.%3%4 seconds (%5 units, %6 bars)"
 msgstr "%1 minuter %2.%3%4 sekunder (%5 enheter, %6 takter)"
 
-#: rosegardenconfiguredialog.cpp:1400
+#: rosegardenconfiguredialog.cpp:1558
+msgid "Add New Property"
+msgstr "Lägg till ny egenskap"
+
+#: rosegardenconfiguredialog.cpp:1562
+msgid "Delete Property"
+msgstr "Ta bort egenskap"
+
+#: rosegardenconfiguredialog.cpp:1572
+msgid "Description"
+msgstr "Beskrivning"
+
+#: rosegardenconfiguredialog.cpp:1590
+msgid "Filename:"
+msgstr "Filnamn:"
+
+#: rosegardenconfiguredialog.cpp:1593
+msgid "Formal duration (to end marker):"
+msgstr "Formell längd (till slutmarkör):"
+
+#: rosegardenconfiguredialog.cpp:1598
+msgid "Playing duration:"
+msgstr "Uppspelningslängd:"
+
+#: rosegardenconfiguredialog.cpp:1603
+msgid "Tracks:"
+msgstr "Spår:"
+
+#: rosegardenconfiguredialog.cpp:1604
+msgid "%1 used, %2 total"
+msgstr "%1 använda, %2 totalt"
+
+#: rosegardenconfiguredialog.cpp:1609
 msgid "Segments:"
 msgstr "Segment:"
 
-#: rosegardenconfiguredialog.cpp:1406
+#: rosegardenconfiguredialog.cpp:1610
+msgid "%1 MIDI, %2 audio, %3 total"
+msgstr "%1 MIDI, %2 ljud, %3 totalt"
+
+#: rosegardenconfiguredialog.cpp:1616
 msgid "Statistics"
 msgstr "Statistik"
 
-#: rosegardenconfiguredialog.cpp:1417
+#: rosegardenconfiguredialog.cpp:1624
+msgid "Track"
+msgstr "Spår"
+
+#: rosegardenconfiguredialog.cpp:1625 segmentparameterbox.cpp:78
+msgid "Label"
+msgstr "Etikett"
+
+#: rosegardenconfiguredialog.cpp:1626
+msgid "Time"
+msgstr "Tid"
+
+#: rosegardenconfiguredialog.cpp:1628
+msgid "Events"
+msgstr "Händelser"
+
+#: rosegardenconfiguredialog.cpp:1629
+msgid "Polyphony"
+msgstr "Polyfoni"
+
+#: rosegardenconfiguredialog.cpp:1630 segmentparameterbox.cpp:79
+msgid "Repeat"
+msgstr "Upprepa"
+
+#: rosegardenconfiguredialog.cpp:1633 segmentparameterbox.cpp:82
+msgid "Delay"
+msgstr "Fördröjning"
+
+#: rosegardenconfiguredialog.cpp:1658
+msgid "MIDI"
+msgstr "MIDI"
+
+#: rosegardenconfiguredialog.cpp:1771
+msgid "Segment Summary"
+msgstr "Segmentöversikt"
+
+#: rosegardenconfiguredialog.cpp:1783
 msgid "{new property %1}"
 msgstr "{ny egenskap %1}"
 
-#: rosegardenconfiguredialog.cpp:1417
+#: rosegardenconfiguredialog.cpp:1783
 msgid "{new property}"
 msgstr "{ny egenskap}"
 
-#: rosegardenconfiguredialog.cpp:1422
+#: rosegardenconfiguredialog.cpp:1788
 msgid "{undefined}"
 msgstr "{odefinierad}"
 
-#: rosegardenconfiguredialog.cpp:1460
+#: rosegardenconfiguredialog.cpp:1826
 msgid "Audio file path:"
 msgstr "Sökväg för ljudfil:"
 
-#: rosegardenconfiguredialog.cpp:1470
+#: rosegardenconfiguredialog.cpp:1836
 msgid "Disk space remaining:"
 msgstr "Återstående diskutrymme:"
 
-#: rosegardenconfiguredialog.cpp:1475
+#: rosegardenconfiguredialog.cpp:1841
 msgid "Equivalent minutes of 16-bit stereo:"
 msgstr "Motsvarande minuter med 16-bitars stereo:"
 
-#: rosegardenconfiguredialog.cpp:1485
+#: rosegardenconfiguredialog.cpp:1851
 msgid "Modify audio path"
 msgstr "Ändra ljudsökväg"
 
-#: rosegardenconfiguredialog.cpp:1513
+#: rosegardenconfiguredialog.cpp:1879
 msgid "<sample rate not available>"
 msgstr "<samplingsfrekvens inte tillgänglig>"
 
-#: rosegardenconfiguredialog.cpp:1528
+#: rosegardenconfiguredialog.cpp:1894
 msgid "minutes at"
 msgstr "minuter vid"
 
-#: rosegardenconfiguredialog.cpp:1585 segmentparameterbox.cpp:287
+#: rosegardenconfiguredialog.cpp:1951 segmentparameterbox.cpp:302
 msgid "Add New Color"
 msgstr "Lägg till ny färg"
 
-#: rosegardenconfiguredialog.cpp:1589
+#: rosegardenconfiguredialog.cpp:1955
 msgid "Delete Color"
 msgstr "Ta bort färg"
 
-#: rosegardenconfiguredialog.cpp:1608
+#: rosegardenconfiguredialog.cpp:1974
 msgid "Color Map"
 msgstr "Färgkarta"
 
-#: rosegardenconfiguredialog.cpp:1641 segmentparameterbox.cpp:744
+#: rosegardenconfiguredialog.cpp:2007 segmentparameterbox.cpp:772
 msgid "New Color Name"
 msgstr "Nytt färgnamn"
 
-#: colourwidgets.cpp:64 rosegardenconfiguredialog.cpp:1641
-#: segmentparameterbox.cpp:744
-msgid "Enter new name"
-msgstr "Skriv in nytt namn"
-
-#: devicemanager.cpp:98 devicemanager.cpp:151
-#: rosegardenconfiguredialog.cpp:1642 segmentparameterbox.cpp:745
-msgid "New"
-msgstr "Ny"
-
-#: rosegardengui.cpp:162
+#: rosegardengui.cpp:192
 msgid ""
 "Attempted to launch JACK audio daemon failed.  Audio will be disabled.\n"
 "Please check configuration (Settings->Configure Rosegarden->Sequencer->JACK "
@@ -3967,259 +4510,283 @@ msgstr ""
 "Sequencer -> JACK-styrning)\n"
 "och starta om."
 
-#: rosegardengui.cpp:166
+#: rosegardengui.cpp:200
 msgid "Starting sequencer..."
 msgstr "Startar sequencer..."
 
-#: rosegardengui.cpp:173
+#: rosegardengui.cpp:207
 msgid "Initialising plugin manager..."
 msgstr "Initiera instickshantering..."
 
-#: rosegardengui.cpp:179
+#: rosegardengui.cpp:212
 msgid "Initialising view..."
 msgstr "Initierar vy..."
 
-#: rosegardengui.cpp:189
+#: rosegardengui.cpp:228
+msgid "Segment & Instrument Parameters"
+msgstr "Segment- och instrumentparametrar"
+
+#: rosegardengui.cpp:264
 msgid "Starting sequence manager..."
 msgstr "Startar sequencer-hantering..."
 
-#: rosegardengui.cpp:196
+#: rosegardengui.cpp:271
 msgid "Getting sound driver status..."
 msgstr "Hämtar status för ljuddrivrutin..."
 
-#: rosegardengui.cpp:201
+#: rosegardengui.cpp:276
 msgid "Clearing studio data..."
 msgstr "Rensar studiodata..."
 
-#: rosegardengui.cpp:210
+#: rosegardengui.cpp:285
 msgid "Enumerating plugins..."
 msgstr "Räknar upp insticksmoduler..."
 
-#: rosegardengui.cpp:265
+#: rosegardengui.cpp:340
 msgid "Import &MIDI file..."
 msgstr "Importera &MIDI-fil..."
 
-#: rosegardengui.cpp:269
+#: rosegardengui.cpp:344
 msgid "Import &Rosegarden 2.1 file..."
 msgstr "Importera &Rosegarden 2.1 fil..."
 
-#: rosegardengui.cpp:273
+#: rosegardengui.cpp:348
 msgid "Merge &File..."
 msgstr "Sammanfoga &fil..."
 
-#: rosegardengui.cpp:277
+#: rosegardengui.cpp:352
 msgid "Merge &MIDI file..."
 msgstr "Sammanfoga &MIDI-fil..."
 
-#: rosegardengui.cpp:281
+#: rosegardengui.cpp:356
 msgid "Merge &Rosegarden 2.1 file..."
 msgstr "Sammanfoga &Rosegarden 2.1 fil..."
 
-#: rosegardengui.cpp:285
+#: rosegardengui.cpp:360
 msgid "Export &MIDI file..."
 msgstr "Exportera &MIDI-fil..."
 
-#: rosegardengui.cpp:289
+#: rosegardengui.cpp:364
 msgid "Export &Lilypond file..."
 msgstr "Exportera &Lilypond-fil..."
 
-#: rosegardengui.cpp:293
+#: rosegardengui.cpp:368
 msgid "Export Music&XML file..."
 msgstr "Exportera Music&XML-fil..."
 
-#: rosegardengui.cpp:297
+#: rosegardengui.cpp:372
 msgid "Export &Csound score file..."
 msgstr "Exportera &Csound partiturfil..."
 
-#: rosegardengui.cpp:301
+#: rosegardengui.cpp:376
 msgid "Export M&up file..."
 msgstr "Exportera M&up-fil..."
 
-#: rosegardengui.cpp:340
+#: rosegardengui.cpp:380
+msgid "Playlist"
+msgstr "Spellista"
+
+#: rosegardengui.cpp:419
 msgid "Show Trac&ks Toolbar"
 msgstr "Visa s&pårverktygsrad"
 
-#: rosegardengui.cpp:344
+#: rosegardengui.cpp:423
 msgid "Show &Editors Toolbar"
 msgstr "Visa e&ditorverktygsrad"
 
-#: rosegardengui.cpp:352
+#: rosegardengui.cpp:431
 msgid "Show &Zoom Toolbar"
 msgstr "Visa &zoomverktygsrad"
 
-#: rosegardengui.cpp:358
+#: rosegardengui.cpp:437
 msgid "Show Tra&nsport"
 msgstr "Visa öv&erföring"
 
-#: rosegardengui.cpp:363
+#: rosegardengui.cpp:442
 msgid "Show Track &Labels"
 msgstr "Visa sp&årrubriker"
 
-#: rosegardengui.cpp:368
-msgid "Show &Segment Parameters"
-msgstr "Visa se&gmentparametrar"
-
-#: rosegardengui.cpp:373
-msgid "Show &Instrument Parameters"
-msgstr "Visa &instrumentparametrar"
-
-#: rosegardengui.cpp:378
+#: rosegardengui.cpp:447
 msgid "Show R&ulers"
 msgstr "Visa lin&jaler"
 
-#: rosegardengui.cpp:383
+#: rosegardengui.cpp:452
 msgid "Show Te&mpo Ruler"
 msgstr "Visa te&mpolinjal"
 
-#: rosegardengui.cpp:388
+#: rosegardengui.cpp:457
 msgid "Show Cho&rd Name Ruler"
 msgstr "Visa &linjal för ackordnamn"
 
-#: rosegardengui.cpp:393
+#: rosegardengui.cpp:462
 msgid "Show Segment Pre&views"
 msgstr "Visa &förhandsgranskningar av segment"
 
-#: rosegardengui.cpp:398
+#: rosegardengui.cpp:467
+msgid "Show Se&gment and Instrument Parameters"
+msgstr "Visa se&gment- och instrumentparametrar"
+
+#: rosegardengui.cpp:472
 msgid "Toggle &All of the Above"
 msgstr "Växla alla &ovan"
 
-#: rosegardengui.cpp:406
+#: rosegardengui.cpp:480
 msgid "Show Tip of the &Day"
 msgstr "Visa &dagens tips"
 
-#: rosegardengui.cpp:464
+#: rosegardengui.cpp:534
 msgid "&Resize"
 msgstr "&Ändra storlek"
 
-#: rosegardengui.cpp:471
+#: rosegardengui.cpp:540
 msgid "&Split"
 msgstr "&Dela"
 
-#: rosegardengui.cpp:478 segmentcommands.h:365
+#: rosegardengui.cpp:546 segmentcommands.h:365
 msgid "&Join"
 msgstr "&Sammanfoga"
 
-#: rosegardengui.cpp:485
+#: rosegardengui.cpp:552
 msgid "&Harmonize"
 msgstr "&Harmoniera"
 
-#: rosegardengui.cpp:501
+#: rosegardengui.cpp:561
+msgid "Open Tempo and Time Signature Editor"
+msgstr "Öppna tempo- och tidssignatureditor"
+
+#: rosegardengui.cpp:571
 msgid "Select &All Segments"
 msgstr "Markera &alla segment"
 
-#: rosegardengui.cpp:515
-msgid "Edit Markers..."
-msgstr "Redigera markörer..."
+#: rosegardengui.cpp:585
+msgid "Edit Mar&kers..."
+msgstr "Redigera mar&körer..."
 
-#: rosegardengui.cpp:519
+#: rosegardengui.cpp:589
 msgid "Edit Document P&roperties..."
 msgstr "Redigera dokument&egenskaper..."
 
-#: rosegardengui.cpp:527
+#: rosegardengui.cpp:597
 msgid "Open in &Default Editor"
 msgstr "&Öppna i standardeditor"
 
-#: rosegardengui.cpp:532
+#: rosegardengui.cpp:602
 msgid "Open in Matri&x Editor"
 msgstr "Öppna i m&atriseditor"
 
-#: rosegardengui.cpp:537
+#: rosegardengui.cpp:607
 msgid "Open in &Notation Editor"
 msgstr "Öppna i &notskriftseditor"
 
-#: rosegardengui.cpp:542
+#: rosegardengui.cpp:612
 msgid "Open in &Event List Editor"
 msgstr "Öppna i editor för &händelselista"
 
-#: rosegardengui.cpp:573
+#: rosegardengui.cpp:638
+msgid "Set Start Time..."
+msgstr "Ställ in starttid..."
+
+#: rosegardengui.cpp:642
+msgid "Set Duration..."
+msgstr "Ställ in längd..."
+
+#: rosegardengui.cpp:651
 msgid "Turn Re&peats into Copies"
 msgstr "Omvandla u&pprepningar till kopior"
 
-#: rosegardengui.cpp:578
+#: rosegardengui.cpp:656
 msgid "Set &Tempo to Audio Segment Duration"
 msgstr "Ställ in &tempo till ljudsegmentets längd"
 
-#: rosegardengui.cpp:582
+#: rosegardengui.cpp:660
 msgid "Manage A&udio Segments"
 msgstr "Hantera &ljudsegment"
 
-#: rosegardengui.cpp:592
+#: rosegardengui.cpp:670
 msgid "&Add Tracks..."
 msgstr "&Lägg till spår..."
 
-#: rosegardengui.cpp:598
+#: rosegardengui.cpp:676
 msgid "&Delete Track"
 msgstr "&Ta bort spår"
 
-#: rosegardengui.cpp:604
+#: rosegardengui.cpp:682
 msgid "Move Track &Down"
 msgstr "Flytta &ner spår"
 
-#: rosegardengui.cpp:610
+#: rosegardengui.cpp:687
 msgid "Move Track &Up"
 msgstr "Flytta &upp spår"
 
-#: rosegardengui.cpp:615
+#: rosegardengui.cpp:691
 msgid "Select &Next Track"
 msgstr "Markera nästa &spår"
 
-#: rosegardengui.cpp:620
+#: rosegardengui.cpp:696
 msgid "Select &Previous Track"
 msgstr "Markera &föregående spår"
 
-#: rosegardengui.cpp:625
+#: rosegardengui.cpp:701
 msgid "&Remap Instruments..."
 msgstr "&Mappa om instrument..."
 
-#: rosegardengui.cpp:632
-msgid "Manage MIDI Devices..."
-msgstr "Hantera MIDI-enheter..."
+#: rosegardengui.cpp:708
+msgid "Audio Mi&xer"
+msgstr "Ljudmi&xer"
 
-#: rosegardengui.cpp:636
-msgid "Modify MIDI &Filters..."
-msgstr "Ändra MIDI-&filter..."
+#: rosegardengui.cpp:712
+msgid "Manage MIDI &Devices"
+msgstr "Hantera MIDI-en&heter"
 
-#: rosegardengui.cpp:640
-msgid "Manage &Metronome..."
-msgstr "Hantera &metronom..."
+#: rosegardengui.cpp:716
+msgid "Modify MIDI &Filters"
+msgstr "Ändra MIDI-&filter"
 
-#: rosegardengui.cpp:644
+#: rosegardengui.cpp:720
+msgid "Manage &Metronome"
+msgstr "Hantera &metronom"
+
+#: rosegardengui.cpp:724
 msgid "&Save Current Document as Default Studio"
 msgstr "&Spara nuvarande dokument som standardstudio"
 
-#: rosegardengui.cpp:648
+#: rosegardengui.cpp:728
 msgid "&Import Default Studio"
 msgstr "&Importera standardstudio"
 
-#: rosegardengui.cpp:652
-msgid "&Import Studio from File..."
+#: rosegardengui.cpp:732
+msgid "Im&port Studio from File..."
 msgstr "Im&portera studio från fil..."
 
-#: rosegardengui.cpp:692
+#: rosegardengui.cpp:736
+msgid "&Reset MIDI Network"
+msgstr "&Återställ MIDI-nätverk"
+
+#: rosegardengui.cpp:776
 msgid "P&unch in Record"
 msgstr "Pu&nch in-inspelning"
 
-#: rosegardengui.cpp:698
+#: rosegardengui.cpp:782
 msgid "&Record"
 msgstr "Spela &in"
 
-#: rosegardengui.cpp:768
+#: rosegardengui.cpp:888
 msgid "  Zoom:  "
 msgstr "  Zooma:  "
 
-#: rosegardengui.cpp:1080
+#: rosegardengui.cpp:1211
 msgid "File \"%1\" does not exist"
 msgstr "Filen \"%1\" finns inte"
 
-#: rosegardengui.cpp:1086
+#: rosegardengui.cpp:1217
 msgid "File \"%1\" is actually a directory"
 msgstr "Filen \"%1\" är i själva verket en katalog"
 
-#: rosegardengui.cpp:1095
+#: rosegardengui.cpp:1226
 msgid "You do not have read permission for \"%1\""
 msgstr "Du har inte läsrättigheter till \"%1\""
 
-#: rosegardengui.cpp:1150
+#: rosegardengui.cpp:1290
 msgid ""
 "An auto-save file for this document has been found\n"
 "Do you want to open it instead ?"
@@ -4227,15 +4794,16 @@ msgstr ""
 "En automatiskt sparad fil för det här dokumentet har hittats.\n"
 "Vill du öppna den istället?"
 
-#: rosegardengui.cpp:1366
+#: rosegardengui.cpp:1494
 msgid "Opening a new application window..."
 msgstr "Öppnar ett nytt programfönster..."
 
-#: rosegardengui.cpp:1376
+#: rosegardengui.cpp:1504
 msgid "Creating new document..."
 msgstr "Skapar nytt dokument..."
 
-#: rosegardengui.cpp:1419
+#: rosegardengui.cpp:1547
+#, c-format
 msgid ""
 "Malformed URL\n"
 "%1"
@@ -4243,96 +4811,112 @@ msgstr ""
 "Felaktig webbadress\n"
 "%1"
 
-#: rosegardengui.cpp:1444 rosegardengui.cpp:1497
+#: rosegardengui.cpp:1572 rosegardengui.cpp:1625
 msgid "Opening file..."
 msgstr "Öppnar fil..."
 
-#: rosegardengui.cpp:1453 rosegardengui.cpp:1477
-msgid ""
-"*.rg|Rosegarden-4 files\n"
-"*|All files"
-msgstr ""
-"*.rg|Rosegarden-4 filer\n"
-"*|Alla filer"
-
-#: rosegardengui.cpp:1454 rosegardengui.cpp:1478
+#: rosegardengui.cpp:1582 rosegardengui.cpp:1606
 msgid "Open File"
 msgstr "Öppna fil"
 
-#: rosegardengui.cpp:1514 rosegardenguidoc.cpp:703
+#: rosegardengui.cpp:1642 rosegardenguidoc.cpp:793
 msgid "Saving file..."
 msgstr "Sparar fil..."
 
-#: rosegardengui.cpp:1575
+#: rosegardengui.cpp:1703
 msgid "This is not a valid filename.\n"
 msgstr "Det här är inte ett giltigt filnamn.\n"
 
-#: rosegardengui.cpp:1580
+#: rosegardengui.cpp:1708
 msgid "This is not a local file.\n"
 msgstr "Detta är inte en lokal fil.\n"
 
-#: rosegardengui.cpp:1606
+#: rosegardengui.cpp:1734
 msgid "Saving file with a new filename..."
 msgstr "Sparar fil med ett nytt namn..."
 
-#: rosegardengui.cpp:1608
+#: rosegardengui.cpp:1736
 msgid "Rosegarden-4 files"
 msgstr "Rosegarden-4 filer"
 
-#: rosegardengui.cpp:1609 rosegardengui.cpp:3118 rosegardengui.cpp:3156
-#: rosegardengui.cpp:3188 rosegardengui.cpp:3221 rosegardengui.cpp:3258
+#: rosegardengui.cpp:1737 rosegardengui.cpp:3367 rosegardengui.cpp:3405
+#: rosegardengui.cpp:3437 rosegardengui.cpp:3470 rosegardengui.cpp:3507
 msgid "All files"
 msgstr "Alla filer"
 
-#: rosegardengui.cpp:1610
+#: rosegardengui.cpp:1738
 msgid "Save as..."
 msgstr "Spara som..."
 
-#: rosegardengui.cpp:1630
+#: rosegardengui.cpp:1758
 msgid "Closing file..."
 msgstr "Stänger fil..."
 
-#: rosegardengui.cpp:1667
+#: rosegardengui.cpp:1795
 msgid "Exiting..."
 msgstr "Avslutar..."
 
-#: rosegardengui.cpp:1689
+#: rosegardengui.cpp:1817
 msgid "Cutting selection..."
 msgstr "Klipper ut markering..."
 
-#: rosegardengui.cpp:1772
+#: rosegardengui.cpp:1900
 msgid "Can't join Audio segments"
 msgstr "Kan inte sammanfoga ljudsegment"
 
-#: rosegardengui.cpp:1932 rosegardengui.cpp:3968
+#: rosegardengui.cpp:2029
+msgid "Segment Start Time"
+msgstr "Starttid för segment"
+
+#: rosegardengui.cpp:2039
+msgid "Set Segment Start Times"
+msgstr "Visa starttider för segment"
+
+#: rosegardengui.cpp:2040
+msgid "Set Segment Start Time"
+msgstr "Ställ in starttid för segment"
+
+#: rosegardengui.cpp:2071
+msgid "Segment Duration"
+msgstr "Längd för segment"
+
+#: rosegardengui.cpp:2082
+msgid "Set Segment Durations"
+msgstr "Ställ in längd för segment"
+
+#: rosegardengui.cpp:2083
+msgid "Set Segment Duration"
+msgstr "Ställ in längd för segment"
+
+#: rosegardengui.cpp:2153 rosegardengui.cpp:4197
 msgid "Set Global Tempo"
 msgstr "Ställ in övergripande tempo"
 
-#: rosegardengui.cpp:1985
+#: rosegardengui.cpp:2216
 msgid "Toggle the tools toolbar..."
 msgstr "Växla verktygsrad med verktyg..."
 
-#: rosegardengui.cpp:1995
+#: rosegardengui.cpp:2226
 msgid "Toggle the tracks toolbar..."
 msgstr "Växla spårverktygsrad..."
 
-#: rosegardengui.cpp:2006
+#: rosegardengui.cpp:2237
 msgid "Toggle the editor toolbar..."
 msgstr "Växla editorverktygsrad..."
 
-#: rosegardengui.cpp:2016
+#: rosegardengui.cpp:2247
 msgid "Toggle the transport toolbar..."
 msgstr "Växla överföringsverktygsrad..."
 
-#: rosegardengui.cpp:2026
+#: rosegardengui.cpp:2257
 msgid "Toggle the zoom toolbar..."
 msgstr "Växla zoomverktygsrad..."
 
-#: rosegardengui.cpp:2036
+#: rosegardengui.cpp:2267
 msgid "Toggle the Transport"
 msgstr "Växla överföringsfönster"
 
-#: rosegardengui.cpp:2195
+#: rosegardengui.cpp:2424
 msgid ""
 "The join tool isn't implemented yet.  Instead please highlight the segments "
 "you want to join and then use the menu option:\n"
@@ -4344,51 +4928,43 @@ msgstr ""
 "\n"
 "Segment -> Sammanfoga segment.\n"
 
-#: rosegardengui.cpp:2198
+#: rosegardengui.cpp:2427
 msgid "Join tool not yet implemented"
 msgstr "Sammanfogningsverktyg ännu inte implementerat"
 
-#: rosegardengui.cpp:2293
+#: rosegardengui.cpp:2522
 msgid "How many tracks do you want to add? (max. 24)"
 msgstr "Hur många spår vill du lägga till? (maximalt 24)"
 
-#: rosegardengui.cpp:2294
+#: rosegardengui.cpp:2523
 msgid "Tracks to add"
 msgstr "Spår att lägga till"
 
-#: rosegardengui.cpp:2421
+#: rosegardengui.cpp:2650
 msgid "Revert modified document to previous saved version?"
 msgstr "Återställ ändrat dokument till tidigare sparad version?"
 
-#: rosegardengui.cpp:2438 rosegardengui.cpp:2458
-msgid ""
-"*.mid *.midi|Standard MIDI files\n"
-"*|All files"
-msgstr ""
-"*.mid *.midi|Standard MIDI-filer\n"
-"*|Alla filer"
-
-#: rosegardengui.cpp:2439
+#: rosegardengui.cpp:2668
 msgid "Open MIDI File"
 msgstr "Öppna MIDI-fil"
 
-#: rosegardengui.cpp:2459
+#: rosegardengui.cpp:2688
 msgid "Merge MIDI File"
 msgstr "Sammanfoga MIDI-fil"
 
-#: rosegardengui.cpp:2484
+#: rosegardengui.cpp:2713
 msgid "Importing MIDI file..."
 msgstr "Importerar MIDI-fil..."
 
-#: rosegardengui.cpp:2519
+#: rosegardengui.cpp:2748
 msgid "Calculating notation..."
 msgstr "Beräknar notskrift..."
 
-#: rosegardengui.cpp:2566
+#: rosegardengui.cpp:2795
 msgid "Calculate Notation"
 msgstr "Beräknar notskrift"
 
-#: rosegardengui.cpp:2611 rosegardengui.cpp:2631
+#: rosegardengui.cpp:2840 rosegardengui.cpp:2860
 msgid ""
 "*.rose|Rosegarden-2 files\n"
 "*|All files"
@@ -4396,139 +4972,146 @@ msgstr ""
 "*.rose|Rosegarden-2 filer\n"
 "*|Alla filer"
 
-#: rosegardengui.cpp:2612 rosegardengui.cpp:2632
+#: rosegardengui.cpp:2841 rosegardengui.cpp:2861
 msgid "Open Rosegarden 2.1 File"
 msgstr "Öppna Rosegarden 2.1 fil"
 
-#: rosegardengui.cpp:2647
+#: rosegardengui.cpp:2876
 msgid "Importing Rosegarden 2.1 file..."
 msgstr "Importerar Rosegarden 2.1 fil..."
 
-#: rosegardengui.cpp:2673
+#: rosegardengui.cpp:2902
 msgid "Can't load Rosegarden 2.1 file.  It appears to be corrupted."
 msgstr "Kan inte ladda Rosegarden 2.1 fil. Den verkar vara skadad."
 
-#: rosegardengui.cpp:2942
+#: rosegardengui.cpp:3206
 msgid "Starting the sequencer..."
 msgstr "Startar sequencern..."
 
-#: rosegardengui.cpp:2968
+#: rosegardengui.cpp:3232
 msgid "Couldn't start the sequencer"
 msgstr "Kunde inte starta sequencern"
 
-#: rosegardengui.cpp:3044
+#: rosegardengui.cpp:3308
 msgid "Clearing down jackd..."
 msgstr "Tar bort jackd..."
 
-#: rosegardengui.cpp:3058
+#: rosegardengui.cpp:3322
 msgid "Starting jackd..."
 msgstr "Startar jackd..."
 
-#: rosegardengui.cpp:3104
+#: rosegardengui.cpp:3353
 msgid "Sequencer exited"
 msgstr "Sequencern avslutades"
 
-#: rosegardengui.cpp:3114 rosegardengui.cpp:3128
+#: rosegardengui.cpp:3363 rosegardengui.cpp:3377
 msgid "Exporting MIDI file..."
 msgstr "Exporterar MIDI-fil..."
 
-#: rosegardengui.cpp:3117
+#: rosegardengui.cpp:3366
 msgid "Standard MIDI files\n"
 msgstr "Standard MIDI-filer\n"
 
-#: rosegardengui.cpp:3119 rosegardengui.cpp:3157 rosegardengui.cpp:3189
-#: rosegardengui.cpp:3222 rosegardengui.cpp:3258
+#: rosegardengui.cpp:3368 rosegardengui.cpp:3406 rosegardengui.cpp:3438
+#: rosegardengui.cpp:3471 rosegardengui.cpp:3507
 msgid "Export as..."
 msgstr "Exportera som..."
 
-#: rosegardengui.cpp:3148 rosegardengui.cpp:3179 rosegardengui.cpp:3211
-#: rosegardengui.cpp:3248 rosegardengui.cpp:3281
+#: rosegardengui.cpp:3397 rosegardengui.cpp:3428 rosegardengui.cpp:3460
+#: rosegardengui.cpp:3497 rosegardengui.cpp:3530
 msgid "Export failed.  The file could not be opened for writing."
 msgstr "Export misslyckades. Filen kunde inte öppnas för skrivning."
 
-#: rosegardengui.cpp:3154 rosegardengui.cpp:3165
+#: rosegardengui.cpp:3403 rosegardengui.cpp:3414
 msgid "Exporting Csound score file..."
 msgstr "Exporterar Csound-partiturfil..."
 
-#: rosegardengui.cpp:3185 rosegardengui.cpp:3197
+#: rosegardengui.cpp:3434 rosegardengui.cpp:3446
 msgid "Exporting Mup file..."
 msgstr "Exporterar Mup-fil..."
 
-#: rosegardengui.cpp:3188
+#: rosegardengui.cpp:3437
 msgid "Mup files\n"
 msgstr " Mup-filer\n"
 
-#: rosegardengui.cpp:3217 rosegardengui.cpp:3234
+#: rosegardengui.cpp:3466 rosegardengui.cpp:3483
 msgid "Exporting Lilypond file..."
 msgstr "Exporterar Lilypond-fil..."
 
-#: rosegardengui.cpp:3220
+#: rosegardengui.cpp:3469
 msgid "Lilypond files"
 msgstr "Lilypond-filer"
 
-#: rosegardengui.cpp:3254 rosegardengui.cpp:3267
+#: rosegardengui.cpp:3503 rosegardengui.cpp:3516
 msgid "Exporting MusicXML file..."
 msgstr "Exporterar MusicXML-fil..."
 
-#: rosegardengui.cpp:3257
+#: rosegardengui.cpp:3506
 msgid "XML files"
 msgstr "XML-filer"
 
-#: rosegardengui.cpp:3951
+#: rosegardengui.cpp:4180
+#, c-format
 msgid "Replace Tempo Change at %1"
 msgstr "Ersätt tempoändring vid %1"
 
-#: rosegardengui.cpp:3985
+#: rosegardengui.cpp:4214
 msgid "Set Global and Default Tempo"
 msgstr "Ställ in övergripande och standardtempo"
 
-#: rosegardengui.cpp:4259
+#: rosegardengui.cpp:4488
+#, c-format
 msgid "Sequencer failed to add audio file %1"
 msgstr "Sequencern misslyckades med att lägga till ljudfilen %1"
 
-#: rosegardengui.cpp:4288
+#: rosegardengui.cpp:4517
+#, c-format
 msgid "Sequencer failed to remove audio file id %1"
 msgstr "Sequencern misslyckades med att ta bort ljudfilen med id %1"
 
-#: rosegardengui.cpp:4352 segmentparameterbox.cpp:786
+#: rosegardengui.cpp:4581 segmentparameterbox.cpp:814
 msgid "Modify Segment label"
 msgstr "Ändra segmentrubrik"
 
-#: rosegardengui.cpp:4353 segmentparameterbox.cpp:787
+#: rosegardengui.cpp:4582 segmentparameterbox.cpp:815
 msgid "Modify Segments label"
 msgstr "Ändra segmentrubriker"
 
-#: rosegardengui.cpp:4355
+#: rosegardengui.cpp:4584
 msgid "Relabelling selection..."
 msgstr "Ändrar rubriker på markering..."
 
-#: rosegardengui.cpp:4584
+#: rosegardengui.cpp:5044
+msgid "Play List"
+msgstr "Spellista"
+
+#: rosegardengui.cpp:5119
 msgid "Sending MIDI panic..."
 msgstr "Skickar MIDI-panik..."
 
-#: rosegardengui.cpp:4642
+#: rosegardengui.cpp:5182
 msgid "Are you sure you want to save this as your default studio?"
 msgstr "Är du säker på att du vill spara det här som standardstudio?"
 
-#: rosegardengui.cpp:4646
+#: rosegardengui.cpp:5186
 msgid "Saving current document as default studio..."
 msgstr "Sparar nuvarande dokument som standardstudio..."
 
-#: rosegardengui.cpp:4661
+#: rosegardengui.cpp:5201
 msgid "Are you sure you want to import your default studio and lose the current one?"
 msgstr ""
 "Är du säker på att du vill importera din standardstudio och låta den "
 "nuvarande gå förlorad?"
 
-#: rosegardengui.cpp:4701
+#: rosegardengui.cpp:5241
 msgid "Import Studio from File"
 msgstr "Importera studio från fil"
 
-#: rosegardengui.cpp:4734
+#: rosegardengui.cpp:5274
 msgid "Import Studio"
 msgstr "Importera studio"
 
-#: rosegardenguidoc.cpp:270
+#: rosegardenguidoc.cpp:275
 msgid ""
 "The current file has been modified.\n"
 "Do you want to save it?"
@@ -4536,35 +5119,35 @@ msgstr ""
 "Den aktuella filen har ändrats.\n"
 "Vill du spara den?"
 
-#: rosegardenguidoc.cpp:361
+#: rosegardenguidoc.cpp:366
 msgid "Can't open file '%1'"
 msgstr "Kan inte öppna filen '%1'"
 
-#: rosegardenguidoc.cpp:366
+#: rosegardenguidoc.cpp:371
 msgid "Reading file..."
 msgstr "Läser fil..."
 
-#: rosegardenguidoc.cpp:378
-msgid "Not a Rosegarden-4 file"
-msgstr "Inte en Rosegarden-4 fil"
+#: rosegardenguidoc.cpp:386
+msgid "Could not open Rosegarden-4 file"
+msgstr "Kunde inte öppna Rosegarden-4 fil"
 
-#: rosegardenguidoc.cpp:389
+#: rosegardenguidoc.cpp:405
 msgid "Error when parsing file '%1': \"%2\""
 msgstr "Fel vid tolkning av filen '%1': \"%2\""
 
-#: rosegardenguidoc.cpp:433
+#: rosegardenguidoc.cpp:453
 msgid "Generating audio previews..."
 msgstr "Skapar förhandsgranskning av ljud..."
 
-#: rosegardenguidoc.cpp:469
+#: rosegardenguidoc.cpp:489
 msgid "Merge"
 msgstr "Sammanfoga"
 
-#: rosegardenguidoc.cpp:1007
+#: rosegardenguidoc.cpp:1112
 msgid "File load cancelled"
 msgstr "Laddning av fil avbruten"
 
-#: rosegardenguidoc.cpp:1015
+#: rosegardenguidoc.cpp:1120
 msgid ""
 "This file contains one or more old element types that are now deprecated.\n"
 "Support for these elements may disappear in future versions of Rosegarden.\n"
@@ -4577,32 +5160,32 @@ msgstr ""
 "Du rekommenderas att spara filen med den här versionen av Rosegarden,\n"
 "för att försäkra dig om att den kan laddas igen i framtida versioner."
 
-#: rosegardenguidoc.cpp:1104
+#: rosegardenguidoc.cpp:1166
 msgid "%1 (recorded)"
 msgstr "%1 (inspelad)"
 
-#: rosegardenguidoc.cpp:1345
+#: rosegardenguidoc.cpp:1431
 msgid "Insert Recorded MIDI"
 msgstr "Infoga inspelad MIDI"
 
-#: rosegardenguiview.cpp:228
+#: rosegardenguiview.cpp:226
 msgid "No non-audio segments in composition"
 msgstr "Inga segment utan ljud i kompositionen"
 
-#: rosegardenguiview.cpp:283
+#: rosegardenguiview.cpp:296
 msgid "Selection must contain only audio or non-audio segments"
 msgstr "Markering får bara innehålla segment med ljud eller utan ljud"
 
-#: rosegardenguiview.cpp:365 rosegardenguiview.cpp:462
-#: rosegardenguiview.cpp:555
+#: rosegardenguiview.cpp:378 rosegardenguiview.cpp:475
+#: rosegardenguiview.cpp:568
 msgid "No non-audio segments selected"
 msgstr "Inga segment utan ljud markerade"
 
-#: rosegardenguiview.cpp:1178 rosegardenguiview.cpp:1184
+#: rosegardenguiview.cpp:1239 rosegardenguiview.cpp:1243
 msgid "Can't add dropped file. "
 msgstr "Kan inte lägga till släppt fil. "
 
-#: rc.cpp:64 rosegardentransportdialog.cpp:72
+#: rc.cpp:72 rosegardentransportdialog.cpp:72
 msgid "Rosegarden Transport"
 msgstr "Rosegarden överföring"
 
@@ -4626,7 +5209,7 @@ msgstr "PRESSURE"
 msgid "SYS EXCLSVE"
 msgstr "SYS EXCLSVE"
 
-#: segmentcanvas.cpp:822
+#: segmentcanvas.cpp:890
 msgid "Segments Canvas - Create and manipulate your segments here"
 msgstr "Segmentblad: Skapa och ändra segment här"
 
@@ -4674,35 +5257,35 @@ msgstr "%1 (dela)"
 msgid "Split Segment"
 msgstr "Dela segment"
 
-#: segmentcommands.cpp:938
+#: segmentcommands.cpp:939
 msgid "%1 (autosplit %2)"
 msgstr "%1 (dela automatiskt %2)"
 
-#: segmentcommands.cpp:1071
+#: segmentcommands.cpp:1073
 msgid "%1 (part)"
 msgstr "%1 (del)"
 
-#: segmentcommands.cpp:1236
+#: segmentcommands.cpp:1250
 msgid "%1 (rescaled)"
 msgstr "%1 (skalad)"
 
-#: segmentcommands.cpp:1940
+#: segmentcommands.cpp:1980
 msgid "%1 (upper)"
 msgstr "%1 (övre del)"
 
-#: segmentcommands.cpp:1942
+#: segmentcommands.cpp:1982
 msgid "%1 (lower)"
 msgstr "%1 (nedre del)"
 
-#: segmentcommands.cpp:2044
+#: segmentcommands.cpp:2086
 msgid "Label Segments"
 msgstr "Sätt rubrik på segment"
 
-#: segmentcommands.cpp:2082
+#: segmentcommands.cpp:2124
 msgid "Change Segment Color"
 msgstr "Ändra segmentfärg"
 
-#: segmentcommands.cpp:2114
+#: segmentcommands.cpp:2156
 msgid "Change Segment Color Map"
 msgstr "Ändra segmentfärgkarta"
 
@@ -4714,55 +5297,55 @@ msgstr "Snabbkopiera segment"
 msgid "&Split on Silence"
 msgstr "&Dela vid tystnad"
 
-#: segmentcommands.h:385
-msgid "&Rescale..."
-msgstr "&Ändra skala..."
-
-#: segmentcommands.h:431
+#: segmentcommands.h:433
 msgid "Add Time Si&gnature Change..."
 msgstr "Lägg till taktartssignatur&ändring..."
 
-#: segmentcommands.h:469
+#: segmentcommands.h:472
+msgid "Remove &Time Signature Change..."
+msgstr "&Ta bort taktartssignaturändring..."
+
+#: segmentcommands.h:496
 msgid "Modify &Default Tempo..."
 msgstr "Ändra &standardtempo..."
 
-#: segmentcommands.h:494
+#: segmentcommands.h:521
 msgid "Remove &Tempo Change..."
 msgstr "&Ta bort tempoändring"
 
-#: segmentcommands.h:523
+#: segmentcommands.h:550
 msgid "Add Te&mpo Change..."
 msgstr "Lägg till te&mpoändring"
 
-#: segmentcommands.h:545
+#: segmentcommands.h:572
 msgid "Add Tracks..."
 msgstr "Lägg till spår..."
 
-#: segmentcommands.h:567
+#: segmentcommands.h:594
 msgid "Delete Tracks..."
 msgstr "Ta bort spår..."
 
-#: segmentcommands.h:589
+#: segmentcommands.h:616
 msgid "Move Tracks..."
 msgstr "Flytta spår..."
 
-#: segmentcommands.h:611
+#: segmentcommands.h:638
 msgid "Change &Composition Duration..."
 msgstr "Ändra &kompositionens längd..."
 
-#: segmentcommands.h:642
+#: segmentcommands.h:669
 msgid "Split by &Pitch..."
 msgstr "Dela &enligt tonhöjd"
 
-#: segmentcommands.h:669
+#: segmentcommands.h:696
 msgid "Re&label..."
 msgstr "Ändra &rubrik..."
 
-#: segmentcommands.h:689
+#: segmentcommands.h:716
 msgid "Change Segment Color..."
 msgstr "Ändra segmentfärg..."
 
-#: segmentcommands.h:708
+#: segmentcommands.h:735
 msgid "Change Segment Color Map..."
 msgstr "Ändra segmentets färgkarta..."
 
@@ -4770,137 +5353,197 @@ msgstr "Ändra segmentets färgkarta..."
 msgid "Segment Parameters"
 msgstr "Segmentparametrar"
 
-#: segmentparameterbox.cpp:74
-msgid "Label"
-msgstr "Etikett"
-
-#: segmentparameterbox.cpp:75
-msgid "Repeat"
-msgstr "Upprepa"
-
-#: segmentparameterbox.cpp:78
-msgid "Delay"
-msgstr "Fördröjning"
-
-#: segmentparameterbox.cpp:234 segmentparameterbox.cpp:543
+#: segmentparameterbox.cpp:238 segmentparameterbox.cpp:567
 msgid "%1 ms"
 msgstr "%1 ms"
 
-#: colourwidgets.cpp:107 segmentparameterbox.cpp:279
-msgid "Default Color"
-msgstr "Förvald färg"
-
-#: segmenttool.cpp:426 segmenttool.cpp:870
+#: segmenttool.cpp:426 segmenttool.cpp:886
 msgid "Move Segment"
 msgstr "Flytta segment"
 
-#: segmenttool.cpp:871
+#: segmenttool.cpp:887
 msgid "Move Segments"
 msgstr "Flytta segment"
 
-#: sequencemanager.cpp:600
+#: sequencemanager.cpp:656
 msgid "Audio record path \""
 msgstr "Sökväg för ljudinspelning \""
 
-#: sequencemanager.cpp:602
+#: sequencemanager.cpp:658
 msgid "Edit your audio path properties (Edit->Edit Document Properties->Audio)"
 msgstr ""
 "Redigera egenskaper för ljudsökväg (Redigera -> Redigera "
 "dokumentegenskaper -> Ljud)"
 
-#: studiocommands.h:55
+#: studiocommands.h:59
 msgid "Modify &MIDI Bank"
 msgstr "Ändra &MIDI-bank"
 
-#: studiocommands.h:95
+#: studiocommands.h:101
 msgid "Modify &Device Mapping"
 msgstr "Ändra &enhetsmappning"
 
-#: studiocommands.h:116
+#: studiocommands.h:122
 msgid "Modify &Instrument Mapping"
 msgstr "Ändra &instrumentmappning"
 
-#: studiocommands.h:145
+#: studiocommands.h:151
 msgid "Rename Device"
 msgstr "Byt namn på enhet"
 
-#: studiocommands.h:181
+#: studiocommands.h:187
 msgid "Create Device"
 msgstr "Skapa enhet"
 
-#: studiocommands.h:209
+#: studiocommands.h:215
 msgid "Reconnect Device"
 msgstr "Koppla upp enhet igen"
 
-#: studiocommands.h:238
+#: studiocommands.h:244
 msgid "&Add Control Parameter"
 msgstr "&Lägg till styrparameter"
 
-#: studiocommands.h:265
+#: studiocommands.h:271
 msgid "&Remove Control Parameter"
 msgstr "&Ta bort styrparameter"
 
-#: studiocommands.h:292
+#: studiocommands.h:298
 msgid "&Modify Control Parameter"
 msgstr "Ä&ndra styrparameter"
 
-#: studiowidgets.cpp:61
-msgid "Audio plugin button"
-msgstr "Ljudinsticksknapp"
-
-#: studiowidgets.cpp:72
-msgid "Audio VU Meter"
-msgstr "VU-ljudmätare"
-
-#: studiowidgets.cpp:81
-msgid "Audio Fader"
-msgstr "Ljudtoning"
-
-#: studiowidgets.cpp:91
+#: studiowidgets.cpp:719
 msgid "Set the audio pan position in the stereo field"
 msgstr "Ställ in ljudets panoreringsposition i stereofältet"
 
-#: studiowidgets.cpp:99
-msgid "Mono or Stereo Audio Instrument"
-msgstr "Instrument med mono- eller stereoljud"
-
-#: studiowidgets.cpp:108
-msgid "Mute the Track to which this Instrument is attached."
-msgstr "Tysta spåret som instrumentet hör till."
-
-#: studiowidgets.cpp:114
-msgid "Solo the Track to which this Instrument is attached."
-msgstr "Spela spåret som instrumentet hör till solo."
-
-#: studiowidgets.cpp:121
+#: studiowidgets.cpp:721
 msgid "Arm recording for this audio Instrument"
 msgstr "Förbered för inspelning av det här ljudinstrumentet"
 
-#: studiowidgets.cpp:123
-msgid "Audio Input"
-msgstr "Ljudindata"
+#: studiowidgets.cpp:722
+msgid "Solo the Track to which this Instrument is attached."
+msgstr "Spela spåret som instrumentet hör till solo."
 
-#: studiowidgets.cpp:126
+#: studiowidgets.cpp:723
+msgid "Mono or Stereo Audio Instrument"
+msgstr "Instrument med mono- eller stereoljud"
+
+#: studiowidgets.cpp:725
+msgid "Mute the Track to which this Instrument is attached."
+msgstr "Tysta spåret som instrumentet hör till."
+
+#: studiowidgets.cpp:726 studiowidgets.cpp:735
+msgid "Audio level"
+msgstr "Ljudnivå"
+
+#: studiowidgets.cpp:728
 msgid "Pan"
 msgstr "Panorera"
 
-#: trackbuttons.cpp:225
+#: studiowidgets.cpp:730
+msgid "Arm recording"
+msgstr "Förbered inspelning"
+
+#: rc.cpp:112 studiowidgets.cpp:731
+msgid "Solo"
+msgstr "Solo"
+
+#: studiowidgets.cpp:732
+msgid "Mono or stereo"
+msgstr "Mono eller stereo"
+
+#: studiowidgets.cpp:734
+msgid "Mute"
+msgstr "Tyst"
+
+#: studiowidgets.cpp:819
+msgid "In:"
+msgstr "In:"
+
+#: studiowidgets.cpp:823
+msgid "Out:"
+msgstr "Ut:"
+
+#: tempoview.cpp:128
+msgid "Filter"
+msgstr "Filter"
+
+#: tempoview.cpp:158
+msgid "Type  "
+msgstr "Typ  "
+
+#: tempoview.cpp:159
+msgid "Value  "
+msgstr "Värde  "
+
+#: tempoview.cpp:160
+msgid "Properties  "
+msgstr "Egenskaper  "
+
+#: tempoview.cpp:241
+msgid "Common, hidden"
+msgstr "Vanlig, dold"
+
+#: tempoview.cpp:242
+msgid "Hidden"
+msgstr "Dold"
+
+#: tempoview.cpp:244
+msgid "Common"
+msgstr "Vanlig"
+
+#: tempoview.cpp:251
+msgid "Time Signature   "
+msgstr "Taktartssignatur   "
+
+#: tempoview.cpp:273
+msgid "%1.%2%3"
+msgstr "%1.%2%3"
+
+#: tempoview.cpp:283
+msgid "%1.%2%3 qpm (%4.%5%6 bpm)   "
+msgstr "%1.%2%3 fjärdedelar/min (%4.%5%6 taktslag/min)   "
+
+#: tempoview.cpp:292
+msgid "Tempo   "
+msgstr "Tempo   "
+
+#: tempoview.cpp:300
+msgid "<nothing at this filter level>"
+msgstr "<ingenting på den här filternivån>"
+
+#: tempoview.cpp:452
+msgid "Delete Tempo or Time Signature"
+msgstr "Ta bort tempo eller taktartssignatur"
+
+#: tempoview.cpp:606
+msgid "&Edit Item"
+msgstr "&Redigera objekt"
+
+#: trackbuttons.cpp:242
+msgid "Mute track"
+msgstr "Tysta spår"
+
+#: trackbuttons.cpp:245
+msgid "Record on this track"
+msgstr "Spela in på detta spår"
+
+#: trackbuttons.cpp:261 trackbuttons.cpp:558
 msgid "<untitled audio>"
 msgstr "<namnlöst ljud>"
 
-#: trackbuttons.cpp:227
+#: trackbuttons.cpp:263 trackbuttons.cpp:560
 msgid "<untitled>"
 msgstr "<namnlös>"
 
-#: trackeditor.cpp:619
+#: trackeditor.cpp:618
 msgid "Turn Repeating Segment into Real Copies"
 msgstr "Omvandla upprepat segment till riktiga kopior"
 
-#: trackeditor.cpp:621
+#: trackeditor.cpp:620
 msgid "Turn Repeating Segments into Real Copies"
 msgstr "Omvandla upprepade segment till riktiga kopior"
 
-#: trackeditor.cpp:796
+#: trackeditor.cpp:774
 msgid ""
 "You can't drop files into Rosegarden from this client.  Try using Konqueror "
 "instead."
@@ -4908,371 +5551,367 @@ msgstr ""
 "Du kan inte släppa filer till Rosegarden från det här programmet. "
 "Försök att använda Konqueror istället."
 
-#: widgets.cpp:136 widgets.cpp:140 widgets.cpp:163
+#: widgets.cpp:140 widgets.cpp:145 widgets.cpp:167
 msgid "Processing..."
 msgstr "Behandlar..."
 
-#: widgets.cpp:754
+#: widgets.cpp:787
 msgid "Quantizer"
 msgstr "Kvantifiering"
 
-#: widgets.cpp:760
+#: widgets.cpp:793
 msgid "Quantizer type:"
 msgstr "Kvantifieringstyp:"
 
-#: widgets.cpp:762
+#: widgets.cpp:795
 msgid "Grid quantizer"
 msgstr "Rutnätskvantifiering"
 
-#: widgets.cpp:763
+#: widgets.cpp:796
 msgid "Heuristic notation quantizer"
 msgstr "Heuristisk kvantifiering av notskrift"
 
-#: widgets.cpp:767
+#: widgets.cpp:800
 msgid "Quantize for notation only (leave performance unchanged)"
 msgstr "Kvantisera bara för notskrift (lämna framförande oförändrat)"
 
-#: widgets.cpp:776
+#: widgets.cpp:809
 msgid "Notation parameters"
 msgstr "Notskriftsparametrar"
 
-#: widgets.cpp:781 widgets.cpp:822
+#: widgets.cpp:814 widgets.cpp:855
 msgid "Base grid unit:"
 msgstr "Basenhet för rutnät:"
 
-#: widgets.cpp:786
+#: widgets.cpp:819
 msgid "Complexity:"
 msgstr "Komplexitet:"
 
-#: widgets.cpp:790
+#: widgets.cpp:823
 msgid "Very high"
 msgstr "Mycket hög"
 
-#: widgets.cpp:791
+#: widgets.cpp:824
 msgid "High"
 msgstr "Hög"
 
-#: widgets.cpp:792
+#: widgets.cpp:825
 msgid "Normal"
 msgstr "Normal"
 
-#: widgets.cpp:793
+#: widgets.cpp:826
 msgid "Low"
 msgstr "Låg"
 
-#: widgets.cpp:794
+#: widgets.cpp:827
 msgid "Very low"
 msgstr "Mycket låg"
 
-#: widgets.cpp:797
+#: widgets.cpp:830
 msgid "Tuplet level:"
 msgstr "Tupelnivå:"
 
-#: widgets.cpp:801
+#: widgets.cpp:834
 msgid "2-in-the-time-of-3"
 msgstr "två under tiden för tre"
 
-#: widgets.cpp:802
+#: widgets.cpp:835
 msgid "Triplet"
 msgstr "Trippel"
 
-#: widgets.cpp:810
+#: widgets.cpp:843
 msgid "Any"
 msgstr "Alla"
 
-#: widgets.cpp:813
+#: widgets.cpp:846
 msgid "Permit counterpoint"
 msgstr "Tillåt kontrapunkt"
 
-#: widgets.cpp:817
+#: widgets.cpp:850
 msgid "Grid parameters"
 msgstr "Rutnätsparametrar"
 
-#: widgets.cpp:827
+#: widgets.cpp:860
 msgid "Quantize durations as well as start times"
 msgstr "Kvantisera både tonlängd och starttider"
 
-#: widgets.cpp:831
+#: widgets.cpp:864
 msgid "After quantization"
 msgstr "Efter kvantisering"
 
-#: widgets.cpp:845
+#: widgets.cpp:878
 msgid "Show advanced options"
 msgstr "Visa avancerade alternativ"
 
-#: widgets.cpp:854
+#: widgets.cpp:887
 msgid "Re-beam"
 msgstr "Lägg till balkar igen"
 
-#: widgets.cpp:856
+#: widgets.cpp:889
 msgid "Add articulations (staccato, tenuto, slurs)"
 msgstr "Lägg till artikulering (staccato, tenuto, bågar)"
 
-#: widgets.cpp:857
+#: widgets.cpp:890
 msgid "Tie notes at barlines etc"
 msgstr "Bind noter vid taktlinjer etc."
 
-#: widgets.cpp:858
+#: widgets.cpp:891
 msgid "Split-and-tie overlapping chords"
 msgstr "Dela och bind överlappande ackord"
 
-#: widgets.cpp:1048
+#: widgets.cpp:1081
 msgid "Show Advanced Options"
 msgstr "Visa avancerade alternativ"
 
-#: widgets.cpp:1052
+#: widgets.cpp:1085
 msgid "Hide Advanced Options"
 msgstr "Dölj avancerade alternativ"
 
-#: widgets.cpp:1388
+#: widgets.cpp:1426
 msgid "Note:"
 msgstr "Anmärkning:"
 
-#: widgets.cpp:1393
+#: widgets.cpp:1433 widgets.cpp:1469
 msgid "<inexact>"
 msgstr "<inexakt>"
 
-#: widgets.cpp:1421
+#: widgets.cpp:1475
 msgid "Units:"
 msgstr "Enheter:"
 
-#: widgets.cpp:1435
+#: widgets.cpp:1497
 msgid "Time:"
 msgstr "Tid:"
 
-#: widgets.cpp:1444
+#: widgets.cpp:1508
 msgid "units"
 msgstr "enheter"
 
-#: widgets.cpp:1447
+#: widgets.cpp:1517
 msgid "Bars:"
 msgstr "Takter:"
 
-#: widgets.cpp:1447
+#: widgets.cpp:1517
 msgid "Bar:"
 msgstr "Takt:"
 
-#: widgets.cpp:1456
+#: widgets.cpp:1535
 msgid "beats:"
 msgstr "taktslag:"
 
-#: widgets.cpp:1456
+#: widgets.cpp:1535
 msgid "beat:"
 msgstr "taktslag:"
 
-#: widgets.cpp:1465
+#: widgets.cpp:1553
 msgid "%1:"
 msgstr "%1:"
 
-#: widgets.cpp:1480
+#: widgets.cpp:1577
 msgid "Seconds:"
 msgstr "Sekunder:"
 
-#: widgets.cpp:1489
+#: widgets.cpp:1595
 msgid "msec:"
 msgstr "msek:"
 
-#: widgets.cpp:1571 widgets.cpp:1660
+#: widgets.cpp:1715 widgets.cpp:1832
 msgid "(%1/%2 time)"
 msgstr "(%1/%2 takt)"
 
-#: widgets.cpp:1601
-#, c-format
+#: widgets.cpp:1753
 msgid "(starting %1.%2 qpm, %2.%3 bpm)"
 msgstr "(startar med %1.%2 fjärdedelar/min, %2.%3 taktslag/min)"
 
-#: widgets.cpp:1607
-#, c-format
+#: widgets.cpp:1759
 msgid "(starting %1.%2 bpm)"
 msgstr "(startar med %1.%2 taktslag/min)"
 
-#: widgets.cpp:1613
-#, c-format
+#: widgets.cpp:1765
 msgid "(%1.%2 qpm, %2.%3 bpm)"
 msgstr "(%1.%2 fjärdedelar/min, %2.%3 taktslag/min)"
 
-#: widgets.cpp:1619
-#, c-format
+#: widgets.cpp:1771
 msgid "(%1.%2 bpm)"
 msgstr "(%1.%2 taktslag/min)"
 
-#: rc.cpp:1
-msgid "E&vent"
-msgstr "Hä&ndelse"
-
-#: rc.cpp:2 rc.cpp:4 rc.cpp:18
+#: rc.cpp:2 rc.cpp:5 rc.cpp:19 rc.cpp:67 rc.cpp:70
 msgid "Actions Toolbar"
 msgstr "Åtgärdsverktygsrad"
 
-#: rc.cpp:3 rc.cpp:17 rc.cpp:40 rc.cpp:62
+#: rc.cpp:3 rc.cpp:68
+msgid "Time Toolbar"
+msgstr "Tidsverktygsrad"
+
+#: rc.cpp:4 rc.cpp:18 rc.cpp:42 rc.cpp:64 rc.cpp:69
 msgid "Transport Toolbar"
 msgstr "Överföringsverktygsrad"
 
-#: rc.cpp:5 rc.cpp:19 rc.cpp:63
+#: rc.cpp:6 rc.cpp:20 rc.cpp:65 rc.cpp:71
 msgid "Zoom Toolbar"
 msgstr "Zoomverktygsrad"
 
-#: rc.cpp:7
+#: rc.cpp:8
 msgid "&Grid"
 msgstr "&Rutnät"
 
-#: rc.cpp:8 rc.cpp:22
-msgid "Add Control Ruler"
-msgstr "Lägg till styrlinjal"
+#: rc.cpp:9 rc.cpp:24
+msgid "Add Event Ruler"
+msgstr "Lägg till händelselinjal"
 
-#: rc.cpp:9 rc.cpp:29
+#: rc.cpp:10 rc.cpp:31
 msgid "Trans&forms"
 msgstr "Transf&ormer"
 
-#: rc.cpp:10
+#: rc.cpp:11
 msgid "&Velocity"
 msgstr "&Hastighet"
 
-#: rc.cpp:11 rc.cpp:30
+#: rc.cpp:12 rc.cpp:32
 msgid "Trans&pose"
 msgstr "Trans&ponera"
 
-#: rc.cpp:13 rc.cpp:32 rc.cpp:57
+#: rc.cpp:14 rc.cpp:34 rc.cpp:59
 msgid "T&ransport"
 msgstr "&Överföring"
 
-#: rc.cpp:16 rc.cpp:39 rc.cpp:59
+#: rc.cpp:17 rc.cpp:41 rc.cpp:61
 msgid "Tools Toolbar"
 msgstr "Verktygsrad med verktyg"
 
-#: rc.cpp:20 rc.cpp:49
+#: rc.cpp:21 rc.cpp:51
 msgid "Control Ruler actions"
 msgstr "Styrlinjalhändelser"
 
-#: rc.cpp:23
+#: rc.cpp:25
 msgid "&Group"
 msgstr "&Grupp"
 
-#: rc.cpp:24 rc.cpp:34
+#: rc.cpp:26 rc.cpp:36
 msgid "&Notes"
 msgstr "&Noter"
 
-#: rc.cpp:25
+#: rc.cpp:27
 msgid "S&tem Direction"
 msgstr "S&kaftriktning"
 
-#: rc.cpp:26
+#: rc.cpp:28
 msgid "S&lashes"
 msgstr "S&nedstreck"
 
-#: rc.cpp:27
-msgid "&Force Accidentals"
+#: rc.cpp:29
+msgid "&Respell Accidentals"
 msgstr "&Tvinga tillfälliga förtecken"
 
-#: rc.cpp:28
+#: rc.cpp:30
 msgid "Mar&ks"
 msgstr "Mar&körer"
 
-#: rc.cpp:35
+#: rc.cpp:37
 msgid "&Rests"
 msgstr "&Pauser"
 
-#: rc.cpp:36
+#: rc.cpp:38
 msgid "&Accidentals"
 msgstr "&Tillfälliga förtecken"
 
-#: rc.cpp:37
+#: rc.cpp:39
 msgid "&Clefs"
 msgstr "&Klaver"
 
-#: rc.cpp:41
+#: rc.cpp:43
 msgid "Notes Toolbar"
 msgstr "Notverktygsrad"
 
-#: rc.cpp:42
+#: rc.cpp:44
 msgid "Rests Toolbar"
 msgstr "Pausverktygsrad"
 
-#: rc.cpp:43
+#: rc.cpp:45
 msgid "Accidentals Toolbar"
 msgstr "Verktyg för tillfälliga förtecken"
 
-#: rc.cpp:44
+#: rc.cpp:46
 msgid "Clefs Toolbar"
 msgstr "Klavverktygsrad"
 
-#: rc.cpp:45
+#: rc.cpp:47
 msgid "Marks Toolbar"
 msgstr "Markörverktygsrad"
 
-#: rc.cpp:46
+#: rc.cpp:48
 msgid "Group Toolbar"
 msgstr "Gruppverktygsrad"
 
-#: rc.cpp:47
+#: rc.cpp:49
 msgid "Meta Toolbar"
 msgstr "Metaverktygsrad"
 
-#: rc.cpp:48
+#: rc.cpp:50
 msgid "Layout Toolbar"
 msgstr "Layoutverktygsrad"
 
-#: rc.cpp:50
+#: rc.cpp:52
 msgid "&Import"
 msgstr "&Importera"
 
-#: rc.cpp:51
+#: rc.cpp:53
 msgid "&Merge"
 msgstr "Sa&mmanfoga"
 
-#: rc.cpp:52
+#: rc.cpp:54
 msgid "&Export"
 msgstr "E&xportera"
 
-#: rc.cpp:53
+#: rc.cpp:55
 msgid "Seg&ments"
 msgstr "Seg&ment"
 
-#: rc.cpp:54
+#: rc.cpp:56
 msgid "Trac&ks"
 msgstr "S&pår"
 
-#: rc.cpp:55
+#: rc.cpp:57
 msgid "Set Instrument"
 msgstr "Ange instrument"
 
-#: rc.cpp:56
+#: rc.cpp:58
 msgid "&Studio"
 msgstr "St&udio"
 
-#: rc.cpp:60
+#: rc.cpp:62
 msgid "Tracks Toolbar"
 msgstr "Spårverktygsrad"
 
-#: rc.cpp:61
+#: rc.cpp:63
 msgid "Editors Toolbar"
 msgstr "Editorverktygsrad"
 
-#: rc.cpp:66
+#: rc.cpp:74
 msgid "Show additional controls"
 msgstr "Visa flera knappar"
 
-#: rc.cpp:68
+#: rc.cpp:76
 msgid "Switch between real time, musical time, and SMPTE frames"
 msgstr "Byt mellan realtid, musiktid och SMPTE-bilder"
 
-#: rc.cpp:70
+#: rc.cpp:78
 msgid "Display time to end"
 msgstr "Visa tid till slutet"
 
-#: rc.cpp:72
+#: rc.cpp:80
 msgid "Fast forward"
 msgstr "Spola fram"
 
-#: rc.cpp:73
+#: rc.cpp:81
 msgid "Moves the current pointer position forwards one bar."
 msgstr "Flyttar nuvarande pekarposition framåt en takt."
 
-#: rc.cpp:75
+#: rc.cpp:83
 msgid "Fast forward to end"
 msgstr "Spola fram till slutet"
 
-#: rc.cpp:76
+#: rc.cpp:84
 msgid ""
 "Moves the pointer position to the end of the composition.  (This may mean "
 "going backwards if the pointer is already beyond the end.)"
@@ -5280,11 +5919,11 @@ msgstr ""
 "Flyttar pekarpositionen till kompositionens slut. (Det kan betyda att gå "
 "bakåt om pekaren för närvarande redan är efter slutet.)"
 
-#: rc.cpp:78
+#: rc.cpp:86
 msgid "Play/Pause"
 msgstr "Spela/Gör paus"
 
-#: rc.cpp:79
+#: rc.cpp:87
 msgid ""
 "Plays from the current pointer position, or pauses playback if already in "
 "progress."
@@ -5292,47 +5931,47 @@ msgstr ""
 "Spelar upp från nuvarande pekarposition, eller gör paus i uppspelningen om "
 "den redan pågår."
 
-#: rc.cpp:81
+#: rc.cpp:89
 msgid "Rewind"
 msgstr "Spola tillbaka"
 
-#: rc.cpp:82
+#: rc.cpp:90
 msgid "Moves the current pointer position back one bar."
 msgstr "Flyttar nuvarande pekarposition bakåt en takt."
 
-#: rc.cpp:83
+#: rc.cpp:91
 msgid "SIG"
 msgstr "SIG"
 
-#: rc.cpp:84
+#: rc.cpp:92
 msgid "DIV"
 msgstr "DIV"
 
-#: rc.cpp:85
+#: rc.cpp:93
 msgid "/16"
 msgstr "/16"
 
-#: rc.cpp:86
+#: rc.cpp:94
 msgid "TEMPO"
 msgstr "TEMPO"
 
-#: rc.cpp:87
+#: rc.cpp:95
 msgid "END"
 msgstr "SLUT"
 
-#: rc.cpp:88
+#: rc.cpp:96
 msgid "BAR"
 msgstr "TAKT"
 
-#: rc.cpp:91
+#: rc.cpp:99
 msgid "Stops playback or recording."
 msgstr "Stoppar uppspelning eller inspelning."
 
-#: rc.cpp:93
+#: rc.cpp:101
 msgid "Rewind to beginning"
 msgstr "Spola tillbaka till början"
 
-#: rc.cpp:94
+#: rc.cpp:102
 msgid ""
 "Moves the pointer position to the start of the composition. (This may mean "
 "going forwards if the pointer is currently before the start.)"
@@ -5340,55 +5979,51 @@ msgstr ""
 "Flyttar pekarpositionen till kompositionens början. (Det kan betyda att gå "
 "framåt om pekaren för närvarande är innan början.)"
 
-#: rc.cpp:96
+#: rc.cpp:104
 msgid "Hide additional controls"
 msgstr "Dölj flera knappar"
 
-#: rc.cpp:98
+#: rc.cpp:106
 msgid "Panic Button"
 msgstr "Panikknapp"
 
-#: rc.cpp:99
+#: rc.cpp:107
 msgid "Resets all MIDI devices if you've got stuck notes"
 msgstr "Återställer alla MIDI-enheter om du har noter som fastnat"
 
-#: rc.cpp:102
+#: rc.cpp:110
 msgid "Provides a metronome click for you to play along with"
 msgstr "Tillhandahåller ett metronomtick att spela med"
 
-#: rc.cpp:104
-msgid "Solo"
-msgstr "Solo"
-
-#: rc.cpp:105
+#: rc.cpp:113
 msgid "Mutes all but the currently selected track"
 msgstr "Tystar alla utom nuvarande markerat spår"
 
-#: rc.cpp:108
+#: rc.cpp:116
 msgid "Record either MIDI or audio"
 msgstr "Spela antingen in MIDI eller ljud"
 
-#: rc.cpp:110
+#: rc.cpp:118
 msgid "Loop"
 msgstr "Upprepa"
 
-#: rc.cpp:111
+#: rc.cpp:119
 msgid "Turn on and off the loop markers (if set)"
 msgstr "Sätt på eller stäng av upprepningsmarkörer (om inställda)"
 
-#: rc.cpp:112
+#: rc.cpp:120
 msgid "Shows MIDI activity in and out of Rosegarden"
 msgstr "Visar MIDI-aktivitet in till och ut från Rosegarden"
 
-#: rc.cpp:113 rc.cpp:116
+#: rc.cpp:121 rc.cpp:124
 msgid "NO EVENTS"
 msgstr "INGA HÄNDELSER"
 
-#: rc.cpp:114
+#: rc.cpp:122
 msgid "IN"
 msgstr "IN"
 
-#: rc.cpp:115
+#: rc.cpp:123
 msgid "OUT"
 msgstr "UT"
 
@@ -5642,16 +6277,15 @@ msgstr ""
 
 #: tips.cpp:118
 msgid ""
-"<p>...that Rosegarden is available in Spanish, French, German, Russian and "
-"Welsh\n"
+"<p>...that Rosegarden is available in Spanish, French, German, Russian, "
+"Welsh, Swedish, Italian and Estonian\n"
 "translations?<br><br>\n"
 "If you're interested in translating Rosegarden to another language, drop us "
 "a\n"
 "line at <b>rosegarden-devel@lists.sourceforge.net</b>.</p>\n"
 msgstr ""
 "<p>...att Rosegarden också är översatt till spanska, franska, tyska, "
-"ryska\n"
-"och walesiska?<br><br>\n"
+"ryska, walesiska, svenska, italienska och estländska?<br><br>\n"
 "Om du är intresserad av att översätta Rosegarden till ett annat språk,\n"
 "hör av dig till <b>rosegarden-devel@lists.sourceforge.net</b>.</p>\n"
 
@@ -5741,244 +6375,4 @@ msgstr ""
 "och fliken Inspelning, och välj därefter enheten du vill ha i "
 "kombinationsrutan för MIDI-inspelningsenhet. Ditt val kommer att kommas "
 "ihåg till nästa gång</p>\n"
-
-#: colourwidgets.cpp:64
-msgid "Modify Color Name"
-msgstr "Ändra färgnamn"
-
-#: controleditor.cpp:41
-msgid "<not showing>"
-msgstr "<visas inte>"
-
-#: controleditor.cpp:57
-msgid "Manage Control Parameters"
-msgstr "Hantera styrparametrar"
-
-#: controleditor.cpp:59
-msgid "<no device>"
-msgstr "<ingen enhet>"
-
-#: controleditor.cpp:66
-msgid "  Control Parameters for %1 (device %2)"
-msgstr "  Styrparametrar för %1 (enhet %2)"
-
-#: controleditor.cpp:71
-msgid "Controller name  "
-msgstr "Styrenhetsnamn  "
-
-#: controleditor.cpp:72
-msgid "Controller type  "
-msgstr "Styrenhetstyp  "
-
-#: controleditor.cpp:73
-msgid "Controller value  "
-msgstr "Styrenhetsvärde  "
-
-#: controleditor.cpp:74
-msgid "Description  "
-msgstr "Beskrivning  "
-
-#: controleditor.cpp:75
-msgid "Max  "
-msgstr "Maximum  "
-
-#: controleditor.cpp:76
-msgid "Min  "
-msgstr "Minimum  "
-
-#: controleditor.cpp:77
-msgid "Default  "
-msgstr "Standard  "
-
-#: controleditor.cpp:78
-msgid "Color  "
-msgstr "Färg  "
-
-#: controleditor.cpp:79
-msgid "Position on instrument panel"
-msgstr "Plats på instrumentpanelen"
-
-#: controleditor.cpp:101
-msgid "Add a Control Parameter to the Studio"
-msgstr "Lägg till en styrparameter i studion"
-
-#: controleditor.cpp:104
-msgid "Delete a Control Parameter from the Studio"
-msgstr "Ta bort en styrparameter från studion"
-
-#: controleditor.cpp:107
-msgid "Close the Control Parameter editor"
-msgstr "Stäng styrparametereditor"
-
-#: controleditor.cpp:184
-msgid "<default>"
-msgstr "<förval>"
-
-#: controleditor.cpp:417
-msgid "Edit Control Parameter"
-msgstr "Redigera styrparameter"
-
-#: controleditor.cpp:426
-msgid "Control Parameter Properties"
-msgstr "Egenskaper för styrparameter"
-
-#: controleditor.cpp:452
-msgid "Minimum value:"
-msgstr "Minimalt värde:"
-
-#: controleditor.cpp:456
-msgid "Maximum value:"
-msgstr "Maximalt värde:"
-
-#: controleditor.cpp:460
-msgid "Default value:"
-msgstr "Standardvärde:"
-
-#: controleditor.cpp:464
-msgid "Color:"
-msgstr "Färg:"
-
-#: controleditor.cpp:468
-msgid "Instrument Parameter Box position:"
-msgstr "Plats för rutan med instrumentparametrar:"
-
-#: devicemanager.cpp:81
-msgid "Play devices"
-msgstr "Uppspelningsenheter"
-
-#: devicemanager.cpp:102
-msgid "Banks..."
-msgstr "Banker..."
-
-#: devicemanager.cpp:103
-msgid "Controllers..."
-msgstr "Styrenheter..."
-
-#: devicemanager.cpp:108
-msgid "Create a new Play device"
-msgstr "Skapa en ny uppspelningsenhet"
-
-#: devicemanager.cpp:110 devicemanager.cpp:159
-msgid "Delete the selected device"
-msgstr "Ta bort markerad enhet"
-
-#: devicemanager.cpp:112
-msgid ""
-"Import Bank, Program and Controller data from a Rosegarden file to the "
-"selected device"
-msgstr ""
-"Importera bank-, program- och styrenhetsdata från Rosegarden-fil till "
-"markerad enhet"
-
-#: devicemanager.cpp:114
-msgid "Export Bank and Controller data to a Rosegarden interchange file"
-msgstr "Exportera bank- och styrenhetsdata till utbytesfil med Rosegarden-format"
-
-#: devicemanager.cpp:116
-msgid "View and edit Banks and Programs for the selected device"
-msgstr "Visa och redigera banker och program för markerad enhet"
-
-#: devicemanager.cpp:118
-msgid "View and edit Controllers for the selected device"
-msgstr "Visa och redigera styrenheter för markerad enhet"
-
-#: devicemanager.cpp:133
-msgid "Record devices"
-msgstr "Inspelningsenheter"
-
-#: devicemanager.cpp:141
-msgid "Current"
-msgstr "Nuvarande"
-
-#: devicemanager.cpp:157
-msgid "Create a new Record device"
-msgstr "Skapa en ny inspelningsenhet"
-
-#: devicemanager.cpp:299 devicemanager.cpp:332
-msgid "%1"
-msgstr "%1"
-
-#: devicemanager.cpp:434
-msgid "Change Record Device"
-msgstr "Ändra inspelningsenhet"
-
-#: devicemanager.cpp:693
-msgid "Import from Device in File"
-msgstr "Importera från enhet i fil"
-
-#: importdevicedialog.cpp:53
-msgid "Import from Device..."
-msgstr "Importera från enhet..."
-
-#: importdevicedialog.cpp:80
-msgid "Cannot open file %1"
-msgstr "Kan inte öppna filen %1"
-
-#: importdevicedialog.cpp:87
-msgid "No devices found in file %1"
-msgstr "Inga enheter hittades i filen %1"
-
-#: importdevicedialog.cpp:94
-msgid "Source device"
-msgstr "Källenhet"
-
-#: importdevicedialog.cpp:99
-msgid "Import from: "
-msgstr "Importera från: "
-
-#: importdevicedialog.cpp:136
-msgid "Import banks"
-msgstr "Importera banker"
-
-#: importdevicedialog.cpp:137
-msgid "Import controllers"
-msgstr "Importera styrenheter"
-
-#: importdevicedialog.cpp:140
-msgid "Import device name"
-msgstr "Importenhetens namn"
-
-#: importdevicedialog.cpp:146
-msgid "Bank import behaviour"
-msgstr "Importbeteende för banker"
-
-#: importdevicedialog.cpp:148
-msgid "Merge banks"
-msgstr "Sammanfoga banker"
-
-#: importdevicedialog.cpp:149
-msgid "Overwrite banks"
-msgstr "Skriv över banker"
-
-#: importdevicedialog.cpp:331
-msgid "Bank %1:%2"
-msgstr "Bank %1:%2"
-
-#: notefontviewer.cpp:100
-msgid "Error: Unable to match font name %1"
-msgstr "Fel: Kan inte hitta passande teckensnitt för namnet %1"
-
-#: notefontviewer.cpp:108
-msgid "Warning: No good match for font name %1 (best is %2)"
-msgstr "Varning: Ingen bra motsvarighet för teckensnittsnamnet %1 (%2 är bäst)"
-
-#: notefontviewer.cpp:116
-msgid "Error: Unable to open best-match font %1"
-msgstr "Fel: Kan inte öppna teckensnitt %1 som passar bäst"
-
-#: notefontviewer.cpp:290
-msgid "Note Font Viewer: %1"
-msgstr "Notteckenvisning: %1"
-
-#: notefontviewer.cpp:296
-msgid "  Component: "
-msgstr "  Komponent:  "
-
-#: notefontviewer.cpp:304
-msgid "  View: "
-msgstr "  Vy:  "
-
-#: notefontviewer.cpp:310
-msgid "  Page: "
-msgstr "  Sida:  "
 
