@@ -851,10 +851,26 @@ void MatrixView::playPreview(int pitch)
 
 void MatrixView::setSelectedElements(const SelectedElements &eS)
 {
-    // clear 
+    // clear all the elements
+    SelectedElements::iterator oIt = m_selectedElements.begin();
+
+    for (; oIt !=  m_selectedElements.end(); oIt++)
+    {
+        // change colour back to original
+        using Rosegarden::BaseProperties::VELOCITY;
+        long velocity = 127;
+        if ((*oIt)->event()->has(VELOCITY))
+            (*oIt)->event()->get<Rosegarden::Int>(VELOCITY, velocity);
+
+        (*oIt)->setColour(getStaff(0)->
+                        getVelocityColour()->getColour(velocity));
+        canvas()->update();
+    }
+
     m_selectedElements.erase(m_selectedElements.begin(),
                              m_selectedElements.end());
 
+    // read in new elements
     SelectedElements::const_iterator it = eS.begin();
     
     for (; it != eS.end(); it++)
@@ -882,9 +898,9 @@ bool MatrixView::addElementToSelection(MatrixElement *mE)
     return true;
 }
 
-// Takes care of the element colouring too
+// Takes care of the element colouring but not the iterator
 //
-void MatrixView::removeElementFromSelection(MatrixElement *mE)
+void MatrixView::queueElementForDeselection(MatrixElement *mE)
 {
     SelectedElements::iterator it = m_selectedElements.begin();
 
@@ -901,12 +917,33 @@ void MatrixView::removeElementFromSelection(MatrixElement *mE)
             (mE)->setColour(getStaff(0)->
                             getVelocityColour()->getColour(velocity));
             canvas()->update();
-
-            m_selectedElements.erase(it);
+            m_deselectionQueue.push_back(mE);
             break;
         }
     }
 }
+
+void MatrixView::processDeselections()
+{
+    SelectedElements::iterator dQ = m_deselectionQueue.begin();
+
+    for (; dQ != m_deselectionQueue.end(); dQ++)
+    {
+        SelectedElements::iterator it = m_selectedElements.begin();
+        for (; it != m_selectedElements.end(); it++)
+        {
+            if (*dQ = *it)
+            {
+                m_selectedElements.erase(it);
+                break;
+            }
+        }
+    }
+
+    m_deselectionQueue.erase(m_deselectionQueue.begin(),
+            m_deselectionQueue.end());
+}
+
 
 bool
 MatrixView::isElementSelected(MatrixElement *mE)

@@ -111,9 +111,11 @@ public:
     //
     bool addElementToSelection(MatrixElement *mE);
 
-    // Remove
+    // Removal is a two part process to keep the integrity of
+    // the vector
     //
-    void removeElementFromSelection(MatrixElement *mE);
+    void queueElementForDeselection(MatrixElement *mE);
+    void processDeselections();
 
     // Is this element in the current selection?
     //
@@ -268,6 +270,7 @@ protected:
     // vector of selected MatrixElements
     //
     SelectedElements m_selectedElements;
+    SelectedElements m_deselectionQueue;
 
     std::vector<MatrixStaff*> m_staffs;
 

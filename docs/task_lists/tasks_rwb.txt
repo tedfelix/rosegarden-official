@@ -18,7 +18,8 @@ o Tidy up AudioFiles:
 
 o "Revert file" option
 
-o sweep selection on Matrix [DONE - almost complete]
+o Matrix tools - cut and join 
+               - multiple resize
 
 
 Post 0.2
@@ -70,6 +71,13 @@ o MIDI reverb and chorus on Instrument parameters [NON-STANDARD so
 
 Completed for 0.2
 =================
+
+o sweep selection on Matrix [DONE]
+
+o Matrix tools - sweep selection   [DONE]
+               - multiple movement [DONE]
+               - unselect/reselect [DONE]
+
 
 o Sweep selection on SegmentCanvas [DONE]
 
