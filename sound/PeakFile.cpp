@@ -19,6 +19,7 @@
 */
 
 #include <qdatetime.h>
+#include <qstringlist.h>
 
 #include "PeakFile.h"
 #include "AudioFile.h"
@@ -119,14 +120,16 @@ PeakFile::parseHeader()
     //
     QString dateString = QString(header.substr(40, 28).c_str());
 
-    m_modificationTime.setDate(QDate(dateString.section(":", 0, 0).toInt(),
-                                       dateString.section(":", 1, 1).toInt(),
-                                       dateString.section(":", 2, 2).toInt()));
+    QStringList dateTime = QStringList::split(":", dateString);
 
-    m_modificationTime.setTime(QTime(dateString.section(":", 3, 3).toInt(),
-                                     dateString.section(":", 4, 4).toInt(),
-                                     dateString.section(":", 5, 5).toInt(),
-                                     dateString.section(":", 6, 6).toInt()));
+    m_modificationTime.setDate(QDate(dateTime[0].toInt(),
+                                     dateTime[1].toInt(),
+                                     dateTime[2].toInt()));
+
+    m_modificationTime.setTime(QTime(dateTime[3].toInt(),
+                                     dateTime[4].toInt(),
+                                     dateTime[5].toInt(),
+                                     dateTime[6].toInt()));
 
     printStats();
 
