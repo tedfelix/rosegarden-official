@@ -195,8 +195,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QPixmap mainPixmap(pixmapDir + "/toolbar/matrix.xpm");
     m_mainDockWidget = createDockWidget("Rosegarden MainDockWidget", mainPixmap, 0L, "main_dock_widget");
-    // allow others to dock to the 4 sides
-    m_mainDockWidget->setDockSite(KDockWidget::DockCorner);
+    // allow others to dock to the left and right sides only
+    m_mainDockWidget->setDockSite(KDockWidget::DockLeft | KDockWidget::DockRight);
     // forbit docking abilities of m_mainDockWidget itself
     m_mainDockWidget->setEnableDocking(KDockWidget::DockNone);
     setView(m_mainDockWidget); // central widget in a KDE mainwindow
@@ -207,7 +207,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     m_dockLeft->manualDock(m_mainDockWidget,            // dock target
                            KDockWidget::DockLeft, // dock site
                            20);                   // relation target/this (in percent)
-
 
     RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
 
