@@ -210,10 +210,10 @@ Post-0.1.5-and-a-bit task list
     on some of the above menus
 
 35. Add "rescale" to main view: stretch or squash a segment by a
-    given ratio of note lengths
+    given ratio of note lengths [DONE]
 
 35a. Also add something like "Auto Split" that splits segments on
-     empty bars, clef changes or time sig changes
+     empty bars, clef changes or time sig changes [DONE]
 
 35a.i. And have a dialog with options: split after (n) bars of
     silence? after time sig change? after clef change? after key
@@ -247,7 +247,7 @@ Post-0.1.5-and-a-bit task list
 
 38. Show notes whose exact time/duration don't match the quantized
     time duration (i.e. notes on which the quantizer has actually
-    done something) in green
+    done something) in green [DONE]
 
 
 Post-0.1.4 task list

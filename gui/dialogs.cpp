@@ -2062,9 +2062,7 @@ QuantizeDialog::slotLegatoChanged()
 
 
 RescaleDialog::RescaleDialog(QWidget *parent) :
-    KDialogBase(parent, "", true, i18n("Rescale"), Ok | Cancel),
-    m_from(Note::Crotchet),
-    m_to(Note::Crotchet)
+    KDialogBase(parent, "", true, i18n("Rescale"), Ok | Cancel)
 {
     QVBox *vbox = makeVBoxMainWidget();
 
@@ -2073,45 +2071,40 @@ RescaleDialog::RescaleDialog(QWidget *parent) :
 
     QHBox *notesBox = new QHBox(ratioBox);
 
-    new QLabel(i18n("From:"), notesBox);
+    new QLabel(i18n("Play "), notesBox);
     QComboBox *fromCombo = new QComboBox(false, notesBox);
 
-    new QLabel(i18n("To:"), notesBox);
+    new QLabel(i18n(" beats in time of "), notesBox);
     QComboBox *toCombo = new QComboBox(false, notesBox);
 
-    NotePixmapFactory npf;
-
-    for (Note::Type t = Note::Shortest + 1; t < Note::Longest; ++t) {
-	for (int dots = 0; dots <= 1; ++dots) {
-	    Note note(t, dots);
-	    QPixmap pmap = npf.makeToolbarPixmap
-		(strtoqstr((std::string("menu-") + note.getReferenceName())));
-	    fromCombo->insertItem(pmap, strtoqstr(note.getEnglishName()));
-	    toCombo->insertItem(pmap, strtoqstr(note.getEnglishName()));
-	    if (t == Note::Crotchet && dots == 0) {
-		fromCombo->setCurrentItem(fromCombo->count() - 1);
-		toCombo->setCurrentItem(toCombo->count() - 1);
-	    }
-	}
+    for (int i = 1; i <= 16; ++i) {
+	fromCombo->insertItem(QString("%1").arg(i));
+	toCombo->insertItem(QString("%1").arg(i));
     }
+    fromCombo->setCurrentItem(7);
+    toCombo->setCurrentItem(7);
+    m_from = m_to = 8;
+
+    QHBox *percentBox = new QHBox(ratioBox);
+    new QLabel(i18n("As percentage: "), percentBox);
+    m_percent = new QLabel("100.00%", percentBox);
 
     QObject::connect(fromCombo, SIGNAL(activated(int)),
 		     this, SLOT(slotFromChanged(int)));
     QObject::connect(toCombo, SIGNAL(activated(int)),
 		     this, SLOT(slotToChanged(int)));
-
 }
 
 int
 RescaleDialog::getMultiplier()
 {
-    return (int)m_to.getDuration();
+    return m_to;
 }
 
 int
 RescaleDialog::getDivisor()
 {
-    return (int)m_from.getDuration();
+    return m_from;
 }
 
 static Note getNoteForIndex(int index)
@@ -2127,12 +2120,20 @@ static Note getNoteForIndex(int index)
 void
 RescaleDialog::slotFromChanged(int i)
 {
-    m_from = getNoteForIndex(i);
+    m_from = i + 1;
+    int perTenThou = m_to * 10000 / m_from;
+    m_percent->setText(QString("%1.%2%").
+		       arg(perTenThou/100).
+		       arg(perTenThou%100));
 }
 
 void
 RescaleDialog::slotToChanged(int i)
 {
-    m_to = getNoteForIndex(i);
+    m_to = i + 1;
+    int perTenThou = m_to * 10000 / m_from;
+    m_percent->setText(QString("%1.%2%").
+		       arg(perTenThou/100).
+		       arg(perTenThou%100));
 }
 

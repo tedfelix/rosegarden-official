@@ -494,8 +494,9 @@ public slots:
     void slotToChanged(int);
 
 protected:
-    Rosegarden::Note m_from;
-    Rosegarden::Note m_to;
+    int m_from;
+    int m_to;
+    QLabel *m_percent;
 };
     
   
