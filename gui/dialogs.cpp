@@ -1210,7 +1210,6 @@ TextEventDialog::slotTypeChanged(const QString &)
 	type == Text::LocalDirection ||
 	type == Text::UnspecifiedType ||
 	type == Text::Lyric ||
-	type == Text::Chord ||
 	type == Text::Annotation) {
 
 	m_staffAboveLabel->show();

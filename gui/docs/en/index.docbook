@@ -2727,10 +2727,6 @@
 	    <listitem><para><keycap>0</keycap> &ndash; Sixty-fourth note (hemidemisemiquaver)</para></listitem>
 	  </itemizedlist>
 	  
-	  <para>Holding the <keycap>Ctrl</keycap> key while pressing a
-	    number will select the corresponding dotted-note
-	    tool.</para>
-
 	  <para>You can switch to a triplet version of the note
 	    duration by pressing the <keycap>G</keycap> key.  Pressing it
 	    again will switch back to the normal duration.  The status
@@ -2755,6 +2751,9 @@
 	    <listitem><para><keycap>K</keycap> &ndash; La</para></listitem>
 	    <listitem><para><keycap>L</keycap> &ndash; Ti</para></listitem>
 	  </itemizedlist>
+
+	  <para>Press the "." key to togggle between dotted and
+	  undotted durations.</para>
 
 	  <para>Holding <keycap>Shift</keycap> while pressing a key
 	    will sharpen the note (except for Mi and Ti, which don't
@@ -2798,6 +2797,27 @@
 	</sect3>
 
 	<sect3>
+	  <title>Changing note durations</title>
+
+	  <para>You can use the keyboard to change the durations of
+	  notes that you've already entered.  Make sure the notes you
+	  want to change are selected, and then press
+	  <keycap>Ctrl</keycap> plus the number key for the note you
+	  want.  You can also add or remove dots, by pressing
+	  <keycap>Ctrl</keycap> plus "." &mdash; use this repeatedly to
+	  select between one dot, two dots and no dots.</para>
+
+	  <para>If you also hold <keycap>Alt</keycap> as well as
+	  <keycap>Ctrl</keycap>, you will change the durations of the
+	  notes as displayed in the notation editor without changing
+	  their performed durations.  This can be very useful for
+	  tidying up a score: see also <link
+	  linkend="nv-quantization">notation from performance
+	  data</link>.
+	  </para>
+	</sect3>
+
+	<sect3>
 	  <title>Other remarks</title>
 
 	  <para>All of the insertion commands are also available on a
@@ -2812,6 +2832,10 @@
 	    key individually using the "Configure Shortcuts..." option
 	    on the Settings menu.</para>
 
+	  <para>Holding the <keycap>Ctrl</keycap> key while pressing a
+	    number will select the corresponding dotted-note
+	    tool.</para>
+
 	</sect3>
 
       </sect2>
@@ -2821,10 +2845,10 @@
 
 	<para>
 	  You can enter notes into the notation editor one at a time
-	  using a MIDI keyboard or other MIDI control device.  The
-	  notation editor uses the pitches you play on the keyboard,
-	  but the durations you have selected in the editor itself.
-	  This is known as "step recording".
+	  using a MIDI keyboard or other MIDI control device &mdash; a
+	  process known as step recording.  The notation editor uses
+	  the pitches you play on the keyboard, but the durations you
+	  have selected in the editor itself.
 	</para>
 
 	<para>
