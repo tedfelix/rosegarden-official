@@ -227,6 +227,81 @@ Composition::~Composition()
     clear();
 }
 
+Composition::Composition(const Composition &comp):
+    XmlExportable(),
+    m_recordTrack(comp.getRecordTrack()),
+    m_solo(comp.isSolo()),
+    m_selectedTrack(comp.getSelectedTrack()),
+    m_timeSigSegment(comp.getTimeSigSegment()),
+    m_tempoSegment(comp.getTempoSegment()),
+    m_basicQuantizer(*comp.getBasicQuantizer()),
+    m_noteQuantizer(*comp.getNoteQuantizer()),
+    m_legatoQuantizer(*comp.getLegatoQuantizer()),
+    m_position(comp.getPosition()),
+    m_defaultTempo(comp.getDefaultTempo()),
+    m_startMarker(comp.getStartMarker()),
+    m_endMarker(comp.getEndMarker()),
+    m_loopStart(comp.getLoopStart()),
+    m_loopEnd(comp.getLoopEnd()),
+    m_barPositionsNeedCalculating(true),
+    m_tempoTimestampsNeedCalculating(true),
+    m_copyright(comp.getCopyrightNote()),
+    m_playMetronome(comp.usePlayMetronome()),
+    m_recordMetronome(comp.useRecordMetronome()),
+    m_needsRefresh(true)
+{
+    m_tracks.clear();
+    m_segments.clear();
+
+    m_tracks = *(comp.getTracks());
+    m_segments = comp.getSegments();
+
+    for (segmentcontainer::iterator i = this->m_segments.begin();
+	 i != this->m_segments.end(); ++i) {
+	(*i)->setComposition(this);
+    }
+}
+
+Composition&
+Composition::operator=(const Composition &comp)
+{
+    m_recordTrack = comp.getRecordTrack();
+    m_solo = comp.isSolo();
+    m_selectedTrack = comp.getSelectedTrack();
+    m_timeSigSegment = comp.getTimeSigSegment();
+    m_tempoSegment = comp.getTempoSegment();
+    m_basicQuantizer = *comp.getBasicQuantizer();
+    m_noteQuantizer = *comp.getNoteQuantizer();
+    m_legatoQuantizer = *comp.getLegatoQuantizer();
+    m_position = comp.getPosition();
+    m_defaultTempo = comp.getDefaultTempo();
+    m_startMarker = comp.getStartMarker();
+    m_endMarker = comp.getEndMarker();
+    m_loopStart = comp.getLoopStart();
+    m_loopEnd = comp.getLoopEnd();
+    m_barPositionsNeedCalculating = true;
+    m_tempoTimestampsNeedCalculating = true;
+    m_copyright = comp.getCopyrightNote();
+    m_playMetronome = comp.usePlayMetronome();
+    m_recordMetronome = comp.useRecordMetronome();
+    m_needsRefresh = true;
+
+    m_tracks.clear();
+    m_segments.clear();
+
+    m_tracks = *(comp.getTracks());
+    m_segments = comp.getSegments();
+
+    for (segmentcontainer::iterator i = this->m_segments.begin();
+	 i != this->m_segments.end(); ++i) {
+	(*i)->setComposition(this);
+    }
+
+    return *this;
+}
+
+
+
 void Composition::swap(Composition& c)
 {
     // ugh.

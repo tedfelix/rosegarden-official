@@ -209,7 +209,7 @@ SoundFile::putBytes(std::ofstream *file,
 
 // Clip off any path from the filename
 std::string
-SoundFile::getShortFilename()
+SoundFile::getShortFilename() const
 {
     std::string rS = m_fileName;
     unsigned int pos = rS.find_last_of("/");

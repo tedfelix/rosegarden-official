@@ -52,6 +52,26 @@ PeakFileManager::~PeakFileManager()
 {
 }
 
+PeakFileManager::PeakFileManager(const PeakFileManager &pFM)
+{
+    std::vector<PeakFile*>::const_iterator it;
+    for (it = pFM.begin(); it != pFM.end(); it++)
+        m_peakFiles.push_back(new PeakFile(**it));
+} 
+
+PeakFileManager&
+PeakFileManager::operator=(const PeakFileManager &pFM)
+{
+    m_peakFiles.clear();
+
+    std::vector<PeakFile*>::const_iterator it;
+    for (it = pFM.begin(); it != pFM.end(); it++)
+        m_peakFiles.push_back(new PeakFile(**it));
+
+    return (*this);
+}
+
+
 // Inserts PeakFile based on AudioFile if it doesn't already exist
 bool
 PeakFileManager::insertAudioFile(AudioFile *audioFile)

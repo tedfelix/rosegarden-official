@@ -48,6 +48,9 @@ public:
                   unsigned int bytesPerSample,
                   unsigned int bitsPerSample);
 
+    // copyish constructor
+    WAVAudioFile(const AudioFile &);
+
     ~WAVAudioFile();
 
     // Override these methods for the WAV

@@ -61,6 +61,11 @@ public:
     Composition();
     virtual ~Composition();
 
+    // Copy Constructor and equality operator
+    //
+    Composition(const Composition &);
+    Composition &operator=(const Composition &);
+
     /// swap the contents with another composition
     void swap(Composition &);
 
@@ -569,10 +574,6 @@ public:
 	m_refreshStatusArray.updateRefreshStatuses();
     }
 
-protected:
-
-    class ReferenceSegment;
-
     /**
      * This is a bit like a segment, but can only contain one sort of
      * event, and can only have one event at each absolute time
@@ -611,6 +612,12 @@ protected:
   	iterator find(Event *e);
 	std::string m_eventType;
     };
+
+    ReferenceSegment getTimeSigSegment() const { return m_timeSigSegment; }
+    ReferenceSegment getTempoSegment() const { return m_tempoSegment; }
+
+
+protected:
 
     static const PropertyName NoAbsoluteTimeProperty;
     static const PropertyName BarNumberProperty;
@@ -696,9 +703,6 @@ protected:
 
     bool m_needsRefresh;
 
-private:
-    Composition(const Composition &);
-    Composition &operator=(const Composition &);
 
 };
 

@@ -43,10 +43,31 @@ Studio::Studio():
 {
 }
 
+Studio::Studio(const Studio &studio):
+    XmlExportable()
+{
+    DeviceListConstIterator it = studio.begin();
+
+    for (; it != studio.end(); it++)
+    {
+    }
+}
+
 Studio::~Studio()
 {
 }
 
+Studio&
+Studio::operator=(const Studio &studio)
+{
+    DeviceListConstIterator it = studio.begin();
+
+    for (; it != studio.end(); it++)
+    {
+    }
+
+    return *this;
+}
 
 void
 Studio::addDevice(const std::string &name,

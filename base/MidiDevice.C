@@ -55,6 +55,56 @@ MidiDevice::MidiDevice(DeviceId id, const std::string &name, bool duplex):
     createInstruments();
 }
 
+MidiDevice::MidiDevice(const MidiDevice &dev):
+    Device(dev.getId(), dev.getName(), dev.getType()),
+    m_programList(new ProgramList()),
+    m_bankList(new BankList()),
+    m_duplex(isDuplex())
+{
+    // Device
+    m_label = dev.getUserLabel();
+
+    // Create and assign a metronome if required
+    //
+    if (m_metronome)
+    {
+        MidiMetronome *metronome = new MidiMetronome();
+        metronome->pitch = m_metronome->pitch;
+        metronome->instrument = m_metronome->instrument;
+        m_metronome = metronome;
+    }
+
+    std::vector<MidiProgram> programs = dev.getPrograms();
+    std::vector<MidiBank> banks = dev.getBanks();
+
+    // Construct a new program list
+    //
+    std::vector<MidiProgram>::iterator it = programs.begin();
+    for (; it != programs.end(); it++)
+    {
+        MidiProgram *prog = new MidiProgram();
+        prog->program = it->program;
+
+        m_programList->push_back(prog);
+    }
+
+
+    // Construct a new bank list
+    //
+    std::vector<MidiBank>::iterator bIt = banks.begin();
+    for (; bIt != banks.end(); bIt++)
+    {
+        MidiBank *bank = new MidiBank();
+        bank->name = bIt->name;
+        bank->msb = bIt->msb;
+        bank->lsb = bIt->lsb;
+
+        m_bankList->push_back(bank);
+    }
+
+}
+
+
 MidiDevice::~MidiDevice()
 {
     delete m_programList;

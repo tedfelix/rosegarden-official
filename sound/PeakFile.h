@@ -59,7 +59,11 @@ public:
     PeakFile(AudioFile *audioFile);
     virtual ~PeakFile();
 
-    // Standard methods
+    // Copy constructor
+    //
+    PeakFile(const PeakFile &);
+
+    // Standard file methods
     //
     virtual bool open();
     virtual void close();
@@ -93,6 +97,7 @@ public:
                                   bool showMinima);
 
     AudioFile* getAudioFile() { return m_audioFile; }
+    const AudioFile* getAudioFile() const { return m_audioFile; }
 
     // Scan to a peak and scan forward a number of peaks
     //
@@ -104,6 +109,21 @@ public:
     std::vector<SplitPointPair> getSplitPoints(const RealTime &startTime,
                                                const RealTime &endTime,
                                                int threshold);
+    // Accessors
+    //
+    int getVersion() const { return m_version; }
+    int getFormat() const { return m_format; }
+    int getPointsPerValue() const { return m_pointsPerValue; }
+    int getBlockSize() const { return m_blockSize; }
+    int getChannels() const { return m_channels; }
+    int getNumberOfPeaks() const { return m_numberOfPeaks; }
+    int getPositionPeakOfPeaks() const { return m_positionPeakOfPeaks; }
+    int getOffsetToPeaks() const { return m_offsetToPeaks; }
+    int getBodyBytes() const { return m_bodyBytes; }
+    QDateTime getModificationTime() const { return m_modificationTime; }
+    std::streampos getChunkStartPosition() const
+        { return m_chunkStartPosition; }
+
 signals:
     void setProgress(int);
     

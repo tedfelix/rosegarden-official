@@ -149,12 +149,11 @@ RosegardenGUIDoc::RosegardenGUIDoc(RosegardenGUIDoc *doc)
     m_title = doc->getTitle();
     m_absFilePath = doc->getAbsFilePath();
 
-    /*
     m_composition = doc->getComposition();
     m_audioFileManager = doc->getAudioFileManager();
+
     m_studio = doc->getStudio();
     m_config = doc->getConfiguration();
-    */
 }
 
 RosegardenGUIDoc&
@@ -173,12 +172,11 @@ RosegardenGUIDoc::operator=(const RosegardenGUIDoc &doc)
     m_startUpSync = true;
     m_autoSaveTimer = new QTimer(this);
 
-    /*
     m_composition = doc.getComposition();
     m_audioFileManager = doc.getAudioFileManager();
+
     m_studio = doc.getStudio();
     m_config = doc.getConfiguration();
-    */
 
     return *this;
 }

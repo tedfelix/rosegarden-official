@@ -64,6 +64,19 @@ WAVAudioFile::WAVAudioFile(const std::string &fileName,
     m_channels = channels;
 }
 
+WAVAudioFile::WAVAudioFile(const AudioFile &wav):
+    RIFFAudioFile(wav.getId(), wav.getName(), wav.getFilename())
+{
+    m_type = wav.getType();
+    m_id = wav.getId();
+    m_name = wav.getName();
+    m_bitsPerSample = wav.getBitsPerSample();
+    m_sampleRate = wav.getSampleRate();
+    m_channels = wav.getChannels();
+    m_dataChunkIndex = -1;
+    m_fileInfo = new QFileInfo(QString(wav.getFilename().c_str()));
+}
+
 WAVAudioFile::~WAVAudioFile()
 {
 }

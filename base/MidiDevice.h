@@ -44,6 +44,10 @@ public:
     MidiDevice(DeviceId id, const std::string &name, bool duplex);
     virtual ~MidiDevice();
 
+    // Copy constructor
+    //
+    MidiDevice(const MidiDevice &);
+
     virtual void createInstruments();
     virtual void addInstrument(Instrument*);
 

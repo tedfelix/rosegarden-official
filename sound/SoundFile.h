@@ -49,8 +49,8 @@ public:
     virtual bool write() = 0;
     virtual void close() = 0;
 
-    std::string getShortFilename();
-    std::string getFilename() { return m_fileName; }
+    std::string getShortFilename() const;
+    std::string getFilename() const { return m_fileName; }
     void setFilename(const std::string &fileName) { m_fileName = fileName; }
 
     // Useful methods that operate on our file data
@@ -69,7 +69,7 @@ public:
 
     // Return file size
     //
-    unsigned int getSize() { return m_fileSize; }
+    unsigned int getSize() const { return m_fileSize; }
 
 protected:
     std::string m_fileName;

@@ -58,7 +58,12 @@ class AudioFileManager : public XmlExportable
 {
 public:
     AudioFileManager();
+    AudioFileManager(const AudioFileManager &aFM);
     ~AudioFileManager();
+
+    // Assignment operator
+    //
+    AudioFileManager& operator=(const AudioFileManager &);
 
     // Create an audio file from an absolute path - we use this interface
     // to add an actual file.
@@ -91,10 +96,10 @@ public:
 
     // Get the list of files
     //
-    std::vector<AudioFile*>::const_iterator begin()
+    std::vector<AudioFile*>::const_iterator begin() const
         { return m_audioFiles.begin(); }
 
-    std::vector<AudioFile*>::const_iterator end()
+    std::vector<AudioFile*>::const_iterator end() const
         { return m_audioFiles.end(); }
 
     // Clear down all audio file references
@@ -103,7 +108,7 @@ public:
 
     // Get and set the record path
     //
-    std::string getAudioPath() { return m_audioPath; }
+    std::string getAudioPath() const { return m_audioPath; }
     void setAudioPath(const std::string &path);
 
     // Get a new audio filename at the audio record path
@@ -181,6 +186,10 @@ public:
                                                const RealTime &startTime,
                                                const RealTime &endTime,
                                                int threshold);
+
+    // Get the peak file manager
+    //
+    PeakFileManager getPeakFileManager() const { return m_peakManager; }
 
 private:
     std::string getFileInPath(const std::string &file);

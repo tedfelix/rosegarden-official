@@ -48,9 +48,16 @@ AudioDevice::AudioDevice(DeviceId id, const std::string &name):
 }
 
 
+AudioDevice::AudioDevice(const AudioDevice &dev):
+    Device(dev.getId(), dev.getName(), dev.getType())
+{
+}
+
 AudioDevice::~AudioDevice()
 {
 }
+
+
 
 void
 AudioDevice::createInstruments()

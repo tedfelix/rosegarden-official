@@ -94,6 +94,16 @@ DocumentConfiguration::DocumentConfiguration()
     set<RealTimeT>(MetronomeDuration, RealTime(0, 10000));    
 }
     
+DocumentConfiguration::DocumentConfiguration(const DocumentConfiguration &config):
+    Configuration()
+{
+}
+
+DocumentConfiguration&
+DocumentConfiguration::operator=(const DocumentConfiguration &config)
+{
+    return *this;
+}
 
 
 // Convert to XML string for export

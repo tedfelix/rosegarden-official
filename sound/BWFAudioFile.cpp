@@ -68,6 +68,17 @@ BWFAudioFile::~BWFAudioFile()
 {
 }
 
+BWFAudioFile::BWFAudioFile(const AudioFile &bwf):
+    RIFFAudioFile(bwf.getId(), bwf.getName(), bwf.getFilename())
+{
+    m_type = bwf.getType();
+    m_bitsPerSample = bwf.getBitsPerSample();
+    m_sampleRate = bwf.getSampleRate();
+    m_channels = bwf.getChannels();
+    m_dataChunkIndex = -1;
+    m_fileInfo = new QFileInfo(QString(bwf.getFilename().c_str()));
+}
+
 bool
 BWFAudioFile::open()
 {

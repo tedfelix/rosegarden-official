@@ -97,6 +97,11 @@ public:
                MidiByte channel,
                Device *device);
 
+
+    // Copy constructor
+    //
+    Instrument(const Instrument &);
+
     ~Instrument();
 
     std::string getName() const { return m_name; }

@@ -43,6 +43,10 @@ public:
     AudioDevice(DeviceId id, const std::string &name);
     virtual ~AudioDevice();
 
+    // Copy constructor
+    //
+    AudioDevice(const AudioDevice &);
+
     virtual void createInstruments();
     virtual void addInstrument(Instrument*);
 

@@ -113,6 +113,33 @@ Instrument::Instrument(InstrumentId id,
     }
 }
 
+Instrument::Instrument(const Instrument &ins):
+    m_id(ins.getId()),
+    m_name(ins.getName()),
+    m_type(ins.getType()),
+    m_channel(ins.getMidiChannel()),
+    m_programChange(ins.getProgramChange()),
+    m_msb(ins.getMSB()),
+    m_lsb(ins.getLSB()),
+    m_transpose(ins.getMidiTranspose()),
+    m_pan(ins.getPan()),
+    m_velocity(ins.getVelocity()),
+    m_attack(ins.getAttack()),
+    m_release(ins.getRelease()),
+    m_filter(ins.getFilter()),
+    m_resonance(ins.getResonance()),
+    m_chorus(ins.getChorus()),
+    m_reverb(ins.getReverb()),
+    m_device(ins.getDevice()),
+    m_sendBankSelect(ins.sendsBankSelect()),
+    m_sendProgramChange(ins.sendsProgramChange()),
+    m_sendPan(ins.sendsPan()),
+    m_sendVelocity(ins.sendsVelocity()),
+    m_mappedId(ins.getMappedId())
+{
+}
+
+
 Instrument::~Instrument()
 {
 }

@@ -92,7 +92,7 @@ public:
 
     // Audio file identifier - set in constructor of file type
     //
-    AudioFileType getType() { return m_type; }
+    AudioFileType getType() const { return m_type; }
 
     unsigned int getBitsPerSample() const { return m_bitsPerSample; }
     unsigned int getSampleRate() const { return m_sampleRate; }

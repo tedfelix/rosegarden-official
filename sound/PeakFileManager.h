@@ -58,6 +58,14 @@ public:
     PeakFileManager();
     ~PeakFileManager();
 
+    // Copy constructor
+    //
+    PeakFileManager(const PeakFileManager &pFM);
+
+    // Equality operator
+    //
+    PeakFileManager& operator=(const PeakFileManager &);
+
     // Check that a given audio file has a valid and up to date
     // peak file or peak chunk.
     //
@@ -91,6 +99,13 @@ public:
                                                const RealTime &startTime,
                                                const RealTime &endTime,
                                                int threshold);
+
+    std::vector<PeakFile*>::const_iterator begin() const
+                { return m_peakFiles.begin(); }
+
+    std::vector<PeakFile*>::const_iterator end() const
+                { return m_peakFiles.end(); }
+
 protected:
 
     // Add and remove from our PeakFile cache

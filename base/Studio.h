@@ -47,6 +47,7 @@ typedef int MidiFilter;
 typedef std::vector<Instrument *> InstrumentList;
 typedef std::vector<Device*> DeviceList;
 typedef std::vector<Device*>::iterator DeviceListIterator;
+typedef std::vector<Device*>::const_iterator DeviceListConstIterator;
 
 class MidiDevice;
 
@@ -56,7 +57,12 @@ class Studio : public XmlExportable
 
 public:
     Studio();
+    Studio(const Studio &);
     ~Studio();
+
+    // Assignment
+    //
+    Studio& operator=(const Studio &);
 
     void addDevice(const std::string &name,
                    DeviceId id,
@@ -118,6 +124,11 @@ public:
     // Return the device list
     //
     DeviceList* getDevices() { return &m_devices; }
+
+    // Const iterators
+    //
+    DeviceListConstIterator begin() const { return m_devices.begin(); }
+    DeviceListConstIterator end() const { return m_devices.end(); }
 
     // Get a device by ID
     //

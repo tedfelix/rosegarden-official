@@ -82,6 +82,9 @@ class DocumentConfiguration : public Configuration
 {
 public:
     DocumentConfiguration();
+    DocumentConfiguration(const DocumentConfiguration &);
+
+    DocumentConfiguration& operator=(const DocumentConfiguration &);
 
     // for exporting -- doesn't write the <configuration> part of
     // the element in case you want to write it into another element

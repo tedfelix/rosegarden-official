@@ -48,6 +48,9 @@ public:
                   unsigned int bytesPerSample,
                   unsigned int bitsPerSample);
 
+    // Copyish constructor
+    BWFAudioFile(const AudioFile &);
+
     ~BWFAudioFile();
 
     // Override these methods for the WAV
