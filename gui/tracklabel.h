@@ -57,8 +57,8 @@ public:
     void setId(Rosegarden::TrackId id) { m_id = id; }
     Rosegarden::TrackId getId() const { return m_id; }
 
-    void setPosition(int position) { m_position = position; }
     int getPosition() const { return m_position; }
+    void setPosition(int position) { m_position = position; }
 
     QPoint getPressPosition() const { return m_pressPosition; }
 

@@ -207,7 +207,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
                                VUMeter::PeakHold,
                                vuWidth,
                                buttonGap,
-                               track->getPosition());
+                               track->getId());
 
     m_trackMeters.push_back(vuMeter);
 
@@ -304,7 +304,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     // Insert the buttons into groups
     //
     m_recordButtonGroup->insert(record, trackId);
-    m_muteButtonGroup->insert(mute, trackId);
+    m_muteButtonGroup->insert(mute, track->getPosition());
 
     mute->setToggleButton(true);
     record->setToggleButton(true);
@@ -358,8 +358,13 @@ TrackButtons::populateButtons()
     {
         track = m_doc->getComposition().getTrackByPosition(i);
 
+        cout << "TRACK LABEL i = " << i 
+             << " ID = " << track->getId() << " ";
+
         if (track)
         {
+            cout << " GOT TRACK (" << track->getId() << ") ";
+
             ins = m_doc->getStudio().getInstrumentById(track->getInstrument());
 
             // Set mute button from track
@@ -372,10 +377,7 @@ TrackButtons::populateButtons()
             // Set record button from track
             //
             if (m_doc->getComposition().getRecordTrack() == track->getId())
-            {
                 slotSetRecordTrack(track->getId());
-                m_recordButtonGroup->find(i)->setDown(true);
-            }
 
             // reset track tokens
             m_trackLabels[i]->setId(track->getId());
@@ -384,6 +386,7 @@ TrackButtons::populateButtons()
 
         if (ins)
         {
+            cout << " GOT INSTRUMENT (" << ins->getId() << ")" ;
             m_instrumentLabels[i]->setText(strtoqstr(ins->getName()));
             if (ins->sendsProgramChange())
             {
@@ -396,6 +399,10 @@ TrackButtons::populateButtons()
         {
             m_instrumentLabels[i]->setText(i18n("<no instrument>"));
         }
+        m_instrumentLabels[i]->update();
+        m_trackLabels[i]->update();
+
+        cout << endl;
     }
 
 }
@@ -467,7 +474,11 @@ TrackButtons::removeButtons(unsigned int position)
         i++;
     }
 
-    if (iit != m_instrumentLabels.end()) m_instrumentLabels.erase(iit);
+    if (iit != m_instrumentLabels.end())
+    {
+        //delete (*iit);
+        m_instrumentLabels.erase(iit);
+    }
 
     i = 0;
     std::vector<TrackLabel*>::iterator tit;
@@ -477,7 +488,11 @@ TrackButtons::removeButtons(unsigned int position)
         i++;
     }
 
-    if (tit != m_trackLabels.end()) m_trackLabels.erase(tit);
+    if (tit != m_trackLabels.end()) 
+    {
+        //delete (*iit);
+        m_trackLabels.erase(tit);
+    }
 
     i = 0;
     std::vector<TrackVUMeter*>::iterator vit;
@@ -487,7 +502,21 @@ TrackButtons::removeButtons(unsigned int position)
         i++;
     }
 
-    if (vit != m_trackMeters.end()) m_trackMeters.erase(vit);
+    if (vit != m_trackMeters.end())
+    {
+        //delete (*vit);
+        m_trackMeters.erase(vit);
+    }
+
+    // Get rid of the buttons
+    //
+    QButton *button = m_muteButtonGroup->find(position);
+    m_muteButtonGroup->remove(button);
+    //delete button;
+
+    button = m_recordButtonGroup->find(position);
+    m_recordButtonGroup->remove(button);
+    //delete button;
 
     delete m_trackHBoxes[position];
 
@@ -516,15 +545,11 @@ TrackButtons::slotUpdateTracks()
         match = false;
         for (it = tracks.begin(); it != tracks.end(); ++it)
         {
-            if (m_trackLabels[i]->getPosition() == (*it).second->getPosition())
+            // Map track positions to ids
+            //
+            if (i == ((unsigned int)(*it).second->getPosition()))
             {
-                // Check and reset TrackIds
-                //
-                if (m_trackLabels[i]->getId() != (*it).second->getId())
-                {
-                    m_trackLabels[i]->setId((*it).second->getId());
-                }
-
+                m_trackLabels[i]->setId((*it).second->getId());
                 match = true;
                 break;
             }
@@ -540,15 +565,16 @@ TrackButtons::slotUpdateTracks()
     //
     if (m_trackHBoxes.size() != newNbTracks)
     {
-        int j = m_trackHBoxes.size();
         for (it = tracks.begin(); it != tracks.end(); ++it)
         {
+            cout << "TRACK ID = " << (*it).second->getId()
+                 << " POSITION = " <<  (*it).second->getPosition() << endl;
             match = false;
+            int j = 0;
             for (unsigned int i = 0; i < m_trackLabels.size(); ++i)
             {
                 if (m_trackLabels[i]->getId() == (*it).second->getId() &&
-                    m_trackLabels[i]->getPosition() ==
-                            (*it).second->getPosition())
+                    i == ((unsigned int)(*it).second->getPosition()))
                 {
                     match = true;
                     break;
@@ -561,14 +587,44 @@ TrackButtons::slotUpdateTracks()
 
                 if (trackHBox)
                 {
+                    cout << "MAKE ID = " << (*it).second->getId()
+                         << " @ j = " << j << endl;
                     trackHBox->show();
-                    m_layout->insertWidget(j++, trackHBox);
+                    m_layout->insertWidget((*it).second->getPosition(),
+                                           trackHBox);
                     m_trackHBoxes.push_back(trackHBox);
                 }
             }
+            j++;
         }
     }
 
+    // ensure that positioning is correct
+    //
+    Rosegarden::Track *track;
+    Rosegarden::Instrument *inst;
+
+    for (unsigned int i = 0; i < m_trackLabels.size(); ++i)
+    {
+        if (m_trackLabels[i] != (*m_trackLabels.end()))
+        {
+            track = m_doc->getComposition().getTrackByPosition(i);
+
+            if (track)
+                m_trackLabels[i]->setId(track->getId());
+        }
+
+        cout << "SU : " << i
+             << " : TRACK " << m_trackLabels[i]->getId()
+             << endl;
+
+        if (m_instrumentLabels[i] != (*m_instrumentLabels.end()))
+        {
+            if (track) m_instrumentLabels[i]->setId(track->getId());
+
+        }
+
+    }
     m_tracks = newNbTracks;
 
     // repopulate the buttons
@@ -619,7 +675,7 @@ TrackButtons::selectLabel(int position)
     {
         update = false;
 
-        if (m_trackLabels[i]->getPosition() == position)
+        if (i == ((unsigned int)position))
         {
             if (!m_instrumentLabels[i]->isSelected())
             {
@@ -673,14 +729,11 @@ std::vector<int>
 TrackButtons::getHighlightedTracks()
 {
     std::vector<int> retList;
-    std::vector<TrackLabel *>::iterator tlpIt;
 
-    for (tlpIt = m_trackLabels.begin();
-         tlpIt != m_trackLabels.end();
-         tlpIt++)
+    for (unsigned int i = 0; i < m_trackLabels.size(); ++i)
     {
-        if ((*tlpIt)->isSelected())
-            retList.push_back((*tlpIt)->getPosition());
+        if (m_trackLabels[i]->isSelected())
+            retList.push_back(i);
     }
 
     return retList;
@@ -692,12 +745,11 @@ TrackButtons::slotRenameTrack(QString newName, int trackNumber)
     Rosegarden::Track *track = m_doc->getComposition().getTrackById(trackNumber);
     track->setLabel(qstrtostr(newName));
 
-    std::vector<TrackLabel*>::iterator it = m_trackLabels.begin();
-    for (; it != m_trackLabels.end(); it++)
+    for (unsigned int i = 0; i < m_trackLabels.size(); ++i)
     {
-        if ((*it)->getPosition() == trackNumber)
+        if (i == ((unsigned int)trackNumber))
         {
-            (*it)->setText(newName);
+            m_trackLabels[i]->setText(newName);
             emit widthChanged();
             return;
         }
@@ -708,13 +760,11 @@ TrackButtons::slotRenameTrack(QString newName, int trackNumber)
 void
 TrackButtons::slotSetTrackMeter(double value, int position)
 {
-    std::vector<TrackVUMeter*>::iterator it = m_trackMeters.begin();
-    
-    for (; it != m_trackMeters.end(); it++)
+    for (unsigned int i = 0; i < m_trackMeters.size(); ++i)
     {
-        if ((*it)->getPosition() == position)
+        if (i == ((unsigned int)position))
         {
-            (*it)->setLevel(value);
+            m_trackMeters[i]->setLevel(value);
             return;
         }
     }
@@ -731,14 +781,12 @@ TrackButtons::slotSetMetersByInstrument(double value,
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Track *track;
 
-    std::vector<TrackVUMeter*>::iterator it = m_trackMeters.begin();
-    
-    for (; it != m_trackMeters.end(); it++)
+    for (unsigned int i = 0; i < m_trackMeters.size(); ++i)
     {
-        track = comp.getTrackByPosition((*it)->getPosition());
+        track = comp.getTrackByPosition(i);
 
         if (track !=0 && track->getInstrument() == id)
-            (*it)->setLevel(value);
+            m_trackMeters[i]->setLevel(value);
     }
 }
 
