@@ -50,14 +50,14 @@ Settings - settings which affect Rosegarden globally, and the various
 
 Specific to the notation editor:
 
-Attach   - these are actions that affect the visual appearance of a note
+Notes   - these are actions that affect the visual appearance of a note
            without physically moving it or changing its duration in any way.
 
 Adjust    - these are ideally to be actions that alter a note in a less
             superficial way; eg. transposing, interpreting, quantizing.  This
 	    is also the home for tuplets, grace notes, note styles and stem
 	    directions if for no better reason than to even some things out
-	    between Attach and Adjust.  (There are a lot of gray areas still.)
+	    between Notes and Adjust.  (There are a lot of gray areas still.)
 
 History:
 

@@ -113,7 +113,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 					 Rosegarden::TimeSignature sig,
 					 bool timeEditable,
 					 QString explanatoryText) :
-    KDialogBase(parent, 0, true, i18n("Time Signature"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Time Signature"), Ok | Cancel | Help),
     m_composition(composition),
     m_timeSignature(sig),
     m_time(insertionTime),
@@ -253,6 +253,8 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 		     SLOT(slotUpdateCommonTimeButton()));
     slotUpdateCommonTimeButton();
     m_explanatoryLabel = explanatoryLabel;
+
+    setHelp("time-signature");
 }
 
 Rosegarden::TimeSignature
@@ -375,7 +377,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 				       bool showApplyToAll,
 				       bool showConversionOptions,
 				       QString explanatoryText) :
-    KDialogBase(parent, 0, true, i18n("Key Change"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Key Change"), Ok | Cancel | Help),
     m_notePixmapFactory(npf),
     m_key(defaultKey),
     m_clef(clef),
@@ -383,6 +385,8 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     m_ignoreComboChanges(false),
     m_explanatoryLabel(0)
 {
+    setHelp("nv-signatures-key");
+
     QVBox *vbox = makeVBoxMainWidget();
 
     QHBox *keyBox = 0;
@@ -671,9 +675,11 @@ KeySignatureDialog::getKeyName(const QString &s, bool minor)
 
 PasteNotationDialog::PasteNotationDialog(QWidget *parent,
 					 PasteEventsCommand::PasteType defaultType) :
-    KDialogBase(parent, 0, true, i18n("Paste"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Paste"), Ok | Cancel | Help ),
     m_defaultType(defaultType)
 {
+    setHelp("nv-paste-types");
+
     QVBox *vbox = makeVBoxMainWidget();
 
     QButtonGroup *pasteTypeGroup = new QButtonGroup
@@ -729,9 +735,10 @@ PasteNotationDialog::slotPasteTypeChanged()
 
 TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 			   timeT maxDuration) :
-    KDialogBase(parent, 0, true, i18n("Tuplet"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Tuplet"), Ok | Cancel | Help),
     m_maxDuration(maxDuration)
 {
+    setHelp("nv-tuplets");
     QVBox *vbox = makeVBoxMainWidget();
 
     QGroupBox *timingBox = new QGroupBox
@@ -1038,10 +1045,11 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 				 NotePixmapFactory *npf,
 				 Text defaultText,
 				 int maxLength) :
-    KDialogBase(parent, 0, true, i18n("Text"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Text"), Ok | Cancel | Help),
     m_notePixmapFactory(npf),
     m_styles(Text::getUserStyles())
 {
+    setHelp("nv-text");
     QVBox *vbox = makeVBoxMainWidget();
 
     QGroupBox *entryBox = new QGroupBox
@@ -2722,11 +2730,13 @@ private:
 
 TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
 			 bool timeEditable):
-    KDialogBase(parent, 0, true, i18n("Insert Tempo Change"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Insert Tempo Change"), Ok | Cancel | Help),
     m_doc(doc),
     m_tempoTime(0),
     m_tempoValue(0.0)
 {
+    setHelp("tempo");
+
     QVBox *vbox = makeVBoxMainWidget();
     QGroupBox *groupBox = new QGroupBox(1, Horizontal, i18n("Tempo"), vbox);
     QHBox *tempoBox = new QHBox(groupBox);
@@ -2997,10 +3007,12 @@ ClefDialog::ClefDialog(QWidget *parent,
 		       NotePixmapFactory *npf,
 		       Rosegarden::Clef defaultClef,
 		       bool showConversionOptions) :
-    KDialogBase(parent, 0, true, i18n("Clef"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Clef"), Ok | Cancel | Help),
     m_notePixmapFactory(npf),
     m_clef(defaultClef)
 {
+    setHelp("nv-signatures-clef");
+
     QVBox *vbox = makeVBoxMainWidget();
 
     QGroupBox *clefFrame = new QGroupBox
@@ -3186,8 +3198,10 @@ ClefDialog::redrawClefPixmap()
 
 
 QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
-    KDialogBase(parent, 0, true, i18n("Quantize"), Ok | Cancel | Details)
+    KDialogBase(parent, 0, true, i18n("Quantize"), Ok | Cancel | Details | Help)
 {
+    setHelp("quantization");
+
     QVBox *vbox = makeVBoxMainWidget();
 
     m_quantizeFrame =
@@ -3329,8 +3343,10 @@ RescaleDialog::slotToChanged(int i)
 FileMergeDialog::FileMergeDialog(QWidget *parent,
 				 QString /*fileName*/,
 				 bool timingsDiffer) :
-    KDialogBase(parent, 0, true, i18n("Merge File"), Ok | Cancel)
+    KDialogBase(parent, 0, true, i18n("Merge File"), Ok | Cancel | Help)
 {
+    setHelp("file-merge");
+    
     QVBox *vbox = makeVBoxMainWidget();
 
     QHBox *hbox = new QHBox(vbox);
@@ -3759,9 +3775,11 @@ AudioSplitDialog::slotThresholdChanged(int threshold)
 
 LyricEditDialog::LyricEditDialog(QWidget *parent,
 				 Segment *segment) :
-    KDialogBase(parent, 0, true, i18n("Edit Lyrics"), Ok | Cancel),
+    KDialogBase(parent, 0, true, i18n("Edit Lyrics"), Ok | Cancel | Help),
     m_segment(segment)
 {    
+    setHelp("nv-text-lyrics");
+    
     QVBox *vbox = makeVBoxMainWidget();
 
     QGroupBox *groupBox = new QGroupBox
@@ -4105,8 +4123,10 @@ SplitByPitchDialog::getClefHandling()
 
 
 InterpretDialog::InterpretDialog(QWidget *parent) :
-    KDialogBase(parent, 0, true, i18n("Interpret"), Ok | Cancel)
+    KDialogBase(parent, 0, true, i18n("Interpret"), Ok | Cancel | Help)
 {
+    setHelp("nv-interpret");
+    
     QVBox *vbox = makeVBoxMainWidget();
     QGroupBox *groupBox = new QGroupBox
 	(1, Horizontal, i18n("Interpretations to apply"), vbox);
@@ -4353,9 +4373,11 @@ CountdownBar::setPosition(int position)
 
 ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
 					     RosegardenGUIDoc *doc) :
-    KDialogBase(parent, 0, true, i18n("Metronome"), Ok | Apply | Close),
+    KDialogBase(parent, 0, true, i18n("Metronome"), Ok | Apply | Close | Help),
     m_doc(doc)
 {
+    setHelp("studio-metronome");
+
     QHBox *hbox = makeHBoxMainWidget();
 
     // I think having this as well probably just overcomplicates things

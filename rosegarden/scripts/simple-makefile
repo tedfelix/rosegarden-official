@@ -13,7 +13,8 @@
 # Builds into a separate subdirectory so as not to confuse the proper
 # build mechanism.
 
-KDEDIR		= /opt/kde32-icc80
+#KDEDIR		= /opt/kde32-icc80
+KDEDIR		= /opt/kde3.2
 QTDIR		= $(KDEDIR)
 
 #KDEDIR		= /opt/kde3
@@ -45,7 +46,7 @@ LDLIBS		= \
 		-L$(QTDIR)/lib \
 		-lkdeprint -lkdeui -lkdecore -lqt-mt \
 		-ljack -lasound -llo -llrdf -lraptor -lmad \
-		-lcprts -lcxa -lunwind -lgcc_s
+		-lcprts -lcxa -lunwind
 
 BUILD_DIR	= simple-build
 
