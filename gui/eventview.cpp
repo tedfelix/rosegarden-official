@@ -222,8 +222,10 @@ EventView::~EventView()
 {
     // Give the sequencer something to suck on while we close
     //
-    getDocument()->getSequenceManager()->
-        setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
+    if (!getDocument()->isBeingDestroyed()) {
+        getDocument()->getSequenceManager()->
+            setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
+    }
 }
 
 bool
