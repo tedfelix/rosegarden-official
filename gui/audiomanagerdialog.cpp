@@ -229,7 +229,7 @@ AudioManagerDialog::slotAdd()
 
     KFileDialog *fileDialog =
         new KFileDialog(QString(m_audioFileManager->getLastAddPath().c_str()),
-                        QString(i18n("WAV files (*.wav)")),
+                        QString(i18n("*.wav|WAV files (*.wav)")),
                         this, i18n("Select an Audio File"), true);
 
     if (fileDialog->exec() == QDialog::Accepted)
