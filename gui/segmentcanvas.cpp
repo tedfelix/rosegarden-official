@@ -168,6 +168,8 @@ public:
 
     virtual void drawShape(QPainter&);
 
+    virtual void clearPreview();
+
 protected:
 
     virtual void updatePreview(const QWMatrix &matrix);
@@ -300,6 +302,12 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
     painter.restore();
 }
 
+void SegmentAudioPreview::clearPreview()
+{
+    m_values.clear();
+    m_previewIsCurrent = false;
+}
+
 void SegmentAudioPreview::updatePreview(const QWMatrix &matrix)
 {
     if (isPreviewCurrent()) return;
@@ -374,6 +382,8 @@ public:
 
     virtual void drawShape(QPainter&);
 
+    virtual void clearPreview();
+
 protected:
     virtual void updatePreview(const QWMatrix &matrix);
 
@@ -398,6 +408,12 @@ SegmentNotationPreview::SegmentNotationPreview(SegmentItem& parent,
     : SegmentItemPreview(parent, scale),
       m_haveSegmentRefreshStatus(false)
 {
+}
+
+void SegmentNotationPreview::clearPreview()
+{
+    m_previewInfo.clear();
+    m_previewIsCurrent = false;
 }
 
 void SegmentNotationPreview::drawShape(QPainter& painter)
@@ -456,16 +472,24 @@ void SegmentNotationPreview::updatePreview(const QWMatrix & /*matrix*/)
 {
     if (isPreviewCurrent()) return;
 
-    if (!m_haveSegmentRefreshStatus) {
-	m_segmentRefreshStatus = m_segment->getNewRefreshStatusId();
-	m_haveSegmentRefreshStatus = true;
+    Rosegarden::timeT fromTime = 0, toTime = 0;
+
+    if (!m_previewInfo.empty()) {
+
+	if (!m_haveSegmentRefreshStatus) {
+	    m_segmentRefreshStatus = m_segment->getNewRefreshStatusId();
+	    m_haveSegmentRefreshStatus = true;
+	}
+	
+	Rosegarden::SegmentRefreshStatus &status =
+	    m_segment->getRefreshStatus(m_segmentRefreshStatus);
+	if (!status.needsRefresh()) return;
+
+	fromTime = status.from();
+	toTime = status.to();
+	status.setNeedsRefresh(false);
     }
 
-    Rosegarden::SegmentRefreshStatus &status =
-	m_segment->getRefreshStatus(m_segmentRefreshStatus);
-    if (!status.needsRefresh()) return;
-
-    Rosegarden::timeT fromTime = status.from(), toTime = status.to();
     if (fromTime == toTime) {
 	fromTime = m_segment->getStartTime();
 	  toTime = m_segment->getEndMarkerTime();
@@ -519,7 +543,6 @@ void SegmentNotationPreview::updatePreview(const QWMatrix & /*matrix*/)
         m_previewInfo.insert(r);
     }
 
-    status.setNeedsRefresh(false);
     setPreviewCurrent(true);
 }
 
@@ -602,6 +625,11 @@ void SegmentItem::setShowPreview(bool preview)
     m_showPreview = preview;
 }
 
+bool SegmentItem::getShowPreview() const
+{
+    return m_showPreview;
+}
+
 void SegmentItem::setPreview()
 {
     delete m_preview;
@@ -679,19 +707,6 @@ void SegmentItem::drawShape(QPainter& painter)
     }
 
     if (m_preview && m_showPreview) {
-/*!!!
-	Rosegarden::Colour col;
-
-	if (m_segment && !m_overrideColour) {
-	    col = (m_doc->getComposition().getSegmentColourMap().getColourByIndex
-		   (m_segment->getColourIndex()));
-	} else {
-	    col = RosegardenGUIColours::convertColour(m_colour);
-	}
-
-	painter.setPen(RosegardenGUIColours::convertColour
-		       (col.getContrastingColour()));
-*/
 	m_preview->drawShape(painter);
     }
 
@@ -910,19 +925,6 @@ void SegmentItem::setSelected(bool select, const QBrush &brush)
 
 void SegmentItem::showRepeatRect(bool s)
 {
-    //!!! This doesn't really work terribly well... need a better fix
-    // for the remaining preview trails when you move a segment
-/*!!!
-    m_suspendPreview = !s;
-    if (m_showPreview) {
-	if (m_suspendPreview) {
-	    delete m_preview;
-	    m_preview = 0;
-	} else {
-	    setPreview();
-	}
-    }
-*/
     if (m_repeatRectangle) {
     
 	if (s)

@@ -282,6 +282,31 @@ private:
 };
 
 
+/**
+ * SegmentResizeFromStartCommand moves the start time of a segment
+ * leaving the events in it at the same absolute times as before, so
+ * padding with rests or deleting events as appropriate.  (Distinct
+ * from Segment::setStartTime, as used by SegmentReconfigureCommand,
+ * which moves all the events in the segment.)
+ */
+
+class SegmentResizeFromStartCommand : public BasicCommand
+{
+public:
+    SegmentResizeFromStartCommand(Rosegarden::Segment *segment,
+				  Rosegarden::timeT newStartTime);
+    virtual ~SegmentResizeFromStartCommand();
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::Segment *m_segment;
+    Rosegarden::timeT m_oldStartTime;
+    Rosegarden::timeT m_newStartTime;
+};
+
+
 class AudioSegmentSplitCommand : public KNamedCommand
 {
 public:

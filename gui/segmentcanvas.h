@@ -96,6 +96,7 @@ public:
     Rosegarden::TrackId getTrackPosition() const { return m_trackPosition; }
 
     void setShowPreview(bool preview);
+    bool getShowPreview() const;
 
     /**
      * Reset the rectangle's location and dimensions following

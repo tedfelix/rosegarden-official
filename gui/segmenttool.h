@@ -208,7 +208,7 @@ public:
     virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual int  handleMouseMove(QMouseEvent*);
 
-    static bool cursorIsCloseEnoughToEdge(SegmentItem*, const QPoint&, int);
+    static bool cursorIsCloseEnoughToEdge(SegmentItem*, const QPoint&, int, bool &);
 
     void setEdgeThreshold(int e) { m_edgeThreshold = e; }
     int getEdgeThreshold() { return m_edgeThreshold; }
@@ -221,6 +221,8 @@ protected:
     //--------------- Data members ---------------------------------
 
     int m_edgeThreshold;
+    bool m_resizeStart;
+    bool m_previewSuspended;
 };
 
 class SegmentSelector : public SegmentTool
@@ -385,6 +387,12 @@ public:
      * to be refreshed
      */
     void setPreviewCurrent(bool c) { m_previewIsCurrent = c; }
+
+    /**
+     * Clears out the preview entirely so that it will be regenerated
+     * next time
+     */
+    virtual void clearPreview() = 0;
 
     QRect rect();
     

@@ -643,23 +643,77 @@ SegmentReconfigureCommand::swap()
 	// previous values back in to the record for use in the
 	// next iteration of the execute/unexecute cycle
 
-	timeT currentEndMarkerTime = i->segment->getEndMarkerTime();
 	timeT currentStartTime = i->segment->getStartTime();
-	TrackId currentTrack = i->segment->getTrack();
 
 	if (currentStartTime != i->startTime) {
 	    i->segment->setStartTime(i->startTime);
 	    i->startTime = currentStartTime;
 	}
 
+	timeT currentEndMarkerTime = i->segment->getEndMarkerTime();
+
 	if (currentEndMarkerTime != i->endMarkerTime) {
 	    i->segment->setEndMarkerTime(i->endMarkerTime);
 	    i->endMarkerTime = currentEndMarkerTime;
 	}
 
+	TrackId currentTrack = i->segment->getTrack();
+
 	if (currentTrack != i->track) {
 	    i->segment->setTrack(i->track);
 	    i->track = currentTrack;
+	}
+    }
+}
+
+
+// SegmentResizeFromStartCommand
+//
+//
+
+SegmentResizeFromStartCommand::SegmentResizeFromStartCommand(Segment *s,
+							     timeT time) :
+    BasicCommand(i18n("Resize Segment"), *s,
+		 std::min(time, s->getStartTime()),
+		 std::max(time, s->getStartTime())),
+    m_segment(s),
+    m_oldStartTime(s->getStartTime()),
+    m_newStartTime(time)
+{
+    // nothing else 
+}
+
+SegmentResizeFromStartCommand::~SegmentResizeFromStartCommand()
+{
+    // nothing
+}
+
+void
+SegmentResizeFromStartCommand::modifySegment()
+{
+    if (m_newStartTime < m_oldStartTime) {
+	m_segment->fillWithRests(m_newStartTime, m_oldStartTime);
+    } else {
+
+	for (Segment::iterator i = m_segment->begin();
+	     m_segment->isBeforeEndMarker(i); ) {
+
+	    Segment::iterator j = i;
+	    ++j;
+
+	    if ((*i)->getAbsoluteTime() >= m_newStartTime) break;
+
+	    if ((*i)->getAbsoluteTime() + (*i)->getDuration() <= m_newStartTime) {
+		m_segment->erase(i);
+	    } else {
+		Event *e = new Event
+		    (**i, m_newStartTime,
+		     (*i)->getAbsoluteTime() + (*i)->getDuration() - m_newStartTime);
+		m_segment->erase(i);
+		m_segment->insert(e);
+	    }
+
+	    i = j;
 	}
     }
 }
