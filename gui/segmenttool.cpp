@@ -47,10 +47,10 @@ using Rosegarden::SegmentSelection;
 SegmentTool::SegmentTool(SegmentCanvas* canvas, RosegardenGUIDoc *doc)
     : m_canvas(canvas),
       m_currentItem(0),
-      m_doc(doc)
+      m_doc(doc),
+      m_menu(0)
 {
     m_canvas->setCursor(Qt::arrowCursor);
-    // createMenu("rosegardenui.rc"); - until we make it work with KDE 3.0.
 }
 
 SegmentTool::~SegmentTool()
@@ -91,6 +91,8 @@ SegmentTool::createMenu(const QString& rcFileName)
 void
 SegmentTool::showMenu()
 {
+    if (!m_menu) createMenu("rosegardenui.rc");
+
     if (m_menu)
         m_menu->popup(QCursor::pos());
     else
