@@ -696,7 +696,7 @@ void RosegardenGUIApp::setupActions()
                 actionCollection(), "add_tracks");
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/delete_track.xpm"));
-    new KAction(i18n("&Delete Track"), icon, CTRL + Key_D,
+    new KAction(i18n("D&elete Track"), icon, CTRL + Key_D,
                 this, SLOT(slotDeleteTrack()),
                 actionCollection(), "delete_track");
 
@@ -719,6 +719,14 @@ void RosegardenGUIApp::setupActions()
                 Key_Up, 
                 this, SLOT(slotTrackUp()),
                 actionCollection(), "select_previous_track");
+
+    new KAction(i18n("&Mute all Tracks"), 0, 
+                this, SLOT(slotMuteAllTracks()),
+                actionCollection(), "mute_all_tracks");
+
+    new KAction(i18n("&Unmute all Tracks"), 0, 
+                this, SLOT(slotUnmuteAllTracks()),
+                actionCollection(), "unmute_all_tracks");
 
     new KAction(i18n("&Remap Instruments..."), 0, this,
                 SLOT(slotRemapInstruments()),
@@ -4197,18 +4205,6 @@ void RosegardenGUIApp::slotTrackDown()
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
 
-    /*
-    Rosegarden::Composition::trackcontainer *tracks = comp.getTracks();
-    Rosegarden::Composition::trackiterator tit;
-    for (tit = tracks->begin(); tit != tracks->end(); ++tit)
-    {
-        cout << "TRACK " << (*tit).first << " - "
-             << (*tit).second->getId()
-             << " - POSITION = " << (*tit).second->getPosition()
-             << endl;
-    }
-    */
-
     Rosegarden::TrackId tid = comp.getSelectedTrack();
     Rosegarden::TrackId pos = comp.getTrackById(tid)->getPosition();
 
@@ -4222,6 +4218,32 @@ void RosegardenGUIApp::slotTrackDown()
     }
 
 }
+
+void RosegardenGUIApp::slotMuteAllTracks()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotMuteAllTracks" << endl;
+
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
+    Rosegarden::Composition::trackcontainer tracks = comp.getTracks();
+    Rosegarden::Composition::trackiterator tit;
+    for (tit = tracks.begin(); tit != tracks.end(); ++tit)
+        m_view->slotSetMute((*tit).second->getInstrument(), true);
+}
+
+void RosegardenGUIApp::slotUnmuteAllTracks()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotUnmuteAllTracks" << endl;
+
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
+    Rosegarden::Composition::trackcontainer tracks = comp.getTracks();
+    Rosegarden::Composition::trackiterator tit;
+    for (tit = tracks.begin(); tit != tracks.end(); ++tit)
+        m_view->slotSetMute((*tit).second->getInstrument(), false);
+}
+
+
 
 void RosegardenGUIApp::slotConfigure()
 {
