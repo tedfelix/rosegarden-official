@@ -30,6 +30,10 @@ o File writing - lots need writing out, Device, Studio etc.
 
 ==
 
+o Segment labelling
+
+o Client (Notation/Matrix) labelling as per Segment/Instrument/Track
+
 o Complete segment edit shortcuts (click/copy/multiple segment drag)
 
 o Segment colouring

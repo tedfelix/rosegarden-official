@@ -100,6 +100,8 @@ private:
     m_standardQuantizations;
 
     RosegardenGUIView          *m_view;
+
+    Rosegarden::MidiByte        m_tranposeRange;
 };
 
 

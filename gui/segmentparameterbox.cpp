@@ -41,7 +41,9 @@ SegmentParameterBox::SegmentParameterBox(RosegardenGUIView *view,
                                          WFlags)
     : QGroupBox(i18n("Segment Parameters"), parent, name),
       m_standardQuantizations(Rosegarden::StandardQuantization::getStandardQuantizations()),
-      m_view(view)
+      m_view(view),
+      m_tranposeRange(24)
+
 {
     initBox();
 
@@ -112,6 +114,10 @@ SegmentParameterBox::initBox()
     connect(m_transposeValue, SIGNAL(activated(int)),
             SLOT(slotTransposeSelected(int)));
 
+    // handle transpose combo changes
+    connect(m_transposeValue, SIGNAL(propagate(int)),
+            SLOT(slotTransposeSelected(int)));
+
     // and text changes
     connect(m_transposeValue, SIGNAL(textChanged(const QString&)),
             SLOT(slotTransposeTextChanged(const QString&)));
@@ -170,10 +176,7 @@ SegmentParameterBox::initBox()
 
     // populate the transpose combo
     //
-    //
-    int range = 24;
-
-    for(int i = -range; i < range + 1; i++)
+    for(int i = -m_tranposeRange; i < m_tranposeRange + 1; i++)
     {
         m_transposeValue->insertItem(QString("%1").arg(i));
     }

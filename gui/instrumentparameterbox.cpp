@@ -41,9 +41,9 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent,
                                                const char *name,
                                                WFlags)
     : QGroupBox(i18n("Instrument Parameters"), parent, name),
-      m_bankValue(new RosegardenComboBox(true, false, this)),
+      m_bankValue(new RosegardenComboBox(false, false, this)),
       m_channelValue(new RosegardenComboBox(true, false, this)),
-      m_programValue(new RosegardenComboBox(true, false, this)),
+      m_programValue(new RosegardenComboBox(false, false, this)),
       m_panValue(new RosegardenComboBox(true, false, this)),
       m_velocityValue(new RosegardenComboBox(true, false, this)),
       m_bankCheckBox(new QCheckBox(this)),
@@ -307,6 +307,15 @@ InstrumentParameterBox::slotActivateProgramChange(bool value)
     m_selectedInstrument->setSendProgramChange(value);
     m_programValue->setDisabled(!value);
     populateProgramList();
+
+    Rosegarden::MappedEvent *mE = 
+        new Rosegarden::MappedEvent(m_selectedInstrument->getID(), 
+                                    Rosegarden::MappedEvent::MidiProgramChange,
+                                    (Rosegarden::MidiByte)value,
+                                    (Rosegarden::MidiByte)0);
+    // Send the controller change
+    //
+    emit sendMappedEvent(mE);
 }
 
 void
@@ -420,6 +429,26 @@ InstrumentParameterBox::slotSelectBank(int index)
 
     // repopulate program list
     populateProgramList();
+
+    Rosegarden::MappedEvent *mE = 
+        new Rosegarden::MappedEvent(m_selectedInstrument->getID(), 
+                                    Rosegarden::MappedEvent::MidiController,
+                                    Rosegarden::MIDI_CONTROLLER_BANK_MSB,
+                                    bank->msb);
+    // Send the msb
+    //
+    emit sendMappedEvent(mE);
+
+    mE = new Rosegarden::MappedEvent(m_selectedInstrument->getID(), 
+                                    Rosegarden::MappedEvent::MidiController,
+                                    Rosegarden::MIDI_CONTROLLER_BANK_LSB,
+                                    bank->lsb);
+    // Send the lsb
+    //
+    emit sendMappedEvent(mE);
+
+    // also need to resend Program change to activate new program
+    slotSelectProgram(m_selectedInstrument->getProgramChange());
 }
 
 void
