@@ -23,7 +23,7 @@ AC_ARG_WITH(arts, [  --with-arts             enable aRts support (at cost of ALS
    else
      with_alsa=yes
   fi
-], with_alsa=no)
+], with_alsa=yes)
 
 dnl only use ALSA when sys/soundlib.h is found
 if test "$ac_header_sys_soundlib_h" = "no"; then
