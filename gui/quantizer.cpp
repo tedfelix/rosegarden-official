@@ -62,12 +62,12 @@ Quantizer::quantize(Event *el)
 
     Note note = Note::getNearestNote(qd);
 
-    el->set<Int>(P_NOTE_TYPE, note.getType());
-    el->set<Bool>(P_NOTE_DOTTED, note.isDotted());
-    el->set<Int>(P_QUANTIZED_DURATION, qd);
+    el->set<Int>(P_NOTE_TYPE, note.getNoteType(), false);
+    el->set<Bool>(P_NOTE_DOTTED, note.isDotted(), false);
+    el->set<Int>(P_QUANTIZED_DURATION, qd, false);
 
     kdDebug(KDEBUG_AREA) << "Quantized to duration : "
-                          << qd << " - note : " << note.getType()
+                          << qd << " - note : " << note.getNoteType()
 			 << ", dotted : " << note.isDotted() << "\n";
 }
 
@@ -84,8 +84,8 @@ Quantizer::quantize(Event::timeT drt, int &high, int &low)
 
     try {
         Note highNote(lowNote.isDotted() ?
-                      lowNote.getType()+1 : 
-                      lowNote.getType(),     !lowNote.isDotted());
+                      lowNote.getNoteType()+1 : 
+                      lowNote.getNoteType(),     !lowNote.isDotted());
         if (highNote.getDuration() > drt) high = highNote.getDuration();
 
     } catch (Note::BadType) {

@@ -31,7 +31,6 @@ Track::Track(unsigned int nbBars, unsigned int startIdx)
     for (unsigned int i = 0; i < nbBars; ++i) {
         Event *e = new Event;
         e->setType("rest");
-        e->setPackage("core");
         e->setDuration(384); // TODO : get rid of this magic number
         e->setAbsoluteTime(initialTime);
         insert(e);

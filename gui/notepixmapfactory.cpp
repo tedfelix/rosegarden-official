@@ -446,7 +446,7 @@ NotePixmapFactory::makeClefPixmap(string type) const
     try {
 	Clef clef(type);
 	string filename = m_pixmapDirectory.latin1();
-        filename += string("/clef-") + clef.getName() + ".xpm";
+        filename += string("/clef-") + clef.getClefType() + ".xpm";
 	return QCanvasPixmap(filename.c_str());
     } catch (Clef::BadClefName) {
 	kdDebug(KDEBUG_AREA) << "Bad clef name \"" << type << "\"" << endl;
@@ -458,7 +458,7 @@ NotePixmapFactory::makeClefPixmap(string type) const
 int NotePixmapFactory::getClefWidth() const
 {
     if (m_clefWidth < 0) {
-        QCanvasPixmap p(makeClefPixmap(Clef::DefaultClef.getName()));
+        QCanvasPixmap p(makeClefPixmap(Clef::DefaultClef.getClefType()));
         m_clefWidth = p.width();
     }
     return m_clefWidth;

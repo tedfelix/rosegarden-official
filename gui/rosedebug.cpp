@@ -32,12 +32,7 @@ operator<<(kdbgstream &dbg, const string &s)
 kdbgstream&
 operator<<(kdbgstream &dbg, const Event &e)
 {
-    if (e.package().length()) {
-        dbg << "Event type : " << e.type() << " - package : "
-            << e.package() << endl;
-    } else {    
-        dbg << "Event type : " << e.type() << endl;
-    }
+    dbg << "Event type : " << e.getType() << endl;
 
     dbg << "\tDuration : " << e.getDuration()
         << "\n\tAbsolute Time : " << e.getAbsoluteTime()

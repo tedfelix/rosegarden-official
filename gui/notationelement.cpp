@@ -69,8 +69,8 @@ void
 NotationElement::setNote(Note note)
 {
     event()->setDuration(note.getDuration());
-    event()->set<Int>(P_NOTE_TYPE, note.getType());
-    event()->set<Bool>(P_NOTE_DOTTED, note.isDotted());
+    event()->set<Int>(P_NOTE_TYPE, note.getNoteType(), false);
+    event()->set<Bool>(P_NOTE_DOTTED, note.isDotted(), false);
 }
 
 Note
@@ -87,16 +87,13 @@ NotationElement::getNote() const
 bool
 NotationElement::isRest() const
 {
-    //???
-    return event()->isa("core", "rest");
-//    return event()->type() == "rest";
+    return event()->isa("rest");
 }
 
 bool
 NotationElement::isNote() const
 {
-    return event()->isa(Note::EventPackage, Note::EventType);
-//    return event()->type() == "note";
+    return event()->isa(Note::EventType);
 }
 
 void
@@ -124,8 +121,7 @@ NotationElementList::erase(NotationElementList::iterator pos)
 }
 
 NotationElementList::iterator
-NotationElementList::findPrevious(const string &package,
-                                  const string &type, iterator i)
+NotationElementList::findPrevious(const string &type, iterator i)
 
 {
     //!!! what to return on failure? I think probably
@@ -133,18 +129,17 @@ NotationElementList::findPrevious(const string &package,
     if (i == begin()) return end();
     --i;
     for (;;) {
-        if ((*i)->event()->isa(package, type)) return i;
+        if ((*i)->event()->isa(type)) return i;
         if (i == begin()) return end();
         --i;
     }
 }
 
 NotationElementList::iterator
-NotationElementList::findNext(const string &package,
-                              const string &type, iterator i)
+NotationElementList::findNext(const string &type, iterator i)
 {
     if (i == end()) return i;
-    for (++i; i != end() && !(*i)->event()->isa(package, type); ++i);
+    for (++i; i != end() && !(*i)->event()->isa(type); ++i);
     return i;
 }
 

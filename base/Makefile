@@ -21,3 +21,10 @@ distclean:	clean
 	rm -f libcore.a *~
 
 # DO NOT DELETE
+
+Property.o: Property.h
+Event.o: Event.h Property.h
+ViewElement.o: ViewElement.h Event.h Property.h
+Track.o: Track.h Event.h Property.h
+Composition.o: Composition.h Track.h Event.h Property.h
+NotationTypes.o: NotationTypes.h Event.h Property.h

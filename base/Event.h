@@ -48,17 +48,15 @@ class Event
 private:
 
 public:
-    typedef hash_map<string, PropertyStoreBase*, hashstring, eqstring>
-        PropertyMap;
     typedef int timeT;
 
     struct NoData { };
     struct BadType { };
 
-    Event();
-
-    Event(const string &package, const string &type);
-
+    Event() :
+        m_duration(0), m_absoluteTime(0) { }
+    Event(const string &type) :
+        m_type(type), m_duration(0), m_absoluteTime(0) { }
     Event(const Event &e);
 
     virtual ~Event();
@@ -67,19 +65,15 @@ public:
     friend bool operator<(const Event&, const Event&);
 
     // Accessors
-    const string &package() const { return m_package; }
-    const string &type() const    { return m_type; }
-    void setPackage(const string &p) { m_package = p; }
+    const string &getType() const    { return m_type; }
     void setType(const string &t)    { m_type = t; }
 
-    bool isa(const string &p, const string &t) const {
-        return (m_package == p && m_type == t);
-    }
+    bool isa(const string &t) const  { return (m_type == t); }
 
-    timeT getAbsoluteTime() const  { return m_absoluteTime; }
-    timeT getDuration()     const  { return m_duration; }
-    void setAbsoluteTime(timeT d)  { m_absoluteTime = d; }
-    void setDuration(timeT d)      { m_duration = d; }
+    timeT getAbsoluteTime() const    { return m_absoluteTime; }
+    timeT getDuration()     const    { return m_duration; }
+    void setAbsoluteTime(timeT d)    { m_absoluteTime = d; }
+    void setDuration(timeT d)        { m_duration = d; }
 
     bool has(const string &name) const;
 
@@ -92,19 +86,30 @@ public:
     bool get(const string &name, PropertyDefn<P>::basic_type &val) const;
 
     template <PropertyType P>
+    bool isPersistent(const string &name) const
+        throw (NoData);
+
+    template <PropertyType P>
+    void setPersistence(const string &name, bool persistent)
+        throw (NoData);
+
     string getAsString(const string &name) const
-	throw (NoData, BadType);
+	throw (NoData);
 
     template <PropertyType P>
-    void set(const string &name, PropertyDefn<P>::basic_type value)
+    void set(const string &name, PropertyDefn<P>::basic_type value,
+             bool persistent = true)
 	throw (BadType);
 
     template <PropertyType P>
-    void setFromString(const string &name, string value)
+    void setFromString(const string &name, string value,
+                       bool persistent = true)
 	throw (BadType);
-
-    PropertyMap&       properties()       { return m_properties; }
-    const PropertyMap& properties() const { return m_properties; }
+    
+    typedef vector<string> PropertyNames;
+    PropertyNames getPropertyNames() const;
+    PropertyNames getPersistentPropertyNames() const;
+    PropertyNames getNonPersistentPropertyNames() const;
 
 #ifndef NDEBUG
     void dump(ostream&) const;
@@ -116,12 +121,12 @@ private:
     void scrapMap();
     void copyFrom(const Event &e);
 
-    string m_package;
     string m_type;
     timeT m_duration;
     timeT m_absoluteTime;
 
-    //    typedef map<string, PropertyStoreBase *> PropertyMap;
+    typedef hash_map<string, PropertyStoreBase*, hashstring, eqstring>
+        PropertyMap;
     typedef PropertyMap::value_type PropertyPair;
     PropertyMap m_properties;
 };
@@ -134,7 +139,7 @@ Event::get(const string &name, PropertyDefn<P>::basic_type &val) const
     PropertyMap::const_iterator i = m_properties.find(name);
     if (i != m_properties.end()) { 
 
-        PropertyStoreBase *sb = (*i).second;
+        PropertyStoreBase *sb = i->second;
         if (sb->getType() == P) {
             val = ((PropertyStore<P> *)sb)->getData();
             return true;
@@ -166,7 +171,7 @@ Event::get(const string &name) const
     PropertyMap::const_iterator i = m_properties.find(name);
     if (i != m_properties.end()) { 
 
-        PropertyStoreBase *sb = (*i).second;
+        PropertyStoreBase *sb = i->second;
         if (sb->getType() == P) return ((PropertyStore<P> *)sb)->getData();
         else {
 #ifndef NDEBUG
@@ -188,33 +193,61 @@ Event::get(const string &name) const
 
 
 template <PropertyType P>
-string
-Event::getAsString(const string &name) const
-    throw (NoData, BadType)
+bool
+Event::isPersistent(const string &name) const
+    throw (NoData)
 {
-    return PropertyDefn<P>::unparse(get<P>(name));
+    PropertyMap::const_iterator i = m_properties.find(name);
+    if (i != m_properties.end()) return i->second->isPersistent();
+    else {
+#ifndef NDEBUG
+        cerr << "Event::get() Error: Attempt to get persistence of property \""
+             << name << "\" which doesn't exist for this element" << endl;
+#endif
+        throw NoData();
+    }
 }
 
 
 template <PropertyType P>
 void
-Event::set(const string &name, PropertyDefn<P>::basic_type value)
+Event::setPersistence(const string &name, bool persistent)
+    throw (NoData)
+{
+    PropertyMap::const_iterator i = m_properties.find(name);
+    if (i != m_properties.end()) i->second->setPersistence(persistent);
+    else {
+#ifndef NDEBUG
+        cerr << "Event::get() Error: Attempt to set persistence of property \""
+             << name << "\" which doesn't exist for this element" << endl;
+#endif
+        throw NoData();
+    }
+}
+
+
+template <PropertyType P>
+void
+Event::set(const string &name, PropertyDefn<P>::basic_type value,
+           bool persistent)
     throw (BadType)
 {
     PropertyMap::const_iterator i = m_properties.find(name);
     if (i != m_properties.end()) {
 
-        PropertyStoreBase *sb = (*i).second;
-        if (sb->getType() == P) ((PropertyStore<P> *)sb)->setData(value);
-        else {
-            cerr << "Error: Element: Attempt to get property \"" << name
+        PropertyStoreBase *sb = i->second;
+        if (sb->getType() == P) {
+            ((PropertyStore<P> *)sb)->setData(value);
+            sb->setPersistence(persistent);
+        } else {
+            cerr << "Error: Element: Attempt to set property \"" << name
                  << "\" as " << PropertyDefn<P>::name() <<", actual type is "
                  << sb->getTypeName() << endl;
             throw BadType();
         }
 	    
     } else {
-        PropertyStoreBase *p = new PropertyStore<P>(value);
+        PropertyStoreBase *p = new PropertyStore<P>(value, persistent);
         m_properties.insert(PropertyPair(name, p));
     }
 }
@@ -222,10 +255,10 @@ Event::set(const string &name, PropertyDefn<P>::basic_type value)
 
 template <PropertyType P>
 void
-Event::setFromString(const string &name, string value)
+Event::setFromString(const string &name, string value, bool persistent)
     throw (BadType)
 {
-    set<P>(name, PropertyDefn<P>::parse(value));
+    set<P>(name, PropertyDefn<P>::parse(value), persistent);
 }
 
 //////////////////////////////////////////////////////////////////////

@@ -40,22 +40,6 @@ NotationVLayout::layout(NotationElementList::iterator from,
 { 
     NotationElementList::iterator i;
 
-#ifdef NOT_DEFINED // should no longer be needed (now we preparse)
-    // right: the elements store their pitches, we need their heights.
-    // for this we need to use a NotationDisplayPitch object, passing
-    // the relevant clef and key, which we need to obtain from the
-    // list first
-
-    Clef clef; // default to defaults
-    Key key;
-
-    i = m_elements.findPrevious(Clef::EventPackage, Clef::EventType, from);
-    if (i != m_elements.end()) clef = Clef(*(*i)->event());
-
-    i = m_elements.findPrevious(Key::EventPackage, Key::EventType, from);
-    if (i != m_elements.end()) key = Key(*(*i)->event());
-#endif
-
     for (i = from; i != to; ++i) {
 
         NotationElement *el = (*i);
@@ -92,12 +76,12 @@ NotationVLayout::layout(NotationElementList::iterator from,
                 try {
 
                     el->setLayoutY(m_staff.yCoordOfHeight(h[j]));
-                    el->event()->set<Bool>(P_STALK_UP, stalkUp);
+                    el->event()->set<Bool>(P_STALK_UP, stalkUp, false);
 
                     el->event()->set<Bool>
                         (P_DRAW_TAIL,
                          ((stalkUp && j == notes.size()-1) ||
-                          (!stalkUp && j == 0)));
+                          (!stalkUp && j == 0)), false);
 
                 } catch (Event::NoData) {
                     kdDebug(KDEBUG_AREA) <<
@@ -109,18 +93,16 @@ NotationVLayout::layout(NotationElementList::iterator from,
         
         } else {
 
-            if (el->event()->isa(Clef::EventPackage, Clef::EventType)) {
+            if (el->event()->isa(Clef::EventType)) {
 
                 // clef pixmaps are sized so that they will be
                 // correctly displayed when set to align one leger
                 // line above the top staff line... well, almost
                 el->setLayoutY(m_staff.yCoordOfHeight(10) + 1);
-//                clef = Clef(*el->event());
 
-            } else if (el->event()->isa(Key::EventPackage, Key::EventType)) {
+            } else if (el->event()->isa(Key::EventType)) {
 
                 el->setLayoutY(m_staff.yCoordOfHeight(12));
-//                key = Key(*el->event());
             }
         }
     }

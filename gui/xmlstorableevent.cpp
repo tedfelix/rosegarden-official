@@ -25,16 +25,13 @@
 
 XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes)
 {
-    setPackage("core"); //!!! sensible default for storable events?
-
     for (int i = 0; i < attributes.length(); ++i) {
 	QString attrName(attributes.qName(i)),
             attrVal(attributes.value(i));
 
-        // special cases first : package, type, duration
 	if (attrName == "package") {
 
-            setPackage(attrVal.latin1());
+            kdDebug(KDEBUG_AREA) << "XmlStorableEvent::XmlStorableEvent: Warning: XML still uses deprecated \"package\" attribute" << endl;
 
         } else if (attrName == "type") {
 
@@ -69,17 +66,17 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes)
 
             if (valLowerCase == "true" || valLowerCase == "false") {
 
-                set<Bool>(attrName.latin1(), valLowerCase == "true");
+                set<Bool>(attrName.latin1(), valLowerCase == "true", true);
 
             } else {
 
                 // Not a bool, check if integer val
                 numVal = val.toInt(&isNumeric);
                 if (isNumeric) {
-                    set<Int>(attrName.latin1(), numVal);
+                    set<Int>(attrName.latin1(), numVal, true);
                 } else {
                     // not an int either, default to string
-                    set<String>(attrName.latin1(), attrVal.latin1());
+                    set<String>(attrName.latin1(), attrVal.latin1(), true);
                 }
             }
 
@@ -99,24 +96,20 @@ XmlStorableEvent::toXmlString() const
 {
     QString res = "<event";
 
-    if (package().length())
-        res += QString(" package=\"%1\"").arg(package().c_str());
-
-    if (type().length())
-        res += QString(" type=\"%1\"").arg(type().c_str());
+    if (getType().length())
+        res += QString(" type=\"%1\"").arg(getType().c_str());
 
     res += QString(" duration=\"%1\"").arg(getDuration());
 
-
-    for (PropertyMap::const_iterator i = properties().begin();
-         i != properties().end(); ++i) {
+    PropertyNames propertyNames(getPersistentPropertyNames());
+    for (PropertyNames::const_iterator i = propertyNames.begin();
+         i != propertyNames.end(); ++i) {
 
         res += QString(" %1=\"%2\"")
-            .arg((*i).first.c_str())
-            .arg((*i).second->unparse().c_str());
+            .arg((*i).c_str())
+            .arg(getAsString(*i).c_str());
     }
     
-
     res += "/>";
     return res;
 }
@@ -126,24 +119,20 @@ XmlStorableEvent::toXmlString(const Event &e)
 {
     QString res = "<event";
 
-    if (e.package().length())
-        res += QString(" package=\"%1\"").arg(e.package().c_str());
-
-    if (e.type().length())
-        res += QString(" type=\"%1\"").arg(e.type().c_str());
+    if (e.getType().length())
+        res += QString(" type=\"%1\"").arg(e.getType().c_str());
 
     res += QString(" duration=\"%1\"").arg(e.getDuration());
 
-
-    for (PropertyMap::const_iterator i = e.properties().begin();
-         i != e.properties().end(); ++i) {
+    PropertyNames propertyNames(e.getPersistentPropertyNames());
+    for (PropertyNames::const_iterator i = propertyNames.begin();
+         i != propertyNames.end(); ++i) {
 
         res += QString(" %1=\"%2\"")
-            .arg((*i).first.c_str())
-            .arg((*i).second->unparse().c_str());
+            .arg((*i).c_str())
+            .arg(e.getAsString(*i).c_str());
     }
     
-
     res += "/>";
     return res;
 }

@@ -98,10 +98,13 @@ public:
     virtual PropertyStoreBase *clone() = 0;
     virtual string unparse() = 0;
 
+    virtual bool isPersistent() const = 0;
+    virtual void setPersistence(bool) = 0;
+
 #ifndef NDEBUG
     virtual void dump(ostream&) const = 0;
 #else
-    virtual void dump(ostream&) const {}
+    virtual void dump(ostream&) const { }
 #endif
 };
 
@@ -114,8 +117,10 @@ template <PropertyType P>
 class PropertyStore : public PropertyStoreBase
 {
 public:
-    PropertyStore(PropertyDefn<P>::basic_type d) : m_data(d) { }
-    PropertyStore(const PropertyStore<P> &p) : PropertyStoreBase(p), m_data(p.m_data) { }
+    PropertyStore(PropertyDefn<P>::basic_type d, bool persistent = true) :
+        m_data(d), m_persistent(persistent) { }
+    PropertyStore(const PropertyStore<P> &p) :
+        PropertyStoreBase(p), m_data(p.m_data), m_persistent(p.m_persistent) { }
     PropertyStore &operator=(const PropertyStore<P> &p);
 
     virtual PropertyType getType() const;
@@ -123,12 +128,13 @@ public:
 
     virtual PropertyStoreBase* clone();
     
-
     virtual string unparse();
-    
 
     PropertyDefn<P>::basic_type getData() { return m_data; }
     void setData(PropertyDefn<P>::basic_type data) { m_data = data; }
+
+    bool isPersistent() const { return m_persistent; }
+    void setPersistence(bool p) { m_persistent = p; }
 
 #ifndef NDEBUG
     void dump(ostream&) const;
@@ -136,12 +142,16 @@ public:
 
 private:
     PropertyDefn<P>::basic_type m_data;
+    bool m_persistent;
 };
 
 template <PropertyType P>
 PropertyStore<P>&
 PropertyStore<P>::operator=(const PropertyStore<P> &p) {
-    if (this != &p) m_data = p.m_data;
+    if (this != &p) {
+        m_data = p.m_data;
+        m_persistent = p.m_persistent;
+    }
     return *this;
 }
 

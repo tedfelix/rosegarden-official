@@ -79,3 +79,4 @@ PropertyDefn<Bool>::unparse(PropertyDefn<Bool>::basic_type i)
 PropertyStoreBase::~PropertyStoreBase()
 {
 }
+

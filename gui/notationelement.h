@@ -115,11 +115,8 @@ public:
 
     void erase(iterator pos);
 
-    iterator findPrevious(const string &package,
-                          const string &type, iterator i);
-
-    iterator findNext(const string &package,
-                      const string &type, iterator i);
+    iterator findPrevious(const string &type, iterator i);
+    iterator findNext(const string &type, iterator i);
 
     // If passed iterator points at a note, return a set of iterators
     // pointing to it and all succeeding notes that have the same

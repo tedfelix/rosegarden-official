@@ -20,25 +20,10 @@
 #include <cstdio>
 #include "Event.h"
 
-Event::Event()
-    : m_duration(0),
-      m_absoluteTime(0)
-{
-}
-
-Event::Event(const string &package, const string &type)
-    : m_package(package),
-      m_type(type),
-      m_duration(0),
-      m_absoluteTime(0)
-{
-}
-
-Event::Event(const Event &e)
-    : m_package(e.package()),
-      m_type(e.type()),
-      m_duration(e.getDuration()),
-      m_absoluteTime(e.getAbsoluteTime())
+Event::Event(const Event &e) :
+    m_type(e.getType()),
+    m_duration(e.getDuration()),
+    m_absoluteTime(e.getAbsoluteTime())
 {
     copyFrom(e);
 }
@@ -80,21 +65,27 @@ Event::copyFrom(const Event &e)
 
     for (PropertyMap::const_iterator i = e.m_properties.begin();
          i != e.m_properties.end(); ++i) {
-        m_properties.insert(PropertyPair((*i).first, (*i).second->clone()));
+        m_properties.insert(PropertyPair(i->first, i->second->clone()));
     }
 }
 
+string
+Event::getAsString(const string &name) const
+    throw (NoData)
+{
+    PropertyMap::const_iterator i = m_properties.find(name);
+    if (i != m_properties.end()) {
+        return i->second->unparse();
+    } else {
+        throw NoData();
+    }
+}
 
 void
 Event::dump(ostream& out) const
 {
 #ifndef NDEBUG
-    if (m_package.length()) {
-        out << "Event type : " << m_type << " - package : "
-            << m_package << '\n';
-    } else {    
-        out << "Event type : " << m_type.c_str() << '\n';
-    }
+    out << "Event type : " << m_type.c_str() << '\n';
 
     out << "\tDuration : " << m_duration
         << "\n\tAbsolute Time : " << m_absoluteTime
@@ -102,10 +93,46 @@ Event::dump(ostream& out) const
 
     for (PropertyMap::const_iterator i = m_properties.begin();
          i != m_properties.end(); ++i) {
-        out << "\t\t" << (*i).first << '\t'
-            << *((*i).second) << '\n';
+        out << "\t\t" << i->first << '\t'
+            << *(i->second)
+            << (i->second->isPersistent() ?
+                "\t(persistent)" : "\t(not persistent)")
+            << '\n';
     }
 #endif
+}
+
+Event::PropertyNames
+Event::getPropertyNames() const
+{
+    PropertyNames v;
+    for (PropertyMap::const_iterator i = m_properties.begin();
+         i != m_properties.end(); ++i) {
+        v.push_back(i->first);
+    }
+    return v;
+}
+
+Event::PropertyNames
+Event::getPersistentPropertyNames() const
+{
+    PropertyNames v;
+    for (PropertyMap::const_iterator i = m_properties.begin();
+         i != m_properties.end(); ++i) {
+        if (i->second->isPersistent()) v.push_back(i->first);
+    }
+    return v;
+}
+
+Event::PropertyNames
+Event::getNonPersistentPropertyNames() const
+{
+    PropertyNames v;
+    for (PropertyMap::const_iterator i = m_properties.begin();
+         i != m_properties.end(); ++i) {
+        if (!i->second->isPersistent()) v.push_back(i->first);
+    }
+    return v;
 }
 
 bool

@@ -352,7 +352,7 @@ NotationView::showElements(NotationElementList::iterator from,
 //    static ChordPixmapFactory npf(*m_mainStaff);
     // let's revert to this for now
     NotePixmapFactory &npf(m_notePixmapFactory);
-    string currentClef = Clef::DefaultClef.getName();
+    string currentClef = Clef::DefaultClef.getClefType();
 
     for (NotationElementList::iterator it = from; it != to; ++it) {
 
@@ -396,16 +396,14 @@ NotationView::showElements(NotationElementList::iterator from,
                 QCanvasPixmap notePixmap(npf.makeRestPixmap(note, dotted));
                 sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 
-            } else if ((*it)->event()->isa
-                       (Clef::EventPackage, Clef::EventType)) {
+            } else if ((*it)->event()->isa(Clef::EventType)) {
 
                 currentClef =
                     (*it)->event()->get<String>(Clef::ClefPropertyName);
                 QCanvasPixmap clefPixmap(npf.makeClefPixmap(currentClef));
                 sprite = new QCanvasSimpleSprite(&clefPixmap, canvas());
 
-            } else if ((*it)->event()->isa
-                       (::Key::EventPackage, ::Key::EventType)) {
+            } else if ((*it)->event()->isa(::Key::EventType)) {
 
                 // Key is a Qt type as well, so we have to specify ::Key
                 QCanvasPixmap keyPixmap
@@ -417,7 +415,7 @@ NotationView::showElements(NotationElementList::iterator from,
             } else {
                     
                 kdDebug(KDEBUG_AREA) << "NotationElement of unrecognised type "
-                                     << (*it)->event()->type()
+                                     << (*it)->event()->getType()
                                      << endl;
                 QCanvasPixmap unknownPixmap(npf.makeUnknownPixmap());
                 sprite = new QCanvasSimpleSprite(&unknownPixmap, canvas());
@@ -707,14 +705,13 @@ NotationView::insertNote(int height, const QPoint &eventPos)
     //
     Event *insertedEvent = new Event;
 
-    insertedEvent->setPackage(Note::EventPackage);
     insertedEvent->setType(Note::EventType); // TODO : we can insert rests too
     
     // set its duration and pitch
     //
 /*!    insertedEvent->setTimeDuration(m_hlayout->quantizer().noteDuration(m_currentSelectedNote)); */
 
-    insertedEvent->set<Int>("pitch", pitch);
+    insertedEvent->set<Int>("pitch", pitch, true);
 
     // Create associated notationElement and set its note type
     //
@@ -723,7 +720,7 @@ NotationView::insertNote(int height, const QPoint &eventPos)
     //!!! no dottedness yet
     newNotationElement->setNote(Note(m_currentSelectedNote));
 
-    newNotationElement->event()->set<String>("Name", "INSERTED_NOTE");
+    newNotationElement->event()->set<String>("Name", "INSERTED_NOTE", false);
 
     NotationElementList::iterator redoLayoutStart = closestNote;
     
@@ -822,12 +819,11 @@ NotationView::findClosestNote(double eventX, Clef &clef, ::Key &key)
          it != m_notationElements->end(); ++it) {
 
         if (!(*it)->isNote() && !(*it)->isRest()) {
-            if ((*it)->event()->isa(Clef::EventPackage, Clef::EventType)) {
+            if ((*it)->event()->isa(Clef::EventType)) {
                 kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found clef: type is "
                                      << (*it)->event()->get<String>(Clef::ClefPropertyName) << endl;
                 clef = Clef(*(*it)->event());
-            } else if ((*it)->event()->isa(::Key::EventPackage,
-                                           ::Key::EventType)) {
+            } else if ((*it)->event()->isa(::Key::EventType)) {
                 kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found key: type is "
                                      << (*it)->event()->get<String>(::Key::KeyPropertyName) << endl;
                 key = ::Key(*(*it)->event());
@@ -898,11 +894,10 @@ NotationView::replaceRestWithNote(NotationElementList::iterator rest,
                                  << " at time " << restAbsoluteTime << endl;
 
             Event *newRest = new Event;
-	    newRest->setPackage("core");
             newRest->setType("rest");
             newRest->setDuration(bit);
             newRest->setAbsoluteTime(restAbsoluteTime);
-            newRest->set<String>("Name", "INSERTED_REST");
+            newRest->set<String>("Name", "INSERTED_REST", false);
             NotationElement *newNotationRest = new NotationElement(newRest);
             restAbsoluteTime += bit;
             // m_notationElements->insert(newNotationRest);

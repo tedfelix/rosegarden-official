@@ -21,7 +21,6 @@
 #include <cstdio> // needed for sprintf()
 #include "NotationTypes.h"
 
-const string Clef::EventPackage = "core";
 const string Clef::EventType = "clefchange";
 const string Clef::ClefPropertyName = "clef";
 const string Clef::Treble = "treble";
@@ -31,7 +30,6 @@ const string Clef::Bass = "bass";
 
 const Clef Clef::DefaultClef = Clef("treble");
 
-const string Key::EventPackage = "core";
 const string Key::EventType = "keychange";
 const string Key::KeyPropertyName = "key";
 const Key Key::DefaultKey = Key("C major");
@@ -274,7 +272,6 @@ NotationDisplayPitch::displayPitchToRawPitch(int height,
 // Note
 //////////////////////////////////////////////////////////////////////
 
-const string Note::EventPackage = "core";
 const string Note::EventType = "note";
 //!!! worry about this later -- simple solution currently in place ain't bad
 const string Note::NotePropertyName = "duration";
@@ -354,7 +351,7 @@ Note Note::getNearestNote(int duration)
 //    n = Note(Longest, true);
 
     cout << "Note::getNearestNote(): duration was " << duration
-	 << ", returning note (" << n.getType() << ", " << n.isDotted()
+	 << ", returning note (" << n.getNoteType() << ", " << n.isDotted()
 	 << ")" << endl;
     return n;
 }
@@ -430,7 +427,6 @@ void Note::makeTimeListSub(int t, bool dotted, vector<int> &v)
     makeTimeListSub(t - current, dotted, v);
 }
 
-const string TimeSignature::EventPackage = "core";
 const string TimeSignature::EventType = "timesignature";
 const string TimeSignature::NumeratorPropertyName = "numerator";
 const string TimeSignature::DenominatorPropertyName = "denominator";

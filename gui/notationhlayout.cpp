@@ -44,8 +44,7 @@ NotationHLayout::~NotationHLayout()
 NotationElementList::iterator
 NotationHLayout::getPreviousNote(NotationElementList::iterator pos)
 {
-    return m_notationElements.findPrevious
-        (Note::EventPackage, Note::EventType, pos);
+    return m_notationElements.findPrevious(Note::EventType, pos);
 }
 
 
@@ -139,9 +138,9 @@ NotationHLayout::preparse(NotationElementList::iterator from,
 
         if (el->isNote() || el->isRest()) m_quantizer.quantize(el->event());
         int mw = getMinWidth(npf, *el);
-        el->event()->set<Int>(P_MIN_WIDTH, mw);
+        el->event()->set<Int>(P_MIN_WIDTH, mw, false);
 
-        if (el->event()->isa(Clef::EventPackage, Clef::EventType)) {
+        if (el->event()->isa(Clef::EventType)) {
 
             fixedWidth += mw;
 
@@ -152,7 +151,7 @@ NotationHLayout::preparse(NotationElementList::iterator from,
                                      << endl;
             }
 
-        } else if (el->event()->isa(Key::EventPackage, Key::EventType)) {
+        } else if (el->event()->isa(Key::EventType)) {
 
             fixedWidth += mw;
 
@@ -163,8 +162,7 @@ NotationHLayout::preparse(NotationElementList::iterator from,
                                      << endl;
             }
 
-        } else if (el->event()->isa(TimeSignature::EventPackage,
-                                    TimeSignature::EventType)) {
+        } else if (el->event()->isa(TimeSignature::EventType)) {
 
             if (nbTimeUnitsInCurrentBar > 0) {
                 // need to insert the bar line _before_ this event
@@ -189,10 +187,11 @@ NotationHLayout::preparse(NotationElementList::iterator from,
                     kdDebug(KDEBUG_AREA) << "pitch : " << pitch << endl;
                     NotationDisplayPitch p(pitch, clef, key);
                     int h = p.getHeightOnStaff();
-                    el->event()->set<Int>(P_HEIGHT_ON_STAFF, h);
-                    el->event()->set<Int>(P_ACCIDENTAL,(int)p.getAccidental());
+                    el->event()->set<Int>(P_HEIGHT_ON_STAFF, h, false);
+                    el->event()->set<Int>(P_ACCIDENTAL,
+                                          (int)p.getAccidental(), false);
                     el->event()->set<String>(P_NOTE_NAME, p.getAsString
-                                             (clef, key));
+                                             (clef, key), false);
                 } catch (Event::NoData) {
                     kdDebug(KDEBUG_AREA) <<
                         "NotationHLayout::preparse: couldn't get pitch for element"
@@ -274,8 +273,7 @@ NotationHLayout::layout()
 
             kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): setting element's x to " << x << endl;
 
-            if (nel->event()->isa(TimeSignature::EventPackage,
-                                  TimeSignature::EventType)) {
+            if (nel->event()->isa(TimeSignature::EventType)) {
 
                 timeSignature = TimeSignature(*nel->event());
                 x += nel->event()->get<Int>(P_MIN_WIDTH);
@@ -349,16 +347,16 @@ int NotationHLayout::getMinWidth(const NotePixmapFactory &npf,
             w += npf.getAccidentalWidth();
         }
 
-    } else if (e.event()->isa(Clef::EventPackage, Clef::EventType)) {
+    } else if (e.event()->isa(Clef::EventType)) {
 
         w += npf.getClefWidth();
 
-    } else if (e.event()->isa(Key::EventPackage, Key::EventType)) {
+    } else if (e.event()->isa(Key::EventType)) {
 
         w += npf.getKeyWidth(Key(*e.event()));
 
     } else {
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::getMinWidth(): no case for event type " << e.event()->type() << endl;
+        kdDebug(KDEBUG_AREA) << "NotationHLayout::getMinWidth(): no case for event type " << e.event()->getType() << endl;
         w += 24;
     }
 

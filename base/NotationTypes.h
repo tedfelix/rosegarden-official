@@ -32,7 +32,6 @@ enum Accidental {
 
 class Clef {
 public:
-    static const string EventPackage;
     static const string EventType;
     static const string ClefPropertyName;
     static const Clef DefaultClef;
@@ -46,7 +45,7 @@ public:
     Clef() : m_clef(DefaultClef.m_clef) { }
 
     Clef(const Event &e) throw (Event::NoData, Event::BadType, BadClefName) {
-        if (e.package() != EventPackage || e.type() != EventType) {
+        if (e.getType() != EventType) {
             throw Event::BadType();
         }
         string s = e.get<String>(ClefPropertyName);
@@ -70,7 +69,7 @@ public:
     }
     virtual ~Clef() { }
 
-    string getName() const { return m_clef; }
+    string getClefType() const { return m_clef; }
 
     int getOctave() const {
         if (m_clef == Treble) return 0;
@@ -100,7 +99,6 @@ private:
 
 class Key {
 public:
-    static const string EventPackage;
     static const string EventType;
     static const string KeyPropertyName;
     static const Key DefaultKey;
@@ -112,7 +110,7 @@ public:
         throw (Event::NoData, Event::BadType, BadKeyName) :
         m_accidentalHeights(0) {
         checkMap();
-        if (e.package() != EventPackage || e.type() != EventType) {
+        if (e.getType() != EventType) {
             throw Event::BadType();
         }
         m_name = e.get<String>(KeyPropertyName);
@@ -167,7 +165,7 @@ public:
     vector<int> getAccidentalHeights(const Clef &clef) const;
 
     Event getAsEvent() const {
-        Event e(EventPackage, EventType);
+        Event e(EventType);
         e.set<String>(KeyPropertyName, m_name);
         return e;
     }
@@ -302,7 +300,6 @@ class TimeSignature;
 class Note
 {
 public:
-    static const string EventPackage;
     static const string EventType;
     static const string NotePropertyName;
     
@@ -358,7 +355,7 @@ public:
         return *this;
     }
 
-    Type getType()      const { return m_type; }
+    Type getNoteType()  const { return m_type; }
 
     bool isFilled()     const { return m_type <= Crotchet; }
     bool isDotted()     const { return m_dotted; }
@@ -397,7 +394,6 @@ private:
 class TimeSignature
 {
 public:
-    static const string EventPackage;
     static const string EventType;
     static const string NumeratorPropertyName;
     static const string DenominatorPropertyName;
@@ -415,7 +411,7 @@ public:
 
     TimeSignature(const Event &e)
         throw (Event::NoData, Event::BadType, BadTimeSignature) {
-        if (e.package() != EventPackage || e.type() != EventType) {
+        if (e.getType() != EventType) {
             throw Event::BadType();
         }
         m_numerator = e.get<Int>(NumeratorPropertyName);
