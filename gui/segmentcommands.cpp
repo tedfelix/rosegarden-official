@@ -394,7 +394,7 @@ SegmentInsertCommand::execute()
         // Do our best to label the Segment with whatever is currently
         // showing against it.
         //
-        Rosegarden::Track *track = m_composition->getTrackByIndex(m_track);
+        Rosegarden::Track *track = m_composition->getTrackById(m_track);
         std::string label;
 
         if (track)
@@ -1466,12 +1466,14 @@ void DeleteTracksCommand::execute()
     // Remap positions and track numbers
     //
 
-    Rosegarden::Composition::trackcontainer
-                *tracks = m_composition->getTracks();
     Rosegarden::Composition::trackiterator tit;
 
+
+    Rosegarden::Composition::trackcontainer
+                &tracks = m_composition->getTracks();
+
     /*
-    for (tit = tracks->begin(); tit != tracks->end(); ++tit)
+    for (tit = tracks.begin(); tit != tracks.end(); ++tit)
     {
         cout << "TRACK " << (*tit).first << " - "
              << (*tit).second->getId()
@@ -1483,7 +1485,7 @@ void DeleteTracksCommand::execute()
     for (unsigned int i = 0; i < m_tracks.size(); ++i)
     {
         // detach segments and store tracks somewhere
-        track = m_composition->getTrackByIndex(m_tracks[i]);
+        track = m_composition->getTrackById(m_tracks[i]);
 
         if (track)
         {
@@ -1514,7 +1516,7 @@ void DeleteTracksCommand::execute()
     std::vector<Rosegarden::Track*>::iterator otIt;
     for (otIt = m_oldTracks.begin(); otIt != m_oldTracks.end(); ++otIt)
     {
-        for (tit = tracks->begin(); tit != tracks->end(); ++tit)
+        for (tit = tracks.begin(); tit != tracks.end(); ++tit)
         {
             /*
             if ((*tit).second->getId() > (*otIt)->getId())
@@ -1555,13 +1557,13 @@ void DeleteTracksCommand::unexecute()
     // Remap positions and track numbers
     //
     Rosegarden::Composition::trackcontainer
-                *tracks = m_composition->getTracks();
+                &tracks = m_composition->getTracks();
     Rosegarden::Composition::trackiterator tit;
 
     std::vector<Rosegarden::Track*>::iterator otIt;
     for (otIt = m_oldTracks.begin(); otIt != m_oldTracks.end(); ++otIt)
     {
-        for (tit = tracks->begin(); tit != tracks->end(); ++tit)
+        for (tit = tracks.begin(); tit != tracks.end(); ++tit)
         {
             /*
             if ((*tit).second->getId() >= (*otIt)->getId())

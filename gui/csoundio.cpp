@@ -82,7 +82,7 @@ CsoundExporter::write()
 
 	str << "\n;; Segment: \"" << (*i)->getLabel() << "\"\n";
 	str << ";; on Track: \""
-	    << m_composition->getTrackByIndex((*i)->getTrack())->getLabel()
+	    << m_composition->getTrackById((*i)->getTrack())->getLabel()
 	    << "\"\n";
 	str << ";;\n;; Inst\tTime\tDur\tPitch\tVely\n"
 	    << ";; ----\t----\t---\t-----\t----\n";

@@ -154,7 +154,7 @@ NotationStaff::drawStaffName()
 
     std::string name =
 	getSegment().getComposition()->
-	getTrackByIndex(getSegment().getTrack())->getLabel();
+	getTrackById(getSegment().getTrack())->getLabel();
 
     m_staffName = new QCanvasSimpleSprite
 	(m_notePixmapFactory->makeTextPixmap

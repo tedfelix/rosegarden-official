@@ -155,7 +155,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     // Set the instrument we're using on this segment
     //
     Rosegarden::Track *track =
-        comp.getTrackByIndex(m_staffs[0]->getSegment().getTrack());
+        comp.getTrackById(m_staffs[0]->getSegment().getTrack());
 
     Rosegarden::Instrument *instr = getDocument()->getStudio().
         getInstrumentById(track->getInstrument());
@@ -1231,7 +1231,7 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
     m_lastNote = evPitch;
     if (!repeating) m_firstNote = evPitch;
 
-    Rosegarden::Track *track = comp.getTrackByIndex(
+    Rosegarden::Track *track = comp.getTrackById(
             m_staffs[0]->getSegment().getTrack());
 
     Rosegarden::Instrument *ins =
@@ -1303,7 +1303,7 @@ void MatrixView::slotKeySelected(unsigned int y, bool repeating)
 
     Rosegarden::Composition &comp = getDocument()->getComposition();
     Rosegarden::Studio &studio = getDocument()->getStudio();
-    Rosegarden::Track *track = comp.getTrackByIndex(segment.getTrack());
+    Rosegarden::Track *track = comp.getTrackById(segment.getTrack());
     Rosegarden::Instrument *ins =
         studio.getInstrumentById(track->getInstrument());
 
@@ -1411,7 +1411,7 @@ void MatrixView::playNote(Rosegarden::Event *event)
 
     // Get the Instrument
     //
-    Rosegarden::Track *track = comp.getTrackByIndex(
+    Rosegarden::Track *track = comp.getTrackById(
             m_staffs[0]->getSegment().getTrack());
 
     Rosegarden::Instrument *ins =
@@ -1458,7 +1458,7 @@ void MatrixView::playNote(const Rosegarden::Segment &segment, int pitch)
     Rosegarden::Composition &comp = getDocument()->getComposition();
     Rosegarden::Studio &studio = getDocument()->getStudio();
 
-    Rosegarden::Track *track = comp.getTrackByIndex(segment.getTrack());
+    Rosegarden::Track *track = comp.getTrackById(segment.getTrack());
 
     Rosegarden::Instrument *ins =
         studio.getInstrumentById(track->getInstrument());

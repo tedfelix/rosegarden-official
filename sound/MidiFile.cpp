@@ -1188,7 +1188,7 @@ MidiFile::convertToMidi(Composition &comp)
                                       MIDI_FILE_META_EVENT,
                                       MIDI_TRACK_NAME,
                                       //trackName.str());
-                          comp.getTrackByIndex((*segment)->getTrack())->getLabel());
+                          comp.getTrackById((*segment)->getTrack())->getLabel());
 
             m_midiComposition[trackNumber].push_back(midiEvent);
         }
@@ -1196,7 +1196,7 @@ MidiFile::convertToMidi(Composition &comp)
         // Get the Instrument
         //
         Track *track =
-            comp.getTrackByIndex((*segment)->getTrack());
+            comp.getTrackById((*segment)->getTrack());
 
 	if (track->isMuted()) continue;
 

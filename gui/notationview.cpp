@@ -1903,7 +1903,7 @@ void NotationView::playNote(Rosegarden::Segment &s, int pitch)
 {
     Rosegarden::Composition &comp = getDocument()->getComposition();
     Rosegarden::Studio &studio = getDocument()->getStudio();
-    Rosegarden::Track *track = comp.getTrackByIndex(s.getTrack());
+    Rosegarden::Track *track = comp.getTrackById(s.getTrack());
 
     Rosegarden::Instrument *ins =
         studio.getInstrumentById(track->getInstrument());

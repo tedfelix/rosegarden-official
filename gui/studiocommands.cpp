@@ -105,13 +105,13 @@ ModifyDeviceMappingCommand::ModifyDeviceMappingCommand(
 void
 ModifyDeviceMappingCommand::execute()
 {
-    Rosegarden::Composition::trackcontainer *tracks =
+    Rosegarden::Composition::trackcontainer &tracks =
         m_composition->getTracks();
-    Rosegarden::Composition::trackcontainer::iterator it = tracks->begin();
+    Rosegarden::Composition::trackcontainer::iterator it = tracks.begin();
     Rosegarden::Instrument *instr = 0;
     int index = 0;
 
-    for(; it != tracks->end(); it++)
+    for(; it != tracks.end(); it++)
     {
         instr = m_studio->getInstrumentById(it->second->getInstrument());
 
@@ -196,7 +196,7 @@ ModifyDeviceMappingCommand::unexecute()
 
     for (; it != m_mapping.end(); it++)
     {
-        track = m_composition->getTrackByIndex(it->first);
+        track = m_composition->getTrackById(it->first);
         track->setInstrument(it->second);
     }
 }
@@ -219,11 +219,11 @@ ModifyInstrumentMappingCommand::ModifyInstrumentMappingCommand(
 void
 ModifyInstrumentMappingCommand::execute()
 {
-    Rosegarden::Composition::trackcontainer *tracks =
+    Rosegarden::Composition::trackcontainer &tracks =
         m_composition->getTracks();
-    Rosegarden::Composition::trackcontainer::iterator it = tracks->begin();
+    Rosegarden::Composition::trackcontainer::iterator it = tracks.begin();
 
-    for(; it != tracks->end(); it++)
+    for(; it != tracks.end(); it++)
     {
         if (it->second->getInstrument() == m_fromInstrument)
         {
@@ -242,7 +242,7 @@ ModifyInstrumentMappingCommand::unexecute()
 
     for (; it != m_mapping.end(); it++)
     {
-        track = m_composition->getTrackByIndex(*it);
+        track = m_composition->getTrackById(*it);
         track->setInstrument(m_fromInstrument);
     }
 }

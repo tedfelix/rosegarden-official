@@ -611,7 +611,7 @@ LilypondExporter::write() {
 
         // do nothing if track is muted...  this provides a crude but easily implemented
         // method for users to selectively export tracks...
-        Rosegarden::Track *track = m_composition->getTrackByIndex((*i)->getTrack());
+        Rosegarden::Track *track = m_composition->getTrackById((*i)->getTrack());
         
         if (!exportUnmuted || (!track->isMuted())) {
             if ((int) (*i)->getTrack() != lastTrackIndex) {
@@ -627,7 +627,7 @@ LilypondExporter::write() {
                 // Staff.instrument property is the same for multiple staffs...
                 std::ostringstream staffName;
                 staffName << protectIllegalChars(m_composition->
-                        getTrackByIndex(lastTrackIndex)->getLabel());
+                        getTrackById(lastTrackIndex)->getLabel());
 
                 if (staffName.str() == "") {
                     staffName << "track";

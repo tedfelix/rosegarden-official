@@ -357,7 +357,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
     std::string name =
 	segment.getComposition()->
-	getTrackByIndex(segment.getTrack())->getLabel();
+	getTrackById(segment.getTrack())->getLabel();
     m_staffNameWidths[&staff] =
 	m_npf->getNoteBodyWidth() * 2 +
 	m_npf->getTextWidth(Rosegarden::Text(name,Rosegarden::Text::StaffName));

@@ -141,11 +141,11 @@ TrackButtons::makeButtons()
     }
     */
 
-    Rosegarden::Composition::trackcontainer *tracks =
+    Rosegarden::Composition::trackcontainer &tracks =
         m_doc->getComposition().getTracks();
     Rosegarden::Composition::trackiterator it;
 
-    for (it = tracks->begin(); it != tracks->end(); ++it)
+    for (it = tracks.begin(); it != tracks.end(); ++it)
     {
         QFrame *trackHBox = makeButton((*it).second->getId());
 
@@ -181,7 +181,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
 
     // Set the label from the Track object on the Composition
     //
-    Rosegarden::Track *track = m_doc->getComposition().getTrackByIndex(trackId);
+    Rosegarden::Track *track = m_doc->getComposition().getTrackById(trackId);
 
     if (track == 0) return 0;
 
@@ -432,10 +432,10 @@ TrackButtons::slotToggleMutedTrack(int mutedTrack)
 
     bool set = true;
 
-    if (m_doc->getComposition().getTrackByIndex(mutedTrack)->isMuted())
+    if (m_doc->getComposition().getTrackById(mutedTrack)->isMuted())
         set = false;
 
-    m_doc->getComposition().getTrackByIndex(mutedTrack)->setMuted(set);
+    m_doc->getComposition().getTrackById(mutedTrack)->setMuted(set);
 
     emit modified();
 }
@@ -501,7 +501,7 @@ TrackButtons::slotUpdateTracks()
 
     if (newNbTracks == m_tracks) return; // nothing to do
 
-    Rosegarden::Composition::trackcontainer *tracks =
+    Rosegarden::Composition::trackcontainer &tracks =
         m_doc->getComposition().getTracks();
     Rosegarden::Composition::trackiterator it;
     bool match = false;
@@ -514,7 +514,7 @@ TrackButtons::slotUpdateTracks()
     for (unsigned int i = 0; i < m_trackLabels.size(); ++i)
     {
         match = false;
-        for (it = tracks->begin(); it != tracks->end(); ++it)
+        for (it = tracks.begin(); it != tracks.end(); ++it)
         {
             if (m_trackLabels[i]->getPosition() == (*it).second->getPosition())
             {
@@ -541,7 +541,7 @@ TrackButtons::slotUpdateTracks()
     if (m_trackHBoxes.size() != newNbTracks)
     {
         int j = m_trackHBoxes.size();
-        for (it = tracks->begin(); it != tracks->end(); ++it)
+        for (it = tracks.begin(); it != tracks.end(); ++it)
         {
             match = false;
             for (unsigned int i = 0; i < m_trackLabels.size(); ++i)
@@ -592,7 +592,7 @@ TrackButtons::slotSetRecordTrack(int position)
 void
 TrackButtons::setRecordButtonDown(int position)
 {
-    if (position < 0 || position > (int)m_tracks )
+    if (position < 0 || position >= (int)m_tracks)
         return;
 
     // Unset the palette if we're jumping to another button
@@ -689,7 +689,7 @@ TrackButtons::getHighlightedTracks()
 void
 TrackButtons::slotRenameTrack(QString newName, int trackNumber)
 {
-    Rosegarden::Track *track = m_doc->getComposition().getTrackByIndex(trackNumber);
+    Rosegarden::Track *track = m_doc->getComposition().getTrackById(trackNumber);
     track->setLabel(qstrtostr(newName));
 
     std::vector<TrackLabel*>::iterator it = m_trackLabels.begin();

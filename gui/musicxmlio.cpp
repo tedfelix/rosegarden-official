@@ -252,11 +252,11 @@ MusicXmlExporter::write() {
 
     // MIDI information
     str << "\t<part-list>" << std::endl;
-    Composition::trackcontainer * tracks = composition->getTracks();
+    Composition::trackcontainer& tracks = composition->getTracks();
 
     int trackNo = 0;
-    for (Composition::trackiterator i = tracks->begin();
-         i != tracks->end(); ++i) {
+    for (Composition::trackiterator i = tracks.begin();
+         i != tracks.end(); ++i) {
         // Incomplete: What about all the other Midi stuff?
         // Incomplete: (Future) GUI to set labels if they're not already
         Instrument * trackInstrument = (&m_doc->getStudio())->getInstrumentById((*i).second->getInstrument());
@@ -273,7 +273,7 @@ MusicXmlExporter::write() {
         }
         str << "\t\t</score-part>" << std::endl;
 
-        emit setProgress(int(double(trackNo++)/double(tracks->size()) * 20.0));
+        emit setProgress(int(double(trackNo++)/double(tracks.size()) * 20.0));
         kapp->processEvents(50);
 
     } // end track iterator
@@ -283,8 +283,8 @@ MusicXmlExporter::write() {
     // Write out all segments for each Track
     bool startedPart = false;
     trackNo = 0;
-    for (Composition::trackiterator j = tracks->begin();
-         j != tracks->end(); ++j) {
+    for (Composition::trackiterator j = tracks.begin();
+         j != tracks.end(); ++j) {
         // Code courtesy docs/code/iterators.txt
         Rosegarden::CompositionTimeSliceAdapter::TrackSet trackSet;
         // Incomplete: get the track info for each track (i.e. this should
@@ -375,7 +375,7 @@ MusicXmlExporter::write() {
         }
 
         emit setProgress(20 +
-                         int(double(trackNo++)/double(tracks->size()) * 80.0));
+                         int(double(trackNo++)/double(tracks.size()) * 80.0));
         kapp->processEvents(50);
     }
     str << "\t</part>" << std::endl;

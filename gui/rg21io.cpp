@@ -544,7 +544,7 @@ bool RG21Loader::parseStaveType()
 
     if (staffNo < m_composition->getNbTracks()) {
 
-	Rosegarden::Track *track = m_composition->getTrackByIndex(staffNo);
+	Rosegarden::Track *track = m_composition->getTrackById(staffNo);
 
 	if (track) {
 	    Rosegarden::Instrument *instr =

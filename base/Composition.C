@@ -962,13 +962,51 @@ Composition::setPosition(timeT position)
     m_position = position;
 }
 
+#ifdef TRACK_DEBUG
+// track debug convenience function
+//
+static void dumpTracks(Composition::trackcontainer& tracks)
+{
+    Composition::trackiterator it = tracks.begin();
+    for (; it != tracks.end(); ++it) {
+        std::cerr << "tracks[" << (*it).first << "] = "
+                  << (*it).second << std::endl;
+    }
+}
+#endif
+
+Track* Composition::getTrackById(TrackId track)
+{
+    trackiterator i = m_tracks.find(track);
+
+    if (i != m_tracks.end())
+        return (*i).second;
+
+    std:: cerr << "Composition::getTrackById("
+               << track << ") - WARNING - track id not found, this is probably a BUG "
+               << __FILE__ << ":" << __LINE__ << std::endl;
+
+    return 0;
+}
 
 // Insert a Track representation into the Composition
 //
 void Composition::addTrack(Track *track)
 {
-    m_tracks[track->getId()] = track;
-    updateRefreshStatuses();
+    // make sure a track with the same id isn't already there
+    //
+    if (m_tracks.find(track->getId()) == m_tracks.end()) {
+
+        m_tracks[track->getId()] = track;
+        updateRefreshStatuses();
+
+    } else {
+        std:: cerr << "Composition::addTrack("
+                   << track << "), id = " << track->getId()
+                   << " - WARNING - track id already present "
+                   << __FILE__ << ":" << __LINE__ << std::endl;
+        // throw Exception("track id already present");
+    }
 }
 
 
@@ -976,30 +1014,94 @@ void Composition::deleteTrack(Rosegarden::TrackId track)
 {
     trackiterator titerator = m_tracks.find(track);
 
-    delete ((*titerator).second);
-    m_tracks.erase(titerator);
-    updateRefreshStatuses();
+    if (titerator == m_tracks.end()) {
+
+        std::cerr << "Composition::deleteTrack : no track of id " << track << std::endl;
+        throw Exception("track id not found");
+
+    } else {
+
+        delete ((*titerator).second);
+        m_tracks.erase(titerator);
+        checkSelectedAndRecordTracks();
+        updateRefreshStatuses();
+    }
     
 }
 
 bool Composition::detachTrack(Rosegarden::Track *track)
 {
     trackiterator it = m_tracks.begin();
+
     for (; it != m_tracks.end(); ++it)
     {
         if ((*it).second == track)
             break;
     }
 
-    if (it == m_tracks.end()) return false;
+    if (it == m_tracks.end()) {
+        std::cerr << "Composition::detachTrack() : no such track " << track << std::endl;
+        throw Exception("track id not found");
+        return false;
+    }
 
     m_tracks.erase(it);
     updateRefreshStatuses();
+    checkSelectedAndRecordTracks();
 
     return true;
 }
 
+void Composition::checkSelectedAndRecordTracks()
+{
+    // reset m_selectedTrack and m_recordTrack to the next valid track id
+    // if the track they point to has been deleted
 
+    if (m_tracks.find(m_selectedTrack) == m_tracks.end()) {
+
+        m_selectedTrack = getClosestValidTrackId(m_selectedTrack);
+        
+    }
+
+    if (m_tracks.find(m_recordTrack) == m_tracks.end()) {
+
+        m_recordTrack = getClosestValidTrackId(m_recordTrack);
+        
+    }
+
+}
+
+TrackId
+Composition::getClosestValidTrackId(TrackId id) const
+{
+//     std::cerr << "Composition::getClosestValidTrackId(" << id << ")\n";
+
+    long diff = LONG_MAX;
+    TrackId closestValidTrackId = 0;
+
+    for (trackcontainer::const_iterator i = getTracks().begin();
+	 i != getTracks().end(); ++i) {
+
+        long cdiff = labs(i->second->getId() - id);
+
+//         std::cerr << "Composition::getClosestValidTrackId(" << id << ") - trying "
+//                   << i->second->getId() << " - diff = " << cdiff << std::endl;
+        
+	if (cdiff < diff) {
+            diff = cdiff;
+	    closestValidTrackId = i->second->getId();
+//             std::cerr << "Composition::getClosestValidTrackId(" << id << ") - new closestValidTrackId = "
+//                       << closestValidTrackId << endl;
+	}
+
+    }
+
+//     std::cerr << "Composition::getClosestValidTrackId(" << id << ") - return "
+//               << closestValidTrackId << std::endl;
+
+    return closestValidTrackId;
+}
+ 
 TrackId
 Composition::getMinTrackId() const
 {
@@ -1068,8 +1170,8 @@ std::string Composition::toXmlString()
 
     composition << endl;
 
-    for (trackiterator tit = getTracks()->begin();
-         tit != getTracks()->end();
+    for (trackiterator tit = getTracks().begin();
+         tit != getTracks().end();
          ++tit)
         {
             if ((*tit).second)

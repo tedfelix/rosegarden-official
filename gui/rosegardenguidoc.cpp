@@ -768,7 +768,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
         // Set an appropriate segment label
         //
         Rosegarden::Track *track =
-            m_composition.getTrackByIndex(m_composition.getRecordTrack());
+            m_composition.getTrackById(m_composition.getRecordTrack());
         std::string label = "";
 
         if (track) {
@@ -1333,7 +1333,7 @@ RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime &time,
         // Set an appropriate segment label
         //
         Rosegarden::Track *track =
-            m_composition.getTrackByIndex(m_composition.getRecordTrack());
+            m_composition.getTrackById(m_composition.getRecordTrack());
         std::string label = "";
 
         if (track)
@@ -1525,7 +1525,7 @@ RosegardenGUIDoc::slotNewRecordButton()
     // If we're got an audio track then tell someone goddamn
     //
     Rosegarden::Track *recordTrack
-        = m_composition.getTrackByIndex(m_composition.getRecordTrack());
+        = m_composition.getTrackById(m_composition.getRecordTrack());
 
     if (recordTrack)
     {

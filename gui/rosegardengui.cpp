@@ -3208,7 +3208,7 @@ void RosegardenGUIApp::slotTrackUp()
     Rosegarden::Composition &comp = m_doc->getComposition();
 
     Rosegarden::TrackId tid = comp.getSelectedTrack();
-    Rosegarden::TrackId pos = comp.getTrackByIndex(tid)->getPosition();
+    Rosegarden::TrackId pos = comp.getTrackById(tid)->getPosition();
 
     // If at top already
     if (pos == 0)
@@ -3242,7 +3242,7 @@ void RosegardenGUIApp::slotTrackDown()
     */
 
     Rosegarden::TrackId tid = comp.getSelectedTrack();
-    Rosegarden::TrackId pos = comp.getTrackByIndex(tid)->getPosition();
+    Rosegarden::TrackId pos = comp.getTrackById(tid)->getPosition();
 
     Rosegarden::Track *track = comp.getTrackByPosition(pos + 1);
 

@@ -133,7 +133,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	timeT segmentEndTime = (*it)->getEndMarkerTime();
 	timeT segmentDuration = segmentEndTime - segmentStartTime;
 
-        track = comp.getTrackByIndex((*it)->getTrack());
+        track = comp.getTrackById((*it)->getTrack());
 
         // check to see if track actually exists
         //
@@ -849,7 +849,7 @@ SequenceManager::record(bool toggled)
     {
         int rID = comp.getRecordTrack();
         Rosegarden::InstrumentId instrId =
-            comp.getTrackByIndex(rID)->getInstrument();
+            comp.getTrackById(rID)->getInstrument();
         Rosegarden::Instrument *instr = studio.getInstrumentById(instrId);
 
         if (!instr || instr->getType() == Rosegarden::Instrument::Audio)
@@ -913,7 +913,7 @@ SequenceManager::record(bool toggled)
         // Get the record track and check the Instrument type
         int rID = comp.getRecordTrack();
         Rosegarden::InstrumentId inst =
-            comp.getTrackByIndex(rID)->getInstrument();
+            comp.getTrackById(rID)->getInstrument();
 
         // If no matching record instrument
         //
@@ -1119,7 +1119,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
         Rosegarden::MappedComposition::iterator i;
         Rosegarden::Composition &comp = m_doc->getComposition();
         Rosegarden::Track *track =
-                  comp.getTrackByIndex(comp.getSelectedTrack());
+                  comp.getTrackById(comp.getSelectedTrack());
         Rosegarden::InstrumentId id = track->getInstrument();
 
         Rosegarden::MappedComposition tempMC =

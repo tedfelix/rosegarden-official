@@ -99,19 +99,15 @@ public:
     //
     //  INSTRUMENT & TRACK
 
-    // This should be getTrackById
-    //
-    Track* getTrackByIndex(TrackId track) {
-	return m_tracks[track];
-    }
+    Track* getTrackById(TrackId track);
 
     Track* getTrackByPosition(int position);
  
-    trackcontainer* getTracks() {
-	return &m_tracks;
+    trackcontainer& getTracks() {
+	return m_tracks;
     }
  
-    const trackcontainer getTracks() const {
+    const trackcontainer& getTracks() const {
 	return m_tracks;
     }
 
@@ -645,6 +641,14 @@ protected:
 	}
     };
  
+    /**
+     * Ensure the selected and record trackids still point to something valid
+     * Must be called after deletion of detach of a track
+     */
+    void checkSelectedAndRecordTracks();
+    TrackId getClosestValidTrackId(TrackId id) const;
+    
+    //--------------- Data members ---------------------------------
 
     trackcontainer m_tracks;
     segmentcontainer m_segments;
