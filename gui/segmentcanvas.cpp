@@ -991,7 +991,8 @@ SegmentCanvas::findSegmentClickedOn(QPoint pos)
 
 void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
 {
-    if (e->button() == LeftButton) { // delegate event handling to tool
+    if (e->button() == LeftButton ||
+        e->button() == MidButton) { // delegate event handling to tool
 
         // ensure that we have a valid tool
         //
@@ -1063,7 +1064,8 @@ void SegmentCanvas::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     if (!m_tool) return;
 
-    if (e->button() == LeftButton) m_tool->handleMouseButtonRelease(e);
+    if (e->button() == LeftButton ||
+        e->button() == MidButton ) m_tool->handleMouseButtonRelease(e);
 }
 
 void SegmentCanvas::contentsMouseMoveEvent(QMouseEvent* e)
@@ -1743,7 +1745,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
         //
         int threshold = int(float(item->width()) * 0.15);
         if (threshold  == 0) threshold = 1;
-
+        if (threshold > 10) threshold = 10;
 
 	if (!m_segmentAddMode &&
 	    SegmentResizer::cursorIsCloseEnoughToEdge(item, e, threshold)) {
@@ -1758,17 +1760,14 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
     } else {
 
-        // If in segment add mode and outside of a segment then insert
-        // one.
+        // Add on middle button - bounding box on rest
         //
-        /*
-	if (m_segmentAddMode) {
+	if (e->button() == MidButton) {
 	    m_dispatchTool = new SegmentPencil(m_canvas, m_doc);
 	    m_dispatchTool->handleMouseButtonPress(e);
 	    return;
 	}
         else {
-        */
             // do a bounding box
             QCanvasRectangle *rect  = m_canvas->getSelectionRectangle();
 
@@ -1778,7 +1777,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
                 rect->setY(e->y());
                 rect->setSize(0, 0);
             }
-        //}
+        }
     }
  
     // Tell the RosegardenGUIView that we've selected some new Segments -
@@ -1916,6 +1915,11 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             // Get collisions and do selection
             //
             QCanvasItemList l = rect->collisions(true); // exact collisions
+
+            // selection management
+            SegmentSelection oldSelection = getSelectedSegments();
+            SegmentSelection newSelection;
+
             int segCount = 0;
 
             if (l.count()) {
@@ -1925,9 +1929,36 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
                     {
                         segCount++;
                         slotSelectSegmentItem(item);
+                        newSelection.insert(item->getSegment());
                     }
                 }
             }
+
+            // Check for unselected items with this piece of crap
+            //
+            bool found = false;
+
+            for (SegmentSelection::const_iterator oIt = oldSelection.begin();
+                  oIt != oldSelection.end(); oIt++)
+            {
+                found = false;
+                for (SegmentSelection::const_iterator nIt = newSelection.begin();
+                     nIt != newSelection.end(); nIt++)
+                {
+                    if (*oIt == *nIt)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found == false)
+                {
+                    removeFromSelection(*oIt);
+                    m_canvas->getSegmentItem(*oIt)->
+                        setSelected(false, m_canvas->getSegmentBrush());
+                }
+            }
+
             if (segCount)
             {
                 emit selectedSegments(getSelectedSegments());
