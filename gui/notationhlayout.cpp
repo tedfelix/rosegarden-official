@@ -338,7 +338,6 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
     int barNo = getComposition()->getBarNumber(segment.getStartTime());
     int endBarNo = getComposition()->getBarNumber(segment.getEndMarkerTime());
     if (endBarNo > barNo &&
-        !m_pageMode &&
 	getComposition()->getBarStart(endBarNo) == segment.getEndMarkerTime()) {
 	--endBarNo;
     }
