@@ -372,7 +372,7 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
 	 i != node->children.end(); ++i) {
 
 	long nodePitch = myPitch;
-	(*(*i)->note)->get<Int>(PITCH, nodePitch);
+	(*(*i)->node)->get<Int>(PITCH, nodePitch);
 
 	if (nodePitch < myPitch) {
 
