@@ -88,7 +88,8 @@ public:
     // Transport controls
     //
 
-    void play();
+    /// returns true if the call actually paused playback
+    bool  play();
 
     // We don't call stop() directly - using stopping() and then
     // call stop().

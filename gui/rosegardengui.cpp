@@ -3771,7 +3771,7 @@ RosegardenGUIApp::slotSetPlayPosition(Rosegarden::timeT time)
 // fails then we default (or try to default) to STOPPED at both
 // the GUI and the Sequencer.
 //
-void RosegardenGUIApp::notifySequencerStatus(const int& status)
+void RosegardenGUIApp::notifySequencerStatus(int status)
 {
     stateChanged("not_playing",
                  (status == PLAYING ||
@@ -3953,18 +3953,27 @@ void RosegardenGUIApp::slotPlay()
     if (sendControllers)
         m_doc->initialiseControllers();
 
-    try
-    {
-        m_seqManager->play();
+    bool pausedPlayback = false;
+    
+    try {
+        pausedPlayback = m_seqManager->play(); // this will stop playback (pause) if it's already running
+        // Check the new state of the transport and start or stop timer
+        // accordingly
+        //
+        if (!pausedPlayback) {
+        
+            // Start the playback timer - this fetches the current sequencer position &c
+            //
+            m_playTimer->start(23);
+        } else {
+            m_playTimer->stop();
+        }
     }
-    catch(QString s)
-    {
+    catch(QString s) {
         KMessageBox::error(this, s);
+        m_playTimer->stop();
     }
-
-    // Start the playback timer - this fetches the current sequencer position &c
-    //
-    m_playTimer->start(23);
+    
 }
 
 void RosegardenGUIApp::slotJumpToTime(int sec, int usec)

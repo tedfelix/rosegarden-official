@@ -69,7 +69,7 @@ k_dcop:
 
     // Sequencer updates GUI with status
     //
-    virtual void notifySequencerStatus(const int &status) = 0;
+    virtual void notifySequencerStatus(int status) = 0;
 
     // Used to map unexpected (async) MIDI events to the user interface.
     // We can show these on the Transport or on a MIDI Mixer.

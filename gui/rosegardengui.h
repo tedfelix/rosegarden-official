@@ -244,7 +244,7 @@ public:
     /**
      * Set the sequencer status - pass through DCOP as an int
      */
-    virtual void notifySequencerStatus(const int &status);
+    virtual void notifySequencerStatus(int status);
 
     /**
      * Handle some random incoming MIDI events.

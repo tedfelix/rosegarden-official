@@ -481,7 +481,7 @@ void
 TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
 {
 
-//    RG_DEBUG << "TrackEditor::setPointerPosition: time is " << position << endl;
+//     RG_DEBUG << "TrackEditor::slotSetPointerPosition: time is " << position << endl;
     if (!m_pointer) return;
 
     m_pointer->setSize(3, m_segmentCanvas->canvas()->height());

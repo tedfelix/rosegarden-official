@@ -187,7 +187,7 @@ SequenceManager::mapSequencer()
     }
 }
 
-void
+bool
 SequenceManager::play()
 {
     mapSequencer();
@@ -205,7 +205,7 @@ SequenceManager::play()
         m_transportStatus == RECORDING_AUDIO )
         {
             stopping();
-            return;
+            return true;
         }
 
     // This check may throw an exception
@@ -233,16 +233,13 @@ SequenceManager::play()
     //
     QDataStream streamOut(data, IO_WriteOnly);
 
-    if (comp.getTempo() == 0)
-        {
-            comp.setDefaultTempo(120.0);
+    if (comp.getTempo() == 0) {
+        comp.setDefaultTempo(120.0);
 
-            SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000\n";
-        }
-    else
-        {
+        SEQMAN_DEBUG << "SequenceManager::play() - setting Tempo to Default value of 120.000\n";
+    } else {
             SEQMAN_DEBUG << "SequenceManager::play() - starting to play\n";
-        }
+    }
 
     // set the tempo in the transport
     m_transport->setTempo(comp.getTempo());
@@ -284,7 +281,7 @@ SequenceManager::play()
     if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
                               replyType, replyData, data)) {
         m_transportStatus = STOPPED;
-        return;
+        return false;
     }
 
     // ensure the return type is ok
@@ -299,6 +296,8 @@ SequenceManager::play()
         m_transportStatus = STOPPED;
         throw(Rosegarden::Exception("Failed to start playback"));
     }
+
+    return false;
 }
 
 void
