@@ -132,7 +132,7 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::RealTime &start,
     //
     if ( m_transportStatus == STOPPED || m_transportStatus == STOPPING )
         return 0;
- 
+
     // If we're looping then we should get as much of the rest of
     // the right hand of the loop as possible and also events from
     // the beginning of the loop.  We can do this in two fetches.
@@ -178,7 +178,7 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
     arg << start.usec;
     arg << end.sec;
     arg << end.usec;
-    arg << firstFetch;
+    arg << (unsigned char)firstFetch;
 
     Rosegarden::MappedComposition *mC = new Rosegarden::MappedComposition();
 
@@ -189,7 +189,7 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
 
     if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
-                                  "getSequencerSlice(long int, long int, long int, long int, bool)",
+                                  "getSequencerSlice(long int, long int, long int, long int, unsigned char)",
                                   data, replyType, replyData, true))
     {
         cerr << "RosegardenSequencer::getSlice()"

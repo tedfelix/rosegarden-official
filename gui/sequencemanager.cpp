@@ -89,7 +89,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
     Rosegarden::RealTime duration;
     Rosegarden::Instrument *instrument;
     Rosegarden::Track *track;
-  
+
     for (Composition::iterator it = comp.begin(); it != comp.end(); it++)
     {
 	timeT segmentStartTime = (*it)->getStartTime();
@@ -274,7 +274,10 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             //
             if (firstFetch == true)
             {
-                if(playTime < sliceStartElapsed)
+                // The "<=" makes sure we don't forget items that start
+                // exactly _on_ the slice which are now valid
+                //
+                if (playTime <= sliceStartElapsed)
                 {
                     duration = duration - (sliceStart - eventTime);
                     eventTime = sliceStart;

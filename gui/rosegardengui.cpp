@@ -1722,14 +1722,16 @@ RosegardenGUIApp::slotToggleMetronome()
 const Rosegarden::MappedComposition&
 RosegardenGUIApp::getSequencerSlice(long sliceStartSec, long sliceStartUsec,
                                     long sliceEndSec, long sliceEndUsec,
-                                    bool firstFetch)
+                                    unsigned char firstFetch)
 {
+    // have to convert from char
+    bool firstFetchBool = (bool)firstFetch;
 
     Rosegarden::RealTime startTime(sliceStartSec, sliceStartUsec);
     Rosegarden::RealTime endTime(sliceEndSec, sliceEndUsec);
 
     Rosegarden::MappedComposition *mC =
-        m_seqManager->getSequencerSlice(startTime, endTime, firstFetch);
+        m_seqManager->getSequencerSlice(startTime, endTime, firstFetchBool);
 
     showVisuals(mC);
 

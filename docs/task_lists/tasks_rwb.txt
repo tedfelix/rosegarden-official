@@ -1,6 +1,6 @@
 0.2 TO-DO for rwb
 -----------------
-updated 23.04.2002
+updated 24.04.2002
 
 Immediate work:
 
@@ -8,11 +8,11 @@ o sweep selection on Matrix
 
 o Event playback on selection movement
 
-o Changing Composition length - deactivating blank tracks
+o Changing Composition length
+
+o Deactivating blank tracks
 
 o ALSA/JACK audio 
-
-o Starting playback in middle of long Events should actually play them
 
 o Matrix view auto scrolling
 
@@ -138,6 +138,9 @@ Completed POST 0.1.4
 
 - Client (Notation/Matrix) labelling as per Segment/Instrument/Track
   [DONE cc/rwb]
+
+- Starting playback in middle of long Events should actually play them
+  ["firstFetch" DONE]
 
 
 

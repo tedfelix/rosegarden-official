@@ -138,7 +138,7 @@ public:
     const Rosegarden::MappedComposition&
             getSequencerSlice(long sliceStartSec, long sliceStartUSec,
                               long sliceEndSec, long sliceEndUSec,
-                              bool firstFetch);
+                              unsigned char firstFetch);
 
     /**
      * The Sequencer sends back a MappedComposition full of
