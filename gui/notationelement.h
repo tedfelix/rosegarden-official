@@ -45,14 +45,18 @@ public:
     bool isRest() const;
     bool isGroup() const;
 
+    /// the group is owned by the object
     const NotationElementList* group() const { return m_group; }
     NotationElementList* group()             { return m_group; }
+
+    /// the group is owned by the object
+    void setGroup(NotationElementList*);
 
     /// The object takes ownership of its canvas item
     void setCanvasItem(QCanvasItem *e);
     QCanvasItem* canvasItem() { return m_canvasItem; }
 
-    friend bool operator<(NotationElement&, NotationElement&);
+    friend bool operator<(const NotationElement&, const NotationElement&);
 
 protected:
     double m_x;
@@ -74,7 +78,7 @@ inline kndgstream& operator<<(kdbgstream &e, NotationElement&)
 class NotationElementCmp
 {
 public:
-    bool operator()(NotationElement *e1, NotationElement *e2) 
+    bool operator()(const NotationElement *e1, const NotationElement *e2) const
     {
         return  *e1 < *e2;
     }

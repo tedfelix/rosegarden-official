@@ -33,7 +33,7 @@ NotationElement::NotationElement(Event *event)
       m_group(0),
       m_canvasItem(0)
 {
-    if (isGroup()) {
+    if (isGroup() && event->group()) {
         EventList *g = event->group();
         
         m_group = ViewElementsManager::notationElementList(g->begin(),
@@ -60,6 +60,17 @@ NotationElement::isGroup() const
     return event()->type() == "group";
 }
 
+void
+NotationElement::setGroup(NotationElementList *group)
+{
+    if (isGroup())
+        delete m_group;
+
+    event()->setType("group");
+
+    m_group = group;
+}
+
 
 void
 NotationElement::setCanvasItem(QCanvasItem *e)
@@ -68,7 +79,7 @@ NotationElement::setCanvasItem(QCanvasItem *e)
     m_canvasItem = e;
 }
 
-bool operator<(NotationElement &e1, NotationElement &e2)
+bool operator<(const NotationElement &e1, const NotationElement &e2)
 {
 //     kdDebug(KDEBUG_AREA) << "operator<(e1.m_x = "
 //                          << e1.m_x << ", e2.m_x = " << e2.m_x << ")" << endl;
