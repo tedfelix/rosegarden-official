@@ -196,6 +196,7 @@
    <Action name="edit_copy"/>
    <Separator/>
    <Action name="delete"/>
+   <Action name="join_segments"/>
    <Separator/>
    <Action name="quantize_selection"/>
    <Action name="relabel_segment"/>
@@ -264,12 +265,13 @@
         <Action name="jog_right"/>
         <Action name="auto_split"/>
         <Action name="split_by_pitch"/>
+        <Action name="join_segments"/>
+        <Action name="relabel_segment"/>
         <Action name="set_segment_start"/>
         <Action name="set_segment_duration"/>
         <Action name="collapse"/>
         <Action name="set_tempo_to_segment_length"/>
         <Action name="repeats_to_real_copies"/>
-        <Action name="relabel_segment"/>
      </enable>
 </State>
 
@@ -291,6 +293,7 @@
         <Action name="quantize_selection"/>
         <Action name="rescale"/>
         <Action name="split_by_pitch"/>
+        <Action name="join_segments"/>
         <Action name="collapse"/>
         <Action name="repeats_to_real_copies"/>
      </disable>

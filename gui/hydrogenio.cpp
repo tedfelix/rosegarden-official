@@ -85,8 +85,10 @@ HydrogenXMLHandler::HydrogenXMLHandler(Rosegarden::Composition *composition,
     m_inNote(false),
     m_inInstrument(false),
     m_inPattern(false),
+    m_inSequence(false),
     m_patternName(""),
     m_patternSize(0),
+    m_sequenceName(""),
     m_position(0),
     m_velocity(0.0),
     m_panL(0.0),
@@ -118,11 +120,16 @@ HydrogenXMLHandler::startDocument()
     m_inNote = false;
     m_inInstrument = false;
     m_inPattern = false;
+    m_inSequence = false;
 
     // Pattern attributes
     //
     m_patternName = "";
     m_patternSize = 0;
+
+    // Sequence attributes
+    //
+    m_sequenceName = "";
 
     // Note attributes
     //
@@ -182,6 +189,7 @@ HydrogenXMLHandler::startElement(const QString& /*namespaceURI*/,
     } else if (lcName == "sequence") {
         // Create a new segment
         m_segment = new Rosegarden::Segment();
+        m_inSequence = true;
     }
 
     m_currentProperty = lcName;
@@ -269,7 +277,8 @@ HydrogenXMLHandler::endElement(const QString& /*namespaceURI*/,
             //
             m_segment->setStartTime(m_composition->getBarStart(0));
             m_segment->setEndMarkerTime(m_composition->getBarEnd(0));
-            QString label = QString("%1 %2 %3").arg(strtoqstr(m_patternName))
+            QString label = QString("%1 - %2 %3 %4").arg(strtoqstr(m_patternName))
+                .arg(strtoqstr(m_sequenceName))
                 .arg(i18n(" imported from Hydrogen ")).arg(strtoqstr(m_version));
             m_segment->setLabel(qstrtostr(label));
 
@@ -279,6 +288,8 @@ HydrogenXMLHandler::endElement(const QString& /*namespaceURI*/,
 
             m_segmentAdded = true;
         }
+
+        m_inSequence = false;
 
     }
 
@@ -321,7 +332,10 @@ HydrogenXMLHandler::characters(const QString& chars)
         // Pattern attributes
 
         if (m_currentProperty == "name") {
-            m_patternName = qstrtostr(chars);
+           if  (m_inSequence)
+               m_sequenceName = qstrtostr(chars);
+           else
+               m_patternName = qstrtostr(chars);
         } else if (m_currentProperty == "size") {
             m_patternSize = ch.toInt();
         }

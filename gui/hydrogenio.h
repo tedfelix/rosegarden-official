@@ -93,11 +93,16 @@ protected:
     bool                     m_inNote;
     bool                     m_inInstrument;
     bool                     m_inPattern;
+    bool                     m_inSequence;
 
     // Pattern attributes
     //
     std::string              m_patternName;
     int                      m_patternSize;
+
+    // Sequence attributes
+    //
+    std::string              m_sequenceName;
 
     // Note attributes
     //
