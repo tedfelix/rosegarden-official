@@ -43,7 +43,8 @@ SegmentItem::SegmentItem(int x, int y,
     : QCanvasRectangle(x, y,
                        nbBarsToWidth(nbSteps), m_itemHeight,
                        canvas),
-      m_segment(0)
+      m_segment(0),
+      m_selected(false)
 {
 }
 
@@ -103,6 +104,28 @@ unsigned int SegmentItem::widthToNbBars(unsigned int width)
     return width * m_barResolution / m_widthToDurationRatio;
 }
 
+// Set this SegmentItem as selected/highlighted
+//
+void
+SegmentItem::setSelected(const bool &select, const QBrush &highlightBrush)
+{
+    if (select)
+    {
+        // need to update 
+        setBrush(highlightBrush);
+
+        std::cout << "SegmentItem::setSelected() - SELECTED" << endl;
+    }
+    else // unselect
+    {
+        std::cout << "SegmentItem::setSelected() - UNSELECTED" << endl;
+    }
+
+    m_selected = select;
+}
+
+
+
 
 unsigned int SegmentItem::m_widthToDurationRatio = 1;
 unsigned int SegmentItem::m_barResolution = 1;
@@ -123,6 +146,7 @@ SegmentCanvas::SegmentCanvas(int gridH, int gridV,
     m_tool(0),
     m_grid(gridH, gridV),
     m_brush(RosegardenGUIColours::SegmentBlock),
+    m_highlightBrush(RosegardenGUIColours::SegmentHighlightBlock),
     m_pen(RosegardenGUIColours::SegmentBorder),
     m_editMenu(new QPopupMenu(this))
 {
@@ -541,30 +565,70 @@ bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, QMouseEvent* e)
     return ( abs(p->rect().x() + p->rect().width() - e->x()) < int(m_edgeThreshold));
 }
 
+//////////////////////////////
+// SegmentSelector (bo!)
+//////////////////////////////
+
 SegmentSelector::SegmentSelector(SegmentCanvas *c)
     : SegmentTool(c)
 {
     kdDebug(KDEBUG_AREA) << "SegmentSelector()\n";
+
+    connect(this, SIGNAL(updateSegmentTrackAndStartIndex(SegmentItem*)),
+            c,    SIGNAL(updateSegmentTrackAndStartIndex(SegmentItem*)));
 }
 
 void
-SegmentSelector::handleMouseButtonPress(QMouseEvent*)
+SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 {
-    kdDebug(KDEBUG_AREA) << "SegmentSelector::handleMouseButtonPress()\n";
+    SegmentItem *item = m_canvas->findPartClickedOn(e->pos());
+
+    if (item)
+        m_currentItem = item;
+
+    // Only add to the list if we've got SHIFT held down
+
+    // For the moment only clear all selected from the list
+    //
+    list<SegmentItem*>::iterator it;
+    for (it = m_selectedItems.begin();
+         it != m_selectedItems.end();
+         it++)
+    {
+        (*it)->setSelected(false, m_canvas->getHighlightBrush());
+    }
+
+    // now clear the list
+    //
+    m_selectedItems.clear();
 }
 
 
 void
-SegmentSelector::handleMouseButtonRelease(QMouseEvent*)
+SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 {
-    kdDebug(KDEBUG_AREA) << "SegmentSelector::handleMouseButtonRelease()\n";
+    if (m_currentItem)
+    {
+        emit updateSegmentTrackAndStartIndex(m_currentItem);
+        m_currentItem->setSelected(true, m_canvas->getHighlightBrush());
+        m_selectedItems.push_back(m_currentItem);
+    }
+
+    m_currentItem = 0;
 }
 
 
+// In Select mode we implement movement on the Segment
+// as movement _of_ the Segment - as with SegmentMover
+//
 void
-SegmentSelector::handleMouseMove(QMouseEvent*)
+SegmentSelector::handleMouseMove(QMouseEvent *e)
 {
-    kdDebug(KDEBUG_AREA) << "SegmentSelector::handleMouseMove()\n";
+    if (m_currentItem) {
+        m_currentItem->setX(m_canvas->grid().snapX(e->pos().x()));
+        m_currentItem->setY(m_canvas->grid().snapY(e->pos().y()));
+        m_canvas->canvas()->update();
+    }
 }
 
 

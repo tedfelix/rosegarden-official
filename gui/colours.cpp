@@ -28,7 +28,8 @@ namespace RosegardenGUIColours
 
     const QColor SegmentBorder = Qt::black;
     const QColor SegmentBlock = Qt::blue;
-
+    const QColor SegmentHighlightBlock = Qt::black;
+  
     const QColor BarLine = Qt::black;
     const QColor BarLineIncorrect = Qt::red;
     const QColor StaffConnectingLine = QColor(192,192,192);

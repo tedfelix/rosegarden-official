@@ -26,6 +26,7 @@
 
 #include <qwidget.h>
 #include <qcanvas.h>
+#include <list>
 
 using Rosegarden::timeT;
 namespace Rosegarden { class Segment; }
@@ -86,6 +87,11 @@ public:
      * bars
      */
     static unsigned int widthToNbBars(unsigned int);
+
+    // Select this SegmentItem
+    //
+    bool const isSelected() { return m_selected; }
+    void setSelected(const bool &select, const QBrush &highlightBrush);
     
 protected:
 
@@ -98,6 +104,8 @@ protected:
     static unsigned int m_widthToDurationRatio;
     static unsigned int m_barResolution;
     static unsigned int m_itemHeight;
+
+    bool m_selected;
 
 };
 
@@ -175,6 +183,12 @@ public:
      */
     SegmentItem* findPartClickedOn(QPoint);
 
+    /**
+     * get the highlight brush from the canvas
+     */
+    QBrush getHighlightBrush() const { return m_highlightBrush; }
+
+
 public slots:
     /// Set the current segment edition tool
     void setTool(SegmentCanvas::ToolType);
@@ -243,6 +257,7 @@ private:
     QCanvasItem* m_moving;
 
     QBrush m_brush;
+    QBrush m_highlightBrush;
     QPen m_pen;
 
     QPopupMenu *m_editMenu;
@@ -359,6 +374,10 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
+    void updateSegmentTrackAndStartIndex(SegmentItem*);
+
+private:
+    list<SegmentItem*> m_selectedItems;
 
 };
 
