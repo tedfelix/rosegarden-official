@@ -749,12 +749,7 @@ void
 AudioManagerDialog::slotAdd()
 {
     KURL::List kurlList =
-        KFileDialog::getOpenURLs(
-#if KDE_VERSION >= 196614
-                                 ":WAVS",
-#else
-                                 QString::null,
-#endif
+        KFileDialog::getOpenURLs(":WAVS",
                                  i18n("*.wav|WAV files (*.wav)\n*.mp3|MP3 files (*.mp3)"),
                                  this, i18n("Select one or more audio files"));
 

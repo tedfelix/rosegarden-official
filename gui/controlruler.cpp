@@ -2004,7 +2004,7 @@ PropertyViewRuler::PropertyViewRuler(RulerScale *rulerScale,
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
 
-    setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
+    setBackgroundColor(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SegmentCanvas));
 
     QString tip = i18n("%1 controller").arg(strtoqstr(property));
     QToolTip::add(this, tip);
@@ -2065,7 +2065,7 @@ PropertyViewRuler::paintEvent(QPaintEvent* e)
 
     if (getHScaleFactor() != 1.0) paint.scale(getHScaleFactor(), 1.0);
 
-    paint.setPen(RosegardenGUIColours::MatrixElementBorder);
+    paint.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::MatrixElementBorder));
 
     QRect clipRect = e->rect().normalize();
 
@@ -2137,8 +2137,8 @@ PropertyBox::paintEvent(QPaintEvent *e)
 {
     QPainter paint(this);
 
-    paint.setPen(RosegardenGUIColours::MatrixElementBorder);
-    //paint.setBrush(RosegardenGUIColours::MatrixElementBlock);
+    paint.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::MatrixElementBorder));
+    //paint.setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::MatrixElementBlock));
 
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());

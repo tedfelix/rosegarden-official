@@ -100,10 +100,10 @@ SegmentRepeatRectangle::SegmentRepeatRectangle(QCanvas *canvas,
       m_snapGrid(snapGrid),
       m_doc(doc)
 {
-    setBrush(RosegardenGUIColours::convertColour
+    setBrush(Rosegarden::GUIPalette::convertColour
 	     (m_doc->getComposition().getSegmentColourMap().getColourByIndex
 	      (m_segment->getColourIndex())).light(150));
-    setPen(RosegardenGUIColours::RepeatSegmentBorder);
+    setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RepeatSegmentBorder));
 }
 
 Rosegarden::timeT SegmentRepeatRectangle::getRepeatStartTime(int ex)
@@ -130,10 +130,10 @@ void SegmentRepeatRectangle::drawShape(QPainter& painter)
     int rWidth = int(m_snapGrid->getRulerScale()->
 		     getXForTime(m_repeatInterval));
 
-    setBrush(RosegardenGUIColours::convertColour
+    setBrush(Rosegarden::GUIPalette::convertColour
 	     (m_doc->getComposition().getSegmentColourMap().getColourByIndex
 	      (m_segment->getColourIndex())).light(150));
-    painter.setPen(RosegardenGUIColours::RepeatSegmentBorder);
+    painter.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RepeatSegmentBorder));
 
     while (pos < width + rWidth)
     {
@@ -313,10 +313,10 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
                   << ", y = " << rect().y() << std::endl;
                   */
 
-        painter.setPen(RosegardenGUIColours::SegmentAudioPreview);
+        painter.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SegmentAudioPreview));
 
 	if (h1 >= 1.0) { h1 = 1.0; painter.setPen(Qt::red); }
-	else { painter.setPen(RosegardenGUIColours::SegmentAudioPreview); }
+	else { painter.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SegmentAudioPreview)); }
 
 	painter.drawLine(tRect.x() + i,
 			 tRect.y() + int(halfRectHeight - h1 * height + 0.5),
@@ -324,7 +324,7 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
 			 tRect.y() + int(halfRectHeight));
 
 	if (h2 >= 1.0) { h2 = 1.0; painter.setPen(Qt::red); }
-	else { painter.setPen(RosegardenGUIColours::SegmentAudioPreview); }
+	else { painter.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SegmentAudioPreview)); }
 
 	painter.drawLine(tRect.x() + i,
 			 tRect.y() + int(halfRectHeight),
@@ -375,7 +375,7 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
 
     // perhaps draw an XOR'd label at some point
     /*
-      painter.setPen(RosegardenGUIColours::SegmentLabel);
+      painter.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SegmentLabel));
       painter.setFont(*m_font);
       QRect labelRect = rect();
       labelRect.setX(labelRect.x() + 3);
@@ -516,7 +516,7 @@ void SegmentNotationPreview::drawShape(QPainter& painter)
     painter.save();
 
     painter.translate(rect().x(), rect().y());
-    painter.setPen(RosegardenGUIColours::SegmentInternalPreview);
+    painter.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SegmentInternalPreview));
     QRect viewportRect = painter.xFormDev(painter.viewport());
 
     double scaleFactor = m_rulerScale->getXForTime(Rosegarden::Note(Rosegarden::Note::Crotchet).
@@ -661,7 +661,7 @@ SegmentItem::SegmentItem(TrackId trackPosition, timeT startTime, timeT endTime,
     m_selected(false),
     m_snapGrid(snapGrid),
     m_repeatRectangle(0),
-    m_colour(RosegardenGUIColours::convertColour
+    m_colour(Rosegarden::GUIPalette::convertColour
 	     (doc->getComposition().getSegmentColourMap().getColourByIndex(0))),
     m_overrideColour(false),
     m_preview(0),
@@ -685,7 +685,7 @@ SegmentItem::SegmentItem(Segment *segment,
     m_selected(false),
     m_snapGrid(snapGrid),
     m_repeatRectangle(0),
-    m_colour(RosegardenGUIColours::convertColour
+    m_colour(Rosegarden::GUIPalette::convertColour
 	     (doc->getComposition().getSegmentColourMap().getColourByIndex(0))),
     m_overrideColour(false),
     m_preview(0),
@@ -780,7 +780,7 @@ void SegmentItem::drawShape(QPainter& painter)
         {
             if (m_segment) {
                 painter.setBrush
-		    (RosegardenGUIColours::convertColour
+		    (Rosegarden::GUIPalette::convertColour
 		     (m_doc->getComposition().getSegmentColourMap().getColourByIndex
 		      (m_segment->getColourIndex())).dark(125));
 		colourset = true;
@@ -863,7 +863,7 @@ void SegmentItem::drawShape(QPainter& painter)
 
         labelRect.setX(x);
         labelRect.setY(y);
-        painter.setPen(RosegardenGUIColours::SegmentLabel);
+        painter.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SegmentLabel));
         painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, text);
 
         // Reenable the transform state
@@ -884,7 +884,7 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     // Get our segment colour
     QColor brush;
     if (m_segment && !m_overrideColour) {
-        brush = RosegardenGUIColours::convertColour
+        brush = Rosegarden::GUIPalette::convertColour
 	    (m_doc->getComposition().getSegmentColourMap().getColourByIndex
 	     (m_segment->getColourIndex()));
     } else {
@@ -1051,8 +1051,8 @@ SegmentSplitLine::SegmentSplitLine(int x, int y, int height,
                                    m_rulerScale(rulerScale),
                                    m_height(height)
 {
-    setPen(RosegardenGUIColours::SegmentSplitLine);
-    setBrush(RosegardenGUIColours::SegmentSplitLine);
+    setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SegmentSplitLine));
+    setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SegmentSplitLine));
     setZ(3);
     moveLine(x, y);
 }
@@ -1085,13 +1085,13 @@ SegmentCanvasTextFloat::SegmentCanvasTextFloat(QCanvas *canvas):
     */
 
 {
-    setBrush(RosegardenGUIColours::RotaryFloatBackground);
-    setPen(RosegardenGUIColours::RotaryFloatForeground);
+    setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RotaryFloatBackground));
+    setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RotaryFloatForeground));
     setZ(10000);
     hide();
 
     /*
-    m_text->setColor(RosegardenGUIColours::RotaryFloatForeground);
+    m_text->setColor(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RotaryFloatForeground));
     m_text->setZ(10001);
     m_text->hide();
     */
@@ -1142,7 +1142,7 @@ SegmentCanvasTextFloat::drawShape(QPainter & p)
 
     QPoint mapPos = p.worldMatrix().map(QPoint(int(x()), int(y())));
 
-    p.setPen(RosegardenGUIColours::RotaryFloatForeground);
+    p.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RotaryFloatForeground));
     p.drawText(mapPos.x() + 2, mapPos.y() + 14, m_text);
 
     p.setWorldXForm(state);
@@ -1165,7 +1165,7 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
     m_currentItem(0),
     m_recordingSegment(0),
     m_splitLine(0),
-    m_pen(RosegardenGUIColours::SegmentBorder),
+    m_pen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SegmentBorder)),
     m_fineGrain(false),
     m_showPreviews(true),
     m_doc(doc),
@@ -1179,7 +1179,7 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
 
     // prepare selection rectangle
     m_selectionRect = new QCanvasRectangle(canvas());
-    m_selectionRect->setPen(RosegardenGUIColours::SelectionRectangle);
+    m_selectionRect->setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SelectionRectangle));
     m_selectionRect->setZ(1000);  // Always in front
     m_selectionRect->hide();
 
@@ -1485,7 +1485,7 @@ SegmentCanvas::addSegmentItem(TrackId track, timeT startTime, timeT endTime)
 //    RG_DEBUG << "addSegmentItem from data: new item is " << newItem << endl;
 
     newItem->setPen(m_pen);
-//    newItem->setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(0)));
+//    newItem->setBrush(Rosegarden::GUIPalette::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(0)));
     newItem->setVisible(true);     
     newItem->setZ(1);           // Segment at Z=1, Pointer at Z=10 [rwb]
 
@@ -1501,7 +1501,7 @@ SegmentCanvas::addSegmentItem(Segment *segment)
 //    RG_DEBUG << "addSegmentItem from segment: new item is " << newItem << endl;
 
     newItem->setPen(m_pen);
-//    newItem->setBrush(RosegardenGUIColours::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(segment->getColourIndex())));
+//    newItem->setBrush(Rosegarden::GUIPalette::convertColour(m_doc->getComposition().getSegmentColourMap().getColourByIndex(segment->getColourIndex())));
     newItem->setVisible(true);     
     newItem->setZ(1);           // Segment at Z=1, Pointer at Z=10 [rwb]
 
@@ -1527,8 +1527,8 @@ void SegmentCanvas::showRecordingSegmentItem(Segment *segment, timeT endTime)
 	
 	m_recordingSegment = addSegmentItem(segment);
 	m_recordingSegment->setEndTime(endTime);
-	m_recordingSegment->setPen(RosegardenGUIColours::RecordingSegmentBorder);
-        m_recordingSegment->setColour(RosegardenGUIColours::RecordingSegmentBlock);
+	m_recordingSegment->setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RecordingSegmentBorder));
+        m_recordingSegment->setColour(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RecordingSegmentBlock));
 	m_recordingSegment->setZ(2);
 
 //	RG_DEBUG << "(recording segment now is " << m_recordingSegment << ")" << endl;

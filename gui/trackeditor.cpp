@@ -112,7 +112,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     QCanvas *canvas = new QCanvas(this);
     canvas->resize(100, 100); // call slotReadjustCanvasSize later
-    canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
+    canvas->setBackgroundColor(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SegmentCanvas));
     //canvas->retune(128);
 
     kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
@@ -279,8 +279,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     // create the position pointer
     m_pointer = new QCanvasRectangle(canvas);
-    m_pointer->setPen(RosegardenGUIColours::Pointer);
-    m_pointer->setBrush(RosegardenGUIColours::Pointer);
+                               m_pointer->setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::Pointer));
+                      m_pointer->setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::Pointer));
     m_pointer->setSize(3, canvas->height());
     m_pointer->setX(-2);
     m_pointer->setY(0);

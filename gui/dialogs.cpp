@@ -4355,11 +4355,11 @@ CountdownBar::paintEvent(QPaintEvent *e)
     p.setClipRegion(e->region());
     p.setClipRect(e->rect().normalize());
 
-    p.setPen(RosegardenGUIColours::AudioCountdownBackground);
-    p.setBrush(RosegardenGUIColours::AudioCountdownBackground);
+    p.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::AudioCountdownBackground));
+    p.setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::AudioCountdownBackground));
     p.drawRect(0, 0, m_position, m_height);
-    p.setPen(RosegardenGUIColours::AudioCountdownForeground);
-    p.setBrush(RosegardenGUIColours::AudioCountdownForeground);
+    p.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::AudioCountdownForeground));
+    p.setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::AudioCountdownForeground));
     p.drawRect(m_position, 0, m_width, m_height);
 }
 

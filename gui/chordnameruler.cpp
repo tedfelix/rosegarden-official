@@ -84,7 +84,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_boldFont.setPixelSize(12);
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
-    setBackgroundColor(RosegardenGUIColours::ChordNameRulerBackground);
+    setBackgroundColor(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::ChordNameRulerBackground));
 
     m_compositionRefreshStatusId = m_composition->getNewRefreshStatusId();
 
@@ -124,7 +124,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     m_boldFont.setPixelSize(12);
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
-    setBackgroundColor(RosegardenGUIColours::ChordNameRulerBackground);
+    setBackgroundColor(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::ChordNameRulerBackground));
 
     m_compositionRefreshStatusId = m_composition->getNewRefreshStatusId();
 
@@ -401,7 +401,7 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     Rosegarden::Profiler profiler1("ChordNameRuler::paintEvent (whole)");
 
     QPainter paint(this);
-    paint.setPen(RosegardenGUIColours::ChordNameRulerForeground);
+    paint.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::ChordNameRulerForeground));
 
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());

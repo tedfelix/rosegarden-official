@@ -877,7 +877,7 @@ PluginControl::PluginControl(QWidget *parent,
 				      ticks,
 				      snapToTicks);
 
-        m_dial->setKnobColour(RosegardenGUIColours::RotaryPlugin);
+        m_dial->setKnobColour(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RotaryPlugin));
 
         //m_dial->setPosition(defaultValue);
         //emit valueChanged(defaultValue);

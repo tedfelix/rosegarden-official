@@ -565,21 +565,7 @@ void RosegardenGUIApp::setupActions()
                 actionCollection(),
                 "show_inst_segment_parameters");
 
-/*  dmm - This was a retarded hack I did to deal with settings amnesia of the day...  we
- *  should get rid of it.   
-    new KAction(i18n("Toggle &All of the Above"), 0, this,
-                SLOT(slotToggleAll()),
-                actionCollection(),
-                "toggle_all");  */
-
-#if KDE_VERSION >= 196614 // KDE 3.1
     KStdAction::tipOfDay( this, SLOT( slotShowTip() ), actionCollection() );
-#else
-    new KAction(i18n("Show Tip of the &Day"), 0, this,
-                SLOT(slotShowTip()),
-                actionCollection(),
-                "help_show_tip");
-#endif
 
     // Standard Actions 
     //
@@ -1874,12 +1860,7 @@ void RosegardenGUIApp::slotFileOpen()
     }	
 
     KURL url = KFileDialog::getOpenURL
-	(
-#if KDE_VERSION >= 196614 
-         ":ROSEGARDEN",
-#else
-         QString::null,
-#endif
+	(":ROSEGARDEN",
 	 "audio/x-rosegarden audio/x-midi audio/x-rosegarden21", this,
 	 i18n("Open File"));
     if ( url.isEmpty() ) { return; }
@@ -1901,12 +1882,7 @@ void RosegardenGUIApp::slotFileOpen()
 void RosegardenGUIApp::slotMerge()
 {
     KURL url = KFileDialog::getOpenURL
-	(
-#if KDE_VERSION >= 196614
-         ":ROSEGARDEN",
-#else
-         QString::null,
-#endif
+	(":ROSEGARDEN",
 	 "audio/x-rosegarden audio/x-midi audio/x-rosegarden21", this,
 	 i18n("Open File"));
     if ( url.isEmpty() ) { return; }
@@ -2738,42 +2714,6 @@ void RosegardenGUIApp::slotParametersDockedBack(KDockWidget* dw, KDockWidget::Do
     }
 }
 
-/* dmm - commenting this out for impending removal...
-void RosegardenGUIApp::slotToggleAll()
-{
-    int c = 0;
-
-    c += m_viewTransport->isChecked();
-    c += m_viewRulers->isChecked();
-    c += m_viewChordNameRuler->isChecked();
-    c += m_viewTempoRuler->isChecked();
-    c += m_viewPreviews->isChecked();
-    c += m_viewTrackLabels->isChecked();
-
-    bool state = false;
-    
-    if (c < 4) state = true;
-
-    m_viewTransport->setChecked(state);
-    slotToggleTransport();
-    
-    m_viewRulers->setChecked(state);
-    slotToggleRulers();
-   
-    m_viewChordNameRuler->setChecked(state);
-    slotToggleChordNameRuler();
-    
-    m_viewTempoRuler->setChecked(state);
-    slotToggleTempoRuler();
-    
-    m_viewPreviews->setChecked(state);
-    slotTogglePreviews();
-    
-    m_viewTrackLabels->setChecked(state);
-    slotToggleTrackLabels();
-} */
-
-
 void RosegardenGUIApp::slotToggleStatusBar()
 {
     KTmpStatusMsg msg(i18n("Toggle the statusbar..."), this);
@@ -3099,12 +3039,7 @@ void RosegardenGUIApp::slotRevertToSaved()
 void RosegardenGUIApp::slotImportMIDI()
 {
     KURL url = KFileDialog::getOpenURL
-        (
-#if KDE_VERSION >= 196614
-         ":MIDI",
-#else
-         QString::null,
-#endif
+        (":MIDI",
          "audio/x-midi", this,
          i18n("Open MIDI File"));
     if (url.isEmpty()) { return; }
@@ -3119,12 +3054,7 @@ void RosegardenGUIApp::slotImportMIDI()
 void RosegardenGUIApp::slotMergeMIDI()
 {
     KURL url = KFileDialog::getOpenURL
-        (
-#if KDE_VERSION >= 196614
-         ":MIDI",
-#else
-         QString::null,
-#endif
+        (":MIDI",
          "audio/x-midi", this,
          i18n("Merge MIDI File"));
     if (url.isEmpty()) { return; }
@@ -3272,12 +3202,7 @@ void RosegardenGUIApp::slotImportRG21()
     if (!m_doc->saveIfModified()) return;
 
     KURL url = KFileDialog::getOpenURL
-        (
-#if KDE_VERSION >= 196614
-         ":ROSEGARDEN21",
-#else
-         QString::null,
-#endif
+        (":ROSEGARDEN21",
          i18n("*.rose|Rosegarden-2 files\n*|All files"), this,
          i18n("Open Rosegarden 2.1 File"));
     if (url.isEmpty()) { return; }
@@ -3292,12 +3217,7 @@ void RosegardenGUIApp::slotImportRG21()
 void RosegardenGUIApp::slotMergeRG21()
 {
     KURL url = KFileDialog::getOpenURL
-        (
-#if KDE_VERSION >= 196614
-         ":ROSEGARDEN21",
-#else
-         QString::null,
-#endif
+        (":ROSEGARDEN21",
          i18n("*.rose|Rosegarden-2 files\n*|All files"), this,
          i18n("Open Rosegarden 2.1 File"));
     if (url.isEmpty()) { return; }
@@ -3364,12 +3284,7 @@ RosegardenGUIApp::slotImportHydrogen()
     if (!m_doc->saveIfModified()) return;
 
     KURL url = KFileDialog::getOpenURL
-        (
-#if KDE_VERSION >= 196614
-         ":HYDROGEN",
-#else
-         QString::null,
-#endif
+        (":HYDROGEN",
          i18n("*.h2song|Hydrogen files\n*|All files"), this,
          i18n("Open Hydrogen File"));
     if (url.isEmpty()) { return; }
@@ -3384,12 +3299,7 @@ RosegardenGUIApp::slotImportHydrogen()
 void RosegardenGUIApp::slotMergeHydrogen()
 {
     KURL url = KFileDialog::getOpenURL
-        (
-#if KDE_VERSION >= 196614
-         ":HYDROGEN",
-#else
-         QString::null,
-#endif
+        (":HYDROGEN",
          i18n("*.h2song|Hydrogen files\n*|All files"), this,
          i18n("Open Hydrogen File"));
     if (url.isEmpty()) { return; }
@@ -6258,12 +6168,7 @@ RosegardenGUIApp::slotImportStudio()
     }
 
     KURL url = KFileDialog::getOpenURL
-        (
-#if KDE_VERSION >= 196614
-         studioDir,
-#else
-         QString::null,
-#endif
+        (studioDir,
          "audio/x-rosegarden-device audio/x-rosegarden",
          this, i18n("Import Studio from File"));
 

@@ -51,7 +51,7 @@ void MatrixElement::setCanvas(QCanvas* c)
         //
         //m_canvasRect->setBrush(RosegardenGUIColours::MatrixElementBlock);
 
-        m_canvasRect->setPen(RosegardenGUIColours::MatrixElementBorder);
+        m_canvasRect->setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::MatrixElementBorder));
         m_canvasRect->show();
     }
 }

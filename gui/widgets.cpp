@@ -541,7 +541,7 @@ RosegardenRotary::paintEvent(QPaintEvent *)
 
     // now the bright metering bit
 
-    pen.setColor(RosegardenGUIColours::RotaryMeter);
+    pen.setColor(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RotaryMeter));
     pen.setWidth(indent);
     paint.setPen(pen);
 
@@ -1324,8 +1324,8 @@ RosegardenTextFloat::paintEvent(QPaintEvent *e)
 
     paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
 
-    paint.setPen(RosegardenGUIColours::RotaryFloatForeground);
-    paint.setBrush(RosegardenGUIColours::RotaryFloatBackground);
+    paint.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RotaryFloatForeground));
+    paint.setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RotaryFloatBackground));
 
     QFontMetrics metrics(paint.fontMetrics());
     QRect textBound = metrics.boundingRect(m_text);

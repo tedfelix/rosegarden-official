@@ -282,16 +282,16 @@ LinedStaff::~LinedStaff()
 void
 LinedStaff::initCursors()
 {
-    QPen pen(RosegardenGUIColours::Pointer);
+    QPen pen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::Pointer));
     pen.setWidth(pointerWidth);
 
     m_pointer->setPen(pen);
-    m_pointer->setBrush(RosegardenGUIColours::Pointer);
+    m_pointer->setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::Pointer));
 
-    pen.setColor(RosegardenGUIColours::InsertCursor);
+    pen.setColor(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::InsertCursor));
 
     m_insertCursor->setPen(pen);
-    m_insertCursor->setBrush(RosegardenGUIColours::InsertCursor);
+    m_insertCursor->setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::InsertCursor));
 }
 
 void
@@ -825,11 +825,11 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     line->moveBy(x, y);
 
     if (isCorrect) {
-	line->setPen(RosegardenGUIColours::BarLine);
-	line->setBrush(RosegardenGUIColours::BarLine);
+	line->setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::BarLine));
+	line->setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::BarLine));
     } else {
-	line->setPen(RosegardenGUIColours::BarLineIncorrect);
-	line->setBrush(RosegardenGUIColours::BarLineIncorrect);
+	line->setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::BarLineIncorrect));
+	line->setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::BarLineIncorrect));
     }
 
     line->setZ(-1);
@@ -853,8 +853,8 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 				     style);
 	eline->moveBy(xe, y);
 
-	eline->setPen(RosegardenGUIColours::BarLine);
-	eline->setBrush(RosegardenGUIColours::BarLine);
+	eline->setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::BarLine));
+	eline->setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::BarLine));
 
 	eline->setZ(-1);
 	if (hidden) eline->hide();
@@ -907,15 +907,15 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
             double currentGrid = gridLines/double(timeSig.getBeatsPerBar());
 
-	    rect->setPen(RosegardenGUIColours::BeatLine);
-	    rect->setBrush(RosegardenGUIColours::BeatLine);
+	    rect->setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::BeatLine));
+	    rect->setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::BeatLine));
 
             // Reset to SubBeatLine colour if we're not a beat line - avoid div by zero!
             //
             if (currentGrid > 1.0 && double(gridLine)/currentGrid != gridLine/int(currentGrid))
             {
-	        rect->setPen(RosegardenGUIColours::SubBeatLine);
-	        rect->setBrush(RosegardenGUIColours::SubBeatLine);
+	        rect->setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SubBeatLine));
+	        rect->setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SubBeatLine));
             }
 
 	    rect->setZ(-1);
@@ -933,8 +933,8 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
 	rect->moveBy(x, y);
 
-	rect->setPen(RosegardenGUIColours::StaffConnectingLine);
-	rect->setBrush(RosegardenGUIColours::StaffConnectingLine);
+	rect->setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::StaffConnectingLine));
+	rect->setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::StaffConnectingLine));
 	rect->setZ(-3);
 	if (hidden) rect->hide();
 	else rect->show();
@@ -1099,8 +1099,8 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
         y = getCanvasYForTopLine(row);
 	QCanvasRectangle *line = new QCanvasRectangle
 	    (int(x + length), y, barThickness, m_connectingLineLength, m_canvas);
-	line->setPen(RosegardenGUIColours::StaffConnectingTerminatingLine);
-	line->setBrush(RosegardenGUIColours::StaffConnectingTerminatingLine);
+	line->setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::StaffConnectingTerminatingLine));
+	line->setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::StaffConnectingTerminatingLine));
         line->setZ(-2);
         line->show();
 	m_staffConnectingLines[row] = line;

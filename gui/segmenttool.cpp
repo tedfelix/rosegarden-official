@@ -42,7 +42,7 @@ using Rosegarden::timeT;
 using Rosegarden::SnapGrid;
 using Rosegarden::Note;
 using Rosegarden::SegmentSelection;
-using RosegardenGUIColours::convertColour;
+using Rosegarden::GUIPalette;
 
 //////////////////////////////////////////////////////////////////////
 //                 Segment Tools
@@ -385,14 +385,14 @@ SegmentMover::SegmentMover(SegmentCanvas *c, RosegardenGUIDoc *d)
     m_foreGuide(new QCanvasRectangle(m_canvas->canvas())),
     m_topGuide(new QCanvasRectangle(m_canvas->canvas()))
 {
-    m_foreGuide->setPen(RosegardenGUIColours::MovementGuide);
-    m_foreGuide->setBrush(RosegardenGUIColours::MovementGuide);
+    m_foreGuide->setPen(GUIPalette::getColor(GUIPalette::MovementGuide));
+    m_foreGuide->setBrush(GUIPalette::getColor(GUIPalette::MovementGuide));
     m_foreGuide->setSize(1, m_canvas->canvas()->height());
     m_foreGuide->setZ(10);
     m_foreGuide->hide();
 
-    m_topGuide->setPen(RosegardenGUIColours::MovementGuide);
-    m_topGuide->setBrush(RosegardenGUIColours::MovementGuide);
+    m_topGuide->setPen(GUIPalette::getColor(GUIPalette::MovementGuide));
+    m_topGuide->setBrush(GUIPalette::getColor(GUIPalette::MovementGuide));
     m_topGuide->setSize(m_canvas->canvas()->width(), 1);
     m_topGuide->setZ(10);
     m_topGuide->hide();
@@ -798,14 +798,14 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c, RosegardenGUIDoc *d)
 {
     RG_DEBUG << "SegmentSelector()\n";
 
-    m_foreGuide->setPen(RosegardenGUIColours::MovementGuide);
-    m_foreGuide->setBrush(RosegardenGUIColours::MovementGuide);
+    m_foreGuide->setPen(GUIPalette::getColor(GUIPalette::MovementGuide));
+    m_foreGuide->setBrush(GUIPalette::getColor(GUIPalette::MovementGuide));
     m_foreGuide->setSize(1, m_canvas->canvas()->height());
     m_foreGuide->setZ(10);
     m_foreGuide->hide();
 
-    m_topGuide->setPen(RosegardenGUIColours::MovementGuide);
-    m_topGuide->setBrush(RosegardenGUIColours::MovementGuide);
+    m_topGuide->setPen(GUIPalette::getColor(GUIPalette::MovementGuide));
+    m_topGuide->setBrush(GUIPalette::getColor(GUIPalette::MovementGuide));
     m_topGuide->setSize(m_canvas->canvas()->width(), 1);
     m_topGuide->setZ(10);
     m_topGuide->hide();
@@ -884,7 +884,7 @@ SegmentSelector::clearSelected()
     {
         it->second->disconnect(this);
         it->second->setSelected(false, 
-          convertColour(m_doc->getComposition().getSegmentColourMap()
+                                GUIPalette::convertColour(m_doc->getComposition().getSegmentColourMap()
                         .getColourByIndex(it->second->getSegment()->getColourIndex())));
     }
 
@@ -1046,7 +1046,7 @@ SegmentSelector::slotSelectSegmentItem(SegmentItem *selectedItem)
     // then don't set the m_currentItem
     //
     selectedItem->setSelected(true, 
-        convertColour(m_doc->getComposition().getSegmentColourMap()
+                              GUIPalette::convertColour(m_doc->getComposition().getSegmentColourMap()
         .getColourByIndex(selectedItem->getSegment()->getColourIndex())).dark(200));
     addToSelection(selectedItem);
     m_canvas->canvas()->update();
@@ -1276,7 +1276,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
                 {
                     removeFromSelection(*oIt);
                     m_canvas->getSegmentItem(*oIt)->
-                        setSelected(false, convertColour(
+                        setSelected(false, GUIPalette::convertColour(
                             m_doc->getComposition().getSegmentColourMap().
                             getColourByIndex(m_canvas->getSegmentItem(*oIt)
                             ->getSegment()->getColourIndex())));

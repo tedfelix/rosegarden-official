@@ -124,4 +124,14 @@ DefaultVelocityColour* DefaultVelocityColour::getInstance()
     return m_instance;
 }
 
+DefaultVelocityColour::DefaultVelocityColour()
+    : VelocityColour(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::LevelMeterRed),
+                     Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::LevelMeterOrange),
+                     Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::LevelMeterGreen),
+                     127, // max knee
+                     115, // red knee
+                     75,  // orange knee
+                     25)  // green knee
+{}
+
 DefaultVelocityColour* DefaultVelocityColour::m_instance = 0;

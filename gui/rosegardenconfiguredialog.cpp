@@ -1990,7 +1990,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 	QPixmap colourPixmap(16, 16);
 	Rosegarden::Colour colour =
 	    comp.getSegmentColourMap().getColourByIndex(s->getColourIndex());
-	colourPixmap.fill(RosegardenGUIColours::convertColour(colour));
+	colourPixmap.fill(Rosegarden::GUIPalette::convertColour(colour));
 
 	table->setItem(i, 2,
 		       new QTableItem(table, QTableItem::Never,
@@ -2374,7 +2374,7 @@ ColourConfigurationPage::slotTextChanged(unsigned int index, QString string)
 void
 ColourConfigurationPage::slotColourChanged(unsigned int index, QColor color)
 {
-    m_map.modifyColourByIndex(m_listmap[index], RosegardenGUIColours::convertColour(color));
+    m_map.modifyColourByIndex(m_listmap[index], Rosegarden::GUIPalette::convertColour(color));
     m_colourtable->populate_table(m_map, m_listmap);
 }
 
@@ -2403,7 +2403,7 @@ ColourConfigurationPage::slotAddNew()
 
         if (result == KColorDialog::Accepted)
         {
-            Rosegarden::Colour temp2 = RosegardenGUIColours::convertColour(temp);
+            Rosegarden::Colour temp2 = Rosegarden::GUIPalette::convertColour(temp);
             m_map.addItem(temp2, qstrtostr(newName));
             m_colourtable->populate_table(m_map, m_listmap);
         }

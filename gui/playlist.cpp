@@ -183,12 +183,7 @@ PlayList::~PlayList()
 void PlayList::slotOpenFiles()
 {
     KURL::List kurlList =
-        KFileDialog::getOpenURLs(
-#if KDE_VERSION >= 196614
-                                 ":ROSEGARDEN",
-#else
-                                 QString::null,
-#endif
+        KFileDialog::getOpenURLs(":ROSEGARDEN",
                                  "audio/x-rosegarden audio/x-midi audio/x-rosegarden21",
                                  this,
                                  i18n("Select one or more Rosegarden files"));

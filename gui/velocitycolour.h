@@ -97,15 +97,7 @@ public:
     static DefaultVelocityColour* getInstance();
     
 protected:
-    DefaultVelocityColour() :
-	VelocityColour(RosegardenGUIColours::LevelMeterRed,
-		       RosegardenGUIColours::LevelMeterOrange,
-		       RosegardenGUIColours::LevelMeterGreen,
-		       127, // max knee
-		       115, // red knee
-		       75,  // orange knee
-		       25)  // green knee
-    { }
+    DefaultVelocityColour();
 
     static DefaultVelocityColour* m_instance;
 };

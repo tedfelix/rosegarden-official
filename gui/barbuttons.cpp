@@ -131,7 +131,7 @@ void BarButtons::connectRulerToDocPointer(RosegardenGUIDoc *doc)
          m_loopRuler,
          SLOT(slotSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT)));
 
-    m_loopRuler->setBackgroundColor(RosegardenGUIColours::PointerRuler);
+    m_loopRuler->setBackgroundColor(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::PointerRuler));
 }
 
 void BarButtons::slotScrollHoriz(int x)
@@ -318,7 +318,7 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
                 painter.fillRect(static_cast<int>(x), 1,
 				 static_cast<int>(metrics.width(name) + 5),
 				 m_barHeight - 2, 
-                                 QBrush(RosegardenGUIColours::MarkerBackground));
+                                 QBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::MarkerBackground)));
 
 		QPoint textDrawPoint = painter.xForm
 		    (QPoint(static_cast<int>(x + 2), m_barHeight - 4));

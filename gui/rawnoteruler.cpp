@@ -57,7 +57,7 @@ RawNoteRuler::RawNoteRuler(RulerScale *rulerScale,
     m_segment(segment),
     m_rulerScale(rulerScale)
 {
-    setBackgroundColor(RosegardenGUIColours::RawNoteRulerBackground);
+    setBackgroundColor(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RawNoteRulerBackground));
 }
 
 RawNoteRuler::~RawNoteRuler()
@@ -360,8 +360,8 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
     paint.setBrush(colour);
     paint.drawRect(ui0 + 1, iy + 1, uiw, ih - 1);
     
-    paint.setPen(RosegardenGUIColours::RawNoteRulerForeground);
-    paint.setBrush(RosegardenGUIColours::RawNoteRulerForeground);
+    paint.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RawNoteRulerForeground));
+    paint.setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RawNoteRulerForeground));
     paint.drawLine(qi0,     iy,      qi1 - 1, iy);
     paint.drawLine(qi0,     iy + ih, qi1 - 1, iy + ih);
     paint.drawLine(ui0,     iy + 1,  ui0,     iy + ih - 1);
@@ -404,8 +404,8 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
     timeT   to = m_rulerScale->getTimeForX
 	(clipRect.x() + clipRect.width() - m_currentXOffset + 100 - m_xorigin);
 
-    paint.setPen(RosegardenGUIColours::RawNoteRulerForeground);
-    paint.setBrush(RosegardenGUIColours::RawNoteRulerForeground);
+    paint.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RawNoteRulerForeground));
+    paint.setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RawNoteRulerForeground));
     paint.drawLine(0, 0, width(), 0);
 
     // draw the bar divisions
@@ -429,8 +429,8 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 	timeT base = timeSig.getBarDuration();
 	timeT barEnd = barStart + base;
 
-	paint.setPen(RosegardenGUIColours::RawNoteRulerForeground);
-	paint.setBrush(RosegardenGUIColours::RawNoteRulerForeground);
+	paint.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RawNoteRulerForeground));
+	paint.setBrush(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RawNoteRulerForeground));
 
 	int x = int(m_rulerScale->getXForTime(barStart) +
 		    m_currentXOffset + m_xorigin);

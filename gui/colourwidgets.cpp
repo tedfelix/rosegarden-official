@@ -115,7 +115,7 @@ RosegardenColourTable::populate_table(Rosegarden::ColourMap &input, ColourList &
         setItem(i, 0, text);
 
         list[i] = it->first;
-        m_colours[i] = RosegardenGUIColours::convertColour(it->second.first);
+        m_colours[i] = Rosegarden::GUIPalette::convertColour(it->second.first);
 
         RosegardenColourTableItem *temp = new RosegardenColourTableItem(this, m_colours[i]);
         setItem(i, 1, temp);

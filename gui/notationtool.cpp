@@ -1635,7 +1635,7 @@ void NotationSelector::ready()
     m_selectionRect = new QCanvasRectangle(m_nParentView->canvas());
     
     m_selectionRect->hide();
-    m_selectionRect->setPen(RosegardenGUIColours::SelectionRectangle);
+    m_selectionRect->setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SelectionRectangle));
 
     m_nParentView->setCanvasCursor(Qt::arrowCursor);
     m_nParentView->setHeightTracking(false);

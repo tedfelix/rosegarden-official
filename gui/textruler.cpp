@@ -53,7 +53,7 @@ TextRuler::TextRuler(RulerScale *rulerScale,
       m_fontMetrics(m_font)
 {
     m_mySegmentMaybe = (m_segment->getComposition() != 0);
-    setBackgroundColor(RosegardenGUIColours::TextRulerBackground);
+    setBackgroundColor(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::TextRulerBackground));
 
     m_font.setPixelSize(10);
 }
@@ -110,7 +110,7 @@ void
 TextRuler::paintEvent(QPaintEvent* e)
 {
     QPainter paint(this);
-    paint.setPen(RosegardenGUIColours::TextRulerForeground);
+    paint.setPen(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::TextRulerForeground));
 
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());

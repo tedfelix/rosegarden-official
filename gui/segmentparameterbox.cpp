@@ -325,7 +325,7 @@ SegmentParameterBox::slotDocColoursChanged()
     for (Rosegarden::RCMap::const_iterator it=temp.begin(); it != temp.end(); ++it)
     {
         QPixmap colour(15,15);
-        colour.fill(RosegardenGUIColours::convertColour(it->second.first));
+        colour.fill(Rosegarden::GUIPalette::convertColour(it->second.first));
         if (it->second.second == std::string(""))
             m_colourValue->insertItem(colour, i18n("Default Color"), i);
         else
@@ -883,7 +883,7 @@ SegmentParameterBox::slotColourSelected(int value)
 
             if (result == KColorDialog::Accepted)
             {
-                Rosegarden::Colour newRColour = RosegardenGUIColours::convertColour(newColour);
+                Rosegarden::Colour newRColour = Rosegarden::GUIPalette::convertColour(newColour);
                 newMap.addItem(newRColour, qstrtostr(newName));
                 SegmentColourMapCommand *command = new SegmentColourMapCommand(m_doc, newMap);
                 addCommandToHistory(command);

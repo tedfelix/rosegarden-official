@@ -147,15 +147,15 @@ VUMeter::VUMeter(QWidget *parent,
 	m_type == AudioPeakHoldIEC ||
 	m_type == AudioPeakHoldIECLong) {
 	m_velocityColour =
-	    new VelocityColour(RosegardenGUIColours::LevelMeterSolidRed,
-			       RosegardenGUIColours::LevelMeterSolidOrange,
-			       RosegardenGUIColours::LevelMeterSolidGreen,
+	    new VelocityColour(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::LevelMeterSolidRed),
+			       Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::LevelMeterSolidOrange),
+			       Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::LevelMeterSolidGreen),
 			       max, red, orange, green);
     } else {
 	m_velocityColour =
-	    new VelocityColour(RosegardenGUIColours::LevelMeterRed,
-			       RosegardenGUIColours::LevelMeterOrange,
-			       RosegardenGUIColours::LevelMeterGreen,
+	    new VelocityColour(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::LevelMeterRed),
+			       Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::LevelMeterOrange),
+			       Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::LevelMeterGreen),
 			       max, red, orange, green);
     }
 }

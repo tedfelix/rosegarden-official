@@ -1012,7 +1012,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     m_recordFader = new RosegardenFader(Rosegarden::AudioLevel::ShortFader,
 					20, m_vuMeter->height(), faderHbox);
 
-    m_recordFader->setOutlineColour(RosegardenGUIColours::RecordFaderOutline);
+    m_recordFader->setOutlineColour(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RecordFaderOutline));
 
     delete m_vuMeter; // only used the first one to establish height,
 		      // actually want it after the record fader in
@@ -1022,7 +1022,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     m_fader = new RosegardenFader(Rosegarden::AudioLevel::ShortFader,
 				  20, m_vuMeter->height(), faderHbox);
 
-    m_fader->setOutlineColour(RosegardenGUIColours::PlaybackFaderOutline);
+    m_fader->setOutlineColour(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::PlaybackFaderOutline));
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     m_monoPixmap.load(QString("%1/misc/mono.xpm").arg(pixmapDir));
@@ -1032,7 +1032,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
 				 RosegardenRotary::NoTicks, false, true);
 
     // same as the knob colour on the MIDI pan
-    m_pan->setKnobColour(RosegardenGUIColours::RotaryPastelGreen);
+    m_pan->setKnobColour(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RotaryPastelGreen));
 
     m_stereoButton = new QPushButton(this);
     m_stereoButton->setPixmap(m_monoPixmap); // default is mono
@@ -1052,7 +1052,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
 					   AudioRouteMenu::Out,
 					   AudioRouteMenu::Regular);
     } else {
-	m_pan->setKnobColour(RosegardenGUIColours::RotaryPastelOrange);
+	m_pan->setKnobColour(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::RotaryPastelOrange));
 
 	m_audioInput = 0;
 	m_audioOutput = 0;

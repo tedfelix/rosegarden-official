@@ -22,6 +22,8 @@
 #ifndef _COLOURS_H_
 #define _COLOURS_H_
 
+#include <map>
+
 #include "Colour.h"
 #include <qcolor.h>
 
@@ -34,107 +36,227 @@
  * at the same time.
  */
 
-namespace RosegardenGUIColours
+namespace Rosegarden {
+class GUIPalette 
 {
-    extern const QColor ActiveRecordTrack;
+public:
+    static QColor getColor(const char* const colorName);
 
-    extern const QColor SegmentCanvas;
-    extern const QColor SegmentBorder;
+    static Rosegarden::Colour convertColour(const QColor &input);
+    static QColor convertColour(const Rosegarden::Colour &input);
 
-    extern const QColor RecordingSegmentBlock;
-    extern const QColor RecordingSegmentBorder;
+    static const char* const ColoursConfigGroup;
 
-    extern const QColor RepeatSegmentBorder;
+    static const char* const ActiveRecordTrack;
 
-    extern const QColor SegmentAudioPreview;
-    extern const QColor SegmentInternalPreview;
-    extern const QColor SegmentLabel;
-    extern const QColor SegmentSplitLine;
+    static const char* const SegmentCanvas;
+    static const char* const SegmentBorder;
+    static const char* const RecordingSegmentBlock;
+    static const char* const RecordingSegmentBorder;
 
-    extern const QColor MatrixElementBorder;
-    extern const QColor MatrixElementBlock;
+    static const char* const RepeatSegmentBorder;
 
-    extern const QColor LoopRulerBackground;
-    extern const QColor LoopRulerForeground;
-    extern const QColor LoopHighlight;
+    static const char* const SegmentAudioPreview;
+    static const char* const SegmentInternalPreview;
+    static const char* const SegmentLabel;
+    static const char* const SegmentSplitLine;
 
-    extern const QColor TempoBase;
+    static const char* const MatrixElementBorder;
+    static const char* const MatrixElementBlock;
 
-    extern const QColor TextRulerBackground;
-    extern const QColor TextRulerForeground;
-  
-    extern const QColor ChordNameRulerBackground;
-    extern const QColor ChordNameRulerForeground;
+    static const char* const LoopRulerBackground;
+    static const char* const LoopRulerForeground;
+    static const char* const LoopHighlight;
 
-    extern const QColor RawNoteRulerBackground;
-    extern const QColor RawNoteRulerForeground;
-  
-    extern const QColor LevelMeterGreen;
-    extern const QColor LevelMeterOrange;
-    extern const QColor LevelMeterRed;
-  
-    extern const QColor LevelMeterSolidGreen;
-    extern const QColor LevelMeterSolidOrange;
-    extern const QColor LevelMeterSolidRed;
+    static const char* const TempoBase;
 
-    extern const QColor BarLine;
-    extern const QColor BarLineIncorrect;
-    extern const QColor BeatLine;
-    extern const QColor SubBeatLine;
-    extern const QColor StaffConnectingLine;
-    extern const QColor StaffConnectingTerminatingLine;
-    extern const QColor StaffRulerBackground;
+    static const char* const TextRulerBackground;
+    static const char* const TextRulerForeground;
+
+    static const char* const ChordNameRulerBackground;
+    static const char* const ChordNameRulerForeground;
+
+    static const char* const RawNoteRulerBackground;
+    static const char* const RawNoteRulerForeground;
+
+    static const char* const LevelMeterGreen;
+    static const char* const LevelMeterOrange;
+    static const char* const LevelMeterRed;
+
+    static const char* const LevelMeterSolidGreen;
+    static const char* const LevelMeterSolidOrange;
+    static const char* const LevelMeterSolidRed;
+
+    static const char* const BarLine;
+    static const char* const BarLineIncorrect;
+    static const char* const BeatLine;
+    static const char* const SubBeatLine;
+    static const char* const StaffConnectingLine;
+    static const char* const StaffConnectingTerminatingLine;
+
+    static const char* const Pointer;
+    static const char* const PointerRuler;
+
+    static const char* const InsertCursor;
+    static const char* const InsertCursorRuler;
+
+    static const char* const MovementGuide;
+    static const char* const SelectionRectangle;
+    static const char* const SelectedElement;
+
+    static const int SelectedElementHue;
+    static const int SelectedElementMinValue;
+    static const int HighlightedElementHue;
+    static const int HighlightedElementMinValue;
+    static const int QuantizedNoteHue;
+    static const int QuantizedNoteMinValue;
+    static const int TriggerNoteHue;
+    static const int TriggerNoteMinValue;
+
+    static const char* const TextAnnotationBackground;
+
+    static const char* const AudioCountdownBackground;
+    static const char* const AudioCountdownForeground;
+
+    static const char* const RotaryFloatBackground;
+    static const char* const RotaryFloatForeground;
+
+    static const char* const RotaryPastelBlue;
+    static const char* const RotaryPastelRed;
+    static const char* const RotaryPastelGreen;
+    static const char* const RotaryPastelOrange;
+    static const char* const RotaryPastelYellow;
+
+    static const char* const MatrixKeyboardFocus;
+
+    static const char* const RotaryPlugin;
+
+    static const char* const RotaryMeter;
+
+    static const char* const MarkerBackground;
+
+    static const char* const MuteTrackLED;
+    static const char* const RecordTrackLED;
+
+    static const char* const PlaybackFaderOutline;
+    static const char* const RecordFaderOutline;
+
     
-    extern const QColor Pointer;
-    extern const QColor PointerRuler;
+protected:
+    GUIPalette();
+    QColor getDefaultColor(const char* const colorName);
 
-    extern const QColor InsertCursor;
-    extern const QColor InsertCursorRuler;
+    //--------------- Data members ---------------------------------
+    static GUIPalette* getInstance();
+    static GUIPalette* m_instance;
 
-    extern const QColor MovementGuide;
-    extern const QColor SelectionRectangle;
-    extern const QColor SelectedElement;
-    extern const int SelectedElementHue;
-    extern const int SelectedElementMinValue;
-    extern const int HighlightedElementHue;
-    extern const int HighlightedElementMinValue;
-    extern const int QuantizedNoteHue;
-    extern const int QuantizedNoteMinValue;
-    extern const int TriggerNoteHue;
-    extern const int TriggerNoteMinValue;
-
-    extern const QColor TextAnnotationBackground;
-
-    extern const QColor AudioCountdownBackground;
-    extern const QColor AudioCountdownForeground;
-
-    extern const QColor RotaryFloatBackground;
-    extern const QColor RotaryFloatForeground;
-
-    extern const QColor RotaryPastelBlue;
-    extern const QColor RotaryPastelRed;
-    extern const QColor RotaryPastelGreen;
-    extern const QColor RotaryPastelOrange;
-    extern const QColor RotaryPastelYellow;
-
-    extern const QColor RotaryPlugin;
-
-    extern const QColor RotaryMeter;
-
-    extern const QColor MatrixKeyboardFocus;
-
-    extern const QColor MarkerBackground;
-
-    extern const QColor MuteTrackLED;
-    extern const QColor RecordTrackLED;
-
-    extern const QColor PlaybackFaderOutline;
-    extern const QColor RecordFaderOutline;
-
-    Rosegarden::Colour convertColour(const QColor &input);
-    QColor convertColour(const Rosegarden::Colour &input);
-
+    typedef std::map<const char* const, QColor> colormap;
+    
+    colormap m_defaultsMap;
+};
+ 
 }
+
+
+// namespace RosegardenGUIColours
+// {
+//     extern const QColor ActiveRecordTrack;
+
+//     extern const QColor SegmentCanvas;
+//     extern const QColor SegmentBorder;
+
+//     extern const QColor RecordingSegmentBlock;
+//     extern const QColor RecordingSegmentBorder;
+
+//     extern const QColor RepeatSegmentBorder;
+
+//     extern const QColor SegmentAudioPreview;
+//     extern const QColor SegmentInternalPreview;
+//     extern const QColor SegmentLabel;
+//     extern const QColor SegmentSplitLine;
+
+//     extern const QColor MatrixElementBorder;
+//     extern const QColor MatrixElementBlock;
+
+//     extern const QColor LoopRulerBackground;
+//     extern const QColor LoopRulerForeground;
+//     extern const QColor LoopHighlight;
+
+//     extern const QColor TempoBase;
+
+//     extern const QColor TextRulerBackground;
+//     extern const QColor TextRulerForeground;
+  
+//     extern const QColor ChordNameRulerBackground;
+//     extern const QColor ChordNameRulerForeground;
+
+//     extern const QColor RawNoteRulerBackground;
+//     extern const QColor RawNoteRulerForeground;
+  
+//     extern const QColor LevelMeterGreen;
+//     extern const QColor LevelMeterOrange;
+//     extern const QColor LevelMeterRed;
+  
+//     extern const QColor LevelMeterSolidGreen;
+//     extern const QColor LevelMeterSolidOrange;
+//     extern const QColor LevelMeterSolidRed;
+
+//     extern const QColor BarLine;
+//     extern const QColor BarLineIncorrect;
+//     extern const QColor BeatLine;
+//     extern const QColor SubBeatLine;
+//     extern const QColor StaffConnectingLine;
+//     extern const QColor StaffConnectingTerminatingLine;
+//     extern const QColor StaffRulerBackground;
+    
+//     extern const QColor Pointer;
+//     extern const QColor PointerRuler;
+
+//     extern const QColor InsertCursor;
+//     extern const QColor InsertCursorRuler;
+
+//     extern const QColor MovementGuide;
+//     extern const QColor SelectionRectangle;
+//     extern const QColor SelectedElement;
+//     extern const int SelectedElementHue;
+//     extern const int SelectedElementMinValue;
+//     extern const int HighlightedElementHue;
+//     extern const int HighlightedElementMinValue;
+//     extern const int QuantizedNoteHue;
+//     extern const int QuantizedNoteMinValue;
+//     extern const int TriggerNoteHue;
+//     extern const int TriggerNoteMinValue;
+
+//     extern const QColor TextAnnotationBackground;
+
+//     extern const QColor AudioCountdownBackground;
+//     extern const QColor AudioCountdownForeground;
+
+//     extern const QColor RotaryFloatBackground;
+//     extern const QColor RotaryFloatForeground;
+
+//     extern const QColor RotaryPastelBlue;
+//     extern const QColor RotaryPastelRed;
+//     extern const QColor RotaryPastelGreen;
+//     extern const QColor RotaryPastelOrange;
+//     extern const QColor RotaryPastelYellow;
+
+//     extern const QColor RotaryPlugin;
+
+//     extern const QColor RotaryMeter;
+
+//     extern const QColor MatrixKeyboardFocus;
+
+//     extern const QColor MarkerBackground;
+
+//     extern const QColor MuteTrackLED;
+//     extern const QColor RecordTrackLED;
+
+//     extern const QColor PlaybackFaderOutline;
+//     extern const QColor RecordFaderOutline;
+
+
+// }
 
 #endif
 

@@ -1052,12 +1052,6 @@ public slots:
      */
     void slotParametersDockedBack(KDockWidget*, KDockWidget::DockPosition);
 
-    /** dmm - getting rid of this stupid hack
-     * Toggle everything except the Transport Toolbar simultaneously
-     *
-    void slotToggleAll();
-    */
-
     /**
      * Display tip-of-day dialog on demand
      */

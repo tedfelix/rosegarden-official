@@ -108,7 +108,7 @@ void MatrixStaff::positionElement(Rosegarden::ViewElement* vel)
     Rosegarden::EventSelection *selection = m_view->getCurrentSelection();
 
     if (selection && selection->contains(el->event()))
-        el->setColour(RosegardenGUIColours::SelectedElement);
+        el->setColour(Rosegarden::GUIPalette::getColor(Rosegarden::GUIPalette::SelectedElement));
     else if (el->event()->has(Rosegarden::BaseProperties::TRIGGER_SEGMENT_ID))
 	el->setColour(Qt::gray);
     else 
