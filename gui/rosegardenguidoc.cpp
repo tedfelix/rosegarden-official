@@ -373,12 +373,8 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     // Check if file readable with fileInfo ?
     if (!fileInfo.isReadable() || fileInfo.isDir()) {
-        QString msg(i18n("Can't open file '"));
-        msg += filename;
-        msg += "'";
-        
+        QString msg(i18n("Can't open file '%1'").arg(filename));
         KMessageBox::sorry(0, msg);
-
         return false;
     }
 
@@ -406,8 +402,10 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         QString msg(i18n("Error when parsing file '%1' : \"%2\"")
                     .arg(filename)
                     .arg(errMsg));
-        
+
+	CurrentProgressDialog::freeze();
         KMessageBox::sorry(0, msg);
+	CurrentProgressDialog::thaw();
 
         return false;
 
@@ -435,7 +433,9 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     }
     catch(std::string e)
     {
+	CurrentProgressDialog::freeze();
         KMessageBox::error(0, strtoqstr(e));
+	CurrentProgressDialog::thaw();
     }
 
     if (isSequencerRunning())
@@ -753,12 +753,11 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
 
     } else if (handler.isDeprecated()) {
 
-        // hide the progress dialog
-        if (progress) progress->hide();
-
         QString msg(i18n("This file contains one or more old element types that are now deprecated.\nSupport for these elements may disappear in future versions of Rosegarden.\nWe recommend you re-save this file from this version of Rosegarden,\nto ensure that it can still be re-loaded in future versions."));
         
+	CurrentProgressDialog::freeze();
         KMessageBox::information(0, msg);
+	CurrentProgressDialog::thaw();
     }
 
     return ok;
@@ -1550,7 +1549,9 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
     }
     catch(std::string e)
     {
+	CurrentProgressDialog::freeze();
         KMessageBox::error(0, strtoqstr(e));
+	CurrentProgressDialog::thaw();
     }
 
     // something in the record segment (that's why it was added

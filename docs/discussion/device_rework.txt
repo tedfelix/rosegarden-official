@@ -89,3 +89,6 @@ per device but has a device corresponding to an ALSA port?
 
 
 2. ...
+
+3. Profit!
+
