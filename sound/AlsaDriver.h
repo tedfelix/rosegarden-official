@@ -179,6 +179,7 @@ public:
     virtual std::vector<PlayableAudioFile*> getPlayingAudioFiles();
     void clearPlayingAudioFiles() { m_playingAudioFiles.clear(); }
     void addPlayingAudioFile(PlayableAudioFile *pA) { m_playingAudioFiles.push_back(pA); }
+    bool removePlayingAudioFile(PlayableAudioFile *pA);
 
 #ifdef HAVE_LADSPA
 

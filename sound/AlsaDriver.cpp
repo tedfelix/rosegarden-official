@@ -2768,6 +2768,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                 // which is pushed onto the actual audio queue at pushPlayableAudioQueue()
                 //
                 queueAudio(audioFile);
+
             }
             else
             {
@@ -4861,15 +4862,13 @@ AlsaDriver::jackDiskThread(void *arg)
 
         while(_threadJackClosing == false)
         {
+            inst->clearPlayingAudioFiles();
+
             // Try to lock this mutex but don't worry if it's busy
             //
             if(pthread_mutex_trylock(&_diskThreadLock) != EBUSY)
             {
                 audioQueue = inst->getAudioPlayQueueNotDefunct();
-
-                // Clear this down and refill every time
-                //
-                inst->clearPlayingAudioFiles();
 
                 for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
                 {
@@ -4882,10 +4881,8 @@ AlsaDriver::jackDiskThread(void *arg)
 #ifdef FINE_DEBUG_DISK_THREAD
                     std::cerr << ", is now = " << (*it)->getRingBuffer()->readSpace() << std::endl;
 #endif 
-                    // Add this to the segment audio vector
-                    //
-                    inst->addPlayingAudioFile(*it);
 
+                    inst->addPlayingAudioFile(*it);
                 }
 
                 pthread_mutex_unlock(&_diskThreadLock);
@@ -4939,9 +4936,23 @@ AlsaDriver::getPlayingAudioFiles()
 #endif
 }
 
+bool
+AlsaDriver::removePlayingAudioFile(PlayableAudioFile *pA)
+{
+    for (std::vector<PlayableAudioFile*>::iterator it = m_playingAudioFiles.begin();
+         it != m_playingAudioFiles.end(); ++it)
+    {
+        if ((*it) == pA)
+        {
+            m_playingAudioFiles.erase(it);
+            return true;
+        }
+    }
 
+    return false;
 }
 
+}
 
 
 #endif // HAVE_ALSA

@@ -1476,7 +1476,10 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
             // if playback in the file is at the correct place really too.
             //
             if ((*it)->getRuntimeSegmentId() == (*sIt)->getRuntimeSegmentId() &&
-                (*it)->getInstrument() ==  (*sIt)->getInstrument())
+                (*it)->getInstrument() ==  (*sIt)->getInstrument() &&
+                //(*it)->getStartTime() == (*sIt)->getEventTime() &&
+                (*it)->getEndTime() == (*sIt)->getEventTime() + (*sIt)->getDuration())
+                //(*it)->getStartIndex() == (*sIt)->getAudioStartMarker())
             {
                 segment = true;
                 break;
@@ -1510,7 +1513,10 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
              it != driverAudio.end(); ++it)
         {
             if ((*it)->getRuntimeSegmentId() == (*sIt)->getRuntimeSegmentId() &&
-                (*it)->getInstrument() ==  (*sIt)->getInstrument())
+                (*it)->getInstrument() ==  (*sIt)->getInstrument() &&
+                //(*it)->getStartTime() == (*sIt)->getEventTime() &&
+                (*it)->getEndTime() == (*sIt)->getEventTime() + (*sIt)->getDuration())
+                //(*it)->getStartIndex() == (*sIt)->getAudioStartMarker())
             {
                 driver = true;
                 break;
@@ -1522,31 +1528,24 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
             // There's an audio event that should be playing that isn't - start
             // it adjusting for current position.
             //
-            MappedEvent *audioSegment = m_metaIterator->getAudioSegment((*sIt)->getRuntimeSegmentId());
+            MappedEvent audioSegment(m_metaIterator->getAudioSegment((*sIt)->getRuntimeSegmentId()));
 
-            if (audioSegment)
-            {
-                audioSegment->setAudioStartMarker
-                    (audioSegment->getAudioStartMarker() + m_songPosition);
+            audioSegment.setAudioStartMarker(audioSegment.getAudioStartMarker() + m_songPosition);
 
-                // Reset duration firstly
-                //
-                audioSegment->
-                    setDuration(audioSegment->getDuration() - 
-                                (m_songPosition - audioSegment->getEventTime()));
+            // Reset duration firstly
+            //
+            audioSegment.setDuration(audioSegment.getDuration() - 
+                            (m_songPosition - audioSegment.getEventTime()));
 
-                // Set start time to now
-                //
-                audioSegment->setEventTime(m_songPosition);
+            // Set start time to now
+            //
+            audioSegment.setEventTime(m_songPosition);
 
-                std::cout << "RosegardenSequencerApp::rationalisePlayingAudio - " 
-                          << " starting audio segment = " << audioSegment->getInstrument()
-                          << std::endl;
+            std::cout << "RosegardenSequencerApp::rationalisePlayingAudio - " 
+                      << " starting audio segment = " << audioSegment.getRuntimeSegmentId()
+                      << std::endl;
 
-                processMappedEvent(*audioSegment);
-
-                delete audioSegment;
-            }
+            processMappedEvent(audioSegment);
         }
     }
 }

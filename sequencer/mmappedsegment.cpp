@@ -554,15 +554,50 @@ MmappedSegmentsMetaIterator::stopPlayingAudioSegment(int segmentRuntimeId)
 std::vector<MappedEvent*>& 
 MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &songPosition)
 {
+    // Clear playing audio segments
+    //
+    for (std::vector<MappedEvent*>::iterator it = m_playingAudioSegments.begin();
+         it != m_playingAudioSegments.end(); ++it) delete (*it);
     m_playingAudioSegments.clear();
+
+    //std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles" << std::endl;
+    //int count = 0;
 
     for(mmappedsegments::iterator i = m_segments.begin(); i != m_segments.end(); ++i)
     {
+        //std::cout << "ITERATOR = " << count++ << std::endl;
+
         MmappedSegment::iterator iter(i->second);
+
+        bool found = false;
+        for(segmentiterators::iterator sI = m_iterators.begin(); sI != m_iterators.end(); ++sI) 
+        {
+            if ((*sI)->getSegment() == iter.getSegment())
+                found = true;
+        }
+
+        if (!found) continue;
+
 
         while (!iter.atEnd())
         {
+            //std::cout << "CONSTRUCTING MAPPEDEVENT" << std::endl;
             MappedEvent evt(*iter);
+
+            // Check for this track being muted or soloed
+            //
+            if (m_controlBlockMmapper->isTrackMuted(evt.getTrackId()) == true)
+            {
+                ++iter;
+                continue;
+            }
+
+            if (m_controlBlockMmapper->isSolo() == true && 
+                evt.getTrackId() != m_controlBlockMmapper->getSelectedTrack())
+            {
+                ++iter;
+                continue;
+            }
 
             // If there's an audio event and it should be playing at this time
             // then flag as such.
@@ -571,24 +606,24 @@ MmappedSegmentsMetaIterator::getPlayingAudioFiles(const Rosegarden::RealTime &so
                 songPosition > evt.getEventTime() &&
                 songPosition < evt.getEventTime() + evt.getDuration())
             {
-                // Check for this track being muted or soloed
-                //
-                if ((m_controlBlockMmapper->isTrackMuted(evt.getTrackId()) == false)
-                     || (m_controlBlockMmapper->isSolo() == true && 
-                         (evt.getTrackId() == m_controlBlockMmapper->getSelectedTrack())))
-                {
 
 #ifdef PLAYING_AUDIO_FILES_DEBUG
-                    std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
-                              << "instrument id = " << evt.getInstrument() << std::endl;
+                std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
+                          << "instrument id = " << evt.getInstrument() << std::endl;
+                std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
+                          << "audio event time     = " << evt.getEventTime() << std::endl;
+                std::cout << "MmappedSegmentsMetaIterator::getPlayingAudioFiles - "
+                          << "audio event duration = " << evt.getDuration() << std::endl;
+
 #endif // PLAYING_AUDIO_FILES_DEBUG
 
-                    m_playingAudioSegments.push_back(new MappedEvent(evt));
-                }
+                m_playingAudioSegments.push_back(new MappedEvent(evt));
             }
 
             ++iter;
         }
+
+        //std::cout << "END OF ITERATOR" << std::endl << std::endl;
 
     }
 
