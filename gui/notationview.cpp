@@ -610,13 +610,13 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
 
     } else { // note is inserted at end (appended)
 
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : note appended" << endl;
-        m_notationElements->insert(newNotationElement);
-
+        kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : Couldn't find closest note" << endl;
+        KMessageBox::error(0, "Couldn't find closest note");
+        return;
     }
 
     //
-    // BIG TODO : insert insertedEvent too
+    // BIG TODO : insert event too
     //
 
     kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements before relayout : "
