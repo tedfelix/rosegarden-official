@@ -23,6 +23,8 @@
 #include <qhbox.h>
 #include <qvbox.h>
 #include <qpushbutton.h>
+#include <qabstractlayout.h> 
+#include <qlayout.h>
 
 // KDE includes
 #include <kdebug.h>
@@ -71,27 +73,22 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     m_rulerScale = new SimpleRulerScale(comp, 0, unitsPerPixel);
 
     QHBox *hbox = new QHBox(this);
-    QVBox *vbox = new QVBox(hbox);
+    QFrame *vbox = new QFrame(hbox);
+    QVBoxLayout* vboxLayout = new QVBoxLayout(vbox, 5);
 
     // Segment and Instrument Parameter Boxes [rwb]
     //
     m_segmentParameterBox = new SegmentParameterBox(vbox);
+    vboxLayout->addWidget(m_segmentParameterBox);
     m_instrumentParameterBox = new InstrumentParameterBox(vbox);
-
-    int width = m_segmentParameterBox->width();
-
-    if (width > m_instrumentParameterBox->width())
-       m_instrumentParameterBox->setMinimumWidth(width);
+    vboxLayout->addWidget(m_instrumentParameterBox);
+    vboxLayout->addStretch();
 
     // Connect up command path
     //
     connect(m_segmentParameterBox, SIGNAL(addCommandToHistory(KCommand*)),
             this, SLOT(slotAddCommandToHistory(KCommand*)));
 
-    // fudge to get everything aligned properly
-    QLabel *spacer = new QLabel(vbox);
-    spacer->setMinimumHeight(100);
-    
     // Construct the trackEditor first so we can then
     // query it for placement information
     //

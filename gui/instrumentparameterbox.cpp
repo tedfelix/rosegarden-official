@@ -24,6 +24,7 @@
 
 #include <cstdio>
 
+#include <qdial.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
@@ -31,13 +32,14 @@
 #include "Instrument.h"
 #include "MidiDevice.h"
 #include "instrumentparameterbox.h"
+#include "widgets.h"
 
 #include "rosedebug.h"
 
 InstrumentParameterBox::InstrumentParameterBox(QWidget *parent,
                                                const char *name,
                                                WFlags f)
-    : QFrame(parent, name, f),
+    : QGroupBox(i18n("Instrument Parameters"), parent, name),
       m_bankValue(new RosegardenComboBox(true, false, this)),
       m_channelValue(new RosegardenComboBox(true, false, this)),
       m_programValue(new RosegardenComboBox(true, false, this)),
@@ -62,14 +64,9 @@ InstrumentParameterBox::initBox()
     QFont plainFont;
     plainFont.setPointSize(10);
 
-    QFont boldFont;
-    boldFont.setPointSize(10);
-    boldFont.setBold(true);
+    setFont(plainFont);
 
-    QGridLayout *gridLayout = new QGridLayout(this, 2, 3, 5, 1);
-
-    QLabel *title = new QLabel(i18n("Instrument Parameters"), this);
-    title->setFont(boldFont);
+    QGridLayout *gridLayout = new QGridLayout(this, 5, 3, 8, 1);
 
     QLabel *channelLabel = new QLabel(i18n("Chan"), this);
     QLabel *panLabel = new QLabel(i18n("Pan"), this);
@@ -77,36 +74,25 @@ InstrumentParameterBox::initBox()
     QLabel *programLabel = new QLabel(i18n("Prg"), this);
     QLabel *bankLabel = new QLabel(i18n("Bank"), this);
 
-    //QFontMetrics fm(plainFont);
-    //m_panValue->setFixedWidth(fm.width("-99"));
-
-    // Make columns 1 and 2 stretch more than 0
-    //
-    //gridLayout->setColStretch(0, 0);
-    //gridLayout->setColStretch(1, 2);
-    //gridLayout->setColStretch(2, 1);
-
-    gridLayout->addMultiCellWidget(title, 0, 0, 0, 2, AlignLeft);
-
-    gridLayout->addWidget(bankLabel, 1, 0, AlignLeft);
-    gridLayout->addWidget(m_bankCheckBox, 1, 1, 0);
-    gridLayout->addWidget(m_bankValue, 1, 2, 0);
+    gridLayout->addWidget(bankLabel, 0, 0, AlignLeft);
+    gridLayout->addWidget(m_bankCheckBox, 0, 1);
+    gridLayout->addWidget(m_bankValue, 0, 2, AlignRight);
 
     // program label under heading - filling the entire cell
-    gridLayout->addWidget(programLabel, 2, 0);
-    gridLayout->addWidget(m_programCheckBox, 2, 1, AlignLeft);
-    gridLayout->addWidget(m_programValue, 2, 2);
+    gridLayout->addWidget(programLabel, 1, 0);
+    gridLayout->addWidget(m_programCheckBox, 1, 1);
+    gridLayout->addWidget(m_programValue, 1, 2, AlignRight);
 
-    gridLayout->addWidget(channelLabel, 3, 0, AlignLeft);
-    gridLayout->addMultiCellWidget(m_channelValue, 3, 3, 1, 2, AlignRight);
+    gridLayout->addWidget(channelLabel, 2, 0, AlignLeft);
+    gridLayout->addMultiCellWidget(m_channelValue, 2, 2, 1, 2, AlignRight);
 
-    gridLayout->addWidget(panLabel, 4, 0, AlignLeft);
-    gridLayout->addWidget(m_panCheckBox, 4, 1);
-    gridLayout->addWidget(m_panValue, 4, 2, AlignRight);
+    gridLayout->addWidget(panLabel, 3, 0, AlignLeft);
+    gridLayout->addWidget(m_panCheckBox, 3, 1);
+    gridLayout->addWidget(m_panValue, 3, 2, AlignRight);
 
-    gridLayout->addWidget(velocityLabel, 5, 0, AlignLeft);
-    gridLayout->addWidget(m_velocityCheckBox, 5, 1);
-    gridLayout->addWidget(m_velocityValue, 5, 2, AlignRight);
+    gridLayout->addWidget(velocityLabel, 4, 0, AlignLeft);
+    gridLayout->addWidget(m_velocityCheckBox, 4, 1);
+    gridLayout->addWidget(m_velocityValue, 4, 2, AlignRight);
 
     // Populate channel list
     for (int i = 0; i < 16; i++)

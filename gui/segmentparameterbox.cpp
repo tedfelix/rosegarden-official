@@ -36,11 +36,9 @@ using Rosegarden::Note;
 
 SegmentParameterBox::SegmentParameterBox(QWidget *parent,
                                          const char *name,
-                                         WFlags f) :
-    QGroupBox(i18n("Segment Parameters"), parent, name),
-//	      QFrame(parent, name, f),
-    m_standardQuantizations
-	(Rosegarden::StandardQuantization::getStandardQuantizations())
+                                         WFlags)
+    : QGroupBox(i18n("Segment Parameters"), parent, name),
+      m_standardQuantizations(Rosegarden::StandardQuantization::getStandardQuantizations())
 {
     initBox();
 }
@@ -57,6 +55,11 @@ SegmentParameterBox::~SegmentParameterBox()
 void
 SegmentParameterBox::initBox()
 {
+    QFont ourFont = font();
+    ourFont.setPointSize(10);
+    ourFont.setBold(true);
+    setFont(ourFont);
+
     QFont font;
     font.setPointSize(10);
 
@@ -64,7 +67,7 @@ SegmentParameterBox::initBox()
     // magic numbers: 13 is the height of the menu pixmaps, 10 is just 10
     int comboHeight = std::max(fontMetrics.height(), 13) + 10;
 
-    QGridLayout *gridLayout = new QGridLayout(this, 2, 2, 4, 1);
+    QGridLayout *gridLayout = new QGridLayout(this, 4, 2, 8, 1);
 
     QLabel *repeatLabel    = new QLabel(i18n("Repeat"), this);
     QLabel *quantizeLabel  = new QLabel(i18n("Quantize"), this);
@@ -123,16 +126,16 @@ SegmentParameterBox::initBox()
     delayLabel->setFont(font);
 
     gridLayout->addWidget(repeatLabel, 0, 0, AlignLeft);
-    gridLayout->addWidget(m_repeatValue, 0, 1, AlignRight);
+    gridLayout->addWidget(m_repeatValue, 0, 1, AlignLeft);
 
     gridLayout->addWidget(quantizeLabel, 1, 0, AlignLeft);
-    gridLayout->addWidget(m_quantizeValue, 1, 1, AlignRight);
+    gridLayout->addWidget(m_quantizeValue, 1, 1);
 
     gridLayout->addWidget(transposeLabel, 2, 0, AlignLeft);
-    gridLayout->addWidget(m_transposeValue, 2, 1, AlignRight);
+    gridLayout->addWidget(m_transposeValue, 2, 1);
 
     gridLayout->addWidget(delayLabel, 3, 0, AlignLeft);
-    gridLayout->addWidget(m_delayValue, 3, 1, AlignRight);
+    gridLayout->addWidget(m_delayValue, 3, 1);
 
     // populate the quantize combo
     //
@@ -189,15 +192,15 @@ SegmentParameterBox::initBox()
     // set delay blank initially
     m_delayValue->setCurrentItem(-1);
 
-    // set widths
-    int comboWidth = 0;
-    if (m_quantizeValue->width() > comboWidth) comboWidth = m_quantizeValue->width();
-    if (m_transposeValue->width() > comboWidth) comboWidth = m_transposeValue->width();
-    if (m_delayValue->width() > comboWidth) comboWidth = m_delayValue->width();
+//     // set widths
+//     int comboWidth = 0;
+//     if (m_quantizeValue->width() > comboWidth) comboWidth = m_quantizeValue->width();
+//     if (m_transposeValue->width() > comboWidth) comboWidth = m_transposeValue->width();
+//     if (m_delayValue->width() > comboWidth) comboWidth = m_delayValue->width();
 
-    m_quantizeValue->setMinimumWidth(comboWidth);
-    m_transposeValue->setMinimumWidth(comboWidth);
-    m_delayValue->setMinimumWidth(comboWidth);
+//     m_quantizeValue->setMinimumWidth(comboWidth);
+//     m_transposeValue->setMinimumWidth(comboWidth);
+//     m_delayValue->setMinimumWidth(comboWidth);
 }
 
 void

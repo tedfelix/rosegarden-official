@@ -19,22 +19,20 @@
     COPYING included with this distribution for more information.
 */
 
-#include <qframe.h>
-#include <qdial.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
+#ifndef _INSTRUMENTPARAMETERBOX_H_
+#define _INSTRUMENTPARAMETERBOX_H_
 
-#include "widgets.h"
+#include <qgroupbox.h>
 
 // Display and allow modification of Instrument parameters
 //
 
-#ifndef _INSTRUMENTPARAMETERBOX_H_
-#define _INSTRUMENTPARAMETERBOX_H_
-
 namespace Rosegarden { class Instrument; }
 
-class InstrumentParameterBox : public QFrame
+class RosegardenComboBox;
+class QCheckBox;
+
+class InstrumentParameterBox : public QGroupBox
 {
 Q_OBJECT
 
@@ -58,6 +56,8 @@ public slots:
 protected:
     void populateProgramList();
     void initBox();
+
+    //--------------- Data members ---------------------------------
 
     RosegardenComboBox *m_bankValue;
     RosegardenComboBox *m_channelValue;
