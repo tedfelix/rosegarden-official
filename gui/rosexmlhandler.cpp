@@ -1039,7 +1039,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         //
         if (plugin)
         {
-            cout << "Adding plugin id = " << m_pluginId << endl;
+            RG_DEBUG << "Adding plugin id = " << m_pluginId << endl;
 
             m_plugin = m_instrument->getPlugin(position);
             m_plugin->setAssigned(true);
@@ -1056,7 +1056,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             Rosegarden::StudioControl::setStudioObjectProperty
                 (mappedId,
+#ifdef HAVE_LADSPA
                  Rosegarden::MappedLADSPAPlugin::UniqueId,
+#else
+                 0,
+#endif
                  Rosegarden::MappedObjectValue(id));
 
             m_plugin->setMappedId(mappedId);
