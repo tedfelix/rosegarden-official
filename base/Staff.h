@@ -68,7 +68,7 @@ public:
      * so you should usually only use this method if you don't want
      * the event to appear in the underlying segment.
      */
-    void insert(Event *, bool insertInSegment = false);
+//     void insert(Event *, bool insertInSegment = false);
 
     /**
      * Erase the element pointed to by iterator.  If eraseFromSegment is
@@ -77,7 +77,7 @@ public:
      * instead of calling this method, so you should usually only use
      * this method if you know that the event is not in the Segment.
      */
-    void erase(ViewElementList<T>::iterator, bool eraseFromSegment = false);
+//     void erase(ViewElementList<T>::iterator, bool eraseFromSegment = false);
 
     /**
      * Return the Segment wrapped by this object 
@@ -170,33 +170,33 @@ Staff<T>::wrapEvent(Event*)
     return true;
 }
 
-template <class T>
-void
-Staff<T>::insert(Event *e, bool insertInSegment)
-{
-    if (insertInSegment) {
-        m_segment.insert(e);
-        // and let the eventAdded callback do the wrapping
-    } else {
-	if (!e->hasViewElement() && wrapEvent(e)) {
-	    T *el = new T(e);
-	    m_viewElementList->insert(el);
-	}
-    }
-}
+// template <class T>
+// void
+// Staff<T>::insert(Event *e, bool insertInSegment)
+// {
+//     if (insertInSegment) {
+//         m_segment.insert(e);
+//         // and let the eventAdded callback do the wrapping
+//     } else {
+// 	if (!e->hasViewElement() && wrapEvent(e)) {
+// 	    T *el = new T(e);
+// 	    m_viewElementList->insert(el);
+// 	}
+//     }
+// }
 
-template <class T>
-void
-Staff<T>::erase(ViewElementList<T>::iterator it,
-				   bool eraseFromSegment)
-{
-    if (eraseFromSegment) {
-        m_segment.eraseSingle((*it)->event());
-        // and let the eventRemoved callback do the unwrapping
-    } else {
-        m_viewElementList->erase(it);
-    }
-}
+// template <class T>
+// void
+// Staff<T>::erase(ViewElementList<T>::iterator it,
+// 				   bool eraseFromSegment)
+// {
+//     if (eraseFromSegment) {
+//         m_segment.eraseSingle((*it)->event());
+//         // and let the eventRemoved callback do the unwrapping
+//     } else {
+//         m_viewElementList->erase(it);
+//     }
+// }
 
 
 template <class T>
