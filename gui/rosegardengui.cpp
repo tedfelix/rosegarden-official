@@ -479,94 +479,49 @@ void RosegardenGUIApp::setupActions()
                               actionCollection(), "join");
     action->setExclusiveGroup("segmenttools");
 
-    // arf -- the action's called Collapse, the command's called Merge,
-    // and the menu text says Join
-    new KAction(SegmentMergeCommand::getGlobalName(),
-                0,
-                this, SLOT(slotMergeSegments()),
-                actionCollection(), "collapse");
-
-    new KAction(i18n("Turn Re&peats into Copies"),
-                0,
-                this, SLOT(slotRepeatingSegments()),
-                actionCollection(), "repeats_to_real_copies");
-
-    new KAction(SegmentLabelCommand::getGlobalName(),
-                0,
-                this, SLOT(slotRelabelSegments()),
-                actionCollection(), "relabel_segment");
-
-    new KAction(i18n("Manage A&udio Segments"),
-                0, 
-                this, SLOT(slotAudioManager()),
-                actionCollection(), "audio_manager");
-
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/add_tracks.xpm"));
-    new KAction(i18n("&Add Tracks..."), icon,  
-                0,
-                this, SLOT(slotAddTracks()),
-                actionCollection(), "add_tracks");
-
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/delete_track.xpm"));
-    new KAction(i18n("&Delete Track"), icon, 
-                0,
-                this, SLOT(slotDeleteTrack()),
-                actionCollection(), "delete_track");
-
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/move_track_up.xpm"));
-    new KAction(i18n("Move Track &Up"), icon,
-                0,
-                this, SLOT(slotMoveTrackUp()),
-                actionCollection(), "move_track_up");
-
-    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/move_track_down.xpm"));
-    new KAction(i18n("Move Track &Down"), icon,
-                0,
-                this, SLOT(slotMoveTrackDown()),
-                actionCollection(), "move_track_down");
-
-    new KAction(i18n("Select &Next Track"),
-                Key_Down, 
-                this, SLOT(slotTrackDown()),
-                actionCollection(), "select_next_track");
-
-    new KAction(i18n("Select &Previous Track"),
-                Key_Up, 
-                this, SLOT(slotTrackUp()),
-                actionCollection(), "select_previous_track");
-
-    new KAction(i18n("Select &All Segments"), 0, this,
-                SLOT(slotSelectAll()), actionCollection(),
-                "select_all");
-
-    new KAction(i18n("De&lete"), Key_Delete, this,
-                SLOT(slotDeleteSelectedSegments()), actionCollection(),
-                "delete");
-
-    new KAction(i18n("&Quantize..."), 0, this,
-                SLOT(slotQuantizeSelection()), actionCollection(),
-                "quantize_selection");
 
     new KAction(i18n("&Harmonize"), 0, this,
                 SLOT(slotHarmonizeSelection()), actionCollection(),
                 "harmonize_selection");
 
-    new KAction(i18n("Set &Tempo to Audio Segment Duration"), 0, this,
-                SLOT(slotTempoToSegmentLength()), actionCollection(),
-                "set_tempo_to_segment_length");
+    new KAction(AddTimeSignatureCommand::getGlobalName(),
+                0,
+                this, SLOT(slotEditTimeSignature()),
+                actionCollection(), "add_time_signature");
 
-    new KAction(SegmentRescaleCommand::getGlobalName(), 0, this,
-                SLOT(slotRescaleSelection()), actionCollection(),
-                "rescale");
+    //
+    // Edit menu
+    //
+    new KAction(i18n("De&lete"), Key_Delete, this,
+                SLOT(slotDeleteSelectedSegments()), actionCollection(),
+                "delete");
 
-    new KAction(SegmentAutoSplitCommand::getGlobalName(), 0, this,
-                SLOT(slotAutoSplitSelection()), actionCollection(),
-                "auto_split");
+    new KAction(i18n("Select &All Segments"), 0, this,
+                SLOT(slotSelectAll()), actionCollection(),
+                "select_all");
 
-    new KAction(SegmentSplitByPitchCommand::getGlobalName(), 0, this,
-                SLOT(slotSplitSelectionByPitch()), actionCollection(),
-                "split_by_pitch");
+    new KAction(AddTempoChangeCommand::getGlobalName(),
+                0,
+                this, SLOT(slotEditTempo()),
+                actionCollection(), "add_tempo");
+    
+    new KAction(ChangeCompositionLengthCommand::getGlobalName(),
+                0,
+                this, SLOT(slotChangeCompositionLength()),
+                actionCollection(), "change_composition_length");
 
+    new KAction(i18n("Edit Markers..."), 0, this,
+                SLOT(slotEditMarkers()),
+                actionCollection(), "edit_markers");
+
+    new KAction(i18n("Edit Document P&roperties..."), 0, this,
+                SLOT(slotEditDocumentProperties()),
+                actionCollection(), "edit_doc_properties");
+
+
+    //
+    // Segments menu
+    //
     new KAction(i18n("Open in &Default Editor"), Key_Return, this,
                 SLOT(slotEdit()), actionCollection(),
                 "edit_default");
@@ -586,25 +541,95 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotEditInEventList()), actionCollection(),
                 "edit_event_list");
 
-    new KAction(AddTempoChangeCommand::getGlobalName(),
+    new KAction(SegmentLabelCommand::getGlobalName(),
                 0,
-                this, SLOT(slotEditTempo()),
-                actionCollection(), "add_tempo");
+                this, SLOT(slotRelabelSegments()),
+                actionCollection(), "relabel_segment");
 
-    new KAction(AddTimeSignatureCommand::getGlobalName(),
+    new KAction(i18n("&Quantize..."), 0, this,
+                SLOT(slotQuantizeSelection()), actionCollection(),
+                "quantize_selection");
+
+    new KAction(SegmentRescaleCommand::getGlobalName(), 0, this,
+                SLOT(slotRescaleSelection()), actionCollection(),
+                "rescale");
+
+    new KAction(SegmentAutoSplitCommand::getGlobalName(), 0, this,
+                SLOT(slotAutoSplitSelection()), actionCollection(),
+                "auto_split");
+
+    new KAction(SegmentSplitByPitchCommand::getGlobalName(), 0, this,
+                SLOT(slotSplitSelectionByPitch()), actionCollection(),
+                "split_by_pitch");
+
+    new KAction(SegmentMergeCommand::getGlobalName(),
                 0,
-                this, SLOT(slotEditTimeSignature()),
-                actionCollection(), "add_time_signature");
+                this, SLOT(slotJoinSegments()),
+                actionCollection(), "join_segments");
 
-    new KAction(ChangeCompositionLengthCommand::getGlobalName(),
+    new KAction(i18n("Turn Re&peats into Copies"),
                 0,
-                this, SLOT(slotChangeCompositionLength()),
-                actionCollection(), "change_composition_length");
+                this, SLOT(slotRepeatingSegments()),
+                actionCollection(), "repeats_to_real_copies");
 
-    new KAction(i18n("Edit Document P&roperties..."), 0, this,
-                SLOT(slotEditDocumentProperties()),
-                actionCollection(), "edit_doc_properties");
+    new KAction(i18n("Set &Tempo to Audio Segment Duration"), 0, this,
+                SLOT(slotTempoToSegmentLength()), actionCollection(),
+                "set_tempo_to_segment_length");
 
+    new KAction(i18n("Manage A&udio Segments"),
+                0, 
+                this, SLOT(slotAudioManager()),
+                actionCollection(), "audio_manager");
+
+
+    //
+    // Tracks menu
+    //
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/add_tracks.xpm"));
+    new KAction(i18n("&Add Tracks..."), icon,  
+                0,
+                this, SLOT(slotAddTracks()),
+                actionCollection(), "add_tracks");
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/delete_track.xpm"));
+    new KAction(i18n("&Delete Track"), icon, 
+                0,
+                this, SLOT(slotDeleteTrack()),
+                actionCollection(), "delete_track");
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/move_track_down.xpm"));
+    new KAction(i18n("Move Track &Down"), icon,
+                0,
+                this, SLOT(slotMoveTrackDown()),
+                actionCollection(), "move_track_down");
+
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/move_track_up.xpm"));
+    new KAction(i18n("Move Track &Up"), icon,
+                0,
+                this, SLOT(slotMoveTrackUp()),
+                actionCollection(), "move_track_up");
+
+    new KAction(i18n("Select &Next Track"),
+                Key_Down, 
+                this, SLOT(slotTrackDown()),
+                actionCollection(), "select_next_track");
+
+    new KAction(i18n("Select &Previous Track"),
+                Key_Up, 
+                this, SLOT(slotTrackUp()),
+                actionCollection(), "select_previous_track");
+
+    new KAction(i18n("&Set Instrument..."), 0, this,
+                SLOT(slotSetTrackInstrument()),
+                actionCollection(), "set_track_instrument");
+
+    new KAction(i18n("&Remap Instruments..."), 0, this,
+                SLOT(slotRemapInstruments()),
+                actionCollection(), "remap_instruments");
+
+    //
+    // Studio menu
+    //
     new KAction(i18n("Manage MIDI &Devices..."), 0, this,
                 SLOT(slotEditDevices()),
                 actionCollection(), "manage_devices");
@@ -613,21 +638,13 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotEditBanks()),
                 actionCollection(), "modify_banks");
 
-    new KAction(i18n("Manage Control Parameters..."), 0, this,
-                SLOT(slotEditControlParameters()),
-                actionCollection(), "manage_controls");
-
-    new KAction(i18n("Edit Markers..."), 0, this,
-                SLOT(slotEditMarkers()),
-                actionCollection(), "edit_markers");
-
     new KAction(i18n("Modify MIDI &Filters..."), 0, this,
                 SLOT(slotModifyMIDIFilters()),
                 actionCollection(), "modify_midi_filters");
 
-    new KAction(i18n("&Remap Instruments..."), 0, this,
-                SLOT(slotRemapInstruments()),
-                actionCollection(), "remap_instruments");
+    new KAction(i18n("Manage Control Parameters..."), 0, this,
+                SLOT(slotEditControlParameters()),
+                actionCollection(), "manage_controls");
 
     new KAction(i18n("&Save Current Document as Default Studio"), 0, this,
                 SLOT(slotSaveDefaultStudio()),
@@ -636,6 +653,10 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("&Import Studio from File..."), 0, this,
 	        SLOT(slotImportStudio()),
 		actionCollection(), "load_studio");
+
+    //
+    // Transport menu
+    //
 
     // Transport controls [rwb]
     //
@@ -1710,7 +1731,7 @@ void RosegardenGUIApp::slotQuantizeSelection()
     m_view->slotAddCommandToHistory(command);
 }
 
-void RosegardenGUIApp::slotMergeSegments()
+void RosegardenGUIApp::slotJoinSegments()
 {
     if (!m_view->haveSelection()) return;
 
@@ -4456,9 +4477,15 @@ RosegardenGUIApp::slotPanic()
 }
 
 void
+RosegardenGUIApp::slotSetTrackInstrument()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotSetTrackInstrument\n";
+}
+
+void
 RosegardenGUIApp::slotRemapInstruments()
 {
-    RG_DEBUG << "RosegardenGUIApp::slotRemapInstruments" << endl;
+    RG_DEBUG << "RosegardenGUIApp::slotRemapInstruments\n";
     RemapInstrumentDialog dialog(this, m_doc);
 
     connect(&dialog, SIGNAL(applyClicked()),

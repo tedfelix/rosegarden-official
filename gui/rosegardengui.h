@@ -599,7 +599,7 @@ public slots:
     /**
      * Merge the selected segments
      */
-    void slotMergeSegments();
+    void slotJoinSegments();
 
     /**
      * Tempo to Segment length
@@ -667,6 +667,11 @@ public slots:
      * Edit Document Markers
      */
     void slotEditMarkers();
+
+    /**
+     * Set instrument for selected track
+     */
+    void slotSetTrackInstrument();
 
     /**
      * Remap instruments

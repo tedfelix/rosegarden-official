@@ -56,7 +56,6 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
       m_recordButtonGroup(new QButtonGroup(this)),
       m_muteButtonGroup(new QButtonGroup(this)),
       m_layout(new QVBoxLayout(this)),
-      m_instrumentPopup(new QPopupMenu(this)),
       m_clickedSigMapper(new QSignalMapper(this)),
       m_instListSigMapper(new QSignalMapper(this)),
       m_tracks(doc->getComposition().getNbTracks()),
@@ -107,9 +106,9 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
     connect(m_clickedSigMapper, SIGNAL(mapped(int)),
             this, SIGNAL(trackSelected(int)));
 
-    // Populate instrument popup menu just once at start-up
-    //
-    populateInstrumentPopup();
+//     // Populate instrument popup menu just once at start-up
+//     //
+//     populateInstrumentPopup();
 
     // We have to force the height for the moment
     //
@@ -119,12 +118,6 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
 
 TrackButtons::~TrackButtons()
 {
-    std::vector<QPopupMenu*>::iterator mIt;
-    for (mIt = m_instrumentSubMenu.begin();
-         mIt != m_instrumentSubMenu.end(); mIt++)
-        delete *mIt;
-
-    m_instrumentSubMenu.clear();
 }
 
 // Draw the mute and record buttons, track labels and VU meters
@@ -714,9 +707,12 @@ TrackButtons::slotInstrumentSelection(int trackId)
     // Yes, well as we might've changed the Device name in the
     // Device/Bank dialog then we reload the whole menu here.
     //
-    populateInstrumentPopup(instrument);
 
-    m_instrumentPopup->exec(QCursor::pos());
+    QPopupMenu instrumentPopup(this);
+
+    populateInstrumentPopup(instrument, &instrumentPopup);
+
+    instrumentPopup.exec(QCursor::pos());
     // Store the popup item position
     //
     m_popupItem = position;
@@ -726,7 +722,7 @@ TrackButtons::slotInstrumentSelection(int trackId)
 }
 
 void
-TrackButtons::populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr)
+TrackButtons::populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr, QPopupMenu* instrumentPopup)
 {
     static QPixmap     connectedPixmap, unconnectedPixmap,
 	           connectedUsedPixmap, unconnectedUsedPixmap,
@@ -758,14 +754,9 @@ TrackButtons::populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr)
     Rosegarden::Studio &studio = m_doc->getStudio();
 
     // clear the popup
-    m_instrumentPopup->clear();
+    instrumentPopup->clear();
 
-    // clear submenus
-    std::vector<QPopupMenu*>::iterator mIt;
-    for (mIt = m_instrumentSubMenu.begin();
-         mIt != m_instrumentSubMenu.end(); mIt++)
-        delete *mIt;
-    m_instrumentSubMenu.clear();
+    std::vector<QPopupMenu*> instrumentSubMenus;
 
     // position index
     int i = 0;
@@ -826,10 +817,10 @@ TrackButtons::populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr)
 
             currentDevId = int(devId);
 
-	    QPopupMenu *subMenu = new QPopupMenu(this);
+	    QPopupMenu *subMenu = new QPopupMenu(instrumentPopup);
 	    QString deviceName = strtoqstr(device->getName());
-	    m_instrumentPopup->insertItem(iconSet, deviceName, subMenu);
-	    m_instrumentSubMenu.push_back(subMenu);
+	    instrumentPopup->insertItem(iconSet, deviceName, subMenu);
+	    instrumentSubMenus.push_back(subMenu);
 	    
 	    // Connect up the submenu
 	    //
@@ -862,8 +853,7 @@ TrackButtons::populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr)
 
 	if (pname != "") iname += " (" + pname + ")";
 
-	m_instrumentSubMenu[m_instrumentSubMenu.size() - 1]->
-	    insertItem(iconSet, iname, i++);
+	instrumentSubMenus[instrumentSubMenus.size() - 1]->insertItem(iconSet, iname, i++);
     }
 
 }

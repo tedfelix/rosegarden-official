@@ -143,7 +143,7 @@ protected:
      * Precalculate the Instrument popup so we don't have to every
      * time it appears
      */
-    void populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr = 0);
+    void populateInstrumentPopup(Rosegarden::Instrument *thisTrackInstr, QPopupMenu* instrumentPopup);
 
     /**
      * Populate the track buttons themselves with Instrument information
@@ -180,11 +180,8 @@ protected:
 
     std::vector<TrackLabel *>         m_trackLabels;
     std::vector<TrackVUMeter *>       m_trackMeters;
-//     std::vector<InstrumentLabel *>    m_instrumentLabels;
     std::vector<QFrame *>             m_trackHBoxes;
 
-    QPopupMenu                       *m_instrumentPopup;
-    std::vector<QPopupMenu*>          m_instrumentSubMenu;
     QSignalMapper                    *m_clickedSigMapper;
     QSignalMapper                    *m_instListSigMapper;
 

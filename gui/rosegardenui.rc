@@ -49,7 +49,7 @@
         <Separator/>
         <Action name="auto_split"/>
         <Action name="split_by_pitch"/>
-        <Action name="collapse"/>
+        <Action name="join_segments"/>
         <Action name="repeats_to_real_copies"/>
         <Separator/>
         <Action name="set_tempo_to_segment_length"/>
@@ -64,6 +64,7 @@
         <Action name="select_next_track"/>
         <Action name="select_previous_track"/>
         <Separator/>
+        <Action name="set_track_instrument"/>
         <Action name="remap_instruments"/>
   </Menu>
   <Menu name="Studio">
