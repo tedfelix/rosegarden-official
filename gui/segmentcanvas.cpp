@@ -472,22 +472,20 @@ void SegmentNotationPreview::updatePreview(const QWMatrix & /*matrix*/)
 {
     if (isPreviewCurrent()) return;
 
+    if (!m_haveSegmentRefreshStatus) {
+	m_segmentRefreshStatus = m_segment->getNewRefreshStatusId();
+	m_haveSegmentRefreshStatus = true;
+    }
+	
+    Rosegarden::SegmentRefreshStatus &status =
+	m_segment->getRefreshStatus(m_segmentRefreshStatus);
+    if (!status.needsRefresh() && !m_previewInfo.empty()) return;
+
     Rosegarden::timeT fromTime = 0, toTime = 0;
 
-    if (!m_previewInfo.empty()) {
-
-	if (!m_haveSegmentRefreshStatus) {
-	    m_segmentRefreshStatus = m_segment->getNewRefreshStatusId();
-	    m_haveSegmentRefreshStatus = true;
-	}
-	
-	Rosegarden::SegmentRefreshStatus &status =
-	    m_segment->getRefreshStatus(m_segmentRefreshStatus);
-	if (!status.needsRefresh()) return;
-
+    if (status.needsRefresh() && !m_previewInfo.empty()) {
 	fromTime = status.from();
 	toTime = status.to();
-	status.setNeedsRefresh(false);
     }
 
     if (fromTime == toTime) {
@@ -543,6 +541,7 @@ void SegmentNotationPreview::updatePreview(const QWMatrix & /*matrix*/)
         m_previewInfo.insert(r);
     }
 
+    status.setNeedsRefresh(false);
     setPreviewCurrent(true);
 }
 
