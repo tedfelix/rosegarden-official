@@ -27,6 +27,7 @@
 #include <kaction.h>
 #include <kapp.h>
 #include <kconfig.h>
+#include <klineeditdlg.h>
 
 #include "notationview.h"
 
@@ -1049,12 +1050,14 @@ void NotationView::slotAddSlashes()
 void NotationView::slotMarksAddTextMark()
 {
     if (m_currentEventSelection) {
-        SimpleTextDialog *dialog = new SimpleTextDialog(this, 20);
-        if (dialog->exec() == QDialog::Accepted) {
+        bool pressedOK = false;
+        
+        QString txt = KLineEditDlg::getText(i18n("Text: "), "", &pressedOK, this);
+        
+        if (pressedOK) {
             addCommandToHistory(new MarksMenuAddTextMarkCommand
-                                (dialog->getText(), *m_currentEventSelection));
+                                (qstrtostr(txt), *m_currentEventSelection));
         }
-        delete dialog;
     }
 }
 

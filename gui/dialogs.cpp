@@ -76,23 +76,6 @@ using Rosegarden::Event;
 using Rosegarden::EventSelection;
 
 
-SimpleTextDialog::SimpleTextDialog(QWidget *parent, int maxLength) :
-    KDialogBase(parent, 0, true, i18n("Text"), Ok | Cancel)
-{
-    QHBox *w = makeHBoxMainWidget();
-    new QLabel(i18n("Text:"), w);
-    m_lineEdit = new QLineEdit(w);
-    if (maxLength > 0) m_lineEdit->setMaxLength(maxLength);
-    m_lineEdit->setFocus();
-}
-
-std::string
-SimpleTextDialog::getText() const
-{
-    return qstrtostr(m_lineEdit->text());
-}
-
-
 class BigArrowButton : public KArrowButton
 {
 public:

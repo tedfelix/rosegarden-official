@@ -53,23 +53,6 @@ class RosegardenQuantizeParameters;
 // different editing views.
 
 
-// okay, not much point in this -- it could be a QInputDialog.  I
-// s'pose there might be some advantage in deriving from KDialogBase,
-// and hey, I've written it now
-
-class SimpleTextDialog : public KDialogBase
-{
-    Q_OBJECT
-
-public:
-    SimpleTextDialog(QWidget *parent, int maxLength = -1); // for Qt default
-    std::string getText() const;
-
-protected:
-    QLineEdit *m_lineEdit;
-};
-
-
 class TimeSignatureDialog : public KDialogBase
 {
     Q_OBJECT
