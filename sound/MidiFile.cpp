@@ -830,8 +830,7 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 
     // [cc] int rather than floating point
     //
-    m_timingDivision = Note(Note::Crotchet).getDuration() * 120 / 
-	(int)comp.getTempo();
+    m_timingDivision = Note(Note::Crotchet).getDuration();
 
     m_format = MIDI_SIMULTANEOUS_TRACK_FILE;
 
