@@ -108,6 +108,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     QCanvas *canvas = new QCanvas(this);
     canvas->resize(100, 100); // call slotReadjustCanvasSize later
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
+    canvas->retune(128);
 
     kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     if (kapp->config()->readBoolEntry("backgroundtextures", false)) {
