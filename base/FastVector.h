@@ -50,7 +50,8 @@
     from place to place in the vector using memmove(), rather than
     deep copy.  If you store objects with internal pointers, they
     will break badly.  Storing simple structures will be no problem,
-    and if you just store pointers to objects you'll be fine.
+    and if you just store pointers to objects you'll be fine, but
+    it's unwise (for example) to store other containers.
  
   * One other difference from the STL vector: It uses placement new
     with the copy constructor to construct objects, rather than
@@ -207,10 +208,6 @@ public:
     public:
         const_iterator() : iterator_base() { }
 	const_iterator(const iterator_base &i) : iterator_base(i) { }
-//        const_iterator &operator=(const iterator &i) {
-//            iterator_base::operator=(i);
-//            return *this;
-//        }
         const_iterator &operator=(const const_iterator &i) {
             iterator_base::operator=(i);
             return *this;
@@ -231,10 +228,6 @@ public:
     public:
         const_reverse_iterator() : iterator_base() { }
 	const_reverse_iterator(const iterator_base &i) : iterator_base(i) { }
-//        const_reverse_iterator &operator=(const reverse_iterator &i) {
-//            iterator_base::operator=(i);
-//            return *this;
-//        }
         const_reverse_iterator &operator=(const const_reverse_iterator &i) {
             iterator_base::operator=(i);
             return *this;

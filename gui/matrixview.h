@@ -305,6 +305,7 @@ protected:
     virtual int getBottomLineHeight() const;
     virtual int getHeightPerLine() const;
     virtual bool elementsInSpaces() const;
+    virtual bool showBeatLines() const;
 
     /**
      * Override from Rosegarden::Staff<T>

@@ -171,8 +171,16 @@ protected:
 	return false;
     }
 
+    /**
+     * Returns true if the staff should draw a faint vertical line at
+     * each beat, in between the (darker) bar lines.
+     */
+    virtual bool showBeatLines() const {
+	return false;
+    }
+
     virtual int getStaffRulerHeight() const {
-	return m_resolution * 2;
+	return 45;
     }
 
 protected:
@@ -428,11 +436,12 @@ protected:
     virtual void resizeStaffLineRow(int row, double offset, double length);
 
     virtual void deleteBars();
-    virtual void insertBar(int layoutX, bool isCorrect);
+    virtual void insertBar(double layoutX, double width, bool isCorrect,
+			   const Rosegarden::TimeSignature &);
 
     // The default implementations of the following two are empty.
     virtual void deleteTimeSignatures();
-    virtual void insertTimeSignature(int layoutX,
+    virtual void insertTimeSignature(double layoutX,
 				     const Rosegarden::TimeSignature &);
 
     virtual void updateRuler(Rosegarden::HorizontalLayoutEngine<T> &layout);
@@ -465,11 +474,12 @@ protected:
     LineMatrix m_staffLines;
     LineList m_staffConnectingLines;
 
-    typedef std::pair<int, QCanvasLine *> BarLine; // layout-x, line
+    typedef std::pair<double, QCanvasLine *> BarLine; // layout-x, line
     typedef FastVector<BarLine> BarLineList;
     static bool compareBars(const BarLine &, const BarLine &);
     static bool compareBarToLayoutX(const BarLine &, int);
     BarLineList m_barLines;
+    BarLineList m_beatLines;
     BarLineList m_barConnectingLines;
 
     StaffRuler *m_ruler;

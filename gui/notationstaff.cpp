@@ -104,7 +104,7 @@ NotationStaff::setLegatoDuration(Rosegarden::timeT duration)
     wq->setUnit(duration);
 }
 
-void NotationStaff::insertTimeSignature(int layoutX,
+void NotationStaff::insertTimeSignature(double layoutX,
 					const TimeSignature &timeSig)
 {
     QCanvasPixmap *pixmap =

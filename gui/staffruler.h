@@ -171,6 +171,7 @@ protected:
     QCanvasRectangleGroupable* m_whiteBackground;
 
     PositionCursor* m_cursor;
+    QFont m_barNumberFont;
 
     Steps m_steps;
     

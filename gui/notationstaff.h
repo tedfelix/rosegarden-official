@@ -135,7 +135,7 @@ public:
     /**
      * Insert time signature at x-coordinate \a x.
      */
-    virtual void insertTimeSignature(int layoutX,
+    virtual void insertTimeSignature(double layoutX,
 				     const Rosegarden::TimeSignature &timeSig);
 
     /**

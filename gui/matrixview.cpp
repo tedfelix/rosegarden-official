@@ -293,10 +293,9 @@ void MatrixElement::setCanvas(QCanvas* c)
     if (!m_canvasRect->canvas()) {
         
         m_canvasRect->setCanvas(c);
-        m_canvasRect->setBrush(Qt::blue);
-        m_canvasRect->setPen(Qt::blue);
+        m_canvasRect->setBrush(RosegardenGUIColours::MatrixElementBlock);
+        m_canvasRect->setPen(RosegardenGUIColours::MatrixElementBorder);
         m_canvasRect->show();
-
     }
 }
 
@@ -328,6 +327,7 @@ int  MatrixStaff::getLegerLineCount()   const { return 0; }
 int  MatrixStaff::getBottomLineHeight() const { return 0; }
 int  MatrixStaff::getHeightPerLine()    const { return 1; }
 bool MatrixStaff::elementsInSpaces()    const { return true; }
+bool MatrixStaff::showBeatLines()       const { return true; }
 
 bool MatrixStaff::wrapEvent(Rosegarden::Event* e)
 {
@@ -409,7 +409,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new MatrixStaff(tCanvas, segments[i], i,
-                                           10)); //!!!
+                                           8)); //!!! kind of random
 	if (i == 0) m_staffs[i]->setCurrent(true);
     }
 

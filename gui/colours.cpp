@@ -50,43 +50,21 @@ namespace RosegardenGUIColours
 // alternative set of colours that goes a bit better with the splash
 // screen... although probably not with your KDE theme
 
-/*
-
 namespace RosegardenGUIColours
 {
     const QColor ActiveRecordTrack = Qt::red;
 
-    const QColor SegmentBorder = Qt::black;
-    const QColor SegmentBlock = QColor(69, 23, 83, QColor::Hsv);
-    const QColor SegmentHighlightBlock = QColor(69, 23, 40, QColor::Hsv);
-  
-    const QColor BarLine = Qt::black;
-    const QColor BarLineIncorrect = QColor(351, 100, 83, QColor::Hsv);
-    const QColor StaffConnectingLine = QColor(192,192,192);
-    const QColor StaffConnectingTerminatingLine = QColor(128,128,128);
-    const QColor StaffRulerBackground = QColor(212,212,212);
-
-    const QColor PositionCursor = QColor(282, 23, 83, QColor::Hsv);
-    const QColor SelectionRectangle = QColor(225, 51, 83, QColor::Hsv);
-    const QColor SelectedElement = QColor(225, 100, 90, QColor::Hsv);
-    const int SelectedElementHue = 225;
-}
-
-*/
-
-namespace RosegardenGUIColours
-{
-    const QColor ActiveRecordTrack = Qt::red;
-
-//    const QColor SegmentCanvas = Qt::darkGrey;
     const QColor SegmentCanvas = QColor(230, 230, 230);
     const QColor SegmentBorder = Qt::black;
-//    const QColor SegmentBlock = QColor(204, 211, 162);
     const QColor SegmentBlock = QColor(197, 211, 125);
     const QColor SegmentHighlightBlock = QColor(98, 102, 78);
+
+    const QColor MatrixElementBorder = Qt::black;
+    const QColor MatrixElementBlock = QColor(98, 128, 232);
   
     const QColor BarLine = Qt::black;
     const QColor BarLineIncorrect = QColor(211, 0, 31);
+    const QColor BeatLine = QColor(212, 212, 212);
     const QColor StaffConnectingLine = QColor(192, 192, 192);
     const QColor StaffConnectingTerminatingLine = QColor(128, 128, 128);
     const QColor StaffRulerBackground = QColor(212, 212, 212);

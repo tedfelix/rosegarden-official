@@ -310,7 +310,7 @@ LinedStaff<T>::getBarExtents(double x, int y) const
 
     for (int i = 1; i < m_barLines.size(); ++i) {
 
-        int layoutX = m_barLines[i].first;
+	double layoutX = m_barLines[i].first;
         int barRow = getRowForLayoutX(layoutX);
 
         QCanvasLine *line = m_barLines[i].second;
@@ -345,6 +345,8 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
     if (barCount > 0) xright = layout.getBarLineX(*this, barCount - 1);
     else xright = layout.getTotalWidth();
     
+    Rosegarden::TimeSignature currentTimeSignature;
+
     for (unsigned int i = 0; i < barCount; ++i) {
 
         if (layout.isBarLineVisible(*this, i)) {
@@ -356,14 +358,20 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
                 haveXLeft = true;
             }
 
-            insertBar(int(x), layout.isBarLineCorrect(*this, i));
-
+	    double timeSigX = 0;
             Rosegarden::Event *timeSig =
-                layout.getTimeSignatureInBar(*this, i, x);
+                layout.getTimeSignatureInBar(*this, i, timeSigX);
+
             if (timeSig && i < barCount - 1) {
-                insertTimeSignature(int(x),
-                                    Rosegarden::TimeSignature(*timeSig));
+		currentTimeSignature = Rosegarden::TimeSignature(*timeSig);
+                insertTimeSignature(timeSigX, currentTimeSignature);
             }
+
+            insertBar(x,
+		      ((i == barCount - 1) ? 0 :
+		       (layout.getBarLineX(*this, i+1) - x)),
+		      layout.isBarLineCorrect(*this, i),
+		      currentTimeSignature);
         }
     }
 
@@ -383,19 +391,29 @@ LinedStaff<T>::deleteBars()
         delete i->second;
     }
 
+    for (BarLineList::iterator i = m_beatLines.begin();
+	 i != m_beatLines.end(); ++i) {
+	delete i->second;
+    }
+
     for (BarLineList::iterator i = m_barConnectingLines.begin();
          i != m_barConnectingLines.end(); ++i) {
         delete i->second;
     }
 
     m_barLines.clear();
+    m_beatLines.clear();
     m_barConnectingLines.clear();
 }
 
 template <class T>
 void
-LinedStaff<T>::insertBar(int layoutX, bool isCorrect)
+LinedStaff<T>::insertBar(double layoutX, double width, bool isCorrect,
+			 const Rosegarden::TimeSignature &timeSig)
 {
+//    kdDebug(KDEBUG_AREA) << "insertBar: " << layoutX << ", " << width
+//			 << ", " << isCorrect << endl;
+
     // rather arbitrary
     int barThickness = m_resolution / 5;
     if (barThickness < 1) barThickness = 1;
@@ -418,10 +436,39 @@ LinedStaff<T>::insertBar(int layoutX, bool isCorrect)
         line->setZ(-1);
         line->show();
 
+	// The bar lines have to be in order of layout-x (there's no
+	// such interesting stipulation for beat or connecting lines)
         BarLine barLine(layoutX, line);
         BarLineList::iterator insertPoint = lower_bound
             (m_barLines.begin(), m_barLines.end(), barLine, compareBars);
         m_barLines.insert(insertPoint, barLine);
+
+	if (showBeatLines()) {
+
+	    int beats = timeSig.getBeatsPerBar();
+	    double dx = width / beats;
+
+	    for (int beat = 1; beat < beats; ++beat) {
+
+		line = new QCanvasLine(m_canvas);
+
+		line->setPoints(0, 0, 0, getBarLineHeight());
+		line->moveBy
+		    (getCanvasXForLayoutX(layoutX + beat * dx),
+		     getCanvasYForTopLine(row));
+		
+		if (elementsInSpaces()) {
+		    line->moveBy(0, -(getLineSpacing()/2 + 1));
+		}
+		
+		line->setPen(QPen(RosegardenGUIColours::BeatLine, 1));
+		line->setZ(-1);
+		line->show();
+
+		BarLine beatLine(layoutX + beat * dx, line);
+		m_beatLines.push_back(beatLine);
+	    }
+	}
 
         if (m_connectingLineLength > 0) {
 
@@ -442,10 +489,7 @@ LinedStaff<T>::insertBar(int layoutX, bool isCorrect)
             line->show();
 
             BarLine connectingLine(layoutX, line);
-            insertPoint = lower_bound
-                (m_barConnectingLines.begin(), m_barConnectingLines.end(),
-                 connectingLine, compareBars);
-            m_barConnectingLines.insert(insertPoint, connectingLine);
+	    m_barConnectingLines.push_back(connectingLine);
         }
     }
 }
@@ -473,7 +517,7 @@ LinedStaff<T>::deleteTimeSignatures()
 
 template <class T>
 void
-LinedStaff<T>::insertTimeSignature(int, const Rosegarden::TimeSignature &)
+LinedStaff<T>::insertTimeSignature(double, const Rosegarden::TimeSignature &)
 {
     // default implementation is empty
 }

@@ -66,23 +66,24 @@ StaffRuler::StaffRuler(int xPos, int yPos, int thickness,
       m_xPos(xPos),
       m_yPos(yPos),
       m_thickness(thickness),
-      m_mainLinePos(m_yPos + m_thickness / 2),
-      m_stepLineHeight(thickness / 3),
-      m_subStepLineHeight(thickness / 6),
+      m_mainLinePos(m_yPos + m_thickness / 4),
+      m_stepLineHeight(thickness / 6),
+      m_subStepLineHeight(thickness / 10),
       m_mainLine(new QCanvasLineGroupable(c, this)),
       m_greyBackground(new QCanvasRectangleGroupable(c, this)),
       m_whiteBackground(new QCanvasRectangleGroupable(c, this)),
-      m_cursor(new PositionCursor(m_mainLinePos + m_yPos + thickness/2,
-				  canvas(), canvas()))
+      m_cursor(new PositionCursor(m_mainLinePos + m_yPos + thickness/4,
+				  canvas(), canvas())),
+      m_barNumberFont("helvetica", 8, QFont::Normal)
 {
     m_greyBackground->setX(0);
     m_greyBackground->setY(m_yPos);
     m_greyBackground->setZ(-1);
-    m_greyBackground->setSize(canvas()->width(), m_thickness / 2);
+    m_greyBackground->setSize(canvas()->width(), m_thickness/4);
 
     m_whiteBackground->setX(0);
     m_whiteBackground->setY(m_yPos);
-    m_whiteBackground->setSize(canvas()->width(), m_thickness);
+    m_whiteBackground->setSize(canvas()->width(), m_thickness/2);
     
     m_greyBackground->setBrush(RosegardenGUIColours::StaffRulerBackground);
     m_greyBackground->setPen(RosegardenGUIColours::StaffRulerBackground);
@@ -95,6 +96,9 @@ StaffRuler::StaffRuler(int xPos, int yPos, int thickness,
     m_mainLine->setPoints(0, m_mainLinePos,
                           canvas()->width(), m_mainLinePos);
     m_mainLine->setZ(1);
+
+    if (thickness < 30) thickness = 30;
+    m_barNumberFont.setPixelSize(thickness / 2 - 10);
 
     setActive(true);
 }
@@ -170,8 +174,9 @@ void StaffRuler::makeStep(int stepValue,
 
     QCanvasText* label = new QCanvasTextGroupable(labelText, canvas(), this);
     label->setX(stepPos + m_xPos);
-    label->setY(m_mainLinePos + 4 + m_yPos);
+    label->setY(m_mainLinePos + m_yPos + 4);
     label->setTextFlags(Qt::AlignHCenter);
+    label->setFont(m_barNumberFont);
 
     // Prepare StepElement
     StepElement stepEl(stepLine, label);
