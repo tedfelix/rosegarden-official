@@ -170,7 +170,7 @@ public slots:
 
     void slotUpdateInstrumentParameterBox(int id);
 
-    // This is called from the canvas moving out
+    // This is called from the canvas (actually the selector tool) moving out
     //
     void slotSelectedSegments(const Rosegarden::SegmentSelection &segments);
 

@@ -203,4 +203,14 @@ EventSelection::segmentDeleted(const Segment *s)
               */
 }
 
+bool SegmentSelection::hasAudioSegment() const
+{
+    for(iterator i = begin(); i != end(); ++i) {
+        if ((*i)->getType() == Segment::Audio)
+            return true;
+    }
+    return false;
+}
+
+
 }

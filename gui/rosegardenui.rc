@@ -255,6 +255,22 @@
      </enable>
 </State>
 
+<State name="audio_segment_selected">
+      <disable>
+        <Action name="edit_default"/>
+        <Action name="edit_notation"/>
+        <Action name="edit_matrix"/>
+        <Action name="edit_event_list"/>
+        <Action name="quantize_selection"/>
+        <Action name="rescale"/>
+        <Action name="auto_split"/>
+        <Action name="split_by_pitch"/>
+        <Action name="collapse"/>
+        <Action name="set_tempo_to_segment_length"/>
+        <Action name="repeats_to_real_copies"/>
+     </disable>
+</State>
+
 <State name="got_midi_devices">
      <enable>
        <Action name="modify_banks"/>

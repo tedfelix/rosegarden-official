@@ -735,6 +735,8 @@ void RosegardenGUIView::slotSetSelectedSegments(
     m_segmentParameterBox->useSegments(segments);
 
     emit stateChange("have_selection", true);
+    if (segments.hasAudioSegment())
+        emit stateChange("audio_segment_selected", true);
 }
 
 void RosegardenGUIView::slotSelectAllSegments()
@@ -789,6 +791,9 @@ void RosegardenGUIView::slotSelectAllSegments()
     //comp.setSelectedTrack(trackId);
 
     emit stateChange("have_selection", true);
+
+    if (segments.hasAudioSegment())
+        emit stateChange("audio_segment_selected", true);
 
     // inform
     //!!! inform what? is this signal actually used?
@@ -901,9 +906,11 @@ RosegardenGUIView::slotSelectedSegments(const Rosegarden::SegmentSelection &segm
     // update the segment parameter box
     m_segmentParameterBox->useSegments(segments);
 
-    if (segments.size())
+    if (segments.size()) {
         emit stateChange("have_selection", true);
-    else
+        if (segments.hasAudioSegment())
+            emit stateChange("audio_segment_selected", true);
+    } else
         emit stateChange("have_selection", false);
 
     emit segmentsSelected(segments);
