@@ -198,7 +198,29 @@ public:
 
     virtual bool eventFilter(QObject *watched, QEvent *e);
 };
-   
+
+class CurrentProgressDialog : public QObject
+{
+    Q_OBJECT
+public:
+    static CurrentProgressDialog* getInstance();
+
+    static RosegardenProgressDialog* getCurrentProgressDialog();
+    static void registerCurrentProgressDialog(RosegardenProgressDialog*);
+
+public slots:
+    void slotCurrentProgressDialogDestroyed();
+    
+protected:
+    CurrentProgressDialog(QObject* parent, const char* name = 0)
+        : QObject(parent, name) {}
+    
+    //--------------- Data members ---------------------------------
+    static CurrentProgressDialog* m_instance;
+    static RosegardenProgressDialog* m_currentProgressDialog;
+};
+
+
 class HZoomable
 {
 public:

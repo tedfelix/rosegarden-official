@@ -190,6 +190,7 @@ RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,
             this,          SLOT(slotCheckShow(int)));
     
     m_chrono.start();
+    CurrentProgressDialog::registerCurrentProgressDialog(this);
 }
 
 
@@ -212,6 +213,8 @@ RosegardenProgressDialog::RosegardenProgressDialog(
     connect(progressBar(), SIGNAL(percentageChanged (int)),
             this,          SLOT(slotCheckShow(int)));
     m_chrono.start();
+
+    CurrentProgressDialog::registerCurrentProgressDialog(this);
 }
 
 void
@@ -274,6 +277,44 @@ RosegardenProgressBar::eventFilter(QObject *watched, QEvent *e)
 
         return KProgress::eventFilter(watched, e);
 }
+
+//----------------------------------------
+
+CurrentProgressDialog* CurrentProgressDialog::getInstance()
+{
+    if (!m_instance)
+        m_instance = new CurrentProgressDialog(0);
+
+    return m_instance;
+}
+
+
+RosegardenProgressDialog*
+CurrentProgressDialog::getCurrentProgressDialog()
+{
+    return m_currentProgressDialog;
+}
+
+void
+CurrentProgressDialog::registerCurrentProgressDialog(RosegardenProgressDialog* d)
+{
+    if (m_currentProgressDialog)
+        m_currentProgressDialog->disconnect(getInstance());
+
+    m_currentProgressDialog = d;
+
+    // this lets the progress dialog deregister itself when it's deleted
+    connect(d, SIGNAL(destroyed()),
+            getInstance(), SLOT(slotCurrentProgressDialogDestroyed()));
+}
+
+void CurrentProgressDialog::slotCurrentProgressDialogDestroyed()
+{
+    m_currentProgressDialog = 0;
+}
+
+CurrentProgressDialog* CurrentProgressDialog::m_instance = 0;
+RosegardenProgressDialog* CurrentProgressDialog::m_currentProgressDialog = 0;
 
 //----------------------------------------
 
