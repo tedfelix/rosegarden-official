@@ -151,8 +151,6 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 void
 NotationCanvasView::insertNote(const StaffLine *line, const QPoint &pos)
 {
-//???    int pitch = getPitchForLine(line);
-
     int h = line->getHeight();
 
     kdDebug(KDEBUG_AREA) << "NotationCanvasView::insertNote() : insertNote at height " << h << endl;

@@ -118,12 +118,16 @@ NotationHLayout::preparse(NotationElementList::iterator from,
 
     NotationElementList::iterator shortest = m_notationElements.end();
     int shortCount = 0;
+    NotationElementList::iterator it = from;
+    Event::timeT absoluteTime = 0;
 
-    for (NotationElementList::iterator it = from; it != to; ++it) {
+    for ( ; it != to; ++it) {
         
         NotationElement *el = (*it);
+        absoluteTime = el->getAbsoluteTime();
+
         if (startNewBar) {
-            addNewBar(it, el->getAbsoluteTime(), -1,
+            addNewBar(it, absoluteTime, -1,
                       getIdealBarWidth(fixedWidth, shortest, npf,
                                        shortCount, timeSignature),
                       fixedWidth, true, barCorrect);
@@ -165,7 +169,7 @@ NotationHLayout::preparse(NotationElementList::iterator from,
             if (nbTimeUnitsInCurrentBar > 0) {
                 // need to insert the bar line _before_ this event
                 nbTimeUnitsInCurrentBar = 0;
-                addNewBar(it, el->getAbsoluteTime(), -1,
+                addNewBar(it, absoluteTime, -1,
                           getIdealBarWidth(fixedWidth, shortest, npf,
                                            shortCount, timeSignature),
                           fixedWidth, true, true);
@@ -187,6 +191,7 @@ NotationHLayout::preparse(NotationElementList::iterator from,
                     int h = p.getHeightOnStaff();
                     el->event()->set<Int>(P_HEIGHT_ON_STAFF, h);
                     el->event()->set<Int>(P_ACCIDENTAL,(int)p.getAccidental());
+                    el->event()->set<String>(P_NOTE_NAME, p.getAsString());
                 } catch (Event::NoData) {
                     kdDebug(KDEBUG_AREA) <<
                         "NotationHLayout::preparse: couldn't get pitch for element"
@@ -225,6 +230,14 @@ NotationHLayout::preparse(NotationElementList::iterator from,
             }
         }
     }
+
+    if (nbTimeUnitsInCurrentBar > 0) {
+        addNewBar(it, absoluteTime, -1,
+                  getIdealBarWidth(fixedWidth, shortest, npf,
+                                   shortCount, timeSignature),
+                  fixedWidth, false,
+                  (nbTimeUnitsInCurrentBar == timeSignature.getBarDuration()));
+    }
 }
 
 
@@ -232,7 +245,7 @@ void
 NotationHLayout::layout()
 {
     double x = 0;
-    const NotePixmapFactory &npf(m_staff.getNotePixmapFactory());
+//    const NotePixmapFactory &npf(m_staff.getNotePixmapFactory());
     TimeSignature timeSignature;
 
     for (BarPositions::iterator bpi = m_barPositions.begin();

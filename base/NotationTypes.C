@@ -127,8 +127,12 @@ NotationDisplayPitch::getPerformancePitch(const Clef &clef, const Key &key) cons
 string
 NotationDisplayPitch::getAsString(const Clef &clef, const Key &key) const
 {
-    static const string noteNamesSharps[] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"  };
-    static const string noteNamesFlats[]  = { "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B" };
+    static const string noteNamesSharps[] = {
+        "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+    };
+    static const string noteNamesFlats[]  = {
+        "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"
+    };
     
     int performancePitch = getPerformancePitch(clef, key);
 
