@@ -3975,18 +3975,6 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
         RG_DEBUG << "RosegardenGUIApp::slotChangeTempo() - "
                              << "unrecognised tempo command" << endl;
     }
-
-    if (m_view && m_view->getTrackEditor()->getTempoRuler())
-    {
-        m_view->getTrackEditor()->getTempoRuler()->repaint();
-        m_view->getTrackEditor()->getTempoRuler()->update();
-    }
-
-    if (m_view && m_view->getTrackEditor()->getChordNameRuler())
-    {
-        m_view->getTrackEditor()->getChordNameRuler()->update();
-    }
-
 }
 
 void

@@ -128,7 +128,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     grid->addWidget(m_chordNameRuler, 0, 1);
 
     m_tempoRuler = new TempoRuler(m_rulerScale,
-				  &m_doc->getComposition(),
+				  m_doc,
 				  0.0,
 				  18,
 				  true,

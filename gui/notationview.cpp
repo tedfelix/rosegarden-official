@@ -451,8 +451,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     if (showProgressive) m_chordNameRuler->show();
 
     m_tempoRuler = new TempoRuler
-	(m_hlayout, &doc->getComposition(),
-	 20.0, 20, false, getCentralFrame());
+	(m_hlayout, doc, 20.0, 20, false, getCentralFrame());
     addRuler(m_tempoRuler);
     m_tempoRuler->hide();
 

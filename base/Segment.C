@@ -801,6 +801,13 @@ Segment::ClefKeyCmp::operator()(const Event *e1, const Event *e2) const
 Clef
 Segment::getClefAtTime(timeT time) const
 {
+    timeT ctime;
+    return getClefAtTime(time, ctime);
+}
+
+Clef
+Segment::getClefAtTime(timeT time, timeT &ctime) const
+{
     if (!m_clefKeyList) return Clef();
 
     Event ec(Clef::EventType, time);
@@ -810,11 +817,15 @@ Segment::getClefAtTime(timeT time) const
 	   (*i)->getAbsoluteTime() > time ||
 	   (*i)->getType() != Clef::EventType) {
 
-	if (i == m_clefKeyList->begin()) return Clef();
+	if (i == m_clefKeyList->begin()) {
+	    ctime = getStartTime();
+	    return Clef();
+	}
 	--i;
     }
 
     try {
+	ctime = (*i)->getAbsoluteTime();
 	return Clef(**i);
     } catch (const Exception &e) {
 	std::cerr << "Segment::getClefAtTime(" << time
@@ -828,6 +839,13 @@ Segment::getClefAtTime(timeT time) const
 Key
 Segment::getKeyAtTime(timeT time) const
 {
+    timeT ktime;
+    return getKeyAtTime(time, ktime);
+}
+
+Key
+Segment::getKeyAtTime(timeT time, timeT &ktime) const
+{
     if (!m_clefKeyList) return Key();
 
     Event ek(Key::EventType, time);
@@ -837,11 +855,15 @@ Segment::getKeyAtTime(timeT time) const
 	   (*i)->getAbsoluteTime() > time ||
 	   (*i)->getType() != Key::EventType) {
 
-	if (i == m_clefKeyList->begin()) return Key();
+	if (i == m_clefKeyList->begin()) {
+	    ktime = getStartTime();
+	    return Key();
+	}
 	--i;
     }
 
     try {
+	ktime = (*i)->getAbsoluteTime();
 	return Key(**i);
     } catch (const Exception &e) {
 	std::cerr << "Segment::getClefAtTime(" << time

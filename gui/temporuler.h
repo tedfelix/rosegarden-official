@@ -32,6 +32,7 @@ namespace Rosegarden {
 
 class QFont;
 class QFontMetrics;
+class RosegardenGUIDoc;
 
 
 /**
@@ -52,7 +53,7 @@ public:
      * The RulerScale will not be destroyed along with the TextRuler.
      */
     TempoRuler(Rosegarden::RulerScale *rulerScale,
-	       Rosegarden::Composition *composition,
+	       RosegardenGUIDoc *doc,
 	       double xorigin = 0.0,
 	       int height = 0,
 	       bool small = false,

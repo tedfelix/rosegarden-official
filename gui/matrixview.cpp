@@ -313,7 +313,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     addRuler(m_chordNameRuler);
 
     m_tempoRuler = new TempoRuler
-	(&m_hlayout, &doc->getComposition(), 0, 20, false, getCentralFrame());
+	(&m_hlayout, doc, 0, 20, false, getCentralFrame());
     addRuler(m_tempoRuler);
 
     // Scroll view to centre middle-C and warp to pointer position

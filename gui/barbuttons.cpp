@@ -103,6 +103,10 @@ BarButtons::BarButtons(RosegardenGUIDoc *doc,
 	m_hButtonBar = new BarButtonsWidget
 	    (m_doc, m_rulerScale, barHeight - m_loopRulerHeight, xorigin, this);
     }
+
+    QObject::connect
+	(doc->getCommandHistory(), SIGNAL(commandExecuted()),
+	 this, SLOT(update()));
 }
 
 

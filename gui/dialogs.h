@@ -51,6 +51,7 @@ class QAccel;
 class RosegardenQuantizeParameters;
 class RosegardenPitchChooser;
 class BigArrowButton;
+class InstrumentParameterBox;
 
 
 // Definitions of various simple dialogs that may be used in multiple
@@ -804,6 +805,7 @@ public slots:
     void slotSetModified();
     void slotResolutionChanged(int);
     void slotPreviewPitch(int);
+    void slotInstrumentChanged(int);
     void populate(int dev);
 
 protected:
@@ -819,6 +821,7 @@ protected:
     QSpinBox           *m_metronomeBarVely;
     QSpinBox           *m_metronomeBeatVely;
     QSpinBox           *m_metronomeSubBeatVely;
+    InstrumentParameterBox *m_instrumentParameterBox;
 
     bool                m_modified;
 };

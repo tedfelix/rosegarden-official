@@ -977,9 +977,43 @@
 
       </sect2>
 
+      <sect2 id="studio-metronome">
+	<title>Metronomes</title>
+	<para>
+	  Rosegarden has two built-in metronomes, one for use during
+	  recording and one that can be switched on during normal
+	  playback.  They work by sending notes to a MIDI instrument,
+	  and both metronomes use the same instrument, pitch and
+	  velocity information.
+	</para>
+
+	<para>
+	  To configure the metronomes, use the "Manage Metronomes"
+	  option on the Studio menu to bring up the metronome dialog.
+	  Here you can select a MIDI instrument for the metronome and
+	  choose the metronome's resolution (whether it should tick
+	  once per beat, once per subdivision of a beat, or only once
+	  per bar), pitch, and velocities.  Properties such as the
+	  actual voice the MIDI synth uses for the metronome tick
+	  depend on the instrument selected, just as the voice used
+	  for a MIDI track depends on the instrument that track is
+	  assigned to.  You can configure the instrument by assigning
+	  a track to it on the main window and selecting the correct
+	  program from the instrument parameter box.
+	</para>
+
+	<para>
+	  The record and play metronomes can be switched on or off
+	  from the Transport window, using the metronome button.  This
+	  button controls the record metronome when recording is armed
+	  or in progress, and the play metronome at other times.  By
+	  default, the record metronome is switched on and the play
+	  metronome switched off.
+	</para>
+      </sect2>
+
       <sect2 id="studio-midi-filters">
 	<title>MIDI filters</title>
-
         <para>
         <screenshot>
           <mediaobject>

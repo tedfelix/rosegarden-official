@@ -68,6 +68,7 @@
 #include "studiocontrol.h"
 #include "colours.h"
 #include "rosegardendcop.h"
+#include "instrumentparameterbox.h"
 #include "sequencemanager.h" // for metronomeChanged()
 
 #include "rosedebug.h"
@@ -3948,6 +3949,8 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     m_doc(doc)
 {
     QHBox *hbox = makeHBoxMainWidget();
+
+    m_instrumentParameterBox = new InstrumentParameterBox(doc, hbox);
     QVBox *vbox = new QVBox(hbox);
 
     QGroupBox *deviceBox = new QGroupBox
@@ -3989,6 +3992,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     layout->addWidget(new QLabel(i18n("Instrument"), frame), 1, 0);
     m_metronomeInstrument = new RosegardenComboBox(frame);
     connect(m_metronomeInstrument, SIGNAL(activated(int)), this, SLOT(slotSetModified()));
+    connect(m_metronomeInstrument, SIGNAL(activated(int)), this, SLOT(slotInstrumentChanged(int)));
     layout->addWidget(m_metronomeInstrument, 1, 1);
 
     QGroupBox *beatBox = new QGroupBox
@@ -4026,7 +4030,9 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     connect(m_metronomeSubBeatVely, SIGNAL(valueChanged(int)), this, SLOT(slotSetModified()));
     layout->addWidget(m_metronomeSubBeatVely, 3, 1);
 
-    m_metronomePitch = new RosegardenPitchChooser(i18n("Pitch"), hbox);
+    vbox = new QVBox(hbox);
+
+    m_metronomePitch = new RosegardenPitchChooser(i18n("Pitch"), vbox);
     connect(m_metronomePitch, SIGNAL(pitchChanged(int)), this, SLOT(slotSetModified()));
     connect(m_metronomePitch, SIGNAL(preview(int)), this, SLOT(slotPreviewPitch(int)));
 
@@ -4075,7 +4081,10 @@ ManageMetronomeDialog::populate(int deviceIndex)
     }
 
     // sanity
-    if (count < 0 || dev == 0) return;
+    if (count < 0 || dev == 0) {
+	m_instrumentParameterBox->useInstrument(0);
+	return;
+    }
 
     // populate instrument list
     Rosegarden::InstrumentList list = dev->getPresentationInstruments();
@@ -4105,8 +4114,24 @@ ManageMetronomeDialog::populate(int deviceIndex)
         int count = 0;
         for (iit = list.begin(); iit != list.end(); ++iit)
         {
-            m_metronomeInstrument->
-                    insertItem(strtoqstr((*iit)->getPresentationName()));
+	    QString iname(strtoqstr((*iit)->getPresentationName()));
+	    QString pname(strtoqstr((*iit)->getProgramName()));
+	    if (pname != "") iname += " (" + pname + ")";
+
+	    bool used = false;
+	    for (Rosegarden::Composition::trackcontainer::iterator tit =
+		     m_doc->getComposition().getTracks().begin();
+		 tit != m_doc->getComposition().getTracks().end(); ++tit) {
+
+		if (tit->second->getInstrument() == (*iit)->getId()) {
+		    used = true;
+		    break;
+		}
+	    }
+
+//	    if (used) iname = i18n("%1 [used]").arg(iname);
+
+            m_metronomeInstrument->insertItem(iname);
     
             if ((*iit)->getId() == metronome->getInstrument())
             {
@@ -4115,6 +4140,7 @@ ManageMetronomeDialog::populate(int deviceIndex)
             count++;
         }
         m_metronomeInstrument->setCurrentItem(position);
+	slotInstrumentChanged(position);
 
         m_metronomePitch->slotSetPitch(metronome->getPitch());
 	m_metronomeResolution->setCurrentItem(metronome->getDepth() - 1);
@@ -4123,6 +4149,43 @@ ManageMetronomeDialog::populate(int deviceIndex)
         m_metronomeSubBeatVely->setValue(metronome->getSubBeatVelocity());
 	slotResolutionChanged(metronome->getDepth() - 1);
     }
+}
+
+void
+ManageMetronomeDialog::slotInstrumentChanged(int i)
+{
+    int deviceIndex = m_metronomeDevice->currentItem();
+
+    Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
+    Rosegarden::DeviceListConstIterator it;
+    int count = 0;
+    Rosegarden::MidiDevice *dev = 0;
+
+    for (it = devices->begin(); it != devices->end(); it++)
+    {
+        dev = dynamic_cast<Rosegarden::MidiDevice*>(*it);
+
+        if (dev && dev->getDirection() == Rosegarden::MidiDevice::Play)
+        {
+            if (count == deviceIndex)
+                break;
+
+            count++;
+        }
+    }
+
+    // sanity
+    if (count < 0 || dev == 0) {
+	m_instrumentParameterBox->useInstrument(0);
+	return;
+    }
+
+    // populate instrument list
+    Rosegarden::InstrumentList list = dev->getPresentationInstruments();
+
+    if (i < 0 || i >= list.size()) return;
+
+    m_instrumentParameterBox->useInstrument(list[i]);
 }
 
 void

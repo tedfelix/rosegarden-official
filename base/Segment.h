@@ -396,10 +396,23 @@ public:
     Clef getClefAtTime(timeT time) const;
 
     /**
+     * Return the clef in effect at the given time, and set ctime to
+     * the time of the clef change.  This is a reasonably quick call.
+     */
+    Clef getClefAtTime(timeT time, timeT &ctime) const;
+
+    /**
      * Return the key signature in effect at the given time.  This is
      * a reasonably quick call.
      */
     Key getKeyAtTime(timeT time) const;
+
+    /**
+     * Return the key signature in effect at the given time, and set
+     * ktime to the time of the key change.  This is a reasonably
+     * quick call.
+     */
+    Key getKeyAtTime(timeT time, timeT &ktime) const;
 
 
     //////

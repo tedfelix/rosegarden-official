@@ -25,9 +25,11 @@
 
 #define DEBUG_PLAYABLE 1
 
+#ifdef HAVE_LIBJACK
 // To ensure thread-safe access to the audio file list vector
 //
 pthread_mutex_t      _audioFileList = PTHREAD_MUTEX_INITIALIZER;
+#endif
 
 namespace Rosegarden
 {
@@ -280,6 +282,7 @@ SoundDriver::getMappedInstrument(InstrumentId id)
 void
 SoundDriver::queueAudio(PlayableAudioFile *audioFile)
 {
+#ifdef HAVE_LIBJACK
     pthread_mutex_lock(&_audioFileList);
 
     // Push to the back of the thread queue and then we must
@@ -289,6 +292,7 @@ SoundDriver::queueAudio(PlayableAudioFile *audioFile)
     m_audioPlayThreadQueue.push_back(audioFile);
 
     pthread_mutex_unlock(&_audioFileList);
+#endif
 }
 
 // Move the pending thread queue across to the real queue
@@ -298,6 +302,7 @@ SoundDriver::queueAudio(PlayableAudioFile *audioFile)
 void
 SoundDriver::pushPlayableAudioQueue()
 {
+#ifdef HAVE_LIBJACK
     std::vector<PlayableAudioFile*>::iterator it;
 
     for (it = m_audioPlayThreadQueue.begin();
@@ -310,6 +315,7 @@ SoundDriver::pushPlayableAudioQueue()
 
     m_audioPlayThreadQueue.erase(m_audioPlayThreadQueue.begin(),
                                  m_audioPlayThreadQueue.end());
+#endif
 }
 
 void

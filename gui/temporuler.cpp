@@ -25,6 +25,7 @@
 #include "colours.h"
 #include "rosestrings.h"
 #include "rosedebug.h"
+#include "rosegardenguidoc.h"
 #include "Composition.h"
 #include "RulerScale.h"
 
@@ -36,7 +37,7 @@ using Rosegarden::timeT;
 
 
 TempoRuler::TempoRuler(RulerScale *rulerScale,
-		       Composition *composition,
+		       RosegardenGUIDoc *doc,
 		       double xorigin,
 		       int height,
 		       bool small,
@@ -48,7 +49,7 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_currentXOffset(0),
     m_width(-1),
     m_small(small),
-    m_composition(composition),
+    m_composition(&doc->getComposition()),
     m_rulerScale(rulerScale),
     m_fontMetrics(m_boldFont)
 {
@@ -60,6 +61,10 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_fontMetrics = QFontMetrics(m_boldFont);
 
     setBackgroundColor(RosegardenGUIColours::TextRulerBackground);
+
+    QObject::connect
+	(doc->getCommandHistory(), SIGNAL(commandExecuted()),
+	 this, SLOT(update()));
 }
 
 TempoRuler::~TempoRuler()
