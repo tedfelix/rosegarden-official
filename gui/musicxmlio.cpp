@@ -246,11 +246,12 @@ MusicXmlExporter::write() {
     
     // Notes!
     // Write out all segments for each Track
-    bool startedPart = false;
     trackNo = 0;
 
     for (Composition::trackiterator j = tracks.begin();
          j != tracks.end(); ++j) {
+
+	bool startedPart = false;
 
         // Code courtesy docs/code/iterators.txt
         Rosegarden::CompositionTimeSliceAdapter::TrackSet trackSet;
@@ -271,8 +272,10 @@ MusicXmlExporter::write() {
             Event *event = *k;
             timeT absoluteTime = event->getNotationAbsoluteTime();
 
-	    str << "\t<part id=\"" << (*j).first << "\">" << std::endl;
-	    startedPart = true;
+	    if (!startedPart) {
+		str << "\t<part id=\"" << (*j).first << "\">" << std::endl;
+		startedPart = true;
+	    }
 
             // Open a new measure if necessary
             // Incomplete: How does MusicXML handle non-contiguous measures?
@@ -344,7 +347,7 @@ MusicXmlExporter::write() {
         }
 
 	if (startedPart) {
-            str << "\t\t</measure>\n" << std::endl;
+            str << "\t\t</measure>" << std::endl;
 	    str << "\t</part>" << std::endl;
 	}
 
