@@ -884,7 +884,7 @@ void RosegardenGUIApp::dropEvent(QDropEvent *event)
         url = uri.first();
 
         // load in the file
-        openURL(KURL(url));
+        openURL(url);
     }
 }
 
@@ -943,6 +943,11 @@ void RosegardenGUIApp::slotFileNew()
             initView();
         }
     }
+}
+
+void RosegardenGUIApp::openURL(const QString& url)
+{
+    openURL(KURL(url));
 }
 
 void RosegardenGUIApp::openURL(const KURL& url)

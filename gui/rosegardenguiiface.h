@@ -50,6 +50,7 @@ public:
 
 k_dcop:
     virtual void openFile(const QString &file) = 0;
+    virtual void openURL(const QString &url) = 0;
     virtual void importRG21File(const QString &file) = 0;
     virtual void importMIDIFile(const QString &file) = 0;
     virtual void fileNew()                       = 0;

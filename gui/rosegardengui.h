@@ -106,22 +106,33 @@ public:
     /**
      * open a file
      */
-    void openFile(const QString& url);
+    virtual void openFile(const QString& filename);
 
     /**
-     * Works like openFile but is able to open remote files
+     * open a URL
+     *
+     * @param url : a string containing a url (protocol://foo/bar/file.rg)
+     */
+    virtual void openURL(const QString& url);
+
+    /**
+     * open a URL
      */
     void openURL(const KURL& url);
 
     /**
      * imports a Rosegarden 2.1 file
+     *
+     * @param url : a string containing a url (protocol://foo/bar/file.rose)
      */
-    void importRG21File(const QString &url);
+    virtual void importRG21File(const QString &url);
 
     /**
      * imports a MIDI file
+     *
+     * @param url : a string containing a url (protocol://foo/bar/file.mid)
      */
-    void importMIDIFile(const QString &url);
+    virtual void importMIDIFile(const QString &url);
 
     /**
      * export a MIDI file
