@@ -949,13 +949,14 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     // output all elements
     //
     // Iterate on segments
+    long eventCount = 0;
 
     for (Composition::iterator segitr = m_composition.begin();
          segitr != m_composition.end(); ++segitr) {
 
 	Segment *segment = *segitr;
 
-        saveSegment(outStream, segment, progress, totalEvents);
+        saveSegment(outStream, segment, progress, totalEvents, eventCount);
 
     }
 
@@ -976,7 +977,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	    .arg(strtoqstr((*ci)->getDefaultTimeAdjust()));
 
 	Segment *segment = (*ci)->getSegment();
-        saveSegment(outStream, segment, progress, totalEvents, triggerAtts);
+        saveSegment(outStream, segment, progress, totalEvents, eventCount, triggerAtts);
     }
 
     // Put a break in the file
@@ -1059,11 +1060,14 @@ bool RosegardenGUIDoc::exportStudio(const QString& filename,
     return true;
 }
 
-void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment, KProgress* progress, int totalEvents, QString extraAttributes)
+void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment,
+                                   KProgress* progress, long totalEvents, long &count,
+                                   QString extraAttributes)
 {
     QString time;
 
-    long count = 0;
+    RG_DEBUG << "RosegardenGUIDoc::saveSegment() totalEvents = " 
+             << totalEvents << endl;
 
     outStream << QString("<segment track=\"%1\" start=\"%2\" ") 
         .arg(segment->getTrack())
@@ -1195,6 +1199,10 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment, KPr
 	        }
 
 		if ((++count % 500 == 0) && progress) {
+                    RG_DEBUG << "RosegardenGUIDoc::saveSegment() : progress = "
+                             << count * 100 / totalEvents
+                             << " - count = " << count << " - totalEvents = "
+                             << totalEvents << endl;
 		    progress->setValue(count * 100 / totalEvents);
 		}
             }
