@@ -49,10 +49,7 @@
 #include "editviewbase.h"
 #include "ControlParameter.h"
 #include "Property.h"
-
-#include "matrixcommands.h"
-#include "SegmentMatrixHelper.h"
-
+#include "widgets.h"
 
 using Rosegarden::RulerScale;
 using Rosegarden::Segment;
@@ -190,6 +187,7 @@ public:
     ~ControlItem();
     
     virtual void setValue(long);
+    int getValue() const { return m_value; }
 
     void setWidth(int w)  { setSize(w, height()); }
     void setHeight(int h) { setSize(width(), h); }
@@ -533,7 +531,8 @@ ControlRuler::ControlRuler(Segment& segment,
     m_selecting(false),
     m_selector(new ControlSelector(this)),
     m_selectionRect(new QCanvasRectangle(canvas())),
-    m_menu(0)    
+    m_menu(0),
+    m_numberFloat(new RosegardenTextFloat(parent))
 {
     setHScrollBarMode(QScrollView::AlwaysOff);
 
@@ -545,8 +544,9 @@ ControlRuler::ControlRuler(Segment& segment,
     connect(this, SIGNAL(stateChange(const QString&, bool)),
             m_parentEditView, SLOT(slotStateChanged(const QString&, bool)));
 
-    emit stateChange("have_controller_item_selected", false);
+    m_numberFloat->hide();
 
+    emit stateChange("have_controller_item_selected", false);
 }
 
 ControlRuler::~ControlRuler()
@@ -641,7 +641,8 @@ void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
 
         m_itemMoved = false;
     }
-    
+
+    m_numberFloat->hide();
 }
 
 void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
@@ -659,11 +660,38 @@ void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
 
     m_itemMoved = true;
 
+    // Borrowed from RosegardenRotary - compute total position within window
+    //
+    QWidget *par = parentWidget();
+    QPoint totalPos = this->pos();
+
+    while (par->parentWidget() && !par->isTopLevel() && !par->isDialog())
+    {
+        totalPos += par->pos();
+        par = par->parentWidget();
+    }
+
+
+    m_numberFloat->move(totalPos.x() + m_lastEventPos.x() + 20,
+                        totalPos.y() + m_lastEventPos.y() - 10);
+    int value = 0;
+
     for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
+        {
             item->handleMouseMove(e, deltaX, deltaY);
-    
+            ElementAdapter* adapter = item->getElementAdapter();
+
+            // set value to highest in selection
+            if (item->getValue() > value)
+            {
+                value = item->getValue();
+                m_numberFloat->setText(QString("%1").arg(value));
+            }
+        }
     }
+
+    m_numberFloat->show();
 
 }
 
@@ -1028,15 +1056,6 @@ void ControllerEventsRuler::insertControllerEvent()
         if (ok) number = res.toULong();
     }
     
-    /*
-    Event *e = new Event(Rosegarden::Controller::EventType, insertTime);
-    e->set<Rosegarden::Int>(Rosegarden::Controller::VALUE, initialValue);
-    e->set<Rosegarden::Int>(Rosegarden::Controller::NUMBER, number);
-
-    MatrixInsertionCommand *command  = new 
-        MatrixInsertionCommand(m_segment, insertTime, insertTime + 960, e);
-    */
-
     ControllerEventInsertCommand* command = 
         new ControllerEventInsertCommand(insertTime, number, initialValue, m_segment);
 
@@ -1090,6 +1109,7 @@ void ControllerEventsRuler::clearControllerEvents()
 void ControllerEventsRuler::startControlLine()
 {
     m_controlLineShowing = true;
+    this->setCursor(Qt::pointingHandCursor);
 }
 
 void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
@@ -1105,6 +1125,8 @@ void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
     {
         m_controlLineShowing = false;
         m_controlLine->hide();
+
+        this->setCursor(Qt::arrowCursor);
         return;
     }
 
@@ -1127,25 +1149,24 @@ void ControllerEventsRuler::contentsMouseReleaseEvent(QMouseEvent *e)
     }
     else
     {
-        timeT startTime = m_rulerScale->getTimeForX(m_lastEventPos.x());
+        timeT startTime = m_rulerScale->getTimeForX(m_controlLineX);
         timeT endTime = m_rulerScale->getTimeForX(e->x());
 
-        long startValue = heightToValue(m_lastEventPos.y() - canvas()->height());
+        long startValue = heightToValue(m_controlLineY - canvas()->height());
         long endValue = heightToValue(e->y() - canvas()->height());
 
-        /*
         std::cout << "ControllerEventsRuler::contentsMouseReleaseEvent - "
                   << "starttime = " << startTime
                   << ", endtime = " << endTime
                   << ", startValue = " << startValue
                   << ", endValue = " << endValue
                   << std::endl;
-                  */
 
         drawControlLine(startTime, endTime, startValue, endValue);
 
         m_controlLineShowing = false;
         m_controlLine->hide();
+        this->setCursor(Qt::arrowCursor);
         canvas()->update();
     }
 
@@ -1171,6 +1192,7 @@ ControllerEventsRuler::drawControlLine(Rosegarden::timeT startTime,
                                        int endValue)
 {
     if (m_controller == 0) return;
+    if (startTime > endTime) std::swap(startTime, endTime);
 
     Rosegarden::timeT quantDur = Rosegarden::Note(Rosegarden::Note::Quaver).getDuration();
 
@@ -1182,13 +1204,15 @@ ControllerEventsRuler::drawControlLine(Rosegarden::timeT startTime,
 
     while (time < endTime)
     {
-        int value = startValue + int(step * double(time));
+        int value = startValue + int(step * double(time - startTime));
 
         // hit the buffers
         if (value < m_controller->getMin())
             value = m_controller->getMin();
         else if (value > m_controller->getMax())
             value = m_controller->getMax();
+
+        std::cout << "INSERT VALUE = " << value << ", TIME = " << time << std::endl;
         
         ControllerEventInsertCommand* command = 
             new ControllerEventInsertCommand(time, m_controller->getControllerValue(), value, m_segment);

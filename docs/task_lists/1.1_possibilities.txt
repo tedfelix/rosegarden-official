@@ -45,3 +45,4 @@ Notation etc
  * Lilypond import.  Ignore those, ahem, lily-livered milquetoasts
    who suggest it'd be "really damn difficult" or any of that rot.
 
+ * better integration of fluidsynth/softsynths

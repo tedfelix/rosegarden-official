@@ -37,6 +37,7 @@ namespace Rosegarden { class RulerScale; class EventSelection; class ControlPara
 
 class QFont;
 class QFontMetrics;
+class RosegardenTextFloat;
 
 class ControlItem;
 class ControlTool;
@@ -129,6 +130,8 @@ protected:
 
     QString m_menuName;
     QPopupMenu* m_menu;
+
+    RosegardenTextFloat  *m_numberFloat;
 };
 
 /**

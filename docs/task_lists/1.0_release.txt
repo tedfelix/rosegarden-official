@@ -5,12 +5,10 @@ Features for 1.0 - updated 20030923
   investigate MIDI clock, MTC and MMC [IN PROGRESS - rwb]
 
 - audio threading for file r/w access [rwb]
-  o ringbuffer
+  o ringbuffer  [DONE]
   o mp3 support
   o libsndfile support
-  o drag and drop
-
-- metronome [IN PROGRESS - rwb/cc]
+  o drag and drop [PARTIALLY DONE]
 
 - banks/variations [cc]
 
@@ -22,7 +20,7 @@ Features for 1.0 - updated 20030923
 
 - playlists (essential for demos!) [rwb]
 
-- song markers - jumping to, creating loops between [rwb]
+- song markers - jumping to, creating loops between [rwb] [MAINLY DONE]
 
 - search facility for patch sounds (search all banks) [rwb]
 
@@ -30,8 +28,6 @@ Features for 1.0 - updated 20030923
            notes past the end of it
 
 - Studio faders (MIDI and audio fader controls)
-
-- porting to shared memory experimental branch [rwb/cc/gl] [almost DONE, audio remains]
 
 - look at other updates for RG manual [dmm]
     
@@ -58,30 +54,6 @@ Features for 1.0 - updated 20030923
 - completely rewrite tutorial for 1.0, using fewer/smaller pixmaps, better
   organization, possibly converting to LDP docbook format [dmm]
 
-- request: integration of fluidsynth [dmm]
-  what does this mean exactly? muse's integration means bundling of
-  fluidysnth source code - we don't want to go that far but bear in
-  mind that this could mean as little or as much as we want [rwb]
-
-  I haven't really looked into it just yet.  I've been lead to believe that we
-  can just -llibfluidsynth1 and then use the API to talk to the thing, but I
-  haven't determined whether that means talking to a running client, or
-  effectively running an interfaceless client ourselves.  Then there are
-  several Jack-related issues to work out no matter what the answer is.  The
-  ultimate aim is to be able to provide a GUI for loading/unloading soundfonts
-  conveniently and setting up other fluidsynth parameters.  It may all prove
-  either un-doable or something best left for after 1.0, but it's worth a look
-  I think.  It may be a quick hack. [dmm]
-
-  Chris and I talked about this a bit more and while we'd like closer
-  fluidsynth integration it'll probably mean we should talk more 
-  closely with the fluidsynth team and get their support.  There are
-  things that both of us dislike about current implementation. [rwb]
-
-- control rulers [gl] [DONE?]
-  
-  I'll have a look at this soonish [rwb]
-
 - Tempo ruler in main window: need control-ruler-like interface,
   ideally from control-ruler code.  This one is a lot more important
   than we've given it credit for so far, I think.
@@ -105,6 +77,12 @@ Features for 1.0 - updated 20030923
 
 Completed
 ---------
+
+- control rulers [gl/rwb] [GETTING THERE/DONE]
+
+- porting to shared memory experimental branch [rwb/cc/gl] [DONE]
+
+- metronome [DONE - rwb/cc]
 
 - general file merging [cc]
 
@@ -140,6 +118,26 @@ To be ignored
   lilypond-devel list some time ago, and this feature would be extremely
   difficult to implement.  If Hans has been working on it all this time in
   secret, then it might make 1.0, but otherwise there's not a chance.
+
+- request: integration of fluidsynth [dmm]
+  what does this mean exactly? muse's integration means bundling of
+  fluidysnth source code - we don't want to go that far but bear in
+  mind that this could mean as little or as much as we want [rwb]
+
+  I haven't really looked into it just yet.  I've been lead to believe that we
+  can just -llibfluidsynth1 and then use the API to talk to the thing, but I
+  haven't determined whether that means talking to a running client, or
+  effectively running an interfaceless client ourselves.  Then there are
+  several Jack-related issues to work out no matter what the answer is.  The
+  ultimate aim is to be able to provide a GUI for loading/unloading soundfonts
+  conveniently and setting up other fluidsynth parameters.  It may all prove
+  either un-doable or something best left for after 1.0, but it's worth a look
+  I think.  It may be a quick hack. [dmm]
+
+  Chris and I talked about this a bit more and while we'd like closer
+  fluidsynth integration it'll probably mean we should talk more 
+  closely with the fluidsynth team and get their support.  There are
+  things that both of us dislike about current implementation. [rwb]
 
 
 Bugs
