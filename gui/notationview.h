@@ -154,6 +154,11 @@ protected:
     bool showBars(NotationElementList::iterator from,
                   NotationElementList::iterator to);
 
+    /**
+     * find the NotationElement which X is closest to eventX
+     */
+    NotationElementList::iterator findClosestNote(NotationElementList::iterator point,
+                                                  double eventX);
 
     void perfTest();
     void test();

@@ -86,7 +86,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
                                         4, // 4 beats per bar
                                         40);
 
-        if (!applyLayout()) {
+        if (applyLayout()) {
 
             // Show all elements in the staff
             kdDebug(KDEBUG_AREA) << "Elements after layout : "
@@ -259,7 +259,8 @@ NotationView::showElements(NotationElementList::iterator from,
 
                 } else {
                     
-                    kdDebug(KDEBUG_AREA) << "NotationElement type is neither a note nor a rest"
+                    kdDebug(KDEBUG_AREA) << "NotationElement type is neither a note nor a rest - type is "
+                                         << (*it)->event()->type()
                                          << endl;
                     continue;
                 }
@@ -293,10 +294,10 @@ NotationView::showBars(NotationElementList::iterator from,
 
     NotationElementList::iterator lastElement = to;
     --lastElement;
-    kdDebug(KDEBUG_AREA) << "NotationView::showBars() : from->x = " <<(*from)->x()
-                         << " - lastElement->x = " << (*lastElement)->x() << endl
-                         << "lastElement : " << *(*lastElement) << endl;
 
+//     kdDebug(KDEBUG_AREA) << "NotationView::showBars() : from->x = " <<(*from)->x()
+//                          << " - lastElement->x = " << (*lastElement)->x() << endl
+//                          << "lastElement : " << *(*lastElement) << endl;
     
     m_currentStaff->deleteBars((*from)->x(), (*lastElement)->x());
         
@@ -342,7 +343,7 @@ NotationView::applyHorizontalLayout()
 
     kdDebug(KDEBUG_AREA) << "NotationView::applyHorizontalLayout() : done" << endl;
 
-    return m_hlayout->status();
+    return m_hlayout->status() == 0;
 }
 
 
@@ -360,7 +361,7 @@ NotationView::applyVerticalLayout()
     
     kdDebug(KDEBUG_AREA) << "NotationView::applyVerticalLayout() : done" << endl;
 
-    return m_vlayout->status();
+    return m_vlayout->status() == 0;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -510,6 +511,8 @@ NotationView::insertNote(int pitch, QMouseEvent *e)
     //
     Event *insertedEvent = new Event;
 
+    insertedEvent->setType("note"); // TODO : we can insert rests too
+    
     // set its duration and pitch
     //
     insertedEvent->setTimeDuration(m_hlayout->quantizer().noteDuration(m_currentSelectedNote));
@@ -517,27 +520,138 @@ NotationView::insertNote(int pitch, QMouseEvent *e)
 
     // Create associated notationElement and set its note type
     //
-    NotationElement *notationElement = new NotationElement(insertedEvent);
+    NotationElement *newNotationElement = new NotationElement(insertedEvent);
 
-    notationElement->event()->set<Int>("Notation::NoteType", m_currentSelectedNote);
+    newNotationElement->event()->set<Int>("Notation::NoteType", m_currentSelectedNote);
 
     // give a "fake" X coord to the notation element (where the click was received)
-    notationElement->setX(e->x());
-    // the horiz. layout will readjust X and tell where to insert the event
-    NotationElementList::iterator insertPosition = m_hlayout->insertNote(notationElement);
+    newNotationElement->setX(e->x());
 
-    // no need to tell where to insert - container is sorted in element's X
-    m_notationElements->insert(notationElement);
+    // readjust newNotationElement->X
+
+    kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : approx. x : " << newNotationElement->x() << endl;
+
+    NotationElementList::iterator insertPoint = m_notationElements->lower_bound(newNotationElement);
+
+    NotationElementList::iterator closestNote = findClosestNote(insertPoint, newNotationElement->x());
+
+    NotationElementList::iterator insertPosition = closestNote;
+    
+
+    if (closestNote != m_notationElements->end()) {
+
+        newNotationElement->setX((*closestNote)->x());
+
+        kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : adjusted x : "
+                             << newNotationElement->x() << endl;
+
+        if ((*closestNote)->isRest()) {
+
+            // replace rest (or part of it) with note
+            // TODO
+            kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : insert over rest is not implemented yet"
+                                 << endl;
+
+        } else if ((*closestNote)->isGroup()) {
+
+            // just add it to group
+            (*closestNote)->group()->insert(newNotationElement);
+
+        } else {
+
+            // create a new group and its supporting element
+            NotationElementList *newGroup = new NotationElementList();
+            NotationElement *newGroupElement = new NotationElement(new Event("", "group"));
+
+            // put the closest note and the new inserted note in the new group
+            newGroup->insert(*closestNote);
+            newGroup->insert(newNotationElement);
+
+            // link the new group to its supporting element
+            newGroupElement->setGroup(newGroup);
+            // and set the element's X
+            newGroupElement->setX(newNotationElement->x());
+
+//             kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : newGroup is "
+//                                  << endl << *newGroup << endl;
+
+            // erase old closestNote (which is now in the new group)
+            // and insert the supporting element for the new group
+            m_notationElements->erase(closestNote);
+            m_notationElements->insert(newGroupElement);
+        }
+        
+
+    } else { // note is inserted at end (appended)
+
+        kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : note appended" << endl;
+        m_notationElements->insert(newNotationElement);
+//         --closestNote;
+//         newNotationElement->setX((*closestNote)->x() + Staff::noteWidth + m_noteMargin);
+    }
 
     // TODO : insert insertedEvent too
 
-    (*m_vlayout)(notationElement);
+    kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements before relayout : "
+                         << endl << *m_notationElements << endl;
+
+    (*m_vlayout)(newNotationElement);
     applyHorizontalLayout(); // TODO : be more subtle than this
+
+    kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements after relayout : "
+                         << endl << *m_notationElements << endl;
+
     // (*m_hlayout)(notationElement);
 
     // TODO : m_currentStaff should be updated by the mouse click 
 
     showElements(--insertPosition, m_notationElements->end(), m_currentStaff);
+}
+
+
+NotationElementList::iterator
+NotationView::findClosestNote(NotationElementList::iterator insertPoint,
+                              double eventX)
+{
+    NotationElementList::iterator nextEl = insertPoint,
+        prevEl = insertPoint, result = insertPoint;
+
+    kdDebug(KDEBUG_AREA) << "NotationHLayout::findClosestNote() : nextEl->x = "
+                         << (*nextEl)->x() << endl;
+
+    if (prevEl != m_notationElements->begin()) --prevEl;
+
+    kdDebug(KDEBUG_AREA) << "NotationHLayout::findClosestNote() : prevEl->x = "
+                         << (*prevEl)->x() << endl;
+
+    double distToNext = 10e9,
+        distToPrevious = 10e9;
+    
+    // Compute dist. to next note
+    if (nextEl != m_notationElements->end())
+        distToNext = (*nextEl)->x() - eventX;
+    else
+        distToNext = 0;
+
+    kdDebug(KDEBUG_AREA) << "NotationHLayout::findClosestNote() : distToNext = "
+                         << distToNext << endl;
+
+    distToPrevious = eventX - (*prevEl)->x();
+
+    kdDebug(KDEBUG_AREA) << "NotationHLayout::findClosestNote() : distToPrevious = "
+                         << distToPrevious << endl;
+
+    if (distToPrevious > distToNext) {
+        kdDebug(KDEBUG_AREA) << "NotationHLayout::findClosestNote() : returning nextEl"
+                             << endl;
+        result = nextEl;
+    } else {
+        kdDebug(KDEBUG_AREA) << "NotationHLayout::findClosestNote() : returning prevEl"
+                             << endl;
+        result = prevEl;
+    }
+    
+    return result;
 }
 
 

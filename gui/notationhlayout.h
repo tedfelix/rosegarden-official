@@ -51,8 +51,6 @@ public:
     /// resets the internal position counters of the object
     void reset();
 
-    NotationElementList::iterator insertNote(NotationElement *el);
-
     Quantizer& quantizer() { return m_quantizer; }
 
 protected:
@@ -64,9 +62,6 @@ protected:
     //     const vector<unsigned int>& splitNote(unsigned int noteLen);
 
     void initNoteWidthTable();
-
-    NotationElementList::iterator findClosestNote(NotationElementList::iterator insertPoint,
-                                                  bool &noteIsRest);
 
     unsigned int barTimeAtPos(NotationElementList::iterator pos);
     void addNewBar(unsigned int barPos);

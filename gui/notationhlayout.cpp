@@ -15,8 +15,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <qcolor.h>
-
 #include "staff.h"
 #include "notationhlayout.h"
 #include "rosedebug.h"
@@ -134,7 +132,7 @@ NotationHLayout::layoutGroup(NotationElement *groupElement)
 {
     groupElement->setX(m_currentPos);
 
-    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout() : layout group to pos "
+    kdDebug(KDEBUG_AREA) << "NotationHLayout::layoutGroup() : layout group to pos "
                          << m_currentPos << endl;
 
     NotationElementList *group = groupElement->group();
@@ -147,6 +145,9 @@ NotationHLayout::layoutGroup(NotationElement *groupElement)
         m_quantizer.quantize(el->event());
         el->setX(m_currentPos);
     }
+
+    kdDebug(KDEBUG_AREA) << "NotationHLayout::layoutGroup() : group after hlayout "
+                         << endl << *group << endl;
 
     NotationElement *firstNoteOfGroup = (*group->begin());
 
@@ -206,69 +207,6 @@ NotationHLayout::reset()
     m_previousNbTimeUnitsInCurrentBar = 0;
     m_barPositions.clear();
 }
-
-NotationElementList::iterator
-NotationHLayout::findClosestNote(NotationElementList::iterator insertPoint,
-                                 bool &noteIsRest)
-{
-    NotationElementList::iterator nextEl = insertPoint,
-        prevEl = insertPoint, result = insertPoint;
-
-    ++nextEl;
-
-    if (prevEl != m_notationElements.begin()) --prevEl;
-
-    double distToNext = 10e9,
-        distToPrevious = 10e9;
-    
-    // Compute dist. to next note
-    if (nextEl != m_notationElements.end())
-        distToNext = (*nextEl)->x() - (*insertPoint)->x();
-
-    if (prevEl != m_notationElements.begin())
-        distToPrevious = (*insertPoint)->x() - (*prevEl)->x();
-
-    if (distToPrevious > distToNext)
-        result = nextEl;
-    else
-        result = prevEl;
-
-    noteIsRest = ((*result)->isRest());
-
-    return result;
-}
-
-
-NotationElementList::iterator
-NotationHLayout::insertNote(NotationElement *el)
-{
-//     ElementHPos elementPos(xPos);
-    
-    kdDebug(KDEBUG_AREA) << "insertNote : approx. x : " << el->x() << endl;
-
-    NotationElementList::iterator insertPoint = m_notationElements.insert(el);
-
-    bool noteIsRest = false;
-
-    NotationElementList::iterator closestNote = findClosestNote(insertPoint, noteIsRest);
-
-    if (closestNote != m_notationElements.end()) {
-
-        el->setX((*closestNote)->x());
-
-        if (noteIsRest) {} // replace rest (or part of it) with note
-        // else don't do anything special, just put note where it is
-
-    } else {
-        --closestNote;
-        el->setX((*closestNote)->x() + Staff::noteWidth + m_noteMargin);
-    }
-    
-
-    return insertPoint;
-}
-
-
 
 // const vector<unsigned int>&
 // NotationHLayout::splitNote(unsigned int noteLen)
