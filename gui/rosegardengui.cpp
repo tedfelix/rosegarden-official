@@ -54,7 +54,6 @@
 #include <ktip.h>
 #include <kpopupmenu.h>
 #include <kfilemetainfo.h>
-#include <kinputdialog.h> // demands KDE >= 3.2; is this a problem?
 
 // application specific includes
 
@@ -2395,6 +2394,14 @@ void RosegardenGUIApp::slotTempoToSegmentLength(QWidget* parent)
 
         Rosegarden::TimeSignature timeSig =
             comp.getTimeSignatureAt( seg->getStartTime());
+
+        timeT endTime = seg->getEndTime();
+
+        if (seg->getRawEndMarkerTime())
+            endTime = seg->getEndMarkerTime();
+
+        Rosegarden::RealTime segDuration =
+            seg->getAudioEndTime() - seg->getAudioStartTime();
         
 	int beats = 0; 
 
@@ -2416,14 +2423,6 @@ void RosegardenGUIApp::slotTempoToSegmentLength(QWidget* parent)
 		     << endl;
             return;
         } 
-
-        timeT endTime = seg->getEndTime();
-
-        if (seg->getRawEndMarkerTime())
-            endTime = seg->getEndMarkerTime();
-
-        Rosegarden::RealTime segDuration =
-            seg->getAudioEndTime() - seg->getAudioStartTime();
 
         double beatLengthUsec =
             double(segDuration.sec * 1000000 + segDuration.usec()) /
