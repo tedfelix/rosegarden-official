@@ -378,7 +378,10 @@ void NotationView::setupActions()
     noteAction->setExclusiveGroup("notes");
     
 
-    // setup edit menu
+    // File menu
+    KStdAction::close (this, SLOT(fileClose()),         actionCollection());
+
+   // setup edit menu
     KStdAction::undo    (this, SLOT(slotEditUndo()),       actionCollection());
     KStdAction::redo    (this, SLOT(slotEditRedo()),       actionCollection());
     KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
@@ -1014,26 +1017,32 @@ void NotationView::slotDottedR64th()
 //----------------------------------------
 void NotationView::slotNoAccidenta()
 {
+    NoteInserter::setAccidental(Rosegarden::NoAccidental);
 }
 
 void NotationView::slotSharp()
 {
+    NoteInserter::setAccidental(Rosegarden::Sharp);
 }
 
 void NotationView::slotFlat()
 {
+    NoteInserter::setAccidental(Rosegarden::Flat);
 }
 
 void NotationView::slotNatural()
 {
+    NoteInserter::setAccidental(Rosegarden::Natural);
 }
 
 void NotationView::slotDoubleSharp()
 {
+    NoteInserter::setAccidental(Rosegarden::DoubleSharp);
 }
 
 void NotationView::slotDoubleFlat()
 {
+    NoteInserter::setAccidental(Rosegarden::DoubleFlat);
 }
 
 
@@ -1251,8 +1260,10 @@ NoteInserter::handleClick(int height, const QPoint &eventPos,
     }
 
 
-    //!!! still need to take accidental into account
-    int pitch = Rosegarden::NotationDisplayPitch(height, NoAccidental).
+    kdDebug(KDEBUG_AREA) << "NoteInserter::handleClick() : accidental = "
+                         << m_accidental << endl;
+
+    int pitch = Rosegarden::NotationDisplayPitch(height, m_accidental).
         getPerformancePitch(clef ? Clef(*clef) : Clef::DefaultClef,
                             key ? Rosegarden::Key(*key) :
                             Rosegarden::Key::DefaultKey);
@@ -1277,6 +1288,13 @@ void NoteInserter::doInsert(TrackNotationHelper& nt,
 {
     nt.insertNote(absTime, note, pitch);
 }
+
+void NoteInserter::setAccidental(Rosegarden::Accidental accidental)
+{
+    m_accidental = accidental;
+}
+
+Rosegarden::Accidental NoteInserter::m_accidental = NoAccidental;
 
 //------------------------------
 

@@ -324,6 +324,8 @@ public:
     virtual void handleClick(int height, const QPoint &eventPos,
                              NotationElement* el);
 
+    static void setAccidental(Rosegarden::Accidental);
+
 protected:
     virtual void doInsert(Rosegarden::TrackNotationHelper&,
                           Rosegarden::timeT absTime,
@@ -331,6 +333,8 @@ protected:
 
     Rosegarden::Note::Type m_noteType;
     unsigned int m_noteDots;
+
+    static Rosegarden::Accidental m_accidental;
 };
 
 class RestInserter : public NoteInserter
