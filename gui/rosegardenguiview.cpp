@@ -1096,7 +1096,7 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 	    }
 
 	    m_trackEditor->getTrackButtons()->slotSetTrackMeter
-		((info.level + info.levelRight) / 254.0, track->getId());
+		((info.level + info.levelRight) / 254.0, track->getPosition());
 
 	} else {
 

@@ -751,6 +751,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     
     jack_position_t position;
     jack_transport_state_t state = JackTransportRolling;
+    bool doneRecord = false;
 
     if (m_jackTransportEnabled) {
 
@@ -781,7 +782,13 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		    // do this before record monitor, otherwise we lost monitor out
 		    jackProcessEmpty(nframes);
 		}
-		return jackProcessRecord(nframes, 0, 0, clocksRunning); // for monitoring
+
+		int rv = jackProcessRecord(nframes, 0, 0, clocksRunning); // for monitoring
+		doneRecord = true;
+		if (!asyncAudio) {
+		    return rv;
+		}
+
 	    } else {
 		return jackProcessEmpty(nframes);
 	    }
@@ -837,8 +844,6 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     InstrumentId synthInstrumentBase;
     int synthInstruments;
     m_alsaDriver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
-
-    bool doneRecord = false;
 
     // We always have the master out
 

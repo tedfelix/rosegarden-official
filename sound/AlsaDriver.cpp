@@ -3005,6 +3005,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
     if (m_jackDriver) {
 	if (haveNewAudio) {
 	    if (now) {
+		m_jackDriver->setHaveAsyncAudioEvent();
 		m_jackDriver->prebufferAudio();
 	    }
 	    if (m_queueRunning) {
@@ -3012,7 +3013,6 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 	    }
 	}
 	m_jackDriver->updateAudioData();
-	m_jackDriver->setHaveAsyncAudioEvent();
     }
 #endif
 }

@@ -246,19 +246,24 @@ LADSPAPluginFactory::getPortMaximum(const LADSPA_Descriptor *descriptor, int por
 MappedObjectValue
 LADSPAPluginFactory::getPortDefault(const LADSPA_Descriptor *descriptor, int port)
 {
+    MappedObjectValue minimum = getPortMinimum(descriptor, port);
+    MappedObjectValue maximum = getPortMaximum(descriptor, port);
+    MappedObjectValue deft;
+
     if (m_portDefaults.find(descriptor->UniqueID) != 
 	m_portDefaults.end()) {
 	if (m_portDefaults[descriptor->UniqueID].find(port) !=
 	    m_portDefaults[descriptor->UniqueID].end()) {
-	    return m_portDefaults[descriptor->UniqueID][port];
+
+	    deft = m_portDefaults[descriptor->UniqueID][port];
+	    if (deft < minimum) deft = minimum;
+	    if (deft > maximum) deft = maximum;
+	    return deft;
 	}
     }
 
     LADSPA_PortRangeHintDescriptor d =
 	descriptor->PortRangeHints[port].HintDescriptor;
-    MappedObjectValue deft;
-    MappedObjectValue minimum = getPortMinimum(descriptor, port);
-    MappedObjectValue maximum = getPortMaximum(descriptor, port);
 
     bool logarithmic = LADSPA_IS_HINT_LOGARITHMIC(d);
     

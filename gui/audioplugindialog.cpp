@@ -897,14 +897,6 @@ PluginControl::PluginControl(QWidget *parent,
             lowerBound = swap;
         }
 
-        QLabel *low;
-	if (port->getDisplayHint() & Rosegarden::PluginPort::Integer) {
-	    low = new QLabel(QString("%1").arg(int(lowerBound)), parent);
-	} else {
-	    low = new QLabel(QString("%1").arg(lowerBound), parent);
-	}
-        low->setFont(plainFont);
-
         float step = (upperBound - lowerBound) / 100.0;
 	float pageStep = step * 10.0;
 	RosegardenRotary::TickMode ticks = RosegardenRotary::PageStepTicks;
@@ -925,6 +917,16 @@ PluginControl::PluginControl(QWidget *parent,
 	    snapToTicks = true;
 	}
 
+        QLabel *low;
+	if (port->getDisplayHint() &
+	    (Rosegarden::PluginPort::Integer |
+	     Rosegarden::PluginPort::Toggled)) {
+	    low = new QLabel(QString("%1").arg(int(lowerBound)), parent);
+	} else {
+	    low = new QLabel(QString("%1").arg(lowerBound), parent);
+	}
+        low->setFont(plainFont);
+
         m_dial = new RosegardenRotary(parent,
                                       lowerBound,   // min
                                       upperBound,   // max
@@ -944,7 +946,9 @@ PluginControl::PluginControl(QWidget *parent,
                 this, SLOT(slotValueChanged(float)));
 
         QLabel *upp;
-	if (port->getDisplayHint() & Rosegarden::PluginPort::Integer) {
+	if (port->getDisplayHint() &
+	    (Rosegarden::PluginPort::Integer |
+	     Rosegarden::PluginPort::Toggled)) {
 	    upp = new QLabel(QString("%1").arg(int(upperBound)), parent);
 	} else {
 	    upp = new QLabel(QString("%1").arg(upperBound), parent);
