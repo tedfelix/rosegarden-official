@@ -131,11 +131,18 @@
   <Action name="toggle_step_by_step"/>
 </Menu>
 
-<Menu  name="settings"><text>&amp;Settings</text>
-  <Action name="show_tools_toolbar"        append="show_merge" />
-  <Action name="show_inst_parameters"      append="show_merge" />
-  <Action name="show_chords_ruler"         append="show_merge" />
-  <Action name="show_tempo_ruler"          append="show_merge" />
+<Menu  name="settings" append="show_merge"><text>&amp;Settings</text>
+  <Menu name="toolbars" append="show_merge"><text>&amp;Toolbars</text>
+    <Action name="options_show_toolbar"      append="show_merge" />
+    <Action name="show_tools_toolbar"        append="show_merge" />
+    <Action name="options_show_statusbar"    append="show_merge" />
+  </Menu>
+  <Menu name="rulers" append="show_merge"><text>&amp;Rulers</text>
+    <Action name="show_chords_ruler"         append="show_merge" />
+    <Action name="show_tempo_ruler"          append="show_merge" />
+  </Menu>
+  <Separator                                 append="show_merge" />
+    <Action name="show_inst_parameters"      append="show_merge" />
 </Menu> 
 
 

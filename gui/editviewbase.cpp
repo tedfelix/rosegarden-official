@@ -169,9 +169,11 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
 
     // Actions all edit views will have
 
-    KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
-    KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
-
+    KStdAction::showToolbar(this, SLOT(slotToggleToolBar()),
+                                       actionCollection(), "options_show_toolbar");
+    
+    KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()),
+                                         actionCollection(), "options_show_statusbar");
 
     KStdAction::preferences(this,
                             SLOT(slotConfigure()),

@@ -1414,6 +1414,8 @@ SequenceManager::panic()
 {
     SEQMAN_DEBUG << "panic button\n";
 
+    stopping();
+
     Studio &studio = m_doc->getStudio();
 
     InstrumentList list = studio.getPresentationInstruments();
@@ -1441,7 +1443,7 @@ SequenceManager::panic()
 
             device++;
         }
-
+        
         emit setProgress(int(90.0 * (double(device) / double(maxDevices))));
     }
 

@@ -20,9 +20,11 @@
   <Action name="stretch_actionmenu"/>
   <Action name="proportion_actionmenu"/>
 <Separator/>
-  <Action name="linear_mode"/>
-  <Action name="continuous_page_mode"/>
-  <Action name="multi_page_mode"/>
+  <Menu name="layout"><text>&amp;Layout Mode</text>
+    <Action name="linear_mode"/>
+    <Action name="continuous_page_mode"/>
+    <Action name="multi_page_mode"/>
+  </Menu>
 <Separator/>
   <Action name="lyric_editor"/>
   <Separator/>
@@ -332,21 +334,29 @@
 </Menu>
 
 <Menu  name="settings"><text>&amp;Settings</text>
-  <Action name="show_tools_toolbar"        append="show_merge" />
-  <Action name="show_notes_toolbar"        append="show_merge" />
-  <Action name="show_rests_toolbar"        append="show_merge" />
-  <Action name="show_accidentals_toolbar"  append="show_merge" />
-  <Action name="show_clefs_toolbar"        append="show_merge" />
-  <Action name="show_marks_toolbar"        append="show_merge" />
-  <Action name="show_group_toolbar"        append="show_merge" />
-  <Action name="show_transport_toolbar"    append="show_merge" />
-  <Action name="show_layout_toolbar"       append="show_merge" />
-  <Action name="show_meta_toolbar"         append="show_merge" />
-  <Separator                               append="show_merge" />
-  <Action name="show_chords_ruler"         append="show_merge" />
-  <Action name="show_raw_note_ruler"       append="show_merge" />
-  <Action name="show_tempo_ruler"          append="show_merge" />
-  <Action name="show_annotations"          append="show_merge" />
+  <Menu name="toolbars"                        append="show_merge"  >
+      <text>&amp;Toolbars</text>
+      <Action name="options_show_toolbar"      append="show_merge" />
+      <Action name="show_tools_toolbar"        append="show_merge" />
+      <Action name="show_notes_toolbar"        append="show_merge" />
+      <Action name="show_rests_toolbar"        append="show_merge" />
+      <Action name="show_accidentals_toolbar"  append="show_merge" />
+      <Action name="show_clefs_toolbar"        append="show_merge" />
+      <Action name="show_marks_toolbar"        append="show_merge" />
+      <Action name="show_group_toolbar"        append="show_merge" />
+      <Action name="show_transport_toolbar"    append="show_merge" />
+      <Action name="show_layout_toolbar"       append="show_merge" />
+      <Action name="show_meta_toolbar"         append="show_merge" />
+      <Action name="options_show_statusbar"    append="show_merge" /> 
+  </Menu>
+  <Menu name="rulers"                          append="show_merge"  >
+      <text>&amp;Rulers</text>
+      <Action name="show_chords_ruler"         append="show_merge" />
+      <Action name="show_raw_note_ruler"       append="show_merge" />
+      <Action name="show_tempo_ruler"          append="show_merge" />
+  </Menu>
+  <Separator                                   append="show_merge" />
+  <Action name="show_annotations"              append="show_merge" />
 </Menu> 
 
 </MenuBar>

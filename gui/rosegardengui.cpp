@@ -5702,7 +5702,7 @@ RosegardenGUIApp::slotPanic()
 {
     if (m_seqManager)
     {
-        RosegardenProgressDialog progressDlg(i18n("Sending MIDI panic..."),
+        RosegardenProgressDialog progressDlg(i18n("Queueing MIDI panic events for tranmission..."),
                                              100,
                                              this);
         CurrentProgressDialog::set(&progressDlg);

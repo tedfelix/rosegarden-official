@@ -45,11 +45,14 @@
   </Menu>
   <Menu name="Segments">
         <text>Seg&amp;ments</text>
-        <Action name="edit_default"/>
-        <Separator/>
-        <Action name="edit_matrix"/>
-        <Action name="edit_notation"/>
-        <Action name="edit_event_list"/>
+	<Menu name="edit_with">
+	<text>Edit &amp;With</text>
+	    <Action name="edit_default"/>
+	    <Separator/>
+	    <Action name="edit_matrix"/>
+	    <Action name="edit_notation"/>
+	    <Action name="edit_event_list"/>
+	</Menu>
         <Separator/>
         <Action name="relabel_segment"/>
         <Action name="quantize_selection"/>
@@ -63,15 +66,19 @@
         <Action name="jog_left"/>
         <Action name="jog_right"/>
 	<Separator/>
-        <Action name="auto_split"/>
-        <Action name="split_by_pitch"/>
-        <Action name="join_segments"/>
+	<Menu name="split_and_join">
+	<text>&amp;Split or Join</text>
+	    <Action name="auto_split"/>
+	    <Action name="split_by_pitch"/>
+	    <Separator/>
+	    <Action name="join_segments"/>
+	</Menu>  
         <Action name="repeats_to_real_copies"/>
-        <Action name="manage_trigger_segments"/>
         <Separator/>
-	<Action name="groove_quantize"/>
         <Action name="set_tempo_to_segment_length"/>
+	<Action name="groove_quantize"/>
         <Separator/>
+        <Action name="manage_trigger_segments"/>
       <Action name="audio_manager"/>
   </Menu>
   <Menu name="Tracks">
@@ -79,15 +86,17 @@
         <Action name="add_track"/>
         <Action name="add_tracks"/>
         <Action name="delete_track"/>
+	<Separator/>
         <Action name="move_track_down"/>
         <Action name="move_track_up"/>
+	<Separator/>
         <Action name="select_next_track"/>
         <Action name="select_previous_track"/>
         <Separator/>
         <Action name="unmute_all_tracks"/>
         <Action name="mute_all_tracks"/>
         <Separator/>
-        <Menu name="set_track_instrument"><text>Set Instrument</text></Menu>
+        <Menu name="set_track_instrument"><text>Set &amp;Instrument</text></Menu>
         <Action name="remap_instruments"/>
   </Menu>
   <Menu name="Studio">
@@ -97,11 +106,13 @@
         <Separator/>
         <Action name="manage_devices"/>
 	<Action name="manage_metronome"/>
+	<Separator/>
         <Action name="modify_midi_filters"/>
         <Separator/>
         <Action name="save_default_studio"/>
 	<Action name="load_default_studio"/>
 	<Action name="load_studio"/>
+	<Separator/>
 	<Action name="reset_midi_network"/>
   </Menu>
   <Menu name="Transport">
