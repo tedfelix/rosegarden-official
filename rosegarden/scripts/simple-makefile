@@ -1,0 +1,63 @@
+
+# This Makefile builds the code only, it doesn't do translations,
+# installations or anything else.  It builds everything it can find,
+# not just the files specified in Makefile.am.  Not recommended except
+# for occasional developer use or troubleshooting.
+
+# This doesn't use configure -- edit the Makefile itself for your own
+# needs -- but you will still need to have a correct config.h, so you
+# must run configure first.  Also does not run moc.
+
+# Builds into a separate subdirectory so as not to interfere with
+# objects from the proper build mechanism.
+
+CC=/opt/intel_cc_80/bin/icc
+CXX=/opt/intel_cc_80/bin/icpc
+
+CXXFLAGS	= -cxxlib-gcc -tpp6 -w1 -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -O0 -g
+LDFLAGS		= -cxxlib-gcc -static-libcxa
+
+KDEDIR		= /opt/kde3
+QTDIR		= /usr/lib/qt3
+
+INCLUDES	= \
+		-I/opt/intel_cc_80/include/c++ \
+		-I/opt/intel_cc_80/include \
+		-I/usr/local/include \
+		-I$(QTDIR)/include \
+		-I$(KDEDIR)/include \
+		-I/usr/include/freetype2 \
+		-I. -Ibase -Igui -Isound -Isequencer
+
+LDLIBS		= \
+		-L/opt/intel_cc_80/lib \
+		-L$(KDEDIR)/lib \
+		-L$(QTDIR)/lib \
+		-lkdeprint -lkdeui -lkdecore -lqt-mt \
+		-ljack -lasound -llrdf -lraptor -lmad \
+		-lcprts -lcxa -lunwind
+
+BUILD_DIR	= simple-build
+
+SOURCES		= $(wildcard base/*.C gui/*.cpp sound/*.cpp sound/*.cc sequencer/*.cpp)
+OBJECTS		= $(addprefix $(BUILD_DIR)/,$(addsuffix .o,$(SOURCES)))
+LIBRARIES	= $(addprefix $(BUILD_DIR)/lib/,base.a gui.a sound.a sequencer.a)
+EXECUTABLES	= $(addprefix $(BUILD_DIR)/,rosegardensequencer rosegarden)
+
+all:	directories $(OBJECTS) $(LIBRARIES) $(EXECUTABLES)
+
+directories:
+	@mkdir -p $(BUILD_DIR) $(addprefix $(BUILD_DIR)/,base gui sound sequencer lib)
+
+$(BUILD_DIR)/%.o: %
+	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
+
+$(BUILD_DIR)/lib/%.a: $(BUILD_DIR)/%
+	$(AR) r $@ $</*.o
+
+$(BUILD_DIR)/rosegarden: $(BUILD_DIR)/lib/gui.a $(BUILD_DIR)/lib/sound.a $(BUILD_DIR)/lib/base.a $(BUILD_DIR)/lib/sound.a $(BUILD_DIR)/lib/base.a
+	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(BUILD_DIR)/rosegardensequencer: $(BUILD_DIR)/lib/sequencer.a $(BUILD_DIR)/lib/sound.a $(BUILD_DIR)/lib/base.a
+	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
+

@@ -19,6 +19,10 @@
 */
 
 
+#include "config.h"
+
+#ifndef HAVE_ALSA
+
 #include "MidiRecord.h"
 #include "MidiArts.h"
 
@@ -87,3 +91,4 @@ REGISTER_IMPLEMENTATION(RosegardenMidiRecord_impl);
 
 }
 
+#endif

@@ -42,6 +42,8 @@
 
 #include "rgapplication.h"
 
+#include "config.h"
+
 /*! \mainpage Rosegarden-4 global design
 
 Rosegarden is split into 3 main parts:

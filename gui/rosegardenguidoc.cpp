@@ -80,6 +80,7 @@
 #include "AudioPluginInstance.h"
 #include "notationcommands.h" // for normalize rests
 
+#include "config.h"
 
 using Rosegarden::Composition;
 using Rosegarden::Segment;

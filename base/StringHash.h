@@ -25,7 +25,12 @@
 
 #include <string>
 
-#if (__GNUC__ < 3)
+#if defined(__INTEL_COMPILER)
+
+#include <ext/hash_map>
+#define __HASH_NS std
+
+#elif (__GNUC__ < 3)
 
 #include <hash_map>
 #define __HASH_NS std

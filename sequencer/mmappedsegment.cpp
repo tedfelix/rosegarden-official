@@ -124,10 +124,10 @@ bool MmappedSegment::remap(size_t newSize)
     }
 
 #ifdef linux
-    void *oldBuffer = m_mmappedRegion;
-    m_mmappedRegion = (MappedEvent*)::mremap(m_mmappedBuffer, m_mmappedSize, newSize, MREMAP_MAYMOVE);
-    if (m_mmappedRegion != oldBuffer) {
-	SEQUENCER_DEBUG << "NOTE: buffer moved from " << oldBuffer <<
+    void *oldRegion = m_mmappedRegion;
+    m_mmappedRegion = (MappedEvent*)::mremap(m_mmappedRegion, m_mmappedSize, newSize, MREMAP_MAYMOVE);
+    if (m_mmappedRegion != oldRegion) {
+	SEQUENCER_DEBUG << "NOTE: buffer moved from " << oldRegion <<
 	    " to " << (void *)m_mmappedRegion << endl;
     }
 #else
