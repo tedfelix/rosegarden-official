@@ -201,7 +201,14 @@ NotationView::~NotationView()
 {
     kdDebug(KDEBUG_AREA) << "-> ~NotationView()\n";
 
-    // Delete canvas items.
+    saveOptions();
+
+    delete m_hlayout;
+    delete m_vlayout;
+    delete m_viewElementsManager;
+    delete m_notationElements; // this will erase all "notes" canvas items
+
+    // Delete remaining canvas items.
     QCanvasItemList allItems = canvas()->allItems();
     QCanvasItemList::Iterator it;
 
@@ -209,11 +216,6 @@ NotationView::~NotationView()
         delete *it;
 
     delete canvas();
-    delete m_hlayout;
-    delete m_vlayout;
-    delete m_viewElementsManager;
-
-    saveOptions();
 
     kdDebug(KDEBUG_AREA) << "<- ~NotationView()\n";
 }
