@@ -4074,6 +4074,11 @@ RosegardenGUIApp::slotSaveDefaultStudio()
 {
     RG_DEBUG << "RosegardenGUIApp::slotSaveDefaultStudio\n";
 
+    int reply = KMessageBox::warningYesNo
+	(this, i18n("Are you sure you want to save this as your default studio?"));
+    
+    if (reply != KMessageBox::Yes) return;
+
     KTmpStatusMsg msg(i18n("Saving current document as default studio..."), this);
 
     QString autoloadFile = ::locateLocal("appdata", "autoload.rg");

@@ -988,6 +988,11 @@ SegmentAutoSplitCommand::execute()
 
 	timeT startTime = segmentStart;
 	if (split > 0) {
+
+	    RG_DEBUG << "Auto-split point " << split-1 << ": time "
+		     << splitPoints[split-1].time << ", lastSoundTime "
+		     << splitPoints[split-1].lastSoundTime << endl;
+
 	    startTime = splitPoints[split-1].time;
 	    newSegment->insert(splitPoints[split-1].clef.getAsEvent(startTime));
 	    newSegment->insert(splitPoints[split-1].key.getAsEvent(startTime));
@@ -995,15 +1000,21 @@ SegmentAutoSplitCommand::execute()
 
 	Segment::iterator i = m_segment->findTime(startTime);
 
+	// A segment has to contain at least one note to be a worthy
+	// candidate for adding back into the composition
+	bool haveNotes = false;
+
 	while (m_segment->isBeforeEndMarker(i)) {
 	    timeT t = (*i)->getAbsoluteTime();
 	    if (split < splitPoints.size() &&
 		t >= splitPoints[split].lastSoundTime) break;
+	    if ((*i)->isa(Rosegarden::Note::EventType)) haveNotes = true;
 	    newSegment->insert(new Event(**i));
 	    ++i;
 	}
 
-	m_newSegments.push_back(newSegment);
+	if (haveNotes) m_newSegments.push_back(newSegment);
+	else delete newSegment;
     }
 	    
     m_composition->detachSegment(m_segment);

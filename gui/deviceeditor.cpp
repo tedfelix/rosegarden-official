@@ -145,6 +145,8 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
     connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddPlayDevice()));
     connect(addRButton, SIGNAL(clicked()), this, SLOT(slotAddRecordDevice()));
     connect(deleteButton, SIGNAL(clicked()), this, SLOT(slotDeleteDevice()));
+    connect(m_table, SIGNAL(valueChanged(int, int)),
+	    this, SLOT(slotValueChanged (int, int)));
 
     setMinimumHeight(250);
 
@@ -169,6 +171,7 @@ DeviceEditorDialog::makeConnectionList(unsigned int direction,
 				  "getConnections(int, unsigned int)",
 				  data, replyType, replyData, false)) {
 	RG_DEBUG << "DeviceEditorDialog: can't call Sequencer" << endl;
+	list.append(i18n("No connection"));
 	return;
     }
 
@@ -191,6 +194,7 @@ DeviceEditorDialog::makeConnectionList(unsigned int direction,
 				      "getConnection(int, unsigned int, unsigned int)",
 				      data, replyType, replyData, false)) {
 	    RG_DEBUG << "DeviceEditorDialog: can't call Sequencer" << endl;
+	    list.append(i18n("No connection"));
 	    return;
 	}
 	    

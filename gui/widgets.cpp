@@ -736,7 +736,7 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     m_simplicityCombo->insertItem(i18n("High"));
     m_simplicityCombo->insertItem(i18n("Normal"));
     m_simplicityCombo->insertItem(i18n("Low"));
-    m_simplicityCombo->insertItem(i18n("Absurdly facile"));
+    m_simplicityCombo->insertItem(i18n("Very low"));
     layout->addWidget(m_simplicityCombo, 0, 1);
 
     layout->addWidget(new QLabel(i18n("Tuplet level:"),
@@ -745,11 +745,13 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     m_maxTuplet->insertItem(i18n("None"));
     m_maxTuplet->insertItem(i18n("2-in-the-time-of-3"));
     m_maxTuplet->insertItem(i18n("Triplet"));
+/*!!!
     m_maxTuplet->insertItem(i18n("4-Tuplet"));
     m_maxTuplet->insertItem(i18n("5-Tuplet"));
     m_maxTuplet->insertItem(i18n("6-Tuplet"));
     m_maxTuplet->insertItem(i18n("7-Tuplet"));
     m_maxTuplet->insertItem(i18n("8-Tuplet"));
+*/
     m_maxTuplet->insertItem(i18n("Any"));
     layout->addWidget(m_maxTuplet, 2, 1);
 

@@ -984,7 +984,7 @@ BankEditorDialog::slotDeleteBank()
         int currentBank = bankItem->getBank();
 
         int reply =
-            KMessageBox::questionYesNo(this, i18n("Really delete this bank?"));
+            KMessageBox::warningYesNo(this, i18n("Really delete this bank?"));
 
         if (reply == KMessageBox::Yes)
         {
@@ -1043,7 +1043,7 @@ BankEditorDialog::slotDeleteAllBanks()
     QString question = i18n("Really delete all banks for ") +
                        strtoqstr(device->getName()) + QString(" ?");
 
-    int reply = KMessageBox::questionYesNo(this, question);
+    int reply = KMessageBox::warningYesNo(this, question);
 
     if (reply == KMessageBox::Yes)
     {
