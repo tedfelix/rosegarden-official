@@ -579,7 +579,7 @@ void SegmentItem::drawShape(QPainter& painter)
 #endif
 
     // draw label
-    if (m_segment->getType() != Rosegarden::Segment::Audio)
+    if (m_segment && m_segment->getType() != Rosegarden::Segment::Audio)
     {
         painter.setPen(RosegardenGUIColours::SegmentLabel);
         painter.setFont(*m_font);
