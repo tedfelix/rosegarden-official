@@ -72,6 +72,15 @@ namespace Marks
     string getTextMark(string text) {
 	return string("text_") + text;
     }
+
+    bool isTextMark(Mark mark) {
+	return string(mark).substr(0, 5) == "text_";
+    }
+
+    string getTextFromMark(Mark mark) {
+	if (!isTextMark) return string();
+	else return string(mark).substr(5);
+    }
 }
 
 using namespace Marks;

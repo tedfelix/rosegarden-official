@@ -180,6 +180,8 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 
     Clef currentClef; // default is okay to start with
 
+    int elementCount = 0; // purely diagnostic
+
     for (NotationElementList::iterator it = from; it != to; ++it) {
 
 	if ((*it)->event()->isa(Clef::EventType)) {
@@ -193,7 +195,12 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 //			     << " (selected = " << selected << ")" << endl;
 
 	renderSingleElement(*it, currentClef, selected);
+
+	++elementCount;
     }
+
+    kdDebug(KDEBUG_AREA) << "NotationStaff::renderElements: "
+			 << elementCount << " elements rendered" << endl;
 
     PRINT_ELAPSED("NotationStaff::renderElements");
 }	

@@ -196,6 +196,9 @@ protected:
     QFont m_tupledCountFont;
     QFontMetrics m_tupledCountFontMetrics;
 
+    QFont m_textMarkFont;
+    QFontMetrics m_textMarkFontMetrics;
+
     QPixmap *m_generatedPixmap;
     QBitmap *m_generatedMask;
     QPainter m_p;

@@ -663,7 +663,7 @@ void RosegardenGUIApp::openURL(const KURL& url)
     } else {
         openFile(target);
     }
-    
+
     setCaption(url.path());
     m_fileRecent->addURL(url);
 
@@ -976,8 +976,13 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
 
     //timeT sliceStartElapsed = m_doc->getComposition().getElapsedTimeForRealTime(mappComp.getStartTime());
 
+    timeT sliceStartElapsed =
+      m_doc->getComposition().getElapsedTimeForRealTime
+	(mappComp.getStartTime()) - 1;
+
     timeT sliceEndElapsed =
-      m_doc->getComposition().getElapsedTimeForRealTime(mappComp.getEndTime());
+      m_doc->getComposition().getElapsedTimeForRealTime
+	(mappComp.getEndTime()) + 1;
 
     Rosegarden::RealTime eventTime;
     Rosegarden::RealTime duration;
@@ -985,6 +990,11 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
     for (Rosegarden::Composition::iterator i = m_doc->getComposition().begin();
                              i != m_doc->getComposition().end(); i++ )
     {
+        // Skip segment if the track is muted
+        //
+        if (m_doc->getComposition().getTrackByIndex((*i)->getTrack())->isMuted())
+            continue;
+
         // Skip the Segment if it starts too late to be of
         // interest to our slice.
         if ( (*i)->getStartIndex() > sliceEndElapsed )
@@ -992,13 +1002,8 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
 
         Rosegarden::SegmentPerformanceHelper helper(**i);
 
-        // Skip segment if the track is muted
-        //
-        if (m_doc->getComposition().getTrackByIndex((*i)->getTrack())->isMuted())
-            continue;
-
-        for ( Rosegarden::Segment::iterator j = (*i)->begin();
-                                          j != (*i)->end(); j++ )
+        for ( Rosegarden::Segment::iterator j = (*i)->findTime(sliceStartElapsed);
+                                          j != (*i)->end(); ++j )
         {
             // for the moment ensure we're all positive
             assert((*j)->getAbsoluteTime() >= 0 );
@@ -1018,21 +1023,21 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
             if ( eventTime > mappComp.getEndTime() )
                 break;
 
-            // Find the performance duration, i.e. taking into account any
-            // ties etc that this note may have  --cc
-            // 
-            duration = helper.getRealSoundingDuration(j);
-
-            // probably in a tied series, but not as first note
-            //
-            if (duration == Rosegarden::RealTime(0, 0))
-                continue;
-
             // Eliminate events before our required time
             //
             if ( eventTime >= mappComp.getStartTime() &&
                  eventTime <= mappComp.getEndTime())
             {
+		// Find the performance duration, i.e. taking into account any
+		// ties etc that this note may have  --cc
+		// 
+		duration = helper.getRealSoundingDuration(j);
+		
+		// probably in a tied series, but not as first note
+		//
+		if (duration == Rosegarden::RealTime(0, 0))
+		    continue;
+
                 // insert event
                 Rosegarden::MappedEvent *me =
                       new Rosegarden::MappedEvent(**j, eventTime, duration);
@@ -1168,6 +1173,9 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
     // and the time
     //
     m_transport->displayTime(rT);
+
+    // and the tempo
+    m_transport->setTempo(m_doc->getComposition().getTempoAt(elapsedTime));
 }
 
 void RosegardenGUIApp::setPointerPosition(timeT t)
@@ -1180,6 +1188,9 @@ void RosegardenGUIApp::setPointerPosition(timeT t)
 
     // and the time
     m_transport->displayTime(m_doc->getComposition().getElapsedRealTime(t));
+
+    // and the tempo
+    m_transport->setTempo(m_doc->getComposition().getTempoAt(t));
 }
 
 void RosegardenGUIApp::play()

@@ -102,7 +102,9 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_timeSigFont("new century schoolbook", 8, QFont::Bold),
     m_timeSigFontMetrics(m_timeSigFont),
     m_tupledCountFont("new century schoolbook", 8, QFont::Bold, true),
-    m_tupledCountFontMetrics(m_tupledCountFont)
+    m_tupledCountFontMetrics(m_tupledCountFont),
+    m_textMarkFont("new century schoolbook", 8, QFont::Bold, true),
+    m_textMarkFontMetrics(m_textMarkFont)
 {
     if (fontName == "") fontName = NotePixmapFactory::getDefaultFont();
     if (size < 0) size = NotePixmapFactory::getDefaultSize(fontName);
@@ -117,6 +119,9 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
         throw;
     }
 
+    // Resize the fonts, because the original constructor used point
+    // sizes only and we want pixels
+
     // 8 => 20, 4 => 10
     m_timeSigFont.setPixelSize(size * 5 / 2);
     m_timeSigFontMetrics = QFontMetrics(m_timeSigFont);
@@ -124,6 +129,10 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     // 8 => 12, 4 => 6
     m_tupledCountFont.setPixelSize(size * 3 / 2);
     m_tupledCountFontMetrics = QFontMetrics(m_tupledCountFont);
+
+    // 8 => 12, 4 => 6
+    m_textMarkFont.setPixelSize(size * 3 / 2);
+    m_textMarkFontMetrics = QFontMetrics(m_textMarkFont);
 
     unsigned int x, y;
     m_font->getBorderThickness(x, y);
@@ -555,20 +564,46 @@ void
 NotePixmapFactory::drawMarks(bool isStemmed,
 			     const NotePixmapParameters &params)
 {
-    bool marksAbove = !(isStemmed && params.m_stemGoesUp);
     int dy = 0;
 
     for (unsigned int i = 0; i < params.m_marks.size(); ++i) {
-	//!!! Deal with textual marks (sf, rf) -- or make them not marks
-	// at all?
-	QPixmap pixmap(m_font->getPixmap(getMarkCharName(params.m_marks[i])));
-	m_p.drawPixmap(m_left + m_noteBodyWidth/2 - pixmap.width()/2,
-		       (marksAbove ? (m_above - dy - pixmap.height() - 1) :
-			(m_above + m_noteBodyWidth + dy)), pixmap);
-	m_pm.drawPixmap(m_left + m_noteBodyWidth/2 - pixmap.width()/2,
-			(marksAbove ? (m_above - dy - pixmap.height() - 1) :
-			 (m_above + m_noteBodyWidth + dy)), *(pixmap.mask()));
-	dy += pixmap.height();
+
+	bool markAbove = !(isStemmed && params.m_stemGoesUp);
+
+	if (!Rosegarden::Marks::isTextMark(params.m_marks[i])) {
+
+	    //!!! not good enough:
+	    if (params.m_marks[i] == Rosegarden::Marks::Pause)
+		markAbove = true;
+
+	    QPixmap pixmap(m_font->getPixmap
+			   (getMarkCharName(params.m_marks[i])));
+
+	    int x = m_left + m_noteBodyWidth/2 - pixmap.width()/2;
+	    int y = (markAbove ? (m_above - dy - pixmap.height() - 1) :
+			         (m_above + m_noteBodyWidth + dy));
+
+	    m_p.drawPixmap(x, y, pixmap);
+	    m_pm.drawPixmap(x, y,  *(pixmap.mask()));
+	    dy += pixmap.height();
+
+	} else {
+
+	    QString text =
+		Rosegarden::Marks::getTextFromMark(params.m_marks[i]).c_str();
+	    QRect bounds = m_textMarkFontMetrics.boundingRect(text);
+	    
+	    m_p.setFont(m_textMarkFont);
+	    m_pm.setFont(m_textMarkFont);
+
+	    int x = m_left + m_noteBodyWidth/2 - bounds.width()/2;
+	    int y = (markAbove ? (m_above - dy - 1) :
+				 (m_above + m_noteBodyWidth + dy + 1));
+
+	    m_p.drawText(x, y, text);
+	    m_pm.drawText(x, y, text);
+	    dy += bounds.height();
+	}
     }
 }
 

@@ -1998,12 +1998,14 @@ void NotationView::readjustCanvasSize()
         if (staff.getTotalHeight() + staff.getY() > maxHeight) {
             maxHeight = staff.getTotalHeight() + staff.getY() + 1;
         }
+
+	PRINT_ELAPSED("NotationView::readjustCanvasSize checkpoint");
     }
 
     // now get the EditView to do the biz
     readjustViewSize(QSize(int(maxWidth), maxHeight));
 
-    PRINT_ELAPSED("NotationView::readjustCanvasWidth total");
+    PRINT_ELAPSED("NotationView::readjustCanvasSize total");
 }
 
 void

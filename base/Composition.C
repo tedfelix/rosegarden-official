@@ -34,7 +34,7 @@
 #endif
 
 #undef DEBUG_BAR_STUFF
-#define DEBUG_TEMPO_STUFF 1
+#undef DEBUG_TEMPO_STUFF 
 
 
 namespace Rosegarden 
@@ -738,6 +738,7 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
 	realTime2Time(t - getTempoTimestamp(*i),
 		      (double)((*i)->get<Int>(TempoProperty)) / 60.0);
 
+#ifdef DEBUG_TEMPO_STUFF
     //!!! temporary calculations of error
     static int doError = true;
     if (doError) {
@@ -751,6 +752,7 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
 	     << (*i)->getAbsoluteTime() << ":"
 	     << ((double)((*i)->get<Int>(TempoProperty)) / 60.0) << ")" << endl;
     }
+#endif
     return elapsed;
 }
 
