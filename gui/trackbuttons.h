@@ -133,6 +133,8 @@ signals:
     // to emit what Track has been selected
     //
     void widthChanged();
+    // to tell the notation canvas when the name changes
+    void nameChanged();
     void trackSelected(int);
     void instrumentSelected(int);
 

@@ -657,14 +657,11 @@ TrackButtons::slotRenameTrack(QString newName, int trackNumber)
     Rosegarden::Track *track = m_doc->getComposition().getTrackById(trackNumber);
     track->setLabel(qstrtostr(newName));
 
-    for (unsigned int i = 0; i < m_trackLabels.size(); ++i)
+    if (((unsigned int)trackNumber) < m_trackLabels.size())
     {
-        if (i == ((unsigned int)trackNumber))
-        {
-            m_trackLabels[i]->getTrackLabel()->setText(newName);
-            emit widthChanged();
-            return;
-        }
+        m_trackLabels[trackNumber]->getTrackLabel()->setText(newName);
+        emit widthChanged();
+        emit nameChanged();
     }
 }
 

@@ -617,6 +617,9 @@ public slots:
 
     void slotSetOperationNameAndStatus(QString);
 
+    // Update notation view based on track/staff name change
+    void slotUpdateStaffName();
+
 signals:
     /**
      * Emitted when the note selected in the palette changes

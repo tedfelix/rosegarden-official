@@ -70,7 +70,9 @@
 #include "notationvlayout.h"
 #include "ktmpstatusmsg.h"
 #include "scrollbox.h"
-
+#include "rosegardenguiview.h"
+#include "trackeditor.h"
+#include "trackbuttons.h"
 
 //!!! TESTING:
 #include "qcanvassimplesprite.h"
@@ -641,6 +643,14 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	(this,            SIGNAL(renderComplete()),
 	 getCanvasView(), SLOT(slotRenderComplete()));
 
+    if (parent) {
+	const TrackButtons * trackLabels = 
+            ((RosegardenGUIView*)parent)->getTrackEditor()->getTrackButtons();
+        QObject::connect
+            (trackLabels,             SIGNAL(nameChanged()),
+             this, SLOT(slotUpdateStaffName()));
+    }
+
     setConfigDialogPageIndex(1);
     setOutOfCtor();
     setupControllerTabs();
@@ -1095,6 +1105,12 @@ void NotationView::positionPages()
     m_config->setGroup(NotationView::ConfigGroup);
 }
 
+
+void NotationView::slotUpdateStaffName()
+{
+    NotationStaff *staff = getStaff(m_currentStaff);
+    staff->drawStaffName();
+}
 
 void NotationView::slotSaveOptions()
 {
