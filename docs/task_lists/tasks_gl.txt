@@ -3,7 +3,7 @@ Current Task list
 
 - Matrix undo DONE
 
-- insertion in the middle of rests
+- insertion in the middle of rests DONE (by Chris)
 
 - look for a way to represent overlapping segments
 
@@ -17,6 +17,8 @@ Current Task list
 
 - harmonize namings of m_view* toggle actions, slotToggleXXX(), slotShowXXX()
  (m_viewSegmentParameters / slotToggleSegmentParameters / slotShowSegmentParameters)
+
+- make MIDI pitch->string configurable
 
 Task list from 18/19th August meetings
 ======================================
