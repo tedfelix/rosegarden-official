@@ -29,109 +29,117 @@
 
 #include "scrollbox.h"
 
-ScrollBox::ScrollBox( QWidget* parent, const char* name )
-    : QFrame( parent, name )
+ScrollBox::ScrollBox(QWidget* parent, SizeMode sizeMode, const char* name) :
+    QFrame(parent, name),
+    m_sizeMode(sizeMode)
 {
-    setFrameStyle( Panel | Sunken );
+    setFrameStyle(Panel|Sunken);
 }
 
-void ScrollBox::mousePressEvent( QMouseEvent* e )
+void ScrollBox::mousePressEvent(QMouseEvent* e)
 {
-    mouse = e->pos();
-    if( e->button() == RightButton )
-	emit button3Pressed();
-    if( e->button() == MidButton )
-	emit button2Pressed();
+    m_mouse = e->pos();
+    if (e->button() == RightButton) emit button3Pressed();
+    if (e->button() == MidButton)   emit button2Pressed();
 }
 
-void ScrollBox::mouseMoveEvent( QMouseEvent* e )
+void ScrollBox::mouseMoveEvent(QMouseEvent* e)
 {
-    if( e->state() != LeftButton )
-	return;
+    if (e->state() != LeftButton) return;
 
-    int dx = ( e->pos().x() - mouse.x() ) * pagesize.width()  / width();
-    int dy = ( e->pos().y() - mouse.y() ) * pagesize.height() / height();
+    int dx = (e->pos().x() - m_mouse.x()) * m_pagesize.width()  / width();
+    int dy = (e->pos().y() - m_mouse.y()) * m_pagesize.height() / height();
 
-    emit valueChanged( QPoint( viewpos.x() + dx, viewpos.y() + dy ) );
-    emit valueChangedRelative( dx, dy );
+    emit valueChanged(QPoint(m_viewpos.x() + dx, m_viewpos.y() + dy));
+    emit valueChangedRelative(dx, dy);
 
-    mouse = e->pos();
+    m_mouse = e->pos();
 }
 
-void ScrollBox::drawContents( QPainter* paint )
+void ScrollBox::drawContents(QPainter* paint)
 {
-    if ( pagesize.isEmpty() )
-	return;
+    if (m_pagesize.isEmpty()) return;
 
-    QRect c( contentsRect() );
+    QRect c(contentsRect());
 
-    paint -> setPen( Qt::red );
+    paint->setPen(Qt::red);
 
-    int len = pagesize.width();
-    int x = c.x() + c.width() * viewpos.x() / len;
-    int w = c.width() * viewsize.width() / len ;
-    if ( w > c.width() ) w = c.width();
+    int len = m_pagesize.width();
+    int x = c.x() + c.width() * m_viewpos.x() / len;
+    int w = c.width() * m_viewsize.width() / len ;
+    if (w > c.width()) w = c.width();
 
-    len = pagesize.height();
-    int y = c.y() + c.height() * viewpos.y() / len;
-    int h = c.height() * viewsize.height() / len;
-    if ( h > c.height() ) h = c.height();
+    len = m_pagesize.height();
+    int y = c.y() + c.height() * m_viewpos.y() / len;
+    int h = c.height() * m_viewsize.height() / len;
+    if (h > c.height()) h = c.height();
 
-    paint->drawRect( x, y, w, h );
+    paint->drawRect(x, y, w, h);
 }
 
-void ScrollBox::setPageSize( const QSize& s )
+void ScrollBox::setPageSize(const QSize& s)
 {
-    pagesize = s;
-    setFixedHeight( s.height() * width() / s.width() );
+    m_pagesize = s;
+    if (m_sizeMode == FixWidth) {
+	setFixedHeight(s.height() * width() / s.width());
+    } else {
+	setFixedWidth(s.width() * height() / s.height());
+    }	
     repaint();
 }
 
-void ScrollBox::setViewSize( const QSize& s )
+void ScrollBox::setViewSize(const QSize& s)
 {
-    viewsize = s;
+    m_viewsize = s;
     repaint();
 }
 
-void ScrollBox::setViewPos( const QPoint& pos )
+void ScrollBox::setViewPos(const QPoint& pos)
 {
-    viewpos = pos;
+    m_viewpos = pos;
     repaint();
 }
 
-void ScrollBox::setViewX( int x )
+void ScrollBox::setViewX(int x)
 {
-    viewpos = QPoint( x, viewpos.y() );
+    m_viewpos = QPoint(x, m_viewpos.y());
     repaint();
 }
 
-void ScrollBox::setViewY( int y )
+void ScrollBox::setViewY(int y)
 {
-    viewpos = QPoint( viewpos.x(), y );
+    m_viewpos = QPoint(m_viewpos.x(), y);
     repaint();
 }
 
-void ScrollBox::setThumbnail( QPixmap img )
+void ScrollBox::setThumbnail(QPixmap img)
 {
-    setPaletteBackgroundPixmap( img.convertToImage().smoothScale( size() ) );
+    setPaletteBackgroundPixmap(img.convertToImage().smoothScale(size()));
 }
 
-
-//!!! EXPERIMENTAL
 
 ScrollBoxDialog::ScrollBoxDialog(QWidget *parent,
-			   const char *name,
-			   WFlags flags) :
+				 ScrollBox::SizeMode sizeMode,
+				 const char *name,
+				 WFlags flags) :
     KDialog(parent, name, flags),
-    m_panner(new ScrollBox(this))
+    m_scrollbox(new ScrollBox(this, sizeMode))
 { }
 
 ScrollBoxDialog::~ScrollBoxDialog()
 { }
 
-void ScrollBoxDialog::closeEvent(QCloseEvent *e) {
+void ScrollBoxDialog::closeEvent(QCloseEvent *e) 
+{
     e->accept();
-//    emit closed;
+    emit closed();
+}
+
+void ScrollBoxDialog::setPageSize(const QSize& s)
+{
+    m_scrollbox->setPageSize(s);
+    setFixedHeight(m_scrollbox->height());
+    setFixedWidth(m_scrollbox->width());
 }
 
 

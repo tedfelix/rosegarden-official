@@ -803,10 +803,6 @@ NoteFontMap::getHotspot(int size, CharName charName, int &x, int &y) const
 {
     HotspotDataMap::const_iterator i = m_hotspots.find(charName);
     if (i == m_hotspots.end()) return false;
-
-    NOTATION_DEBUG << "NoteFontMap::getHotspot(" <<charName.getName()	
-	   <<"): about to look up hotspot" << endl;
-
     return i->second.getHotspot(size, x, y);
 }
 
@@ -819,16 +815,12 @@ NoteFontMap::HotspotData::getHotspot(int size, int &x, int &y) const
 	if (m_scaled.first  >= 0) x = toSize(size, m_scaled.first,  false);
 	if (m_scaled.second >= 0) {
 	    y = toSize(size, m_scaled.second, false);
-	    NOTATION_DEBUG << "NoteFontMap::getHotspot: found scaled at "
-			   << x << "," << y << endl;
 	    return true;
 	}
 	else return false;
     }
     x = i->second.first;
     y = i->second.second;
-    NOTATION_DEBUG << "NoteFontMap::getHotspot: found unscaled at "
-		   << x << "," << y << endl;
     return true;
 }
 

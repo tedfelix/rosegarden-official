@@ -204,7 +204,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontSizeSlider(0),
     m_spacingSlider(0),
     m_fontSizeActionMenu(0),
-    m_pannerDialog(new ScrollBoxDialog(this)),
+    m_pannerDialog(new ScrollBoxDialog(this, ScrollBox::FixHeight)),
     m_progressDisplayer(PROGRESS_NONE),
     m_progressEventFilterInstalled(false),
     m_inhibitRefresh(true),
@@ -613,13 +613,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_inhibitRefresh = false;
 
     setConfigDialogPageIndex(1);
-
     
-    //!!! EXPERIMENTAL
-    ScrollBoxDialog *pdialog = new ScrollBoxDialog(this);
-    pdialog->show();
-
-
     NOTATION_DEBUG << "NotationView ctor exiting\n";
 }
 
@@ -1883,6 +1877,12 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
 	if (m_tempoRuler && getToggleAction("show_tempo_ruler")->isChecked())
 	    m_tempoRuler->show();
     }
+    
+    if (pageMode != LinedStaff::MultiPageMode) {
+	m_pannerDialog->hide();
+    } else {
+	m_pannerDialog->show();
+    }
 
     int pageWidth = getPageWidth();
     int topMargin = 0, leftMargin = 0;
@@ -2625,24 +2625,23 @@ void NotationView::readjustCanvasSize()
     readjustViewSize(QSize(int(maxWidth), maxHeight));
     UPDATE_PROGRESS(2);
 
-
     //!!! EXPERIMENTAL
     if (m_pannerDialog) {
 //	int pdw = getCanvasView()->width() / 8;
 //	int pdh = getCanvasView()->height() / 8;
 //	m_pannerDialog->scrollbox()->setFixedSize(std::max(pdw, 150), std::max(pdh, 100));
-	m_pannerDialog->scrollbox()->setPageSize
+	m_pannerDialog->scrollbox()->setMinimumHeight(100);
+	m_pannerDialog->setPageSize
 	    (QSize(getCanvasView()->canvas()->width(),
 		   getCanvasView()->canvas()->height()));
 	m_pannerDialog->scrollbox()->setViewSize
 	    (QSize(getCanvasView()->width(),
 		   getCanvasView()->height()));
 
-	m_pannerDialog->setFixedSize(m_pannerDialog->scrollbox()->size());
-	m_pannerDialog->show();
-	m_pannerDialog->raise();
+//	m_pannerDialog->setFixedSize(m_pannerDialog->scrollbox()->size());
+//	m_pannerDialog->show();
+//	if (m_pannerDialog->visible()) m_pannerDialog->raise();
     }
-
 
     PRINT_ELAPSED("NotationView::readjustCanvasSize total");
 }

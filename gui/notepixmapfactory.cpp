@@ -671,14 +671,26 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 
     x0 = m_left - m_noteBodyWidth / 5 - 1;
     x1 = m_left + m_noteBodyWidth + m_noteBodyWidth / 5 + 1;
-    y = m_above + m_noteBodyHeight / 2;
-    
+
     int offset = m_noteBodyHeight + getLegerLineThickness();
     int legerLines = params.m_legerLines;
+    bool below = (legerLines < 0);
     
-    if (legerLines < 0) {
+    if (below) {
 	legerLines = -legerLines;
 	offset = -offset;
+    }
+
+    if (legerLines % 2 == 1) {
+	if (below) {
+	    // note below staff
+	    y = m_above;
+	} else {
+	    // note above staff
+	    y = m_above + m_noteBodyHeight;
+	}
+    } else {
+	y = m_above + m_noteBodyHeight / 2;
     }
     
     bool first = true;
@@ -697,12 +709,12 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 		x1 -= getStemThickness();
 		first = false;
 	    }
-	} else if (first) {
+	}/* else if (first) {
 	    y += offset/2;
 	    if (legerLines < 0) {
-		--y;
-/	    }
-	}                
+		y -= getLegerLineThickness();
+	    }
+	    }  */              
     }
 }
 
