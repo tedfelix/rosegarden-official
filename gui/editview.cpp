@@ -619,7 +619,7 @@ EditView::setupAddControlRulerMenu()
         for (Rosegarden::ControlListConstIterator it = list->begin(); it != list->end(); ++it)
         {
             //addControlRulerMenu->insertItem("Insert your items here");
-            QString itemStr = i18n("%1 ruler").arg((*it)->getName());
+            QString itemStr = i18n("%1 ruler").arg(strtoqstr((*it)->getName()));
             addControlRulerMenu->insertItem(itemStr, i++);
         }
 
