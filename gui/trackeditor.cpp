@@ -132,7 +132,10 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     grid->addWidget(m_topBarButtons, 0, 1);
 
+    m_horizontalScrollBar = new QScrollBar(Horizontal, this);
+
     m_segmentCanvas = new SegmentCanvas(m_rulerScale,
+                                        m_horizontalScrollBar,
                                         getTrackCellHeight(),
                                         canvas, this);
     // We need our own scrollbar so that it is displayed below the
@@ -149,7 +152,6 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     grid->addWidget(m_bottomBarButtons, 2, 1);
 
-    m_horizontalScrollBar = new QScrollBar(Horizontal, this);
     m_horizontalScrollBar->setRange(m_segmentCanvas->horizontalScrollBar()->minValue(),
                                     m_segmentCanvas->horizontalScrollBar()->maxValue());
 
@@ -191,7 +193,7 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
             m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
 
     connect(this, SIGNAL(needUpdate()),
-            m_segmentCanvas, SLOT(update()));
+            m_segmentCanvas, SLOT(slotUpdate()));
 
     QObject::connect(m_segmentCanvas, SIGNAL(addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)),
                      this,            SLOT  (slotAddSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)));
@@ -309,7 +311,7 @@ void TrackEditor::slotCommandExecuted(KCommand *command)
 	}
     }
 
-    m_segmentCanvas->update();
+    m_segmentCanvas->slotUpdate();
 }
 
 

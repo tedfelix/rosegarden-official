@@ -169,7 +169,7 @@ public:
                     Joiner,
                     Splitter };
 
-    SegmentCanvas(Rosegarden::RulerScale *, int vStep,
+    SegmentCanvas(Rosegarden::RulerScale *,QScrollBar*,  int vStep,
                   QCanvas*,
 		  QWidget* parent=0, const char* name=0, WFlags f=0);
     ~SegmentCanvas();
@@ -245,9 +245,11 @@ public:
 				  Rosegarden::timeT duration);
     void deleteRecordingSegmentItem();
 
+    virtual void polish();
+
 public slots:
     /// Update the SegmentCanvas after a change of content
-    virtual void update();
+    virtual void slotUpdate();
 
     /// Set the current segment editing tool
     void slotSetTool(SegmentCanvas::ToolType);
@@ -364,6 +366,8 @@ private:
     QBrush m_highlightBrush;
     QPen m_pen;
     QPopupMenu *m_editMenu;
+
+    QScrollBar *m_horizontalScrollBar;
 
     bool m_fineGrain;
 };

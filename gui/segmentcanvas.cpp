@@ -184,7 +184,8 @@ SegmentSplitLine::hideLine()
 //////////////////////////////////////////////////////////////////////
 
 
-SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, int vStep,
+SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, QScrollBar* hsb,
+                             int vStep,
 			     QCanvas* c, QWidget* parent,
 			     const char* name, WFlags f) :
     QCanvasView(c, parent, name, f),
@@ -197,6 +198,7 @@ SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, int vStep,
     m_highlightBrush(RosegardenGUIColours::SegmentHighlightBlock),
     m_pen(RosegardenGUIColours::SegmentBorder),
     m_editMenu(new QPopupMenu(this)),
+    m_horizontalScrollBar(hsb),
     m_fineGrain(false)
 {
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
@@ -207,10 +209,24 @@ SegmentCanvas::~SegmentCanvas()
 {
 }
 
+void SegmentCanvas::polish()
+{
+    QCanvasView::polish();
+    slotUpdate();
+}
+
+
 void
-SegmentCanvas::update()
+SegmentCanvas::slotUpdate()
 {
     canvas()->update();
+
+    m_horizontalScrollBar->setRange(horizontalScrollBar()->minValue(),
+                                    horizontalScrollBar()->maxValue());
+
+    m_horizontalScrollBar->setSteps(horizontalScrollBar()->lineStep(),
+                                    horizontalScrollBar()->pageStep());
+
 }
 
 void
@@ -398,7 +414,7 @@ SegmentCanvas::slotShowSplitLine(int x, int y)
     else
         m_splitLine->moveLine(x, y);
 
-    update();
+    slotUpdate();
 }
 
 // Hide the split line
@@ -407,7 +423,7 @@ void
 SegmentCanvas::slotHideSplitLine()
 {
     m_splitLine->hideLine();
-    update();
+    slotUpdate();
 }
 
 
@@ -627,7 +643,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     m_currentItem = m_canvas->addSegmentItem(track, time, duration);
     m_newRect = true;
     
-    m_canvas->update();
+    m_canvas->slotUpdate();
 }
 
 void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
@@ -671,7 +687,7 @@ void SegmentPencil::handleMouseMove(QMouseEvent *e)
     }
 
     m_currentItem->setDuration(duration);
-    m_canvas->update();
+    m_canvas->slotUpdate();
 }
 
 //////////////////////////////
