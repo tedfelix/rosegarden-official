@@ -1,3 +1,12 @@
 #!/bin/sh
+prefix=/opt/rosegarden-installs
 tag="$1"; shift
-PATH="/opt/rosegarden-installs/$tag/bin" KDEDIRS="/opt/rosegarden-installs/$tag" rosegarden "$@"
+if [ -z "$tag" ]; then
+    echo "Usage: $0 <tag>"
+    exit 2
+fi
+if [ ! -d "$prefix/$tag" ]; then
+    echo "No such tag as $tag (directory $prefix/$tag not found)"
+    exit 1
+fi
+PATH="$prefix/$tag/bin:$PATH" KDEDIRS="/opt/rosegarden-installs/$tag" "$prefix/$tag/bin/rosegarden" "$@"

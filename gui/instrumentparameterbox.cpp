@@ -1623,10 +1623,10 @@ MIDIInstrumentParameterPanel::sendBankAndProgram()
 void
 MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
 {
-    /*
+
     RG_DEBUG<< "MIDIInstrumentParameterPanel::slotControllerChanged - "
             << "controller = " << controllerNumber << "\n";
-    */
+
 
     if (m_selectedInstrument == 0)
         return;
@@ -1646,7 +1646,7 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
     {
         RG_DEBUG << "MIDIInstrumentParameterPanel::slotControllerChanged - "
                  << "couldn't get value of rotary for controller " 
-                 << controllerNumber << "\n";
+                 << controllerNumber << endl;
         return;
     }
 
@@ -1671,7 +1671,7 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
         m_selectedInstrument->setControllerValue(Rosegarden::MidiByte(controllerNumber),
                                                  Rosegarden::MidiByte(value));
 
-        //RG_DEBUG << "SET CONTROLLER VALUE (" << controllerNumber << ") = " << value << std::endl;
+        RG_DEBUG << "SET CONTROLLER VALUE (" << controllerNumber << ") = " << value << endl;
     }
     /*
     else

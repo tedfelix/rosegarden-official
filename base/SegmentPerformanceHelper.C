@@ -132,7 +132,7 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
 {
     timeT d = 0;
 
-    if (!(*i)->has(TIED_BACKWARD)) {
+    if ((*i)->has(TIED_BACKWARD)) {
 	
 	// Formerly we just returned d in this case, but now we check
 	// with getTiedNotes so as to remove any bogus backward ties

@@ -151,10 +151,10 @@ KDEaddlibs([ 'kdeui', 'kdecore', 'kdeprint', 'kio', ], myenv)
 KDEaddlibs([ 'Xft' ], myenv)
 
 # RG libs
-KDEaddlibs(['base', 'RosegardenSound', 'RosegardenSequencer'], myenv)
+KDEaddlibs(['RosegardenSequencer', 'RosegardenSound', 'base'], myenv)
 
-myenv['LIBPATH'].append('../base')
-myenv['LIBPATH'].append('../sound')
+myenv['LIBPATH'].insert(0, '../base')
+myenv['LIBPATH'].insert(0, '../sound')
 myenv['LIBPATH'].append('/usr/X11R6/lib')
 
 for dep in soundLibs:
