@@ -211,6 +211,10 @@ Segment::iterator Segment::insert(Event *e)
 
 void Segment::erase(iterator from, iterator to)
 {
+    timeT startTime = 0, endTime = 0;
+    if (from != end()) startTime = (*from)->getAbsoluteTime();
+    if (to != end()) endTime = (*to)->getAbsoluteTime();
+
     // Not very efficient, but without an observer event for
     // multiple erase we can't do any better.
 
@@ -229,10 +233,6 @@ void Segment::erase(iterator from, iterator to)
         notifyRemove(e);
         delete e;
     }
-
-    timeT startTime = 0, endTime = 0;
-    if (from != end()) startTime = (*from)->getAbsoluteTime();
-    if (to != end()) endTime = (*to)->getAbsoluteTime();
     
     std::multiset<Event*, Event::EventCmp>::erase(from, to);
 
