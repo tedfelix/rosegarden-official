@@ -25,6 +25,8 @@
 #include "Midi.h"
 #include "MidiEvent.h"
 #include "Composition.h"
+#include "SoundFile.h"
+
 
 #include <fstream>
 #include <string>
@@ -53,7 +55,7 @@ namespace Rosegarden
 typedef std::map<unsigned int, std::list<MidiEvent> > MidiComposition;
 typedef std::list<MidiEvent>::iterator MidiTrackIterator;
 
-class MidiFile
+class MidiFile : public SoundFile
 {
 public:
 
@@ -67,25 +69,23 @@ public:
     } MIDIFileFormatType;
 
     MidiFile();
-    MidiFile (const char *fn);
+    MidiFile (const std::string &fn);
     ~MidiFile();
 
     MidiFile& operator=(const MidiFile& mF)
     {
-	m_filename = mF.m_filename;
+	m_fileName = mF.m_fileName;
 	m_timingDivision = mF.m_timingDivision;
 	m_numberOfTracks = mF.m_numberOfTracks;
 	m_format = mF.m_format;
 	return *this;
     }
 
-    // open a file of the given filename
-    bool open();
+    // Declare our virtuals
+    //
+    virtual bool open();
+    virtual bool write();
 
-    // write a file of the internal filename
-    bool write();
-
-    const std::string& filename() { return m_filename; }
     const int& timingDivision() { return m_timingDivision; }
     const MIDIFileFormatType& format() { return m_format; }
     const unsigned int& numberOfTracks() { return m_numberOfTracks; }
@@ -96,7 +96,7 @@ public:
     void convertToMidi(Rosegarden::Composition &comp); // urch, no const
 
 private:
-    std::string            m_filename;
+
     int                    m_timingDivision;   // pulses per quarter note
     MIDIFileFormatType     m_format;
     unsigned int           m_numberOfTracks;

@@ -7,11 +7,18 @@ COMPILE_FIRST = libRosegardenSound
 
 ####### This part is very Rosegarden specific
 # you can add here more. This one gets installed 
+
 noinst_LTLIBRARIES = libRosegardenSound.la
-libRosegardenSound_la_SOURCES = MidiFile.cpp MidiEvent.cpp MappedEvent.cpp MappedComposition.cpp
+libRosegardenSound_la_SOURCES = AudioFile.cpp \
+                                MidiFile.cpp \
+                                MidiEvent.cpp \
+                                MappedEvent.cpp \
+                                MappedComposition.cpp
 
 lib_LTLIBRARIES = libRosegardenSequencer.la
-libRosegardenSequencer_la_SOURCES = MidiRecord.cpp MidiArts.cc Sequencer.cpp
+libRosegardenSequencer_la_SOURCES = MidiArts.cc \
+                                    MidiRecord.cpp \
+                                    Sequencer.cpp
 
 # the library search path. 
 libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined

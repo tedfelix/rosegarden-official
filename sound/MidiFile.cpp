@@ -53,7 +53,7 @@ using std::endl;
 using std::ends;
 using std::ios;
 
-MidiFile::MidiFile():m_filename("unnamed.mid"),
+MidiFile::MidiFile():SoundFile(std::string("unnamed.mid")),
                      m_timingDivision(0),
                      m_format(MIDI_FILE_NOT_LOADED),
                      m_numberOfTracks(0),
@@ -62,7 +62,7 @@ MidiFile::MidiFile():m_filename("unnamed.mid"),
 {
 }
 
-MidiFile::MidiFile(const char *fn):m_filename(fn),
+MidiFile::MidiFile(const std::string &fn):SoundFile(fn),
                                    m_timingDivision(0),
                                    m_format(MIDI_FILE_NOT_LOADED),
                                    m_numberOfTracks(0),
@@ -234,7 +234,7 @@ MidiFile::open()
     bool retOK = true;
 
     // Open the file
-    ifstream *midiFile = new ifstream(m_filename.c_str(), ios::in | ios::binary);
+    ifstream *midiFile = new ifstream(m_fileName.c_str(), ios::in | ios::binary);
 
     try
     {
@@ -277,10 +277,6 @@ MidiFile::open()
         }
         else
         {
-#ifdef MIDI_DEBUG
-            std::cerr << "MidiFile::open - \"" << _filename <<
-                "\" not recognised as a MIDI file" << endl;
-#endif
             m_format = MIDI_FILE_NOT_LOADED;
             return(false);
         }
@@ -1267,7 +1263,7 @@ MidiFile::write()
     bool retOK = true;
 
     std::ofstream *midiFile =
-        new std::ofstream(m_filename.c_str(), ios::out | ios::binary);
+        new std::ofstream(m_fileName.c_str(), ios::out | ios::binary);
 
 
     if (!(*midiFile))
