@@ -346,7 +346,8 @@ NoteFontMap::dump() const
 NoteFont::PixmapMap *NoteFont::m_map = 0;
 
 NoteFont::NoteFont(string fontName, int size) :
-    m_fontMap(fontName)
+    m_fontMap(fontName),
+    m_blankPixmap(10, 10)
 {
     std::set<int> sizes = m_fontMap.getSizes();
 
@@ -367,6 +368,8 @@ NoteFont::NoteFont(string fontName, int size) :
     if (m_map == 0) {
         m_map = new PixmapMap();
     }
+
+    m_blankPixmap.setMask(QBitmap(10, 10, TRUE));
 }
 
 NoteFont::~NoteFont()
@@ -421,13 +424,18 @@ NoteFont::getPixmap(string charName, QPixmap &pixmap, bool inverted) const
 
         pixmap = QPixmap(src.c_str());
         if (!pixmap.isNull()) {
+	    pixmap.setMask(pixmap.createHeuristicMask()); //!!!
             (*m_map)[key] = PixmapPair(true, pixmap);
             return true;
         }
         cerr << "Warning: Unable to read pixmap file " << src << endl;
+    } else {
+        cerr << "NoteFont::getPixmap: No pixmap for character \""
+	     << charName << "\"" << (inverted ? " (inverted)" : "")
+	     << " in font \"" << m_fontMap.getName() << "\"" << endl;
     }
 
-    pixmap = getBlankPixmap();
+    pixmap = m_blankPixmap;
     (*m_map)[key] = PixmapPair(false, pixmap);
     return false;
 }
@@ -450,12 +458,6 @@ NoteFont::getCanvasPixmap(string charName, bool inverted) const
     (void)getHotspot(charName, x, y, inverted);
 
     return QCanvasPixmap(p, QPoint(x, y));
-}
-
-QPixmap
-NoteFont::getBlankPixmap() const
-{
-    return QPixmap(10, 10);
 }
 
 bool

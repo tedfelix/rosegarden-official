@@ -56,7 +56,7 @@ NotePixmapFactory::NotePixmapFactory(int size, std::string fontName) :
     --size;
 
     try {
-//        fontName = "feta";
+        fontName = "feta";
 
         m_font = new NoteFont(fontName, size);
     } catch (NoteFontMap::MappingFileReadFailed f) {

@@ -241,8 +241,8 @@ public:
 private:
     int m_currentSize;
     NoteFontMap m_fontMap;
+    QPixmap m_blankPixmap;
 
-    QPixmap getBlankPixmap() const;
     std::string getKey(std::string charName, bool inverted) const;
 
     typedef std::pair<bool, QPixmap> PixmapPair;
