@@ -77,8 +77,7 @@ public slots:
     void slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
         { emit setLoop(lhs, rhs); }
 
-    void slotSetLoopMarker(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
-        { emit signalSetLoopMarker(lhs, rhs); }
+    void slotSetLoopMarker(Rosegarden::timeT lhs, Rosegarden::timeT rhs);
 
     void setLoopingMode(bool value);
 
