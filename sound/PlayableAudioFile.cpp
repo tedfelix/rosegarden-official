@@ -414,7 +414,8 @@ PlayableAudioFile::updateBuffers()
 
     if (sourceSampleRate != m_targetSampleRate) {
 	resample = true;
-	fileFrames = frames * sourceSampleRate / m_targetSampleRate;
+	fileFrames = size_t(float(frames) * float(sourceSampleRate) /
+			    float(m_targetSampleRate));
     }
 
     std::string data; //!!! here be hidden heap allocation and slowness
@@ -428,7 +429,7 @@ PlayableAudioFile::updateBuffers()
 	    m_fileEnded = true;
 	} else {
 	    if (m_smallFileIndex + bytes >= source.size()) {
-		bytes = source.size() + m_smallFileIndex - 1;
+		bytes = source.size() - m_smallFileIndex;
 		m_fileEnded = true;
 	    }
 	    if (bytes > 0) {
@@ -457,9 +458,9 @@ PlayableAudioFile::updateBuffers()
     }
 
     // update frames to the number we actually managed to read
-    fileFrames = (data.size() / (getBitsPerSample() / 8)) / sourceChannels;
+    fileFrames = data.size() / m_audioFile->getBytesPerFrame();
 
-    float *buffer = new float[frames]; 
+    float *buffer = new float[std::max(frames, fileFrames)]; 
     const unsigned char *ubuf = (const unsigned char *)data.c_str();
 
     //!!! How come this code isn't in WAVAudioFile?
@@ -473,7 +474,7 @@ PlayableAudioFile::updateBuffers()
 
     for (int ch = 0; ch < sourceChannels; ++ch) {
 
-	if (!reduceToMono) {
+	if (!reduceToMono || ch == 0) {
 	    if (ch >= m_targetChannels) break;
 	    memset(buffer, 0, frames * sizeof(sample_t));
 	}
@@ -523,15 +524,19 @@ PlayableAudioFile::updateBuffers()
 
 	    // resample (very crudely) in-place
 
+	    float ratio = float(sourceSampleRate) / float(m_targetSampleRate);
+
 	    if (m_targetSampleRate > sourceSampleRate) {
 		for (size_t i = frames; i > 0; --i) {
-		    buffer[i-1] =
-			buffer[(i-1) * sourceSampleRate / m_targetSampleRate];
+		    size_t j = size_t((i-1) * ratio);
+		    if (j >= fileFrames) j = fileFrames - 1;
+		    buffer[i-1] = buffer[j];
 		}
 	    } else {
 		for (size_t i = 0; i < frames; ++i) {
-		    buffer[i] =
-			buffer[i * sourceSampleRate / m_targetSampleRate];
+		    size_t j = size_t(i * ratio);
+		    if (j >= fileFrames) j = fileFrames - 1;
+		    buffer[i] = buffer[j];
 		}
 	    }
 	}

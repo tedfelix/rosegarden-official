@@ -64,9 +64,9 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
 
         // In an audio instrument we use the m_channel attribute to
         // hold the number of audio channels this Instrument uses -
-        // not the MIDI channel number.  Default is 1 (mono).
+        // not the MIDI channel number.  Default is 2 (stereo).
         //
-        m_channel = 1;
+        m_channel = 2;
 
         m_pan = 100; // audio pan ranges from -100 to 100 but
                      // we store within an unsigned char as 
@@ -109,9 +109,9 @@ Instrument::Instrument(InstrumentId id,
 
         // In an audio instrument we use the m_channel attribute to
         // hold the number of audio channels this Instrument uses -
-        // not the MIDI channel number.  Default is 1 (mono).
+        // not the MIDI channel number.  Default is 2 (stereo).
         //
-        m_channel = 1;
+        m_channel = 2;
 
         m_pan = 100; // audio pan ranges from -100 to 100 but
                      // we store within an unsigned char as 
@@ -163,9 +163,9 @@ Instrument::Instrument(const Instrument &ins):
 
         // In an audio instrument we use the m_channel attribute to
         // hold the number of audio channels this Instrument uses -
-        // not the MIDI channel number.  Default is 1 (mono).
+        // not the MIDI channel number.  Default is 2 (stereo).
         //
-        m_channel = 1;
+        m_channel = 2;
     }
 }
 

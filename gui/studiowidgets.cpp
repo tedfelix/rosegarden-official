@@ -100,23 +100,6 @@ RosegardenFader::slotShowFloatText()
 //    float dbValue = 10.0 * log10(float(maxValue() - value())/100.0);
 
     // draw on the float text
-/*!!!    
-    float value = faderLevel();
-
-    if (value != 0) {
-
-	value = value - 105.0;
-	if (value > 0.0) value /= 7.0;
-	else value /= 13.0;
-	float dB = powf(value, 2.0);
-	if (value < 0.0) dB = -dB;
-
-//	float dB = (value - maxValue() + 20.0) / 2.0;
-	m_float->setText(QString("%1%2 dB").arg(m_prependText).arg(dB));
-    } else {
-	m_float->setText(QString("%1-Inf dB").arg(m_prependText));
-    }
-*/
 
     int value = faderLevel();
     

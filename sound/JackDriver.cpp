@@ -933,6 +933,10 @@ JackDriver::jackXRun(void *)
 void
 JackDriver::prebufferAudio()
 {
+    //!!! Hmm.  This will need to be cleverer to cope with JACK transport
+    // sync, as the next slice start is not so predictable (anyone can set
+    // the transport to any frame count).  We could just query it?
+
     if (m_mixer) {
 	m_mixer->fillBuffers
 	    (getNextSliceStart(m_alsaDriver->getSequencerTime()));
@@ -1001,7 +1005,7 @@ JackDriver::getAudioQueueLocks()
 int
 JackDriver::tryAudioQueueLocks()
 {
-    int rv;
+    int rv = 0;
     if (m_mixer) {
 	rv = m_mixer->tryLock();
 	if (rv) return rv;

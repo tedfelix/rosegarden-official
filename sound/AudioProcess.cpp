@@ -333,12 +333,14 @@ AudioMixer::generateBuffers()
 	(void)fader->getProperty(MappedAudioFader::Channels, fch);
 	unsigned int channels = (unsigned int)fch;
 
+	BufferRec &rec = m_bufferMap[id];
+
+	rec.channels = channels;
+
 	// We always have stereo buffers (for output of pan)
 	// even on a mono instrument.
 	if (channels < 2) channels = 2;
 	if (channels > maxChannels) maxChannels = channels;
-
-	BufferRec &rec = m_bufferMap[id];
 
 	for (size_t i = 0; i < rec.buffers.size(); ++i) {
 	    delete rec.buffers[i];
@@ -456,28 +458,9 @@ AudioMixer::processBlocks(bool forceFill)
 	    	    
 	    float faderLevel = 107;
 	    (void)fader->getProperty(MappedAudioFader::FaderLevel, faderLevel);
-	    /*!!!
-	    // A fader linearly represents dB values such that 127 on the
-	    // fader (the maximum value) is 20dB and 0dB is at 107 (max value
-	    // minus 20).  As a special case, 0 on the fader is silence.
-	    //!!! stick this code somewhere handier
-
-	    float volume = 0.0;
-
-	    if (faderLevel > 0.1) {
-
-		float value = faderLevel - 105.0;
-		if (value > 0.0) value /= 7.0;
-		else value /= 13.0;
-		float dB = powf(value, 2.0);
-		if (value < 0.0) dB = -dB;
-
-		volume = powf(10.0, dB / 10.0);
-	    }
-	    */
 
 	    float volume = AudioLevel::fader_to_multiplier
-		(faderLevel, 127, AudioLevel::ShortFader);
+		(int(faderLevel), 127, AudioLevel::ShortFader);
 
 	    float pan = 0.0;
 	    (void)fader->getProperty(MappedAudioFader::Pan, pan);
@@ -594,7 +577,8 @@ AudioMixer::processBlock(InstrumentId id, PlayableAudioFileList &audioQueue,
 	m_fileReader->updateReadyStatuses(audioQueue);
     }
 
-    unsigned int channels = rec.buffers.size();
+    unsigned int channels = rec.channels;
+    if (channels > rec.buffers.size()) channels = rec.buffers.size();
     if (channels > m_processBuffers.size()) channels = m_processBuffers.size();
     if (channels == 0) return false; // buffers just haven't been set up yet
 

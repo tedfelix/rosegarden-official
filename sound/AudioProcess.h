@@ -130,6 +130,7 @@ protected:
 	size_t zeroFrames;
 
 	RealTime filledTo;
+	size_t channels;
 	std::vector<RingBuffer<sample_t> *> buffers;
 
 	float gainLeft;

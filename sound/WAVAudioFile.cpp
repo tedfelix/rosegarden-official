@@ -94,9 +94,7 @@ WAVAudioFile::open()
     catch(std::string s)
     {
         //throw(s);
-#ifdef DEBUG_WAV
-        std::cout << "WAVAudioFile::open() parseHeader threw " << s << endl;
-#endif
+        std::cerr << "ERROR: WAVAudioFile::open(): parseHeader: " << s << endl;
         return false;
     }
 

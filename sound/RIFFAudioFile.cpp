@@ -362,11 +362,17 @@ RIFFAudioFile::readFormatChunk()
 
     if (length != m_fileSize)
     {
+	/*!!!
         char value[80];
         sprintf(value, "(read %u when size is %u)", length, m_fileSize);
         throw(std::string("\"" + m_fileName +
               "\" corrupted (wrong length) - " +
               std::string(value)));
+	*/
+	std::cerr << "WARNING: RIFFAudioFile: incorrect length ("
+		  << length << ", file size is " << m_fileSize << "), ignoring"
+		  << std::endl;
+	length = m_fileSize;
     }
 
     // Check the format length

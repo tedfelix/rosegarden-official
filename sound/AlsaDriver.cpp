@@ -136,11 +136,11 @@ AlsaDriver::shutdown()
 #ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::shutdown - stopped queue" << std::endl;
 #endif
-//        snd_seq_close(m_midiHandle);
+        snd_seq_close(m_midiHandle);
 #ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::shutdown - closed MIDI handle" << std::endl;
 #endif
-//        m_midiHandle = 0;
+        m_midiHandle = 0;
     }
 
 #ifdef HAVE_LADSPA

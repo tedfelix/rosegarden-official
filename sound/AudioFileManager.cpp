@@ -784,6 +784,8 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
     //
     for (int i = 0; i < pixmap->width(); ++i)
     {
+	if ((i * channels + (channels - 1)) >= values.size()) break;
+
         // Always get two values for our pixmap no matter how many
         // channels in AudioFile as that's all we can display.
         //
