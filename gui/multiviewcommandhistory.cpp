@@ -232,7 +232,14 @@ void
 MultiViewCommandHistory::clearStack(CommandStack &stack)
 {
     while (!stack.empty()) {
-	delete stack.top();
+	KCommand *togo = stack.top();
+	KNamedCommand *named = dynamic_cast<KNamedCommand *>(togo);
+	if (named) {
+	    RG_DEBUG << "MVCH::clearStack: About to delete command: " << named->name() << endl;
+	} else {
+	    RG_DEBUG << "MVCH::clearStack: About to delete unnamed command" << endl;
+	}
+	delete togo;
 	stack.pop();
     }
 }

@@ -24,7 +24,9 @@
 #define _PROFILER_H_
 
 #include <ctime>
+#include <sys/time.h>
 
+#include "RealTime.h"
 #include "StringHash.h"
 
 
@@ -46,13 +48,14 @@ public:
     static Profiles* getInstance();
     ~Profiles();
 
-    void accumulate(const char* id, clock_t time);
+    void accumulate(const char* id, clock_t time, RealTime rt);
     void dump();
 
 protected:
     Profiles();
 
-    typedef std::pair<int, clock_t> ProfilePair;
+    typedef std::pair<clock_t, RealTime> TimePair;
+    typedef std::pair<int, TimePair> ProfilePair;
     typedef hash_char<ProfilePair>  ProfileMap; // hash_char maps char* -> pair
     ProfileMap m_profiles;
 
@@ -69,7 +72,8 @@ public:
 
 protected:
     const char* m_c;
-    clock_t m_startTime;
+    clock_t m_startCPU;
+    RealTime m_startTime;
     bool m_showOnDestruct;
 };
  

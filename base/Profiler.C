@@ -46,12 +46,13 @@ Profiles::~Profiles()
     dump();
 }
 
-void Profiles::accumulate(const char* id, clock_t time)
+void Profiles::accumulate(const char* id, clock_t time, RealTime rt)
 {
 #ifndef NO_TIMING    
     ProfilePair &pair(m_profiles[id]);
     ++pair.first;
-    pair.second += time;
+    pair.second.first += time;
+    pair.second.second = pair.second.second + rt;
 #endif
 }
 
@@ -74,11 +75,18 @@ void Profiles::dump()
     for (std::vector<const char *>::iterator i = profileNames.begin();
 	 i != profileNames.end(); ++i) {
 
-        cerr << "-> " << *i << ": " 
+        cerr << "-> " << *i << ":  CPU: " 
 	     << m_profiles[*i].first << " calls, "
-	     << int((m_profiles[*i].second * 1000.0) / CLOCKS_PER_SEC) << "ms, "
-	     << (((double)m_profiles[*i].second * 1000000.0 /
+	     << int((m_profiles[*i].second.first * 1000.0) / CLOCKS_PER_SEC) << "ms, "
+	     << (((double)m_profiles[*i].second.first * 1000000.0 /
 		  (double)m_profiles[*i].first) / CLOCKS_PER_SEC) << "us/call"
+	     << endl;
+
+        cerr << "-> " << *i << ": real: " 
+	     << m_profiles[*i].first << " calls, "
+	     << m_profiles[*i].second.second << ", "
+	     << (m_profiles[*i].second.second / m_profiles[*i].second.first)
+	     << "/call"
 	     << endl;
     }
 
@@ -91,7 +99,11 @@ Profiler::Profiler(const char* c, bool showOnDestruct)
       m_showOnDestruct(showOnDestruct)
 {
 #ifndef NO_TIMING
-    m_startTime = clock();
+    m_startCPU = clock();
+
+    struct timeval tv;
+    (void)gettimeofday(&tv, 0);
+    m_startTime = RealTime(tv.tv_sec, tv.tv_usec);
 #endif
 }
 
@@ -99,25 +111,33 @@ void
 Profiler::update()
 {
 #ifndef NO_TIMING
-    clock_t elapsedTime = clock() - m_startTime;
+    clock_t elapsedCPU = clock() - m_startCPU;
+
+    struct timeval tv;
+    (void)gettimeofday(&tv, 0);
+    RealTime elapsedTime = RealTime(tv.tv_sec, tv.tv_usec) - m_startTime;
 
     cerr << "Profiler : id = " << m_c
-	 << " - elapsed so far = " << ((elapsedTime * 1000) / CLOCKS_PER_SEC)
-	 << "ms" << endl;
+	 << " - elapsed so far = " << ((elapsedCPU * 1000) / CLOCKS_PER_SEC)
+	 << "ms CPU, " << elapsedTime << " real" << endl;
 #endif
 }    
 
 Profiler::~Profiler()
 {
 #ifndef NO_TIMING
-    clock_t elapsedTime = clock() - m_startTime;
+    clock_t elapsedCPU = clock() - m_startCPU;
 
-    Profiles::getInstance()->accumulate(m_c, elapsedTime);
+    struct timeval tv;
+    (void)gettimeofday(&tv, 0);
+    RealTime elapsedTime = RealTime(tv.tv_sec, tv.tv_usec) - m_startTime;
+
+    Profiles::getInstance()->accumulate(m_c, elapsedCPU, elapsedTime);
 
     if (m_showOnDestruct)
         cerr << "Profiler : id = " << m_c
-             << " - elapsed = " << ((elapsedTime * 1000) / CLOCKS_PER_SEC)
-	     << "ms" << endl;
+             << " - elapsed = " << ((elapsedCPU * 1000) / CLOCKS_PER_SEC)
+	     << "ms CPU, " << elapsedTime << " real" << endl;
 #endif
 }
  

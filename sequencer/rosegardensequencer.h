@@ -278,7 +278,7 @@ public:
     bool startPlaying();
 
     // Process all subsequent events
-    bool keepPlaying();
+    bool keepPlaying(Rosegarden::RealTime &waitTime);
 
     // Update internal clock and send GUI position pointer movement
     void updateClocks();

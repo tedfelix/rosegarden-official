@@ -758,10 +758,15 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 
 	    // Because we can't discover through the API whether a
 	    // port is a synth, we are instead reduced to this
-	    // disgusting hack:
+	    // disgusting hack.  (At least we should make this
+	    // configurable!)
 
 	    if (!isSynth &&
 		(port->m_name.find("ynth") < port->m_name.length())) isSynth = true;
+	    if (!isSynth &&
+		(port->m_name.find("nstrument") < port->m_name.length())) isSynth = true;
+	    if (!isSynth &&
+		(port->m_name.find("VSTi") < port->m_name.length())) isSynth = true;
 	    
 	    if (category == SYSTEM) isSynth = false;
 
@@ -1941,6 +1946,7 @@ AlsaDriver::allNotesOff()
                                (*it)->getChannel(),
                                (*it)->getPitch(),
                                127);
+
         //snd_seq_event_output(m_midiHandle, event);
         int error = snd_seq_event_output_direct(m_midiHandle, event);
 
@@ -2107,7 +2113,7 @@ AlsaDriver::getAlsaTime()
     RealTime sequencerTime(0, 0);
 
     snd_seq_queue_status_t *status;
-    snd_seq_queue_status_malloc(&status);
+    snd_seq_queue_status_alloca(&status);
 
     if (snd_seq_get_queue_status(m_midiHandle, m_queue, status) < 0)
     {

@@ -45,6 +45,7 @@
 #include "Sequencer.h"
 #include "MappedInstrument.h"
 #include "SoundDriver.h"
+#include "Profiler.h"
 
 // The default latency and read-ahead values are actually sent
 // down from the GUI every time playback or recording starts
@@ -304,9 +305,13 @@ RosegardenSequencerApp::notifyVisuals(Rosegarden::MappedComposition *mC)
 }
 
 bool
-RosegardenSequencerApp::keepPlaying()
+RosegardenSequencerApp::keepPlaying(Rosegarden::RealTime &waitTime)
 {
+    Rosegarden::Profiler profiler("RosegardenSequencerApp::keepPlaying");
+
     if (m_songPosition > ( m_lastFetchSongPosition - m_fetchLatency)) {
+
+	waitTime = Rosegarden::RealTime::zeroTime;
 
         m_mC.clear();
         m_mC = *fetchEvents(m_lastFetchSongPosition,
@@ -330,6 +335,9 @@ RosegardenSequencerApp::keepPlaying()
             rationalisePlayingAudio(m_metaIterator->
                     getPlayingAudioFiles(m_songPosition));
         }
+
+    } else {
+	waitTime = m_lastFetchSongPosition - m_fetchLatency - m_songPosition;
     }
 
     return true; // !isEndOfCompReached(); - until we sort this out, we don't stop at end of comp.
@@ -342,6 +350,8 @@ RosegardenSequencerApp::keepPlaying()
 void
 RosegardenSequencerApp::updateClocks()
 {
+    Rosegarden::Profiler profiler("RosegardenSequencerApp::updateClocks");
+
     // Attempt to send MIDI clock 
     //
     m_sequencer->sendMidiClock(m_playLatency);
@@ -396,8 +406,7 @@ RosegardenSequencerApp::updateClocks()
     // Remap the position pointer
     //
     m_sequencerMapper.updatePositionPointer(newPosition);
-
-    /*
+/*
     arg << newPosition.sec;
     arg << newPosition.usec;
 
@@ -414,8 +423,7 @@ RosegardenSequencerApp::updateClocks()
         //
         stop();
     }
-    */
-
+*/
 }
 
 void

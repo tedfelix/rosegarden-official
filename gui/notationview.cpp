@@ -2437,20 +2437,20 @@ void NotationView::setSingleSelectedEvent(Segment &segment, Event *event,
 
 bool NotationView::canPreviewAnotherNote()
 {
-    static clock_t lastCutOff = 0;
+    static time_t lastCutOff = 0;
     static int sinceLastCutOff = 0;
 
-    clock_t now = clock();
+    time_t now = time(0);
     ++sinceLastCutOff;
 
-    if ((((now - lastCutOff) * 1000) / CLOCKS_PER_SEC) >= 1) {
+    if ((now - lastCutOff) > 0) {
 	sinceLastCutOff = 0;
 	lastCutOff = now;
 	NOTATION_DEBUG << "NotationView::canPreviewAnotherNote: reset" << endl;
     } else {
 	if (sinceLastCutOff >= 20) {
-	    // don't permit more than 20 notes per second, to avoid
-	    // gungeing up the sound drivers
+	    // don't permit more than 20 notes per second or so, to
+	    // avoid gungeing up the sound drivers
 	    NOTATION_DEBUG << "Rejecting preview (too busy)" << endl;
 	    return false;
 	}

@@ -63,6 +63,25 @@ std::ostream &operator<<(std::ostream &out, const RealTime &rt)
     return out;
 }
 
+RealTime
+RealTime::operator/(double d) const
+{
+    // not a good implementation -- potential for overflow on the long
+    double total = double(sec) * 1000000.0 + double(usec);
+    long usec = long(total / d);
+    return RealTime(usec / 1000000, usec % 1000000);
+}
+
+double 
+RealTime::operator/(const RealTime &r) const
+{
+    double lTotal = double(sec) * 1000000.0 + double(usec);
+    double rTotal = double(r.sec) * 1000000.0 + double(r.usec);
+    
+    if (rTotal == 0) return 0.0;
+    else return lTotal/rTotal;
+}
+
 const RealTime RealTime::zeroTime(0,0);
 
 }

@@ -1328,13 +1328,13 @@ void MatrixView::closeWindow()
 
 bool MatrixView::canPreviewAnotherNote()
 {
-    static clock_t lastCutOff = 0;
+    static time_t lastCutOff = 0;
     static int sinceLastCutOff = 0;
 
-    clock_t now = clock();
+    time_t now = time(0);
     ++sinceLastCutOff;
 
-    if ((((now - lastCutOff) * 1000) / CLOCKS_PER_SEC) >= 1) {
+    if ((now - lastCutOff) > 0) {
 	sinceLastCutOff = 0;
 	lastCutOff = now;
     } else {
