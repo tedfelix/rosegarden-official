@@ -19,17 +19,15 @@
   COPYING included with this distribution for more information.
 */
 
+#include <signal.h>
+#include <iostream>
+#include <unistd.h>
+#include <sys/time.h>
 
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <dcopclient.h>
-
-#include <iostream>
-#include <unistd.h>
-#include <csignal>
-
-#include <sys/time.h>
 
 #include "Profiler.h"
 #include "MappedComposition.h"
@@ -66,6 +64,7 @@ cleanup()
 
 static bool _mainThread = false; // set true later
 static bool _exiting = false;
+static sigset_t _signals;
 
 static void
 signalHandler(int /*sig*/)
@@ -79,6 +78,18 @@ signalHandler(int /*sig*/)
 
 int main(int argc, char *argv[])
 {
+    // Block signals during startup, so that child threads (inheriting
+    // this mask) ignore them; then after startup we can unblock them
+    // for this thread only.  This trick picked up from the jackd code.
+    sigemptyset (&_signals);
+    sigaddset(&_signals, SIGHUP);
+    sigaddset(&_signals, SIGINT);
+    sigaddset(&_signals, SIGQUIT);
+    sigaddset(&_signals, SIGPIPE);
+    sigaddset(&_signals, SIGTERM);
+    sigaddset(&_signals, SIGUSR1);
+    sigaddset(&_signals, SIGUSR2);
+    pthread_sigmask(SIG_BLOCK, &_signals, 0);
 
     KAboutData aboutData( "rosegardensequencer",
                           I18N_NOOP("RosegardenSequencer"),
@@ -102,13 +113,6 @@ int main(int argc, char *argv[])
     if (app.isRestored())
     {
 	app.quit(); // don't do session restore -- GUI will start a sequencer
-        
-//         int n = 1;
-//         while (KMainWindow::canBeRestored(n)) {
-// 	    // memory leak if more than one can be restored?
-//             (roseSeq = new RosegardenSequencerApp(jackArgs))->restore(n);
-//             n++;
-//         }
     }
     else
     {
@@ -117,21 +121,10 @@ int main(int argc, char *argv[])
         // we don't show() the sequencer application as we're just taking
         // advantage of DCOP/KApplication and there's nothing to show().
 
-//!!!        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-	if (args->count())
-	{
-            //rosegardensequencer->openDocumentFile(args->arg(0));
-        }
-        else
-        {
-            // rosegardensequencer->openDocumentFile();
-        }
-
         args->clear();
     }
 
     QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-    //app.dcopClient()->setDefaultObject("RosegardenGUIIface");
 
     app.disableSessionManagement(); // we don't want to be
                                     // saved/restored by session
@@ -140,6 +133,14 @@ int main(int argc, char *argv[])
     // Started OK
     //
     SEQUENCER_DEBUG << "RosegardenSequencer - started OK" << endl;
+	
+    // Register signal handlers and unblock signals
+    //
+    signal(SIGINT, signalHandler);
+    signal(SIGTERM, signalHandler);
+    signal(SIGHUP, signalHandler);
+    signal(SIGQUIT, signalHandler);
+    pthread_sigmask(SIG_UNBLOCK, &_signals, 0);
 
     // Now we can enter our specialised event loop.
     // For each pass through we wait for some pending
@@ -152,13 +153,6 @@ int main(int argc, char *argv[])
     // processor - we're not in that much of a rush!
     //
     TransportStatus lastSeqStatus = roseSeq->getStatus();
-
-    // Register signal handler
-    //
-    signal(SIGINT, signalHandler);
-    signal(SIGTERM, signalHandler);
-    signal(SIGHUP, signalHandler);
-    signal(SIGQUIT, signalHandler);
 
     _mainThread = true;
 
@@ -303,5 +297,6 @@ int main(int argc, char *argv[])
 
     int rv = app.exec();
     cleanup();
+    SEQUENCER_DEBUG << "Toodle-pip." << endl;
     return rv;
 }

@@ -125,6 +125,7 @@ RosegardenSequencerApp::RosegardenSequencerApp(
 RosegardenSequencerApp::~RosegardenSequencerApp()
 {
     SEQUENCER_DEBUG << "RosegardenSequencer - shutting down" << endl;
+    m_sequencer->shutdown();
     delete m_sequencer;
     delete m_studio;
     delete m_controlBlockMmapper;

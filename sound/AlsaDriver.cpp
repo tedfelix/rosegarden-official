@@ -99,7 +99,8 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_alsaRecordStartTime(0, 0),
     m_loopStartTime(0, 0),
     m_loopEndTime(0, 0),
-    m_looping(false)
+    m_looping(false),
+    m_haveShutdown(false)
 #ifdef HAVE_LIBJACK
     ,m_jackDriver(0)
 #endif
@@ -115,19 +116,22 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 
 AlsaDriver::~AlsaDriver()
 {
-    std::cerr << "AlsaDriver::~AlsaDriver (" << (void *)this << ")" << std::endl;
-    shutdown();
-    std::cerr << "AlsaDriver::~AlsaDriver exiting" << std::endl;
+    if (!m_haveShutdown) {
+	std::cerr << "WARNING: AlsaDriver::shutdown() was not called before destructor, calling now" << std::endl;
+	shutdown();
+    }
 }
 
 void
 AlsaDriver::shutdown()
 {
-    AUDIT_START;
-    AUDIT_STREAM << "AlsaDriver::~AlsaDriver - shutting down" << std::endl;
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver::~AlsaDriver - shutting down" << std::endl;
+#endif
 
 #ifdef HAVE_LIBJACK
     delete m_jackDriver;
+    m_jackDriver = 0;
 #endif
 
     if (m_midiHandle)
@@ -157,7 +161,7 @@ AlsaDriver::shutdown()
 #endif
 #endif // HAVE_LADSPA
 
-   AUDIT_UPDATE;
+    m_haveShutdown = true;
 }
 
 void

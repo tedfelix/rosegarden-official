@@ -95,28 +95,27 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
 JackDriver::~JackDriver()
 {
     std::cerr << "JackDriver::~JackDriver" << std::endl;
-
     m_ok = false; // prevent any more work in process()
 
-    std::cerr << "JackDriver::~JackDriver: deleting file reader" << std::endl;
-    AudioFileReader *reader = m_fileReader;
-    m_fileReader = 0;
-    delete reader;
-
-    std::cerr << "JackDriver::~JackDriver: deleting file writer" << std::endl;
-    AudioFileWriter *writer = m_fileWriter;
-    m_fileWriter = 0;
-    delete writer;
-
-    std::cerr << "JackDriver::~JackDriver: deleting instrument mixer" << std::endl;
-    AudioInstrumentMixer *instrumentMixer = m_instrumentMixer;
-    m_instrumentMixer = 0;
-    delete instrumentMixer;
-
-    std::cerr << "JackDriver::~JackDriver: deleting buss mixer" << std::endl;
+    std::cerr << "JackDriver::~JackDriver: terminating buss mixer" << std::endl;
     AudioBussMixer *bussMixer = m_bussMixer;
     m_bussMixer = 0;
-    delete bussMixer;
+    if (bussMixer) bussMixer->terminate();
+
+    std::cerr << "JackDriver::~JackDriver: terminating instrument mixer" << std::endl;
+    AudioInstrumentMixer *instrumentMixer = m_instrumentMixer;
+    m_instrumentMixer = 0;
+    if (instrumentMixer) instrumentMixer->terminate();
+
+    std::cerr << "JackDriver::~JackDriver: terminating file reader" << std::endl;
+    AudioFileReader *reader = m_fileReader;
+    m_fileReader = 0;
+    if (reader) reader->terminate();
+
+    std::cerr << "JackDriver::~JackDriver: terminating file writer" << std::endl;
+    AudioFileWriter *writer = m_fileWriter;
+    m_fileWriter = 0;
+    if (writer) writer->terminate();
 
     if (m_client)
     {
@@ -125,6 +124,7 @@ JackDriver::~JackDriver()
                   << std::endl;
 #endif
 	std::cerr << "deactivating" << std::endl;
+
         if (jack_deactivate(m_client))
 	{
 #ifdef DEBUG_ALSA
@@ -132,7 +132,6 @@ JackDriver::~JackDriver()
 		      << std::endl;
 #endif
 	}
-
         for (unsigned int i = 0; i < m_inputPorts.size(); ++i)
         {
 	    std::cerr << "unregistering input " << i << std::endl;
@@ -181,11 +180,18 @@ JackDriver::~JackDriver()
 #endif
 	    }
 	}
-                
+
 	std::cerr << "closing client" << std::endl;
         jack_client_close(m_client);
+	std::cerr << "done" << std::endl;
         m_client = 0;
     }
+
+    std::cerr << "JackDriver: deleting mixers etc" << std::endl;
+    delete bussMixer;
+    delete instrumentMixer;
+    delete reader;
+    delete writer;
 
     std::cerr << "JackDriver::~JackDriver exiting" << std::endl;
 }
@@ -265,6 +271,11 @@ JackDriver::initialise()
 	(m_alsaDriver, m_instrumentMixer, m_sampleRate,
 	 m_bufferSize < 1024 ? 1024 : m_bufferSize);
     m_instrumentMixer->setBussMixer(m_bussMixer);
+
+    m_fileReader->run();
+    m_fileWriter->run();
+    m_instrumentMixer->run();
+    m_bussMixer->run();
 
     // Create and connect the default numbers of ports.  We always create
     // one stereo pair each of master and monitor outs, and then we create
@@ -759,7 +770,9 @@ JackDriver::jackProcessStatic(jack_nframes_t nframes, void *arg)
 int
 JackDriver::jackProcess(jack_nframes_t nframes)
 {
-    if (!m_ok) return 0;
+    if (!m_ok) {
+	return 0;
+    }
 
     if (!m_bussMixer) {
 	return jackProcessEmpty(nframes);
@@ -1319,7 +1332,7 @@ JackDriver::jackShutdown(void * /*arg*/)
 int
 JackDriver::jackGraphOrder(void *)
 {
-    //std::cerr << "JackDriver::jackGraphOrder" << std::endl;
+    std::cerr << "JackDriver::jackGraphOrder" << std::endl;
     return 0;
 }
 

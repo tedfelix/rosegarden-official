@@ -136,6 +136,7 @@ public:
     virtual ~SoundDriver();
 
     virtual void initialise() = 0;
+    virtual void shutdown() { }
 
     virtual void initialisePlayback(const RealTime &position) = 0;
     virtual void stopPlayback() = 0;

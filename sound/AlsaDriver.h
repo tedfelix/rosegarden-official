@@ -275,6 +275,8 @@ private:
     RealTime                     m_loopEndTime;
     bool                         m_looping;
 
+    bool                         m_haveShutdown;
+
 #ifdef HAVE_LIBJACK
     JackDriver *m_jackDriver;
 #endif

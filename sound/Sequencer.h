@@ -65,6 +65,10 @@ class Sequencer
 public:
     Sequencer(MappedStudio *studio, const std::vector<std::string> &args);
     ~Sequencer();
+    
+    // Call this before deleting the class, please
+    // 
+    void shutdown() { m_soundDriver->shutdown(); }
 
     // Control playback - initialisePlayback starts us playing
     //

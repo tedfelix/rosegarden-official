@@ -44,7 +44,12 @@ public:
 
     virtual ~AudioThread();
 
-    virtual void run();
+    // This is to be called by the owning class after construction.
+    void run();
+
+    // This is to be called by the owning class to cause the thread to
+    // exit and clean up, before destruction.
+    void terminate();
 
     int getLock();
     int tryLock();
@@ -62,6 +67,7 @@ protected:
     pthread_t         m_thread;
     pthread_mutex_t   m_lock;
     pthread_cond_t    m_condition;
+    volatile bool     m_exiting;
 
 private:
     static void *staticThreadRun(void *arg);
@@ -78,6 +84,7 @@ public:
 		   AudioInstrumentMixer *instrumentMixer,
 		   unsigned int sampleRate,
 		   unsigned int blockSize);
+
     virtual ~AudioBussMixer();
 
     void kick(bool wantLock = true);
@@ -154,6 +161,7 @@ public:
 			 AudioFileReader *fileReader,
 			 unsigned int sampleRate,
 			 unsigned int blockSize);
+
     virtual ~AudioInstrumentMixer();
 
     void kick(bool wantLock = true);
@@ -251,6 +259,7 @@ class AudioFileReader : public AudioThread
 public:
     AudioFileReader(SoundDriver *driver,
 		    unsigned int sampleRate);
+
     virtual ~AudioFileReader();
 
     bool kick(bool wantLock = true);
@@ -268,6 +277,7 @@ class AudioFileWriter : public AudioThread
 public:
     AudioFileWriter(SoundDriver *driver,
 		    unsigned int sampleRate);
+
     virtual ~AudioFileWriter();
 
     void kick(bool wantLock = true);
