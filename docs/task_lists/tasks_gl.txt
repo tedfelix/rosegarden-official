@@ -1,6 +1,8 @@
 Current Task list
 ======================================
 
+- save/load of instrument config in bank editor dialog
+
 - add signals for progress reporting in layout classes DONE
 
 - use a QWidgetStack for the InstrumentParameterBox DONE
@@ -15,7 +17,7 @@ Current Task list
 gui/qcanvassimplesprite.h r1.18, qcanvassimplesprite.cpp r1.20,
 notationstaff.cpp r1.146).
 
-- optimize segment overlap shading
+- optimize segment overlap shading - DONE
 
 - guitar chord display
 
@@ -54,13 +56,13 @@ lines of fixed length).
 
 - make MIDI pitch->string convertion configurable - DONE
 
-- menu item status (enabled/disabled)
+- menu item status (enabled/disabled) - ongoing work...
 
 - better error report when failing to load a resource
 
 - make matrix tools use shift modifier for smoth move - DONE
 
-- tidy up exceptions, make a Rosegarden::Exception class
+- tidy up exceptions, make a Rosegarden::Exception class - DONE by Chris
 
 - have several kdDebug() channels - DONE
 
