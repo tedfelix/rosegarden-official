@@ -85,6 +85,7 @@
 #include "audiopluginmanager.h"
 #include "diskspace.h"
 #include "segmentcommands.h"
+#include "rgapplication.h"
 
 namespace Rosegarden
 {
@@ -1012,34 +1013,56 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     layout = new QGridLayout(frame, 10, 3,
 			     10, 5);
 
+    // Fetch the sample rate for showing conversions between time and
+    // memory usage
+
+    QCString replyType;
+    QByteArray replyData;
+    m_sampleRate = 0;
+
+    if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        unsigned int result;
+        streamIn >> result;
+        m_sampleRate = result;
+    }
+
     layout->addMultiCellWidget(new QLabel(i18n("Longer buffers usually improve playback quality, but use more memory and slow response."), frame),
                                0, 0,
                                0, 3);
 
-    layout->addWidget(new QLabel(i18n("Event read-ahead (ms)"), frame), 1, 0);
-    layout->addWidget(new QLabel(i18n("Audio mix buffer (ms)"), frame), 3, 0);
-    layout->addWidget(new QLabel(i18n("Audio file read buffer (ms)"), frame), 5, 0);
-    layout->addWidget(new QLabel(i18n("Audio file write buffer (ms)"), frame), 7, 0);
+    layout->addWidget(new QLabel(i18n("Event read-ahead"), frame), 1, 0);
+    layout->addWidget(new QLabel(i18n("Audio mix buffer"), frame), 3, 0);
+    layout->addWidget(new QLabel(i18n("Audio file read buffer"), frame), 5, 0);
+    layout->addWidget(new QLabel(i18n("Audio file write buffer"), frame), 7, 0);
     layout->addWidget(new QLabel(i18n("Per-file limit for cacheable audio files"), frame), 9, 0);
+
+    // Each tick doubles the value, though let's round down to 2sf.
+    // Appropriate ranges are:
+    // 
+    // Event read-ahead: 20ms -> 5sec (9 ticks)
+    // Audio mix: 10ms -> 2.5sec, always shorter than event read-ahead (9 ticks)
+    // Audio file read: 10ms -> 2.5sec (9 ticks)
+    // Audio file write: 100ms -> 50sec (10 ticks)
 
     m_readAhead = new QSlider(Horizontal, frame);
 
-    m_readAhead->setMinValue(20);
-    layout->addWidget(new QLabel("20", frame), 2, 1);
+    m_readAhead->setMinValue(1);
+    m_readAhead->setMaxValue(9);
+    m_readAhead->setLineStep(1);
+    m_readAhead->setPageStep(1);
+//    m_readAhead->setTickmarks(QSlider::Below);
 
-    m_readAhead->setMaxValue(500);
-    layout->addWidget(new QLabel("500", frame), 2, 3);
-    
-    m_readAhead->setLineStep(20);
-    m_readAhead->setPageStep(20);
+    m_readAheadLabel = new QLabel(frame);
+
+    layout->addWidget(new QLabel(i18n("20 msec"), frame), 1, 1);
+    layout->addWidget(new QLabel(i18n("5 sec"), frame), 1, 3);
+    layout->addWidget(m_readAhead, 1, 2);
+    layout->addWidget(m_readAheadLabel, 2, 2, Qt::AlignHCenter);
 
     int readAheadValue = m_cfg->readLongNumEntry("readaheadusec", 80000) / 1000;
-    m_readAhead->setValue(readAheadValue);
-    m_readAhead->setTickmarks(QSlider::Below);
-    layout->addWidget(m_readAhead, 2, 2);
-
-    m_readAheadLabel = new QLabel(QString("%1").arg(readAheadValue), frame);
-    layout->addWidget(m_readAheadLabel, 1, 2, Qt::AlignHCenter);
+    updateTimeSlider(readAheadValue, 1, 9, 10, m_readAhead, m_readAheadLabel,
+		     0);
 
     connect(m_readAhead,
             SIGNAL(valueChanged(int)),
@@ -1047,46 +1070,45 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     m_audioMix = new QSlider(Horizontal, frame);
 
-    m_audioMix->setMinValue(20);
-    layout->addWidget(new QLabel("20", frame), 4, 1);
+    m_audioMix->setMinValue(0);
+    m_audioMix->setMaxValue(8);
+    m_audioMix->setLineStep(1);
+    m_audioMix->setPageStep(1);
+//    m_audioMix->setTickmarks(QSlider::Below);
 
-    m_audioMix->setMaxValue(500);
-    layout->addWidget(new QLabel("500", frame), 4, 3);
+    m_audioMixLabel = new QLabel(frame);
 
-    m_audioMix->setLineStep(20);
-    m_audioMix->setPageStep(20);
+    layout->addWidget(new QLabel("10 msec", frame), 3, 1);
+    layout->addWidget(new QLabel("2.5 sec", frame), 3, 3);
+    layout->addWidget(m_audioMix, 3, 2);
+    layout->addWidget(m_audioMixLabel, 4, 2, Qt::AlignHCenter);
 
     int audioMixValue = m_cfg->readLongNumEntry("audiomixusec", 60000) / 1000;
-    m_audioMix->setValue(audioMixValue);
-    m_audioMix->setTickmarks(QSlider::Below);
-    layout->addWidget(m_audioMix, 4, 2);
-
-    m_audioMixLabel = new QLabel(QString("%1").arg(audioMixValue), frame);
-    layout->addWidget(m_audioMixLabel, 3, 2, Qt::AlignHCenter);
+    updateTimeSlider(audioMixValue, 0, 8, 10, m_audioMix, m_audioMixLabel,
+		     i18n("per audio instrument"));
 
     connect(m_audioMix,
             SIGNAL(valueChanged(int)),
             SLOT(slotAudioMixChanged(int)));
 
-
     m_audioRead = new QSlider(Horizontal, frame);
 
-    m_audioRead->setMinValue(20);
-    layout->addWidget(new QLabel("20", frame), 6, 1);
+    m_audioRead->setMinValue(1);
+    m_audioRead->setMaxValue(9);
+    m_audioRead->setLineStep(1);
+    m_audioRead->setPageStep(1);
+//    m_audioRead->setTickmarks(QSlider::Below);
 
-    m_audioRead->setMaxValue(500);
-    layout->addWidget(new QLabel("500", frame), 6, 3);
+    m_audioReadLabel = new QLabel(frame);
 
-    m_audioRead->setLineStep(20);
-    m_audioRead->setPageStep(20);
+    layout->addWidget(new QLabel("20 msec", frame), 5, 1);
+    layout->addWidget(new QLabel("5 sec", frame), 5, 3);
+    layout->addWidget(m_audioRead, 5, 2);
+    layout->addWidget(m_audioReadLabel, 6, 2, Qt::AlignHCenter);
 
     int audioReadValue = m_cfg->readLongNumEntry("audioreadusec", 80000) / 1000;
-    m_audioRead->setValue(audioReadValue);
-    m_audioRead->setTickmarks(QSlider::Below);
-    layout->addWidget(m_audioRead, 6, 2);
-
-    m_audioReadLabel = new QLabel(QString("%1").arg(audioReadValue), frame);
-    layout->addWidget(m_audioReadLabel, 5, 2, Qt::AlignHCenter);
+    updateTimeSlider(audioReadValue, 1, 9, 10, m_audioRead, m_audioReadLabel,
+		     i18n("per file"));
 
     connect(m_audioRead,
             SIGNAL(valueChanged(int)),
@@ -1095,22 +1117,21 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     m_audioWrite = new QSlider(Horizontal, frame);
 
-    m_audioWrite->setMinValue(50);
-    layout->addWidget(new QLabel("50", frame), 8, 1);
+    m_audioWrite->setMinValue(0);
+    m_audioWrite->setMaxValue(9);
+    m_audioWrite->setLineStep(1);
+    m_audioWrite->setPageStep(1);
+//    m_audioWrite->setTickmarks(QSlider::Below);
 
-    m_audioWrite->setMaxValue(1000);
-    layout->addWidget(new QLabel("1000", frame), 8, 3);
+    m_audioWriteLabel = new QLabel(frame);
 
-    m_audioWrite->setLineStep(50);
-    m_audioWrite->setPageStep(50);
+    layout->addWidget(new QLabel("100 msec", frame), 7, 1);
+    layout->addWidget(new QLabel("50 sec", frame), 7, 3);
+    layout->addWidget(m_audioWrite, 7, 2);
+    layout->addWidget(m_audioWriteLabel, 8, 2, Qt::AlignHCenter);
 
     int audioWriteValue = m_cfg->readLongNumEntry("audiowriteusec", 200000) / 1000;
-    m_audioWrite->setValue(audioWriteValue);
-    m_audioWrite->setTickmarks(QSlider::Below);
-    layout->addWidget(m_audioWrite, 8, 2);
-
-    m_audioWriteLabel = new QLabel(QString("%1").arg(audioWriteValue), frame);
-    layout->addWidget(m_audioWriteLabel, 7, 2, Qt::AlignHCenter);
+    updateTimeSlider(audioWriteValue, 0, 9, 100, m_audioWrite, m_audioWriteLabel, "");
 
     connect(m_audioWrite,
             SIGNAL(valueChanged(int)),
@@ -1120,17 +1141,13 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     m_smallFile = new QSlider(Horizontal, frame);
 
     m_smallFile->setMinValue(5);
-    layout->addWidget(new QLabel("32KB", frame), 10, 1);
-
     m_smallFile->setMaxValue(15);
-    layout->addWidget(new QLabel("32MB", frame), 10, 3);
 
     int smallFileValue = m_cfg->readLongNumEntry("smallaudiofilekbytes", 128);
     int powerOfTwo = 1;
     while (1 << powerOfTwo < smallFileValue) ++powerOfTwo;
     m_smallFile->setValue(powerOfTwo);
-    m_smallFile->setTickmarks(QSlider::Below);
-    layout->addWidget(m_smallFile, 10, 2);
+//    m_smallFile->setTickmarks(QSlider::Below);
 
     if (smallFileValue < 1024) {
 	m_smallFileLabel = new QLabel(QString("%1KB").arg(smallFileValue),
@@ -1139,7 +1156,11 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 	m_smallFileLabel = new QLabel(QString("%1MB").arg(smallFileValue/1024),
 				      frame);
     }
-    layout->addWidget(m_smallFileLabel, 9, 2, Qt::AlignHCenter);
+
+    layout->addWidget(new QLabel(i18n("32KB"), frame), 9, 1);
+    layout->addWidget(new QLabel(i18n("32MB"), frame), 9, 3);
+    layout->addWidget(m_smallFile, 9, 2);
+    layout->addWidget(m_smallFileLabel, 10, 2, Qt::AlignHCenter);
 
     connect(m_smallFile,
             SIGNAL(valueChanged(int)),
@@ -1304,34 +1325,99 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     addTab(frame, i18n("Synchronisation"));
 }
 
+int
+SequencerConfigurationPage::updateTimeSlider(int msec,
+					     int minPower, int maxPower,
+					     int multiplier,
+					     QSlider *slider,
+					     QLabel *label,
+					     QString klabel)
+{
+    int tick;
+    int actual = 0;
+
+    for (tick = minPower;
+	 tick <= maxPower &&
+	     msec > (actual = ((1 << tick) * multiplier));
+	 ++tick);
+
+    slider->setValue(tick);
+
+    if (klabel && m_sampleRate) {
+
+	size_t bytes = int(float(m_sampleRate) * actual / 1000) 
+	    * 2 * sizeof(float);
+	int kb = bytes / 1024;
+	
+	if (actual < 1000) {
+	    if (kb < 1024) {
+		label->setText(i18n("%1 msec / %2 KB %3")
+			       .arg(actual).arg(kb).arg(klabel));
+	    } else {
+		label->setText(i18n("%1 msec / %2 MB %3")
+			       .arg(actual).arg(kb/1024).arg(klabel));
+	    }
+	} else {
+	    if (kb < 1024) {
+		label->setText(i18n("%1 sec / %2 KB %3")
+			       .arg(float(actual/100)/10).arg(kb).arg(klabel));
+	    } else {
+		label->setText(i18n("%1 sec / %2 MB %3")
+			       .arg(float(actual/100)/10).arg(kb/1024).arg(klabel));
+	    }
+	}
+    } else {
+	if (actual < 1000) {
+	    label->setText(i18n("%1 msec").arg(actual));
+	} else {
+	    label->setText(i18n("%1 sec").arg(float(actual/100)/10));
+	}
+    }
+
+    return actual;
+}
+
+
 void
 SequencerConfigurationPage::slotReadAheadChanged(int v)
 {
-    // event read-ahead must always be at least 10ms more than
-    // the audio mix or read buffer, and the read buffer should
-    // be at least as long as the mix buffer.
+    // Event read-ahead must always be more than the audio mix buffer.
+    // The mix slider is marked up with lower values already, so we
+    // only need to ensure it's showing no greater tick.
+    if (m_audioMix->value() >= v) m_audioMix->setValue(v - 1);
 
-    if (m_audioMix->value() > v-10) m_audioMix->setValue(v-10);
-    m_readAheadLabel->setNum(v);
+    m_readAhead->blockSignals(true);
+    updateTimeSlider((1 << v) * 10, 1, 9, 10, m_readAhead, m_readAheadLabel, 0);
+    m_readAhead->blockSignals(false);
 }
 
 void
 SequencerConfigurationPage::slotAudioMixChanged(int v)
 {
-    if (m_readAhead->value() < v+10) m_readAhead->setValue(v+10);
-    m_audioMixLabel->setNum(v);
+    if (m_readAhead->value() <= v) m_readAhead->setValue(v + 1);
+
+    m_audioMix->blockSignals(true);
+    updateTimeSlider((1 << v) * 10, 0, 8, 10, m_audioMix, m_audioMixLabel,
+		     i18n("per audio instrument"));
+    m_audioMix->blockSignals(false);
 }
 
 void
 SequencerConfigurationPage::slotAudioReadChanged(int v)
 {
-    m_audioReadLabel->setNum(v);
+    m_audioRead->blockSignals(true);
+    updateTimeSlider((1 << v) * 10, 1, 9, 10, m_audioRead, m_audioReadLabel,
+		     i18n("per file"));
+    m_audioRead->blockSignals(false);
 }
 
 void
 SequencerConfigurationPage::slotAudioWriteChanged(int v)
 {
-    m_audioWriteLabel->setNum(v);
+    m_audioWrite->blockSignals(true);
+    updateTimeSlider((1 << v) * 100, 0, 9, 100, m_audioWrite, m_audioWriteLabel,
+		     "");
+    m_audioWrite->blockSignals(false);
 }
 
 void
@@ -1339,8 +1425,8 @@ SequencerConfigurationPage::slotSmallFileChanged(int v)
 {
     QString text;
     v = 1 << v;
-    if (v < 1024) text = QString("%1KB").arg(v);
-    else text = QString("%1MB").arg(v/1024);
+    if (v < 1024) text = i18n("%1 KB").arg(v);
+    else text = i18n("%1 MB").arg(v/1024);
     m_smallFileLabel->setText(text);
 }
 
@@ -1404,16 +1490,16 @@ SequencerConfigurationPage::apply()
     m_cfg->writeEntry("sfxloadpath", m_sfxLoadPath->text());
     m_cfg->writeEntry("soundfontpath", m_soundFontPath->text());
 
-    m_cfg->writeEntry("readaheadusec", m_readAhead->value() * 1000);
+    m_cfg->writeEntry("readaheadusec", (10 * (1 << m_readAhead->value())) * 1000);
     m_cfg->writeEntry("readaheadsec", 0L);
     
-    m_cfg->writeEntry("audiomixusec", m_audioMix->value() * 1000);
+    m_cfg->writeEntry("audiomixusec", (10 * (1 << m_audioMix->value())) * 1000);
     m_cfg->writeEntry("audiomixsec", 0L);
     
-    m_cfg->writeEntry("audioreadusec", m_audioRead->value() * 1000);
+    m_cfg->writeEntry("audioreadusec", (10 * (1 << m_audioRead->value())) * 1000);
     m_cfg->writeEntry("audioreadsec", 0L);
     
-    m_cfg->writeEntry("audiowriteusec", m_audioWrite->value() * 1000);
+    m_cfg->writeEntry("audiowriteusec", (100 * (1 << m_audioWrite->value())) * 1000);
     m_cfg->writeEntry("audiowritesec", 0L);
 
     m_cfg->writeEntry("smallaudiofilekbytes", 1 << m_smallFile->value());

@@ -458,7 +458,11 @@ protected slots:
     void slotSoundFontToggled(bool);
     void slotSfxLoadPathChoose();
     void slotSoundFontChoose();
+
 protected:
+
+    int updateTimeSlider(int msec, int minPower, int maxPower, int multiplier,
+			 QSlider *slider, QLabel *label, QString klabel);
 
     //--------------- Data members ---------------------------------
 
@@ -484,6 +488,7 @@ protected:
     QComboBox *m_jackTransport;
     QComboBox *m_mmcTransport;
 
+    int      m_sampleRate;
     QSlider* m_readAhead;
     QSlider* m_audioMix;
     QSlider* m_audioRead;
