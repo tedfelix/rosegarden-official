@@ -24,10 +24,12 @@
 #include <qlayout.h>
 #include <qcanvas.h>
 #include <qlabel.h>
+#include <qaccel.h>
 
 #include <kcommand.h>
 #include <kmessagebox.h>
 #include <kapp.h>
+
 
 #include "RulerScale.h"
 #include "Track.h"
@@ -278,12 +280,20 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 					   Rosegarden::timeT)),
 	    this, SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
  
+
+    QAccel *a = new QAccel(this);
+    a->connectItem(a->insertItem(Key_Delete),
+                   this,
+                   SLOT(slotDeleteSelectedSegments()));
+
     // create the position pointer
     m_pointer = new QCanvasLine(canvas);
     m_pointer->setPen(RosegardenGUIColours::Pointer);
     m_pointer->setPoints(0, 0, 0, canvas->height());
     m_pointer->setZ(10);
     m_pointer->show();
+
+
 
 }
 
@@ -574,6 +584,29 @@ TrackEditor::slotSelectedSegments(std::vector<Rosegarden::Segment*> segments)
 {
     emit selectedSegments(segments);
 }
+
+void
+TrackEditor::slotDeleteSelectedSegments()
+{
+    MacroCommand *macro = new MacroCommand("Delete Segments");
+
+    std::vector<Rosegarden::Segment*> segments =
+            m_segmentCanvas->getSelectedSegments();
+
+    if (segments.size() == 0)
+        return;
+
+    std::vector<Rosegarden::Segment*>::iterator it;
+
+    for (it = segments.begin(); it != segments.end(); it++)
+    {
+        macro->addCommand(new SegmentEraseCommand(*it));
+    }
+
+    addCommandToHistory(macro);
+
+}
+
 
 
 

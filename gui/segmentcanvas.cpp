@@ -505,6 +505,21 @@ void SegmentCanvas::slotSelectSegments(std::vector<Rosegarden::Segment*> segment
     }
 }
 
+// Get a vector of selected Segments if we're using a Selector tool
+//
+std::vector<Rosegarden::Segment*>
+SegmentCanvas::getSelectedSegments()
+{
+    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
+
+    if (selTool)
+        return selTool->getSelectedSegments();
+
+    return *(new std::vector<Rosegarden::Segment*>);
+}
+
+
+
 // enter/exit selection add mode - this means that the SHIFT key
 // (or similar) has been depressed and if we're in Select mode we
 // can add Selections to the one we currently have
@@ -884,20 +899,26 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
     // Tell the RosegardenGUIView that we've selected some new Segments -
     // when the list is empty we're just unselecting.
     //
-    //
-    std::vector<Rosegarden::Segment*> segmentList;
+    emit selectedSegments(getSelectedSegments());
+
+}
+
+std::vector<Rosegarden::Segment*>
+SegmentSelector::getSelectedSegments()
+{
+    std::vector<Rosegarden::Segment*> segments;
     SegmentItemList::iterator it;
 
     for (it = m_selectedItems.begin();
          it != m_selectedItems.end();
          it++)
     {
-        segmentList.push_back(it->second->getSegment());
+        segments.push_back(it->second->getSegment());
     }
 
-    emit selectedSegments(segmentList);
-
+    return segments;
 }
+
 
 void
 SegmentSelector::slotSelectSegmentItem(SegmentItem *selectedItem)

@@ -46,6 +46,7 @@ namespace Rosegarden { class Segment; }
 //
 class RosegardenTristateCheckBox : public QCheckBox
 {
+Q_OBJECT
 public:
     RosegardenTristateCheckBox(QWidget *parent=0,
                                const char *name=0):QCheckBox(parent, name)
@@ -65,6 +66,7 @@ private:
 //
 class RosegardenComboBox : public QComboBox
 {
+Q_OBJECT
 public:
     RosegardenComboBox(QWidget *parent=0, const char *name=0):
         QComboBox(parent, name) {;}
@@ -80,16 +82,25 @@ protected:
         if (e->delta() < 0)
         {
             if (currentItem() < count() - 1)
+            {
                 setCurrentItem(currentItem() + 1);
+                emit propagate(currentItem());
+            }
         }
         else
         {
             if (currentItem() > 0)
+            {
                 setCurrentItem(currentItem() - 1);
+                emit propagate(currentItem());
+            }
         }
     }
 
 private:
+
+signals:
+    void propagate(int); // update the Segment with new value
 
 };
 

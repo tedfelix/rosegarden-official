@@ -85,8 +85,12 @@ SegmentParameterBox::initBox()
     m_quantizeValue->setFont(plainFont);
     m_quantizeValue->setFixedSize(comboWidth, comboHeight);
 
-    // handle quantize changes
+    // handle quantize changes from drop down
     connect(m_quantizeValue, SIGNAL(activated(int)),
+            SLOT(slotQuantizeSelected(int)));
+
+    // handle quantize changes from mouse wheel
+    connect(m_quantizeValue, SIGNAL(propagate(int)),
             SLOT(slotQuantizeSelected(int)));
 
     // motif style read-only combo
@@ -262,11 +266,9 @@ SegmentParameterBox::populateBoxFromSegments()
             break;
 
         case Some:
-            // Set the edit text to an unfeasible value meaning "Some"
+            // Set the edit text to an unfeasible blank value meaning "Some"
             //
-            m_quantizeValue->setEditable(true);
-            m_quantizeValue->setEditText(QString("*"));
-            m_quantizeValue->setEditable(false);
+            m_quantizeValue->setCurrentItem(-1);
             break;
 
             // Assuming "Off" is always the last field

@@ -246,6 +246,11 @@ public:
 				  Rosegarden::timeT duration);
     void deleteRecordingSegmentItem();
 
+    // Return a vector of selected Segments if we're
+    // currently using a "Selector"
+    //
+    std::vector<Rosegarden::Segment*> getSelectedSegments();
+
 public slots:
 
     /// Set the current segment editing tool
@@ -500,6 +505,10 @@ public:
     //
     void setSegmentAdd(const bool &value)  { m_segmentAddMode = value; }
     void setSegmentCopy(const bool &value) { m_segmentCopyMode = value; }
+
+    // Return a vector of selected Segments
+    //
+    std::vector<Rosegarden::Segment*> getSelectedSegments();
 
 public slots:
     void slotSelectSegmentItem(SegmentItem *selectedItem);

@@ -4,6 +4,12 @@ updated 07.03.2001
 
 Currently looking at:
 
+o Looping marker set from file load/top level - Looping
+  set from Clients
+
+o Sharing keyboard accelerators cleanly across all child windows
+
+
 o Playing Audio files broken - get seeking working
 
 o Split/Join - segment start and end markers

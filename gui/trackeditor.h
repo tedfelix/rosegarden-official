@@ -160,6 +160,8 @@ protected slots:
 
     void slotSelectedSegments(std::vector<Rosegarden::Segment*> segments);
 
+    void slotDeleteSelectedSegments();
+
 signals:
     /**
      * Emitted when the represented data changed and the SegmentCanvas
