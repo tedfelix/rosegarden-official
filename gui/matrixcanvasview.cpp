@@ -54,7 +54,12 @@ MatrixCanvasView::~MatrixCanvasView()
 
 void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 {
+#ifdef RGKDE3
     QPoint p = inverseWorldMatrix().map(e->pos());
+#else
+    QPoint p = e->pos();
+#endif
+
     QMouseEvent *nE = new QMouseEvent(e->type(), p, e->button(), e->state());
 
     if (m_snapGrid->getSnapTime(p.x()))
@@ -112,7 +117,12 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 
 void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 {
+#ifdef RGKDE3
     QPoint p = inverseWorldMatrix().map(e->pos());
+#else
+    QPoint p = e->pos();
+#endif
+
     QMouseEvent *nE = new QMouseEvent(e->type(), p, e->button(), e->state());
 
     if (m_snapGrid->getSnapTime(p.x()))
@@ -144,7 +154,11 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 
 void MatrixCanvasView::contentsMouseDoubleClickEvent (QMouseEvent* e)
 {
+#ifdef RGKDE3
     QPoint p = inverseWorldMatrix().map(e->pos());
+#else
+    QPoint p = e->pos();
+#endif
 
     if (!m_staff.containsCanvasY(p.y())) {
         m_ignoreClick = true;
@@ -155,7 +169,12 @@ void MatrixCanvasView::contentsMouseDoubleClickEvent (QMouseEvent* e)
 
 void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
 {
+#ifdef RGKDE3
     QPoint p = inverseWorldMatrix().map(e->pos());
+#else
+    QPoint p = e->pos();
+#endif
+
     QMouseEvent *nE = new QMouseEvent(e->type(), p, e->button(), e->state());
 
     if (m_ignoreClick) {

@@ -1354,6 +1354,7 @@ MatrixView::initZoomToolbar()
 void
 MatrixView::slotChangeHorizontalZoom(int)
 {
+#ifdef RGKDE3
 //     double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
     double value = m_hZoomSlider->getCurrentSize();
 //     m_zoomLabel->setText(i18n("%1%").arg(duration44/value));
@@ -1396,7 +1397,7 @@ MatrixView::slotChangeHorizontalZoom(int)
     int newWidth = getXbyInverseWorldMatrix(m_hlayout.getXForTime(length));
     setViewSize(QSize(newWidth, getViewSize().height()));
     applyLayout();
-
+#endif
 }
 
 unsigned int
