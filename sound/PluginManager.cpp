@@ -25,9 +25,9 @@
 
 #include <qdir.h>
 
-using std::cout;
-using std::cerr;
-using std::endl;
+// using std::cout;
+// using std::cerr;
+// using std::endl;
 
 namespace Rosegarden
 {

@@ -85,7 +85,7 @@ protected:
 };
 #endif
 
-typedef vector<Plugin*>::const_iterator PluginIterator;
+typedef std::vector<Plugin*>::const_iterator PluginIterator;
 
 class PluginManager
 {
@@ -120,7 +120,7 @@ protected:
 
     std::string m_path;
 
-    vector<Plugin*> m_plugins;
+    std::vector<Plugin*> m_plugins;
     PluginId        m_runningId;
 
 };
