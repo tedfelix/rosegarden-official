@@ -579,13 +579,7 @@ void EditViewBase::toggleWidget(QWidget* widget,
         return;
     }
 
-    // Qt 3.1 only :
-//     widget->setShown(toggleAction->isChecked());
-
-    if (toggleAction->isChecked())
-        widget->show();
-    else
-        widget->hide();
+    widget->setShown(toggleAction->isChecked());
 }
 
     
@@ -622,7 +616,7 @@ EditViewBase::slotToggleSolo()
     emit toggleSolo(newSoloState);
 
     if (newSoloState) {
-        emit selectTrack(m_segments[0]->getTrack());
+        emit selectTrack(getCurrentSegment()->getTrack());
     }
 
 }
