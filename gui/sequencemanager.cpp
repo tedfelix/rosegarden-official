@@ -52,8 +52,39 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_metronomeDuration(0, 10000),
     m_transport(transport)
 {
+    // Create the Devices and their inherent Instrument list
+    //
     m_midiDevices.push_back(new Rosegarden::MidiDevice("aRts MIDI"));
     m_audioDevices.push_back(new Rosegarden::AudioDevice("aRts Audio"));
+
+    Composition &comp = m_doc->getComposition();
+
+    // Add the Midi instruments
+    //
+    std::vector<MidiDevice*>::iterator mdIt;
+
+    for (mdIt = m_midiDevices.begin(); mdIt != m_midiDevices.end(); mdIt++)
+    {
+        std::vector<Instrument*> instruments = (*mdIt)->getInstruments();
+        std::vector<Instrument*>::iterator iit;
+
+        for (iit = instruments.begin(); iit != instruments.end(); iit++)
+            comp.addInstrument(*iit);
+    }
+
+    // Add the audio instruments
+    //
+    std::vector<AudioDevice*>::iterator adIt;
+
+    for (adIt = m_audioDevices.begin(); adIt != m_audioDevices.end(); adIt++)
+    {
+        std::vector<Instrument*> instruments = (*adIt)->getInstruments();
+        std::vector<Instrument*>::iterator iit;
+
+        for (iit = instruments.begin(); iit != instruments.end(); iit++)
+            comp.addInstrument(*iit);
+    }
+    
 }
 
 

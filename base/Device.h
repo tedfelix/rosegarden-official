@@ -53,6 +53,8 @@ public:
 
     virtual void createInstruments() = 0;
 
+    std::vector<Instrument *>& getInstruments() { return m_instruments; }
+
 protected:
     std::vector<Instrument *> m_instruments;
     std::string               m_name;

@@ -24,11 +24,14 @@
 #include "Device.h"
 #include "Instrument.h"
 
+
 #ifndef _MIDIDEVICE_H_
 #define _MIDIDEVICE_H_
 
 namespace Rosegarden
 {
+
+typedef std::pair<MidiByte, std::string> MidiProgram;
 
 class MidiDevice : public Device
 {
@@ -40,7 +43,16 @@ public:
 
     virtual void createInstruments();
 
+    // Bank select
+    //
+    void setBankSelect(bool value);
+    void setBankSelectMSB(MidiByte msb);
+    void setBankSelectLSB(MidiByte lsb);
+
 private:
+    void populateProgramList();
+    void clearProgramList();
+
     // Brief (probably incorrect) synopsis of bank select 
     // messages for XG:
     //
@@ -55,10 +67,14 @@ private:
     // required bank
     //
     //
-    MidiByte m_bankMSB;   // Send as Controller 0
-    MidiByte m_bankLSB;   // Send as Controller 32
+    MidiByte                  m_bankMSB;     // Send as Controller 0
+    MidiByte                  m_bankLSB;     // Send as Controller 32
+    bool                      m_bankSelect;  // send bank select?
 
-    bool m_sendBankSelect; // send BS?
+    // We store voice names that depend on bank select state
+    // - we can create our own and save them out
+    //
+    std::vector<MidiProgram*> m_programList;
 
 };
 

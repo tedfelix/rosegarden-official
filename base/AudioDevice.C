@@ -63,7 +63,9 @@ AudioDevice::createInstruments()
         instrumentName << m_name.c_str() << " #" << i << std::ends;
 
         m_instruments.push_back(
-                new Instrument(i, Instrument::Audio, instrumentName.str()));
+                new Instrument(i + AudioInstrumentBase, // id
+                               Instrument::Audio,       // type
+                               instrumentName.str()));  // name
     }
 
 }

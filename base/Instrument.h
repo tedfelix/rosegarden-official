@@ -23,7 +23,6 @@
 #define _INSTRUMENT_H_
 
 #include "XmlExportable.h"
-#include "Device.h"
 #include <string>
 
 // An Instrument connects a Track (which itself contains
@@ -37,6 +36,10 @@ namespace Rosegarden
 
 typedef unsigned int InstrumentId;
 typedef unsigned char MidiByte;
+
+const InstrumentId SystemInstrumentBase = 0;
+const InstrumentId MidiInstrumentBase   = 1000;
+const InstrumentId AudioInstrumentBase  = 2000;
 
 const MidiByte MidiMaxValue = 127;
 const MidiByte MidiMidValue = 64;
@@ -87,8 +90,6 @@ private:
     MidiByte m_programChange;
     MidiByte m_pan;
     MidiByte m_volume;
-
-    Device  *m_device;
 
 };
 

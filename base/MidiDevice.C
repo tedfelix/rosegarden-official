@@ -33,14 +33,14 @@ namespace Rosegarden
 
 MidiDevice::MidiDevice():
     Device("Default Midi Device", Device::Midi),
-    m_bankMSB(0), m_bankLSB(0), m_sendBankSelect(false)
+    m_bankMSB(0), m_bankLSB(0), m_bankSelect(false)
 {
     createInstruments();
 }
 
 MidiDevice::MidiDevice(const std::string &name):
     Device(name, Device::Midi),
-    m_bankMSB(0), m_bankLSB(0), m_sendBankSelect(false)
+    m_bankMSB(0), m_bankLSB(0), m_bankSelect(false)
 {
     createInstruments();
 }
@@ -63,13 +63,78 @@ MidiDevice::createInstruments()
         instrumentName << m_name.c_str() << " #" << i << std::ends;
 
         m_instruments.push_back(
-            new Instrument(i,                             // id
-                           Instrument::Midi,              // type
-                           instrumentName.str(),         // name
-                           (MidiByte)i));                  // channel
+            new Instrument(i + MidiInstrumentBase,    // id
+                           Instrument::Midi,          // type
+                           instrumentName.str(),      // name
+                           (MidiByte)i));             // channel
     }
 
 }
+
+void
+MidiDevice::setBankSelect(bool value)
+{
+    m_bankSelect = value;
+    populateProgramList();
+}
+
+
+void
+MidiDevice::setBankSelectMSB(MidiByte msb)
+{
+    m_bankMSB = msb;
+    populateProgramList();
+}
+
+void
+MidiDevice::setBankSelectLSB(MidiByte lsb)
+{
+    m_bankLSB = lsb;
+    populateProgramList();
+}
+
+
+void
+MidiDevice::clearProgramList()
+{
+    std::vector<MidiProgram*>::iterator it;
+
+    for (it = m_programList.begin(); it != m_programList.end(); it++)
+        delete (*it);
+
+    m_programList.erase(m_programList.begin(), m_programList.end());
+
+
+}
+
+
+// Set labels according to bank select messages
+//
+void
+MidiDevice::populateProgramList()
+{
+    if(m_bankSelect)
+    {
+        // Eventually calculate according to MSB and LSB -
+        // for the moment populate with 128 default values
+
+        clearProgramList();
+
+        std::vector<MidiProgram*>::iterator it;
+        int i = 0;
+
+        for (it = m_programList.begin(); it != m_programList.end(); it++)
+        {
+            m_programList.push_back(new MidiProgram((MidiByte)i++, ""));
+        }
+        
+    }
+    else // no bank select - populate with General MIDI
+    {
+    }
+
+}
+
 
 
 }
