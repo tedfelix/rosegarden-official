@@ -74,6 +74,9 @@ signals:
 
     void mouseReleased(Rosegarden::timeT time, QMouseEvent*);
 
+public slots:
+    void slotExternalWheelEvent(QWheelEvent*);
+
 protected:
     /**
      * Callback for a mouse button press event in the canvas

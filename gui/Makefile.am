@@ -40,6 +40,7 @@ rosegarden_SOURCES = \
 	notepixmapfactory.cpp \
 	qcanvasgroupableitem.cpp \
 	qcanvassimplesprite.cpp \
+	qdeferscrollview.cpp \
 	rg21io.cpp \
 	rosedebug.cpp \
         rosegardenconfigure.ui \

@@ -134,3 +134,8 @@ void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
     emit mouseReleased(evTime, e);
     m_mouseWasPressed = false;
 }
+
+void MatrixCanvasView::slotExternalWheelEvent(QWheelEvent* e)
+{
+    wheelEvent(e);
+}

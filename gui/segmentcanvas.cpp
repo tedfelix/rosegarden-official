@@ -523,6 +523,11 @@ void SegmentCanvas::slotHideSplitLine()
     slotUpdate();
 }
 
+void SegmentCanvas::slotExternalWheelEvent(QWheelEvent* e)
+{
+    wheelEvent(e);
+}
+
 
 SegmentItem *
 SegmentCanvas::addSegmentItem(TrackId track, timeT startTime, timeT duration)

@@ -301,6 +301,8 @@ public slots:
     void slotShowSplitLine(int x, int y);
     void slotHideSplitLine();
 
+    void slotExternalWheelEvent(QWheelEvent*);
+
 protected:
     virtual void contentsMousePressEvent(QMouseEvent*);
     virtual void contentsMouseReleaseEvent(QMouseEvent*);

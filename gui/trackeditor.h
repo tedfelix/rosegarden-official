@@ -149,9 +149,7 @@ protected slots:
 
     void slotDeleteSelectedSegments();
 
-    // to handle vertical scrolling properly
-    //
-    void slotVerticalScrollSegmentCanvas(int x, int y);
+    /// Scroll the track buttons along with the segment canvas
     void slotVerticalScrollTrackButtons(int y);
 
 signals:
