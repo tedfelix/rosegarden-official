@@ -1911,11 +1911,11 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenGUIDoc *doc,
 
     layout->addMultiCellWidget(m_colourtable, 0, 0, 0, 1);
 
-    QPushButton* addColourButton = new QPushButton(i18n("Add New Colour"),
+    QPushButton* addColourButton = new QPushButton(i18n("Add New Color"),
                                                    frame);
     layout->addWidget(addColourButton, 1, 0, Qt::AlignHCenter);
 
-    QPushButton* deleteColourButton = new QPushButton(i18n("Delete Colour"),
+    QPushButton* deleteColourButton = new QPushButton(i18n("Delete Color"),
                                                       frame);
     layout->addWidget(deleteColourButton, 1, 1, Qt::AlignHCenter);
 
@@ -1934,7 +1934,7 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenGUIDoc *doc,
     connect(m_colourtable, SIGNAL(entryColourChanged(unsigned int, QColor)),
             this,  SLOT(slotColourChanged(unsigned int, QColor)));
 
-    addTab(frame, i18n("Colour Map"));
+    addTab(frame, i18n("Color Map"));
 
 }
 
@@ -1967,7 +1967,7 @@ ColourConfigurationPage::slotAddNew()
 
     bool ok = false;
 
-    QString newName = KLineEditDlg::getText(i18n("New Colour Name"), i18n("Enter new name"),
+    QString newName = KLineEditDlg::getText(i18n("New Color Name"), i18n("Enter new name"),
                                             i18n("New"), &ok);
     if ((ok == true) && (!newName.isEmpty()))
     {

@@ -1208,10 +1208,15 @@ AddMarkerCommand::unexecute()
 
 
 RemoveMarkerCommand::RemoveMarkerCommand(Rosegarden::Composition *comp,
-                                         Rosegarden::Marker *marker):
+                                         Rosegarden::timeT time,
+                                         const std::string &name,
+                                         const std::string &description):
     KNamedCommand(getGlobalName()),
+    m_marker(0),
     m_composition(comp),
-    m_marker(marker)
+    m_time(time),
+    m_name(name),
+    m_descr(description)
 {
 }
 
@@ -1229,8 +1234,11 @@ RemoveMarkerCommand::execute()
 
     for (; it != markers.end(); ++it)
     {
-        if (*it== m_marker)
+        if ((*it)->getTime() == m_time && 
+            (*it)->getName() == m_name && 
+            (*it)->getDescription() == m_descr)
         {
+            m_marker = (*it);
             m_composition->detachMarker(m_marker);
             return;
         }

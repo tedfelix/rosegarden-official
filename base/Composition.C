@@ -1352,6 +1352,7 @@ Composition::addMarker(Rosegarden::Marker *marker)
     }
     */
     m_markers.push_back(marker);
+    updateRefreshStatuses();
 }
 
 bool
@@ -1364,6 +1365,7 @@ Composition::detachMarker(Rosegarden::Marker *marker)
         if (*it == marker)
         {
             m_markers.erase(it);
+            updateRefreshStatuses();
             return true;
         }
     }

@@ -416,8 +416,8 @@ public:
 
     void populate_table();
 
-    static QString iconLabel() { return i18n("Colour"); }
-    static QString title()     { return i18n("Colour Settings"); }
+    static QString iconLabel() { return i18n("Color"); }
+    static QString title()     { return i18n("Color Settings"); }
 
 signals:
     void docColoursChanged();

@@ -204,7 +204,6 @@ MarkerEditorDialog::slotUpdate()
     //QPtrList<QListViewItem> selection = m_listView->selectedItems();
 
     QListViewItem *item;
-    int i = 0;
 
     m_listView->clear();
 
@@ -244,6 +243,22 @@ void
 MarkerEditorDialog::slotDeleteAll()
 {
     RG_DEBUG << "MarkerEditorDialog::slotDeleteAll" << endl;
+    KMacroCommand *command = new KMacroCommand(i18n("Remove all markers"));
+
+    QListViewItem *item = m_listView->firstChild();
+
+    do
+    {
+        RemoveMarkerCommand *rc = 
+            new RemoveMarkerCommand(&m_doc->getComposition(),
+                                    item->text(0).toInt(),
+                                    qstrtostr(item->text(1)),
+                                    qstrtostr(item->text(2)));
+        command->addCommand(rc);
+    }
+    while((item = item->nextSibling()));
+
+    addCommandToHistory(command);
 }
 
 void
@@ -265,7 +280,18 @@ void
 MarkerEditorDialog::slotDelete()
 {
     RG_DEBUG << "MarkerEditorDialog::slotDelete" << endl;
-    if (!m_listView->currentItem()) return;
+    QListViewItem *item = m_listView->currentItem();
+
+    if (!item) return;
+
+    RemoveMarkerCommand *command =
+        new RemoveMarkerCommand(&m_doc->getComposition(),
+                                item->text(0).toInt(),
+                                qstrtostr(item->text(1)),
+                                qstrtostr(item->text(2)));
+
+    addCommandToHistory(command);
+                                             
 }
 
 void

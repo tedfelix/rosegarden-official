@@ -441,7 +441,9 @@ class RemoveMarkerCommand : public KNamedCommand
 {
 public:
     RemoveMarkerCommand(Rosegarden::Composition *comp,
-                        Rosegarden::Marker *marker);
+                        Rosegarden::timeT time,
+                        const std::string &name,
+                        const std::string &description);
     ~RemoveMarkerCommand();
 
     static QString getGlobalName() { return i18n("&Remove Marker"); }
@@ -453,6 +455,9 @@ protected:
 
     Rosegarden::Composition     *m_composition;
     Rosegarden::Marker          *m_marker;
+    Rosegarden::timeT            m_time;
+    std::string                  m_name;
+    std::string                  m_descr;
 
 };
 
