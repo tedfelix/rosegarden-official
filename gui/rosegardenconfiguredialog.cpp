@@ -887,7 +887,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     // Send Controllers
     //
-    QLabel *label = new QLabel(i18n("Send MIDI Controllers at start of playback\n     (will incur noticeable initial delay)"), frame);
+    QLabel *label = new QLabel(i18n("Send all MIDI Controllers at start of playback\n     (will incur noticeable delay)"), frame);
 
     QString controllerTip = i18n("Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all MIDI devices every\ntime you hit play if you so wish.  Please note that this option will usually incur a\ndelay at the start of playback due to the amount of data being transmitted.");
     QToolTip::add(label, controllerTip);
@@ -901,6 +901,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     // Command-line
     //
+/*
     layout->addWidget(new QLabel(i18n("Sequencer command line options\n     (takes effect only from next restart)"), frame), 2, 0);
 
     m_sequencerArguments = new QLineEdit("", frame);
@@ -910,27 +911,29 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     //
     QString commandLine = m_cfg->readEntry("commandlineoptions", "");
     m_sequencerArguments->setText(commandLine);
-
+*/
     // SoundFont loading
     //
-    m_sfxLoadEnabled = new QCheckBox(frame);
-    layout->addWidget(m_sfxLoadEnabled, 3, 0);
-    QLabel* lbl = new QLabel(i18n("Enable soundfont loading at startup"), frame);
-    QString tooltip = i18n("Check this box to enable SoundBlaster soundfont loading when Rosegarden is launched");
+    QLabel* lbl = new QLabel(i18n("Load SoundFont to SoundBlaster card at startup"), frame);
+    QString tooltip = i18n("Check this box to enable soundfont loading on EMU10K-based cards when Rosegarden is launched");
     QToolTip::add(lbl, tooltip);
-    QToolTip::add(m_sfxLoadEnabled, tooltip);
-    layout->addMultiCellWidget(lbl, 3, 3, 1, 2);
-    layout->addWidget(new QLabel(i18n("Path to 'sfxload' command"), frame), 4, 0);
-    m_sfxLoadPath = new QLineEdit(m_cfg->readEntry("sfxloadpath", "/bin/sfxload"), frame);
-    layout->addMultiCellWidget(m_sfxLoadPath, 4, 4, 1, 2);
-    m_sfxLoadChoose = new QPushButton("...", frame);
-    layout->addWidget(m_sfxLoadChoose, 4, 3);
+    layout->addWidget(lbl, 2, 0);
 
-    layout->addWidget(new QLabel(i18n("Soundfont"), frame), 5, 0);
+    m_sfxLoadEnabled = new QCheckBox(frame);
+    layout->addMultiCellWidget(m_sfxLoadEnabled, 2, 2, 1, 2);
+    QToolTip::add(m_sfxLoadEnabled, tooltip);
+
+    layout->addWidget(new QLabel(i18n("Path to 'asfxload' or 'sfxload' command"), frame), 3, 0);
+    m_sfxLoadPath = new QLineEdit(m_cfg->readEntry("sfxloadpath", "/bin/sfxload"), frame);
+    layout->addMultiCellWidget(m_sfxLoadPath, 3, 3, 1, 2);
+    m_sfxLoadChoose = new QPushButton("...", frame);
+    layout->addWidget(m_sfxLoadChoose, 3, 3);
+
+    layout->addWidget(new QLabel(i18n("SoundFont"), frame), 4, 0);
     m_soundFontPath = new QLineEdit(m_cfg->readEntry("soundfontpath", ""), frame);
-    layout->addMultiCellWidget(m_soundFontPath, 5, 5, 1, 2);
+    layout->addMultiCellWidget(m_soundFontPath, 4, 4, 1, 2);
     m_soundFontChoose = new QPushButton("...", frame);
-    layout->addWidget(m_soundFontChoose, 5, 3);
+    layout->addWidget(m_soundFontChoose, 4, 3);
 
     bool sfxLoadEnabled = m_cfg->readBoolEntry("sfxloadenabled", false);
     m_sfxLoadEnabled->setChecked(sfxLoadEnabled);
@@ -1381,7 +1384,7 @@ SequencerConfigurationPage::apply()
 
     // ---------- General -----------
     //
-    m_cfg->writeEntry("commandlineoptions", m_sequencerArguments->text());
+//    m_cfg->writeEntry("commandlineoptions", m_sequencerArguments->text());
     m_cfg->writeEntry("alwayssendcontrollers",
                       m_sendControllersAtPlay->isChecked());
 
