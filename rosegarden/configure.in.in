@@ -51,10 +51,13 @@ if test "$ac_header_jack_jack_h" = "no"; then
 fi
 
 if test "$with_jack" = "yes"; then
-  AC_DEFINE(HAVE_JACK, 1, [Define if you have JACK support])
-  AC_SUBST(JACKLIB)
-  AC_CHECK_FUNCS(libRosegardenSequencer.la, [],
-                 [JACKLIB="-ljack"])
+   AC_CHECK_LIB(jack, jack_client_new)
+
+dnl  AC_DEFINE(HAVE_JACK, 1, [Define if you have JACK support])
+dnl  AC_SUBST(JACKLIB)
+dnl  AC_CHECK_FUNCS(libRosegardenSequencer.la, [],
+dnl                 [JACKLIB="-ljack"])
+
 fi
 
 dnl append RDKDE3 flag if we've found KDE3
