@@ -10,3 +10,7 @@ sound
 *_skel.cpp
 *_meta_unload.cpp
 *.kidl
+MidiArts.h
+MidiArts.cc
+MidiArts.mcopclass
+MidiArts.mcoptype
