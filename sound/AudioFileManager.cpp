@@ -44,6 +44,7 @@
 #include "BWFAudioFile.h"
 #include "MP3AudioFile.h"
 #include "config.h"
+#include "rosestrings.h"
 
 namespace Rosegarden
 {
@@ -98,7 +99,7 @@ AudioFileManager::addFile(const std::string &filePath)
 
         // Ensure we have a valid file handle
         //
-        if (aF == 0) throw i18n("Unsupported audio file type ") + QString("\"%1\"").arg(filePath);
+        if (aF == 0) throw i18n("Unsupported audio file type."); 
 
         // Add file type on extension
         try
