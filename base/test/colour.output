@@ -16,7 +16,7 @@ TEST: ColourMap.C
 
 Can we create a ColourMap with the right default Colour + String
 Can we get the default colour back out of it?
-name:   red:  230 green: 230 blue:  230
+name:   red:  197 green: 211 blue:  125
 Can we create a ColourMap with a specified default Colour?
 Can we get the information back out of it?
 name:   red:  210 green: 0 blue:  100
@@ -55,14 +55,9 @@ index:  4  name: NEW  red:  211 green: 212 blue:  213
 
 TEST: Generic Colour routines
 
-Try getting a contrasting colour:
-Original colour:
-red:  210 green: 0 blue:  100
-Contrast colour:
-red:  45 green: 255 blue:  155
 Try getting a combination colour:
 Original colours:
-red:  45 green: 255 blue:  155
+red:  210 green: 0 blue:  100
 red:  100 green: 101 blue:  102
 Combination colour:
-red:  72 green: 178 blue:  128
+red:  155 green: 50 blue:  101

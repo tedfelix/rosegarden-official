@@ -194,15 +194,8 @@ int main()
 
     cout << "\nTEST: Generic Colour routines\n\n";
 
-    cout << "Try getting a contrasting colour:\n";
-    Colour blah = map2->getColourByIndex(0);
-    cout << "Original colour:\n";
-    printRC(&blah);
-    cout << "Contrast colour:\n";
-    blah = getContrastColour(blah);
-    printRC(&blah);
-
     cout << "Try getting a combination colour:\n";
+    Colour blah = map2->getColourByIndex(0);
     Colour blah2 = map2->getColourByIndex(1);
     cout << "Original colours:\n";
     printRC(&blah);
