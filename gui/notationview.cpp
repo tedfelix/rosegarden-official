@@ -1162,8 +1162,8 @@ void NotationView::setupActions()
                 SLOT(slotMarksRemoveMarks()), actionCollection(),
                 "remove_marks");
 
-    static const char *slashTitles[] = {
-	"&None", "&1", "&2", "&3", "&4", "&5"
+    static QString slashTitles[] = {
+	i18n("&None"), "&1", "&2", "&3", "&4", "&5"
     };
     for (int i = 0; i <= 5; ++i) {
 	new KAction(i18n(slashTitles[i]), 0, this,
