@@ -897,9 +897,9 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
     if (!ok) {
 
         if (handler.isCancelled()) {
-            RG_DEBUG << "File Loading Cancelled\n";
+            RG_DEBUG << "File load cancelled\n";
 	    KStartupLogo::hideIfStillThere();
-            KMessageBox::information(0, i18n("File Loading Cancelled"));
+            KMessageBox::information(0, i18n("File load cancelled"));
             cancelled = true;
             return true;
         } else

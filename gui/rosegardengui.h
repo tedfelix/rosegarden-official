@@ -117,43 +117,22 @@ public:
     /**
      * open a file
      */
-    virtual void openFile(const QString& filename);
+    virtual void openFile(const QString &filePath);
 
     /**
      * open a URL
      */
-    virtual void openURL(const QString& url);
+    virtual void openURL(const QString &url);
+
+    /**
+     * merge a file with the existing document
+     */ 
+    virtual void mergeFile(const QString &filePath);
 
     /**
      * open a URL
      */
-    void openURL(const KURL& url);
-
-    /**
-     * imports a Rosegarden 2.1 file
-     *
-     * @param url : a string containing a url (protocol://foo/bar/file.rose)
-     */
-    virtual void importRG21File(const QString &url);
-
-    /**
-     * imports a MIDI file
-     *
-     * @param url : a string containing a url (protocol://foo/bar/file.mid)
-     */
-    virtual void importMIDIFile(const QString &url);
-
-    /**
-     * merges a MIDI file
-     *
-     * @param url : a string containing a url (protocol://foo/bar/file.mid)
-     */
-    virtual void mergeMIDIFile(const QString &url);
-
-    /**
-     * merges or imports a MIDI file
-     */
-    void importMIDIFile(const QString &url, bool merge);
+    void openURL(const KURL &url);
 
     /**
      * export a MIDI file
@@ -320,6 +299,40 @@ public:
     void plugAccelerators(QWidget *widget, QAccel *accel);
 
 protected:
+
+    /**** File handling code that we don't want the outside world to use ****/
+    /**/
+    /**/
+
+    /**
+     * Create document from a file
+     */
+    RosegardenGUIDoc* createDocument(const QString &filePath);
+
+    /**
+     * Create a document from RG file
+     */
+    RosegardenGUIDoc* createDocumentFromRGFile(const QString &filePath);
+
+    /**
+     * Create document from MIDI file
+     */
+    RosegardenGUIDoc* createDocumentFromMIDIFile(const QString &filePath);
+
+    /**
+     * Create docuemnt from RG21 file
+     */
+    RosegardenGUIDoc* createDocumentFromRG21File(const QString &filePath);
+
+    /**
+     * Merge documents - creates a new document and returns it.
+     */
+    RosegardenGUIDoc*  mergeDocuments(RosegardenGUIDoc *doc1,
+                                      RosegardenGUIDoc *doc2);
+
+    /**/
+    /**/
+    /***********************************************************************/
 
     static const void* SequencerExternal;
 

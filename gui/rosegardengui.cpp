@@ -986,49 +986,58 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     //
     if (m_markerEditor) m_markerEditor->setDocument(m_doc);
 
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
+    // Set any loaded loop at the Composition and
+    // on the marker on SegmentCanvas and clients
+    //
+    if (m_seqManager) m_doc->setLoop(comp.getLoopStart(), comp.getLoopEnd());
+
     emit documentChanged(newDocument);
 }
 
 
-void RosegardenGUIApp::openFile(const QString& filePath)
+void
+RosegardenGUIApp::openFile(const QString &filePath)
 {
-    if (filePath.lower().endsWith(".mid")) {
-
-        if (!m_doc->saveIfModified()) return;
-
-        importMIDIFile(filePath);
-        return;
-
-    } else if (filePath.lower().endsWith(".rose")) {
-
-        if (!m_doc->saveIfModified()) return;
-
-        importRG21File(filePath);
-        return;
-
+    RosegardenGUIDoc *doc = createDocument(filePath);
+    if (doc)
+    {
+        setDocument(doc);
+        m_fileRecent->addURL(filePath);
     }
 
+}
+
+RosegardenGUIDoc*
+RosegardenGUIApp::createDocument(const QString& filePath)
+{
     QFileInfo info(filePath);
+    RosegardenGUIDoc *doc = 0;
 
     if (!info.exists()) {
         // can happen with command-line arg, so...
         KStartupLogo::hideIfStillThere();
         KMessageBox::sorry(this, i18n("The specified file does not exist"));
-        return;
+        return 0;
     }
 
     if (info.isDir()) {
         KStartupLogo::hideIfStillThere();
         KMessageBox::sorry(this, i18n("You have specified a directory"));
-        return;
+        return 0;
     }
 
     QFile file(filePath);
 
     if (!file.open(IO_ReadOnly)) {
         KStartupLogo::hideIfStillThere();
-        KMessageBox::sorry(this, i18n("You do not have read permission to this file."));
-        return;
+        QString errStr =
+            QString(i18n("You do not have read permission for \"%1\"")).
+            arg(filePath);
+
+        KMessageBox::sorry(this, errStr);
+        return 0;
     }
 
     // Stop if playing
@@ -1036,10 +1045,29 @@ void RosegardenGUIApp::openFile(const QString& filePath)
     if (m_seqManager && m_seqManager->getTransportStatus() == PLAYING)
         slotStop();
 
-    //m_doc->closeDocument();
     slotEnableTransport(false);
 
+    if (filePath.lower().endsWith(".mid")) {
 
+        doc = createDocumentFromMIDIFile(filePath);
+
+    } else if (filePath.lower().endsWith(".rose")) {
+
+        doc = createDocumentFromRG21File(filePath);
+    }
+    else
+    {
+        doc = createDocumentFromRGFile(filePath);
+    }
+
+    slotEnableTransport(true);
+
+    return doc;
+}
+
+RosegardenGUIDoc* 
+RosegardenGUIApp::createDocumentFromRGFile(const QString& filePath)
+{
     // Check for an autosaved file to recover
     QString effectiveFilePath = filePath;
     bool canRecover = false;
@@ -1050,7 +1078,10 @@ void RosegardenGUIApp::openFile(const QString& filePath)
         QFileInfo docFileInfo(filePath), autoSaveFileInfo(autoSaveFileName);
 
         if (docFileInfo.lastModified() < autoSaveFileInfo.lastModified()) {
-            RG_DEBUG << "RosegardenGUIApp::openFile : found a more recent autosave file\n";
+
+            RG_DEBUG << "RosegardenGUIApp::openFile : "
+                     << "found a more recent autosave file\n";
+
             // At this point the splash screen may still be there, hide it if
             // it's the case
             KStartupLogo::hideIfStillThere();
@@ -1078,33 +1109,33 @@ void RosegardenGUIApp::openFile(const QString& filePath)
     RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager,
 						    true); // skipAutoload
 
-    if (newDoc->openDocument(effectiveFilePath)) {
-
-        setDocument(newDoc);
-
-        Rosegarden::Composition &comp = m_doc->getComposition();
-
-        // Set any loaded loop at the Composition and
-        // on the marker on SegmentCanvas and clients
-        //
-        m_doc->setLoop(comp.getLoopStart(), comp.getLoopEnd());
-
-        if (canRecover) {
+    // ignore return thingy
+    //
+    if(newDoc->openDocument(effectiveFilePath))
+    {
+        if (canRecover)
+        {
             // Mark the document as modified,
-            // set the "regular" filepath and name (not those of the autosaved doc)
+            // set the "regular" filepath and name (not those of
+            // the autosaved doc)
             //
-            m_doc->slotDocumentModified();
+            newDoc->slotDocumentModified();
             QFileInfo info(filePath);
-            m_doc->setAbsFilePath(info.absFilePath());
-            m_doc->setTitle(info.fileName());
-        } else
-            m_doc->clearModifiedStatus();
-
-    } else {
-        // Create a new document
-
-        setDocument(new RosegardenGUIDoc(this, m_pluginManager));
+            newDoc->setAbsFilePath(info.absFilePath());
+            newDoc->setTitle(info.fileName());
+        }
+        else
+        {
+            newDoc->clearModifiedStatus();
+        }
     }
+    else
+    {
+        delete newDoc;
+        return 0;
+    }
+    
+    return newDoc;
 }
 
 
@@ -1342,10 +1373,11 @@ void RosegardenGUIApp::openURL(const KURL& url)
 
     RG_DEBUG << "RosegardenGUIApp::openURL: target : " << target << endl;
 
+     if (!m_doc->saveIfModified()) return;
+
     openFile(target);
 
     setCaption(url.path());
-    m_fileRecent->addURL(url);
 }
 
 void RosegardenGUIApp::slotFileOpen()
@@ -2302,7 +2334,7 @@ void RosegardenGUIApp::slotImportMIDI()
 
     QString tmpfile;
     KIO::NetAccess::download(url, tmpfile);
-    importMIDIFile(tmpfile);
+    openFile(tmpfile); // does everything including setting the document
 
     KIO::NetAccess::removeTempFile( tmpfile );
 }
@@ -2317,31 +2349,31 @@ void RosegardenGUIApp::slotMergeMIDI()
 
     QString tmpfile;
     KIO::NetAccess::download(url, tmpfile);
-    importMIDIFile(tmpfile, true);
+
+    RosegardenGUIDoc *doc = createDocument(tmpfile);
+
+    if (doc)
+    {
+        RosegardenGUIDoc *mergeDoc = mergeDocuments(m_doc, doc);
+
+        if (mergeDoc)
+        {
+            setDocument(mergeDoc);
+        }
+        delete doc;
+    }
 
     KIO::NetAccess::removeTempFile( tmpfile );
 }
 
-void RosegardenGUIApp::importMIDIFile(const QString &file)
+RosegardenGUIDoc*
+RosegardenGUIApp::createDocumentFromMIDIFile(const QString &file)
 {
-    importMIDIFile(file, false);
-}
-
-void RosegardenGUIApp::mergeMIDIFile(const QString &file)
-{
-    importMIDIFile(file, true);
-}
-
-void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
-{
-    if (!merge && !m_doc->saveIfModified()) return;
-
-
+    //if (!merge && !m_doc->saveIfModified()) return;
 
     // Create new document (autoload is inherent)
     //
-    RosegardenGUIDoc *newDoc =
-	merge ? m_doc : new RosegardenGUIDoc(this, m_pluginManager);
+    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
 
     std::string fname(QFile::encodeName(file));
 
@@ -2362,24 +2394,19 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
             progressDlg.progressBar(), SLOT(advance(int)));
 
     if (!midiFile.open())
-        {
-            CurrentProgressDialog::freeze();
-            KMessageBox::error(this, strtoqstr(midiFile.getError())); //!!! i18n
-	    if (!merge) delete newDoc;
-            return;
-        }
+    {
+        CurrentProgressDialog::freeze();
+        KMessageBox::error(this, strtoqstr(midiFile.getError())); //!!! i18n
+        delete newDoc;
+        return 0;
+    }
 
-    // Stop if playing
-    //
-    if (m_seqManager->getTransportStatus() == PLAYING)
-        slotStop();
+    midiFile.convertToRosegarden(newDoc->getComposition(),
+                                 Rosegarden::MidiFile::CONVERT_REPLACE);
 
-    if (!merge) {
+    /*
+    //!!! Merge stuff - taken out for the mo [rwb]
 
-	midiFile.convertToRosegarden(newDoc->getComposition(),
-				     Rosegarden::MidiFile::CONVERT_REPLACE);
-
-    } else {
 
         bool append = false;
 
@@ -2415,35 +2442,24 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 	     append ? Rosegarden::MidiFile::CONVERT_APPEND
 	            : Rosegarden::MidiFile::CONVERT_AUGMENT);
     }
-
-
-    // Swap and clear down
-    //
-    setDocument(newDoc);
+    */
     
     // Set modification flag
     //
-    m_doc->slotDocumentModified();
+    newDoc->slotDocumentModified();
 
     // Set the caption
     //
-    if (!merge)
-        {
-            m_doc->setTitle(QFileInfo(file).fileName());
-            m_doc->setAbsFilePath(QFileInfo(file).absFilePath());
-        }
-
-    m_fileRecent->addURL(file);
+    newDoc->setTitle(QFileInfo(file).fileName());
+    newDoc->setAbsFilePath(QFileInfo(file).absFilePath());
 
     // Clean up for notation purposes (after reinitialise, because that
     // sets the composition's end marker time which is needed here)
 
-    if (merge) return; // need to work out how to only clean merged segments
-    
     progressDlg.slotSetOperationName(i18n("Calculating notation..."));
     kapp->processEvents();
 
-    Rosegarden::Composition *comp = &m_doc->getComposition();
+    Rosegarden::Composition *comp = &newDoc->getComposition();
 
     int progressPer = 100;
     if (comp->getNbSegments() > 0)
@@ -2509,7 +2525,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
         progressDlg.progressBar()->advance(progressPer);
     }
 
-    m_doc->getCommandHistory()->addCommand(command);
+    newDoc->getCommandHistory()->addCommand(command);
 
     if (comp->getTimeSignatureCount() == 0) {
         Rosegarden::CompositionTimeSliceAdapter adapter(comp);
@@ -2518,6 +2534,8 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
             analysisHelper.guessTimeSignature(adapter);
         comp->addTimeSignature(0, timeSig);
     }
+
+    return newDoc;
 }
 
 void RosegardenGUIApp::slotImportRG21()
@@ -2532,18 +2550,13 @@ void RosegardenGUIApp::slotImportRG21()
 
     QString tmpfile;
     KIO::NetAccess::download(url, tmpfile);
-
-    // Stop if playing
-    //
-    if (m_seqManager->getTransportStatus() == PLAYING)
-        slotStop();
-    
-    importRG21File(tmpfile);
+    openFile(tmpfile);
 
     KIO::NetAccess::removeTempFile(tmpfile);
 }
 
-void RosegardenGUIApp::importRG21File(const QString &file)
+RosegardenGUIDoc*
+RosegardenGUIApp::createDocumentFromRG21File(const QString &file)
 {
     KStartupLogo::hideIfStillThere();
     RosegardenProgressDialog progressDlg(
@@ -2569,29 +2582,54 @@ void RosegardenGUIApp::importRG21File(const QString &file)
     //
     progressDlg.progressBar()->advance(40);
 
-    if (!rg21Loader.load(file, newDoc->getComposition())) {
-
+    if (!rg21Loader.load(file, newDoc->getComposition()))
+    {
 	CurrentProgressDialog::freeze();
 	KMessageBox::error(this,
 			   i18n("Can't load Rosegarden 2.1 file.  It appears to be corrupted."));
 	delete newDoc;
-	return;
+	return 0;
     }
-
-    // assign to existing document
-    setDocument(newDoc);
 
     // Set modification flag
     //
-    m_doc->slotDocumentModified();
+    newDoc->slotDocumentModified();
 
     // Set the caption and add recent
     //
-    m_doc->setTitle(QFileInfo(file).fileName());
-    m_doc->setAbsFilePath(QFileInfo(file).absFilePath());
+    newDoc->setTitle(QFileInfo(file).fileName());
+    newDoc->setAbsFilePath(QFileInfo(file).absFilePath());
 
-    m_fileRecent->addURL(file);
+    return newDoc;
+
 }
+
+void
+RosegardenGUIApp::mergeFile(const QString &filePath)
+{
+    RosegardenGUIDoc *doc = createDocument(filePath);
+
+    if (doc)
+    {
+        RosegardenGUIDoc *mergeDoc = mergeDocuments(m_doc, doc);
+
+        if (mergeDoc)
+        {
+            setDocument(mergeDoc);
+        }
+        delete doc;
+    }
+}
+
+
+RosegardenGUIDoc*
+RosegardenGUIApp::mergeDocuments(RosegardenGUIDoc *doc1,
+                                 RosegardenGUIDoc *doc2)
+{
+    //RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
+    return doc2;
+}
+
 
 void RosegardenGUIApp::setPointerPosition(long posSec,
                                           long posUsec,
