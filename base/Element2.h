@@ -219,8 +219,8 @@ public:
     Element2 &operator=(const Element2 &e);
 
     // Accessors
-    const string &getPackage() const { return m_package; }
-    const string &getType() const    { return m_type; }
+    const string &package() const { return m_package; }
+    const string &type() const    { return m_type; }
     void setPackage(const string &p) { m_package = p; }
     void setType(const string &t)    { m_type = t; }
 
@@ -228,7 +228,7 @@ public:
     const EventList* group() const { return m_group; }
     void setGroup(EventList*);
 
-    duration getDuration() const { return m_duration; }
+    duration duration() const         { return m_duration; }
     void setDuration(duration d)      { m_duration = d; }
 
     ViewElements* viewElements()             { return m_viewElements; }
