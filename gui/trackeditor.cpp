@@ -391,12 +391,13 @@ TrackEditor::updateRecordingSegmentItem(Rosegarden::Segment *segment)
 	int startBar = comp.getBarNumber(segment->getStartTime(), false);
 	std::pair<timeT, timeT> bar = comp.getBarRange(startBar, false);
      
-	cout << "bar " << startBar << ": " << bar.first << " -> " << bar.second << " (start)" << endl;
+	std::cerr << "bar " << startBar << ": " << bar.first << " -> " << bar.second << " (start)" << std::endl;
 
 	int endBar = comp.getBarNumber(comp.getPosition(), false);
 	bar = comp.getBarRange(endBar, false);
-
-	cout << "bar " << startBar << ": " << bar.first << " -> " << bar.second << " (end)" << endl;
+	
+	std::cerr << "bar " << endBar << ": " << bar.first << " -> " << bar.second << " (end)" << std::endl;
+	std::cerr << "(composition's duration is " << comp.getDuration() << ")" << std::endl;
 
     }
 

@@ -34,7 +34,7 @@
 #include <sstream>
 #endif
 
-#undef DEBUG_BAR_STUFF
+//#undef DEBUG_BAR_STUFF
 #undef DEBUG_TEMPO_STUFF 
 
 
@@ -418,11 +418,11 @@ Composition::addNewBar(timeT time, timeT duration,
 void
 Composition::calculateBarPositions() const
 {
-#ifdef DEBUG_BAR_STUFF
-//    std::cerr << "Composition::calculateBarPositions" << std::endl;
-#endif
-
     if (!m_barPositionsNeedCalculating) return;
+
+#ifdef DEBUG_BAR_STUFF
+    std::cerr << "Composition::calculateBarPositions" << std::endl;
+#endif
 
     ReferenceSegment &t = m_timeSigSegment;
     ReferenceSegment::iterator i;
@@ -433,10 +433,10 @@ Composition::calculateBarPositions() const
     for (i = t.begin(); i != t.end(); ++i) {
 
 #ifdef DEBUG_BAR_STUFF
-//		std::cerr << "Pushing time sig duration "
-//			  << TimeSignature(**i).getBarDuration()
-//			  << " at time "
-//			  << (*i)->getAbsoluteTime() << std::endl;
+		std::cerr << "Pushing time sig duration "
+			  << TimeSignature(**i).getBarDuration()
+			  << " at time "
+			  << (*i)->getAbsoluteTime() << std::endl;
 #endif
 	sections.push_back((*i)->getAbsoluteTime());
 	sectionTimes.push_back(TimeSignature(**i).getBarDuration());
@@ -446,7 +446,7 @@ Composition::calculateBarPositions() const
     m_barSegment.clear();
 
 #ifdef DEBUG_BAR_STUFF
-//    std::cerr << "have " << t.size() << " non-bars in ref segment" << std::endl;
+    std::cerr << "have " << t.size() << " non-bars in ref segment" << std::endl;
 #endif
 
     bool section0isTimeSig = true;
@@ -471,7 +471,7 @@ Composition::calculateBarPositions() const
 	timeT time;
 
 #ifdef DEBUG_BAR_STUFF
-//	std::cerr << "section " << s << ": start " << start << ", finish " << finish << std::endl;
+	std::cerr << "section " << s << ": start " << start << ", finish " << finish << std::endl;
 #endif
 	
 	bool haveTimeSig = (s > 0 || section0isTimeSig);
@@ -482,14 +482,14 @@ Composition::calculateBarPositions() const
 	    addNewBar(time, thisBar, barNo++, haveTimeSig);
 	    haveTimeSig = false;
 #ifdef DEBUG_BAR_STUFF
-//            std::cerr << "added bar at " << time << std::endl;
+            std::cerr << "added bar at " << time << std::endl;
 #endif
 	}
     }
 
     m_barPositionsNeedCalculating = false;
 #ifdef DEBUG_BAR_STUFF
-//    std::cerr << "Composition::calculateBarPositions ending" << std::endl;
+    std::cerr << "Composition::calculateBarPositions ending" << std::endl;
 
     std::cerr << "Time sig segment contains:" << std::endl;
     for (i = t.begin(); i != t.end(); ++i) {
