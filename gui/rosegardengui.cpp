@@ -303,12 +303,17 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     // We also choose to do this before "Initializing view" to avoid
     // introducing any more status states for 18n.
     //
+
+#ifndef QUERY_PLUGINS_FROM_GUI
+    // We only have to do this if we're querying the plugins at the sequencer
+
     while (isSequencerRunning() && !rgapp->isSequencerRegistered()) {
         RG_DEBUG << "RosegardenGUIApp::RosegardenGUIApp - "
                  << "waiting for Sequencer to come up" << endl;
 	RosegardenProgressDialog::processEvents();
         sleep(1); // 1s
     }
+#endif
 
     // Plugin manager
     //
@@ -461,6 +466,8 @@ RosegardenGUIApp::~RosegardenGUIApp()
         delete m_transport;
 
     delete m_seqManager;
+
+    Rosegarden::Profiles::getInstance()->dump();
 }
 
 

@@ -1347,8 +1347,8 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     layout->addWidget(m_timer, 0, 1); //, Qt::AlignHCenter);
 
     QStringList timers = m_doc->getTimers();
-    QString currentTimer = m_doc->getCurrentTimer();
-    currentTimer = m_cfg->readEntry("timer", currentTimer);
+    m_origTimer = m_doc->getCurrentTimer();
+    QString currentTimer = m_cfg->readEntry("timer", m_origTimer);
 
     for (unsigned int i = 0; i < timers.size(); ++i) {
 	m_timer->insertItem(timers[i]);
@@ -1657,9 +1657,9 @@ SequencerConfigurationPage::apply()
     Rosegarden::StudioControl::sendMappedEvent(mEports);
 
     m_cfg->writeEntry("timer", m_timer->currentText());
-    m_doc->setCurrentTimer(m_timer->currentText());
-    
-
+    if (m_timer->currentText() != m_origTimer) {
+	m_doc->setCurrentTimer(m_timer->currentText());
+    }
 
     // Write the JACK entry
     //

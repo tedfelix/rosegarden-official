@@ -37,6 +37,7 @@
 
 #include <ctime>
 
+#define QUERY_PLUGINS_FROM_GUI 1
 
 // SequenceManager is a helper class that wraps the sequencing
 // functionality at the GUI level.  The sequencer still communicates

@@ -46,6 +46,11 @@
 #include "mmapper.h"
 #include "sequencermapper.h"
 
+#include "Profiler.h"
+#ifdef QUERY_PLUGINS_FROM_GUI
+#include "PluginFactory.h"
+#endif
+
 
 namespace Rosegarden
 {
@@ -1391,7 +1396,27 @@ SequenceManager::getSequencerPlugins(AudioPluginManager *aPM)
 
     SEQMAN_DEBUG << "getSequencerPlugins - getting plugin information" << endl;
 
-    MappedObjectPropertyList seqPlugins = StudioControl::getPluginInformation();
+    MappedObjectPropertyList seqPlugins
+#ifdef QUERY_PLUGINS_FROM_GUI
+	(50000)
+#endif
+	;
+
+    {
+	Rosegarden::Profiler profiler("querying plugins", true);
+
+#ifdef QUERY_PLUGINS_FROM_GUI
+
+    PluginFactory::enumerateAllPlugins(seqPlugins);
+
+    SEQMAN_DEBUG << "got " << seqPlugins.size() << " pieces of plugin data at GUI side" << endl;
+
+#else
+
+    seqPlugins = StudioControl::getPluginInformation();
+
+#endif
+    }
 
     unsigned int i = 0;
 

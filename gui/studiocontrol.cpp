@@ -25,12 +25,16 @@
 #include "rosedebug.h"
 #include "rosegardendcop.h"
 
+#include "Profiler.h"
+
 namespace Rosegarden
 {
 
 MappedObjectId
 StudioControl::createStudioObject(MappedObject::MappedObjectType type)
 {
+    Rosegarden::Profiler profiler("StudioControl::createStudioObject", true);
+
     Rosegarden::MappedObjectId value = -1;
     QByteArray data;
     QCString replyType;
@@ -58,6 +62,8 @@ StudioControl::createStudioObject(MappedObject::MappedObjectType type)
 bool
 StudioControl::destroyStudioObject(MappedObjectId id)
 {
+    Rosegarden::Profiler profiler("StudioControl::destroyStudioObject", true);
+
     int value = 0;
     QByteArray data;
     QCString replyType;
@@ -89,6 +95,8 @@ MappedObjectPropertyList
 StudioControl::getStudioObjectProperty(MappedObjectId id,
                         const MappedObjectProperty &property)
 {
+    Rosegarden::Profiler profiler("StudioControl::getStudioObjectProperty", true);
+
     MappedObjectPropertyList list;
 
     QByteArray data;
@@ -120,6 +128,8 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
                         const MappedObjectProperty &property,
                         MappedObjectValue value)
 {
+    Rosegarden::Profiler profiler("StudioControl::setStudioObjectProperty(float)", true);
+
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
@@ -137,6 +147,8 @@ StudioControl::setStudioObjectProperties(const MappedObjectIdList &ids,
 					 const MappedObjectPropertyList &properties,
 					 const MappedObjectValueList &values)
 {
+    Rosegarden::Profiler profiler("StudioControl::setStudioObjectProperties(floats)", true);
+
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
@@ -154,6 +166,8 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
                         const MappedObjectProperty &property,
                         const QString &value)
 {
+    Rosegarden::Profiler profiler("StudioControl::setStudioObjectProperty(string)", true);
+
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
@@ -171,6 +185,8 @@ StudioControl::setStudioObjectPropertyList(MappedObjectId id,
                         const MappedObjectProperty &property,
                         const MappedObjectPropertyList &values)
 {
+    Rosegarden::Profiler profiler("StudioControl::setStudioObjectPropertyList", true);
+
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
@@ -189,6 +205,8 @@ StudioControl::setStudioObjectPropertyList(MappedObjectId id,
 MappedObjectId
 StudioControl::getStudioObjectByType(MappedObject::MappedObjectType type)
 {
+    Rosegarden::Profiler profiler("StudioControl::getStudioObjectByType", true);
+
     Rosegarden::MappedObjectId value = -1;
     QByteArray data;
     QCString replyType;
@@ -218,6 +236,8 @@ StudioControl::setStudioPluginPort(MappedObjectId pluginId,
                                    unsigned long portId,
                                    MappedObjectValue value)
 {
+    Rosegarden::Profiler profiler("StudioControl::setStudioPluginPort", true);
+
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
@@ -234,6 +254,8 @@ MappedObjectValue
 StudioControl::getStudioPluginPort(MappedObjectId pluginId,
                                    unsigned long portId)
 {
+    Rosegarden::Profiler profiler("StudioControl::getStudioPluginPort", true);
+
     Rosegarden::MappedObjectValue value = 0.0;
     QByteArray data;
     QCString replyType;
@@ -351,16 +373,15 @@ void
 StudioControl::connectStudioObjects(MappedObjectId id1,
 				    MappedObjectId id2)
 {
+    Rosegarden::Profiler profiler("StudioControl::connectStudioObjects", true);
+
     QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
     QDataStream streamOut(data, IO_WriteOnly);
 
     streamOut << id1;
     streamOut << id2;
 
-    if (!rgapp->sequencerCall("connectMappedObjects(int, int)",
-                              replyType, replyData, data))
+    if (!rgapp->sequencerSend("connectMappedObjects(int, int)", data))
     {
         SEQMAN_DEBUG << "connectStudioObjects - "
                      << "failed to contact Rosegarden sequencer"
@@ -374,16 +395,15 @@ void
 StudioControl::disconnectStudioObjects(MappedObjectId id1,
 				       MappedObjectId id2)
 {
+    Rosegarden::Profiler profiler("StudioControl::disconnectStudioObjects", true);
+
     QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
     QDataStream streamOut(data, IO_WriteOnly);
 
     streamOut << id1;
     streamOut << id2;
 
-    if (!rgapp->sequencerCall("disconnectMappedObjects(int, int)",
-                              replyType, replyData, data))
+    if (!rgapp->sequencerSend("disconnectMappedObjects(int, int)", data))
     {
         SEQMAN_DEBUG << "disconnectStudioObjects - "
                      << "failed to contact Rosegarden sequencer"
@@ -396,15 +416,14 @@ StudioControl::disconnectStudioObjects(MappedObjectId id1,
 void
 StudioControl::disconnectStudioObject(MappedObjectId id)
 {
+    Rosegarden::Profiler profiler("StudioControl::disconnectStudioObject", true);
+
     QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
     QDataStream streamOut(data, IO_WriteOnly);
 
     streamOut << id;
 
-    if (!rgapp->sequencerCall("disconnectMappedObject(int)",
-                              replyType, replyData, data))
+    if (!rgapp->sequencerSend("disconnectMappedObject(int)", data))
     {
         SEQMAN_DEBUG << "disconnectStudioObject - "
                      << "failed to contact Rosegarden sequencer"
@@ -417,6 +436,8 @@ StudioControl::disconnectStudioObject(MappedObjectId id)
 void
 StudioControl::sendMappedEvent(const Rosegarden::MappedEvent &mE)
 {
+    Rosegarden::Profiler profiler("StudioControl::sendMappedEvent", true);
+
     static Rosegarden::MappedEvent mEs;
     
     mEs = mE; // just in case the passed mapped event has dubious
@@ -432,6 +453,8 @@ StudioControl::sendMappedEvent(const Rosegarden::MappedEvent &mE)
 void
 StudioControl::sendMappedComposition(const Rosegarden::MappedComposition &mC)
 {
+    Rosegarden::Profiler profiler("StudioControl::sendMappedComposition", true);
+
     if (mC.size() == 0)
         return;
 
@@ -453,6 +476,8 @@ StudioControl::sendMappedComposition(const Rosegarden::MappedComposition &mC)
 void
 StudioControl::sendMappedInstrument(const Rosegarden::MappedInstrument &mI)
 {
+    Rosegarden::Profiler profiler("StudioControl::sendMappedInstrument", true);
+
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
@@ -467,6 +492,8 @@ StudioControl::sendMappedInstrument(const Rosegarden::MappedInstrument &mI)
 void
 StudioControl::sendQuarterNoteLength(const Rosegarden::RealTime &length)
 {
+    Rosegarden::Profiler profiler("StudioControl::sendQuarterNoteLength", true);
+
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
@@ -484,6 +511,8 @@ StudioControl::sendRPN(Rosegarden::InstrumentId instrumentId,
                        Rosegarden::MidiByte /* controller */,
                        Rosegarden::MidiByte value)
 {
+    Rosegarden::Profiler profiler("StudioControl::sendRPN", true);
+
     Rosegarden::MappedComposition mC;
     Rosegarden::MappedEvent *mE =
         new Rosegarden::MappedEvent(instrumentId,
@@ -530,6 +559,8 @@ StudioControl::sendNRPN(Rosegarden::InstrumentId instrumentId,
                         Rosegarden::MidiByte /* controller */,
                         Rosegarden::MidiByte value)
 {
+    Rosegarden::Profiler profiler("StudioControl::sendNRPN", true);
+
     Rosegarden::MappedComposition mC;
     Rosegarden::MappedEvent *mE =
         new Rosegarden::MappedEvent(instrumentId,

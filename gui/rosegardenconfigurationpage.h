@@ -510,6 +510,7 @@ protected:
     // Sync and timing
     //
     QCheckBox *m_midiClockEnabled;
+    QString    m_origTimer;
     QComboBox *m_timer;
     QComboBox *m_jackTransport;
     QComboBox *m_mmcTransport;

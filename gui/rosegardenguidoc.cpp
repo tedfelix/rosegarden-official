@@ -604,6 +604,8 @@ void RosegardenGUIDoc::clearStudio()
 
 void RosegardenGUIDoc::initialiseStudio()
 {
+    Rosegarden::Profiler profiler("initialiseStudio", true);
+
     RG_DEBUG << "RosegardenGUIDoc::initialiseStudio - "
              << "clearing down and initialising" << endl;
 
@@ -1818,13 +1820,16 @@ RosegardenGUIDoc::syncDevices()
     if (!isSequencerRunning())
         return;
 
-    // Set the default timer first (we don't have to do this every
-    // time, but this is the most convenient place to do it)
-    //!!! too much overhead in doing this repeatedly
-    kapp->config()->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-    QString currentTimer = getCurrentTimer();
-    currentTimer = kapp->config()->readEntry("timer", currentTimer);
-    setCurrentTimer(currentTimer);
+    // Set the default timer first.  We only do this first time and
+    // when changed in the configuration dialog.
+    static bool setTimer = false;
+    if (!setTimer) {
+	kapp->config()->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+	QString currentTimer = getCurrentTimer();
+	currentTimer = kapp->config()->readEntry("timer", currentTimer);
+	setCurrentTimer(currentTimer);
+	setTimer = true;
+    }
 
     QByteArray replyData;
     QCString replyType;
