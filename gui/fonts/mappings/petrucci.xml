@@ -5,12 +5,13 @@
 
 <font-information
         mapped-by="Chris Cannam"
-        type="scalable"/>
-<!-- No copyright information here, as we are not distributing the font -->
+        type="scalable"
+	autocrop="yes"/>
+<!-- No copyright information here, as we are not distributing the font and don't even know what its copyright status is -->
 
 <font-requirements>
-	<font-requirement font-id="0" name="petrucci,maestro"/>
-	<font-requirement font-id="1" name="times"/> <!-- text font -->
+	<font-requirement font-id="0" names="petrucci,maestro"/>
+	<font-requirement font-id="1" name="times new roman"/> <!-- text font -->
 </font-requirements>
 
 <font-sizes>

@@ -96,7 +96,7 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s,
 
 	timeT time = (*i)->getAbsoluteTime();
 
-	std::cerr << "AnalysisHelper::labelChords: time is " << time << ", type is " << (*i)->getType() << ", event is " << *i << " (itr is " << &i << ")" << std::endl;
+//	std::cerr << "AnalysisHelper::labelChords: time is " << time << ", type is " << (*i)->getType() << ", event is " << *i << " (itr is " << &i << ")" << std::endl;
 
 	if ((*i)->isa(Key::EventType)) {
 	    key = Key(**i);

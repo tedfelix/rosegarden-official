@@ -34,6 +34,7 @@
 #include <iostream>
 
 #include "rosestrings.h"
+#include "rosedebug.h"
 #include "pixmapfunctions.h"
 
 using std::string;
@@ -45,6 +46,7 @@ using std::endl;
 
 NoteFontMap::NoteFontMap(string name) :
     m_name(name),
+    m_autocrop(false),
     m_smooth(false),
     m_characterDestination(0),
     m_hotspotCharName(""),
@@ -120,6 +122,9 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         s = attributes.value("type");
         if (s) m_type = qstrtostr(s);
+
+	s = attributes.value("autocrop");
+	if (s) m_autocrop = (s.lower() == "yes" || s.lower() == "true");
 
         s = attributes.value("smooth");
         if (s) m_smooth = (s.lower() == "true");
@@ -379,9 +384,27 @@ NoteFontMap::getCharNames() const
 bool
 NoteFontMap::checkFont(QString name, int size, QFont &font) const
 {
+    NOTATION_DEBUG << "NoteFontMap::checkFont: name is " << name << ", size " << size << endl;
+
     font = QFont(name, size, QFont::Normal);
     font.setPixelSize(size);
-    return font.exactMatch();
+
+    QFontInfo info(font);
+
+    NOTATION_DEBUG << "NoteFontMap::checkFont: have family " << info.family() << ", size " << info.pixelSize() << " (exactMatch " << info.exactMatch() << ")" << endl;
+
+    // The Qt documentation says:
+    //
+    //   bool QFontInfo::exactMatch() const
+    //   Returns TRUE if the matched window system font is exactly the
+    //   same as the one specified by the font; otherwise returns FALSE.
+    //
+    // My arse.  I specify "feta", I get "Verdana", and exactMatch
+    // returns true.  Uh huh.
+
+//    return info.exactMatch();
+
+    return info.family().lower() == name.lower();
 }
 
 bool
@@ -728,7 +751,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
     }
 
     if (inverted && !m_fontMap.hasInversion(m_currentSize, charName)) {
-	if (!getPixmap(charName, pixmap, false)) return false;
+	if (!getPixmap(charName, pixmap, !inverted)) return false;
 	found = new QPixmap(PixmapFunctions::flipVertical(pixmap));
 	add(charName, inverted, found);
 	pixmap = *found;
@@ -782,6 +805,14 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	ok = m_fontMap.getFont(m_currentSize, charName, font);
 
 	if (!ok) {
+	    if (!inverted && m_fontMap.hasInversion(m_currentSize, charName)) {
+		if (!getPixmap(charName, pixmap, !inverted)) return false;
+		found = new QPixmap(PixmapFunctions::flipVertical(pixmap));
+		add(charName, inverted, found);
+		pixmap = *found;
+		return true;
+	    }
+
 	    cerr << "NoteFont::getPixmap: Warning: No system font for character \""
 		 << charName << "\"" << (inverted ? " (inverted)" : "")
 		 << " in font \"" << m_fontMap.getName() << "\"" << endl;
@@ -794,6 +825,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 	found->fill();
 	QPainter painter;
 	painter.begin(found);
+	painter.setFont(font);
 	painter.drawText(0, metrics.ascent(), QChar(code));
 	painter.end();
 

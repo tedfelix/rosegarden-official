@@ -58,6 +58,7 @@ public:
     std::string getCopyright() const { return m_copyright; }
     std::string getMappedBy() const { return m_mappedBy; }
     std::string getType() const { return m_type; }
+    bool shouldAutocrop() const { return m_autocrop; }
     bool isSmooth() const { return m_smooth; }
 
     std::set<int> getSizes() const;
@@ -223,6 +224,7 @@ private:
     std::string m_copyright;
     std::string m_mappedBy;
     std::string m_type;
+    bool m_autocrop;
     bool m_smooth;
 
     typedef __HASH_NS::hash_map<CharName, SymbolData,
