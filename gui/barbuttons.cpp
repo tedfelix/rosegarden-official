@@ -272,18 +272,25 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
         // adjust count for first bar line    
         if (every == firstBar) count++;
 
-	painter.drawLine(static_cast<int>(x), 0, static_cast<int>(x), m_barHeight);
+	if (i != lastBar) {
+            painter.drawLine(static_cast<int>(x), 0, static_cast<int>(x), m_barHeight);
 
-        // disable worldXForm for text
-        QPoint textDrawPoint = painter.xForm(QPoint(static_cast<int>(x+4), 12));
-        
-        bool enableXForm = painter.hasWorldXForm();
-        painter.setWorldXForm(false);
+            // disable worldXForm for text
+            QPoint textDrawPoint = painter.xForm(QPoint(static_cast<int>(x+4), 12));
 
-	if (i >= 0) painter.drawText(textDrawPoint, QString("%1").arg(i + 1));
+            bool enableXForm = painter.hasWorldXForm();
+            painter.setWorldXForm(false);
 
-        painter.setWorldXForm(enableXForm);
+            if (i >= 0) painter.drawText(textDrawPoint, QString("%1").arg(i + 1));
 
+            painter.setWorldXForm(enableXForm);
+	} else {
+            const QPen normalPen = painter.pen();;
+            QPen endPen(black, 2);
+            painter.setPen(endPen);
+            painter.drawLine(static_cast<int>(x), 0, static_cast<int>(x), m_barHeight);
+            painter.setPen(normalPen);
+	}
     }
 
     if (m_doc)
