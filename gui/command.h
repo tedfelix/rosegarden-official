@@ -144,4 +144,17 @@ private:
 };
 
 
+/**
+ * The true macro version.
+ */
+
+class MacroCommand : public CompoundCommand
+{
+public:
+    MacroCommand(const QString &name) : CompoundCommand(name) { }
+    using CompoundCommand::addCommand;
+};
+
+ 
+
 #endif
