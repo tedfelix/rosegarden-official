@@ -22,6 +22,7 @@
 #include <klocale.h>
 
 #include <qpainter.h>
+#include <qtooltip.h>
 
 #include "controlruler.h"
 #include "colours.h"
@@ -57,6 +58,9 @@ ControlRuler::ControlRuler(RulerScale *rulerScale,
     m_fontMetrics = QFontMetrics(m_boldFont);
 
     setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
+
+    QString tip = strtoqstr(property) + i18n(" controller");
+    QToolTip::add(this, tip);
 }
 
 ControlRuler::~ControlRuler()
@@ -97,12 +101,35 @@ ControlRuler::paintEvent(QPaintEvent* e)
 {
     QPainter paint(this);
 
-    paint.setPen(RosegardenGUIColours::SegmentCanvas);
+    paint.setPen(RosegardenGUIColours::MatrixElementBorder);
+    paint.setBrush(RosegardenGUIColours::MatrixElementBlock);
 
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());
 
     //QRect clipRect = paint.clipRegion().boundingRect();
+    //paint.drawRect(0, 0, 100, 100);
+
+    Segment::iterator it = m_segment->begin();
+
+    for (; it != m_segment->end(); it++)
+    {
+        if ((*it)->has(m_propertyName))
+        {
+            int x = int(m_rulerScale->getXForTime((*it)->getAbsoluteTime()))
+                    + m_currentXOffset + int(m_xorigin);
+
+            int width = 
+                int(m_rulerScale->getXForTime((*it)->getAbsoluteTime() +
+                                              (*it)->getDuration()))
+                    + m_currentXOffset + int(m_xorigin) - x;
+
+            int value = int(double(height()) * 
+                ((*it)->get<Rosegarden::Int>(m_propertyName)/127.0));
+            
+            paint.drawRect(x, height() - value, width, value);
+        }
+    }
 
     /*
     timeT from = m_rulerScale->getTimeForX
