@@ -199,6 +199,11 @@ public slots:
 
     void slotShowPreviews(bool);
 
+    /**
+     * Update previews for a particular instrument, if audio
+     */
+    void slotUpdateAudioPreviews(Rosegarden::InstrumentId id);
+
     void slotAddTracks(unsigned int, Rosegarden::InstrumentId);
 
     void slotDeleteTracks(std::vector<Rosegarden::TrackId> tracks);

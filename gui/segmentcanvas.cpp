@@ -41,6 +41,7 @@
 #include "NotationTypes.h"
 #include "BaseProperties.h"
 #include "RulerScale.h"
+#include "AudioLevel.h"
 
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
@@ -206,8 +207,23 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
     //painter.translate(rect().x(), rect().y());
 
     // perhaps antialias this somehow at some point
-    int height = rect().height()/2 - 3;
+    int height = rect().height()/2 - 2;
     int halfRectHeight = rect().height()/2;
+
+    float gain = 1.0;
+    if (m_segment && m_parent.getDocument()) {
+	Rosegarden::TrackId trackId = m_segment->getTrack();
+	Rosegarden::Track *track =
+	    m_parent.getDocument()->getComposition().getTrackById(trackId);
+	if (track) {
+	    Rosegarden::Instrument *instrument =
+		m_parent.getDocument()->getStudio().getInstrumentById
+		(track->getInstrument());
+	    if (instrument) {
+		gain = Rosegarden::AudioLevel::dB_to_multiplier(instrument->getLevel());
+	    }
+	}
+    }
 
     // Sometimes our audio file fails to get recorded properly and
     // the number of channels fails too.  Guard against this.
@@ -246,22 +262,22 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
 
         if (m_channels == 1) {
 
-            h1 = m_values[position++];
+            h1 = m_values[position++] * gain;
             h2 = h1;
 
             if (m_showMinima)
             {
-                l1 = m_values[position++];
+                l1 = m_values[position++] * gain;
                 l2 = l1;
             }
         }
         else {
 
-            h1 = m_values[position++];
-            if (m_showMinima) l1 = m_values[position++];
+            h1 = m_values[position++] * gain;
+            if (m_showMinima) l1 = m_values[position++] * gain;
 
-            h2 = m_values[position++];
-            if (m_showMinima) l2 = m_values[position++];
+            h2 = m_values[position++] * gain;
+            if (m_showMinima) l2 = m_values[position++] * gain;
             
         }
 
@@ -271,10 +287,22 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
                   */
 
         painter.setPen(RosegardenGUIColours::SegmentAudioPreview);
-        painter.drawLine(tRect.x() + i,
-                         tRect.y() + int(halfRectHeight - h1 * height),
-                         tRect.x() + i,
-                         tRect.y() + int(halfRectHeight + h2 * height));
+
+	if (h1 >= 1.0) { h1 = 1.0; painter.setPen(Qt::red); }
+	else { painter.setPen(RosegardenGUIColours::SegmentAudioPreview); }
+
+	painter.drawLine(tRect.x() + i,
+			 tRect.y() + int(halfRectHeight - h1 * height + 0.5),
+			 tRect.x() + i,
+			 tRect.y() + int(halfRectHeight));
+
+	if (h2 >= 1.0) { h2 = 1.0; painter.setPen(Qt::red); }
+	else { painter.setPen(RosegardenGUIColours::SegmentAudioPreview); }
+
+	painter.drawLine(tRect.x() + i,
+			 tRect.y() + int(halfRectHeight),
+			 tRect.x() + i,
+			 tRect.y() + int(halfRectHeight + h2 * height + 0.5));
 
         // For the moment draw it the same colour - the resolution on the
         // segmentcanvas doens't allow us to tell the difference between

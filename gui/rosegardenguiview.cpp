@@ -1185,6 +1185,28 @@ void RosegardenGUIView::slotShowPreviews(bool v)
     m_trackEditor->getSegmentCanvas()->repaint();
 }
 
+void RosegardenGUIView::slotUpdateAudioPreviews(Rosegarden::InstrumentId id)
+{
+    if (!m_trackEditor->getSegmentCanvas()->isShowingPreviews()) return;
+
+    RosegardenGUIDoc *doc = getDocument();
+    Rosegarden::Instrument *instrument = doc->getStudio().getInstrumentById(id);
+
+    if (instrument && instrument->getType() == Rosegarden::Instrument::Audio) {
+
+	for (Rosegarden::Composition::iterator i = doc->getComposition().begin();
+	     i != doc->getComposition().end(); ++i) {
+
+	    Rosegarden::Track *track = doc->getComposition().getTrackById
+		((*i)->getTrack());
+
+	    if (track && track->getInstrument() == id) {
+		m_trackEditor->getSegmentCanvas()->updateSegmentItem(*i);
+	    }
+	}
+    }
+}
+	
 void RosegardenGUIView::slotAddTracks(unsigned int nbTracks,
                                       Rosegarden::InstrumentId id)
 {
