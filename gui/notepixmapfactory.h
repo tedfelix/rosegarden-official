@@ -27,31 +27,6 @@
 typedef vector<int> ChordPitches;
 typedef vector<Accidental> Accidentals;
 
-//!!! some of the stuff in the Note class could simplify a few bits of this
-
-// enum Note { WholeDotted = 0, Whole,
-//             HalfDotted, Half,
-//             QuarterDotted, Quarter,
-//             EighthDotted, Eighth,
-//             SixteenthDotted, Sixteenth,
-//             ThirtySecondDotted, ThirtySecond,
-//             SixtyFourthDotted, SixtyFourth, LastNote = SixtyFourth };
-
-/*!
-enum Note {
-    SixtyFourth = 0, SixtyFourthDotted,
-    ThirtySecond, ThirtySecondDotted,
-    Sixteenth, SixteenthDotted,
-    Eighth, EighthDotted,
-    Quarter, QuarterDotted,
-    Half, HalfDotted,
-    Whole, WholeDotted,
-    LastNote = WholeDotted 
-};
-*/
-
-/*! enum Accidental { NoAccidental, Sharp, Flat, Natural }; */
-
 
 /**
  * Helper class to compute various offsets
@@ -211,5 +186,17 @@ public:
 protected:
     const Staff &m_referenceStaff;
 };
+
+
+class ClefPixmapFactory
+{
+public:
+    ClefPixmapFactory() { }
+    ~ClefPixmapFactory() { }
+
+    QCanvasPixmap makeClefPixmap(string type);
+};
+
+    
 
 #endif

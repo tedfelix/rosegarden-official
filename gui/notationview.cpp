@@ -312,6 +312,7 @@ NotationView::showElements(NotationElementList::iterator from,
     if (from == to) return true;
 
     static ChordPixmapFactory npf(*m_mainStaff);
+    static ClefPixmapFactory cpf;
 
     for(NotationElementList::iterator it = from; it != to; ++it) {
 
@@ -345,12 +346,19 @@ NotationView::showElements(NotationElementList::iterator from,
                 Note::Type note = (*it)->event()->get<Int>("Notation::NoteType");
                 QCanvasPixmap notePixmap(npf.makeRestPixmap(note));
                 noteSprite = new QCanvasSimpleSprite(&notePixmap, canvas());
+
 /*! key & clef conflated
             } else if ((*it)->event()->type() == "keychange") {
 
                 QCanvasPixmap clefPixmap("pixmaps/clef-treble.xpm");
                 noteSprite = new QCanvasSimpleSprite(&clefPixmap, canvas());
 */
+
+            } else if ((*it)->event()->type() == "clefchange") {
+
+                QCanvasPixmap clefPixmap(cpf.makeClefPixmap((*it)->event()->get<String>(Clef::ClefPropertyName)));
+                noteSprite = new QCanvasSimpleSprite(&clefPixmap, canvas());
+
             } else {
                     
                 kdDebug(KDEBUG_AREA) << "NotationElement type is neither a note nor a rest - type is "
@@ -369,7 +377,8 @@ NotationView::showElements(NotationElementList::iterator from,
             }
             
         } catch (...) {
-            kdDebug(KDEBUG_AREA) << "NotationElement doesn't have a 'Notation::NoteType' property"
+            kdDebug(KDEBUG_AREA) << "Event lacks the proper properties: "
+				 << (*(*it)->event())
                                  << endl;
         }
     }

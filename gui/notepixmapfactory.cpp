@@ -753,3 +753,17 @@ ChordPixmapFactory::makeChordPixmap(const chordpitches &pitches,
 }
 
 */
+
+QCanvasPixmap ClefPixmapFactory::makeClefPixmap(string type)
+{
+    static string defaultClefFile = "pixmaps/clef-treble.xpm";
+
+    try {
+	Clef clef(type);
+	string filename = "pixmaps/clef-" + clef.getName() + ".xpm";
+	return QCanvasPixmap(filename.c_str());
+    } catch (Clef::BadClefName) {
+	kdDebug(KDEBUG_AREA) << "Bad clef name \"" << type << "\"" << endl;
+	return QCanvasPixmap(defaultClefFile.c_str());
+    }
+}
