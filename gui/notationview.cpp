@@ -2250,6 +2250,30 @@ NotationView::paintEvent(QPaintEvent *e)
 
     m_inPaintEvent = true;
 
+    // This is duplicated here from EditViewBase, because (a) we need
+    // to know about the segment being removed before we try to check
+    // the staff names etc., and (b) it's not safe to call close()
+    // from EditViewBase::paintEvent if we're then going to try to do
+    // some more work afterwards in this function
+
+    if (isCompositionModified()) {
+      
+        // Check if one of the segments we display has been removed
+        // from the composition.
+        //
+	// For the moment we'll have to close the view if any of the
+	// segments we handle has been deleted.
+
+	for (unsigned int i = 0; i < m_segments.size(); ++i) {
+
+	    if (!m_segments[i]->getComposition()) {
+		// oops, I think we've been deleted
+		close();
+		return;
+	    }
+	}
+    }
+
     // relayout if the window width changes significantly in continuous page mode
     if (m_pageMode == LinedStaff::ContinuousPageMode) {
 	int diff = int(getPageWidth() - m_hlayout->getPageWidth());
@@ -2257,7 +2281,6 @@ NotationView::paintEvent(QPaintEvent *e)
 	if (diff < -10 || diff > 10) {
 	    setPageMode(m_pageMode);
 	    refreshSegment(0, 0, 0);
-	    // return here?
 	}
     }
 
