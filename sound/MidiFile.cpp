@@ -419,8 +419,16 @@ MidiFile::convertToRosegarden()
   //
   timeT endOfLastNote;
 
+  // Event specific vars
+  //
   int numerator;
   int denominator;
+
+  // keys
+  Rosegarden::Key *key;
+  int accidentals;
+  bool isMinor;
+  bool isSharp;
 
   Rosegarden::Composition *composition = new Composition;
 
@@ -595,10 +603,23 @@ MidiFile::convertToRosegarden()
               rosegardenEvent->set<Int>("denominator", denominator);
               rosegardenEvent->setAbsoluteTime(rosegardenTime);
               rosegardenTrack->insert(rosegardenEvent); 
+
               break;
 
             case MIDI_KEY_SIGNATURE:
-              //cout << "KEY SIG" << endl;
+              // get the details
+              accidentals = (int) midiEvent->metaMessage()[0];
+              isMinor     = (int) midiEvent->metaMessage()[1];
+              isSharp     = accidentals < 0 ?        false  :  true;
+              accidentals = accidentals < 0 ?  -accidentals :  accidentals;
+
+              // create and insert the key event
+              //
+              key = new Rosegarden::Key(accidentals, isSharp, isMinor);
+              rosegardenEvent = key->getAsEvent(rosegardenTime);
+              rosegardenTrack->insert(rosegardenEvent);
+              delete key;
+
               break;
 
             case MIDI_SEQUENCER_SPECIFIC:
@@ -673,7 +694,8 @@ MidiFile::convertToRosegarden()
   if (composition->getTempo() == 0)
   {
     if (_timingDivision)
-      composition->setTempo(96/_timingDivision * 120);
+      composition->setTempo(Note(Note::Crotchet).getDuration()
+                            /_timingDivision * 120);
     else
       composition->setTempo(120);
   }
