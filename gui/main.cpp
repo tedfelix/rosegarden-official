@@ -378,7 +378,10 @@ int main(int argc, char *argv[])
 {
     KAboutData aboutData( "rosegarden", I18N_NOOP("Rosegarden"),
                           VERSION, description, KAboutData::License_GPL,
-                          "Copyright 2000 - 2003 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2001 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilypond fonts copyright 1997 - 2001 Han-Wen Nienhuys and Jan Nieuwenhuizen");
+                          "Copyright 2000 - 2003 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2001 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilypond fonts copyright 1997 - 2001 Han-Wen Nienhuys and Jan Nieuwenhuizen",
+                          0,
+                          "http://www.all-day-breakfast.com/rosegarden/",
+                          "rosegarden-devel@sf.net");
     aboutData.addAuthor("Guillaume Laurent, Chris Cannam, Richard Bown",0,
                         "glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com");
     KCmdLineArgs::init( argc, argv, &aboutData );
