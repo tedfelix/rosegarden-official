@@ -248,7 +248,6 @@ public:
     virtual void addSegment(const QString& filename);
     virtual void deleteSegment(const QString& filename);
     virtual void closeAllSegments();
-    virtual void remapControlBlock();
 
     // Set Quarter note length
     //
@@ -296,6 +295,14 @@ public:
     // recorded (i.e. for display in Transport or on Mixer)
     //
     void processAsynchronousEvents();
+
+    // Sleep for the given time, approximately.  Called from the main
+    // loop in order to lighten CPU load (i.e. the timing quality of
+    // the sequencer does not depend on this being accurate).  A good
+    // implementation of this call would return right away when an
+    // incoming MIDI event needed to be handled.
+    //
+    void sleep(const Rosegarden::RealTime &rt);
 
     void applyFiltering(Rosegarden::MappedComposition *mC,
 			Rosegarden::MidiFilter filter);

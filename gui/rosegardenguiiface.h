@@ -65,35 +65,6 @@ k_dcop:
     virtual void rewindToBeginning() = 0;
     virtual void fastForwardToEnd() = 0;
 
-    // The sequencer tells the GUI what it's just been playing so 
-    // the GUI can provide some visual feedback.
-    //
-    virtual void showVisuals(const Rosegarden::MappedComposition &mC) = 0;
-
-    // The Sequencer sends back MappedCompositions full of
-    // newly recorded MappedEvents for storage and presentation
-    // by the GUI
-    //
-    virtual void processRecordedMidi(const Rosegarden::MappedComposition &mC)=0;
-
-    // Recorded audio is written to a file by the Sequencer so
-    // instead of sending sample data back to the GUI we just
-    // send a timing update.  We can work out real time previewing
-    // directly from the sample file if we have to.
-    //
-    virtual void processRecordedAudio(long recordTimeSec,
-                                      long recordTimeUsec) = 0;
-
-    // Used to map unexpected (async) MIDI events to the user interface.
-    // We can show these on the Transport or on a MIDI Mixer.
-    //
-    virtual void processAsynchronousMidi(const Rosegarden::MappedComposition &mC)=0;
-
-    // Sequencer updates GUI pointer position
-    //
-    virtual void setPointerPosition(long realTimeSec,
-                                    long realTimeUsec) = 0;
-
     // Sequencer updates GUI with status
     //
     virtual void notifySequencerStatus(const int &status) = 0;

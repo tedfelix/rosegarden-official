@@ -108,7 +108,6 @@ public:
     void sendSequencerJump(const RealTime &time);
 
     // Events coming in
-    void processRecordedMidi(const MappedComposition &mC);
     void processAsynchronousMidi(const MappedComposition &mC,
                                  Rosegarden::AudioManagerDialog *aMD);
 
@@ -130,13 +129,6 @@ public:
     /// Check and set sequencer status
     void setTransportStatus(const TransportStatus &status);
     TransportStatus getTransportStatus() const { return m_transportStatus; }
-
-    /**
-     * Update our GUI with latest audio recording information - actual
-     * sample file is recorded directly at the sequencer level so this
-     * is just for informational purposes.
-     */
-    void processRecordedAudio(const Rosegarden::RealTime &time);
 
     /**
      * Suspend the sequencer to allow for a safe DCOP call() i.e. one

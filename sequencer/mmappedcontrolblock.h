@@ -43,10 +43,6 @@ public:
     
     QString getFileName() { return m_fileName; }
 
-    // should be called only when control block changes size,
-    // i.e. not very often
-    void refresh();
-
     // delegate ControlBlock's interface
     InstrumentId getInstrumentForTrack(unsigned int trackId) 
         { return m_controlBlock->getInstrumentForTrack(trackId); }

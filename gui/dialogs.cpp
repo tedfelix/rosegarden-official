@@ -2634,7 +2634,7 @@ TempoDialog::populateTempo()
 
     Rosegarden::RealTime tempoTime = comp.getElapsedRealTime(m_tempoTime);
     QString milliSeconds;
-    milliSeconds.sprintf("%03ld", tempoTime.usec / 1000);
+    milliSeconds.sprintf("%03d", tempoTime.usec / 1000);
     m_tempoTimeLabel->setText(i18n("%1.%2 s,").arg(tempoTime.sec)
 			      .arg(milliSeconds));
 
@@ -2662,7 +2662,7 @@ TempoDialog::populateTempo()
 
 	    Rosegarden::RealTime lastRT = comp.getElapsedRealTime(lastTempoTime);
 	    QString lastms;
-	    lastms.sprintf("%03ld", lastRT.usec / 1000);
+	    lastms.sprintf("%03d", lastRT.usec / 1000);
 	    int lastBar = comp.getBarNumber(lastTempoTime);
 	    m_tempoChangeBeforeAt->setText
 		(i18n("        (at %1.%2 s, in bar %3)").arg(lastRT.sec)

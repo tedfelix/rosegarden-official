@@ -341,10 +341,6 @@ RosegardenSequencerApp::updateClocks()
         m_transportStatus != RECORDING_AUDIO)
         return;
 
-    QByteArray data, replyData;
-    QCString replyType;
-    QDataStream arg(data, IO_WriteOnly);
-
     Rosegarden::RealTime newPosition = m_sequencer->getSequencerTime();
 
     // Go around the loop if we've reached the end
@@ -410,6 +406,20 @@ RosegardenSequencerApp::notifySequencerStatus()
     }
 }
 
+void
+RosegardenSequencerApp::processGUIEvents()
+{
+    Rosegarden::Profiler profiler("processGUIEvents");
+    kapp->processEvents();
+}
+
+void
+RosegardenSequencerApp::sleep(const Rosegarden::RealTime &rt)
+{
+    m_sequencer->sleep(rt);
+}
+
+
 // Sets the Sequencer object and this object to the new time 
 // from where playback can continue.
 //
@@ -450,33 +460,8 @@ RosegardenSequencerApp::processRecordedMidi()
 
     m_sequencerMapper.updateRecordingBuffer(mC);
 
-    // Stream the composition to the DCOP arg but don't send it yet,
-    // because playing MIDI thru is quicker and more urgent than
-    // updating the GUI
-/*!!!
-    QByteArray data;
-    QDataStream arg(data, IO_WriteOnly);
-    arg << mC;
-*/
-    // Now it's safely streamed, we can filter for MIDI thru and 
-    // play it immediately
     applyFiltering(mC, m_controlBlockMmapper->getThruFilter());
     m_sequencer->processEventsOut(*mC, Rosegarden::RealTime::zeroTime, true);
-/*!!!
-    if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                                  ROSEGARDEN_GUI_IFACE_NAME,
-                                 "processRecordedMidi(Rosegarden::MappedComposition)",
-                                  data))
-    {
-        SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi() - " 
-                        <<   "can't call RosegardenGUI client" 
-                        << endl;
-
-        // Stop the sequencer
-        //
-        stop();
-    }
-*/
 }
 
 
@@ -485,29 +470,11 @@ RosegardenSequencerApp::processRecordedMidi()
 void
 RosegardenSequencerApp::processRecordedAudio()
 {
-    QByteArray data; //, replyData;
-    //QCString replyType;
-    QDataStream arg(data, IO_WriteOnly);
-
-    Rosegarden::RealTime time = m_sequencer->getSequencerTime();
-
-    // Send out current time and last audio level
-    //
-    arg << time.sec;
-    arg << time.usec;
-
-    if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                                  ROSEGARDEN_GUI_IFACE_NAME,
-                                 "processRecordedAudio(long int, long int)",
-                                  data/*, replyType, replyData, true*/))
-    {
-        SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi() - " 
-                        <<   "can't call RosegardenGUI client" << endl;
-
-        // Stop the sequencer
-        //
-        stop();
-    }
+    //!!! Nothing to do here: the recording time is sent back to the GUI
+    // in the sequencer mapper as a normal case.  What we probably
+    // should be doing is updating the sequencer mapper with levels,
+    // instead of sending them through mapped events.  Next thing to
+    // do I guess...
 }
 
 
@@ -523,6 +490,7 @@ RosegardenSequencerApp::processAsynchronousEvents()
 	m_sequencer->getMappedComposition(m_playLatency);
 
     if (mC->empty()) {
+	m_sequencer->processPending(m_playLatency);
 	return;
     }
 
@@ -852,9 +820,6 @@ void RosegardenSequencerApp::cleanupMmapData()
 
     delete m_metaIterator;
     m_metaIterator = 0;
-
-//!!!    delete m_controlBlockMmapper;
-//!!!    m_controlBlockMmapper = 0;
 }
 
 void RosegardenSequencerApp::remapSegment(const QString& filename)
@@ -909,17 +874,6 @@ void RosegardenSequencerApp::closeAllSegments()
 
     m_mmappedSegments.clear();
     
-}
-
-void RosegardenSequencerApp::remapControlBlock()
-{
-//!!!    if (m_transportStatus != PLAYING) return;
-
-    SEQUENCER_DEBUG << "RosegardenSequencerApp::remapControlBlock()\n";
-
-    if (m_controlBlockMmapper) {
-	m_controlBlockMmapper->refresh();
-    }
 }
 
 // DCOP Wrapper for play(Rosegarden::RealTime,

@@ -25,7 +25,7 @@
 
 namespace Rosegarden {
 
-RealTime::RealTime(long s, long u) :
+RealTime::RealTime(int s, int u) :
     sec(s), usec(u)
 {
     if (sec == 0) {
@@ -33,10 +33,10 @@ RealTime::RealTime(long s, long u) :
 	while (usec >=  1000000) { usec -= 1000000; ++sec; }
     } else if (sec < 0) {
 	while (usec <= -1000000) { usec += 1000000; --sec; }
-	while (usec > 0) { usec -= 1000000; ++sec; }
+	while (usec > 0)         { usec -= 1000000; ++sec; }
     } else { 
-	while (usec >= 1000000) { usec -= 1000000; ++sec; }
-	while (usec < 0) { usec += 1000000; --sec; }
+	while (usec >= 1000000)  { usec -= 1000000; ++sec; }
+	while (usec < 0)         { usec += 1000000; --sec; }
     }
 }
 
@@ -49,12 +49,12 @@ std::ostream &operator<<(std::ostream &out, const RealTime &rt)
 	out << " ";
     }
 
-    long s = (rt.sec < 0 ? -rt.sec : rt.sec);
-    long u = (rt.usec < 0 ? -rt.usec : rt.usec);
+    int s = (rt.sec < 0 ? -rt.sec : rt.sec);
+    int u = (rt.usec < 0 ? -rt.usec : rt.usec);
 
     out << s << ".";
 
-    long uu(u);
+    int uu(u);
     if (uu == 0) out << "00000";
     else while (uu < 100000) {
 	out << "0";
@@ -66,7 +66,7 @@ std::ostream &operator<<(std::ostream &out, const RealTime &rt)
 }
 
 RealTime
-RealTime::operator/(long d) const
+RealTime::operator/(int d) const
 {
     return RealTime(sec / d, (usec + 1000000 * (sec % d)) / d);
 }

@@ -389,7 +389,7 @@ AudioManagerDialog::slotPopulateFileList()
         // Duration
         //
         length = (*it)->getLength();
-        msecs.sprintf("%03ld", length.usec / 1000);
+        msecs.sprintf("%03d", length.usec / 1000);
         item->setText(1, QString("%1.%2s").arg(length.sec).arg(msecs));
 
         // set start time and duration
@@ -447,7 +447,7 @@ AudioManagerDialog::slotPopulateFileList()
 
                 // Write segment duration
                 //
-                msecs.sprintf("%03ld", segmentDuration.usec / 1000);
+                msecs.sprintf("%03d", segmentDuration.usec / 1000);
                 childItem->setText(1, QString("%1.%2s")
                                           .arg(segmentDuration.sec)
                                           .arg(msecs));

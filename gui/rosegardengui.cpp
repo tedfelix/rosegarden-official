@@ -907,8 +907,7 @@ void RosegardenGUIApp::initView()
 
     // set the pointer position
     //
-    slotSetPointerPosition
-        (comp.getElapsedRealTime(m_doc->getComposition().getPosition()));
+    slotSetPointerPosition(m_doc->getComposition().getPosition());
 
 
     // Transport setup
@@ -2895,30 +2894,6 @@ RosegardenGUIApp::mergeFile(QString filePath)
     }
 }
 
-void RosegardenGUIApp::setPointerPosition(long posSec,
-                                          long posUsec)
-{
-    Rosegarden::RealTime rT(posSec, posUsec);
-    Rosegarden::Composition &comp = m_doc->getComposition();
-    timeT elapsedTime = comp.getElapsedTimeForRealTime(rT);
-
-//    RG_DEBUG << "RosegardenGUIApp::setPointerPosition(" << posSec << ","
-//	     << posUsec << "," << clearToSend << "): elapsedTime " << elapsedTime << endl;
-
-    // Indicate to slotSetPointerPosition that we shouldn't propagate
-    // the jump back to the sequencer, because it originated from the
-    // sequencer in the first place.  This is not exactly elegant
-    // and does rather rely being single-threaded.
-    m_originatingJump = true;
-    m_doc->setPointerPosition(elapsedTime);
-    m_originatingJump = false;
-
-    // stop if we've reached the end marker
-    //
-    if (elapsedTime >= comp.getEndMarker())
-        slotStop();
-}
-
 void
 RosegardenGUIApp::slotUpdatePlaybackPosition()
 {
@@ -2943,24 +2918,22 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
     m_originatingJump = false;
 
     if (m_seqManager->getTransportStatus() == RECORDING_MIDI) {
+
 	Rosegarden::MappedComposition mC;
 	if (mapper->getRecordedEvents(mC) > 0) {
+	    m_seqManager->processAsynchronousMidi(mC, 0);
 	    m_doc->insertRecordedMidi(mC, RECORDING_MIDI);
 	}
 	m_doc->updateRecordingSegment();
+
+    } else if (m_seqManager->getTransportStatus() == RECORDING_AUDIO) {
+
+	m_doc->insertRecordedAudio(position, RECORDING_AUDIO);
     }
 
     if (elapsedTime >= comp.getEndMarker())
         slotStop();
 }
-
-
-void
-RosegardenGUIApp::slotSetPointerPosition(Rosegarden::RealTime time)
-{
-    setPointerPosition(time.sec, time.usec);
-}
-
 
 void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 {
@@ -3533,30 +3506,6 @@ RosegardenGUIApp::keyReleaseEvent(QKeyEvent *event)
 }
 
 
-// Process the outgoing sounds into some form of visual
-// feedback at the GUI
-//
-void
-RosegardenGUIApp::showVisuals(const Rosegarden::MappedComposition &mC)
-{
-    Rosegarden::MappedComposition::iterator it;
-
-    for (it = mC.begin(); it != mC.end(); ++it )
-    {
-        // Only show MIDI MappedEvents on the transport - ensure
-        // that the first non-MIDI event is always "Audio"
-        //
-        if ((*it)->getType() < Rosegarden::MappedEvent::Audio)
-        {
-            m_transport->setMidiOutLabel(*it);
-            m_view->showVisuals(*it);
-        }
-    }
-
-}
-
-
-
 // Sets the play or record Metronome status according to
 // the current transport status
 //
@@ -3631,44 +3580,6 @@ RosegardenGUIApp::slotSetPlayPosition(Rosegarden::timeT time)
     m_seqManager->setPlayStartTime(time);
 }
 
-
-// Process unexpected MIDI events at the GUI - send them to the Transport
-// or to a MIDI mixer for display purposes only.  Useful feature to enable
-// the musician to prove to herself quickly that the MIDI input is still
-// working.
-//
-void
-RosegardenGUIApp::processAsynchronousMidi(const Rosegarden::MappedComposition &mC)
-{
-    if (m_seqManager)
-        m_seqManager->processAsynchronousMidi(mC, m_audioManagerDialog);
-
-    if (m_doc && m_doc->getStudio().haveMidiDevices()) {
-	stateChanged("got_midi_devices");
-    } else {
-	stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
-    }
-}
-
-
-void
-RosegardenGUIApp::processRecordedMidi(const Rosegarden::MappedComposition &mC)
-{
-    if (m_seqManager)
-        m_seqManager->processRecordedMidi(mC);
-}
-
-void
-RosegardenGUIApp:: processRecordedAudio(long recordTimeSec,
-                                        long recordTimeUsec)
-{
-    if (m_seqManager)
-        m_seqManager->processRecordedAudio(Rosegarden::RealTime(recordTimeSec,
-                                                                recordTimeUsec));
-}
-
-
-
 // This method is a callback from the Sequencer to update the GUI
 // with state change information.  The GUI requests the Sequencer
 // to start playing or to start recording and enters a pending
@@ -3693,8 +3604,7 @@ void RosegardenGUIApp::notifySequencerStatus(const int& status)
 // Called when we want to start recording from the GUI.
 // This method tells the sequencer to start recording and
 // from then on the sequencer returns MappedCompositions
-// to the GUI via the "processRecordedMidi() method -
-// also called via DCOP
+// to the GUI via the sequencer mmapper
 //
 void
 RosegardenGUIApp::slotRecord()
@@ -3740,8 +3650,7 @@ RosegardenGUIApp::slotRecord()
 
     // Start the playback timer - this fetches the current sequencer position &c
     //
-    m_playTimer->start(37); // 40ms update (...ish.  Actually we want
-			    // to avoid precise multiples just so as
+    m_playTimer->start(23); // avoid multiples of 10 just so as
 			    // to avoid always having the same digit
 			    // in one place on the transport.  How
 			    // shallow.)
@@ -3847,7 +3756,7 @@ void RosegardenGUIApp::slotPlay()
 
     // Start the playback timer - this fetches the current sequencer position &c
     //
-    m_playTimer->start(37);
+    m_playTimer->start(23);
 }
 
 // Send stop request to Sequencer.  This'll set the flag 

@@ -150,15 +150,10 @@ int main(int argc, char *argv[])
     signal(SIGHUP, signalHandler);
     signal(SIGQUIT, signalHandler);
 
-    struct timeval tv;
-    (void)gettimeofday(&tv, 0);
-    Rosegarden::RealTime lastTick = Rosegarden::RealTime(tv.tv_sec, tv.tv_usec);
-    Rosegarden::RealTime timePerTick = Rosegarden::RealTime(0, 10000);
+    Rosegarden::RealTime sleepTime = Rosegarden::RealTime(0, 10000);
 
     while (roseSeq && roseSeq->getStatus() != QUIT)
     {
-	Rosegarden::RealTime waitTime = Rosegarden::RealTime::zeroTime;
-
         // Update internal clock and send pointer position
         // change event to GUI - this is the heartbeat of
         // the Sequencer - it doesn't tick over without
@@ -281,43 +276,9 @@ int main(int argc, char *argv[])
 
         lastSeqStatus = roseSeq->getStatus();
 
-	Rosegarden::RealTime nextTick = lastTick + timePerTick;
-
-	(void)gettimeofday(&tv, 0);
-	Rosegarden::RealTime timeNow = Rosegarden::RealTime(tv.tv_sec, tv.tv_usec);
-
-	if (waitTime != Rosegarden::RealTime::zeroTime &&
-	    waitTime <  timePerTick) {
-	    nextTick = lastTick + waitTime;
-	}
-
-	// Process small number of pending events (argument is max time in ms)
-	app.processEvents(1);
-	(void)gettimeofday(&tv, 0);
-	timeNow = Rosegarden::RealTime(tv.tv_sec, tv.tv_usec);
-	Rosegarden::RealTime toNextTick = (nextTick - timeNow);
-
-/*
-	if (toNextTick < Rosegarden::RealTime::zeroTime) {
-	    cout << "\nwarning: sequencer overrun: " << (timeNow - nextTick) << endl;
-	    cout << "last tick:\t" << lastTick << endl
-		 << "next tick:\t" << nextTick << endl
-		 << "now:\t\t" << timeNow << endl;
-	}
-*/
-
-	if (toNextTick > Rosegarden::RealTime::zeroTime) {
-
-	    struct timespec reg;
-	    reg.tv_sec = toNextTick.sec;
-	    reg.tv_nsec = toNextTick.usec * 1000;
-	    nanosleep(&reg, 0);
-		
-	}
-	
-	lastTick = nextTick;
+	app.processEvents();
+	roseSeq->sleep(sleepTime);
     }
-
 
     return app.exec();
 

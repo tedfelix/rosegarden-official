@@ -24,6 +24,8 @@
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
 
+#include <sys/time.h>
+
 //#define DEBUG_PLAYABLE 1
 
 namespace Rosegarden
@@ -394,7 +396,7 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_recordStatus(ASYNCHRONOUS_MIDI),
     m_midiRunningId(MidiInstrumentBase),
     m_audioRunningId(AudioInstrumentBase),
-    m_audioMonitoringInstrument(Rosegarden::AudioInstrumentBase),
+    m_audioMonitoringInstrument(AudioInstrumentBase),
     m_audioPlayLatency(0, 0),
     m_audioRecordLatency(0, 0),
     m_studio(studio),
@@ -403,7 +405,7 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_mmcId(0),           // default MMC id of 0
     m_midiClockEnabled(false),
     m_midiClockInterval(0),
-    m_midiClockSendTime(Rosegarden::RealTime::zeroTime),
+    m_midiClockSendTime(RealTime::zeroTime),
     m_midiSongPositionPointer(0)
 {
     // Do some preallocating of the audio vector to minimise overhead
@@ -420,7 +422,7 @@ SoundDriver::~SoundDriver()
 MappedInstrument*
 SoundDriver::getMappedInstrument(InstrumentId id)
 {
-    std::vector<Rosegarden::MappedInstrument*>::iterator it;
+    std::vector<MappedInstrument*>::iterator it;
 
     for (it = m_instruments.begin(); it != m_instruments.end(); it++)
     {
@@ -467,7 +469,7 @@ SoundDriver::queueAudio(PlayableAudioFile *audioFile)
 void
 SoundDriver::setMappedInstrument(MappedInstrument *mI)
 {
-    std::vector<Rosegarden::MappedInstrument*>::iterator it;
+    std::vector<MappedInstrument*>::iterator it;
 
     // If we match then change existing entry
     for (it = m_instruments.begin(); it != m_instruments.end(); it++)
@@ -501,7 +503,7 @@ MappedDevice
 SoundDriver::getMappedDevice(DeviceId id)
 {
     MappedDevice retDevice;
-    std::vector<Rosegarden::MappedInstrument*>::iterator it;
+    std::vector<MappedInstrument*>::iterator it;
 
     std::vector<MappedDevice*>::iterator dIt = m_devices.begin();
     for (; dIt != m_devices.end(); dIt++)
@@ -701,6 +703,15 @@ SoundDriver::cancelAudioFile(MappedEvent *mE)
     }
 }
 
+void
+SoundDriver::sleep(const RealTime &rt)
+{
+    struct timespec reg;
+    reg.tv_sec = rt.sec;
+    reg.tv_nsec = rt.usec * 1000;
+    nanosleep(&reg, 0);
 }
 
+
+}
 

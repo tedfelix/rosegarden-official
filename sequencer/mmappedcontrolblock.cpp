@@ -69,10 +69,3 @@ ControlBlockMmapper::~ControlBlockMmapper()
     ::close(m_fd);
 }
 
-
-void ControlBlockMmapper::refresh()
-{
-    SEQMAN_DEBUG << "ControlBlockMmapper::refresh() : Nothing to do - "
-                 << "control block is of constant size\n";
-}
-

@@ -135,6 +135,8 @@ public:
     //
     virtual void sendMidiClock(const RealTime &playLatency);
 
+    virtual void sleep(const RealTime &);
+
     // ----------------------- End of Virtuals ----------------------
 
     // Create and send an MMC command

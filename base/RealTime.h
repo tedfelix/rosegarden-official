@@ -30,11 +30,11 @@ namespace Rosegarden
 
 struct RealTime
 {
-    long sec;
-    long usec;
+    int sec;
+    int usec;
 
     RealTime(): sec(0), usec(0) {}
-    RealTime(long s, long u);
+    RealTime(int s, int u);
 
     RealTime(const RealTime &r) :
 	sec(r.sec), usec(r.usec) { }
@@ -78,7 +78,7 @@ struct RealTime
         else return sec <= r.sec;
     }
 
-    RealTime operator/(long d) const;
+    RealTime operator/(int d) const;
 
     // Find the fractional difference between times
     //

@@ -2427,7 +2427,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                            playLatency + m_alsaPlayStartTime;
 
 
-	Rosegarden::RealTime alsaTimeNow = getAlsaTime();
+	RealTime alsaTimeNow = getAlsaTime();
 	if (midiRelativeTime < alsaTimeNow) {
 //!!!	    std::cerr << "WARNING: processMidiOut: event is at "
 //		      << midiRelativeTime << " but queue is already at "
@@ -4279,7 +4279,7 @@ AlsaDriver::checkForNewClients()
 
 	    if (m_suspendedPortMap.find(portPair) != m_suspendedPortMap.end()) {
 
-		Rosegarden::DeviceId id = m_suspendedPortMap[portPair];
+		DeviceId id = m_suspendedPortMap[portPair];
 
 		AUDIT_STREAM << "(Reusing suspended device " << id << ")" << std::endl;
 
@@ -4298,7 +4298,7 @@ AlsaDriver::checkForNewClients()
 	    if ((*i)->isReadable()) {
 		for (MappedDeviceList::iterator j = m_devices.begin();
 		     j != m_devices.end(); ++j) {
-		    if ((*j)->getType() == Rosegarden::Device::Midi &&
+		    if ((*j)->getType() == Device::Midi &&
 			(*j)->getConnection() == "" &&
 			(*j)->getDirection() == MidiDevice::Record) {
 			AUDIT_STREAM << "(Reusing record device " << (*j)->getId()
@@ -4316,7 +4316,7 @@ AlsaDriver::checkForNewClients()
 	    if ((*i)->isWriteable()) {
 		for (MappedDeviceList::iterator j = m_devices.begin();
 		     j != m_devices.end(); ++j) {
-		    if ((*j)->getType() == Rosegarden::Device::Midi &&
+		    if ((*j)->getType() == Device::Midi &&
 			(*j)->getConnection() == "" &&
 			(*j)->getDirection() == MidiDevice::Play) {
 			AUDIT_STREAM << "(Reusing play device " << (*j)->getId()
@@ -4540,7 +4540,7 @@ AlsaDriver::sendMMC(MidiByte deviceArg,
     MappedComposition mC;
     MappedEvent *mE;
 
-    Rosegarden::DeviceId deviceId = Rosegarden::Device::NO_DEVICE;
+    DeviceId deviceId = Device::NO_DEVICE;
     
     for (MappedInstrumentList::iterator i = m_instruments.begin();
 	 i != m_instruments.end(); ++i) {
@@ -4548,7 +4548,7 @@ AlsaDriver::sendMMC(MidiByte deviceArg,
 	if ((*i)->getDevice() == deviceId) continue;
 	deviceId = (*i)->getDevice();
 
-	if ((*i)->getType() != Rosegarden::Instrument::Midi) continue;
+	if ((*i)->getType() != Instrument::Midi) continue;
 
 	// Create a plain SysEx
 	//
@@ -4960,6 +4960,15 @@ AlsaDriver::removePlayingAudioFile(PlayableAudioFile *pA)
     }
 
     return false;
+}
+
+void
+AlsaDriver::sleep(const RealTime &rt)
+{
+    int npfd = snd_seq_poll_descriptors_count(m_midiHandle, POLLIN);
+    struct pollfd *pfd = (struct pollfd *)alloca(npfd * sizeof(struct pollfd));
+    snd_seq_poll_descriptors(m_midiHandle, pfd, npfd, POLLIN);
+    poll(pfd, npfd, rt.sec * 1000 + rt.usec / 1000);
 }
 
 }

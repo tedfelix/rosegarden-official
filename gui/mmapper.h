@@ -57,7 +57,6 @@ public:
     ~ControlBlockMmapper();
     
     QString getFileName() { return m_fileName; }
-    void refresh();
     void updateTrackData(Rosegarden::Track*);
     void updateMetronomeData(Rosegarden::InstrumentId instId);
     void updateMetronomeForPlayback();
@@ -75,7 +74,6 @@ protected:
     //--------------- Data members ---------------------------------
     RosegardenGUIDoc* m_doc;
     QString m_fileName;
-    bool m_needsRefresh;
     int m_fd;
     void* m_mmappedBuffer;
     size_t m_mmappedSize;

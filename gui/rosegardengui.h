@@ -173,26 +173,6 @@ public:
     RosegardenProgressBar *getProgressBar() { return m_progressBar; }
 
     /**
-     * The Sequencer sends back a MappedComposition full of
-     * any MappedEvents that it's recorded.
-     *
-     */
-    void processRecordedMidi(const Rosegarden::MappedComposition &mC);
-
-    /*
-     * Retrieve an audio time update while recording
-     *
-     */
-    void processRecordedAudio(long recordTimeSec,
-                              long recordTimeUsec);
-
-    /**
-     * Process unexpected MIDI events for the benefit of the GUI
-     *
-     */
-    void processAsynchronousMidi(const Rosegarden::MappedComposition &mC);
-
-    /**
      * Equivalents of the GUI slots, for DCOP use
      */
     virtual void fileNew()    { slotFileNew(); }
@@ -208,12 +188,6 @@ public:
     virtual void record()             { slotRecord(); }
     virtual void rewindToBeginning()  { slotRewindToBeginning(); }
     virtual void fastForwardToEnd()   { slotFastForwardToEnd(); }
-
-    /**
-     * Set the song position pointer - sent from sequencer
-     */
-    virtual void setPointerPosition(long posSec,
-                                    long posUSec);
 
     /**
      * Start the sequencer auxiliary process
@@ -396,12 +370,6 @@ protected:
      * @see KTMainWindow#readProperties
      */
     virtual void readProperties(KConfig *_cfg);
-
-    /*
-     * Called from the sequencer - to show visuals at the gui.
-     *
-     */
-    virtual void showVisuals(const Rosegarden::MappedComposition &mC);
 
     /**
      * Create a new audio file for the sequencer and return the
@@ -861,11 +829,6 @@ public slots:
      */
     void slotMoveTrackUp();
     void slotMoveTrackDown();
-
-    /**
-     * Set the song position pointer
-     */
-    void slotSetPointerPosition(Rosegarden::RealTime time);
 
     /**
      * timeT version of the same

@@ -57,7 +57,6 @@ using Rosegarden::timeT;
 ControlBlockMmapper::ControlBlockMmapper(RosegardenGUIDoc* doc)
     : m_doc(doc),
       m_fileName(createFileName()),
-      m_needsRefresh(true),
       m_fd(-1),
       m_mmappedBuffer(0),
       m_mmappedSize(sizeof(ControlBlock)),
@@ -108,23 +107,9 @@ QString ControlBlockMmapper::createFileName()
     return KGlobal::dirs()->resourceDirs("tmp").first() + "/rosegarden_control_block";
 }
 
-void ControlBlockMmapper::refresh()
-{
-    SEQMAN_DEBUG << "ControlBlockMmapper : refresh\n";
-
-    if (m_needsRefresh) {
-        ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
-
-        rgapp->sequencerSend("remapControlBlock()");
-
-        m_needsRefresh = false;
-    }
-}
-
 void ControlBlockMmapper::updateTrackData(Track *t)
 {
     m_controlBlock->updateTrackData(t);
-    m_needsRefresh = true;
 }
 
 void ControlBlockMmapper::updateMidiFilters(Rosegarden::MidiFilter thruFilter,
@@ -132,13 +117,11 @@ void ControlBlockMmapper::updateMidiFilters(Rosegarden::MidiFilter thruFilter,
 {
     m_controlBlock->setThruFilter(thruFilter);
     m_controlBlock->setRecordFilter(recordFilter);
-    m_needsRefresh = true;
 }
 
 void ControlBlockMmapper::updateMetronomeData(Rosegarden::InstrumentId instId)
 {
     m_controlBlock->setInstrumentForMetronome(instId);
-    m_needsRefresh = true;
 }
 
 void ControlBlockMmapper::updateMetronomeForPlayback()
@@ -147,7 +130,6 @@ void ControlBlockMmapper::updateMetronomeForPlayback()
     SEQMAN_DEBUG << "ControlBlockMmapper::updateMetronomeForPlayback: muted=" << muted << endl;
     if (m_controlBlock->isMetronomeMuted() == muted) return;
     m_controlBlock->setMetronomeMuted(muted);
-    m_needsRefresh = true;
 }
 
 void ControlBlockMmapper::updateMetronomeForRecord()
@@ -156,7 +138,6 @@ void ControlBlockMmapper::updateMetronomeForRecord()
     SEQMAN_DEBUG << "ControlBlockMmapper::updateMetronomeForRecord: muted=" << muted << endl;
     if (m_controlBlock->isMetronomeMuted() == muted) return;
     m_controlBlock->setMetronomeMuted(muted);
-    m_needsRefresh = true;
 }
 
 void ControlBlockMmapper::updateSoloData(bool solo,
@@ -164,7 +145,6 @@ void ControlBlockMmapper::updateSoloData(bool solo,
 {
     m_controlBlock->setSolo(solo);
     m_controlBlock->setSelectedTrack(selectedTrack);
-    m_needsRefresh = true;
 }
 
 void ControlBlockMmapper::setDocument(RosegardenGUIDoc* doc)
@@ -196,7 +176,7 @@ void ControlBlockMmapper::initControlBlock()
     m_controlBlock->setThruFilter(m_doc->getStudio().getMIDIThruFilter());
     m_controlBlock->setRecordFilter(m_doc->getStudio().getMIDIRecordFilter());
 
-    refresh();
+    ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
 }
 
 

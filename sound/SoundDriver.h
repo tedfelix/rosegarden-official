@@ -248,10 +248,10 @@ class NoteOffEvent
 {
 public:
     NoteOffEvent() {;}
-    NoteOffEvent(const Rosegarden::RealTime &realTime,
+    NoteOffEvent(const RealTime &realTime,
                  unsigned int pitch,
-                 Rosegarden::MidiByte channel,
-                 Rosegarden::InstrumentId instrument):
+                 MidiByte channel,
+                 InstrumentId instrument):
         m_realTime(realTime),
         m_pitch(pitch),
         m_channel(channel),
@@ -267,17 +267,17 @@ public:
     };
 
     void setRealTime(const RealTime &time) { m_realTime = time; }
-    Rosegarden::RealTime getRealTime() const { return m_realTime; }
+    RealTime getRealTime() const { return m_realTime; }
 
-    Rosegarden::MidiByte getPitch() const { return m_pitch; }
-    Rosegarden::MidiByte getChannel() const { return m_channel; }
-    Rosegarden::InstrumentId getInstrument() const { return m_instrument; }
+    MidiByte getPitch() const { return m_pitch; }
+    MidiByte getChannel() const { return m_channel; }
+    InstrumentId getInstrument() const { return m_instrument; }
 
 private:
-    Rosegarden::RealTime     m_realTime;
-    Rosegarden::MidiByte     m_pitch;
-    Rosegarden::MidiByte     m_channel;
-    Rosegarden::InstrumentId m_instrument;
+    RealTime     m_realTime;
+    MidiByte     m_pitch;
+    MidiByte     m_channel;
+    InstrumentId m_instrument;
 
 };
 
@@ -321,7 +321,7 @@ public:
         getMappedComposition(const RealTime &playLatency) = 0;
 
     virtual void processEventsOut(const MappedComposition &mC,
-                                  const Rosegarden::RealTime &playLatency,
+                                  const RealTime &playLatency,
                                   bool now) = 0;
 
     // Activate a recording state
@@ -367,6 +367,8 @@ public:
     virtual void setLoop(const RealTime &loopStart, const RealTime &loopEnd)
         = 0;
 
+    virtual void sleep(const RealTime &rt);
+
     // Send the MIDI clock
     //
     virtual void sendMidiClock(const RealTime &playLatency) = 0;
@@ -398,7 +400,7 @@ public:
     // this list (complete with names) to generate its proper
     // Instruments under the MidiDevice and AudioDevice.
     //
-    Rosegarden::MappedDevice getMappedDevice(DeviceId id);
+    MappedDevice getMappedDevice(DeviceId id);
 
     // Return the number of devices we've found
     //
@@ -472,10 +474,10 @@ public:
 
     // Audio monitoring InstrumentId
     //
-    Rosegarden::InstrumentId getAudioMonitoringInstrument()
+    InstrumentId getAudioMonitoringInstrument()
         { return m_audioMonitoringInstrument; }
 
-    void setAudioMonitoringInstrument(Rosegarden::InstrumentId id)
+    void setAudioMonitoringInstrument(InstrumentId id)
         { m_audioMonitoringInstrument = id; }
 
     // Latencies
@@ -502,9 +504,9 @@ public:
 
     // Modify MIDI record device
     //
-    void setMidiRecordDevice(Rosegarden::DeviceId id)
+    void setMidiRecordDevice(DeviceId id)
         { m_midiRecordDevice = id; }
-    Rosegarden::DeviceId getMIDIRecordDevice() const 
+    DeviceId getMIDIRecordDevice() const 
         { return m_midiRecordDevice; }
 
     // Set MMC state
@@ -520,7 +522,7 @@ public:
     // MMC Id
     //
     int getMMCId() const { return ((int)(m_mmcId)); }
-    void setMMCId(int id) { m_mmcId = (Rosegarden::MidiByte)(id); }
+    void setMMCId(int id) { m_mmcId = (MidiByte)(id); }
 
     // Set MIDI clock interval
     //
@@ -542,7 +544,7 @@ protected:
 
     std::string                                 m_name;
     unsigned int                                m_driverStatus;
-    Rosegarden::RealTime                        m_playStartPosition;
+    RealTime                                    m_playStartPosition;
     bool                                        m_startPlayback;
     bool                                        m_playing;
 
@@ -562,7 +564,7 @@ protected:
     typedef std::vector<MappedDevice*> MappedDeviceList;
     MappedDeviceList m_devices;
 
-    Rosegarden::DeviceId                        m_midiRecordDevice;
+    DeviceId                                    m_midiRecordDevice;
 
     //
     MappedComposition                           m_recordComposition;
@@ -585,12 +587,12 @@ protected:
     // Filename we should record to
     std::string                                 m_recordingFilename;
 
-    Rosegarden::InstrumentId                    m_audioMonitoringInstrument;
+    InstrumentId                                m_audioMonitoringInstrument;
 
     // Audio latencies
     //
-    RealTime                     m_audioPlayLatency;
-    RealTime                     m_audioRecordLatency;
+    RealTime                                    m_audioPlayLatency;
+    RealTime                                    m_audioRecordLatency;
 
     // Virtual studio hook
     //
@@ -602,13 +604,13 @@ protected:
     //
     bool                         m_mmcEnabled;
     bool                         m_mmcMaster;
-    Rosegarden::MidiByte         m_mmcId;      // device id
+    MidiByte                     m_mmcId;      // device id
 
     // MIDI clock interval - microseconds
     //
     bool                         m_midiClockEnabled;
     long                         m_midiClockInterval;
-    Rosegarden::RealTime         m_midiClockSendTime;
+    RealTime                     m_midiClockSendTime;
 
     // MIDI Song Position pointer
     //

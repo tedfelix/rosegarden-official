@@ -326,6 +326,9 @@ public:
     std::vector<PlayableAudioFile*> getPlayingAudioFiles()
         { return m_soundDriver->getPlayingAudioFiles(); }
 
+    void sleep(const Rosegarden::RealTime &rt)
+        { return m_soundDriver->sleep(rt); }
+
 protected:
 
     SoundDriver                                *m_soundDriver;

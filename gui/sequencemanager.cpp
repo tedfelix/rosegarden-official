@@ -478,7 +478,7 @@ SequenceManager::sendSequencerJump(const Rosegarden::RealTime &time)
 // Called when we want to start recording from the GUI.
 // This method tells the sequencer to start recording and
 // from then on the sequencer returns MappedCompositions
-// to the GUI via the "processRecordedMidi() method -
+// to the GUI via the sequencer mmapper
 // also called via DCOP
 //
 //
@@ -773,46 +773,6 @@ punchin:
 }
 
 
-
-// This method accepts an incoming MappedComposition and goes about
-// inserting it into the Composition and updating the display to show
-// what has been recorded and where.
-//
-// For ALSA we reflect the events straight back out to the instrument
-// we're currently playing just like in processAsynchronousMidi.
-// aRts does it's own MIDI thru which we don't bother we worrying
-// about for the moment.
-//
-//
-void
-SequenceManager::processRecordedMidi(const MappedComposition &mC)
-{
-    processAsynchronousMidi(mC, 0);
-
-
-    // Send any recorded Events to a Segment for storage and display.
-    // We have to send the transport status because this method is
-    // called asynchronously from the sequencer and the calls below
-    // can create a new recording SegmentItem on the canvas if we
-    // don't check that recording is coming to a close (or has already
-    // been stopped).
-    //
-    //  Filter on the way out.
-    //
-    //
-    m_doc->insertRecordedMidi(
-	mC,
-/*!!!
-            applyFiltering(mC,
-                           Rosegarden::MappedEvent::MappedEventType(
-                               m_doc->getStudio().getMIDIRecordFilter())),
-*/
-            m_transportStatus);
-
-}
-
-
-
 // Process unexpected MIDI events at the GUI - send them to the Transport
 // or to a MIDI mixer for display purposes only.  Useful feature to enable
 // the musician to prove to herself quickly that the MIDI input is still
@@ -828,11 +788,6 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
     Rosegarden::MappedComposition::iterator i;
     Rosegarden::Composition &comp = m_doc->getComposition();
-    Rosegarden::Track *track =
-	comp.getTrackById(comp.getSelectedTrack());
-#ifdef HAVE_ALSA
-//!!!    Rosegarden::InstrumentId id = track->getInstrument();
-#endif
 
     // Thru filtering is done at the sequencer for the actual sound
     // output, but here we need both filtered (for OUT display) and
@@ -842,8 +797,6 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 	applyFiltering(mC,
 		       Rosegarden::MappedEvent::MappedEventType(
 			   m_doc->getStudio().getMIDIThruFilter()));
-    
-//!!!    Rosegarden::MappedComposition retMC;
     
     // send all events to the MIDI in label
     //
@@ -896,25 +849,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 	    continue;
 	    
 	}
-	
-#ifdef HAVE_ALSA
-//!!!	(*i)->setInstrument(id);
-#endif
-//!!!	retMC.insert(new Rosegarden::MappedEvent(*i));
     }
-    
-#ifdef HAVE_ALSA
-    // MIDI thru implemented at this layer for ALSA for
-    // the moment.  aRts automatically does MIDI through,
-    // this does it to the currently selected instrument.
-    //
-//!!!    showVisuals(retMC);
-    
-    // Filter
-    //
-//!!!    Rosegarden::StudioControl::sendMappedComposition(retMC);
-    
-#endif 
     
     // if we aren't playing or recording, consider invoking any
     // step-by-step clients (using unfiltered composition)
@@ -1112,13 +1047,6 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
     m_playbackAudioLatency = Rosegarden::RealTime(jackSec, jackUSec);
 
 }
-
-void
-SequenceManager::processRecordedAudio(const Rosegarden::RealTime &time)
-{
-    m_doc->insertRecordedAudio(time, m_transportStatus);
-}
-
 
 void
 SequenceManager::sendAudioLevel(Rosegarden::MappedEvent *mE)
@@ -1360,18 +1288,8 @@ SequenceManager::panic()
 void
 SequenceManager::showVisuals(const Rosegarden::MappedComposition &mC)
 {
-    RosegardenGUIView *v;
-    QList<RosegardenGUIView>& viewList = m_doc->getViewList();
-
     MappedComposition::iterator it = mC.begin();
-    for (; it != mC.end(); it++)
-    {
-        for (v = viewList.first(); v != 0; v = viewList.next())
-        {
-            //v->showVisuals(*it);
-            m_transport->setMidiOutLabel(*it);
-        }
-    }
+    if (it != mC.end()) m_transport->setMidiOutLabel(*it);
 }
 
 
@@ -1444,7 +1362,6 @@ bool SequenceManager::event(QEvent *e)
 	if (m_updateRequested) {
 	    SEQMAN_DEBUG << "SequenceManager::event(): update requested\n";
 	    checkRefreshStatus();
-            m_controlBlockMmapper->refresh();
 	    m_updateRequested = false;
 	}
 	return true;

@@ -389,9 +389,6 @@ void SegmentNotationPreview::updatePreview()
     m_previewInfo.clear();
 
     Segment::iterator start = m_segment->begin();
-//    Segment::iterator end = m_segment->end();
-    // if (start == m_segment->end()) start = m_segment->begin();
-    //else start = m_segment->findTime((*start)->getAbsoluteTime());
 
     for (Segment::iterator i = start; m_segment->isBeforeEndMarker(i); ++i) {
 
@@ -418,9 +415,6 @@ void SegmentNotationPreview::updatePreview()
         double y = y1 + ((y0 - y1) * (pitch-16)) / 96;
         if (y < y0) y = y0;
         if (y > y1-1) y = y1-1;
-		
-//         painter.drawLine((int)x0, (int)y, (int)x0 + width, (int)y);
-//         painter.drawLine((int)x0, (int)y+1, (int)x0 + width, (int)y+1);
 
         QRect r((int)x0, (int)y, width, 2);
         m_previewInfo.push_back(r);
@@ -953,6 +947,8 @@ void SegmentCanvas::updateAllSegmentItems()
 	     i != compositionSegments.end(); ++i) {
 	    
 	    Segment* seg = (*i);
+	    if (m_recordingSegment &&
+		(seg == m_recordingSegment->getSegment())) continue;
 	    
 	    if (std::find(currentSegments.begin(),
 			  currentSegments.end(), seg) ==
@@ -1208,6 +1204,7 @@ void SegmentCanvas::deleteRecordingSegmentItem()
 	m_recordingSegment->setVisible(false);
 	delete m_recordingSegment;
 	m_recordingSegment = 0;
+	updateAllSegmentItems();
         canvas()->update();
     }
 }
