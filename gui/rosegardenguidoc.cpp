@@ -362,11 +362,13 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                << "<!DOCTYPE rosegarden-data>\n"
                << "<rosegarden-data>\n";
 
-    if (format && std::string(format) == std::string("deviceExport"))
+    static const QString deviceExport("deviceExport");
+
+    if (format && deviceExport == format)
     {
         // Send out the studio - a self contained command
         //
-        outStream << QString(strtoqstr(m_studio.toXmlString())) << endl << endl;
+        outStream << strtoqstr(m_studio.toXmlString()) << endl << endl;
     
         // close the top-level XML tag
         //
