@@ -82,8 +82,8 @@ std::vector<int> NotationHLayout::m_availableSpacings;
 
 
 NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
-				 const NotationProperties &properties,
-                                 QObject* parent, const char* name) :
+				   const NotationProperties &properties,
+				   QObject* parent, const char* name) :
     ProgressReporter(parent, name),
     Rosegarden::HorizontalLayoutEngine(c),
     m_totalWidth(0.),
@@ -138,117 +138,6 @@ NotationHLayout::getBarData(Staff &staff) const
 }
 
 
-// To find the "ideal" width of a bar, we need the sum of the minimum
-// widths of the elements in the bar, plus some extra space.
-
-// Rather naively, we currently add as much extra space as would be
-// needed if the bar was made up entirely of repetitions of its
-// shortest note.  This space is the product of the number of the
-// bar's shortest notes that will fit in the duration of the bar and
-// the comfortable gap for each.
-
-// Some ground rules for "ideal" layout:
-// 
-// -- The shortest notes in the bar need to have a certain amount of
-//    space, but if they're _very_ short compared to the total bar
-//    duration then we can probably afford to squash them somewhat
-// 
-// -- If there are lots of the shortest note duration, then we
-//    should try not to squash them quite so much
-// 
-// -- If there are not very many notes in the bar altogether, we can
-//    squash things up a bit more perhaps
-// 
-// -- Similarly if they're dotted, we need space for the dots; we
-//    can't risk making the dots invisible
-// 
-// -- In theory we don't necessarily want the whole bar width to be
-//    the product of the shortest-note width and the number of shortest
-//    notes in the bar.  But it's difficult to plan the spacing
-//    otherwise.  One possibility is to augment the fixedWidth with a
-//    certain proportion of the width of each note, and make that a
-//    higher proportion for very short notes than for long notes.
-//
-// -- We should never make the bar narrower than a certain minimum
-//    (dependent on the current spacing setting, as is most of the rest)
-
-// The algorithm below does not implement most of these rules; it
-// can probably be improved dramatically without too much work
-
-// Arguments to this method:
-//
-// fixedWidth: is the total width of non-negotiable items such as
-// clefs, keys, and accidentals.  These are items that need a
-// particular amount of space and are not accorded extra space
-// according to their duration.
-// 
-// baseWidth: is the minimum total width of variable-width items such
-// as notes and rests.
-//
-// shortest: points to the shortest non-zero-duration event in the bar
-// (may be one event in a chord).
-// 
-// shortCount: is the number of distinct events (i.e. chords or rests)
-// of duration equal to shortest.
-//
-// totalCount: is the total number of distinct events (chords or rests,
-// or keys, clefs etc) in the bar.
-
-double NotationHLayout::getIdealBarWidth(Staff &staff,
-					 int fixedWidth,
-					 int baseWidth,
-					 NotationElementList::iterator shortest,
-					 int shortCount,
-					 int /*totalCount*/,
-					 const TimeSignature &timeSignature)
-    const
-{
-    NOTATION_DEBUG << "NotationHLayout::getIdealBarWidth: shortCount is "
-                         << shortCount << ", fixedWidth is "
-                         << fixedWidth << ", baseWidth is "
-                         << baseWidth << ", fixedWidth+baseWidth is "
-                         << fixedWidth + baseWidth << ", barDuration is "
-                         << timeSignature.getBarDuration() << endl;
-
-    if (shortest == staff.getViewElementList()->end()) {
-        NOTATION_DEBUG << "First trivial return" << endl;
-        return fixedWidth;
-    }
-
-    int d = (*shortest)->event()->getNotationDuration();
-
-    if (d == 0) {
-        NOTATION_DEBUG << "Second trivial return" << endl;
-        return fixedWidth;
-    }
-
-    int smin = getMinWidth(**shortest);
-    if (!(*shortest)->event()->get<Int>(NOTE_DOTS)) {
-        smin += m_npf->getDotWidth()/2;
-    }
-
-    // if there aren't many of the shortest notes, we don't want to
-    // allow so much space to accommodate them 
-    if (shortCount < 3) smin -= 3 - shortCount;
-
-    int gapPer =
-	getComfortableGap((*shortest)->event()->get<Int>(NOTE_TYPE)) +
-        smin;
-
-    NOTATION_DEBUG << "d is " << d << ", gapPer is " << gapPer << endl;
-
-    double w = ((timeSignature.getBarDuration() * gapPer) / d);
-    w *= m_spacing / 170.0;
-    w += baseWidth + fixedWidth;
-
-    if (w < (fixedWidth + baseWidth)) {
-	w = (double)(fixedWidth + baseWidth);
-	NOTATION_DEBUG << "NotationHLayout::getIdealBarWidth: returning minimum: "
-		       << w << endl;
-    }
-    return w;
-} 
-
 NotationElementList::iterator
 NotationHLayout::getStartOfQuantizedSlice(const NotationElementList *notes,
 					  timeT t)
@@ -265,6 +154,7 @@ NotationHLayout::getStartOfQuantizedSlice(const NotationElementList *notes,
     }
 }
 
+
 void
 NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 {
@@ -272,34 +162,29 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
     Rosegarden::Profiler profiler("NotationHLayout::scanStaff");
 
     Segment &segment(staff.getSegment());
-    NotationElementList *notes = staff.getViewElementList();
-    BarDataList &barList(getBarData(staff));
-
-    Rosegarden::Key key;
-    Clef clef;
-    TimeSignature timeSignature;
-
     bool isFullScan = (startTime == endTime);
-    bool allDone = false; // used in partial scans
-    bool barCorrect = true;
-
-    int startBarNo = getComposition()->getBarNumber(segment.getStartTime());
-    int endBarNo = getComposition()->getBarNumber(segment.getEndMarkerTime());
-    if (endBarNo > startBarNo &&
-	getComposition()->getBarStart(endBarNo) == segment.getEndMarkerTime()) {
-	--endBarNo;
-    }
 
     if (isFullScan) {
 	clearBarList(staff);
 	startTime = segment.getStartTime();
 	endTime = segment.getEndMarkerTime();
     } else {
-	while (barList.begin() != barList.end() &&
-	       barList.begin()->first < startBarNo) {
-	    barList.erase(barList.begin());
-	}
+	startTime = getComposition()->getBarStartForTime(startTime);
+	endTime = getComposition()->getBarEndForTime(endTime);
     }
+
+    NotationElementList *notes = staff.getViewElementList();
+    BarDataList &barList(getBarData(staff));
+
+    int startBarNo = getComposition()->getBarNumber(startTime);
+    int endBarNo = getComposition()->getBarNumber(endTime);
+
+/*!!!
+    if (endBarNo > startBarNo &&
+	getComposition()->getBarStart(endBarNo) == segment.getEndMarkerTime()) {
+	--endBarNo;
+    }
+*/
 
     std::string name =
 	segment.getComposition()->
@@ -314,10 +199,14 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
     if (isFullScan) {
 	helper.setNotationProperties();
     } else {
-	helper.setNotationProperties
-	    (getComposition()->getBarStartForTime(startTime),
-	     getComposition()->getBarEndForTime(endTime));
+	helper.setNotationProperties(startTime, endTime);
     }
+
+    Rosegarden::Key key = segment.getKeyAtTime(startTime);
+    Clef clef = segment.getClefAtTime(startTime);
+    TimeSignature timeSignature =
+	segment.getComposition()->getTimeSignatureAt(startTime);
+    bool barCorrect = true;
 
     for (int barNo = startBarNo; barNo <= endBarNo; ++barNo) {
 
@@ -334,44 +223,26 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	    to = notes->end();
 	}
 
-        // fixedWidth includes clefs, keys &c, but also accidentals
-	int fixedWidth = getBarMargin();
-
-        // baseWidth is absolute minimum width of non-fixedWidth elements
-        int baseWidth = 0;
-
 	bool newTimeSig = false;
 	timeSignature = getComposition()->getTimeSignatureInBar
 	    (barNo, newTimeSig);
 
+	double fixedWidth = 0.0;
 	if ((newTimeSig || barNo == startBarNo) && !timeSignature.isHidden()) {
 	    fixedWidth += getFixedItemSpacing() * 2 +
 		m_npf->getTimeSigWidth(timeSignature);
 	}
 
 	setBarBasicData(staff, barNo, from, barCorrect, timeSignature, newTimeSig);
+	barList.find(barNo)->second.layoutData.needsLayout = true;
 
-	if (barTimes.second >= startTime) {
-	    // we're confident this isn't end() after setBarBasicData above
-	    barList.find(barNo)->second.layoutData.needsLayout = true;
-	}
-
-	if (!isFullScan && allDone) {
-	    ++barNo;
-	    continue;
-	}
+	ChunkList chunks;
+	double lyricWidth = 0;
 
 	typedef __HASH_NS::hash_set<long> GroupIdSet;
 	GroupIdSet groupIds;
 
 	NOTATION_DEBUG << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << segment.getEndMarkerTime() << "); from is at " << (from == notes->end() ? -1 : (*from)->getViewAbsoluteTime()) << ", to is at " << (to == notes->end() ? -1 : (*to)->getViewAbsoluteTime()) << endl;
-
-        NotationElementList::iterator shortest = notes->end();
-        int shortCount = 0;
-        int totalCount = 0;
-
-	// for partial scans where this bar turns out to precede the scan start
-	bool leaveSizesAlone = false;
 
 	timeT actualBarEnd = barTimes.first;
 
@@ -380,7 +251,6 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
         for (NotationElementList::iterator itr = from; itr != to; ++itr) {
         
             NotationElement *el = static_cast<NotationElement*>((*itr));
-            int mw = getMinWidth(*el);
 
 	    if (el->event()->has(BEAMED_GROUP_ID)) {
 		long groupId = el->event()->get<Int>(BEAMED_GROUP_ID);
@@ -396,8 +266,9 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
             if (el->event()->isa(Clef::EventType)) {
 
 //		NOTATION_DEBUG << "Found clef" << endl;
-
-                fixedWidth += mw;
+		chunks.push_back(Chunk(el->event()->getSubOrdering(),
+				       getLayoutWidth(*el)));
+		
                 clef = Clef(*el->event());
 
                 // Probably not strictly the right thing to do
@@ -407,21 +278,12 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
             } else if (el->event()->isa(Rosegarden::Key::EventType)) {
 
 //		NOTATION_DEBUG << "Found key" << endl;
+		chunks.push_back(Chunk(el->event()->getSubOrdering(),
+				       getLayoutWidth(*el)));
 
-                fixedWidth += mw;
                 key = Rosegarden::Key(*el->event());
 
                 accTable = AccidentalTable(key, clef);
-		
-            } else if (!isFullScan &&
-		       (barTimes.second < startTime ||
-			barTimes.first > endTime)) {
-
-		// partial scans don't need to look at all notes, just clefs
-		// and key changes, and can set the basic data only (?)
-		leaveSizesAlone = true;
-                if (barTimes.first > endTime) allDone = true;
-                continue;
 
 	    } else if (el->event()->isa(Text::EventType)) {
 
@@ -431,60 +293,43 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 		if (el->event()->has(Text::TextTypePropertyName) &&
 		    el->event()->get<String>(Text::TextTypePropertyName) ==
 		    Text::Lyric) {
-
-		    int textWidth = m_npf->getTextWidth(Text(*el->event()));
-		    if (textWidth > m_npf->getNoteBodyWidth()) {
-			textWidth -= m_npf->getNoteBodyWidth();
-		    } else {
-			textWidth = 0;
-		    }
-		    fixedWidth += textWidth;
-		    el->event()->set<Int>(m_properties.LYRIC_EXTRA_WIDTH,
-					  textWidth);
+		    lyricWidth = m_npf->getTextWidth(Text(*el->event()));
 		}
+		chunks.push_back(Chunk(el->event()->getSubOrdering(), 0));
 
 	    } else if (el->isNote()) {
-
-		++totalCount;
 		
-		scanChord(notes, itr, clef, key, accTable,
-			  fixedWidth, baseWidth, shortest, shortCount, to);
+		scanChord(notes, itr, clef, key, accTable, lyricWidth, chunks, to);
 
 	    } else if (el->isRest()) {
 
-		++totalCount;
-
-		scanRest(notes, itr,
-			 fixedWidth, baseWidth, shortest, shortCount);
+		chunks.push_back(Chunk(el->getViewDuration(),
+				       el->event()->getSubOrdering(),
+				       0,
+				       getLayoutWidth(*el)));
 
 	    } else if (el->event()->isa(Indication::EventType)) {
 
 //		NOTATION_DEBUG << "Found indication" << endl;
 
-		mw = 0;
+		chunks.push_back(Chunk(el->event()->getSubOrdering(), 0));
 
 	    } else {
 		
 		NOTATION_DEBUG << "Found something I don't know about (type is " << el->event()->getType() << ")" << endl;
-		fixedWidth += mw;
+		chunks.push_back(Chunk(el->event()->getSubOrdering(),
+				       getLayoutWidth(*el)));
 	    }
 
 	    actualBarEnd = el->getViewAbsoluteTime() + el->getViewDuration();
-            el->event()->setMaybe<Int>(m_properties.MIN_WIDTH, mw);
+//!!!            el->event()->setMaybe<Int>(m_properties.MIN_WIDTH, mw);
 	}
 
 	if (actualBarEnd == barTimes.first) actualBarEnd = barTimes.second;
 	barCorrect = (actualBarEnd == barTimes.second);
 
-	if (!leaveSizesAlone) {
-	    double idealWidth = 
-		getIdealBarWidth(staff, fixedWidth, baseWidth, shortest,
-				 shortCount, totalCount, timeSignature);
-	    NOTATION_DEBUG << "Ideal bar width: " << idealWidth << endl;
-	
-	    setBarSizeData(staff, barNo, idealWidth, fixedWidth, baseWidth,
-			   actualBarEnd - barTimes.first);
-	}
+	setBarSizeData(staff, barNo, chunks, fixedWidth,
+		       actualBarEnd - barTimes.first);
 
 	if ((endTime > startTime) && (barNo % 20 == 0)) {
 	    emit setProgress((barTimes.second - startTime) * 95 /
@@ -494,12 +339,13 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
         throwIfCancelled();
     }
-
+/*
     BarDataList::iterator ei(barList.end());
     while (ei != barList.begin() && (--ei)->first > endBarNo) {
 	barList.erase(ei);
 	ei = barList.end();
     }
+*/
 }
 
 void
@@ -537,11 +383,10 @@ NotationHLayout::setBarBasicData(Staff &staff,
 
 void
 NotationHLayout::setBarSizeData(Staff &staff,
-				int barNo,
-				double width,
-				int fixedWidth,
-				int baseWidth,
-				Rosegarden::timeT actualDuration)
+				 int barNo,
+				 const ChunkList &chunks,
+				 double fixedWidth,
+				 Rosegarden::timeT actualDuration)
 {
     NOTATION_DEBUG << "setBarSizeData for " << barNo << endl;
 
@@ -555,23 +400,23 @@ NotationHLayout::setBarSizeData(Staff &staff,
 	i = bdl.find(barNo);
     }
 
-    i->second.sizeData.idealWidth = width;
-    i->second.sizeData.fixedWidth = fixedWidth;
-    i->second.sizeData.baseWidth = baseWidth;
+    i->second.sizeData.chunks = chunks;
     i->second.sizeData.actualDuration = actualDuration;
+    i->second.sizeData.idealWidth = 0.0;
+    i->second.sizeData.reconciledWidth = 0.0;
+    i->second.sizeData.fixedWidth = fixedWidth;
 }
 
  
 void
 NotationHLayout::scanChord(NotationElementList *notes,
-			   NotationElementList::iterator &itr,
-			   const Rosegarden::Clef &clef,
-			   const Rosegarden::Key &key,
-			   AccidentalTable &accTable,
-			   int &fixedWidth, int &baseWidth,
-			   NotationElementList::iterator &shortest,
-			   int &shortCount,
-			   NotationElementList::iterator &to)
+			    NotationElementList::iterator &itr,
+			    const Rosegarden::Clef &clef,
+			    const Rosegarden::Key &key,
+			    AccidentalTable &accTable,
+			    double &lyricWidth,
+			    ChunkList &chunks,
+			    NotationElementList::iterator &to)
 {
     NotationChord chord(*notes, itr, m_notationQuantizer, m_properties);
     AccidentalTable newAccTable(accTable);
@@ -644,93 +489,37 @@ NotationHLayout::scanChord(NotationElementList *notes,
     }
 
     accTable.copyFrom(newAccTable);
+    
+    double extraWidth = 0;
 
     if (someAccidental != NoAccidental) {
-	fixedWidth += m_npf->getAccidentalWidth(someAccidental);
+	extraWidth += m_npf->getAccidentalWidth(someAccidental);
     }
 
     if (chord.hasNoteHeadShifted()) {
-	fixedWidth += m_npf->getNoteBodyWidth();
+	extraWidth = std::max(extraWidth, double(m_npf->getNoteBodyWidth()));
     }
 
     if (grace) {
-	fixedWidth += m_npf->getNoteBodyWidth();
+//	fixedWidth += m_npf->getNoteBodyWidth();
+	chunks.push_back(Chunk(-1, extraWidth + m_npf->getNoteBodyWidth()));
 	return;
     }
 
-    NotationElementList::iterator myShortest = chord.getShortestElement();
-    if (myShortest == notes->end()) {
-	NOTATION_DEBUG << "WARNING: NotationHLayout::scanChord: No shortest element in chord!" << endl;
+    //!!! suboptimal -- we've already scanned chord above
+    NotationElementList::iterator myLongest = chord.getLongestElement();
+    if (myLongest == notes->end()) {
+	NOTATION_DEBUG << "WARNING: NotationHLayout::scanChord: No longest element in chord!" << endl;
     }
 
-    timeT d = (*myShortest)->getViewDuration();
-    baseWidth += getMinWidth(**myShortest);
+    timeT d = (*myLongest)->getViewDuration();
 
-    timeT sd = 0;
-    if (shortest != notes->end()) {
-	sd = (*shortest)->getViewDuration();
-    }
-
-    if (d > 0 && (sd == 0 || d <= sd)) {
-	if (d == sd) {
-	    ++shortCount;
-	} else {
-	    shortest = myShortest;
-	    shortCount = 1;
-	}
-    }
+    chunks.push_back(Chunk(d, 0, extraWidth,
+			   std::max(getLayoutWidth(**myLongest),
+				    lyricWidth)));
 
     itr = chord.getFinalElement();
     if (barEndsInChord) { to = itr; ++to; }
-    return;
-}
-
-void
-NotationHLayout::scanRest
-(NotationElementList *notes,
- NotationElementList::iterator &itr,
- int &, int &baseWidth,
- NotationElementList::iterator &shortest, int &shortCount)
-{ 
-    timeT d = (*itr)->getViewDuration();
-
-    // find any cases where rests are too short to appear:
-    // we ignore any rest which has a quantized duration of
-    // zero, or which overlaps a following event that starts
-    // less than the shortest note's duration after it
-    
-    bool tooShort = (d == 0);
-    if (!tooShort) {
-	NotationElementList::iterator ni(itr);
-	if (++ni != notes->end()) {
-	    if ((*ni)->getViewAbsoluteTime() - (*itr)->getViewAbsoluteTime()
-		< Note(Note::Shortest).getDuration()) {
-		tooShort = true;
-	    }
-	}
-    }
-    (*itr)->event()->setMaybe<Bool>(m_properties.REST_TOO_SHORT, tooShort);
-    if (tooShort) return;
-
-    baseWidth += getMinWidth(**itr);
-
-    timeT sd = 0;
-    if (shortest != notes->end()) {
-	sd = (*shortest)->getViewDuration();
-    }
-
-    if (d > 0 && (sd == 0 || d <= sd)) {
-
-	// assumption: rests are wider than notes
-	if (sd == 0 || d < sd || static_cast<NotationElement*>((*shortest))->isNote()) {
-	    shortest = itr;
-	    if (d != sd) shortCount = 1;
-	    else ++shortCount;
-	} else {
-	    ++shortCount;
-	}
-    }
-
     return;
 }
 
@@ -746,6 +535,11 @@ NotationHLayout::getStaffWithWidestBar(int barNo)
 	BarDataList &list = mi->second;
 	BarDataList::iterator li = list.find(barNo);
 	if (li != list.end()) {
+
+	    if (li->second.sizeData.idealWidth == 0.0) {
+		preSquishBar(barNo);
+	    }
+
 	    if (li->second.sizeData.idealWidth > maxWidth) {
 		maxWidth = li->second.sizeData.idealWidth;
 		widest = mi->first;
@@ -754,6 +548,107 @@ NotationHLayout::getStaffWithWidestBar(int barNo)
     }
 
     return widest;
+}
+
+struct ChunkLocation {
+    timeT time;
+    short subordering;
+    ChunkLocation(timeT t, short s) : time(t), subordering(s) { }
+};
+
+bool operator<(const ChunkLocation &l0, const ChunkLocation &l1) {
+    return ((l0.time < l1.time) ||
+	    ((l0.time == l1.time) && (l0.subordering < l1.subordering)));
+}
+
+void
+NotationHLayout::preSquishBar(int barNo)
+{
+    typedef std::vector<Chunk *> ChunkRefList;
+    typedef std::map<ChunkLocation, ChunkRefList> ColumnMap;
+    ColumnMap columns;
+
+    for (BarDataMap::iterator mi = m_barData.begin();
+	 mi != m_barData.end(); ++mi) {
+
+	BarDataList &bdl = mi->second;
+	BarDataList::iterator bdli = bdl.find(barNo);
+	if (bdli != bdl.end()) {
+	    ChunkList &cl(bdli->second.sizeData.chunks);
+	    timeT aggregateTime = 0;
+	    for (ChunkList::iterator cli = cl.begin(); cli != cl.end(); ++cli) {
+		columns[ChunkLocation(aggregateTime, cli->subordering)].
+		    push_back(&(*cli));
+		aggregateTime += cli->duration;
+	    }
+	}
+    }
+
+    // now modify chunks in-place
+
+    // What we want to do here is idle along the whole set of chunk
+    // lists, inspecting all the chunks that occur at each moment in
+    // turn and choosing a "rate" from the "slowest" of these
+    // (i.e. most space per time)
+
+    double x = 0.0;
+    timeT prevTime = 0;
+    double prevRate = 0.0;
+    double maxStretchy = 0.0;
+
+    for (ColumnMap::iterator i = columns.begin(); i != columns.end(); ++i) {
+
+	timeT time = i->first.time;
+	ChunkRefList &list = i->second;
+
+	double minRate = -1.0;
+	double totalFixed = 0.0;
+	maxStretchy = 0.0;
+
+	for (ChunkRefList::iterator j = list.begin(); j != list.end(); ++j) {
+	    if ((*j)->stretchy > 0.0) {
+		double rate = (*j)->duration / (*j)->stretchy; // time per px
+		if (minRate < 0.0 || rate < minRate) minRate = rate;
+	    }
+	    maxStretchy = std::max(maxStretchy, (*j)->stretchy);
+	    totalFixed = std::max(totalFixed, (*j)->fixed);
+	}
+
+	// we have the rate from this point, but we want to assign
+	// these elements an x coord based on the rate and distance
+	// from the previous point, plus fixed space for this point
+	// if it's a note (otherwise fixed space goes afterwards)
+
+	if (i->first.subordering == 0) x += totalFixed;
+	if (prevRate > 0.0) x += (time - prevTime) / prevRate;
+	
+	for (ChunkRefList::iterator j = list.begin(); j != list.end(); ++j) {
+	    NOTATION_DEBUG << "Setting x for time " << time << " to " << x << " in chunk at " << *j << endl;
+	    (*j)->x = x;
+	}
+	
+	if (i->first.subordering != 0) x += totalFixed;
+
+	prevTime = time;
+	prevRate = minRate;
+    }
+
+    x += maxStretchy;
+
+    for (BarDataMap::iterator mi = m_barData.begin();
+	 mi != m_barData.end(); ++mi) {
+
+	BarDataList &bdl = mi->second;
+	BarDataList::iterator bdli = bdl.find(barNo);
+	if (bdli != bdl.end()) {
+
+	    bdli->second.sizeData.idealWidth =
+		bdli->second.sizeData.fixedWidth + x + getBarMargin();
+
+	    bdli->second.sizeData.reconciledWidth =
+		bdli->second.sizeData.idealWidth;
+	}
+    }
 }
 
 
@@ -767,7 +662,6 @@ NotationHLayout::reconcileBarsLinear()
     // on any staff.
 
     int barNo = getFirstVisibleBar();
-    bool aWidthChanged = false;
 
     m_totalWidth = 0.0;
     for (StaffIntMap::iterator i = m_staffNameWidths.begin();
@@ -815,18 +709,10 @@ NotationHLayout::reconcileBarsLinear()
 	    if (bdli != list.end()) {
 
 		BarData::SizeData &bd(bdli->second.sizeData);
-
-		if (bd.idealWidth != maxWidth) {
-		    if (bd.idealWidth > 0.0) {
-			double ratio = maxWidth / bd.idealWidth;
-			bd.fixedWidth +=
-			    bd.fixedWidth * (int)((ratio - 1.0)/2.0);
-		    }
-		    bd.idealWidth = maxWidth;
-                    aWidthChanged = true;
+		if (bd.reconciledWidth != maxWidth) {
+		    bdli->second.layoutData.needsLayout = true;
 		}
-
-                if (aWidthChanged) bdli->second.layoutData.needsLayout = true;
+		bd.reconciledWidth = maxWidth;
 	    }
 	}
 
@@ -904,7 +790,7 @@ NotationHLayout::reconcileBarsPage()
 	    // If the next stretch factor is less than 1 and would
 	    // make this bar on any of the staffs narrower than it can
 	    // afford to be, then we've got too many bars
-
+/*!!!
 	    if (!tooFar && (nextStretchFactor < 1.0)) {
 
 		for (BarDataMap::iterator i = m_barData.begin();
@@ -922,6 +808,7 @@ NotationHLayout::reconcileBarsPage()
 		    }
 		}
 	    }
+*/
 	}
 
 	if (tooFar) {
@@ -991,16 +878,11 @@ NotationHLayout::reconcileBarsPage()
 		BarDataList &list = i->second;
 		BarDataList::iterator bdli = list.find(barNo);
 		if (bdli != list.end()) {
-
 		    BarData::SizeData &bd(bdli->second.sizeData);
-		    bdli->second.layoutData.needsLayout = true;
-
-		    if (bd.idealWidth > 0) {
-			double ratio = maxWidth / bd.idealWidth;
-			bd.fixedWidth +=
-			    bd.fixedWidth * (int)((ratio - 1.0)/2.0);
+		    if (bd.reconciledWidth != maxWidth) {
+			bdli->second.layoutData.needsLayout = true;
 		    }
-		    bd.idealWidth = maxWidth;
+		    bd.reconciledWidth = maxWidth;
 		}
 	    }
 
@@ -1106,7 +988,15 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
 {
     Rosegarden::Profiler profiler("NotationHLayout::finishLayout");
     m_barPositions.clear();
-
+/*
+    if (startTime == endTime) { // full layout
+	startTime = 0;
+	endTime = getComposition()->getDuration();
+    }
+    int startBar = getComposition()->getBarNumber(startTime);
+    int   endBar = getComposition()->getBarNumber(endTime);
+    for (int barNo = startBar; barNo <= endBar; ++barNo) preSquishBar(barNo);
+*/
     if (m_pageMode && (m_pageWidth > 0.1)) reconcileBarsPage();
     else reconcileBarsLinear();
 
@@ -1169,14 +1059,17 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
     Clef clef = notationStaff.getSegment().getClefAtTime(lastIncrement);
     TimeSignature timeSignature;
 
+    int startBar = getComposition()->getBarNumber(startTime);
+
     for (BarPositionList::iterator bpi = m_barPositions.begin();
 	 bpi != m_barPositions.end(); ++bpi) {
 
+	int barNo = bpi->first;
+	if (!isFullLayout && barNo < startBar) continue;
+
 	NOTATION_DEBUG << "NotationHLayout::looking for bar "
 			     << bpi->first << endl;
-	int barNo = bpi->first;
-
-	BarDataList::iterator bdi = barList.find(bpi->first);
+	BarDataList::iterator bdi = barList.find(barNo);
 	if (bdi == barList.end()) continue;
 	barX = bpi->second;
 
@@ -1200,6 +1093,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         }
 
         if (!isFullLayout &&
+	    !bdi->second.layoutData.needsLayout &&
 	    (from == notes->end() ||
 	     (*from)->getViewAbsoluteTime() > endTime)) {
 
@@ -1229,12 +1123,17 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             }
 
             // And skip the real layout work
-            bdi->second.layoutData.needsLayout = false;
+//!!!            bdi->second.layoutData.needsLayout = false;
+            continue;
+        }
+
+        if (!bdi->second.layoutData.needsLayout) {
+            NOTATION_DEBUG << "NotationHLayout::layout(): bar " << " has needsLayout false" << endl;
             continue;
         }
 
 	bdi->second.layoutData.x = barX;
-	x = barX + getPostBarMargin();
+//	x = barX + getPostBarMargin();
 
 	bool timeSigToPlace = false;
 	if (bdi->second.basicData.newTimeSig) {
@@ -1242,79 +1141,85 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    timeSigToPlace = true;
 	}
 
-        if (!bdi->second.layoutData.needsLayout) {
-            NOTATION_DEBUG << "NotationHLayout::layout(): bar " << " has needsLayout false" << endl;
-            continue;
-        }
-
         if (timeSigToPlace) {
 	    NOTATION_DEBUG << "NotationHLayout::layout(): there's a time sig in this bar" << endl;
 	}
 
-	long lyricWidth = 0;
 	NotationElement *lastDynamicText = 0;
 	int count = 0;
+
+	ChunkList &chunks = bdi->second.sizeData.chunks;
+	ChunkList::iterator chunkitr = chunks.begin();
+	double reconcileRatio = 1.0;
+	if (bdi->second.sizeData.idealWidth > 0.0) {
+	    reconcileRatio =
+		bdi->second.sizeData.reconciledWidth /
+		bdi->second.sizeData.idealWidth;
+	}
+
+	double offset = getPostBarMargin();
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
 
             NotationElement *el = static_cast<NotationElement*>(*it);
-            el->setLayoutX(x);
-            NOTATION_DEBUG << "NotationHLayout::layout(): setting element's x to " << x << endl;
-	    long delta = 0;
+
+	    double delta = 0;
+	    if (chunkitr != chunks.end()) {
+//		NOTATION_DEBUG << "barX is " << barX << ", reconcileRatio is " << reconcileRatio << " (" << bdi->second.sizeData.reconciledWidth << "/" << bdi->second.sizeData.idealWidth << ") , chunk's x is " << (*chunkitr).x << ", chunk is at " << &(*chunkitr) << endl;
+		x = barX + offset + reconcileRatio * (*chunkitr).x;
+//		NOTATION_DEBUG << " x is " << x << endl;
+		ChunkList::iterator chunkscooter(chunkitr);
+		if (++chunkscooter != chunks.end()) {
+		    delta = (*chunkscooter).x - (*chunkitr).x;
+		} else {
+		    delta = bdi->second.sizeData.reconciledWidth -
+			bdi->second.sizeData.fixedWidth - (*chunkitr).x;
+		}
+		delta *= reconcileRatio;
+		++chunkitr;
+	    } else {
+		x = barX + bdi->second.sizeData.reconciledWidth - getPreBarMargin();
+		delta = 0;
+	    }
 
 	    if (timeSigToPlace &&
 		!el->event()->isa(Rosegarden::Clef::EventType) &&
 		!el->event()->isa(Rosegarden::Key::EventType)) {
 		NOTATION_DEBUG << "Placing timesig at " << x << endl;
 		bdi->second.layoutData.timeSigX = (int)x;
-		x += getFixedItemSpacing()*2 +
+		double shift = getFixedItemSpacing()*2 +
 		    m_npf->getTimeSigWidth(timeSignature);
+		offset += shift;
+		x += shift;
 		NOTATION_DEBUG << "and moving next elt to " << x << endl;
-		el->setLayoutX(x);
 		timeSigToPlace = false;
 	    }
+
+            NOTATION_DEBUG << "NotationHLayout::layout(): setting element's x to " << x << endl;
+
+	    el->setLayoutX(x);
+	    el->setLayoutAirspace(x, int(delta));
 
 	    if (el->isNote()) {
 
 		// This modifies "it" and "tieMap"
-		delta = positionChord
-		    (staff, it, bdi, timeSignature, clef, key, tieMap, to);
-
-		delta += lyricWidth;
-		lyricWidth = 0;
+		positionChord(staff, it, bdi, timeSignature, clef, key, tieMap, to);
 
 	    } else if (el->isRest()) {
 
-		delta = positionRest(staff, it, bdi, timeSignature);
-		lyricWidth = 0;
+		// nothing to do
 
 	    } else if (el->event()->isa(Clef::EventType)) {
 		
-		delta = el->event()->get<Int>(m_properties.MIN_WIDTH);
-		el->setLayoutAirspace(x, delta);
-//		NOTATION_DEBUG << "Found clef" << endl;
 		clef = Clef(*el->event());
 
 	    } else if (el->event()->isa(Rosegarden::Key::EventType)) {
 
-		delta = el->event()->get<Int>(m_properties.MIN_WIDTH);
-		el->setLayoutAirspace(x, delta);
-//		NOTATION_DEBUG << "Found key" << endl;
 		key = Rosegarden::Key(*el->event());
 
 	    } else if (el->event()->isa(Text::EventType)) {
 
-		// if it's a lyric event, ensure there'll be some room
-
-		if (el->event()->has(Text::TextTypePropertyName) &&
-		    el->event()->get<String>(Text::TextTypePropertyName) ==
-		    Text::Lyric) {
-		    el->event()->get<Int>(m_properties.LYRIC_EXTRA_WIDTH,
-					  lyricWidth);
-		}
-		el->setLayoutAirspace(x, delta);
-
-		// and if it's a dynamic, make a note of it in case a
+		// if it's a dynamic, make a note of it in case a
 		// hairpin immediately follows it
 		
 		if (el->event()->has(Text::TextTypePropertyName) &&
@@ -1348,13 +1253,11 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		}
 
 		el->setLayoutX(ix);
-		delta = el->event()->get<Int>(m_properties.MIN_WIDTH);
-		el->setLayoutAirspace(ix, delta);
+		el->setLayoutAirspace(ix, delta - (ix - x));
 
 	    } else {    
 
-		delta = el->event()->get<Int>(m_properties.MIN_WIDTH);
-		el->setLayoutAirspace(x, delta);
+		// nothing else
 	    }
 
 	    if (it != to && el->event()->has(BEAMED_GROUP_ID)) {
@@ -1382,7 +1285,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		m_groupsExtant[groupId]->sample(it);
 	    }
 
-            x += delta;
+	    x += delta;
 	    
 	    if (m_timePerProgressIncrement > 0 && (++count == 100)) {
 		count = 0;
@@ -1415,54 +1318,6 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
         bdi->second.layoutData.needsLayout = false;
     }
-}
-
-
-long
-NotationHLayout::positionRest(Staff &staff,
-                              const NotationElementList::iterator &itr,
-                              const BarDataList::iterator &bdi,
-                              const TimeSignature &timeSignature)
-{
-    NotationElement *rest = static_cast<NotationElement*>(*itr);
-
-    // return 0 for any cases where rests are too short to appear
-    bool tooShort = false;
-    if ((*itr)->event()->get<Bool>(m_properties.REST_TOO_SHORT, tooShort) &&
-	tooShort) return 0;
-
-    // To work out how much space to allot a rest, as for a note,
-    // start with the amount alloted to the whole bar, subtract that
-    // reserved for fixed-width items, and take the same proportion of
-    // the remainder as our duration is of the whole bar's duration.
-    // (We use the actual duration of the bar, not the nominal time-
-    // signature duration.)
-
-    timeT barDuration = bdi->second.sizeData.actualDuration;
-    if (barDuration == 0) barDuration = timeSignature.getBarDuration();
-    timeT spacingDuration = getSpacingDuration(staff, itr);
-
-    long delta = (((int)bdi->second.sizeData.idealWidth -
-		       (bdi->second.sizeData.fixedWidth +
-			bdi->second.sizeData.baseWidth)) * spacingDuration) /
-	barDuration;
-    delta += (*itr)->event()->get<Int>(m_properties.MIN_WIDTH);
-    rest->setLayoutAirspace(rest->getLayoutX(), delta);
-
-    // Situate the rest somewhat further into its allotted space.  Not
-    // convinced this is the right thing to do
-
-    int justRestWidth = m_npf->getRestWidth
-	(Note(rest->event()->get<Int>(NOTE_TYPE),
-	      rest->event()->get<Int>(NOTE_DOTS)));
-
-    if (delta > 2 * justRestWidth) {
-        int shift = (delta - 2 * justRestWidth) / 4;
-        shift = std::min(shift, (justRestWidth * 3));
-        rest->setLayoutX(rest->getLayoutX() + shift);
-    }
- 
-    return delta;
 }
 
 
@@ -1503,18 +1358,19 @@ NotationHLayout::getSpacingDuration(Staff &staff,
 }
 
 
-long
+void
 NotationHLayout::positionChord(Staff &staff,
                                NotationElementList::iterator &itr,
-			       const BarDataList::iterator &bdi,
-			       const TimeSignature &timeSignature,
+				const BarDataList::iterator &, //!!!unreqd?
+				const TimeSignature &, //!!! unreqd?
 			       const Clef &clef, const Rosegarden::Key &key,
 			       TieMap &tieMap, 
 			       NotationElementList::iterator &to)
 {
     NotationChord chord(*staff.getViewElementList(), itr, m_notationQuantizer,
 			m_properties, clef, key);
-    double baseX = (*itr)->getLayoutX();
+    double baseX, delta;
+    (static_cast<NotationElement *>(*itr))->getLayoutAirspace(baseX, delta);
 
     // To work out how much space to allot a note (or chord), start
     // with the amount alloted to the whole bar, subtract that
@@ -1527,34 +1383,7 @@ NotationHLayout::positionChord(Staff &staff,
     // effective duration based on the absolute time of the first
     // following event not in the chord (see getSpacingDuration)
 
-    timeT barDuration = bdi->second.sizeData.actualDuration;
-    if (barDuration == 0) barDuration = timeSignature.getBarDuration();
-
-    long delta = (((int)bdi->second.sizeData.idealWidth -
-		       (bdi->second.sizeData.fixedWidth +
-			bdi->second.sizeData.baseWidth)) *
-		  getSpacingDuration(staff, chord)) /
-	barDuration;
-    delta += (*itr)->event()->get<Int>(m_properties.MIN_WIDTH);
-    int noteWidth = m_npf->getNoteBodyWidth();
-
-    // If the chord's allowed a lot of space, situate it somewhat
-    // further into its allotted space.  Not convinced this is always
-    // the right thing to do.
-
-    double unmodifiedBaseX = baseX;
-    if (delta > 2 * noteWidth) {
-        int shift = (delta - 2 * noteWidth) / 5;
-	baseX += std::min(shift, (m_npf->getNoteBodyWidth() * 3 / 2));
-    }
-
-    // Special case for grace notes (spacing not proportional to
-    // duration)
-
-    if (static_cast<NotationElement*>((*itr))->isGrace()) {
-	baseX = unmodifiedBaseX;
-	delta = noteWidth;
-    }
+//    int noteWidth = m_npf->getNoteBodyWidth();
 
     // Find out whether the chord contains any accidentals, and if so,
     // make space, and also shift the notes' positions right somewhat.
@@ -1568,7 +1397,7 @@ NotationHLayout::positionChord(Staff &staff,
 
     for (i = 0; i < chord.size(); ++i) {
 
-	static_cast<NotationElement*>(*chord[i])->setLayoutAirspace(unmodifiedBaseX, delta);
+	static_cast<NotationElement*>(*chord[i])->setLayoutAirspace(baseX, delta);
 
 	NotationElement *note = static_cast<NotationElement*>(*(chord[i]));
 	if (!note->isNote()) continue;
@@ -1595,24 +1424,20 @@ NotationHLayout::positionChord(Staff &staff,
 	    }
 	}
     }
-
+/*!!!
     baseX += accWidth;
-    delta += accWidth;
 
     // Cope with the presence of shifted note-heads
 
     bool shifted = chord.hasNoteHeadShifted();
 
     if (shifted) {
-
-	delta += noteWidth;
-
 	// For this to work reliably with notes inside beamed groups,
 	// we depend on the group's applyStemProperties() method
 	// having already been called (as it is in scanStaff above).
 	if (!chord.hasStemUp()) baseX += noteWidth;
     }
-
+*/
     // Check for any ties going back, and if so work out how long it
     // must have been and assign accordingly.
 
@@ -1677,73 +1502,71 @@ NotationHLayout::positionChord(Staff &staff,
 
     itr = chord.getFinalElement();
     if (barEndsInChord) { to = itr; ++to; }
-//!!    if (groupId < 0) return delta;
-
-    return delta;
 }
 
 
-int NotationHLayout::getMinWidth(Rosegarden::ViewElement &ve) const
+double
+NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve) const
 {
     NotationElement& e = static_cast<NotationElement&>(ve);
 
-    int w = 0;
+    if (e.isNote() || e.isRest()) {
 
-    if (e.isNote()) {
+        long noteType = e.event()->get<Int>(NOTE_TYPE);
+	long dots = 0;
+        (void)e.event()->get<Int>(NOTE_DOTS, dots);
 
-        long noteType = e.event()->get<Int>(NOTE_TYPE, noteType);
+	double bw = 0;
 
-        w += m_npf->getNoteBodyWidth(noteType);
+	if (e.isNote()) {
+	    bw = m_npf->getNoteBodyWidth(noteType)
+	       + m_npf->getDotWidth() * dots;
+	} else {
+	    bw = m_npf->getRestWidth(Note(noteType, dots));
+	}
 
-        long dots;
-        if (e.event()->get<Int>(NOTE_DOTS, dots)) {
-            w += m_npf->getDotWidth() * dots;
-        }
+	double gap = 0;
 
-        return w;
+	//!!! This is where we plug in different spacings...
+	switch (noteType) {
+	case Note::Hemidemisemiquaver:
+	case Note::Demisemiquaver:
+	case Note::Semiquaver:         gap = bw / 8;     break;
+	case Note::Quaver:             gap = bw / 2;     break;
+	case Note::Crotchet:           gap = bw * 3 / 2; break;
+	case Note::Minim:              gap = bw * 3;     break;
+	case Note::Semibreve:          gap = bw * 9 / 2; break;
+	case Note::Breve:              gap = bw * 7;     break;
+	}
 
-    } else if (e.isRest()) {
-
-        w += m_npf->getRestWidth(Note(e.event()->get<Int>(NOTE_TYPE),
-                                     e.event()->get<Int>(NOTE_DOTS)));
-
-        return w;
-    }
-
-    w = getFixedItemSpacing();
-
-    if (e.event()->isa(Clef::EventType)) {
-
-        w += m_npf->getClefWidth(Clef(*e.event()));
-
-    } else if (e.event()->isa(Rosegarden::Key::EventType)) {
-
-        w += m_npf->getKeyWidth(Rosegarden::Key(*e.event()));
-
-    } else if (e.event()->isa(Indication::EventType) ||
-	       e.event()->isa(Text::EventType)) {
-
-	w = 0;
+	return bw + gap;
 
     } else {
-        NOTATION_DEBUG << "NotationHLayout::getMinWidth(): no case for event type " << e.event()->getType() << endl;
-	w += 24;
-    }
 
-    return w;
+	double w = getFixedItemSpacing();
+
+	if (e.event()->isa(Clef::EventType)) {
+
+	    w += m_npf->getClefWidth(Clef(*e.event()));
+
+	} else if (e.event()->isa(Rosegarden::Key::EventType)) {
+
+	    w += m_npf->getKeyWidth(Rosegarden::Key(*e.event()));
+
+	} else if (e.event()->isa(Indication::EventType) ||
+		   e.event()->isa(Text::EventType)) {
+
+	    w = 0;
+
+	} else {
+	    NOTATION_DEBUG << "NotationHLayout::getMinWidth(): no case for event type " << e.event()->getType() << endl;
+	    w += 24;
+	}
+
+	return w;
+    }
 }
 
-int NotationHLayout::getComfortableGap(Note::Type type) const
-{
-    int bw = m_npf->getNoteBodyWidth();
-    if (type < Note::Quaver) return 1;
-    else if (type == Note::Quaver) return (bw / 2);
-    else if (type == Note::Crotchet) return (bw * 3) / 2;
-    else if (type == Note::Minim) return (bw * 3);
-    else if (type == Note::Semibreve) return (bw * 9) / 2;
-    else if (type == Note::Breve) return (bw * 7);
-    return 1;
-}        
 
 int NotationHLayout::getBarMargin() const
 {

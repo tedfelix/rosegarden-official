@@ -45,12 +45,12 @@ namespace Rosegarden { class Progress; }
  */
 
 class NotationHLayout : public ProgressReporter,
-                        public Rosegarden::HorizontalLayoutEngine
+			public Rosegarden::HorizontalLayoutEngine
 {
 public:
     NotationHLayout(Rosegarden::Composition *c, NotePixmapFactory *npf,
-		    const NotationProperties &properties,
-                    QObject* parent, const char* name = 0);
+		     const NotationProperties &properties,
+		     QObject* parent, const char* name = 0);
 
     virtual ~NotationHLayout();
 
@@ -201,6 +201,20 @@ protected:
 	Rosegarden::Accidental m_accidentals[7];
     };
 
+    struct Chunk {
+	Rosegarden::timeT duration;
+	short subordering;
+	double fixed;
+	double stretchy;
+	double x;
+
+	Chunk(Rosegarden::timeT d, short sub, double f, double s) :
+	    duration(d), subordering(sub), fixed(f), stretchy(s), x(0) { }
+	Chunk(short sub, double f) :
+	    duration(0), subordering(sub), fixed(f), stretchy(0), x(0) { }
+    };
+    typedef std::vector<Chunk> ChunkList;
+
     /**
      * Inner class for bar data, used by scanStaff()
      */
@@ -219,9 +233,11 @@ protected:
 	struct SizeData
 	{   // slots that can be filled when the following bar has been scanned
 
+	    ChunkList chunks;
 	    double idealWidth;    // theoretical width of bar following barline
-	    int fixedWidth;       // width of non-note items in bar
-	    int baseWidth;        // minimum width of note items in bar
+	    double reconciledWidth;
+	    double fixedWidth;       // width of non-chunk items in bar
+//	    int baseWidth;        // minimum width of note items in bar
 	    Rosegarden::timeT actualDuration; // may exceed nominal duration
 
 	} sizeData;
@@ -241,8 +257,9 @@ protected:
 	    basicData.timeSignature = timeSig;
 	    basicData.newTimeSig = newTimeSig;
 	    sizeData.idealWidth = 0;
+	    sizeData.reconciledWidth = 0;
 	    sizeData.fixedWidth = 0;
-	    sizeData.baseWidth = 0;
+//	    sizeData.baseWidth = 0;
 	    sizeData.actualDuration = 0;
 	    layoutData.needsLayout = true;
 	    layoutData.x = -1;
@@ -254,6 +271,7 @@ protected:
     typedef BarDataList::value_type BarDataPair;
     typedef std::map<Rosegarden::Staff *, BarDataList> BarDataMap;
     typedef std::map<int, double> BarPositionList;
+
     typedef std::map<Rosegarden::Staff *, int> StaffIntMap;
     typedef std::map<long, NotationGroup *> NotationGroupMap;
 
@@ -275,7 +293,7 @@ protected:
      * records and/or fill with empty ones as appropriate.
      */
     void setBarSizeData(Rosegarden::Staff &staff, int barNo,
-			double width, int fixedWidth, int baseWidth,
+			const ChunkList &chunks, double fixedWidth,
 			Rosegarden::timeT actualDuration);
 
     /**
@@ -288,6 +306,9 @@ protected:
     /// Find the staff in which bar "barNo" is widest
     Rosegarden::Staff *getStaffWithWidestBar(int barNo);
 
+    /// For a single bar, makes sure synchronisation points align in all staves
+    void preSquishBar(int barNo);
+
     /// Tries to harmonize the bar positions for all the staves (linear mode)
     void reconcileBarsLinear();
 
@@ -298,12 +319,6 @@ protected:
 		Rosegarden::timeT startTime,
 		Rosegarden::timeT endTime);
     
-    double getIdealBarWidth
-    (Rosegarden::Staff &staff, int fixedWidth, int baseWidth,
-     NotationElementList::iterator shortest,
-     int shortCount, int totalCount,
-     const Rosegarden::TimeSignature &timeSignature) const;
-
     /// Find earliest element with quantized time of t or greater
     NotationElementList::iterator getStartOfQuantizedSlice 
     (const NotationElementList *, Rosegarden::timeT t) const;
@@ -311,14 +326,8 @@ protected:
     void scanChord
     (NotationElementList *notes, NotationElementList::iterator &i,
      const Rosegarden::Clef &, const Rosegarden::Key &, AccidentalTable &,
-     int &fixedWidth, int &baseWidth,
-     NotationElementList::iterator &shortest, int &shortCount,
+     double &lyricWidth, ChunkList &chunks,
      NotationElementList::iterator &to);
-
-    void scanRest
-    (NotationElementList *notes, NotationElementList::iterator &i,
-     int &fixedWidth, int &baseWidth,
-     NotationElementList::iterator &shortest, int &shortCount);
 
     typedef std::map<int, NotationElementList::iterator> TieMap;
 
@@ -326,16 +335,11 @@ protected:
     // moving it on to the last note in the chord; updates the TieMap;
     // and may modify the to-iterator if it turns out to point at a
     // note within the chord
-    long positionChord
+    void positionChord
     (Rosegarden::Staff &staff, 
      NotationElementList::iterator &, const BarDataList::iterator &,
      const Rosegarden::TimeSignature &, const Rosegarden::Clef &clef,
      const Rosegarden::Key &key, TieMap &, NotationElementList::iterator &to);
-
-    long positionRest
-    (Rosegarden::Staff &staff, 
-     const NotationElementList::iterator &, const BarDataList::iterator &,
-     const Rosegarden::TimeSignature &);
 
     /// Difference between absolute time of next event and of this
     Rosegarden::timeT getSpacingDuration
@@ -345,8 +349,8 @@ protected:
     Rosegarden::timeT getSpacingDuration
     (Rosegarden::Staff &staff, const NotationChord &);
 
-    int getMinWidth(Rosegarden::ViewElement &) const;
-    int getComfortableGap(Rosegarden::Note::Type type) const;
+    double getLayoutWidth(Rosegarden::ViewElement &) const;
+
     int getBarMargin() const;
     int getPreBarMargin() const;
     int getPostBarMargin() const;
