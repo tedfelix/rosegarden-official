@@ -30,6 +30,7 @@
 #include <qpushbutton.h>
 
 // application specific includes
+#include "MappedComposition.h"
 #include "rosegardenguiview.h"
 #include "rosegardenguidoc.h"
 #include "rosegardengui.h"
@@ -156,6 +157,9 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(this,         SIGNAL(signalSetSelectCopy(bool)), 
             tracksEditor, SLOT(setSelectCopy(bool)));
             
+    connect(this,       SIGNAL(signalSetTrackMeter(double, int)),
+            trackButtons, SLOT(setTrackMeter(double, int)));
+
     // turn off the scrollbars on the track buttons and set width
     //
     trackButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
@@ -412,6 +416,24 @@ void RosegardenGUIView::setLoopMarker(Rosegarden::timeT startLoop,
 {
     emit signalSetLoopMarker(startLoop, endLoop);
 }
+
+
+void RosegardenGUIView::showVisuals(const Rosegarden::MappedComposition &mC)
+{
+    Rosegarden::MappedComposition::iterator it;
+    double value;
+
+    for (it = mC.begin(); it != mC.end(); it++)
+    {
+        if ((*it)->getType() == Rosegarden::MappedEvent::Internal)
+        {
+            value = ((double)(*it)->getPitch()) / 127.0;
+            emit signalSetTrackMeter(value, (*it)->getTrack());
+        }
+    }
+
+}
+
 
 
 

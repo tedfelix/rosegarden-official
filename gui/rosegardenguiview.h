@@ -34,7 +34,7 @@
 
 #include "rosedebug.h"
 
-namespace Rosegarden { class Composition; }
+namespace Rosegarden { class Composition; class MappedComposition; }
 
 class QScrollView;
 class RosegardenGUIDoc;
@@ -148,6 +148,11 @@ public:
      * set the viewable loop on the clients and SegmentCanvas
      */      
     void setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop);
+
+    /**
+     * Show output levels
+     */
+    void showVisuals(const Rosegarden::MappedComposition &mC);
     
 public slots:
     void editSegmentNotation(Rosegarden::Segment*);
@@ -197,6 +202,8 @@ signals:
     void addSegmentItem(Rosegarden::Segment*);
 
     void signalSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT);
+
+    void signalSetTrackMeter(double, int);
 
 
 protected:

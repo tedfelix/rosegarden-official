@@ -62,6 +62,22 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
 
 TrackButtons::~TrackButtons()
 {
+    vector<TrackVUMeter*>::iterator vuit = m_trackMeters.begin();
+
+    for (; vuit != m_trackMeters.end(); vuit++)
+    {
+        delete(*vuit);
+    }
+
+    m_trackMeters.erase(m_trackMeters.begin(), m_trackMeters.end());
+
+    vector<TrackLabel*>::iterator lit = m_trackLabels.begin();
+    for (; lit != m_trackLabels.end(); lit++)
+    {
+        delete(*lit);
+    }
+
+    m_trackLabels.erase(m_trackLabels.begin(), m_trackLabels.end());
 }
 
 // Draw the mute and record buttons, track labels and VU meters
@@ -132,7 +148,7 @@ TrackButtons::drawButtons()
         // Create a VU meter
         vuMeter = new TrackVUMeter(track,
                               VUMeter::PeakHold,
-                              12,
+                              25,
                               buttonGap,
                               i);
 
@@ -374,7 +390,7 @@ TrackButtons::renameTrack(QString newName, int trackNum)
 
 
 void
-TrackButtons::setVUMeter(double value, int trackNum)
+TrackButtons::setTrackMeter(double value, int trackNum)
 {
     vector<TrackVUMeter*>::iterator it = m_trackMeters.begin();
     

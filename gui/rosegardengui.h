@@ -235,6 +235,12 @@ protected:
      */
     virtual void readProperties(KConfig *_cfg);
 
+    /*
+     * Send the result of getSequencerSlice (operated by the
+     * Sequencer) to the GUI so as to get visual representation
+     * of the events/sounds going out
+     */
+    void showVisuals(const Rosegarden::MappedComposition &mC);
 
 public slots:
     /**

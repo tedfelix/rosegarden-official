@@ -101,7 +101,7 @@ public slots:
     void toggleMutedTrack(int mutedTrack);
     void labelSelected(int id);
     void renameTrack(QString newName, int trackNum);
-    void setVUMeter(double value, int trackNum);
+    void setTrackMeter(double value, int trackNum);
 
 
 private:

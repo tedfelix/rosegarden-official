@@ -38,7 +38,7 @@ VUMeter::VUMeter(QWidget *parent,
     m_type(type),
     m_level(0),
     m_peakLevel(0),
-    m_levelStep(5)
+    m_levelStep(3)
 {
     setMinimumSize(width, height);
     setMaximumSize(width, height);
@@ -85,8 +85,25 @@ VUMeter::drawMeterLevel(QPainter* paint)
     paint->setBrush(colorGroup().background());
     paint->drawRect(0, 0, width(), height());
 
-    paint->setPen(colorGroup().color(QColorGroup::Dark));
-    paint->setBrush(colorGroup().color(QColorGroup::Dark));
+    //paint->setPen(colorGroup().color(QColorGroup::Dark));
+    //paint->setBrush(colorGroup().color(QColorGroup::Dark));
+
+    if (m_level > 80)
+    {
+        paint->setPen(RosegardenGUIColours::LevelMeterRed);
+        paint->setBrush(RosegardenGUIColours::LevelMeterRed);
+    }
+    else if (m_level > 60)
+    {
+        paint->setPen(RosegardenGUIColours::LevelMeterOrange);
+        paint->setBrush(RosegardenGUIColours::LevelMeterOrange);
+    }
+    else
+    {
+        paint->setPen(RosegardenGUIColours::LevelMeterGreen);
+        paint->setBrush(RosegardenGUIColours::LevelMeterGreen);
+    }
+
     int x = m_level * width() / 100;
     paint->drawRect(0, 0, x, height());
 }

@@ -1095,8 +1095,10 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
 
             assert (duration >= Rosegarden::RealTime(0,0));
             
+            Rosegarden::TrackId track = (*i)->getTrack();
+
             Rosegarden::InstrumentId instrument = comp.
-                             getTrackByIndex((*i)->getTrack())->getInstrument();
+                             getTrackByIndex(track)->getInstrument();
 
             // Insert Audio event
             //
@@ -1105,6 +1107,7 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
                                                 startIndex,
                                                 duration,
                                                 instrument,
+                                                track,
                                                 Rosegarden::MappedEvent::Audio,
                                                 (*i)->getAudioFileID());
             mappComp.insert(me);
@@ -1156,12 +1159,14 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
 		if (duration == Rosegarden::RealTime(0, 0))
 		    continue;
 
+                Rosegarden::TrackId track = (*i)->getTrack();
+
                 Rosegarden::InstrumentId instrument = comp.
-                             getTrackByIndex((*i)->getTrack())->getInstrument();
+                             getTrackByIndex(track)->getInstrument();
                 // insert event
                 Rosegarden::MappedEvent *me =
                       new Rosegarden::MappedEvent(**j, eventTime, duration,
-                                                  instrument);
+                                                  instrument, track);
 
                 mappComp.insert(me);
             }
@@ -1169,6 +1174,11 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
     }
 
     //std::cout << "GOT SLICE OF " << mappComp.size() << " ELEMENTS" << endl;
+    
+    // send the MappedEvents to the GUI as well so we can process
+    // them for the level meters
+    //
+    showVisuals(mappComp);
 
     return mappComp;
 }
@@ -2061,5 +2071,16 @@ RosegardenGUIApp::setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
         i18n("Failed to contact Rosegarden sequencer with \"setLoop\""));
     }
 }
+
+// Process the outgoing sounds into some form of visual
+// feedback at the GUI
+//
+void
+RosegardenGUIApp::showVisuals(const Rosegarden::MappedComposition &mC)
+{
+    m_view->showVisuals(mC);
+}
+
+
 
 

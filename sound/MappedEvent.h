@@ -71,7 +71,8 @@ public:
     MappedEvent(const Event &e,
                 const Rosegarden::RealTime &absoluteTime,
                 const Rosegarden::RealTime &duration,
-                const Rosegarden::InstrumentId &instrument);
+                const Rosegarden::InstrumentId &instrument,
+                const Rosegarden::TrackId &track);
 
     MappedEvent(const int &pitch,
                 const Rosegarden::RealTime &absTime,
@@ -79,6 +80,7 @@ public:
                 const Rosegarden::RealTime &audioStartMarker,
                 const velocityT &velocity,
                 const Rosegarden::InstrumentId &instrument,
+                const Rosegarden::TrackId &track,
                 const MappedEventType &type):
         m_pitch(pitch),
         m_absoluteTime(absTime),
@@ -86,7 +88,8 @@ public:
         m_audioStartMarker(audioStartMarker),
         m_velocity(velocity),
         m_type(type),
-        m_instrument(instrument) {;}
+        m_instrument(instrument),
+        m_track(track) {;}
 
     // Set the type, id and times - Audio event constructor
     //
@@ -94,6 +97,7 @@ public:
                 const Rosegarden::RealTime &duration,
                 const Rosegarden::RealTime &audioStartMarker,
                 const Rosegarden::InstrumentId &instrument,
+                const Rosegarden::TrackId &track,
                 const MappedEventType type,
                 const int &id);
                 
@@ -104,12 +108,14 @@ public:
     void setDuration(const Rosegarden::RealTime &d) { m_duration = d; }
     void setVelocity(const velocityT &v) { m_velocity = v; }
     void setInstrument(const InstrumentId &id) { m_instrument = id; }
+    void setTrack(const TrackId &track) { m_track = track; }
 
     int getPitch() const { return m_pitch; }
     Rosegarden::RealTime getAbsoluteTime() const { return m_absoluteTime; }
     Rosegarden::RealTime getDuration() const { return m_duration; }
     velocityT getVelocity() const { return m_velocity; }
     InstrumentId getInstrument() const { return m_instrument; }
+    TrackId getTrack() const { return m_track; }
 
     // Audio MappedEvent methods
     Rosegarden::RealTime getStartIndex() const { return m_absoluteTime; }
@@ -153,6 +159,7 @@ private:
     velocityT                m_velocity;
     MappedEventType          m_type;
     Rosegarden::InstrumentId m_instrument;
+    Rosegarden::TrackId      m_track;
 
 };
 
