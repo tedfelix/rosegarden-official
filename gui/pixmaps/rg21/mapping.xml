@@ -50,8 +50,8 @@
         <symbol name="MUSICAL SYMBOL QUARTER REST" src="rest-crotchet"/>
         <symbol name="MUSICAL SYMBOL EIGHTH REST" src="rest-quaver"/>
         <symbol name="MUSICAL SYMBOL SIXTEENTH REST" src="rest-semiquaver"/>
-        <symbol name="MUSICAL SYMBOL THIRTY-SECOND REST" src="rest-demisemi"/>
-        <symbol name="MUSICAL SYMBOL SIXTY-FOURTH REST" src="rest-hemidemisemi"/>
+        <symbol name="MUSICAL SYMBOL THIRTY-SECOND REST" src="rest-demisemiquaver"/>
+        <symbol name="MUSICAL SYMBOL SIXTY-FOURTH REST" src="rest-hemidemisemiquaver"/>
 
         <symbol name="MUSICAL SYMBOL COMBINING AUGMENTATION DOT" src="dot"/>
 
