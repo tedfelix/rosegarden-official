@@ -124,6 +124,7 @@ NotationGroup::calculateBeam(const NotePixmapFactory &npf,
         }
         
         prevHeight = h;
+        while (*i != chord.getFinalNote()) ++i;
     }
 
     
