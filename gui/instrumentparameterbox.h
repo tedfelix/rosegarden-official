@@ -22,6 +22,8 @@
 #ifndef _INSTRUMENTPARAMETERBOX_H_
 #define _INSTRUMENTPARAMETERBOX_H_
 
+#include <vector>
+
 #include "Instrument.h"
 #include "MappedEvent.h"
 #include "MappedInstrument.h"
@@ -49,6 +51,9 @@ namespace Rosegarden
 
 class AudioInstrumentParameterPanel;
 class MIDIInstrumentParameterPanel;
+
+typedef std::vector<std::pair<int, RosegardenRotary*> > RotaryMap;
+typedef std::vector<std::pair<int, RosegardenRotary*> >::iterator RotaryMapIterator;
 
 /**
  * Display and allow modification of Instrument parameters
@@ -210,6 +215,8 @@ public:
 
     MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc, QWidget* parent);
 
+    void setupControllers(); // setup ControlParameters on box
+
     virtual void setupForInstrument(Rosegarden::Instrument*);
 
 signals:
@@ -225,15 +232,8 @@ public slots:
     void slotSelectBank(int index);
     void slotSelectVariation(int index);
     void slotSelectChannel(int index);
-    void slotSelectPan(float index);
-    void slotSelectVolume(float index);
 
-    void slotSelectChorus(float index);
-    void slotSelectReverb(float index);
-    void slotSelectHighPass(float index);
-    void slotSelectResonance(float index);
-    void slotSelectAttack(float index);
-    void slotSelectRelease(float index);
+    void slotControllerChanged(int index);
 
     void slotTogglePercussion(bool value);
     void slotToggleProgramChange(bool value);
@@ -254,6 +254,12 @@ protected:
     // send the bank and program events relevant to this instrument
     void sendBankAndProgram();
 
+    // get value of a specific rotary (keyed by controller value)
+    int getValueFromRotary(int rotary);
+
+    // set rotary to value
+    void setRotaryToValue(int controller, int value);
+
     //--------------- Data members ---------------------------------
 
     QLabel             *m_connectionLabel;
@@ -262,8 +268,6 @@ protected:
     KComboBox          *m_variationValue;
     KComboBox          *m_channelValue;
     KComboBox          *m_programValue;
-    RosegardenRotary   *m_panRotary;
-    RosegardenRotary   *m_volumeRotary;
 
     QCheckBox          *m_percussionCheckBox;
     QCheckBox          *m_bankCheckBox;
@@ -273,12 +277,9 @@ protected:
     QLabel             *m_bankLabel;
     QLabel             *m_variationLabel;
 
-    RosegardenRotary   *m_chorusRotary;
-    RosegardenRotary   *m_reverbRotary;
-    RosegardenRotary   *m_highPassRotary;
-    RosegardenRotary   *m_resonanceRotary;
-    RosegardenRotary   *m_attackRotary;
-    RosegardenRotary   *m_releaseRotary;
+    QGridLayout        *m_gridLayout;
+    RotaryMap           m_rotaries;
+    QSignalMapper      *m_rotaryMapper;                               
 
     std::vector<Rosegarden::MidiBank>    m_banks;
     std::vector<Rosegarden::MidiProgram> m_programs;

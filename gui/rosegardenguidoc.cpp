@@ -1927,30 +1927,15 @@ RosegardenGUIDoc::initialiseControllers()
         if ((*it)->getType() == Rosegarden::Instrument::Midi)
         {
             std::vector<Rosegarden::MidiControlPair> advancedControls;
-            advancedControls.
-                push_back(Rosegarden::
-                        MidiControlPair(Rosegarden::MIDI_CONTROLLER_CHORUS,
-                                       (*it)->getChorus()));
-            advancedControls.
-                push_back(Rosegarden::
-                        MidiControlPair(Rosegarden::MIDI_CONTROLLER_REVERB,
-                                       (*it)->getReverb()));
-            advancedControls.
-                push_back(Rosegarden::
-                        MidiControlPair(Rosegarden::MIDI_CONTROLLER_RESONANCE,
-                                       (*it)->getResonance()));
-            advancedControls.
-                push_back(Rosegarden::
-                        MidiControlPair(Rosegarden::MIDI_CONTROLLER_FILTER,
-                                       (*it)->getFilter()));
-            advancedControls.
-                push_back(Rosegarden::
-                        MidiControlPair(Rosegarden::MIDI_CONTROLLER_ATTACK,
-                                       (*it)->getAttack()));
-            advancedControls.
-                push_back(Rosegarden::
-                        MidiControlPair(Rosegarden::MIDI_CONTROLLER_RELEASE,
-                                       (*it)->getRelease()));
+
+            // push all the advanced static controls
+            //
+            Rosegarden::StaticControllers &list = (*it)->getStaticControllers();
+            for (Rosegarden::StaticControllerConstIterator cIt = list.begin(); cIt != list.end(); ++cIt)
+            {
+                advancedControls.push_back(Rosegarden::MidiControlPair(cIt->first, cIt->second));
+            }
+
             advancedControls.
                 push_back(Rosegarden::
                         MidiControlPair(Rosegarden::MIDI_CONTROLLER_PAN,

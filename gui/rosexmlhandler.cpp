@@ -37,6 +37,7 @@
 #include "AudioDevice.h"
 #include "MappedStudio.h"
 #include "Instrument.h"
+#include "Midi.h"
 
 #include "widgets.h"
 #include "rosestrings.h"
@@ -1131,7 +1132,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         getStudio().addControlParameter(con);
 
-    } else if (lcName == "reverb") {
+    } else if (lcName == "reverb") { // deprecated but we still read 'em
 
         if (m_section != InInstrument)
         {
@@ -1142,10 +1143,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         Rosegarden::MidiByte value = atts.value("value").toInt();
 
         if (m_instrument)
-            m_instrument->setReverb(value);
+            m_instrument->setControllerValue(Rosegarden::MIDI_CONTROLLER_REVERB, value);
 
 
-    } else if (lcName == "chorus") {
+    } else if (lcName == "chorus") { // deprecated but we still read 'em
 
         if (m_section != InInstrument)
         {
@@ -1156,9 +1157,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         Rosegarden::MidiByte value = atts.value("value").toInt();
 
         if (m_instrument)
-            m_instrument->setChorus(value);
+            m_instrument->setControllerValue(Rosegarden::MIDI_CONTROLLER_CHORUS, value);
 
-    } else if (lcName == "filter") {
+    } else if (lcName == "filter") { // deprecated but we still read 'em
 
         if (m_section != InInstrument)
         {
@@ -1169,10 +1170,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         Rosegarden::MidiByte value = atts.value("value").toInt();
 
         if (m_instrument)
-            m_instrument->setFilter(value);
+            m_instrument->setControllerValue(Rosegarden::MIDI_CONTROLLER_FILTER, value);
 
 
-    } else if (lcName == "resonance") {
+    } else if (lcName == "resonance") { // deprecated but we still read 'em
 
         if (m_section != InInstrument)
         {
@@ -1183,10 +1184,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         Rosegarden::MidiByte value = atts.value("value").toInt();
 
         if (m_instrument)
-            m_instrument->setResonance(value);
+            m_instrument->setControllerValue(Rosegarden::MIDI_CONTROLLER_RESONANCE, value);
 
 
-    } else if (lcName == "attack") {
+    } else if (lcName == "attack") { // deprecated but we still read 'em
 
         if (m_section != InInstrument)
         {
@@ -1197,9 +1198,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         Rosegarden::MidiByte value = atts.value("value").toInt();
 
         if (m_instrument)
-            m_instrument->setAttack(value);
+            m_instrument->setControllerValue(Rosegarden::MIDI_CONTROLLER_ATTACK, value);
 
-    } else if (lcName == "release") {
+    } else if (lcName == "release") { // deprecated but we still read 'em
 
         if (m_section != InInstrument)
         {
@@ -1210,7 +1211,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         Rosegarden::MidiByte value = atts.value("value").toInt();
 
         if (m_instrument)
-            m_instrument->setRelease(value);
+            m_instrument->setControllerValue(Rosegarden::MIDI_CONTROLLER_RELEASE, value);
 
     } else if (lcName == "pan") {
 
@@ -1243,6 +1244,22 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         {
             m_instrument->setVolume(value);
             m_instrument->setSendVolume(true);
+        }
+
+    } else if (lcName == "controlchange") {
+
+        if (m_section != InInstrument)
+        {
+            m_errorString = "Found ControlChange outside Instrument";
+            return false;
+        }
+
+        Rosegarden::MidiByte type = atts.value("type").toInt();
+        Rosegarden::MidiByte value = atts.value("value").toInt();
+
+        if (m_instrument)
+        {
+            m_instrument->setControllerValue(type, value);
         }
 
 #ifdef HAVE_LADSPA

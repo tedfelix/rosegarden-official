@@ -44,6 +44,10 @@ namespace Rosegarden
 class AudioPluginInstance;
 typedef std::vector<AudioPluginInstance*>::iterator PluginInstanceIterator;
 
+typedef std::vector<std::pair<MidiByte, MidiByte> > StaticControllers;
+typedef std::vector<std::pair<MidiByte, MidiByte> >::iterator StaticControllerIterator;
+typedef std::vector<std::pair<MidiByte, MidiByte> >::const_iterator StaticControllerConstIterator;
+
 
 // Instrument number groups
 //
@@ -131,23 +135,8 @@ public:
     void setSendVolume(bool value) { m_sendVolume = value; }
     bool sendsVolume() const { return m_sendVolume; } 
 
-    void setAttack(MidiByte attack) { m_attack = attack; }
-    MidiByte getAttack() const { return m_attack; }
-    
-    void setRelease(MidiByte release) { m_release = release; }
-    MidiByte getRelease() const { return m_release; }
-
-    void setFilter(MidiByte filter) { m_filter = filter; }
-    MidiByte getFilter() const { return m_filter; }
-
-    void setResonance(MidiByte res) { m_resonance = res; }
-    MidiByte getResonance() const { return m_resonance; }
-
-    void setChorus(MidiByte chorus) { m_chorus = chorus; }
-    MidiByte getChorus() const { return m_chorus; }
-
-    void setReverb(MidiByte reverb) { m_reverb = reverb; }
-    MidiByte getReverb() const { return m_reverb; }
+    void setControllerValue(MidiByte controller, MidiByte value);
+    MidiByte getControllerValue(MidiByte controller) const;
 
     // Convenience functions (strictly redundant with get/setProgram):
     // 
@@ -213,6 +202,8 @@ public:
     int getMappedId() const { return m_mappedId; }
     void setMappedId(int id) { m_mappedId = id; }
 
+    StaticControllers& getStaticControllers() { return m_staticControllers; }
+
 private:
     InstrumentId    m_id;
     std::string     m_name;
@@ -223,24 +214,15 @@ private:
     MidiByte        m_channel;
     MidiProgram     m_program;
     MidiByte        m_transpose;
-    MidiByte        m_pan;
+    MidiByte        m_pan;  // required by audio
 
-    // Used for MIDI volume and Audio volume (0dB == 100)
+    // Used for Audio volume (0dB == 100)
     //
     MidiByte        m_volume;
 
     // Record level for Audio recording (0dB == 100)
     //
     MidiByte        m_recordLevel;
-
-    // More advanced controllers
-    //
-    MidiByte        m_attack;
-    MidiByte        m_release;
-    MidiByte        m_filter;
-    MidiByte        m_resonance;
-    MidiByte        m_chorus;
-    MidiByte        m_reverb;
 
     Device         *m_device;
 
@@ -269,6 +251,13 @@ private:
     // MappedObjectId/port pair for output connection
     //
     std::pair<int, int>  m_mappedAudioOutput;
+
+    // A static controller map that can be saved/loaded and queried along with this instrument.
+    // These values are modified from the IPB - if they appear on the IPB then they are sent
+    // at playback start time to the sequencer.
+    //
+    //
+    StaticControllers    m_staticControllers;
 };
 
 }

@@ -47,6 +47,23 @@ public:
     ControlParameter(const ControlParameter &control);
     ControlParameter& operator=(const ControlParameter &control);
 
+    // ControlParameter comparison on IPB position
+    //
+    struct ControlPositionCmp
+    {
+        bool operator()(Rosegarden::ControlParameter *c1,
+                        Rosegarden::ControlParameter *c2)
+        {
+            return (c1->getIPBPosition() < c2->getIPBPosition());
+        }
+
+        bool operator()(const Rosegarden::ControlParameter &c1,
+                        const Rosegarden::ControlParameter &c2)
+        {
+            return (c1.getIPBPosition() < c2.getIPBPosition());
+        }
+    };
+
     std::string getName() const { return m_name; }
     std::string getType() const { return m_type; }
     std::string getDescription() const { return m_description; }

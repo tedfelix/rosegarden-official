@@ -243,6 +243,17 @@ Studio::toXmlString()
            << "\" recordfilter=\"" << m_midiRecordFilter
            << "\">" << endl << endl;
 
+    studio << endl;
+
+    // Controllers before Devices (as Instruments can depend on 
+    // Controller colours)
+    //
+    ControlListConstIterator cIt;
+    for (cIt = m_controls.begin(); cIt != m_controls.end() ; ++cIt)
+        studio << (*cIt)->toXmlString();
+
+    studio << endl << endl;
+
     std::vector<Device*>::iterator it;
     InstrumentList list;
 
@@ -254,12 +265,6 @@ Studio::toXmlString()
         //
         studio << (*it)->toXmlString() << endl << endl;
     }
-
-    studio << endl << endl;
-
-    ControlListConstIterator cIt;
-    for (cIt = m_controls.begin(); cIt != m_controls.end() ; ++cIt)
-        studio << (*cIt)->toXmlString();
 
     studio << endl << endl;
 

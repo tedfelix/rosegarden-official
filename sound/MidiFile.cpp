@@ -1033,27 +1033,27 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 			break;
 		    }
 		    if ((*midiEvent)->getData1() == MIDI_CONTROLLER_ATTACK) {
-			instrument->setAttack((*midiEvent)->getData2());
+			instrument->setControllerValue(MIDI_CONTROLLER_ATTACK, (*midiEvent)->getData2());
 			break;
 		    }
 		    if ((*midiEvent)->getData1() == MIDI_CONTROLLER_RELEASE) {
-			instrument->setRelease((*midiEvent)->getData2());
+			instrument->setControllerValue(MIDI_CONTROLLER_RELEASE, (*midiEvent)->getData2());
 			break;
 		    }
 		    if ((*midiEvent)->getData1() == MIDI_CONTROLLER_FILTER) {
-			instrument->setFilter((*midiEvent)->getData2());
+			instrument->setControllerValue(MIDI_CONTROLLER_FILTER, (*midiEvent)->getData2());
 			break;
 		    }
 		    if ((*midiEvent)->getData1() == MIDI_CONTROLLER_RESONANCE) {
-			instrument->setResonance((*midiEvent)->getData2());
+			instrument->setControllerValue(MIDI_CONTROLLER_RESONANCE, (*midiEvent)->getData2());
 			break;
 		    }
 		    if ((*midiEvent)->getData1() == MIDI_CONTROLLER_CHORUS) {
-			instrument->setChorus((*midiEvent)->getData2());
+			instrument->setControllerValue(MIDI_CONTROLLER_CHORUS,(*midiEvent)->getData2());
 			break;
 		    }
 		    if ((*midiEvent)->getData1() == MIDI_CONTROLLER_REVERB) {
-			instrument->setReverb((*midiEvent)->getData2());
+			instrument->setControllerValue(MIDI_CONTROLLER_REVERB, (*midiEvent)->getData2());
 			break;
 		    }
 		}
@@ -1375,29 +1375,37 @@ MidiFile::convertToMidi(Composition &comp)
 		(new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
 			       MIDI_CONTROLLER_PAN, instr->getPan()));
 
-	    m_midiComposition[trackNumber].push_back
-		(new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
-			       MIDI_CONTROLLER_ATTACK, instr->getAttack()));
+            try
+            {
+	        m_midiComposition[trackNumber].push_back
+		    (new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
+		    MIDI_CONTROLLER_ATTACK, instr->getControllerValue(MIDI_CONTROLLER_ATTACK)));
 
-	    m_midiComposition[trackNumber].push_back
-		(new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
-			       MIDI_CONTROLLER_RELEASE, instr->getRelease()));
+	        m_midiComposition[trackNumber].push_back
+		    (new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
+		    MIDI_CONTROLLER_RELEASE, instr->getControllerValue(MIDI_CONTROLLER_RELEASE)));
 
-	    m_midiComposition[trackNumber].push_back
-		(new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
-			       MIDI_CONTROLLER_FILTER, instr->getFilter()));
+	        m_midiComposition[trackNumber].push_back
+		    (new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
+		    MIDI_CONTROLLER_FILTER, instr->getControllerValue(MIDI_CONTROLLER_FILTER)));
 
-	    m_midiComposition[trackNumber].push_back
-		(new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
-			       MIDI_CONTROLLER_RESONANCE, instr->getResonance()));
+	        m_midiComposition[trackNumber].push_back
+		    (new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
+		    MIDI_CONTROLLER_RESONANCE, instr->getControllerValue(MIDI_CONTROLLER_RESONANCE)));
 
-	    m_midiComposition[trackNumber].push_back
-		(new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
-			       MIDI_CONTROLLER_CHORUS, instr->getChorus()));
+	        m_midiComposition[trackNumber].push_back
+		    (new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
+		    MIDI_CONTROLLER_CHORUS, instr->getControllerValue(MIDI_CONTROLLER_CHORUS)));
 
-	    m_midiComposition[trackNumber].push_back
-		(new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
-			       MIDI_CONTROLLER_REVERB, instr->getReverb()));
+	        m_midiComposition[trackNumber].push_back
+		    (new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
+		    MIDI_CONTROLLER_REVERB, instr->getControllerValue(MIDI_CONTROLLER_REVERB)));
+            }
+            catch(...)
+            {
+                /* do nothing */
+            }
+
 	}
 
 	timeT segmentMidiDuration =

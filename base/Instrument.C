@@ -45,12 +45,6 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_pan(MidiMidValue),
     m_volume(100),
     m_recordLevel(100),
-    m_attack(MidiMinValue),
-    m_release(MidiMinValue),
-    m_filter(MidiMaxValue),
-    m_resonance(MidiMinValue),
-    m_chorus(MidiMinValue),
-    m_reverb(MidiMinValue),
     m_device(device),
     m_sendBankSelect(false),
     m_sendProgramChange(false),
@@ -94,12 +88,6 @@ Instrument::Instrument(InstrumentId id,
     m_pan(MidiMidValue),
     m_volume(100),
     m_recordLevel(100),
-    m_attack(MidiMinValue),
-    m_release(MidiMinValue),
-    m_filter(MidiMaxValue),
-    m_resonance(MidiMinValue),
-    m_chorus(MidiMinValue),
-    m_reverb(MidiMinValue),
     m_device(device),
     m_sendBankSelect(false),
     m_sendProgramChange(false),
@@ -154,12 +142,6 @@ Instrument::Instrument(const Instrument &ins):
     m_pan(ins.getPan()),
     m_volume(ins.getVolume()),
     m_recordLevel(ins.getRecordLevel()),
-    m_attack(ins.getAttack()),
-    m_release(ins.getRelease()),
-    m_filter(ins.getFilter()),
-    m_resonance(ins.getResonance()),
-    m_chorus(ins.getChorus()),
-    m_reverb(ins.getReverb()),
     m_device(ins.getDevice()),
     m_sendBankSelect(ins.sendsBankSelect()),
     m_sendProgramChange(ins.sendsProgramChange()),
@@ -201,12 +183,6 @@ Instrument::operator=(const Instrument &ins)
     m_pan = ins.getPan();
     m_volume = ins.getVolume();
     m_recordLevel = ins.getRecordLevel();
-    m_attack = ins.getAttack();
-    m_release = ins.getRelease();
-    m_filter = ins.getFilter();
-    m_resonance = ins.getResonance();
-    m_chorus = ins.getChorus();
-    m_reverb = ins.getReverb();
     m_device = ins.getDevice();
     m_sendBankSelect = ins.sendsBankSelect();
     m_sendProgramChange = ins.sendsProgramChange();
@@ -357,25 +333,12 @@ Instrument::toXmlString()
         instrument << "            <volume value=\""
                    << (int)m_volume << "\"/>" << std::endl;
 
-        // Advanced MIDI controls
-        //
-        instrument << "            <reverb value=\""
-                       << (int)m_reverb << "\"/>" << std::endl;
-
-        instrument << "            <chorus value=\""
-                       << (int)m_chorus << "\"/>" << std::endl;
-
-        instrument << "            <filter value=\""
-                       << (int)m_filter << "\"/>" << std::endl;
-
-        instrument << "            <resonance value=\""
-                       << (int)m_resonance << "\"/>" << std::endl;
-
-        instrument << "            <attack value=\""
-                       << (int)m_attack << "\"/>" << std::endl;
-
-        instrument << "            <release value=\""
-                       << (int)m_release << "\"/>" << std::endl;
+        for (StaticControllerConstIterator it = m_staticControllers.begin();
+             it != m_staticControllers.end(); ++it)
+        {
+            instrument << "            <controlchange type=\"" << int(it->first)
+                       << "\" value=\"" << int(it->second) << "\"/>" << std::endl;
+        }
 
     }
     else // Audio
@@ -492,6 +455,39 @@ Instrument::getPlugin(int index)
 
     return 0;
 }
+
+void
+Instrument::setControllerValue(MidiByte controller, MidiByte value)
+{
+    for (StaticControllerIterator it = m_staticControllers.begin();
+         it != m_staticControllers.end(); ++it)
+    {
+        if (it->first == controller)
+        {
+            it->second = value;
+            return;
+        }
+    }
+
+    m_staticControllers.push_back(std::pair<MidiByte, MidiByte>(controller, value));
+
+}
+
+MidiByte
+Instrument::getControllerValue(MidiByte controller) const
+{
+    for (StaticControllerConstIterator it = m_staticControllers.begin();
+         it != m_staticControllers.end(); ++it)
+    {
+
+        if (it->first  == controller)
+            return it->second;
+    }
+
+    throw std::string("<no controller of that value>");
+}
+
+
 
 
 }
