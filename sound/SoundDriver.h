@@ -44,6 +44,30 @@
 namespace Rosegarden
 {
 
+// Current recording status - whether we're monitoring anything
+// or recording.
+//
+typedef enum
+{
+    ASYNCHRONOUS_MIDI,
+    ASYNCHRONOUS_AUDIO,
+    RECORD_MIDI,
+    RECORD_AUDIO
+} RecordStatus;
+
+
+// Status of a SoundDriver - whether we're got an audio and
+// MIDI subsystem or not.  This is reported right up to the
+// gui.
+//
+typedef enum
+{
+    NO_DRIVER = 0x00,          // Nothing's OK
+    AUDIO_OK  = 0x01,          // AUDIO's OK
+    MIDI_OK   = 0x02           // MIDI's OK
+} SoundDriverStatus;
+
+
 // PlayableAudioFile is queued on the m_audioPlayQueue and
 // played by processAudioQueue() in Sequencer.  State changes
 // through playback and it's finally discarded when done.
@@ -130,25 +154,6 @@ private:
 
 };
 
-
-typedef enum
-{
-    ASYNCHRONOUS_MIDI,
-    ASYNCHRONOUS_AUDIO,
-    RECORD_MIDI,
-    RECORD_AUDIO
-} RecordStatus;
-
-
-
-typedef enum
-{
-    MIDI_AND_AUDIO_OK,  // Everything's OK
-    MIDI_OK,            // MIDI's OK
-    AUDIO_OK,           // AUDIO's OK
-    NO_DRIVER           // Nothing's OK
-} SoundDriverStatus;
-
 // The NoteOffQueue holds a time ordered set of
 // pending MIDI NOTE OFF events.
 //
@@ -189,6 +194,9 @@ private:
 
 };
 
+
+// The queue itself
+//
 class NoteOffQueue : public std::multiset<NoteOffEvent *,
                      NoteOffEvent::NoteOffEventCmp>
 {
@@ -201,6 +209,9 @@ private:
 
 class MappedStudio;
 
+// The abstract SoundDriver
+//
+//
 class SoundDriver
 {
 public:
@@ -240,7 +251,7 @@ public:
 
     // Return the current status of the driver
     //
-    SoundDriverStatus getStatus() const { return m_driverStatus; }
+    unsigned int getStatus() const { return m_driverStatus; }
 
     // Queue an audio file for playback
     //
@@ -342,7 +353,7 @@ protected:
     AudioFile* getAudioFile(unsigned int id);
 
     std::string                                 m_name;
-    SoundDriverStatus                           m_driverStatus;
+    unsigned int                                m_driverStatus;
     Rosegarden::RealTime                        m_playStartPosition;
     bool                                        m_startPlayback;
     bool                                        m_playing;

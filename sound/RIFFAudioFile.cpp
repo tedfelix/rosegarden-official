@@ -176,7 +176,7 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
 
     // When using seekg we have to keep an eye on the boundaries ourselves
     //
-    if (totalBytes > m_fileSize - 44)
+    if (totalBytes > m_fileSize - (lengthOfFormat + 16 + 8))
     {
         std::cerr << "RIFFAudioFile::scanTo() - attempting to move past end of "
                   << "data block" << std::endl;
@@ -230,16 +230,25 @@ RIFFAudioFile::getSampleFrameSlice(std::ifstream *file, const RealTime &time)
 RealTime
 RIFFAudioFile::getLength()
 {
-    // The total length of data chunk = m_fileSize - 44 (fixed header size)
-    // and so it's easy to work out the length of the file:
+    // Fixed header size = 44 but prove by getting it from the file too
+    //
+    unsigned int headerLength = 44;
+
+    if (m_inFile)
+    {
+        m_inFile->seekg(16, std::ios::beg);
+        headerLength = getIntegerFromLittleEndian(getBytes(m_inFile, 4));
+        m_inFile->seekg(headerLength, std::ios::cur);
+        headerLength += (16 + 8);
+    }
 
     // bytesPerSample allows for number of channels
     //
-    double frames = ( m_fileSize - 44 ) / m_bytesPerSample;
+    double frames = (m_fileSize - headerLength)/m_bytesPerSample;
     double seconds = frames / ((double)m_sampleRate);
 
-    int secs = int( seconds );
-    int usecs = int( ( seconds - secs ) * 1000000 );
+    int secs = int(seconds);
+    int usecs = int((seconds - secs) * 1000000.0);
 
     return RealTime(secs, usecs);
 }

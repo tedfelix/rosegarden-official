@@ -80,7 +80,7 @@ public:
 
     // Get the status of the Sequencer
     //
-    virtual int getSoundSystemStatus() = 0;
+    virtual unsigned int getSoundDriverStatus() = 0;
 
     // Add and delete audio files on the Sequencer
     //

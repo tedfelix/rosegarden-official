@@ -39,7 +39,6 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
         m_file(0),
         m_audioFile(audioFile),
         m_instrumentId(instrumentId)
-
 {
     m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
                                std::ios::in | std::ios::binary);

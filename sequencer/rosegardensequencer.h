@@ -133,7 +133,7 @@ public:
  
     // Return the Sound system status (audio/MIDI)
     //
-    virtual int getSoundSystemStatus();
+    virtual unsigned int getSoundDriverStatus();
 
     // Add and remove Audio files on the sequencer
     //

@@ -3,8 +3,6 @@
 
 o Matrix Parameter Box [SKELETON]
 
-o Event list [JUST ABOUT COMPLETE]
-
 o Get Segment joining working
 
 o Repeating segments and composition end marker
@@ -13,13 +11,13 @@ o aRts 1.0.0 support
 
 o Fix segment audio drag and drop
 
+o Finite audio recording time - check for available disk space
+
 o Toggle record mode for punch in/out [Half complete]
 
-o MIDI reverb and chorus on Instrument parameters [NON-STANDARD so
-  save these for the Studio information]
-
 o More MIDI events at Composition level. Sys Exs, Program Changes,
-  Controller changes etc. etc. [CC and PitchBend DONE]
+  Controller changes etc. etc. [DONE at composition level, some
+  bugs and MIDI import/export to sort out]
 
 o Audio volume faders - studio concept on sequencer
 
@@ -63,9 +61,14 @@ o Segment colouring
 
 o selection of ALSA recording device
 
+o MIDI reverb and chorus on Instrument parameters [NON-STANDARD so
+  save these for the Studio information]
 
-Completed for 0.2.0
-===================
+
+Completed for 0.2
+=================
+
+o Event list [DONE first cut]
 
 o admin directories and INSTALL scripts should tally [DONE]
 
@@ -145,7 +148,7 @@ o Instrument name when pop down instrument list [DONE]
 
 o "Split silence" function to automatically split up an audio segment
    into a number of segments when the amplitude falls below a given
-   threshold. [DONE]
+   threshold. [BUGGY]
 
 o Audio file open dialog - with Guillaume's DnD [DONE]
 

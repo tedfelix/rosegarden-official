@@ -82,6 +82,10 @@ public:
     //
     void closePlayingDialog(Rosegarden::AudioFileId id);
 
+    // Can we playback audio currently?
+    //
+    void setAudioSubsystemStatus(bool ok);
+
 public slots:
     void slotAdd();
     void slotDelete();
@@ -159,6 +163,8 @@ protected:
     static const char* const m_listViewLayoutName;
     static const int         m_maxPreviewWidth;
     static const int         m_previewHeight;
+
+    bool                     m_audiblePreview;
 };
 
 }

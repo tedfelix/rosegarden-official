@@ -93,7 +93,7 @@ public:
 
     // Before playing and recording (throws exceptions)
     //
-    void checkSoundSystemStatus();
+    void checkSoundDriverStatus();
 
     // Send program changes and align Instrument lists before playback
     // starts.
@@ -126,6 +126,10 @@ public:
     //
     void sendAudioLevel(Rosegarden::MappedEvent *mE);
 
+    // Find what has been initialised and what hasn't
+    //
+    unsigned int getSoundDriverStatus() { return m_soundDriverStatus; }
+
 public slots:
     // Empty the m_clearToSend flag
     //
@@ -137,7 +141,7 @@ private:
 
     // statuses
     TransportStatus m_transportStatus;
-    SoundSystemStatus m_soundSystemStatus;
+    unsigned int    m_soundDriverStatus;
 
     // pointer to the transport dialog
     RosegardenTransportDialog *m_transport;

@@ -177,14 +177,6 @@ public:
     void processAsynchronousMidi(const Rosegarden::MappedComposition &mC);
 
     /**
-     *
-     * Query the sequencer to find out if the sound systems initialised
-     * correctly
-     *
-     */
-    bool getSoundSystemStatus();
-
-    /**
      * Equivalents of the GUI slots, for DCOP use
      */
     virtual void fileNew()    { slotFileNew(); }

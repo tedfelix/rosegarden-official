@@ -153,7 +153,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
                 i18n("Rosegarden Audio File Manager"), Close),
     m_doc(doc),
     m_playingAudioFile(0),
-    m_audioPlayingDialog(0)
+    m_audioPlayingDialog(0),
+    m_audiblePreview(true)
 {
     // accept dnd
     setAcceptDrops(true);
@@ -548,10 +549,13 @@ void
 AudioManagerDialog::slotEnableButtons()
 {
     m_deleteButton->setDisabled(false);
-    m_playButton->setDisabled(false);
     m_renameButton->setDisabled(false);
     m_insertButton->setDisabled(false);
     m_deleteAllButton->setDisabled(false);
+
+    if (m_audiblePreview)
+        m_playButton->setDisabled(false);
+
 }
 
 void
@@ -912,6 +916,22 @@ AudioManagerDialog::dropEvent(QDropEvent *event)
         
     }
 }
+
+void
+AudioManagerDialog::setAudioSubsystemStatus(bool ok)
+{
+    if (ok)
+    {
+        m_playButton->setDisabled(false);
+        m_audiblePreview = true;
+    }
+    else
+    {
+        m_playButton->setDisabled(true);
+        m_audiblePreview = false;
+    }
+}
+
 
 }
 

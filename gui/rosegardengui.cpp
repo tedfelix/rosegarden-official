@@ -77,6 +77,7 @@
 #include "audiomanagerdialog.h"
 #include "widgets.h"
 #include "temporuler.h"
+#include "SoundDriver.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -2846,6 +2847,9 @@ RosegardenGUIApp::slotAudioManager()
         connect(m_audioManagerDialog,
                 SIGNAL(cancelPlayingAudioFile(Rosegarden::AudioFileId)),
                 SLOT(slotCancelAudioPlayingFile(Rosegarden::AudioFileId)));
+
+        m_audioManagerDialog->setAudioSubsystemStatus(
+                m_seqManager->getSoundDriverStatus() & Rosegarden::AUDIO_OK);
 
         m_audioManagerDialog->show();
     }

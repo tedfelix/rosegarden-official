@@ -734,6 +734,8 @@ AudioSegmentAutoSplitCommand::execute()
     std::vector<Rosegarden::SplitPointPair>::iterator it;
     Rosegarden::timeT absStartTime, absEndTime;
     std::vector<Rosegarden::timeT> endTimes;
+    char splitNumber[10];
+    int splitCount = 0;
 
     for (it = rtSplitPoints.begin(); it != rtSplitPoints.end(); it++)
     {
@@ -746,21 +748,29 @@ AudioSegmentAutoSplitCommand::execute()
 	Segment *newSegment = new Segment(*m_segment);
         newSegment->setAudioStartTime(it->first);
         newSegment->setAudioEndTime(it->second);
-        newSegment->setLabel(
-                m_segment->getLabel() + std::string(" (autosplit)"));
 
+        // label
+        sprintf(splitNumber, "%d", splitCount++);
+        newSegment->setLabel(
+                m_segment->getLabel() + std::string(" (autosplit ") +
+                splitNumber + std::string(" )"));
+
+	m_composition->addSegment(newSegment);
         newSegment->setStartTime(absStartTime);
-        endTimes.push_back(absEndTime);
+        newSegment->setEndMarkerTime(absEndTime);
+        //endTimes.push_back(absEndTime);
 
 	m_newSegments.push_back(newSegment);
     }
 	    
     m_composition->detachSegment(m_segment);
 
+    /*
     for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
 	m_composition->addSegment(m_newSegments[i]);
-        m_newSegments[i]->setEndTime(endTimes[i]);
+        m_newSegments[i]->setEndMarkerTime(endTimes[i]);
     }
+    */
 
     m_detached = true;
 }

@@ -730,10 +730,10 @@ RosegardenSequencerApp::setLoop(long loopStartSec,
 
 // Return the status of the sound systems (audio and MIDI)
 //
-int
-RosegardenSequencerApp::getSoundSystemStatus()
+unsigned int
+RosegardenSequencerApp::getSoundDriverStatus()
 {
-    return m_sequencer->getDriverStatus();
+    return m_sequencer->getSoundDriverStatus();
 }
 
 

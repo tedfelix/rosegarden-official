@@ -35,6 +35,7 @@
 #include "rosegardenguiview.h"
 #include "sequencemanager.h"
 #include "SegmentPerformanceHelper.h"
+#include "SoundDriver.h"
 #include "MappedRealTime.h"
 
 using std::cout;
@@ -48,7 +49,7 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
                                  RosegardenTransportDialog *transport):
     m_doc(doc),
     m_transportStatus(STOPPED),
-    m_soundSystemStatus(Rosegarden::NO_SEQUENCE_SUBSYS),
+    m_soundDriverStatus(NO_DRIVER),
     m_transport(transport),
     m_sendStop(false)
 {
@@ -467,7 +468,7 @@ SequenceManager::play()
     }
 
     // This check may throw an exception
-    checkSoundSystemStatus();
+    checkSoundDriverStatus();
 
     // Align Instrument lists and send initial program changes
     //
@@ -838,7 +839,7 @@ SequenceManager::record(bool toggled)
 
 
         // may throw an exception
-        checkSoundSystemStatus();
+        checkSoundDriverStatus();
 
         // toggle the Metronome button if it's in use
         m_transport->MetronomeButton->setOn(comp.useRecordMetronome());
@@ -1152,7 +1153,7 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
 }
 
 void
-SequenceManager::checkSoundSystemStatus()
+SequenceManager::checkSoundDriverStatus()
 {
     QByteArray data;
     QCString replyType;
@@ -1160,7 +1161,7 @@ SequenceManager::checkSoundSystemStatus()
 
     if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "getSoundSystemStatus()",
+                                  "getSoundDriverStatus()",
                                   data, replyType, replyData))
     {
         // failed - pop up and disable sequencer options
@@ -1169,31 +1170,20 @@ SequenceManager::checkSoundSystemStatus()
     else
     {
         QDataStream streamIn(replyData, IO_ReadOnly);
-        int result;
+        unsigned int result;
         streamIn >> result;
-        m_soundSystemStatus = (Rosegarden::SoundSystemStatus) result;
+        m_soundDriverStatus = result;
 
-        switch(m_soundSystemStatus)
-        {
-            case Rosegarden::MIDI_AND_AUDIO_SUBSYS_OK:
-                // we're fine
-                break;
+        if (m_soundDriverStatus == NO_DRIVER)
+            throw(i18n("MIDI and Audio subsystems have failed to initialise"));
 
-            case Rosegarden::MIDI_SUBSYS_OK:
-                // for the moment we're fine
-                //
-                //throw(i18n("Audio subsystem has failed to initialise"));
-                break;
+        if (!(m_soundDriverStatus & MIDI_OK))
+            throw(i18n("MIDI subsystem has failed to initialise"));
 
-            case Rosegarden::AUDIO_SUBSYS_OK:
-                throw(i18n("MIDI subsystem has failed to initialise"));
-                break;
-                
-            case Rosegarden::NO_SEQUENCE_SUBSYS:
-            default:
-                throw(i18n("MIDI and Audio subsystems have failed to initialise"));
-                break;
-        }
+        /*
+        if (!(m_soundDriverStatus & AUDIO_OK))
+            throw(i18n("Audio subsystem has failed to initialise"));
+        */
     }
 }
 

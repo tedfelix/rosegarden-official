@@ -510,7 +510,6 @@ AlsaDriver::initialiseMidi()
         std::cout << "AlsaDriver::generateInstruments() - "
                   << "couldn't open sequencer - " << snd_strerror(errno)
                   << std::endl;
-        m_driverStatus = NO_DRIVER;
         return;
     }
 
@@ -527,7 +526,6 @@ AlsaDriver::initialiseMidi()
     {
         std::cerr << "AlsaDriver::initialiseMidi - can't allocate queue"
                   << std::endl;
-        m_driverStatus = NO_DRIVER;
         return;
     }
 
@@ -539,7 +537,6 @@ AlsaDriver::initialiseMidi()
     {
         std::cerr << "AlsaDriver::initialiseMidi - can't create client"
                   << std::endl;
-        m_driverStatus = NO_DRIVER;
         return;
     }
 
@@ -556,7 +553,6 @@ AlsaDriver::initialiseMidi()
     {
         std::cerr << "AlsaDriver::initialiseMidi - can't create port"
                   << std::endl;
-        m_driverStatus = NO_DRIVER;
         return;
     }
 
@@ -631,18 +627,14 @@ AlsaDriver::initialiseMidi()
         std::cerr << "AlsaDriver::initialiseMidi - "
                   << "can't modify pool parameters"
                   << std::endl;
-        m_driverStatus = NO_DRIVER;
         return;
     }
 
     getSystemInfo();
 
-    // Modify status with success
+    // Modify status with MIDI success
     //
-    if (m_driverStatus == AUDIO_OK)
-        m_driverStatus = MIDI_AND_AUDIO_OK;
-    else if (m_driverStatus == NO_DRIVER)
-        m_driverStatus = MIDI_OK;
+    m_driverStatus |= MIDI_OK;
 
     // Start the timer
     if ((result = snd_seq_start_queue(m_midiHandle, m_queue, NULL)) < 0)
@@ -680,12 +672,6 @@ AlsaDriver::initialiseAudio()
         std::cerr << "AlsaDriver::initialiseAudio - "
                   << "JACK server not running"
                   << std::endl;
-
-        if (m_driverStatus == MIDI_AND_AUDIO_OK)
-            m_driverStatus = MIDI_OK;
-        else if (m_driverStatus == AUDIO_OK)
-            m_driverStatus = NO_DRIVER;
-
         return;
     }
 
@@ -745,12 +731,6 @@ AlsaDriver::initialiseAudio()
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
                   << "cannot activate JACK client" << std::endl;
-
-        if (m_driverStatus == MIDI_AND_AUDIO_OK)
-            m_driverStatus = MIDI_OK;
-        else if (m_driverStatus == AUDIO_OK)
-            m_driverStatus = NO_DRIVER;
-
         return;
     }
 
@@ -779,12 +759,6 @@ AlsaDriver::initialiseAudio()
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
                   << "cannot connect to JACK output port" << std::endl;
-
-        if (m_driverStatus == MIDI_AND_AUDIO_OK)
-            m_driverStatus = MIDI_OK;
-        else if (m_driverStatus == AUDIO_OK)
-            m_driverStatus = NO_DRIVER;
-
         return;
     }
 
@@ -793,12 +767,6 @@ AlsaDriver::initialiseAudio()
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
                   << "cannot connect to JACK output port" << std::endl;
-
-        if (m_driverStatus == MIDI_AND_AUDIO_OK)
-            m_driverStatus = MIDI_OK;
-        else if (m_driverStatus == AUDIO_OK)
-            m_driverStatus = NO_DRIVER;
-
         return;
     }
 
@@ -834,6 +802,9 @@ AlsaDriver::initialiseAudio()
     std::cout << "AlsaDriver::initialiseAudio - "
               << "JACK record latency " << m_audioRecordLatency << std::endl;
 
+    // ok with audio driver
+    //
+    m_driverStatus |= AUDIO_OK;
 
 #endif
 }

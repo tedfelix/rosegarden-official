@@ -122,7 +122,7 @@ public:
 
     // Return the status of the initialised sound driver
     //
-    SoundDriverStatus getDriverStatus() const
+    unsigned int getSoundDriverStatus() const
         { return m_soundDriver->getStatus(); }
 
     // Audio files
