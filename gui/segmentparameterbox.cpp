@@ -19,12 +19,13 @@
     COPYING included with this distribution for more information.
 */
 
-#include <klocale.h>
-#include <kcommand.h>
-
 #include <qhbox.h>
 #include <qlayout.h>
 #include <qinputdialog.h>
+
+#include <klocale.h>
+#include <kcommand.h>
+#include <kcombobox.h>
 
 #include "Segment.h"
 #include "Quantizer.h"
@@ -103,7 +104,7 @@ SegmentParameterBox::initBox()
     connect(m_repeatValue, SIGNAL(pressed()), SLOT(slotRepeatPressed()));
 
     // non-reversing motif style read-only combo
-    m_quantizeValue = new RosegardenComboBox(false, false, this);
+    m_quantizeValue = new KComboBox(false, this);
     m_quantizeValue->setFont(font);
     m_quantizeValue->setFixedHeight(comboHeight);
 

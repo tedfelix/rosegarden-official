@@ -98,7 +98,7 @@ protected:
     QLabel                     *m_label;
     QPushButton                *m_labelButton;
     RosegardenTristateCheckBox *m_repeatValue;
-    RosegardenComboBox         *m_quantizeValue;
+    KComboBox                  *m_quantizeValue;
     RosegardenComboBox         *m_transposeValue;
     RosegardenComboBox         *m_delayValue;
 

@@ -23,7 +23,6 @@
 #define _WIDGETS_H_
 
 #include <qcheckbox.h>
-#include <qcombobox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qgroupbox.h>
@@ -34,6 +33,8 @@
 #include <qcolor.h>
 #include <qdatetime.h>
 #include <qtooltip.h>
+
+#include <kcombobox.h>
 
 #include "Event.h" // for timeT
 
@@ -66,19 +67,19 @@ private:
  * Turn a normal QComboBox into one that accepts mouse wheel
  * events to change the value
  */
-class RosegardenComboBox : public QComboBox
+class RosegardenComboBox : public KComboBox
 {
 Q_OBJECT
 public:
     RosegardenComboBox(QWidget *parent=0, const char *name=0):
-        QComboBox(parent, name), m_reverse(false) {;}
+        KComboBox(parent, name), m_reverse(false) {;}
 
     RosegardenComboBox(bool reverse, QWidget *parent=0, const char *name=0):
-        QComboBox(parent, name), m_reverse(reverse) {;}
+        KComboBox(parent, name), m_reverse(reverse) {;}
 
     RosegardenComboBox(bool reverse, bool rw,
                        QWidget *parent=0, const char *name=0):
-        QComboBox(rw, parent, name), m_reverse(reverse) {;}
+        KComboBox(rw, parent, name), m_reverse(reverse) {;}
 
 
 protected:
@@ -408,17 +409,17 @@ protected:
 
     std::vector<Rosegarden::timeT> m_standardQuantizations;
 
-    RosegardenComboBox *m_typeCombo;
+    KComboBox *m_typeCombo;
 
     QGroupBox *m_gridBox;
     QCheckBox *m_durationCheckBox;
-    RosegardenComboBox *m_gridUnitCombo;
+    KComboBox *m_gridUnitCombo;
 
     QGroupBox *m_notationBox;
     QCheckBox *m_notationTarget;
-    RosegardenComboBox *m_notationUnitCombo;
-    RosegardenComboBox *m_simplicityCombo;
-    RosegardenComboBox *m_maxTuplet;
+    KComboBox *m_notationUnitCombo;
+    KComboBox *m_simplicityCombo;
+    KComboBox *m_maxTuplet;
     QCheckBox *m_articulate;
 
     QCheckBox *m_makeViable;

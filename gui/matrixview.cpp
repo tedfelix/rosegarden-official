@@ -30,8 +30,9 @@
 #include <qpixmap.h>
 
 #include <kapp.h>
-#include <kconfig.h>
 #include <kaction.h>
+#include <kconfig.h>
+#include <kcombobox.h>
 #include <kstddirs.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -1689,7 +1690,7 @@ MatrixView::initActionsToolbar()
     NotePixmapFactory npf;
     QPixmap noMap = NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap("menu-no-note"));
 
-    m_snapGridCombo = new RosegardenComboBox(false, false, actionsToolbar);
+    m_snapGridCombo = new KComboBox(actionsToolbar);
 
     Rosegarden::timeT crotchetDuration = Note(Note::Crotchet).getDuration();
     m_snapValues.push_back(Rosegarden::SnapGrid::NoSnap);
@@ -1730,7 +1731,7 @@ MatrixView::initActionsToolbar()
     QLabel *qLabel = new QLabel(i18n("Quantize"), actionsToolbar);
     qLabel->setIndent(10);
 
-    m_quantizeCombo = new RosegardenComboBox(false, false, actionsToolbar);
+    m_quantizeCombo = new KComboBox(actionsToolbar);
 
     for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
 

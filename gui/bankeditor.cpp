@@ -39,6 +39,7 @@
 
 #include <kapp.h>
 #include <kconfig.h>
+#include <kcombobox.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstddirs.h>
@@ -1976,8 +1977,8 @@ RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
 
     new QLabel(i18n("From"), groupBox);
     new QLabel(i18n("To"), groupBox);
-    m_fromCombo = new RosegardenComboBox(false, groupBox);
-    m_toCombo = new RosegardenComboBox(false, groupBox);
+    m_fromCombo = new KComboBox(groupBox);
+    m_toCombo = new KComboBox(groupBox);
 
     /*
     QGridLayout *gridLayout = new QGridLayout(frame,
@@ -2110,7 +2111,7 @@ ImportDeviceDialog::ImportDeviceDialog(QWidget *parent,
 
     if (devices.size() > 1) {
 
-	m_deviceCombo = new RosegardenComboBox(groupBox);
+	m_deviceCombo = new KComboBox(groupBox);
 
 	// Create the combo
 	//

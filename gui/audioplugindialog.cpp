@@ -19,8 +19,6 @@
 
 #include <cmath>
 
-#include <klocale.h>
-
 #include <qlabel.h>
 #include <qdial.h>
 #include <qfont.h>
@@ -28,6 +26,9 @@
 #include <qgroupbox.h>
 #include <qcheckbox.h>
 #include <qlayout.h>
+
+#include <klocale.h>
+#include <kcombobox.h>
 
 #include "audioplugindialog.h"
 #include "audiopluginmanager.h"
@@ -64,7 +65,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 
     makePluginParamsBox(vbox);
 
-    m_pluginList = new RosegardenComboBox(false, pluginSelectionBox);
+    m_pluginList = new KComboBox(pluginSelectionBox);
     m_pluginList->insertItem(i18n("(none)"));
 
     QHBox *h = new QHBox(pluginSelectionBox);

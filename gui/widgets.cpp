@@ -23,10 +23,6 @@
 #include <unistd.h>
 #include <cmath>
 
-#include <kapp.h>
-#include <klocale.h>
-#include <kconfig.h>
-
 #include <qfontdatabase.h>
 #include <qtimer.h>
 #include <qapplication.h>
@@ -36,6 +32,11 @@
 #include <qlayout.h>
 #include <qtextedit.h>
 #include <qlineedit.h>
+
+#include <kapp.h>
+#include <klocale.h>
+#include <kconfig.h>
+#include <kcombobox.h>
 
 #include "widgets.h"
 #include "rosedebug.h"
@@ -805,7 +806,7 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     QFrame *typeFrame = new QFrame(quantizerBox);
 
     QGridLayout *layout = new QGridLayout(typeFrame, 1, 1, 5, 3);
-    m_typeCombo = new RosegardenComboBox(false, typeFrame);
+    m_typeCombo = new KComboBox(typeFrame);
     m_typeCombo->insertItem(i18n("Grid quantizer"));
     m_typeCombo->insertItem(i18n("Heuristic notation quantizer"));
     layout->addWidget(m_typeCombo, 0, 0);
@@ -826,13 +827,13 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 
     layout->addWidget(new QLabel(i18n("Base grid unit:"), notationFrame),
 		      1, 0);
-    m_notationUnitCombo = new RosegardenComboBox(false, notationFrame);
+    m_notationUnitCombo = new KComboBox(notationFrame);
     layout->addWidget(m_notationUnitCombo, 1, 1);
 
     layout->addWidget(new QLabel(i18n("Complexity:"),
 				 notationFrame), 0, 0);
 
-    m_simplicityCombo = new RosegardenComboBox(false, notationFrame);
+    m_simplicityCombo = new KComboBox(notationFrame);
     m_simplicityCombo->insertItem(i18n("Very high"));
     m_simplicityCombo->insertItem(i18n("High"));
     m_simplicityCombo->insertItem(i18n("Normal"));
@@ -842,7 +843,7 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 
     layout->addWidget(new QLabel(i18n("Tuplet level:"),
 				 notationFrame), 2, 0);
-    m_maxTuplet = new RosegardenComboBox(false, notationFrame);
+    m_maxTuplet = new KComboBox(notationFrame);
     m_maxTuplet->insertItem(i18n("None"));
     m_maxTuplet->insertItem(i18n("2-in-the-time-of-3"));
     m_maxTuplet->insertItem(i18n("Triplet"));
@@ -863,7 +864,7 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     layout = new QGridLayout(gridFrame, 2, 2, 5, 3);
 
     layout->addWidget(new QLabel(i18n("Base grid unit:"), gridFrame), 0, 0);
-    m_gridUnitCombo = new RosegardenComboBox(false, gridFrame);
+    m_gridUnitCombo = new KComboBox(gridFrame);
     layout->addWidget(m_gridUnitCombo, 0, 1);
 
     m_durationCheckBox = new QCheckBox

@@ -22,11 +22,6 @@
 #include <iostream>
 #include <cstdio>
 
-#include <kglobal.h>
-#include <kstddirs.h>
-#include <klocale.h>
-#include <kapp.h>
-
 #include <qdial.h>
 #include <qlayout.h>
 #include <qlabel.h>
@@ -35,6 +30,12 @@
 #include <qpushbutton.h>
 #include <qsignalmapper.h>
 #include <qwidgetstack.h>
+
+#include <kcombobox.h>
+#include <kglobal.h>
+#include <kstddirs.h>
+#include <klocale.h>
+#include <kapp.h>
 
 #include "Midi.h"
 #include "Instrument.h"
@@ -1175,9 +1176,9 @@ AudioInstrumentParameterPanel::slotAudioChannels(int channels)
 MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget* parent)
     : InstrumentParameterPanel(parent),
       m_deviceLabel(new QLabel(this)),
-      m_bankValue(new RosegardenComboBox(false, false, this)),
+      m_bankValue(new KComboBox(false, this)),
       m_channelValue(new RosegardenComboBox(true, false, this)),
-      m_programValue(new RosegardenComboBox(false, false, this)),
+      m_programValue(new KComboBox(this)),
       m_panRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 64.0, 20)),
       m_volumeRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 64.0, 20)),
       m_bankCheckBox(new QCheckBox(this)),

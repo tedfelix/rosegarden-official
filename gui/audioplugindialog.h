@@ -39,7 +39,7 @@
 //
 
 class RosegardenRotary;
-class RosegardenComboBox;
+class KComboBox;
 class QGroupBox;
 class QCheckBox;
 class QLabel;
@@ -139,7 +139,7 @@ protected:
     Instrument          *m_instrument;
 
     QFrame		*m_pluginParamsBox;
-    RosegardenComboBox  *m_pluginList;
+    KComboBox           *m_pluginList;
     QLabel              *m_pluginId;
     QCheckBox		*m_bypass;
 

@@ -36,7 +36,7 @@
 #include "Device.h"
 #include "Instrument.h"
 
-class RosegardenComboBox;
+class KComboBox;
 class QButtonGroup;
 class QPushButton;
 class QFrame;
@@ -316,8 +316,8 @@ protected:
     QRadioButton        *m_instrumentButton;
 
     QButtonGroup        *m_buttonGroup;
-    RosegardenComboBox  *m_fromCombo;
-    RosegardenComboBox  *m_toCombo;
+    KComboBox           *m_fromCombo;
+    KComboBox           *m_toCombo;
 };
 
 // --------------------- ImportDeviceDialog --------------------------
@@ -336,7 +336,7 @@ public slots:
     void slotCancel();
 
 protected:
-    RosegardenComboBox *m_deviceCombo;
+    KComboBox          *m_deviceCombo;
     QLabel             *m_label;
 
     QButtonGroup       *m_buttonGroup;

@@ -23,6 +23,7 @@
 #include <klocale.h>
 #include <kstddirs.h>
 #include <kconfig.h>
+#include <kcombobox.h>
 
 #include <qlayout.h>
 #include <qvbox.h>
@@ -119,11 +120,9 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
                   i18n("Arm recording for this audio Instrument"));
 
     QLabel *inputLabel = new QLabel(i18n("Audio Input"), this);
-    m_audioInput = new RosegardenComboBox(this);
+    m_audioInput = new KComboBox(this);
 
     QLabel *panLabel = new QLabel(i18n("Pan"), this);
-    //QLabel *outputLabel = new QLabel(i18n("Audio Output"), this);
-    //m_audioOutput = new RosegardenComboBox(this);
     
     // Sort out the layout accordingly
     //
@@ -197,7 +196,7 @@ AudioFaderWidget::setAudioChannels(int channels)
         default:
             std::cerr << "AudioFaderWidget::setAudioChannels - "
                       << "unsupported channel numbers (" << channels
-                      << ")" << endl;
+                      << ")" << std::endl;
     }
 
     // Populate audio inputs accordingly

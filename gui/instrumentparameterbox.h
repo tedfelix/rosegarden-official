@@ -35,6 +35,7 @@ class QPushButton;
 class QSignalMapper;
 class QLabel;
 class RosegardenComboBox;
+class KComboBox;
 class RosegardenGUIDoc;
 class QWidgetStack;
 class AudioVUMeter;
@@ -244,9 +245,9 @@ protected:
 
     QLabel             *m_deviceLabel;
 
-    RosegardenComboBox *m_bankValue;
+    KComboBox          *m_bankValue;
     RosegardenComboBox *m_channelValue; 
-    RosegardenComboBox *m_programValue;
+    KComboBox          *m_programValue;
     RosegardenRotary   *m_panRotary;
     RosegardenRotary   *m_volumeRotary;
 

@@ -52,7 +52,7 @@ class MatrixStaff;
 class MatrixCanvasView;
 class PianoKeyboard;
 class MatrixParameterBox;
-class RosegardenComboBox;
+class KComboBox;
 template <class T> class ZoomSlider;
 class ControlRuler;
 class ControlBox;
@@ -480,8 +480,8 @@ protected:
 
     // Toolbar flora
     //
-    RosegardenComboBox *m_quantizeCombo;
-    RosegardenComboBox *m_snapGridCombo;
+    KComboBox          *m_quantizeCombo;
+    KComboBox          *m_snapGridCombo;
     ZoomSlider<double> *m_hZoomSlider;
     ZoomSlider<double> *m_vZoomSlider;
     QLabel             *m_zoomLabel;

@@ -63,6 +63,7 @@
 #include <klocale.h>
 #include <karrowbutton.h>
 #include <kfiledialog.h>
+#include <kcombobox.h>
 
 using Rosegarden::Int;
 using Rosegarden::RealTimeT;
@@ -348,7 +349,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     QToolTip::add(keyUp, i18n("Sharpen"));
 
     m_keyCombo = new RosegardenComboBox(true, nameBox);
-    m_majorMinorCombo = new RosegardenComboBox(false, nameBox);
+    m_majorMinorCombo = new KComboBox(nameBox);
     m_majorMinorCombo->insertItem("Major");
     m_majorMinorCombo->insertItem("Minor");
     if (m_key.isMinor()) {
@@ -681,7 +682,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
     new QLabel(i18n("Play "), timingGrid);
     m_untupledCombo = new RosegardenComboBox(true, timingGrid);
 
-    m_unitCombo = new RosegardenComboBox(false, timingGrid);
+    m_unitCombo = new KComboBox(timingGrid);
     NotePixmapFactory npf;
 
     for (Note::Type t = Note::Shortest; t <= Note::Longest; ++t) {
@@ -946,7 +947,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     if (maxLength > 0) m_text->setMaxLength(maxLength);
 
     new QLabel(i18n("Style:  "), entryGrid);
-    m_typeCombo = new RosegardenComboBox(false, entryGrid);
+    m_typeCombo = new KComboBox(entryGrid);
 
     for (unsigned int i = 0; i < m_styles.size(); ++i) {
 
@@ -1934,10 +1935,10 @@ RescaleDialog::RescaleDialog(QWidget *parent) :
     QHBox *notesBox = new QHBox(ratioBox);
 
     new QLabel(i18n("Play "), notesBox);
-    RosegardenComboBox *fromCombo = new RosegardenComboBox(false, notesBox);
+    KComboBox *fromCombo = new KComboBox(notesBox);
 
     new QLabel(i18n(" beats in time of "), notesBox);
-    RosegardenComboBox *toCombo = new RosegardenComboBox(false, notesBox);
+    KComboBox *toCombo = new KComboBox(notesBox);
 
     for (int i = 1; i <= 16; ++i) {
 	fromCombo->insertItem(QString("%1").arg(i));
@@ -2686,7 +2687,7 @@ SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
 
     layout->addWidget(new QLabel(i18n("Clef handling:"), frame), 3, 0);
 
-    m_clefs = new RosegardenComboBox(frame);
+    m_clefs = new KComboBox(frame);
     m_clefs->insertItem(i18n("Leave clefs alone"));
     m_clefs->insertItem(i18n("Guess new clefs"));
     m_clefs->insertItem(i18n("Use treble and bass clefs"));

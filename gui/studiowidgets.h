@@ -69,7 +69,7 @@ public:
 
     QSignalMapper             *m_signalMapper;
 
-    RosegardenComboBox        *m_audioInput; 
+    KComboBox                 *m_audioInput; 
     //RosegardenComboBox        *m_audioOutput; 
 
 signals:

@@ -38,6 +38,7 @@ class QLineEdit;
 class QCheckBox;
 class QLabel;
 class RosegardenComboBox;
+class KComboBox;
 class QGroupBox;
 class QRadioButton;
 class QVButtonGroup;
@@ -149,7 +150,7 @@ protected:
 
     QLabel *m_keyLabel;
     RosegardenComboBox *m_keyCombo;
-    RosegardenComboBox *m_majorMinorCombo;
+    KComboBox *m_majorMinorCombo;
     QLabel *m_explanatoryLabel;
 
     QRadioButton *m_applyToAllButton;
@@ -213,7 +214,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    RosegardenComboBox *m_unitCombo;
+    KComboBox          *m_unitCombo;
     RosegardenComboBox *m_untupledCombo;
     RosegardenComboBox *m_tupledCombo;
 
@@ -254,7 +255,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     QLineEdit *m_text;
-    RosegardenComboBox *m_typeCombo;
+    KComboBox *m_typeCombo;
 
     QLabel *m_staffAboveLabel;
     QLabel *m_textExampleLabel;
@@ -622,7 +623,7 @@ private:
     QSpinBox *m_pitch;
     QCheckBox *m_range;
     QCheckBox *m_duplicate;
-    RosegardenComboBox *m_clefs;
+    KComboBox *m_clefs;
     QLabel *m_pitchLabel;
 };
 
