@@ -213,9 +213,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                    .arg(doc->getTitle())
                    .arg(segments.size()));
     }
-    
-    show();
-    kapp->processEvents();
 
     m_topBarButtons = new BarButtons(&m_hlayout, 25,
                                      false, getCentralFrame());
@@ -239,6 +236,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_bottomBarButtons = new BarButtons(&m_hlayout, 25,
                                         true, getCentralFrame());
     setBottomBarButtons(m_bottomBarButtons);
+    
+    show();
+    kapp->processEvents();
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,

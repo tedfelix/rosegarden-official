@@ -147,7 +147,10 @@ void SegmentItem::makeFont()
 
 void SegmentItem::drawShape(QPainter& painter)
 {
-    QRect previewRect = painter.clipRegion(QPainter::CoordPainter).boundingRect();
+    QRect previewRect =
+	painter.hasClipping() ?
+	painter.clipRegion(QPainter::CoordPainter).boundingRect() :
+	painter.viewport();
     QCanvasRectangle::drawShape(painter);
     Rosegarden::RulerScale *rulerScale = m_snapGrid->getRulerScale();
 
