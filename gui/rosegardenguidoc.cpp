@@ -773,6 +773,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     // Send out the appearance data
     outStream << "<appearance>" << endl;
     outStream << strtoqstr(getComposition().getSegmentColourMap().toXmlString("segmentmap"));
+    outStream << strtoqstr(getComposition().getGeneralColourMap().toXmlString("generalmap"));
     outStream << "</appearance>" << endl << endl << endl;
 
     // close the top-level XML tag
