@@ -52,7 +52,7 @@ release standard:
 
 In order of importance:
 
-  o Matrix tools (shorten/lengthen note, join/split note, move note)
+  o Matrix tools (shorten/lengthen note, join/split note, move note) [DONE]
 
   o Get the GUI to make sense when loading files and switching states,
     enabling correct buttons and menu options corresponding to whether
