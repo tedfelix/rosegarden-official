@@ -3375,19 +3375,15 @@ RosegardenGUIApp::slotPlayAudioFile(unsigned int id,
     if (aF == 0)
         return;
 
-    try
-    {
-        Rosegarden::MappedEvent *mE =
-          new Rosegarden::MappedEvent(m_doc->getStudio().
-                                        getAudioPreviewInstrument(),
-                                      id,
-                                      Rosegarden::RealTime(-120, 0),
-                                      duration,                  // duration
-                                      startTime);                // start index
+    Rosegarden::MappedEvent *mE =
+      new Rosegarden::MappedEvent(m_doc->getStudio().
+                                    getAudioPreviewInstrument(),
+                                  id,
+                                  Rosegarden::RealTime(-120, 0),
+                                  duration,                  // duration
+                                  startTime);                // start index
 
-        Rosegarden::StudioControl::sendMappedEvent(mE);
-    }
-    catch(...) {;}
+    Rosegarden::StudioControl::sendMappedEvent(mE);
 
 }
 
@@ -3525,17 +3521,13 @@ RosegardenGUIApp::slotCancelAudioPlayingFile(Rosegarden::AudioFileId id)
     if (aF == 0)
         return;
 
-    try
-    {
-        Rosegarden::MappedEvent *mE =
-            new Rosegarden::MappedEvent(m_doc->getStudio().
-                                            getAudioPreviewInstrument(),
-                                        Rosegarden::MappedEvent::AudioCancel,
-                                        id);
+    Rosegarden::MappedEvent *mE =
+        new Rosegarden::MappedEvent(m_doc->getStudio().
+                                        getAudioPreviewInstrument(),
+                                    Rosegarden::MappedEvent::AudioCancel,
+                                    id);
 
-        Rosegarden::StudioControl::sendMappedEvent(mE);
-    }
-    catch(...) {;}
+    Rosegarden::StudioControl::sendMappedEvent(mE);
 }
 
 void

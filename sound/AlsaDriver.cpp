@@ -932,6 +932,10 @@ AlsaDriver::stopPlayback()
     allNotesOff();
     m_playing = false;
 
+    // reset the clock send time
+    //
+    m_midiClockSendTime = Rosegarden::RealTime(0, 0);
+
     // Flush the output and input queues
     //
     snd_seq_remove_events_t *info;
@@ -3399,26 +3403,34 @@ AlsaDriver::sendMidiClock()
     //
     unsigned int numTicks =
         (unsigned int)(Rosegarden::RealTime(2, 0)/
-                       Rosegarden::RealTime(0, m_midiClockInterval * 1000));
+                       Rosegarden::RealTime(0, m_midiClockInterval));
 
     // First time through set the clock send time - this will also
     // ensure we send the first batch of clock events
     //
     if (m_midiClockSendTime == Rosegarden::RealTime(0, 0))
+    {
         m_midiClockSendTime = getAlsaTime();
+        //cout << "INITIAL ALSA TIME = " << m_midiClockSendTime << endl;
+    }
 
     // If we're within twenty milliseconds of running out of clock
     // then send a batch of clock signals.
     //
     if (getAlsaTime() > (m_midiClockSendTime - Rosegarden::RealTime(0, 20000)))
     {
+        /*
+        cout << "SENDING " << numTicks
+             << " CLOCK TICKS @ " << m_midiClockSendTime << endl;
+             */
+
         for (unsigned int i = 0; i < numTicks; i++)
         {
             sendSystemQueued(SND_SEQ_EVENT_CLOCK, m_midiClockSendTime);
 
             // increment send time
             m_midiClockSendTime = m_midiClockSendTime +
-                Rosegarden::RealTime(0, m_midiClockInterval * 1000);
+                Rosegarden::RealTime(0, m_midiClockInterval);
         }
     }
 }

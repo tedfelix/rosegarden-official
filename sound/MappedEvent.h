@@ -63,36 +63,42 @@ class MappedEvent
 public:
     typedef enum
     {
-        MidiNote                = 0x000001,
-        MidiNoteOneShot         = 0x000002,  // doesn't need NOTE OFFs
-        MidiProgramChange       = 0x000004,
-        MidiKeyPressure         = 0x000008,
-        MidiChannelPressure     = 0x000010,
-        MidiPitchBend           = 0x000020,
-        MidiController          = 0x000040,
-        MidiSystemExclusive     = 0x000080,
+        // INVALID
+        //
+        InvalidMappedEvent = -1,
+
+        // VALID
+        //
+        MidiNote,
+        MidiNoteOneShot,  // doesn't need NOTE OFFs
+        MidiProgramChange,
+        MidiKeyPressure,
+        MidiChannelPressure,
+        MidiPitchBend,
+        MidiController,
+        MidiSystemExclusive,
         // Sent from the gui to play an audio file
-        Audio                   = 0x000100,
+        Audio = 40,
         // Sent from gui to cancel playing an audio file
-        AudioCancel             = 0x000200,
+        AudioCancel,
         // Sent to the gui with audio level on Instrument
-        AudioLevel              = 0x000400,
+        AudioLevel,
         // Sent to the gui to inform an audio file stopped
-        AudioStopped            = 0x000800,
+        AudioStopped,
         // The gui is clear to generate a preview for a new audio file
-        AudioGeneratePreview    = 0x001000,
+        AudioGeneratePreview,
         // Update Instruments - new ALSA client detected
-        SystemUpdateInstruments = 0x002000,
+        SystemUpdateInstruments = 80,
         // Set RG as JACK master/slave
-        SystemJackTransport     = 0x004000,
+        SystemJackTransport,
         // Set RG as MMC master/slave
-        SystemMMCTransport      = 0x008000,
+        SystemMMCTransport,
         // Set System Messages and MIDI Clock
-        SystemMIDIClock         = 0x010000,
+        SystemMIDIClock,
         // Set Record device
-        SystemRecordDevice      = 0x020000,
+        SystemRecordDevice,
         // Set Metronome device
-        SystemMetronomeDevice   = 0x040000
+        SystemMetronomeDevice
 
     } MappedEventType;
 

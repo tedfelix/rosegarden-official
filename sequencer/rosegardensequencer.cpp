@@ -98,12 +98,6 @@ RosegardenSequencerApp::RosegardenSequencerApp(
     m_sliceTimer = new QTimer(this);
     connect(m_sliceTimer, SIGNAL(timeout()), this, SLOT(slotRevertSliceSize()));
 
-    // Connect the MIDI clock timer but don't start it yet
-    //
-    m_midiClockTimer = new QTimer(this);
-    connect(m_midiClockTimer, SIGNAL(timeout()),
-            this, SLOT(slotSendMidiClock()));
-
     // Check for new clients every so often
     //
     m_newClientTimer = new QTimer(this);
@@ -381,7 +375,8 @@ RosegardenSequencerApp::updateClocks(bool clearToSend)
 {
     // Attempt to send MIDI clock 
     //
-    slotSendMidiClock();
+    m_sequencer->sendMidiClock();
+
 
     // If we're not playing etc. then that's all we need to do
 
@@ -1233,42 +1228,15 @@ RosegardenSequencerApp::slotRevertSliceSize()
     m_oldSliceSize = Rosegarden::RealTime(0, 0);
 }
 
+// Set the MIDI Clock period in microseconds
+//
 void
 RosegardenSequencerApp::setQuarterNoteLength(long timeSec, long timeUSec)
 {
-    Rosegarden::RealTime quarterNoteLength =
-        Rosegarden::RealTime(timeSec, timeUSec);
+    long usecs =
+        long((double(timeSec) * 1000.0 + double(timeUSec)) / 24.0);
 
-    long msecs =
-        long((double(timeSec) * 1000.0 + double(timeUSec)/1000.0) / 24.0);
-
-    SEQUENCER_DEBUG << "sending MIDI clock every " << msecs << endl;
-    m_sequencer->setMIDIClockInterval(msecs);
-
-    /*
-    // Timer interval is in milliseconds - turn into 24ppq
-    //
-    */
-
-
-    /*
-    if (m_midiClockTimer->isActive())
-    {
-        m_midiClockTimer->changeInterval(msecs);
-    }
-    else
-    {
-        m_midiClockTimer->start(msecs);
-    }
-    */
-
+    SEQUENCER_DEBUG << "sending MIDI clock every " << usecs << " usecs" << endl;
+    m_sequencer->setMIDIClockInterval(usecs);
 }
-
-void
-RosegardenSequencerApp::slotSendMidiClock()
-{
-    m_sequencer->sendMidiClock();
-}
-
-
 

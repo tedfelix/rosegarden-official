@@ -321,10 +321,6 @@ public slots:
     //
     void slotRevertSliceSize();
 
-    // Send the MIDI clock signal now - on timeout
-    //
-    void slotSendMidiClock();
-
 protected:
 
     // get events whilst handling loop
@@ -404,10 +400,6 @@ protected:
     //
     Rosegarden::RealTime      m_oldSliceSize;
     QTimer                   *m_sliceTimer;
-
-    // MIDI Clock timer - issue a clock signal every timeout
-    //
-    QTimer                   *m_midiClockTimer;
 
     // Timer to check for new clients
     //

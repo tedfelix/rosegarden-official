@@ -123,9 +123,9 @@ MappedEvent::MappedEvent(InstrumentId id,
     {
         m_type = MidiSystemExclusive;
     }
-    else
+    else 
     {
-        throw(std::string("unsupported MappedEvent type"));
+        m_type = InvalidMappedEvent;
     }
 }
 
