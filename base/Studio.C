@@ -248,8 +248,9 @@ Studio::assignMidiProgramToInstrument(MidiByte program, bool percussion)
                     // Otherwise store the first Instrument for
                     // possible use later.
                     //
-                    if (newInstrument == 0
-                            && (*iit)->sendsProgramChange() == false)
+                    if (newInstrument == 0 &&
+                        (*iit)->sendsProgramChange() == false &&
+                        (*iit)->getMidiChannel() != MIDI_PERCUSSION_CHANNEL)
                         newInstrument = *iit;
                 }
             }
