@@ -27,6 +27,7 @@
 #ifdef HAVE_DSSI
 
 #define DEBUG_DSSI 1
+//#define DEBUG_DSSI_PROCESS 1
 
 namespace Rosegarden
 {
@@ -294,6 +295,9 @@ DSSIPluginInstance::connectPorts()
 void
 DSSIPluginInstance::setPortValue(unsigned int portNumber, float value)
 {
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::setPortValue(" << portNumber << ") to " << value << std::endl;
+#endif
     for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i)
     {
         if (m_controlPortsIn[i].first == portNumber)
@@ -323,14 +327,14 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 {
     if (!m_descriptor || !m_descriptor->run_synth) return;
  
-#ifdef DEBUG_DSSI
+#ifdef DEBUG_DSSI_PROCESS
     std::cerr << "DSSIPluginInstance::run(" << blockTime << ")" << std::endl;
 #endif
    
     static snd_seq_event_t localEventBuffer[EVENT_BUFFER_SIZE];
     int evCount = 0;
 
-#ifdef DEBUG_DSSI
+#ifdef DEBUG_DSSI_PROCESS
     if (m_eventBuffer.getReadSpace() > 0) {
 	std::cerr << "DSSIPluginInstance::run: event buffer has "
 		  << m_eventBuffer.getReadSpace() << " event(s) in it" << std::endl;
@@ -349,7 +353,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 	    frameOffset = RealTime::realTime2Frame(evTime - blockTime, m_sampleRate);
 	}
 
-#ifdef DEBUG_DSSI
+#ifdef DEBUG_DSSI_PROCESS
 	std::cerr << "DSSIPluginInstance::run: evTime " << evTime << ", frameOffset " << frameOffset
 		  << ", block size " << m_blockSize << std::endl;
 #endif
@@ -362,7 +366,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 	if (++evCount >= EVENT_BUFFER_SIZE) break;
     }
 
-#ifdef DEBUG_DSSI
+#ifdef DEBUG_DSSI_PROCESS
     std::cerr << "DSSIPluginInstance::run: running with " << evCount << " events"
 	      << std::endl;
 #endif
@@ -370,7 +374,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
     m_descriptor->run_synth(m_instanceHandle, m_blockSize,
 			    localEventBuffer, evCount);
 
-#ifdef DEBUG_DSSI
+#ifdef DEBUG_DSSI_PROCESS
 //    for (int i = 0; i < m_blockSize; ++i) {
 //	std::cout << m_outputBuffers[0][i] << " ";
 //	if (i % 8 == 0) std::cout << std::endl;
