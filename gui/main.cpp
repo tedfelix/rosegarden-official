@@ -424,7 +424,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Michael McIntyre", I18N_NOOP("notation selection event filter\nextra toolbars/pixmaps\nnotation/Lilypond patches\nauthor of \"Using Rosegarden\""), "dmmcintyr@users.sourceforge.net");
     aboutData.addCredit("Levi Burton", I18N_NOOP("UI improvements\nbug fixes"), "donburton@sbcglobal.net");
     aboutData.addCredit("Alexandre Prokoudine", I18N_NOOP("Russian translation\ni18n-ization"), "avp@altlinux.ru");
-    aboutData.addCredit("Pedro Lopez-Cabanillas", I18N_NOOP("Spanish translatio\nALSA hacking and bug fixes\nmulti-input MIDI recording"), "plcl@bigfoot.com");
+    aboutData.addCredit("Pedro Lopez-Cabanillas", I18N_NOOP("Spanish translatio\nALSA hacking and bug fixes\nmulti-input MIDI recording"), "plcl@users.sourceforge.net");
     aboutData.addCredit("Jörg Schumann", I18N_NOOP("German translation"), "jrschumann@gmx.de");
     aboutData.addCredit("Kevin Donnelly", I18N_NOOP("Welsh translation"));
     aboutData.addCredit("Didier Burli", I18N_NOOP("French translation"), "didierburli@bluewin.ch");

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-07-14 16:10+0100\n"
-"PO-Revision-Date: 2004-07-19 00:38+0200\n"
+"PO-Revision-Date: 2004-07-19 20:08+0200\n"
 "Last-Translator: Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>\n"
 "Language-Team: Español <rosegarden-devel@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -1652,15 +1652,15 @@ msgstr "Parámetros de Segmento"
 
 #: segmentparameterbox.cpp:84
 msgid "Audio auto-fade"
-msgstr "Desvanecimiento automático de audio"
+msgstr ""
 
 #: segmentparameterbox.cpp:85
 msgid "Fade in (ms)"
-msgstr "Subida gradual (ms)"
+msgstr ""
 
 #: segmentparameterbox.cpp:86
 msgid "Fade out (ms)"
-msgstr "Desvanecimiento (ms)"
+msgstr ""
 
 #: segmentparameterbox.cpp:271 segmentparameterbox.cpp:600
 msgid "%1 ms"
@@ -2744,7 +2744,7 @@ msgstr "Importar archivo de &Hydrogen..."
 
 #: rosegardengui.cpp:396
 msgid "Merge &File..."
-msgstr "Me&zclar Archivo..."
+msgstr "Me&zclar archivo..."
 
 #: rosegardengui.cpp:400
 msgid "Merge &MIDI file..."
@@ -2752,7 +2752,7 @@ msgstr "Mezclar archivo &MIDI..."
 
 #: rosegardengui.cpp:404
 msgid "Merge &Rosegarden 2.1 file..."
-msgstr "Mezclar Archivo de &Rosegarden 2.1..."
+msgstr "Mezclar archivo de &Rosegarden 2.1..."
 
 #: rosegardengui.cpp:408
 msgid "Merge &Hydrogen file..."
@@ -3273,7 +3273,7 @@ msgstr "Abrir Archivo MIDI"
 
 #: rosegardengui.cpp:3036
 msgid "Merge MIDI File"
-msgstr "Mezclar Archivo MIDI"
+msgstr "Mezclar archivo MIDI"
 
 #: rosegardengui.cpp:3061
 msgid "Importing MIDI file..."
@@ -7250,7 +7250,7 @@ msgstr "Duración de la selección"
 
 #: dialogs.cpp:3327
 msgid "Merge File"
-msgstr "Mezclar Archivo"
+msgstr "Mezclar archivo"
 
 #: dialogs.cpp:3332
 msgid "Merge new file  "
