@@ -170,7 +170,7 @@ public slots:
     // From AudioFaderWidget
     //
     void slotSelectPlugin(int index);
-    void slotSelectAudioLevel(int index);
+    void slotSelectAudioLevel(float dB);
     void slotAudioChannels(int channels);
     void slotSelectAudioInput(int value);
 

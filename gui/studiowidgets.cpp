@@ -40,77 +40,320 @@
 
 //----------------------------------------
 
-RosegardenFader::RosegardenFader(QWidget *parent):
-    QSlider(Qt::Vertical, parent),
+RosegardenFader::RosegardenFader(Rosegarden::AudioLevel::FaderType type,
+				 int w, int h, QWidget *parent) :
+    QWidget(parent),
+    m_integral(false),
+    m_vertical(h > w),
+    m_min(0),
+    m_max(0),
+    m_type(type),
+    m_clickMousePos(-1),
     m_float(new RosegardenTextFloat(this)),
     m_floatTimer(new QTimer()),
-    m_prependText("")
+    m_groovePixmap(0),
+    m_buttonPixmap(0)
 {
-    connect(this, SIGNAL(valueChanged(int)),
-            this, SLOT(slotValueChanged(int)));
+    setFixedSize(w, h); // provisional
+    calculateButtonPixmap();
+    if (m_vertical) {
+	setFixedSize(w, h + m_buttonPixmap->height() + 4);
+    } else {
+	setFixedSize(w + m_buttonPixmap->width() + 4, h);
+    }
 
-    connect(this, SIGNAL(sliderPressed()),
-            this, SLOT(slotShowFloatText()));
+    if (m_vertical) {
+	m_sliderMin = m_buttonPixmap->height()/2 + 2;
+	m_sliderMax = height() - m_sliderMin;
+    } else {
+	m_sliderMin = m_buttonPixmap->width()/2 + 2;
+	m_sliderMax = width() - m_sliderMin;
+    }	
 
-    // connect timer
+    calculateGroovePixmap();
+    setFader(0.0);
+
     connect(m_floatTimer, SIGNAL(timeout()), this, SLOT(slotFloatTimeout()));
-
-    m_float->hide(); // hide the floater
+    m_float->hide();
 }
 
-// We invert the value - so that it appear the top of the fader
-// is our maximum and vice versa.  For the moment we only catch
-// and re-emit this signal - so beware.
-//
+RosegardenFader::RosegardenFader(int min, int max, int deflt,
+				 int w, int h, QWidget *parent) :
+    QWidget(parent),
+    m_integral(true),
+    m_vertical(h > w),
+    m_min(min),
+    m_max(max),
+    m_clickMousePos(-1),
+    m_float(new RosegardenTextFloat(this)),
+    m_floatTimer(new QTimer()),
+    m_groovePixmap(0),
+    m_buttonPixmap(0)
+{
+    setFixedSize(w, h); // provisional
+    calculateButtonPixmap();
+    if (m_vertical) {
+	setFixedSize(w, h + m_buttonPixmap->height() + 4);
+    } else {
+	setFixedSize(w + m_buttonPixmap->width() + 4, h);
+    }
+
+    if (m_vertical) {
+	m_sliderMin = m_buttonPixmap->height()/2 + 2;
+	m_sliderMax = height() - m_sliderMin;
+    } else {
+	m_sliderMin = m_buttonPixmap->width()/2 + 2;
+	m_sliderMax = width() - m_sliderMin;
+    }	
+
+    calculateGroovePixmap();
+    setFader(deflt);
+
+    connect(m_floatTimer, SIGNAL(timeout()), this, SLOT(slotFloatTimeout()));
+    m_float->hide();
+}
+
+RosegardenFader::RosegardenFader(int min, int max, int deflt,
+				 bool vertical, QWidget *parent) :
+    QWidget(parent),
+    m_integral(true),
+    m_vertical(vertical),
+    m_min(min),
+    m_max(max),
+    m_clickMousePos(-1),
+    m_float(new RosegardenTextFloat(this)),
+    m_floatTimer(new QTimer()),
+    m_groovePixmap(0),
+    m_buttonPixmap(0)
+{
+    calculateButtonPixmap();
+    if (vertical) {
+	setFixedSize(m_buttonPixmap->width(),
+		     (max - min) + m_buttonPixmap->height() + 4);
+    } else {
+	setFixedSize((max - min) + m_buttonPixmap->height() + 4,
+		     m_buttonPixmap->height());
+    }
+
+    if (m_vertical) {
+	m_sliderMin = m_buttonPixmap->height()/2 + 2;
+	m_sliderMax = height() - m_sliderMin;
+    } else {
+	m_sliderMin = m_buttonPixmap->width()/2 + 2;
+	m_sliderMax = width() - m_sliderMin;
+    }	
+
+    calculateGroovePixmap();
+    setFader(deflt);
+
+    connect(m_floatTimer, SIGNAL(timeout()), this, SLOT(slotFloatTimeout()));
+    m_float->hide();
+}
+
+RosegardenFader::~RosegardenFader()
+{
+    delete m_groovePixmap;
+    delete m_buttonPixmap;
+}
+
+float
+RosegardenFader::getFaderLevel() const
+{
+    return m_value;
+}
+
 void
-RosegardenFader::slotValueChanged(int value)
+RosegardenFader::setFader(float value)
 {
-    int adjValue = maxValue() - value;
-    if (adjValue < 0) adjValue = 0;
-
-    emit faderChanged(adjValue);
-
-    slotShowFloatText();
-}
-
-void 
-RosegardenFader::setFader(int value)
-{
+    m_value = value;
     emit faderChanged(value);
+    paintEvent(0);
+}
 
-    value = maxValue() - value;
+float
+RosegardenFader::position_to_value(int position)
+{
+    float value;
 
-    if (value > maxValue()) value = maxValue();
-    if (value < minValue()) value = minValue();
+    if (m_integral) {
+	float sliderLength = float(m_sliderMax) - float(m_sliderMin);
+	value = float(position)
+	    * (m_max - m_min) / sliderLength - m_min;
+    } else {
+	value = Rosegarden::AudioLevel::fader_to_dB
+	    (position, m_sliderMax - m_sliderMin, m_type);
+    }
+    
+    return value;
+}
 
-    setValue(value);
+int
+RosegardenFader::value_to_position(float value)
+{
+    int position;
+
+    if (m_integral) {
+	float sliderLength = float(m_sliderMax) - float(m_sliderMin);
+	position = 
+	    int(sliderLength * (value - m_min) / (m_max - m_min));
+    } else {
+	position = 
+	    Rosegarden::AudioLevel::dB_to_fader
+	    (value, m_sliderMax - m_sliderMin, m_type);
+    }
+
+    return position;
+} 
+
+void
+RosegardenFader::paintEvent(QPaintEvent *e)
+{
+    QPainter paint(this);
+    int position = value_to_position(m_value);
+
+    if (m_vertical) {
+
+	int aboveButton = height() - position - m_sliderMin - m_buttonPixmap->height()/2;
+	int belowButton = position + m_sliderMin - m_buttonPixmap->height()/2;
+
+	if (aboveButton > 0) {
+	    paint.drawPixmap(0, 0,
+			     *m_groovePixmap,
+			     0, 0,
+			     m_groovePixmap->width(), aboveButton);
+	}
+
+	if (belowButton > 0) {
+	    paint.drawPixmap(0, aboveButton + m_buttonPixmap->height(),
+			     *m_groovePixmap,
+			     0, aboveButton + m_buttonPixmap->height(),
+			     m_groovePixmap->width(), belowButton);
+	}
+
+	int buttonMargin = (width() - m_buttonPixmap->width()) / 2;
+
+	paint.drawPixmap(buttonMargin, aboveButton, *m_buttonPixmap);
+
+	paint.drawPixmap(0, aboveButton,
+			 *m_groovePixmap,
+			 0, aboveButton,
+			 buttonMargin, m_buttonPixmap->height());
+
+	paint.drawPixmap(width() - buttonMargin, aboveButton,
+			 *m_groovePixmap,
+			 width() - buttonMargin, aboveButton,
+			 buttonMargin, m_buttonPixmap->height());
+
+    } else {
+//!!!update
+	int leftOfButton =
+	    (m_sliderMax - m_sliderMin) - position - m_buttonPixmap->width()/2;
+
+	int rightOfButton =
+	    position - m_buttonPixmap->width()/2;
+
+	if (leftOfButton > 0) {
+	    paint.drawPixmap(0, 0,
+			     *m_groovePixmap,
+			     0, 0,
+			     leftOfButton, m_groovePixmap->height());
+	}
+
+	if (rightOfButton > 0) {
+	    paint.drawPixmap(rightOfButton + m_buttonPixmap->width(), 0,
+			     *m_groovePixmap,
+			     m_groovePixmap->width() - rightOfButton, 0,
+			     rightOfButton, m_groovePixmap->height());
+	}
+
+	paint.drawPixmap(leftOfButton, 0, *m_buttonPixmap);
+    }
+
+    paint.end();
 }
 
 void
-RosegardenFader::slotShowFloatText()
+RosegardenFader::mousePressEvent(QMouseEvent *e)
 {
-    // A fader linearly represents dB values such that 0dB is at
-    // maximum fader value less 20 and 10dB is at maximum.  As a
-    // special case, 0 on the fader is silence.
+    m_clickMousePos = -1;
 
-    //!!! no, have a better characteristic -- need to formalise
-     //this somewhere, and probably store volume levels in the xml as
-     //dB as well
+    if (e->button() == LeftButton) {
+	
+	if (m_vertical) {
+	    int buttonPosition = value_to_position(m_value);
+	    int clickPosition = height() - e->y() - m_sliderMin;
+	    
+	    if (clickPosition < buttonPosition + m_buttonPixmap->height()/2 &&
+		clickPosition > buttonPosition - m_buttonPixmap->height()/2) {
+		m_clickMousePos = clickPosition;
+		m_clickButtonPos = value_to_position(m_value);
+		showFloatText();
+	    }
+	}
+    }
+}
 
-//    float dbValue = 10.0 * log10(float(maxValue() - value())/100.0);
+void
+RosegardenFader::mouseReleaseEvent(QMouseEvent *e)
+{
+    mouseMoveEvent(e);
+    m_clickMousePos = -1;
+}
 
+void
+RosegardenFader::mouseMoveEvent(QMouseEvent *e)
+{
+    if (m_clickMousePos >= 0) {
+	if (m_vertical) {
+	    int mousePosition = height() - e->y() - m_sliderMin;
+	    int delta = mousePosition - m_clickMousePos;
+	    int buttonPosition = m_clickButtonPos + delta;
+	    if (buttonPosition < 0) buttonPosition = 0;
+	    if (buttonPosition > m_sliderMax - m_sliderMin) {
+		buttonPosition = m_sliderMax - m_sliderMin;
+	    }
+	    setFader(position_to_value(buttonPosition));
+	    showFloatText();
+	}
+    }
+}
+
+void
+RosegardenFader::wheelEvent(QWheelEvent *e)
+{
+    int buttonPosition = value_to_position(m_value);
+    if (e->state() && ShiftButton) {
+	if (e->delta() > 0) buttonPosition += 10;
+	else buttonPosition -= 10;
+    } else {
+	if (e->delta() > 0) buttonPosition += 1;
+	else buttonPosition -= 1;
+    }
+    setFader(position_to_value(buttonPosition));
+}
+
+void
+RosegardenFader::showFloatText()
+{
     // draw on the float text
 
-    int value = faderLevel();
-    
-    if (value != 0) {
-	m_float->setText(QString("%1%2 dB").arg(m_prependText).arg
-			 (Rosegarden::AudioLevel::fader_to_dB
-			  (value, 127,
-			   Rosegarden::AudioLevel::ShortFader)));
+    QString text;
+
+    if (m_integral) {
+	text = QString("%1").arg(int(m_value));
+    } else if (m_value == Rosegarden::AudioLevel::DB_FLOOR) {
+	text = "Off";
     } else {
-	m_float->setText(QString("%1-Inf dB").arg(m_prependText));
+	float v = fabs(m_value);
+	text = QString("%1%2.%3%4%5 dB")
+	    .arg(m_value < 0 ? '-' : '+')
+	    .arg(int(v))
+	    .arg(int(v * 10) % 10)
+	    .arg(int(v * 100) % 10)
+	    .arg(int(v * 1000) % 10);
     }
+
+    m_float->setText(text);
 
     // Reposition - we need to sum the relative positions up to the
     // topLevel or dialog to please move().
@@ -123,6 +366,7 @@ RosegardenFader::slotShowFloatText()
         totalPos += par->pos();
         par = par->parentWidget();
     }
+
     // Move just top/right
     //
     m_float->move(totalPos + QPoint(width() + 2, 0));
@@ -134,12 +378,119 @@ RosegardenFader::slotShowFloatText()
     m_floatTimer->start(500, true);
 }
 
-
 void
 RosegardenFader::slotFloatTimeout()
 {
     m_float->hide();
 }
+
+void
+RosegardenFader::calculateGroovePixmap()
+{
+    if (m_vertical) {
+	m_groovePixmap = new QPixmap(width(), height());
+	m_groovePixmap->fill(colorGroup().background());
+	QPainter paint(m_groovePixmap);
+	paint.setBrush(colorGroup().background());
+
+	if (m_integral) {
+	    //!!!
+	} else {
+	    for (int dB = -70; dB <= 10; ) {
+		int position = value_to_position(float(dB));
+		if (position >= 0 &&
+		    position < m_sliderMax - m_sliderMin) {
+		    if (dB == 0) paint.setPen(colorGroup().dark());
+		    else paint.setPen(colorGroup().midlight());
+		    paint.drawLine(0, (m_sliderMax - position),
+				   width()-1, (m_sliderMax - position));
+		}
+		if (dB < -10) dB += 10;
+		else dB += 2;
+	    }
+	}
+	
+	paint.setPen(colorGroup().dark());
+	paint.setBrush(colorGroup().mid());
+	paint.drawRect(width()/2 - 3, height() - m_sliderMax,
+		       6, m_sliderMax - m_sliderMin);
+	paint.end();
+    } else {
+	//!!!
+    }
+}
+
+void
+RosegardenFader::calculateButtonPixmap()
+{
+    if (m_vertical) {
+
+	int buttonHeight = height()/7;
+	buttonHeight /= 10;
+	++buttonHeight;
+	buttonHeight *= 10;
+	++buttonHeight;
+	int buttonWidth = width() * 2 / 3;
+	buttonWidth /= 5;
+	++buttonWidth;
+	buttonWidth *= 5;
+	if (buttonWidth > width()-2) buttonWidth = width()-2;
+
+	m_buttonPixmap = new QPixmap(buttonWidth, buttonHeight);
+	m_buttonPixmap->fill(colorGroup().background());
+
+	int x = 0;
+	int y = 0;
+
+	QPainter paint(m_buttonPixmap);
+
+	paint.setPen(colorGroup().light());
+	paint.drawLine(x + 1, y, x + buttonWidth - 2, y);
+	paint.drawLine(x, y + 1, x, y + buttonHeight - 2);
+
+	paint.setPen(colorGroup().midlight());
+	paint.drawLine(x + 1, y + 1, x + buttonWidth - 2, y + 1);
+	paint.drawLine(x + 1, y + 1, x + 1, y + buttonHeight - 2);
+
+	paint.setPen(colorGroup().mid());
+	paint.drawLine(x + 2, y + buttonHeight - 2, x + buttonWidth - 2,
+		       y + buttonHeight - 2);
+	paint.drawLine(x + buttonWidth - 2, y + 2, x + buttonWidth - 2,
+		       y + buttonHeight - 2);
+
+	paint.setPen(colorGroup().dark());
+	paint.drawLine(x + 1, y + buttonHeight - 1, x + buttonWidth - 2,
+		       y + buttonHeight - 1);
+	paint.drawLine(x + buttonWidth - 1, y + 1, x + buttonWidth - 1,
+		       y + buttonHeight - 2);
+
+	paint.setPen(colorGroup().shadow());
+	paint.drawLine(x + 1, y + buttonHeight/2, x + buttonWidth - 2,
+		       y + buttonHeight/2);
+
+	paint.setPen(colorGroup().mid());
+	paint.drawLine(x + 1, y + buttonHeight/2 - 1, x + buttonWidth - 2,
+		       y + buttonHeight/2 - 1);
+	paint.drawPoint(x, y + buttonHeight/2);
+
+	paint.setPen(colorGroup().light());
+	paint.drawLine(x + 1, y + buttonHeight/2 + 1, x + buttonWidth - 2,
+		       y + buttonHeight/2 + 1);
+
+	paint.setPen(colorGroup().button());
+	paint.setBrush(colorGroup().button());
+	paint.drawRect(x + 2, y + 2, buttonWidth - 4, buttonHeight/2 - 4);
+	paint.drawRect(x + 2, y + buttonHeight/2 + 2,
+		       buttonWidth - 4, buttonHeight/2 - 4);
+
+	paint.end();
+    } else {
+	//!!!
+    }
+}
+
+
+    
 
 
 // ---------------- AudioFaderWidget ------------------
@@ -178,14 +529,15 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     m_vuMeter = new AudioVUMeter(this);
     QToolTip::add(m_vuMeter, i18n("Audio VU Meter"));
 
-    m_fader = new RosegardenFader(this);
-    m_fader->setTickmarks(QSlider::Right);
-    m_fader->setTickInterval(10);
-    m_fader->setPageStep(10);
-    m_fader->setMinValue(0);
-    m_fader->setMaxValue(127);
-    m_fader->setFixedHeight(m_vuMeter->height());
-    QToolTip::add(m_fader, i18n("Audio Fader"));
+    m_fader = new RosegardenFader(Rosegarden::AudioLevel::ShortFader,
+				  20, m_vuMeter->height(), this);
+//    m_fader->setTickmarks(QSlider::Right);
+//    m_fader->setTickInterval(10);
+//    m_fader->setPageStep(10);
+//    m_fader->setMinValue(0);
+//    m_fader->setMaxValue(127);
+//    m_fader->setFixedHeight(m_vuMeter->height());
+//    QToolTip::add(m_fader, i18n("Audio Fader"));
 
     // Stereo, solo, mute and pan
     //

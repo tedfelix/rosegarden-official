@@ -24,6 +24,8 @@
 
 namespace Rosegarden {
 
+const float AudioLevel::DB_FLOOR = -1000.0;
+
 struct FaderDescription
 {
     FaderDescription(float _minDb, float _maxDb, float _zeroPoint) :
@@ -42,18 +44,22 @@ static const FaderDescription faderTypes[] = {
 float
 AudioLevel::multiplier_to_dB(float multiplier)
 {
+    if (multiplier == 0.0) return DB_FLOOR;
     return 10 * log10f(multiplier);
 }
 
 float
 AudioLevel::dB_to_multiplier(float dB)
 {
+    if (dB == DB_FLOOR) return 0.0;
     return powf(10.0, dB / 10.0);
 }
 
 float
 AudioLevel::fader_to_dB(int level, int maxLevel, FaderType type)
 {
+    if (level == 0) return DB_FLOOR;
+
     int zeroLevel = int(maxLevel * faderTypes[type].zeroPoint);
     
     if (level >= zeroLevel) {
@@ -79,6 +85,8 @@ AudioLevel::fader_to_dB(int level, int maxLevel, FaderType type)
 int
 AudioLevel::dB_to_fader(float dB, int maxLevel, FaderType type)
 {
+    if (dB == DB_FLOOR) return 0;
+
     int zeroLevel = int(maxLevel * faderTypes[type].zeroPoint);
     
     if (dB >= 0.0) {
@@ -105,14 +113,14 @@ AudioLevel::dB_to_fader(float dB, int maxLevel, FaderType type)
 float
 AudioLevel::fader_to_multiplier(int level, int maxLevel, FaderType type)
 {
-    if (level == 0) return 0.0; // special case for silence
+    if (level == 0) return 0.0;
     return dB_to_multiplier(fader_to_dB(level, maxLevel, type));
 }
 
 int
 AudioLevel::multiplier_to_fader(float multiplier, int maxLevel, FaderType type)
 {
-    if (multiplier == 0.0) return 0; // special case for silence
+    if (multiplier == 0.0) return 0;
     return dB_to_fader(multiplier_to_dB(multiplier), maxLevel, type);
 }
 

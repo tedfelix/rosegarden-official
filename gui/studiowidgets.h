@@ -30,60 +30,87 @@
 #include "widgets.h"
 #include "trackvumeter.h"
 
-/*
-class AudioVUMeter : public VUMeter 
-{
-public:
-    AudioVUMeter(QWidget *parent);
+#include "AudioLevel.h"
 
-    virtual void meterStart();
-    virtual void meterStop();
 
-protected:
-
-};
-*/
-
-// We need one of these because the QSlider is stupid and won't
-// let us have the maximum value of the slider at the top.  Or
-// just I can't find a way of doing it.  Anyway, this is a 
-// vertically aligned volume/MIDI fader.
-//
-class RosegardenFader : public QSlider
+class RosegardenFader : public QWidget
 {
     Q_OBJECT
+
 public:
-    RosegardenFader(QWidget *parent);
+    /**
+     * Construct a dB fader.  The fader calculates its orientation
+     * based on the given dimensions.  Note that the longer dimension
+     * will be taken as the length of the slider, so the entire fader
+     * widget will be longer or taller than that.
+     */
+    RosegardenFader(Rosegarden::AudioLevel::FaderType,
+		    int width, int height, QWidget *parent);
+
+    /**
+     * Construct a fader on an integral scale.  The fader calculates
+     * its orientation based on the given dimensions.  Note that the
+     * longer dimension will be taken as the length of the slider, so
+     * the entire fader widget will be longer or taller than that.
+     */
+    RosegardenFader(int min, int max, int deflt,
+		    int width, int height, QWidget *parent);
+
+    /**
+     * Construct a fader on an integral scale, with a 1:1 ratio of
+     * pixel positions and values.
+     */
+    RosegardenFader(int min, int max, int deflt,
+		    bool vertical, QWidget *parent);
+
+    virtual ~RosegardenFader();
+
+    float getFaderLevel() const;
 
 public slots:
-    void slotValueChanged(int);
-
-    // Use this in preference to setValue - horrible hack but it's
-    // quicker than fiddling about with the insides of QSlider.
-    //
-    virtual void setFader(int);
-
-    int faderLevel() const { return maxValue() - value(); }
-
+    void setFader(float value);
     void slotFloatTimeout();
 
-    // Prependable text for tooltip
-    //
-    void setPrependText(const QString &text) { m_prependText = text; }
-
 signals:
-    void faderChanged(int);
-
-protected slots:
-    void slotShowFloatText();
+    void faderChanged(float);
 
 protected:
+    virtual void paintEvent(QPaintEvent *);
+    virtual void mousePressEvent(QMouseEvent *);
+    virtual void mouseReleaseEvent(QMouseEvent *);
+    virtual void mouseMoveEvent(QMouseEvent *);
+    virtual void wheelEvent(QWheelEvent *);
+
+    float position_to_value(int);
+    int value_to_position(float);
+
+    void calculateGroovePixmap();
+    void calculateButtonPixmap();
+    void showFloatText();
+
+    bool m_integral;
+    bool m_vertical;
+
+    int m_sliderMin;
+    int m_sliderMax;
+    float m_value;
+
+    int m_min;
+    int m_max;
+    Rosegarden::AudioLevel::FaderType m_type;
+
+    int m_clickMousePos;
+    int m_clickButtonPos;
 
     RosegardenTextFloat *m_float;
     QTimer              *m_floatTimer;
 
-    QString              m_prependText;
+    //!!! we should really get all sophisticated and cache these
+    //shared among faders of a given dimension
+    QPixmap *m_groovePixmap;
+    QPixmap *m_buttonPixmap;
 };
+    
 
 
 class AudioFaderWidget : public QWidget

@@ -35,6 +35,8 @@ class AudioLevel
 {
 public:
 
+    static const float DB_FLOOR;
+
     enum FaderType {
 	ShortFader = 0, // -40 -> +6  dB
   	 LongFader = 1  // -70 -> +10 dB
