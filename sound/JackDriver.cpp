@@ -599,13 +599,17 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
     }
 
-    for (InstrumentId id = 0;
-	 id < instrumentBase + instruments;
-	 ++id) {
+    for (InstrumentId id = instrumentBase + instruments - 1;
+	 /*	 id >= 0 */;
+	 --id) {
 
-	if (id == m_mixer->getSubmasterCount() + 1) {
-	    id = instrumentBase;
+	if (id == instrumentBase - 1) {
+	    id = m_mixer->getSubmasterCount();
 	}
+
+//	if (id == m_mixer->getSubmasterCount() + 1) {
+//	    id = instrumentBase;
+//	}
 
 	bool dormant = false;
 	if (id >= instrumentBase) dormant = m_mixer->isInstrumentDormant(id);
@@ -706,6 +710,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		sdb->setInstrumentLevel(id, info);
 	    }
 	}
+
+	if (id == 0) break;
     }
 
     if (m_alsaDriver->isPlaying()) {

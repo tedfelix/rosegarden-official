@@ -38,7 +38,7 @@
 #include <cmath>
 
 //#define DEBUG_MIXER 1
-//#define DEBUG_MIXER_LIGHTWEIGHT 1
+#define DEBUG_MIXER_LIGHTWEIGHT 1
 //#define DEBUG_LOCKS 1
 //#define DEBUG_READER 1
 //#define DEBUG_WRITER 1
@@ -578,6 +578,11 @@ AudioMixer::processBlocks(bool forceFill, bool &waitingForFiles)
 	}
     }
 
+#ifdef DEBUG_MIXER_LIGHTWEIGHT
+    int n[20];
+    std::cout << minBlocks << " .. ";
+#endif
+
     for (InstrumentId id = instrumentBase;
 	 id < instrumentBase + instrumentCount; ++id) {
 
@@ -602,10 +607,21 @@ AudioMixer::processBlocks(bool forceFill, bool &waitingForFiles)
 #endif
 	}
 
+#ifdef DEBUG_MIXER_LIGHTWEIGHT
+	n[id - instrumentBase] = blocksHere;
+#endif
+
 	if (id == instrumentBase || blocksHere < minBlocks) {
 	    minBlocks = blocksHere;
 	}
     }
+
+#ifdef DEBUG_MIXER_LIGHTWEIGHT
+    for (int i = 0; i < instrumentCount; ++i) {
+	std::cout << n[i] << " ";
+    }
+    std::cout << std::endl;
+#endif
 
     if (minBlocks == 0) {
 	waitingForFiles = true;
@@ -638,6 +654,9 @@ AudioMixer::processBlocks(bool forceFill, bool &waitingForFiles)
 	    } else {
 		processBlock(id, files[id]);
 	    }
+#ifdef DEBUG_MIXER
+//	    std::cerr << "AudioMixer::processBlocks: instr " << id << " now " << canProcessBlocks(id, files[id], false) << " blocks" << std::endl;
+#endif
 	}
 
 	bool first = true;
@@ -874,15 +893,22 @@ AudioMixer::canProcessBlocks(InstrumentId id,
 
 	if ((*it)->getStatus() == PlayableAudioFile::PLAYING) {
 
+	    // Once a file is fully buffered, it can theoretically
+	    // serve any number of frames (because it will happily
+	    // serve up any number of zeroes after EOF).  So it
+	    // needn't concern us here.
+
+	    if ((*it)->isFullyBuffered()) continue;
+
 	    size_t frames = (*it)->getSampleFramesAvailable();
 
 #ifdef DEBUG_MIXER
 	    if (id == 1000) std::cerr << "AudioMixer::canProcessBlock(" << id <<"): playing audio file has " << frames << " frames available" << std::endl;
 #endif
 
-	    if ((*it)->isFullyBuffered() && frames < m_blockSize) {
-		frames = m_blockSize;
-	    }
+//	    if ((*it)->isFullyBuffered() && frames < m_blockSize) {
+//		frames = m_blockSize;
+//	    }
 
 	    if (!haveFiles || frames < minReadSpace) {
 		if (frames < m_blockSize) return 0;
