@@ -70,6 +70,7 @@ rosegarden_SOURCES = \
 	notestyle.cpp \
 	pianokeyboard.cpp \
 	pixmapfunctions.cpp \
+	playlist.cpp \
 	qcanvasgroupableitem.cpp \
 	qcanvassimplesprite.cpp \
 	qdeferscrollview.cpp \
