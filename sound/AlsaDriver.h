@@ -40,6 +40,45 @@ typedef jack_default_audio_sample_t sample_t;
 
 #endif
 
+
+#ifdef HAVE_LADSPA
+
+#include <ladspa.h>
+
+// LADSPA plugin instance
+//
+class LADSPAPluginInstance
+{
+public:
+    LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
+                         unsigned long ladspaId,
+                         int position):
+        m_instrument(instrument),
+        m_ladspaId(ladspaId),
+        m_position(position) {;}
+
+    Rosegarden::InstrumentId getInstrument() const { return m_instrument; }
+    unsigned long getLADSPAId() const { return m_ladspaId; }
+    int getPosition() const { return m_position; }
+
+    LADSPA_Handle getHandle() { return m_handle; }
+
+protected:
+    
+    Rosegarden::InstrumentId  m_instrument;
+    unsigned long             m_ladspaId;
+    int                       m_position;
+    LADSPA_Handle             m_handle;
+
+};
+
+typedef std::vector<LADSPAPluginInstance*> PluginInstances;
+typedef std::vector<LADSPAPluginInstance*>::iterator PluginIterator;
+
+#endif // HAVE_LADSPA
+
+
+
 // Specialisation of SoundDriver to support ALSA (http://www.alsa-project.org)
 // Currently supports version 0.9beta12
 //
@@ -137,6 +176,15 @@ public:
     // Meter levels or audio file completions can go in here.
     //
     void insertMappedEventForReturn(MappedEvent *mE);
+
+
+    // Plugin instance management
+    //
+    virtual void setPluginInstance(InstrumentId id,
+                                   unsigned long pluginId,
+                                   int position);
+
+    virtual void removePluginInstance(InstrumentId id, int position);
 
 
 #ifdef HAVE_LIBJACK
@@ -243,7 +291,16 @@ private:
     jack_port_t                 *m_audioOutputPortRight;
 
 
-#endif
+#endif // HAVE_LIBJACK
+
+#ifdef HAVE_LADSPA
+
+    // Change this container to something a bit more efficient for
+    // finding lots of plugins once we have lots of plugins available.
+    //
+    PluginInstances m_pluginInstances;
+
+#endif // HAVE_LADSPA
 
 };
 

@@ -768,10 +768,25 @@ InstrumentParameterBox::slotPluginSelected(int index, int plugin)
                 inst->setAssigned(true);
 
 #ifdef HAVE_LADSPA
+                // set the instrument id
+                Rosegarden::StudioControl::setStudioObjectProperty
+                    (newId,
+                     Rosegarden::MappedObject::Instrument,
+                     Rosegarden::MappedObjectValue(
+                         m_selectedInstrument->getId()));
+
+                // set the position
+                Rosegarden::StudioControl::setStudioObjectProperty
+                    (newId,
+                     Rosegarden::MappedObject::Position,
+                     Rosegarden::MappedObjectValue(index));
+
+                // set the plugin id
                 Rosegarden::StudioControl::setStudioObjectProperty
                     (newId,
                      Rosegarden::MappedLADSPAPlugin::UniqueId,
-                     plgn->getUniqueId());
+                     Rosegarden::MappedObjectValue(
+                         plgn->getUniqueId()));
 #endif
             }
 

@@ -70,6 +70,15 @@ public:
     //
     virtual float getLastRecordedAudioLevel() { return 0.0; }
 
+    // Plugin instance management
+    //
+    virtual void setPluginInstance(InstrumentId id,
+                                   unsigned long pluginId,
+                                   int position) {;}
+
+    virtual void removePluginInstance(InstrumentId id, int position) {;}
+
+
 protected:
     virtual void processMidiOut(const MappedComposition & /*mC*/,
                                 const RealTime & /*playLatency*/,

@@ -42,7 +42,9 @@
 namespace Rosegarden
 {
 
-//
+class Sequencer;
+
+
 // Types are in MappedCommon.h
 //
 
@@ -57,6 +59,8 @@ public:
     // Some common properties
     //
     static const MappedObjectProperty Name;
+    static const MappedObjectProperty Instrument;
+    static const MappedObjectProperty Position;
 
     // The object we can create
     //
@@ -238,6 +242,13 @@ public:
     friend QDataStream& operator<<(QDataStream &dS, const MappedStudio &mS);
     */
 
+
+    // Set the sequencer object so that we can do things like
+    // initialise plugins etc.
+    //
+    void setSequencer(Rosegarden::Sequencer *sequencer);
+    Rosegarden::Sequencer* getSequencer() { return m_sequencer; }
+
 protected:
 
 private:
@@ -253,6 +264,10 @@ private:
     // maintain both - don't forget about this.
     //
     std::vector<MappedObject*> m_objects;
+
+    // Sequencer object
+    //
+    Rosegarden::Sequencer     *m_sequencer;
 };
 
 
@@ -316,6 +331,7 @@ public:
     static const MappedObjectProperty PortCount;
     static const MappedObjectProperty Ports;
 
+
     MappedLADSPAPlugin(MappedObject *parent,
                        MappedObjectId id,
                        bool readOnly):
@@ -323,7 +339,9 @@ public:
                      "MappedLADSPAPlugin",
                      MappedObject::LADSPAPlugin,
                      id,
-                     readOnly) {;}
+                     readOnly),
+                     m_instrument(0),
+                     m_position(0) {;}
 
     MappedLADSPAPlugin(MappedObject *parent,
                        MappedObjectId id):
@@ -331,7 +349,9 @@ public:
                      "MappedLADSPAPlugin",
                      MappedObject::LADSPAPlugin,
                      id,
-                     false) {;}
+                     false),
+                     m_instrument(0),
+                     m_position(0) {;}
 
     virtual MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property);
@@ -353,11 +373,14 @@ public:
 
 protected:
 
-    unsigned long m_uniqueId;
-    std::string   m_label;
-    std::string   m_author;
-    std::string   m_copyright;
-    unsigned long m_portCount;
+    unsigned long             m_uniqueId;
+    std::string               m_label;
+    std::string               m_author;
+    std::string               m_copyright;
+    unsigned long             m_portCount;
+
+    Rosegarden::InstrumentId  m_instrument;
+    int                       m_position;
 
 };
 

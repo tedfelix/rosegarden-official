@@ -1811,6 +1811,43 @@ AlsaDriver::insertMappedEventForReturn(MappedEvent *mE)
     m_recordComposition.insert(mE);
 }
 
+void
+AlsaDriver::setPluginInstance(InstrumentId id,
+                              unsigned long pluginId,
+                              int position)
+{
+    std::cout << "AlsaDriver::setPluginInstance" << std::endl;
+    PluginIterator it = m_pluginInstances.begin();
+
+    // first shut down any running instance
+    removePluginInstance(id, position);
+
+    m_pluginInstances.push_back(
+            new LADSPAPluginInstance(id, pluginId, position));
+    // stop a
+}
+
+
+void
+AlsaDriver::removePluginInstance(InstrumentId id, int position)
+{
+    std::cout << "AlsaDriver::removePluginInstance" << std::endl;
+    PluginIterator it = m_pluginInstances.begin();
+    for (; it != m_pluginInstances.end(); it++)
+    {
+        if ((*it)->getInstrument() == id &&
+            (*it)->getPosition() == position)
+        {
+            // deactivate
+            delete *it;
+            m_pluginInstances.erase(it);
+            break;
+        }
+    }
+
+}
+
+
 // Return the sample rate of the JACK driver if we have one installed
 //
 unsigned int
@@ -2106,7 +2143,8 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                 peakLevel = 0.0;
 
-                // Get the volume of the audio fader if we can find it
+                // Get the volume of the audio fader and set a modifier
+                // accordingly.
                 //
                 float volume = 1.0f;
 

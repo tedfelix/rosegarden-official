@@ -248,6 +248,15 @@ public:
     //
     virtual unsigned int getSampleRate() const = 0;
 
+    // Plugin instance management
+    //
+    virtual void setPluginInstance(InstrumentId id,
+                                   unsigned long pluginId,
+                                   int position) = 0;
+
+    virtual void removePluginInstance(InstrumentId id,
+                                      int position) = 0;
+
     // Mapped Instruments
     //
     void setMappedInstrument(MappedInstrument *mI);

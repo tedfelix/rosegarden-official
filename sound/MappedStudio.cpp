@@ -25,17 +25,21 @@
 #include <qdir.h>
 
 #include "MappedStudio.h"
+#include "Sequencer.h"
 
 namespace Rosegarden
 {
 
-// Define our object properties - these can be queried and in some
-// cases set too.
+// Define our object properties - these can be queried and set.
+//
+
+// General things
 //
 const MappedObjectProperty MappedObject::Name = "name";
+const MappedObjectProperty MappedObject::Instrument = "instrument";
+const MappedObjectProperty MappedObject::Position = "position";
 
 const MappedObjectProperty MappedAudioFader::FaderLevel = "faderLevel";
-const MappedObjectProperty MappedAudioFader::InstrumentId = "instrumentId";
 
 const MappedObjectProperty MappedAudioPluginManager::Plugins = "plugins";
 const MappedObjectProperty MappedAudioPluginManager::PluginIds = "pluginids";
@@ -455,7 +459,7 @@ MappedStudio::getAudioFader(Rosegarden::InstrumentId id)
             // compare InstrumentId
             //
             MappedObjectPropertyList list = (*it)->
-                getPropertyList(MappedAudioFader::InstrumentId);
+                getPropertyList(MappedObject::Instrument);
 
             if (Rosegarden::InstrumentId(list[0].toInt()) == id)
                 return (*it);
@@ -467,7 +471,11 @@ MappedStudio::getAudioFader(Rosegarden::InstrumentId id)
 
 }
 
-
+void
+MappedStudio::setSequencer(Rosegarden::Sequencer *sequencer)
+{
+    m_sequencer = sequencer;
+}
 
 
 // ------------ MappedAudioFader ----------------
@@ -496,7 +504,7 @@ MappedAudioFader::getPropertyList(const MappedObjectProperty &property)
     {
         list.push_back(MappedAudioFader::FaderLevel);
     }
-    else if (property == MappedAudioFader::InstrumentId)
+    else if (property == MappedObject::Instrument)
     {
         list.push_back(MappedObjectProperty("%1").arg(m_instrumentId));
     }
@@ -518,7 +526,7 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
                   << "fader = " << value << std::endl;
         m_level = value;
     }
-    else if (property == MappedAudioFader::InstrumentId)
+    else if (property == MappedObject::Instrument)
     {
         m_instrumentId = Rosegarden::InstrumentId(value);
     }
@@ -926,6 +934,10 @@ MappedLADSPAPlugin::getPropertyList(const MappedObjectProperty &property)
             list.push_back(MappedObjectProperty(m_copyright.c_str()));
         else if (property == MappedLADSPAPlugin::PortCount)
             list.push_back(MappedObjectProperty("%1").arg(m_portCount));
+        else if (property == MappedObject::Instrument)
+            list.push_back(MappedObjectProperty("%1").arg(m_instrument));
+        else if (property == MappedObject::Position)
+            list.push_back(MappedObjectProperty("%1").arg(m_position));
         else if (property == MappedLADSPAPlugin::Ports)
         {
             // list the port object ids
@@ -952,20 +964,21 @@ MappedLADSPAPlugin::setProperty(const MappedObjectProperty &property,
 
     if (property == MappedLADSPAPlugin::UniqueId)
     {
-        // manufacture the ports for this plugin type
+        // we've already got a plugin of this type
+        //
+        if (m_uniqueId == ((unsigned long)value))
+            return;
 
-        /*
-        cout << "GET PLUGIN ID = " << int(value) << endl;
+        // Get the studio and the sequencer
+        //
         MappedStudio *studio =
             dynamic_cast<MappedStudio*>(getParent()->getParent());
+        Rosegarden::Sequencer *seq = studio->getSequencer();
 
-        MappedLADSPAPlugin *plugin =
-            dynamic_cast<MappedLADSPAPlugin*>(studio->getObject(int(value)));
+        // shut down and remove the plugin instance we have running
+        seq->removePluginInstance(m_instrument, m_position);
 
-        if (plugin)
-        {
-            */
-            // populate our ports from here
+        // manufacture the ports for this plugin type
         MappedAudioPluginManager *pluginManager =
             dynamic_cast<MappedAudioPluginManager*>(getParent());
 
@@ -975,12 +988,18 @@ MappedLADSPAPlugin::setProperty(const MappedObjectProperty &property,
 
         if (roPlugin == 0)
         {
-            std::cerr << "COULDN'T GET RO PLUGIN" << std::endl;
+            std::cerr << "MappedLADSPAPlugin::setProperty - "
+                      << "can't get read-only copy to clone" << std::endl;
             return;
         }
-        cout << "CLONING" << endl;
-        cout << "NAME = " << roPlugin->getLabel() << endl;
+
+        // clone the ports
+        //
         roPlugin->clone(this);
+
+        // now create the new instance
+        seq->setPluginInstance(((unsigned long)value),
+                               m_instrument, m_position);
 
     }
 

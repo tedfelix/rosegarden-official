@@ -94,6 +94,15 @@ public:
                 m_playStartPosition.usec)));
     }
 
+    // Plugin instance management - do nothing for the moment
+    //
+    virtual void setPluginInstance(InstrumentId id,
+                                   unsigned long pluginId,
+                                   int position) {;}
+
+    virtual void removePluginInstance(InstrumentId id, int position) {;}
+
+
 protected:
     virtual void generateInstruments();
     virtual void processAudioQueue(const RealTime &playLatency,

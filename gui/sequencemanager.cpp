@@ -1713,7 +1713,7 @@ SequenceManager::reinitialiseSequencerStudio()
             // Set the instrument id against this object
             //
             Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
-                Rosegarden::MappedAudioFader::InstrumentId,
+                Rosegarden::MappedObject::Instrument,
                 Rosegarden::MappedObjectValue((*it)->getId()));
 
             // Set the object id against the instrument

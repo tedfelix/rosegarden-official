@@ -35,5 +35,16 @@ management code.  WAV/RIFF/BWF file format handling.  MidiFile
 handling as well.   This library is required by the main 
 Rosegarden process as well as the Sequencer itself.
 
+GUI access and DCOP
+===================
+
+Look in rosegardensequenceriface.h for the interface definition for
+the sequencer app.  This file extends the DCOPObject to provide an
+abstract base class which we inherit into the RosegardenSequencerApp
+class and then have to make concrete.
 
 
+
+
+PlayableAudioFiles
+==================

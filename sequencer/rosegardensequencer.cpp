@@ -75,6 +75,7 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     // aduio faders are also created.
     //
     m_sequencer = new Rosegarden::Sequencer(m_studio);
+    m_studio->setSequencer(m_sequencer);
 
     if (!m_sequencer)
     {

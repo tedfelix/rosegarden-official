@@ -213,7 +213,21 @@ public:
     unsigned int getSampleRate() const
         { return m_soundDriver->getSampleRate(); }
 
-private:
+    // Plugin instance management (from the Studio).
+    // The Drivers themselves deploy this API in whichever manner
+    // they see fit.  For example in LADSPA we'll have to instantiate
+    // and manage our own plugins, with aRts we'll (probably) just 
+    // have to insert them into a stream and provide management.
+    //
+    void setPluginInstance(InstrumentId id,
+                           unsigned long pluginId,
+                           int position)
+        { m_soundDriver->setPluginInstance(id, pluginId, position); }
+
+    void removePluginInstance(InstrumentId id, int position)
+        { m_soundDriver->removePluginInstance(id, position); }
+
+protected:
 
     SoundDriver                                *m_soundDriver;
     std::vector<AudioFile*>                     m_audioFiles;
