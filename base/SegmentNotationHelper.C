@@ -60,14 +60,25 @@ SegmentNotationHelper::legatoQuantizer() {
 
 
 timeT
-SegmentNotationHelper::getNotationDuration(iterator i)
+SegmentNotationHelper::getNotationAbsoluteTime(Event *e)
 {
-    if ((*i)->has(TUPLET_NOMINAL_DURATION)) {
+    if (e->has(BEAMED_GROUP_TUPLET_BASE)) {
+	return e->getAbsoluteTime(); // Quantization fails for tuplets
+    } else {
+	return legatoQuantizer().getQuantizedAbsoluteTime(e);
+    }
+}	
+
+
+timeT
+SegmentNotationHelper::getNotationDuration(Event *e)
+{
+    if (e->has(TUPLET_NOMINAL_DURATION)) {
 
 	return legatoQuantizer().quantizeDuration
-	    ((*i)->get<Int>(TUPLET_NOMINAL_DURATION));
+	    (e->get<Int>(TUPLET_NOMINAL_DURATION));
 
-    } else if ((*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
+    } else if (e->has(BEAMED_GROUP_TUPLET_BASE)) {
 
 	// Code duplicated with SegmentNotationHelper::quantize().
 	// This is intended to deal with the case where two edits
@@ -76,16 +87,16 @@ SegmentNotationHelper::getNotationDuration(iterator i)
 	// in trouble if the entire segment had not been quantized
 	// yet...
 
-	int tcount = (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT);
-	int ucount = (*i)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
+	int tcount = e->get<Int>(BEAMED_GROUP_TUPLED_COUNT);
+	int ucount = e->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
 	assert(tcount != 0);
-	timeT nominalDuration = ((*i)->getDuration() / tcount) * ucount;
+	timeT nominalDuration = (e->getDuration() / tcount) * ucount;
 	nominalDuration = legatoQuantizer().quantizeDuration(nominalDuration);
-	(*i)->setMaybe<Int>(TUPLET_NOMINAL_DURATION, nominalDuration);
+	e->setMaybe<Int>(TUPLET_NOMINAL_DURATION, nominalDuration);
 	return nominalDuration;
 
     } else {
-	return legatoQuantizer().getQuantizedDuration(*i);
+	return legatoQuantizer().getQuantizedDuration(e);
     }
 }
 
@@ -165,7 +176,7 @@ SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
     iterator elPos = segment().findSingle(e);
     if (elPos == end()) return false;
 
-    timeT myDuration = getNotationDuration(elPos);
+    timeT myDuration = getNotationDuration(*elPos);
 
     iterator nextEvent = segment().findContiguousNext(elPos),
 	 previousEvent = segment().findContiguousPrevious(elPos);
@@ -177,7 +188,7 @@ SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
     // collapse to right if (a) not at end...
     if (nextEvent != end() &&
 	// ...(b) notes can be merged to a single, valid unit
- 	isCollapseValid(getNotationDuration(nextEvent), myDuration) &&
+ 	isCollapseValid(getNotationDuration(*nextEvent), myDuration) &&
 	// ...(c) event is in same bar (no cross-bar collapsing)
 	(*nextEvent)->getAbsoluteTime() <
 	    segment().getBarEndForTime(e->getAbsoluteTime())) {
@@ -195,7 +206,7 @@ SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
 
     // logic is exactly backwards from collapse to right logic above
     if (previousEvent != end() &&
-	isCollapseValid(getNotationDuration(previousEvent), myDuration) &&
+	isCollapseValid(getNotationDuration(*previousEvent), myDuration) &&
 	(*previousEvent)->getAbsoluteTime() >
 	    segment().getBarStartForTime(e->getAbsoluteTime())) {
 			    
@@ -563,7 +574,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
 	if ((*i)->isa(Note::EventType)) {
 
-	    if (!isSplitValid(getNotationDuration(i), duration)) {
+	    if (!isSplitValid(getNotationDuration(*i), duration)) {
 
 		cerr << "Bad split, coercing new note" << endl;
 
@@ -844,8 +855,11 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 {
     int groupId = segment().getNextId();
 
+    cerr << "SegmentNotationHelper::makeTupletGroup: time " << t << ", unit "<< unit << ", params " << untupled << "/" << tupled << ", id " << groupId << endl;
+
     list<Event *> toInsert;
     list<iterator> toErase;
+    timeT fillWithRestsTo = t + (untupled * unit);
 
     for (iterator i = segment().findTime(t); i != end(); ++i) {
 
@@ -856,6 +870,7 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 
 	if ((*i)->isa(Note::EventRestType) &&
 	    ((offset + duration) > (untupled * unit))) {
+	    fillWithRestsTo = std::max(fillWithRestsTo, t + offset + duration);
 	    duration = (untupled * unit) - offset;
 	    if (duration <= 0) {
 		toErase.push_back(i);
@@ -889,7 +904,7 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 	segment().insert(*i);
     }
 
-    segment().fillWithRests(t + (tupled * unit), t + (untupled * unit));
+    segment().fillWithRests(t + (tupled * unit), fillWithRestsTo);
 }
 
     
@@ -1031,7 +1046,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 
         // only look at one note in each chord, and at rests
         if (!hasEffectiveDuration(i)) continue;
-        timeT idur = getNotationDuration(i);
+        timeT idur = getNotationDuration(*i);
 
 	if (accumulator % average == 0 &&  // "beamable duration" threshold
 	    idur < crotchet) {
@@ -1061,7 +1076,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 	    for (iterator j = i; j != to; ++j) {
 
 		if (!hasEffectiveDuration(j)) continue;
-                timeT jdur = getNotationDuration(j);
+                timeT jdur = getNotationDuration(*j);
 
 		if ((*j)->isa(Note::EventType)) {
 		    if (jdur < crotchet) ++beamable;
@@ -1094,7 +1109,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 		    || (++jnext == to)     
 		    || ((*j    )->isa(Note::EventType) &&
 			(*jnext)->isa(Note::EventType) &&
-			getNotationDuration(jnext) > jdur)
+			getNotationDuration(*jnext) > jdur)
 		    || ((*jnext)->isa(Note::EventRestType))) {
 
 		    if (k != end() && beamable >= 2) {

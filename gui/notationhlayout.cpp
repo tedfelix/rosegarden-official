@@ -180,7 +180,9 @@ double NotationHLayout::getIdealBarWidth(StaffType &staff,
         return fixedWidth;
     }
 
-    int d = getQuantizer()->getQuantizedDuration((*shortest)->event());
+    int d = 
+	SegmentNotationHelper(staff.getSegment()).getNotationDuration
+	((*shortest)->event());
 
     if (d == 0) {
 //        kdDebug(KDEBUG_AREA) << "Second trivial return" << endl;
@@ -223,9 +225,15 @@ NotationHLayout::getStartOfQuantizedSlice(const NotationElementList *notes,
     while (true) {
 	if (i == notes->begin()) return i;
 	--j;
-	if (getQuantizer()->getQuantizedAbsoluteTime((*j)->event()) < t) {
-	    return i;
+
+	timeT absTime;
+	if ((*j)->event()->has(BEAMED_GROUP_TUPLET_BASE)) {
+	    absTime = (*j)->getAbsoluteTime();
+	} else {
+	    absTime = getQuantizer()->getQuantizedAbsoluteTime((*j)->event());
 	}
+
+	if (absTime < t) return i;
 	i = j;
     }
 }
@@ -1242,12 +1250,13 @@ timeT
 NotationHLayout::getSpacingDuration(StaffType &staff,
 				    const NotationElementList::iterator &i)
 {
-    timeT t(getQuantizer()->getQuantizedAbsoluteTime((*i)->event()));
-    timeT d(getQuantizer()->getQuantizedDuration((*i)->event()));
+    SegmentNotationHelper helper(staff.getSegment());
+    timeT t(helper.getNotationAbsoluteTime((*i)->event()));
+    timeT d(helper.getNotationDuration((*i)->event()));
 
     NotationElementList::iterator j(i), e(staff.getViewElementList()->end());
     while (j != e &&
-	   getQuantizer()->getQuantizedAbsoluteTime((*j)->event()) == t) {
+	   helper.getNotationAbsoluteTime((*j)->event()) == t) {
 	++j;
     }
     if (j == e) return d;
@@ -1397,30 +1406,13 @@ NotationHLayout::positionChord(StaffType &staff,
 	if (subItr == to) barEndsInChord = true;
 	(*subItr)->setLayoutX(baseX);
 	if (groupId < 0) (*chord[i])->event()->unset(BEAMED);
-	else (*chord[i])->event()->set<Int>(BEAMED_GROUP_ID, groupId);//!!!
+	else (*chord[i])->event()->set<Int>(BEAMED_GROUP_ID, groupId);
     }
 
     itr = chord.getFinalElement();
     if (barEndsInChord) { to = itr; ++to; }
     if (groupId < 0) return delta;
 
-    // Finally set the beam data
-/*!!!
-    long nextGroupId = -1;
-    NotationElementList::iterator scooter(itr);
-    ++scooter;
-
-    if (scooter == staff.getViewElementList()->end() ||
-	!(*scooter)->event()->get<Int>(BEAMED_GROUP_ID, nextGroupId) ||
-	nextGroupId != groupId) {
-	
-	NotationStaff &notationStaff = dynamic_cast<NotationStaff &>(staff);
-	NotationGroup group(*staff.getViewElementList(), itr,
-			    getQuantizer(), clef, key);
-	group.applyBeam(notationStaff);
-	group.applyTuplingLine(notationStaff);
-    }
-*/
     return delta;
 }
 

@@ -38,10 +38,18 @@ public:
 
     
     /**
-     * Return the duration of an event "as displayed".  This is
-     * the legato-quantized duration, without tuplet squishing.
+     * Return the absolute time of an event "as displayed".  This is
+     * the legato-quantized duration, except for tuplets where 
+     * the quantization is a bad idea.
      */
-    timeT getNotationDuration(iterator i);
+    timeT getNotationAbsoluteTime(Event *e);
+
+
+    /**
+     * Return the duration of an event "as displayed".  This is
+     * the legato-quantized duration, with compensation for tuplets.
+     */
+    timeT getNotationDuration(Event *e);
 
     
     /**
