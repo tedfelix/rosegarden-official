@@ -21,7 +21,7 @@
 #include "notationelement.h"
 
 #ifndef NDEBUG
-#include <iostream>
+
 #include "rosedebug.h"
 #include "Element2.h"
 #endif
