@@ -102,7 +102,7 @@ NoteStyleFactory::getAvailableStyleNames()
     }
 
     if (!foundDefault) {
-	kdDebug(KDEBUG_AREA) << "NoteStyleFactory::getAvailableStyleNames: WARNING: Default style name \"" << DefaultStyle << "\" not found" << endl;
+	RG_DEBUG << "NoteStyleFactory::getAvailableStyleNames: WARNING: Default style name \"" << DefaultStyle << "\" not found" << endl;
     }
 
     return names;
@@ -121,7 +121,7 @@ NoteStyleFactory::getStyle(NoteStyleName name)
 	    return newStyle;
 
 	} catch (NoteStyleFileReader::StyleFileReadFailed f) {
-	    kdDebug(KDEBUG_AREA)
+	    RG_DEBUG
 		<< "NoteStyleFactory::getStyle: Style file read failed: "
 		<< f.reason << endl;
 	    throw StyleUnavailable("Style file read failed: " + f.reason);
@@ -170,7 +170,7 @@ NoteStyle::getShape(Note::Type type)
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->getShape(type);
-	kdDebug(KDEBUG_AREA)
+	RG_DEBUG
 	    << "WARNING: NoteStyle::getShape: No shape defined for note type "
 	    << type << ", defaulting to AngledOval" << endl;
 	return AngledOval;
@@ -186,7 +186,7 @@ NoteStyle::isFilled(Note::Type type)
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->isFilled(type);
-	kdDebug(KDEBUG_AREA) 
+	RG_DEBUG 
 	    << "WARNING: NoteStyle::isFilled: No definition for note type "
 	    << type << ", defaulting to true" << endl;
 	return true;
@@ -202,7 +202,7 @@ NoteStyle::hasStem(Note::Type type)
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->hasStem(type);
-	kdDebug(KDEBUG_AREA) 
+	RG_DEBUG 
 	    << "WARNING: NoteStyle::hasStem: No definition for note type "
 	    << type << ", defaulting to true" << endl;
 	return true;
@@ -218,7 +218,7 @@ NoteStyle::getFlagCount(Note::Type type)
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->getFlagCount(type);
-	kdDebug(KDEBUG_AREA) 
+	RG_DEBUG 
 	    << "WARNING: NoteStyle::getFlagCount: No definition for note type "
 	    << type << ", defaulting to 0" << endl;
 	return 0;
@@ -234,7 +234,7 @@ NoteStyle::getSlashCount(Note::Type type)
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->getSlashCount(type);
-	kdDebug(KDEBUG_AREA) 
+	RG_DEBUG 
 	    << "WARNING: NoteStyle::getSlashCount: No definition for note type "
 	    << type << ", defaulting to 0" << endl;
 	return 0;
@@ -254,7 +254,7 @@ NoteStyle::getStemFixPoints(Note::Type type,
 	    m_baseStyle->getStemFixPoints(type, hfix, vfix);
 	    return;
 	}
-	kdDebug(KDEBUG_AREA) 
+	RG_DEBUG 
 	    << "WARNING: NoteStyle::getStemFixPoints: "
 	    << "No definition for note type " << type
 	    << ", defaulting to (Normal,Middle)" << endl;
@@ -275,7 +275,7 @@ NoteStyle::getNoteHeadCharName(Note::Type type)
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
 	if (m_baseStyle) return m_baseStyle->getNoteHeadCharName(type);
-	kdDebug(KDEBUG_AREA) 
+	RG_DEBUG 
 	    << "WARNING: NoteStyle::getNoteHeadCharName: No definition for note type "
 	    << type << ", defaulting to NOTEHEAD_BLACK" << endl;
 	return CharNameRec(NoteCharacterNames::NOTEHEAD_BLACK, false);
@@ -293,14 +293,14 @@ NoteStyle::getNoteHeadCharName(Note::Type type)
     } else if (desc.shape == LevelOval) {
 
 	if (desc.filled) {
-	    kdDebug(KDEBUG_AREA) << "WARNING: NoteStyle::getNoteHeadCharName: No filled level oval head";
+	    RG_DEBUG << "WARNING: NoteStyle::getNoteHeadCharName: No filled level oval head";
 	}
 	name = NoteCharacterNames::WHOLE_NOTE;
 	
     } else if (desc.shape == Breve) {
 
 	if (desc.filled) {
-	    kdDebug(KDEBUG_AREA) << "WARNING: NoteStyle::getNoteHeadCharName: No filled breve head";
+	    RG_DEBUG << "WARNING: NoteStyle::getNoteHeadCharName: No filled breve head";
 	}
 	name = NoteCharacterNames::BREVE;
 	
@@ -332,7 +332,7 @@ NoteStyle::getNoteHeadCharName(Note::Type type)
 	
     } else if (desc.shape == Number) {
 
-	kdDebug(KDEBUG_AREA) << "WARNING: NoteStyle::getNoteHeadCharName: Number not yet implemented" << endl;
+	RG_DEBUG << "WARNING: NoteStyle::getNoteHeadCharName: Number not yet implemented" << endl;
 	name = NoteCharacterNames::UNKNOWN; //!!!
 
     } else if (desc.shape == CustomCharName) {
@@ -426,13 +426,13 @@ NoteStyle::setBaseStyle(NoteStyleName name)
 	if (m_baseStyle == this) m_baseStyle = 0;
     } catch (NoteStyleFactory::StyleUnavailable u) {
 	if (name != NoteStyleFactory::DefaultStyle) {
-	    kdDebug(KDEBUG_AREA)
+	    RG_DEBUG
 		<< "NoteStyle::setBaseStyle: Base style "
 		<< name << " not available, defaulting to "
 		<< NoteStyleFactory::DefaultStyle << endl;
 	    setBaseStyle(NoteStyleFactory::DefaultStyle);
 	} else {
-	    kdDebug(KDEBUG_AREA)
+	    RG_DEBUG
 		<< "NoteStyle::setBaseStyle: Base style "
 		<< name << " not available" << endl;
 	    m_baseStyle = 0;

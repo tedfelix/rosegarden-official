@@ -35,7 +35,7 @@ StaffLine::StaffLine(QCanvas *c, QCanvasItemGroup *g, int height) :
 void
 StaffLine::setHighlighted(bool highlighted)
 {
-//     kdDebug(KDEBUG_AREA) << "StaffLine::setHighlighted("
+//     RG_DEBUG << "StaffLine::setHighlighted("
 //                          << highlighted << ")\n";
 
     if (highlighted) {

@@ -288,7 +288,7 @@ LinedStaff<T>::getHeightAtCanvasY(int y) const
     //!!! the lazy route: approximate, then get the right value
     // by calling getCanvasYForHeight a few times... ugh
 
-//    kdDebug(KDEBUG_AREA) << "\nNotationStaff::heightOfYCoord: y = " << y
+//    RG_DEBUG << "\nNotationStaff::heightOfYCoord: y = " << y
 //                         << ", getTopLineOffset() = " << getTopLineOffset()
 //                         << ", getLineSpacing() = " << m_npf->getLineSpacing()
 //                         << endl;
@@ -313,17 +313,17 @@ LinedStaff<T>::getHeightAtCanvasY(int y) const
     }
     
     if (mi > -2) {
-//         kdDebug(KDEBUG_AREA) << "LinedStaff::getHeightAtCanvasY: " << y
+//         RG_DEBUG << "LinedStaff::getHeightAtCanvasY: " << y
 //                              << " -> " << (ph + mi) << " (mi is " << mi << ", distance "
 //                              << md << ")" << endl;
 //         if (mi == 0) {
-//             kdDebug(KDEBUG_AREA) << "GOOD APPROXIMATION" << endl;
+//             RG_DEBUG << "GOOD APPROXIMATION" << endl;
 //         } else {
-//             kdDebug(KDEBUG_AREA) << "BAD APPROXIMATION" << endl;
+//             RG_DEBUG << "BAD APPROXIMATION" << endl;
 //         }
         return ph + mi;
     } else {
-        kdDebug(KDEBUG_AREA) << "LinedStaff::getHeightAtCanvasY: heuristic got " << ph << ", nothing within range (closest was " << (ph + testi) << " which is " << testMd << " away)" << endl;
+        RG_DEBUG << "LinedStaff::getHeightAtCanvasY: heuristic got " << ph << ", nothing within range (closest was " << (ph + testi) << " which is " << testMd << " away)" << endl;
         return 0;
     }
 }
@@ -361,7 +361,7 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
     deleteBars();
     deleteTimeSignatures();
 
-//    kdDebug(KDEBUG_AREA) << "LinedStaff::sizeStaff" << endl;
+//    RG_DEBUG << "LinedStaff::sizeStaff" << endl;
 
     int lastBar = layout.getLastVisibleBarOnStaff(*this);
 
@@ -392,7 +392,7 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
 	    insertTimeSignature(timeSigX, currentTimeSignature);
 	}
 
-//	kdDebug(KDEBUG_AREA) << "LinedStaff::sizeStaff: inserting bar at " << x << " on staff " << this << endl;
+//	RG_DEBUG << "LinedStaff::sizeStaff: inserting bar at " << x << " on staff " << this << endl;
 	
 	insertBar(x,
 		  ((barNo == lastBar) ? 0 :
@@ -437,7 +437,7 @@ void
 LinedStaff<T>::insertBar(double layoutX, double width, bool isCorrect,
 			 const Rosegarden::TimeSignature &timeSig)
 {
-//    kdDebug(KDEBUG_AREA) << "insertBar: " << layoutX << ", " << width
+//    RG_DEBUG << "insertBar: " << layoutX << ", " << width
 //			 << ", " << isCorrect << endl;
 
     // rather arbitrary
@@ -573,7 +573,7 @@ LinedStaff<T>::resizeStaffLines()
     int firstRow = getRowForLayoutX(m_startLayoutX);
     int  lastRow = getRowForLayoutX(m_endLayoutX);
 
-    kdDebug(KDEBUG_AREA) << "LinedStaff::resizeStaffLines: firstRow "
+    RG_DEBUG << "LinedStaff::resizeStaffLines: firstRow "
                          << firstRow << ", lastRow " << lastRow
                          << " (startLayoutX " << m_startLayoutX
                          << ", endLayoutX " << m_endLayoutX << ")" <<  endl;
@@ -642,7 +642,7 @@ template <class T>
 void
 LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
 {
-//    kdDebug(KDEBUG_AREA) << "LinedStaff::resizeStaffLineRow: row "
+//    RG_DEBUG << "LinedStaff::resizeStaffLineRow: row "
 //                         << row << ", offset " << offset << ", length " 
 //                         << length << ", pagewidth " << getPageWidth() << endl;
 
@@ -713,7 +713,7 @@ LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
 		y -= getLineSpacing()/2 + 1;
 	    }
 
-//            kdDebug(KDEBUG_AREA) << "LinedStaff: drawing line from ("
+//            RG_DEBUG << "LinedStaff: drawing line from ("
 //                                 << x << "," << y << ") to (" << (x+length-1)
 //                                 << "," << y << ")" << endl;
 

@@ -57,7 +57,7 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
     timeT emTime = m_staff.getSegment().getEndMarkerTime();
     if (evTime > emTime) evTime = emTime;
     
-//     kdDebug(KDEBUG_AREA_MATRIX) << "MatrixCanvasView::contentsMousePressEvent() at pitch "
+//     MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent() at pitch "
 //                          << evPitch << ", time " << evTime << endl;
 
     QCanvasItemList itemList = canvas()->collisions(e->pos());
@@ -162,7 +162,7 @@ void MatrixCanvasView::updateGridSnap(QMouseEvent *e)
 {
     Qt::ButtonState bs = e->state();
 
-//     kdDebug(KDEBUG_AREA_MATRIX) << "MatrixCanvasView::updateGridSnap : bs = "
+//     MATRIX_DEBUG << "MatrixCanvasView::updateGridSnap : bs = "
 //                          << bs << " - sm = " << getSmoothModifier() << endl;
 
     m_snapGrid.setSnapTime((bs & getSmoothModifier()) ?

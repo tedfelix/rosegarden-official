@@ -816,7 +816,7 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
         if (quartile > 3) quartile = 3;
         if (inc > 0) quartile = 4 - quartile;
 /*
-        kdDebug(KDEBUG_AREA)
+        RG_DEBUG
             << "x = " << cx << ", y = " << cy
             << ", g = " << g << ", dg1 = " << dg1 << ", dg2 = " << dg2
             << ", seg = " << segment << ", q = " << quartile << endl;
@@ -1010,11 +1010,11 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
 
     int tickOffset = (params.m_tuplingLineY < 0) ? 3 : -3;
 
-    kdDebug(KDEBUG_AREA) << "adjusted params.m_tuplingLineWidth = "
+    RG_DEBUG << "adjusted params.m_tuplingLineWidth = "
 			 << tlw
 			 << ", cr.width = " << cr.width()
 			 << ", tickOffset = " << tickOffset << endl;
-    kdDebug(KDEBUG_AREA) << "line: (" << startX << "," << startY << ") -> ("
+    RG_DEBUG << "line: (" << startX << "," << startY << ") -> ("
 			 << endX << "," << endY << ")" << endl;
 
     bool smooth = m_font->getNoteFontMap().isSmooth();
@@ -1029,7 +1029,7 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
 
     int textX = endX + countSpace;
     int textY = endY + cr.height()/2;
-    kdDebug(KDEBUG_AREA) << "text: (" << textX << "," << textY << ")" << endl;
+    RG_DEBUG << "text: (" << textX << "," << textY << ")" << endl;
 
     m_p.drawText(textX, textY, count);
     m_pm.drawText(textX, textY, count);
@@ -1040,7 +1040,7 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     startY += (int)(params.m_tuplingLineGradient * (tlw - w));
     endY = startY + (int)(params.m_tuplingLineGradient * w);
 
-    kdDebug(KDEBUG_AREA) << "line: (" << startX << "," << startY << ") -> ("
+    RG_DEBUG << "line: (" << startX << "," << startY << ") -> ("
 			 << endX << "," << endY << ")" << endl;
 
 
@@ -1351,7 +1351,7 @@ NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
     int height = (int)(((double)nbh / (double)(nbw * 40)) * length) + nbh;
     int thickness = getStaffLineThickness() * 3 / 2;
 
-//    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeHairpinPixmap: mapped length " << length << " to height " << height << " (nbh = " << nbh << ", nbw = " << nbw << ")" << endl;
+//    RG_DEBUG << "NotePixmapFactory::makeHairpinPixmap: mapped length " << length << " to height " << height << " (nbh = " << nbh << ", nbw = " << nbw << ")" << endl;
 
     if (height < nbh)   height = nbh;
     if (height > nbh*2) height = nbh*2;
@@ -1442,7 +1442,7 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 	else if (y2 > my2 + nbh/2) my2 = y2 - nbh/2;
     }
     
-//    kdDebug(KDEBUG_AREA) << "Pixmap dimensions: " << length << "x" << height << endl;
+//    RG_DEBUG << "Pixmap dimensions: " << length << "x" << height << endl;
 
     bool havePixmap = false;
     QPoint topLeft, bottomRight, hotspot;

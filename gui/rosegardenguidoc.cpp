@@ -119,7 +119,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 
 RosegardenGUIDoc::~RosegardenGUIDoc()
 {
-    kdDebug(KDEBUG_AREA) << "~RosegardenGUIDoc()\n";
+    RG_DEBUG << "~RosegardenGUIDoc()\n";
     delete m_commandHistory; // must be deleted before the Composition is
     delete m_clipboard;
 }
@@ -175,20 +175,20 @@ void RosegardenGUIDoc::setModified(bool m)
 
 void RosegardenGUIDoc::slotDocumentModified()
 {
-//    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::slotDocumentModified()" << endl;
+//    RG_DEBUG << "RosegardenGUIDoc::slotDocumentModified()" << endl;
     setModified(true);
     emit documentModified();
 }
 
 void RosegardenGUIDoc::slotDocumentRestored()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::slotDocumentRestored()" << endl;
+    RG_DEBUG << "RosegardenGUIDoc::slotDocumentRestored()" << endl;
     setModified(false);
 }
 
 bool RosegardenGUIDoc::saveIfModified()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::saveIfModified()" << endl;
+    RG_DEBUG << "RosegardenGUIDoc::saveIfModified()" << endl;
     bool completed=true;
 
     if (m_modified) {
@@ -197,7 +197,7 @@ bool RosegardenGUIDoc::saveIfModified()
                                                         i18n("The current file has been modified.\n"
                                                              "Do you want to save it?"),
                                                         i18n("Warning"));
-        kdDebug(KDEBUG_AREA) << "want_save = " << want_save << endl;
+        RG_DEBUG << "want_save = " << want_save << endl;
 
         switch(want_save)
             {
@@ -253,7 +253,7 @@ bool RosegardenGUIDoc::newDocument()
 bool RosegardenGUIDoc::openDocument(const QString& filename,
                                     const char* /*format*/ /*=0*/)
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::openDocument("
+    RG_DEBUG << "RosegardenGUIDoc::openDocument("
                          << filename << ")" << endl;
     
     if (!filename || filename.isEmpty())
@@ -308,7 +308,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         return false;
     }
 
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::openDocument() end - "
+    RG_DEBUG << "RosegardenGUIDoc::openDocument() end - "
                          << "m_composition : " << &m_composition
                          << " - m_composition->getNbSegments() : "
                          << m_composition.getNbSegments()
@@ -348,7 +348,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 bool RosegardenGUIDoc::saveDocument(const QString& filename,
                                     const char* /*format*/ /*=0*/)
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::saveDocument("
+    RG_DEBUG << "RosegardenGUIDoc::saveDocument("
                          << filename << ")\n";
 
     QString outText;
@@ -503,7 +503,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     bool okay = writeToFile(filename, outText);
     if (!okay) return false;
 
-    kdDebug(KDEBUG_AREA) << endl << "RosegardenGUIDoc::saveDocument() finished\n";
+    RG_DEBUG << endl << "RosegardenGUIDoc::saveDocument() finished\n";
 
     m_modified = false;
     m_commandHistory->documentSaved();
@@ -512,7 +512,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
 void RosegardenGUIDoc::deleteContents()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::deleteContents()\n";
+    RG_DEBUG << "RosegardenGUIDoc::deleteContents()\n";
 
     deleteViews();
 
@@ -962,7 +962,7 @@ RosegardenGUIDoc::alive()
     while(!kapp->dcopClient()->
            isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
     {
-        kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - "
+        RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
                              << "waiting for Sequencer to come up\n";
 
         kapp->processEvents(1000);
@@ -976,7 +976,7 @@ RosegardenGUIDoc::alive()
                                   "alive()",
                                   data))
     {
-        kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - "
+        RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
                              << "can't call the Sequencer\n";
         return;
     }
@@ -992,7 +992,7 @@ RosegardenGUIDoc::alive()
                                   "getDevices()",
                                   data, replyType, replyData, true))
     {
-        kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - "
+        RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
                              << "can't get number of devices\n";
         return;
     }
@@ -1006,7 +1006,7 @@ RosegardenGUIDoc::alive()
     }
     else
     {
-        kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - "
+        RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
                              << "got unknown returntype from getDevices()\n";
         return;
     }
@@ -1015,17 +1015,17 @@ RosegardenGUIDoc::alive()
     //
     m_studio.clear();
 
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - devices = "
+    RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - devices = "
                          << devices << endl;
 
     for (unsigned int i = 0; i < devices; i++)
     {
-        kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - i = "
+        RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - i = "
                              << i << endl;
         getMappedDevice(i);
     }
 
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - "
+    RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
                          << "Sequencer alive - Instruments synced\n";
 
     // Ok, we've sync'd - make sure that this app doesn't
@@ -1052,7 +1052,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
                                   "getMappedDevice(unsigned int)",
                                   data, replyType, replyData, false))
     {
-        kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice() - "
+        RG_DEBUG << "RosegardenGUIDoc::getMappedDevice() - "
                              << "can't call Sequencer\n";
         return;
     }
@@ -1062,7 +1062,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
 
     if (replyType == "Rosegarden::MappedDevice")
     {
-        kdDebug(KDEBUG_AREA)  << "RosegardenGUIDoc::getMappedDevice() - "
+        RG_DEBUG  << "RosegardenGUIDoc::getMappedDevice() - "
                               << "got Rosegarden::MappedDevice\n";
 
         // unfurl
@@ -1070,25 +1070,25 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     }
     else
     {
-        kdDebug(KDEBUG_AREA)  << "RosegardenGUIDoc::getMappedDevice() - "
+        RG_DEBUG  << "RosegardenGUIDoc::getMappedDevice() - "
                               << "didn't get MappedDevice " 
                               << id << "\n";
         return;
     }
 
-    kdDebug(KDEBUG_AREA)  << "RosegardenGUIDoc::getMappedDevice() - check if we've got this device already\n";
+    RG_DEBUG  << "RosegardenGUIDoc::getMappedDevice() - check if we've got this device already\n";
 
     // See if we've got this device already
     //
     Rosegarden::Device *device = m_studio.getDevice(id);
     Rosegarden::Instrument::InstrumentType type;
 
-    kdDebug(KDEBUG_AREA)  << "RosegardenGUIDoc::getMappedDevice() - device = "
+    RG_DEBUG  << "RosegardenGUIDoc::getMappedDevice() - device = "
                           << device << endl;
 
     if (mD->size() == 0)
     {
-        kdDebug(KDEBUG_AREA)  << "RosegardenGUIDoc::getMappedDevice() - 0 instrument found\n";
+        RG_DEBUG  << "RosegardenGUIDoc::getMappedDevice() - 0 instrument found\n";
         return;
     }
     
@@ -1109,7 +1109,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
         }
         else
         {
-            kdDebug(KDEBUG_AREA)  << "RosegardenGUIDoc::getMappedDevice - "
+            RG_DEBUG  << "RosegardenGUIDoc::getMappedDevice - "
                                   << "unknown device\n";
         }
     }

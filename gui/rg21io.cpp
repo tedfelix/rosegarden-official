@@ -187,7 +187,7 @@ bool RG21Loader::parseChordItem()
 	    }
 	}
 
-//         kdDebug(KDEBUG_AREA) << "RG21Loader::parseChordItem() : insert note pitch " << pitch
+//         RG_DEBUG << "RG21Loader::parseChordItem() : insert note pitch " << pitch
 //                              << " at time " << m_currentSegmentTime << endl;
 
 	setGroupProperties(noteEvent);
@@ -317,7 +317,7 @@ bool RG21Loader::parseGroupStart()
 
     } else {
 
-	kdDebug(KDEBUG_AREA)
+	RG_DEBUG
 	    << "RG21Loader::parseGroupStart: WARNING: Unknown group type "
 	    << m_groupType << ", ignoring" << endl;
 	m_inGroup = false;
@@ -333,12 +333,12 @@ bool RG21Loader::parseIndicationStart()
     unsigned int indicationId = m_tokens[2].toUInt();
     std::string indicationType = qstrtostr(m_tokens[3].lower());
 
-//    kdDebug(KDEBUG_AREA) << "Indication start: type is \"" << indicationType << "\"" << endl;
+//    RG_DEBUG << "Indication start: type is \"" << indicationType << "\"" << endl;
 
     if (indicationType == "tie") {
 
 	if (m_tieStatus != 0) {
-	    kdDebug(KDEBUG_AREA)
+	    RG_DEBUG
 		<< "RG21Loader:: parseIndicationStart: WARNING: Found tie within "
 		<< "tie, ignoring" << endl;
 	    return true;
@@ -357,7 +357,7 @@ bool RG21Loader::parseIndicationStart()
 	}
 	m_tieStatus = 2;
 
-	kdDebug(KDEBUG_AREA) << "rg21io: Indication start: it's a tie" << endl;
+	RG_DEBUG << "rg21io: Indication start: it's a tie" << endl;
 
     } else {
 
@@ -383,7 +383,7 @@ bool RG21Loader::parseIndicationStart()
 
 	m_currentSegment->insert(e);
 
-	kdDebug(KDEBUG_AREA) << "rg21io: Indication start: it's a real indication; id is " << indicationId << ", event is:" << endl;
+	RG_DEBUG << "rg21io: Indication start: it's a real indication; id is " << indicationId << ", event is:" << endl;
 	e->dump(std::cerr);
 
     }
@@ -399,7 +399,7 @@ void RG21Loader::closeIndication()
     unsigned int indicationId = m_tokens[2].toUInt();
     EventIdMap::iterator i = m_indicationsExtant.find(indicationId);
 
-    kdDebug(KDEBUG_AREA) << "rg21io: Indication close: indication id is " << indicationId << endl;
+    RG_DEBUG << "rg21io: Indication close: indication id is " << indicationId << endl;
 
     // this is normal (for ties):
     if (i == m_indicationsExtant.end()) return;
@@ -434,7 +434,7 @@ void RG21Loader::closeGroup()
 		timeT intended =
 		    (offset * m_groupTupledLength) / m_groupUntupledLength;
 
-		kdDebug(KDEBUG_AREA)
+		RG_DEBUG
 		    << "RG21Loader::closeGroup:"
 		    << " m_groupStartTime = " << m_groupStartTime
 		    << ", m_groupTupledLength = " << m_groupTupledLength
@@ -507,7 +507,7 @@ bool RG21Loader::parseBarType()
 
     int staffNo = m_tokens[1].toInt();
     if (staffNo > 0) {
-	kdDebug(KDEBUG_AREA)
+	RG_DEBUG
 	    << "RG21Loader::parseBarType: We don't support different time\n"
 	    << "signatures on different staffs; disregarding time signature for staff " << staffNo << endl;
 	return true;
@@ -574,7 +574,7 @@ timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
 
     } catch (Rosegarden::Note::BadType b) {
 
-        kdDebug(KDEBUG_AREA) << "RG21Loader::convertRG21Duration: Bad duration: "
+        RG_DEBUG << "RG21Loader::convertRG21Duration: Bad duration: "
                              << durationString << endl;
         return 0;
     }
@@ -744,7 +744,7 @@ bool RG21Loader::parse()
             
         } else {
 
-	    kdDebug(KDEBUG_AREA) << "RG21Loader::parse: Unsupported element type \"" << firstToken << "\", ignoring" << endl;
+	    RG_DEBUG << "RG21Loader::parse: Unsupported element type \"" << firstToken << "\", ignoring" << endl;
 	}
     }
     

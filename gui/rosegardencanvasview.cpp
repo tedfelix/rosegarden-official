@@ -75,7 +75,7 @@ void CanvasItemGC::mark(QCanvasItem* item)
     if (!item) return;
 
     item->hide();
-//     kdDebug(KDEBUG_AREA) << "CanvasItemGC::mark() : "
+//     RG_DEBUG << "CanvasItemGC::mark() : "
 //                          << item << std::endl;
     m_garbage.push_back(item);
 }
@@ -83,7 +83,7 @@ void CanvasItemGC::mark(QCanvasItem* item)
 void CanvasItemGC::gc()
 {
     for(unsigned int i = 0; i < m_garbage.size(); ++i) {
-//         kdDebug(KDEBUG_AREA) << "CanvasItemGC::gc() : delete "
+//         RG_DEBUG << "CanvasItemGC::gc() : delete "
 //                              << m_garbage[i] << "\n";
         delete m_garbage[i];
     }

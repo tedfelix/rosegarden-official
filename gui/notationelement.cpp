@@ -48,13 +48,13 @@ NotationElement::NotationElement(Event *event)
       m_recentlyRegenerated(false),
       m_canvasItem(0)
 {
-//     kdDebug(KDEBUG_AREA_NOTATION) << "new NotationElement "
+//     NOTATION_DEBUG << "new NotationElement "
 //                          << this << " wrapping " << event << endl;
 }
 
 NotationElement::~NotationElement()
 {
-//     kdDebug(KDEBUG_AREA_NOTATION) << "NotationElement " << this << "::~NotationElement() wrapping "
+//     NOTATION_DEBUG << "NotationElement " << this << "::~NotationElement() wrapping "
 //                          << event() << endl;
 
     delete m_canvasItem;

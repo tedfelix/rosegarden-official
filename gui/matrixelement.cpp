@@ -30,13 +30,13 @@ MatrixElement::MatrixElement(Rosegarden::Event *event) :
     m_layoutX(0.0),
     m_layoutY(0.0)
 {
-//     kdDebug(KDEBUG_AREA_MATRIX) << "new MatrixElement "
+//     MATRIX_DEBUG << "new MatrixElement "
 //                          << this << " wrapping " << event << endl;
 }
 
 MatrixElement::~MatrixElement()
 {
-//     kdDebug(KDEBUG_AREA_MATRIX) << "MatrixElement " << this << "::~MatrixElement() wrapping "
+//     MATRIX_DEBUG << "MatrixElement " << this << "::~MatrixElement() wrapping "
 //                          << event() << endl;
 
     m_canvasRect->hide();

@@ -80,7 +80,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_lastNote(0),
       m_selectedProperty(getViewLocalPropertyPrefix() + "Selected")
 {
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixView ctor\n";
+    MATRIX_DEBUG << "MatrixView ctor\n";
 
     m_toolBox = new MatrixToolBox(this);
 
@@ -91,7 +91,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     QCanvas *tCanvas = new QCanvas(this);
     tCanvas->resize(width() * 2, height() * 2);
 
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixView : creating staff\n";
+    MATRIX_DEBUG << "MatrixView : creating staff\n";
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new MatrixStaff(tCanvas, segments[i], i,
@@ -100,7 +100,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	if (i == 0) m_staffs[i]->setCurrent(true);
     }
 
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixView : creating canvas view\n";
+    MATRIX_DEBUG << "MatrixView : creating canvas view\n";
 
     m_pianoView = new QDeferScrollView(getCentralFrame());
     m_pianoKeyboard = new PianoKeyboard(m_pianoView->viewport());
@@ -173,12 +173,12 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	(doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixView : applying layout\n";
+    MATRIX_DEBUG << "MatrixView : applying layout\n";
 
     bool layoutApplied = applyLayout();
     if (!layoutApplied) KMessageBox::sorry(0, i18n("Couldn't apply piano roll layout"));
     else {
-        kdDebug(KDEBUG_AREA_MATRIX) << "MatrixView : rendering elements\n";
+        MATRIX_DEBUG << "MatrixView : rendering elements\n";
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
 	    m_staffs[i]->positionAllElements();
@@ -421,7 +421,7 @@ bool MatrixView::applyLayout(int /*staffNo*/)
 void MatrixView::refreshSegment(Segment *segment,
 				timeT startTime, timeT endTime)
 {
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixView::refreshSegment(" << startTime
+    MATRIX_DEBUG << "MatrixView::refreshSegment(" << startTime
                          << ", " << endTime << ")\n";
 
     applyLayout();
@@ -544,7 +544,7 @@ void MatrixView::slotTransformsQuantize()
 void MatrixView::slotMousePressed(Rosegarden::timeT time, int pitch,
                                   QMouseEvent* e, MatrixElement* el)
 {
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixView::mousePressed at pitch "
+    MATRIX_DEBUG << "MatrixView::mousePressed at pitch "
                          << pitch << ", time " << time << endl;
 
     m_tool->handleMousePress(time, pitch, 0, e, el);
@@ -656,7 +656,7 @@ MatrixView::slotSetInsertCursorPosition(timeT time)
 //
 void MatrixView::slotEditCut()
 {
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixView::slotEditCut()\n";
+    MATRIX_DEBUG << "MatrixView::slotEditCut()\n";
 
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Cutting selection to clipboard..."), statusBar());

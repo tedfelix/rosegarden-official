@@ -334,7 +334,7 @@ void SegmentNotationPreview::updatePreview()
 {
     if (isPreviewCurrent()) return;
 
-    kdDebug(KDEBUG_AREA) << "SegmentNotationItem::updatePreview() "
+    RG_DEBUG << "SegmentNotationItem::updatePreview() "
                          << this << endl;
 
     m_previewInfo.clear();
@@ -503,8 +503,8 @@ void SegmentItem::drawShape(QPainter& painter)
         //
 /*
 	if (!painter.hasClipping())
-	    kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: clipping is off " << endl;
-	kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: rect is "
+	    RG_DEBUG << "SegmentCanvas::drawShape: clipping is off " << endl;
+	RG_DEBUG << "SegmentCanvas::drawShape: rect is "
 			     << previewRect.width() << "x"
 			     << previewRect.height() << " at "
 			     << previewRect.x() << ","
@@ -812,7 +812,7 @@ SegmentCanvas::getSelectionRectangle()
 
 void SegmentCanvas::slotSetTool(ToolType t)
 {
-    kdDebug(KDEBUG_AREA) << "SegmentCanvas::slotSetTool(" << t << ")"
+    RG_DEBUG << "SegmentCanvas::slotSetTool(" << t << ")"
                          << this << "\n";
 
     if (m_tool)
@@ -999,7 +999,7 @@ void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
         if (m_tool)
             m_tool->handleMouseButtonPress(e);
         else
-            kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMousePressEvent() :"
+            RG_DEBUG << "SegmentCanvas::contentsMousePressEvent() :"
                                  << this << " no tool\n";
 
     } else if (e->button() == RightButton) { // popup menu if over a part
@@ -1008,7 +1008,7 @@ void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
 
         if (item) {
             m_currentItem = item;
-            //             kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMousePressEvent() : edit m_currentItem = "
+            //             RG_DEBUG << "SegmentCanvas::contentsMousePressEvent() : edit m_currentItem = "
             //                                  << m_currentItem << endl;
 
             if (m_currentItem->getSegment()->getType() == 
@@ -1387,7 +1387,7 @@ SegmentPencil::SegmentPencil(SegmentCanvas *c, RosegardenGUIDoc *d)
       m_endTime(0)
 {
     m_canvas->setCursor(Qt::ibeamCursor);
-    kdDebug(KDEBUG_AREA) << "SegmentPencil()\n";
+    RG_DEBUG << "SegmentPencil()\n";
 }
 
 void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
@@ -1484,7 +1484,7 @@ SegmentEraser::SegmentEraser(SegmentCanvas *c, RosegardenGUIDoc *d)
 {
     m_canvas->setCursor(Qt::pointingHandCursor);
 
-    kdDebug(KDEBUG_AREA) << "SegmentEraser()\n";
+    RG_DEBUG << "SegmentEraser()\n";
 }
 
 void SegmentEraser::handleMouseButtonPress(QMouseEvent *e)
@@ -1519,7 +1519,7 @@ SegmentMover::SegmentMover(SegmentCanvas *c, RosegardenGUIDoc *d)
 {
     m_canvas->setCursor(Qt::sizeAllCursor);
 
-    kdDebug(KDEBUG_AREA) << "SegmentMover()\n";
+    RG_DEBUG << "SegmentMover()\n";
 }
 
 void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
@@ -1585,7 +1585,7 @@ SegmentResizer::SegmentResizer(SegmentCanvas *c, RosegardenGUIDoc *d,
 {
     m_canvas->setCursor(Qt::sizeHorCursor);
 
-    kdDebug(KDEBUG_AREA) << "SegmentResizer()\n";
+    RG_DEBUG << "SegmentResizer()\n";
 }
 
 void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
@@ -1664,7 +1664,7 @@ SegmentSelector::SegmentSelector(SegmentCanvas *c, RosegardenGUIDoc *d)
       m_segmentQuickCopyDone(false),
       m_dispatchTool(0)
 {
-    kdDebug(KDEBUG_AREA) << "SegmentSelector()\n";
+    RG_DEBUG << "SegmentSelector()\n";
 
     connect(this, SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)),
             c,     SIGNAL(selectedSegments(const Rosegarden::SegmentSelection &)));
@@ -2051,7 +2051,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 SegmentSplitter::SegmentSplitter(SegmentCanvas *c, RosegardenGUIDoc *d)
     : SegmentTool(c, d)
 {
-    kdDebug(KDEBUG_AREA) << "SegmentSplitter()\n";
+    RG_DEBUG << "SegmentSplitter()\n";
     m_canvas->setCursor(Qt::splitHCursor);
 }
 
@@ -2164,7 +2164,7 @@ SegmentSplitter::contentsMouseDoubleClickEvent(QMouseEvent*)
 SegmentJoiner::SegmentJoiner(SegmentCanvas *c, RosegardenGUIDoc *d)
     : SegmentTool(c, d)
 {
-    kdDebug(KDEBUG_AREA) << "SegmentJoiner()\n";
+    RG_DEBUG << "SegmentJoiner()\n";
 }
 
 SegmentJoiner::~SegmentJoiner()

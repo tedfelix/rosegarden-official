@@ -118,7 +118,7 @@ RosegardenParameterBox::RosegardenParameterBox(QString label,
     QValueList<int> sizes(db.smoothSizes(m_font.family(),
 					 db.styleString(m_font)));
 
-    kdDebug(KDEBUG_AREA) << "Family: " << m_font.family()
+    RG_DEBUG << "Family: " << m_font.family()
 			 << ", style: " << db.styleString(m_font) << endl;
     
     int size = -1;
@@ -127,7 +127,7 @@ RosegardenParameterBox::RosegardenParameterBox(QString label,
     for (QValueList<int>::Iterator it = sizes.begin();
 	 it != sizes.end(); ++it) {
 
-	kdDebug(KDEBUG_AREA) << "Found size " << *it << endl;
+	RG_DEBUG << "Found size " << *it << endl;
 
 	// find largest size no more than 90% of the plain size
 	// and at least 9pt, assuming they're in ascending order
@@ -135,7 +135,7 @@ RosegardenParameterBox::RosegardenParameterBox(QString label,
 	else if (*it >= 9 && *it <= (plainSize*9)/10) size = *it;
     }
 
-    kdDebug(KDEBUG_AREA) << "Default font: " << plainSize
+    RG_DEBUG << "Default font: " << plainSize
 			 << ", my font: " << size << endl;
     if (size > 0) {
 	m_font.setPointSize(size);

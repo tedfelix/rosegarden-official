@@ -141,7 +141,7 @@ bool ConfigurationXmlSubHandler::characters(const QString& ch)
         rt.sec = ch.left(sepIdx).toInt();
         rt.usec = ch.mid(sepIdx + 1).toInt();
 
-        kdDebug(KDEBUG_AREA) << "sec = " << rt.sec << ", usec = " << rt.usec << endl;
+        RG_DEBUG << "sec = " << rt.sec << ", usec = " << rt.usec << endl;
 
         m_doc->getConfiguration().set<Rosegarden::RealTimeT>(m_propertyName.data(), rt);
 
@@ -238,10 +238,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     if (lcName == "event") {
 
-//        kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: found event, current time is " << m_currentTime << endl;
+//        RG_DEBUG << "RoseXmlHandler::startElement: found event, current time is " << m_currentTime << endl;
 
         if (m_currentEvent) {
-            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: Warning: new event found at time " << m_currentTime << " before previous event has ended; previous event will be lost" << endl;
+            RG_DEBUG << "RoseXmlHandler::startElement: Warning: new event found at time " << m_currentTime << " before previous event has ended; previous event will be lost" << endl;
             delete m_currentEvent;
         }
 
@@ -285,7 +285,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             m_currentTime = m_currentEvent->getAbsoluteTime() + duration;
 
-//            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: (we're not in a chord) " << endl;
+//            RG_DEBUG << "RoseXmlHandler::startElement: (we're not in a chord) " << endl;
 
         } else if (duration != 0) {
 
@@ -301,7 +301,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "property") {
         
         if (!m_currentEvent) {
-            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: Warning: Found property outside of event at time " << m_currentTime << ", ignoring" << endl;
+            RG_DEBUG << "RoseXmlHandler::startElement: Warning: Found property outside of event at time " << m_currentTime << ", ignoring" << endl;
         } else {
             m_currentEvent->setPropertiesFromAttributes(atts);
         }
@@ -318,7 +318,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
         
 	m_deprecation = true;
-	kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: Warning: group element is deprecated, recommend re-saving file from this version of Rosegarden to assure your ability to re-load it in future versions" << endl;
+	RG_DEBUG << "RoseXmlHandler::startElement: Warning: group element is deprecated, recommend re-saving file from this version of Rosegarden to assure your ability to re-load it in future versions" << endl;
 
         m_inGroup = true;
         m_groupId = m_currentSegment->getNextId();
@@ -611,7 +611,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "resync") {
 
 	m_deprecation = true;
-	kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: Warning: resync element is deprecated, recommend re-saving file from this version of Rosegarden to assure your ability to re-load it in future versions" << endl;
+	RG_DEBUG << "RoseXmlHandler::startElement: Warning: resync element is deprecated, recommend re-saving file from this version of Rosegarden to assure your ability to re-load it in future versions" << endl;
 	
 	QString time(atts.value("time"));
 	bool isNumeric;
@@ -1006,7 +1006,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         setSubHandler(new ConfigurationXmlSubHandler(m_doc));
 
     } else {
-        kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
+        RG_DEBUG << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
     }
 
     return true;

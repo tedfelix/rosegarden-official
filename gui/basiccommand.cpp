@@ -102,7 +102,7 @@ BasicCommand::unexecute()
 void
 BasicCommand::copyTo(Rosegarden::Segment *events)
 {
-//    kdDebug(KDEBUG_AREA) << "BasicCommand::copyTo: range (" 
+//    RG_DEBUG << "BasicCommand::copyTo: range (" 
 //			 << m_startTime << "," << m_endTime
 //			 << ")" << endl;
 
@@ -110,7 +110,7 @@ BasicCommand::copyTo(Rosegarden::Segment *events)
     Segment::iterator to   = m_segment.findTime(m_endTime);
 
     for (Segment::iterator i = from; i != m_segment.end() && i != to; ++i) {
-//	kdDebug(KDEBUG_AREA) << "Found event of type " << (*i)->getType() << " and duration " << (*i)->getDuration() << endl;
+//	RG_DEBUG << "Found event of type " << (*i)->getType() << " and duration " << (*i)->getDuration() << endl;
 	events->insert(new Event(**i));
     }
 }
@@ -118,7 +118,7 @@ BasicCommand::copyTo(Rosegarden::Segment *events)
 void
 BasicCommand::copyFrom(Rosegarden::Segment *events)
 {
-//    kdDebug(KDEBUG_AREA) << "BasicCommand::copyFrom: range (" 
+//    RG_DEBUG << "BasicCommand::copyFrom: range (" 
 //			 << m_startTime << "," << m_endTime
 //			 << ")" << endl;
 
@@ -126,7 +126,7 @@ BasicCommand::copyFrom(Rosegarden::Segment *events)
 		    m_segment.findTime(m_endTime));
 
     for (Segment::iterator i = events->begin(); i != events->end(); ++i) {
-//	kdDebug(KDEBUG_AREA) << "Found event of type " << (*i)->getType() << " and duration " << (*i)->getDuration() << endl;
+//	RG_DEBUG << "Found event of type " << (*i)->getType() << " and duration " << (*i)->getDuration() << endl;
 	m_segment.insert(new Event(**i));
     }
 

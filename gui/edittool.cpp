@@ -60,7 +60,7 @@ EditTool::EditTool(const QString& menuName, EditView* view)
 
 EditTool::~EditTool()
 {
-    kdDebug(KDEBUG_AREA) << "EditTool::~EditTool()\n";
+    RG_DEBUG << "EditTool::~EditTool()\n";
 
     //     delete m_menu;
     //     m_parentView->factory()->removeClient(this);
@@ -91,7 +91,7 @@ void EditTool::handleMousePress(Rosegarden::timeT time,
                                 QMouseEvent* e,
                                 Rosegarden::ViewElement* el)
 {
-    kdDebug(KDEBUG_AREA) << "EditTool::handleMousePress : mouse button = "
+    RG_DEBUG << "EditTool::handleMousePress : mouse button = "
                          << e->button() << endl;
 
     switch (e->button()) {
@@ -109,7 +109,7 @@ void EditTool::handleMousePress(Rosegarden::timeT time,
         break;
 
     default:
-        kdDebug(KDEBUG_AREA) << "EditTool::handleMousePress : no button mouse press\n";
+        RG_DEBUG << "EditTool::handleMousePress : no button mouse press\n";
         break;
     }
 }
@@ -152,7 +152,7 @@ void EditTool::showMenu()
     if (m_menu)
         m_menu->exec(QCursor::pos());
     else
-        kdDebug(KDEBUG_AREA) << "EditTool::showMenu() : no menu to show\n";
+        RG_DEBUG << "EditTool::showMenu() : no menu to show\n";
 }
 
 void EditTool::setParentView(EditView* view)

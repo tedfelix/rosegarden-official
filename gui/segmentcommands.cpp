@@ -72,7 +72,7 @@ void SegmentCommandRepeat::unexecute()
 //     : SegmentCommand(i18n("Transpose Segments"), segments),
 //       m_transposeValue(transposeValue)
 // {
-//     kdDebug(KDEBUG_AREA) << "SegmentCommandChangeTransposeValue : nb segments : " << m_segments.size()
+//     RG_DEBUG << "SegmentCommandChangeTransposeValue : nb segments : " << m_segments.size()
 //                          << endl;
 
 // }
@@ -83,7 +83,7 @@ void SegmentCommandRepeat::unexecute()
 //     segmentlist::iterator it;
 
 //     for (it = m_segments.begin(); it != m_segments.end(); ++it) {
-//         kdDebug(KDEBUG_AREA) << "SegmentCommandChangeTransposeValue::execute : saving " << (*it)->getTranspose()
+//         RG_DEBUG << "SegmentCommandChangeTransposeValue::execute : saving " << (*it)->getTranspose()
 //                              << endl;
 
 //         m_savedValues.push_back((*it)->getTranspose());
@@ -98,7 +98,7 @@ void SegmentCommandRepeat::unexecute()
     
 //     for (; it != m_segments.end() && itV != m_savedValues.end();
 //          ++it, ++itV) {
-//         kdDebug(KDEBUG_AREA) << "SegmentCommandChangeTransposeValue::unexecute : restoring " << (*itV)
+//         RG_DEBUG << "SegmentCommandChangeTransposeValue::unexecute : restoring " << (*itV)
 //                              << endl;
         
 //         (*it)->setTranspose((*itV));

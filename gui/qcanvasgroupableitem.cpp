@@ -31,7 +31,7 @@ QCanvasGroupableItem::QCanvasGroupableItem(QCanvasItem *i,
     : m_group(g),
       m_item(i)
 {
-//     kdDebug(KDEBUG_AREA) << "QCanvasGroupableItem() - this : " << this
+//     RG_DEBUG << "QCanvasGroupableItem() - this : " << this
 //                          << " - group : " << g
 //                          << " - item : " << i << endl;
 
@@ -43,7 +43,7 @@ QCanvasGroupableItem::QCanvasGroupableItem(QCanvasItem *i,
 
 QCanvasGroupableItem::~QCanvasGroupableItem()
 {
-//     kdDebug(KDEBUG_AREA) << "~QCanvasGroupableItem() - this : " << this
+//     RG_DEBUG << "~QCanvasGroupableItem() - this : " << this
 //                          << " - group : " << group()
 //                          << " - item : " << item() << endl;
 
@@ -70,12 +70,12 @@ QCanvasGroupableItem::detach()
 QCanvasItemGroup::QCanvasItemGroup(QCanvas *c)
     : QCanvasItem(c)
 {
-//     kdDebug(KDEBUG_AREA) << "QCanvasItemGroup() - this : " << this << endl;
+//     RG_DEBUG << "QCanvasItemGroup() - this : " << this << endl;
 }
 
 QCanvasItemGroup::~QCanvasItemGroup()
 {
-//     kdDebug(KDEBUG_AREA) << "~QCanvasItemGroup() - this : " << this << endl;
+//     RG_DEBUG << "~QCanvasItemGroup() - this : " << this << endl;
 
     // Tell all our items that we're being destroyed
     QCanvasItemList::Iterator i;
@@ -226,7 +226,7 @@ QCanvasItemGroup::addItemWithRelativeCoords(QCanvasItem *i)
 void
 QCanvasItemGroup::removeItem(QCanvasItem *i)
 {
-//     kdDebug(KDEBUG_AREA) << "QCanvasItemGroup::removeItem() - this : "
+//     RG_DEBUG << "QCanvasItemGroup::removeItem() - this : "
 //                          << this << " - item : " << i << endl;
     m_items.remove(i);
 }

@@ -68,7 +68,7 @@ void EditView::paintEvent(QPaintEvent* e)
     EditViewBase::paintEvent(e);
     
     if (m_needUpdate)  {
-        kdDebug(KDEBUG_AREA) << "EditView::paintEvent() - calling updateView\n";
+        RG_DEBUG << "EditView::paintEvent() - calling updateView\n";
         updateView();
         getCanvasView()->slotUpdate();
     } else {
@@ -131,7 +131,7 @@ void EditView::readjustViewSize(QSize requestedSize, bool exact)
     newSize.setWidth(((requestedWidth / windowWidth) + 1) * windowWidth);
     newSize.setHeight(((requestedHeight / windowHeight) + 1) * windowHeight);
 
-    kdDebug(KDEBUG_AREA) << "EditView::readjustViewSize: requested ("
+    RG_DEBUG << "EditView::readjustViewSize: requested ("
 			 << requestedSize.width() << ", " << requestedSize.height() 
 			 << "), getting (" << newSize.width() <<", "
 			 << newSize.height() << ")" << endl;

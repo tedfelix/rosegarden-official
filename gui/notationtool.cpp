@@ -139,7 +139,7 @@ NotationTool::NotationTool(const QString& menuName, NotationView* view)
 
 NotationTool::~NotationTool()
 {
-    kdDebug(KDEBUG_AREA_NOTATION) << "NotationTool::~NotationTool()\n";
+    NOTATION_DEBUG << "NotationTool::~NotationTool()\n";
 
     //     delete m_menu;
     //     m_parentView->factory()->removeClient(this);
@@ -476,7 +476,7 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 
     m_nParentView->addCommandToHistory(activeCommand);
     
-    kdDebug(KDEBUG_AREA_NOTATION) << "NoteInserter::doAddCommand: accidental is "
+    NOTATION_DEBUG << "NoteInserter::doAddCommand: accidental is "
 			 << accidental << endl;
 
     return insertionCommand->getLastInsertedEvent();
@@ -498,7 +498,7 @@ void NoteInserter::slotSetDots(unsigned int dots)
 
 void NoteInserter::slotSetAccidental(Rosegarden::Accidental accidental)
 {
-    kdDebug(KDEBUG_AREA_NOTATION) << "NoteInserter::setAccidental: accidental is "
+    NOTATION_DEBUG << "NoteInserter::setAccidental: accidental is "
 			 << accidental << endl;
     m_accidental = accidental;
 }
@@ -510,7 +510,7 @@ void NoteInserter::slotSetTupletMode(bool tupletMode)
 
 void NoteInserter::slotSetAccidentalSync(Rosegarden::Accidental accidental)
 {
-    kdDebug(KDEBUG_AREA_NOTATION) << "NoteInserter::setAccidentalSync: accidental is "
+    NOTATION_DEBUG << "NoteInserter::setAccidentalSync: accidental is "
 			 << accidental << endl;
     slotSetAccidental(accidental);
 
@@ -910,7 +910,7 @@ void NotationSelector::handleLeftButtonPress(Rosegarden::timeT t,
 	return;
     }
 
-    kdDebug(KDEBUG_AREA_NOTATION) << "NotationSelector::handleMousePress" << endl;
+    NOTATION_DEBUG << "NotationSelector::handleMousePress" << endl;
     m_clickedStaff = staffNo;
     m_clickedElement = dynamic_cast<NotationElement*>(element);
 
@@ -935,7 +935,7 @@ void NotationSelector::handleMouseDblClick(Rosegarden::timeT,
                                            QMouseEvent* e,
                                            ViewElement *element)
 {
-    kdDebug(KDEBUG_AREA_NOTATION) << "NotationSelector::handleMouseDblClick" << endl;
+    NOTATION_DEBUG << "NotationSelector::handleMouseDblClick" << endl;
     m_clickedStaff = staffNo;
     m_clickedElement = dynamic_cast<NotationElement*>(element);
     
@@ -985,7 +985,7 @@ void NotationSelector::handleMouseTripleClick(Rosegarden::timeT t,
     if (!m_justSelectedBar) return;
     m_justSelectedBar = false;
 
-    kdDebug(KDEBUG_AREA_NOTATION) << "NotationSelector::handleMouseTripleClick" << endl;
+    NOTATION_DEBUG << "NotationSelector::handleMouseTripleClick" << endl;
     m_clickedStaff = staffNo;
     m_clickedElement = dynamic_cast<NotationElement*>(element);
     
@@ -1032,7 +1032,7 @@ bool NotationSelector::handleMouseMove(timeT, int,
 
 void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 {
-    kdDebug(KDEBUG_AREA_NOTATION) << "NotationSelector::handleMouseRelease" << endl;
+    NOTATION_DEBUG << "NotationSelector::handleMouseRelease" << endl;
     m_updateRect = false;
     setViewCurrentSelection();
     
@@ -1118,7 +1118,7 @@ EventSelection* NotationSelector::getSelection()
     //
     if (!m_selectionRect->visible()) return 0;
 
-    //    kdDebug(KDEBUG_AREA_NOTATION) << "Selection x,y: " << m_selectionRect->x() << ","
+    //    NOTATION_DEBUG << "Selection x,y: " << m_selectionRect->x() << ","
     //                         << m_selectionRect->y() << "; w,h: " << m_selectionRect->width() << "," << m_selectionRect->height() << endl;
 
     if (m_selectionRect->width()  > -3 &&
@@ -1148,15 +1148,15 @@ EventSelection* NotationSelector::getSelection()
 
             if (!rect.contains(int(item->x()), int(item->y()), true)) {
 
-                kdDebug(KDEBUG_AREA_NOTATION) << "NotationSelector::getSelection Skipping item not really in selection rect\n";
-                kdDebug(KDEBUG_AREA_NOTATION) << "NotationSelector::getSelection Rect: x,y: " << rect.x() << ","
+                NOTATION_DEBUG << "NotationSelector::getSelection Skipping item not really in selection rect\n";
+                NOTATION_DEBUG << "NotationSelector::getSelection Rect: x,y: " << rect.x() << ","
                                      << rect.y() << "; w,h: " << rect.width()
                                      << "," << rect.height() << " / Item: x,y: "
                                      << item->x() << "," << item->y() << endl;
                 continue;
             } else {
                 
-                kdDebug(KDEBUG_AREA_NOTATION) << "NotationSelector::getSelection Item in rect : Rect: x,y: " << rect.x() << ","
+                NOTATION_DEBUG << "NotationSelector::getSelection Item in rect : Rect: x,y: " << rect.x() << ","
                                      << rect.y() << "; w,h: " << rect.width()
                                      << "," << rect.height() << " / Item: x,y: "
                                      << item->x() << "," << item->y() << endl;
@@ -1166,7 +1166,7 @@ EventSelection* NotationSelector::getSelection()
 
             selection->addEvent(el.event());
 
-            //             kdDebug(KDEBUG_AREA_NOTATION) << "Selected event : \n";
+            //             NOTATION_DEBUG << "Selected event : \n";
             //             el.event()->dump(std::cerr);
         }
         

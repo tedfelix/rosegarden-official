@@ -143,7 +143,7 @@ MatrixInsertionCommand::~MatrixInsertionCommand()
 
 void MatrixInsertionCommand::modifySegment()
 {
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixInsertionCommand::modifySegment()\n";
+    MATRIX_DEBUG << "MatrixInsertionCommand::modifySegment()\n";
 
     Rosegarden::SegmentMatrixHelper helper(getSegment());
     helper.insertNote(new Event(*m_event));
@@ -351,7 +351,7 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
                                           QMouseEvent *e,
                                           Rosegarden::ViewElement *)
 {
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixPainter::handleLeftButtonPress : pitch = "
+    MATRIX_DEBUG << "MatrixPainter::handleLeftButtonPress : pitch = "
                          << pitch << ", time : " << time << endl;
 
     // Round event time to a multiple of resolution
@@ -389,7 +389,7 @@ bool MatrixPainter::handleMouseMove(Rosegarden::timeT time,
     // sanity check
     if (!m_currentElement) return false;
 
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixPainter::handleMouseMove : pitch = "
+    MATRIX_DEBUG << "MatrixPainter::handleMouseMove : pitch = "
                          << pitch << ", time : " << time << endl;
 
     using Rosegarden::BaseProperties::PITCH;
@@ -435,7 +435,7 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
     if (endTime == time) endTime = time + m_currentElement->getDuration();
 
     Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixPainter::handleMouseRelease() : helper.insertNote()\n";
+    MATRIX_DEBUG << "MatrixPainter::handleMouseRelease() : helper.insertNote()\n";
 
     MatrixInsertionCommand* command = 
 	new MatrixInsertionCommand(m_currentStaff->getSegment(),
@@ -468,7 +468,7 @@ void MatrixEraser::handleLeftButtonPress(Rosegarden::timeT,
                                          QMouseEvent*,
                                          Rosegarden::ViewElement* el)
 {
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixEraser::handleLeftButtonPress : el = "
+    MATRIX_DEBUG << "MatrixEraser::handleLeftButtonPress : el = "
                          << el << endl;
 
     if (!el) return; // nothing to erase
@@ -504,7 +504,7 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
                                            QMouseEvent* e,
                                            Rosegarden::ViewElement *element)
 {
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixSelector::handleMousePress" << endl;
+    MATRIX_DEBUG << "MatrixSelector::handleMousePress" << endl;
 
     m_currentStaff = m_mParentView->getStaff(staffNo);
 
@@ -658,7 +658,7 @@ bool MatrixSelector::handleMouseMove(timeT time, int height,
 
 void MatrixSelector::handleMouseRelease(timeT time, int height, QMouseEvent *e)
 {
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixSelector::handleMouseRelease" << endl;
+    MATRIX_DEBUG << "MatrixSelector::handleMouseRelease" << endl;
 
     if (m_dispatchTool)
     {
@@ -756,7 +756,7 @@ EventSelection* MatrixSelector::getSelection()
     return (selection->getAddedEvents() > 0) ? selection : 0;
 
 
-    //    kdDebug(KDEBUG_AREA_MATRIX) << "Selection x,y: " << m_selectionRect->x() << ","
+    //    MATRIX_DEBUG << "Selection x,y: " << m_selectionRect->x() << ","
     //                         << m_selectionRect->y() << "; w,h: " << m_selectionRect->width() << "," << m_selectionRect->height() << endl;
 
     /*
@@ -784,15 +784,15 @@ EventSelection* MatrixSelector::getSelection()
 
             if (!rect.contains(matrixRect->rect(), true)) {
 
-                kdDebug(KDEBUG_AREA_MATRIX) << "MatrixSelector::getSelection Skipping item not really in selection rect\n";
-                kdDebug(KDEBUG_AREA_MATRIX) << "MatrixSelector::getSelection Rect: x,y: " << rect.x() << ","
+                MATRIX_DEBUG << "MatrixSelector::getSelection Skipping item not really in selection rect\n";
+                MATRIX_DEBUG << "MatrixSelector::getSelection Rect: x,y: " << rect.x() << ","
                                      << rect.y() << "; w,h: " << rect.width()
                                      << "," << rect.height() << " / Item: x,y: "
                                      << item->x() << "," << item->y() << endl;
                 continue;
             } else {
                 
-                kdDebug(KDEBUG_AREA_MATRIX) << "MatrixSelector::getSelection Item in rect : Rect: x,y: " << rect.x() << ","
+                MATRIX_DEBUG << "MatrixSelector::getSelection Item in rect : Rect: x,y: " << rect.x() << ","
                                      << rect.y() << "; w,h: " << rect.width()
                                      << "," << rect.height() << " / Item: x,y: "
                                      << item->x() << "," << item->y() << endl;
@@ -800,7 +800,7 @@ EventSelection* MatrixSelector::getSelection()
             
             selection->addEvent(matrixRect->getMatrixElement().event());
 
-            //             kdDebug(KDEBUG_AREA_MATRIX) << "Selected event : \n";
+            //             MATRIX_DEBUG << "Selected event : \n";
             //             el.event()->dump(std::cerr);
         }
         
@@ -825,7 +825,7 @@ void MatrixMover::handleLeftButtonPress(Rosegarden::timeT,
                                         QMouseEvent*,
                                         Rosegarden::ViewElement* el)
 {
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixMover::handleLeftButtonPress() : el = "
+    MATRIX_DEBUG << "MatrixMover::handleLeftButtonPress() : el = "
                          << el << endl;
 
     if (!el) return; // nothing to erase
@@ -839,7 +839,7 @@ bool MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
                                   int pitch,
                                   QMouseEvent*)
 {
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixMover::handleMouseMove() time = "
+    MATRIX_DEBUG << "MatrixMover::handleMouseMove() time = "
                          << newTime << endl;
 
     if (!m_currentElement || !m_currentStaff) return false;
@@ -878,14 +878,14 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
                                      int newPitch,
                                      QMouseEvent*)
 {
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixMover::handleMouseRelease()\n";
+    MATRIX_DEBUG << "MatrixMover::handleMouseRelease()\n";
 
     if (!m_currentElement || !m_currentStaff) return;
 
     int y = m_currentStaff->getLayoutYForHeight(newPitch)
         - m_currentStaff->getElementHeight() / 2;
 
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixMover::handleMouseRelease() y = " << y << endl;
+    MATRIX_DEBUG << "MatrixMover::handleMouseRelease() y = " << y << endl;
 
     /*
     int oldX = int(m_currentElement->getLayoutX());
@@ -1002,7 +1002,7 @@ void MatrixResizer::handleLeftButtonPress(Rosegarden::timeT,
                                           QMouseEvent*,
                                           Rosegarden::ViewElement* el)
 {
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixResizer::handleLeftButtonPress() : el = "
+    MATRIX_DEBUG << "MatrixResizer::handleLeftButtonPress() : el = "
                          << el << endl;
 
     if (!el) return; // nothing to erase

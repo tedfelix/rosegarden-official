@@ -136,7 +136,7 @@ void PixmapArrayGC::registerForDeletion(QCanvasPixmapArray* array)
 
 void PixmapArrayGC::deleteAll()
 {
-    kdDebug(KDEBUG_AREA) << "PixmapArrayGC::deleteAll() : "
+    RG_DEBUG << "PixmapArrayGC::deleteAll() : "
                          << m_pixmapArrays.size() << " pixmap arrays to delete\n";
 
     for (unsigned int i = 0; i < m_pixmapArrays.size(); ++i)

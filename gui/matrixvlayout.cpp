@@ -57,7 +57,7 @@ void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staffBase, timeT, timeT)
     MatrixElementList::iterator to = notes->end();
     MatrixElementList::iterator i;
 
-    kdDebug(KDEBUG_AREA_MATRIX) << "MatrixVLayout::scanStaff : id = "
+    MATRIX_DEBUG << "MatrixVLayout::scanStaff : id = "
                          << staff.getId() << endl;
 
 

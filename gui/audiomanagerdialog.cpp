@@ -621,7 +621,7 @@ AudioManagerDialog::slotInsert()
     if (audioFile == 0)
         return;
 
-    kdDebug(KDEBUG_AREA) << "AudioManagerDialog::slotInsert\n";
+    RG_DEBUG << "AudioManagerDialog::slotInsert\n";
 
     // Find an Audio Instrument and create a Track and insert
     // the audio file over given time parameters.
@@ -658,7 +658,7 @@ AudioManagerDialog::slotInsert()
     // Ok, so we've got the first audio instrument
     //
     if (instr == 0) {
-        kdDebug(KDEBUG_AREA) << "AudioManagerDialog::slotInsert() instr = 0\n";
+        RG_DEBUG << "AudioManagerDialog::slotInsert() instr = 0\n";
         return;
     }
 
@@ -1004,7 +1004,7 @@ AudioManagerDialog::dropEvent(QDropEvent *event)
         QString url, target;
         for(const char* url = uri.first(); url; url = uri.next()) {
             
-            kdDebug(KDEBUG_AREA) << "AudioManagerDialog::dropEvent() : got "
+            RG_DEBUG << "AudioManagerDialog::dropEvent() : got "
                                  << url << endl;
 
             addFile(KURL(url));

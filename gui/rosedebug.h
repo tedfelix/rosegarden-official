@@ -28,9 +28,13 @@
 
 namespace Rosegarden { class Event; class Segment; }
 
-#define KDEBUG_AREA          1010
-#define KDEBUG_AREA_NOTATION 1011
-#define KDEBUG_AREA_MATRIX   1012
+#define KDEBUG_AREA          200000
+#define KDEBUG_AREA_NOTATION 200001
+#define KDEBUG_AREA_MATRIX   200002
+
+#define RG_DEBUG       kdDebug(KDEBUG_AREA)
+#define NOTATION_DEBUG kdDebug(KDEBUG_AREA_NOTATION)
+#define MATRIX_DEBUG   kdDebug(KDEBUG_AREA_MATRIX)
 
 #ifndef NDEBUG
 

@@ -365,7 +365,7 @@ int TrackEditor::getTrackCellHeight() const
 void
 TrackEditor::setupSegments()
 {
-    kdDebug(KDEBUG_AREA) << "TrackEditor::setupSegments() begin" << endl;
+    RG_DEBUG << "TrackEditor::setupSegments() begin" << endl;
 
     if (!m_document) return; // sanity check
     
@@ -375,7 +375,7 @@ TrackEditor::setupSegments()
 
         if (!(*i)) continue;
 
-	kdDebug(KDEBUG_AREA) << "TrackEditor::setupSegments() add segment"
+	RG_DEBUG << "TrackEditor::setupSegments() add segment"
 			     << " - start idx : " << (*i)->getStartTime()
 			     << " - nb time steps : " << ((*i)->getEndTime() - (*i)->getStartTime())
 			     << " - track : " << (*i)->getTrack()
@@ -436,7 +436,7 @@ void TrackEditor::paintEvent(QPaintEvent* e)
 
 	    if (ri == m_segmentsRefreshStatusIds.end()) {
 		
-		kdDebug(KDEBUG_AREA) << "TrackEditor::paintEvent: adding segment " << *i << " to map" << endl;
+		RG_DEBUG << "TrackEditor::paintEvent: adding segment " << *i << " to map" << endl;
 		m_segmentsRefreshStatusIds[*i] = (*i)->getNewRefreshStatusId();
 
 	    } else {
@@ -479,7 +479,7 @@ void TrackEditor::addSegment(int track, int time, unsigned int duration)
 
 void TrackEditor::slotSegmentOrderChanged(int section, int fromIdx, int toIdx)
 {
-    kdDebug(KDEBUG_AREA) << QString("TrackEditor::segmentOrderChanged(section : %1, from %2, to %3)")
+    RG_DEBUG << QString("TrackEditor::segmentOrderChanged(section : %1, from %2, to %3)")
         .arg(section).arg(fromIdx).arg(toIdx) << endl;
 
     //!!! how do we get here? need to involve a command
@@ -491,7 +491,7 @@ void
 TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
 {
 
-//    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: time is " << position << endl;
+//    RG_DEBUG << "TrackEditor::setPointerPosition: time is " << position << endl;
     if (!m_pointer) return;
 
     m_pointer->setSize(3, m_segmentCanvas->canvas()->height());
@@ -694,12 +694,12 @@ void TrackEditor::dropEvent(QDropEvent* event)
     // if it's a URI, pass it to parent
     if (QUriDrag::decode(event, uri))
         {
-            kdDebug(KDEBUG_AREA) << "TrackEditor::dropEvent() : got URI :"
+            RG_DEBUG << "TrackEditor::dropEvent() : got URI :"
                                  << uri.first() << endl;
             emit droppedURI(uri.first());
             
         } else if (QTextDrag::decode(event, audioInfo)) {
-            kdDebug(KDEBUG_AREA) << "TrackEditor::dropEvent() : got audio info "
+            RG_DEBUG << "TrackEditor::dropEvent() : got audio info "
                                  << audioInfo << endl;
             emit droppedAudio(audioInfo);
         }

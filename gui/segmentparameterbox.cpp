@@ -220,7 +220,7 @@ SegmentParameterBox::useSegments(const Rosegarden::SegmentSelection &segments)
 
 void SegmentParameterBox::update()
 {
-    kdDebug(KDEBUG_AREA) << "SegmentParameterBox::update()\n";
+    RG_DEBUG << "SegmentParameterBox::update()\n";
 
     populateBoxFromSegments();
 }

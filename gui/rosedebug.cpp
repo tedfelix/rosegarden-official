@@ -198,7 +198,7 @@ kdbgostreamAdapter::operator<<(double d)
 //         int pitch = ev.get<Int>("BLAH");
 
 //     } catch (Rosegarden::Event::NoData) {
-//         kdDebug(KDEBUG_AREA) << "DBCheckThrow()" << endl;
+//         RG_DEBUG << "DBCheckThrow()" << endl;
 //     }
 // }
 

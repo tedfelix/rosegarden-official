@@ -109,7 +109,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     // the alive() call in initDocument() is eventually caught.
     //
     if (m_useSequencer) launchSequencer();
-    else kdDebug(KDEBUG_AREA) << "RosegardenGUIApp : don't use sequencer\n";
+    else RG_DEBUG << "RosegardenGUIApp : don't use sequencer\n";
 
     ///////////////////////////////////////////////////////////////////
     // call inits to invoke all other construction parts
@@ -153,7 +153,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
 
 RosegardenGUIApp::~RosegardenGUIApp()
 {
-    kdDebug(KDEBUG_AREA) << "~RosegardenGUIApp()\n";
+    RG_DEBUG << "~RosegardenGUIApp()\n";
 
     if (m_sequencerProcess) {
         m_sequencerProcess->blockSignals(true);
@@ -468,7 +468,7 @@ void RosegardenGUIApp::initZoomToolbar()
 {
     KToolBar *zoomToolbar = toolBar("zoomToolBar");
     if (!zoomToolbar) {
-	kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::initZoomToolbar() : "
+	RG_DEBUG << "RosegardenGUIApp::initZoomToolbar() : "
 			     << "zoom toolbar not found" << endl;
 	return;
     }
@@ -526,7 +526,7 @@ void RosegardenGUIApp::initView()
     // create the main widget here that is managed by KTMainWindow's view-region and
     // connect the widget to your document to display document contents.
 
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::initView()" << endl;
+    RG_DEBUG << "RosegardenGUIApp::initView()" << endl;
 
     Rosegarden::Composition &comp = m_doc->getComposition();
 
@@ -901,7 +901,7 @@ void RosegardenGUIApp::slotFileNewWindow()
 
 void RosegardenGUIApp::slotFileNew()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotFileNew()\n";
+    RG_DEBUG << "RosegardenGUIApp::slotFileNew()\n";
 
     KTmpStatusMsg msg(i18n("Creating new document..."), statusBar());
 
@@ -947,7 +947,7 @@ void RosegardenGUIApp::openURL(const KURL& url)
     SetWaitCursor waitCursor;
 
     QString netFile = url.url();
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::openURL: " << netFile << endl;
+    RG_DEBUG << "RosegardenGUIApp::openURL: " << netFile << endl;
 
     if (url.isMalformed()) {
         QString string;
@@ -1098,7 +1098,7 @@ void RosegardenGUIApp::slotFileSaveAs()
 
 void RosegardenGUIApp::slotFileClose()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotFileClose()" << endl;
+    RG_DEBUG << "RosegardenGUIApp::slotFileClose()" << endl;
     
     if (!m_doc) return;
 
@@ -1133,7 +1133,7 @@ void RosegardenGUIApp::slotFilePrint()
 
 void RosegardenGUIApp::slotQuit()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotQuit()" << endl;
+    RG_DEBUG << "RosegardenGUIApp::slotQuit()" << endl;
     
     slotStatusMsg(i18n("Exiting..."));
     slotSaveOptions();
@@ -1885,7 +1885,7 @@ bool RosegardenGUIApp::launchSequencer()
     
     if (!res) {
         KMessageBox::error(0, i18n("Couldn't start the sequencer"));
-        kdDebug(KDEBUG_AREA) << "Couldn't start the sequencer\n";
+        RG_DEBUG << "Couldn't start the sequencer\n";
         m_sequencerProcess = 0;
 	m_useSequencer = false; // otherwise we hang waiting for it
     }
@@ -1897,7 +1897,7 @@ bool RosegardenGUIApp::launchSequencer()
 
 void RosegardenGUIApp::slotSequencerExited(KProcess*)
 {
-    kdDebug(KDEBUG_AREA) << "Sequencer exited\n";
+    RG_DEBUG << "Sequencer exited\n";
 
     KStartupLogo* logo = KStartupLogo::getInstance();
     if (logo) logo->close();
@@ -2419,7 +2419,7 @@ bool RosegardenGUIApp::performAutoload()
 
     if (!autoloadFileInfo.isReadable())
     {
-        kdDebug(KDEBUG_AREA)
+        RG_DEBUG
             << "RosegardenGUIApp::performAutoload() - "
             << "Can't find autoload file - no default Studio loaded\n";
 
@@ -2428,7 +2428,7 @@ bool RosegardenGUIApp::performAutoload()
 
     // Else we try to open it
     //
-    kdDebug(KDEBUG_AREA)
+    RG_DEBUG
         << "RosegardenGUIApp::performAutoload() - autoloading\n";
 
     openFile(autoloadFile);
@@ -2448,7 +2448,7 @@ bool RosegardenGUIApp::performAutoload()
 //
 void RosegardenGUIApp::slotToggleSolo()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotToggleSolo\n";
+    RG_DEBUG << "RosegardenGUIApp::slotToggleSolo\n";
 
     m_doc->getComposition().setSolo(m_transport->SoloButton->isOn());
     m_doc->setModified();
@@ -2496,7 +2496,7 @@ void RosegardenGUIApp::slotTrackDown()
 
 void RosegardenGUIApp::slotConfigure()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotConfigure\n";
+    RG_DEBUG << "RosegardenGUIApp::slotConfigure\n";
 
     Rosegarden::ConfigureDialog *configDlg = 
         new Rosegarden::ConfigureDialog(m_doc, m_config, this);
@@ -2506,7 +2506,7 @@ void RosegardenGUIApp::slotConfigure()
 
 void RosegardenGUIApp::slotEditDocumentProperties()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditDocumentProperties\n";
+    RG_DEBUG << "RosegardenGUIApp::slotEditDocumentProperties\n";
 
     Rosegarden::DocumentConfigureDialog *configDlg = 
         new Rosegarden::DocumentConfigureDialog(m_doc, this);
@@ -2548,7 +2548,7 @@ void RosegardenGUIApp::slotEditTimeSignature()
 
 void RosegardenGUIApp::slotEditTempo(QWidget *parent)
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditTempo\n";
+    RG_DEBUG << "RosegardenGUIApp::slotEditTempo\n";
 
     TempoDialog *tempoDlg = new TempoDialog(parent, m_doc);
 
@@ -2694,7 +2694,7 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
     } 
     else
     {
-        kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotChangeTempo() - "
+        RG_DEBUG << "RosegardenGUIApp::slotChangeTempo() - "
                              << "unrecognised tempo command" << endl;
     }
 

@@ -329,7 +329,7 @@ PasteEventsCommand::isPossible()
     timeT origin = source->getStartTime();
     timeT duration = source->getEndTime() - origin;
 
-    kdDebug(KDEBUG_AREA) << "NotationView::slotEditPaste: paste time is " << pasteTime << ", origin is " << origin << ", duration is " << duration << endl;
+    RG_DEBUG << "NotationView::slotEditPaste: paste time is " << pasteTime << ", origin is " << origin << ", duration is " << duration << endl;
 
     SegmentNotationHelper helper(getSegment());
     return helper.removeRests(pasteTime, duration, true);
@@ -350,6 +350,9 @@ PasteEventsCommand::modifySegment()
     Segment *destination(&getSegment());
     SegmentNotationHelper helper(*destination);
 
+    RG_DEBUG << "PasteEventsCommand::modifySegment() : paste type = "
+                         << m_pasteType << endl;
+    
     switch (m_pasteType) {
 
 	// Do some preliminary work to make space or whatever;
@@ -416,6 +419,8 @@ PasteEventsCommand::modifySegment()
 	}
 	break;
     }
+
+    RG_DEBUG << "PasteEventsCommand::modifySegment() - inserting\n";
 
     for (Segment::iterator i = source->begin(); i != source->end(); ++i) {
 	Event *e = new Event

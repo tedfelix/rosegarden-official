@@ -51,7 +51,7 @@ using Rosegarden::timeT;
 void
 NotationView::slotDocumentDestroyed()
 {
-    kdDebug(KDEBUG_AREA_NOTATION) << "NotationView::slotDocumentDestroyed()\n";
+    NOTATION_DEBUG << "NotationView::slotDocumentDestroyed()\n";
     m_documentDestroyed = true;
     m_inhibitRefresh = true;
 }
@@ -133,7 +133,7 @@ NotationView::slotChangeFontSizeFromAction()
 void
 NotationView::slotChangeFont(const QString &newName)
 {
-    kdDebug(KDEBUG_AREA_NOTATION) << "changeFont: " << newName << endl;
+    NOTATION_DEBUG << "changeFont: " << newName << endl;
     slotChangeFont(std::string(newName.utf8()));
 }
 
@@ -194,7 +194,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
 	    (actionCollection()->action("note_font_" + strtoqstr(f[i])));
 	if (action) action->setChecked(thisOne);
 	else {
-	    kdDebug(KDEBUG_AREA_NOTATION)
+	    NOTATION_DEBUG
 		<< "WARNING: Expected action \"note_font_" << f[i]
 		<< "\" to be a KToggleAction, but it isn't (or doesn't exist)"
 		<< endl;
@@ -401,7 +401,7 @@ void NotationView::toggleNamedToolBar(const QString& toolBarName, bool* force)
     KToolBar *namedToolBar = toolBar(toolBarName);
 
     if (!namedToolBar) {
-        kdDebug(KDEBUG_AREA_NOTATION) << "NotationView::toggleNamedToolBar() : toolBar "
+        NOTATION_DEBUG << "NotationView::toggleNamedToolBar() : toolBar "
                              << toolBarName << " not found" << endl;
         return;
     }
@@ -1225,7 +1225,7 @@ NotationView::slotJumpPlaybackToCursor()
 
 void NotationView::slotToggleTriplet()
 {
-    kdDebug(KDEBUG_AREA_NOTATION) << "NotationView::slotToggleTriplet()\n";
+    NOTATION_DEBUG << "NotationView::slotToggleTriplet()\n";
     
     m_tupletMode = !m_tupletMode;
     emit changeTupletMode(m_tupletMode);
@@ -1326,13 +1326,13 @@ void NotationView::slotText()
 
 void NotationView::slotEraseSelected()
 {
-    kdDebug(KDEBUG_AREA_NOTATION) << "NotationView::slotEraseSelected()\n";
+    NOTATION_DEBUG << "NotationView::slotEraseSelected()\n";
     setTool(m_toolBox->getTool(NotationEraser::ToolName));
 }
 
 void NotationView::slotSelectSelected()
 {
-    kdDebug(KDEBUG_AREA_NOTATION) << "NotationView::slotSelectSelected()\n";
+    NOTATION_DEBUG << "NotationView::slotSelectSelected()\n";
     setTool(m_toolBox->getTool(NotationSelector::ToolName));
 }
 
@@ -1379,7 +1379,7 @@ void NotationView::slotItemPressed(int height, int staffNo,
 				   QMouseEvent* e,
 				   NotationElement* el)
 {
-    kdDebug(KDEBUG_AREA_NOTATION) << "NotationView::slotItemPressed(height = "
+    NOTATION_DEBUG << "NotationView::slotItemPressed(height = "
                          << height << ", staffNo = " << staffNo
                          << ")\n";
 

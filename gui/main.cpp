@@ -413,7 +413,7 @@ int main(int argc, char *argv[])
 
     if (config->readBoolEntry("Logo",true) && (!kapp->isRestored() && args->isSet("splash")) )
     {
-	kdDebug(KDEBUG_AREA) << "main: Showing startup logo\n";
+	RG_DEBUG << "main: Showing startup logo\n";
 	startLogo = KStartupLogo::getInstance();
 	startLogo->show();
     }

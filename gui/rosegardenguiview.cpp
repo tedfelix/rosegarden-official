@@ -153,7 +153,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
 
 RosegardenGUIView::~RosegardenGUIView()
 {
-    kdDebug(KDEBUG_AREA) << "~RosegardenGUIView()\n";
+    RG_DEBUG << "~RosegardenGUIView()\n";
     delete m_rulerScale;
 }
 
@@ -163,14 +163,14 @@ RosegardenGUIView::getDocument() const
     QWidget *t = parentWidget();
     
     if (!t) {
-        kdDebug(KDEBUG_AREA) << "CRITICAL ERROR : RosegardenGUIView::getDocument() : widget parent is 0\n";
+        RG_DEBUG << "CRITICAL ERROR : RosegardenGUIView::getDocument() : widget parent is 0\n";
         return 0;
     }
 
     RosegardenGUIApp *theApp = dynamic_cast<RosegardenGUIApp*>(t);
     
     if (!theApp) {
-        kdDebug(KDEBUG_AREA) << "CRITICAL ERROR : RosegardenGUIView::getDocument() : widget parent is of the wrong type\n";
+        RG_DEBUG << "CRITICAL ERROR : RosegardenGUIView::getDocument() : widget parent is of the wrong type\n";
         return 0;
     }
     
@@ -755,7 +755,7 @@ void RosegardenGUIView::slotShowPreviews(bool v)
 void RosegardenGUIView::slotAddTracks(unsigned int nbTracks,
                                       Rosegarden::InstrumentId id)
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIView::slotAddTracks(" << nbTracks << ")\n";
+    RG_DEBUG << "RosegardenGUIView::slotAddTracks(" << nbTracks << ")\n";
     m_trackEditor->slotAddTracks(nbTracks, id);
 }
 
@@ -821,7 +821,7 @@ RosegardenGUIView::slotDroppedAudio(QString audioDesc)
     s >> endTime.sec;
     s >> endTime.usec;
 
-//     kdDebug(KDEBUG_AREA) << "RosegardenGUIView::slotDroppedAudio("
+//     RG_DEBUG << "RosegardenGUIView::slotDroppedAudio("
 //                          << audioDesc
 //                          << ") : audioFileId = " << audioFileId
 //                          << " - instrumentId = " << instrumentId

@@ -203,7 +203,7 @@ InstrumentParameterBox::initBox()
 void
 InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
 {
-    kdDebug(KDEBUG_AREA) << "useInstrument() - populate Instrument\n";
+    RG_DEBUG << "useInstrument() - populate Instrument\n";
 
     if (instrument == 0)
         return;
