@@ -81,6 +81,15 @@ void EditView::paintEvent(QPaintEvent* e)
         RG_DEBUG << "EditView::paintEvent() - calling updateView\n";
         updateView();
         getCanvasView()->slotUpdate();
+
+        // update rulers
+        QLayoutIterator it = m_rulerBox->iterator();
+        QLayoutItem *child;
+        while ( (child = it.current()) != 0 ) {
+            if (child->widget()) child->widget()->update();
+            it++;
+        }
+
     } else {
 
         getCanvasView()->slotUpdate();
