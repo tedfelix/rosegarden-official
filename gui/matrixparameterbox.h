@@ -29,7 +29,7 @@
 #ifndef _MATRIXPARAMETERBOX_H_
 #define _MATRIXPARAMETERBOX_H_
 
-// Display and allow modification of Instrument parameters
+// Display and allow modification of Event parameters on the Matrix
 //
 
 class RosegardenComboBox;
@@ -45,16 +45,25 @@ public:
 
     void initBox();
 
+    //  Set all our dials to a new selection
+    //
+    void setSelection(Rosegarden::EventSelection *);
+
 public slots:
+    void slotQuantizeSelected(int);
+    void slotSetSnap(int);
 
 signals:
+    void quantizeSelection(Rosegarden::StandardQuantization);
+    void modifySnapTime(Rosegarden::timeT);
 
 protected:
 
-    RosegardenComboBox         *m_quantizeValue;
-    RosegardenComboBox         *m_snapGridValue;
+    RosegardenComboBox         *m_quantizeCombo;
+    RosegardenComboBox         *m_snapGridCombo;
 
-    std::vector<Rosegarden::StandardQuantization> m_standardQuantizations;
+    std::vector<Rosegarden::StandardQuantization> m_quantizations;
+    std::vector<Rosegarden::timeT>                m_snapValues;
 
 };
 

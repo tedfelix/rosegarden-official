@@ -119,6 +119,17 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     m_parameterBox = new MatrixParameterBox(getCentralFrame());
     m_grid->addWidget(m_parameterBox, 2, 0);
 
+    connect(m_parameterBox,
+            SIGNAL(quantizeSelection(Rosegarden::StandardQuantization)),
+            this,
+            SLOT(slotQuantizeSelection(Rosegarden::StandardQuantization)));
+    
+    connect(m_parameterBox,
+            SIGNAL(modifySnapTime(Rosegarden::timeT)),
+            this,
+            SLOT(slotSetSnap(Rosegarden::timeT)));
+
+
     m_snapGrid.setSnapTime(Rosegarden::SnapGrid::SnapToUnit);
 
     m_canvasView = new MatrixCanvasView(*m_staffs[0], m_snapGrid,
@@ -600,6 +611,8 @@ void MatrixView::slotEraseSelected()
 void MatrixView::slotSelectSelected()
 {
     EditTool* selector = m_toolBox->getTool(MatrixSelector::ToolName);
+    connect(selector, SIGNAL(gotSelection()),
+            this, SLOT(slotNewSelection()));
 
     setTool(selector);
 }
@@ -1022,6 +1035,37 @@ MatrixView::setSingleSelectedEvent(Rosegarden::Segment &segment,
     selection->addEvent(event);
     setCurrentSelection(selection, true);
 }
+
+// A new selection has been acquired by a tool - set the appropriate
+// information in matrix parameter pane.
+//
+void
+MatrixView::slotNewSelection()
+{
+    MATRIX_DEBUG << "MatrixView::slotNewSelection\n";
+
+    m_parameterBox->setSelection(m_currentEventSelection);
+}
+
+
+void
+MatrixView::slotSetSnap(Rosegarden::timeT snapTime)
+{
+    MATRIX_DEBUG << "MatrixView::slotSetSnap\n";
+    m_snapGrid.setSnapTime(snapTime);
+    updateView();
+}
+
+
+void
+MatrixView::slotQuantizeSelection(Rosegarden::StandardQuantization q)
+{
+    MATRIX_DEBUG << "MatrixView::slotQuantizeSelection\n";
+    addCommandToHistory(new EventQuantizeCommand
+			    (*m_currentEventSelection,
+                             Rosegarden::Quantizer(q)));
+}
+
 
 
 

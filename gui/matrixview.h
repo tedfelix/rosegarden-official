@@ -30,6 +30,7 @@
 #include "Staff.h"
 #include "RulerScale.h"
 #include "SnapGrid.h"
+#include "Quantizer.h"
 
 #include "editview.h"
 #include "matrixcanvasview.h"
@@ -201,23 +202,46 @@ public slots:
      */
     void slotHoveredOverAbsoluteTimeChanged(unsigned int);
 
-    /// Set the time pointer position during playback
+    /*
+     * Set the time pointer position during playback
+     */
     void slotSetPointerPosition(Rosegarden::timeT time);
 
-    /// Set the insertion pointer position (from the bottom LoopRuler)
+    /*
+     * Set the insertion pointer position (from the bottom LoopRuler)
+     */
     void slotSetInsertCursorPosition(Rosegarden::timeT position);
 
-    // Catch the keyboard being pressed
-    //
+    /*
+     * Catch the keyboard being pressed
+     */
     void slotKeyPressed(unsigned int y, bool repeating);
 
-    // Handle scrolling between view and PianoKeyboard
-    //
+    /*
+     * Handle scrolling between view and PianoKeyboard
+     */
     void slotVerticalScrollPianoKeyboard(int y);
 
-    // close
-    //
+    /*
+     * Close
+     */
     void closeWindow();
+
+    /*
+     * A new selection has been acquired by a tool
+     */
+    void slotNewSelection();
+
+    /*
+     * Set the snaptime of the grid
+     *
+     */
+    void slotSetSnap(Rosegarden::timeT);
+
+    /*
+     * Quantize a selection to a given level
+     */
+    void slotQuantizeSelection(Rosegarden::StandardQuantization);
 
 protected:
 

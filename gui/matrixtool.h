@@ -219,6 +219,9 @@ public slots:
      * performed
      */
     void slotHideSelection();
+
+signals:
+    void gotSelection(); // inform that we've got a new selection
     
 protected:
     MatrixSelector(MatrixView*);

@@ -550,6 +550,7 @@ void MatrixSelector::handleMouseRelease(timeT time, int height, QMouseEvent *e)
                                               m_clickedElement->event());
         m_mParentView->canvas()->update();
         m_clickedElement = 0;
+
     }
     else if (m_selectionRect)
     {
@@ -557,6 +558,9 @@ void MatrixSelector::handleMouseRelease(timeT time, int height, QMouseEvent *e)
         m_selectionRect->hide();
         m_mParentView->canvas()->update();
     }
+
+    // Tell anyone who's interested that the selection has changed
+    emit gotSelection();
 }
 
 void MatrixSelector::ready()

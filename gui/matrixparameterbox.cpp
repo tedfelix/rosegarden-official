@@ -36,8 +36,8 @@ using std::endl;
 
 MatrixParameterBox::MatrixParameterBox(QWidget *parent):
     RosegardenParameterBox(i18n("Parameters "), parent),
-    m_standardQuantizations(
-        Rosegarden::StandardQuantization::getStandardQuantizations())
+    m_quantizations(
+            Rosegarden::StandardQuantization::getStandardQuantizations())
 {
     initBox();
 }
@@ -61,42 +61,72 @@ MatrixParameterBox::initBox()
     QLabel *quantizeLabel  = new QLabel(i18n("Quantize"), this);
     quantizeLabel->setFont(font);
 
-    m_quantizeValue = new RosegardenComboBox(false, false, this);
+    m_quantizeCombo = new RosegardenComboBox(false, false, this);
 
-    m_quantizeValue->setFont(font);
-    m_quantizeValue->setFixedHeight(comboHeight);
+    m_quantizeCombo->setFont(font);
+    m_quantizeCombo->setFixedHeight(comboHeight);
 
     // populate the quantize combo
     //
     NotePixmapFactory npf;
     QPixmap noMap = npf.makeToolbarPixmap("menu-no-note");
 
-    for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
-        std::string noteName = m_standardQuantizations[i].noteName;
-        QString qname = strtoqstr(m_standardQuantizations[i].name);
+    for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
+        std::string noteName = m_quantizations[i].noteName;
+        QString qname = strtoqstr(m_quantizations[i].name);
         QPixmap pmap = noMap;
         if (noteName != "") {
             noteName = "menu-" + noteName;
             pmap = npf.makeToolbarPixmap(strtoqstr(noteName));
         }
-        m_quantizeValue->insertItem(pmap, qname);
+        m_quantizeCombo->insertItem(pmap, qname);
     }
-    m_quantizeValue->insertItem(noMap, i18n("Off"));
+    m_quantizeCombo->insertItem(noMap, i18n("Off"));
+
+    connect(m_quantizeCombo, SIGNAL(activated(int)),
+            this, SLOT(slotQuantizeSelected(int)));
 
     // default to last item
-    m_quantizeValue->setCurrentItem(m_quantizeValue->count() - 1);
+    m_quantizeCombo->setCurrentItem(m_quantizeCombo->count() - 1);
 
     QLabel *snapGridLabel = new QLabel(i18n("Snap grid"), this);
-    m_snapGridValue = new RosegardenComboBox(false, false, this);
+    m_snapGridCombo = new RosegardenComboBox(false, false, this);
+
+    for (Rosegarden::timeT i = 0; i < 3840; i += 960)
+    {
+        m_snapValues.push_back(i);
+        m_snapGridCombo->insertItem(QString("Snap %1").arg(i));
+    }
+
+    connect(m_snapGridCombo, SIGNAL(activated(int)),
+            this, SLOT(slotSetSnap(int)));
 
     // Insert everything
     gridLayout->addRowSpacing(0, 8);
     gridLayout->addWidget(quantizeLabel, 1, 0, AlignLeft|AlignTop);
-    gridLayout->addWidget(m_quantizeValue, 1, 1, AlignTop);
+    gridLayout->addWidget(m_quantizeCombo, 1, 1, AlignTop);
     gridLayout->addWidget(snapGridLabel, 2, 0, AlignLeft|AlignTop);
-    gridLayout->addWidget(m_snapGridValue, 2, 1, AlignTop);
+    gridLayout->addWidget(m_snapGridCombo, 2, 1, AlignTop);
 
 
+}
+
+
+void
+MatrixParameterBox::setSelection(Rosegarden::EventSelection *selection)
+{
+}
+
+void
+MatrixParameterBox::slotQuantizeSelected(int q)
+{
+    emit quantizeSelection(m_quantizations[q]);
+}
+
+void
+MatrixParameterBox::slotSetSnap(int s)
+{
+    emit modifySnapTime(m_snapValues[s]);
 }
 
 
