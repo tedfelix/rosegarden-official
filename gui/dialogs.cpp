@@ -1440,10 +1440,12 @@ public:
         QDoubleValidator(bottom, top, decimals, parent, name) {;}
     virtual ~TempoValidator() {;}
 
+    /*
     virtual void fixup(QString &input) const
     {
         // do nothing for the moment
     }
+    */
 
 private:
 };
@@ -1456,50 +1458,39 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
     m_tempoTime(0),
     m_tempoValue(0.0)
 {
-    static QFont *tempoFont = 0;
-
-    if (tempoFont == 0) {
-	tempoFont = new QFont("new century schoolbook", 8, QFont::Bold);
-	tempoFont->setPixelSize(20);
-    }
-
     QVBox *vbox = makeVBoxMainWidget();
-    QGroupBox *groupBox = new QGroupBox(1, Horizontal, i18n("Tempo"), vbox);
-    QVBox *topBox = new QVBox(groupBox);
+    QGroupBox *groupBox = new QGroupBox(3, Horizontal, i18n("Tempo"), vbox);
+    groupBox->setAlignment(AlignHCenter);
 
-    QGrid *labelGrid = new QGrid(3, QGrid::Horizontal, topBox);
-    labelGrid->setMargin(4);
-    labelGrid->setSpacing(4);
-
-    QLabel *tempoLabel = new QLabel(i18n("New tempo"), labelGrid);
-    m_tempoValueSpinBox = new RosegardenSpinBox(labelGrid);
-    new QLabel(i18n("bpm"), labelGrid);
+    // Set tempo
+    new QLabel(i18n("New tempo"), groupBox);
+    m_tempoValueSpinBox = new RosegardenSpinBox(groupBox);
+    m_tempoValueSpinBox->setMinValue(1);
+    m_tempoValueSpinBox->setMaxValue(1000);
+    new QLabel(i18n("bpm"), groupBox);
 
     // create a validator
     TempoValidator *validator = new TempoValidator(1.0, 1000.0, 6, this);
     m_tempoValueSpinBox->setValidator(validator);
-    m_tempoValueSpinBox->setMinValue(1);
-    m_tempoValueSpinBox->setMaxValue(1000);
 
     // Scope Box
-    //
-    QGroupBox *scopeBox = new QGroupBox(1, Horizontal,
+    QGroupBox *scopeBox = new QGroupBox(2, Horizontal,
                                         i18n("Scope"), vbox);
-
-    QHBox *scopeHBox = new QHBox(scopeBox);
-    new QLabel(i18n("This tempo change will take effect from "), scopeHBox);
-    m_tempoTimeLabel = new QLabel(scopeHBox);
+    scopeBox->setAlignment(AlignHCenter);
+    new QLabel(i18n("This tempo change will take effect from "), scopeBox);
+    m_tempoTimeLabel = new QLabel(scopeBox);
 
     // Option Box
-    //
     QGroupBox *optionBox = new QGroupBox(1, Horizontal,
                                         i18n("Options"), vbox);
+    optionBox->setAlignment(AlignHCenter);
 
-    m_makeDefaultCheckBox = new QCheckBox(i18n("Make this the default tempo"),
-                                          optionBox);
+    m_makeDefaultCheckBox =
+        new QCheckBox(i18n("Make this the default tempo"), optionBox);
+
     m_deleteOthersCheckBox =
-        new QCheckBox(i18n("Remove all other tempo changes"),
-                                          optionBox);
+        new QCheckBox(i18n("Remove all other tempo changes"), optionBox);
+
     populateTempo();
 }
 
@@ -1524,7 +1515,12 @@ TempoDialog::populateTempo()
     double tempo = comp.getTempoAt(m_tempoTime);
     QString tempoString;
     tempoString.sprintf("%4.6f", tempo);
+
+    // We have to frig this by setting both integer tempo
+    // and the special text field.
+    //
     m_tempoValueSpinBox->setValue((int)tempo);
+    m_tempoValueSpinBox->setSpecialValueText(tempoString);
 
     Rosegarden::RealTime tempoTime= comp.getElapsedRealTime(m_tempoTime);
     QString milliSeconds;
@@ -1536,8 +1532,18 @@ TempoDialog::populateTempo()
 void
 TempoDialog::slotOk()
 {
+    double tempoDouble = m_tempoValueSpinBox->getDoubleValue();
+
+    // Check for freakiness in the returned results - 
+    // if we can't believe the double value then use
+    // the value on the SpinBox itself - we just have 
+    // to lose the precision.
+    //
+    if ((int)tempoDouble != m_tempoValueSpinBox->value())
+        tempoDouble = m_tempoValueSpinBox->value();
+
     emit changeTempo(m_tempoTime,
-                     m_tempoValueSpinBox->getDoubleValue(),
+                     tempoDouble,
                      m_makeDefaultCheckBox->isChecked(),
                      m_deleteOthersCheckBox->isChecked());
     delete this;

@@ -107,7 +107,6 @@ public:
     double getDoubleValue() const { return m_doubleValue; }
 
 protected:
-    // virtual void valueChange();
     virtual QString mapValueToText (int value);
     virtual int mapTextToValue(bool *ok);
 

@@ -78,7 +78,8 @@ RosegardenSpinBox::mapValueToText(int value)
 
     doubleStr.sprintf("%4.6f", m_doubleValue);
 
-    //setSpecialValueText(doubleStr);
+    // clear any special value
+    //setSpecialValueText("");
 
     return doubleStr;
 }
@@ -96,6 +97,5 @@ RosegardenSpinBox::mapTextToValue(bool *ok)
 
     return 120; // default
 }
-
 
 

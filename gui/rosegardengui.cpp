@@ -2243,18 +2243,15 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
 
         comp.setDefaultTempo(value);
     }
-    else
-    {
-        if (commandLabel != "")
-            commandLabel += ", ";
 
-        commandLabel += i18n("Insert Tempo Change");
+    if (commandLabel != "")
+        commandLabel += ", ";
 
-        // insert tempo change event
-        //
-        macro->addCommand(new AddTempoChangeCommand(&comp, time, value));
+    commandLabel += i18n("Insert Tempo Change");
 
-    }
+    // insert tempo change event
+    //
+    macro->addCommand(new AddTempoChangeCommand(&comp, time, value));
 
     macro->setName(commandLabel);
     m_doc->getCommandHistory()->addCommand(macro);

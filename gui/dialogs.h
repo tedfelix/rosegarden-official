@@ -31,6 +31,7 @@
 class QWidget;
 class QLineEdit;
 class QCheckBox;
+class QSpinBox;
 class QLabel;
 class QComboBox;
 class QRadioButton;
