@@ -27,7 +27,7 @@
 
 #include "notationhlayout.h"
 #include "notationvlayout.h"
-#inlucde "rosedebug.h"
+#include "rosedebug.h"
 
 
 class RosegardenGUIDoc;
