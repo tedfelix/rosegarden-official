@@ -75,7 +75,10 @@ public:
     int getStaffCount() { return m_staffs.size(); }
 
     /// Return a pointer to the staff at the specified index
-    NotationStaff *getStaff(int i) { return m_staffs[i]; }
+    NotationStaff *getStaff(int i) {
+	if (i >= 0 && i < m_staffs.size()) return m_staffs[i];
+	else return 0;
+    }
 
     /// Return a pointer to the staff corresponding to the given segment
     NotationStaff *getStaff(const Rosegarden::Segment &segment);
