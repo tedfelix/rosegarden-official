@@ -513,12 +513,15 @@ NotationHLayout::scanChord(NotationElementList *notes,
     }
 
     accTable.copyFrom(newAccTable);
+    chord.applyAccidentalShiftProperties();
     
     float extraWidth = 0;
 
     if (someAccidental != NoAccidental) {
-	extraWidth += m_npf->getAccidentalWidth(someAccidental) +
-	              m_npf->getNoteBodyWidth() * chord.getMaxAccidentalShift();
+	extraWidth +=
+	    m_npf->getAccidentalWidth(someAccidental) +
+	    m_npf->getAccidentalWidth(Rosegarden::Accidentals::Sharp) *
+	    chord.getMaxAccidentalShift();
     }
 
     float layoutExtra = 0;

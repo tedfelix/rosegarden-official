@@ -60,6 +60,8 @@ public:
     virtual bool isNoteHeadShifted(const NotationElementList::iterator &itr)
 	const;
 
+    void applyAccidentalShiftProperties();
+
     virtual int getMaxAccidentalShift() const;
     virtual int getAccidentalShift(const NotationElementList::iterator &itr)
 	const;
@@ -68,6 +70,7 @@ protected:
     const NotationProperties &m_properties;
     Rosegarden::Clef m_clef;
     Rosegarden::Key m_key;
+
 
     int getHeight(const Iterator&) const;
 };

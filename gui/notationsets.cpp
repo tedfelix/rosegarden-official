@@ -199,35 +199,106 @@ NotationChord::isNoteHeadShifted(const Iterator &itr) const
     return false;
 }
 
-int
-NotationChord::getMaxAccidentalShift() const
+void
+NotationChord::applyAccidentalShiftProperties()
 {
-    int shift = 0;
+    // Some rules:
+    //
+    // The top accidental always gets the minimum shift (i.e. normally
+    // right next to the note head or stem).
+    //
+    // The bottom accidental gets the next least: the same, if the
+    // interval is more than a sixth, or the next shift out otherwise.
+    //
+    // We then progress up from the bottom accidental upwards.
+    //
+    // These rules aren't really enough, but they might do for now!
 
-    if (!hasStemUp() && hasNoteHeadShifted()) {
-	shift += 1;
+
+    int minShift = 0;
+    if (!hasStemUp() && hasNoteHeadShifted()) minShift = 1; // lazy
+
+    int lastShift = minShift;
+    int lastHeight = 0, maxHeight = 0;
+
+    for (iterator i = end(); i != begin(); ) {
+
+	--i;
+	Event *e = getAsEvent(*i);
+
+	Rosegarden::Accidental acc;
+	if (e->get<String>(m_properties.DISPLAY_ACCIDENTAL, acc)) {
+	    e->set<Int>(m_properties.ACCIDENTAL_SHIFT, minShift);
+	    maxHeight = lastHeight = getHeight(*i);
+	    break;
+	}
     }
 
-    return shift; //!!! 
+    for (iterator i = begin(); i != end(); ++i) {
+
+	Event *e = getAsEvent(*i);
+	int height = getHeight(*i);
+
+	if (height == maxHeight && e->has(m_properties.ACCIDENTAL_SHIFT)) {
+	    // finished -- we've come around to the highest one again
+	    break;
+	}
+
+	Rosegarden::Accidental acc;
+	if (e->get<String>(m_properties.DISPLAY_ACCIDENTAL, acc)) {
+
+	    if (height < lastHeight) { // lastHeight was the first, up top
+		if (lastHeight - height >= 6) {
+		    e->set<Int>(m_properties.ACCIDENTAL_SHIFT, lastShift);
+		} else {
+		    e->set<Int>(m_properties.ACCIDENTAL_SHIFT, lastShift+1);
+		    lastShift = lastShift+1;
+		}
+	    } else {
+		if (height - lastHeight >= 6) {
+		    if (maxHeight - height >= 6) {
+			e->set<Int>(m_properties.ACCIDENTAL_SHIFT, minShift);
+			lastShift = minShift;
+		    } else {
+			e->set<Int>(m_properties.ACCIDENTAL_SHIFT, minShift+1);
+			lastShift = minShift+1;
+		    }
+		} else {
+		    e->set<Int>(m_properties.ACCIDENTAL_SHIFT, lastShift+1);
+		    lastShift = lastShift+1;
+		}
+	    }
+
+	    lastHeight = height;
+	}
+    }
 }
 
 int
-NotationChord::getAccidentalShift(const Iterator &) const
+NotationChord::getMaxAccidentalShift() const
 {
-    //!!! for this and prior method we really have to study the
-    // chord once on construction
+    int maxShift = 0;
 
-    int shift = 0;
-
-    // If we have any note head shifted left of usual, then we add an
-    // accidental shift of 1 to everything (because we're lazy)
-
-    if (!hasStemUp() && hasNoteHeadShifted()) {
-	shift += 1;
+    for (const_iterator i = begin(); i != end(); ++i) {
+	Event *e = getAsEvent(*i);
+	if (e->has(m_properties.ACCIDENTAL_SHIFT)) {
+	    int shift = e->get<Int>(m_properties.ACCIDENTAL_SHIFT);
+	    if (shift > maxShift) maxShift = shift;
+	}
     }
 
+    return maxShift;
+}
 
-    return shift;
+int
+NotationChord::getAccidentalShift(const Iterator &i) const
+{
+    if (getAsEvent(i)->has(m_properties.ACCIDENTAL_SHIFT)) {
+	int shift = getAsEvent(i)->get<Int>(m_properties.ACCIDENTAL_SHIFT);
+	return shift;
+    } else {
+	return 0;
+    }
 }
 
 
