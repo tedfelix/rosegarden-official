@@ -66,7 +66,6 @@ using std::vector;
 static clock_t drawBeamsTime = 0;
 static clock_t makeNotesTime = 0;
 
-
 NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
                                            int dots,
                                            Accidental accidental) :
@@ -984,13 +983,20 @@ NotePixmapFactory::drawTie(bool above, int length)
     }
 }
 
-
 QCanvasPixmap
 NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params) 
 {
     CharName charName(getRestCharName(params.m_noteType));
-    if (params.m_dots == 0 && params.m_tupletCount == 0 && !m_selected) {
-        return m_font->getCanvasPixmap(charName);
+    bool encache = false;
+
+    if (params.m_tupletCount == 0 && !m_selected) {
+	if (params.m_dots == 0) {
+	    return m_font->getCanvasPixmap(charName);
+	} else {
+	    NotePixmapCache::iterator ci(m_dottedRestCache.find(charName));
+	    if (ci != m_dottedRestCache.end()) return ci->second;
+	    else encache = true;
+	}
     }
 
     QPixmap pixmap;
@@ -1035,7 +1041,12 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
         m_pm.drawPixmap(x, restY, *(dot.mask()));
     }
 
-    return makeCanvasPixmap(hotspot);
+    QCanvasPixmap canvasMap = makeCanvasPixmap(hotspot);
+    if (encache) {
+	m_dottedRestCache.insert(std::pair<CharName, QCanvasPixmap>
+				 (charName, canvasMap));
+    }
+    return canvasMap;
 }
 
 

@@ -653,9 +653,9 @@ LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
     if (m_pageMode && m_connectingLineLength > 0.1) {
         line = new QCanvasLine(m_canvas);
         y = getCanvasYForTopLine(row);
-        line->setPoints(int(x + length - 1), y, int(x + length - 1),
+        line->setPoints(int(x + length), y, int(x + length),
                         y + m_connectingLineLength);
-         line->setPen
+	line->setPen
             (QPen(RosegardenGUIColours::StaffConnectingTerminatingLine, 1));
         line->setZ(-2);
         line->show();
@@ -691,7 +691,7 @@ LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
 //                                 << x << "," << y << ") to (" << (x+length-1)
 //                                 << "," << y << ")" << endl;
 
-            line->setPoints(int(x), y, int(x + length - 1), y);
+            line->setPoints(int(x), y, int(x + length), y);
 
 //            if (j > 0) line->setSignificant(false);
 

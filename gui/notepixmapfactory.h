@@ -223,6 +223,10 @@ protected:
     QPainter m_p;
     QPainter m_pm;
 
+    typedef std::hash_map<CharName, QCanvasPixmap,
+	                  CharNameHash, CharNamesEqual> NotePixmapCache;
+    NotePixmapCache m_dottedRestCache;
+
     static QPoint m_pointZero;
 };
 
