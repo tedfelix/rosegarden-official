@@ -1916,6 +1916,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 	if (outputDevice.first < 0 && outputDevice.second < 0) continue;
 
 	std::cout << "processMidiOut[" << now << "]: instrument " << (*i)->getInstrument() << " -> output device " << outputDevice.first << ":" << outputDevice.second << std::endl;
+	std::cout << "pitch: " << (int)(*i)->getPitch() << ", velocity " << (int)(*i)->getVelocity() << ", duration " << (*i)->getDuration() << std::endl;
 
         snd_seq_ev_set_dest(&event,
                             outputDevice.first,

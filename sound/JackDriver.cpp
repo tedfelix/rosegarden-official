@@ -98,6 +98,26 @@ JackDriver::~JackDriver()
 
     m_ok = false; // prevent any more work in process()
 
+    std::cerr << "JackDriver::~JackDriver: deleting file reader" << std::endl;
+    AudioFileReader *reader = m_fileReader;
+    m_fileReader = 0;
+    delete reader;
+
+    std::cerr << "JackDriver::~JackDriver: deleting file writer" << std::endl;
+    AudioFileWriter *writer = m_fileWriter;
+    m_fileWriter = 0;
+    delete writer;
+
+    std::cerr << "JackDriver::~JackDriver: deleting instrument mixer" << std::endl;
+    AudioInstrumentMixer *instrumentMixer = m_instrumentMixer;
+    m_instrumentMixer = 0;
+    delete instrumentMixer;
+
+    std::cerr << "JackDriver::~JackDriver: deleting buss mixer" << std::endl;
+    AudioBussMixer *bussMixer = m_bussMixer;
+    m_bussMixer = 0;
+    delete bussMixer;
+
     if (m_client)
     {
 #ifdef DEBUG_ALSA
@@ -166,12 +186,6 @@ JackDriver::~JackDriver()
         jack_client_close(m_client);
         m_client = 0;
     }
-
-    std::cerr << "JackDriver::~JackDriver: deleting disk and mix managers" << std::endl;
-    delete m_fileReader;
-    delete m_fileWriter;
-    delete m_instrumentMixer;
-    delete m_bussMixer;
 
     std::cerr << "JackDriver::~JackDriver exiting" << std::endl;
 }

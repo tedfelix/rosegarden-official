@@ -110,7 +110,7 @@ AudioThread::staticThreadRun(void *arg)
     AudioThread *inst = static_cast<AudioThread *>(arg);
     if (!inst) return 0;
 
-//    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+    pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
     pthread_cleanup_push(staticThreadCleanup, arg);
     
     inst->getLock(); // released in staticThreadCleanup after cancel
