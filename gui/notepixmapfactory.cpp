@@ -293,6 +293,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 
     bool isStemmed = m_style->hasStem(params.m_noteType);
     int flagCount = m_style->getFlagCount(params.m_noteType);
+    int slashCount = params.m_slashes;
 
     if (params.m_accidental != NoAccidental) {
         makeRoomForAccidental(params.m_accidental);
@@ -481,6 +482,10 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
                 drawBeams(s1, params, flagCount);
             }
         }
+
+	if (slashCount > 0) {
+	    drawSlashes(s0, params, slashCount);
+	}
     }
 
     if (params.m_tupletCount > 0) {
@@ -892,6 +897,35 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
 }
 
 void
+NotePixmapFactory::drawSlashes(const QPoint &s0,
+			       const NotePixmapParameters &params,
+			       int slashCount)
+{
+    unsigned int thickness;
+    (void)m_font->getBeamThickness(thickness);
+    thickness = thickness * 3 / 4;
+    if (thickness < 1) thickness = 1;
+
+    int gap = thickness - 1;
+    if (gap < 1) gap = 1;
+
+    bool smooth = m_font->getNoteFontMap().isSmooth();
+
+    int width = m_noteBodyWidth;
+    int sign = (params.m_stemGoesUp ? -1 : 1);
+    int y = s0.y() + sign * (m_noteBodyHeight*3/2 + thickness/2);
+
+    for (int i = 0; i < slashCount; ++i) {
+	int yoff = width / 2;
+	drawShallowLine(s0.x() - width/2, y + yoff/2,
+			s0.x() + width/2 + getStemThickness(), y - yoff/2,
+			thickness, smooth);
+	y += sign * (thickness + gap);
+    }
+}
+
+
+void
 NotePixmapFactory::makeRoomForTuplingLine(const NotePixmapParameters &params)
 {
     int lineSpacing =
@@ -952,10 +986,12 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     kdDebug(KDEBUG_AREA) << "line: (" << startX << "," << startY << ") -> ("
 			 << endX << "," << endY << ")" << endl;
 
+    bool smooth = m_font->getNoteFontMap().isSmooth();
+
     m_p.drawLine(startX, startY, startX, startY + tickOffset);
     m_pm.drawLine(startX, startY, startX, startY + tickOffset);
 
-    drawShallowLine(startX, startY, endX, endY, thickness, true);
+    drawShallowLine(startX, startY, endX, endY, thickness, smooth);
 
     m_p.setFont(m_tupletCountFont);
     m_pm.setFont(m_tupletCountFont);
@@ -977,7 +1013,7 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
 			 << endX << "," << endY << ")" << endl;
 
 
-    drawShallowLine(startX, startY, endX, endY, thickness, true);
+    drawShallowLine(startX, startY, endX, endY, thickness, smooth);
 
     m_p.drawLine(endX, endY, endX, endY + tickOffset);
     m_pm.drawLine(endX, endY, endX, endY + tickOffset);
@@ -1284,14 +1320,16 @@ NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
 
     int left = 1, right = length - 2*nbw/3 + 1;
 
+    bool smooth = m_font->getNoteFontMap().isSmooth();
+
     if (isCrescendo) {
 	drawShallowLine(left, height/2-1,
-			right, height - thickness - 1, thickness, true);
-	drawShallowLine(left, height/2-1, right, 0, thickness, true);
+			right, height - thickness - 1, thickness, smooth);
+	drawShallowLine(left, height/2-1, right, 0, thickness, smooth);
     } else {
-	drawShallowLine(left, 0, right, height/2-1, thickness, true);
+	drawShallowLine(left, 0, right, height/2-1, thickness, smooth);
 	drawShallowLine(left, height - thickness - 1,
-			right, height/2-1, thickness, true);
+			right, height/2-1, thickness, smooth);
     }
 
     return makeCanvasPixmap(QPoint(0, height/2));

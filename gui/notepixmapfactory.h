@@ -194,6 +194,9 @@ protected:
     void drawBeams(const QPoint &, const NotePixmapParameters &params,
                    int beamCount);
 
+    void drawSlashes(const QPoint &, const NotePixmapParameters &params,
+		     int slashCount);
+
     void makeRoomForTuplingLine(const NotePixmapParameters &params);
     void drawTuplingLine(const NotePixmapParameters &params);
 

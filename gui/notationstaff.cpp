@@ -793,6 +793,9 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
         legerLines = heightOnStaff - 8;
     }
 
+    long slashes = 0;
+    (void)(elt->event()->get<Int>(m_properties.SLASHES, slashes));
+
     params.setNoteType(note);
     params.setDots(dots);
     params.setAccidental(accidental);
@@ -801,6 +804,7 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     params.setDrawStem(true);
     params.setStemGoesUp(up);
     params.setLegerLines(legerLines);
+    params.setSlashes(slashes);
     params.setBeamed(false);
     params.setIsOnLine(heightOnStaff % 2 == 0);
     params.removeMarks();
