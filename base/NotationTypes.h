@@ -791,9 +791,10 @@ private:
     int m_numerator;
     int m_denominator;
 
-    mutable int m_barDuration;
-    mutable int m_beatDuration;
-    mutable int m_beatDivisionDuration;
+    mutable int  m_barDuration;
+    mutable int  m_beatDuration;
+    mutable int  m_beatDivisionDuration;
+    mutable bool m_dotted;
     void setInternalDurations() const;
 
     // a time & effort saving device

@@ -976,16 +976,8 @@ Note::Type TimeSignature::getUnit() const
 
 bool TimeSignature::isDotted() const
 {
-    // Is 3/8 dotted time?  This will report that it isn't, because of
-    // the check for m_numerator > 3 -- but otherwise we'd get a false
-    // positive with 3/4
-
-    // [rf] That's an acceptable answer, according to my theory book. In
-    // practice, you can say it's dotted time iff it has 6, 9, or 12 on top.
-
-    return (m_numerator % 3 == 0 &&
-            m_numerator > 3 &&
-            getBarDuration() >= Note(Note::Crotchet, true).getDuration());
+    setInternalDurations();
+    return m_dotted;
 }
 
 Event *TimeSignature::getAsEvent(timeT absoluteTime) const
@@ -1157,7 +1149,18 @@ void TimeSignature::setInternalDurations() const
 
     m_barDuration = m_numerator * unitLength;
 
-    if (isDotted()) {
+    // Is 3/8 dotted time?  This will report that it isn't, because of
+    // the check for m_numerator > 3 -- but otherwise we'd get a false
+    // positive with 3/4
+
+    // [rf] That's an acceptable answer, according to my theory book. In
+    // practice, you can say it's dotted time iff it has 6, 9, or 12 on top.
+
+    m_dotted = (m_numerator % 3 == 0 &&
+		m_numerator > 3 &&
+		m_barDuration >= m_dottedCrotchetTime);
+
+    if (m_dotted) {
 	m_beatDuration = unitLength * 3;
 	m_beatDivisionDuration = unitLength;
     }
