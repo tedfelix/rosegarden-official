@@ -1091,6 +1091,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         QString def = atts.value("default");
         QString conVal = atts.value("controllervalue");
         QString colour = atts.value("colour");
+        QString ipbPosition = atts.value("ipbposition");
 
         Rosegarden::ControlParameter *con = 
             new Rosegarden::ControlParameter(
@@ -1101,7 +1102,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     max.toInt(),
                     def.toInt(),
                     Rosegarden::MidiByte(conVal.toInt()),
-                    colour.toInt());
+                    colour.toInt(),
+                    ipbPosition.toInt());
 
         getStudio().addControlParameter(con);
 

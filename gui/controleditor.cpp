@@ -57,6 +57,7 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     m_listView->addColumn(i18n("Min  "));
     m_listView->addColumn(i18n("Default  "));
     m_listView->addColumn(i18n("Color  "));
+    m_listView->addColumn(i18n("Show on Instrument panel"));
 
     // Align centrally
     for (int i = 0; i < 8; ++i)
@@ -556,4 +557,11 @@ ControlParameterEditDialog::slotColourChanged(int value)
     m_dialogControl.setColour(value);
 }
 
+
+void
+ControlParameterEditDialog::slotIPBPositionChanged(int value)
+{
+    RG_DEBUG << "ControlParameterEditDialog::slotIPBPositionChanged" << endl;
+    m_dialogControl.setIPBPosition(value);
+}
 

@@ -41,7 +41,8 @@ public:
                      int max = 127,
                      int def = 0,
                      MidiByte controllerValue = 0,
-                     int colour = 0);
+                     int colour = 0,
+                     int ipbPositon = -1);
 
     ControlParameter(const ControlParameter &control);
     ControlParameter& operator=(const ControlParameter &control);
@@ -58,6 +59,8 @@ public:
 
     int getColour() const { return m_colour; }
 
+    int getIPBPosition() const { return m_ipbPosition; }
+
     void setName(const std::string &name) { m_name = name; }
     void setType(const std::string &type) { m_type = type; }
     void setDescription(const std::string &des) { m_description = des; }
@@ -69,6 +72,8 @@ public:
     void setControllerValue(MidiByte con) { m_controllerValue = con; }
 
     void setColour(int colour) { m_colour = colour; }
+
+    void setIPBPosition(int position) { m_ipbPosition = position; }
 
     virtual std::string toXmlString();
 
@@ -89,6 +94,9 @@ protected:
     MidiByte       m_controllerValue;
 
     int            m_colour;
+
+    int            m_ipbPosition; // position on Instrument Parameter Box
+
 
 };
 

@@ -40,7 +40,8 @@ ControlParameter::ControlParameter():
     m_max(127),
     m_default(0),
     m_controllerValue(0),
-    m_colour(0)
+    m_colour(0),
+    m_ipbPosition(-1)  // doesn't appear on IPB by default
 {
 }
 
@@ -52,7 +53,8 @@ ControlParameter::ControlParameter(const std::string &name,
                                    int max,
                                    int def,
                                    MidiByte controllerValue,
-                                   int colour):
+                                   int colour,
+                                   int ipbPosition):
         m_name(name),
         m_type(type),
         m_description(description),
@@ -60,7 +62,8 @@ ControlParameter::ControlParameter(const std::string &name,
         m_max(max),
         m_default(def),
         m_controllerValue(controllerValue),
-        m_colour(colour)
+        m_colour(colour),
+        m_ipbPosition(ipbPosition)
 {
 }
 
@@ -106,7 +109,8 @@ ControlParameter::toXmlString()
             << "\" max=\"" << m_max
             << "\" default=\"" << m_default
             << "\" controllervalue=\"" << int(m_controllerValue)
-            << "\" colour=\"" << m_colour;
+            << "\" colour=\"" << m_colour
+            << "\" ipbposition=\"" << m_ipbPosition;
 
 #if (__GNUC__ < 3)
     control << "\"/>" << endl << std::ends;

@@ -81,6 +81,7 @@ public slots:
     void slotMaxChanged(int);
     void slotDefaultChanged(int);
     void slotColourChanged(int);
+    void slotIPBPositionChanged(int);
 
 protected:
     RosegardenGUIDoc             *m_doc;
@@ -95,6 +96,7 @@ protected:
     QSpinBox                     *m_maxBox;
     QSpinBox                     *m_defaultBox;
     RosegardenComboBox           *m_colourCombo;
+    RosegardenComboBox           *m_ipbPosition;
 
 };
 
