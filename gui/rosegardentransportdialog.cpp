@@ -76,6 +76,11 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     //
     TempoLineEdit->setReadOnly(true);
 
+    // fix and hold the size of the dialog
+    //
+    setMinimumSize(width(), height());
+    setMaximumSize(width(), height());
+
     loadPixmaps();
 }
 

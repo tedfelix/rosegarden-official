@@ -321,8 +321,8 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
     
 	// load the command structure
 	event.command.status = Arts::mcsNoteOn | channel;
-	event.command.data1 = (*i)->getPitch();   // pitch
-	event.command.data2 = 127;  // hardcode velocity
+	event.command.data1 = (*i)->getPitch();     // pitch
+	event.command.data2 = (*i)->getVelocity();  // velocity
 
 	// Test our timing
 	Arts::TimeStamp now = m_midiPlayPort.time();

@@ -45,18 +45,13 @@ class MappedEvent
 public:
     MappedEvent() {;}
 
-    // Our main constructor used to convert from the Track Events
+    // Our major constructors used to convert from Events -
+    // note that we put in place default velocities at this
+    // point in case our Composition is missing them.
     //
-    MappedEvent(const Event &e, timeT duration):
-        m_pitch(e.get<Int>("pitch")),
-        m_absoluteTime(e.getAbsoluteTime()),
-        m_duration(duration),
-        m_velocity(127) {;}
-
-    MappedEvent(const Event &e): m_pitch(e.get<Int>("pitch")),
-                                 m_absoluteTime(e.getAbsoluteTime()),
-                                 m_duration(e.getDuration()),
-                                 m_velocity(127) {;}
+    //
+    MappedEvent(const Event &e);
+    MappedEvent(const Event &e, timeT duration);
 
     MappedEvent(const int &pitch, const timeT &absTime, const timeT &duration,
                 const velocityT &velocity, const instrumentT &instrument):

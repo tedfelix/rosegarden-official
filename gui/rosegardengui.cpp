@@ -206,26 +206,22 @@ void RosegardenGUIApp::setupActions()
                                   SLOT(play()), actionCollection(),
                                   "play");
     m_playTransport->setGroup("transportcontrols");
-    //m_playTransport->setAccel(Key_Enter);
 
-    m_stopTransport = new KAction(i18n("Stop"), 0, 0, this,
+    m_stopTransport = new KAction(i18n("Stop"), 0, Key_Insert, this,
                                   SLOT(stop()), actionCollection(),
                                   "stop");
     m_stopTransport->setGroup("transportcontrols");
-    m_stopTransport->setAccel(Key_Insert);
 
-    m_ffwdTransport = new KAction(i18n("Fast Forward"), 0, 0, this,
+    m_ffwdTransport = new KAction(i18n("Fast Forward"), 0, Key_PageDown,
+                                  this,
                                   SLOT(fastforward()), actionCollection(),
                                   "fast_forward");
     m_ffwdTransport->setGroup("transportcontrols");
-    m_ffwdTransport->setAccel(Key_PageDown);
 
-    m_rewindTransport = new KAction(i18n("Rewind"), 0, 0, this,
+    m_rewindTransport = new KAction(i18n("Rewind"), 0, Key_End, this,
                                   SLOT(rewind()), actionCollection(),
                                   "rewind");
-
     m_rewindTransport->setGroup("transportcontrols");
-    m_rewindTransport->setAccel(Key_End);
 
     // create the Transport GUI and add the callbacks
     //
@@ -233,9 +229,10 @@ void RosegardenGUIApp::setupActions()
                 Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration());
 
     // We should be plugging the actions into the buttons
-    // on the transport - but this doesn't seem to work
-    // at the moment so we bodge it.
-    //
+    // on the transport - but this doesn't seem to be working
+    // as expected (i.e. at all) so we're duplicating the
+    // accelerators in the dialog - nasty but works for the
+    // moment.
     //
 /*
     m_playTransport->plug(m_transport->PlayButton);
@@ -244,21 +241,39 @@ void RosegardenGUIApp::setupActions()
     m_ffwdTransport->plug(m_transport->FfwdButton);
 */
 
+    QAccel *a = new QAccel(m_transport);
+
     connect((QObject *) m_transport->PlayButton,
              SIGNAL(released()),
              SLOT(play()));
+
+    a->connectItem(a->insertItem(Key_Enter),
+                   this,
+                   SLOT(play()));
 
     connect((QObject *) m_transport->StopButton,
              SIGNAL(released()),
              SLOT(stop()));
              
+    a->connectItem(a->insertItem(Key_Insert),
+                   this,
+                   SLOT(stop()));
+
     connect((QObject *) m_transport->FfwdButton,
              SIGNAL(released()),
              SLOT(fastforward()));
             
+    a->connectItem(a->insertItem(Key_PageDown),
+                   this,
+                   SLOT(fastforward()));
+
     connect((QObject *) m_transport->RewindButton,
              SIGNAL(released()),
              SLOT(rewind()));
+
+    a->connectItem(a->insertItem(Key_End),
+                   this,
+                   SLOT(rewind()));
 
     // Ensure that the checkbox is unchecked if the dialog
     // is destroyed.

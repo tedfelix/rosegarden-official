@@ -691,6 +691,7 @@ MidiFile::convertToRosegarden()
 		    rosegardenEvent->setAbsoluteTime(rosegardenTime);
 		    rosegardenEvent->setType(Note::EventType);
 		    rosegardenEvent->set<Int>("pitch", midiEvent->note());
+		    rosegardenEvent->set<Int>("velocity", midiEvent->velocity());
 		    rosegardenEvent->setDuration(rosegardenDuration);
 
 		    {
@@ -703,7 +704,6 @@ MidiFile::convertToRosegarden()
 			    notationTrack.makeNoteViable(loc);
 			}
 		    }
-
 		    break;
 
 		case MIDI_NOTE_OFF:
@@ -866,7 +866,7 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 		midiEvent = new MidiEvent(midiEventAbsoluteTime,        // time
 					  MIDI_NOTE_ON + midiChannel,   // eventcode
 					  (*el)->get<Int>("pitch"),     // pitch
-					  127);                         // velocity
+					  (*el)->get<Int>("velocity"));                         // velocity
 
 		m_midiComposition[trackNumber].push_back(*midiEvent);
 

@@ -24,6 +24,37 @@
 namespace Rosegarden
 {
 
+MappedEvent::MappedEvent(const Event &e, timeT duration):
+       m_pitch(e.get<Int>("pitch")),
+       m_absoluteTime(e.getAbsoluteTime()),
+       m_duration(duration)
+{
+    try
+    {
+        m_velocity = e.get<Int>("velocity");
+    }
+    catch(...)
+    {
+        m_velocity = 127;
+    }
+}
+
+MappedEvent::MappedEvent(const Event &e):
+       m_pitch(e.get<Int>("pitch")),
+       m_absoluteTime(e.getAbsoluteTime()),
+       m_duration(e.getDuration())
+{
+    try
+    {
+        m_velocity = e.get<Int>("velocity");
+    }
+    catch(...)
+    {
+        m_velocity = 127;
+    }
+}
+
+
 bool
 operator<(const MappedEvent &a, const MappedEvent &b)
 {
