@@ -111,7 +111,7 @@ ControlParameter::toXmlString()
 #if (__GNUC__ < 3)
     control << "\"/>" << endl << std::ends;
 #else
-    control << "\"/>" << endl;
+    control << "\"/>" << std::endl;
 #endif
 
     return control.str();

@@ -2239,7 +2239,7 @@ SimpleEventEditDialog::getEvent() const
 void
 SimpleEventEditDialog::slotEventTypeChanged(int value)
 {
-    m_type = m_typeCombo->text(value);
+    m_type = qstrtostr(m_typeCombo->text(value));
     m_modified = true;
 
     setupForEvent();
