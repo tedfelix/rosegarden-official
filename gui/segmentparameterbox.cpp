@@ -37,7 +37,8 @@ using Rosegarden::Note;
 SegmentParameterBox::SegmentParameterBox(QWidget *parent,
                                          const char *name,
                                          WFlags f) :
-    QFrame(parent, name, f),
+    QGroupBox(i18n("Segment Parameters"), parent, name),
+//	      QFrame(parent, name, f),
     m_standardQuantizations
 	(Rosegarden::StandardQuantization::getStandardQuantizations())
 {
@@ -56,17 +57,13 @@ SegmentParameterBox::~SegmentParameterBox()
 void
 SegmentParameterBox::initBox()
 {
-    int comboWidth = 64;
-    int comboHeight = 20;
+    QFont font;
+    font.setPointSize(10);
 
-    QFont plainFont;
-    plainFont.setPointSize(10);
+    QFontMetrics fontMetrics(font);
+    int comboHeight = fontMetrics.height();
 
-    QFont boldFont;
-    boldFont.setPointSize(10);
-    boldFont.setBold(true);
-
-    QGridLayout *gridLayout = new QGridLayout(this, 2, 2, 5, 1);
+    QGridLayout *gridLayout = new QGridLayout(this, 2, 2, 4, 1);
 
     QLabel *repeatLabel    = new QLabel(i18n("Repeat"), this);
     QLabel *quantizeLabel  = new QLabel(i18n("Quantize"), this);
@@ -74,16 +71,16 @@ SegmentParameterBox::initBox()
     QLabel *delayLabel     = new QLabel(i18n("Delay"), this);
 
     m_repeatValue = new RosegardenTristateCheckBox(this);
-    m_repeatValue->setFont(plainFont);
-//!!!    m_repeatValue->setFixedHeight(comboHeight);
+    m_repeatValue->setFont(font);
+    m_repeatValue->setMinimumHeight(comboHeight);
 
     // handle state changes
     connect(m_repeatValue, SIGNAL(pressed()), SLOT(slotRepeatPressed()));
 
     // non-reversing motif style read-only combo
     m_quantizeValue = new RosegardenComboBox(false, false, this);
-    m_quantizeValue->setFont(plainFont);
-//!!!    m_quantizeValue->setFixedSize(comboWidth, comboHeight);
+    m_quantizeValue->setFont(font);
+    m_quantizeValue->setMinimumHeight(comboHeight);
 
     // handle quantize changes from drop down
     connect(m_quantizeValue, SIGNAL(activated(int)),
@@ -95,8 +92,8 @@ SegmentParameterBox::initBox()
 
     // reversing motif style read-write combo
     m_transposeValue = new RosegardenComboBox(true, true, this);
-    m_transposeValue->setFont(plainFont);
-//!!!    m_transposeValue->setFixedSize(comboWidth, comboHeight);
+    m_transposeValue->setFont(font);
+    m_transposeValue->setMinimumHeight(comboHeight);
 
     // handle transpose combo changes
     connect(m_transposeValue, SIGNAL(activated(int)),
@@ -108,8 +105,8 @@ SegmentParameterBox::initBox()
 
     // reversing motif style read-write combo
     m_delayValue = new RosegardenComboBox(true, true, this);
-    m_delayValue->setFont(plainFont);
-//!!!    m_delayValue->setFixedSize(comboWidth, comboHeight);
+    m_delayValue->setFont(font);
+    m_delayValue->setMinimumHeight(comboHeight);
 
     // handle delay combo changes
     connect(m_delayValue, SIGNAL(activated(int)),
@@ -119,28 +116,22 @@ SegmentParameterBox::initBox()
     connect(m_delayValue, SIGNAL(textChanged(const QString&)),
             SLOT(slotDelayTextChanged(const QString &)));
 
-    repeatLabel->setFont(plainFont);
-    quantizeLabel->setFont(plainFont);
-    transposeLabel->setFont(plainFont);
-    delayLabel->setFont(plainFont);
+    repeatLabel->setFont(font);
+    quantizeLabel->setFont(font);
+    transposeLabel->setFont(font);
+    delayLabel->setFont(font);
 
-    QLabel *title = new QLabel(i18n("Segment Parameters"), this);
-    title->setFont(boldFont);
-//!!!    title->setFixedHeight(comboHeight);
+    gridLayout->addWidget(repeatLabel, 0, 0, AlignLeft);
+    gridLayout->addWidget(m_repeatValue, 0, 1, AlignRight);
 
-    gridLayout->addMultiCellWidget(title, 0, 0, 0, 1, AlignLeft);
+    gridLayout->addWidget(quantizeLabel, 1, 0, AlignLeft);
+    gridLayout->addWidget(m_quantizeValue, 1, 1, AlignRight);
 
-    gridLayout->addWidget(repeatLabel, 1, 0, AlignLeft);
-    gridLayout->addWidget(m_repeatValue, 1, 1, AlignRight);
+    gridLayout->addWidget(transposeLabel, 2, 0, AlignLeft);
+    gridLayout->addWidget(m_transposeValue, 2, 1, AlignRight);
 
-    gridLayout->addWidget(quantizeLabel, 2, 0, AlignLeft);
-    gridLayout->addWidget(m_quantizeValue, 2, 1, AlignRight);
-
-    gridLayout->addWidget(transposeLabel, 3, 0, AlignLeft);
-    gridLayout->addWidget(m_transposeValue, 3, 1, AlignRight);
-
-    gridLayout->addWidget(delayLabel, 4, 0, AlignLeft);
-    gridLayout->addWidget(m_delayValue, 4, 1, AlignRight);
+    gridLayout->addWidget(delayLabel, 3, 0, AlignLeft);
+    gridLayout->addWidget(m_delayValue, 3, 1, AlignRight);
 
     // populate the quantize combo
     //
@@ -197,6 +188,15 @@ SegmentParameterBox::initBox()
     // set delay blank initially
     m_delayValue->setCurrentItem(-1);
 
+    // set widths
+    int comboWidth = 0;
+    if (m_quantizeValue->width() > comboWidth) comboWidth = m_quantizeValue->width();
+    if (m_transposeValue->width() > comboWidth) comboWidth = m_transposeValue->width();
+    if (m_delayValue->width() > comboWidth) comboWidth = m_delayValue->width();
+
+    m_quantizeValue->setMinimumWidth(comboWidth);
+    m_transposeValue->setMinimumWidth(comboWidth);
+    m_delayValue->setMinimumWidth(comboWidth);
 }
 
 void

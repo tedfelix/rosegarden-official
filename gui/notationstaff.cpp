@@ -328,13 +328,6 @@ NotationStaff::positionElements(timeT from, timeT to)
     
     std::cerr << "positionElements: " << from << " -> " << to << std::endl;
 
-//!!!
-//    Clef currentClef; // default is okay to start with
-//    m_clefChanges.empty();
-
-//    Rosegarden::Key currentKey; // likewise
-//    m_keyChanges.empty();
-
     timeT nextBarTime;
     NotationElementList::iterator beginAt = findUnchangedBarStart(from);
     NotationElementList::iterator endAt = findUnchangedBarEnd(to, nextBarTime);

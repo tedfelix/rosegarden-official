@@ -22,7 +22,7 @@
 #include <vector>
 
 #include <kcommand.h>
-#include <qframe.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -41,7 +41,7 @@ namespace Rosegarden { class Segment; }
 #ifndef _SEGMENTPARAMETERBOX_H_
 #define _SEGMENTPARAMETERBOX_H_
 
-class SegmentParameterBox : public QFrame
+class SegmentParameterBox : public QGroupBox
 {
 Q_OBJECT
 

@@ -41,13 +41,9 @@ namespace RosegardenGUIColours
     const QColor LoopRulerForeground = Qt::white;
     const QColor LoopHighlight = Qt::white;
   
-//    const QColor TextRulerBackground = QColor(120, 120, 120);
-//    const QColor TextRulerForeground = Qt::white;
     const QColor TextRulerBackground = Qt::white;
     const QColor TextRulerForeground = Qt::black;
 
-//    const QColor ChordNameRulerBackground = QColor(120, 120, 120);
-//    const QColor ChordNameRulerForeground = Qt::white;
     const QColor ChordNameRulerBackground = Qt::white;
     const QColor ChordNameRulerForeground = Qt::black;
 
@@ -60,7 +56,6 @@ namespace RosegardenGUIColours
     const QColor BeatLine = QColor(212, 212, 212);
     const QColor StaffConnectingLine = QColor(192, 192, 192);
     const QColor StaffConnectingTerminatingLine = QColor(128, 128, 128);
-    const QColor StaffRulerBackground = QColor(212, 212, 212);//!!! obsolete
 
     const QColor Pointer = Qt::darkBlue;
     const QColor PointerRuler = QColor(100, 100, 100);

@@ -56,7 +56,7 @@ public:
 /**
  * LinedStaff is a base class for implementations of Staff that
  * display the contents of a Segment on a set of horizontal lines
- * with optional vertical bar lines plus a StaffRuler at the top.  
+ * with optional vertical bar lines.  
  * Likely subclasses include the notation and piano-roll staffs.
  *
  * In general, this class handles x coordinates in floating-point,
@@ -537,7 +537,6 @@ protected:
 
     QCanvasLine *m_pointer;
     QCanvasLine *m_insertCursor;
-//    StaffRuler *m_ruler;
 };
 
 #include "linedstaff.cpp"
