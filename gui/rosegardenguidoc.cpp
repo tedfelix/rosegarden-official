@@ -1093,134 +1093,133 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
     }
 
 
-    if (mC.size() > 0) { 
-            Rosegarden::MappedComposition::iterator i;
-            Rosegarden::Event *rEvent = 0;
-            timeT duration, absTime;
+    if (mC.size() > 0 && m_recordSegment) 
+    { 
+        Rosegarden::MappedComposition::iterator i;
+        Rosegarden::Event *rEvent = 0;
+        timeT duration, absTime;
 
-            // process all the incoming MappedEvents
-            //
-            for (i = mC.begin(); i != mC.end(); ++i) {
-                    absTime = m_composition.
-                        getElapsedTimeForRealTime((*i)->getEventTime());
+        // process all the incoming MappedEvents
+        //
+        for (i = mC.begin(); i != mC.end(); ++i)
+        {
+            absTime = m_composition.getElapsedTimeForRealTime((*i)->getEventTime());
 
-                    /* This is incorrect, unless the tempo at absTime happens to
-                       be the same as the tempo at zero and there are no tempo
-                       changes within the given duration after either zero or
-                       absTime
+            /* This is incorrect, unless the tempo at absTime happens to
+               be the same as the tempo at zero and there are no tempo
+               changes within the given duration after either zero or
+               absTime
 
-                       duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
-                    */
-                    duration = m_composition.
-                        getElapsedTimeForRealTime((*i)->getEventTime() +
-                                                  (*i)->getDuration())
-                        - absTime;
+               duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
+            */
+            duration = m_composition.
+                    getElapsedTimeForRealTime((*i)->getEventTime() + (*i)->getDuration()) - absTime;
 
-                    rEvent = 0;
+            rEvent = 0;
 
-                    switch((*i)->getType()) {
-                        case Rosegarden::MappedEvent::MidiNote:
-                            if ((*i)->getDuration() < Rosegarden::RealTime::zeroTime)
-                                duration = -1;
-		    
-                            rEvent = new Event(Rosegarden::Note::EventType,
-                                               absTime,
-                                               duration);
+            switch((*i)->getType()) {
+                case Rosegarden::MappedEvent::MidiNote:
+                    if ((*i)->getDuration() < Rosegarden::RealTime::zeroTime)
+                        duration = -1;
+	
+                    rEvent = new Event(Rosegarden::Note::EventType,
+                                       absTime,
+                               duration);
 
-                            rEvent->set<Int>(PITCH, (*i)->getPitch());
-                            rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
+                    rEvent->set<Int>(PITCH, (*i)->getPitch());
+                    rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
 
+                    break;
+
+                case Rosegarden::MappedEvent::MidiPitchBend:
+                    rEvent = Rosegarden::PitchBend
+                        ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+                    break;
+
+                case Rosegarden::MappedEvent::MidiController:
+                    rEvent = Rosegarden::Controller
+                        ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+                    break;
+
+                case Rosegarden::MappedEvent::MidiProgramChange:
+                    RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi()"
+                             << " - got Program Change (unsupported)"
+                             << endl;
+                    break;
+
+                case Rosegarden::MappedEvent::MidiKeyPressure:
+                    rEvent = Rosegarden::KeyPressure
+                        ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
+                    break;
+
+                case Rosegarden::MappedEvent::MidiChannelPressure:
+                    rEvent = Rosegarden::ChannelPressure
+                        ((*i)->getData1()).getAsEvent(absTime);
+                    break;
+
+                case Rosegarden::MappedEvent::MidiSystemExclusive:
+                    rEvent = Rosegarden::SystemExclusive
+                        (Rosegarden::DataBlockRepository::getDataBlockForEvent((*i))).getAsEvent(absTime);
+                    break;
+
+                case Rosegarden::MappedEvent::MidiNoteOneShot:
+                    RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
+                                 << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot"
+                                 << endl;
+                    break;
+
+                    // Audio control signals - ignore these
+                case Rosegarden::MappedEvent::Audio:
+                case Rosegarden::MappedEvent::AudioCancel:
+                case Rosegarden::MappedEvent::AudioLevel:
+                case Rosegarden::MappedEvent::AudioStopped:
+                case Rosegarden::MappedEvent::AudioGeneratePreview:
+                case Rosegarden::MappedEvent::SystemUpdateInstruments:
+                    break;
+
+                default:
+                    RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
+                                 << "GOT UNSUPPORTED MAPPED EVENT"
+                                 << endl;
                             break;
-
-                        case Rosegarden::MappedEvent::MidiPitchBend:
-                            rEvent = Rosegarden::PitchBend
-                                ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
-                            break;
-
-                        case Rosegarden::MappedEvent::MidiController:
-                            rEvent = Rosegarden::Controller
-                                ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
-                            break;
-
-                        case Rosegarden::MappedEvent::MidiProgramChange:
-                            RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi()"
-                                     << " - got Program Change (unsupported)"
-                                     << endl;
-                            break;
-
-                        case Rosegarden::MappedEvent::MidiKeyPressure:
-                            rEvent = Rosegarden::KeyPressure
-                                ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
-                            break;
-
-                        case Rosegarden::MappedEvent::MidiChannelPressure:
-                            rEvent = Rosegarden::ChannelPressure
-                                ((*i)->getData1()).getAsEvent(absTime);
-                            break;
-
-                        case Rosegarden::MappedEvent::MidiSystemExclusive:
-                            rEvent = Rosegarden::SystemExclusive
-                                (Rosegarden::DataBlockRepository::getDataBlockForEvent((*i))).getAsEvent(absTime);
-                            break;
-		    
-                        case Rosegarden::MappedEvent::MidiNoteOneShot:
-                            RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
-                                         << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot"
-                                         << endl;
-                            break;
-		
-                            // Audio control signals - ignore these
-                        case Rosegarden::MappedEvent::Audio:
-                        case Rosegarden::MappedEvent::AudioCancel:
-                        case Rosegarden::MappedEvent::AudioLevel:
-                        case Rosegarden::MappedEvent::AudioStopped:
-                        case Rosegarden::MappedEvent::AudioGeneratePreview:
-                        case Rosegarden::MappedEvent::SystemUpdateInstruments:
-                            break;
-
-                        default:
-                            RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
-                                         << "GOT UNSUPPORTED MAPPED EVENT"
-                                         << endl;
-                            break;
-                        }
-
-                    // sanity check
-                    //
-                    if (rEvent == 0)
-                        continue;
-
-                    // Set the start index and then insert into the Composition
-                    // (if we haven't before)
-                    //
-                    if (m_recordSegment->size() == 0 &&
-                        !m_composition.contains(m_recordSegment))
-                        {
-			    m_recordSegment->setStartTime
-				(m_composition.getBarStartForTime(absTime));
-			    m_recordSegment->fillWithRests(absTime);
-                            m_endOfLastRecordedNote = m_composition.getPosition();
-                            m_composition.addSegment(m_recordSegment);
-                        }
-
-                    // Now insert the new event
-                    //
-                    m_recordSegment->insert(rEvent);
-
-                    // Update our counter
-                    //
-                    m_endOfLastRecordedNote = absTime + duration;
-
                 }
+
+            // sanity check
+            //
+            if (rEvent == 0)
+                continue;
+
+            // Set the start index and then insert into the Composition
+            // (if we haven't before)
+            //
+            if (m_recordSegment->size() == 0 && !m_composition.contains(m_recordSegment))
+            {
+                m_recordSegment->setStartTime (m_composition.getBarStartForTime(absTime));
+                m_recordSegment->fillWithRests(absTime);
+                m_endOfLastRecordedNote = m_composition.getPosition();
+                m_composition.addSegment(m_recordSegment);
+            }
+
+            // Now insert the new event
+            //
+            m_recordSegment->insert(rEvent);
+
+            // Update our counter
+            //
+            m_endOfLastRecordedNote = absTime + duration;
+
         }
+    }
 
     // Only update gui if we're still recording - otherwise we
     // can get a recording SegmentItem hanging around.
     //
-    if (status == RECORDING_MIDI) {
+    if (status == RECORDING_MIDI)
+    {
         // update this segment on the GUI
         RosegardenGUIView *w;
-        for(w=m_viewList.first(); w!=0; w=m_viewList.next()) {
+        for(w=m_viewList.first(); w!=0; w=m_viewList.next()) 
+        {
             w->showRecordingSegmentItem(m_recordSegment);
         }
     }

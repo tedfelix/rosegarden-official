@@ -1128,6 +1128,7 @@ void SegmentCanvas::showRecordingSegmentItem(TrackId track,
 void SegmentCanvas::deleteRecordingSegmentItem()
 {
     if (m_recordingSegment) {
+
 	m_recordingSegment->setVisible(false);
 	delete m_recordingSegment;
 	m_recordingSegment = 0;

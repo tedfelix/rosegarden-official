@@ -51,8 +51,6 @@ public:
                      long timeUsec,
                      long playLatencySec,
                      long playLatencyUSec,
-                     long fetchLatencySec,
-                     long fetchLatencyUSec,
                      long readAheadSec,
                      long readAheadUSec) = 0;
 
@@ -62,8 +60,6 @@ public:
                        long timeUSec,
                        long playLatencySec,
                        long playLatencyUSec,
-                       long fetchLatencySec,
-                       long fetchLatencyUSec,
                        long readAheadSec,
                        long readAheadUSec,
                        int recordMode) = 0;

@@ -87,13 +87,11 @@ public:
     //
     int play(const Rosegarden::RealTime &position,
              const Rosegarden::RealTime &playLatency,
-             const Rosegarden::RealTime &fetchLatency,
              const Rosegarden::RealTime &readAhead);
 
     // recording
     int record(const Rosegarden::RealTime &position,
                const Rosegarden::RealTime &playLatency,
-               const Rosegarden::RealTime &fetchLatency,
                const Rosegarden::RealTime &readAhead,
                int recordMode);
 
@@ -108,8 +106,6 @@ public:
                      long timeUsec,
                      long playLatencySec,
                      long playLatencyUSec,
-                     long fetchLatencySec,
-                     long fetchLatencyUSec,
                      long readAheadSec,
                      long readAheadUSec);
 
@@ -119,8 +115,6 @@ public:
                        long timeUSec,
                        long playLatencySec,
                        long playLatencyUSec,
-                       long fetchLatencySec,
-                       long fetchLatencyUSec,
                        long readAheadSec,
                        long readAheadUSec,
                        int recordMode);

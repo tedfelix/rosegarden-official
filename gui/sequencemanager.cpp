@@ -222,8 +222,6 @@ SequenceManager::play()
     KConfig* config = kapp->config();
     config->setGroup(Rosegarden::LatencyOptionsConfigGroup);
 
-    Rosegarden::Configuration& docConfig = m_doc->getConfiguration();
-
     // playback start position
     streamOut << startPos.sec;
     streamOut << startPos.usec;
@@ -232,17 +230,12 @@ SequenceManager::play()
     streamOut << config->readLongNumEntry("playbacklatencysec", 0);
     streamOut << config->readLongNumEntry("playbacklatencyusec", 100000);
 
-    // fetch latency
-    RealTime fetchLatency = docConfig.get<RealTimeT>("fetchlatency");
-    streamOut << fetchLatency.sec;
-    streamOut << fetchLatency.usec;
-
     // read ahead slice
     streamOut << config->readLongNumEntry("readaheadsec", 0);
     streamOut << config->readLongNumEntry("readaheadusec", 40000);
 
     // Send Play to the Sequencer
-    if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int)",
+    if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int)",
                               replyType, replyData, data)) {
         m_transportStatus = STOPPED;
         return;
@@ -508,8 +501,23 @@ SequenceManager::record(bool toggled)
         if (m_transportStatus == RECORDING_MIDI ||
             m_transportStatus == RECORDING_AUDIO) {
             SEQMAN_DEBUG << "SequenceManager::record - stop recording and keep playing\n";
-            punchIn = true;
-            goto punchin;
+
+            QByteArray data;
+            QCString replyType;
+            QByteArray replyData;
+
+            // Send Record to the Sequencer to signal it to drop out of record mode
+            //
+            if (!rgapp->sequencerCall("record(long int, long int, long int, long int, long int, long int, int)",
+                                  replyType, replyData, data))
+            {
+                m_transportStatus = STOPPED;
+                return;
+            }
+
+            m_doc->stopRecordingMidi();
+            m_transportStatus = PLAYING;
+
             return;
         }
 
@@ -522,13 +530,6 @@ SequenceManager::record(bool toggled)
     } else {
 
 punchin:
-        // if already recording then stop
-        //
-        if (m_transportStatus == RECORDING_MIDI ||
-            m_transportStatus == RECORDING_AUDIO) {
-            stopping();
-            return;
-        }
 
         // Get the record track and check the Instrument type
         int rID = comp.getRecordTrack();
@@ -664,11 +665,6 @@ punchin:
         streamOut << config->readLongNumEntry("playbacklatencysec", 0);
         streamOut << config->readLongNumEntry("playbacklatencyusec", 100000);
 
-        // fetch latency
-        RealTime fetchLatency = docConfig.get<RealTimeT>("fetchlatency");
-        streamOut << fetchLatency.sec;
-        streamOut << fetchLatency.usec;
-
         // read ahead slice
         streamOut << config->readLongNumEntry("readaheadsec", 0);
         streamOut << config->readLongNumEntry("readaheadusec", 40000);
@@ -677,7 +673,7 @@ punchin:
         streamOut << (int)recordType;
     
         // Send Play to the Sequencer
-        if (!rgapp->sequencerCall("record(long int, long int, long int, long int, long int, long int, long int, long int, int)",
+        if (!rgapp->sequencerCall("record(long int, long int, long int, long int, long int, long int, int)",
                                   replyType, replyData, data)) {
             // failed
             m_transportStatus = STOPPED;

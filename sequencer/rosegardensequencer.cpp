@@ -523,7 +523,6 @@ RosegardenSequencerApp::processAsynchronousEvents()
 int
 RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
                                const Rosegarden::RealTime &playLatency,
-                               const Rosegarden::RealTime &fetchLatency,
                                const Rosegarden::RealTime &readAhead,
                                int recordMode)
 {
@@ -635,7 +634,7 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
     //
     m_sequencer->initialisePlayback(m_songPosition, playLatency);
 
-    return play(time, playLatency, fetchLatency, readAhead);
+    return play(time, playLatency, readAhead);
 }
 
 // We receive a starting time from the GUI which we use as the
@@ -648,11 +647,19 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
 int
 RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
                              const Rosegarden::RealTime &playLatency, 
-                             const Rosegarden::RealTime &fetchLatency,
                              const Rosegarden::RealTime &readAhead)
 {
     if (m_transportStatus == PLAYING || m_transportStatus == STARTING_TO_PLAY)
         return true;
+
+
+    // Check for record toggle (punch out)
+    //
+    if (m_transportStatus == RECORDING_MIDI || m_transportStatus == RECORDING_AUDIO)
+    {
+        m_transportStatus = PLAYING;
+        return;
+    }
 
     // To play from the given song position sets up the internal
     // play state to "STARTING_TO_PLAY" which is then caught in
@@ -671,7 +678,6 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
     // Set up latencies
     //
     m_playLatency = playLatency;
-    m_fetchLatency = fetchLatency;
     m_readAhead = readAhead;
     if (m_readAhead == Rosegarden::RealTime::zeroTime)
         m_readAhead.sec = 1;
@@ -853,15 +859,12 @@ RosegardenSequencerApp::play(long timeSec,
                              long timeUsec,
                              long playLatencySec,
                              long playLatencyUSec,
-                             long fetchLatencySec,
-                             long fetchLatencyUSec,
                              long readAheadSec,
                              long readAheadUSec)
 
 {
     return play(Rosegarden::RealTime(timeSec, timeUsec),
                 Rosegarden::RealTime(playLatencySec, playLatencyUSec),
-                Rosegarden::RealTime(fetchLatencySec, fetchLatencyUSec),
                 Rosegarden::RealTime(readAheadSec, readAheadUSec));
 }
 
@@ -878,8 +881,6 @@ RosegardenSequencerApp::record(long timeSec,
                                long timeUSec,
                                long playLatencySec,
                                long playLatencyUSec,
-                               long fetchLatencySec,
-                               long fetchLatencyUSec,
                                long readAheadSec,
                                long readAheadUSec,
                                int recordMode)
@@ -887,7 +888,6 @@ RosegardenSequencerApp::record(long timeSec,
 {
     return record(Rosegarden::RealTime(timeSec, timeUSec),
                   Rosegarden::RealTime(playLatencySec, playLatencyUSec),
-                  Rosegarden::RealTime(fetchLatencySec, fetchLatencyUSec),
                   Rosegarden::RealTime(readAheadSec, readAheadUSec),
                   recordMode);
 }
