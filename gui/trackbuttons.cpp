@@ -1,7 +1,7 @@
 
 
 /*
-    Rosegarden-4 v0.2
+    Rosegarden-4
     A sequencer and musical notation editor.
 
     This program is Copyright 2000-2002
