@@ -418,13 +418,6 @@ void NotationView::saveOptions()
     toolBar("clefsToolBar")->saveSettings(m_config, "Notation Options clefsToolBar");
     toolBar("fontToolBar")->saveSettings(m_config, "Notation Options fontToolBar");
     toolBar("accidentalsToolBar")->saveSettings(m_config, "Notation Options accidentalsToolBar");
-    
-//     m_config->writeEntry("Notes ToolBarPos",       (int) toolBar("notesToolBar")->barPos());
-//     m_config->writeEntry("Rests ToolBarPos",       (int) toolBar("restsToolBar")->barPos());
-//     m_config->writeEntry("Clefs ToolBarPos",       (int) toolBar("clefsToolBar")->barPos());
-//     m_config->writeEntry("Font ToolBarPos",        (int) toolBar("fontToolBar")->barPos());
-//     m_config->writeEntry("Accidentals ToolBarPos", (int) toolBar("accidentalsToolBar")->barPos());
-
 }
 
 void NotationView::readOptions()
@@ -459,30 +452,6 @@ void NotationView::readOptions()
     toolBar("clefsToolBar")->applySettings(m_config, "Notation Options clefsToolBar");
     toolBar("fontToolBar")->applySettings(m_config, "Notation Options fontToolBar");
     toolBar("accidentalsToolBar")->applySettings(m_config, "Notation Options accidentalsToolBar");
-
-//     // Read toolbars positions
-//     KToolBar::BarPosition pos;
-
-//     pos = KToolBar::BarPosition(m_config->readNumEntry("Notes ToolBarPos",
-//                                                        KToolBar::Top));
-//     toolBar("notesToolBar")->setBarPos(pos);
-
-//     pos = KToolBar::BarPosition(m_config->readNumEntry("Rests ToolBarPos",
-//                                                        KToolBar::Top));
-//     toolBar("restsToolBar")->setBarPos(pos);
-
-//     pos = KToolBar::BarPosition(m_config->readNumEntry("Clefs ToolBarPos",
-//                                                        KToolBar::Top));
-//     toolBar("clefsToolBar")->setBarPos(pos);
-
-//     pos = KToolBar::BarPosition(m_config->readNumEntry("Font ToolBarPos",
-//                                                        KToolBar::Top));
-//     toolBar("fontToolBar")->setBarPos(pos);
-
-//     pos = KToolBar::BarPosition(m_config->readNumEntry("Accidentals ToolBarPos",
-//                                                        KToolBar::Top));
-//     toolBar("accidentalsToolBar")->setBarPos(pos);
-
 }
 
 void NotationView::setupActions()
