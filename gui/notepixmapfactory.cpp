@@ -92,7 +92,8 @@ NotePixmapOffsets::offsetsFor(Note::Type note,
 void
 NotePixmapOffsets::computeAccidentalAndStalkSize()
 {
-    unsigned int tailOffset = (m_note < Note::QuarterNote && m_stalkGoesUp) ? m_tailWidth : 0;
+    unsigned int tailOffset =
+        (m_note < Note::QuarterNote && m_stalkGoesUp) ? m_tailWidth : 0;
     unsigned int totalXOffset = tailOffset,
         totalYOffset = 0;
     
@@ -378,10 +379,14 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
                                   Accidental accidental,
                                   bool drawTail,
                                   bool stalkGoesUp,
+                                  int stalkLength,
                                   bool fixedHeight)
 {
     kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap: note is "
                          << note << ", dotted is " << dotted << endl;
+
+    if (stalkLength > 0) m_offsets.setStalkLength(stalkLength);
+    else m_offsets.setStalkLength(getStalkLength());
 
     m_offsets.offsetsFor
         (note, dotted, accidental, drawTail, stalkGoesUp, fixedHeight);
@@ -393,6 +398,7 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
     }
 
     bool noteHasStalk = note < Note::WholeNote;
+
     m_generatedPixmapHeight = m_offsets.getPixmapSize().height();
     
     createPixmapAndMask();

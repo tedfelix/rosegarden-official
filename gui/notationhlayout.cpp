@@ -132,7 +132,6 @@ NotationHLayout::preparse(NotationElementList::iterator from,
     int shortCount = 0;
     NotationElementList::iterator it = from;
     Event::timeT absoluteTime = 0;
-    long pGroupNo = -1;
 
     for ( ; it != to; ++it) {
         
@@ -157,24 +156,12 @@ NotationHLayout::preparse(NotationElementList::iterator from,
         if (el->event()->isa(Clef::EventType)) {
 
             fixedWidth += mw;
-
-            try {
-                clef = Clef(*el->event());
-            } catch (Event::NoData) {
-                kdDebug(KDEBUG_AREA) << "NotationHLayout::preparse() : got a clef event with no clef property"
-                                     << endl;
-            }
+            clef = Clef(*el->event());
 
         } else if (el->event()->isa(Key::EventType)) {
 
             fixedWidth += mw;
-
-            try {
-                key = Key(*el->event());
-            } catch (Event::NoData) {
-                kdDebug(KDEBUG_AREA) << "NotationHLayout::preparse() : got a keychange event with no key property"
-                                     << endl;
-            }
+            key = Key(*el->event());
 
         } else if (el->event()->isa(TimeSignature::EventType)) {
 
@@ -195,23 +182,6 @@ NotationHLayout::preparse(NotationElementList::iterator from,
         } else if (el->isNote() || el->isRest()) {
 
             if (el->isNote()) {
-                
-                long groupNo = -1;
-                if (el->event()->get<Int>(P_GROUP_NO, groupNo) &&
-                    groupNo != pGroupNo) {
-                    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: entering group" << endl;
-                    NotationGroup group(m_notationElements, it, clef, key);
-                    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: group type is " << group.getGroupType() << ", now calculating beam" << endl;
-                    //!! just testing, for the moment -- we should
-                    //probably note when we enter a group, and then
-                    //when we're about to leave it (so we've
-                    //calculated the width) we do the beam stuff.
-                    //Maybe group.calculateBeam should write
-                    //beam-indication properties straight into the
-                    //elements of the group
-                    NotationGroup::Beam beam(group.calculateBeam(npf, 100));
-                }
-                pGroupNo = groupNo;
 
                 try {
                     int pitch = el->event()->get<Int>("pitch");
@@ -276,9 +246,14 @@ NotationHLayout::preparse(NotationElementList::iterator from,
 void
 NotationHLayout::layout()
 {
+    Key key;
+    Clef clef;
     double x = 0;
-//    const NotePixmapFactory &npf(m_staff.getNotePixmapFactory());
+    const NotePixmapFactory &npf(m_staff.getNotePixmapFactory());
     TimeSignature timeSignature;
+
+    int pGroupNo = -1;
+    NotationElementList::iterator startOfGroup = m_notationElements.end();
 
     for (BarPositions::iterator bpi = m_barPositions.begin();
          bpi != m_barPositions.end(); ++bpi) {
@@ -300,17 +275,64 @@ NotationHLayout::layout()
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
             
-            NotationElement *nel = (*it);
-            nel->setLayoutX(x);
-
+            NotationElement *el = (*it);
+            el->setLayoutX(x);
             kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): setting element's x to " << x << endl;
 
-            if (nel->event()->isa(TimeSignature::EventType)) {
+            long delta = 0;
+            (void)el->event()->get<Int>(P_MIN_WIDTH, delta);
 
-                timeSignature = TimeSignature(*nel->event());
-                x += nel->event()->get<Int>(P_MIN_WIDTH);
+            if (el->event()->isa(TimeSignature::EventType)) {
 
-            } else if (nel->isNote() || nel->isRest()) {
+                timeSignature = TimeSignature(*el->event());
+
+            } else if (el->event()->isa(Clef::EventType)) {
+
+                clef = Clef(*el->event());
+
+            } else if (el->event()->isa(Key::EventType)) {
+
+                key = Key(*el->event());
+
+            } else if (el->isRest()) {
+
+                // To work out how much space to allot a note (or
+                // chord), start with the amount alloted to the
+                // whole bar, subtract that reserved for
+                // fixed-width items, and take the same proportion
+                // of the remainder as our duration is of the
+                // whole bar's duration.
+                
+                delta = ((bpi->idealWidth - bpi->fixedWidth) *
+                         el->event()->getDuration()) /
+                    //!!! not right for partial bar?
+                    timeSignature.getBarDuration();
+
+            } else if (el->isNote()) {
+                
+                long groupNo = -1;
+
+                if (el->event()->get<Int>(P_GROUP_NO, groupNo) &&
+                    groupNo != pGroupNo) {
+                    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: entering group " << groupNo << endl;
+                    startOfGroup = it;
+                }
+
+                long nextGroupNo = -1;
+                NotationElementList::iterator it0(it);
+                ++it0;
+                if (groupNo > -1 &&
+                    (it0 == m_notationElements.end() ||
+                     ((*it0)->event()->get<Int>(P_GROUP_NO, nextGroupNo) &&
+                      nextGroupNo != groupNo))) {
+                    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: about to leave group " << groupNo << ", time to do the sums" << endl;
+                
+                    NotationGroup group(m_notationElements, it, clef, key);
+                    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout: group type is " << group.getGroupType() << ", now applying beam" << endl;
+                    group.applyBeam();
+                }
+
+                pGroupNo = groupNo;
 
                 Chord chord(m_notationElements, it);
                 if (chord.size() < 2 || it == chord.getFinalElement()) {
@@ -321,16 +343,15 @@ NotationHLayout::layout()
                     // fixed-width items, and take the same proportion
                     // of the remainder as our duration is of the
                     // whole bar's duration.
-
-                    x += ((bpi->idealWidth - bpi->fixedWidth) *
-                          nel->event()->getDuration()) /
+                    
+                    delta = ((bpi->idealWidth - bpi->fixedWidth) *
+                             el->event()->getDuration()) /
                         //!!! not right for partial bar?
                         timeSignature.getBarDuration();
                 }
-
-            } else {
-                x += nel->event()->get<Int>(P_MIN_WIDTH);
             }
+
+            x += delta;
         }
     }
 }

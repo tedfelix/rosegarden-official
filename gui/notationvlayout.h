@@ -43,7 +43,7 @@ public:
 
 protected:
     Staff &m_staff;
-    NotationElementList &m_elements;
+    NotationElementList &m_notationElements;
 };
 
 #endif

@@ -149,16 +149,10 @@ public:
     virtual ~NotationGroup() { }
 
     Type getGroupType() const { return m_type; }
-    
-    struct Beam
-    {                           // if a beam has a line equation y = mx + c,
-        double gradient;        // -- then this is m
-        double startHeight;     // -- and this is c (in height-on-staff units,
-        bool aboveNotes;        //                   relative to 1st notehead)
-        bool necessary;
-    };
 
-    Beam calculateBeam(const NotePixmapFactory&, int width);
+    // Writes beam data into each note in the group.  Notes'
+    // x-coordinates must already have been set.
+    void applyBeam();
 
 protected:
     virtual bool test(const NELIterator &i) {
@@ -169,6 +163,14 @@ protected:
     virtual void sample(const NELIterator &i);
 
 private:
+    struct Beam
+    {                           // if a beam has a line equation y = mx + c,
+        int  gradient;          // -- then this is m*100 (i.e. a percentage)
+        int  startHeight;       // -- and this is c (as height-on-staff)
+        bool aboveNotes;
+        bool necessary;
+    };
+
     int height(const NELIterator&);
     const Rosegarden::Clef &m_clef;
     const Rosegarden::Key &m_key;

@@ -33,7 +33,7 @@ using Rosegarden::Key;
 using Rosegarden::TimeSignature;
 
 NotationVLayout::NotationVLayout(Staff &staff, NotationElementList &elements) :
-    m_staff(staff), m_elements(elements)
+    m_staff(staff), m_notationElements(elements)
 {
     // empty
 }
@@ -62,7 +62,7 @@ NotationVLayout::layout(NotationElementList::iterator from,
 
         } else if (el->isNote()) {
 
-            Chord chord(m_elements, i);
+            Chord chord(m_notationElements, i);
             if (chord.size() == 0) continue;
 
             std::vector<int> h;
@@ -71,27 +71,56 @@ NotationVLayout::layout(NotationElementList::iterator from,
             }
             int top = h.size()-1;
 
-            bool stalkUp = true;
-            if (h[top] > 4) {
-                if (h[0] > 4) stalkUp = false;
-                else stalkUp = (h[top] - 4) < (5 - h[0]);
-            }
+            bool beam = false;
+            (void)el->event()->get<Bool>(P_BEAM_NECESSARY, beam);
 
-            for (unsigned int j = 0; j < chord.size(); ++j) {
-                el = *chord[j];
-                try {
+            if (beam) {
 
+                kdDebug(KDEBUG_AREA) << "NotationVLayout::layout: Have a beam" << endl;
+
+                // P_STALK_UP and P_DRAW_TAIL have already been set.
+                // We just need to work out P_BEAM_MY_Y and P_BEAM_NEXT_Y
+                
+                int startHeight =
+                    el->event()->get<Int>(P_BEAM_START_HEIGHT);
+                double gradient =
+                    (double)el->event()->get<Int>(P_BEAM_GRADIENT) / 100.0;
+                int relativeX =
+                    el->event()->get<Int>(P_BEAM_RELATIVE_X);
+
+                int startY = m_staff.yCoordOfHeight(startHeight);
+                int myY = (int)(gradient * relativeX) + startY;
+
+                kdDebug(KDEBUG_AREA) << "NotationVLayout::layout: myY is " << myY << endl;
+
+                for (unsigned int j = 0; j < chord.size(); ++j) {
+                    NotationElementList::iterator it0(chord[j]);
+                    (*it0)->setLayoutY(m_staff.yCoordOfHeight(h[j]));
+                    (*it0)->event()->setMaybe<Int>(P_BEAM_MY_Y, myY);
+                    kdDebug(KDEBUG_AREA) << "NotationVLayout::layout: Set myY on note " << j << " of chord" << endl;
+                    if (it0 != m_notationElements.begin()) {
+                        --it0;
+                        (*it0)->event()->setMaybe<Int>(P_BEAM_NEXT_Y, myY);
+                        kdDebug(KDEBUG_AREA) << "NotationVLayout::layout: Set nextY on previous item" << endl;
+                    }
+                }
+
+            } else {
+
+                bool stalkUp = true;
+                if (h[top] > 4) {
+                    if (h[0] > 4) stalkUp = false;
+                    else stalkUp = (h[top] - 4) < (5 - h[0]);
+                }
+
+                for (unsigned int j = 0; j < chord.size(); ++j) {
+                    el = *chord[j];
                     el->setLayoutY(m_staff.yCoordOfHeight(h[j]));
                     el->event()->setMaybe<Bool>(P_STALK_UP, stalkUp);
-
                     el->event()->setMaybe<Bool>
                         (P_DRAW_TAIL,
                          ((stalkUp && j == chord.size()-1) ||
                           (!stalkUp && j == 0)));
-
-                } catch (Event::NoData) {
-                    kdDebug(KDEBUG_AREA) <<
-                        "NotationVLayout::layout : couldn't get properties for element (has NotationHLayout::preparse run?)" << endl;
                 }
             }
 

@@ -27,6 +27,7 @@
 using Rosegarden::Event;
 using Rosegarden::String;
 using Rosegarden::Int;
+using Rosegarden::Bool;
 using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::Note;
@@ -235,6 +236,14 @@ NotationGroup::sample(const NELIterator &i)
 
     if (!(*i)->isNote()) return;
 
+    // The code that uses the Group should not rely on the presence of
+    // e.g. P_BEAM_GRADIENT to indicate that a beam should be drawn;
+    // it's possible the gradient might be left over from a previous
+    // calculation and the group might have changed since.  Instead it
+    // should test P_BEAM_NECESSARY, which may be false even if there
+    // is a gradient present.
+    (*i)->event()->setMaybe<Bool>(P_BEAM_NECESSARY, false);
+
     int h = height(i);
     if (h > 4) m_weightAbove += h - 4;
     if (h < 4) m_weightBelow += 4 - h;
@@ -253,12 +262,12 @@ NotationGroup::height(const NELIterator &i)
     return h;
 }
 
-NotationGroup::Beam
-NotationGroup::calculateBeam(const NotePixmapFactory &npf, int width)
+void
+NotationGroup::applyBeam()
 {
     Beam beam;
     beam.aboveNotes = !(m_weightAbove > m_weightBelow);
-    beam.gradient = 0.0;
+    beam.gradient = 0;
     beam.startHeight = 0;
     beam.necessary = false;
     
@@ -267,30 +276,30 @@ NotationGroup::calculateBeam(const NotePixmapFactory &npf, int width)
 
     if (initialNote == getList().end() ||
         initialNote == finalNote) {
-        return beam; // no notes, no case to answer
+        return; // no notes, no case to answer
     }
 
     Chord initialChord(getList(), initialNote),
             finalChord(getList(),   finalNote);
 
     if (initialChord.getInitialElement() == finalChord.getInitialElement()) {
-        return beam;
+        return;
     }
 
     int initialHeight, finalHeight, extremeHeight;
-    Event::timeT extremeTime;
+    NELIterator extremeNote;
 
     if (beam.aboveNotes) {
         initialHeight = height(initialChord.getHighestNote());
           finalHeight = height(  finalChord.getHighestNote());
         extremeHeight = height(             getHighestNote());
-        extremeTime = (*getHighestNote())->event()->getAbsoluteTime();
+        extremeNote = getHighestNote();
 
     } else {
         initialHeight = height(initialChord.getLowestNote());
           finalHeight = height(  finalChord.getLowestNote());
         extremeHeight = height(             getLowestNote());
-        extremeTime = (*getLowestNote())->event()->getAbsoluteTime();
+        extremeNote = getLowestNote();
     }
         
     int diff = initialHeight - finalHeight;
@@ -307,10 +316,10 @@ NotationGroup::calculateBeam(const NotePixmapFactory &npf, int width)
     }
 
     // some magic numbers
-    if (diff > 4) beam.gradient = 0.3;
-    else if (diff > 3) beam.gradient = 0.17;
-    else if (diff > 0) beam.gradient = 0.1;
-    else beam.gradient = 0.0;
+    if (diff > 4) beam.gradient = 30;
+    else if (diff > 3) beam.gradient = 17;
+    else if (diff > 0) beam.gradient = 10;
+    else beam.gradient = 0;
 
     if (initialHeight > finalHeight) beam.gradient = -beam.gradient;
 
@@ -322,20 +331,17 @@ NotationGroup::calculateBeam(const NotePixmapFactory &npf, int width)
     // away from it.  This is a straight-line equation y = mx + c,
     // where we have m and two x,y pairs and need to find c.
     
-    Event::timeT
-        initialTime = (*initialNote)->event()->getAbsoluteTime(),
-          finalTime =   (*finalNote)->event()->getAbsoluteTime();
-
-    int extremeX = 
-        ((extremeTime - initialTime) * width) / (finalTime - initialTime);
+    int  initialX = (int)(*initialNote)->getLayoutX();
+    int   finalDX = (int)  (*finalNote)->getLayoutX() - initialX;
+    int extremeDX = (int)(*extremeNote)->getLayoutX() - initialX;
 
     int c0 = initialHeight, c1, c2;
-    Equation::solve(Equation::C, extremeHeight, beam.gradient, extremeX, c1);
-    Equation::solve(Equation::C,   finalHeight, beam.gradient, width,    c2);
+    double dgrad = (double)beam.gradient / 100.0;
+    Equation::solve(Equation::C, extremeHeight, dgrad, extremeDX, c1);
+    Equation::solve(Equation::C,   finalHeight, dgrad,   finalDX, c2);
 
     using std::max;
     using std::min;
-    int stalkLength = npf.getStalkLength();
     long shortestNoteType = Note::Quaver;
     if (!(*getShortestElement())->event()->get<Int>(P_NOTE_TYPE,
                                                     shortestNoteType)) {
@@ -345,17 +351,17 @@ NotationGroup::calculateBeam(const NotePixmapFactory &npf, int width)
     if (beam.aboveNotes) {
         beam.startHeight =
             max(max(c0, c1),
-                max(c2, min(initialHeight + stalkLength,
-                              finalHeight + stalkLength)));
+                max(c2, min(initialHeight + 6,
+                              finalHeight + 6)));
         if (shortestNoteType < Note::Quaver)
-            beam.startHeight += 3 * (Note::Quaver - shortestNoteType);
+            beam.startHeight += (Note::Quaver - shortestNoteType);
     } else {
         beam.startHeight =
             min(min(c0, c1),
-                min(c2, max(initialHeight - stalkLength,
-                              finalHeight - stalkLength)));
+                min(c2, max(initialHeight - 6,
+                              finalHeight - 6)));
         if (shortestNoteType < Note::Quaver)
-            beam.startHeight -= 3 * (Note::Quaver - shortestNoteType);
+            beam.startHeight -= (Note::Quaver - shortestNoteType);
     }  
 
     Event::timeT crotchet = Note(Note::Crotchet).getDuration();
@@ -363,12 +369,29 @@ NotationGroup::calculateBeam(const NotePixmapFactory &npf, int width)
          (*initialNote)->event()->getDuration() < crotchet
         && (*finalNote)->event()->getDuration() < crotchet;
 
-    kdDebug(KDEBUG_AREA) << "NotationGroup::calculateBeam: returning beam:" << endl
+    kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: beam data:" << endl
                          << "gradient: " << beam.gradient << endl
                          << "start height: " << beam.startHeight << endl
                          << "aboveNotes: " << beam.aboveNotes << endl
                          << "necessary: " << beam.necessary << endl;
 
-    return beam;
+    for (NELIterator i = initialNote; i != getList().end(); ++i) {
+
+        if ((*i)->isNote()) {
+            (*i)->event()->setMaybe<Bool>(P_BEAM_NECESSARY, beam.necessary);
+
+            if (beam.necessary) {
+                (*i)->event()->setMaybe<Bool>(P_STALK_UP, beam.aboveNotes);
+                (*i)->event()->setMaybe<Bool>(P_DRAW_TAIL, false);
+                (*i)->event()->setMaybe<Int>(P_BEAM_GRADIENT, beam.gradient);
+                (*i)->event()->setMaybe<Int>(P_BEAM_START_HEIGHT,
+                                             beam.startHeight);
+                (*i)->event()->setMaybe<Int>(P_BEAM_RELATIVE_X,
+                                             (int)(*i)->getLayoutX()-initialX);
+            }
+        }
+
+        if (i == finalNote) break;
+    }
 }
 

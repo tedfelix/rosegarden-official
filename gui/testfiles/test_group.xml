@@ -26,7 +26,10 @@
         <group type="beamed">
         <event type="note" duration="semiquaver" pitch="64"/>
         <event type="note" duration="semiquaver" pitch="66"/>
+        <chord>
         <event type="note" duration="semiquaver" pitch="68"/>
+        <event type="note" duration="semiquaver" pitch="72"/>
+        </chord>
         <event type="note" duration="semiquaver" pitch="66"/>
         </group>
         <group type="beamed">

@@ -130,6 +130,7 @@ public:
                                                      Rosegarden::NoAccidental,
                                  bool drawTail = true,
                                  bool stalkGoesUp = true,
+                                 int stalkLength = 0,
                                  bool fixedHeight = false);
 
     QCanvasPixmap makeRestPixmap(Rosegarden::Note::Type note, bool dotted);
