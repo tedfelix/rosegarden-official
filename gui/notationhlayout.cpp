@@ -249,13 +249,14 @@ NotationHLayout::layout()
 
                     kdDebug(KDEBUG_AREA) << " to " << x << endl;
 
-                    try {
-                        Accidental a = (Accidental)nel->event()->get<Int>
-                            (P_ACCIDENTAL);
+                    Accidental a = NoAccidental;
+                    long tmp;
+                    
+                    if (nel->event()->get<Int>(P_ACCIDENTAL, tmp)) {
+                        a = Accidental(tmp);
                         if (a != NoAccidental) x += npf.getAccidentalWidth();
-                    } catch (Event::NoData) {
-                        // not a problem
                     }
+
                 }
             }
         }
