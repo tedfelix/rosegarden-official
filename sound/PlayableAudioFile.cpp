@@ -26,7 +26,7 @@ namespace Rosegarden
 {
 
 //#define DEBUG_PLAYABLE 1
-//#define DEBUG_RECORDABLE 1
+#define DEBUG_RECORDABLE 1
 
 PlayableAudioFile::SmallFileMap PlayableAudioFile::m_smallFileCache;
 
@@ -775,7 +775,7 @@ RecordableAudioFile::buffer(const sample_t *data, int channel, size_t frames)
     if (channel >= int(m_ringBuffers.size())) {
 	std::cerr << "RecordableAudioFile::buffer: No such channel as "
 		  << channel << std::endl;
-	return;
+	return 0;
     }
 
     size_t available = m_ringBuffers[channel]->getWriteSpace();

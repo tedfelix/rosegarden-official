@@ -1228,6 +1228,8 @@ AudioFaderWidget::owns(const QObject *object)
 void
 AudioFaderWidget::setAudioChannels(int channels)
 {
+    m_isStereo = (channels > 1);
+
     switch (channels)
     {
         case 1:
@@ -1253,8 +1255,6 @@ AudioFaderWidget::setAudioChannels(int channels)
 void
 AudioFaderWidget::slotChannelStateChanged()
 {
-    //!!! need to reconnect input, or change input channel number anyway
-
     if (m_isStereo)
     {
         setAudioChannels(1);

@@ -1242,8 +1242,6 @@ AlsaDriver::initialiseAudio()
 
     if (m_jackDriver->isOK()) {
 	m_driverStatus |= AUDIO_OK;
-	m_audioPlayLatency = m_jackDriver->getAudioPlayLatency();
-	m_audioRecordLatency = m_jackDriver->getAudioRecordLatency();
     } else {
 	delete m_jackDriver;
 	m_jackDriver = 0;

@@ -357,7 +357,7 @@ AudioFileManager::getFileInPath(const std::string &file)
     QFileInfo searchInfo(searchFile);
 
     if (searchInfo.exists())
-        return searchFile;
+        return searchFile.latin1();
 
     std::cout << "AudioFileManager::getFileInPath - "
               << "searchInfo = " << searchFile << std::endl;

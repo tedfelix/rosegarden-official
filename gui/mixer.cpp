@@ -867,6 +867,29 @@ AudioMixerWindow::slotFaderLevelChanged(float dB)
 	return;
     } 
 
+    if (m_monitor.m_fader == s) {
+	
+	Rosegarden::Composition &comp = m_document->getComposition();
+	Rosegarden::TrackId recordTrackId = comp.getRecordTrack();
+	Rosegarden::Track *recordTrack = comp.getTrackById(recordTrackId);
+	if (recordTrack) {
+	    Rosegarden::InstrumentId instrumentId = recordTrack->getInstrument();
+	    Rosegarden::Instrument *instrument = m_studio->getInstrumentById
+		(instrumentId);
+
+            if (instrument) {
+		instrument->setRecordLevel(dB);
+		Rosegarden::StudioControl::setStudioObjectProperty
+		    (Rosegarden::MappedObjectId(instrument->getMappedId()),
+		     Rosegarden::MappedAudioFader::FaderRecordLevel,
+		     Rosegarden::MappedObjectValue(dB));
+		emit instrumentParametersChanged(instrument->getId());
+	    }
+	}
+
+	return;
+    }
+
     int index = 1;
 
     for (FaderVector::iterator i = m_submasters.begin();

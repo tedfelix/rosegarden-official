@@ -338,6 +338,7 @@ public:
     //
     Rosegarden::RealTime getAudioPlayLatency();
     Rosegarden::RealTime getAudioRecordLatency();
+    void updateAudioRecordLatency();
 
     // Complete the add of an audio file when a new file has finished
     // being recorded at the sequencer.  This method will ensure that
@@ -587,6 +588,8 @@ protected:
     // AudioPluginManager - sequencer and local plugin management
     //
     Rosegarden::AudioPluginManager *m_pluginManager;
+
+    Rosegarden::RealTime m_audioRecordLatency;
 
     // Autosave period for this document in seconds
     //

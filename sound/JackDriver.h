@@ -68,8 +68,8 @@ public:
     bool start();
     void stop();
 
-    RealTime getAudioPlayLatency() const { return m_audioPlayLatency; }
-    RealTime getAudioRecordLatency() const { return m_audioRecordLatency; }
+    RealTime getAudioPlayLatency() const;
+    RealTime getAudioRecordLatency() const;
 
     // Plugin instance management
     //
@@ -164,9 +164,7 @@ protected:
 
     // jackProcessStatic delegates to this
     int          jackProcess(jack_nframes_t nframes);
-    int          jackProcessRecord(jack_nframes_t nframes,
-				   sample_t *, sample_t *,
-				   bool, sample_t, sample_t);
+    int          jackProcessRecord(jack_nframes_t nframes, sample_t *, sample_t *);
     int          jackProcessEmpty(jack_nframes_t nframes);
 
     // other helper methods:
@@ -195,9 +193,6 @@ protected:
 
     bool                         m_jackTransportEnabled;
     bool                         m_jackTransportMaster;
-
-    RealTime                     m_audioPlayLatency;
-    RealTime                     m_audioRecordLatency;
 
     bool                         m_waiting;
     jack_transport_state_t       m_waitingState;

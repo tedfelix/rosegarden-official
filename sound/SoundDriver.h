@@ -309,11 +309,8 @@ public:
 
     // Latencies
     //
-    void setAudioPlayLatency(const RealTime &l) { m_audioPlayLatency = l; }
-    RealTime getAudioPlayLatency() { return  m_audioPlayLatency; }
-
-    void setAudioRecordLatency(const RealTime &l) { m_audioRecordLatency = l; }
-    RealTime getAudioRecordLatency() { return m_audioRecordLatency; }
+    virtual RealTime getAudioPlayLatency() { return RealTime(0, 0); }
+    virtual RealTime getAudioRecordLatency() { return RealTime(0, 0); }
 
     void setAudioBufferSizes(RealTime mix, RealTime read, RealTime write,
 			     int smallFileSize) {
@@ -445,11 +442,6 @@ protected:
     std::string                                 m_recordingFilename;
 
     InstrumentId                                m_audioMonitoringInstrument;
-
-    // Audio latencies
-    //
-    RealTime                                    m_audioPlayLatency;
-    RealTime                                    m_audioRecordLatency;
 
     RealTime m_audioMixBufferLength;
     RealTime m_audioReadBufferLength;

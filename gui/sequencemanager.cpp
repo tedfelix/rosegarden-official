@@ -481,7 +481,7 @@ SequenceManager::fastforward()
 // with state change information.  The GUI requests the Sequencer
 // to start playing or to start recording and enters a pending
 // state (see rosegardendcop.h for TransportStatus values).
-// The Sequencer replies when ready with it's status.  If anything
+// The Sequencer replies when ready with its status.  If anything
 // fails then we default (or try to default) to STOPPED at both
 // the GUI and the Sequencer.
 //
@@ -653,6 +653,7 @@ punchin:
             break;
 
         case Rosegarden::Instrument::Audio: {
+
             // check for disk space available
             Rosegarden::DiskSpace *space;
             Rosegarden::AudioFileManager &afm = 
@@ -676,14 +677,10 @@ punchin:
             // audio recording limit
             //
             config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-//            int audioRecordMinutes = config->
-//                readNumEntry("audiorecordminutes", 5);
 
-//            Rosegarden::AudioPluginManager *apm = 
-//                m_doc->getPluginManager();
-
-            // Ok, check disk space and compare to limits
-            //space->getFreeKBytes()
+	    // Ask the document to update its record latencies so as to
+	    // do latency compensation when we stop
+	    m_doc->updateAudioRecordLatency();
 
             recordType = STARTING_TO_RECORD_AUDIO;
             SEQMAN_DEBUG << "SequenceManager::record() - "

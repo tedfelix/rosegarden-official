@@ -105,6 +105,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
       m_recordSegment(0),
       m_commandHistory(new MultiViewCommandHistory()),
       m_pluginManager(pluginManager),
+      m_audioRecordLatency(0, 0),
       m_autoSavePeriod(0),
       m_beingDestroyed(false)
 {
@@ -1883,18 +1884,11 @@ RosegardenGUIDoc::stopRecordingAudio()
     RG_DEBUG << "RosegardenGUIDoc::stopRecordingAudio - "
                  << "got recorded segment" << endl;
 
-    // now move the segment back by the jack record latency
+    // now move the segment back by the record latency
     //
-    KConfig* config = kapp->config();
-    config->setGroup(Rosegarden::LatencyOptionsConfigGroup);
-
-    int recordSec = config->readLongNumEntry("jackrecordlatencysec", 0);
-    int recordUSec = config->readLongNumEntry("jackrecordlatencyusec", 0);
-
-    Rosegarden::RealTime jackLatency(recordSec, recordUSec * 1000);
     Rosegarden::RealTime adjustedStartTime =
         m_composition.getElapsedRealTime(m_recordSegment->getStartTime()) -
-        jackLatency;
+	m_audioRecordLatency;
 
     Rosegarden::timeT shiftedStartTime =
         m_composition.getElapsedTimeForRealTime(adjustedStartTime);
@@ -1905,7 +1899,6 @@ RosegardenGUIDoc::stopRecordingAudio()
                  << " clicks" << endl;
 
     m_recordSegment->setStartTime(shiftedStartTime);
-
 }
 
 // Called from the sequencer when all is clear with the newly recorded
@@ -2081,6 +2074,12 @@ RosegardenGUIDoc::getAudioRecordLatency()
     streamIn >> result;
 
     return (result.getRealTime());
+}
+
+void
+RosegardenGUIDoc::updateAudioRecordLatency()
+{
+    m_audioRecordLatency = getAudioRecordLatency();
 }
 
 QStringList

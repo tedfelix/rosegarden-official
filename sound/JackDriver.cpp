@@ -47,8 +47,6 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
     m_tempOutBuffer(0),
     m_jackTransportEnabled(false),
     m_jackTransportMaster(false),
-    m_audioPlayLatency(0, 0),
-    m_audioRecordLatency(0, 0),
     m_waiting(false),
     m_waitingState(JackTransportStopped),
     m_waitingToken(0),
@@ -398,33 +396,6 @@ JackDriver::initialise()
         }
     }
 
-
-    // Get the latencies from JACK and set them as RealTime
-    //
-    jack_nframes_t outputLatency =
-        jack_port_get_total_latency(m_client, m_outputMasters[0]);
-
-    jack_nframes_t inputLatency = 
-        jack_port_get_total_latency(m_client, m_inputPorts[0]);
-
-    double latency = double(outputLatency) / double(m_sampleRate);
-
-    // Set the audio latencies ready for collection by the GUI
-    //
-    m_audioPlayLatency = RealTime(int(latency),
-				  int((latency - int(latency)) * 1e9));
-
-    latency = double(inputLatency) / double(m_sampleRate);
-
-    m_audioRecordLatency = RealTime(int(latency),
-				    int((latency - int(latency)) * 1e9));
-
-    audit << "JackDriver::initialiseAudio - "
-	  << "JACK playback latency " << m_audioPlayLatency << std::endl;
-    
-    audit << "JackDriver::initialiseAudio - "
-	  << "JACK record latency " << m_audioRecordLatency << std::endl;
-
     audit << "JackDriver::initialiseAudio - "
 	  << "initialised JACK audio subsystem"
 	  << std::endl;
@@ -619,6 +590,25 @@ JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
     }
 }
 
+RealTime
+JackDriver::getAudioPlayLatency() const
+{
+    jack_nframes_t latency =
+        jack_port_get_total_latency(m_client, m_outputMasters[0]);
+
+    return RealTime::frame2RealTime(latency, m_sampleRate);
+}
+
+RealTime
+JackDriver::getAudioRecordLatency() const
+{
+    jack_nframes_t latency =
+        jack_port_get_total_latency(m_client, m_inputPorts[0]);
+
+    return RealTime::frame2RealTime(latency, m_sampleRate);
+}
+
+
 int
 JackDriver::jackProcessStatic(jack_nframes_t nframes, void *arg)
 {
@@ -670,6 +660,9 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    }
 	}
     } else if (!m_alsaDriver->areClocksRunning()) {
+	return jackProcessEmpty(nframes);
+    } else if (!m_alsaDriver->isPlaying()) {
+	jackProcessRecord(nframes, 0, 0); // for monitoring
 	return jackProcessEmpty(nframes);
     }
 
@@ -746,9 +739,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	}
 
 	if (buss + 1 == m_recordInput) {
-	    jackProcessRecord(nframes,
-			      submaster[0], submaster[1],
-			      true, peak[0], peak[1]);
+	    jackProcessRecord(nframes, submaster[0], submaster[1]);
 	    doneRecord = true;
 	}
     }
@@ -845,11 +836,9 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     }
 
     if (m_recordInput == 0) {
-	jackProcessRecord(nframes,
-			  master[0], master[1],
-			  true, masterPeak[0], masterPeak[1]);
+	jackProcessRecord(nframes, master[0], master[1]);
     } else if (!doneRecord) {
-	jackProcessRecord(nframes, 0, 0, false, 0, 0);
+	jackProcessRecord(nframes, 0, 0);
     }
 
     if (m_alsaDriver->isPlaying()) {
@@ -903,16 +892,11 @@ JackDriver::jackProcessEmpty(jack_nframes_t nframes)
     
 int
 JackDriver::jackProcessRecord(jack_nframes_t nframes,
-			      sample_t *sourceBufferLeft, sample_t *sourceBufferRight,
-			      bool havePeaks, sample_t peakLeft, sample_t peakRight)
+			      sample_t *sourceBufferLeft, sample_t *sourceBufferRight)
 {
     SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
     bool wroteSomething = false;
-
-    if (!havePeaks) {
-	peakLeft = 0.0;
-	peakRight = 0.0;
-    }
+    sample_t peakLeft = 0.0, peakRight = 0.0;
 
     // Get input buffers
     //
@@ -948,30 +932,90 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes,
 		(jack_port_get_buffer(m_inputPorts[portRight], nframes));
 	}
     }
+
+    float gain = AudioLevel::dB_to_multiplier(m_recordLevel);
     
     if (m_alsaDriver->getRecordStatus() == RECORD_AUDIO &&
 	m_alsaDriver->areClocksRunning()) {
 
+	memset(m_tempOutBuffer, 0, nframes * sizeof(sample_t));
+
 	if (inputBufferLeft) {
+	    for (size_t i = 0; i < nframes; ++i) {
+		sample_t sample = inputBufferLeft[i] * gain;
+		if (sample > peakLeft) peakLeft = sample;
+		m_tempOutBuffer[i] = sample;
+	    }
+
+	    if (m_outputMonitors.size() > 0) {
+		sample_t *buf = 
+		    static_cast<sample_t *>
+		    (jack_port_get_buffer(m_outputMonitors[0], nframes));
+		memcpy(buf, m_tempOutBuffer, nframes * sizeof(sample_t));
+	    }
+
 	    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-				inputBufferLeft, 0, nframes);
+				m_tempOutBuffer, 0, nframes);
 	}
-    
+
 	if (channels == 2) {
+
 	    if (inputBufferRight) {
-		m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-				    inputBufferRight, 1, nframes);
+		for (size_t i = 0; i < nframes; ++i) {
+		    sample_t sample = inputBufferRight[i] * gain;
+		    if (sample > peakRight) peakRight = sample;
+		    m_tempOutBuffer[i] = sample;
+		}
+		if (m_outputMonitors.size() > 1) {
+		    sample_t *buf =
+			static_cast<sample_t *>
+			(jack_port_get_buffer(m_outputMonitors[1], nframes));
+		    memcpy(buf, m_tempOutBuffer, nframes * sizeof(sample_t));
+		}
+	    } 
+
+	    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
+				m_tempOutBuffer, 1, nframes);
+	}
+	    
+	wroteSomething = true;
+
+    } else {
+
+	// want peak levels and monitors anyway, even if not recording
+
+	if (inputBufferLeft) {
+
+	    sample_t *buf = 0;
+	    if (m_outputMonitors.size() > 0) {
+		buf = static_cast<sample_t *>
+		    (jack_port_get_buffer(m_outputMonitors[0], nframes));
 	    }
-	} else {
-	    if (inputBufferLeft) {
-		m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-				    inputBufferLeft, 1, nframes);
+
+	    for (size_t i = 0; i < nframes; ++i) {
+		sample_t sample = inputBufferLeft[i] * gain;
+		if (sample > peakLeft) peakLeft = sample;
+		if (buf) buf[i] = sample;
+	    }
+
+	    if (channels == 2 && inputBufferRight) {
+
+		buf = 0;
+		if (m_outputMonitors.size() > 1) {
+		    buf = static_cast<sample_t *>
+			(jack_port_get_buffer(m_outputMonitors[1], nframes));
+		}
+
+		for (size_t i = 0; i < nframes; ++i) {
+		    sample_t sample = inputBufferRight[i] * gain;
+		    if (sample > peakRight) peakRight = sample;
+		    if (buf) buf[i] = sample;
+		}
 	    }
 	}
-	
-	wroteSomething = true;
     }
 
+/*
     if (m_outputMonitors.size() > 0 && inputBufferLeft) {
 	
 	sample_t *buf = 
@@ -998,6 +1042,7 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes,
 	    }
 	}
     }
+*/
 
     if (channels < 2) peakRight = peakLeft;
 
