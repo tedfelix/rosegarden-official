@@ -1,2 +1,2 @@
 #!/bin/sh
-find ../core ./rosegardengui -print | xargs perl ./admin/find-todo.pl
+find ./core ./gui -print | xargs perl ./admin/find-todo.pl
