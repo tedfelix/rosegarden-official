@@ -34,26 +34,28 @@ class DummyDriver : public SoundDriver
 {
 public:
     DummyDriver(MappedStudio *studio):
-        SoundDriver(studio, std::string("DummyDriver - no sound")) {;}
+        SoundDriver(studio, std::string("DummyDriver - no sound")) { }
     DummyDriver(MappedStudio *studio, const std::string & name):
-        SoundDriver(studio, std::string("DummyDriver: " + name)) {;}
-    virtual ~DummyDriver() {;}
+        SoundDriver(studio, std::string("DummyDriver: " + name)) { }
+    virtual ~DummyDriver() { }
 
     virtual void initialise()  { m_recordComposition.clear();}
-    virtual void initialisePlayback(const RealTime & /*position*/) {;}
-    virtual void stopPlayback() {;}
+    virtual void initialisePlayback(const RealTime & /*position*/) { }
+    virtual void stopPlayback() { }
     virtual void resetPlayback(const RealTime & /*old position*/,
-			       const RealTime & /*position*/) {;}
-    virtual void allNotesOff()  {;}
-    virtual void processNotesOff(const RealTime & /*time*/) {;}
+			       const RealTime & /*position*/) { }
+    virtual void allNotesOff()  { }
     
     virtual RealTime getSequencerTime() { return RealTime(0, 0);}
 
     virtual MappedComposition* getMappedComposition()
         { return &m_recordComposition;}
 
-    virtual void processEventsOut(const MappedComposition & /*mC*/,
-                                  bool /*now*/) {;}
+    virtual void processEventsOut(const MappedComposition & /*mC*/) { }
+
+    virtual void processEventsOut(const MappedComposition &,
+				  const RealTime &,
+				  const RealTime &) { }
 
     // Activate a recording state
     //
@@ -62,7 +64,7 @@ public:
 
     // Process anything that's pending
     //
-    virtual void processPending() {;}
+    virtual void processPending() { }
 
     // Sample rate
     //
@@ -76,26 +78,62 @@ public:
     //
     virtual void setPluginInstance(InstrumentId /*id*/,
                                    QString /*pluginIdent*/,
-                                   int /*position*/) {;}
+                                   int /*position*/) { }
 
     virtual void removePluginInstance(InstrumentId /*id*/,
-                                      int /*position*/) {;}
+                                      int /*position*/) { }
 
-    virtual void removePluginInstances() {;}
+    virtual void removePluginInstances() { }
 
     virtual void setPluginInstancePortValue(InstrumentId /*id*/,
                                             int /*position*/,
                                             unsigned long /*portNumber*/,
-                                            float /*value*/) {;}
+                                            float /*value*/) { }
+
+    virtual float getPluginInstancePortValue(InstrumentId ,
+					     int ,
+					     unsigned long ) { return 0; }
 
     virtual void setPluginInstanceBypass(InstrumentId /*id*/,
                                          int /*position*/,
-                                         bool /*value*/) {;}
+                                         bool /*value*/) { }
+
+    virtual QStringList getPluginInstancePrograms(InstrumentId ,
+						  int ) { return QStringList(); }
+
+    virtual QString getPluginInstanceProgram(InstrumentId,
+					     int ) { return QString(); }
+
+    virtual QString getPluginInstanceProgram(InstrumentId,
+					     int,
+					     int,
+					     int) { return QString(); }
+
+    virtual unsigned long getPluginInstanceProgram(InstrumentId,
+						   int ,
+						   QString) { return 0; }
+    
+    virtual void setPluginInstanceProgram(InstrumentId,
+					  int ,
+					  QString ) { }
+
+    virtual QString configurePlugin(InstrumentId,
+				    int,
+				    QString ,
+				    QString ) { return QString(); }
+
+    virtual void setAudioBussLevels(int ,
+				    float ,
+				    float ) { }
+
+    virtual void setAudioInstrumentLevels(InstrumentId,
+					  float,
+					  float) { }
 
     virtual bool checkForNewClients() { return false; }
 
     virtual void setLoop(const RealTime &/*loopStart*/,
-                         const RealTime &/*loopEnd*/) {;}
+                         const RealTime &/*loopEnd*/) { }
 
     virtual std::vector<PlayableAudioFile*> getPlayingAudioFiles()
         { return std::vector<PlayableAudioFile*>(); }
@@ -103,14 +141,18 @@ public:
     virtual void getAudioInstrumentNumbers(InstrumentId &i, int &n) {
 	i = 0; n = 0;
     }
+    virtual void getSoftSynthInstrumentNumbers(InstrumentId &i, int &n) {
+	i = 0; n = 0;
+    }
+
+    virtual void claimUnwantedPlugin(void *plugin) { }
 
     virtual bool areClocksRunning() const { return true; }
 
 protected:
     virtual void processMidiOut(const MappedComposition & /*mC*/,
-                                bool /*now*/) {;}
-    virtual void processAudioQueue(bool /*now*/) {;}
-    virtual void generateInstruments()  {;}
+                                const RealTime &, const RealTime &) { }
+    virtual void generateInstruments()  { }
 
 };
 
