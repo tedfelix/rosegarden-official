@@ -472,11 +472,22 @@ Studio::clearMidiBanksAndPrograms()
 Device*
 Studio::getDevice(DeviceId id)
 {
+    cerr << "Studio::getDevice(" << id << ")... ";
+
     std::vector<Device*>::iterator it;
 
-    for (it = m_devices.begin(); it != m_devices.end(); it++)
-        if ((*it)->getId() == id)
-            return (*it);
+    for (it = m_devices.begin(); it != m_devices.end(); it++) {
+
+	if (it != m_devices.begin()) cerr << ", ";
+
+	cerr << (*it)->getId();
+        if ((*it)->getId() == id) {
+	    cerr << ". Found" << endl;
+	    return (*it);
+	}
+    }
+
+    cerr << ". Not found" << endl;
 
     return 0;
 }

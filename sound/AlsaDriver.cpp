@@ -148,7 +148,6 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_loopStartTime(0, 0),
     m_loopEndTime(0, 0),
     m_looping(false),
-    m_currentPair(-1, -1),
     m_addedMetronome(false),
     m_audioMeterSent(false)
 
@@ -323,7 +322,6 @@ AlsaDriver::generateInstruments()
     m_addedMetronome = false;
     m_audioRunningId = Rosegarden::AudioInstrumentBase;
     m_midiRunningId = Rosegarden::MidiInstrumentBase;
-    m_currentPair  = std::pair<int, int>(-1, -1);
 
     // Clear these
     //
@@ -459,7 +457,8 @@ AlsaDriver::generateInstruments()
 
     // New device
     //
-    m_deviceRunningId++;
+    //!!! this is now incremented at end of addInstrumentsForPort
+//    m_deviceRunningId++;
 
     MappedInstrument *instr;
     char number[100];
@@ -474,7 +473,7 @@ AlsaDriver::generateInstruments()
             instr = new MappedInstrument(Instrument::Audio,
                                          channel,
                                          m_audioRunningId,
-                                         0, // sub ordering is 0
+//!!!                                         0, // sub ordering is 0
                                          audioName,
                                          m_deviceRunningId);
             m_instruments.push_back(instr);
@@ -518,91 +517,31 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
                                   int port,
                                   PortDirection direction)
 {
-    m_deviceRunningId++;
- 
-    AlsaPort *alsaInstr;
-    MappedInstrument *instr;
-    std::string channelName;
-    char number[100];
+    AlsaPortDescription *alsaPort;
+
+    alsaPort = new AlsaPortDescription(Instrument::Midi,
+				       connectionName,
+				       client,
+				       port,
+				       direction);
+
+    m_alsaPorts.push_back(alsaPort);
 
     if (type == Instrument::Midi)
     {
-
-        // If we haven't added a metronome then add one to the first
-        // device we add.   This is accomplished by adding a
-        // MappedInstrument for Instrument #0
-        //
-        if(m_addedMetronome == false)
-        {
-            alsaInstr = new AlsaPort(0,
-                                     0,
-				     connectionName,
-                                     client,
-                                     port,
-                                     direction);  // port direction
-
-            m_alsaPorts.push_back(alsaInstr);
-
-            for (int channel = 0; channel < 16; ++channel)
-            {
-                sprintf(number, " #%d", channel);
-                channelName = "Metronome" + std::string(number);
-                instr = new MappedInstrument(type,
-                                             9, // always the drum channel
-                                             channel,
-                                             port,
-                                             channelName,
-                                             m_deviceRunningId);
-
-                instr->setDirection(direction);
-
-                m_instruments.push_back(instr);
-            }
-            m_addedMetronome = true;
-        }
-
-        // Create AlsaPort with the start and end MappedInstrument
-        // indexes.
-        //
-        alsaInstr = new AlsaPort(m_midiRunningId,
-                                 m_midiRunningId + 15,
-				 connectionName,
-                                 client,
-                                 port,
-                                 direction);
-
-        m_alsaPorts.push_back(alsaInstr);
-
-        for (int channel = 0; channel < 16; ++channel)
-        {
-            // Create MappedInstrument for export to GUI
-            //
-            sprintf(number, " #%d", channel + 1);
-            channelName = name + std::string(number);
-
-            if (channel == 9)
-                channelName = name + std::string(" #10[D]");
-            MappedInstrument *instr = new MappedInstrument(type,
-                                                           channel,
-                                                           m_midiRunningId++,
-                                                           port,
-                                                           channelName,
-                                                           m_deviceRunningId);
-            instr->setDirection(direction);
-
-            m_instruments.push_back(instr);
-        }
-
 	cout << "AlsaDriver: creating device id " << m_deviceRunningId << " for client " << client << ", port " << port << ", name " << name << endl;
+	cout << "AlsaDriver: connection is " << connectionName << endl;
+
 	m_devicePortMap[m_deviceRunningId] = ClientPortPair(client, port);
 
-        MappedDevice *device =
-                new MappedDevice(m_deviceRunningId,
-                                 Rosegarden::Device::Midi,
-                                 name);
+        MappedDevice *device = new MappedDevice(m_deviceRunningId,
+						Rosegarden::Device::Midi,
+						name,
+						connectionName);
 
-	cout << "AlsaDriver: connection is " << connectionName << endl;
-	device->setConnection(connectionName);
+	device->setDirection(direction);
+	addInstrumentsForDevice(device);
+
 	//!!! need to keep port map in sync with changes to this --
 	// or perhaps abandon port map & store alsa connection object with
 	// alsa port name capable of returning its synthesised connection
@@ -611,24 +550,151 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
         m_devices.push_back(device);
     }
 
-    // Store these numbers for next time through
-    m_currentPair.first = client;
-    m_currentPair.second = port;
+    ++m_deviceRunningId;
 }
 
+void
+AlsaDriver::addInstrumentsForDevice(MappedDevice *device)
+{
+    MappedInstrument *instr;
+    std::string channelName;
+    char number[100];
+
+    // If we haven't added a metronome then add one to the first
+    // device we add.   This is accomplished by adding a
+    // MappedInstrument for Instrument #0
+    //
+    if (m_addedMetronome == false)
+    {
+	//!!! if direction not read only
+	for (int channel = 0; channel < 16; ++channel)
+	{
+	    sprintf(number, " #%d", channel);
+	    channelName = "Metronome" + std::string(number);
+	    instr = new MappedInstrument(Instrument::Midi,
+					 9, // always the drum channel
+					 channel,
+//!!!					 port,
+					 channelName,
+					 m_deviceRunningId);
+	    
+	    m_instruments.push_back(instr);
+	}
+
+	m_addedMetronome = true;
+    }
+
+    for (int channel = 0; channel < 16; ++channel)
+    {
+	// Create MappedInstrument for export to GUI
+	//
+	// name is just number, derive rest from device at gui
+	sprintf(number, "#%d", channel + 1);
+	channelName = std::string(number);
+	
+	if (channel == 9) channelName = std::string("#10[D]");
+	MappedInstrument *instr = new MappedInstrument(Instrument::Midi,
+						       channel,
+						       m_midiRunningId++,
+//!!!						       port,
+						       channelName,
+						       device->getId());
+	m_instruments.push_back(instr);
+    }
+}
+    
+
+bool
+AlsaDriver::canReconnect(Rosegarden::Device::DeviceType type)
+{
+    return (type == Rosegarden::Device::Midi);
+}
+
+DeviceId
+AlsaDriver::addDevice(Rosegarden::Device::DeviceType type)
+{
+    if (type == Rosegarden::Device::Midi) {
+	MappedDevice *device = new MappedDevice();
+	device->setId(m_deviceRunningId++);
+	addInstrumentsForDevice(device);
+	m_devices.push_back(device);
+
+        MappedEvent *mE =
+            new MappedEvent(0, MappedEvent::SystemUpdateInstruments,
+                            0, 0);
+        insertMappedEventForReturn(mE);
+
+	return device->getId();
+    }
+    return 0; // would really like a known "no device" number
+}
+
+void
+AlsaDriver::removeDevice(DeviceId id)
+{
+    //!!!
+}
+
+ClientPortPair
+AlsaDriver::parseConnectionName(std::string name)
+{
+    for (unsigned int i = 0; i < m_alsaPorts.size(); ++i) {
+	if (m_alsaPorts[i]->m_name == name) {
+	    return ClientPortPair(m_alsaPorts[i]->m_client,
+				  m_alsaPorts[i]->m_port);
+	}
+    }
+    return ClientPortPair(-1, -1);
+}
+
+std::string
+AlsaDriver::unparseConnectionName(ClientPortPair port)
+{
+    for (unsigned int i = 0; i < m_alsaPorts.size(); ++i) {
+	if (m_alsaPorts[i]->m_client == port.first &&
+	    m_alsaPorts[i]->m_port == port.second) {
+	    return m_alsaPorts[i]->m_name;
+	}
+    }
+    return "";
+}
+    
+
 unsigned int
-AlsaDriver::getConnections(unsigned int)
+AlsaDriver::getConnections(DeviceId)
 {
     return m_alsaPorts.size();
 }
 
 QString
-AlsaDriver::getConnection(unsigned int, unsigned int connectionNo)
+AlsaDriver::getConnection(DeviceId, unsigned int connectionNo)
 {
     //!!! We should really only return ports of the same direction
     // (i.e. duplex or read-only ports for input devices, duplex
     // or write-only for output)
+    if (connectionNo >= m_alsaPorts.size()) return "";
     return QString(m_alsaPorts[connectionNo]->m_name.c_str());
+}
+
+void
+AlsaDriver::setConnection(DeviceId id, QString connection)
+{
+    ClientPortPair port(parseConnectionName(connection.data()));
+    if (port.first != -1 && port.second != -1) {
+	m_devicePortMap[id] = port;
+	for (unsigned int i = 0; i < m_devices.size(); ++i) {
+	    if (m_devices[i]->getId() == id) {
+		m_devices[i]->setConnection(connection.data());
+
+		MappedEvent *mE =
+		    new MappedEvent(0, MappedEvent::SystemUpdateInstruments,
+				    0, 0);
+		insertMappedEventForReturn(mE);
+
+		break;
+	    }
+	}
+    }
 }
 
 void
@@ -707,7 +773,7 @@ AlsaDriver::initialiseMidi()
               << inputDevice.second
               << ")" << std::endl << std::endl;
 
-    std::vector<AlsaPort*>::iterator it;
+    std::vector<AlsaPortDescription *>::iterator it;
 
     // Connect to all available output client/ports
     //
@@ -1077,7 +1143,7 @@ AlsaDriver::stopPlayback()
 
     // send sounds-off to all client port pairs
     //
-    std::vector<AlsaPort*>::iterator it;
+    std::vector<AlsaPortDescription *>::iterator it;
     for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); ++it)
     {
         sendDeviceController(ClientPortPair((*it)->m_client,
@@ -2176,7 +2242,7 @@ ClientPortPair
 AlsaDriver::getFirstDestination(bool duplex)
 {
     ClientPortPair destPair(-1, -1);
-    std::vector<AlsaPort*>::iterator it;
+    std::vector<AlsaPortDescription *>::iterator it;
 
     for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); ++it)
     {
@@ -2231,8 +2297,8 @@ AlsaDriver::getPairForMappedInstrument(InstrumentId id)
     }
 
     ClientPortPair matchPair(-1, -1);
-
-    std::vector<AlsaPort*>::iterator it;
+#ifdef NOT_DEFINED
+    std::vector<AlsaPortDescription *>::iterator it;
 
     for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); ++it)
     {
@@ -2243,7 +2309,7 @@ AlsaDriver::getPairForMappedInstrument(InstrumentId id)
             return matchPair;
         }
     }
-
+#endif
     return matchPair;
 }
 
@@ -3400,7 +3466,7 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id, int port)
     std::vector<MappedInstrument*>::iterator mIt = m_instruments.begin();
     for (; mIt != m_instruments.end(); ++mIt)
     {
-        if ((*mIt)->getDevice() == id && (*mIt)->getPort() == port)
+        if ((*mIt)->getDevice() == id /*!!! && (*mIt)->getPort() == port */)
         {
             typicalId = (*mIt)->getId();
             break;
@@ -3413,14 +3479,17 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id, int port)
     dest.client = m_client;
     dest.port = m_port;
 
-    std::vector<AlsaPort*>::iterator it = m_alsaPorts.begin();
+    std::vector<AlsaPortDescription *>::iterator it = m_alsaPorts.begin();
     for (; it != m_alsaPorts.end(); ++it)
     {
         sender.client = (*it)->m_client;
         sender.port = (*it)->m_port;
 
+#ifdef NOT_DEFINED
+	//!!!!!!!!
         if (typicalId >= (*it)->m_startId &&
             typicalId <= (*it)->m_endId) break;
+#endif
     }
 
     if (it == m_alsaPorts.end())
@@ -3542,7 +3611,7 @@ AlsaDriver::sendMMC(Rosegarden::MidiByte deviceId,
     MappedComposition mC;
     MappedEvent *mE;
 
-    std::vector<AlsaPort*>::iterator it = m_alsaPorts.begin();
+    std::vector<AlsaPortDescription *>::iterator it = m_alsaPorts.begin();
     for (; it != m_alsaPorts.end(); ++it)
     {
         // One message per duplex device
@@ -3553,26 +3622,26 @@ AlsaDriver::sendMMC(Rosegarden::MidiByte deviceId,
             {
                 // Create a plain SysEx
                 //
-                 mE = new MappedEvent((*it)->m_startId,
-                                      MappedEvent::MidiSystemExclusive);
+		mE = new MappedEvent(0, //!!! should be iterating over devices?  (*it)->m_startId,
+				     MappedEvent::MidiSystemExclusive);
 
-                 // Make it a RealTime SysEx
-                 mE->addDataByte(MIDI_SYSEX_RT);
-
-                 // Add the destination
-                 mE->addDataByte(deviceId);
-
-                 // Add the command type
-                 if (isCommand)
-                     mE->addDataByte(MIDI_SYSEX_RT_COMMAND);
-                 else
-                     mE->addDataByte(MIDI_SYSEX_RT_RESPONSE);
-
-                 // Add the command
-                 mE->addDataByte(instruction);
-
-                 // Add any data
-                 mE->addDataString(data);
+		// Make it a RealTime SysEx
+		mE->addDataByte(MIDI_SYSEX_RT);
+		
+		// Add the destination
+		mE->addDataByte(deviceId);
+		
+		// Add the command type
+		if (isCommand)
+		    mE->addDataByte(MIDI_SYSEX_RT_COMMAND);
+		else
+		    mE->addDataByte(MIDI_SYSEX_RT_RESPONSE);
+		
+		// Add the command
+		mE->addDataByte(instruction);
+		
+		// Add any data
+		mE->addDataString(data);
             }
             catch(...)
             {
@@ -3597,7 +3666,7 @@ AlsaDriver::sendSystemDirect(MidiByte command, const std::string &args)
     sender.client = m_client;
     sender.port = m_port;
 
-    std::vector<AlsaPort*>::iterator it = m_alsaPorts.begin();
+    std::vector<AlsaPortDescription *>::iterator it = m_alsaPorts.begin();
     for (; it != m_alsaPorts.end(); ++it)
     {
         // One message per duplex device
@@ -3661,7 +3730,7 @@ AlsaDriver::sendSystemQueued(Rosegarden::MidiByte command,
     snd_seq_real_time_t sendTime = { time.sec, time.usec * 1000 };
 
 
-    std::vector<AlsaPort*>::iterator it = m_alsaPorts.begin();
+    std::vector<AlsaPortDescription *>::iterator it = m_alsaPorts.begin();
     for (; it != m_alsaPorts.end(); ++it)
     {
         // One message per duplex device

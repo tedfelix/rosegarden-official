@@ -132,11 +132,45 @@ public:
     //
     virtual Rosegarden::MappedDevice getMappedDevice(unsigned int id) = 0;
 
-    // Return permissible connections by device
-    // This API will change when connection classes happen
+    // Query whether the driver implements device reconnection.
+    // Returns a non-zero value if the addDevice, removeDevice,
+    // getConnections, getConnection and setConnection methods
+    // may be used with devices of the given type.
+    //
+    virtual int canReconnect(int deviceType) = 0;
+    
+    // Create a device of the given type and return its id.
+    // The device will have no connection by default, and will
+    // have Duplex direction until connected to something.
+    // Do not use this unless canReconnect(type) returned true.
+    //
+    virtual unsigned int addDevice(int type) = 0;
+
+    // Remove the device of the given id.
+    // Ignored if driver does not permit changing the number of devices
+    // (i.e. if canReconnect(type) would return false when given the
+    // type of the supplied device).
+    //
+    virtual void removeDevice(unsigned int id) = 0;
+
+    // Return the number of permissible connections for a particular device.
+    // Returns zero if the device is non-reconnectable
+    // (i.e. if canReconnect(type) would return false when given the
+    // type of the supplied device).
     //
     virtual unsigned int getConnections(unsigned int deviceId) = 0;
-    virtual QString getConnection(unsigned int deviceId, unsigned int connectionNo) = 0;
+
+    // Return one of the set of permissible connections for a particular
+    // device.  Returns the empty string for invalid parameters.
+    // 
+    virtual QString getConnection(unsigned int deviceId,
+				  unsigned int connectionNo) = 0;
+
+    // Reconnect a particular device.
+    // Ignored if driver does not permit reconnections or the connection
+    // is not one of the permissible set for that device.
+    // 
+    virtual void setConnection(unsigned int deviceId, QString connection) = 0;
 
     // Set audio monitoring Instrument - tells the sequencer that the
     // gui is currently monitoring audio and which Instrument to report

@@ -30,17 +30,22 @@ MappedDevice::MappedDevice():
     std::vector<Rosegarden::MappedInstrument*>(),
     m_id(0),
     m_type(Rosegarden::Device::Midi),
-    m_name("MappedDevice default name")
+    m_name("Unnamed Device"),
+    m_connection(""),
+    m_direction(Duplex)
 {
 }
 
 MappedDevice::MappedDevice(Rosegarden::DeviceId id,
                            Rosegarden::Device::DeviceType type,
-                           const std::string &name):
+                           std::string name,
+			   std::string connection):
     std::vector<Rosegarden::MappedInstrument*>(),
     m_id(id),
     m_type(type),
-    m_name(name)
+    m_name(name),
+    m_connection(connection),
+    m_direction(Duplex)
 {
 }
 
@@ -60,6 +65,7 @@ MappedDevice::MappedDevice(const MappedDevice &mD):
     m_type = mD.getType();
     m_name = mD.getName();
     m_connection = mD.getConnection();
+    m_direction = mD.getDirection();
 }
 
 void
@@ -96,6 +102,7 @@ MappedDevice::operator=(const MappedDevice &mD)
     m_type = mD.getType();
     m_name = mD.getName();
     m_connection = mD.getConnection();
+    m_direction = mD.getDirection();
 
     return *this;
 }
@@ -118,17 +125,18 @@ operator>>(QDataStream &dS, MappedDevice *mD)
     QString name;
     unsigned int id, dType;
     QString connection;
+    unsigned int direction;
 
     dS >> id;
     dS >> dType;
     dS >> name;
     dS >> connection;
-    std::cerr << "MappedDevice::operator>> - read \"" << connection << "\""
-	      << std::endl;
+    dS >> direction;
     mD->setId(id);
     mD->setType(Rosegarden::Device::DeviceType(dType));
     mD->setName(std::string(name.data()));
     mD->setConnection(connection.data());
+    mD->setDirection(PortDirection(direction));
 
     if (instruments)
     {
@@ -158,17 +166,18 @@ operator>>(QDataStream &dS, MappedDevice &mD)
     unsigned int id, dType;
     QString name;
     QString connection;
+    unsigned int direction;
 
     dS >> id;
     dS >> dType;
     dS >> name;
     dS >> connection;
-    std::cerr << "MappedDevice::operator>> - read \"" << connection << "\""
-	      << std::endl;
+    dS >> direction;
     mD.setId(id);
     mD.setType(Rosegarden::Device::DeviceType(dType));
     mD.setName(std::string(name.data()));
     mD.setConnection(connection.data());
+    mD.setDirection(PortDirection(direction));
 
     if (instruments)
     {
@@ -191,6 +200,7 @@ operator<<(QDataStream &dS, MappedDevice *mD)
     dS << (int)(mD->getType());
     dS << QString(mD->getName().c_str());
     dS << QString(mD->getConnection().c_str());
+    dS << mD->getDirection();
     std::cerr << "MappedDevice::operator>> - wrote \"" << mD->getConnection() << "\""
 	      << std::endl;
 
@@ -209,13 +219,14 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
     dS << (int)(mD.getType());
     dS << QString(mD.getName().c_str());
     dS << QString(mD.getConnection().c_str());
+    dS << mD.getDirection();
     std::cerr << "MappedDevice::operator>> - wrote \"" << mD.getConnection() << "\""
 	      << std::endl;
 
     return dS;
 }
 
-
+/*!!!
 Rosegarden::MidiDevice::DeviceDirection
 MappedDevice::getDirection() const
 {
@@ -233,7 +244,7 @@ MappedDevice::getDirection() const
 
     return direction;
 }
-
+*/
 
 }
 

@@ -180,8 +180,13 @@ public:
     virtual unsigned int getDevices();
     virtual Rosegarden::MappedDevice getMappedDevice(unsigned int id);
 
+    virtual int canReconnect(int deviceType);
+    virtual unsigned int addDevice(int type);
+    virtual void removeDevice(unsigned int id);
     virtual unsigned int getConnections(unsigned int deviceId);
-    virtual QString getConnection(unsigned int deviceId, unsigned int connectionNo);
+    virtual QString getConnection(unsigned int deviceId,
+				  unsigned int connectionNo);
+    virtual void setConnection(unsigned int deviceId, QString connection);
 
     // Audio monitoring
     //

@@ -1189,8 +1189,15 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     {
         if (mD->getType() == Rosegarden::Device::Midi)
         {
-            device = new Rosegarden::MidiDevice(id, mD->getName());
+	    Rosegarden::MidiDevice *midiDevice =
+		new Rosegarden::MidiDevice(id, mD->getName());
 
+	    //!!! oops -- converting from PortDirection (sound/MappedCommon.h)
+	    // to MidiDevice::DeviceDirection by just assuming they're the same
+	    midiDevice->setDirection(Rosegarden::MidiDevice::DeviceDirection
+				     (mD->getDirection()));
+
+	    device = midiDevice;
             m_studio.addDevice(device);
 
             SEQMAN_DEBUG  << "RosegardenGUIDoc::getMappedDevice - "
@@ -1223,19 +1230,31 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
     Rosegarden::Instrument *instrument;
     Rosegarden::MappedDeviceIterator it;
 
+    Rosegarden::InstrumentList existingInstrs(device->getAllInstruments());
+
     for (it = mD->begin(); it != mD->end(); it++)
     {
-	if (!hadDeviceAlready)
-	{
+	Rosegarden::InstrumentId instrumentId = (*it)->getId();
+
+	bool haveInstrument = false;
+	for (Rosegarden::InstrumentList::iterator iit = existingInstrs.begin();
+	     iit != existingInstrs.end(); ++iit) {
+
+	    if ((*iit)->getId() == instrumentId) {
+		haveInstrument = true;
+		break;
+	    }
+	}
+
+	if (!haveInstrument) {
 	    instrument = new Rosegarden::Instrument((*it)->getId(),
 						    (*it)->getType(),
 						    (*it)->getName(),
 						    (*it)->getChannel(),
 						    device);
-
 	    device->addInstrument(instrument);
 	}
-
+/*!!!
         // set the Direction
         if (device->getType() == Rosegarden::Device::Midi)
         {
@@ -1247,6 +1266,7 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
                         Rosegarden::MidiDevice::DeviceDirection(
                             (*it)->getDirection()));
         }
+*/
     }
 
 }

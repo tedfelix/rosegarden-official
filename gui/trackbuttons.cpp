@@ -43,6 +43,20 @@
 
 using Rosegarden::TrackId;
 
+QString
+TrackButtons::getPresentationName(Rosegarden::Instrument *instr)
+{
+    if (!instr) {
+	return i18n("<no instrument>");
+    } else if (instr->getType() == Rosegarden::Instrument::Audio) {
+	return strtoqstr(instr->getName());
+    } else {
+	return strtoqstr(instr->getDevice()->getUserLabel() + " " +
+			 instr->getName());
+    }
+}
+
+
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            unsigned int trackCellHeight,
                            unsigned int trackLabelWidth,
@@ -263,11 +277,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     Rosegarden::Instrument *ins =
         m_doc->getStudio().getInstrumentById(track->getInstrument());
 
-    QString instrumentName;
-    if (ins == 0)
-        instrumentName = QString("<no instrument>");
-    else
-        instrumentName = QString(strtoqstr(ins->getName()));
+    QString instrumentName(getPresentationName(ins));
 
     instrumentLabel = new InstrumentLabel(instrumentName,
                                           trackId,
@@ -374,7 +384,7 @@ TrackButtons::populateButtons()
 
         if (ins)
         {
-            m_instrumentLabels[i]->setText(strtoqstr(ins->getName()));
+            m_instrumentLabels[i]->setText(getPresentationName(ins));
             if (ins->sendsProgramChange())
             {
                 m_instrumentLabels[i]->
@@ -754,14 +764,10 @@ TrackButtons::slotInstrumentSelection(int trackId)
     {
         Rosegarden::Instrument *ins = studio.
                 getInstrumentById(track->getInstrument());
-
-        if (ins == 0)
-            instrumentName = QString("<no instrument>");
-        else
-            instrumentName = QString(strtoqstr(ins->getName()));
+	instrumentName = getPresentationName(ins);
     }
     else
-        instrumentName = QString("<no instrument>");
+        instrumentName = getPresentationName(0);
     //
     // populate this instrument widget
     m_instrumentLabels[position]->setText(instrumentName);
@@ -835,8 +841,8 @@ TrackButtons::populateInstrumentPopup()
 
         if (! (*it)) continue; // sanity check
 
-	std::string iname((*it)->getName());
-	std::string pname((*it)->getProgramName());
+	QString iname(getPresentationName(*it));
+	QString pname(strtoqstr((*it)->getProgramName()));
         Rosegarden::DeviceId devId = (*it)->getDevice()->getId();
 
 	if (devId != (Rosegarden::DeviceId)(currentDevId)) {
@@ -845,7 +851,7 @@ TrackButtons::populateInstrumentPopup()
 
 	    QPopupMenu *subMenu = new QPopupMenu(this);
 	    m_instrumentPopup->
-		insertItem(strtoqstr((*it)->getDevice()->getName()),
+		insertItem(strtoqstr((*it)->getDevice()->getUserLabel()),
 			   subMenu);
 	    
 	    m_instrumentSubMenu.push_back(subMenu);
@@ -865,12 +871,12 @@ TrackButtons::populateInstrumentPopup()
         if (groupBase == -1)
         {
 	    m_instrumentSubMenu[m_instrumentSubMenu.size() - 1]->
-                insertItem(strtoqstr(iname), i++);
+                insertItem(iname, i++);
         }
         else
         {
 	    m_instrumentSubMenu[groupBase]->
-                insertItem(strtoqstr(iname), i++);
+                insertItem(iname, i++);
         }
 
     }
@@ -904,7 +910,7 @@ TrackButtons::slotInstrumentPopupActivated(int item)
             emit instrumentSelected((int)inst->getId());
 
             m_instrumentLabels[m_popupItem]->
-                    setText(strtoqstr(inst->getName()));
+                    setText(getPresentationName(inst));
 
             // reset the alternative label
             m_instrumentLabels[m_popupItem]->clearAlternativeLabel();
@@ -1015,10 +1021,7 @@ TrackButtons::slotSynchroniseWithComposition()
             Rosegarden::Instrument *ins = studio.
                 getInstrumentById(track->getInstrument());
 
-            if (ins == 0)
-                instrumentName = QString("<no instrument>");
-            else
-                instrumentName = QString(strtoqstr(ins->getName()));
+	    instrumentName = getPresentationName(ins);
 
             m_instrumentLabels[i]->setText(instrumentName);
         }

@@ -311,11 +311,16 @@ public:
     //
     unsigned int getDevices();
 
-    virtual unsigned int getConnections(unsigned int /*deviceId*/)
-        { return 0; }
-    virtual QString getConnection(unsigned int /*deviceId*/,
-                                  unsigned int /*connectionNo*/)
-        { return ""; }
+    virtual bool canReconnect(Device::DeviceType) { return false; }
+
+    virtual DeviceId addDevice(Device::DeviceType) {
+	return 0; //!!! really need known No-Device id
+    }
+    virtual void removeDevice(DeviceId) { }
+
+    virtual unsigned int getConnections(DeviceId) { return 0; }
+    virtual QString getConnection(DeviceId, unsigned int) { return ""; }
+    virtual void setConnection(DeviceId, QString) { }
 
     // Return the audio play queue
     //

@@ -1,3 +1,4 @@
+
 // -*- c-basic-offset: 4 -*-
 
 /*
@@ -153,7 +154,7 @@ private:
     void makeButtons();
 
     QFrame* makeButton(Rosegarden::TrackId trackId);
-    
+    QString getPresentationName(Rosegarden::Instrument *);
 
     //--------------- Data members ---------------------------------
 

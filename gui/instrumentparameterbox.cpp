@@ -1195,7 +1195,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
 
     // Set instrument name
     //
-    m_instrumentLabel->setText(strtoqstr(instrument->getName()));
+    m_instrumentLabel->setText(strtoqstr(instrument->getDevice()->getName() + " (" + instrument->getDevice()->getUserLabel() + ") " + instrument->getName()));
 
     // Set Studio Device name
     //

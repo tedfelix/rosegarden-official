@@ -83,6 +83,8 @@ public:
                                int port,
                                PortDirection direction);
 
+    void addInstrumentsForDevice(MappedDevice *device);
+
     virtual void processEventsOut(const MappedComposition &mC,
                                   const Rosegarden::RealTime &playLatency, 
                                   bool now);
@@ -161,11 +163,17 @@ public:
     void setRecordDevice(Rosegarden::DeviceId id, int port);
     void unsetRecordDevices();
 
+    virtual bool canReconnect(Rosegarden::Device::DeviceType type);
+
+    virtual DeviceId addDevice(Rosegarden::Device::DeviceType type);
+    virtual void removeDevice(DeviceId id);
+
     // Get available connections per device
     // 
-    virtual unsigned int getConnections(unsigned int deviceId);
-    virtual QString getConnection(unsigned int deviceId,
+    virtual unsigned int getConnections(DeviceId deviceId);
+    virtual QString getConnection(DeviceId deviceId,
 				  unsigned int connectionNo);
+    virtual void setConnection(DeviceId deviceId, QString connection);
 
 #ifdef HAVE_LADSPA
 
@@ -260,7 +268,7 @@ private:
                               MidiByte byte2);
 
 
-    std::vector<AlsaPort*>       m_alsaPorts;
+    std::vector<AlsaPortDescription *> m_alsaPorts;
 
 
     // ALSA MIDI/Sequencer stuff
@@ -291,11 +299,6 @@ private:
     RealTime                     m_loopStartTime;
     RealTime                     m_loopEndTime;
     bool                         m_looping;
-
-    // used when deciding what device number we're on
-    // (multiple ports for a client)
-    //
-    ClientPortPair               m_currentPair;
 
     // added metronome yet?
     bool                         m_addedMetronome;
@@ -338,6 +341,8 @@ private:
     typedef std::map<DeviceId, ClientPortPair> DevicePortMap;
     DevicePortMap m_devicePortMap;
 
+    ClientPortPair parseConnectionName(std::string name);
+    std::string unparseConnectionName(ClientPortPair port);
 };
 
 }

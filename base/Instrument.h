@@ -246,13 +246,6 @@ private:
     // control.  Here we can store the remote fader id.
     //
     int              m_mappedId;
-#ifndef EXPERIMENTAL_ALSA_DRIVER
-    // If a MIDI Instrument then we might have a port number.
-    // The Device to which this Instrument belongs will give
-    // us a client ID on the sequencer side in the ALSA case.
-    //
-    int              m_port;
-#endif
 
 };
 

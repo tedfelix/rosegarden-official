@@ -46,6 +46,7 @@
 namespace Rosegarden
 {
 
+#ifdef NOT_DEFINED
 // --------- AlsaPort ------------
 //
 AlsaPort::AlsaPort(InstrumentId startId,
@@ -67,7 +68,7 @@ AlsaPort::AlsaPort(InstrumentId startId,
 AlsaPort::~AlsaPort()
 {
 }
-
+#endif
 
 AlsaPortDescription::AlsaPortDescription(Instrument::InstrumentType type,
                                          const std::string &name,
@@ -80,6 +81,46 @@ AlsaPortDescription::AlsaPortDescription(Instrument::InstrumentType type,
         m_port(port),
         m_direction(direction)
 {
+}
+
+
+bool
+AlsaPortCmp::operator()(AlsaPortDescription *a1, AlsaPortDescription *a2)
+{
+    // Ordering for ALSA ports in the list:
+    //
+    // * Hardware ports (client id 64-127) sorted by direction
+    //   (write, duplex, read) then client id then port id
+    //
+    // * Software ports (client id 128+) sorted by client id
+    //   then port id
+    // 
+    // * System ports (client id 0-63) sorted by client id then
+    //   port id
+
+    const int HARDWARE = 1, SOFTWARE = 2, SYSTEM = 3;
+
+    int a1type = (a1->m_client < 64  ? SYSTEM :
+		  a1->m_client < 128 ? HARDWARE : SOFTWARE);
+
+    int a2type = (a2->m_client < 64  ? SYSTEM :
+		  a2->m_client < 128 ? HARDWARE : SOFTWARE);
+
+    if (a1type != a2type) return a1type < a2type;
+
+    if (a1type == HARDWARE) {
+	if (a1->m_direction == WriteOnly) {
+	    if (a2->m_direction != WriteOnly) return true;
+	} else if (a1->m_direction == Duplex) {
+	    if (a2->m_direction == ReadOnly) return true;
+	}
+    }
+
+    if (a1->m_client != a2->m_client) {
+	return a1->m_client < a2->m_client;
+    } else {
+	return a1->m_port   < a2->m_port;
+    }
 }
 
 }

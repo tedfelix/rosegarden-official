@@ -177,6 +177,21 @@ public:
         return m_soundDriver->getDevices();
     }
 
+    int canReconnect(int type)
+    {
+	return m_soundDriver->canReconnect(Rosegarden::Device::DeviceType(type));
+    }
+
+    unsigned int addDevice(int type)
+    {
+	return m_soundDriver->addDevice(Rosegarden::Device::DeviceType(type));
+    }
+
+    void removeDevice(unsigned int deviceId)
+    {
+	m_soundDriver->removeDevice(deviceId);
+    }
+
     // Get total number of permissible connections for a given device
     //
     unsigned int getConnections(unsigned int deviceId)
@@ -189,6 +204,11 @@ public:
     QString getConnection(unsigned int deviceId, unsigned int connectionNo)
     {
 	return m_soundDriver->getConnection(deviceId, connectionNo);
+    }
+
+    void setConnection(unsigned int deviceId, QString connection)
+    {
+	m_soundDriver->setConnection(deviceId, connection);
     }
 
     // Process anything that needs to go on in the background 

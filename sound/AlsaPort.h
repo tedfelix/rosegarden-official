@@ -33,6 +33,7 @@
 namespace Rosegarden
 {
 
+#ifdef NOT_DEFINED
 // An AlsaPort represents one or more (usually 16) MappedInstruments.
 //
 //
@@ -55,7 +56,7 @@ public:
     PortDirection m_direction; // read, write or duplex
     unsigned int  m_type;      // MIDI, synth or what?
 };
-
+#endif
 
 typedef std::pair<int, int> ClientPortPair;
 
@@ -86,29 +87,7 @@ public:
 struct AlsaPortCmp
 {
     bool operator()(AlsaPortDescription *a1,
-                    AlsaPortDescription *a2)
-    {
-        // Handle non-system clients by pushing them to the end of the
-        // device list always.  This will keep devices in the order:
-        //
-        // o write-only system devices (soundcard synths)
-        // o duplex system devices (MIDI ports)
-        // o software devices (softsynths)
-        //
-        // I don't want to use the 128 here but this is at least
-        // emperically correct for the moment and can't see a 
-        // working alternative.
-        //
-        if (a1->m_client < 128 && a1->m_direction != a2->m_direction)
-            return true;
-        else
-        {
-            if (a1->m_client != a2->m_client)
-                return a1->m_client < a2->m_client;
-            else
-                return a1->m_port < a2->m_port;
-        }
-    }
+                    AlsaPortDescription *a2);
 };
 
 

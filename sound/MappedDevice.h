@@ -26,6 +26,7 @@
 
 #include "Device.h"
 #include "MidiDevice.h"
+#include "MappedCommon.h"
 
 #ifndef _MAPPEDDEVICE_H_
 #define _MAPPEDDEVICE_H_
@@ -44,7 +45,8 @@ public:
     MappedDevice();
     MappedDevice(Rosegarden::DeviceId id,
                  Rosegarden::Device::DeviceType type,
-                 const std::string &name);
+                 std::string name,
+		 std::string connection = "");
 
     MappedDevice(const MappedDevice &mD);
     ~MappedDevice();
@@ -70,12 +72,11 @@ public:
     Rosegarden::Device::DeviceType getType() const { return m_type; }
     void setType(Rosegarden::Device::DeviceType type) { m_type = type; }
 
-    // Get the DeviceDirection from the attached MappedInstruments
-    //
-    Rosegarden::MidiDevice::DeviceDirection getDirection() const;
-
     std::string getConnection() const { return m_connection; }
     void setConnection(std::string connection) { m_connection = connection; }
+
+    PortDirection getDirection() const { return m_direction; }
+    void setDirection(PortDirection direction) { m_direction = direction; }
 
 protected:
 
@@ -83,6 +84,7 @@ protected:
     Rosegarden::Device::DeviceType  m_type;
     std::string                     m_name;
     std::string                     m_connection;
+    PortDirection                   m_direction;
 };
 
 typedef std::vector<Rosegarden::MappedInstrument*>::const_iterator

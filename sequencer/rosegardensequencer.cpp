@@ -913,6 +913,24 @@ RosegardenSequencerApp::getDevices()
     return m_sequencer->getDevices();
 }
 
+int
+RosegardenSequencerApp::canReconnect(int type)
+{
+    return m_sequencer->canReconnect(type);
+}
+
+unsigned int
+RosegardenSequencerApp::addDevice(int type)
+{
+    return m_sequencer->addDevice(type);
+}
+
+void
+RosegardenSequencerApp::removeDevice(unsigned int deviceId)
+{
+    m_sequencer->removeDevice(deviceId);
+}
+
 unsigned int
 RosegardenSequencerApp::getConnections(unsigned int deviceId)
 {
@@ -924,6 +942,13 @@ RosegardenSequencerApp::getConnection(unsigned int deviceId,
 				      unsigned int connectionNo)
 {
     return m_sequencer->getConnection(deviceId, connectionNo);
+}
+
+void
+RosegardenSequencerApp::setConnection(unsigned int deviceId,
+				      QString connection)
+{
+    m_sequencer->setConnection(deviceId, connection);
 }
 
 void
