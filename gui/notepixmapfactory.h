@@ -48,7 +48,8 @@ public:
                     bool dotted,
                     Rosegarden::Accidental,
                     bool drawTail,
-                    bool stalkGoesUp);
+                    bool stalkGoesUp,
+                    bool fixedHeight);
     
     const QPoint&      getBodyOffset()     { return m_bodyOffset; }
     const QSize&       getPixmapSize()     { return m_pixmapSize; }
@@ -120,12 +121,16 @@ public:
      *   (useful when the tail should be collapsed with the one of a
      *    neighboring note)
      * @param stalkGoesUp : if the note's stalk should go up or down
+     * @param fixedHeight : true for things like toolbar buttons,
+     *   never appropriate on a real stave
      */
     QCanvasPixmap makeNotePixmap(Rosegarden::Note::Type note,
                                  bool dotted,
-                                 Rosegarden::Accidental accidental = Rosegarden::NoAccidental,
+                                 Rosegarden::Accidental accidental =
+                                                     Rosegarden::NoAccidental,
                                  bool drawTail = true,
-                                 bool stalkGoesUp = true);
+                                 bool stalkGoesUp = true,
+                                 bool fixedHeight = false);
 
     QCanvasPixmap makeRestPixmap(Rosegarden::Note::Type note, bool dotted);
     QCanvasPixmap makeClefPixmap(Rosegarden::Clef clef) const;

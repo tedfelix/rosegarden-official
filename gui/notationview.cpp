@@ -262,37 +262,37 @@ NotationView::setupActions()
 {
     // setup Notes menu
     QIconSet icon(m_notePixmapFactory.makeNotePixmap
-                  (Note::WholeNote, false));
+                  (Note::WholeNote, false, NoAccidental, true, true, true));
     new KAction(i18n("Whole"), icon, 0, this,
                 SLOT(slotWhole()), actionCollection(), "whole_note" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::HalfNote, false));
+                    (Note::HalfNote, false, NoAccidental, true, true, true));
     new KAction(i18n("Half"), icon, 0, this,
                 SLOT(slotHalf()), actionCollection(), "half" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::QuarterNote, false));
+                    (Note::QuarterNote, false, NoAccidental, true, true, true));
     new KAction(i18n("Quarter"), icon, 0, this,
                 SLOT(slotQuarter()), actionCollection(), "quarter" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::EighthNote, false));
+                    (Note::EighthNote, false, NoAccidental, true, true, true));
     new KAction(i18n("8th"), icon, 0, this,
                 SLOT(slot8th()), actionCollection(), "8th" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::SixteenthNote, false));
+                    (Note::SixteenthNote, false, NoAccidental, true, true, true));
     new KAction(i18n("16th"), icon, 0, this,
                 SLOT(slot16th()), actionCollection(), "16th" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::ThirtySecondNote, false));
+                    (Note::ThirtySecondNote, false, NoAccidental, true, true, true));
     new KAction(i18n("32nd"), icon, 0, this,
                 SLOT(slot32nd()), actionCollection(), "32nd" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::SixtyFourthNote, false));
+                    (Note::SixtyFourthNote, false, NoAccidental, true, true, true));
     new KAction(i18n("64th"), icon, 0, this,
                 SLOT(slot64th()), actionCollection(), "64th" );
     
@@ -551,7 +551,7 @@ void
 NotationView::setCurrentSelectedNote(Note::Type n)
 {
     m_currentSelectedNote = n;
-    m_currentNotePixmap->setPixmap(m_notePixmapFactory.makeNotePixmap(n, false));
+    m_currentNotePixmap->setPixmap(m_notePixmapFactory.makeNotePixmap(n, false, NoAccidental, true, true, true));
     emit changeCurrentNote(n);
 }
 

@@ -48,7 +48,9 @@ void
 NotePixmapOffsets::offsetsFor(Note::Type note,
                               bool dotted,
                               Accidental accidental,
-                              bool drawTail, bool stalkGoesUp)
+                              bool drawTail,
+                              bool stalkGoesUp,
+                              bool fixedHeight)
 {
     m_note = note;
     m_accidental = accidental;
@@ -69,6 +71,22 @@ NotePixmapOffsets::offsetsFor(Note::Type note,
     computeAccidentalAndStalkSize();
     computePixmapSize();
     computeBodyOffset();
+
+    if (fixedHeight) {
+        //ew
+        int d = m_pixmapSize.height();
+        m_pixmapSize.setHeight(m_bodySize.height() / 2 +
+                               m_stalkLength +
+                               m_accidentalStalkSize.height());
+        m_pixmapSize.rheight() += 14 + 2 +
+            (m_accidentalHeight - m_noteBodyEmptySize.height()) / 2;
+        d = m_pixmapSize.height() - d;
+        m_stalkPoints.first.ry() += d;
+        m_stalkPoints.second.ry() += d;
+        m_bodyOffset.ry() += d;
+        m_hotSpot.ry() += d;
+        m_accidentalOffset.ry() += d;
+    }
 }
 
 void
@@ -359,12 +377,14 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
                                   bool dotted,
                                   Accidental accidental,
                                   bool drawTail,
-                                  bool stalkGoesUp)
+                                  bool stalkGoesUp,
+                                  bool fixedHeight)
 {
     kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap: note is "
                          << note << ", dotted is " << dotted << endl;
 
-    m_offsets.offsetsFor(note, dotted, accidental, drawTail, stalkGoesUp);
+    m_offsets.offsetsFor
+        (note, dotted, accidental, drawTail, stalkGoesUp, fixedHeight);
 
     if (note > Note::Longest) {
         kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap : note > LastNote ("
@@ -690,8 +710,8 @@ NotePixmapFactory::drawStalk(Note::Type note,
         if (stalkGoesUp) {
             tailPixmap = tailUp(note);
 
-            m_p.drawPixmap (m_offsets.getStalkPoints().first.x() + 1 , 0, *tailPixmap);
-            m_pm.drawPixmap(m_offsets.getStalkPoints().first.x() + 1 , 0, *(tailPixmap->mask()));
+            m_p.drawPixmap (m_offsets.getStalkPoints().second.x() + 1 , m_offsets.getStalkPoints().second.y(), *tailPixmap);
+            m_pm.drawPixmap(m_offsets.getStalkPoints().second.x() + 1 , m_offsets.getStalkPoints().second.y(), *(tailPixmap->mask()));
 
         } else {
 
