@@ -115,53 +115,44 @@ fi
 dir1=$kde_includes
 dir2=$kde_libraries
 
-lengthDir1=`expr length ${dir1}`
-lengthDir2=`expr length ${dir2}`
+# Remove any trailing slashes
+while test $dir1 = ${dir1%?}/; do
+dir1=${dir1%?}; done
+while test $dir2 = ${dir2%?}/; do
+dir2=${dir2%?}; done
 
+lengthDir1=${#dir1}
+lengthDir2=${#dir2}
+
+# Make directory paths equal in length
 if test $lengthDir1 -gt $lengthDir2
 then
-    endLength=${lengthDir2}
+    count=$(($lengthDir1 - $lengthDir2))
+    while test $count -ne 0
+    do
+       dir1=${dir1%?}
+       count=$(($count - 1))
+    done
 else
-    endLength=${lengthDir1}
+    count=$(($lengthDir2 - $lengthDir1))
+    while test $count -ne 0
+    do 
+       dir2=${dir2%?}
+       count=$(($count - 1))
+    done
 fi
 
-# remove termination character
-endLength=`expr $endLength - 1`
-
-count=0
-matchDir=""
-while test ${count} -ne ${endLength}  -a \
-       "${dir1:${count}:1}" = "${dir2:${count}:1}"
+# Chop off a path element at a time until
+# we hit root, or they're equal.
+while test $dir1 != "/" -a \
+        $dir1 != $dir2
 do
-    lastChar=${dir1:${count}:1}
-    matchDir="${matchDir}${lastChar}"
-    count=`expr ${count} + 1`
+    dir1=${dir1%/?*}/
+    dir2=${dir2%/?*}/
 done
-
-
-# Check directory exists and if it doesn't back up until we
-# find a slash
-#
-if test ! -d $matchDir
-then
-   # remove up to last slash
-   count=`expr length ${matchDir} - 1`
-
-   while test ${count} -gt 0 -a "${matchDir:${count}:1}" != "/"
-   do
-       count=`expr $count - 1`
-   done
-   matchDir=${matchDir:0:${count}}
-fi
-
-# append a slash if we're missing one
-if test "${lastChar}" != '/'
-then
-    matchDir="${matchDir}/"
-fi
+matchDir=$dir1        
 
 if test $prefix = "/usr/local/kde"
 then
     prefix=$matchDir
 fi
-
