@@ -129,6 +129,11 @@ public:
     void insertRest(timeT absoluteTime, Note note);
 
     /**
+     * Insert a clef
+     */
+    void insertClef(timeT absoluteTime, Clef clef);
+
+    /**
      * Deletes a note, doing all the clever split/merge stuff as
      * appropriate.  Requires up-to-date bar position list.
      */

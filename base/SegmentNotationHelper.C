@@ -559,6 +559,12 @@ TrackNotationHelper::insertSingleSomething(iterator i, int duration,
 }
 
 
+void TrackNotationHelper::insertClef(timeT absoluteTime, Clef clef)
+{
+    insert(clef.getAsEvent(absoluteTime));
+}
+
+
 void TrackNotationHelper::deleteNote(Event *e)
 {
     iterator i = track().findSingle(e);
