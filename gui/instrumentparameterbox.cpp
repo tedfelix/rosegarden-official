@@ -1064,12 +1064,19 @@ MIDIInstrumentParameterPanel::populateBankList()
 
     if (md->getVariationType() == MidiDevice::NoVariations) {
 
-	if (m_bankLabel->isHidden()) {
-	    m_bankLabel->show();
-	    m_bankCheckBox->show();
-	    m_bankValue->show();
-	}
 	banks = md->getBanks(m_selectedInstrument->isPercussion());
+
+	if (!banks.empty()) {
+	    if (m_bankLabel->isHidden()) {
+		m_bankLabel->show();
+		m_bankCheckBox->show();
+		m_bankValue->show();
+	    }
+	} else {
+	    m_bankLabel->hide();
+	    m_bankCheckBox->hide();
+	    m_bankValue->hide();
+	}
 
 	for (unsigned int i = 0; i < banks.size(); ++i) {
 	    if (m_selectedInstrument->getProgram().getBank() == banks[i]) {
@@ -1133,9 +1140,15 @@ MIDIInstrumentParameterPanel::populateBankList()
 	m_banks.push_back(*i);
 	m_bankValue->insertItem(strtoqstr(i->getName()));
     }
-	    
-    m_bankValue->setCurrentItem(currentBank);
+
     m_bankValue->setEnabled(m_selectedInstrument->sendsBankSelect());
+    
+    if (currentBank < 0 && !banks.empty()) {
+	m_bankValue->setCurrentItem(0);
+	slotSelectBank(0);
+    } else {
+	m_bankValue->setCurrentItem(currentBank);
+    }
 }    
 	
 // Populate program list by bank context
@@ -1168,6 +1181,8 @@ MIDIInstrumentParameterPanel::populateProgramList()
 	bank = m_selectedInstrument->getProgram().getBank();
     }
 
+    int currentProgram = -1;
+
     Rosegarden::ProgramList programs = md->getPrograms(bank);
     for (unsigned int i = 0; i < programs.size(); ++i) {
 	std::string programName = programs[i].getName();
@@ -1176,7 +1191,7 @@ MIDIInstrumentParameterPanel::populateProgramList()
 				       .arg(programs[i].getProgram() + 1)
 				       .arg(strtoqstr(programName)));
 	    if (m_selectedInstrument->getProgram() == programs[i]) {
-		m_programValue->setCurrentItem(i);
+		currentProgram = i;
 	    }
 	    m_programs.push_back(programs[i]);
 	}
@@ -1184,13 +1199,20 @@ MIDIInstrumentParameterPanel::populateProgramList()
 
     m_programValue->setEnabled(m_selectedInstrument->sendsProgramChange());
 
-    // Ensure that stored program change value is same as the one
-    // we're now showing (BUG 937371)
-    //
-    if (m_programs.size())
-    {
-        m_selectedInstrument->setProgramChange
-            ((m_programs[m_programValue->currentItem()]).getProgram());
+    if (currentProgram == 0 && !m_programs.empty()) {
+	m_programValue->setCurrentItem(0);
+	slotSelectProgram(0);
+    } else {
+	m_programValue->setCurrentItem(currentProgram);
+
+	// Ensure that stored program change value is same as the one
+	// we're now showing (BUG 937371)
+	//
+	if (!m_programs.empty())
+	{
+	    m_selectedInstrument->setProgramChange
+		((m_programs[m_programValue->currentItem()]).getProgram());
+	}
     }
 }
 
@@ -1260,6 +1282,8 @@ MIDIInstrumentParameterPanel::populateVariationList()
     }
     std::string defaultProgramName = md->getProgramName(defaultProgram);
 
+    int currentVariation = -1;
+
     for (unsigned int i = 0; i < variations.size(); ++i) {
 
 	Rosegarden::MidiProgram program;
@@ -1290,10 +1314,17 @@ MIDIInstrumentParameterPanel::populateVariationList()
 					 .arg(variations[i] + 1)
 					 .arg(strtoqstr(programName)));
 	    if (m_selectedInstrument->getProgram() == program) {
-		m_variationValue->setCurrentItem(i);
+		currentVariation = i;
 	    }
 	    m_variations.push_back(variations[i]);
 	}
+    }
+
+    if (currentVariation < 0 && !m_variations.empty()) {
+	m_variationValue->setCurrentItem(0);
+	slotSelectVariation(0);
+    } else {
+	m_variationValue->setCurrentItem(currentVariation);
     }
 
     if (m_variations.size() < 2) {
@@ -1442,18 +1473,27 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
 
     const Rosegarden::MidiBank *bank = &m_banks[index];
 
+    bool change = false;
+
     if (md->getVariationType() != MidiDevice::VariationFromLSB) {
-	m_selectedInstrument->setLSB(bank->getLSB());
+	if (m_selectedInstrument->getLSB() != bank->getLSB()) {
+	    m_selectedInstrument->setLSB(bank->getLSB());
+	    change = true;
+	}
     }
     if (md->getVariationType() != MidiDevice::VariationFromMSB) {
-	m_selectedInstrument->setMSB(bank->getMSB());
+	if (m_selectedInstrument->getMSB() != bank->getMSB()) {
+	    m_selectedInstrument->setMSB(bank->getMSB());
+	    change = true;
+	}
     }
 
     populateProgramList();
 
-    sendBankAndProgram();
-
-    emit updateAllBoxes();
+    if (change) {
+	sendBankAndProgram();
+	emit updateAllBoxes();
+    }
 }
 
 void
@@ -1464,16 +1504,22 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
         RG_DEBUG << "program change not found in bank" << endl;
         return;
     }
-    m_selectedInstrument->setProgramChange(prg->getProgram());
 
-    sendBankAndProgram();
+    bool change = false;
+    if (m_selectedInstrument->getProgramChange() != prg->getProgram()) {
+	m_selectedInstrument->setProgramChange(prg->getProgram());
+	change = true;
+    }
 
     populateVariationList();
 
-    emit changeInstrumentLabel(m_selectedInstrument->getId(),
-			       strtoqstr(m_selectedInstrument->
-					 getProgramName()));
-    emit updateAllBoxes();
+    if (change) {
+	sendBankAndProgram();
+	emit changeInstrumentLabel(m_selectedInstrument->getId(),
+				   strtoqstr(m_selectedInstrument->
+					     getProgramName()));
+	emit updateAllBoxes();
+    }
 }
 
 void
@@ -1494,13 +1540,23 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
 
     Rosegarden::MidiByte v = m_variations[index];
     
-    if (md->getVariationType() == MidiDevice::VariationFromLSB) {
-	m_selectedInstrument->setLSB(v);
-    } else if (md->getVariationType() == MidiDevice::VariationFromMSB) {
-	m_selectedInstrument->setMSB(v);
-    }
+    bool change = false;
 
-    sendBankAndProgram();
+    if (md->getVariationType() == MidiDevice::VariationFromLSB) {
+	if (m_selectedInstrument->getLSB() != v) {
+	    m_selectedInstrument->setLSB(v);
+	    change = true;
+	}
+    } else if (md->getVariationType() == MidiDevice::VariationFromMSB) {
+	if (m_selectedInstrument->getMSB() != v) {
+	    m_selectedInstrument->setMSB(v);
+	    change = true;
+	}
+    }
+    
+    if (change) {
+	sendBankAndProgram();
+    }
 }
 
 void
@@ -1512,7 +1568,7 @@ MIDIInstrumentParameterPanel::sendBankAndProgram()
     MidiDevice *md = dynamic_cast<MidiDevice*>
 	(m_selectedInstrument->getDevice());
     if (!md) {
-	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
+	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::sendBankAndProgram: No MidiDevice for Instrument "
 		  << m_selectedInstrument->getId() << endl;
 	return;
     }

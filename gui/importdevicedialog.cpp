@@ -327,7 +327,8 @@ ImportDeviceDialog::importFromSF2(QString filename)
 	int lsb = bankNumber % 128;
 
         Rosegarden::MidiBank bank
-	    (false, msb, lsb, qstrtostr(i18n("Bank %1:%2").arg(msb).arg(lsb)));
+	    (msb == 1, msb, lsb,
+	     qstrtostr(i18n("Bank %1:%2").arg(msb).arg(lsb)));
 
         banks.push_back(bank);
 
