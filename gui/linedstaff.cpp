@@ -724,7 +724,7 @@ double
 LinedStaff<T>::getLayoutXOfPointer() const
 {
     double x = m_pointer->x();
-    int row = getRowForCanvasCoords(x, m_pointer->y());
+    int row = getRowForCanvasCoords(x, int(m_pointer->y()));
     return getLayoutCoordsForCanvasCoords(x, getCanvasYForTopLine(row)).first;
 }
 
@@ -734,7 +734,7 @@ LinedStaff<T>::getLayoutXOfInsertCursor() const
 {
     if (!m_current) return -1;
     double x = m_insertCursor->x();
-    int row = getRowForCanvasCoords(x, m_insertCursor->y());
+    int row = getRowForCanvasCoords(x, int(m_insertCursor->y()));
     return getLayoutCoordsForCanvasCoords(x, getCanvasYForTopLine(row)).first;
 }
 
@@ -744,8 +744,8 @@ LinedStaff<T>::setPointerPosition(double canvasX, int canvasY)
 {
     int row = getRowForCanvasCoords(canvasX, canvasY);
     canvasY = getCanvasYForTopOfStaff(row);
-    m_pointer->setPoints(canvasX, canvasY,
-			 canvasX, canvasY + getHeightOfRow() - 1);
+    m_pointer->setPoints(int(canvasX), canvasY,
+			 int(canvasX), canvasY + getHeightOfRow() - 1);
     m_pointer->show();
 }
 
@@ -779,8 +779,8 @@ LinedStaff<T>::setInsertCursorPosition(double canvasX, int canvasY)
     }
 
     canvasY = getCanvasYForTopOfStaff(row);
-    m_insertCursor->setPoints(canvasX, canvasY,
-			      canvasX, canvasY + getHeightOfRow() - 1);
+    m_insertCursor->setPoints(int(canvasX), canvasY,
+			      int(canvasX), canvasY + getHeightOfRow() - 1);
     m_insertCursor->show();
 }
 
