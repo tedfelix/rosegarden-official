@@ -1420,15 +1420,18 @@ TransformsMenuInterpretCommand::articulate()
 	    }
 	    
 	    if (durationChange != 0) { 
+
+		if (toErase.find(e) == toErase.end()) {
 		
-		//!!! deal with tuplets
-		
-		Event *newEvent = new Event
-		    (*e, e->getAbsoluteTime(),
-		     duration + duration * durationChange / 100);
-		newEvent->setNotationDuration(duration);
-		toInsert.insert(newEvent);
-		toErase.insert(e);
+		    //!!! deal with tuplets
+		    
+		    Event *newEvent = new Event
+			(*e, e->getAbsoluteTime(),
+			 duration + duration * durationChange / 100);
+		    newEvent->setNotationDuration(duration);
+		    toInsert.insert(newEvent);
+		    toErase.insert(e);
+		}
 	    }
 	}
 

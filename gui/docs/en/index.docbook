@@ -565,8 +565,8 @@
        the main canvas in a fainter colour than the original segment.
        You can turn them into real editable copies of the original
        segment either by using the "Turn Repeats into Copies" option
-       on the Segments menu, or by double-clicking on the individual
-       repeating blocks to edit them directly.</para>
+       on the Segments menu, or simply by double-clicking on the
+       individual repeating blocks.</para>
       </listitem>
      </varlistentry>
 

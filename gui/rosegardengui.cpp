@@ -916,6 +916,8 @@ void RosegardenGUIApp::initView()
 
     }
 
+    m_view->getTrackEditor()->getChordNameRuler()->recalculate();
+
     m_view->show();
     delete oldView;
 

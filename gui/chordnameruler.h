@@ -75,6 +75,8 @@ public:
 
     void setMinimumWidth(int width) { m_width = width; }
 
+    void recalculate();
+
 public slots:
     void slotScrollHoriz(int x);
 
@@ -106,8 +108,6 @@ private:
 
     const Rosegarden::PropertyName TEXT_FORMAL_X;
     const Rosegarden::PropertyName TEXT_ACTUAL_X;
-
-    void recalculate();
 };
 
 #endif // _LOOPRULER_H_

@@ -139,6 +139,12 @@ void RosegardenCanvasView::slotScrollVertSmallSteps(int vpos)
 {
     QScrollBar* vbar = verticalScrollBar();
 
+    RG_DEBUG << "RosegardenCanvasView::slotScrollVertSmallSteps: vpos is " << vpos << ", contentsY is " << contentsY() << ", visibleHeight is " << visibleHeight() << endl;
+
+    // As a special case (or hack), ignore any request made before we've
+    // actually been rendered and sized
+    if (visibleHeight() <= 1) return;
+
     int diff = 0;
 
     if (vpos == 0) {
