@@ -201,7 +201,7 @@ MidiDevice::generateDefaultControllers()
         { "Sustain", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "64", "4", "4" },
         { "Expression", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "11", "2", "5" },
         { "Modulation", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "1", "4", "-1" },
-        { "Pitch Bend", Rosegarden::PitchBend::EventType, "<none>", "0", "127", "0", "1", "4", "-1" }
+        { "PitchBend", Rosegarden::PitchBend::EventType, "<none>", "0", "16383", "8192", "1", "4", "-1" }
     };
 
     for (unsigned int i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {

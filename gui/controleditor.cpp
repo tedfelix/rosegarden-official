@@ -442,7 +442,7 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     QVBox *vbox = makeVBoxMainWidget();
 
     QGroupBox *groupBox = new QGroupBox
-        (1, Horizontal, i18n("Control Parameter Properties"), vbox);
+        (1, Horizontal, i18n("Control Event Properties"), vbox);
 
     QFrame *frame = new QFrame(groupBox);
 
@@ -534,6 +534,10 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     // populate combos
     m_typeCombo->insertItem(strtoqstr(Rosegarden::Controller::EventType));
     m_typeCombo->insertItem(strtoqstr(Rosegarden::PitchBend::EventType));
+    /*
+    m_typeCombo->insertItem(strtoqstr(Rosegarden::KeyPressure::EventType));
+    m_typeCombo->insertItem(strtoqstr(Rosegarden::ChannelPressure::EventType));
+    */
 
     // Populate colour combo
     //
@@ -541,48 +545,87 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     Rosegarden::ColourMap &colourMap = m_doc->getComposition().getGeneralColourMap();
     Rosegarden::RCMap::const_iterator it;
     QPixmap colourPixmap(16, 16);
-    int pos = 0, setItem = 0;
 
     for (it = colourMap.begin(); it != colourMap.end(); ++it)
     {
         Rosegarden::Colour c = it->second.first;
         colourPixmap.fill(QColor(c.getRed(), c.getGreen(), c.getBlue()));
         m_colourCombo->insertItem(colourPixmap, strtoqstr(it->second.second));
-
-        if (control->getColourIndex() == it->first) setItem = pos;
-
-        pos++;
     }
 
     // Populate IPB position combo
     //
     m_ipbPosition->insertItem(notShowing);
     for (unsigned int i = 0; i < 16; i++)
-    {
         m_ipbPosition->insertItem(QString("%1").arg(i));
-    }
 
-    m_nameEdit->setText(strtoqstr(control->getName()));
-
-    if (control->getType() == Rosegarden::Controller::EventType)
+    if (m_control->getType() == Rosegarden::Controller::EventType)
         m_typeCombo->setCurrentItem(0);
-    else if (control->getType() == Rosegarden::PitchBend::EventType)
+    else if (m_control->getType() == Rosegarden::PitchBend::EventType)
         m_typeCombo->setCurrentItem(1);
+    /*
+    else if (m_control->getType() == Rosegarden::KeyPressure::EventType)
+        m_typeCombo->setCurrentItem(2);
+    else if (m_control->getType() == Rosegarden::ChannelPressure::EventType)
+        m_typeCombo->setCurrentItem(3);
+        */
 
-    m_description->setText(strtoqstr(control->getDescription()));
-    m_controllerBox->setValue(int(control->getControllerValue()));
+    populate();
+}
+
+void 
+ControlParameterEditDialog::populate()
+{
+    m_nameEdit->setText(strtoqstr(m_control->getName()));
+
+    m_description->setText(strtoqstr(m_control->getDescription()));
+    m_controllerBox->setValue(int(m_control->getControllerValue()));
 
     QString hexValue;
-    hexValue.sprintf("(0x%x)", control->getControllerValue());
+    hexValue.sprintf("(0x%x)", m_control->getControllerValue());
     m_hexValue->setText(hexValue);
 
-    m_minBox->setValue(control->getMin());
-    m_maxBox->setValue(control->getMax());
-    m_defaultBox->setValue(control->getDefault());
+    m_minBox->setValue(m_control->getMin());
+    m_maxBox->setValue(m_control->getMax());
+    m_defaultBox->setValue(m_control->getDefault());
+
+    int pos = 0, setItem = 0;
+    Rosegarden::ColourMap &colourMap = m_doc->getComposition().getGeneralColourMap();
+    Rosegarden::RCMap::const_iterator it;
+    for (it = colourMap.begin(); it != colourMap.end(); ++it)
+        if (m_control->getColourIndex() == it->first) setItem = pos++;
+
     m_colourCombo->setCurrentItem(setItem);
 
     // set combo position
-    m_ipbPosition->setCurrentItem(control->getIPBPosition() + 1);
+    m_ipbPosition->setCurrentItem(m_control->getIPBPosition() + 1);
+
+    // If the type has changed and there are no defaults then we have to
+    // supply some.
+    //
+    if (qstrtostr(m_typeCombo->currentText()) == Rosegarden::PitchBend::EventType ||
+        qstrtostr(m_typeCombo->currentText()) == Rosegarden::KeyPressure::EventType ||
+        qstrtostr(m_typeCombo->currentText()) == Rosegarden::ChannelPressure::EventType)
+    {
+        m_controllerBox->setEnabled(false);
+        m_ipbPosition->setEnabled(false);
+        m_colourCombo->setEnabled(false);
+        m_hexValue->setEnabled(false);
+        m_minBox->setEnabled(false);
+        m_maxBox->setEnabled(false);
+        m_defaultBox->setEnabled(false);
+    }
+    else if (qstrtostr(m_typeCombo->currentText()) == Rosegarden::Controller::EventType)
+    {
+        m_controllerBox->setEnabled(true);
+        m_ipbPosition->setEnabled(true);
+        m_colourCombo->setEnabled(true);
+        m_hexValue->setEnabled(true);
+        m_minBox->setEnabled(true);
+        m_maxBox->setEnabled(true);
+        m_defaultBox->setEnabled(true);
+    }
+
 }
 
 void 
@@ -597,6 +640,8 @@ ControlParameterEditDialog::slotTypeChanged(int value)
 {
     RG_DEBUG << "ControlParameterEditDialog::slotTypeChanged" << endl;
     m_dialogControl.setType(qstrtostr(m_typeCombo->text(value)));
+
+    populate();
 }
 
 void 

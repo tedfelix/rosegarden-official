@@ -1,45 +1,20 @@
-Features for 1.0 - updated 20030923
+Features for 1.0 - updated 2004025
 -----------------------------------
 
-- integrate new JACK transport and synchronisation - also
-  investigate MIDI clock, MTC and MMC [IN PROGRESS - rwb]
+- request: notation segment expanding itself as you enter
+           notes past the end of it
 
-- LADCCA integration
-
-- punch in record [rwb] [HALF COMPLETE]
+- punch in record [cc]
 
 - matrix view 
   o double/half speed of selection 
   o force legato
 
-- audio threading for file r/w access [rwb]
-  o mp3 support
-  o libsndfile support
-  o improving ringbuffer and precaching performance for audio
-  o memory speedups in the RingBuffer and using MappedStudio in process loop
-  o caching waveform previews at PeakFile [rwb]
-  o ringbuffer  [DONE]
-  o drag and drop [DONE]
-  o dynamic editing [DONE]
-
-- tidy up audio parameter box [cc/rwb/gl]
-  o audio VU meter needs to look cool (like ardour)
-
 - multiple document interface (switcheable buffers, loading while playing) [rwb]
-
-- request: notation segment expanding itself as you enter
-           notes past the end of it
-
-- Studio faders (MIDI and audio fader controls)
-
-- look at other updates for RG manual [dmm]
 
 - fix lilypond lyric duration bug [dmm]
 
 - find decent home for event filter toolbar icons [cc? dmm?]
-
-- completely rewrite tutorial for 1.0, using fewer/smaller pixmaps, better
-  organization, possibly converting to LDP docbook format [dmm]
 
 - Tempo ruler in main window: need control-ruler-like interface,
   ideally from control-ruler code.  This one is a lot more important
@@ -64,6 +39,24 @@ Features for 1.0 - updated 20030923
 
 Completed
 ---------
+
+- integrate new JACK transport and synchronisation [DONE --cc]
+
+- Studio faders (MIDI and audio fader controls)
+
+- tidy up audio parameter box [cc/rwb/gl]
+  o audio VU meter needs to look cool (like ardour)
+
+- audio threading for file r/w access [rwb/cc]
+  o mp3 support
+  o libsndfile support
+  o improving ringbuffer and precaching performance for audio
+  o memory speedups in the RingBuffer and using MappedStudio in process loop
+  o caching waveform previews at PeakFile [rwb]
+  o ringbuffer  [DONE]
+  o drag and drop [DONE]
+  o dynamic editing [DONE]
+
 
 - Change setPositionPointer calls to a mmapped model (gui will need
   its own timer to inspect mmapped file) [DONE]
@@ -157,6 +150,16 @@ To be ignored
   fluidsynth integration it'll probably mean we should talk more 
   closely with the fluidsynth team and get their support.  There are
   things that both of us dislike about current implementation. [rwb]
+
+Postponed
+---------
+
+- LADCCA integration
+
+- completely rewrite tutorial for 1.0, using fewer/smaller pixmaps, better
+  organization, possibly converting to LDP docbook format [dmm]
+
+- look at other updates for RG manual [dmm]
 
 
 Bugs

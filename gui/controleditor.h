@@ -88,6 +88,8 @@ public slots:
     void slotIPBPositionChanged(int);
 
 protected:
+    void populate(); // populate the dialog
+
     RosegardenGUIDoc             *m_doc;
     Rosegarden::ControlParameter *m_control;
     Rosegarden::ControlParameter  m_dialogControl;

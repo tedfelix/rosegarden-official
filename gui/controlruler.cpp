@@ -1082,10 +1082,10 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
     else
         m_controller = 0;
 
-
-    // Reset range information for this controller type
-    if (m_controller->getType() == Rosegarden::PitchBend::EventType)
-        setMaxItemValue(16383); // 2 ^ 14
+    // Reset range information for this controller type (for the moment
+    // this assumes min is always 0.
+    //
+    setMaxItemValue(m_controller->getMax());
 
     m_segment.addObserver(this);
 
