@@ -597,10 +597,12 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 //kdDebug(KDEBUG_AREA) << "done" <<endl;
 
 //	    if (duration > 0) {
+
 		Note::Type note = elt->event()->get<Int>(NOTE_TYPE);
 		int dots = elt->event()->get<Int>(NOTE_DOTS);
-		pixmap = new QCanvasPixmap
-		    (m_npf->makeRestPixmap(Note(note, dots)));
+		NotePixmapParameters params(note, dots);
+		setTuplingParameters(elt, params);
+		pixmap = new QCanvasPixmap(m_npf->makeRestPixmap(params));
 //	    } else {
 //		kdDebug(KDEBUG_AREA) << "Omitting too-short rest" << endl;
 //	    }
@@ -821,7 +823,18 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     }
     
     params.setStemLength(stemLength);
-    params.setTupledCount(0);
+    setTuplingParameters(elt, params);
+
+    QCanvasPixmap notePixmap(m_npf->makeNotePixmap(params));
+    return new QCanvasNotationSprite(*elt,
+                                     new QCanvasPixmap(notePixmap), m_canvas);
+}
+
+void
+NotationStaff::setTuplingParameters(NotationElement *elt,
+				    NotePixmapParameters &params)
+{
+    params.setTupletCount(0);
     long tuplingLineY = 0;
     bool tupled = (elt->event()->get<Int>(TUPLING_LINE_MY_Y, tuplingLineY));
 
@@ -831,20 +844,14 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 	double tuplingLineGradient =
 	    (double)(elt->event()->get<Int>(TUPLING_LINE_GRADIENT)) / 100.0;
 
-	//!!! should be "tupletCount"
-
-	long tupledCount;
-	if (elt->event()->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT, tupledCount)) {
-	    params.setTupledCount(tupledCount);
+	long tupletCount;
+	if (elt->event()->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT, tupletCount)) {
+	    params.setTupletCount(tupletCount);
 	    params.setTuplingLineY(tuplingLineY - (int)elt->getLayoutY());
 	    params.setTuplingLineWidth(tuplingLineWidth);
 	    params.setTuplingLineGradient(tuplingLineGradient);
 	}
     }
-
-    QCanvasPixmap notePixmap(m_npf->makeNotePixmap(params));
-    return new QCanvasNotationSprite(*elt,
-                                     new QCanvasPixmap(notePixmap), m_canvas);
 }
 
 bool

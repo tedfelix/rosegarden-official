@@ -85,7 +85,7 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_nextPartialBeams(false),
     m_width(1),
     m_gradient(0.0),
-    m_tupledCount(0),
+    m_tupletCount(0),
     m_tuplingLineY(0),
     m_tuplingLineWidth(0),
     m_tuplingLineGradient(0.0)
@@ -106,8 +106,8 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_timeSigFontMetrics(m_timeSigFont),
     m_bigTimeSigFont("new century schoolbook", 12, QFont::Normal),
     m_bigTimeSigFontMetrics(m_bigTimeSigFont),
-    m_tupledCountFont("new century schoolbook", 8, QFont::Bold, true),
-    m_tupledCountFontMetrics(m_tupledCountFont),
+    m_tupletCountFont("new century schoolbook", 8, QFont::Bold, true),
+    m_tupletCountFontMetrics(m_tupletCountFont),
     m_textMarkFont("new century schoolbook", 8, QFont::Bold, true),
     m_textMarkFontMetrics(m_textMarkFont)
 {
@@ -120,8 +120,8 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_timeSigFontMetrics(m_timeSigFont),
     m_bigTimeSigFont("new century schoolbook", 12, QFont::Normal),
     m_bigTimeSigFontMetrics(m_bigTimeSigFont),
-    m_tupledCountFont("new century schoolbook", 8, QFont::Bold, true),
-    m_tupledCountFontMetrics(m_tupledCountFont),
+    m_tupletCountFont("new century schoolbook", 8, QFont::Bold, true),
+    m_tupletCountFontMetrics(m_tupletCountFont),
     m_textMarkFont("new century schoolbook", 8, QFont::Bold, true),
     m_textMarkFontMetrics(m_textMarkFont)
 {
@@ -168,8 +168,8 @@ NotePixmapFactory::init(std::string fontName, int size)
     m_bigTimeSigFontMetrics = QFontMetrics(m_bigTimeSigFont);
 
     // 8 => 12, 4 => 6
-    m_tupledCountFont.setPixelSize(size * 3 / 2);
-    m_tupledCountFontMetrics = QFontMetrics(m_tupledCountFont);
+    m_tupletCountFont.setPixelSize(size * 3 / 2);
+    m_tupletCountFontMetrics = QFontMetrics(m_tupletCountFont);
 
     // 8 => 12, 4 => 6
     m_textMarkFont.setPixelSize(size * 3 / 2);
@@ -334,27 +334,8 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
         }
     }            
 
-    if (params.m_tupledCount > 0) {
-
-	int lineSpacing =
-	    (int)(params.m_tuplingLineWidth * params.m_tuplingLineGradient);
-	int th = m_tupledCountFontMetrics.height();
-
-	if (params.m_tuplingLineY < 0) {
-
-	    lineSpacing = -lineSpacing;
-	    if (lineSpacing < 0) lineSpacing = 0;
-	    m_above = std::max(m_above, -params.m_tuplingLineY + th/2);
-	    m_above += lineSpacing + 1;
-
-	} else {
-
-	    if (lineSpacing < 0) lineSpacing = 0;
-	    m_below = std::max(m_below, params.m_tuplingLineY + th/2);
-	    m_below += lineSpacing + 1;
-	}
-
-	m_right = std::max(m_right, params.m_tuplingLineWidth);
+    if (params.m_tupletCount > 0) {
+	makeRoomForTuplingLine(params);
     }
 						 
 
@@ -443,7 +424,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
         }
     }
 
-    if (params.m_tupledCount > 0) {
+    if (params.m_tupletCount > 0) {
 	drawTuplingLine(params);
     }
 
@@ -843,14 +824,38 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
 }
 
 void
+NotePixmapFactory::makeRoomForTuplingLine(const NotePixmapParameters &params)
+{
+    int lineSpacing =
+	(int)(params.m_tuplingLineWidth * params.m_tuplingLineGradient);
+    int th = m_tupletCountFontMetrics.height();
+
+    if (params.m_tuplingLineY < 0) {
+
+	lineSpacing = -lineSpacing;
+	if (lineSpacing < 0) lineSpacing = 0;
+	m_above = std::max(m_above, -params.m_tuplingLineY + th/2);
+	m_above += lineSpacing + 1;
+	
+    } else {
+	
+	if (lineSpacing < 0) lineSpacing = 0;
+	m_below = std::max(m_below, params.m_tuplingLineY + th/2);
+	m_below += lineSpacing + 1;
+    }
+    
+    m_right = std::max(m_right, params.m_tuplingLineWidth);
+}
+
+void
 NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
 {
     int thickness = getStaffLineThickness() * 3 / 2;
     int countSpace = thickness * 2;
 
     QString count;
-    count.setNum(params.m_tupledCount);
-    QRect cr = m_tupledCountFontMetrics.boundingRect(count);
+    count.setNum(params.m_tupletCount);
+    QRect cr = m_tupletCountFontMetrics.boundingRect(count);
 
     int w = (params.m_tuplingLineWidth - cr.width())/2 - countSpace;
 
@@ -876,8 +881,8 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
 
     drawShallowLine(startX, startY, endX, endY, thickness, true);
 
-    m_p.setFont(m_tupledCountFont);
-    m_pm.setFont(m_tupledCountFont);
+    m_p.setFont(m_tupletCountFont);
+    m_pm.setFont(m_tupletCountFont);
 
     int textX = endX + countSpace;
     int textY = endY + cr.height()/2;
@@ -967,11 +972,12 @@ NotePixmapFactory::drawTie(bool above, int length)
     }
 }
 
+
 QCanvasPixmap
-NotePixmapFactory::makeRestPixmap(const Note &restType) 
+NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params) 
 {
-    CharName charName(getRestCharName(restType.getNoteType()));
-    if (restType.getDots() == 0 && !m_selected) {
+    CharName charName(getRestCharName(params.m_noteType));
+    if (params.m_dots == 0 && params.m_tupletCount == 0 && !m_selected) {
         return m_font->getCanvasPixmap(charName);
     }
 
@@ -985,23 +991,33 @@ NotePixmapFactory::makeRestPixmap(const Note &restType)
     }
     QPixmap dot = m_font->getPixmap(NoteCharacterNames::DOT);
 
-    createPixmapAndMask(pixmap.width() + dot.width() * restType.getDots(),
-                        pixmap.height());
+    m_above = m_below = m_left = 0;
+    m_right = dot.width() * params.m_dots;
+    m_noteBodyWidth = pixmap.width();
+    m_noteBodyHeight = pixmap.height();
 
-    m_p.drawPixmap(0, 0, pixmap);
-    m_pm.drawPixmap(0, 0, *(pixmap.mask()));
+    makeRoomForTuplingLine(params);
+
+    createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
+                        m_noteBodyHeight + m_above + m_below);
+
+    m_p.drawPixmap(m_left, m_above, pixmap);
+    m_pm.drawPixmap(m_left, m_above, *(pixmap.mask()));
+
+    drawTuplingLine(params);
 
     QPoint hotspot(m_font->getHotspot(charName));
-    hotspot.setX(0);
+    hotspot.setX(m_left);
+    hotspot.setY(m_above + hotspot.y());
 
     int restY = hotspot.y() - dot.height() - getStaffLineThickness();
-    if (restType.getNoteType() == Note::Semibreve ||
-	restType.getNoteType() == Note::Breve) {
+    if (params.m_noteType == Note::Semibreve ||
+	params.m_noteType == Note::Breve) {
 	restY += getLineSpacing();
     }
 
-    for (int i = 0; i < restType.getDots(); ++i) {
-        int x = pixmap.width() + i * dot.width();
+    for (int i = 0; i < params.m_dots; ++i) {
+        int x = m_left + m_noteBodyWidth + i * dot.width();
         m_p.drawPixmap(x, restY, dot); 
         m_pm.drawPixmap(x, restY, *(dot.mask()));
     }

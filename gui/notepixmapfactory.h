@@ -59,7 +59,7 @@ public:
     void setWidth(int width)              { m_width            = width;     }
     void setGradient(double gradient)     { m_gradient         = gradient;  }
 
-    void setTupledCount(int count)	  { m_tupledCount      = count;	    }
+    void setTupletCount(int count)	  { m_tupletCount      = count;	    }
     void setTuplingLineY(int y)		  { m_tuplingLineY     = y;	    }
     void setTuplingLineWidth(int width)	  { m_tuplingLineWidth = width;	    }
     void setTuplingLineGradient(double g) { m_tuplingLineGradient = g;      }
@@ -99,7 +99,7 @@ private:
     int     m_width;
     double  m_gradient;
 
-    int	    m_tupledCount;
+    int	    m_tupletCount;
     int     m_tuplingLineY;
     int	    m_tuplingLineWidth;
     double  m_tuplingLineGradient;
@@ -135,7 +135,7 @@ public:
     bool isSelected() const { return m_selected; }
 
     QCanvasPixmap makeNotePixmap(const NotePixmapParameters &parameters);
-    QCanvasPixmap makeRestPixmap(const Rosegarden::Note &restType);
+    QCanvasPixmap makeRestPixmap(const NotePixmapParameters &parameters);
     QCanvasPixmap makeClefPixmap(const Rosegarden::Clef &clef) const;
     QCanvasPixmap makeKeyPixmap(const Rosegarden::Key &key,
 				const Rosegarden::Clef &clef);
@@ -180,7 +180,10 @@ protected:
     
     void drawBeams(const QPoint &, const NotePixmapParameters &params,
                    int beamCount);
+
+    void makeRoomForTuplingLine(const NotePixmapParameters &params);
     void drawTuplingLine(const NotePixmapParameters &params);
+
     void drawShallowLine(int x0, int y0, int x1, int y1, int thickness,
                          bool smooth);
     void drawTie(bool above, int length);
@@ -204,8 +207,8 @@ protected:
     QFont m_bigTimeSigFont;
     QFontMetrics m_bigTimeSigFontMetrics;
 
-    QFont m_tupledCountFont;
-    QFontMetrics m_tupledCountFontMetrics;
+    QFont m_tupletCountFont;
+    QFontMetrics m_tupletCountFontMetrics;
 
     QFont m_textMarkFont;
     QFontMetrics m_textMarkFontMetrics;

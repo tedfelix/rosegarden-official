@@ -248,6 +248,8 @@ protected:
 				     const Rosegarden::Clef &,
 				     bool selected);
 
+    void setTuplingParameters(NotationElement *, NotePixmapParameters &);
+
     /**
      * Return a QCanvasSimpleSprite representing the given note event
      */
