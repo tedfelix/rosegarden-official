@@ -1330,7 +1330,7 @@ void SequenceManager::resetMetronomeMmapper()
 
 void SequenceManager::resetControlBlockMmapper()
 {
-    SEQMAN_DEBUG << "SequenceManager::resetMetronomeMmapper()" << endl;
+    SEQMAN_DEBUG << "SequenceManager::resetControlBlockMmapper()" << endl;
 
     m_controlBlockMmapper->setDocument(m_doc);
 }
@@ -1368,7 +1368,8 @@ void SequenceManager::checkRefreshStatus()
 {
     SEQMAN_DEBUG << "SequenceManager::checkRefreshStatus()" << endl;
 
-    bool metronomeNeedsRefresh = (m_removedSegments.size() != 0 || m_addedSegments.size() != 0);
+    bool metronomeNeedsRefresh =
+	(m_removedSegments.size() != 0 || m_addedSegments.size() != 0);
 
     std::vector<Segment*>::iterator i;
 
