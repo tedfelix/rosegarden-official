@@ -1450,9 +1450,11 @@ AlsaDriver::stopPlayback()
     for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); ++it)
     {
         sendDeviceController(ClientPortPair((*it)->m_client,
-                                            (*it)->m_port),
-                             MIDI_CONTROLLER_SOUNDS_OFF,
-                             0);
+					    (*it)->m_port),
+			     MIDI_CONTROLLER_SUSTAIN, 0);
+        sendDeviceController(ClientPortPair((*it)->m_client,
+					    (*it)->m_port),
+			     MIDI_CONTROLLER_ALL_NOTES_OFF, 0);
     }
 
 #ifdef HAVE_LIBJACK
