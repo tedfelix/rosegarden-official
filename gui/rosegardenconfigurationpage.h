@@ -20,9 +20,9 @@
 */
 
 #ifndef _ROSEGARDENCONFIGUREPAGE_H_
-#define _ROSEGARDENCONFIGUREPAGE_include_
+#define _ROSEGARDENCONFIGUREPAGE_H_
 
-#H <map>
+#include <map>
 #include <utility>
 #include <vector>
 
