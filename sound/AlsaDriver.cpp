@@ -228,6 +228,9 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 
     _jackMappedEventCounter = 0;
 
+    // no disk thread
+    _diskThread = 0;
+
 #endif
 
     _threadAlsaClosing = false;
@@ -270,15 +273,20 @@ AlsaDriver::shutdown()
 
 #ifdef HAVE_LIBJACK
 
-#ifdef DEBUG_ALSA
-    std::cerr << "AlsaDriver::shutdown - cancelling disk thread" << std::endl;
-#endif
-    // join disk thread
-    pthread_join(_diskThread, NULL);
 
-    if (_threadJackClosing == false && m_audioClient)
+    // to close audio thread we need to change the static flag and tell thread
+    // to continue.
+    if (_threadJackClosing == false)
     {
+        // set status and signal thread to complete
         _threadJackClosing = true;
+        pthread_cond_signal(&_dataReady);
+        pthread_mutex_unlock(&_diskThreadLock);
+    }
+
+    if (m_audioClient)
+    {
+
 #ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::shutdown - closing JACK client"
                   << std::endl;
@@ -327,6 +335,14 @@ AlsaDriver::shutdown()
     // Get rid of all those static events
     for (int i = 0; i < _jackMappedEventsMax; ++i)
         delete _jackMappedEvent[i];
+
+#ifdef DEBUG_ALSA
+    std::cerr << "AlsaDriver::shutdown - cancelling disk thread" << std::endl;
+#endif
+
+    // This thread should already have completed at this point
+    //
+    if (_diskThread) pthread_join(_diskThread, NULL);
 
 #endif // HAVE_LIBJACK
     AUDIT_UPDATE;
@@ -1397,7 +1413,6 @@ AlsaDriver::initialiseAudio()
 
     // Using JACK instead
     //
-
     std::string jackClientName = "rosegarden";
 
     // attempt connection to JACK server
