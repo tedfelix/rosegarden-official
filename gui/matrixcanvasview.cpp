@@ -78,7 +78,7 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 //     MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent() at pitch "
 //                          << evPitch << ", time " << evTime << endl;
 
-    QCanvasItemList itemList = canvas()->collisions(p);
+    QCanvasItemList itemList = canvas()->collisions(e->pos());
     QCanvasItemList::Iterator it;
     MatrixElement* mel = 0;
     QCanvasItem* activeItem = 0;
