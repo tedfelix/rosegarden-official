@@ -36,7 +36,7 @@
     </copyright>
 
     <date>2002-07-04</date>
-    <releaseinfo>0.1.7</releaseinfo>
+    <releaseinfo>0.2.0</releaseinfo>
 
     <abstract>
       <para>
@@ -280,8 +280,8 @@
 	<title>Single and Multiple Staffs</title>
 
 	<para>
-	  There are two ways to open a notation editor from the
-	  Rosegarden main window.  (Both of them require that you
+	  There are three ways to open a notation editor from the
+	  Rosegarden main window.  (They all require that you
 	  have some existing segments in the main window first,
 	  so if you're starting a new composition, you should
 	  create your segments before you start thinking about
@@ -294,11 +294,12 @@
 	      <listitem>
 		
 		<para>The most obvious way is just to double-click on
-		a segment in the main canvas.  So long as you haven't
-		reconfigured <!-- !!!link --> Rosegarden to use the
-		matrix editor as a default, double-clicking a segment
-		will open it as a single staff in a notation editor
-		window.</para>
+		a segment in the main canvas.  This opens the segment
+		in whatever you have configured <!-- !!!Link --> as
+		the default editor (notation, matrix, or event list),
+		and by default this is the notation editor.  So
+		double-clicking a single segment will open it as a
+		single staff in a notation editor window.</para>
 		
 		<para>You can also open a multi-staff editor this way:
 		holding down the Shift key, select (with a single
@@ -311,10 +312,35 @@
 	    </varlistentry>
 
 	    <varlistentry>
+	      <term>The Open in Default Editor menu function (the Return key)</term>
+	      <listitem>
+
+		<para>The Return key is a shortcut for the Open in
+		Default Editor menu function, which does much the same
+		thing as double-clicking: opens all of the currently
+		selected segments together in a notation editor, or in
+		whichever other editor you have configured as your
+		default. </para>
+	      </listitem>
+	    </varlistentry>
+		
+	    <varlistentry>
 	      <term>The Open in Notation Editor menu functions</term>
 	      <listitem>
 
-		<para>Alternatively, you can use the main window's <!-- !!! link linkend="commands-main-segments-notation" -->Open in Notation Editor<!-- /link --> menu function, either on the Segments menu or on the right-button popup menu on a segment in the canvas.  Select the segments you want to edit (by shift-clicking as above, or by using the <!-- !!! link linkend="commands-main-edit-select-all-segments" -->Select All Segments<!-- /link --> function) and then select <!-- !!! link linkend="commands-main-segments-notation" -->Open in Notation Editor<!-- /link -->.</para>
+		<para>Alternatively, you can use the main window's
+		<!-- !!! link
+		linkend="commands-main-segments-notation" -->Open in
+		Notation Editor<!-- /link --> menu function, either on
+		the Segments menu or on the right-button popup menu on
+		a segment in the canvas.  Select the segments you want
+		to edit (by shift-clicking as above, or by using the
+		<!-- !!! link
+		linkend="commands-main-edit-select-all-segments"
+		-->Select All Segments<!-- /link --> function) and
+		then select <!-- !!! link
+		linkend="commands-main-segments-notation" -->Open in
+		Notation Editor<!-- /link -->.</para>
 	      </listitem>
 	      
 	    </varlistentry>
@@ -570,7 +596,7 @@
 	      </para>
 	    </listitem>
 	  </varlistentry>
-
+<!--
 	  <varlistentry>
 	    <term></term>
 	    <listitem>
@@ -578,8 +604,8 @@
 	      </para>
 	    </listitem>
 	  </varlistentry>
+-->
         </variablelist>
-
       </sect2>
 
       <!-- Insertion: notes, auto-ties, accidentals -->
@@ -611,14 +637,14 @@
       shortening or possibly removing it altogether.</para>
 
 	<sect3 id="nv-insertion-keyboard">
-	  <title>Typing notes with the PC keyboard</title>
+	  <title>Typing notes and rests with the PC keyboard</title>
 
 	  <para>You can also insert notes by "typing" their pitches on
 	  the PC's keyboard.</para>
 
-	  <para>First, ensure a notation tool
-	  is selected to indicate the duration of note you wish to
-	    insert.  You can select the various note types using the number keys:</para>
+	  <para>First, ensure a notation tool is selected to indicate
+	  the duration of note (or rest) you wish to insert.  You can
+	  select the various note types using the number keys:</para>
 
 	  <itemizedlist>
 	    <listitem><para><keycap>5</keycap> - Breve</para></listitem>
@@ -631,9 +657,20 @@
 	    <listitem><para><keycap>0</keycap> - Sixty-fourth note (hemidemisemiquaver)</para></listitem>
 	  </itemizedlist>
 	    
-	  <para>Holding the <keycap>Ctrl</keycap> key while pressing a number will select the corresponding dotted-note tool.</para>
-	  
-	  <para>Once a notation tool is selected, you can insert a note at the current position of the <link linkend="nv-rulers">insert cursor</link> by pressing one of the pitch keys:</para>
+	  <para>Holding the <keycap>Ctrl</keycap> key while pressing a
+	  number will select the corresponding dotted-note
+	  tool.</para>
+
+	  <para>You can switch to a triplet version of the note
+	  duration by pressing the <keycap>G</keycap> key.  Pressing it
+	  again will switch back to the normal duration.  The status
+	  bar at the bottom of the window will notify you of when a
+	  triplet duration is active.</para>
+
+	  <para>Once a notation tool is selected, you can insert a
+	  note at the current position of the <link
+	  linkend="nv-rulers">insert cursor</link> by pressing one of
+	  the pitch keys:</para>
 
 	  <itemizedlist>
 	    <listitem><para><keycap>A</keycap> - Do (the tonic of the current key in the current clef)</para></listitem>
@@ -660,14 +697,19 @@
 	  <keycap>C</keycap>, <keycap>V</keycap>, <keycap>B</keycap>,
 	  <keycap>N</keycap> and <keycap>M</keycap>.</para>
 
+	  <para>To insert a rest instead of a note, press
+	  <keycap>P</keycap>.  Alternatively, you can use the
+	  <keycap>T</keycap> and <keycap>Y</keycap> keys to switch the
+	  current tool to a rest tool and back to a note tool again.</para>
+
 	  <para>The default behaviour of the notation editor is to
 	  move the insert cursor forward after inserting a note, so as
 	  to be ready to insert another note after it in a melody;
-	  this can be changed using the <keycap>G</keycap> key, which
+	  this can be changed using the <keycap>H</keycap> key, which
 	  switches to chord mode so that subsequent insertions occur
 	  at the same time as the last one.  Pressing
-	  <keycap>H</keycap> switches back to the melody insertion
-	  behaviour.</para>
+	  <keycap>H</keycap> again switches back to the melody
+	  insertion behaviour.</para>
 
 	  <para>All of the insertion commands are also available on a
 	  submenu of the Tools menu.  It's unlikely you'd ever want to
@@ -684,6 +726,8 @@
 	</sect3>
 	
       </sect2>
+
+      <!-- Keys, Clefs and Time Signatures -->
 
       <!-- Text -->
 
@@ -897,10 +941,29 @@
 	groups must always be played with a shorter duration than
 	written.)</para>
 
-	<para>To make a general tuplet group, we need to know what the
-	base note is (for example, if we play three crotchets in the
-	time of two then the base is a crotchet) and the ratio of the
-	number of base notes written to the number played.</para>
+	<para>The triplet and tuplet menu functions work by taking an
+	existing series of notes or rests and squashing them so they
+	play quicker, filling in the left-over space at the end of the
+	series with a final rest and drawing the whole as a tuplet
+	group.  You can therefore create a new series of triplets by
+	entering the first two notes of the series (in their normal
+	form), making them into triplets, and then filling in the rest
+	left over by the triplet operation with the final note of the
+	triplet.  Or you can apply the triplet operation before you
+	enter any notes, thus turning the original rest itself into
+	triplet form, and then insert the notes of the triplet on top
+	of it.  Some examples may help:</para>
+
+	<!-- Need examples and screenshots -->
+	
+	<!-- Then discuss general tuplet dialog... -->
+
+	<para>To specify a general tuplet group, we need to know what
+	the base note is (for example, if we play three crotchets in
+	the time of two then the base is a crotchet) and the ratio of
+	the number of base notes written to the number played.</para>
+
+	<!-- Then discuss "tuplet mode": with a subtitle? -->
 
       </sect2>
 
