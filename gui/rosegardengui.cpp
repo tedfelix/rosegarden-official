@@ -1414,7 +1414,8 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 
     // and the time
     //
-    if (m_transport->isShowingBarTime()) {
+    if (m_transport->getCurrentMode() ==
+	Rosegarden::RosegardenTransportDialog::BarMode) {
 
 	slotDisplayBarTime(t);
 
@@ -1426,7 +1427,7 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 	    rT = rT - comp.getElapsedRealTime(comp.getDuration());
 	}
 
-	m_transport->displayTime(rT);
+	m_transport->displayRealTime(rT);
     }
 }
 

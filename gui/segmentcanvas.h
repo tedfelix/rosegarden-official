@@ -37,6 +37,8 @@ namespace Rosegarden {
 }
 
 class RosegardenGUIDoc;
+class QFont;
+class QFontMetrics;
 
 
 /**
@@ -115,13 +117,18 @@ protected:
     Rosegarden::TrackId m_track;
     Rosegarden::timeT m_startTime;
     Rosegarden::timeT m_duration;
+    QString m_labelText;
 
     bool m_selected;
     Rosegarden::SnapGrid *m_snapGrid;
 
     QCanvasRectangle *m_repeatRectangle;
+    QCanvasText *m_label;
 
-    QCanvasText *m_segmentLabel;
+    static QFont *m_font;
+    static QFontMetrics *m_fontMetrics;
+    static int m_fontHeight;
+    void makeFont();
 };
 
 

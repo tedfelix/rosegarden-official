@@ -861,7 +861,7 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     int indent = m_noteBodyWidth / 2;
     
     if (tlw < (cr.width() + countSpace * 2 + m_noteBodyWidth * 2)) {
-	tlw += m_noteBodyWidth;
+	tlw += m_noteBodyWidth - 1;
 	indent = 0;
     }
 
@@ -877,8 +877,8 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
 
     int tickOffset = (params.m_tuplingLineY < 0) ? 3 : -3;
 
-    kdDebug(KDEBUG_AREA) << "params.m_tuplingLineWidth = "
-			 << params.m_tuplingLineWidth
+    kdDebug(KDEBUG_AREA) << "adjusted params.m_tuplingLineWidth = "
+			 << tlw
 			 << ", cr.width = " << cr.width()
 			 << ", tickOffset = " << tickOffset << endl;
     kdDebug(KDEBUG_AREA) << "line: (" << startX << "," << startY << ") -> ("
@@ -899,11 +899,10 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     m_p.drawText(textX, textY, count);
     m_pm.drawText(textX, textY, count);
 
-    startX += params.m_tuplingLineWidth - w;
+    startX += tlw - w;
     endX = startX + w;
 
-    startY += (int)(params.m_tuplingLineGradient *
-		    (params.m_tuplingLineWidth - w));
+    startY += (int)(params.m_tuplingLineGradient * (tlw - w));
     endY = startY + (int)(params.m_tuplingLineGradient * w);
 
     kdDebug(KDEBUG_AREA) << "line: (" << startX << "," << startY << ") -> ("

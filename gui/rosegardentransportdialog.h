@@ -40,12 +40,15 @@ public:
                               const char *name=0);
     ~RosegardenTransportDialog();
 
-    void displayTime(const Rosegarden::RealTime &rt);
-    void displayBarTime(int bar, int beat, int unit);
+    enum TimeDisplayMode { RealMode, SMPTEMode, BarMode };
 
+    TimeDisplayMode getCurrentMode() { return m_currentMode; }
     bool isShowingTimeToEnd();
-    bool isShowingBarTime();
     bool isExpanded();
+
+    void displayRealTime(const Rosegarden::RealTime &rt);
+    void displaySMPTETime(const Rosegarden::RealTime &rt);
+    void displayBarTime(int bar, int beat, int unit);
 
     void setTempo(const double &tempo);
     void setTimeSignature(const Rosegarden::TimeSignature &timeSig);
@@ -112,7 +115,8 @@ private:
     int m_lastTenThousandths;
 
     bool m_lastNegative;
-    bool m_lastBarTime;
+    TimeDisplayMode m_lastMode;
+    TimeDisplayMode m_currentMode;
 
     int m_tenHours;
     int m_unitHours;

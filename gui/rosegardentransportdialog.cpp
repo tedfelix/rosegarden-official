@@ -52,7 +52,8 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     m_lastThousandths(0),
     m_lastTenThousandths(0),
     m_lastNegative(false),
-    m_lastBarTime(false),
+    m_lastMode(RealMode),
+    m_currentMode(RealMode),
     m_tempo(0)
 {
     resetFonts();
@@ -229,10 +230,23 @@ RosegardenTransportDialog::resetFont(QWidget *w)
 void
 RosegardenTransportDialog::slotChangeTimeDisplay()
 {
-    if (TimeDisplayButton->isOn()) {
+    switch (m_currentMode) {
+    case RealMode:
+	TimeDisplayLabel->setText("SMPTE");
 	TimeDisplayLabel->show();
-    } else {
+	m_currentMode = SMPTEMode;
+	break;
+
+    case SMPTEMode:
+	TimeDisplayLabel->setText("BAR");
+	TimeDisplayLabel->show();
+	m_currentMode = BarMode;
+	break;
+
+    case BarMode:
 	TimeDisplayLabel->hide();
+	m_currentMode = RealMode;
+	break;
     }
 }
 
@@ -247,25 +261,21 @@ RosegardenTransportDialog::slotChangeToEnd()
 }
 
 bool
-RosegardenTransportDialog::isShowingBarTime()
-{
-    return TimeDisplayButton->isOn();
-}
-
-bool
 RosegardenTransportDialog::isShowingTimeToEnd()
 {
     return ToEndButton->isOn();
 }
 
 void
-RosegardenTransportDialog::displayTime(const Rosegarden::RealTime &rt)
+RosegardenTransportDialog::displayRealTime(const Rosegarden::RealTime &rt)
 {
     Rosegarden::RealTime st = rt;
 
-    if (m_lastBarTime) {
+    if (m_lastMode != RealMode) {
 	HourColonPixmap->show();
-	m_lastBarTime = false;
+	SecondColonPixmap->hide();
+	HundredthColonPixmap->hide();
+	m_lastMode = RealMode;
     }
 
     // If time is negative then reverse the time and set the minus flag
@@ -304,11 +314,20 @@ RosegardenTransportDialog::displayTime(const Rosegarden::RealTime &rt)
 }
 
 void
+RosegardenTransportDialog::displaySMPTETime(const Rosegarden::RealTime &rt)
+{
+    //!!! for now
+    displayRealTime(rt);
+}
+
+void
 RosegardenTransportDialog::displayBarTime(int bar, int beat, int unit)
 {
-    if (!m_lastBarTime) {
+    if (m_lastMode != BarMode) {
 	HourColonPixmap->hide();
-	m_lastBarTime = true;
+	SecondColonPixmap->hide();
+	HundredthColonPixmap->hide();
+	m_lastMode = BarMode;
     }
 
     // If time is negative then reverse the time and set the minus flag

@@ -8,7 +8,7 @@ Post-0.1.4 task list
 
  3. Implement "Collapse Notes" and inverse (see notes on paper)
 
- 4. Tuplet GUI -- but how?
+ 4. Tuplet GUI -- but how? [basics DONE, still many issues remaining]
 
  4a. Decide how we want to manage quantization of segments containing
      tuplets, and quantization to tuplet units
@@ -91,15 +91,19 @@ Post-0.1.4 task list
 
 21. Load test_tuplets, open score editor, then on segment editor
     extend the first segment to the same length as the second -- blam!
+    [DONE I think]
 
 22. Rationalise segment editor tools into "simple" and "extended"
     as per discussion on mailing list:
     http://www.geocrawler.com/mail/thread.php3?subject=a+question%2C+was+Re%3A+%5BRosegarden-devel%5D+0.2+roadmap+-+some+thoughts&list=16004
 
 23. Final bar in a notation staff doesn't seem to resize correctly
-    when things are inserted into it
+    when things are inserted into it [DONE I think]
 
 24. Make tempo/timesig ruler a la text ruler, add it to segment view
+
+25. Sometimes timesigs (in notation) appear before the start of
+    the staff.  Find a reliable test case and thrash it
 
 
 20020301 task list (based on outstanding items from post-0.1.3 list below)

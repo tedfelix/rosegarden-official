@@ -21,6 +21,8 @@
 
 #include <qpopupmenu.h>
 #include <qwhatsthis.h>
+#include <qfont.h>
+#include <qfontmetrics.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -48,6 +50,10 @@ using Rosegarden::timeT;
 //                SegmentItem
 //////////////////////////////////////////////////////////////////////
 
+QFont *SegmentItem::m_font = 0;
+QFontMetrics *SegmentItem::m_fontMetrics = 0;
+int SegmentItem::m_fontHeight = 0;
+
 SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT duration,
                          SnapGrid *snapGrid, QCanvas *canvas) :
     QCanvasRectangle(0, 0, 1, 1, canvas),
@@ -57,12 +63,11 @@ SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT duration,
     m_duration(duration),
     m_selected(false),
     m_snapGrid(snapGrid),
-    m_repeatRectangle(0)
-    //m_segmentLabel(new QCanvasText(canvas))
+    m_repeatRectangle(0),
+    m_label(new QCanvasText("", canvas))
 {
-    //m_segmentLabel->setText(QString(""));
-    //m_segmentLabel->setZ(2);
-    //m_segmentLabel->show();
+    if (!m_font) makeFont();
+    m_label->setFont(*m_font);
 
     recalculateRectangle(true);
 }
@@ -73,12 +78,11 @@ SegmentItem::SegmentItem(Segment *segment,
     m_segment(segment),
     m_selected(false),
     m_snapGrid(snapGrid),
-    m_repeatRectangle(0)
-    //m_segmentLabel(new QCanvasText(canvas))
+    m_repeatRectangle(0),
+    m_label(new QCanvasText("", canvas))
 {
-    //m_segmentLabel->setText(QString(""));
-    //m_segmentLabel->setZ(2);
-    //m_segmentLabel->show();
+    if (!m_font) makeFont();
+    m_label->setFont(*m_font);
 
     recalculateRectangle(true);
 }
@@ -87,14 +91,18 @@ SegmentItem::~SegmentItem()
 {
     kdDebug(KDEBUG_AREA) << "SegmentItem::~SegmentItem" << endl;
     if (m_repeatRectangle) delete m_repeatRectangle;
+    if (m_label) delete m_label;
+}
 
-    /*
-    if (m_segmentLabel)
-    {
-        delete m_segmentLabel;
-        m_segmentLabel = 0;
-    }
-    */
+void
+SegmentItem::makeFont()
+{
+    m_font = new QFont();
+    m_font->setPixelSize(m_snapGrid->getYSnap() / 2);
+    m_font->setWeight(QFont::Bold);
+    m_font->setItalic(false);
+    m_fontMetrics = new QFontMetrics(*m_font);
+    m_fontHeight = m_fontMetrics->boundingRect("|^M,g").height();
 }
 
 void
@@ -105,7 +113,7 @@ SegmentItem::recalculateRectangle(bool inheritFromSegment)
 	m_track = m_segment->getTrack();
 	m_startTime = m_segment->getStartTime();
 	m_duration = m_segment->getDuration();
-	kdDebug(KDEBUG_AREA) << "inherited from segment" << endl;
+        m_labelText = m_segment->getLabel().c_str();
 
 	if (m_segment->isRepeating()) {
 
@@ -132,17 +140,8 @@ SegmentItem::recalculateRectangle(bool inheritFromSegment)
 	    delete m_repeatRectangle;
 	    m_repeatRectangle = 0;
 	}
-
-        // set the label
-        //m_segmentLabel->setText(QString(m_segment->getLabel().c_str()));
-
     }
 
-    // set label position
-    //m_segmentLabel->setX(m_snapGrid->getRulerScale()->
-                         //getXForTime(m_startTime) + 2);
-    //m_segmentLabel->setY(m_snapGrid->getYBinCoordinate(m_track) + 1);
-	
     setX(m_snapGrid->getRulerScale()->getXForTime(m_startTime));
     setY(m_snapGrid->getYBinCoordinate(m_track));
 
@@ -150,6 +149,29 @@ SegmentItem::recalculateRectangle(bool inheritFromSegment)
 	    getWidthForDuration(m_startTime, m_duration) + 1,
 	    m_snapGrid->getYSnap());
 
+    QString text = m_labelText;
+    bool dots = false;
+
+    while (text.length() > 0 &&
+	   (m_fontMetrics->boundingRect(dots ? (text + "...") : text).width() >
+	    width() - 5)) {
+	if (!dots && text.length() > 6) {
+	    text.truncate(text.length() - 4);
+	    dots = true;
+	} else if (dots && text.length() < 2) {
+	    dots = false;
+	} else {
+	    text.truncate(text.length() - 1);
+	}
+    }
+    if (dots) m_label->setText(text + "...");
+    else m_label->setText(text);
+
+    m_label->setX(m_snapGrid->getRulerScale()->getXForTime(m_startTime) + 3);
+    m_label->setY(m_snapGrid->getYBinCoordinate(m_track) +
+		  (m_snapGrid->getYSnap()/2 - m_fontHeight/2) * 2 / 3);
+    m_label->setZ(2);
+    m_label->show();
 }
 
 Segment *
