@@ -424,3 +424,23 @@ Unfortunately getting the right combination of magic incantations to
 make JACK work is not always easy and is not something we can help you
 with.  If it's any help, once it's working it usually stays working.
 
+Why are the program names wrong in my MIDI file?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Rosegarden uses a Studio layer to map your MIDI file's Program Change
+information into meaningful instrument labels.  The default Studio has
+support for General Midi (GM) patch names.  If you want the Program
+Change numbers to map to a different, non-GM device (a different
+soundcard or synth) then you can do this mapping in the Bank Editor
+dialog (Studio->Manage Banks and Programs).  Once you've made changes
+in your current Rosegarden file you can save it off and replace your
+autoload.rg file so that all your subsequent sessions in Rosegarden
+utilise your specialised Studio settings.
+
+It will eventually be possible to share and merge these sections of
+the Studio so that new users won't have to manually replicate the
+work to create these patch files.  It is hoped that Studio library
+will then allow new users to quickly create their own particular
+Studio device settings with the minimum of work on their part.
+
+

@@ -258,10 +258,13 @@ void RosegardenGUIView::slotEditSegment(Rosegarden::Segment* segment)
 	slotEditSegmentAudio(segment);
     } else {
 
-	Rosegarden::GeneralConfigurationPage::DoubleClickClient client =
-	    (Rosegarden::GeneralConfigurationPage::DoubleClickClient)(kapp->config()->readUnsignedNumEntry
-	    ("doubleclickclient",
-	     (unsigned int)Rosegarden::GeneralConfigurationPage::NotationView));
+        KConfig* config = kapp->config();
+        config->setGroup("General Options");
+	Rosegarden::GeneralConfigurationPage::DoubleClickClient
+            client =
+	    (Rosegarden::GeneralConfigurationPage::DoubleClickClient)
+            (config->readUnsignedNumEntry("doubleclickclient",
+	    (unsigned int)Rosegarden::GeneralConfigurationPage::NotationView));
 
 	if (client == Rosegarden::GeneralConfigurationPage::MatrixView) {
 	    slotEditSegmentMatrix(segment);
