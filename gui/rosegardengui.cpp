@@ -860,7 +860,9 @@ RosegardenGUIApp::play()
   //
   QDataStream streamOut(data, IO_WriteOnly);
   streamOut << m_doc->getComposition().getPosition();
-  streamOut << 20;  // default latency
+
+  streamOut << 100; // playback latency
+  streamOut << 20;  // fetch latency
 
   cout << "RosegardenGUIApp::play() - playing at tempo " << 
                 m_doc->getComposition().getTempo() << endl;
@@ -868,7 +870,7 @@ RosegardenGUIApp::play()
   // Send Play to the Sequencer
   if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                "play(Rosegarden::timeT, Rosegarden::timeT)",
+                                "play(Rosegarden::timeT, Rosegarden::timeT, Rosegarden::timeT)",
                                 data, replyType, replyData))
   {
     // failed - pop up and disable sequencer options

@@ -31,7 +31,7 @@ rosegardengui_SOURCES = trackscanvas.cpp \
 			rosegardenguiiface.skel \
 			trackseditoriface.skel
 
-rosegardengui_LDADD   = -lRosegardenSound -lcore -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET)
+rosegardengui_LDADD   = ../sound/libRosegardenSound.la ../core/libcore.la -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET)
 
 SUBDIRS = docs
 
@@ -80,7 +80,7 @@ INCLUDES= $(all_includes) -I../core -I../sound
 rosegardengui_METASOURCES = AUTO
 
 # the library search path. 
-rosegardengui_LDFLAGS = $(all_libraries) $(KDE_RPATH) -L../core -L../sound
+rosegardengui_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 # them while "make clean", use CLEANFILES
 DISTCLEANFILES = $(rosegardengui_METASOURCES)

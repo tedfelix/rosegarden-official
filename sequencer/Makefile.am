@@ -3,7 +3,7 @@ rosegardensequencer_SOURCES = rosegardensequencer.cpp \
 			      main.cpp \
 			      rosegardensequenceriface.skel
 
-rosegardensequencer_LDADD   = -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET) -lRosegardenSound -lRosegardenSequencer -lcore
+rosegardensequencer_LDADD   = -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET) ../sound/libRosegardenSound.la ../sound/libRosegardenSequencer.la ../core/libcore.la
 
 EXTRA_DIST = main.cpp rosegardensequencer.cpp rosegardensequencer.h rosegardensequenceriface.skel
 
@@ -29,7 +29,7 @@ bin_PROGRAMS = rosegardensequencer
 rosegardensequencer_METASOURCES = AUTO
 
 # the library search path. 
-rosegardensequencer_LDFLAGS = $(all_libraries) $(KDE_RPATH) -L../core -L../sound
+rosegardensequencer_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 # them while "make clean", use CLEANFILES
 DISTCLEANFILES = $(rosegardensequencer_METASOURCES)

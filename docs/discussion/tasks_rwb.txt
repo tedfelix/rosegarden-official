@@ -42,3 +42,4 @@ Bugs
 
  - playback currently stumbling and poor
 
+ - sending All Notes Off to aRTS when they're already queued?

@@ -38,7 +38,7 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     m_songPosition(0),
     m_lastFetchSongPosition(0),
     m_fetchLatency(20),
-    m_playLatency(30)
+    m_playLatency(50)
 {
   // Without DCOP we are nothing
   QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
@@ -90,7 +90,8 @@ RosegardenSequencerApp::quit()
 //
 int
 RosegardenSequencerApp::play(const Rosegarden::timeT &position,
-                             const Rosegarden::timeT &latency)
+                             const Rosegarden::timeT &playLatency, 
+                             const Rosegarden::timeT &fetchLatency)
 {
   if (m_transportStatus == PLAYING || m_transportStatus == STARTING_TO_PLAY)
     return true;
@@ -101,7 +102,11 @@ RosegardenSequencerApp::play(const Rosegarden::timeT &position,
   //
   m_songPosition = position;
   m_transportStatus = STARTING_TO_PLAY;
-  m_playLatency = latency;
+
+  // Set up latencies
+  //
+  m_playLatency = playLatency;
+  m_fetchLatency = fetchLatency;
 
   // keep it simple
   return true;
@@ -314,7 +319,7 @@ RosegardenSequencerApp::jumpTo(const Rosegarden::timeT &position)
     return;
 
   stop();
-  play(position, m_playLatency);
+  play(position, m_playLatency, m_fetchLatency);
   
   return;
 }

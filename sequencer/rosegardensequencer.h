@@ -74,7 +74,8 @@ public slots:
   // the GUI level control interface for the Sequencer.
   //
   virtual int play(const Rosegarden::timeT &position,
-                   const Rosegarden::timeT &latency);
+                   const Rosegarden::timeT &playLatency,
+                   const Rosegarden::timeT &fetchLatency);
   virtual int stop();
 
   // Any sudden moves
