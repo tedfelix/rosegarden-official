@@ -25,7 +25,8 @@ namespace Rosegarden
 Track::Track(unsigned int nbBars, unsigned int startIdx)
     : std::multiset<Event*, EventCmp>(),
     m_startIdx(startIdx),
-    m_nbBars(nbBars)
+    m_nbBars(nbBars),
+    m_instrument(0)
 {
     unsigned int initialTime = m_startIdx;
     
