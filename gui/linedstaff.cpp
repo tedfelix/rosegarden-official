@@ -742,7 +742,7 @@ LinedStaff<T>::setCursorPosition(double canvasX, int canvasY)
 	m_currentRow = row;
     }
 
-    m_ruler->getCursor()->setPosition(canvasX);
+    m_ruler->getCursor()->setPosition(int(canvasX));
 }
 
 template <class T>

@@ -27,11 +27,13 @@
 
 #include "editview.h"
 #include "edittool.h"
+#include "qcanvasgroupableitem.h"
 #include "basiccommand.h"
 #include "rosegardenguidoc.h"
 #include "multiviewcommandhistory.h"
 #include "rosedebug.h"
 #include "ktmpstatusmsg.h"
+#include "staffruler.h"
 
 //----------------------------------------------------------------------
 const unsigned int EditView::ID_STATUS_MSG = 1;
@@ -43,7 +45,8 @@ EditView::EditView(RosegardenGUIDoc *doc,
       m_config(kapp->config()),
       m_document(doc),
       m_tool(0),
-      m_toolBox(0)
+      m_toolBox(0),
+      m_activeItem(0)
 {
     // add undo and redo to edit menu and toolbar
     getCommandHistory()->attachView(actionCollection());
@@ -164,4 +167,28 @@ void EditView::slotStatusHelpMsg(const QString &text)
     ///////////////////////////////////////////////////////////////////
     // change status message of whole statusbar temporary (text, msec)
     statusBar()->message(text, 2000);
+}
+
+void EditView::activeItemPressed(QMouseEvent* e,
+                                 QCanvasItem* item)
+{
+    if (!item) return;
+
+    // Check if it's a groupable item, if so get its group
+    //
+    QCanvasGroupableItem *gitem = dynamic_cast<QCanvasGroupableItem*>(item);
+    if (gitem) item = gitem->group();
+        
+    // Check if it's an active item
+    //
+    ActiveItem *activeItem = dynamic_cast<ActiveItem*>(item);
+        
+    if (activeItem) {
+
+        setActiveItem(activeItem);
+        activeItem->handleMousePress(e);
+        update();
+
+    }
+
 }

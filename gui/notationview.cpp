@@ -95,7 +95,6 @@ NotationView::NotationView(RosegardenGUIView* rgView,
                                         new QCanvas(width() * 2, height() * 2),
                                         this)),
     m_lastFinishingStaff(-1),
-    m_activeItem(0),
     m_hlayout(0),
     m_vlayout(0),
     m_fontSizeSlider(0),
@@ -769,7 +768,7 @@ NotationView::changeStretch(int n)
         m_staffs[i]->positionElements();
     }
 
-    canvas()->update();
+    update();
 }
 
 void NotationView::changeLegato(int n)
@@ -787,7 +786,7 @@ void NotationView::changeLegato(int n)
         m_staffs[i]->positionElements();
     }
 
-    canvas()->update();
+    update();
 }
 
 
@@ -867,7 +866,7 @@ NotationView::changeFont(string newName, int newSize)
         }
     }
 
-    canvas()->update();
+    update();
 }
 
 
@@ -893,7 +892,7 @@ NotationView::setPageMode(bool pageMode)
         }
     }
 
-    canvas()->update();
+    update();
 }   
 
 
@@ -975,7 +974,7 @@ void NotationView::setCurrentSelection(EventSelection* s)
                                                     s->getEndTime());
     }
 
-    canvas()->update();
+    update();
 }
 
 void NotationView::setSingleSelectedEvent(int staffNo, Event *event)
@@ -1465,7 +1464,7 @@ NotationView::setPositionPointer(int position)
     }
 
     m_pointer->setX(canvasPosition + 20);
-    canvas()->update();
+    update();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -1815,7 +1814,7 @@ void NotationView::itemPressed(int height, int staffNo,
 	    m_staffs[m_currentStaff]->setCursorPosition(e->x(), (int)e->y());
 	}
 
-	canvas()->update();
+	update();
 
     } else {
 
@@ -1835,35 +1834,11 @@ void NotationView::itemPressed(int height, int staffNo,
     
 }
 
-void NotationView::activeItemPressed(QMouseEvent* e,
-                                     QCanvasItem* item)
-{
-    if (!item) return;
-
-    // Check if it's a groupable item, if so get its group
-    //
-    QCanvasGroupableItem *gitem = dynamic_cast<QCanvasGroupableItem*>(item);
-    if (gitem) item = gitem->group();
-        
-    // Check if it's an active item
-    //
-    ActiveItem *activeItem = dynamic_cast<ActiveItem*>(item);
-        
-    if (activeItem) {
-
-        setActiveItem(activeItem);
-        activeItem->handleMousePress(e);
-        canvas()->update();
-
-    }
-
-}
-
 void NotationView::mouseMoved(QMouseEvent *e)
 {
     if (activeItem()) {
         activeItem()->handleMouseMove(e);
-        canvas()->update();
+        update();
     }
     else 
         m_tool->handleMouseMove(0, 0, // unknown time and height
@@ -1875,7 +1850,7 @@ void NotationView::mouseReleased(QMouseEvent *e)
     if (activeItem()) {
         activeItem()->handleMouseRelease(e);
         setActiveItem(0);
-        canvas()->update();
+        update();
     }
     else
         m_tool->handleMouseRelease(0, 0, // unknown time and height
@@ -1892,6 +1867,10 @@ NotationView::getStaffForCanvasY(int y) const
     return 0;
 }
 
+void NotationView::update()
+{
+    canvas()->update();
+}
 
 /*!!!
 NotationElementList::iterator
@@ -2020,7 +1999,7 @@ void NotationView::refreshSegment(Segment *segment,
 
     PRINT_ELAPSED("NotationView::refreshSegment (without update/GC)");
 
-    canvas()->update();
+    update();
     PixmapArrayGC::deleteAll();
 
     Event::dumpStats(cerr);

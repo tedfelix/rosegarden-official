@@ -132,6 +132,14 @@ public:
 signals:
 
     /**
+     * Emitted when the user clicks on a QCanvasItem which is active
+     *
+     * @see QCanvasItem#setActive
+     */
+    void activeItemPressed(QMouseEvent*,
+                           QCanvasItem* item);
+
+    /**
      * Emitted when the mouse cursor moves to a different height
      * on the staff
      *
@@ -380,6 +388,7 @@ public:
     QCanvas* canvas() { return m_canvasView->canvas(); }
 
     MatrixStaff* getStaff(int) { return m_staffs[0]; } // deal with 1 staff only
+    virtual void update();
 
 public slots:
 

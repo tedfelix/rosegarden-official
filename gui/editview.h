@@ -35,6 +35,8 @@ class KCommand;
 class EditTool;
 class EditToolBox;
 class BasicCommand;
+class QCanvasItem;
+class ActiveItem;
 
 class EditView : public KMainWindow
 {
@@ -88,6 +90,21 @@ public:
      * Add a Command to the history
      */
     virtual void addCommandToHistory(KCommand *);
+
+    /**
+     * Update the view
+     */
+    virtual void update() = 0;
+
+    /**
+     * Return the active item
+     */
+    ActiveItem* activeItem() { return m_activeItem; }
+
+    /**
+     * Set the active item
+     */
+    void setActiveItem(ActiveItem* i) { m_activeItem = i; }
 
 public slots:
     /**
@@ -144,6 +161,14 @@ public slots:
      */
     virtual void slotCommandExecuted(KCommand *command);
 
+    /**
+     * Called when a mouse press occurred on an active canvas item
+     *
+     * @see ActiveItem
+     * @see QCanvasItem#setActive
+     */
+    virtual void activeItemPressed(QMouseEvent*, QCanvasItem*);
+
 protected:
 
     /**
@@ -197,6 +222,8 @@ protected:
 
     EditTool*    m_tool;
     EditToolBox* m_toolBox;
+
+    ActiveItem* m_activeItem;
 
 };
 

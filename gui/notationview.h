@@ -142,6 +142,12 @@ public:
      */
     virtual NotationStaff *getStaffForCanvasY(int y) const;
 
+
+    /**
+     * Overridden from EditView
+     */
+    virtual void update();
+
 public slots:
 
 
@@ -290,14 +296,6 @@ public slots:
      * or somewhere on a staff
      */
     void itemPressed(int height, int staffNo, QMouseEvent*, NotationElement*);
-
-    /**
-     * Called when a mouse press occurred on an active canvas item
-     *
-     * @see ActiveItem
-     * @see QCanvasItem#setActive
-     */
-    void activeItemPressed(QMouseEvent*, QCanvasItem*);
 
     void mouseMoved(QMouseEvent*);
     void mouseReleased(QMouseEvent*);
@@ -455,17 +453,6 @@ protected:
      */
     void setHLayout(NotationHLayout*);
 
-    /**
-     * Set the active item
-     */
-    void setActiveItem(ActiveItem* i) { m_activeItem = i; }
-
-    /**
-     * Return the active item
-     */
-    ActiveItem* activeItem() { return m_activeItem; }
-
-
     //--------------- Data members ---------------------------------
 
     /// The current selection of Events (for cut/copy/paste)
@@ -487,8 +474,6 @@ protected:
     int m_lastFinishingStaff;
 
     Rosegarden::Accidental m_currentAccidental;
-
-    ActiveItem* m_activeItem;
 
     std::string m_fontName;
     int m_fontSize;
