@@ -45,6 +45,73 @@
 using Rosegarden::Int;
 using Rosegarden::BaseProperties;
 
+// EventView specialisation of a QListViewItem with the
+// addition of a segment pointer
+//
+class EventViewItem : public QListViewItem
+{
+public:
+    EventViewItem(Rosegarden::Segment *segment,
+                  QListView *parent):QListViewItem(parent),
+                                     m_segment(segment) {;}
+
+    EventViewItem(Rosegarden::Segment *segment,
+                  QListViewItem *parent):QListViewItem(parent),
+                                         m_segment(segment) {;}
+
+    EventViewItem(Rosegarden::Segment *segment,
+                  QListView *parent, QString label1,
+                  QString label2 = QString::null,
+                  QString label3 = QString::null,
+                  QString label4 = QString::null,
+                  QString label5 = QString::null,
+                  QString label6 = QString::null,
+                  QString label7 = QString::null,
+                  QString label8 = QString::null)
+        :QListViewItem(parent, label1, label2, label3, label4,
+                       label5, label6, label7, label8), m_segment(segment) {;}
+
+    EventViewItem(Rosegarden::Segment *segment,
+                  QListViewItem *parent, QString label1,
+                  QString label2 = QString::null,
+                  QString label3 = QString::null,
+                  QString label4 = QString::null,
+                  QString label5 = QString::null,
+                  QString label6 = QString::null,
+                  QString label7 = QString::null,
+                  QString label8 = QString::null)
+        :QListViewItem(parent, label1, label2, label3, label4,
+                       label5, label6, label7, label8), m_segment(segment) {;}
+
+    void setSegment(Rosegarden::Segment *segment) { m_segment = segment; }
+    Rosegarden::Segment* getSegment() { return m_segment; }
+
+    // Reimplement so that we can sort numerically
+    //
+    virtual int compare(QListViewItem *i, int col, bool ascending) const;
+
+protected:
+
+    Rosegarden::Segment *m_segment;
+};
+
+
+// Reimplementation of sort for numeric columns - taking the
+// right hand argument from the left is equivalent to the
+// the QString compare().
+//
+int
+EventViewItem::compare(QListViewItem *i, int col, bool ascending) const
+{
+    if (col == 2) // event type
+        return key(col, ascending).compare(i->key(col, ascending));
+    else          // numeric comparison
+        return key(col, ascending).toInt() - i->key(col, ascending).toInt();
+}
+
+
+////////////////////////////////////////////////////////////////////////
+
 EventView::EventView(RosegardenGUIDoc *doc,
                      std::vector<Rosegarden::Segment *> segments,
                      QWidget *parent):
@@ -439,19 +506,3 @@ EventView::slotPopupEventEditor(QListViewItem *item)
         eED->show();
     }
 }
-
-
-// Reimplementation of sort for numeric columns - taking the
-// right hand argument from the left is equivalent to the
-// the QString compare().
-//
-int
-EventViewItem::compare(QListViewItem *i, int col, bool ascending) const
-{
-    if (col == 2) // event type
-        return key(col, ascending).compare(i->key(col, ascending));
-    else          // numeric comparison
-        return key(col, ascending).toInt() - i->key(col, ascending).toInt();
-}
-
-
