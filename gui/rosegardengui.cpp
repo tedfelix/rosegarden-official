@@ -100,8 +100,6 @@ RosegardenGUIApp::RosegardenGUIApp()
 
     readOptions();
 
-    actionCollection()->action("draw")->activate();
-
 //     ///////////////////////////////////////////////////////////////////
 //     // disable menu and toolbar items at startup
 //     disableCommand(ID_FILE_SAVE);
@@ -461,6 +459,37 @@ void RosegardenGUIApp::initView()
     slotSetPointerPosition
 	(comp.getElapsedRealTime(m_doc->getComposition().getPosition()));
 
+
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::initView() : nb tracks = "
+                         << comp.getNbSegments() << std::endl;
+
+    // Set the right track edition tool
+    //
+    if (comp.getNbSegments() > 0) {
+        // setup 'move' tool
+
+        // We have to do this to make sure that the 2nd call ("move")
+        // actually has any effect. Activating the same radio action
+        // doesn't work the 2nd time (like pressing down the same radio
+        // button twice - it doesn't have any effect), so if you load two
+        // files in a row, on the 2nd file a new SegmentCanvas will be
+        // created but its tool won't be set, so clicking on the canvas
+        // will crash.
+        //
+        
+        actionCollection()->action("draw")->activate();
+        actionCollection()->action("move")->activate();
+    } else {
+        // setup 'draw' tool
+        actionCollection()->action("move")->activate();
+        actionCollection()->action("draw")->activate();
+    }
+     
+
+    //
+    // Transport setup
+    //
+
     // set the tempo in the transport
     //
     m_transport->setTempo(comp.getTempo());
@@ -503,10 +532,6 @@ void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
 
         initView();
 
-        // See comment in RosegardenGUIApp::openURL()
-        // for an explanation on why we have to do this
-        actionCollection()->action("draw")->activate();
-        actionCollection()->action("move")->activate();
     }
 
 }
@@ -776,11 +801,6 @@ void RosegardenGUIApp::slotFileNew()
         QString caption=kapp->caption();	
         setCaption(caption+": "+m_doc->getTitle());
         initView();
-
-        // See comment in RosegardenGUIApp::openURL()
-        // for an explanation on why we have to do this
-        actionCollection()->action("move")->activate();
-        actionCollection()->action("draw")->activate();
     }
 }
 
@@ -816,19 +836,6 @@ void RosegardenGUIApp::openURL(const KURL& url)
 
     setCaption(url.path());
     m_fileRecent->addURL(url);
-
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::openURL() : enabling 'move'\n";
-
-    // We have to do this to make sure that the 2nd call ("move")
-    // actually has any effect. Activating the same radio action
-    // doesn't work the 2nd time (like pressing down the same radio
-    // button twice - it doesn't have any effect), so if you load two
-    // files in a row, on the 2nd file a new SegmentCanvas will be
-    // created but its tool won't be set, so clicking on the canvas
-    // will crash.
-    //
-    actionCollection()->action("draw")->activate();
-    actionCollection()->action("move")->activate();
 }
 
 void RosegardenGUIApp::slotFileOpen()
@@ -907,11 +914,6 @@ void RosegardenGUIApp::slotFileClose()
     m_doc->newDocument();
 
     initView();
-
-    // See comment in RosegardenGUIApp::openURL()
-    // for an explanation on why we have to do this
-    actionCollection()->action("move")->activate();
-    actionCollection()->action("draw")->activate();
 
     close();
 }
@@ -1167,11 +1169,6 @@ void RosegardenGUIApp::slotImportMIDI()
     KIO::NetAccess::download(url, tmpfile);
     importMIDIFile(tmpfile);
 
-    // See comment in RosegardenGUIApp::openURL()
-    // for an explanation on why we have to do this
-    actionCollection()->action("draw")->activate();
-    actionCollection()->action("move")->activate();
-  
     KIO::NetAccess::removeTempFile( tmpfile );
 }
 
@@ -1838,8 +1835,6 @@ RosegardenGUIApp::performAutoload()
         << "RosegardenGUIApp::performAutoload() - autoloading" << endl;
 
     openDocumentFile(autoloadFile.data());
-
-
 }
 
 
