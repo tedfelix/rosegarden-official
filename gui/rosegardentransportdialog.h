@@ -23,6 +23,7 @@
 #define _ROSEGARDENTRANSPORTDIALOG_H_
 
 #include "rosegardentransport.h"
+#include "Composition.h" // for RealTime
 #include <map>
 #include <qpixmap.h>
 
@@ -37,7 +38,7 @@ public:
                             const double &ppq = 384.0);
   ~RosegardenTransportDialog();
 
-  void displayTime(unsigned long long microSeconds);
+  void displayTime(Rosegarden::RealTime microSeconds);
 
   void setTempo(const double &tempo);
 

@@ -39,6 +39,8 @@ namespace RosegardenGUIColours
     extern const QColor SegmentBorder;
     extern const QColor SegmentBlock;
 
+    extern const QColor BarLine;
+    extern const QColor BarLineIncorrect;
     extern const QColor StaffConnectingLine;
     extern const QColor StaffConnectingTerminatingLine;
     extern const QColor StaffRulerBackground;

@@ -113,7 +113,7 @@ RosegardenTransportDialog::loadPixmaps()
 //
 //
 void
-RosegardenTransportDialog::displayTime(unsigned long long microSeconds)
+RosegardenTransportDialog::displayTime(Rosegarden::RealTime microSeconds)
 {
     m_microSeconds = microSeconds;
 

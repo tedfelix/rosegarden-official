@@ -44,14 +44,6 @@
  * staff lines be a precise integral distance apart.
  */
 
-/*!!!  not true, but should it be?
- *
- * Subclasses of LinedStaff will normally wish to be subclasses
- * of Staff as well.  LinedStaff is not itself a subclass of Staff
- * because that would mean it would need to be a template class,
- * something we'd rather avoid here for reasons of code organisation.
- */
-
 template <class T>
 class LinedStaff : public Rosegarden::Staff<T>
 {
@@ -219,9 +211,9 @@ public:
 
     /**
      * Return the full width, height and origin of the bar containing
-     * the given cooordinates.
+     * the given canvas cooordinates.
      */
-    virtual QRect getBarExtents(int x, int y) const;
+    virtual QRect getBarExtents(double x, int y) const;
 
     /**
      * Query the given horizontal layout object (which is assumed to
@@ -302,7 +294,11 @@ protected:
     }
 
     double getCanvasXForLayoutX(double x) const {
-	return m_x + x - (m_pageWidth * getRowForLayoutX(x));
+	if (m_pageMode) {
+	    return m_x + x - (m_pageWidth * getRowForLayoutX(x));
+	} else {
+	    return m_x + x;
+	}
     }
 
     int getCanvasYForTopOfStaff(int row = -1) const {
@@ -335,10 +331,25 @@ protected:
 	std::pair<double, int> cc = getCanvasCoordsForLayoutCoords(x, y);
 	return std::pair<double, int>(cc.first - x, cc.second - y);
     }
-    
-    void resizeStaffLines(double startLayoutX, double endLayoutX);
-    void clearStaffLineRow(int row);
-    void resizeStaffLineRow(int row, double offset, double length);
+
+protected:
+    // Actual implementation methods.  The default implementation
+    // shows staff lines, connecting lines (where appropriate) and bar
+    // lines, but does not show time signatures.  To see time
+    // signatures, override the deleteTimeSignatures and
+    // insertTimeSignature methods.
+
+    virtual void resizeStaffLines();
+    virtual void clearStaffLineRow(int row);
+    virtual void resizeStaffLineRow(int row, double offset, double length);
+
+    virtual void deleteBars();
+    virtual void insertBar(int layoutX, bool isCorrect);
+
+    // The default implementations of the following two are empty.
+    virtual void deleteTimeSignatures();
+    virtual void insertTimeSignature(int layoutX,
+				     const Rosegarden::TimeSignature &);
 
 protected:
     QCanvas *m_canvas;
@@ -367,6 +378,7 @@ protected:
     static bool compareBars(const BarLine &, const BarLine &);
     static bool compareBarToLayoutX(const BarLine &, int);
     BarLineList m_barLines;
+    BarLineList m_barConnectingLines;
 };
 
 #include "linedstaff.cpp"

@@ -32,6 +32,8 @@
 
 namespace Rosegarden 
 {
+
+typedef unsigned long long RealTime; // usec
     
 typedef std::map<int, Instrument> instrumentcontainer;
 typedef std::map<int, Track> trackcontainer;
@@ -256,19 +258,29 @@ public:
      * This is a fairly efficient operation, not dependent on the
      * magnitude of t or the number of tempo changes in the piece.
      */
-    unsigned long long getElapsedRealTime(timeT t) const;
+    RealTime getElapsedRealTime(timeT t) const;
+
+    /**
+     * Return the nearest time in timeT units to the point at the
+     * given number of microseconds after the beginning of the
+     * composition.  (timeT units are independent of tempo; this takes
+     * into account any tempo changes in the first t microseconds.)
+     * The result will be approximate, as timeT units are obviously
+     * less precise than microseconds.
+     *
+     * This is a fairly efficient operation, not dependent on the
+     * magnitude of t or the number of tempo changes in the piece.
+     */
+    timeT getElapsedTimeForRealTime(RealTime t) const;
 
     /**
      * Return the number of microseconds elapsed between
      * the two given timeT indices into the composition, taking
      * into account any tempo changes between the two times.
      */
-    unsigned long long getRealTimeDifference(timeT t0, timeT t1) const {
-	if (t1 > t0) {
-	    return getElapsedRealTime(t1) - getElapsedRealTime(t0);
-	} else {
-	    return getElapsedRealTime(t0) - getElapsedRealTime(t1);
-	}
+    RealTime getRealTimeDifference(timeT t0, timeT t1) const {
+	if (t1 > t0) return getElapsedRealTime(t1) - getElapsedRealTime(t0);
+	else	     return getElapsedRealTime(t0) - getElapsedRealTime(t1);
     }
 
     /**
@@ -326,7 +338,9 @@ protected:
     /// affects m_tempoSegment
     void calculateTempoTimestamps() const;
     mutable bool m_tempoTimestampsNeedCalculating;
-    unsigned long long calculateMicroseconds(timeT time, double tempo) const;
+    RealTime time2RealTime(timeT time, double tempo) const;
+    timeT realTime2Time(RealTime rtime, double tempo) const;
+    static bool compareTempoTimestamps(const Event *&, const Event *&);
 
 private:
     Composition(const Composition &);

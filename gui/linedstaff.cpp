@@ -19,6 +19,7 @@
 */
 
 #include "linedstaff.h"
+#include "colours.h"
 
 
 template <class T>
@@ -233,13 +234,178 @@ LinedStaff<T>::getHeightAtCanvasY(int y) const
     }
 }
 
+template <class T>
+QRect
+LinedStaff<T>::getBarExtents(double x, int y) const
+{
+    int row = getRowForCanvasY(y);
+
+    for (unsigned int i = 1; i < m_barLines.size(); ++i) {
+
+	int layoutX = m_barLines[i].first;
+	int barRow = getRowForLayoutX(layoutX);
+
+	QCanvasLine *line = m_barLines[i].second;
+
+	if (m_pageMode && (barRow < row)) continue;
+	if (line->x() <= x) continue;
+
+	return QRect(m_barLines[i-1].second->x(),
+		     getCanvasYForTopOfStaff(barRow),
+		     line->x() - m_barLines[i-1].second->x(),
+		     getHeightOfRow());
+    }
+
+    // failure
+    return QRect(m_x, getCanvasYForTopOfStaff(), 4, getHeightOfRow());
+}
 
 template <class T>
 void
-LinedStaff<T>::resizeStaffLines(double startLayoutX, double endLayoutX)
+LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
 {
-    int firstRow = getRowForLayoutX(startLayoutX);
-    int  lastRow = getRowForLayoutX(endLayoutX);
+    deleteBars();
+    deleteTimeSignatures();
+
+    unsigned int barCount = layout->getBarLineCount(*this);
+
+    int xleft = 0, xright = 0;
+    bool haveXLeft = false;
+
+    if (barCount > 0) xright = layout->getBarLineX(*this, barCount - 1);
+    else xright = layout->getTotalWidth();
+    
+    for (unsigned int i = 0; i < barCount; ++i) {
+
+	if (layout->isBarLineVisible(*this, i)) {
+
+	    int x = layout->getBarLineX(*this, i);
+
+	    if (!haveXLeft && layout->isBarLineVisible(*this, i)) {
+		xleft = x;
+		haveXLeft = true;
+	    }
+
+	    insertBar(x, layout->isBarLineCorrect(*this, i));
+
+	    Event *timeSig = layout->getTimeSignatureInBar(*this, i, x);
+	    if (timeSig && i < barCount - 1) {
+		insertTimeSignature(x, TimeSignature(*timeSig));
+	    }
+	}
+    }
+
+    m_startLayoutX = xleft;
+    m_endLayoutX = xright;
+    resizeStaffLines();
+
+    //!!! updateRuler();
+}
+
+template <class T>
+void
+LinedStaff<T>::deleteBars()
+{
+    for (BarLineList::iterator i = m_barLines.begin();
+	 i != m_barLines.end(); ++i) {
+	delete i->second;
+    }
+
+    for (BarLineList::iterator i = m_barConnectingLines.begin();
+	 i != m_barConnectingLines.end(); ++i) {
+	delete i->second;
+    }
+
+    m_barLines.clear();
+    m_barConnectingLines.clear();
+}
+
+template <class T>
+void
+LinedStaff<T>::insertBar(int layoutX, bool isCorrect)
+{
+    //!!! Where to get this from?
+    int barThickness = 1;
+
+    for (int i = 0; i < barThickness; ++i) {
+
+        QCanvasLine *line = new QCanvasLine(m_canvas);
+	int row = getRowForLayoutX(layoutX);
+
+        line->setPoints(0, 0, 0, getBarLineHeight());
+        line->moveBy
+	    (getCanvasXForLayoutX(layoutX) + i, getCanvasYForTopLine(row));
+
+        if (correct) line->setPen(QPen(RosegardenGUIColours::BarLine, 1));
+        else line->setPen(QPen(RosegardenGUIColours::BarLineIncorrect, 1));
+        line->show();
+	line->setZ(-1);
+
+	BarLine barLine(layoutX, line);
+        BarLineList::iterator insertPoint = lower_bound
+	    (m_barLines.begin(), m_barLines.end(), barLine, compareBars);
+        m_barLines.insert(insertPoint, barLine);
+
+//!!!
+#ifdef NOT_DEFINED_YET
+	if (m_connectingLineHeight > 0) {
+
+	    QCanvasLine *connectingLine = new QCanvasLine(canvas());
+	    
+	    connectingLine->setPoints(0, 0, 0, m_connectingLineHeight);
+	    connectingLine->moveBy
+		(getCanvasXForLayoutX(layoutX) + i,
+		 getCanvasYForTopLine(row) + getBarLineHeight());
+
+	    connectingLine->setPen
+		(QPen(RosegardenGUIColours::StaffConnectingLine, 1));
+	    connectingLine->setZ(-3);
+	    connectingLine->show();
+
+	    BarLine connectingLine(barPos, connectingLine);
+	    insertPoint = lower_bound
+		(m_barConnectingLines.begin(), m_barConnectingLines.end(),
+		 connectingLine, compareBars);
+	    m_barConnectingLines.insert(insertPoint, connectingLine);
+	}
+#endif
+    }
+}
+
+template <class T>
+bool
+LinedStaff<T>::compareBars(const BarLine &barLine1, const BarLine &barLine2)
+{
+    return (barLine1.first < barLine2.first);
+}
+
+template <class T>
+bool
+LinedStaff<T>::compareBarToLayoutX(const BarLine &barLine1, int x)
+{
+    return (barLine1.first < x);
+}
+
+template <class T>
+void
+LinedStaff<T>::deleteTimeSignatures()
+{
+    // default implementation is empty
+}
+
+template <class T>
+void
+LinedStaff<T>::insertTimeSignature(int, const Rosegarden::TimeSignature &)
+{
+    // default implementation is empty
+}
+
+template <class T>
+void
+LinedStaff<T>::resizeStaffLines()
+{
+    int firstRow = getRowForLayoutX(m_startLayoutX);
+    int  lastRow = getRowForLayoutX(m_endLayoutX);
     
     int i;
 
@@ -260,11 +426,11 @@ LinedStaff<T>::resizeStaffLines(double startLayoutX, double endLayoutX)
 	double x1 = m_pageWidth;
 
 	if (i == firstRow) {
-	    x0 = getXForLayoutX(startLayoutX);
+	    x0 = getXForLayoutX(m_startLayoutX);
 	}
 
 	if (i == lastRow) {
-	    x1 = getXForLayoutX(endLayoutX);
+	    x1 = getXForLayoutX(m_endLayoutX);
 	}
 
 	resizeStaffLineRow(i, x0, x1 - x0);

@@ -548,7 +548,7 @@ Composition::addTempo(timeT time, double tempo)
     std::cerr << "Composition: Added tempo " << tempo << " at " << time << endl;
 }
 
-unsigned long long
+RealTime
 Composition::getElapsedRealTime(timeT t) const
 {
     if (m_tempoTimestampsNeedCalculating) {
@@ -557,14 +557,50 @@ Composition::getElapsedRealTime(timeT t) const
 
     Segment::iterator i = m_tempoSegment.findTime(t);
     if (i == m_tempoSegment.begin()) {
-	return calculateMicroseconds(t, m_defaultTempo);
+	return time2RealTime(t, m_defaultTempo);
     }
 
     if (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > t) --i;
 
-    return (unsigned long long)((*i)->get<Int>(TempoTimestampProperty)) +
-	calculateMicroseconds(t - (*i)->getAbsoluteTime(),
-			      (double)((*i)->get<Int>(TempoProperty)) / 60.0);
+    return (RealTime)((*i)->get<Int>(TempoTimestampProperty)) +
+	time2RealTime(t - (*i)->getAbsoluteTime(),
+		      (double)((*i)->get<Int>(TempoProperty)) / 60.0);
+}
+
+timeT
+Composition::getElapsedTimeForRealTime(RealTime t) const
+{
+    if (m_tempoTimestampsNeedCalculating) {
+	calculateTempoTimestamps();
+    }
+
+    Event dummy;
+    //!!!
+    dummy.set<Int>(TempoTimestampProperty, t);
+    Segment::iterator i = lower_bound(m_tempoSegment.begin(),
+				      m_tempoSegment.end(),
+				      &dummy,
+				      compareTempoTimestamps);
+
+    if (i == m_tempoSegment.begin()) {
+	return realTime2Time(t, m_defaultTempo);
+    }
+
+    if (i == m_tempoSegment.end() ||
+	(*i)->get<Int>(TempoTimestampProperty) > t) --i;
+
+    return (*i)->getAbsoluteTime() +
+	realTime2Time(t - (*i)->get<Int>(TempoTimestampProperty),
+		      (double)((*i)->get<Int>(TempoProperty)) / 60.0);
+}
+
+bool
+Composition::compareTempoTimestamps(const Event *&e1, const Event *&e2)
+{
+    RealTime r1 = e1->get<Int>(TempoTimestampProperty);
+    RealTime r2 = e2->get<Int>(TempoTimestampProperty);
+
+    return (r1 < r2);
 }
 
 void
@@ -585,7 +621,7 @@ Composition::calculateTempoTimestamps() const
 
 	(*i)->setMaybe<Int>
 	    (TempoTimestampProperty,
-	     (long)calculateMicroseconds((*i)->getAbsoluteTime(), tempo));
+	     (long)time2RealTime((*i)->getAbsoluteTime(), tempo));
 	
 	tempo = (double)((*i)->get<Int>(TempoProperty)) / 60.0;
 	base = (*i)->getAbsoluteTime();
@@ -594,12 +630,20 @@ Composition::calculateTempoTimestamps() const
     m_tempoTimestampsNeedCalculating = false;
 }	
 
-unsigned long long
-Composition::calculateMicroseconds(timeT t, double tempo) const
+RealTime
+Composition::time2RealTime(timeT t, double tempo) const
 {
-    return (unsigned long long)
+    return (RealTime)
 	((6e7L * (double)t) /
 	 ((double)Note(Note::Crotchet).getDuration() * tempo));
+}
+
+timeT
+Composition::realTime2Time(RealTime t, double tempo) const
+{
+    return (timeT)
+	(((double)t * (double)Note(Note::Crotchet).getDuration() * tempo) /
+	 6e7L);
 }
 
 void
