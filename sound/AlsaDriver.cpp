@@ -1816,6 +1816,7 @@ AlsaDriver::setPluginInstance(InstrumentId id,
                               unsigned long pluginId,
                               int position)
 {
+#ifdef HAVE_LADSPA
     std::cout << "AlsaDriver::setPluginInstance" << std::endl;
     PluginIterator it = m_pluginInstances.begin();
 
@@ -1825,12 +1826,15 @@ AlsaDriver::setPluginInstance(InstrumentId id,
     m_pluginInstances.push_back(
             new LADSPAPluginInstance(id, pluginId, position));
     // stop a
+#endif // HAVE_LADSPA
+
 }
 
 
 void
 AlsaDriver::removePluginInstance(InstrumentId id, int position)
 {
+#ifdef HAVE_LADSPA
     std::cout << "AlsaDriver::removePluginInstance" << std::endl;
     PluginIterator it = m_pluginInstances.begin();
     for (; it != m_pluginInstances.end(); it++)
@@ -1844,7 +1848,7 @@ AlsaDriver::removePluginInstance(InstrumentId id, int position)
             break;
         }
     }
-
+#endif // HAVE_LADSPA
 }
 
 

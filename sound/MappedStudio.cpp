@@ -159,7 +159,7 @@ MappedObject::clone(MappedObject *object)
                 dynamic_cast<MappedStudio*>(studio)
                     ->createObject((*it)->getType(), false);
             object->addChild(child);
-            cout << "ADD CHILD" << endl;
+            std::cout << "ADD CHILD" << endl;
             (*it)->clone(child);
         }
     }
@@ -885,6 +885,7 @@ MappedAudioPluginManager::setProperty(const MappedObjectProperty &property,
 MappedObject*
 MappedAudioPluginManager::getReadOnlyPlugin(unsigned long uniqueId)
 {
+#ifdef HAVE_LADSPA
     std::vector<MappedObject*>::iterator it = m_children.begin();
 
     for(; it != m_children.end(); it++)
@@ -899,6 +900,8 @@ MappedAudioPluginManager::getReadOnlyPlugin(unsigned long uniqueId)
                 return *it;
         }
     }
+
+#endif // HAVE_LADSPA
 
     return 0;
 }
