@@ -20,6 +20,9 @@
 
 #include "tracklabel.h"
 
+#include <qtimer.h>
+#include <klineeditdlg.h>
+
 TrackLabel::TrackLabel(Rosegarden::TrackId id,
                        int position,
                        QWidget *parent,
@@ -103,13 +106,11 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
 
     bool ok = false;
 
-    QString newText = QInputDialog::getText(
-                                 QString("Change track name"),
-                                 QString("Enter new track name"),
-                                 QLineEdit::Normal, 
-                                 text(),
-                                 &ok,
-                                 this);
+    QString newText = KLineEditDlg::getText(QString("Change track name"),
+                                            QString("Enter new track name"),
+                                            text(),
+                                            &ok,
+                                            this);
 
     if ( ok && !newText.isEmpty() )
         emit renameTrack(newText, m_position);

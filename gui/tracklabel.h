@@ -21,22 +21,18 @@
 #ifndef _TRACK_LABEL_H_
 #define _TRACK_LABEL_H_
 
-#include <iostream>
-
 #include <qstring.h>
 #include <qlabel.h>
-#include <qtimer.h>
-#include <qinputdialog.h>
 
 #include "Track.h"
 
-// Specialises QLabel to create in effect a toggleable and
-// hence selectable label/label list.  In conjunction with
-// TrackButtons provides a framework for Track selection
-// on the TrackCanvas.
-//
-//
+class QTimer;
 
+/**
+ * Specialises QLabel to create in effect a toggleable and hence
+ * selectable label/label list.  In conjunction with TrackButtons
+ * provides a framework for Track selection on the TrackCanvas.
+ */
 class TrackLabel : public QLabel
 {
 Q_OBJECT

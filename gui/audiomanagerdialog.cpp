@@ -25,13 +25,13 @@
 #include <qvbuttongroup.h>
 #include <qpainter.h>
 #include <qpixmap.h>
-#include <qinputdialog.h>
 
 #include <kurl.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
+#include <klineeditdlg.h>
 #include <klistview.h>
 #include <kio/netaccess.h>
 
@@ -796,13 +796,12 @@ AudioManagerDialog::slotRename()
 
     bool ok = false;
 
-    QString newText = QInputDialog::getText(
-                                 i18n("Change Audio File label"),
-                                 i18n("Enter new label"),
-                                 QLineEdit::Normal,
-                                 QString(audioFile->getName().c_str()),
-                                 &ok,
-                                 this);
+    QString newText = KLineEditDlg::getText(
+                                            i18n("Change Audio File label"),
+                                            i18n("Enter new label"),
+                                            QString(audioFile->getName().c_str()),
+                                            &ok,
+                                            this);
 
     if ( ok && !newText.isEmpty() )
         audioFile->setName(qstrtostr(newText));

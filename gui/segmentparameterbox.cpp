@@ -21,12 +21,12 @@
 
 #include <qhbox.h>
 #include <qlayout.h>
-#include <qinputdialog.h>
 
 #include <klocale.h>
 #include <kcommand.h>
 #include <kcombobox.h>
 #include <kcolordialog.h>
+#include <klineeditdlg.h>
 
 #include "Segment.h"
 #include "Quantizer.h"
@@ -748,8 +748,8 @@ SegmentParameterBox::slotColourSelected(int value)
         Rosegarden::ColourMap newMap = m_view->getDocument()->getComposition().getSegmentColourMap();
         QColor newColour;
         bool ok = false;
-        QString newName = QInputDialog::getText(i18n("New Color Name"), i18n("Enter new name"),
-                                                QLineEdit::Normal, i18n("New"), &ok);
+        QString newName = KLineEditDlg::getText(i18n("New Color Name"), i18n("Enter new name"),
+                                                i18n("New"), &ok);
         if ((ok == true) && (!newName.isEmpty()))
         {
             KColorDialog box(this, "", true);
@@ -800,13 +800,11 @@ SegmentParameterBox::slotEditSegmentLabel()
     QString label = m_label->text();
     if (label == "*") label = "";
 
-    QString newLabel = QInputDialog::getText(
-            editLabel,
-            i18n("Enter new label"),
-            QLineEdit::Normal,
-            m_label->text(),
-            &ok,
-            this);
+    QString newLabel = KLineEditDlg::getText(editLabel,
+                                             i18n("Enter new label"),
+                                             m_label->text(),
+                                             &ok,
+                                             this);
 
     if (ok)
     {

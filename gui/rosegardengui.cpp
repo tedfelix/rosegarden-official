@@ -36,6 +36,7 @@
 #include <kio/netaccess.h>
 #include <kmenubar.h>
 #include <klocale.h>
+#include <klineeditdlg.h>
 #include <kconfig.h>
 #include <kprocess.h>
 #include <kprinter.h>
@@ -4326,13 +4327,11 @@ RosegardenGUIApp::slotRelabelSegments()
 
     bool ok = false;
 
-    QString newLabel = QInputDialog::getText(
-            editLabel,
-            i18n("Enter new label"),
-            QLineEdit::Normal,
-            label,
-            &ok,
-            this);
+    QString newLabel = KLineEditDlg::getText(editLabel,
+                                             i18n("Enter new label"),
+                                             label,
+                                             &ok,
+                                             this);
 
     if (ok)
     {

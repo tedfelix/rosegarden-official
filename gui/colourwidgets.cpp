@@ -24,10 +24,10 @@
 */
 
 #include <qtable.h>
-#include <qinputdialog.h>
 
 #include <kcolordialog.h>
 #include <klocale.h>
+#include <klineeditdlg.h>
 
 #include "colours.h"
 #include "colourwidgets.h"
@@ -61,8 +61,8 @@ RosegardenColourTable::slotEditEntry(int row, int col)
         {
             if (row == 0) return;
             bool ok = false;
-            QString newName = QInputDialog::getText(i18n("Modify Color Name"), i18n("Enter new name"), 
-                                                    QLineEdit::Normal, item(row, col)->text(), &ok);
+            QString newName = KLineEditDlg::getText(i18n("Modify Color Name"), i18n("Enter new name"), 
+                                                    item(row, col)->text(), &ok);
 
             if ((ok == true) && (!newName.isEmpty()))
             {
