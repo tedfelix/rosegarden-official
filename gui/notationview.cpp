@@ -650,6 +650,8 @@ void NotationView::initFontToolbar()
     connect(stretchSlider, SIGNAL(valueChanged(int)),
             this, SLOT(changeStretch(int)));
 
+/*!!! Removed temporarily because the implementation is so deficient
+
     new QLabel("  Quantization:  ", fontToolbar);
 
     if (m_quantizationDurations.size() == 0) {
@@ -663,6 +665,7 @@ void NotationView::initFontToolbar()
          QSlider::Horizontal, fontToolbar);
     connect(quantizeSlider, SIGNAL(valueChanged(int)),
             this, SLOT(changeQuantization(int)));
+*/
 }
 
 void NotationView::initStatusBar()
