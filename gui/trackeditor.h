@@ -183,11 +183,11 @@ signals:
     void stateChange(const QString&, bool);
 
     /**
-     * A URI was dropped on the canvas
+     * A URI to a Rosegarden document was dropped on the canvas
      *
      * @see RosegardenGUI#slotOpenURL()
      */
-    void droppedURI(QString uri);
+    void droppedDocument(QString uri);
 
     /**
      * An audio file was dropped from the audio manager dialog

@@ -659,28 +659,33 @@ void TrackEditor::dragEnterEvent(QDragEnterEvent *event)
 
 void TrackEditor::dropEvent(QDropEvent* event)
 {
-    // this is a very simplistic implementation of a drop event.  we
-    // will only accept a dropped URL.  the Qt dnd code can do *much*
-    // much more, so please read the docs there
     QStrList uri;
-    QString audioInfo;
+    QString text;
 
-    // if it's a URI, pass it to parent
-    if (QUriDrag::decode(event, uri))
-    {
+    if (QUriDrag::decode(event, uri)) {
         RG_DEBUG << "TrackEditor::dropEvent() : got URI :"
                              << uri.first() << endl;
-        emit droppedURI(uri.first());
+        QString uriPath = uri.first();
         
-    } else if (QTextDrag::decode(event, audioInfo)) {
-        RG_DEBUG << "TrackEditor::dropEvent() : got audio info " << endl;
-                             //<< audioInfo << endl;
+        if (uriPath.endsWith(".rg")) {
+            emit droppedDocument(uriPath);
+        } else {
+            emit droppedAudio(uriPath);
+        }
+            
+    } else if (QTextDrag::decode(event, text)) {
+        RG_DEBUG << "TrackEditor::dropEvent() : got text info "
+                 << text << endl;
 
         int trackPos = m_segmentCanvas->grid().getYBin(event->pos().y());
         RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos " 
                  << trackPos << endl;
 
-        emit droppedAudio(audioInfo);
+        if (text.endsWith(".rg")) {
+            emit droppedDocument(text);
+        } else {
+            emit droppedAudio(text);
+        }
     }
     
 }
