@@ -1,8 +1,7 @@
-Rosegarden 0.8 release notes
+Rosegarden 0.9 release notes
 ==============================
-The source tree builds for KDE 3.x. KDE 2.x support has been removed, as of
-Dec. 3rd 2002. To build it, you first need to regenerate the "configure"
-script like so:
+The source tree builds for KDE 3.x. To build it, you first need to
+regenerate the "configure" script like so:
 
   % make -f Makefile.cvs
 
@@ -10,6 +9,9 @@ and now you can configure and make as usual:
 
   % ./configure --with-qt-dir=/usr/lib/qt3 --prefix=/opt/kde3 --with-alsa=yes
   % make
+
+NOTE: due to some build configuration issues you might also need to add
+the additional option "--with-exceptions=yes" to your configure line.
 
 
 ALSA 0.9.0 support, JACK and LADSPA
@@ -30,6 +32,9 @@ must start the synth (such as iiwusynth) _before_ you start Rosegarden.
 You should then see the ports of the soft synth available in the
 Rosegarden Instrument list (click and hold on the Track name to pop up
 the Instrument selection list).
+
+This release has been tested with the following JACK versions and will
+probably work with those in-between and before:  0.50.0, 0.61.0, 0.69.1
 
 
 Compiling from CVS
