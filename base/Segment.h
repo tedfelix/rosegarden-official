@@ -450,6 +450,11 @@ public:
     int getTranspose() const { return m_transpose; }
     void setTranspose(const int &transpose) { m_transpose = transpose; }
 
+    // label
+    //
+    void setLabel(const std::string &label) { m_label = label; }
+    std::string getLabel() const { return m_label; }
+
     //////
     //
     // REFRESH STATUS
@@ -493,6 +498,8 @@ private:
     Rosegarden::timeT m_delay;  // all Events delay
 
     RefreshStatusArray<SegmentRefreshStatus> m_refreshStatusArray;
+
+    std::string m_label; // segment label
 
 };
 

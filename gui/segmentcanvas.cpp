@@ -58,7 +58,12 @@ SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT duration,
     m_selected(false),
     m_snapGrid(snapGrid),
     m_repeatRectangle(0)
+    //m_segmentLabel(new QCanvasText(canvas))
 {
+    //m_segmentLabel->setText(QString(""));
+    //m_segmentLabel->setZ(2);
+    //m_segmentLabel->show();
+
     recalculateRectangle(true);
 }
 
@@ -69,7 +74,12 @@ SegmentItem::SegmentItem(Segment *segment,
     m_selected(false),
     m_snapGrid(snapGrid),
     m_repeatRectangle(0)
+    //m_segmentLabel(new QCanvasText(canvas))
 {
+    //m_segmentLabel->setText(QString(""));
+    //m_segmentLabel->setZ(2);
+    //m_segmentLabel->show();
+
     recalculateRectangle(true);
 }
 
@@ -77,6 +87,14 @@ SegmentItem::~SegmentItem()
 {
     kdDebug(KDEBUG_AREA) << "SegmentItem::~SegmentItem" << endl;
     if (m_repeatRectangle) delete m_repeatRectangle;
+
+    /*
+    if (m_segmentLabel)
+    {
+        delete m_segmentLabel;
+        m_segmentLabel = 0;
+    }
+    */
 }
 
 void
@@ -114,7 +132,16 @@ SegmentItem::recalculateRectangle(bool inheritFromSegment)
 	    delete m_repeatRectangle;
 	    m_repeatRectangle = 0;
 	}
+
+        // set the label
+        //m_segmentLabel->setText(QString(m_segment->getLabel().c_str()));
+
     }
+
+    // set label position
+    //m_segmentLabel->setX(m_snapGrid->getRulerScale()->
+                         //getXForTime(m_startTime) + 2);
+    //m_segmentLabel->setY(m_snapGrid->getYBinCoordinate(m_track) + 1);
 	
     setX(m_snapGrid->getRulerScale()->getXForTime(m_startTime));
     setY(m_snapGrid->getYBinCoordinate(m_track));
@@ -122,6 +149,7 @@ SegmentItem::recalculateRectangle(bool inheritFromSegment)
     setSize((int)m_snapGrid->getRulerScale()->
 	    getWidthForDuration(m_startTime, m_duration) + 1,
 	    m_snapGrid->getYSnap());
+
 }
 
 Segment *

@@ -120,6 +120,8 @@ protected:
     Rosegarden::SnapGrid *m_snapGrid;
 
     QCanvasRectangle *m_repeatRectangle;
+
+    QCanvasText *m_segmentLabel;
 };
 
 

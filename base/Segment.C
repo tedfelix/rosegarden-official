@@ -51,7 +51,8 @@ Segment::Segment(SegmentType segmentType, timeT startIdx) :
     m_quantizer(new Quantizer("SegmentQ", Quantizer::RawEventData)),
     m_quantize(false),
     m_transpose(0),
-    m_delay(0)
+    m_delay(0),
+    m_label("untitled")
 {
     // nothing
 }
