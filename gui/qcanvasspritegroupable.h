@@ -18,7 +18,9 @@
 #ifndef QCANVASSPRITEGROUPABLE_H
 #define QCANVASSPRITEGROUPABLE_H
 
-#include <qcanvasgroupableitem.h>
+#include <qcanvas.h>
+
+#include "qcanvasgroupableitem.h"
 
 /**A QCanvasSprite that can be put in a QCanvasGroup
 

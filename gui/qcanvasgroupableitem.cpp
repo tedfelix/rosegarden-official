@@ -15,6 +15,9 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qcanvas.h>
+
+#include "qcanvasitemgroup.h"
 #include "qcanvasgroupableitem.h"
 #include "rosedebug.h"
 
@@ -24,9 +27,9 @@ QCanvasGroupableItem::QCanvasGroupableItem(QCanvasItem *i,
     : m_group(g),
       m_item(i)
 {
-    kdDebug(KDEBUG_AREA) << "QCanvasGroupableItem() - this : " << this
-                         << " - group : " << g
-                         << " - item : " << i << endl;
+//     kdDebug(KDEBUG_AREA) << "QCanvasGroupableItem() - this : " << this
+//                          << " - group : " << g
+//                          << " - item : " << i << endl;
 
     if (withRelativeCoords)
         group()->addItemWithRelativeCoords(item());
@@ -36,11 +39,13 @@ QCanvasGroupableItem::QCanvasGroupableItem(QCanvasItem *i,
 
 QCanvasGroupableItem::~QCanvasGroupableItem()
 {
-    kdDebug(KDEBUG_AREA) << "~QCanvasGroupableItem() - this : " << this
-                         << " - group : " << group()
-                         << " - item : " << item() << endl;
+//     kdDebug(KDEBUG_AREA) << "~QCanvasGroupableItem() - this : " << this
+//                          << " - group : " << group()
+//                          << " - item : " << item() << endl;
 
-    group()->removeItem(item());
+    // remove from the item group if we're still attached to one
+    if (group())
+        group()->removeItem(item());
 }
 
 void
@@ -48,4 +53,10 @@ QCanvasGroupableItem::relativeMoveBy(double dx, double dy)
 {
     m_item->moveBy(dx + m_group->x(),
                    dy + m_group->y());
+}
+
+void
+QCanvasGroupableItem::detach()
+{
+    m_group = 0;
 }

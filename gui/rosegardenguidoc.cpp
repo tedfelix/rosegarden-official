@@ -191,7 +191,8 @@ void RosegardenGUIDoc::deleteContents()
 {
     deleteViews();
 
-    for(EventList::iterator i = m_elements.begin(); i != m_elements.end(); ++i) {
+    for(EventList::iterator i = m_elements.begin();
+        i != m_elements.end(); ++i) {
         delete *i;
     }
 
@@ -215,46 +216,6 @@ void RosegardenGUIDoc::deleteViews()
 //          192 units =  48 clocks = 1 minim
 //          384 units =  96 clocks = 1 semibreve
 //          768 units = 192 clocks = 1 breve
-
-// bool
-// RosegardenGUIDoc::xmlParseElement(const QDomElement &base)
-// {
-//     QString tag;
-//     QDomElement domElement(base);
-
-//     while ( !domElement.isNull() ) {
-
-//         tag = domElement.tagName();
-
-//         if (tag == "element") {
-
-//             QDomNamedNodeMap attributes(domElement.attributes());
-//             QDomNodeList children(domElement.childNodes());
-
-//             m_elements.push_back(new XMLStorableElement(attributes, children));
-
-//         } else if (tag == "rosegarden-data") {
-
-//             QDomNodeList children(domElement.childNodes());
-// 	    if (children.length())
-//                 xmlParseElement(children.item(0).toElement());
-
-//         } else {
-//             kdDebug(KDEBUG_AREA) << "xmlParseElement: Unknown tag " << tag
-//                                  << " - checking children" << endl;
-//             QDomNodeList children(domElement.childNodes());
-// 	    if (children.length())
-//                 xmlParseElement(children.item(0).toElement());
-
-//         }
-
-//         domElement = domElement.nextSibling().toElement();
-//     }
-//     return true;
-// }
-
-
-
 
 
 bool

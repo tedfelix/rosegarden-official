@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
         if (args->count()) {
             rosegardengui->openDocumentFile(args->arg(0));
         } else {
-            rosegardengui->openDocumentFile();
+            // rosegardengui->openDocumentFile();
         }
 
         args->clear();

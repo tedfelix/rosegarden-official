@@ -18,8 +18,6 @@
 #ifndef QCANVASGROUPABLEITEM_H
 #define QCANVASGROUPABLEITEM_H
 
-#include "qcanvasitemgroup.h"
-
 /**
  * This class is meant to be inherited by QCanvasItem children to make
  * them groupable.
@@ -30,7 +28,12 @@
 * @author Guillaume Laurent
 */
 
+class QCanvasItemGroup;
+class QCanvasItem;
+
 class QCanvasGroupableItem {
+    friend QCanvasItemGroup;
+
 public:
 
     /**
@@ -54,6 +57,15 @@ public:
     */
     virtual void relativeMoveBy(double dx, double dy);
 
+protected:
+    /**
+     * detach item from the item group - called by QCanvasItemGroup only
+     *
+     * set m_group to 0, so that on desctruction the item won't try to
+     * remove itself from the group
+     */
+    void detach();
+    
 private:
     QCanvasItemGroup* m_group;
     QCanvasItem*      m_item;

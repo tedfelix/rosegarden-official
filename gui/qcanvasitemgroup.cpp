@@ -16,17 +16,26 @@
  ***************************************************************************/
 
 #include "qcanvasitemgroup.h"
+#include "qcanvasgroupableitem.h"
+
 #include "rosedebug.h"
 
 QCanvasItemGroup::QCanvasItemGroup(QCanvas *c)
     : QCanvasItem(c)
 {
-    kdDebug(KDEBUG_AREA) << "QCanvasItemGroup() - this : " << this << endl;
+//     kdDebug(KDEBUG_AREA) << "QCanvasItemGroup() - this : " << this << endl;
 }
 
 QCanvasItemGroup::~QCanvasItemGroup()
 {
-    kdDebug(KDEBUG_AREA) << "~QCanvasItemGroup() - this : " << this << endl;
+//     kdDebug(KDEBUG_AREA) << "~QCanvasItemGroup() - this : " << this << endl;
+
+    // Tell all our items that we're being destroyed
+    QCanvasItemList::Iterator i;
+    for(i = m_items.begin(); i != m_items.end(); ++i) {
+        QCanvasGroupableItem *t = dynamic_cast<QCanvasGroupableItem*>(*i);
+        if (t) t->detach();
+    }
 }
 
 void

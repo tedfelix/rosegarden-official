@@ -18,7 +18,9 @@
 #ifndef QCANVASLINEGROUPABLE_H
 #define QCANVASLINEGROUPABLE_H
 
-#include <qcanvasgroupableitem.h>
+#include <qcanvas.h>
+
+#include "qcanvasgroupableitem.h"
 
 /**A QCanvasLine which can be put in a QCanvasGroup
 
