@@ -157,14 +157,24 @@ public:
     // Copy constructor
     //
     MappedEvent(const MappedEvent &mE):
-        m_instrument(getInstrument()),
-        m_type(getType()),
+        m_instrument(mE.getInstrument()),
+        m_type(mE.getType()),
         m_data1(mE.getData1()),
-        m_data2(getData2()),
+        m_data2(mE.getData2()),
         m_eventTime(mE.getEventTime()),
-        m_duration(getDuration()),
-        m_audioStartMarker(getAudioStartMarker()) {;}
-                
+        m_duration(mE.getDuration()),
+        m_audioStartMarker(mE.getAudioStartMarker()) {;}
+
+    // Copy from pointer
+    MappedEvent(MappedEvent *mE):
+        m_instrument(mE->getInstrument()),
+        m_type(mE->getType()),
+        m_data1(mE->getData1()),
+        m_data2(mE->getData2()),
+        m_eventTime(mE->getEventTime()),
+        m_duration(mE->getDuration()),
+        m_audioStartMarker(mE->getAudioStartMarker()) {;}
+
     ~MappedEvent() {;}
 
     // Event time

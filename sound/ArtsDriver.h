@@ -18,6 +18,9 @@
   COPYING included with this distribution for more information.
 */
 
+#include "config.h"
+
+#ifndef HAVE_ALSA
 
 #include <arts/artsmidi.h>
 #include <arts/soundserver.h>
@@ -123,3 +126,4 @@ private:
 
 #endif // _ARTSDRIVER_H_
 
+#endif // HAVE_ALSA

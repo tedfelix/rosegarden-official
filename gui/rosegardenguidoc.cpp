@@ -537,6 +537,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 
                    rEvent->set<Int>(PITCH, (*i)->getPitch());
                    rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
+                   cout << "INSERTED TIME = " << absTime << endl;
                    break;
 
                 case Rosegarden::MappedEvent::MidiPitchWheel:
@@ -632,6 +633,7 @@ RosegardenGUIDoc::stopRecordingMidi()
     }
 
     if (m_recordSegment->getComposition()) {
+        cout << "INSERTING" << endl;
 	// something in the record segment (that's why it was added
 	// to the composition)
 	m_commandHistory->addCommand
@@ -794,6 +796,7 @@ RosegardenGUIDoc::alive()
     //
     m_studio.clear();
 
+    cout << "DEVICES = " << devices << endl;
     for (unsigned int i = 0; i < devices; i++)
     {
         getMappedDevice(i);

@@ -156,8 +156,15 @@ public:
     MappedDevice getMappedDevice(DeviceId id)
         { return m_soundDriver->getMappedDevice(id); }
 
-    // get total number of devices
-    unsigned int getDevices() { return m_soundDriver->getDevices(); }
+    // Get total number of devices
+    //
+    unsigned int getDevices()
+    {
+        if (m_soundDriver->getStatus() == NO_DRIVER)
+            return 0;
+
+        return m_soundDriver->getDevices();
+    }
 
 
     // Process anything that needs to go on in the background 

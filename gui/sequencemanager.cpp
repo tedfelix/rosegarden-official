@@ -704,6 +704,11 @@ SequenceManager::record()
 // inserting it into the Composition and updating the display to show
 // what has been recorded and where.
 //
+// For ALSA we reflect the events straight back out to the instrument
+// we're currently playing just like in processAsynchronousMidi.
+// aRts does it's own MIDI thru which we don't bother we worrying
+// about for the moment.
+//
 //
 void
 SequenceManager::processRecordedMidi(const MappedComposition &mC)
@@ -711,12 +716,24 @@ SequenceManager::processRecordedMidi(const MappedComposition &mC)
     if (mC.size() > 0)
     {
         Rosegarden::MappedComposition::iterator i;
+        Rosegarden::Composition &comp = m_doc->getComposition();
+        Rosegarden::Track *track =
+                  comp.getTrackByIndex(comp.getSelectedTrack());
+        Rosegarden::InstrumentId id = track->getInstrument();
 
         // send all events to the MIDI in label
         //
         for (i = mC.begin(); i != mC.end(); ++i )
+        {
             m_transport->setMidiInLabel(*i);
+#ifdef HAVE_ALSA
+            (*i)->setInstrument(id);
+#endif
+        }
 
+#ifdef HAVE_ALSA
+        sendMappedComposition(mC);
+#endif 
     }
 
     // send any recorded Events to a Segment for storage and display
@@ -739,11 +756,28 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC)
     if (mC.size())
     {
         Rosegarden::MappedComposition::iterator i;
+        Rosegarden::Composition &comp = m_doc->getComposition();
+        Rosegarden::Track *track =
+                  comp.getTrackByIndex(comp.getSelectedTrack());
+        Rosegarden::InstrumentId id = track->getInstrument();
 
         // send all events to the MIDI in label
         //
         for (i = mC.begin(); i != mC.end(); ++i )
+        {
             m_transport->setMidiInLabel(*i);
+#ifdef HAVE_ALSA
+            (*i)->setInstrument(id);
+#endif
+        }
+
+#ifdef HAVE_ALSA
+        // MIDI thru implemented at this layer for ALSA for
+        // the moment.  aRts automatically does MIDI through,
+        // this does it to the currently selected instrument.
+        //
+        sendMappedComposition(mC);
+#endif 
     }
 }
 

@@ -482,6 +482,10 @@ RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent *mE)
     {
         case MappedEvent::MidiNote:
             {
+                // don't do anything if we've got an effective NOTE OFF
+                //
+                if (mE->getVelocity() == 0) return;
+
                 MidiPitchLabel *mPL = new MidiPitchLabel(mE->getPitch());
                 InDisplay->setText(mPL->getQString() +
 		       QString("  %1").arg(mE->getVelocity()));

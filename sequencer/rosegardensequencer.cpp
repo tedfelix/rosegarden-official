@@ -266,7 +266,10 @@ RosegardenSequencerApp::keepPlaying()
         Rosegarden::RealTime dropBoundary = m_lastFetchSongPosition
                                             + m_readAhead + m_readAhead;
 
-        if (sequencerTime > dropBoundary && !isLooping())
+        if (sequencerTime > dropBoundary &&  // we've overstepped boundary
+            !isLooping() &&                  // we're not looping or recording
+            m_transportStatus != RECORDING_MIDI &&
+            m_transportStatus != RECORDING_AUDIO)
         {
             // Catch up
             m_lastFetchSongPosition = sequencerTime;

@@ -18,6 +18,10 @@
   COPYING included with this distribution for more information.
 */
 
+#include "config.h"
+
+#ifndef HAVE_ALSA
+
 // aRts
 #include <arts/artsversion.h>
 #include <arts/connect.h>
@@ -940,3 +944,4 @@ ArtsDriver::processPending()
 }
 
 
+#endif // HAVE_ALSA

@@ -54,6 +54,7 @@ AlsaDriver::AlsaDriver():
 
 AlsaDriver::~AlsaDriver()
 {
+    snd_seq_stop_queue(m_midiHandle, m_queue, 0);
     snd_seq_close(m_midiHandle);
 }
 
@@ -323,6 +324,8 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
 void
 AlsaDriver::initialiseMidi()
 { 
+    int result;
+
     // Create a non-blocking handle.
     // ("hw" will possibly give in to other handles in future?)
     //
@@ -466,6 +469,18 @@ AlsaDriver::initialiseMidi()
     else if (m_driverStatus == NO_DRIVER)
         m_driverStatus = MIDI_OK;
 
+    // Start the timer
+    if ((result = snd_seq_start_queue(m_midiHandle, m_queue, NULL)) < 0)
+    {
+        std::cerr << "AlsaDriver::initialisePlayback - couldn't start queue - "
+                  << snd_strerror(result)
+                  << std::endl;
+        exit(1);
+    }
+
+    // process anything pending
+    snd_seq_drain_output(m_midiHandle);
+
     std::cout << "AlsaDriver - initialised MIDI subsystem" << std::endl;
 }
 
@@ -533,22 +548,9 @@ void
 AlsaDriver::initialisePlayback(const RealTime &position)
 {
     std::cout << "AlsaDriver - initialisePlayback" << std::endl;
-    int result;
-
-    m_alsaPlayStartTime = RealTime(0, 0);
+    m_alsaPlayStartTime = getAlsaTime();
     m_playStartPosition = position;
     m_startPlayback = true;
-
-    // Start the timer
-    if ((result = snd_seq_start_queue(m_midiHandle, m_queue, NULL)) < 0)
-    {
-        std::cerr << "AlsaDriver::initialisePlayback - couldn't start queue - "
-                  << snd_strerror(result)
-                  << std::endl;
-        exit(1);
-    }
-
-    snd_seq_drain_output(m_midiHandle);
 }
 
 
@@ -557,7 +559,6 @@ AlsaDriver::stopPlayback()
 {
     allNotesOff();
     snd_seq_drain_output(m_midiHandle);
-    snd_seq_stop_queue(m_midiHandle, m_queue, 0);
     m_playing = false;
 
     // send sounds-off to all client port pairs
@@ -654,7 +655,7 @@ AlsaDriver::processNotesOff(const RealTime &time)
                                 outputDevice.first,
                                 outputDevice.second);
 
-            offTime = (*i)->getRealTime(); // + m_alsaPlayStartTime;
+            offTime = (*i)->getRealTime();
 
             snd_seq_real_time_t time = { offTime.sec,
                                          offTime.usec * 1000 };
@@ -675,6 +676,8 @@ AlsaDriver::processNotesOff(const RealTime &time)
     // and flush them
     snd_seq_drain_output(m_midiHandle);
 
+    // and clear up
+    delete event;
 }
 
 void
@@ -728,16 +731,22 @@ AlsaDriver::getAlsaTime()
 //
 //
 MappedComposition*
-AlsaDriver::getMappedComposition(const RealTime & playLatency)
+AlsaDriver::getMappedComposition(const RealTime &playLatency)
 {
     m_recordComposition.clear();
+
+    if (m_recordStatus != RECORD_MIDI &&
+        m_recordStatus != RECORD_AUDIO &&
+        m_recordStatus != ASYNCHRONOUS_MIDI &&
+        m_recordStatus != ASYNCHRONOUS_AUDIO)
+           return &m_recordComposition;
 
     // If the input port hasn't connected we shouldn't poll it
     //
     if(m_midiInputPortConnected == false)
         return &m_recordComposition;
 
-    Rosegarden::RealTime eventTime;
+    Rosegarden::RealTime eventTime(0, 0);
 
     do
     {
@@ -748,13 +757,16 @@ AlsaDriver::getMappedComposition(const RealTime & playLatency)
         if (snd_seq_event_input(m_midiHandle, &event) < 0)
             return &m_recordComposition;
 
-        MidiByte channel = event->data.note.channel;
-        unsigned int chanNoteKey = ( channel << 8 ) + event->data.note.note;
+        unsigned int channel = (unsigned int)event->data.note.channel;
+        unsigned int chanNoteKey = ( channel << 8 ) +
+                                   (unsigned int) event->data.note.note;
 
         eventTime.sec = event->time.time.tv_sec;
         eventTime.usec = event->time.time.tv_nsec / 1000;
-        eventTime = eventTime + m_alsaRecordStartTime;
+        eventTime = eventTime - m_alsaRecordStartTime + m_playStartPosition
+                              - playLatency;
 
+        cout << "EVENT TIME = " << eventTime << endl;
         switch(event->type)
         {
 
@@ -768,34 +780,48 @@ AlsaDriver::getMappedComposition(const RealTime & playLatency)
                         setVelocity(event->data.note.velocity);
                     m_noteOnMap[chanNoteKey]->setEventTime(eventTime);
 
-                    /*
-                    std::cout << "NOTE ON TIMESTAMP = "
-                              << event->time.time.tv_sec
-                              << " . "
-                              << event->time.time.tv_nsec
-                              << std::endl;
-                              */
+                    // Hour long duration - we need to hear the NOTE ON
+                    // so we must insert it now with a duration.
+                    //
+                    m_noteOnMap[chanNoteKey]->setDuration(RealTime(3600, 0));
+
+                    // Create a copy of this when we insert the NOTE ON -
+                    // keeping a copy alive on the m_noteOnMap.
+                    //
+                    // We shake out the two NOTE Ons after we've recorded
+                    // them.
+                    //
+                    m_recordComposition.insert(
+                            new MappedEvent(m_noteOnMap[chanNoteKey]));
+
                     break;
                 }
-
-                // fall through (velocity 0 == NOTEOFF)
 
             case SND_SEQ_EVENT_NOTEOFF:
                 if (m_noteOnMap[chanNoteKey] != 0)
                 {
+                    // Set duration correctly on the NOTE OFF
+                    //
                     RealTime duration = eventTime -
-                         m_noteOnMap[chanNoteKey]->getEventTime();
+                             m_noteOnMap[chanNoteKey]->getEventTime();
 
                     assert(duration >= RealTime(0, 0));
 
+                    // Velocity 0 - NOTE OFF.  Set duration correctly
+                    // for recovery later.
+                    //
+                    m_noteOnMap[chanNoteKey]->setVelocity(0);
                     m_noteOnMap[chanNoteKey]->setDuration(duration);
 
+                    /*
                     std::cout << "Inserted NOTE at "
                               << m_noteOnMap[chanNoteKey]->getEventTime()
                               << " with duration "
                               << m_noteOnMap[chanNoteKey]->getDuration()
                               << std::endl;
+                    */
 
+                    // force shut off of note
                     m_recordComposition.insert(m_noteOnMap[chanNoteKey]);
 
                     // reset the reference
@@ -809,7 +835,7 @@ AlsaDriver::getMappedComposition(const RealTime & playLatency)
                 {
                     MappedEvent *mE = new MappedEvent();
                     mE->setType(MappedEvent::MidiKeyPressure);
-                    //mE->setEventTime(guiTimeStamp);
+                    mE->setEventTime(eventTime);
                     mE->setData1(event->data.control.value >> 7);
                     mE->setData2(event->data.control.value & 0x7f);
                     m_recordComposition.insert(mE);
@@ -820,7 +846,7 @@ AlsaDriver::getMappedComposition(const RealTime & playLatency)
                 {
                     MappedEvent *mE = new MappedEvent();
                     mE->setType(MappedEvent::MidiController);
-                    //mE->setEventTime(guiTimeStamp);
+                    mE->setEventTime(eventTime);
                     mE->setData1(event->data.control.param);
                     mE->setData2(event->data.control.value);
                     m_recordComposition.insert(mE);
@@ -831,7 +857,7 @@ AlsaDriver::getMappedComposition(const RealTime & playLatency)
                 {
                     MappedEvent *mE = new MappedEvent();
                     mE->setType(MappedEvent::MidiProgramChange);
-                    //mE->setEventTime(guiTimeStamp);
+                    mE->setEventTime(eventTime);
                     mE->setData1(event->data.control.value);
                     m_recordComposition.insert(mE);
 
@@ -842,7 +868,7 @@ AlsaDriver::getMappedComposition(const RealTime & playLatency)
                 {
                     MappedEvent *mE = new MappedEvent();
                     mE->setType(MappedEvent::MidiPitchWheel);
-                    //mE->setEventTime(guiTimeStamp);
+                    mE->setEventTime(eventTime);
                     mE->setData1(event->data.control.value >> 7);
                     mE->setData2(event->data.control.value & 0x7f);
                     m_recordComposition.insert(mE);
@@ -853,7 +879,7 @@ AlsaDriver::getMappedComposition(const RealTime & playLatency)
                 {
                     MappedEvent *mE = new MappedEvent();
                     mE->setType(MappedEvent::MidiChannelPressure);
-                    //mE->setEventTime(guiTimeStamp);
+                    mE->setEventTime(eventTime);
                     mE->setData1(event->data.control.value >> 7);
                     mE->setData2(event->data.control.value & 0x7f);
                     m_recordComposition.insert(mE);
@@ -891,7 +917,6 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
     ClientPortPair outputDevice;
     MidiByte channel;
     snd_seq_event_t *event = new snd_seq_event_t();
-
 
     // These won't change in this slice
     //
@@ -995,10 +1020,13 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                 std::cout << "AlsaDriver::processMidiOut - "
                           << "unrecognised event type"
                           << std::endl;
-                break;
+                delete event;
+                snd_seq_drain_output(m_midiHandle);
+                processNotesOff(midiRelativeTime);
+                return;
         }
 
-        if (now)
+        if (now || m_playing == false)
         {
             RealTime nowTime = getAlsaTime();
             snd_seq_real_time_t outTime = { nowTime.sec,
@@ -1023,7 +1051,6 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
     }
 
     snd_seq_drain_output(m_midiHandle);
-
     processNotesOff(midiRelativeTime);
 
     delete event;
@@ -1054,7 +1081,7 @@ AlsaDriver::record(const RecordStatus& recordStatus)
     {
         // start recording
         m_recordStatus = RECORD_MIDI;
-        m_alsaRecordStartTime = getSequencerTime();
+        m_alsaRecordStartTime = getAlsaTime();
     }
     else if (recordStatus == RECORD_AUDIO)
     {
