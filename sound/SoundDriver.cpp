@@ -56,6 +56,8 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
     std::cout << "PlayableAudioFile::PlayableAudioFile - creating " << this << std::endl;
 #endif
 
+    if (m_ringBuffer) m_externalRingbuffer = true;
+
 }
 
 
@@ -68,12 +70,16 @@ PlayableAudioFile::PlayableAudioFile(const PlayableAudioFile &pAF)
     m_file = 0;
     m_audioFile = pAF.getAudioFile();
     m_instrumentId = pAF.getInstrument();
-    m_ringBuffer = pAF.getRingBuffer();
     m_ringBufferThreshold = pAF.getRingBufferThreshold();
     m_playBuffer = 0;
     m_playBufferSize = pAF.getPlayBufferSize();
     m_initialised = false;
+
+    // On copy - create a new buffer
+    //
+    m_ringBuffer = 0;
     m_externalRingbuffer = false;
+
     m_runtimeSegmentId = pAF.getRuntimeSegmentId();
 
 #ifdef DEBUG_PLAYABLE_CONSTRUCTION

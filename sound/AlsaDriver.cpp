@@ -2769,9 +2769,6 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
             }
             else
-
-#endif // HAVE_LIBJACK
-
             {
 #ifdef DEBUG_ALSA
                 std::cerr << "AlsaDriver::processEventsOut - "
@@ -2794,6 +2791,8 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
         {
             cancelAudioFile(*i);
         }
+
+#endif // HAVE_LIBJACK
 
         if ((*i)->getType() == MappedEvent::SystemMIDIClock)
         {
