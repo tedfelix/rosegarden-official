@@ -32,18 +32,19 @@
 #include "Composition.h" // for RealTime
 #include "MappedEvent.h"
 
-#include <kdialog.h>
+#include <kdockwidget.h>
 
 namespace Rosegarden
 {
 
-class RosegardenTransportDialog : public KDialog 
+class RosegardenTransportDialog : public KDockMainWindow
 {
 Q_OBJECT
 public:
     RosegardenTransportDialog(QWidget *parent=0,
                               const char *name=0,
-                              WFlags flags = 0);
+                              WFlags flags = Qt::WStyle_StaysOnTop |
+                                             Qt::WStyle_NormalBorder);
     ~RosegardenTransportDialog();
 
     static const char* const ConfigGroup;
