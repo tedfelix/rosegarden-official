@@ -903,7 +903,11 @@ void TextInserter::handleLeftButtonPress(Rosegarden::timeT,
 
 	// edit an existing text, if that's what we clicked on
 
-	defaultText = Rosegarden::Text(*element->event());
+	try {
+	    defaultText = Rosegarden::Text(*element->event());
+	} catch (Rosegarden::Exception e) {
+	}
+
 	insertionTime = element->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
 
 	eraseEvent = element->event();

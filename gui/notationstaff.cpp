@@ -768,8 +768,12 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 
 	    } else {
 
-		pixmap = m_notePixmapFactory->makeTextPixmap
-		     (Rosegarden::Text(*elt->event()));
+		try {
+		    pixmap = m_notePixmapFactory->makeTextPixmap
+			(Rosegarden::Text(*elt->event()));
+		} catch (Rosegarden::Exception e) { // Text ctor failed
+		    NOTATION_DEBUG << "Bad text event" << endl;
+		}
 	    }
 
 	} else if (elt->event()->isa(Indication::EventType)) {

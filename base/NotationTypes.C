@@ -216,16 +216,24 @@ const string Clef::Bass = "bass";
 
 const Clef Clef::DefaultClef = Clef("treble");
 
-Clef::Clef(const Event &e)
-    // throw (Event::NoData, Event::BadType, BadClefName)
+Clef::Clef(const Event &e) :
+    m_clef(DefaultClef.m_clef),
+    m_octaveOffset(0)
 {
     if (e.getType() != EventType) {
-        throw Event::BadType("Clef model event", EventType, e.getType());
+	std::cerr << Event::BadType
+	    ("Clef model event", EventType, e.getType()).getMessage()
+		  << std::endl;
+	return;
     }
+
     std::string s = e.get<String>(ClefPropertyName);
     if (s != Treble && s != Tenor && s != Alto && s != Bass) {
-        throw BadClefName("No such clef as \"" + s + "\"");
+	std::cerr << BadClefName("No such clef as \"" + s + "\"").getMessage()
+		  << std::endl;
+	return;
     }
+
     long octaveOffset = 0;
     (void)e.get<Int>(OctaveOffsetPropertyName, octaveOffset);
 
@@ -250,6 +258,16 @@ Clef &Clef::operator=(const Clef &c)
 	m_octaveOffset = c.m_octaveOffset;
     }
     return *this;
+}
+
+bool Clef::isValid(const Event &e)
+{
+    if (e.getType() != EventType) return false;
+
+    std::string s = e.get<String>(ClefPropertyName);
+    if (s != Treble && s != Tenor && s != Alto && s != Bass) return false;
+
+    return true;
 }
 
 int Clef::getTransposition() const
@@ -312,31 +330,36 @@ const Key Key::DefaultKey = Key("C major");
 
 Key::KeyDetailMap Key::m_keyDetailMap = Key::KeyDetailMap();
 
-Key::Key()
-    : m_name(DefaultKey.m_name),
-      m_accidentalHeights(0)
+Key::Key() :
+    m_name(DefaultKey.m_name),
+    m_accidentalHeights(0)
 {
     checkMap();
 }
 
 
-Key::Key(const Event &e)
-    // throw (Event::NoData, Event::BadType, BadKeyName)
-    : m_accidentalHeights(0)
+Key::Key(const Event &e) :
+    m_name(DefaultKey.m_name),
+    m_accidentalHeights(0)
 {
     checkMap();
     if (e.getType() != EventType) {
-        throw Event::BadType("Key model event", EventType, e.getType());
+        std::cerr << Event::BadType
+	    ("Key model event", EventType, e.getType()).getMessage()
+		  << std::endl;
+	return;
     }
     m_name = e.get<String>(KeyPropertyName);
     if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
-        throw BadKeyName("No such key as \"" + m_name + "\"");
+	std::cerr << BadKeyName
+	    ("No such key as \"" + m_name + "\"").getMessage() << std::endl;
+	return;
     }
 }
 
-Key::Key(const std::string &name)
-    // throw (BadKeyName)
-    : m_name(name), m_accidentalHeights(0)
+Key::Key(const std::string &name) :
+    m_name(name),
+    m_accidentalHeights(0)
 {
     checkMap();
     if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
@@ -344,9 +367,8 @@ Key::Key(const std::string &name)
     }
 }    
 
-Key::Key(int accidentalCount, bool isSharp, bool isMinor)
-    // throw (BadKeySpec)
-    : m_accidentalHeights(0)
+Key::Key(int accidentalCount, bool isSharp, bool isMinor) :
+    m_accidentalHeights(0)
 {
     checkMap();
     for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
@@ -379,9 +401,8 @@ Key::Key(int accidentalCount, bool isSharp, bool isMinor)
 // We need an isSharp argument, but we already have a constructor
 // with that signature.  Not quite sure what's the best solution.
 
-Key::Key(int tonicPitch, bool isMinor)
-    // throw (BadKeySpec)
-    : m_accidentalHeights(0)
+Key::Key(int tonicPitch, bool isMinor) :
+    m_accidentalHeights(0)
 {
     checkMap();
     for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
@@ -410,8 +431,9 @@ Key::Key(int tonicPitch, bool isMinor)
 }
     
 
-Key::Key(const Key &kc)
-    : m_name(kc.m_name), m_accidentalHeights(0)
+Key::Key(const Key &kc) :
+    m_name(kc.m_name),
+    m_accidentalHeights(0)
 {
 }
 
@@ -422,6 +444,13 @@ Key& Key::operator=(const Key &kc)
     return *this;
 }
 
+bool Key::isValid(const Event &e)
+{
+    if (e.getType() != EventType) return false;
+    std::string name = e.get<String>(KeyPropertyName);
+    if (m_keyDetailMap.find(name) == m_keyDetailMap.end()) return false;
+    return true;
+}
 
 Key::KeyList Key::getKeys(bool minor)
 {

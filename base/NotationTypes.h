@@ -201,12 +201,25 @@ public:
     static const std::string Alto;
     static const std::string Bass;
 
+    /**
+     * Construct the default clef (treble).
+     */
     Clef() : m_clef(DefaultClef.m_clef), m_octaveOffset(0) { }
 
-    Clef(const Event &e)
-        /* throw (Event::NoData, Event::BadType, BadClefName) */;
-    Clef(const std::string &s, int octaveOffset = 0)
-        /* throw (BadClefName) */;
+    /**
+     * Construct a Clef from the clef data in the given event.  If the
+     * event is not of clef type or contains insufficient data, this
+     * returns the default clef (with a warning).  You should normally
+     * test Clef::isValid() to catch that before construction.
+     */
+    Clef(const Event &e);
+
+    /**
+     * Construct a Clef from the given data.  Throws a BadClefName
+     * exception if the given string does not match one of the above
+     * clef name constants.
+     */
+    Clef(const std::string &s, int octaveOffset = 0);
 
     Clef(const Clef &c) : m_clef(c.m_clef), m_octaveOffset(c.m_octaveOffset) {
     }
@@ -222,6 +235,11 @@ public:
     }
 
     ~Clef() { }
+
+    /**
+     * Test whether the given event is a valid Clef event.
+     */
+    static bool isValid(const Event &e);
 
     /**
      * Return the basic clef type (Treble, Tenor, Alto, Bass)
@@ -293,24 +311,36 @@ public:
     typedef Exception BadKeyName;
     typedef Exception BadKeySpec;
 
-    /// Construct the default key (C major).
+    /**
+     * Construct the default key (C major).
+     */
     Key();
 
-    /// Construct a key from the given Event of type Key::EventType.
-    Key(const Event &e)
-        /* throw (Event::NoData, Event::BadType, BadKeyName) */;
+    /**
+     * Construct a Key from the key data in the given event.  If the
+     * event is not of key type or contains insufficient data, this
+     * returns the default key (with a warning).  You should normally
+     * test Key::isValid() to catch that before construction.
+     */
+    Key(const Event &e);
 
-    /// Construct the named key.
-    Key(const std::string &name)
-        /* throw (BadKeyName) */;
+    /**
+     * Construct the named key.  Throws a BadKeyName exception if the
+     * given string does not match one of the known key names.
+     */
+    Key(const std::string &name);
 
-    /// Construct a key from signature and mode.
-    Key(int accidentalCount, bool isSharp, bool isMinor)
-        /* throw (BadKeySpec) */;
+    /**
+     * Construct a key from signature and mode.  May throw a
+     * BadKeySpec exception.
+     */
+    Key(int accidentalCount, bool isSharp, bool isMinor);
 
-    /// Construct the key with the given tonic and mode. (Ambiguous.)
-    Key(int tonicPitch, bool isMinor)
-        /* throw (BadKeySpec) */;
+    /**
+     * Construct the key with the given tonic and mode. (Ambiguous.)
+     * May throw a BadKeySpec exception.
+     */
+    Key(int tonicPitch, bool isMinor);
 
     Key(const Key &kc);
 
@@ -325,8 +355,13 @@ public:
     }
 
     /**
+     * Test whether the given event is a valid Key event.
+     */
+    static bool isValid(const Event &e);
+
+    /**
      * Return true if this is a minor key.  Unlike in RG2.1,
-     * we distinguish betwenn major and minor keys with the
+     * we distinguish between major and minor keys with the
      * same signature.
      */
     bool isMinor() const {
