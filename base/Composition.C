@@ -58,7 +58,7 @@ Composition::deleteTrack(Composition::iterator i)
     m_tracks.erase(i);
 }
 
-void
+bool
 Composition::deleteTrack(Track *p)
 {
     iterator i = find(begin(), end(), p);
@@ -66,7 +66,10 @@ Composition::deleteTrack(Track *p)
     if (i != end()) {
         delete p;
         m_tracks.erase(i);
+        return true;
     }
+
+    return false;
 }
 
 unsigned int

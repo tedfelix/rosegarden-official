@@ -50,7 +50,7 @@ public:
     iterator addTrack(Track*);
 
     void deleteTrack(iterator);
-    void deleteTrack(Track*);
+    bool deleteTrack(Track*);
 
     unsigned int getNbTracks() const { return m_tracks.size(); }
     unsigned int getNbBars() const;
