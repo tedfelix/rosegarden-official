@@ -27,6 +27,7 @@
 #include <kcommand.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
+#include <ktoolbar.h>
 
 using std::cerr;
 using std::endl;
@@ -56,10 +57,13 @@ MultiViewCommandHistory::clear()
 }
 
 void
-MultiViewCommandHistory::attachView(KActionCollection *collection)
+MultiViewCommandHistory::attachView(KActionCollection *collection,
+                                    KToolBar* toolbar)
 {
     if (m_views.find(collection) != m_views.end()) return;
 
+    kdDebug(KDEBUG_AREA) << "MultiViewCommandHistory::attachView() : creating actions\n";
+    
     KToolBarPopupAction *undo = new KToolBarPopupAction
 	(i18n("Und&o"),
 	 "undo",
@@ -104,6 +108,12 @@ MultiViewCommandHistory::attachView(KActionCollection *collection)
 
     m_views.insert(collection);
     updateButtons();
+
+    if (toolbar) {
+        undo->plug(toolbar);
+        redo->plug(toolbar);
+    }
+    
 }
 
 void

@@ -352,7 +352,7 @@ void RosegardenGUIApp::initDocument()
     m_doc = new RosegardenGUIDoc(this);
     m_doc->newDocument();
 
-    m_doc->getCommandHistory()->attachView(actionCollection());
+    m_doc->getCommandHistory()->attachView(actionCollection(), toolBar("mainToolBar"));
 }
 
 void RosegardenGUIApp::initView()

@@ -27,6 +27,7 @@
 
 class KCommand;
 class KActionCollection;
+class KToolBar;
 
 /**
  * The MultiViewCommandHistory class is much like KCommandHistory in
@@ -50,7 +51,7 @@ public:
 
     void clear();
     
-    void attachView(KActionCollection *collection);
+    void attachView(KActionCollection *collection, KToolBar* toolbar = 0);
     void detachView(KActionCollection *collection);
 
     void addCommand(KCommand *command, bool execute = true);
