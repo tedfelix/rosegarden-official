@@ -1493,16 +1493,18 @@ NotationView::slotSetPointerPosition(timeT time, bool scroll)
     Rosegarden::Composition &comp = getDocument()->getComposition();
     int barNo = comp.getBarNumber(time);
 
+    double layoutX = m_hlayout->getXForTime(time);
+
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         if (barNo < m_hlayout->getFirstVisibleBarOnStaff(*m_staffs[i]) ||
             barNo > m_hlayout-> getLastVisibleBarOnStaff(*m_staffs[i])) {
             m_staffs[i]->hidePointer();
         } else {
-            m_staffs[i]->setPointerPosition(*m_hlayout, time);
+            m_staffs[i]->setPointerPosition(layoutX);
         }
     }
 
-    if (scroll) getCanvasView()->slotScrollHoriz(int(m_hlayout->getXForTime(time)));
+    if (scroll) getCanvasView()->slotScrollHoriz(int(layoutX));
     updateView();
 }
 

@@ -360,6 +360,12 @@ public:
     virtual void setPointerPosition(double x, int y);
 
     /**
+     * Move the playback pointer to the given layout-X
+     * coordinate, and show it.
+     */
+    virtual void setPointerPosition(double x);
+
+    /**
      * Returns the layout-X coordinate corresponding to the current
      * position of the playback pointer.
      */
