@@ -315,7 +315,12 @@ SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
 	// from the first event (as it already does, because it
 	// was created using the copy constructor).
 
-	if (firstGroupId != -1 && nextGroupId != firstGroupId) {
+	// (this doesn't apply to tupled groups, which we want
+	// to persist wherever possible.)
+
+	if (firstGroupId != -1 &&
+	    nextGroupId != firstGroupId &&
+	    !evb->has(BEAMED_GROUP_TUPLET_BASE)) {
 	    evb->unset(BEAMED_GROUP_ID);
 	    evb->unset(BEAMED_GROUP_TYPE);
 	}
@@ -575,8 +580,11 @@ SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
 	    iterator last = splitIntoTie(i, duration);
 
             // Recover viability for the second half of any split rest
+	    // (we duck out of this if we find we're in a tupleted zone)
 
-//!!!commented out because it screws up tuplets at the moment	    makeRestViable(last);
+	    if (last != end() && !(*last)->has(BEAMED_GROUP_TUPLET_BASE)) {
+		makeRestViable(last);
+	    }
 	}
 
 	return insertSingleSomething(i, duration, pitch, isRest, tiedBack,
@@ -844,9 +852,20 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
 	if ((*i)->getAbsoluteTime() >= t + (untupled * unit)) break;
 
 	timeT offset = (*i)->getAbsoluteTime() - t;
+	timeT duration = (*i)->getDuration();
+
+	if ((*i)->isa(Note::EventRestType) &&
+	    ((offset + duration) > (untupled * unit))) {
+	    duration = (untupled * unit) - offset;
+	    if (duration <= 0) {
+		toErase.push_back(i);
+		continue;
+	    }
+	}
+
 	Event *e = new Event(**i,
 			     t + (offset * tupled / untupled),
-			     (*i)->getDuration() * tupled / untupled);
+			     duration * tupled / untupled);
 
 	e->set<Int>(BEAMED_GROUP_ID, groupId);
 	e->set<String>(BEAMED_GROUP_TYPE, GROUP_TYPE_TUPLED);

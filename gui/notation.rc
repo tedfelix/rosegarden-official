@@ -114,9 +114,11 @@ etc
   <text>&amp;Group</text>
   <Action name="beam"/>
   <Action name="auto_beam"/>
+  <Action name="break_group"/>
+  <Separator/>
   <Action name="tuplet"/>
   <Action name="simple_tuplet"/>
-  <Action name="break_group"/>
+  <Action name="break_tuplets"/>
   <Separator/>
   <Menu name="Stems">
     <text>S&amp;tem Direction</text>
