@@ -469,6 +469,8 @@ void TrackResizer::handleMouseButtonPress(QMouseEvent *e)
 
 void TrackResizer::handleMouseButtonRelase(QMouseEvent*)
 {
+    if (!m_currentItem) return;
+
     unsigned int newNbTimeSteps = m_currentItem->getItemNbTimeSteps();
 
     kdDebug(KDEBUG_AREA) << "TrackResizer: set track nb time steps to "
