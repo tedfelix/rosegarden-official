@@ -7,7 +7,7 @@ $RG_DIR = "/home/glaurent/rosegarden"
 #
 def check_stray_sequencer
 
-  processes = `ps -auxww`.grep(/rosegarden/)
+  processes = `ps auxww`.grep(/rosegarden/)
 
   if (processes.length == 1)
     # Check if the lone process is the sequencer
