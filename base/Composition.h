@@ -57,6 +57,7 @@ class CompositionObserver;
 class Composition : public XmlExportable
 {
     friend class Track; // to call notifyTrackChanged()
+    friend class Segment; // to call notifySegmentRepeatChanged()
     
 public:
     typedef std::multiset<Segment*, Segment::SegmentCmp> segmentcontainer;
@@ -736,6 +737,7 @@ protected:
     ObserverSet m_observers;
     void notifySegmentAdded(Segment *) const;
     void notifySegmentRemoved(Segment *) const;
+    void notifySegmentRepeatChanged(Segment *, bool) const;
     void notifyEndMarkerChange(bool shorten) const;
     void notifyTrackChanged(Track*) const;
     void notifyMetronomeChanged() const;
@@ -791,6 +793,11 @@ public:
      * and just before it is deleted
      */
     virtual void segmentRemoved(const Composition *, Segment *) = 0;
+
+    /**
+     * Called when the segment's repeat status has changed
+     */
+    virtual void segmentRepeatChanged(const Composition *, Segment *, bool) = 0;
 
     /**
      * Called after the composition's end marker time has been

@@ -257,8 +257,9 @@ bool SegmentMmapper::refresh()
 
     size_t newMmappedSize = computeMmappedSize();
 
-    SEQMAN_DEBUG << "SegmentMmapper::refresh() - m_mmappedBuffer = "
-                 << (void*)m_mmappedBuffer << " - size = " << newMmappedSize << endl;
+    SEQMAN_DEBUG << "SegmentMmapper::refresh() - " << getFileName()
+                 << " - m_mmappedBuffer = " << (void*)m_mmappedBuffer
+                 << " - size = " << newMmappedSize << endl;
 
     // always zero out
     memset(m_mmappedBuffer, 0, m_mmappedSize);

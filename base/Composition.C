@@ -1276,7 +1276,15 @@ Composition::notifySegmentRemoved(Segment *s) const
 	(*i)->segmentRemoved(this, s);
     }
 }
- 
+
+void
+Composition::notifySegmentRepeatChanged(Segment *s, bool repeat) const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->segmentRepeatChanged(this, s, repeat);
+    }
+}
 
 void
 Composition::notifyEndMarkerChange(bool shorten) const

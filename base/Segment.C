@@ -773,7 +773,10 @@ void
 Segment::setRepeating(bool value)
 {
     m_repeating = value;
-    if (m_composition) m_composition->updateRefreshStatuses();
+    if (m_composition) {
+        m_composition->updateRefreshStatuses();
+        m_composition->notifySegmentRepeatChanged(this, value);
+    }
 }
 
 void

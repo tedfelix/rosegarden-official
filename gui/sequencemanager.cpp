@@ -1517,6 +1517,12 @@ void SequenceManager::segmentRemoved(const Composition*, Segment* s)
     m_removedSegments.push_back(s);
 }
 
+void SequenceManager::segmentRepeatChanged(const Composition*, Segment* s, bool repeat)
+{
+    SEQMAN_DEBUG << "SequenceManager::segmentRepeatChanged(" << s << ", " << repeat << ")\n";
+    segmentModified(s);
+}
+
 void SequenceManager::processAddedSegment(Segment* s)
 {
     SEQMAN_DEBUG << "SequenceManager::processAddedSegment(" << s << ")\n";

@@ -184,13 +184,14 @@ public:
     void resetMetronomeMmapper();
 
     // CompositionObserver interface
-    virtual void segmentAdded(const Composition *c, Segment *s);
-    virtual void segmentRemoved(const Composition *c, Segment *s);
-    virtual void endMarkerTimeChanged(const Composition *, bool shorten);
-    virtual void trackChanged(const Composition *, Track*);
-    virtual void metronomeChanged(const Composition *, bool playMetronome, bool recordMetronome);
-    virtual void soloChanged(const Composition *, bool solo, TrackId selectedTrack);
-    virtual void compositionDeleted(const Composition*);
+    virtual void segmentAdded        (const Composition*, Segment*);
+    virtual void segmentRemoved      (const Composition*, Segment*);
+    virtual void segmentRepeatChanged(const Composition*, Segment*, bool);
+    virtual void endMarkerTimeChanged(const Composition*, bool shorten);
+    virtual void trackChanged        (const Composition*, Track*);
+    virtual void metronomeChanged    (const Composition*, bool playMetronome, bool recordMetronome);
+    virtual void soloChanged         (const Composition*, bool solo, TrackId selectedTrack);
+    virtual void compositionDeleted  (const Composition*);
 
     void processAddedSegment(Segment*);
     void processRemovedSegment(Segment*);
