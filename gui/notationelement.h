@@ -120,48 +120,41 @@ public:
     iterator findNext(const string &type, iterator i);
 
     typedef pair<iterator,iterator> IteratorPair;
-    template <class Compare>
-    IteratorPair findContainingSet(iterator i, Compare c = Compare()) const;
+    template <class MembershipTest>
+    IteratorPair findContainingSet(iterator i, MembershipTest m) const;
 
     // Discovers whether this note is in a chord at some position
     // other than at the end, i.e. it is true if you could construct a
     // Chord object (see below) from the passed iterator and the
     // getFinalNote() method on that object would succeed and return
-    // something other than this iterator
+    // something other than this iterator.  Obvious really
     bool hasSucceedingChordElements(iterator i);
 
 private:
     Quantizer m_quantizer;
 };
 
-template <class Compare>
+template <class MembershipTest>
 NotationElementList::IteratorPair
 NotationElementList::findContainingSet
-(NotationElementList::iterator i, Compare c) const
+(NotationElementList::iterator i, MembershipTest mtest) const
 {
     IteratorPair ipair(end(), end());
-    if (i == end()) return ipair;
+    if (i == end() || !mtest(i)) return ipair;
+    iterator j;
 
     // first scan back to find an element not in the desired set, and
-    // leave i pointing to the one after it
+    // leave ipair.first pointing to the one after it
 
-    iterator j(i);
-
-    for (;;) {
-        if (i == begin()) break;
-        --j;
-        if (!c(i, j)) break;
-        i = j;
-    }
-
+    for (j = i; i != begin() && mtest(--j); i = j);
     ipair.first = i;
 
-    j = i;
-    while (j != end() && c(i,j)) {
-        ++j;
-    }
+    // then scan forwards to find an element not in the desired set,
+    // and leave ipair.second pointing to that
 
+    for (j = i; j != end() && mtest(j); ++j);
     ipair.second = j;
+
     return ipair;
 }
 
@@ -172,6 +165,9 @@ inline kndgstream& operator<<(kdbgstream &e, NotationElementList&)
 { return e; }
 #endif
 
+
+// A temporary collection of pointers to things in the list.  Don't
+// store Chords, just create them, query them and throw them away.
 
 class Chord : public vector<NotationElementList::iterator>
 {
@@ -211,13 +207,16 @@ public:
     }
 
 private:
-    class TimeComparator {
+    class ChordMembershipTest {
     public:
-        bool operator()(const NotationElementList::iterator &a,
-                        const NotationElementList::iterator &b) {
-            return ((*a)->isNote() && (*b)->isNote() &&
-                    ((*a)->getAbsoluteTime() == (*b)->getAbsoluteTime()));
+        ChordMembershipTest(const NELIterator &i) :
+            m_time((*i)->getAbsoluteTime()) {
         }
+        bool operator()(const NELIterator &i) {
+            return ((*i)->isNote() && ((*i)->getAbsoluteTime() == m_time));
+        }
+    private:
+        Event::timeT m_time;
     };
 
     const NotationElementList &m_nel;

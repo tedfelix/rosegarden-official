@@ -203,7 +203,8 @@ Chord::Chord(const NotationElementList &nel, NELIterator i,
     if (i == nel.end()) return;
 
     NotationElementList::IteratorPair pair
-        (nel.findContainingSet<TimeComparator>(i));
+        (nel.findContainingSet<ChordMembershipTest>
+         (i, ChordMembershipTest(i)));
 
     long d;
     int maxDuration = 0;
