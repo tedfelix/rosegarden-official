@@ -337,11 +337,11 @@ CompositionModel::itemcontainer CompositionModelImpl::getItemsAt(const QPoint& p
         Segment* s = *i;
         CompositionRect sr = computeSegmentRect(*s, m_composition, m_grid);
         if (sr.contains(point)) {
-            RG_DEBUG << "CompositionModelImpl::getItemsAt() adding " << sr << endl;
+//             RG_DEBUG << "CompositionModelImpl::getItemsAt() adding " << sr << endl;
             computeRepeatMarks(sr, s);
             res.push_back(CompositionItem(new CompositionItemImpl(*s, sr)));
         } else {
-            RG_DEBUG << "CompositionModelImpl::getItemsAt() skiping " << sr << endl;
+//             RG_DEBUG << "CompositionModelImpl::getItemsAt() skiping " << sr << endl;
         }
         
     }
