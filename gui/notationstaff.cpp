@@ -1018,11 +1018,28 @@ NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 	// Show the sprite
 	//
 	if (canvasItem) {
-	    LinedStaffCoords coords = getCanvasOffsetsForLayoutCoords
-		(elt->getLayoutX(), (int)elt->getLayoutY());
+
+	    double layoutX = elt->getLayoutX();
+	    int layoutY = (int)elt->getLayoutY();
+
+	    LinedStaffCoords coords =
+		getCanvasOffsetsForLayoutCoords(layoutX, layoutY);
+
 	    elt->setCanvasItem
 		(canvasItem, coords.first, (double)coords.second);
+
 	    canvasItem->show();
+
+	    // Test whether this item overruns the end of a row
+	    if (m_pageMode != LinearMode && pixmap) {
+		int row = getRowForLayoutX(layoutX);
+		double right = getCanvasXForRightOfRow(row);
+		double extent = layoutX + coords.first + pixmap->width();
+		if (extent > right) {
+		    NOTATION_DEBUG << "Pixmap overlaps border (at " << right << ") by " << (extent - right) << "px" << endl;
+		}
+	    }
+
 	} else {
 	    elt->removeCanvasItem();
 	}
@@ -1448,7 +1465,7 @@ NotationStaff::checkRendered(timeT from, timeT to)
     Rosegarden::Composition *composition = getSegment().getComposition();
     if (!composition) {
 	NOTATION_DEBUG << "NotationStaff::checkRendered: warning: segment has no composition -- is my paint event late?" << endl;
-	return;
+	return false;
     }
 
 //    NOTATION_DEBUG << "NotationStaff::checkRendered: " << from << " -> " << to << endl;

@@ -150,6 +150,23 @@ namespace Marks
 	return marks;
     }
 
+    Mark getFingeringMark(const Event &e) {
+
+	long markCount = 0;
+	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
+	if (markCount == 0) return NoMark;
+
+	for (long j = 0; j < markCount; ++j) {
+
+	    Mark mark(Marks::NoMark);
+	    (void)e.get<String>(BaseProperties::getMarkPropertyName(j), mark);
+
+	    if (isFingeringMark(mark)) return mark;
+	}
+
+	return NoMark;
+    }
+
     void addMark(Event &e, const Mark &mark, bool unique) {
 	if (unique && hasMark(e, mark)) return;
 

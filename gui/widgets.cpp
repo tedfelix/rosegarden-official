@@ -870,11 +870,13 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     m_gridUnitCombo = new KComboBox(gridFrame);
     layout->addWidget(m_gridUnitCombo, 0, 1);
 
-    layout->addWidget(new QLabel(i18n("Swing:"), gridFrame), 1, 0);
+    m_swingLabel = new QLabel(i18n("Swing:"), gridFrame);
+    layout->addWidget(m_swingLabel, 1, 0);
     m_swingCombo = new KComboBox(gridFrame);
     layout->addWidget(m_swingCombo, 1, 1);
 
-    layout->addWidget(new QLabel(i18n("Iterative amount:"), gridFrame), 2, 0);
+    m_iterativeLabel = new QLabel(i18n("Iterative amount:"), gridFrame);
+    layout->addWidget(m_iterativeLabel, 2, 0);
     m_iterativeCombo = new KComboBox(gridFrame);
     layout->addWidget(m_iterativeCombo, 2, 1);
 
@@ -1014,7 +1016,7 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	}
     }
 
-    for (int i = -100; i <= 200; i += 20) {
+    for (int i = -100; i <= 200; i += 10) {
 	m_swingCombo->insertItem(i == 0 ? i18n("None") : QString("%1%").arg(i));
 	if (i == defaultSwing)
 	    m_swingCombo->setCurrentItem(m_swingCombo->count()-1);
@@ -1030,7 +1032,9 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     switch (defaultType) {
     case 0: // grid
 	m_gridBox->show();
+	m_swingLabel->show();
 	m_swingCombo->show();
+	m_iterativeLabel->show();
 	m_iterativeCombo->show();
 	m_notationBox->hide();
 	m_durationCheckBox->show();
@@ -1038,15 +1042,15 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	break;
     case 1: // legato
 	m_gridBox->show();
+	m_swingLabel->hide();
 	m_swingCombo->hide();
+	m_iterativeLabel->hide();
 	m_iterativeCombo->hide();
 	m_notationBox->hide();
 	m_durationCheckBox->hide();
 	m_typeCombo->setCurrentItem(1);
     case 2: // notation
 	m_gridBox->hide();
-	m_swingCombo->hide();
-	m_iterativeCombo->hide();
 	m_notationBox->show();
 	m_typeCombo->setCurrentItem(2);
 	break;
@@ -1073,7 +1077,7 @@ RosegardenQuantizeParameters::getQuantizer() const
     Rosegarden::Quantizer *quantizer = 0;
 
     int swing = m_swingCombo->currentItem();
-    swing *= 20;
+    swing *= 10;
     swing -= 100;
     
     int iterate = m_iterativeCombo->currentItem();
@@ -1188,10 +1192,18 @@ RosegardenQuantizeParameters::slotTypeChanged(int index)
 {
     if (index == 0) {
 	m_gridBox->show();
+	m_swingLabel->show();
+	m_swingCombo->show();
+	m_iterativeLabel->show();
+	m_iterativeCombo->show();
 	m_durationCheckBox->show();
 	m_notationBox->hide();
     } else if (index == 1) {
 	m_gridBox->show();
+	m_swingLabel->hide();
+	m_swingCombo->hide();
+	m_iterativeLabel->hide();
+	m_iterativeCombo->hide();
 	m_durationCheckBox->hide();
 	m_notationBox->hide();
     } else {

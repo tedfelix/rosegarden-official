@@ -6,7 +6,7 @@ Features for 1.0 - updated 20040331
            explicitly from within the editor]
 
 - BUG - matrix resizes itself by default when adding notes
-
+  
 - native printing
   o it's too slow [BETTER]
   o adding fluff and nicities to printed staves
@@ -19,6 +19,7 @@ Features for 1.0 - updated 20040331
   o accidentals -- correct in octaves, cautionary/mandatory when resetting in
     following bar [in progress: cautionary flag provided in AccidentalTable,
     no code for drawing cautionaries yet, bar-reset stuff not yet implemented]
+  o draggable fine positioning
 
 - menus throughout
   o check that the accelerators don't clash

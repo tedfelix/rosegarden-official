@@ -178,6 +178,11 @@ namespace Marks //!!! This would be better as a class, these days
     extern std::vector<Mark> getMarks(const Event &e);
 
     /**
+     * Return the first fingering mark on an event (or NoMark, if none).
+     */
+    extern Mark getFingeringMark(const Event &e);
+
+    /**
      * Add a mark to an event.  If unique is true, add the mark only
      * if the event does not already have it (otherwise permit
      * multiple identical marks).

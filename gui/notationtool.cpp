@@ -429,8 +429,13 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 
 void NoteInserter::showPreview()
 {
+    Segment &segment = m_nParentView->getStaff(m_clickStaffNo)->getSegment();
+
+    int pitch = m_clickPitch;
+    pitch += getOttavaShift(segment, m_clickTime) * 12;
+
     m_nParentView->showPreviewNote(m_clickStaffNo, m_clickInsertX,
-				   m_clickPitch, m_clickHeight,
+				   pitch, m_clickHeight,
 				   Note(m_noteType, m_noteDots));
 }
 
@@ -489,17 +494,9 @@ NoteInserter::getOffsetWithinRest(int staffNo,
     return 0;
 }
 
-
-Event *
-NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
-			   const Note &note, int pitch, Accidental accidental)
+int
+NoteInserter::getOttavaShift(Segment &segment, timeT time)
 {
-    if (time < segment.getStartTime() ||
-	endTime > segment.getEndMarkerTime() ||
-	time + note.getDuration() > segment.getEndMarkerTime()) {
-	return 0;
-    }
-
     // Find out whether we're in an ottava section.
 
     int ottavaShift = 0;
@@ -527,7 +524,20 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 	if (i == segment.begin()) break;
     }
 
-    pitch += ottavaShift * 12;
+    return ottavaShift;
+}
+
+Event *
+NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
+			   const Note &note, int pitch, Accidental accidental)
+{
+    if (time < segment.getStartTime() ||
+	endTime > segment.getEndMarkerTime() ||
+	time + note.getDuration() > segment.getEndMarkerTime()) {
+	return 0;
+    }
+
+    pitch += getOttavaShift(segment, time) * 12;
 
     NoteInsertionCommand *insertionCommand =
 	new NoteInsertionCommand
@@ -1116,6 +1126,8 @@ void NotationSelector::handleLeftButtonPress(Rosegarden::timeT t,
     m_clickedElement = dynamic_cast<NotationElement*>(element);
     if (m_clickedElement) {
 	m_selectedStaff = getStaffForElement(m_clickedElement);
+	m_lastDragPitch = -400;
+	m_lastDragTime = m_clickedElement->event()->getNotationAbsoluteTime();
     } else {
 	m_selectedStaff = 0; // don't know yet; wait until we have an element
     }
@@ -1341,7 +1353,6 @@ void NotationSelector::drag(int x, int y, bool final)
     timeT duration = m_clickedElement->getViewDuration();
 
     NotationElementList::iterator itr =
-//!!!	m_selectedStaff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
 	targetStaff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
 
     if (itr != targetStaff /* m_selectedStaff */ ->getViewElementList()->end()) {
@@ -1376,7 +1387,6 @@ void NotationSelector::drag(int x, int y, bool final)
     if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
     if (keyEvt) key = Rosegarden::Key(*keyEvt);
     
-//!!!    int height = m_selectedStaff->getHeightAtCanvasY(y);
     int height = targetStaff->getHeightAtCanvasY(y);
     int pitch = Rosegarden::Pitch
 	(height, clef, key, clickedAccidental).getPerformancePitch();
@@ -1400,14 +1410,14 @@ void NotationSelector::drag(int x, int y, bool final)
 
     if (!final && !singleNonNotePreview) {
 
-	NOTATION_DEBUG << "dragTime " << dragTime << ", clickedTime " << clickedTime << endl;
-
-	if ((pitch != clickedPitch || dragTime != clickedTime) &&
+	if ((pitch != m_lastDragPitch || dragTime != m_lastDragTime) &&
 	    m_clickedElement->isNote()) {
-//!!!	    m_nParentView->showPreviewNote(m_selectedStaff->getId(),
+	    
 	    m_nParentView->showPreviewNote(targetStaff->getId(),
 					   layoutX, pitch, height,
 					   Note::getNearestNote(duration));
+	    m_lastDragPitch = pitch;
+	    m_lastDragTime = dragTime;
 	}
 
     } else {
@@ -1445,33 +1455,20 @@ void NotationSelector::drag(int x, int y, bool final)
 	}
 
 	if (haveSomething) {
+
 	    m_nParentView->addCommandToHistory(command);
+
 	    if (mc && singleNonNotePreview) {
+
 		lastInsertedEvent = mc->getLastInsertedEvent();
+
 		if (lastInsertedEvent) {
-//!!!		    m_nParentView->setSingleSelectedEvent(m_selectedStaff->getId(),
 		    m_nParentView->setSingleSelectedEvent(targetStaff->getId(),
 							  lastInsertedEvent);
-
-/*!!!
-		    Rosegarden::ViewElementList::iterator vli =
-			m_selectedStaff->getViewElementList()->findTime(lastInsertedEvent->getAbsoluteTime());
-		    while (vli != m_selectedStaff->getViewElementList()->end() &&
-			   (*vli)->event() != lastInsertedEvent) ++vli;
-		    if (vli != m_selectedStaff->getViewElementList()->end()) {
-			m_clickedElement = dynamic_cast<NotationElement *>(*vli);
-		    } else {
-			m_clickedElement = 0;
-		    }
-*/
 
 		    Rosegarden::ViewElementList::iterator vli =
 			targetStaff->findEvent(lastInsertedEvent);
 
-//!!!		    Rosegarden::ViewElementList::iterator vli =
-//			targetStaff->getViewElementList()->findTime(lastInsertedEvent->getAbsoluteTime());
-//		    while (vli != targetStaff->getViewElementList()->end() &&
-//			   (*vli)->event() != lastInsertedEvent) ++vli;
 		    if (vli != targetStaff->getViewElementList()->end()) {
 			m_clickedElement = dynamic_cast<NotationElement *>(*vli);
 		    } else {

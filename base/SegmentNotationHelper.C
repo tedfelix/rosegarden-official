@@ -508,9 +508,12 @@ SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
     list<Event *> toInsert;
     list<iterator> toErase;
           
-    // Split all the events in range [from, to[
+    // Split all the note and rest events in range [from, to[
     //
     for (iterator i = from; i != to; ++i) {
+
+	if (!(*i)->isa(Note::EventType) &&
+	    !(*i)->isa(Note::EventRestType)) continue;
 
 	if ((*i)->getAbsoluteTime() != baseTime) {
 	    // no way to really cope with an error, because at this
@@ -861,7 +864,10 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
     // not reasonable to split.  We can't always give users the Right
     // Thing here, so to hell with them.
 
-    while (i != end() && (*i)->getDuration() == 0) ++i;
+    while (i != end() &&
+	   ((*i)->getDuration() == 0 ||
+	    !((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType))))
+	++i;
 
     if (i == end()) {
 	return insertSingleSomething(i, duration, modelEvent, tiedBack);
@@ -907,7 +913,8 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
 //		cerr << "Good split, splitting old event" << endl;
 		splitIntoTie(i, duration);
 	    }
-	} else {
+	} else if ((*i)->isa(Note::EventRestType)) {
+
 //	    cerr << "Found rest, splitting" << endl;
 	    iterator last = splitIntoTie(i, duration);
 

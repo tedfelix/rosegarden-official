@@ -1115,15 +1115,61 @@ void
 MarksMenuAddFingeringMarkCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
+    Segment &segment(m_selection->getSegment());
+
+    std::set<Event *> done;
 
     for (i  = m_selection->getSegmentEvents().begin();
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 	
-	long n = 0;
-	(*i)->get<Int>(MARK_COUNT, n);
-	(*i)->set<Int>(MARK_COUNT, n + 1);
-	(*i)->set<String>(getMarkPropertyName(n),
-			  Rosegarden::Marks::getFingeringMark(m_text));
+	if (done.find(*i) != done.end()) continue;
+	if (!(*i)->isa(Note::EventType)) continue;
+
+	// We should do this on a chord-by-chord basis, considering
+	// only those notes in a chord that are also in the selection.
+	// Apply this fingering to the first note in the chord that
+	// does not already have a fingering.  If they all already do,
+	// then clear them all and start again.
+
+	Rosegarden::Chord chord(segment, segment.findSingle(*i),
+				segment.getComposition()->getNotationQuantizer());
+
+	int attempt = 0;
+
+	while (attempt < 2) {
+
+	    int count = 0;
+
+	    for (Rosegarden::Chord::iterator ci = chord.begin();
+		 ci != chord.end(); ++ci) {
+
+		if (!m_selection->contains(**ci)) continue;
+
+		if (attempt < 2 &&
+		    Rosegarden::Marks::getFingeringMark(***ci) ==
+		    Rosegarden::Marks::NoMark) {
+		    Rosegarden::Marks::addMark
+			(***ci, Rosegarden::Marks::getFingeringMark(m_text), true);
+		    attempt = 2;
+		}
+		
+		done.insert(**ci);
+		++count;
+	    }
+
+	    if (attempt < 2) {
+		if (count == 0) break;
+		for (Rosegarden::Chord::iterator ci = chord.begin();
+		     ci != chord.end(); ++ci) {
+		    if (m_selection->contains(**ci)) {
+			Rosegarden::Marks::removeMark
+			    (***ci,
+			     Rosegarden::Marks::getFingeringMark(***ci));
+		    }
+		}
+		++attempt;
+	    }
+	}
     }
 }
 

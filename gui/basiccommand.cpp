@@ -113,7 +113,7 @@ BasicCommand::copyTo(Rosegarden::Segment *events)
     Segment::iterator to   = m_segment.findTime(m_endTime);
 
     for (Segment::iterator i = from; i != m_segment.end() && i != to; ++i) {
-	RG_DEBUG << "Found event of type " << (*i)->getType() << " and duration " << (*i)->getDuration() << endl;
+//	RG_DEBUG << "Found event of type " << (*i)->getType() << " and duration " << (*i)->getDuration() << endl;
 	events->insert(new Event(**i));
     }
 }
@@ -130,7 +130,7 @@ BasicCommand::copyFrom(Rosegarden::Segment *events)
 		    m_segment.findTime(m_endTime));
 
     for (Segment::iterator i = events->begin(); i != events->end(); ++i) {
-	RG_DEBUG << "Found event of type " << (*i)->getType() << " and duration " << (*i)->getDuration() << endl;
+//	RG_DEBUG << "Found event of type " << (*i)->getType() << " and duration " << (*i)->getDuration() << endl;
 	m_segment.insert(new Event(**i));
     }
 

@@ -179,6 +179,8 @@ protected:
 					  const NotationElementList::iterator&,
 					  double &canvasX);
 
+    int getOttavaShift(Rosegarden::Segment &segment, Rosegarden::timeT time);
+
     virtual Rosegarden::Event *doAddCommand(Rosegarden::Segment &,
 					    Rosegarden::timeT time,
 					    Rosegarden::timeT endTime,
@@ -466,6 +468,9 @@ protected:
     NotationElement *m_clickedElement;
 
     Rosegarden::EventSelection *m_selectionToMerge;
+
+    long m_lastDragPitch;
+    Rosegarden::timeT m_lastDragTime;
 
     bool m_justSelectedBar;
     bool m_wholeStaffSelectionComplete;

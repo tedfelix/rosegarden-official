@@ -199,7 +199,11 @@ public:
                                 bool preview = false,
                                 bool redrawNow = false);
 
-    /// Show and sound the given note
+    /**
+     * Show and sound the given note.  The height is used for display,
+     * the pitch for performance, so the two need not correspond (e.g.
+     * under ottava there may be octave differences).
+     */
     void showPreviewNote(int staffNo, double layoutX,
                          int pitch, int height,
                          const Rosegarden::Note &note,

@@ -280,8 +280,6 @@ NotePixmapParameters::getAboveMarks() const
 
 	if (Rosegarden::Marks::isFingeringMark(*mi)) {
 
-	    NOTATION_DEBUG << "getAboveMarks: adding fingering mark " << *mi << endl;
-
 	    marks.push_back(*mi);
 	}
     }
@@ -936,8 +934,6 @@ NotePixmapFactory::makeRoomForMarks(bool isStemmed,
 
 	} else {
 
-	    NOTATION_DEBUG << "makeRoomForMarks: fingering mark " << *i << endl;
-
 	    // Inefficient to do this here _and_ in drawMarks
 	    QString text = strtoqstr(Rosegarden::Marks::getFingeringFromMark(*i));
 	    QRect bounds = m_fingeringFontMetrics.boundingRect(text);
@@ -1032,8 +1028,6 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 	    dy += character.getHeight() + gap;
 
 	} else {
-	    NOTATION_DEBUG << "drawMarks: fingering mark " << *i << endl;
-
 	    QString text = strtoqstr(Rosegarden::Marks::getFingeringFromMark(*i));
 	    QRect bounds = m_fingeringFontMetrics.boundingRect(text);
 	    
