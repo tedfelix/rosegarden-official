@@ -254,35 +254,7 @@ AudioFileManager::setAudioPath(const std::string &path)
 
     m_audioPath = hPath;
 
-    // Set the lastAddPath if it's currently empty
-    //
-    if (m_lastAddPath == "")
-        m_lastAddPath = m_audioPath;
 }
-
-// Set the last "add" path so that the UI remembers where we
-// last searched for an audio file.
-//
-void
-AudioFileManager::setLastAddPath(const std::string &path)
-{
-    std::string hPath = path;
-
-    // add a trailing / if we don't have one
-    //
-    if (hPath[hPath.size() - 1] != '/')
-        hPath += std::string("/");
-
-    // get the home directory
-    if (hPath[0] == '~')
-    {
-        hPath.erase(0, 1);
-        hPath = std::string(getenv("HOME")) + hPath;
-    }
-
-    m_lastAddPath = hPath;
-}
-
 
 
 // See if we can find a given file in our search path
@@ -490,10 +462,6 @@ AudioFileManager::toXmlString()
     audioFiles << "<audiofiles>" << std::endl;
     audioFiles << "    <audioPath value=\""
                << audioPath << "\"/>" << std::endl;
-
-    std::string lastAddPath = substituteHomeForTilde(m_lastAddPath);
-    audioFiles << "    <audioLastAddPath value =\""
-               << lastAddPath << "\"/>" << std::endl;
 
     std::string fileName;
     std::vector<AudioFile*>::iterator it;

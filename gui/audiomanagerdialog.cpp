@@ -429,11 +429,7 @@ AudioManagerDialog::slotPlayPreview()
 void
 AudioManagerDialog::slotAdd()
 {
-    QString lastAddPath = m_doc->getAudioFileManager().getLastAddPath().c_str();
-    if (lastAddPath.isEmpty())
-        lastAddPath = ":WAVS";
-
-    KURL::List kurlList = KFileDialog::getOpenURLs(lastAddPath,
+    KURL::List kurlList = KFileDialog::getOpenURLs(":WAVS",
                                                    QString(i18n("*.wav|WAV files (*.wav)")),
                                                    this, i18n("Select an Audio File"));
 
@@ -730,10 +726,6 @@ AudioManagerDialog::addFile(const KURL& kurl)
 
     if (kurl.isLocalFile()) {
 
-        std::string newLastAddPath =
-            m_doc->getAudioFileManager().getDirectory(std::string(kurl.path().data()));
-        m_doc->getAudioFileManager().setLastAddPath(newLastAddPath);
-        
         newFilePath = kurl.path();
 
     } else { // download locally

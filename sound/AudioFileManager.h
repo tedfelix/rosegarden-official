@@ -106,12 +106,6 @@ public:
     std::string getAudioPath() { return m_audioPath; }
     void setAudioPath(const std::string &path);
 
-    // Last add audio file path - used to remember where we last
-    // looked for audio files.
-    //
-    std::string getLastAddPath() { return m_lastAddPath; }
-    void setLastAddPath(const std::string &path);
-
     // Get a new audio filename at the audio record path
     //
     std::string createRecordingAudioFile();
@@ -194,7 +188,6 @@ private:
 
     std::vector<AudioFile*>                       m_audioFiles;
     std::string                                   m_audioPath;
-    std::string                                   m_lastAddPath;
 
     PeakFileManager                               m_peakManager;
 
