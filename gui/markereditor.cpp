@@ -67,7 +67,7 @@ MarkerEditorDialog::MarkerEditorDialog(QWidget *parent,
     new QLabel(i18n("Real time:"), posGroup);
     m_realTime = new QLabel(posGroup);
 
-    new QLabel(i18n("Bars:"), posGroup);
+    new QLabel(i18n("In bar:"), posGroup);
     m_barTime = new QLabel(posGroup);
 
     QFrame* btnBox = new QFrame(mainFrame);

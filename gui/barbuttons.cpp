@@ -193,8 +193,7 @@ BarButtonsWidget::~BarButtonsWidget()
 
 void BarButtonsWidget::scrollHoriz(int x)
 {
-    m_currentXOffset = -x / getHScaleFactor();
-
+    m_currentXOffset = static_cast<int>(-x / getHScaleFactor());
     repaint();
 }
 
@@ -293,21 +292,35 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
         Rosegarden::Composition::markercontainer markers = comp.getMarkers();
         Rosegarden::Composition::markerconstiterator it;
 
+	Rosegarden::timeT start = comp.getBarStart(firstBar);
+	Rosegarden::timeT end   = comp.getBarEnd(lastBar);
+
+	QFontMetrics metrics = painter.fontMetrics();
+
         for (it = markers.begin(); it != markers.end(); ++it)
         {
-            if ((*it)->getTime() >= comp.getBarStart(firstBar) &&
-                (*it)->getTime() < comp.getBarEnd(lastBar))
+            if ((*it)->getTime() >= start && (*it)->getTime() < end)
             {
-                QRect bound = 
-                    painter.boundingRect(0, 0, 200, 100, AlignLeft, strtoqstr((*it)->getName()));
+		QString name(strtoqstr((*it)->getName()));
 
-                int x = m_rulerScale->getXForTime((*it)->getTime());
-                painter.fillRect(x , 1, x + bound.width() + 5, m_barHeight - 2, 
+		double x = m_rulerScale->getXForTime((*it)->getTime()) 
+		    + m_xorigin + m_currentXOffset;
+
+                painter.fillRect(static_cast<int>(x), 1,
+				 static_cast<int>(metrics.width(name) + 5),
+				 m_barHeight - 2, 
                                  QBrush(RosegardenGUIColours::MarkerBackground));
 
-                painter.setWorldXForm(false);
-                painter.drawText(x + 2, m_barHeight - 4, strtoqstr((*it)->getName()));
-                painter.setWorldXForm(true);
+		QPoint textDrawPoint = painter.xForm
+		    (QPoint(static_cast<int>(x + 2), m_barHeight - 4));
+
+		// disable worldXForm for text
+                bool enableXForm = painter.hasWorldXForm();
+		painter.setWorldXForm(false);
+
+                painter.drawText(textDrawPoint, name);
+
+                painter.setWorldXForm(enableXForm);
             }
         }
     }

@@ -26,6 +26,8 @@ using std::endl;
 using std::cout;
 using Rosegarden::MappedEvent;
 
+#define DEBUG_META_ITERATOR 1
+
 MmappedSegment::MmappedSegment(const QString filename)
     : m_fd(-1),
       m_mmappedSize(0),
@@ -213,11 +215,30 @@ bool MmappedSegment::iterator::atEnd() const
 }
 
 // Ew ew ew - move this to base
+// [or rather, this is a dup of code in base]
 kdbgstream&
-operator<<(kdbgstream &dbg, const Rosegarden::RealTime &t)
+operator<<(kdbgstream &out, const Rosegarden::RealTime &rt)
 {
-    dbg << "sec : " << t.sec << ", usec : " << t.usec;
-    return dbg;
+    if (rt < Rosegarden::RealTime::zeroTime) {
+	out << "-";
+    } else {
+	out << " ";
+    }
+
+    long s = (rt.sec < 0 ? -rt.sec : rt.sec);
+    long u = (rt.usec < 0 ? -rt.usec : rt.usec);
+
+    out << s << ".";
+
+    long uu(u);
+    if (uu == 0) out << "00000";
+    else while (uu < 100000) {
+	out << "0";
+	uu *= 10;
+    }
+    
+    out << u << "R";
+    return out;
 }
 
 //----------------------------------------
@@ -346,30 +367,30 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
 
             //std::cerr << "Iterating on Segment #" << i << std::endl;
 
-            /*
+#ifdef DEBUG_META_ITERATOR
             SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : "
                             << "checking segment #" << i << " " 
                             << iter->getSegment()->getFileName() << endl;
-                            */
+#endif
 
             if (!validSegments[i]) {
-                /*
+#ifdef DEBUG_META_ITERATOR
                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : "
                                 << "no more events to get for this slice "
                                 << "in segment #" << i << endl;
-                                */
+#endif
                 continue; // skip this segment
             }
 
             bool evtIsFromMetronome = iter->getSegment()->isMetronome();
 
             if (iter->atEnd()) {
-                /*
+#ifdef DEBUG_META_ITERATOR
                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : " 
                                 << endTime
                                 << " reached end of segment #"
                                 << i << endl;
-                                */
+#endif
                 continue;
             } else if (!evtIsFromMetronome) {
                 eventsRemaining = true;
@@ -377,14 +398,14 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
 
             MappedEvent *evt = new MappedEvent(*(*iter));
 
-            /*
+#ifdef DEBUG_META_ITERATOR
             if (evt->getType() == MappedEvent::Audio) {
                 
                 if (evt->getEventTime() < endTime)
                     evt->setEventTime(evt->getEventTime() - Rosegarden::RealTime(1, 0));
                     c->insert(evt);
             }
-            */
+#endif
 
             if (evt->getEventTime() < endTime) {
                 if (evtIsFromMetronome) {
@@ -399,7 +420,7 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
 
                 }
                 
-                /*
+#ifdef DEBUG_META_ITERATOR
                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : " << endTime
                                 << " inserting evt from segment #"
                                 << i
@@ -412,7 +433,7 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
                                 << " - data2: " << (unsigned int)evt->getData2()
                                 << " - metronome event: " << evtIsFromMetronome
                                 << endl;
-                                */
+#endif
 
 
                 if (evt->getType() == MappedEvent::TimeSignature) {
@@ -438,17 +459,19 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
 
             } else {
                 validSegments[i] = false; // no more events to get from this segment
-                /*
+#ifdef DEBUG_META_ITERATOR
                 SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : no more events to get from segment #"
                                 << i << endl;
-                                */
+#endif
             }
 
         }
 
     } while (foundOneEvent);
 
-    //SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : eventsRemaining = " << eventsRemaining << endl;
+#ifdef DEBUG_META_ITERATOR
+    SEQUENCER_DEBUG << "fillCompositionWithEventsUntil : eventsRemaining = " << eventsRemaining << endl;
+#endif
 
     return eventsRemaining || foundOneEvent;
 }
