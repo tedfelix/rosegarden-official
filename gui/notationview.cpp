@@ -291,25 +291,22 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     //
     // layout
     //
+    RosegardenProgressDialog* progressDlg = 0;
+
     if (showProgressive) {
 	show();
         kapp->processEvents();
 
-//         RG_DEBUG << "NotationView : setting up progress dialog\n";
+        RG_DEBUG << "NotationView : setting up progress dialog\n";
 
-//         // 	progressDlg = new RosegardenProgressDialog(i18n("Starting..."),
-//         //                                                    100, this);
-// 	progressDlg = new KProgressDialog(0, "progressdialog",
-//                                           i18n("Starting..."),
-//                                           i18n("Starting..."));
-// 	progressDlg->setAutoClose(false);
-//         progressDlg->setAutoReset(true);
-//         progressDlg->setMinimumDuration(500);
-//         //         setupProgress(progressDlg);
+        progressDlg = new RosegardenProgressDialog(i18n("Starting..."),
+                                                   100, this);
+	progressDlg->setAutoClose(false);
+        progressDlg->setAutoReset(true);
+        progressDlg->setMinimumDuration(1000);
+        setupProgress(progressDlg);
 
-//         setupProgress(progressDlg->progressBar());
-
-//         m_progressDisplayer = PROGRESS_DIALOG;
+        m_progressDisplayer = PROGRESS_DIALOG;
     }
 
     m_chordNameRuler->setComposition(&(getDocument()->getComposition()));
@@ -342,6 +339,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	// when cancelled, m_ok is false -- checked by calling method
     }
 
+    //
+    // Setup default progress (the progress bar in the status bar)
+    //
+    delete progressDlg;
+    setupDefaultProgress();
 
     //
     // Connect signals
