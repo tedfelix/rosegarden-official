@@ -152,7 +152,7 @@ NotationCanvasView::handleClick(const StaffLine *line,
 {
     int h = line->getHeight();
 
-    kdDebug(KDEBUG_AREA) << "NotationCanvasView::insertNote() : insertNote at height " << h << endl;
+    kdDebug(KDEBUG_AREA) << "NotationCanvasView::handleClick() at height " << h << endl;
 
     emit noteClicked(h, pos, el);
 }
