@@ -38,6 +38,8 @@
 
 #include "notefont.h"
 
+#include "qcanvasspline.h"
+
 
 #include <iostream>
 using std::cerr;
@@ -316,7 +318,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     }
 
     if (params.m_tied) {
-        m_right = std::max(m_right, params.m_tieLength - m_noteBodyWidth/2);
+        m_right = std::max(m_right, params.m_tieLength/*!!! - m_noteBodyWidth/2*/);
         if (params.m_stemGoesUp) {
             m_below = std::max(m_below, m_noteBodyHeight * 2);
         } else {
@@ -491,19 +493,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     }
 #endif
 
-    // We're done - generate the returned pixmap with the right offset
-    //
-    m_p.end();
-    m_pm.end();
-
-    QCanvasPixmap notePixmap(*m_generatedPixmap, hotspot);
-    QBitmap mask(*m_generatedMask);
-    notePixmap.setMask(mask);
-
-    delete m_generatedPixmap;
-    delete m_generatedMask;
-
-    return notePixmap;
+    return makeCanvasPixmap(hotspot);
 }
 
 void
@@ -533,7 +523,7 @@ NotePixmapFactory::drawAccidental(Accidental a)
 }
 
 
-// Bresenham algorithm, Wu antialiasing:
+// Bresenham algorithm, Wu antialiasing
 
 void
 NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
@@ -553,15 +543,19 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
     static std::vector<QColor> colours;
     if (colours.size() == 0) {
         colours.push_back(QColor(-1, 0, 0, QColor::Hsv));
-        colours.push_back(QColor(-1, 0, 64, QColor::Hsv));
-        colours.push_back(QColor(-1, 0, 128, QColor::Hsv));
-        colours.push_back(QColor(-1, 0, 160, QColor::Hsv));
+        colours.push_back(QColor(-1, 0, 63, QColor::Hsv));
+        colours.push_back(QColor(-1, 0, 127, QColor::Hsv));
+        colours.push_back(QColor(-1, 0, 191, QColor::Hsv));
+        colours.push_back(QColor(-1, 0, 255, QColor::Hsv));
     }
 
     int cx = x0, cy = y0;
 
     int inc = 1;
-    if (dv < 0) { dv = -dv; inc = -1; }
+
+    if (dv < 0) {
+	dv = -dv; inc = -1;
+    }
 
     int g = 2 * dv - dh;
     int dg1 = 2 * (dv - dh);
@@ -581,13 +575,13 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
         int quartile = (dg2 - g) / segment;
         if (quartile < 0) quartile = 0;
         if (quartile > 3) quartile = 3;
-        if (inc > 0) quartile = 3 - quartile;
-
-//        kdDebug(KDEBUG_AREA)
-//            << "x = " << c.x() << ", y = " << c.y()
-//            << ", g = " << g << ", dg1 = " << dg1 << ", dg2 = " << dg2
-//            << ", seg = " << segment << ", q = " << quartile << endl;
-
+        if (inc > 0) quartile = 4 - quartile;
+/*
+        kdDebug(KDEBUG_AREA)
+            << "x = " << cx << ", y = " << cy
+            << ", g = " << g << ", dg1 = " << dg1 << ", dg2 = " << dg2
+            << ", seg = " << segment << ", q = " << quartile << endl;
+*/
         // I don't know enough about Qt to be sure of this, but I
         // suspect this may be some of the most inefficient code ever
         // written:
@@ -598,20 +592,20 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
         m_p.drawPoint(cx, cy);
         m_pm.drawPoint(cx, cy);
 
-	if (thickness > 1) m_p.setPen(colours[0]);
+	if (thickness > 1) m_p.setPen(Qt::black);
 	while (++off < thickness) {
             m_p.drawPoint(cx, cy + off);
             m_pm.drawPoint(cx, cy + off);
         }
         
-        m_p.setPen(colours[3-quartile]);
+        m_p.setPen(colours[4 - quartile]);
         m_p.drawPoint(cx, cy + off);
         m_pm.drawPoint(cx, cy + off);
 
         ++cx;
     }
 
-    m_p.setPen(colours[0]);
+    m_p.setPen(Qt::black);
 }
 
 
@@ -746,12 +740,17 @@ NotePixmapFactory::drawTie(bool above, int length)
     int tieThickness = getStaffLineThickness() * 2;
     int tieCurve = m_font->getCurrentSize() / 2;
     int height = tieCurve + tieThickness;
-    int x = m_left + m_noteBodyWidth / 2;
+    int x = m_left + m_noteBodyWidth /*!!! / 2*/;
     int y = (above ? m_above - height - tieCurve/2 :
                      m_above + m_noteBodyHeight + tieCurve/2 + 1);
     int i;
 
+    length -= m_noteBodyWidth;
     if (length < tieCurve * 2) length = tieCurve * 2;
+    if (length < m_noteBodyWidth * 3) {
+	length += m_noteBodyWidth - 2;
+	x -= m_noteBodyWidth/2 - 1;
+    }
 
     for (i = 0; i < tieThickness; ++i) {
 
@@ -836,17 +835,7 @@ NotePixmapFactory::makeRestPixmap(const Note &restType)
         m_pm.drawPixmap(x, restY, *(dot.mask()));
     }
 
-    m_p.end();
-    m_pm.end();
-
-    QCanvasPixmap restPixmap(*m_generatedPixmap, hotspot);
-    QBitmap mask(*m_generatedMask);
-    restPixmap.setMask(mask);
-
-    delete m_generatedPixmap;
-    delete m_generatedMask;
-
-    return restPixmap;
+    return makeCanvasPixmap(hotspot);
 }
 
 
@@ -920,17 +909,77 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 	x += delta;
     }
 
-    m_p.end();
-    m_pm.end();
+    return makeCanvasPixmap(m_pointZero);
+}
 
-    QCanvasPixmap p(*m_generatedPixmap, m_pointZero);
-    QBitmap m(*m_generatedMask);
-    p.setMask(m);
+QCanvasPixmap
+NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
+{
+    // hairpin height should be about notebodyheight when the width is
+    // notebodywidth*2 or less, and shouldn't exceed notebodyheight*2
 
-    delete m_generatedPixmap;
-    delete m_generatedMask;
+    int nbh = getNoteBodyHeight();
+    int nbw = getNoteBodyWidth();
 
-    return p;
+    int height = (int)(((double)nbh / (double)(nbw * 40)) * length) + nbh;
+    int thickness = getStaffLineThickness() * 3 / 2;
+
+//    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeHairpinPixmap: mapped length " << length << " to height " << height << " (nbh = " << nbh << ", nbw = " << nbw << ")" << endl;
+
+    if (height < nbh)   height = nbh;
+    if (height > nbh*2) height = nbh*2;
+
+    height += thickness - 1;
+
+    createPixmapAndMask(length, height);
+
+    int left = 1, right = length - 2*nbw/3 + 1;
+
+    if (isCrescendo) {
+	drawShallowLine(left, height/2-1,
+			right, height - thickness - 1, thickness, true);
+	drawShallowLine(left, height/2-1, right, 0, thickness, true);
+    } else {
+	drawShallowLine(left, 0, right, height/2-1, thickness, true);
+	drawShallowLine(left, height - thickness - 1,
+			right, height/2-1, thickness, true);
+    }
+
+    return makeCanvasPixmap(QPoint(0, height/2));
+}
+
+QCanvasItem *
+NotePixmapFactory::makeSlur(QCanvas *canvas, int length, int dy, bool above)
+{
+    if (length < getNoteBodyWidth() * 2) length = getNoteBodyWidth() * 2;
+
+    Q3PointArray a(4);
+
+    int nbh = getNoteBodyHeight();
+
+    int offset = nbh * 2;
+    if (dy < nbh / 2) {
+	offset = nbh;
+    } else if (dy < nbh * 5) {
+	offset = nbh*3 / 2;
+    }
+
+    int maximum;
+
+    if (above) {
+	maximum = std::min(0, dy) - offset;
+    } else {
+	maximum = std::max(0, dy) + offset;
+    }
+
+    a.setPoint(0, 0, 0);
+    a.setPoint(1, length/5, maximum);
+    a.setPoint(2, length - length/5 - 1, maximum);
+    a.setPoint(3, length-1, dy);
+
+    QCanvasSpline *slur = new QCanvasSpline(canvas);
+    slur->setControlPoints(a, false);
+    return slur;
 }
 
 QCanvasPixmap
@@ -968,18 +1017,8 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 
     m_p.setPen(Qt::black);
 
-    m_p.end();
-    m_pm.end();
-
-    QCanvasPixmap p(*m_generatedPixmap,
-		    QPoint(0, denomR.height() + (getNoteBodyHeight()/4) - 1));
-    QBitmap m(*m_generatedMask);
-    p.setMask(m);
-
-    delete m_generatedPixmap;
-    delete m_generatedMask;
-
-    return p;
+    return makeCanvasPixmap(QPoint(0, denomR.height() +
+				   (getNoteBodyHeight()/4) - 1));
 }
 
 
@@ -1019,6 +1058,18 @@ NotePixmapFactory::createPixmapAndMask(int width, int height)
     m_pm.setPen(Qt::white); m_pm.setBrush(Qt::white);
 }
 
+QCanvasPixmap
+NotePixmapFactory::makeCanvasPixmap(QPoint hotspot)
+{
+    m_p.end();
+    m_pm.end();
+    QCanvasPixmap p(*m_generatedPixmap, hotspot);
+    QBitmap m(*m_generatedMask);
+    p.setMask(m);
+    delete m_generatedPixmap;
+    delete m_generatedMask;
+    return p;
+}
 
 QPoint
 NotePixmapFactory::m_pointZero;

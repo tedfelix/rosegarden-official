@@ -38,11 +38,13 @@
 
 using Rosegarden::Int;
 using Rosegarden::Bool;
+using Rosegarden::String;
 using Rosegarden::Event;
 using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::TimeSignature;
 using Rosegarden::Note;
+using Rosegarden::Mark;
 
 using namespace Rosegarden::BaseProperties;
 using namespace NotationProperties;
@@ -163,7 +165,34 @@ NotationVLayout::scanStaff(StaffType &staffBase)
             } else if (el->event()->isa(Key::EventType)) {
 
                 el->setLayoutY(staff.yCoordOfHeight(12));
-            }
+
+            } else if (el->event()->isa(Mark::EventType)) {
+
+		std::string markType =
+		    el->event()->get<String>(Mark::MarkTypePropertyName);
+		
+		if (markType == Mark::Crescendo ||
+		    markType == Mark::Decrescendo) {
+		    
+		    el->setLayoutY(staff.yCoordOfHeight(-9)); //!!! refine
+
+		} else if (markType == Mark::Slur) {
+
+		    int height = 8;
+		    NotationElementList::iterator scooter = i;
+		    while (!(*scooter)->event()->isa(Note::EventType)) {
+			++scooter;
+		    }
+		    if ((*scooter)->event()->isa(Note::EventType)) {
+			height = (*scooter)->event()->get<Int>(HEIGHT_ON_STAFF);
+		    }
+
+		    el->setLayoutY(staff.yCoordOfHeight(height));
+
+		} else {
+		    //!!! complain
+		}
+	    }
         }
     }
 }

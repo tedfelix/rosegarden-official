@@ -125,6 +125,9 @@ public:
     QCanvasPixmap makeKeyPixmap(const Rosegarden::Key &key,
 				const Rosegarden::Clef &clef);
     QCanvasPixmap makeTimeSigPixmap(const Rosegarden::TimeSignature& sig);
+    QCanvasPixmap makeHairpinPixmap(int length, bool isCrescendo);
+    QCanvasItem  *makeSlur(QCanvas *canvas,
+			   int length, int dy, bool above); // caller owns rtn
     QCanvasPixmap makeUnknownPixmap();
     QCanvasPixmap makeToolbarPixmap(const char *name);
 
@@ -165,6 +168,7 @@ protected:
     void drawTie(bool above, int length);
 
     void createPixmapAndMask(int width, int height);
+    QCanvasPixmap makeCanvasPixmap(QPoint hotspot);
 
     QPoint m_origin;
 

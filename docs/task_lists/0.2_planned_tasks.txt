@@ -53,6 +53,11 @@ Work required to fix existing stuff
 8.  mucho cleaning up and tidying in the GUI: toolbars, menus,
     palettes etc.  kind of obvious
 
+9.  Selection global to entire composition, and selection updated
+    correctly throughout all views on (e.g.) note insert
+    
+10. Implement undo for cut/copy/paste, and for the track
+    insert/delete/resize tools
 
 
 
@@ -93,8 +98,6 @@ New features suitable for 0.2
 
 Basis for later features
 ------------------------
-
-1.  undo that works at least some of the time [DONE]
 
 2.  layers (for counterpoint)
 

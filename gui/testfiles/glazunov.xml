@@ -26,12 +26,10 @@
 <event type="note" duration="192"><property name="pitch" int="66"/><property name="TiedForward" bool="true"/></event>
 <group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="66"/><property name="TiedBackward" bool="true"/></event>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/></event>
 	<event type="note" duration="24"><property name="pitch" int="64"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="24"><property name="pitch" int="62"/></event>
 </group>
 <group type="beamed">
@@ -41,11 +39,11 @@
 <event type="note" duration="24"><property name="pitch" int="62"/></event>
 </group>
 <event type="note" duration="288"><property name="pitch" int="64"/></event>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="64"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="66"/></event>
 </group>
 <chord>
@@ -57,44 +55,44 @@
 	<event type="mark" subordering="-8"><property name="marktype" string="crescendo"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="96"><property name="pitch" int="61"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="61"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="69"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="69"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="71"/></event>
 </group>
 <chord>
-	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
+	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/><property name="TiedForward" bool="true"/></event>
 	<event type="note" duration="96"><property name="pitch" int="68"/><property name="TiedForward" bool="true"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="decrescendo"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="68"/><property name="TiedBackward" bool="true"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="69"/></event>
 </group>
 <chord>
-	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
+	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/><property name="TiedForward" bool="true"/></event>
 	<event type="note" duration="96"><property name="pitch" int="66"/><property name="TiedForward" bool="true"/></event>
 </chord>
 <group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="66"/><property name="TiedBackward" bool="true"/></event>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="crescendo"/><property name="markduration" int="336"/></event>
 	<event type="note" duration="48"><property name="pitch" int="63"/></event>
 </chord>
+</group>
 <chord>
-	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
+	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/><property name="TiedForward" bool="true"/></event>
 	<event type="note" duration="96"><property name="pitch" int="64"/><property name="TiedForward" bool="true"/></event>
 </chord>
 <group type="beamed">
@@ -112,12 +110,12 @@
 <event type="rest" duration="24"></event>
 <event type="note" duration="24"><property name="pitch" int="66"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="decrescendo"/><property name="markduration" int="144"/></event>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="64"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="63"/></event>
 <event type="note" duration="48"><property name="pitch" int="56"/></event>
 </group>
@@ -135,53 +133,49 @@
 </group>
 <group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="62"/><property name="TiedBackward" bool="true"/></event>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="decrescendo"/><property name="markduration" int="144"/></event>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/></event>
 	<event type="note" duration="48"><property name="pitch" int="61"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="56"/></event>
 <event type="note" duration="48"><property name="pitch" int="57"/></event>
 </group>
+<group type="beamed">
 <chord>
-	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/></event>
 	<event type="mark" subordering="-8"><property name="marktype" string="crescendo"/><property name="markduration" int="192"/></event>
+	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/></event>
 	<event type="note" duration="48"><property name="pitch" int="59"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="61"/></event>
 <event type="note" duration="48"><property name="pitch" int="64"/></event>
 <event type="note" duration="48"><property name="pitch" int="62"/><property name="TiedForward" bool="true"/></event>
 </group>
 <group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="62"/><property name="TiedBackward" bool="true"/></event>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="decrescendo"/><property name="markduration" int="144"/></event>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/></event>
 	<event type="note" duration="48"><property name="pitch" int="61"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="56"/></event>
 <event type="note" duration="48"><property name="pitch" int="57"/></event>
 </group>
+<group type="beamed">
 <chord>
-	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="mark" subordering="-8"><property name="marktype" string="crescendo"/><property name="markduration" int="384"/></event>
+	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="59"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="62"/></event>
 <event type="note" duration="48"><property name="pitch" int="68"/></event>
 <event type="note" duration="48"><property name="pitch" int="66"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="65"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="68"/></event>
 <event type="note" duration="48"><property name="pitch" int="71"/></event>
 </group>
@@ -196,11 +190,11 @@
 </chord>
 <event type="note" duration="96"><property name="pitch" int="61"/></event>
 <event type="note" duration="288"><property name="pitch" int="69"/></event>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="24"><property name="pitch" int="68"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="24"><property name="pitch" int="66"/></event>
 <event type="note" duration="24"><property name="pitch" int="64"/></event>
 <event type="note" duration="24"><property name="pitch" int="66"/></event>
@@ -217,12 +211,10 @@
 </group>
 <group type="beamed">
 <event type="note" duration="24"><property name="pitch" int="66"/><property name="TiedBackward" bool="true"/></event>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="168"/></event>
 	<event type="note" duration="24"><property name="pitch" int="69"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="24"><property name="pitch" int="68"/></event>
 <event type="note" duration="24"><property name="pitch" int="66"/></event>
 <event type="note" duration="12"><property name="pitch" int="64"/></event>
@@ -235,11 +227,11 @@
 <event type="note" duration="12"><property name="pitch" int="62"/></event>
 </group>
 <event type="note" duration="288"><property name="pitch" int="64"/></event>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="64"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="66"/></event>
 </group>
 <chord>
@@ -251,22 +243,22 @@
 	<event type="mark" subordering="-8"><property name="marktype" string="crescendo"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="96"><property name="pitch" int="61"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="61"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="69"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="69"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="71"/></event>
 </group>
 <chord>
-	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
+	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/><property name="TiedForward" bool="true"/></event>
 	<event type="note" duration="96"><property name="pitch" int="68"/><property name="TiedForward" bool="true"/></event>
 </chord>
 <group type="beamed">
@@ -275,7 +267,7 @@
 </group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="decrescendo"/><property name="markduration" int="96"/><property name="TiedForward" bool="true"/></event>
-	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
+	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/><property name="TiedForward" bool="true"/></event>
 	<event type="note" duration="96"><property name="pitch" int="66"/><property name="TiedForward" bool="true"/></event>
 </chord>
 <group type="beamed">
@@ -283,14 +275,14 @@
 <event type="note" duration="48"><property name="pitch" int="63"/></event>
 </group>
 <chord>
-	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
+	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/><property name="TiedForward" bool="true"/></event>
 	<event type="note" duration="96"><property name="pitch" int="64"/><property name="TiedForward" bool="true"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="crescendo"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="64"/><property name="TiedBackward" bool="true"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="61"/></event>
 </group>
 <event type="note" duration="96"><property name="pitch" int="62"/></event>
@@ -307,12 +299,10 @@
 <event type="note" duration="192"><property name="pitch" int="66"/><property name="TiedForward" bool="true"/></event>
 <group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="66"/><property name="TiedBackward" bool="true"/></event>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="24"><property name="pitch" int="64"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="24"><property name="pitch" int="62"/></event>
 </group>
 <group type="tupled" length="96" untupled="144" count="6">
@@ -333,12 +323,10 @@
 <event type="note" duration="192"><property name="pitch" int="71"/><property name="TiedForward" bool="true"/></event>
 <group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="71"/><property name="TiedBackward" bool="true"/></event>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="24"><property name="pitch" int="69"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="24"><property name="pitch" int="68"/></event>
 </group>
 <group type="tupled" length="96" untupled="144" count="6">
@@ -414,11 +402,11 @@
 	<event type="note" duration="144"><property name="pitch" int="66"/></event>
 </chord>
 <event type="note" duration="48"><property name="pitch" int="64"/></event>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="62"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="61"/></event>
 <event type="note" duration="48"><property name="pitch" int="59"/></event>
 <event type="note" duration="48"><property name="pitch" int="64"/></event>
@@ -438,33 +426,31 @@
 <event type="note" duration="48"><property name="pitch" int="66"/></event>
 <event type="note" duration="48"><property name="pitch" int="67"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="mark" subordering="-8"><property name="marktype" string="crescendo"/><property name="markduration" int="384"/></event>
 	<event type="note" duration="48"><property name="pitch" int="66"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="67"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="64"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="66"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="64"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="66"/></event>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="62"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="64"/></event>
 </group>
 <event type="note" duration="192"><property name="pitch" int="57"/></event>
@@ -481,11 +467,11 @@
 	<event type="note" duration="144"><property name="pitch" int="71"/></event>
 </chord>
 <event type="note" duration="48"><property name="pitch" int="69"/></event>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="67"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="66"/></event>
 <event type="note" duration="48"><property name="pitch" int="64"/></event>
 <event type="note" duration="48"><property name="pitch" int="69"/></event>
@@ -493,21 +479,19 @@
 <event type="note" duration="192"><property name="pitch" int="66"/><property name="TiedForward" bool="true"/></event>
 <group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="66"/><property name="TiedBackward" bool="true"/></event>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/></event>
 	<event type="mark" subordering="-8"><property name="marktype" string="crescendo"/><property name="markduration" int="336"/></event>
 	<event type="note" duration="48"><property name="pitch" int="62"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="61"/></event>
 <event type="note" duration="48"><property name="pitch" int="59"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="61"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="66"/></event>
 <event type="note" duration="48"><property name="pitch" int="61"/></event>
 </group>
@@ -535,11 +519,11 @@
 	<event type="note" duration="144"><property name="pitch" int="69"/></event>
 </chord>
 <event type="note" duration="48"><property name="pitch" int="64"/></event>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="67"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="66"/></event>
 <event type="note" duration="48"><property name="pitch" int="64"/></event>
 <event type="note" duration="48"><property name="pitch" int="71"/></event>
@@ -550,6 +534,7 @@
 	<event type="note" duration="144"><property name="pitch" int="69"/></event>
 </chord>
 <event type="note" duration="48"><property name="pitch" int="67"/></event>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="66"/></event>
@@ -558,34 +543,33 @@
 	<event type="mark" subordering="-8"><property name="marktype" string="crescendo"/><property name="markduration" int="336"/></event>
 	<event type="note" duration="48"><property name="pitch" int="74"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="73"/></event>
 <event type="note" duration="48"><property name="pitch" int="71"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="70"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="71"/></event>
 <event type="note" duration="48"><property name="pitch" int="69"/></event>
 <event type="note" duration="48"><property name="pitch" int="67"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="66"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="71"/></event>
 <event type="note" duration="48"><property name="pitch" int="69"/></event>
 <event type="note" duration="48"><property name="pitch" int="67"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="mark" subordering="-8"><property name="marktype" string="decrescendo"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="66"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="67"/></event>
 <event type="note" duration="48"><property name="pitch" int="66"/></event>
 <event type="note" duration="48"><property name="pitch" int="64"/></event>
@@ -603,11 +587,11 @@
 	<event type="note" duration="144"><property name="pitch" int="71"/></event>
 </chord>
 <event type="note" duration="48"><property name="pitch" int="69"/></event>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="67"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="66"/></event>
 <event type="note" duration="48"><property name="pitch" int="64"/></event>
 <event type="note" duration="48"><property name="pitch" int="69"/></event>
@@ -649,76 +633,70 @@
 	<event type="keychange" subordering="-20"><property name="key" string="A major"/></event>
 	<event type="note" duration="48"><property name="pitch" int="54"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/></event>
 	<event type="note" duration="48"><property name="pitch" int="49"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="51"/></event>
 <event type="note" duration="48"><property name="pitch" int="53"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="54"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="56"/></event>
 </group>
 <event type="note" duration="96"><property name="pitch" int="57"/></event>
 <group type="beamed">
 <event type="rest" duration="48"></event>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/></event>
 	<event type="note" duration="48"><property name="pitch" int="56"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="57"/></event>
 <event type="note" duration="48"><property name="pitch" int="59"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="61"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="62"/></event>
 </group>
 <event type="note" duration="96"><property name="pitch" int="64"/></event>
 <group type="beamed">
 <event type="rest" duration="48"></event>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/></event>
 	<event type="note" duration="48"><property name="pitch" int="54"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="56"/></event>
 <event type="note" duration="48"><property name="pitch" int="57"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="59"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="61"/></event>
 </group>
 <event type="note" duration="96"><property name="pitch" int="62"/></event>
 <group type="beamed">
 <event type="rest" duration="48"></event>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/></event>
 	<event type="note" duration="48"><property name="pitch" int="59"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="61"/></event>
 <event type="note" duration="48"><property name="pitch" int="62"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="64"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="66"/></event>
 </group>
 <chord>
@@ -738,15 +716,16 @@
 <event type="note" duration="48"><property name="pitch" int="62"/></event>
 </group>
 <event type="note" duration="96"><property name="pitch" int="64"/></event>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="mark" subordering="-8"><property name="marktype" string="crescendo"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="65"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="66"/></event>
 <event type="note" duration="48"><property name="pitch" int="68"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="decrescendo"/><property name="markduration" int="144"/></event>
 	<event type="note" duration="48"><property name="pitch" int="73"/></event>
@@ -755,7 +734,6 @@
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="71"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="69"/></event>
 </group>
 <group type="beamed">
@@ -769,18 +747,18 @@
 </chord>
 <event type="note" duration="48"><property name="pitch" int="62"/></event>
 <event type="note" duration="96"><property name="pitch" int="59"/></event>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="59"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="67"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="67"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="66"/></event>
 <event type="note" duration="48"><property name="pitch" int="57"/></event>
 <event type="note" duration="48"><property name="pitch" int="59"/></event>
@@ -801,29 +779,29 @@
 <event type="note" duration="48"><property name="pitch" int="48"/></event>
 <event type="note" duration="48"><property name="pitch" int="49"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="51"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="53"/></event>
 <event type="note" duration="48"><property name="pitch" int="54"/></event>
 <event type="note" duration="48"><property name="pitch" int="56"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="59"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="57"/></event>
 <event type="note" duration="48"><property name="pitch" int="51"/></event>
 <event type="note" duration="48"><property name="pitch" int="53"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="54"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="56"/></event>
 <event type="note" duration="48"><property name="pitch" int="57"/></event>
 <event type="note" duration="48"><property name="pitch" int="59"/></event>
@@ -839,11 +817,11 @@
 <event type="note" duration="48"><property name="pitch" int="56"/></event>
 <event type="note" duration="48"><property name="pitch" int="57"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="59"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="61"/></event>
 <event type="note" duration="48"><property name="pitch" int="63"/></event>
 <event type="note" duration="48"><property name="pitch" int="65"/></event>
@@ -981,12 +959,12 @@
 	<event type="note" duration="96"><property name="pitch" int="57"/></event>
 	<event type="note" duration="96"><property name="pitch" int="61"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="69"/></event>
 	<event type="note" duration="48"><property name="pitch" int="81"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="71"/></event>
 	<event type="note" duration="48"><property name="pitch" int="83"/></event>
@@ -1006,23 +984,23 @@
 	<event type="note" duration="96"><property name="pitch" int="66"/></event>
 	<event type="note" duration="96"><property name="pitch" int="78"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="66"/></event>
 	<event type="note" duration="48"><property name="pitch" int="78"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="74"/></event>
 	<event type="note" duration="48"><property name="pitch" int="86"/></event>
 </chord>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="74"/></event>
 	<event type="note" duration="48"><property name="pitch" int="86"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="73"/></event>
 	<event type="note" duration="48"><property name="pitch" int="85"/></event>
@@ -1048,12 +1026,12 @@
 <event type="rest" duration="48"></event>
 <group type="beamed">
 <event type="rest" duration="48"></event>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/></event>
 	<event type="note" duration="48"><property name="pitch" int="66"/></event>
 	<event type="note" duration="48"><property name="pitch" int="71"/></event>
 </chord>
+</group>
 <chord>
 	<event type="note" duration="96"><property name="pitch" int="68"/></event>
 	<event type="note" duration="96"><property name="pitch" int="71"/></event>
@@ -1227,11 +1205,11 @@
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="96"><property name="pitch" int="59"/><property name="TiedForward" bool="true"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="crescendo"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="59"/><property name="TiedBackward" bool="true"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="56"/></event>
 </group>
 <event type="note" duration="96"><property name="pitch" int="57"/></event>
@@ -1245,12 +1223,12 @@
 	<event type="note" duration="96"><property name="pitch" int="57"/></event>
 	<event type="note" duration="96"><property name="pitch" int="61"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="69"/></event>
 	<event type="note" duration="48"><property name="pitch" int="81"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="71"/></event>
 	<event type="note" duration="48"><property name="pitch" int="83"/></event>
@@ -1270,24 +1248,24 @@
 	<event type="note" duration="96"><property name="pitch" int="66"/></event>
 	<event type="note" duration="96"><property name="pitch" int="78"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="66"/></event>
 	<event type="note" duration="48"><property name="pitch" int="78"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="74"/></event>
 	<event type="note" duration="48"><property name="pitch" int="86"/></event>
 </chord>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="384"/></event>
 	<event type="note" duration="48"><property name="pitch" int="74"/></event>
 	<event type="note" duration="48"><property name="pitch" int="78"/></event>
 	<event type="note" duration="48"><property name="pitch" int="86"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="76"/></event>
 	<event type="note" duration="48"><property name="pitch" int="78"/></event>
@@ -1330,11 +1308,11 @@
 	<event type="note" duration="192"><property name="pitch" int="78"/></event>
 </chord>
 <event type="rest" duration="96"></event>
+<group type="tupled" length="96" untupled="108" count="9">
 <chord>
-	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/></event>
+	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/><property name="TupletNominalDuration" int="0"/></event>
 	<event type="note" duration="10"><property name="pitch" int="78"/><property name="TupletNominalDuration" int="12"/></event>
 </chord>
-<group type="tupled" length="96" untupled="108" count="9">
 <event type="note" duration="11"><property name="pitch" int="76"/><property name="TupletNominalDuration" int="12"/></event>
 <event type="note" duration="11"><property name="pitch" int="74"/><property name="TupletNominalDuration" int="12"/></event>
 <event type="note" duration="10"><property name="pitch" int="73"/><property name="TupletNominalDuration" int="12"/></event>
@@ -1365,11 +1343,11 @@
 	<event type="note" duration="192"><property name="pitch" int="83"/></event>
 </chord>
 <event type="rest" duration="96"></event>
+<group type="tupled" length="96" untupled="108" count="9">
 <chord>
-	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/></event>
+	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/><property name="TupletNominalDuration" int="0"/></event>
 	<event type="note" duration="10"><property name="pitch" int="83"/><property name="TupletNominalDuration" int="12"/></event>
 </chord>
-<group type="tupled" length="96" untupled="108" count="9">
 <event type="note" duration="11"><property name="pitch" int="81"/><property name="TupletNominalDuration" int="12"/></event>
 <event type="note" duration="11"><property name="pitch" int="80"/><property name="TupletNominalDuration" int="12"/></event>
 <event type="note" duration="10"><property name="pitch" int="78"/><property name="TupletNominalDuration" int="12"/></event>
@@ -1467,12 +1445,10 @@
 </chord>
 <group type="beamed">
 <event type="rest" duration="48"></event>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="240"/></event>
 	<event type="note" duration="48"><property name="pitch" int="69"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="71"/></event>
 <event type="note" duration="48"><property name="pitch" int="73"/></event>
 </group>
@@ -1486,6 +1462,7 @@
 	<event type="note" duration="96"><property name="pitch" int="71"/></event>
 	<event type="note" duration="96"><property name="pitch" int="76"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="mark" subordering="-8"><property name="marktype" string="decrescendo"/><property name="markduration" int="192"/></event>
@@ -1493,7 +1470,6 @@
 	<event type="note" duration="48"><property name="pitch" int="64"/></event>
 	<event type="note" duration="48"><property name="pitch" int="69"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="61"/></event>
 	<event type="note" duration="48"><property name="pitch" int="64"/></event>
@@ -1542,13 +1518,13 @@
 	<event type="note" duration="48"><property name="pitch" int="81"/></event>
 </chord>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="61"/></event>
 	<event type="note" duration="48"><property name="pitch" int="69"/></event>
 	<event type="note" duration="48"><property name="pitch" int="81"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="61"/></event>
 	<event type="note" duration="48"><property name="pitch" int="71"/></event>
@@ -1569,11 +1545,11 @@
 <group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="62"/></event>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="288"/></event>
 	<event type="note" duration="48"><property name="pitch" int="71"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="59"/></event>
 	<event type="note" duration="48"><property name="pitch" int="69"/></event>
@@ -1614,13 +1590,13 @@
 	<event type="note" duration="48"><property name="pitch" int="69"/></event>
 </chord>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="336"/></event>
 	<event type="note" duration="48"><property name="pitch" int="66"/></event>
 	<event type="note" duration="48"><property name="pitch" int="69"/></event>
 	<event type="note" duration="48"><property name="pitch" int="78"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="68"/></event>
 	<event type="note" duration="48"><property name="pitch" int="76"/></event>
@@ -1753,12 +1729,12 @@
 	<event type="note" duration="48"><property name="pitch" int="66"/></event>
 	<event type="note" duration="48"><property name="pitch" int="74"/></event>
 </chord>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/></event>
 	<event type="note" duration="48"><property name="pitch" int="71"/></event>
 	<event type="note" duration="48"><property name="pitch" int="78"/></event>
 </chord>
+</group>
 <chord>
 	<event type="note" duration="96"><property name="pitch" int="74"/></event>
 	<event type="note" duration="96"><property name="pitch" int="83"/></event>
@@ -1794,13 +1770,13 @@
 	<event type="note" duration="192"><property name="pitch" int="59"/></event>
 	<event type="note" duration="192"><property name="pitch" int="64"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="mark" subordering="-8"><property name="marktype" string="decrescendo"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="59"/></event>
 	<event type="note" duration="48"><property name="pitch" int="64"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="59"/></event>
 	<event type="note" duration="48"><property name="pitch" int="62"/></event>
@@ -1815,12 +1791,12 @@
 	<event type="note" duration="192"><property name="pitch" int="54"/></event>
 	<event type="note" duration="192"><property name="pitch" int="59"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="54"/></event>
 	<event type="note" duration="48"><property name="pitch" int="59"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="54"/></event>
 	<event type="note" duration="48"><property name="pitch" int="57"/></event>
@@ -1856,14 +1832,12 @@
 	<event type="note" duration="48"><property name="pitch" int="73"/><property name="TiedBackward" bool="true"/></event>
 	<event type="note" duration="48"><property name="pitch" int="81"/><property name="TiedBackward" bool="true"/></event>
 </chord>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="48"/></event>
 	<event type="note" duration="24"><property name="pitch" int="69"/></event>
 	<event type="note" duration="24"><property name="pitch" int="73"/></event>
 	<event type="note" duration="24"><property name="pitch" int="80"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="24"><property name="pitch" int="69"/></event>
 	<event type="note" duration="24"><property name="pitch" int="73"/></event>
@@ -1894,12 +1868,10 @@
 	<event type="note" duration="48"><property name="pitch" int="71"/></event>
 	<event type="note" duration="48"><property name="pitch" int="78"/></event>
 </chord>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/></event>
 	<event type="note" duration="24"><property name="pitch" int="76"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="24"><property name="pitch" int="74"/></event>
 </group>
 <group type="beamed">
@@ -1918,11 +1890,11 @@
 	<event type="note" duration="96"><property name="pitch" int="69"/></event>
 	<event type="note" duration="96"><property name="pitch" int="76"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="76"/></event>
 </chord>
-<group type="beamed">
 <event type="note" duration="48"><property name="pitch" int="78"/></event>
 </group>
 <chord>
@@ -1931,24 +1903,24 @@
 </chord>
 <event type="note" duration="48"><property name="pitch" int="76"/></event>
 <event type="note" duration="96"><property name="pitch" int="73"/></event>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="mark" subordering="-8"><property name="marktype" string="crescendo"/><property name="markduration" int="288"/></event>
 	<event type="note" duration="48"><property name="pitch" int="73"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="69"/></event>
 	<event type="note" duration="48"><property name="pitch" int="81"/></event>
 </chord>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="96"/></event>
 	<event type="note" duration="48"><property name="pitch" int="69"/></event>
 	<event type="note" duration="48"><property name="pitch" int="73"/></event>
 	<event type="note" duration="48"><property name="pitch" int="81"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="71"/></event>
 	<event type="note" duration="48"><property name="pitch" int="73"/></event>
@@ -1966,27 +1938,25 @@
 	<event type="note" duration="48"><property name="pitch" int="73"/><property name="TiedBackward" bool="true"/></event>
 	<event type="note" duration="48"><property name="pitch" int="80"/><property name="TiedBackward" bool="true"/></event>
 </chord>
-</group>
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="decrescendo"/><property name="markduration" int="48"/></event>
 	<event type="note" duration="48"><property name="pitch" int="69"/></event>
 	<event type="note" duration="48"><property name="pitch" int="73"/></event>
 	<event type="note" duration="48"><property name="pitch" int="81"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="96"><property name="pitch" int="71"/><property name="TiedForward" bool="true"/></event>
 	<event type="note" duration="96"><property name="pitch" int="78"/><property name="TiedForward" bool="true"/></event>
 	<event type="note" duration="96"><property name="pitch" int="83"/><property name="TiedForward" bool="true"/></event>
 </chord>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="crescendo"/><property name="markduration" int="384"/></event>
 	<event type="note" duration="48"><property name="pitch" int="71"/><property name="TiedBackward" bool="true"/></event>
 	<event type="note" duration="48"><property name="pitch" int="78"/><property name="TiedBackward" bool="true"/></event>
 	<event type="note" duration="48"><property name="pitch" int="83"/><property name="TiedBackward" bool="true"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="68"/></event>
 	<event type="note" duration="48"><property name="pitch" int="78"/></event>
@@ -2016,6 +1986,7 @@
 	<event type="note" duration="96"><property name="pitch" int="74"/></event>
 	<event type="note" duration="96"><property name="pitch" int="79"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="144"/></event>
 	<event type="note" duration="48"><property name="pitch" int="65"/></event>
@@ -2023,7 +1994,6 @@
 	<event type="note" duration="48"><property name="pitch" int="73"/></event>
 	<event type="note" duration="48"><property name="pitch" int="77"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="66"/></event>
 	<event type="note" duration="48"><property name="pitch" int="69"/></event>
@@ -2048,13 +2018,13 @@
 	<event type="note" duration="24"><property name="pitch" int="83"/></event>
 </chord>
 </group>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="decrescendo"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="69"/></event>
 	<event type="note" duration="48"><property name="pitch" int="73"/></event>
 	<event type="note" duration="48"><property name="pitch" int="81"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="68"/></event>
 	<event type="note" duration="48"><property name="pitch" int="73"/></event>
@@ -2883,12 +2853,12 @@
 	<event type="note" duration="96"><property name="pitch" int="37"/></event>
 	<event type="note" duration="96"><property name="pitch" int="49"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="38"/></event>
 	<event type="note" duration="48"><property name="pitch" int="50"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="40"/></event>
 	<event type="note" duration="48"><property name="pitch" int="52"/></event>
@@ -2907,12 +2877,12 @@
 	<event type="note" duration="96"><property name="pitch" int="32"/></event>
 	<event type="note" duration="96"><property name="pitch" int="44"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="33"/></event>
 	<event type="note" duration="48"><property name="pitch" int="45"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="35"/></event>
 	<event type="note" duration="48"><property name="pitch" int="47"/></event>
@@ -2997,12 +2967,12 @@
 	<event type="note" duration="96"><property name="pitch" int="45"/></event>
 	<event type="note" duration="96"><property name="pitch" int="61"/></event>
 </chord>
+<group type="beamed">
 <chord>
 	<event type="mark" subordering="-8"><property name="marktype" string="slur"/><property name="markduration" int="192"/></event>
 	<event type="note" duration="48"><property name="pitch" int="49"/></event>
 	<event type="note" duration="48"><property name="pitch" int="61"/></event>
 </chord>
-<group type="beamed">
 <chord>
 	<event type="note" duration="48"><property name="pitch" int="51"/></event>
 	<event type="note" duration="48"><property name="pitch" int="61"/></event>

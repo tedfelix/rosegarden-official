@@ -29,6 +29,7 @@
 #include <string>
 #ifndef NDEBUG
 #include <iostream>
+#include <ctime>
 #endif
 
 #if (__GNUC__ < 3)
@@ -171,6 +172,7 @@ public:
 #else
     void dump(std::ostream&) const {}
 #endif
+    static void dumpStats(std::ostream&);
 
     bool hasViewElement() const { return m_viewElementRefCount != 0; }
 
@@ -219,6 +221,15 @@ private:
 	m_viewElementRefCount = 0;
 	if (--m_data->m_refCount == 0) delete m_data;
     }
+
+#ifndef NDEBUG
+    static int m_getCount;
+    static int m_setCount;
+    static int m_setMaybeCount;
+    static int m_hasCount;
+    static int m_unsetCount;
+    static clock_t m_lastStats;
+#endif
 };
 
 
@@ -226,6 +237,10 @@ template <PropertyType P>
 bool
 Event::get(const PropertyName &name, PropertyDefn<P>::basic_type &val) const
 {
+#ifndef NDEBUG
+    ++m_getCount;
+#endif
+
     EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
     if (i != m_data->m_properties.end()) { 
 
@@ -254,6 +269,18 @@ PropertyDefn<P>::basic_type
 Event::get(const PropertyName &name) const
     // throw (NoData, BadType)
 {
+#ifdef NDEBUG
+
+    // If debug is off, we just do the quickest possible thing and let
+    // the property map implementation worry about absent entries
+
+    return (static_cast<PropertyStore<P> *>
+	    (m_data->m_properties[name]))->getData();
+    
+#else
+
+    ++m_getCount;
+
     EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
     if (i != m_data->m_properties.end()) { 
 
@@ -261,24 +288,21 @@ Event::get(const PropertyName &name) const
         if (sb->getType() == P)
             return (static_cast<PropertyStore<P> *>(sb))->getData();
         else {
-#ifndef NDEBUG
             std::cerr << "Event::get() Error: Attempt to get property \"" << name
                  << "\" as " << PropertyDefn<P>::typeName() <<", actual type is "
                  << sb->getTypeName() << std::endl;
-#endif
             throw BadType();
         }
 	    
     } else {
 
-#ifndef NDEBUG
         std::cerr << "Event::get(): Error: Attempt to get property \"" << name
              << "\" which doesn't exist for this event\nEvent::get(): Dump follows:" << std::endl;
 	dump(std::cerr);
-#endif
-
         throw NoData();
     }
+
+#endif
 }
 
 
@@ -323,6 +347,10 @@ Event::set(const PropertyName &name, PropertyDefn<P>::basic_type value,
            bool persistent)
     // throw (BadType)
 {
+#ifndef NDEBUG
+    ++m_setCount;
+#endif
+
     unshare();
     EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
     if (i != m_data->m_properties.end()) {
@@ -347,15 +375,43 @@ Event::set(const PropertyName &name, PropertyDefn<P>::basic_type value,
 }
 
 
+
+// setMaybe<> is actually called rather more frequently than set<>, so
+// it makes sense for best performance to implement it separately
+// rather than through calls to has, isPersistent and set<>
+
 template <PropertyType P>
 void
 Event::setMaybe(const PropertyName &name, PropertyDefn<P>::basic_type value)
     // throw (BadType)
 {
-    // no need to catch NoData from isPersistent, as the has() check
-    // should mean it never happens
-    if (has(name) && isPersistent<P>(name)) return;
-    set<P>(name, value, false);
+#ifndef NDEBUG
+    ++m_setMaybeCount;
+#endif
+
+    EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
+    if (i != m_data->m_properties.end()) {
+
+        PropertyStoreBase *sb = i->second;
+        if (sb->getType() == P) {
+	    if (!sb->isPersistent()) {
+		unshare();
+		(static_cast<PropertyStore<P> *>(sb))->setData(value);
+	    }
+        } else {
+#ifndef NDEBUG
+            std::cerr << "Error: Element: Attempt to setMaybe property \"" << name
+                 << "\" as " << PropertyDefn<P>::typeName() <<", actual type is "
+                 << sb->getTypeName() << std::endl;
+#endif
+            throw BadType();
+        }
+	    
+    } else {
+	unshare();
+        PropertyStoreBase *p = new PropertyStore<P>(value, false);
+        m_data->m_properties.insert(EventData::PropertyPair(name, p));
+    }
 }
 
 

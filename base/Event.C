@@ -76,6 +76,10 @@ Event::EventData::~EventData()
 bool
 Event::has(const PropertyName &name) const
 {
+#ifndef NDEBUG
+    ++m_hasCount;
+#endif
+
     EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
     return (i != m_data->m_properties.end());
 }
@@ -83,6 +87,10 @@ Event::has(const PropertyName &name) const
 void
 Event::unset(const PropertyName &name)
 {
+#ifndef NDEBUG
+    ++m_unsetCount;
+#endif
+
     unshare();
     m_data->m_properties.erase(name);
 }
@@ -135,6 +143,41 @@ Event::dump(ostream& out) const
 
     out << "Event storage size : " << getStorageSize() << '\n';
 }
+
+
+int Event::m_getCount = 0;
+int Event::m_setCount = 0;
+int Event::m_setMaybeCount = 0;
+int Event::m_hasCount = 0;
+int Event::m_unsetCount = 0;
+clock_t Event::m_lastStats = clock();
+
+void
+Event::dumpStats(ostream& out)
+{
+    clock_t now = clock();
+    int ms = (now - m_lastStats) * 1000 / CLOCKS_PER_SEC;
+    out << "\nEvent stats, since start of run or last report ("
+	<< ms << "ms ago):" << endl;
+
+    out << "Calls to get<>: " << m_getCount << endl;
+    out << "Calls to set<>: " << m_setCount << endl;
+    out << "Calls to setMaybe<>: " << m_setMaybeCount << endl;
+    out << "Calls to has: " << m_hasCount << endl;
+    out << "Calls to unset: " << m_unsetCount << endl;
+
+    m_getCount = m_setCount = m_setMaybeCount = m_hasCount = m_unsetCount = 0;
+    m_lastStats = clock();
+}
+
+#else
+
+void
+Event::dumpStats(ostream&)
+{
+    // nothing
+}
+
 #endif
 
 Event::PropertyNames

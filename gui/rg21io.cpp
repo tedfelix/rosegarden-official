@@ -222,7 +222,7 @@ bool RG21Loader::parseMarkStart()
     unsigned int markId = m_tokens[2].toUInt();
     std::string markType = m_tokens[3].lower().latin1();
 
-    kdDebug(KDEBUG_AREA) << "Mark start: type is \"" << markType << "\"" << endl;
+//    kdDebug(KDEBUG_AREA) << "Mark start: type is \"" << markType << "\"" << endl;
 
     if (markType == "tie") {
 
@@ -259,7 +259,15 @@ bool RG21Loader::parseMarkStart()
 	}
 
 	Mark mark(markType, 0);
-	m_marksExtant[markId] = mark.getAsEvent(markTime);
+	Event *e = mark.getAsEvent(markTime);
+	setGroupProperties(e);
+	m_marksExtant[markId] = e;
+
+	// place the mark in the segment now; don't wait for the
+	// close-mark, because some things may need to know about it
+	// before then (e.g. close-group)
+
+	m_currentSegment->insert(e);
     }
 
     // other marks not handled yet
@@ -281,7 +289,7 @@ void RG21Loader::closeMark()
 
     markEvent->set<Int>(Mark::MarkDurationPropertyName,
 			m_currentSegmentTime - markEvent->getAbsoluteTime());
-    m_currentSegment->insert(markEvent);
+//!!! see comment in previous method    m_currentSegment->insert(markEvent);
 }
 
 void RG21Loader::closeGroup()
@@ -306,7 +314,7 @@ void RG21Loader::closeGroup()
 		timeT offset = (*i)->getAbsoluteTime() - m_groupStartTime;
 		timeT intended =
 		    (offset * m_groupTupledLength) / m_groupUntupledLength;
-		
+/*
 		kdDebug(KDEBUG_AREA)
 		    << "RG21Loader::closeGroup:"
 		    << " m_groupStartTime = " << m_groupStartTime
@@ -317,7 +325,7 @@ void RG21Loader::closeGroup()
 		    << ", intended = " << intended
 		    << ", new absolute time = " <<
 		    ((*i)->getAbsoluteTime() + intended - offset) << endl;
-
+*/
 		(*i)->addAbsoluteTime(intended - offset);
 		(*i)->setDuration(prev - (*i)->getAbsoluteTime());
 		prev = (*i)->getAbsoluteTime();

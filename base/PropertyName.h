@@ -62,7 +62,6 @@ namespace Rosegarden
 
 */
 
-
 class PropertyName
 {
 public:

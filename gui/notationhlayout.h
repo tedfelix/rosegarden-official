@@ -92,7 +92,8 @@ public:
 
     /**
      * Returns the total length of all elements once layout is done
-     * This is the x-coord of the end of the last element on the longest staff
+     * This is the x-coord of the end of the last element on the longest
+     * staff, plus the space allocated to that element
      */
     virtual double getTotalWidth() { return m_totalWidth; }
 

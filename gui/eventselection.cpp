@@ -147,13 +147,9 @@ void EventSelection::updateBeginEndTime() const
 void
 EventSelection::recordSelectionOnSegment()
 {
-    kdDebug(KDEBUG_AREA) << "EventSelection::recordSelectionOnSegment" << endl;
-
     removeSelectionFromSegment();
     for (eventcontainer::iterator i = m_segmentEvents.begin();
 	 i != m_segmentEvents.end(); ++i) {
-	kdDebug(KDEBUG_AREA) << "setting at " << (*i)->getAbsoluteTime()
-			     << endl;
 	(*i)->set<Bool>(NotationProperties::SELECTED, true);
     }
 }
@@ -161,12 +157,8 @@ EventSelection::recordSelectionOnSegment()
 void
 EventSelection::removeSelectionFromSegment()
 { 
-    kdDebug(KDEBUG_AREA) << "EventSelection::removeSelectionFromSegment" << endl;
-
     for (Segment::iterator i = m_originalSegment.begin();
 	 i != m_originalSegment.end(); ++i) {
-	kdDebug(KDEBUG_AREA) << "unsetting at " << (*i)->getAbsoluteTime()
-			     << endl;
 	(*i)->unset(NotationProperties::SELECTED);
     }
 }

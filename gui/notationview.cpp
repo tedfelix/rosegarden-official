@@ -1740,6 +1740,8 @@ void NotationView::redoLayoutAdvised(Segment *segment,
     canvas()->update();
     PixmapArrayGC::deleteAll();
 
+    Event::dumpStats(cerr);
+
     PRINT_ELAPSED("NotationView::redoLayoutAdvised");
 }
 

@@ -44,6 +44,7 @@ using Rosegarden::Sharp;
 using Rosegarden::Flat;
 using Rosegarden::Natural;
 using Rosegarden::Note;
+using Rosegarden::Mark;
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
 using Rosegarden::TimeSignature;
@@ -406,6 +407,12 @@ NotationHLayout::scanStaff(StaffType &staff)
 
                 baseWidth += mw;
 
+	    } else if (el->event()->isa(Mark::EventType)) {
+
+		kdDebug(KDEBUG_AREA) << "Found mark" << endl;
+
+		mw = 0;
+
 	    } else {
 		
 		kdDebug(KDEBUG_AREA) << "Found something I don't know about" << endl;
@@ -681,40 +688,36 @@ NotationHLayout::layout(BarDataMap::iterator i)
 
             long delta = el->event()->get<Int>(MIN_WIDTH);
 
-	    if (el->event()->isa(Clef::EventType)) {
+	    if (timeSigToPlace && !el->event()->isa(Clef::EventType)) {
+		kdDebug(KDEBUG_AREA) << "Placing timesig at " << x << endl;
+		bdi->timeSigX = x;
+		x += getFixedItemSpacing() +
+		    m_npf.getTimeSigWidth(timeSignature);
+		kdDebug(KDEBUG_AREA) << "and moving next elt to " << x << endl;
+		el->setLayoutX(x);
+		timeSigToPlace = false;
+	    }
 
+	    if (el->isNote()) {
+
+		delta = positionNote
+		    (staff, it, bdi, timeSignature, clef, key, tieMap,
+		     accidentalInThisChord);
+
+	    } else if (el->isRest()) {
+
+		delta = positionRest(staff, it, bdi, timeSignature);
+
+	    } else if (el->event()->isa(Clef::EventType)) {
+		
 		kdDebug(KDEBUG_AREA) << "Found clef" << endl;
+		clef = Clef(*el->event());
 
-                clef = Clef(*el->event());
+	    } else if (el->event()->isa(Key::EventType)) {
 
-            } else {
+		kdDebug(KDEBUG_AREA) << "Found key" << endl;
+		key = Key(*el->event());
 
-		if (timeSigToPlace) {
-		    kdDebug(KDEBUG_AREA) << "Placing timesig at " << x << endl;
-		    bdi->timeSigX = x;
-		    x += getFixedItemSpacing() +
-			m_npf.getTimeSigWidth(timeSignature);
-		    kdDebug(KDEBUG_AREA) << "and moving next elt to " << x << endl;
-		    el->setLayoutX(x);
-		    timeSigToPlace = false;
-		}
-
-		if (el->event()->isa(Key::EventType)) {
-
-		    kdDebug(KDEBUG_AREA) << "Found key" << endl;
-
-		    key = Key(*el->event());
-
-		} else if (el->isRest()) {
-
-		    delta = positionRest(staff, it, bdi, timeSignature);
-
-		} else if (el->isNote()) {
-
-		    delta = positionNote
-			(staff, it, bdi, timeSignature, clef, key, tieMap,
-			 accidentalInThisChord);
-		}
 	    }
 
             x += delta;
@@ -763,6 +766,9 @@ NotationHLayout::positionRest(StaffType &,
     return delta;
 }
 
+
+//!!! We could do rather better making this positionChord and
+// dealing with the whole chord at once.  Simpler and faster.
 
 long
 NotationHLayout::positionNote(StaffType &staff,

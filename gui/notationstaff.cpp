@@ -44,6 +44,7 @@ using Rosegarden::Bool;
 using Rosegarden::String;
 using Rosegarden::NoAccidental;
 using Rosegarden::Note;
+using Rosegarden::Mark;
 using Rosegarden::Segment;
 using Rosegarden::Clef;
 using Rosegarden::Key;
@@ -467,13 +468,13 @@ NotationStaff::renderSingleElement(NotationElement *elt,
     try {
 
 	QCanvasPixmap *pixmap = 0;
-	QCanvasSimpleSprite *sprite = 0;
+	QCanvasItem *canvasItem = 0;
 
 	m_npf->setSelected(selected);
 
 	if (elt->isNote()) {
 
-	    sprite = makeNoteSprite(elt);
+	    canvasItem = makeNoteSprite(elt);
 
 	} else if (elt->isRest()) {
 
@@ -502,6 +503,70 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		(m_npf->makeKeyPixmap
 		 (Rosegarden::Key(*elt->event()), currentClef));
 
+	} else if (elt->event()->isa(Mark::EventType)) {
+
+	    timeT markDuration =
+		elt->event()->get<Int>(Mark::MarkDurationPropertyName);
+	    NotationElementList::iterator it =
+		getViewElementList()->findTime(elt->getAbsoluteTime() +
+					       markDuration);
+
+	    string markType = 
+		elt->event()->get<String>(Mark::MarkTypePropertyName);
+
+	    int length, y1;
+
+	    if (markType == Mark::Slur &&
+		it != getViewElementList()->begin()) {
+		--it;
+	    }
+
+	    if (it != getViewElementList()->end()) {
+		length = (*it)->getLayoutX() - elt->getLayoutX();
+		y1 = (*it)->getLayoutY();
+	    } else {
+		//!!! imperfect
+		--it;
+		length = (*it)->getLayoutX() + m_npf->getNoteBodyWidth() * 3
+		    - elt->getLayoutX();
+		y1 = (*it)->getLayoutY();
+	    }
+
+	    if (length < m_npf->getNoteBodyWidth()) {
+		length = m_npf->getNoteBodyWidth();
+	    }
+
+	    if (markType == Mark::Crescendo) {
+
+		pixmap = new QCanvasPixmap
+		    (m_npf->makeHairpinPixmap(length, true));
+
+	    } else if (markType == Mark::Decrescendo) {
+
+		pixmap = new QCanvasPixmap
+		    (m_npf->makeHairpinPixmap(length, false));
+
+	    } else if (markType == Mark::Slur) {
+
+		int cy = yCoordOfHeight(4);
+		int y0 = elt->getLayoutY();
+		bool above = ((cy - y0) + (cy - y1) > 0);
+
+		elt->setLayoutX
+		    (elt->getLayoutX() + m_npf->getNoteBodyWidth()/2 + 1);
+
+		elt->setLayoutY
+		    (above ?
+		     (elt->getLayoutY() - m_npf->getNoteBodyHeight()*3/2) :
+		     (elt->getLayoutY() + m_npf->getNoteBodyHeight()*3/2));
+
+		canvasItem = m_npf->makeSlur
+		    (canvas(), length, y1 - y0, above);
+
+	    } else {
+		//!!!
+	    }
+
 	} else {
                     
 	    kdDebug(KDEBUG_AREA)
@@ -510,16 +575,16 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	    pixmap = new QCanvasPixmap(m_npf->makeUnknownPixmap());
 	}
 
-	if (!sprite && pixmap) {
-	    sprite = new QCanvasNotationSprite(*elt, pixmap, canvas());
+	if (!canvasItem && pixmap) {
+	    canvasItem = new QCanvasNotationSprite(*elt, pixmap, canvas());
 	}
 
 	// Show the sprite
 	//
-	if (sprite) {
-	    elt->setCanvasItem(sprite, x(), y());
-	    sprite->setZ(selected ? 2 : 0);
-	    sprite->show();
+	if (canvasItem) {
+	    elt->setCanvasItem(canvasItem, x(), y());
+	    canvasItem->setZ(selected ? 2 : 0);
+	    canvasItem->show();
 	} else {
 	    elt->removeCanvasItem();
 	}

@@ -57,7 +57,7 @@ operator<<(kndbgstream &s, const Rosegarden::Segment&) { return s; }
 #ifndef NO_TIMING
 
 #include <iostream>
-#include <time.h>
+#include <ctime>
 
 #define START_TIMING \
   clock_t dbgStart = clock();
