@@ -32,7 +32,7 @@ KTmpStatusMsg::KTmpStatusMsg(const QString& msg, KMainWindow* window, int id)
     : m_mainWindow(window),
       m_id(id)
 {
-    m_mainWindow->statusBar()->changeItem(msg, m_id);
+    m_mainWindow->statusBar()->changeItem(QString("  %1").arg(msg), m_id);
     qApp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
 }
 

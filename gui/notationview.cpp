@@ -3026,9 +3026,6 @@ void NotationView::disconnectProgress()
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         m_staffs[i]->disconnect();
     }
-
-    statusBar()->changeItem(KTmpStatusMsg::getDefaultMsg(),
-			    KTmpStatusMsg::getDefaultId());
 }
 
 void NotationView::setupDefaultProgress()
@@ -3066,6 +3063,9 @@ void NotationView::removeProgressEventFilter()
         NOTATION_DEBUG << "NotationView::removeProgressEventFilter() - skipping remove : "
                  << m_progressDisplayer << "," << PROGRESS_BAR << endl;
     }
+
+    statusBar()->changeItem(KTmpStatusMsg::getDefaultMsg(),
+			    KTmpStatusMsg::getDefaultId());
 }
 
 void
