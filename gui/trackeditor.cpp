@@ -91,11 +91,6 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
             comp.addTrack(track);
         }
 
-        // Add a default Instrument
-        //
-        Rosegarden::Instrument *instr = new Rosegarden::Instrument(0,
-                          Rosegarden::Instrument::Midi, std::string("Instrument 1"));
-        comp.addInstrument(instr);
     }
 
     init(tracks,

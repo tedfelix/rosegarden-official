@@ -762,14 +762,6 @@ MidiFile::convertToRosegarden()
         }
     }
 
-    // Default instrument creation for the moment
-    //
-    Rosegarden::Instrument *instrument =
-                new Rosegarden::Instrument(0,
-                                           Rosegarden::Instrument::Midi,
-                                           string("MIDI Instrument 1"));
-
-    composition->addInstrument(instrument);
     return composition;
 }
 

@@ -29,7 +29,6 @@
 #include "RealTime.h"
 #include "Segment.h"
 #include "Quantizer.h"
-#include "Instrument.h"
 #include "Track.h"
 #include "XmlExportable.h"
 
@@ -51,9 +50,6 @@ public:
     typedef std::multiset<Segment*, Segment::SegmentCmp> segmentcontainer;
     typedef segmentcontainer::iterator iterator;
     typedef segmentcontainer::const_iterator const_iterator;
-
-    typedef std::map<unsigned int, Instrument*> instrumentcontainer;
-    typedef instrumentcontainer::iterator instrumentiterator;
 
     typedef std::map<unsigned int, Track*> trackcontainer;
     typedef trackcontainer::iterator trackiterator;
@@ -110,15 +106,9 @@ public:
     Track* getTrackByIndex(const unsigned int &track) {
 	return m_tracks[track];
     }
-    Instrument* getInstrumentByIndex(const unsigned int &instr) {
-	return m_instruments[instr];
-    }
  
     trackcontainer* getTracks() {
 	return &m_tracks;
-    }
-    instrumentcontainer* getInstruments() {
-	return &m_instruments;
     }
 
     int getRecordTrack() const {
@@ -138,16 +128,6 @@ public:
     void clearTracks();
 
     /**
-     * Clear out the Instruments
-     */
-    void clearInstruments();
-
-    /**
-     * Insert a new Instrument
-     */
-    void addInstrument(Instrument *inst);
-
-    /**
      * Insert a new Track
      */
     void addTrack(Track *track);
@@ -156,13 +136,6 @@ public:
      * Delete a Track by index
      */
     void deleteTrack(const int &track);
-
-    /*
-     * Delete instrument by index
-     */
-    void deleteInstrument(const int &instrument);
-
-
 
     //////
     //
@@ -588,7 +561,6 @@ protected:
 
     trackcontainer m_tracks;
     segmentcontainer m_segments;
-    instrumentcontainer m_instruments;
     int m_recordTrack;
 
     /// Contains time signature events

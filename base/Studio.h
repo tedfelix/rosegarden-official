@@ -22,20 +22,22 @@
 #include "Device.h"
 #include <string>
 
-// The Studio is where Midi and Audio devices live
-// and where we can connect them together or to
-// effects units or move them about or whatever.
-//
-// The Studio is a representation of what we can do
-// to the devices and the sound in the Composition.
+// The Studio is where Midi and Audio devices live.  We can query
+// them for a list of Instruments, connect them together or to
+// effects units (eventually) and generally do real studio-type
+// stuff to them.
 //
 //
+
+#include "Instrument.h"
 
 #ifndef _STUDIO_H_
 #define _STUDIO_H_
 
 namespace Rosegarden
 {
+
+typedef std::vector<Instrument *> InstrumentList;
 
 class Studio
 {
@@ -44,8 +46,15 @@ public:
     Studio();
     ~Studio();
 
-    void createDevice(const std::string &name,
-                      Device::DeviceType type);
+    void addDevice(const std::string &name, Device::DeviceType type);
+    void addDevice(Device *device);
+
+    // Return the combined instrument list from all devices
+    //
+    InstrumentList getInstruments();
+
+    // Return an Instrument
+    Instrument* getInstrumentByIndex(InstrumentId id);
 
 private:
 

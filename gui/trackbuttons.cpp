@@ -30,6 +30,7 @@
 #include <assert.h>
 
 #include "Track.h"
+#include "Studio.h"
 #include "colours.h"
 #include "tracklabel.h"
 #include "trackvumeter.h"
@@ -429,7 +430,7 @@ TrackButtons::slotSetTrackMeter(double value, int position)
 void
 TrackButtons::slotInstrumentSelection(int position)
 {
-    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Studio &studio = m_doc->getStudio();
 
     // populate this instrument widget
     m_instrumentLabels[position]->setText(QString("Instrument"));
@@ -437,16 +438,17 @@ TrackButtons::slotInstrumentSelection(int position)
     // clear the popup
     m_instrumentPopup->clear();
 
-    Rosegarden::Composition::instrumentiterator it;
-
     // position index
     int i = 0;
 
-    for (it = comp.getInstruments()->begin();
-         it != comp.getInstruments()->end(); it++)
+    // Get the list
+    Rosegarden::InstrumentList list = studio.getInstruments();
+    Rosegarden::InstrumentList::iterator it;
+
+    for (it = list.begin(); it != list.end(); it++)
     {
         m_instrumentPopup->
-            insertItem(QString((*it).second->getName().c_str()), i++);
+            insertItem(QString((*it)->getName().c_str()), i++);
     }
 
     // Hide the track label

@@ -46,8 +46,6 @@ class RosegardenGUIDoc;
 namespace Rosegarden
 {
 
-class MidiDevice;
-class AudioDevice;
 class RosegardenTransportDialog;
 
 
@@ -116,11 +114,6 @@ private:
 
     // pointer to the transport dialog
     RosegardenTransportDialog *m_transport;
-
-    // MIDI and Audio devices
-    //
-    std::vector<Rosegarden::MidiDevice*>  m_midiDevices;
-    std::vector<Rosegarden::AudioDevice*> m_audioDevices;
 
 };
 

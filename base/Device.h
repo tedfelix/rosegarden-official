@@ -33,6 +33,7 @@ namespace Rosegarden
 {
 
 class Instrument;
+typedef std::vector<Instrument *> InstrumentList;
 
 class Device
 {
@@ -53,12 +54,12 @@ public:
 
     virtual void createInstruments() = 0;
 
-    std::vector<Instrument *>& getInstruments() { return m_instruments; }
+    InstrumentList& getInstruments() { return m_instruments; }
 
 protected:
-    std::vector<Instrument *> m_instruments;
-    std::string               m_name;
-    DeviceType                m_type;
+    InstrumentList     m_instruments;
+    std::string        m_name;
+    DeviceType         m_type;
 
 };
 

@@ -236,10 +236,9 @@ void Composition::swap(Composition& c)
     m_timeSigSegment.swap(c.m_timeSigSegment);
     m_tempoSegment.swap(c.m_tempoSegment);
 
-    // swap tracks and instruments
+    // swap tracks
     //
     m_tracks.swap(c.m_tracks);
-    m_instruments.swap(c.m_instruments);
 
     // swap all the segments
     //
@@ -814,18 +813,6 @@ Composition::setPosition(timeT position)
 }
 
 
-// Insert an Instrument into the Composition
-//
-//
-void Composition::addInstrument(Instrument *inst)
-{
-    // For the moment just insert it - but we should probably
-    // check indexes first.
-    //
-    // 
-    m_instruments[inst->getID()] = inst;
-}
-
 // Insert a Track representation into the Composition
 //
 void Composition::addTrack(Track *track)
@@ -842,16 +829,8 @@ void Composition::deleteTrack(const int &track)
      m_tracks.erase(titerator);
 }
 
-void Composition::deleteInstrument(const int &instrument)
-{
-     instrumentiterator iiterator = m_instruments.find(instrument);
-
-     delete ((*iiterator).second);
-     m_instruments.erase(iiterator);
-}
-
 // Export the Composition as XML, also iterates through
-// Instruments, Tracks and any further sub-objects
+// Tracks and any further sub-objects
 //
 //
 std::string Composition::toXmlString()
@@ -872,13 +851,6 @@ std::string Composition::toXmlString()
     }
 
     composition << "\">" << endl << endl;
-
-    for (instrumentiterator iit = getInstruments()->begin();
-                            iit != getInstruments()->end();
-                            iit++ )
-    {
-        composition << "  " << (*iit).second->toXmlString() << endl;
-    }
 
     composition << endl;
 
@@ -933,18 +905,6 @@ Composition::clearTracks()
 
     m_tracks.erase(m_tracks.begin(), m_tracks.end());
 }
-
-void
-Composition::clearInstruments()
-{
-    instrumentiterator it = m_instruments.begin();
- 
-    for (; it != m_instruments.end(); it++)
-        delete((*it).second);
-
-    m_instruments.erase(m_instruments.begin(), m_instruments.end());
-}
-
 
 }
 

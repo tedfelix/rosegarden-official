@@ -69,7 +69,7 @@ public:
 
     MidiByte getMidiChannel() const { return m_midiChannel; }
     MidiByte getMidiTranspose() const { return m_midiTranspose; }
-    InstrumentId getType() const { return m_type; }
+    InstrumentType getType() const { return m_type; }
 
     void setID(int id) { m_id = id; }
     void setName(const std::string &name) { m_name = name; }

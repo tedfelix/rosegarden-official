@@ -30,14 +30,11 @@
 #include "sequencemanager.h"
 #include "SegmentPerformanceHelper.h"
 
-#include "MidiDevice.h"
-#include "AudioDevice.h"
-
 namespace Rosegarden
 {
 
 SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
-                                   RosegardenTransportDialog *transport):
+                                 RosegardenTransportDialog *transport):
     m_doc(doc),
     m_playLatency(0, 100000),  // the sequencer's head start
     m_fetchLatency(0, 50000),  // how long to fetch and queue new events
@@ -52,40 +49,6 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_metronomeDuration(0, 10000),
     m_transport(transport)
 {
-    // Create the Devices and their inherent Instrument list
-    //
-    m_midiDevices.push_back(new Rosegarden::MidiDevice("aRts MIDI"));
-    m_audioDevices.push_back(new Rosegarden::AudioDevice("aRts Audio"));
-
-    Composition &comp = m_doc->getComposition();
-
-    // Add the audio instruments
-    //
-    std::vector<AudioDevice*>::iterator adIt;
-
-    for (adIt = m_audioDevices.begin(); adIt != m_audioDevices.end(); adIt++)
-    {
-        std::vector<Instrument*> instruments = (*adIt)->getInstruments();
-        std::vector<Instrument*>::iterator iit;
-
-        for (iit = instruments.begin(); iit != instruments.end(); iit++)
-            comp.addInstrument(*iit);
-    }
-
-    // Add the Midi instruments
-    //
-    std::vector<MidiDevice*>::iterator mdIt;
-
-    for (mdIt = m_midiDevices.begin(); mdIt != m_midiDevices.end(); mdIt++)
-    {
-        std::vector<Instrument*> instruments = (*mdIt)->getInstruments();
-        std::vector<Instrument*>::iterator iit;
-
-        for (iit = instruments.begin(); iit != instruments.end(); iit++)
-            comp.addInstrument(*iit);
-    }
-
-    
 }
 
 
@@ -537,6 +500,7 @@ void
 SequenceManager::record()
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Studio &studio = m_doc->getStudio();
 
     // if already recording then stop
     //
@@ -572,7 +536,7 @@ SequenceManager::record()
     int rID = comp.getRecordTrack();
     Rosegarden::InstrumentId inst= comp.getTrackByIndex(rID)->getInstrument();
 
-    switch (comp.getInstrumentByIndex(inst)->getType())
+    switch (studio.getInstrumentByIndex(inst)->getType())
     {
         case Rosegarden::Instrument::Midi:
             recordType = STARTING_TO_RECORD_MIDI;

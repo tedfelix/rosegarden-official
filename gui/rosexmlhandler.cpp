@@ -24,8 +24,10 @@
 #include "xmlstorableevent.h"
 #include "SegmentNotationHelper.h"
 #include "BaseProperties.h"
-#include "Instrument.h"
 #include "Track.h"
+
+#include "MidiDevice.h"
+#include "AudioDevice.h"
 
 #include <klocale.h>
 #include <qtextstream.h>
@@ -56,7 +58,8 @@ RoseXmlHandler::RoseXmlHandler(Composition &composition,
       m_inComposition(false),
       m_groupId(0),
       m_foundTempo(false),
-      m_section(NoSection)
+      m_section(NoSection),
+      m_device(0)
 {
 //     kdDebug(KDEBUG_AREA) << "RoseXmlHandler() : composition size : "
 //                          << m_composition.getNbSegments()
@@ -71,10 +74,7 @@ RoseXmlHandler::~RoseXmlHandler()
 bool
 RoseXmlHandler::startDocument()
 {
-    // clear things before we load 'em
-    //
     m_composition.clearTracks();
-    m_composition.clearInstruments();
 
     // and the loop
     //
@@ -212,47 +212,6 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	if (bphStr) bph = bphStr.toInt();
 
 	m_composition.addRawTempo(t, bph);
-
-    } else if (lcName == "instrument") {
-
-        if (m_inComposition == false)
-        {
-            m_errorString = i18n("Instrument object found outside Composition");
-            return false;
-        }
-
-        int id = -1;
-        std::string name;
-        Rosegarden::Instrument::InstrumentType it;
-
-        QString instrNbStr = atts.value("id");
-        if (instrNbStr) {
-            id = instrNbStr.toInt();
-        }
-
-        QString nameStr = atts.value("name");
-        if (nameStr) {
-            name = std::string(nameStr.data());
-        }
-
-        QString instrTypeStr = atts.value("type");
-        if (instrTypeStr) {
-            if (instrTypeStr == "midi")
-                it = Rosegarden::Instrument::Midi;
-            else if (instrTypeStr == "audio")
-                it = Rosegarden::Instrument::Audio;
-            else
-                it = Rosegarden::Instrument::Midi;
-        }
-        
-
-        // Create and insert the Instrument
-        //
-        //
-        Rosegarden::Instrument *instrument =
-                new Rosegarden::Instrument(id, it, name);
-
-        m_composition.addInstrument(instrument);
 
     } else if (lcName == "composition") {
 
@@ -531,11 +490,23 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         if (type == "midi")
         {
-            ;
+            m_device = new Rosegarden::MidiDevice(atts.value("name").data());
+            m_studio.addDevice(m_device);
+
+            /*
+            m_studio.addDevice(std::string(atts.value("name").data()),
+                               Rosegarden::Device::Midi);
+                               */
         }
         else if (type == "audio")
         {
-            ;
+            m_device = new Rosegarden::AudioDevice(atts.value("name").data());
+            m_studio.addDevice(m_device);
+
+            /*
+            m_studio.addDevice(std::string(atts.value("name").data()),
+                               Rosegarden::Device::Audio);
+                               */
         }
         else
         {

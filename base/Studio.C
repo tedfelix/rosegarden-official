@@ -20,6 +20,9 @@
 */
 
 #include "Studio.h"
+#include "MidiDevice.h"
+#include "AudioDevice.h"
+#include "Instrument.h"
 
 
 namespace Rosegarden
@@ -35,9 +38,75 @@ Studio::~Studio()
 
 
 void
-Studio::createDevice(const std::string &name, Device::DeviceType type)
+Studio::addDevice(const std::string &name, Device::DeviceType type)
 {
+    switch(type)
+    {
+        case Device::Midi:
+            m_devices.push_back(new MidiDevice(name));
+            break;
+
+        case Device::Audio:
+            m_devices.push_back(new AudioDevice(name));
+            break;
+
+        default:
+            std::cerr << "Studio::addDevice() - unrecognised device"
+                      << std::endl;
+            break;
+    }
 }
+
+void
+Studio::addDevice(Device *device)
+{
+    m_devices.push_back(device);
+}
+
+InstrumentList
+Studio::getInstruments()
+{
+    InstrumentList list, subList;
+
+    std::vector<Device*>::iterator it;
+
+    // Append lists
+    //
+    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    {
+        // get sub list
+        subList = (*it)->getInstruments();
+
+        // concetenate
+        list.insert(list.end(), subList.begin(), subList.end());
+    }
+
+    return list;
+
+}
+
+Instrument*
+Studio::getInstrumentByIndex(InstrumentId id)
+{
+    std::vector<Device*>::iterator it;
+    InstrumentList list;
+    InstrumentList::iterator iit;
+
+    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    {
+        list = (*it)->getInstruments();
+
+        for (iit = list.begin(); iit != list.end(); it++)
+            if ((*iit)->getID() == id)
+                return (*iit);
+    }
+
+    return 0;
+
+}
+
+
+
 
 }
 

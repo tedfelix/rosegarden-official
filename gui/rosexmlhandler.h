@@ -106,6 +106,7 @@ protected:
     QString m_errorString;
 
     RosegardenFileSection m_section;
+    Rosegarden::Device *m_device;
 };
 
 #endif
