@@ -29,7 +29,7 @@
 	<p>... then you can set programs and control changes on that device using the right names and with different colours for the various controllers.</p>
 
 	<br clear="right">
-	<p>And Rosegarden's Matrix editor also includes rulers for graphically editing control changes, as well as for velocity and pitch bend.</p>
+	<p>Rosegarden's Matrix editor also includes rulers for graphically editing control changes, as well as for velocity and pitch bend.</p>
 
 	<br>
 	<div align="center"><img src="ruler.png" style="max-width: 100%"></div>

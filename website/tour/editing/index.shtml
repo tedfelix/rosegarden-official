@@ -18,21 +18,22 @@
     <br>
     <div align="center"><img style="max-width: 100%" src="main.png"/></div>
     <br>
-	<p>All of the different editing windows &ndash; the matrix view, notation editor, event editor and so on &ndash; have the same common interface, in which you just sweep to select and drag to move, stretch and squash and so on.</p>
+	<p>All of the different editing windows &ndash; the matrix editor, notation editor and event editor &ndash; have the same common interface, in which you just sweep to select and drag to move, stretch and squash and so on.  You can enter notes from a MIDI keyboard &ndash; whether by recording in real-time or entering a note at a time &ndash; or by "playing" the PC keyboard, or simply with the mouse.</p>
     <br>
     <div align="center"><img style="max-width: 100%" src="matrix.png"/></div>
     <br>
-    <p>You get unlimited undo and redo everywhere, and the standard editing tools like quantizers and intelligent split-by-pitch have clear, consistent GUIs.</p>
+    <p>You get unlimited undo and redo everywhere, and the standard editing tools like quantizers and the "intelligent split-by-pitch" are clear and consistent to use.</p>
 
     <br>
     <div align="center"><table><tr align="middle"><td><img style="max-width: 30%" src="undo-s.png"/></td><td><img style="max-width: 30%" src="split-s.png"/></td><td><img style="max-width: 30%" src="quantize-s.png"/></td></tr></table></div>
     <br>
-    <p>And liberal use of tooltips, configurable keyboard shortcuts and a help system make the whole thing straightforward to use.</p>
+    <p>And liberal use of tooltips, configurable keyboard shortcuts and a help system make the whole thing even more straightforward.</p>
+    <br>
 	    <p><b>Next: <a href="/tour/midi/">MIDI</a></b></p>
 
       </div>
     </div>
 
   </body>
-</html> 
+</html>
 

@@ -35,17 +35,17 @@
     heuristic notation quantizer, without losing the original
     performance timings.</p>
 
-    <p>And you can prepare printed scores, editing and previewing in a
-    clear multi-page layout.</p>
+    <p>You can prepare printed scores, editing and previewing in a
+    clear multi-page layout...</p>
 
     <br>
     <div align="center"><img style="max-width: 100%" src="score-page.png"/></div>
     <br>
 
-    <p>Rosegarden can of course print directly,
+    <p>... and then print directly,
     what-you-see-is-what-you-get &ndash; or, for some of the highest
     quality typesetting anywhere, export straight to the <a
-    href="http://www.lilypond.org/">LilyPond</a> system, for results like this:</p>
+    href="http://www.lilypond.org/" target="_blank">LilyPond</a> system:</p>
 
     <br>
     <div align="center"><img style="max-width: 100%" src="lilypond-output.png"/></div>

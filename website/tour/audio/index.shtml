@@ -37,7 +37,7 @@
     <div align="center"><img style="max-width: 100%" src="plugin.png"/></div>
     <br>
 
-    <p>Rosegarden uses the Linux standard LADSPA plugin API, so it
+    <p>Rosegarden uses the Linux standard <a href="http://www.ladspa.org/" target="_blank">LADSPA plugin API</a>, so it
     supports hundreds of existing free plugins &ndash; and for those
     with an engineering bent, the open and easy-to-learn plugin
     standard makes it a fun platform for studying signal processing
@@ -50,5 +50,5 @@
     </div>
 
   </body>
-</html> 
+</html>
 
