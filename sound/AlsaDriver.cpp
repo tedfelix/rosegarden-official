@@ -1422,9 +1422,19 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                 break;
 
             case MappedEvent::MidiPitchBend:
-                snd_seq_ev_set_pitchbend(event,
-                                         channel,
-                                         (*i)->getData1());
+                {
+                    int value = ((*i)->getData1() << 7) |
+                                ((*i)->getData2() & 0x7F);
+
+                    // keep within -8192 to +8192
+                    //
+                    if (value & 0x4000)
+                        value -= 0x8000;
+
+                    snd_seq_ev_set_pitchbend(event,
+                                             channel,
+                                             value);
+                }
                 break;
 
             case MappedEvent::MidiController:

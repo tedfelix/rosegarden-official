@@ -61,7 +61,7 @@ MappedEvent::MappedEvent(InstrumentId id,
     else if (e.isa(Rosegarden::PitchBend::EventType))
     {
         if (e.has(Rosegarden::PitchBend::MSB))
-            m_data1 = e.get<Int>(Rosegarden::PitchBend::LSB);
+            m_data1 = e.get<Int>(Rosegarden::PitchBend::MSB);
         else
             m_data1 = 0;
 
@@ -71,6 +71,20 @@ MappedEvent::MappedEvent(InstrumentId id,
             m_data2 = 0;
 
         m_type = MidiPitchBend;
+    }
+    else if (e.isa(Rosegarden::Controller::EventType))
+    {
+        if (e.has(Rosegarden::Controller::DATA1))
+            m_data1 = e.get<Int>(Rosegarden::Controller::DATA1);
+        else
+            m_data1 = 0;
+
+        if (e.has(Rosegarden::Controller::DATA2))
+            m_data2 = e.get<Int>(Rosegarden::Controller::DATA2);
+        else
+            m_data2 = 0;
+
+        m_type = MidiController;
     }
     else
     {
