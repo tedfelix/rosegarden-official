@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 
     // Sleep time for sequencer main loop
     //
-    const int sequencerSleep = 5000;
+    const int sequencerSleep = 25000;
 
     while(roseSeq && roseSeq->getStatus() != QUIT)
     {

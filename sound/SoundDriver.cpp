@@ -222,6 +222,23 @@ PlayableAudioFile::getBitsPerSample()
     return 0;
 }
 
+// ------------- RecordableAudioFile -------------
+//
+//
+RecordableAudioFile::RecordableAudioFile(const std::string &filePath,
+                                         InstrumentId instrumentId,
+                                         AudioFile *audioFile)
+{
+}
+
+
+void 
+RecordableAudioFile::fillRingBuffer(const std::string &data)
+{
+}
+
+
+
 
 // ---------- SoundDriver -----------
 //

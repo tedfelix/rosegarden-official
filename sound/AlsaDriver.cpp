@@ -267,14 +267,14 @@ AlsaDriver::shutdown()
     {
         _threadJackClosing = true;
 #ifdef DEBUG_ALSA
-        std::cerr << "AlsaDriver::~AlsaDriver - closing JACK client"
+        std::cerr << "AlsaDriver::shutdown - closing JACK client"
                   << std::endl;
 #endif
 
         if (jack_deactivate(m_audioClient))
         {
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::~AlsaDriver - deactivation failed"
+            std::cerr << "AlsaDriver::shutdown - deactivation failed"
                       << std::endl;
 #endif
         }
@@ -284,7 +284,7 @@ AlsaDriver::shutdown()
             if (jack_port_unregister(m_audioClient, m_jackInputPorts[i]))
             {
 #ifdef DEBUG_ALSA
-                std::cerr << "AlsaDriver::~AlsaDriver - "
+                std::cerr << "AlsaDriver::shutdown - "
                           << "can't unregister input port " << i + 1
                           << std::endl;
 #endif
@@ -294,7 +294,7 @@ AlsaDriver::shutdown()
         if (jack_port_unregister(m_audioClient, m_jackOutputPortLeft))
         {
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::~AlsaDriver - "
+            std::cerr << "AlsaDriver::shutdown - "
                       << "can't unregister output port left" << std::endl;
 #endif
         }
@@ -302,7 +302,7 @@ AlsaDriver::shutdown()
         if (jack_port_unregister(m_audioClient, m_jackOutputPortRight))
         {
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::~AlsaDriver - "
+            std::cerr << "AlsaDriver::shutdown - "
                       << "can't unregister output port right" << std::endl;
 #endif
         }
@@ -3464,6 +3464,11 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 if (samples.length() <
                     (fetchFrames * (*it)->getBytesPerSample()))
                 {
+#define UNDERRUN
+#ifdef UNDERRUN
+                    std::cerr << "jackProcess - audio file buffer underrun" << std::endl;
+#endif // UNDERRUN
+
                     int bytesToFill = (fetchFrames * (*it)->getBytesPerSample()) - samples.length();
                     std::string empty;
                     for (int i = 0; i < bytesToFill; ++i)

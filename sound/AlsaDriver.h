@@ -37,7 +37,6 @@
 //
 #ifdef HAVE_LIBJACK
 #include <jack/jack.h>
-#include "AudioScheduler.h"
 
 // convenience
 typedef jack_default_audio_sample_t sample_t;
@@ -338,8 +337,6 @@ private:
     jack_port_t                 *m_jackOutputPortRight;
 
     jack_nframes_t               m_transportPosition;
-
-    AudioScheduler              *m_audioScheduler;
 
 #endif // HAVE_LIBJACK
 

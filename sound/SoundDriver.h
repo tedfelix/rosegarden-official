@@ -173,6 +173,28 @@ private:
 
 };
 
+// A wrapper class for writing out a recording file
+//
+class RecordableAudioFile
+{
+public:
+    RecordableAudioFile(const std::string &filePath,
+                        InstrumentId instrumentId,
+                        AudioFile *audioFile);
+
+    void fillRingBuffer(const std::string &data);
+
+protected:
+    std::string           m_path;
+    AudioFile            *m_audioFile;
+
+    InstrumentId          m_recordingId;
+    RingBuffer           *m_ringBuffer;
+
+
+
+};
+
 // The NoteOffQueue holds a time ordered set of
 // pending MIDI NOTE OFF events.
 //
