@@ -286,23 +286,22 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     QString errMsg;
     QString fileContents;
-    bool okay = readFromFile(filename, fileContents, 0);
+    bool okay = readFromFile(filename, fileContents);
     if (!okay) errMsg = "Couldn't read from file";
     else {
 
 	// parse xml file
-	RosegardenProgressDialog *progressDlg =
-	    new RosegardenProgressDialog(i18n("Reading file..."),
-					 100,
-					 (QWidget*)parent());
-        progressDlg->show();
+	RosegardenProgressDialog progressDlg(i18n("Reading file..."),
+                                             100,
+                                             (QWidget*)parent());
+        progressDlg.show();
 
-	okay = xmlParse(fileContents, errMsg, progressDlg);
+	okay = xmlParse(fileContents, errMsg, &progressDlg);
 
-        if (m_progressDialogDead == false)
-	    delete progressDlg;
-        else
-            m_progressDialogDead = false;
+//         if (m_progressDialogDead == false)
+// 	    delete progressDlg;
+//         else
+//             m_progressDialogDead = false;
     }
 
     if (!okay) {
@@ -571,9 +570,8 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
     if (!ok) errMsg = handler.errorString();
     else if (handler.isDeprecated()) {
 
-        // close the progress dialog
-        delete progress;
-        m_progressDialogDead = true;
+        // hide the progress dialog
+        progress->hide();
 
         QString msg(i18n("This file contains one or more old element types that are now deprecated.\nSupport for these elements may disappear in future versions of Rosegarden.\nWe recommend you re-save this file from this version of Rosegarden,\nto ensure that it can still be re-loaded in future versions."));
         
@@ -601,8 +599,7 @@ RosegardenGUIDoc::writeToFile(const QString &file, const QString &text)
 }
 
 bool
-RosegardenGUIDoc::readFromFile(const QString &file, QString &text,
-                               RosegardenProgressDialog *progress)
+RosegardenGUIDoc::readFromFile(const QString &file, QString &text)
 {
     text = "";
     gzFile fd = gzopen(qstrtostr(file).c_str(), "rb");
@@ -614,7 +611,7 @@ RosegardenGUIDoc::readFromFile(const QString &file, QString &text,
 
         // Update gui
         //
-        if (progress) progress->processEvents();
+        kapp->processEvents();
 
 	text.append(strtoqstr(std::string(buffer)));
 	if (gzeof(fd)) {

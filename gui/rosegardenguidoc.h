@@ -359,8 +359,7 @@ protected:
      * uncompressing as you go.
      * @return false for failure
      */
-    bool readFromFile(const QString &fileName, QString &text,
-                      RosegardenProgressDialog *progress);
+    bool readFromFile(const QString &fileName, QString &text);
 
     /*
      * Recording might have to insert NOTE ONs and NOTE OFFs
