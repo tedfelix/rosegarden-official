@@ -1092,11 +1092,6 @@ RosegardenGUIDoc::readFromFile(const QString &file, QString &text)
     static char buffer[1000];
 
     while (gzgets(fd, buffer, 1000)) {
-/*
-        // Update gui
-        //
-        RosegardenProgressDialog::processEvents();
-*/
 	text.append(strtoqstr(std::string(buffer)));
 	if (gzeof(fd)) {
 	    gzclose(fd);
@@ -1332,21 +1327,6 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 	    emit recordingSegmentUpdated(m_recordSegment, updateFrom);
 	}
     }
-
-    // Only update gui if we're still recording - otherwise we
-    // can get a recording SegmentItem hanging around.
-    //
-/*!!!
-    if (status == RECORDING_MIDI)
-    {
-        // update this segment on the GUI
-        RosegardenGUIView *w;
-        for(w=m_viewList.first(); w!=0; w=m_viewList.next()) 
-        {
-            w->showRecordingSegmentItem(m_recordSegment);
-        }
-    }
-*/
 }
 
 void
@@ -1429,8 +1409,10 @@ RosegardenGUIDoc::stopRecordingMidi()
 	command->addCommand
 	    (new EventQuantizeCommand
 	     (*m_recordSegment,
-	      m_recordSegment->getStartTime(),
-	      m_recordSegment->getEndTime(),
+	      m_recordSegment->getComposition()
+	      ->getBarStartForTime(m_recordSegment->getStartTime()),
+	      m_recordSegment->getComposition()
+	      ->getBarEndForTime(m_recordSegment->getEndTime()),
 	      "Notation Options",
 	      true));
 

@@ -481,6 +481,8 @@ protected:
     //
     QSpinBox     *m_jackInputs;
     QSpinBox     *m_submasters;
+    QCheckBox    *m_createFaderOuts;
+    QCheckBox    *m_createSubmasterOuts;
 
 #endif // HAVE_LIBJACK
 

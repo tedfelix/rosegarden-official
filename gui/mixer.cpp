@@ -103,6 +103,14 @@ MixerWindow::MixerWindow(QWidget *parent,
     if (busses.size() > 0) {
 	AudioFaderWidget *fader = 
 	    new AudioFaderWidget
+	    (mainBox, AudioFaderWidget::FaderStrip, "R", false);
+	fader->m_fader->setFader(0.0);
+	connect(fader->m_fader, SIGNAL(faderChanged(float)),
+		this, SLOT(slotFaderLevelChanged(float)));
+	mainLayout->addWidget(fader);
+	m_monitor = fader;
+
+	fader = new AudioFaderWidget
 	    (mainBox, AudioFaderWidget::FaderStrip, "M", false);
 	fader->m_fader->setFader(busses[0]->getLevel());
 	connect(fader->m_fader, SIGNAL(faderChanged(float)),
@@ -245,6 +253,17 @@ MixerWindow::updateMeters(SequencerMapper *mapper)
 	    (info.levelRight, 127, Rosegarden::AudioLevel::LongFader);
 
 	fader->m_vuMeter->setLevel(dBleft, dBright);
+    }
+
+    Rosegarden::LevelInfo monitorInfo;
+    if (mapper->getRecordLevel(monitorInfo)) {
+
+	float dBleft = Rosegarden::AudioLevel::fader_to_dB
+	    (monitorInfo.level, 127, Rosegarden::AudioLevel::LongFader);
+	float dBright = Rosegarden::AudioLevel::fader_to_dB
+	    (monitorInfo.levelRight, 127, Rosegarden::AudioLevel::LongFader);
+
+	m_monitor->m_vuMeter->setLevel(dBleft, dBright);
     }
 
     Rosegarden::LevelInfo masterInfo;

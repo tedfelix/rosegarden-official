@@ -58,6 +58,7 @@ private:
 
     typedef std::vector<AudioFaderWidget *> FaderVector;
     FaderVector m_submasters;
+    AudioFaderWidget *m_monitor;
     AudioFaderWidget *m_master;
 
     void updateFader(int id); // instrument id if large enough, master/sub otherwise

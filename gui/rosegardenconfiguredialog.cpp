@@ -1108,19 +1108,18 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // ------------------ Record tab ---------------------
     //
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 3, 2, 10, 5);
+    layout = new QGridLayout(frame, 6, 2, 10, 5);
 
     int increment = 0;
 
 #ifdef HAVE_LIBJACK
-
-    increment = 2;
 
     label = new QLabel(i18n("Number of audio inputs:"), frame);
     m_jackInputs = new QSpinBox(frame);
 
     layout->addWidget(label,        0, 0);
     layout->addWidget(m_jackInputs, 0, 1);
+    ++increment;
 
     int jackAudioInputs = m_cfg->readNumEntry("jackaudioinputs", 2);
 
@@ -1128,17 +1127,34 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     m_jackInputs->setMinValue(2);
     m_jackInputs->setMaxValue(64); // completely arbitrary of course!
 
-    label = new QLabel(i18n("Number of audio submaster outputs:"), frame);
+    label = new QLabel(i18n("Number of audio submasters:"), frame);
     m_submasters = new QSpinBox(frame);
 
     layout->addWidget(label,        1, 0);
     layout->addWidget(m_submasters, 1, 1);
+    ++increment;
 
     int submasterCount = m_cfg->readNumEntry("audiosubmasters", 4);
-
     m_submasters->setValue(submasterCount);
     m_submasters->setMinValue(0);
     m_submasters->setMaxValue(8);
+
+    label = new QLabel(i18n("Create JACK outputs for instrument faders"), frame);
+    m_createFaderOuts = new QCheckBox(frame);
+    m_createFaderOuts->setChecked(m_cfg->readBoolEntry("audiofaderouts", false));
+
+    layout->addWidget(label, 2, 0);
+    layout->addWidget(m_createFaderOuts, 2, 1);
+    ++increment;
+
+    label = new QLabel(i18n("Create JACK outputs for submasters"), frame);
+    m_createSubmasterOuts = new QCheckBox(frame);
+    m_createSubmasterOuts->setChecked(m_cfg->readBoolEntry("audiosubmasterouts",
+							   false));
+
+    layout->addWidget(label, 3, 0);
+    layout->addWidget(m_createSubmasterOuts, 3, 1);
+    ++increment;
 
 #endif // HAVE_LIBJACK
 
@@ -1341,6 +1357,8 @@ SequencerConfigurationPage::apply()
     m_cfg->writeEntry("jackaudioinputs", m_jackInputs->value());
 
     m_cfg->writeEntry("audiosubmasters", m_submasters->value());
+    m_cfg->writeEntry("audiofaderouts", m_createFaderOuts->isChecked());
+    m_cfg->writeEntry("audiosubmasterouts", m_createSubmasterOuts->isChecked());
 
     // Audio record minutes
     //
