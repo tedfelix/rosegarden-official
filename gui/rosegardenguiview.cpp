@@ -43,7 +43,7 @@
 #include "quantizer.h"
 
 RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
-    : QCanvasView(new QCanvas(parent->width(), parent->height()),
+    : QCanvasView(new QCanvas(parent->width() * 2, parent->height() * 2),
                   parent, name),
     m_movingItem(0),
     m_draggingItem(false),
@@ -51,8 +51,10 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
     m_vlayout(new NotationVLayout())
 {
 
-    setBackgroundMode(PaletteBase);
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIView ctor" << endl;
 
+    setBackgroundMode(PaletteBase);
+    
     //#define TEST_CANVAS
 #ifndef TEST_CANVAS
 
@@ -62,7 +64,10 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
 
 //     m_vlayout->setStaffOffsetY((Staff::nbLines * Staff::lineWidth -
 //                                Staff::lineWidth / 2 - 4 + Staff::linesOffset));
-    
+    kdDebug(KDEBUG_AREA) << "staff->pitch0YOffset() = "
+                         << staff->pitch0YOffset() << endl;
+
+    m_vlayout->setStaffOffsetY(staff->pitch0YOffset());
 
     if (!applyLayout()) {
 
@@ -303,7 +308,7 @@ RosegardenGUIView::showElements(EventList::iterator from,
         
         Note note = Note((*it)->get<Int>("Notation::NoteType"));
         
-        QPixmap notePixmap(npf.makeNotePixmap(note, true, true));
+        QCanvasPixmap notePixmap(npf.makeNotePixmap(note, true, true));
         QCanvasSimpleSprite *noteSprite = new QCanvasSimpleSprite(&notePixmap,
                                                                   canvas());
         noteSprite->move(dxoffset + (*it)->get<Int>("Notation::X"),
