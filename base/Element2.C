@@ -193,7 +193,8 @@ ViewElement::~ViewElement()
 
 Track::Track(unsigned int nbBars, unsigned int startIdx)
     : multiset<Event*, EventCmp>(),
-    m_startIdx(startIdx)
+    m_startIdx(startIdx),
+    m_nbBars(nbBars)
 {
     unsigned int initialTime = m_startIdx;
     
@@ -239,11 +240,11 @@ operator<(const ViewElement &a, const ViewElement &b)
 
 Composition::Composition(unsigned int nbTracks)
     : m_tracks(nbTracks),
-      m_nbTicksPerBar(960 * 4 * 4)
+      m_nbTicksPerBar(384)
 {
-    cerr << "Composition:(" << nbTracks << ") : this = "
-         << this <<  " - size = "
-         << m_tracks.size() << endl;
+//     cerr << "Composition:(" << nbTracks << ") : this = "
+//          << this <<  " - size = "
+//          << m_tracks.size() << endl;
 }
 
 Composition::~Composition()
@@ -256,8 +257,8 @@ Composition::~Composition()
 bool
 Composition::addTrack(Track *track = 0, int idx = -1)
 {
-    cerr << "Composition::addTrack(track = " << track << ", "
-         << idx << ")\n";
+//     cerr << "Composition::addTrack(track = " << track << ", "
+//          << idx << ")\n";
 
     if (!track) track = new Track;
     
@@ -272,13 +273,13 @@ Composition::addTrack(Track *track = 0, int idx = -1)
             m_tracks.resize(idx + 2);
 
         } else if (m_tracks[idx]) {
-            cerr << "Composition::addTrack() : there's already a track at this index\n";
+//             cerr << "Composition::addTrack() : there's already a track at this index\n";
             return false; // there's already a track at
             // that index
         }
 
-        cerr << "Composition::addTrack() : adding track at idx "
-             << idx << endl;
+//         cerr << "Composition::addTrack() : adding track at idx "
+//              << idx << endl;
         m_tracks[idx] = track;
     }
 
@@ -308,7 +309,13 @@ Composition::getNbBars() const
 
             Track::const_iterator lastEl = (*i)->end();
             --lastEl;
-            maxNbBars = (*lastEl)->absoluteTime() / getNbTicksPerBar();
+            maxNbBars = ((*lastEl)->absoluteTime() + (*lastEl)->duration()) / getNbTicksPerBar();
+
+//             cerr << "Composition::getNbBars() : last el. abs.Time : "
+//                  << (*lastEl)->absoluteTime()
+//                  << " - nbTicksPerBar : "
+//                  << getNbTicksPerBar()
+//                  << " - maxNbBars : " << maxNbBars << endl;
         }
     }
     
