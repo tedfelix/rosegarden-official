@@ -89,11 +89,13 @@ void KStartupLogo::paintEvent(QPaintEvent*)
 
     QString version(VERSION);
     int sepIdx = version.find("-");
+    QString versionLabel =
+	QString("R%1 v%2").arg(version.left(sepIdx)).arg(version.mid(sepIdx + 1));
+    int versionWidth = metrics.width(versionLabel);
 
-    paint.drawText(m_pixmap.width() - 54,
+    paint.drawText(m_pixmap.width() - versionWidth - 18,
                    m_pixmap.height() - 28,
-                   QString("R") + version.left(sepIdx) +
-                   QString(" v") + version.mid(sepIdx+1));
+		   versionLabel);
 
     paint.drawText(m_pixmap.width() - (width + 10), y, m_statusMessage);
 }

@@ -18,16 +18,16 @@
 
      * Write instructions in the second person.
 
+       Good:     "You can select segments by clicking on
+                  them with the arrow tool."
+
        Bad:      "Segments can be selected by clicking on
                   them with the arrow tool."
 
        Very bad: "The arrow tool allows the user to select
                   segments by clicking on them."
 
-       Good:     "You can select segments by clicking on
-                  them with the arrow tool".
-
-       If you dislike the last of these because you want to
+       If you dislike the first of these because you want to
        make the phrase "the arrow tool" more obvious by placing
        it at the start of the sentence, then perhaps you
        should be using a variablelist instead and making
@@ -820,7 +820,53 @@
 
     <sect1 id="matrix-view">
       <title>The Matrix editor</title>
-      <para></para>
+      <para>
+	The &rosegarden; matrix editor enables you to view and edit
+	music in a clear, logical format: each note represented as a
+	block in a grid, at a height corresponding to the pitch.
+      </para>
+      <para>
+	Each matrix editor window shows a single segment.  To edit a
+	segment, just right-click on it in the main canvas and select
+	the matrix editor from the menu.  Alternatively, you can
+	configure Rosegarden to make the matrix editor the default
+	editor available when you double-click on a segment.
+      </para>
+
+      <sect2 id="matrix-insertion">
+	<title>Inserting notes</title>
+	<para>
+	</para>
+	<sect3 id="matrix-insertion-keyboard">
+	  <title>Typing notes using the PC keyboard</title>
+	  <para>
+	  </para>
+	</sect3>
+	<sect3 id="matrix-insertion-midi">
+	  <title>Entering notes using a MIDI keyboard</title>
+	  <para>
+	  </para>
+	</sect3>
+      </sect2>
+
+      <sect2 id="matrix-selection">
+	<title>Selecting notes</title>
+	<para>
+	</para>
+      </sect2>
+
+      <sect2 id="matrix-editing">
+	<title>Moving and copying notes</title>
+	<para>
+	</para>
+      </sect2>
+
+      <sect2 id="matrix-view-options">
+	<title>Configuring the matrix view</title>
+	<para>
+	  <!-- zoom, rulers etc -->
+	</para>
+      </sect2>
     </sect1>
 
     <sect1 id="notation-view">
@@ -833,7 +879,7 @@
 
 	<para>
 
-	  The &rosegarden; Notation editor enables you to view and edit
+	  The &rosegarden; notation editor enables you to view and edit
 	  one or more staffs in traditional score notation.
 
 	</para><para>
@@ -1137,7 +1183,7 @@
 	  <sect4>
 	    <title>Duration</title>
 
-	    <para>First, ensure a Notation tool is selected to indicate
+	    <para>First, ensure a notation tool is selected to indicate
 	      the duration of note (or rest) you wish to insert.  You can
 	      select the various note types using the number keys:</para>
 
@@ -1239,6 +1285,39 @@
 
 	  </sect4>
 
+	</sect3>
+
+	<sect3 id="nv-insertion-midi">
+	  <title>Entering notes using a MIDI keyboard</title>
+
+	  <para>
+	    You can enter notes into the notation editor one at a time
+	    using a MIDI keyboard or other MIDI control device.  The
+	    notation editor uses the pitches you play on the keyboard,
+	    but the durations you have selected in the editor itself.
+	    This is known as "step recording".
+	  </para>
+
+	  <para>
+	    To start entering notes from a MIDI keyboard, first make
+	    sure the keyboard is configured as your default MIDI
+	    record device.  Then make sure a notation tool is selected
+	    to set a duration.  Then press the <!-- !!!  image of
+	    button --> step recording button on the notation editor's
+	    toolbar, or select Step Recording from the Tools menu.
+	    From that point on all notes pressed on the MIDI keyboard
+	    will be inserted at the current insertion time in that
+	    notation window, until step recording is switched off
+	    again or activated in a different window or the window is
+	    closed.
+	  </para>
+
+	  <para>
+	    You can select another notation tool while step recording
+	    is in progress, in order to insert notes of different
+	    durations; and you can also switch into Chord mode <!--
+	    !!! link --> to insert chords.
+	  </para>
 	</sect3>
 	
       </sect2>

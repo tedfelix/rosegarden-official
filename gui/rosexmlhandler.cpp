@@ -929,6 +929,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		    m_device = 0;
 		}
 	    }
+
+	    QString connection = atts.value("connection");
+	    if (m_createDevices && m_device &&
+		!connection.isNull() && connection != "") {
+		setMIDIDeviceConnection(connection);
+	    }
 	}
 	else if (type == "audio")
         {
@@ -1554,5 +1560,36 @@ RoseXmlHandler::addMIDIDevice(QString name)
     // instruments will be sync'd later in the natural course of things
     getStudio().addDevice(qstrtostr(name), deviceId, Device::Midi);
     m_device = getStudio().getDevice(deviceId);
+}
+
+
+void
+RoseXmlHandler::setMIDIDeviceConnection(QString connection)
+{
+    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>(m_device);
+    if (!md) return;
+		    
+    QByteArray data;
+    QByteArray replyData;
+    QCString replyType;
+    QDataStream arg(data, IO_WriteOnly);
+
+    arg << (unsigned int)md->getId();
+    arg << connection;
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "setConnection(unsigned int, QString)",
+                                  data, replyType, replyData, false)) {
+        SEQMAN_DEBUG << "RoseXmlHandler::setMIDIDeviceConnection - "
+                     << "can't call sequencer setConnection" << endl;
+        return;
+    }
+
+    SEQMAN_DEBUG << "RoseXmlHandler::setMIDIDeviceConnection - "
+		 << " set connection for " << md->getId() << " to "
+		 << connection << endl;
+
+    // connection should be sync'd later in the natural course of things
 }
 

@@ -107,7 +107,8 @@ protected:
     XmlSubHandler* getSubHandler() { return m_subHandler; }
 
     void addMIDIDevice(QString name);
-                                         
+    void setMIDIDeviceConnection(QString connection);
+
     //--------------- Data members ---------------------------------
 
     RosegardenGUIDoc    *m_doc;
