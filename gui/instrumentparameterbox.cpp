@@ -1033,9 +1033,10 @@ InstrumentParameterBox::slotPluginPortChanged(int pluginIndex,
                                 portIndex,
                                 value);
                                 
+        /*
         std::cout << "InstrumentParameterBox::slotPluginPortChanged - "
                   << "setting plugin port to " << value << std::endl;
-
+                  */
 #endif
     }
 

@@ -16,13 +16,13 @@ o Matrix width bug [HALF COMPLETED]
 
 o Matrix pointer width
 
+o Plugin calls() during playback causing usual problem
+
 o File loading blank-out
 
 o Drum bank selects and different MIDI drums
 
 o Real time plugins
-
-o audio previews with minima
 
 o Fix segment audio drag and drop
 
@@ -46,6 +46,7 @@ o Finite audio recording time - check for available disk space
 Post 0.2
 ========
 
+o audio previews with minima [NOT FOR THE MOMENT]
 
 o Complete and make sure segment edit shortcuts are consistent 
   across segmentcanvas and views (click/copy/multiple segment drag)

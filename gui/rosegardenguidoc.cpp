@@ -1640,7 +1640,7 @@ RosegardenGUIDoc::initialiseControllers()
 void
 RosegardenGUIDoc::clearAllPlugins()
 {
-    RG_DEBUG << "clearAllPlugins" << endl;
+    //RG_DEBUG << "clearAllPlugins" << endl;
 
     Rosegarden::InstrumentList list = m_studio.getAllInstruments();
     Rosegarden::MappedComposition mC;
@@ -1659,17 +1659,19 @@ RosegardenGUIDoc::clearAllPlugins()
                     if (Rosegarden::StudioControl::
                         destroyStudioObject((*pIt)->getMappedId()) == false)
                     {
-                        std::cerr << "RosegardenGUIDoc::clearAllPlugins - "
-                                  << "couldn't find plugin instance "
-                                  << (*pIt)->getMappedId() << std::endl;
+                        RG_DEBUG << "RosegardenGUIDoc::clearAllPlugins - "
+                                 << "couldn't find plugin instance "
+                                 << (*pIt)->getMappedId() << endl;
                     }
                 }
                 (*pIt)->clearPorts();
             }
             (*it)->emptyPlugins();
 
-            std::cout << "RosegardenGUIDoc::clearAllPlugins - "
-                      << "cleared " << (*it)->getName() << std::endl;
+            /*
+            RG_DEBUG << "RosegardenGUIDoc::clearAllPlugins - "
+                     << "cleared " << (*it)->getName() << endl;
+            */
         }
     }
 }

@@ -2,7 +2,7 @@
 
 unset CDPATH
 
-SRCDIR=/home/glaurent/rosegarden
+SRCDIR=/home/bownie/rosegarden
 
 cd $SRCDIR
 
@@ -10,7 +10,7 @@ VERSION=`grep INIT_AUTOMAKE configure.in.in | cut -d ',' -f2 | tr -d ')'`
 
 echo "VERSION = $VERSION"
 
-DESTDIR=/home/glaurent/tmp/rosegarden-$VERSION
+DESTDIR=/home/bownie/tmp/rosegarden-$VERSION
 
 rm -rf $DESTDIR
 
@@ -20,5 +20,5 @@ cp -R $SRCDIR $DESTDIR
 cd $DESTDIR || exit -1
 
 echo "Building distrib..."
-make distclean && sh ./gl_configure && make dist
+make distclean && sh ./rb_configure && make dist
 

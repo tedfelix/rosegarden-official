@@ -1928,7 +1928,10 @@ AlsaDriver::setPluginInstancePortValue(InstrumentId id,
                                        float value)
 {
 #ifdef HAVE_LADSPA
+
+    /*
     std::cout << "AlsaDriver::setPluginInstancePortValue" << std::endl;
+    */
 
     PluginIterator it = m_pluginInstances.begin();
     for (; it != m_pluginInstances.end(); it++)
@@ -1987,7 +1990,7 @@ LADSPAPluginInstance::LADSPAPluginInstance(Rosegarden::InstrumentId instrument,
         else
         if (LADSPA_IS_PORT_CONTROL(descriptor->PortDescriptors[i]))
         {
-            cout << "ADDING CONTROL PORT" << endl;
+            //cout << "ADDING CONTROL PORT" << endl;
             LADSPA_Data *data = new LADSPA_Data(0.0);
             m_controlPorts.push_back(
                     std::pair<unsigned long, LADSPA_Data*>(i, data));
@@ -2087,8 +2090,10 @@ LADSPAPluginInstance::setPortValue(unsigned long portNumber, LADSPA_Data value)
     {
         if (m_controlPorts[i].first == portNumber)
         {
+            /*
             std::cout << "LADSPAPluginInstance::setPortValue - "
                       << "setting value = " << value << std::endl;
+                      */
 
             (*m_controlPorts[i].second) = value;
         }
@@ -2611,10 +2616,12 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     for (; pIt != list.end(); pIt++)
                     {
     
+                        /*
                         cout << "PROCESSING PLUGIN INST = "
                              << (*pIt)->getInstrument()
                              << " : POSITION = "
                              << (*pIt)->getPosition() << endl;
+                             */
 
                         (*pIt)->run(_jackBufferSize);
 
@@ -2695,9 +2702,12 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                         volume = float(result[0].toFloat())/127.0;
                     }
 
+                    /*
                     cout << "UNPROC INSTRUMENT = " << (*it)->getInstrument()
                          << " : POS = " << (*it)->getPosition()
                          << endl;
+                         */
+
                     // Run the plugin
                     //
                     (*it)->run(_jackBufferSize);

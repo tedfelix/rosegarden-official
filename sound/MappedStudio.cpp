@@ -183,7 +183,8 @@ MappedObject::destroy()
         (*it)->destroy();
     }
 
-    std::cout << "DESTROYING ID = " << m_id << std::endl;
+    //std::cout << "DESTROYING ID = " << m_id << endl;
+
     (void)studio->clearObject(m_id);
     delete this;
 }
@@ -1473,8 +1474,11 @@ MappedLADSPAPort::setProperty(const MappedObjectProperty &property,
 {
     if (property == MappedLADSPAPort::Value)
     {
+        /*
         std::cout << "MappedLADSPAPort::setProperty value = "
                   << value << std::endl;
+                  */
+
         m_value = value;
 
         // Gather information and tell the plugin instance that we've

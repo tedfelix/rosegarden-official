@@ -27,6 +27,10 @@ Style and naming conventions
 
  * brace placement is rather liberal
 
+ * classes should either be in the Rosegarden namespace or 
+   be easily identifiable as part of the Rosegarden code
+   (i.e. no QClasses or KClasses please)
+
 Language issues
 ---------------
 

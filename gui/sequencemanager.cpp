@@ -1263,6 +1263,18 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
         metronome->instrument = Rosegarden::SystemInstrumentBase;
     }
 
+    Rosegarden::RealTime mDuration = config.get<RealTimeT>("metronomeduration");
+    Rosegarden::MidiByte mBarVelocity =
+        Rosegarden::MidiByte(config.get<Int>("metronomebarvelocity"));
+    Rosegarden::MidiByte mBeatVelocity =
+        Rosegarden::MidiByte(config.get<Int>("metronomebarvelocity"));
+
+    if (mDuration == Rosegarden::RealTime(0, 0))
+        mDuration = Rosegarden::RealTime(0, 10000);
+
+    if (mBarVelocity == 0) mBarVelocity = 120;
+    if (mBeatVelocity == 0) mBeatVelocity = 80;
+
     // If neither metronome is armed and we're not playing or recording
     // then don't sound the metronome
     //
@@ -1290,9 +1302,9 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
             MappedEvent *me =
                     new MappedEvent(metronome->instrument,
                                     metronome->pitch,
-                                    config.get<Int>("metronomebarvelocity"),
+                                    mBarVelocity,
                                     comp.getElapsedRealTime(barStart.first),
-                                    config.get<RealTimeT>("metronomeduration"));
+                                    mDuration);
             m_mC.insert(me);
         }
         catch(...) {;}
@@ -1304,9 +1316,9 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
             MappedEvent *me =
                     new MappedEvent(metronome->instrument,
                                     metronome->pitch,
-                                    config.get<Int>("metronomebarvelocity"),
+                                    mBarVelocity,
                                     comp.getElapsedRealTime(barEnd.first),
-                                    config.get<RealTimeT>("metronomeduration"));
+                                    mDuration);
             m_mC.insert(me);
         }
         catch(...) {;}
@@ -1328,11 +1340,9 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
             {
                 MappedEvent *me = new MappedEvent(metronome->instrument,
                                                   metronome->pitch,
-                                                  config.get<Int>(
-                                                      "metronomebeatvelocity"),
+                                                  mBeatVelocity,
                                                   comp.getElapsedRealTime(i),
-                                                  config.get<RealTimeT>(
-                                                      "metronomeduration"));
+                                                  mDuration);
                 m_mC.insert(me);
             }
             catch(...) {;}
@@ -1580,12 +1590,7 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
 
     while (i < seqPlugins.size())
     {
-        // This null thing is here to get around an occasional template
-        // instantion problem I see with 2.95 (rwb)
-        //
-        (void)seqPlugins.size();
-
-        Rosegarden::MappedObjectId id = seqPlugins.at(i++).toInt();
+        Rosegarden::MappedObjectId id = seqPlugins[i++].toInt();
         QString name = seqPlugins[i++];
         unsigned long uniqueId = seqPlugins[i++].toLong();
         QString label = seqPlugins[i++];

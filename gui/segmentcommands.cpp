@@ -251,6 +251,8 @@ AudioSegmentInsertCommand::execute()
         else
             label = std::string("unknown audio file");
 
+        cout << "LABEL = " << label << endl;
+
         m_segment->setLabel(label);
 
     }
@@ -365,6 +367,7 @@ SegmentRecordCommand::execute()
 {
     if (!m_segment->getComposition()) {
 	m_composition->addSegment(m_segment);
+        m_segment->setLabel(std::string("recorded audio"));
     }
     m_detached = false;
 }

@@ -133,6 +133,8 @@ bool ConfigurationXmlSubHandler::characters(const QString& ch)
 {
     if (m_propertyType == "Int") {
         long i = ch.toInt();
+        RG_DEBUG << "\"" << m_propertyName << "\" "
+                 << "value = " << i << endl;
         m_doc->getConfiguration().set<Int>(qstrtostr(m_propertyName), i);
 
         return true;
@@ -145,7 +147,8 @@ bool ConfigurationXmlSubHandler::characters(const QString& ch)
         rt.sec = ch.left(sepIdx).toInt();
         rt.usec = ch.mid(sepIdx + 1).toInt();
 
-        RG_DEBUG << "sec = " << rt.sec << ", usec = " << rt.usec << endl;
+        RG_DEBUG << "\"" << m_propertyName << "\" "
+                 << "sec = " << rt.sec << ", usec = " << rt.usec << endl;
 
         m_doc->getConfiguration().set<Rosegarden::RealTimeT>(qstrtostr(m_propertyName), rt);
 
