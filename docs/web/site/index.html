@@ -32,69 +32,50 @@
 
       <h2>What is Rosegarden-4?</h2>
 
-      <p><b>Rosegarden-4</b> is the new development series of the
+      <p>Rosegarden-4 is the new development series of the
       Rosegarden MIDI and audio sequencer and musical notation editor.
-      It is free software for Unix and X.  It's a KDE application,
-      which means it needs the KDE libraries, but it can be run within
+      It features complete or partial support for:
+
+      <ul>
+      <li class="close">A track editor</li>
+      <li class="close">A piano-roll/matrix editor</li>
+      <li class="close">Score display and editing</li>
+      <li class="close">MIDI file I/O, <a href="http://www.lilypond.org/">Lilypond</a> and <a href="http://www.csounds.com/">Csound</a> export</li>
+      <li class="close">Playback and recording using <a href="http://www.alsa-project.org/">ALSA</a> or <a href="http://www.arts-project.org/">aRts</a></li>
+      <li class="close">Audio support using <a href="http://jackit.sourceforge.net/">JACK</a></li>
+      </ul>
+      
+      <p>Rosegarden-4 is free software for Unix and X.  It's a KDE
+      application, which means to build it you need the KDE 2.2.x or
+      3.0 libraries.  However, once installed it can be run within
       the KDE environment or any other desktop or window manager
       environment.
 
-      <p>If you want to try it out then please go to the
-      <a href="download.html">download</a> page for more information.
-
-      <h4>Current Release</h4>
+      <h3>Current Release</h3>
       <p>The latest release of Rosegarden-4 is the rather
-      confusingly-numbered 0.1.5, released on 02 May 2002.
-      Significantly this release adds
-      <a href="http://www.kde.org" target="_blank">KDE3</a> and
-      <a href="http://www.alsa-project.org" target="_blank">ALSA</a>
-      support.
-
-      <p>The current release also includes complete or partial support for
-      MIDI file I/O, playback and recording, a track editor, score display
-      and editing, and a piano-roll/matrix style editor.
+      confusingly-numbered 0.1.6, released on 6 June 2002.
     
-      <p>Changes since 0.1.4 include</p>
+      <p>Changes since 0.1.5 include</p>
 
-<ul>
-<li class="close">KDE3 support (builds from same source tree as KDE2 version)</li>
-<li class="close">ALSA support for MIDI playback and recording (0.9.0beta12 and above)</li>
-<li class="close">Notation View "Finale style" note entry - notes sound before entry</li>
-<li class="close">Triplet and tuplet editing in the Notation view</li>
-<li class="close">Event editor dialog</li>
-<li class="close">Tempo dialog accessed through double click on current tempo,
-  new tempo changes can be inserted or overall tempo changed</li>
-<li class="close">Horizontal zooming on track editor</li>
-<li class="close">Internal reworking and tidying of command framework for improved
-  undo/redo capability</li>
-<li class="close">Keyboard accelerators for Transport controls shared across all clients
-  (you can control playback from client windows)</li>
-<li class="close">Song state information (including Studio parameters) saved to
-  Composition file</li>
-<li class="close">Playback Latency can be modified through Configuration dialog</li>
-<li class="close">Instrument program names appear on Track buttons when selected</li>
-<li class="close">Bigger, brighter song position pointers</li>
-<li class="close">MatrixView keyboard now plays notes</li>
-<li class="close">MatrixView Events are coloured by velocity</li>
-<li class="close">Quick copy of Segments (ctrl and click/drag on Segment)</li>
-<li class="close">Segments are labelled according to Track</li>
-<li class="close">Soloing Tracks now works</li>
-<li class="close">Notation and Matrix clients are labelled against the current file</li>
-<li class="close">Notional JACK audio support (not working)</li>
-</ul>
+      <ul>
+	<li class="close">experimental JACK audio driver with recording (not yet sync'd with ALSA output)</li>
+	<li class="close">audio previews on Segments (but still no audio file insertion GUI)</li>
+	<li class="close">new quantize dialog in notation view</li>
+	<li class="close">track name shown at start of staff in notation</li>
+	<li class="close">matrix now shows time signature changes correctly</li>
+	<li class="close">a few handy keyboard accelerators in notation view </li>
+	<li class="close">a couple of new notation marks (marcato, staccatissimo) </li>
+	<li class="close">first pass at Lilypond file export, courtesy of Hans Kieserman, and at Csound scorefile export </li>
+	<li class="close">internal string usage should be unicode-clean throughout </li>
+	<li class="close">many notation properties now view-local, ensuring better support for different layouts, sizes or smoothings in different views at the same time </li>
+	<li class="close">first pass at previews of contents of segments on main view, though not yet optimised enough to be usable </li>
+	<li class="close">new matrix tools (note move, note duration change) </li>
+	<li class="close">start of menu items state management </li>
+	<li class="close">rework of the configuration system</li>
+	</ul>
 
       <p>Have a look
-      at some <a href="pictures.html">pictures</a> of it in use.
-
-      <p>You can <a href="download.html">download</a> the source
-      package from SourceForge, or obtain more recent source code
-      directly from the <a href="http://sourceforge.net/cvs/?group_id=4932">CVS repository</a>.  In order to
-      build it, you will need a Unix-like operating system, the
-      gcc-2.9x C++ compiler, KDE 2.2 with Qt2 or KDE3 wth Qt3.
-      If you haven't got KDE, see the <a
-      href="http://www.kde.org/">KDE web site</a>.
-
-      <p>The SourceForge site also contains <a href="http://rosegarden.sourceforge.net/code_doc">some code documentation</a> and <a href="http://sourceforge.net/mail/?group_id=4932">a mailing-list</a>.
+      at some <a href="pictures.html">pictures</a> of it in use, or <a href="download.html">download the source code</a> now.
 
       <h3>Contribute</h3>
 
