@@ -40,7 +40,7 @@ Marker::toXmlString()
     marker << "  <marker time=\""  << m_time
            << "\" name=\"" << encode(m_name)
            << "\" description=\"" << encode(m_description)
-           << "\"/>" << endl;
+           << "\"/>" << std::endl;
 #if (__GNUC__ < 3)
     marker << std::ends;
 #endif
