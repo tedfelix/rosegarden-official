@@ -173,6 +173,10 @@ public:
      * easily find the corresponding ViewElements to delete), or null
      * if no event was deleted
      */
+    //!!! we can probably remove collapsedEvent now that
+    //ViewElementsManager is a TrackObserver.  Besides, surely the
+    //event would have been deleted (by erase()) before the code that
+    //called this method was able to look at it?
     bool collapse(Event*, bool& collapseForward, Event*& collapsedEvent);
 
     /**
