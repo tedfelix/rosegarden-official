@@ -769,7 +769,7 @@ void
 DSSIPluginInstance::cleanup()
 {
 #ifdef DEBUG_DSSI
-    std::cerr << "DSSIPluginInstance::cleanup" << std::endl;
+    std::cerr << "DSSIPluginInstance::cleanup " << m_identifier << std::endl;
 #endif
     if (!m_descriptor) return;
 
@@ -783,6 +783,9 @@ DSSIPluginInstance::cleanup()
 
     m_descriptor->LADSPA_Plugin->cleanup(m_instanceHandle);
     m_instanceHandle = 0;
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::cleanup " << m_identifier << " done" << std::endl;
+#endif
 }
 
 

@@ -104,10 +104,16 @@ protected slots:
     void slotSetInputCountFromAction();
     void slotSetSubmasterCountFromAction();
 
-    void slotShowFaders();
-    void slotShowSubmasters();
-    void slotShowPluginButtons();
-    void slotShowUnassignedFaders();
+    void slotToggleFaders();
+    void slotToggleSynthFaders();
+    void slotToggleSubmasters();
+    void slotTogglePluginButtons();
+    void slotToggleUnassignedFaders();
+
+    void slotUpdateFaderVisibility();
+    void slotUpdateSynthFaderVisibility();
+    void slotUpdateSubmasterVisibility();
+    void slotUpdatePluginButtonVisibility();
 
 private:
 

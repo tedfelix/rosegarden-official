@@ -19,6 +19,7 @@
 
   <Action name="show_midi" append="show_merge" />
   <Action name="show_audio_faders" append="show_merge" />
+  <Action name="show_synth_faders" append="show_merge" />
   <Action name="show_audio_submasters" append="show_merge" />
   <Action name="show_plugin_buttons" append="show_merge" />
 

@@ -47,11 +47,12 @@
 #include <qaccel.h>
 
 // We define these such that the default of no-bits-set for the
-// studio's mixer display options produces the most complete result
+// studio's mixer display options produces the most sensible result
 static const unsigned int MIXER_OMIT_FADERS            = 1 << 0;
 static const unsigned int MIXER_OMIT_SUBMASTERS        = 1 << 1;
 static const unsigned int MIXER_OMIT_PLUGINS           = 1 << 2;
-static const unsigned int MIXER_OMIT_UNASSIGNED_FADERS = 1 << 3;
+static const unsigned int MIXER_SHOW_UNASSIGNED_FADERS = 1 << 3;
+static const unsigned int MIXER_OMIT_SYNTH_FADERS      = 1 << 4;
 
 
 MixerWindow::MixerWindow(QWidget *parent,
@@ -132,25 +133,30 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
     unsigned int mixerOptions = m_studio->getMixerDisplayOptions();
 
-    (new KToggleAction(i18n("Show &Faders"), 0, this,
-		       SLOT(slotShowFaders()), actionCollection(),
+    (new KToggleAction(i18n("Show Audio &Faders"), 0, this,
+		       SLOT(slotToggleFaders()), actionCollection(),
 		       "show_audio_faders"))->setChecked
 	(!(mixerOptions & MIXER_OMIT_FADERS));
 
+    (new KToggleAction(i18n("Show Synth &Faders"), 0, this,
+		       SLOT(slotToggleSynthFaders()), actionCollection(),
+		       "show_synth_faders"))->setChecked
+	(!(mixerOptions & MIXER_OMIT_SYNTH_FADERS));
+
     (new KToggleAction(i18n("Show &Submasters"), 0, this,
-		       SLOT(slotShowSubmasters()), actionCollection(),
+		       SLOT(slotToggleSubmasters()), actionCollection(),
 		       "show_audio_submasters"))->setChecked
 	(!(mixerOptions & MIXER_OMIT_SUBMASTERS));
 
     (new KToggleAction(i18n("Show &Plugin Buttons"), 0, this,
-		       SLOT(slotShowPluginButtons()), actionCollection(),
+		       SLOT(slotTogglePluginButtons()), actionCollection(),
 		       "show_plugin_buttons"))->setChecked
 	(!(mixerOptions & MIXER_OMIT_PLUGINS));
 
     (new KToggleAction(i18n("Show &Unassigned Faders"), 0, this,
-		       SLOT(slotShowUnassignedFaders()), actionCollection(),
+		       SLOT(slotToggleUnassignedFaders()), actionCollection(),
 		       "show_unassigned_faders"))->setChecked
-	(!(mixerOptions & MIXER_OMIT_UNASSIGNED_FADERS));
+	(mixerOptions & MIXER_SHOW_UNASSIGNED_FADERS);
 
     KRadioAction *action = 0;
 
@@ -256,12 +262,13 @@ AudioMixerWindow::populate()
 
     unsigned int mixerOptions = m_studio->getMixerDisplayOptions();
 
-    bool showUnassigned = (!(mixerOptions & MIXER_OMIT_UNASSIGNED_FADERS));
+    bool showUnassigned = (mixerOptions & MIXER_SHOW_UNASSIGNED_FADERS);
 
     for (Rosegarden::InstrumentList::iterator i = instruments.begin();
 	 i != instruments.end(); ++i) {
 	
-	if ((*i)->getType() != Rosegarden::Instrument::Audio) continue;
+	if ((*i)->getType() != Rosegarden::Instrument::Audio &&
+	    (*i)->getType() != Rosegarden::Instrument::SoftSynth) continue;
 
 	FaderRec rec;
 
@@ -273,25 +280,33 @@ AudioMixerWindow::populate()
 	}
 	rec.m_populated = true;
 
-	rec.m_input  = new AudioRouteMenu(m_mainBox,
-					  AudioRouteMenu::In,
-					  AudioRouteMenu::Compact,
-					  m_studio, *i);
+	if ((*i)->getType() == Rosegarden::Instrument::Audio) {
+	    rec.m_input  = new AudioRouteMenu(m_mainBox,
+					      AudioRouteMenu::In,
+					      AudioRouteMenu::Compact,
+					      m_studio, *i);
+	    QToolTip::add(rec.m_input->getWidget(), i18n("Record input source"));
+	    rec.m_input->getWidget()->setMaximumWidth(45);
+	} else {
+	    rec.m_input = 0;
+	}
+
 	rec.m_output = new AudioRouteMenu(m_mainBox,
 					  AudioRouteMenu::Out,
 					  AudioRouteMenu::Compact,
 					  m_studio, *i);
-
-	QToolTip::add(rec.m_input->getWidget(), i18n("Record input source"));
 	QToolTip::add(rec.m_output->getWidget(), i18n("Output destination"));
-
-	rec.m_input->getWidget()->setMaximumWidth(45);
 	rec.m_output->getWidget()->setMaximumWidth(45);
 
 	rec.m_pan = new RosegardenRotary
 	    (m_mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20,
 	     RosegardenRotary::NoTicks, false, true);
-	rec.m_pan->setKnobColour(RosegardenGUIColours::RotaryPastelGreen);
+
+	if ((*i)->getType() == Rosegarden::Instrument::Audio) {
+	    rec.m_pan->setKnobColour(RosegardenGUIColours::RotaryPastelGreen);
+	} else {
+	    rec.m_pan->setKnobColour(RosegardenGUIColours::RotaryPastelYellow);
+	}
 
 	QToolTip::add(rec.m_pan, i18n("Pan"));
 
@@ -345,11 +360,23 @@ AudioMixerWindow::populate()
             connect(plugin, SIGNAL(clicked()),
                     this, SLOT(slotSelectPlugin()));
         }
-	
-	QLabel *idLabel = new QLabel(QString("%1").arg((*i)->getId() - Rosegarden::AudioInstrumentBase + 1), m_mainBox, "idLabel");
+
+	QLabel *idLabel;
+	QString idString;
+	if ((*i)->getType() == Rosegarden::Instrument::Audio) {
+	    idString = i18n("Audio %1").arg((*i)->getId() -
+					    Rosegarden::AudioInstrumentBase + 1);
+	    idLabel = new QLabel(idString, m_mainBox, "audioIdLabel");
+	} else {
+	    idString = i18n("Synth %1").arg((*i)->getId() - 
+					    Rosegarden::SoftSynthInstrumentBase + 1);
+	    idLabel = new QLabel(idString, m_mainBox, "synthIdLabel");
+	}
 	idLabel->setFont(boldFont);
 
-	mainLayout->addMultiCellWidget(rec.m_input->getWidget(), 1, 1, col, col+1);
+	if (rec.m_input) {
+	    mainLayout->addMultiCellWidget(rec.m_input->getWidget(), 1, 1, col, col+1);
+	}
 	mainLayout->addMultiCellWidget(rec.m_output->getWidget(), 2, 2, col, col+1);
 //	mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
 //	mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
@@ -382,8 +409,10 @@ AudioMixerWindow::populate()
 	updateStereoButton((*i)->getId());
 	updatePluginButtons((*i)->getId());
 
-	connect(rec.m_input, SIGNAL(changed()),
-		this, SLOT(slotInputChanged()));
+	if (rec.m_input) {
+	    connect(rec.m_input, SIGNAL(changed()),
+		    this, SLOT(slotInputChanged()));
+	}
 
 	connect(rec.m_output, SIGNAL(changed()),
 		this, SLOT(slotOutputChanged()));
@@ -557,6 +586,11 @@ AudioMixerWindow::populate()
 		this, SLOT(slotMuteChanged()));
     }
 
+    slotUpdateFaderVisibility();
+    slotUpdateSynthFaderVisibility();
+    slotUpdateSubmasterVisibility();
+    slotUpdatePluginButtonVisibility();
+
     adjustSize();
     m_mainBox->show();
 }
@@ -706,7 +740,7 @@ AudioMixerWindow::updateRouteButtons(int id)
     if (id >= (int)Rosegarden::AudioInstrumentBase) {
 	FaderRec &rec = m_faders[id];
 	if (!rec.m_populated) return;
-	rec.m_input->slotRepopulate();
+	if (rec.m_input) rec.m_input->slotRepopulate();
 	rec.m_output->slotRepopulate();
     }
 }
@@ -1240,39 +1274,82 @@ AudioMixerWindow::FaderRec::setPluginButtonsVisible(bool visible)
 
 
 void
-AudioMixerWindow::slotShowFaders()
+AudioMixerWindow::slotToggleFaders()
+{
+    m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
+				     MIXER_OMIT_FADERS);
+
+    slotUpdateFaderVisibility();
+}
+
+void
+AudioMixerWindow::slotUpdateFaderVisibility()
 {
     KToggleAction *action = dynamic_cast<KToggleAction *>
         (actionCollection()->action("show_audio_faders"));
     if (!action) return;
 
-    m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
-				     MIXER_OMIT_FADERS);
-				     
     action->setChecked(!(m_studio->getMixerDisplayOptions() &
 			 MIXER_OMIT_FADERS));
 
-    for(FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
-        FaderRec rec = i->second;
-        rec.setVisible(action->isChecked());
+    for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+	if (i->first < Rosegarden::SoftSynthInstrumentBase) {
+	    FaderRec rec = i->second;
+	    rec.setVisible(action->isChecked());
+	}
     }
 
-    toggleNamedWidgets(action->isChecked(), "idLabel");
+    toggleNamedWidgets(action->isChecked(), "audioIdLabel");
 
     adjustSize();
-    
 }
 
 void
-AudioMixerWindow::slotShowSubmasters()
+AudioMixerWindow::slotToggleSynthFaders()
 {
+    m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
+				     MIXER_OMIT_SYNTH_FADERS);
 
+    slotUpdateSynthFaderVisibility();
+}
+
+void
+AudioMixerWindow::slotUpdateSynthFaderVisibility()
+{
+    KToggleAction *action = dynamic_cast<KToggleAction *>
+        (actionCollection()->action("show_synth_faders"));
+    if (!action) return;
+
+    action->setChecked(!(m_studio->getMixerDisplayOptions() &
+			 MIXER_OMIT_SYNTH_FADERS));
+
+    for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+	if (i->first >= Rosegarden::SoftSynthInstrumentBase) {
+	    FaderRec rec = i->second;
+	    rec.setVisible(action->isChecked());
+	}
+    }
+
+    toggleNamedWidgets(action->isChecked(), "synthIdLabel");
+
+    adjustSize();
+}
+
+void
+AudioMixerWindow::slotToggleSubmasters()
+{
+    m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
+				     MIXER_OMIT_SUBMASTERS);
+
+    slotUpdateSubmasterVisibility();
+}
+
+void
+AudioMixerWindow::slotUpdateSubmasterVisibility()
+{
     KToggleAction *action = dynamic_cast<KToggleAction *>
         (actionCollection()->action("show_audio_submasters"));
     if (!action) return;
-
-    m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
-				     MIXER_OMIT_SUBMASTERS);
 				     
     action->setChecked(!(m_studio->getMixerDisplayOptions() &
 			 MIXER_OMIT_SUBMASTERS));
@@ -1285,19 +1362,23 @@ AudioMixerWindow::slotShowSubmasters()
     toggleNamedWidgets(action->isChecked(), "subMaster");
     
     adjustSize();
-
 }
 
 void
-AudioMixerWindow::slotShowPluginButtons()
+AudioMixerWindow::slotTogglePluginButtons()
 {
+    m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
+				     MIXER_OMIT_PLUGINS);
 
+    slotUpdatePluginButtonVisibility();
+}
+
+void
+AudioMixerWindow::slotUpdatePluginButtonVisibility()
+{
     KToggleAction *action = dynamic_cast<KToggleAction *>
         (actionCollection()->action("show_plugin_buttons"));
     if (!action) return;
-
-    m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
-				     MIXER_OMIT_PLUGINS);
 				     
     action->setChecked(!(m_studio->getMixerDisplayOptions() &
 			 MIXER_OMIT_PLUGINS));
@@ -1311,17 +1392,17 @@ AudioMixerWindow::slotShowPluginButtons()
 }
 
 void
-AudioMixerWindow::slotShowUnassignedFaders()
+AudioMixerWindow::slotToggleUnassignedFaders()
 {
     KToggleAction *action = dynamic_cast<KToggleAction *>
         (actionCollection()->action("show_unassigned_faders"));
     if (!action) return;
 
     m_studio->setMixerDisplayOptions(m_studio->getMixerDisplayOptions() ^
-				     MIXER_OMIT_UNASSIGNED_FADERS);
+				     MIXER_SHOW_UNASSIGNED_FADERS);
 				     
-    action->setChecked(!(m_studio->getMixerDisplayOptions() &
-			 MIXER_OMIT_UNASSIGNED_FADERS));
+    action->setChecked(m_studio->getMixerDisplayOptions() &
+		       MIXER_SHOW_UNASSIGNED_FADERS);
 
     populate();
 }

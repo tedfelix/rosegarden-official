@@ -338,8 +338,6 @@ AudioBussMixer::generateBuffers()
 	}
     }
 
-    updateInstrumentConnections();
-
     if (m_processBuffers.size() == 0) {
 	m_processBuffers.push_back(new sample_t[m_blockSize]);
 	m_processBuffers.push_back(new sample_t[m_blockSize]);
@@ -419,6 +417,8 @@ AudioBussMixer::setBussLevels(int bussId, float dB, float pan)
 void
 AudioBussMixer::updateInstrumentConnections()
 {
+    if (m_bussCount == 0) generateBuffers();
+
     InstrumentId audioInstrumentBase;
     int audioInstruments;
     m_driver->getAudioInstrumentNumbers(audioInstrumentBase, audioInstruments);
@@ -540,7 +540,7 @@ AudioBussMixer::processBlocks()
 
 #ifdef DEBUG_BUSS_MIXER
 		    if (id == 1000) {
-			std::cerr << "AudioBussMixer::processBlocks: buss " << buss << ": read space " << r << " on instrument " << *ii << ", channel " << ch << std::endl;
+			std::cerr << "AudioBussMixer::processBlocks: buss " << buss << ": read space " << r << " on instrument " << id << ", channel " << ch << std::endl;
 		    }
 #endif
 		    

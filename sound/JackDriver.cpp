@@ -1707,12 +1707,13 @@ JackDriver::updateAudioData()
     // this will return with no work if the inputs are already correct:
     createRecordInputs(inputs);
 
+    m_bussMixer->updateInstrumentConnections();
+
     if (m_bussMixer->getBussCount() == 0 || m_alsaDriver->getLowLatencyMode()) {
 	if (m_bussMixer->running()) {
 	    m_bussMixer->terminate();
 	}
     } else {
-	m_bussMixer->updateInstrumentConnections();
 	if (!m_bussMixer->running()) {
 	    m_bussMixer->run();
 	}
