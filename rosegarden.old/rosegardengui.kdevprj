@@ -31,7 +31,7 @@ email=glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.c
 kdevprj_version=1.1 beta1
 lfv_open_groups=Headers,Sources
 make_options=\s-j1
-makefiles=Makefile.am,rosegardengui/Makefile.am,rosegardengui/docs/Makefile.am,rosegardengui/docs/en/Makefile.am,po/Makefile.am,
+makefiles=Makefile.am,rosegardengui/Makefile.am,rosegardengui/docs/Makefile.am,rosegardengui/docs/en/Makefile.am,po/Makefile.am,rosegardengui/notation/Makefile.am
 modifyMakefiles=true
 project_name=RosegardenGUI
 project_type=normal_kde2
@@ -77,8 +77,8 @@ type=DATA
 [Workspace_1]
 browser_file=file:/home/glaurent/.kde/share/apps/kdevelop/KDE-Documentation//kab/KabAPI.html
 cpp_file=/home/glaurent/rosegarden/rosegardengui/rosegardengui/main.cpp
-header_file=/home/glaurent/rosegarden/rosegardengui/gl_configure
-openfiles=Untitled.h,Untitled.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/rosegardengui.h,/home/glaurent/rosegarden/rosegardengui/rosegardengui/main.cpp,/home/glaurent/rosegarden/rosegardengui/configure.files,/home/glaurent/rosegarden/rosegardengui/config.h.in,/home/glaurent/rosegarden/rosegardengui/gl_configure
+header_file=/home/glaurent/rosegarden/rosegardengui/rosegardengui/rosegardengui.h
+openfiles=Untitled.h,Untitled.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/rosegardengui.h,/home/glaurent/rosegarden/rosegardengui/rosegardengui/main.cpp
 show_outputview=true
 show_treeview=true
 
@@ -100,7 +100,7 @@ type=DATA
 
 [rosegardengui/Makefile.am]
 files=rosegardengui/main.cpp,rosegardengui/rosegardengui.cpp,rosegardengui/rosegardengui.h,rosegardengui/rosegardenguidoc.cpp,rosegardengui/rosegardenguidoc.h,rosegardengui/rosegardenguiview.cpp,rosegardengui/rosegardenguiview.h,rosegardengui/resource.h,rosegardengui/rosegardengui.desktop,rosegardengui/rosegardengui.xpm,rosegardengui/mini-rosegardengui.xpm,rosegardengui/notepixmapfactory.cpp,rosegardengui/notepixmapfactory.h,rosegardengui/qcanvasgroupableitem.cpp,rosegardengui/qcanvasgroupableitem.h,rosegardengui/qcanvasitemgroup.cpp,rosegardengui/qcanvasitemgroup.h,rosegardengui/qcanvaslinegroupable.cpp,rosegardengui/qcanvaslinegroupable.h,rosegardengui/qcanvasspritegroupable.cpp,rosegardengui/qcanvasspritegroupable.h,rosegardengui/staff.cpp,rosegardengui/staff.h,rosegardengui/qcanvassimplesprite.cpp,rosegardengui/qcanvassimplesprite.h,rosegardengui/layoutengine.cpp,rosegardengui/layoutengine.h,rosegardengui/notationhlayout.cpp,rosegardengui/notationhlayout.h,rosegardengui/notationvlayout.cpp,rosegardengui/notationvlayout.h,rosegardengui/xmlstorableevent.cpp,rosegardengui/xmlstorableevent.h,rosegardengui/rosexmlhandler.cpp,rosegardengui/rosexmlhandler.h,rosegardengui/quantizer.cpp,rosegardengui/quantizer.h,rosegardengui/rosedebug.h,rosegardengui/notationelement.cpp,rosegardengui/notationelement.h,rosegardengui/viewelementsmanager.cpp,rosegardengui/viewelementsmanager.h,rosegardengui/notationview.cpp,rosegardengui/notationview.h,rosegardengui/notationcanvasview.cpp,rosegardengui/notationcanvasview.h,rosegardengui/staffline.cpp,rosegardengui/staffline.h,rosegardengui/scale.cpp,rosegardengui/scale.h,rosegardengui/rosedebug.cpp,rosegardengui/trackseditor.cpp,rosegardengui/trackseditor.h,rosegardengui/trackscanvas.cpp,rosegardengui/trackscanvas.h
-sub_dirs=docs,
+sub_dirs=docs,notation
 type=prog_main
 
 [rosegardengui/docs/Makefile.am]
@@ -141,6 +141,35 @@ dist=true
 install=true
 install_location=$$(kde_icondir)/small/locolor/apps/rosegardengui.xpm
 type=DATA
+
+[rosegardengui/notation/Makefile.am]
+files=rosegardengui/notation/dummy.cpp,rosegardengui/notation/dummy.h,rosegardengui/notation/dummy2.cpp,rosegardengui/notation/dummy2.h
+sub_dirs=
+type=static_library
+
+[rosegardengui/notation/dummy.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[rosegardengui/notation/dummy.h]
+dist=true
+install=false
+install_location=
+type=HEADER
+
+[rosegardengui/notation/dummy2.cpp]
+dist=true
+install=false
+install_location=
+type=SOURCE
+
+[rosegardengui/notation/dummy2.h]
+dist=true
+install=false
+install_location=
+type=HEADER
 
 [rosegardengui/notationcanvasview.cpp]
 dist=true
