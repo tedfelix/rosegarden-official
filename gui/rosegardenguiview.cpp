@@ -1016,6 +1016,8 @@ RosegardenGUIView::slotAddAudioSegmentAndTrack(
     // Fix the canvas size
     //
     m_trackEditor->slotReadjustCanvasSize();
+
+    m_trackEditor->getTrackButtons()->slotUpdateTracks();
  
     // Select the new track (will scroll to it automatically)
     //
