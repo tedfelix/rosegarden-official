@@ -35,6 +35,8 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 
+#include "dialogs.h"
+
 using Rosegarden::EventSelection;
 using Rosegarden::SnapGrid;
 using Rosegarden::Event;
@@ -375,16 +377,41 @@ void MatrixSelector::handleMidButtonPress(Rosegarden::timeT time,
 
 // Pop up an event editor - send a signal or something
 //
-void MatrixSelector::handleMouseDblClick(Rosegarden::timeT time,
-                                         int height,
-                                         int staffNo,
-                                         QMouseEvent* e,
-                                         Rosegarden::ViewElement *element)
+void MatrixSelector::handleMouseDoubleClick(Rosegarden::timeT time,
+					    int height,
+					    int staffNo,
+					    QMouseEvent* e,
+					    Rosegarden::ViewElement *element)
 {
+/*
     if (m_dispatchTool)
     {
-        m_dispatchTool->handleMouseDblClick(time, height, staffNo, e, element);
+        m_dispatchTool->handleMouseDoubleClick(time, height, staffNo, e, element);
     }
+*/
+    
+    m_clickedElement = dynamic_cast<MatrixElement*>(element);
+
+    MatrixStaff *staff = m_mParentView->getStaff(staffNo);
+    if (!staff) return;
+
+    if (m_clickedElement) {
+
+	EventEditDialog *dialog = new EventEditDialog
+	    (m_mParentView, *m_clickedElement->event(), true);
+
+	if (dialog->exec() == QDialog::Accepted &&
+	    dialog->isModified()) {
+
+	    EventEditCommand *command = new EventEditCommand
+		(staff->getSegment(),
+		 m_clickedElement->event(),
+		 dialog->getEvent());
+
+	    m_mParentView->addCommandToHistory(command);
+	}
+    }
+
 }
 
 int MatrixSelector::handleMouseMove(timeT time, int height,

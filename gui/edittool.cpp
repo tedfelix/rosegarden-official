@@ -134,10 +134,10 @@ void EditTool::handleRightButtonPress(Rosegarden::timeT,
     showMenu();
 }
 
-void EditTool::handleMouseDblClick(Rosegarden::timeT,
-                                   int, int,
-                                   QMouseEvent*,
-                                   Rosegarden::ViewElement*)
+void EditTool::handleMouseDoubleClick(Rosegarden::timeT,
+				      int, int,
+				      QMouseEvent*,
+				      Rosegarden::ViewElement*)
 {
     // nothing
 }

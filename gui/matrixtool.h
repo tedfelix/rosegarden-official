@@ -162,11 +162,11 @@ public:
     /**
      *
      */
-    virtual void handleMouseDblClick(Rosegarden::timeT time,
-                                     int height,
-                                     int staffNo,
-                                     QMouseEvent* event,
-                                     Rosegarden::ViewElement *element);
+    virtual void handleMouseDoubleClick(Rosegarden::timeT time,
+					int height,
+					int staffNo,
+					QMouseEvent* event,
+					Rosegarden::ViewElement *element);
 
 
     /**

@@ -386,7 +386,7 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
     if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
     if (keyEvt) key = Rosegarden::Key(*keyEvt);
 
-    if ((*itr)->isRest()) {
+    if ((*itr)->isRest() && (*itr)->getCanvasItem()) {
 	time += getOffsetWithinRest(staffNo, itr, x);
 	m_clickInsertX += (x - (*itr)->getCanvasX());
     }
@@ -995,13 +995,13 @@ void NotationSelector::slotClickTimeout()
     m_justSelectedBar = false;
 }
 
-void NotationSelector::handleMouseDblClick(Rosegarden::timeT,
-                                           int,
-                                           int staffNo,
-                                           QMouseEvent* e,
-                                           ViewElement *element)
+void NotationSelector::handleMouseDoubleClick(Rosegarden::timeT,
+					      int,
+					      int staffNo,
+					      QMouseEvent* e,
+					      ViewElement *element)
 {
-    NOTATION_DEBUG << "NotationSelector::handleMouseDblClick" << endl;
+    NOTATION_DEBUG << "NotationSelector::handleMouseDoubleClick" << endl;
     m_clickedStaff = staffNo;
     m_clickedElement = dynamic_cast<NotationElement*>(element);
     

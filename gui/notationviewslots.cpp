@@ -1388,6 +1388,8 @@ NotationView::doDeferredCursorMove()
     NotationElementList::iterator i = 
 	staff->getViewElementList()->findNearestTime(t);
 
+    while (!(*i)->getCanvasItem()) ++i;
+
     if (i == staff->getViewElementList()->end()) {
 	//!!! ???
 	if (m_insertionTime >= staff->getSegment().getStartTime()) {
@@ -1733,7 +1735,7 @@ void NotationView::slotItemPressed(int height, int staffNo,
         // This won't work because a double click event is always
         // preceded by a single click event
         if (e->type() == QEvent::MouseButtonDblClick)
-            m_tool->handleMouseDblClick(unknownTime, height,
+            m_tool->handleMouseDoubleClick(unknownTime, height,
                                         staffNo, e, el);
         else
             m_tool->handleMousePress(unknownTime, height,

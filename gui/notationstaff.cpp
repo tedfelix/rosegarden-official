@@ -248,7 +248,7 @@ NotationStaff::getClosestElementToLayoutX(double x,
         return notes->end();
     }
         
-    NOTATION_DEBUG << "NotationStaff::getClosestElementToLayoutX: found element at layout " << (*result)->getLayoutX() << " (" << (*result)->getCanvasX() << "," << (*result)->getCanvasY() << ") - we're at layout " << x << endl;
+    NOTATION_DEBUG << "NotationStaff::getClosestElementToLayoutX: found element at layout " << (*result)->getLayoutX() << " - we're at layout " << x << endl;
 
     PRINT_ELAPSED("NotationStaff::getClosestElementToLayoutX");
 

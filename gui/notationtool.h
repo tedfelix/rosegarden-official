@@ -364,11 +364,11 @@ public:
                                     int height,
                                     QMouseEvent*);
 
-    virtual void handleMouseDblClick(Rosegarden::timeT,
-                                     int height,
-                                     int staffNo,
-                                     QMouseEvent*,
-                                     Rosegarden::ViewElement*);
+    virtual void handleMouseDoubleClick(Rosegarden::timeT,
+					int height,
+					int staffNo,
+					QMouseEvent*,
+					Rosegarden::ViewElement*);
 
     virtual void handleMouseTripleClick(Rosegarden::timeT,
 					int height,

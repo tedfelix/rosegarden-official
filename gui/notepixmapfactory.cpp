@@ -1328,6 +1328,7 @@ QCanvasPixmap*
 NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 {
     std::vector<int> ah = key.getAccidentalHeights(clef);
+    if (ah.size() == 0) return 0;
 
     CharName charName = (key.isSharp() ?
                          NoteCharacterNames::SHARP :
@@ -1347,6 +1348,10 @@ NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
     int x = 0;
     int lw = getLineSpacing();
     int delta = accidentalPixmap.width() - 2*m_origin.x();
+
+    
+    NOTATION_DEBUG << "makeKeyPixmap: delta is " << delta << ", ah.size is " << ah.size() << ", m_origin.x is " << m_origin.x() << ", lw is " << lw << endl;
+
 
     createPixmapAndMask(delta * ah.size() + 2*m_origin.x(), lw * 8 + 1);
 
