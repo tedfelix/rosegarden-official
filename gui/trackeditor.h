@@ -160,6 +160,8 @@ protected slots:
 					Rosegarden::TrackId,
 					Rosegarden::timeT);
 
+    void scrollTrackButtons(int y);
+
 signals:
     /**
      * Emitted when the represented data changed and the SegmentCanvas
@@ -207,6 +209,8 @@ protected:
     TrackButtons            *m_trackButtons;
     SegmentCanvas           *m_segmentCanvas;
     QCanvasLine             *m_pointer;
+
+    int m_trackButtonsScrollPos;
 };
 
 #endif

@@ -58,7 +58,8 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     m_rulerScale(rulerScale),
     m_barButtons(0),
     m_trackButtons(0),
-    m_segmentCanvas(0)
+    m_segmentCanvas(0),
+    m_trackButtonsScrollPos(0)
 {
     Composition &comp = doc->getComposition();
 
@@ -143,6 +144,11 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
                               getSegmentCanvas()->viewport()->width(),
                               barButtonsHeight);
 
+    connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(valueChanged(int)),
+            this, SLOT(scrollTrackButtons(int)));
+    connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(sliderMoved(int)),
+            this, SLOT(scrollTrackButtons(int)));
+
     connect(this, SIGNAL(needUpdate()),
             m_segmentCanvas, SLOT(update()));
 
@@ -180,6 +186,23 @@ void TrackEditor::resizeEvent(QResizeEvent*)
                               m_barButtons->height());
 }
 
+void TrackEditor::scrollTrackButtons(int newPos)
+{
+    int oldPos = m_trackButtonsScrollPos;
+
+    m_trackButtonsScrollPos = newPos;
+
+    kdDebug(KDEBUG_AREA) << "TrackEditor::scrollTrackButtons : y = "
+                         << m_trackButtons->y()
+                         << " - newPos = "
+                         << newPos
+                         << " - currentPos = " << oldPos
+                         << " - scroll by : " << oldPos - m_trackButtonsScrollPos
+                         << std::endl;
+
+    m_trackButtons->scroll(0, oldPos - m_trackButtonsScrollPos);
+
+}
 
 int TrackEditor::getTrackCellHeight() const
 {
