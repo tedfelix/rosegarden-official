@@ -173,13 +173,13 @@ SegmentParameterBox::initBox()
 
     m_delays.clear();
 
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 9; i++)
     {
 	Rosegarden::timeT time = 0;
-	if (i > 0 && i < 5) {
+	if (i > 0 && i < 6) {
 	    time = Note(Note::Hemidemisemiquaver).getDuration() << (i-1);
-	} else if (i > 4) {
-	    time = Note(Note::Crotchet).getDuration() * (i-3);
+	} else if (i > 5) {
+	    time = Note(Note::Crotchet).getDuration() * (i-4);
 	}
 
 	m_delays.push_back(time);

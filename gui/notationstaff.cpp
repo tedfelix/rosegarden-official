@@ -35,6 +35,7 @@
 #include "notestyle.h"
 #include "widgets.h"
 #include "notationview.h"
+#include "progressreporter.h"
 
 #include "Event.h"
 #include "Segment.h"
@@ -329,9 +330,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	    (qstrtostr(i18n("Rendering staff %1...").arg(getId() + 1)));
 	m_progress->setCompleted(0);
 	m_progress->processEvents();
-	if (m_progress->wasOperationCancelled()) {
-	    throw std::string("Action cancelled");
-	}
+	if (m_progress->wasOperationCancelled()) throw ProgressReporter::Cancelled();//!!!
     }
 
     Clef currentClef; // default is okay to start with
@@ -366,9 +365,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	    m_progress->setCompleted
 		((myTime - startTime) * 100 / (endTime - startTime));
 	    m_progress->processEvents();
-	    if (m_progress->wasOperationCancelled()) {
-		throw std::string("Action cancelled");
-	    }
+	    if (m_progress->wasOperationCancelled()) throw ProgressReporter::Cancelled();//!!!
 	}
     }
 
@@ -389,9 +386,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    (qstrtostr(i18n("Positioning staff %1...").arg(getId() + 1)));
 	m_progress->setCompleted(0);
 	m_progress->processEvents();
-	if (m_progress->wasOperationCancelled()) {
-	    throw std::string("Action cancelled");
-	}
+	if (m_progress->wasOperationCancelled()) throw ProgressReporter::Cancelled();//!!!
     }
 
     const NotationProperties &properties(m_notationView->getProperties());
@@ -496,9 +491,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    timeT myTime = (*it)->getAbsoluteTime();
 	    m_progress->setCompleted((myTime - from) * 100 / (to - from));
 	    m_progress->processEvents();
-	    if (m_progress->wasOperationCancelled()) {
-		throw std::string("Action cancelled");
-	    }
+	    if (m_progress->wasOperationCancelled()) throw ProgressReporter::Cancelled();//!!!
 	}
     }
 
@@ -684,11 +677,11 @@ NotationStaff::renderSingleElement(NotationElement *elt,
     } catch (NoteStyleFactory::StyleUnavailable u) {
 
 	NOTATION_DEBUG
-	    << "WARNING: Note style unavailable: " << u.reason << endl;
+	    << "WARNING: Note style unavailable: " << u.getMessage() << endl;
 
 	static bool warned = false;
 	if (!warned) {
-	    KMessageBox::error(0, i18n(strtoqstr(u.reason)));
+	    KMessageBox::error(0, i18n(strtoqstr(u.getMessage())));
 	    warned = true;
 	}
     }

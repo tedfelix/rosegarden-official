@@ -48,10 +48,7 @@ class NoteStyleFileReader : public QXmlDefaultHandler
 public:
     NoteStyleFileReader(NoteStyleName name);
 
-    struct StyleFileReadFailed {
-        StyleFileReadFailed(std::string r) : reason(r) { }
-        std::string reason;
-    };
+    typedef Rosegarden::Exception StyleFileReadFailed;
     
     NoteStyle *getStyle() { return m_style; }
 
@@ -122,8 +119,9 @@ NoteStyleFactory::getStyle(NoteStyleName name)
 	} catch (NoteStyleFileReader::StyleFileReadFailed f) {
 	    RG_DEBUG
 		<< "NoteStyleFactory::getStyle: Style file read failed: "
-		<< f.reason << endl;
-	    throw StyleUnavailable("Style file read failed: " + f.reason);
+		<< f.getMessage() << endl;
+	    throw StyleUnavailable("Style file read failed: " +
+				   f.getMessage());
 	}
 
     } else {

@@ -66,7 +66,8 @@ NotationElement::getCanvasX()
     if (m_canvasItem)
         return m_canvasItem->x();
     else
-        throw NoCanvasItem();
+        throw NoCanvasItem("No canvas item for notation element of type " +
+			   event()->getType(), __FILE__, __LINE__);
 }
 
 double
@@ -75,7 +76,8 @@ NotationElement::getCanvasY()
     if (m_canvasItem)
         return m_canvasItem->y();
     else
-        throw NoCanvasItem();
+        throw NoCanvasItem("No canvas item for notation element of type " +
+			   event()->getType(), __FILE__, __LINE__);
 }
 
 bool

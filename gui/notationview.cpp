@@ -325,10 +325,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	    }
 	}
 	m_ok = true;
-    } catch (std::string s) {
-	if (s != "Action cancelled") {
-	    throw;
-	}
+    } catch (ProgressReporter::Cancelled c) {
 	// when cancelled, m_ok is false -- checked by calling method
     }
 
@@ -539,10 +536,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	    }
 	}
 	m_ok = true;
-    } catch (std::string s) {
-	if (s != "Action cancelled") {
-	    throw;
-	}
+    } catch (ProgressReporter::Cancelled c) {
 	// when cancelled, m_ok is false -- checked by calling method
     }
 }

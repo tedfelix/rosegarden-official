@@ -23,6 +23,7 @@
 #define PROGRESSREPORTER_H
 
 #include <qobject.h>
+#include "Exception.h"
 
 class ProgressReporter : public QObject
 {
@@ -30,6 +31,9 @@ class ProgressReporter : public QObject
 public:
     ProgressReporter(QObject* parent, const char* name = 0)
         : QObject(parent, name), m_isCancelled(false) {}
+
+    // exception class for cancellations
+    class Cancelled { };
 
 protected:
     /*

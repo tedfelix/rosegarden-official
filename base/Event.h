@@ -24,6 +24,7 @@
 #define _EVENT_H_
 
 #include "PropertyMap.h"
+#include "Exception.h"
 
 #include <string>
 #ifndef NDEBUG
@@ -58,8 +59,24 @@ typedef long timeT;
 class Event
 {
 public:
-    struct NoData { };
-    struct BadType { };
+    class NoData : public Exception {
+    public:
+	NoData(std::string property) :
+	    Exception("No data found for property " + property) { }
+	NoData(std::string property, std::string file, int line) :
+	    Exception("No data found for property " + property, file, line) { }
+    };
+
+    class BadType : public Exception {
+    public:
+	BadType(std::string property, std::string expected, std::string actl) :
+	    Exception("Bad type for " + property + " (expected " +
+		      expected + ", found " + actl + ")") { }
+	BadType(std::string property, std::string expected, std::string actual,
+		std::string file, int line) :
+	    Exception("Bad type for " + property + " (expected " +
+		      expected + ", found " + actual + ")", file, line) { }
+    };
 
     Event(const std::string &type,
 	  timeT absoluteTime, timeT duration = 0, int subOrdering = 0) :
@@ -335,21 +352,18 @@ Event::get(const PropertyName &name) const
         if (sb->getType() == P)
             return (static_cast<PropertyStore<P> *>(sb))->getData();
         else {
-            std::cerr << "Event::get() Error: Attempt to get property \"" << name
-                 << "\" as " << PropertyDefn<P>::typeName() <<", actual type is "
-                 << sb->getTypeName() << std::endl;
-            throw BadType();
+            throw BadType(name.getName(),
+			  PropertyDefn<P>::typeName(), sb->getTypeName(),
+			  __FILE__, __LINE__);
         }
 	    
     } else {
 
-        std::cerr << "Event::get(): Error: Attempt to get property \"" << name
-		  << "\" which doesn't exist for this event\n" << std::endl;
 #ifndef NDEBUG
-	std::cerr << "Event::get(): Dump follows:" << std::endl;
+	std::cerr << "Event::get(): Error dump follows:" << std::endl;
 	dump(std::cerr);
 #endif
-        throw NoData();
+        throw NoData(name.getName(), __FILE__, __LINE__);
     }
 }
 
@@ -365,11 +379,7 @@ Event::isPersistent(const PropertyName &name) const
     if (map) {
 	return (map == &m_data->m_properties);
     } else {
-#ifndef NDEBUG
-        std::cerr << "Event::get() Error: Attempt to get persistence of property \""
-             << name << "\" which doesn't exist for this element" << std::endl;
-#endif
-        throw NoData();
+	throw NoData(name.getName(), __FILE__, __LINE__);
     }
 }
 
@@ -387,11 +397,7 @@ Event::setPersistence(const PropertyName &name, bool persistent)
 	insert(*i, persistent);
 	map->erase(i);
     } else {
-#ifndef NDEBUG
-        std::cerr << "Event::get() Error: Attempt to set persistence of property \""
-             << name << "\" which doesn't exist for this element" << std::endl;
-#endif
-        throw NoData();
+        throw NoData(name.getName(), __FILE__, __LINE__);
     }
 }
 
@@ -423,12 +429,9 @@ Event::set(const PropertyName &name, typename PropertyDefn<P>::basic_type value,
         if (sb->getType() == P) {
             (static_cast<PropertyStore<P> *>(sb))->setData(value);
         } else {
-#ifndef NDEBUG
-            std::cerr << "Error: Event: Attempt to set property \"" << name
-                 << "\" as " << PropertyDefn<P>::typeName() <<", actual type is "
-                 << sb->getTypeName() << std::endl;
-#endif
-            throw BadType();
+            throw BadType(name.getName(),
+			  PropertyDefn<P>::typeName(), sb->getTypeName(),
+			  __FILE__, __LINE__);
         }
 	    
     } else {
@@ -464,12 +467,9 @@ Event::setMaybe(const PropertyName &name, typename PropertyDefn<P>::basic_type v
         if (sb->getType() == P) {
 	    (static_cast<PropertyStore<P> *>(sb))->setData(value);
         } else {
-#ifndef NDEBUG
-            std::cerr << "Error: Event: Attempt to setMaybe property \"" << name
-                 << "\" as " << PropertyDefn<P>::typeName() <<", actual type is "
-                 << sb->getTypeName() << std::endl;
-#endif
-            throw BadType();
+            throw BadType(name.getName(),
+			  PropertyDefn<P>::typeName(), sb->getTypeName(),
+			  __FILE__, __LINE__);
         }
     } else {
         PropertyStoreBase *p = new PropertyStore<P>(value);

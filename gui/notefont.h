@@ -33,6 +33,7 @@
 
 #include "notecharname.h"
 #include "NotationTypes.h"
+#include "Exception.h"
 
 
 // Helper class for looking up information about a font
@@ -40,10 +41,7 @@
 class NoteFontMap : public QXmlDefaultHandler
 {
 public:
-    struct MappingFileReadFailed {
-        MappingFileReadFailed(std::string r) : reason(r) { }
-        std::string reason;
-    };
+    typedef Rosegarden::Exception MappingFileReadFailed;
 
     NoteFontMap(std::string name); // load and parse the XML mapping file
     ~NoteFontMap();
@@ -221,10 +219,7 @@ private:
 class NoteFont
 {
 public:
-    struct BadFont {
-        BadFont(std::string r) : reason(r) { }
-        std::string reason;
-    };
+    typedef Rosegarden::Exception BadFont;
 
     // can throw BadFont, MappingFileReadFailed:
     NoteFont(std::string fontName, int size = 0);

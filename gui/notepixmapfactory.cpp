@@ -156,7 +156,7 @@ NotePixmapFactory::init(std::string fontName, int size)
     try {
 	m_style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
     } catch (NoteStyleFactory::StyleUnavailable u) {
-	KMessageBox::error(0, i18n(strtoqstr(u.reason)));
+	KMessageBox::error(0, i18n(strtoqstr(u.getMessage())));
 	throw;
     }
 
@@ -166,10 +166,10 @@ NotePixmapFactory::init(std::string fontName, int size)
     try {
         m_font = new NoteFont(fontName, size);
     } catch (NoteFontMap::MappingFileReadFailed f) {
-        KMessageBox::error(0, i18n(strtoqstr(f.reason)));
+        KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
         throw;
     } catch (NoteFont::BadFont f) {
-        KMessageBox::error(0, i18n(strtoqstr(f.reason)));
+        KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
         throw;
     }
 

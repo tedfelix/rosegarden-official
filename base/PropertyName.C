@@ -21,6 +21,7 @@
 */
 
 #include "PropertyName.h"
+#include "Exception.h"
 
 
 namespace Rosegarden 
@@ -54,7 +55,25 @@ string PropertyName::getName() const
 {
     intern_reverse_map::iterator i(m_internsReversed->find(m_value));
     if (i != m_internsReversed->end()) return i->second;
-    throw CorruptedValue(m_value);
+
+    // dump some informative data, even if we aren't in debug mode,
+    // because this really shouldn't be happening
+    std::cerr << "ERROR: PropertyName::getName: value corrupted!" << endl;
+    std::cerr << "PropertyName's internal value is " << m_value << endl;
+    std::cerr << "Reverse interns are ";
+    i = m_internsReversed->begin();
+    if (i == m_internsReversed->end()) std::cerr << "(none)";
+    else while (i != m_internsReversed->end()) {
+	if (i != m_internsReversed->begin()) {
+	    std::cerr << ", ";
+	}
+	std::cerr << i->first << "=" << i->second;
+    }
+    std::cerr << std::endl;
+
+    throw Exception
+	("Serious problem in PropertyName::getName(): property "
+	 "name's internal value is corrupted -- see stderr for details");
 }
 
 }

@@ -26,6 +26,7 @@
 
 #include "StringHash.h"
 #include "NotationTypes.h"
+#include "Exception.h"
 
 #include "notecharname.h"
 
@@ -47,10 +48,7 @@ public:
     static NoteStyle *getStyle(NoteStyleName name);
     static NoteStyle *getStyleForEvent(Rosegarden::Event *event);
 
-    struct StyleUnavailable {
-        StyleUnavailable(std::string r) : reason(r) { }
-        std::string reason;
-    };
+    typedef Rosegarden::Exception StyleUnavailable;
 
 private:
     typedef Rosegarden::hash_string<NoteStyle*> StyleMap;

@@ -131,7 +131,10 @@ Composition::ReferenceSegment::find(Event *e)
 Composition::ReferenceSegment::iterator
 Composition::ReferenceSegment::insert(Event *e)
 {
-    if (!e->isa(m_eventType)) throw Event::BadType();
+    if (!e->isa(m_eventType)) {
+	throw Event::BadType(std::string("event in ReferenceSegment"),
+			     m_eventType, e->getType(), __FILE__, __LINE__);
+    }
 
     iterator i = find(e);
 

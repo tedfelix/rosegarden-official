@@ -157,7 +157,7 @@ public:
     static const int EventSubOrdering;
     static const PropertyName ClefPropertyName;
     static const Clef DefaultClef;
-    struct BadClefName { };
+    typedef Exception BadClefName;
 
     static const std::string Treble;
     static const std::string Tenor;
@@ -241,8 +241,8 @@ public:
     static const int EventSubOrdering;
     static const PropertyName KeyPropertyName;
     static const Key DefaultKey;
-    struct BadKeyName { };
-    struct BadKeySpec { };
+    typedef Exception BadKeyName;
+    typedef Exception BadKeySpec;
 
     /// Construct the default key (C major).
     Key();
@@ -431,7 +431,7 @@ public:
     static const int EventSubOrdering;
     static const PropertyName IndicationTypePropertyName;
     static const PropertyName IndicationDurationPropertyName;
-    struct BadIndicationName { };
+    typedef Exception BadIndicationName;
 
     static const std::string Slur;
     static const std::string Crescendo;
@@ -605,18 +605,7 @@ public:
 
     typedef int Type; // not an enum, too much arithmetic at stake
 
-    struct BadType {
-        std::string type;
-        BadType(std::string t = "") : type(t) { }
-    };
-
-    struct MalformedNoteName {
-        std::string name;
-        std::string reason;
-        MalformedNoteName(std::string n, std::string r) :
-            name(n), reason(r) { }
-    };
-
+    typedef Exception MalformedNoteName;
 
     // define both sorts of names; some people prefer the American
     // names, but I just can't remember which of them is which
@@ -748,7 +737,7 @@ public:
     static const PropertyName ShowAsCommonTimePropertyName;
     static const PropertyName IsHiddenPropertyName;
     static const TimeSignature DefaultTimeSignature;
-    struct BadTimeSignature { };
+    typedef Exception BadTimeSignature;
 
     TimeSignature() :
         m_numerator(DefaultTimeSignature.m_numerator),

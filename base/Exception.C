@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -17,16 +19,28 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _ROSE_STRINGS_H_
-#define _ROSE_STRINGS_H_
-
-#include <string>
-#include <qstring.h>
-#include "PropertyName.h"
 #include "Exception.h"
 
-extern QString strtoqstr(const std::string &);
-extern QString strtoqstr(const Rosegarden::PropertyName &);
-extern std::string qstrtostr(const QString &);
+#include <iostream>
 
+namespace Rosegarden {
+
+Exception::Exception(std::string message) :
+    m_message(message)
+{
+#ifndef NDEBUG
+    std::cerr << "WARNING: Rosegarden::Exception: \""
+	      << message << "\"" << std::endl;
 #endif
+}
+
+Exception::Exception(std::string message, std::string file, int line) :
+    m_message(message)
+{
+#ifndef NDEBUG
+    std::cerr << "WARNING: Rosegarden::Exception: \""
+	      << message << "\" at " << file << ":" << line << std::endl;
+#endif
+}
+
+}

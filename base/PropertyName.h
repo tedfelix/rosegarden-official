@@ -106,11 +106,6 @@ public:
         return getName().c_str();
     }
 
-    struct CorruptedValue {
-        int value;
-        CorruptedValue(int v) : value(v) { }
-    };
-
     std::string getName() const /* throw (CorruptedValue) */;
 
     int getValue() const { return m_value; }
@@ -134,6 +129,10 @@ private:
 inline std::ostream& operator<<(std::ostream &out, const PropertyName &n) {
     out << n.getName();
     return out;
+}
+
+inline std::string operator+(const std::string &s, const PropertyName &n) {
+    return s + n.getName();
 }
 
 struct PropertyNamesEqual

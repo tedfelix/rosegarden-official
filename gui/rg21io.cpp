@@ -572,7 +572,7 @@ timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
         Rosegarden::Note n(qstrtostr(durationString));
         return n.getDuration();
 
-    } catch (Rosegarden::Note::BadType b) {
+    } catch (Rosegarden::Note::MalformedNoteName m) {
 
         RG_DEBUG << "RG21Loader::convertRG21Duration: Bad duration: "
                              << durationString << endl;

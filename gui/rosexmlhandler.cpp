@@ -617,7 +617,26 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_currentSegment->setRepeating(true);
         }
 
-        // fill in the label
+        QString delayStr = atts.value("delay");
+        if (delayStr) {
+	    RG_DEBUG << "Delay string is \"" << delayStr << "\"" << endl;
+	    long delay = delayStr.toLong();
+	    RG_DEBUG << "Delay is " << delay << endl;
+	    m_currentSegment->setDelay(delay);
+	}
+
+	QString rtDelayuSec = atts.value("rtdelayusec");
+	QString rtDelaySec = atts.value("rtdelaysec");
+	if (rtDelaySec && rtDelayuSec) {
+	    m_currentSegment->setRealTimeDelay
+		(Rosegarden::RealTime(rtDelaySec.toLong(),
+				      rtDelayuSec.toLong()));
+	}
+
+        QString transposeStr = atts.value("transpose");
+        if (transposeStr) m_currentSegment->setTranspose(transposeStr.toInt());
+
+	// fill in the label
         QString labelStr = atts.value("label");
         if (labelStr)
             m_currentSegment->setLabel(qstrtostr(labelStr));

@@ -75,8 +75,8 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
 		try {
 		    Note n(qstrtostr(attrVal));
 		    setDuration(n.getDuration());
-		} catch (Note::BadType b) {
-                    RG_DEBUG << "XmlStorableEvent::XmlStorableEvent: Bad duration: " << attrVal << " (Note choked on \"" << b.type << "\")" << endl;
+		} catch (Note::MalformedNoteName m) {
+                    RG_DEBUG << "XmlStorableEvent::XmlStorableEvent: Bad duration: " << attrVal << " (" << m.getMessage() << ")" << endl;
 		}
             } else {
 		setDuration(d);

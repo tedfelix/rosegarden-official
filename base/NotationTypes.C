@@ -140,14 +140,11 @@ Clef::Clef(const Event &e)
     // throw (Event::NoData, Event::BadType, BadClefName)
 {
     if (e.getType() != EventType) {
-        throw Event::BadType();
+        throw Event::BadType("Clef model event", EventType, e.getType());
     }
     std::string s = e.get<String>(ClefPropertyName);
     if (s != Treble && s != Tenor && s != Alto && s != Bass) {
-#ifndef NDEBUG
-	cerr << "Warning: Clef::Clef: No such clef as \"" << s << "\"" << endl;
-#endif
-        throw BadClefName();
+        throw BadClefName("No such clef as \"" + s + "\"");
     }
     m_clef = s;
 }        
@@ -156,10 +153,7 @@ Clef::Clef(const std::string &s)
     // throw (BadClefName)
 {
     if (s != Treble && s != Tenor && s != Alto && s != Bass) {
-#ifndef NDEBUG
-	cerr << "Warning: Clef::Clef: No such clef as \"" << s << "\"" << endl;
-#endif
-        throw BadClefName();
+        throw BadClefName("No such clef as \"" + s + "\"");
     }
     m_clef = s;
 }
@@ -243,14 +237,11 @@ Key::Key(const Event &e)
 {
     checkMap();
     if (e.getType() != EventType) {
-        throw Event::BadType();
+        throw Event::BadType("Key model event", EventType, e.getType());
     }
     m_name = e.get<String>(KeyPropertyName);
     if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
-#ifndef NDEBUG
-	cerr << "Warning: Key::Key: No such key as \"" << m_name << "\"" <<endl;
-#endif
-        throw BadKeyName();
+        throw BadKeyName("No such key as \"" + m_name + "\"");
     }
 }
 
@@ -260,10 +251,7 @@ Key::Key(const std::string &name)
 {
     checkMap();
     if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
-#ifndef NDEBUG
-	cerr << "Warning: Key::Key: No such key as \"" << m_name << "\"" <<endl;
-#endif
-        throw BadKeyName();
+        throw BadKeyName("No such key as \"" + m_name + "\"");
     }
 }    
 
@@ -281,12 +269,21 @@ Key::Key(int accidentalCount, bool isSharp, bool isMinor)
             return;
         }
     }
-#ifndef NDEBUG
-    cerr << "Warning: Key::Key: No "
-	 << (isMinor ? "minor" : "major") << " key with " << accidentalCount
-	 << (isSharp ? " sharp(s)" : " flat(s)") << endl;
+
+#if (__GNUC__ < 3)
+    std::ostrstream os;
+#else
+    std::ostringstream os;
 #endif
-    throw BadKeySpec();
+
+    os << "No " << (isMinor ? "minor" : "major") << " key with "
+       << accidentalCount << (isSharp ? " sharp(s)" : " flat(s)");
+
+#if (__GNUC__ < 3)
+    os << std::ends;
+#endif
+
+    throw BadKeySpec(os.str());
 }
 
 // Unfortunately this is ambiguous -- e.g. B major / Cb major.
@@ -306,12 +303,21 @@ Key::Key(int tonicPitch, bool isMinor)
             return;
         }
     }
-#ifndef NDEBUG
-    cerr << "Warning: Key::Key: No "
-	 << (isMinor ? "minor" : "major") << " key with tonic pitch "
-	 << tonicPitch << endl;
+
+#if (__GNUC__ < 3)
+    std::ostrstream os;
+#else
+    std::ostringstream os;
 #endif
-    throw BadKeySpec();
+
+    os << "No " << (isMinor ? "minor" : "major") << " key with tonic pitch "
+       << tonicPitch;
+
+#if (__GNUC__ < 3)
+    os << std::ends;
+#endif
+
+    throw BadKeySpec(os.str());
 }
     
 
@@ -487,15 +493,11 @@ const std::string Indication::Decrescendo = "decrescendo";
 Indication::Indication(const Event &e)
 {
     if (e.getType() != EventType) {
-        throw Event::BadType();
+        throw Event::BadType("Indication model event", EventType, e.getType());
     }
     std::string s = e.get<String>(IndicationTypePropertyName);
     if (s != Slur && s != Crescendo && s != Decrescendo) {
-#ifndef NDEBUG
-	cerr << "Warning: Indication::Indication: No such indication as \""
-	     << s << "\"" << endl;
-#endif
-        throw BadIndicationName();
+        throw BadIndicationName("No such indication as \"" + s + "\"");
     }
     m_indicationType = s;
     m_duration = e.get<Int>(IndicationDurationPropertyName);
@@ -504,11 +506,7 @@ Indication::Indication(const Event &e)
 Indication::Indication(const std::string &s, timeT indicationDuration)
 {
     if (s != Slur && s != Crescendo && s != Decrescendo) {
-#ifndef NDEBUG
-	cerr << "Warning: Indication::Indication: No such indication as \""
-	     << s << "\"" << endl;
-#endif
-        throw BadIndicationName();
+        throw BadIndicationName("No such indication as \"" + s + "\"");
     }
     m_indicationType = s;
     m_duration = indicationDuration;
@@ -559,7 +557,7 @@ const std::string Text::Annotation	= "annotation";
 Text::Text(const Event &e)
 {
     if (e.getType() != EventType) {
-        throw Event::BadType();
+        throw Event::BadType("Text model event", EventType, e.getType());
     }
 
     m_text = e.get<String>(TextPropertyName);
@@ -846,7 +844,7 @@ const timeT Note::m_shortestTime = basePPQ / 16;
  
 
 Note::Note(const string &n)
-    // throw (BadType, MalformedNoteName)
+    // throw (MalformedNoteName)
     : m_type(-1), m_dots(0)
 {
     string name(n);
@@ -858,7 +856,8 @@ Note::Note(const string &n)
         dots = atoi(name.substr(0, pos).c_str());
         name = name.substr(pos + 1);
         if (dots < 2)
-            throw MalformedNoteName(n, "Non-numeric or invalid dot count");
+            throw MalformedNoteName("Non-numeric or invalid dot count in \"" +
+				    n + "\"");
     }
 
     if (name.length() > 7 && name.substr(0, 7) == "dotted ") {
@@ -866,7 +865,8 @@ Note::Note(const string &n)
         name = name.substr(7);
     } else {
         if (dots > 1)
-            throw MalformedNoteName(n, "Dot count without dotted tag");
+            throw MalformedNoteName("Dot count without dotted tag in \"" +
+				    n + "\"");
     }
 
     Type t;
@@ -879,11 +879,7 @@ Note::Note(const string &n)
         }
     }
     if (m_type == -1) {
-#ifndef NDEBUG
-	cerr << "Warning: Note::Note: Can't parse note name \""
-	     << n << "\"" << endl;
-#endif
-	throw BadType(name);
+	throw MalformedNoteName("Can't parse note name \"" + n + "\"");
     }
 }
 
@@ -1041,14 +1037,16 @@ TimeSignature::TimeSignature(int numerator, int denominator,
 		(m_numerator == 2 || m_numerator == 4))),
       m_hidden(hidden)
 {
-    if (numerator < 1 || denominator < 1) throw BadTimeSignature();
+    if (numerator < 1 || denominator < 1) {
+	throw BadTimeSignature("Numerator and denominator must be positive");
+    }
 }
 
 TimeSignature::TimeSignature(const Event &e)
     // throw (Event::NoData, Event::BadType, BadTimeSignature)
 {
     if (e.getType() != EventType) {
-        throw Event::BadType();
+        throw Event::BadType("TimeSignature model event", EventType, e.getType());
     }
     m_numerator = e.get<Int>(NumeratorPropertyName);
     m_denominator = e.get<Int>(DenominatorPropertyName);
@@ -1059,7 +1057,9 @@ TimeSignature::TimeSignature(const Event &e)
     m_hidden = false;
     e.get<Bool>(IsHiddenPropertyName, m_hidden);
 
-    if (m_numerator < 1 || m_denominator < 1) throw BadTimeSignature();
+    if (m_numerator < 1 || m_denominator < 1) {
+	throw BadTimeSignature("Numerator and denominator must be positive");
+    }
 }
 
 TimeSignature& TimeSignature::operator=(const TimeSignature &ts)

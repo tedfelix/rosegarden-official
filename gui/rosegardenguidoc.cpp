@@ -387,7 +387,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
             outStream << "\" repeat=\"true";
 	}
 
-	if (segment->getDelay() != 0) {
+	if (segment->getTranspose() != 0) {
 	    outStream << "\" transpose=\"" << segment->getTranspose();
 	}
 

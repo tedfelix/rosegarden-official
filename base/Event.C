@@ -118,7 +118,7 @@ Event::getPropertyType(const PropertyName &name) const
     if (map) {
         return i->second->getType();
     } else {
-        throw NoData();
+        throw NoData(name.getName(), __FILE__, __LINE__);
     }
 }
       
@@ -132,7 +132,7 @@ Event::getPropertyTypeAsString(const PropertyName &name) const
     if (map) {
         return i->second->getTypeName();
     } else {
-        throw NoData();
+        throw NoData(name.getName(), __FILE__, __LINE__);
     }
 }
    
@@ -146,7 +146,7 @@ Event::getAsString(const PropertyName &name) const
     if (map) {
         return i->second->unparse();
     } else {
-        throw NoData();
+        throw NoData(name.getName(), __FILE__, __LINE__);
     }
 }
 

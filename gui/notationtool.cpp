@@ -219,9 +219,6 @@ NoteInserter::NoteInserter(NotationView* view)
 
     connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
             this,         SLOT(slotSetAccidental(Rosegarden::Accidental)));
-
-    connect(m_parentView, SIGNAL(changeTupletMode(bool)),
-            this,         SLOT(slotSetTupletMode(bool)));
 }
 
 NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
@@ -687,10 +684,28 @@ Event *
 RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 			   const Note &note, int, Accidental)
 {
-    NoteInsertionCommand *command = 
+    NoteInsertionCommand *insertionCommand = 
 	new RestInsertionCommand(segment, time, endTime, note);
-    m_nParentView->addCommandToHistory(command);
-    return command->getLastInsertedEvent();
+    m_nParentView->addCommandToHistory(insertionCommand);
+
+    KCommand *activeCommand = insertionCommand;
+
+    if (m_nParentView->isInTripletMode()) {
+	Segment::iterator i(segment.findTime(time));
+	if (i != segment.end() &&
+	    !(*i)->has(Rosegarden::BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+
+	    KMacroCommand *command = new KMacroCommand(insertionCommand->name());
+	    command->addCommand(new GroupMenuTupletCommand
+				(segment, time, note.getDuration()));
+	    command->addCommand(insertionCommand);
+	    activeCommand = command;
+	}
+    }
+
+    m_nParentView->addCommandToHistory(activeCommand);
+
+    return insertionCommand->getLastInsertedEvent();
 } 
 
 void RestInserter::slotToggleDot()

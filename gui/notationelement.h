@@ -40,7 +40,7 @@ class QCanvasItem;
 class NotationElement : public Rosegarden::ViewElement
 {
 public:
-    struct NoCanvasItem {};
+    typedef Rosegarden::Exception NoCanvasItem;
     
     NotationElement(Rosegarden::Event *event);
 

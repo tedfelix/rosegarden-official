@@ -494,9 +494,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
         emit setProgress((barTimes.second - startTime) * 95 / (endTime - startTime));
 
-        if (isCancelled()) {
-            throw std::string("Action cancelled");
-        }
+        if (isCancelled()) throw Cancelled();
 	++barNo;
     }
 
@@ -1071,9 +1069,7 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
 	
         emit setProgress(100 * staffNo / m_barData.size());
 
-        if (isCancelled()) {
-            throw std::string("Action cancelled");
-        }
+        if (isCancelled()) throw Cancelled();
 
         timeT timeCovered = endTime - startTime;
 	    
@@ -1308,9 +1304,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		    lastIncrement +=
 			(sinceIncrement / m_timePerProgressIncrement)
 			* m_timePerProgressIncrement;
-		    if (isCancelled()) {
-			throw std::string("Action cancelled");
-		    }
+		    if (isCancelled()) throw Cancelled();
 		}
 	    }
         }
