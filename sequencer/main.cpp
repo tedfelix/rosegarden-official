@@ -291,32 +291,29 @@ int main(int argc, char *argv[])
 	    nextTick = lastTick + waitTime;
 	}
 
+	// Process small number of pending events (argument is max time in ms)
+	app.processEvents(1);
+	process = true;
+	(void)gettimeofday(&tv, 0);
+	timeNow = Rosegarden::RealTime(tv.tv_sec, tv.tv_usec);
 	Rosegarden::RealTime toNextTick = (nextTick - timeNow);
 
-	bool process = false;
-	if (toNextTick.usec > timePerTick.usec/2) {
-	    // Process small number of pending events (argument is max time in ms)
-	    app.processEvents(timePerTick.usec / 2000 + 1);
-	    process = true;
-	    (void)gettimeofday(&tv, 0);
-	    timeNow = Rosegarden::RealTime(tv.tv_sec, tv.tv_usec);
-	    toNextTick = (nextTick - timeNow);
-	}
-
+/*
 	if (toNextTick < Rosegarden::RealTime::zeroTime) {
 	    cout << "\nwarning: sequencer overrun: " << (timeNow - nextTick) << endl;
 	    cout << "last tick:\t" << lastTick << endl
 		 << "next tick:\t" << nextTick << endl
-		 << "now:\t\t" << timeNow << endl
-		 << "process:\t" << (process ? "yes" : "no") << endl;
+		 << "now:\t\t" << timeNow << endl;
 	}
+*/
 
-	if (toNextTick > Rosegarden::RealTime(0, 2000)) {
-	    // sleep somewhat
+	if (toNextTick > Rosegarden::RealTime::zeroTime) {
+
 	    struct timespec reg;
 	    reg.tv_sec = toNextTick.sec;
-	    reg.tv_nsec = (toNextTick.usec - 1) * 1000;
+	    reg.tv_nsec = toNextTick.usec * 1000;
 	    nanosleep(&reg, 0);
+		
 	}
 	
 	lastTick = nextTick;

@@ -232,7 +232,7 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
 {
     Rosegarden::MappedComposition *mC = new Rosegarden::MappedComposition();
 
-    SEQUENCER_DEBUG << "RosegardenSequencerApp::getSlice (" << start << " -> " << end << ", " << firstFetch << ")" << endl;
+//    SEQUENCER_DEBUG << "RosegardenSequencerApp::getSlice (" << start << " -> " << end << ", " << firstFetch << ")" << endl;
 
     if (firstFetch || (start < m_lastStartTime)) {
 	SEQUENCER_DEBUG << "[calling jumpToTime on start]" << endl;

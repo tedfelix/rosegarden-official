@@ -108,11 +108,11 @@ SequencerMmapper::updateVisual(Rosegarden::MappedEvent *ev)
 
     Rosegarden::MappedEvent *eventPtr = (Rosegarden::MappedEvent *)buf;
 
+    *haveEventPtr = false; // until written
+
     if (ev) {
-	*haveEventPtr = true;
 	*eventPtr = *ev;
-    } else {
-	*haveEventPtr = false;
+	*haveEventPtr = true;
     }
 }
 
