@@ -104,6 +104,7 @@ public slots:
 
 protected:
     MatrixPainter(MatrixView*);
+    MatrixPainter(QString name, MatrixView*);
 
     MatrixElement* m_currentElement;
     MatrixStaff* m_currentStaff;
@@ -217,8 +218,6 @@ protected:
 
 class MatrixMover : public MatrixTool
 {
-    Q_OBJECT
-
     friend class MatrixToolBox;
 
 public:
@@ -249,6 +248,38 @@ protected:
 
     MatrixElement* m_currentElement;
     MatrixStaff* m_currentStaff;
+};
+
+
+class MatrixResizer : public MatrixPainter
+{
+    friend class MatrixToolBox;
+
+public:
+    virtual void handleLeftButtonPress(Rosegarden::timeT,
+                                       int height,
+                                       int staffNo,
+                                       QMouseEvent *event,
+                                       Rosegarden::ViewElement*);
+
+    /**
+     * Set the duration of the element
+     */
+    virtual void handleMouseMove(Rosegarden::timeT,
+                                 int height,
+                                 QMouseEvent*);
+
+    /**
+     * Actually insert the new element
+     */
+    virtual void handleMouseRelease(Rosegarden::timeT,
+                                    int height,
+                                    QMouseEvent*);
+
+    static const QString ToolName;
+
+protected:
+    MatrixResizer(MatrixView*);
 };
 
 

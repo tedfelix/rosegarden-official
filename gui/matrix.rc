@@ -7,6 +7,7 @@
   <Action name="erase" />
   <Action name="select" />
   <Action name="move" />
+  <Action name="resize" />
 </ToolBar>
 
 </kpartgui>

@@ -304,6 +304,12 @@ void MatrixView::setupActions()
                                   actionCollection(), "move");
     toolAction->setExclusiveGroup("tools");
 
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/resize.xpm"));
+    toolAction = new KRadioAction(i18n("Resize"), icon, 0,
+                                  this, SLOT(slotResizeSelected()),
+                                  actionCollection(), "resize");
+    toolAction->setExclusiveGroup("tools");
+
     createGUI("matrix.rc");
 
     actionCollection()->action("paint")->activate();
@@ -450,6 +456,13 @@ void MatrixView::slotMoveSelected()
     EditTool* mover = m_toolBox->getTool(MatrixMover::ToolName);
 
     setTool(mover);
+}
+
+void MatrixView::slotResizeSelected()
+{
+    EditTool* resizer = m_toolBox->getTool(MatrixResizer::ToolName);
+
+    setTool(resizer);
 }
 
 void MatrixView::slotMousePressed(Rosegarden::timeT time, int pitch,

@@ -144,6 +144,7 @@ public slots:
     void slotEraseSelected();
     void slotSelectSelected();
     void slotMoveSelected();
+    void slotResizeSelected();
 
     /// Canvas actions slots
 

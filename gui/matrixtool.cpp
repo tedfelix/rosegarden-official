@@ -65,8 +65,12 @@ EditTool* MatrixToolBox::createTool(const QString& toolName)
 
         tool = new MatrixMover(m_mParentView);
 
+    else if (toolNamelc == MatrixResizer::ToolName)
+
+        tool = new MatrixResizer(m_mParentView);
+
     else {
-        KMessageBox::error(0, QString("NotationToolBox::createTool : unrecognised toolname %1 (%2)")
+        KMessageBox::error(0, QString("MatrixToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));
         return 0;
     }
@@ -133,8 +137,7 @@ MatrixInsertionCommand::~MatrixInsertionCommand()
         delete m_event;
 }
 
-void
-MatrixInsertionCommand::modifySegment()
+void MatrixInsertionCommand::modifySegment()
 {
     kdDebug(KDEBUG_AREA) << "MatrixInsertionCommand::modifySegment()\n";
 
@@ -193,14 +196,12 @@ MatrixEraseCommand::MatrixEraseCommand(Rosegarden::Segment &segment,
     // nothing
 }
 
-timeT
-MatrixEraseCommand::getRelayoutEndTime()
+timeT MatrixEraseCommand::getRelayoutEndTime()
 {
     return m_relayoutEndTime;
 }
 
-void
-MatrixEraseCommand::modifySegment()
+void MatrixEraseCommand::modifySegment()
 {
     Rosegarden::SegmentMatrixHelper helper(getSegment());
 
@@ -212,6 +213,8 @@ MatrixEraseCommand::modifySegment()
 
     }
 }
+
+//------------------------------
 
 class MatrixMoveCommand : public BasicCommand
 {
@@ -252,8 +255,7 @@ MatrixMoveCommand::MatrixMoveCommand(Rosegarden::Segment &segment,
 {
 }
 
-void
-MatrixMoveCommand::modifySegment()
+void MatrixMoveCommand::modifySegment()
 {
     Rosegarden::SegmentMatrixHelper helper(getSegment());
 
@@ -275,9 +277,79 @@ MatrixMoveCommand::modifySegment()
 
 //------------------------------
 
+class MatrixChangeDurationCommand : public BasicCommand
+{
+public:
+    MatrixChangeDurationCommand(Rosegarden::Segment &segment,
+                                timeT newDuration,
+                                MatrixStaff*,
+                                Rosegarden::Event *event);
+
+protected:
+    virtual void modifySegment();
+
+
+    timeT m_newDuration;
+
+    MatrixStaff* m_staff;
+    Rosegarden::Event* m_event;
+};
+
+MatrixChangeDurationCommand::MatrixChangeDurationCommand(Rosegarden::Segment &segment,
+                                                         timeT newDuration,
+                                                         MatrixStaff* staff,
+                                                         Rosegarden::Event *event)
+    : BasicCommand(i18n("Change Note Duration"),
+                   segment,
+                   event->getAbsoluteTime(), 
+                   event->getAbsoluteTime() + QMAX(newDuration, event->getDuration()),
+                   true),
+    m_newDuration(newDuration),
+    m_staff(staff),
+    m_event(event)
+{
+}
+
+void MatrixChangeDurationCommand::modifySegment()
+{
+    Rosegarden::SegmentMatrixHelper helper(getSegment());
+
+    std::string eventType = m_event->getType();
+
+    if (eventType == Note::EventType) {
+
+        // We can't change the duration directly
+
+        // Create new event
+        Rosegarden::Event *newEvent = new Rosegarden::Event(*m_event,
+                                                            m_event->getAbsoluteTime(),
+                                                            m_newDuration);
+        // Delete old one
+	helper.deleteNote(m_event, false);
+
+        // Insert new one
+        helper.insertNote(newEvent);
+
+    }
+}
+
+//------------------------------
+
 
 MatrixPainter::MatrixPainter(MatrixView* parent)
     : MatrixTool("MatrixPainter", parent),
+      m_currentElement(0),
+      m_currentStaff(0),
+      m_resolution(Note::QuarterNote),
+      m_basicDuration(0)
+{
+    Note tmpNote(m_resolution);
+
+    m_basicDuration = tmpNote.getDuration();
+}
+
+MatrixPainter::MatrixPainter(QString name, MatrixView* parent)
+    : MatrixTool(name, parent),
       m_currentElement(0),
       m_currentStaff(0),
       m_resolution(Note::QuarterNote),
@@ -365,7 +437,7 @@ void MatrixPainter::handleMouseMove(Rosegarden::timeT newTime,
     double width = newDuration * m_currentStaff->getTimeScaleFactor();
     m_currentElement->setWidth(int(width));
 
-    m_mParentView->update();
+    m_mParentView->canvas()->update();
 }
 
 void MatrixPainter::handleMouseRelease(Rosegarden::timeT,
@@ -418,6 +490,10 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT,
 void MatrixPainter::slotSetResolution(Rosegarden::Note::Type note)
 {
     m_resolution = note;
+
+    Note tmpNote(m_resolution);
+
+    m_basicDuration = tmpNote.getDuration();
 }
 
 //------------------------------
@@ -717,6 +793,77 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
 
 
     m_mParentView->addCommandToHistory(command);
+    m_mParentView->canvas()->update();
+}
+
+//------------------------------
+MatrixResizer::MatrixResizer(MatrixView* parent)
+    : MatrixPainter("MatrixResizer", parent)
+{
+}
+
+void MatrixResizer::handleLeftButtonPress(Rosegarden::timeT,
+                                          int,
+                                          int staffNo,
+                                          QMouseEvent*,
+                                          Rosegarden::ViewElement* el)
+{
+    kdDebug(KDEBUG_AREA) << "MatrixResizer::handleLeftButtonPress() : el = "
+                         << el << endl;
+
+    if (!el) return; // nothing to erase
+
+    m_currentElement = dynamic_cast<MatrixElement*>(el);
+    m_currentStaff = m_mParentView->getStaff(staffNo);
+}
+
+void MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
+                                    int pitch,
+                                    QMouseEvent* e)
+{
+    if (!m_currentElement || !m_currentStaff) return;
+
+    newTime = (newTime / m_basicDuration) * m_basicDuration;
+
+    // if (newTime == m_currentElement->getAbsoluteTime()) // what to do ? erase element ?
+
+    timeT newDuration = newTime - m_currentElement->getAbsoluteTime();
+
+    m_currentElement->setDuration(newDuration);
+
+    double width = newDuration * m_currentStaff->getTimeScaleFactor();
+    m_currentElement->setWidth(int(width));
+
+    m_mParentView->canvas()->update();
+    
+}
+
+void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
+                                       int,
+                                       QMouseEvent*)
+{
+    if (!m_currentElement || !m_currentStaff) return;
+
+    newTime = (newTime / m_basicDuration) * m_basicDuration;
+
+    // if (newTime == m_currentElement->getAbsoluteTime()) // what to do ? erase element ?
+
+    timeT newDuration = newTime - m_currentElement->getAbsoluteTime();
+
+    m_currentElement->setDuration(newDuration);
+
+    double width = newDuration * m_currentStaff->getTimeScaleFactor();
+    m_currentElement->setWidth(int(width));
+
+    MatrixChangeDurationCommand* command =
+        new MatrixChangeDurationCommand(m_currentStaff->getSegment(),
+                                        newDuration,
+                                        m_currentStaff,
+                                        m_currentElement->event());
+
+
+    m_mParentView->addCommandToHistory(command);
+
     m_mParentView->update();
 }
 
@@ -726,4 +873,5 @@ const QString MatrixPainter::ToolName   = "painter";
 const QString MatrixEraser::ToolName    = "eraser";
 const QString MatrixSelector::ToolName  = "selector";
 const QString MatrixMover::ToolName     = "mover";
+const QString MatrixResizer::ToolName   = "resizer";
 
