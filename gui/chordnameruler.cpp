@@ -128,6 +128,9 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     // CompositionTimeSliceAdapter could locate keys in its subset of
     // segments, perhaps?
 
+    //!!! bit of a problem, as a linear search for keys in the entire
+    // segment would be a real drag
+
     CompositionTimeSliceAdapter adapter(m_composition, from, to + 1);
     Segment segment;
     AnalysisHelper helper;

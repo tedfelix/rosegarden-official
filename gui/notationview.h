@@ -358,17 +358,30 @@ public slots:
     /// Set the current staff to the one containing the given canvas Y coord
     void slotSetCurrentStaff(int canvasY);
 
-    /// Set the insert cursor position (from the top LoopRuler)
+    /**
+     * Set the insert cursor position (from the top LoopRuler).
+     * If the segment has recently been changed and no refresh has
+     * occurred since, pass updateNow false; then the move will
+     * happen on the next update.
+     */
     void slotSetInsertCursorPosition(Rosegarden::timeT position,
-				     bool scroll = true);
+				     bool scroll = true,
+				     bool updateNow = true);
 
     /// Set the insert cursor position from a mouse event location
     void slotSetInsertCursorPosition(double canvasX, int canvasY,
-				     bool scroll = true);
+				     bool scroll = true,
+				     bool updateNow = true);
 
-    /// Set the insert cursor position and scroll so it's at given point
+    /**
+     * Set the insert cursor position and scroll so it's at given point.
+     * If the segment has recently been changed and no refresh has
+     * occurred since, pass updateNow false; then the move will
+     * happen on the next update.
+     */
     void slotSetInsertCursorAndRecentre(Rosegarden::timeT position,
-					double cx, int cy);
+					double cx, int cy,
+					bool updateNow = true);
 
     /// Step back one event with the insert cursor position
     void slotStepBackward();
@@ -536,6 +549,8 @@ protected:
     Rosegarden::timeT getInsertionTime(Rosegarden::Event *&clefEvt,
 				       Rosegarden::Event *&keyEvt);
 
+    void doDeferredCursorMove();
+
     void removeViewLocalProperties(Rosegarden::Event *);
 
     //--------------- Data members ---------------------------------
@@ -559,7 +574,15 @@ protected:
     std::vector<NotationStaff*> m_staffs;
     int m_currentStaff;
     int m_lastFinishingStaff;
+
     Rosegarden::timeT m_insertionTime;
+    enum {
+	NoCursorMoveNeeded,
+	CursorMoveOnly,
+	CursorMoveAndMakeVisible,
+	CursorMoveAndScrollToPosition
+    } m_deferredCursorMove;
+    double m_deferredCursorScrollToX;
 
     Rosegarden::Accidental m_currentAccidental;
 

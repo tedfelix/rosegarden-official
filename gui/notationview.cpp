@@ -2111,7 +2111,8 @@ NotationView::slotCurrentStaffDown()
 }
 
 void
-NotationView::slotSetInsertCursorPosition(double x, int y, bool scroll)
+NotationView::slotSetInsertCursorPosition(double x, int y, bool scroll,
+					  bool updateNow)
 {
     slotSetCurrentStaff(y);
 
@@ -2121,16 +2122,45 @@ NotationView::slotSetInsertCursorPosition(double x, int y, bool scroll)
 	staff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
 
     if (i == staff->getViewElementList()->end()) {
-	slotSetInsertCursorPosition(staff->getSegment().getEndTime(), scroll);
+	slotSetInsertCursorPosition(staff->getSegment().getEndTime(), scroll,
+				    updateNow);
     } else {
-	slotSetInsertCursorPosition((*i)->getAbsoluteTime(), scroll);
+	slotSetInsertCursorPosition((*i)->getAbsoluteTime(), scroll,
+				    updateNow);
     }
 }    
 
 void
-NotationView::slotSetInsertCursorPosition(timeT t, bool scroll)
+NotationView::slotSetInsertCursorPosition(timeT t, bool scroll, bool updateNow)
 {
     m_insertionTime = t;
+    if (scroll) {
+	m_deferredCursorMove = CursorMoveAndMakeVisible;
+    } else {
+	m_deferredCursorMove = CursorMoveOnly;
+    }
+    if (updateNow) doDeferredCursorMove();
+}
+
+void
+NotationView::slotSetInsertCursorAndRecentre(timeT t, double cx, int,
+					     bool updateNow)
+{
+    m_insertionTime = t;
+    m_deferredCursorMove = CursorMoveAndScrollToPosition;
+    m_deferredCursorScrollToX = cx;
+    if (updateNow) doDeferredCursorMove();
+}
+
+void
+NotationView::doDeferredCursorMove()
+{
+    if (m_deferredCursorMove == NoCursorMoveNeeded) {
+	return;
+    }
+
+    timeT t = m_insertionTime;
+
     if (m_staffs.size() == 0) return;
     NotationStaff *staff = m_staffs[m_currentStaff];
     Segment &segment = staff->getSegment();
@@ -2174,38 +2204,39 @@ NotationView::slotSetInsertCursorPosition(timeT t, bool scroll)
 
 	staff->setInsertCursorPosition
 	    ((*i)->getCanvasX() - 2, int((*i)->getCanvasY()));
-	if (scroll) slotScrollHoriz(int((*i)->getCanvasX()) - 4);
+
+	if (m_deferredCursorMove == CursorMoveAndMakeVisible) {
+	    slotScrollHoriz(int((*i)->getCanvasX()) - 4);
+	}
     }
 
-    updateView();
-}
+    if (m_deferredCursorMove == CursorMoveAndScrollToPosition) {
 
-void
-NotationView::slotSetInsertCursorAndRecentre(timeT t, double cx, int)
-{
-    slotSetInsertCursorPosition(t, false);
-
-    // get current canvas x of insert cursor
+	// get current canvas x of insert cursor, which might not be
+	// what we just set
     
-    double ccx;
+	double ccx;
 
-    NotationStaff *staff = m_staffs[m_currentStaff];
-    NotationElementList::iterator i = 
-	staff->getViewElementList()->findTime(t);
+	NotationElementList::iterator i = 
+	    staff->getViewElementList()->findTime(t);
 
-    if (i == staff->getViewElementList()->end()) {
-	if (i == staff->getViewElementList()->begin()) return;
-        double lx, lwidth;
-	--i;
-	ccx = (*i)->getCanvasX();
-	(*i)->getLayoutAirspace(lx, lwidth);
-	ccx += lwidth;
-    } else {
-	ccx = (*i)->getCanvasX();
+	if (i == staff->getViewElementList()->end()) {
+	    if (i == staff->getViewElementList()->begin()) return;
+	    double lx, lwidth;
+	    --i;
+	    ccx = (*i)->getCanvasX();
+	    (*i)->getLayoutAirspace(lx, lwidth);
+	    ccx += lwidth;
+	} else {
+	    ccx = (*i)->getCanvasX();
+	}
+	
+	QScrollBar* hbar = m_horizontalScrollBar;
+	hbar->setValue(hbar->value() - (m_deferredCursorScrollToX - ccx));
     }
 
-    QScrollBar* hbar = m_horizontalScrollBar;
-    hbar->setValue(hbar->value() - (cx - ccx));
+    m_deferredCursorMove = NoCursorMoveNeeded;
+    updateView();
 }
 
 
@@ -2559,7 +2590,8 @@ void NotationView::refreshSegment(Segment *segment,
     PixmapArrayGC::deleteAll();
 
     Event::dumpStats(cerr);
-    slotSetInsertCursorPosition(m_insertionTime, false);
+    doDeferredCursorMove();
+//!!!    slotSetInsertCursorPosition(m_insertionTime, false);
     slotSetPointerPosition(m_document->getComposition().getPosition(), false);
 
     PRINT_ELAPSED("NotationView::refreshSegment (including update/GC)");
