@@ -28,7 +28,13 @@ m_viewTracksToolBar->setChecked(!toolBar("tracksToolBar")->isHidden());
 
 EditViewBase::readOptions() handles the "show toolbar" and "show
 status bar" actions. It should be called right after
-setAutoSaveSettings() by the child.
+setAutoSaveSettings() by the child. That is, children of EditViewBase
+should explicitely call EditViewBase::readOptions() in their own
+implementation of readOptions().
+
+On the contrary, EditViewBase::slotSaveOptions() is called by the
+EditViewBase dtor. There is no need to call it explicitly in the
+children's dtors.
 
 + When adding a new toolbar : if this toolbar has a corresponding
   "Show" toggle action, then the only thing you need is to make sure
