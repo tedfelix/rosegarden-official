@@ -38,7 +38,7 @@ Post-0.1.4 task list
     implement Cut-&-Close, Paste as New Segment, etc.
 
 10. Create clef dialog with transposition options (maintain pitches,
-    transpose entirely, transpose octaves only)
+    transpose entirely, transpose octaves only) [DONE]
 
 11. Ties don't always appear (e.g. load davy.mid with viability switched
     on in MidiFile.cpp)

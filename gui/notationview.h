@@ -336,6 +336,12 @@ public slots:
     /// Set the insertion pointer position (from the bottom LoopRuler)
     void slotSetInsertCursorPosition(Rosegarden::timeT position);
 
+    /// Step back one event with the insertion pointer position
+    void slotStepBackward();
+
+    /// Step forward one event with the insertion pointer position
+    void slotStepForward();
+
     /// Changes the font of the staffs on the view
     void slotChangeFont(const QString &newFont);
 

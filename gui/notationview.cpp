@@ -677,6 +677,12 @@ void NotationView::setupActions()
 
         toolbarAction->setChecked(true);
     }
+
+    QAccel *accelerators(getAccelerators());
+    accelerators->connectItem(accelerators->insertItem(Key_Left),
+			      this, SLOT(slotStepBackward()));
+    accelerators->connectItem(accelerators->insertItem(Key_Right),
+			      this, SLOT(slotStepForward()));
     
     KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
 
@@ -1133,6 +1139,8 @@ NotationView::getInsertionTime(Event *&clefEvt,
     double layoutX = staff->getLayoutXOfInsertCursor();
     if (layoutX < 0) layoutX = 0;
 
+    //!!! hang on. don't we want airspace here rather than closest element?
+    // point is it should be unambiguous.
     NotationElementList::iterator i = staff->getClosestElementToLayoutX
 	(layoutX, clefEvt, keyEvt, false, -1);
 
@@ -1882,8 +1890,32 @@ NotationView::slotSetInsertCursorPosition(timeT time)
     updateView();
 }
 
-    
+void
+NotationView::slotStepBackward()
+{
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    Segment &segment = staff->getSegment();
+    timeT time = getInsertionTime();
+    Segment::iterator i = segment.findTime(time);
 
+    while (i != segment.begin() &&
+	   (i == segment.end() || (*i)->getAbsoluteTime() == time)) --i;
+    if (i != segment.end()) slotSetInsertCursorPosition((*i)->getAbsoluteTime());
+}
+
+void
+NotationView::slotStepForward()
+{
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    Segment &segment = staff->getSegment();
+    timeT time = getInsertionTime();
+    Segment::iterator i = segment.findTime(time);
+
+    while (i != segment.end() && (*i)->getAbsoluteTime() == time) ++i;
+    if (i == segment.end()) slotSetInsertCursorPosition(segment.getEndTime());
+    else slotSetInsertCursorPosition((*i)->getAbsoluteTime());
+}
+    
 
 //////////////////////////////////////////////////////////////////////
 
