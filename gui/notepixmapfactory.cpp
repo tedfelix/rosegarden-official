@@ -728,8 +728,6 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
 
     if (isStemmed && params.m_drawStem) {
 
-	drawStem(params, startPoint, endPoint);
-
 	if (flagCount > 0 && !drawFlag && params.m_beamed) {
 	    drawBeams(endPoint, params, flagCount);
         }
@@ -737,6 +735,17 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
 	if (slashCount > 0) {
 	    drawSlashes(startPoint, params, slashCount);
 	}
+	// If we draw stems after beams, instead of beams after stems,
+	// beam anti-aliasing won't damage stems but we have to shorten the
+	// stems slightly first so that the stems don't extend all the way
+	// through the beam into the anti-aliased region on the
+	// other side of the beam that faces away from the note-heads.
+	int shortening;
+	if (flagCount > 0 && !drawFlag && params.m_beamed)
+	   shortening = 2;
+	else
+	   shortening = 0;
+	drawStem(params, startPoint, endPoint, shortening);
     }
 
     if (params.m_marks.size() > 0) {
@@ -1192,7 +1201,7 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 
     for (int i = legerLines - 1; i >= 0; --i) { 
 	if (i % 2) {
-//	    NOTATION_DEBUG << "drawing at y = " << y << endl;
+//	    NOTATION_DEBUG << "drawing leger line at y = " << y << endl;
 	    for (int j = 0; j < getLegerLineThickness(); ++j) {
 		m_p->drawLine(x0, y + j, x1, y + j);
 	    }
@@ -1378,12 +1387,15 @@ NotePixmapFactory::drawFlags(int flagCount,
 }
 
 void
-NotePixmapFactory::drawStem(const NotePixmapParameters &,
-			    const QPoint &s0, const QPoint &s1)
+NotePixmapFactory::drawStem(const NotePixmapParameters &params,
+			    const QPoint &s0, const QPoint &s1,
+			    int shortening)
 {
+    if (params.m_stemGoesUp)
+	shortening = -shortening;
     for (int i = 0; i < getStemThickness(); ++i) {
 	m_p->drawLine(m_left + s0.x() + i, m_above + s0.y(),
-		      m_left + s1.x() + i, m_above + s1.y());
+		      m_left + s1.x() + i, m_above + s1.y() - shortening);
     }
 }
 
@@ -1396,7 +1408,7 @@ NotePixmapFactory::makeRoomForBeams(const NotePixmapParameters &params)
 	
 	beamSpacing = -beamSpacing;
 	if (beamSpacing < 0) beamSpacing = 0;
-	m_above += beamSpacing + 1;
+	m_above += beamSpacing + 2;
 	
 	// allow a bit extra in case the h fixpoint is non-normal
 	m_right = std::max(m_right, params.m_width + m_noteBodyWidth);
@@ -1404,7 +1416,7 @@ NotePixmapFactory::makeRoomForBeams(const NotePixmapParameters &params)
     } else {
 	
 	if (beamSpacing < 0) beamSpacing = 0;
-	m_below += beamSpacing + 1;
+	m_below += beamSpacing + 2;
 	
 	m_right = std::max(m_right, params.m_width);
     }
