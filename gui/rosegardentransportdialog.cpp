@@ -60,6 +60,8 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     m_framesPerSecond(24),
     m_bitsPerFrame(80)
 {
+    setWFlags(flags);
+
     resetFonts();
 
     // set the LCD frame background to black
