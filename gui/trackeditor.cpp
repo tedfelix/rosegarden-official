@@ -598,6 +598,13 @@ TrackEditor::slotDeleteSelectedSegments()
 
     std::vector<Rosegarden::Segment*>::iterator it;
 
+    // Clear the selection before erasing the Segments
+    // the selection points to
+    //
+    m_segmentCanvas->clearSelected();
+
+    // Create the compound command
+    //
     for (it = segments.begin(); it != segments.end(); it++)
     {
         macro->addCommand(new SegmentEraseCommand(*it));

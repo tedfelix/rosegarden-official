@@ -250,6 +250,7 @@ public:
     // currently using a "Selector"
     //
     std::vector<Rosegarden::Segment*> getSelectedSegments();
+    void clearSelected();
 
 public slots:
 

@@ -518,6 +518,15 @@ SegmentCanvas::getSelectedSegments()
     return *(new std::vector<Rosegarden::Segment*>);
 }
 
+void
+SegmentCanvas::clearSelected()
+{
+    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
+
+    if (selTool)
+        return selTool->clearSelected();
+}
+
 
 
 // enter/exit selection add mode - this means that the SHIFT key
