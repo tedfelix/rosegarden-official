@@ -58,5 +58,6 @@ gui/Makefile \
 gui/docs/Makefile \
 gui/docs/en/Makefile \
 po/Makefile \
+sequencer/Makefile \
 sound/Makefile \
 )

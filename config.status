@@ -28,7 +28,7 @@ done
 ac_given_srcdir=.
 ac_given_INSTALL="/usr/bin/ginstall -c -p"
 
-trap 'rm -fr ./Makefile core/Makefile gui/Makefile gui/docs/Makefile gui/docs/en/Makefile po/Makefile sound/Makefile  config.h conftest*; exit 1' 1 2 15
+trap 'rm -fr ./Makefile core/Makefile gui/Makefile gui/docs/Makefile gui/docs/en/Makefile po/Makefile sequencer/Makefile sound/Makefile  config.h conftest*; exit 1' 1 2 15
 
 # Protect against being on the right side of a sed subst in config.status.
 sed 's/%@/@@/; s/@%/@@/; s/%g$/@g/; /@g$/s/[\\&%]/\\&/g;
@@ -181,13 +181,13 @@ s%@LIB_KWRITE@%-lkwrite%g
 s%@LIB_KFM@%%g
 s%@LIBTIFF@%-ltiff -ljpeg -lz%g
 s%@LIB_KIMGIO@%-lkimgio%g
-s%@TOPSUBDIRS@% po%g
+s%@TOPSUBDIRS@% po sequencer%g
 
 CEOF
 
 # Split the substitutions into bite-sized pieces for seds with
 # small command number limits, like on Digital OSF/1 and HP-UX.
-CONFIG_FILES=${CONFIG_FILES-"./Makefile core/Makefile gui/Makefile gui/docs/Makefile gui/docs/en/Makefile po/Makefile sound/Makefile "}
+CONFIG_FILES=${CONFIG_FILES-"./Makefile core/Makefile gui/Makefile gui/docs/Makefile gui/docs/en/Makefile po/Makefile sequencer/Makefile sound/Makefile "}
 #echo Doing the fast build of Makefiles -- autoconf 213
 if test "x$ac_cs_root" = "x" ; then
     ac_cs_root=conftest
