@@ -561,7 +561,10 @@ GroupMenuGraceCommand::modifySegment()
     s.getTimeSlice(endOfLastGraceNote, i0, i1);
 
     while (i0 != i1 && i0 != s.end()) {
-	if (!(*i0)->isa(Note::EventType)) continue;
+	if (!(*i0)->isa(Note::EventType)) {
+	    ++i0;
+	    continue;
+	}
 	(*i0)->set<Bool>(HAS_GRACE_NOTES, true);
 	++i0;
     }
