@@ -80,6 +80,7 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_stemLength(-1),
     m_legerLines(0),
     m_selected(false),
+    m_highlighted(false),
     m_onLine(false),
     m_beamed(false),
     m_nextBeamCount(0),
@@ -435,12 +436,14 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     }
 
     QPixmap body;
-    if (!m_selected && !params.m_selected) {
+    if (!m_selected && !params.m_selected && !params.m_highlighted) {
         body = m_font->getPixmap(getNoteHeadCharName(params.m_noteType));
     } else {
         body = m_font->getColouredPixmap
             (getNoteHeadCharName(params.m_noteType),
-	     RosegardenGUIColours::SelectedElementHue);
+	     params.m_highlighted ? RosegardenGUIColours::HighlightedElementHue
+	                          : RosegardenGUIColours::   SelectedElementHue)
+	    ;
     }
 
     QPoint bodyLocation(m_left - m_origin.x(), m_above - m_origin.y());

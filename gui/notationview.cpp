@@ -1021,6 +1021,8 @@ void NotationView::previewNote(int staffNo, double layoutX,
 			       int pitch, int height,
 			       const Rosegarden::Note &note)
 { 
+    m_staffs[staffNo]->showPreviewNote(layoutX, height, note);
+
     Rosegarden::Composition &comp = m_document->getComposition();
     Rosegarden::Studio &studio = m_document->getStudio();
 
@@ -1046,8 +1048,6 @@ void NotationView::previewNote(int staffNo, double layoutX,
                                     Rosegarden::RealTime(0, 0));
 
     emit notePlayed(mE);
-
-    //!!! and the rest
 }
 
 

@@ -65,7 +65,8 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
 				pageMode, pageWidth,
 				0 //!!!
 	),
-    m_npf(0)
+    m_npf(0),
+    m_previewSprite(0)
 {
     changeFont(fontName, resolution);
 }
@@ -848,6 +849,43 @@ NotationStaff::setTuplingParameters(NotationElement *elt,
 	}
     }
 }
+
+void
+NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
+			       const Rosegarden::Note &note)
+{
+    NotePixmapParameters params(note.getNoteType(), note.getDots());
+
+    params.setAccidental(NoAccidental);
+    params.setNoteHeadShifted(false);
+    params.setDrawFlag(true);
+    params.setDrawStem(true);
+    params.setStemGoesUp(heightOnStaff <= 4);
+    params.setLegerLines(heightOnStaff < 0 ? heightOnStaff :
+			 heightOnStaff > 8 ? heightOnStaff - 8 : 0);
+    params.setBeamed(false);
+    params.setIsOnLine(heightOnStaff % 2 == 0);
+    params.setTied(false);
+    params.setBeamed(false);
+    params.setTupletCount(0);
+    params.setSelected(false);
+    params.setHighlighted(true);
+
+    QCanvasPixmap notePixmap(m_npf->makeNotePixmap(params));
+    delete m_previewSprite;
+    m_previewSprite = new QCanvasSimpleSprite
+	(new QCanvasPixmap(notePixmap), m_canvas);
+
+    int layoutY = getLayoutYForHeight(heightOnStaff);
+    LinedStaffCoords coords = getCanvasOffsetsForLayoutCoords(layoutX, layoutY);
+
+    kdDebug(KDEBUG_AREA) << "NotationStaff::showPreviewNote: Made note, moved it to (" << coords.first << "," << coords.second << ")" << endl;
+
+    m_previewSprite->show();
+    m_previewSprite->move(coords.first, (double)coords.second);
+    m_canvas->update();
+} 
+
 
 bool
 NotationStaff::wrapEvent(Rosegarden::Event *e)

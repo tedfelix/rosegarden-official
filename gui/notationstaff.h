@@ -210,6 +210,13 @@ public:
     (double x, Rosegarden::Event *&clef, Rosegarden::Event *&key);
 
     /**
+     * Draw a note on the staff to show an insert position prior to
+     * an insert. 
+     */
+    virtual void showPreviewNote(double layoutX, int heightOnStaff,
+				 const Rosegarden::Note &note);
+
+    /**
      * Overridden from Rosegarden::Staff<T>.
      * We want to avoid wrapping really short rests
      */
@@ -290,6 +297,7 @@ protected:
     void truncateClefsAndKeysAt(int);
 
     NotePixmapFactory *m_npf;
+    QCanvasSimpleSprite *m_previewSprite;
 };
 
 #endif

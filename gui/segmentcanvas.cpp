@@ -260,6 +260,7 @@ void SegmentItem::setSelected(const bool &select, const QBrush &brush)
 {
     setBrush(brush);
     m_selected = select;
+    setZ(select ? 2 : 1); // selected items come to the front
 }
 
 
@@ -1245,7 +1246,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
     if (m_segmentQuickCopyDone)
     {
         m_segmentQuickCopyDone = false;
-        m_currentItem->setZ(2);
+//        m_currentItem->setZ(2); // see SegmentItem::setSelected  --??
     }
 
     m_currentItem = 0;

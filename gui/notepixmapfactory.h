@@ -52,6 +52,7 @@ public:
     void setStemLength(int length)        { m_stemLength       = length;    }
     void setLegerLines(int lines)         { m_legerLines       = lines;     }
     void setSelected(bool selected)       { m_selected         = selected;  }
+    void setHighlighted(bool highlighted) { m_highlighted      = highlighted;}
     void setIsOnLine(bool isOnLine)       { m_onLine           = isOnLine;  }
 
     void setBeamed(bool beamed)           { m_beamed           = beamed;    }
@@ -92,6 +93,7 @@ private:
     int     m_stemLength;
     int     m_legerLines;
     bool    m_selected;
+    bool    m_highlighted;
     bool    m_onLine;
 
     bool    m_beamed;

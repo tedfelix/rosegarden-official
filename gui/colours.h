@@ -76,6 +76,7 @@ namespace RosegardenGUIColours
     extern const QColor SelectionRectangle;
     extern const QColor SelectedElement;
     extern const int SelectedElementHue;
+    extern const int HighlightedElementHue;
 }
 
 #endif
