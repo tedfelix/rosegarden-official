@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "POT-Creation-Date: 2003-09-14 17:57+0200\n"
-"PO-Revision-Date: 2004-02-09 22:03+0000\n"
+"PO-Revision-Date: 2004-02-13 10:06+0000\n"
 "Last-Translator: Burli <didierburli@hotmail.com>\n"
 "Language-Team: Français <fr@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -860,7 +860,7 @@ msgstr "Aucun segment non-audio selectionné"
 
 #: rosegardentempo.cpp:35
 msgid "Set Tempo"
-msgstr "Regler Tempo"
+msgstr "Règler le tempo"
 
 #: rosegardentempo.cpp:44
 msgid "Modify Tempo"
@@ -1230,27 +1230,27 @@ msgstr "Sélectionner &tout les segments"
 
 #: rosegardengui.cpp:515
 msgid "Edit Markers..."
-msgstr "Editer repères..."
+msgstr "Editer les repères..."
 
 #: rosegardengui.cpp:519
 msgid "Edit Document P&roperties..."
-msgstr "Editer p&ropriétés du document..."
+msgstr "Editer les p&ropriétés du document..."
 
 #: rosegardengui.cpp:527
 msgid "Open in &Default Editor"
-msgstr "Ouvrir dans é&diteur par défaut"
+msgstr "Ouvrir dans l'é&diteur par défaut"
 
 #: rosegardengui.cpp:532
 msgid "Open in Matri&x Editor"
-msgstr "Ouvrir &Matrice"
+msgstr "Ouvrir la &Matrice"
 
 #: rosegardengui.cpp:537
 msgid "Open in &Notation Editor"
-msgstr "Ouvrir &Partition"
+msgstr "Ouvrir la &Partition"
 
 #: rosegardengui.cpp:542
 msgid "Open in &Event List Editor"
-msgstr "Ouvrir liste d'&événements"
+msgstr "Ouvrir la liste des &événements"
 
 #: rosegardengui.cpp:551 editcommands.cpp:731 editcommands.cpp:895
 msgid "&Quantize..."
@@ -1262,11 +1262,11 @@ msgstr "Ré&pétitons dans copies"
 
 #: rosegardengui.cpp:577
 msgid "Set &Tempo to Audio Segment Duration"
-msgstr "Fixer &Tempo sur durée segment audio"
+msgstr "Fixer le &tempo sur la durée du segment audio"
 
 #: rosegardengui.cpp:581
 msgid "Manage A&udio Segments"
-msgstr "Gérer segments A&udio"
+msgstr "Gérer les segments A&udio"
 
 #: rosegardengui.cpp:591
 msgid "&Add Tracks..."
@@ -1474,7 +1474,7 @@ msgstr "Ne peut pas joindre les segments Audio"
 
 #: rosegardengui.cpp:1914 rosegardengui.cpp:3943
 msgid "Set Global Tempo"
-msgstr "Règler le Tempo global"
+msgstr "Règler le tempo global"
 
 #: rosegardengui.cpp:1957 editviewbase.cpp:344
 msgid "Toggle the toolbar..."
@@ -1661,7 +1661,7 @@ msgstr "Remplacer Changement de Tempo à %1"
 
 #: rosegardengui.cpp:3960
 msgid "Set Global and Default Tempo"
-msgstr "Régler Tempo Global et par Défaut"
+msgstr "Régler les tempos global et par défaut"
 
 #: rosegardengui.cpp:4217
 msgid "Sequencer failed to add audio file %1"
@@ -2347,7 +2347,7 @@ msgstr ""
 
 #: dialogs.cpp:178
 msgid "Start bar %1 here"
-msgstr ""
+msgstr "Mesure de départ %1 ici"
 
 #: dialogs.cpp:182
 msgid "Change time from start of bar %1"
@@ -2863,9 +2863,8 @@ msgid "Merge new file  "
 msgstr ""
 
 #: dialogs.cpp:2937
-#, fuzzy
 msgid "At start of existing composition"
-msgstr "Inserer dans la composition"
+msgstr "Au début de la composition existante"
 
 #: dialogs.cpp:2938
 #, fuzzy
@@ -2892,7 +2891,6 @@ msgstr "&Sauter"
 msgid "&Locate"
 msgstr "&Localiser"
 
-#: dialogs.cpp:2979
 msgid ""
 "Can't find file \"%1\".\n"
 "Would you like to try and locate this file or skip it?"
@@ -2908,11 +2906,11 @@ msgstr "Choisir un fichier Audio"
 
 #: dialogs.cpp:3017
 msgid "Playing audio file"
-msgstr ""
+msgstr "Joue un fichier audio"
 
 #: dialogs.cpp:3022
 msgid "Playing audio file \"%1\""
-msgstr ""
+msgstr "Joue le fichier audio \"%1\" "
 
 #: dialogs.cpp:3036
 msgid "Autosplit Audio Segment"
@@ -2984,7 +2982,7 @@ msgstr "2ème Valeur"
 
 #: dialogs.cpp:3591
 msgid "Change Composition Length"
-msgstr "Changer la Longueur de la Composition"
+msgstr "Changer la durée de la composition"
 
 #: dialogs.cpp:3597
 msgid "Set the Start and End bar markers for this Composition"
@@ -3096,7 +3094,7 @@ msgstr "De quelle taille est votre Disque dur ?"
 
 #: sequencemanager.cpp:573
 msgid "Audio record path \""
-msgstr ""
+msgstr "Path d'enregistrement \""
 
 #: sequencemanager.cpp:575
 msgid "Edit your audio path properties (Edit->Edit Document Properties->Audio)"
@@ -3414,7 +3412,7 @@ msgstr "&Redimensionner..."
 
 #: segmentcommands.h:431
 msgid "Add Time Si&gnature Change..."
-msgstr ""
+msgstr "Changer la si&gnature temps..."
 
 #: segmentcommands.h:469
 msgid "Modify &Default Tempo..."
@@ -3426,7 +3424,7 @@ msgstr ""
 
 #: segmentcommands.h:523
 msgid "Add Te&mpo Change..."
-msgstr ""
+msgstr "Changer le te&mpo..."
 
 #: segmentcommands.h:545
 msgid "Add Tracks..."
@@ -3567,7 +3565,7 @@ msgstr "Programme"
 
 #: instrumentparameterbox.cpp:896
 msgid "Channel"
-msgstr ""
+msgstr "Canal"
 
 #: instrumentparameterbox.cpp:945 studiowidgets.cpp:125
 msgid "Pan"
@@ -3640,7 +3638,7 @@ msgstr ""
 
 #: rosegardenguidoc.cpp:432
 msgid "Generating audio previews..."
-msgstr ""
+msgstr "Génération des previews audio..."
 
 #: rosegardenguidoc.cpp:468
 msgid "Merge"
@@ -3668,7 +3666,7 @@ msgstr ""
 
 #: rosegardenguidoc.cpp:1741 audiomanagerdialog.cpp:994
 msgid "Generating audio preview..."
-msgstr ""
+msgstr "Génération des previews audio"
 
 #: segmentparameterbox.cpp:47
 msgid "Segment Parameters"
@@ -3974,7 +3972,7 @@ msgstr ""
 
 #: rosegardenconfiguredialog.cpp:500
 msgid "Ignore existing durations"
-msgstr ""
+msgstr "Ignorer les durées existantes"
 
 #: rosegardenconfiguredialog.cpp:508
 msgid "Auto-beam on insert when appropriate"
@@ -4174,6 +4172,16 @@ msgid ""
 "\n"
 "For example: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n"
 msgstr ""
+"Rosegarden peut démarrer le daemon JACK audio (jackd) pour vous\n"
+"automatiquement si il n'est pas en route lorsque Rosegarden démarre.\n"
+"\n"
+"Ceci est recommandé pour les débutants et ceux qui utilisent Rosegarden\n"
+"en tant qu'application audio principale, mais ne plaira peut-être pas aux plus experimentés.\n"
+"\n"
+"Si vous voulez démarrer JACK automatiquement, soyez sûr(e) que la commande inclue\n"
+"le path nécessaire ainsi que les arguments que vous désirez utiliser.\n"
+"\n"
+"Par exemple : /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n"
 
 #: rosegardenconfiguredialog.cpp:1052
 msgid "Start JACK when Rosegarden starts"
@@ -4709,7 +4717,7 @@ msgstr "Fréquence d'échantillonage"
 
 #: audiomanagerdialog.cpp:303
 msgid "<no audio files>"
-msgstr "<Aucun fichiers audio>"
+msgstr "<Aucun fichier audio>"
 
 #: audiomanagerdialog.cpp:505
 msgid "Choose a name to save this file as"
@@ -5119,11 +5127,11 @@ msgstr ""
 
 #: notationviewslots.cpp:978 notationviewslots.cpp:1044
 msgid "No note duration selected"
-msgstr ""
+msgstr "Pas de durée de note sélectionnée"
 
 #: notationviewslots.cpp:1012 notationviewslots.cpp:1024
 msgid "No rest duration selected"
-msgstr ""
+msgstr "Pas de durée de silence sélectionné"
 
 #: notationviewslots.cpp:1111 notationviewslots.cpp:1121
 #: notationviewslots.cpp:1131 notationviewslots.cpp:1141
@@ -5519,7 +5527,7 @@ msgstr ""
 
 #: markereditor.cpp:93
 msgid "Delete All Markers"
-msgstr ""
+msgstr "Supprimer tout les repères"
 
 #: markereditor.cpp:96
 msgid "Close the Marker Editor"
