@@ -600,6 +600,8 @@ void AudioSegmentMmapper::dump()
 CompositionMmapper::CompositionMmapper(RosegardenGUIDoc *doc)
     : m_doc(doc)
 {
+    cleanup();
+
     SEQMAN_DEBUG << "CompositionMmapper() - doc = " << doc << endl;
     Composition &comp = m_doc->getComposition();
 

@@ -321,8 +321,8 @@ LinedStaff::getCanvasYForHeight(int h, double baseX, int baseY) const
 {
     int y;
 
-    NOTATION_DEBUG << "LinedStaff::getCanvasYForHeight(" << h << "," << baseY
-		   << ")" << endl;
+//    NOTATION_DEBUG << "LinedStaff::getCanvasYForHeight(" << h << "," << baseY
+//		   << ")" << endl;
 
     if (baseX < 0) baseX = getX() + getMargin();
 
@@ -858,9 +858,9 @@ LinedStaff::clearStaffLineRow(int row)
 void
 LinedStaff::resizeStaffLineRow(int row, double x, double length)
 {
-    RG_DEBUG << "LinedStaff::resizeStaffLineRow: row "
-	     << row << ", x " << x << ", length " 
-	     << length << endl;
+//    RG_DEBUG << "LinedStaff::resizeStaffLineRow: row "
+//	     << row << ", x " << x << ", length " 
+//	     << length << endl;
 
 
     // If the resolution is 8 or less, we want to reduce the blackness
@@ -1014,7 +1014,7 @@ LinedStaff::setPointerPosition(double canvasX, int canvasY)
     m_pointer->setX(int(canvasX));
     m_pointer->setY(int(canvasY));
     m_pointer->setZ(-30); // behind everything else
-    m_pointer->setPoints(0, 0, 0, getHeightOfRow() - 1);
+    m_pointer->setPoints(0, 0, 0, getHeightOfRow() /* - 1 */);
     m_pointer->show();
 }
 

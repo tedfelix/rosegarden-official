@@ -76,7 +76,10 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_reportTimer(new QTimer(doc)),
     m_canReport(true)
 {
-    m_compositionMmapper->cleanup();
+    // Replaced this with a call to cleanup() from composition mmapper ctor:
+    // if done here, this removes the mmapped versions of any segments stored
+    // in the autoload (that have only just been mapped by the ctor!)
+//    m_compositionMmapper->cleanup();
 
     m_countdownDialog = new CountdownDialog(dynamic_cast<QWidget*>
                                 (m_doc->parent())->parentWidget());
