@@ -70,19 +70,28 @@ SegmentInsertCommand::SegmentInsertCommand(RosegardenGUIDoc *doc,
 
 SegmentInsertCommand::~SegmentInsertCommand()
 {
+    /*
     if (!m_segment->getComposition()) {
 	delete m_segment;
     }
+    */
 }
 
 void
 SegmentInsertCommand::execute()
 {
+    // Create and insert Segment
+    //
     m_segment = new Rosegarden::Segment();
     m_segment->setTrack(m_track);
     m_segment->setStartTime(m_startTime);
     m_document->getComposition().addSegment(m_segment);
     m_segment->setDuration(m_duration);
+
+    // Add the SegmentItem to the canvas (does nothing
+    // if the SegmentItem already exists)
+    //
+    m_document->addSegmentItem(m_segment);
 }
 
 void

@@ -278,10 +278,11 @@ protected slots:
 
 signals:
     /**
-     * Emitted when a new Segment is created, the argument is the
-     * corresponding SegmentItem
+     * Emitted when a new Segment is created, the arguments are the
+     * dimensions for a new SegmentItem but we don't create it at
+     * this stage
      */
-    void addSegment(SegmentItem*);
+    void addSegment(int, Rosegarden::timeT, Rosegarden::timeT);
 
     /**
      * Emitted when a Segment is deleted, the argument is a pointer to
@@ -362,7 +363,7 @@ public:
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
-    void addSegment(SegmentItem*);
+    void addSegment(int, Rosegarden::timeT, Rosegarden::timeT);
     void deleteSegment(Rosegarden::Segment*);
     void setSegmentDuration(SegmentItem*);
 
@@ -370,6 +371,9 @@ protected:
     //--------------- Data members ---------------------------------
 
     bool m_newRect;
+    int  m_y;
+    Rosegarden::timeT m_startTime;
+    Rosegarden::timeT m_duration;
 };
 
 class SegmentEraser : public SegmentTool

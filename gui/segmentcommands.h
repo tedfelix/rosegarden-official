@@ -59,11 +59,11 @@ public:
     Rosegarden::Segment* getSegment() const { return m_segment; }
 
 private:
-    RosegardenGUIDoc    *m_document;
-    Rosegarden::Segment *m_segment;
-    int                  m_track;
-    Rosegarden::timeT    m_startTime;
-    Rosegarden::timeT    m_duration;
+    RosegardenGUIDoc       *m_document;
+    Rosegarden::Segment    *m_segment;
+    int                     m_track;
+    Rosegarden::timeT       m_startTime;
+    Rosegarden::timeT       m_duration;
 
 };
 

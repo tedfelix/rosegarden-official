@@ -140,8 +140,8 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     connect(this, SIGNAL(needUpdate()),
             m_segmentCanvas, SLOT(update()));
 
-    QObject::connect(m_segmentCanvas, SIGNAL(addSegment(SegmentItem*)),
-                     this,            SLOT  (addSegment(SegmentItem*)));
+    QObject::connect(m_segmentCanvas, SIGNAL(addSegment(int, Rosegarden::timeT, Rosegarden::timeT)),
+                     this,            SLOT  (addSegment(int, Rosegarden::timeT, Rosegarden::timeT)));
 
     QObject::connect(m_segmentCanvas, SIGNAL(deleteSegment(Rosegarden::Segment*)),
                      this,            SLOT  (deleteSegment(Rosegarden::Segment*)));
@@ -225,13 +225,13 @@ void TrackEditor::segmentOrderChanged(int section, int fromIdx, int toIdx)
 
 
 void
-TrackEditor::addSegment(SegmentItem *p)
+TrackEditor::addSegment(int y, Rosegarden::timeT time, Rosegarden::timeT duration)
 {
     // first find track for segment, as it is used for indexing
     //
-    Rosegarden::TrackId track = static_cast<Rosegarden::TrackId>(m_vHeader->sectionAt(static_cast<int>(p->y())));
+    Rosegarden::TrackId track = static_cast<Rosegarden::TrackId>(m_vHeader->sectionAt(y));
 
-    emit createNewSegment(p, track);
+    emit createNewSegment(time, duration, track);
 }
 
 
@@ -366,15 +366,29 @@ TrackEditor::setFineGrain(bool value)
 
 
 // Just like setupSegments() this creates a SegmentItem
-// on the SegmentCanvas after we've recorded a Segment.
-//
+// on the SegmentCanvas if we've just recorded a Segment
+// or if we need to add one say as part of an Undo/Redo.
 //
 void
 TrackEditor::addSegmentItem(Rosegarden::Segment *segment)
 {
     if (!m_document) return; // sanity check
 
-    Composition &comp = m_document->getComposition();
+    // Check that a SegmentItem doesn't already exist
+    // for this Segment
+    //
+    QCanvasItemList itemList = canvas()->canvas()->allItems();
+    QCanvasItemList::Iterator it;
+
+    for (it = itemList.begin(); it != itemList.end(); ++it)
+    {
+        QCanvasItem *item = *it;
+        SegmentItem *segmentItem = dynamic_cast<SegmentItem*>(item);
+
+        if (segmentItem)
+            if (segmentItem->getSegment() == segment)
+                return;
+    }
 
     int y = m_vHeader->sectionPos(segment->getTrack());
     SegmentItem *newItem = m_segmentCanvas->addSegmentItem
@@ -399,9 +413,8 @@ TrackEditor::deleteSegmentItem(Rosegarden::Segment *segment)
         {
             if (segmentItem->getSegment() == segment)
             {
-                cout << "DEED" << endl;
                 delete segmentItem;
-                //canvas()->canvas()->erase(it);
+                itemList.remove(it);
                 break;
             }
         }

@@ -457,32 +457,19 @@ RosegardenGUIDoc::readFromFile(const QString &file, QString &text)
     
 
 void
-RosegardenGUIDoc::createNewSegment(SegmentItem *p, Rosegarden::TrackId track)
+RosegardenGUIDoc::createNewSegment(Rosegarden::timeT time,
+                                   Rosegarden::timeT duration,
+                                   Rosegarden::TrackId track)
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment(item : "
-                         << p << ")\n";
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment()\n";
 
-/*!!!
-    int startBar = p->getStartBar();
-    int barCount = p->getItemNbBars();
-
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewSegment() startBar = " 
-			 << startBar << ", barCount = " << barCount << endl;
-
-    timeT startTime =
-	m_composition.getBarRange(startBar, false).first;
-
-    timeT duration =
-	m_composition.getBarRange(startBar + barCount, false).first -
-	startTime;
-*/
-    // store ptr to new segment in segment part item
+    // Create Segment and SegmentItem through the Command interface
     //
     SegmentInsertCommand *segmentInsert =
         new SegmentInsertCommand(this,
                                  track,
-                                 p->getStartTime(),
-                                 p->getDuration());
+                                 time,
+                                 duration);
 
     // Into the undo/redo command history which executes()
     // the command and creates the Segment
@@ -490,12 +477,14 @@ RosegardenGUIDoc::createNewSegment(SegmentItem *p, Rosegarden::TrackId track)
     getCommandHistory()->addCommand(segmentInsert);
 
     // Now we can safely access the Segment
-    p->setSegment(segmentInsert->getSegment());
+    //p->setSegment(segmentInsert->getSegment());
 
     setModified();
 }
 
 
+// Delete a SegmentItem from the SegmentCanvas
+//
 void
 RosegardenGUIDoc::deleteSegmentItem(Rosegarden::Segment *segment)
 {
@@ -508,6 +497,21 @@ RosegardenGUIDoc::deleteSegmentItem(Rosegarden::Segment *segment)
         }
     }
 
+}
+
+// Create a SegmentItem on the SegmentCanvas
+//
+void
+RosegardenGUIDoc::addSegmentItem(Rosegarden::Segment *segment)
+{
+    RosegardenGUIView *w;
+    if(pViewList)
+    {
+        for(w=pViewList->first(); w!=0; w=pViewList->next())
+        {
+                w->createSegmentItem(segment);
+        }
+    }
 }
 
 

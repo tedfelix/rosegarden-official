@@ -564,12 +564,15 @@ SegmentTool::~SegmentTool()
 
 SegmentPencil::SegmentPencil(SegmentCanvas *c)
     : SegmentTool(c),
-      m_newRect(false)
+      m_newRect(false),
+      m_y(0),
+      m_startTime(0),
+      m_duration(0)
 {
 //    m_canvas->setCursor(Qt::ibeamCursor);
 
-    connect(this, SIGNAL(addSegment(SegmentItem*)),
-            c,    SIGNAL(addSegment(SegmentItem*)));
+    connect(this, SIGNAL(addSegment(int, Rosegarden::timeT, Rosegarden::timeT)),
+            c,    SIGNAL(addSegment(int, Rosegarden::timeT, Rosegarden::timeT)));
     connect(this, SIGNAL(deleteSegment(Rosegarden::Segment*)),
             c,    SIGNAL(deleteSegment(Rosegarden::Segment*)));
     connect(this, SIGNAL(setSegmentDuration(SegmentItem*)),
@@ -589,7 +592,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     if (item) {
         // we are, so set currentItem to it
-        // m_currentItem = item; // leave it alone
+        m_currentItem = item;
         return;
 
     } else { // we are not, so create one
@@ -606,8 +609,14 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 	timeT duration = m_canvas->grid().getSnapTime(e->pos().x());
 	if (duration == 0) duration = Note(Note::Shortest).getDuration();
 
-	m_currentItem = m_canvas->addSegmentItem(y, time, duration);
+        // Don't use the m_currentItem for the moment as we
+        // don't want to create a SegmentItem at this level
+        //
+	    //m_currentItem = m_canvas->addSegmentItem(y, time, duration);
         m_newRect = true;
+        m_y = y;
+        m_startTime = time;
+        m_duration = duration;
 
         m_canvas->update();
     }
@@ -615,20 +624,21 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
 void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
 {
-    if (!m_currentItem) return;
-    m_currentItem->normalize();
+    //if (!m_currentItem) return;
+    //m_currentItem->normalize();
 
     if (m_newRect) {
 
-        emit addSegment(m_currentItem);
-
-    } else {
+        emit addSegment(m_y, m_startTime, m_duration);
+        
+    }
+    /*else {
 
         kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMouseReleaseEvent() : shorten m_currentItem = "
                              << m_currentItem << endl;
 
 	emit setSegmentDuration(m_currentItem);
-    }
+    }*/
 
     m_currentItem = 0;
     m_newRect = false;

@@ -138,7 +138,11 @@ public slots:
 
 protected slots:
     void segmentOrderChanged(int section, int fromIdx, int toIdx);
-    void addSegment(SegmentItem*);
+
+    void addSegment(int y,
+                    Rosegarden::timeT time,
+                    Rosegarden::timeT duration);
+
     void deleteSegment(Rosegarden::Segment*);
     void updateSegmentDuration(SegmentItem*);
     void updateSegmentTrackAndStartTime(SegmentItem*);
@@ -170,7 +174,9 @@ signals:
      *
      * @see RosegardenGUIDoc::createNewSegment()
      */
-    void createNewSegment(SegmentItem* item, Rosegarden::TrackId instrument);
+    void createNewSegment(Rosegarden::timeT,
+                          Rosegarden::timeT,
+                          Rosegarden::TrackId);
 
 protected:
 
