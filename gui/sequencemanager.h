@@ -68,9 +68,9 @@ public:
     void fastForwardToEnd();
 
     void setPlayStartTime(const timeT &time);
+    void setLoop(const timeT &lhs, const timeT &rhs);
     void notifySequencerStatus(TransportStatus status);
     void sendSequencerJump(const RealTime &time);
-    void setLoop(const timeT &lhs, const timeT &rhs);
     void insertMetronomeClicks(const timeT &sliceStart, const timeT &sliceEnd);
 
     // Events coming in
@@ -84,13 +84,6 @@ public:
     // Check and set sequencer status
     void setTransportStatus(const TransportStatus &status);
     TransportStatus getTransportStatus() const { return m_transportStatus; }
-
-
-signals:
-    // For the moment we cheat and use signals for these
-    //
-    void setPointerPosition(Rosegarden::timeT);
-    void setPointerPosition(Rosegarden::RealTime);
 
 private:
 

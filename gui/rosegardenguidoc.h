@@ -179,19 +179,26 @@ public:
     void prepareAudio();
 
     /**
-     * Set the visible loop on the Segment Canvas or any open clients 
-     */
-    void setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop);
-
-    /**
-     * Cause the setGUIPointerPosition signal to be emitted and any
+     * Cause the pointerPositionChanged signal to be emitted and any
      * associated internal work in the document to happen
      */
-//!!!???    void setPointerPosition(Rosegarden::timeT);
+    void setPointerPosition(Rosegarden::timeT);
+
+    /**
+     * Cause the playPositionChanged signal to be emitted and any
+     * associated internal work in the document to happen
+     */
+    void setPlayPosition(Rosegarden::timeT);
+
+    /**
+     * Cause the loopChanged signal to be emitted and any
+     * associated internal work in the document to happen
+     */
+    void setLoop(Rosegarden::timeT, Rosegarden::timeT);
 
 public slots:
     /**
-     * callsslotRepaint() on all views connected to the document object
+     * calls repaint() on all views connected to the document object
      * and is called by the view by which the document has been
      * changed.  As this view normally repaints itself, it is excluded
      * from the paintEvent.
@@ -202,9 +209,9 @@ public slots:
     void slotDocumentRestored();
 
 signals:
-//!!!???    void setGUIPointerPosition(Rosegarden::timeT);
-//!!!???    void setGUIPlayPosition(Rosegarden::timeT);
-//!!!???    void setGUILoop(Rosegarden::timeT, Rosegarden::timeT);
+    void pointerPositionChanged(Rosegarden::timeT);
+    void playPositionChanged(Rosegarden::timeT);
+    void loopChanged(Rosegarden::timeT, Rosegarden::timeT);
 
 protected:
 

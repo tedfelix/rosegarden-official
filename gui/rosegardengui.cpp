@@ -68,7 +68,10 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_fileRecent(0),
       m_view(0),
       m_doc(0),
-      m_sequencerProcess(0)
+      m_sequencerProcess(0),
+      m_seqManager(0),
+      m_transport(0),
+      m_originatingJump(false)
 {
     // accept dnd
     setAcceptDrops(true);
@@ -85,16 +88,8 @@ RosegardenGUIApp::RosegardenGUIApp()
     // Create a sequence manager
     m_seqManager = new Rosegarden::SequenceManager(m_doc, m_transport);
 
-    // Temporary arrangement until we get the playback pointer
-    // into the document
-    //
-    connect((QObject*)m_seqManager,
-             SIGNAL(setPointerPosition(Rosegarden::RealTime)),
-             SLOT(slotSetPointerPosition(Rosegarden::RealTime)));
-
-    connect((QObject*)m_seqManager,
-            SIGNAL(setPointerPosition(Rosegarden::timeT)),
-            SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+    connect(m_doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
+            this,   SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     readOptions();
 
@@ -412,15 +407,6 @@ void RosegardenGUIApp::initView()
     connect(m_view, SIGNAL(activateTool(SegmentCanvas::ToolType)),
             this,   SLOT(slotActivateTool(SegmentCanvas::ToolType)));
 
-    connect(m_view, SIGNAL(setGUIPositionPointer(Rosegarden::timeT)),
-            this,   SLOT(slotSetPointerPosition(Rosegarden::timeT)));
-
-    connect(m_view, SIGNAL(setGUIPlayPosition(Rosegarden::timeT)),
-            this,   SLOT(slotSetPlayPosition(Rosegarden::timeT)));
-
-    connect(m_view, SIGNAL(setGUILoop(Rosegarden::timeT, Rosegarden::timeT)),
-            this,   SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
-
     m_doc->addView(m_view);
     setCentralWidget(m_view);
     setCaption(m_doc->getTitle());
@@ -520,10 +506,7 @@ void RosegardenGUIApp::openFile(const QString& url)
     // Set any loaded loop at the Composition and
     // on the marker on SegmentCanvas and clients
     //
-    slotSetLoop(comp.getLoopStart(), comp.getLoopEnd());
-    m_doc->setLoopMarker(comp.getLoopStart(), comp.getLoopEnd());
-
-
+    m_doc->setLoop(comp.getLoopStart(), comp.getLoopEnd());
 }
 
 
@@ -1147,58 +1130,19 @@ void RosegardenGUIApp::importRG21File(const QString &file)
 void RosegardenGUIApp::setPointerPosition(const long &posSec,
                                           const long &posUsec)
 {
-    // We do this the lazily dangerous way of setting Composition
-    // time and then gui time - we should probably make this
-    // an atomic operation with observers or something to make
-    // it nice and encapsulated ... but as long as we only EVER
-    // use this modifier method for changing composition time
-    // we can probably get away with it.
-
-    // cc -- this seems like a good idea, but is it safe?
-    //
-    // rwb - it's not safe if you want initView to refresh the
-    //       pointer position after a document load, so for the
-    //       moment we lose this
-    //
-
     Rosegarden::RealTime rT(posSec, posUsec);
     Rosegarden::Composition &comp = m_doc->getComposition();
-
     timeT elapsedTime = comp.getElapsedTimeForRealTime(rT);
 
-    if (elapsedTime >= comp.getEndMarker())
-    {
-        slotStop();
-        rT = Rosegarden::RealTime(0, 0);
-        elapsedTime = 0;
-    }
+    // Indicate to slotSetPointerPosition that we shouldn't propagate
+    // the jump back to the sequencer, because it originated from the
+    // sequencer in the first place.  This is not exactly elegant
+    // and does rather rely being single-threaded.
+    m_originatingJump = true;
+    m_doc->setPointerPosition(elapsedTime);
+    m_originatingJump = false;
 
-    // Set the composition time
-    comp.setPosition(elapsedTime);
-
-    // and the gui time
-    m_view->setPointerPosition(elapsedTime);
-
-    // and the tempo
-    m_transport->setTempo(comp.getTempoAt(elapsedTime));
-
-    // and the time sig
-    m_transport->setTimeSignature(comp.getTimeSignatureAt(elapsedTime));
-
-    // and the time...
-    //
-    if (m_transport->isShowingBarTime()) {
-
-	slotDisplayBarTime(elapsedTime);
-
-    } else {
-
-	if (m_transport->isShowingTimeToEnd()) {
-	    rT = rT - comp.getElapsedRealTime(comp.getDuration());
-	}
-
-	m_transport->displayTime(rT);
-    }
+    return;
 }
 
 void
@@ -1211,11 +1155,17 @@ RosegardenGUIApp::slotSetPointerPosition(Rosegarden::RealTime time)
 void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
-
+//!!!???
     if ( m_seqManager->getTransportStatus() == PLAYING ||
          m_seqManager->getTransportStatus() == RECORDING_MIDI ||
          m_seqManager->getTransportStatus() == RECORDING_AUDIO )
     {
+	//!!!??? for this to be here is somewhat inconsistent with
+	// having the document do the biz of setting the position
+	// in the composition.  perhaps if it's out of range, we
+	// should set the position back in range on the doc (thus
+	// firing the signals again) and then return (because the
+	// new signal will make us do the required work anyway)
         if (t >= comp.getEndMarker())
         {
             slotStop();
@@ -1224,24 +1174,19 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 
         try
         {
-            m_seqManager->sendSequencerJump(comp.getElapsedRealTime(t));
+            if (!m_originatingJump) {
+		m_seqManager->sendSequencerJump(comp.getElapsedRealTime(t));
+	    }
         }
         catch(QString s)
         {
             KMessageBox::error(this, s);
         }
-
-        return;
     }
 
+    //!!!???
     if (t >= comp.getEndMarker())
         t = 0;
-
-    // set the composition time
-    comp.setPosition(t);
-
-    // and the gui time
-    m_view->setPointerPosition(t);
 
     // and the tempo
     m_transport->setTempo(comp.getTempoAt(t));
@@ -1640,7 +1585,6 @@ RosegardenGUIApp::slotRecord()
         KMessageBox::error(this, s);
     }
 }
-
 
 void
 RosegardenGUIApp::slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)

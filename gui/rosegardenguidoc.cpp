@@ -636,16 +636,23 @@ RosegardenGUIDoc::prepareAudio()
 }
 
 void
-RosegardenGUIDoc::setLoopMarker(Rosegarden::timeT startLoop,
-                                Rosegarden::timeT endLoop)
+RosegardenGUIDoc::setPointerPosition(Rosegarden::timeT t)
 {
-    RosegardenGUIView *w;
-    if(pViewList)
-    {
-        for(w=pViewList->first(); w!=0; w=pViewList->next())
-        {
-            w->setLoopMarker(startLoop, endLoop);
-        }
-    }
+    m_composition.setPosition(t);
+    emit pointerPositionChanged(t);
+}
+
+void
+RosegardenGUIDoc::setPlayPosition(Rosegarden::timeT t)
+{
+    emit playPositionChanged(t);
+}
+
+void
+RosegardenGUIDoc::setLoop(Rosegarden::timeT t0, Rosegarden::timeT t1)
+{
+    m_composition.setLoopStart(t0);
+    m_composition.setLoopEnd(t1);
+    emit loopChanged(t0, t1);
 }
 

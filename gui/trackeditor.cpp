@@ -39,6 +39,7 @@
 #include "segmentcommands.h"
 #include "barbuttons.h"
 #include "trackbuttons.h"
+#include "loopruler.h"
 
 #include "rosedebug.h"
 
@@ -188,7 +189,7 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
             m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
 
     connect(this, SIGNAL(needUpdate()),
-            m_segmentCanvas, SLOT(slotUpdate()));
+            m_segmentCanvas, SLOT(update()));
 
     QObject::connect(m_segmentCanvas, SIGNAL(addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)),
                      this,            SLOT  (slotAddSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)));
@@ -210,8 +211,17 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     QObject::connect
 	(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
-	 this,		      SLOT(slotCommandExecuted(KCommand *)));
+	 this, SLOT(slotCommandExecuted(KCommand *)));
 
+    QObject::connect
+	(m_document, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
+	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+ 
+    QObject::connect
+	(m_document, SIGNAL(loopChanged(Rosegarden::timeT,
+					Rosegarden::timeT)),
+	 this, SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
+ 
     // create the position pointer
     m_pointer = new QCanvasLine(canvas);
     m_pointer->setPen(RosegardenGUIColours::TimePointer);
@@ -396,6 +406,12 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
         emit scrollHorizTo((int)canvasPosition);
 	emit needUpdate();
     }
+}
+
+void
+TrackEditor::slotSetLoop(Rosegarden::timeT start, Rosegarden::timeT end)
+{
+    getTopBarButtons()->getLoopRuler()->slotSetLoopMarker(start, end);
 }
 
 void

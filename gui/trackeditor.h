@@ -113,6 +113,11 @@ public slots:
     void slotSetPointerPosition(Rosegarden::timeT position);
 
     /**
+     * Show the given loop on the ruler or wherever
+     */
+    void slotSetLoop(Rosegarden::timeT start, Rosegarden::timeT end);
+
+    /**
      * Show a Segment as it records
      */
     void slotUpdateRecordingSegmentItem(Rosegarden::Segment *segment);

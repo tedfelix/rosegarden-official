@@ -334,7 +334,7 @@ public slots:
     void slotHoveredOverAbsoluteTimeChanged(unsigned int);
 
     /// Set the time pointer position during playback
-    void slotSetGUIPositionPointer(Rosegarden::timeT position);
+    void slotSetPointerPosition(Rosegarden::timeT position);
 
     /// Changes the font of the staffs on the view
     void slotChangeFont(const QString &newFont);

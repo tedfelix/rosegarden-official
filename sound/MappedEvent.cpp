@@ -34,20 +34,24 @@ MappedEvent::MappedEvent(const Event &e,
        m_eventTime(eventTime),
        m_duration(duration),
        m_audioStartMarker(0, 0),
+       m_velocity(127),
        m_type(Internal),
        m_instrument(instrument),
        m_track(track)
 {
-    // Attempt to get a velocity - if it fails then
-    // set the velocity to default maximum (127)
-    //
-    try
-    {
-        m_velocity = e.get<Int>(BaseProperties::VELOCITY);
-    }
-    catch(...)
-    {
-        m_velocity = 127;
+    if (e.has(BaseProperties::VELOCITY)) {
+
+	// Attempt to get a velocity - if it fails then
+	// set the velocity to default maximum (127)
+	//
+	try
+	{
+	    m_velocity = e.get<Int>(BaseProperties::VELOCITY);
+	}
+	catch(...)
+	{
+	    m_velocity = 127;
+	}
     }
 }
 

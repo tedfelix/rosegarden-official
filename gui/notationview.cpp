@@ -87,6 +87,7 @@ using namespace Rosegarden::BaseProperties;
 
 //////////////////////////////////////////////////////////////////////
 
+//!!! We only use rgView to get the document, so pass the document instead
 NotationView::NotationView(RosegardenGUIView* rgView,
                            vector<Segment *> segments,
                            QWidget *parent) :
@@ -158,9 +159,14 @@ NotationView::NotationView(RosegardenGUIView* rgView,
         (getCanvasView(), SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
          this,         SLOT  (slotHoveredOverAbsoluteTimeChanged(unsigned int)));
 
+/*!!!
     QObject::connect
 	(rgView, SIGNAL(setGUIPositionPointer(Rosegarden::timeT)),
 	 this,   SLOT  (slotSetGUIPositionPointer(Rosegarden::timeT)));
+*/
+    QObject::connect
+	(rgView->getDocument(), SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
+	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
     //
     // Window appearance (options, title...)
@@ -1633,7 +1639,7 @@ void NotationView::slotDebugDump()
 
 
 void
-NotationView::slotSetGUIPositionPointer(timeT time)
+NotationView::slotSetPointerPosition(timeT time)
 {
     Rosegarden::Composition &comp = m_document->getComposition();
     int barNo = comp.getBarNumber(time);

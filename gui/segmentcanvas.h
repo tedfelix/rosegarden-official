@@ -248,11 +248,11 @@ public:
     void deleteRecordingSegmentItem();
 
 public slots:
+    /// Update the SegmentCanvas after a change of content
+    virtual void update();
+
     /// Set the current segment editing tool
     void slotSetTool(SegmentCanvas::ToolType);
-
-    /// Update the SegmentCanvas after a change of content
-    virtual void slotUpdate();
 
     // This method only operates if we're of the "Selector"
     // tool type - it's called from the View to enable it

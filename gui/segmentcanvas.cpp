@@ -212,7 +212,7 @@ SegmentCanvas::~SegmentCanvas()
 }
 
 void
-SegmentCanvas::slotUpdate()
+SegmentCanvas::update()
 {
     canvas()->update();
 }
@@ -402,7 +402,7 @@ SegmentCanvas::slotShowSplitLine(int x, int y)
     else
         m_splitLine->moveLine(x, y);
 
-    slotUpdate();
+    update();
 }
 
 // Hide the split line
@@ -411,7 +411,7 @@ void
 SegmentCanvas::slotHideSplitLine()
 {
     m_splitLine->hideLine();
-    slotUpdate();
+    update();
 }
 
 

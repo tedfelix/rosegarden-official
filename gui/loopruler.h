@@ -37,18 +37,14 @@ namespace Rosegarden {
 // sends relevant signals to modify position pointer and
 // playback/looping states.
 //
-// Hopefully use this same class in TrackEditor and editing
-// clients - they will have to be synced-up or managed at
-// some point.
-//
-//
 
 class LoopRuler : public QWidget
 {
     Q_OBJECT
 
 public:
-    LoopRuler(Rosegarden::RulerScale *rulerScale,
+    LoopRuler(RosegardenGUIDoc *doc,
+	      Rosegarden::RulerScale *rulerScale,
               int height = 0,
 	      bool invert = false,
               QWidget* parent = 0,
@@ -79,6 +75,9 @@ protected:
 signals:
     // The three main functions that this class performs
     //
+/*!!! Currently not signals (they call the doc direct) but there's
+      probably a case for making them signals again and plugging 'em
+      in to the doc from the owning class
 
     /// Set the pointer position on mouse single click
     void setPointerPosition(Rosegarden::timeT);
@@ -88,7 +87,7 @@ signals:
 
     /// Set a playing loop
     void setLoop(Rosegarden::timeT, Rosegarden::timeT);
-
+*/
 private:
     void drawBarSections(QPainter*);
     void drawLoopMarker(QPainter*);  // between loop positions
@@ -100,6 +99,7 @@ private:
     int  m_currentXOffset;
     int  m_width;
 
+    RosegardenGUIDoc *m_doc;
     Rosegarden::RulerScale *m_rulerScale;
     Rosegarden::SnapGrid    m_grid;
     

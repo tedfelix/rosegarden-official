@@ -85,20 +85,16 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
     setSpacing(0);
 
     if (!m_invert) {
-	m_hButtonBar = new BarButtonsWidget(m_rulerScale,
-                                            barHeight - m_loopRulerHeight, this);
+	m_hButtonBar = new BarButtonsWidget
+	    (m_rulerScale, barHeight - m_loopRulerHeight, this);
     }
 
-    // Loop ruler works its bar spacing out from the scale just
-    // like we do in this class.  Then connect up the LoopRuler
-    // signals passing back through the outside world.
-    //
-    //
-    m_loopRuler = new LoopRuler(m_rulerScale, m_loopRulerHeight, m_invert, this);
+    m_loopRuler = new LoopRuler
+	(doc, m_rulerScale, m_loopRulerHeight, m_invert, this);
 
     if (m_invert) {
-	m_hButtonBar = new BarButtonsWidget(m_rulerScale,
-                                            barHeight - m_loopRulerHeight, this);
+	m_hButtonBar = new BarButtonsWidget
+	    (m_rulerScale, barHeight - m_loopRulerHeight, this);
     }
 }
 

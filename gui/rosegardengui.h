@@ -462,6 +462,11 @@ public slots:
     void slotSetPointerPosition(Rosegarden::RealTime time);
 
     /**
+     * timeT version of the same
+     */
+    void slotSetPointerPosition(Rosegarden::timeT t);
+
+    /**
      * Set the pointer position and start playing (from LoopRuler)
      */
     void slotSetPlayPosition(Rosegarden::timeT position);
@@ -470,11 +475,6 @@ public slots:
      * Set a loop
      */
     void slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs);
-
-    /**
-     * timeT version of the same
-     */
-    void slotSetPointerPosition(Rosegarden::timeT t);
 
 
     /**
@@ -578,6 +578,8 @@ private:
     // Transport dialog pointer
     //
     Rosegarden::RosegardenTransportDialog *m_transport;
+
+    bool m_originatingJump;
 };
  
 #endif // ROSEGARDENGUI_H

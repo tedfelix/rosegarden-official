@@ -313,7 +313,7 @@ SequenceManager::stop()
 
     if (m_transportStatus == STOPPED)
     {
-        emit setPointerPosition(0);
+        m_doc->setPointerPosition(0);
         return;
     }
 
@@ -372,7 +372,7 @@ SequenceManager::rewind()
     // want to cope with bars beyond the actual end of the piece
     timeT newPosition = composition.getBarRangeForTime(position - 1).first;
 
-    emit setPointerPosition(newPosition);
+    m_doc->setPointerPosition(newPosition);
 }
 
 
@@ -390,7 +390,7 @@ SequenceManager::fastforward()
     // don't skip beyond it.  Generally we need extra-Composition
     // non-destructive start and end markers for the piece.
     //
-    emit setPointerPosition(newPosition);
+    m_doc->setPointerPosition(newPosition);
 
 }
 
@@ -467,7 +467,7 @@ SequenceManager::record()
     //
     int startBar = comp.getBarNumber(comp.getPosition());
     startBar -= comp.getCountInBars();
-    emit setPointerPosition(comp.getBarRange(startBar).first);
+    m_doc->setPointerPosition(comp.getBarRange(startBar).first);
 
 
     // Some locals
@@ -638,7 +638,7 @@ void
 SequenceManager::rewindToBeginning()
 {
     cout << "SequenceManager::rewindToBeginning()" << endl;
-    emit setPointerPosition(0);
+    m_doc->setPointerPosition(0);
 }
 
 
@@ -648,9 +648,7 @@ SequenceManager::fastForwardToEnd()
     cout << "SequenceManager::fastForwardToEnd()" << endl;
 
     Composition &comp = m_doc->getComposition();
-    RealTime jumpTo = comp.getElapsedRealTime(comp.getDuration());
-
-    emit setPointerPosition(jumpTo);
+    m_doc->setPointerPosition(comp.getDuration());
 }
 
 
@@ -673,7 +671,7 @@ SequenceManager::setPlayStartTime(const timeT &time)
     
     // otherwise off we go
     //
-    emit setPointerPosition(time);
+    m_doc->setPointerPosition(time);
     play();
 }
 
@@ -681,9 +679,6 @@ SequenceManager::setPlayStartTime(const timeT &time)
 void
 SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
 {
-    m_doc->getComposition().setLoopStart(lhs);
-    m_doc->getComposition().setLoopEnd(rhs);
-
     // Let the sequencer know about the loop markers
     //
     QByteArray data;

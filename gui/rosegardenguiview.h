@@ -101,11 +101,6 @@ public:
     void editAllTracks(Rosegarden::Composition*);
 
     /**
-     * Set the time pointer position during playback
-     */
-    void setPointerPosition(const Rosegarden::timeT &position);
-
-    /**
      * These two are just-passing-through methods called from
      * the GUI when it has key presses that the SegmentCanvas
      * or anything else downstairsis interested in.
@@ -120,11 +115,6 @@ public:
      */
     void showRecordingSegmentItem(Rosegarden::Segment* segment);
     void deleteRecordingSegmentItem();
-
-    /**
-     * set the viewable loop on the clients and SegmentCanvas
-     */      
-    void setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop);
 
     /**
      * Show output levels
@@ -150,13 +140,6 @@ public slots:
     void slotSelectTrackSegments(int);
 
 signals:
-    // Signals to tell the main GUI and any other views to
-    // update their various status indications
-    //
-    void setGUIPositionPointer(Rosegarden::timeT);
-    void setGUIPlayPosition(Rosegarden::timeT);
-    void setGUILoop(Rosegarden::timeT, Rosegarden::timeT);
-
     void activateTool(SegmentCanvas::ToolType);
 
 protected:
