@@ -989,6 +989,11 @@ void NotationView::setCursorPosition(unsigned int n)
     canvas()->update();
 }
 
+unsigned int NotationView::getCursorPosition() const
+{
+    return m_ruler->getCursorPosition();
+}
+
 
 void
 NotationView::changeFont(const QString &newName)
