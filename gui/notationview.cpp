@@ -39,7 +39,6 @@
 #include "notationstaff.h"
 #include "notepixmapfactory.h"
 #include "qcanvaslinegroupable.h"
-#include "qcanvassimplesprite.h"
 #include "ktmpstatusmsg.h"
 
 #include "rosedebug.h"
@@ -153,7 +152,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
     else {
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    showElements(i);
+	    m_staffs[i]->showElements();
 	    showBars(i);
 	}
     }
@@ -453,215 +452,9 @@ void NotationView::initStatusBar()
 }
 
 
-bool NotationView::showElements(int staffNo)
-{
-    NotationElementList *notes = m_staffs[staffNo]->getViewElementList();
-    return showElements(m_staffs[staffNo], notes->begin(), notes->end());
-}
-
-bool NotationView::showElements(NotationStaff *staff,
-                                NotationElementList::iterator from,
-                                NotationElementList::iterator to,
-                                bool positionOnly)
-{
-    double dxoffset = staff->x(), dyoffset = staff->y();
-
-    kdDebug(KDEBUG_AREA) << "NotationView::showElements()" << endl;
-
-    START_TIMING;
-
-    NotePixmapFactory &npf(m_notePixmapFactory);
-    Clef currentClef; // default is okay to start with
-
-    NotationElementList::iterator end =
-        staff->getViewElementList()->end();
-
-    for (NotationElementList::iterator it = from; it != end; ++it) {
-
-        if (positionOnly && (*it)->canvasItem()) {
-
-            // We can't only reposition if the event is a beamed note,
-            // because changing the position normally requires
-            // changing the beam's length and/or angle as well
-
-            if ((*it)->isNote()) {
-                
-                bool beamed = false;
-                (void)((*it)->event()->get<Bool>(Properties::BEAMED, beamed));
-                if (!beamed) {
-                    (*it)->reposition(dxoffset, dyoffset);
-                    continue;
-                }
-            } else {
-                (*it)->reposition(dxoffset, dyoffset);
-                continue;
-            }
-
-            // beamed note or something without a pixmap -- fall through
-        }
-
-        //
-        // process event
-        //
-        try {
-
-            QCanvasSimpleSprite *sprite = 0;
-
-            if ((*it)->isNote()) {
-
-                sprite = makeNoteSprite(it);
-
-            } else if ((*it)->isRest()) {
-
-                Note::Type note =
-                    (*it)->event()->get<Int>(Rosegarden::Note::NoteType);
-                int dots =
-                    (*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
-
-                QCanvasPixmap notePixmap
-                    (npf.makeRestPixmap(Note(note, dots)));
-                sprite = new
-                    QCanvasNotationSprite(*(*it), &notePixmap, canvas());
-
-            } else if ((*it)->event()->isa(Clef::EventType)) {
-
-		currentClef = Clef(*(*it)->event());
-                QCanvasPixmap clefPixmap(npf.makeClefPixmap(currentClef));
-                sprite = new
-                    QCanvasNotationSprite(*(*it), &clefPixmap, canvas());
-
-            } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
-
-                QCanvasPixmap keyPixmap
-                    (npf.makeKeyPixmap
-                     (Rosegarden::Key((*it)->event()->get<String>
-                                      (Rosegarden::Key::KeyPropertyName)),
-                      currentClef));
-                sprite = new
-                    QCanvasNotationSprite(*(*it), &keyPixmap, canvas());
-
-            } else if ((*it)->event()->isa(TimeSignature::EventType)) {
-
-                QCanvasPixmap timeSigPixmap
-                    (npf.makeTimeSigPixmap(TimeSignature(*(*it)->event())));
-                sprite = new
-                    QCanvasNotationSprite(*(*it), &timeSigPixmap, canvas());
-
-            } else {
-                    
-                kdDebug(KDEBUG_AREA)
-                    << "NotationElement of unrecognised type "
-                    << (*it)->event()->getType() << endl;
-                QCanvasPixmap unknownPixmap(npf.makeUnknownPixmap());
-                sprite = new
-                    QCanvasNotationSprite(*(*it), &unknownPixmap, canvas());
-            }
-
-            // Show the sprite
-            //
-            if (sprite) {
-                (*it)->setCanvasItem(sprite, dxoffset, dyoffset);
-                sprite->show();
-            }
-            
-        } catch (...) {
-            kdDebug(KDEBUG_AREA) << "Event lacks the proper properties: "
-				 << (*(*it)->event())
-                                 << endl;
-        }
-
-        if (it == to) positionOnly = true; // from now on
-    }
-
-    kdDebug(KDEBUG_AREA) << "NotationView::showElements() exiting" << endl;
-
-    PRINT_ELAPSED("NotationView::showElements");
-    return true;
-}
-
-
-QCanvasSimpleSprite *NotationView::makeNoteSprite(NotationElementList::iterator it)
-{
-    NotePixmapFactory &npf(m_notePixmapFactory);
-
-    Note::Type note = (*it)->event()->get<Int>(Rosegarden::Note::NoteType);
-    int dots = (*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
-
-    Accidental accidental = NoAccidental;
-
-    long acc;
-    if ((*it)->event()->get<Int>(Properties::DISPLAY_ACCIDENTAL, acc)) {
-        accidental = Accidental(acc);
-    }
-
-    bool up = true;
-    (void)((*it)->event()->get<Bool>(Properties::STEM_UP, up));
-
-    bool tail = true;
-    (void)((*it)->event()->get<Bool>(Properties::DRAW_TAIL, tail));
-
-    bool beamed = false;
-    (void)((*it)->event()->get<Bool>(Properties::BEAMED, beamed));
-
-    bool shifted = false;
-    (void)((*it)->event()->get<Bool>(Properties::NOTE_HEAD_SHIFTED, shifted));
-
-    long stemLength = npf.getNoteBodyHeight();
-    (void)((*it)->event()->get<Int>
-           (Properties::UNBEAMED_STEM_LENGTH, stemLength));
-
-//    kdDebug(KDEBUG_AREA) << "Got stem length of "
-//                         << stemLength << endl;
-
-    if (beamed) {
-
-        if ((*it)->event()->get<Bool>(Properties::BEAM_PRIMARY_NOTE)) {
-
-            int myY = (*it)->event()->get<Int>(Properties::BEAM_MY_Y);
-
-            stemLength = myY - (int)(*it)->getLayoutY();
-            if (stemLength < 0) stemLength = -stemLength;
-
-            int nextTailCount =
-                (*it)->event()->get<Int>(Properties::BEAM_NEXT_TAIL_COUNT);
-            int width =
-                (*it)->event()->get<Int>(Properties::BEAM_SECTION_WIDTH);
-            int gradient =
-                (*it)->event()->get<Int>(Properties::BEAM_GRADIENT);
-
-            bool thisPartialTails(false), nextPartialTails(false);
-            (void)(*it)->event()->get<Bool>
-                (Properties::BEAM_THIS_PART_TAILS, thisPartialTails);
-            (void)(*it)->event()->get<Bool>
-                (Properties::BEAM_NEXT_PART_TAILS, nextPartialTails);
-
-            QCanvasPixmap notePixmap
-                (npf.makeBeamedNotePixmap
-                 (note, dots, accidental, shifted, up, stemLength,
-                  nextTailCount, thisPartialTails, nextPartialTails,
-                  width, (double)gradient / 100.0));
-            return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
-
-        } else {
-
-            QCanvasPixmap notePixmap
-                (npf.makeNotePixmap
-                 (note, dots, accidental, shifted, tail, up, false,
-                  stemLength));
-            return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
-        }
-
-		
-    } else {
-
-        QCanvasPixmap notePixmap
-            (npf.makeNotePixmap(note, dots, accidental,
-                                shifted, tail, up, false, stemLength));
-
-        return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
-    }
-}
-
+//!!! This should probably be unnecessary here and done in
+//NotationStaff instead (it should be intelligent enough to query the
+//notationhlayout itself)
 
 bool NotationView::showBars(int staffNo)
 {
@@ -1229,11 +1022,17 @@ void NotationView::redoLayout(int staffNo, timeT startTime, timeT endTime)
             endi = notes->findTime(barEndTime);
         }
 
-	showElements(m_staffs[i], starti, endi,
-                     (staffNo >= 0 && (int)i != staffNo));
+	m_staffs[i]->showElements(starti, endi,
+				  (staffNo >= 0 && (int)i != staffNo));
 	showBars(i);
     }
 }
+
+
+//!!! Some of this should be in NotationStaff (at the very least it
+//should be able to report how much width and height it needs based on
+//its own bar line positions which it's calculated by querying the
+//notationhlayout)
 
 void NotationView::readjustCanvasSize()
 {

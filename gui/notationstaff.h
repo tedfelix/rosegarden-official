@@ -31,6 +31,7 @@
 #include "Staff.h"
 
 class QCanvasLineGroupable;
+class QCanvasSimpleSprite;
 
 /**
  * The Staff is a repository for information about the notation
@@ -82,6 +83,16 @@ public:
 	return m_resolution * nbLines + linesOffset * 2 + 1;
     }
 
+
+    bool showElements();
+
+    bool showElements(NotationElementList::iterator from,
+		      NotationElementList::iterator to,
+		      bool positionOnly = false);
+
+
+
+
     /**
      * Insert a bar line at X position \a barPos.
      *
@@ -110,6 +121,12 @@ public:
     static const int linesOffset;    // from top of canvas to top line (bad!)
 
 protected:
+    /**
+     * Return a QCanvasSimpleSprite representing the NotationElement
+     * pointed to by the given iterator
+     */
+    QCanvasSimpleSprite* makeNoteSprite(NotationElementList::iterator);
+
     int m_barLineHeight;
     int m_horizLineLength;
     int m_resolution;

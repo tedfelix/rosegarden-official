@@ -25,7 +25,6 @@
 #include <kmainwindow.h>
 
 #include "notationelement.h"
-#include "viewelementsmanager.h"
 #include "notationhlayout.h"
 #include "notationvlayout.h"
 #include "notationcanvasview.h"
@@ -33,7 +32,6 @@
 #include "NotationTypes.h"
 
 class QCanvasItem;
-class QCanvasSimpleSprite;
 namespace Rosegarden { class Track; }
 class RosegardenGUIDoc;
 class NotationTool;
@@ -65,15 +63,6 @@ public:
 
     const RosegardenGUIDoc *getDocument() const { return m_document; }
     RosegardenGUIDoc *getDocument() { return m_document; }
-
-    /// draw all elements
-    virtual bool showElements(int staffNo);
-
-    /// draw all elements in range at coordinates relative to staff
-    virtual bool showElements(NotationStaff *staff,
-                              NotationElementList::iterator from,
-                              NotationElementList::iterator to,
-                              bool positionOnly = false);
 
     /// Calls all the relevant preparse and layout methods
     virtual bool applyLayout(int staffNo = -1);
@@ -326,12 +315,6 @@ protected:
                                                   Rosegarden::Event *&key,
                                                   int staffNo,
                                                   unsigned int proximityThreshold = 10);
-
-    /**
-     * Return a QCanvasSimpleSprite representing the NotationElement
-     * pointed to by the given iterator
-     */
-    QCanvasSimpleSprite* makeNoteSprite(NotationElementList::iterator);
 
     /**
      * Set the current Notation tool (note inserter, rest inserter, eraser...)

@@ -24,10 +24,30 @@
 #include "notationstaff.h"
 #include "staffline.h"
 #include "qcanvasspritegroupable.h"
+#include "qcanvassimplesprite.h"
+#include "notationproperties.h"
 
 #include "rosedebug.h"
 
+#include "Event.h"
+#include "Track.h"
+#include "NotationTypes.h"
+
 using Rosegarden::Track;
+using Rosegarden::Event;
+using Rosegarden::Int;
+using Rosegarden::Bool;
+using Rosegarden::String;
+using Rosegarden::NoAccidental;
+using Rosegarden::Note;
+using Rosegarden::Track;
+using Rosegarden::Clef;
+using Rosegarden::Key;
+using Rosegarden::Accidental;
+using Rosegarden::TimeSignature;
+
+const int NotationStaff::nbLines = 5;
+const int NotationStaff::linesOffset = 40;
 
 NotationStaff::NotationStaff(QCanvas *canvas, Track *track, int resolution) :
     Rosegarden::Staff<NotationElement>(*track),
@@ -184,6 +204,205 @@ void NotationStaff::setLines(double xfrom, double xto)
     m_initialBarB->setPoints((int)xfrom, sp.y(), (int)xfrom, ep.y());
 }
 
-const int NotationStaff::nbLines = 5;
-const int NotationStaff::linesOffset = 40;
+
+bool NotationStaff::showElements()
+{
+    NotationElementList *notes = getViewElementList();
+    return showElements(notes->begin(), notes->end(), false);
+}
+
+bool NotationStaff::showElements(NotationElementList::iterator from,
+				 NotationElementList::iterator to,
+				 bool positionOnly)
+{
+    kdDebug(KDEBUG_AREA) << "NotationStaff::showElements()" << endl;
+
+    START_TIMING;
+
+    Clef currentClef; // default is okay to start with
+    NotationElementList::iterator end = getViewElementList()->end();
+
+    for (NotationElementList::iterator it = from; it != end; ++it) {
+
+        if (positionOnly && (*it)->canvasItem()) {
+
+            // We can't only reposition if the event is a beamed note,
+            // because changing the position normally requires
+            // changing the beam's length and/or angle as well
+
+            if ((*it)->isNote()) {
+                
+                bool beamed = false;
+                (void)((*it)->event()->get<Bool>(Properties::BEAMED, beamed));
+                if (!beamed) {
+                    (*it)->reposition(x(), y());
+                    continue;
+                }
+            } else {
+                (*it)->reposition(x(), y());
+                continue;
+            }
+
+            // beamed note or something without a pixmap -- fall through
+        }
+
+        //
+        // process event
+        //
+        try {
+
+            QCanvasSimpleSprite *sprite = 0;
+
+            if ((*it)->isNote()) {
+
+                sprite = makeNoteSprite(it);
+
+            } else if ((*it)->isRest()) {
+
+                Note::Type note =
+                    (*it)->event()->get<Int>(Rosegarden::Note::NoteType);
+                int dots =
+                    (*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
+
+                QCanvasPixmap notePixmap
+                    (m_npf.makeRestPixmap(Note(note, dots)));
+                sprite = new
+                    QCanvasNotationSprite(*(*it), &notePixmap, canvas());
+
+            } else if ((*it)->event()->isa(Clef::EventType)) {
+
+		currentClef = Clef(*(*it)->event());
+                QCanvasPixmap clefPixmap(m_npf.makeClefPixmap(currentClef));
+                sprite = new
+                    QCanvasNotationSprite(*(*it), &clefPixmap, canvas());
+
+            } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
+
+                QCanvasPixmap keyPixmap
+                    (m_npf.makeKeyPixmap
+                     (Rosegarden::Key((*it)->event()->get<String>
+                                      (Rosegarden::Key::KeyPropertyName)),
+                      currentClef));
+                sprite = new
+                    QCanvasNotationSprite(*(*it), &keyPixmap, canvas());
+
+            } else if ((*it)->event()->isa(TimeSignature::EventType)) {
+
+                QCanvasPixmap timeSigPixmap
+                    (m_npf.makeTimeSigPixmap(TimeSignature(*(*it)->event())));
+                sprite = new
+                    QCanvasNotationSprite(*(*it), &timeSigPixmap, canvas());
+
+            } else {
+                    
+                kdDebug(KDEBUG_AREA)
+                    << "NotationElement of unrecognised type "
+                    << (*it)->event()->getType() << endl;
+                QCanvasPixmap unknownPixmap(m_npf.makeUnknownPixmap());
+                sprite = new
+                    QCanvasNotationSprite(*(*it), &unknownPixmap, canvas());
+            }
+
+            // Show the sprite
+            //
+            if (sprite) {
+                (*it)->setCanvasItem(sprite, x(), y());
+                sprite->show();
+            }
+            
+        } catch (...) {
+            kdDebug(KDEBUG_AREA) << "Event lacks the proper properties: "
+				 << (*(*it)->event())
+                                 << endl;
+        }
+
+        if (it == to) positionOnly = true; // from now on
+    }
+
+    kdDebug(KDEBUG_AREA) << "NotationStaff::showElements() exiting" << endl;
+
+    PRINT_ELAPSED("NotationStaff::showElements");
+    return true;
+}
+
+
+QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator it)
+{
+    Note::Type note = (*it)->event()->get<Int>(Rosegarden::Note::NoteType);
+    int dots = (*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
+
+    Accidental accidental = NoAccidental;
+
+    long acc;
+    if ((*it)->event()->get<Int>(Properties::DISPLAY_ACCIDENTAL, acc)) {
+        accidental = Accidental(acc);
+    }
+
+    bool up = true;
+    (void)((*it)->event()->get<Bool>(Properties::STEM_UP, up));
+
+    bool tail = true;
+    (void)((*it)->event()->get<Bool>(Properties::DRAW_TAIL, tail));
+
+    bool beamed = false;
+    (void)((*it)->event()->get<Bool>(Properties::BEAMED, beamed));
+
+    bool shifted = false;
+    (void)((*it)->event()->get<Bool>(Properties::NOTE_HEAD_SHIFTED, shifted));
+
+    long stemLength = m_npf.getNoteBodyHeight();
+    (void)((*it)->event()->get<Int>
+           (Properties::UNBEAMED_STEM_LENGTH, stemLength));
+
+//    kdDebug(KDEBUG_AREA) << "Got stem length of "
+//                         << stemLength << endl;
+
+    if (beamed) {
+
+        if ((*it)->event()->get<Bool>(Properties::BEAM_PRIMARY_NOTE)) {
+
+            int myY = (*it)->event()->get<Int>(Properties::BEAM_MY_Y);
+
+            stemLength = myY - (int)(*it)->getLayoutY();
+            if (stemLength < 0) stemLength = -stemLength;
+
+            int nextTailCount =
+                (*it)->event()->get<Int>(Properties::BEAM_NEXT_TAIL_COUNT);
+            int width =
+                (*it)->event()->get<Int>(Properties::BEAM_SECTION_WIDTH);
+            int gradient =
+                (*it)->event()->get<Int>(Properties::BEAM_GRADIENT);
+
+            bool thisPartialTails(false), nextPartialTails(false);
+            (void)(*it)->event()->get<Bool>
+                (Properties::BEAM_THIS_PART_TAILS, thisPartialTails);
+            (void)(*it)->event()->get<Bool>
+                (Properties::BEAM_NEXT_PART_TAILS, nextPartialTails);
+
+            QCanvasPixmap notePixmap
+                (m_npf.makeBeamedNotePixmap
+                 (note, dots, accidental, shifted, up, stemLength,
+                  nextTailCount, thisPartialTails, nextPartialTails,
+                  width, (double)gradient / 100.0));
+            return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
+
+        } else {
+
+            QCanvasPixmap notePixmap
+                (m_npf.makeNotePixmap
+                 (note, dots, accidental, shifted, tail, up, false,
+                  stemLength));
+            return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
+        }
+
+		
+    } else {
+
+        QCanvasPixmap notePixmap
+            (m_npf.makeNotePixmap(note, dots, accidental,
+                                shifted, tail, up, false, stemLength));
+
+        return new QCanvasNotationSprite(*(*it), &notePixmap, canvas());
+    }
+}
 

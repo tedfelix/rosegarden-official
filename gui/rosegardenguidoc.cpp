@@ -38,7 +38,6 @@
 #include "rosegardengui.h"
 #include "rosegardenguiview.h"
 #include "rosexmlhandler.h"
-#include "viewelementsmanager.h"
 #include "xmlstorableevent.h"
 #include "Event.h"
 #include "TrackNotationHelper.h"

@@ -114,4 +114,3 @@ NotationElement::reposition(double dxoffset, double dyoffset)
     m_canvasItem->move(m_x + dxoffset, m_y + dyoffset);
 }
 
-#endif
