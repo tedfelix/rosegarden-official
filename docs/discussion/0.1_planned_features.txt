@@ -27,6 +27,9 @@ Features for release 0.1
 
 - basic MIDI record and playback infrastructure through aRts (RB - 18.06.01)
 
+- the basics of Rosegarden 2.1 file loading
+
+
 2. the basis for more advanced features, where that basis should be
 done as soon as possible
 
@@ -41,12 +44,13 @@ done as soon as possible
 - track properties dialog
 
 - setting the time default sig of newly created tracks
+  (and selecting the appropriate sort of rest to fill up the tracks
+  with -- and should it be possible to change the rest type for a whole
+  filled section at once, after the fact?)
 
 - moveable begin and end markers in tracks
 
 - show several tracks in a single notation window
-
-- loading Rosegarden 2.1 files
 
 
 3. cleaning up the code and organisation such that it's as pleasant as
