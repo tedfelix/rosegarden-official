@@ -14,7 +14,12 @@ po/Makefile so the new .po file will be taken into account.
 .gmo files, and 'make package-messages' at top-level will update the
 new po files with newly found messages as well.
 
-XEmacs has a very good mode for po edition.
+XEmacs has a very good mode for po edition, but it doesn't know how to
+deal with UTF-8 chars, and you have to stick to UTF-8 :
+
+http://i18n.kde.org/translation-howto/
+
+So KBabel (from the kdesdk module) is in fact a much better tool.
 
 IMPORTANT NOTE : DO NOT USE QString CONCATENATION TO CREATE MESSAGES,
 ALWAYS USE .arg().
