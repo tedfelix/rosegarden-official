@@ -44,142 +44,138 @@ class RGKProgressDialog : public KDialogBase
 {
     Q_OBJECT
 
-    public:
-        /**
-         * Constructs a KProgressDialog
-         *
-         * @param parent Parent of the widget
-         * @param name Widget name
-         * @param caption Text to display in window title bar
-         * @param text Text to display in the dialog
-         * @param modal Set to true to make the dialog modal
-         */
-        RGKProgressDialog(QWidget* parent = 0, const char* name = 0,
-                        const QString& caption = QString::null,
-                        const QString& text = QString::null,
-                        bool modal = false);
+public:
+    /**
+     * Constructs a KProgressDialog
+     *
+     * @param parent Parent of the widget
+     * @param name Widget name
+     * @param caption Text to display in window title bar
+     * @param text Text to display in the dialog
+     * @param modal Set to true to make the dialog modal
+     */
+    RGKProgressDialog(QWidget* parent = 0, const char* name = 0,
+                      const QString& caption = QString::null,
+                      const QString& text = QString::null,
+                      bool modal = false);
 
-        /**
-         * Desctructor
-         */
-        ~RGKProgressDialog();
+    /**
+     * Desctructor
+     */
+    ~RGKProgressDialog();
 
-        /**
-         * Returns the @ref KProgress used in this dialog. 
-         * To set the number of steps or other progress bar related
-         * settings, access the KProgress object directly via this method.
-         */
-        KProgress* progressBar();
+    /**
+     * Returns the @ref KProgress used in this dialog. 
+     * To set the number of steps or other progress bar related
+     * settings, access the KProgress object directly via this method.
+     */
+    KProgress* progressBar();
 
-        /**
-         * Sets the text in the dialog
-         *
-         * @param text the text to display
-         */
-        void    setLabel(const QString&);
+    /**
+     * Sets the text in the dialog
+     *
+     * @param text the text to display
+     */
+    void    setLabel(const QString&);
         
-        /**
-         * Returns the current dialog text
-         */
-        QString labelText();
+    /**
+     * Returns the current dialog text
+     */
+    QString labelText();
 
-        /**
-         * Sets whether or not the user can cancel the process.
-         * If the dialog is cancellable, the Cancel button will be shown
-         * and the user can close the window using the window decorations.
-         * If the process is not (or should not be) interuptable,
-         * set the dialog to be modal and not cancellable.
-         *
-         * @param allowCancel Set to true to make the dialog non-closable
-         */
-        void setAllowCancel(bool allowCancel);
+    /**
+     * Sets whether or not the user can cancel the process.
+     * If the dialog is cancellable, the Cancel button will be shown
+     * and the user can close the window using the window decorations.
+     * If the process is not (or should not be) interuptable,
+     * set the dialog to be modal and not cancellable.
+     *
+     * @param allowCancel Set to true to make the dialog non-closable
+     */
+    void setAllowCancel(bool allowCancel);
 
-        /**
-         * Returns true if the dialog can be cancelled, false otherwise
-         */
-        bool allowCancel();
+    /**
+     * Returns true if the dialog can be cancelled, false otherwise
+     */
+    bool allowCancel();
 
-        /**
-         * Sets whether the cancel button is visible. @ref setAllowCancel(false)
-         * implies showCancelButton(false)
-         *
-         * @param show Whether or not the cancel button should be shown
-         */
-        void showCancelButton(bool show);
+    /**
+     * Sets whether the cancel button is visible. @ref setAllowCancel(false)
+     * implies showCancelButton(false)
+     *
+     * @param show Whether or not the cancel button should be shown
+     */
+    void showCancelButton(bool show);
 
-        /**
-         * Sets whether the dialog should close automagically when
-         * all the steps in the KProgress have been completed.
-         */
-        void setAutoClose(bool close);
+    /**
+     * Sets whether the dialog should close automagically when
+     * all the steps in the KProgress have been completed.
+     */
+    void setAutoClose(bool close);
 
-        /**
-         * Returns true if the dialog will close upon completion,
-         * or false otherwise
-         */
-        bool autoClose();
+    /**
+     * Returns true if the dialog will close upon completion,
+     * or false otherwise
+     */
+    bool autoClose();
 
-        /**
-         * Sets whether the dialog should reset the KProgress dialog
-         * back to 0 steps compelete when all steps have been completed.
-         * This is useful for KProgressDialogs that will be reused.
-         */
-        void setAutoReset(bool autoReset);
+    /**
+     * Sets whether the dialog should reset the KProgress dialog
+     * back to 0 steps compelete when all steps have been completed.
+     * This is useful for KProgressDialogs that will be reused.
+     */
+    void setAutoReset(bool autoReset);
 
-        /**
-         * Returns true if the KProgress widget will be reset
-         * upon completion, or false otherwise
-         */
-        bool autoReset();
+    /**
+     * Returns true if the KProgress widget will be reset
+     * upon completion, or false otherwise
+     */
+    bool autoReset();
 
-        /**
-         * Returns true if the dialog was closed or cancelled
-         * before completion. If the dialog is not cancellable
-         * it will always return false.
-         */
-        bool wasCancelled();
+    /**
+     * Returns true if the dialog was closed or cancelled
+     * before completion. If the dialog is not cancellable
+     * it will always return false.
+     */
+    bool wasCancelled();
 
-        /**
-         * Sets the text to appear on the cancel button.
-         */
-        void setButtonText(const QString&);
+    /**
+     * Sets the text to appear on the cancel button.
+     */
+    void setButtonText(const QString&);
 
-        /**
-         * Returns the text on the cancel button
-         */
-        QString buttonText();
+    /**
+     * Returns the text on the cancel button
+     */
+    QString buttonText();
 
-        /** 
-         * Set the minimum number of milliseconds to wait before
-         * actually showing the dialog
-         */
-        void setMinimumDuration(int ms);
+    /** 
+     * Set the minimum number of milliseconds to wait before
+     * actually showing the dialog
+     */
+    void setMinimumDuration(int ms);
 
-        /**
-         * Returns the wait duration in milliseconds
-         */
-        int  minimumDuration();
+    /**
+     * Returns the wait duration in milliseconds
+     */
+    int  minimumDuration();
 
-    protected slots:
-        void slotAutoShow();
-        void slotAutoActions(int percentage);
-        void slotCancel();
+protected slots:
+void slotAutoShow();
+    void slotAutoActions(int percentage);
+    void slotCancel();
 
-    private:
-        bool       mAutoClose;
-        bool       mAutoReset;
-        bool       mCancelled;
-        bool       mAllowCancel;
-        bool       mShown;
-        QString    mCancelText;
-        QLabel*    mLabel;
-        KProgress* mProgressBar;
-        QTimer*    mShowTimer;
-        int        mMinDuration;
-
-    private:
-        class KProgressDialogPrivate;
-        KProgressDialogPrivate *d;
+protected:
+    bool       mAutoClose;
+    bool       mAutoReset;
+    bool       mCancelled;
+    bool       mAllowCancel;
+    bool       mShown;
+    QString    mCancelText;
+    QLabel*    mLabel;
+    KProgress* mProgressBar;
+    QTimer*    mShowTimer;
+    int        mMinDuration;
 };
 
 #endif
