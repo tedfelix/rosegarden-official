@@ -194,9 +194,9 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
             m_programNames.push_back(lineEdit);
 
             connect(m_programNames[labelId],
-                    SIGNAL(textChanged(const QString&)),
+                    SIGNAL(lostFocus()),
                     this,
-                    SLOT(slotProgramChanged(const QString&)));
+                    SLOT(slotProgramChanged()));
         }
     }
     tab->addTab(progHBox, i18n("Programs 1 - 64"));
@@ -221,10 +221,9 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
             m_programNames.push_back(lineEdit);
 
             connect(m_programNames[labelId],
-                    SIGNAL(textChanged(const QString&)),
+                    SIGNAL(lostFocus()),
                     this,
-                    SLOT(slotProgramChanged(const QString&)));
-
+                    SLOT(slotProgramChanged()));
         }
     }
     tab->addTab(progHBox, i18n("Programs 65 - 128"));
@@ -419,8 +418,15 @@ struct ProgramCmp
 };
 
 void
-MidiProgramsEditor::slotProgramChanged(const QString &programName)
+MidiProgramsEditor::slotProgramChanged()
 {
+    const KLineEdit* lineEdit = dynamic_cast<const KLineEdit*>(sender());
+    if (!lineEdit) {
+        RG_DEBUG << "MidiProgramsEditor::slotProgramChanged() : %%% ERROR - signal sender is not a KLineEdit\n";
+        return;
+    }
+
+    QString programName = lineEdit->text();
     QString senderName = sender()->name();
 
     // Adjust value back to zero rated
@@ -1608,8 +1614,6 @@ BankEditorDialog::importFromSF2(QString filename)
 			overwrite);
 		addCommandToHistory(command);
 		
-		setModified(true);
-	
 		// Redraw the dialog
 		initDialog();
 	    }

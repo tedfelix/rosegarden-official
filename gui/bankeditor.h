@@ -130,7 +130,7 @@ public slots:
     void slotNewMSB(int value);
     void slotNewLSB(int value);
 
-    void slotProgramChanged(const QString&);
+    void slotProgramChanged();
 
 protected:
 
