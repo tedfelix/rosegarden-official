@@ -112,7 +112,7 @@ BarButtons::drawButtons()
     // First bar width by which others are judged
     //
     std::pair<Rosegarden::timeT, Rosegarden::timeT> fTimes =
-        m_doc->getComposition().getBarRange(1, false);
+        m_doc->getComposition().getBarRange(0, false);
 
     int firstBarWidth = fTimes.second - fTimes.first;
  

@@ -92,7 +92,6 @@ private:
     int m_bars;
     int m_barWidth;
     int m_height;
-    int m_barSubSections;
     QCanvas          *m_canvas;
     RosegardenGUIDoc *m_doc;
    
