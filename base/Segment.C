@@ -273,6 +273,69 @@ bool Track::expandIntoGroup(iterator from, iterator to,
 
 }
 
+bool Track::expandAndInsertEvent(Event *baseEvent, timeT baseDuration,
+                                 iterator& lastInsertedEvent)
+{
+    insert(baseEvent);
+
+    timeT eventDuration = baseEvent->getDuration();
+    timeT baseTime = baseEvent->getAbsoluteTime();
+
+    if (baseDuration == eventDuration) {
+        return true;
+    }
+    
+    timeT maxDuration = 0,
+        minDuration = 0;
+    
+    if (baseDuration > eventDuration) {
+        maxDuration = baseDuration;
+        minDuration = eventDuration;
+    } else {
+        maxDuration = eventDuration;
+        minDuration = baseDuration;
+    }
+
+    if (checkExpansionValid(maxDuration, minDuration)) {
+
+        long gid = -1;
+        std::string groupType;
+
+        // if the initial event has a group id, set the new event to it,
+        // otherwise fetch the track's next group id
+        //
+        if (!baseEvent->get<Int>("GroupNo", gid)) {
+            gid = getNextGroupId();
+            groupType = "beamed";
+        }
+
+        baseEvent->setDuration(minDuration);
+
+        // Add 2nd event
+        Event* ev = new Event(*baseEvent);
+        ev->setDuration(maxDuration - minDuration);
+        ev->setAbsoluteTime(baseTime + minDuration);       
+
+        if (gid >= 0) { // we need to group both notes
+            cerr << "Track::expandIntoGroup() : Setting gid = " << gid << endl;
+            ev->set<Int>("GroupNo", gid);
+            ev->set<String>("GroupType", groupType);
+
+            baseEvent->set<Int>("GroupNo", gid);
+            baseEvent->set<String>("GroupType", groupType);
+        }
+
+        lastInsertedEvent = insert(ev);
+
+        return true;
+    } else {
+        // expansion is not possible - only the base event has been inserted
+        return false;
+    }
+    
+}
+
+
 void Track::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
 {
     Event dummy;

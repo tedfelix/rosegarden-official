@@ -85,6 +85,19 @@ public:
                          iterator& lastInsertedEvent);
 
     /**
+     * Same as expandIntoGroup(), but for an Event which hasn't
+     * been inserted into a track yet. It will be expanded and
+     * inserted along with the new generated event.
+     * lastInsertedEvent will point to the 2nd event (the generated
+     * one)
+     *
+     * Note that even if the expansion is not possible, the
+     * Event will still be inserted.
+     */
+    bool expandAndInsertEvent(Event*, timeT baseDuration,
+                              iterator& lastInsertedEvent);
+
+    /**
      * Returns the range [start, end[ of events which are at absoluteTime
      */
     void getTimeSlice(timeT absoluteTime, iterator &start, iterator &end);
