@@ -30,6 +30,9 @@ namespace Rosegarden {
     class Segment;
 }
 
+class QFont;
+class QFontMetrics;
+
 
 /**
  * TextRuler is a widget that shows a strip of text strings at
@@ -54,9 +57,13 @@ public:
      * in the given Segment at positions calculated by the given
      * RulerScale.
      *
-     * If the Segment is not in a Composition, this TextRuler will
-     * take ownership of it; otherwise it will assume the Segment's
-     * lifetime is managed by the Composition and is not its concern.
+     * The Segment will be destroyed along with the TextRuler, if
+     * it was not in a Composition when the TextRuler was created
+     * and still is not when it's destroyed.  If the Segment was
+     * found to be in a Composition on either occasion, it will be
+     * assumed to be someone else's responsibility.
+     *
+     * The RulerScale will not be destroyed along with the TextRuler.
      */
     TextRuler(Rosegarden::RulerScale *rulerScale,
 	      Rosegarden::Segment *segment,
@@ -69,9 +76,10 @@ public:
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
-    void scrollHoriz(int x);
-
     void setMinimumWidth(int width) { m_width = width; }
+
+public slots:
+    void slotScrollHoriz(int x);
 
 protected:
     virtual void paintEvent(QPaintEvent *);
@@ -81,8 +89,13 @@ private:
     int  m_currentXOffset;
     int  m_width;
 
+    bool m_mySegmentMaybe;
+
     Rosegarden::Segment    *m_segment;
     Rosegarden::RulerScale *m_rulerScale;
+
+    QFont *m_font;
+    QFontMetrics *m_fontMetrics;
 };
 
 #endif // _LOOPRULER_H_

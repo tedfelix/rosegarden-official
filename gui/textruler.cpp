@@ -49,15 +49,27 @@ TextRuler::TextRuler(RulerScale *rulerScale,
       m_segment(segment),
       m_rulerScale(rulerScale)
 {
+    m_mySegmentMaybe = (m_segment->getComposition() != 0);
     setBackgroundColor(RosegardenGUIColours::TextRulerBackground);
+
+    m_font = new QFont("helvetica", 12);
+    m_font->setPixelSize(10);
+    
+    m_fontMetrics = new QFontMetrics(*m_font);
 }
 
 TextRuler::~TextRuler()
 {
+    if (m_mySegmentMaybe && !m_segment->getComposition()) {
+	delete m_segment;
+    }
+
+    delete m_fontMetrics;
+    delete m_font;
 }
 
 void
-TextRuler::scrollHoriz(int x)
+TextRuler::slotScrollHoriz(int x)
 {
     m_currentXOffset = -x;
     repaint();
@@ -92,7 +104,7 @@ TextRuler::paintEvent(QPaintEvent* e)
 
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());
-//!!!
+
     QRect clipRect = paint.clipRegion().boundingRect();
 
     timeT from = m_rulerScale->getTimeForX(clipRect.x() - m_currentXOffset);
@@ -114,10 +126,14 @@ TextRuler::paintEvent(QPaintEvent* e)
 	    continue;
 	}
 
-	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime()) +
-	    m_currentXOffset;
+	QRect bounds = m_fontMetrics->boundingRect(text.c_str());
 
-	paint.drawText(x, 5, text.c_str());
+	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime()) +
+	    m_currentXOffset - bounds.width()/2;
+
+	int y = height()/2 + bounds.height()/2;
+
+	paint.drawText(x, y, text.c_str());
     }
 }
 

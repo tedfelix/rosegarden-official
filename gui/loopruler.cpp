@@ -97,7 +97,6 @@ void LoopRuler::paintEvent(QPaintEvent* e)
 
 void LoopRuler::drawBarSections(QPainter* paint)
 {
-//    QRect clipRect = visibleRect(); //paint->clipRegion().boundingRect();
     QRect clipRect = paint->clipRegion().boundingRect();
 
     int firstBar = m_rulerScale->getBarForX(clipRect.x() - m_currentXOffset);

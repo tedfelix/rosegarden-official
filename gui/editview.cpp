@@ -120,8 +120,6 @@ void EditView::setBottomBarButtons(QWidget* w)
             m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
 }
 
-
-
 void EditView::readjustViewSize(QSize requestedSize, bool exact)
 {
     if (exact) {

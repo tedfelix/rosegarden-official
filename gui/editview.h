@@ -170,7 +170,16 @@ public slots:
 
 protected:
 
+    /**
+     * Locate the given widget in the top bar-buttons position and
+     * connect up its scrolling signals.
+     */
     void setTopBarButtons(QWidget*);
+
+    /**
+     * Locate the given widget in the top bar-buttons position and
+     * connect up its scrolling signals.
+     */
     void setBottomBarButtons(QWidget*);
 
     /**

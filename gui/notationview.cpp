@@ -63,6 +63,10 @@
 #include "dialogs.h"
 #include "staffruler.h" // for ActiveItem
 
+#include "textruler.h"
+#include "CompositionTimeSliceAdapter.h"
+#include "AnalysisTypes.h"
+
 using Rosegarden::Event;
 using Rosegarden::Int;
 using Rosegarden::Bool;
@@ -204,7 +208,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     m_topBarButtons = new BarButtons(m_hlayout, 25,
                                      false, m_centralFrame);
-
     setTopBarButtons(m_topBarButtons);
 
     QObject::connect
@@ -215,12 +218,27 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_topBarButtons->getLoopRuler()->setBackgroundColor
 	(RosegardenGUIColours::InsertCursorRuler);
 
+    m_bottomBarButtons = 0;
+
+    //!!! Experimental.
+    Segment *textSegment = new Segment;
+    Rosegarden::Composition *composition = &doc->getComposition();
+    Rosegarden::CompositionTimeSliceAdapter adapter
+	(composition,
+	 composition->getBarRange(m_hlayout->getFirstVisibleBar()).first,
+	 composition->getBarRange(m_hlayout->getLastVisibleBar()).second);
+    Rosegarden::AnalysisHelper helper;
+    helper.labelChords(adapter, *textSegment);
+    QWidget *textRuler = new TextRuler(m_hlayout, textSegment, 25, m_centralFrame);
+    setBottomBarButtons(textRuler);
+
+/*
     m_bottomBarButtons = new BarButtons(m_hlayout, 25,
                                         true, m_centralFrame);
-    m_bottomBarButtons->connectRulerToDocPointer(doc);
-
     setBottomBarButtons(m_bottomBarButtons);
 
+    m_bottomBarButtons->connectRulerToDocPointer(doc);
+*/
     m_selectDefaultNote->activate();
 }
 
@@ -922,11 +940,11 @@ void
 NotationView::setPageMode(bool pageMode)
 {
     if (pageMode) {
-	m_topBarButtons->hide();
-	m_bottomBarButtons->hide();
+	if (m_topBarButtons) m_topBarButtons->hide();
+	if (m_bottomBarButtons) m_bottomBarButtons->hide();
     } else {
-	m_topBarButtons->show();
-	m_bottomBarButtons->show();
+	if (m_topBarButtons) m_topBarButtons->show();
+	if (m_bottomBarButtons) m_bottomBarButtons->show();
     }
 
     m_hlayout->setPageMode(pageMode);

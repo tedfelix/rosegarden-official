@@ -98,9 +98,11 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s) {
 	ChordLabel ch(key, mask, bass);
 
         if (ch.isValid()) {
-            // label the chord (but, of course, there aren't text-indication
-            // events yet)
+
             std::cerr << ch.getName(key) << " at time " << time << std::endl;
+
+	    Text text(ch.getName(key));
+	    s.insert(text.getAsEvent(time));
         }
 
     }

@@ -49,6 +49,10 @@ class CompositionTimeSliceAdapter
 public:
     class iterator;
 
+    //!!! -1 is actually valid for either of these args now, so it'd
+    // be better to default to something else rather than appearing
+    // to use "magic" (but in fact non-magic) values.  Either zero
+    // and the composition's end time, or zero and zero.  Or something.
     CompositionTimeSliceAdapter(Composition* c,
 				timeT begin = -1, timeT end = -1) :
 	m_composition(c),
