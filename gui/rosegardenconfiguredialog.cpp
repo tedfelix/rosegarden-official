@@ -127,6 +127,49 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
     layout->addWidget(m_midiPitchOffset, 2, 1);
 
     addTab(frame, i18n("General"));
+
+    frame = new QFrame(m_tabWidget);
+    layout = new QGridLayout(frame,
+                             2, 3, // nbrow, nbcol
+                             10, 5);
+
+    layout->addWidget(new QLabel(i18n("External Audio Editor:"), frame),
+                      0, 0);
+
+    QString externalAudioEditor = m_cfg->readEntry("externalaudioeditor",
+                                  i18n("/usr/local/bin/audacity"));
+
+    m_externalAudioEditorPath = new QLineEdit(externalAudioEditor, frame);
+    layout->addMultiCellWidget(m_externalAudioEditorPath, 1, 1, 1, 2);
+    
+    QPushButton *changePathButton =
+        new QPushButton(i18n("Choose..."), frame);
+
+    layout->addWidget(changePathButton, 1, 3);
+    connect(changePathButton, SIGNAL(released()), SLOT(slotFileDialog()));
+
+
+    addTab(frame, i18n("External Editors"));
+
+}
+
+void
+GeneralConfigurationPage::slotFileDialog()
+{
+    KFileDialog *fileDialog = new KFileDialog(getExternalAudioEditor(),
+                                              QString::null,
+                                              this, "file dialog", true);
+    connect(fileDialog, SIGNAL(fileSelected(const QString&)),
+            SLOT(slotFileSelected(const QString&)));
+
+    connect(fileDialog, SIGNAL(destroyed()),
+            SLOT(slotDirectoryDialogClosed()));
+
+    if (fileDialog->exec() == QDialog::Accepted)
+    {
+        m_externalAudioEditorPath->setText(fileDialog->selectedFile());
+    }
+    delete fileDialog;
 }
 
 void GeneralConfigurationPage::apply()
@@ -146,6 +189,9 @@ void GeneralConfigurationPage::apply()
 
     int offset = getMIDIPitch2StringOffset();
     m_cfg->writeEntry("midipitchoffset", offset);
+
+    QString externalAudioEditor = getExternalAudioEditor();
+    m_cfg->writeEntry("externalaudioeditor", externalAudioEditor);
 
 
 }
@@ -414,7 +460,7 @@ LatencyConfigurationPage::LatencyConfigurationPage(KConfig *cfg,
     m_jackRecord->setTickInterval(25);
 
     addTab(frame, i18n("JACK Latency"));
-#endif
+#endif  // HAVE_JACK
 
 }
 
@@ -434,6 +480,8 @@ void LatencyConfigurationPage::apply()
     m_cfg->writeEntry("playbacklatencyusec", playback * 1000);
     m_cfg->writeEntry("playbacklatencysec", 0L);
 
+#ifdef HAVE_JACK
+
     int jackPlayback = getJACKPlaybackValue();
     m_cfg->writeEntry("jackplaybacklatencysec", jackPlayback / 1000);
     m_cfg->writeEntry("jackplaybacklatencyusec", jackPlayback * 1000);
@@ -441,6 +489,9 @@ void LatencyConfigurationPage::apply()
     int jackRecord = getJACKRecordValue();
     m_cfg->writeEntry("jackrecordlatencysec", jackRecord / 1000);
     m_cfg->writeEntry("jackrecordlatencyusec", jackRecord * 1000);
+
+#endif  // HAVE_JACK
+
 }
 
 
@@ -454,17 +505,17 @@ AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
     Rosegarden::AudioFileManager &afm = doc->getAudioFileManager();
 
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 1, 3,
+    QGridLayout *layout = new QGridLayout(frame, 1, 4,
                                           10, 5);
     layout->addWidget(new QLabel(i18n("Audio file path:"), frame), 0, 0);
     m_path = new QLineEdit(QString(afm.getAudioPath().c_str()), frame);
     m_path->setMinimumWidth(200);
-    layout->addWidget(m_path, 0, 1);
+    layout->addMultiCellWidget(m_path, 0, 1, 0, 2);
     
     m_changePathButton =
         new QPushButton(i18n("Choose..."), frame);
 
-    layout->addWidget(m_changePathButton, 0, 2);
+    layout->addWidget(m_changePathButton, 0, 3);
 
     connect(m_changePathButton, SIGNAL(released()),
             SLOT(slotFileDialog()));

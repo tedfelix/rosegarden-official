@@ -25,11 +25,15 @@
 #include <qpushbutton.h>
 #include <qabstractlayout.h> 
 #include <qlayout.h>
+#include <qprocess.h>
+#include <qfileinfo.h>
 
 // KDE includes
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kprinter.h>
+#include <kconfig.h>
+#include <kapp.h>
 
 // application specific includes
 #include "MappedEvent.h"
@@ -282,9 +286,57 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
     matrixView->show();
 }
 
-void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment*)
+void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
 {
-    std::cout << "RosegardenGUIView::slotEditSegmentAudio() - got segment" << endl;
+    std::cout << "RosegardenGUIView::slotEditSegmentAudio() - "
+              << "starting external audio editor" << endl;
+
+    KConfig* config = kapp->config();
+    QString application = config->readEntry("externalaudioeditor", "");
+
+    if (application.isEmpty())
+    {
+        std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
+                  << "external editor \"" << application.data()
+                  << "\" not found" << std::endl;
+        return;
+    }
+
+    QFileInfo *appInfo = new QFileInfo(application);
+    if (appInfo->exists() == false || appInfo->isExecutable() == false)
+    {
+        std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
+                  << "can't execute \"" << application << "\""
+                  << std::endl;
+        return;
+    }
+
+    Rosegarden::AudioFile *aF = getDocument()->getAudioFileManager().
+                                    getAudioFile(segment->getAudioFileID());
+    if (aF == 0)
+    {
+        std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
+                  << "can't find audio file" << std::endl;
+        return;
+    }
+
+
+    // wait cursor
+    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+
+    QProcess *process = new QProcess(this);
+    process->addArgument(application);
+    process->addArgument(QString(aF->getFilename().c_str()));
+
+    if (!process->start())
+    {
+        std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
+                  << "can't start external editor" << std::endl;
+    }
+
+    // restore cursor
+    QApplication::restoreOverrideCursor();
+
 }
 
 void RosegardenGUIView::setZoomSize(double size)

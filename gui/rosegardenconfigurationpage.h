@@ -25,6 +25,7 @@
 #include <qspinbox.h>
 #include <qcombobox.h>
 #include <qslider.h>
+#include <qlineedit.h>
 
 #include <klocale.h>
 
@@ -126,6 +127,8 @@ protected:
  */
 class GeneralConfigurationPage : public TabbedConfigurationPage
 {
+    Q_OBJECT
+
 public:
     enum DoubleClickClient
     {
@@ -144,11 +147,17 @@ public:
     int getCountInSpin()            { return m_countIn->value(); }
     int getDblClickClient()         { return m_client->currentItem(); }
     int getMIDIPitch2StringOffset() { return m_midiPitchOffset->value(); }
+    QString getExternalAudioEditor() { return m_externalAudioEditorPath->text(); }
+
+public slots:
+    void slotFileDialog();
+
 
 protected:
     QComboBox* m_client;
     QSpinBox* m_countIn;
     QSpinBox* m_midiPitchOffset;
+    QLineEdit* m_externalAudioEditorPath;
 };
 
 /**
