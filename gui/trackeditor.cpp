@@ -195,6 +195,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
     m_trackButtonScroll->setHScrollBarMode(QScrollView::AlwaysOff);
     m_trackButtonScroll->setVScrollBarMode(QScrollView::AlwaysOff);
     m_trackButtonScroll->setMinimumWidth(m_trackButtonScroll->contentsWidth());
+    m_trackButtonScroll->setBottomMargin(m_bottomBarButtons->height() +
+                                         m_segmentCanvas->horizontalScrollBar()->height());
 
     connect(m_trackButtons, SIGNAL(widthChanged()),
             this, SLOT(slotTrackButtonsWidthChanged()));

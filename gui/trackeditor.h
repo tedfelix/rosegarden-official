@@ -50,7 +50,7 @@ class TrackButtons;
 class MultiViewCommandHistory;
 class KCommand;
 class QCanvasRectangle;
-class QScrollView;
+class QDeferScrollView;
 class QScrollBar;
 
 /**
@@ -227,7 +227,7 @@ protected:
     TrackButtons            *m_trackButtons;
     SegmentCanvas           *m_segmentCanvas;
     QCanvasRectangle        *m_pointer;
-    QScrollView             *m_trackButtonScroll;
+    QDeferScrollView        *m_trackButtonScroll;
 
     bool                     m_showTrackLabels;
     unsigned int             m_canvasWidth;

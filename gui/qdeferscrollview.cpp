@@ -28,6 +28,13 @@ QDeferScrollView::QDeferScrollView(QWidget* parent, const char *name, WFlags f)
     setFocusPolicy(QWidget::WheelFocus);
 }
 
+void QDeferScrollView::setBottomMargin(int m)
+{
+    setMargins(leftMargin(), topMargin(), rightMargin(), m);
+}
+
+
+
 void QDeferScrollView::contentsWheelEvent(QWheelEvent* e)
 {
     emit gotWheelEvent(e);

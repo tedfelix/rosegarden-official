@@ -45,6 +45,8 @@ class QDeferScrollView : public QScrollView
 public:
     QDeferScrollView(QWidget* parent=0, const char *name=0, WFlags f=0);
 
+    void setBottomMargin(int);
+
 signals:
     void gotWheelEvent(QWheelEvent*);
 
