@@ -149,6 +149,24 @@ protected:
 };
 
 /**
+ * Notation Configuration page
+ */
+class NotationConfigurationPage : public TabbedConfigurationPage
+{
+public:
+    NotationConfigurationPage(KConfig *cfg,
+			      QWidget *parent = 0, const char *name=0);
+
+    virtual void apply();
+
+    static QString iconLabel() { return i18n("Notation"); }
+    static QString title()     { return i18n("Notation"); }
+
+protected:
+};
+
+
+/**
  * Playback Configuration page
  *
  * (application-wide settings)

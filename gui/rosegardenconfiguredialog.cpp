@@ -149,6 +149,23 @@ void GeneralConfigurationPage::apply()
 }
 
 
+NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
+                                                     QWidget *parent,
+                                                     const char *name) :
+    TabbedConfigurationPage(cfg, parent, name)
+{
+    m_cfg->setGroup("Notation Options");
+}
+
+void
+NotationConfigurationPage::apply()
+{
+    m_cfg->setGroup("Notation Options");
+
+}
+
+
+
 PlaybackConfigurationPage::PlaybackConfigurationPage(KConfig *cfg,
                                                      QWidget *parent,
                                                      const char *name)
@@ -342,6 +359,16 @@ ConfigureDialog::ConfigureDialog(KConfig* cfg,
                          loadIcon(GeneralConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new GeneralConfigurationPage(cfg, pageWidget);
+    vlay->addWidget(page);
+    page->setPageIndex(pageIndex(pageWidget));
+    m_configurationPages.push_back(page);
+
+    // Notation Page
+    pageWidget = addPage(NotationConfigurationPage::iconLabel(),
+			 NotationConfigurationPage::title(),
+			 loadIcon(NotationConfigurationPage::iconName()));
+    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    page = new NotationConfigurationPage(cfg, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);

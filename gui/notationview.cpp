@@ -2243,6 +2243,12 @@ void
 NotationView::slotSetInsertCursorAndRecentre(timeT t, double cx, int,
 					     bool updateNow)
 {
+    // We only do this if cx is in the right two-thirds of
+    // the window
+    
+    if (cx < (getCanvasView()->contentsX() +
+	      getCanvasView()->visibleWidth() / 3)) return;
+
     m_insertionTime = t;
     m_deferredCursorMove = CursorMoveAndScrollToPosition;
     m_deferredCursorScrollToX = cx;

@@ -372,7 +372,15 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
                 long group;
                 if ((*i)->get<Int>(BEAMED_GROUP_ID, group)) {
-                    if (group != currentGroup) {
+
+		    // We can't start a group in the middle of a
+		    // chord, as that would make for ill-formed XML if
+		    // the group ended outside the chord, which it
+		    // almost certainly would.  Besides, it'd be
+		    // meaningless musically.
+
+                    if (group != currentGroup && !inChord) {
+		    
                         if (currentGroup != -1) outStream << "</group>" << endl;
                         std::string type = (*i)->get<String>(BEAMED_GROUP_TYPE);
                         outStream << "<group type=\"" << strtoqstr(type) << "\"";
@@ -391,6 +399,13 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                         currentGroup = group;
                     }
                 } else if (currentGroup != -1) {
+
+		    // we hope this won't happen, but:
+		    if (inChord) {
+			outStream << "</chord></group><!-- ERROR -->\n";
+			inChord = false;
+		    }
+
                     outStream << "</group>\n";
                     currentGroup = -1;
                 }

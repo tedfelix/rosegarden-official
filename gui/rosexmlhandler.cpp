@@ -864,12 +864,20 @@ RoseXmlHandler::errorString()
 bool
 RoseXmlHandler::error(const QXmlParseException& exception)
 {
+    m_errorString = QString("%1 at line %2, column %3")
+	.arg(exception.message())
+	.arg(exception.lineNumber())
+	.arg(exception.columnNumber());
     return QXmlDefaultHandler::error( exception );
 }
 
 bool
 RoseXmlHandler::fatalError(const QXmlParseException& exception)
 {
+    m_errorString = QString("%1 at line %2, column %3")
+	.arg(exception.message())
+	.arg(exception.lineNumber())
+	.arg(exception.columnNumber());
     return QXmlDefaultHandler::fatalError( exception );
 }
 

@@ -105,7 +105,6 @@
 
 <State name="have_segments">
 	<enable>
-		<Action name="select"/>
 		<Action name="move"/>
 		<Action name="erase"/>
 		<Action name="resize"/>

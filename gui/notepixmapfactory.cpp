@@ -1693,7 +1693,7 @@ NotePixmapFactory::makeAnnotationPixmap(const Rosegarden::Text &text)
 
     m_p.setBrush(Qt::black);
     m_p.drawText(QRect(sideGap, topGap,
-		       annotationWidth + sideGap, annotationHeight + topGap),
+		       annotationWidth + sideGap, pixmapHeight - bottomGap),
 		 Qt::WordBreak, s);
 
 /* unnecessary following the rectangle draw

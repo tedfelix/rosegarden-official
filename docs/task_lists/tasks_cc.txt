@@ -192,7 +192,7 @@ Post-0.1.5-and-a-bit task list
     g. GUI for all this...
 
 32. Add Slashes to notes menu -- 1, 2, 3, 4, or none.  Worry about
-    playback aspect later
+    playback aspect later [DONE]
 
 33. Consider YA menu reorganisation: stuff now in Groups to spread out
     across Notes instead?  Or go for Groups and Notes instead of G, N
