@@ -69,9 +69,9 @@ BasicCommand::finishExecute()
     //!!! We're still missing the equivalent of "emit usedSelection()"
     // from here
 
-    m_view->redoLayout(m_view->getStaff(m_segment)->getId(),
+    m_view->redoLayout(this, m_view->getStaff(m_segment)->getId(),
 		       m_savedEvents.getStartIndex(),
-		       m_endTime);
+		       getRelayoutEndTime());
 }
 
 void

@@ -1636,12 +1636,29 @@ void NotationView::redoLayout(int staffNo, timeT startTime, timeT endTime)
     if (staffNo >= 0) segment = &m_staffs[staffNo]->getSegment();
     for (NotationViewSet::iterator i = m_viewsExtant.begin();
          i != m_viewsExtant.end(); ++i) {
-        (*i)->redoLayoutAdvised(segment, startTime, endTime);
+        (*i)->redoLayoutAdvised(0, segment, startTime, endTime);
     }
 }
 
-void NotationView::redoLayoutAdvised(Segment *segment, timeT startTime, timeT endTime)
+void NotationView::redoLayout(BasicCommand *command,
+			      int staffNo, timeT startTime, timeT endTime)
 {
+    Segment *segment = 0;
+    if (staffNo >= 0) segment = &m_staffs[staffNo]->getSegment();
+    for (NotationViewSet::iterator i = m_viewsExtant.begin();
+         i != m_viewsExtant.end(); ++i) {
+        (*i)->redoLayoutAdvised(command, segment, startTime, endTime);
+    }
+}
+
+void NotationView::redoLayoutAdvised(BasicCommand *command,
+				     Segment *segment,
+				     timeT startTime, timeT endTime)
+{
+    if (command && (command->getView() != this)) {
+	m_commandHistory->addCommand(command, false);
+    }
+
     if (segment == 0) applyLayout();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {

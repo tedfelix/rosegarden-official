@@ -50,6 +50,9 @@ public:
 
     Rosegarden::timeT getBeginTime() { return m_savedEvents.getStartIndex(); }
     Rosegarden::timeT getEndTime() { return m_endTime; }
+    virtual Rosegarden::timeT getRelayoutEndTime() { return getEndTime(); }
+
+    NotationView *getView() { return m_view; }
 
 protected:
     BasicCommand(const QString &name, NotationView *view,
@@ -60,8 +63,6 @@ protected:
 
     virtual void beginExecute();
     virtual void finishExecute();
-
-    NotationView *getView() { return m_view; }
 
 private:
     void deleteSavedEvents();
