@@ -252,6 +252,9 @@ void SegmentAudioPreview::updatePreview()
 
     try
     {
+        RG_DEBUG << "SegmentAudioPreview::updatePreview() - for file id "
+                 << m_segment->getAudioFileId() << " fetching values\n";
+
         m_values =
             aFM.getPreview(m_segment->getAudioFileId(),
                            audioStartTime,
@@ -262,6 +265,9 @@ void SegmentAudioPreview::updatePreview()
     catch (std::string e)
     {
         // empty all values out
+        RG_DEBUG << "SegmentAudioPreview::updatePreview : "
+                 << e.c_str() << endl;
+        
         m_values.clear();
     }
 
@@ -269,8 +275,10 @@ void SegmentAudioPreview::updatePreview()
     // If we haven't inserted the audio file yet we're probably
     // just still recording it.
     //
-    if (m_values.size() == 0)
+    if (m_values.size() == 0) {
+        RG_DEBUG << "SegmentAudioPreview::updatePreview : no values\n";
         return;
+    }
 
     m_channels = aFM.getAudioFile(m_segment->getAudioFileId())->getChannels();
 
