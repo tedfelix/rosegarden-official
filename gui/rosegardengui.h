@@ -644,6 +644,7 @@ public slots:
     void slotRewind();
     void slotFastforward();
     void slotRecord();
+    void slotToggleRecord();
     void slotRewindToBeginning();
     void slotFastForwardToEnd();
     void slotRefreshTimeDisplay();

@@ -555,6 +555,17 @@ SequenceManager::stopping()
         return;
     }
 
+    // Disarm recording and drop back to STOPPED
+    //
+    if (m_transportStatus == RECORDING_ARMED)
+    {
+        m_transportStatus = STOPPED;
+        m_transport->RecordButton->setOn(false);
+        m_transport->MetronomeButton->
+            setOn(m_doc->getComposition().usePlayMetronome());
+        return;
+    }
+
     m_sendStop = true;
 }
 
@@ -578,16 +589,12 @@ SequenceManager::stop()
 
     // Toggle off the buttons - first record
     //
-    if ((m_transportStatus == RECORDING_MIDI ||
-         m_transportStatus == RECORDING_AUDIO))
+    if (m_transportStatus == RECORDING_MIDI ||
+        m_transportStatus == RECORDING_AUDIO)
     {
-        if (m_transport->RecordButton->state() == QButton::On)
-            m_transport->RecordButton->setOn(false);
-
-        // Metronome
-        //
-        if (m_transport->MetronomeButton->state() == QButton::On)
-            m_transport->MetronomeButton->setOn(false);
+        m_transport->RecordButton->setOn(false);
+        m_transport->MetronomeButton->
+            setOn(m_doc->getComposition().usePlayMetronome());
     }
 
     // Now playback
@@ -733,158 +740,211 @@ SequenceManager::sendSequencerJump(const Rosegarden::RealTime &time)
 //
 
 void
-SequenceManager::record()
+SequenceManager::record(bool toggled)
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Studio &studio = m_doc->getStudio();
     KConfig* config = kapp->config();
     config->setGroup("General Options");
 
-    // if already recording then stop
-    //
-    if (m_transportStatus == RECORDING_MIDI ||
-        m_transportStatus == RECORDING_AUDIO)
+    if (toggled)
     {
-        stopping();
-        return;
-    }
-
-    // Get the record track and check the Instrument type
-    int rID = comp.getRecordTrack();
-    Rosegarden::InstrumentId inst = comp.getTrackByIndex(rID)->getInstrument();
-
-    // If no matching record instrument
-    //
-    if (studio.getInstrumentById(inst) == 0)
-    {
-        m_transport->RecordButton->setDown(false);
-        throw(i18n("No Record instrument selected"));
-    }
-
-
-    // may throw an exception
-    checkSoundSystemStatus();
-
-    // toggle the Metronome button if it's in use
-    //
-    m_transport->MetronomeButton->setOn(comp.useRecordMetronome());
-
-    // If we are looping then jump to start of loop and start recording,
-    // if we're not take off the number of count-in bars and start 
-    // recording.
-    //
-    if(comp.isLooping())
-        m_doc->setPointerPosition(comp.getLoopStart());
-    else
-    {
-        int startBar = comp.getBarNumber(comp.getPosition());
-        startBar -= config->readUnsignedNumEntry("countinbars", 2);
-        m_doc->setPointerPosition(comp.getBarRange(startBar).first);
-    }
-
-    // Some locals
-    //
-    TransportStatus recordType;
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
-
-    switch (studio.getInstrumentById(inst)->getType())
-    {
-        case Rosegarden::Instrument::Midi:
-            recordType = STARTING_TO_RECORD_MIDI;
-            cout << "SequenceManager::record() - starting to record MIDI"
-                 << endl;
-            break;
-
-        case Rosegarden::Instrument::Audio:
-            recordType = STARTING_TO_RECORD_AUDIO;
-            cout << "SequenceManager::record() - starting to record Audio"
-                 << endl;
-            break;
-
-        default:
-            cout << "SequenceManager::record() - unrecognised instrument type"
-                 << endl;
-            return;
-            break;
-    }
-
-    // set the buttons
-    m_transport->RecordButton->setOn(true);
-    m_transport->PlayButton->setOn(true);
-
-    // write the start position argument to the outgoing stream
-    //
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    if (comp.getTempo() == 0)
-    {
-        cout << "SequenceManager::play() - setting Tempo to Default value of 120.000"
-          << endl;
-        comp.setDefaultTempo(120.0);
-    }
-    else
-    {
-        cout << "SequenceManager::record() - starting to record" << endl;
-    }
-
-    // set the tempo in the transport
-    //
-    m_transport->setTempo(comp.getTempo());
-
-    // The arguments for the Sequencer  - record is similar to playback,
-    // we must being playing to record.
-    //
-    Rosegarden::RealTime startPos =comp.getElapsedRealTime(comp.getPosition());
-    Rosegarden::Configuration &docConfig = m_doc->getConfiguration();
-
-    // playback start position
-    streamOut << startPos.sec;
-    streamOut << startPos.usec;
-
-    // playback latency
-    streamOut << config->readLongNumEntry("playbacklatencysec", 0);
-    streamOut << config->readLongNumEntry("playbacklatencyusec", 100000);
-
-    // fetch latency
-    RealTime fetchLatency = docConfig.get<RealTimeT>("fetchlatency");
-    streamOut << fetchLatency.sec;
-    streamOut << fetchLatency.usec;
-
-    // read ahead slice
-    streamOut << config->readLongNumEntry("readaheadsec", 0);
-    streamOut << config->readLongNumEntry("readaheadusec", 40000);
-
-    // record type
-    streamOut << (int)recordType;
-
-    // Send Play to the Sequencer
-    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "record(long int, long int, long int, long int, long int, long int, long int, long int, int)",
-                                  data, replyType, replyData))
-    {
-        // failed - pop up and disable sequencer options
-        m_transportStatus = STOPPED;
-        throw(i18n("Failed to contact Rosegarden sequencer"));
-    }
-    else
-    {
-        // ensure the return type is ok
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        int result;
-        streamIn >> result;
-  
-        if (result)
+        if (m_transportStatus == RECORDING_ARMED)
         {
-            // completed successfully 
-            m_transportStatus = recordType;
+            std::cout << "SequenceManager::record - "
+                      << "unarming record" << std::endl;
+            m_transportStatus = STOPPED;
+
+            // Toggle the buttons
+            m_transport->MetronomeButton->setOn(comp.usePlayMetronome());
+            m_transport->RecordButton->setOn(false);
+
+            return;
+        }
+
+        if (m_transportStatus == STOPPED)
+        {
+            std::cout << "SequenceManager::record - "
+                      << "armed record" << std::endl;
+            m_transportStatus = RECORDING_ARMED;
+
+            // Toggle the buttons
+            m_transport->MetronomeButton->setOn(comp.useRecordMetronome());
+            m_transport->RecordButton->setOn(true);
+
+            return;
+        }
+
+        if (m_transportStatus == RECORDING_MIDI ||
+            m_transportStatus == RECORDING_AUDIO)
+        {
+            std::cout << "SequenceManager::record - "
+                      << "stop recording and keep playing" << std::endl;
+            return;
+        }
+
+        if (m_transportStatus == PLAYING)
+        {
+            std::cout << "SequenceManager::record - "
+                      << "punch in recording" << std::endl;
+            return;
+        }
+
+    }
+    else
+    {
+        // if already recording then stop
+        //
+        if (m_transportStatus == RECORDING_MIDI ||
+            m_transportStatus == RECORDING_AUDIO)
+        {
+            stopping();
+            return;
+        }
+
+        // Get the record track and check the Instrument type
+        int rID = comp.getRecordTrack();
+        Rosegarden::InstrumentId inst =
+            comp.getTrackByIndex(rID)->getInstrument();
+
+        // If no matching record instrument
+        //
+        if (studio.getInstrumentById(inst) == 0)
+        {
+            m_transport->RecordButton->setDown(false);
+            throw(i18n("No Record instrument selected"));
+        }
+
+
+        // may throw an exception
+        checkSoundSystemStatus();
+
+        // toggle the Metronome button if it's in use
+        m_transport->MetronomeButton->setOn(comp.useRecordMetronome());
+
+        // If we are looping then jump to start of loop and start recording,
+        // if we're not take off the number of count-in bars and start 
+        // recording.
+        //
+        if(comp.isLooping())
+            m_doc->setPointerPosition(comp.getLoopStart());
+        else
+        {
+            if (m_transportStatus != RECORDING_ARMED)
+            {
+                int startBar = comp.getBarNumber(comp.getPosition());
+                startBar -= config->readUnsignedNumEntry("countinbars", 2);
+                m_doc->setPointerPosition(comp.getBarRange(startBar).first);
+            }
+        }
+
+        // Some locals
+        //
+        TransportStatus recordType;
+        QByteArray data;
+        QCString replyType;
+        QByteArray replyData;
+
+        switch (studio.getInstrumentById(inst)->getType())
+        {
+            case Rosegarden::Instrument::Midi:
+                recordType = STARTING_TO_RECORD_MIDI;
+                cout << "SequenceManager::record() - starting to record MIDI"
+                     << endl;
+                break;
+
+            case Rosegarden::Instrument::Audio:
+                recordType = STARTING_TO_RECORD_AUDIO;
+                cout << "SequenceManager::record() - starting to record Audio"
+                     << endl;
+                break;
+
+            default:
+                cout << "SequenceManager::record() - "
+                     << "unrecognised instrument type"
+                     << endl;
+                return;
+                break;
+        }
+
+        // set the buttons
+        m_transport->RecordButton->setOn(true);
+        m_transport->PlayButton->setOn(true);
+
+        // write the start position argument to the outgoing stream
+        //
+        QDataStream streamOut(data, IO_WriteOnly);
+
+        if (comp.getTempo() == 0)
+        {
+            cout << "SequenceManager::play() - "
+                 << "setting Tempo to Default value of 120.000"
+                 << endl;
+            comp.setDefaultTempo(120.0);
         }
         else
         {
+            cout << "SequenceManager::record() - starting to record" << endl;
+        }
+
+        // set the tempo in the transport
+        //
+        m_transport->setTempo(comp.getTempo());
+
+        // The arguments for the Sequencer  - record is similar to playback,
+        // we must being playing to record.
+        //
+        Rosegarden::RealTime startPos =
+            comp.getElapsedRealTime(comp.getPosition());
+        Rosegarden::Configuration &docConfig = m_doc->getConfiguration();
+
+        // playback start position
+        streamOut << startPos.sec;
+        streamOut << startPos.usec;
+    
+        // playback latency
+        streamOut << config->readLongNumEntry("playbacklatencysec", 0);
+        streamOut << config->readLongNumEntry("playbacklatencyusec", 100000);
+
+        // fetch latency
+        RealTime fetchLatency = docConfig.get<RealTimeT>("fetchlatency");
+        streamOut << fetchLatency.sec;
+        streamOut << fetchLatency.usec;
+
+        // read ahead slice
+        streamOut << config->readLongNumEntry("readaheadsec", 0);
+        streamOut << config->readLongNumEntry("readaheadusec", 40000);
+    
+        // record type
+        streamOut << (int)recordType;
+    
+        // Send Play to the Sequencer
+        if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                      "record(long int, long int, long int, long int, long int, long int, long int, long int, int)",
+                                      data, replyType, replyData))
+        {
+            // failed - pop up and disable sequencer options
             m_transportStatus = STOPPED;
-            throw(i18n("Failed to start recording"));
+            throw(i18n("Failed to contact Rosegarden sequencer"));
+        }
+        else
+        {
+            // ensure the return type is ok
+            QDataStream streamIn(replyData, IO_ReadOnly);
+            int result;
+            streamIn >> result;
+  
+            if (result)
+            {
+                // completed successfully 
+                m_transportStatus = recordType;
+            }
+            else
+            {
+                m_transportStatus = STOPPED;
+                throw(i18n("Failed to start recording"));
+            }
         }
     }
 

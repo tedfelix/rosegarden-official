@@ -76,7 +76,7 @@ public:
     void stopping();
     void rewind();
     void fastforward();
-    void record();
+    void record(bool countIn);
     void rewindToBeginning();
     void fastForwardToEnd();
 

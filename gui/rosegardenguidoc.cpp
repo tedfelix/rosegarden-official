@@ -741,10 +741,8 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
             // If there was a gap between the last note and this one
             // then fill it with rests
             //
-            /*
             if (absTime > m_endOfLastRecordedNote)
                 m_recordSegment->fillWithRests(absTime + duration);
-                */
 
             // Now insert the new event
             //

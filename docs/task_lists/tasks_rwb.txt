@@ -7,9 +7,10 @@ o Event list [GETTING THERE]
 
 o Get Segment joining working
 
-o MIDI reverb and chorus on Instrument parameters
+o Toggle record mode for punch in/out [Half complete]
 
-o Repeating Notes bug
+o MIDI reverb and chorus on Instrument parameters [NON-STANDARD so
+  save these for the Studio information]
 
 o More MIDI events at Composition level. Sys Exs, Program Changes,
   Controller changes etc. etc. [ALMOST DONE - can't insert them]
@@ -57,6 +58,10 @@ o selection of ALSA recording device
 
 Completed for 0.1.7 (0.2.0)
 ===========================
+
+o MIDI export is broken [No it's not, NoteEdit's MIDI import is broken]
+
+o Repeating Notes bug [FIXED]
 
 o Set tempo event to length of segment [DONE]
 

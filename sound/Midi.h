@@ -107,11 +107,17 @@ const MidiByte MIDI_SEQUENCER_SPECIFIC     = 0x7F;
 
 // Some controllers
 //
-const MidiByte MIDI_CONTROLLER_BANK_MSB    = 0x00;
-const MidiByte MIDI_CONTROLLER_BANK_LSB    = 0x20;
-const MidiByte MIDI_CONTROLLER_MODULATION  = 0x01;
-const MidiByte MIDI_CONTROLLER_PAN         = 0x0A;
-const MidiByte MIDI_CONTROLLER_SOUNDS_OFF  = 0x78;
+const MidiByte MIDI_CONTROLLER_BANK_MSB      = 0x00;
+const MidiByte MIDI_CONTROLLER_BANK_LSB      = 0x20;
+const MidiByte MIDI_CONTROLLER_MODULATION    = 0x01;
+const MidiByte MIDI_CONTROLLER_PAN           = 0x0A;
+const MidiByte MIDI_CONTROLLER_SUSTAIN       = 0x40;
+const MidiByte MIDI_CONTROLLER_REVERB        = 0x5B;
+const MidiByte MIDI_CONTROLLER_CHORUS        = 0x5D;
+const MidiByte MIDI_CONTROLLER_SOUNDS_OFF    = 0x78;
+const MidiByte MIDI_CONTROLLER_RESET         = 0x79; // reset all controllers
+const MidiByte MIDI_CONTROLLER_LOCAL         = 0x7A; // 0 = off, 127 = on
+const MidiByte MIDI_CONTROLLER_ALL_NOTES_OFF = 0x7B;
 
 
 // MIDI percussion channel

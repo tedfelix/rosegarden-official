@@ -422,7 +422,7 @@ void RosegardenGUIApp::setupActions()
     m_rewindTransport->setGroup("transportcontrols");
 
     m_recordTransport = new KAction(i18n("&Record"), 0, Key_Space, this,
-                                    SLOT(slotRecord()), actionCollection(),
+                                    SLOT(slotToggleRecord()), actionCollection(),
                                     "record");
 
     m_recordTransport->setGroup("transportcontrols");
@@ -2079,7 +2079,8 @@ RosegardenGUIApp::slotToggleMetronome()
     if (m_seqManager->getTransportStatus() == STARTING_TO_RECORD_MIDI ||
         m_seqManager->getTransportStatus() == STARTING_TO_RECORD_AUDIO ||
         m_seqManager->getTransportStatus() == RECORDING_MIDI ||
-        m_seqManager->getTransportStatus() == RECORDING_AUDIO)
+        m_seqManager->getTransportStatus() == RECORDING_AUDIO ||
+        m_seqManager->getTransportStatus() == RECORDING_ARMED)
     {
         if (comp.useRecordMetronome())
             comp.setRecordMetronome(false);
@@ -2133,6 +2134,12 @@ RosegardenGUIApp::getSequencerSlice(long sliceStartSec, long sliceStartUsec,
 void
 RosegardenGUIApp::slotRewindToBeginning()
 {
+    // ignore requests if recording
+    //
+    if (m_seqManager->getTransportStatus() == RECORDING_MIDI ||
+        m_seqManager->getTransportStatus() == RECORDING_AUDIO)
+        return;
+
     m_seqManager->rewindToBeginning();
 }
 
@@ -2140,6 +2147,12 @@ RosegardenGUIApp::slotRewindToBeginning()
 void
 RosegardenGUIApp::slotFastForwardToEnd()
 {
+    // ignore requests if recording
+    //
+    if (m_seqManager->getTransportStatus() == RECORDING_MIDI ||
+        m_seqManager->getTransportStatus() == RECORDING_AUDIO)
+        return;
+
     m_seqManager->fastForwardToEnd();
 }
 
@@ -2208,17 +2221,38 @@ void RosegardenGUIApp::notifySequencerStatus(const int& status)
 void
 RosegardenGUIApp::slotRecord()
 {
-    if (!m_sequencerProcess && !launchSequencer())
-                return;
+   if (!m_sequencerProcess && !launchSequencer())
+        return;
 
     try
     {
-        m_seqManager->record();
+        m_seqManager->record(false);
     }
     catch(QString s)
     {
         KMessageBox::error(this, s);
     }
+}
+
+// Toggling record whilst stopped prepares us for record next time we
+// hit play.  If we're already playing we perform punch-in recording.
+//
+// All of the logic for this is handled in the sequencemanager.
+//
+void
+RosegardenGUIApp::slotToggleRecord()
+{
+    if (!m_sequencerProcess && !launchSequencer())
+        return;
+    try
+    {
+        m_seqManager->record(true);
+    }
+    catch(QString s)
+    {
+        KMessageBox::error(this, s);
+    }
+
 }
 
 void
@@ -2248,6 +2282,16 @@ void RosegardenGUIApp::slotPlay()
     if (!m_sequencerProcess && !launchSequencer())
                 return;
 
+    // If we're armed and ready to record then do this instead (calling
+    // slotRecord ensures we don't toggle the recording state in
+    // SequenceManager)
+    //
+    if (m_seqManager->getTransportStatus() == RECORDING_ARMED)
+    {
+        slotRecord();
+        return;
+    }
+
     try
     {
         m_seqManager->play();
@@ -2256,7 +2300,6 @@ void RosegardenGUIApp::slotPlay()
     {
         KMessageBox::error(this, s);
     }
-
 }
 
 // Send stop request to Sequencer.  This'll set the flag 
@@ -2272,6 +2315,11 @@ void RosegardenGUIApp::slotStop()
 //
 void RosegardenGUIApp::slotRewind()
 {
+    // ignore requests if recording
+    //
+    if (m_seqManager->getTransportStatus() == RECORDING_MIDI ||
+        m_seqManager->getTransportStatus() == RECORDING_AUDIO)
+        return;
     if (m_seqManager)
         m_seqManager->rewind();
 }
@@ -2281,6 +2329,12 @@ void RosegardenGUIApp::slotRewind()
 //
 void RosegardenGUIApp::slotFastforward()
 {
+    // ignore requests if recording
+    //
+    if (m_seqManager->getTransportStatus() == RECORDING_MIDI ||
+        m_seqManager->getTransportStatus() == RECORDING_AUDIO)
+        return;
+
     if (m_seqManager)
         m_seqManager->fastforward();
 }
@@ -2682,7 +2736,7 @@ RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)
 
     acc->connectItem(acc->insertItem(Key_Space),
                      this,
-                     SLOT(slotRecord()));
+                     SLOT(slotToggleRecord()));
 
     Rosegarden::RosegardenTransportDialog *transport =
         dynamic_cast<Rosegarden::RosegardenTransportDialog*>(widget);

@@ -233,6 +233,13 @@ int main(int argc, char *argv[])
                     roseSeq->setStatus(STOPPED);
                     break;
 
+                case RECORDING_ARMED:
+                    std::cerr << "RosegardenSequencer - "
+                              << "Sequencer can't enter \""
+                              << "RECORDING_ARMED\" state - internal error"
+                              << std::endl;
+                    break;
+
                 case STOPPED:
                 default:
                     roseSeq->processAsynchronousEvents();

@@ -32,8 +32,7 @@
 #define ROSEGARDEN_GUI_IFACE_NAME       "RosegardenIface"
 
 
-// Sequencer communicates its state through this enum - 
-// it's sent over the wire as an "int" for the moment
+// Sequencer communicates its state through this enum
 //
 typedef enum
 {
@@ -45,6 +44,7 @@ typedef enum
      STARTING_TO_PLAY,
      STARTING_TO_RECORD_MIDI,
      STARTING_TO_RECORD_AUDIO,
+     RECORDING_ARMED,                   // gui only state
      QUIT
 } TransportStatus;
 
