@@ -1608,6 +1608,15 @@ RosegardenGUIDoc::initialiseControllers()
                 push_back(Rosegarden::
                         MidiControlPair(Rosegarden::MIDI_CONTROLLER_RELEASE,
                                        (*it)->getRelease()));
+            advancedControls.
+                push_back(Rosegarden::
+                        MidiControlPair(Rosegarden::MIDI_CONTROLLER_PAN,
+                                       (*it)->getPan()));
+            advancedControls.
+                push_back(Rosegarden::
+                        MidiControlPair(Rosegarden::MIDI_CONTROLLER_VOLUME,
+                                       (*it)->getVelocity()));
+
 
             std::vector<Rosegarden::MidiControlPair>::iterator
                     iit = advancedControls.begin();

@@ -31,6 +31,7 @@
 #include <qpushbutton.h>
 #include <qslider.h>
 #include <qvbox.h>
+#include <qcolor.h>
 
 #include "Progress.h"
 
@@ -319,6 +320,11 @@ public:
     float getPosition() const { return m_position; }
     void setPosition(float position);
 
+    // Set the colour of the knob
+    //
+    void setKnobColour(const QColor &colour);
+    QColor getKnobColour() const { return m_knobColour; }
+
 signals:
     void valueChanged(float);
 
@@ -342,6 +348,8 @@ protected:
     bool  m_buttonPressed;
     int   m_lastY;
     int   m_lastX;
+
+    QColor m_knobColour;
 };
 
 

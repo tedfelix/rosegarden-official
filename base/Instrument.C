@@ -187,17 +187,11 @@ Instrument::toXmlString()
                    << std::endl;
     }
     
-    if (m_sendPan)
-    {
-        instrument << "            <pan value=\""
-                   << (int)m_pan << "\"/>" << std::endl;
-    }
+    instrument << "            <pan value=\""
+               << (int)m_pan << "\"/>" << std::endl;
 
-    if (m_sendVelocity || m_type == Audio)
-    {
-        instrument << "            <velocity value=\""
-                   << (int)m_velocity << "\"/>" << std::endl;
-    }
+    instrument << "            <volume value=\""
+               << (int)m_velocity << "\"/>" << std::endl;
 
     // Advanced MIDI controls
     //

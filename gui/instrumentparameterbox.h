@@ -62,10 +62,10 @@ public:
 
 public slots:
     void slotSelectProgram(int index);
-    void slotSelectPan(int index);
-    void slotSelectVelocity(int index);
     void slotSelectBank(int index);
     void slotSelectChannel(int index);
+    void slotSelectPan(float index);
+    void slotSelectVolume(float index);
 
     void slotSelectChorus(float index);
     void slotSelectReverb(float index);
@@ -73,10 +73,9 @@ public slots:
     void slotSelectResonance(float index);
     void slotSelectAttack(float index);
     void slotSelectRelease(float index);
+    void slotSelectAudioLevel(int index);
 
     void slotActivateProgramChange(bool value);
-    void slotActivateVelocity(bool value);
-    void slotActivatePan(bool value);
     void slotActivateBank(bool value);
 
     // select a plugin to go at an index number
@@ -107,23 +106,21 @@ protected:
     QLabel             *m_instrumentLabel;
     QLabel             *m_channelLabel;
     QLabel             *m_panLabel;
-    QLabel             *m_velocityLabel;
+    QLabel             *m_volumeLabel;
     QLabel             *m_programLabel;
     QLabel             *m_bankLabel;
 
     RosegardenComboBox *m_bankValue;
     RosegardenComboBox *m_channelValue;
     RosegardenComboBox *m_programValue;
-    RosegardenComboBox *m_panValue;
-    RosegardenComboBox *m_velocityValue;
+    RosegardenRotary   *m_panRotary;
+    RosegardenRotary   *m_volumeRotary;
 
     QCheckBox          *m_bankCheckBox;
     QCheckBox          *m_programCheckBox;
-    QCheckBox          *m_panCheckBox;
-    QCheckBox          *m_velocityCheckBox;
-    RosegardenFader    *m_volumeFader;
-    QLabel             *m_volumeValue;
-    QLabel             *m_volumeLabel;
+    RosegardenFader    *m_audioLevelFader;
+    QLabel             *m_audioLevelValue;
+    QLabel             *m_audioLevelLabel;
     QLabel             *m_pluginLabel;
 
     RosegardenRotary   *m_chorusRotary;

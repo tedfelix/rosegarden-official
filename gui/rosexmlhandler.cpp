@@ -1000,11 +1000,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_instrument->setSendPan(true);
         }
 
-    } else if (lcName == "velocity") {
+        // keep "velocity" so we're backwards compatible
+    } else if (lcName == "velocity" || lcName == "volume") {
 
         if (m_section != InInstrument)
         {
-            m_errorString = i18n("Found Pan outside Instrument");
+            m_errorString = i18n("Found Volume outside Instrument");
             return false;
         }
 

@@ -21,6 +21,7 @@ o BUG - Matrix width bug [HALF COMPLETED]
 o BUG - Matrix pointer width
 
 o BUG - recorded audio file inserting to AudioManagerDialog before it's ready
+  [DONE]
 
 o BUG - Plugin calls() during playback causing usual problem
 

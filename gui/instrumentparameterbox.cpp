@@ -20,9 +20,10 @@
 */
 
 #include <iostream>
+#include <cstdio>
+
 #include <klocale.h>
 
-#include <cstdio>
 
 #include <qdial.h>
 #include <qlayout.h>
@@ -53,21 +54,19 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
       m_instrumentLabel(new QLabel(this)),
       m_channelLabel(new QLabel(i18n("Channel"), this)),
       m_panLabel(new QLabel(i18n("Pan"), this)),
-      m_velocityLabel(new QLabel(i18n("Velocity"), this)),
+      m_volumeLabel(new QLabel(i18n("Volume"), this)),
       m_programLabel(new QLabel(i18n("Program"), this)),
       m_bankLabel(new QLabel(i18n("Bank"), this)),
       m_bankValue(new RosegardenComboBox(false, false, this)),
       m_channelValue(new RosegardenComboBox(true, false, this)),
       m_programValue(new RosegardenComboBox(false, false, this)),
-      m_panValue(new RosegardenComboBox(true, false, this)),
-      m_velocityValue(new RosegardenComboBox(true, false, this)),
+      m_panRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 64.0, 20)),
+      m_volumeRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 64.0, 20)),
       m_bankCheckBox(new QCheckBox(this)),
       m_programCheckBox(new QCheckBox(this)),
-      m_panCheckBox(new QCheckBox(this)),
-      m_velocityCheckBox(new QCheckBox(this)),
-      m_volumeFader(new RosegardenFader(this)),
-      m_volumeValue(new QLabel(this)),
-      m_volumeLabel(new QLabel(i18n("Volume"), this)),
+      m_audioLevelFader(new RosegardenFader(this)),
+      m_audioLevelValue(new QLabel(this)),
+      m_audioLevelLabel(new QLabel(i18n("Level"), this)),
       m_pluginLabel(new QLabel(i18n("Plugins"), this)),
       m_chorusRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 0.0, 20)),
       m_reverbRotary(new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 0.0, 20)),
@@ -98,6 +97,28 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
 
     if (!contains)
         instrumentParamBoxes.push_back(this);
+
+    // Set some nice pastel knob colours
+    //
+
+    // light blue
+    m_volumeRotary->setKnobColour(QColor(205, 212, 255));
+
+    // light red
+    m_panRotary->setKnobColour(QColor(255, 168, 169));
+
+    // light green
+    m_chorusRotary->setKnobColour(QColor(231, 255, 223));
+    m_reverbRotary->setKnobColour(QColor(231, 255, 223));
+
+    // light orange
+    m_highPassRotary->setKnobColour(QColor(255, 233, 208));
+    m_resonanceRotary->setKnobColour(QColor(255, 233, 208));
+
+    // light yellow
+    m_attackRotary->setKnobColour(QColor(249, 255, 208));
+    m_releaseRotary->setKnobColour(QColor(249, 255, 208));
+
 }
 
 InstrumentParameterBox::~InstrumentParameterBox()
@@ -129,22 +150,21 @@ InstrumentParameterBox::initBox()
 
     m_channelLabel->setFont(getFont());
     m_panLabel->setFont(getFont());
-    m_velocityLabel->setFont(getFont());
+    m_volumeLabel->setFont(getFont());
     m_programLabel->setFont(getFont());
     m_bankLabel->setFont(getFont());
 
     m_bankValue->setFont(getFont());
     m_programValue->setFont(getFont());
     m_channelValue->setFont(getFont());
-    m_panValue->setFont(getFont());
-    m_velocityValue->setFont(getFont());
+    m_audioLevelValue->setFont(getFont());
+    m_audioLevelFader->setLineStep(1);
 
-    m_volumeFader->setLineStep(1);
     //m_volumeFader->setPageStep(1);
-    m_volumeFader->setMaxValue(127);
-    m_volumeFader->setMinValue(0);
-    m_volumeValue->setFont(getFont());
-    m_volumeLabel->setFont(getFont());
+    m_audioLevelFader->setMaxValue(127);
+    m_audioLevelFader->setMinValue(0);
+    m_audioLevelValue->setFont(getFont());
+    m_audioLevelLabel->setFont(getFont());
     m_pluginLabel->setFont(getFont());
 
     // advanced MIDI effects
@@ -183,13 +203,11 @@ InstrumentParameterBox::initBox()
     gridLayout->addMultiCellWidget(m_channelLabel, 4, 4, 0, 1, AlignLeft);
     gridLayout->addWidget(m_channelValue, 4, 2, AlignRight);
 
-    gridLayout->addWidget(m_panLabel,    5, 0, AlignLeft);
-    gridLayout->addWidget(m_panCheckBox, 5, 1);
-    gridLayout->addWidget(m_panValue,    5, 2, AlignRight);
+    gridLayout->addWidget(m_volumeLabel,    5, 0, AlignLeft);
+    gridLayout->addWidget(m_volumeRotary,   5, 2, AlignRight);
 
-    gridLayout->addWidget(m_velocityLabel,    6, 0, AlignLeft);
-    gridLayout->addWidget(m_velocityCheckBox, 6, 1);
-    gridLayout->addWidget(m_velocityValue,    6, 2, AlignRight);
+    gridLayout->addWidget(m_panLabel,    6, 0, AlignLeft);
+    gridLayout->addWidget(m_panRotary,   6, 2, AlignRight);
 
     gridLayout->addWidget(m_chorusLabel, 7, 0, AlignLeft);
     gridLayout->addWidget(m_chorusRotary, 7, 2, AlignRight);
@@ -211,10 +229,10 @@ InstrumentParameterBox::initBox()
 
     // Audio widgets
     //
-    gridLayout->addWidget(m_volumeLabel, 13, 0, AlignCenter);
+    gridLayout->addWidget(m_audioLevelLabel, 13, 0, AlignCenter);
     gridLayout->addMultiCellWidget(m_pluginLabel, 13, 13, 1, 2, AlignCenter);
-    gridLayout->addMultiCellWidget(m_volumeFader, 14, 16, 0, 0,  AlignCenter);
-    gridLayout->addWidget(m_volumeValue, 17, 0, AlignCenter);
+    gridLayout->addMultiCellWidget(m_audioLevelFader, 14, 16, 0, 0,  AlignCenter);
+    gridLayout->addWidget(m_audioLevelValue, 17, 0, AlignCenter);
 
     for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
     {
@@ -234,6 +252,7 @@ InstrumentParameterBox::initBox()
     for (int i = 0; i < 16; i++)
         m_channelValue->insertItem(QString("%1").arg(i));
 
+    /*
     for (int i = -Rosegarden::MidiMidValue;
              i < Rosegarden::MidiMidValue + 1; i++)
     {
@@ -242,36 +261,29 @@ InstrumentParameterBox::initBox()
         else
             m_panValue->insertItem(QString("%1").arg(i));
     }
+    */
 
+    /*
     // velocity values
     //
     for (int i = 0; i < Rosegarden::MidiMaxValue + 1; i++)
         m_velocityValue->insertItem(QString("%1").arg(i));
+        */
 
 
     // Disable these three by default - they are activate by their
     // checkboxes
     //
-    m_panValue->setDisabled(true);
     m_programValue->setDisabled(true);
-    m_velocityValue->setDisabled(true);
     m_bankValue->setDisabled(true);
 
     // Only active is we have an Instrument selected
     //
-    m_panCheckBox->setDisabled(true);
-    m_velocityCheckBox->setDisabled(true);
     m_programCheckBox->setDisabled(true);
     m_bankCheckBox->setDisabled(true);
 
     // Connect up the toggle boxes
     //
-    connect(m_panCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotActivatePan(bool)));
-
-    connect(m_velocityCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotActivateVelocity(bool)));
-
     connect(m_programCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotActivateProgramChange(bool)));
 
@@ -284,34 +296,28 @@ InstrumentParameterBox::initBox()
     connect(m_bankValue, SIGNAL(activated(int)),
             this, SLOT(slotSelectBank(int)));
 
-    connect(m_panValue, SIGNAL(activated(int)),
-            this, SLOT(slotSelectPan(int)));
+    connect(m_panRotary, SIGNAL(valueChanged(float)),
+            this, SLOT(slotSelectPan(float)));
+    
+    connect(m_volumeRotary, SIGNAL(valueChanged(float)),
+            this, SLOT(slotSelectVolume(float)));
 
     connect(m_programValue, SIGNAL(activated(int)),
             this, SLOT(slotSelectProgram(int)));
 
-    connect(m_velocityValue, SIGNAL(activated(int)),
-            this, SLOT(slotSelectVelocity(int)));
-
     connect(m_channelValue, SIGNAL(activated(int)),
             this, SLOT(slotSelectChannel(int)));
 
-    connect(m_volumeFader, SIGNAL(faderChanged(int)),
-            this, SLOT(slotSelectVelocity(int)));
+    connect(m_audioLevelFader, SIGNAL(faderChanged(int)),
+            this, SLOT(slotSelectAudioLevel(int)));
 
     // connect up mouse wheel movement
     //
     connect(m_bankValue, SIGNAL(propagate(int)),
             this, SLOT(slotSelectBank(int)));
 
-    connect(m_panValue, SIGNAL(propagate(int)),
-            this, SLOT(slotSelectPan(int)));
-
     connect(m_programValue, SIGNAL(propagate(int)),
             this, SLOT(slotSelectProgram(int)));
-
-    connect(m_velocityValue, SIGNAL(propagate(int)),
-            this, SLOT(slotSelectVelocity(int)));
 
     connect(m_channelValue, SIGNAL(propagate(int)),
             this, SLOT(slotSelectChannel(int)));
@@ -337,8 +343,6 @@ InstrumentParameterBox::initBox()
 
 
     // don't select any of the options in any dropdown
-    m_panValue->setCurrentItem(-1);
-    m_velocityValue->setCurrentItem(-1);
     m_programValue->setCurrentItem(-1);
     m_bankValue->setCurrentItem(-1);
     m_channelValue->setCurrentItem(-1);
@@ -361,13 +365,11 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         m_bankValue->hide();
         m_channelValue->hide();
         m_programValue->hide();
-        m_panValue->hide();
+        m_panRotary->hide();
         m_bankCheckBox->hide();
         m_programCheckBox->hide();
-        m_panCheckBox->hide();
-        m_velocityCheckBox->hide();
-        m_velocityValue->hide();
-        m_velocityLabel->hide();
+        m_volumeLabel->hide();
+        m_volumeRotary->hide();
 
         // Advanced MIDI controls
         //
@@ -386,9 +388,9 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
 
         // Audio controls
         //
-        m_volumeFader->hide();
-        m_volumeValue->hide();
-        m_volumeLabel->hide();
+        m_audioLevelFader->hide();
+        m_audioLevelValue->hide();
+        m_audioLevelLabel->hide();
         m_pluginLabel->hide();
 
         for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
@@ -414,13 +416,11 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         m_bankValue->hide();
         m_channelValue->hide();
         m_programValue->hide();
-        m_panValue->hide();
+        m_panRotary->hide();
         m_bankCheckBox->hide();
         m_programCheckBox->hide();
-        m_panCheckBox->hide();
-        m_velocityCheckBox->hide();
-        m_velocityValue->hide();
-        m_velocityLabel->hide();
+        m_volumeRotary->hide();
+        m_volumeLabel->hide();
 
         // Advanced MIDI controls
         //
@@ -443,11 +443,11 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         //m_velocityValue->setDisabled(false);
         //m_velocityValue->setCurrentItem(instrument->getVelocity());
 
-        m_volumeFader->show();
-        m_volumeValue->show();
-        m_volumeLabel->show();
+        m_audioLevelFader->show();
+        m_audioLevelValue->show();
+        m_audioLevelLabel->show();
         m_pluginLabel->show();
-        m_volumeFader->setFader(instrument->getVelocity());
+        m_audioLevelFader->setFader(instrument->getVelocity());
 
         for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
         {
@@ -477,18 +477,17 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         m_instrumentLabel->show();
         m_channelLabel->show();
         m_panLabel->show();
-        m_velocityLabel->show();
+        m_volumeLabel->show();
+        m_volumeRotary->show();
         m_programLabel->show();
         m_bankLabel->show();
         m_bankValue->show();
         m_channelValue->show();
         m_programValue->show();
-        m_panValue->show();
-        m_velocityValue->show();
+        m_panRotary->show();
+        m_audioLevelValue->show();
         m_bankCheckBox->show();
         m_programCheckBox->show();
-        m_panCheckBox->show();
-        m_velocityCheckBox->show();
 
         // Advanced MIDI controls
         //
@@ -508,9 +507,9 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
 
         // Audio controls
         //
-        m_volumeFader->hide();
-        m_volumeValue->hide();
-        m_volumeLabel->hide();
+        m_audioLevelFader->hide();
+        m_audioLevelValue->hide();
+        m_audioLevelLabel->hide();
         m_pluginLabel->hide();
 
         for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
@@ -524,33 +523,19 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
 
     // Enable all check boxes
     //
-    m_panCheckBox->setDisabled(false);
-    m_velocityCheckBox->setDisabled(false);
     m_programCheckBox->setDisabled(false);
     m_bankCheckBox->setDisabled(false);
 
     // Activate all checkboxes
     //
-    m_panCheckBox->setChecked(m_selectedInstrument->sendsPan());
-    m_velocityCheckBox->setChecked(m_selectedInstrument->sendsVelocity());
     m_programCheckBox->setChecked(m_selectedInstrument->sendsProgramChange());
     m_bankCheckBox->setChecked(m_selectedInstrument->sendsBankSelect());
 
-    // The MIDI channel
-    m_channelValue->setCurrentItem((int)instrument->getMidiChannel());
-
-    // Check for pan
+    // Basic parameters
     //
-    if (instrument->sendsPan())
-    {
-        m_panValue->setDisabled(false);
-        m_panValue->setCurrentItem(instrument->getPan());
-    }
-    else
-    {
-        m_panValue->setDisabled(true);
-        m_panValue->setCurrentItem(-1);
-    }
+    m_channelValue->setCurrentItem((int)instrument->getMidiChannel());
+    m_panRotary->setPosition((float)instrument->getPan());
+    m_volumeRotary->setPosition((float)instrument->getVelocity());
 
     // Check for program change
     //
@@ -563,19 +548,6 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     {
         m_programValue->setDisabled(true);
         m_programValue->setCurrentItem(-1);
-    }
-
-    // Check for velocity
-    //
-    if (instrument->sendsVelocity())
-    {
-        m_velocityValue->setDisabled(false);
-        m_velocityValue->setCurrentItem(instrument->getVelocity());
-    }
-    else
-    {
-        m_velocityValue->setDisabled(true);
-        m_velocityValue->setCurrentItem(-1);
     }
 
     // clear bank list
@@ -648,40 +620,6 @@ InstrumentParameterBox::slotActivateProgramChange(bool value)
 }
 
 void
-InstrumentParameterBox::slotActivateVelocity(bool value)
-{
-    if (m_selectedInstrument == 0)
-    {
-        m_velocityCheckBox->setChecked(false);
-        updateAllBoxes();
-        return;
-    }
-
-    m_selectedInstrument->setSendVelocity(value);
-    m_velocityValue->setDisabled(!value);
-    m_velocityValue->setCurrentItem(m_selectedInstrument->getVelocity());
-
-    updateAllBoxes();
-}
-
-void
-InstrumentParameterBox::slotActivatePan(bool value)
-{
-    if (m_selectedInstrument == 0)
-    {
-        m_panCheckBox->setChecked(false);
-        updateAllBoxes();
-        return;
-    }
-
-    m_selectedInstrument->setSendPan(value);
-    m_panValue->setDisabled(!value);
-    m_panValue->setCurrentItem(m_selectedInstrument->getPan());
-
-    updateAllBoxes();
-}
-
-void
 InstrumentParameterBox::slotActivateBank(bool value)
 {
     if (m_selectedInstrument == 0)
@@ -734,12 +672,12 @@ InstrumentParameterBox::slotSelectProgram(int index)
 
 
 void
-InstrumentParameterBox::slotSelectPan(int index)
+InstrumentParameterBox::slotSelectPan(float value)
 {
     if (m_selectedInstrument == 0)
         return;
 
-    m_selectedInstrument->setPan(index);
+    m_selectedInstrument->setPan(Rosegarden::MidiByte(value));
 
     try
     {
@@ -747,7 +685,7 @@ InstrumentParameterBox::slotSelectPan(int index)
          new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
                                      Rosegarden::MappedEvent::MidiController,
                                      Rosegarden::MIDI_CONTROLLER_PAN,
-                                     (Rosegarden::MidiByte)index);
+                                     (Rosegarden::MidiByte)value);
         Rosegarden::StudioControl::sendMappedEvent(mE);
     }
     catch(...) {;}
@@ -756,24 +694,46 @@ InstrumentParameterBox::slotSelectPan(int index)
 }
 
 void
-InstrumentParameterBox::slotSelectVelocity(int index)
+InstrumentParameterBox::slotSelectVolume(float value)
 {
     if (m_selectedInstrument == 0)
         return;
 
-    m_selectedInstrument->setVelocity(index);
+    m_selectedInstrument->setVelocity(Rosegarden::MidiByte(value));
+
+    try
+    {
+        Rosegarden::MappedEvent *mE = 
+         new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
+                                     Rosegarden::MappedEvent::MidiController,
+                                     Rosegarden::MIDI_CONTROLLER_VOLUME,
+                                     (Rosegarden::MidiByte)value);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
+    }
+    catch(...) {;}
+
+    updateAllBoxes();
+}
+
+void
+InstrumentParameterBox::slotSelectAudioLevel(int value)
+{
+    if (m_selectedInstrument == 0)
+        return;
+
+    m_selectedInstrument->setVelocity(Rosegarden::MidiByte(value));
 
     if (m_selectedInstrument->getType() == Rosegarden::Instrument::Audio)
     {
         // stupid QSliders mean we have to invert this value so that
         // the top of the slider is max, the bottom min.
         //
-        m_volumeValue->setNum(index);
+        m_audioLevelValue->setNum(int(value));
 
         Rosegarden::StudioControl::setStudioObjectProperty
             (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
              Rosegarden::MappedAudioFader::FaderLevel,
-             Rosegarden::MappedObjectValue(index));
+             Rosegarden::MappedObjectValue(value));
     }
 
     updateAllBoxes();

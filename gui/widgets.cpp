@@ -421,12 +421,20 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
     m_position(initialPosition),
     m_buttonPressed(false),
     m_lastY(0),
-    m_lastX(0)
+    m_lastX(0),
+    m_knobColour(0, 0, 0)
 {
     setFixedSize(size, size);
     QToolTip::add(this, i18n("Click n' Drag - up and down or left to right"));
 }
 
+
+void
+RosegardenRotary::setKnobColour(const QColor &colour)
+{
+    m_knobColour = colour;
+    repaint();
+}
 
 void
 RosegardenRotary::paintEvent(QPaintEvent *e)
@@ -437,7 +445,13 @@ RosegardenRotary::paintEvent(QPaintEvent *e)
     paint.setClipRect(e->rect().normalize());
 
     paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
-    paint.setBrush(kapp->palette().color(QPalette::Active, QColorGroup::Base));
+
+    if (m_knobColour != Qt::black)
+        paint.setBrush(m_knobColour);
+    else
+        paint.setBrush(
+                kapp->palette().color(QPalette::Active, QColorGroup::Base));
+
     paint.drawEllipse(0, 0, m_size, m_size);
 
     drawPosition();
@@ -534,7 +548,12 @@ RosegardenRotary::drawPosition()
     double x = hyp - 0.8 * hyp * sin(angle);
     double y = hyp + 0.8 * hyp * cos(angle);
 
-    paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Base));
+    if (m_knobColour != Qt::black)
+        paint.setPen(m_knobColour);
+    else
+        paint.setPen
+            (kapp->palette().color(QPalette::Active, QColorGroup::Base));
+
     paint.drawLine(hyp, hyp, x, y);
 
     // Draw the new position
