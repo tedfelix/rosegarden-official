@@ -43,6 +43,7 @@ Quantizer::Quantizer(std::string source,
     m_source(source), m_target(target)
 {
     if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
+    makePropertyNames();
 }
 
 Quantizer::Quantizer(const StandardQuantization &sq,
@@ -52,6 +53,7 @@ Quantizer::Quantizer(const StandardQuantization &sq,
     m_source(source), m_target(target)
 {
     if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
+    makePropertyNames();
 }    
 
 Quantizer::Quantizer(const Quantizer &q,
@@ -60,14 +62,14 @@ Quantizer::Quantizer(const Quantizer &q,
     m_type(q.m_type), m_unit(q.m_unit), m_maxDots(q.m_maxDots),
     m_source(source), m_target(target)
 {
-    // nothing else
+    makePropertyNames();
 }
    
 Quantizer::Quantizer(const Quantizer &q) :
     m_type(q.m_type), m_unit(q.m_unit), m_maxDots(q.m_maxDots),
     m_source(q.m_source), m_target(q.m_target)
 {
-    // nothing else
+    makePropertyNames();
 }
 
 Quantizer &
@@ -79,6 +81,7 @@ Quantizer::operator=(const Quantizer &q)
     m_maxDots = q.m_maxDots;
     m_source = q.m_source;
     m_target = q.m_target;
+    makePropertyNames();
     return *this;
 }
 
@@ -102,13 +105,7 @@ Quantizer::SingleQuantizer::~SingleQuantizer() { }
 Quantizer::UnitQuantizer::~UnitQuantizer() { }
 Quantizer::NoteQuantizer::~NoteQuantizer() { }
 Quantizer::LegatoQuantizer::~LegatoQuantizer() { }
-/*!!!
-timeT
-Quantizer::SingleQuantizer::getDuration(Event *e) const
-{
-    return e->getDuration();
-}
-*/
+
 timeT
 Quantizer::UnitQuantizer::quantize(int unit, int, timeT duration, timeT) const
 {
@@ -171,18 +168,7 @@ Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
 	return shortTime;
     }
 };
-/*!!!
-timeT
-Quantizer::NoteQuantizer::getDuration(Event *e) const
-{
-    long nominalDuration;
-    if (e->get<Int>(BaseProperties::TUPLET_NOMINAL_DURATION, nominalDuration)) {
-	return nominalDuration;
-    } else {
-	return e->getDuration();
-    }
-}
-*/
+
 timeT
 Quantizer::LegatoQuantizer::quantize(int unit, int maxDots, timeT duration,
 				     timeT followingRestDuration) const
@@ -211,16 +197,17 @@ Quantizer::LegatoQuantizer::quantize(int unit, int maxDots, timeT duration,
 
 
 void
-Quantizer::quantize(Segment::iterator from, Segment::iterator to) const
+Quantizer::quantize(Segment *s,
+		    Segment::iterator from, Segment::iterator to) const
 {
     switch (m_type) {
 
     case UnitQuantize:
-	quantize(from, to, UnitQuantizer(), UnitQuantizer());
+	quantize(s, from, to, UnitQuantizer(), UnitQuantizer());
 	break;
 
     case NoteQuantize:
-	quantize(from, to, UnitQuantizer(), NoteQuantizer());
+	quantize(s, from, to, UnitQuantizer(), NoteQuantizer());
 	break;
 
     case LegatoQuantize:
@@ -228,31 +215,36 @@ Quantizer::quantize(Segment::iterator from, Segment::iterator to) const
 	// with the minimal unit it's equivalent to note quantization
 
 	if (m_unit == Note(Note::Shortest).getDuration()) {
-	    quantize(from, to, UnitQuantizer(), NoteQuantizer());
+	    quantize(s, from, to, UnitQuantizer(), NoteQuantizer());
 	} else {
-	    quantize(from, to, UnitQuantizer(), LegatoQuantizer());
+	    quantize(s, from, to, UnitQuantizer(), LegatoQuantizer());
 	}
 	break;
     }
 }
 
 void
-Quantizer::fixQuantizedValues(Segment::iterator from,
+Quantizer::fixQuantizedValues(Segment *s, Segment::iterator from,
 			      Segment::iterator to) const
 {
-    quantize(from, to);
+    //!!! Twice as slow as it needs to be.
 
-    for (; from != to; ++from) {
+    quantize(s, from, to);
+
+    for (Segment::iterator nextFrom = from; from != to; from = nextFrom) {
+
+	++nextFrom;
 
 	if (m_target != RawEventData) {
 	    timeT t = getFromTarget(*from, AbsoluteTimeValue);
 	    timeT d = getFromTarget(*from, DurationValue);
-	    (*from)->setAbsoluteTime(t);
-	    (*from)->setDuration(d);
+	    Event *e = new Event(**from, t, d);
+	    s->erase(from);
+	    m_toInsert.push_back(e);
 	}
-
-	removeProperties(*from);
     }
+
+    insertNewEvents(s);
 }
 
 
@@ -333,12 +325,14 @@ Quantizer::quantizeDuration(timeT duration) const
 
 
 void
-Quantizer::quantize(Segment::iterator from, Segment::iterator to,
+Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
 		    const SingleQuantizer &aq, const SingleQuantizer &dq) const
 {
     timeT excess = 0;
     bool legato = (m_type == LegatoQuantize);
-    
+
+    assert(m_toInsert.size() == 0);
+
     // For the moment, legato quantization always uses the minimum
     // unit (rather than the potentially large legato unit) for the
     // absolute time.  Ideally we'd be able to specify both
@@ -347,10 +341,11 @@ Quantizer::quantize(Segment::iterator from, Segment::iterator to,
     timeT absTimeQuantizeUnit =
 	legato ? Note(Note::Shortest).getDuration() : m_unit;
 
-    for ( ; from != to; ++from) {
+    for (Segment::iterator nextFrom = from ; from != to; from = nextFrom) {
 
-//!!!	timeT absoluteTime   = (*from)->getAbsoluteTime();
-//!!!	timeT duration	     = dq.getDuration(*from);
+	++nextFrom;
+	cerr << "From is at " << std::distance(s->begin(), from) << " from start, nextFrom is at " << std::distance(s->begin(), nextFrom) << "; from's time is " << (*from)->getAbsoluteTime() << ", nextFrom's is " << (nextFrom == s->end() ? -1 : (*nextFrom)->getAbsoluteTime()) << endl;
+
 	timeT absoluteTime   = getFromSource(*from, AbsoluteTimeValue);
 	timeT duration       = getFromSource(*from, DurationValue);
 
@@ -388,11 +383,11 @@ Quantizer::quantize(Segment::iterator from, Segment::iterator to,
 	    }
 	} else continue;
 
-	setToTarget(*from, AbsoluteTimeValue, qAbsoluteTime);
-	setToTarget(*from, DurationValue, qDuration);
-//!!!	(*from)->setMaybe<Int>(getAbsoluteTimeProperty(), qAbsoluteTime);
-//!!!	(*from)->setMaybe<Int>(getDurationProperty(), qDuration);
+	setToTarget(s, from, qAbsoluteTime, qDuration);
+//	cerr << "After set, from is at " << std::distance(s->begin(), from) << " from start, nextFrom is at " << std::distance(s->begin(), nextFrom) << endl;
     }
+    
+    insertNewEvents(s);
 }
 
 
@@ -400,8 +395,6 @@ timeT
 Quantizer::findFollowingRestDuration(Segment::iterator from,
 				     Segment::iterator to) const
 {
-    //!!! update to use getFromSource
-
     Segment::iterator j(from);
     timeT nextTime =
 	getFromSource(*j, AbsoluteTimeValue) +
@@ -419,21 +412,25 @@ Quantizer::findFollowingRestDuration(Segment::iterator from,
 }
 
 void
-Quantizer::unquantize(Segment::iterator from, Segment::iterator to) const
+Quantizer::unquantize(Segment *s,
+		      Segment::iterator from, Segment::iterator to) const
 {
-    for (; from != to; ++from) unquantize(*from);
-}
+    assert(m_toInsert.size() == 0);
 
-void
-Quantizer::unquantize(Event *e) const
-{
-    if (m_target == RawEventData) {
-	setToTarget(e, AbsoluteTimeValue, getFromSource(e, AbsoluteTimeValue));
-	setToTarget(e, DurationValue,     getFromSource(e, DurationValue));
+    for (Segment::iterator nextFrom = from; from != to; from = nextFrom) {
+	++nextFrom;
 
-    } else {
-	removeTargetProperties(e);
+	if (m_target == RawEventData) {
+	    setToTarget(s, from,
+			getFromSource(*from, AbsoluteTimeValue),
+			getFromSource(*from, DurationValue));
+	    
+	} else {
+	    removeTargetProperties(*from);
+	}
     }
+    
+    insertNewEvents(s);
 }
 
 timeT
@@ -448,40 +445,22 @@ Quantizer::getFromSource(Event *e, ValueType v) const
 
     } else {
 
-	std::string tag(v == AbsoluteTimeValue ? "AbsoluteTime" : "Duration");
-
 	// We need to write the source from the target if the
-	// source doesn't exist, or if the backup value for the
-	// target exists and doesn't match the current target
-	// value
+	// source doesn't exist (and the target does)
 
-	//!!! All these "m_source + tag" things need dealing
-	// with -- slow interning
+	bool haveSource = e->has(m_sourceProperties[v]);
+	bool haveTarget = ((m_target == RawEventData) ||
+			   (e->has(m_targetProperties[v])));
+	timeT t = 0;
 
-	bool haveSource = e->has(m_source + tag);
-	bool haveTarget =
-	    ((m_target == RawEventData) || (e->has(m_target + tag)));
-
-	if (haveSource) {
-	    if (haveTarget) {
-		timeT targetValueBackup = 0;
-		if (e->get<Int>(m_source + tag + "TargetBackup",
-				targetValueBackup)){
-		    
-		    timeT currentTargetValue = getFromTarget(e, v);
-		    if (currentTargetValue != targetValueBackup) {
-			e->setMaybe<Int>(m_source + tag, currentTargetValue);
-			return currentTargetValue;
-		    }
-		}
-	    }
-	} else {
-	    timeT currentTargetValue = getFromTarget(e, v);
-	    e->setMaybe<Int>(m_source + tag, currentTargetValue);
-	    return currentTargetValue;
+	if (!haveSource && haveTarget) {
+	    t = getFromTarget(e, v);
+	    e->setMaybe<Int>(m_sourceProperties[v], t);
+	    return t;
 	}
 
-	return e->get<Int>(m_source + tag);
+	e->get<Int>(m_sourceProperties[v], t);
+	return t;
     }
 }
 
@@ -504,55 +483,40 @@ Quantizer::getFromTarget(Event *e, ValueType v) const
 }
 
 void
-Quantizer::setToSource(Event *e, ValueType v, timeT time) const
+Quantizer::setToTarget(Segment *s, Segment::iterator i,
+		       timeT absTime, timeT duration) const
 {
-    if (m_source == RawEventData) {
-
-	if (v == AbsoluteTimeValue) e->setAbsoluteTime(time);
-	else e->setDuration(time);
-
-    } else {
-
-	std::string tag(v == AbsoluteTimeValue ? "AbsoluteTime" : "Duration");
-	e->setMaybe<Int>(m_source + tag, time);
-    }
-}
-
-void
-Quantizer::setToTarget(Event *e, ValueType v, timeT time) const
-{
-    cerr << "Quantizer::setToTarget: target is \"" << m_target << "\", time is " << time << " (unit is " << m_unit << ", sort is " << (v == AbsoluteTimeValue ? "absolute time" : "duration") << ", original value is " << (v == AbsoluteTimeValue ? e->getAbsoluteTime() : e->getDuration()) << ")" << endl;
-
-    std::string tag(v == AbsoluteTimeValue ? "AbsoluteTime" : "Duration");
+    cerr << "Quantizer::setToTarget: target is \"" << m_target << "\", absTime is " << absTime << ", duration is " << duration << " (unit is " << m_unit << ", original values are absTime " << (*i)->getAbsoluteTime() << ", duration " << (*i)->getDuration() << ")" << endl;
 
     if (m_target == RawEventData) {
-	
-	if (v == AbsoluteTimeValue) e->setAbsoluteTime(time);
-	else e->setDuration(time);
+
+	//!!! Need to make sure we don't lose source properties
+	// (Also need to document the fact that this is kind-of
+	// destructive in that it loses all other non-persistent
+	// properties if target == RawEventData)
+
+	Event *e = new Event(**i, absTime, duration);
+	s->erase(i);
+	m_toInsert.push_back(e);
 
     } else {
 
-	e->setMaybe<Int>(m_target + tag, time);
+	(*i)->setMaybe<Int>(m_target + "AbsoluteTime", absTime);
+	(*i)->setMaybe<Int>(m_target + "Duration", duration);
     }
-
-    //!!! which things are setMaybes and which are sets?
-
-    e->setMaybe<Int>(m_source + tag + "TargetBackup", time);
 }
 
 void
 Quantizer::removeProperties(Event *e) const
 {
     if (m_source != RawEventData) {
-	e->unset(m_source + "AbsoluteTime");
-	e->unset(m_source + "Duration");
-	e->unset(m_source + "AbsoluteTimeTargetBackup");
-	e->unset(m_source + "DurationTargetBackup");
+	e->unset(m_sourceProperties[AbsoluteTimeValue]);
+	e->unset(m_sourceProperties[DurationValue]);
     }
 
     if (m_target != RawEventData) {
-	e->unset(m_target + "AbsoluteTime");
-	e->unset(m_target + "Duration");
+	e->unset(m_targetProperties[AbsoluteTimeValue]);
+	e->unset(m_targetProperties[DurationValue]);
     }	
 }
 
@@ -560,9 +524,32 @@ void
 Quantizer::removeTargetProperties(Event *e) const
 {
     if (m_target != RawEventData) {
-	e->unset(m_target + "AbsoluteTime");
-	e->unset(m_target + "Duration");
+	e->unset(m_targetProperties[AbsoluteTimeValue]);
+	e->unset(m_targetProperties[DurationValue]);
     }	
+}
+
+void
+Quantizer::makePropertyNames()
+{
+    if (m_source != RawEventData) {
+	m_sourceProperties[AbsoluteTimeValue] = m_source + "AbsoluteTimeSource";
+	m_sourceProperties[DurationValue]     = m_source + "DurationSource";
+    }
+
+    if (m_target != RawEventData) {
+	m_targetProperties[AbsoluteTimeValue] = m_target + "AbsoluteTimeTarget";
+	m_targetProperties[DurationValue]     = m_target + "DurationTarget";
+    }
+}	
+
+void
+Quantizer::insertNewEvents(Segment *s) const
+{
+    for (int i = 0; i < m_toInsert.size(); ++i) {
+	s->insert(m_toInsert[i]);
+    }
+    m_toInsert.clear();
 }
 
 

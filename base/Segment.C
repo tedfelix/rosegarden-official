@@ -420,6 +420,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
     
     if (ia == end()) return;
 
+/*!!!
     std::vector<iterator> erasable;
 
     for (iterator i = ia; i != ib && i != end(); ++i) {
@@ -429,7 +430,13 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
     for (unsigned int ei = 0; ei < erasable.size(); ++ei) {
 	erase(erasable[ei]);
     }
-    
+*/
+//!!!
+    for (iterator i = ia, j = i; i != ib && i != end(); i = j) {
+	++j;
+	if ((*i)->isa(Note::EventRestType)) erase(i);
+    }
+
     // Second stage: find the gaps that need to be filled with
     // rests.  We don't mind about the case where two simultaneous
     // notes end at different times -- we're only interested in
@@ -562,9 +569,9 @@ Segment::setQuantization(bool quantize)
     if (m_quantize != quantize) {
 	m_quantize = quantize;
 	if (m_quantize) {
-	    m_quantizer->quantize(begin(), end());
+	    m_quantizer->quantize(this, begin(), end());
 	} else {
-	    m_quantizer->unquantize(begin(), end());
+	    m_quantizer->unquantize(this, begin(), end());
 	}
     }
 }
@@ -582,7 +589,7 @@ Segment::setQuantizeLevel(const StandardQuantization &q)
 
     if (newQ != *m_quantizer) {
 	*m_quantizer = newQ;
-	if (m_quantize) m_quantizer->quantize(begin(), end());
+	if (m_quantize) m_quantizer->quantize(this, begin(), end());
     }
 }
 
@@ -593,7 +600,7 @@ Segment::setQuantizeLevel(const Quantizer &q)
 
     if (newQ != *m_quantizer) {
 	*m_quantizer = newQ;
-	if (m_quantize) m_quantizer->quantize(begin(), end());
+	if (m_quantize) m_quantizer->quantize(this, begin(), end());
     }
 }
 

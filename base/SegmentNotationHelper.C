@@ -373,7 +373,6 @@ SegmentNotationHelper::makeNoteViable(iterator i)
     }
     
     Event *e = new Event(*(*i));
-    legatoQuantizer().unquantize(e);
 
     bool lastTiedForward;
     e->get<Bool>(TIED_FORWARD, lastTiedForward);
@@ -1180,7 +1179,7 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 void
 SegmentNotationHelper::quantize()
 {
-    legatoQuantizer().quantize(begin(), end());
+    legatoQuantizer().quantize(&segment(), begin(), end());
 
     for (iterator i = begin(); i != end(); ++i) {
 

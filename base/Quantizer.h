@@ -25,6 +25,7 @@
 #include "Segment.h"
 #include "Event.h"
 #include "NotationTypes.h"
+#include "FastVector.h"
 #include <string>
 
 namespace Rosegarden {
@@ -181,22 +182,17 @@ public:
      * Quantize a section of a Segment.  This is the recommended
      * method for general quantization.
      */
-    void quantize(Segment::iterator from, Segment::iterator to) const;
+    void quantize(Segment *,
+		  Segment::iterator from, Segment::iterator to) const;
 
     /**
      * Quantize a section of a Segment, and force the quantized
      * results into the formal absolute time and duration of
      * the events.  This is a destructive operation that should
      * not be carried out except on a user's explicit request.
-     *
-     * //!!! NB -- this will fail if quantization ever changes the
-     * theoretical order of events, which might happen if two
-     * events have different durations that quantize to the same
-     * value but also have different suborderings.  Need to
-     * consider this whole issue of allowing people to change
-     * events' absolute times after they've been inserted.
      */
-    void fixQuantizedValues(Segment::iterator from, Segment::iterator to)
+    void fixQuantizedValues(Segment *,
+			    Segment::iterator from, Segment::iterator to)
 	const;
 
     /**
@@ -246,20 +242,20 @@ public:
      * quantizer.  Properties set by other quantizers with
      * different propertyNamePrefix values will remain.
      */
-    void unquantize(Segment::iterator from, Segment::iterator to) const;
+    void unquantize(Segment *,
+		    Segment::iterator from, Segment::iterator to) const;
 
     /**
      * Unquantize the given event, for this
      * quantizer.  Properties set by other quantizers with
      * different propertyNamePrefix values will remain.
      */
-    void unquantize(Event *el) const;
+//    void unquantize(Event *el) const;
 
 protected:
     class SingleQuantizer {
     public:
 	virtual ~SingleQuantizer();
-//!!!	virtual timeT getDuration(Event *event) const;
 	virtual timeT quantize(int unit, int maxDots, timeT duration,
 			       timeT followingRestDuration) const = 0;
     };
@@ -274,7 +270,6 @@ protected:
     class NoteQuantizer : public SingleQuantizer {
     public:
 	virtual ~NoteQuantizer();
-//!!!	virtual timeT getDuration(Event *event) const;
 	virtual timeT quantize(int unit, int maxDots, timeT duration,
 			       timeT followingRestDuration) const;
     };
@@ -286,7 +281,7 @@ protected:
 			       timeT followingRestDuration) const;
     };
 
-    void quantize(Segment::iterator from, Segment::iterator to,
+    void quantize(Segment *s, Segment::iterator from, Segment::iterator to,
 		  const SingleQuantizer &absq, const SingleQuantizer &dq)
 	const;
 
@@ -297,17 +292,21 @@ protected:
     timeT m_unit;
     int m_maxDots;
 
-    enum ValueType { AbsoluteTimeValue, DurationValue };
+    std::string m_source;
+    std::string m_target;
+    enum ValueType { AbsoluteTimeValue = 0, DurationValue = 1 };
+    PropertyName m_sourceProperties[2];
+    PropertyName m_targetProperties[2];
 
     timeT getFromSource(Event *, ValueType) const;
     timeT getFromTarget(Event *, ValueType) const;
-    void setToSource(Event *, ValueType, timeT) const;
-    void setToTarget(Event *, ValueType, timeT) const;
+    void setToTarget(Segment *, Segment::iterator, timeT t, timeT d) const;
     void removeProperties(Event *) const;
     void removeTargetProperties(Event *) const;
+    void makePropertyNames();
 
-    std::string m_source;
-    std::string m_target;
+    mutable FastVector<Event *> m_toInsert;
+    void insertNewEvents(Segment *) const;
 };
 
 struct StandardQuantization {
