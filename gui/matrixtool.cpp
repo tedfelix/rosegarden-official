@@ -243,6 +243,10 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
 
     Event* el = newNote.getAsNoteEvent(time, pitch);
 
+    // set a default velocity
+    using Rosegarden::BaseProperties::VELOCITY;
+    el->set<Rosegarden::Int>(VELOCITY, 100);
+
     m_currentElement = new MatrixElement(el);
 
     m_currentStaff = m_mParentView->getStaff(staffNo);

@@ -48,7 +48,11 @@ void MatrixElement::setCanvas(QCanvas* c)
     if (!m_canvasRect->canvas()) {
         
         m_canvasRect->setCanvas(c);
-        m_canvasRect->setBrush(RosegardenGUIColours::MatrixElementBlock);
+
+        // We set this by velocity now (matrixstaff.cpp)
+        //
+        //m_canvasRect->setBrush(RosegardenGUIColours::MatrixElementBlock);
+
         m_canvasRect->setPen(RosegardenGUIColours::MatrixElementBorder);
         m_canvasRect->show();
     }

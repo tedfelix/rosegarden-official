@@ -25,8 +25,9 @@
 #define _VELOCITYCOLOUR_H_
 
 // Returns a QColour according to a formula.  We provide three
-// colours to mix, a maximum value and two knees at which points
-// the intermediate colours are true.
+// colours to mix, a maximum value and three knees at which
+// points the intermediate colours max out.  Play around to
+// your satisfaction.
 //
 //
 
