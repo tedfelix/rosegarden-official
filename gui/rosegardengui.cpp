@@ -259,7 +259,7 @@ void RosegardenGUIApp::addRecentFile(const QString &file)
                                  << recentFiles.at(i) << " at "
                                  << i << endl;
 
-            recentFilesMenu->insertItem(recentFiles.at(i));
+            recentFilesMenu->insertItem(recentFiles.at(i), i);
         }
     }
 }
@@ -325,7 +325,7 @@ void RosegardenGUIApp::readOptions()
     config->readListEntry("Recent Files", recentFiles);
 	
     for (int i=0; i < (int) recentFiles.count(); i++) {
-        recentFilesMenu->insertItem(recentFiles.at(i));
+        recentFilesMenu->insertItem(recentFiles.at(i), i);
     }
 
     QSize size=config->readSizeEntry("Geometry");
