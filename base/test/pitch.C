@@ -1,7 +1,7 @@
 
 #include "NotationTypes.h"
 
-namespace Rosegarden {
+using namespace Rosegarden;
 
 int main(int argc, char **argv)
 {
@@ -22,7 +22,5 @@ int main(int argc, char **argv)
     }
 
     return 0;
-}
-
 }
 

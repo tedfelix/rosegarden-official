@@ -238,7 +238,7 @@ MupExporter::writePitch(std::ofstream &str, Rosegarden::TrackId trackNo,
     ClefKeyPair ck;
     ClefKeyMap::iterator ckmi = m_clefKeyMap.find(trackNo);
     if (ckmi != m_clefKeyMap.end()) ck = ckmi->second;
-
+/*!!!
     Rosegarden::NotationDisplayPitch ndp(pitch, ck.first, ck.second, accidental);
     int placeInScale, accidentals, octave;
     ndp.getInScale(ck.first, ck.second, placeInScale, accidentals, octave);
@@ -251,6 +251,21 @@ MupExporter::writePitch(std::ofstream &str, Rosegarden::TrackId trackNo,
     case  1: str << "#";  break;
     case  2: str << "x";  break;
     }
+
+    str << octave + 1;
+*/
+
+    Rosegarden::Pitch p(pitch, accidental);
+    Rosegarden::Accidental acc(p.getAccidental(ck.second.isSharp()));
+    int noteInScale(p.getNoteInScale(ck.second));
+    int octave(p.getOctave());
+
+    str << "cdefgab"[noteInScale];
+    
+    if (accidental == Rosegarden::Accidentals::DoubleFlat) str << "&&";
+    else if (accidental == Rosegarden::Accidentals::Flat) str << "&";
+    else if (accidental == Rosegarden::Accidentals::Sharp) str << "#";
+    else if (accidental == Rosegarden::Accidentals::DoubleSharp) str << "##";
 
     str << octave + 1;
 }

@@ -423,7 +423,7 @@ void Key::checkMap() {
     m_keyDetailMap["Bb major"] = KeyDetails(false, false, 2, "G minor",  "Bb maj / G  min", 10);
     m_keyDetailMap["G minor" ] = KeyDetails(false, true,  2, "Bb major", "Bb maj / G  min", 7);
     m_keyDetailMap["C major" ] = KeyDetails(true,  false, 0, "A minor",  "C  maj / A  min", 0);
-    m_keyDetailMap["A minor" ] = KeyDetails(true,  true,  0, "C major",  "C  maj / A  min", 9);
+    m_keyDetailMap["A minor" ] = KeyDetails(false, true,  0, "C major",  "C  maj / A  min", 9);
     m_keyDetailMap["Cb major"] = KeyDetails(false, false, 7, "Ab minor", "Cb maj / Ab min", 11);
     m_keyDetailMap["Ab minor"] = KeyDetails(false, true,  7, "Cb major", "Cb maj / Ab min", 8);
     m_keyDetailMap["C# major"] = KeyDetails(true,  false, 7, "A# minor", "C# maj / A# min", 1);
@@ -1086,6 +1086,107 @@ NotationDisplayPitch::getInScale(const Clef &clef, const Key &key,
 	placeInScale = pitches[1][pitch];
 	accidentals = accidentalsForPitches[1][pitch];
     }
+}
+
+
+Pitch::Pitch(const Event &e) :
+    // throw (Event::NoData)
+    m_accidental(NoAccidental)
+{
+    m_pitch = e.get<Int>(BaseProperties::PITCH);
+    e.get<String>(BaseProperties::ACCIDENTAL, m_accidental);
+}
+
+Pitch::Pitch(int performancePitch, const Accidental &explicitAccidental) :
+    m_pitch(performancePitch),
+    m_accidental(explicitAccidental)
+{
+    // nothing
+}
+
+Pitch::Pitch(int heightOnStaff, const Clef &clef, const Key &key,
+	     const Accidental &explicitAccidental) :
+    m_pitch(0),
+    m_accidental(explicitAccidental)
+{
+    NotationDisplayPitch ndp(heightOnStaff, explicitAccidental);
+    m_pitch = ndp.getPerformancePitch(clef, key);
+}
+
+Pitch::Pitch(int noteInScale, int octave,
+	     const Accidental &explicitAccidental) :
+    m_pitch((octave+2) * 12 + noteInScale),
+    m_accidental(explicitAccidental)
+{
+    // nothing else
+}
+
+int
+Pitch::getPerformancePitch() const
+{
+    return m_pitch;
+}
+
+Accidental
+Pitch::getAccidental(bool keyIsSharp) const
+{
+    return getAccidental(keyIsSharp ? Key("C major") : Key("A minor"));
+}
+
+Accidental
+Pitch::getAccidental(const Key &key) const
+{
+    NotationDisplayPitch ndp(m_pitch, Clef(), key, m_accidental);
+    return ndp.getAccidental();
+}
+
+int
+Pitch::getNoteInScale(const Key &key) const
+{
+    return (getHeightOnStaff(Clef(Clef::Treble), key) + 72) % 7;
+}
+
+char
+Pitch::getNoteName(const Key &key) const
+{
+    return "CDEFGAB"[getNoteInScale(key)];
+}
+
+int
+Pitch::getHeightOnStaff(const Clef &clef, const Key &key) const
+{
+    NotationDisplayPitch ndp(m_pitch, clef, key, m_accidental);
+    return ndp.getHeightOnStaff();
+}
+
+int
+Pitch::getOctave(int octaveBase) const
+{
+    return m_pitch / 12 + octaveBase;
+}
+
+int
+Pitch::getPitchInOctave() const
+{
+    return m_pitch % 12;
+}
+
+std::string
+Pitch::getAsString(const Key &key, bool inclOctave, int octaveBase) const
+{
+    Accidental acc = getAccidental(key.isSharp());
+
+    std::string s;
+    s += getNoteName(key);
+
+    if (acc == Accidentals::Sharp) s += "#";
+    else if (acc == Accidentals::Flat) s += "b";
+
+    if (!inclOctave) return s;
+
+    char tmp[10];
+    sprintf(tmp, "%s%d", s.c_str(), getOctave(octaveBase));
+    return std::string(tmp);
 }
 
 

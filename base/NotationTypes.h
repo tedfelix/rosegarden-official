@@ -634,7 +634,9 @@ public:
 	  const Accidental &explicitAccidental = Accidentals::NoAccidental);
 
     /**
-     * Construct a Pitch based on scale position.
+     * Construct a Pitch based on scale position.  Middle C is in
+     * octave 3, and the lowest permissible octave number is -2.
+     * noteInScale must be in the range 0-11.
      */
     Pitch(int noteInScale, int octave,
 	  const Accidental &explicitAccidental = Accidentals::NoAccidental);
@@ -645,11 +647,13 @@ public:
     int getPerformancePitch() const;
 
     /**
-     * Return the accidental for this pitch.  The key is only used here
-     * to determine whether to prefer sharps and flats if there is any
-     * doubt.
+     * Return the accidental for this pitch.  This is the accidental
+     * that would be used to display this pitch outside of the context
+     * of any key; that is, it may duplicate an accidental actually in
+     * the current key.  The keyIsSharp argument is used to decide
+     * whether to prefer sharps over flats if there is any doubt.
      */
-    Accidental getAccidental(const Key &key = Key::DefaultKey) const;
+    Accidental getAccidental(bool keyIsSharp) const;
 
     /**
      * Return the accidental that should be used to display this pitch
@@ -657,26 +661,26 @@ public:
      * in which F has a sharp, NoAccidental will be returned.  (This
      * is in contrast to getAccidental, which would return Sharp.)
      */
-    Accidental getDisplayAccidental(const Key &key = Key::DefaultKey) const;
+    Accidental getAccidental(const Key &key = Key::DefaultKey) const;
 
     /**
      * Return the position in the scale for this pitch.  That is, return
      * a number in the range 0 to 6 where 0 is C and 6 is the next B.
      */
-    int getNoteInScale(const Key &key = Key::DefaultKey) const;
+    int getNoteInScale(const Key &key) const;
 
     /**
      * Return the reference name of the note for this pitch.  The name
      * is returned as a single character in the range A to G.
      */
-    char getNoteName(const Key &key = Key::DefaultKey) const;
+    char getNoteName(const Key &key) const;
 
     /**
      * Return the height at which this pitch should display on a
      * conventional 5-line staff.  0 is the bottom line, 1 the first
      * space, etc.
      */
-    int getHeightOnStaff(const Clef &clef, const Key &key = Key::DefaultKey) const;
+    int getHeightOnStaff(const Clef &clef, const Key &key) const;
 
     /**
      * Return the octave containing this pitch.  The octaveBase argument
@@ -693,7 +697,11 @@ public:
     /**
      * Return a reference name for this pitch. (C4, Bb2, etc...)
      * according to http://www.harmony-central.com/MIDI/Doc/table2.html
-     * If inclOctave is false, this will return C, Bb, etc.
+     * If inclOctave is false, this will return C, Bb, etc.  Note that
+     * this does not take into account the stored accidental -- this
+     * string is purely an encoding of the MIDI pitch, with the
+     * accidental in the string based on whether the given key is sharp
+     * or flat.
      */
     std::string getAsString(const Key &key,
 			    bool inclOctave = true, int octaveBase = -2) const;
