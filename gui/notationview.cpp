@@ -121,7 +121,7 @@ NoteActionData::NoteActionData(const QString& _title,
 			       bool _rest,
 			       Note::Type _noteType,
 			       int _dots)
-    : title(i18n(_title)),
+    : title(_title),
       actionName(_actionName),
       pixmapName(_pixmapName),
       keycode(_keycode),
@@ -827,14 +827,14 @@ void NotationView::setupActions()
     //
     // Accidentals
     //
-    static const char* actionsAccidental[][4] = 
+    static QString actionsAccidental[][4] = 
         {
-            { "No accidental",  "1slotNoAccidental()",  "no_accidental",           "accidental-none" },
-            { "Sharp",          "1slotSharp()",         "sharp_accidental",        "accidental-sharp" },
-            { "Flat",           "1slotFlat()",          "flat_accidental",         "accidental-flat" },
-            { "Natural",        "1slotNatural()",       "natural_accidental",      "accidental-natural" },
-            { "Double sharp",   "1slotDoubleSharp()",   "double_sharp_accidental", "accidental-doublesharp" },
-            { "Double flat",    "1slotDoubleFlat()",    "double_flat_accidental",  "accidental-doubleflat" }
+            { i18n("No accidental"),  "1slotNoAccidental()",  "no_accidental",           "accidental-none" },
+            { i18n("Sharp"),          "1slotSharp()",         "sharp_accidental",        "accidental-sharp" },
+            { i18n("Flat"),           "1slotFlat()",          "flat_accidental",         "accidental-flat" },
+            { i18n("Natural"),        "1slotNatural()",       "natural_accidental",      "accidental-natural" },
+            { i18n("Double sharp"),   "1slotDoubleSharp()",   "double_sharp_accidental", "accidental-doublesharp" },
+            { i18n("Double flat"),    "1slotDoubleFlat()",    "double_flat_accidental",  "accidental-doubleflat" }
         };
 
     for (unsigned int i = 0;
@@ -842,7 +842,7 @@ void NotationView::setupActions()
 
         icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
                         (actionsAccidental[i][3])));
-        noteAction = new KRadioAction(i18n(actionsAccidental[i][0]), icon, 0, this,
+        noteAction = new KRadioAction(actionsAccidental[i][0], icon, 0, this,
                                       actionsAccidental[i][1],
                                       actionCollection(), actionsAccidental[i][2]);
         noteAction->setExclusiveGroup("accidentals");
@@ -1166,7 +1166,7 @@ void NotationView::setupActions()
 	i18n("&None"), "&1", "&2", "&3", "&4", "&5"
     };
     for (int i = 0; i <= 5; ++i) {
-	new KAction(i18n(slashTitles[i]), 0, this,
+	new KAction(slashTitles[i], 0, this,
 		    SLOT(slotAddSlashes()), actionCollection(),
 		    QString("slashes_%1").arg(i));
     }
@@ -2296,7 +2296,7 @@ void NotationView::initActionDataMaps()
 		            titleName.right(titleName.length()-1);
 
 		if (rest) {
-		    titleName.replace(QRegExp("note"), "rest");
+		    titleName.replace(QRegExp(i18n("note")), i18n("rest"));
 		}
 
 		int keycode = keys[type - Note::Shortest];
