@@ -121,6 +121,8 @@ public:
 
     QAccel* getAccelerators() { return m_accelerators; }
 
+    bool isSynth() { return m_index == int(Instrument::SYNTH_PLUGIN_POSITION); }
+
 public slots:
     void slotCategorySelected(int);
     void slotPluginSelected(int index);

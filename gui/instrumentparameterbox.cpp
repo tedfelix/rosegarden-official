@@ -680,7 +680,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 	m_synthButton->hide();
     }
 
-    for (int i = start; i < m_audioFader->m_plugins.size(); i++)
+    for (int i = start; i < int(m_audioFader->m_plugins.size()); i++)
     {
 	int index;
 	QPushButton *button;

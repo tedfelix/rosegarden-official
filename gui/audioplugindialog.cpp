@@ -137,7 +137,7 @@ AudioPluginDialog::populatePluginCategoryList()
 	 i != m_pluginManager->end(); ++i) {
 	if ((*i)->getCategory() != "") categories.insert((*i)->getCategory());
     }
-    if (categories.empty()) {
+    if (isSynth() || categories.empty()) {
 	m_pluginCategoryBox->hide();
 	m_pluginLabel->hide();
     }
@@ -184,6 +184,8 @@ AudioPluginDialog::populatePluginList()
 	 i != m_pluginManager->end(); ++i) {
 
 	++count;
+
+	if ((*i)->isSynth() != isSynth()) continue;
 
 	if (needCategory) {
 	    if ((*i)->getCategory() != category) continue;
