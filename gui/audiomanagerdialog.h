@@ -18,7 +18,7 @@
 */
 
 #include <kdialogbase.h>
-#include <qlistbox.h>
+#include <qlistview.h>
 #include <qpushbutton.h>
 #include <qpixmap.h>
 
@@ -42,6 +42,26 @@ namespace Rosegarden
 {
 
 class AudioFileManager;
+
+
+// Add an Id to a QListViewItem
+//
+class AudioListItem : public QListViewItem
+{
+
+public:
+
+    AudioListItem(QListView * parent, QString label, unsigned int id):
+        QListViewItem(parent, label, "", "", "", "", "", "", ""), m_id(id) {;}
+
+    unsigned int getId() { return m_id; }
+
+protected:
+    unsigned int m_id;
+
+};
+
+
 
 class AudioManagerDialog : public KDialogBase
 {
@@ -81,7 +101,7 @@ protected:
     virtual void closeEvent(QCloseEvent *e);
     void generateEnvelopePixmap(QPixmap *pixmap, AudioFile *aF);
 
-    QListBox         *m_fileList;
+    QListView        *m_fileList;
     QPushButton      *m_addButton;
     QPushButton      *m_deleteButton;
     QPushButton      *m_playButton;

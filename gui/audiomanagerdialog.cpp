@@ -23,7 +23,7 @@
 
 #include <qhbox.h>
 #include <qvbuttongroup.h>
-#include <qlistbox.h>
+#include <qlistview.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qinputdialog.h>
@@ -39,7 +39,7 @@ namespace Rosegarden
 {
 
 static const int maxPreviewWidth = 100;
-static const int previewHeight = 40;
+static const int previewHeight = 30;
 
 AudioManagerDialog::AudioManagerDialog(QWidget *parent,
                                        AudioFileManager *aFM):
@@ -62,7 +62,14 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_deleteButton = new QPushButton(i18n("Delete File"), v);
     m_playButton   = new QPushButton(i18n("Play File"), v);
     m_renameButton = new QPushButton(i18n("Rename File"), v);
-    m_fileList     = new QListBox(h);
+    m_fileList     = new QListView(h);
+
+    // Set the column names
+    //
+    m_fileList->addColumn(i18n("Name"));
+    m_fileList->addColumn(i18n("Duration (s)"));
+    m_fileList->addColumn(i18n("Envelope"));
+    m_fileList->addColumn(i18n("File"));
 
     // a minimum width for the list box
     m_fileList->setMinimumWidth(300);
@@ -85,7 +92,6 @@ void
 AudioManagerDialog::populateFileList()
 {
     std::vector<AudioFile*>::const_iterator it;
-    QListBoxPixmap *listBoxPixmap;
 
     // create pixmap of given size
     QPixmap *audioPixmap = new QPixmap(maxPreviewWidth, previewHeight);
@@ -98,14 +104,16 @@ AudioManagerDialog::populateFileList()
 
     if (m_audioFileManager->begin() == m_audioFileManager->end())
     {
-        // turn off selection and report empty list
-        m_fileList->insertItem(i18n("<no audio files>"));
-        m_fileList->setSelectionMode(QListBox::NoSelection);
+        // Turn off selection and report empty list
+        //
+        new AudioListItem(m_fileList, i18n("<no audio files>"), 0);
+        m_fileList->setSelectionMode(QListView::NoSelection);
+
         return;
     }
 
     // enable selection
-    m_fileList->setSelectionMode(QListBox::Single);
+    m_fileList->setSelectionMode(QListView::Single);
 
     // for the sample file length
     QString usecs;
@@ -118,18 +126,20 @@ AudioManagerDialog::populateFileList()
         generateEnvelopePixmap(audioPixmap, *it);
 
         length = (*it)->getLength();
-        usecs.sprintf("%6d", length.usec);
+        usecs.sprintf("%6ld", length.usec);
 
-        QString label = QString((*it)->getShortFilename().c_str()) + " (" +
-                        //QString((*it)->getName().c_str()) + ") - " + 
-                        QString("%1.%2 s").arg(length.sec)
-                                          .arg(usecs) + ")";
-
+        QString label = QString((*it)->getShortFilename().c_str());
              
-        // this inserts the list item at the same time as creating
-        listBoxPixmap = new QListBoxPixmap(m_fileList,
-                                           *audioPixmap,
-                                           label);
+        // Set the label, duration, envelope pixmap and filename
+        //
+        AudioListItem *item = new AudioListItem(m_fileList, label,
+                                                (*it)->getId());
+        item->setText(1, QString("%1.%2").arg(length.sec).arg(usecs));
+        item->setPixmap(2, *audioPixmap);
+        item->setText(3, QString(
+                    m_audioFileManager->
+                        substituteHomeForTilde((*it)->getFilename()).c_str()));
+                                       
     }
 
 }
@@ -137,18 +147,20 @@ AudioManagerDialog::populateFileList()
 AudioFile*
 AudioManagerDialog::getCurrentSelection()
 {
-    // if nothing selected
-    if (m_fileList->currentItem() == -1)
-        return 0;
-
-    int count = 0;
+    // try and get the selected item
+    AudioListItem *item =
+        dynamic_cast<AudioListItem*>(m_fileList->selectedItem());
+    if (item == 0) return 0;
 
     std::vector<AudioFile*>::const_iterator it;
+
     for (it = m_audioFileManager->begin();
          it != m_audioFileManager->end();
          it++)
     {
-        if (count++ == m_fileList->currentItem())
+        // If we match then return the valid AudioFile
+        //
+        if (item->getId() == (*it)->getId())
             return (*it);
     }
 
