@@ -199,6 +199,10 @@ XmlStorableEvent::toXmlString(const Event &e)
 	res += QString(" duration=\"%1\"").arg(e.getDuration());
     }
 
+    if (e.getSubOrdering() != 0) {
+        res += QString(" subordering=\"%1\"").arg(e.getSubOrdering());
+    }
+
     res += ">";
 
     PropertyNames propertyNames(e.getPersistentPropertyNames());
