@@ -31,7 +31,7 @@
 
 // jack includes
 //
-#ifdef HAVE_JACK
+#ifdef HAVE_LIBJACK
 #include <jack/jack.h>
 
 // convenience typedef
@@ -135,7 +135,7 @@ public:
     void insertMappedEventForReturn(MappedEvent *mE);
 
 
-#ifdef HAVE_JACK
+#ifdef HAVE_LIBJACK
 
     jack_port_t* getJackInputPort() { return m_audioInputPort; }
 
@@ -224,7 +224,7 @@ private:
     //
     bool                         m_audioMeterSent;
 
-#ifdef HAVE_JACK
+#ifdef HAVE_LIBJACK
 
     static int  jackProcess(jack_nframes_t nframes, void *arg);
     static int  jackBufferSize(jack_nframes_t nframes, void *arg);

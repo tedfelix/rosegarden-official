@@ -598,7 +598,7 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     addTab(frame, i18n("Latency"));
 
 
-#ifdef HAVE_JACK
+#ifdef HAVE_LIBJACK
     frame = new QFrame(m_tabWidget, i18n("JACK latency"));
     layout = new QGridLayout(frame, 6, 5, 10, 10);
 
@@ -663,7 +663,7 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(new QLabel("500", frame), 5, 4, Qt::AlignLeft);
 
     addTab(frame, i18n("JACK Latency"));
-#endif  // HAVE_JACK
+#endif  // HAVE_LIBJACK
 
 }
 
@@ -683,7 +683,7 @@ void LatencyConfigurationPage::apply()
     m_cfg->writeEntry("playbacklatencyusec", playback * 1000);
     m_cfg->writeEntry("playbacklatencysec", 0L);
 
-#ifdef HAVE_JACK
+#ifdef HAVE_LIBJACK
 
     int jackPlayback = getJACKPlaybackValue();
     m_cfg->writeEntry("jackplaybacklatencysec", jackPlayback / 1000);
@@ -693,7 +693,7 @@ void LatencyConfigurationPage::apply()
     m_cfg->writeEntry("jackrecordlatencysec", jackRecord / 1000);
     m_cfg->writeEntry("jackrecordlatencyusec", jackRecord * 1000);
 
-#endif  // HAVE_JACK
+#endif  // HAVE_LIBJACK
 
 }
 

@@ -32,7 +32,7 @@
 #include "Midi.h"
 #include "WAVAudioFile.h"
 
-#ifdef HAVE_JACK
+#ifdef HAVE_LIBJACK
 #include <jack/types.h>
 #include <unistd.h> // for usleep
 #include <math.h>
@@ -85,7 +85,7 @@ using std::endl;
 namespace Rosegarden
 {
 
-#ifdef HAVE_JACK
+#ifdef HAVE_LIBJACK
 
 static jack_nframes_t    _jackBufferSize;
 static unsigned int      _jackSampleRate;
@@ -124,14 +124,14 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_audioMeterSent(false)
 
 
-#ifdef HAVE_JACK
+#ifdef HAVE_LIBJACK
     ,m_audioClient(0)
 #endif
 
 {
     std::cout << "Rosegarden AlsaDriver - " << m_name << std::endl;
 
-#ifdef HAVE_JACK
+#ifdef HAVE_LIBJACK
     _jackBufferSize = 0;
     _jackSampleRate = 0;
     _usingAudioQueueVector = false;
@@ -154,7 +154,7 @@ AlsaDriver::~AlsaDriver()
         m_midiHandle = 0;
     }
 
-#ifdef HAVE_JACK
+#ifdef HAVE_LIBJACK
 
     if (_threadJackClosing == false && m_audioClient)
     {
@@ -369,7 +369,7 @@ AlsaDriver::generateInstruments()
 
     std::cout << std::endl;
 
-#ifdef HAVE_JACK
+#ifdef HAVE_LIBJACK
 
     // Create a number of audio Instruments - these are just
     // logical Instruments anyway and so we can create as 
@@ -659,7 +659,7 @@ AlsaDriver::initialiseMidi()
 void
 AlsaDriver::initialiseAudio()
 {
-#ifdef HAVE_JACK
+#ifdef HAVE_LIBJACK
     // Using JACK instead
     //
 
@@ -853,7 +853,7 @@ AlsaDriver::stopPlayback()
     // Sometimes we don't "process" again before we actually
     // stop
 
-#ifdef HAVE_JACK
+#ifdef HAVE_LIBJACK
 
     // Wait for the queue vector to become available so we can
     // clear it down.  We're careful with this sleep.
@@ -1632,7 +1632,7 @@ AlsaDriver::record(const RecordStatus& recordStatus)
     }
     else if (recordStatus == RECORD_AUDIO)
     {
-#ifdef HAVE_JACK
+#ifdef HAVE_LIBJACK
         createAudioFile(m_recordingFilename);
         m_recordStatus = RECORD_AUDIO;
 #else
@@ -1783,7 +1783,7 @@ AlsaDriver::insertMappedEventForReturn(MappedEvent *mE)
 //
 //
 
-#ifdef HAVE_JACK
+#ifdef HAVE_LIBJACK
 
 
 // The "process" callback is where we do all the work of turning a sample
