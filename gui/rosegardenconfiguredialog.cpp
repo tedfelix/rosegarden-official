@@ -772,8 +772,37 @@ void LatencyConfigurationPage::slotPlaybackChanged(int value)
 
 }
 
+// -------------------  SequencerConfigurationPage ---------------------
+//
 
+SequencerConfigurationPage::SequencerConfigurationPage(
+                                                   RosegardenGUIDoc *doc,
+                                                   KConfig *cfg,
+                                                   QWidget *parent,
+                                                   const char *name):
+    TabbedConfigurationPage(cfg, parent, name)
+{
+    m_cfg->setGroup("Sequencer Options");
 
+    QFrame *frame = new QFrame(m_tabWidget, "sequencer options");
+    QGridLayout *layout = new QGridLayout(frame, 2, 3,
+                                          10, 5);
+
+    layout->addMultiCellWidget(new QLabel(i18n("Define some sequencer options"), frame),
+                               0, 0,
+                               0, 1);
+
+    layout->addWidget(new QLabel(i18n("Options:"), frame), 1, 0);
+    m_sequencerArguments = new QLineEdit("", frame);
+    layout->addWidget(m_sequencerArguments, 1, 1);
+}
+
+void
+SequencerConfigurationPage::apply()
+{
+}
+
+// ---
 
 
 DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *doc,
@@ -988,6 +1017,18 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
+
+    // Sequencer Page
+    //
+    pageWidget = addPage(SequencerConfigurationPage::iconLabel(),
+                              SequencerConfigurationPage::title(),
+                              loadIcon(SequencerConfigurationPage::iconName()));
+    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    page = new SequencerConfigurationPage(doc, cfg, pageWidget);
+    vlay->addWidget(page);
+    page->setPageIndex(pageIndex(pageWidget));
+    m_configurationPages.push_back(page);
+
 }
 
 //------------------------------------------------------------

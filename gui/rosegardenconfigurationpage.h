@@ -347,6 +347,31 @@ protected:
     QPushButton      *m_changePathButton;
 };
 
+
+// -----------  SequencerConfigurationage -----------------
+//
+
+class SequencerConfigurationPage : public TabbedConfigurationPage
+{
+    Q_OBJECT
+public:
+    SequencerConfigurationPage(RosegardenGUIDoc *doc,
+                               KConfig *cfg,
+                               QWidget *parent=0,
+                               const char *name=0);
+
+    virtual void apply();
+
+    static QString iconLabel() { return i18n("Sequencer"); }
+    static QString title()     { return i18n("Sequencer Settings"); }
+
+protected slots:
+
+protected:
+
+    QLineEdit *m_sequencerArguments;
+
+};
  
 }
 

@@ -75,7 +75,8 @@ public:
     static const char* const MetronomeBeatVelocity;
     static const char* const FetchLatency;
     static const char* const MetronomeDuration;
-    
+    static const char* const SequencerOptions;
+
 private:
 
 };

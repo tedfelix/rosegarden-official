@@ -47,6 +47,7 @@ const char* const Configuration::MetronomeBarVelocity  = "metronomebarvelocity";
 const char* const Configuration::MetronomeBeatVelocity = "metronomebeatvelocity";
 const char* const Configuration::FetchLatency          = "fetchlatency";
 const char* const Configuration::MetronomeDuration     = "metronomeduration";
+const char* const Configuration::SequencerOptions      = "sequenceroptions";
 
 
 Configuration::Configuration()
