@@ -1826,9 +1826,10 @@ void RosegardenGUIApp::slotFileClose()
 
     KTmpStatusMsg msg(i18n("Closing file..."), this);
 
-    m_doc->saveIfModified();
-    setDocument(new RosegardenGUIDoc(this, m_pluginManager));
-
+    if (m_doc->saveIfModified()) {
+        setDocument(new RosegardenGUIDoc(this, m_pluginManager));
+    }
+    
     // Don't close the whole view (i.e. Quit), just close the doc.
     //    close();
 }
