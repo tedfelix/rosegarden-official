@@ -56,14 +56,17 @@ PlayableAudioFile::initialise()
 {
     if (m_initialised) return;
 
+
     m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
                                std::ios::in | std::ios::binary);
+
 
     if (!*m_file)
         throw(std::string("PlayableAudioFile - can't open file"));
 
-    // scan to the beginning of the data chunk
-    scanTo(RealTime::zeroTime);
+    // Scan to the beginning of the data chunk we need
+    //
+    scanTo(m_startIndex);
 
     // if no external ringbuffer then create one
     if (m_ringBuffer == 0)
