@@ -1,6 +1,6 @@
 #! /bin/bash
 export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-IMAGEWRITER=/opt/rosegarden/docs/web/support/imagewriter
+IMAGEWRITER=/homes/ccannam/rosegarden/rosegarden/docs/web/support/imagewriter
 
 # RG2.1
 
@@ -22,8 +22,11 @@ $IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/21
 $IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-development.png Development
 $IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-pictures.png Screenshots
 $IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-list.png Mailing-list
+$IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-lists.png Mailing-lists
 $IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-download.png Download
 $IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-faq.png FAQ
 $IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-features.png Features
 $IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-authors.png Authors
-
+$IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-contact.png Contact
+$IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-demos.png Demos
+$IMAGEWRITER/imagewriter -f $IMAGEWRITER/fonts/aristo.ttf -b204/212/160 -t204/212/160 -s 50 -w 400 -h 104 -x 2 -y 28 -o title-requirements.png Requirements

@@ -8,7 +8,7 @@
   </head>
   <body>
     <div id="heading">
-      <img src="roses.png" alt="" width="183" height="104"><img src="title-rosegarden.png" alt="Requirements" width="400" height="104">
+      <img src="roses.png" alt="" width="183" height="104"><img src="title-requirements.png" alt="Requirements" width="400" height="104">
     </div>
 
     <div id="nav">
@@ -22,8 +22,8 @@
         &nbsp;&nbsp;<a href="history.html">history</a><br>
         &nbsp;&nbsp;<a href="development.html">development</a><br>
         &nbsp;&nbsp;<a href="faq.html">faq</a><br>
-        &nbsp;&nbsp;<a href="http://lists.sourceforge.net/lists/listinfo/rosegarden-devel">mailing-list</a><br>
-        &nbsp;&nbsp;<a href="contact.html">contact</a><br>
+        &nbsp;&nbsp;<a href="list.html">mailing-list</a><br>
+        &nbsp;&nbsp;<a href="authors.html">contact</a><br>
     <br><a href="2.1/index.html">Rosegarden-2.1</a><br>
     <br><a href="download.html">Download</a><br>
     </noscript>
@@ -33,25 +33,31 @@
 
     <h3>Hardware requirements</h3>
 
-    <p>
-    Rosegarden-4 is a MIDI and audio sequencer and notation editor and
-    its system requirements differ according to what task you're using
-    it for.  Editing, playing and recording MIDI is a less resource hungry
-    mode of operation than recording or playing audio.  The use of multiple
-    audio plugins will especially impact system performance and its worth
-    bearing yout projected usage in mind when specifying your machine.
-    </p>
+    <p> Rosegarden-4 is a MIDI and audio sequencer and notation editor
+    and its system requirements differ according to what task you're
+    using it for.  Editing, playing and recording MIDI is a less
+    resource hungry mode of operation than recording or playing audio.
+    The use of multiple audio plugins or soft-synths will especially
+    impact system performance, and it's worth bearing your projected
+    usage in mind when specifying your machine.  </p>
 
-    <p>
-    For a PC, minimum hardware requirements for running Rosegarden-4 for
-    mainly MIDI use with simple editing and playback/recording is a 400MHz
-    system with 64MB of memory.  A recommended system is an 800MHz system
-    with 256MB of memory - with this setup you should have enough power to
-    sequence MIDI and audio with a number of audio plugins.
-    </p>
-    
+    <p> For a PC, minimum hardware requirements for running
+    Rosegarden-4 for MIDI use with simple editing and
+    playback/recording is a 400MHz system with 64MB of memory.  A
+    recommended system is an 800MHz system with 256MB of memory - with
+    this setup you should have enough power to sequence MIDI and audio
+    with a small number of audio plugins.  For serious audio use
+    and/or use with a serious number of high-quality soft synths,
+    you'll need significantly more processor power.</p>
 
     <h3>Software requirements</h3>
+
+    <p> Rosegarden-4 uses the KDE libraries, so you will need <a
+    href="http://www.kde.org/">KDE</a> 2.2 with <a
+    href="http://www.trolltech.com/">Qt</a>2 or KDE 3 with Qt 3.  (KDE
+    2.1 is not supported.)  You don't actually need to use the KDE
+    desktop, you just need the library packages installed on your
+    system.</p>
 
     <p>
     If you want to hear sound from your system then you will also need
@@ -84,15 +90,15 @@
     href="faq.html">FAQ</a> for solutions to a few build and installation
     problems.
 
-    <p>Other related software Rosegarden relies on (not essential - you can build without it) :
+    <p>Other related software that you may wish to build with includes:
     <ul>
-    <li><a href="http://www.alsa-project.org/">Alsa</a> 0.9 or better
+    <li><a href="http://www.alsa-project.org/">ALSA</a> 0.9 or better
           (<b>highly recommended</b> - much better sound rendering than with KDE's aRts), but your distribution most likely
           carries it already, except RedHat which as of 8.0 still ships Alsa 0.5)</li>
     
-    <li><a href="http://jackit.sourceforge.net">JACK</a>, (Jack Audio Connection Kit) for audio.</li>
+    <li><a href="http://jackit.sourceforge.net">JACK</a> (Jack Audio Connection Kit) for audio.</li>
 
-    <li><a href="http://www.ladspa.org">LADSPA</a>, (Linux Audio Developer's Simple Plugin API), for audio plugins.</li>
+    <li><a href="http://www.ladspa.org">LADSPA</a> (Linux Audio Developer's Simple Plugin API), for audio plugins.</li>
 
     </ul>
 
