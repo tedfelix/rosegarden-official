@@ -3066,17 +3066,17 @@ AlsaDriver::checkForNewClients()
     snd_seq_port_info_t *pinfo;
     int  client;
     unsigned int cap;
-    unsigned int clientCount = 0;
+    unsigned int currentClientCount = 0,
+                 oldClientCount = 0;
 
     snd_seq_client_info_alloca(&cinfo);
     snd_seq_client_info_set_client(cinfo, -1);
 
-    int existingClients = 0;
     std::vector<MappedDevice*>::iterator it = m_devices.begin();
     for (; it != m_devices.end(); it++)
     {
         if ((*it)->getType() == Rosegarden::Device::Midi)
-            existingClients++;
+            oldClientCount++;
     }
 
 
@@ -3133,15 +3133,15 @@ AlsaDriver::checkForNewClients()
 
                 std::string clientName =
                     std::string(clientId) + fullClientName;
+
+                currentClientCount++;
             }
         }
-
-        clientCount++;
     }
 
     // Have we got a different numbe of clients than we had before?
     //
-    if (clientCount + 1 != existingClients)
+    if (oldClientCount != currentClientCount)
     {
         /*
         cout << "CLIENT COUNT    = " << clientCount << endl;
