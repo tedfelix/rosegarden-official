@@ -72,7 +72,7 @@ else
   dnl only use JACK when jack/jack.h is found
   if test "$with_jack" = "yes"; then
      export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-     PKG_CHECK_MODULES(JACK,jack >= 0.50.0,,[with_jack="no"])
+     PKG_CHECK_MODULES(JACK,jack >= 0.77.0,,[with_jack="no"])
   fi
 
   if test "$with_jack" = "yes"; then
