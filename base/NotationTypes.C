@@ -1893,9 +1893,7 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 	}
     }
 
-    // only remember this if a real non-cautionary accidental is being set
-    
-    if (acc != NoAccidental && !cautionary) {
+    if (acc != NoAccidental) {
 	m_newAccidentals[height] = AccidentalRec(acc, false);
 	m_newCanonicalAccidentals[canonicalHeight] = AccidentalRec(acc, false);
     }

@@ -212,7 +212,8 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
     //have recorded any accidentals in the previous bar for the
     //desirable BarResetCautionary/BarResetNaturals accidental table
     //modes
-    Rosegarden::AccidentalTable accTable(key, clef);
+    Rosegarden::AccidentalTable accTable
+	(key, clef, Rosegarden::AccidentalTable::OctavesCautionary);
 
     for (int barNo = startBarNo; barNo <= endBarNo; ++barNo) {
 
@@ -453,6 +454,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
 {
     NotationChord chord(*notes, itr, m_notationQuantizer, m_properties);
     Accidental someAccidental = NoAccidental;
+    bool someCautionary = false;
     bool barEndsInChord = false;
     bool grace = false;
 /*
@@ -513,6 +515,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
 	if (cautionary) {
 	    el->event()->setMaybe<Bool>(m_properties.DISPLAY_ACCIDENTAL_IS_CAUTIONARY,
 					true);
+	    someCautionary = true;
 	}
 	    
 	if (someAccidental == NoAccidental) someAccidental = dacc;
@@ -536,6 +539,9 @@ NotationHLayout::scanChord(NotationElementList *notes,
 	int e = m_npf->getAccidentalWidth(someAccidental, shift, extraShift);
 	if (someAccidental != Sharp) {
 	    e = std::max(e, m_npf->getAccidentalWidth(Sharp, shift, extraShift));
+	}
+	if (someCautionary) {
+	    e += m_npf->getNoteBodyWidth();
 	}
 	extraWidth += e;
     }

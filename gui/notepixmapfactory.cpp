@@ -835,7 +835,17 @@ NotePixmapFactory::drawAccidental(Accidental a, bool cautionary)
 
     QPoint ah(m_font->getHotspot(m_style->getAccidentalCharName(a)));
 
-    m_p->drawNoteCharacter(0, m_above + m_noteBodyHeight/2 - ah.y(), ac);
+    int ax = 0;
+
+    if (cautionary) {
+	ax += m_noteBodyWidth / 2;
+	int bl = ac.getHeight() * 2 / 3;
+	int by = m_above + m_noteBodyHeight/2 - bl/2;
+	drawBracket(bl, true,  false, m_noteBodyWidth*3/8, by);
+	drawBracket(bl, false, false, ac.getWidth() + m_noteBodyWidth*5/8, by);
+    }
+
+    m_p->drawNoteCharacter(ax, m_above + m_noteBodyHeight/2 - ah.y(), ac);
 }
 
 void
@@ -2250,14 +2260,15 @@ NotePixmapFactory::drawBracket(int length, bool left, bool curly, int x, int y)
     int thickness = getStemThickness() * 2;
     
     int m1 = length/6;
-    int m2 = length - length/6;
+    int m2 = length - length/6 - 1;
 
     int off0 = 0, moff = 0;
 
     int nbh = getNoteBodyHeight(), nbw = getNoteBodyWidth();
     float noteLengths = float(length) / nbw;
     if (noteLengths < 1) noteLengths = 1;
-    moff = int(0 - nbh * sqrt(noteLengths) / 2);
+    moff = int(nbh * sqrt(noteLengths) / 2);
+    moff = moff * 2 / 3;
 
     if (left) moff = -moff;
 
@@ -2269,14 +2280,25 @@ NotePixmapFactory::drawBracket(int length, bool left, bool curly, int x, int y)
 	pl.push_back(QPoint((int)moff, m1));
 	pl.push_back(QPoint((int)moff, m2));
 
+	NOTATION_DEBUG << "bracket spline controls: " << moff << "," << m1
+		       << ", " << moff << "," << m2 << "; end points "
+		       << off0 << ",0, " << off0 << "," << length-1
+		       << endl;
+
 	Spline::PointList *polyPoints = Spline::calculate
 	    (QPoint(off0, 0), QPoint(off0, length-1), pl, topLeft, bottomRight);
 
 	int ppc = polyPoints->size();
 	QPointArray qp(ppc);
 
+	NOTATION_DEBUG << "bracket spline polypoints: " << endl;
 	for (int j = 0; j < ppc; ++j) {
-	    qp.setPoint(j, (*polyPoints)[j].x(), (*polyPoints)[j].y());
+	    NOTATION_DEBUG << (*polyPoints)[j].x() << "," << (*polyPoints)[j].y() << endl;
+	}
+									
+
+	for (int j = 0; j < ppc; ++j) {
+	    qp.setPoint(j, x + (*polyPoints)[j].x(), y + (*polyPoints)[j].y());
 	}
 
 	delete polyPoints;
