@@ -18,6 +18,9 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef _PLAYLIST_H_
+#define _PLAYLIST_H_
+
 #include <qvbox.h>
 
 #include <kdialogbase.h>
@@ -94,3 +97,5 @@ protected:
     //--------------- Data members ---------------------------------
     PlayList* m_playList;
 };
+
+#endif // _PLAYLIST_H_
