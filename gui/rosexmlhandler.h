@@ -53,6 +53,7 @@ public:
 
 protected:
     EventList &m_events;
+    EventList *m_currentGroup;
 };
 
 #endif

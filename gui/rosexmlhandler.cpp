@@ -20,7 +20,8 @@
 #include "xmlstorableevent.h"
 
 RoseXmlHandler::RoseXmlHandler(EventList &events)
-    : m_events(events)
+    : m_events(events),
+      m_currentGroup(0)
 {
 }
 
@@ -45,14 +46,25 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     if (lcName == "rosegarden-data") {
         // set to some state which says it's ok to parse the rest
     } else if (lcName == "event") {
-        m_events.push_back(new XMLStorableEvent(atts));
+
+        if (m_currentGroup)
+            m_currentGroup->push_back(new XMLStorableEvent(atts));
+        else
+            m_events.push_back(new XMLStorableEvent(atts));
+
     } else if (lcName == "track") {
-        // later
-    } else if (lcName == "Group") {
+        // TODO
+    } else if (lcName == "group") {
+
+        Event *group = new Event;
+        group->setType("group");
+        group->setGroup(m_currentGroup = new EventList);
+        m_events.push_back(group);
         
     } else {
         kdDebug(KDEBUG_AREA) << "Don't know how to parse this : " << qName << endl;
     }
+
     return true;
 }
 
@@ -60,6 +72,12 @@ bool
 RoseXmlHandler::endElement(const QString& namespaceURI,
                            const QString& localName, const QString& qName)
 {
+    QString lcName = qName.lower();
+
+    if (lcName == "group") {
+        m_currentGroup = 0;
+    }
+
     return true;
 }
 
