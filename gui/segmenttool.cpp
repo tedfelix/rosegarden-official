@@ -156,7 +156,7 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
     if (m_newRect) {
 
         Rosegarden::Track *track = m_doc->getComposition().
-            getTrackByPosition(m_currentItem->getTrack());
+            getTrackByPosition(m_currentItem->getTrackPosition());
 
         SegmentInsertCommand *command =
             new SegmentInsertCommand(m_doc,
@@ -300,13 +300,17 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentItem)
     {
+        Rosegarden::Composition &comp = m_doc->getComposition();
+        Rosegarden::Track *track = comp.getTrackByPosition(
+                m_currentItem->getTrackPosition());
+
         SegmentReconfigureCommand *command =
                 new SegmentReconfigureCommand("Move Segment");
 
         command->addSegment(m_currentItem->getSegment(),
                             m_currentItem->getStartTime(),
                             m_currentItem->getEndTime(),
-                            m_currentItem->getTrack());
+                            track->getId());
         addCommandToHistory(command);
         m_currentItem->showRepeatRect(true);
 
@@ -323,7 +327,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 
 	m_canvas->setSnapGrain(true);
 
-	int newX = e->x() - m_clickPoint.x() + m_currentItemStartX;
+	int newX = e->x() - m_clickPoint.x() + int(m_currentItemStartX);
         //if (newX < 0) newX = 0;
         int newY = e->y();
         if (newY < 0) newY = 0;
@@ -337,12 +341,15 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 
         int nbTracks = m_doc->getComposition().getNbTracks();
 
-        if (track >= nbTracks) {
+        if (track >= ((unsigned int)nbTracks)) {
             // Make sure the item isn't dragged to below the last track
             track = nbTracks - 1;
         }
 
-        m_currentItem->setTrack(track);
+        // Don't use proper TrackPosition yet - just visual position
+        // until the release.
+        //
+        m_currentItem->setTrackPosition(track);
 
         m_foreGuide->setX(int(m_canvas->grid().getRulerScale()->
                             getXForTime(newStartTime)) - 2);
@@ -389,10 +396,14 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
     SegmentReconfigureCommand *command =
                 new SegmentReconfigureCommand("Resize Segment");
 
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *track =
+        comp.getTrackByPosition(m_currentItem->getTrackPosition());
+
     command->addSegment(m_currentItem->getSegment(),
                         m_currentItem->getStartTime(),
                         m_currentItem->getEndTime(),
-                        m_currentItem->getTrack());
+                        track->getId());
     addCommandToHistory(command);
 
     // update preview
@@ -716,16 +727,23 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 	     it != m_selectedItems.end();
 	     it++)
 	{
+
 	    SegmentItem *item = it->second;
+
+            Rosegarden::Composition &comp = m_doc->getComposition();
+            Rosegarden::Track *track = 
+                comp.getTrackByPosition(item->getTrackPosition());
+
+            Rosegarden::TrackId trackId = track->getId();
 
 	    if (item->getStartTime() != item->getSegment()->getStartTime() ||
 		item->getEndTime()   != item->getSegment()->getEndMarkerTime() ||
-		item->getTrack()     != item->getSegment()->getTrack()) {
+		trackId              != item->getSegment()->getTrack()) {
 
 		command->addSegment(item->getSegment(),
 				    item->getStartTime(),
 				    item->getEndTime(),
-				    item->getTrack());
+				    trackId);
 
 		haveChange = true;
 	    }
@@ -920,7 +938,10 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             if (track >= TrackId(m_doc->getComposition().getNbTracks())) 
                 track  = TrackId(m_doc->getComposition().getNbTracks() - 1);
 
-	    it->second->setTrack(track);
+            // This is during a "mover" so don't use the normalised (i.e.
+            // proper) TrackPosition value yet.
+            //
+	    it->second->setTrackPosition(track);
 	}
 
         m_foreGuide->setX(guideX - 2);

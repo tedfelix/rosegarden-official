@@ -395,14 +395,14 @@ QFont *SegmentItem::m_font = 0;
 QFontMetrics *SegmentItem::m_fontMetrics = 0;
 int SegmentItem::m_fontHeight = 0;
 
-SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT endTime,
+SegmentItem::SegmentItem(TrackId trackPosition, timeT startTime, timeT endTime,
 			 bool showPreview,
                          SnapGrid *snapGrid, QCanvas *canvas,
                          RosegardenGUIDoc *doc) :
     QCanvasRectangle(0, 0, 1, 1, canvas),
     m_segment(0),
     m_doc(doc),
-    m_track(track),
+    m_trackPosition(trackPosition),
     m_startTime(startTime),
     m_endTime(endTime),
     m_selected(false),
@@ -425,6 +425,7 @@ SegmentItem::SegmentItem(Segment *segment,
     QCanvasRectangle(0, 0, 1, 1, canvas),
     m_segment(segment),
     m_doc(doc),
+    m_trackPosition(0),
     m_selected(false),
     m_snapGrid(snapGrid),
     m_repeatRectangle(0),
@@ -492,7 +493,7 @@ void SegmentItem::drawShape(QPainter& painter)
         SegmentItem *item = dynamic_cast<SegmentItem*>(*it);
 
         if (!item) continue;
-        if (item->getTrack() != getTrack()) continue;
+        if (item->getTrackPosition() != getTrackPosition()) continue;
         QRect intersection = rect() & item->rect();
         if (!intersection.isValid()) continue;
 
@@ -551,7 +552,7 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     //
     if (m_segment && inheritFromSegment) {
 
-	m_track = m_doc->getComposition().
+	m_trackPosition = m_doc->getComposition().
             getTrackById(m_segment->getTrack())->getPosition();
 	m_startTime = m_segment->getStartTime();
 	m_endTime = m_segment->getEndMarkerTime();
@@ -569,7 +570,7 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 	    m_repeatRectangle->setX
 		(int(m_snapGrid->getRulerScale()->getXForTime(repeatStart)) + 1);
 	    m_repeatRectangle->setY
-		(m_snapGrid->getYBinCoordinate(m_track));
+		(m_snapGrid->getYBinCoordinate(m_trackPosition));
 	    m_repeatRectangle->setSize
 		((int)m_snapGrid->getRulerScale()->getWidthForDuration
 		 (repeatStart, repeatEnd - repeatStart) + 1,
@@ -589,7 +590,7 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     // Compute main rectangle
     //
     setX(m_snapGrid->getRulerScale()->getXForTime(m_startTime));
-    setY(m_snapGrid->getYBinCoordinate(m_track));
+    setY(m_snapGrid->getYBinCoordinate(m_trackPosition));
 
     int h = m_snapGrid->getYSnap();
     double w = m_snapGrid->getRulerScale()->getWidthForDuration
@@ -646,9 +647,9 @@ void SegmentItem::setEndTime(timeT t)
     recalculateRectangle(false);
 }
 
-void SegmentItem::setTrack(TrackId track)
+void SegmentItem::setTrackPosition(TrackId trackPosition)
 {
-    m_track = track;
+    m_trackPosition = trackPosition;
     recalculateRectangle(false);
 }
 
@@ -1040,7 +1041,7 @@ void SegmentCanvas::showRecordingSegmentItem(TrackId track,
 
 	m_recordingSegment->setStartTime(startTime);
 	m_recordingSegment->setEndTime(endTime);
-	m_recordingSegment->setTrack(track);
+	m_recordingSegment->setTrackPosition(track);
 
     } else {
 	

@@ -41,6 +41,7 @@ o Multiple Document Interface - at least internally capable
   - more complete "swap()" that works at Document level [DONE]
   - full MDI interface internals
 
+o Track Deleting [almost working]
 
 Fixed for next release
 ----------------------
@@ -57,6 +58,9 @@ o extra cascade level in Instrument selection menu [DONE]
 
 o Segment labelling [DONE]
 
+o File loading blank-out [DONE as part of file loading]
+
+o Track Moving [DONE]
 
 
 Smaller stuff
@@ -73,8 +77,6 @@ o FEATURE - double/half speed event selection in Matrix
 o BUG - Plugin calls() during playback causing usual problem
 
 o BUG - changing audio file path doesn't work
-
-o File loading blank-out
 
 o Finite audio recording time - check for available disk space
 

@@ -54,7 +54,7 @@ public:
     /**
      * Create a new segment item without an associated segment (yet)
      */
-    SegmentItem(Rosegarden::TrackId track,
+    SegmentItem(Rosegarden::TrackId trackPosition,
 		Rosegarden::timeT startTime,
 		Rosegarden::timeT endTime,
 		bool showPreview,
@@ -89,8 +89,8 @@ public:
     Rosegarden::timeT getEndTime() const { return m_endTime; }
 
     /// Update track of the rectangle (doesn't modify underlying segment)
-    void setTrack(Rosegarden::TrackId track);
-    Rosegarden::TrackId getTrack() const { return m_track; }
+    void setTrackPosition(Rosegarden::TrackId trackPosition);
+    Rosegarden::TrackId getTrackPosition() const { return m_trackPosition; }
 
     void setShowPreview(bool preview);
 
@@ -140,7 +140,7 @@ private:
     // We need to duplicate these from the segment, because we
     // frequently want to create SegmentItems before their
     // associated Segments
-    Rosegarden::TrackId m_track;
+    Rosegarden::TrackId m_trackPosition;
     Rosegarden::timeT m_startTime;
     Rosegarden::timeT m_endTime;
 

@@ -2020,10 +2020,6 @@ void RosegardenGUIApp::slotMoveTrackDown()
     //
     if (srcTrack == 0) return;
 
-    // Check we're not at the top already
-    //
-    if (srcTrack->getPosition() == 0) return;
-
     // Check destination track exists
     //
     Rosegarden::Track *destTrack =
@@ -2051,6 +2047,10 @@ void RosegardenGUIApp::slotMoveTrackUp()
     // Check for track object
     //
     if (srcTrack == 0) return;
+
+    // Check we're not at the top already
+    //
+    if (srcTrack->getPosition() == 0) return;
 
     // Check destination track exists
     //
