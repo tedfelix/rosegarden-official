@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "POT-Creation-Date: 2003-03-12 12:27+0000\n"
-"PO-Revision-Date: 2003-03-17 19:11+0300\n"
+"PO-Revision-Date: 2003-03-21 20:57+0300\n"
 "Last-Translator: Alexandre Prokoudine <avp@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -184,7 +184,7 @@ msgstr "Значение LSB"
 
 #: bankeditor.cpp:145
 msgid "Librarian"
-msgstr ""
+msgstr "Библиотекарь"
 
 #: bankeditor.cpp:153
 msgid "Email"
@@ -200,6 +200,12 @@ msgid ""
 "benefit\n"
 "of others."
 msgstr ""
+"Библиотекарь ответственен за основную информацию о банке и программе для "
+"этого устройства.\n"
+"Если вы как-либо изменили данные о банке с целью подстройки под используемое "
+"вами \n"
+"устройство, возможно, имеет смысл договориться с библиотекарем о публикации "
+"вашей версии."
 
 #: bankeditor.cpp:192
 msgid "Programs 1 - 64"
@@ -435,7 +441,7 @@ msgstr ""
 
 #: dialogs.cpp:207
 msgid "Show as common time"
-msgstr ""
+msgstr "Показывать как обычное время"
 
 #: dialogs.cpp:210
 msgid "Normalize subsequent rests"
@@ -443,11 +449,11 @@ msgstr "Нормализовать последующие паузы"
 
 #: dialogs.cpp:284
 msgid "Display as common time"
-msgstr ""
+msgstr "Показывать как обычное время"
 
 #: dialogs.cpp:288
 msgid "Display as cut common time"
-msgstr ""
+msgstr "Показывать оставшееся время"
 
 #: dialogs.cpp:324
 msgid "Key Change"
@@ -923,7 +929,7 @@ msgstr "&Эвристическая квантизация партитуры"
 
 #: editcommands.cpp:705
 msgid "Grid &Quantize"
-msgstr ""
+msgstr "&Квантизовать по сетке"
 
 #: editcommands.cpp:709 rosegardengui.cpp:490
 msgid "&Quantize..."
@@ -987,7 +993,7 @@ msgstr "Контроллер"
 
 #: eventview.cpp:165 midifilter.cpp:49 midifilter.cpp:85
 msgid "Pitch Bend"
-msgstr ""
+msgstr "Изменение высоты тона"
 
 #: eventview.cpp:166 midifilter.cpp:51 midifilter.cpp:87
 msgid "System Exclusive"
@@ -995,7 +1001,7 @@ msgstr ""
 
 #: eventview.cpp:167 midifilter.cpp:47 midifilter.cpp:83
 msgid "Key Pressure"
-msgstr ""
+msgstr "Сила нажатия клавишы"
 
 #: eventview.cpp:168 midifilter.cpp:48 midifilter.cpp:84
 msgid "Channel Pressure"
@@ -1027,7 +1033,7 @@ msgstr "Тип события  "
 
 #: eventview.cpp:208
 msgid "Pitch  "
-msgstr "Питч  "
+msgstr "Поднятие  "
 
 #: eventview.cpp:209
 msgid "Velocity  "
@@ -1389,19 +1395,19 @@ msgstr "можно вводить 1/2"
 
 #: matrixview.cpp:610
 msgid "Snap to &Unit"
-msgstr ""
+msgstr "Выравнивать по &единице"
 
 #: matrixview.cpp:612
 msgid "Snap to Bea&t"
-msgstr ""
+msgstr "Выравнивать по &такту"
 
 #: matrixview.cpp:614
 msgid "Snap to &Bar"
-msgstr "ячейка равна полоске"
+msgstr "Выравнивать по &полоске"
 
 #: matrixview.cpp:616
 msgid "&No Snap"
-msgstr ""
+msgstr "&Без выравнивания"
 
 #: matrixview.cpp:625 notationview.cpp:988
 msgid "Show Ch&ord Name Ruler"
@@ -1516,11 +1522,11 @@ msgstr "%1%"
 
 #: matrixview.cpp:2031
 msgid "Raising velocities..."
-msgstr ""
+msgstr "Повышение скоростей..."
 
 #: matrixview.cpp:2040
 msgid "Lowering velocities..."
-msgstr ""
+msgstr "Понижение скоростей..."
 
 #: matrixview.cpp:2075
 msgid "Set Event Velocities"
@@ -1532,7 +1538,7 @@ msgstr "Устанавливаются скорости..."
 
 #: midifilter.cpp:33
 msgid "Modify MIDI filters..."
-msgstr "Изменить MIDI-фильтры"
+msgstr "Изменить MIDI-фильтры..."
 
 #: midifilter.cpp:43
 msgid "THRU events to ignore"
@@ -1640,11 +1646,11 @@ msgstr "4-ая нота"
 
 #: notationstrings.cpp:73
 msgid "half note"
-msgstr "половинка"
+msgstr "половинная нота"
 
 #: notationstrings.cpp:74
 msgid "whole note"
-msgstr "целая"
+msgstr "целая нота"
 
 #: notationstrings.cpp:74
 msgid "double whole note"
@@ -1788,7 +1794,7 @@ msgstr "Переключить в режим вставки нот"
 
 #: notationtool.cpp:869 rosegardenconfiguredialog.cpp:489
 msgid "Collapse rests after erase"
-msgstr "Объединить паузы после стирания"
+msgstr "Сжать паузы после стирания"
 
 #: notationtool.cpp:876 notationtool.cpp:945
 msgid "Switch to Insert Tool"
@@ -1872,7 +1878,7 @@ msgstr "В&ырезать и закрыть"
 
 #: notationview.cpp:965
 msgid "Pa&ste..."
-msgstr "Вставить...\tCtrl+v"
+msgstr "&Вставить...\tCtrl+v"
 
 #: notationview.cpp:969 rosegardengui.cpp:486
 msgid "De&lete"
@@ -1880,11 +1886,11 @@ msgstr "&Удалить"
 
 #: notationview.cpp:977
 msgid "&Linear Layout"
-msgstr "&Линейное представление\tCtrl+Shift+L"
+msgstr "&Линейное представление \tCtrl+Shift+L"
 
 #: notationview.cpp:983
 msgid "&Page Layout"
-msgstr "&Страничное представление\tCtrl+Shift+P"
+msgstr "&Страничное представление \tCtrl+Shift+P"
 
 #: notationview.cpp:992
 msgid "Show Ra&w Note Ruler"
@@ -1892,7 +1898,7 @@ msgstr "Показывать &обычную нотную линейку"
 
 #: notationview.cpp:1000
 msgid "Show &Annotations"
-msgstr "Показывать &аннотации"
+msgstr "Показывать &примечания"
 
 #: notationview.cpp:1004
 msgid "Open L&yric Editor"
@@ -1912,11 +1918,11 @@ msgstr ""
 
 #: notationview.cpp:1306
 msgid "Cursor &Up Staff"
-msgstr ""
+msgstr "Курсор &вверх по нотному стану"
 
 #: notationview.cpp:1310
 msgid "Cursor &Down Staff"
-msgstr ""
+msgstr "Курсор в&низ по нотному стану"
 
 #: notationview.cpp:1418
 msgid "%1 pixels"
@@ -1944,19 +1950,19 @@ msgstr "Строится отображение партитуры..."
 
 #: notationview.cpp:1635
 msgid "Laying out staff %1..."
-msgstr ""
+msgstr "Строится отображение нотного стана %1..."
 
 #: notationview.cpp:1644
 msgid "Reconciling staffs..."
-msgstr ""
+msgstr "Нотные станы пересогласовываются..."
 
 #: notationview.cpp:2244
 msgid "Sizing and allocating canvas..."
-msgstr ""
+msgstr "Размещается и подстраивается канва..."
 
 #: notationviewslots.cpp:65
 msgid " Triplet Chord"
-msgstr "Триольный аккорд "
+msgstr " Триольный аккорд "
 
 #: notationviewslots.cpp:67
 msgid " Chord"
@@ -1968,7 +1974,7 @@ msgstr " Триоль"
 
 #: notationviewslots.cpp:90
 msgid "Hidden annotations"
-msgstr "Скрытые аннотации"
+msgstr "Скрытые примечания"
 
 #: notationviewslots.cpp:120
 msgid "Unknown spacing action %1"
@@ -1996,15 +2002,15 @@ msgstr "Невозможно осуществить вставку в этой �
 
 #: notationviewslots.cpp:581
 msgid "Beaming group..."
-msgstr ""
+msgstr "Группа направляется..."
 
 #: notationviewslots.cpp:590
 msgid "Auto-beaming selection..."
-msgstr ""
+msgstr "Автонаправление группы..."
 
 #: notationviewslots.cpp:599
 msgid "Breaking groups..."
-msgstr ""
+msgstr "Разделение групп..."
 
 #: notationviewslots.cpp:682
 msgid "Untupleting..."
@@ -2032,43 +2038,43 @@ msgstr "Добавляется декрещендо..."
 
 #: notationviewslots.cpp:762
 msgid "Normalizing rests..."
-msgstr "Нормализуются паузы..."
+msgstr "Паузы нормализуются..."
 
 #: notationviewslots.cpp:771
 msgid "Collapsing rests..."
-msgstr ""
+msgstr "Паузы сжимаются..."
 
 #: notationviewslots.cpp:780
 msgid "Collapsing notes..."
-msgstr ""
+msgstr "Ноты сжимаются..."
 
 #: notationviewslots.cpp:789
 msgid "Tying notes..."
-msgstr ""
+msgstr "Лигатура создаётся..."
 
 #: notationviewslots.cpp:798
 msgid "Untying notes..."
-msgstr ""
+msgstr "Лигатура удаляется..."
 
 #: notationviewslots.cpp:807
 msgid "Making notes viable..."
-msgstr ""
+msgstr "Ноты \"оживляются\"..."
 
 #: notationviewslots.cpp:816
 msgid "Removing counterpoint..."
-msgstr ""
+msgstr "Контрапункт удаляется..."
 
 #: notationviewslots.cpp:825
 msgid "Pointing stems up..."
-msgstr ""
+msgstr "Штили направляются вверх..."
 
 #: notationviewslots.cpp:834
 msgid "Pointing stems down..."
-msgstr ""
+msgstr "Штили направляются вниз..."
 
 #: notationviewslots.cpp:844
 msgid "Restoring computed stem directions..."
-msgstr "Восстанавливается расчитанное направление \"хвостов\" нот..."
+msgstr "Восстанавливается расчитанное направление штилей..."
 
 #: notationviewslots.cpp:860
 msgid "Changing to %1 style..."
@@ -2088,7 +2094,7 @@ msgstr "Продолжительность паузы не выбрана"
 
 #: notationviewslots.cpp:1030
 msgid "Interpreting selection..."
-msgstr ""
+msgstr "Выделение интерпретируется..."
 
 #: notationviewslots.cpp:1135
 msgid "Estimated time signature shown"
@@ -2120,7 +2126,7 @@ msgstr ""
 
 #: notefont.cpp:160
 msgid "name is a required attribute of symbol"
-msgstr "имя является необходимым атрибутом символа"
+msgstr "name является необходимым атрибутом символа"
 
 #: notefont.cpp:166
 msgid ""
@@ -2132,11 +2138,11 @@ msgstr ""
 
 #: notefont.cpp:184
 msgid "name is a required attribute of hotspot"
-msgstr "имя является необходимым атрибутом hotspot"
+msgstr "name является необходимым атрибутом hotspot"
 
 #: notefont.cpp:192
 msgid "when-element must be in hotspot-element"
-msgstr "when-element должен быть частью hotspot-element"
+msgstr "when-элемент должен быть частью hotspot-элемента"
 
 #: notefont.cpp:198
 msgid "note-height is a required attribute of when"
@@ -2164,7 +2170,7 @@ msgstr "Имя ноты \"%1\" неизвестно"
 
 #: notestyle.cpp:566
 msgid "global element must precede note elements"
-msgstr ""
+msgstr "глобальный элемент должен предшествовать нотным эелементам"
 
 #: notestyle.cpp:595
 msgid "global and note elements may have shape or charname attribute, but not both"
@@ -2231,7 +2237,7 @@ msgstr "    (учитывается при следующем старте пр�
 
 #: rosegardenconfiguredialog.cpp:139
 msgid "Always use US names (e.g. quarter, 8th)"
-msgstr "Всегда использовать амер. единицы измерения (8th, четверть и т.д.)"
+msgstr "Всегда использовать амер. единицы измерения (8th, quarter и т.д.)"
 
 #: rosegardenconfiguredialog.cpp:140
 msgid "Localised (where available)"
@@ -2303,7 +2309,7 @@ msgstr "Авторское право:"
 
 #: rosegardenconfiguredialog.cpp:340
 msgid "Mapped by:"
-msgstr ""
+msgstr "Разметивший:"
 
 #: rosegardenconfiguredialog.cpp:341
 msgid "Type:"
@@ -2327,7 +2333,7 @@ msgstr "Стандартный промежуток"
 
 #: rosegardenconfiguredialog.cpp:426
 msgid "Show non-notation events as question marks"
-msgstr ""
+msgstr "Показывать ненотные события как символы \"?\""
 
 #: rosegardenconfiguredialog.cpp:432
 msgid "Show notation-quantized notes in a different colour"
@@ -2339,7 +2345,7 @@ msgstr "Представление"
 
 #: rosegardenconfiguredialog.cpp:443
 msgid "Default note style for new notes"
-msgstr ""
+msgstr "Стандартный нотный стиль для новых нот"
 
 #: rosegardenconfiguredialog.cpp:466
 msgid "When inserting notes..."
@@ -2347,7 +2353,7 @@ msgstr "При вставке нот..."
 
 #: rosegardenconfiguredialog.cpp:473
 msgid "Split notes into ties to make durations match"
-msgstr ""
+msgstr "Разделять ноты на лиги для сохранения их продолжительностей"
 
 #: rosegardenconfiguredialog.cpp:474
 msgid "Ignore existing durations"
@@ -2355,7 +2361,7 @@ msgstr "Игнорировать существующие длительност
 
 #: rosegardenconfiguredialog.cpp:482
 msgid "Auto-beam on insert when appropriate"
-msgstr ""
+msgstr "Автоматически направлять при вставке"
 
 #: rosegardenconfiguredialog.cpp:495
 msgid "Default paste type"
@@ -2492,10 +2498,9 @@ msgid ""
 "incur a\n"
 "delay at the start of playback due to the amount of data being transmitted."
 msgstr ""
-"Rosegarden может пересылать устройствам все MIDI-контроллеры "
-"(Pan, Reverb и т.д.etc)\n"
-"при каждом нажатии кнопки \"Воспроизвести\", если вы того "
-"пожелаете.\n"
+"Rosegarden может пересылать устройствам все MIDI-контроллеры (Pan, Reverb и "
+"т.д.etc)\n"
+"при каждом нажатии кнопки \"Воспроизвести\", если вы того пожелаете.\n"
 "Учтите, что это повлечёт за собой задержку воспроизведения ввиду\n"
 "большого количества пересылаемых данных."
 
@@ -2527,19 +2532,19 @@ msgstr "выкл"
 
 #: rosegardenconfiguredialog.cpp:1069
 msgid "JACK Slave"
-msgstr ""
+msgstr "JACK ведомый"
 
 #: rosegardenconfiguredialog.cpp:1070
 msgid "JACK Master"
-msgstr ""
+msgstr "JACK ведущий"
 
 #: rosegardenconfiguredialog.cpp:1094
 msgid "MMC Slave"
-msgstr ""
+msgstr "MMC ведомый"
 
 #: rosegardenconfiguredialog.cpp:1095
 msgid "MMC Master"
-msgstr ""
+msgstr "MMC ведущий"
 
 #: rosegardenconfiguredialog.cpp:1111
 msgid "Synchronisation"
@@ -2779,7 +2784,7 @@ msgstr "Открыть в редакторе событий"
 
 #: rosegardengui.cpp:548
 msgid "Edit Document P&roperties..."
-msgstr "Редактировать свойства документа..."
+msgstr "Редактировать &свойства документа..."
 
 #: rosegardengui.cpp:552
 msgid "Manage MIDI &Devices..."
@@ -3418,11 +3423,11 @@ msgstr "Изменить &MIDI-банк"
 
 #: studiocommands.h:79
 msgid "Modify &Device Mapping"
-msgstr ""
+msgstr "Изменить разметку &устройств"
 
 #: studiocommands.h:100
 msgid "Modify &Instrument Mapping"
-msgstr ""
+msgstr "Изменить разметку &инструментов"
 
 #: studiowidgets.cpp:57
 msgid "Audio plugin button"
@@ -3478,7 +3483,7 @@ msgstr "Идёт обработка..."
 
 #: widgets.cpp:496 widgets.cpp:521
 msgid "Click n' Drag - up and down or left to right"
-msgstr ""
+msgstr "Кликните и перетащите вверх-вниз или влево-вправо"
 
 #: widgets.cpp:700
 msgid "Quantizer type"
@@ -3486,7 +3491,7 @@ msgstr "Тип квантизации"
 
 #: widgets.cpp:708
 msgid "Grid quantizer"
-msgstr ""
+msgstr "Квантизация по сетке"
 
 #: widgets.cpp:709
 msgid "Heuristic notation quantizer"
@@ -3502,7 +3507,7 @@ msgstr "Параметры нотации"
 
 #: widgets.cpp:726 widgets.cpp:762
 msgid "Base grid unit:"
-msgstr ""
+msgstr "Основная единица сетки:"
 
 #: widgets.cpp:731
 msgid "Complexity:"
@@ -3542,23 +3547,23 @@ msgstr "Триоль"
 
 #: widgets.cpp:748
 msgid "4-Tuplet"
-msgstr ""
+msgstr "Группа из 4"
 
 #: widgets.cpp:749
 msgid "5-Tuplet"
-msgstr ""
+msgstr "Группа из 5"
 
 #: widgets.cpp:750
 msgid "6-Tuplet"
-msgstr ""
+msgstr "Группа из 6"
 
 #: widgets.cpp:751
 msgid "7-Tuplet"
-msgstr ""
+msgstr "Группа из 7"
 
 #: widgets.cpp:752
 msgid "8-Tuplet"
-msgstr ""
+msgstr "Группа из 8"
 
 #: widgets.cpp:753
 msgid "Any"
@@ -3569,8 +3574,9 @@ msgid "Grid parameters"
 msgstr "Параметры сетки"
 
 #: widgets.cpp:767
+#, fuzzy
 msgid "Quantize durations as well as start times"
-msgstr ""
+msgstr "Квантизовать продолжительности и времена начала"
 
 #: widgets.cpp:771
 msgid "After quantization"
@@ -3578,11 +3584,11 @@ msgstr "После квантизации"
 
 #: widgets.cpp:779
 msgid "Tie notes at barlines etc"
-msgstr ""
+msgstr "Связать ноты лигатурой по полоскам и т.д."
 
 #: widgets.cpp:780
 msgid "Split-and-tie overlapping chords"
-msgstr ""
+msgstr "Разделять и связывать лигатурой перекрывающиеся аккорды"
 
 #: widgets.cpp:781
 msgid "Re-beam"
@@ -3602,7 +3608,7 @@ msgstr "&Ноты"
 
 #: rc.cpp:4
 msgid "S&tem Direction"
-msgstr "&Направление \"палочек\""
+msgstr "&Направление штилей"
 
 #: rc.cpp:5
 msgid "S&lashes"
@@ -3666,7 +3672,7 @@ msgstr "Показывать дополнительные кнопки упра�
 
 #: rc.cpp:31
 msgid "Display bar/beat time"
-msgstr ""
+msgstr "Показывать время по полоскам/тактам"
 
 #: rc.cpp:33
 msgid "Display time to end"
