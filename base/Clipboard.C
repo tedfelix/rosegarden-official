@@ -38,6 +38,7 @@ Clipboard &
 Clipboard::operator=(const Clipboard &c)
 {
     copyFrom(&c);
+    return *this;
 }
 
 Clipboard::~Clipboard()

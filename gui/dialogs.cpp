@@ -434,3 +434,87 @@ KeySignatureDialog::getKeyName(const QString &s, bool minor)
     return name;
 }
 
+
+PasteNotationDialog::PasteNotationDialog(QWidget *parent,
+					 PasteNotationCommand::PasteType defaultType) :
+    KDialogBase(parent, 0, true, i18n("Paste"), Ok | Cancel),
+    m_defaultType(defaultType)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+
+    QButtonGroup *pasteTypeGroup = new QButtonGroup
+	(1, Horizontal, i18n("Paste type"), vbox);
+
+    m_pasteIntoGapButton = new QRadioButton
+	(i18n("Paste into an existing gap"), pasteTypeGroup);
+    if (m_defaultType == PasteNotationCommand::PasteIntoGap) {
+	m_pasteIntoGapButton->setChecked(true);
+    }
+    m_pasteDestructiveButton = new QRadioButton
+	(i18n("Erase existing events to make room"), pasteTypeGroup);
+    if (m_defaultType == PasteNotationCommand::PasteDestructive) {
+	m_pasteDestructiveButton->setChecked(true);
+    }
+    m_openAndPasteButton = new QRadioButton
+	(i18n("Move existing events out of the way"), pasteTypeGroup);
+    if (m_defaultType == PasteNotationCommand::OpenAndPaste) {
+	m_openAndPasteButton->setChecked(true);
+    }
+    m_pasteOverlayButton = new QRadioButton
+	(i18n("Overlay notes, tying against present notes"), pasteTypeGroup);
+    if (m_defaultType == PasteNotationCommand::PasteOverlay) {
+	m_pasteOverlayButton->setChecked(true);
+    }
+    m_pasteOverlayRawButton = new QRadioButton
+	(i18n("Overlay notes, ignoring present notes"), pasteTypeGroup);
+    if (m_defaultType == PasteNotationCommand::PasteOverlayRaw) {
+	m_pasteOverlayRawButton->setChecked(true);
+    }
+
+    QButtonGroup *setAsDefaultGroup = new QButtonGroup
+	(1, Horizontal, i18n("Options"), vbox);
+
+    m_setAsDefaultButton = new QCheckBox
+	(i18n("Make this the default paste type"), setAsDefaultGroup);
+    m_setAsDefaultButton->setChecked(true);
+
+    QObject::connect(m_pasteIntoGapButton, SIGNAL(released()),
+		     this, SLOT(slotPasteTypeChanged()));
+    QObject::connect(m_pasteDestructiveButton, SIGNAL(released()),
+		     this, SLOT(slotPasteTypeChanged()));
+    QObject::connect(m_openAndPasteButton, SIGNAL(released()),
+		     this, SLOT(slotPasteTypeChanged()));
+    QObject::connect(m_pasteOverlayButton, SIGNAL(released()),
+		     this, SLOT(slotPasteTypeChanged()));
+    QObject::connect(m_pasteOverlayRawButton, SIGNAL(released()),
+		     this, SLOT(slotPasteTypeChanged()));
+}
+
+PasteNotationCommand::PasteType
+PasteNotationDialog::getPasteType() const
+{
+    if (m_pasteIntoGapButton->isChecked()) {
+	return PasteNotationCommand::PasteIntoGap;
+    } else if (m_pasteDestructiveButton->isChecked()) {
+	return PasteNotationCommand::PasteDestructive;
+    } else if (m_pasteOverlayButton->isChecked()) {
+	return PasteNotationCommand::PasteOverlay;
+    } else if (m_pasteOverlayRawButton->isChecked()) {
+	return PasteNotationCommand::PasteOverlayRaw;
+    } else {
+	return PasteNotationCommand::OpenAndPaste;
+    }
+}
+
+bool
+PasteNotationDialog::setAsDefault() const
+{
+    return m_setAsDefaultButton->isChecked();
+}
+
+void
+PasteNotationDialog::slotPasteTypeChanged()
+{
+    m_setAsDefaultButton->setChecked(m_defaultType == getPasteType());
+}
+

@@ -712,10 +712,11 @@ MidiFile::convertToRosegarden()
                         rosegardenSegment->insert(rosegardenEvent);
 
                     // [cc] -- a bit of an experiment
-                    SegmentNotationHelper helper(*rosegardenSegment);
-                    if (!helper.isViable(rosegardenEvent)) {
-                        helper.makeNoteViable(loc);
-                    }
+//!!! probably do want this, but
+//                    SegmentNotationHelper helper(*rosegardenSegment);
+//                    if (!helper.isViable(rosegardenEvent)) {
+//                        helper.makeNoteViable(loc);
+//                    }
                 }
                 break;
 

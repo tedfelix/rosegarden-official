@@ -54,7 +54,11 @@
 
 13. Merge Randall's optimisations to layout
 
-14. Why no rest-inserter menu?
+14. Why no rest-inserter menu? [DONE]
+
+15. Ties don't always appear (e.g. load davy.mid with viability switched
+    on in MidiFile.cpp)
+
 
 Post-0.1.3 task list (superseding older ones)
 ====================

@@ -45,6 +45,8 @@ using Rosegarden::Indication;
 using Rosegarden::NotationDisplayPitch;
 using Rosegarden::EventSelection;
 
+using namespace Rosegarden::BaseProperties;
+
 using std::string;
 using std::cerr;
 using std::endl;
@@ -180,19 +182,17 @@ KeyInsertionCommand::modifySegment()
 	    }
 
 	    if ((*i)->isa(Rosegarden::Note::EventType) &&
-		(*i)->has(Rosegarden::BaseProperties::PITCH)) {
+		(*i)->has(PITCH)) {
 
-		long pitch = (*i)->get<Int>(Rosegarden::BaseProperties::PITCH);
+		long pitch = (*i)->get<Int>(PITCH);
 		
 		if (m_convert) {
-		    (*i)->set<Int>(Rosegarden::BaseProperties::PITCH,
-				   m_key.convertFrom(pitch, oldKey));
+		    (*i)->set<Int>(PITCH, m_key.convertFrom(pitch, oldKey));
 		} else {
-		    (*i)->set<Int>(Rosegarden::BaseProperties::PITCH,
-				   m_key.transposeFrom(pitch, oldKey));
+		    (*i)->set<Int>(PITCH, m_key.transposeFrom(pitch, oldKey));
 		}
 
-		(*i)->unset(Rosegarden::BaseProperties::ACCIDENTAL);
+		(*i)->unset(ACCIDENTAL);
 	    }
 	}
     }
@@ -302,25 +302,32 @@ CopyNotationCommand::unexecute()
     m_targetClipboard->copyFrom(&temp);
 }
 
+PasteNotationCommand::PasteType
+PasteNotationCommand::m_defaultPaste = PasteNotationCommand::PasteIntoGap;
+
 PasteNotationCommand::PasteNotationCommand(Rosegarden::Segment &segment,
 					   Rosegarden::Clipboard *clipboard,
-					   Rosegarden::timeT pasteTime) :
+					   Rosegarden::timeT pasteTime,
+					   PasteType pasteType) :
     BasicCommand(name(), segment, pasteTime,
 		 getEffectiveEndTime(segment, clipboard, pasteTime)),
     m_relayoutEndTime(getEndTime()),
-    m_clipboard(clipboard)
+    m_clipboard(clipboard),
+    m_pasteType(pasteType)
 {
-    // paste clef or key -> relayout to end
+    if (pasteType != OpenAndPaste) {
 
-    if (clipboard->isSingleSegment()) {
+	// paste clef or key -> relayout to end
 
-	Segment *s(clipboard->getSingleSegment());
-	for (Segment::iterator i = s->begin(); i != s->end(); ++i) {
+	if (clipboard->isSingleSegment()) {
 
-	    if ((*i)->isa(Rosegarden::Clef::EventType) ||
-		(*i)->isa(Rosegarden::Key::EventType)) {
-		m_relayoutEndTime = s->getEndTime();
-		break;
+	    Segment *s(clipboard->getSingleSegment());
+	    for (Segment::iterator i = s->begin(); i != s->end(); ++i) {
+		if ((*i)->isa(Rosegarden::Clef::EventType) ||
+		    (*i)->isa(Rosegarden::Key::EventType)) {
+		    m_relayoutEndTime = s->getEndTime();
+		    break;
+		}
 	    }
 	}
     }
@@ -336,9 +343,13 @@ PasteNotationCommand::getEffectiveEndTime(Rosegarden::Segment &segment,
     timeT d = clipboard->getSingleSegment()->getEndTime() -
  	      clipboard->getSingleSegment()->getFirstEventTime();
 
-    Segment::iterator i = segment.findTime(pasteTime + d);
-    if (i == segment.end()) return segment.getEndTime();
-    else return (*i)->getAbsoluteTime();
+    if (m_pasteType == OpenAndPaste) {
+	return segment.getEndTime() + d;
+    } else {
+	Segment::iterator i = segment.findTime(pasteTime + d);
+	if (i == segment.end()) return segment.getEndTime();
+	else return (*i)->getAbsoluteTime();
+    }
 }
 
 timeT
@@ -354,6 +365,10 @@ PasteNotationCommand::isPossible()
 	return false;
     }
     
+    if (m_pasteType != PasteIntoGap) {
+	return true;
+    }
+
     Segment *source = m_clipboard->getSingleSegment();
 
     timeT pasteTime = getBeginTime();
@@ -374,16 +389,87 @@ PasteNotationCommand::modifySegment()
 
     timeT pasteTime = getBeginTime();
     timeT origin = source->getFirstEventTime();
-    timeT duration = source->getDuration() - origin;
+    timeT duration = source->getEndTime() - origin;
+    
+    Segment *destination(&getSegment());
+    SegmentNotationHelper helper(*destination);
 
-    SegmentNotationHelper helper(getSegment());
+    switch (m_pasteType) {
 
-    if (!helper.removeRests(pasteTime, duration)) return;
+	// Do some preliminary work to make space or whatever;
+	// we do the actual paste after this switch statement
+	// (except where individual cases do the work and return)
+
+    case PasteIntoGap:
+	if (!helper.removeRests(pasteTime, duration)) return;
+	break;
+
+    case PasteDestructive:
+	destination->erase(destination->findTime(pasteTime),
+			   destination->findTime(pasteTime + duration));
+	break;
+
+    case PasteOverlay:
+	for (Segment::iterator i = source->begin(); i != source->end(); ++i) {
+	    if ((*i)->isa(Note::EventRestType)) continue;
+	    if ((*i)->isa(Note::EventType)) {
+		long pitch = 0;
+		Accidental explicitAccidental = NoAccidental;
+		(*i)->get<String>(ACCIDENTAL, explicitAccidental);
+		if ((*i)->get<Int>(PITCH, pitch)) {
+		    helper.insertNote
+			((*i)->getAbsoluteTime() - origin + pasteTime,
+			 Note::getNearestNote((*i)->getDuration()),
+			 pitch, explicitAccidental);
+		}
+	    } else {
+		Event *e = new Event(**i);
+		e->setAbsoluteTime(e->getAbsoluteTime() - origin + pasteTime);
+		destination->insert(e);
+	    }
+	}
+	break;
+
+    case PasteOverlayRaw:
+
+	for (Segment::iterator i = source->begin(); i != source->end(); ++i) {
+
+	    if ((*i)->isa(Note::EventRestType)) continue;
+
+	    Event *e = new Event(**i);
+	    e->setAbsoluteTime(e->getAbsoluteTime() - origin + pasteTime);
+	    destination->insert(e);
+	}
+	break;
+
+    case OpenAndPaste:
+
+	std::vector<Event *> copies;
+	for (Segment::iterator i = destination->findTime(pasteTime);
+	     i != destination->end(); ++i) {
+	    Event *e = new Event(**i);
+	    e->setAbsoluteTime(e->getAbsoluteTime() + duration);
+	    copies.push_back(e);
+	}
+
+	destination->erase(destination->findTime(pasteTime),
+			   destination->end());
+
+	for (unsigned int i = 0; i < copies.size(); ++i) {
+	    destination->insert(copies[i]);
+	}
+	break;
+    }
 
     for (Segment::iterator i = source->begin(); i != source->end(); ++i) {
 	Event *e = new Event(**i);
 	e->setAbsoluteTime(e->getAbsoluteTime() - origin + pasteTime);
-	getSegment().insert(e);
+	destination->insert(e);
+
+	if (e->isa(Note::EventType)) {
+	    helper.normalizeRests(e->getAbsoluteTime(),
+				  e->getAbsoluteTime() + e->getDuration());
+	}
     }
 }
 
@@ -445,7 +531,7 @@ void GroupMenuBeamCommand::modifySegment()
     SegmentNotationHelper helper(getSegment());
 
     helper.makeBeamedGroup(getBeginTime(), getEndTime(),
-                           Rosegarden::BaseProperties::GROUP_TYPE_BEAMED);
+                           GROUP_TYPE_BEAMED);
 }
 
 void GroupMenuAutoBeamCommand::modifySegment()
@@ -453,7 +539,7 @@ void GroupMenuAutoBeamCommand::modifySegment()
     SegmentNotationHelper helper(getSegment());
 
     helper.autoBeam(getBeginTime(), getEndTime(),
-                    Rosegarden::BaseProperties::GROUP_TYPE_BEAMED);
+                    GROUP_TYPE_BEAMED);
 }
 
 void GroupMenuBreakCommand::modifySegment()
@@ -579,12 +665,12 @@ TransformsMenuTransposeCommand::modifySegment()
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 
 	if ((*i)->isa(Note::EventType)) {
-	    long pitch = (*i)->get<Int>(Rosegarden::BaseProperties::PITCH);
+	    long pitch = (*i)->get<Int>(PITCH);
 	    pitch += m_semitones;
 	    if (pitch < 0) pitch = 0;
 	    if (pitch > 127) pitch = 127;
-	    (*i)->set<Int>(Rosegarden::BaseProperties::PITCH, pitch); 
-	    (*i)->unset(Rosegarden::BaseProperties::ACCIDENTAL);
+	    (*i)->set<Int>(PITCH, pitch); 
+	    (*i)->unset(ACCIDENTAL);
 	}
     }
 }
@@ -601,12 +687,12 @@ TransformsMenuTransposeOneStepCommand::modifySegment()
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 
 	if ((*i)->isa(Note::EventType)) {
-	    long pitch = (*i)->get<Int>(Rosegarden::BaseProperties::PITCH);
+	    long pitch = (*i)->get<Int>(PITCH);
 	    pitch += offset;
 	    if (pitch < 0) pitch = 0;
 	    if (pitch > 127) pitch = 127;
-	    (*i)->set<Int>(Rosegarden::BaseProperties::PITCH, pitch); 
-	    (*i)->unset(Rosegarden::BaseProperties::ACCIDENTAL);
+	    (*i)->set<Int>(PITCH, pitch); 
+	    (*i)->unset(ACCIDENTAL);
 	}
     }
 }
@@ -623,12 +709,12 @@ TransformsMenuTransposeOctaveCommand::modifySegment()
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 
 	if ((*i)->isa(Note::EventType)) {
-	    long pitch = (*i)->get<Int>(Rosegarden::BaseProperties::PITCH);
+	    long pitch = (*i)->get<Int>(PITCH);
 	    pitch += offset;
 	    if (pitch < 0) pitch = 0;
 	    if (pitch > 127) pitch = 127;
-	    (*i)->set<Int>(Rosegarden::BaseProperties::PITCH, pitch); 
-	    (*i)->unset(Rosegarden::BaseProperties::ACCIDENTAL);
+	    (*i)->set<Int>(PITCH, pitch); 
+	    (*i)->unset(ACCIDENTAL);
 	}
     }
 }
@@ -660,9 +746,9 @@ TransformsMenuAddMarkCommand::modifySegment()
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 	
 	long n = 0;
-	(*i)->get<Int>(Rosegarden::BaseProperties::MARK_COUNT, n);
-	(*i)->set<Int>(Rosegarden::BaseProperties::MARK_COUNT, n + 1);
-	(*i)->set<String>(Rosegarden::BaseProperties::getMarkPropertyName(n),
+	(*i)->get<Int>(MARK_COUNT, n);
+	(*i)->set<Int>(MARK_COUNT, n + 1);
+	(*i)->set<String>(getMarkPropertyName(n),
 			  m_mark);
     }
 }
@@ -677,9 +763,9 @@ TransformsMenuAddTextMarkCommand::modifySegment()
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 	
 	long n = 0;
-	(*i)->get<Int>(Rosegarden::BaseProperties::MARK_COUNT, n);
-	(*i)->set<Int>(Rosegarden::BaseProperties::MARK_COUNT, n + 1);
-	(*i)->set<String>(Rosegarden::BaseProperties::getMarkPropertyName(n),
+	(*i)->get<Int>(MARK_COUNT, n);
+	(*i)->set<Int>(MARK_COUNT, n + 1);
+	(*i)->set<String>(getMarkPropertyName(n),
 			  Rosegarden::Marks::getTextMark(m_text));
     }
 }
@@ -694,11 +780,11 @@ TransformsMenuRemoveMarksCommand::modifySegment()
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 	
 	long n = 0;
-	(*i)->get<Int>(Rosegarden::BaseProperties::MARK_COUNT, n);
-	(*i)->unset(Rosegarden::BaseProperties::MARK_COUNT);
+	(*i)->get<Int>(MARK_COUNT, n);
+	(*i)->unset(MARK_COUNT);
 	
 	for (int j = 0; j < n; ++j) {
-	    (*i)->unset(Rosegarden::BaseProperties::getMarkPropertyName(j));
+	    (*i)->unset(getMarkPropertyName(j));
 	}
     }
 }

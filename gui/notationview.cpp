@@ -1168,8 +1168,54 @@ void NotationView::slotEditPaste()
 
 void NotationView::slotEditGeneralPaste()
 {
-    //!!!
-    //...
+    if (m_document->getClipboard()->isEmpty()) {
+        slotStatusHelpMsg(i18n("Clipboard is empty"));
+        slotQuarter(); //!!!why?
+        return;
+    }
+
+    slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
+
+    // Paste at cursor position
+    //
+
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    Segment &segment = staff->getSegment();
+    
+    double layoutX = staff->getLayoutXOfInsertCursor();
+    if (layoutX < 0) {
+	slotStatusHelpMsg(i18n("Couldn't paste at this point"));
+	return;
+    }
+
+    Rosegarden::Event *timeSig, *clef, *key;
+
+    NotationElementList::iterator i = staff->getClosestElementToLayoutX
+	(layoutX, timeSig, clef, key, false, -1);
+
+    timeT insertionTime = segment.getEndTime();
+    if (i != staff->getViewElementList()->end()) {
+	insertionTime = (*i)->getAbsoluteTime();
+    }
+
+    PasteNotationDialog *dialog = new PasteNotationDialog
+	(this, PasteNotationCommand::getDefaultPasteType());
+    if (dialog->exec() == QDialog::Accepted) {
+
+	PasteNotationCommand::PasteType type = dialog->getPasteType();
+	if (dialog->setAsDefault()) {
+	    PasteNotationCommand::setDefaultPasteType(type);
+	}
+
+	PasteNotationCommand *command = new PasteNotationCommand
+	    (segment, m_document->getClipboard(), insertionTime, type);
+
+	if (!command->isPossible()) {
+	    slotStatusHelpMsg(i18n("Couldn't paste at this point"));
+	} else {
+	    addCommandToHistory(command);
+	}
+    }
 }
 
 void NotationView::slotEditSelectFromStart()

@@ -26,6 +26,7 @@
 #include <string>
 
 #include "NotationTypes.h"
+#include "notationcommands.h"
 
 class QWidget;
 class QLineEdit;
@@ -136,6 +137,34 @@ public slots:
     void slotKeyNameChanged(const QString &);
     void slotMajorMinorChanged(const QString &);
 };
+
+
+class PasteNotationDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    PasteNotationDialog(QWidget *parent,
+			PasteNotationCommand::PasteType defaultType);
+
+    PasteNotationCommand::PasteType getPasteType() const;
+    bool setAsDefault() const;
+
+protected:
+    QRadioButton *m_pasteIntoGapButton;
+    QRadioButton *m_pasteDestructiveButton;
+    QRadioButton *m_pasteOverlayButton;
+    QRadioButton *m_pasteOverlayRawButton;
+    QRadioButton *m_openAndPasteButton;
+    
+    QCheckBox *m_setAsDefaultButton;
+
+    PasteNotationCommand::PasteType m_defaultType;
+
+public slots:
+    void slotPasteTypeChanged();
+};
+    
 
 
 #endif

@@ -188,9 +188,18 @@ protected:
 class PasteNotationCommand : public BasicCommand
 {
 public:
+    enum PasteType {
+	PasteIntoGap,
+	PasteDestructive,
+	PasteOverlay,
+	PasteOverlayRaw,
+	OpenAndPaste
+    };
+
     PasteNotationCommand(Rosegarden::Segment &segment,
 			 Rosegarden::Clipboard *clipboard,
-			 Rosegarden::timeT pasteTime);
+			 Rosegarden::timeT pasteTime,
+			 PasteType pasteType = getDefaultPasteType());
 
     static QString name() { return "&Paste"; }
 
@@ -199,6 +208,9 @@ public:
 
     virtual Rosegarden::timeT getRelayoutEndTime();
     
+    static void setDefaultPasteType(PasteType type) { m_defaultPaste = type; }
+    static PasteType getDefaultPasteType() { return m_defaultPaste; }
+
 protected:
     virtual void modifySegment();
     Rosegarden::timeT getEffectiveEndTime(Rosegarden::Segment &,
@@ -206,6 +218,9 @@ protected:
 					  Rosegarden::timeT);
     Rosegarden::timeT m_relayoutEndTime;
     Rosegarden::Clipboard *m_clipboard;
+    PasteType m_pasteType;
+
+    static PasteType m_defaultPaste;
 };
 
 class EraseNotationCommand : public BasicSelectionCommand
