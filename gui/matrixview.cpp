@@ -1420,6 +1420,13 @@ MatrixView::slotChangeHorizontalZoom(int)
 #endif
 }
 
+/// Scrolls the view such that the given time is centered
+void
+MatrixView::scrollToTime(timeT t) {
+    double layoutCoord = m_hlayout.getXForTime(t);
+    getCanvasView()->slotScrollHoriz(int(layoutCoord));
+}
+
 unsigned int
 MatrixView::addControlRuler(const Rosegarden::PropertyName &property)
 {

@@ -176,6 +176,11 @@ public:
      */
     void readjustCanvasSize();
 
+    /*
+     * Scrolls the view such that the given time is centered
+     */
+    void scrollToTime(Rosegarden::timeT t);
+
 signals:    
     /**
      * Emitted when the selection has been cut or copied
