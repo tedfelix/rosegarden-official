@@ -1,7 +1,7 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 bin_PROGRAMS = rosegardengui
 rosegardengui_SOURCES = quantizer.cpp rosexmlhandler.cpp xmlstorableevent.cpp notationvlayout.cpp notationhlayout.cpp layoutengine.cpp qcanvassimplesprite.cpp staff.cpp qcanvasspritegroupable.cpp qcanvaslinegroupable.cpp qcanvasitemgroup.cpp qcanvasgroupableitem.cpp pitchtoheight.cpp notepixmapfactory.cpp rosegardenguiview.cpp rosegardenguidoc.cpp rosegardengui.cpp main.cpp 
-rosegardengui_LDADD   = -Lrosegarden_core -lcore -lkfile -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
+rosegardengui_LDADD   = -lcore -lkfile -lkdeui -lkdecore -lqt -lXext -lX11 $(LIBSOCKET)
 
 SUBDIRS = docs 
 
@@ -43,7 +43,7 @@ bin_PROGRAMS = rosegardengui
 rosegardengui_METASOURCES = AUTO
 
 # the library search path. 
-rosegardengui_LDFLAGS = $(all_libraries) $(KDE_RPATH) -L../../core -lcore
+rosegardengui_LDFLAGS = $(all_libraries) $(KDE_RPATH) -L../../core
 
 # them while "make clean", use CLEANFILES
 DISTCLEANFILES = $(rosegardengui_METASOURCES)
