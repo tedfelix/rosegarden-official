@@ -22,7 +22,7 @@ A.  Features without which nobody will even believe we're serious:
     present (the longer note must be split)
 
 8.  proper handling of time sigs. Tracks should be positioned at
-    absolute steps, not bars.
+    absolute steps, not bars : DONEish
 
 9.  all the notation elegances (more precise description needed here) : DONEish
 9a. make it possible to insert dotted notes and notes with accidentals
