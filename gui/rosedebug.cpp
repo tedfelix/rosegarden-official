@@ -158,10 +158,10 @@ kdbgostreamAdapter::operator<<(double d)
 }
 
 
-ostream& endl( ostream &s)
-{
-    s << "\n"; return s;
-}
+// ostream& endl( ostream &s)
+// {
+//     s << "\n"; return s;
+// }
 
 void DBCheckThrow()
 {

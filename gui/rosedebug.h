@@ -62,7 +62,7 @@ protected:
     kdbgstream &m_kdbgStream;
 };
 
-ostream& endl(ostream& s);
+// ostream& endl(ostream& s);
 
 void DBCheckThrow();
 
