@@ -270,7 +270,7 @@ void SegmentItem::updatePreview()
 
     QPainter painter(&m_preview);
 
-    //m_preview.fill(black);
+    m_preview.fill(black);
 
     painter.setPen(RosegardenGUIColours::SegmentInternalPreview);
     painter.setBrush(RosegardenGUIColours::SegmentBlock);
