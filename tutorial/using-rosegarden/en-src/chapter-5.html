@@ -5,7 +5,7 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;311800">
-	<META NAME="CHANGED" CONTENT="20040625;22050300">
+	<META NAME="CHANGED" CONTENT="20040807;18390700">
 </HEAD>
 <BODY LANG="en-US" DIR="LTR">
 <H1 STYLE="border: none; padding: 0in"><A NAME="5"></A>A Different
@@ -22,11 +22,27 @@ to start with an editor from scratch, you must first create an empty
 segment with the pencil tool, as I described in chapter 2, and then
 select it.</P>
 <H2>The Event List Editor</H2>
-<P STYLE="border: none; padding: 0in">Out of the box, the Notation
-Editor is the default, but that is a chapter unto itself. For the
-moment, let us begin with the simplest of the three. Pick a segment,
-and then right click on it. Choose &quot;Open in Event List Editor&quot;
-from the resulting context menu.</P>
+<P STYLE="border: none; padding: 0in">The event list editor is for
+editing the composition at the event level.  This is the most raw of
+the three edit views, and the most difficult editor to use.</P>
+<H3>Events and Properties</H3>
+<P>Rosegarden is not a pure MIDI sequencer, and it does not store raw
+MIDI events; instead, it uses its own internal format, which is both
+more powerful and more flexible. There are many kinds of events in
+Rosegarden. As you would expect, MIDI notes, controllers and the like
+are events, but so are hairpins, dynamics, performance directions,
+clefs and key signatures, etc. Each class of event has its own set of
+unique properties.</P>
+<P>Here are just a few examples of types of events with a few their
+properties. All of these can be edited from here in the event list
+editor, although you probably will find little occasion to tear an
+event apart and rearrange its insides.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/some-events-diagram.jpg" NAME="Graphic25" ALIGN=BOTTOM WIDTH=418 HEIGHT=251 BORDER=0></P>
+<P STYLE="border: none; padding: 0in">Out of the box, the notation
+editor is the default, but that editor is a chapter unto itself. For
+the moment, let us begin with the simplest of the three. Pick a
+segment, and then right click on it. Choose &quot;Open in Event List
+Editor&quot; from the resulting context menu.</P>
 <P ALIGN=CENTER STYLE="border: none; padding: 0in"><IMG SRC="../pixmaps/open-in-event-editor.png" NAME="Graphic1" ALIGN=BOTTOM WIDTH=196 HEIGHT=244 BORDER=0></P>
 <P ALIGN=LEFT STYLE="border: none; padding: 0in">If you've started
 with a blank segment, as I did, there's not much to see here:</P>
@@ -42,6 +58,19 @@ is definitely best reserved for the future 500-page deluxe edition of
 this book. For the moment, let us move on to something more useful.</P>
 <H3>Suggested Uses</H3>
 <H4>Inserting a Mid-Composition Program Change</H4>
+<P>One thing that can only be done from the event editor is the
+insertion of a mid-track program change.  This might be useful, for
+example, if you wish to switch a string part from playing normally to
+playing pizzicato and back without having to write the parts on
+different tracks to assign them to different instruments.</P>
+<P>In version 1.0 of Rosegarden, the facility for entering program
+changes is rather crude and unwieldy.  It may see improvement in
+future versions, but for the moment, the only mechanism provided is
+the entry of program changes by number.  This means you may not
+change the bank, so you are limited to whatever bank is assigned to
+the instrument to which the track you are writing for is assigned.</P>
+<P><BR><BR>
+</P>
 <H2>The Matrix Editor</H2>
 <P>The Matrix editor is based around the familiar piano roll metaphor
 you have probably seen in other packages. It is useful for taking a
@@ -203,7 +232,7 @@ cursors, and I'm far too lazy to try to draw that little pointing
 finger, so I will instead describe what I did. After making the
 selection from the menu, the cursor changed to a pointing finger. I
 picked a start point with this finger, and continued to hold the
-button down while dragging the resulting line up and to the right. 
+button down while dragging the resulting line up and to the right.
 After I released the button, it produced this line of controllers:</P>
 <P ALIGN=CENTER><IMG SRC="../pixmaps/matrix-line-of-mods.png" NAME="Graphic23" ALIGN=BOTTOM WIDTH=152 HEIGHT=112 BORDER=0></P>
 <P ALIGN=LEFT STYLE="font-weight: medium">You can move individual
@@ -215,7 +244,7 @@ in red.</P>
 <P ALIGN=LEFT STYLE="font-weight: medium">If you hold down shift and
 drag these up and down as a group, they all move at once.</P>
 <H2>Controlling the Local Transport</H2>
-<P>Coming soon...  Or maybe appearing in the Notation chapter...</P>
+<P>Coming soon... Or maybe appearing in the Notation chapter...</P>
 <H2>Suggested Uses</H2>
 <H3>Rolling a Chord</H3>
 <H3>Entering a Percussion Part</H3>

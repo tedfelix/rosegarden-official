@@ -1,0 +1,12 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+undef $/;
+
+while (<>) {
+        s|(<IMG.*)WIDTH\s*=\s*["']?\d+["']?\s(\s*.*?>)|$1$2|gis;
+        s|(<IMG.*)HEIGHT\s*=\s*["']?\d+["']?\s(\s*.*?>)|$1$2|gis;
+
+        print;
+}

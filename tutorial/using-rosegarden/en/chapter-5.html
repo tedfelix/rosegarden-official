@@ -17,7 +17,7 @@ A { text-decoration: none }
 --></STYLE>
 </HEAD>
 <BODY BGCOLOR="#ffffff" TEXT="#000000" LINK="#0000ff" VLINK="#0000ff" ALINK="#0000ff">
-<A HREF="index.html">Contents</A>
+<A HREF="chapter-0.html">Contents</A>
 <A HREF="chapter-4.html">Previous</A>
 <A HREF="chapter-6.html">Next</A>
 <HR>
@@ -34,11 +34,28 @@ A { text-decoration: none }
  scratch, you must first create an empty segment with the pencil tool,
  as I described in chapter 2, and then select it.</P>
 <H2><A NAME="7_1">7.1 The Event List Editor</A></H2>
-<P STYLE="border: none; padding: 0in">Out of the box, the Notation
- Editor is the default, but that is a chapter unto itself. For the
- moment, let us begin with the simplest of the three. Pick a segment,
- and then right click on it. Choose &quot;Open in Event List Editor&quot; from the
- resulting context menu.</P>
+<P STYLE="border: none; padding: 0in">The event list editor is for
+ editing the composition at the event level. This is the most raw of the
+ three edit views, and the most difficult editor to use.</P>
+<H3><A NAME="7_1_1">7.1.1 Events and Properties</A></H3>
+<P>Rosegarden is not a pure MIDI sequencer, and it does not store raw
+ MIDI events; instead, it uses its own internal format, which is both
+ more powerful and more flexible. There are many kinds of events in
+ Rosegarden. As you would expect, MIDI notes, controllers and the like
+ are events, but so are hairpins, dynamics, performance directions,
+ clefs and key signatures, etc. Each class of event has its own set of
+ unique properties.</P>
+<P>Here are just a few examples of types of events with a few their
+ properties. All of these can be edited from here in the event list
+ editor, although you probably will find little occasion to tear an
+ event apart and rearrange its insides.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="251" NAME="Graphic25"
+SRC="../pixmaps/some-events-diagram.jpg" WIDTH="418"></P>
+<P STYLE="border: none; padding: 0in">Out of the box, the notation
+ editor is the default, but that editor is a chapter unto itself. For
+ the moment, let us begin with the simplest of the three. Pick a
+ segment, and then right click on it. Choose &quot;Open in Event List Editor&quot;
+ from the resulting context menu.</P>
 <P ALIGN="CENTER" STYLE="border: none; padding: 0in"><IMG ALIGN="BOTTOM" BORDER="0"
 HEIGHT="244" NAME="Graphic1" SRC="../pixmaps/open-in-event-editor.png" WIDTH="196"></P>
 <P ALIGN="LEFT" STYLE="border: none; padding: 0in">If you've started
@@ -55,9 +72,23 @@ HEIGHT="213" NAME="Graphic3" SRC="../pixmaps/insert-event.png" WIDTH="185"></P>
 <P ALIGN="LEFT" STYLE="border: none; padding: 0in">Explaining its use is
  definitely best reserved for the future 500-page deluxe edition of this
  book. For the moment, let us move on to something more useful.</P>
-<H3><A NAME="7_1_1">7.1.1 Suggested Uses</A></H3>
-<H4><A NAME="7_1_1_1">7.1.1.1 Inserting a Mid-Composition Program Change</A>
+<H3><A NAME="7_1_2">7.1.2 Suggested Uses</A></H3>
+<H4><A NAME="7_1_2_1">7.1.2.1 Inserting a Mid-Composition Program Change</A>
 </H4>
+<P>One thing that can only be done from the event editor is the
+ insertion of a mid-track program change. This might be useful, for
+ example, if you wish to switch a string part from playing normally to
+ playing pizzicato and back without having to write the parts on
+ different tracks to assign them to different instruments.</P>
+<P>In version 1.0 of Rosegarden, the facility for entering program
+ changes is rather crude and unwieldy. It may see improvement in future
+ versions, but for the moment, the only mechanism provided is the entry
+ of program changes by number. This means you may not change the bank,
+ so you are limited to whatever bank is assigned to the instrument to
+ which the track you are writing for is assigned.</P>
+<P>
+<BR>
+<BR></P>
 <H2><A NAME="7_2">7.2 The Matrix Editor</A></H2>
 <P>The Matrix editor is based around the familiar piano roll metaphor
  you have probably seen in other packages. It is useful for taking a
@@ -252,7 +283,7 @@ SRC="../pixmaps/matrix-selected-controllers.png" WIDTH="139"></P>
 <H3><A NAME="7_4_1">7.4.1 Rolling a Chord</A></H3>
 <H3><A NAME="7_4_2">7.4.2 Entering a Percussion Part</A></H3>
 <HR>
-<A HREF="index.html">Contents</A>
+<A HREF="chapter-0.html">Contents</A>
 <A HREF="chapter-4.html">Previous</A>
 <A HREF="chapter-6.html">Next</A>
 </BODY>

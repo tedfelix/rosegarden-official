@@ -5,16 +5,20 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;311700">
-	<META NAME="CHANGED" CONTENT="20040805;2582700">
+	<META NAME="CHANGED" CONTENT="20040807;18575800">
+	<STYLE>
+	<!--
+		@page { size: 8.5in 11in }
+	-->
+	</STYLE>
 </HEAD>
 <BODY LANG="en-US" DIR="LTR">
 <H1>Managing Instruments (under construction)</H1>
 <P>You want to play a particular track using a hammered dulcimer, or
-else you've got an audio track that needs some EQ.  In either case,
-you need an introduction to the <B>instrument</B><SPAN STYLE="font-weight: medium">.
- Instruments are configured with the </SPAN><B>Instrument Parameters</B>
-box, and any number of tracks can be assigned to play via the same
-instrument.  
+else you've got an audio track that needs some EQ. In either case,
+you need an introduction to the <B>instrument</B>. Instruments are
+configured with the <B>Instrument Parameters</B> box, and any number
+of tracks can be assigned to play via the same instrument. 
 </P>
 <H2>Instruments</H2>
 <P>Rosegarden has yet another layer of abstraction between you and
@@ -32,22 +36,22 @@ the same purpose as MIDI channels, allowing you to configure up to 16
 different combinations of LADSPA plugins, volume and pan settings,
 programs (for synth plugins) and so forth, and then apply these
 combinations to any number of different tracks.</P>
-<P><IMG SRC="instrument-diagram/instrument-diagram.jpg" NAME="Graphic10" ALIGN=BOTTOM WIDTH=223 HEIGHT=255 BORDER=0></P>
-<P>A hammered dulcimer instrument.  All tracks assigned to play via
+<P><IMG SRC="../pixmaps/instrument-diagram.jpg" NAME="Graphic10" ALIGN=BOTTOM WIDTH=223 HEIGHT=255 BORDER=0></P>
+<P>A hammered dulcimer instrument. All tracks assigned to play via
 this instrument will play using the first output port on the Sound
 Blaster Live!, using program 16 from bank 0 0, with an initial volume
-of 100, and an initial reverb level of 97.  <I>(Notice that the
-instrument number and the channel number do not have to coincide.)</I><SPAN STYLE="font-style: normal">
- This instrument will show up as &quot;Sound Blaster Live! (1) #12
-(Hammered Dulcimer)&quot; on the menu.</SPAN></P>
-<P ALIGN=CENTER><IMG SRC="instrument-diagram/plugin-instrument-diagram.jpg" NAME="Graphic11" ALIGN=BOTTOM WIDTH=372 HEIGHT=205 BORDER=0></P>
-<P ALIGN=LEFT>This is a typical synth plugin instrument.  The sound
-it makes will depend on the synth plugin used, but all tracks
-assigned to play via this instrument will make the same sound.  Its
-output will be piped through the EQ and Reverb plugins, and this
-instrument will show up as &quot;Synth plugin #12&quot; on the menu.</P>
-<P ALIGN=RIGHT><IMG SRC="instrument-diagram/jack-instrument-diagram.jpg" NAME="Graphic12" ALIGN=BOTTOM WIDTH=264 HEIGHT=175 BORDER=0></P>
-<P ALIGN=LEFT>This is a typical audio instrument.  Any audio tracks
+of 100, and an initial reverb level of 97. <I>(Notice that the
+instrument number and the channel number do not have to coincide.)</I>
+This instrument will show up as &quot;Sound Blaster Live! (1) #12
+(Hammered Dulcimer)&quot; on the menu.</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/plugin-instrument-diagram.jpg" NAME="Graphic11" ALIGN=BOTTOM WIDTH=372 HEIGHT=205 BORDER=0></P>
+<P ALIGN=LEFT>This is a typical synth plugin instrument. The sound it
+makes will depend on the synth plugin used, but all tracks assigned
+to play via this instrument will make the same sound. Its output will
+be piped through the EQ and Reverb plugins, and this instrument will
+show up as &quot;Synth plugin #12&quot; on the menu.</P>
+<P ALIGN=RIGHT><IMG SRC="../pixmaps/jack-instrument-diagram.jpg" NAME="Graphic12" ALIGN=BOTTOM WIDTH=264 HEIGHT=175 BORDER=0></P>
+<P ALIGN=LEFT>This is a typical audio instrument. Any audio tracks
 assigned to play via this instrument will have their output piped
 through the EQ and Reverb plugins, and this instrument will show up
 as &quot;Audio #12&quot; on the menu.</P>

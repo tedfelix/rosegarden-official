@@ -14,9 +14,28 @@
 # with separate pixmaps by language in different directories, which is what
 # should eventually happen if this thing is done right...  sigh...
 
+error () {
+    echo "Something went awry with $1...  Investigate."
+    echo "Aborting..."
+    exit 1
+}
+
+splinf=$RANDOM
+
 for file in $1/*.html;do
-    sed s@SRC=\"@SRC=\"../pixmaps/@g $file > /tmp/$(basename $file)||exit 1
-    mv -f /tmp/$(basename $file) $file||exit 1
+#    sed s@SRC=\"@SRC=\"../pixmaps/@g $file > /tmp/$(basename $file)||exit 1
+#    mv -f /tmp/$(basename $file) $file||exit 1
+
+    # fix the broken pixmap path reset by HTMLDoc
+    perl -i -p -e 's@SRC=\"@SRC=\"../pixmaps/@g' $file     || error "fixing links"
+
+    # fix the broken links to an index.html that doesn't exist
+    perl -i -p -e 's@index\.html@chapter-0\.html@g' $file  || error "fixing index files"
+
+    # sed the HEIGHT and WIDTH tags out of the published web HTML
+#    ../admin/strip-tags $file > /tmp/$splinf               || error "stripping tags (A)"
+#    mv /tmp/$splinf $file                                  || error "stripping tags (B)"
+	
 done
 
 exit 0
