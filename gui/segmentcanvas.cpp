@@ -375,18 +375,23 @@ void SegmentNotationPreview::drawShape(QPainter& painter)
     painter.setPen(RosegardenGUIColours::SegmentInternalPreview);
     QRect viewportRect = painter.xFormDev(painter.viewport());
 
+    double scaleFactor = m_rulerScale->getXForTime(Rosegarden::Note(Rosegarden::Note::Crotchet).
+            getDuration()) / double(Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration());
+
     for (RectList::iterator i = m_previewInfo.begin();
 	 i != m_previewInfo.end(); ++i) {
 
         // draw rectangles, discarding those which are clipped
         //
         QRect p = *i;
-        int scaledX = int(m_rulerScale->getXForTime((*i).x()));
-        int scaledWidth = int(m_rulerScale->getXForTime((*i).width()));
-        if (!scaledWidth) scaledWidth = 1;
+        //int scaledX = int(m_rulerScale->getXForTime((*i).x()));
+        //int scaledWidth = int(m_rulerScale->getXForTime((*i).width()));
+        //if (!scaledWidth) scaledWidth = 1;
 
-        p.setX(scaledX);
-        p.setWidth(scaledWidth);
+        p.setX(int((double((*i).x()) * scaleFactor)));
+        p.setWidth(int((double((*i).width()) * scaleFactor)));
+
+        if (p.width() == 0) p.setWidth(1);
 
 	if (p.x() > (viewportRect.x() + viewportRect.width())) break;
         if ((p.x() + p.width()) >= viewportRect.x()) {
