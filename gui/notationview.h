@@ -41,6 +41,7 @@ class NotationTool;
 class NotationToolBox;
 class PositionCursor;
 class ActiveItem;
+class NoteActionData;
 
 /**
  * NotationView is a view for one or more Staff objects, each of
@@ -96,6 +97,11 @@ public:
     void setCurrentSelectedNote(const char *pixmapName,
                                 bool isRest, Rosegarden::Note::Type,
                                 int dots = 0);
+
+    /**
+     * Set the note or rest selected by the user from the toolbars
+     */
+    void setCurrentSelectedNote(NoteActionData);
 
     /**
      * Set the current event selection
@@ -206,46 +212,10 @@ public slots:
      */
     void slotToggleFontToolBar();
 
-    /// note switch slots
-    void slotBreve();
-    void slotWhole();
-    void slotHalf();
-    void slotQuarter();
-    void slot8th();
-    void slot16th();
-    void slot32nd();
-    void slot64th();
+    /// note switch slot
+    void slotNoteAction();
+
     void slotToggleTriplet();
-
-    /// dotted note switch slots
-    void slotDottedBreve();
-    void slotDottedWhole();
-    void slotDottedHalf();
-    void slotDottedQuarter();
-    void slotDotted8th();
-    void slotDotted16th();
-    void slotDotted32nd();
-    void slotDotted64th();
-
-    /// rest switch slots
-    void slotRBreve();
-    void slotRWhole();
-    void slotRHalf();
-    void slotRQuarter();
-    void slotR8th();
-    void slotR16th();
-    void slotR32nd();
-    void slotR64th();
-
-    /// dotted rest switch slots
-    void slotDottedRBreve();
-    void slotDottedRWhole();
-    void slotDottedRHalf();
-    void slotDottedRQuarter();
-    void slotDottedR8th();
-    void slotDottedR16th();
-    void slotDottedR32nd();
-    void slotDottedR64th();
 
     /// accidental switch slots
     void slotNoAccidental();
@@ -392,6 +362,10 @@ signals:
     void usedSelection();
 
 protected:
+    /**
+     * init the note action map
+     */
+    void initNoteActionDataMap();
 
     /**
      * save general Options like all bar positions and status as well
@@ -535,6 +509,9 @@ protected:
 
     KAction* m_selectDefaultNote;
 
+    typedef QMap<QString, NoteActionData> NoteActionDataMap;
+    
+    static NoteActionDataMap* m_noteActionDataMap;
 };
 
 #endif

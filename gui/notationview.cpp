@@ -93,6 +93,51 @@ using std::set;
 
 using namespace Rosegarden::BaseProperties;
 
+class NoteActionData
+{
+public:
+    NoteActionData();
+    NoteActionData(const QString& _title,
+               const char* _actionName,
+               const char* _pixmapName,
+               bool _rest,
+               Note::Type _noteType,
+               int _dots);
+    
+    QString title;
+    const char* actionName;
+    const char* pixmapName;
+    bool rest;
+    Note::Type noteType;
+    int dots;
+};
+
+NoteActionData::NoteActionData()
+    : actionName(0),
+      pixmapName(0),
+      rest(false),
+      noteType(0),
+      dots(0)
+{
+}
+
+
+NoteActionData::NoteActionData(const QString& _title,
+                       const char* _actionName,
+                       const char* _pixmapName,
+                       bool _rest,
+                       Note::Type _noteType,
+                       int _dots)
+    : title(i18n(_title)),
+      actionName(_actionName),
+      pixmapName(_pixmapName),
+      rest(_rest),
+      noteType(_noteType),
+      dots(_dots)
+{
+}
+
+
 //////////////////////////////////////////////////////////////////////
 
 NotationView::NotationView(RosegardenGUIDoc *doc,
@@ -115,6 +160,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontSizeSlider(0),
     m_selectDefaultNote(0)
 {
+    initNoteActionDataMap(); // does something only the 1st time it's called
+    
     m_toolBox = new NotationToolBox(this);
 
     assert(segments.size() > 0);
@@ -313,128 +360,25 @@ void NotationView::setupActions()
     // setup Notes menu & toolbar
     QIconSet icon;
  
-    //
-    // Notes
-    //
-    static const char* actionsNote[][3] = 
-        {   // i18n,     slotName,         action name,     
-            { "Breve",   "1slotBreve()",   "breve" },
-            { "Whole",   "1slotWhole()",   "whole_note" },
-            { "Half",    "1slotHalf()",    "half" },
-            { "Quarter", "1slotQuarter()", "quarter" },
-            { "8th",     "1slot8th()",     "8th" },
-            { "16th",    "1slot16th()",    "16th" },
-            { "32nd",    "1slot32nd()",    "32nd" },
-            { "64th",    "1slot64th()",    "64th" }
-        };
-   
-    for (unsigned int i = 0, noteType = Note::Longest;
-         i < 8; ++i, --noteType) {
+    for(NoteActionDataMap::Iterator actionDataIter = m_noteActionDataMap->begin();
+        actionDataIter != m_noteActionDataMap->end();
+        ++actionDataIter) {
 
-	string iconName = Note(noteType).getReferenceName();
+        NoteActionData noteActionData = *actionDataIter;
+        
+	string iconName = Note(noteActionData.noteType).getReferenceName();
         icon = QIconSet
 	    (m_toolbarNotePixmapFactory.makeToolbarPixmap(iconName.c_str()));
-        noteAction = new KRadioAction(i18n(actionsNote[i][0]), icon, 0, this,
-                                      actionsNote[i][1],
-                                      actionCollection(), actionsNote[i][2]);
+        noteAction = new KRadioAction(noteActionData.title, icon, 0, this,
+                                      SLOT(slotNoteAction()),
+                                      actionCollection(), noteActionData.actionName);
         noteAction->setExclusiveGroup("notes");
 
-        if (i == 3)
+        if (QString(noteActionData.actionName) == "quarter")
             m_selectDefaultNote = noteAction; // quarter is the default selected note
 
     }
-
-    //
-    // Dotted Notes
-    //
-    static const char* actionsDottedNote[][3] = 
-        {
-            { "Dotted Breve",   "1slotDottedBreve()",   "dotted_breve" },
-            { "Dotted Whole",   "1slotDottedWhole()",   "dotted_whole_note" },
-            { "Dotted Half",    "1slotDottedHalf()",    "dotted_half" },
-            { "Dotted Quarter", "1slotDottedQuarter()", "dotted_quarter" },
-            { "Dotted 8th",     "1slotDotted8th()",     "dotted_8th" },
-            { "Dotted 16th",    "1slotDotted16th()",    "dotted_16th" },
-            { "Dotted 32nd",    "1slotDotted32nd()",    "dotted_32nd" },
-            { "Dotted 64th",    "1slotDotted64th()",    "dotted_64th" }
-        };
-
-    for (unsigned int i = 0, noteType = Note::Longest;
-         i < 8; ++i, --noteType) {
-
-	string iconName = Note(noteType, 1).getReferenceName();
-        icon = QIconSet
-	    (m_toolbarNotePixmapFactory.makeToolbarPixmap(iconName.c_str()));
-        noteAction = new KRadioAction(i18n(actionsDottedNote[i][0]), icon, 0, this,
-                                      actionsDottedNote[i][1],
-                                      actionCollection(), actionsDottedNote[i][2]);
-        noteAction->setExclusiveGroup("notes");
-
-    }
-
-    // Tuplets
-
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("triplet"));
-    new KToggleAction(i18n("Triplet"), icon, 0,
-		      this, SLOT(slotToggleTriplet()),
-		      actionCollection(), "triplet");
-
-    //
-    // Rests
-    //
-    static const char* actionsRest[][3] = 
-        {
-            { "Breve Rest",   "1slotRBreve()",   "breve_rest" },
-            { "Whole Rest",   "1slotRWhole()",   "whole_note_rest" },
-            { "Half Rest",    "1slotRHalf()",    "half_rest" },
-            { "Quarter Rest", "1slotRQuarter()", "quarter_rest" },
-            { "8th Rest",     "1slotR8th()",     "8th_rest" },
-            { "16th Rest",    "1slotR16th()",    "16th_rest" },
-            { "32nd Rest",    "1slotR32nd()",    "32nd_rest" },
-            { "64th Rest",    "1slotR64th()",    "64th_rest" }
-        };
-
-    for (unsigned int i = 0, noteType = Note::Longest;
-         i < 8; ++i, --noteType) {
-
-	string iconName = Note(noteType).getReferenceName(true);
-        icon = QIconSet
-	    (m_toolbarNotePixmapFactory.makeToolbarPixmap(iconName.c_str()));
-        noteAction = new KRadioAction(i18n(actionsRest[i][0]), icon, 0, this,
-                                      actionsRest[i][1],
-                                      actionCollection(), actionsRest[i][2]);
-        noteAction->setExclusiveGroup("notes");
-
-    }
-
-    //
-    // Dotted Rests
-    //
-    static const char* actionsDottedRest[][3] = 
-        {
-            { "Dotted Breve Rest",   "1slotDottedRBreve()",   "dotted_breve_rest" },
-            { "Dotted Whole Rest",   "1slotDottedRWhole()",   "dotted_whole_note_rest" },
-            { "Dotted Half Rest",    "1slotDottedRHalf()",    "dotted_half_rest" },
-            { "Dotted Quarter Rest", "1slotDottedRQuarter()", "dotted_quarter_rest" },
-            { "Dotted 8th Rest",     "1slotDottedR8th()",     "dotted_8th_rest" },
-            { "Dotted 16th Rest",    "1slotDottedR16th()",    "dotted_16th_rest" },
-            { "Dotted 32nd Rest",    "1slotDottedR32nd()",    "dotted_32nd_rest" },
-            { "Dotted 64th Rest",    "1slotDottedR64th()",    "dotted_64th_rest" }
-        };
-
-    for (unsigned int i = 0, noteType = Note::Longest;
-         i < 8 && noteType > 0; ++i, --noteType) {
-
-	string iconName = Note(noteType, 1).getReferenceName(true);
-        icon = QIconSet
-	    (m_toolbarNotePixmapFactory.makeToolbarPixmap(iconName.c_str()));
-        noteAction = new KRadioAction(i18n(actionsDottedRest[i][0]), icon, 0, this,
-                                      actionsDottedRest[i][1],
-                                      actionCollection(), actionsDottedRest[i][2]);
-        noteAction->setExclusiveGroup("notes");
-
-    }
-
+    
     //
     // Accidentals
     //
@@ -1070,6 +1014,15 @@ void NotationView::setCurrentSelectedNote(const char *pixmapName,
     emit changeCurrentNote(rest, n);
 }
 
+void NotationView::setCurrentSelectedNote(NoteActionData noteAction)
+{
+    setCurrentSelectedNote(noteAction.pixmapName,
+                           noteAction.rest,
+                           noteAction.noteType,
+                           noteAction.dots);
+}
+
+
 void NotationView::setCurrentSelection(EventSelection* s)
 {
     if (m_currentEventSelection) {
@@ -1178,7 +1131,6 @@ void NotationView::slotEditPaste()
 {
     if (m_document->getClipboard()->isEmpty()) {
         slotStatusHelpMsg(i18n("Clipboard is empty"));
-        slotQuarter(); //!!!why?
         return;
     }
 
@@ -1203,7 +1155,6 @@ void NotationView::slotEditGeneralPaste()
 {
     if (m_document->getClipboard()->isEmpty()) {
         slotStatusHelpMsg(i18n("Clipboard is empty"));
-        slotQuarter(); //!!!why?
         return;
     }
 
@@ -1840,103 +1791,20 @@ NotationView::slotSetInsertCursorPosition(timeT time)
 //////////////////////////////////////////////////////////////////////
 
 //----------------------------------------
-// Notes
+// Notes & Rests
 //----------------------------------------
 
-void NotationView::slotBreve()
+void NotationView::slotNoteAction()
 {
-    kdDebug(KDEBUG_AREA) << "NotationView::slotBreve()\n";
-    setCurrentSelectedNote("breve", false, Note::Breve);
-}
+    const QObject* sigSender = sender();
 
-void NotationView::slotWhole()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotWhole()\n";
-    setCurrentSelectedNote("semibreve", false, Note::WholeNote);
-}
-
-void NotationView::slotHalf()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotHalf()\n";
-    setCurrentSelectedNote("minim", false, Note::HalfNote);
-}
-
-void NotationView::slotQuarter()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotQuarter()\n";
-    setCurrentSelectedNote("crotchet", false, Note::QuarterNote);
-}
-
-void NotationView::slot8th()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slot8th()\n";
-    setCurrentSelectedNote("quaver", false, Note::EighthNote);
-}
-
-void NotationView::slot16th()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slot16th()\n";
-    setCurrentSelectedNote("semiquaver", false, Note::SixteenthNote);
-}
-
-void NotationView::slot32nd()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slot32nd()\n";
-    setCurrentSelectedNote("demisemi", false, Note::ThirtySecondNote);
-}
-
-void NotationView::slot64th()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slot64th()\n";
-    setCurrentSelectedNote("hemidemisemi", false, Note::SixtyFourthNote);
-}
-
-void NotationView::slotDottedBreve()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedBreve()\n";
-    setCurrentSelectedNote("dotted-breve", false, Note::Breve, 1);
-}
-
-void NotationView::slotDottedWhole()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedWhole()\n";
-    setCurrentSelectedNote("dotted-semibreve", false, Note::WholeNote, 1);
-}
-
-void NotationView::slotDottedHalf()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedHalf()\n";
-    setCurrentSelectedNote("dotted-minim", false, Note::HalfNote, 1);
-}
-
-void NotationView::slotDottedQuarter()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedQuarter()\n";
-    setCurrentSelectedNote("dotted-crotchet", false, Note::QuarterNote, 1);
-}
-
-void NotationView::slotDotted8th()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotDotted8th()\n";
-    setCurrentSelectedNote("dotted-quaver", false, Note::EighthNote, 1);
-}
-
-void NotationView::slotDotted16th()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotDotted16th()\n";
-    setCurrentSelectedNote("dotted-semiquaver", false, Note::SixteenthNote, 1);
-}
-
-void NotationView::slotDotted32nd()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotDotted32nd()\n";
-    setCurrentSelectedNote("dotted-demisemi", false, Note::ThirtySecondNote, 1);
-}
-
-void NotationView::slotDotted64th()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotDotted64th()\n";
-    setCurrentSelectedNote("dotted-hemidemisemi", false, Note::SixtyFourthNote, 1);
+    NoteActionDataMap::Iterator noteAct = m_noteActionDataMap->find(sigSender->name());
+    
+    if (noteAct != m_noteActionDataMap->end())
+        setCurrentSelectedNote(*noteAct);
+    else
+        kdDebug(KDEBUG_AREA) << "NotationView::slotNoteAction() : couldn't find NoteActionData named '"
+                             << sigSender->name() << "'\n";
 }
 
 void NotationView::slotToggleTriplet()
@@ -1945,106 +1813,6 @@ void NotationView::slotToggleTriplet()
     
     m_tupletMode = !m_tupletMode;
     emit changeTupletMode(m_tupletMode);
-}
-
-//----------------------------------------
-// Rests
-//----------------------------------------
-
-void NotationView::slotRBreve()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotRBreve()\n";
-    setCurrentSelectedNote("rest-breve", true, Note::Breve);
-}
-
-void NotationView::slotRWhole()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotRWhole()\n";
-    setCurrentSelectedNote("rest-semibreve", true, Note::WholeNote);
-}
-
-void NotationView::slotRHalf()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotRHalf()\n";
-    setCurrentSelectedNote("rest-minim", true, Note::HalfNote);
-}
-
-void NotationView::slotRQuarter()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotRQuarter()\n";
-    setCurrentSelectedNote("rest-crotchet", true, Note::QuarterNote);
-}
-
-void NotationView::slotR8th()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotR8th()\n";
-    setCurrentSelectedNote("rest-quaver", true, Note::EighthNote);
-}
-
-void NotationView::slotR16th()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotR16th()\n";
-    setCurrentSelectedNote("rest-semiquaver", true, Note::SixteenthNote);
-}
-
-void NotationView::slotR32nd()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotR32nd()\n";
-    setCurrentSelectedNote("rest-demisemi", true, Note::ThirtySecondNote);
-}
-
-void NotationView::slotR64th()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotR64th()\n";
-    setCurrentSelectedNote("rest-hemidemisemi", true, Note::SixtyFourthNote);
-}
-
-void NotationView::slotDottedRBreve()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedRBreve()\n";
-    setCurrentSelectedNote("dotted-rest-breve", true, Note::Breve, 1);
-}
-
-void NotationView::slotDottedRWhole()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedRWhole()\n";
-    setCurrentSelectedNote("dotted-rest-semibreve", true, Note::WholeNote, 1);
-}
-
-void NotationView::slotDottedRHalf()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedRHalf()\n";
-    setCurrentSelectedNote("dotted-rest-minim", true, Note::HalfNote, 1);
-}
-
-void NotationView::slotDottedRQuarter()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedRQuarter()\n";
-    setCurrentSelectedNote("dotted-rest-crotchet", true, Note::QuarterNote, 1);
-}
-
-void NotationView::slotDottedR8th()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedR8th()\n";
-    setCurrentSelectedNote("dotted-rest-quaver", true, Note::EighthNote, 1);
-}
-
-void NotationView::slotDottedR16th()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedR16th()\n";
-    setCurrentSelectedNote("dotted-rest-semiquaver", true, Note::SixteenthNote, 1);
-}
-
-void NotationView::slotDottedR32nd()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedR32nd()\n";
-    setCurrentSelectedNote("dotted-rest-demisemi", true, Note::ThirtySecondNote, 1);
-}
-
-void NotationView::slotDottedR64th()
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::slotDottedR64th()\n";
-    setCurrentSelectedNote("dotted-rest-hemidemisemi", true, Note::SixtyFourthNote, 1);
 }
 
 //----------------------------------------
@@ -2373,3 +2141,61 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
     m_hoveredOverAbsoluteTime->setText(message);
 }
 
+void NotationView::initNoteActionDataMap()
+{
+    static bool called = false;
+    
+    if (called) return;
+
+    called = true;
+
+    m_noteActionDataMap = new NoteActionDataMap;
+
+    // Regular Notes
+    //
+    m_noteActionDataMap->insert("breve",      NoteActionData("Breve",   "breve",      "breve",        false, Note::Breve, 0));
+    m_noteActionDataMap->insert("whole_note", NoteActionData("Whole",   "whole_note", "semibreve",    false, Note::WholeNote, 0));
+    m_noteActionDataMap->insert("half",       NoteActionData("Half",    "half",       "minim",        false, Note::HalfNote, 0));
+    m_noteActionDataMap->insert("quarter",    NoteActionData("Quarter", "quarter",    "crotchet",     false, Note::QuarterNote, 0));
+    m_noteActionDataMap->insert("8th",        NoteActionData("8th",     "8th",        "quaver",       false, Note::EighthNote, 0));
+    m_noteActionDataMap->insert("16th",       NoteActionData("16th",    "16th",       "semiquaver",   false, Note::SixteenthNote, 0));
+    m_noteActionDataMap->insert("32nd",       NoteActionData("32nd",    "32nd",       "demisemi",     false, Note::ThirtySecondNote, 0));
+    m_noteActionDataMap->insert("64th",       NoteActionData("64th",    "64th",       "hemidemisemi", false, Note::SixtyFourthNote, 0));
+
+    // Dotted Notes
+    //
+    m_noteActionDataMap->insert("dotted_breve",      NoteActionData("Dotted Breve",   "dotted_breve",      "dotted-breve",        false, Note::Breve, 1));
+    m_noteActionDataMap->insert("dotted_whole_note", NoteActionData("Dotted Whole",   "dotted_whole_note", "dotted-semibreve",    false, Note::WholeNote, 1));
+    m_noteActionDataMap->insert("dotted_half",       NoteActionData("Dotted Half",    "dotted_half",       "dotted-minim",        false, Note::HalfNote, 1));
+    m_noteActionDataMap->insert("dotted_quarter",    NoteActionData("Dotted Quarter", "dotted_quarter",    "dotted-crotchet",     false, Note::QuarterNote, 1));
+    m_noteActionDataMap->insert("dotted_8th",        NoteActionData("Dotted 8th",     "dotted_8th",        "dotted-quaver",       false, Note::EighthNote, 1));
+    m_noteActionDataMap->insert("dotted_16th",       NoteActionData("Dotted 16th",    "dotted_16th",       "dotted-semiquaver",   false, Note::SixteenthNote, 1));
+    m_noteActionDataMap->insert("dotted_32nd",       NoteActionData("Dotted 32nd",    "dotted_32nd",       "dotted-demisemi",     false, Note::ThirtySecondNote, 1));
+    m_noteActionDataMap->insert("dotted_64th",       NoteActionData("Dotted 64th",    "dotted_64th",       "dotted-hemidemisemi", false, Note::SixtyFourthNote, 1));
+
+
+    // Rests
+    //
+    m_noteActionDataMap->insert("breve_rest",      NoteActionData("Breve Rest",   "breve_rest",      "rest-breve",        true, Note::Breve, 0));
+    m_noteActionDataMap->insert("whole_note_rest", NoteActionData("Whole Rest",   "whole_note_rest", "rest-semibreve",    true, Note::WholeNote, 0));
+    m_noteActionDataMap->insert("half_rest",       NoteActionData("Half Rest",    "half_rest",       "rest-minim",        true, Note::HalfNote, 0));
+    m_noteActionDataMap->insert("quarter_rest",    NoteActionData("Quarter Rest", "quarter_rest",    "rest-crotchet",     true, Note::QuarterNote, 0));
+    m_noteActionDataMap->insert("8th_rest",        NoteActionData("8th Rest",     "8th_rest",        "rest-quaver",       true, Note::EighthNote, 0));
+    m_noteActionDataMap->insert("16th_rest",       NoteActionData("16th Rest",    "16th_rest",       "rest-semiquaver",   true, Note::SixteenthNote, 0));
+    m_noteActionDataMap->insert("32nd_rest",       NoteActionData("32nd Rest",    "32nd_rest",       "rest-demisemi",     true, Note::ThirtySecondNote, 0));
+    m_noteActionDataMap->insert("64th_rest",       NoteActionData("64th Rest",    "64th_rest",       "rest-hemidemisemi", true, Note::SixtyFourthNote, 0));
+
+    // Dotted rests
+    //
+    m_noteActionDataMap->insert("dotted_breve_rest",      NoteActionData("Dotted Breve Rest",   "dotted_breve_rest",      "dotted-rest-breve",        true, Note::Breve, 1));
+    m_noteActionDataMap->insert("dotted_whole_note_rest", NoteActionData("Dotted Whole Rest",   "dotted_whole_note_rest", "dotted-rest-semibreve",    true, Note::WholeNote, 1));
+    m_noteActionDataMap->insert("dotted_half_rest",       NoteActionData("Dotted Half Rest",    "dotted_half_rest",       "dotted-rest-minim",        true, Note::HalfNote, 1));
+    m_noteActionDataMap->insert("dotted_quarter_rest",    NoteActionData("Dotted Quarter Rest", "dotted_quarter_rest",    "dotted-rest-crotchet",     true, Note::QuarterNote, 1));
+    m_noteActionDataMap->insert("dotted_8th_rest",        NoteActionData("Dotted 8th Rest",     "dotted_8th_rest",        "dotted-rest-quaver",       true, Note::EighthNote, 1));
+    m_noteActionDataMap->insert("dotted_16th_rest",       NoteActionData("Dotted 16th Rest",    "dotted_16th_rest",       "dotted-rest-semiquaver",   true, Note::SixteenthNote, 1));
+    m_noteActionDataMap->insert("dotted_32nd_rest",       NoteActionData("Dotted 32nd Rest",    "dotted_32nd_rest",       "dotted-rest-demisemi",     true, Note::ThirtySecondNote, 1));
+    m_noteActionDataMap->insert("dotted_64th_rest",       NoteActionData("Dotted 64th Rest",    "dotted_64th_rest",       "dotted-rest-hemidemisemi", true, Note::SixtyFourthNote, 1));
+}
+
+    
+NotationView::NoteActionDataMap* NotationView::m_noteActionDataMap = 0;
