@@ -52,6 +52,8 @@ public:
     
     void reinitialise(const std::vector<T> &sizes, T initialValue);
 
+    void setSize(T size);
+
     const T &getCurrentSize() const;
         
 protected:
@@ -105,6 +107,13 @@ const T &
 ZoomSlider<T>::getCurrentSize() const
 {
     return m_sizes[value()];
+}
+
+template <class T>
+void
+ZoomSlider<T>::setSize(T size)
+{
+    setValue(getIndex(m_sizes, size));
 }
 
 

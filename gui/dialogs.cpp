@@ -143,11 +143,11 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 	    if (m_atStartOfBar) {
 		scopeText = QString
 		    (i18n("Insertion point is at start of bar %1."))
-		    .arg(m_barNo);
+		    .arg(m_barNo + 1);
 	    } else {
 		scopeText = QString
 		    (i18n("Insertion point is in the middle of bar %1."))
-		    .arg(m_barNo);
+		    .arg(m_barNo + 1);
 	    }
 	} else {
 	    scopeText = QString
@@ -161,14 +161,14 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 	if (!m_atStartOfBar) {
 	    m_startOfBarButton = new QRadioButton
 		(i18n("Change time from start of bar %1")
-		 .arg(m_barNo), groupBox);
+		 .arg(m_barNo + 1), groupBox);
 	    m_startOfBarButton->setChecked(true);
 	} else {
 	    m_asGivenButton->setChecked(true);
 	}
     } else {
 	new QLabel(i18n("Time change will take effect at the start of bar %1.")
-		   .arg(barNo), groupBox);
+		   .arg(barNo + 1), groupBox);
     }
 
     groupBox = new QGroupBox(1, Horizontal, i18n("Options"), vbox);
