@@ -164,8 +164,8 @@ unsigned int CompositionModelImpl::getNbRows()
 }
 
 const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(const QRect& rect,
-                                                                             notationpreviewdata* npData,
-                                                                             audiopreviewdata* apData)
+                                                                             NotationPreviewData* npData,
+                                                                             AudioPreviewData* apData)
 {
     m_res.clear();
 
@@ -205,12 +205,12 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 
             // Notation preview data
             if (npData && s->getType() == Rosegarden::Segment::Internal) {
-                notationpreviewdata* cachedNPData = getNotationPreviewData(s);
+                NotationPreviewData* cachedNPData = getNotationPreviewData(s);
 
                 RG_DEBUG << "CompositionModelImpl::getRectanglesIn() : npData = "
                          << npData << " - rect = " << rect << endl;
 
-                notationpreviewdata::iterator npi = cachedNPData->lower_bound(rect),
+                NotationPreviewData::iterator npi = cachedNPData->lower_bound(rect),
                     npEnd = cachedNPData->end();
 
                 int xLim = rect.topRight().x();
@@ -299,7 +299,7 @@ void CompositionModelImpl::clearPreviewCache()
     m_audioPreviewDataCache.clear();
 }
 
-void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* segment, notationpreviewdata* npData)
+void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* segment, NotationPreviewData* npData)
 {
     Segment::iterator segEnd = segment->end();
     
@@ -339,38 +339,81 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
 
 }
 
-void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segment, audiopreviewdata* apData)
+void CompositionModelImpl::updatePreviewCacheForAudioSegment(const Segment* segment, AudioPreviewData* apData)
 {
     // TODO
 }
 
-CompositionModel::notationpreviewdata* CompositionModelImpl::getNotationPreviewData(const Rosegarden::Segment* s)
+CompositionModel::NotationPreviewData* CompositionModelImpl::getNotationPreviewData(const Rosegarden::Segment* s)
 {
-    notationpreviewdata* npData = m_notationPreviewDataCache[const_cast<Rosegarden::Segment*>(s)];
+    NotationPreviewData* npData = m_notationPreviewDataCache[const_cast<Rosegarden::Segment*>(s)];
+ 
+    if (!npData) {
+        npData = makeNotationPreviewDataCache(s);
+    }
     
     RG_DEBUG << "CompositionModelImpl::getNotationPreviewData() : get npData "
              << npData << " for segment " << s << endl;
+
     return npData;
 }
 
-CompositionModel::audiopreviewdata* CompositionModelImpl::getAudioPreviewData(const Rosegarden::Segment* s)
+CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(const Rosegarden::Segment* s)
 {
-    return m_audioPreviewDataCache[const_cast<Rosegarden::Segment*>(s)];
+    AudioPreviewData* apData = m_audioPreviewDataCache[const_cast<Rosegarden::Segment*>(s)];
+
+    if (!apData) {
+        apData = makeAudioPreviewDataCache(s);
+    }
+
+    return apData;
+}
+
+void CompositionModelImpl::eventAdded(const Rosegarden::Segment *s, Rosegarden::Event *)
+{
+    if (s->getType() == Rosegarden::Segment::Audio) {
+        AudioPreviewData* apData = getAudioPreviewData(s);
+        updatePreviewCacheForAudioSegment(s, apData);
+    } else {
+        NotationPreviewData* npData = getNotationPreviewData(s);
+        updatePreviewCacheForNotationSegment(s, npData);
+    }
+}
+
+void CompositionModelImpl::eventRemoved(const Rosegarden::Segment *s, Rosegarden::Event *)
+{
+    if (s->getType() == Rosegarden::Segment::Audio) {
+        makeAudioPreviewDataCache(s);
+    } else {
+        makeNotationPreviewDataCache(s);
+    }
 }
 
 void CompositionModelImpl::segmentAdded(const Composition *, Segment *s) 
 {
     if (s->getType() == Rosegarden::Segment::Audio) {
-        audiopreviewdata* apData = new audiopreviewdata();
-        updatePreviewCacheForAudioSegment(s, apData);
-        m_audioPreviewDataCache.insert(s, apData);
+        makeAudioPreviewDataCache(s);
     } else {
-        notationpreviewdata* npData = new notationpreviewdata();
-        updatePreviewCacheForNotationSegment(s, npData);
-        RG_DEBUG << "CompositionModelImpl::segmentAdded() : insert npData "
-                 << npData << " for segment " << s << endl;
-        m_notationPreviewDataCache.insert(s, npData);
+        makeNotationPreviewDataCache(s);
     }
+}
+
+CompositionModel::NotationPreviewData* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
+{
+    NotationPreviewData* npData = new NotationPreviewData();
+    updatePreviewCacheForNotationSegment(s, npData);
+    m_notationPreviewDataCache.insert(const_cast<Segment*>(s), npData);
+
+    return npData;
+}
+
+CompositionModel::AudioPreviewData* CompositionModelImpl::makeAudioPreviewDataCache(const Segment *s)
+{
+    AudioPreviewData* apData = new AudioPreviewData();
+    updatePreviewCacheForAudioSegment(s, apData);
+    m_audioPreviewDataCache.insert(const_cast<Segment*>(s), apData);
+
+    return apData;
 }
 
 void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
@@ -381,7 +424,6 @@ void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
         m_audioPreviewDataCache.remove(s);
     }
 }
-
 
 void CompositionModelImpl::setSelectionRect(const QRect& r)
 {
@@ -946,8 +988,8 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
 
     RG_DEBUG << "CompositionView::drawContents() clipRect = " << clipRect << endl;
 
-    CompositionModel::audiopreviewdata*    audioPreviewData = 0;
-    CompositionModel::notationpreviewdata* notationPreviewData = 0;
+    CompositionModel::AudioPreviewData*    audioPreviewData = 0;
+    CompositionModel::NotationPreviewData* notationPreviewData = 0;
 
     if (m_showPreviews) {
         notationPreviewData = &m_notationPreviewData;
@@ -983,15 +1025,15 @@ void CompositionView::drawContents(QPainter *p, int clipx, int clipy, int clipw,
     }
 
     if (m_showPreviews) {
-        CompositionModel::audiopreviewdata::const_iterator api = m_audioPreviewData.begin();
-        CompositionModel::audiopreviewdata::const_iterator apEnd = m_audioPreviewData.end();
+        CompositionModel::AudioPreviewData::const_iterator api = m_audioPreviewData.begin();
+        CompositionModel::AudioPreviewData::const_iterator apEnd = m_audioPreviewData.end();
         
         for(; api != apEnd; ++api) {
             // TODO
         }
 
-        CompositionModel::notationpreviewdata::const_iterator npi = m_notationPreviewData.begin();
-        CompositionModel::notationpreviewdata::const_iterator npEnd = m_notationPreviewData.end();
+        CompositionModel::NotationPreviewData::const_iterator npi = m_notationPreviewData.begin();
+        CompositionModel::NotationPreviewData::const_iterator npEnd = m_notationPreviewData.end();
         
         for(; npi != npEnd; ++npi) {
             RG_DEBUG << "CompositionView::drawContents : draw preview rect " << *npi << endl;

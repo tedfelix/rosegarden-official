@@ -661,24 +661,24 @@ public:
     /**
      * Called after the event has been added to the segment
      */
-    virtual void eventAdded(const Segment *, Event *) = 0;
+    virtual void eventAdded(const Segment *, Event *) { }
 
     /**
      * Called after the event has been removed from the segment,
      * and just before it is deleted
      */
-    virtual void eventRemoved(const Segment *, Event *) = 0;
+    virtual void eventRemoved(const Segment *, Event *) { }
 
     /**
      * Called after the segment's end marker time has been
      * changed
      */
-    virtual void endMarkerTimeChanged(const Segment *, bool shorten) = 0;
+    virtual void endMarkerTimeChanged(const Segment *, bool shorten) { }
 
     /**
      * Called from the segment dtor
      */
-    virtual void segmentDeleted(const Segment *) = 0;
+    virtual void segmentDeleted(const Segment *) { }
 };
 
 
