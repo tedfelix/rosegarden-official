@@ -54,7 +54,7 @@ class TrackTool;
 class TracksCanvas : public QCanvasView
 {
     Q_OBJECT
-    
+
 public:
     enum ToolType { Pencil, Eraser, Mover };
     
@@ -85,8 +85,11 @@ public:
     };
 
     const SnapGrid& grid() const { return m_grid; }
+    const QBrush& brush() const { return *m_brush; }
+    const QPen& pen() const { return *m_pen; }
 
     TrackPartItem* addPartItem(int x, int y, unsigned int nbBars);
+    TrackPartItem* findPartClickedOn(QPoint);
 
 public slots:
     void setTool(TracksCanvas::ToolType);
@@ -98,17 +101,15 @@ protected:
     void contentsMouseMoveEvent(QMouseEvent*);
     virtual void wheelEvent(QWheelEvent*);
 
-    TrackPartItem* findPartClickedOn(QPoint);
-
 protected slots:
 /**
  * connected to the 'Edit' item of the popup menu - re-emits
  * editTrackPart(TrackPart*)
  */
-void onEdit();
+    void onEdit();
     void onEditSmall();
 
-    signals:
+signals:
     void addTrackPart(TrackPart*);
     void deleteTrackPart(TrackPart*);
     void editTrackPart(TrackPart*);
@@ -117,9 +118,6 @@ void onEdit();
 private:
     ToolType m_toolType;
     TrackTool *m_tool;
-
-    bool m_newRect;
-    bool m_editMenuOn;
 
     SnapGrid m_grid;
 
@@ -162,7 +160,7 @@ protected:
     TrackPartItem *m_canvasPartItem;
 };
 
-class TrackTool 
+class TrackTool : public QObject
 {
 public:
     TrackTool(TracksCanvas*);
@@ -170,7 +168,7 @@ public:
 
     virtual void handleMouseButtonPress(QMouseEvent*) = 0;
     virtual void handleMouseButtonRelase(QMouseEvent*) = 0;
-    virtual void handleMouseButtonMove(QMouseEvent*) = 0;
+    virtual void handleMouseMove(QMouseEvent*) = 0;
 
 protected:
     TracksCanvas *m_canvas;
@@ -178,22 +176,34 @@ protected:
 
 class TrackPencil : public TrackTool
 {
+    Q_OBJECT
 public:
     TrackPencil(TracksCanvas*);
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelase(QMouseEvent*);
-    virtual void handleMouseButtonMove(QMouseEvent*);
+    virtual void handleMouseMove(QMouseEvent*);
+
+signals:
+    void addTrackPart(TrackPart*);
+
+protected:
+    TrackPartItem* m_currentItem;
+    bool m_newRect;
 };
 
 class TrackEraser : public TrackTool
 {
+    Q_OBJECT
 public:
     TrackEraser(TracksCanvas*);
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelase(QMouseEvent*);
-    virtual void handleMouseButtonMove(QMouseEvent*);
+    virtual void handleMouseMove(QMouseEvent*);
+
+signals:
+    void eraseTrackPart(TrackPart*);
 };
 
 class TrackMover : public TrackTool
@@ -203,7 +213,7 @@ public:
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelase(QMouseEvent*);
-    virtual void handleMouseButtonMove(QMouseEvent*);
+    virtual void handleMouseMove(QMouseEvent*);
 };
 
 

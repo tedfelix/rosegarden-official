@@ -88,8 +88,6 @@ TracksCanvas::TracksCanvas(int gridH, int gridV,
     QCanvasView(&c,parent,name,f),
     m_toolType(Pencil),
     m_tool(new TrackPencil(this)),
-    m_newRect(false),
-    m_editMenuOn(false),
     m_grid(gridH, gridV),
     m_brush(new QBrush(Qt::blue)),
     m_pen(new QPen(Qt::black)),
@@ -157,44 +155,11 @@ TracksCanvas::findPartClickedOn(QPoint pos)
 void
 TracksCanvas::contentsMousePressEvent(QMouseEvent* e)
 {
-    m_newRect = false;
-    m_currentItem = 0;
+    if (e->button() == LeftButton) { // delegate event handling to tool
 
-    if (e->button() == LeftButton) {
-
-        m_editMenuOn = false;
-
-        // Check if we're clicking on a rect
-        //
-        TrackPartItem *item = findPartClickedOn(e->pos());
-
-        if (item) {
-             // we are, so set currentItem to it
-            m_currentItem = item;
-            return;
-
-        } else { // we are not, so create one
-
-            int gx = m_grid.snapX(e->pos().x()),
-                gy = m_grid.snapY(e->pos().y());
-
-            m_currentItem = new TrackPartItem(gx, gy,
-                                              m_grid.hstep(),
-                                              m_grid.vstep(),
-                                              canvas());
-
-            m_currentItem->setPen(*m_pen);
-            m_currentItem->setBrush(*m_brush);
-            m_currentItem->setVisible(true);
-
-            m_newRect = true;
-
-            update();
-        }
+        m_tool->handleMouseButtonPress(e);
 
     } else if (e->button() == RightButton) { // popup menu if over a part
-
-        m_editMenuOn = true;
 
         TrackPartItem *item = findPartClickedOn(e->pos());
 
@@ -208,53 +173,14 @@ TracksCanvas::contentsMousePressEvent(QMouseEvent* e)
     }
 }
 
-void TracksCanvas::contentsMouseReleaseEvent(QMouseEvent*)
+void TracksCanvas::contentsMouseReleaseEvent(QMouseEvent *e)
 {
-    if (!m_currentItem) return;
-
-    if (m_currentItem->width() == 0) {
-        kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : rect deleted"
-                             << endl;
-        // delete m_currentItem; - TODO emit signal
-    }
-
-    if (m_newRect) {
-
-        TrackPart *newPart = new TrackPart(m_currentItem, gridHStep());
-
-        emit addTrackPart(newPart);
-
-    } else {
-        kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : shorten m_currentItem = "
-                                 << m_currentItem << endl;
-        // readjust size of corresponding track
-        TrackPart *part = m_currentItem->part();
-        part->updateLength();
-    }
-
-
-    m_currentItem = 0;
+    if (e->button() == LeftButton) m_tool->handleMouseButtonRelase(e);
 }
 
 void TracksCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 {
-
-    if ( m_currentItem ) {
-
-//         qDebug("Enlarging rect. to h = %d, v = %d",
-//                gpos.x() - m_currentItem->rect().x(),
-//                gpos.y() - m_currentItem->rect().y());
-
-        kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseMoveEvent() : changing current Item size\n";
-
-        if (m_editMenuOn) {
-            kdDebug(KDEBUG_AREA) << "break here\n";
-        }
-        
-	m_currentItem->setSize(m_grid.snapX(e->pos().x()) - m_currentItem->rect().x(),
-                               m_currentItem->rect().height());
-	canvas()->update();
-    }
+    m_tool->handleMouseMove(e);
 }
 
 void
@@ -319,21 +245,94 @@ TrackTool::~TrackTool()
 //////////////////////////////
 
 TrackPencil::TrackPencil(TracksCanvas *c)
-    : TrackTool(c)
+    : TrackTool(c),
+      m_currentItem(0),
+      m_newRect(false)
 {
+    connect(this, SIGNAL(addTrackPart(TrackPart*)),
+            c,    SIGNAL(addTrackPart(TrackPart*)));
+
     kdDebug(KDEBUG_AREA) << "TrackPencil()\n";
 }
 
 void TrackPencil::handleMouseButtonPress(QMouseEvent *e)
 {
+    m_newRect = false;
+    m_currentItem = 0;
+
+    // Check if we're clicking on a rect
+    //
+    TrackPartItem *item = m_canvas->findPartClickedOn(e->pos());
+
+    if (item) {
+        // we are, so set currentItem to it
+        m_currentItem = item;
+        return;
+
+    } else { // we are not, so create one
+
+        int gx = m_canvas->grid().snapX(e->pos().x()),
+            gy = m_canvas->grid().snapY(e->pos().y());
+
+        m_currentItem = new TrackPartItem(gx, gy,
+                                          m_canvas->grid().hstep(),
+                                          m_canvas->grid().vstep(),
+                                          m_canvas->canvas());
+        
+        m_currentItem->setPen(m_canvas->pen());
+        m_currentItem->setBrush(m_canvas->brush());
+        m_currentItem->setVisible(true);
+
+        m_newRect = true;
+
+        m_canvas->update();
+    }
+
 }
 
-void TrackPencil::handleMouseButtonRelase(QMouseEvent *e)
+void TrackPencil::handleMouseButtonRelase(QMouseEvent*)
 {
+    if (!m_currentItem) return;
+
+    if (m_currentItem->width() == 0) {
+        kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : rect deleted"
+                             << endl;
+        // delete m_currentItem; - TODO emit signal
+    }
+
+    if (m_newRect) {
+
+        TrackPart *newPart = new TrackPart(m_currentItem,
+                                           m_canvas->gridHStep());
+
+        emit addTrackPart(newPart);
+
+    } else {
+        kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : shorten m_currentItem = "
+                             << m_currentItem << endl;
+        // readjust size of corresponding track
+        TrackPart *part = m_currentItem->part();
+        part->updateLength();
+    }
+
+
+    m_currentItem = 0;
 }
 
-void TrackPencil::handleMouseButtonMove(QMouseEvent *e)
+void TrackPencil::handleMouseMove(QMouseEvent *e)
 {
+    if ( m_currentItem ) {
+
+        //         qDebug("Enlarging rect. to h = %d, v = %d",
+        //                gpos.x() - m_currentItem->rect().x(),
+        //                gpos.y() - m_currentItem->rect().y());
+
+        kdDebug(KDEBUG_AREA) << "TracksPencil::handleMouseMove() : changing current Item size\n";
+
+	m_currentItem->setSize(m_canvas->grid().snapX(e->pos().x()) - m_currentItem->rect().x(),
+                               m_currentItem->rect().height());
+	m_canvas->canvas()->update();
+    }
 }
 
 //////////////////////////////
@@ -346,15 +345,15 @@ TrackEraser::TrackEraser(TracksCanvas *c)
     kdDebug(KDEBUG_AREA) << "TrackEraser()\n";
 }
 
-void TrackEraser::handleMouseButtonPress(QMouseEvent *e)
+void TrackEraser::handleMouseButtonPress(QMouseEvent*)
 {
 }
 
-void TrackEraser::handleMouseButtonRelase(QMouseEvent *e)
+void TrackEraser::handleMouseButtonRelase(QMouseEvent*)
 {
 }
 
-void TrackEraser::handleMouseButtonMove(QMouseEvent *e)
+void TrackEraser::handleMouseMove(QMouseEvent*)
 {
 }
 
@@ -368,15 +367,15 @@ TrackMover::TrackMover(TracksCanvas *c)
     kdDebug(KDEBUG_AREA) << "TrackMover()\n";
 }
 
-void TrackMover::handleMouseButtonPress(QMouseEvent *e)
+void TrackMover::handleMouseButtonPress(QMouseEvent*)
 {
 }
 
-void TrackMover::handleMouseButtonRelase(QMouseEvent *e)
+void TrackMover::handleMouseButtonRelase(QMouseEvent*)
 {
 }
 
-void TrackMover::handleMouseButtonMove(QMouseEvent *e)
+void TrackMover::handleMouseMove(QMouseEvent*)
 {
 }
 
