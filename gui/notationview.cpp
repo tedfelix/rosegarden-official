@@ -131,7 +131,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     tCanvas->resize(width() * 2, height() * 2);
     
     setCanvasView(new NotationCanvasView(*this, m_horizontalScrollBar,
-                                         tCanvas, m_centralFrame));
+                                         tCanvas, getCentralFrame()));
 
     //
     // Connect signals
@@ -204,7 +204,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
 
     m_topBarButtons = new BarButtons(m_hlayout, 25,
-                                     false, m_centralFrame);
+                                     false, getCentralFrame());
     setTopBarButtons(m_topBarButtons);
 
     QObject::connect
@@ -216,13 +216,13 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	(RosegardenGUIColours::InsertCursorRuler);
 
     m_chordNameRuler = new ChordNameRuler
-	(m_hlayout, &doc->getComposition(), 20, m_centralFrame);
+	(m_hlayout, &doc->getComposition(), 20, getCentralFrame());
     addRuler(m_chordNameRuler);
     m_chordNameRuler->hide();
     m_chordNamesVisible = false;
 
     m_bottomBarButtons = new BarButtons(m_hlayout, 25,
-                                        true, m_centralFrame);
+                                        true, getCentralFrame());
     setBottomBarButtons(m_bottomBarButtons);
 
     m_bottomBarButtons->connectRulerToDocPointer(doc);

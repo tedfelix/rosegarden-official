@@ -84,7 +84,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     MatrixCanvasView *canvasView =
 	new MatrixCanvasView(*m_staffs[0], m_horizontalScrollBar,
-                             tCanvas, m_centralFrame);
+                             tCanvas, getCentralFrame());
     setCanvasView(canvasView);
 
     QObject::connect
@@ -127,7 +127,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     }
 
     BarButtons *topBarButtons = new BarButtons(m_hlayout, 25,
-                                               false, m_centralFrame);
+                                               false, getCentralFrame());
     setTopBarButtons(topBarButtons);
 
     QObject::connect
@@ -139,7 +139,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	(RosegardenGUIColours::InsertCursorRuler);
 
     BarButtons *bottomBarButtons = new BarButtons(m_hlayout, 25,
-                                                  true, m_centralFrame);
+                                                  true, getCentralFrame());
     bottomBarButtons->connectRulerToDocPointer(doc);
     setBottomBarButtons(bottomBarButtons);
 }

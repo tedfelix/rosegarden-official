@@ -250,6 +250,8 @@ protected:
     virtual QCanvasView* getCanvasView();
     virtual void setCanvasView(QCanvasView *cv);
 
+    QFrame* getCentralFrame() { return m_centralFrame; }
+
     //--------------- Data members ---------------------------------
 
     KConfig* m_config;
