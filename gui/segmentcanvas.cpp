@@ -46,10 +46,11 @@ using Rosegarden::SnapGrid;
 //////////////////////////////////////////////////////////////////////
 
 SegmentItem::SegmentItem(int y, timeT startTime, timeT duration,
-			 RulerScale *rulerScale, QCanvas *canvas) :
-    QCanvasRectangle(rulerScale->getXForTime(startTime), y, 
-		     rulerScale->getWidthForDuration(startTime, duration),
-		     m_itemHeight, canvas),
+                         RulerScale *rulerScale, QCanvas *canvas) :
+    QCanvasRectangle((int)rulerScale->getXForTime(startTime),
+                     y, 
+                     (int)rulerScale->getWidthForDuration(startTime, duration),
+                     m_itemHeight, canvas),
     m_segment(0),
     m_startTime(startTime),
     m_duration(duration),
@@ -60,11 +61,13 @@ SegmentItem::SegmentItem(int y, timeT startTime, timeT duration,
 }
 
 SegmentItem::SegmentItem(int y, Segment *segment,
-			 RulerScale *rulerScale, QCanvas *canvas) :
-    QCanvasRectangle(rulerScale->getXForTime(segment->getStartTime()), y,
-		     rulerScale->getWidthForDuration(segment->getStartTime(),
-						     segment->getDuration()),
-		     m_itemHeight, canvas),
+                         RulerScale *rulerScale, QCanvas *canvas) :
+    QCanvasRectangle((int)rulerScale->getXForTime(segment->getStartTime()),
+                     y,
+                     (int)rulerScale->
+                          getWidthForDuration(segment->getStartTime(),
+                                              segment->getDuration()),
+                     m_itemHeight, canvas),
     m_segment(segment),
     m_startTime(segment->getStartTime()),
     m_duration(segment->getDuration()),
@@ -89,8 +92,8 @@ SegmentItem::setSegment(Segment *segment)
     m_duration = segment->getDuration();
 
     setX(m_rulerScale->getXForTime(m_startTime));
-    setSize
-	(m_rulerScale->getWidthForDuration(m_startTime, m_duration), height());
+    setSize((int)m_rulerScale->getWidthForDuration(m_startTime, m_duration),
+            height());
 }
 
 void
@@ -104,16 +107,16 @@ void
 SegmentItem::setDuration(timeT d)
 {
     m_duration = d;
-    setSize
-	(m_rulerScale->getWidthForDuration(m_startTime, m_duration), height());
+    setSize((int)m_rulerScale->getWidthForDuration(m_startTime, m_duration),
+            height());
 }
 
 void
 SegmentItem::recalculateRectangle()
 {
     setX(m_rulerScale->getXForTime(m_startTime));
-    setSize
-	(m_rulerScale->getWidthForDuration(m_startTime, m_duration), height());
+    setSize((int)m_rulerScale->getWidthForDuration(m_startTime, m_duration),
+            height());
 }
 
 void
@@ -210,6 +213,13 @@ SegmentCanvas::setTool(ToolType t)
     case Selector:
         m_tool = new SegmentSelector(this);
         break;
+    case Splitter:
+        m_tool = new SegmentSplitter(this);
+        break;
+    case Joiner:
+        m_tool = new SegmentJoiner(this);
+        break;
+
     default:
         KMessageBox::error(0, QString("SegmentCanvas::setTool() : unknown tool id %1").arg(t));
     }
@@ -797,7 +807,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
     if (item)
     {
         m_currentItem = item;
-	m_clickPoint = e->pos();
+        m_clickPoint = e->pos();
         selectSegmentItem(m_currentItem);
         emit updateSegmentTrackAndStartTime(m_currentItem);
     }
@@ -812,8 +822,8 @@ SegmentSelector::selectSegmentItem(SegmentItem *selectedItem)
     //
     selectedItem->setSelected(true, m_canvas->getHighlightBrush());
     m_selectedItems.push_back(SegmentItemPair
-			      (QPoint(selectedItem->x(), selectedItem->y()),
-			       selectedItem));
+                 (QPoint((int)selectedItem->x(), (int)selectedItem->y()),
+                  selectedItem));
     m_canvas->canvas()->update();
 }
 
@@ -862,4 +872,60 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	}
     }
 }
+
+SegmentSplitter::SegmentSplitter(SegmentCanvas *c)
+    : SegmentTool(c)
+{
+    kdDebug(KDEBUG_AREA) << "SegmentSplitter()\n";
+}
+
+SegmentSplitter::~SegmentSplitter()
+{
+}
+
+void
+SegmentSplitter::handleMouseButtonPress(QMouseEvent*)
+{
+}
+
+void
+SegmentSplitter::handleMouseButtonRelease(QMouseEvent*)
+{
+}
+
+
+void
+SegmentSplitter::handleMouseMove(QMouseEvent*)
+{
+}
+
+
+SegmentJoiner::SegmentJoiner(SegmentCanvas *c)
+    : SegmentTool(c)
+{
+    kdDebug(KDEBUG_AREA) << "SegmentJoiner()\n";
+}
+
+SegmentJoiner::~SegmentJoiner()
+{
+}
+
+void
+SegmentJoiner::handleMouseButtonPress(QMouseEvent*)
+{
+}
+
+void
+SegmentJoiner::handleMouseButtonRelease(QMouseEvent*)
+{
+}
+
+
+void
+SegmentJoiner::handleMouseMove(QMouseEvent*)
+{
+}
+
+
+
 

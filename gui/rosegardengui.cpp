@@ -201,6 +201,18 @@ void RosegardenGUIApp::setupActions()
                               actionCollection(), "resize");
     action->setExclusiveGroup("segmenttools");
 
+    action = new KRadioAction(i18n("&Split"), "wizard",
+                              0,
+                              this, SLOT(splitSelected()),
+                              actionCollection(), "split");
+    action->setExclusiveGroup("segmenttools");
+
+    action = new KRadioAction(i18n("&Join"), "wizard",
+                              0,
+                              this, SLOT(joinSelected()),
+                              actionCollection(), "join");
+    action->setExclusiveGroup("segmenttools");
+
     new KAction(i18n("Change &Time Resolution..."), 
                 0,
                 this, SLOT(slotChangeTimeResolution()),
@@ -935,30 +947,40 @@ void RosegardenGUIApp::statusHelpMsg(const QString &text)
 
 void RosegardenGUIApp::pointerSelected()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::pointerSelected\n";
-             
-    m_view->pointerSelected();
+    m_view->selectTool(SegmentCanvas::Selector);
 }
 
 void RosegardenGUIApp::eraseSelected()
 {
-    m_view->eraseSelected();
+    m_view->selectTool(SegmentCanvas::Eraser);
 }
 
 void RosegardenGUIApp::drawSelected()
 {
-    m_view->drawSelected();
+    m_view->selectTool(SegmentCanvas::Pencil);
 }
 
 void RosegardenGUIApp::moveSelected()
 {
-    m_view->moveSelected();
+    m_view->selectTool(SegmentCanvas::Mover);
 }
 
 void RosegardenGUIApp::resizeSelected()
 {
-    m_view->resizeSelected();
+    m_view->selectTool(SegmentCanvas::Resizer);
 }
+
+void RosegardenGUIApp::joinSelected()
+{
+    m_view->selectTool(SegmentCanvas::Joiner);
+}
+
+void RosegardenGUIApp::splitSelected()
+{
+    m_view->selectTool(SegmentCanvas::Splitter);
+}
+
+
 
 #include <qlayout.h>
 #include <qspinbox.h>

@@ -128,7 +128,14 @@ class SegmentCanvas : public QCanvasView
 
 public:
     /// Available tools
-    enum ToolType { NoTool, Pencil, Eraser, Mover, Resizer, Selector };
+    enum ToolType { NoTool,
+                    Pencil,
+                    Eraser,
+                    Mover,
+                    Resizer,
+                    Selector,
+                    Joiner,
+                    Splitter };
 
     SegmentCanvas(Rosegarden::RulerScale *, int vStep, QCanvas&,
 		  QWidget* parent=0, const char* name=0, WFlags f=0);
@@ -421,5 +428,32 @@ private:
     bool m_segmentCopyMode;
     QPoint m_clickPoint;
 };
+
+
+class SegmentSplitter : public SegmentTool
+{
+    Q_OBJECT
+public:
+    SegmentSplitter(SegmentCanvas*);
+    virtual ~SegmentSplitter();
+
+    virtual void handleMouseButtonPress(QMouseEvent*);
+    virtual void handleMouseButtonRelease(QMouseEvent*);
+    virtual void handleMouseMove(QMouseEvent*);
+};
+
+class SegmentJoiner : public SegmentTool
+{
+    Q_OBJECT
+public:
+    SegmentJoiner(SegmentCanvas*);
+    virtual ~SegmentJoiner();
+
+    virtual void handleMouseButtonPress(QMouseEvent*);
+    virtual void handleMouseButtonRelease(QMouseEvent*);
+    virtual void handleMouseMove(QMouseEvent*);
+};
+
+
 
 #endif

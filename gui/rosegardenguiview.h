@@ -88,29 +88,9 @@ public:
     // RosegardenGUIApp
 
     /**
-     * segment selector mode
+     * Select a tool at the SegmentCanvas
      */
-    void pointerSelected();
-    
-    /**
-     * segment eraser tool is selected
-     */
-    void eraseSelected();
-    
-    /**
-     * segment draw tool is selected
-     */
-    void drawSelected();
-    
-    /**
-     * segment move tool is selected
-     */
-    void moveSelected();
-
-    /**
-     * segment resize tool is selected
-     */
-    void resizeSelected();
+    void selectTool(SegmentCanvas::ToolType tool);
 
     /**
      * Edit all the segment at once

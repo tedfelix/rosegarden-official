@@ -253,30 +253,9 @@ void RosegardenGUIView::print(KPrinter *pPrinter, Rosegarden::Composition* p)
     printpainter.end();
 }
 
-void RosegardenGUIView::pointerSelected()
+void RosegardenGUIView::selectTool(SegmentCanvas::ToolType tool)
 {
-    m_trackEditor->getSegmentCanvas()->setTool(SegmentCanvas::Selector);
-}
-
-
-void RosegardenGUIView::drawSelected()
-{
-    m_trackEditor->getSegmentCanvas()->setTool(SegmentCanvas::Pencil);
-}
-
-void RosegardenGUIView::eraseSelected()
-{
-    m_trackEditor->getSegmentCanvas()->setTool(SegmentCanvas::Eraser);
-}
-
-void RosegardenGUIView::moveSelected()
-{
-    m_trackEditor->getSegmentCanvas()->setTool(SegmentCanvas::Mover);
-}
-
-void RosegardenGUIView::resizeSelected()
-{
-    m_trackEditor->getSegmentCanvas()->setTool(SegmentCanvas::Resizer);
+    m_trackEditor->getSegmentCanvas()->setTool(tool);
 }
 
 

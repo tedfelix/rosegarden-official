@@ -4,8 +4,6 @@ updated 05.02.2001
 
 Currently looking at:
 
-o Some MIDI files won't load - horrible MIDI file parsing
-
 o Segment operation undo/redo (plus scissors and glue)
   
 o Playing Audio files
@@ -57,7 +55,9 @@ o MIDI CC, PC and sysex handling
 Recently completed/fixed
 ------------------------
 
-- Metronome [DONE - but doesn't yet work for negative bars]
+- Some MIDI files won't load [DONE]
+
+- Metronome [DONE]
 
 - Sequencer memory leak [DONE - note off Events not being deleted]
 

@@ -404,6 +404,18 @@ public slots:
      */
     void resizeSelected();
 
+    /*
+     * Segment join tool
+     *
+     */
+    void joinSelected();
+
+    /*
+     * Segment split tool
+     *
+     */
+    void splitSelected();
+
     /**
      * change the resolution of the segment display
      */
