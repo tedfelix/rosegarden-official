@@ -129,6 +129,12 @@ public:
      */
     iterator findSingle(NotationElement*);
 
+    /**
+     * Returns first iterator pointing at or after the given time,
+     * end() if time is beyond the end of the track
+     */ 
+    iterator findTime(Rosegarden::timeT time) const;
+
 private:
 };
 

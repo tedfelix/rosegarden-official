@@ -118,11 +118,162 @@ int NotationHLayout::getIdealBarWidth(int fixedWidth,
     return w;
 } 
 
+
+// Compute bar data and cached properties.
+
+void
+NotationHLayout::preparse(const Track::BarPositionList &barPositions,
+			  int firstBar, int lastBar)
+{
+    Key key;
+    Clef clef;
+    TimeSignature timeSignature;
+
+    const NotePixmapFactory &npf(m_staff.getNotePixmapFactory());
+    AccidentalTable accTable(key, clef), newAccTable(accTable);
+
+    m_barData.clear();
+    int fixedWidth = m_barMargin;
+    
+    for (int barNo = firstBar; barNo <= lastBar; ++barNo) {
+
+	kdDebug(KDEBUG_AREA) << "preparse: Looking at bar " << barNo << endl;
+
+	NotationElementList::iterator shortest = m_notationElements.end();
+	int shortCount = 0;
+
+	NotationElementList::iterator from =
+	    m_notationElements.findTime(barPositions[barNo].start);
+
+	NotationElementList::iterator to;
+        if (barNo < (int)barPositions.size() - 1) {
+	    to = m_notationElements.findTime(barPositions[barNo+1].start);
+	} else {
+	    to = m_notationElements.end();
+	}
+
+	for (NotationElementList::iterator it = from; it != to; ++it) {
+        
+	    NotationElement *el = (*it);
+	    int mw = getMinWidth(npf, *el);
+
+	    if (el->event()->isa(Clef::EventType)) {
+
+		fixedWidth += mw;
+		clef = Clef(*el->event());
+
+		//!!! Probably not strictly the right thing to do
+		// here, but I hope it'll do well enough in practice
+		accTable = AccidentalTable(key, clef);
+		newAccTable = accTable;
+
+	    } else if (el->event()->isa(Key::EventType)) {
+
+		fixedWidth += mw;
+		key = Key(*el->event());
+
+		accTable = AccidentalTable(key, clef);
+		newAccTable = accTable;
+
+	    } else if (el->event()->isa(TimeSignature::EventType)) {
+
+		fixedWidth += mw;
+		timeSignature = TimeSignature(*el->event());
+
+	    } else if (el->isNote() || el->isRest()) {
+
+		bool hasDuration = true;
+
+		if (el->isNote()) {
+
+		    try {
+			int pitch = el->event()->get<Int>("pitch");
+			kdDebug(KDEBUG_AREA) << "pitch : " << pitch << endl;
+			Rosegarden::NotationDisplayPitch p(pitch, clef, key);
+			int h = p.getHeightOnStaff();
+			Accidental acc = p.getAccidental();
+
+			el->event()->setMaybe<Int>(P_HEIGHT_ON_STAFF, h);
+			el->event()->setMaybe<Int>(P_ACCIDENTAL, acc);
+			el->event()->setMaybe<String>
+			    (P_NOTE_NAME, p.getAsString(clef, key));
+
+			// update display acc for note according to the
+			// accTable (accidentals in force when the last
+			// chord ended) and update newAccTable with
+			// accidentals from this note.  (We don't update
+			// accTable because there may be other notes in
+			// this chord that need accTable to be the same as
+			// it is for this one)
+		    
+			Accidental dacc = accTable.getDisplayAccidental(acc, h);
+
+			//		kdDebug(KDEBUG_AREA) << "display accidental = " << dacc << endl;
+		    
+			el->event()->setMaybe<Int>(P_DISPLAY_ACCIDENTAL, dacc);
+			newAccTable.update(acc, h);
+
+			if (dacc != acc) {
+			    // recalculate min width, as the accidental is
+			    // not what we first thought
+			    mw = getMinWidth(npf, *el);
+			}
+
+		    } catch (Event::NoData) {
+			kdDebug(KDEBUG_AREA) <<
+			    "NotationHLayout::preparse: couldn't get pitch for element"
+					     << endl;
+		    }
+
+		    Chord chord(m_notationElements, it);
+		    if (chord.size() >= 2 && it != chord.getFinalElement()) {
+			// we're in a chord, but not at the end of it yet
+			hasDuration = false;
+		    } else {
+			accTable = newAccTable;
+		    }
+		}
+
+		if (hasDuration) {
+		
+		    // either we're not in a chord or the chord is about
+		    // to end: update shortest data accordingly
+
+		    int d = el->event()->get<Int>
+			(Quantizer::NoteDurationProperty);
+
+		    int sd = 0;
+		    if (shortest == m_notationElements.end() ||
+			d <= (sd = (*shortest)->event()->get<Int>
+			      (Quantizer::NoteDurationProperty))) {
+			if (d == sd) ++shortCount;
+			else {
+			    kdDebug(KDEBUG_AREA) << "New shortest! Duration is " << d << " (at " << el->getAbsoluteTime() << " time units)"<< endl;
+			    shortest = it;
+			    shortCount = 1;
+			}
+		    }
+		}
+	    }
+
+	    el->event()->setMaybe<Int>(P_MIN_WIDTH, mw);
+	}
+	
+        addNewBar(barNo, from,
+                  getIdealBarWidth(fixedWidth, shortest, npf,
+                                   shortCount, timeSignature),
+                  fixedWidth);
+    }
+}
+
+
+#ifdef NOT_DEFINED
 // Locate the bars, and compute all the cached properties.
 
 void
 NotationHLayout::preparse(NotationElementList::iterator from,
-                          NotationElementList::iterator to)
+                          NotationElementList::iterator to,
+			  const Track::BarPositionList &barPositions)
 {
     Key key;
     Clef clef;
@@ -335,7 +486,7 @@ NotationHLayout::preparse(NotationElementList::iterator from,
                   (nbTimeUnitsInCurrentBar == timeSignature.getBarDuration()));
     }
 }
-
+#endif
 
 NotationHLayout::AccidentalTable::AccidentalTable(Key key, Clef clef) :
     m_key(key), m_clef(clef)
@@ -404,29 +555,30 @@ NotationHLayout::layout()
 {
     Key key;
     Clef clef;
+    TimeSignature timeSignature;
+
     double x = 0;
     const NotePixmapFactory &npf(m_staff.getNotePixmapFactory());
-    TimeSignature timeSignature;
 
     int pGroupNo = -1;
     NotationElementList::iterator startOfGroup = m_notationElements.end();
 
-    for (BarPositions::iterator bpi = m_barPositions.begin();
-         bpi != m_barPositions.end(); ++bpi) {
+    for (BarDataList::iterator bdi = m_barData.begin();
+         bdi != m_barData.end(); ++bdi) {
 
-        NotationElementList::iterator from = bpi->start;
+        NotationElementList::iterator from = bdi->start;
         NotationElementList::iterator to;
-        BarPositions::iterator nbpi(bpi);
-        if (++nbpi == m_barPositions.end()) {
+        BarDataList::iterator nbdi(bdi);
+        if (++nbdi == m_barData.end()) {
             to = m_notationElements.end();
         } else {
-            to = nbpi->start;
+            to = nbdi->start;
         }
 
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): starting a bar, initial x is " << x << " and barWidth is " << bpi->idealWidth << endl;
+        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): starting a bar, initial x is " << x << " and barWidth is " << bdi->idealWidth << endl;
 
 
-        bpi->x = (int)(x + m_barMargin / 2);
+        bdi->x = (int)(x + m_barMargin / 2);
         x += m_barMargin;
 
 	bool haveAccidentalInThisChord = false;
@@ -501,15 +653,15 @@ NotationHLayout::layout()
                 // of the remainder as our duration is of the
                 // whole bar's duration.
  
-                delta = ((bpi->idealWidth - bpi->fixedWidth) *
+                delta = ((bdi->idealWidth - bdi->fixedWidth) *
                          el->event()->getDuration()) /
                     //!!! not right for partial bar?
                     timeSignature.getBarDuration();
 
                  kdDebug(KDEBUG_AREA) << "Rest idealWidth : "
-                                      << bpi->idealWidth
+                                      << bdi->idealWidth
                                       << " - fixedWidth : "
-                                      << bpi->fixedWidth << endl;
+                                      << bdi->fixedWidth << endl;
 
 
             } else if (el->isNote()) {
@@ -541,7 +693,7 @@ NotationHLayout::layout()
 		    // additional accidental spacing
 
 		    if (haveAccidentalInThisChord) {
-			for (int i = 0; i < chord.size(); ++i) {
+			for (int i = 0; i < (int)chord.size(); ++i) {
 			    (*chord[i])->setLayoutX
 				((*chord[i])->getLayoutX() +
 				 npf.getAccidentalWidth());
@@ -557,15 +709,15 @@ NotationHLayout::layout()
                     // of the remainder as our duration is of the
                     // whole bar's duration.
                     
-                    delta = ((bpi->idealWidth - bpi->fixedWidth) *
+                    delta = ((bdi->idealWidth - bdi->fixedWidth) *
                              el->event()->getDuration()) /
                         //!!! not right for partial bar?
                         timeSignature.getBarDuration();
 
 //                     kdDebug(KDEBUG_AREA) << "Note idealWidth : "
-//                                          << bpi->idealWidth
+//                                          << bdi->idealWidth
 //                                          << " - fixedWidth : "
-//                                          << bpi->fixedWidth << endl;
+//                                          << bdi->fixedWidth << endl;
 
                 } else {
 		    kdDebug(KDEBUG_AREA) << "This is not the final chord element (of " << chord.size() << ")" << endl;
@@ -615,6 +767,8 @@ NotationHLayout::layout()
     }
 }
 
+
+#ifdef NOT_DEFINED
 void
 NotationHLayout::addNewBar(NotationElementList::iterator start,
                            timeT time, int x, int width, int fwidth,
@@ -630,17 +784,16 @@ NotationHLayout::addNewBar(NotationElementList::iterator start,
                          << m_barPositions.size() << "\n";
 }
 
-NotationHLayout::BarPositions&
-NotationHLayout::getBarPositions()
+#endif
+
+
+void
+NotationHLayout::addNewBar(int barNo,  NotationElementList::iterator start,
+                           int width, int fwidth)
 {
-    return m_barPositions;
+    m_barData.push_back(BarData(barNo, start, -1, width, fwidth));
 }
 
-const NotationHLayout::BarPositions&
-NotationHLayout::getBarPositions() const
-{
-    return m_barPositions;
-}
 
 int NotationHLayout::getMinWidth(const NotePixmapFactory &npf,
                                  const NotationElement &e) const
@@ -696,7 +849,7 @@ int NotationHLayout::getComfortableGap(const NotePixmapFactory &npf,
 void
 NotationHLayout::reset()
 {
-    m_barPositions.clear();
+    m_barData.clear();
 }
 
 

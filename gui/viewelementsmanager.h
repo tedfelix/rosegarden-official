@@ -26,8 +26,12 @@
 #include "notationelement.h"
 
 /**
-  *@author Guillaume Laurent, Chris Cannam, Rich Bown
-  */
+ *
+ * ViewElementsManager manages the relationship between Track/Event
+ * and NotationElementList/NotationElement objects.
+ * 
+ * @author Guillaume Laurent, Chris Cannam, Rich Bown
+ */
 
 class ViewElementsManager
 {

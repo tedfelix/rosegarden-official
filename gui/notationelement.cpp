@@ -38,6 +38,7 @@ using Rosegarden::Event;
 using Rosegarden::Note;
 using Rosegarden::Int;
 using Rosegarden::Bool;
+using Rosegarden::timeT;
 
 NotationElement::NotationElement(Event *event)
     : ViewElement(event),
@@ -188,7 +189,7 @@ NotationElementList::findSingle(NotationElement* el)
 
     std::pair<iterator, iterator> interval = equal_range(el);
 
-    bool foundIt = false;
+//    bool foundIt = false;
     
     for(iterator i = interval.first; i != interval.second; ++i) {
         if (*i == el) {
@@ -198,6 +199,15 @@ NotationElementList::findSingle(NotationElement* el)
     }
 
     return res;
+}
+
+NotationElementList::iterator
+NotationElementList::findTime(timeT time) const
+{
+    Event e;
+    e.setAbsoluteTime(time);
+    NotationElement dummy(&e);
+    return lower_bound(&dummy);
 }
 
 

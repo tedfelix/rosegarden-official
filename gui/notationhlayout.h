@@ -36,33 +36,29 @@ public:
     NotationHLayout(Staff &staff, NotationElementList& elements);
     ~NotationHLayout();
 
-    void preparse(NotationElementList::iterator from,
-                  NotationElementList::iterator to);
+    void preparse(const Rosegarden::Track::BarPositionList &barPositions,
+		  int firstBar, int lastBar);
     void layout();
 
-    struct BarPosition
+    struct BarData
     {
+	int barNo;	      // of corresponding BarPosition in Track
         NotationElementList::iterator start; // i.e. event following barline
-        Rosegarden::timeT time;    // absolute time of event at "start"
-        int x;                // coordinate for display
-        int idealWidth;       // theoretical width
-        int fixedWidth;       // minimum possible width
-        bool fixed;           // user-supplied new-bar or timesig event?
-        bool correct;         // false if preceding bar has incorrect duration
+        int x;                // coordinate for display of barline
+        int idealWidth;       // theoretical width of bar following barline
+        int fixedWidth;       // minimum possible width of bar following barline
         
-        BarPosition(NotationElementList::iterator istart,
-                    Rosegarden::timeT itime,
-                    int ix, int iwidth, int fwidth,
-                    bool ifixed, bool icorrect) :
-            start(istart), time(itime), x(ix), idealWidth(iwidth),
-            fixedWidth(fwidth), fixed(ifixed), correct(icorrect) { }
+        BarData(int ibarno, NotationElementList::iterator istart,
+		int ix, int iwidth, int fwidth) :
+            barNo(ibarno), start(istart), x(ix), idealWidth(iwidth),
+            fixedWidth(fwidth) { }
     };
 
-    typedef std::vector<BarPosition> BarPositions;
+    typedef std::vector<BarData> BarDataList;
 
     /// returns the bar positions computed from the last call to preparse()
-    BarPositions& getBarPositions();
-    const BarPositions& getBarPositions() const;
+    BarDataList& getBarData() { return m_barData; }
+    const BarDataList& getBarData() const { return m_barData; }
 
     /// resets the internal position counters of the object
     void reset();
@@ -80,10 +76,8 @@ protected:
 	Rosegarden::Clef m_clef;
     };
 	    
-    void addNewBar(NotationElementList::iterator start,
-                   Rosegarden::timeT time,
-                   int x, int width, int fwidth,
-                   bool, bool);
+    void addNewBar(int barNo, NotationElementList::iterator start,
+                   int width, int fwidth);
 
     /// returns the note immediately before 'pos'
     NotationElementList::iterator getPreviousNote(NotationElementList::iterator pos);
@@ -102,7 +96,7 @@ protected:
                          const NotePixmapFactory &npf, int shortCount,
                          const Rosegarden::TimeSignature &timeSignature) const;
 
-    BarPositions m_barPositions;
+    BarDataList m_barData;
 };
 
 #ifdef NOT_DEFINED

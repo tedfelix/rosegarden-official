@@ -135,6 +135,7 @@ public:
      */
     //!!! Untested.
     int getBarNumber(const iterator &i) const;
+    int getBarNumber(const Event *e) const;
 
     /**
      * Erases a single Event

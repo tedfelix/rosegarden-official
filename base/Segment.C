@@ -252,8 +252,13 @@ void Track::calculateBarPositions()
 int Track::getBarNumber(const iterator &i) const
 {
     if (i == end()) return m_barPositions.size() - 1;
+    else return getBarNumber(*i);
+}
 
-    BarPosition pos((*i)->getAbsoluteTime(), true, true, TimeSignature());
+
+int Track::getBarNumber(const Event *e) const
+{
+    BarPosition pos(e->getAbsoluteTime(), true, true, TimeSignature());
 
     BarPositionList::const_iterator bpi
         (std::lower_bound(m_barPositions.begin(), m_barPositions.end(), pos));

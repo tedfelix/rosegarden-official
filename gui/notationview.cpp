@@ -626,7 +626,9 @@ bool NotationView::showBars(NotationElementList::iterator from,
 {
     if (from == to) return true;
 
-    const NotationHLayout::BarPositions& barPos(m_hlayout->getBarPositions());
+    const NotationHLayout::BarDataList &barData(m_hlayout->getBarData());
+    const Track::BarPositionList &barPositions(getTrack().getBarPositions());
+
     NotationElementList::iterator lastElement = to;
     --lastElement;
 
@@ -635,12 +637,19 @@ bool NotationView::showBars(NotationElementList::iterator from,
     //                          << "lastElement : " << *(*lastElement) << endl;
     
     m_currentStaff->deleteBars(int((*from)->getEffectiveX()));
-        
-    for (NotationHLayout::BarPositions::const_iterator it = barPos.begin();
-         it != barPos.end(); ++it) {
 
-        kdDebug(KDEBUG_AREA) << "Adding bar at pos " << it->x << endl;
-        m_currentStaff->insertBar(it->x, it->correct);
+    for (NotationHLayout::BarDataList::const_iterator it = barData.begin();
+         it != barData.end(); ++it) {
+
+	if (it->barNo < 0 || it->barNo >= (int)barPositions.size()) {
+	    kdDebug(KDEBUG_AREA) << "ERROR: Synchronisation problem: barNo "
+				 << it->barNo << " is out of legal range (0,"
+				 << barPositions.size()-1 << ")" << endl;
+	} else {
+	    kdDebug(KDEBUG_AREA) << "Adding bar number " << it->barNo
+				 << " at pos " << it->x << endl;
+	    m_currentStaff->insertBar(it->x, barPositions[it->barNo].correct);
+	}
     }
     
     return true;
@@ -666,8 +675,12 @@ bool NotationView::applyHorizontalPreparse()
         return false;
     }
 
+    Track &t(getTrack());
+    t.calculateBarPositions();
+    const Track::BarPositionList &bpl(t.getBarPositions());
+
     m_hlayout->reset();
-    m_hlayout->preparse(m_notationElements->begin(), m_notationElements->end());
+    m_hlayout->preparse(bpl, 0, bpl.size() - 1);
 
     kdDebug(KDEBUG_AREA) << "NotationView::applyHorizontalPreparse() : done" << endl;
 
