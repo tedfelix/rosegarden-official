@@ -28,6 +28,7 @@
 #include <klocale.h>
 
 class RosegardenGUIDoc;
+class QLineEdit;
 
 namespace Rosegarden
 {
@@ -122,8 +123,8 @@ public slots:
 
 protected:
     RosegardenGUIDoc *m_doc;
+    QLineEdit        *m_path;
     QPushButton      *m_changePathButton;
-    QString           m_newDirectory;
 };
 
 

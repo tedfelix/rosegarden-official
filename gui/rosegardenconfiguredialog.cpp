@@ -30,8 +30,9 @@
 #include <qlayout.h>
 #include <qtabwidget.h>
 #include <qlabel.h>
-#include <qfiledialog.h>
+#include <kfiledialog.h>
 #include <qpushbutton.h>
+#include <qlineedit.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -208,22 +209,24 @@ AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
                                                QWidget *parent,
                                                const char *name)
     : TabbedConfigurationPage(doc, parent, name),
-    m_doc(doc),
-    m_newDirectory("")
+      m_doc(doc),
+      m_path(0),
+      m_changePathButton(0)
 {
     Rosegarden::Configuration &config = doc->getConfiguration();
     Rosegarden::AudioFileManager &afm = doc->getAudioFileManager();
 
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 3, 2,
+    QGridLayout *layout = new QGridLayout(frame, 1, 3,
                                           10, 5);
-    layout->addWidget(new QLabel(i18n("Audio file path:"), frame), 1, 0);
-
+    layout->addWidget(new QLabel(i18n("Audio file path:"), frame), 0, 0);
+    m_path = new QLineEdit(QString(afm.getAudioPath().c_str()), frame);
+    layout->addWidget(m_path, 0, 1);
+    
     m_changePathButton =
-        new QPushButton(i18n(QString(afm.getAudioPath().c_str())),
-                        frame);
+        new QPushButton(i18n("Choose..."), frame);
 
-    layout->addWidget(m_changePathButton, 1, 1);
+    layout->addWidget(m_changePathButton, 0, 2);
 
     connect(m_changePathButton, SIGNAL(released()),
             SLOT(slotFileDialog()));
@@ -236,9 +239,10 @@ AudioConfigurationPage::slotFileDialog()
 {
     Rosegarden::AudioFileManager &afm = m_doc->getAudioFileManager();
 
-    QFileDialog *fileDialog = new QFileDialog(this, "file dialog", TRUE);
-    fileDialog->setMode(QFileDialog::DirectoryOnly);
-    fileDialog->setDir(QString(afm.getAudioPath().c_str()));
+    KFileDialog *fileDialog = new KFileDialog(QString(afm.getAudioPath().c_str()),
+                                              QString::null,
+                                              this, "file dialog", true);
+    fileDialog->setMode(KFile::Directory);
 
     connect(fileDialog, SIGNAL(fileSelected(const QString&)),
             SLOT(slotFileSelected(const QString&)));
@@ -248,8 +252,7 @@ AudioConfigurationPage::slotFileDialog()
 
     if (fileDialog->exec() == QDialog::Accepted)
     {
-        m_newDirectory = fileDialog->selectedFile();
-        m_changePathButton->setText(m_newDirectory);
+        m_path->setText(fileDialog->selectedFile());
     }
     delete fileDialog;
 }
@@ -258,10 +261,11 @@ void
 AudioConfigurationPage::apply()
 {
     Rosegarden::AudioFileManager &afm = m_doc->getAudioFileManager();
-
-    if (!m_newDirectory.isNull())
+    QString newDir = m_path->text();
+    
+    if (!newDir.isNull())
     {
-        afm.setAudioPath(std::string(m_newDirectory.data()));
+        afm.setAudioPath(std::string(newDir.latin1()));
     }
 }
 
