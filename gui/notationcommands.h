@@ -84,11 +84,6 @@ protected:
 };
 
 
-/* Not ideal, but we can't pass in the exact Event as the thing to erase
-   because we're just about to erase it, so replay wouldn't work (as the
-   event restored to the segment by unexecute() will be only a duplicate,
-   not the same event) */
-
 class EraseCommand : public BasicCommand
 {
 public:

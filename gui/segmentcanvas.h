@@ -28,10 +28,10 @@
 #include <qcanvas.h>
 #include <list>
 
+#include "rulerscale.h"
+
 using Rosegarden::timeT;
 namespace Rosegarden { class Segment; }
-class RulerScale;
-class SimpleRulerScale;
 
 
 /**
@@ -46,14 +46,14 @@ public:
     /**
      * Create a new segment item without an associated segment (yet)
      */
-    SegmentItem(int y, timeT startTime, timeT duration, double unitsPerPixel,
-		QCanvas* canvas);
+    SegmentItem(int y, timeT startTime, timeT duration,
+		RulerScale *rulerScale, QCanvas* canvas);
 
     /**
      * Create a new segment item with an associated segment
      */
-    SegmentItem(int y, Rosegarden::Segment *segment, double unitsPerPixel,
-		QCanvas* canvas);
+    SegmentItem(int y, Rosegarden::Segment *segment,
+		RulerScale *rulerScale, QCanvas* canvas);
 
     /// Return the item's associated segment 
     Rosegarden::Segment* getSegment() const;
@@ -66,6 +66,12 @@ public:
 
     timeT getDuration() const { return m_duration; }
     void setDuration(timeT d);
+
+    /**
+     * Reset the rectangle's location and dimensions following
+     * a change in the ruler scale.
+     */
+    void recalculateRectangle();
     
     /**
      * Modify start time and duration so as to maintain dimensions
@@ -73,16 +79,10 @@ public:
      * fine for a SegmentItem but not for a Segment.)  Should only
      * be called on a SegmentItem that has no Segment yet.
      */
-//!!!    void normalize();
-
-    double getUnitsPerPixel() const { return m_unitsPerPixel; }
-    void setUnitsPerPixel(double upp);
+    void normalize();
 
     /// Return the track for the item's segment
     int getTrack() const;
-
-    /// Set the height of all new SegmentItem objects
-    static void setItemHeight(unsigned int);
 
     bool const isSelected() { return m_selected; }
 
@@ -90,6 +90,9 @@ public:
     void setSelected(const bool &select, const QBrush &highlightBrush);
 
     virtual int rtti() const { return SegmentItemRTTI; }
+
+    /// Set the height of all new SegmentItem objects
+    static void setItemHeight(unsigned int);
     
 protected:
     Rosegarden::Segment *m_segment;
@@ -100,7 +103,7 @@ protected:
     timeT m_startTime;
     timeT m_duration;
     bool m_selected;
-    double m_unitsPerPixel;
+    RulerScale *m_rulerScale;
 
     static unsigned int m_itemHeight;
 };
@@ -182,7 +185,7 @@ public:
 
 	int getYSnap() const { return m_vstep; }
 
-	double getUnitsPerPixel() const;
+	RulerScale *getRulerScale() { return m_rulerScale; }
 
     protected:
 	SimpleRulerScale *m_rulerScale; // I don't own this
@@ -312,16 +315,13 @@ private:
 
     SnapGrid m_grid;
 
-    SegmentItem* m_currentItem;
-
-    QCanvasItem* m_moving;
+    SegmentItem *m_currentItem;
+    SegmentItem *m_recordingSegment;
 
     QBrush m_brush;
     QBrush m_highlightBrush;
     QPen m_pen;
-
     QPopupMenu *m_editMenu;
-    QCanvasRectangle *m_recordingSegment;
 };
 
 //////////////////////////////////////////////////////////////////////

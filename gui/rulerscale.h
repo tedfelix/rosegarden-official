@@ -72,6 +72,23 @@ public:
      */
     virtual double getXForTime(Rosegarden::timeT time) = 0;
 
+    /**
+     * Return the duration corresponding to the given delta-x
+     * starting at the given x-coord.
+     */
+    Rosegarden::timeT getDurationForWidth(double x, double width) {
+	return getTimeForX(x + width) - getTimeForX(x);
+    }
+
+    /**
+     * Return the width corresponding to the given duration
+     * starting at the given time.
+     */
+    double getWidthForDuration(Rosegarden::timeT startTime,
+			       Rosegarden::timeT duration) {
+	return getXForTime(startTime + duration) - getXForTime(startTime);
+    }
+
 protected:
     RulerScale() { }
 };

@@ -44,28 +44,30 @@ using Rosegarden::Note;
 //////////////////////////////////////////////////////////////////////
 
 SegmentItem::SegmentItem(int y, timeT startTime, timeT duration,
-			 double unitsPerPixel, QCanvas *canvas) :
-    QCanvasRectangle((double)startTime / unitsPerPixel, y, 
-		     (double)duration / unitsPerPixel, m_itemHeight, canvas),
+			 RulerScale *rulerScale, QCanvas *canvas) :
+    QCanvasRectangle(rulerScale->getXForTime(startTime), y, 
+		     rulerScale->getWidthForDuration(startTime, duration),
+		     m_itemHeight, canvas),
     m_segment(0),
     m_startTime(startTime),
     m_duration(duration),
     m_selected(false),
-    m_unitsPerPixel(unitsPerPixel)
+    m_rulerScale(rulerScale)
 {
     // nothing else
 }
 
 SegmentItem::SegmentItem(int y, Segment *segment,
-			 double unitsPerPixel, QCanvas *canvas) :
-    QCanvasRectangle((double)segment->getStartIndex() / unitsPerPixel, y,
-		     (double)segment->getDuration() / unitsPerPixel,
+			 RulerScale *rulerScale, QCanvas *canvas) :
+    QCanvasRectangle(rulerScale->getXForTime(segment->getStartIndex()), y,
+		     rulerScale->getWidthForDuration(segment->getStartIndex(),
+						     segment->getDuration()),
 		     m_itemHeight, canvas),
     m_segment(segment),
     m_startTime(segment->getStartIndex()),
     m_duration(segment->getDuration()),
     m_selected(false),
-    m_unitsPerPixel(unitsPerPixel)
+    m_rulerScale(rulerScale)
 {
     // nothing else 
 }
@@ -84,30 +86,42 @@ SegmentItem::setSegment(Segment *segment)
     m_startTime = segment->getStartIndex();
     m_duration = segment->getDuration();
 
-    setX((double)m_startTime / m_unitsPerPixel);
-    setSize((double)m_duration / m_unitsPerPixel, height());
+    setX(m_rulerScale->getXForTime(m_startTime));
+    setSize
+	(m_rulerScale->getWidthForDuration(m_startTime, m_duration), height());
 }
 
 void
 SegmentItem::setStartTime(timeT t)
 {
     m_startTime = t;
-    setX((double)m_startTime / m_unitsPerPixel);
+    setX(m_rulerScale->getXForTime(m_startTime));
 }
 
 void
 SegmentItem::setDuration(timeT d)
 {
     m_duration = d;
-    setSize((double)m_duration / m_unitsPerPixel, height());
+    setSize
+	(m_rulerScale->getWidthForDuration(m_startTime, m_duration), height());
 }
 
 void
-SegmentItem::setUnitsPerPixel(double upp)
+SegmentItem::recalculateRectangle()
 {
-    m_unitsPerPixel = upp;
-    setX((double)m_startTime / m_unitsPerPixel);
-    setSize((double)m_duration / m_unitsPerPixel, height());
+    setX(m_rulerScale->getXForTime(m_startTime));
+    setSize
+	(m_rulerScale->getWidthForDuration(m_startTime, m_duration), height());
+}
+
+void
+SegmentItem::normalize()
+{
+    if (m_duration < 0) {
+	m_duration = -m_duration;
+	m_startTime -= m_duration;
+	recalculateRectangle();
+    }
 }
 
 int SegmentItem::getTrack() const
@@ -145,11 +159,12 @@ SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, int vStep,
     QCanvasView(&c, parent, name, f),
     m_tool(0),
     m_grid(dynamic_cast<SimpleRulerScale *>(rulerScale), vStep),
+    m_currentItem(0),
+    m_recordingSegment(0),
     m_brush(RosegardenGUIColours::SegmentBlock),
     m_highlightBrush(RosegardenGUIColours::SegmentHighlightBlock),
     m_pen(RosegardenGUIColours::SegmentBorder),
-    m_editMenu(new QPopupMenu(this)),
-    m_recordingSegment(0)
+    m_editMenu(new QPopupMenu(this))
 {
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
 
@@ -306,7 +321,7 @@ SegmentItem *
 SegmentCanvas::addSegmentItem(int y, timeT startTime, timeT duration)
 {
     SegmentItem* newItem = new SegmentItem
-	(y, startTime, duration, m_grid.getUnitsPerPixel(), canvas());
+	(y, startTime, duration, m_grid.getRulerScale(), canvas());
 
     newItem->setPen(m_pen);
     newItem->setBrush(m_brush);
@@ -319,40 +334,31 @@ SegmentCanvas::addSegmentItem(int y, timeT startTime, timeT duration)
 void
 SegmentCanvas::showRecordingSegmentItem(int y, timeT startTime, timeT duration)
 {
-    //!!! I think it'd be highly advisable to make the recording
-    // segment item a real SegmentItem rather than just a rectangle
+    if (m_recordingSegment) {
 
-    double startX = startTime / m_grid.getUnitsPerPixel();
-    double endX = (startTime + duration) / m_grid.getUnitsPerPixel();
+	m_recordingSegment->setStartTime(startTime);
+	m_recordingSegment->setDuration(duration);
+	m_recordingSegment->setY(y);
 
-    if(m_recordingSegment)
-    {
-	m_recordingSegment->move(startX, y);
-        m_recordingSegment->setSize(endX - startX, m_grid.getYSnap());
-    }
-    else
-    {
-        m_recordingSegment = new QCanvasRectangle
-	    (startX, y, endX - startX, m_grid.getYSnap(), canvas());
-
-        m_recordingSegment->
+    } else {
+	
+	m_recordingSegment = addSegmentItem(y, startTime, duration);
+	m_recordingSegment->
             setPen(RosegardenGUIColours::RecordingSegmentBorder);
         m_recordingSegment->
             setBrush(RosegardenGUIColours::RecordingSegmentCanvas);
-
-        m_recordingSegment->setVisible(true);     
-        m_recordingSegment->setZ(1);           // Segment at Z=1,
+	m_recordingSegment->setZ(2);
     }
 }
+
 
 void
 SegmentCanvas::destroyRecordingSegmentItem()
 {
-    if(m_recordingSegment)
-    {
-         m_recordingSegment->setVisible(false);
-         delete m_recordingSegment;
-         m_recordingSegment = 0;
+    if (m_recordingSegment) {
+	m_recordingSegment->setVisible(false);
+	delete m_recordingSegment;
+	m_recordingSegment = 0;
     }
 }
 
@@ -485,7 +491,7 @@ SegmentCanvas::SnapGrid::getSnapTime(double x) const
 	snapTime = m_snapTime;
     }
 
-    kdDebug(KDEBUG_AREA) << "SnapGrid: snap time is " << snapTime << endl;
+//    kdDebug(KDEBUG_AREA) << "SnapGrid: snap time is " << snapTime << endl;
     return snapTime;
 }
 
@@ -517,17 +523,8 @@ SegmentCanvas::SnapGrid::snapX(double x) const
 	snapped = rounded + barRange.first;
     }
 
-    kdDebug(KDEBUG_AREA) << "SnapGrid: before: " << x << " = " << time << "; after: " << snapped << endl;
+//    kdDebug(KDEBUG_AREA) << "SnapGrid: before: " << x << " = " << time << "; after: " << snapped << endl;
     return snapped;
-}
-	
-double
-SegmentCanvas::SnapGrid::getUnitsPerPixel() const
-{
-    // requires a SimpleRulerScale, not just a RulerScale -- which
-    // is quite correct, as SegmentItem requires x-coordinate to be
-    // strictly proportional to time, just as in SimpleRulerScale
-    return m_rulerScale->getUnitsPerPixel();
 }
 
 int
@@ -591,7 +588,6 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
 	int y = m_canvas->grid().snapY(e->pos().y());
 	timeT time = m_canvas->grid().snapX(e->pos().x());
-//	timeT duration = m_canvas->grid().snapWidth(0);
 	timeT duration = m_canvas->grid().getSnapTime(e->pos().x());
 	if (duration == 0) duration = Note(Note::Shortest).getDuration();
 
@@ -605,39 +601,13 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
 {
     if (!m_currentItem) return;
-//!!!    m_currentItem->normalize();
+    m_currentItem->normalize();
 
-
-/*!!!
-    if (m_currentItem->width() < 0) { // segment was drawn from right to left
-        double itemX = m_currentItem->x();
-        double itemW = m_currentItem->width();
-        kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMouseReleaseEvent() : itemX = "
-                             << itemX << " - width : " << itemW << endl;
-
-        m_currentItem->setX(itemX + itemW);
-        m_currentItem->setSize(int(-itemW), m_currentItem->height());
-
-        kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMouseReleaseEvent() after correction : itemX = "
-                             << m_currentItem->x()
-                             << " - width : " << m_currentItem->width()
-                             << endl;
-    }
-*/
-/*
-    if (m_currentItem->width() == 0 && ! m_newRect) {
-
-        kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMouseReleaseEvent() : segment deleted"
-                             << endl;
-        emit deleteSegment(m_currentItem->getSegment());
-        delete m_currentItem;
-        m_canvas->canvas()->update();
-
-	} else*/ if (m_newRect /*&& m_currentItem->width() > 0*/) {
+    if (m_newRect) {
 
         emit addSegment(m_currentItem);
 
-	} else /* if (m_currentItem->width() > 0)*/ {
+    } else {
 
         kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMouseReleaseEvent() : shorten m_currentItem = "
                              << m_currentItem << endl;
@@ -654,34 +624,17 @@ void SegmentPencil::handleMouseMove(QMouseEvent *e)
     if (!m_currentItem) return;
 
     timeT time = m_canvas->grid().snapX(e->pos().x());
-
-    if (time < m_currentItem->getStartTime()) {
-
-	timeT duration = m_currentItem->getDuration() +
-	    (m_currentItem->getStartTime() - time);
-	m_currentItem->setStartTime(time);
-	m_currentItem->setDuration(duration);
-
-    } else {
-	timeT duration = time - m_currentItem->getStartTime();
-	m_currentItem->setDuration(duration);
-    }
+    timeT duration = time - m_currentItem->getStartTime();
 
     timeT snap = m_canvas->grid().getSnapTime(e->pos().x());
     if (snap == 0) snap = Note(Note::Shortest).getDuration();
-    if (m_currentItem->getDuration() < snap) {
-	m_currentItem->setDuration(snap);
+
+    if ((duration > 0 && duration <  snap) ||
+	(duration < 0 && duration > -snap)) {
+	m_currentItem->setDuration(d < 0 ? -snap : snap);
+    } else {
+	m_currentItem->setDuration(duration);
     }
-
-/*
-	int width = m_canvas->grid().snapX(e->pos().x()) -
-	    m_currentItem->rect().x();
-	if ((width >= 0) && (width < SegmentItem::getBarResolution())) {
-	    width = SegmentItem::getBarResolution(); // cc
-	}
-
-	m_currentItem->setSize(width, m_currentItem->height());
-*/
 
     m_canvas->canvas()->update();
 }
@@ -755,8 +708,6 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 void SegmentMover::handleMouseMove(QMouseEvent *e)
 {
     if (m_currentItem) {
-	//!!! as SegmentSelector::handleMouseMove -- move into SegmentItem
-//        m_currentItem->setX(m_canvas->grid().snapX(e->pos().x()));
 	m_currentItem->setStartTime(m_canvas->grid().snapX(e->pos().x()));
         m_currentItem->setY(m_canvas->grid().snapY(e->pos().y()));
         m_canvas->canvas()->update();
@@ -794,6 +745,7 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 {
     if (!m_currentItem) return;
+    m_currentItem->normalize();
     emit setSegmentDuration(m_currentItem);
     m_currentItem = 0;
 }
@@ -802,35 +754,20 @@ void SegmentResizer::handleMouseMove(QMouseEvent *e)
 {
     if (!m_currentItem) return;
 
-    //!!! as SegmentPencil::handleMouseMove
-    //!!! move into SegmentItem
-
     timeT time = m_canvas->grid().snapX(e->pos().x());
-
-    if (time < m_currentItem->getStartTime()) {
-
-	timeT duration = m_currentItem->getDuration() +
-	    (m_currentItem->getStartTime() - time);
-	m_currentItem->setStartTime(time);
-	m_currentItem->setDuration(duration);
-
-    } else {
-	timeT duration = time - m_currentItem->getStartTime();
-	m_currentItem->setDuration(duration);
-    }
+    timeT duration = time - m_currentItem->getStartTime();
 
     timeT snap = m_canvas->grid().getSnapTime(e->pos().x());
     if (snap == 0) snap = Note(Note::Shortest).getDuration();
-    if (m_currentItem->getDuration() < snap) {
-	m_currentItem->setDuration(snap);
+
+    if ((duration > 0 && duration <  snap) ||
+	(duration < 0 && duration > -snap)) {
+	m_currentItem->setDuration(d < 0 ? -snap : snap);
+    } else {
+	m_currentItem->setDuration(duration);
     }
 
-
-//!!!    m_currentItem->setSize(m_canvas->grid().snapX(e->pos().x()) - m_currentItem->rect().x(),
-//                           m_currentItem->rect().height());
-    
     m_canvas->canvas()->update();
-    
 }
 
 bool SegmentResizer::cursorIsCloseEnoughToEdge(SegmentItem* p, QMouseEvent* e)
@@ -945,7 +882,6 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
                      it != m_selectedItems.end();
                      it++)
                 {
-//                    (*it)->setX(m_canvas->grid().snapX(e->pos().x()));
 		    (*it)->setStartTime(m_canvas->grid().snapX(e->pos().x()));
                     (*it)->setY(m_canvas->grid().snapY(e->pos().y()));
                     m_canvas->canvas()->update();

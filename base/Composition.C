@@ -589,7 +589,17 @@ Composition::getBarRange(int n, bool truncate) const
 	n = m_barSegment.size() - 1;
     }
 
-    if (n < m_barSegment.size()) {
+    if (n < 0) {
+	if (truncate) {
+	    n = 0;
+	} else {
+	    barDuration = getTimeSignatureAt(0).getBarDuration();
+	    return std::pair<timeT, timeT>
+		(n * barDuration, (n + 1) * barDuration);
+	}
+    }
+
+    if (n >= 0 && n < m_barSegment.size()) {
 	start = m_barSegment[n]->getAbsoluteTime();
 	barDuration = m_barSegment[n]->getDuration();
 
