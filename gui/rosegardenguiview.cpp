@@ -232,8 +232,8 @@ void RosegardenGUIView::print(KPrinter *printer, Composition* p)
     }
     
     // For debug - show what's going to be printed
-    notationView->show();
-    kapp->processEvents();
+//    notationView->show();
+//    kapp->processEvents();
     // For debug - end
 
     notationView->print(printer);

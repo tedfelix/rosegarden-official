@@ -71,6 +71,10 @@ public:
 	else m_legerLineCount = legerLineCount;
     }
 
+    void setBarNumbersEvery(int barNumbersEvery) {
+	m_barNumbersEvery = barNumbersEvery;
+    }
+
     LinedStaff::setPageMode;
     LinedStaff::setPageWidth;
     LinedStaff::setRowsPerPage;
@@ -259,7 +263,7 @@ protected:
     virtual int getLegerLineCount() const    { return m_legerLineCount; }
     virtual int getBottomLineHeight() const  { return 0; }
     virtual int getHeightPerLine() const     { return 2; }
-    virtual int showBarNumbersEvery() const  { return 5; }
+    virtual int showBarNumbersEvery() const  { return m_barNumbersEvery; }
 
     /** 
      * Assign a suitable sprite to the given element (the clef is
@@ -336,6 +340,7 @@ protected:
     QCanvasSimpleSprite *m_staffName;
     NotationView *m_notationView;
     int m_legerLineCount;
+    int m_barNumbersEvery;
     bool m_colourQuantize;
     bool m_showUnknowns;
 };

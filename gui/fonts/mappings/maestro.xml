@@ -70,7 +70,7 @@
 -->
         <symbol name="MUSICAL SYMBOL MULTI REST" font-id="0" code="227"/>
         <symbol name="MUSICAL SYMBOL WHOLE REST" font-id="0" code="238"/>
-        <symbol name="MUSICAL SYMBOL HALF REST" font-id="0" code="238"/> <!--!!! baseline -->
+        <symbol name="MUSICAL SYMBOL HALF REST" font-id="0" code="238"/>
         <symbol name="MUSICAL SYMBOL QUARTER REST" font-id="0" code="206"/>
         <symbol name="MUSICAL SYMBOL EIGHTH REST" font-id="0" code="228"/>
         <symbol name="MUSICAL SYMBOL SIXTEENTH REST" font-id="0" code="197"/>
@@ -108,13 +108,13 @@
 		<scaled y="1.92"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL C CLEF">
-		<scaled y="2.0"/>
+		<scaled y="1.98"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL G CLEF">
-		<scaled y="4.3"/>
+		<scaled y="4.5"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL F CLEF">
-		<scaled y="0.96"/>
+		<scaled y="0.95"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL MULTI REST">
 		<scaled y="0"/>
@@ -123,7 +123,7 @@
 		<scaled y="0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL HALF REST">
-		<scaled y="0"/>
+		<scaled y="0.48"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL QUARTER REST">
 		<scaled y="1.5"/>

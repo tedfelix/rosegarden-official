@@ -85,6 +85,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
     m_staffName(0),
     m_notationView(view),
     m_legerLineCount(8),
+    m_barNumbersEvery(0),
     m_colourQuantize(true),
     m_showUnknowns(true)
 {

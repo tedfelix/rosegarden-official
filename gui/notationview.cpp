@@ -925,6 +925,12 @@ void NotationView::positionStaffs()
         if (track < maxTrack) {
             m_staffs[i]->setConnectingLineLength(trackHeights[track]);
         }
+
+	if (track == minTrack && m_pageMode != LinedStaff::LinearMode) {
+	    m_staffs[i]->setBarNumbersEvery(5);
+	} else {
+	    m_staffs[i]->setBarNumbersEvery(0);
+	}
         
 	m_staffs[i]->setX(20);
 	m_staffs[i]->setY((m_pageMode == LinedStaff::MultiPageMode ? 20 : 0) +

@@ -106,13 +106,13 @@
 		<scaled y="1.92"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL C CLEF">
-		<scaled y="2.0"/>
+		<scaled y="1.95"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL G CLEF">
-		<scaled y="4.3"/>
+		<scaled y="4.95"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL F CLEF">
-		<scaled y="0.96"/>
+		<scaled y="0.95"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL MULTI REST">
 		<scaled y="0"/>
@@ -121,10 +121,10 @@
 		<scaled y="0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL HALF REST">
-		<scaled y="0"/>
+		<scaled y="0.47"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL QUARTER REST">
-		<scaled y="1.5"/>
+		<scaled y="1.7"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL EIGHTH REST">
 		<scaled y="0.9"/>
