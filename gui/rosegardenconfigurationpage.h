@@ -143,8 +143,8 @@ public:
 
     enum NoteNameStyle
     { 
-	American,
-	Local
+        American,
+        Local
     };
 
     GeneralConfigurationPage(KConfig *cfg,
@@ -190,7 +190,7 @@ class NotationConfigurationPage : public TabbedConfigurationPage
 
 public:
     NotationConfigurationPage(KConfig *cfg,
-			      QWidget *parent = 0, const char *name=0);
+                              QWidget *parent = 0, const char *name=0);
 
     virtual void apply();
 
@@ -222,6 +222,15 @@ protected:
     QCheckBox *m_collapseRests;
     QComboBox *m_pasteType;
     RosegardenQuantizeParameters *m_quantizeFrame;
+
+    // Lilypond export:
+    QComboBox *m_lilyPaperSize;
+    QComboBox *m_lilyFontSize;
+    QCheckBox *m_lilyExportHeaders;
+    QCheckBox *m_lilyExportLyrics;
+    QCheckBox *m_lilyExportMidi;
+    QCheckBox *m_lilyExportUnmuted;
+    QComboBox *m_lilyRestType;
 
     void populateSizeCombo(QComboBox *combo, std::string font, int dfltSize);
 };
@@ -313,7 +322,7 @@ class DocumentMetaConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 public:
     DocumentMetaConfigurationPage(RosegardenGUIDoc *doc,
-				  QWidget *parent = 0, const char *name = 0);
+                                  QWidget *parent = 0, const char *name = 0);
     virtual void apply();
 
     static QString iconLabel() { return i18n("About"); }

@@ -27,6 +27,7 @@
 */
 
 #include <klocale.h> // i18n
+#include <kconfig.h> // KConfig
 #include <kapp.h>
 
 #include <qstring.h>
@@ -383,13 +384,13 @@ std::string LilypondExporter::indent(const int &column) {
 std::string
 LilypondExporter::protectIllegalChars(std::string inStr) {
     QString tmpStr = strtoqstr(inStr);
-    tmpStr.replace(QRegExp("_"), "\\\\_");
-    tmpStr.replace(QRegExp("&"), "\\\\&");
-    tmpStr.replace(QRegExp("\\^"), "\\\\^");
-    tmpStr.replace(QRegExp("#"), "\\\\#");
+    tmpStr.replace(QRegExp("_"), " ");
+    tmpStr.replace(QRegExp("&"), "\\&");
+    tmpStr.replace(QRegExp("\\^"), "\\^");
+    tmpStr.replace(QRegExp("#"), "\\#");
     tmpStr.replace(QRegExp("%"), "\\%");
-    tmpStr.replace(QRegExp("<"), "\\\\<");
-    tmpStr.replace(QRegExp(">"), "\\\\>");
+    tmpStr.replace(QRegExp("<"), "\\<");
+    tmpStr.replace(QRegExp(">"), "\\>");
     tmpStr.replace(QRegExp("\\["), "");
     tmpStr.replace(QRegExp("\\]"), "");
     tmpStr.replace(QRegExp("\\{"), "");
@@ -443,6 +444,23 @@ LilypondExporter::write() {
     const std::string headerFooter = "footer";
     const std::string headerTagline = "tagline";
 
+    // grab config info
+    KConfig *cfg = kapp->config();
+    cfg->setGroup("Notation Options");
+
+    unsigned int paperSize = cfg->readUnsignedNumEntry("lilypapersize");
+    unsigned int fontSize = cfg->readUnsignedNumEntry("lilyfontsize");
+    unsigned int restType = cfg->readUnsignedNumEntry("lilyresttype");
+    bool exportLyrics = cfg->readBoolEntry("lilyexportlyrics");
+    bool exportHeaders = cfg->readBoolEntry("lilyexportheaders");
+    bool exportMidi = cfg->readBoolEntry("lilyexportmidi");
+    bool exportUnmuted = cfg->readBoolEntry("lilyexportunmuted");
+
+    if (exportUnmuted) {
+        str << "% NOTE: \"do not export muted staffs\" was checked, but this feature hasn't\n"
+            << "% yet been implemented...  Coming soon...  Hang in there.  :)" << std::endl;
+    }
+    
     // Lilypond \header block
     str << "\\version \"1.6.5\"" << std::endl;
 
@@ -454,8 +472,9 @@ LilypondExporter::write() {
     Configuration metadata = m_composition->getMetadata();
     std::vector<std::string> propertyNames = metadata.getPropertyNames();
     
-    // open \header section
-    if (!propertyNames.empty()) {
+    // open \header section if there's metadata to grab, and if the user
+    // wishes it
+    if (!propertyNames.empty() || exportHeaders) {
         str << "\\header {" << std::endl;
         col++;  // indent+
 
@@ -502,6 +521,20 @@ LilypondExporter::write() {
     // (not the cleanest output but maybe the most reliable)
     // Incomplete: add an option to cram it all into one grand staff
     
+    // include appropriate paper file to make the specified paper/font sizes
+    // work...
+    int font = 20; // default, if config problem
+    switch (fontSize) {
+        case 0 : font = 11; break;
+        case 1 : font = 13; break;
+        case 2 : font = 16; break;
+        case 3 : font = 19; break;
+        case 4 : font = 20; break;
+        case 5 : font = 23; break;
+        case 6 : font = 26; break;
+    }
+    str << indent(col) << "\\include \"paper" << font << ".ly\"" << std::endl;
+   
     // open \score section
     str << "\\score {" << std::endl;
     str << indent(++col) << "\\notes <" << std::endl;  // indent+
@@ -602,6 +635,11 @@ LilypondExporter::write() {
             while (curNote >= MIN_NOTE_SKIP_DURATION) {
                 int numCurNotes = ((int)(segmentStart / curNote));
                 if (numCurNotes > 0) {
+                    // FIXME - use new config data and get some |==rests==|
+                    // going...
+                    if (restType == 1) {
+                        str << std::endl << "% you selected multi-measure rests, but they are not yet implemented...  sorry..." << std::endl;
+                    }
                     str << indent(col) << "\\skip " << (wholeNoteDuration / curNote)
                         << "*" << numCurNotes << std::endl;
                     segmentStart = segmentStart - numCurNotes*curNote;
@@ -1009,11 +1047,15 @@ LilypondExporter::write() {
         // close Voice context
         str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-  
         
-        // write accumulated lyric events to the Lyric context
-        str << indent(col) << "\\context Lyrics = \"" << lyricNumber.str() << "\" \\lyrics  { "
-            << std::endl;
-        str << indent(++col) << lilyLyrics.str() << " " << std::endl;
-        str << std::endl << indent(--col) << "} % Lyrics"; // close Lyric context
+        // write accumulated lyric events to the Lyric context, if user
+        // desires
+        if (exportLyrics) {
+            str << indent(col) << "\\context Lyrics = \"" << lyricNumber.str()
+                << "\" \\lyrics  { " << std::endl;
+            str << indent(++col) << lilyLyrics.str() << " " << std::endl;
+            str << std::endl << indent(--col) << "} % Lyrics"; // close Lyric context
+        }
+        str << std::endl; // quick fix...  something was out of sync under certain circumstances
     }
     
 
@@ -1023,8 +1065,22 @@ LilypondExporter::write() {
     // close \notes section
     str << std::endl << indent(--col) << "> % notes" << std::endl;; // indent-
 
-    // Incomplete: Add paper info?
-    str << indent(col) << "\\paper { }" << std::endl;
+    // write user-specified paper type in \paper block
+    std::string paper = "";
+    switch (paperSize) {
+        case 0 : paper = "letter"; break;
+        case 1 : paper = "a4";     break;
+        case 2 : paper = "legal";  break;
+    }
+    str << indent(col) << "\\paper { papersize = \"" << paper << "\" }" << std::endl;
+
+    // write initial tempo in Midi block, if user wishes (added per user request...
+    // makes debugging the .ly file easier...)
+    if (exportMidi) {
+        str << indent(col++) << "\\midi {" << std::endl;
+        str << indent(col) << "% not implemented yet...  coming soon..." << std::endl;
+        str << indent(--col) << "} " << std::endl;
+    }    
 
     // close \score section and close out the file
     str << "} % score" << std::endl;

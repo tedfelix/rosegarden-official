@@ -114,8 +114,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
     //
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
-			     4, 2, // nbrow, nbcol -- one extra row improves layout
-			     10, 5);
+                             4, 2, // nbrow, nbcol -- one extra row improves layout
+                             10, 5);
     layout->addWidget(new QLabel(i18n("Note name style"),
                                  frame), 0, 0);
     layout->addWidget(new QLabel(i18n("Base octave number for MIDI pitch display"),
@@ -152,8 +152,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
     //
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame,
-			     4, 2, // nbrow, nbcol
-			     10, 5);
+                             4, 2, // nbrow, nbcol
+                             10, 5);
 
     layout->addWidget(new QLabel(i18n("Default editor (for double-click on segment)"),
                                  frame), 0, 0);
@@ -313,18 +313,18 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
                                           10, 5);
 
     layout->addWidget
-	(new QLabel(i18n("Notation font"), frame), 0, 0);
+        (new QLabel(i18n("Notation font"), frame), 0, 0);
     layout->addWidget
-	(new QLabel(i18n("Font size for single-staff views"), frame),
-	 2, 0);
+        (new QLabel(i18n("Font size for single-staff views"), frame),
+         2, 0);
     layout->addWidget
-	(new QLabel(i18n("Font size for multi-staff views"), frame),
-	 3, 0);
+        (new QLabel(i18n("Font size for multi-staff views"), frame),
+         3, 0);
 
     QFrame *subFrame = new QFrame(frame);
     QGridLayout *subLayout = new QGridLayout(subFrame,
-					     4, 2, // nbrow, nbcol
-					     12, 2);
+                                             4, 2, // nbrow, nbcol
+                                             12, 2);
 
     subLayout->addWidget(new QLabel(i18n("Origin:"), subFrame), 0, 0);
     subLayout->addWidget(new QLabel(i18n("Copyright:"), subFrame), 1, 0);
@@ -349,19 +349,19 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_font->setEditable(false);
 
     QString defaultFont = m_cfg->readEntry
-	("notefont", strtoqstr(NotePixmapFactory::getDefaultFont()));
+        ("notefont", strtoqstr(NotePixmapFactory::getDefaultFont()));
 
     std::set<std::string> fs(NotePixmapFactory::getAvailableFontNames());
     std::vector<std::string> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
 
     for (std::vector<std::string>::iterator i = f.begin(); i != f.end(); ++i) {
-	QString s(strtoqstr(*i));
+        QString s(strtoqstr(*i));
         m_font->insertItem(s);
-	if (s == defaultFont) m_font->setCurrentItem(m_font->count() - 1);
+        if (s == defaultFont) m_font->setCurrentItem(m_font->count() - 1);
     }
     QObject::connect(m_font, SIGNAL(activated(const QString &)),
-		     this, SLOT(slotFontComboChanged(const QString &)));
+                     this, SLOT(slotFontComboChanged(const QString &)));
     layout->addWidget(m_font, 0, 1);
 
     m_singleStaffSize = new QComboBox(frame);
@@ -388,7 +388,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_layoutMode->insertItem(i18n("Page layout"));
     int defaultLayoutMode = m_cfg->readNumEntry("layoutmode", 0);
     if (defaultLayoutMode >= 0 && defaultLayoutMode <= 1) {
-	m_layoutMode->setCurrentItem(defaultLayoutMode);
+        m_layoutMode->setCurrentItem(defaultLayoutMode);
     }
     layout->addWidget(m_layoutMode, 0, 1);
     
@@ -402,25 +402,25 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     for (std::vector<int>::iterator i = s.begin(); i != s.end(); ++i) {
 
-	QString text("%1 %");
-	if (*i == 100) text = "%1 % (normal)";
+        QString text("%1 %");
+        if (*i == 100) text = "%1 % (normal)";
         m_spacing->insertItem(text.arg(*i));
 
-	if (*i == defaultSpacing) {
-	    m_spacing->setCurrentItem(m_spacing->count() - 1);
-	}
+        if (*i == defaultSpacing) {
+            m_spacing->setCurrentItem(m_spacing->count() - 1);
+        }
     }
 
     layout->addWidget(m_spacing, 1, 1);
 
     m_showUnknowns = new QCheckBox
-	(i18n("Show non-notation events as question marks"), frame);
+        (i18n("Show non-notation events as question marks"), frame);
     bool defaultShowUnknowns = m_cfg->readBoolEntry("showunknowns", true);
     m_showUnknowns->setChecked(defaultShowUnknowns);
     layout->addWidget(m_showUnknowns, 2, 1);
 
     m_colourQuantize = new QCheckBox
-	(i18n("Show notation-quantized notes in a different colour"), frame);
+        (i18n("Show notation-quantized notes in a different colour"), frame);
     bool defaultColourQuantize = m_cfg->readBoolEntry("colourquantize", false);
     m_colourQuantize->setChecked(defaultColourQuantize);
     layout->addWidget(m_colourQuantize, 3, 1);
@@ -431,37 +431,37 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout = new QGridLayout(frame, 6, 2, 10, 5);
 
     layout->addWidget
-	(new QLabel(i18n("Default note style for new notes"), frame), 0, 0);
+        (new QLabel(i18n("Default note style for new notes"), frame), 0, 0);
 
     m_noteStyle = new QComboBox(frame);
     m_noteStyle->setEditable(false);
 
     QString defaultStyle =
-	m_cfg->readEntry("style", strtoqstr(NoteStyleFactory::DefaultStyle));
+        m_cfg->readEntry("style", strtoqstr(NoteStyleFactory::DefaultStyle));
     std::vector<NoteStyleName> styles
-	(NoteStyleFactory::getAvailableStyleNames());
+        (NoteStyleFactory::getAvailableStyleNames());
     
     for (std::vector<NoteStyleName>::iterator i = styles.begin();
-	 i != styles.end(); ++i) {
+         i != styles.end(); ++i) {
 
-	QString styleQName(strtoqstr(*i));
-	m_noteStyle->insertItem(styleQName);
-	if (styleQName == defaultStyle) {
-	    m_noteStyle->setCurrentItem(m_noteStyle->count() - 1);
-	}
+        QString styleQName(strtoqstr(*i));
+        m_noteStyle->insertItem(styleQName);
+        if (styleQName == defaultStyle) {
+            m_noteStyle->setCurrentItem(m_noteStyle->count() - 1);
+        }
     }
 
     layout->addWidget(m_noteStyle, 0, 1);
 
     layout->addWidget
-	(new QLabel(i18n("When inserting notes..."), frame), 1, 0);
+        (new QLabel(i18n("When inserting notes..."), frame), 1, 0);
 
     int defaultInsertType = m_cfg->readNumEntry("inserttype", 0);
 
     m_insertType = new QComboBox(frame);
     m_insertType->setEditable(false);
     m_insertType->insertItem
-	(i18n("Split notes into ties to make durations match"));
+        (i18n("Split notes into ties to make durations match"));
     m_insertType->insertItem(i18n("Ignore existing durations"));
     m_insertType->setCurrentItem(defaultInsertType);
 
@@ -470,33 +470,33 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     bool autoBeam = m_cfg->readBoolEntry("autobeam", true);
 
     m_autoBeam = new QCheckBox
-	(i18n("Auto-beam on insert when appropriate"), frame);
+        (i18n("Auto-beam on insert when appropriate"), frame);
     m_autoBeam->setChecked(autoBeam);
     layout->addWidget(m_autoBeam, 2, 1);
 
     bool collapse = m_cfg->readBoolEntry("collapse", false);
 
     m_collapseRests = new QCheckBox
-	(i18n("Collapse rests after erase"), frame);
+        (i18n("Collapse rests after erase"), frame);
     m_collapseRests->setChecked(collapse);
     layout->addWidget(m_collapseRests, 3, 1);
 
 
     layout->addWidget
-	(new QLabel(i18n("Default paste type"), frame), 4, 0);
+        (new QLabel(i18n("Default paste type"), frame), 4, 0);
 
     m_pasteType = new QComboBox(frame);
     m_pasteType->setEditable(false);
 
     unsigned int defaultPasteType = m_cfg->readUnsignedNumEntry
-	("pastetype", PasteEventsCommand::Restricted);
+        ("pastetype", PasteEventsCommand::Restricted);
 
     PasteEventsCommand::PasteTypeMap pasteTypes =
-	PasteEventsCommand::getPasteTypes();
+        PasteEventsCommand::getPasteTypes();
 
     for (PasteEventsCommand::PasteTypeMap::iterator i = pasteTypes.begin();
-	 i != pasteTypes.end(); ++i) {
-	m_pasteType->insertItem(i18n(strtoqstr(i->second)));
+         i != pasteTypes.end(); ++i) {
+        m_pasteType->insertItem(i18n(strtoqstr(i->second)));
     }
 
     m_pasteType->setCurrentItem(defaultPasteType);
@@ -505,18 +505,86 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     addTab(frame, i18n("Editing"));
 
     QString preamble =
-	(i18n("Rosegarden can apply automatic quantization to recorded "
-	      "or imported MIDI data for notation purposes only. "
-	      "This does not affect playback, or "
-	      "editing in any of the views except notation."));
+        (i18n("Rosegarden can apply automatic quantization to recorded "
+              "or imported MIDI data for notation purposes only. "
+              "This does not affect playback, and does not affect "
+              "editing in any of the views except notation."));
 
     m_cfg->writeEntry("quantizetype", 2);
     m_cfg->writeEntry("quantizenotationonly", true);
 
     m_quantizeFrame = new RosegardenQuantizeParameters
-	(m_tabWidget, false, "Notation Options", preamble);
+        (m_tabWidget, false, "Notation Options", preamble);
 
     addTab(m_quantizeFrame, i18n("Quantize"));
+
+    // Lilypond (DMM) - I'll just hijack the Notation configurator for the time
+    // being.
+
+    // quantizer setting this elsewhere?  this was evidently getting reset
+    // because all my reads were coming up with defaults
+    m_cfg->setGroup("Notation Options");
+
+    frame = new QFrame(m_tabWidget);
+    layout = new QGridLayout(frame, 7, 2, 10, 5);
+
+    layout->addWidget(new QLabel(
+        i18n("Customize the Lilypond export filter..."), frame), 0, 0);
+    
+    m_lilyExportHeaders = new QCheckBox(
+        i18n("Export Document Properties as \\header block"), frame);
+    m_lilyExportHeaders->setChecked(m_cfg->readBoolEntry("lilyexportheaders", true));
+    layout->addWidget(m_lilyExportHeaders, 1, 0);
+    
+    m_lilyExportLyrics = new QCheckBox(
+        i18n("Export \\lyric blocks"), frame);
+    m_lilyExportLyrics->setChecked(m_cfg->readBoolEntry("lilyexportlyrics", true));
+    layout->addWidget(m_lilyExportLyrics, 1, 1);
+
+    m_lilyExportUnmuted = new QCheckBox(
+        i18n("Do not export muted staffs."), frame);
+    m_lilyExportUnmuted->setChecked(m_cfg->readBoolEntry("lilyexportunmuted", true));
+    layout->addWidget(m_lilyExportUnmuted, 2, 0);
+
+    m_lilyExportMidi = new QCheckBox(
+        i18n("Export \\midi block"), frame);
+    m_lilyExportMidi->setChecked(m_cfg->readBoolEntry("lilyexportmidi", false));
+    layout->addWidget(m_lilyExportMidi, 2, 1);
+
+    layout->addWidget(new QLabel(
+        i18n("Paper size to use in \\paper block:"), frame), 3, 0);
+    
+    m_lilyPaperSize = new QComboBox(frame);
+    m_lilyPaperSize->insertItem(i18n("US Letter"));
+    m_lilyPaperSize->insertItem(i18n("A4"));
+    m_lilyPaperSize->insertItem(i18n("Legal"));
+    m_lilyPaperSize->setCurrentItem(m_cfg->readUnsignedNumEntry("lilypapersize", 0));
+    layout->addWidget(m_lilyPaperSize, 3, 1);
+
+    layout->addWidget(new QLabel(
+        i18n("Lilypond font size:"), frame), 4, 0);
+
+    m_lilyFontSize = new QComboBox(frame);
+    m_lilyFontSize->insertItem("11");
+    m_lilyFontSize->insertItem("13");
+    m_lilyFontSize->insertItem("16");
+    m_lilyFontSize->insertItem("19");
+    m_lilyFontSize->insertItem("20");
+    m_lilyFontSize->insertItem("23");
+    m_lilyFontSize->insertItem("26");
+    m_lilyFontSize->setCurrentItem(m_cfg->readUnsignedNumEntry("lilyfontsize", 4));
+    layout->addWidget(m_lilyFontSize, 4, 1);
+
+    layout->addWidget(new QLabel(
+        i18n("Fill time gaps with:"), frame), 5, 0);
+            
+    m_lilyRestType = new QComboBox(frame);
+    m_lilyRestType->insertItem("\\skip");
+    m_lilyRestType->insertItem("multi-measure rests");
+    m_lilyRestType->setCurrentItem(m_cfg->readUnsignedNumEntry("lilyresttype", 0));
+    layout->addWidget(m_lilyRestType, 5, 1);
+    
+    addTab(frame, i18n("Lilypond"));  
 }
 
 void
@@ -525,25 +593,25 @@ NotationConfigurationPage::slotFontComboChanged(const QString &font)
     std::string fontStr = qstrtostr(font);
 
     populateSizeCombo(m_singleStaffSize, fontStr,
-		      m_cfg->readUnsignedNumEntry
-		      ("singlestaffnotesize",
-		       NotePixmapFactory::getDefaultSize(fontStr)));
+                      m_cfg->readUnsignedNumEntry
+                      ("singlestaffnotesize",
+                       NotePixmapFactory::getDefaultSize(fontStr)));
     populateSizeCombo(m_multiStaffSize, fontStr,
-		      m_cfg->readUnsignedNumEntry
-		      ("multistaffnotesize",
-		       NotePixmapFactory::getDefaultSize(fontStr)));
+                      m_cfg->readUnsignedNumEntry
+                      ("multistaffnotesize",
+                       NotePixmapFactory::getDefaultSize(fontStr)));
 
     try {
-	NoteFont noteFont(fontStr);
-	const NoteFontMap &map(noteFont.getNoteFontMap());
-	m_fontOriginLabel->setText(strtoqstr(map.getOrigin()));
-	m_fontCopyrightLabel->setText(strtoqstr(map.getCopyright()));
-	m_fontMappedByLabel->setText(strtoqstr(map.getMappedBy()));
-	if (map.isSmooth()) {
-	    m_fontTypeLabel->setText(strtoqstr(map.getType() + " (smooth)"));
-	} else {
-	    m_fontTypeLabel->setText(strtoqstr(map.getType() + " (jaggy)"));
-	}
+        NoteFont noteFont(fontStr);
+        const NoteFontMap &map(noteFont.getNoteFontMap());
+        m_fontOriginLabel->setText(strtoqstr(map.getOrigin()));
+        m_fontCopyrightLabel->setText(strtoqstr(map.getCopyright()));
+        m_fontMappedByLabel->setText(strtoqstr(map.getMappedBy()));
+        if (map.isSmooth()) {
+            m_fontTypeLabel->setText(strtoqstr(map.getType() + " (smooth)"));
+        } else {
+            m_fontTypeLabel->setText(strtoqstr(map.getType() + " (jaggy)"));
+        }
     } catch (Rosegarden::Exception f) {
         KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
     }
@@ -551,15 +619,15 @@ NotationConfigurationPage::slotFontComboChanged(const QString &font)
 
 void
 NotationConfigurationPage::populateSizeCombo(QComboBox *combo,
-					     std::string font,
-					     int defaultSize)
+                                             std::string font,
+                                             int defaultSize)
 {
     std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(font);
     combo->clear();
     
     for (std::vector<int>::iterator i = sizes.begin(); i != sizes.end(); ++i) {
         combo->insertItem(QString("%1").arg(*i));
-	if (*i == defaultSize) combo->setCurrentItem(combo->count() - 1);
+        if (*i == defaultSize) combo->setCurrentItem(combo->count() - 1);
     }
 }
 
@@ -570,9 +638,9 @@ NotationConfigurationPage::apply()
 
     m_cfg->writeEntry("notefont", m_font->currentText());
     m_cfg->writeEntry("singlestaffnotesize",
-		      m_singleStaffSize->currentText().toUInt());
+                      m_singleStaffSize->currentText().toUInt());
     m_cfg->writeEntry("multistaffnotesize",
-		      m_multiStaffSize->currentText().toUInt());
+                      m_multiStaffSize->currentText().toUInt());
 
     std::vector<int> s = NotationHLayout::getAvailableSpacings();
     m_cfg->writeEntry("spacing", s[m_spacing->currentItem()]);
@@ -580,7 +648,7 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("layoutmode", m_layoutMode->currentItem());
 /*!!!
     m_cfg->writeEntry("smoothing",
-		      m_smoothing->currentItem() + Note::Shortest);
+                      m_smoothing->currentItem() + Note::Shortest);
 */
     m_cfg->writeEntry("colourquantize", m_colourQuantize->isChecked());
     m_cfg->writeEntry("showunknowns", m_showUnknowns->isChecked());
@@ -589,6 +657,15 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("autobeam", m_autoBeam->isChecked());
     m_cfg->writeEntry("collapse", m_collapseRests->isChecked());
     m_cfg->writeEntry("pastetype", m_pasteType->currentItem());
+
+    // Lilypond (DMM)
+    m_cfg->writeEntry("lilypapersize", m_lilyPaperSize->currentItem());
+    m_cfg->writeEntry("lilyfontsize", m_lilyFontSize->currentItem());
+    m_cfg->writeEntry("lilyexportlyrics", m_lilyExportLyrics->isChecked());
+    m_cfg->writeEntry("lilyexportheader", m_lilyExportHeaders->isChecked());
+    m_cfg->writeEntry("lilyexportmidi", m_lilyExportMidi->isChecked());
+    m_cfg->writeEntry("lilyexportunmuted", m_lilyExportUnmuted->isChecked());
+    m_cfg->writeEntry("lilyresttype", m_lilyRestType->currentItem());
 
     (void)m_quantizeFrame->getQuantizer(); // this also writes to the config
 }
@@ -1138,13 +1215,13 @@ SequencerConfigurationPage::apply()
 
 
 DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *doc,
-							     QWidget *parent,
-							     const char *name) :
+                                                             QWidget *parent,
+                                                             const char *name) :
     TabbedConfigurationPage(doc, parent, name)
 {
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
-					  3, 2,
+                                          3, 2,
                                           10, 5);
 
     layout->addWidget(new QLabel(i18n("Filename:"), frame), 0, 0);
@@ -1154,17 +1231,17 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     Rosegarden::timeT d = doc->getComposition().getDuration();
     Rosegarden::RealTime rtd = doc->getComposition().getElapsedRealTime(d);
     layout->addWidget
-	(new QLabel(i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 bars)")
-		    .arg(rtd.sec / 60).arg(rtd.sec % 60)
-		    .arg(rtd.usec / 100000).arg((rtd.usec / 10000) % 10)
-		    .arg(d).arg(doc->getComposition().getBarNumber(d) + 1),
-		    frame), 1, 1);
+        (new QLabel(i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 bars)")
+                    .arg(rtd.sec / 60).arg(rtd.sec % 60)
+                    .arg(rtd.usec / 100000).arg((rtd.usec / 10000) % 10)
+                    .arg(d).arg(doc->getComposition().getBarNumber(d) + 1),
+                    frame), 1, 1);
 
     layout->addWidget(new QLabel(i18n("Segments:"), frame), 2, 0);
     layout->addWidget(new QLabel(QString("%1 on %2 tracks")
-				 .arg(doc->getComposition().getNbSegments())
-				 .arg(doc->getComposition().getNbTracks()),
-				 frame), 2, 1);
+                                 .arg(doc->getComposition().getNbSegments())
+                                 .arg(doc->getComposition().getNbTracks()),
+                                 frame), 2, 1);
     
     addTab(frame, i18n("Summary"));
 
@@ -1184,11 +1261,11 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     Rosegarden::Configuration &metadata = doc->getComposition().getMetadata();
     std::vector<std::string> names(metadata.getPropertyNames());
     for (unsigned int i = 0; i < names.size(); ++i) {
-	QString name(strtoqstr(names[i]));
-	// property names stored in lower case
-	name = name.left(1).upper() + name.right(name.length()-1);
-	new KListViewItem(m_metadata, name,
-			  strtoqstr(metadata.get<String>(names[i])));
+        QString name(strtoqstr(names[i]));
+        // property names stored in lower case
+        name = name.left(1).upper() + name.right(name.length()-1);
+        new KListViewItem(m_metadata, name,
+                          strtoqstr(metadata.get<String>(names[i])));
     }
 
     layout->addMultiCellWidget(m_metadata, 0, 0, 0, 1);
@@ -1218,9 +1295,9 @@ DocumentMetaConfigurationPage::slotAddNewProperty()
     int i = 0;
 
     while (1) {
-	propertyName = (i > 0 ? i18n("New property %1").arg(i) : i18n("New property"));
-	if (!m_doc->getComposition().getMetadata().has(qstrtostr(propertyName))) break;
-	++i;
+        propertyName = (i > 0 ? i18n("New property %1").arg(i) : i18n("New property"));
+        if (!m_doc->getComposition().getMetadata().has(qstrtostr(propertyName))) break;
+        ++i;
     }
 
     new KListViewItem(m_metadata, propertyName, i18n("Undefined"));
@@ -1238,8 +1315,8 @@ DocumentMetaConfigurationPage::apply()
     Rosegarden::Configuration &metadata = m_doc->getComposition().getMetadata();
 
     for (QListViewItem *item = m_metadata->firstChild();
-	 item != 0; item = item->nextSibling()) {
-	
+         item != 0; item = item->nextSibling()) {
+        
         metadata.set<String>(qstrtostr(item->text(0).lower()),
                              qstrtostr(item->text(1)));
     }
@@ -1382,8 +1459,8 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
 
     // Notation Page
     pageWidget = addPage(NotationConfigurationPage::iconLabel(),
-			 NotationConfigurationPage::title(),
-			 loadIcon(NotationConfigurationPage::iconName()));
+                         NotationConfigurationPage::title(),
+                         loadIcon(NotationConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new NotationConfigurationPage(cfg, pageWidget);
     vlay->addWidget(page);
@@ -1392,8 +1469,8 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
 
     // Matrix Page
     pageWidget = addPage(MatrixConfigurationPage::iconLabel(),
-			 MatrixConfigurationPage::title(),
-			 loadIcon(MatrixConfigurationPage::iconName()));
+                         MatrixConfigurationPage::title(),
+                         loadIcon(MatrixConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new MatrixConfigurationPage(cfg, pageWidget);
     vlay->addWidget(page);
