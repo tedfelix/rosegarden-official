@@ -34,6 +34,8 @@ public:
     TrackNotationHelper(Track &t) : TrackHelper(t) { }
     virtual ~TrackNotationHelper();
 
+    TrackHelper::track;
+
 
     /**
      * Checks whether it's reasonable to expand (split) a single event
@@ -99,27 +101,32 @@ public:
 
     /**
      * Inserts a note, doing all the clever split/merge stuff as
-     * appropriate.  Requires up-to-date bar position list.
+     * appropriate.  Requires up-to-date bar position list.  Returns
+     * iterator pointing to last event inserted (there may be more
+     * than one, as note may have had to be split)
      *
      * This method will only work correctly if there is a note or
      * rest event already starting at absoluteTime.
      */
-    void insertNote(timeT absoluteTime, Note note, int pitch,
-                    Accidental explicitAccidental);
+    iterator insertNote(timeT absoluteTime, Note note, int pitch,
+			Accidental explicitAccidental);
 
     /**
      * Inserts a rest, doing all the clever split/merge stuff as
      * appropriate.  Requires up-to-date bar position list.
+     * Returns iterator pointing to last event inserted (there
+     * may be more than one, as rest may have had to be split)
      *
      * This method will only work correctly if there is a note or
      * rest event already starting at absoluteTime.
      */
-    void insertRest(timeT absoluteTime, Note note);
+    iterator insertRest(timeT absoluteTime, Note note);
 
     /**
-     * Insert a clef
+     * Insert a clef.
+     * Returns iterator pointing to clef.
      */
-    void insertClef(timeT absoluteTime, Clef clef);
+    iterator insertClef(timeT absoluteTime, Clef clef);
 
     /**
      * Deletes a note, doing all the clever split/merge stuff as
@@ -212,19 +219,35 @@ public:
 
 
     /**
-     * Divide the notes between the start of the timeslice containing
-     * from and the start of the timeslice containing to up into sensible
+     * Divide the notes between the start of the bar containing
+     * from and the end of the bar containing to up into sensible
      * beamed groups and give each group the right group properties
      * using makeBeamedGroup.  Requires up-to-date bar position list.
      */
     void autoBeam(timeT from, timeT to, std::string type);
 
     /**
-     * Divide the notes in the interval [from, to[ up into sensible
+     * Divide the notes between the start of the bar containing
+     * from and the end of the bar containing to up into sensible
      * beamed groups and give each group the right group properties
      * using makeBeamedGroup.  Requires up-to-date bar position list.
      */
     void autoBeam(iterator from, iterator to, std::string type);
+
+
+    /**
+     * Clear the group id and group type from all events between the
+     * start of the timeslice containing from and the start of the
+     * timeslice containing to
+     */
+    void unbeam(timeT from, timeT to);
+
+    /**
+     * Clear the group id and group type from all events between the
+     * start of the timeslice containing from and the start of the
+     * timeslice containing to
+     */
+    void unbeam(iterator from, iterator to);
 
 
     /**
@@ -271,8 +294,9 @@ private:
 
 
     /// for use by insertNote and insertRest
-    void insertSomething(iterator position, int duration, int pitch,
-			 bool isRest, bool tiedBack, Accidental explicitAcc);
+    iterator insertSomething(iterator position, int duration, int pitch,
+			     bool isRest, bool tiedBack,
+			     Accidental explicitAcc);
 
     /// for use by insertSomething
     iterator insertSingleSomething(iterator position, int duration, int pitch,
@@ -283,6 +307,9 @@ private:
 
     /// for use by makeBeamedGroup
     void makeBeamedGroupAux(iterator from, iterator to, std::string type);
+
+    /// for use by unbeam
+    void unbeamAux(iterator from, iterator to);
 
     /// for use by autoBeam
 

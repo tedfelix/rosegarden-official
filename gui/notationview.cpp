@@ -571,6 +571,9 @@ void NotationView::setupActions()
     new KAction(i18n("Auto-Beam Group"), 0, this,
 		SLOT(slotGroupAutoBeam()), actionCollection(), "auto_beam");
 
+    new KAction(i18n("Break Groups"), 0, this,
+		SLOT(slotGroupBreak()), actionCollection(), "break_group");
+
 
     // setup Settings menu
     KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
@@ -983,6 +986,18 @@ void NotationView::setCurrentSelection(EventSelection* s)
     canvas()->update();
 }
 
+void NotationView::setSingleSelectedEvent(int staffNo, Event *event)
+{
+    setSingleSelectedEvent(getStaff(staffNo)->getTrack(), event);
+}
+
+void NotationView::setSingleSelectedEvent(Track &track, Event *event)
+{
+    EventSelection *selection = new EventSelection(track);
+    selection->addEvent(event);
+    setCurrentSelection(selection);
+}
+
 void NotationView::setTool(NotationTool* tool)
 {
     delete m_tool;
@@ -1180,10 +1195,6 @@ void NotationView::slotGroupBeam()
     Track &track = m_currentEventSelection->getTrack();
     TrackNotationHelper helper(track);
 
-    kdDebug(KDEBUG_AREA) << "Beaming between "
-			 << m_currentEventSelection->getBeginTime() << " and "
-			 << m_currentEventSelection->getEndTime() << endl;
-
     helper.makeBeamedGroup(m_currentEventSelection->getBeginTime(),
 			   m_currentEventSelection->getEndTime(),
 			   "beamed"); //!!!
@@ -1205,13 +1216,29 @@ void NotationView::slotGroupAutoBeam()
     Track &track = m_currentEventSelection->getTrack();
     TrackNotationHelper helper(track);
 
-    kdDebug(KDEBUG_AREA) << "Auto-beaming between "
-			 << m_currentEventSelection->getBeginTime() << " and "
-			 << m_currentEventSelection->getEndTime() << endl;
-
     helper.autoBeam(m_currentEventSelection->getBeginTime(),
 		    m_currentEventSelection->getEndTime(),
 		    "beamed"); //!!!
+
+    emit usedSelection();
+
+    redoLayout(getStaff(m_currentEventSelection->getTrack())->getId(),
+	       m_currentEventSelection->getBeginTime(),
+	       m_currentEventSelection->getEndTime());
+}
+
+void NotationView::slotGroupBreak()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotGroupBreak()\n";
+
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Breaking groups..."), statusBar());
+
+    Track &track = m_currentEventSelection->getTrack();
+    TrackNotationHelper helper(track);
+
+    helper.unbeam(m_currentEventSelection->getBeginTime(),
+		  m_currentEventSelection->getEndTime());
 
     emit usedSelection();
 
@@ -1875,17 +1902,24 @@ NoteInserter::handleMousePress(int height, int staffNo,
 
     timeT time = (*closestNote)->getAbsoluteTime();
     timeT endTime = time + note.getDuration(); //???
-    doInsert(nt, time, note, pitch, m_accidental);
+    Event *newEvent = doInsert(nt, time, note, pitch, m_accidental);
 
+    m_parentView.setSingleSelectedEvent(staffNo, newEvent);
     m_parentView.redoLayout(staffNo, time, endTime);
 }
 
-void NoteInserter::doInsert(TrackNotationHelper& nt,
-                            Rosegarden::timeT absTime,
-                            const Note& note, int pitch,
-                            Accidental accidental)
+Event *NoteInserter::doInsert(TrackNotationHelper& nt,
+			      Rosegarden::timeT absTime,
+			      const Note& note, int pitch,
+			      Accidental accidental)
 {
-    nt.insertNote(absTime, note, pitch, accidental);
+    Track::iterator i = nt.insertNote(absTime, note, pitch, accidental);
+
+    if (i != nt.track().end()) {
+	return (*i);
+    } else {
+	return 0;
+    }
 }
 
 void NoteInserter::setAccidental(Rosegarden::Accidental accidental)
@@ -1903,12 +1937,18 @@ RestInserter::RestInserter(Rosegarden::Note::Type type,
 {
 }
 
-void RestInserter::doInsert(TrackNotationHelper& nt,
-                            Rosegarden::timeT absTime,
-                            const Note& note, int,
-                            Accidental)
+Event *RestInserter::doInsert(TrackNotationHelper& nt,
+			      Rosegarden::timeT absTime,
+			      const Note& note, int,
+			      Accidental)
 {
-    nt.insertRest(absTime, note);
+    Track::iterator i = nt.insertRest(absTime, note);
+
+    if (i != nt.track().end()) {
+	return (*i);
+    } else {
+	return 0;
+    }
 }
 
 //------------------------------
@@ -1943,8 +1983,11 @@ void ClefInserter::handleMousePress(int, int staffNo,
 
     m_parentView.getDocument()->setModified();
 
-    nt.insertClef(time, m_clef);
+    Track::iterator i = nt.insertClef(time, m_clef);
+    Event *newEvent = 0;
+    if (i != nt.track().end()) newEvent = *i;
 
+    m_parentView.setSingleSelectedEvent(staffNo, newEvent);
     m_parentView.redoLayout(staffNo, time, time + 1);
 }
 
@@ -2015,7 +2058,9 @@ void NotationEraser::_handleMousePress(int staffNo,
 NotationSelector::NotationSelector(NotationView& view)
     : NotationTool(view),
       m_selectionRect(new QCanvasRectangle(m_parentView.canvas())),
-      m_updateRect(false)
+      m_updateRect(false),
+      m_clickedStaff(-1),
+      m_clickedElement(0)
 {
     m_selectionRect->hide();
     m_selectionRect->setPen(Qt::blue);
@@ -2030,10 +2075,13 @@ NotationSelector::~NotationSelector()
     m_parentView.canvas()->update();
 }
 
-void NotationSelector::handleMousePress(int, int,
+void NotationSelector::handleMousePress(int, int staffNo,
                                         const QPoint& p,
-                                        NotationElement*)
+                                        NotationElement *element)
 {
+    m_clickedStaff = staffNo;
+    m_clickedElement = element;
+
     m_selectionRect->setX(p.x());
     m_selectionRect->setY(p.y());
     m_selectionRect->setSize(0,0);
@@ -2064,6 +2112,20 @@ void NotationSelector::handleMouseRelease(QMouseEvent*)
 {
     m_updateRect = false;
     setViewCurrentSelection();
+
+    // If we didn't drag out a meaningful area, but _did_ click on
+    // an individual event, then select just that event
+    
+    if (m_selectionRect->width()  > -2 &&
+	m_selectionRect->width()  <  2 &&
+	m_selectionRect->height() > -2 &&
+	m_selectionRect->height() <  2 &&
+	m_clickedElement != 0	       &&
+	m_clickedStaff >= 0) {
+
+	m_parentView.setSingleSelectedEvent
+	    (m_clickedStaff, m_clickedElement->event());
+    }
 }
 
 void NotationSelector::hideSelection()

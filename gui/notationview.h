@@ -183,6 +183,18 @@ public:
      */
     void setCurrentSelection(EventSelection*);
 
+    /**
+     * Set the current event selection to a single event
+     */
+    void setSingleSelectedEvent(int staffNo,
+				Rosegarden::Event *event);
+
+    /**
+     * Set the current event selection to a single event
+     */
+    void setSingleSelectedEvent(Rosegarden::Track &track,
+				Rosegarden::Event *event);
+
     /// Changes the font of the staffs on the view
     void changeFont(std::string newFont);
 
@@ -339,6 +351,7 @@ public slots:
     /// group slots
     void slotGroupBeam();
     void slotGroupAutoBeam();
+    void slotGroupBreak();
 
     /// Canvas actions slots
 
@@ -654,10 +667,10 @@ public:
     static void setAccidental(Rosegarden::Accidental);
 
 protected:
-    virtual void doInsert(Rosegarden::TrackNotationHelper&,
-                          Rosegarden::timeT absTime,
-                          const Rosegarden::Note&, int pitch,
-                          Rosegarden::Accidental);
+    virtual Rosegarden::Event *doInsert(Rosegarden::TrackNotationHelper&,
+					Rosegarden::timeT absTime,
+					const Rosegarden::Note&, int pitch,
+					Rosegarden::Accidental);
 
     Rosegarden::Note::Type m_noteType;
     unsigned int m_noteDots;
@@ -674,10 +687,10 @@ public:
     RestInserter(Rosegarden::Note::Type, unsigned int dots, NotationView&);
     
 protected:
-    virtual void doInsert(Rosegarden::TrackNotationHelper&,
-                          Rosegarden::timeT absTime,
-                          const Rosegarden::Note&, int pitch,
-                          Rosegarden::Accidental);
+    virtual Rosegarden::Event *doInsert(Rosegarden::TrackNotationHelper&,
+					Rosegarden::timeT absTime,
+					const Rosegarden::Note&, int pitch,
+					Rosegarden::Accidental);
 };
 
 /**
@@ -765,6 +778,8 @@ protected:
     QCanvasRectangle* m_selectionRect;
     bool m_updateRect;
 
+    int m_clickedStaff;
+    NotationElement *m_clickedElement;
 };
 
 

@@ -295,8 +295,9 @@ void TrackNotationHelper::makeNoteViable(iterator i)
 }
 
 
-void TrackNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
-                                     Accidental explicitAccidental)
+Track::iterator
+TrackNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
+				Accidental explicitAccidental)
 {
 
     //!!! Handle grouping!  (Inserting into the middle of an existing
@@ -312,12 +313,13 @@ void TrackNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
 
 //    int barNo = track().getBarNumber(i);
 
-    insertSomething(i, note.getDuration(), pitch, false, false,
-                    explicitAccidental);
+    return insertSomething(i, note.getDuration(), pitch, false, false,
+			   explicitAccidental);
 }
 
 
-void TrackNotationHelper::insertRest(timeT absoluteTime, Note note)
+Track::iterator
+TrackNotationHelper::insertRest(timeT absoluteTime, Note note)
 {
     iterator i, j;
     track().getTimeSlice(absoluteTime, i, j);
@@ -326,12 +328,14 @@ void TrackNotationHelper::insertRest(timeT absoluteTime, Note note)
 
 //    int barNo = track().getBarNumber(i);
 
-    insertSomething(i, note.getDuration(), 0, true, false, NoAccidental);
+    return insertSomething(i, note.getDuration(), 0, true, false,
+			   NoAccidental);
 }
 
 
-Track::iterator TrackNotationHelper::collapseRestsForInsert(iterator i,
-					      timeT desiredDuration)
+Track::iterator
+TrackNotationHelper::collapseRestsForInsert(iterator i,
+					    timeT desiredDuration)
 {
     // collapse at most once, then recurse
 
@@ -349,9 +353,10 @@ Track::iterator TrackNotationHelper::collapseRestsForInsert(iterator i,
 }
 
 
-void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
-                                          bool isRest, bool tiedBack,
-                                          Accidental acc)
+Track::iterator
+TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
+				     bool isRest, bool tiedBack,
+				     Accidental acc)
 {
     // Rules:
     // 
@@ -373,8 +378,8 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
     while (i != end() && (*i)->getDuration() == 0) ++i;
 
     if (i == end()) {
-	insertSingleSomething(i, duration, pitch, isRest, tiedBack, acc);
-	return;
+	return insertSingleSomething
+	    (i, duration, pitch, isRest, tiedBack, acc);
     }
 
     // If there's a rest at the insertion position, merge it with any
@@ -396,7 +401,8 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
 	cerr << "Durations match; doing simple insert" << endl;
 
-	insertSingleSomething(i, duration, pitch, isRest, tiedBack, acc);
+	return insertSingleSomething
+	    (i, duration, pitch, isRest, tiedBack, acc);
 
     } else if (duration < existingDuration) {
 
@@ -429,8 +435,8 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
             }
 	}
 
-	insertSingleSomething(i, duration, pitch, isRest, tiedBack,
-                              acc);
+	return insertSingleSomething(i, duration, pitch, isRest, tiedBack,
+				     acc);
 
     } else { // duration > existingDuration
 
@@ -471,15 +477,15 @@ void TrackNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
             i = track().findTime((*i)->getAbsoluteTime() + existingDuration);
 
-	    insertSomething(i, duration - existingDuration, pitch, isRest,
-                            true, acc);
+	    return insertSomething
+		(i, duration - existingDuration, pitch, isRest, true, acc);
 
 	} else {
 
 	    cerr << "No need to split new note" << endl;
 
-	    i = insertSingleSomething(i, duration, pitch, isRest,
-                                      tiedBack, acc);
+	    return insertSingleSomething(i, duration, pitch, isRest,
+					 tiedBack, acc);
 	}
     }
 }
@@ -543,9 +549,10 @@ TrackNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
 }
 
 
-void TrackNotationHelper::insertClef(timeT absoluteTime, Clef clef)
+Track::iterator
+TrackNotationHelper::insertClef(timeT absoluteTime, Clef clef)
 {
-    insert(clef.getAsEvent(absoluteTime));
+    return insert(clef.getAsEvent(absoluteTime));
 }
 
 
@@ -640,6 +647,29 @@ TrackNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
     for (iterator i = from; i != to; ++i) {
         (*i)->setMaybe<Int>(BEAMED_GROUP_ID, groupId);
         (*i)->set<String>(BEAMED_GROUP_TYPE, type);
+    }
+}
+
+void
+TrackNotationHelper::unbeam(timeT from, timeT to)
+{
+    unbeamAux(track().findTime(from), track().findTime(to));
+}
+
+void
+TrackNotationHelper::unbeam(iterator from, iterator to)
+{
+    unbeamAux
+	(track().findTime((*from)->getAbsoluteTime()),
+	 (to == end()) ? to : track().findTime((*to)->getAbsoluteTime()));
+}
+
+void
+TrackNotationHelper::unbeamAux(iterator from, iterator to)
+{
+    for (iterator i = from; i != to; ++i) {
+	(*i)->unset(BEAMED_GROUP_ID);
+	(*i)->unset(BEAMED_GROUP_TYPE);
     }
 }
 
