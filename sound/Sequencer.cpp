@@ -110,10 +110,10 @@ Sequencer::initializeMidi()
     //
     m_midiRecordClient.addInputPort(m_midiRecordPort);
 
-    // set MIDI thru - urgh, not if we're recording anything!
+    // set MIDI thru - we _have_ to set this on otherwise aRTS barfs
     //
     //
-    //m_midiRecordPort.setMidiThru(m_midiPlayPort);
+    m_midiRecordPort.setMidiThru(m_midiPlayPort);
 
     // Turn MIDI event recording on 
     //
