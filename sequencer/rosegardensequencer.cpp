@@ -258,6 +258,37 @@ RosegardenSequencerApp::keepPlaying()
 {
     if (m_songPosition > ( m_lastFetchSongPosition - m_fetchLatency))
     {
+
+        // Check to make sure that we haven't got ahead of the GUI
+        // and adjust as necessary (drop some "slices" if you like)
+        //
+        Rosegarden::RealTime sequencerTime = m_sequencer->getSequencerTime();
+        Rosegarden::RealTime dropBoundary = m_lastFetchSongPosition
+                                            + m_readAhead + m_readAhead;
+
+        if (sequencerTime > dropBoundary)
+        {
+            // Catch up
+            m_lastFetchSongPosition = sequencerTime;
+
+            // Comment on droppage
+            //
+            Rosegarden::RealTime gapTime = sequencerTime - dropBoundary;
+            int gapLength = gapTime.sec * 1000000 + gapTime.usec;
+            int sliceSize = m_readAhead.sec * 1000000 + m_readAhead.usec;
+            int slices = (gapLength/sliceSize == 0) ? 1 : gapLength/sliceSize;
+
+            std::cerr << "RosegardenSequencerApp::keepPlaying() - "
+                      << "GUI COULDN'T SERVICE SLICE REQUEST(S)" << std::endl
+                      << "                                        "
+                      << "      -- DROPPED "
+                      << slices
+                      << " SLICE";
+            if (slices > 1) std::cerr << "S";
+            std::cerr <<"! --" << std::endl;
+
+        }
+
         Rosegarden::MappedComposition *mC =
                         fetchEvents(m_lastFetchSongPosition,
                                     m_lastFetchSongPosition + m_readAhead);
