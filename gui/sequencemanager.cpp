@@ -1454,6 +1454,19 @@ SequenceManager::preparePlayback()
                 mC.insert(mE);
             }
         }
+        else if ((*it)->getType() == Instrument::Audio)
+        {
+            setMappedProperty((*it)->getId(),
+                              "value",
+                              (*it)->getVelocity());
+        }
+        else
+        {
+            std::cerr << "SequenceManager::preparePlayback - "
+                      << "unrecognised instrument type" << std::endl;
+        }
+
+
     }
 
     // Send the MappedComposition if it's got anything in it

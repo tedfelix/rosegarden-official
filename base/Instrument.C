@@ -159,7 +159,7 @@ Instrument::toXmlString()
                    << (int)m_pan << "\"/>" << std::endl;
     }
 
-    if (m_sendVelocity)
+    if (m_sendVelocity || m_type == Audio)
     {
         instrument << "            <velocity value=\""
                    << (int)m_velocity << "\"/>" << std::endl;

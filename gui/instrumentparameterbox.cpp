@@ -244,7 +244,6 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
 
         m_channelLabel->hide();
         m_panLabel->hide();
-        m_velocityLabel->hide();
         m_programLabel->hide();
         m_bankLabel->hide();
         m_bankValue->hide();
@@ -257,6 +256,7 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         m_velocityCheckBox->hide();
 
         m_velocityValue->show();
+        m_velocityLabel->show();
         m_velocityValue->setDisabled(false);
         m_velocityValue->setCurrentItem(instrument->getVelocity());
 
