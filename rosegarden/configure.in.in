@@ -71,12 +71,13 @@ else
 
   dnl only use JACK when jack/jack.h is found
   if test "$with_jack" = "yes"; then
-     AC_CHECK_HEADERS(jack/jack.h,,[with_jack=no])
+     export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+     PKG_CHECK_MODULES(JACK,jack >= 0.50.0,,[with_jack="no"])
   fi
 
   if test "$with_jack" = "yes"; then
     AC_CHECK_LIB(rt, shm_open)
-    AC_CHECK_LIB(jack, jack_client_new)
+    AC_DEFINE(HAVE_LIBJACK, 1, [Define if you have JACK support])
 
     dnl  AC_DEFINE(HAVE_JACK, 1, [Define if you have JACK support])
     dnl  AC_SUBST(JACKLIB)

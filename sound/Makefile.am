@@ -9,7 +9,7 @@ endif
 endif
 
 # over stated path
-INCLUDES= $(all_includes) $(arts_includes) -I$(top_srcdir)/gui -I$(top_srcdir)/base
+INCLUDES= $(all_includes) $(arts_includes) -I$(top_srcdir)/gui -I$(top_srcdir)/base @JACK_CFLAGS@
 
 COMPILE_FIRST = libRosegardenSound
 
@@ -80,7 +80,7 @@ endif
 endif
 
 libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined
-libRosegardenSequencer_la_LIBADD   = $(LIB_QT) $(arts_libs) libRosegardenSound.la ../base/libbase.la @ALSA_LIBS@
+libRosegardenSequencer_la_LIBADD   = $(LIB_QT) $(arts_libs) libRosegardenSound.la ../base/libbase.la @ALSA_LIBS@  @JACK_LIBS@
 
 libRosegardenSequencer_la_CFLAGS = @ALSA_CFLAGS@
 
