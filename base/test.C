@@ -77,6 +77,12 @@ int main(int argc, char **argv)
 	cout << "Correctly caught BadType when trying to get<String> of duration" << endl;
     }
 
+    try {
+	cout << "dummy prop is " << e.get<String>("nonexistentprop") << endl;
+    } catch (Element2::NoData bt) {
+	cout << "Correctly caught NoData when trying to get non existent property" << endl;
+    }
+
     e.setFromString<Int>("duration", "30");
     cout << "duration is " << e.get<Int>("duration") << endl;
 
