@@ -1080,14 +1080,14 @@ NotationStaff::setPainterClipping(QPainter *painter, double lx, int ly,
 {
     painter->save();
 
-    NOTATION_DEBUG << "NotationStaff::setPainterWindow: lx " << lx << ", dx " << dx << ", w " << w << endl;
+//    NOTATION_DEBUG << "NotationStaff::setPainterWindow: lx " << lx << ", dx " << dx << ", w " << w << endl;
 
     coords = getCanvasCoordsForLayoutCoords(lx + dx, ly);
     int row = getRowForLayoutX(lx + dx);
     double rightMargin = getCanvasXForRightOfRow(row);
     double available = rightMargin - coords.first;
 
-    NOTATION_DEBUG << "NotationStaff::setPainterWindow: row " << row << ", rightMargin " << rightMargin << ", available " << available << endl;
+//    NOTATION_DEBUG << "NotationStaff::setPainterWindow: row " << row << ", rightMargin " << rightMargin << ", available " << available << endl;
 
     switch (policy) {
 
