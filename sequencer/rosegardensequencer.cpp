@@ -980,7 +980,9 @@ RosegardenSequencerApp::initialiseStudio()
     pM->getenvLADSPAPath();
 #endif
 
-    pM->discoverPlugins();
+    // This creates new MappedPlugin objects under the studio
+    //
+    pM->discoverPlugins(m_studio);
 }
 
 
@@ -1039,7 +1041,7 @@ RosegardenSequencerApp::getPropertyList(int id,
     }
 
     SEQUENCER_DEBUG << "getPropertyList - return " << list.size()
-                    << "items" << endl;
+                    << " items" << endl;
 
     return list;
 }

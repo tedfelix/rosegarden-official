@@ -23,7 +23,7 @@ libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 MappedStudio.cpp \
                                 PeakFile.cpp \
                                 PeakFileManager.cpp \
-                                PluginManager.cpp \
+                                Plugins.cpp \
                                 RIFFAudioFile.cpp \
                                 SoundFile.cpp \
                                 WAVAudioFile.cpp

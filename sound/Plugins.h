@@ -18,8 +18,8 @@
   COPYING included with this distribution for more information.
 */
 
-#ifndef _PLUGINMANAGER_H_
-#define _PLUGINMANAGER_H_
+#ifndef _PLUGINS_H_
+#define _PLUGINS_H_
 
 #include "config.h"
 
@@ -36,11 +36,6 @@
 namespace Rosegarden
 {
 
-// Note: same as MappedObjectPropertyList/MappedObjectProperty
-//
-typedef QString PluginProperty;
-typedef QValueVector<PluginProperty> PluginPropertyList;
-
 // Load and manage audio plugins - for the moment we only deal
 // with LADSPA types.
 //
@@ -56,30 +51,16 @@ typedef enum
 class Plugin
 {
 public:
-    Plugin(PluginType type, PluginId id, const std::string &libraryName);
+    Plugin(PluginType type, const std::string &libraryName);
     virtual ~Plugin();
-
-    std::string getName() { return m_name; }
-    PluginType getType() { return m_type; }
-
-    PluginId getId() { return m_id; }
-    void setId(PluginId id) { m_id = id; };
 
     std::string getLibraryName() { return m_libraryName; }
     void setLibraryName(const std::string &libraryName)
         { m_libraryName = libraryName; }
 
-    virtual
-        PluginPropertyList getPropertyList(const PluginProperty &property) = 0;
-
-    virtual PluginPropertyList
-        getPortProperty(PluginPortId id, const PluginProperty &property) = 0;
-
 protected:
 
     PluginType   m_type;
-    std::string  m_name;
-    PluginId     m_id;
     std::string  m_libraryName;
 
 };
@@ -88,22 +69,31 @@ protected:
 class LADSPAPlugin : public Plugin
 {
 public:
+    LADSPAPlugin();
     LADSPAPlugin(const LADSPA_Descriptor *descriptor,
-                 PluginId id,
                  const std::string &libraryName);
     virtual ~LADSPAPlugin();
 
-    virtual PluginPropertyList getPropertyList(const PluginProperty &property);
-    virtual PluginPropertyList getPortProperty(PluginPortId id,
-                                               const PluginProperty &property);
+    const LADSPA_Descriptor* getDescriptor() { return m_descriptor; }
+    void setDescriptor(const LADSPA_Descriptor *descriptor)
+        { m_descriptor = descriptor; }
+
+    // Plugin name
+    //
+    std::string getPluginName();
+    void setPluginName(const std::string &name) { m_pluginName = name; }
 
 protected:
 
     const LADSPA_Descriptor *m_descriptor;
 
+    std::string m_pluginName; // store in the object as we don't always
+                              // have the descriptor available
+
 };
 #endif
 
+/*
 typedef std::vector<Plugin*>::const_iterator PluginIterator;
 
 class PluginManager
@@ -147,9 +137,10 @@ protected:
     PluginId             m_runningId;
 
 };
+*/
 
 
 };
 
-#endif // _PLUGINMANAGER_H_
+#endif // _PLUGINS_H_
 

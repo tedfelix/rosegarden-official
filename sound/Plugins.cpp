@@ -18,7 +18,7 @@
   COPYING included with this distribution for more information.
 */
 
-#include "PluginManager.h"
+#include "Plugins.h"
 
 
 #include <dlfcn.h>
@@ -32,9 +32,8 @@
 namespace Rosegarden
 {
 
-Plugin::Plugin(PluginType type, PluginId id, const std::string &libraryName):
+Plugin::Plugin(PluginType type, const std::string &libraryName):
     m_type(type),
-    m_id(id),
     m_libraryName(libraryName)
 {
 }
@@ -44,22 +43,37 @@ Plugin::~Plugin()
 }
 
 #ifdef HAVE_LADSPA
+
+LADSPAPlugin::LADSPAPlugin():Plugin(LADSPA, ""), m_descriptor(0)
+{
+}
+
 LADSPAPlugin::LADSPAPlugin(const LADSPA_Descriptor *descriptor,
-                           PluginId id,
                            const std::string &libraryName):
-    Plugin(LADSPA, id, libraryName),
+    Plugin(LADSPA, libraryName),
     m_descriptor(descriptor)
 {
-    if (m_descriptor)
-    {
-        m_name = descriptor->Name;
-    }
 }
 
 LADSPAPlugin::~LADSPAPlugin()
 {
 } 
 
+std::string
+LADSPAPlugin::getPluginName()
+{
+    std::string name;
+   
+    if (m_descriptor)
+        name = std::string(m_descriptor->Name);
+    else
+        return m_pluginName;
+
+    return name;
+}
+
+
+/*
 
 PluginPropertyList
 LADSPAPlugin::getPropertyList(const PluginProperty &property)
@@ -101,10 +115,12 @@ LADSPAPlugin::getPortProperty(PluginPortId id, const PluginProperty &property)
     PluginPropertyList list;
     return list;
 }
+*/
 
 
 #endif
 
+/*
 PluginManager::PluginManager():
     m_path(""),
     m_runningId(0)
@@ -205,8 +221,10 @@ PluginManager::loadPlugin(const std::string &path)
         }
         while(data);
     }
-    else
-        dlclose(pluginHandle);
+
+    if(dlclose(pluginHandle) != 0)
+        std::cerr << "PluginManager::loadPlugin - can't unload plugin"
+                  << std::endl;
 
 #endif // HAVE_LADSPA
 
@@ -223,6 +241,7 @@ PluginManager::getPluginForId(PluginId id)
     }
     return 0;
 }
+*/
 
 
 };

@@ -19,8 +19,11 @@
   COPYING included with this distribution for more information.
 */
 
+#include <dlfcn.h>
+
+#include <qdir.h>
+
 #include "MappedStudio.h"
-#include "PluginManager.h"
 
 namespace Rosegarden
 {
@@ -28,7 +31,8 @@ namespace Rosegarden
 const MappedObjectProperty MappedObject::FaderLevel = "faderLevel";
 const MappedObjectProperty MappedAudioPluginManager::Plugins = "plugins";
 
-MappedStudio::MappedStudio():MappedObject("MappedStudio",
+MappedStudio::MappedStudio():MappedObject(0,
+                                          "MappedStudio",
                                           Studio,
                                           0),
                              m_runningObjectId(1)
@@ -54,25 +58,7 @@ MappedStudio::createObject(MappedObjectType type)
     while(getObject(m_runningObjectId))
         m_runningObjectId++;
 
-    if (type == MappedObject::AudioPluginManager)
-    {
-        // Check and return if exists
-        if ((mO = getObjectOfType(type)))
-            return mO;
-
-        mO = new MappedAudioPluginManager(m_runningObjectId);
-    }
-    else if (type == MappedObject::AudioFader)
-    {
-        mO = new MappedAudioFader(m_runningObjectId,
-                                  2); // channels
-    }
-
-    // Insert
-    if (mO)
-    {
-        m_objects.push_back(mO);
-    }
+    mO = createObject(type, m_runningObjectId);
 
     // If we've got a new object increase the running id
     //
@@ -84,19 +70,29 @@ MappedStudio::createObject(MappedObjectType type)
 MappedObject*
 MappedStudio::createObject(MappedObjectType type, MappedObjectId id)
 {
-    // fail if the object already exists
-    if (getObject(id)) return 0;
+    // fail if the object already exists and it's not zero
+    if (id != 0 && getObject(id)) return 0;
 
     MappedObject *mO = 0;
 
     if (type == MappedObject::AudioPluginManager)
     {
-        mO = new MappedAudioPluginManager(id);
+        mO = new MappedAudioPluginManager(this, id);
     }
     else if (type == MappedObject::AudioFader)
     {
-        mO = new MappedAudioFader(id,
+        mO = new MappedAudioFader(this,
+                                  id,
                                   2); // channels
+    }
+    else if (type == MappedObject::AudioPluginLADSPA)
+    {
+        // create plugins under the pluginmanager if it exists
+        ///
+        MappedObject *mAPM =
+            getObjectOfType(MappedObject::AudioPluginManager);
+
+        mO = new MappedLADSPAPlugin(mAPM, id);
     }
 
     // Insert
@@ -112,7 +108,7 @@ MappedObject*
 MappedStudio::getObjectOfType(MappedObjectType type)
 {
     std::vector<MappedObject*>::iterator it;
-    for (it = m_objects.begin(); it != m_objects.end(); ++it)
+    for (it = m_objects.begin(); it != m_objects.end(); it++)
         if ((*it)->getType() == type)
             return (*it);
     return 0;
@@ -121,9 +117,20 @@ MappedStudio::getObjectOfType(MappedObjectType type)
 
 
 bool
-MappedStudio::destroyItem(MappedObjectId /*id*/)
+MappedStudio::destroyObject(MappedObjectId id)
 {
-    return true;
+    std::vector<MappedObject*>::iterator it;
+    for (it = m_objects.begin(); it != m_objects.end(); it++)
+    {
+        if ((*it)->getId() == id)
+        {
+            delete (*it);
+            m_objects.erase(it);
+            return true;
+        }
+    }
+   
+    return false;
 }
 
 bool
@@ -144,7 +151,7 @@ void
 MappedStudio::clear()
 {
     std::vector<MappedObject*>::iterator it;
-    for (it = m_objects.begin(); it != m_objects.end(); ++it)
+    for (it = m_objects.begin(); it != m_objects.end(); it++)
         delete (*it);
 
     m_objects.erase(m_objects.begin(), m_objects.end());
@@ -154,7 +161,14 @@ MappedStudio::clear()
 MappedObjectPropertyList
 MappedStudio::getPropertyList(const MappedObjectProperty &property)
 {
-    return MappedObjectPropertyList();
+    MappedObjectPropertyList list;
+
+    if (property == "")
+    {
+        // something
+    }
+
+    return list;
 }
 
 
@@ -163,13 +177,45 @@ MappedStudio::getObject(MappedObjectId id)
 {
     std::vector<MappedObject*>::iterator it;
 
-    for (it = m_objects.begin(); it != m_objects.end(); ++it)
+    for (it = m_objects.begin(); it != m_objects.end(); it++)
         if ((*it)->getId() == id)
             return (*it);
 
     return 0;
 }
 
+MappedObject*
+MappedStudio::getFirst(MappedObjectType type)
+{
+    return getObjectOfType(type);
+}
+
+MappedObject*
+MappedStudio::getNext(MappedObject *object)
+{
+    MappedObjectType type = Studio;
+
+    std::vector<MappedObject*>::iterator it = m_objects.begin();
+
+    while (it != m_objects.end())
+    {
+        if (object->getId() == (*it)->getId())
+        {
+            type = (*it)->getType();
+            it++;
+            break;
+        }
+        it++;
+    }
+
+    for (; it != m_objects.end(); it++)
+    {
+        if (type == (*it)->getType())
+            return (*it);
+    }
+
+    return 0;
+}
 
 
 
@@ -188,7 +234,15 @@ MappedAudioFader::setLevel(MappedObjectValue param)
 MappedObjectPropertyList 
 MappedAudioFader::getPropertyList(const MappedObjectProperty &property)
 {
-    return MappedObjectPropertyList();
+    MappedObjectPropertyList list;
+
+    if (property == "")
+    {
+        // etc
+
+    }
+
+    return list;
 }
 
 /*
@@ -246,8 +300,11 @@ operator<<(QDataStream &dS, const MappedStudio &mS)
 */
 
 
-MappedAudioPluginManager::MappedAudioPluginManager(MappedObjectId id)
-    :MappedObject("MappedAudioPluginManager",
+MappedAudioPluginManager::MappedAudioPluginManager(
+        MappedObject *parent,
+        MappedObjectId id)
+    :MappedObject(parent,
+                 "MappedAudioPluginManager",
                   AudioPluginManager,
                   id,
                   true)
@@ -268,40 +325,180 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
 
     if (property == "")
     {
+        list.push_back(MappedAudioPluginManager::Plugins);
+        /*
         PluginIterator it;
         for (it = m_plugins.begin(); it != m_plugins.end(); it++)
             list.push_back(MappedObjectProperty((*it)->getName().c_str()));
+            */
 
+    }
+    else if (property == MappedAudioPluginManager::Plugins)
+    {
+        MappedStudio *studio = dynamic_cast<MappedStudio*>(m_parent);
+
+        if (studio)
+        {
+            MappedLADSPAPlugin *plugin =
+                dynamic_cast<MappedLADSPAPlugin*>
+                    (studio->getFirst(AudioPluginLADSPA));
+
+            while (plugin)
+            {
+                list.push_back(MappedObjectProperty
+                            (plugin->getPluginName().c_str()));
+                plugin = dynamic_cast<MappedLADSPAPlugin*>
+                            (studio->getNext(plugin));
+            }
+        }
+    }
+
+
+    return list;
+}
+
+void
+MappedAudioPluginManager::discoverPlugins(MappedStudio *studio)
+{
+    QDir dir(QString(m_path.c_str()), "*.so");
+    clearPlugins(studio);
+
+    for (unsigned int i = 0; i < dir.count(); i++ )
+        enumeratePlugin(studio,
+                m_path + std::string("/") + std::string(dir[i].data()));
+    
+}
+
+void
+MappedAudioPluginManager::clearPlugins(MappedStudio *studio)
+{
+    MappedObject *object;
+    while ((object = studio->getObjectOfType(AudioPluginLADSPA)))
+    {
+        studio->destroyObject(object->getId());
+    }
+}
+
+
+void
+MappedAudioPluginManager::getenvLADSPAPath()
+{
+    char *path = getenv("LADSPA_PATH");
+
+    if (!path) m_path = "";
+    else m_path = std::string(path);
+
+    // try a default value
+    if (m_path == "")
+        m_path = "/usr/lib/ladspa";
+
+}
+
+void
+MappedAudioPluginManager::setLADSPAPath(const std::string &path)
+{
+    m_path = path;
+}
+
+
+void
+MappedAudioPluginManager::addLADSPAPath(const std::string &path)
+{
+    m_path += path;
+}
+
+void
+MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
+                                          const std::string& path)
+{
+#ifdef HAVE_LADSPA
+    LADSPA_Descriptor_Function descrFn = 0;
+    void *pluginHandle = 0;
+
+    pluginHandle = dlopen(path.c_str(), RTLD_LAZY);
+
+    descrFn = (LADSPA_Descriptor_Function)dlsym(pluginHandle,
+                                                "ladspa_descriptor");
+
+    if (descrFn)
+    {
+        const LADSPA_Descriptor *descriptor;
+
+        int index = 0;
+
+        do
+        {
+            descriptor = descrFn(index);
+
+            if (descriptor)
+            {
+                // The sequencer is only interested in plugins that 
+                // will be able to run in real time.
+                //
+                if (LADSPA_IS_HARD_RT_CAPABLE(descriptor->Properties))
+                {
+                    MappedLADSPAPlugin *plugin =
+                        dynamic_cast<MappedLADSPAPlugin*>
+                            (studio->createObject(AudioPluginLADSPA));
+
+                    plugin->setLibraryName(path);
+                    plugin->setPluginName(descriptor->Name);
+                    
+                    //plugin->setDescriptor(descriptor);
+                }
+                index++;
+            }
+        }
+        while(descriptor);
+    }
+
+    if(dlclose(pluginHandle) != 0)
+        std::cerr << "PluginManager::loadPlugin - can't unload plugin"
+                  << std::endl;
+
+#endif // HAVE_LADSPA
+}
+
+#ifdef HAVE_LADSPA
+MappedObjectPropertyList
+MappedLADSPAPlugin::getPropertyList(const MappedObjectProperty &property)
+{
+    MappedObjectPropertyList list;
+    
+    if (property == "")
+    {
+        // our LADSPA properties
+        list.push_back(MappedObjectProperty("id"));
+        list.push_back(MappedObjectProperty("label"));
+        list.push_back(MappedObjectProperty("name"));
+        list.push_back(MappedObjectProperty("author"));
+        list.push_back(MappedObjectProperty("copyright"));
+        list.push_back(MappedObjectProperty("numberofports"));
+    }
+    else if (m_descriptor)
+    {
+        if (property == "id")
+            list.push_back(MappedObjectProperty("%1").arg(m_descriptor->UniqueID));
+        else if (property == "label")
+            list.push_back(MappedObjectProperty(m_descriptor->Label));
+        else if (property == "name")
+            list.push_back(MappedObjectProperty(m_descriptor->Name));
+        else if (property == "author")
+            list.push_back(MappedObjectProperty(m_descriptor->Maker));
+        else if (property == "copyright")
+            list.push_back(MappedObjectProperty(m_descriptor->Copyright));
+        else if (property == "numberofports")
+            list.push_back(MappedObjectProperty("%1").arg(m_descriptor->PortCount));
     }
 
     return list;
+
 }
+#endif // HAVE_LADSPA
 
-
-MappedObjectPropertyList
-MappedAudioPluginManager::getPluginProperty(
-        PluginId id,
-        const MappedObjectProperty &property)
-{
-    MappedObjectPropertyList list;
-    Plugin *plugin = getPluginForId(id);
-
-    if (plugin)
-        list = plugin->getPropertyList(property);
-
-    return list;
-}
-
-MappedObjectPropertyList
-MappedAudioPluginManager::getPortProperty(PluginId pluginId,
-                                          PluginPortId portId,
-                                          const MappedObjectProperty &property)
-{
-    MappedObjectPropertyList list;
-    return list;
-}
 
 
 
 }
+
 

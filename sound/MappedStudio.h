@@ -27,7 +27,7 @@
 
 #include "Instrument.h"
 #include "Device.h"
-#include "PluginManager.h"
+#include "Plugins.h"
 
 #ifndef _MAPPEDSTUDIO_H_
 #define _MAPPEDSTUDIO_H_
@@ -71,20 +71,30 @@ public:
         Studio,
         AudioFader,
         AudioPluginManager,
-        AudioPlugin
+        AudioPluginLADSPA
     
     } MappedObjectType;
 
-    MappedObject(const std::string &name,
+    MappedObject(MappedObject *parent,
+                 const std::string &name,
                  MappedObjectType type,
                  MappedObjectId id):
-        m_type(type), m_id(id), m_static(false), m_name(name) {;}
+        m_type(type),
+        m_id(id), 
+        m_static(false), 
+        m_name(name),
+        m_parent(parent) {;}
 
-    MappedObject(const std::string &name,
+    MappedObject(MappedObject *parent, 
+                 const std::string &name,
                  MappedObjectType type,
                  MappedObjectId id,
                  bool s):
-        m_type(type), m_id(id), m_static(s), m_name(name) {;}
+        m_type(type),
+        m_id(id),
+        m_static(s),
+        m_name(name),
+        m_parent(parent) {;}
 
     virtual ~MappedObject() {;}
 
@@ -103,6 +113,8 @@ protected:
     MappedObjectId   m_id;
     bool             m_static;
     std::string      m_name;
+
+    MappedObject    *m_parent;
 };
 
 
@@ -131,9 +143,9 @@ public:
     bool connectInstrument(InstrumentId iId, MappedObjectId mId);
     bool connectObjects(MappedObjectId mId1, MappedObjectId mId2);
 
-    // Destroy a MappedStudio item
+    // Destroy a MappedObject
     //
-    bool destroyItem(MappedObjectId id);
+    bool destroyObject(MappedObjectId id);
 
     // Get an object
     //
@@ -142,6 +154,10 @@ public:
     // Get an object of a certain type - to see if any exist
     //
     MappedObject* getObjectOfType(MappedObjectType type);
+
+    // iterators
+    MappedObject* getFirst(MappedObjectType type);
+    MappedObject* getNext(MappedObject *object);
 
     // Empty the studio of everything
     //
@@ -188,8 +204,11 @@ private:
 class MappedAudioFader : public MappedObject
 {
 public:
-    MappedAudioFader(MappedObjectId id, MappedObjectValue channels):
-        MappedObject("MappedAudioFader",
+    MappedAudioFader(MappedObject *parent,
+                     MappedObjectId id,
+                     MappedObjectValue channels):
+        MappedObject(parent,
+                     "MappedAudioFader",
                      AudioFader,
                      id),
                      m_level(80), // assume 100 is max for the moment
@@ -201,10 +220,8 @@ public:
     MappedObjectValue getLevel();
     void setLevel(MappedObjectValue param);
 
-    // Property list
-    //
     virtual MappedObjectPropertyList getPropertyList(
-            const MappedObjectProperty &property);
+                        const MappedObjectProperty &property);
 
 protected:
 
@@ -213,34 +230,67 @@ protected:
 
 };
 
+#ifdef HAVE_LADSPA
+class MappedLADSPAPlugin : public MappedObject, public LADSPAPlugin
+{
+public:
+    MappedLADSPAPlugin(MappedObject *parent, MappedObjectId id):
+        MappedObject(parent,
+                     std::string("MappedLADSPAPlugin"),
+                     AudioPluginLADSPA,
+                     id) {;}
+
+    virtual MappedObjectPropertyList getPropertyList(
+                        const MappedObjectProperty &property);
+
+protected:
+};
+#endif
+
+
+
 // MappedPluginManager locates and lists plugins and
 // provides an interface for plugging them into the
 // faders/Instruments.
 //
 //
-class MappedAudioPluginManager : public MappedObject, public PluginManager
+class MappedAudioPluginManager : public MappedObject
 {
 public:
     static const MappedObjectProperty Plugins;
 
 
-    MappedAudioPluginManager(MappedObjectId id);
+    MappedAudioPluginManager(MappedObject *parent, MappedObjectId id);
     ~MappedAudioPluginManager();
 
     // Property list
     //
     virtual MappedObjectPropertyList getPropertyList(
             const MappedObjectProperty &property);
-    MappedObjectPropertyList
-        getPluginProperty(PluginId id, const MappedObjectProperty &property);
 
-    MappedObjectPropertyList
-        getPortProperty(PluginId pluginId,
-                        PluginPortId portId,
-                        const MappedObjectProperty &property);
+    // Get a list of plugins and create MappedObjects out of them
+    //
+    void discoverPlugins(MappedStudio *studio);
+    void clearPlugins(MappedStudio *studio);
+
+#ifdef HAVE_LADSPA
+
+    // Just some LADSPA paths 
+    //
+    void getenvLADSPAPath();
+    std::string getLADSPAPath() { return m_path; }
+    void setLADSPAPath(const std::string &path);
+    void addLADSPAPath(const std::string &path);
+
+#endif
+
 
 protected:
+    // Help discover plugins
+    //
+    void enumeratePlugin(MappedStudio *studio, const std::string& path);
 
+    std::string m_path;
 };
 
 }
