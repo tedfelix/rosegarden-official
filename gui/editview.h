@@ -253,12 +253,12 @@ protected:
      * as the geometry and the recent file list to the configuration
      * file
      */
-    virtual void saveOptions() = 0;
+    virtual void saveOptions();
 
     /**
      * read general Options again and initialize all variables like the recent file list
      */
-    virtual void readOptions() = 0;
+    virtual void readOptions();
 
     /**
      * create menus and toolbars

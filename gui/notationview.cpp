@@ -405,10 +405,7 @@ void NotationView::positionStaffs()
 void NotationView::saveOptions()
 {
     m_config->setGroup("Notation Options");
-    m_config->writeEntry("Geometry", size());
-    m_config->writeEntry("Show Toolbar", toolBar()->isVisible());
-    m_config->writeEntry("Show Statusbar",statusBar()->isVisible());
-    m_config->writeEntry("ToolBarPos", (int) toolBar()->barPos());
+    EditView::saveOptions();
 
     m_config->writeEntry("Show Notes Toolbar",       getToggleAction("show_notes_toolbar")->isChecked());
     m_config->writeEntry("Show Rests Toolbar",       getToggleAction("show_rests_toolbar")->isChecked());
@@ -416,25 +413,26 @@ void NotationView::saveOptions()
     m_config->writeEntry("Show Font Toolbar",        getToggleAction("show_font_toolbar")->isChecked());
     m_config->writeEntry("Show Accidentals Toolbar", getToggleAction("show_accidentals_toolbar")->isChecked());
 
-    m_config->writeEntry("Notes ToolBarPos",       (int) toolBar("notesToolBar")->barPos());
-    m_config->writeEntry("Rests ToolBarPos",       (int) toolBar("restsToolBar")->barPos());
-    m_config->writeEntry("Clefs ToolBarPos",       (int) toolBar("clefsToolBar")->barPos());
-    m_config->writeEntry("Font ToolBarPos",        (int) toolBar("fontToolBar")->barPos());
-    m_config->writeEntry("Accidentals ToolBarPos", (int) toolBar("accidentalsToolBar")->barPos());
+    toolBar("notesToolBar")->saveSettings(m_config, "Notation Options notesToolBar");
+    toolBar("restsToolBar")->saveSettings(m_config, "Notation Options restsToolBar");
+    toolBar("clefsToolBar")->saveSettings(m_config, "Notation Options clefsToolBar");
+    toolBar("fontToolBar")->saveSettings(m_config, "Notation Options fontToolBar");
+    toolBar("accidentalsToolBar")->saveSettings(m_config, "Notation Options accidentalsToolBar");
+    
+//     m_config->writeEntry("Notes ToolBarPos",       (int) toolBar("notesToolBar")->barPos());
+//     m_config->writeEntry("Rests ToolBarPos",       (int) toolBar("restsToolBar")->barPos());
+//     m_config->writeEntry("Clefs ToolBarPos",       (int) toolBar("clefsToolBar")->barPos());
+//     m_config->writeEntry("Font ToolBarPos",        (int) toolBar("fontToolBar")->barPos());
+//     m_config->writeEntry("Accidentals ToolBarPos", (int) toolBar("accidentalsToolBar")->barPos());
 
 }
 
 void NotationView::readOptions()
 {
-    bool opt;
-
     m_config->setGroup("Notation Options");
-        
-    QSize size(m_config->readSizeEntry("Geometry"));
+    EditView::readOptions();
 
-    if (!size.isEmpty()) {
-        resize(size);
-    }
+    bool opt;
 
     opt = m_config->readBoolEntry("Show Notes Toolbar", true);
     getToggleAction("show_notes_toolbar")->setChecked(opt);
@@ -455,6 +453,35 @@ void NotationView::readOptions()
     opt = m_config->readBoolEntry("Show Accidentals Toolbar", true);
     getToggleAction("show_accidentals_toolbar")->setChecked(opt);
     toggleNamedToolBar("accidentalsToolBar", &opt);
+
+    toolBar("notesToolBar")->applySettings(m_config, "Notation Options notesToolBar");
+    toolBar("restsToolBar")->applySettings(m_config, "Notation Options restsToolBar");
+    toolBar("clefsToolBar")->applySettings(m_config, "Notation Options clefsToolBar");
+    toolBar("fontToolBar")->applySettings(m_config, "Notation Options fontToolBar");
+    toolBar("accidentalsToolBar")->applySettings(m_config, "Notation Options accidentalsToolBar");
+
+//     // Read toolbars positions
+//     KToolBar::BarPosition pos;
+
+//     pos = KToolBar::BarPosition(m_config->readNumEntry("Notes ToolBarPos",
+//                                                        KToolBar::Top));
+//     toolBar("notesToolBar")->setBarPos(pos);
+
+//     pos = KToolBar::BarPosition(m_config->readNumEntry("Rests ToolBarPos",
+//                                                        KToolBar::Top));
+//     toolBar("restsToolBar")->setBarPos(pos);
+
+//     pos = KToolBar::BarPosition(m_config->readNumEntry("Clefs ToolBarPos",
+//                                                        KToolBar::Top));
+//     toolBar("clefsToolBar")->setBarPos(pos);
+
+//     pos = KToolBar::BarPosition(m_config->readNumEntry("Font ToolBarPos",
+//                                                        KToolBar::Top));
+//     toolBar("fontToolBar")->setBarPos(pos);
+
+//     pos = KToolBar::BarPosition(m_config->readNumEntry("Accidentals ToolBarPos",
+//                                                        KToolBar::Top));
+//     toolBar("accidentalsToolBar")->setBarPos(pos);
 
 }
 

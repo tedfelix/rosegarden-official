@@ -254,21 +254,37 @@ MatrixView::~MatrixView()
 void MatrixView::saveOptions()
 {        
     m_config->setGroup("Matrix Options");
-    m_config->writeEntry("Geometry", size());
-    m_config->writeEntry("Show Toolbar", toolBar()->isVisible());
-    m_config->writeEntry("Show Statusbar",statusBar()->isVisible());
-    m_config->writeEntry("ToolBarPos", (int) toolBar()->barPos());
+    EditView::saveOptions();
+
+    m_config->writeEntry("Show Tools Toolbar", true); // in case we
+                                                      // may want to
+                                                      // let the user
+                                                      // hide this
+                                                      // toolbar in the future
+    toolBar("toolsToolBar")->saveSettings(m_config,
+                                          "Matrix Options toolsToolbar");
+    
+//     m_config->writeEntry("Tools ToolBarPos",
+//                          (int) toolBar("toolsToolBar")->barPos());
 }
 
 void MatrixView::readOptions()
 {
     m_config->setGroup("Matrix Options");
-        
-    QSize size(m_config->readSizeEntry("Geometry"));
+    EditView::readOptions();
 
-    if (!size.isEmpty()) {
-        resize(size);
-    }
+    bool opt;
+
+    opt = m_config->readBoolEntry("Show Tools Toolbar", true);
+
+    KToolBar::BarPosition pos;
+    
+    toolBar("toolsToolBar")->applySettings(m_config,
+                                           "Matrix Options toolsToolbar");
+
+//     pos = KToolBar::BarPosition(m_config->readNumEntry("Tools ToolBarPos",
+//                                                        KToolBar::Top));
+//     toolBar("toolsToolBar")->setBarPos(pos);
 }
 
 void MatrixView::setupActions()

@@ -94,6 +94,51 @@ EditView::~EditView()
     m_viewNumberPool.erase(m_viewNumber);
 }
 
+void EditView::saveOptions()
+{
+    m_config->writeEntry("Geometry", size());
+    m_config->writeEntry("Show Toolbar", toolBar()->isVisible());
+    m_config->writeEntry("Show Statusbar",statusBar()->isVisible());
+//     m_config->writeEntry("ToolBarPos", (int) toolBar()->barPos());
+    toolBar()->saveSettings(m_config, m_config->group() + " Toolbar");
+}
+
+void EditView::readOptions()
+{
+    QSize size(m_config->readSizeEntry("Geometry"));
+
+    if (!size.isEmpty()) {
+        resize(size);
+    }
+
+    // Read toolbars visibility
+    bool opt;
+
+    opt = m_config->readBoolEntry("Show Toolbar", true);
+    getToggleAction("options_show_toolbar")->setChecked(opt);
+    if (opt)
+        toolBar()->show();
+    else
+        toolBar()->hide();
+
+    opt = m_config->readBoolEntry("Show Statusbar", true);
+    getToggleAction("options_show_statusbar")->setChecked(opt);
+    if (opt)
+        statusBar()->show();
+    else
+        statusBar()->hide();
+
+    toolBar()->applySettings(m_config, m_config->group() + " Toolbar");
+
+//     KToolBar::BarPosition pos;
+
+//     pos = KToolBar::BarPosition(m_config->readNumEntry("ToolBarPos",
+//                                                        KToolBar::Top));
+//     toolBar()->setBarPos(pos);
+
+}
+
+
 std::set<int>
 EditView::m_viewNumberPool;
 
