@@ -3179,10 +3179,10 @@ ClefDialog::redrawClefPixmap()
     int octave = m_clef.getOctaveOffset();
 
     switch (octave) {
-    case -1: name = "%1 down an octave"; break;
-    case -2: name = "%1 down two octaves"; break;
-    case  1: name = "%1 up an octave"; break;
-    case  2: name = "%1 up two octaves"; break;
+    case -1: name = i18n("%1 down an octave"); break;
+    case -2: name = i18n("%1 down two octaves"); break;
+    case  1: name = i18n("%1 up an octave"); break;
+    case  2: name = i18n("%1 up two octaves"); break;
     default: name = "%1"; break;
     }
 
