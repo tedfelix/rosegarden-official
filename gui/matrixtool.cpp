@@ -814,7 +814,8 @@ int MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
         selection->getSegmentEvents().begin();
 
     MatrixElement *element = 0;
-
+    int maxY = m_currentStaff->getCanvasYForHeight(0);
+    
     for (; it != selection->getSegmentEvents().end(); it++)
     {
         element = m_currentStaff->getElement(*it);
@@ -826,7 +827,8 @@ int MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
 
             newY = element->getLayoutY() + diffY;
             if (newY < 0) newY = 0;
-            
+            if (newY > maxY) newY = maxY;
+
             element->setLayoutX(newX);
             element->setLayoutY(newY);
             m_currentStaff->positionElement(element);
@@ -849,9 +851,18 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
                                      int newPitch,
                                      QMouseEvent*)
 {
-    MATRIX_DEBUG << "MatrixMover::handleMouseRelease()\n";
+    MATRIX_DEBUG << "MatrixMover::handleMouseRelease() - newPitch = "
+                 << newPitch << '\n';
 
     if (!m_currentElement || !m_currentStaff) return;
+
+    if (newPitch > int(MatrixVLayout::maxMIDIPitch))
+        newPitch = MatrixVLayout::maxMIDIPitch;
+    if (newPitch < 0)
+        newPitch = 0;
+
+    MATRIX_DEBUG << "MatrixMover::handleMouseRelease() - corrected newPitch = "
+                 << newPitch << '\n';
 
     int y = m_currentStaff->getLayoutYForHeight(newPitch)
         - m_currentStaff->getElementHeight() / 2;
