@@ -122,7 +122,10 @@ Segment::setTrack(TrackId id)
     Composition *c = m_composition;
     if (c) c->weakDetachSegment(this); // sets m_composition to 0
     m_track = id;
-    if (c) c->weakAddSegment(this);
+    if (c) {
+        c->weakAddSegment(this);
+        c->updateRefreshStatuses();
+    }
 }
 
 timeT
