@@ -330,11 +330,11 @@ DSSIPluginFactory::discoverPlugins(QString soName)
 	    }
 	}
 	
-	std::cerr << "Plugin id is " << ladspaDescriptor->UniqueID
-		  << ", category is \"" << (category ? category : QString("(none)"))
-		  << "\", name is " << ladspaDescriptor->Name
-		  << ", label is " << ladspaDescriptor->Label
-		  << std::endl;
+//	std::cerr << "Plugin id is " << ladspaDescriptor->UniqueID
+//		  << ", category is \"" << (category ? category : QString("(none)"))
+//		  << "\", name is " << ladspaDescriptor->Name
+//		  << ", label is " << ladspaDescriptor->Label
+//		  << std::endl;
 	
 	def_uri = lrdf_get_default_uri(ladspaDescriptor->UniqueID);
 	if (def_uri) {
@@ -351,7 +351,7 @@ DSSIPluginFactory::discoverPlugins(QString soName)
 		    
 		    for (int j = 0; j < defs->count; j++) {
 			if (defs->items[j].pid == controlPortNumber) {
-			    std::cerr << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << "; applying this to port number " << i << " with name " << ladspaDescriptor->PortNames[i] << std::endl;
+//			    std::cerr << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << "; applying this to port number " << i << " with name " << ladspaDescriptor->PortNames[i] << std::endl;
 			    m_portDefaults[ladspaDescriptor->UniqueID][i] =
 				defs->items[j].value;
 			}

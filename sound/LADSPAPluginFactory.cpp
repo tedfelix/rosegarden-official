@@ -419,7 +419,7 @@ LADSPAPluginFactory::unloadLibrary(QString soName)
 {
     LibraryHandleMap::iterator li = m_libraryHandles.find(soName);
     if (li != m_libraryHandles.end()) {
-	std::cerr << "unloading " << soName << std::endl;
+//	std::cerr << "unloading " << soName << std::endl;
 	dlclose(m_libraryHandles[soName]);
 	m_libraryHandles.erase(li);
     }
@@ -539,7 +539,7 @@ LADSPAPluginFactory::discoverPlugins()
 	QDir dir(lrdfPaths[i], "*.rdf;*.rdfs");
 	for (unsigned int j = 0; j < dir.count(); ++j) {
 	    if (!lrdf_read_file(QString("file:" + lrdfPaths[i] + "/" + dir[j]).data())) {
-		std::cerr << "LADSPAPluginFactory: read RDF file " << (lrdfPaths[i] + "/" + dir[j]) << std::endl;
+//		std::cerr << "LADSPAPluginFactory: read RDF file " << (lrdfPaths[i] + "/" + dir[j]) << std::endl;
 		haveSomething = true;
 	    }
 	}
@@ -606,11 +606,11 @@ LADSPAPluginFactory::discoverPlugins(QString soName)
 	    }
 	}
 	
-	std::cerr << "Plugin id is " << descriptor->UniqueID
-		  << ", category is \"" << (category ? category : QString("(none)"))
-		  << "\", name is " << descriptor->Name
-		  << ", label is " << descriptor->Label
-		  << std::endl;
+//	std::cerr << "Plugin id is " << descriptor->UniqueID
+//		  << ", category is \"" << (category ? category : QString("(none)"))
+//		  << "\", name is " << descriptor->Name
+//		  << ", label is " << descriptor->Label
+//		  << std::endl;
 	
 	def_uri = lrdf_get_default_uri(descriptor->UniqueID);
 	if (def_uri) {
@@ -627,7 +627,7 @@ LADSPAPluginFactory::discoverPlugins(QString soName)
 		    
 		    for (int j = 0; j < defs->count; j++) {
 			if (defs->items[j].pid == controlPortNumber) {
-			    std::cerr << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << "; applying this to port number " << i << " with name " << descriptor->PortNames[i] << std::endl;
+//			    std::cerr << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << "; applying this to port number " << i << " with name " << descriptor->PortNames[i] << std::endl;
 			    m_portDefaults[descriptor->UniqueID][i] =
 				defs->items[j].value;
 			}
