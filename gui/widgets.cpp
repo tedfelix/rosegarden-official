@@ -379,7 +379,8 @@ RosegardenProgressBar::eventFilter(QObject *watched, QEvent *e)
         e->type() == QEvent::DragMove            ||
         e->type() == QEvent::DragLeave           ||
         e->type() == QEvent::Drop                ||
-        e->type() == QEvent::DragResponse)
+        e->type() == QEvent::DragResponse        ||
+        e->type() == QEvent::Close)
 
         return true;
 
