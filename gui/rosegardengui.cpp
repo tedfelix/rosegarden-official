@@ -173,6 +173,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_clipboard(new Rosegarden::Clipboard),
       m_playList(0),
       m_deviceManager(0),
+      m_synthManager(0),
       m_audioMixer(0),
       m_midiMixer(0),
       m_bankEditor(0),
@@ -791,6 +792,10 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotManageMIDIDevices()),
                 actionCollection(), "manage_devices");
 
+    new KAction(i18n("Manage S&ynth Plugins"), 0, 0, this,
+                SLOT(slotManageSynths()),
+                actionCollection(), "manage_synths");
+
     new KAction(i18n("Modify MIDI &Filters"), "filter", 0, this,
                 SLOT(slotModifyMIDIFilters()),
                 actionCollection(), "modify_midi_filters");
@@ -1134,6 +1139,9 @@ void RosegardenGUIApp::initView()
 
     delete m_deviceManager;
     m_deviceManager = 0;
+
+    delete m_synthManager;
+    m_synthManager = 0;
 
     delete m_audioMixer;
     m_audioMixer = 0;
@@ -5110,6 +5118,26 @@ RosegardenGUIApp::slotManageMIDIDevices()
     m_deviceManager->show();
 }
 
+ 
+void
+RosegardenGUIApp::slotManageSynths()
+{
+    if (m_synthManager) {
+	m_synthManager->raise();
+	return;
+    }
+
+    m_synthManager = new SynthPluginManagerDialog(this, m_doc);
+    
+    connect(m_synthManager, SIGNAL(closing()),
+            this, SLOT(slotSynthPluginManagerClosed()));
+
+    connect(this, SIGNAL(documentAboutToChange()),
+            m_synthManager, SLOT(close()));
+
+    m_synthManager->show();
+}
+
 void
 RosegardenGUIApp::slotOpenAudioMixer()
 {
@@ -5675,6 +5703,14 @@ RosegardenGUIApp::slotDeviceManagerClosed()
     }
     
     m_deviceManager = 0;
+}
+
+void
+RosegardenGUIApp::slotSynthPluginManagerClosed()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotSynthPluginManagerClosed()\n";
+
+    m_synthManager = 0;
 }
 
 void

@@ -1291,21 +1291,6 @@ SequenceManager::resetMidiNetwork()
 void
 SequenceManager::getSequencerPlugins(AudioPluginManager *aPM)
 {
-/*!!!
-    MappedObjectId id =
-        StudioControl::getStudioObjectByType(
-                MappedObject::AudioPluginManager);
-
-    SEQMAN_DEBUG << "getSequencerPlugins - getting plugin information" << endl;
-    
-    MappedObjectPropertyList seqPlugins
-        = StudioControl::getStudioObjectProperty(
-                id, MappedAudioPluginManager::Plugins);
-
-    SEQMAN_DEBUG << "getSequencerPlugins - got "
-                 << seqPlugins.size() << " items" << endl;
-*/
-
     //!!! At this point we might be better off querying identifier
     // and category only... and then filling in the blanks when we
     // actually want to display the thing.

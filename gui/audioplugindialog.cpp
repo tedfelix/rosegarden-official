@@ -23,6 +23,7 @@
 
 #include <qlabel.h>
 #include <qdial.h>
+#include <qtable.h>
 #include <qfont.h>
 #include <qpushbutton.h>
 #include <qgroupbox.h>
@@ -33,12 +34,15 @@
 
 #include <klocale.h>
 #include <kcombobox.h>
+#include <kstdaction.h>
+#include <kaction.h>
 
 #include "audioplugindialog.h"
 #include "audiopluginmanager.h"
 #include "widgets.h"
 #include "rosestrings.h"
 #include "colours.h"
+#include "rosegardenguidoc.h"
 
 #include "rosedebug.h"
 
@@ -592,3 +596,138 @@ PluginControl::slotValueChanged(float value)
 }
 
 }
+
+
+const char *const SynthPluginManagerDialog::SynthPluginManagerConfigGroup =
+"Synth Plugin Manager";
+
+SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
+						   RosegardenGUIDoc *doc) :
+    KMainWindow(parent, "synthpluginmanagerdialog"),
+    m_document(doc),
+    m_studio(&doc->getStudio()),
+    m_pluginManager(doc->getPluginManager())
+{
+    QFrame *mainBox = new QFrame(this);
+    setCentralWidget(mainBox);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(mainBox, 10, 10);
+
+    setCaption(i18n("Manage Synth Plugins"));
+
+    m_synthTable = new QTable(0, 2, mainBox);
+    m_synthTable->setSorting(false);
+    m_synthTable->setRowMovingEnabled(false);
+    m_synthTable->setColumnMovingEnabled(false);
+    m_synthTable->setShowGrid(false);
+    m_synthTable->horizontalHeader()->setLabel(0, i18n("Instrument"));
+    m_synthTable->horizontalHeader()->setLabel(1, i18n("Plugin"));
+    m_synthTable->horizontalHeader()->show();
+    m_synthTable->verticalHeader()->hide();
+    m_synthTable->setLeftMargin(0);
+    m_synthTable->setSelectionMode(QTable::SingleRow);
+
+    mainLayout->addWidget(m_synthTable);
+
+    QFrame* btnBox = new QFrame(mainBox);
+
+    btnBox->setSizePolicy(
+            QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
+
+    QPushButton *closeButton = new QPushButton(i18n("Close"), btnBox);
+
+    QHBoxLayout* layout = new QHBoxLayout(btnBox, 0, 10);
+    layout->addStretch(10);
+    layout->addWidget(closeButton);
+    layout->addSpacing(5);
+
+    KAction* close = KStdAction::close(this,
+                                       SLOT(slotClose()),
+                                       actionCollection());
+
+    closeButton->setText(close->text());
+    connect(closeButton, SIGNAL(clicked()), this, SLOT(slotClose()));
+
+    mainLayout->addWidget(btnBox);
+
+    createGUI("synthpluginmanager.rc");
+
+    m_synthTable->setCurrentCell(-1, 0);
+
+    setAutoSaveSettings(SynthPluginManagerConfigGroup, true);
+
+    populate();
+}
+
+SynthPluginManagerDialog::~SynthPluginManagerDialog()
+{
+    RG_DEBUG << "\n*** SynthPluginManagerDialog::~SynthPluginManagerDialog()"
+	     << endl;
+}
+
+void
+SynthPluginManagerDialog::populate()
+{
+    for (int i = 0; i < 16; ++i) {
+
+	m_synthTable->insertRows(i, 1);
+	m_synthTable->setText(i, 0, QString("%1").arg(i + 1));
+
+	Rosegarden::InstrumentId id = Rosegarden::SoftSynthInstrumentBase + i;
+	Rosegarden::Instrument *instrument = m_studio->getInstrumentById(id);
+	if (!instrument) continue;
+	
+	Rosegarden::AudioPluginInstance *plugin = instrument->getPlugin
+	    (Rosegarden::Instrument::SYNTH_PLUGIN_POSITION);
+
+	std::string identifier;
+	if (plugin) identifier = plugin->getIdentifier();
+
+	int count = 0;
+	QStringList plugins;
+	int currentPluginIndex = 0;
+	m_synthPlugins.clear();
+
+	plugins.append(i18n("<none>"));
+
+	for (Rosegarden::PluginIterator itr = m_pluginManager->begin();
+	     itr != m_pluginManager->end(); ++itr) {
+
+	    ++count;
+
+	    if ((*itr)->isSynth()) {
+
+		plugins.append((*itr)->getName());
+		m_synthPlugins.push_back(count);
+
+		if ((*itr)->getIdentifier() == identifier.c_str()) {
+		    currentPluginIndex = m_synthPlugins.size() - 1;
+		}
+	    }
+	}
+
+	QComboTableItem *item = new QComboTableItem(m_synthTable, plugins, false);
+	item->setCurrentItem(currentPluginIndex);
+	m_synthTable->setItem(i, 1, item);
+    }
+}
+
+
+void
+SynthPluginManagerDialog::slotClose()
+{
+    close();
+}
+
+void
+SynthPluginManagerDialog::closeEvent(QCloseEvent *e)
+{
+    emit closing();
+    KMainWindow::closeEvent(e);
+}
+
+void
+SynthPluginManagerDialog::slotValueChanged(int row, int col)
+{
+}
+

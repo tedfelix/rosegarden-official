@@ -43,6 +43,7 @@
 		<Action name="midi_mixer"/>
 		<Separator/>
 		<Action name="manage_devices"/>
+		<Action name="manage_synths"/>
 		<Action name="manage_metronome"/>
 		<Separator/>
 		<Action name="modify_midi_filters"/>
@@ -199,6 +200,7 @@
         <Action name="edit_event_list"/>
         <Action name="quantize_selection"/>
 	<Action name="manage_devices"/>
+	<Action name="manage_synths"/>
 	<Action name="audio_manager"/>
         <Action name="midi_mixer"/>
         <Action name="audio_mixer"/>

@@ -53,6 +53,7 @@ class KProcess;
 // forward declaration of the RosegardenGUI classes
 class BankEditorDialog;
 class DeviceManagerDialog;
+class SynthPluginManagerDialog;
 class AudioMixerWindow;
 class MidiMixerWindow;
 class RosegardenGUIDoc;
@@ -713,6 +714,11 @@ public slots:
     void slotManageMIDIDevices();
 
     /**
+     * Manage plugin synths
+     */
+    void slotManageSynths();
+
+    /**
      * Show the mixers
      */
     void slotOpenAudioMixer();
@@ -1177,6 +1183,11 @@ public slots:
     void slotDeviceManagerClosed();
 
     /**
+     * called when the synth manager is being closed
+     */
+    void slotSynthPluginManagerClosed();
+
+    /**
      * called when the Mixer is being closed
      */
     void slotAudioMixerClosed();
@@ -1337,6 +1348,7 @@ private:
 
     PlayListDialog        *m_playList;
     DeviceManagerDialog   *m_deviceManager;
+    SynthPluginManagerDialog *m_synthManager;
     AudioMixerWindow      *m_audioMixer;
     MidiMixerWindow       *m_midiMixer;
     BankEditorDialog      *m_bankEditor;

@@ -31,9 +31,7 @@
 // It's a bit confusing having all these various pluginmanagers -
 // there's one in the sound library too.  This one is the gui end
 // to it all - it displays and allows selection and management of
-// the sequencer plugins (PluginManager ones - they'll be REALTIME
-// capable plugins) plus all the static (non REALTIME) plugins that
-// we might want to use in an audio editor.
+// the sequencer plugins.
 //
 // We should be plugin api-agnostic at this level.
 //

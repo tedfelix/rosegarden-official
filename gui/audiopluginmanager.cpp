@@ -105,23 +105,6 @@ AudioPluginManager::getPlugin(int number)
 
     return m_plugins[number];
 }
-/*!!!
-int
-AudioPluginManager::getPositionByUniqueId(unsigned long uniqueId)
-{
-    int pos = 0;
-    PluginIterator it = m_plugins.begin();
-    for (; it != m_plugins.end(); ++it)
-    {
-        if ((*it)->getUniqueId() == uniqueId)
-            return pos;
-
-        pos++;
-    }
-
-    return -1;
-}
-*/
 
 //!!! these two functions duplicate code in MappedStudio.cpp:
 
