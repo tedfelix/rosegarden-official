@@ -1369,9 +1369,12 @@ QString
 RosegardenGUIApp::getValidWriteFile(const QString &descriptiveExtension,
                                     const QString &label)
 {
-    // extract ".rg" from "*.rg|Rosegarden files"
+    // extract first extension listed in descriptiveExtension, for instance,
+    // ".rg" from "*.rg|Rosegarden files", or ".mid" from "*.mid *.midi|MIDI Files"
     //
-    QString extension = descriptiveExtension.left(descriptiveExtension.find('|')).mid(1);
+    QString extension = descriptiveExtension.left(descriptiveExtension.find('|')).mid(1).section(' ', 0, 0);
+
+    RG_DEBUG << "RosegardenGUIApp::getValidWriteFile() : extension = " << extension << endl;
 
     // It's too bad there isn't this functionality within 
     // KFileDialog::getSaveFileName
