@@ -307,6 +307,22 @@ void TrackPencil::handleMouseButtonRelase(QMouseEvent*)
 {
     if (!m_currentItem) return;
 
+    if (m_currentItem->width() < 0) { // track was drawn from right to left
+        double itemX = m_currentItem->x();
+        double itemW = m_currentItem->width();
+        kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : itemX = "
+                             << itemX << " - width : " << itemW << endl;
+
+        m_currentItem->setX(itemX + itemW);
+        m_currentItem->setSize(-itemW, m_currentItem->height());
+
+        kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() after correction : itemX = "
+                             << m_currentItem->x()
+                             << " - width : " << m_currentItem->width()
+                             << endl;
+    }
+    
+
     if (m_currentItem->width() == 0 && ! m_newRect) {
 
         kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : track deleted"
@@ -336,7 +352,7 @@ void TrackPencil::handleMouseMove(QMouseEvent *e)
     if (m_currentItem) {
 
 	m_currentItem->setSize(m_canvas->grid().snapX(e->pos().x()) - m_currentItem->rect().x(),
-                               m_currentItem->rect().height());
+                               m_currentItem->height());
 	m_canvas->canvas()->update();
     }
 }
