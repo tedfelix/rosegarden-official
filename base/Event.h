@@ -313,6 +313,7 @@ void
 Event::setPersistence(const PropertyName &name, bool persistent)
     // throw (NoData)
 {
+    unshare();
     EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
     if (i != m_data->m_properties.end()) i->second->setPersistence(persistent);
     else {
@@ -331,6 +332,7 @@ Event::set(const PropertyName &name, PropertyDefn<P>::basic_type value,
            bool persistent)
     // throw (BadType)
 {
+    unshare();
     EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
     if (i != m_data->m_properties.end()) {
 

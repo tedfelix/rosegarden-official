@@ -1,6 +1,6 @@
 // -*- c-basic-offset: 4 -*-
-#ifndef SEGMENTSEDITORIFACE_H
-#define SEGMENTSEDITORIFACE_H
+#ifndef TRACKEDITORIFACE_H
+#define TRACKEDITORIFACE_H
 
 #include <dcopobject.h>
 

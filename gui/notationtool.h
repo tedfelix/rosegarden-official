@@ -28,6 +28,7 @@
 #include <kxmlguiclient.h>
 
 #include "NotationTypes.h"
+#include "Segment.h"
 
 class QCanvasRectangle;
 
@@ -175,10 +176,18 @@ protected:
     /// this ctor is used by RestInserter
     NoteInserter(const QString& menuName, NotationView*);
 
+    virtual void doAddCommand(Rosegarden::Segment &,
+			      Rosegarden::timeT time,
+			      Rosegarden::timeT endTime,
+			      const Rosegarden::Note &,
+			      int pitch, Rosegarden::Accidental);
+
+/*!!!
     virtual Rosegarden::Event *doInsert(Rosegarden::SegmentNotationHelper&,
                                         Rosegarden::timeT absTime,
                                         const Rosegarden::Note&, int pitch,
                                         Rosegarden::Accidental);
+*/
 protected slots:
     // RMB menu slots
     void slotNoAccidental();
@@ -213,10 +222,17 @@ public:
 protected:
     RestInserter(NotationView*);
 
+    virtual void doAddCommand(Rosegarden::Segment &,
+			      Rosegarden::timeT time,
+			      Rosegarden::timeT endTime,
+			      const Rosegarden::Note &,
+			      int pitch, Rosegarden::Accidental);
+/*!!!
     virtual Rosegarden::Event *doInsert(Rosegarden::SegmentNotationHelper&,
                                         Rosegarden::timeT absTime,
                                         const Rosegarden::Note&, int pitch,
                                         Rosegarden::Accidental);
+*/
     static NotationTool* m_instance;
 };
 

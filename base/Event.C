@@ -83,6 +83,7 @@ Event::has(const PropertyName &name) const
 void
 Event::unset(const PropertyName &name)
 {
+    unshare();
     m_data->m_properties.erase(name);
 }
     

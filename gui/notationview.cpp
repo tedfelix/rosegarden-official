@@ -31,6 +31,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kaction.h>
+#include <kcommand.h>
 #include <kstdaction.h>
 #include <kapp.h>
 
@@ -54,6 +55,7 @@
 #include "Quantizer.h"
 #include "staffline.h"
 #include "staffruler.h"
+#include "notationcommands.h"
 
 using Rosegarden::Event;
 using Rosegarden::Int;
@@ -434,28 +436,31 @@ void NotationView::setupActions()
     KStdAction::close (this, SLOT(closeWindow()),          actionCollection());
 
     // setup edit menu
-    KStdAction::undo    (this, SLOT(slotEditUndo()),       actionCollection());
-    KStdAction::redo    (this, SLOT(slotEditRedo()),       actionCollection());
+
+    m_commandHistory = new KCommandHistory(actionCollection());
+
+//    KStdAction::undo    (this, SLOT(slotEditUndo()),       actionCollection());
+//    KStdAction::redo    (this, SLOT(slotEditRedo()),       actionCollection());
     KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
     KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
     KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
 
     // setup Group menu
-    new KAction(i18n("Beam Group"), 0, this,
+    new KAction(GroupMenuBeamCommand::name(), 0, this,
                 SLOT(slotGroupBeam()), actionCollection(), "beam");
 
-    new KAction(i18n("Auto-Beam Group"), 0, this,
+    new KAction(GroupMenuAutoBeamCommand::name(), 0, this,
                 SLOT(slotGroupAutoBeam()), actionCollection(), "auto_beam");
 
-    new KAction(i18n("Break Groups"), 0, this,
+    new KAction(GroupMenuBreakCommand::name(), 0, this,
                 SLOT(slotGroupBreak()), actionCollection(), "break_group");
 
     // setup Transforms menu
-    new KAction(i18n("Normalize Rests"), 0, this,
+    new KAction(TransformsMenuNormalizeRestsCommand::name(), 0, this,
                 SLOT(slotTransformsNormalizeRests()), actionCollection(),
                 "normalize_rests");
 
-    new KAction(i18n("Collapse Rests Aggressively"), 0, this,
+    new KAction(TransformsMenuCollapseRestsCommand::name(), 0, this,
                 SLOT(slotTransformsCollapseRests()), actionCollection(),
                 "collapse_rests_aggressively");
 
@@ -1091,64 +1096,29 @@ void NotationView::slotToggleStatusBar()
 
 void NotationView::slotGroupBeam()
 {
-    kdDebug(KDEBUG_AREA) << "NotationView::slotGroupBeam()\n";
-
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Beaming group..."), statusBar());
 
-    Segment &segment = m_currentEventSelection->getSegment();
-    SegmentNotationHelper helper(segment);
-
-    helper.makeBeamedGroup(m_currentEventSelection->getBeginTime(),
-                           m_currentEventSelection->getEndTime(),
-                           GROUP_TYPE_BEAMED);
-
-    emit usedSelection();
-
-    redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
-               m_currentEventSelection->getBeginTime(),
-               m_currentEventSelection->getEndTime());
+    m_commandHistory->addCommand(new GroupMenuBeamCommand
+				 (this, *m_currentEventSelection));
 }
 
 void NotationView::slotGroupAutoBeam()
 {
-    kdDebug(KDEBUG_AREA) << "NotationView::slotGroupAutoBeam()\n";
-
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Auto-beaming selection..."), statusBar());
 
-    Segment &segment = m_currentEventSelection->getSegment();
-    SegmentNotationHelper helper(segment);
-
-    helper.autoBeam(m_currentEventSelection->getBeginTime(),
-                    m_currentEventSelection->getEndTime(),
-                    GROUP_TYPE_BEAMED);
-
-    emit usedSelection();
-
-    redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
-               m_currentEventSelection->getBeginTime(),
-               m_currentEventSelection->getEndTime());
+    m_commandHistory->addCommand(new GroupMenuAutoBeamCommand
+				 (this, *m_currentEventSelection));
 }
 
 void NotationView::slotGroupBreak()
 {
-    kdDebug(KDEBUG_AREA) << "NotationView::slotGroupBreak()\n";
-
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Breaking groups..."), statusBar());
 
-    Segment &segment = m_currentEventSelection->getSegment();
-    SegmentNotationHelper helper(segment);
-
-    helper.unbeam(m_currentEventSelection->getBeginTime(),
-                  m_currentEventSelection->getEndTime());
-
-    emit usedSelection();
-
-    redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
-               m_currentEventSelection->getBeginTime(),
-               m_currentEventSelection->getEndTime());
+    m_commandHistory->addCommand(new GroupMenuBreakCommand
+				 (this, *m_currentEventSelection));
 }
 
  
@@ -1158,22 +1128,11 @@ void NotationView::slotGroupBreak()
  
 void NotationView::slotTransformsNormalizeRests()
 {
-    kdDebug(KDEBUG_AREA) << "NotationView::slotTransformsNormalizeRests()\n";
-
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Normalizing rests..."), statusBar());
 
-    Segment &segment = m_currentEventSelection->getSegment();
-    SegmentNotationHelper helper(segment);
-
-    helper.normalizeRests(m_currentEventSelection->getBeginTime(),
-                          m_currentEventSelection->getEndTime());
-
-    emit usedSelection();
-
-    redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
-               m_currentEventSelection->getBeginTime(),
-               m_currentEventSelection->getEndTime());
+    m_commandHistory->addCommand(new TransformsMenuNormalizeRestsCommand
+				 (this, *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsCollapseRests()
@@ -1181,21 +1140,11 @@ void NotationView::slotTransformsCollapseRests()
     kdDebug(KDEBUG_AREA) << "NotationView::slotTransformsCollapseRests()\n";
 
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Merging rests..."), statusBar());
+    KTmpStatusMsg msg(i18n("Collapsing rests..."), statusBar());
 
-    Segment &segment = m_currentEventSelection->getSegment();
-    SegmentNotationHelper helper(segment);
-
-    helper.collapseRestsAggressively(m_currentEventSelection->getBeginTime(),
-				     m_currentEventSelection->getEndTime());
-
-    emit usedSelection();
-
-    redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
-               m_currentEventSelection->getBeginTime(),
-               m_currentEventSelection->getEndTime());
+    m_commandHistory->addCommand(new TransformsMenuCollapseRestsCommand
+				 (this, *m_currentEventSelection));
 }
-
   
 
 //

@@ -26,6 +26,7 @@
 #include <kaction.h>
 
 #include "Event.h"
+#include "Segment.h"
 #include "NotationTypes.h"
 #include "SegmentNotationHelper.h"
 
@@ -35,6 +36,8 @@
 #include "notationview.h"
 #include "staffline.h"
 #include "qcanvassimplesprite.h"
+
+#include "notationcommands.h"
 
 #include "rosedebug.h"
 
@@ -158,6 +161,75 @@ void NotationTool::setParentView(NotationView* view)
 
 //------------------------------
 
+
+class
+NoteInsertionCommand : public BasicCommand
+{
+public:
+    NoteInsertionCommand(const QString &name,
+			 NotationView *view, Segment &segment, timeT time,
+			 timeT endTime, Note note, int pitch,
+			 Accidental accidental) :
+	BasicCommand(name, view, segment, time, endTime),
+	m_note(note),
+	m_pitch(pitch),
+	m_accidental(accidental),
+	m_justInsertedEvent(0),
+	m_staffId(0) { }
+    virtual ~NoteInsertionCommand() { }
+
+protected:
+    virtual void modifySegment(SegmentNotationHelper &helper) {
+
+	Segment::iterator i =
+	    helper.insertNote(getBeginTime(), m_note, m_pitch, m_accidental);
+
+	if (i != helper.segment().end()) {
+	    m_justInsertedEvent = *i;
+	    m_staffId = getView()->getStaff(helper.segment())->getId();
+	}
+    }
+
+    virtual void finishExecute() {
+
+	BasicCommand::finishExecute();
+
+	if (m_justInsertedEvent) {
+	    getView()->setSingleSelectedEvent(m_staffId, m_justInsertedEvent);
+	    m_justInsertedEvent = 0;
+	}
+    }
+
+    Note m_note;
+    int m_pitch;
+    Accidental m_accidental;
+    Rosegarden::Event *m_justInsertedEvent;
+    int m_staffId;
+};
+
+class RestInsertionCommand : public NoteInsertionCommand
+{
+public:
+    RestInsertionCommand(const QString &name,
+			 NotationView *view, Segment &segment, timeT time,
+			 timeT endTime, Note note) :
+	NoteInsertionCommand(name, view, segment, time, endTime,
+			     note, 0, NoAccidental) { }
+    virtual ~RestInsertionCommand() { }
+
+    virtual void modifySegment(SegmentNotationHelper &helper) {
+
+	Segment::iterator i =
+	    helper.insertRest(getBeginTime(), m_note);
+
+	if (i != helper.segment().end()) {
+	    m_justInsertedEvent = *i;
+	    m_staffId = getView()->getStaff(helper.segment())->getId();
+	}
+    }
+};
+
+
 NoteInserter::NoteInserter(NotationView* view)
     : NotationTool("NoteInserter", view),
       m_noteType(Rosegarden::Note::Quaver),
@@ -232,6 +304,8 @@ void NoteInserter::finalize()
     m_parentView->setPositionTracking(true);
 }
 
+
+
 void    
 NoteInserter::handleLeftButtonPress(int height, int staffNo,
                                    QMouseEvent* e,
@@ -251,43 +325,36 @@ NoteInserter::handleLeftButtonPress(int height, int staffNo,
         return;
     }
 
-
-    kdDebug(KDEBUG_AREA) << "NoteInserter::handleLeftButtonPress() : accidental = "
-                         << m_accidental << endl;
-
     int pitch = Rosegarden::NotationDisplayPitch(height, m_accidental).
         getPerformancePitch(clef ? Clef(*clef) : Clef::DefaultClef,
                             key ? Rosegarden::Key(*key) :
                             Rosegarden::Key::DefaultKey);
 
-    // We are going to modify the document so mark it as such
-    //
-    m_parentView->getDocument()->setModified();
-
     Note note(m_noteType, m_noteDots);
-    SegmentNotationHelper nt(m_parentView->getStaff(staffNo)->getSegment());
+    Segment &segment = m_parentView->getStaff(staffNo)->getSegment();
 
     timeT time = (*closestNote)->getAbsoluteTime();
-    timeT endTime = time + note.getDuration(); //???
-    Event *newEvent = doInsert(nt, time, note, pitch, m_accidental);
+    timeT endTime = time + note.getDuration();
 
-    m_parentView->redoLayout(staffNo, time, endTime);
-    m_parentView->setSingleSelectedEvent(staffNo, newEvent);
-}
-
-Event *NoteInserter::doInsert(SegmentNotationHelper& nt,
-                              Rosegarden::timeT absTime,
-                              const Note& note, int pitch,
-                              Accidental accidental)
-{
-    Segment::iterator i = nt.insertNote(absTime, note, pitch, accidental);
-
-    if (i != nt.segment().end()) {
-        return (*i);
+    Segment::iterator realEnd = segment.findTime(endTime);
+    if (realEnd == segment.end() || ++realEnd == segment.end()) {
+	endTime = segment.getEndIndex();
     } else {
-        return 0;
+	endTime = std::max(endTime, (*realEnd)->getAbsoluteTime());
     }
+
+    doAddCommand(segment, time, endTime, note, pitch, m_accidental);
 }
+
+void
+NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
+			   const Note &note, int pitch, Accidental accidental)
+{
+    m_parentView->getCommandHistory()->addCommand
+	(new NoteInsertionCommand
+	 ("Insert Note",
+	  m_parentView, segment, time, endTime, note, pitch, accidental));
+} 
 
 void NoteInserter::setNote(Rosegarden::Note::Type nt)
 {
@@ -393,19 +460,15 @@ NotationTool* RestInserter::getInstance(NotationView* view)
     return m_instance;
 }
 
-Event *RestInserter::doInsert(SegmentNotationHelper& nt,
-                              Rosegarden::timeT absTime,
-                              const Note& note, int,
-                              Accidental)
+void
+RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
+			   const Note &note, int, Accidental)
 {
-    Segment::iterator i = nt.insertRest(absTime, note);
+    m_parentView->getCommandHistory()->addCommand
+	(new RestInsertionCommand
+	 ("Insert Rest", m_parentView, segment, time, endTime, note));
+} 
 
-    if (i != nt.segment().end()) {
-        return (*i);
-    } else {
-        return 0;
-    }
-}
 
 //------------------------------
 

@@ -7,6 +7,7 @@ rosegarden_SOURCES = \
 	ktmpstatusmsg.cpp \
 	main.cpp \
 	notationcanvasview.cpp \
+	notationcommands.cpp \
 	notationelement.cpp \
 	notationhlayout.cpp \
 	notationproperties.cpp \
@@ -27,16 +28,16 @@ rosegarden_SOURCES = \
 	rosegardenguiiface.skel \
 	rosegardenguiiface.cpp \
 	rosegardenguiview.cpp \
+        rosegardentransport.ui \
+        rosegardentransportdialog.cpp \
 	rosexmlhandler.cpp \
 	staffline.cpp \
 	staffruler.cpp \
 	segmentcanvas.cpp \
 	trackeditor.cpp \
 	trackseditoriface.skel \
-	xmlstorableevent.cpp \
-        rosegardentransport.ui \
-        rosegardentransportdialog.cpp \
-        trackheader.cpp
+        trackheader.cpp \
+	xmlstorableevent.cpp
 
 rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET)
 
@@ -52,7 +53,8 @@ EXTRA_DIST = rosegardenguiiface.kidl trackseditoriface.kidl \
 	pixmaps/feta/8/*.xpm \
 	pixmaps/feta/10/*.xpm \
 	pixmaps/feta/12/*.xpm \
-	pixmaps/toolbar/*.xpm
+	pixmaps/toolbar/*.xpm \
+	pixmaps/transport/*.xpm
 
 # Where pixmaps for notes, clefs, etc... will be installed
 data_dirname = rosegarden

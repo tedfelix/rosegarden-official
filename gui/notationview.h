@@ -40,6 +40,7 @@ class NotationTool;
 class StaffRuler;
 class PositionCursor;
 class ActiveItem;
+class KCommandHistory;
 
 /**
  * NotationView is a view for one or more Staff objects, each of
@@ -67,9 +68,6 @@ public:
 
     const RosegardenGUIDoc *getDocument() const { return m_document; }
     RosegardenGUIDoc *getDocument() { return m_document; }
-
-    /// Calls all the relevant preparse and layout methods
-    virtual bool applyLayout(int staffNo = -1);
 
     /// Return the number of staffs
     int getStaffCount() { return m_staffs.size(); }
@@ -130,6 +128,14 @@ public:
      * return -1.
      */
     int findClosestStaff(double y);
+
+    /**
+     * redo the layout after insertion.  default is all staffs
+     */
+    void redoLayout(int staffNo = -1, Rosegarden::timeT startTime = 0,
+                    Rosegarden::timeT endTime = -1); // -1 => end of staff
+
+    KCommandHistory *getCommandHistory() { return m_commandHistory; }
 
 
 public slots:
@@ -390,12 +396,9 @@ protected:
      * Helper function to toggle a toolbar given its name
      */
     void toggleNamedToolBar(const QString& toolBarName);
-    
-    /**
-     * redo the layout after insertion.  default is all staffs
-     */
-    void redoLayout(int staffNo = -1, Rosegarden::timeT startTime = 0,
-                    Rosegarden::timeT endTime = -1); // -1 => end of staff
+
+    /// Calls all the relevant preparse and layout methods
+    virtual bool applyLayout(int staffNo = -1);
 
     /**
      * Readjust the size of the canvas after a layout
@@ -531,6 +534,11 @@ protected:
     std::vector<int> m_legatoDurations;
 
     KAction* m_selectDefaultNote;
+
+    //!!! This should be global to a composition (rosegardenguiview, I
+    //guess) rather than specific to a notationview -- but it's easier
+    //to test like this
+    KCommandHistory *m_commandHistory;
 
     QCanvasLine *m_pointer;
 
