@@ -1251,12 +1251,17 @@ SegmentMergeCommand::~SegmentMergeCommand()
 void
 SegmentMergeCommand::execute()
 {
-    Composition *composition = 0;
+    Composition *composition = m_oldSegments[0]->getComposition();
+    if (!composition) {
+	std::cerr
+	    << "SegmentMergeCommand::execute: ERROR: old segments are not in composition!"
+	    << std::endl;
+	return;
+    }
 
     if (!m_newSegment) {
 
 	m_newSegment = new Segment(*m_oldSegments[0]);
-	composition = m_oldSegments[0]->getComposition();
 
 	// that duplicated segment 0; now do the rest
 
@@ -1304,9 +1309,6 @@ SegmentMergeCommand::execute()
 		    (m_oldSegments[i]->getEndMarkerTime());
 	    }
 	}
-	
-    } else {
-	composition = m_newSegment->getComposition();
     }
 
     composition->addSegment(m_newSegment);
