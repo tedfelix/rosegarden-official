@@ -159,11 +159,6 @@ NotationView::NotationView(RosegardenGUIView* rgView,
         (getCanvasView(), SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
          this,         SLOT  (slotHoveredOverAbsoluteTimeChanged(unsigned int)));
 
-/*!!!
-    QObject::connect
-	(rgView, SIGNAL(setGUIPositionPointer(Rosegarden::timeT)),
-	 this,   SLOT  (slotSetGUIPositionPointer(Rosegarden::timeT)));
-*/
     QObject::connect
 	(rgView->getDocument(), SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));

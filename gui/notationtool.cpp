@@ -590,14 +590,11 @@ void NotationSelector::handleMouseMove(timeT, int,
     m_nParentView->canvas()->update();
 }
 
-void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent*)
+void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 {
     kdDebug(KDEBUG_AREA) << "NotationSelector::handleMouseRelease" << endl;
     m_updateRect = false;
     setViewCurrentSelection();
-
-    // If we didn't drag out a meaningful area, but _did_ click on
-    // an individual event, then select just that event
     
     if (m_selectionRect->width()  > -3 &&
         m_selectionRect->width()  <  3 &&
@@ -609,8 +606,23 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent*)
 	if (m_clickedElement != 0 &&
 	    m_clickedStaff   >= 0) {
 
+	    // If we didn't drag out a meaningful area, but _did_
+	    // click on an individual event, then select just that
+	    // event
+
 	    m_nParentView->setSingleSelectedEvent
 		(m_clickedStaff, m_clickedElement->event());
+
+	} else if (m_clickedStaff >= 0) {
+
+	    // If we clicked on no event but on a staff, move the
+	    // insertion cursor to the point where we clicked
+
+	    NotationStaff *staff = m_nParentView->getStaff(m_clickedStaff);
+	    if (staff) {
+		staff->setCursorPosition(e->x(), e->y());
+		m_nParentView->canvas()->update();
+	    }
 	}
     }
 }
