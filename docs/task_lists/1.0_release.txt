@@ -1,5 +1,8 @@
-Features for 1.0 - updated 20030627
+Features for 1.0 - updated 20030923
 -----------------------------------
+
+- integrate new JACK transport and synchronisation - also
+  investigate MIDI clock, MTC and MMC [rwb]
 
 - banks/variations [cc]
 
