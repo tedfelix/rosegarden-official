@@ -20,7 +20,7 @@
 */
 
 #include "Track.h"
-#include <sstream>
+#include <strstream>
 
 namespace Rosegarden
 {
@@ -61,7 +61,7 @@ Track::~Track()
 string
 Track::toXmlString()
 {
-    stringstream track;
+    strstream track;
 
     track << "<track id=\"";
     track << m_id << "\" type=\"";

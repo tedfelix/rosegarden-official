@@ -7,7 +7,7 @@
 <event type="timesignature"><property name="numerator" int="4"/><property name="denominator" int="4"/></event>
 </reference-segment>
 
-<composition recordtrack="0" pointer="0" tempo="120">
+<composition recordtrack="0" pointer="0" defaultTempo="120">
 
   <instrument id="0" type="midi" name="Piano"/>
   <instrument id="1" type="midi" name="Piano"/>

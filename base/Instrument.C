@@ -20,7 +20,7 @@
 */
 
 #include "Instrument.h"
-#include <sstream>
+#include <strstream>
 
 namespace Rosegarden
 {
@@ -52,7 +52,7 @@ Instrument::~Instrument()
 string
 Instrument::toXmlString()
 {
-    stringstream instrument;
+    strstream instrument;
 
     instrument << "<instrument id=\"";
     instrument << m_id << "\" type=\"";

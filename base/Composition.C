@@ -24,7 +24,7 @@
 #include "FastVector.h"
 
 #include <iostream>
-#include <sstream>
+#include <strstream>
 #include <iomanip>
 
 
@@ -620,14 +620,14 @@ void Composition::deleteInstrument(const int &instrument)
 //
 string Composition::toXmlString()
 {
-    stringstream composition;
+    strstream composition;
 
     composition << "<composition recordtrack=\"";
     composition << m_recordTrack;
     composition << "\" pointer=\"" << m_position;
-    composition << "\" tempo=\"";
+    composition << "\" defaultTempo=\"";
     composition << setiosflags(ios::fixed)
-                << setprecision(4) << m_currentTempo;
+                << setprecision(4) << m_defaultTempo;
     composition << "\">" << endl << endl;
 
     for (instrumentiterator iit = getInstruments()->begin();

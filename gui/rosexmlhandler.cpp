@@ -91,11 +91,13 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	m_currentSegment = m_composition.getReferenceSegment();
 	m_currentTime = 0;
 
+/*!!!
     } else if (lcName == "default-tempo") {
 
 	QString tempoString = atts.value("value");
 	m_composition.setDefaultTempo(tempoString.toDouble());
 	m_foundTempo = true;
+*/
 
     } else if (lcName == "instrument") {
         int id = -1;
@@ -157,7 +159,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         // Get and (eventually) set the tempo
         //
         double tempo;
-        QString tempoStr = atts.value("tempo");
+        QString tempoStr = atts.value("defaultTempo");
         if (tempoStr) {
             tempo = tempoStr.toDouble();
         }
