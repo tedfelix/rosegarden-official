@@ -255,10 +255,6 @@ void RosegardenGUIApp::addRecentFile(const QString &file)
         recentFilesMenu->clear();
 
         for ( int i=0 ; i < (int) recentFiles.count(); i++) {
-            kdDebug(KDEBUG_AREA) << "addRecentFile - insert "
-                                 << recentFiles.at(i) << " at "
-                                 << i << endl;
-
             recentFilesMenu->insertItem(recentFiles.at(i), i);
         }
     }
