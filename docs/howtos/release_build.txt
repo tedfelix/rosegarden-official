@@ -100,8 +100,16 @@ shouldn't.  Ensure that the tarball doesn't contain any of the following:
 
 rosegarden/docs/web (has to be currently manually removed anyway)
 rosegarden/sound/MidiArts.cc
+rosegarden/sequencer/rosegardensequenceriface.kidl
+rosegarden/sequencer/rosegardensequenceriface_skel.cpp
 rosegarden/gui/rosegardentransport.h
 rosegarden/gui/rosegardentransport.cpp
+rosegarden/gui/trackseditoriface.kidl
+rosegarden/gui/trackseditoriface_skel.cpp
+rosegarden/gui/rosegardenguiiface.kidl
+
+Also had no end of problems getting the po/ directory to build up
+in the "make dist".
 
 3. Verify the Tarball and get release notes from developers
 -----------------------------------------------------------
