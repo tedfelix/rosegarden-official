@@ -24,7 +24,6 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <dcopclient.h>
-#include <qvaluevector.h>
 
 #include <iostream>
 #include <unistd.h>
