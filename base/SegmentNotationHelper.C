@@ -125,7 +125,7 @@ Track::iterator TrackNotationHelper::expandIntoTie(iterator from, iterator to, t
 	}
 
         if ((*i)->getDuration() != eventDuration) {
-	    cerr << "WARNING: TrackNotationHelper::expandIntoTie(): (*i)->getDuration() != eventDuration (" << (*i)->getAbsoluteTime() << " vs " << eventDuration << "), changing eventDuration to match\n";
+	    cerr << "WARNING: TrackNotationHelper::expandIntoTie(): (*i)->getDuration() != eventDuration (" << (*i)->getDuration() << " vs " << eventDuration << "), changing eventDuration to match\n";
             eventDuration = (*i)->getDuration();
         }
 

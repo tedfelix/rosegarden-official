@@ -597,8 +597,6 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
 
     bool smooth = m_font->getNoteFontMap().isSmooth();
 
-cerr << "Smooth is " << smooth << endl;
-
     int gap = thickness - 1;
     if (gap < 1) gap = 1;
 

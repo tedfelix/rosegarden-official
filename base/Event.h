@@ -68,68 +68,72 @@ public:
     struct NoData { };
     struct BadType { };
 
-    Event();
-    Event(const std::string &type);
-    Event(const Event &e);
+    Event() : m_data(new EventData()) { }
+    Event(const std::string &type) : m_data(new EventData(type)) { }
+    Event(const Event &e) { share(e); }
+    ~Event() { lose(); }
 
-    virtual ~Event();
+    Event &operator=(const Event &e) {
+	if (&e != this) { lose(); share(e); }
+	return *this;
+    }
 
-    Event &operator=(const Event &e);
     friend bool operator<(const Event&, const Event&);
 
     // Accessors
-    const std::string &getType() const    { return m_type; }
-    void setType(const std::string &t)    { m_type = t; }
+    const std::string &getType() const    { return m_data->m_type; }
+    void setType(const std::string &t)    { unshare(); m_data->m_type = t; }
 
-    bool isa(const std::string &t) const  { return (m_type == t); }
+    bool isa(const std::string &t) const  { return (m_data->m_type == t); }
 
-    timeT getAbsoluteTime() const    { return m_absoluteTime; }
-    void  setAbsoluteTime(timeT d)   { m_absoluteTime = d; }
-    void  addAbsoluteTime(timeT d)   { m_absoluteTime += d; }
+    timeT getAbsoluteTime() const    { return m_data->m_absoluteTime; }
+    void  setAbsoluteTime(timeT d)   { unshare(); m_data->m_absoluteTime = d; }
+    void  addAbsoluteTime(timeT d)   { unshare(); m_data->m_absoluteTime += d; }
 
-    timeT getDuration()     const    { return m_duration; }
-    void  setDuration(timeT d)       { m_duration = d; }
+    timeT getDuration()     const    { return m_data->m_duration; }
+    void  setDuration(timeT d)       { unshare(); m_data->m_duration = d; }
 
-    int   getSubOrdering()  const    { return m_subOrdering; }
-    void  setSubOrdering(int o)      { m_subOrdering = o; }
+    int   getSubOrdering()  const    { return m_data->m_subOrdering; }
+    void  setSubOrdering(int o)      { unshare(); m_data->m_subOrdering = o; }
 
     bool  has(const PropertyName &name) const;
 
     template <PropertyType P>
-    PropertyDefn<P>::basic_type get(const PropertyName &name) const
-        /* throw (NoData, BadType) */;
+    PropertyDefn<P>::basic_type get(const PropertyName &name) const;
+    // throw (NoData, BadType);
 
     // no throw, returns bool
     template <PropertyType P>
     bool get(const PropertyName &name, PropertyDefn<P>::basic_type &val) const;
 
     template <PropertyType P>
-    bool isPersistent(const PropertyName &name) const
-        /* throw (NoData) */;
+    bool isPersistent(const PropertyName &name) const;
+    // throw (NoData);
 
     template <PropertyType P>
-    void setPersistence(const PropertyName &name, bool persistent)
-        /* throw (NoData) */;
+    void setPersistence(const PropertyName &name, bool persistent);
+    // throw (NoData);
 
-    std::string getPropertyType(const PropertyName &name) const
- 	/* throw (NoData) */;
-    std::string getAsString(const PropertyName &name) const
- 	/* throw (NoData) */;
+    std::string getPropertyType(const PropertyName &name) const;
+    // throw (NoData);
+
+    std::string getAsString(const PropertyName &name) const;
+    // throw (NoData);
 
     template <PropertyType P>
     void set(const PropertyName &name, PropertyDefn<P>::basic_type value,
-             bool persistent = true)
-        /* throw (BadType) */;
+             bool persistent = true);
+    // throw (BadType);
 
     // set non-persistent, but only if there's no persistent value already
     template <PropertyType P>
-    void setMaybe(const PropertyName &name, PropertyDefn<P>::basic_type value)
-        /* throw (BadType) */;
+    void setMaybe(const PropertyName &name, PropertyDefn<P>::basic_type value);
+    // throw (BadType);
 
     template <PropertyType P>
     void setFromString(const PropertyName &name, std::string value,
-                       bool persistent = true)
- 	/* throw (BadType) */;
+                       bool persistent = true);
+    // throw (BadType);
 
     void unset(const PropertyName &name);
     
@@ -140,19 +144,19 @@ public:
 
     struct EventCmp
     {
-        bool operator()(const Event *e1, const Event *e2) const
-        {
+        bool operator()(const Event &e1, const Event &e2) const {
+            return e1 < e2;
+        }
+        bool operator()(const Event *e1, const Event *e2) const {
             return *e1 < *e2;
         }
     };
 
-    static bool compareEvent2Time(const Event *e, timeT t)
-    {
+    static bool compareEvent2Time(const Event *e, timeT t) {
         return e->getAbsoluteTime() < t;
     }
 
-    static bool compareTime2Event(timeT t, const Event *e)
-    {
+    static bool compareTime2Event(timeT t, const Event *e) {
         return t <  e->getAbsoluteTime();
     }
 
@@ -165,28 +169,55 @@ public:
     void dump(std::ostream&) const {}
 #endif
 
-    bool hasViewElement() const { return m_viewElementRefCount != 0; }
+    bool hasViewElement() const { return m_data->m_viewElementRefCount != 0; }
 
 protected:
     // these are for ViewElement only
-    void viewElementRef()   { ++m_viewElementRefCount; }
-    void viewElementUnRef() { --m_viewElementRefCount; }
+    void viewElementRef()   { ++m_data->m_viewElementRefCount; }
+    void viewElementUnRef() { --m_data->m_viewElementRefCount; }
 
 private:
-    void scrapMap();
-    void copyFrom(const Event &e);
+    struct EventData
+    {
+	EventData();
+	EventData(const std::string &type);
+	EventData *unshare();
+	~EventData();
+	unsigned int m_refCount;
 
-    std::string m_type;
-    timeT m_duration;
-    timeT m_absoluteTime;
-    int m_subOrdering;
+	std::string m_type;
+	timeT m_duration;
+	timeT m_absoluteTime;
+	int m_subOrdering;
 
-    unsigned int m_viewElementRefCount;
+	unsigned int m_viewElementRefCount;
 
-    typedef std::hash_map<PropertyName, PropertyStoreBase*,
-                          PropertyNameHash, PropertyNamesEqual> PropertyMap;
-    typedef PropertyMap::value_type PropertyPair;
-    PropertyMap m_properties;
+	typedef std::hash_map<PropertyName, PropertyStoreBase*,
+			      PropertyNameHash, PropertyNamesEqual> PropertyMap;
+	typedef PropertyMap::value_type PropertyPair;
+	PropertyMap m_properties;
+
+    private:
+	EventData(const EventData &);
+	EventData &operator=(const EventData &);
+    };	
+
+    EventData *m_data;
+
+    void share(const Event &e) {
+	m_data = e.m_data;
+    cout << "Event::share: raising m_refCount from " << m_data->m_refCount << endl;
+	m_data->m_refCount++;
+    }
+
+    void unshare() {
+	if (m_data->m_refCount > 1) m_data = m_data->unshare();
+    }
+
+    void lose() {
+    cout << "Event::lose: lowering m_refCount from " << m_data->m_refCount << endl;
+	if (--m_data->m_refCount == 0) delete m_data;
+    }
 };
 
 
@@ -194,8 +225,8 @@ template <PropertyType P>
 bool
 Event::get(const PropertyName &name, PropertyDefn<P>::basic_type &val) const
 {
-    PropertyMap::const_iterator i = m_properties.find(name);
-    if (i != m_properties.end()) { 
+    EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
+    if (i != m_data->m_properties.end()) { 
 
         PropertyStoreBase *sb = i->second;
         if (sb->getType() == P) {
@@ -234,8 +265,8 @@ PropertyDefn<P>::basic_type
 Event::get(const PropertyName &name) const
     // throw (NoData, BadType)
 {
-    PropertyMap::const_iterator i = m_properties.find(name);
-    if (i != m_properties.end()) { 
+    EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
+    if (i != m_data->m_properties.end()) { 
 
         PropertyStoreBase *sb = i->second;
         if (sb->getType() == P)
@@ -264,8 +295,8 @@ bool
 Event::isPersistent(const PropertyName &name) const
     // throw (NoData)
 {
-    PropertyMap::const_iterator i = m_properties.find(name);
-    if (i != m_properties.end()) return i->second->isPersistent();
+    EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
+    if (i != m_data->m_properties.end()) return i->second->isPersistent();
     else {
 #ifndef NDEBUG
         std::cerr << "Event::get() Error: Attempt to get persistence of property \""
@@ -281,8 +312,8 @@ void
 Event::setPersistence(const PropertyName &name, bool persistent)
     // throw (NoData)
 {
-    PropertyMap::const_iterator i = m_properties.find(name);
-    if (i != m_properties.end()) i->second->setPersistence(persistent);
+    EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
+    if (i != m_data->m_properties.end()) i->second->setPersistence(persistent);
     else {
 #ifndef NDEBUG
         std::cerr << "Event::get() Error: Attempt to set persistence of property \""
@@ -299,8 +330,8 @@ Event::set(const PropertyName &name, PropertyDefn<P>::basic_type value,
            bool persistent)
     // throw (BadType)
 {
-    PropertyMap::const_iterator i = m_properties.find(name);
-    if (i != m_properties.end()) {
+    EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
+    if (i != m_data->m_properties.end()) {
 
         PropertyStoreBase *sb = i->second;
         if (sb->getType() == P) {
@@ -317,7 +348,7 @@ Event::set(const PropertyName &name, PropertyDefn<P>::basic_type value,
 	    
     } else {
         PropertyStoreBase *p = new PropertyStore<P>(value, persistent);
-        m_properties.insert(PropertyPair(name, p));
+        m_data->m_properties.insert(EventData::PropertyPair(name, p));
     }
 }
 

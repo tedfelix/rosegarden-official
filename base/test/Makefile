@@ -1,8 +1,9 @@
 CC	 = g++
-CPPFLAGS = -O2
+# debug flags need to be consistent with base build
+CPPFLAGS = -O2 -DNDEBUG
 
-LIBCORE  = ../.libs/libcore.a
-###LIBCORE  = ../Property.o ../Event.o ../NotationTypes.o ../Track.o ../Quantizer.o
+LIBBASE  = ../.libs/libbase.a
+###LIBBASE  = ../Property.o ../Event.o ../NotationTypes.o ../Track.o ../Quantizer.o
 
 INCPATH  = -I..
 
@@ -17,9 +18,9 @@ clean:
 	$(CC) $(CPPFLAGS) -c $< $(INCPATH) -o $@
 
 test: test.o
-	$(CC) $< $(LIBCORE) -o $@
+	$(CC) $< $(LIBBASE) -o $@
 ###test: test.o ../Property.o ../Event.o ../NotationTypes.o ../Track.o ../Quantizer.o
-###	$(CC) $< $(LIBCORE) -o $@
+###	$(CC) $< $(LIBBASE) -o $@
 
 depend:
 	makedepend $(INCPATH) -- $(CPPFLAGS) -- $(SRCS)
