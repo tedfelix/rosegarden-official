@@ -461,6 +461,9 @@ SegmentParameterBox::populateBoxFromSegments()
             break;
     }
 
+    disconnect(m_delayValue, SIGNAL(textChanged(const QString&)),
+               this, SLOT(slotDelayTextChanged(const QString &)));
+
     switch(delayed)
     {
         case All:
@@ -485,6 +488,9 @@ SegmentParameterBox::populateBoxFromSegments()
             m_delayValue->setEditText("");
             break;
     }
+
+    connect(m_delayValue, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotDelayTextChanged(const QString &)));
 }
 
 void SegmentParameterBox::slotRepeatPressed()
@@ -600,7 +606,7 @@ SegmentParameterBox::slotDelayTimeChanged(Rosegarden::timeT delayValue)
 void
 SegmentParameterBox::slotDelayTextChanged(const QString &text)
 {
-    if (text.isEmpty())
+    if (text.isEmpty() || m_segments.size() == 0)
         return;
 
     slotDelayTimeChanged(-(text.toInt()));
