@@ -30,17 +30,18 @@
 //
 //
 
+#include <string>
 #include <iostream>
 #include <fstream>
 
 
-#ifndef _RIFFPEAKCHUNKGENERATOR_H_
-#define _RIFFPEAKCHUNKGENERATOR_H_
+#ifndef _RIFFPEAKMANAGER_H_
+#define _RIFFPEAKMANAGER_H_
 
 namespace Rosegarden
 {
 
-class RIFFPeakChunkGenerator
+class RIFFPeakManager
 {
 public:
     // updatePercentage tells this object how often to throw a
@@ -49,25 +50,38 @@ public:
     // five percent.  The percentage complete is sent with 
     // each exception.
     //
-    RIFFPeakChunkGenerator(std::ifstream *in,
-                           std::ofstream *out,
-                           unsigned bitsPerSample,
-                           unsigned int channels,
-                           unsigned short updatePercentage);
-    ~RIFFPeakChunkGenerator();
+    RIFFPeakManager(const std::string &fileName,
+                    streampos dataChunk,
+                    unsigned bitsPerSample,
+                    unsigned int channels,
+                    bool internal,
+                    unsigned short updatePercentage);
+    ~RIFFPeakManager();
 
-    // Generate the peak chunk into the out file stream.
-    // This process will send updates of its progress by exception
-    // every m_updatePercentage%
-    void generate();
 
 protected:
 
+    // Generate the peak chunk if necessary (checks for peak file
+    // or peak chunk existence).
+    //
+    void generate();
+
+    // Calculate actual peaks from in file handle and write out -
+    // based on interal file specs (channels, bits per sample).
+    //
+    void calculatePeaks(std::ifstream *in, std::ofstream *out);
+
+    void readHeader();
+    void writeHeader();
+
     std::ifstream *m_inFile;
     std::ofstream *m_outFile;
+    std::string    m_riffFileName;
+    streampos      m_dataChunk;
     unsigned int   m_bitsPerSample;
     unsigned int   m_channels;
-    unsigned short m_updatePercentage;
+    bool           m_internal;          // do we store peak data in RIFF file?
+    unsigned short m_updatePercentage;  // how often we send updates 
 
 
 };
@@ -75,6 +89,6 @@ protected:
 }
 
 
-#endif // _RIFFPEAKCHUNKGENERATOR_H_
+#endif // _RIFFPEAKMANAGER_H_
 
 
