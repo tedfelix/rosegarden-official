@@ -435,9 +435,12 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentItem)
     {
+        /*
         Rosegarden::Composition &comp = m_doc->getComposition();
+
         Rosegarden::Track *track = comp.getTrackByPosition(
                 m_currentItem->getTrackPosition());
+                */
 
 	bool haveChange = false;
 
@@ -620,6 +623,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
             if (track >= TrackId(m_doc->getComposition().getNbTracks()))
                 track  = TrackId(m_doc->getComposition().getNbTracks() - 1);
 
+            /*
             if (it == m_selectedItems->begin())
             {
                 guideX = int(m_canvas->grid().getRulerScale()->
@@ -636,6 +640,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
                 if (y < guideY)
                     guideY = m_canvas->grid().getYBinCoordinate(track);
             }
+            */
 
             // This is during a "mover" so don't use the normalised (i.e.
             // proper) TrackPosition value yet.
@@ -643,8 +648,8 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 	    it->second->setTrackPosition(track);
 	}
 
-        guideX = m_currentItem->x();
-        guideY = m_currentItem->y();
+        guideX = int(m_currentItem->x());
+        guideY = int(m_currentItem->y());
 
         m_foreGuide->setX(guideX - 2);
         m_topGuide->setY(guideY - 2);
@@ -675,11 +680,18 @@ void SegmentResizer::ready()
 
 void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
 {
+    RG_DEBUG << "SegmentResizer::handleMouseButtonPress" << endl;
+
+    SegmentSelector* selector = dynamic_cast<SegmentSelector*>
+            (getToolBox()->getTool("segmentselector"));
+    if (selector) selector->clearSelected();
+
     SegmentItem* item = m_canvas->findSegmentClickedOn(e->pos());
 
-    if (item && cursorIsCloseEnoughToEdge(item, e, m_edgeThreshold)) {
+    if (item /*&& cursorIsCloseEnoughToEdge(item, e, m_edgeThreshold)*/) {
         m_currentItem = item;
-    }
+        if (selector) selector->slotSelectSegmentItem(item);
+    } 
 }
 
 void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
@@ -891,6 +903,12 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
             SegmentResizer* resizer = dynamic_cast<SegmentResizer*>
                     (getToolBox()->getTool(SegmentResizer::ToolName));
             resizer->setEdgeThreshold(threshold);
+
+            // For the moment we only allow resizing of a single segment
+            // at a time.
+            //
+            clearSelected();
+            slotSelectSegmentItem(item);
 
 	    m_dispatchTool = resizer;
             
@@ -1322,6 +1340,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             if (track >= TrackId(m_doc->getComposition().getNbTracks()))
                 track  = TrackId(m_doc->getComposition().getNbTracks() - 1);
 
+            /*
             if (it == m_selectedItems.begin())
             {
                 guideX = int(m_canvas->grid().getRulerScale()->
@@ -1338,6 +1357,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
                 if (y < guideY)
                     guideY = m_canvas->grid().getYBinCoordinate(track);
             }
+            */
 
             // This is during a "mover" so don't use the normalised (i.e.
             // proper) TrackPosition value yet.
@@ -1345,8 +1365,8 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	    it->second->setTrackPosition(track);
 	}
 
-        guideX = m_currentItem->x();
-        guideY = m_currentItem->y();
+        guideX = int(m_currentItem->x());
+        guideY = int(m_currentItem->y());
 
         m_foreGuide->setX(guideX - 2);
         m_topGuide->setY(guideY - 2);
