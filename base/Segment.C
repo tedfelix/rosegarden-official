@@ -33,14 +33,14 @@ using std::string;
     
 
 
-Track::Track(timeT duration, timeT startIdx) :
+Track::Track(timeT startIdx) :
     std::multiset<Event*, Event::EventCmp>(),
     m_startIdx(startIdx),
     m_instrument(0),
     m_id(0),
     m_quantizer(new Quantizer())
 {
-    setDuration(duration);
+//    setDuration(duration);
 }
 
 Track::~Track()

@@ -32,7 +32,8 @@ const std::string Composition::BarEventType = "bar";
 
 
 Composition::Composition()
-    : m_nbTicksPerBar(384),
+    : m_timeReference(0),
+      m_nbTicksPerBar(384),
       m_tempo(120),
       m_position(0),
       m_barPositionsNeedCalculating(true)

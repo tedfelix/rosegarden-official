@@ -187,6 +187,7 @@ NotationHLayout::preparse(Staff &staff)
 //!!!    if ( lastBar < 0)  lastBar = barPositions.size() - 1;
 
     Track::iterator refStart = timeRef->findTime(t.getStartIndex());
+//    Track::iterator refStart = timeRef->begin();
     Track::iterator refEnd =
 	timeRef->findTime(t.getStartIndex() + t.getDuration() + 1);
 
@@ -203,7 +204,7 @@ NotationHLayout::preparse(Staff &staff)
         int totalCount = 0;
 
         NotationElementList::iterator from =
-	    notes->findTime((*refi)->getAbsoluteTime());
+	    notes->findTime((*refi)->getAbsoluteTime() - t.getStartIndex());
 //            notes->findTime(barPositions[barNo].start);
 
         NotationElementList::iterator to;
@@ -211,7 +212,7 @@ NotationHLayout::preparse(Staff &staff)
 	if (refi0 != timeRef->end()) {
 //        if (barNo < (int)barPositions.size() - 1) {
 //            to = notes->findTime(barPositions[barNo+1].start);
-            to = notes->findTime((*refi0)->getAbsoluteTime());
+            to = notes->findTime((*refi0)->getAbsoluteTime() - t.getStartIndex());
         } else {
             to = notes->end();
         }
@@ -442,10 +443,25 @@ NotationHLayout::reconcileBars()
     // the bar list for any staff that doesn't begin right at the
     // start of the composition
 
-    
-    
-	
+    BarDataMap::iterator i;
 
+    for (i = m_barData.begin(); i != m_barData.end(); ++i) {
+
+        Staff *staff = i->first;
+        BarDataList &list = i->second;
+
+        Track &track = staff->getViewElementsManager()->getTrack();
+        const Track &refTrack = *(track.getReferenceTrack());
+
+        for (Track::const_iterator j = refTrack.begin();
+             j != refTrack.end(); ++j) {
+
+            if ((*j)->getAbsoluteTime() >= track.getStartIndex()) break;
+            list.push_front
+                (BarData
+                 (-1, staff->getNotationElementList()->end(), -1, 0, 0));
+        }
+    }
 
     // Ensure that concurrent bars on all staffs have the same width,
     // which for now we make the maximum width required for this bar
@@ -459,8 +475,7 @@ NotationHLayout::reconcileBars()
 	int maxWidth = -1;
 	reachedEnd = true;
 
-	for (BarDataMap::iterator i = m_barData.begin();
-	     i != m_barData.end(); ++i) {
+	for (i = m_barData.begin(); i != m_barData.end(); ++i) {
 
 	    BarDataList &list = i->second;
 
@@ -474,8 +489,7 @@ NotationHLayout::reconcileBars()
 	    }
 	}
 
-	for (BarDataMap::iterator i = m_barData.begin();
-	     i != m_barData.end(); ++i) {
+	for (i = m_barData.begin(); i != m_barData.end(); ++i) {
 
 	    BarDataList &list = i->second;
 
@@ -534,13 +548,21 @@ NotationHLayout::layout(BarDataMap::iterator i)
             to = nbdi->start;
         }
 
-        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): starting a bar, initial x is "
-                             << x << " and barWidth is " << bdi->idealWidth << endl;
-
+        kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): starting a bar, barNo is " << bdi->barNo << ", initial x is "
+                             << x << ", barX is " << barX << ", and bar width is " << bdi->idealWidth << endl;
+        if (from == notes->end()) {
+            kdDebug(KDEBUG_AREA) << "Start is end" << endl;
+        }
+        if (from == to) {
+            kdDebug(KDEBUG_AREA) << "Start is to" << endl;
+        }
 
 	x = barX;
         bdi->x = x + staff.getBarMargin() / 2;
         x += staff.getBarMargin();
+	barX += bdi->idealWidth;
+
+        if (bdi->barNo < 0) continue; // fake bar
 
         bool haveAccidentalInThisChord = false;
 
@@ -709,8 +731,6 @@ NotationHLayout::layout(BarDataMap::iterator i)
             x += delta;
             kdDebug(KDEBUG_AREA) << "x = " << x << endl;
         }
-
-	barX += bdi->idealWidth;
     }
 
     if (x > m_totalWidth) m_totalWidth = x;

@@ -58,7 +58,7 @@ class Quantizer;
 class Track : public std::multiset<Event*, Event::EventCmp>
 {
 public:
-    Track(timeT duration = 0, timeT startIdx = 0);
+    Track(timeT startIdx = 0);
     ~Track();
 
 /*

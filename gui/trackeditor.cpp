@@ -173,9 +173,10 @@ void TracksEditor::addTrack(int instrument, int start,
 
     Composition &comp = m_document->getComposition();
 
-    Rosegarden::Track* track = new Rosegarden::Track(nbTimeSteps, start);
+    Rosegarden::Track* track = new Rosegarden::Track(start);
     track->setInstrument(instrument);
     comp.addTrack(track);
+    track->setDuration(nbTimeSteps);
 
     int y = m_vHeader->sectionPos(instrument),
         x = m_hHeader->sectionPos(start);
