@@ -42,7 +42,11 @@ AudioFile::AudioFile(const unsigned int &id,
 
 AudioFile::~AudioFile()
 {
-    if (m_file) m_file->close();
+    if (m_file)
+    {
+        m_file->close();
+        delete m_file;
+    }
 }
 
 
@@ -190,7 +194,7 @@ AudioFile::open()
 
     // Reset to front of "data" block
     //
-    scanTo(RealTime(0, 0));
+    scanTo(m_file, RealTime(0, 0));
 
     return true;
 }
@@ -215,16 +219,16 @@ AudioFile::write()
 }
 
 bool
-AudioFile::scanTo(const RealTime &time)
+AudioFile::scanTo(std::ifstream *file, const RealTime &time)
 {
     // sanity
-    if (m_file == 0) return false;
+    if (file == 0) return false;
 
     // seek past header
-    m_file->seekg(36, std::ios::beg);
+    file->seekg(36, std::ios::beg);
 
     // check we've got data chunk start
-    if (getBytes(m_file, 4) != "data")
+    if (getBytes(file, 4) != "data")
     {
         std::cerr << "AudioFile::scanTo() - can't find data chunk where "
                   << "it was expected" << std::endl;
@@ -233,10 +237,10 @@ AudioFile::scanTo(const RealTime &time)
 
     // How much do we scan forward?
     //
-    long totalSamples = m_sampleRate * time.sec +
+    unsigned int totalSamples = m_sampleRate * time.sec +
                         ( ( m_sampleRate * time.usec ) / 1000000 );
 
-    long totalBytes = totalSamples * m_channels * m_bytesPerSample;
+    unsigned int totalBytes = totalSamples * m_channels * m_bytesPerSample;
 
 
     // When using seekg we have to keep an eye on the boundaries ourselves
@@ -248,8 +252,7 @@ AudioFile::scanTo(const RealTime &time)
         return false;
     }
 
-    m_file->seekg(totalBytes,  std::ios::cur);
-
+    file->seekg(totalBytes,  std::ios::cur);
 
     std::cout << "AudioFile::scanTo - seeking to " << time << std::endl;
 
@@ -264,25 +267,31 @@ AudioFile::scanTo(const RealTime &time)
 //
 //
 std::string
-AudioFile::getSampleFrames(unsigned int frames)
+AudioFile::getSampleFrames(std::ifstream *file, unsigned int frames)
 {
+    // sanity
+    if (m_file == 0) return std::string("");
+
     // Bytes per sample already takes into account the number
     // of channels we're using
     //
     long totalBytes = frames * m_bytesPerSample;
-    return getBytes(m_file, totalBytes);
+    return getBytes(file, totalBytes);
 }
 
 // Return a slice of frames over a time period
 //
 std::string
-AudioFile::getSampleFrameSlice(const RealTime &time)
+AudioFile::getSampleFrameSlice(std::ifstream *file, const RealTime &time)
 {
+    // sanity
+    if (m_file == 0) return std::string("");
+
     long totalSamples = m_sampleRate * time.sec +
                         ( ( m_sampleRate * time.usec ) / 1000000 );
 
     long totalBytes = totalSamples * m_channels * m_bytesPerSample;
-    return getBytes(m_file, totalBytes);
+    return getBytes(file, totalBytes);
 }
 
 

@@ -24,6 +24,98 @@
 namespace Rosegarden
 {
 
+PlayableAudioFile::PlayableAudioFile(AudioFile *audioFile,
+                                     const RealTime &startTime,
+                                     const RealTime &startIndex,
+                                     const RealTime &duration):
+        m_startTime(startTime),
+        m_startIndex(startIndex),
+        m_duration(duration),
+        m_status(IDLE),
+        m_file(0),
+        m_audioFile(audioFile)
+{
+    m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
+                               std::ios::in | std::ios::binary);
+
+    if (!*m_file)
+        throw(std::string("PlayableAudioFile - can't open file"));
+
+    // scan to the beginning of the data chunk
+    scanTo(RealTime(0, 0));
+}
+
+PlayableAudioFile::~PlayableAudioFile()
+{
+    if (m_file)
+    {
+        m_file->close();
+        delete m_file;
+    }
+}
+ 
+bool
+PlayableAudioFile::scanTo(const RealTime &time)
+{
+    if (m_audioFile)
+    {
+        return m_audioFile->scanTo(m_file, time);
+    }
+    return false;
+}
+
+
+// Get some sample frames using this object's file handle
+//
+std::string
+PlayableAudioFile::getSampleFrames(unsigned int frames)
+{
+    if (m_audioFile)
+    {
+        return m_audioFile->getSampleFrames(m_file, frames);
+    }
+    return std::string("");
+}
+
+// Get a sample file slice using this object's file handle
+//
+std::string
+PlayableAudioFile::getSampleFrameSlice(const RealTime &time)
+{
+    if (m_audioFile)
+    {
+        return m_audioFile->getSampleFrameSlice(m_file, time);
+    }
+    return std::string("");
+}
+
+// How many channels in the base AudioFile?
+//
+unsigned int
+PlayableAudioFile::getChannels()
+{
+    if (m_audioFile)
+    {
+        return m_audioFile->getChannels();
+    }
+    return 0;
+}
+
+
+// How many bits per sample in the base AudioFile?
+//
+unsigned int
+PlayableAudioFile::getBitsPerSample()
+{
+    if (m_audioFile)
+    {
+        return m_audioFile->getBitsPerSample();
+    }
+    return 0;
+}
+
+
+
 SoundDriver::SoundDriver(const std::string &name):
     m_name(name),
     m_driverStatus(NO_DRIVER),
@@ -59,7 +151,32 @@ SoundDriver::getMappedInstrument(InstrumentId id)
 void
 SoundDriver::queueAudio(PlayableAudioFile *audioFile)
 {
-    m_audioPlayQueue.push_back(audioFile);
+    // Push to the back of the thread queue and then we must
+    // process this across to the proper audio queue when
+    // it's safe to do so - use the method below
+    //
+    m_audioPlayThreadQueue.push_back(audioFile);
+}
+
+// Move the pending thread queue across to the real queue
+// at a safe point in time (when another thread isn't
+// accessing the vector.
+//
+void
+SoundDriver::pushPlayableAudioQueue()
+{
+    std::vector<PlayableAudioFile*>::iterator it;
+
+    for (it = m_audioPlayThreadQueue.begin();
+         it != m_audioPlayThreadQueue.end();
+         it++)
+
+    {
+        m_audioPlayQueue.push_back(*it);
+    }
+
+    m_audioPlayThreadQueue.erase(m_audioPlayThreadQueue.begin(),
+                                 m_audioPlayThreadQueue.end());
 }
 
 void

@@ -48,8 +48,8 @@ namespace Rosegarden
 // played by processAudioQueue() in Sequencer.  State changes
 // through playback and it's finally discarded when done.
 //
-// We've removed any driver dependencies (aRts) from here so
-// Audio is broken for the moment.
+// To enable us to have multiple file handles on real AudioFile
+// we store the file handle with this class.
 //
 //
 class PlayableAudioFile
@@ -67,28 +67,14 @@ public:
     PlayableAudioFile(AudioFile *audioFile,
                       const RealTime &startTime,
                       const RealTime &startIndex,
-                      const RealTime &duration):
-        m_id(audioFile->getId()),
-        m_startTime(startTime),
-        m_startIndex(startIndex),
-        m_duration(duration),
-        m_status(IDLE)
-    {
-    }
+                      const RealTime &duration);
 
     PlayableAudioFile(unsigned int id,
                       const RealTime &startTime,
                       const RealTime &startIndex,
-                      const RealTime &duration):
-        m_id(id),
-        m_startTime(startTime),
-        m_startIndex(startIndex),
-        m_duration(duration),
-        m_status(IDLE)
-    {
-    }
+                      const RealTime &duration);
 
-    ~PlayableAudioFile() {;}
+    ~PlayableAudioFile();
 
     void setStatus(const PlayStatus &status) { m_status = status; }
     PlayStatus getStatus() const { return m_status; }
@@ -102,15 +88,34 @@ public:
     void setStartIndex(const RealTime &time) { m_startIndex = time; }
     RealTime getStartIndex() const { return m_startIndex; }
 
-    void setId(unsigned int id) { m_id = id; }
-    unsigned int getId() const { return m_id; }
+    // Reaches through to AudioFile interface using our local file handle
+    //
+    //
+    bool scanTo(const RealTime &time);
+    std::string getSampleFrames(unsigned int frames);
+    std::string getSampleFrameSlice(const RealTime &time);
+
+    // Two important numbers also reaching through to AudioFile
+    //
+    unsigned int getChannels();
+    unsigned int getBitsPerSample();
 
 private:
-    unsigned int          m_id;
     RealTime              m_startTime;
     RealTime              m_startIndex;
     RealTime              m_duration;
     PlayStatus            m_status;
+
+    // Performance file handle - must open non-blocking to
+    // allow other potential PlayableAudioFiles access to
+    // the same file.
+    //
+    std::ifstream        *m_file;
+
+    // AudioFile handle
+    //
+    AudioFile            *m_audioFile;
+
 };
 
 
@@ -258,7 +263,9 @@ public:
     bool addAudioFile(const std::string &fileName, unsigned int id);
     bool removeAudioFile(unsigned int id);
                     
-    // Queue up an audio sample for playing
+    // Queue up an audio sample for playing - we use the
+    // m_audioPlayThreadQueue to make sure all queue add
+    // operations are thread-safe.
     //
     bool queueAudio(unsigned int id,
                     const RealTime &absoluteTime,
@@ -266,6 +273,11 @@ public:
                     const RealTime &duration,
                     const RealTime &playLatency);
 
+    // Move the pending thread queue across to the real queue
+    // at a safe point in time (when another thread isn't
+    // accessing the vector.
+    //
+    void pushPlayableAudioQueue();
 
 protected:
     // Helper functions to be implemented by subclasses
@@ -310,6 +322,14 @@ protected:
     // Audio files - both real and the playing abstraction
     //
     std::vector<PlayableAudioFile*>             m_audioPlayQueue;
+
+    // The Thread queue is used to make sure we don't invalidate
+    // iterators by writing to the audioPlayQueue when another
+    // (JACK) thread is reading from it.  We use the thread queue
+    // as temporary storage and move it along at the end of the
+    // JACK process callback.
+    //
+    std::vector<PlayableAudioFile*>             m_audioPlayThreadQueue;
     std::vector<AudioFile*>                     m_audioFiles;
 
 };

@@ -208,6 +208,8 @@ private:
     static int  jackBufferSize(nframes_t nframes, void *arg);
     static int  jackSampleRate(nframes_t nframes, void *arg);
     static void jackShutdown(void *arg);
+    static int  jackGraphOrder(void *);
+    static int  jackXRun(void *);
 
     jack_client_t               *m_audioClient;
     jack_port_t                 *m_audioInputPort;

@@ -33,6 +33,7 @@
 
 #ifdef HAVE_JACK
 #include <jack/types.h>
+#include <unistd.h> // for usleep
 #endif
 
 // This driver implements MIDI in and out via the ALSA (www.alsa-project.org)
@@ -77,6 +78,7 @@ namespace Rosegarden
 #ifdef HAVE_JACK
 static nframes_t    _jackBufferSize;
 static unsigned int _jackSampleRate;
+static bool         _usingAudioQueueVector;
 #endif
 
 AlsaDriver::AlsaDriver():
@@ -97,6 +99,7 @@ AlsaDriver::AlsaDriver():
 #ifdef HAVE_JACK
     _jackBufferSize = 0;
     _jackSampleRate = 0;
+    _usingAudioQueueVector = false;
 #endif
 }
 
@@ -194,7 +197,7 @@ AlsaDriver::generateInstruments()
     std::cout << std::endl << "  ALSA Client information:"
               << std::endl << std::endl;
 
-    bool duplex = false;
+    //bool duplex = false;
 
     // Use these to store ONE input (duplex) port
     // which we push onto the Instrument list last
@@ -625,6 +628,8 @@ AlsaDriver::initialiseAudio()
     jack_set_buffer_size_callback(m_audioClient, jackBufferSize, this);
     jack_set_sample_rate_callback(m_audioClient, jackSampleRate, this);
     jack_on_shutdown(m_audioClient, jackShutdown, this);
+    jack_set_graph_order_callback(m_audioClient, jackGraphOrder, this);
+    //jack_set_xrun_callback(m_audioClient, jackXRun, this);
 
     // get and report the sample rate
     //
@@ -790,9 +795,33 @@ AlsaDriver::stopPlayback()
                              0);
     }
 
-    // clear down the audio queue
+    // Sometimes we don't "process" again before we actually
+    // stop
+
+#ifdef HAVE_JACK
+
+    // Wait for the queue vector to become available so we can
+    // clear it down.  We're careful with this sleep.
     //
+    int sleepPeriod = 500; // microseconds
+    int totalSleep = 0;
+
+    while (_usingAudioQueueVector)
+    {
+        usleep(sleepPeriod);
+        totalSleep += sleepPeriod;
+
+        if (totalSleep > 1000000)
+        {
+            // Bound to be uncaught but at least we'll break out rather
+            // than just hanging here.
+            //
+            throw(std::string("AlsaDriver::stopPlayback - slept too long waiting for audio queue vector to free"));
+        }
+    }
+
     clearAudioPlayQueue();
+#endif
 
 }
 
@@ -1326,7 +1355,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
         if ((*i)->getType() == MappedEvent::Audio)
         {
             PlayableAudioFile *audioFile =
-                    new PlayableAudioFile((*i)->getAudioID(),
+                    new PlayableAudioFile(getAudioFile((*i)->getAudioID()),
                                           (*i)->getEventTime(),
                                           (*i)->getAudioStartMarker(),
                                           (*i)->getDuration());
@@ -1485,23 +1514,10 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
 
     if (inst)
     {
-        /*
-        char bufsize[16384];
+        // protect the audio queue vector from outside intervention
+        //
+        _usingAudioQueueVector = true;
 
-        sample_t *samples = new sample_t[nframes];
-
-        for (int i = 0; i < nframes; i++)
-            samples[i] = 32767;
-
-        memcpy(inst->getJackOutputPort(),
-               samples,
-               sizeof(samples));
-               */
-
-        std::vector<PlayableAudioFile*> &audioQueue = inst->getAudioPlayQueue();
-        std::vector<PlayableAudioFile*>::iterator it;
-        AudioFile *audioFile;
-    
         // Get output buffer
         //
         sample_t *leftBuffer = static_cast<sample_t*>
@@ -1511,112 +1527,141 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
             (jack_port_get_buffer(inst->getJackOutputPortRight(),
                                   nframes));
 
-        for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
+        // Send out silence if we're not playing
+        //
+        if (!inst->isPlaying())
         {
-            if ((*it)->getStatus() == PlayableAudioFile::PLAYING)
+            float silence = 0.0;
+
+            for (unsigned int i = 0 ; i < nframes; i++)
+            {
+                (*leftBuffer) = silence;
+                leftBuffer++;
+
+                (*rightBuffer) = silence;
+                rightBuffer++;
+            }
+            return 0;
+        }
+
+        // Ok, we're playing - so push some samples out if we have
+        // any files that should be playing.
+        //
+        std::vector<PlayableAudioFile*> &audioQueue = inst->getAudioPlayQueue();
+        std::vector<PlayableAudioFile*>::iterator it;
+
+        for (it = audioQueue.begin(); it != audioQueue.end(); it++)
+        {
+
+            // Another thread could've cleared down all the
+            // PlayableAudioFiles already.
+            //
+            if (inst->isPlaying() && (*it) &&
+                (*it)->getStatus() == PlayableAudioFile::PLAYING)
             {
                 // get the samples from the WAV and then throw at JACK
                 //
-                audioFile = inst->getAudioFile((*it)->getId());
 
-                //cout << "AUDIO FILE ID = " << audioFile->getId() << endl;
-                //cout << "AUDIO FILE NAME = " << audioFile->getFilename() << endl;
+                // store the samples in a string
+                std::string samples;
 
-                if (audioFile)
+
+                // make sure we haven't stopped playing because if we
+                // have the iterator is invalid
+                //
+                if (!inst->isPlaying())
+                    continue;
+
+                int channels = (*it)->getChannels();
+                int bytes = (*it)->getBitsPerSample() / 8;
+
+                // Get the number of frames according to the number of
+                // channels.
+                //
+                try
                 {
-                    //std::cout << "GET " << nframes << " FRAMES" << std::endl;
+                    samples = (*it)->getSampleFrames(nframes);
+                }
+                catch(std::string es)
+                {
+                    // we've run out of samples in the file
+                    continue;
+                }
 
-                    // store the samples in a string
-                    std::string samples;
+                // Now point to the string
+                char *samplePtr = (char *)(samples.c_str());
+                char *endOfSamples = samplePtr + samples.length();
+                float outBytes;
 
-                    int channels = audioFile->getChannels();
-                    int bytes = audioFile->getBitsPerSample() / 8;
-
-
-                    /*
-                    cout << "BITS PER SAMPLE = "
-                         << audioFile->getBitsPerSample()
-                                                 << std::endl;
-                                                 */
-                    // Get the number of frames according to the number of
-                    // channels.
-                    //
-                    try
+                while (samplePtr < endOfSamples)
+                {
+                    switch(bytes)
                     {
-                        samples = audioFile->getSampleFrames(nframes);
-                    }
-                    catch(std::string es)
-                    {
-                        std::cout << "jackProcess() - reached file end"
-                                  << std::endl;
-                        continue;
-                    }
+                        case 1: // for 8-bit samples
+                            /*
+                            *outputBuffer = *samplePtr;
+                            outputBuffer += 1;
+                            i += 1;
+                            */
+                            break;
 
-                    // Now point to the string
-                    char *samplePtr = samples.c_str();
-                    char *endOfSamples = samplePtr + samples.length();
-                    float outBytes;
+                        case 2: // for 16-bit samples
+                            outBytes = (*((short*)(samplePtr))) / 32767.0f;
+                            //outBytes = (*samplePtr))) / 32767.0f;
+                            //assert(outBytes >= -1 && outBytes <= 1);
+                            samplePtr += 2;
 
-                    //cout << "BYTES = " << bytes << endl;
-                    //cout << "SIZE = " << sizeof(*leftBuffer) << endl;
-                    //cout << "CHANNELS = " << channels << endl;
+                            (*leftBuffer) = outBytes;
+                            leftBuffer++;
 
-                    /*
-                    memcpy(outputBuffer,
-                           samplePtr,
-                           nframes * sizeof(sample_t));
-                           */
-
-                    //cout << "SAMPLED = " << nframes * channels << endl;
-                    //cout << "FRAMES = " << endOfSamples - samplePtr << endl;
-
-                    while (samplePtr < endOfSamples)
-                    {
-                        switch(bytes)
-                        {
-                            case 1: // for 8-bit samples
-                                /*
-                                *outputBuffer = *samplePtr;
-                                outputBuffer += 1;
-                                i += 1;
-                                */
-                                break;
-
-                            case 2: // for 16-bit samples
-                                outBytes = (*((short*)(samplePtr))) / 32767.0f;
-                                //outBytes = (*samplePtr))) / 32767.0f;
-                                assert(outBytes >= -1 && outBytes <= 1);
+                            // Get other sample if we have one
+                            //
+                            if (channels == 2)
+                            {
+                                outBytes = (*((short*)(samplePtr)))
+                                           / 32767.0f;
+                                //assert(outBytes >= -1 && outBytes <= 1);
                                 samplePtr += 2;
+                            }
 
-                                (*leftBuffer) = outBytes;
-                                leftBuffer++;
+                            (*rightBuffer) = outBytes;
+                            rightBuffer++;
+                            break;
 
-                                // Get other sample if we have one
-                                //
-                                if (channels == 2)
-                                {
-                                    outBytes = (*((short*)(samplePtr)))
-                                               / 32767.0f;
-                                    assert(outBytes >= -1 && outBytes <= 1);
-                                    samplePtr += 2;
-                                    //cout << "OTHER" << endl;
-                                }
-
-                                (*rightBuffer) = outBytes;
-                                rightBuffer++;
-
-                                break;
-
-                            default:
-                                std::cerr << "jackProcess() - sample size "
-                                          << "not supported" << std::endl;
-                                break;
-                        }
+                        default:
+                            std::cerr << "jackProcess() - sample size "
+                                      << "not supported" << std::endl;
+                            break;
                     }
                 }
             }
+            else // assume DEFUNCT
+            {
+                float silence = 0.0;
+
+                for (unsigned int i = 0 ; i < nframes; i++)
+                {
+                    (*leftBuffer) = silence;
+                    leftBuffer++;
+
+                    (*rightBuffer) = silence;
+                    rightBuffer++;
+                }
+            }
         }
+
+        // Process any queue vector operations now it's safe to do so
+        //
+        inst->pushPlayableAudioQueue();
+
+        // clear down the audio queue if we're not playing
+        //
+        if (inst->isPlaying() == false)
+            inst->clearAudioPlayQueue();
+
+        _usingAudioQueueVector = false;
     }
+
 
     return 0;
 }
@@ -1679,6 +1724,21 @@ AlsaDriver::shutdownAudio()
         //
     }
 }
+
+int
+AlsaDriver::jackGraphOrder(void *)
+{
+    std::cout << "AlsaDriver::jackGraphOrder" << std::endl;
+    return 0;
+}
+
+int
+AlsaDriver::jackXRun(void *)
+{
+    std::cout << "AlsaDriver::jackXRun" << std::endl;
+    return 0;
+}
+
 
 
 #endif

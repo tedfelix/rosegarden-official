@@ -79,21 +79,30 @@ public:
     //
     void printStats();
 
+    // Slightly dodgy code here - we keep these functions here
+    // because I don't want to duplicate them in PlayableAudioFile
+    // and also don't want that class to inherit this one.
+    //
+    // Of course the file handle we use in might be pointing to
+    // any file - for the most part we just assume it's an audio
+    // file.
+    //
+    //
     // Move file pointer to relative time in data chunk -
     // shouldn't be less than zero.  Returns true if the
     // scan time was valid and successful.
     // 
-    bool scanTo(const RealTime &time);
+    bool scanTo(std::ifstream *file, const RealTime &time);
 
     // Return a number of samples - caller will have to
     // de-interleave n-channel samples themselves.
     //
-    std::string getSampleFrames(unsigned int frames);
+    std::string getSampleFrames(std::ifstream *file, unsigned int frames);
 
     // Return a number of (possibly) interleaved samples
-    // over a time slice from current position.
+    // over a time slice from current file pointer position.
     //
-    std::string getSampleFrameSlice(const RealTime &time);
+    std::string getSampleFrameSlice(std::ifstream *file, const RealTime &time);
 
 private:
 
