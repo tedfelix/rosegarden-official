@@ -616,6 +616,8 @@ LilypondExporter::write() {
     int trackNo = 0;
 
     // some hard-coded styles in order to provide rudimentary style export support
+    // note that this is technically bad practice, as style names are not supposed
+    // to be fixed but deduced from the style files actually present on the system
     const std::string styleMensural = "Mensural";
     const std::string styleTriangle = "Triangle";
     const std::string styleCross = "Cross";

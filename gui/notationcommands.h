@@ -466,7 +466,7 @@ public:
 	m_selection(&selection), m_up(up) { }
 
     static QString getGlobalName(bool up) {
-	return up ? "Stems &Up" : "Stems &Down";
+	return up ? i18n("Stems &Up") : i18n("Stems &Down");
     }
 
 protected:
@@ -523,7 +523,7 @@ class NotesMenuAddSlashesCommand : public BasicSelectionCommand
 public:
     NotesMenuAddSlashesCommand(int number,
 			       Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand("Slashes", selection, true),
+	BasicSelectionCommand(i18n("Slashes"), selection, true),
 	m_selection(&selection), m_number(number) { }
 
 protected:

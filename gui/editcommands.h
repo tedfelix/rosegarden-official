@@ -161,7 +161,7 @@ public:
 	MatrixOverlay		// overlay raw matrix-style
     };
 
-    typedef std::map<PasteType, std::string> PasteTypeMap;
+    typedef std::map<PasteType, QString> PasteTypeMap;
     static PasteTypeMap getPasteTypes(); // type, descrip
 
     PasteEventsCommand(Rosegarden::Segment &segment,

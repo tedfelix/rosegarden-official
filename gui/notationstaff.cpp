@@ -280,7 +280,7 @@ NotationStaff::getElementUnderLayoutX(double x,
 
     for (it = notes->begin(); it != notes->end(); ++it) {
 
-	bool before = ((*it)->getLayoutX() < x);
+	bool before = ((*it)->getLayoutX() <= x);
 	
 	if (!(*it)->isNote() && !(*it)->isRest()) {
 	    if (before) {

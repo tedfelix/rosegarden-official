@@ -330,7 +330,7 @@ void NotationView::slotEditCutAndClose()
                                                getDocument()->getClipboard()));
 }
 
-#define RESTRICTED_PASTE_FAILED_DESCRIPTION \
+static const QString RESTRICTED_PASTE_FAILED_DESCRIPTION = i18n(
                       "The Restricted paste type requires enough empty\n" \
                       "space (containing only rests) at the paste position\n" \
                       "to hold all of the events to be pasted.\n" \
@@ -340,6 +340,7 @@ void NotationView::slotEditCutAndClose()
                       "on the Edit menu.  You can also change the default\n" \
                       "paste type to something other than Restricted if\n" \
                       "you wish."
+    );
 
 void NotationView::slotEditPaste()
 {
@@ -378,8 +379,7 @@ void NotationView::slotEditPaste()
     if (!command->isPossible()) {
         KMessageBox::detailedError
             (this,
-             i18n("Couldn't paste at this point."),
-             i18n(RESTRICTED_PASTE_FAILED_DESCRIPTION));
+             i18n("Couldn't paste at this point."), RESTRICTED_PASTE_FAILED_DESCRIPTION);
     } else {
         addCommandToHistory(command);
         //!!! well, we really just want to select the events
@@ -881,7 +881,7 @@ void NotationView::slotInsertNoteFromAction()
     int pitch = 0;
     Rosegarden::Accidental accidental =
         Rosegarden::Accidentals::NoAccidental;
-
+               
     try {
 
         pitch = getPitchFromNoteInsertAction(name, accidental);
@@ -1698,7 +1698,9 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
     long ms = rt.usec / 1000;
 
     QString message;
-    message.sprintf(" Time: %ld (%ld.%03lds)", t, rt.sec, ms);
+    QString format("%ld (%ld.%03lds)");
+    format = i18n("Time: %1").arg(format);
+    message.sprintf(format, t, rt.sec, ms);
 
     m_hoveredOverAbsoluteTime->setText(message);
 }

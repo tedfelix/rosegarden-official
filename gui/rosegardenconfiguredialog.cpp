@@ -511,7 +511,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     for (PasteEventsCommand::PasteTypeMap::iterator i = pasteTypes.begin();
          i != pasteTypes.end(); ++i) {
-        m_pasteType->insertItem(i18n(strtoqstr(i->second)));
+        m_pasteType->insertItem(i->second);
     }
 
     m_pasteType->setCurrentItem(defaultPasteType);
@@ -955,7 +955,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     // Send Controllers
     //
-    QLabel *label = new QLabel("Send MIDI Controllers at start of playback\n     (will incur noticeable initial delay)", frame);
+    QLabel *label = new QLabel(i18n("Send MIDI Controllers at start of playback\n     (will incur noticeable initial delay)"), frame);
 
     QString controllerTip = i18n("Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all MIDI devices every\ntime you hit play if you so wish.  Please note that this option will usually incur a\ndelay at the start of playback due to the amount of data being transmitted.");
     QToolTip::add(label, controllerTip);
@@ -988,7 +988,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame, 4, 2, 10, 5);
 
-    label = new QLabel("MIDI Record Device", frame);
+    label = new QLabel(i18n("MIDI Record Device"), frame);
     m_recordDevice = new RosegardenComboBox(frame);
 
     layout->addWidget(label, 0, 0);
@@ -1080,7 +1080,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     // MIDI Clock
     //
-    label = new QLabel("Send MIDI Clock and System messages", frame);
+    label = new QLabel(i18n("Send MIDI Clock and System messages"), frame);
     layout->addWidget(label, 0, 0);
     m_midiClockEnabled = new QCheckBox(frame);
     layout->addWidget(m_midiClockEnabled, 0, 1);
@@ -1090,7 +1090,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     // JACK Transport
     //
-    label = new QLabel("JACK transport mode", frame);
+    label = new QLabel(i18n("JACK transport mode"), frame);
     layout->addWidget(label, 1, 0);
 
     m_jackTransport = new RosegardenComboBox(frame);
@@ -1115,7 +1115,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     // MMC Transport
     //
-    label = new QLabel("MMC transport mode", frame);
+    label = new QLabel(i18n("MMC transport mode"), frame);
     layout->addWidget(label, 2, 0);
     
     m_mmcTransport = new RosegardenComboBox(frame);

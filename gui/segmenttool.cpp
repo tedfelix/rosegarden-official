@@ -395,7 +395,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
                 m_currentItem->getTrackPosition());
 
         SegmentReconfigureCommand *command =
-                new SegmentReconfigureCommand("Move Segment");
+	    new SegmentReconfigureCommand(i18n("Move Segment"));
 
         command->addSegment(m_currentItem->getSegment(),
                             m_currentItem->getStartTime(),
@@ -821,8 +821,8 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 
 	SegmentReconfigureCommand *command =
 	    new SegmentReconfigureCommand
-	    (m_selectedItems.size() == 1 ? "Move Segment" :
-	                                   "Move Segments");
+	    (m_selectedItems.size() == 1 ? i18n("Move Segment") :
+	                                   i18n("Move Segments"));
 
 	for (it = m_selectedItems.begin();
 	     it != m_selectedItems.end();

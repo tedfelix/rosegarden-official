@@ -298,15 +298,15 @@ PasteEventsCommand::getPasteTypes()
     static bool haveTypes = false;
     if (!haveTypes) {
 	types[Restricted] =
-	    "Paste into an existing gap [\"restricted\"]";
+	    i18n("Paste into an existing gap [\"restricted\"]");
 	types[Simple] =
-	    "Erase existing events to make room [\"simple\"]";
+	    i18n("Erase existing events to make room [\"simple\"]");
 	types[OpenAndPaste] =
-	    "Move existing events out of the way [\"open-n-paste\"]";
+	    i18n("Move existing events out of the way [\"open-n-paste\"]");
 	types[NoteOverlay] =
-	    "Overlay notes, tying against present notes [\"note-overlay\"]";
+	    i18n("Overlay notes, tying against present notes [\"note-overlay\"]");
 	types[MatrixOverlay] =
-	    "Overlay notes, ignoring present notes [\"matrix-overlay\"]";
+	    i18n("Overlay notes, ignoring present notes [\"matrix-overlay\"]");
     }
     return types;
 }

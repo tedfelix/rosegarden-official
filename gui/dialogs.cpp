@@ -612,8 +612,7 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent,
     for (PasteEventsCommand::PasteTypeMap::iterator i = pasteTypes.begin();
 	 i != pasteTypes.end(); ++i) {
 
-	QRadioButton *button = new QRadioButton
-	    (i18n(strtoqstr(i->second)), pasteTypeGroup);
+	QRadioButton *button = new QRadioButton(i->second, pasteTypeGroup);
 	button->setChecked(m_defaultType == i->first);
 	QObject::connect(button, SIGNAL(clicked()),
 			 this, SLOT(slotPasteTypeChanged()));

@@ -444,9 +444,13 @@ void EditView::slotExtendSelectionForward(bool bar)
 void
 EditView::createInsertPitchActionMenu()
 {
-    const char *notePitchNames[] = {
-	"Do", "Re", "Mi", "Fa", "So", "La", "Ti"
+    QString notePitchNames[] = {
+	i18n("I"), i18n("II"), i18n("III"), i18n("IV"),
+	i18n("V"), i18n("VI"), i18n("VII"), i18n("VIII")
     };
+    QString flat  = i18n("%1 flat");
+    QString sharp = i18n("%1 sharp");
+
     const Key notePitchKeys[3][7] = {
 	{
 	    Key_A, Key_S, Key_D, Key_F, Key_J, Key_K, Key_L,
@@ -490,7 +494,7 @@ EditView::createInsertPitchActionMenu()
       
 		insertPitchAction =
 		    new KAction
-		    (i18n(QString(notePitchNames[i]) + " flat"),
+		    (flat.arg(notePitchNames[i]),
 		     CTRL + SHIFT + notePitchKeys[octave][i],
 		     this, SLOT(slotInsertNoteFromAction()), actionCollection(),
 		     QString("insert_%1_flat%2").arg(i).arg(octaveSuffix));
@@ -500,7 +504,7 @@ EditView::createInsertPitchActionMenu()
 
 	    insertPitchAction =
 		new KAction
-		(i18n(QString(notePitchNames[i])),
+		(notePitchNames[i],
 		 notePitchKeys[octave][i],
 		 this, SLOT(slotInsertNoteFromAction()), actionCollection(),
 		 QString("insert_%1%2").arg(i).arg(octaveSuffix));
@@ -513,7 +517,7 @@ EditView::createInsertPitchActionMenu()
 
 		insertPitchAction =
 		    new KAction
-		    (i18n(QString(notePitchNames[i]) + " sharp"),
+		    (sharp.arg(notePitchNames[i]),
 		     SHIFT + notePitchKeys[octave][i],
 		     this, SLOT(slotInsertNoteFromAction()), actionCollection(),
 		     QString("insert_%1_sharp%2").arg(i).arg(octaveSuffix));
@@ -532,7 +536,13 @@ int
 EditView::getPitchFromNoteInsertAction(QString name,
 				       Rosegarden::Accidental &accidental)
 {
-    accidental = Rosegarden::Accidentals::NoAccidental;
+    using namespace Rosegarden::Accidentals;
+
+    accidental = NoAccidental;
+
+    Rosegarden::Key key;
+    Rosegarden::Clef clef;
+    Rosegarden::timeT time = getInsertionTime(clef, key);
 
     if (name.left(7) == "insert_") {
 
@@ -555,15 +565,13 @@ EditView::getPitchFromNoteInsertAction(QString name,
 	if (name.right(6) == "_sharp") {
 
 	    modify = 1;
-	    accidental = Rosegarden::Accidentals::Sharp;
-//!!! should be DoubleSharp if there's a sharp already in key
+	    accidental = Sharp;
 	    name = name.left(name.length()-6);
 
 	} else if (name.right(5) == "_flat") {
 
 	    modify = -1;
-	    accidental = Rosegarden::Accidentals::Flat;
-//!!! should be DoubleFlat if there's a flat already in key
+	    accidental = Flat;
 	    name = name.left(name.length()-5);
 	}
 
@@ -575,15 +583,23 @@ EditView::getPitchFromNoteInsertAction(QString name,
 	    scalePitch = 0;
 	}
 
-	Rosegarden::Clef clef;
-	Rosegarden::Key key;
-
 	int pitch =
 	    key.getTonicPitch() + 60 + 12*(octave + clef.getOctave()) + modify;
 
 	static int scale[] = { 0, 2, 4, 5, 7, 9, 11 };
 	pitch += scale[scalePitch];
 
+/*!!!
+	if (accidental != NoAccidental) {
+	    Rosegarden::NotationDisplayPitch ndp(pitch, clef, key);
+	    int height = ndp.getHeightOnStaff();
+	    Rosegarden::Accidental defaultAcc = key.getAccidentalAtHeight(height, clef);
+	    if ((defaultAcc == Sharp || defaultAcc == Flat) &&
+		defaultAcc != accidental) accidental = Natural;
+	    else if (defaultAcc == Sharp) accidental = DoubleSharp;
+	    else                          accidental = DoubleFlat;
+	}
+*/
 	return pitch;
 
     } else {

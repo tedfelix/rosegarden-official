@@ -1099,7 +1099,9 @@ MatrixView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
     long ms = rt.usec / 1000;
 
     QString message;
-    message.sprintf(" Time: %ld (%ld.%03lds)", t, rt.sec, ms);
+    QString format("%ld (%ld.%03lds)");
+    format = i18n("Time: %1").arg(format);
+    message.sprintf(format, t, rt.sec, ms);
 
     m_hoveredOverAbsoluteTime->setText(message);
 }
