@@ -681,6 +681,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                                     const char* format,
 				    bool autosave)
 {
+    Rosegarden::Profiler profiler("RosegardenGUIDoc::saveDocument");
     RG_DEBUG << "RosegardenGUIDoc::saveDocument("
                          << filename << ")\n";
 

@@ -377,6 +377,7 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
     } else {
 //	e = new Event(**i);
 	e = *i;
+	e->clearNonPersistentProperties();
 	if (m_target == NotationPrefix) {
 	    if (m_normalizeRegion.first == m_normalizeRegion.second) {
 		m_normalizeRegion = std::pair<timeT, timeT>

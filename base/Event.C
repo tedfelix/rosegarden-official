@@ -406,6 +406,13 @@ Event::getNonPersistentPropertyNames() const
     return v;
 }
 
+void
+Event::clearNonPersistentProperties()
+{
+    delete m_nonPersistentProperties;
+    m_nonPersistentProperties = 0;
+}
+
 size_t
 Event::getStorageSize() const
 {

@@ -57,6 +57,7 @@
 #include "Clipboard.h"
 #include "Configuration.h"
 #include "SegmentNotationHelper.h"
+#include "Profiler.h"
 #include "MidiFile.h"
 
 #include "constants.h"
@@ -1662,6 +1663,8 @@ void RosegardenGUIApp::slotQuit()
     RG_DEBUG << "RosegardenGUIApp::slotQuit()" << endl;
     
     slotStatusMsg(i18n("Exiting..."));
+
+    Rosegarden::Profiles::getInstance()->dump();
 
     // close the first window, the list makes the next one the first again.
     // This ensures thatslotQueryClose() is called on each window to ask for closing

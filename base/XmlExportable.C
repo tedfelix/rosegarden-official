@@ -29,8 +29,19 @@ static std::string multibyte;
 
 std::string XmlExportable::encode(const std::string &s0)
 {
-    s1 = "";
-    multibyte = "";
+    static char *buffer = 0;
+    static size_t bufsiz = 0;
+    size_t buflen = 0;
+
+    static char multibyte[20];
+    int mblen = 0;
+
+    size_t len = s0.length();
+
+    if (bufsiz < len * 2 + 10) {
+	bufsiz = len * 2 + 10;
+	buffer = (char *)malloc(bufsiz);
+    }
 
     // Escape any xml special characters, and also make sure we have
     // valid utf8 -- otherwise we won't be able to re-read the xml.
@@ -38,7 +49,7 @@ std::string XmlExportable::encode(const std::string &s0)
 
     bool warned = false; // no point in warning forever for long bogus strings
 
-    for (unsigned int i = 0; i < s0.length(); ++i) {
+    for (size_t i = 0; i < len; ++i) {
 
 	unsigned char c = s0[i];
 
@@ -46,7 +57,7 @@ std::string XmlExportable::encode(const std::string &s0)
 
 	    // 11xxxxxx or 0xxxxxxx: first byte of a character sequence
 
-	    if (multibyte != "") {
+	    if (mblen > 0) {
 
 		// does multibyte contain a valid sequence?
 		unsigned int length = 
@@ -55,15 +66,20 @@ std::string XmlExportable::encode(const std::string &s0)
 		    (!(multibyte[0] & 0x08)) ? 4 :
 		    (!(multibyte[0] & 0x04)) ? 5 : 0;
 
-		if (length == 0 || multibyte.length() == length) {
-		    s1 += multibyte;
+		if (length == 0 || mblen == length) {
+		    if (bufsiz < buflen + mblen + 1) {
+			bufsiz = 2 * buflen + mblen + 1;
+			buffer = (char *)realloc(buffer, bufsiz);
+		    }
+		    strncpy(buffer + buflen, multibyte, mblen);
+		    buflen += mblen;
 		} else {
 		    if (!warned) {
 			std::cerr
 			    << "WARNING: Invalid utf8 char width in string \""
 			    << s0 << "\" at index " << i << " ("
-			    << multibyte.length() << " octet"
-			    << (multibyte.length() != 1 ? "s" : "")
+			    << mblen << " octet"
+			    << (mblen != 1 ? "s" : "")
 			    << ", expected " << length << ")" << std::endl;
 			warned = true;
 		    }
@@ -71,24 +87,29 @@ std::string XmlExportable::encode(const std::string &s0)
 		}
 	    }
 
-	    multibyte = "";
+	    mblen = 0;
 
 	    if (!(c & 0x80)) { // ascii
+
+		if (bufsiz < buflen + 10) {
+		    bufsiz = 2 * buflen + 10;
+		    buffer = (char *)realloc(buffer, bufsiz);
+		}
 		
 		switch (c) {
-		case '&' : s1 += "&amp;";  break;
-		case '<' : s1 += "&lt;";   break;
-		case '>' : s1 += "&gt;";   break;
-		case '"' : s1 += "&quot;"; break;
-		case '\'': s1 += "&apos;"; break;
+		case '&' :  strncpy(buffer + buflen, "&amp;", 5); buflen += 5;  break;
+		case '<' :  strncpy(buffer + buflen, "&lt;", 4); buflen += 4;  break;
+		case '>' :  strncpy(buffer + buflen, "&gt;", 4); buflen += 4;  break;
+		case '"' :  strncpy(buffer + buflen, "&quot;", 6); buflen += 6;  break;
+		case '\'' : strncpy(buffer + buflen, "&apos;", 6); buflen += 6;  break;
 		case 0x9:
 		case 0xa:
 		case 0xd:
 		    // convert these special cases to plain whitespace:
-		    s1 += ' ';
+		    buffer[buflen++] = ' ';
 		    break;
 		default:
-		    if (c >= 32) s1 += c;
+		    if (c >= 32) buffer[buflen++] = c;
 		    else {
 			if (!warned) {
 			    std::cerr
@@ -102,16 +123,17 @@ std::string XmlExportable::encode(const std::string &s0)
 
 	    } else {
 
-		// store in multibyte rather than straight to s1, so that
-		// we know we're in the middle of something (below) 
-		multibyte += c;
+		// store in multibyte rather than straight to s1, so
+		// that we know we're in the middle of something
+		// (below).  At this point we know mblen == 0.
+		multibyte[mblen++] = c;
 	    }			
 
 	} else {
 
 	    // second or subsequent byte
 
-	    if (multibyte == "") { // ... without a first byte!
+	    if (mblen == 0) { // ... without a first byte!
 		if (!warned) {
 		    std::cerr
 			<< "WARNING: Invalid utf8 octet sequence in string \""
@@ -119,14 +141,34 @@ std::string XmlExportable::encode(const std::string &s0)
 		    warned = true;
 		}
 	    } else {
-		multibyte += c;
+
+		if (mblen >= sizeof(multibyte)-1) {
+		    if (!warned) {
+			std::cerr
+			    << "WARNING: Character too wide in string \""
+			    << s0 << "\" at index " << i << " (reached width of "
+			    << mblen << ")" << std::endl;
+		    }
+		    warned = true;
+		    mblen = 0;
+		} else {
+		    multibyte[mblen++] = c;
+		}
 	    }
 	}
     }
 
-    if (multibyte != "") s1 += multibyte;
+    if (bufsiz < buflen + mblen + 1) {
+	bufsiz = 2 * buflen + mblen + 1;
+	buffer = (char *)realloc(buffer, bufsiz);
+    }
+    if (mblen > 0) {
+	strncpy(buffer + buflen, multibyte, mblen);
+	buflen += mblen;
+    }
+    buffer[buflen] = '\0';
 
-    return s1;
+    return buffer;
 }
 
 }

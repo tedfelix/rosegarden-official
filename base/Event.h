@@ -188,6 +188,8 @@ public:
     PropertyNames getPersistentPropertyNames() const;
     PropertyNames getNonPersistentPropertyNames() const;
 
+    void clearNonPersistentProperties();
+
     struct EventCmp
     {
         bool operator()(const Event &e1, const Event &e2) const {

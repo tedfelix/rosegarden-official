@@ -799,7 +799,9 @@ EventView::slotEditEventAdvanced()
 void
 EventView::slotSelectAll()
 {
+    m_listSelection.clear();
     for (int i = 0; m_eventList->itemAtIndex(i); ++i) {
+	m_listSelection.push_back(i);
 	m_eventList->setSelected(m_eventList->itemAtIndex(i), true);
     }
 }
@@ -807,6 +809,7 @@ EventView::slotSelectAll()
 void
 EventView::slotClearSelection()
 {
+    m_listSelection.clear();
     for (int i = 0; m_eventList->itemAtIndex(i); ++i) {
 	m_eventList->setSelected(m_eventList->itemAtIndex(i), false);
     }
@@ -815,6 +818,7 @@ EventView::slotClearSelection()
 void
 EventView::slotFilterSelection()
 {
+    m_listSelection.clear();
     QPtrList<QListViewItem> selection = m_eventList->selectedItems();
     if (selection.count() == 0) return;
 
@@ -833,6 +837,7 @@ EventView::slotFilterSelection()
 	    }
 
 	    if (!dialog.keepEvent(item->getEvent())) {
+		m_listSelection.push_back(m_eventList->itemIndex(*it));
 		m_eventList->setSelected(item, false);
 	    }
 
