@@ -1109,7 +1109,7 @@ void NotationView::setNotePixmapFactory(NotePixmapFactory* f)
 
 NotationCanvasView* NotationView::getCanvasView()
 {
-    return static_cast<NotationCanvasView *>(m_canvasView);
+    return dynamic_cast<NotationCanvasView *>(m_canvasView);
 }
 
 

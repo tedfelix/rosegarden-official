@@ -333,7 +333,7 @@ void MatrixView::updateView()
 
 MatrixCanvasView* MatrixView::getCanvasView()
 {
-    return static_cast<MatrixCanvasView *>(m_canvasView);
+    return dynamic_cast<MatrixCanvasView *>(m_canvasView);
 }
 
 
