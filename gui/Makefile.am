@@ -25,6 +25,7 @@ rosegardengui_SOURCES = trackscanvas.cpp \
 			rosegardenguidoc.cpp \
 			rosegardengui.cpp \
 			main.cpp \
+                        rg21io.cpp \
 			rosegardenguiiface.skel \
 			trackseditoriface.skel
 
