@@ -804,7 +804,7 @@ Sequencer::addAudioFile(const string &fileName, const unsigned int &id)
 
     m_audioFiles.push_back(ins);
 
-    cout << "AudioFilePlayer::addAudioFile() = \"" << fileName << "\"" << endl;
+    cout << "Sequencer::addAudioFile() = \"" << fileName << "\"" << endl;
 
     return true;
 }
@@ -843,10 +843,9 @@ Sequencer::clearAudioFiles()
 
     std::vector<AudioFile*>::iterator it;
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
-    {
         delete(*it);
-        m_audioFiles.erase(it);
-    }
+
+    m_audioFiles.erase(m_audioFiles.begin(), m_audioFiles.end());
 
 }
 

@@ -123,14 +123,14 @@ public slots:
     //
     virtual int getSoundSystemStatus();
 
-    // Add and delete Audio files on the sequencer
+    // Add and remove Audio files on the sequencer
     //
     virtual int addAudioFile(const QString &fileName, const int &id);
-    virtual int deleteAudioFile(const int &id);
+    virtual int removeAudioFile(const int &id);
 
     // Deletes all the audio files and clears down any flapping i/o handles
     //
-    virtual void deleteAllAudioFiles();
+    virtual void clearAllAudioFiles();
 
     // stops the sequencer
     //

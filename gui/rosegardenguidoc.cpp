@@ -617,28 +617,25 @@ RosegardenGUIDoc::stopRecordingMidi()
 void
 RosegardenGUIDoc::prepareAudio()
 {
-    Rosegarden::AudioFileManagerIterator it = m_audioFileManager.begin();
     QCString replyType;
     QByteArray replyData;
 
     // Clear down the sequencer AudioFilePlayer object
     //
-    {
-        QByteArray data;
-        QDataStream streamOut(data, IO_WriteOnly);
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
 
-        if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                      "deleteAllAudioFiles()", data))
-        {
-            std::cerr <<
-            "prepareAudio() - couldn't delete all audio files from sequencer"
-                      << std::endl;
-            return;
-        }
+    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "clearAllAudioFiles()", data))
+    {
+        std::cerr <<
+        "prepareAudio() - couldn't delete all audio files from sequencer"
+                  << std::endl;
+        return;
     }
     
-    for (it = m_audioFileManager.begin();
+    for (Rosegarden::AudioFileManagerIterator it = m_audioFileManager.begin();
          it != m_audioFileManager.end();
          it++)
     {

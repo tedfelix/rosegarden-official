@@ -593,13 +593,13 @@ RosegardenSequencerApp::addAudioFile(const QString &fileName,
 }
 
 int
-RosegardenSequencerApp::deleteAudioFile(const int &id)
+RosegardenSequencerApp::removeAudioFile(const int &id)
 {
     return((int)m_sequencer->removeAudioFile(id));
 }
 
 void
-RosegardenSequencerApp::deleteAllAudioFiles()
+RosegardenSequencerApp::clearAllAudioFiles()
 {
     m_sequencer->clearAudioFiles();
 }

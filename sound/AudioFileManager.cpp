@@ -230,10 +230,9 @@ AudioFileManager::clear()
     for (it = m_audioFiles.begin();
          it != m_audioFiles.end();
          it++)
-    {
         delete(*it);
-        m_audioFiles.erase(it);
-    }
+
+    m_audioFiles.erase(m_audioFiles.begin(), m_audioFiles.end());
 }
 
 
