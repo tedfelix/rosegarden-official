@@ -39,6 +39,7 @@ class BarButtonsWidget : public QWidget
 public:
     BarButtonsWidget(Rosegarden::RulerScale *rulerScale,
                      int buttonHeight,
+		     double xorigin = 0.0,
                      QWidget* parent = 0,
                      const char* name = 0,
                      WFlags f=0);
@@ -57,6 +58,7 @@ protected:
 
     //--------------- Data members ---------------------------------
     int m_barHeight;
+    double m_xorigin;
     int m_currentXOffset;
     int m_width;
 
@@ -68,6 +70,7 @@ protected:
 
 
 BarButtons::BarButtons(RulerScale *rulerScale,
+		       double xorigin,
                        int barHeight,
 		       bool invert,
                        QWidget* parent,
@@ -76,7 +79,6 @@ BarButtons::BarButtons(RulerScale *rulerScale,
     QVBox(parent, name, f),
     m_invert(invert),
     m_loopRulerHeight(10),
-    m_offset(4),
     m_currentXOffset(0),
     m_rulerScale(rulerScale),
     m_hButtonBar(0)
@@ -86,15 +88,15 @@ BarButtons::BarButtons(RulerScale *rulerScale,
 
     if (!m_invert) {
 	m_hButtonBar = new BarButtonsWidget
-	    (m_rulerScale, barHeight - m_loopRulerHeight, this);
+	    (m_rulerScale, barHeight - m_loopRulerHeight, xorigin, this);
     }
 
     m_loopRuler = new LoopRuler
-	(m_rulerScale, m_loopRulerHeight, m_invert, this);
+	(m_rulerScale, m_loopRulerHeight, xorigin, m_invert, this);
 
     if (m_invert) {
 	m_hButtonBar = new BarButtonsWidget
-	    (m_rulerScale, barHeight - m_loopRulerHeight, this);
+	    (m_rulerScale, barHeight - m_loopRulerHeight, xorigin, this);
     }
 }
 
@@ -155,11 +157,13 @@ void BarButtons::paintEvent(QPaintEvent *e)
 
 BarButtonsWidget::BarButtonsWidget(RulerScale *rulerScale,
                                    int barHeight,
+				   double xorigin,
                                    QWidget* parent,
                                    const char* name,
                                    WFlags f)
     : QWidget(parent, name, f),
       m_barHeight(barHeight),
+      m_xorigin(xorigin),
       m_currentXOffset(0),
       m_width(-1),
       m_rulerScale(rulerScale)
@@ -188,14 +192,14 @@ QSize BarButtonsWidget::sizeHint() const
 	m_rulerScale->getLastVisibleBar();
     double width =
 	m_rulerScale->getBarPosition(lastBar) +
-	m_rulerScale->getBarWidth(lastBar);
+	m_rulerScale->getBarWidth(lastBar) + m_xorigin;
 
     return QSize(std::max(int(width), m_width), m_barHeight);
 }
 
 QSize BarButtonsWidget::minimumSizeHint() const
 {
-    double firstBarWidth = m_rulerScale->getBarWidth(0);
+    double firstBarWidth = m_rulerScale->getBarWidth(0) + m_xorigin;
 
     return QSize(firstBarWidth, m_barHeight);
 }
@@ -207,7 +211,9 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
 
     QRect clipRect = visibleRect();
 
-    int firstBar = m_rulerScale->getBarForX(clipRect.x() - m_currentXOffset);
+    int firstBar = m_rulerScale->getBarForX(clipRect.x() -
+					    m_currentXOffset -
+					    m_xorigin);
     int  lastBar = m_rulerScale->getLastVisibleBar();
     if (firstBar < m_rulerScale->getFirstVisibleBar()) {
 	firstBar = m_rulerScale->getFirstVisibleBar();
@@ -233,7 +239,7 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
 
     for (int i = firstBar; i <= lastBar; ++i) {
 
-	double x = m_rulerScale->getBarPosition(i) + m_currentXOffset;
+	double x = m_rulerScale->getBarPosition(i) + m_xorigin + m_currentXOffset;
 
 	if (x > clipRect.x() + clipRect.width()) break;
 

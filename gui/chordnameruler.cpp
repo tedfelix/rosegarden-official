@@ -47,10 +47,12 @@ using Rosegarden::Text;
 
 ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
 			       Composition *composition,
+			       double xorigin,
 			       int height,
 			       QWidget *parent,
 			       const char *name) :
     QWidget(parent, name),
+    m_xorigin(xorigin),
     m_height(height),
     m_currentXOffset(0),
     m_width(-1),
@@ -114,9 +116,9 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     QRect clipRect = paint.clipRegion().boundingRect();
 
     timeT from = m_rulerScale->getTimeForX
-	(clipRect.x() - m_currentXOffset - 100);
+	(clipRect.x() - m_currentXOffset - m_xorigin - 100);
     timeT   to = m_rulerScale->getTimeForX
-	(clipRect.x() + clipRect.width() - m_currentXOffset + 100);
+	(clipRect.x() + clipRect.width() - m_currentXOffset - m_xorigin + 100);
 
     //!!! The AnalysisHelper guesses chord labels based on a particular
     // key, which it looks for in the segment passed to it.  At present
@@ -166,7 +168,7 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 
 	x -= width / 2;
 	if (prevX >= x - 3) x = prevX + 3;
-	(*i)->set<Int>(TEXT_ACTUAL_X, (long)x);
+	(*i)->set<Int>(TEXT_ACTUAL_X, long(x));
 	prevX = x + width;
     }
 
@@ -183,8 +185,8 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	long formalX = (*i)->get<Int>(TEXT_FORMAL_X);
 	long actualX = (*i)->get<Int>(TEXT_ACTUAL_X);
 
-	formalX += m_currentXOffset;
-	actualX += m_currentXOffset;
+	formalX += m_currentXOffset + m_xorigin;
+	actualX += m_currentXOffset + m_xorigin;
 
 	paint.drawLine(formalX, height() - 4, formalX, height());
 

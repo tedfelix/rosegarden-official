@@ -42,6 +42,7 @@ class LoopRuler : public QWidget
 public:
     LoopRuler(Rosegarden::RulerScale *rulerScale,
               int height = 0,
+	      double xorigin = 0.0,
 	      bool invert = false,
               QWidget* parent = 0,
               const char *name = 0);
@@ -87,6 +88,7 @@ private:
 
     //--------------- Data members ---------------------------------
     int  m_height;
+    double m_xorigin;
     bool m_invert;
     int  m_currentXOffset;
     int  m_width;

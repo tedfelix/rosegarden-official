@@ -138,7 +138,8 @@ NotationStaff::drawStaffName()
 
     int layoutY = getLayoutYForHeight(5);
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(0, layoutY);
-    m_staffName->move(m_npf->getNoteBodyWidth(), (double)coords.second);
+    m_staffName->move(getX() + m_npf->getNoteBodyWidth(),
+		      (double)coords.second);
     m_staffName->show();
 }
 

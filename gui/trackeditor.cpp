@@ -154,15 +154,13 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
     int trackLabelWidth = 230;
-//     int trackLabelOffset = 0;//!!!3;
-
     int barButtonsHeight = 25;
-//     int barButtonsOffset = 0;//!!!2;
 
     //
     // Top Bar Buttons
     //
     m_topBarButtons = new BarButtons(m_rulerScale,
+				     0,
                                      barButtonsHeight,
                                      false,
                                      this);
@@ -190,6 +188,7 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     // Bottom Bar Buttons
     //
     m_bottomBarButtons = new BarButtons(m_rulerScale,
+					0, 
                                         barButtonsHeight,
                                         true,
                                         this);
@@ -488,13 +487,13 @@ void TrackEditor::slotScrollHoriz(int hpos)
 		       scrollView->visibleWidth() * 0.9)) {
 
 	// moving off the right hand side of the view   
-	hbar->setValue(hbar->value() + int(scrollView->visibleWidth() * 0.8));
+	hbar->setValue(hbar->value() + int(scrollView->visibleWidth() * 0.6));
 
     } else if (hpos < (scrollView->contentsX() +
 		       scrollView->visibleWidth() * 0.1)) {
 
 	// moving off the left
-	hbar->setValue(hbar->value() - int(scrollView->visibleWidth() * 0.8));
+	hbar->setValue(hbar->value() - int(scrollView->visibleWidth() * 0.6));
     }
 }
 

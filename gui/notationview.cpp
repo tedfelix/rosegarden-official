@@ -215,7 +215,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                    .arg(segments.size()));
     }
 
-    m_topBarButtons = new BarButtons(&m_hlayout, 25,
+    m_topBarButtons = new BarButtons(&m_hlayout, 20.0, 25,
                                      false, getCentralFrame());
     setTopBarButtons(m_topBarButtons);
 
@@ -223,18 +223,18 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	(RosegardenGUIColours::InsertCursorRuler);
 
     m_chordNameRuler = new ChordNameRuler
-	(&m_hlayout, 0, 20, getCentralFrame());
+	(&m_hlayout, 0, 20.0, 20, getCentralFrame());
     addRuler(m_chordNameRuler);
     if (showProgressive) m_chordNameRuler->show();
     m_chordNamesVisible = true;
 
     m_tempoRuler = new TempoRuler
-	(&m_hlayout, &doc->getComposition(), 20, getCentralFrame());
+	(&m_hlayout, &doc->getComposition(), 20.0, 20, getCentralFrame());
     addRuler(m_tempoRuler);
     m_tempoRuler->hide();
     m_temposVisible = false;
 
-    m_bottomBarButtons = new BarButtons(&m_hlayout, 25,
+    m_bottomBarButtons = new BarButtons(&m_hlayout, 20.0, 25,
                                         true, getCentralFrame());
     setBottomBarButtons(m_bottomBarButtons);
     

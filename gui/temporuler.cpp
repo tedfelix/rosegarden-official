@@ -35,10 +35,12 @@ using Rosegarden::timeT;
 
 TempoRuler::TempoRuler(RulerScale *rulerScale,
 		       Composition *composition,
+		       double xorigin,
 		       int height,
 		       QWidget *parent,
 		       const char *name) :
     QWidget(parent, name),
+    m_xorigin(xorigin),
     m_height(height),
     m_currentXOffset(0),
     m_width(-1),
@@ -71,11 +73,10 @@ TempoRuler::slotScrollHoriz(int x)
 QSize
 TempoRuler::sizeHint() const
 {
-    //!!! could be improved upon
-
     double width =
 	m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
-	m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar());
+	m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar()) +
+	m_xorigin;
 
     QSize res(std::max(int(width), m_width), m_height);
 
@@ -85,7 +86,7 @@ TempoRuler::sizeHint() const
 QSize
 TempoRuler::minimumSizeHint() const
 {
-    double firstBarWidth = m_rulerScale->getBarWidth(0);
+    double firstBarWidth = m_rulerScale->getBarWidth(0) + m_xorigin;
     QSize res = QSize(int(firstBarWidth), m_height);
     return res;
 }
@@ -102,9 +103,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
     QRect clipRect = paint.clipRegion().boundingRect();
 
     timeT from = m_rulerScale->getTimeForX
-	(clipRect.x() - m_currentXOffset - 100);
+	(clipRect.x() - m_currentXOffset - 100 - m_xorigin);
     timeT   to = m_rulerScale->getTimeForX
-	(clipRect.x() + clipRect.width() - m_currentXOffset + 100);
+	(clipRect.x() + clipRect.width() - m_currentXOffset + 100 - m_xorigin);
 
     QRect boundsForHeight = m_fontMetrics.boundingRect("^j|lM");
     int fontHeight = boundsForHeight.height();
@@ -142,7 +143,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	 i != timePoints.end(); ++i) {
 
 	timeT time = i->first;
-	double x = m_rulerScale->getXForTime(time) + m_currentXOffset;
+	double x = m_rulerScale->getXForTime(time) + m_currentXOffset + m_xorigin;
 	paint.drawLine(x, height() - 4, x, height());
 	
 	if (i->second & timeSigChangeHere) {

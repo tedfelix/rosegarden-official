@@ -32,11 +32,13 @@ using Rosegarden::RulerScale;
 
 LoopRuler::LoopRuler(RulerScale *rulerScale,
                      int height,
+		     double xorigin,
 		     bool invert,
                      QWidget *parent,
                      const char *name)
     : QWidget(parent, name),
       m_height(height),
+      m_xorigin(xorigin),
       m_invert(invert),
       m_currentXOffset(0),
       m_width(-1),
@@ -68,7 +70,8 @@ QSize LoopRuler::sizeHint() const
 {
     double width =
 	m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
-	m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar());
+	m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar()) +
+	m_xorigin;
 
     QSize res(std::max(int(width), m_width), m_height);
 
@@ -77,7 +80,7 @@ QSize LoopRuler::sizeHint() const
 
 QSize LoopRuler::minimumSizeHint() const
 {
-    double firstBarWidth = m_rulerScale->getBarWidth(0);
+    double firstBarWidth = m_rulerScale->getBarWidth(0) + m_xorigin;
 
     QSize res = QSize(int(firstBarWidth), m_height);
 
@@ -100,7 +103,9 @@ void LoopRuler::drawBarSections(QPainter* paint)
 {
     QRect clipRect = paint->clipRegion().boundingRect();
 
-    int firstBar = m_rulerScale->getBarForX(clipRect.x() - m_currentXOffset);
+    int firstBar = m_rulerScale->getBarForX(clipRect.x() -
+					    m_currentXOffset -
+					    m_xorigin);
     int  lastBar = m_rulerScale->getLastVisibleBar();
     if (firstBar < m_rulerScale->getFirstVisibleBar()) {
 	firstBar = m_rulerScale->getFirstVisibleBar();
@@ -110,7 +115,7 @@ void LoopRuler::drawBarSections(QPainter* paint)
 
     for (int i = firstBar; i <= lastBar; ++i) {
 
-	double x = m_rulerScale->getBarPosition(i) + m_currentXOffset;
+	double x = m_rulerScale->getBarPosition(i) + m_currentXOffset + m_xorigin;
 	if (x > clipRect.x() + clipRect.width()) break;
 	    
 	double width = m_rulerScale->getBarWidth(i);
