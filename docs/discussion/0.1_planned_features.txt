@@ -16,7 +16,7 @@ A.  Features without which nobody will even believe we're serious:
 
 5.  note insertion (by replacing rests) : DONE
 
-6.  note deletion
+6.  note deletion : DONEish - (rest deletion doesn't take bar counting into account)
 
 7.  chording of a note which is of a different length than the ones already
     present (the longer note must be split) : DONE (inserting short over long
