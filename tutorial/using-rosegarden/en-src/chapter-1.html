@@ -5,7 +5,7 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;311000">
-	<META NAME="CHANGED" CONTENT="20040613;504700">
+	<META NAME="CHANGED" CONTENT="20040615;18430900">
 	<STYLE>
 	<!--
 		A:link { color: #ba2c2c }
@@ -29,12 +29,10 @@ interface.</P>
 Rosegarden is a native KDE application that can run on any system
 that has the KDE and QT libraries installed, and currently requires a
 minimum of KDE/QT 3.1 in order to run. Many of its features may only
-work Linux systems, but it is designed to compile and run on any
+work on Linux systems, but it is designed to compile and run on any
 Unix-like platform capable of running KDE. (See the<A HREF="http://rosegardenmusic.com/faq.html">
 FAQ</A> for details on building for systems that can't run ALSA.)</P>
-<H2 STYLE="border: none; padding: 0in"><A NAME="1_2"></A>This Guide's
-<I>Raison d'&ecirc;tre</I> 
-</H2>
+<H2 STYLE="border: none; padding: 0in">About This Guide</H2>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
 My goal in writing this guide is to help you explore Rosegarden, and
 to discover ways to use its features to solve real problems that you
@@ -44,15 +42,24 @@ like anything you are likely to have used in the past. As such, I
 wish to take you on a guided tour through Rosegarden, to demonstrate
 many of its capabilities, and to offer you a foundation from which
 your own creative projects can spring.</P>
-<H2 STYLE="border: none; padding: 0in"><A NAME="1_3"></A>Version
-Requirements</H2>
+<H2 STYLE="border: none; padding: 0in"><A NAME="1_3"></A>Version and
+System Requirements</H2>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 This document describes Rosegarden4, the latest in this venerable
-line of applications. As of this writing, we're at version 0.9.9_cvs.
-The latest official release is 0.9.8. There are myriad older versions
-floating around, and some features described here may not work unless
-you're running something very recent. 
-</P>
+line of applications; not to be confused with the older Rosegarden
+that was last updated in 1997.</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+You should be running...</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+[This will probably require version 1.0 or later of everything
+involved, but at this pre-release writing everything except ALSA is
+still pre-release.  These requirements need to be edited and updated
+prior to final publication of this document.]</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+[I should talk about minimum acceptable hardware/RAM specs, and
+preferred minimum audio hardware and such like, but I haven't yet
+given any real thought to this, and don't have anything to put down
+just yet.]</P>
 <H2 STYLE="border: none; padding: 0in"><A NAME="1_4"></A>The Author's
 Studio</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Obviously,
@@ -61,15 +68,15 @@ to bear in mind what is sitting in front of me as I write this, and
 thus I will share the details of my &quot;studio.&quot;</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">I'm
 running a 2.0 GHz P4 with 512 MB of RAM; Debian Sarge, and KDE 3.2.3.
- I've compiled Debian's kerenel 2.4.26 source with Debian's pre-empt
+I've compiled Debian's kerenel 2.4.26 source with Debian's pre-empt
 and low latency patches.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">My MIDI
 landscape centers around an SB Live! with an old joystick MIDI port
-box from Gravis.  I have the MIDI out from a Fatar MIDI-72 controller
+box from Gravis. I have the MIDI out from a Fatar MIDI-72 controller
 keyboard attached to the MIDI in on the box, and the MIDI out on the
-box connects to the MIDI in on my Roland SC-33 Sound Canvas.  I
-usually load <A HREF="ftp://anonymous@tp://ftp.personalcopy.net/pub/PC51f.sf2.gz">PC51f.sf2</A>
-into the SB Live!, and rarely change it.</P>
+box connects to the MIDI in on my Roland SC-33 Sound Canvas. I
+usually load the <A HREF="ftp://anonymous@tp://ftp.personalcopy.net/pub/PC51f.sf2.gz">PC51f.sf2</A>
+soundfont into the SB Live!, and rarely change it.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">In the
 way of other gear, I have a reasonably good electret microphone from
 Radio Shack, which I use to record my acoustic guitar, flute, and

@@ -5,7 +5,7 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
 	<META NAME="CREATED" CONTENT="20040613;311200">
-	<META NAME="CHANGED" CONTENT="20040613;1125100">
+	<META NAME="CHANGED" CONTENT="20040615;20214600">
 	<STYLE>
 	<!--
 		A:link { color: #ba2c2c }
@@ -32,7 +32,7 @@ settings from within a notation view, these settings actually exist
 at a composition level, and they may be edited here in the main
 window using the tempo ruler.</P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/main-screenshot.png" NAME="Graphic4" ALIGN=BOTTOM WIDTH=868 HEIGHT=557 BORDER=0></P>
+<IMG SRC="../pixmaps/main-screenshot.png" NAME="Graphic4" ALIGN=BOTTOM WIDTH=463 HEIGHT=295 BORDER=0></P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 <BR><BR>
 </P>
@@ -99,6 +99,7 @@ in the same track.</P>
 you began with an imported MIDI file, your segment canvas will be
 empty, and many of the features I wish to demonstrate will be
 disabled.</P>
+<H3>Creating a New Segment</H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
 You can begin recording (audio or MIDI) to create one, but I'll get
 into that a bit later. For now, why not draw one from scratch?</P>
@@ -111,9 +112,9 @@ length:</P>
 <IMG SRC="../pixmaps/using-rosegarden_html_3c571111.png" NAME="Graphic66" ALIGN=BOTTOM WIDTH=521 HEIGHT=86 BORDER=0>
 </P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">You can
-now edit it by way of the matrix or notation views<!--SPAN STYLE="font-weight: medium"-->
-, which we will address later. For now, go ahead and play with the
-segment.</P>
+now edit it by way of the matrix or notation views, which we will
+address later. For now, let's go ahead and play with the segment.</P>
+<H3>Moving and Copying</H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
 Use the 
 <IMG SRC="../pixmaps/using-rosegarden_html_5b745bd6.png" NAME="Graphic67" ALIGN=BOTTOM WIDTH=26 HEIGHT=24 BORDER=0>
@@ -155,6 +156,7 @@ This can also merge events from several different tracks into a
 single segment. The events will combine, and merge onto a segment on
 whichever track is currently active. Obviously, you may not merge
 MIDI and audio into the same segment.</P>
+<H3>Segment Previews</H3>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 You can get some sense of what that bit of music is like just by
 looking at the segment display, which is a useful visual aid when
@@ -162,41 +164,60 @@ dragging things around. If this feature is not turned on, turn it on
 with <B>Settings -&gt; Segment Previews</B>. This displays a
 miniature &ldquo;piano roll&rdquo; for MIDI segments, and a drawing
 of the wave form for audio segments.</P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
-<I>[SCREENSHOT NEEDED]</I></P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; text-decoration: none">
+<IMG SRC="../pixmaps/segment-previews.png" NAME="Graphic1" ALIGN=BOTTOM WIDTH=240 HEIGHT=143 BORDER=0></P>
+<H3>Segment Parameters</H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">After you
 have created a segment, you can edit various parameters from the
-segment parameters box to the left. If you have selected a MIDI
-segment, you will see something similar to this. The exact controls
-available will depend on how you have you Studio configured, and
-which MIDI output device is assigned to this particular track. They
-allow you to control the instrument assignment, and to adjust any
-controllers you have configured for this device.</P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/instrument-parameters-midi.png" NAME="Graphic6" ALIGN=BOTTOM WIDTH=257 HEIGHT=230 BORDER=0></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you
-have selected an audio segment, then these controls are available.
-They allow you to control the routing of the audio, and to add layers
-of plugins. There are redundant Mute, Solo and Record toggles, as
-well as volume sliders for left and right stereo channels, and a
-mono/stereo toggle. (<IMG SRC="../pixmaps/audio-mono.png" NAME="Graphic8" ALIGN=BOTTOM WIDTH=24 HEIGHT=24 BORDER=0>
-<IMG SRC="../pixmaps/audio-stereo.png" NAME="Graphic9" ALIGN=BOTTOM WIDTH=24 HEIGHT=25 BORDER=0>).</P>
-<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/instrument-parameters-audio.png" NAME="Graphic7" ALIGN=BOTTOM WIDTH=258 HEIGHT=282 BORDER=0></P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
+<B>Segment Parameters</B> box to the left: 
 </P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/segment-parameters.png" NAME="Graphic6" ALIGN=BOTTOM WIDTH=312 HEIGHT=198 BORDER=0></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+Every segment can have a unique label and color.  In this example,
+I've chosen the most obvious color to use for this French horn part,
+but colors are entirely user-configurable, and these defaults are
+only suggestions.  I'll explain how to configure custom colors later
+on,  in the Studio chapter.</P>
+<H3>Repeats</H3>
+<P>Every segment can be made to repeat.  It will keep repeating until
+the end of the document, or until another segment is encountered in
+the track; whichever comes first.  These are displayed between repeat
+signs ( |: :| ) in the notation editor.</P>
+<P>You can turn all repeats into copies at once with <B>Segments -&gt;
+Turn Repeats into Copies</B><SPAN STYLE="font-weight: medium">, or
+you can turn individual repeats into copies by double clicking on the
+light colored repeat rectangles.</SPAN></P>
+<P ALIGN=CENTER STYLE="font-weight: medium"><IMG SRC="../pixmaps/segment-repeats-copies.png" NAME="Graphic7" ALIGN=BOTTOM WIDTH=223 HEIGHT=84 BORDER=0></P>
+<H3>Segment Quantizer</H3>
+<P>Changing the setting in this box will immediately quantize all
+notes in this segment to the selected grid position.  It will move
+the start times  forward or back to align them with the next closest
+beat at the desired resolution.  It will not change note durations in
+any way.</P>
+<H3>Transposing Instruments</H3>
+<P>If you wish to write notation for transposing instruments, you can
+dial a transposition setting into the <B>Transpose</B><SPAN STYLE="font-weight: medium">
+box.  This will cause the part to sound in a different range from
+written.  A typical Bb trumpet part, for example, should have -2
+here.  I'll cover this subject in more depth later on, in the
+Notation chapter.</SPAN></P>
+<H3>Delay</H3>
+<P>The <B>Delay</B><SPAN STYLE="font-weight: medium"> setting allows
+you to knock the timing of a segment out of sync on purpose.  This
+can be useful in various ways, and it's especially amusing for
+transforming a nicely performed MIDI file into a simulation of a
+middle school band concert.</SPAN></P>
 <H2>The Tracklist</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The
-tracklist allows you to give your tracks a name, and to direct their
-output to any of your available output devices. At the present, it's
-not possible to insert program change events mid-composition, so any
-MIDI instrument assignments you need to make will need to be done
-from here.</P>
+tracklist allows you to give your tracks a name, and provides the
+mechanism for routing output to particular output devices and
+channels.</P>
 <H3>Connection vs. Name</H3>
 <P STYLE="margin-bottom: 0.2in">The tracklist can be configured to
 display either the name you've assigned to the track, or the name of
-the connection. Toggle this behavior with Settings -&gt; Show Track
-Labels.</P>
+the connection. Toggle this behavior with <B>Settings -&gt; Show
+Track Labels</B>.</P>
 <P STYLE="margin-bottom: 0.2in">Here we see how connections are
 displayed on the tracklist. I'll get into much more detail in the
 next chapter.</P>
@@ -215,7 +236,8 @@ recording operations.</P>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
 <I>TIP: The mute LEDs can also be used to control which tracks are
 included when exporting the composition into another format. Muted
-tracks will typically be ignored during export.</I></P>
+tracks will typically be ignored during export, though this varies
+slightly by the export method chosen.</I></P>
 <H3><A NAME="2_6_4"></A>Changing the Track Name</H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">To change
 the track name, double click on the label. A dialog should appear,
@@ -243,10 +265,10 @@ ruler until you coax it out of hiding.</P>
 <H3>The Transport</H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
 You should have a separate, floating Transport window like this one.
-If it's not visible, then toggle it on with <B>Settings -&gt;  Show
+If it's not visible, then toggle it on with <B>Settings -&gt; Show
 Transport</B>.</P>
 <P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-<IMG SRC="../pixmaps/transport.png" NAME="Graphic11" ALIGN=BOTTOM WIDTH=432 HEIGHT=156 BORDER=0></P>
+<IMG SRC="../pixmaps/transport.png" NAME="Graphic11" ALIGN=BOTTOM WIDTH=360 HEIGHT=121 BORDER=0></P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Most of
 these should be self-explanatory. If you can't figure out what any of
 the buttons do, hover over them a bit, and context-sensitive help
@@ -256,11 +278,11 @@ special note are the panic, metronome, and solo buttons. If they're
 missing, toggle the extra controls.</P>
 <P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
 The panic button transmits a &quot;notes off&quot; message on every
-channel.  It does not transmit an &quot;all notes off&quot; or a
+channel. It does not transmit an &quot;all notes off&quot; or a
 &quot;system reset&quot; or what have you, but litereally transmits a
-notes off on every channel on every device Rosegarden knows about. 
-It can take quite a long time for all the events to transmit, which
-you can see happening by watching the &quot;OUT&quot; area in the
+notes off on every channel on every device Rosegarden knows about. It
+can take quite a long time for all the events to transmit, which you
+can see happening by watching the &quot;OUT&quot; area in the
 Transport, but it's guaranteed to shut up that droning C# and then
 some.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
@@ -271,9 +293,9 @@ composition. Configure it via <B>Composition -&gt; Studio -&gt;
 Manage Metronome</B>.</P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
 The solo button forces the Transport to play only whatever track is
-currently selected at the moment, independent of its mute state.  (To
+currently selected at the moment, independent of its mute state. (To
 &quot;solo&quot; more than one part, you'll need to set the mute for
-tracks individually, or by using <B>Tracks -&gt; Mute All  Tracks</B>
+tracks individually, or by using <B>Tracks -&gt; Mute All Tracks</B>
 and then un-muting the parts you desire.)</P>
 <H2>Time and Tempo</H2>
 <P>As I mentioned, the time signature and tempo are global to the
@@ -286,8 +308,28 @@ change occurs, the tempo is displayed along the top half of the
 ruler, and the time signature is displayed across the bottom. If you
 double click this ruler, the Tempo and Time Signature editor will
 appear.</P>
-<P ALIGN=CENTER><IMG SRC="../pixmaps/time-tempo-editor.png" NAME="Graphic12" ALIGN=BOTTOM WIDTH=472 HEIGHT=322 BORDER=0></P>
-<H2 STYLE="border: none; padding: 0in">Autosave</H2>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/time-tempo-editor.png" NAME="Graphic12" ALIGN=BOTTOM WIDTH=402 HEIGHT=228 BORDER=0></P>
+<H3>New Tempo</H3>
+<P>To add a new tempo, click the 
+<IMG SRC="../pixmaps/tempo-icon.png" NAME="Graphic2" ALIGN=BOTTOM WIDTH=26 HEIGHT=21 BORDER=0>
+icon, and you'll be presented with a dialog like this:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/tempo-add.png" NAME="Graphic13" ALIGN=BOTTOM WIDTH=384 HEIGHT=178 BORDER=0></P>
+<P ALIGN=LEFT>By default, new events you add here will be inserted at
+the point in time where you clicked to open the Tempo and Time
+Signature editor.  You can change this by adjusting the &quot;Time of
+tempo change&quot; parameters, if you wish.</P>
+<H3>New Time Signature</H3>
+<P>Use the  
+<IMG SRC="../pixmaps/tempo-time-icon.png" NAME="Graphic14" ALIGN=BOTTOM WIDTH=24 HEIGHT=22 BORDER=0>
+icon, and you'll be presented with a dialog like:</P>
+<P ALIGN=CENTER><IMG SRC="../pixmaps/tempo-time-dialog.png" NAME="Graphic15" ALIGN=BOTTOM WIDTH=383 HEIGHT=282 BORDER=0></P>
+<P ALIGN=LEFT>You can display the time signature as <SPAN STYLE="font-weight: medium">cut
+or common time, and make the time signature hidden.  You should
+probably always leave &quot;Correct the durations of the following
+measures&quot; checked unless you have a good reason to do otherwise.
+ </SPAN>
+</P>
+<H2>Autosave</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
 I'll conclude this section by mentioning a very useful feature that
 doesn't quite fit in anywhere else. As always, &quot;save early, save

@@ -1,113 +1,153 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
-<BODY>
-	<H1>Recording</H1>
-	<P STYLE="margin-bottom: 0.2in">Now that you've configured your
-	Studio, you're probably eager to create some segments that contain
-	something interesting. In this chapter, I discuss different ways of
-	recording live performances with Rosegarden. My focus for the moment
-	still lies with manipulating data on the main window.</P>
-	<H2>Three Ways to Record</H2>
-	<P STYLE="margin-bottom: 0.2in">There are three different ways to
-	record with Rosegarden. If you come from a MIDI background, the most
-	obvious thing to do is plug in your MIDI keyboard and hit the record
-	button to record a MIDI segment in the currently-selected track. If
-	audio is your aim, you'll want to plug something into an input port
-	on your soundcard, set your mixer recording source and get to work.
-	On the other hand, if you have all the keyboard skill of a
-	paraplegic chipmunk, like I do, you might be more interested in the
-	step recording feature described in chapter 7.</P>
-	<H3>Connecting a Track</H3>
-	<P STYLE="margin-bottom: 0.2in">Before you record, you might need to
-	assign and output device to the selected track. If you're recording
-	MIDI, then any MIDI device will do. Rosegarden cannot yet handle
-	multiple, concurrent MIDI inputs, so the input you wish to use for
-	recording should already have been connected while you were setting
-	up your Studio. (See <A HREF="http://chapter-3.html/">Chapter 3</A>
-	for more details.) If you're recording audio, you'll need to tell
-	Rosegarden that the currently selected track should contain audio
-	segments. Do this by directing its connection to one of the Jack
-	channels.</P>
-	<P STYLE="margin-top: 0in; border: none; padding: 0in"><BR>
-	</P>
-	<P STYLE="margin-top: 0in; border: none; padding: 0in; font-style: normal">
-	<FONT FACE="Arial">Click on one of the track labels and hold the
-	button down for a moment.</FONT></P>
-	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	<IMG SRC="../pixmaps/click-and-hold.png" NAME="Graphic3" ALIGN=BOTTOM WIDTH=231 HEIGHT=51 BORDER=0></P>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	You should be presented with a series of nested menus that allow you
-	to choose the MIDI (or Jack) device and channel for the track.</P>
-	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	<IMG SRC="../pixmaps/select-midi.png" NAME="Graphic4" ALIGN=BOTTOM WIDTH=382 HEIGHT=325 BORDER=0>
-		</P>
-	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	<IMG SRC="../pixmaps/select-jack.png" NAME="Graphic5" ALIGN=BOTTOM WIDTH=305 HEIGHT=345 BORDER=0></P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
-	</P>
-	<H3 STYLE="border: none; padding: 0in">What Do Those Black
-	Boxes Mean?</H3>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">While
-	it's not immediately relevant to our discussion of recording, this
-	is a convenient place to talk about the odd little boxes you might
-	have noticed in the menus above.</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The
-	column of small boxes to the left of the channel provide a concise
-	way of showing information about the status of these connections. In
-	the examples above, you might have noticed that they were in several
-	different states. That's because I have connections configured in my
-	Studio for devices that aren't currently available, because the
-	associated softsynths aren't running, and because some of my
-	external MIDI, and some of my Jack channels weren't assigned to
-	anything. (See <A HREF="http://chapter-7.html/">Chapter 7</A> for
-	more information about running softsynths in conjunction with
-	Rosegarden.)</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
-	These boxes convey the following information:</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG SRC="../pixmaps/using-rosegarden_html_72a37f4e.png" NAME="Graphic38" ALIGN=BOTTOM WIDTH=14 HEIGHT=15 BORDER=0>
-	This instrument or device isn't very useful to you right now. It is
-	is<B> not in use</B> by a track, and it is<B> not connected</B> to
-	any active output path. 
-	</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG SRC="../pixmaps/using-rosegarden_html_3dc467bd.png" NAME="Graphic79" ALIGN=BOTTOM WIDTH=15 HEIGHT=12 BORDER=0>
-	This instrument or device could provide a valid output path, and all
-	you need to do from here is attach it to a track and begin making
-	use of it. It<B> is connected</B> to an active output path, but it
-	is<B> not being used</B> by any track. 
-	</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG SRC="../pixmaps/using-rosegarden_html_1e7e4e7a.png" NAME="Graphic81" ALIGN=BOTTOM WIDTH=14 HEIGHT=15 BORDER=0>
-	A track or tracks are connected to this device, but this is not
-	currently a valid output path, and the events on any tracks that are
-	connected don't have anywhere to go. This instrument or device is<B>
-	in use</B> by a track, but is<B> not connected</B> to an active
-	output path.</P>
-	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG SRC="../pixmaps/using-rosegarden_html_e634bf.png" NAME="Graphic80" ALIGN=BOTTOM WIDTH=14 HEIGHT=16 BORDER=0>
-	This instrument or device provides a valid output path, and that
-	path is in use by at least one track. It<B> has a valid connection</B>
-	to an output path, and that connection is<B> in use</B> by a track.</P>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	In addition, the instrument in use by the current track will have an
-	extra black outline around either a black filled or black outlined
-	box, depending on whether or not the path is connected to a valid
-	output:</P>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	<IMG SRC="../pixmaps/using-rosegarden_html_500c240c.png" NAME="Graphic82" ALIGN=BOTTOM WIDTH=18 HEIGHT=18 BORDER=0>
-	The active track is connected to an output that is<B> also
-	connected</B>. If you play this track, you can expect the device
-	you've hooked up to make some noise.</P>
-	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
-	<IMG SRC="../pixmaps/using-rosegarden_html_5204c333.png" NAME="Graphic83" ALIGN=BOTTOM WIDTH=18 HEIGHT=18 BORDER=0>
-	The active track is connected to an output that is<B> not connected</B>.
-	This track, on the other hand, won't make any noise until you assign
-	a different device to it or turn on the device that isn't currently
-	working.</P>
-	<H2>Recording MIDI</H2>
-	<P STYLE="margin-bottom: 0.2in">Now that your track is assigned...</P>
-	<P STYLE="margin-bottom: 0.2in">Out of time.  You hit the record
-	button.  You get  one measure of count-in, then a red segment starts
-	to appear.  If you set it up right, you got stuff in there.  If not,
-	you got a lot of empty nothing.</P>
-	<P STYLE="margin-bottom: 0.2in"><BR><BR>
-	</P>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
+	<META NAME="CREATED" CONTENT="20040613;311700">
+	<META NAME="CHANGED" CONTENT="20040615;19523200">
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<H1>Managing Instrument Assignments and Controllers</H1>
+<P>UNDER CONSTRUCTION.  This is going to cover instrument assignment
+issues in some detail, including a discussion about how to deal with 
+</P>
+<UL>
+	<LI><P>synths where all you want to use are numbers</P>
+	<LI><P>GM</P>
+	<LI><P>GS instruments/variations</P>
+	<LI><P>GS drums</P>
+	<LI><P>other bank/program/variation stuff</P>
+</UL>
+<P>Coming in the next update...</P>
+<P>For now, this chapter is just a boneyard.</P>
+<P><BR><BR>
+</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you
+have selected a MIDI segment, you will see something similar to this.
+The exact controls available will depend on how you have your Studio
+configured, and which MIDI output device is assigned to this
+particular track. They allow you to control the instrument
+assignment, and to adjust any controllers you have configured for
+this device.</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/instrument-parameters-midi.png" NAME="Graphic6" ALIGN=BOTTOM WIDTH=257 HEIGHT=230 BORDER=0></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you
+have selected an audio segment, then these controls are available.
+They allow you to control the routing of the audio, and to add layers
+of plugins. There are redundant Mute, Solo and Record toggles, as
+well as volume sliders for left and right</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">stereo
+channels, and a mono/stereo toggle. (<IMG SRC="../pixmaps/audio-mono.png" NAME="Graphic8" ALIGN=BOTTOM WIDTH=24 HEIGHT=24 BORDER=0>
+<IMG SRC="../pixmaps/audio-stereo.png" NAME="Graphic9" ALIGN=BOTTOM WIDTH=24 HEIGHT=25 BORDER=0>).</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/instrument-parameters-audio.png" NAME="Graphic7" ALIGN=BOTTOM WIDTH=258 HEIGHT=282 BORDER=0></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
+</P>
+<P STYLE="margin-bottom: 0.2in">Now that you've configured your
+Studio, you're probably eager to create some segments that contain
+something interesting. In this chapter, I discuss different ways of
+recording live performances with Rosegarden. My focus for the moment
+still lies with manipulating data on the main window.</P>
+<H2>Three Ways to Record</H2>
+<P STYLE="margin-bottom: 0.2in">There are three different ways to
+record with Rosegarden. If you come from a MIDI background, the most
+obvious thing to do is plug in your MIDI keyboard and hit the record
+button to record a MIDI segment in the currently-selected track. If
+audio is your aim, you'll want to plug something into an input port
+on your soundcard, set your mixer recording source and get to work.
+On the other hand, if you have all the keyboard skill of a paraplegic
+chipmunk, like I do, you might be more interested in the step
+recording feature described in chapter 7.</P>
+<H3>Connecting a Track</H3>
+<P STYLE="margin-bottom: 0.2in">Before you record, you might need to
+assign and output device to the selected track. If you're recording
+MIDI, then any MIDI device will do. Rosegarden cannot yet handle
+multiple, concurrent MIDI inputs, so the input you wish to use for
+recording should already have been connected while you were setting
+up your Studio. (See <A HREF="http://chapter-3.html/">Chapter 3</A>
+for more details.) If you're recording audio, you'll need to tell
+Rosegarden that the currently selected track should contain audio
+segments. Do this by directing its connection to one of the Jack
+channels.</P>
+<P STYLE="border: none; padding: 0in"><BR><BR>
+</P>
+<P STYLE="border: none; padding: 0in; font-style: normal"><FONT FACE="Arial">Click
+on one of the track labels and hold the button down for a moment.</FONT></P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/click-and-hold.png" NAME="Graphic3" ALIGN=BOTTOM WIDTH=231 HEIGHT=51 BORDER=0></P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+You should be presented with a series of nested menus that allow you
+to choose the MIDI (or Jack) device and channel for the track.</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/select-midi.png" NAME="Graphic4" ALIGN=BOTTOM WIDTH=382 HEIGHT=325 BORDER=0>
+</P>
+<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/select-jack.png" NAME="Graphic5" ALIGN=BOTTOM WIDTH=305 HEIGHT=345 BORDER=0></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
+</P>
+<H3 STYLE="border: none; padding: 0in">What Do Those Black Boxes
+Mean?</H3>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">While
+it's not immediately relevant to our discussion of recording, this is
+a convenient place to talk about the odd little boxes you might have
+noticed in the menus above.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The
+column of small boxes to the left of the channel provide a concise
+way of showing information about the status of these connections. In
+the examples above, you might have noticed that they were in several
+different states. That's because I have connections configured in my
+Studio for devices that aren't currently available, because the
+associated softsynths aren't running, and because some of my external
+MIDI, and some of my Jack channels weren't assigned to anything. (See
+<A HREF="http://chapter-7.html/">Chapter 7</A> for more information
+about running softsynths in conjunction with Rosegarden.)</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+These boxes convey the following information:</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG SRC="../pixmaps/using-rosegarden_html_72a37f4e.png" NAME="Graphic38" ALIGN=BOTTOM WIDTH=14 HEIGHT=15 BORDER=0>
+This instrument or device isn't very useful to you right now. It is
+is <B>not in use</B> by a track, and it is <B>not connected</B> to
+any active output path. 
+</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG SRC="../pixmaps/using-rosegarden_html_3dc467bd.png" NAME="Graphic79" ALIGN=BOTTOM WIDTH=15 HEIGHT=12 BORDER=0>
+This instrument or device could provide a valid output path, and all
+you need to do from here is attach it to a track and begin making use
+of it. It <B>is connected</B> to an active output path, but it is <B>not
+being used</B> by any track. 
+</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG SRC="../pixmaps/using-rosegarden_html_1e7e4e7a.png" NAME="Graphic81" ALIGN=BOTTOM WIDTH=14 HEIGHT=15 BORDER=0>
+A track or tracks are connected to this device, but this is not
+currently a valid output path, and the events on any tracks that are
+connected don't have anywhere to go. This instrument or device is <B>in
+use</B> by a track, but is <B>not connected</B> to an active output
+path.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><IMG SRC="../pixmaps/using-rosegarden_html_e634bf.png" NAME="Graphic80" ALIGN=BOTTOM WIDTH=14 HEIGHT=16 BORDER=0>
+This instrument or device provides a valid output path, and that path
+is in use by at least one track. It <B>has a valid connection</B> to
+an output path, and that connection is <B>in use</B> by a track.</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+In addition, the instrument in use by the current track will have an
+extra black outline around either a black filled or black outlined
+box, depending on whether or not the path is connected to a valid
+output:</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/using-rosegarden_html_500c240c.png" NAME="Graphic82" ALIGN=BOTTOM WIDTH=18 HEIGHT=18 BORDER=0>
+The active track is connected to an output that is <B>also connected</B>.
+If you play this track, you can expect the device you've hooked up to
+make some noise.</P>
+<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<IMG SRC="../pixmaps/using-rosegarden_html_5204c333.png" NAME="Graphic83" ALIGN=BOTTOM WIDTH=18 HEIGHT=18 BORDER=0>
+The active track is connected to an output that is <B>not connected</B>.
+This track, on the other hand, won't make any noise until you assign
+a different device to it or turn on the device that isn't currently
+working.</P>
+<H2>Recording MIDI</H2>
+<P STYLE="margin-bottom: 0.2in">Now that your track is assigned...</P>
+<P STYLE="margin-bottom: 0.2in">Out of time. You hit the record
+button. You get one measure of count-in, then a red segment starts to
+appear. If you set it up right, you got stuff in there. If not, you
+got a lot of empty nothing.</P>
+<P STYLE="margin-bottom: 0.2in"><BR><BR>
+</P>
 </BODY>
 </HTML>
