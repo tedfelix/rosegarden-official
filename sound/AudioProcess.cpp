@@ -750,7 +750,7 @@ AudioInstrumentMixer::generateBuffers()
 	MappedAudioFader *fader = m_driver->getMappedStudio()->getAudioFader(id);
 
 	if (!fader) {
-	    std::cerr << "WARNING: AudioInstrumentMixer::generateBuffers: no fader for audio instrument " << id << std::endl;
+//	    std::cerr << "WARNING: AudioInstrumentMixer::generateBuffers: no fader for audio instrument " << id << std::endl;
 	    continue;
 	}
 
