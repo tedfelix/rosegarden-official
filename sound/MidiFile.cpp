@@ -619,8 +619,14 @@ MidiFile::convertToRosegarden(Composition *composition,
     bool isSharp;
 
     bool preexisting = false;
-    if (!composition) composition = new Composition;
-    else preexisting = true;
+    if (composition)
+    {
+        if (!append) composition->clear();
+        preexisting = true;
+    }
+    else
+        composition = new Composition;
+
 
     timeT origin = 0;
     if (preexisting && append && composition->getDuration() > 0) {

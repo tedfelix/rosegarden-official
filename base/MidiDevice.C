@@ -131,6 +131,95 @@ MidiDevice::MidiDevice(const MidiDevice &dev):
 
 }
 
+MidiDevice
+MidiDevice::operator=(const MidiDevice &dev)
+{
+    m_id = dev.getId();
+    m_name = dev.getName();
+    m_type = dev.getType();
+
+    m_programList->clear();
+    m_bankList->clear();
+    m_duplex = dev.isDuplex();
+
+    // Device
+    m_label = dev.getUserLabel();
+
+    // Create and assign a metronome if required
+    //
+    if (dev.getMetronome())
+    {
+        if (dev.getMetronome() == 0)
+            m_metronome = new MidiMetronome();
+
+        m_metronome->pitch = dev.getMetronome()->pitch;
+        m_metronome->instrument = dev.getMetronome()->instrument;
+        m_metronome->msb = dev.getMetronome()->msb;
+        m_metronome->lsb = dev.getMetronome()->lsb;
+        m_metronome->program = dev.getMetronome()->program;
+    }
+    else
+    {
+        if (m_metronome) delete m_metronome;
+    }
+
+
+    std::vector<MidiProgram> programs = dev.getPrograms();
+    std::vector<MidiBank> banks = dev.getBanks();
+
+    // Construct a new program list
+    //
+    std::vector<MidiProgram>::iterator it = programs.begin();
+    for (; it != programs.end(); it++)
+    {
+        MidiProgram *prog = new MidiProgram();
+        prog->name = it->name;
+        prog->msb = it->msb;
+        prog->lsb = it->lsb;
+        prog->program = it->program;
+
+        m_programList->push_back(prog);
+    }
+
+
+    // Construct a new bank list
+    //
+    std::vector<MidiBank>::iterator bIt = banks.begin();
+    for (; bIt != banks.end(); bIt++)
+    {
+        MidiBank *bank = new MidiBank();
+        bank->name = bIt->name;
+        bank->msb = bIt->msb;
+        bank->lsb = bIt->lsb;
+
+        m_bankList->push_back(bank);
+    }
+
+    // Copy the instruments
+    //
+    InstrumentList insList = dev.getAllInstruments();
+    InstrumentList::iterator iIt = insList.begin();
+    for (; iIt != insList.end(); iIt++)
+    {
+        Instrument *newInst = new Instrument(**iIt);
+        newInst->setDevice(this);
+        m_instruments.push_back(newInst);
+    }
+
+    // Copy the presentation instruments
+    //
+    insList = dev.getPresentationInstruments();
+    for (iIt = insList.begin(); iIt != insList.end(); iIt++)
+    {
+        Instrument *newInst = new Instrument(**iIt);
+        newInst->setDevice(this);
+        m_presentationInstrumentList.push_back(newInst);
+    }
+
+    return (*this);
+}
+
+
 
 MidiDevice::~MidiDevice()
 {

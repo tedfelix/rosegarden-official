@@ -1937,8 +1937,10 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     Rosegarden::MidiFile *midiFile;
 
+    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(m_doc);
+
     midiFile = new Rosegarden::MidiFile(qstrtostr(file),
-                                        &m_doc->getStudio());
+                                        &newDoc->getStudio());
 
     KStartupLogo::hideIfStillThere();
     RosegardenProgressDialog progressDlg(i18n("Importing MIDI file..."),
@@ -1966,21 +1968,20 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     if (!merge) {
 
-	m_doc->closeDocument();
-	m_doc->newDocument();
+	//newDoc->closeDocument();
+	//newDoc->newDocument();
 
-	Rosegarden::Composition *tmpComp = midiFile->convertToRosegarden();
-
-	m_doc->getComposition().swap(*tmpComp);
-
-	delete tmpComp;
+        Rosegarden::Composition *tmpComp = new Rosegarden::Composition();
+        tmpComp = midiFile->convertToRosegarden();
+        newDoc->getComposition().swap(*tmpComp);
+        delete tmpComp;
 
     } else {
 
 	bool append = false;
 
 	if (midiFile->hasTimeChanges() &&
-	    m_doc->getComposition().getDuration() > 0) {
+	    newDoc->getComposition().getDuration() > 0) {
 
 	    //!!! This isn't adequate.  We really need to know whether
 	    // the tempo/timesig stuff is _different_ from that in the
@@ -2008,10 +2009,12 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 	}
 	    
 	/*Rosegarden::Composition *tmpComp =*/
-            midiFile->convertToRosegarden(&m_doc->getComposition(), append);
+            midiFile->convertToRosegarden(&newDoc->getComposition(), append);
     }
 
     delete midiFile;
+
+    (*m_doc) = (*newDoc);
 
     // Set modification flag
     //

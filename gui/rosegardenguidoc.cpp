@@ -138,7 +138,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(RosegardenGUIDoc *doc)
       m_endOfLastRecordedNote(0),
       m_commandHistory(new MultiViewCommandHistory()), // lose command history
       m_clipboard(new Rosegarden::Clipboard),          // lose clipboard
-      m_startUpSync(true),
+      m_startUpSync(false),
       m_pluginManager(doc->getPluginManager())
 {
     m_title = doc->getTitle();
@@ -148,9 +148,6 @@ RosegardenGUIDoc::RosegardenGUIDoc(RosegardenGUIDoc *doc)
     m_studio = doc->getStudio();
     m_config = doc->getConfiguration();
     m_composition = doc->getComposition();
-
-    if (m_startUpSync)
-        alive();
 
     if(!pViewList) {
         pViewList = new QList<RosegardenGUIView>();
@@ -181,7 +178,10 @@ RosegardenGUIDoc::operator=(const RosegardenGUIDoc &doc)
     m_absFilePath = doc.getAbsFilePath();
     m_recordSegment = 0;
     m_endOfLastRecordedNote = 0;
-    m_startUpSync = true;
+
+
+    // never sync
+    m_startUpSync = false;
 
     m_audioFileManager = doc.getAudioFileManager();
     m_studio = doc.getStudio();
@@ -313,13 +313,13 @@ bool RosegardenGUIDoc::saveIfModified()
                     saveDocument(getAbsFilePath());
                 };
 
-                deleteContents();
+                //deleteContents();
                 completed=true;
                 break;
 
             case KMessageBox::No:
                 setModified(false);
-                deleteContents();
+                //deleteContents();
                 // delete the autosave file so it won't annoy
                 // the user when reloading the file.
                 QFile::remove(getAutoSaveFileName());

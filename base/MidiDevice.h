@@ -45,8 +45,10 @@ public:
     virtual ~MidiDevice();
 
     // Copy constructor
-    //
     MidiDevice(const MidiDevice &);
+
+    // Assignment
+    MidiDevice operator=(const MidiDevice &);
  
     virtual void createInstruments();
     virtual void addInstrument(Instrument*);
