@@ -134,6 +134,9 @@ NotationDisplayPitch::getAsString(const Clef &clef, const Key &key) const
     
     int performancePitch = getPerformancePitch(clef, key);
 
+    // highly unlikely, but fatal if it happened:
+    if (performancePitch < 0) performancePitch = 0;
+
     int octave = performancePitch / 12;
     int pitch  = performancePitch % 12;
 
