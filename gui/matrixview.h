@@ -271,7 +271,7 @@ protected:
     //
     Rosegarden::MidiByte m_lastNote;
 
-
+    Rosegarden::PropertyName m_selectedProperty;
 };
 
 #endif

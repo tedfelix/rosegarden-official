@@ -72,7 +72,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_previousEvPitch(0),
       m_canvasView(0),
       m_pianoView(0),
-      m_lastNote(0)
+      m_lastNote(0),
+      m_selectedProperty(getViewLocalPropertyPrefix() + "Selected")
 {
     kdDebug(KDEBUG_AREA) << "MatrixView ctor\n";
 
@@ -433,7 +434,8 @@ MatrixCanvasView* MatrixView::getCanvasView()
 void MatrixView::setCurrentSelection(EventSelection* s)
 {
     if (m_currentEventSelection) {
-        m_currentEventSelection->removeSelectionFromSegment();
+        m_currentEventSelection->removeSelectionFromSegment
+	    (m_selectedProperty);
         getStaff(0)->positionElements(m_currentEventSelection->getBeginTime(),
                                       m_currentEventSelection->getEndTime());
     }
@@ -442,7 +444,7 @@ void MatrixView::setCurrentSelection(EventSelection* s)
     m_currentEventSelection = s;
 
     if (s) {
-        s->recordSelectionOnSegment();
+        s->recordSelectionOnSegment(m_selectedProperty);
         getStaff(0)->positionElements(s->getBeginTime(),
                                       s->getEndTime());
     }

@@ -435,3 +435,43 @@ EventEditCommand::modifySegment()
     segment.normalizeRests(getBeginTime(), getEndTime());
 }
 
+
+
+EventQuantizeCommand::EventQuantizeCommand(Rosegarden::Segment &segment,
+					   Rosegarden::timeT beginTime,
+					   Rosegarden::timeT endTime,
+					   Rosegarden::Quantizer quantizer) :
+    BasicCommand(getGlobalName(&quantizer), segment, beginTime, endTime),
+    m_quantizer(quantizer)
+{
+    // nothing else
+}
+
+QString
+EventQuantizeCommand::getGlobalName(Rosegarden::Quantizer *quantizer)
+{
+    if (quantizer) {
+	switch (quantizer->getType()) {
+	case Rosegarden::Quantizer::PositionQuantize:
+	    return "Position &Quantize";
+	case Rosegarden::Quantizer::UnitQuantize:
+	    return "Unit &Quantize";
+	case Rosegarden::Quantizer::NoteQuantize:
+	    return "Note &Quantize";
+	case Rosegarden::Quantizer::LegatoQuantize:
+	    return "Smoothing &Quantize";
+	}
+    }
+
+    return "&Quantize...";
+}
+
+void
+EventQuantizeCommand::modifySegment()
+{
+    Segment &segment = getSegment();
+    m_quantizer.quantize(&segment,
+			 segment.findTime(getBeginTime()),
+			 segment.findTime(getEndTime()));
+}
+

@@ -940,7 +940,10 @@ void SegmentCanvas::setShowPreviews(bool previews)
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
         SegmentItem* segItem = dynamic_cast<SegmentItem*>(*it);
-	if (segItem) segItem->setShowPreview(previews);
+	if (segItem) {
+	    segItem->setShowPreview(previews);
+	    canvas()->setChanged(segItem->rect());
+	}
     }
 
     m_showPreviews = previews;

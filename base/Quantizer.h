@@ -99,9 +99,13 @@ public:
      *   MyPrefix-properties.  This may be useful for piggybacking
      *   onto another quantizer's output.
      *
+     *   -- if source == RawEventData and target == RawEventData,
+     *   values will be read from the event's absolute time and
+     *   duration, quantized, and written back to these values.
+     *
      * \arg type : Type of quantization to carry out, as follows:
      *
-     *   "UnitQuantize": For note events, starting time is rounded
+     *   "PositionQuantize": For note events, starting time is rounded
      *   to the nearest multiple of a given unit duration (by default,
      *   the duration of the shortest available note).  Rests are
      *   quantized in the same way, except where preceded by a note

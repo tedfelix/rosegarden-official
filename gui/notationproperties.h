@@ -48,6 +48,7 @@ public:
 
     // The rest are, or may be, view-local
 
+    const Rosegarden::PropertyName SELECTED;
     const Rosegarden::PropertyName MIN_WIDTH;
     const Rosegarden::PropertyName CALCULATED_ACCIDENTAL;
     const Rosegarden::PropertyName DISPLAY_ACCIDENTAL;

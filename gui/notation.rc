@@ -169,6 +169,8 @@ etc
   <Action name="general_transpose"/>
   </Menu>
   <Separator/>
+  <Action name="quantize"/>
+  <Separator/>
   <Action name="invert"/>
   <Action name="retrograde"/>
 </Menu>

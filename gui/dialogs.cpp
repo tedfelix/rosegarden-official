@@ -53,6 +53,7 @@
 using Rosegarden::TimeSignature;
 using Rosegarden::Note;
 using Rosegarden::timeT;
+using Rosegarden::Quantizer;
 
 
 SimpleTextDialog::SimpleTextDialog(QWidget *parent, int maxLength) :
@@ -1721,5 +1722,119 @@ ClefDialog::redrawClefPixmap()
     QString name(strtoqstr(m_clef.getClefType()));
     name = name.left(1).upper() + name.right(name.length() - 1);
     m_clefNameLabel->setText(name);
+}
+
+
+QuantizeDialog::QuantizeDialog(QWidget *parent,
+			       std::string source,
+			       std::string target) :
+    KDialogBase(parent, 0, true, i18n("Quantize"), Ok | Cancel),
+    m_source(source),
+    m_target(target),
+    m_standardQuantizations
+        (Rosegarden::StandardQuantization::getStandardQuantizations())
+{
+    QVBox *vbox = makeVBoxMainWidget();
+
+    QGroupBox *quantizeBox = new QGroupBox
+	(1, Horizontal, i18n("Basic quantization"), vbox);
+
+    QHBox *typeBox = new QHBox(quantizeBox);
+    new QLabel(i18n("Quantize:"), typeBox);
+    m_typeCombo = new QComboBox(false, typeBox);
+    m_typeCombo->insertItem(i18n("Event positions only"));
+    m_typeCombo->insertItem(i18n("Event positions and durations"));
+    m_typeCombo->insertItem(i18n("Event positions, and round durations to exact notes"));
+
+    QHBox *unitBox = new QHBox(quantizeBox);
+    new QLabel(i18n("Base duration unit:"), unitBox);
+    m_unitCombo = new QComboBox(false, unitBox);
+
+    NotePixmapFactory npf;
+    QPixmap noMap = npf.makeToolbarPixmap("menu-no-note");
+
+    for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
+	std::string noteName = m_standardQuantizations[i].noteName;
+	QString qname = strtoqstr(m_standardQuantizations[i].name);
+	QPixmap pmap = noMap;
+	if (noteName != "") {
+	    noteName = "menu-" + noteName;
+	    pmap = npf.makeToolbarPixmap(strtoqstr(noteName));
+	}
+	m_unitCombo->insertItem(pmap, qname);
+    }
+    
+    m_noteQuantizeBox = new QGroupBox
+	(1, Horizontal, i18n("Note rounding"), vbox);
+
+    QHBox *dotsBox = new QHBox(m_noteQuantizeBox);
+    new QLabel(i18n("Maximum number of dots:"), dotsBox);
+    m_dotsCombo = new QComboBox(false, dotsBox);
+    m_dotsCombo->insertItem("0");
+    m_dotsCombo->insertItem("1");
+    m_dotsCombo->insertItem("2");
+    m_dotsCombo->insertItem("3");
+    m_dotsCombo->setCurrentItem(2);
+
+    m_legatoButton = new QCheckBox
+	(i18n("Only round durations up if following rests permit"),
+	 m_noteQuantizeBox);
+    
+    m_noteQuantizeBox->setEnabled(false);
+
+    connect(m_typeCombo, SIGNAL(activated(int)), SLOT(slotTypeChanged(int)));
+    connect(m_unitCombo, SIGNAL(activated(int)), SLOT(slotUnitChanged(int)));
+    connect(m_dotsCombo, SIGNAL(activated(int)), SLOT(slotDotsChanged(int)));
+    connect(m_legatoButton, SIGNAL(activated()), SLOT(slotLegatoChanged()));
+}
+
+Quantizer
+QuantizeDialog::getQuantizer() const
+{
+    Quantizer::QuantizationType type;
+    switch (m_typeCombo->currentItem()) {
+    case 0: type = Quantizer::PositionQuantize; break;
+    case 1: type = Quantizer::UnitQuantize; break;
+    case 2: type = Quantizer::NoteQuantize; break;
+    default: assert(0);
+    }
+    
+    if (type == Quantizer::NoteQuantize) {
+	if (m_legatoButton->isChecked()) {
+	    type = Quantizer::LegatoQuantize;
+	}
+    }	
+
+    int dots = m_dotsCombo->currentItem();
+
+    Rosegarden::StandardQuantization quantization =
+	m_standardQuantizations[m_unitCombo->currentItem()];
+
+    return Quantizer(m_source, m_target, type, quantization.unit, dots);
+}
+	
+
+void
+QuantizeDialog::slotTypeChanged(int index)
+{
+    m_noteQuantizeBox->setEnabled(index == 2);
+}
+
+void
+QuantizeDialog::slotUnitChanged(int)
+{
+    //...
+}
+
+void
+QuantizeDialog::slotDotsChanged(int)
+{
+    //...
+}
+
+void
+QuantizeDialog::slotLegatoChanged()
+{
+    //...
 }
 

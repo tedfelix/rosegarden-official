@@ -34,6 +34,7 @@ class QCheckBox;
 class QSpinBox;
 class QLabel;
 class QComboBox;
+class QGroupBox;
 class QRadioButton;
 class QVButtonGroup;
 class NotePixmapFactory;
@@ -398,6 +399,38 @@ protected:
 public slots:
     void slotClefUp();
     void slotClefDown();
+};
+
+
+class QuantizeDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    QuantizeDialog(QWidget *parent,
+		   std::string quantizeSource,
+		   std::string quantizeTarget);
+    
+    Rosegarden::Quantizer getQuantizer() const;
+    
+protected:
+    std::string m_source;
+    std::string m_target;
+
+    std::vector<Rosegarden::StandardQuantization>
+    m_standardQuantizations;
+
+    QComboBox *m_typeCombo;
+    QComboBox *m_unitCombo;
+    QGroupBox *m_noteQuantizeBox;
+    QComboBox *m_dotsCombo;
+    QCheckBox *m_legatoButton;
+
+public slots:
+    void slotTypeChanged(int);
+    void slotUnitChanged(int);
+    void slotDotsChanged(int);
+    void slotLegatoChanged();
 };
   
 

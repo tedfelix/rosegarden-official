@@ -608,11 +608,11 @@ void NotationView::setupActions()
 		SLOT(slotEditSelectToEnd()), actionCollection(),
 		"select_to_end");
 
-    new KAction(i18n("Select &Whole Staff"), 0, this,
+    new KAction(i18n("Select Whole St&aff"), 0, this,
 		SLOT(slotEditSelectWholeStaff()), actionCollection(),
 		"select_whole_staff");
 
-    new KAction(i18n("P&aste..."), 0, this,
+    new KAction(i18n("Pa&ste..."), 0, this,
 		SLOT(slotEditGeneralPaste()), actionCollection(),
 		"general_paste");
 
@@ -716,6 +716,10 @@ void NotationView::setupActions()
     new KAction(TransformsMenuTransposeCommand::getGlobalName(0), 0, this,
                 SLOT(slotTransformsTranspose()), actionCollection(),
                 "general_transpose");
+
+    new KAction(EventQuantizeCommand::getGlobalName(), 0, this,
+                SLOT(slotTransformsQuantize()), actionCollection(),
+                "quantize");
 
     new KAction(i18n("&Dump selected events to stderr"), 0, this,
 		SLOT(slotDebugDump()), actionCollection(), "debug_dump");
@@ -1182,7 +1186,8 @@ void NotationView::setCurrentSelectedNote(NoteActionData noteAction)
 void NotationView::setCurrentSelection(EventSelection* s)
 {
     if (m_currentEventSelection) {
-        m_currentEventSelection->removeSelectionFromSegment();
+        m_currentEventSelection->removeSelectionFromSegment
+	    (m_properties.SELECTED);
         getStaff(m_currentEventSelection->getSegment())->positionElements
             (m_currentEventSelection->getBeginTime(),
              m_currentEventSelection->getEndTime());
@@ -1192,13 +1197,39 @@ void NotationView::setCurrentSelection(EventSelection* s)
     m_currentEventSelection = s;
 
     if (s) {
-        s->recordSelectionOnSegment();
+        s->recordSelectionOnSegment(m_properties.SELECTED);
         getStaff(s->getSegment())->positionElements(s->getBeginTime(),
                                                     s->getEndTime());
     }
 
     updateView();
 }
+
+void NotationView::checkCurrentSelection()
+{
+    // If any of the notes in the selection are absent from their
+    // segment, cancel the selection and give up
+
+    if (m_currentEventSelection) {
+
+	Segment &segment = m_currentEventSelection->getSegment();
+
+	for (EventSelection::eventcontainer::iterator i =
+		 m_currentEventSelection->getSegmentEvents().begin();
+	     i != m_currentEventSelection->getSegmentEvents().end(); ++i) {
+
+	    if (segment.findSingle(*i) == segment.end()) {
+		m_currentEventSelection->removeSelectionFromSegment
+		    (m_properties.SELECTED);
+		delete m_currentEventSelection;
+		m_currentEventSelection = 0;
+		emit usedSelection();
+		return;
+	    }
+	}
+    }
+}
+
 
 void NotationView::setSingleSelectedEvent(int staffNo, Event *event)
 {
@@ -1748,6 +1779,24 @@ void NotationView::slotTransformsTransposeDownOctave()
 
     addCommandToHistory(new TransformsMenuTransposeCommand
                         (-12, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsQuantize()
+{
+    if (!m_currentEventSelection) return;
+
+    QuantizeDialog *dialog = new QuantizeDialog(this,
+						Quantizer::RawEventData,
+						Quantizer::RawEventData);
+
+    if (dialog->exec() == QDialog::Accepted) {
+	KTmpStatusMsg msg(i18n("Quantizing..."), statusBar());
+	addCommandToHistory(new EventQuantizeCommand
+			    (m_staffs[m_currentStaff]->getSegment(),
+			     m_currentEventSelection->getBeginTime(),
+			     m_currentEventSelection->getEndTime(),
+			     dialog->getQuantizer()));
+    }
 }
 
 void NotationView::slotMarksAddAccent()
@@ -2437,7 +2486,8 @@ void NotationView::refreshSegment(Segment *segment,
 {
     START_TIMING;
 
-    emit usedSelection(); //!!! hardly right
+    emit usedSelection();
+    checkCurrentSelection();
 
     if (segment) {
         NotationStaff *staff = getStaff(*segment);
@@ -2480,6 +2530,7 @@ void NotationView::refreshSegment(Segment *segment,
 
     Event::dumpStats(cerr);
     slotSetInsertCursorPosition(m_insertionTime);
+    slotSetPointerPosition(m_document->getComposition().getPosition());
 
     PRINT_ELAPSED("NotationView::refreshSegment (including update/GC)");
 }

@@ -27,6 +27,8 @@ const Rosegarden::PropertyName NotationProperties::BEAMED	      = "Beamed";
 
 NotationProperties::NotationProperties(const std::string &prefix) :
 
+    SELECTED			(prefix + "Selected"),
+
     MIN_WIDTH			(prefix + "MinWidth"),
 
     CALCULATED_ACCIDENTAL	(prefix + "NoteCalculatedAccidental"),

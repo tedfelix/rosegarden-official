@@ -32,7 +32,7 @@ extern const PropertyName PITCH;
 extern const PropertyName VELOCITY;
 extern const PropertyName ACCIDENTAL;
 
-extern const PropertyName SELECTED;
+//extern const PropertyName SELECTED;
 
 extern const PropertyName MARK_COUNT;
 extern PropertyName getMarkPropertyName(int markNo);

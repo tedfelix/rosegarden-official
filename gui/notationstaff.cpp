@@ -310,7 +310,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	}
 
 	bool selected = false;
-	(void)((*it)->event()->get<Bool>(SELECTED, selected));
+	(void)((*it)->event()->get<Bool>(m_properties.SELECTED, selected));
 
 //	kdDebug(KDEBUG_AREA) << "Rendering at " << (*it)->getAbsoluteTime()
 //			     << " (selected = " << selected << ")" << endl;
@@ -360,7 +360,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 	}
 
 	bool selected = false;
-	(void)((*it)->event()->get<Bool>(SELECTED, selected));
+	(void)((*it)->event()->get<Bool>(m_properties.SELECTED, selected));
 
 	bool needNewSprite = (selected != (*it)->isSelected());
 

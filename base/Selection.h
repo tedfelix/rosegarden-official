@@ -21,6 +21,7 @@
 #define SELECTION_H
 
 #include <set>
+#include "PropertyName.h"
 #include "Event.h"
 
 namespace Rosegarden {
@@ -94,16 +95,16 @@ public:
     Segment &getSegment()             { return m_originalSegment; }
 
     /**
-     * Set the SELECTED property on all selected events in the
+     * Set the given boolean property on all selected events in the
      * segment, and unset from all non-selected events.
      */
-    void recordSelectionOnSegment();
+    void recordSelectionOnSegment(PropertyName property);
 
     /**
-     * Unset the SELECTED property from all events in the segment
+     * Unset the given boolean property from all events in the segment
      * that are in this selection.
      */
-    void removeSelectionFromSegment();
+    void removeSelectionFromSegment(PropertyName property);
     
 private:
     EventSelection(const EventSelection&);

@@ -23,6 +23,8 @@
 
 #include "basiccommand.h"
 
+#include "Quantizer.h"
+
 namespace Rosegarden {
     class Clipboard;
     class EventSelection;
@@ -179,5 +181,24 @@ private:
     Rosegarden::Event *m_oldEvent; // only used on 1st execute
     Rosegarden::Event m_newEvent; // only used on 1st execute
 };
+
+
+class EventQuantizeCommand : public BasicCommand
+{
+public:
+    EventQuantizeCommand(Rosegarden::Segment &segment,
+			 Rosegarden::timeT beginTime,
+			 Rosegarden::timeT endTime,
+			 Rosegarden::Quantizer);
+    
+    static QString getGlobalName(Rosegarden::Quantizer *quantizer = 0);
+    
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::Quantizer m_quantizer;
+};
+
 
 #endif
