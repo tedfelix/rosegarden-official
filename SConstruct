@@ -8,7 +8,7 @@
 import os
 
 
-env = Environment(tools = ['default', 'config'], toolpath='./')
+env = Environment(tools = ['default', 'config', 'kde'], toolpath='./')
 env.AppendUnique( ENV = os.environ )
 
 # The target make dist requires the python module shutil which is in 2.3
@@ -18,7 +18,6 @@ env.EnsurePythonVersion(2,3)
 env['INSTALL_ALL'] = 0
 if 'install' in COMMAND_LINE_TARGETS:
     env['INSTALL_ALL'] = 1
-
 
 ##
 ## Configure stuff    

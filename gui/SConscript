@@ -5,7 +5,7 @@
 ## use the environment set in the top-level
 ## SConstruct file
 
-Import( "env" )
+Import( '*' )
 myenv=env.Copy()
 Import("soundLibs")
 
@@ -101,6 +101,7 @@ rgSources = Split("""
 	rosegardengui.cpp 
 	rosegardenguidoc.cpp 
 	rosegardenguiiface.cpp 
+	rosegardenguiiface_skel.cpp 
 	rosegardenguiview.cpp 
 	rosegardenscrollview.cpp 
         rosegardentransport.ui 
@@ -135,28 +136,24 @@ rgSources = Split("""
 	xmlstorableevent.cpp
 """)
 
-# KDE libs
-myenv['LIBS'].append('kdeui')
-myenv['LIBS'].append('kdecore')
-myenv['LIBS'].append('kdeprint')
-myenv['LIBS'].append('kio')
+rg = KDEprogram('rosegarden', rgSources, myenv )
 
-myenv['LIBS'].append('Xft')
+
+KDEaddpaths( ['/usr/X11R6/include/X11/Xft',
+           '/usr/include/freetype2',
+           '../base', '../sound', '..', '.'], myenv)
+
+# KDE libs
+KDEaddlibs([ 'kdeui', 'kdecore', 'kdeprint', 'kio', ], myenv)
+
+KDEaddlibs([ 'Xft' ], myenv)
 
 # RG libs
-myenv['LIBS'].append('base')
-myenv['LIBS'].append('RosegardenSound')
-myenv['LIBS'].append('RosegardenSequencer')
+KDEaddlibs(['base', 'RosegardenSound', 'RosegardenSequencer'], myenv)
 
 myenv['LIBPATH'].append('../base')
 myenv['LIBPATH'].append('../sound')
 myenv['LIBPATH'].append('/usr/X11R6/lib')
-
-rg = myenv.Program('rosegarden', rgSources,
-              CPPPATH = ['/usr/X11R6/include/X11/Xft',
-                         '/usr/include/freetype2',
-                         '../base', '../sound', '..', '.'],
-               )
 
 for dep in soundLibs:
     Depends(rg, dep)

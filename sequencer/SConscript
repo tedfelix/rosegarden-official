@@ -5,7 +5,7 @@
 ## use the environment set in the top-level
 ## SConstruct file
 
-Import( "env" )
+Import( '*' )
 myenv=env.Copy()
 Import("soundLibs")
 
@@ -18,20 +18,13 @@ sequencermapper.cpp
 rosegardensequenceriface_skel.cpp
 """)
 
-myenv['LIBS'].append('kdeui')
-myenv['LIBS'].append('kdecore')
-myenv['LIBS'].append('base')
-myenv['LIBS'].append('RosegardenSound')
-myenv['LIBS'].append('RosegardenSequencer')
+rgseq = KDEprogram('rosegardensequencer', rgseqSources, myenv)
+
+KDEaddpaths( ['../base', '../sound', '../gui', '../', './'], myenv)
+KDEaddlibs(['kdeui', 'kdecore', 'base', 'RosegardenSound', 'RosegardenSequencer'], myenv)
 
 myenv['LIBPATH'].append('../base')
 myenv['LIBPATH'].append('../sound')
-
-myenv.Dcop( ['rosegardensequenceriface.h'] )
-
-rgseq = myenv.Program('rosegardensequencer', rgseqSources,
-              CPPPATH = ['../base', '../sound', '../gui', '..', '.'],
-               )
 
 for dep in soundLibs:
     Depends(rgseq, dep)
