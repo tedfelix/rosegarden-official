@@ -1,32 +1,62 @@
-Last modified: Richard Bown 10.7.2001
+How to get the Rosegarden Sequencer working
+===========================================
+
+                                             Modified: 18.9.2001
+                                                       Richard Bown
+                                                       (bownie@bownie.com)
 
 
-artsd version
+Introduction
+------------
+
+Rosegarden Version 4.0 for KDE works only with the aRts sound system
+that comes with the KDE multimedia packages.
+
+To get the development version of Rosegarden to work you'll need to
+ensure that artsd is running, can find the relevant Rosegarden
+server stubs and that you've mapped the sequencer output to a relevant
+port.
+
+So far the playback has only been tested under KDE2.1 (Mandrake 8.0)
+with an SBLive and arts-0.6.0.   Results are patchy to say the least!
+
+
+Building aRts
 -------------
 
-MIDI recording only works with arts-0.5.4 and arts-extras-0.5.4
-or later.  Install to (say) /opt/arts-0.5.4 and ensure LD_LIBRARY_PATH,
-path and the setup in your .mcoprc point to the latest version.
+Rosegarden MIDI recording only works with arts-0.5.4
+(including arts-extras-0.5.4) or later.
+
+To install a new version of aRTs on your system:
+
+o download from http://www.arts-project.org
+o build and install to a good place (say /opt/arts-0.n.m)
+o ensure LD_LIBRARY_PATH or ldconfig can find the relevant libs
+o setup your ~/.mcoprc point to include these libs as well (see below)
+
 
 Starting and stopping artsd
 ---------------------------
 
-Artsd starts with your UID as you log into (say) KDE.  When developing
-the MIDI stuff so far it's advisable to run artsd in the foreground with
-debug on ('-l0') to catch any messages.  If you do restart artsd many
-arts client applications will fail and crash (Arts Control for example).
-These will have to be restarted also.
+Artsd usually starts with your UID as you log into (say) KDE.  When
+developing with artsd it's advisable to run it in the foreground with
+debug on ('-l0') to catch any messages.
 
-Start artsd like this:
+Start artsd (something) like this:
 
- % artsd -F 10 -S 4096 -a oss -l0
+ % artsd -F 10 -S 1024 -a oss -l0
 
-On a default installation create the OSS midi ports by trying either
-/dev/midi or /dev/midi00.
+Open artscontrol (KDE menu item under Multimedia/Sound) and from that
+open the MidiManager.  To use the MIDI ports of your soundcard map the
+MidiManager to the OSS midi ports (try either /dev/midi or /dev/midi00).
 
-Once Rosegarden starts up it'll create two new clients labelled
-Playback and Record that can be connected to OSS ports or whatever
-else is available in the Midi Manager.
+If you do restart artsd at any point you'll have to restart your arts
+clients as well (artscontrol, rosegardensequencer).
+
+Once the Rosegarden sequencer starts up it'll create two new MIDI ports
+labelled Playback and Record.  These can be connected to anything you
+can create in the MidiManager.
+
 
 
 Registering the Rosegarden implementations with artsd
@@ -41,7 +71,7 @@ You need to add entries to the directory that holds these files:
   RosegardenMidiRecord.mcopclass
   libMidiArts.la
 
-A complete example file as follows:
+A complete example file (indented) as follows:
 
 
   # global port - we use the temp directory
@@ -57,4 +87,54 @@ A complete example file as follows:
   TraderPath="/usr/lib/mcop","/home/bownie/rosegarden/sound/"
 
 
-Then restart artsd.
+Once you've edited ~/.mcoprc then you'll have to restart artsd to
+pick up the changes
+
+
+Configuring for playback using aRts Midi Manager
+------------------------------------------------
+
+Once you have everything built for Rosegarden and you've made the
+changes to your ~/.mcoprc you should ensure artsd is running and
+then you're ready to start up the application.
+
+You can start either "rosegardengui" or "rosegardensequencer" first
+as they only look for each other's presence when they need them (i.e.
+when playing or recording).
+
+When "rosegardensequencer" starts up it'll let you know its status on the
+command line.  If you're running the artscontrol MidiManager you should
+see the Rosegarden Play and Record ports registering with aRts.
+
+Successfully creating the System Midi Port (OSS) on the arts Midi Manager
+will enable you to send and receive MIDI events from your soundcard's
+MIDI ports.  Creating an aRts Synthesis Midi Output device is equivalent
+to a soft synth (TiMidity type device) which can also act as a sink for
+Rosegarden events and allow you to test the sequencer without needing any 
+external MIDI equipment or cables.
+
+At the moment a limitation of the aRts Midi Manager is that every time
+aRts is restarted you'll need to recreate devices and mappings and also
+that the synthesis devices are not multitimbral - i.e. an entire piece
+will only be played in the single voice that the Play port is connected
+to.
+
+
+Testing the Rosegarden Sequencer
+--------------------------------
+
+Assuming you've followed all of the above steps you should have
+now have the rosegardensequencer running, the artscontrol Midi Manager
+showing Rosegarden Play and Record ports and at least one available
+Midi Output port that'll allow you to test whether the Sequencer is
+making sound i.e. an OSS Midi Port that's connect to an external
+MIDI device or an aRts synthesis device.  Select the Rosegarden (Play)
+port and the output port you want and "Connect" them together.
+
+If you know start the "rosegardengui" application and load in a test
+file you should be able to hit "Play" on the sequencer and hear some
+playback.  The song position pointer on the GUI should move from
+left to right across the screen in time with the notes being sent out.
+Note that at the moment you can Fast Forward and Rewind whilst the
+sequencer is stopped or playing.
+

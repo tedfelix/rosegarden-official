@@ -41,7 +41,7 @@ Sequencer::Sequencer():
                        _recordStatus(ASYNCHRONOUS_MIDI),
                        _startPlayback(true),
                        _playing(false),
-                       _ppq(960),
+                       _ppq(Note(Note::Crotchet).getDuration()),
                        _tempo(120),
                        _recordTrack(0)
 {
@@ -323,23 +323,33 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
     // Test our timing
     Arts::TimeStamp now = _midiPlayPort.time();
     int secAhead = event.time.sec - now.sec;
-    int mSecAhead = event.time.usec - now.usec;
+    int uSecAhead = event.time.usec - now.usec;
 
-    if (mSecAhead < 0) 
+    if (uSecAhead < 0) 
     {
       secAhead--;
-      mSecAhead += 1000000;
+      uSecAhead += 1000000;
     }
 
     if (secAhead < 0)
     {
       std::cerr << "Failed to process NOTE events in time - lagging by "
-                << secAhead << "s and " << mSecAhead << "ms" << endl;
+                << secAhead << "s and " << uSecAhead << "ms" << endl;
     }
 
     // if a NOTE ON
     // send the event out
     _midiPlayPort.processEvent(event);
+
+    int secFromStart = event.time.sec - _playStartTime.sec;
+    int usecFromStart = event.time.usec - _playStartTime.usec;
+
+    if (usecFromStart < 0)
+    {
+      secFromStart--;
+      secFromStart += 1000000;
+    }
+    cout << "TIME " << secFromStart << " : " << usecFromStart << endl;
 
     // and log it on the Note OFF stack
     NoteOffEvent *noteOffEvent =

@@ -168,7 +168,8 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::timeT &start,
   }
   else
   {
-    cerr << "getSequencerSlice TIME = " << t.elapsed() << " ms " << endl;
+    //cerr << "getSequencerSlice TIME = " << t.elapsed() << " ms " << endl;
+
     QDataStream reply(replyData, IO_ReadOnly);
     if (replyType == "Rosegarden::MappedComposition")
     {

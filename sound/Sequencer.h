@@ -139,7 +139,7 @@ namespace Rosegarden
     //
     inline unsigned int convertToMidiTime(const Arts::TimeStamp &timeStamp)
     {
-      return (unsigned int) ( 384.0 * ( (double) timeStamp.sec +
+      return (unsigned int) ( (double)_ppq * 4.0 * ( (double) timeStamp.sec +
                               ( ( (double) timeStamp.usec ) / 1000000.0 ) ) *
                                   (double) _tempo / 60.0 );
     }
@@ -156,7 +156,7 @@ namespace Rosegarden
     {
       unsigned int usec = (unsigned int) ( ( 60.0 * 1000000.0 *
                                            (double) midiTime ) /
-                                           ( 384.0 * (double) _tempo) );
+                                           ( (double)_ppq * 4.0 * (double)_tempo) );
       unsigned int sec = usec / 1000000;
       usec %= 1000000;
 
