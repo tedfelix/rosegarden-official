@@ -23,6 +23,8 @@
 #include <qiconset.h>
 #include <qlayout.h>
 #include <qlabel.h>
+#include <qhbox.h>
+#include <qslider.h>
 
 #include <kapp.h>
 #include <kconfig.h>
@@ -32,6 +34,7 @@
 #include <kstdaction.h>
 #include <kmessagebox.h>
 #include <kstatusbar.h>
+#include <ktoolbar.h>
 
 #include "Instrument.h"
 #include "Composition.h"
@@ -57,6 +60,9 @@
 #include "matrixparameterbox.h"
 #include "velocitycolour.h"
 #include "Property.h"
+#include "widgets.h"
+#include "zoomslider.h"
+#include "notepixmapfactory.h"
 
 #include "rosedebug.h"
 
@@ -81,7 +87,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_previousEvPitch(0),
       m_canvasView(0),
       m_pianoView(0),
-      m_lastNote(0)
+      m_lastNote(0),
+      m_quantizations(
+              Rosegarden::StandardQuantization::getStandardQuantizations())
 {
     MATRIX_DEBUG << "MatrixView ctor\n";
 
@@ -133,16 +141,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     m_grid->addWidget(m_parameterBox, 2, 0);
 
     connect(m_parameterBox,
-            SIGNAL(quantizeSelection(Rosegarden::Quantizer)),
-            this,
-            SLOT(slotQuantizeSelection(Rosegarden::Quantizer)));
-    
-    connect(m_parameterBox,
-            SIGNAL(modifySnapTime(Rosegarden::timeT)),
-            this,
-            SLOT(slotSetSnap(Rosegarden::timeT)));
-
-    connect(m_parameterBox,
             SIGNAL(sendMappedEvent(Rosegarden::MappedEvent *)),
             SIGNAL(sendMappedEvent(Rosegarden::MappedEvent *)));
 
@@ -160,6 +158,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     // do this after we have a canvas
     setupActions();
 
+    // tool bars
+    initActionsToolbar();
+    initZoomToolbar();
+
     // Connect vertical scrollbars between matrix and piano
     //
     connect(m_canvasView->verticalScrollBar(), SIGNAL(valueChanged(int)),
@@ -171,25 +173,35 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     connect(m_pianoView, SIGNAL(gotWheelEvent(QWheelEvent*)),
             m_canvasView, SLOT(slotExternalWheelEvent(QWheelEvent*)));
 
+    /*
     QObject::connect
         (getCanvasView(), SIGNAL(activeItemPressed(QMouseEvent*, QCanvasItem*)),
          this,            SLOT  (activeItemPressed(QMouseEvent*, QCanvasItem*)));
+         */
 
     QObject::connect
-        (getCanvasView(), SIGNAL(mousePressed(Rosegarden::timeT, int, QMouseEvent*, MatrixElement*)),
-         this,            SLOT  (slotMousePressed(Rosegarden::timeT, int, QMouseEvent*, MatrixElement*)));
+        (getCanvasView(),
+         SIGNAL(mousePressed(Rosegarden::timeT,
+                             int, QMouseEvent*, MatrixElement*)),
+         this, 
+         SLOT(slotMousePressed(Rosegarden::timeT,
+                              int, QMouseEvent*, MatrixElement*)));
 
     QObject::connect
-        (getCanvasView(), SIGNAL(mouseMoved(Rosegarden::timeT, int, QMouseEvent*)),
-         this,            SLOT  (slotMouseMoved(Rosegarden::timeT, int, QMouseEvent*)));
+        (getCanvasView(),
+         SIGNAL(mouseMoved(Rosegarden::timeT, int, QMouseEvent*)),
+         this,
+         SLOT(slotMouseMoved(Rosegarden::timeT, int, QMouseEvent*)));
 
     QObject::connect
-        (getCanvasView(), SIGNAL(mouseReleased(Rosegarden::timeT, int, QMouseEvent*)),
-         this,            SLOT  (slotMouseReleased(Rosegarden::timeT, int, QMouseEvent*)));
+        (getCanvasView(),
+         SIGNAL(mouseReleased(Rosegarden::timeT, int, QMouseEvent*)),
+         this,
+         SLOT(slotMouseReleased(Rosegarden::timeT, int, QMouseEvent*)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(hoveredOverNoteChanged(const QString&)),
-         this,            SLOT  (slotHoveredOverNoteChanged(const QString&)));
+         this, SLOT(slotHoveredOverNoteChanged(const QString&)));
 
     QObject::connect
         (m_pianoKeyboard, SIGNAL(hoveredOverKeyChanged(unsigned int)),
@@ -1078,10 +1090,12 @@ MatrixView::slotNewSelection()
 
 
 void
-MatrixView::slotSetSnap(Rosegarden::timeT snapTime)
+MatrixView::slotSetSnap(int s)
 {
-    MATRIX_DEBUG << "MatrixView::slotSetSnap: time is " << snapTime << endl;;
-    m_snapGrid.setSnapTime(snapTime);
+    MATRIX_DEBUG << "MatrixView::slotSetSnap: time is "
+                 << m_snapValues[s] << endl;
+
+    m_snapGrid.setSnapTime(m_snapValues[s]);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i)
         m_staffs[i]->sizeStaff(m_hlayout);
@@ -1091,27 +1105,201 @@ MatrixView::slotSetSnap(Rosegarden::timeT snapTime)
 
 
 void
-MatrixView::slotQuantizeSelection(Rosegarden::Quantizer q)
+MatrixView::slotQuantizeSelection(int q)
 {
     if (!m_currentEventSelection) return;
     if (m_currentEventSelection->getAddedEvents() == 0) return;
 
     MATRIX_DEBUG << "MatrixView::slotQuantizeSelection\n";
 
-    if (q.getUnit() != 0)
+    using Rosegarden::Quantizer;
+    Rosegarden::timeT unit = m_quantizations[q].unit;
+
+    Rosegarden::Quantizer quant(Quantizer::GlobalSource,
+                                Quantizer::RawEventData,
+                                Quantizer::PositionQuantize,
+                                unit,
+                                m_quantizations[q].maxDots);
+
+    if (quant.getUnit() != 0)
     {
         KTmpStatusMsg msg(i18n("Quantizing..."), statusBar());
         addCommandToHistory(
-                new EventQuantizeCommand(*m_currentEventSelection, q));
+                new EventQuantizeCommand(*m_currentEventSelection, quant));
     }
     else
     {
         KTmpStatusMsg msg(i18n("Unquantizing..."), statusBar());
         addCommandToHistory(
-                new EventUnquantizeCommand(*m_currentEventSelection, q));
+                new EventUnquantizeCommand(*m_currentEventSelection, quant));
     }
 }
 
 
+void
+MatrixView::initActionsToolbar()
+{
+    MATRIX_DEBUG << "MatrixView::initActionsToolbar" << std::endl;
+
+    KToolBar *actionsToolbar = toolBar("actionsToolBar");
+
+    if (!actionsToolbar)
+    {
+        MATRIX_DEBUG << "MatrixView::initActionsToolbar - "
+                     << "tool bar not found" << std::endl;
+        return;
+    }
+
+    //actionsToolbar->setBarPos(KToolBar::Right);
+
+    // The SnapGrid combo
+    //
+    QLabel *sLabel = new QLabel(i18n("Grid"), actionsToolbar);
+    sLabel->setIndent(10);
+
+    using Rosegarden::Note;
+    NotePixmapFactory npf;
+    QPixmap noMap = npf.makeToolbarPixmap("menu-no-note");
+
+    m_snapGridCombo = new RosegardenComboBox(false, false, actionsToolbar);
+
+    Rosegarden::timeT crotchetDuration = Note(Note::Crotchet).getDuration();
+    m_snapValues.push_back(Rosegarden::SnapGrid::NoSnap);
+    m_snapValues.push_back(Rosegarden::SnapGrid::SnapToUnit);
+    m_snapValues.push_back(crotchetDuration / 16);
+    m_snapValues.push_back(crotchetDuration / 8);
+    m_snapValues.push_back(crotchetDuration / 4);
+    m_snapValues.push_back(crotchetDuration / 2);
+    m_snapValues.push_back(Rosegarden::SnapGrid::SnapToBeat);
+    m_snapValues.push_back(Rosegarden::SnapGrid::SnapToBar);
+
+    for (unsigned int i = 0; i < m_snapValues.size(); i++)
+    {
+        Note nearestNote = Note::getNearestNote(m_snapValues[i]);
+
+        if (nearestNote.getDuration() == m_snapValues[i])
+        {
+            QString pmapName = "menu-" +
+                               strtoqstr(nearestNote.getReferenceName());
+            QPixmap pmap = npf.makeToolbarPixmap(pmapName);
+
+            m_snapGridCombo->insertItem(pmap,
+                                        strtoqstr(nearestNote.getShortName()));
+        }
+        else
+        {
+            QString noteName;
+
+            if (m_snapValues[i] == Rosegarden::SnapGrid::NoSnap)
+                noteName = i18n("None");
+            else if (m_snapValues[i] == Rosegarden::SnapGrid::SnapToUnit)
+                noteName = i18n("Unit");
+            else if (m_snapValues[i] == Rosegarden::SnapGrid::SnapToBeat)
+                noteName = i18n("Beat");
+            else if (m_snapValues[i] == Rosegarden::SnapGrid::SnapToBar)
+                noteName = i18n("Bar");
+
+            if (noteName == "")
+            {
+                int iValue = crotchetDuration / m_snapValues[i];
+
+                if (iValue * m_snapValues[i] == crotchetDuration)
+                    noteName = i18n("1/%1").arg(iValue);
+                else
+                    noteName = i18n("%1 ticks").arg(m_snapValues[i]);
+            }
+
+            m_snapGridCombo->insertItem(noteName);
+        }
+    }
+
+    connect(m_snapGridCombo, SIGNAL(activated(int)),
+            this, SLOT(slotSetSnap(int)));
+
+    connect(m_snapGridCombo, SIGNAL(propagate(int)),
+            this, SLOT(slotSetSnap(int)));
+
+
+    // Quantize combo
+    //
+    QLabel *qLabel = new QLabel(i18n("Quantize"), actionsToolbar);
+    qLabel->setIndent(10);
+
+    m_quantizeCombo = new RosegardenComboBox(false, false, actionsToolbar);
+
+    for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
+        std::string noteName = m_quantizations[i].noteName;
+        QString qname = strtoqstr(m_quantizations[i].name);
+        QPixmap pmap = noMap;
+        if (noteName != "") {
+            noteName = "menu-" + noteName;
+            pmap = npf.makeToolbarPixmap(strtoqstr(noteName));
+        }
+        m_quantizeCombo->insertItem(pmap, qname);
+    }
+    m_quantizeCombo->insertItem(noMap, i18n("Off"));
+
+    connect(m_quantizeCombo, SIGNAL(activated(int)),
+            this, SLOT(slotQuantizeSelection(int)));
+
+    // mouse wheel
+    connect(m_quantizeCombo, SIGNAL(propagate(int)),
+            this, SLOT(slotQuantizeSelection(int)));
+
+}
+
+void
+MatrixView::initZoomToolbar()
+{
+    MATRIX_DEBUG << "MatrixView::initZoomToolbar" << std::endl;
+
+    KToolBar *zoomToolbar = toolBar("zoomToolBar");
+
+    if (!zoomToolbar)
+    {
+        MATRIX_DEBUG << "MatrixView::initZoomToolbar - "
+                     << "tool bar not found" << std::endl;
+        return;
+    }
+
+    //zoomToolbar->setBarPos(KToolBar::Right);
+
+    std::vector<double> zoomSizes; // in units-per-pixel
+    double defaultBarWidth44 = 100.0;
+    double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
+    static double factors[] = { 0.025, 0.05, 0.1, 0.2, 0.5,
+                                1.0, 1.5, 2.5, 5.0, 10.0, 20.0 };
+
+    // Zoom labels
+    //
+    for (unsigned int i = 0; i < sizeof(factors)/sizeof(factors[0]); ++i)
+        zoomSizes.push_back(duration44 / (defaultBarWidth44 * factors[i]));
+
+    m_hZoomSlider = new ZoomSlider<double>
+        (zoomSizes, -1, QSlider::Horizontal, zoomToolbar);
+    m_hZoomSlider->setTracking(true);
+    m_hZoomSlider->setFocusPolicy(QWidget::NoFocus);
+
+    m_zoomLabel = new QLabel(zoomToolbar);
+    m_zoomLabel->setIndent(10);
+    m_zoomLabel->setFixedWidth(80);
+
+    connect(m_hZoomSlider,
+            SIGNAL(valueChanged(int)),
+            SLOT(slotChangeHorizontalZoom(int)));
+
+}
+
+
+void
+MatrixView::slotChangeHorizontalZoom(int zoom)
+{
+    double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
+    double value = double(m_hZoomSlider->getCurrentSize());
+    m_zoomLabel->setText(i18n("%1%").arg(duration44/value));
+    
+    //m_view->setZoomSize(m_zoomSlider->getCurrentSize());
+
+}
 
 

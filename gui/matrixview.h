@@ -50,6 +50,8 @@ class MatrixStaff;
 class MatrixCanvasView;
 class PianoKeyboard;
 class MatrixParameterBox;
+class RosegardenComboBox;
+template <class T> class ZoomSlider;
 
 class QMouseEvent;
 class QLabel;
@@ -240,12 +242,17 @@ public slots:
      * Set the snaptime of the grid
      *
      */
-    void slotSetSnap(Rosegarden::timeT);
+    void slotSetSnap(int);
 
     /*
      * Quantize a selection to a given level
      */
-    void slotQuantizeSelection(Rosegarden::Quantizer);
+    void slotQuantizeSelection(int);
+
+    /*
+     * Change horizontal zoom
+     */
+    void slotChangeHorizontalZoom(int);
 
 protected:
 
@@ -285,6 +292,16 @@ protected:
     virtual void setViewSize(QSize);
 
     virtual MatrixCanvasView *getCanvasView();
+
+    /**
+     * Init matrix actions toolbar
+     */
+    void initActionsToolbar();
+
+    /**
+     * Zoom toolbar
+     */
+    void initZoomToolbar();
 
     //--------------- Data members ---------------------------------
 
@@ -329,6 +346,21 @@ protected:
     // The parameter box
     //
     MatrixParameterBox *m_parameterBox;
+
+    // Toolbar flora
+    //
+    RosegardenComboBox *m_quantizeCombo;
+    RosegardenComboBox *m_snapGridCombo;
+    ZoomSlider<double> *m_hZoomSlider;
+    ZoomSlider<double> *m_vZoomSlider;
+    QLabel             *m_zoomLabel;
+ 
+
+    // Hold our matrix quantization values and snap values
+    //
+    std::vector<Rosegarden::StandardQuantization> m_quantizations;
+    std::vector<Rosegarden::timeT>                m_snapValues;
+
 };
 
 #endif

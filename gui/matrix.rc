@@ -19,6 +19,12 @@
   <Action name="resize" />
 </ToolBar>
 
+<ToolBar name="actionsToolBar">
+</ToolBar>
+
+<ToolBar name="zoomToolBar">
+</ToolBar>
+
 <State name="have_selection">
   <enable>
     <Action name="edit_cut"/>

@@ -58,12 +58,16 @@ public:
     void useInstrument(Rosegarden::Instrument *instrument);
 
 public slots:
+    /*
     void slotQuantizeSelected(int);
     void slotSetSnap(int);
+    */
 
 signals:
+    /*
     void quantizeSelection(Rosegarden::Quantizer);
     void modifySnapTime(Rosegarden::timeT);
+    */
 
     void sendMappedEvent(Rosegarden::MappedEvent *mE);
     void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);

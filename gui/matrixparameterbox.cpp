@@ -75,6 +75,7 @@ MatrixParameterBox::initBox()
 
     QGridLayout *gridLayout = new QGridLayout(this, 20, 3, 8, 1);
 
+    /*
     QLabel *quantizeLabel  = new QLabel(i18n("Quantize positions"), this);
     quantizeLabel->setFont(font);
 
@@ -179,6 +180,7 @@ MatrixParameterBox::initBox()
 
     connect(m_snapGridCombo, SIGNAL(propagate(int)),
             this, SLOT(slotSetSnap(int)));
+    */
 
     m_instrumentParameterBox = new InstrumentParameterBox(this);
 
@@ -192,10 +194,13 @@ MatrixParameterBox::initBox()
 
     // Insert everything
     gridLayout->addMultiCellWidget(m_instrumentParameterBox, 0, 7, 0, 2);
+
+    /*
     gridLayout->addWidget(quantizeLabel, 10, 0, AlignLeft|AlignTop);
     gridLayout->addWidget(m_quantizeCombo, 10, 2, AlignTop);
     gridLayout->addWidget(snapGridLabel, 11, 0, AlignLeft|AlignTop);
     gridLayout->addWidget(m_snapGridCombo, 11, 2, AlignTop);
+    */
 }
 
 
@@ -213,6 +218,7 @@ MatrixParameterBox::setSelection(Rosegarden::EventSelection *selection)
 
 }
 
+/*
 void
 MatrixParameterBox::slotQuantizeSelected(int q)
 {
@@ -239,6 +245,7 @@ MatrixParameterBox::slotSetSnap(int s)
 {
     emit modifySnapTime(m_snapValues[s]);
 }
+*/
 
 
 void
