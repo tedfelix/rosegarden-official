@@ -1460,7 +1460,7 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
             //
             if ((*it)->getRuntimeSegmentId() == (*sIt)->getRuntimeSegmentId() &&
                 (*it)->getInstrument() ==  (*sIt)->getInstrument() &&
-                (*it)->getEndTime() == (*sIt)->getEventTime() + (*sIt)->getDuration() + m_playLatency)
+                (*it)->getEndTime() == (*sIt)->getEventTime() + (*sIt)->getDuration()+ m_playLatency)
             {
 #ifdef DEBUG_RATIONALISE_AUDIO
                 std::cout << "MATCHED SEGMENT AND DRIVER (no need to stop)" << std::endl;
@@ -1499,11 +1499,19 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
     for (std::vector<MappedEvent*>::const_iterator sIt = segmentAudio.begin();
          sIt != segmentAudio.end(); ++sIt)
     {
-        if (m_songPosition < (*sIt)->getEventTime() - m_playLatency) continue;
-	/*
-	  if (m_songPosition >= (*sIt)->getEventTime() + (*sIt)->getDuration() - m_playLatency)
+        if (m_songPosition <= (*sIt)->getEventTime()) {
+#ifdef DEBUG_RATIONALISE_AUDIO
+	    std::cout << "Ignoring audio at " << (*sIt)->getEventTime() << " that hasn't started yet" << std::endl;
+#endif
 	    continue;
-*/
+	}
+	if (m_songPosition >= (*sIt)->getEventTime() + (*sIt)->getDuration()) {
+#ifdef DEBUG_RATIONALISE_AUDIO
+	    std::cout << "Ignoring audio ending at " << (*sIt)->getEventTime() - (*sIt)->getDuration() << " that's already ended" << std::endl;
+#endif
+	    continue;
+	}
+
         bool driver = false;
 
         for (std::vector<PlayableAudioFile*>::const_iterator it = driverAudio.begin();
@@ -1541,11 +1549,6 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
             }
         }
 
-        /*
-        if (driverAudio.size() == 0)
-            std::cout << "NO DRIVER AUDIO" << std::endl;
-            */
-
         if (driver == false)
         {
             // There's an audio event that should be playing that isn't - start
@@ -1561,7 +1564,12 @@ void RosegardenSequencerApp::rationalisePlayingAudio(const std::vector<MappedEve
 	    Rosegarden::RealTime offset =
 		m_songPosition - audioSegment.getEventTime();
 
-	    // this time is adjusted for latency in processEventsOut:
+	    // Normally this start time is adjusted for latency in
+	    // AlsaDriver::processEventsOut.  But because we call it
+	    // via processMappedEvent below, and that's normally
+	    // intended for events that want to be sent immediately,
+	    // it makes the adjustment as if play latency was zero.
+	    // So we have to adjust here instead.
 	    audioSegment.setEventTime(m_songPosition + m_playLatency);
 	    audioSegment.setAudioStartMarker(audioSegment.getAudioStartMarker() + offset);
 	    audioSegment.setDuration(audioSegment.getDuration() - offset);

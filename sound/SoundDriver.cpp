@@ -465,6 +465,8 @@ SoundDriver::getAudioPlayQueueNotDefunct()
 void
 SoundDriver::queueAudio(PlayableAudioFile *audioFile)
 {
+    std::cout << "SoundDriver::queueAudio called" << std::endl;
+
     // Push to the back of the thread queue and then we must
     // process this across to the proper audio queue when
     // it's safe to do so - use the method below
@@ -663,14 +665,14 @@ SoundDriver::queueAudio(InstrumentId instrumentId,
         return false;
 
     std::cout << "queueAudio() - queuing Audio event at time "
-              << absoluteTime + playLatency << std::endl;
+              << absoluteTime - playLatency << std::endl;
 
     // register the AudioFile in the playback queue
     //
     PlayableAudioFile *newAF =
                          new PlayableAudioFile(instrumentId,
                                                audioFile,
-                                               absoluteTime + playLatency,
+                                               absoluteTime - playLatency,
                                                audioStartMarker - absoluteTime,
                                                duration,
                                                4096);
