@@ -450,6 +450,7 @@ GroupMenuBreakCommand::modifySegment()
 	(*i)->unset(NotationProperties::BEAMED);
 	(*i)->unset(BEAMED_GROUP_ID);
 	(*i)->unset(BEAMED_GROUP_TYPE);
+	(*i)->clearNonPersistentProperties();
     }
 }
 

@@ -825,6 +825,7 @@ SegmentSplitCommand::execute()
 	m_segment->setLabel(qstrtostr(i18n("%1 (split)").arg
 				      (strtoqstr(m_segmentLabel))));
         m_newSegment->setLabel(m_segment->getLabel());
+	m_newSegment->setColourIndex(m_segment->getColourIndex());
     }
 
     // Resize left hand Segment
@@ -938,6 +939,7 @@ AudioSegmentAutoSplitCommand::execute()
 	    newSegment->setLabel(qstrtostr(i18n("%1 (autosplit %2)").arg
 					   (strtoqstr(m_segment->getLabel())).arg
 					   (splitNumber)));
+	    newSegment->setColourIndex(m_segment->getColourIndex());
 	    
 	    newSegment->setStartTime(absStartTime);
 	    newSegment->setEndTime(absEndTime);
@@ -1070,6 +1072,7 @@ SegmentAutoSplitCommand::execute()
 	    newSegment->setTrack(m_segment->getTrack());
 	    newSegment->setLabel(qstrtostr(i18n("%1 (part)").arg
 					   (strtoqstr(m_segment->getLabel()))));
+	    newSegment->setColourIndex(m_segment->getColourIndex());
 	    
 	    timeT startTime = segmentStart;
 	    if (split > 0) {
@@ -1235,6 +1238,7 @@ SegmentRescaleCommand::execute()
 	m_newSegment->setTrack(m_segment->getTrack());
 	m_newSegment->setLabel(qstrtostr(i18n("%1 (rescaled)").arg
 					 (strtoqstr(m_segment->getLabel()))));
+	m_newSegment->setColourIndex(m_segment->getColourIndex());
 	
 	for (Segment::iterator i = m_segment->begin();
 	     m_segment->isBeforeEndMarker(i); ++i) {
@@ -1941,6 +1945,8 @@ SegmentSplitByPitchCommand::execute()
 				      (strtoqstr(label))));
     m_newSegmentB->setLabel(qstrtostr(i18n("%1 (lower)").arg
 				      (strtoqstr(label))));
+    m_newSegmentA->setColourIndex(m_segment->getColourIndex());
+    m_newSegmentB->setColourIndex(m_segment->getColourIndex());
 
     m_composition->detachSegment(m_segment);
     m_executed = true;

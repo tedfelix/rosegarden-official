@@ -1328,6 +1328,7 @@ SegmentNotationHelper::unbeamAux(iterator from, iterator to)
     for (iterator i = from; i != to; ++i) {
 	(*i)->unset(BEAMED_GROUP_ID);
 	(*i)->unset(BEAMED_GROUP_TYPE);
+	(*i)->clearNonPersistentProperties();
     }
 }
 
