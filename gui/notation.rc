@@ -376,7 +376,7 @@ etc
   </enable>
 </State>
 
-<State name="have_multiple_staffs>
+<State name="have_multiple_staffs">
   <enable>
     <Action name="cursor_up_staff"/>
     <Action name="cursor_down_staff"/>

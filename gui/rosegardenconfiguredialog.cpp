@@ -174,8 +174,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     QFrame *subFrame = new QFrame(frame);
     QGridLayout *subLayout = new QGridLayout(subFrame,
-					     4, 2, // nbrow, nbcol
-					     );
+					     4, 2); // nbrow, nbcol
 
     subLayout->addWidget(new QLabel(i18n("Origin:"), subFrame), 0, 0);
     subLayout->addWidget(new QLabel(i18n("Copyright:"), subFrame), 1, 0);
