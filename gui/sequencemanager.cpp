@@ -342,6 +342,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	//
         for (Segment::iterator j = i0; ; ++j)
         {
+
 	    if (!(*it)->isBeforeEndMarker(j))
 	    {
 		// Wrap around if we're repeating, abandon otherwise
@@ -380,9 +381,10 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
             if (playTime >= sliceEndElapsed)
                 break;
 
-            // Skip this event if it's a rest
+            // Skip this event if it's a rest or a clef
             //
-            if ((*j)->isa(Rosegarden::Note::EventRestType))
+            if ((*j)->isa(Rosegarden::Note::EventRestType) ||
+                (*j)->isa(Rosegarden::Clef::EventType))
                 continue;
 
 
