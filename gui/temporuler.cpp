@@ -141,9 +141,38 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	}
     }
 
-    // last position - where to draw from
-    double nextX = 0.0;
-    QColor nextColour;
+    for (TimePoints::iterator i = timePoints.begin(); ; ++i) {
+
+	timeT t0, t1;
+
+	if (i == timePoints.begin()) {
+	    t0 = from;
+	} else {
+	    TimePoints::iterator j(i);
+	    --j;
+	    t0 = j->first;
+	}
+
+	if (i == timePoints.end()) {
+	    t1 = to;
+	} else {
+	    t1 = i->first;
+	}
+
+	QColor colour = TempoColour::getColour(m_composition->getTempoAt(t0));
+        paint.setPen(colour);
+        paint.setBrush(colour);
+
+	double x0, x1;
+	x0 = m_rulerScale->getXForTime(t0) + m_currentXOffset + m_xorigin;
+	x1 = m_rulerScale->getXForTime(t1) + m_currentXOffset + m_xorigin;
+        paint.drawRect(x0, 0, x1 - x0, height());
+
+	if (i == timePoints.end()) break;
+    }
+
+    paint.setPen(Qt::black);
+    paint.setBrush(Qt::black);
 
     for (TimePoints::iterator i = timePoints.begin();
 	 i != timePoints.end(); ++i) {
@@ -151,19 +180,6 @@ TempoRuler::paintEvent(QPaintEvent* e)
 	timeT time = i->first;
 	double x = m_rulerScale->getXForTime(time) + m_currentXOffset
                    + m_xorigin;
-
-        TimePoints::iterator l = i;
-        if (++l == timePoints.end()) nextX = width();
-        else
-            nextX = m_rulerScale->getXForTime(l->first) + m_currentXOffset
-                                   + m_xorigin;
-
-        nextColour = TempoColour::getColour(m_composition->getTempoAt(time));
-        paint.setPen(nextColour);
-        paint.setBrush(nextColour);
-	//paint.drawLine(x, height() - 4, x, height());
-        paint.drawRect(x, 0, nextX - x, height());
-
 	
 	if (i->second & timeSigChangeHere) {
 
@@ -205,22 +221,11 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
 	    QRect bounds = m_fontMetrics.boundingRect(tempoString);
 
-            paint.save();
-
-            // Set a brighter pen of same shade
-            //
-            int h, s, v;
-            TempoColour::getColour(m_composition->getTempoAt(time)).
-                hsv(&h, &s, &v);
-            paint.setPen(QColor(h, s, 90, QColor::Hsv));
-
 	    paint.setFont(m_font);
 	    if (x > bounds.width() / 2) x -= bounds.width() / 2;
 	    if (prevEndX >= x - 3) x = prevEndX + 3;
 	    paint.drawText(x, textY, tempoString);
 	    prevEndX = x + bounds.width();
-
-            paint.restore();
 	}
     }
 }

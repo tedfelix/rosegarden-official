@@ -647,11 +647,11 @@ void NotationView::setupActions()
     pageModeAction->setExclusiveGroup("layoutMode");
 
     (new KToggleAction
-     (i18n("Label &Chords"), 0, this, SLOT(slotLabelChords()),
+     (i18n("Show &Chord Name Ruler"), 0, this, SLOT(slotLabelChords()),
       actionCollection(), "label_chords"))->setChecked(true);
 
     new KToggleAction
-	(i18n("Display &Tempo Changes"), 0, this, SLOT(slotShowTempos()),
+	(i18n("Show &Tempo Ruler"), 0, this, SLOT(slotShowTempos()),
 	 actionCollection(), "display_tempo_changes");
 
     // setup Group menu

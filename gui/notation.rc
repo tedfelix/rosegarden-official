@@ -22,9 +22,6 @@
     <text>&amp;Font</text>
 etc
 -->
-  <Separator/>
-  <Action name="label_chords"/>
-  <Action name="display_tempo_changes"/>
 </Menu>
 
 <Menu name="edit">
@@ -236,6 +233,8 @@ etc
   <Action name="show_accidentals_toolbar"  append="show_merge" />
   <Action name="show_clefs_toolbar"        append="show_merge" />
   <Action name="show_font_toolbar"         append="show_merge" />
+  <Action name="label_chords"         append="show_merge" />
+  <Action name="display_tempo_changes"         append="show_merge" />
 </Menu> 
 
 </MenuBar>

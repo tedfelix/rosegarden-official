@@ -50,7 +50,9 @@ namespace RosegardenGUIColours
     const QColor LoopHighlight = Qt::white;
   
     //const QColor TextRulerBackground = QColor(60, 205, 230, QColor::Hsv);
-    const QColor TextRulerBackground = QColor(120, 90, 238, QColor::Hsv);
+//    const QColor TextRulerBackground = QColor(120, 90, 238, QColor::Hsv);
+//    const QColor TextRulerBackground = QColor(210, 220, 140);
+    const QColor TextRulerBackground = QColor(226, 232, 187);
     const QColor TextRulerForeground = Qt::white;
 
     const QColor ChordNameRulerBackground = QColor(230, 230, 230);
