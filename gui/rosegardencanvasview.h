@@ -47,6 +47,27 @@ public slots:
     /// Update the RosegardenCanvasView after a change of content
     virtual void slotUpdate();
 
+    /**
+     * Scroll horizontally to make the given position visible,
+     * paging to as to get some visibility of the next screenful
+     * (for playback etc)
+     */
+    void slotScrollHoriz(int hpos);
+
+    /**
+     * Scroll horizontally to make the given position somewhat
+     * nearer to visible, scrolling by only "a small distance"
+     * at a time
+     */
+    void slotScrollHorizSmallSteps(int hpos);
+
+    /**
+     * Scroll vertically to make the given position somewhat
+     * nearer to visible, scrolling by only "a small distance"
+     * at a time
+     */
+    void slotScrollVertSmallSteps(int vpos);
+
 protected:
     
     //--------------- Data members ---------------------------------

@@ -290,12 +290,6 @@ TrackEditor::init(QWidget* rosegardenguiview)
             rosegardenguiview,
             SLOT(slotSelectedSegments(const Rosegarden::SegmentSelection &)));
 
-    connect(m_segmentCanvas, SIGNAL(hScrollTo(int)),
-	    this, SLOT(slotScrollHorizSmallSteps(int)));
-
-    connect(m_segmentCanvas, SIGNAL(vScrollTo(int)),
-	    this, SLOT(slotScrollVertSmallSteps(int)));
-
     connect(getCommandHistory(), SIGNAL(commandExecuted()),
 	    this, SLOT(update()));
 
@@ -506,7 +500,7 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
     if (distance >= 1.0) {
 
 	m_pointer->setX(canvasPosition - 1);
-        slotScrollHoriz((int)canvasPosition);
+        getSegmentCanvas()->slotScrollHoriz((int)canvasPosition);
 	emit needUpdate();
     }
 }
@@ -534,97 +528,6 @@ void
 TrackEditor::slotSetFineGrain(bool value)
 {
      m_segmentCanvas->slotSetFineGrain(value);
-}
-
-
-// This scrolling model pages the SegmentCanvas across the screen
-//
-//
-void TrackEditor::slotScrollHoriz(int hpos)
-{
-    QScrollView* scrollView = getSegmentCanvas();
-    QScrollBar* hbar = getHorizontalScrollBar();
-
-    if (hpos == 0) {
-	
-	// returning to zero
-        hbar->setValue(0);
-
-    } else if (hpos > (scrollView->contentsX() +
-		       scrollView->visibleWidth() * 1.6) ||
-	       hpos < (scrollView->contentsX() -
-		       scrollView->visibleWidth() * 0.7)) {
-	
-	// miles off one side or the other
-	hbar->setValue(hpos - int(scrollView->visibleWidth() * 0.4));
-
-    } else if (hpos > (scrollView->contentsX() + 
-		       scrollView->visibleWidth() * 0.9)) {
-
-	// moving off the right hand side of the view   
-	hbar->setValue(hbar->value() + int(scrollView->visibleWidth() * 0.6));
-
-    } else if (hpos < (scrollView->contentsX() +
-		       scrollView->visibleWidth() * 0.1)) {
-
-	// moving off the left
-	hbar->setValue(hbar->value() - int(scrollView->visibleWidth() * 0.6));
-    }
-}
-
-
-void TrackEditor::slotScrollHorizSmallSteps(int hpos)
-{
-    QScrollView* scrollView = getSegmentCanvas();
-    QScrollBar* hbar = getHorizontalScrollBar();
-
-    int diff = 0;
-
-    if (hpos == 0) {
-	
-	// returning to zero
-        hbar->setValue(0);
-
-    } else if ((diff = int(hpos - (scrollView->contentsX() + 
-				   scrollView->visibleWidth() * 0.9))) > 0) {
-
-	// moving off the right hand side of the view   
-	hbar->setValue(hbar->value() + diff);
-
-    } else if ((diff = int(hpos - (scrollView->contentsX() +
-				   scrollView->visibleWidth() * 0.1))) < 0) {
-
-	// moving off the left
-	hbar->setValue(hbar->value() + diff);
-
-    }
-}
-
-void TrackEditor::slotScrollVertSmallSteps(int vpos)
-{
-    QScrollView* scrollView = getSegmentCanvas();
-    QScrollBar* vbar = scrollView->verticalScrollBar();
-
-    int diff = 0;
-
-    if (vpos == 0) {
-	
-	// returning to zero
-        vbar->setValue(0);
-
-    } else if ((diff = int(vpos - (scrollView->contentsY() + 
-				   scrollView->visibleHeight() * 0.9))) > 0) {
-
-	// moving off up
-	vbar->setValue(vbar->value() + diff);
-
-    } else if ((diff = int(vpos - (scrollView->contentsY() +
-				   scrollView->visibleHeight() * 0.1))) < 0) {
-
-	// moving off down
-	vbar->setValue(vbar->value() + diff);
-
-    }
 }
 
 // Show a Segment as its being recorded

@@ -72,6 +72,96 @@ void RosegardenCanvasView::slotUpdate()
     
 }
 
+// This scrolling model pages the CanvasView across the screen
+//
+//
+void RosegardenCanvasView::slotScrollHoriz(int hpos)
+{
+    QScrollBar* hbar = m_horizontalScrollBar;
+
+    if (hpos == 0) {
+	
+	// returning to zero
+        hbar->setValue(0);
+
+    } else if (hpos > (contentsX() +
+		       visibleWidth() * 1.6) ||
+	       hpos < (contentsX() -
+		       visibleWidth() * 0.7)) {
+	
+	// miles off one side or the other
+	hbar->setValue(hpos - int(visibleWidth() * 0.4));
+
+    } else if (hpos > (contentsX() + 
+		       visibleWidth() * 0.9)) {
+
+	// moving off the right hand side of the view   
+	hbar->setValue(hbar->value() + int(visibleWidth() * 0.6));
+
+    } else if (hpos < (contentsX() +
+		       visibleWidth() * 0.1)) {
+
+	// moving off the left
+	hbar->setValue(hbar->value() - int(visibleWidth() * 0.6));
+    }
+}
+
+
+void RosegardenCanvasView::slotScrollHorizSmallSteps(int hpos)
+{
+    QScrollBar* hbar = m_horizontalScrollBar;
+
+    int diff = 0;
+
+    if (hpos == 0) {
+	
+	// returning to zero
+        hbar->setValue(0);
+
+    } else if ((diff = int(hpos - (contentsX() + 
+				   visibleWidth() * 0.9))) > 0) {
+
+	// moving off the right hand side of the view   
+	hbar->setValue(hbar->value() + diff);
+
+    } else if ((diff = int(hpos - (contentsX() +
+				   visibleWidth() * 0.1))) < 0) {
+
+	// moving off the left
+	hbar->setValue(hbar->value() + diff);
+
+    }
+}
+
+void RosegardenCanvasView::slotScrollVertSmallSteps(int vpos)
+{
+    QScrollBar* vbar = verticalScrollBar();
+
+    int diff = 0;
+
+    if (vpos == 0) {
+	
+	// returning to zero
+        vbar->setValue(0);
+
+    } else if ((diff = int(vpos - (contentsY() + 
+				   visibleHeight() * 0.9))) > 0) {
+
+	// moving off up
+	vbar->setValue(vbar->value() + diff);
+
+    } else if ((diff = int(vpos - (contentsY() +
+				   visibleHeight() * 0.1))) < 0) {
+
+	// moving off down
+	vbar->setValue(vbar->value() + diff);
+
+    }
+}
+
+
+//----------------------------------------------------------------------
+
 void CanvasItemGC::mark(QCanvasItem* item)
 {
     if (!item) return;
