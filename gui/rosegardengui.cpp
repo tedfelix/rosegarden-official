@@ -645,6 +645,10 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotSaveDefaultStudio()),
                 actionCollection(), "save_default_studio");
 
+    new KAction(i18n("&Import Default Studio"), 0, this,
+	        SLOT(slotImportDefaultStudio()),
+		actionCollection(), "load_default_studio");
+
     new KAction(i18n("&Import Studio from File..."), 0, this,
 	        SLOT(slotImportStudio()),
 		actionCollection(), "load_studio");
@@ -4653,13 +4657,32 @@ RosegardenGUIApp::slotSaveDefaultStudio()
 }
 
 void
+RosegardenGUIApp::slotImportDefaultStudio()
+{
+    int reply = KMessageBox::warningYesNo
+        (this, i18n("Are you sure you want to import your default studio and lose the current one?"));
+    
+    if (reply != KMessageBox::Yes) return;
+
+    QString autoloadFile =
+        KGlobal::dirs()->findResource("appdata", "autoload.rg"); 
+
+    QFileInfo autoloadFileInfo(autoloadFile);
+
+    if (!autoloadFileInfo.isReadable())
+    {
+        RG_DEBUG << "RosegardenGUIDoc::slotImportDefaultStudio - "
+                 << "can't find autoload file - defaulting" << endl;
+        return;
+    }
+
+    slotImportStudioFromFile(autoloadFile);
+}
+
+void
 RosegardenGUIApp::slotImportStudio()
 {
-    // dmm - derived from code ripped off from the bank editor on 7-1-2003
-    
     RG_DEBUG << "RosegardenGUIApp::slotImportStudio()\n";
-
-//    Rosegarden::Studio m_studio = m_doc->getStudio();
 
     QString studioDir = KGlobal::dirs()->findResource("appdata", "library/");
     QDir dir(studioDir);
@@ -4688,6 +4711,12 @@ RosegardenGUIApp::slotImportStudio()
         return;
     }
 
+    slotImportStudioFromFile(target);
+}
+
+void
+RosegardenGUIApp::slotImportStudioFromFile(const QString &file)
+{
     RosegardenGUIDoc *doc = new RosegardenGUIDoc(this, 0, true); // skipAutoload
 
     Rosegarden::Studio &oldStudio = m_doc->getStudio();
@@ -4700,9 +4729,9 @@ RosegardenGUIApp::slotImportStudio()
 //        newStudio.addDevice("", i, Rosegarden::Device::Midi);
 //    }
 
-    if (doc->openDocument(target, true)) { // true because we actually
-					   // do want to create devices
-	                                   // on the sequencer here
+    if (doc->openDocument(file, true)) { // true because we actually
+					 // do want to create devices
+	                                 // on the sequencer here
 
 	KMacroCommand *command = new KMacroCommand(i18n("Import Studio"));
 	doc->syncDevices();

@@ -712,6 +712,16 @@ public slots:
     void slotImportStudio();
 
     /**
+     * Import Studio from Autoload
+     */
+    void slotImportDefaultStudio();
+
+    /**
+     * Import Studio from File
+     */
+    void slotImportStudioFromFile(const QString &file);
+
+    /**
      * toggles the toolbar
      */
     void slotToggleToolBar();
