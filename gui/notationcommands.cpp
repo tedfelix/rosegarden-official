@@ -722,10 +722,10 @@ TransformsMenuTieNotesCommand::modifySegment()
 	     m_selection->getSegmentEvents().begin();
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 
-	bool tiedForward;
-	if ((*i)->get<Bool>(TIED_FORWARD, tiedForward) && tiedForward) {
-	    continue;
-	}
+//	bool tiedForward;
+//	if ((*i)->get<Bool>(TIED_FORWARD, tiedForward) && tiedForward) {
+//	    continue;
+//	}
 	
 	Segment::iterator si = segment.findSingle(*i);
 	Segment::iterator sj;

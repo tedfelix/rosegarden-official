@@ -875,9 +875,9 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
 	    y -= getLineSpacing()/2 + 1;
 	}
 
-      RG_DEBUG << "LinedStaff: drawing line from ("
-                           << x << "," << y << ") to (" << (x+length-1)
-                           << "," << y << ")" << endl;
+//      RG_DEBUG << "LinedStaff: drawing line from ("
+//                           << x << "," << y << ") to (" << (x+length-1)
+//                           << "," << y << ")" << endl;
 
 	QCanvasItem *line;
 	delete m_staffLines[row][lineIndex];

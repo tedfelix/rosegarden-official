@@ -354,6 +354,9 @@ SegmentNotationHelper::noteIsInChord(Event *note)
 }
 
 
+//!!! This doesn't appear to be used any more and may well not work.
+// Ties are calculated in several different places, and it's odd that
+// we don't have a decent API for them 
 Segment::iterator
 SegmentNotationHelper::getNoteTiedWith(Event *note, bool forwards)
 {
@@ -1084,6 +1087,21 @@ SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
     iterator i = segment().findSingle(e);
 
     if (i == end()) return;
+
+    if ((*i)->has(TIED_BACKWARD) && (*i)->get<Bool>(TIED_BACKWARD)) {
+	iterator j = getPreviousAdjacentNote(i, segment().getStartTime(),
+					     true, false);
+	if (j != end()) {
+	    (*j)->unset(TIED_FORWARD); // don't even check if it has it set
+	}
+    }	
+
+    if ((*i)->has(TIED_FORWARD) && (*i)->get<Bool>(TIED_FORWARD)) {
+	iterator j = getNextAdjacentNote(i, true, false);
+	if (j != end()) {
+	    (*j)->unset(TIED_BACKWARD); // don't even check if it has it set
+	}
+    }	
 
     // If any notes start at the same time as this one but end first,
     // or start after this one starts but before it ends, then we go

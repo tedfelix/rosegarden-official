@@ -787,9 +787,10 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 		maxTime = rosegardenTime + rosegardenDuration;
 	    }
 
-	    timeT fillFromTime = rosegardenTime;
+//	    timeT fillFromTime = rosegardenTime;
 	    if (rosegardenSegment->empty()) {
-		fillFromTime = composition.getBarStartForTime(rosegardenTime);
+//		fillFromTime = composition.getBarStartForTime(rosegardenTime);
+		endOfLastNote = composition.getBarStartForTime(rosegardenTime);
 	    }
 
             if ((*midiEvent)->isMeta())
@@ -1102,8 +1103,11 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
             }
 
 	    if (rosegardenEvent) {
-		if (fillFromTime < rosegardenTime) {
-		    rosegardenSegment->fillWithRests(fillFromTime, rosegardenTime);
+//		if (fillFromTime < rosegardenTime) {
+//		    rosegardenSegment->fillWithRests(fillFromTime, rosegardenTime);
+//		}
+		if (endOfLastNote < rosegardenTime) {
+		    rosegardenSegment->fillWithRests(endOfLastNote, rosegardenTime);
 		}
 		rosegardenSegment->insert(rosegardenEvent);
 	    }
@@ -1132,11 +1136,24 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 		continue;
 	    } else if (!haveKeySig && conductorSegment) {
 		// copy across any key sigs from the conductor segment
+
+		timeT segmentStartTime = rosegardenSegment->getStartTime();
+		timeT earliestEventEndTime = segmentStartTime;
+
 		for (Segment::iterator i = conductorSegment->begin();
 		     i != conductorSegment->end(); ++i) {
+		    if ((*i)->getAbsoluteTime() + (*i)->getDuration() <
+			earliestEventEndTime) {
+			earliestEventEndTime =
+			    (*i)->getAbsoluteTime() + (*i)->getDuration();
+		    }
 		    rosegardenSegment->insert(new Event(**i));
 		}
-		    
+
+		if (earliestEventEndTime < segmentStartTime) {
+		    rosegardenSegment->fillWithRests(earliestEventEndTime,
+						     segmentStartTime);
+		}
 	    }
 
 	    // add the Segment to the Composition and increment the
@@ -1454,38 +1471,39 @@ MidiFile::convertToMidi(Composition &comp)
 			else
 			    midiVelocity = 127;
 
-			int pitch = (*el)->get<Int>(BaseProperties::PITCH);
-			pitch += (*segment)->getTranspose();
-                              
-			// insert the NOTE_ON at the appropriate channel
-			//
-			midiEvent = 
-			    new MidiEvent(midiEventAbsoluteTime,
-					  MIDI_NOTE_ON | midiChannel,
-					  pitch,
-					  midiVelocity);
-
-			m_midiComposition[trackNumber].push_back(midiEvent);
-
 			// Get the sounding time for the matching NOTE_OFF.
 			// We use SegmentPerformanceHelper::getSoundingDuration()
 			// to work out the tied duration of the NOTE.
-			//
-			// [cc] avoiding floating-point
-			timeT midiEventEndTime = midiEventAbsoluteTime +
-			    helper.getSoundingDuration(el) * m_timingDivision /
-			    crotchetDuration;
+			timeT soundingDuration = helper.getSoundingDuration(el);
+			if (soundingDuration > 0) {
 
-			// insert the matching NOTE OFF
-			//
-			midiEvent =
-			    new MidiEvent(midiEventEndTime,
-					  MIDI_NOTE_OFF | midiChannel,
-					  pitch,
-					  127); // full volume silence
+			    timeT midiEventEndTime = midiEventAbsoluteTime +
+				soundingDuration * m_timingDivision /
+				crotchetDuration;
 
-			m_midiComposition[trackNumber].push_back(midiEvent);
-
+			    int pitch = (*el)->get<Int>(BaseProperties::PITCH);
+			    pitch += (*segment)->getTranspose();
+                              
+			    // insert the NOTE_ON at the appropriate channel
+			    //
+			    midiEvent = 
+				new MidiEvent(midiEventAbsoluteTime,
+					      MIDI_NOTE_ON | midiChannel,
+					      pitch,
+					      midiVelocity);
+			    
+			    m_midiComposition[trackNumber].push_back(midiEvent);
+			    
+			    // insert the matching NOTE OFF
+			    //
+			    midiEvent =
+				new MidiEvent(midiEventEndTime,
+					      MIDI_NOTE_OFF | midiChannel,
+					      pitch,
+					      127); // full volume silence
+			    
+			    m_midiComposition[trackNumber].push_back(midiEvent);
+			}
 		    }
 		    else if ((*el)->isa(PitchBend::EventType))
 		    {

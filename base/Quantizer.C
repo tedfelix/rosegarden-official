@@ -1154,15 +1154,6 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 		  << bases.first << " and " << bases.second << endl;
 #endif
 
-	//!!! Note longer than the longest note we have.  Deal with
-	//this -- how?  Quantize the end time?  Split the note?
-	//(Prefer to do that in a separate phase later if requested.)
-	//Leave it as it is?  (Yes, for now.)
-	if (bases.first == 0) return;
-
-	timeT absTimeBase = bases.first;
-	(**ci)->get<Int>(m_provisionalBase, absTimeBase);
-
 	timeT qd = getProvisional(**ci, DurationValue);
 
 	timeT spaceAvailable = nextNoteTime - qt;
@@ -1172,7 +1163,22 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
 	    qd = Note::getNearestNote(spaceAvailable).getDuration();
 	    // leave slur true
 
+#ifdef DEBUG_NOTATION_QUANTIZER
+	    cout << "non-contrapuntal segment, rounded duration down to "
+		 << qd << " (as only " << spaceAvailable << " available)"
+		 << endl;
+#endif
+
 	} else {
+
+	    //!!! Note longer than the longest note we have.  Deal with
+	    //this -- how?  Quantize the end time?  Split the note?
+	    //(Prefer to do that in a separate phase later if requested.)
+	    //Leave it as it is?  (Yes, for now.)
+	    if (bases.first == 0) return;
+	    
+	    timeT absTimeBase = bases.first;
+	    (**ci)->get<Int>(m_provisionalBase, absTimeBase);
 
 	    spaceAvailable = std::min(spaceAvailable, 
 				      comp->getBarEndForTime(qt) - qt);

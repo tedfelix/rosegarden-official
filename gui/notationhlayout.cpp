@@ -1326,8 +1326,6 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		m_groupsExtant[groupId]->sample(it);
 	    }
 
-	    x += delta;
-	    
 	    if (m_timePerProgressIncrement > 0 && (++count == 100)) {
 		count = 0;
 		timeT sinceIncrement = el->getViewAbsoluteTime() - lastIncrement;
