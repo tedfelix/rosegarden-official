@@ -217,9 +217,15 @@ void RosegardenGUIApp::setupActions()
     // setup Settings menu
     //
     m_viewToolBar = KStdAction::showToolbar  (this, SLOT(slotToggleToolBar()),   actionCollection());
+
     m_viewTracksToolBar = new KToggleAction(i18n("Show T&racks Toolbar"), 0, this,
                                             SLOT(slotToggleTracksToolBar()), actionCollection(),
                                             "show_tracks_toolbar");
+
+    m_viewTransportToolBar = new KToggleAction(i18n("Show Trans&port Toolbar"), 0, this,
+                                            SLOT(slotToggleTransportToolBar()), actionCollection(),
+                                            "show_transport_toolbar");
+
     m_viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
 
     m_viewTransport = new KToggleAction(i18n("Show Tra&nsport"), 0, this,
@@ -377,6 +383,10 @@ void RosegardenGUIApp::setupActions()
 		SLOT(slotAutoSplitSelection()), actionCollection(),
 		"auto_split");
 
+    new KAction(i18n("Open in &Default Editor"), Key_Return, this,
+		SLOT(slotEdit()), actionCollection(),
+		"edit_default");
+
     new KAction(i18n("Open in Matri&x Editor"), 0, this,
 		SLOT(slotEditInMatrix()), actionCollection(),
 		"edit_matrix");
@@ -384,6 +394,10 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("Open in &Notation Editor"), 0, this,
 		SLOT(slotEditAsNotation()), actionCollection(),
 		"edit_notation");
+
+    new KAction(i18n("Open in &Event List Editor"), 0, this,
+		SLOT(slotEditInEventList()), actionCollection(),
+		"edit_event_list");
 
     new KAction(i18n(AddTempoChangeCommand::getGlobalName()),
                 0,
@@ -403,45 +417,49 @@ void RosegardenGUIApp::setupActions()
     //
     // We set some default key bindings - with numlock off
     // use 1 (End) and 3 (Page Down) for Rwd and Ffwd and
-    // 0 (insert) and Enter for Play and Stop 
+    // 0 (insert) and keypad Enter for Play and Stop 
     //
-    m_playTransport = new KAction(i18n("&Play"), 0, Key_Enter, this,
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-play.xpm"));
+    m_playTransport = new KAction(i18n("&Play"), icon, Key_Enter, this,
                                   SLOT(slotPlay()), actionCollection(),
                                   "play");
     m_playTransport->setGroup("transportcontrols");
 
-    m_stopTransport = new KAction(i18n("&Stop"), 0, Key_Insert, this,
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-stop.xpm"));
+    m_stopTransport = new KAction(i18n("&Stop"), icon, Key_Insert, this,
                                   SLOT(slotStop()), actionCollection(),
                                   "stop");
     m_stopTransport->setGroup("transportcontrols");
 
-    m_ffwdTransport = new KAction(i18n("&Fast Forward"), 0, Key_PageDown,
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-ffwd.xpm"));
+    m_ffwdTransport = new KAction(i18n("&Fast Forward"), icon, Key_PageDown,
                                   this,
                                   SLOT(slotFastforward()), actionCollection(),
                                   "fast_forward");
     m_ffwdTransport->setGroup("transportcontrols");
 
-    m_rewindTransport = new KAction(i18n("Re&wind"), 0, Key_End, this,
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-rewind.xpm"));
+    m_rewindTransport = new KAction(i18n("Re&wind"), icon, Key_End, this,
                                     SLOT(slotRewind()), actionCollection(),
                                     "rewind");
     m_rewindTransport->setGroup("transportcontrols");
 
-    m_recordTransport = new KAction(i18n("&Record"), 0, Key_Space, this,
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-record.xpm"));
+    m_recordTransport = new KAction(i18n("&Record"), icon, Key_Space, this,
                                     SLOT(slotToggleRecord()), actionCollection(),
                                     "record");
-
     m_recordTransport->setGroup("transportcontrols");
 
-    m_rewindEndTransport = new KAction(i18n("Rewind to &Beginning"), 0, 0, this,
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-rewind-end.xpm"));
+    m_rewindEndTransport = new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
                                        SLOT(slotRewindToBeginning()), actionCollection(),
                                        "rewindtobeginning");
-
     m_rewindEndTransport->setGroup("transportcontrols");
 
-    m_ffwdEndTransport = new KAction(i18n("Fast Forward to &End"), 0, 0, this,
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/transport-ffwd-end.xpm"));
+    m_ffwdEndTransport = new KAction(i18n("Fast Forward to &End"), icon, 0, this,
                                      SLOT(slotFastForwardToEnd()), actionCollection(),
                                      "fastforwardtoend");
-
     m_ffwdEndTransport->setGroup("transportcontrols");
 
     // create the Transport GUI and add the callbacks to the
@@ -761,6 +779,7 @@ void RosegardenGUIApp::slotSaveOptions()
     m_config->writeEntry("Show Toolbar",                 m_viewToolBar->isChecked());
     m_config->writeEntry("Show Tracks Toolbar",          m_viewTracksToolBar->isChecked());
     m_config->writeEntry("Show Transport",               m_viewTransport->isChecked());
+    m_config->writeEntry("Show Transport Toolbar",       m_viewTransportToolBar->isChecked());
     m_config->writeEntry("Expanded Transport",           m_transport->isExpanded());
     m_config->writeEntry("Show Track labels",            m_viewTrackLabels->isChecked());
     m_config->writeEntry("Show Statusbar",               m_viewStatusBar->isChecked());
@@ -773,6 +792,7 @@ void RosegardenGUIApp::slotSaveOptions()
 
     m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
     m_config->writeEntry("TracksToolBarPos", (int) toolBar("tracksToolBar")->barPos());
+    m_config->writeEntry("TransportToolBarPos", (int) toolBar("transportToolBar")->barPos());
     m_config->writeEntry("ZoomToolBarPos", (int) toolBar("zoomToolBar")->barPos());
 
     m_fileRecent->saveEntries(m_config);
@@ -802,6 +822,10 @@ void RosegardenGUIApp::readOptions()
     opt = m_config->readBoolEntry("Show Tracks Toolbar", true);
     m_viewTracksToolBar->setChecked(opt);
     slotToggleTracksToolBar();
+
+    opt = m_config->readBoolEntry("Show Transport Toolbar", false);
+    m_viewTransportToolBar->setChecked(opt);
+    slotToggleTransportToolBar();
 
     opt = m_config->readBoolEntry("Show Transport", true);
     m_viewTransport->setChecked(opt);
@@ -844,6 +868,9 @@ void RosegardenGUIApp::readOptions()
 
     toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("TracksToolBarPos", KToolBar::Top);
     toolBar("tracksToolBar")->setBarPos(toolBarPos);
+
+    toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("TransportToolBarPos", KToolBar::Top);
+    toolBar("transportToolBar")->setBarPos(toolBarPos);
 	
     toolBarPos=(KToolBar::BarPosition) m_config->readNumEntry("ZoomToolBarPos", KToolBar::Top);
     toolBar("zoomToolBar")->setBarPos(toolBarPos);
@@ -1399,6 +1426,11 @@ void RosegardenGUIApp::slotTempoToSegmentLength()
 
 
 
+void RosegardenGUIApp::slotEdit()
+{
+    m_view->slotEditSegment(0);
+}
+
 void RosegardenGUIApp::slotEditAsNotation()
 {
     m_view->slotEditSegmentNotation(0);
@@ -1406,11 +1438,12 @@ void RosegardenGUIApp::slotEditAsNotation()
 
 void RosegardenGUIApp::slotEditInMatrix()
 {
-    Rosegarden::SegmentSelection selection = m_view->getSelection();
-    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
-	 i != selection.end(); ++i) {
-	m_view->slotEditSegmentMatrix(*i);
-    }
+    m_view->slotEditSegmentMatrix(0);
+}
+
+void RosegardenGUIApp::slotEditInEventList()
+{
+    m_view->slotEditSegmentEventList(0);
 }
 
 void RosegardenGUIApp::slotToggleToolBar()
@@ -1431,6 +1464,16 @@ void RosegardenGUIApp::slotToggleTracksToolBar()
         toolBar("tracksToolBar")->show();
     else
         toolBar("tracksToolBar")->hide();
+}
+
+void RosegardenGUIApp::slotToggleTransportToolBar()
+{
+    KTmpStatusMsg msg(i18n("Toggle the transport toolbar..."), this);
+
+    if (m_viewTransportToolBar->isChecked())
+        toolBar("transportToolBar")->show();
+    else
+        toolBar("transportToolBar")->hide();
 }
 
 void RosegardenGUIApp::slotToggleTransport()

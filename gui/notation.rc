@@ -6,8 +6,10 @@
 
 <Menu name="View">
   <text>&amp;View</text>
+<!--
 <Action name="debug_dump"/>
 <Separator/>
+-->
   <Action name="note_font_actionmenu"/>
   <Action name="note_font_size_actionmenu"/>
   <Action name="stretch_actionmenu"/>
@@ -15,13 +17,8 @@
 <Separator/>
   <Action name="linear_mode"/>
   <Action name="page_mode"/>
-
-<!-- Stuff from font/layout toolbar, e.g...
-  <Separator/>
-  <Menu name="Font">
-    <text>&amp;Font</text>
-etc
--->
+<Separator/>
+  <Action name="lyric_editor"/>
 </Menu>
 
 <Menu name="edit">
@@ -32,6 +29,7 @@ etc
   <Action name="select_from_start"/>
   <Action name="select_to_end"/>
   <Action name="select_whole_staff"/>
+  <Action name="clear_selection"/>
   <Separator/>
   <Action name="add_tempo"/>
   <Action name="add_time_signature"/>
@@ -111,6 +109,7 @@ etc
   <Action name="make_notes_viable"/>
   <Separator/>
   <Action name="quantize"/>
+  <Action name="fix_smoothing"/>
   <Separator/>
   <Menu name="Transpose">
   <text>Trans&amp;pose</text>
@@ -122,9 +121,11 @@ etc
   <Separator/>
   <Action name="general_transpose"/>
   </Menu>
+<!--
   <Separator/>
   <Action name="invert"/>
   <Action name="retrograde"/>
+-->
 </Menu>
 
 <Menu name="Move">
@@ -135,21 +136,32 @@ etc
   <Action name="cursor_forward_bar"/>
   <Action name="cursor_start"/>
   <Action name="cursor_end"/>
+  <Separator/>
+  <Action name="extend_selection_backward"/>
+  <Action name="extend_selection_forward"/>
 <Separator/>
   <Action name="cursor_to_playback_pointer"/>
   <Action name="playback_pointer_to_cursor"/>
 <Separator/>
   <Action name="cursor_up_staff"/>
   <Action name="cursor_down_staff"/>
+<!--
 <Separator/>
   <Menu name="Transport">
   <text>&amp;Transport</text>
+  </Menu>
+-->
+</Menu>
+
+  <Menu name="Transport">
+        <text>T&amp;ransport</text>
+        <Action name="play"/> 
+        <Action name="stop"/> 
   <Action name="playback_pointer_back_bar"/>
   <Action name="playback_pointer_forward_bar"/>
   <Action name="playback_pointer_start"/>
   <Action name="playback_pointer_end"/>
   </Menu>
-</Menu>
 
 <Menu name="Tools">
   <text>&amp;Tools</text>
@@ -176,6 +188,8 @@ etc
   <Action name="dotted_8th" />
   <Action name="dotted_16th" />
   <Action name="dotted_32nd" />
+  <Separator/>
+  <Action name="switch_from_rest_to_note" />
 </Menu>
 
 <Menu noMerge="1" name="Rests">
@@ -195,6 +209,8 @@ etc
   <Action name="dotted_8th_rest" />
   <Action name="dotted_16th_rest" />
   <Action name="dotted_32nd_rest" />
+  <Separator/>
+  <Action name="switch_from_note_to_rest" />
 </Menu>
 
 <Menu noMerge="1" name="Accidentals">
@@ -219,6 +235,12 @@ etc
   <Action name="bass_clef" />
 </Menu>
 
+  <Separator/>
+  <Action name="insert_note_actionmenu"/>
+  <Action name="insert_rest"/>
+  <Action name="insert_melody_mode"/>
+  <Action name="insert_chord_mode"/>
+
 </Menu>
 
 <Menu  name="settings"><text>&amp;Settings</text>
@@ -226,9 +248,12 @@ etc
   <Action name="show_rests_toolbar"        append="show_merge" />
   <Action name="show_accidentals_toolbar"  append="show_merge" />
   <Action name="show_clefs_toolbar"        append="show_merge" />
+  <Action name="show_transport_toolbar"    append="show_merge" />
   <Action name="show_font_toolbar"         append="show_merge" />
+  <Separator append="show_merge" />
   <Action name="label_chords"         append="show_merge" />
   <Action name="display_tempo_changes"         append="show_merge" />
+  <Action name="show_annotations"         append="show_merge" />
 </Menu> 
 
 </MenuBar>
@@ -236,6 +261,18 @@ etc
 <ToolBar name="toolsToolBar">
   <Action name="erase" />
   <Action name="select" />
+  <Action name="text" />
+</ToolBar>
+
+<ToolBar name="transportToolBar">
+  <Action name="playback_pointer_start" />
+  <Action name="playback_pointer_back_bar" />
+  <Action name="play" />
+  <Action name="playback_pointer_forward_bar" />
+  <Action name="playback_pointer_end" />
+  <Action name="stop" />
+  <Action name="playback_pointer_to_cursor" />
+  <Action name="cursor_to_playback_pointer" />
 </ToolBar>
 
 <ToolBar name="notesToolBar" newline="true">
@@ -296,10 +333,6 @@ etc
   <Action name="bass_clef" />
 </ToolBar>
 
-<ToolBar name="textToolBar">
-  <Action name="text" />
-</ToolBar>
-
 <ToolBar name="metaToolbar" newline="true">
   <Action name="show_notes_toolbar"        />
   <Action name="show_rests_toolbar"        />
@@ -309,6 +342,20 @@ etc
 
 <ToolBar name="fontToolBar">
 </ToolBar>
+
+<State name="note_insert_tool_current">
+  <enable>
+    <Action name="insert_note_actionmenu"/>
+    <Action name="switch_from_note_to_rest"/>
+  </enable>
+</State>
+
+<State name="rest_insert_tool_current">
+  <enable>
+    <Action name="insert_rest"/>
+    <Action name="switch_from_rest_to_note"/>
+  </enable>
+</State>
 
 <State name="have_selection">
   <enable>
@@ -372,6 +419,7 @@ etc
     <Action name="untie_notes"/>
     <Action name="make_notes_viable"/>
     <Action name="quantize"/>
+    <Action name="fix_smoothing"/>
     <Action name="transpose_up"/>
     <Action name="transpose_down"/>
     <Action name="transpose_up_octave"/>

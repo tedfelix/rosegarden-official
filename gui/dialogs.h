@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 /*
     Rosegarden-4 v0.2
     A sequencer and musical notation editor.
@@ -43,6 +45,7 @@ class NotePixmapFactory;
 class QGrid;
 class RosegardenGUIDoc;
 class RosegardenSpinBox;
+class QTextEdit;
 
 
 // Definitions of various simple dialogs that may be used in multiple
@@ -193,12 +196,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QRadioButton *m_restrictedButton;
-    QRadioButton *m_simpleButton;
-    QRadioButton *m_openAndPasteButton;
-    QRadioButton *m_noteOverlayButton;
-    QRadioButton *m_matrixOverlayButton;
-    
+    std::vector<QRadioButton *> m_pasteTypeButtons;
     QCheckBox *m_setAsDefaultButton;
 
     PasteEventsCommand::PasteType m_defaultType;
@@ -570,6 +568,22 @@ protected:
 
     std::vector<QCanvasRectangle*> m_previewBoxes;
 
+};
+
+
+class LyricEditDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    LyricEditDialog(QWidget *parent, Rosegarden::Segment *segment);
+
+    QString getLyricData();
+
+protected:
+    Rosegarden::Segment *m_segment;
+    QTextEdit *m_textEdit;
+    void unparse();
 };
 
 

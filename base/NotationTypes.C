@@ -584,11 +584,11 @@ Text::getUserStyles()
     std::vector<std::string> v;
 
     v.push_back(Dynamic);
-    v.push_back(Lyric);
     v.push_back(Direction);
     v.push_back(LocalDirection);
     v.push_back(Tempo);
     v.push_back(LocalTempo);
+    v.push_back(Lyric);
     v.push_back(Annotation);
 
     return v;

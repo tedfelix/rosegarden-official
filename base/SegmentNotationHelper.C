@@ -317,13 +317,12 @@ SegmentNotationHelper::getNoteTiedWith(Event *note, bool forwards)
 bool
 SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
 {
-    //!!! use isBeforeEndMarker?
-
     iterator elPos = segment().findSingle(e);
     if (elPos == end()) return false;
 
     timeT myDuration = getNotationDuration(*elPos);
 
+    // findContiguousNext won't return an iterator beyond the end marker
     iterator nextEvent = findContiguousNext(elPos),
 	 previousEvent = findContiguousPrevious(elPos);
 
@@ -389,8 +388,6 @@ SegmentNotationHelper::isSplitValid(timeT a, timeT b)
 Segment::iterator
 SegmentNotationHelper::splitIntoTie(iterator &i, timeT baseDuration)
 {
-    //!!! use isBeforeEndMarker?
-
     if (i == end()) return end();
     iterator i2;
     segment().getTimeSlice((*i)->getAbsoluteTime(), i, i2);
@@ -416,9 +413,7 @@ SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
     long nextGroupId = -1;
     iterator ni(to);
 
-    //!!! use isBeforeEndMarker?
-
-    if (ni != end() && ++ni != end()) {
+    if (segment().isBeforeEndMarker(ni) && segment().isBeforeEndMarker(++ni)) {
 	(*ni)->get<Int>(BEAMED_GROUP_ID, nextGroupId);
     }
 
@@ -611,8 +606,6 @@ SegmentNotationHelper::insertNote(Event *modelEvent)
     // existing event, and if we're inserting over a rest, split the
     // rest at the insertion time first.
 
-    //!!! use isBeforeEndMarker?
-
     if (i != end() &&
 	(*i)->getAbsoluteTime() < absoluteTime &&
 	(*i)->getAbsoluteTime() + (*i)->getDuration() > absoluteTime &&
@@ -621,8 +614,6 @@ SegmentNotationHelper::insertNote(Event *modelEvent)
     }
 
     timeT duration = modelEvent->getDuration();
-
-    //!!! use isBeforeEndMarker?
 
     if (i != end() && (*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
 	duration = duration * (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT) /
@@ -644,8 +635,6 @@ SegmentNotationHelper::insertRest(timeT absoluteTime, Note note)
     //!!! Deal with end-of-bar issues!
 
     timeT duration(note.getDuration());
-
-    //!!! use isBeforeEndMarker?
 
     if (i != end() && (*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
 	duration = duration * (*i)->get<Int>(BEAMED_GROUP_TUPLED_COUNT) /
@@ -670,12 +659,11 @@ SegmentNotationHelper::collapseRestsForInsert(iterator i,
 {
     // collapse at most once, then recurse
 
-    //!!! use isBeforeEndMarker?
-
-    if (i == end() || !(*i)->isa(Note::EventRestType)) return i;
+    if (!segment().isBeforeEndMarker(i) ||
+	!(*i)->isa(Note::EventRestType)) return i;
 
     timeT d = (*i)->getDuration();
-    iterator j = findContiguousNext(i);
+    iterator j = findContiguousNext(i); // won't return itr after end marker
     if (d >= desiredDuration || j == end()) return i;
 
     Event *e(new Event(**i, (*i)->getAbsoluteTime(), d + (*j)->getDuration()));
@@ -847,7 +835,18 @@ SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
         e->set<Bool>(TIED_BACKWARD, true);
     }
 
-    if (eraseI) erase(i);
+    if (eraseI) {
+	// erase i and all subsequent events with the same type and
+	// absolute time
+	timeT time((*i)->getAbsoluteTime());
+	std::string type((*i)->getType());
+	iterator j(i);
+	while (j != end() && (*j)->getAbsoluteTime() == time) {
+	    ++j;
+	    if ((*i)->isa(type)) erase(i);
+	    i = j;
+	}
+    }
 
     return insert(e);
 }

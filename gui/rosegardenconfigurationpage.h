@@ -135,7 +135,14 @@ public:
     enum DoubleClickClient
     {
         NotationView,
-        MatrixView
+        MatrixView,
+        EventView
+    };
+
+    enum NoteNameStyle
+    { 
+	American,
+	Local
     };
 
     GeneralConfigurationPage(KConfig *cfg,
@@ -150,6 +157,7 @@ public:
     int getDblClickClient()         { return m_client->currentItem(); }
     int getMIDIPitch2StringOffset() { return m_midiPitchOffset->value(); }
     QString getExternalAudioEditor() { return m_externalAudioEditorPath->text(); }
+    int getNoteNameStyle() { return m_nameStyle->currentItem(); }
 
 protected slots:
     void slotFileDialog();
@@ -164,6 +172,7 @@ protected:
     QSpinBox*  m_midiPitchOffset;
     QLineEdit* m_externalAudioEditorPath;
     QCheckBox* m_selectorGreedyMode;
+    QComboBox* m_nameStyle;
 };
 
 /**
@@ -203,6 +212,7 @@ protected:
     QComboBox *m_insertType;
     QRadioButton *m_autoBeam;
     QRadioButton *m_collapseRests;
+    QComboBox *m_pasteType;
 
     void populateSizeCombo(QComboBox *combo, std::string font, int dfltSize);
 };

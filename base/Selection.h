@@ -69,6 +69,11 @@ public:
     void addFromSelection(EventSelection *sel);
 
     /**
+     * If the given Event is in the selection, take it out.
+     */
+    void removeEvent(Event *e);
+
+    /**
      * Test whether a given Event (in the Segment) is part of
      * this selection.
      */

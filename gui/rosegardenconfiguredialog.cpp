@@ -54,6 +54,7 @@
 #include "matrixtool.h"
 #include "notationtool.h"
 #include "segmentcanvas.h"
+#include "editcommands.h"
 
 namespace Rosegarden
 {
@@ -96,7 +97,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
       m_countIn(0),
       m_midiPitchOffset(0),
       m_externalAudioEditorPath(0),
-      m_selectorGreedyMode(0)
+      m_selectorGreedyMode(0),
+      m_nameStyle(0)
 
 {
 //     Rosegarden::Composition &comp = doc->getComposition();
@@ -108,22 +110,24 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
     //
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
-                                          4, 2, // nbrow, nbcol
+                                          5, 2, // nbrow, nbcol
                                           10, 5);
 
     layout->addWidget(new QLabel(i18n("Double click on segment opens..."),
                                  frame), 0, 0);
     layout->addWidget(new QLabel(i18n("Number of count-in bars when recording"),
                                  frame), 1, 0);
-    layout->addWidget(new QLabel(i18n("MIDI pitch to string offset"),
+    layout->addWidget(new QLabel(i18n("Note name style"),
                                  frame), 2, 0);
-    layout->addWidget(new QLabel(i18n("Selector greedy mode"),
+    layout->addWidget(new QLabel(i18n("MIDI pitch to string offset"),
                                  frame), 3, 0);
-
+    layout->addWidget(new QLabel(i18n("Selector greedy mode"),
+                                 frame), 4, 0);
 
     m_client = new QComboBox(frame);
     m_client->insertItem(i18n("Notation"));
     m_client->insertItem(i18n("Matrix"));
+    m_client->insertItem(i18n("Event List"));
     m_client->setCurrentItem(m_cfg->readUnsignedNumEntry("doubleclickclient", NotationView));
     
     layout->addWidget(m_client, 0, 1);
@@ -135,15 +139,21 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
 
     layout->addWidget(m_countIn, 1, 1);
 
+    m_nameStyle = new QComboBox(frame);
+    m_nameStyle->insertItem(i18n("Always use US names (e.g. quarter, 8th)"));
+    m_nameStyle->insertItem(i18n("Localised (where available, else UK)"));
+    m_nameStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("notenamestyle", Local));
+    layout->addWidget(m_nameStyle, 2, 1);
+
     m_midiPitchOffset = new QSpinBox(frame);
     m_midiPitchOffset->setValue(m_cfg->readUnsignedNumEntry("midipitchoffset", 4));
     m_midiPitchOffset->setMaxValue(10);
     m_midiPitchOffset->setMinValue(0);
 
-    layout->addWidget(m_midiPitchOffset, 2, 1);
+    layout->addWidget(m_midiPitchOffset, 3, 1);
 
     m_selectorGreedyMode = new QCheckBox(frame);
-    layout->addWidget(m_selectorGreedyMode, 3, 1);
+    layout->addWidget(m_selectorGreedyMode, 4, 1);
 
     m_selectorGreedyMode->setChecked(m_cfg->readBoolEntry("selectorgreedymode",
                                                           true));
@@ -215,6 +225,9 @@ void GeneralConfigurationPage::apply()
 
     int offset = getMIDIPitch2StringOffset();
     m_cfg->writeEntry("midipitchoffset", offset);
+
+    int namestyle = getNoteNameStyle();
+    m_cfg->writeEntry("notenamestyle", namestyle);
 
     bool greedyMode = m_selectorGreedyMode->isChecked();
     MatrixSelector::setGreedyMode(greedyMode);
@@ -381,7 +394,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     addTab(frame, i18n("Layout"));
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 4, 2, 10, 5);
+    layout = new QGridLayout(frame, 5, 2, 10, 5);
 
     layout->addWidget
 	(new QLabel(i18n("Default note style for new notes"), frame), 0, 0);
@@ -435,6 +448,28 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_collapseRests->setChecked(collapse);
 //    layout->addMultiCellWidget(m_collapseRests, 3, 3, 0, 1);
     layout->addWidget(m_collapseRests, 3, 1);
+
+
+    layout->addWidget
+	(new QLabel(i18n("Default paste type"), frame), 4, 0);
+
+    m_pasteType = new QComboBox(frame);
+    m_pasteType->setEditable(false);
+
+    unsigned int defaultPasteType = m_cfg->readUnsignedNumEntry
+	("pastetype", PasteEventsCommand::Restricted);
+
+    PasteEventsCommand::PasteTypeMap pasteTypes =
+	PasteEventsCommand::getPasteTypes();
+
+    for (PasteEventsCommand::PasteTypeMap::iterator i = pasteTypes.begin();
+	 i != pasteTypes.end(); ++i) {
+	m_pasteType->insertItem(i18n(strtoqstr(i->second)));
+    }
+
+    m_pasteType->setCurrentItem(defaultPasteType);
+    layout->addWidget(m_pasteType, 4, 1);
+
 
     addTab(frame, i18n("Editing"));
 }
@@ -506,6 +541,7 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("inserttype", m_insertType->currentItem());
     m_cfg->writeEntry("autobeam", m_autoBeam->isChecked());
     m_cfg->writeEntry("collapse", m_collapseRests->isChecked());
+    m_cfg->writeEntry("pastetype", m_pasteType->currentItem());
 }
 
 

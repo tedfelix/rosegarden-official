@@ -143,6 +143,12 @@ public:
 	return Rosegarden::Note(m_noteType, m_noteDots);
     }
 
+    /// Insert a note as if the user has clicked at the given time & pitch
+    void insertNote(Rosegarden::Segment &segment,
+		    Rosegarden::timeT insertionTime,
+		    int pitch,
+		    Rosegarden::Accidental accidental);
+
     static const QString ToolName;
 
 public slots:
@@ -391,7 +397,7 @@ public:
     /**
      * Returns whether the selection rectangle is visible or not
      */
-    bool isRectangleVisible();
+//!!!    bool isRectangleVisible(); // no -- it's not visible, guaranteed
 
     /**
      * Returns the currently selected events

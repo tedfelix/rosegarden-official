@@ -90,6 +90,9 @@ MatrixParameterBox::initBox()
     QPixmap noMap = npf.makeToolbarPixmap("menu-no-note");
 
     for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
+    //!!! this should use new NotePixmapFactory::makeNoteMenuPixmap
+    // and NotePixmapFactory::makeNoteMenuLabel -- see SegmentParameterBox
+    // and dialogs.cpp for usage examples
         std::string noteName = m_quantizations[i].noteName;
         QString qname = strtoqstr(m_quantizations[i].name);
         QPixmap pmap = noMap;
@@ -132,6 +135,9 @@ MatrixParameterBox::initBox()
 
     for (unsigned int i = 0; i < m_snapValues.size(); i++)
     {
+    //!!! this should use new NotePixmapFactory::makeNoteMenuPixmap
+    // and NotePixmapFactory::makeNoteMenuLabel -- see SegmentParameterBox
+    // and dialogs.cpp for usage examples
         Note nearestNote = Note::getNearestNote(m_snapValues[i]);
         if (nearestNote.getDuration() == m_snapValues[i])
         {

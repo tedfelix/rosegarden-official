@@ -149,6 +149,7 @@ public:
     Rosegarden::SegmentSelection getSelection();
 
 public slots:
+    void slotEditSegment(Rosegarden::Segment*);
     void slotEditSegmentNotation(Rosegarden::Segment*);
     void slotEditSegmentMatrix(Rosegarden::Segment*);
     void slotEditSegmentAudio(Rosegarden::Segment*);

@@ -46,8 +46,6 @@ class KToggleAction;
 
 class RosegardenGUIDoc;
 class MultiViewCommandHistory;
-class EditTool;
-class EditToolBox;
 class BasicCommand;
 class ActiveItem;
 class BarButtons;

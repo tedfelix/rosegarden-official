@@ -93,6 +93,8 @@ ChordNameRuler::sizeHint() const
 	m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
 	m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar());
 
+    NOTATION_DEBUG << "Returning chord-label ruler width as " << width << endl;
+
     QSize res(std::max(int(width), m_width), m_height);
 
     return res;

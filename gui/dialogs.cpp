@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 /*
     Rosegarden-4 v0.2
     A sequencer and musical notation editor.
@@ -46,16 +48,28 @@
 #include <qspinbox.h>
 #include <qvalidator.h>
 #include <qvbuttongroup.h>
+#include <qregexp.h>
+#include <qstringlist.h>
+#include <qtextedit.h>
 
 #include <kapp.h>
 #include <klocale.h>
 #include <karrowbutton.h>
 #include <kfiledialog.h>
 
+using Rosegarden::Int;
+using Rosegarden::RealTimeT;
+using Rosegarden::Bool;
+using Rosegarden::String;
+
 using Rosegarden::TimeSignature;
 using Rosegarden::Note;
+using Rosegarden::Text;
+using Rosegarden::Segment;
 using Rosegarden::timeT;
 using Rosegarden::Quantizer;
+using Rosegarden::Event;
+using Rosegarden::EventSelection;
 
 
 SimpleTextDialog::SimpleTextDialog(QWidget *parent, int maxLength) :
@@ -602,30 +616,19 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent,
     QButtonGroup *pasteTypeGroup = new QButtonGroup
 	(1, Horizontal, i18n("Paste type"), vbox);
 
-    m_restrictedButton = new QRadioButton
-	(i18n("Paste into an existing gap [\"restricted\"]"), pasteTypeGroup);
-    if (m_defaultType == PasteEventsCommand::Restricted) {
-	m_restrictedButton->setChecked(true);
-    }
-    m_simpleButton = new QRadioButton
-	(i18n("Erase existing events to make room [\"simple\"]"), pasteTypeGroup);
-    if (m_defaultType == PasteEventsCommand::Simple) {
-	m_simpleButton->setChecked(true);
-    }
-    m_openAndPasteButton = new QRadioButton
-	(i18n("Move existing events out of the way [\"open-n-paste\"]"), pasteTypeGroup);
-    if (m_defaultType == PasteEventsCommand::OpenAndPaste) {
-	m_openAndPasteButton->setChecked(true);
-    }
-    m_noteOverlayButton = new QRadioButton
-	(i18n("Overlay notes, tying against present notes [\"note-overlay\"]"), pasteTypeGroup);
-    if (m_defaultType == PasteEventsCommand::NoteOverlay) {
-	m_noteOverlayButton->setChecked(true);
-    }
-    m_matrixOverlayButton = new QRadioButton
-	(i18n("Overlay notes, ignoring present notes [\"matrix-overlay\"]"), pasteTypeGroup);
-    if (m_defaultType == PasteEventsCommand::MatrixOverlay) {
-	m_matrixOverlayButton->setChecked(true);
+    PasteEventsCommand::PasteTypeMap pasteTypes =
+	PasteEventsCommand::getPasteTypes();
+
+    for (PasteEventsCommand::PasteTypeMap::iterator i = pasteTypes.begin();
+	 i != pasteTypes.end(); ++i) {
+
+	QRadioButton *button = new QRadioButton
+	    (i18n(strtoqstr(i->second)), pasteTypeGroup);
+	button->setChecked(m_defaultType == i->first);
+	QObject::connect(button, SIGNAL(clicked()),
+			 this, SLOT(slotPasteTypeChanged()));
+
+	m_pasteTypeButtons.push_back(button);
     }
 
     QButtonGroup *setAsDefaultGroup = new QButtonGroup
@@ -634,33 +637,18 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent,
     m_setAsDefaultButton = new QCheckBox
 	(i18n("Make this the default paste type"), setAsDefaultGroup);
     m_setAsDefaultButton->setChecked(true);
-
-    QObject::connect(m_restrictedButton, SIGNAL(clicked()),
-		     this, SLOT(slotPasteTypeChanged()));
-    QObject::connect(m_simpleButton, SIGNAL(clicked()),
-		     this, SLOT(slotPasteTypeChanged()));
-    QObject::connect(m_openAndPasteButton, SIGNAL(clicked()),
-		     this, SLOT(slotPasteTypeChanged()));
-    QObject::connect(m_noteOverlayButton, SIGNAL(clicked()),
-		     this, SLOT(slotPasteTypeChanged()));
-    QObject::connect(m_matrixOverlayButton, SIGNAL(clicked()),
-		     this, SLOT(slotPasteTypeChanged()));
 }
 
 PasteEventsCommand::PasteType
 PasteNotationDialog::getPasteType() const
 {
-    if (m_restrictedButton->isChecked()) {
-	return PasteEventsCommand::Restricted;
-    } else if (m_simpleButton->isChecked()) {
-	return PasteEventsCommand::Simple;
-    } else if (m_noteOverlayButton->isChecked()) {
-	return PasteEventsCommand::NoteOverlay;
-    } else if (m_matrixOverlayButton->isChecked()) {
-	return PasteEventsCommand::MatrixOverlay;
-    } else {
-	return PasteEventsCommand::OpenAndPaste;
+    for (unsigned int i = 0; i < m_pasteTypeButtons.size(); ++i) {
+	if (m_pasteTypeButtons[i]->isChecked()) {
+	    return (PasteEventsCommand::PasteType)i;
+	}
     }
+
+    return PasteEventsCommand::Restricted;
 }
 
 bool
@@ -709,10 +697,11 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 
     for (Note::Type t = Note::Shortest; t <= Note::Longest; ++t) {
 	Note note(t);
-	if (maxDuration > 0 && (2 * note.getDuration() > maxDuration)) break;
-	QPixmap pmap = npf.makeToolbarPixmap
-	    (strtoqstr((std::string("menu-") + note.getReferenceName())));
-	m_unitCombo->insertItem(pmap, strtoqstr(note.getEnglishName() + "s"));
+	timeT duration(note.getDuration());
+	if (maxDuration > 0 && (2 * duration > maxDuration)) break;
+	timeT e; // error factor, ignore
+	m_unitCombo->insertItem(npf.makeNoteMenuPixmap(duration, e),
+				npf.makeNoteMenuLabel(duration, false, e, true));
 	if (defaultUnitType == t) {
 	    m_unitCombo->setCurrentItem(m_unitCombo->count() - 1);
 	}
@@ -947,11 +936,11 @@ TupletDialog::slotTupledChanged(const QString &)
 
 TextEventDialog::TextEventDialog(QWidget *parent,
 				 NotePixmapFactory *npf,
-				 Rosegarden::Text defaultText,
+				 Text defaultText,
 				 int maxLength) :
     KDialogBase(parent, "", true, i18n("Text"), Ok | Cancel),
     m_notePixmapFactory(npf),
-    m_styles(Rosegarden::Text::getUserStyles())
+    m_styles(Text::getUserStyles())
 {
     QVBox *vbox = makeVBoxMainWidget();
 
@@ -1061,7 +1050,7 @@ TextEventDialog::slotTextChanged(const QString &qtext)
 	text = text.substr(0, 20) + "...";
     }
 
-    Rosegarden::Text rtext(text, type);
+    Text rtext(text, type);
     m_textExampleLabel->setPixmap(m_notePixmapFactory->makeTextPixmap(rtext));
 }
 
@@ -1076,14 +1065,14 @@ TextEventDialog::slotTypeChanged(const QString &)
 	text = text.substr(0, 20) + "...";
     }
 
-    Rosegarden::Text rtext(text, type);
+    Text rtext(text, type);
     m_textExampleLabel->setPixmap(m_notePixmapFactory->makeTextPixmap(rtext));
 
-    if (type == Rosegarden::Text::Dynamic ||
-	type == Rosegarden::Text::LocalDirection ||
-	type == Rosegarden::Text::UnspecifiedType ||
-	type == Rosegarden::Text::Lyric ||
-	type == Rosegarden::Text::Annotation) {
+    if (type == Text::Dynamic ||
+	type == Text::LocalDirection ||
+	type == Text::UnspecifiedType ||
+	type == Text::Lyric ||
+	type == Text::Annotation) {
 
 	m_staffAboveLabel->show();
 	m_staffBelowLabel->hide();
@@ -1097,7 +1086,7 @@ TextEventDialog::slotTypeChanged(const QString &)
 
 
 EventEditDialog::EventEditDialog(QWidget *parent,
-				 const Rosegarden::Event &event,
+				 const Event &event,
 				 bool editable) :
     KDialogBase(parent, "", true, i18n(editable ? "Edit Event" : "View Event"),
 		(editable ? (Ok | Cancel) : Ok)),
@@ -1176,9 +1165,9 @@ EventEditDialog::EventEditDialog(QWidget *parent,
     label = new QLabel("", m_persistentGrid);
     label->setFont(font);
 
-    Rosegarden::Event::PropertyNames p = event.getPersistentPropertyNames();
+    Event::PropertyNames p = event.getPersistentPropertyNames();
 
-    for (Rosegarden::Event::PropertyNames::iterator i = p.begin();
+    for (Event::PropertyNames::iterator i = p.begin();
 	 i != p.end(); ++i) {
 	addPersistentProperty(*i);
     }
@@ -1215,7 +1204,7 @@ EventEditDialog::EventEditDialog(QWidget *parent,
 	label = new QLabel("", m_nonPersistentGrid);
 	label->setFont(font);
 	
-	for (Rosegarden::Event::PropertyNames::iterator i = p.begin();
+	for (Event::PropertyNames::iterator i = p.begin();
 	     i != p.end(); ++i) {
 	    
 	    new QLabel(strtoqstr(*i), m_nonPersistentGrid, strtoqstr(*i));
@@ -1242,20 +1231,20 @@ EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
     Rosegarden::PropertyType type(m_originalEvent.getPropertyType(name));
     switch (type) {
 	
-    case Rosegarden::Int:
+    case Int:
     {
 	QSpinBox *spinBox = new QSpinBox
 	    (INT_MIN, INT_MAX, 1, m_persistentGrid, strtoqstr(name));
-	spinBox->setValue(m_originalEvent.get<Rosegarden::Int>(name));
+	spinBox->setValue(m_originalEvent.get<Int>(name));
 	QObject::connect(spinBox, SIGNAL(valueChanged(int)),
 			 this, SLOT(slotIntPropertyChanged(int)));
 	spinBox->show();
 	break;
     }
     
-    case Rosegarden::RealTimeT:
+    case RealTimeT:
     {
-        Rosegarden::RealTime realTime = m_originalEvent.get<Rosegarden::RealTimeT>(name);
+        Rosegarden::RealTime realTime = m_originalEvent.get<RealTimeT>(name);
 
         QHBox* hbox = new QHBox(m_persistentGrid);
 
@@ -1282,21 +1271,21 @@ EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
 	break;
     }
 
-    case Rosegarden::Bool:
+    case Bool:
     {
 	QCheckBox *checkBox = new QCheckBox
 	    ("", m_persistentGrid, strtoqstr(name));
-	checkBox->setChecked(m_originalEvent.get<Rosegarden::Bool>(name));
+	checkBox->setChecked(m_originalEvent.get<Bool>(name));
 	QObject::connect(checkBox, SIGNAL(clicked()),
 			 this, SLOT(slotBoolPropertyChanged()));
 	checkBox->show();
 	break;
     }
     
-    case Rosegarden::String:
+    case String:
     {
 	QLineEdit *lineEdit = new QLineEdit
-	    (strtoqstr(m_originalEvent.get<Rosegarden::String>(name)),
+	    (strtoqstr(m_originalEvent.get<String>(name)),
 	     m_persistentGrid,
 	     strtoqstr(name));
 	QObject::connect(lineEdit, SIGNAL(textChanged(const QString &)),
@@ -1316,10 +1305,10 @@ EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
 }
 
 
-Rosegarden::Event
+Event
 EventEditDialog::getEvent() const
 {
-    return Rosegarden::Event(m_event, m_absoluteTime, m_duration, m_subOrdering);
+    return Event(m_event, m_absoluteTime, m_duration, m_subOrdering);
 }
 
 
@@ -1344,6 +1333,21 @@ EventEditDialog::slotAbsoluteTimeChanged(int value)
 void
 EventEditDialog::slotDurationChanged(int value)
 {
+    timeT error = 0;
+    m_durationDisplay->setPixmap
+	(m_notePixmapFactory.makeNoteMenuPixmap(timeT(value), error));
+
+    if (error >= value / 2) {
+	m_durationDisplayAux->setText("++ ");
+    } else if (error > 0) {
+	m_durationDisplayAux->setText("+ ");
+    } else if (error < 0) {
+	m_durationDisplayAux->setText("- ");
+    } else {
+	m_durationDisplayAux->setText(" ");
+    }
+
+/*!!!
     Note nearestNote = Note::getNearestNote(timeT(value), 1);
     std::string noteName = nearestNote.getReferenceName();
     noteName = "menu-" + noteName;
@@ -1361,8 +1365,8 @@ EventEditDialog::slotDurationChanged(int value)
     } else {
 	m_durationDisplayAux->setText(" ");
     }
-
-    if (value == m_duration) return;
+*/
+    if (timeT(value) == m_duration) return;
 
     m_modified = true;
     m_duration = value;
@@ -1385,7 +1389,7 @@ EventEditDialog::slotIntPropertyChanged(int value)
 
     m_modified = true;
     QString propertyName = spinBox->name();
-    m_event.set<Rosegarden::Int>(qstrtostr(propertyName), value);
+    m_event.set<Int>(qstrtostr(propertyName), value);
 }
 
 void
@@ -1407,14 +1411,14 @@ EventEditDialog::slotRealTimePropertyChanged(int value)
         usecOrSec =  propertyFullName.mid(sep + 1);
 #endif
 
-    Rosegarden::RealTime realTime = m_event.get<Rosegarden::RealTimeT>(qstrtostr(propertyName));
+    Rosegarden::RealTime realTime = m_event.get<RealTimeT>(qstrtostr(propertyName));
 
     if (usecOrSec == "sec")
         realTime.sec = value;
     else 
         realTime.usec = value;
 
-    m_event.set<Rosegarden::Int>(qstrtostr(propertyName), value);
+    m_event.set<Int>(qstrtostr(propertyName), value);
 }
 
 void
@@ -1428,7 +1432,7 @@ EventEditDialog::slotBoolPropertyChanged()
     QString propertyName = checkBox->name();
     bool checked = checkBox->isChecked();
 
-    m_event.set<Rosegarden::Bool>(qstrtostr(propertyName), checked);
+    m_event.set<Bool>(qstrtostr(propertyName), checked);
 }
 
 void
@@ -1440,7 +1444,7 @@ EventEditDialog::slotStringPropertyChanged(const QString &value)
     
     m_modified = true;
     QString propertyName = lineEdit->name();
-    m_event.set<Rosegarden::String>(qstrtostr(propertyName), qstrtostr(value));
+    m_event.set<String>(qstrtostr(propertyName), qstrtostr(value));
 }
 
 void
@@ -1506,31 +1510,31 @@ EventEditDialog::slotPropertyMadePersistent()
 
     switch (type) {
 
-    case Rosegarden::Int:
-	m_event.set<Rosegarden::Int>
+    case Int:
+	m_event.set<Int>
 	    (qstrtostr(propertyName),
-	     m_originalEvent.get<Rosegarden::Int>
+	     m_originalEvent.get<Int>
 	     (qstrtostr(propertyName)));
 	break;
 
-    case Rosegarden::RealTimeT:
-	m_event.set<Rosegarden::RealTimeT>
+    case RealTimeT:
+	m_event.set<RealTimeT>
 	    (qstrtostr(propertyName),
-	     m_originalEvent.get<Rosegarden::RealTimeT>
+	     m_originalEvent.get<RealTimeT>
 	     (qstrtostr(propertyName)));
 	break;
 
-    case Rosegarden::Bool:
-	m_event.set<Rosegarden::Bool>
+    case Bool:
+	m_event.set<Bool>
 	    (qstrtostr(propertyName),
-	     m_originalEvent.get<Rosegarden::Bool>
+	     m_originalEvent.get<Bool>
 	     (qstrtostr(propertyName)));
 	break;
 
-    case Rosegarden::String:
-	m_event.set<Rosegarden::String>
+    case String:
+	m_event.set<String>
 	    (qstrtostr(propertyName),
-	     m_originalEvent.get<Rosegarden::String>
+	     m_originalEvent.get<String>
 	     (qstrtostr(propertyName)));
 	break;
     }
@@ -1751,12 +1755,19 @@ TempoDialog::updateBeatLabels(double tempo)
 	m_tempoBeat->hide();
 	m_tempoBeatsPerMinute->hide();
     } else {
+	m_tempoBeatLabel->setText(" (");
+
+	NotePixmapFactory npf;
+/*!!!
 	Note beatNote = Note::getNearestNote(beat);
 	std::string beatName = beatNote.getReferenceName();
-	NotePixmapFactory npf;
-	m_tempoBeatLabel->setText(" (");
 	m_tempoBeat->setPixmap(npf.makeToolbarPixmap
 			       (strtoqstr("menu-" + beatName)));
+*/
+	timeT error = 0;
+	m_tempoBeat->setPixmap(npf.makeNoteMenuPixmap(beat, error));
+	if (error) m_tempoBeat->setPixmap(npf.makeUnknownPixmap());
+
 	m_tempoBeatsPerMinute->setText
 	    (QString("= %1 )").arg
 	     (int(tempo * Note(Note::Crotchet).getDuration() / beat)));
@@ -1966,14 +1977,16 @@ QuantizeDialog::QuantizeDialog(QWidget *parent,
     QPixmap noMap = npf.makeToolbarPixmap("menu-no-note");
 
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
-	std::string noteName = m_standardQuantizations[i].noteName;
-	QPixmap pmap = noMap;
-	if (noteName != "") {
-	    noteName = "menu-" + noteName;
-	    pmap = npf.makeToolbarPixmap(strtoqstr(noteName));
-	}
-	QString qname = strtoqstr(m_standardQuantizations[i].description);
-	m_unitCombo->insertItem(pmap, qname);
+
+	Rosegarden::timeT time = m_standardQuantizations[i].unit;
+	Rosegarden::timeT error = 0;
+
+	QPixmap pmap = npf.makeNoteMenuPixmap(time, error);
+	QString label = npf.makeNoteMenuLabel(time, false, error);
+
+	if (error == 0) m_unitCombo->insertItem(pmap, label);
+	else m_unitCombo->insertItem(noMap, QString("%1").arg(time));
+
 	if (m_standardQuantizations[i].unit ==
 	    Note(Note::Semiquaver).getDuration()) {
 		m_unitCombo->setCurrentItem(m_unitCombo->count() - 1);
@@ -2112,6 +2125,7 @@ RescaleDialog::getDivisor()
     return m_from;
 }
 
+/*!!!
 static Note getNoteForIndex(int index)
 {
     for (Note::Type t = Note::Shortest + 1; t < Note::Longest; ++t) {
@@ -2121,6 +2135,7 @@ static Note getNoteForIndex(int index)
     }
     return Note(Note::Crotchet);
 }
+*/
 
 void
 RescaleDialog::slotFromChanged(int i)
@@ -2208,7 +2223,7 @@ AudioPlayingDialog::AudioPlayingDialog(QWidget *parent,
 
 
 AudioSplitDialog::AudioSplitDialog(QWidget *parent,
-                                   Rosegarden::Segment *segment,
+                                   Segment *segment,
                                    RosegardenGUIDoc *doc):
             KDialogBase(parent, "", true,
                         i18n("Autosplit Audio Segment"), Ok|Cancel),
@@ -2219,7 +2234,7 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
             m_previewWidth(400),
             m_previewHeight(100)
 {
-    if (!segment || segment->getType() != Rosegarden::Segment::Audio)
+    if (!segment || segment->getType() != Segment::Audio)
         reject();
 
     QVBox *w = makeVBoxMainWidget();
@@ -2487,4 +2502,112 @@ AudioSplitDialog::slotThresholdChanged(int threshold)
 }
 
 
+// Lyric editor.  We store lyrics internally as individual events for
+// individual syllables, just as one might enter them (laboriously)
+// without the help of a lyric editor.  The editor scans the segment
+// for lyric events and unparses them into a string format for
+// editing; when the user is done, the editor parses the string and
+// completely recreates the lyric events in the segment.
+
+// The string format is pretty basic at the moment.  A bar with notes
+// and lyrics somewhat like:
+//
+//    o     o     o  o     |    o         o   
+//    who   by    fi-re    |    and who   by  [etc]
+//
+// where the word fire is divided across two notes and the second bar
+// has two syllables on the same note, would be represented as "who
+// by fi-re / and~who by".  I'm sure we can work on this, as the text
+// version is not what's actually saved anyway.
+
+LyricEditDialog::LyricEditDialog(QWidget *parent,
+				 Segment *segment) :
+    KDialogBase(parent, "", true, i18n("Edit Lyrics"), Ok | Cancel),
+    m_segment(segment)
+{    
+    QVBox *vbox = makeVBoxMainWidget();
+
+    QGroupBox *groupBox = new QGroupBox
+	(1, Horizontal, i18n("Lyrics for this segment"), vbox);
+
+    m_textEdit = new QTextEdit(groupBox);
+    m_textEdit->setTextFormat(Qt::PlainText);
+    m_textEdit->setMinimumWidth(300);
+    m_textEdit->setMinimumHeight(200);
+
+    unparse();
+}
+
+void
+LyricEditDialog::unparse()
+{
+    // This code and SetLyricsCommand::execute() are opposites that will
+    // need to be kept in sync with any changes in one another
+
+    Rosegarden::Composition *comp = m_segment->getComposition();
+
+    QString text;
+
+    timeT lastTime = m_segment->getStartTime();
+    int lastBarNo = comp->getBarNumber(lastTime);
+    bool haveLyric = false;
+
+    text += QString("[%1] ").arg(lastBarNo + 1);
+
+    for (Segment::iterator i = m_segment->begin();
+	 m_segment->isBeforeEndMarker(i); ++i) {
+
+	//!!! should ignore tied-back notes, here and in parse()
+
+	bool isNote = (*i)->isa(Note::EventType);
+	bool isLyric = false;
+	
+	if (!isNote) {
+	    if ((*i)->isa(Text::EventType)) {
+		std::string textType;
+		if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
+		    textType == Text::Lyric) {
+		    isLyric = true;
+		}
+	    }
+	}
+
+	if (!isNote && !isLyric) continue;
+
+	timeT myTime = (*i)->getAbsoluteTime();
+	int myBarNo = comp->getBarNumber(myTime);
+
+	if (myBarNo > lastBarNo) {
+
+	    while (myBarNo > lastBarNo) {
+		text += " /";
+		++lastBarNo;
+	    }
+	    text += QString("\n[%1] ").arg(myBarNo + 1);
+	}
+
+	if (myTime > lastTime && isNote) {
+	    if (!haveLyric) text += " .";
+	    lastTime = myTime;
+	    haveLyric = false;
+	}
+
+	if (isLyric) {
+	    std::string ssyllable;
+	    (*i)->get<String>(Text::TextPropertyName, ssyllable);
+	    QString syllable(strtoqstr(ssyllable));
+	    syllable.replace(QRegExp("\\s+"), "~");
+	    text += " " + syllable;
+	    haveLyric = true;
+	}
+    }
+
+    m_textEdit->setText(text);
+}
+
+QString
+LyricEditDialog::getLyricData()
+{
+    return m_textEdit->text();
+}
 

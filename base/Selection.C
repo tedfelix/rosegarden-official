@@ -56,6 +56,7 @@ EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime) :
 }
 
 EventSelection::EventSelection(const EventSelection &sel) :
+    SegmentObserver(),
     m_originalSegment(sel.m_originalSegment),
     m_segmentEvents(sel.m_segmentEvents),
     m_beginTime(sel.m_beginTime),
@@ -91,16 +92,30 @@ void EventSelection::addFromSelection(EventSelection *sel)
     }
 }
 
-bool EventSelection::contains(Event *e) const
+void EventSelection::removeEvent(Event *e) 
 {
     std::pair<eventcontainer::iterator,eventcontainer::iterator> 
-      interval = m_segmentEvents.equal_range(e);
+	interval = m_segmentEvents.equal_range(e);
 
     for (eventcontainer::iterator it = interval.first;
          it != interval.second; it++)
     {
-        if (*it == e)
-            return true;
+        if (*it == e) {
+	    m_segmentEvents.erase(it); 
+	    return;
+	}
+    }
+}
+
+bool EventSelection::contains(Event *e) const
+{
+    std::pair<eventcontainer::iterator,eventcontainer::iterator> 
+	interval = m_segmentEvents.equal_range(e);
+
+    for (eventcontainer::iterator it = interval.first;
+         it != interval.second; ++it)
+    {
+        if (*it == e) return true;
     }
 
     return false;
@@ -123,8 +138,10 @@ timeT EventSelection::getTotalDuration() const
 void
 EventSelection::eventRemoved(const Segment *s, Event *e)
 {
-    if (s == &m_originalSegment && contains(e)) {
-	m_segmentEvents.erase(m_segmentEvents.find(e));
+    if (s == &m_originalSegment /*&& contains(e)*/) {
+//!!!	m_segmentEvents.erase(m_segmentEvents.find(e));
+	std::cerr << "Removing event at " << e->getAbsoluteTime() << " from selection" << endl;
+        removeEvent(e);
     }
 }
 

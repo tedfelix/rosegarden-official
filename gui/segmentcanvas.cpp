@@ -37,7 +37,6 @@
 #include "Segment.h"
 #include "Composition.h"
 #include "NotationTypes.h"
-#include "rosegardenconfigurationpage.h"
 #include "BaseProperties.h"
 
 #include "rosedebug.h"
@@ -944,19 +943,7 @@ void SegmentCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
 
     if (item) {
         m_currentItem = item;
-        // TODO : edit style should be user configurable
-
-        if (m_currentItem->getSegment()->getType() == Rosegarden::Segment::Audio)
-            emit editSegmentAudio(m_currentItem->getSegment());
-        else
-        {
-            if (kapp->config()->readUnsignedNumEntry("doubleclickclient",
-                                               Rosegarden::GeneralConfigurationPage::NotationView) == 
-                    Rosegarden::GeneralConfigurationPage::NotationView)
-                emit editSegmentNotation(m_currentItem->getSegment());
-            else
-                emit editSegmentMatrix(m_currentItem->getSegment());
-        }
+	emit editSegment(item->getSegment());
     }
 }
 

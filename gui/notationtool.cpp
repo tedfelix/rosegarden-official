@@ -303,13 +303,56 @@ NoteInserter::handleMouseRelease(Rosegarden::timeT,
 	(segment, m_clickTime, endTime, note, m_clickPitch, m_accidental);
 
     if (lastInsertedEvent) {
+
 	m_nParentView->setSingleSelectedEvent
 	    (m_clickStaffNo, lastInsertedEvent);
-	m_nParentView->slotSetInsertCursorAndRecentre
-	    (lastInsertedEvent->getAbsoluteTime() +
-	     lastInsertedEvent->getDuration(), e->x(), (int)e->y(),
-	     false);
+
+	if (m_nParentView->isInInsertChordMode()) {
+	    m_nParentView->slotSetInsertCursorAndRecentre
+		(lastInsertedEvent->getAbsoluteTime(), e->x(), (int)e->y(),
+		 false);
+	} else {
+	    m_nParentView->slotSetInsertCursorAndRecentre
+		(lastInsertedEvent->getAbsoluteTime() +
+		 lastInsertedEvent->getDuration(), e->x(), (int)e->y(),
+		 false);
+	}
     }
+}
+
+
+void
+NoteInserter::insertNote(Segment &segment, timeT insertionTime,
+			 int pitch, Rosegarden::Accidental accidental)
+{
+    Note note(m_noteType, m_noteDots);
+    timeT endTime = insertionTime + note.getDuration();
+
+    Segment::iterator realEnd = segment.findTime(endTime);
+    if (realEnd == segment.end() || ++realEnd == segment.end()) {
+	endTime = segment.getEndTime();
+    } else {
+	endTime = std::max(endTime, (*realEnd)->getAbsoluteTime());
+    }
+
+    Event *lastInsertedEvent = doAddCommand
+	(segment, insertionTime, endTime, note, pitch, accidental);
+
+    if (lastInsertedEvent) {
+
+	m_nParentView->setSingleSelectedEvent(segment, lastInsertedEvent);
+
+	if (m_nParentView->isInInsertChordMode()) {
+	    m_nParentView->slotSetInsertCursorPosition
+		(lastInsertedEvent->getAbsoluteTime(), true, false);
+	} else {
+	    m_nParentView->slotSetInsertCursorPosition
+		(lastInsertedEvent->getAbsoluteTime() +
+		 lastInsertedEvent->getDuration(), true, false);
+	}
+    }
+
+    m_nParentView->playNote(segment, pitch);
 }
 
 
@@ -1053,7 +1096,6 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 {
     NOTATION_DEBUG << "NotationSelector::handleMouseRelease" << endl;
     m_updateRect = false;
-    setViewCurrentSelection(false);
     
     if (m_selectionRect->width()  > -3 &&
         m_selectionRect->width()  <  3 &&
@@ -1067,8 +1109,19 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 	    // click on an individual event, then select just that
 	    // event
 
-	    m_nParentView->setSingleSelectedEvent
-		(m_clickedStaff, m_clickedElement->event());
+	    if (m_selectionToMerge &&
+		m_selectionToMerge->getSegment() ==
+		m_nParentView->getStaff(m_clickedStaff)->getSegment()) {
+
+		m_selectionToMerge->addEvent(m_clickedElement->event());
+		m_nParentView->setCurrentSelection(m_selectionToMerge, false);
+		m_selectionToMerge = 0;
+
+	    } else {
+
+		m_nParentView->setSingleSelectedEvent
+		    (m_clickedStaff, m_clickedElement->event());
+	    }
 
 	} else if (m_clickedStaff >= 0) {
 
@@ -1080,6 +1133,8 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 
 	    m_nParentView->slotSetInsertCursorPosition(e->x(), (int)e->y());
 	}
+    } else {
+	setViewCurrentSelection(false);
     }
 
     m_selectionRect->hide();
@@ -1124,12 +1179,12 @@ void NotationSelector::slotEraseSelected()
     m_parentView->actionCollection()->action("erase")->activate();
 }
 
-
+/*!!!
 bool NotationSelector::isRectangleVisible()
 {
     return m_selectionRect->visible();
 }
-
+*/
 
 EventSelection* NotationSelector::getSelection()
 {
@@ -1247,7 +1302,8 @@ void NotationSelectionPaster::handleLeftButtonPress(Rosegarden::timeT,
 
     Segment& segment = staff->getSegment();
     PasteEventsCommand *command = new PasteEventsCommand
-	(segment, m_parentView->getDocument()->getClipboard(), time);
+	(segment, m_parentView->getDocument()->getClipboard(), time,
+	 PasteEventsCommand::Restricted);
 
     if (!command->isPossible()) {
 	m_parentView->slotStatusHelpMsg(i18n("Couldn't paste at this point"));

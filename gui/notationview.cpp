@@ -193,6 +193,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     assert(segments.size() > 0);
     NOTATION_DEBUG << "NotationView ctor" << endl;
 
+
+    // Initialise the display-related defaults that will be needed
+    // by both the actions and the font toolbar
+
     KConfig *config = kapp->config();
     config->setGroup("Notation Options");
 
@@ -203,6 +207,22 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontSize = config->readUnsignedNumEntry
 	((segments.size() > 1 ? "multistaffnotesize" : "singlestaffnotesize"),
 	 NotePixmapFactory::getDefaultSize(m_fontName));
+
+    int defaultSpacing = config->readNumEntry("spacing", 100);
+    m_hlayout.setSpacing(defaultSpacing);
+
+    Note::Type defaultSmoothingType = 
+	config->readNumEntry("smoothing", Note::Shortest);
+    timeT defaultSmoothing = Note(defaultSmoothingType).getDuration();
+    for (int type = Note::Shortest; type <= Note::Longest; ++type) {
+	m_legatoDurations.push_back((int)(Note(type).getDuration()));
+    }
+    Rosegarden::Quantizer q(Rosegarden::Quantizer::RawEventData,
+			    getViewLocalPropertyPrefix() + "Q",
+			    Rosegarden::Quantizer::LegatoQuantize,
+			    defaultSmoothing);
+    *m_legatoQuantizer = q;
+    
 
     setupActions();
     initFontToolbar();
@@ -257,9 +277,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], 0, // snap
-                                             i, this,
-					     /*m_legatoQuantizer,
-					       m_properties,*/ false, width() - 50,
+                                             i, this, false, width() - 50,
                                              m_fontName, m_fontSize));
     }
 
@@ -365,13 +383,23 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     stateChanged("have_multiple_staffs",
 		 (m_staffs.size() > 1 ? KXMLGUIClient::StateNoReverse :
 		                        KXMLGUIClient::StateReverse));
+    stateChanged("rest_insert_tool_current", KXMLGUIClient::StateReverse);
     slotTestClipboard();
 #endif
 
-    if (getSegmentsOnlyRests())
+    if (getSegmentsOnlyRests()) {
         m_selectDefaultNote->activate();
-    else
+#ifdef RGKDE3
+	stateChanged("note_insert_tool_current", 
+		     KXMLGUIClient::StateNoReverse);
+#endif
+    } else {
         actionCollection()->action("select")->activate();
+#ifdef RGKDE3
+	stateChanged("note_insert_tool_current",
+		     KXMLGUIClient::StateReverse);
+#endif
+    }
 
     slotSetInsertCursorPosition(0);
     slotSetPointerPosition(doc->getComposition().getPosition());
@@ -501,6 +529,7 @@ void NotationView::slotSaveOptions()
     toolBar("fontToolBar")->saveSettings(m_config, "Notation Options fontToolBar");
     toolBar("accidentalsToolBar")->saveSettings(m_config, "Notation Options accidentalsToolBar");
     toolBar("toolsToolBar")->saveSettings(m_config, "Notation Options toolsToolBar");
+    toolBar("transportToolBar")->saveSettings(m_config, "Notation Options transportToolBar");
     toolBar("textToolBar")->saveSettings(m_config, "Notation Options textToolBar");
     toolBar("metaToolBar")->saveSettings(m_config, "Notation Options metaToolBar");
 }
@@ -528,6 +557,10 @@ void NotationView::readOptions()
     getToggleAction("show_font_toolbar")->setChecked(opt);
     toggleNamedToolBar("fontToolBar", &opt);
 
+    opt = m_config->readBoolEntry("Show Transport Toolbar", false);
+    getToggleAction("show_transport_toolbar")->setChecked(opt);
+    toggleNamedToolBar("transportToolBar", &opt);
+
     opt = m_config->readBoolEntry("Show Accidentals Toolbar", true);
     getToggleAction("show_accidentals_toolbar")->setChecked(opt);
     toggleNamedToolBar("accidentalsToolBar", &opt);
@@ -544,6 +577,10 @@ void NotationView::readOptions()
     m_temposVisible = opt;
     getToggleAction("display_tempo_changes")->setChecked(opt);
 
+    opt = m_config->readBoolEntry("Show Annotations", true);
+    m_annotationsVisible = opt;
+    getToggleAction("show_annotations")->setChecked(opt);
+
     opt = m_config->readBoolEntry("Show Accidentals Toolbar", true);
     getToggleAction("show_accidentals_toolbar")->setChecked(opt);
     toggleNamedToolBar("accidentalsToolBar", &opt);
@@ -554,6 +591,7 @@ void NotationView::readOptions()
     toolBar("fontToolBar")->applySettings(m_config, "Notation Options fontToolBar");
     toolBar("accidentalsToolBar")->applySettings(m_config, "Notation Options accidentalsToolBar");
     toolBar("toolsToolBar")->applySettings(m_config, "Notation Options toolsToolBar");
+    toolBar("transportToolBar")->applySettings(m_config, "Notation Options transportToolBar");
     toolBar("textToolBar")->applySettings(m_config, "Notation Options textToolBar");
     toolBar("metaToolBar")->applySettings(m_config, "Notation Options metaToolBar");
 }
@@ -594,6 +632,66 @@ void NotationView::setupActions()
 
     actionCollection()->insert(m_fontSizeActionMenu);
 
+    
+    KActionMenu *spacingActionMenu =
+	new KActionMenu(i18n("Spa&cing"), this, "stretch_actionmenu");
+
+    int defaultSpacing = m_hlayout.getSpacing();
+    std::vector<int> spacings = NotationHLayout::getAvailableSpacings();
+
+    for (std::vector<int>::iterator i = spacings.begin();
+	 i != spacings.end(); ++i) {
+	
+	KToggleAction *spacingAction =
+	    new KToggleAction
+	    (QString("%1%").arg(*i), 0, this,
+	     SLOT(slotChangeSpacingFromAction()),
+	     actionCollection(), QString("spacing_%1").arg(*i));
+
+	spacingAction->setExclusiveGroup("spacing");
+	spacingAction->setChecked(*i == defaultSpacing);
+	spacingActionMenu->insert(spacingAction);
+    }
+
+    actionCollection()->insert(spacingActionMenu);
+
+    
+    KActionMenu *smoothingActionMenu =
+	new KActionMenu(i18n("S&moothing"), this, "smoothing_actionmenu");
+
+    timeT defaultSmoothing = m_legatoQuantizer->getUnit();
+    NotePixmapFactory npf;
+
+    for (std::vector<int>::iterator i = m_legatoDurations.begin();
+	 i != m_legatoDurations.end(); ++i) {
+
+	QPixmap pmap = 0;
+	QString label = 0;
+
+	Note nearestNote = Note::getNearestNote(*i);
+	if (nearestNote.getDuration() == *i) {
+	    std::string noteName = nearestNote.getReferenceName(); 
+	    noteName = "menu-" + noteName;
+	    pmap = npf.makeToolbarPixmap(strtoqstr(noteName));
+	    label = strtoqstr(nearestNote.getEnglishName());
+	} else {
+	    label = QString("%1").arg(*i);
+	}
+	
+	KToggleAction *smoothingAction =
+	    new KToggleAction
+	    (label, QIconSet(pmap), 0, this,
+	     SLOT(slotChangeLegatoFromAction()),
+	     actionCollection(), QString("smoothing_%1").arg(*i));
+
+	smoothingAction->setExclusiveGroup("smoothing");
+	smoothingAction->setChecked(*i == defaultSmoothing);
+	smoothingActionMenu->insert(smoothingAction);
+    }
+
+    actionCollection()->insert(smoothingActionMenu);
+
+
 
     KActionMenu *styleActionMenu =
 	new KActionMenu(i18n("Note &Style"), this, "note_style_actionmenu");
@@ -615,6 +713,119 @@ void NotationView::setupActions()
     }
 
     actionCollection()->insert(styleActionMenu);
+
+
+    new KAction
+	(i18n("Insert Rest"), Key_P, this, SLOT(slotInsertRest()),
+	 actionCollection(), QString("insert_rest"));
+
+    new KAction
+	(i18n("Switch from Note to Rest"), Key_T, this,
+	 SLOT(slotSwitchFromNoteToRest()),
+	 actionCollection(), QString("switch_from_note_to_rest"));
+
+    new KAction
+	(i18n("Switch from Rest to Note"), Key_Y, this,
+	 SLOT(slotSwitchFromRestToNote()),
+	 actionCollection(), QString("switch_from_rest_to_note"));
+
+
+    const char *notePitchNames[] = {
+	"Do", "Re", "Mi", "Fa", "So", "La", "Ti"
+    };
+    const Key notePitchKeys[3][7] = {
+	{
+	    Key_A, Key_S, Key_D, Key_F, Key_J, Key_K, Key_L,
+	},
+	{
+	    Key_Q, Key_W, Key_E, Key_R, Key_U, Key_I, Key_O,
+	},
+	{
+	    Key_Z, Key_X, Key_C, Key_V, Key_B, Key_N, Key_M,
+	},
+    };
+
+    KActionMenu *insertNoteActionMenu =
+	new KActionMenu(i18n("&Insert Note"), this, "insert_note_actionmenu");
+
+    for (int octave = 0; octave <= 2; ++octave) {
+
+	KActionMenu *menu = insertNoteActionMenu;
+	if (octave == 1) {
+	    menu = new KActionMenu(i18n("&Upper Octave"), this,
+				   "insert_note_actionmenu_upper_octave");
+	    insertNoteActionMenu->insert(new KActionSeparator(this));
+	    insertNoteActionMenu->insert(menu);
+	} else if (octave == 2) {
+	    menu = new KActionMenu(i18n("&Lower Octave"), this,
+				   "insert_note_actionmenu_lower_octave");
+	    insertNoteActionMenu->insert(menu);
+	}
+
+	for (unsigned int i = 0; i < 7; ++i) {
+
+	    KAction *insertNoteAction = 0;
+
+	    QString octaveSuffix;
+	    if (octave == 1) octaveSuffix = "_high";
+	    else if (octave == 2) octaveSuffix = "_low";
+
+	    // do and fa lack a flat
+
+	    if (i != 0 && i != 3) {
+      
+		insertNoteAction =
+		    new KAction
+		    (i18n(QString(notePitchNames[i]) + " flat"),
+		     CTRL + SHIFT + notePitchKeys[octave][i],
+		     this, SLOT(slotInsertNoteFromAction()), actionCollection(),
+		     QString("insert_%1_flat%2").arg(i).arg(octaveSuffix));
+
+		menu->insert(insertNoteAction);
+	    }
+
+	    insertNoteAction =
+		new KAction
+		(i18n(QString(notePitchNames[i])),
+		 notePitchKeys[octave][i],
+		 this, SLOT(slotInsertNoteFromAction()), actionCollection(),
+		 QString("insert_%1%2").arg(i).arg(octaveSuffix));
+
+	    menu->insert(insertNoteAction);
+
+	    // and mi and ti lack a sharp
+
+	    if (i != 2 && i != 6) {
+
+		insertNoteAction =
+		    new KAction
+		    (i18n(QString(notePitchNames[i]) + " sharp"),
+		     SHIFT + notePitchKeys[octave][i],
+		     this, SLOT(slotInsertNoteFromAction()), actionCollection(),
+		     QString("insert_%1_sharp%2").arg(i).arg(octaveSuffix));
+
+		menu->insert(insertNoteAction);
+	    }
+
+	    if (i < 6) menu->insert(new KActionSeparator(this));
+	}
+    }
+
+    actionCollection()->insert(insertNoteActionMenu);
+
+    
+    KRadioAction *insertChordMode = new KRadioAction
+	(i18n("&Chord Insert Mode"), Key_G, this, SLOT(slotInsertChordMode()),
+	 actionCollection(), "insert_chord_mode");
+    insertChordMode->setExclusiveGroup("insertMode");
+
+    KRadioAction *insertMelodyMode = new KRadioAction
+	(i18n("&Melody Insert Mode"), Key_H, this, SLOT(slotInsertMelodyMode()),
+	 actionCollection(), "insert_melody_mode");
+    insertMelodyMode->setExclusiveGroup("insertMode");
+    insertMelodyMode->setChecked(true);
+    m_insertChordMode = false;
+    
 
 
     // setup Notes menu & toolbar
@@ -772,9 +983,16 @@ void NotationView::setupActions()
      (i18n("Show &Chord Name Ruler"), 0, this, SLOT(slotLabelChords()),
       actionCollection(), "label_chords"))->setChecked(true);
 
+    (new KToggleAction
+     (i18n("Show &Annotations"), 0, this, SLOT(slotShowAnnotations()),
+      actionCollection(), "show_annotations"))->setChecked(true);
+
     new KToggleAction
 	(i18n("Show &Tempo Ruler"), 0, this, SLOT(slotShowTempos()),
 	 actionCollection(), "display_tempo_changes");
+
+    new KAction(i18n("Open L&yric Editor"), 0, this, SLOT(slotEditLyrics()),
+		actionCollection(), "lyric_editor");
 
     // setup Group menu
     new KAction(i18n(GroupMenuBeamCommand::getGlobalName()), 0, this,
@@ -871,6 +1089,10 @@ void NotationView::setupActions()
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 
+    new KAction(i18n(TransformsMenuFixSmoothingCommand::getGlobalName()), 0,
+		this, SLOT(slotTransformsFixSmoothing()), actionCollection(),
+                "fix_smoothing");
+
     new KAction(i18n("&Dump selected events to stderr"), 0, this,
 		SLOT(slotDebugDump()), actionCollection(), "debug_dump");
 
@@ -932,7 +1154,8 @@ void NotationView::setupActions()
             { "Show &Rests Toolbar",  "1slotToggleRestsToolBar()",  "show_rests_toolbar",                    "palette-rests" },
             { "Show &Accidentals Toolbar",   "1slotToggleAccidentalsToolBar()",  "show_accidentals_toolbar", "palette-accidentals" },
             { "Show Cle&fs Toolbar",         "1slotToggleClefsToolBar()",        "show_clefs_toolbar",       "palette-clefs" },
-            { "Show &Layout Toolbar",         "1slotToggleFontToolBar()",        "show_font_toolbar",       "palette-font" }
+            { "Show &Layout Toolbar",         "1slotToggleFontToolBar()",        "show_font_toolbar",       "palette-font" },
+            { "Show Trans&port Toolbar",      "1slotToggleTransportToolBar()",        "show_transport_toolbar",       "palette-transport" }
         };
 
     for (unsigned int i = 0;
@@ -967,6 +1190,30 @@ void NotationView::setupActions()
 		SLOT(slotJumpForward()), actionCollection(),
 		"cursor_forward_bar");
 
+    new KAction(i18n("Cursor Back and Se&lect"), SHIFT + Key_Left, this,
+		SLOT(slotExtendSelectionBackward()), actionCollection(),
+		"extend_selection_backward");
+
+    new KAction(i18n("Cursor Forward and &Select"), SHIFT + Key_Right, this,
+		SLOT(slotExtendSelectionForward()), actionCollection(),
+		"extend_selection_forward");
+
+    new KAction(i18n("Cursor Back Bar and Select"), SHIFT + CTRL + Key_Left, this,
+		SLOT(slotExtendSelectionBackwardBar()), actionCollection(),
+		"extend_selection_backward_bar");
+
+    new KAction(i18n("Cursor Forward Bar and Select"), SHIFT + CTRL + Key_Right, this,
+		SLOT(slotExtendSelectionForwardBar()), actionCollection(),
+		"extend_selection_forward_bar");
+
+    new KAction(i18n("Cursor to St&art"), 0, Key_A + CTRL, this,
+		SLOT(slotJumpToStart()), actionCollection(),
+		"cursor_start");
+
+    new KAction(i18n("Cursor to &End"), 0, Key_E + CTRL, this,
+		SLOT(slotJumpToEnd()), actionCollection(),
+		"cursor_end");
+
     new KAction(i18n("Cursor &Up Staff"), 0, Key_Up + SHIFT, this,
 		SLOT(slotCurrentStaffUp()), actionCollection(),
 		"cursor_up_staff");
@@ -975,40 +1222,55 @@ void NotationView::setupActions()
 		SLOT(slotCurrentStaffDown()), actionCollection(),
 		"cursor_down_staff");
 
-    new KAction(i18n("Cursor to &Playback Pointer"), 0, this,
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
+		    ("transport-cursor-to-pointer"));
+    new KAction(i18n("Cursor to &Playback Pointer"), icon, 0, this,
 		SLOT(slotJumpCursorToPlayback()), actionCollection(),
 		"cursor_to_playback_pointer");
 
-    new KAction(i18n("Re&wind"), 0, Key_End, this,
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
+		    ("transport-play"));
+    new KAction(i18n("&Play"), icon, Key_Enter, this,
+		SIGNAL(play()), actionCollection(), "play");
+
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
+		    ("transport-stop"));
+    new KAction(i18n("&Stop"), icon, Key_Insert, this,
+		SIGNAL(stop()), actionCollection(), "stop");
+
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
+		    ("transport-rewind"));
+    new KAction(i18n("Re&wind"), icon, Key_End, this,
 		SIGNAL(rewindPlayback()), actionCollection(),
 		"playback_pointer_back_bar");
 
-    new KAction(i18n("&Fast Forward"), 0, Key_PageDown, this,
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
+		    ("transport-ffwd"));
+    new KAction(i18n("&Fast Forward"), icon, Key_PageDown, this,
 		SIGNAL(fastForwardPlayback()), actionCollection(),
 		"playback_pointer_forward_bar");
 
-    new KAction(i18n("Rewind to &Beginning"), 0, this,
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
+		    ("transport-rewind-end"));
+    new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
 		SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
 		"playback_pointer_start");
 
-    new KAction(i18n("Fast Forward to &End"), 0, this,
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
+		    ("transport-ffwd-end"));
+    new KAction(i18n("Fast Forward to &End"), icon, 0, this,
 		SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
 		"playback_pointer_end");
 
-    new KAction(i18n("Fast Forward to &End"), 0, this,
-		SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
-		"playback_pointer_end");
-
-    new KAction(i18n("Playback Pointer to &Cursor"), 0, this,
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
+		    ("transport-pointer-to-cursor"));
+    new KAction(i18n("Playback Pointer to &Cursor"), icon, 0, this,
 		SLOT(slotJumpPlaybackToCursor()), actionCollection(),
 		"playback_pointer_to_cursor");
 
-    QAccel *accelerators(getAccelerators());
-
-    accelerators->connectItem(accelerators->insertItem(Key_Left + SHIFT),
-			      this, SLOT(slotExtendSelectionBackward()));
-    accelerators->connectItem(accelerators->insertItem(Key_Right + SHIFT),
-			      this, SLOT(slotExtendSelectionForward()));
+    new KAction(i18n("Clear Selection"), Key_Escape, this,
+		SLOT(slotClearSelection()), actionCollection(),
+		"clear_selection");
 
     createGUI(getRCFileName());
 }
@@ -1107,42 +1369,21 @@ void NotationView::initFontToolbar()
 
     new QLabel(i18n("  Spacing:  "), fontToolbar);
 
-    KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
-    int defaultSpacing = config->readNumEntry("spacing", 100);
-
+    int defaultSpacing = m_hlayout.getSpacing();
     std::vector<int> spacings = NotationHLayout::getAvailableSpacings();
     m_spacingSlider = new ZoomSlider<int>
         (spacings, defaultSpacing, QSlider::Horizontal, fontToolbar);
     connect(m_spacingSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(slotChangeSpacing(int)));
-    m_hlayout.setSpacing(defaultSpacing);
+            this, SLOT(slotChangeSpacingFromIndex(int)));
 
     new QLabel(i18n("  Smoothing:  "), fontToolbar);
 
-    Note::Type defaultSmoothingType = 
-	config->readNumEntry("smoothing", Note::Shortest);
-    timeT defaultSmoothing = Note(defaultSmoothingType).getDuration();
-
-    if (m_legatoDurations.size() == 0) {
-        for (int type = Note::Shortest; type <= Note::Longest; ++type) {
-            m_legatoDurations.push_back((int)(Note(type).getDuration()));
-        }
-    }
-    QSlider *m_smoothingSlider = new ZoomSlider<int>
+    timeT defaultSmoothing = m_legatoQuantizer->getUnit();
+    m_smoothingSlider = new ZoomSlider<int>
         (m_legatoDurations, defaultSmoothing,
 	 QSlider::Horizontal, fontToolbar);
     connect(m_smoothingSlider, SIGNAL(valueChanged(int)),
-            this, SLOT(slotChangeLegato(int)));
-
-    Rosegarden::Quantizer q(Rosegarden::Quantizer::RawEventData,
-			    getViewLocalPropertyPrefix() + "Q",
-			    Rosegarden::Quantizer::LegatoQuantize,
-			    defaultSmoothing);
-    *m_legatoQuantizer = q;
-
-//    slotChangeLegato(defaultSmoothingType);
-//    slotChangeFont(m_fontName, m_fontSize);
+            this, SLOT(slotChangeLegatoFromIndex(int)));
 }
 
 void NotationView::initStatusBar()
@@ -1224,7 +1465,7 @@ void
 NotationView::paintEvent(QPaintEvent *e)
 {
     if (m_hlayout.isPageMode()) {
-	int diff = width() - 50 - m_hlayout.getPageWidth();
+	int diff = int(width() - 50 - m_hlayout.getPageWidth());
 	if (diff > -10 && diff < 10) {
 	    m_hlayout.setPageWidth(width() - 50);
 	    refreshSegment(0, 0, 0);
@@ -1438,7 +1679,8 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
     if (s) eventsSelected = s->getSegmentEvents().size();
     if (s) {
 	m_selectionCounter->setText
-	    (i18n("  %1 events selected ").arg(eventsSelected));
+	    (i18n("  %1 event%2 selected ").
+	     arg(eventsSelected).arg(eventsSelected == 1 ? "" : "s"));
     } else {
 	m_selectionCounter->setText(i18n("  No selection "));
     }
@@ -1455,6 +1697,9 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
     stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
 
     if (s) {
+
+	NOTATION_DEBUG << "NotationView::setCurrentSelection: Have selection; it's " << s << " covering range from " << s->getStartTime() << " to " << s->getEndTime() << " (" << s->getSegmentEvents().size() << " events)" << endl;
+
 	stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
 	if (s->contains(Rosegarden::Note::EventType)) {
 	    stateChanged("have_notes_in_selection",
@@ -1465,6 +1710,10 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 			 KXMLGUIClient::StateNoReverse);
 	}
     }
+#else
+
+    NOTATION_DEBUG << "Not using KDE3, not setting selection-related states"
+		   << endl;
 #endif
 
     updateView();
@@ -1678,6 +1927,9 @@ void NotationView::refreshSegment(Segment *segment,
     stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
 
     if (m_currentEventSelection) {
+
+	NOTATION_DEBUG << "NotationView::refreshSegment: Have selection; it's " << m_currentEventSelection << " covering range from " << m_currentEventSelection->getStartTime() << " to " << m_currentEventSelection->getEndTime() << " (" << m_currentEventSelection->getSegmentEvents().size() << " events)" << endl;
+
 	stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
 	if (m_currentEventSelection->contains
 	    (Rosegarden::Note::EventType)) {
@@ -1690,6 +1942,10 @@ void NotationView::refreshSegment(Segment *segment,
 			 KXMLGUIClient::StateNoReverse);
 	}
     }
+#else
+
+    NOTATION_DEBUG << "Not using KDE3, not setting selection-related states"
+		   << endl;
 #endif
 
 
@@ -1758,11 +2014,21 @@ void NotationView::slotNoteAction()
     NoteActionDataMap::Iterator noteAct =
 	m_noteActionDataMap->find(sigSender->name());
     
-    if (noteAct != m_noteActionDataMap->end())
+    if (noteAct != m_noteActionDataMap->end()) {
         setCurrentSelectedNote(*noteAct);
-    else
+#ifdef RGKDE3
+	if ((*noteAct).rest) {
+	    stateChanged("note_insert_tool_current", StateReverse);
+	    stateChanged("rest_insert_tool_current", StateNoReverse);
+	} else {
+	    stateChanged("note_insert_tool_current", StateNoReverse);
+	    stateChanged("rest_insert_tool_current", StateReverse);
+	}
+#endif
+    } else {
         NOTATION_DEBUG << "NotationView::slotNoteAction() : couldn't find NoteActionData named '"
                              << sigSender->name() << "'\n";
+    }
 }
     
 
@@ -1814,7 +2080,8 @@ void NotationView::initActionDataMaps()
 
 		int keycode = keys[type - Note::Shortest];
 		if (dots) keycode += CTRL;
-		if (rest) keycode += SHIFT;
+		if (rest) // keycode += SHIFT; -- can't do shift+numbers
+		    keycode = 0;
 
 		m_noteActionDataMap->insert
 		    (shortName, NoteActionData

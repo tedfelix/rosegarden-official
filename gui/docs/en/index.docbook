@@ -281,7 +281,11 @@
 
 	<para>
 	  There are two ways to open a notation editor from the
-	  Rosegarden main window:
+	  Rosegarden main window.  (Both of them require that you
+	  have some existing segments in the main window first,
+	  so if you're starting a new composition, you should
+	  create your segments before you start thinking about
+	  how to edit them.)
 
 	  <variablelist>
 
@@ -376,12 +380,18 @@
 
 	<para>
 	  The purple cursor is the insert cursor.  It shows the point
-	  at which operations such as paste will take place.  It can
-	  be repositioned by clicking or dragging on the top ruler,
-	  although it can only ever be positioned between two events
-	  on its staff.  You can also position it by clicking with the
-	  Select tool on an empty part of the staff (avoiding any
-	  events), or by clicking anywhere with Ctrl held down.
+	  at which operations such as insert and paste will take
+	  place.  You can reposition the insert cursor by clicking or
+	  dragging on the top ruler, or by clicking with the Select
+	  tool on an empty part of the staff (avoiding any events), or
+	  by clicking anywhere with Ctrl held down.</para>
+
+	<para>You can also use the left and right arrow keys to move
+	the insert cursor one event at a time.  If you hold Ctrl while
+	pressing the arrow keys, the cursor will move a whole bar at a
+	time; if you hold Shift, the cursor will <link
+	linkend="nv-tools-selections">select the events</link> as it
+	passes over them.
 	</para>
 
 	<para>
@@ -502,17 +512,18 @@
 	  <varlistentry>
 	    <term>Tools</term>
 	    <listitem>
-	      <para>The basic tools are the selection tool and those
-	      for inserting notes, rests, text and so on, which are
-	      usually accessed from the toolbar buttons.  Choosing a
-	      tool changes the default behaviour of the mouse buttons
-	      on the main notation canvas, at least until another tool
-	      is chosen instead.  For example, choosing the selection
-	      tool allows you to make selections and so to use the
-	      selection-based functions (below); choosing an insertion
-	      tool (such as one of the notes) switches the GUI's
-	      behaviour so as to insert notes by clicking on the
-	      canvas.
+	      <para>The basic tools are the selection tool, the erase
+	      tool, and those for inserting notes, rests, text and so
+	      on, which are usually accessed from the toolbar buttons.
+	      Choosing a tool changes the default behaviour of the
+	      mouse buttons on the main notation canvas, at least
+	      until another tool is chosen instead.  For example,
+	      choosing the selection tool allows you to make
+	      selections and so to use the selection-based functions
+	      (below); choosing an insertion tool (such as one of the
+	      notes) switches the GUI's behaviour so as to insert
+	      notes by clicking on the canvas; choosing the erase tool
+	      allows you to remove events by clicking on them.
 	      </para>
 	      <para>
 	      You can also change the current tool using the Tools menu.
@@ -534,20 +545,24 @@
 	      </para>
 	      <para>
 	      To select some events on the canvas, switch to the
-	      Select (arrow) tool and then outline a rectangular
-	      area containing the events you want to select.  The
-	      selected events will then be highlighted in blue.
-	      If you click on a single event, just that event will
-	      be selected.  (You can also double-click on a single
-	      event to open an editing dialog for that event.)
+	      Select (arrow) tool and then outline a rectangular area
+	      containing the events you want to select.  The selected
+	      events will then be highlighted in blue.  If you click
+	      on a single event, just that event will be selected.
+	      (You can also double-click on a single event to open an
+	      editing dialog for that event, but that's got nothing to
+	      do with selections.)  If you hold Shift while dragging
+	      out a rectangle, its contents will be added to any
+	      existing selection instead of replacing it.
 	      </para>
 	      <para>
-	      To select a whole bar, double-click
-	      with the Select tool on some empty space within that
-	      bar; to select the whole staff, click three times.
-	      The Edit menu also carries functions for selecting
-	      extended areas based on the location of the insert
-	      cursor.
+	      To select a whole bar, double-click with the Select tool
+	      on some empty space within that bar; to select the whole
+	      staff, click three times.  The Edit menu carries
+	      functions for selecting extended areas based on the
+	      location of the insert cursor, and you can also select
+	      events around the insert cursor by holding Shift and
+	      pressing the left or right arrow keys.
 	      </para>
 	      <para>
 	      It is not possible to select events from more than
@@ -581,7 +596,7 @@
       different duration, the editor will generally assume that you
       want to create chords and will split the existing or new note
       accordingly so as to create one or more chords with ties.  If
-      you really did want to chord two different durations, you can
+      you really do want to chord two different durations, you can
       select the tied noteheads and use the Collapse Equal-Pitch Notes
       function to merge them together.  Alternatively, the default
       behaviour can be changed in the Rosegarden configuration dialog
@@ -595,11 +610,273 @@
       the note will be silenced for the duration of the rest,
       shortening or possibly removing it altogether.</para>
 
+	<sect3 id="nv-insertion-keyboard">
+	  <title>Typing notes with the PC keyboard</title>
+
+	  <para>You can also insert notes by "typing" their pitches on
+	  the PC's keyboard.</para>
+
+	  <para>First, ensure a notation tool
+	  is selected to indicate the duration of note you wish to
+	    insert.  You can select the various note types using the number keys:</para>
+
+	  <itemizedlist>
+	    <listitem><para><keycap>5</keycap> - Breve</para></listitem>
+	    <listitem><para><keycap>1</keycap> - Whole note (semibreve)</para></listitem>
+	    <listitem><para><keycap>2</keycap> - Half note (minim)</para></listitem>
+	    <listitem><para><keycap>4</keycap> - Quarter note (crotchet)</para></listitem>
+	    <listitem><para><keycap>8</keycap> - Eighth note (quaver)</para></listitem>
+	    <listitem><para><keycap>6</keycap> - Sixteenth note (semiquaver)</para></listitem>
+	    <listitem><para><keycap>3</keycap> - Thirty-second note (demisemiquaver)</para></listitem>
+	    <listitem><para><keycap>0</keycap> - Sixty-fourth note (hemidemisemiquaver)</para></listitem>
+	  </itemizedlist>
+	    
+	  <para>Holding the <keycap>Ctrl</keycap> key while pressing a number will select the corresponding dotted-note tool.</para>
+	  
+	  <para>Once a notation tool is selected, you can insert a note at the current position of the <link linkend="nv-rulers">insert cursor</link> by pressing one of the pitch keys:</para>
+
+	  <itemizedlist>
+	    <listitem><para><keycap>A</keycap> - Do (the tonic of the current key in the current clef)</para></listitem>
+	    <listitem><para><keycap>S</keycap> - Re</para></listitem>
+	    <listitem><para><keycap>D</keycap> - Mi</para></listitem>
+	    <listitem><para><keycap>F</keycap> - Fa</para></listitem>
+	    <listitem><para><keycap>J</keycap> - So</para></listitem>
+	    <listitem><para><keycap>K</keycap> - La</para></listitem>
+	    <listitem><para><keycap>L</keycap> - Ti</para></listitem>
+	  </itemizedlist>
+
+	  <para>Holding <keycap>Shift</keycap> while pressing a key
+	  will sharpen the note (except for Mi and Ti, which don't
+	  have sharpened versions) and holding <keycap>Shift</keycap>
+	  and <keycap>Ctrl</keycap> together will flatten it (except
+	  for Fa and Do).</para>
+
+	  <para>To enter notes an octave higher, use the corresponding
+	  keys on the next row up: <keycap>Q</keycap>,
+	  <keycap>W</keycap>, <keycap>E</keycap>, <keycap>R</keycap>,
+	  <keycap>U</keycap>, <keycap>I</keycap>, and
+	  <keycap>O</keycap>.  Likewise to enter notes an octave
+	  lower, use <keycap>Z</keycap>, <keycap>X</keycap>,
+	  <keycap>C</keycap>, <keycap>V</keycap>, <keycap>B</keycap>,
+	  <keycap>N</keycap> and <keycap>M</keycap>.</para>
+
+	  <para>The default behaviour of the notation editor is to
+	  move the insert cursor forward after inserting a note, so as
+	  to be ready to insert another note after it in a melody;
+	  this can be changed using the <keycap>G</keycap> key, which
+	  switches to chord mode so that subsequent insertions occur
+	  at the same time as the last one.  Pressing
+	  <keycap>H</keycap> switches back to the melody insertion
+	  behaviour.</para>
+
+	  <para>All of the insertion commands are also available on a
+	  submenu of the Tools menu.  It's unlikely you'd ever want to
+	  navigate the menus just to insert a single note, but the
+	  menus show the keyboard shortcuts and so provide a useful
+	  reference in case you forget which key is which.</para>
+
+	  <para>The keyboard shortcuts are currently designed for use
+	  with a QWERTY-layout keyboard.  There is not yet any way to
+	  remap the keys for another layout, short of reassigning each
+	  key individually using the "Configure Shortcuts..." option
+	  on the Settings menu.</para>
+
+	</sect3>
+	
       </sect2>
 
       <!-- Text -->
+
+      <sect2 id="nv-text">
+	<title>Text and lyrics</title>
+	
+	<para>A staff can contain various sorts of text, in text
+	events.  There are two basic classes of text event: single
+	text items used for point annotations etc., and lyrics.  The
+	former can be created (and so associated with a particular
+	time in the staff) using the Text tool, which is available on
+	the button marked with a big T in the toolbar.  Lyrics can
+	also be created this way, but are more easily created using
+	the <link linkend="nv-text-lyrics">lyric editor</link>.</para>
+
+	<para>To add a piece of text, select the Text tool and click
+	at the point where you want to add it.  A dialog box will
+	appear, into which you can type the text and choose its
+	intended purpose.  (Rosegarden prefers to store what the text
+	is for, rather than how it should look; this is so that in
+	future we may be able to configure how the various sorts of
+	text are presented for each individual user.) The available
+	purposes (or styles) are:</para>
+
+	<variablelist>
+
+	  <varlistentry><term>Dynamic</term><listitem><para> Used for
+	  minor local indications such as the dynamic marks "p", "mf"
+	  etc. Shown below the staff in small italic
+	  type by default.  </para></listitem></varlistentry>
+
+	  <varlistentry><term>Direction</term><listitem><para> Used
+	  when indicating significant changes in style or mood.  Shown
+	  above the staff in large roman type by default.
+	  </para></listitem></varlistentry>
+
+	  <varlistentry><term>Local Direction</term><listitem><para>
+	  Used to indicate less significant changes in style or mood.
+	  Shown below the staff in a smaller bold-italic roman type by
+	  default.  </para></listitem></varlistentry>
+
+	  <varlistentry><term>Tempo</term><listitem><para> Used to
+	  indicate significant changes in tempo.  Shown above the
+	  staff in large bold roman type by default.
+	  </para></listitem></varlistentry>
+
+	  <varlistentry><term>Local Tempo</term><listitem><para> Used
+	  to indicate more minor or local changes in tempo.  Shown
+	  above the staff in a small bold roman type by default.
+	  </para></listitem></varlistentry>
+
+	  <varlistentry><term>Lyric</term><listitem><para> Although
+	  lyrics are usually created in the <link
+	  linkend="nv-text-lyrics">lyric editor</link>, they can also
+	  be entered word by word if necessary using this style.  This
+	  style is shown below the text in a small roman type by
+	  default.  (Warning: if you enter lyrics this way and later
+	  edit the staff's lyrics using the lyric editor, any lyrics
+	  entered this way may be modified or moved if their
+	  positioning is not compatible with that expected by the
+	  lyric editor.)  </para></listitem></varlistentry>
+
+	  <varlistentry><term>Annotation</term><listitem><para> Used
+	  for helpful text that is not strictly considered part of the
+	  score.  Shown below the staff, boxed-out in a yellow
+	  sticky-label-style box by default.
+	  </para></listitem></varlistentry>
+
+	  </variablelist>
+
+	<para>You can also edit text after creating it, by clicking on
+	the existing text with the text tool.</para>
+	
+	<sect3 id="nv-text-lyrics">
+	  <title>Editing lyrics</title>
+	
+	  <para>The Lyric editor, available from the "Open Lyric
+	  Editor" option of the View menu, allows you to edit all of
+	  the lyric events for a single staff at once, using a fairly
+	  rudimentary textual editing system.  To use it, just
+	  activate the menu option, edit the lyric text in the
+	  resulting dialog, and then hit OK.</para>
+
+	  <para>The lyrics you enter should follow a particular
+	  format.  Bar lines are vital to avoid the editor getting
+	  confused, and are represented with a slash ("/").  Within
+	  each bar the individual syllables are separated by spaces
+	  (at least one space: the editor doesn't care about any extra
+	  whitespace). Each syllable in turn will be attached to the
+	  next subsequent note or chord within that bar (although at
+	  the moment the editor can get quite confused by chords that
+	  are not exact, i.e. that require smoothing or
+	  quantizing).</para>
+
+	  <para>If you want a note to have no syllable attached to it,
+	  you need to provide a dot (".") as the syllable for that
+	  note.  (This is why the default lyric text for a segment is
+	  usually full of dots.)  Remember to separate the dots with
+	  spaces, so that they are clearly separate syllables.</para>
+	  
+	  <para>If you want more than one syllable on the same note,
+	  with a space between them, use a tilde ("~") instead of the
+	  space.  It will be shown as a space on the score.</para>
+
+	  <para>If you want to split a syllable across two notes, with
+	  a hyphen, you need to enter a space following the hyphen so
+	  the editor knows to treat it as two syllables.  (Hyphens get
+	  no special treatment within syllables.)</para>
+
+	  <para>Syllables consisting only of numbers surrounded by
+	  square brackets (like "[29]") will be ignored; this is the
+	  format used for the automatically-generated bar numbers
+	  shown in the editor.</para>
+
+	  <para>You should also be aware that the textual format of
+	  lyrics is only used for editing:  the lyrics are actually
+	  stored as distinct text events (one per syllable).  This
+	  means that the text format may potentially change in the
+	  future to accommodate more advanced editing capabilities,
+	  although the event format should not change and so your
+	  saved files should continue to be compatible.</para>
+
+	  </sect3>
+
+	</sect2>
+
       <!-- Indications -->
+
+      <sect2 id="nv-indication">
+	<title>Slurs and hairpins</title>
+
+	<para>Slur and hairpin dynamic markings are stored as events,
+	just like notes or rests.  To create one, select the area you
+	want it to cover (a series of notes or whatever), and then use
+	the Add Slur, Add Crescendo or Add Decrescendo options from
+	the Group menu.</para>
+
+	<para>You remove a slur or hairpin in the same way as any
+	other event: either select it with the selection tool and then
+	hit Delete, or click on it with the erase tool active.</para>
+
+      </sect2>
+
+      <!-- Stem direction, slashes etc -->
+
+      <sect2 id="nv-note-qualities">
+	<title>Note Stems</title>
+
+	<para>You can set the stem direction of any selected notes
+	(provided they are a sort that have stems) using the three
+	Stem Direction options on the Notes menu.  The options allow
+	you to either fix the stems up or down, or revert to the stem
+	direction that Rosegarden would otherwise have chosen.</para>
+
+	<para>The Notes menu also contains options for adding slashes
+	across note stems, for example to indicate short repeated
+	notes or drum rolls.  These are currently purely notational;
+	Rosegarden will not take them into account when playing the
+	staff or generating MIDI.</para>
+      </sect2>
+      
       <!-- Beamed groups, including overlapping and nesting them -->
+
+      <sect2 id="nv-beamed-groups">
+	<title>Beams</title>
+	
+	<para>Adding beams to notes is considered a grouping operation
+	in the Rosegarden notation editor, available on the Group
+	menu.  Select the notes you want to beam, and use the Beam
+	Group menu option.  To remove a beam, select the notes and use
+	the Unbeam menu option.</para>
+
+	<para>It is possible to have more than one beamed group
+	happening at the same time -- you just select and beam the
+	separate groups one at a time -- but Rosegarden is usually not
+	yet clever enough to work out which notes should have stems up
+	and which should have stems down for simultaneous beamed
+	groups, so you will probably have to set the stem directions
+	of the notes in the groups explicitly as well as beaming them.</para>
+
+	<para>Rosegarden can attempt to guess a sensible beaming for a
+	piece of music, provided it's not too complicated.  To invoke
+	this, select the notes you want to calculate the beaming for
+	(for example by triple-clicking to select a whole staff) and
+	then use the Auto-Beam option on the Group menu.  Auto-beaming
+	is also done automatically when loading a MIDI file, for
+	example, and the editor also does some automatic beaming as
+	you enter notes (this can be disabled by changing the
+	"Auto-Beam when appropriate" setting on the configuration
+	dialog or the insertion tool's right-button menu).</para>
+
+      </sect2>
+
       <!-- Tuplets -->
       <!-- Grace notes -->
 
@@ -651,7 +928,7 @@
 	    <listitem>
 	      <para>The opposite of <link
 	  linkend="commands-nv-menu-edit-cut-and-close">Cut and
-	  Close</link>.  Makes room for the paste by moving all of
+	  Close</link>.  Makes room for the paste by moving all of the
 		subsequent events further towards the end of the
 		composition.
 	      </para>
@@ -703,11 +980,13 @@
 	<para>
 	  A set of standard styles (Classical, Cross, Triangle and
 	  Mensural) is provided, and you can change the style used for
-	  individual notes using the <!-- !!! link
-	  linkend="commands-nv-menu-notes-notestyle" -->Note Style<!-- /link -->
-	  menu options.  Each note remembers which style has been
-	  chosen for it, and this information is saved as part of the
-	  composition.
+	  individual notes by selecting them and then using the <!--
+	  !!! link linkend="commands-nv-menu-notes-notestyle" -->Note
+	  Style<!-- /link --> menu options.  Each note remembers which
+	  style has been chosen for it, and this information is saved
+	  as part of the composition.  You can also change the default
+	  style for new notes using the "Configure Rosegarden..." 
+	  option in the Settings menu.
 	</para>
 
 	<para>
@@ -1344,6 +1623,60 @@
 		  </action>
 		  If part of a beamed group is selected, the unselected
 		  part of the group will remain beamed.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-group-tuplet">
+	      <term><menuchoice>
+		  <guimenu>Group</guimenu>
+		  <guimenuitem>Tuplet</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+
+		    Makes a triplet or other tuplet group.
+
+		  </action>
+		  This function allows you to adjust the timing of a
+		  short section of music in the ratio of two
+		  durations, for example to indicate that three notes
+		  should be played in the time of two (the classic
+		  triplet), or nine in the time of six, or whatever.
+		  You can set this ratio in a dialog box when you
+		  invoke the function.
+		</para>
+		<para>
+		  If you have selected some events before invoking the
+		  function, it will assume that you want to make a
+		  tuplet group out of the selected region (or as close
+		  to its duration as possible) and will adjust the
+		  default values available in the dialog accordingly.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+
+	    <varlistentry id="commands-nv-menu-group-simple-tuplet">
+	      <term><menuchoice>
+		  <guimenu>Group</guimenu>
+		  <guimenuitem>Simple Tuplet</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>
+
+		    Makes a tuplet group (normally of triplets) with
+		    the most apparently obvious ratio of durations.
+
+		  </action>
+		  Usually this function will attempt to make a triplet
+		  group starting at the current insert cursor, or if
+		  some events are selected, will attempt to make them
+		  into triplets.  It is possible that it might end up
+		  making non-triplet groups if there is no obvious
+		  valid triplet arrangement.
 		</para>
 	      </listitem>
 	    </varlistentry>

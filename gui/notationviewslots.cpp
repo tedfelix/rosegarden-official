@@ -24,6 +24,7 @@
 
 #include "NotationTypes.h"
 #include "Selection.h"
+#include "Segment.h"
 #include "Clipboard.h"
 #include "CompositionTimeSliceAdapter.h"
 #include "AnalysisTypes.h"
@@ -42,10 +43,15 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kaction.h>
+#include <kapp.h>
+#include <kconfig.h>
 
 #include "ktmpstatusmsg.h"
 
 using Rosegarden::timeT;
+using Rosegarden::Segment;
+using Rosegarden::Event;
+using Rosegarden::EventSelection;
 
 
 void
@@ -57,11 +63,48 @@ NotationView::slotDocumentDestroyed()
 }
 
 void
-NotationView::slotChangeSpacing(int n)
+NotationView::slotChangeSpacingFromIndex(int n)
 {
     std::vector<int> spacings = m_hlayout.getAvailableSpacings();
     if (n >= (int)spacings.size()) n = spacings.size() - 1;
-    m_hlayout.setSpacing(spacings[n]);
+    slotChangeSpacing(spacings[n]);
+}
+
+void
+NotationView::slotChangeSpacingFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->name();
+
+    if (name.left(8) == "spacing_") {
+	int spacing = name.right(name.length() - 8).toInt();
+
+	if (spacing > 0) slotChangeSpacing(spacing);
+
+    } else {
+	KMessageBox::sorry
+	    (this, QString(i18n("Unknown spacing action %1").arg(name)));
+    }
+}
+
+void
+NotationView::slotChangeSpacing(int spacing)
+{
+    if (m_hlayout.getSpacing() == spacing) return;
+
+    m_hlayout.setSpacing(spacing);
+    
+    m_spacingSlider->setSize(spacing);
+
+    KToggleAction *action = dynamic_cast<KToggleAction *>
+	(actionCollection()->action(QString("spacing_%1").arg(spacing)));
+    if (action) action->setChecked(true);
+    else {
+	NOTATION_DEBUG
+	    << "WARNING: Expected action \"spacing_" << spacing
+	    << "\" to be a KToggleAction, but it isn't (or doesn't exist)"
+	    << endl;
+    }
 
     applyLayout();
 
@@ -72,16 +115,49 @@ NotationView::slotChangeSpacing(int n)
     updateView();
 }
 
-void NotationView::slotChangeLegato(int n)
+void NotationView::slotChangeLegatoFromIndex(int n)
 {
     if (n >= (int)m_legatoDurations.size())
         n = m_legatoDurations.size() - 1;
+    slotChangeLegato(m_legatoDurations[n]);
+}
+
+void
+NotationView::slotChangeLegatoFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->name();
+
+    if (name.left(10) == "smoothing_") {
+	int smoothing = name.right(name.length() - 10).toInt();
+	if (smoothing > 0) slotChangeLegato(smoothing);
+    } else {
+	KMessageBox::sorry
+	    (this, QString(i18n("Unknown smoothing action %1").arg(name)));
+    }
+}
+
+void NotationView::slotChangeLegato(timeT duration)
+{
+    if (m_legatoQuantizer->getUnit() == duration) return;
 
     Rosegarden::Quantizer q(Rosegarden::Quantizer::RawEventData,
 			    getViewLocalPropertyPrefix() + "Q",
 			    Rosegarden::Quantizer::LegatoQuantize,
-			    m_legatoDurations[n]);
+			    duration);
     *m_legatoQuantizer = q;
+    
+    m_smoothingSlider->setSize(duration);
+
+    KToggleAction *action = dynamic_cast<KToggleAction *>
+	(actionCollection()->action(QString("smoothing_%1").arg(duration)));
+    if (action) action->setChecked(true);
+    else {
+	NOTATION_DEBUG
+	    << "WARNING: Expected action \"smoothing_" << duration
+	    << "\" to be a KToggleAction, but it isn't (or doesn't exist)"
+	    << endl;
+    }
     
     applyLayout();
 
@@ -174,7 +250,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
         return;
     }
 
-    bool changedFont = (newName != m_fontName);
+//!!! not used?    bool changedFont = (newName != m_fontName);
 
     std::string oldName = m_fontName;
     m_fontName = newName;
@@ -263,6 +339,17 @@ void NotationView::slotEditCutAndClose()
 					       m_document->getClipboard()));
 }
 
+#define RESTRICTED_PASTE_FAILED_DESCRIPTION \
+		      "The Restricted paste type requires enough empty\n" \
+		      "space (containing only rests) at the paste position\n" \
+		      "to hold all of the events to be pasted.\n" \
+		      "Not enough space was found.\n" \
+		      "If you want to paste anyway, consider using one of\n" \
+		      "the other paste types from the \"Paste...\" option\n" \
+		      "on the Edit menu.  You can also change the default\n" \
+		      "paste type to something other than Restricted if\n" \
+		      "you wish."
+
 void NotationView::slotEditPaste()
 {
     Rosegarden::Clipboard *clipboard = m_document->getClipboard();
@@ -279,7 +366,7 @@ void NotationView::slotEditPaste()
     slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
 
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Rosegarden::Segment &segment = staff->getSegment();
+    Segment &segment = staff->getSegment();
     
     // Paste at cursor position
     //
@@ -288,16 +375,25 @@ void NotationView::slotEditPaste()
 	(clipboard->getSingleSegment()->getEndTime() - 
 	 clipboard->getSingleSegment()->getStartTime());
 
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+    PasteEventsCommand::PasteType defaultType = (PasteEventsCommand::PasteType)
+	config->readUnsignedNumEntry("pastetype",
+				     PasteEventsCommand::Restricted);
+
     PasteEventsCommand *command = new PasteEventsCommand
-	(segment, clipboard, insertionTime);
+	(segment, clipboard, insertionTime, defaultType);
 
     if (!command->isPossible()) {
-	slotStatusHelpMsg(i18n("Couldn't paste at this point"));
+	KMessageBox::detailedError
+	    (this,
+	     i18n("Couldn't paste at this point."),
+	     i18n(RESTRICTED_PASTE_FAILED_DESCRIPTION));
     } else {
 	addCommandToHistory(command);
 	//!!! well, we really just want to select the events
 	// we just pasted
-	setCurrentSelection(new Rosegarden::EventSelection
+	setCurrentSelection(new EventSelection
 			    (segment, insertionTime, endTime));
     }
 }
@@ -314,16 +410,22 @@ void NotationView::slotEditGeneralPaste()
     slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
 
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Rosegarden::Segment &segment = staff->getSegment();
+    Segment &segment = staff->getSegment();
+
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+    PasteEventsCommand::PasteType defaultType = (PasteEventsCommand::PasteType)
+	config->readUnsignedNumEntry("pastetype",
+				     PasteEventsCommand::Restricted);
     
-    PasteNotationDialog *dialog = new PasteNotationDialog
-	(this, PasteEventsCommand::getDefaultPasteType());
+    PasteNotationDialog *dialog =
+	new PasteNotationDialog(this, defaultType);
 
     if (dialog->exec() == QDialog::Accepted) {
 
 	PasteEventsCommand::PasteType type = dialog->getPasteType();
 	if (dialog->setAsDefault()) {
-	    PasteEventsCommand::setDefaultPasteType(type);
+	    config->writeEntry("pastetype", type);
 	}
 
 	timeT insertionTime = getInsertionTime();
@@ -335,39 +437,163 @@ void NotationView::slotEditGeneralPaste()
 	    (segment, clipboard, insertionTime, type);
 
 	if (!command->isPossible()) {
-	    slotStatusHelpMsg(i18n("Couldn't paste at this point"));
+	    KMessageBox::detailedError
+		(this,
+		 i18n("Couldn't paste at this point."),
+		 i18n(RESTRICTED_PASTE_FAILED_DESCRIPTION));
 	} else {
 	    addCommandToHistory(command);
-	    setCurrentSelection(new Rosegarden::EventSelection
+	    setCurrentSelection(new EventSelection
 				(segment, insertionTime, endTime));
 	}
     }
 }
 
+void NotationView::slotExtendSelectionBackward()
+{
+    slotExtendSelectionBackward(false);
+}
+
+void NotationView::slotExtendSelectionBackwardBar()
+{
+    slotExtendSelectionBackward(true);
+}
+
+void NotationView::slotExtendSelectionBackward(bool bar)
+{
+    // If there is no current selection, or the selection is entirely
+    // to the right of the cursor, move the cursor left and add to the
+    // selection
+
+    timeT oldTime = getInsertionTime();
+    if (bar) slotJumpBackward();
+    else slotStepBackward();
+    timeT newTime = getInsertionTime();
+
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+    EventSelection *es = new EventSelection(segment);
+    if (m_currentEventSelection) es->addFromSelection(m_currentEventSelection);
+
+    if (!m_currentEventSelection ||
+	&m_currentEventSelection->getSegment() != &segment ||
+	m_currentEventSelection->getSegmentEvents().size() == 0 ||
+	m_currentEventSelection->getStartTime() >= oldTime) {
+
+	Segment::iterator extendFrom = segment.findTime(oldTime);
+
+	while (extendFrom != segment.begin() &&
+	       (*--extendFrom)->getAbsoluteTime() >= newTime) {
+	    es->addEvent(*extendFrom);
+	}
+
+    } else { // remove an event
+
+	EventSelection::eventcontainer::iterator i =
+	    es->getSegmentEvents().end();
+
+	std::vector<Event *> toErase;
+
+	while (i != es->getSegmentEvents().begin() &&
+	       (*--i)->getAbsoluteTime() >= newTime) {
+	    toErase.push_back(*i);
+	}
+
+	for (unsigned int j = 0; j < toErase.size(); ++j) {
+	    es->removeEvent(toErase[j]);
+	}
+    }
+    
+    setCurrentSelection(es);
+}
+
+void NotationView::slotExtendSelectionForward()
+{
+    slotExtendSelectionForward(false);
+}
+
+void NotationView::slotExtendSelectionForwardBar()
+{
+    slotExtendSelectionForward(true);
+}
+
+void NotationView::slotExtendSelectionForward(bool bar)
+{
+    // If there is no current selection, or the selection is entirely
+    // to the left of the cursor, move the cursor right and add to the
+    // selection
+
+    timeT oldTime = getInsertionTime();
+    if (bar) slotJumpForward();
+    else slotStepForward();
+    timeT newTime = getInsertionTime();
+
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+    EventSelection *es = new EventSelection(segment);
+    if (m_currentEventSelection) es->addFromSelection(m_currentEventSelection);
+
+    if (!m_currentEventSelection ||
+	&m_currentEventSelection->getSegment() != &segment ||
+	m_currentEventSelection->getSegmentEvents().size() == 0 ||
+	m_currentEventSelection->getEndTime() <= oldTime) {
+
+	Segment::iterator extendFrom = segment.findTime(oldTime);
+
+	while (extendFrom != segment.end() &&
+	       (*extendFrom)->getAbsoluteTime() < newTime) {
+	    es->addEvent(*extendFrom);
+	    ++extendFrom;
+	}
+
+    } else { // remove an event
+
+	EventSelection::eventcontainer::iterator i =
+	    es->getSegmentEvents().begin();
+
+	std::vector<Event *> toErase;
+
+	while (i != es->getSegmentEvents().end() &&
+	       (*i)->getAbsoluteTime() < newTime) {
+	    toErase.push_back(*i);
+	    ++i;
+	}
+
+	for (unsigned int j = 0; j < toErase.size(); ++j) {
+	    es->removeEvent(toErase[j]);
+	}
+    }
+    
+    setCurrentSelection(es);
+}
+
+void NotationView::slotClearSelection()
+{
+    setCurrentSelection(0);
+}
+
 void NotationView::slotEditSelectFromStart()
 {
     timeT t = getInsertionTime();
-    Rosegarden::Segment &segment = m_staffs[m_currentStaff]->getSegment();
-    setCurrentSelection(new Rosegarden::EventSelection(segment,
-						       segment.getStartTime(),
-						       t));
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+    setCurrentSelection(new EventSelection(segment,
+					   segment.getStartTime(),
+					   t));
 }
 
 void NotationView::slotEditSelectToEnd()
 {
     timeT t = getInsertionTime();
-    Rosegarden::Segment &segment = m_staffs[m_currentStaff]->getSegment();
-    setCurrentSelection(new Rosegarden::EventSelection(segment,
-						       t,
-						       segment.getEndTime()));
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+    setCurrentSelection(new EventSelection(segment,
+					   t,
+					   segment.getEndTime()));
 }
 
 void NotationView::slotEditSelectWholeStaff()
 {
-    Rosegarden::Segment &segment = m_staffs[m_currentStaff]->getSegment();
-    setCurrentSelection(new Rosegarden::EventSelection(segment,
-						       segment.getStartTime(),
-						       segment.getEndTime()));
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+    setCurrentSelection(new EventSelection(segment,
+					   segment.getStartTime(),
+					   segment.getEndTime()));
 }
 
 void NotationView::slotToggleNotesToolBar()
@@ -393,6 +619,11 @@ void NotationView::slotToggleClefsToolBar()
 void NotationView::slotToggleFontToolBar()
 {
     toggleNamedToolBar("fontToolBar");
+}
+
+void NotationView::slotToggleTransportToolBar()
+{
+    toggleNamedToolBar("transportToolBar");
 }
 
 void NotationView::toggleNamedToolBar(const QString& toolBarName, bool* force)
@@ -468,13 +699,14 @@ void NotationView::slotGroupTuplet(bool simple)
     timeT unit = 0;
     int tupled = 2;
     int untupled = 3;
-    Rosegarden::Segment *segment = 0;
+    Segment *segment = 0;
 
+/*!!! nah -- selection rectangle is never visible now
     NotationSelector *selector = dynamic_cast<NotationSelector *>
 	(m_toolBox->getTool(NotationSelector::ToolName));
-
-    if (m_currentEventSelection &&
-	selector && selector->isRectangleVisible()) {
+*/
+    if (m_currentEventSelection /*!!! &&
+  selector && selector->isRectangleVisible() */ ) {
 
 	t = m_currentEventSelection->getStartTime();
 
@@ -691,6 +923,137 @@ void NotationView::slotSetStyleFromAction()
     }
 }
 
+void NotationView::slotInsertNoteFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->name();
+
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+
+    NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
+    if (!noteInserter) {
+	KMessageBox::sorry(this, i18n("No note duration selected"));
+	return;
+    }
+
+    if (name.left(7) == "insert_") {
+	name = name.right(name.length()-7);
+	
+	KTmpStatusMsg msg(i18n("Inserting note"), this);
+	
+	int modify = 0;
+	int octave = 0;
+
+	if (name.right(5) == "_high") {
+	    
+	    octave = 1;
+	    name = name.left(name.length()-5);
+	
+	} else if (name.right(4) == "_low") {
+
+	    octave = -1;
+	    name = name.left(name.length()-4);
+	}
+
+	if (name.right(6) == "_sharp") {
+
+	    modify = 1;
+	    name = name.left(name.length()-6);
+
+	} else if (name.right(5) == "_flat") {
+
+	    modify = -1;
+	    name = name.left(name.length()-5);
+	}
+
+	int scalePitch = name.toInt();
+	
+	if (scalePitch < 0 || scalePitch > 7) {
+	    NOTATION_DEBUG << "NotationView::slotInsertNoteFromAction: pitch "
+			   << scalePitch << " out of range, using 0" <<endl;
+	    scalePitch = 0;
+	}
+
+	Event *clefEvt = 0, *keyEvt = 0;
+	timeT time = getInsertionTime(clefEvt, keyEvt);
+
+	Rosegarden::Key key;
+	if (keyEvt) key = Rosegarden::Key(*keyEvt);
+
+	Rosegarden::Clef clef;
+	if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
+
+	int pitch =
+	    key.getTonicPitch() + 60 + 12*(octave + clef.getOctave()) + modify;
+
+	static int scale[] = { 0, 2, 4, 5, 7, 9, 11 };
+	pitch += scale[scalePitch];
+	
+	NOTATION_DEBUG << "Inserting note at pitch " << pitch << " with modifier " << modify << endl;
+
+	noteInserter->insertNote(segment, time, pitch,
+				 Rosegarden::Accidentals::NoAccidental);
+
+    } else {
+	
+	KMessageBox::sorry
+	    (this, QString(i18n("Unknown note insert action %1").arg(name)));
+    }
+}
+
+void NotationView::slotInsertRest()
+{
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+    timeT time = getInsertionTime();
+
+    RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
+    if (!restInserter) {
+	KMessageBox::sorry(this, i18n("No rest duration selected"));
+	return;
+    }
+
+    restInserter->insertNote(segment, time,
+			     0, Rosegarden::Accidentals::NoAccidental);
+}
+
+void NotationView::slotSwitchFromRestToNote()
+{
+    RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
+    if (!restInserter) {
+	KMessageBox::sorry(this, i18n("No rest duration selected"));
+	return;
+    }
+
+    Rosegarden::Note note(restInserter->getCurrentNote());
+    
+    NoteInserter *noteInserter = dynamic_cast<NoteInserter*>
+	(m_toolBox->getTool(NoteInserter::ToolName));
+
+    noteInserter->slotSetNote(note.getNoteType());
+    noteInserter->slotSetDots(note.getDots());
+
+    setTool(noteInserter);
+}
+
+void NotationView::slotSwitchFromNoteToRest()
+{
+    NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
+    if (!noteInserter) {
+	KMessageBox::sorry(this, i18n("No note duration selected"));
+	return;
+    }
+
+    Rosegarden::Note note(noteInserter->getCurrentNote());
+    
+    RestInserter *restInserter = dynamic_cast<RestInserter*>
+	(m_toolBox->getTool(RestInserter::ToolName));
+
+    restInserter->slotSetNote(note.getNoteType());
+    restInserter->slotSetDots(note.getDots());
+
+    setTool(restInserter);
+}
+
 void NotationView::slotTransformsTranspose()
 {
     if (!m_currentEventSelection) return;
@@ -760,6 +1123,16 @@ void NotationView::slotTransformsQuantize()
     }
 }
 
+void NotationView::slotTransformsFixSmoothing()
+{
+    //!!! actually, this is a pretty useless function
+
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Fixing smoothed values..."), this);
+    addCommandToHistory(new TransformsMenuFixSmoothingCommand
+			(*m_currentEventSelection, m_legatoQuantizer));
+}
+
 void NotationView::slotAddSlashes()
 {
     const QObject *s = sender();
@@ -795,8 +1168,8 @@ void NotationView::slotMarksRemoveMarks()
 void NotationView::slotEditAddClef()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
-    Rosegarden::Segment &segment = staff->getSegment();
+    Event *clefEvt = 0, *keyEvt = 0;
+    Segment &segment = staff->getSegment();
     timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
 
     Rosegarden::Clef clef;
@@ -822,7 +1195,7 @@ void NotationView::slotEditAddClef()
 
 void NotationView::slotEditAddTempo()
 {
-    Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
+    Event *clefEvt = 0, *keyEvt = 0;
     timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
 
     TempoDialog *tempoDlg = new TempoDialog(this, m_document);
@@ -841,8 +1214,8 @@ void NotationView::slotEditAddTempo()
 void NotationView::slotEditAddTimeSignature()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
-    Rosegarden::Segment &segment = staff->getSegment();
+    Event *clefEvt = 0, *keyEvt = 0;
+    Segment &segment = staff->getSegment();
     Rosegarden::Composition *composition = segment.getComposition();
     timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
 
@@ -882,8 +1255,6 @@ void NotationView::slotEditAddTimeSignature()
 				(composition, insertionTime,
 				 dialog->getTimeSignature()));
 	}
-
-	//!!!setCurrentSelection(0);
     }
     
     delete dialog;
@@ -892,8 +1263,8 @@ void NotationView::slotEditAddTimeSignature()
 void NotationView::slotEditAddKeySignature()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
-    Rosegarden::Segment &segment = staff->getSegment();
+    Event *clefEvt = 0, *keyEvt = 0;
+    Segment &segment = staff->getSegment();
     timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
     
 /*!!!
@@ -939,8 +1310,6 @@ void NotationView::slotEditAddKeySignature()
 		  conversion == KeySignatureDialog::Convert,
 		  conversion == KeySignatureDialog::Transpose));
 	}
-
-	//!!!setCurrentSelection(0);
     }
 
     delete dialog;
@@ -950,10 +1319,10 @@ void NotationView::slotEditAddKeySignature()
 void NotationView::slotDebugDump()
 {
     if (m_currentEventSelection) {
-	Rosegarden::EventSelection::eventcontainer &ec =
+	EventSelection::eventcontainer &ec =
 	    m_currentEventSelection->getSegmentEvents();
 	int n = 0;
-	for (Rosegarden::EventSelection::eventcontainer::iterator i =
+	for (EventSelection::eventcontainer::iterator i =
 		 ec.begin();
 	     i != ec.end(); ++i) {
 	    cerr << "\n" << n++ << " [" << (*i) << "]" << endl;
@@ -1030,7 +1399,7 @@ NotationView::slotSetInsertCursorPosition(double x, int y, bool scroll,
     slotSetCurrentStaff(y);
 
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Rosegarden::Event *clefEvt, *keyEvt;
+    Event *clefEvt, *keyEvt;
     NotationElementList::iterator i =
 	staff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
 
@@ -1082,7 +1451,7 @@ NotationView::doDeferredCursorMove()
 
     if (m_staffs.size() == 0) return;
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Rosegarden::Segment &segment = staff->getSegment();
+    Segment &segment = staff->getSegment();
 
     if (t < segment.getStartTime()) {
 	t = segment.getStartTime();
@@ -1095,6 +1464,10 @@ NotationView::doDeferredCursorMove()
 	staff->getViewElementList()->findNearestTime(t);
 
     if (i == staff->getViewElementList()->end()) {
+	//!!! ???
+	if (m_insertionTime >= staff->getSegment().getStartTime()) {
+	    i = staff->getViewElementList()->begin();
+	}
 	m_insertionTime = staff->getSegment().getStartTime();
     } else {
 	m_insertionTime = (*i)->getAbsoluteTime();
@@ -1163,9 +1536,9 @@ void
 NotationView::slotStepBackward()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Rosegarden::Segment &segment = staff->getSegment();
+    Segment &segment = staff->getSegment();
     timeT time = m_insertionTime;
-    Rosegarden::Segment::iterator i = segment.findTime(time);
+    Segment::iterator i = segment.findTime(time);
 
     while (i != segment.begin() &&
 	   (i == segment.end() || (*i)->getAbsoluteTime() == time)) --i;
@@ -1176,9 +1549,9 @@ void
 NotationView::slotStepForward()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Rosegarden::Segment &segment = staff->getSegment();
+    Segment &segment = staff->getSegment();
     timeT time = m_insertionTime;
-    Rosegarden::Segment::iterator i = segment.findTime(time);
+    Segment::iterator i = segment.findTime(time);
 
     while (i != segment.end() && (*i)->getAbsoluteTime() == time) ++i;
     if (i == segment.end()) slotSetInsertCursorPosition(segment.getEndTime());
@@ -1189,7 +1562,7 @@ void
 NotationView::slotJumpBackward()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Rosegarden::Segment &segment = staff->getSegment();
+    Segment &segment = staff->getSegment();
     timeT time = segment.getBarStartForTime(m_insertionTime - 1);
     slotSetInsertCursorPosition(time);
 }
@@ -1198,10 +1571,28 @@ void
 NotationView::slotJumpForward()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    Rosegarden::Segment &segment = staff->getSegment();
+    Segment &segment = staff->getSegment();
     timeT time = segment.getBarEndForTime(m_insertionTime);
     slotSetInsertCursorPosition(time);
 }
+
+void
+NotationView::slotJumpToStart()
+{
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    Segment &segment = staff->getSegment();
+    timeT time = segment.getStartTime();
+    slotSetInsertCursorPosition(time);
+}    
+
+void
+NotationView::slotJumpToEnd()
+{
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    Segment &segment = staff->getSegment();
+    timeT time = segment.getEndMarkerTime();
+    slotSetInsertCursorPosition(time);
+}    
 
 void
 NotationView::slotJumpCursorToPlayback()
@@ -1275,6 +1666,8 @@ void NotationView::slotTrebleClef()
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Treble);
+
+    stateChanged("note_insert_tool_current", KXMLGUIClient::StateReverse);
 }
 
 void NotationView::slotTenorClef()
@@ -1284,6 +1677,8 @@ void NotationView::slotTenorClef()
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Tenor);
+
+    stateChanged("note_insert_tool_current", KXMLGUIClient::StateReverse);
 }
 
 void NotationView::slotAltoClef()
@@ -1293,6 +1688,8 @@ void NotationView::slotAltoClef()
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Alto);
+
+    stateChanged("note_insert_tool_current", KXMLGUIClient::StateReverse);
 }
 
 void NotationView::slotBassClef()
@@ -1302,6 +1699,8 @@ void NotationView::slotBassClef()
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Rosegarden::Clef::Bass);
+
+    stateChanged("note_insert_tool_current", KXMLGUIClient::StateReverse);
 }
 
 
@@ -1311,6 +1710,8 @@ void NotationView::slotText()
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("text"));
     setTool(m_toolBox->getTool(TextInserter::ToolName));
+
+    stateChanged("note_insert_tool_current", KXMLGUIClient::StateReverse);
 }
 
 
@@ -1322,12 +1723,16 @@ void NotationView::slotEraseSelected()
 {
     NOTATION_DEBUG << "NotationView::slotEraseSelected()\n";
     setTool(m_toolBox->getTool(NotationEraser::ToolName));
+
+    stateChanged("note_insert_tool_current", KXMLGUIClient::StateReverse);
 }
 
 void NotationView::slotSelectSelected()
 {
     NOTATION_DEBUG << "NotationView::slotSelectSelected()\n";
     setTool(m_toolBox->getTool(NotationSelector::ToolName));
+
+    stateChanged("note_insert_tool_current", KXMLGUIClient::StateReverse);
 }
 
 
@@ -1341,6 +1746,16 @@ void NotationView::slotLinearMode()
 void NotationView::slotPageMode()
 {
     setPageMode(true);
+}
+
+void NotationView::slotInsertChordMode()
+{
+    m_insertChordMode = true;
+}
+
+void NotationView::slotInsertMelodyMode()
+{
+    m_insertChordMode = false;
 }
 
 void NotationView::slotLabelChords()
@@ -1364,6 +1779,28 @@ void NotationView::slotShowTempos()
 	m_tempoRuler->hide();
     } else {
 	m_tempoRuler->show();
+    }
+}
+
+void NotationView::slotShowAnnotations()
+{
+    m_annotationsVisible = !m_annotationsVisible;
+    refreshSegment(0, 0, 0);
+}
+
+void NotationView::slotEditLyrics()
+{
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    Segment &segment = staff->getSegment();
+
+    LyricEditDialog *dialog = new LyricEditDialog(this, &segment);
+
+    if (dialog->exec() == QDialog::Accepted) {
+	
+	SetLyricsCommand *command = new SetLyricsCommand
+	    (&segment, dialog->getLyricData());
+
+	addCommandToHistory(command);
     }
 }
 

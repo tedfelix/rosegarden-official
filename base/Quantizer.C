@@ -294,18 +294,18 @@ Quantizer::quantize(EventSelection *selection)
     m_manualClear = true;
 
     RangeList::iterator r = ranges.end();
-    while(r-- != ranges.begin())
+    while (r-- != ranges.begin())
     {
-        m_toInsert.clear();
         quantize(&segment, r->first, r->second);
-
-        // Push the new events to the selection
-        //
-        for (int i = 0; i < m_toInsert.size(); ++i)
-            selection->addEvent(m_toInsert[i]);
     }
-    m_manualClear = false;
 
+    // Push the new events to the selection
+    //
+    for (int i = 0; i < m_toInsert.size(); ++i)
+	selection->addEvent(m_toInsert[i]);
+    m_toInsert.clear();
+
+    m_manualClear = false;
 }
 
 

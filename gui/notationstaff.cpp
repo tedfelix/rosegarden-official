@@ -157,8 +157,8 @@ NotationStaff::drawStaffName()
 
     m_staffName = new QCanvasSimpleSprite
 	(new QCanvasPixmap
-	 (m_notePixmapFactory->makeTextPixmap(Rosegarden::Text(name,
-						 Rosegarden::Text::StaffName))),
+	 (m_notePixmapFactory->makeTextPixmap
+	  (Rosegarden::Text(name, Rosegarden::Text::StaffName))),
 	 m_canvas);
 
     int layoutY = getLayoutYForHeight(5);
@@ -764,9 +764,21 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	} else if (elt->event()->isa(Rosegarden::Text::EventType)) {
 
-	    pixmap = new QCanvasPixmap
-		(m_notePixmapFactory->makeTextPixmap
-		 (Rosegarden::Text(*elt->event())));
+	    if (elt->event()->has(Rosegarden::Text::TextTypePropertyName) &&
+		elt->event()->get<String>
+		(Rosegarden::Text::TextTypePropertyName) ==
+		Rosegarden::Text::Annotation &&
+		!m_notationView->areAnnotationsVisible()) {
+		
+		//!!! what? we should probably show somewhere that
+		// annotations are switched off
+
+	    } else {
+
+		pixmap = new QCanvasPixmap
+		    (m_notePixmapFactory->makeTextPixmap
+		     (Rosegarden::Text(*elt->event())));
+	    }
 
 	} else if (elt->event()->isa(Indication::EventType)) {
 

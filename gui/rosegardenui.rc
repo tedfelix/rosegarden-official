@@ -29,8 +29,11 @@
   </Menu>
   <Menu name="Segments">
 	<text>Seg&amp;ments</text>
+      	<Action name="edit_default"/>
+	<Separator/>
       	<Action name="edit_matrix"/>
       	<Action name="edit_notation"/>
+      	<Action name="edit_event_list"/>
 	<Separator/>
 	<Action name="quantize_selection"/>
 	<Action name="rescale"/>
@@ -48,10 +51,10 @@
   <Menu name="Transport">
         <text>T&amp;ransport</text>
         <Action name="play"/> 
-        <Action name="record"/>
         <Action name="stop"/> 
         <Action name="fast_forward"/> 
         <Action name="rewind"/> 
+        <Action name="record"/>
   </Menu>
   <Menu name="Tools">
 	<text>&amp;Tools</text>
@@ -65,13 +68,16 @@
   </Menu>
   <Menu  name="settings"><text>&amp;Settings</text>
          <Action name="show_tracks_toolbar"        append="show_merge" />
+         <Action name="show_transport_toolbar"     append="show_merge" />
+  <Separator append="show_merge" />
          <Action name="show_transport"             append="show_merge" />
-         <Action name="show_tracklabels"           append="show_merge" />
-         <Action name="show_segment_parameters"    append="show_merge" />
-         <Action name="show_instrument_parameters" append="show_merge" />
+  <Separator append="show_merge" />
          <Action name="show_rulers"                append="show_merge" />
          <Action name="show_tempo_ruler"           append="show_merge" />
          <Action name="show_previews"              append="show_merge" />
+         <Action name="show_tracklabels"           append="show_merge" />
+         <Action name="show_segment_parameters"    append="show_merge" />
+         <Action name="show_instrument_parameters" append="show_merge" />
   </Menu>
 
 </MenuBar>
@@ -84,6 +90,16 @@
 	<Action name="erase"/>
         <Action name="split"/>
         <Action name="join"/>
+</ToolBar>
+
+<ToolBar name="transportToolBar">
+  <Action name="rewindtobeginning" />
+  <Action name="rewind" />
+  <Action name="play" />
+  <Action name="fast_forward" />
+  <Action name="fastforwardtoend" />
+  <Action name="stop" />
+  <Action name="record" />
 </ToolBar>
 
 <ToolBar name="zoomToolBar">

@@ -623,55 +623,6 @@ EventView::slotPopupEventEditor(QListViewItem *item)
 
     if (eItem)
     {
-        // For the moment just get one event
-        //
-
-/*!!! bad idea, very unreliable
-
-        Rosegarden::Segment::iterator it = eItem->getSegment()->
-            findTime(eItem->text(0).toInt());
-
-        do
-        {
-            // if types don't match then return
-            if ((*it)->getType() != qstrtostr(eItem->text(2)))
-                continue;
-
-            // try to match durations
-            if ((*it)->getDuration() != eItem->text(1).toInt())
-                continue;
-
-            if((*it)->isa(Rosegarden::Note::EventRestType))
-            {
-                break;
-            }
-
-            if((*it)->isa(Rosegarden::Note::EventType))
-            {
-                // check pitch
-	        if ((*it)->has(BaseProperties::PITCH) &&
-                   ((*it)->get<Int>(BaseProperties::PITCH)
-                        == eItem->text(3).toInt()))
-                    break;
-            }
-
-
-            if ((*it)->getAbsoluteTime() > eItem->text(0).toInt())
-            {
-                std::cerr << "EventView::slotPopupEventEditor - "
-                          << "couldn't find event" << std::endl;
-                return;
-            }
-
-        }
-        while (++it != eItem->getSegment()->end());
-
-        // Ok, pop up and execute dialog and perform command if 
-        // we've modified the event.
-        //
-        EventEditDialog *dialog = new EventEditDialog(this, **it);
-*/
-
 	Rosegarden::Event *event = eItem->getEvent();
         EventEditDialog *dialog = new EventEditDialog(this, *event);
 

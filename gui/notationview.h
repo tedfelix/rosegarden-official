@@ -124,6 +124,17 @@ public:
      * Set the note or rest selected by the user from the toolbars
      */
     void setCurrentSelectedNote(NoteActionData);
+    
+    /**
+     * Discover whether chord-mode insertions are enabled (as opposed
+     * to the default melody-mode)
+     */
+    bool isInInsertChordMode() { return m_insertChordMode; }
+
+    /**
+     * Discover whether annotations are being displayed or not
+     */
+    bool areAnnotationsVisible() { return m_annotationsVisible; }
 
     /**
      * Set the current event selection
@@ -254,6 +265,11 @@ public slots:
      */
     void slotToggleFontToolBar();
 
+    /**
+     * toggles the transport toolbar
+     */
+    void slotToggleTransportToolBar();
+
     /// note switch slot
     void slotNoteAction();
 
@@ -281,6 +297,13 @@ public slots:
     void slotSelectSelected();
 
     /// edit menu
+    void slotExtendSelectionBackward();
+    void slotExtendSelectionForward();
+    void slotExtendSelectionBackwardBar();
+    void slotExtendSelectionForwardBar();
+    void slotExtendSelectionBackward(bool bar);
+    void slotExtendSelectionForward(bool bar);
+    void slotClearSelection();
     void slotEditSelectFromStart();
     void slotEditSelectToEnd();
     void slotEditSelectWholeStaff();
@@ -290,6 +313,8 @@ public slots:
     void slotPageMode();
     void slotLabelChords();
     void slotShowTempos();
+    void slotShowAnnotations();
+    void slotEditLyrics();
 
     /// group slots
     void slotGroupBeam();
@@ -319,8 +344,15 @@ public slots:
     void slotTransformsTransposeDown();
     void slotTransformsTransposeDownOctave();
     void slotTransformsQuantize();
+    void slotTransformsFixSmoothing();
 
     void slotSetStyleFromAction();
+    void slotInsertNoteFromAction();
+    void slotInsertChordMode();
+    void slotInsertMelodyMode();
+    void slotInsertRest();
+    void slotSwitchFromRestToNote();
+    void slotSwitchFromNoteToRest();
 
     void slotAddMark();
     void slotMarksAddTextMark();
@@ -416,6 +448,12 @@ public slots:
     /// Step forward one bar with the insert cursor position
     void slotJumpForward();
 
+    /// Zip back to the start of the segment
+    void slotJumpToStart();
+
+    /// Zip forward to the end of the segment
+    void slotJumpToEnd();
+
     /// Set insert cursor to playback pointer position
     void slotJumpCursorToPlayback();
 
@@ -450,10 +488,22 @@ public slots:
     void slotChangeFontSizeFromIndex(int n);
 
     /// Changes the hlayout spacing of the staffs on the view
-    void slotChangeSpacing(int newSpacingIndex);
+    void slotChangeSpacing(int newSpacing);
+
+    /// Changes the hlayout spacing of the staffs on the view
+    void slotChangeSpacingFromIndex(int newSpacingIndex);
+
+    /// Changes the hlayout spacing of the staffs on the view
+    void slotChangeSpacingFromAction();
 
     /// Changes the display quantization of the staffs on the view
-    void slotChangeLegato(int newLegatoIndex);
+    void slotChangeLegato(Rosegarden::timeT newLegatoDuration);
+
+    /// Changes the display quantization of the staffs on the view
+    void slotChangeLegatoFromIndex(int newLegatoIndex);
+
+    /// Changes the display quantization of the staffs on the view
+    void slotChangeLegatoFromAction();
 
     /// The document has been destroyed, and we're about to go with it
     void slotDocumentDestroyed();
@@ -485,6 +535,8 @@ signals:
                      double,             // tempo value
                      TempoDialog::TempoDialogAction); // tempo action
 
+    void play();
+    void stop();
     void fastForwardPlayback();
     void rewindPlayback();
     void fastForwardPlaybackToEnd();
@@ -651,8 +703,10 @@ protected:
     QWidget *m_tempoRuler;
     bool m_chordNamesVisible;
     bool m_temposVisible;
-
+    bool m_annotationsVisible;
+    
     bool m_tupletMode;
+    bool m_insertChordMode;
     
     std::vector<int> m_legatoDurations;
 

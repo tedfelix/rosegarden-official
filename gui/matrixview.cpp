@@ -636,7 +636,8 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
     if (s) eventsSelected = s->getSegmentEvents().size();
     if (s) {
         m_selectionCounter->setText
-            (i18n("  %1 events selected ").arg(eventsSelected));
+	    (i18n("  %1 event%2 selected ").
+	     arg(eventsSelected).arg(eventsSelected == 1 ? "" : "s"));
     } else {
         m_selectionCounter->setText(i18n("  No selection "));
     }
@@ -1208,42 +1209,21 @@ MatrixView::initActionsToolbar()
 
     for (unsigned int i = 0; i < m_snapValues.size(); i++)
     {
-        Note nearestNote = Note::getNearestNote(m_snapValues[i]);
+	if (m_snapValues[i] == Rosegarden::SnapGrid::NoSnap) {
+	    m_snapGridCombo->insertItem(i18n("None"));
+	} else if (m_snapValues[i] == Rosegarden::SnapGrid::SnapToUnit) {
+	    m_snapGridCombo->insertItem(i18n("Unit"));
+	} else if (m_snapValues[i] == Rosegarden::SnapGrid::SnapToBeat) {
+	    m_snapGridCombo->insertItem(i18n("Beat"));
+	} else if (m_snapValues[i] == Rosegarden::SnapGrid::SnapToBar) {
+	    m_snapGridCombo->insertItem(i18n("Bar"));
+	} else {
 
-        if (nearestNote.getDuration() == m_snapValues[i])
-        {
-            QString pmapName = "menu-" +
-                               strtoqstr(nearestNote.getReferenceName());
-            QPixmap pmap = npf.makeToolbarPixmap(pmapName);
-
-            m_snapGridCombo->insertItem(pmap,
-                                        strtoqstr(nearestNote.getShortName()));
-        }
-        else
-        {
-            QString noteName;
-
-            if (m_snapValues[i] == Rosegarden::SnapGrid::NoSnap)
-                noteName = i18n("None");
-            else if (m_snapValues[i] == Rosegarden::SnapGrid::SnapToUnit)
-                noteName = i18n("Unit");
-            else if (m_snapValues[i] == Rosegarden::SnapGrid::SnapToBeat)
-                noteName = i18n("Beat");
-            else if (m_snapValues[i] == Rosegarden::SnapGrid::SnapToBar)
-                noteName = i18n("Bar");
-
-            if (noteName == "")
-            {
-                int iValue = crotchetDuration / m_snapValues[i];
-
-                if (iValue * m_snapValues[i] == crotchetDuration)
-                    noteName = i18n("1/%1").arg(iValue);
-                else
-                    noteName = i18n("%1 ticks").arg(m_snapValues[i]);
-            }
-
-            m_snapGridCombo->insertItem(noteName);
-        }
+	    timeT err = 0;
+	    QString label = npf.makeNoteMenuLabel(m_snapValues[i], true, err);
+	    QPixmap pixmap = npf.makeNoteMenuPixmap(m_snapValues[i], err);
+	    m_snapGridCombo->insertItem((err ? noMap : pixmap), label);
+	}
     }
 
     connect(m_snapGridCombo, SIGNAL(activated(int)),
@@ -1261,15 +1241,14 @@ MatrixView::initActionsToolbar()
     m_quantizeCombo = new RosegardenComboBox(false, false, actionsToolbar);
 
     for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
-        std::string noteName = m_quantizations[i].noteName;
-        QString qname = strtoqstr(m_quantizations[i].name);
-        QPixmap pmap = noMap;
-        if (noteName != "") {
-            noteName = "menu-" + noteName;
-            pmap = npf.makeToolbarPixmap(strtoqstr(noteName));
-        }
-        m_quantizeCombo->insertItem(pmap, qname);
+
+	Rosegarden::timeT time = m_quantizations[i].unit;
+	Rosegarden::timeT error = 0;
+	QString label = npf.makeNoteMenuLabel(time, true, error);
+	QPixmap pmap = npf.makeNoteMenuPixmap(time, error);
+	m_quantizeCombo->insertItem(error ? noMap : pmap, label);
     }
+
     m_quantizeCombo->insertItem(noMap, i18n("Off"));
 
     connect(m_quantizeCombo, SIGNAL(activated(int)),

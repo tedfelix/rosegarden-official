@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 /*
     Rosegarden-4 v0.2
     A sequencer and musical notation editor.
@@ -32,6 +34,8 @@
 #include "rosedebug.h"
 #include <iostream>
 
+#include <qregexp.h>
+
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
 using Rosegarden::Event;
@@ -40,6 +44,7 @@ using Rosegarden::Note;
 using Rosegarden::Clef;
 using Rosegarden::Int;
 using Rosegarden::String;
+using Rosegarden::Text;
 using Rosegarden::Accidental;
 using Rosegarden::Accidentals::NoAccidental;
 using Rosegarden::Indication;
@@ -255,10 +260,6 @@ PasteSegmentsCommand::unexecute()
 }
     
 
-
-PasteEventsCommand::PasteType
-PasteEventsCommand::m_defaultPaste = PasteEventsCommand::Restricted;
-
 PasteEventsCommand::PasteEventsCommand(Rosegarden::Segment &segment,
 				       Rosegarden::Clipboard *clipboard,
 				       Rosegarden::timeT pasteTime,
@@ -285,6 +286,26 @@ PasteEventsCommand::PasteEventsCommand(Rosegarden::Segment &segment,
 	    }
 	}
     }
+}
+
+PasteEventsCommand::PasteTypeMap
+PasteEventsCommand::getPasteTypes()
+{
+    static PasteTypeMap types;
+    static bool haveTypes = false;
+    if (!haveTypes) {
+	types[Restricted] =
+	    "Paste into an existing gap [\"restricted\"]";
+	types[Simple] =
+	    "Erase existing events to make room [\"simple\"]";
+	types[OpenAndPaste] =
+	    "Move existing events out of the way [\"open-n-paste\"]";
+	types[NoteOverlay] =
+	    "Overlay notes, tying against present notes [\"note-overlay\"]";
+	types[MatrixOverlay] =
+	    "Overlay notes, ignoring present notes [\"matrix-overlay\"]";
+    }
+    return types;
 }
 
 timeT
@@ -646,3 +667,129 @@ EventUnquantizeCommand::modifySegment()
     }
 }
 
+
+SetLyricsCommand::SetLyricsCommand(Segment *segment, QString newLyricData) :
+    XKCommand(getGlobalName()),
+    m_segment(segment),
+    m_newLyricData(newLyricData)
+{
+    // nothing
+}
+
+SetLyricsCommand::~SetLyricsCommand()
+{
+    for (std::vector<Event *>::iterator i = m_oldLyricEvents.begin();
+	 i != m_oldLyricEvents.end(); ++i) {
+	delete *i;
+    }
+}
+
+void
+SetLyricsCommand::execute()
+{
+    // first remove old lyric events
+    
+    Segment::iterator i = m_segment->begin();
+
+    while (i != m_segment->end()) {
+
+	Segment::iterator j = i;
+	++j;
+
+	if ((*i)->isa(Text::EventType)) {
+	    std::string textType;
+	    if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
+		textType == Text::Lyric) {
+		m_oldLyricEvents.push_back(new Event(**i));
+		m_segment->erase(i);
+	    }
+	}
+
+	i = j;
+    }
+
+    // now parse the new string
+
+    QStringList barStrings =
+	QStringList::split("/", m_newLyricData, true); // empties ok
+    
+    Rosegarden::Composition *comp = m_segment->getComposition();
+    int barNo = comp->getBarNumber(m_segment->getStartTime());
+    
+    for (QStringList::Iterator bsi = barStrings.begin();
+	 bsi != barStrings.end(); ++bsi) {
+
+	NOTATION_DEBUG << "Parsing lyrics for bar number " << barNo << ": \"" << *bsi << "\"" << endl;
+
+	std::pair<timeT, timeT> barRange = comp->getBarRange(barNo++);
+	QString syllables = *bsi;
+	syllables.replace(QRegExp("\\[\\d+\\] "), " ");
+	QStringList syllableList = QStringList::split(" ", syllables); // no empties
+	
+	i = m_segment->findTime(barRange.first);
+	timeT laterThan = barRange.first - 1;
+
+	for (QStringList::iterator ssi = syllableList.begin();
+	     ssi != syllableList.end(); ++ssi) {
+
+	    while (m_segment->isBeforeEndMarker(i) &&
+		   (*i)->getAbsoluteTime() < barRange.second &&
+		   (!(*i)->isa(Note::EventType) ||
+		    (*i)->getAbsoluteTime() <= laterThan)) ++i;
+
+	    timeT time = m_segment->getEndMarkerTime();
+	    if (m_segment->isBeforeEndMarker(i))
+		time = (*i)->getAbsoluteTime();
+
+	    QString syllable = *ssi;
+	    syllable.replace(QRegExp("~"), " ");
+	    syllable = syllable.simplifyWhiteSpace();
+	    if (syllable == "") continue;
+	    laterThan = time + 1;
+	    if (syllable == ".") continue;
+
+	    NOTATION_DEBUG << "Syllable \"" << syllable << "\" at time " << time <<  endl;
+
+	    Text text(qstrtostr(syllable), Text::Lyric);
+	    m_segment->insert(text.getAsEvent(time));
+	}
+    }
+}
+
+void
+SetLyricsCommand::unexecute()
+{
+    // Before we inserted the new lyric events (in execute()), we
+    // removed all the existing ones.  That means we know any lyric
+    // events found now must have been inserted by execute(), so we
+    // can safely remove them before restoring the old ones.
+    
+    Segment::iterator i = m_segment->begin();
+
+    while (i != m_segment->end()) {
+
+	Segment::iterator j = i;
+	++j;
+
+	if ((*i)->isa(Text::EventType)) {
+	    std::string textType;
+	    if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
+		textType == Text::Lyric) {
+		m_segment->erase(i);
+	    }
+	}
+
+	i = j;
+    }
+
+    // Now restore the old ones and clear out the vector.
+
+    for (std::vector<Event *>::iterator i = m_oldLyricEvents.begin();
+	 i != m_oldLyricEvents.end(); ++i) {
+	m_segment->insert(*i);
+    }
+
+    m_oldLyricEvents.clear();
+}
+
+    

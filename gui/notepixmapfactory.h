@@ -154,12 +154,19 @@ public:
     QCanvasPixmap makeHairpinPixmap(int length, bool isCrescendo);
     QCanvasPixmap makeSlurPixmap(int length, int dy, bool above);
     QCanvasPixmap makeUnknownPixmap();
-    QCanvasPixmap makeToolbarPixmap(const char *name);
     QCanvasPixmap makeClefDisplayPixmap(const Rosegarden::Clef &clef);
     QCanvasPixmap makeKeyDisplayPixmap(const Rosegarden::Key &key,
 				       const Rosegarden::Clef &clef);
     QCanvasPixmap makeTextPixmap(const Rosegarden::Text &text);
 
+    QCanvasPixmap makeToolbarPixmap(const char *name);
+    QCanvasPixmap makeNoteMenuPixmap(Rosegarden::timeT duration,
+				     Rosegarden::timeT &errorReturn);
+    QString makeNoteMenuLabel(Rosegarden::timeT duration,
+			      bool brief,
+			      Rosegarden::timeT &errorReturn,
+			      bool plural = false);
+    
     int getNoteBodyWidth (Rosegarden::Note::Type =
                           Rosegarden::Note::Crotchet) const;
 

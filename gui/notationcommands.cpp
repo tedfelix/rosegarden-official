@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 /*
     Rosegarden-4 v0.2
     A sequencer and musical notation editor.
@@ -108,10 +110,8 @@ NoteInsertionCommand::modifySegment()
 	++i;
     }
 
-    //!!! in order to apply noteStyle without base/ having to know
-    // about it, we're going to have to discover _all_ the notes that
-    // the helper just inserted... oh screw.
-
+    // insert via a model event, so as to apply the note style
+    
     Event *e = new Event
 	(Note::EventType, m_insertionTime, m_note.getDuration());
 
@@ -785,6 +785,7 @@ MarksMenuAddMarkCommand::getGlobalName(Rosegarden::Mark markType)
 
     // Gosh, lots of collisions
     if (markType == Rosegarden::Marks::Sforzando) m = "S&forzando";
+    else if (markType == Rosegarden::Marks::Staccato) m = "Sta&ccato";
     else if (markType == Rosegarden::Marks::Rinforzando) m = "R&inforzando";
     else if (markType == Rosegarden::Marks::Tenuto) m = "T&enuto";
     else if (markType == Rosegarden::Marks::Trill) m = "Tri&ll";
@@ -843,3 +844,20 @@ MarksMenuRemoveMarksCommand::modifySegment()
 	}
     }
 }
+
+
+void
+TransformsMenuFixSmoothingCommand::modifySegment()
+{
+    //!!! FIXME -- the Quantizer needs a fixQuantizedValues(EventSelection*)
+    // method, but it hasn't got one yet so for the moment we're just fixing
+    // all the quantized values within the time limits whether selected or not
+
+    Segment *segment(&m_selection->getSegment());
+    m_quantizer->fixQuantizedValues
+	(segment,
+	 segment->findTime(m_selection->getStartTime()),
+	 segment->findTime(m_selection->getEndTime()));
+}
+
+

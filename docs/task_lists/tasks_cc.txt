@@ -2,11 +2,13 @@
 20020729 task list
 ==================
 
- 1. Lyrics.  And a bouncing ball to track them with during playback.
+ 1. Lyrics. [DONEish]
+    And a bouncing ball to track them with during playback.
 
  2. Better-calculated progress bars in notation view [DONEish]
     [No -- still open.  Need to manage them better across multiple
-    open views of the same segment.]
+    open views of the same segment.] [DONE except for strange bug
+    that leaves wait cursors active over only part of the window]
 
  3. User docs / help
 
@@ -49,11 +51,27 @@
 
 22. Some notation view menu actions into editing toolbars
 
-23. Show/hide annotations
+23. Show/hide annotations [DONE, but need some way of indicating that
+    there may be hidden annotations]
 
 24. See http://sourceforge.net/mailarchive/message.php?msg_id=1824903
 
-25. Thoroughly scan all following task lists to find more stuff to do...
+25. Tie in Paste type in notation view with the Preferences pane [DONE]
+
+26. If you move the cursor by a whole bar (if the window is not very
+    wide) or to the start or end of the segment (regardless of window
+    width) the canvas doesn't always scroll to the new cursor position,
+    perhaps because it decides it's too far away for a short page-scroll.
+    Fix.
+
+27. Need to make all menus with notes on them use the new NotePixmapFactory
+    makeNoteMenuPixmap and makeNoteMenuLabel API, for easier pixmap creation
+    and support for the preferences selection of i18n vs US note names [DONE]
+
+28. Problem with moving cursor up/down on staff -- ctrl-click does it but
+    no visible feedback? or what?
+
+29. Thoroughly scan all following task lists to find more stuff to do...
 
 
 Post-0.1.5-and-a-bit task list

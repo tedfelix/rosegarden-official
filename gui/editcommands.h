@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 /*
     Rosegarden-4 v0.2
     A sequencer and musical notation editor.
@@ -145,10 +147,13 @@ public:
 	MatrixOverlay		// overlay raw matrix-style
     };
 
+    typedef std::map<PasteType, std::string> PasteTypeMap;
+    static PasteTypeMap getPasteTypes(); // type, descrip
+
     PasteEventsCommand(Rosegarden::Segment &segment,
 		       Rosegarden::Clipboard *clipboard,
 		       Rosegarden::timeT pasteTime,
-		       PasteType pasteType = getDefaultPasteType());
+		       PasteType pasteType);
 
     static QString getGlobalName() { return "&Paste"; }
 
@@ -156,9 +161,6 @@ public:
     bool isPossible();
 
     virtual Rosegarden::timeT getRelayoutEndTime();
-    
-    static void setDefaultPasteType(PasteType type) { m_defaultPaste = type; }
-    static PasteType getDefaultPasteType() { return m_defaultPaste; }
 
 protected:
     virtual void modifySegment();
@@ -168,8 +170,6 @@ protected:
     Rosegarden::timeT m_relayoutEndTime;
     Rosegarden::Clipboard *m_clipboard;
     PasteType m_pasteType;
-
-    static PasteType m_defaultPaste;
 };
 
 
@@ -256,6 +256,24 @@ protected:
 private:
     Rosegarden::Quantizer m_quantizer;
     Rosegarden::EventSelection *m_selection;
+};
+
+
+class SetLyricsCommand : public XKCommand
+{
+public:
+    SetLyricsCommand(Rosegarden::Segment *segment, QString newLyricData);
+    ~SetLyricsCommand();
+    
+    static QString getGlobalName() { return "Edit L&yrics"; }
+
+    virtual void execute();
+    virtual void unexecute();
+
+private:
+    Rosegarden::Segment *m_segment;
+    std::vector<Rosegarden::Event *> m_oldLyricEvents;
+    QString m_newLyricData;
 };
 
 

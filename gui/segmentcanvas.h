@@ -395,6 +395,7 @@ protected slots:
     void slotOnEditEventList();
 
 signals:
+    void editSegment(Rosegarden::Segment*); // use default editor
     void editSegmentNotation(Rosegarden::Segment*);
     void editSegmentMatrix(Rosegarden::Segment*);
     void editSegmentAudio(Rosegarden::Segment*);

@@ -424,6 +424,26 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
                 if (barTimes.first > endTime) allDone = true;
                 continue;
 
+	    } else if (el->event()->isa(Text::EventType)) {
+
+		// the only text events of interest are lyrics, which
+		// contribute to a fixed area following the next chord
+		
+		if (el->event()->has(Text::TextTypePropertyName) &&
+		    el->event()->get<String>(Text::TextTypePropertyName) ==
+		    Text::Lyric) {
+
+		    int textWidth = m_npf->getTextWidth(Text(*el->event()));
+		    if (textWidth > m_npf->getNoteBodyWidth()) {
+			textWidth -= m_npf->getNoteBodyWidth();
+		    } else {
+			textWidth = 0;
+		    }
+		    fixedWidth += textWidth;
+		    el->event()->set<Int>(m_properties.LYRIC_EXTRA_WIDTH,
+					  textWidth);
+		}
+
 	    } else if (el->isNote()) {
 
 		++totalCount;
@@ -1192,12 +1212,14 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    NOTATION_DEBUG << "NotationHLayout::layout(): there's a time sig in this bar" << endl;
 	}
 
+	long lyricWidth = 0;
+
         for (NotationElementList::iterator it = from; it != to; ++it) {
 
             NotationElement *el = (*it);
             el->setLayoutX(x);
 //            NOTATION_DEBUG << "NotationHLayout::layout(): setting element's x to " << x << endl;
-	    long delta;
+	    long delta = 0;
 
 	    if (timeSigToPlace && !el->event()->isa(Clef::EventType)) {
 //		NOTATION_DEBUG << "Placing timesig at " << x << endl;
@@ -1215,9 +1237,13 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		delta = positionChord
 		    (staff, it, bdi, timeSignature, clef, key, tieMap, to);
 
+		delta += lyricWidth;
+		lyricWidth = 0;
+
 	    } else if (el->isRest()) {
 
 		delta = positionRest(staff, it, bdi, timeSignature);
+		lyricWidth = 0;
 
 	    } else if (el->event()->isa(Clef::EventType)) {
 		
@@ -1232,6 +1258,18 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		el->setLayoutAirspace(x, delta);
 //		NOTATION_DEBUG << "Found key" << endl;
 		key = Key(*el->event());
+
+	    } else if (el->event()->isa(Text::EventType)) {
+
+		// if it's a lyric event, ensure there'll be some room
+
+		if (el->event()->has(Text::TextTypePropertyName) &&
+		    el->event()->get<String>(Text::TextTypePropertyName) ==
+		    Text::Lyric) {
+		    el->event()->get<Int>(m_properties.LYRIC_EXTRA_WIDTH,
+					  lyricWidth);
+		}
+		el->setLayoutAirspace(x, delta);
 
 	    } else {
 		delta = el->event()->get<Int>(m_properties.MIN_WIDTH);
@@ -1252,9 +1290,9 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		// doesn't work, nothing will
 
 		long groupId = el->event()->get<Int>(BEAMED_GROUP_ID);
-		NOTATION_DEBUG << "group id: " << groupId << endl;
+//		NOTATION_DEBUG << "group id: " << groupId << endl;
 		if (m_groupsExtant.find(groupId) == m_groupsExtant.end()) {
-		    NOTATION_DEBUG << "(new group)" << endl;
+//		    NOTATION_DEBUG << "(new group)" << endl;
 		    m_groupsExtant[groupId] =
 			new NotationGroup(*staff.getViewElementList(),
 					  m_legatoQuantizer,

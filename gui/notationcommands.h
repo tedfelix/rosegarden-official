@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 /*
     Rosegarden-4 v0.2
     A sequencer and musical notation editor.
@@ -245,7 +247,7 @@ public:
 
     static QString getGlobalName(bool simple = true) {
 	if (simple) return "&Simple Tuplet";
-	else return "Tu&plet...";
+	else return "&Tuplet...";
     }
 
 protected:
@@ -555,6 +557,25 @@ private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 
+
+class TransformsMenuFixSmoothingCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuFixSmoothingCommand(Rosegarden::EventSelection &selection,
+				      Rosegarden::Quantizer *quantizer) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection),
+	m_quantizer(quantizer) { }
+    
+    static QString getGlobalName() { return "Fi&x Smoothed Values"; }
+    
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::Quantizer *m_quantizer;
+};
 
 
 #endif

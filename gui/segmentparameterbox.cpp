@@ -151,14 +151,16 @@ SegmentParameterBox::initBox()
     QPixmap noMap = npf.makeToolbarPixmap("menu-no-note");
 
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
-	std::string noteName = m_standardQuantizations[i].noteName;
-	QString qname = strtoqstr(m_standardQuantizations[i].name);
-	QPixmap pmap = noMap;
-	if (noteName != "") {
-	    noteName = "menu-" + noteName;
-	    pmap = npf.makeToolbarPixmap(strtoqstr(noteName));
-	}
-	m_quantizeValue->insertItem(pmap, qname);
+
+	Rosegarden::timeT time = m_standardQuantizations[i].unit;
+	Rosegarden::timeT error = 0;
+	QString label = npf.makeNoteMenuLabel(time, true, error);
+	QPixmap pmap = npf.makeNoteMenuPixmap(time, error);
+	m_quantizeValue->insertItem(error ? noMap : pmap, label);
+/*!!!
+	if (error == 0) m_quantizeValue->insertItem(pmap, label);
+	else m_quantizeValue->insertItem(noMap, QString("%1").arg(time));
+*/
     }
     m_quantizeValue->insertItem(noMap, i18n("Off"));
 
@@ -183,15 +185,14 @@ SegmentParameterBox::initBox()
 	// time defn above, but if we were basing it on the sequencer
 	// resolution it might not be) & include a note pixmap if so
 	// 
-	Note nearestNote = Note::getNearestNote(time);
-	if (nearestNote.getDuration() == time) {
-	    std::string noteName = nearestNote.getReferenceName(); 
-	    noteName = "menu-" + noteName;
-	    QPixmap pmap = npf.makeToolbarPixmap(strtoqstr(noteName));
-	    m_delayValue->insertItem(pmap, QString("%1").arg(time));
-	} else {
-	    m_delayValue->insertItem(QString("%1").arg(time));
-	}	    
+	Rosegarden::timeT error = 0;
+	QString label = npf.makeNoteMenuLabel(time, true, error);
+	QPixmap pmap = npf.makeNoteMenuPixmap(time, error);
+	m_delayValue->insertItem((error ? noMap : pmap), label);
+	/*!!!
+	if (error == 0) m_delayValue->insertItem(pmap, label);
+	else m_delayValue->insertItem(noMap, QString("%1").arg(time));
+	*/
     }
 
     // set delay blank initially
@@ -507,16 +508,16 @@ SegmentParameterBox::slotDelayTextChanged(const QString &text)
     int delayValue = text.toInt();
 
     NotePixmapFactory npf;
-    QPixmap pmap = npf.makeToolbarPixmap("menu-no-note");
-    Note nearestNote = Note::getNearestNote(delayValue);
-    if (nearestNote.getDuration() == delayValue) {
-	std::string noteName = nearestNote.getReferenceName(); 
-	noteName = "menu-" + noteName;
-	pmap = npf.makeToolbarPixmap(strtoqstr(noteName));
-    }
+
+    Rosegarden::timeT error = 0;
+    QPixmap pmap = npf.makeNoteMenuPixmap(delayValue, error);
+    QString label = npf.makeNoteMenuLabel(delayValue, true, error);
+/*!!!
+    if (error == 0) m_delayValue->insertItem(pmap, label);
+    else m_delayValue->insertItem
+	     (npf.makeToolbarPixmap("menu-no-note", QString("%1").arg(time)));
+*/
     //!!! Now, how to get pmap into the pixmap part of the text field?
-
-
 
     std::vector<Rosegarden::Segment*>::iterator it;
     for (it = m_segments.begin(); it != m_segments.end(); it++) {

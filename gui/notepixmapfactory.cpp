@@ -32,10 +32,13 @@
 #include <kglobal.h>
 #include <kstddirs.h>
 #include <klocale.h>
+#include <kapp.h>
+#include <kconfig.h>
 
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "rosegardenguiview.h"
+#include "rosegardenconfigurationpage.h"
 #include "notepixmapfactory.h"
 #include "NotationTypes.h"
 #include "Equation.h"
@@ -1222,6 +1225,93 @@ NotePixmapFactory::makeToolbarPixmap(const char *name)
 }
 
 QCanvasPixmap
+NotePixmapFactory::makeNoteMenuPixmap(Rosegarden::timeT duration,
+				      Rosegarden::timeT &errorReturn)
+{
+    Note nearestNote = Note::getNearestNote(duration);
+    bool triplet = false;
+    errorReturn = 0;
+
+    if (nearestNote.getDuration() != duration) {
+	Note tripletNote = Note::getNearestNote(duration * 3 / 2);
+	if (tripletNote.getDuration() == duration * 3 / 2) {
+	    nearestNote = tripletNote;
+	    triplet = true;
+	} else {
+	    errorReturn = duration - nearestNote.getDuration();
+	}
+    }
+
+    std::string noteName = nearestNote.getReferenceName();
+    if (triplet) noteName = "3-" + noteName;
+    noteName = "menu-" + noteName;
+    return makeToolbarPixmap(strtoqstr(noteName));
+}
+
+QString
+NotePixmapFactory::makeNoteMenuLabel(Rosegarden::timeT duration,
+				     bool brief,
+				     Rosegarden::timeT &errorReturn,
+				     bool plural)
+{
+    Note nearestNote = Note::getNearestNote(duration);
+    bool triplet = false;
+    errorReturn = 0;
+
+    if (duration == 0) return "0";
+
+    if (nearestNote.getDuration() != duration) {
+	Note tripletNote = Note::getNearestNote(duration * 3 / 2);
+	if (tripletNote.getDuration() == duration * 3 / 2) {
+	    nearestNote = tripletNote;
+	    triplet = true;
+	} else {
+	    errorReturn = duration - nearestNote.getDuration();
+	    duration = nearestNote.getDuration();
+	}
+    }
+
+    KConfig *config = kapp->config();
+    config->setGroup("General Options");
+    Rosegarden::GeneralConfigurationPage::NoteNameStyle noteNameStyle =
+	(Rosegarden::GeneralConfigurationPage::NoteNameStyle)
+	config->readUnsignedNumEntry
+	("notenamestyle", Rosegarden::GeneralConfigurationPage::Local);
+
+    if (brief) {
+
+	Rosegarden::timeT wholeNote = Note(Note::Semibreve).getDuration();
+	if ((wholeNote / duration) * duration == wholeNote) {
+	    return QString("1/%1").arg(wholeNote / duration);
+	} else if ((duration / wholeNote) * wholeNote == duration) {
+	    return QString("%1/1").arg(duration / wholeNote);
+	} else {
+	    return QString("%1 ticks").arg(duration);
+	    plural = false;
+	}
+
+    } else {
+
+	std::string noteName;
+
+	switch (noteNameStyle) {
+
+	case Rosegarden::GeneralConfigurationPage::American:
+	    noteName = nearestNote.getAmericanName();
+	    break;
+
+	case Rosegarden::GeneralConfigurationPage::Local:
+	    noteName = nearestNote.getEnglishName();
+	    break;
+	}
+    
+	if (triplet) noteName += " triplet";
+	return i18n(strtoqstr(noteName) + (plural ? "s" : ""));
+    }
+}
+
+
+QCanvasPixmap
 NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 {
     std::vector<int> ah = key.getAccidentalHeights(clef);
@@ -1671,17 +1761,19 @@ NotePixmapFactory::makeTextPixmap(const Rosegarden::Text &text)
 
     QFont textFont(getTextFont(text));
     QFontMetrics textMetrics(textFont);
-    QRect r = textMetrics.boundingRect(s);
+    
+    int width = textMetrics.width(s) + 4;
+    int height = textMetrics.height() + 4;
 
-    createPixmapAndMask(r.width() + 4, r.height() * 2 + 4);
+    createPixmapAndMask(width, height);
     
     if (m_selected) m_p.setPen(RosegardenGUIColours::SelectedElement);
 
     m_p.setFont(textFont);
     m_pm.setFont(textFont);
 
-    m_p.drawText(2, r.height() + 2, s);
-    m_pm.drawText(2, r.height() + 2, s);
+    m_p.drawText(2, textMetrics.ascent() + 2, s);
+    m_pm.drawText(2, textMetrics.ascent() + 2, s);
 
     m_p.setPen(Qt::black);
     return makeCanvasPixmap(QPoint(2, 2));

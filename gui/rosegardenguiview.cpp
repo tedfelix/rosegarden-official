@@ -55,6 +55,7 @@
 #include "Selection.h"
 #include "segmentparameterbox.h"
 #include "instrumentparameterbox.h"
+#include "rosegardenconfigurationpage.h"
 #include "eventview.h"
 #include "dialogs.h"
 
@@ -104,6 +105,10 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     //
     m_trackEditor  = new TrackEditor(doc, this,
                                      m_rulerScale, showTrackLabels, hbox);
+
+    connect(m_trackEditor->getSegmentCanvas(),
+            SIGNAL(editSegment(Rosegarden::Segment*)),
+            SLOT(slotEditSegment(Rosegarden::Segment*)));
 
     connect(m_trackEditor->getSegmentCanvas(),
             SIGNAL(editSegmentNotation(Rosegarden::Segment*)),
@@ -241,6 +246,54 @@ RosegardenGUIView::getSelection()
     return m_trackEditor->getSegmentCanvas()->getSelectedSegments();
 }
 
+void RosegardenGUIView::slotEditSegment(Rosegarden::Segment* segment)
+{
+    Rosegarden::Segment::SegmentType type = Rosegarden::Segment::Internal;
+
+    if (segment) {
+	type = segment->getType();
+    } else {
+	if (haveSelection()) {
+
+	    bool haveType = false;
+
+	    Rosegarden::SegmentSelection selection = getSelection(); 
+	    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+		 i != selection.end(); ++i) {
+
+		Rosegarden::Segment::SegmentType myType = (*i)->getType();
+		if (haveType) {
+		    if (myType != type) {
+			KMessageBox::sorry(this, i18n("Selection must contain only audio or non-audio segments"));
+			return;
+		    }
+		} else {
+		    type = myType; 
+		    haveType = true;
+		}
+	    }
+	} else return;
+    }
+
+    if (type == Rosegarden::Segment::Audio) {
+	slotEditSegmentAudio(segment);
+    } else {
+
+	Rosegarden::GeneralConfigurationPage::DoubleClickClient client =
+	    kapp->config()->readUnsignedNumEntry
+	    ("doubleclickclient",
+	     Rosegarden::GeneralConfigurationPage::NotationView);
+
+	if (client == Rosegarden::GeneralConfigurationPage::MatrixView) {
+	    slotEditSegmentMatrix(segment);
+	} else if (client == Rosegarden::GeneralConfigurationPage::EventView) {
+	    slotEditSegmentEventList(segment);
+	} else {
+	    slotEditSegmentNotation(segment);
+	}
+    }
+}
+
 
 void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 {
@@ -296,8 +349,8 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     //
     RosegardenGUIApp *par = dynamic_cast<RosegardenGUIApp*>(parent());
 
-    if (par)
-        par->plugAccelerators(notationView, notationView->getAccelerators());
+//!!!    if (par)
+//        par->plugAccelerators(notationView, notationView->getAccelerators());
 
     // For sending note previews
     //
@@ -313,6 +366,10 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 	    par, SLOT(slotChangeTempo(Rosegarden::timeT, double,
 				      TempoDialog::TempoDialogAction)));
 
+    connect(notationView, SIGNAL(play()),
+	    par, SLOT(slotPlay()));
+    connect(notationView, SIGNAL(stop()),
+	    par, SLOT(slotStop()));
     connect(notationView, SIGNAL(fastForwardPlayback()),
 	    par, SLOT(slotFastforward()));
     connect(notationView, SIGNAL(rewindPlayback()),
@@ -332,7 +389,23 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
     SetWaitCursor waitCursor;
 
     std::vector<Rosegarden::Segment *> segmentsToEdit;
-    segmentsToEdit.push_back(p);
+
+    // unlike notation, if we're calling for this on a particular
+    // segment we don't open all the other selected segments as well
+    // (fine in notation because they're in a single window)
+
+    if (p) {
+	if (p->getType() != Rosegarden::Segment::Audio) {
+	    segmentsToEdit.push_back(p);
+	}
+    } else {
+	Rosegarden::SegmentSelection selection = getSelection();
+	for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+	     i != selection.end(); ++i) {
+	    slotEditSegmentMatrix(*i);
+	}
+	return;
+    }
 
     MatrixView *matrixView = new MatrixView(getDocument(),
                                             segmentsToEdit,
@@ -356,6 +429,50 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
             SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument&)));
 
     matrixView->show();
+}
+
+void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
+{
+    SetWaitCursor waitCursor;
+
+    std::vector<Rosegarden::Segment *> segmentsToEdit;
+
+    // unlike notation, if we're calling for this on a particular
+    // segment we don't open all the other selected segments as well
+    // (fine in notation because they're in a single window)
+
+    if (p) {
+	if (p->getType() != Rosegarden::Segment::Audio) {
+	    segmentsToEdit.push_back(p);
+	}
+    } else {
+	Rosegarden::SegmentSelection selection = getSelection();
+	for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+	     i != selection.end(); ++i) {
+	    slotEditSegmentEventList(*i);
+	}
+	return;
+    }
+
+    EventView *eventView = new EventView(getDocument(),
+                                         segmentsToEdit,
+                                         this);
+
+    // create keyboard accelerators on view
+    //
+    RosegardenGUIApp *par = dynamic_cast<RosegardenGUIApp*>(parent());
+
+    if (par)
+        par->plugAccelerators(eventView, eventView->getAccelerators());
+
+    // For sending key presses
+    //
+    /*
+    connect(eventView, SIGNAL(keyPressed(Rosegarden::MappedEvent*)),
+            this, SIGNAK(sendMappedEvent(Rosegarden::MappedEvent*)));
+            */
+
+    eventView->show();
 }
 
 void RosegardenGUIView::slotSegmentAutoSplit(Rosegarden::Segment *segment)
@@ -431,34 +548,6 @@ void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
     // restore cursor
     QApplication::restoreOverrideCursor();
 
-}
-
-void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
-{
-    SetWaitCursor waitCursor;
-
-    std::vector<Rosegarden::Segment *> segmentsToEdit;
-    segmentsToEdit.push_back(p);
-
-    EventView *eventView = new EventView(getDocument(),
-                                         segmentsToEdit,
-                                         this);
-
-    // create keyboard accelerators on view
-    //
-    RosegardenGUIApp *par = dynamic_cast<RosegardenGUIApp*>(parent());
-
-    if (par)
-        par->plugAccelerators(eventView, eventView->getAccelerators());
-
-    // For sending key presses
-    //
-    /*
-    connect(eventView, SIGNAL(keyPressed(Rosegarden::MappedEvent*)),
-            this, SIGNAK(sendMappedEvent(Rosegarden::MappedEvent*)));
-            */
-
-    eventView->show();
 }
 
 

@@ -495,6 +495,16 @@ public slots:
     void slotTempoToSegmentLength();
 
     /**
+     * open the default editor for each of the currently-selected segments
+     */
+    void slotEdit();
+
+    /**
+     * open an event list view for each of the currently-selected segments
+     */
+    void slotEditInEventList();
+
+    /**
      * open a matrix view for each of the currently-selected segments
      */
     void slotEditInMatrix();
@@ -535,6 +545,11 @@ public slots:
      * toggles the tracks toolbar
      */
     void slotToggleTracksToolBar();
+
+    /**
+     * toggles the tracks toolbar
+     */
+    void slotToggleTransportToolBar();
 
     /**
      * toggles the statusbar
@@ -845,6 +860,7 @@ private:
     KToggleAction* m_viewTracksToolBar;
     KToggleAction* m_viewStatusBar;
     KToggleAction* m_viewTransport;
+    KToggleAction* m_viewTransportToolBar;
     KToggleAction* m_viewTrackLabels;
     KToggleAction* m_viewSegmentParameters;
     KToggleAction* m_viewInstrumentParameters;

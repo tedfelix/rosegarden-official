@@ -509,7 +509,7 @@ NotationGroup::sample(const NELIterator &i)
 	return false;
     }
 
-    NOTATION_DEBUG << "NotationGroup::sample: group id is " << m_groupNo << endl;
+//    NOTATION_DEBUG << "NotationGroup::sample: group id is " << m_groupNo << endl;
 
     NotationSet::sample(i);
 
@@ -748,7 +748,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
     NELIterator prev = getList().end(), prevprev = getList().end();
     double gradient = (double)beam.gradient / 100.0;
 
-    NOTATION_DEBUG << "NotationGroup::applyBeam starting for group "<< this << endl;
+//    NOTATION_DEBUG << "NotationGroup::applyBeam starting for group "<< this << endl;
 
     for (NELIterator i = getInitialNote(); i != getList().end(); ++i) {
 
@@ -761,7 +761,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 			m_properties, m_clef, m_key);
 	    unsigned int j;
 
-            NOTATION_DEBUG << "NotationGroup::applyBeam: Found chord" << endl;
+//            NOTATION_DEBUG << "NotationGroup::applyBeam: Found chord" << endl;
 
 	    for (j = 0; j < chord.size(); ++j) {
 		NotationElement *el = (*chord[j]);
