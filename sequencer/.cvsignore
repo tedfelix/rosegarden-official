@@ -1,4 +1,3 @@
-*.moc.cpp
 .deps
 .libs
 Makefile
