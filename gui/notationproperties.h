@@ -43,6 +43,7 @@ namespace NotationProperties
     extern const Rosegarden::PropertyName UNBEAMED_STEM_LENGTH;
     extern const Rosegarden::PropertyName DRAW_FLAG;
     extern const Rosegarden::PropertyName NOTE_HEAD_SHIFTED;
+    extern const Rosegarden::PropertyName NEEDS_EXTRA_SHIFT_SPACE;
     extern const Rosegarden::PropertyName NOTE_NAME;
 
     // Set in applyBeam in notationsets.cpp:

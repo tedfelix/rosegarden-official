@@ -236,7 +236,7 @@ Chord::height(const NELIterator &i) const
     return h;
 }
 
-bool Chord::hasStalkUp() const
+bool Chord::hasStemUp() const
 {
     int high = height(getHighestNote()), low = height(getLowestNote());
 
@@ -257,6 +257,27 @@ bool Chord::hasShiftedNoteHeads() const
     return false;
 }
 
+bool Chord::contains(const NELIterator &itr) const
+{
+    for (const_iterator i = begin(); i != end(); ++i) {
+        if (*i == itr) return true;
+    }
+    return false;
+}
+
+bool Chord::hasNoteHeadShifted() const
+{
+    int ph = 999;
+
+    for (int i = 0; i < size(); ++i) {
+        int h = height((*this)[i]);
+        if (h == ph + 1) return true;
+        ph = h;
+    }
+
+    return false;
+}
+
 bool Chord::isNoteHeadShifted(const NELIterator &itr) const
 {
     unsigned int i;
@@ -270,12 +291,12 @@ bool Chord::isNoteHeadShifted(const NELIterator &itr) const
 
     int h = height((*this)[i]);
 
-    if (hasStalkUp()) {
+    if (hasStemUp()) {
         if ((i > 0) && (h == height((*this)[i-1]) + 1)) {
             return (!isNoteHeadShifted((*this)[i-1]));
         }
     } else {
-        if ((i < size()-1) && (h == height((*this)[i+1]) + 1)) {
+        if ((i < size()-1) && (h == height((*this)[i+1]) - 1)) {
             return (!isNoteHeadShifted((*this)[i+1]));
         }
     }
@@ -357,6 +378,19 @@ NotationGroup::sample(const NELIterator &i)
     if (h < 4) m_weightBelow += 4 - h;
 }
 
+bool
+NotationGroup::contains(const NELIterator &i) const
+{
+    NELIterator j(getInitialElement()),
+                k(  getFinalElement());
+
+    for (;;) {
+        if (j == i) return true;
+        if (j == k) return false;
+        ++j;
+    }
+}
+
 int
 NotationGroup::height(const NELIterator &i) const
 {
@@ -409,7 +443,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
         extremeHeight = height(             getLowestNote());
         extremeNote = getLowestNote();
     }
-        
+
     int diff = initialHeight - finalHeight;
     if (diff < 0) diff = -diff;
 
@@ -424,8 +458,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     }
 
     // some magic numbers
-    if (diff > 4) beam.gradient = 25;
-    else if (diff > 3) beam.gradient = 15;
+/*    if (diff > 4) beam.gradient = 25;
+      else*/ if (diff > 3) beam.gradient = 18;
     else if (diff > 1) beam.gradient = 10;
     else beam.gradient = 0;
 
@@ -435,7 +469,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     // nearest note of the whole group, the nearest note of the first
     // chord and the nearest note of the final chord are all at least
     // two note-body-heights away from it, and at least one of the
-    // start and end points is at least the usual note stalk-length
+    // start and end points is at least the usual note stem-length
     // away from it.  This is a straight-line equation y = mx + c,
     // where we have m and two x,y pairs and need to find c.
     
@@ -503,11 +537,11 @@ NotationGroup::applyBeam(NotationStaff &staff)
     int initialX = (int)(*initialNote)->getLayoutX();
 
     // For each chord in the group, we nominate the note head furthest
-    // from the beam as the one that "owns" the stalk and the section
+    // from the beam as the one that "owns" the stem and the section
     // of beam up to the following chord.  For this note, we need to:
     // 
     // * Set the start height, start x-coord and gradient of the beam
-    //   (we can't set the stalk length for this note directly, because
+    //   (we can't set the stem length for this note directly, because
     //   we don't know its y-coordinate yet)
     // 
     // * Set width of this section of beam
@@ -521,7 +555,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
     //
     // For the rest of the notes in the chord, we just need to
     // indicate that they aren't part of the beam-drawing process and
-    // don't need to draw a stalk.
+    // don't need to draw a stem.
 
     NELIterator prev = getList().end(), prevprev = getList().end();
     double gradient = (double)beam.gradient / 100.0;

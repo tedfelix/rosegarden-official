@@ -92,9 +92,10 @@ NotationVLayout::scanStaff(StaffType &staffBase)
             for (unsigned int j = 0; j < chord.size(); ++j) {
                 h.push_back((*chord[j])->event()->get<Int>(HEIGHT_ON_STAFF));
             }
-            bool stalkUp = chord.hasStalkUp();
+            bool stemUp = chord.hasStemUp();
+            bool hasNoteHeadShifted = chord.hasNoteHeadShifted();
 
-            unsigned int flaggedNote = (stalkUp ? chord.size() - 1 : 0);
+            unsigned int flaggedNote = (stemUp ? chord.size() - 1 : 0);
 
 	    for (unsigned int j = 0; j < chord.size(); ++j) {
 		el = *chord[j];
@@ -106,12 +107,15 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 		// the bit that sets this for beamed groups is called
 		// after this bit (i.e. that notationview calls
 		// notationhlayout after notationvlayout)... or else
-		// introduce two separate properties (beamed stalk up
-		// and non-beamed stalk up)
-                el->event()->setMaybe<Bool>(STEM_UP, stalkUp);
+		// introduce two separate properties (beamed stem up
+		// and non-beamed stem up)
+                el->event()->setMaybe<Bool>(STEM_UP, stemUp);
 
                 el->event()->setMaybe<Bool>(NOTE_HEAD_SHIFTED,
                                             chord.isNoteHeadShifted(chord[j]));
+
+                el->event()->setMaybe<Bool>(NEEDS_EXTRA_SHIFT_SPACE,
+                                            hasNoteHeadShifted && !stemUp);
 
                 el->event()->setMaybe<Bool>(DRAW_FLAG,
                                             j == flaggedNote);

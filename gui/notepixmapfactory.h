@@ -38,6 +38,10 @@ public:
                          Rosegarden::Accidental accidental =
                                                 Rosegarden::NoAccidental);
     ~NotePixmapParameters();
+
+    void setNoteType(Rosegarden::Note::Type type) { m_noteType = type; }
+    void setDots(int dots) { m_dots = dots; }
+    void setAccidental(Rosegarden::Accidental acc) { m_accidental = acc; }
     
     void setNoteHeadShifted(bool shifted) { m_shifted          = shifted;  }
     void setDrawFlag(bool df)             { m_drawFlag         = df;       }
@@ -45,6 +49,7 @@ public:
     void setStemLength(int length)        { m_stemLength       = length;   }
     void setLegerLines(int lines)         { m_legerLines       = lines;    }
     void setSelected(bool selected)       { m_selected         = selected; }
+    void setIsOnLine(bool isOnLine)       { m_onLine           = isOnLine; }
 
     void setBeamed(bool beamed)           { m_beamed           = beamed;   }
     void setNextBeamCount(int tc)         { m_nextBeamCount    = tc;       }
@@ -66,6 +71,7 @@ private:
     int     m_stemLength;
     int     m_legerLines;
     bool    m_selected;
+    bool    m_onLine;
 
     bool    m_beamed;
     int     m_nextBeamCount;

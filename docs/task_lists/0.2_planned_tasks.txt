@@ -25,7 +25,7 @@ Work required to fix existing stuff
     This would also require GUI for handling time sigs in track
     editor rather than (just) notation view.  Complicated stuff
 
-3.  leger lines
+3.  leger lines [DONE]
 
 4.  ties (rendering them; they already are stored and handled in
     playback - qcanvasspline is here though)

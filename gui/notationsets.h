@@ -88,6 +88,8 @@ public:
     NELIterator getHighestNote() const     { return m_highest;  }
     NELIterator getLowestNote() const      { return m_lowest;   }
 
+    virtual bool contains(const NELIterator &) const = 0;
+
 protected:
     NotationSet(const NotationElementList &nel, NELIterator elementInSet,
                 bool quantize);
@@ -128,9 +130,12 @@ public:
 
     virtual ~Chord();
 
-    virtual bool hasStalkUp() const;
+    virtual bool hasStemUp() const;
     virtual bool hasShiftedNoteHeads() const;
+    virtual bool hasNoteHeadShifted() const;
     virtual bool isNoteHeadShifted(const NELIterator &itr) const;
+
+    virtual bool contains(const NELIterator &) const;
 
 protected:
     virtual bool test(const NELIterator&);
@@ -174,6 +179,8 @@ public:
      * layout x coordinates must already have been set.
      */
     void applyBeam(NotationStaff &);
+
+    virtual bool contains(const NELIterator &) const;
 
 protected:
     virtual bool test(const NELIterator &i);

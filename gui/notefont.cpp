@@ -483,7 +483,8 @@ NoteFont::getStemThickness(unsigned int &thickness) const
 bool
 NoteFont::getBeamThickness(unsigned int &thickness) const
 {
-    thickness = (m_currentSize + 2) / 3;
+//    thickness = (m_currentSize + 2) / 3;
+    thickness = m_currentSize / 2;
     return m_fontMap.getBeamThickness(m_currentSize, thickness);
 }
 

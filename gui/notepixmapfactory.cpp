@@ -68,6 +68,7 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_stemLength(-1),
     m_legerLines(0),
     m_selected(false),
+    m_onLine(false),
     m_beamed(false),
     m_nextBeamCount(0),
     m_thisPartialBeams(false),
@@ -262,9 +263,16 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     }
 
     m_right = std::max(m_right, params.m_dots * dot.width() + dot.width()/2);
+    if (params.m_onLine) {
+        m_above = std::max(m_above, dot.height()/2);
+    }
 
     if (params.m_shifted) {
-        m_right += m_noteBodyWidth;
+        if (params.m_stemGoesUp) {
+            m_right += m_noteBodyWidth;
+        } else {
+            m_left = std::max(m_left, m_noteBodyWidth);
+        }
     }
 
     createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
@@ -323,7 +331,13 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     }
 
     QPoint bodyLocation(m_left - m_origin.x(), m_above - m_origin.y());
-    if (params.m_shifted) bodyLocation.rx() += m_noteBodyWidth;
+    if (params.m_shifted) {
+        if (params.m_stemGoesUp) {
+            bodyLocation.rx() += m_noteBodyWidth;
+        } else {
+            bodyLocation.rx() -= m_noteBodyWidth - 1;
+        }
+    }
     
     m_p.drawPixmap (bodyLocation, body);
     m_pm.drawPixmap(bodyLocation, *(body.mask()));
@@ -332,7 +346,9 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 
         int x = m_left + m_noteBodyWidth + dot.width()/2;
         int y = m_above + m_noteBodyHeight/2 - dot.height()/2;
+
         if (params.m_shifted) x += m_noteBodyWidth;
+        if (params.m_onLine)  y -= m_noteBodyHeight/2;
 
         for (int i = 0; i < params.m_dots; ++i) {
             m_p.drawPixmap(x, y, dot);
@@ -467,23 +483,22 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
                                    int thickness, bool smooth)
 {
     if (!smooth || (y0 == y1)) {
-	if (smooth) ++thickness;
         for (int i = 0; i < thickness; ++i) {
             m_p.drawLine(x0, y0 + i, x1, y1 + i);
             m_pm.drawLine(x0, y0 + i, x1, y1 + i);
         }
         return;
     }
-    
+  
     int dv = y1 - y0;
     int dh = x1 - x0;
 
     static std::vector<QColor> colours;
     if (colours.size() == 0) {
-        colours.push_back(QColor(0, 0, 0));
-        colours.push_back(QColor(64, 64, 64));
-	colours.push_back(QColor(128, 128, 128));
-        colours.push_back(QColor(192, 192, 192));
+        colours.push_back(QColor(-1, 0, 0, QColor::Hsv));
+        colours.push_back(QColor(-1, 0, 64, QColor::Hsv));
+        colours.push_back(QColor(-1, 0, 128, QColor::Hsv));
+        colours.push_back(QColor(-1, 0, 160, QColor::Hsv));
     }
 
     int cx = x0, cy = y0;
@@ -561,21 +576,17 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
     int width = params.m_width;
     double grad = params.m_gradient;
 
+    bool smooth = m_font->getNoteFontMap().isSmooth();
+
     int gap = thickness - 1;
     if (gap < 1) gap = 1;
-    if (grad < 0.01) ++gap;
-
-    bool smooth = true;
-    if (thickness < 2 || !m_font->getNoteFontMap().isSmooth()) smooth = false;
-
-    if (!params.m_stemGoesUp) {
-        startY -= thickness;
-        if (!smooth) startY += 1;
-    } else {
-        if  (smooth) startY -= 1;
-    }
 
     int sign = (params.m_stemGoesUp ? 1 : -1);
+
+    if (!params.m_stemGoesUp) startY -= thickness;
+
+    if (!smooth) startY -= sign;
+    else if (grad > -0.01 && grad < 0.01) startY -= sign;
 
     for (int j = 0; j < commonBeamCount; ++j) {
         int y = sign * j * (thickness + gap);

@@ -13,9 +13,9 @@
 <font-sizes>
         <font-size note-height="4" beam-thickness="2" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>
         <font-size note-height="6" beam-thickness="3" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>
-        <font-size note-height="8" beam-thickness="3" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>
-        <font-size note-height="10" beam-thickness="4" staff-line-thickness="1" stem-thickness="2" border-x="1" border-y="1"/>
-        <font-size note-height="12" beam-thickness="5" staff-line-thickness="2" stem-thickness="2" border-x="1" border-y="1"/>
+        <font-size note-height="8" beam-thickness="4" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>
+        <font-size note-height="10" beam-thickness="5" staff-line-thickness="1" stem-thickness="2" border-x="1" border-y="1"/>
+        <font-size note-height="12" beam-thickness="6" staff-line-thickness="2" stem-thickness="2" border-x="1" border-y="1"/>
 </font-sizes>
 
 <font-symbol-map>

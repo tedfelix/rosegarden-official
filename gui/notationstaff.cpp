@@ -370,6 +370,8 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
 
 QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator it)
 {
+    static NotePixmapParameters params(Note::Crotchet, 0);
+
     Note::Type note = (*it)->event()->get<Int>(Rosegarden::Note::NoteType);
     int dots = (*it)->event()->get<Int>(Rosegarden::Note::NoteDots);
 
@@ -405,11 +407,15 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
         legerLines = heightOnStaff - 8;
     }
 
-    NotePixmapParameters params(note, dots, accidental);
+    params.setNoteType(note);
+    params.setDots(dots);
+    params.setAccidental(accidental);
     params.setNoteHeadShifted(shifted);
     params.setDrawFlag(flag);
     params.setStemGoesUp(up);
     params.setLegerLines(legerLines);
+    params.setBeamed(beamed);
+    params.setIsOnLine(heightOnStaff % 2 == 0);
 
     if (beamed) {
 
@@ -433,12 +439,14 @@ QCanvasSimpleSprite *NotationStaff::makeNoteSprite(NotationElementList::iterator
             (void)(*it)->event()->get<Bool>
                 (BEAM_NEXT_PART_BEAMS, nextPartialBeams);
 
-            params.setBeamed(true);
             params.setNextBeamCount(nextBeamCount);
             params.setThisPartialBeams(thisPartialBeams);
             params.setNextPartialBeams(nextPartialBeams);
             params.setWidth(width);
             params.setGradient((double)gradient / 100.0);
+
+        } else {
+            params.setBeamed(false);
         }
     }
 

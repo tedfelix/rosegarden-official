@@ -335,6 +335,9 @@ NotationHLayout::scanStaff(StaffType &staff)
                         hasDuration = false;
                     } else {
                         accTable = newAccTable;
+                        if (chord.hasNoteHeadShifted() && !chord.hasStemUp()) {
+                            fixedWidth += m_npf.getNoteBodyWidth();
+                        }
                     }
                 }
 
@@ -706,9 +709,9 @@ NotationHLayout::positionRest(StaffType &,
 	(Note(rest->event()->get<Int>(Note::NoteType),
 	      rest->event()->get<Int>(Note::NoteDots)));
 
-    if (delta > baseWidth) {
-        int shift = (delta - baseWidth) / 4;
-        shift = std::min(shift, (baseWidth * 4));
+    if (delta > 2 * baseWidth) {
+        int shift = (delta - 2 * baseWidth) / 4;
+        shift = std::min(shift, (baseWidth * 3));
         rest->setLayoutX(rest->getLayoutX() + shift);
     }
                 
@@ -736,13 +739,24 @@ NotationHLayout::positionNote(StaffType &staff,
         //!!! not right for partial bar?
         timeSignature.getBarDuration();
 
-    // Situate the note somewhat further into its allotted space.  Not
-    // convinced this is always the right thing to do
+    int noteWidth = m_npf.getNoteBodyWidth();
 
-    int noteBodyWidth = m_npf.getNoteBodyWidth();
-    if (delta > noteBodyWidth) {
-        int shift = (delta - noteBodyWidth) / 5;
-        shift = std::min(shift, (noteBodyWidth * 3));
+    bool shiftSpace = false;
+    if (note->event()->get<Bool>(NEEDS_EXTRA_SHIFT_SPACE, shiftSpace) &&
+        shiftSpace) {
+
+        note->setLayoutX(note->getLayoutX() + noteWidth);
+        noteWidth *= 2;
+        if (delta < noteWidth) delta = noteWidth;
+    }
+
+    // If the note's allowed a lot of space, situate it somewhat
+    // further into its allotted space.  Not convinced this is always
+    // the right thing to do.
+
+    if (delta > 2 * noteWidth) {
+        int shift = (delta - 2 * noteWidth) / 4;
+        shift = std::min(shift, (m_npf.getNoteBodyWidth() * 3));
         note->setLayoutX(note->getLayoutX() + shift);
     }
                 
