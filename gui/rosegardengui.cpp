@@ -495,33 +495,16 @@ void RosegardenGUIApp::initView()
 	(comp.getElapsedRealTime(m_doc->getComposition().getPosition()));
 
 
-    actionCollection()->action("select")->activate();
-
-/*!!!
-
-    // Set the right track edition tool
+    // We have to do this to make sure that the 2nd call ("select")
+    // actually has any effect. Activating the same radio action
+    // doesn't work the 2nd time (like pressing down the same radio
+    // button twice - it doesn't have any effect), so if you load two
+    // files in a row, on the 2nd file a new SegmentCanvas will be
+    // created but its tool won't be set, even though it will appear
+    // to be selected.
     //
-    if (comp.getNbSegments() > 0) {
-        // setup 'move' tool
-
-        // We have to do this to make sure that the 2nd call ("move")
-        // actually has any effect. Activating the same radio action
-        // doesn't work the 2nd time (like pressing down the same radio
-        // button twice - it doesn't have any effect), so if you load two
-        // files in a row, on the 2nd file a new SegmentCanvas will be
-        // created but its tool won't be set, so clicking on the canvas
-        // will crash.
-        //
-        
-        actionCollection()->action("draw")->activate();
-        actionCollection()->action("move")->activate();
-    } else {
-        // setup 'draw' tool
-        actionCollection()->action("move")->activate();
-        actionCollection()->action("draw")->activate();
-    }
-
-*/     
+    actionCollection()->action("move")->activate();
+    actionCollection()->action("select")->activate();
 
     //
     // Transport setup
