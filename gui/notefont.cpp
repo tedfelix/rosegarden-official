@@ -187,6 +187,9 @@ NoteFontMap::startElement(const QString &, const QString &,
         s = attributes.value("beam-thickness");
         if (s) sizeData.setBeamThickness(s.toInt());
 
+        s = attributes.value("stem-length");
+        if (s) sizeData.setStemLength(s.toInt());
+
         s = attributes.value("flag-spacing");
         if (s) sizeData.setFlagSpacing(s.toInt());
 
@@ -203,6 +206,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 	
 	double fontHeight = -1.0;
 	double beamThickness = -1.0;
+	double stemLength = -1.0;
 	double flagSpacing = -1.0;
 	double staffLineThickness = -1.0;
 	double stemThickness = -1.0;
@@ -227,6 +231,9 @@ NoteFontMap::startElement(const QString &, const QString &,
         s = attributes.value("beam-thickness");
 	if (s) beamThickness = s.toDouble();
 
+        s = attributes.value("stem-length");
+	if (s) stemLength = s.toDouble();
+
         s = attributes.value("flag-spacing");
 	if (s) flagSpacing = s.toDouble();
 
@@ -245,7 +252,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 	//notehead is noticeably smaller than the notehead should be,
 	//and reject if so?
 	
-	for (int sz = 2; sz <= 50; sz += (sz < 8 ? 1 : 2)) {
+	for (int sz = 2; sz <= 30; sz += (sz < 8 ? 1 : 2)) {
 
 	    SizeData &sizeData = m_sizes[sz];
 	    unsigned int temp, temp1;
@@ -261,6 +268,10 @@ NoteFontMap::startElement(const QString &, const QString &,
 	    if (sizeData.getBeamThickness(temp) == false &&
 		beamThickness >= 0.0)
 		sizeData.setBeamThickness(toSize(sz, beamThickness, true));
+
+	    if (sizeData.getStemLength(temp) == false &&
+		stemLength >= 0.0)
+		sizeData.setStemLength(toSize(sz, stemLength, true));
 
 	    if (sizeData.getFlagSpacing(temp) == false &&
 		flagSpacing >= 0.0)
@@ -463,8 +474,8 @@ NoteFontMap::startElement(const QString &, const QString &,
 
 	QString name = attributes.value("name");
 	QString names = attributes.value("names");
-	if (name) {
 
+	if (name) {
 	    if (names) {
 		m_errorString =
 		    i18n("font-requirement may have name or names attribute, but not both");
@@ -738,6 +749,15 @@ NoteFontMap::getBeamThickness(int size, unsigned int &thickness) const
 }
 
 bool
+NoteFontMap::getStemLength(int size, unsigned int &length) const
+{
+    SizeDataMap::const_iterator i = m_sizes.find(size);
+    if (i == m_sizes.end()) return false;
+
+    return i->second.getStemLength(length);
+}
+
+bool
 NoteFontMap::getFlagSpacing(int size, unsigned int &spacing) const
 {
     SizeDataMap::const_iterator i = m_sizes.find(size);
@@ -822,6 +842,10 @@ NoteFontMap::dump() const
 
         if (getBeamThickness(*sizei, t)) {
             cout << "Beam thickness: " << t << endl;
+        }
+
+        if (getStemLength(*sizei, t)) {
+            cout << "Stem length: " << t << endl;
         }
 
         if (getFlagSpacing(*sizei, t)) {
@@ -922,36 +946,6 @@ NoteFont::~NoteFont()
 }
 
 
-set<string>
-NoteFont::getAvailableFontNames()
-{
-    set<string> names;
-
-    QString mappingDir = 
-	KGlobal::dirs()->findResource("appdata", "fonts/mappings/");
-    QDir dir(mappingDir);
-    if (!dir.exists()) {
-        cerr << "NoteFont::getAvailableFontNames: mapping directory \""
-	     << mappingDir << "\" not found" << endl;
-        return names;
-    }
-
-    dir.setFilter(QDir::Files | QDir::Readable);
-    QStringList files = dir.entryList();
-    for (QStringList::Iterator i = files.begin(); i != files.end(); ++i) {
-	if ((*i).length() > 4 && (*i).right(4).lower() == ".xml") {
-	    // we don't catch MappingFileReadFailed here -- that's a serious
-	    // enough exception that we need to handle it further up the stack
-	    string name(qstrtostr((*i).left((*i).length() - 4)));
-	    NoteFontMap map(name);
-	    if (map.ok()) names.insert(map.getName());
-	}
-    }
-
-    return names;
-}
-
-
 bool
 NoteFont::getStemThickness(unsigned int &thickness) const
 {
@@ -964,6 +958,13 @@ NoteFont::getBeamThickness(unsigned int &thickness) const
 {
     thickness = m_size / 2;
     return m_fontMap.getBeamThickness(m_size, thickness);
+}
+
+bool
+NoteFont::getStemLength(unsigned int &length) const
+{
+    length = m_size * 13 / 4;
+    return m_fontMap.getStemLength(m_size, length);
 }
 
 bool
@@ -1293,12 +1294,37 @@ NoteFont::getHotspot(CharName charName, bool inverted) const
 std::set<std::string>
 NoteFontFactory::getFontNames()
 {
-    try {
-	return NoteFont::getAvailableFontNames();
-    } catch (Rosegarden::Exception e) {
-	KMessageBox::error(0, strtoqstr(e.getMessage()));
-	throw;
-    }
+    if (m_fontNames.empty()) {
+
+	QString mappingDir = 
+	    KGlobal::dirs()->findResource("appdata", "fonts/mappings/");
+	QDir dir(mappingDir);
+	if (!dir.exists()) {
+	    cerr << "NoteFontFactory::getFontNames: mapping directory \""
+		 << mappingDir << "\" not found" << endl;
+	    return m_fontNames;
+	}
+
+	dir.setFilter(QDir::Files | QDir::Readable);
+	QStringList files = dir.entryList();
+	for (QStringList::Iterator i = files.begin(); i != files.end(); ++i) {
+
+	    if ((*i).length() > 4 && (*i).right(4).lower() == ".xml") {
+
+		string name(qstrtostr((*i).left((*i).length() - 4)));
+
+		try {
+		    NoteFontMap map(name);
+		    if (map.ok()) m_fontNames.insert(map.getName());
+		} catch (Rosegarden::Exception e) {
+		    KMessageBox::error(0, strtoqstr(e.getMessage()));
+		    throw;
+		}
+	    }
+	}
+    } 
+
+    return m_fontNames;
 }
 
 std::vector<int>
@@ -1307,11 +1333,42 @@ NoteFontFactory::getAllSizes(std::string fontName)
     NoteFont *font = getFont(fontName, 0);
     if (!font) return std::vector<int>();
 
+    int knownGood = 16;
+    int knownBad = 100000;
+
     std::set<int> s(font->getSizes());
     std::vector<int> v;
     for (std::set<int>::iterator i = s.begin(); i != s.end(); ++i) {
+
+	//!!! This is all a gross hack.  Qt seems to be unable to tell us
+	// when a font we've requested is too large: it just loads a
+	// smaller one and never lets on (even the font info's
+	// pixelSize method returns the incorrect larger size).  So we
+	// have to examine the font and make sure it's actually as big
+	// as specified!
+	
+	if (*i >= knownBad) continue;
+
+	if (*i > knownGood) { // load it and make sure it works
+	    NoteFont *sizedFont = getFont(fontName, *i);
+	    QPixmap map;
+	    if (sizedFont->getPixmap(NoteCharacterNames::NOTEHEAD_BLACK, map)) {
+		if (map.height() < *i - 1) {
+		    std::cerr << "Warning: NoteFontFactory::getAllSizes: can't load font for " << fontName << " at size " << *i << " (" << map.height() << " returned instead)" << std::endl;
+		    knownBad = *i;
+		    continue;
+		} else {
+		    NOTATION_DEBUG << "NoteFontFactory::getAllSizes: loaded font " << fontName << " at size " << *i << ", pixmap is " << map.height() << " tall" << endl;
+		    knownGood = *i;
+		}
+	    } else {
+		continue;
+	    }
+	}
+
 	v.push_back(*i);
     }
+
     std::sort(v.begin(), v.end());
     return v;
 }
@@ -1319,6 +1376,9 @@ NoteFontFactory::getAllSizes(std::string fontName)
 std::vector<int>
 NoteFontFactory::getScreenSizes(std::string fontName)
 {
+    //!!!
+    return getAllSizes(fontName);
+
     NoteFont *font = getFont(fontName, 0);
     if (!font) return std::vector<int>();
 
@@ -1367,9 +1427,11 @@ NoteFontFactory::getDefaultFontName()
 int
 NoteFontFactory::getDefaultSize(std::string fontName)
 {
-    std::vector<int> sizes(getScreenSizes(fontName));
-    return sizes[sizes.size()/2];
+    return 8;
+//!!!    std::vector<int> sizes(getScreenSizes(fontName));
+//    return sizes[sizes.size()/2];
 }
 
+std::set<std::string> NoteFontFactory::m_fontNames;
 std::map<std::pair<std::string, int>, NoteFont *> NoteFontFactory::m_fonts;
 

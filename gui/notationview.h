@@ -204,8 +204,8 @@ public:
     /// Sound the given note
     void playNote(Rosegarden::Segment &segment, int pitch);
 
-    /// Switches between page- and linear- layout mode
-    void setPageMode(bool pageMode);
+    /// Switches between page- and linear- layout modes
+    void setPageMode(LinedStaff::PageMode mode);
 
     /// Returns the page width according to the layout mode (page/linear)
     int getPageWidth();
@@ -372,7 +372,8 @@ public slots:
 
     /// view menu
     void slotLinearMode();
-    void slotPageMode();
+    void slotContinuousPageMode();
+    void slotMultiPageMode();
     void slotToggleChordsRuler();
     void slotToggleRawNoteRuler();
     void slotToggleTempoRuler();
@@ -469,7 +470,7 @@ public slots:
     void slotSetPointerPosition(Rosegarden::timeT position, bool scroll = true);
 
     /// Set the current staff to the one containing the given canvas Y coord
-    void slotSetCurrentStaff(int canvasY);
+    void slotSetCurrentStaff(double canvasX, int canvasY);
 
     /**
      * Set the insert cursor position (from the top LoopRuler).

@@ -202,7 +202,10 @@ NotationView::slotChangeFont(const QString &newName)
 void
 NotationView::slotChangeFont(std::string newName)
 {
-    slotChangeFont(newName, NoteFontFactory::getDefaultSize(newName));
+    int newSize = m_config->readUnsignedNumEntry
+	((getStaffCount() > 1 ? "multistaffnotesize" : "singlestaffnotesize"),
+	 NoteFontFactory::getDefaultSize(newName));
+    slotChangeFont(newName, newSize);
 }
 
 
@@ -1289,18 +1292,18 @@ NotationView::slotSetPointerPosition(timeT time, bool scroll)
 }
 
 void
-NotationView::slotSetCurrentStaff(int y)
+NotationView::slotSetCurrentStaff(double x, int y)
 {
     unsigned int staffNo;
     for (staffNo = 0; staffNo < m_staffs.size(); ++staffNo) {
-        if (m_staffs[staffNo]->containsCanvasY(y)) break;
+        if (m_staffs[staffNo]->containsCanvasCoords(x, y)) break;
     }
     
     if (staffNo < m_staffs.size()) {
         if (m_currentStaff != signed(staffNo)) {
             m_staffs[m_currentStaff]->setCurrent(false);
             m_currentStaff = staffNo;
-            m_staffs[m_currentStaff]->setCurrent(true, y);
+            m_staffs[m_currentStaff]->setCurrent(true);
         }
         m_chordNameRuler->setCurrentSegment
             (&m_staffs[m_currentStaff]->getSegment());
@@ -1336,7 +1339,7 @@ void
 NotationView::slotSetInsertCursorPosition(double x, int y, bool scroll,
                                           bool updateNow)
 {
-    slotSetCurrentStaff(y);
+    slotSetCurrentStaff(x, y);
 
     NotationStaff *staff = m_staffs[m_currentStaff];
     Event *clefEvt, *keyEvt;
@@ -1616,12 +1619,17 @@ void NotationView::slotSelectSelected()
 
 void NotationView::slotLinearMode()
 {
-    setPageMode(false);
+    setPageMode(LinedStaff::LinearMode);
 }
 
-void NotationView::slotPageMode()
+void NotationView::slotContinuousPageMode()
 {
-    setPageMode(true);
+    setPageMode(LinedStaff::ContinuousPageMode);
+}
+
+void NotationView::slotMultiPageMode()
+{
+    setPageMode(LinedStaff::MultiPageMode);
 }
 
 void NotationView::slotToggleChordsRuler()

@@ -44,14 +44,14 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_y(0),
     m_resolution(resolution),
     m_lineThickness(lineThickness),
-    m_pageMode(false),
+    m_pageMode(LinearMode),
     m_pageWidth(2000.0), // fairly arbitrary, but we need something non-zero
+    m_pageHeight(0),
     m_rowSpacing(0),
     m_connectingLineLength(0),
     m_startLayoutX(0),
     m_endLayoutX(0),
     m_current(false),
-    m_currentRow(0),
     m_pointer(new QCanvasLine(canvas)),
     m_insertCursor(new QCanvasLine(canvas))
 {
@@ -59,9 +59,9 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
 }
 
 LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
-                          Rosegarden::SnapGrid *snapGrid,
-                          int id, int resolution, int lineThickness,
-                          double pageWidth, int pageHeight, int rowSpacing) :
+		       Rosegarden::SnapGrid *snapGrid,
+		       int id, int resolution, int lineThickness,
+		       double pageWidth, int pageHeight, int rowSpacing) :
     Rosegarden::Staff(*segment),
     m_canvas(canvas),
     m_snapGrid(snapGrid),
@@ -70,15 +70,14 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_y(0),
     m_resolution(resolution),
     m_lineThickness(lineThickness),
-    m_pageMode(true),
+    m_pageMode(pageHeight ? MultiPageMode : ContinuousPageMode),
     m_pageWidth(pageWidth),
-//!!! implement pageHeight
+    m_pageHeight(pageHeight),
     m_rowSpacing(rowSpacing),
     m_connectingLineLength(0),
     m_startLayoutX(0),
     m_endLayoutX(0),
     m_current(false),
-    m_currentRow(0),
     m_pointer(new QCanvasLine(canvas)),
     m_insertCursor(new QCanvasLine(canvas))
 {
@@ -86,9 +85,9 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
 }
 
 LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
-                          Rosegarden::SnapGrid *snapGrid,
-                          int id, int resolution, int lineThickness,
-                          bool pageMode, double pageWidth, int pageHeight,
+		       Rosegarden::SnapGrid *snapGrid,
+		       int id, int resolution, int lineThickness,
+		       PageMode pageMode, double pageWidth, int pageHeight,
 		       int rowSpacing) :
     Rosegarden::Staff(*segment),
     m_canvas(canvas),
@@ -100,13 +99,12 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_lineThickness(lineThickness),
     m_pageMode(pageMode),
     m_pageWidth(pageWidth),
-//!!! implement pageHeight
+    m_pageHeight(pageHeight),
     m_rowSpacing(rowSpacing),
     m_connectingLineLength(0),
     m_startLayoutX(0),
     m_endLayoutX(0),
     m_current(false),
-    m_currentRow(0),
     m_pointer(new QCanvasLine(canvas)),
     m_insertCursor(new QCanvasLine(canvas))
 {
@@ -147,7 +145,7 @@ LinedStaff::setLineThickness(int lineThickness)
 }
 
 void
-LinedStaff::setPageMode(bool pageMode)
+LinedStaff::setPageMode(PageMode pageMode)
 {
     m_pageMode = pageMode;
 }
@@ -156,6 +154,12 @@ void
 LinedStaff::setPageWidth(double pageWidth)
 {
     m_pageWidth = pageWidth;
+}
+
+void
+LinedStaff::setPageHeight(int pageHeight)
+{
+    m_pageHeight = pageHeight;
 }
 
 void
@@ -203,9 +207,10 @@ LinedStaff::getY() const
 double
 LinedStaff::getTotalWidth() const
 {
-    if (m_pageMode) {
+    switch (m_pageMode) {
+    case ContinuousPageMode: case MultiPageMode:
         return getCanvasXForRightOfRow(getRowForLayoutX(m_endLayoutX)) - m_x;
-    } else {
+    case LinearMode: default:
         return getCanvasXForLayoutX(m_endLayoutX) - m_x;
     }
 }
@@ -213,8 +218,15 @@ LinedStaff::getTotalWidth() const
 int
 LinedStaff::getTotalHeight() const
 {
-    return getCanvasYForTopOfStaff(getRowForLayoutX(m_endLayoutX)) +
-        getHeightOfRow() - m_y;
+    switch (m_pageMode) {
+    case ContinuousPageMode:
+	return getCanvasYForTopOfStaff(getRowForLayoutX(m_endLayoutX)) +
+	    getHeightOfRow() - m_y;
+    case MultiPageMode:
+	return m_pageHeight - m_y;
+    case LinearMode: default:
+	return getCanvasYForTopOfStaff(0) + getHeightOfRow() - m_y;
+    }
 }
 
 int 
@@ -225,13 +237,13 @@ LinedStaff::getHeightOfRow() const
 }
 
 bool
-LinedStaff::containsCanvasY(int y) const
+LinedStaff::containsCanvasCoords(double x, int y) const
 {
-    if (m_pageMode) {
+    switch (m_pageMode) {
 
-        int row;
-    
-        for (row  = getRowForLayoutX(m_startLayoutX);
+    case ContinuousPageMode:
+
+        for (int row  = getRowForLayoutX(m_startLayoutX);
              row <= getRowForLayoutX(m_endLayoutX); ++row) {
             if (y >= getCanvasYForTopOfStaff(row) &&
                 y <  getCanvasYForTopOfStaff(row) + getHeightOfRow()) {
@@ -241,7 +253,21 @@ LinedStaff::containsCanvasY(int y) const
 
         return false;
 
-    } else {
+    case MultiPageMode:
+    
+        for (int row  = getRowForLayoutX(m_startLayoutX);
+             row <= getRowForLayoutX(m_endLayoutX); ++row) {
+            if (y >= getCanvasYForTopOfStaff(row) &&
+                y <  getCanvasYForTopOfStaff(row) + getHeightOfRow() &&
+		x >= getCanvasXForLeftOfRow(row) &&
+		x <= getCanvasXForRightOfRow(row)) {
+                return true;
+            }
+        }
+
+        return false;
+
+    case LinearMode: default:
         
         return (y >= getCanvasYForTopOfStaff() &&
                 y <  getCanvasYForTopOfStaff() + getHeightOfRow());
@@ -330,7 +356,7 @@ LinedStaff::getBarExtents(double x, int y) const
 
         QCanvasLine *line = m_barLines[i].second;
 
-        if (m_pageMode && (barRow < row)) continue;
+        if (m_pageMode != LinearMode && (barRow < row)) continue;
         if (line->x() <= x) continue;
 
         return QRect(int(m_barLines[i-1].second->x()),
@@ -672,7 +698,7 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
     delete m_staffConnectingLines[row];
     line = 0;
 
-    if (m_pageMode && m_connectingLineLength > 0.1) {
+    if (m_pageMode != LinearMode && m_connectingLineLength > 0.1) { //!!! multi page
         line = new QCanvasLine(m_canvas);
         y = getCanvasYForTopLine(row);
         line->setPoints(int(x + length), y, int(x + length),
@@ -738,15 +764,11 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
 }    
 
 void
-LinedStaff::setCurrent(bool current, int canvasY)
+LinedStaff::setCurrent(bool current)
 {
     m_current = current;
     if (m_current) {
-	m_currentRow =
-	    ((m_pageMode && (canvasY >= 0)) ?
-	     getRowForCanvasCoords(0, canvasY) : 0);
 	m_insertCursor->show();
-	//!!! how should we show which row is current? shade the background?
     } else {
 	m_insertCursor->hide();
     }
@@ -802,11 +824,6 @@ LinedStaff::setInsertCursorPosition(double canvasX, int canvasY)
     if (!m_current) return;
     
     int row = getRowForCanvasCoords(canvasX, canvasY);
-    if (row != m_currentRow) {
-	//!!! show current row somehow
-	m_currentRow = row;
-    }
-
     canvasY = getCanvasYForTopOfStaff(row);
     m_insertCursor->setX(canvasX);
     m_insertCursor->setY(canvasY);

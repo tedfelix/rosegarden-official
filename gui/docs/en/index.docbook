@@ -1774,8 +1774,8 @@
 	  defined this way: the only reason the editor knows that a
 	  Classical semiquaver has a tilted oval filled head, a stem,
 	  two flags, etc., is that the description in Classical.xml
-	  says so.)  See the <!-- !!! link
-	  linkend="developers-note-styles" -->Developers Guide<!-- /link --> for
+	  says so.)  See the <link
+	  linkend="developers-note-styles">Developers Guide</link> for
 	  more information.
 	</para>
       </sect2>
@@ -3796,9 +3796,27 @@
   **********************************
   -->
 
-
   <chapter id="developers">
     <title>Developer's Guide to Rosegarden</title>
+
+    <sect1 id="developers-note-fonts">
+      <title>Configuring custom notation fonts</title>
+
+      <para>If you have a notation font that is not currently
+      supported by Rosegarden, you can create your own mapping file to
+      describe the font's character map and metrics in a way
+      Rosegarden can use.  These files are installed in the
+      fonts/mappings subdirectory of the Rosegarden installation
+      directory, and a number of samples are included with the
+	distribution.</para>
+    </sect1>
+    
+    <sect1 id="developers-note-styles">
+      <title>Creating new notation styles</title>
+
+      <para></para>
+    </sect1>
+    
 
     <!-- (OPTIONAL) A Programming/Scripting reference chapter should be
     used for apps that use plugins or that provide their own scripting hooks
@@ -3807,18 +3825,18 @@
   <!-- cc: I think we should document the DCOP API here, but I don't
   think we should include extensive developer docs, although we should
   point to where they can be found in the source tree or online. -->
-
+<!--
     <para>
       Programming <application>Rosegarden</application> plugins is 
       a joy to behold. Just read through the next
       66 pages of <acronym>API</acronym>'s to learn how!
     </para>
-
+-->
     <!-- Use refentries to describe APIs.  Refentries are fairly
     complicated and you should consult the docbook reference for
     further details. The example below was taken from that reference
     and shortened a bit for readability. -->
-
+<!--
     <refentry id="re-1007-unmanagechildren-1">
       <refmeta>
 	<refentrytitle>XtUnmanageChildren</refentrytitle>
@@ -3947,7 +3965,7 @@
 	</screen>
       </refsect1>
     </refentry>
-
+-->
   </chapter>
 
 

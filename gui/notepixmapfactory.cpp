@@ -2069,7 +2069,9 @@ int NotePixmapFactory::getAccidentalHeight(const Accidental &a) const {
 }
 
 int NotePixmapFactory::getStemLength() const {
-    return getNoteBodyHeight() * 13/4;
+    unsigned int l = 1;
+    (void)m_font->getStemLength(l);
+    return l;
 }
 
 int NotePixmapFactory::getStemThickness() const {

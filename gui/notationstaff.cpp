@@ -72,13 +72,11 @@ using std::string;
 NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
                              Rosegarden::SnapGrid *snapGrid, int id,
 			     NotationView *view,
-			     bool pageMode, double pageWidth,
                              string fontName, int resolution) :
     ProgressReporter(0),
     LinedStaff(canvas, segment, snapGrid, id, resolution,
                resolution / 16 + 1, // line thickness
-               pageMode, pageWidth,
-	       600, //!!! page height
+	       LinearMode, 0, 0, // pageMode, pageWidth and pageHeight set later
                0 // row spacing
                ),
     m_notePixmapFactory(0),

@@ -69,6 +69,12 @@ class LinedStaff : public Rosegarden::Staff
 public:
     typedef std::pair<double, int> LinedStaffCoords;
 
+    enum PageMode {
+	LinearMode = 0,
+	ContinuousPageMode,
+	MultiPageMode
+    };
+
 protected:
     /**
      * Create a new LinedStaff for the given Segment, with a
@@ -120,7 +126,7 @@ protected:
      */
     LinedStaff(QCanvas *, Rosegarden::Segment *, Rosegarden::SnapGrid *,
                int id, int resolution, int lineThickness,
-	       bool pageMode, double pageWidth, int pageHeight, int rowSpacing);
+	       PageMode pageMode, double pageWidth, int pageHeight, int rowSpacing);
 
 public:
     virtual ~LinedStaff();
@@ -187,10 +193,13 @@ protected:
     virtual void setLineThickness(int lineThickness);
 
     /// Subclass may wish to expose this
-    virtual void setPageMode(bool pageMode);
+    virtual void setPageMode(PageMode pageMode);
 
     /// Subclass may wish to expose this
     virtual void setPageWidth(double pageWidth);
+
+    /// Subclass may wish to expose this
+    virtual void setPageHeight(int pageHeight);
 
     /// Subclass may wish to expose this
     virtual void setRowSpacing(int rowSpacing);
@@ -261,11 +270,11 @@ public:
     virtual int getHeightOfRow() const;
     
     /**
-     * Returns true if the given canvas y-coordinate falls within
-     * (any of the rows of) this staff.  False if it falls in the
+     * Returns true if the given canvas coordinates fall within
+     * (any of the rows of) this staff.  False if they fall in the
      * gap between two rows.
      */
-    virtual bool containsCanvasY(int canvasY) const; 
+    virtual bool containsCanvasCoords(double canvasX, int canvasY) const; 
 
     /**
      * Returns the canvas y coordinate of the specified line on the
@@ -299,12 +308,8 @@ public:
      * The owner of the staffs should normally ensure that one staff
      * is current (the default is non-current, even if there only is
      * one staff) and that only one staff is current at once.
-     *
-     * If current is true, canvasY >= 0, and the staff is in page
-     * mode, canvasY will be used to determine which row to make
-     * current.
      */
-    virtual void setCurrent(bool current, int canvasY = -1);
+    virtual void setCurrent(bool current);
 
     /**
      * Move the playback pointer to the layout-X coordinate
@@ -411,9 +416,17 @@ public:
     // Please try to avoid calling this method.
     //!!! fix NotationView::doDeferredCursorMove
     double getCanvasXForLayoutX(double x) const {
-	if (m_pageMode) {
+	switch (m_pageMode) {
+	case ContinuousPageMode:
 	    return m_x + x - (m_pageWidth * getRowForLayoutX(x));
-	} else {
+	case MultiPageMode:
+	{
+	    int pageNo = getRowForLayoutX(x) / getRowsPerPage();
+	    double cx = m_x + x - (m_pageWidth * getRowForLayoutX(x));
+	    cx += (m_x + m_pageWidth) * pageNo;
+	    return cx;
+	}
+	case LinearMode: default:
 	    return m_x + x;
 	}
     }
@@ -476,13 +489,28 @@ protected:
     }
 
     int getRowForCanvasCoords(double x, int y) const {
-	if (!m_pageMode) return (int)((x - m_x) / m_pageWidth);
-	else return ((y - m_y) / m_rowSpacing);
+	switch (m_pageMode) {
+	case ContinuousPageMode:
+	    return ((y - m_y) / m_rowSpacing);
+	case MultiPageMode:
+	    return (getRowsPerPage() * (int(x) / int(m_x + m_pageWidth))) +
+		((y - m_y) / m_rowSpacing);
+	case LinearMode: default:
+	    return (int)((x - m_x) / m_pageWidth);
+	}
     }
 
     int getCanvasYForTopOfStaff(int row = -1) const {
-	if (!m_pageMode || row <= 0) return m_y;
-	else return m_y + (row * m_rowSpacing);
+	switch (m_pageMode) {
+	case ContinuousPageMode:
+	    if (row <= 0) return m_y;
+	    else return m_y + (row * m_rowSpacing);
+	case MultiPageMode:
+	    if (row <= 0) return m_y;
+	    else return m_y + ((row % getRowsPerPage()) * m_rowSpacing);
+	case LinearMode: default:
+	    return m_y;
+	}
     }
 
     int getCanvasYForTopLine(int row = -1) const {
@@ -490,8 +518,14 @@ protected:
     }
 
     double getCanvasXForLeftOfRow(int row) const {
-	if (!m_pageMode) return m_x + (row * m_pageWidth);
-	else return m_x;
+	switch (m_pageMode) {
+	case ContinuousPageMode:
+	    return m_x;
+	case MultiPageMode:
+	    return m_x + (m_x + m_pageWidth) * (row / getRowsPerPage());
+	case LinearMode: default:
+	    return m_x + (row * m_pageWidth);
+	}
     }
 
     double getCanvasXForRightOfRow(int row) const {
@@ -502,6 +536,11 @@ protected:
     getCanvasOffsetsForLayoutCoords(double x, int y) const {
 	LinedStaffCoords cc = getCanvasCoordsForLayoutCoords(x, y);
 	return LinedStaffCoords(cc.first - x, cc.second - y);
+    }
+
+    int getRowsPerPage() const {
+	if (m_pageMode != MultiPageMode) return 0;
+	else return m_pageHeight / m_rowSpacing;
     }
 
 protected:
@@ -546,8 +585,9 @@ protected:
     int	     m_resolution;
     int	     m_lineThickness;
     
-    bool     m_pageMode;
+    PageMode m_pageMode;
     double   m_pageWidth;
+    int      m_pageHeight;
     int	     m_rowSpacing;
     int	     m_connectingLineLength;
 
@@ -555,7 +595,6 @@ protected:
     double   m_endLayoutX;
 
     bool     m_current;
-    int      m_currentRow;
 
     typedef std::vector<QCanvasLine *> LineList;
     typedef std::vector<LineList> LineMatrix;

@@ -79,6 +79,12 @@ Features for 1.0 - updated 20030627
   o create mapping files for commerical available fonts (so one can
     use them in RG)
 
+- notation
+  o staff connections above/below (bracketing)
+  o bar styles: double, repeat -- integration with repeating segments how?
+  o at least be able to draw segno, 1/2-repeats etc
+
+
 Completed
 ---------
 

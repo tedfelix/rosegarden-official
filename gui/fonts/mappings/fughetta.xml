@@ -54,6 +54,8 @@
 
         <!-- There's only one Unicode point for each flag; I guess
              you're expected to invert them yourself -->
+        <symbol name="MUSICAL SYMBOL COMBINING FLAG-0"
+                font-id="0" code="75" inversion-code="239"/>
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-1"
                 font-id="0" code="106" inversion-code="74"/>
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-2"

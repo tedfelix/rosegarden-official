@@ -18,7 +18,8 @@
 -->
 <Separator/>
   <Action name="linear_mode"/>
-  <Action name="page_mode"/>
+  <Action name="continuous_page_mode"/>
+  <Action name="multi_page_mode"/>
 <Separator/>
   <Action name="lyric_editor"/>
   <Separator/>

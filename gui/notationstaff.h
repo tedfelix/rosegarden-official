@@ -56,7 +56,7 @@ public:
      * \a id is the id of the staff in the NotationView
      */
     NotationStaff(QCanvas *, Rosegarden::Segment *, Rosegarden::SnapGrid *,
-                  int id, NotationView *view, bool pageMode, double pageWidth,
+                  int id, NotationView *view,
                   std::string fontName, int resolution);
     virtual ~NotationStaff();
 
@@ -68,6 +68,7 @@ public:
 
     LinedStaff::setPageMode;
     LinedStaff::setPageWidth;
+    LinedStaff::setPageHeight;
     LinedStaff::setRowSpacing;
     LinedStaff::setConnectingLineLength;
 

@@ -67,6 +67,7 @@ public:
     bool getStaffLineThickness(int size, unsigned int &thickness) const;
     bool getStemThickness(int size, unsigned int &thickness) const;
     bool getBeamThickness(int size, unsigned int &thickness) const;
+    bool getStemLength(int size, unsigned int &length) const;
     bool getFlagSpacing(int size, unsigned int &spacing) const;
     bool getBorderThickness(int size, unsigned int &X, unsigned int &y) const;
     
@@ -164,6 +165,7 @@ private:
     public:
         SizeData() : m_stemThickness(-1),
                      m_beamThickness(-1),
+                     m_stemLength(-1),
                      m_flagSpacing(-1),
                      m_staffLineThickness(-1),
                      m_borderX(-1), m_borderY(-1),
@@ -175,6 +177,9 @@ private:
         }
         void setBeamThickness(unsigned int i) {
             m_beamThickness = (int)i;
+        }
+        void setStemLength(unsigned int i) {
+            m_stemLength = (int)i;
         }
         void setFlagSpacing(unsigned int i) {
             m_flagSpacing = (int)i;
@@ -202,6 +207,13 @@ private:
         bool getBeamThickness(unsigned int &i) const {
             if (m_beamThickness >= 0) {
                 i = (unsigned int)m_beamThickness;
+                return true;
+            } else return false;
+        }
+
+        bool getStemLength(unsigned int &i) const {
+            if (m_stemLength >= 0) {
+                i = (unsigned int)m_stemLength;
                 return true;
             } else return false;
         }
@@ -238,6 +250,7 @@ private:
     private:
         int m_stemThickness;
         int m_beamThickness;
+        int m_stemLength;
         int m_flagSpacing;
         int m_staffLineThickness;
         int m_borderX;
@@ -305,6 +318,9 @@ public:
     /// Returns false + a guess at suitable thickness if not specified
     bool getBeamThickness(unsigned int &thickness) const;
 
+    /// Returns false + a guess at suitable length if not specified
+    bool getStemLength(unsigned int &length) const;
+
     /// Returns false + a guess at suitable spacing if not specified
     bool getFlagSpacing(unsigned int &spacing) const;
 
@@ -367,7 +383,6 @@ public:
 private:
     friend class NoteFontFactory;
     NoteFont(std::string fontName, int size = 0);
-    static std::set<std::string> getAvailableFontNames();
     std::set<int> getSizes() const { return m_fontMap.getSizes(); }
 
     bool lookup(CharName charName, bool inverted, QPixmap *&pixmap) const;
@@ -414,6 +429,7 @@ public:
     static int getDefaultSize(std::string fontName);
 
 private:
+    static std::set<std::string> m_fontNames;
     static std::map<std::pair<std::string, int>, NoteFont *> m_fonts;
 };
 

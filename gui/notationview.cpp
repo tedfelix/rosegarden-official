@@ -296,8 +296,27 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	painter.setFont(font);
 	painter.drawLine(0, 50, 3000, 50);
 	x = 0;
+	QString s("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+	painter.drawText(x, 50, s);
+	x += metrics.width(s);
+	painter.end();
+	sprite = new QCanvasSimpleSprite
+	    (pixmap, tCanvas);
+	sprite->move(0, y);
+	sprite->show();
+	y += 100;
+
+	pixmap = new QPixmap(3000, 100);
+	pixmap->fill();
+	font = QFont("maestro");
+	font.setPixelSize(16);
+	metrics = QFontMetrics(font);
+	painter.begin(pixmap);
+	painter.setFont(font);
+	painter.drawLine(0, 50, 3000, 50);
+	x = 0;
 	for (int c = 32; c < 256; ++c) {
-	    QChar cc(0xe000 + c);
+	    QChar cc(0xf000 + c);
 	    painter.drawText(x, 50, cc);
 	    x += metrics.width(cc);
 	}
@@ -314,7 +333,25 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	painter.setFont(font);
 	painter.drawLine(0, 50, 3000, 50);
 	x = 0;
-	QString s("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+	for (int c = 32; c < 256; ++c) {
+	    QChar cc(c);
+	    painter.drawText(x, 50, cc);
+	    x += metrics.width(cc);
+	}
+	painter.end();
+	sprite = new QCanvasSimpleSprite
+	    (pixmap, tCanvas);
+	sprite->move(0, y);
+	sprite->show();
+	y += 100;
+
+	pixmap = new QPixmap(3000, 100);
+	pixmap->fill();
+	painter.begin(pixmap);
+	painter.setFont(font);
+	painter.drawLine(0, 50, 3000, 50);
+	x = 0;
+	s = QString("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
 	painter.drawText(x, 50, s);
 	x += metrics.width(s);
 	painter.end();
@@ -326,7 +363,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
 	pixmap = new QPixmap(3000, 100);
 	pixmap->fill();
-	font = QFont("maestro");
+	font = QFont("xinfonia");
 	font.setPixelSize(16);
 	metrics = QFontMetrics(font);
 	painter.begin(pixmap);
@@ -447,9 +484,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 				       true, getCentralFrame()));
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
-        m_staffs.push_back(new NotationStaff(canvas(), segments[i], 0, // snap
-                                             i, this, false, getPageWidth(),
-                                             m_fontName, m_fontSize));
+        m_staffs.push_back(new NotationStaff
+			   (canvas(), segments[i], 0, // snap
+			    i, this,
+			    m_fontName, m_fontSize));
     }
 
     //
@@ -485,7 +523,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     try {
 
-        setPageMode(layoutMode == 1); // also renders the staffs!
+	LinedStaff::PageMode mode = LinedStaff::LinearMode;
+	if (layoutMode == 1) mode = LinedStaff::ContinuousPageMode;
+	else if (layoutMode == 2) mode = LinedStaff::MultiPageMode;
+
+        setPageMode(mode); // also renders the staffs!
 
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->getSegment().getRefreshStatus
@@ -651,7 +693,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
              << pdm.width() << ", " << pdm.height()
              << " - printer resolution : " << printer->resolution() << "\n";
 
-    double staffGapPt = 8.0;
+    double staffGapPt = 6.0; //!!! for now
     double staffGapPx = staffGapPt * (double)printer->resolution() / 72.0;
     double scaleFactor = staffGapPx / (double)m_fontSize;
 
@@ -662,7 +704,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], 0, // snap
-                                             i, this, false, getPageWidth(),
+                                             i, this,
                                              m_fontName, m_fontSize));
     }
 
@@ -690,7 +732,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     try {
 
-        setPageMode(true);
+        setPageMode(LinedStaff::ContinuousPageMode); //!!! worry about this
 
 	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->getSegment().getRefreshStatus
@@ -1126,11 +1168,17 @@ void NotationView::setupActions()
     linearModeAction->setExclusiveGroup("layoutMode");
     if (layoutMode == 0) linearModeAction->setChecked(true);
 
-    KRadioAction *pageModeAction = new KRadioAction
-        (i18n("&Page Layout"), 0, this, SLOT(slotPageMode()),
-         actionCollection(), "page_mode");
-    pageModeAction->setExclusiveGroup("layoutMode");
-    if (layoutMode == 1) pageModeAction->setChecked(true);
+    KRadioAction *continuousPageModeAction = new KRadioAction
+        (i18n("&Continuous Page Layout"), 0, this, SLOT(slotContinuousPageMode()),
+         actionCollection(), "continuous_page_mode");
+    continuousPageModeAction->setExclusiveGroup("layoutMode");
+    if (layoutMode == 1) continuousPageModeAction->setChecked(true);
+
+    KRadioAction *multiPageModeAction = new KRadioAction
+        (i18n("&Multiple Page Layout"), 0, this, SLOT(slotMultiPageMode()),
+         actionCollection(), "multi_page_mode");
+    multiPageModeAction->setExclusiveGroup("layoutMode");
+    if (layoutMode == 2) multiPageModeAction->setChecked(true);
 
     new KToggleAction(i18n("Show Ch&ord Name Ruler"), 0, this,
                       SLOT(slotToggleChordsRuler()),
@@ -1731,9 +1779,9 @@ void NotationView::setViewSize(QSize s)
 
 
 void
-NotationView::setPageMode(bool pageMode)
+NotationView::setPageMode(LinedStaff::PageMode pageMode)
 {
-    if (pageMode) {
+    if (pageMode != LinedStaff::LinearMode) {
 	if (m_topBarButtons) m_topBarButtons->hide();
 	if (m_bottomBarButtons) m_bottomBarButtons->hide();
 	if (m_chordNameRuler) m_chordNameRuler->hide();
@@ -1749,14 +1797,15 @@ NotationView::setPageMode(bool pageMode)
 
     int pageWidth = getPageWidth();
 
-    m_hlayout->setPageMode(pageMode);
+    m_hlayout->setPageMode(pageMode != LinedStaff::LinearMode);
     m_hlayout->setPageWidth(pageWidth);
 
-    RG_DEBUG << "Page mode : page width = " << pageWidth << endl;
+    RG_DEBUG << "Page mode " << pageMode << ": page width = " << pageWidth << endl;
     
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         m_staffs[i]->setPageMode(pageMode);
         m_staffs[i]->setPageWidth(pageWidth);
+	m_staffs[i]->setPageHeight(2000); //!!! fix for pageHeight
     }
 
     bool layoutApplied = applyLayout();
@@ -2205,7 +2254,7 @@ NotationView::getStaffForCanvasCoords(int x, int y) const
 
 	NotationStaff *s = m_staffs[i];
 
-        if (s->containsCanvasY(y)) {
+        if (s->containsCanvasCoords(x, y)) {
 	    
 	    NotationStaff::LinedStaffCoords coords = 
 		s->getLayoutCoordsForCanvasCoords(x, y);
@@ -2233,7 +2282,7 @@ void NotationView::print(KPrinter* printer)
         return;
     }
 
-    double staffGapPt = 8.0; //!!! for now
+    double staffGapPt = 6.0; //!!! for now
     double staffGapPx = staffGapPt * (double)printer->resolution() / 72.0;
     double scaleFactor = staffGapPx / (double)m_fontSize;
 

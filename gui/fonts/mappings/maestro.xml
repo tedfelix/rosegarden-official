@@ -20,11 +20,6 @@
 
 <font-sizes>
 	<font-scale font-height="4.0" beam-thickness="0.5" staff-line-thickness="0.1" stem-thickness="0.1" border-x="0" border-y="0"/>
-        <font-size note-height="4" font-height="16" beam-thickness="2" staff-line-thickness="1" stem-thickness="1" border-x="0" border-y="0"/>
-        <font-size note-height="6" font-height="24" beam-thickness="3" staff-line-thickness="1" stem-thickness="1" border-x="0" border-y="0"/>
-        <font-size note-height="8" font-height="32" beam-thickness="4" staff-line-thickness="1" stem-thickness="1" border-x="0" border-y="0"/>
-        <font-size note-height="10" font-height="40" beam-thickness="5" staff-line-thickness="1" stem-thickness="2" border-x="0" border-y="0"/>
-        <font-size note-height="12" font-height="48" beam-thickness="6" staff-line-thickness="2" stem-thickness="2" border-x="0" border-y="0"/>
 </font-sizes>
 
 <font-symbol-map>
@@ -61,6 +56,8 @@
 
         <!-- There's only one Unicode point for each flag; I guess
              you're expected to invert them yourself -->
+        <symbol name="MUSICAL SYMBOL COMBINING FLAG-0"
+                font-id="0" code="75" inversion-code="239"/>
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-1"
                 font-id="0" code="106" inversion-code="74"/>
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-2"
@@ -106,20 +103,18 @@
         <symbol name="MUSICAL SYMBOL F CLEF" font-id="0" code="63"/>
 </font-symbol-map>
 
-<!-- It'd be useful to be able to express these as fractions,   
-     and we'll need that if we ever support scalable fonts: -->
 <font-hotspots>
         <hotspot name="MUSIC FLAT SIGN">
-		<scaled y="2.0"/>
+		<scaled y="1.92"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL C CLEF">
 		<scaled y="2.0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL G CLEF">
-		<scaled y="4.8"/>
+		<scaled y="4.3"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL F CLEF">
-		<scaled y="1.1"/>
+		<scaled y="0.96"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL MULTI REST">
 		<scaled y="0"/>

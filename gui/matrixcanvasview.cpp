@@ -116,7 +116,7 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
     // Ignore click if it was above the staff and not
     // on an active item
     //
-    if (!m_staff.containsCanvasY(p.y()) && !activeItem)
+    if (!m_staff.containsCanvasCoords(p.x(), p.y()) && !activeItem)
         m_ignoreClick = true;
 }
 
@@ -156,7 +156,7 @@ void MatrixCanvasView::contentsMouseDoubleClickEvent (QMouseEvent* e)
 {
     QPoint p = inverseMapPoint(e->pos());
 
-    if (!m_staff.containsCanvasY(p.y())) {
+    if (!m_staff.containsCanvasCoords(p.x(), p.y())) {
         m_ignoreClick = true;
         return;
     }
