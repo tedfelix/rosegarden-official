@@ -2523,7 +2523,14 @@ void RosegardenGUIApp::exportCsoundFile(const QString &file)
                                          100,
                                          this);
 
-    CsoundExporter e(&m_doc->getComposition(), qstrtostr(file));
+    CsoundExporter e(this, &m_doc->getComposition(), qstrtostr(file));
+
+    connect(&e, SIGNAL(setProgress(int)),
+            progressDlg.progressBar(), SLOT(setValue(int)));
+
+    connect(&e, SIGNAL(incrementProgress(int)),
+            progressDlg.progressBar(), SLOT(advance(int)));
+
     if (!e.write()) {
         KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
     }

@@ -23,16 +23,19 @@
 #include <string>
 #include <vector>
 
+#include "progressreporter.h"
+
 namespace Rosegarden { class Composition; }
 
 /**
  * Csound scorefile export
  */
 
-class CsoundExporter
+class CsoundExporter : public ProgressReporter
 {
 public:
-    CsoundExporter(Rosegarden::Composition *, std::string fileName);
+    CsoundExporter(QObject *parent,
+                   Rosegarden::Composition *, std::string fileName);
     ~CsoundExporter();
 
     bool write();

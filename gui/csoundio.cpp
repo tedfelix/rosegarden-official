@@ -17,14 +17,16 @@
     COPYING included with this distribution for more information.
 */
 
+#include <iostream>
+#include <fstream>
+#include <string>
+
+#include <kapp.h>
+
 #include "csoundio.h"
 
 #include "Composition.h"
 #include "BaseProperties.h"
-
-#include <iostream>
-#include <fstream>
-#include <string>
 
 using Rosegarden::Composition;
 using Rosegarden::Segment;
@@ -34,8 +36,10 @@ using Rosegarden::BaseProperties;
 using Rosegarden::timeT;
 
 
-CsoundExporter::CsoundExporter(Composition *composition,
+CsoundExporter::CsoundExporter(QObject *parent,
+                               Composition *composition,
 			       std::string fileName) :
+    ProgressReporter(parent, "csoundExporter"),
     m_composition(composition),
     m_fileName(fileName)
 {
@@ -69,8 +73,12 @@ CsoundExporter::write()
 	    << m_composition->getCopyrightNote() << "\n";
     }
 
+    int trackNo = 0;
     for (Composition::iterator i = m_composition->begin();
 	 i != m_composition->end(); ++i) {
+
+        emit setProgress(int(double(trackNo++)/double(m_composition->getNbTracks()) * 100.0));
+        kapp->processEvents(50);
 
 	str << "\n;; Segment: \"" << (*i)->getLabel() << "\"\n";
 	str << ";; on Track: \""
