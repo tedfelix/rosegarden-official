@@ -48,6 +48,9 @@ MidiDevice::MidiDevice():
 {
     generatePresentationList();
     generateDefaultControllers();
+
+    // create a default Metronome
+    m_metronome = new MidiMetronome(MidiInstrumentBase + 9);
 }
 
 MidiDevice::MidiDevice(DeviceId id,
@@ -61,6 +64,9 @@ MidiDevice::MidiDevice(DeviceId id,
 {
     generatePresentationList();
     generateDefaultControllers();
+
+    // create a default Metronome
+    m_metronome = new MidiMetronome(MidiInstrumentBase + 9);
 }
 
 MidiDevice::MidiDevice(DeviceId id,
