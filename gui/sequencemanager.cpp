@@ -147,7 +147,8 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_sliceFetched(true), // default to true (usually ignored)
     m_countdownDialog(0),
     m_countdownTimer(new QTimer(doc)),
-    m_recordTime(new QTime())
+    m_recordTime(new QTime()),
+    m_updateRequested(true)
 {
     m_countdownDialog = new CountdownDialog(dynamic_cast<QWidget*>
                                 (m_doc->parent())->parentWidget());
@@ -2097,7 +2098,10 @@ void SegmentMmapper::dump()
 bool SequenceManager::event(QEvent *e)
 {
     if (e->type() == QEvent::User) {
-	checkRefreshStatus();
+	if (m_updateRequested) {
+	    checkRefreshStatus();
+	    m_updateRequested = false;
+	}
 	return true;
     } else {
 	return QObject::event(e);
@@ -2109,6 +2113,7 @@ void SequenceManager::update()
 {
     // schedule a refresh-status check for the next event loop
     QEvent *e = new QEvent(QEvent::User);
+    m_updateRequested = true;
     QApplication::postEvent(this, e);
 }
 
