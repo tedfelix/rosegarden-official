@@ -613,6 +613,8 @@ public slots:
     /// Do some background rendering work.
     void slotRenderSomething();
 
+    void slotSetOperationNameAndStatus(QString);
+
 signals:
     /**
      * Emitted when the note selected in the palette changes

@@ -2180,7 +2180,7 @@ NotationView::paintEvent(QPaintEvent *e)
 
 bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 {
-    emit setOperationName(i18n("Laying out score..."));
+    slotSetOperationNameAndStatus(i18n("Laying out score..."));
     RosegardenProgressDialog::processEvents();
 
     m_hlayout->setStaffCount(m_staffs.size());
@@ -2192,7 +2192,7 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 
         if (staffNo >= 0 && (int)i != staffNo) continue;
 
-        emit setOperationName(i18n("Laying out staff %1...").arg(i + 1));
+        slotSetOperationNameAndStatus(i18n("Laying out staff %1...").arg(i + 1));
         RosegardenProgressDialog::processEvents();
 
         m_hlayout->resetStaff(*m_staffs[i], startTime, endTime);
@@ -2201,7 +2201,7 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
         m_vlayout->scanStaff(*m_staffs[i], startTime, endTime);
     }
 
-    emit setOperationName(i18n("Reconciling staffs..."));
+    slotSetOperationNameAndStatus(i18n("Reconciling staffs..."));
     RosegardenProgressDialog::processEvents();
 
     m_hlayout->finishLayout(startTime, endTime);
@@ -2789,7 +2789,7 @@ void NotationView::readjustCanvasSize()
     double maxWidth = 0.0;
     int maxHeight = 0;
 
-    emit setOperationName(i18n("Sizing and allocating canvas..."));
+    slotSetOperationNameAndStatus(i18n("Sizing and allocating canvas..."));
     RosegardenProgressDialog::processEvents();
 
     int progressTotal = m_staffs.size() + 2;
@@ -2994,7 +2994,7 @@ void NotationView::setupProgress(RosegardenProgressDialog* dialog)
 
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
             connect(m_staffs[i], SIGNAL(setOperationName(QString)),
-                    dialog,      SLOT(slotSetOperationName(QString)));
+                    this,        SLOT(slotSetOperationNameAndStatus(QString)));
 
             connect(dialog, SIGNAL(cancelClicked()),
                     m_staffs[i], SLOT(slotCancel()));
@@ -3005,6 +3005,13 @@ void NotationView::setupProgress(RosegardenProgressDialog* dialog)
         m_progressDisplayer = PROGRESS_DIALOG;
     }
     
+}
+
+void NotationView::slotSetOperationNameAndStatus(QString name)
+{
+    emit setOperationName(name);
+    statusBar()->changeItem(QString("  %1").arg(name),
+			    KTmpStatusMsg::getDefaultId());
 }
 
 void NotationView::disconnectProgress()
@@ -3019,6 +3026,9 @@ void NotationView::disconnectProgress()
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         m_staffs[i]->disconnect();
     }
+
+    statusBar()->changeItem(KTmpStatusMsg::getDefaultMsg(),
+			    KTmpStatusMsg::getDefaultId());
 }
 
 void NotationView::setupDefaultProgress()
