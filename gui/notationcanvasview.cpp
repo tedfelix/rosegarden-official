@@ -183,12 +183,12 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
         handleMousePress(m_currentHighlightedLine, staffNo, e);
 }
 
-void NotationCanvasView::contentsMouseDoubleClickEvent(QMouseEvent* e)
-{
-        kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMouseDoubleClickEvent()\n";
+// void NotationCanvasView::contentsMouseDoubleClickEvent(QMouseEvent* e)
+// {
+//         kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMouseDoubleClickEvent()\n";
     
-    contentsMousePressEvent(e);
-}
+//     contentsMousePressEvent(e);
+// }
 
 
 // Used for a note-shaped cursor - leaving around just in case

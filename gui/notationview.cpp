@@ -1586,10 +1586,13 @@ void NotationView::itemPressed(int height, int staffNo,
 
         setActiveItem(0);
 
-        if (e->type() == QEvent::MouseButtonDblClick)
-            m_tool->handleMouseDblClick(height, staffNo, eventPos, el);
-        else
-            m_tool->handleMousePress(height, staffNo, eventPos, el);
+        // This won't work because a double click event is always
+        // preceded by a single click event
+
+//         if (e->type() == QEvent::MouseButtonDblClick)
+//             m_tool->handleMouseDblClick(height, staffNo, eventPos, el);
+//         else
+        m_tool->handleMousePress(height, staffNo, eventPos, el);
     }
     
 }
@@ -1834,12 +1837,12 @@ NotationTool::~NotationTool()
 {
 }
 
-void NotationTool::handleMouseDblClick(int height, int staffNo,
-                                       const QPoint &eventPos,
-                                       NotationElement* e)
-{
-    handleMousePress(height, staffNo, eventPos, e);
-}
+// void NotationTool::handleMouseDblClick(int height, int staffNo,
+//                                        const QPoint &eventPos,
+//                                        NotationElement* e)
+// {
+//     handleMousePress(height, staffNo, eventPos, e);
+// }
 
 void NotationTool::handleMouseMove(QMouseEvent*)
 {
@@ -1995,7 +1998,8 @@ void ClefInserter::handleMousePress(int, int staffNo,
 //------------------------------
 
 NotationEraser::NotationEraser(NotationView& view)
-    : NotationTool(view)
+    : NotationTool(view),
+      m_collapseRest(false)
 {
     m_parentView.setCanvasCursor(Qt::pointingHandCursor);
 }
@@ -2004,23 +2008,6 @@ void NotationEraser::handleMousePress(int, int staffNo,
                                       const QPoint&,
                                       NotationElement* element)
 {
-    _handleMousePress(staffNo, element, false);
-}
-
-void NotationEraser::handleMouseDblClick(int, int staffNo,
-                                         const QPoint&,
-                                         NotationElement* element)
-{
-    _handleMousePress(staffNo, element, true);
-}
-
-void NotationEraser::_handleMousePress(int staffNo,
-                                       NotationElement* element,
-                                       bool collapseRest)
-{
-    kdDebug(KDEBUG_AREA) << "NotationEraser::_handleMousePress("
-                         << collapseRest << ")\n";
-
     bool needLayout = false;
     if (!element || staffNo < 0) return;
 
@@ -2032,7 +2019,7 @@ void NotationEraser::_handleMousePress(int staffNo,
     if (element->isNote()) {
 
         absTime = element->getAbsoluteTime();
-        nt.deleteNote(element->event(), collapseRest);
+        nt.deleteNote(element->event(), m_collapseRest);
         needLayout = true;
 
     } else if (element->isRest()) {

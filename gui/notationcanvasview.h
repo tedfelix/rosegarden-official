@@ -126,7 +126,7 @@ protected:
     /**
      * Callback for a mouse double click event in the canvas
      */
-    virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
+//     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
 
     void processActiveItems(QMouseEvent*, QCanvasItemList);
 

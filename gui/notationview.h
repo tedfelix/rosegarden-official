@@ -101,7 +101,7 @@ public:
     unsigned int      getAddedEvents()     const { return m_segmentEvents.size(); }
 
     const Rosegarden::Segment &getSegment() const { return m_originalSegment; }
-    Rosegarden::Segment &getSegment() { return m_originalSegment; }
+    Rosegarden::Segment &getSegment()             { return m_originalSegment; }
     
 private:
     EventSelection(const EventSelection&);
@@ -634,10 +634,10 @@ public:
                                   const QPoint &eventPos,
                                   NotationElement*) = 0;
 
-    /// defaults to calling handleMousePress
-    virtual void handleMouseDblClick(int height, int staffNo,
-                                     const QPoint &eventPos,
-                                     NotationElement*);
+//     /// defaults to calling handleMousePress
+//     virtual void handleMouseDblClick(int height, int staffNo,
+//                                      const QPoint &eventPos,
+//                                      NotationElement*);
 
     /// does nothing by default
     virtual void handleMouseMove(QMouseEvent*);
@@ -712,28 +712,18 @@ protected:
 
 /**
  * This tool will erase a note on mouse click events
- *
- * A double-click will erase and collapse rests
  */
 class NotationEraser : public NotationTool
 {
 public:
     NotationEraser(NotationView&);
 
-    /// Erase element but don't collapse rests
     virtual void handleMousePress(int height, int staffNo,
                                   const QPoint &eventPos,
                                   NotationElement* el);
-
-    /// Erase element and collapse rests
-    virtual void handleMouseDblClick(int height, int staffNo,
-                                     const QPoint &eventPos,
-                                     NotationElement* el);
 protected:
-    void _handleMousePress(int staffNo,
-                           NotationElement* element,
-                           bool collapseRest);
-    
+
+    bool m_collapseRest;
 };
 
 /**
