@@ -156,7 +156,14 @@ void Segment::erase(iterator pos)
 
     std::multiset<Event*, Event::EventCmp>::erase(pos);
     notifyRemove(e);
+    updateRefreshStatuses(e->getAbsoluteTime(), getEndTime());
     delete e;
+}
+
+void Segment::updateRefreshStatuses(timeT startTime, timeT endTime)
+{
+    for(unsigned int i = 0; i < m_refreshStatuses.size(); ++i)
+        m_refreshStatuses[i].push(startTime, endTime);
 }
 
 
@@ -166,6 +173,7 @@ Segment::iterator Segment::insert(Event *e)
 
     iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
     notifyAdd(e);
+    updateRefreshStatuses(e->getAbsoluteTime(), getEndTime());
     return i;
 }
 
@@ -190,9 +198,14 @@ void Segment::erase(iterator from, iterator to)
         notifyRemove(e);
         delete e;
     }
+
+    timeT startTime = 0, endTime = 0;
+    if (from != end()) startTime = (*from)->getAbsoluteTime();
+    if (to != end()) endTime = (*to)->getAbsoluteTime();
     
     std::multiset<Event*, Event::EventCmp>::erase(from, to);
 
+    updateRefreshStatuses(startTime, endTime);
 }
 
 
@@ -628,8 +641,37 @@ void Segment::notifyRemove(Event *e) const
     }
 }
 
+unsigned int Segment::getNewRefreshStatusId()
+{
+    m_refreshStatuses.push_back(SegmentRefreshStatus());
+    return m_refreshStatuses.size() - 1;
+}
+
+
 
 SegmentHelper::~SegmentHelper() { }
+
+
+void SegmentRefreshStatus::push(timeT from, timeT to)
+{
+    if (!needsRefresh()) { // don't do anything subtle - just erase the old data
+
+        m_from = from;
+        m_to = to;
+
+    } else { // accumulate on what was already there
+
+        if (from < m_from) m_from = from;
+        if (to > m_to) m_to = to;
+
+    }
+
+    if (m_to < m_from) m_from = m_to;
+
+    setNeedsRefresh(true);
+}
+
+
 
  
 }

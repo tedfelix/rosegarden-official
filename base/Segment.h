@@ -29,10 +29,26 @@
 #include "Track.h"
 #include "Event.h"
 #include "NotationTypes.h"
-
+#include "RefreshStatus.h"
 
 namespace Rosegarden 
 {
+
+class SegmentRefreshStatus : public RefreshStatus
+{
+public:
+    SegmentRefreshStatus() : m_from(0), m_to(0) {}
+
+    void push(Rosegarden::timeT from, Rosegarden::timeT to);
+
+    Rosegarden::timeT from() { return m_from; }
+    Rosegarden::timeT to()   { return m_to; }
+
+protected:
+    Rosegarden::timeT m_from;
+    Rosegarden::timeT m_to;
+};
+
 
 /**
  * Segment is the container for a set of Events that are all played on
@@ -425,6 +441,10 @@ public:
     int getTranspose() const { return m_transpose; }
     void setTranspose(const int &transpose) { m_transpose = transpose; }
 
+    unsigned int getNewRefreshStatusId();
+    SegmentRefreshStatus& refreshStatus(unsigned int id) { return m_refreshStatuses[id]; }
+    void updateRefreshStatuses(timeT startTime, timeT endTime);
+
 private:
     timeT m_startIdx;
     TrackId m_track;
@@ -456,6 +476,9 @@ private:
 
     int m_transpose;            // all Events tranpose
     Rosegarden::timeT m_delay;  // all Events delay
+
+    std::vector<SegmentRefreshStatus> m_refreshStatuses;
+
 };
 
 
@@ -469,7 +492,6 @@ public:
     // and just before it is deleted:
     virtual void eventRemoved(const Segment *, Event *) = 0;
 };
-
 
 // an abstract base
 
