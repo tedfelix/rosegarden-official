@@ -654,10 +654,6 @@ SegmentParameterBox::slotTransposeTextChanged(const QString &text)
     }
 
     emit documentModified();
-    
-    RG_DEBUG << "emitting transposeValueChanged(" << transposeValue << ")" << endl;
-
-    emit transposeValueChanged(transposeValue);
 }
 
 void 
@@ -678,7 +674,7 @@ SegmentParameterBox::slotDelayTimeChanged(Rosegarden::timeT delayValue)
 	std::vector<Rosegarden::Segment*>::iterator it;
 	for (it = m_segments.begin(); it != m_segments.end(); it++) {
 	    (*it)->setDelay(delayValue);
-	    (*it)->setRealTimeDelay(Rosegarden::RealTime(0, 0));
+	    (*it)->setRealTimeDelay(Rosegarden::RealTime::zeroTime);
 	}
 
     } else if (delayValue < 0) {
@@ -695,7 +691,7 @@ SegmentParameterBox::slotDelayTimeChanged(Rosegarden::timeT delayValue)
 	std::vector<Rosegarden::Segment*>::iterator it;
 	for (it = m_segments.begin(); it != m_segments.end(); it++) {
 	    (*it)->setDelay(0);
-	    (*it)->setRealTimeDelay(Rosegarden::RealTime(0, 0));
+	    (*it)->setRealTimeDelay(Rosegarden::RealTime::zeroTime);
 	}
     }
 

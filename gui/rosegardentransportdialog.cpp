@@ -323,9 +323,9 @@ RosegardenTransportDialog::displayRealTime(const Rosegarden::RealTime &rt)
 
     // If time is negative then reverse the time and set the minus flag
     //
-    if (st < Rosegarden::RealTime(0,0))
+    if (st < Rosegarden::RealTime::zeroTime)
     {
-        st = Rosegarden::RealTime(0,0) - st;
+        st = Rosegarden::RealTime::zeroTime - st;
         if (!m_lastNegative) {
 	    m_transport->NegativePixmap->setPixmap(m_lcdNegative);
 	    m_lastNegative = true;
@@ -370,9 +370,9 @@ RosegardenTransportDialog::displaySMPTETime(const Rosegarden::RealTime &rt)
 
     // If time is negative then reverse the time and set the minus flag
     //
-    if (st < Rosegarden::RealTime(0,0))
+    if (st < Rosegarden::RealTime::zeroTime)
     {
-        st = Rosegarden::RealTime(0,0) - st;
+        st = Rosegarden::RealTime::zeroTime - st;
         if (!m_lastNegative) {
 	    m_transport->NegativePixmap->setPixmap(m_lcdNegative);
 	    m_lastNegative = true;

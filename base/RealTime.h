@@ -32,7 +32,7 @@ struct RealTime
     long sec;
     long usec;
 
-    RealTime(): sec(0), usec(0) {;}
+    RealTime(): sec(0), usec(0) {}
     RealTime(long s, long u);
 
     RealTime(const RealTime &r) :
@@ -87,6 +87,7 @@ struct RealTime
         else return lTotal/rTotal;
     }
 
+    static const RealTime zeroTime;
 };
 
 std::ostream &operator<<(std::ostream &out, const RealTime &rt);

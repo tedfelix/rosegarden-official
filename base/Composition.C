@@ -771,7 +771,7 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
     ReferenceSegment::iterator i = m_tempoSegment.findNearestRealTime(t);
     if (i == m_tempoSegment.end()) {
 	i = m_tempoSegment.begin();
-	if (t >= RealTime(0, 0) ||
+	if (t >= RealTime::zeroTime ||
 	    (i == m_tempoSegment.end() || (*i)->getAbsoluteTime() > 0)) {
 	    return realTime2Time(t, m_defaultTempo);
 	}
@@ -1270,6 +1270,24 @@ Composition::notifySegmentRepeatChanged(Segment *s, bool repeat) const
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->segmentRepeatChanged(this, s, repeat);
+    }
+}
+
+void
+Composition::notifySegmentEventsTimingChanged(Segment *s, timeT delay, RealTime rtDelay) const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->segmentEventsTimingChanged(this, s, delay, rtDelay);
+    }
+}
+
+void
+Composition::notifySegmentTransposeChanged(Segment *s, int transpose) const
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->segmentTransposeChanged(this, s, transpose);
     }
 }
 

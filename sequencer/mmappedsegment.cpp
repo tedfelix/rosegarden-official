@@ -286,10 +286,8 @@ bool MmappedSegmentsMetaIterator::jumpToTime(const Rosegarden::RealTime& startTi
 
     m_currentTime = startTime;
 
-//    if (startTime > Rosegarden::RealTime(0,0)) {
-        for(segmentiterators::iterator i = m_iterators.begin(); i != m_iterators.end(); ++i)
-            if (!moveIteratorToTime(*(*i), startTime)) res = false;
-//    }
+    for(segmentiterators::iterator i = m_iterators.begin(); i != m_iterators.end(); ++i)
+        if (!moveIteratorToTime(*(*i), startTime)) res = false;
 
     return res;
 }

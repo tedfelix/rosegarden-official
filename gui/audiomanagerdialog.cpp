@@ -346,7 +346,7 @@ AudioManagerDialog::slotPopulateFileList()
         {
             m_doc->getAudioFileManager().
                     drawPreview((*it)->getId(),
-                                RealTime(0, 0),
+                                RealTime::zeroTime,
                                 (*it)->getLength(),
                                 audioPixmap);
         }
@@ -371,7 +371,7 @@ AudioManagerDialog::slotPopulateFileList()
         item->setText(1, QString("%1.%2s").arg(length.sec).arg(msecs));
 
         // set start time and duration
-        item->setStartTime(Rosegarden::RealTime(0, 0));
+        item->setStartTime(Rosegarden::RealTime::zeroTime);
         item->setDuration(length);
 
         // Envelope pixmap
@@ -434,7 +434,7 @@ AudioManagerDialog::slotPopulateFileList()
                 {
                     m_doc->getAudioFileManager().
                         drawHighlightedPreview((*it)->getId(),
-                                               RealTime(0, 0),
+                                               RealTime::zeroTime,
                                                (*it)->getLength(),
                                                (*iit)->getAudioStartTime(),
                                                (*iit)->getAudioEndTime(),
@@ -759,7 +759,7 @@ AudioManagerDialog::slotInsert()
     // find selected audio file and guess a track
     emit insertAudioSegment(audioFile->getId(),
                             instr->getId(),
-                            Rosegarden::RealTime(0, 0),
+                            Rosegarden::RealTime::zeroTime,
                             audioFile->getLength());
 }
 

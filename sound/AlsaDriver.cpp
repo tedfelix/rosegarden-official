@@ -1602,7 +1602,7 @@ AlsaDriver::initialisePlayback(const RealTime &position,
 
         m_alsaPlayStartTime = alsaClockSent;
 
-        if (position == RealTime(0, 0))
+        if (position == RealTime::zeroTime)
             sendSystemQueued(SND_SEQ_EVENT_START, "",
                              m_alsaPlayStartTime + playLatency);
         else
@@ -1627,7 +1627,7 @@ AlsaDriver::stopPlayback()
 
     // reset the clock send time
     //
-    m_midiClockSendTime = RealTime(0, 0);
+    m_midiClockSendTime = RealTime::zeroTime;
 
     // Flush the output and input queues
     //
@@ -1744,7 +1744,7 @@ AlsaDriver::resetPlayback(const RealTime &position, const RealTime &latency)
     {
 
         // if we're fast forwarding then we bring the note off closer
-        if (modifyNoteOff <= RealTime(0, 0))
+        if (modifyNoteOff <= RealTime::zeroTime)
         {
             (*i)->setRealTime((*i)->getRealTime() + modifyNoteOff);
         }
@@ -2070,7 +2070,7 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
                     RealTime duration = eventTime -
                              m_noteOnMap[chanNoteKey]->getEventTime();
 
-                    if (duration < RealTime(0, 0)) break;
+                    if (duration < RealTime::zeroTime) break;
 
                     // Velocity 0 - NOTE OFF.  Set duration correctly
                     // for recovery later.
@@ -2555,7 +2555,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                     (*i)->getEventTime();
 
                 /*
-                    adjustedEventTime == RealTime(0, 0) &&
+                    adjustedEventTime == RealTime::zeroTime &&
                     getSequencerTime() > RealTime(1, 0))
                     */
 
@@ -2570,7 +2570,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
                     if (m_playing)
                         adjustedEventTime = getAlsaTime() + RealTime(0, 500000);
                     else
-                        adjustedEventTime = RealTime(0, 0);
+                        adjustedEventTime = RealTime::zeroTime;
                 }
 
 
@@ -2583,7 +2583,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
                 // If the start index is non-zero then we must scan to
                 // the required starting position in the sample
-                if (audioFile->getStartIndex() != RealTime(0, 0))
+                if (audioFile->getStartIndex() != RealTime::zeroTime)
                 {
                     // If there's a problem with the scan (most likely
                     // we've moved beyond the end of the sample) then
@@ -4588,7 +4588,7 @@ AlsaDriver::sendMMC(MidiByte deviceArg,
 #endif
     }
 
-    processMidiOut(mC, RealTime(0, 0), true);
+    processMidiOut(mC, RealTime::zeroTime, true);
 }
 
 // Send a system real-time message
@@ -4744,7 +4744,7 @@ AlsaDriver::sendMidiClock(const RealTime &playLatency)
     // First time through set the clock send time - this will also
     // ensure we send the first batch of clock events
     //
-    if (m_midiClockSendTime == RealTime(0, 0))
+    if (m_midiClockSendTime == RealTime::zeroTime)
     {
         m_midiClockSendTime = getAlsaTime() + playLatency;
         /*

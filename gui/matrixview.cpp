@@ -1189,9 +1189,9 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
                                   Rosegarden::MappedEvent::MidiNoteOneShot,
                                   evPitch,
                                   Rosegarden::MidiMaxValue,
-                                  Rosegarden::RealTime(0, 0),
+                                  Rosegarden::RealTime::zeroTime,
                                   Rosegarden::RealTime(0, 500000),
-                                  Rosegarden::RealTime(0, 0));
+                                  Rosegarden::RealTime::zeroTime);
     Rosegarden::StudioControl::sendMappedEvent(mE);
 
 }
@@ -1259,9 +1259,9 @@ void MatrixView::slotKeySelected(unsigned int y, bool repeating)
                                   Rosegarden::MappedEvent::MidiNoteOneShot,
                                   evPitch,
                                   Rosegarden::MidiMaxValue,
-                                  Rosegarden::RealTime(0, 0),
+                                  Rosegarden::RealTime::zeroTime,
                                   Rosegarden::RealTime(0, 500000),
-                                  Rosegarden::RealTime(0, 0));
+                                  Rosegarden::RealTime::zeroTime);
     Rosegarden::StudioControl::sendMappedEvent(mE);
 }
 
@@ -1385,9 +1385,9 @@ void MatrixView::playNote(Rosegarden::Event *event)
                                       event->get<Rosegarden::Int>
                                         (Rosegarden::BaseProperties::PITCH),
                                   velocity,
-                                  Rosegarden::RealTime(0, 0),
+                                  Rosegarden::RealTime::zeroTime,
                                   duration,
-                                  Rosegarden::RealTime(0, 0));
+                                  Rosegarden::RealTime::zeroTime);
 
     Rosegarden::StudioControl::sendMappedEvent(mE);
 }
@@ -1415,9 +1415,9 @@ void MatrixView::playNote(const Rosegarden::Segment &segment, int pitch)
                                   Rosegarden::MappedEvent::MidiNoteOneShot,
                                   pitch,
                                   Rosegarden::MidiMaxValue,
-                                  Rosegarden::RealTime(0, 0),
+                                  Rosegarden::RealTime::zeroTime,
                                   Rosegarden::RealTime(0, 500000),
-                                  Rosegarden::RealTime(0, 0));
+                                  Rosegarden::RealTime::zeroTime);
 
     Rosegarden::StudioControl::sendMappedEvent(mE);
 }

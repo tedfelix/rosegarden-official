@@ -182,16 +182,18 @@ public:
 
 
     // CompositionObserver interface
-    virtual void segmentAdded        (const Composition*, Segment*);
-    virtual void segmentRemoved      (const Composition*, Segment*);
-    virtual void segmentRepeatChanged(const Composition*, Segment*, bool);
-    virtual void endMarkerTimeChanged(const Composition*, bool shorten);
-    virtual void trackChanged        (const Composition*, Track*);
-    virtual void timeSignatureChanged(const Composition*);
-    virtual void metronomeChanged    (const Composition*);
-    virtual void soloChanged         (const Composition*, bool solo, TrackId selectedTrack);
-    virtual void tempoChanged        (const Composition*);
-    virtual void compositionDeleted  (const Composition*);
+    virtual void segmentAdded              (const Composition*, Segment*);
+    virtual void segmentRemoved            (const Composition*, Segment*);
+    virtual void segmentRepeatChanged      (const Composition*, Segment*, bool);
+    virtual void segmentEventsTimingChanged(const Composition*, Segment *, timeT delay, RealTime rtDelay);
+    virtual void segmentTransposeChanged   (const Composition*, Segment *, int transpose);
+    virtual void endMarkerTimeChanged      (const Composition*, bool shorten);
+    virtual void trackChanged              (const Composition*, Track*);
+    virtual void timeSignatureChanged      (const Composition*);
+    virtual void metronomeChanged          (const Composition*);
+    virtual void soloChanged               (const Composition*, bool solo, TrackId selectedTrack);
+    virtual void tempoChanged              (const Composition*);
+    virtual void compositionDeleted        (const Composition*);
 
     void processAddedSegment(Segment*);
     void processRemovedSegment(Segment*);

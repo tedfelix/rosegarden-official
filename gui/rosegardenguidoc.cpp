@@ -822,7 +822,7 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment, KPr
         outStream << "\" delay=\"" << segment->getDelay();
     }
 
-    if (segment->getRealTimeDelay() != Rosegarden::RealTime(0, 0)) {
+    if (segment->getRealTimeDelay() != Rosegarden::RealTime::zeroTime) {
         outStream << "\" rtdelaysec=\"" << segment->getRealTimeDelay().sec 
                   << "\" rtdelayusec=\"" << segment->getRealTimeDelay().usec;
     }
@@ -1102,7 +1102,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 
                     switch((*i)->getType()) {
                         case Rosegarden::MappedEvent::MidiNote:
-                            if ((*i)->getDuration() < Rosegarden::RealTime(0, 0))
+                            if ((*i)->getDuration() < Rosegarden::RealTime::zeroTime)
                                 duration = -1;
 		    
                             rEvent = new Event(Rosegarden::Note::EventType,
@@ -1603,7 +1603,7 @@ RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime& /*time*/,
         m_recordSegment = new Segment(Rosegarden::Segment::Audio);
         m_recordSegment->setTrack(m_composition.getRecordTrack());
         m_recordSegment->setStartTime(m_composition.getPosition());
-        m_recordSegment->setAudioStartTime(Rosegarden::RealTime(0, 0));
+        m_recordSegment->setAudioStartTime(Rosegarden::RealTime::zeroTime);
 
         // Set an appropriate segment label
         //
@@ -1861,7 +1861,7 @@ RosegardenGUIDoc::getAudioPlayLatency()
         RG_DEBUG << "RosegardenGUIDoc::getAudioPlayLatency - "
                  << "Playback failed to contact Rosegarden sequencer"
                  << endl;
-        return Rosegarden::RealTime(0, 0);
+        return Rosegarden::RealTime::zeroTime;
     }
 
     // ensure the return type is ok
@@ -1882,7 +1882,7 @@ RosegardenGUIDoc::getAudioRecordLatency()
         RG_DEBUG << "RosegardenGUIDoc::getAudioRecordLatency - "
                  << "Playback failed to contact Rosegarden sequencer"
                  << endl;
-        return Rosegarden::RealTime(0, 0);
+        return Rosegarden::RealTime::zeroTime;
     }
 
     // ensure the return type is ok

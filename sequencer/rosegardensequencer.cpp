@@ -653,7 +653,7 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
     m_playLatency = playLatency;
     m_fetchLatency = fetchLatency;
     m_readAhead = readAhead;
-    if (m_readAhead == Rosegarden::RealTime(0,0))
+    if (m_readAhead == Rosegarden::RealTime::zeroTime)
         m_readAhead.sec = 1;
 
     // Ensure that we have time for audio synchronisation
@@ -945,7 +945,7 @@ RosegardenSequencerApp::processSequencerSlice(Rosegarden::MappedComposition mC)
 {
     // Use the "now" API
     //
-    m_sequencer->processEventsOut(mC, Rosegarden::RealTime(0, 0), true);
+    m_sequencer->processEventsOut(mC, Rosegarden::RealTime::zeroTime, true);
 }
 
 void
@@ -984,7 +984,7 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
 
     mC.insert(mE);
 
-    m_sequencer->processEventsOut(mC, Rosegarden::RealTime(0, 0), true);
+    m_sequencer->processEventsOut(mC, Rosegarden::RealTime::zeroTime, true);
 }
 
 void
@@ -992,7 +992,7 @@ RosegardenSequencerApp::processMappedEvent(MappedEvent mE)
 {
     Rosegarden::MappedComposition mC;
     mC.insert(new MappedEvent(mE));
-    m_sequencer->processEventsOut(mC, Rosegarden::RealTime(0, 0), true);
+    m_sequencer->processEventsOut(mC, Rosegarden::RealTime::zeroTime, true);
 }
 
 // Get the MappedDevice (DCOP wrapped vector of MappedInstruments)

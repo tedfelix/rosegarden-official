@@ -739,6 +739,8 @@ protected:
     void notifySegmentAdded(Segment *) const;
     void notifySegmentRemoved(Segment *) const;
     void notifySegmentRepeatChanged(Segment *, bool) const;
+    void notifySegmentEventsTimingChanged(Segment *s, timeT delay, RealTime rtDelay) const;
+    void notifySegmentTransposeChanged(Segment *s, int transpose) const;
     void notifyEndMarkerChange(bool shorten) const;
     void notifyTrackChanged(Track*) const;
     void notifyMetronomeChanged() const;
@@ -801,6 +803,18 @@ public:
      * Called when the segment's repeat status has changed
      */
     virtual void segmentRepeatChanged(const Composition *, Segment *, bool) = 0;
+
+    /**
+     * Called when the segment's delay timing has changed
+     */
+    virtual void segmentEventsTimingChanged(const Composition *, Segment *,
+                                            timeT delay, RealTime rtDelay) = 0;
+
+    /**
+     * Called when the segment's transpose value has changed
+     */
+    virtual void segmentTransposeChanged(const Composition *, Segment *,
+                                         int transpose) = 0;
 
     /**
      * Called after the composition's end marker time has been

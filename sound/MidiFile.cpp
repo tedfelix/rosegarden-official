@@ -1414,7 +1414,7 @@ MidiFile::convertToMidi(Composition &comp)
 		    (*segment)->getDelay();
 	    }
 
-	    if ((*segment)->getRealTimeDelay() != RealTime(0, 0)) {
+	    if ((*segment)->getRealTimeDelay() != RealTime::zeroTime) {
 		RealTime evRT = comp.getElapsedRealTime(midiEventAbsoluteTime);
 		timeT timeBeforeDelay = midiEventAbsoluteTime;
 		midiEventAbsoluteTime = comp.getElapsedTimeForRealTime

@@ -103,9 +103,6 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     connect(m_segmentParameterBox, SIGNAL(documentModified()),
             doc, SLOT(slotDocumentModified()));
 
-    connect(m_segmentParameterBox, SIGNAL(transposeValueChanged(int)),
-            this, SLOT(slotTransposeValueChanged(int)));
-
     m_instrumentParameterBox = new InstrumentParameterBox(getDocument(), vbox);
     vboxLayout->addWidget(m_instrumentParameterBox);
     vboxLayout->addStretch();
@@ -1226,17 +1223,6 @@ RosegardenGUIView::slotSynchroniseWithComposition()
 
     m_instrumentParameterBox->slotUpdateAllBoxes();
 }
-
-void
-RosegardenGUIView::slotTransposeValueChanged(int transposeVal)
-{
-    Rosegarden::SegmentSelection selection = getSelection();
-    for(Rosegarden::SegmentSelection::iterator i = selection.begin(); i != selection.end(); ++i) {
-        getDocument()->getSequenceManager()->segmentModified(*i);
-    }
-}
-
-
 
 void
 RosegardenGUIView::initChordNameRuler()

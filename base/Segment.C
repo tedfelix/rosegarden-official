@@ -785,6 +785,36 @@ Segment::setRepeating(bool value)
 }
 
 void
+Segment::setDelay(timeT delay)
+{
+    m_delay = delay;
+    if (m_composition) {
+//         m_composition->updateRefreshStatuses(); // no need to do that - affects playback only
+        m_composition->notifySegmentEventsTimingChanged(this, delay, RealTime::zeroTime);
+    }
+}
+
+void
+Segment::setRealTimeDelay(RealTime delay)
+{
+    m_realTimeDelay = delay;
+    if (m_composition) {
+        // don't updateRefreshStatuses() - affects playback only 
+        m_composition->notifySegmentEventsTimingChanged(this, 0, delay);
+    }
+}
+
+void
+Segment::setTranspose(int transpose)
+{
+    m_transpose = transpose;
+    if (m_composition) {
+        // don't updateRefreshStatuses() - affects playback only 
+        m_composition->notifySegmentTransposeChanged(this, transpose);
+    }
+}
+
+void
 Segment::setLabel(const std::string &label)
 {
     m_label = label; 

@@ -2419,9 +2419,9 @@ void NotationView::playNote(Rosegarden::Segment &s, int pitch)
                                     Rosegarden::MappedEvent::MidiNoteOneShot,
                                     pitch,
                                     Rosegarden::MidiMaxValue,
-                                    Rosegarden::RealTime(0,0),
+                                    Rosegarden::RealTime::zeroTime,
                                     Rosegarden::RealTime(0, 500000),
-                                    Rosegarden::RealTime(0, 0));
+                                    Rosegarden::RealTime::zeroTime);
 
     Rosegarden::StudioControl::sendMappedEvent(mE);
 }

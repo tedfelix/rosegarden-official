@@ -41,7 +41,7 @@ RealTime::RealTime(long s, long u) :
 
 std::ostream &operator<<(std::ostream &out, const RealTime &rt)
 {
-    if (rt < RealTime(0, 0)) {
+    if (rt < RealTime::zeroTime) {
 	out << "-";
     } else {
 	out << " ";
@@ -62,5 +62,7 @@ std::ostream &operator<<(std::ostream &out, const RealTime &rt)
     out << u << "R";
     return out;
 }
+
+const RealTime RealTime::zeroTime(0,0);
 
 }

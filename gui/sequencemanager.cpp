@@ -1270,9 +1270,9 @@ SequenceManager::panic()
                                      Rosegarden::MappedEvent::MidiNote,
                                      i,
                                      0,
-                                     RealTime(0, 0),
-                                     RealTime(0, 0),
-                                     RealTime(0, 0));
+                                     RealTime::zeroTime,
+                                     RealTime::zeroTime,
+                                     RealTime::zeroTime);
                 mC.insert(mE);
             }
 
@@ -1462,6 +1462,18 @@ void SequenceManager::segmentRemoved(const Composition*, Segment* s)
 void SequenceManager::segmentRepeatChanged(const Composition*, Segment* s, bool repeat)
 {
     SEQMAN_DEBUG << "SequenceManager::segmentRepeatChanged(" << s << ", " << repeat << ")\n";
+    segmentModified(s);
+}
+
+void SequenceManager::segmentEventsTimingChanged(const Composition*, Segment * s, timeT t, RealTime)
+{
+    SEQMAN_DEBUG << "SequenceManager::segmentEventsTimingChanged(" << s << ", " << t << ")\n";
+    segmentModified(s);
+}
+
+void SequenceManager::segmentTransposeChanged(const Composition*, Segment *s, int transpose)
+{
+    SEQMAN_DEBUG << "SequenceManager::segmentTransposeChanged(" << s << ", " << transpose << ")\n";
     segmentModified(s);
 }
 

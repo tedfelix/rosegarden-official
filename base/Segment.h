@@ -434,13 +434,13 @@ public:
     timeT getRepeatEndTime() const;
 
     timeT getDelay() const { return m_delay; }
-    void setDelay(timeT delay) { m_delay = delay; }
+    void setDelay(timeT delay);
 
     RealTime getRealTimeDelay() const { return m_realTimeDelay; }
-    void setRealTimeDelay(RealTime delay) { m_realTimeDelay = delay; }
+    void setRealTimeDelay(RealTime delay);
 
     int getTranspose() const { return m_transpose; }
-    void setTranspose(const int &transpose) { m_transpose = transpose; }
+    void setTranspose(int transpose);
 
 
 
@@ -451,7 +451,7 @@ public:
     // Get and set Audio file Id (see the AudioFileManager)
     //
     unsigned int getAudioFileId() const { return m_audioFileId; }
-    void setAudioFileId(const unsigned int &id) { m_audioFileId = id; }
+    void setAudioFileId(unsigned int id) { m_audioFileId = id; }
 
     // The audio start and end times tell us how far into
     // audio file "m_audioFileId" this Segment starts and

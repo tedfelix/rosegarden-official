@@ -50,7 +50,7 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
         throw(std::string("PlayableAudioFile - can't open file"));
 
     // scan to the beginning of the data chunk
-    scanTo(RealTime(0, 0));
+    scanTo(RealTime::zeroTime);
 
     // if no external ringbuffer then create one
     if (m_ringBuffer == 0)
@@ -245,7 +245,7 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_mmcId(0),           // default MMC id of 0
     m_midiClockEnabled(false),
     m_midiClockInterval(0),
-    m_midiClockSendTime(Rosegarden::RealTime(0, 0)),
+    m_midiClockSendTime(Rosegarden::RealTime::zeroTime),
     m_midiSongPositionPointer(0)
 {
     // Do some preallocating of the audio vector to minimise overhead

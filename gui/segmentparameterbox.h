@@ -96,7 +96,6 @@ public slots:
 signals:
     void documentModified();
     void canvasModified();
-    void transposeValueChanged(int);
 
 protected:
     void initBox();
