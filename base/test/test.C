@@ -527,8 +527,6 @@ int main(int argc, char **argv)
 		cout << endl;
         }
 
-	t.insert(TimeSignature(2,4).getAsEvent(0));
-
 	nh.autoBeam(t.begin(), t.end(), "beamed");
 
 #endif // TEST_NOTATION_TYPES

@@ -1334,6 +1334,8 @@ void SequenceManager::resetCompositionMmapper()
     m_compositionMmapper = new CompositionMmapper(m_doc);
 
     resetMetronomeMmapper();
+    resetTempoSegmentMmapper();
+    resetTimeSigSegmentMmapper();
     resetControlBlockMmapper();
 }
 
@@ -1598,7 +1600,7 @@ void SequenceManager::soloChanged(const Composition *, bool solo, TrackId select
     m_controlBlockMmapper->updateSoloData(solo, selectedTrack);
 }
 
-void SequenceManager::tempoChanged(const Composition *)
+void SequenceManager::tempoChanged(const Composition *c)
 {
     SEQMAN_DEBUG << "SequenceManager::tempoChanged()\n";
 
@@ -1614,6 +1616,8 @@ void SequenceManager::tempoChanged(const Composition *)
     m_metronomeMmapper->refresh();
     m_timeSigSegmentMmapper->refresh();
     m_tempoSegmentMmapper->refresh();
+
+    if (c->isLooping()) setLoop(c->getLoopStart(), c->getLoopEnd());
 }
 
 void

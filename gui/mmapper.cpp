@@ -201,14 +201,14 @@ void ControlBlockMmapper::setFileSize(size_t size)
     // (seek() to wanted size, then write a byte)
     //
     if (::lseek(m_fd, size - 1, SEEK_SET) == -1) {
-        SEQMAN_DEBUG << "ControlBlockMmapper : Couldn't lseek in " << m_fileName
-                     << " to " << size << endl;
+        std::cerr << "WARNING: ControlBlockMmapper : Couldn't lseek in " << m_fileName
+		  << " to " << size << std::endl;
         throw Rosegarden::Exception("lseek failed");
     }
     
     if (::write(m_fd, "\0", 1) != 1) {
-        SEQMAN_DEBUG << "ControlBlockMmapper : Couldn't write byte in  "
-                     << m_fileName << endl;
+	std::cerr << "WARNING: ControlBlockMmapper : Couldn't write byte in  "
+		  << m_fileName << std::endl;
         throw Rosegarden::Exception("write failed");
     }
     
@@ -355,14 +355,14 @@ void SegmentMmapper::setFileSize(size_t size)
         // (seek() to wanted size, then write a byte)
         //
         if (::lseek(m_fd, size - 1, SEEK_SET) == -1) {
-            SEQMAN_DEBUG << "SegmentMmapper : Couldn't lseek in " << m_fileName
-                         << " to " << size << endl;
+	    std::cerr << "WARNING: SegmentMmapper : Couldn't lseek in "
+		      << m_fileName << " to " << size << std::endl;
             throw Rosegarden::Exception("lseek failed");
         }
     
         if (::write(m_fd, "\0", 1) != 1) {
-            SEQMAN_DEBUG << "SegmentMmapper : Couldn't write byte in  "
-                         << m_fileName << endl;
+	    std::cerr << "WARNING: SegmentMmapper : Couldn't write byte in  "
+		      << m_fileName << std::endl;
             throw Rosegarden::Exception("write failed");
         }
     
