@@ -1772,6 +1772,18 @@ SequenceManager::reinitialiseSequencerStudio()
                 Rosegarden::MappedObject::Instrument,
                 Rosegarden::MappedObjectValue((*it)->getId()));
 
+            // Set the number of channels
+            //
+            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
+                Rosegarden::MappedAudioObject::Channels,
+                Rosegarden::MappedObjectValue((*it)->getAudioChannels()));
+
+            // Set the pan - 0 based
+            //
+            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
+                Rosegarden::MappedAudioFader::Pan,
+                Rosegarden::MappedObjectValue(float((*it)->getPan())) - 100.0);
+
             // Set the object id against the instrument
             //
             (*it)->setMappedId(mappedId);

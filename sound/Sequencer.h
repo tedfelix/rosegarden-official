@@ -82,9 +82,8 @@ public:
 
     // Control recording (input) state
     //
-    bool record(RecordStatus recordStatus,
-            std::vector<unsigned int> inputPorts)
-        { return m_soundDriver->record(recordStatus, inputPorts); }
+    bool record(RecordStatus recordStatus)
+        { return m_soundDriver->record(recordStatus); }
 
     // While recording returns a wrapped MappedComposition of
     // the latest MappedEvents

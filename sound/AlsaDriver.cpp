@@ -2606,8 +2606,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 }
 
 bool
-AlsaDriver::record(RecordStatus recordStatus,
-                   std::vector<unsigned int> inputPorts)
+AlsaDriver::record(RecordStatus recordStatus)
 {
     if (recordStatus == RECORD_MIDI)
     {
@@ -2618,7 +2617,7 @@ AlsaDriver::record(RecordStatus recordStatus,
     else if (recordStatus == RECORD_AUDIO)
     {
 #ifdef HAVE_LIBJACK
-        if (createAudioFile(m_recordingFilename, inputPorts))
+        if (createAudioFile(m_recordingFilename))
         {
             m_recordStatus = RECORD_AUDIO;
         }
@@ -2992,32 +2991,33 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         {
             // Get the audio input port from the audio fader
             //
-            /*
             MappedAudioFader *fader =
                 dynamic_cast<MappedAudioFader*>
                     (inst->getMappedStudio()->
-                         getAudioFader((*it)->getInstrument()));
+                         getAudioFader(inst->getAudioMonitoringInstrument()));
 
-            MappedObjectPropertyList result =
-                fader->getPropertList(MappedAudioFader::Channels);
+            int channels = fader->
+                getPropertyList(MappedAudioFader::Channels)[0].toInt();
 
-            int channels = result[0].toInt();
+            int connection = fader->
+                getPropertyList(MappedAudioObject::ConnectionsIn)[0].toInt();
 
-            cout << "FADER " << (*it)->getInstrument() <<
-                    ", CHANNELS = " << channels << endl;
-                    */
+            //std::cout << "FADER CHANNELS = " << channels << endl;
                 
             // Get input buffer
             //
-            sample_t *inputBufferLeft = static_cast<sample_t*>
-                (jack_port_get_buffer(inst->getJackInputPort(0),
-                                      nframes));
+            sample_t *inputBufferLeft = 0, *inputBufferRight = 0;
 
-            /*
-            sample_t *inputBufferRight = static_cast<sample_t*>
-                (jack_port_get_buffer(inst->getJackInputPortRight(),
-                                      nframes));
-                                      */
+            inputBufferLeft = static_cast<sample_t*>
+              (jack_port_get_buffer(inst->
+                 getJackInputPort(connection * channels), nframes));
+
+            if (channels == 2)
+            {
+                inputBufferRight = static_cast<sample_t*>
+                  (jack_port_get_buffer(inst->
+                     getJackInputPort(connection * channels + 1), nframes));
+            }
 
             /*
             std::cout << "AlsaDriver::jackProcess - recording samples"
@@ -3043,9 +3043,20 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 //
                 inputLevel += fabs(inputBufferLeft[i]);
 
+                if (inputBufferRight)
+                {
+                    b2 = (unsigned char)((long)
+                            (inputBufferRight[i] * _16bitSampleMax)& 0xff);
+                    b1 = (unsigned char)((long)
+                            (inputBufferRight[i] * _16bitSampleMax) >> 8);
+                    buffer += b2;
+                    buffer += b1;
+
+                    inputLevel += fabs(inputBufferRight[i]);
+                }
             }
 
-            inputLevel /= float(nframes);
+            inputLevel /= float(nframes) * channels;
 
             if (_passThroughCounter++ > reportPasses)
             {
@@ -3667,8 +3678,7 @@ AlsaDriver::jackXRun(void *)
 
 
 bool
-AlsaDriver::createAudioFile(const std::string &fileName,
-                            std::vector<unsigned int> inputPorts)
+AlsaDriver::createAudioFile(const std::string &fileName)
 {
     // Already got a recording file - close it first to make
     // sure the data is written and internal totals computed.
@@ -3680,19 +3690,33 @@ AlsaDriver::createAudioFile(const std::string &fileName,
     cout << "AlsaDriver::createAudioFile - creating \"" 
          << fileName << "\"" << std::endl;
 
-    // we use JACK_DEFAULT_AUDIO_TYPE for all ports currently so
-    // we're recording 32 bit float MONO audio.
-    //
-    _recordFile =
-        new WAVAudioFile(fileName,
-                         1, // inputPorts.size(),    // channels
-                         _jackSampleRate,      // bits per second
-                         _jackSampleRate/16,   // bytes per second
-                         2,                    // bytes per sample
-                         16);                  // bits per sample
-    // open the file for writing
-    //
-    return (_recordFile->write());
+    MappedAudioFader *fader =
+        dynamic_cast<MappedAudioFader*>
+                    (m_studio->getAudioFader(getAudioMonitoringInstrument()));
+
+    if (fader)
+    {
+        int channels = fader->
+            getPropertyList(MappedAudioFader::Channels)[0].toInt();
+
+        cout << "GOT CHANNELS FROM FADER = " << channels << endl;
+        // we use JACK_DEFAULT_AUDIO_TYPE for all ports currently so
+        // we're recording 32 bit float MONO audio.
+        //
+        _recordFile =
+            new WAVAudioFile(fileName,
+                             channels,             // channels
+                             _jackSampleRate,      // bits per second
+                             _jackSampleRate/16,   // bytes per second
+                             2,                    // bytes per sample
+                             16);                  // bits per sample
+
+        // open the file for writing
+        //
+        return (_recordFile->write());
+    }
+
+    return 0;
 }
 
 

@@ -116,6 +116,11 @@ public:
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value) = 0;
 
+    // Not a requirement - but an occasionally useful method
+    //
+    virtual void setProperty(const MappedObjectProperty & /*property*/,
+                             MappedObjectValueList /*value*/) {;}
+
     // Accepts a MappedObject* which to clone the current object into.
     // All children of the passed MappedObject are free'd and new children
     // created as part of the clone process.  This operation turns readonly
@@ -342,16 +347,16 @@ public:
     // properties but we provide these methods for convenience.
     //
     void setConnections(AudioConnection dir,
-                        MappedObjectPropertyList conns);
+                        MappedObjectValueList conns);
 
-    MappedObjectPropertyList getConnections (AudioConnection dir);
+    MappedObjectValueList getConnections (AudioConnection dir);
 
 protected:
 
     // Which audio connections we have
     //
-    MappedObjectPropertyList      m_connectionsIn;
-    MappedObjectPropertyList      m_connectionsOut;
+    MappedObjectValueList      m_connectionsIn;
+    MappedObjectValueList      m_connectionsOut;
 
     // How many channels we carry
     //

@@ -42,6 +42,7 @@ typedef float        MappedObjectValue;
 // replaced with a std::vector<> for Qt2 compatibility
 
 typedef std::vector<MappedObjectProperty> MappedObjectPropertyList;
+typedef std::vector<MappedObjectValue> MappedObjectValueList;
 
 // The direction in which a port operates.
 //
@@ -56,5 +57,8 @@ typedef enum
 
 QDataStream& operator>>(QDataStream& s, Rosegarden::MappedObjectPropertyList&);
 QDataStream& operator<<(QDataStream&, const Rosegarden::MappedObjectPropertyList&);
+
+QDataStream& operator>>(QDataStream& s, Rosegarden::MappedObjectValueList&);
+QDataStream& operator<<(QDataStream&, const Rosegarden::MappedObjectValueList&);
 
 #endif // _MAPPEDCOMMON_H_

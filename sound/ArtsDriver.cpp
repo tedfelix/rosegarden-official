@@ -948,8 +948,7 @@ ArtsDriver::processEventsOut(const MappedComposition &mC,
 }
 
 bool
-ArtsDriver::record(RecordStatus recordStatus,
-                   std::vector<unsigned int> /*inputPorts*/)
+ArtsDriver::record(RecordStatus recordStatus)
 {
     if (recordStatus == RECORD_MIDI)
     {

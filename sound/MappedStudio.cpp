@@ -33,7 +33,7 @@
 #include "lrdf.h"
 #endif // HAVE_LIBLRDF
 
-// These two functions are stolen and adapted from Qt3 qvaluevector.h
+// These four functions are stolen and adapted from Qt3 qvaluevector.h
 //
 // ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 //
@@ -56,6 +56,30 @@ QDataStream& operator<<(QDataStream& s, const Rosegarden::MappedObjectPropertyLi
 {
     s << (Q_UINT32)v.size();
     Rosegarden::MappedObjectPropertyList::const_iterator it = v.begin();
+    for( ; it != v.end(); ++it )
+        s << *it;
+    return s;
+}
+
+QDataStream& operator>>(QDataStream& s, Rosegarden::MappedObjectValueList& v)
+{
+    v.clear();
+    Q_UINT32 c;
+    s >> c;
+    v.resize(c);
+    for(Q_UINT32 i = 0; i < c; ++i)
+    {
+        Rosegarden::MappedObjectValue t;
+        s >> t;
+        v[i] = t;
+    }
+    return s;
+}
+
+QDataStream& operator<<(QDataStream& s, const Rosegarden::MappedObjectValueList& v)
+{
+    s << (Q_UINT32)v.size();
+    Rosegarden::MappedObjectValueList::const_iterator it = v.begin();
     for( ; it != v.end(); ++it )
         s << *it;
     return s;
@@ -637,15 +661,21 @@ MappedAudioObject::~MappedAudioObject()
 
 void
 MappedAudioObject::setConnections(AudioConnection dir,
-                                  MappedObjectPropertyList conns)
+                                  MappedObjectValueList conns)
 {
+    if (dir == In)
+        m_connectionsIn = conns;
+    else
+        m_connectionsOut = conns;
 }
 
-MappedObjectPropertyList
+MappedObjectValueList
 MappedAudioObject::getConnections(AudioConnection dir)
 {
-    MappedObjectPropertyList list;
-    return list;
+    if (dir == In)
+        return m_connectionsIn;
+    else
+        return m_connectionsOut;
 }
 
 
@@ -666,6 +696,13 @@ MappedAudioFader::MappedAudioFader(MappedObject *parent,
                       m_bypassed(false),
                       m_pan(Rosegarden::MidiMidValue)
 {
+    // Set default connections
+    //
+    MappedObjectValueList defaultConns;
+    defaultConns.push_back(0);
+
+    setConnections(In, defaultConns);
+    setConnections(Out, defaultConns);
 }
 
 MappedAudioFader::~MappedAudioFader()
@@ -710,22 +747,22 @@ MappedAudioFader::getPropertyList(const MappedObjectProperty &property)
     }
     else if (property == MappedAudioObject::ConnectionsIn)
     {
-        Rosegarden::MappedObjectPropertyList::const_iterator 
+        Rosegarden::MappedObjectValueList::const_iterator 
             it = m_connectionsIn.begin();
 
         for( ; it != m_connectionsIn.end(); ++it)
         {
-            list.push_back(*it);
+            list.push_back(QString("%1").arg(*it));
         }
     }
     else if (property == MappedAudioObject::ConnectionsOut)
     {
-        Rosegarden::MappedObjectPropertyList::const_iterator 
+        Rosegarden::MappedObjectValueList::const_iterator 
             it = m_connectionsOut.begin();
 
         for( ; it != m_connectionsOut.end(); ++it)
         {
-            list.push_back(*it);
+            list.push_back(QString("%1").arg(*it));
         }
     }
 
@@ -763,6 +800,22 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
         std::cout << "MappedAudioFader::setProperty - "
                   << "pan = " << value << std::endl;
         m_pan = value;
+    }
+    else if (property == MappedAudioObject::ConnectionsIn)
+    {
+        std::cout << "MappedAudioFader::setProperty - "
+                  << "connectionsIn = " << value << std::endl;
+
+        m_connectionsIn.clear();
+        m_connectionsIn.push_back(value);
+    }
+    else if (property == MappedAudioObject::ConnectionsOut)
+    {
+        std::cout << "MappedAudioFader::setProperty - "
+                  << "connectionsOut = " << value << std::endl;
+
+        m_connectionsOut.clear();
+        m_connectionsOut.push_back(value);
     }
     else
     {

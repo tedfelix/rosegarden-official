@@ -161,6 +161,7 @@ public slots:
     void slotSelectPlugin(int index);
     void slotSelectAudioLevel(int index);
     void slotAudioChannels(int channels);
+    void slotSelectAudioInput(int value);
 
     // From the parameter box clicks
     void slotMute();

@@ -74,8 +74,7 @@ public:
     virtual MappedComposition*
         getMappedComposition(const RealTime &playLatency);
     
-    virtual bool record(RecordStatus recordStatus,
-                        std::vector<unsigned int> inputPorts);
+    virtual bool record(RecordStatus recordStatus);
 
     virtual void processEventsOut(const MappedComposition &mC,
                                   const RealTime &playLatency, 
@@ -226,8 +225,7 @@ public:
     // These public methods are required in this file because we
     // need access to this file from the static jackProcess member.
     //
-    bool createAudioFile(const std::string &fileName,
-                         std::vector<unsigned int> inputPorts);
+    bool createAudioFile(const std::string &fileName);
     void appendToAudioFile(const std::string &buffer);
 
 #endif

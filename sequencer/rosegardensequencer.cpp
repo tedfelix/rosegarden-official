@@ -91,8 +91,7 @@ RosegardenSequencerApp::RosegardenSequencerApp(
 
     // set this here and now so we can accept async midi events
     //
-    m_sequencer->record(Rosegarden::ASYNCHRONOUS_MIDI,
-                        std::vector<unsigned int>());
+    m_sequencer->record(Rosegarden::ASYNCHRONOUS_MIDI);
 
     // Setup the slice timer
     //
@@ -592,8 +591,6 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
     // For audio recording we need to retrieve the input ports
     // we're connected to from the Studio.
     //
-    std::vector<unsigned int> inputPorts;
-
     if (localRecordMode == STARTING_TO_RECORD_MIDI)
     {
         SEQUENCER_DEBUG << "RosegardenSequencerApp::record()"
@@ -602,7 +599,7 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
         // Get the Sequencer to prepare itself for recording - if
         // this fails we stop.
         //
-        if(m_sequencer->record(Rosegarden::RECORD_MIDI, inputPorts) == false)
+        if(m_sequencer->record(Rosegarden::RECORD_MIDI) == false)
         {
             m_transportStatus = STOPPING;
             return 0;
@@ -644,7 +641,7 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
         m_sequencer->setRecordingFilename(std::string(audioFileName.data()));
 
         // set recording
-        if (m_sequencer->record(Rosegarden::RECORD_AUDIO, inputPorts) == false)
+        if (m_sequencer->record(Rosegarden::RECORD_AUDIO) == false)
         {
             SEQUENCER_DEBUG << "couldn't start recording - "
                             << "perhaps audio file path wrong?"
@@ -993,7 +990,7 @@ RosegardenSequencerApp::setAudioMonitoring(long value)
     if (bValue &&
             m_sequencer->getRecordStatus() == Rosegarden::ASYNCHRONOUS_MIDI)
     {
-        m_sequencer->record(Rosegarden::ASYNCHRONOUS_AUDIO, inputPorts);
+        m_sequencer->record(Rosegarden::ASYNCHRONOUS_AUDIO);
         SEQUENCER_DEBUG << "RosegardenSequencerApp::setAudioMonitoring - "
                         << "monitoring audio input" << endl;
         return;
@@ -1004,7 +1001,7 @@ RosegardenSequencerApp::setAudioMonitoring(long value)
     {
         SEQUENCER_DEBUG << "RosegardenSequencerApp::setAudioMonitoring - "
                         << "monitoring MIDI input" << endl;
-        m_sequencer->record(Rosegarden::ASYNCHRONOUS_MIDI, inputPorts);
+        m_sequencer->record(Rosegarden::ASYNCHRONOUS_MIDI);
     }
     
 }
@@ -1083,6 +1080,20 @@ RosegardenSequencerApp::setMappedProperty(int id,
             fader->setLevel(value);
     }
     */
+}
+
+void
+RosegardenSequencerApp::setMappedProperty(int id, const QString &property,
+        Rosegarden::MappedObjectValueList value)
+{
+    SEQUENCER_DEBUG << "setProperty: id = " << id
+                    << " : property list size = \"" << value.size()
+                    << "\"" << endl;
+
+    Rosegarden::MappedObject *object = m_studio->getObject(id);
+
+    if (object)
+        object->setProperty(property, value);
 }
 
 

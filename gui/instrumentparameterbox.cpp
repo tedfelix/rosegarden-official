@@ -1015,6 +1015,9 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
     connect(m_audioFader->m_pan, SIGNAL(valueChanged(float)),
             this, SLOT(slotSetPan(float)));
 
+    connect(m_audioFader->m_audioInput, SIGNAL(activated(int)),
+            this, SLOT(slotSelectAudioInput(int)));
+
 }
 
 void
@@ -1170,6 +1173,24 @@ AudioInstrumentParameterPanel::slotAudioChannels(int channels)
          Rosegarden::MappedObjectValue(channels));
 
 }
+
+void
+AudioInstrumentParameterPanel::slotSelectAudioInput(int value)
+{
+    RG_DEBUG << "AudioInstrumentParameterPanel::slotSelectAudioInput - "
+             << value << endl;
+
+    /*
+   Rosegarden::MappedObjectValueList connectionList;
+   connectionList.push_back(value);
+   */
+
+   Rosegarden::StudioControl::setStudioObjectProperty
+        (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
+         Rosegarden::MappedAudioObject::ConnectionsIn,
+         Rosegarden::MappedObjectValue(value));
+}
+
 
 
 

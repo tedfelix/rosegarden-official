@@ -201,6 +201,13 @@ public:
                                    const QString &property,
                                    float value) = 0;
 
+    // Set a MappedObject to a property list
+    //
+    virtual void setMappedProperty(
+                               int id,
+                               const QString &property,
+                               std::vector<float> value) = 0;
+
     // Get a mapped object id for a object type
     //
     virtual int getMappedObjectId(int type) = 0;

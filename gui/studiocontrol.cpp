@@ -148,6 +148,33 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
     return true;
 }
 
+bool
+StudioControl::setStudioObjectProperty(MappedObjectId id,
+                        const MappedObjectProperty &property,
+                        MappedObjectValueList value)
+{
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    // Use new MappedEvent interface
+    //
+    streamOut << id;
+    streamOut << property;
+    streamOut << value;
+
+    if (!kapp->dcopClient()->
+            send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                 "setMappedProperty(int, QString, std::vector<float>)",
+                 data))
+    {
+        SEQMAN_DEBUG << "setStudioObjectProperty - "
+                     << "failed to contact Rosegarden sequencer" << endl;
+    }
+
+    return true;
+}
+
 MappedObjectId
 StudioControl::getStudioObjectByType(MappedObject::MappedObjectType type)
 {
