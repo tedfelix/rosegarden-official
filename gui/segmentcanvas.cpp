@@ -1241,82 +1241,23 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
         Rosegarden::Segment *newSegment = command->getCopy();
 
-
-        // Get the duration - set to a minimum if we can't find it
-        //
-        timeT duration = m_currentItem->getDuration();
-        if (duration == 0)
-        {
-            
-            if (m_canvas->grid().getSnapTime(e->pos().x()))
-                duration = m_canvas->grid().getSnapTime(e->pos().x());
-            else
-                duration = Note(Note::Shortest).getDuration();
-
-        }
-
-        newSegment->setDuration(duration);
-
         // update label
-        std::string copyLabel = m_currentItem->getSegment()->getLabel();
-        copyLabel += std::string(" (copied)");
+        std::string copyLabel = newSegment->getLabel() + " (copied)";
         newSegment->setLabel(copyLabel);
 
-
-
-	//!!! this is obviously work-in-progress but:
-	//
-	// -- the SegmentItem would normally be created by
-	// updateAllSegmentItems, which would be called next time an
-	// update() happened.  Because we're single-threaded, that
-	// can't have happened yet.  An alternative to creating the
-	// SegmentItem ourselves might be to call that
-	// updateAllSegmentItems (which would ensure that it happens
-	// consistently with the usual way, at least) -- don't know
-	// whether it's as simple as that in practice though
-	//
-	// -- shouldn't have to do all this business of querying the
-	// duration from the SegmentItem as surely the newSegment
-	// should have inherited the correct duration already --
-	// should just be able to call
-	// m_canvas->addSegmentItem(newSegment) instead of calling
-	// addSegmentItem with the track/start-time/etc and then
-	// setting the segment afterwards
-	// 
-	// cc
-
-
-
-        // Just check that a SegmentItem hasn't been created for us -
-        // today I'm paranoid.
+        // generate SegmentItem
         //
-        SegmentItem *newItem = m_canvas->getSegmentItem(newSegment);
-
-        // Ok, it hasn't
-        //
-        if(newItem == 0)
-        {
-            newItem = m_canvas->addSegmentItem(m_currentItem->getTrack(),
-                                               m_currentItem->getStartTime(),
-                                               duration);
-            newItem->setSegment(newSegment);
-        }
-
-        // Clear current selections (obviously don't want this for
-        // multiple copy)
-        //
-        clearSelected();
-
-        // Now swap and raise to change the Segment we're carrying
-        //
-        m_currentItem = newItem;
-        m_currentItem->setZ(3); // bring it to the top
-        slotSelectSegmentItem(newItem);
-
-        // Update and flag
-        //
-        m_canvas->slotUpdate();
+	m_canvas->updateAllSegmentItems();
         m_segmentQuickCopyDone = true;
+
+        // Don't understand why swapping selected item is causing
+        // problem hereafter - so leaving this commented out.
+        //
+        //SegmentItem *newItem = m_canvas->getSegmentItem(newSegment);
+        //clearSelected();
+        //m_currentItem = newItem;
+        //m_currentItem->setZ(3); // bring it to the top
+        //slotSelectSegmentItem(newItem);
     }
 
     m_canvas->setSnapGrain(true);
