@@ -516,8 +516,7 @@ RosegardenGUIDoc::createNewSegment(SegmentItem *p, int track)
 void
 RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
 {
-    // Just create a new record Segment if we don't have one
-    // currently open and running
+    // Just create a new record Segment if we don't have one already
     //
     if (m_recordSegment == 0)
     {
@@ -544,7 +543,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
             rEvent = new Event(Rosegarden::Note::EventType);
 
             absTime = m_composition.
-                          getElapsedTimeForRealTime((*i)->getAbsoluteTime());
+                          getElapsedTimeForRealTime((*i)->getEventTime());
             duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
 
             rEvent->setAbsoluteTime(absTime);

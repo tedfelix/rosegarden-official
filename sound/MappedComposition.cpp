@@ -50,8 +50,8 @@ operator<<(QDataStream &dS, const MappedComposition &mC)
     for (MappedCompositionIterator it = mC.begin(); it != mC.end(); ++it )
     {
 	dS << (*it)->getPitch();
-	dS << (*it)->getAbsoluteTime().sec;
-	dS << (*it)->getAbsoluteTime().usec;
+	dS << (*it)->getEventTime().sec;
+	dS << (*it)->getEventTime().usec;
 	dS << (*it)->getDuration().sec;
 	dS << (*it)->getDuration().usec;
 	dS << (*it)->getAudioStartMarker().sec;
@@ -117,7 +117,7 @@ MappedComposition::moveStartTime(const Rosegarden::RealTime &mT)
     MappedCompositionIterator it;
 
     for (it = this->begin(); it != this->end(); it++)
-        (*it)->setAbsoluteTime((*it)->getAbsoluteTime() + mT);
+        (*it)->setEventTime((*it)->getEventTime() + mT);
 
     m_startTime = m_startTime + mT;
     m_endTime = m_endTime + mT;

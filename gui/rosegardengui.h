@@ -251,6 +251,12 @@ protected:
      */
     void showVisuals(const Rosegarden::MappedComposition &mC);
 
+    /*
+     * place clicktrack events into the global MappedComposition
+     *
+     */
+    void insertMetronomeClicks(timeT sliceStart, timeT sliceEnd);
+
 public slots:
     /**
      * open a new application window by creating a new instance of

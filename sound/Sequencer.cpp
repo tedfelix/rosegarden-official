@@ -353,7 +353,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
                 // Set time, pitch and velocity on the MappedEvent
                 //
                 m_noteOnMap[chanNoteKey]->
-                       setAbsoluteTime(guiTimeStamp);
+                       setEventTime(guiTimeStamp);
 
                 m_noteOnMap[chanNoteKey]->setPitch(midiCommand.data1);
                 m_noteOnMap[chanNoteKey]->setVelocity(midiCommand.data2);
@@ -367,7 +367,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
             if ( m_noteOnMap[chanNoteKey] != 0 )
             {
                 Rosegarden::RealTime duration = guiTimeStamp -
-                            m_noteOnMap[chanNoteKey]->getAbsoluteTime();
+                            m_noteOnMap[chanNoteKey]->getEventTime();
 
                 // for the moment, ensure we're positive like this
                 //
@@ -414,7 +414,7 @@ Sequencer::processEventsOut(Rosegarden::MappedComposition mC,
     {
         if ((*i)->getType() == MappedEvent::Audio)
         {
-            queueAudio((*i)->getAudioID(), (*i)->getAbsoluteTime(),
+            queueAudio((*i)->getAudioID(), (*i)->getEventTime(),
                        (*i)->getAudioStartMarker(), (*i)->getDuration(),
                        playLatency);
         }
@@ -525,14 +525,14 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mC,
     for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
     {
         // sort out the correct TimeStamp for playback
-        assert((*i)->getAbsoluteTime() >= m_playStartPosition);
+        assert((*i)->getEventTime() >= m_playStartPosition);
 
         // check the type we're processing
         if ((*i)->getType() != MappedEvent::Internal)
             continue;
 
         // add the fiddle factor for RealTime to MIDI conversion in here
-        midiRelativeTime = (*i)->getAbsoluteTime() - m_playStartPosition +
+        midiRelativeTime = (*i)->getEventTime() - m_playStartPosition +
             playLatency;
 
         event.time = aggregateTime(m_artsPlayStartTime,

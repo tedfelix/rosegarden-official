@@ -18,9 +18,9 @@ o End of loop flyback sends duplicate copies of start of loop events
 
 o bar and loop ruler bar widths for partial bars
 
-o tidy up getSequencerSlice and MappedEvent
+o tidy up getSequencerSlice and MappedEvent [MappedEvent DONE]
 
-o Metronome
+o Metronome [PENDING getBarRange fix]
 
 
 ==

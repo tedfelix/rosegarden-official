@@ -22,17 +22,15 @@
 #ifndef _MAPPEDEVENT_H_
 #define _MAPPEDEVENT_H_
 
-// Used as a transformation stage between Composition Events and output
-// at the Sequencer this class and MidiComposition eliminates the notion
-// of Segment.  The MappedEvents are ripe for playing.
+// Used as a transformation stage between Composition, Events and output
+// at the Sequencer this class and MidiComposition eliminate the notion
+// of the Segment for ease of Event access.  The MappedEvents are ready
+// for playing and whatever else they might want to do internally in the
+// application.
 //
-// NOTE: for the moment until the Composition handles it we're hard
-// coding the velocity components of all MappedEvents to maximum (127)
-//
-//
-// MappedEvents also code playback of audio samples - if the
-// m_type is Audio then the sequencer will attempt to map the
-// Pitch (m_pitch) to the audio id.
+// MappedEvents can also represent instructions for playback of audio
+// samples - if the m_type is Audio then the sequencer will attempt to
+// map the Pitch (m_pitch) to the audio id.
 //
 
 #include "Composition.h" // for Rosegarden::RealTime
@@ -55,25 +53,43 @@ public:
     } MappedEventType;
 
     MappedEvent(): m_pitch(0),
-                   m_absoluteTime(0, 0),
+                   m_eventTime(0, 0),
                    m_duration(0, 0),
                    m_audioStartMarker(0, 0),
                    m_velocity(0),
                    m_type(Internal) {;}
 
-    // Our main constructors used to convert from Events -
-    // note that we put in place default velocities at this
-    // point in case our Composition is missing them.
-    //
+    // Construct from Events to Internal (MIDI) type MappedEvent
     //
     MappedEvent(const Event &e);
 
+    // Another Internal constructor from Events
     MappedEvent(const Event &e,
-                const Rosegarden::RealTime &absoluteTime,
+                const Rosegarden::RealTime &eventTime,
                 const Rosegarden::RealTime &duration,
                 const Rosegarden::InstrumentId &instrument,
                 const Rosegarden::TrackId &track);
 
+    // A shortcut for creating MIDI/Internal MappedEvents
+    // from base properties
+    //
+    MappedEvent(const int &pitch,
+                const Rosegarden::RealTime &absTime,
+                const Rosegarden::RealTime &duration,
+                const velocityT &velocity,
+                const Rosegarden::InstrumentId &instrument,
+                const Rosegarden::TrackId &track):
+        m_pitch(pitch),
+        m_eventTime(absTime),
+        m_duration(duration),
+        m_audioStartMarker(Rosegarden::RealTime(0,0)),
+        m_velocity(velocity),
+        m_type(Internal),
+        m_instrument(instrument),
+        m_track(track) {;}
+
+    // A general MappedEvent constructor for any MappedEvent type
+    //
     MappedEvent(const int &pitch,
                 const Rosegarden::RealTime &absTime,
                 const Rosegarden::RealTime &duration,
@@ -83,7 +99,7 @@ public:
                 const Rosegarden::TrackId &track,
                 const MappedEventType &type):
         m_pitch(pitch),
-        m_absoluteTime(absTime),
+        m_eventTime(absTime),
         m_duration(duration),
         m_audioStartMarker(audioStartMarker),
         m_velocity(velocity),
@@ -91,35 +107,57 @@ public:
         m_instrument(instrument),
         m_track(track) {;}
 
-    // Set the type, id and times - Audio event constructor
+    // Audio MappedEvent shortcut constructor
     //
-    MappedEvent(const Rosegarden::RealTime &absTime,
+    MappedEvent(const Rosegarden::RealTime &eventTime,
                 const Rosegarden::RealTime &duration,
                 const Rosegarden::RealTime &audioStartMarker,
                 const Rosegarden::InstrumentId &instrument,
                 const Rosegarden::TrackId &track,
-                const MappedEventType type,
-                const int &id);
+                const int &id):
+         m_pitch(id),
+         m_eventTime(eventTime),
+         m_duration(duration),
+         m_audioStartMarker(audioStartMarker),
+         m_type(Audio),
+         m_instrument(instrument),
+         m_track(track) {;}
                 
     ~MappedEvent() {;}
 
-    void setPitch(const int &p) { m_pitch = p; }
-    void setAbsoluteTime(const Rosegarden::RealTime &a) { m_absoluteTime = a; }
-    void setDuration(const Rosegarden::RealTime &d) { m_duration = d; }
-    void setVelocity(const velocityT &v) { m_velocity = v; }
-    void setInstrument(const InstrumentId &id) { m_instrument = id; }
-    void setTrack(const TrackId &track) { m_track = track; }
+    // Event time
+    //
+    void setEventTime(const Rosegarden::RealTime &a) { m_eventTime = a; }
+    Rosegarden::RealTime getEventTime() const { return m_eventTime; }
 
-    int getPitch() const { return m_pitch; }
-    Rosegarden::RealTime getAbsoluteTime() const { return m_absoluteTime; }
+    // Duration
+    //
+    void setDuration(const Rosegarden::RealTime &d) { m_duration = d; }
     Rosegarden::RealTime getDuration() const { return m_duration; }
-    velocityT getVelocity() const { return m_velocity; }
+
+    // Instrument
+    void setInstrument(const InstrumentId &id) { m_instrument = id; }
     InstrumentId getInstrument() const { return m_instrument; }
+
+    // Velocity
+    //
+    void setVelocity(const velocityT &v) { m_velocity = v; }
+    velocityT getVelocity() const { return m_velocity; }
+
+    // Track (used for visual feedback as we can get all playback
+    // information from the Instrument)
+    //
+    void setTrack(const TrackId &track) { m_track = track; }
     TrackId getTrack() const { return m_track; }
 
-    // Audio MappedEvent methods
-    Rosegarden::RealTime getStartTime() const { return m_absoluteTime; }
 
+    // Pitch
+    //
+    void setPitch(const int &p) { m_pitch = p; }
+    int getPitch() const { return m_pitch; }
+
+    // Also use the pitch as the Audio file ID
+    //
     void setAudioID(const int &id) { m_pitch = id; }
     int getAudioID() const { return m_pitch; }
 
@@ -134,12 +172,13 @@ public:
     Rosegarden::RealTime getAudioStartMarker() const
         { return m_audioStartMarker; }
 
-    // The type of MappedEvent
+    // The type of the MappedEvent
     //
-
     MappedEventType getType() const { return m_type; }
     void setType(const MappedEventType &value) { m_type = value; }
     
+    // How MappedEvents are ordered in the MappedComposition
+    //
     struct MappedEventCmp
     {
         bool operator()(const MappedEvent *mE1, const MappedEvent *mE2) const
@@ -153,7 +192,7 @@ public:
 private:
 
     int                      m_pitch;
-    Rosegarden::RealTime     m_absoluteTime;
+    Rosegarden::RealTime     m_eventTime;
     Rosegarden::RealTime     m_duration;
     Rosegarden::RealTime     m_audioStartMarker;
     velocityT                m_velocity;

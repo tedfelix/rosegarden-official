@@ -1028,44 +1028,13 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
     timeT sliceEndElapsed =
               comp.getElapsedTimeForRealTime(mappComp.getEndTime());
 
-    /*
-    std::pair<timeT, timeT> bMSt = comp.getBarRange(comp.getBarNumber(sliceStartElapsed, false), false);
-    std::pair<timeT, timeT> bMEnd = comp.getBarRange(comp.getBarNumber(sliceStartElapsed, false), false);
-
-    if (bMSt.first >= sliceStartElapsed && bMSt.first <= sliceEndElapsed)
-    {
-        Rosegarden::MappedEvent *me =
-            new Rosegarden::MappedEvent(70, //pitch
-                                        comp.getElapsedRealTime(bMSt.first), //t 
-                                        Rosegarden::RealTime(0, 100000),   // d
-                                        Rosegarden::RealTime(0, 0),
-                                        110, // velocity
-                                        0,   // instrument
-                                        0,   // track
-                                        Rosegarden::MappedEvent::Internal);
-
-
-        mappComp.insert(me);
-    }
-    else if (bMEnd.first >= sliceStartElapsed && bMEnd.first <= sliceEndElapsed)
-    {
-        Rosegarden::MappedEvent *me =
-            new Rosegarden::MappedEvent(70, //pitch
-                                        comp.getElapsedRealTime(bMEnd.first), //t 
-                                        Rosegarden::RealTime(0, 100000),   // d
-                                        Rosegarden::RealTime(0, 0),
-                                        110, // velocity
-                                        0,   // instrument
-                                        0,   // track
-                                        Rosegarden::MappedEvent::Internal);
-
-
-        mappComp.insert(me);
-    }
-    */
-             
-
-
+    // Place metronome clicks in the global MappedCompisition
+    // if they're enabled for our current mode
+    //
+    if (((m_transportStatus == PLAYING && comp.usePlayMetronome()) ||
+         (m_transportStatus == RECORDING_MIDI && comp.useRecordMetronome())) ||
+         (m_transportStatus == RECORDING_AUDIO && comp.useRecordMetronome()))
+            insertMetronomeClicks(sliceStartElapsed, sliceEndElapsed);
 
     Rosegarden::RealTime eventTime;
     Rosegarden::RealTime duration;
@@ -1121,7 +1090,6 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
                                                 duration,
                                                 instrument,
                                                 track,
-                                                Rosegarden::MappedEvent::Audio,
                                                 (*i)->getAudioFileID());
             mappComp.insert(me);
 
@@ -2169,5 +2137,48 @@ RosegardenGUIApp::getSoundSystemStatus()
 }
 
 
+// Insert metronome clicks into the global MappedComposition that
+// is returned as part of the fetch from the Sequencer
+//
+//
+void
+RosegardenGUIApp::insertMetronomeClicks(timeT sliceStart, timeT sliceEnd)
+{
+
+    // for the moment do nothing
+    return;
+
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
+    std::pair<timeT, timeT> bMSt = comp.getBarRange(comp.getBarNumber(sliceStart, false), false);
+    std::pair<timeT, timeT> bMEnd = comp.getBarRange(comp.getBarNumber(sliceStart, false), false);
+
+    if (bMSt.first >= sliceStart && bMSt.first <= sliceEnd)
+    {
+        Rosegarden::MappedEvent *me =
+            new Rosegarden::MappedEvent(70, //pitch
+                                        comp.getElapsedRealTime(bMSt.first), //t 
+                                        Rosegarden::RealTime(0, 100000),   // d
+                                        110, // velocity
+                                        0,   // instrument
+                                        0);  // track
+
+
+        mappComp.insert(me);
+    }
+    else if (bMEnd.first >= sliceStart && bMEnd.first <= sliceEnd)
+    {
+        Rosegarden::MappedEvent *me =
+            new Rosegarden::MappedEvent(70, //pitch
+                                        comp.getElapsedRealTime(bMEnd.first), //t 
+                                        Rosegarden::RealTime(0, 100000),   // d
+                                        110, // velocity
+                                        0,   // instrument
+                                        0);  // track
+
+
+        mappComp.insert(me);
+    }
+}
 
 
