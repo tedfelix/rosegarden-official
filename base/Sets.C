@@ -92,5 +92,17 @@ isPersistent__Bool(Event *e, const PropertyName &name)
     return e->isPersistent<Bool>(name);
 }
 
+extern void
+setMaybe__Int(Event *e, const PropertyName &name, long value)
+{
+    e->setMaybe<Int>(name, value);
+}
+
+extern void
+setMaybe__String(Event *e, const PropertyName &name, const std::string &value)
+{
+    e->setMaybe<String>(name, value);
+}
+
 }
 

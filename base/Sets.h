@@ -200,6 +200,8 @@ protected:
 	bool operator()(const Iterator &a, const Iterator &b);
     };
 
+    void copyGroupProperties(Event *e0, Event *e1) const;
+
     //--------------- Data members ---------------------------------
 
     PropertyName m_stemUpProperty;
@@ -230,6 +232,13 @@ get__String(Event *e, const PropertyName &name, std::string &ref);
 
 extern bool
 isPersistent__Bool(Event *e, const PropertyName &name);
+
+extern void
+setMaybe__Int(Event *e, const PropertyName &name, long value);
+
+extern void
+setMaybe__String(Event *e, const PropertyName &name, const std::string &value);
+
 
 
 template <class Element, class Container>
@@ -405,28 +414,18 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i)
 
     if (singleStaff) {
 
-	// two notes that would otherwise be in a chord but are not in
-	// the same group, or have stems pointing in different
-	// directions by design, count as separate chords
+	// Two notes that would otherwise be in a chord but are
+	// explicitly in different groups, or have stems pointing in
+	// different directions by design, count as separate chords.
+	
+	// Per #930473 ("Inserting notes into beamed chords is
+	// broken"), if one note is in a group and the other isn't,
+	// that's no problem.  In fact we should actually modify the
+	// one that isn't so as to suggest that it is.
 
 	if (m_baseIterator != getContainer().end()) {
 
 	    Event *e0 = getAsEvent(m_baseIterator);
-
-	    if (e0->has(BaseProperties::BEAMED_GROUP_ID)) {
-		if (e1->has(BaseProperties::BEAMED_GROUP_ID)) {
-		    if (get__Int(e1, BaseProperties::BEAMED_GROUP_ID) !=
-			get__Int(e0, BaseProperties::BEAMED_GROUP_ID)) {
-			return false;
-		    }
-		} else {
-		    return false;
-		}
-	    } else {
-		if (e1->has(BaseProperties::BEAMED_GROUP_ID)) {
-		    return false;
-		}
-	    }
 
 	    if (!(m_stemUpProperty == PropertyName::EmptyPropertyName)) {
 
@@ -439,6 +438,21 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i)
 		    return false;
 		}
 	    }
+
+	    if (e0->has(BaseProperties::BEAMED_GROUP_ID)) {
+		if (e1->has(BaseProperties::BEAMED_GROUP_ID)) {
+		    if (get__Int(e1, BaseProperties::BEAMED_GROUP_ID) !=
+			get__Int(e0, BaseProperties::BEAMED_GROUP_ID)) {
+			return false;
+		    }
+		} else {
+		    copyGroupProperties(e0, e1); // #930473
+		}
+	    } else {
+		if (e1->has(BaseProperties::BEAMED_GROUP_ID)) {
+		    copyGroupProperties(e1, e0); // #930473
+		}
+	    }
 	}
     }
 
@@ -447,6 +461,32 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i)
     return true;
 }
 
+template <class Element, class Container, bool singleStaff>
+void
+GenericChord<Element, Container, singleStaff>::copyGroupProperties(Event *e0,
+								   Event *e1) const
+{
+    if (e0->has(BaseProperties::BEAMED_GROUP_TYPE)) {
+	setMaybe__String(e1, BaseProperties::BEAMED_GROUP_TYPE,
+			 get__String(e0, BaseProperties::BEAMED_GROUP_TYPE));
+    }
+    if (e0->has(BaseProperties::BEAMED_GROUP_ID)) {
+	setMaybe__Int(e1, BaseProperties::BEAMED_GROUP_ID,
+		      get__Int(e0, BaseProperties::BEAMED_GROUP_ID));
+    }
+    if (e0->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+	setMaybe__Int(e1, BaseProperties::BEAMED_GROUP_TUPLET_BASE,
+		      get__Int(e0, BaseProperties::BEAMED_GROUP_TUPLET_BASE));
+    }
+    if (e0->has(BaseProperties::BEAMED_GROUP_TUPLED_COUNT)) {
+	setMaybe__Int(e1, BaseProperties::BEAMED_GROUP_TUPLED_COUNT,
+		      get__Int(e0, BaseProperties::BEAMED_GROUP_TUPLED_COUNT));
+    }
+    if (e0->has(BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT)) {
+	setMaybe__Int(e1, BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT,
+		      get__Int(e0, BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT));
+    }
+}
 
 template <class Element, class Container, bool singleStaff>
 int
