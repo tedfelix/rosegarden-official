@@ -108,6 +108,9 @@
          <Action name="show_segment_parameters"    append="show_merge" />
          <Action name="show_instrument_parameters" append="show_merge" />
   </Menu>
+  <Menu name="help">
+        <Action name="show_tips_on_startup">
+  </Menu>
 
 </MenuBar>
 

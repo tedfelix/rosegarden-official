@@ -861,6 +861,11 @@ public slots:
      */
     void slotTogglePreviews();
 
+    /**
+     * Toggle tips
+     */
+    void slotToggleShowTips();
+
     /*
      * Select Track up or down
      */
@@ -1009,6 +1014,7 @@ private:
     KToggleAction* m_viewTempoRuler;
     KToggleAction* m_viewChordNameRuler;
     KToggleAction* m_viewPreviews;
+    KToggleAction* m_viewTipsOnStartup;
 
     KAction *m_playTransport;
     KAction *m_stopTransport;

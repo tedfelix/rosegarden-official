@@ -21,7 +21,8 @@ o Audio
    - jack process tidy up (Bob Ham inspired) [DONE]
 
 o Audio busses and routing
-   - n jack input routes
+   - n jack input routes [DONE]
+   - multiple audio record arm
 
 o JACK autostart and process management  [SCRIPT?]
 o automatic Sequencer process management [SCRIPT?]

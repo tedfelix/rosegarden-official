@@ -348,6 +348,12 @@ void RosegardenGUIApp::setupActions()
                                        actionCollection(),
                                        "show_previews");
 
+    m_viewTipsOnStartup =
+        new KToggleAction(i18n("Show &Tips on startup"), 0, this,
+                          SLOT(slotToggleShowTips()),
+                          actionCollection(),
+                          "show_tips_on_startup");
+
     // Standard Actions 
     //
     KStdAction::saveOptions(this,
@@ -4133,5 +4139,11 @@ RosegardenGUIApp::slotUpdateAutoSaveInterval(unsigned int interval)
     m_autoSaveTimer->changeInterval(int(interval) * 1000);
 }
 
+
+void
+RosegardenGUIApp::slotToggleShowTips()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotToggleShowTips" << endl;
+}
 
 const void* RosegardenGUIApp::SequencerExternal = (void*)-1;
