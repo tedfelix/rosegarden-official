@@ -1581,6 +1581,7 @@ void RosegardenGUIApp::setupFileDialogSpeedbar()
 
         config->writeEntry("Examples Set", true);
 	config->writeEntry("Number of Entries", n + 1);
+        config->sync();
     }
     
 }
