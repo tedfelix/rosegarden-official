@@ -26,7 +26,7 @@
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
 
-class NotationHLayout : public NotationLayout
+class NotationHLayout : public LayoutEngine
 {
 public:
     /**
@@ -40,8 +40,11 @@ public:
                     unsigned int barMargin,
                     unsigned int noteMargin = 2);
 
+    void layout(NotationElementList::iterator from, NotationElementList::iterator to);
+
     typedef list<unsigned int> barpositions;
 
+    /// returns the bar positions computed from the last call to layout()
     barpositions& barPositions();
     const barpositions& barPositions() const;
 
@@ -54,13 +57,13 @@ public:
 
 protected:
     /*
-     * Breaks down a note which doesn't fit in a bar into shorter notes - disabled for now */
+     * Breaks down a note which doesn't fit in a bar into shorter notes - disabled for now
+     */
     //     const vector<unsigned int>& splitNote(unsigned int noteLen);
-
-    virtual void layout(NotationElement*);
 
     void initNoteWidthTable();
 
+    unsigned int barTimeAtPos(NotationElementList::iterator pos);
     void addNewBar(unsigned int barPos);
 
     Quantizer m_quantizer;

@@ -42,39 +42,78 @@ NotationHLayout::NotationHLayout(NotationElementList& elements,
     kdDebug(KDEBUG_AREA) << "NotationHLayout::NotationHLayout()" << endl;
 }
 
-void
-NotationHLayout::layout(NotationElement *el)
+unsigned int
+NotationHLayout::barTimeAtPos(NotationElementList::iterator pos)
 {
-    // if (el) is time sig change, reflect that
+    unsigned int res = 0;
 
-    // kdDebug(KDEBUG_AREA) << "Layout" << endl;
+    for (NotationElementList::iterator it = m_notationElements.begin();
+         it != pos; ++it)
+        res += (*it)->event()->get<Int>("QuantizedDuration");
 
-    m_quantizer.quantize(el->event());
+    return res % m_timeUnitsPerBar;
+}
 
-    // kdDebug(KDEBUG_AREA) << "Quantized" << endl;
 
-    // Add note to current bar
-    m_previousNbTimeUnitsInCurrentBar = m_nbTimeUnitsInCurrentBar;
-    m_nbTimeUnitsInCurrentBar += el->event()->get<Int>("QuantizedDuration");
-
-    el->setX(m_currentPos);
-
-    Note note = Note(el->event()->get<Int>("Notation::NoteType")); // check the property is here ?
-
-    // Move current pos to next note
-    m_currentPos += m_noteWidthTable[note] + Staff::noteWidth + m_noteMargin;
-
-    // See if we've completed a bar
+void
+NotationHLayout::layout(NotationElementList::iterator from, NotationElementList::iterator to)
+{
+    // Adjust current pos according to where we are in the NotationElementList
     //
-    if (m_nbTimeUnitsInCurrentBar > m_timeUnitsPerBar) {
-        kdDebug(KDEBUG_AREA) << "Bar has wrong length" << endl;
-        // TODO
-    } else if (m_nbTimeUnitsInCurrentBar == m_timeUnitsPerBar) {
+    if (from == m_notationElements.begin()) {
+        m_currentPos = m_barMargin; // we are at the beginning of the elements
         m_nbTimeUnitsInCurrentBar = 0;
-        addNewBar(m_currentPos + m_noteMargin);
-        m_currentPos += 2 * m_noteMargin + Staff::noteWidth;
+    } else {
+        NotationElementList::iterator oneBeforeFrom = from;
+        --oneBeforeFrom;
+        NotationElement *elementBeforeFrom = (*oneBeforeFrom);
+        // Make sure the event has a note
+        m_quantizer.quantize(elementBeforeFrom->event());
+        Note previousNote = Note(elementBeforeFrom->event()->get<Int>("Notation::NoteType"));
+        m_currentPos = elementBeforeFrom->x();
+        m_currentPos += m_noteWidthTable[previousNote] + Staff::noteWidth + m_noteMargin;
+
+        m_nbTimeUnitsInCurrentBar = barTimeAtPos(oneBeforeFrom);
+    }
+    
+    m_barPositions.clear();
+
+    for (NotationElementList::iterator it = from; it != to; ++it) {
+        
+        NotationElement *el = (*it);
+    
+        // if (el) is time sig change, reflect that
+
+        // kdDebug(KDEBUG_AREA) << "Layout" << endl;
+
+        m_quantizer.quantize(el->event());
+
+        // kdDebug(KDEBUG_AREA) << "Quantized" << endl;
+
+        // Add note to current bar
+        m_previousNbTimeUnitsInCurrentBar = m_nbTimeUnitsInCurrentBar;
+        m_nbTimeUnitsInCurrentBar += el->event()->get<Int>("QuantizedDuration");
+
+        el->setX(m_currentPos);
+
+        Note note = Note(el->event()->get<Int>("Notation::NoteType")); // check the property is here ?
+
+        // Move current pos to next note
+        m_currentPos += m_noteWidthTable[note] + Staff::noteWidth + m_noteMargin;
+
+        // See if we've completed a bar
+        //
+        if (m_nbTimeUnitsInCurrentBar > m_timeUnitsPerBar) {
+            kdDebug(KDEBUG_AREA) << "Bar has wrong length" << endl;
+            // TODO
+        } else if (m_nbTimeUnitsInCurrentBar == m_timeUnitsPerBar) {
+            m_nbTimeUnitsInCurrentBar = 0;
+            addNewBar(m_currentPos + m_noteMargin);
+            m_currentPos += 2 * m_noteMargin + Staff::noteWidth;
+        }
     }
 }
+
 
 void
 NotationHLayout::initNoteWidthTable()
