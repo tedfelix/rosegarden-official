@@ -615,7 +615,7 @@ void NotationView::initStatusBar()
     m_hoveredOverAbsoluteTime = new QLabel(sb);
 
     m_currentNotePixmap->setMinimumWidth(20);
-    m_hoveredOverNoteName->setMinimumWidth(25);
+    m_hoveredOverNoteName->setMinimumWidth(32);
     m_hoveredOverAbsoluteTime->setMinimumWidth(80);
 
     m_currentNotePixmap->setFrameStyle(QFrame::NoFrame);
@@ -1603,6 +1603,8 @@ NotationView::findClosestNote(double eventX, Event *&timeSignature,
     // Possible optimization : make a QRect of width = 2*proximityThreshold,
     // height = staffHeight, centered at eventX. Get canvas items in this
     // rectangle (QCanvas::collisions(QRect), and scan this item list only
+    // (though we'd still have to scan back, potentially to the start of
+    // the segment, to find the clef and key).
     //
     for (it = notes->begin();
          it != notes->end(); ++it) 

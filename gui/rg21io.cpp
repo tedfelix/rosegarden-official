@@ -38,6 +38,7 @@ using Rosegarden::Int;
 using Rosegarden::String;
 using Rosegarden::Bool;
 using Rosegarden::Clef;
+using Rosegarden::TimeSignature;
 using Rosegarden::Accidental;
 using Rosegarden::Sharp;
 using Rosegarden::Flat;
@@ -313,6 +314,38 @@ void RG21Loader::closeGroup()
 }
 
 
+bool RG21Loader::parseBarType()
+{
+    if (m_tokens.count() < 5) return false;
+    if (!m_composition) return false;
+
+    int staffNo = m_tokens[1].toInt();
+    if (staffNo > 0) {
+	kdDebug(KDEBUG_AREA)
+	    << "RG21Loader::parseBarType: We do not support different time signatures on\ndifferent staffs; disregarding time signature for staff " << staffNo << endl;
+	return true;
+    }
+
+    int barNo = m_tokens[2].toInt();
+
+    int numerator   = m_tokens[4].toInt();
+    int denominator = m_tokens[5].toInt();
+
+    timeT sigTime = m_composition->getBarRange(barNo).first;
+    TimeSignature timeSig(numerator, denominator);
+    m_composition->getReferenceSegment()->insert(timeSig.getAsEvent(sigTime));
+
+    return true;
+}
+
+
+bool RG21Loader::parseStaveType()
+{
+    // not implemented yet
+    return true;
+}
+
+
 timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
 {
     QString durationString = (*i).lower();
@@ -446,6 +479,14 @@ bool RG21Loader::parse()
                 parseMarkStart();
             else if (m_tokens[1] == "end") 
                 closeMark();
+
+	} else if (firstToken == "Bar") {
+
+	    parseBarType();
+
+	} else if (firstToken == "Stave") {
+
+	    parseStaveType();
 
         } else if (firstToken == "End") {
 

@@ -47,7 +47,7 @@ NotationCanvasView::NotationCanvasView(QCanvas *viewing, QWidget *parent,
     line->setPen(QPen(QColor(64, 64, 64), 1));
 
     line = new QCanvasLineGroupable(viewing, m_positionMarker);
-    line->setPoints(16, 0, 16, 8); //!!!
+    line->setPoints(17, 0, 17, 8); //!!!
     line->setPen(QPen(QColor(64, 64, 64), 1));
 
     m_positionMarker->hide();

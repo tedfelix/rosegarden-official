@@ -64,6 +64,8 @@ protected:
     bool parseRest();
     bool parseGroupStart();
     bool parseMarkStart();
+    bool parseBarType();
+    bool parseStaveType();
 
     void closeGroup();
     void closeMark();
