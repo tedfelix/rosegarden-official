@@ -48,7 +48,8 @@ public:
         InSegment,
         InStudio,
         InInstrument,
-        InAudio
+        InAudioFiles,
+        InPlugin
     } RosegardenFileSection;
 
     /**
@@ -97,6 +98,8 @@ protected:
         { return m_doc->getStudio(); }
     Rosegarden::AudioFileManager& getAudioFileManager()
         { return m_doc->getAudioFileManager(); }
+    Rosegarden::AudioPluginManager* getAudioPluginManager()
+        { return m_doc->getPluginManager(); }
 
     void setSubHandler(XmlSubHandler* sh);
     XmlSubHandler* getSubHandler() { return m_subHandler; }
@@ -125,17 +128,19 @@ protected:
 
     QString m_errorString;
 
-    RosegardenFileSection   m_section;
-    Rosegarden::Device     *m_device;
-    Rosegarden::MidiByte    m_msb;
-    Rosegarden::MidiByte    m_lsb;
-    Rosegarden::Instrument *m_instrument;
-    unsigned int            m_totalElements;
-    unsigned int            m_elementsSoFar;
-    Rosegarden::Progress   *m_progress;
+    RosegardenFileSection             m_section;
+    Rosegarden::Device               *m_device;
+    Rosegarden::MidiByte              m_msb;
+    Rosegarden::MidiByte              m_lsb;
+    Rosegarden::Instrument           *m_instrument;
+    Rosegarden::AudioPluginInstance  *m_plugin;
+    unsigned int                      m_pluginId;
+    unsigned int                      m_totalElements;
+    unsigned int                      m_elementsSoFar;
+    Rosegarden::Progress             *m_progress;
 
-    XmlSubHandler          *m_subHandler;
-    bool		    m_deprecation;
+    XmlSubHandler                    *m_subHandler;
+    bool		              m_deprecation;
 };
 
 #endif

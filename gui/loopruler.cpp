@@ -230,9 +230,11 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
     
     if (m_loop)
     {
-        m_endLoop = m_grid.snapX(x);
-        update();
-
+        if (m_grid.snapX(x) != m_endLoop)
+        {
+           m_endLoop = m_grid.snapX(x);
+           update();
+        }
     }
     else
         emit setPointerPosition(m_rulerScale->getTimeForX(x));

@@ -69,6 +69,7 @@
 #include "widgets.h"
 #include "trackeditor.h"
 #include "studiocontrol.h"
+#include "AudioPluginInstance.h"
 
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
@@ -1633,5 +1634,43 @@ RosegardenGUIDoc::initialiseControllers()
 
     Rosegarden::StudioControl::sendMappedComposition(mC);
 }
+
+// Clear all the plugins from the sequencer and from the Composition
+// 
+void
+RosegardenGUIDoc::clearAllPlugins()
+{
+    Rosegarden::InstrumentList list = m_studio.getAllInstruments();
+    Rosegarden::MappedComposition mC;
+
+    Rosegarden::InstrumentList::iterator it = list.begin();
+    for (; it != list.end(); it++)
+    {
+        if ((*it)->getType() == Rosegarden::Instrument::Audio)
+        {
+            Rosegarden::PluginInstanceIterator pIt = (*it)->beginPlugins();
+
+            for(; pIt != (*it)->endPlugins(); pIt++)
+            {
+                if ((*pIt)->getMappedId() != -1)
+                {
+                    if (Rosegarden::StudioControl::
+                        destroyStudioObject((*pIt)->getMappedId()) == false)
+                    {
+                        std::cerr << "RosegardenGUIDoc::clearAllPlugins - "
+                                  << "couldn't find plugin instance "
+                                  << (*pIt)->getMappedId() << std::endl;
+                    }
+                }
+                (*pIt)->clearPorts();
+            }
+            (*it)->emptyPlugins();
+
+            std::cout << "RosegardenGUIDoc::clearAllPlugins - "
+                      << "cleared " << (*it)->getName() << std::endl;
+        }
+    }
+}
+
 
 

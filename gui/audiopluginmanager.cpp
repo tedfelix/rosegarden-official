@@ -112,6 +112,18 @@ AudioPluginManager::getPositionByUniqueId(unsigned long uniqueId)
     return -1;
 }
 
+AudioPlugin*
+AudioPluginManager::getPluginByUniqueId(unsigned long uniqueId)
+{
+    PluginIterator it = m_plugins.begin();
+    for (; it != m_plugins.end(); it++)
+    {
+        if ((*it)->getUniqueId() == uniqueId)
+            return (*it);
+    }
+
+    return 0;
+}
 
 
 void

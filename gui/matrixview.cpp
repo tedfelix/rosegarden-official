@@ -140,7 +140,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     Rosegarden::Instrument *instr = m_document->getStudio().
         getInstrumentById(track->getInstrument());
 
-    if (instr) m_parameterBox->useInstrument(instr);
+    // Assign the instrument
+    //
+    m_parameterBox->useInstrument(instr);
 
     m_grid->addWidget(m_parameterBox, 2, 0);
 

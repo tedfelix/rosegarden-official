@@ -302,15 +302,28 @@ PluginControl::PluginControl(QWidget *parent,
             upperBound *= m_pluginManager->getSampleRate();
         }
 
-        //if (upperBound < 0.001) upperBound = 0.0;
-        //if (lowerBound < 0.001) lowerBound = 0.0;
+        if (lowerBound > upperBound)
+        {
+            float swap = upperBound;
+            upperBound = lowerBound;
+            lowerBound = swap;
+        }
 
         QLabel *low = new QLabel(QString("%1").arg(lowerBound), this);
         low->setIndent(10);
         low->setAlignment(AlignRight|AlignBottom);
         setStretchFactor(low, 1);
 
-        float step = (upperBound - lowerBound) * m_multiplier / 200.0;
+            
+
+        m_multiplier = 200.0 / (upperBound - lowerBound);
+        float step = 1.0;
+
+        /*
+        cout << "MULT = " << m_multiplier << endl;
+        cout << "STEP = " << step << endl;
+        */
+
         m_dial = new RosegardenRotary(this,
                                       lowerBound * m_multiplier, // min
                                       upperBound * m_multiplier, // max
@@ -333,11 +346,11 @@ PluginControl::PluginControl(QWidget *parent,
 
         // Set the initial value
         //
-        int value = int(initialValue * m_multiplier);
-        if (value < int(lowerBound * m_multiplier))
-            value = int(lowerBound * m_multiplier);
-        else if (value > int(upperBound * m_multiplier))
-            value = int(upperBound * m_multiplier);
+        float value = initialValue * m_multiplier;
+        if (value < lowerBound * m_multiplier)
+            value = lowerBound * m_multiplier;
+        else if (value > upperBound * m_multiplier)
+            value = upperBound * m_multiplier;
 
         m_dial->setPosition(value);
         slotValueChanged(value);

@@ -295,6 +295,10 @@ public:
     Rosegarden::AudioPluginManager* getPluginManager()
         { return m_pluginManager; }
 
+    // Clear all plugins from sequencer and from gui
+    //
+    void clearAllPlugins();
+
     // Initialise the MIDI controllers after we've loaded a file
     //
     void initialiseControllers();

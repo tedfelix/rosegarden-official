@@ -30,10 +30,13 @@
 
 #include "MidiDevice.h"
 #include "AudioDevice.h"
+#include "MappedStudio.h"
 #include "Instrument.h"
 #include "widgets.h"
 #include "rosestrings.h"
 #include "dialogs.h"
+#include "audiopluginmanager.h"
+#include "studiocontrol.h"
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -199,6 +202,8 @@ RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
       m_msb(0),
       m_lsb(0),
       m_instrument(0),
+      m_plugin(0),
+      m_pluginId(0),
       m_totalElements(elementCount),
       m_elementsSoFar(0),
       m_progress(progress),
@@ -215,12 +220,18 @@ RoseXmlHandler::~RoseXmlHandler()
 bool
 RoseXmlHandler::startDocument()
 {
+    // Clear tracks
+    //
     getComposition().clearTracks();
 
-    // and the loop
+    // And the loop
     //
     getComposition().setLoopStart(0);
     getComposition().setLoopEnd(0);
+
+    // All plugins
+    //
+    m_doc->clearAllPlugins();
 
     // reset state
     return true;
@@ -621,7 +632,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "audio") {
 
-        if (m_section != InAudio)
+        if (m_section != InAudioFiles)
         {
             m_errorString = i18n("Audio object found outside Audio section");
             return false;
@@ -698,7 +709,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         
     } else if (lcName == "audiopath") {
 
-        if (m_section != InAudio)
+        if (m_section != InAudioFiles)
         {
             m_errorString = i18n("Audiopath object found outside AudioFiles section");
             return false;
@@ -1002,6 +1013,66 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_instrument->setSendVelocity(true);
         }
 
+    } else if (lcName == "plugin") {
+
+        if (m_section != InInstrument)
+        {
+            m_errorString = i18n("Found Plugin outside Instrument");
+            return false;
+        }
+
+        // get details
+        int position = atts.value("position").toInt();
+        unsigned long id = atts.value("id").toULong();
+        QString bpStr = atts.value("bypassed");
+        bool bypassed = false;
+
+        if (bpStr.lower() == "true")
+            bypassed = true;
+
+        // Check that ID exists
+        Rosegarden::AudioPlugin *plugin = getAudioPluginManager()->
+            getPluginByUniqueId(id);
+
+        // If we find the plugin all is well and good but if
+        // we don't we just skip it.
+        //
+        if (plugin)
+        {
+            cout << "Adding plugin id = " << m_pluginId << endl;
+
+            m_plugin = m_instrument->getPlugin(position);
+            m_plugin->setAssigned(true);
+            m_plugin->setBypass(bypassed);
+
+            Rosegarden::MappedObjectId mappedId =
+                Rosegarden::StudioControl::createStudioObject(
+                        Rosegarden::MappedObject::LADSPAPlugin);
+
+            Rosegarden::StudioControl::setStudioObjectProperty
+                (mappedId,
+                 Rosegarden::MappedObject::Position,
+                 Rosegarden::MappedObjectValue(position));
+
+            Rosegarden::StudioControl::setStudioObjectProperty
+                (mappedId,
+                 Rosegarden::MappedLADSPAPlugin::UniqueId,
+                 Rosegarden::MappedObjectValue(id));
+
+            m_plugin->setMappedId(mappedId);
+
+            m_section = InPlugin;
+        }
+
+    } else if (lcName == "port") {
+
+        if (m_section != InPlugin)
+        {
+            m_errorString = i18n("Found Port outside Plugin");
+            return false;
+        }
+
+
     } else if (lcName == "metronome") {
 
         if (m_section != InStudio)
@@ -1080,7 +1151,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
-        m_section = InAudio;
+        m_section = InAudioFiles;
 
 
     } else if (lcName == "configuration") {
@@ -1163,6 +1234,12 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
         m_section = InStudio;
         m_instrument = 0;
+
+    } else if (lcName == "plugin") {
+
+        m_section = InInstrument;
+        m_plugin = 0;
+        m_pluginId = 0;
 
     } else if (lcName == "device") {
 

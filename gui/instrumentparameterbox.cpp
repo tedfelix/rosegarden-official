@@ -348,6 +348,7 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     if (instrument == 0)
     {
         m_instrumentLabel->setText(i18n("<no instrument>"));
+        m_instrumentLabel->setFixedWidth(140);
         m_channelLabel->hide();
         m_panLabel->hide();
         m_programLabel->hide();

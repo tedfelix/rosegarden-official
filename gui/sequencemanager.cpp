@@ -1580,8 +1580,10 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
 
     while (i < seqPlugins.size())
     {
-        //cout << "COUNT = " << seqPlugins.size() << endl;
-        //cout << "VALUE = " << seqPlugins[i] << endl;
+        // This null thing is here to get around an occasional template
+        // instantion problem I see with 2.95 (rwb)
+        //
+        (void)seqPlugins.size();
 
         Rosegarden::MappedObjectId id = seqPlugins.at(i++).toInt();
         QString name = seqPlugins[i++];

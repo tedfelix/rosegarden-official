@@ -19,6 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qvbox.h>
+
 #include "widgets.h"
 #include "Quantizer.h"
 #include "Selection.h"
@@ -42,7 +44,7 @@ namespace Rosegarden
     class MappedEvent;
 }
 
-class MatrixParameterBox : public QFrame
+class MatrixParameterBox : public QVBox
 {
 Q_OBJECT
 
@@ -51,24 +53,8 @@ public:
     ~MatrixParameterBox();
 
     void initBox();
-
-    //  Set all our dials to a new selection
-    //
     void setSelection(Rosegarden::EventSelection *);
-
     void useInstrument(Rosegarden::Instrument *instrument);
-
-public slots:
-    /*
-    void slotQuantizeSelected(int);
-    void slotSetSnap(int);
-    */
-
-signals:
-    /*
-    void quantizeSelection(Rosegarden::Quantizer);
-    void modifySnapTime(Rosegarden::timeT);
-    */
 
 protected:
 

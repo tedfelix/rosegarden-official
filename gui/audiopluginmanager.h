@@ -163,9 +163,10 @@ public:
     //
     std::vector<QString> getPluginNames();
 
-    // Return a member of that list
+    // Some useful members
     //
     AudioPlugin* getPlugin(int number);
+    AudioPlugin* getPluginByUniqueId(unsigned long uniqueId);
     int getPositionByUniqueId(unsigned long uniqueId);
 
     PluginIterator begin() { return m_plugins.begin(); }
