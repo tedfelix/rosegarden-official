@@ -29,6 +29,8 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
+//#define DEBUG_RIFF
+
 
 namespace Rosegarden
 {
@@ -161,10 +163,11 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
             return false;
         }
 
-        // get the length of the data chunk
+        // get the length of the data chunk, and scan past it as a side-effect
+	int dataChunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
 #ifdef DEBUG_RIFF
         std::cout << "RIFFAudioFile::scanTo() - data chunk size = "
-                  << getIntegerFromLittleEndian(getBytes(file, 4)) << std::endl;
+                  << dataChunkLength << std::endl;
 #endif
 
     }
@@ -195,12 +198,13 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
         return false;
     }
 
-    file->seekg(totalBytes,  std::ios::cur);
-
 #ifdef DEBUG_RIFF
     std::cout << "RIFFAudioFile::scanTo - seeking to " << time
-              << " (" << totalBytes << " bytes)" << std::endl;
+              << " (" << totalBytes << " bytes from current " << file->tellg()
+	      << ")" << std::endl;
 #endif
+
+    file->seekg(totalBytes,  std::ios::cur);
 
     return true;
 }
