@@ -5,34 +5,26 @@ Bugs:
 -----
 1) Update and correct this task list
 2) Default output file name same as current .rg filename
-3) escape lilypond text output (i.e. title, etc)
-- latex barfs on _, silvan reported & is bad, etc.
-- why is QString.replace private?
-4) (in progress) clean up note naming
--move notationtypes note string stuff to gui/
--cleanse base/ of all but reference note names
--ask chris(?) about style file (note names)
-5) refactor lilypond Voice assignments
+3) refactor lilypond Voice assignments (arguably necessary)
 -use automatic voicing (\\{ } )
 -requires support code- sort voices by time and make sure they all get inserted at once
 
 Features:
 ---------
-1) Start internationalization
-2) publish i18n howto and general plea for help
-3) lilypond text events (see sforge bug)
-4) HOWTO importers/exporters
+1) HOWTO importers/exporters
+2) publish i18n general plea for help
+3) recruit/initial stab at more languages
+4) More importers/exporters
+- finish lily input
+- find a way to test musicXML output
+
+Silvan?
 5) GUI for lilypond export
 - map tracks to lilypond staves manually rather than based on name (maybe config setting)
 - Title etc. info settings
-6) More importers/exporters
-- finish lily input
-- find a way to test musicXML output
+6) Paper settings for lilypond output
 
 Want to do, someone else will probably get there first
 ------------------------------------------------------
 1) Split note for midi input (see rg-user from end of dec/beginning jan)
 
-Prefer not to do, but probably should
--------------------------------------
-1) Paper settings for lilypond output
