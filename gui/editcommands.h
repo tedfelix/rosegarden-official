@@ -373,7 +373,7 @@ class MoveCommand : public BasicCommand
 {
 public:
     MoveCommand(Rosegarden::Segment &segment,
-		Rosegarden::timeT newStartTime,
+		Rosegarden::timeT delta,
 		bool useNotationTimings,
 		Rosegarden::EventSelection &selection);
     
@@ -384,7 +384,7 @@ protected:
 
 private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    Rosegarden::timeT m_newStartTime;
+    Rosegarden::timeT m_delta;
     bool m_useNotationTimings;
 };
 

@@ -1107,10 +1107,11 @@ int NotationSelector::handleMouseMove(timeT, int,
     int w = int(e->x() - m_selectionRect->x());
     int h = int(e->y() - m_selectionRect->y());
 
-    if (m_clickedElement && m_clickedElement->isNote() &&
-	(w > 3 || w < -3 || h > 3 || h < -3)) {
+    if (m_clickedElement && !m_clickedElement->isRest()) {
 
-	drag(e->x(), e->y(), false);
+	if (w > 3 || w < -3 || h > 3 || h < -3) {
+	    drag(e->x(), e->y(), false);
+	}
 
     } else {
 
@@ -1177,7 +1178,7 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 	}
     } else {
 
-	if (m_clickedElement) {
+	if (m_clickedElement && !m_clickedElement->isRest()) {
 	    drag(e->x(), e->y(), true);
 	} else {
 	    setViewCurrentSelection(false);
@@ -1214,13 +1215,41 @@ void NotationSelector::drag(int x, int y, bool final)
     Event *clefEvt = 0, *keyEvt = 0;
     Rosegarden::Clef clef;
     Rosegarden::Key key;
+
     timeT dragTime = clickedTime;
+    double layoutX = m_clickedElement->getLayoutX();
+    timeT duration = m_clickedElement->getViewDuration();
 
     NotationElementList::iterator itr =
 	m_selectedStaff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
 
     if (itr != m_selectedStaff->getViewElementList()->end()) {
-	dragTime = (*itr)->event()->getNotationAbsoluteTime();
+
+	NotationElement *elt = dynamic_cast<NotationElement *>(*itr);
+	dragTime = elt->getViewAbsoluteTime();
+	layoutX  = elt->getLayoutX();
+
+	if (elt->isRest() && duration > 0) {
+
+	    double restX = 0, restWidth = 0;
+	    elt->getCanvasAirspace(restX, restWidth);
+	    
+	    timeT restDuration = elt->getViewDuration();
+
+	    if (restWidth > 0 &&
+		restDuration >= duration * 2) {
+
+		int parts = restDuration / duration;
+		double encroachment = x - restX;
+		NOTATION_DEBUG << "encroachment is " << encroachment << ", restWidth is " << restWidth << endl;
+		int part = (int)((encroachment / restWidth) * parts);
+		if (part >= parts) part = parts-1;
+
+		dragTime += part * restDuration / parts;
+		layoutX  += part * restWidth / parts +
+		    (restX - elt->getCanvasX());
+	    }
+	}
     }
 
     if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
@@ -1244,22 +1273,16 @@ void NotationSelector::drag(int x, int y, bool final)
 	}
     }	    
 
-    if (!final) {
-
-	double layoutX = m_clickedElement->getLayoutX();
+    if (!final /* && (m_clickedElement->isNote() ||
+		  selection->getSegmentEvents().size() > 1) */ ) {
 
 	NOTATION_DEBUG << "dragTime " << dragTime << ", clickedTime " << clickedTime << endl;
 
-	if (dragTime != clickedTime) {
-	    layoutX = m_selectedStaff->getLayoutCoordsForCanvasCoords(x, y).first;
+	if (m_clickedElement->isNote()) {
+	    m_nParentView->showPreviewNote(m_selectedStaff->getId(),
+					   layoutX, pitch, height,
+					   Note::getNearestNote(duration));
 	}
-
-	timeT duration = m_clickedElement->getViewDuration();
-	//!!! what if not a note?
-
-	m_nParentView->showPreviewNote(m_selectedStaff->getId(),
-				       layoutX, pitch, height,
-				       Note::getNearestNote(duration));
 
     } else {
 
@@ -1274,17 +1297,11 @@ void NotationSelector::drag(int x, int y, bool final)
 	    haveSomething = true;
 	}
 
-	//!!! move the selection left or right if (a) there is an event at the
-	// time dragged to (and the time is not the absolute or notation time
-	// of the original event) or (b) the original event has notation
-	// duration > 0 and the time dragged to is a multiple of that notation
-	// duration into its bar.  Need to maintain selectedness on the events
-	// though
-
 	if (dragTime != clickedTime) {
 	    // this is only option (a) from the above selection
-	    command->addCommand(new MoveCommand(m_selectedStaff->getSegment(),
-						dragTime, true, *selection));
+	    command->addCommand(new MoveCommand
+				(m_selectedStaff->getSegment(),
+				 dragTime - clickedTime, true, *selection));
 	    haveSomething = true;
 	}
 

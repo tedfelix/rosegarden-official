@@ -1064,13 +1064,13 @@ TransposeCommand::modifySegment()
 }
 
 
-MoveCommand::MoveCommand(Segment &s, timeT newTime, bool useNotationTimings,
+MoveCommand::MoveCommand(Segment &s, timeT delta, bool useNotationTimings,
 			 EventSelection &sel) :
     BasicCommand(getGlobalName(), s,
-		 std::min(sel.getStartTime(), newTime),
-		 1 + std::max(sel.getEndTime(), newTime + sel.getTotalDuration())),
+		 delta < 0 ? sel.getStartTime() + delta : sel.getStartTime(),
+		 delta < 0 ? sel.getEndTime()+1 : sel.getEndTime()+1 + delta),
     m_selection(&sel),
-    m_newStartTime(newTime),
+    m_delta(delta),
     m_useNotationTimings(useNotationTimings)
 {
     // nothing else
@@ -1096,7 +1096,7 @@ MoveCommand::modifySegment()
 
     timeT a0 = m_selection->getStartTime();
     timeT a1 = m_selection->getEndTime();
-    timeT b0 = m_newStartTime;
+    timeT b0 = a0 + m_delta;
     timeT b1 = b0 + (a1 - a0);
 
     EventSelection::eventcontainer::iterator i;

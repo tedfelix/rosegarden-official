@@ -54,6 +54,11 @@ public:
 	width = m_airWidth;
     }
 
+    void getCanvasAirspace(double &x, double &width) {
+	x = m_airX - getLayoutX() + getCanvasX();
+	width = m_airWidth;
+    }
+
     /// returns the x pos of the associated canvas item
     double getCanvasX();
 
