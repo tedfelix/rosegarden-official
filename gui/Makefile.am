@@ -18,6 +18,7 @@ rosegarden_SOURCES = \
 	matrixelement.cpp \
 	matrixhlayout.cpp \
 	matrixstaff.cpp \
+	matrixtool.cpp \
 	matrixview.cpp \
 	matrixvlayout.cpp \
 	multiviewcommandhistory.cpp \
