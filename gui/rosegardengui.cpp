@@ -879,7 +879,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotTrackUp()),
                 actionCollection(), "select_previous_track");
 
-    pixmap.load(pixmapDir + "/toolbar/mute_all.xpm");
+    pixmap.load(pixmapDir + "/toolbar/mute-all.xpm");
     icon = QIconSet(pixmap);
     new KAction(i18n("&Mute all Tracks"), icon, 0, 
                 this, SLOT(slotMuteAllTracks()),
