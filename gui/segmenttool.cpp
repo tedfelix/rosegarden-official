@@ -123,7 +123,7 @@ SegmentTool::~SegmentTool()
 
 void SegmentTool::ready()
 {
-    m_canvas->setCursor(Qt::arrowCursor);
+    m_canvas->viewport()->setCursor(Qt::arrowCursor);
 }
 
 void 
@@ -196,7 +196,7 @@ SegmentPencil::SegmentPencil(SegmentCanvas *c, RosegardenGUIDoc *d)
 
 void SegmentPencil::ready()
 {
-    m_canvas->setCursor(Qt::ibeamCursor);
+    m_canvas->viewport()->setCursor(Qt::ibeamCursor);
 }
 
 void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
@@ -328,7 +328,7 @@ SegmentEraser::SegmentEraser(SegmentCanvas *c, RosegardenGUIDoc *d)
 
 void SegmentEraser::ready()
 {
-    m_canvas->setCursor(Qt::pointingHandCursor);
+    m_canvas->viewport()->setCursor(Qt::pointingHandCursor);
 }
 
 void SegmentEraser::handleMouseButtonPress(QMouseEvent *e)
@@ -376,7 +376,7 @@ SegmentMover::SegmentMover(SegmentCanvas *c, RosegardenGUIDoc *d)
 
 void SegmentMover::ready()
 {
-    m_canvas->setCursor(Qt::sizeAllCursor);
+    m_canvas->viewport()->setCursor(Qt::sizeAllCursor);
 }
 
 void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
@@ -492,7 +492,7 @@ SegmentResizer::SegmentResizer(SegmentCanvas *c, RosegardenGUIDoc *d,
 
 void SegmentResizer::ready()
 {
-    m_canvas->setCursor(Qt::sizeHorCursor);
+    m_canvas->viewport()->setCursor(Qt::sizeHorCursor);
 }
 
 void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
@@ -834,7 +834,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 	m_dispatchTool->handleMouseButtonRelease(e);
 	//delete m_dispatchTool;
 	m_dispatchTool = 0;
-	m_canvas->setCursor(Qt::arrowCursor);
+	m_canvas->viewport()->setCursor(Qt::arrowCursor);
 	return;
     }
 
@@ -848,7 +848,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
         return;
     }
 
-    m_canvas->setCursor(Qt::arrowCursor);
+    m_canvas->viewport()->setCursor(Qt::arrowCursor);
 
     if (m_currentItem->isSelected())
     {
@@ -988,7 +988,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
         return FollowHorizontal | FollowVertical;
     }
 
-    m_canvas->setCursor(Qt::sizeAllCursor);
+    m_canvas->viewport()->setCursor(Qt::sizeAllCursor);
 
     if (m_segmentCopyMode && !m_segmentQuickCopyDone)
     {
@@ -1120,7 +1120,7 @@ SegmentSplitter::~SegmentSplitter()
 
 void SegmentSplitter::ready()
 {
-    m_canvas->setCursor(Qt::splitHCursor);
+    m_canvas->viewport()->setCursor(Qt::splitHCursor);
 }
 
 void
@@ -1132,7 +1132,7 @@ SegmentSplitter::handleMouseButtonPress(QMouseEvent *e)
 
     if (item)
     {
-        m_canvas->setCursor(Qt::blankCursor);
+        m_canvas->viewport()->setCursor(Qt::blankCursor);
         drawSplitLine(e);
     }
 
@@ -1169,7 +1169,7 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
     }
  
     // Reinstate the cursor
-    m_canvas->setCursor(Qt::splitHCursor);
+    m_canvas->viewport()->setCursor(Qt::splitHCursor);
     m_canvas->slotHideSplitLine();
 }
 
@@ -1181,13 +1181,13 @@ SegmentSplitter::handleMouseMove(QMouseEvent *e)
 
     if (item)
     {
-        m_canvas->setCursor(Qt::blankCursor);
+        m_canvas->viewport()->setCursor(Qt::blankCursor);
         drawSplitLine(e);
 	return FollowHorizontal;
     }
     else
     {
-        m_canvas->setCursor(Qt::splitHCursor);
+        m_canvas->viewport()->setCursor(Qt::splitHCursor);
         m_canvas->slotHideSplitLine();
 	return NoFollow;
     }
