@@ -41,7 +41,8 @@ namespace Rosegarden
 {
 
 class AlsaDriver;
-class AudioMixer;
+class AudioBussMixer;
+class AudioInstrumentMixer;
 class AudioFileReader;
 class AudioFileWriter;
 
@@ -177,7 +178,8 @@ protected:
     jack_transport_state_t       m_waitingState;
     ExternalTransport::TransportToken m_waitingToken;
 
-    AudioMixer                  *m_mixer;
+    AudioBussMixer              *m_bussMixer;
+    AudioInstrumentMixer        *m_instrumentMixer;
     AudioFileReader             *m_fileReader;
     AudioFileWriter             *m_fileWriter;
     AlsaDriver                  *m_alsaDriver;

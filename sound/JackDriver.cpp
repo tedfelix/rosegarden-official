@@ -77,7 +77,8 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
     m_waiting(false),
     m_waitingState(JackTransportStopped),
     m_waitingToken(0),
-    m_mixer(0),
+    m_bussMixer(0),
+    m_instrumentMixer(0),
     m_fileReader(0),
     m_fileWriter(0),
     m_alsaDriver(alsaDriver),
@@ -147,7 +148,8 @@ JackDriver::~JackDriver()
     std::cout << "JackDriver::~JackDriver: deleting disk and mix managers" << std::endl;
     delete m_fileReader;
     delete m_fileWriter;
-    delete m_mixer;
+    delete m_instrumentMixer;
+    delete m_bussMixer;
 
     std::cout << "JackDriver::~JackDriver exiting" << std::endl;
 }
@@ -250,8 +252,13 @@ JackDriver::initialise()
 
     m_fileReader = new AudioFileReader(m_alsaDriver, m_sampleRate);
     m_fileWriter = new AudioFileWriter(m_alsaDriver, m_sampleRate);
-    m_mixer = new AudioMixer(m_alsaDriver, m_fileReader, m_sampleRate,
-			     m_bufferSize < 1024 ? 1024 : m_bufferSize);
+    m_instrumentMixer = new AudioInstrumentMixer
+	(m_alsaDriver, m_fileReader, m_sampleRate,
+	 m_bufferSize < 1024 ? 1024 : m_bufferSize);
+    m_bussMixer = new AudioBussMixer
+	(m_alsaDriver, m_instrumentMixer, m_sampleRate,
+	 m_bufferSize < 1024 ? 1024 : m_bufferSize);
+    m_instrumentMixer->setBussMixer(m_bussMixer);
 
     // Create and connect (default) two audio inputs - activating as
     // we go
@@ -549,7 +556,7 @@ JackDriver::jackProcessStatic(jack_nframes_t nframes, void *arg)
 int
 JackDriver::jackProcess(jack_nframes_t nframes)
 {
-    if (!m_mixer) {
+    if (!m_bussMixer) {
 	return 0;
     }
 
@@ -599,12 +606,161 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
     }
 
+    // We always have the master out
+
+    sample_t *master[2] = {
+	static_cast<sample_t *>
+	(jack_port_get_buffer(m_outputMasters[0], nframes)),
+	static_cast<sample_t *>
+	(jack_port_get_buffer(m_outputMasters[1], nframes))
+    };
+
+    memset(master[0], 0, nframes * sizeof(sample_t));
+    memset(master[1], 0, nframes * sizeof(sample_t));
+	
+    int bussCount = m_bussMixer->getBussCount();
+    
+    // If we have any busses, then we just mix from them (but we still
+    // need to keep ourselves up to date by reading and monitoring the
+    // instruments).  If we have no busses, mix direct from instruments.
+
+    for (int buss = 0; buss < bussCount; ++buss) {
+
+	sample_t *submaster[2] = { 0, 0 };
+	sample_t peak[2] = { 0.0, 0.0 };
+
+	if (m_outputSubmasters.size() > buss * 2 + 1) {
+	    submaster[0] = static_cast<sample_t *>
+		(jack_port_get_buffer(m_outputSubmasters[buss * 2], nframes));
+	    submaster[1] = static_cast<sample_t *>
+		(jack_port_get_buffer(m_outputSubmasters[buss * 2 + 1], nframes));
+	}
+
+	for (int ch = 0; ch < 2; ++ch) {
+
+	    RingBuffer<AudioBussMixer::sample_t> *rb =
+		m_bussMixer->getRingBuffer(buss, ch);
+
+	    if (!rb || m_bussMixer->isBussDormant(buss)) {
+		if (rb) rb->skip(nframes);
+		if (submaster[ch])
+		    memset(submaster[ch], 0, nframes * sizeof(sample_t));
+	    } else {
+		size_t actual = rb->read(submaster[ch], nframes);
+		if (actual < nframes) {
+		    std::cerr << "WARNING: buffer underrun in buss ringbuffer " << buss << ":" << ch << std::endl;
+		}
+		for (size_t i = 0; i < nframes; ++i) {
+		    sample_t sample = submaster[ch][i];
+		    if (sample > peak[ch]) peak[ch] = sample;
+		    master[ch][i] += sample;
+		}
+	    }
+	}
+
+	if (sdb) {
+	    Rosegarden::LevelInfo info;
+	    info.level = AudioLevel::multiplier_to_fader
+		(peak[0], 127, AudioLevel::LongFader);
+	    info.levelRight = AudioLevel::multiplier_to_fader
+		(peak[1], 127, AudioLevel::LongFader);
+
+	    sdb->setSubmasterLevel(buss, info);
+	}
+    }
+    
+    for (InstrumentId id = instrumentBase;
+	 id < instrumentBase + instruments; ++id) {
+	
+	sample_t *instrument[2] = { 0, 0 };
+	sample_t peak[2] = { 0.0, 0.0 };
+
+	unsigned int index = id - instrumentBase;
+	if (m_outputInstruments.size() > index * 2 + 1) {
+	    instrument[0] = static_cast<sample_t *>
+		(jack_port_get_buffer(m_outputInstruments[index * 2], nframes));
+	    instrument[1] = static_cast<sample_t *>
+		(jack_port_get_buffer(m_outputInstruments[index * 2 + 1], nframes));
+	}
+
+	for (int ch = 0; ch < 2; ++ch) {
+
+	    RingBuffer<AudioInstrumentMixer::sample_t, 2> *rb =
+		m_instrumentMixer->getRingBuffer(id, ch);
+
+	    if (!rb || m_instrumentMixer->isInstrumentDormant(id)) {
+		if (rb) rb->skip(nframes);
+		if (instrument[ch])
+		    memset(instrument[ch], 0, nframes * sizeof(sample_t));
+	    } else {
+		size_t actual = rb->read(instrument[ch], nframes);
+		if (actual < nframes) {
+		    std::cerr << "WARNING: buffer underrun in instrument ringbuffer " << id << ":" << ch << std::endl;
+		}
+		for (size_t i = 0; i < nframes; ++i) {
+		    sample_t sample = instrument[ch][i];
+		    if (sample > peak[ch]) peak[ch] = sample;
+		    if (bussCount == 0) master[ch][i] += sample;
+		}
+	    }
+	}
+
+	if (sdb) {
+	    Rosegarden::LevelInfo info;
+	    info.level = AudioLevel::multiplier_to_fader
+		(peak[0], 127, AudioLevel::LongFader);
+	    info.levelRight = AudioLevel::multiplier_to_fader
+		(peak[1], 127, AudioLevel::LongFader);
+
+	    sdb->setInstrumentLevel(id, info);
+	}
+    }
+
+    // Get master fader level.  This is a Bad Thing to do here because
+    // of the requirement to acquire a lock.
+    MappedAudioBuss *mbuss = m_alsaDriver->getMappedStudio()->getAudioBuss(0);
+    float masterGain[2] = { 1.0, 1.0 };
+
+    if (mbuss) {
+	float level = 0.0;
+	(void)mbuss->getProperty(MappedAudioBuss::Level, level);
+
+	float volume = AudioLevel::dB_to_multiplier(level);
+
+	float pan = 0.0;
+//!!!	(void)mbuss->getProperty(MappedAudioBuss::Pan, pan);
+
+	masterGain[0] = volume * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
+	masterGain[1] = volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
+    }
+
+    float masterPeak[2] = { 0.0, 0.0 };
+
+    for (int ch = 0; ch < 2; ++ch) {
+	for (size_t i = 0; i < nframes; ++i) {
+	    sample_t sample = master[ch][i] * masterGain[ch];
+	    if (sample > masterPeak[ch]) masterPeak[ch] = sample;
+	    master[ch][i] = sample;
+	}
+    }
+
+    if (sdb) {
+	Rosegarden::LevelInfo info;
+	info.level = AudioLevel::multiplier_to_fader
+	    (masterPeak[0], 127, AudioLevel::LongFader);
+	info.levelRight = AudioLevel::multiplier_to_fader
+	    (masterPeak[1], 127, AudioLevel::LongFader);
+	
+	sdb->setMasterLevel(info);
+    }
+
+#ifdef NOT_DEFINED
     for (InstrumentId id = instrumentBase + instruments - 1;
 	 /*	 id >= 0 */;
 	 --id) {
 
 	if (id == instrumentBase - 1) {
-	    id = m_mixer->getSubmasterCount();
+	    id = m_bussMixer->getSubmasterCount();
 	}
 
 //	if (id == m_mixer->getSubmasterCount() + 1) {
@@ -651,7 +807,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	float peakLeft = 0.0;
 	float peakRight = 0.0;
 
-	RingBuffer<AudioMixer::sample_t> *rb = m_mixer->getRingBuffer(id, 0);
+	RingBuffer<AudioInstrumentMixer::sample_t> *rb = m_mixer->getRingBuffer(id, 0);
 
 	if (rb) {
 	    if (!left) rb->skip(nframes);
@@ -713,9 +869,11 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
 	if (id == 0) break;
     }
+#endif
 
     if (m_alsaDriver->isPlaying()) {
-	m_mixer->signal();
+	m_bussMixer->signal();
+//	m_instrumentMixer->signal();
     }
 
     return 0;
@@ -951,7 +1109,7 @@ JackDriver::stop()
 	}
     }
 
-    if (m_mixer) m_mixer->resetAllPlugins();
+    if (m_instrumentMixer) m_instrumentMixer->resetAllPlugins();
 }
 
 
@@ -1030,29 +1188,42 @@ JackDriver::jackXRun(void *)
 void
 JackDriver::prebufferAudio()
 {
-    //!!! Hmm.  This will need to be cleverer to cope with JACK transport
-    // sync, as the next slice start is not so predictable (anyone can set
-    // the transport to any frame count).  We could just query it?
+    if (!m_instrumentMixer) return;
 
-    if (m_mixer) {
-	m_mixer->fillBuffers
+    // For JACK transport sync, the next slice could start anywhere.
+    // We need to query it.
+//!!! urch, no, seems this is being called before the transport has actually
+// repositioned
+/*
+    if (m_jackTransportEnabled) {
+	jack_position_t position;
+	jack_transport_query(m_client, &position);
+	m_instrumentMixer->fillBuffers
+	    (RealTime::frame2RealTime(position.frame, m_sampleRate));
+	m_bussMixer->fillBuffers();
+    } else {
+*/
+	m_instrumentMixer->fillBuffers
 	    (getNextSliceStart(m_alsaDriver->getSequencerTime()));
-    }
+	m_bussMixer->fillBuffers();
+//    }
 }
 
 void
 JackDriver::flushAudio()
 {
-    if (m_mixer) {
-	m_mixer->emptyBuffers();
-    }
+    if (!m_instrumentMixer) return;
+
+    m_instrumentMixer->emptyBuffers();
+    m_bussMixer->emptyBuffers();
 }
  
 void
 JackDriver::kickAudio()
 {
     if (m_fileReader) m_fileReader->kick();
-    if (m_mixer) m_mixer->kick();
+    if (m_instrumentMixer) m_instrumentMixer->kick();
+    if (m_bussMixer) m_bussMixer->kick();
     if (m_fileWriter) m_fileWriter->kick();
 }
 
@@ -1075,15 +1246,20 @@ JackDriver::getNextSliceStart(const RealTime &now) const
 int
 JackDriver::getAudioQueueLocks()
 {
-    // We have to lock the mix manager first, because the mix manager
-    // can try to lock the disk manager from within its own locked
-    // section -- so if we locked the disk manager first we would risk
-    // deadlock when trying to acquire the mix manager lock
+    // We have to lock the mixers first, because the mixers can try to
+    // lock the disk manager from within a locked section -- so if we
+    // locked the disk manager first we would risk deadlock when
+    // trying to acquire the instrument mixer lock
 
     int rv = 0;
-    if (m_mixer) {
-	std::cerr << "JackDriver::getAudioQueueLocks: trying to lock mix manager" << std::endl;
-	rv = m_mixer->getLock();
+    if (m_bussMixer) {
+	std::cerr << "JackDriver::getAudioQueueLocks: trying to lock buss mixer" << std::endl;
+	rv = m_bussMixer->getLock();
+	if (rv) return rv;
+    }
+    if (m_instrumentMixer) {
+	std::cerr << "ok, now trying for instrument mixer" << std::endl;
+	rv = m_instrumentMixer->getLock();
 	if (rv) return rv;
     }
     if (m_fileReader) {
@@ -1103,15 +1279,26 @@ int
 JackDriver::tryAudioQueueLocks()
 {
     int rv = 0;
-    if (m_mixer) {
-	rv = m_mixer->tryLock();
+    if (m_bussMixer) {
+	rv = m_bussMixer->tryLock();
 	if (rv) return rv;
+    }
+    if (m_instrumentMixer) {
+	rv = m_instrumentMixer->tryLock();
+	if (rv) {
+	    if (m_bussMixer) {
+		m_bussMixer->releaseLock();
+	    }
+	}
     }
     if (m_fileReader) {
 	rv = m_fileReader->tryLock();
 	if (rv) {
-	    if (m_mixer) {
-		m_mixer->releaseLock();
+	    if (m_instrumentMixer) {
+		m_instrumentMixer->releaseLock();
+	    }
+	    if (m_bussMixer) {
+		m_bussMixer->releaseLock();
 	    }
 	}
     }
@@ -1121,8 +1308,11 @@ JackDriver::tryAudioQueueLocks()
 	    if (m_fileReader) {
 		m_fileReader->releaseLock();
 	    }
-	    if (m_mixer) {
-		m_mixer->releaseLock();
+	    if (m_instrumentMixer) {
+		m_instrumentMixer->releaseLock();
+	    }
+	    if (m_bussMixer) {
+		m_bussMixer->releaseLock();
 	    }
 	}
     }
@@ -1136,7 +1326,8 @@ JackDriver::releaseAudioQueueLocks()
     std::cerr << "JackDriver::releaseAudioQueueLocks" << std::endl;
     if (m_fileWriter) rv = m_fileWriter->releaseLock();
     if (m_fileReader) rv = m_fileReader->releaseLock();
-    if (m_mixer) rv = m_mixer->releaseLock();
+    if (m_instrumentMixer) rv = m_instrumentMixer->releaseLock();
+    if (m_bussMixer) rv = m_bussMixer->releaseLock();
     return rv;
 }
 
@@ -1147,19 +1338,19 @@ void
 JackDriver::setPluginInstance(InstrumentId id, unsigned long pluginId,
 			      int position)
 {
-    if (m_mixer) m_mixer->setPlugin(id, position, pluginId);
+    if (m_instrumentMixer) m_instrumentMixer->setPlugin(id, position, pluginId);
 }
 
 void
 JackDriver::removePluginInstance(InstrumentId id, int position)
 {
-    if (m_mixer) m_mixer->removePlugin(id, position);
+    if (m_instrumentMixer) m_instrumentMixer->removePlugin(id, position);
 }
 
 void
 JackDriver::removePluginInstances()
 {
-    if (m_mixer) m_mixer->removeAllPlugins();
+    if (m_instrumentMixer) m_instrumentMixer->removeAllPlugins();
 }
 
 void
@@ -1167,13 +1358,13 @@ JackDriver::setPluginInstancePortValue(InstrumentId id, int position,
 				       unsigned long portNumber,
 				       float value)
 {
-    if (m_mixer) m_mixer->setPluginPortValue(id, position, portNumber, value);
+    if (m_instrumentMixer) m_instrumentMixer->setPluginPortValue(id, position, portNumber, value);
 }
 
 void
 JackDriver::setPluginInstanceBypass(InstrumentId id, int position, bool value)
 {
-    if (m_mixer) m_mixer->setPluginBypass(id, position, value);
+    if (m_instrumentMixer) m_instrumentMixer->setPluginBypass(id, position, value);
 }
 
 //!!! and these
