@@ -643,6 +643,12 @@ protected:
     typedef QMap<QString, MarkActionData> MarkActionDataMap;
     static MarkActionDataMap *m_markActionDataMap;
 
+#ifdef RGKDE3
+    QPtrList<KAction> m_fontActions;
+#else
+    QList<KAction> m_fontActions;
+#endif
+
     RosegardenProgressDialog *m_progressDlg;
     bool m_inhibitRefresh;
     bool m_documentDestroyed;

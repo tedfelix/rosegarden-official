@@ -33,9 +33,9 @@ Post-0.1.5-and-a-bit task list
 
     -- Undo doesn't work for Split Segment [DONE?]
 
- 7a. Make notation view support end markers
- 7b. Make matrix view support end markers
- 7c. Make file I/O support end markers    
+ 7a. Make notation view support end markers [DONE with bugs]
+ 7b. Make matrix view support end markers [DONE with bugs]
+ 7c. Make file I/O support end markers [DONE]
 
  8. Add origin to start of hlayout, so that first bar is indented on both
     ruler and staff (preceded by staff name perhaps) [DONE]
@@ -214,10 +214,6 @@ Post-0.1.5-and-a-bit task list
 
 35a. Also add something like "Auto Split" that splits segments on
      empty bars, clef changes or time sig changes [DONE]
-
-35a.i. And have a dialog with options: split after (n) bars of
-    silence? after time sig change? after clef change? after key
-    change?
 
 35a.i. And have a dialog with options: split after (n) bars of
     silence? after time sig change? after clef change? after key

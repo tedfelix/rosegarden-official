@@ -981,6 +981,8 @@ void NotationView::setupActions()
     KStdAction::configureToolbars(this, SLOT(editToolbars()), actionCollection());
 
     createGUI("notation.rc");
+
+    plugActionList("note_fonts", m_fontActions);
 }
 
 NotationStaff *
@@ -1026,7 +1028,7 @@ void NotationView::initFontToolbar(int legatoUnit, bool multiStaff)
     std::sort(f.begin(), f.end());
 
     bool foundFont = false;
-    QPtrList<KAction> actions;
+    m_fontActions.clear();
 
     for (vector<string>::iterator i = f.begin(); i != f.end(); ++i) {
 
@@ -1038,10 +1040,16 @@ void NotationView::initFontToolbar(int legatoUnit, bool multiStaff)
 	    foundFont = true;
         }
 
+#ifdef RGKDE3
 	KAction *action = new KAction
 	    (fontQName, 0, this, SLOT(slotChangeFontFromAction()),
 	     actionCollection(), "note_font_" + fontQName);
-	actions.append(action);
+#else 
+	KAction action
+	    (fontQName, 0, this, SLOT(slotChangeFontFromAction()),
+	     actionCollection(), "note_font_" + fontQName);
+#endif
+	m_fontActions.append(action);
     }
 
     if (!foundFont) {
@@ -1051,8 +1059,6 @@ void NotationView::initFontToolbar(int legatoUnit, bool multiStaff)
 	m_fontName = NotePixmapFactory::getDefaultFont();
     }
     
-    plugActionList("note_fonts", actions);
-
     connect(fontCombo, SIGNAL(activated(const QString &)),
             this,        SLOT(slotChangeFont(const QString &)));
 
