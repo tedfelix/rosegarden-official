@@ -384,6 +384,7 @@ PasteEventsCommand::modifySegment()
 	for (unsigned int i = 0; i < copies.size(); ++i) {
 	    destination->insert(copies[i]);
 	}
+
 	break;
     }
 
@@ -406,7 +407,8 @@ PasteEventsCommand::modifySegment()
 		destination->insert(e);
 	    }
 	}
-	break;
+
+	return;
 
     case MatrixOverlay:
 
@@ -417,9 +419,19 @@ PasteEventsCommand::modifySegment()
 	    Event *e = new Event
 		(**i, (*i)->getAbsoluteTime() - origin + pasteTime);
 
+	    if (e->has(BEAMED_GROUP_TYPE) &&
+		e->get<String>(BEAMED_GROUP_TYPE) == GROUP_TYPE_BEAMED) {
+		e->unset(BEAMED_GROUP_ID);
+		e->unset(BEAMED_GROUP_TYPE);
+	    }
+
 	    destination->insert(e);
 	}
-	break;
+
+	destination->normalizeRests
+	    (source->getStartTime(), source->getEndTime());
+
+	return;
     }
 
     RG_DEBUG << "PasteEventsCommand::modifySegment() - inserting\n";

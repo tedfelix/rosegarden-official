@@ -197,17 +197,12 @@ RosegardenProgressDialog::RosegardenProgressDialog(
 {
     setCaption(i18n("Processing..."));
     QTimer::singleShot(700, this, SLOT(slotTimerElapsed()));
-
-    // set the cursor
-//    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
-    //setCursor(QCursor(Qt::waitCursor));
 }
 
 RosegardenProgressDialog::~RosegardenProgressDialog()
 {
     QWidget* creator = 0;
-    
-    QApplication::restoreOverrideCursor();
+    if (m_changedCursor) QApplication::restoreOverrideCursor();
 }
 
 void
@@ -225,6 +220,16 @@ RosegardenProgressDialog::setCompleted(int value)
 	m_value = value; //???
 
     if (m_shown) setProgress(value);
+
+    if (m_value == m_max) {
+	if (m_changedCursor) {
+	    QApplication::restoreOverrideCursor();
+	    m_changedCursor = false;
+	}
+    } else if (m_shown && !m_changedCursor) {
+	QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+	m_changedCursor = true;
+    }
 }
 
 void
@@ -254,17 +259,15 @@ RosegardenProgressDialog::slotShowMyself()
     setProgress(m_value);
     show();
     m_shown = true;
-
-    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
-    // re-set the cursor
-    //QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
-    //setCursor(QCursor(Qt::waitCursor));
 }
 
 void
 RosegardenProgressDialog::done()
 {
-    QApplication::restoreOverrideCursor();
+    if (m_changedCursor) {
+	QApplication::restoreOverrideCursor();
+	m_changedCursor = false;
+    }
     close();
 }
 

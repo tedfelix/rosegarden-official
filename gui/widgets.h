@@ -194,9 +194,9 @@ public slots:
     void slotShowMyself();
 
 private:
-
     bool m_firstTimeout;
     bool m_shown;
+    bool m_changedCursor;
 };
 
 

@@ -865,6 +865,9 @@ SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
 
     timeT myEndTime = e->getAbsoluteTime() + e->getDuration();
 
+    e->unset(BEAMED_GROUP_ID);
+    e->unset(BEAMED_GROUP_TYPE);
+
     //!!! use isBeforeEndMarker?
 
     while (i != end()) {

@@ -1169,7 +1169,7 @@ EventSelection* NotationSelector::getSelection()
             // If selector is not greedy, check if the element's rect
             // is actually included in the selection rect.
             //
-            if (!isGreedy() &&
+            if (/* so damn stupid it's stupid   !isGreedy() && */
                 !rect.contains(int(item->x()), int(item->y()), true)) continue;
             
             NotationElement &el = sprite->getNotationElement();

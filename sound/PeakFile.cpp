@@ -576,8 +576,6 @@ PeakFile::writePeaks(Progress *progress,
         //
         for (unsigned int i = 0; i < m_audioFile->getChannels(); i++)
         {
-	    cerr << "peak: " << channelPeaks[i].first << " - " << channelPeaks[i].second << endl;
-
             putBytes(file, getLittleEndianFromInteger(channelPeaks[i].first,
                                                       bytes));
             putBytes(file, getLittleEndianFromInteger(channelPeaks[i].second,
@@ -693,17 +691,9 @@ PeakFile::getPreview(const RealTime &startTime,
                 int inValue =
                     getIntegerFromLittleEndian(peakData.substr(0, m_format));
 
-		cerr << "inValue is " << inValue << ", intDivisor is " << intDivisor;
-
-		/*!!!
-                if (inValue >= intDivisor - 1)
-                    inValue = inValue % intDivisor;
-		*/
 		while (inValue > intDivisor) {
 		    inValue -= (1 << (m_format * 8));
 		}
-
-		cerr << ", inValue is now " << inValue << endl;
 
                 hiValue += float(inValue);
 
@@ -713,16 +703,9 @@ PeakFile::getPreview(const RealTime &startTime,
                         getIntegerFromLittleEndian(
                                 peakData.substr(m_format, m_format));
 
-		    cerr << "inValue is " << inValue << ", intDivisor is " << intDivisor;
-		    /*!!!
-                    if (inValue >= intDivisor - 1)
-                        inValue = intDivisor - inValue;
-		    */
 		    while (inValue > intDivisor) {
 			inValue -= (1 << (m_format * 8));
 		    }
-
-		    cerr << ", inValue is now " << inValue << " (low)" << endl;
 
                     loValue += float(inValue);
                 }
