@@ -1425,6 +1425,12 @@ void SequenceManager::resetCompositionMmapper()
     delete m_compositionMmapper;
     m_compositionMmapper = new CompositionMmapper(m_doc);
 
+    resetMetronomeMmapper();
+}
+
+void SequenceManager::resetMetronomeMmapper()
+{
+    SEQMAN_DEBUG << "SequenceManager::resetMetronomeMmapper()\n";
 
     delete m_metronomeMmapper;
     m_metronomeMmapper = new MetronomeMmapper(m_doc);
@@ -1461,6 +1467,8 @@ void SequenceManager::checkRefreshStatus()
 {
     SEQMAN_DEBUG << "SequenceManager::checkRefreshStatus()\n";
 
+    bool metronomeNeedsRefresh = (m_removedSegments.size() != 0 || m_addedSegments.size() != 0);
+
     std::vector<Segment*>::iterator i;
 
     // Check removed segments first
@@ -1483,6 +1491,8 @@ void SequenceManager::checkRefreshStatus()
         processAddedSegment(*i);
     }
     m_addedSegments.clear();
+
+    if (metronomeNeedsRefresh) resetMetronomeMmapper();
 }
 
 void SequenceManager::segmentModified(Segment* s)

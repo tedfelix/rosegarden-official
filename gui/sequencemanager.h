@@ -181,6 +181,7 @@ public:
 
 
     void resetCompositionMmapper();
+    void resetMetronomeMmapper();
 
     // CompositionObserver interface
     virtual void segmentAdded(const Composition *c, Segment *s);
