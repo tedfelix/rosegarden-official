@@ -391,9 +391,15 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
 //    cerr << "Segment::normalizeRests " << startTime << " -> "
 //	 << endTime << endl;
 
-    iterator ia = findTime(startTime);
+    iterator ia = findNearestTime(startTime);
+    if (ia == end()) ia = begin();
+    if (ia == end()) { // the segment is empty
+	fillWithRests(endTime);
+	return;
+    }
+
     iterator ib = findTime(endTime);
-    if (!(ib == end())) endTime = (*ib)->getAbsoluteTime();
+    if (ib != end()) endTime = (*ib)->getAbsoluteTime();
 
     // If there's a rest preceding the start time, with no notes
     // between us and it, and if it doesn't have precisely the
@@ -412,8 +418,6 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
 	    break;
 	}
     }
-    
-    if (ia == end()) return;
 
     for (iterator i = ia, j = i; i != ib && i != end(); i = j) {
 	++j;
