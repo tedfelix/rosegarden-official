@@ -25,10 +25,10 @@
 # can be useful for creating a module that consists of many directories
 # spread out over the entire source repository.
 
-toplevel -l gui
+toplevel -d rosegarden -l gui
 
 # Make a module named 'gui' out of the gui/rosegardengui dir 
-#gui gui/rosegardengui
+gui gui/rosegardengui
 
 # The main 'rosegarden' module holding our source tree
 # The '&gui' below is the module defined above
