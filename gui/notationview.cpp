@@ -1387,7 +1387,7 @@ ClefInserter::ClefInserter(std::string clefType, NotationView& view)
 {
 }
     
-void ClefInserter::handleClick(int height, const QPoint &eventPos,
+void ClefInserter::handleClick(int /*height*/, const QPoint &eventPos,
                                NotationElement*)
 {
     Event *tsig = 0, *clef = 0, *key = 0;
