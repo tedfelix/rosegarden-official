@@ -25,15 +25,18 @@
 # can be useful for creating a module that consists of many directories
 # spread out over the entire source repository.
 
-toplevel -d . -l gui
+#toplevel -d . -l gui
 
 # Make a module named 'gui' out of the gui/rosegardengui dir 
 gui gui/rosegardengui
 
 # The main 'rosegarden' module holding our source tree
 # The '&gui' below is the module defined above
+# The 1st 'rosegarden' is the name of the module
+# The 2nd 'rosegarden' is the rosegarden directory in the
+# repository
 #
-rosegarden &admin &core &docs &gui &po &sound
+rosegarden rosegarden &admin &core &docs &gui &po &sound
 
-rgtest -d rosegarden &toplevel &admin &core &docs &gui &po &sound
+#rgtest -d rosegarden rosegarden &admin &core &docs &gui &po &sound
 
