@@ -1034,8 +1034,9 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     //
     m_doc->prepareAudio();
 
-    if (m_seqManager)
-        m_seqManager->preparePlayback(true);
+    // Do not reset instrument prog. changes after all.
+//     if (m_seqManager)
+//         m_seqManager->preparePlayback(true);
 
     // same for the Marker Editor
     //
