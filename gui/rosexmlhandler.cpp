@@ -63,9 +63,10 @@ RoseXmlHandler::~RoseXmlHandler()
 bool
 RoseXmlHandler::startDocument()
 {
-    // clear the tracks out before we load
+    // clear things before we load 'em
     //
     m_composition.clearTracks();
+    m_composition.clearInstruments();
 
     // reset state
     return true;
@@ -141,7 +142,8 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         //
         Rosegarden::Instrument *instrument =
                 new Rosegarden::Instrument(id, it, name);
-        m_composition.addInstrument(*instrument);
+
+        m_composition.addInstrument(instrument);
 
     } else if (lcName == "composition") {
 
@@ -228,7 +230,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                                                          label, position,
                                                          instrument);
 
-        m_composition.addTrack(*track);
+        m_composition.addTrack(track);
 
 
     } else if (lcName == "segment") {

@@ -820,20 +820,20 @@ void Composition::eventRemoved(const Segment *, Event *e)
 // Insert an Instrument into the Composition
 //
 //
-void Composition::addInstrument(const Instrument &inst)
+void Composition::addInstrument(Instrument *inst)
 {
     // For the moment just insert it - but we should probably
     // check indexes first.
     //
     // 
-    m_instruments[inst.getID()] = inst;
+    m_instruments[inst->getID()] = inst;
 }
 
 // Insert a Track representation into the Composition
 //
-void Composition::addTrack(const Track &track)
+void Composition::addTrack(Track *track)
 {
-    m_tracks[track.getID()] = track;
+    m_tracks[track->getID()] = track;
 }
 
 
@@ -871,7 +871,7 @@ std::string Composition::toXmlString()
                             iit != getInstruments()->end();
                             iit++ )
     {
-        composition << "  " << (*iit).second.toXmlString() << std::endl;
+        composition << "  " << (*iit).second->toXmlString() << std::endl;
     }
 
     composition << std::endl;
@@ -880,7 +880,7 @@ std::string Composition::toXmlString()
                         tit != getTracks()->end();
                         tit++ )
     {
-        composition << "  " << (*tit).second.toXmlString() << std::endl;
+        composition << "  " << (*tit).second->toXmlString() << std::endl;
     }
 
     composition << std::endl;
@@ -915,6 +915,37 @@ std::string Composition::toXmlString()
     composition << "</composition>" << std::ends;
 
     return composition.str();
+}
+
+void
+Composition::clearTracks()
+{
+/*
+    trackiterator it = m_tracks.begin();
+    for (; it != m_tracks.end(); it++)
+    {
+        m_tracks.erase(it);
+        //delete (*it);
+    }
+*/
+
+    m_tracks.clear();
+}
+
+void
+Composition::clearInstruments()
+{
+/*
+    instrumentiterator it = m_instruments.begin();
+ 
+    for (; it != m_instruments.end(); it++)
+    {
+        m_instruments.erase(it);
+        // delete(*it);
+    }
+*/
+
+    m_instruments.clear();
 }
 
 

@@ -422,5 +422,6 @@ RosegardenGUIDoc::createNewSegment(SegmentItem *p, int track)
     p->setSegment(newSegment);
 
     setModified();
+
 }
 

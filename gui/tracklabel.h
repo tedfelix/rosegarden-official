@@ -21,7 +21,9 @@
 #ifndef _TRACK_LABEL_H_
 #define _TRACK_LABEL_H_
 
+#include <qstring.h>
 #include <qlabel.h>
+#include <qinputdialog.h>
 #include <iostream>
 
 // Specialises QLabel to create in effect a toggleable and
@@ -35,8 +37,11 @@ class TrackLabel : public QLabel
 {
 Q_OBJECT
 public:
-    TrackLabel(const int &id, QWidget *parent, const char *name=0, WFlags f=0):
-               QLabel(parent, name, f), m_id(id) {;}
+    TrackLabel(const int &trackNum,
+               QWidget *parent,
+               const char *name=0,
+               WFlags f=0):
+               QLabel(parent, name, f), m_trackNum(trackNum) {;}
 
     ~TrackLabel() {;}
 
@@ -66,20 +71,41 @@ public:
         else
             setLabelHighlight(true);
 
-        emit released(m_id);
+        emit released(m_trackNum);
+    }
+
+    virtual void mouseDoubleClickEvent(QMouseEvent *mE)
+    {
+        // always highlight this label
+        setLabelHighlight(true);
+
+        bool ok = false;
+        QString newText = QInputDialog::getText(
+                                     QString("Change track name"),
+                                     QString("Enter new track name"),
+                                     text(),
+                                     &ok,
+                                     this);
+
+        if ( ok && !newText.isEmpty() )
+            emit renameTrack(newText, m_trackNum);
     }
 
     bool isSelected() { return m_selected; }
-    int id() { return m_id; }
+    int trackNum() { return m_trackNum; }
 
 signals:
     // Our version of released() has an int id associated with it
     //
     void released(int);
 
+    // We emit this once we've renamed a track
+    //
+    void renameTrack(QString, int);
+
 private:
 
-    int  m_id;
+    int  m_trackNum;
     bool m_selected;
 
 };

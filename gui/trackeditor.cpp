@@ -24,6 +24,7 @@
 #include "trackeditor.h"
 #include "segmentcanvas.h"
 #include "rosegardenguidoc.h"
+#include "Track.h"
 
 #include "rosedebug.h"
 
@@ -47,7 +48,36 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     int tracks = doc->getNbTracks();
     int bars = doc->getNbBars();
 
-    if (tracks == 0) tracks = 10;
+    // If we have no Track then create a default document with 10 of them
+    //
+    if (tracks == 0)
+    {
+        // default number of Tracks
+        //
+        tracks = 10;
+
+        // Create the Tracks on the Composition
+        //
+        Composition &comp = m_document->getComposition();
+        Rosegarden::Track *track;
+        for (int i = 0; i < tracks; i++)
+        {
+            track = new Rosegarden::Track(i, false, Rosegarden::Track::Midi,
+                                          string("untitled"), i, 0);
+
+            comp.addTrack(track);
+        }
+
+        // Add a default Instrument
+        //
+        Rosegarden::Instrument *instr = new Rosegarden::Instrument(0,
+                          Rosegarden::Instrument::Midi, string("Instrument 1"));
+        comp.addInstrument(instr);
+    }
+
+
+    // If we have no length to our piece then create a default
+    //
     if (bars == 0) bars = 100;
 
     init(tracks, bars);

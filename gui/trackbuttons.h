@@ -87,6 +87,7 @@ public slots:
     void setRecordTrack(int id);
     void toggleMutedTrack(int mutedTrack);
     void labelSelected(int id);
+    void renameTrack(QString newName, int trackNum);
 
 
 private:

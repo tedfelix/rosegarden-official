@@ -72,8 +72,8 @@ struct RealTime
 };
     
 
-typedef std::map<int, Instrument> instrumentcontainer;
-typedef std::map<int, Track> trackcontainer;
+typedef std::map<int, Instrument*> instrumentcontainer;
+typedef std::map<int, Track*> trackcontainer;
 
 typedef instrumentcontainer::iterator instrumentiterator;
 typedef trackcontainer::iterator trackiterator;
@@ -123,9 +123,9 @@ public:
     //
     //  INSTRUMENT & TRACK
 
-    Track* getTrackByIndex(const int &track) { return &(m_tracks[track]); }
+    Track* getTrackByIndex(const int &track) { return m_tracks[track]; }
     Instrument* getInstrumentByIndex(const int &instr)
-            { return &(m_instruments[instr]); }
+            { return m_instruments[instr]; }
  
     trackcontainer* getTracks() { return &m_tracks; }
     instrumentcontainer* getInstruments() { return &m_instruments; }
@@ -136,19 +136,24 @@ public:
     int getNbTracks() const { return m_tracks.size(); }
 
     /**
-     * Clear out the track container
+     * Clear out the Track container
      */
-    void clearTracks() { m_tracks.clear(); }
+    void clearTracks();
+
+    /**
+     * Clear out the Instruments
+     */
+    void clearInstruments();
 
     /**
      * Insert a new Instrument
      */
-    void addInstrument(const Instrument &inst);
+    void addInstrument(Instrument *inst);
 
     /**
      * Insert a new Track
      */
-    void addTrack(const Track &track);
+    void addTrack(Track *track);
  
     /**
      * Delete a Track by index

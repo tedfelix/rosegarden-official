@@ -166,6 +166,9 @@ TrackButtons::drawButtons()
         trackLabel->setMaximumSize(80, m_cellSize - buttonGap);
         trackLabel->setIndent(7);
 
+        connect(trackLabel, SIGNAL(renameTrack(QString, int)),
+                            SLOT(renameTrack(QString, int)));
+
         // Store the TrackLabel pointer
         //
         m_trackLabels.push_back(trackLabel);
@@ -302,7 +305,7 @@ TrackButtons::setRecordTrack(int recordTrack)
 // Connected to the released(int) callback of the TrackLabels
 //
 void
-TrackButtons::labelSelected(int id)
+TrackButtons::labelSelected(int trackNum)
 {
     list<TrackLabel *>::iterator tlpIt;
 
@@ -311,7 +314,7 @@ TrackButtons::labelSelected(int id)
          tlpIt++)
     {
         
-        if ((*tlpIt)->id() != id &&
+        if ((*tlpIt)->trackNum() != trackNum &&
             (*tlpIt)->isSelected())
         {
             (*tlpIt)->setLabelHighlight(false);
@@ -320,7 +323,7 @@ TrackButtons::labelSelected(int id)
 
     // Propagate this message upstairs
     //
-    emit(trackSelected(id));
+    emit(trackSelected(trackNum));
 
 }
 
@@ -338,10 +341,27 @@ TrackButtons::getHighLightedTracks()
          tlpIt++)
     {
         if ((*tlpIt)->isSelected())
-            retList.push_back((*tlpIt)->id());
+            retList.push_back((*tlpIt)->trackNum());
     }
 
     return retList;
 }
+
+void
+TrackButtons::renameTrack(QString newName, int trackNum)
+{
+    Rosegarden::Track *track = m_doc->getComposition().getTrackByIndex(trackNum);
+    track->setLabel(string(newName.data()));
+
+    list<TrackLabel*>::iterator it = m_trackLabels.begin();
+    for (; it != m_trackLabels.end(); it++)
+    {
+        if ((*it)->trackNum() == trackNum)
+            (*it)->setText(newName);
+    }
+
+}
+
+
 
 

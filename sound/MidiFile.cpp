@@ -468,7 +468,6 @@ MidiFile::convertToRosegarden()
     MidiTrackIterator midiEvent, noteOffSearch;
     Rosegarden::Segment *rosegardenSegment;
     Rosegarden::Event *rosegardenEvent;
-    unsigned long tTime;
     unsigned int compositionTrack = 0;
     bool noteOffFound;
     bool notesOnTrack;
@@ -489,7 +488,6 @@ MidiFile::convertToRosegarden()
     timeT segmentTime;
 
     // keys
-    Rosegarden::Key *key;
     int accidentals;
     bool isMinor;
     bool isSharp;
@@ -787,7 +785,7 @@ MidiFile::convertToRosegarden()
                                       (int) i,
                                       0);
 
-        composition->addTrack(*track);
+        composition->addTrack(track);
 
     }
 
@@ -796,7 +794,7 @@ MidiFile::convertToRosegarden()
                                            Rosegarden::Instrument::Midi,
                                            string("MIDI Instrument 1"));
 
-    composition->addInstrument(*instrument);
+    composition->addInstrument(instrument);
 
 
     // set a tempo based on timing division or default
