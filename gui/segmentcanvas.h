@@ -396,6 +396,10 @@ public:
 
 signals:
     void updateSegmentTrackAndStartTime(SegmentItem*);
+
+private:
+    QPoint m_clickPoint;
+    double m_currentItemStartX;
 };
 
 /**
@@ -458,11 +462,13 @@ signals:
 
 
 private:
+    typedef std::pair<QPoint, SegmentItem *> SegmentItemPair;
+    typedef std::list<SegmentItemPair> SegmentItemList;
+    SegmentItemList m_selectedItems;
 
-    std::list<SegmentItem*> m_selectedItems;
     bool m_segmentAddMode;
     bool m_segmentCopyMode;
-
+    QPoint m_clickPoint;
 };
 
 #endif

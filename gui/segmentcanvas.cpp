@@ -693,6 +693,8 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 
     if (item) {
         m_currentItem = item;
+	m_currentItemStartX = item->x();
+	m_clickPoint = e->pos();
         return;
     }
 }
@@ -708,7 +710,9 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 void SegmentMover::handleMouseMove(QMouseEvent *e)
 {
     if (m_currentItem) {
-	m_currentItem->setStartTime(m_canvas->grid().snapX(e->pos().x()));
+	int x = e->pos().x() - m_clickPoint.x();
+	m_currentItem->setStartTime(m_canvas->grid().snapX
+				    (m_currentItemStartX + x));
         m_currentItem->setY(m_canvas->grid().snapY(e->pos().y()));
         m_canvas->canvas()->update();
     }
@@ -799,12 +803,12 @@ SegmentSelector::clearSelected()
 {
     // For the moment only clear all selected from the list
     //
-    std::list<SegmentItem*>::iterator it;
+    SegmentItemList::iterator it;
     for (it = m_selectedItems.begin();
          it != m_selectedItems.end();
          it++)
     {
-        (*it)->setSelected(false, m_canvas->getSegmentBrush());
+        it->second->setSelected(false, m_canvas->getSegmentBrush());
     }
 
     // now clear the list
@@ -834,6 +838,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
     if (item)
     {
         m_currentItem = item;
+	m_clickPoint = e->pos();
         selectSegmentItem(m_currentItem);
         emit updateSegmentTrackAndStartTime(m_currentItem);
     }
@@ -847,7 +852,9 @@ SegmentSelector::selectSegmentItem(SegmentItem *selectedItem)
     // then don't set the m_currentItem
     //
     selectedItem->setSelected(true, m_canvas->getHighlightBrush());
-    m_selectedItems.push_back(selectedItem);
+    m_selectedItems.push_back(SegmentItemPair
+			      (QPoint(selectedItem->x(), selectedItem->y()),
+			       selectedItem));
     m_canvas->canvas()->update();
 }
 
@@ -866,29 +873,28 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
 void
 SegmentSelector::handleMouseMove(QMouseEvent *e)
 {
-    if (m_currentItem) {
+    if (!m_currentItem) return;
+    if (m_segmentCopyMode)
+    {
+	std::cout << "Segment quick copy mode not implemented" << std::endl;
+	return;
+    }
 
-        if (m_segmentCopyMode)
-        {
-            std::cout << "Segment quick copy mode not implemented" << std::endl;
-        }
-        else
-        {
-            if (m_currentItem->isSelected())
-            {
-                std::list<SegmentItem*>::iterator it;
-
-                for (it = m_selectedItems.begin();
-                     it != m_selectedItems.end();
-                     it++)
-                {
-		    (*it)->setStartTime(m_canvas->grid().snapX(e->pos().x()));
-                    (*it)->setY(m_canvas->grid().snapY(e->pos().y()));
-                    m_canvas->canvas()->update();
-                    emit updateSegmentTrackAndStartTime(*it);
-                }
-            }
-        }
+    if (m_currentItem->isSelected())
+    {
+	SegmentItemList::iterator it;
+	
+	for (it = m_selectedItems.begin();
+	     it != m_selectedItems.end();
+	     it++)
+	{
+	    int x = e->pos().x() - m_clickPoint.x(),
+		y = e->pos().y() - m_clickPoint.y();
+	    it->second->setStartTime(m_canvas->grid().snapX(it->first.x() + x));
+	    it->second->setY(m_canvas->grid().snapY(it->first.y() + y));
+	    m_canvas->canvas()->update();
+	    emit updateSegmentTrackAndStartTime(it->second);
+	}
     }
 }
 
