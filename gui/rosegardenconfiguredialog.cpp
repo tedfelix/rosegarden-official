@@ -337,10 +337,22 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     addTab(frame, i18n("Font"));
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 4, 2, 10, 5);
+    layout = new QGridLayout(frame, 5, 2, 10, 5);
 
-    layout->addWidget(new QLabel(i18n("Default spacing"), frame), 0, 0);
+    layout->addWidget(new QLabel(i18n("Default layout mode"), frame), 0, 0);
+
+    m_layoutMode = new QComboBox(frame);
+    m_layoutMode->setEditable(false);
+    m_layoutMode->insertItem(i18n("Linear Layout"));
+    m_layoutMode->insertItem(i18n("Page Layout"));
+    int defaultLayoutMode = m_cfg->readNumEntry("layoutmode", 0);
+    if (defaultLayoutMode >= 0 && defaultLayoutMode <= 1) {
+	m_layoutMode->setCurrentItem(defaultLayoutMode);
+    }
+    layout->addWidget(m_layoutMode, 0, 1);
     
+    layout->addWidget(new QLabel(i18n("Default spacing"), frame), 1, 0);
+
     m_spacing = new QComboBox(frame);
     m_spacing->setEditable(false);
 
@@ -358,9 +370,9 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 	}
     }
 
-    layout->addWidget(m_spacing, 0, 1);
+    layout->addWidget(m_spacing, 1, 1);
 
-    layout->addWidget(new QLabel(i18n("Default smoothing"), frame), 1, 0);
+    layout->addWidget(new QLabel(i18n("Default smoothing"), frame), 2, 0);
     
     m_smoothing = new QComboBox(frame);
     m_smoothing->setEditable(false);
@@ -379,19 +391,19 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 	}
     }
 
-    layout->addWidget(m_smoothing, 1, 1);
+    layout->addWidget(m_smoothing, 2, 1);
     
     m_colourQuantize = new QCheckBox
 	(i18n("Show smoothed notes in a different colour"), frame);
     bool defaultColourQuantize = m_cfg->readBoolEntry("colourquantize", true);
     m_colourQuantize->setChecked(defaultColourQuantize);
-    layout->addWidget(m_colourQuantize, 2, 1);
+    layout->addWidget(m_colourQuantize, 3, 1);
     
     m_showUnknowns = new QCheckBox
 	(i18n("Show non-notation events as question marks"), frame);
     bool defaultShowUnknowns = m_cfg->readBoolEntry("showunknowns", true);
     m_showUnknowns->setChecked(defaultShowUnknowns);
-    layout->addWidget(m_showUnknowns, 3, 1);
+    layout->addWidget(m_showUnknowns, 4, 1);
     
     addTab(frame, i18n("Layout"));
 
@@ -534,6 +546,7 @@ NotationConfigurationPage::apply()
     std::vector<int> s = NotationHLayout::getAvailableSpacings();
     m_cfg->writeEntry("spacing", s[m_spacing->currentItem()]);
 
+    m_cfg->writeEntry("layoutmode", m_layoutMode->currentItem());
     m_cfg->writeEntry("smoothing",
 		      m_smoothing->currentItem() + Note::Shortest);
     m_cfg->writeEntry("colourquantize", m_colourQuantize->isChecked());

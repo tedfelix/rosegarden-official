@@ -313,7 +313,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_currentStaff = 0;
     m_staffs[0]->setCurrent(true);
 
-    m_hlayout->setPageMode(false);
+    m_config->setGroup("Notation Options");
+    int layoutMode = m_config->readNumEntry("layoutmode", 0);
+
+    m_hlayout->setPageMode(layoutMode == 1);
     m_hlayout->setPageWidth(getPageWidth());
 
     try {
