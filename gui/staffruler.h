@@ -30,19 +30,6 @@
 class QCanvasRectangleGroupable;
 class QCanvasLineGroupable;
 
-/**
- * An interface for canvas items which are capable of handling
- * mouse events
- */
-class ActiveItem
-{
-public:
-    virtual void handleMousePress(QMouseEvent*) = 0;
-    virtual void handleMouseMove(QMouseEvent*) = 0;
-    virtual void handleMouseRelease(QMouseEvent*) = 0;
-};
-
-
 class PositionCursor : public QObject, public QCanvasItemGroup, public ActiveItem
 {
     Q_OBJECT
