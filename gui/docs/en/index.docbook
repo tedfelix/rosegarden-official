@@ -788,6 +788,38 @@
 	  .sf2 file that you are using instead of a .rgd file.
 	</para>
 
+	<sect3 id="studio-variations">
+	  <title>Variations</title>
+
+	  <para>
+	    Some MIDI devices (for example, those from Roland)
+	    organise their program names using a scheme known as
+	    "variations".  For these devices, you generally want to
+	    select a program by first selecting the basic program name
+	    &mdash; such as a piano &mdash; and then selecting one
+	    of a set of variations on that program &mdash; such as an
+	    electric piano.  This is in contrast to General MIDI-based
+	    synths, which organise their programs into banks and
+	    expect you to choose a bank first and then a program from
+	    that bank.
+	  </para>
+
+	  <para>
+	    Rosegarden can support devices that use variations, but
+	    you still have to enter the program names in a bank
+	    format.  Internally, devices that use variations still use
+	    MIDI bank select controllers to choose between the
+	    variations; you need to find out from your synth's
+	    documentation whether your device uses the LSB or MSB bank
+	    select to choose variations, and which bank number
+	    corresponds to which variation.  You can then enter the
+	    banks as normal, and use the "Show Variation list based on
+	    MSB/LSB" option on the bank dialog to tell Rosegarden to
+	    show variations instead of banks when displaying that
+	    device in an instrument parameter box.
+	  </para>
+	</sect3>
+
       </sect2>
 
       <sect2 id="studio-midi-filters">
@@ -2434,7 +2466,12 @@
          Invokes a composition duration change dialog.
        </action>
 
-		  This offers a way of changing the start and end bars of the composition.
+		  This allows you to change the overall duration of
+		  the composition.  This duration sets a hard limit
+		  (as a number of bars) on the scrollable width of the
+		  main window and the length of time you can play or
+		  record before the composition is deemed to have
+		  ended.  The default is 100 bars.
 
       </para>
      </listitem>
@@ -2532,15 +2569,15 @@
 	 <term>
       <menuchoice>
 	   <guimenu>Segments</guimenu>
-	   <guimenuitem>Open in Event Editor</guimenuitem>
+	   <guimenuitem>Open in Event List Editor</guimenuitem>
       </menuchoice>
      </term>
 	 <listitem>
       <para>
        <action> Opens all of the currently
-		selected segments together in a event editor.
+		selected segments together in a event-list editor.
        </action>
-        See <link linkend="event-view">event editor</link>.
+        See <link linkend="event-view">event-list editor</link>.
       </para>
      </listitem>
 	</varlistentry>  
@@ -2555,14 +2592,13 @@
      </term>
 	 <listitem>
       <para>
-       <action>Invokes a quantization dialog for quantizing the current selections.
+       <action>Invokes a quantization dialog for quantizing the current selection.
        </action>
         See <link linkend="nv-quantization">quantization</link>.
       </para>
      </listitem>
 	</varlistentry>  
 
-    <!-- TODO -->
     <varlistentry id="commands-main-segments-rescale">
 	 <term>
       <menuchoice>
@@ -2572,13 +2608,26 @@
      </term>
 	 <listitem>
       <para>
-       <action>Invokes a rescale dialog.  Need more info on how this works. 
+       <action>Allows you to stretch or squash segments in time.
        </action>
+
+		  This option invokes a rescale dialog, which allows
+		  you to specify a ratio of timings that is then
+		  applied to the selected segments.  This has the
+		  result of stretching (slowing down) or squashing
+		  (speeding up) the selected segments, changing their
+		  durations accordingly.
+
+		</para>
+		<para>
+		  This only applies to segments containing MIDI
+		  events, not to audio segments. Rosegarden does not
+		  currently provide native support for audio
+		  time-stretching.
       </para>
      </listitem>
 	</varlistentry>  
 
-    <!-- TODO -->
     <varlistentry id="commands-main-segments-auto-split">
 	 <term>
       <menuchoice>
@@ -2588,13 +2637,23 @@
      </term>
 	 <listitem>
       <para>
-       <action> Not sure what this does (appears to be currently broken).
+       <action>
+		Splits the selected segments on silences.
        </action>
+
+		  This function works slightly differently depending
+		  on whether the selected segments contain audio or
+		  MIDI data.  For audio segments, it offers you a
+		  dialog in which you can choose a threshold below
+		  which the segment is considered "silent"; it then
+		  splits the segment whenever its amplitude falls
+		  below this threshold.  For MIDI segments, it simply
+		  splits the segment everywhere that a full bar of
+		  silence occurs.
       </para>
      </listitem>
 	</varlistentry>  
 
-    <!-- TODO -->
     <varlistentry id="commands-main-segments-split-by-pitch">
 	 <term>
       <menuchoice>
@@ -2604,8 +2663,33 @@
      </term>
 	 <listitem>
       <para>
-       <action>Invokes a split by pitch dialog.  Not sure was this does yet either.
+       <action>Splits the currently selected segments into higher and
+       lower parts.
        </action>
+
+		  This function invokes a dialog allowing you to
+		  choose a pitch as a "split point", and then splits
+		  the selected segments in half with all the notes on
+		  or above that split point in the "higher" segment
+		  and all the notes below it in the "lower".
+
+		</para>
+		<para>
+		  If the music in the segment consists of two separate
+		  parts (e.g. left and right hand piano parts) that
+		  are not always completely on either side of a single
+		  split point, you may with to select the "ranging
+		  split-point" option.  If this is selected,
+		  Rosegarden will attempt to track the two parts as
+		  they move up and down, usually doing a slightly
+		  better job of separating out notes that were
+		  intended to lie in the two separate parts.
+
+		</para>
+		<para>
+		  The resulting segments are both created on the same
+		  track, with one overlapping the other.
+		  
       </para>
      </listitem>
 	</varlistentry>  

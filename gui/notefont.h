@@ -161,7 +161,8 @@ private:
         SizeData() : m_stemThickness(-1),
                      m_beamThickness(-1),
                      m_staffLineThickness(-1),
-                     m_borderX(-1), m_borderY(-1) { }
+                     m_borderX(-1), m_borderY(-1),
+		     m_fontHeight(-1) { }
         ~SizeData() { }
 
         void setStemThickness(unsigned int i) {
@@ -179,6 +180,9 @@ private:
         void setBorderY(unsigned int y) {
             m_borderY = (int)y;
         }
+	void setFontHeight(unsigned int h) {
+	    m_fontHeight = (int)h;
+	}
 
         bool getStemThickness(unsigned int &i) const {
             if (m_stemThickness >= 0) {
@@ -208,6 +212,13 @@ private:
             else y = 0;
             return (m_borderX >= 0 || m_borderY >= 0);
         }
+
+	bool getFontHeight(unsigned int &h) const {
+	    if (m_fontHeight >= 0) {
+		h = (unsigned int)m_fontHeight;
+		return true;
+	    } else return false;
+	}	
        
     private:
         int m_stemThickness;
@@ -215,6 +226,7 @@ private:
         int m_staffLineThickness;
         int m_borderX;
         int m_borderY;
+	int m_fontHeight;
     };
 
     //--------------- Data members ---------------------------------

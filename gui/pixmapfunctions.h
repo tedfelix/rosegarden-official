@@ -35,6 +35,22 @@ public:
      * holes in the middle of the image.  This is more usually what we
      * want than the default behaviour of createHeuristicMask.
      *
+     * The rgb value specifies the colour to treat as background.
+     *
+     * This function is slow.
+     */
+    static QBitmap generateMask(const QPixmap &map, const QRgb &rgb);
+
+    /**
+     * Generate a heuristic mask for the given pixmap.  Unlike
+     * QPixmap::createHeuristicMask, this removes from the mask all
+     * pixels that are apparently "background" even if they appear in
+     * holes in the middle of the image.  This is more usually what we
+     * want than the default behaviour of createHeuristicMask.
+     *
+     * This function calculates its own estimated colour to match as
+     * background.
+     *
      * This function is slow.
      */
     static QBitmap generateMask(const QPixmap &map);

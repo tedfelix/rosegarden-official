@@ -26,6 +26,27 @@
 
 
 QBitmap
+PixmapFunctions::generateMask(const QPixmap &map, const QRgb &px)
+{
+    QImage i(map.convertToImage());
+    QImage im(i.width(), i.height(), 1, 2, QImage::LittleEndian);
+
+    for (int y = 0; y < i.height(); ++y) {
+	for (int x = 0; x < i.width(); ++x) {
+	    if (i.pixel(x, y) != px) {
+		im.setPixel(x, y, 1);
+	    } else {
+		im.setPixel(x, y, 0);
+	    }
+	}
+    }
+    
+    QBitmap m;
+    m.convertFromImage(im);
+    return m;
+}
+
+QBitmap
 PixmapFunctions::generateMask(const QPixmap &map)
 {
     QImage i(map.convertToImage());

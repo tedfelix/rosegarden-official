@@ -134,7 +134,8 @@ public:
     ~NotePixmapFactory();
 
     static std::set<std::string> getAvailableFontNames();
-    static std::vector<int> getAvailableSizes(std::string fontName); // sorted
+    static std::vector<int> getAvailableSizes(std::string fontName,
+					      bool screenOnly = true); // sorted
     static std::string getDefaultFont();
     static int getDefaultSize(std::string fontName);
 

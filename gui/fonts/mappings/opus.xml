@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rosegarden-font-encoding>
 
-<!-- The name here must match the filename in everything except case -->
-<rosegarden-font-encoding name="Petrucci">
+<rosegarden-font-encoding name="Opus">
 
 <!-- !!! check copyright -->
 <font-information
-        origin="Petrucci and Maestro are part of Finale, but other fonts use the same mappings."
-	copyright="Copyright Coda Inc"
+        origin="The Opus font is part of Sibelius."
+	copyright="Copyright Sibelius Software Ltd"
         mapped-by="Chris Cannam"
         type="scalable"
 	autocrop="yes"
         smooth="true"/>
 
 <font-requirements>
-	<font-requirement font-id="0" names="petrucci,maestro"/>
-	<font-requirement font-id="1" name="times new roman"/> <!-- text font -->
+	<font-requirement font-id="0" names="opus"/>
+	<font-requirement font-id="1" names="opus text,times new roman"/> <!-- text font -->
 </font-requirements>
 
 <font-sizes>
-	<font-scale font-height="4.0" beam-thickness="0.5" staff-line-thickness="0.18" stem-thickness="0.22" border-x="0" border-y="0"/>
-        <font-size note-height="4" font-height="16" beam-thickness="2" staff-line-thickness="1" stem-thickness="1" border-x="0" border-y="0"/>
-        <font-size note-height="6" font-height="24" beam-thickness="3" staff-line-thickness="1" stem-thickness="1" border-x="0" border-y="0"/>
-        <font-size note-height="8" font-height="32" beam-thickness="4" staff-line-thickness="1" stem-thickness="1" border-x="0" border-y="0"/>
-        <font-size note-height="10" font-height="40" beam-thickness="5" staff-line-thickness="1" stem-thickness="2" border-x="0" border-y="0"/>
-        <font-size note-height="12" font-height="48" beam-thickness="6" staff-line-thickness="2" stem-thickness="2" border-x="0" border-y="0"/>
+        <font-size note-height="4" beam-thickness="2" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>
+        <font-size note-height="6" beam-thickness="3" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>
+        <font-size note-height="8" beam-thickness="4" staff-line-thickness="1" stem-thickness="1" border-x="1" border-y="1"/>
+        <font-size note-height="10" beam-thickness="5" staff-line-thickness="1" stem-thickness="2" border-x="1" border-y="1"/>
+        <font-size note-height="12" beam-thickness="6" staff-line-thickness="2" stem-thickness="2" border-x="1" border-y="1"/>
 </font-sizes>
 
 <font-symbol-map>
@@ -44,7 +42,7 @@
         <symbol name="MUSICAL SYMBOL BREVE" font-id="0" code="87"/>
         <symbol name="MUSICAL SYMBOL WHOLE NOTE" font-id="0" code="119"/>
         <symbol name="MUSICAL SYMBOL VOID NOTEHEAD" font-id="0" code="250"/>
-        <symbol name="MUSICAL SYMBOL NOTEHEAD BLACK" font-id="0" code="207"/>
+        <symbol name="MUSICAL SYMBOL NOTEHEAD BLACK" font-id="0" code="223"/>
 
 	<symbol name="MUSICAL SYMBOL X NOTEHEAD" font-id="0" code="192"/>
 

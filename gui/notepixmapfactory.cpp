@@ -236,7 +236,7 @@ string
 NotePixmapFactory::getDefaultFont()
 {
     set<string> fontNames = getAvailableFontNames();
-    if (fontNames.find("feta") != fontNames.end()) return "feta";
+    if (fontNames.find("Feta") != fontNames.end()) return "Feta";
     else if (fontNames.size() == 0) {
         KMessageBox::error(0, i18n("No note font names available, aborting"));
 	throw -1;
@@ -245,11 +245,14 @@ NotePixmapFactory::getDefaultFont()
 }
 
 vector<int>
-NotePixmapFactory::getAvailableSizes(string fontName)
+NotePixmapFactory::getAvailableSizes(string fontName, bool screenOnly)
 {
     try {
 	set<int> s(NoteFont(fontName).getSizes());
-	vector<int> v(s.begin(), s.end());
+	vector<int> v;
+	for (set<int>::iterator i = s.begin(); i != s.end(); ++i) {
+	    if (*i >= 3 && *i <= 16) v.push_back(*i);
+	}
 	std::sort(v.begin(), v.end());
 	return v;
     } catch (Rosegarden::Exception f) {
@@ -455,6 +458,8 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
                         m_noteBodyHeight + m_above + m_below);
 
     QPoint s0, s1;
+    unsigned int stemThickness = 1;
+    m_font->getStemThickness(stemThickness);
 
     if (isStemmed && params.m_drawStem) {
 
@@ -467,7 +472,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 	case NoteStyle::Normal:
 	case NoteStyle::Reversed:
 	    if (params.m_stemGoesUp ^ (hfix == NoteStyle::Reversed)) {
-		s0.setX(m_left + m_noteBodyWidth - 1);
+		s0.setX(m_left + m_noteBodyWidth - stemThickness);
 	    } else {
 		s0.setX(m_left);
 	    }
@@ -604,9 +609,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     }
 
     if (isStemmed && params.m_drawStem) {
-        unsigned int thickness;
-        m_font->getStemThickness(thickness);
-        for (unsigned int i = 0; i < thickness; ++i) {
+        for (unsigned int i = 0; i < stemThickness; ++i) {
             m_p.drawLine(s0, s1);
             m_pm.drawLine(s0, s1);
             ++s0.rx();
@@ -2004,7 +2007,9 @@ int NotePixmapFactory::getNoteBodyWidth(Note::Type type)
 
 int NotePixmapFactory::getNoteBodyHeight(Note::Type type)
     const {
-    return m_font->getHeight(m_style->getNoteHeadCharName(type).first) -2*m_origin.y();
+    // this is by definition
+    return m_font->getCurrentSize();
+//!!!    return m_font->getHeight(m_style->getNoteHeadCharName(type).first) -2*m_origin.y();
 }
 
 int NotePixmapFactory::getLineSpacing() const {
