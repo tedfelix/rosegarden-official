@@ -1106,10 +1106,12 @@ void MetronomeMmapper::dump()
             }
 
             new (bufPos) MappedEvent(m_metronome->getInstrument(),
+				     MappedEvent::MidiNoteOneShot,
                                      m_metronome->getPitch(),
                                      velocity,
                                      eventTime,
-                                     m_tickDuration);
+                                     m_tickDuration,
+				     Rosegarden::RealTime::zeroTime);
         }
 
         ++bufPos;

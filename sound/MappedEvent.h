@@ -215,31 +215,6 @@ public:
                 const RealTime &eventTime,
                 const RealTime &duration);
 
-    // A shortcut for creating MIDI/Internal MappedEvents
-    // from base properties
-    //
-    MappedEvent(InstrumentId id,
-                MidiByte pitch,
-                MidiByte velocity,
-                const RealTime &absTime,
-                const RealTime &duration):
-        m_trackId(0),
-        m_instrument(id),
-        m_type(MidiNote),
-        m_data1(pitch),
-        m_data2(velocity),
-        m_eventTime(absTime),
-        m_duration(duration),
-        m_audioStartMarker(RealTime(0,0)),
-        m_dataBlockId(0),
-        m_isPersistent(false),
-        m_runtimeSegmentId(-1),
-        m_autoFade(false),
-        m_fadeInTime(Rosegarden::RealTime::zeroTime),
-        m_fadeOutTime(Rosegarden::RealTime::zeroTime),
-        m_recordedChannel(0),
-        m_recordedPort(0) {}
-
     // A general MappedEvent constructor for any MappedEvent type
     //
     MappedEvent(InstrumentId id,
