@@ -616,7 +616,10 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 	} else if (m_clickedStaff >= 0) {
 
 	    // If we clicked on no event but on a staff, move the
-	    // insertion cursor to the point where we clicked
+	    // insertion cursor to the point where we clicked. 
+	    //!!! Actually we only really want this to happen if
+	    // we aren't double-clicking -- consider using a timer
+	    // to establish whether a double-click is going to happen
 
 	    NotationStaff *staff = m_nParentView->getStaff(m_clickedStaff);
 	    if (staff) {

@@ -28,15 +28,12 @@
 #include "RulerScale.h"
 #include "rosegardenguidoc.h"
 
-namespace Rosegarden {
-    class RulerScale;
-}
 
-
-// Creates a canvas widget that reacts to mouse clicks and
-// sends relevant signals to modify position pointer and
-// playback/looping states.
-//
+/**
+ * LoopRuler is a widget that shows bar and beat durations on a
+ * ruler-like scale, and reacts to mouse clicks by sending relevant
+ * signals to modify position pointer and playback/looping states.
+*/
 
 class LoopRuler : public QWidget
 {
@@ -60,7 +57,8 @@ public:
 
 public slots:
     void slotSetLoopingMode(bool value);
-    void slotSetLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop);
+    void slotSetLoopMarker(Rosegarden::timeT startLoop,
+			   Rosegarden::timeT endLoop);
 
 protected:
     // ActiveItem interface
@@ -90,7 +88,6 @@ private:
     //--------------- Data members ---------------------------------
     int  m_height;
     bool m_invert;
-    int  m_lastXPaint;
     int  m_currentXOffset;
     int  m_width;
 

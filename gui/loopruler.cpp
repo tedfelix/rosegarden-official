@@ -37,7 +37,6 @@ LoopRuler::LoopRuler(RulerScale *rulerScale,
     : QWidget(parent, name),
       m_height(height),
       m_invert(invert),
-      m_lastXPaint(0),
       m_currentXOffset(0),
       m_width(-1),
       m_rulerScale(rulerScale),
@@ -87,19 +86,19 @@ QSize LoopRuler::minimumSizeHint() const
 void LoopRuler::paintEvent(QPaintEvent* e)
 {
     QPainter paint(this);
-    //paint.setClipRegion(e->region());
-    //paint.setClipRect(e->rect().normalize());
+
+    paint.setClipRegion(e->region());
+    paint.setClipRect(e->rect().normalize());
 
     paint.setBrush(colorGroup().foreground());
     drawBarSections(&paint);
     drawLoopMarker(&paint);
-
-    m_lastXPaint = e->rect().x();
 }
 
 void LoopRuler::drawBarSections(QPainter* paint)
 {
-    QRect clipRect = visibleRect(); //paint->clipRegion().boundingRect();
+//    QRect clipRect = visibleRect(); //paint->clipRegion().boundingRect();
+    QRect clipRect = paint->clipRegion().boundingRect();
 
     int firstBar = m_rulerScale->getBarForX(clipRect.x() - m_currentXOffset);
     int  lastBar = m_rulerScale->getLastVisibleBar();

@@ -485,15 +485,15 @@ void NotationView::setupActions()
     KStdAction::close (this, SLOT(closeWindow()),          actionCollection());
 
     // Edit menu
-    new KAction(i18n("Select from Start"), 0, this,
+    new KAction(i18n("Select from St&art"), 0, this,
 		SLOT(slotEditSelectFromStart()), actionCollection(),
 		"select_from_start");
 
-    new KAction(i18n("Select to End"), 0, this,
+    new KAction(i18n("Select to &End"), 0, this,
 		SLOT(slotEditSelectToEnd()), actionCollection(),
 		"select_to_end");
 
-    new KAction(i18n("Select Whole Staff"), 0, this,
+    new KAction(i18n("Select &Whole Staff"), 0, this,
 		SLOT(slotEditSelectWholeStaff()), actionCollection(),
 		"select_whole_staff");
 
@@ -1000,11 +1000,9 @@ bool NotationView::applyLayout(int staffNo)
 
     readjustCanvasSize();
     if (m_topBarButtons) {
-	m_topBarButtons->setMinimumWidth(canvas()->width());
 	m_topBarButtons->update();
     }
     if (m_bottomBarButtons) {
-	m_bottomBarButtons->setMinimumWidth(canvas()->width());
 	m_bottomBarButtons->update();
     }
 

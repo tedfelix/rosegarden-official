@@ -263,8 +263,8 @@ MultiViewCommandHistory::slotRedoAboutToShow()
 void
 MultiViewCommandHistory::updateButtons()
 {
-    updateButton("Undo", KStdAction::stdName(KStdAction::Undo), m_undoStack);
-    updateButton("Redo", KStdAction::stdName(KStdAction::Redo), m_redoStack);
+    updateButton("Und&o", KStdAction::stdName(KStdAction::Undo), m_undoStack);
+    updateButton("Re&do", KStdAction::stdName(KStdAction::Redo), m_redoStack);
 }
 
 
@@ -283,7 +283,9 @@ MultiViewCommandHistory::updateButton(const QString &text,
 	    action->setText(i18n("Nothing to " + text));
 	} else {
 	    action->setEnabled(true);
-	    action->setText(i18n(text + " " + stack.top()->name()));
+	    QString commandName = stack.top()->name();
+	    commandName.replace(QRegExp("&"), "");
+	    action->setText(i18n(text + " " + commandName));
 	}
     }
 }

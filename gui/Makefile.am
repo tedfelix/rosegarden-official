@@ -54,6 +54,7 @@ rosegarden_SOURCES = \
 	spline.cpp \
 	staffline.cpp \
 	staffruler.cpp \
+	textruler.cpp \
         trackbuttons.cpp \
 	trackeditor.cpp \
         trackheader.cpp \
