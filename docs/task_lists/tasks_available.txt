@@ -50,4 +50,10 @@ Tasks suggested by Bownie (MIDI and audio guy):
  -- Someone should investigate and possibly implement the LADSPA plugins
  as well (www.plugin.org.uk, www.ladspa.org).
 
+ -- a virtual MIDI keyboard for aRTS.  With a keyboard GUI that
+ allows sending of MIDI events to any aRTS capable MIDI client (i.e
+ the Rosegarden MIDI record port).  Also has a MIDI IN port that
+ gives visual feedback on any events passing through - what keys are
+ being played.  Useful little gadget for those with no external MIDI
+ devices who are keen to play around with MIDI.
 
