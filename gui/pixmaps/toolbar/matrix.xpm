@@ -11,7 +11,7 @@ static char *magick[] = {
 /* pixels */
 "                      ",
 "                      ",
-"   OOOOOOOOOOOOOOOOO  ",
+"                      ",
 "   XXXXXXXXXXXXXXXXX  ",
 "   ..O...O...O...O..  ",
 "                      ",
@@ -28,7 +28,7 @@ static char *magick[] = {
 "                      ",
 "   ..O...O...O...O..  ",
 "   XXXXXXXXXXXXXXXXX  ",
-"   OOOOOOOOOOOOOOOOO  ",
+"                      ",
 "                      ",
 "                      "
 };

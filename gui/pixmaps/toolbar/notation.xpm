@@ -23,12 +23,12 @@ static char *magick[] = {
 "       X        X     ",
 "       X        X     ",
 "       X     .ooX     ",
-"       X     xXXXo    ",
-"       X    oXXXXo    ",
-"    .ooX    oXXXx     ",
-"    xXXXo    oO.      ",
-"   oXXXXo             ",
-"   oXXXx              ",
+"       X     xXXX     ",
+"       X    oXXXX     ",
+"    .ooX    oXXXO     ",
+"    xXXX     oO.      ",
+"   oXXXX              ",
+"   oXXXO              ",
 "    oO.               ",
 "                      "
 };
