@@ -278,7 +278,8 @@ public:
 
 #ifdef HAVE_LIBJACK
 
-    jack_port_t* getJackInputPort() { return m_audioInputPort; }
+    jack_port_t* getJackInputPortLeft() { return m_audioInputPortLeft; }
+    jack_port_t* getJackInputPortRight() { return m_audioInputPortRight; }
 
     jack_port_t* getJackOutputPortLeft() { return m_audioOutputPortLeft; }
     jack_port_t* getJackOutputPortRight() { return m_audioOutputPortRight; }
@@ -375,7 +376,8 @@ private:
     static int  jackXRun(void *);
 
     jack_client_t               *m_audioClient;
-    jack_port_t                 *m_audioInputPort;
+    jack_port_t                 *m_audioInputPortLeft;
+    jack_port_t                 *m_audioInputPortRight;
     jack_port_t                 *m_audioOutputPortLeft;
     jack_port_t                 *m_audioOutputPortRight;
 

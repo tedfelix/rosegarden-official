@@ -689,7 +689,7 @@ AlsaDriver::initialiseAudio()
     // Using JACK instead
     //
 
-    std::string jackClientName = "Rosegarden";
+    std::string jackClientName = "rosegarden";
 
     // attempt connection to JACK server
     //
@@ -717,20 +717,27 @@ AlsaDriver::initialiseAudio()
     std::cout << "AlsaDriver::initialiseAudio - JACK sample rate = "
               << _jackSampleRate << std::endl;
 
-    m_audioInputPort = jack_port_register(m_audioClient,
-                                          "Rosegarden input",
-                                          JACK_DEFAULT_AUDIO_TYPE,
-                                          JackPortIsInput|JackPortIsTerminal,
-                                          0);
+    m_audioInputPortLeft =
+        jack_port_register(m_audioClient,
+                           "in_1",
+                           JACK_DEFAULT_AUDIO_TYPE,
+                           JackPortIsInput|JackPortIsTerminal,
+                           0);
+    m_audioInputPortRight =
+        jack_port_register(m_audioClient,
+                           "in_1",
+                           JACK_DEFAULT_AUDIO_TYPE,
+                           JackPortIsInput|JackPortIsTerminal,
+                           0);
 
     m_audioOutputPortLeft = jack_port_register(m_audioClient,
-                                               "Rosegarden output 1",
+                                               "out_1",
                                                JACK_DEFAULT_AUDIO_TYPE,
                                                JackPortIsOutput,
                                                0);
 
     m_audioOutputPortRight = jack_port_register(m_audioClient,
-                                                "Rosegarden output 2",
+                                                "out_2",
                                                 JACK_DEFAULT_AUDIO_TYPE,
                                                 JackPortIsOutput,
                                                 0);
@@ -804,7 +811,14 @@ AlsaDriver::initialiseAudio()
 
     // now input
     if (jack_connect(m_audioClient, "alsa_pcm:in_1",
-                     jack_port_name(m_audioInputPort)))
+                     jack_port_name(m_audioInputPortLeft)))
+    {
+        std::cerr << "AlsaDriver::initialiseAudio - "
+                  << "cannot connect to JACK input port" << std::endl;
+    }
+
+    if (jack_connect(m_audioClient, "alsa_pcm:in_2",
+                     jack_port_name(m_audioInputPortRight)))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
                   << "cannot connect to JACK input port" << std::endl;
@@ -816,7 +830,7 @@ AlsaDriver::initialiseAudio()
         jack_port_get_total_latency(m_audioClient, m_audioOutputPortLeft);
 
     jack_nframes_t inputLatency = 
-        jack_port_get_total_latency(m_audioClient, m_audioInputPort);
+        jack_port_get_total_latency(m_audioClient, m_audioInputPortLeft);
 
     double latency = double(outputLatency) / double(_jackSampleRate);
 
@@ -2258,10 +2272,13 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         {
             // Get input buffer
             //
-            sample_t *inputBuffer = static_cast<sample_t*>
-                (jack_port_get_buffer(inst->getJackInputPort(),
+            sample_t *inputBufferLeft = static_cast<sample_t*>
+                (jack_port_get_buffer(inst->getJackInputPortLeft(),
                                       nframes));
 
+            sample_t *inputBufferRight = static_cast<sample_t*>
+                (jack_port_get_buffer(inst->getJackInputPortRight(),
+                                      nframes));
             /*
             std::cout << "AlsaDriver::jackProcess - recording samples"
                       << std::endl;
@@ -2275,14 +2292,16 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
             for (unsigned int i = 0; i < nframes; i++)
             {
-                b2 = (unsigned char)((long)(inputBuffer[i] * _16bitSampleMax)& 0xff);
-                b1 = (unsigned char)((long)(inputBuffer[i] * _16bitSampleMax) >> 8);
+                b2 = (unsigned char)((long)
+                        (inputBufferLeft[i] * _16bitSampleMax)& 0xff);
+                b1 = (unsigned char)((long)
+                        (inputBufferLeft[i] * _16bitSampleMax) >> 8);
                 buffer += b2;
                 buffer += b1;
 
                 // We're monitoring levels here 
                 //
-                inputLevel += fabs(inputBuffer[i]);
+                inputLevel += fabs(inputBufferLeft[i]);
 
             }
 
