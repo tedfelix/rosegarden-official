@@ -358,6 +358,9 @@ RosegardenProgressDialog* CurrentProgressDialog::m_currentProgressDialog = 0;
 #define ROTARY_MAX (1.75 * M_PI)
 #define ROTARY_RANGE (ROTARY_MAX - ROTARY_MIN)
 
+static RosegardenTextFloat* _float = 0;
+static QTimer *_floatTimer = 0;
+
 RosegardenRotary::RosegardenRotary(QWidget *parent,
                                    float minValue,
                                    float maxValue,
@@ -381,18 +384,23 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
     m_buttonPressed(false),
     m_lastY(0),
     m_lastX(0),
-    m_knobColour(0, 0, 0),
-    m_float(new RosegardenTextFloat(this)),
-    m_floatTimer(new QTimer())
+    m_knobColour(0, 0, 0)
 {
+    if (!_float) _float = new RosegardenTextFloat(this);
+
+    if (!_floatTimer)
+    {
+        _floatTimer = new QTimer();
+    }
+
+    // connect timer
+    connect(_floatTimer, SIGNAL(timeout()), this,
+            SLOT(slotFloatTimeout()));
+    _float->hide();
+
     QToolTip::add(this,
                  "Click and drag up and down or left and right to modify");
     setFixedSize(size, size);
-
-    // connect timer
-    connect(m_floatTimer, SIGNAL(timeout()), this, SLOT(slotFloatTimeout()));
-
-    m_float->hide();
 
     // set the initial position
     drawPosition();
@@ -400,10 +408,25 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
     emit valueChanged(m_snapPosition);
 }
 
+// If we destroy any Rotary then destroy the associated float
+// so that we recreate on the next 
+
+RosegardenRotary::~RosegardenRotary()
+{
+    // Remove this connection
+    //
+    disconnect(_floatTimer, SIGNAL(timeout()), this,
+               SLOT(slotFloatTimeout()));
+
+    delete _float;
+    _float = 0;
+}
+
+
 void
 RosegardenRotary::slotFloatTimeout()
 {
-    m_float->hide();
+    if (_float) _float->hide();
 }
 
 void
@@ -624,22 +647,22 @@ RosegardenRotary::mousePressEvent(QMouseEvent *e)
         m_lastY = e->y();
         m_lastX = e->x();
 
-        // draw on the float text
-        m_float->setText(QString("%1").arg(m_snapPosition));
+        if (!_float) _float = new RosegardenTextFloat(this);
 
-        // Reposition - remap to topLevel or dialog to please move().
-        //
-        // (Note that we're remapping to the local widget firstly so
-        //  the QPoint only has to be zero)
+        // Reposition - we need to sum the relative positions up to the
+        // topLevel or dialog to please move(). Move just top/right of the 
+        // rotary
         //
         QPoint totalPos = mapTo(topLevelWidget(), QPoint(0, 0));
+        //_float->reparent(this, totalPos + QPoint(width() + 2, -height()/2));
+        _float->reparent(this);
+        _float->move(totalPos + QPoint(width() + 2, -height()/2));
 
-        // Move just top/right of the rotary
-        //
-        m_float->move(totalPos + QPoint(width() + 2, -height()/2));
+        // draw on the float text
+        _float->setText(QString("%1").arg(m_snapPosition));
 
         // Show
-        m_float->show();
+        _float->show();
     }
     else if (e->button() == RightButton) // reset to centre position
     {
@@ -662,7 +685,7 @@ RosegardenRotary::mouseReleaseEvent(QMouseEvent *e)
 
         // Hide the float text
         //
-        if (m_float) m_float->hide();
+        if (_float) _float->hide();
 
     }
 }
@@ -698,7 +721,7 @@ RosegardenRotary::mouseMoveEvent(QMouseEvent *e)
         emit valueChanged(m_snapPosition);
 
         // draw on the float text
-        m_float->setText(QString("%1").arg(m_snapPosition));
+        _float->setText(QString("%1").arg(m_snapPosition));
     }
 }
 
@@ -719,27 +742,21 @@ RosegardenRotary::wheelEvent(QWheelEvent *e)
     snapPosition();
     drawPosition();
 
+    if (!_float) _float = new RosegardenTextFloat(this);
+
     // draw on the float text
-    m_float->setText(QString("%1").arg(m_snapPosition));
+    _float->setText(QString("%1").arg(m_snapPosition));
 
     // Reposition - we need to sum the relative positions up to the
-    // topLevel or dialog to please move().
+    // topLevel or dialog to please move(). Move just top/right of the rotary
     //
-    QWidget *par = parentWidget();
-    QPoint totalPos = this->pos();
-
-    while (par->parentWidget() && !par->isTopLevel() && !par->isDialog())
-    {
-        totalPos += par->pos();
-        par = par->parentWidget();
-    }
-    // Move just top/right of the rotary
-    //
-    m_float->move(totalPos + QPoint(width() + 2, -height()/2));
-    m_float->show();
+    QPoint totalPos = mapTo(topLevelWidget(), QPoint(0, 0));
+    _float->reparent(this);
+    _float->move(totalPos + QPoint(width() + 2, -height()/2));
+    _float->show();
 
     // one shot, 500ms
-    m_floatTimer->start(500, true);
+    _floatTimer->start(500, true);
 
     // set it to show for a timeout value
     emit valueChanged(m_snapPosition);
@@ -754,8 +771,11 @@ RosegardenRotary::setPosition(float position)
     snapPosition();
     drawPosition();
 
+    if (!_float) _float = new RosegardenTextFloat(this);
+    _float->reparent(this);
+
     // modify tip
-    m_float->setText(QString("%1").arg(m_snapPosition));
+    _float->setText(QString("%1").arg(m_snapPosition));
 }
 
 
@@ -1148,26 +1168,33 @@ RosegardenTextFloat::RosegardenTextFloat(QWidget *parent):
             WStyle_Customize  | WStyle_NoBorder | WStyle_StaysOnTop),
     m_text("")
 {
-    QWidget *par = parentWidget();
-    QPoint pos = parent->pos() + par->pos();
+    reparent(parentWidget());
+    resize(20, 20);
+}
+
+void
+RosegardenTextFloat::reparent(QWidget *newParent)
+{
+    QPoint position = newParent->pos();
 
     // Get position and reparent to either top level or dialog
     //
-    while (par->parentWidget() && !par->isTopLevel() && !par->isDialog())
+    while (newParent->parentWidget() && !newParent->isTopLevel() 
+           && !newParent->isDialog())
     {
-        par = par->parentWidget();
-        pos += par->pos();
+        newParent = newParent->parentWidget();
+        position += newParent->pos();
     }
 
     // Position this widget to the right of the parent
     //
     //move(pos + QPoint(parent->width() + 5, 5));
 
-    reparent(par, WStyle_Customize  | WStyle_NoBorder | WStyle_StaysOnTop,
-             pos + QPoint(20, 5));
-
-    resize(20, 20);
+    QWidget::reparent(newParent, 
+             WStyle_Customize  | WStyle_NoBorder | WStyle_StaysOnTop,
+             position + QPoint(20, 5));
 }
+
 
 void
 RosegardenTextFloat::paintEvent(QPaintEvent *e)

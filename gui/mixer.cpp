@@ -1391,10 +1391,10 @@ MidiMixerWindow::setupTabs()
 
             // MIDI Mixer label
             //
-            /*
-            QLabel *label = new QLabel(QString("%1 %2").arg(strtoqstr(dev->getName()))
-                        .arg(i18n("MIDI Mixer")), m_tabFrame);
-                        */
+            //QLabel *label = new QLabel(QString("%1 %2").
+                //arg(strtoqstr(dev->getName()))
+                //.arg(i18n("MIDI Mixer")), m_tabFrame);
+
             QLabel *label = new QLabel("", m_tabFrame);
             mainLayout->addMultiCellWidget(label, 0, 0, 0, 16, Qt::AlignCenter);
 
@@ -1407,18 +1407,19 @@ MidiMixerWindow::setupTabs()
 
             // meter label
             //
-            /*
-            label = new QLabel(i18n("Meter"), m_tabFrame);
-            mainLayout->addWidget(label, controls.size() + 1, 0, Qt::AlignCenter);
-            */
+            //label = new QLabel(i18n("Meter"), m_tabFrame);
+            //mainLayout->addWidget(label, 
+                //controls.size() + 1, 0, Qt::AlignCenter);
 
             // volume label
             label = new QLabel(i18n("Volume"), m_tabFrame);
-            mainLayout->addWidget(label, controls.size() + 2, 0, Qt::AlignCenter);
+            mainLayout->addWidget(label, controls.size() + 2, 0, 
+                    Qt::AlignCenter);
 
             // instrument label
             label = new QLabel(i18n("Instrument"), m_tabFrame);
-            mainLayout->addWidget(label, controls.size() + 3, 0, Qt::AlignCenter);
+            mainLayout->addWidget(label, controls.size() + 3, 0, 
+                    Qt::AlignCenter);
 
             int posCount = 1;
             int firstInstrument = -1;
@@ -1434,6 +1435,7 @@ MidiMixerWindow::setupTabs()
                 //
                 if (firstInstrument == -1) firstInstrument = (*iIt)->getId();
 
+
                 // Add the controls
                 //
                 for (unsigned int i = 0; i < controls.size(); ++i)
@@ -1443,24 +1445,29 @@ MidiMixerWindow::setupTabs()
                     if (controls[i].getColourIndex() > 0) 
                     {
                         Rosegarden::Colour c =
-                        m_document->getComposition().getGeneralColourMap().getColourByIndex
-                                (controls[i].getColourIndex());
-                        knobColour = QColor(c.getRed(), c.getGreen(), c.getBlue());
+                            m_document->getComposition().getGeneralColourMap().
+                            getColourByIndex(controls[i].getColourIndex());
+
+                        knobColour = QColor(c.getRed(), 
+                                c.getGreen(), c.getBlue());
                     }
 
-                    RosegardenRotary *controller = new RosegardenRotary(m_tabFrame,
-                            controls[i].getMin(),
-                            controls[i].getMax(),
-                            1.0,
-                            5.0,
-                            controls[i].getDefault(),
-                            20);
+                    RosegardenRotary *controller = 
+                        new RosegardenRotary(m_tabFrame,
+                                controls[i].getMin(),
+                                controls[i].getMax(),
+                                1.0,
+                                5.0,
+                                controls[i].getDefault(),
+                                20);
+
                     controller->setKnobColour(knobColour);
 
 	            connect(controller, SIGNAL(valueChanged(float)),
 		            this, SLOT(slotControllerChanged(float)));
 
-                    mainLayout->addWidget(controller, i + 1, posCount, Qt::AlignCenter);
+                    mainLayout->addWidget(controller, i + 1, posCount, 
+                            Qt::AlignCenter);
 
                     // Store the rotary
                     //
@@ -1472,37 +1479,44 @@ MidiMixerWindow::setupTabs()
                 // Pan rotary
                 //
                 MidiMixerVUMeter *meter = 
-                    new MidiMixerVUMeter(m_tabFrame, VUMeter::FixedHeightVisiblePeakHold, 6, 30);
-                mainLayout->addWidget(meter, controls.size() + 1, posCount, Qt::AlignCenter);
+                    new MidiMixerVUMeter(m_tabFrame,
+                            VUMeter::FixedHeightVisiblePeakHold, 6, 30);
+                mainLayout->addWidget(meter, controls.size() + 1, 
+                        posCount, Qt::AlignCenter);
                 m_faders[faderCount]->m_vuMeter = meter;
 
                 // Volume fader
                 //
-                RosegardenFader *fader = new RosegardenFader(0, 127, 100, 20, 80, m_tabFrame);
-                mainLayout->addWidget(fader, controls.size() + 2, posCount, Qt::AlignCenter);
-                //fader->setFader(float((*iIt)->getVolume()));
+                RosegardenFader *fader = 
+                    new RosegardenFader(0, 127, 100, 20, 80, m_tabFrame);
+                mainLayout->addWidget(fader, controls.size() + 2, 
+                        posCount, Qt::AlignCenter);
                 m_faders[faderCount]->m_volumeFader = fader;
+                //fader->setFader(float((*iIt)->getVolume()));
 
                 // Label
                 //
 	        QLabel *idLabel = new QLabel(QString("%1").
-                        arg((*iIt)->getId() - firstInstrument + 1), m_tabFrame, "idLabel");
-                mainLayout->addWidget(idLabel, controls.size() + 3, posCount, Qt::AlignCenter);
-                m_faders[faderCount]->m_id = (*iIt)->getId(); // store id in struct
+                        arg((*iIt)->getId() - firstInstrument + 1),
+                        m_tabFrame, "idLabel");
+
+                mainLayout->addWidget(idLabel, controls.size() + 3, 
+                        posCount, Qt::AlignCenter);
+
+                // store id in struct
+                m_faders[faderCount]->m_id = (*iIt)->getId();
 
                 // Connect them up
                 //
 	        connect(fader, SIGNAL(faderChanged(float)),
 		        this, SLOT(slotFaderLevelChanged(float)));
 
-/*
-	        connect(pan, SIGNAL(valueChanged(float)),
-		        this, SLOT(slotPanChanged(float)));
-*/
+	        //connect(pan, SIGNAL(valueChanged(float)),
+		        //this, SLOT(slotPanChanged(float)));
 
                 // Update all the faders and controllers
                 //
-                slotUpdateInstrument((*iIt)->getId());
+                //slotUpdateInstrument((*iIt)->getId());
 
                 // Increment counters
                 //

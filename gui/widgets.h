@@ -256,6 +256,10 @@ public:
 
     void setText(const QString &text);
 
+    // Reparent the float correctly by context
+    //
+    void reparent(QWidget *newParent);
+
 protected:
     virtual void paintEvent(QPaintEvent *e);
 
@@ -286,6 +290,7 @@ public:
                      int size = 20,
 		     TickMode ticks = NoTicks,
 		     bool snapToTicks = false);
+    ~RosegardenRotary();
 
     void setMinValue(float min) { m_minValue = min; }
     float getMinValue() const { return m_minValue; }
@@ -345,8 +350,6 @@ protected:
 
     QColor               m_knobColour;
 
-    RosegardenTextFloat *m_float;
-    QTimer              *m_floatTimer;
 };
 
 namespace Rosegarden { class Quantizer; }
