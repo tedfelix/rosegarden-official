@@ -471,6 +471,9 @@ const string Note::EventType = "note";
 //!!! worry about this later -- simple solution currently in place ain't bad
 const string Note::NotePropertyName = "duration";
 
+const string Note::TiedBackwardPropertyName = "TiedBackward";
+const string Note::TiedForwardPropertyName  = "TiedForward";
+
 const int Note::m_shortestTime       = 6;
 //const int Note::m_dottedShortestTime = 9;
 

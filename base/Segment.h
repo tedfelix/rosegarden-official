@@ -54,7 +54,7 @@ public:
      * Returns an event group id
      * The id is guaranteed to be unique within the track
      */
-    int getNextGroupId() const;
+//!!!    int getNextGroupId() const;
 
     /**
      * Expands events in the [from, to[ interval into 
@@ -123,7 +123,7 @@ protected:
     timeT m_startIdx;
     unsigned int m_instrument;
 
-    mutable int m_groupId;
+//!!!    mutable int m_groupId;
 };
 
 }

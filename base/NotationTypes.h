@@ -219,7 +219,10 @@ class Note
 public:
     static const std::string EventType;
     static const std::string NotePropertyName;
-    
+
+    static const std::string TiedBackwardPropertyName;
+    static const std::string TiedForwardPropertyName;
+
     typedef int Type; // not an enum, too much arithmetic at stake
 
     struct BadType {

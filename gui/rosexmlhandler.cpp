@@ -142,7 +142,8 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         }
         
         m_inGroup = true;
-        m_groupNo = m_currentTrack->getNextGroupId();
+        m_groupNo++;
+//        m_groupNo = m_currentTrack->getNextGroupId();
         m_groupType = atts.value("type");
 
     } else if (lcName == "property") {

@@ -29,8 +29,8 @@ Track::Track(unsigned int nbTimeSteps, timeT startIdx,
              unsigned int stepsPerBar)
     : std::multiset<Event*, Event::EventCmp>(),
     m_startIdx(startIdx),
-    m_instrument(0),
-    m_groupId(0)
+    m_instrument(0) /*!!!,
+                      m_groupId(0)*/
 {
     unsigned int initialTime = m_startIdx;
     
@@ -161,12 +161,12 @@ TimeSignature Track::getTimeSigAtEnd() const
     return defaultSig44;
 }
 
-
+/*!!!
 int Track::getNextGroupId() const
 {
     return m_groupId++;
 }
-
+*/
 
 bool Track::expandIntoGroup(iterator i,
                             timeT baseDuration,
@@ -209,12 +209,14 @@ bool Track::expandIntoGroup(iterator from, iterator to,
     //
     if (checkExpansionValid(maxDuration, minDuration)) {
 
-        long gid = -1;
-        std::string groupType;
+//!!!        long gid = -1;
+//!!!        std::string groupType;
 
         // if the initial event has a group id, set the new event to it,
         // otherwise fetch the track's next group id
         //
+
+/*!!!
         if (!(*from)->get<Int>("GroupNo", gid)) {
             cerr << "Track::expandIntoGroup() : creating new gid\n";
             gid = getNextGroupId();
@@ -222,7 +224,7 @@ bool Track::expandIntoGroup(iterator from, iterator to,
         } else {
             cerr << "Track::expandIntoGroup() : event already has a group\n";
         }
-
+*/
             
         // Expand all the events in range [from, to[
         //
@@ -245,6 +247,15 @@ bool Track::expandIntoGroup(iterator from, iterator to,
             ev->setDuration(maxDuration - minDuration);
             ev->setAbsoluteTime((*i)->getAbsoluteTime() + minDuration);       
 
+            // if the first event was already tied forward, the second
+            // one will now be marked as tied forward (which is good).
+            // set up the relationship between the original (now
+            // shorter) event and the new one.
+
+              ev->set<Bool>(Note::TiedBackwardPropertyName, true);
+            (*i)->set<Bool>(Note:: TiedForwardPropertyName, true);
+
+            /*!!!
             if (gid >= 0) { // we need to group both notes
                 cerr << "Track::expandIntoGroup() : Setting gid = " << gid << endl;
                 ev->setMaybe<Int>("GroupNo", gid);
@@ -253,6 +264,7 @@ bool Track::expandIntoGroup(iterator from, iterator to,
                 (*i)->setMaybe<Int>("GroupNo", gid);
                 (*i)->setMaybe<String>("GroupType", groupType);
             }
+            */
             
 //             long pitch = 0;
 //             if ((*i)->get<Int>("pitch", pitch))
@@ -298,17 +310,18 @@ bool Track::expandAndInsertEvent(Event *baseEvent, timeT baseDuration,
 
     if (checkExpansionValid(maxDuration, minDuration)) {
 
-        long gid = -1;
-        std::string groupType;
+//!!!        long gid = -1;
+//!!!        std::string groupType;
 
         // if the initial event has a group id, set the new event to it,
         // otherwise fetch the track's next group id
         //
+/*!!!
         if (!baseEvent->get<Int>("GroupNo", gid)) {
             gid = getNextGroupId();
             groupType = "beamed";
         }
-
+*/
         baseEvent->setDuration(minDuration);
 
         // Add 2nd event
@@ -316,6 +329,15 @@ bool Track::expandAndInsertEvent(Event *baseEvent, timeT baseDuration,
         ev->setDuration(maxDuration - minDuration);
         ev->setAbsoluteTime(baseTime + minDuration);       
 
+        // if the first event was already tied forward, the second
+        // one will now be marked as tied forward (which is good).
+        // set up the relationship between the original (now
+        // shorter) event and the new one.
+        
+               ev->set<Bool>(Note::TiedBackwardPropertyName, true);
+        baseEvent->set<Bool>(Note:: TiedForwardPropertyName, true);
+
+/*!!!
         if (gid >= 0) { // we need to group both notes
             cerr << "Track::expandIntoGroup() : Setting gid = " << gid << endl;
             ev->setMaybe<Int>("GroupNo", gid);
@@ -324,7 +346,7 @@ bool Track::expandAndInsertEvent(Event *baseEvent, timeT baseDuration,
             baseEvent->setMaybe<Int>("GroupNo", gid);
             baseEvent->setMaybe<String>("GroupType", groupType);
         }
-
+*/
         lastInsertedEvent = insert(ev);
 
         return true;
