@@ -130,6 +130,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_config(kapp->config()),
     m_document(doc),
     m_currentNotePixmap(0),
+    m_hoveredOverNoteName(0),
+    m_hoveredOverAbsoluteTime(0),
     m_canvasView(new NotationCanvasView(new QCanvas(width() * 2,
                                                     height() * 2),
                                         this)),
@@ -160,6 +162,9 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 
     QObject::connect(m_canvasView, SIGNAL(hoveredOverNoteChange(const QString&)),
                      this,         SLOT  (hoveredOverNoteChanged(const QString&)));
+
+    QObject::connect(m_canvasView, SIGNAL(hoveredOverAbsoluteTimeChange(unsigned int)),
+                     this,         SLOT  (hoveredOverAbsoluteTimeChange(unsigned int)));
 
 //     QObject::connect(this,         SIGNAL(changeCurrentNote(Note::Type)),
 //                      m_canvasView, SLOT(currentNoteChanged(Note::Type)));
@@ -421,11 +426,13 @@ void NotationView::initStatusBar()
     KStatusBar* sb = statusBar();
 
     sb->insertItem(i18n(IDS_STATUS_DEFAULT), ID_STATUS_MSG);
-    m_currentNotePixmap = new QLabel(sb);
-    m_hoveredOverNoteName = new QLabel(sb);
+    m_currentNotePixmap       = new QLabel(sb);
+    m_hoveredOverNoteName     = new QLabel(sb);
+    m_hoveredOverAbsoluteTime = new QLabel(sb);
     
     sb->addWidget(m_currentNotePixmap);
     sb->addWidget(m_hoveredOverNoteName);
+    sb->addWidget(m_hoveredOverAbsoluteTime);
 }
 
 
@@ -1166,10 +1173,17 @@ NotationView::hoveredOverNoteChanged(const QString &noteName)
     m_hoveredOverNoteName->setText(noteName);
 }
 
+void
+NotationView::hoveredOverAbsoluteTimeChange(unsigned int time)
+{
+    m_hoveredOverAbsoluteTime->setText(QString().setNum(time));
+}
+
 
 
 //////////////////////////////////////////////////////////////////////
 
+#ifdef NOT_DEFINED
 
 void
 NotationView::perfTest()
@@ -1202,8 +1216,6 @@ NotationView::perfTest()
     std::cout << (et-st)*10 << "ms" << std::endl;
 }
 
-
-#ifdef NOT_DEFINED
 
 void
 NotationView::test()

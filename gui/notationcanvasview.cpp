@@ -19,6 +19,7 @@
 */
 
 #include "notationcanvasview.h"
+#include "notationelement.h"
 #include "qcanvasgroupableitem.h"
 #include "qcanvasitemgroup.h"
 #include "qcanvassimplesprite.h"
@@ -67,7 +68,8 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
             QCanvasItem *item = *it;
 
             StaffLine *staffLine = 0;
-    
+            QCanvasSimpleSprite *noteSprite = 0;
+            
             if ((staffLine = dynamic_cast<StaffLine*>(item))) {
                 m_currentHighlightedLine = staffLine;
 
@@ -80,8 +82,14 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 
                 emit hoveredOverNoteChange(noteName);
 
-                break;
+            } else if ((noteSprite = dynamic_cast<QCanvasSimpleSprite*>(item))) {
+                // TODO : fetch element's absolute time
+//                 unsigned int elAbsoluteTime = el->event()->getAbsoluteTime();
+//                 kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMouseMoveEvent() : abs. Time : " << elAbsoluteTime << endl;
+//                 emit hoveredOverAbsoluteTimeChange(elAbsoluteTime);
+
             }
+            
         }
     }
     

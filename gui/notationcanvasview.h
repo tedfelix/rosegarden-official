@@ -61,6 +61,7 @@ public slots:
 signals:
     void noteInserted(int pitch, const QPoint&);
     void hoveredOverNoteChange(const QString &noteName);
+    void hoveredOverAbsoluteTimeChange(unsigned int);
     
 protected:
 

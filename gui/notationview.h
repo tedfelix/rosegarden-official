@@ -157,6 +157,7 @@ public slots:
     // Canvas actions slots
     void insertNote(int height, const QPoint&);
     void hoveredOverNoteChanged(const QString&);
+    void hoveredOverAbsoluteTimeChange(unsigned int);
 
 signals:
     void changeCurrentNote(bool isRest, Rosegarden::Note::Type);
@@ -205,8 +206,8 @@ protected:
     bool replaceRestWithNote(NotationElementList::iterator, NotationElement*);
 
 
-    void perfTest();
 #ifdef NOT_DEFINED
+    void perfTest();
     void test();
 #endif
 
@@ -219,6 +220,9 @@ protected:
 
     /// Displayed in the status bar, shows the pitch the cursor is at
     QLabel* m_hoveredOverNoteName;
+
+    /// Displayed in the status bar, shows the absolute time the cursor is at
+    QLabel* m_hoveredOverAbsoluteTime;
 
     NotationCanvasView* m_canvasView;
 
