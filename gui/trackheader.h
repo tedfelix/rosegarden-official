@@ -41,7 +41,8 @@ public:
 
 protected:
     virtual void paintEvent(QPaintEvent *pe);
-
+//     void paintSection(QPainter * p, int index, QRect fr);
+//     void paintSectionLabel (QPainter * p, int index, const QRect & fr);
 
 private:
 
