@@ -19,9 +19,9 @@
     COPYING included with this distribution for more information.
 */
 
-#include "ControlBlock.h"
-
 #include <cstring>
+
+#include "ControlBlock.h"
 
 namespace Rosegarden
 {
@@ -38,14 +38,22 @@ ControlBlock::ControlBlock()
     // the sequencer, through a placement new over an mmapped file.
 }
 
-void ControlBlock::setInstrumentForTrack(unsigned int trackNb, InstrumentId id)
+void ControlBlock::updateTrackData(Track* t)
 {
-    if (trackNb < CONTROLBLOCK_MAX_NB_TRACKS) m_trackInstruments[trackNb] = id;
+    if (t) {
+        setInstrumentForTrack(t->getId(), t->getInstrument());
+    }
 }
 
-InstrumentId ControlBlock::getInstrumentForTrack(unsigned int trackNb)
+
+void ControlBlock::setInstrumentForTrack(TrackId trackId, InstrumentId instId)
 {
-    if (trackNb < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInstruments[trackNb];
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) m_trackInstruments[trackId] = instId;
+}
+
+InstrumentId ControlBlock::getInstrumentForTrack(TrackId trackId)
+{
+    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS) return m_trackInstruments[trackId];
     return 0;
 }
 

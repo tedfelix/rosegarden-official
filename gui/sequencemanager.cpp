@@ -76,6 +76,7 @@ public:
     
     QString getFileName() { return m_fileName; }
     void refresh();
+    void updateTrackData(Track*);
 
 protected:
     void initControlBlock();
@@ -85,6 +86,7 @@ protected:
     //--------------- Data members ---------------------------------
     RosegardenGUIDoc* m_doc;
     QString m_fileName;
+    bool m_needsRefresh;
     int m_fd;
     void* m_mmappedBuffer;
     size_t m_mmappedSize;
@@ -94,6 +96,7 @@ protected:
 ControlBlockMmapper::ControlBlockMmapper(RosegardenGUIDoc* doc)
     : m_doc(doc),
       m_fileName(createFileName()),
+      m_needsRefresh(true),
       m_fd(-1),
       m_mmappedBuffer(0),
       m_mmappedSize(ControlBlock::getSize()),
@@ -149,8 +152,29 @@ void ControlBlockMmapper::refresh()
 {
     SEQMAN_DEBUG << "ControlBlockMmapper : refresh\n";
 
-    ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
+    if (m_needsRefresh) {
+        ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
+
+        QByteArray dummy;
+        
+        if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                      "remapControlBlock()",
+                                      dummy)) {
+            // failed
+            throw(Rosegarden::Exception("ControlBlockMmapper::refresh failed to contact Rosegarden sequencer"));
+        }
+
+        m_needsRefresh = false;
+    }
 }
+
+void ControlBlockMmapper::updateTrackData(Track *t)
+{
+    m_controlBlock->updateTrackData(t);
+    m_needsRefresh = true;
+}
+
 
 void ControlBlockMmapper::initControlBlock()
 {
@@ -160,9 +184,9 @@ void ControlBlockMmapper::initControlBlock()
         Track* track = i->second;
         if (track == 0) continue;
         
-        m_controlBlock->setInstrumentForTrack(i->first, track->getInstrument());
+        m_controlBlock->updateTrackData(track);
     }
-    
+
     refresh();
 }
 
@@ -2222,6 +2246,7 @@ bool SequenceManager::event(QEvent *e)
     if (e->type() == QEvent::User) {
 	if (m_updateRequested) {
 	    checkRefreshStatus();
+            m_controlBlockMmapper->refresh();
 	    m_updateRequested = false;
 	}
 	return true;
@@ -2422,8 +2447,9 @@ void SequenceManager::compositionDeleted(const Composition *)
     // do nothing
 }
 
-void SequenceManager::trackChanged(const Composition *, Track*)
+void SequenceManager::trackChanged(const Composition *, Track* t)
 {
+    m_controlBlockMmapper->updateTrackData(t);
 }
 
 void

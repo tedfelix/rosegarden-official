@@ -23,6 +23,7 @@
 #define _CONTROLBLOCK_H_
 
 #include "MidiProgram.h"
+#include "Track.h"
 
 namespace Rosegarden 
 {
@@ -42,8 +43,10 @@ public:
     ControlBlock();
 
     unsigned int getNbTracks();
-    void setInstrumentForTrack(unsigned int trackNb, InstrumentId);
-    InstrumentId getInstrumentForTrack(unsigned int trackNb);
+    void updateTrackData(Track*);
+
+    void setInstrumentForTrack(TrackId trackId, InstrumentId);
+    InstrumentId getInstrumentForTrack(TrackId trackId);
 
     static size_t getSize(); // update this when adding new members
 
