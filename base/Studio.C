@@ -540,7 +540,7 @@ Studio::getAudioPreviewInstrument()
 bool
 Studio::haveMidiDevices() const
 {
-    Rosegarden::DeviceListIterator it = m_devices.begin();
+    Rosegarden::DeviceListConstIterator it = m_devices.begin();
     for (; it != m_devices.end(); it++)
     {
         if ((*it)->getType() == Device::Midi) return true;
