@@ -537,6 +537,7 @@ MixerWindow::populate()
 		this, SLOT(slotMuteChanged()));
     }
 
+    adjustSize();
     m_mainBox->show();
 }
 
