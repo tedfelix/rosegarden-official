@@ -148,8 +148,8 @@ void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staffBase)
         if (!el->isNote()) continue; // notes only
         
         int pitch = el->event()->get<Rosegarden::Int>(PITCH);
-     
-	int y = staff.getLayoutYForHeight(pitch) - staff.getElementHeight()/2;
+
+	int y = staff.getLayoutYForHeight(pitch) - staff.getElementHeight();
 
         el->setLayoutY(y);
         el->setHeight(staff.getElementHeight());
@@ -459,6 +459,8 @@ void MatrixView::setupActions()
     toolAction->setExclusiveGroup("tools");
 
     createGUI("matrix.rc");
+
+    //slotPaintSelected();
 }
 
 void MatrixView::initStatusBar()
@@ -524,8 +526,12 @@ void MatrixView::slotSelectSelected()
 }
 
 void MatrixView::itemPressed(int pitch, Rosegarden::timeT time,
-                             QMouseEvent*, MatrixElement*)
+                             QMouseEvent* e, MatrixElement* el)
 {
+    kdDebug(KDEBUG_AREA) << "MatrixView::itemPressed at pitch "
+                         << pitch << ", time " << time << endl;
+
+    m_tool->handleMousePress(pitch, time, 0, e, el);
 }
 
 
@@ -609,7 +615,9 @@ MatrixTool::MatrixTool(const QString& menuName, MatrixView* parent)
 using Rosegarden::Event;
 
 MatrixPainter::MatrixPainter(MatrixView* parent)
-    : MatrixTool("MatrixPainter", parent)
+    : MatrixTool("MatrixPainter", parent),
+      m_currentElement(0),
+      m_currentStaff(0)
 {
 }
 
@@ -619,8 +627,32 @@ void MatrixPainter::handleLeftButtonPress(int pitch,
                                           QMouseEvent *event,
                                           Rosegarden::ViewElement*)
 {
+    using Rosegarden::Note;
+    
     kdDebug(KDEBUG_AREA) << "MatrixPainter::handleLeftButtonPress : pitch = "
                          << pitch << ", time : " << time << endl;
+
+    Note newNote(Note::QuarterNote);
+
+    Event* el = newNote.getAsNoteEvent(pitch, time);
+
+    m_currentElement = new MatrixElement(el);
+    m_currentStaff = m_mParentView->getStaff(staffNo);
+
+    int y = m_currentStaff->getLayoutYForHeight(pitch) - m_currentStaff->getElementHeight();
+
+    m_currentElement->setLayoutY(y);
+    m_currentElement->setHeight(m_currentStaff->getElementHeight());
+    
+}
+
+void MatrixPainter::handleMouseMove(QMouseEvent*)
+{
+}
+
+void MatrixPainter::handleMouseRelease(QMouseEvent*)
+{
+    m_currentElement = 0;
 }
 
 const QString MatrixPainter::ToolName = "painter";

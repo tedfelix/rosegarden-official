@@ -333,6 +333,8 @@ public:
 
     QCanvas* canvas() { return m_canvasView->canvas(); }
 
+    MatrixStaff* getStaff(int) { return m_staffs[0]; } // deal with 1 staff only
+
 public slots:
 
     /**
@@ -468,12 +470,23 @@ public:
                                        QMouseEvent *event,
                                        Rosegarden::ViewElement*);
 
-//     virtual void handleMouseRelease(QMouseEvent*);
+    /**
+     * Set the duration of the element
+     */
+    virtual void handleMouseMove(QMouseEvent*);
+
+    /**
+     * Actually insert the new element
+     */
+    virtual void handleMouseRelease(QMouseEvent*);
 
     static const QString ToolName;
 
 protected:
     MatrixPainter(MatrixView*);
+
+    MatrixElement* m_currentElement;
+    MatrixStaff* m_currentStaff;
 };
 
 #endif
