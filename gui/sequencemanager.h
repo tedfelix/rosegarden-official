@@ -143,6 +143,10 @@ public:
     //
     void reinitialiseSequencerStudio();
 
+    // Send all note offs and resets to MIDI devices
+    //
+    void panic();
+
 public slots:
     // Empty the m_clearToSend flag
     //

@@ -851,6 +851,10 @@ public slots:
 
     void slotRepeatingSegments();
 
+    // Panic button pressed
+    //
+    void slotPanic();
+
 private:
 
     //--------------- Data members ---------------------------------

@@ -543,6 +543,7 @@ void RosegardenGUIApp::setupActions()
     
     connect(m_transport, SIGNAL(setLoop()), SLOT(slotSetLoop()));
     connect(m_transport, SIGNAL(unsetLoop()), SLOT(slotUnsetLoop()));
+    connect(m_transport, SIGNAL(panic()), SLOT(slotPanic()));
 
     connect(m_transport, SIGNAL(editTempo(QWidget*)),
             SLOT(slotEditTempo(QWidget*)));
@@ -3338,4 +3339,11 @@ RosegardenGUIApp::slotEditBanks()
                   << "accepted" << std::endl;
     }
 }
+
+void
+RosegardenGUIApp::slotPanic()
+{
+    if (m_seqManager) m_seqManager->panic();
+}
+
 

@@ -39,6 +39,7 @@
 #include "SoundDriver.h"
 #include "MappedRealTime.h"
 #include "studiocontrol.h"
+#include "MidiDevice.h"
 
 using std::cout;
 using std::cerr;
@@ -1660,6 +1661,50 @@ SequenceManager::reinitialiseSequencerStudio()
 
 }
 
+// Clear down all playing notes and reset controllers
+//
+void
+SequenceManager::panic()
+{
+    SEQMAN_DEBUG << "panic button" << endl;
+
+    Studio &studio = m_doc->getStudio();
+
+    InstrumentList list = studio.getPresentationInstruments();
+    InstrumentList::iterator it = list.begin();
+
+    Rosegarden::MappedComposition mC;
+    Rosegarden::MappedEvent *mE;
+
+    for (; it != list.end(); it++)
+    {
+        if ((*it)->getType() == Instrument::Midi)
+        {
+            for (unsigned int i = 0; i < 128; i++)
+            {
+                try
+                {
+                    mE = new MappedEvent((*it)->getId(),
+                                         Rosegarden::MappedEvent::MidiNote,
+                                         i,
+                                         0,
+                                         RealTime(0, 0),
+                                         RealTime(0, 0),
+                                         RealTime(0, 0));
+                }
+                catch(...)
+                {
+                    continue;
+                } 
+                mC.insert(mE);
+            }
+        }
+    }
+
+    Rosegarden::StudioControl::sendMappedComposition(mC);
+
+    resetControllers();
+}
 
 }
 

@@ -128,6 +128,8 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     connect(PanelCloseButton, SIGNAL(released()),
 	    SLOT(slotPanelCloseButtonReleased()));
 
+    connect(PanicButton, SIGNAL(released()), SIGNAL(panic()));
+
     m_panelOpen = *PanelOpenButton->pixmap();
     m_panelClosed = *PanelCloseButton->pixmap();
 

@@ -104,6 +104,7 @@ signals:
     void unsetLoop();
     void editTempo(QWidget *);
     void editTimeSignature(QWidget *);
+    void panic();
 
 private:
     void loadPixmaps();
