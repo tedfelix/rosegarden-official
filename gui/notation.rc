@@ -586,6 +586,7 @@
   <enable>
     <Action name="show_velocity_control_ruler"/>
     <Action name="show_controller_events_ruler"/>
+    <Menu name="add_control_ruler"/>
     <Action name="add_control_ruler"/>
     <Action name="show_chords_ruler"/>
     <Action name="show_raw_note_ruler"/>

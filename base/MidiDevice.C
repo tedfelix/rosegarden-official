@@ -649,6 +649,30 @@ MidiDevice::isUniqueControlParameter(const ControlParameter &con) const
     return true;
 }
 
+// Cheat a bit here and remove the VOLUME controller here - just
+// so that the MIDIMixer is made a bit easier.
+//
+ControlList
+MidiDevice::getIPBControlParameters() const
+{
+    ControlList retList;
+
+    Rosegarden::MidiByte MIDI_CONTROLLER_VOLUME = 0x07;
+
+    for (ControlList::const_iterator it = m_controlList.begin();
+         it != m_controlList.end(); ++it)
+    {
+        if (it->getIPBPosition() != -1 && 
+            it->getControllerValue() != MIDI_CONTROLLER_VOLUME)
+            retList.push_back(*it);
+    }
+
+    return retList;
+}
+
+
+
+
 ControlParameter *
 MidiDevice::getControlParameter(int index)
 {

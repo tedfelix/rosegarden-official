@@ -196,7 +196,7 @@ RosegardenFader::position_to_value(int position)
     if (m_integral) {
 	float sliderLength = float(m_sliderMax) - float(m_sliderMin);
 	value = float(position)
-	    * (m_max - m_min) / sliderLength - m_min;
+	    * float(m_max - m_min) / sliderLength - float(m_min);
     } else {
 	value = Rosegarden::AudioLevel::fader_to_dB
 	    (position, m_sliderMax - m_sliderMin, m_type);
@@ -213,7 +213,7 @@ RosegardenFader::value_to_position(float value)
     if (m_integral) {
 	float sliderLength = float(m_sliderMax) - float(m_sliderMin);
 	position = 
-	    int(sliderLength * (value - m_min) / (m_max - m_min));
+	    int(sliderLength * (value - float(m_min)) / float(m_max - m_min));
     } else {
 	position = 
 	    Rosegarden::AudioLevel::dB_to_fader

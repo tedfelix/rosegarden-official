@@ -1326,19 +1326,45 @@ MidiMixerWindow::setupTabs()
 
         if (dev)
         {
+            // Get the control parameters that are on the IPB (and hence can
+            // be shown here too).
+            //
+            Rosegarden::ControlList controls = dev->getIPBControlParameters();
+
             instruments = dev->getPresentationInstruments();
 
             QFrame *frame = new QFrame(m_tabWidget);
 
             QGridLayout *mainLayout = new QGridLayout
-                (frame, instruments.size() + 2, 7, 5);
+                (frame, instruments.size() + 4, controls.size() + 4, 5);
 
-            // Label vertical axis
+            // MIDI Mixer label
             //
-            QLabel *label = new QLabel(i18n("Pan"), frame);
-            mainLayout->addWidget(label, 2, 0, Qt::AlignCenter);
+            QLabel *label = new QLabel(QString("%1 %2").arg(strtoqstr(dev->getName()))
+                        .arg(i18n("MIDI Mixer")), frame);
+            mainLayout->addMultiCellWidget(label, 0, 0, 0, 16, Qt::AlignCenter);
+
+            // control labels
+            for (unsigned int i = 0; i < controls.size(); ++i)
+            {
+                label = new QLabel(strtoqstr(controls[i].getName()), frame);
+                mainLayout->addWidget(label, i + 1, 0, Qt::AlignCenter);
+            }
+
+            // meter label
+            //
+            /*
+            label = new QLabel(i18n("Meter"), frame);
+            mainLayout->addWidget(label, controls.size() + 1, 0, Qt::AlignCenter);
+            */
+
+            // volume label
             label = new QLabel(i18n("Volume"), frame);
-            mainLayout->addWidget(label, 3, 0, Qt::AlignCenter);
+            mainLayout->addWidget(label, controls.size() + 2, 0, Qt::AlignCenter);
+
+            // instrument label
+            label = new QLabel(i18n("Instrument"), frame);
+            mainLayout->addWidget(label, controls.size() + 3, 0, Qt::AlignCenter);
 
             int posCount = 1;
             int firstInstrument = -1;
@@ -1354,36 +1380,68 @@ MidiMixerWindow::setupTabs()
                 //
                 if (firstInstrument == -1) firstInstrument = (*iIt)->getId();
 
-                // Label
+                // Add the controls
                 //
-	        QLabel *idLabel = new QLabel(QString("%1").
-                        arg((*iIt)->getId() - firstInstrument + 1), frame, "idLabel");
-                mainLayout->addWidget(idLabel, 6, posCount, Qt::AlignCenter);
-                m_faders[faderCount]->m_id = (*iIt)->getId(); // store id in struct
+                for (unsigned int i = 0; i < controls.size(); ++i)
+                {
+                    QColor knobColour = Qt::white;
+
+                    if (controls[i].getColourIndex() > 0) 
+                    {
+                        Rosegarden::Colour c =
+                        m_document->getComposition().getGeneralColourMap().getColourByIndex
+                                (controls[i].getColourIndex());
+                        knobColour = QColor(c.getRed(), c.getGreen(), c.getBlue());
+                    }
+
+                    RosegardenRotary *controller = new RosegardenRotary(frame,
+                            controls[i].getMin(),
+                            controls[i].getMax(),
+                            1.0,
+                            5.0,
+                            controls[i].getDefault(),
+                            20);
+                    controller->setKnobColour(knobColour);
+
+	            connect(controller, SIGNAL(valueChanged(float)),
+		            this, SLOT(slotControllerChanged(float)));
+
+                    mainLayout->addWidget(controller, i + 1, posCount, Qt::AlignCenter);
+                }
 
                 // Pan rotary
                 //
-                RosegardenRotary *pan = new RosegardenRotary
-                    (frame, 0.0, 127.0, 1.0, 5.0, 64.0, 20);
-                pan->setKnobColour(RosegardenGUIColours::RotaryPastelRed);
-                mainLayout->addWidget(pan, 2, posCount, Qt::AlignCenter);
-                pan->setPosition(double((*iIt)->getPan()));
-                m_faders[faderCount]->m_panRotary = pan;
+                MidiMixerVUMeter *meter = new MidiMixerVUMeter(frame, VUMeter::PeakHold, 10, 40);
+                mainLayout->addWidget(meter, controls.size() + 1, posCount, Qt::AlignCenter);
+                m_faders[faderCount]->m_vuMeter = meter;
 
                 // Volume fader
                 //
                 RosegardenFader *fader = new RosegardenFader(0, 127, 100, 20, 80, frame);
-                mainLayout->addWidget(fader, 3, posCount, Qt::AlignCenter);
-                fader->setFader(float((*iIt)->getVolume()));
+                mainLayout->addWidget(fader, controls.size() + 2, posCount, Qt::AlignCenter);
+                //fader->setFader(float((*iIt)->getVolume()));
                 m_faders[faderCount]->m_volumeFader = fader;
+
+                // Label
+                //
+	        QLabel *idLabel = new QLabel(QString("%1").
+                        arg((*iIt)->getId() - firstInstrument + 1), frame, "idLabel");
+                mainLayout->addWidget(idLabel, controls.size() + 3, posCount, Qt::AlignCenter);
+                m_faders[faderCount]->m_id = (*iIt)->getId(); // store id in struct
 
                 // Connect them up
                 //
 	        connect(fader, SIGNAL(faderChanged(float)),
 		        this, SLOT(slotFaderLevelChanged(float)));
 
+/*
 	        connect(pan, SIGNAL(valueChanged(float)),
 		        this, SLOT(slotPanChanged(float)));
+*/
+
+                // Update all the faders and controllers
+                //
+                slotUpdateInstrument((*iIt)->getId());
 
                 // Increment counters
                 //
@@ -1403,6 +1461,7 @@ MidiMixerWindow::addTab(QWidget *tab, const QString &title)
 }
 
 
+/*
 void 
 MidiMixerWindow::slotPanChanged(float value)
 {
@@ -1430,6 +1489,7 @@ MidiMixerWindow::slotPanChanged(float value)
         }
     }
 }
+*/
 
 void
 MidiMixerWindow::slotFaderLevelChanged(float value)
@@ -1459,6 +1519,37 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
     }
 }
 
+void
+MidiMixerWindow::slotControllerChanged(float value)
+{
+    const QObject *s = sender();
+
+    std::vector<RosegardenRotary*>::const_iterator cIt;
+    int found = -1;
+    int count = 0;
+    unsigned int i = 0, j = 0;
+
+    for (i = 0; i < m_faders.size(); ++i)
+    {
+        for (j = 0; j < m_faders[i]->m_controllerRotaries.size(); ++j)
+        {
+            if (m_faders[i]->m_controllerRotaries[j] == s)
+                break;
+        }
+
+        // break out on match
+        if (j != m_faders[i]->m_controllerRotaries.size()) break;
+    }
+
+    // Don't do anything if we've not matched and got solid values
+    // for i and j
+    //
+    if (i == m_faders.size() || j == m_faders[i]->m_controllerRotaries.size()) return;
+
+    RG_DEBUG << "MidiMixerWindow::slotControllerChanged - found a controller" << endl;
+
+}
+
 
 void 
 MidiMixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
@@ -1476,6 +1567,7 @@ MidiMixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
         if (dev)
         {
             instruments = dev->getPresentationInstruments();
+            Rosegarden::ControlList controls = dev->getIPBControlParameters();
 
             for (iIt = instruments.begin(); iIt != instruments.end(); ++iIt)
             {
@@ -1483,14 +1575,70 @@ MidiMixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
                 //
                 if ((*iIt)->getId() == id)
                 {
-                    m_faders[count]->m_panRotary->setPosition(float((*iIt)->getPan()));
+                    // Set Volume fader
+                    //
                     m_faders[count]->m_volumeFader->setFader(float((*iIt)->getVolume()));
-                    return;
+
+                    // Set all controllers for this Instrument
+                    //
+                    for (unsigned int i = 0; i < controls.size(); ++i)
+                    {
+                        float value = 0.0;
+
+                        try
+                        {
+                            value = float((*iIt)->getControllerValue(controls[i].getControllerValue()));
+                        }
+                        catch(std::string s)
+                        {
+                            RG_DEBUG << "MidiMixerWindow::slotUpdateInstrument - "
+                                     << "can't match controller " 
+                                     << int(controls[i].getControllerValue()) << " - \""
+                                     << s << "\"" << endl;
+                            continue;
+                        }
+                        m_faders[count]->m_controllerRotaries[i]->setPosition(value);
+                    }
                 }
                 count++;
             }
         }
     }
+}
+
+
+
+// ---- MidiMixerVUMeter ----
+//
+//
+
+MidiMixerVUMeter::MidiMixerVUMeter(QWidget *parent,
+                           VUMeterType type,
+                           int width,
+                           int height,
+                           const char *name):
+    VUMeter(parent, type, false, width, height, VUMeter::Vertical, name),
+    m_textHeight(12)
+{
+    setAlignment(AlignCenter);
+}
+
+
+void
+MidiMixerVUMeter::meterStart()
+{
+    clear();
+    setMinimumHeight(m_originalHeight);
+    setMaximumHeight(m_originalHeight);
+}
+
+
+void
+MidiMixerVUMeter::meterStop()
+{
+    setMinimumHeight(m_textHeight);
+    setMaximumHeight(m_textHeight);
+    //setText(QString("%1").arg(m_position + 1));
 }
 
 

@@ -165,6 +165,25 @@ private:
     QPixmap m_stereoPixmap;
 };
 
+
+class MidiMixerVUMeter : public VUMeter
+{
+public:
+    MidiMixerVUMeter(QWidget *parent = 0,
+                     VUMeterType type = Plain,
+                     int width = 0,
+                     int height = 0,
+                     const char *name = 0);
+
+protected:
+     virtual void meterStart();
+     virtual void meterStop();
+
+private:
+     int m_textHeight;
+
+}; 
+
 class MidiMixerWindow : public MixerWindow
 {
     Q_OBJECT
@@ -191,8 +210,9 @@ signals:
 protected slots:
     void slotUpdateInstrument(Rosegarden::InstrumentId);
 
-    void slotPanChanged(float);
-    void slotFaderLevelChanged(float level);
+    //void slotPanChanged(float);
+    void slotFaderLevelChanged(float);
+    void slotControllerChanged(float);
 
 protected:
     void addTab(QWidget *tab, const QString &title);
@@ -204,7 +224,7 @@ protected:
         FaderStruct() {}
 
         Rosegarden::InstrumentId       m_id;
-        RosegardenRotary              *m_panRotary;
+        MidiMixerVUMeter              *m_vuMeter;
         RosegardenFader               *m_volumeFader;
         std::vector<RosegardenRotary*> m_controllerRotaries;
 

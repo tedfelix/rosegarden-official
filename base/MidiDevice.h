@@ -134,6 +134,10 @@ public:
 
     const ControlList &getControlParameters() const { return m_controlList; }
 
+    // Only those on the IPB list
+    //
+    ControlList getIPBControlParameters() const;
+
     // Access ControlParameters (read/write)
     //
     ControlParameter *getControlParameter(int index);
