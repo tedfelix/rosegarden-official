@@ -276,6 +276,11 @@ protected:
 
     MatrixElement* m_currentElement;
     MatrixStaff* m_currentStaff;
+
+    // store MatrixElement's size
+    int m_oldWidth;
+    double m_oldX;
+    double m_oldY;
 };
 
 

@@ -118,7 +118,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     m_parameterBox = new MatrixParameterBox(getCentralFrame());
     m_grid->addWidget(m_parameterBox, 2, 0);
-    m_parameterBox->hide();
 
     m_snapGrid.setSnapTime(Rosegarden::SnapGrid::SnapToUnit);
 

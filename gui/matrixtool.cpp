@@ -131,7 +131,9 @@ MatrixInsertionCommand::MatrixInsertionCommand(Rosegarden::Segment &segment,
                                                Event *event) :
     BasicCommand(i18n("Insert Note"), segment, time, endTime),
     m_staff(staff),
-    m_event(new Event(*event, time, endTime - time))
+    m_event(new Event(*event,
+                      std::min(time, endTime),
+                      (time < endTime) ? endTime - time : time - endTime))
 {
     // nothing
 }
@@ -256,15 +258,10 @@ void MatrixModifyCommand::modifySegment()
 				      m_oldEvent->getAbsoluteTime() +
 				      m_oldEvent->getDuration());
 
-        // Delete old one
-        getSegment().eraseSingle(m_oldEvent);
-
-        // Insert new one
-        getSegment().insert(m_newEvent);
-
-        // Tidy up
-        getSegment().normalizeRests(normalizeStart, normalizeEnd);
-
+        Rosegarden::Segment &segment(getSegment());
+        segment.insert(m_newEvent);
+        segment.eraseSingle(m_oldEvent);
+        segment.normalizeRests(normalizeStart, normalizeEnd);
     }
 }
 
@@ -652,7 +649,10 @@ bool MatrixSelector::m_greedy = true;
 MatrixMover::MatrixMover(MatrixView* parent)
     : MatrixTool("MatrixMover", parent),
       m_currentElement(0),
-      m_currentStaff(0)
+      m_currentStaff(0),
+      m_oldWidth(0),
+      m_oldX(0),
+      m_oldY(0)
 {
 }
 
@@ -672,6 +672,13 @@ void MatrixMover::handleLeftButtonPress(Rosegarden::timeT,
 
     if (m_currentElement)
     {
+        // store these so that we know not to resize if we've not modified
+        // the physical blob on the screen.
+        //
+        m_oldWidth = m_currentElement->getWidth();
+        m_oldX = m_currentElement->getLayoutX();
+        m_oldY = m_currentElement->getLayoutY();
+        
         // Add this element and allow movement
         //
         EventSelection* selection = m_mParentView->getCurrentSelection();
@@ -778,6 +785,21 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
         - m_currentStaff->getElementHeight() / 2;
 
     MATRIX_DEBUG << "MatrixMover::handleMouseRelease() y = " << y << endl;
+
+    // Don't do anything if we've not changed the size of the physical
+    // element.
+    //
+    if (m_oldWidth == m_currentElement->getWidth() &&
+        m_oldX == m_currentElement->getLayoutX() &&
+        m_oldY == m_currentElement->getLayoutY())
+    {
+        m_oldWidth = 0;
+        m_oldX = 0.0;
+        m_oldY = 0.0;
+        m_currentElement = 0;
+        return;
+    }
+
 
     using Rosegarden::BaseProperties::PITCH;
     timeT diffTime = newTime - m_currentElement->event()->getAbsoluteTime();
@@ -957,20 +979,21 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
 
             macro->addCommand(
                     new MatrixModifyCommand(m_currentStaff->getSegment(),
-                                        m_currentStaff,
-                                        m_currentElement->event(),
-                                        newEvent,
-                                        false));
+                                            m_currentStaff,
+                                            *it,
+                                            newEvent,
+                                            false));
 
             newSelection->addEvent(newEvent);
         }
 
+        m_mParentView->setCurrentSelection(0, false);
         m_mParentView->addCommandToHistory(macro);
         m_mParentView->setCurrentSelection(newSelection, false);
     }
 
     m_mParentView->update();
-
+    m_currentElement = 0;
 }
 
 //------------------------------
