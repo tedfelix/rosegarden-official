@@ -70,7 +70,7 @@ public slots:
 signals:
 
     /**
-     * Emitted when the user clicks on a staff
+     * Emitted when the user clicks on a staff (e.g. mouse button press)
      * \a pitch is set to the MIDI pitch on which the click occurred
      * \a point is set to the coordinates of the click event
      * \a el points to the NotationElement which was clicked on, if any
@@ -91,10 +91,20 @@ signals:
      * \a time is set to the absolute time of the note the cursor is hovering on
      */
     void hoveredOverAbsoluteTimeChange(unsigned int time);
+
+    /**
+     * Emitted when the mouse cursor moves (used by the selection tool)
+     */
+    void mouseMove(QMouseEvent*);
+
+    /**
+     * Emitted when the mouse button is released
+     */
+    void mouseRelease(QMouseEvent*);
     
 protected:
 
-    void handleClick(const StaffLine*, const QPoint&, NotationElement* = 0);
+    void handleMousePress(const StaffLine*, const QPoint&, NotationElement* = 0);
 
     bool posIsTooFarFromStaff(const QPoint &pos);
 

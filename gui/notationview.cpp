@@ -46,6 +46,7 @@
 #include "NotationTypes.h"
 #include "TrackNotationHelper.h"
 #include "Quantizer.h"
+#include "staffline.h"
 
 using Rosegarden::Event;
 using Rosegarden::Int;
@@ -104,6 +105,14 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     QObject::connect
 	(m_canvasView, SIGNAL(itemClicked(int,const QPoint&, NotationElement*)),
 	 this,         SLOT  (itemClicked(int,const QPoint&, NotationElement*)));
+
+    QObject::connect
+	(m_canvasView, SIGNAL(mouseMove(QMouseEvent*)),
+	 this,         SLOT  (mouseMove(QMouseEvent*)));
+
+    QObject::connect
+	(m_canvasView, SIGNAL(mouseRelease(QMouseEvent*)),
+	 this,         SLOT  (mouseRelease(QMouseEvent*)));
 
     QObject::connect
 	(m_canvasView, SIGNAL(hoveredOverNoteChange (const QString&)),
@@ -385,6 +394,11 @@ void NotationView::setupActions()
                                   this, SLOT(slotEraseSelected()),
                                   actionCollection(), "erase");
     noteAction->setExclusiveGroup("notes");
+
+    noteAction = new KRadioAction(i18n("Select"), "misc", 0,
+                                  this, SLOT(slotSelectSelected()),
+                                  actionCollection(), "select");
+    noteAction->setExclusiveGroup("notes");
     
 
     // File menu
@@ -464,7 +478,7 @@ bool NotationView::showBars(int staffNo)
     for (unsigned int i = 0; i < m_hlayout->getBarLineCount(staff); ++i) {
 
         if (m_hlayout->isBarLineVisible(staff, i)) {
-            staff.insertBar(m_hlayout->getBarLineX(staff, i),
+            staff.insertBar(unsigned(m_hlayout->getBarLineX(staff, i)),
                             m_hlayout->isBarLineCorrect(staff, i));
         }
     }
@@ -917,13 +931,31 @@ void NotationView::slotEraseSelected()
     setTool(new NotationEraser(*this));
 }
 
+void NotationView::slotSelectSelected()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotSelectSelected()\n";
+    setTool(new NotationSelector(*this));
+}
+
 //----------------------------------------------------------------------
 
 void NotationView::itemClicked(int height, const QPoint &eventPos,
                                NotationElement* el)
 {
-    m_tool->handleClick(height, eventPos, el);
+    m_tool->handleMousePress(height, eventPos, el);
 }
+
+void NotationView::mouseMove(QMouseEvent *e)
+{
+    m_tool->handleMouseMove(e);
+}
+
+void NotationView::mouseRelease(QMouseEvent *e)
+{
+    m_tool->handleMouseRelease(e);
+}
+
+
 
 int
 NotationView::findClosestStaff(double eventY)
@@ -1046,7 +1078,7 @@ void NotationView::readjustCanvasSize()
         double xleft = 0, xright = totalWidth;
 
         NotationStaff &staff = *m_staffs[i];
-        int barCount = m_hlayout->getBarLineCount(staff);
+        unsigned int barCount = m_hlayout->getBarLineCount(staff);
         
         for (unsigned int j = 0; j < barCount; ++j) {
             if (m_hlayout->isBarLineVisible(staff, j)) {
@@ -1100,6 +1132,14 @@ NotationTool::~NotationTool()
 {
 }
 
+void NotationTool::handleMouseMove(QMouseEvent*)
+{
+}
+
+void NotationTool::handleMouseRelease(QMouseEvent*)
+{
+}
+
 //------------------------------
 
 NoteInserter::NoteInserter(Rosegarden::Note::Type type,
@@ -1112,9 +1152,11 @@ NoteInserter::NoteInserter(Rosegarden::Note::Type type,
 }
     
 void    
-NoteInserter::handleClick(int height, const QPoint &eventPos,
-                          NotationElement*)
+NoteInserter::handleMousePress(int height, const QPoint &eventPos,
+                               NotationElement*)
 {
+    if (height == StaffLine::NoHeight) return;
+
     Event *tsig = 0, *clef = 0, *key = 0;
 
     int staffNo = m_parentView.findClosestStaff(eventPos.y());
@@ -1131,7 +1173,7 @@ NoteInserter::handleClick(int height, const QPoint &eventPos,
     }
 
 
-    kdDebug(KDEBUG_AREA) << "NoteInserter::handleClick() : accidental = "
+    kdDebug(KDEBUG_AREA) << "NoteInserter::handleMousePress() : accidental = "
                          << m_accidental << endl;
 
     int pitch = Rosegarden::NotationDisplayPitch(height, m_accidental).
@@ -1193,8 +1235,8 @@ ClefInserter::ClefInserter(std::string clefType, NotationView& view)
 {
 }
     
-void ClefInserter::handleClick(int /*height*/, const QPoint &eventPos,
-                               NotationElement*)
+void ClefInserter::handleMousePress(int /*height*/, const QPoint &eventPos,
+                                    NotationElement*)
 {
     Event *tsig = 0, *clef = 0, *key = 0;
 
@@ -1226,8 +1268,8 @@ NotationEraser::NotationEraser(NotationView& view)
 {
 }
 
-void NotationEraser::handleClick(int, const QPoint&,
-                                 NotationElement* element)
+void NotationEraser::handleMousePress(int, const QPoint&,
+                                      NotationElement* element)
 {
     bool needLayout = false;
     if (!element) return;
@@ -1271,4 +1313,49 @@ void NotationEraser::handleClick(int, const QPoint&,
     
     if (needLayout)
         m_parentView.redoLayout(staffNo, absTime, absTime);
+}
+
+//------------------------------
+
+NotationSelector::NotationSelector(NotationView& view)
+    : NotationTool(view),
+      m_selectionRect(new QCanvasRectangle(m_parentView.canvas())),
+      m_updateRect(false)
+{
+    m_selectionRect->hide();
+    m_selectionRect->setPen(Qt::red);
+}
+
+NotationSelector::~NotationSelector()
+{
+    delete m_selectionRect;
+    m_parentView.canvas()->update();
+}
+
+void NotationSelector::handleMousePress(int, const QPoint& p,
+                                        NotationElement* element)
+{
+    m_selectionRect->setX(p.x());
+    m_selectionRect->setY(p.y());
+    m_selectionRect->setSize(0,0);
+
+    m_selectionRect->show();
+    m_updateRect = true;
+}
+
+void NotationSelector::handleMouseMove(QMouseEvent* e)
+{
+    if (!m_updateRect) return;
+
+    int w = e->x() - m_selectionRect->x();
+    int h = e->y() - m_selectionRect->y();
+
+    m_selectionRect->setSize(w,h);
+
+    m_parentView.canvas()->update();
+}
+
+void NotationSelector::handleMouseRelease(QMouseEvent*)
+{
+    m_updateRect = false;
 }

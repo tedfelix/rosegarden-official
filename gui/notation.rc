@@ -133,6 +133,7 @@
 
 <ToolBar name="toolsToolBar" newline="true">
   <Action name="erase" />
+  <Action name="select" />
 </ToolBar>
 
 </kpartgui>

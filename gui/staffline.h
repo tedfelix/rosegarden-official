@@ -34,6 +34,8 @@ class StaffLine : public QCanvasLineGroupable
 {
 public:
     StaffLine(QCanvas *c, QCanvasItemGroup *g, int height);
+
+    enum { NoHeight = -150 };
  
     void setHeight(int h) { m_height = h; }
     int getHeight() const { return m_height; }

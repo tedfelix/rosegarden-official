@@ -219,9 +219,12 @@ public slots:
 
     /// edition tools
     void slotEraseSelected();
+    void slotSelectSelected();
 
     /// Canvas actions slots
     void itemClicked(int height, const QPoint&, NotationElement*);
+    void mouseMove(QMouseEvent*);
+    void mouseRelease(QMouseEvent*);
 
     /**
      * Called when the mouse cursor moves over a different height on
@@ -377,8 +380,15 @@ public:
     NotationTool(NotationView&);
     virtual ~NotationTool();
 
-    virtual void handleClick(int height, const QPoint &eventPos,
-                             NotationElement* el) = 0;
+    virtual void handleMousePress(int height, const QPoint &eventPos,
+                                  NotationElement* el) = 0;
+
+    /// does nothing by default
+    virtual void handleMouseMove(QMouseEvent*);
+
+    /// does nothing by default
+    virtual void handleMouseRelease(QMouseEvent*);
+
 protected:
     NotationView& m_parentView;
 };
@@ -393,8 +403,8 @@ class NoteInserter : public NotationTool
 public:
     NoteInserter(Rosegarden::Note::Type, unsigned int dots, NotationView&);
     
-    virtual void handleClick(int height, const QPoint &eventPos,
-                             NotationElement* el);
+    virtual void handleMousePress(int height, const QPoint &eventPos,
+                                  NotationElement* el);
 
     /// Set the accidental for the notes which will be inserted
     static void setAccidental(Rosegarden::Accidental);
@@ -434,8 +444,8 @@ class ClefInserter : public NotationTool
 public:
     ClefInserter(std::string clefType, NotationView&);
     
-    virtual void handleClick(int height, const QPoint &eventPos,
-                             NotationElement* el);
+    virtual void handleMousePress(int height, const QPoint &eventPos,
+                                  NotationElement* el);
 protected:
     Rosegarden::Clef m_clef;
 };
@@ -449,8 +459,29 @@ class NotationEraser : public NotationTool
 public:
     NotationEraser(NotationView&);
 
-    virtual void handleClick(int height, const QPoint &eventPos,
-                             NotationElement* el);
+    virtual void handleMousePress(int height, const QPoint &eventPos,
+                                  NotationElement* el);
+};
+
+/**
+ * Rectangular note selection
+ */
+class NotationSelector : public NotationTool
+{
+public:
+    NotationSelector(NotationView&);
+    ~NotationSelector();
+    
+    virtual void handleMousePress(int height, const QPoint &eventPos,
+                                  NotationElement* el);
+
+    virtual void handleMouseMove(QMouseEvent*);
+    virtual void handleMouseRelease(QMouseEvent*);
+
+protected:
+    QCanvasRectangle* m_selectionRect;
+    bool m_updateRect;
+
 };
 
 #endif

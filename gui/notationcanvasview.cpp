@@ -44,8 +44,9 @@ NotationCanvasView::~NotationCanvasView()
 
 
 void
-NotationCanvasView::contentsMouseReleaseEvent(QMouseEvent*)
+NotationCanvasView::contentsMouseReleaseEvent(QMouseEvent *e)
 {
+    emit mouseRelease(e);
     canvas()->update();
 }
 
@@ -90,7 +91,9 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
             
         }
     }
-    
+
+    // if(tracking) ??
+    emit mouseMove(e);
 }
 
 void
@@ -98,7 +101,10 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 {
     kdDebug(KDEBUG_AREA) << "mousepress" << endl;
 
-    if (!m_currentHighlightedLine) return;
+    if (!m_currentHighlightedLine) {
+        emit handleMousePress(0, e->pos());
+        return;
+    }
     
     kdDebug(KDEBUG_AREA) << "mousepress : m_currentHighlightedLine != 0 - inserting note - staff pitch : "
                          << "(no longer relevant)" << endl;
@@ -109,6 +115,7 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
     if(itemList.isEmpty()) { // click was not on an item
         kdDebug(KDEBUG_AREA) << "mousepress : Not on an item" << endl;
+        emit handleMousePress(0, e->pos());
         return;
     }
 
@@ -146,9 +153,9 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     }
 
     if (sprite)
-        handleClick(m_currentHighlightedLine, e->pos(), &(sprite->getNotationElement()));
+        handleMousePress(m_currentHighlightedLine, e->pos(), &(sprite->getNotationElement()));
     else
-        handleClick(m_currentHighlightedLine, e->pos());
+        handleMousePress(m_currentHighlightedLine, e->pos());
 }
 
 
@@ -169,13 +176,13 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
 
 void
-NotationCanvasView::handleClick(const StaffLine *line,
-                                const QPoint &pos,
-                                NotationElement *el)
+NotationCanvasView::handleMousePress(const StaffLine *line,
+                                     const QPoint &pos,
+                                     NotationElement *el)
 {
-    int h = line->getHeight();
+    int h = line ? line->getHeight() : StaffLine::NoHeight;
 
-    kdDebug(KDEBUG_AREA) << "NotationCanvasView::handleClick() at height " << h << endl;
+    kdDebug(KDEBUG_AREA) << "NotationCanvasView::handleMousePress() at height " << h << endl;
 
     emit itemClicked(h, pos, el);
 }
