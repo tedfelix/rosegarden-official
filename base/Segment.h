@@ -275,7 +275,9 @@ public:
 
     /**
      * Fill up the track with rests, from the end of the last event
-     * currently on the track to the endTime given.
+     * currently on the track to the endTime given.  Actually, this
+     * does much the same as setDuration does when it extends a track.
+     * Hm.
      */
     void fillWithRests(timeT endTime);
 
@@ -313,37 +315,6 @@ public:
      */
     bool deleteRest(Event *e);
 
-    /**
-     * The compare class used by Composition
-     */
-    struct TrackCmp
-    {
-        bool operator()(const Track* a, const Track* b) const 
-        {
-            if (a->getInstrument() == b->getInstrument())
-                return a->getStartIndex() < b->getStartIndex();
-
-            return a->getInstrument() < b->getInstrument();
-        }
-    };
-
-    void    addObserver(TrackObserver *obs) { m_observers.insert(obs); }
-    void removeObserver(TrackObserver *obs) { m_observers.erase (obs); }
-
-protected:
-
-    /**
-     * Collapse multiple consecutive rests into one, in preparation
-     * for insertion of a note (whose duration may exceed that of the
-     * first rest) at the given position.  The resulting rest event
-     * may have a duration that is not expressible as a single note
-     * type, and may therefore require splitting again after the
-     * insertion.
-     *
-     * Returns position at which the collapse ended (i.e. the first
-     * uncollapsed event)
-     */
-    iterator collapseRestsForInsert(iterator firstRest, timeT desiredDuration);
 
     /**
      * Check whether a note or rest event has a duration that can be
@@ -367,6 +338,66 @@ protected:
      */
     void makeRestViable(iterator i);
 
+    
+    /**
+     * Given an iterator pointing to a note, split that note up into
+     * tied notes of viable lengths (longest possible viable duration
+     * first, then longest possible viable component of remainder &c)
+     */
+    //!!! untested.
+    void makeNoteViable(iterator i);
+
+
+    /**
+     * Give all events in the interval [from, to[ the same (new) group
+     * id and the given type
+     */
+    void makeBeamedGroup(iterator from, iterator to, std::string type);
+
+
+    /**
+     * Divide the notes in the interval [from, to[ up into sensible
+     * beamed groups and give each group the right group properties
+     * using makeBeamedGroup.  Requires up-to-date bar position list.
+     */
+    void autoBeam(iterator from, iterator to, std::string type);
+
+
+    /**
+     * The compare class used by Composition
+     */
+    struct TrackCmp
+    {
+        bool operator()(const Track* a, const Track* b) const 
+        {
+            if (a->getInstrument() == b->getInstrument())
+                return a->getStartIndex() < b->getStartIndex();
+
+            return a->getInstrument() < b->getInstrument();
+        }
+    };
+
+    /// For use by TrackObserver objects such as ViewElementsManager
+    void    addObserver(TrackObserver *obs) { m_observers.insert(obs); }
+
+    /// For use by TrackObserver objects such as ViewElementsManager
+    void removeObserver(TrackObserver *obs) { m_observers.erase (obs); }
+
+protected:
+
+    /**
+     * Collapse multiple consecutive rests into one, in preparation
+     * for insertion of a note (whose duration may exceed that of the
+     * first rest) at the given position.  The resulting rest event
+     * may have a duration that is not expressible as a single note
+     * type, and may therefore require splitting again after the
+     * insertion.
+     *
+     * Returns position at which the collapse ended (i.e. the first
+     * uncollapsed event)
+     */
+    iterator collapseRestsForInsert(iterator firstRest, timeT desiredDuration);
+
 
     /// for use by insertNote and insertRest
     void insertSomething(iterator position, int duration, int pitch,
@@ -381,6 +412,11 @@ protected:
                    const TimeSignature &timesig) {
         m_barPositions.push_back(BarPosition(start, fixed, correct, timesig));
     }
+
+    /// for use by autoBeam
+    void autoBeamAux(iterator from, iterator to, timeT average,
+                     timeT minimum, timeT maximum, TimeSignature timesig,
+                     std::string type);
 
     timeT m_startIdx;
     unsigned int m_instrument;

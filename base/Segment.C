@@ -516,16 +516,6 @@ Track::iterator Track::expandIntoTie(iterator from, iterator to, timeT baseDurat
     timeT eventDuration = (*from)->getDuration();
     timeT baseTime = (*from)->getAbsoluteTime();
 
-    if (baseDuration == eventDuration) {
-        cerr << "Track::expandIntoTie() : baseDuration == eventDuration\n";
-        return end();
-    }
-    
-    if (baseDuration > eventDuration) {
-        cerr << "WARNING: Track::expandIntoTie() : baseDuration > eventDuration\n";
-        return end();
-    }
-
     long firstGroupId = -1;
     (void)(*from)->get<Int>(BeamedGroupIdPropertyName, firstGroupId);
 
@@ -546,9 +536,19 @@ Track::iterator Track::expandIntoTie(iterator from, iterator to, timeT baseDurat
 	    // no way to really cope with an error, because at this
 	    // point we may already have expanded some events. Best to
 	    // skip this event
-	    cerr << "WARNING: Track::expandIntoTie(): (*i)->getAbsoluteTime() != baseTime (baseTime is " << baseTime << ", event time is " << (*i)->getAbsoluteTime() << ")\n";
+	    cerr << "WARNING: Track::expandIntoTie(): (*i)->getAbsoluteTime() != baseTime (" << (*i)->getAbsoluteTime() << " vs " << baseTime << "), ignoring this event\n";
 	    continue;
 	}
+
+        if ((*i)->getDuration() != eventDuration) {
+	    cerr << "WARNING: Track::expandIntoTie(): (*i)->getDuration() != eventDuration (" << (*i)->getAbsoluteTime() << " vs " << eventDuration << "), changing eventDuration to match\n";
+            eventDuration = (*i)->getDuration();
+        }
+
+        if (baseDuration >= eventDuration) {
+            cerr << "Track::expandIntoTie() : baseDuration >= eventDuration, ignoring event\n";
+            continue;
+        }
 
 	// set the initial event's duration to base
 	(*i)->setDuration(baseDuration);
@@ -593,9 +593,10 @@ Track::iterator Track::expandIntoTie(iterator from, iterator to, timeT baseDurat
 	m_quantizer->unquantize(ev);
 
         // We don't want to do the insert yet, as we'd find ourselves
-        // iterating over the new event unexpectedly (symptom: we see
-        // the WARNING above, even though the to-iterator was fine
-        // when we entered the function).  Not quite clear why, though
+        // iterating over the new event unexpectedly (symptom: we get
+        // to see the baseTime WARNING above, even though the "to"
+        // iterator was fine when we entered the function).  Not quite
+        // clear why this happens though
         toInsert.push_back(ev);
     }
 
@@ -606,13 +607,6 @@ Track::iterator Track::expandIntoTie(iterator from, iterator to, timeT baseDurat
     }
 
     return last;
-}
-
-
-bool Track::isViable(timeT duration)
-{
-    duration = m_quantizer->quantizeByUnit(duration);
-    return (duration == m_quantizer->quantizeByNote(duration));
 }
 
 
@@ -656,6 +650,13 @@ Track::iterator Track::collapseRestsForInsert(iterator i,
 }
 
 
+bool Track::isViable(timeT duration)
+{
+    duration = m_quantizer->quantizeByUnit(duration);
+    return (duration == m_quantizer->quantizeByNote(duration));
+}
+
+
 void Track::makeRestViable(iterator i)
 {
     DurationList dl;
@@ -685,6 +686,50 @@ void Track::makeRestViable(iterator i)
 	insert(e);
 	absTime += duration;
     }
+}
+
+
+void Track::makeNoteViable(iterator i)
+{
+    // We don't use quantized values here; we want a precise division.
+    // Even if it doesn't look precise on the score (because the score
+    // is quantized), we want any playback to produce exactly the same
+    // duration of note as was originally recorded
+
+    DurationList dl;
+
+    timeT acc = 0;
+    timeT required = (*i)->getDuration();
+
+    while (acc < required) {
+        timeT component = Note::getNearestNote(required - acc).getDuration();
+        if (component > (required - acc)) dl.push_back(required - acc);
+        else dl.push_back(component);
+        acc += component;
+    }
+    
+    Event *e = new Event(*(*i));
+    m_quantizer->unquantize(e);
+
+    bool lastTiedForward;
+    (void)e->get<Bool>(Note::TiedForwardPropertyName, lastTiedForward);
+
+    e->set<Bool>(Note::TiedForwardPropertyName, true);
+    erase(i);
+
+    for (unsigned int i = 0; i < dl.size(); ++i) {
+
+        e->setDuration(dl[i]);
+        insert(new Event(*e));
+        e->addAbsoluteTime(dl[i]);
+
+        e->set<Bool>(Note::TiedBackwardPropertyName, true);
+        if (i == dl.size()-1 && !lastTiedForward) {
+            e->unset(Note::TiedForwardPropertyName);
+        }
+    }
+
+    delete e;
 }
 
 
@@ -930,6 +975,329 @@ bool Track::noteIsInChord(Event *note)
     }
     return noteCount > 1;
 }
+
+
+void Track::makeBeamedGroup(iterator from, iterator to, string type)
+{
+    int groupId = getNextGroupId();
+    for (iterator i = from; i != to; ++i) {
+        (*i)->set<Int>(BeamedGroupIdPropertyName, groupId);
+        (*i)->set<String>(BeamedGroupTypePropertyName, type);
+    }
+}
+
+
+
+/*
+
+  Auto-beaming code derived from Rosegarden 2.1's ItemListAutoBeam
+  and ItemListAutoBeamSub in editor/src/ItemList.c.
+  
+  "Today I want to celebrate "Montreal" by Autechre, because of
+  its sleep-disturbing aura, because it sounds like the sort of music
+  which would be going around in the gunman's head as he trains a laser
+  sight into your bedroom through the narrow gap in your curtains and
+  dances the little red dot around nervously on your wall."
+  
+*/
+
+void Track::autoBeam(iterator from, iterator to, string type)
+{
+    int barNo = getBarNumber(from);
+
+    TimeSignature tsig = m_barPositions[barNo].timeSignature;
+
+    int num = tsig.getNumerator();
+    int denom = tsig.getDenominator();
+
+    // I'm still trying to work out how this old code works...
+
+    timeT average;
+    timeT minimum;
+
+    // Completely ad-hoc heuristics for determining suitable group
+    // sizes:
+
+    // If the denominator is 2 or 4, beam in twos (3/4, 6/2 etc).
+    
+    if (denom == 2 || denom == 4) {
+
+        if (num % 3) {
+            average = Note(Note::Quaver).getDuration();
+            minimum = Note(Note::Semiquaver).getDuration();
+        } else {
+            average = minimum = Note(Note::Semiquaver).getDuration();
+        }
+
+    } else {
+
+        // special hack for 6/8
+
+        if (num == 6 && denom == 8) {
+
+            average = 3 * Note(Note::Quaver).getDuration();
+            minimum = average / 2;
+
+        } else {
+
+            // find a divisor (at least 2) for the numerator
+
+            int n = 2;
+            while (num % n != 0) ++n;
+
+            average = n * Note(Note::Semiquaver).getDuration();
+            minimum = average / 2;
+        }
+    }
+
+    if (denom > 4) average /= 2;
+
+    autoBeamAux(from, to, average, minimum, average * 4, tsig, type);
+}
+
+
+void Track::autoBeamAux(iterator from, iterator to,
+                        timeT average, timeT minimum, timeT maximum,
+                        TimeSignature tsig, string type)
+{
+    //...
+}
+
+
+#ifdef NOT_DEFINED
+
+/* Auto-Beaming Heuristic:                                   */
+/*                                                           */
+/* First, we need the number of units to try to beam in.  If */
+/* we're in 4/4, we probably beam quavers in twos (and semis */
+/* in fours and so on); if 6/8, we beam quavers in threes;   */
+/* if 2/4, in twos again; if something weird (5/8? 7/8?) we  */
+/* probably just beam in fives or sevens.  Seems we just     */
+/* want the lowest prime divisor for the number of quavers,  */
+/* and to take semis and so on from there.                   */
+/*                                                           */
+/* Then we skip through the section, accumulating times.     */
+/* On finding that the accumulated time is a multiple of the */
+/* length of a beamed group (two quavers in 4/4, three in    */
+/* 6/8, &c.), we check to see if there's a note ending       */
+/* cleanly at the end of another beamed group's length, and  */
+/* if so, and if there are at least two beamable items in    */
+/* between here and there, we beam them up.  ("...Scotty")   */
+/*                                                           */
+/* This returns the item list; if `start' was the first item */
+/* and has been engrouped, the return value will be the new  */
+/* group item; otherwise it'll just be `start'.              */
+
+ItemList ItemListAutoBeamSub(MTime avg, MTime min, MTime max,
+			     ItemList start, ItemList end, MTime barLength)
+{
+  MTime    accumulator;		/* ah, for the days of *real* CPUs */
+  MTime    prospective;
+  MTime    temp;
+  MTime    tmin;
+  MTime    beamLength;
+  ClassTag oclass;
+  MTime    current;
+  int      beamable;
+  int      longerThanDemi;
+  ItemList i, j, k;
+  ItemList rtn;
+  
+  Begin("ItemListAutoBeamSub");
+
+  rtn = start;
+
+  for (i = start, accumulator = zeroTime;
+       i && (iPrev(i) != end); i = iNext(i)) {
+
+    oclass = i->item->object_class;
+
+    if (MTimeToNumber(accumulator) % MTimeToNumber(barLength) == 0)
+      accumulator = zeroTime;
+
+    if ((MTimeToNumber(accumulator) % MTimeToNumber(avg) == 0) &&
+	(oclass == ChordClass || oclass ==  RestClass) &&
+	(i->item->methods->get_length(i->item) < TagToMTime(Crotchet, False))) {
+
+      k              = NULL;
+      tmin           = min;
+      temp           = zeroTime;
+      beamable       = 0;
+      longerThanDemi = 0;
+
+      for (j = i; j && (iPrev(j) != end); j = iNext(j)) {
+
+	oclass  = j->item->object_class;
+	current = j->item->methods->get_length(j->item);
+
+	if (oclass == ChordClass) {
+
+	  if (((Chord *)j->item)->chord.visual->type < Crotchet) ++beamable;
+	  if (((Chord *)j->item)->chord.visual->type >= Semiquaver)
+	    ++longerThanDemi;
+	}
+
+	temp = AddMTime(temp, current);
+
+	if (MTimeGreater(temp, zeroTime) &&
+	    MTimeToNumber(temp) % MTimeToNumber(tmin) == 0) {
+	  k = j;
+	  beamLength = temp;
+
+	  /* Will this group have crossed a bar line?  If so, wrap */
+	  /* around the prospective accumulator from the bar mark  */
+
+	  prospective =
+	    NumberToMTime(MTimeToNumber(AddMTime(accumulator, temp)) %
+			  MTimeToNumber(barLength));
+
+	  tmin = NumberToMTime(2 * MTimeToNumber(tmin));
+	}
+
+	/* Decide to stop scanning for items to join this beamed group. */
+	/* We stop if we've got the maximum length of beamed group, if  */
+	/* we've got more than 4 semis or quavers, if we're at the end  */
+	/* of the piece or of a bar, if there's a rest ahead or if the  */
+	/* next chord is longer than the current one.                   */
+
+	/* All this, of course, results is an absolutely magnificent    */
+	/* conditional.  Ha!  I spurn your puny temporary variables.    */
+
+	if (!MTimeLesser(temp, max) || longerThanDemi >= 4 || !Next(j) ||
+	    (k && !MTimeToNumber(prospective)) ||
+	    (iNext(j))->item->object_class == RestClass ||
+	    (oclass == ChordClass &&
+	     (iNext(j))->item->object_class == ChordClass &&
+	     MTimeGreater
+	     ((iNext(j))->item->methods->get_length
+	      ((iNext(j))->item), current))) {
+
+	  if (k && beamable >= 2) {
+
+	    if (i == start && !Prev(i))
+	      rtn = ItemListEnGroup(GroupBeamed, i, k/*, False*/);
+	    else
+	      (void)ItemListEnGroup(GroupBeamed, i, k/*, False*/);
+	  }
+
+	  /* If this group is longer than the check threshold (`avg'), */
+	  /* its length must be a multiple of the threshold and hence  */
+	  /* we can keep scanning from the end of the group without    */
+	  /* losing the modulo properties of the accumulator.  Other-  */
+	  /* wise, we continue from where we were.  (The latter action */
+	  /* must be safe -- we can't get another group starting half- */
+	  /* way through the last one, because we know the last one    */
+	  /* is shorter than the group start check threshold.)         */
+
+	  if (k && !MTimeLesser(beamLength, avg)) {
+
+	    i = k;
+	    accumulator = prospective;
+
+	  } else {
+
+	    accumulator = AddMTime
+	      (accumulator,
+	       i->item->methods->get_length(i->item));
+	  }
+
+	  break;
+	}
+      }
+    } else {
+
+      accumulator = AddMTime
+	(accumulator,
+	 i->item->methods->get_length(i->item));
+    }
+  }
+
+  Return(rtn);
+}
+
+
+ItemList ItemListAutoBeam(TimeSignature *time, ItemList start, ItemList end)
+{
+  int   num;
+  MTime avg;
+  MTime min;
+  MTime barLength;
+
+  Begin("ItemListAutoBeam");
+
+  if (time) {
+
+    barLength = time->bar_length;
+
+    /* Minimal number for grouping should ideally be smallest prime */
+    /* divisor of bar's numerator.  We'll relax the "prime" bit,    */
+    /* but ensure that it's at least 2.                             */
+
+    /* Later comment: no, this isn't true.  If the denominator is   */
+    /* 2 or 4, we should always beam in twos (in 3/4, 6/2 or stng.) */
+
+    /* (Actually this isn't right either.  I think if the numerator */
+    /* is prime, perhaps, we should beam up to the length of one    */
+    /* beat at a time?  Something like that, anyway.  Leave it for  */
+    /* a rainy day sometime.)                                       */
+
+    if (time->denominator == 2 ||
+	time->denominator == 4) {
+
+      if (time->numerator % 3) {
+
+	avg = NumberToMTime(TagToNumber(Quaver,     False));
+	min = NumberToMTime(TagToNumber(Semiquaver, False));
+
+      } else avg = min = NumberToMTime(TagToNumber(Semiquaver, False));
+
+    } else {
+
+      /* Special hack for 6/8.  This is getting dodgier by the minute */
+
+      if (time->numerator   == 6 &&
+	  time->denominator == 8) {
+
+	avg = NumberToMTime(3 * TagToNumber(Quaver, False));
+	min = NumberToMTime(MTimeToNumber(avg) / 2);
+
+      } else {
+
+	for (num = 2; time->numerator % num != 0; ++num);
+	
+	avg = NumberToMTime(num * TagToNumber(Semiquaver, False));
+	min = NumberToMTime(MTimeToNumber(avg) / 2);
+      }
+
+      /* older code, works okay for most time signatures:
+
+	 avg =
+	 ((time->numerator== 4) ? (2 * TagToMTime(Semiquaver, False)) :
+	 (time->numerator == 6) ? (3 * TagToMTime(Semiquaver, False)) :
+	 (time->numerator * TagToMTime(Semiquaver, False)));
+
+	 min =
+	 ((time->numerator== 4) ? TagToMTime(Semiquaver, False) :
+	 (time->numerator == 6) ? TagToMTime(Semiquaver,  True) :
+	 TagToMTime(Semiquaver, False));
+      */
+    }
+  } else {
+
+    barLength = 4 * TagToMTime(Crotchet, False);
+
+    avg = TagToMTime(Quaver, False);
+    min = TagToMTime(Semiquaver, False);
+  }
+
+  if (time->denominator > 4) avg /= 2;
+
+  Return(ItemListAutoBeamSub(avg, min,
+			     NumberToMTime(4 * MTimeToNumber(avg)),
+			     start, end, barLength));
+}
+
+#endif
 
 
 void Track::notifyAdd(Event *e)
