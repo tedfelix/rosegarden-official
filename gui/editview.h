@@ -195,6 +195,7 @@ public slots:
     // Property ruler actions
     //
     void slotDrawPropertyLine();
+    void slotSelectAllProperties();
 
     // add control ruler
     void slotAddControlRuler(int);

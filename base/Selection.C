@@ -35,7 +35,7 @@ EventSelection::EventSelection(Segment& t) :
     t.addObserver(this);
 }
 
-EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime) :
+EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime, bool overlap) :
     m_originalSegment(t),
     m_beginTime(0),
     m_endTime(0),
@@ -55,6 +55,27 @@ EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime) :
 	}
 	m_haveRealStartTime = true;
     }
+
+    // Find events overlapping the beginning
+    //
+    if (overlap) {
+        i = t.findTime(beginTime);
+
+        while (i != t.begin()) {
+
+            if ((*i)->getAbsoluteTime() + (*i)->getDuration() > beginTime)
+            {
+                m_segmentEvents.insert(*i); // duplicates are filtered automatically
+                m_beginTime = (*i)->getAbsoluteTime();
+            }
+            else
+                break;
+
+            --i;
+        }
+
+    }
+
 }
 
 EventSelection::EventSelection(const EventSelection &sel) :

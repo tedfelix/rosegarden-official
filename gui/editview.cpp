@@ -737,6 +737,10 @@ EditView::setupActions()
     new KAction(i18n("Draw property line"), 0, this,
                 SLOT(slotDrawPropertyLine()), actionCollection(),
                 "draw_property_line");
+
+    new KAction(i18n("Select all property values"), 0, this,
+                SLOT(slotSelectAllProperties()), actionCollection(),
+                "select_all_properties");
 }
 
 void
@@ -1321,6 +1325,18 @@ EditView::slotDrawPropertyLine()
 
     if (ruler) ruler->startPropertyLine();
 }
+
+void
+EditView::slotSelectAllProperties()
+{
+    int index = 0;
+    PropertyControlRuler* ruler = dynamic_cast<PropertyControlRuler*>
+        (findRuler(Rosegarden::BaseProperties::VELOCITY, index));
+
+    if (ruler) ruler->selectAllProperties();
+}
+
+
 
 
 void

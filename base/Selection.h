@@ -51,9 +51,10 @@ public:
 
     /**
      * Construct an EventSelection selecting all the events in the
-     * given range of the given Segment.
+     * given range of the given Segment.  Set overlap if you want 
+     * to include Events overlapping the selection edges.
      */
-    EventSelection(Segment &, timeT beginTime, timeT endTime);
+    EventSelection(Segment &, timeT beginTime, timeT endTime, bool overlap = false);
 
     EventSelection(const EventSelection&);
 

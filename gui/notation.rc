@@ -471,6 +471,7 @@
 <Menu noMerge="1" name="property_ruler_menu">
    <Text>Property Ruler actions</Text>
    <Action name="draw_property_line"/>
+   <!--<Action name="select_all_properties"/>-->
 </Menu>
 
 <!--     Application States           -->

@@ -167,6 +167,7 @@ public:
     virtual void elementRemoved(const Rosegarden::Staff *, Rosegarden::ViewElement*);
     virtual void staffDeleted(const Rosegarden::Staff *);
     virtual void startPropertyLine();
+    virtual void selectAllProperties();
 
 protected:
 

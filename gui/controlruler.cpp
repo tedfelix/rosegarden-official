@@ -48,6 +48,8 @@
 #include "editcommands.h"
 #include "editviewbase.h"
 #include "ControlParameter.h"
+#include "NotationTypes.h"
+#include "BaseProperties.h"
 #include "Property.h"
 #include "widgets.h"
 #include "linedstaff.h"
@@ -1050,6 +1052,7 @@ PropertyControlRuler::PropertyControlRuler(Rosegarden::PropertyName propertyName
     m_propertyLineY(0)
 {
     m_staff->addObserver(this);
+    m_propertyLine->setZ(1000); // bring to front
 
     setMenuName("property_ruler_menu");
     drawBackground();
@@ -1178,28 +1181,115 @@ void PropertyControlRuler::startPropertyLine()
 }
 
 void
-PropertyControlRuler::contentsMousePressEvent(QMouseEvent*)
+PropertyControlRuler::contentsMousePressEvent(QMouseEvent *e)
 {
     RG_DEBUG << "PropertyControlRuler::contentsMousePressEvent" << endl;
+
+    if (!m_propertyLineShowing)
+    {
+        if (e->button() == MidButton)
+            m_lastEventPos = inverseMapPoint(e->pos());
+        
+        ControlRuler::contentsMousePressEvent(e); // send super
+
+        return;
+    }
+
+    // cancel control line mode
+    if (e->button() == RightButton)
+    {
+        m_propertyLineShowing = false;
+        m_propertyLine->hide();
+
+        this->setCursor(Qt::arrowCursor);
+        return;
+    }
+
+    if (e->button() == LeftButton)
+    {
+        QPoint p = inverseMapPoint(e->pos());
+        
+        m_propertyLine->show();
+        m_propertyLineX = p.x();
+        m_propertyLineY = p.y();
+        m_propertyLine->setPoints(m_propertyLineX, m_propertyLineY, m_propertyLineX, m_propertyLineY);
+        canvas()->update();
+    }
 }
 
 void 
-PropertyControlRuler::contentsMouseReleaseEvent(QMouseEvent*)
+PropertyControlRuler::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     RG_DEBUG << "PropertyControlRuler::contentsMouseReleaseEvent" << endl;
 
+    /*
     if (m_propertyLineShowing)
     {
         this->setCursor(Qt::arrowCursor);
         m_propertyLineShowing = false;
         canvas()->update();
     }
+    */
+
+    if (!m_propertyLineShowing)
+    {
+        /*
+        if (e->button() == MidButton)
+            insertControllerEvent();
+            */
+
+        ControlRuler::contentsMouseReleaseEvent(e); // send super
+        return;
+    }
+    else
+    {
+        QPoint p = inverseMapPoint(e->pos());
+
+        timeT startTime = m_rulerScale->getTimeForX(m_propertyLineX);
+        timeT endTime = m_rulerScale->getTimeForX(p.x());
+
+        long startValue = heightToValue(m_propertyLineY - canvas()->height());
+        long endValue = heightToValue(p.y() - canvas()->height());
+
+        RG_DEBUG << "PropertyControlRuler::contentsMouseReleaseEvent - "
+                 << "starttime = " << startTime
+                 << ", endtime = " << endTime
+                 << ", startValue = " << startValue
+                 << ", endValue = " << endValue
+                 << endl;
+
+        drawPropertyLine(startTime, endTime, startValue, endValue);
+
+        m_propertyLineShowing = false;
+        m_propertyLine->hide();
+        this->setCursor(Qt::arrowCursor);
+        canvas()->update();
+    }
 }
 
 void 
-PropertyControlRuler::contentsMouseMoveEvent(QMouseEvent*)
+PropertyControlRuler::contentsMouseMoveEvent(QMouseEvent *e)
 {
     RG_DEBUG << "PropertyControlRuler::contentsMouseMoveEvent" << endl;
+
+    if (!m_propertyLineShowing)
+    {
+        // Don't send super if we're using the middle button
+        //
+        if (e->button() == MidButton)
+        {
+            m_lastEventPos = inverseMapPoint(e->pos());
+            return;
+        }
+
+        ControlRuler::contentsMouseMoveEvent(e); // send super
+        return;
+    }
+
+    QPoint p = inverseMapPoint(e->pos());
+
+    m_propertyLine->setPoints(m_propertyLineX, m_propertyLineY, p.x(), p.y());
+    canvas()->update();
 }
 
 void 
@@ -1208,9 +1298,68 @@ PropertyControlRuler::drawPropertyLine(Rosegarden::timeT startTime,
                                        int startValue,
                                        int endValue)
 {
+    if (startTime > endTime) 
+    {
+        std::swap(startTime, endTime);
+        std::swap(startValue, endValue);
+    }
+
+    RG_DEBUG << "PropertyControlRuler::drawPropertyLine - "
+             << "set velocity from " << startTime 
+             << " to " << endTime << endl;
+
+    // Add the "true" to catch Events overlapping this line
+    //
+    Rosegarden::EventSelection selection(m_segment, startTime, endTime, true);
+    Rosegarden::PropertyPattern pattern = Rosegarden::DecrescendoPattern;
+
+    SelectionPropertyCommand *command = 
+        new SelectionPropertyCommand(&selection,
+                                     Rosegarden::BaseProperties::VELOCITY,
+                                     pattern,
+                                     startValue,
+                                     endValue);
+
+    m_parentEditView->addCommandToHistory(command);
+
 }
 
+void
+PropertyControlRuler::selectAllProperties()
+{
+    RG_DEBUG << "PropertyControlRuler::selectAllProperties" << endl;
 
+    /*
+    for(Segment::iterator i = m_segment.begin();
+                    i != m_segment.end(); ++i)
+        if (!m_eventSelection->contains(*i)) m_eventSelection->addEvent(*i);
+    */
+
+    QCanvasItemList l=canvas()->allItems();
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) 
+    {
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
+        {
+            (*it)->setSelected(true);
+            ElementAdapter* adapter = item->getElementAdapter();
+            m_eventSelection->addEvent(adapter->getEvent());
+        }
+    }
+
+    /*
+    m_eventSelection->addFromSelection(&selection);
+    for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
+
+            ElementAdapter* adapter = item->getElementAdapter();
+            m_eventSelection->addEvent(adapter->getEvent());
+            item->handleMouseButtonRelease(e);
+        }
+    }
+    */
+
+    emit stateChange("have_controller_item_selected", true);
+}
 
 //----------------------------------------
 ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
