@@ -212,6 +212,12 @@ KeySignatureDialog::regenerateKeyCombo()
     }
 }
 
+Rosegarden::Key
+KeySignatureDialog::getKey()
+{
+    return m_key;
+}
+
 void
 KeySignatureDialog::redrawKeyPixmap()
 {
