@@ -404,7 +404,7 @@ public:
      */
     virtual void positionAllElements();
     
-protected:
+public:
     // Methods that the subclass may (indeed, should) use to convert
     // between the layout coordinates of elements and their canvas
     // coordinates.  These are deliberately not virtual.
@@ -440,6 +440,8 @@ protected:
 	    return m_x + x;
 	}
     }
+
+    int getRowSpacing() { return m_rowSpacing; }
 
     int getCanvasYForTopOfStaff(int row = -1) const {
 	if (!m_pageMode || row <= 0) return m_y;
