@@ -267,6 +267,12 @@ JackDriver::initialise(bool reinitialise)
     // start by creating one pair of record ins and no fader or submaster
     // outs.
     //
+    m_outputMasters.clear();
+    m_outputMonitors.clear();
+    m_outputSubmasters.clear();
+    m_outputInstruments.clear();
+    m_inputPorts.clear();
+
     if (!createMainOutputs()) { // one stereo pair master, one pair monitor
         audit << "JackDriver::initialise - "
 	      << "failed to create main outputs!" << std::endl;
@@ -433,6 +439,8 @@ JackDriver::initialise(bool reinitialise)
 bool
 JackDriver::createMainOutputs()
 {
+    if (!m_client) return false;
+
     jack_port_t *port =  jack_port_register
 	(m_client, "master out L",
 	 JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0);
@@ -463,6 +471,8 @@ JackDriver::createMainOutputs()
 bool
 JackDriver::createFaderOutputs(int pairs)
 {
+    if (!m_client) return false;
+
     int pairsNow = m_outputInstruments.size() / 2;
     if (pairs == pairsNow) return true;
 
@@ -504,6 +514,8 @@ JackDriver::createFaderOutputs(int pairs)
 bool
 JackDriver::createSubmasterOutputs(int pairs)
 {
+    if (!m_client) return false;
+
     int pairsNow = m_outputSubmasters.size() / 2;
     if (pairs == pairsNow) return true;
 
@@ -544,6 +556,8 @@ JackDriver::createSubmasterOutputs(int pairs)
 bool
 JackDriver::createRecordInputs(int pairs)
 {
+    if (!m_client) return false;
+
     int pairsNow = m_inputPorts.size() / 2;
     if (pairs == pairsNow) return true;
 
@@ -585,6 +599,8 @@ JackDriver::createRecordInputs(int pairs)
 void
 JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
 {
+    if (!m_client) return;
+
     Audit audit;
 #ifdef DEBUG_JACK_DRIVER
     std::cerr << "JackDriver::setAudioPorts(" << faderOuts << "," << submasterOuts << ")" << std::endl;
@@ -627,6 +643,8 @@ JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
 RealTime
 JackDriver::getAudioPlayLatency() const
 {
+    if (!m_client) return RealTime::zeroTime;
+
     jack_nframes_t latency =
         jack_port_get_total_latency(m_client, m_outputMasters[0]);
 
@@ -636,6 +654,8 @@ JackDriver::getAudioPlayLatency() const
 RealTime
 JackDriver::getAudioRecordLatency() const
 {
+    if (!m_client) return RealTime::zeroTime;
+    
     jack_nframes_t latency =
         jack_port_get_total_latency(m_client, m_inputPorts[0]);
 
@@ -669,7 +689,7 @@ JackDriver::jackProcessStatic(jack_nframes_t nframes, void *arg)
 int
 JackDriver::jackProcess(jack_nframes_t nframes)
 {
-    if (!m_ok) {
+    if (!m_ok || !m_client) {
 #ifdef DEBUG_JACK_PROCESS
 	std::cerr << "JackDriver::jackProcess: not OK" << std::endl;
 #endif
@@ -1554,6 +1574,8 @@ JackDriver::jackShutdown(void *arg)
     JackDriver *inst = static_cast<JackDriver*>(arg);
     inst->m_ok = false;
     inst->m_kickedOutAt = time(0);
+
+    inst->reportFailure(Rosegarden::MappedEvent::FailureJackDied);
 }
 
 int
@@ -1580,23 +1602,33 @@ JackDriver::jackXRun(void *arg)
     return 0;
 }
 
+
 void
+
 JackDriver::restoreIfRestorable()
 {
     if (m_kickedOutAt == 0) return;
 
+    if (m_client) {
+        jack_client_close(m_client);
+	std::cerr << "closed client" << std::endl;
+	m_client = 0;
+    }
+    
     time_t now = time(0);
 
-    if (now < m_kickedOutAt || now >= m_kickedOutAt + 5) {
+    if (now < m_kickedOutAt || now >= m_kickedOutAt + 3) {
+    
 	initialise(true);
+	
 	if (m_ok) {
 	    reportFailure(Rosegarden::MappedEvent::FailureJackRestart);
 	} else {
-	    reportFailure(Rosegarden::MappedEvent::FailureJackDied);
+	    reportFailure(Rosegarden::MappedEvent::FailureJackRestartFailed);
 	}
-    }
 
-    m_kickedOutAt = 0;
+	m_kickedOutAt = 0;
+    }
 }	
 
 void
@@ -1668,6 +1700,8 @@ JackDriver::kickAudio()
 void
 JackDriver::updateAudioData()
 {
+    if (!m_ok || !m_client) return;
+
     MappedAudioBuss *mbuss =
 	m_alsaDriver->getMappedStudio()->getAudioBuss(0);
 
