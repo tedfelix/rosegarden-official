@@ -22,8 +22,11 @@
 #ifndef ROSEGARDENCANVASVIEW_H
 #define ROSEGARDENCANVASVIEW_H
 
-#include <qcanvas.h>
 #include <vector>
+
+#include <qcanvas.h>
+#include <qwmatrix.h>
+
 
 class QScrollBar;
 class QGridLayout;
@@ -55,6 +58,9 @@ public:
     void setBottomFixedWidget(QWidget*);
 
     void updateBottomWidgetGeometry();
+
+    /// Map a point with the inverse world matrix
+    QPoint inverseMapPoint(const QPoint& p) { return inverseWorldMatrix().map(p); }
 
 public slots:
     /// Update the RosegardenCanvasView after a change of content

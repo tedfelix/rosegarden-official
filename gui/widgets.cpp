@@ -559,17 +559,10 @@ RosegardenRotary::mousePressEvent(QMouseEvent *e)
         // draw on the float text
         m_float->setText(QString("%1").arg(m_position));
 
-        // Reposition - we need to sum the relative positions up to the
-        // topLevel or dialog to please move().
+        // Reposition - remap to topLevel or dialog to please move().
         //
-        QWidget *par = parentWidget();
-        QPoint totalPos = this->pos();
+        QPoint totalPos = mapTo(topLevelWidget(), this->pos());
 
-        while (par->parentWidget() && !par->isTopLevel() && !par->isDialog())
-        {
-            totalPos += par->pos();
-            par = par->parentWidget();
-        }
         // Move just top/right of the rotary
         //
         m_float->move(totalPos + QPoint(width() + 2, -height()/2));

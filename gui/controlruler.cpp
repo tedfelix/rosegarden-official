@@ -352,8 +352,10 @@ ControlSelector::ControlSelector(ControlRuler* parent)
 
 void ControlSelector::handleMouseButtonPress(QMouseEvent *e)
 {
-    getSelectionRectangle()->setX(e->x());
-    getSelectionRectangle()->setY(e->y());
+    QPoint p = m_ruler->inverseMapPoint(e->pos());
+
+    getSelectionRectangle()->setX(p.x());
+    getSelectionRectangle()->setY(p.y());
     getSelectionRectangle()->setSize(0,0);
 
     getSelectionRectangle()->show();
@@ -368,8 +370,10 @@ void ControlSelector::handleMouseButtonRelease(QMouseEvent*)
 
 void ControlSelector::handleMouseMove(QMouseEvent *e, int, int)
 {
-    int w = int(e->x() - getSelectionRectangle()->x());
-    int h = int(e->y() - getSelectionRectangle()->y());
+    QPoint p = m_ruler->inverseMapPoint(e->pos());
+
+    int w = int(p.x() - getSelectionRectangle()->x());
+    int h = int(p.y() - getSelectionRectangle()->y());
     if (w > 0) ++w; else --w;
     if (h > 0) ++h; else --h;
 
@@ -572,7 +576,9 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 
     RG_DEBUG << "ControlRuler::contentsMousePressEvent()\n";
 
-    QCanvasItemList l=canvas()->collisions(e->pos());
+    QPoint p = inverseMapPoint(e->pos());
+
+    QCanvasItemList l=canvas()->collisions(p);
 
     if (l.count() == 0) { // de-select current item
         clearSelectedItems();
@@ -600,7 +606,7 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
     }
 
     m_itemMoved = false;
-    m_lastEventPos = e->pos();
+    m_lastEventPos = p;
 }
 
 void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
@@ -628,7 +634,7 @@ void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
 
     if (m_itemMoved) {
 
-        m_lastEventPos = e->pos();
+        m_lastEventPos = inverseMapPoint(e->pos());
 
         // Add command to history
         ControlChangeCommand* command = new ControlChangeCommand(m_selectedItems,
@@ -647,14 +653,16 @@ void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
 
 void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
 {
-    int deltaX = e->x() - m_lastEventPos.x(),
-        deltaY = e->y() - m_lastEventPos.y();
-    m_lastEventPos = e->pos();
+    QPoint p = inverseMapPoint(e->pos());
+
+    int deltaX = p.x() - m_lastEventPos.x(),
+        deltaY = p.y() - m_lastEventPos.y();
+    m_lastEventPos = p;
 
     if (m_selecting) {
         updateSelection();
         m_selector->handleMouseMove(e, deltaX, deltaY);
-        slotScrollHorizSmallSteps(e->pos().x());
+        slotScrollHorizSmallSteps(p.x());
         return;
     }
 
@@ -662,18 +670,10 @@ void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
 
     // Borrowed from RosegardenRotary - compute total position within window
     //
-    QWidget *par = parentWidget();
-    QPoint totalPos = this->pos();
+    QPoint totalPos = mapTo(topLevelWidget(), this->pos());
 
-    while (par->parentWidget() && !par->isTopLevel() && !par->isDialog())
-    {
-        totalPos += par->pos();
-        par = par->parentWidget();
-    }
-
-
-    m_numberFloat->move(totalPos.x() + m_lastEventPos.x() + 20,
-                        totalPos.y() + m_lastEventPos.y() - 10);
+    m_numberFloat->move(totalPos.x() + e->x() + 20,
+                        totalPos.y() + e->y() - 10);
     int value = 0;
 
     for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
@@ -731,7 +731,7 @@ void ControlRuler::contentsContextMenuEvent(QContextMenuEvent* e)
 
     if (m_menu) {
         RG_DEBUG << "ControlRuler::showMenu() - show menu with" << m_menu->count() << " items\n";
-        m_lastEventPos = e->pos();
+        m_lastEventPos = inverseMapPoint(e->pos());
         m_menu->exec(QCursor::pos());
     } else
         RG_DEBUG << "ControlRuler::showMenu() : no menu to show\n";
