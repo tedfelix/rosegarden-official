@@ -22,6 +22,10 @@
 #ifndef NOTATIONHLAYOUT_H
 #define NOTATIONHLAYOUT_H
 
+#include <vector>
+
+#include <qobject.h>
+
 #include "notationelement.h"
 #include "notepixmapfactory.h"
 
@@ -29,8 +33,6 @@
 #include "LayoutEngine.h"
 #include "FastVector.h"
 #include "Quantizer.h"
-
-#include <vector>
 
 class NotationProperties;
 class NotationGroup;
@@ -43,12 +45,15 @@ namespace Rosegarden { class Progress; }
  * computes the X coordinates of notation elements
  */
 
-class NotationHLayout : public Rosegarden::HorizontalLayoutEngine<NotationElement>
+class NotationHLayout : public QObject,
+                        public Rosegarden::HorizontalLayoutEngine<NotationElement>
 {
 public:
     NotationHLayout(Rosegarden::Composition *c, NotePixmapFactory *npf,
 		    Rosegarden::Quantizer *legatoQuantizer,
-		    const NotationProperties &properties);
+		    const NotationProperties &properties,
+                    QObject* parent, const char* name = 0);
+
     virtual ~NotationHLayout();
 
     void setNotePixmapFactory(NotePixmapFactory *npf) {

@@ -63,7 +63,9 @@ std::vector<int> NotationHLayout::m_availableSpacings;
 
 NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
 				 Quantizer *legatoQuantizer,
-				 const NotationProperties &properties) :
+				 const NotationProperties &properties,
+                                 QObject* parent, const char* name) :
+    QObject(parent, name),
     Rosegarden::HorizontalLayoutEngine<NotationElement>(c),
     m_totalWidth(0.),
     m_pageMode(false),
@@ -293,7 +295,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
     NotationElementList *notes = staff.getViewElementList();
     BarDataList &barList(getBarData(staff));
 
-    Key key;
+    Rosegarden::Key key;
     Clef clef;
     TimeSignature timeSignature;
 
@@ -405,12 +407,12 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
                 // here, but I hope it'll do well enough in practice
                 accTable = AccidentalTable(key, clef);
 
-            } else if (el->event()->isa(Key::EventType)) {
+            } else if (el->event()->isa(Rosegarden::Key::EventType)) {
 
 //		NOTATION_DEBUG << "Found key" << endl;
 
                 fixedWidth += mw;
-                key = Key(*el->event());
+                key = Rosegarden::Key(*el->event());
 
                 accTable = AccidentalTable(key, clef);
 		
@@ -970,7 +972,7 @@ NotationHLayout::reconcileBarsPage()
 
 // and for once I swear things will still be good tomorrow
 
-NotationHLayout::AccidentalTable::AccidentalTable(Key key, Clef clef) :
+NotationHLayout::AccidentalTable::AccidentalTable(Rosegarden::Key key, Clef clef) :
     m_key(key), m_clef(clef)
 {
     std::vector<int> heights(key.getAccidentalHeights(clef));
@@ -978,7 +980,7 @@ NotationHLayout::AccidentalTable::AccidentalTable(Key key, Clef clef) :
 
     for (i = 0; i < 7; ++i) m_accidentals[i] = NoAccidental;
     for (i = 0; i < heights.size(); ++i) {
-        m_accidentals[Key::canonicalHeight(heights[i])] =
+        m_accidentals[Rosegarden::Key::canonicalHeight(heights[i])] =
             (key.isSharp() ? Sharp : Flat);
     }
 }
@@ -1004,7 +1006,7 @@ Accidental
 NotationHLayout::AccidentalTable::getDisplayAccidental(Accidental accidental,
                                                        int height) const
 {
-    height = Key::canonicalHeight(height);
+    height = Rosegarden::Key::canonicalHeight(height);
 
     if (accidental == NoAccidental) {
         accidental = m_key.getAccidentalAtHeight(height, m_clef);
@@ -1033,7 +1035,7 @@ NotationHLayout::AccidentalTable::getDisplayAccidental(Accidental accidental,
 void
 NotationHLayout::AccidentalTable::update(Accidental accidental, int height)
 {
-    height = Key::canonicalHeight(height);
+    height = Rosegarden::Key::canonicalHeight(height);
 
     if (accidental == NoAccidental) {
         accidental = m_key.getAccidentalAtHeight(height, m_clef);
@@ -1112,7 +1114,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
     BarDataList &barList(getBarData(staff));
     NotationStaff &notationStaff = dynamic_cast<NotationStaff &>(staff);
 
-    Key key;
+    Rosegarden::Key key;
     Clef clef;
     TimeSignature timeSignature;
 
@@ -1255,12 +1257,12 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 //		NOTATION_DEBUG << "Found clef" << endl;
 		clef = Clef(*el->event());
 
-	    } else if (el->event()->isa(Key::EventType)) {
+	    } else if (el->event()->isa(Rosegarden::Key::EventType)) {
 
 		delta = el->event()->get<Int>(m_properties.MIN_WIDTH);
 		el->setLayoutAirspace(x, delta);
 //		NOTATION_DEBUG << "Found key" << endl;
-		key = Key(*el->event());
+		key = Rosegarden::Key(*el->event());
 
 	    } else if (el->event()->isa(Text::EventType)) {
 
@@ -1422,7 +1424,7 @@ NotationHLayout::positionChord(StaffType &staff,
                                NotationElementList::iterator &itr,
 			       const BarDataList::iterator &bdi,
 			       const TimeSignature &timeSignature,
-			       const Clef &clef, const Key &key,
+			       const Clef &clef, const Rosegarden::Key &key,
 			       TieMap &tieMap, 
 			       NotationElementList::iterator &to)
 {
@@ -1617,9 +1619,9 @@ int NotationHLayout::getMinWidth(NotationElement &e) const
 
         w += m_npf->getClefWidth(Clef(*e.event()));
 
-    } else if (e.event()->isa(Key::EventType)) {
+    } else if (e.event()->isa(Rosegarden::Key::EventType)) {
 
-        w += m_npf->getKeyWidth(Key(*e.event()));
+        w += m_npf->getKeyWidth(Rosegarden::Key(*e.event()));
 
     } else if (e.event()->isa(Indication::EventType) ||
 	       e.event()->isa(Text::EventType)) {

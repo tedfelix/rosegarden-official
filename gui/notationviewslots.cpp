@@ -20,6 +20,14 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qlabel.h>
+#include <qinputdialog.h>
+#include <kmessagebox.h>
+#include <klocale.h>
+#include <kaction.h>
+#include <kapp.h>
+#include <kconfig.h>
+
 #include "notationview.h"
 
 #include "NotationTypes.h"
@@ -37,14 +45,7 @@
 #include "dialogs.h"
 #include "chordnameruler.h"
 #include "temporuler.h"
-
-#include <qlabel.h>
-#include <qinputdialog.h>
-#include <kmessagebox.h>
-#include <klocale.h>
-#include <kaction.h>
-#include <kapp.h>
-#include <kconfig.h>
+#include "notationhlayout.h"
 
 #include "ktmpstatusmsg.h"
 
@@ -85,7 +86,7 @@ NotationView::slotUpdateInsertModeStatus()
 void
 NotationView::slotChangeSpacingFromIndex(int n)
 {
-    std::vector<int> spacings = m_hlayout.getAvailableSpacings();
+    std::vector<int> spacings = m_hlayout->getAvailableSpacings();
     if (n >= (int)spacings.size()) n = spacings.size() - 1;
     slotChangeSpacing(spacings[n]);
 }
@@ -110,9 +111,9 @@ NotationView::slotChangeSpacingFromAction()
 void
 NotationView::slotChangeSpacing(int spacing)
 {
-    if (m_hlayout.getSpacing() == spacing) return;
+    if (m_hlayout->getSpacing() == spacing) return;
 
-    m_hlayout.setSpacing(spacing);
+    m_hlayout->setSpacing(spacing);
     
     m_spacingSlider->setSize(spacing);
 
@@ -301,7 +302,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
     m_fontSizeSlider->reinitialise(sizes, m_fontSize);
     setupFontSizeMenu(oldName);
 
-    m_hlayout.setNotePixmapFactory(m_notePixmapFactory);
+    m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         m_staffs[i]->changeFont(m_fontName, m_fontSize);
@@ -1399,15 +1400,15 @@ NotationView::slotSetPointerPosition(timeT time, bool scroll)
     int barNo = comp.getBarNumber(time);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	if (barNo < m_hlayout.getFirstVisibleBarOnStaff(*m_staffs[i]) ||
-	    barNo > m_hlayout. getLastVisibleBarOnStaff(*m_staffs[i])) {
+	if (barNo < m_hlayout->getFirstVisibleBarOnStaff(*m_staffs[i]) ||
+	    barNo > m_hlayout-> getLastVisibleBarOnStaff(*m_staffs[i])) {
 	    m_staffs[i]->hidePointer();
 	} else {
-	    m_staffs[i]->setPointerPosition(m_hlayout, time);
+	    m_staffs[i]->setPointerPosition(*m_hlayout, time);
 	}
     }
 
-    if (scroll) getCanvasView()->slotScrollHoriz(int(m_hlayout.getXForTime(time)));
+    if (scroll) getCanvasView()->slotScrollHoriz(int(m_hlayout->getXForTime(time)));
     updateView();
 }
 
@@ -1542,7 +1543,7 @@ NotationView::doDeferredCursorMove()
 	t == segment.getEndTime() ||
 	t == segment.getBarStartForTime(t)) {
 
-	staff->setInsertCursorPosition(m_hlayout, t);
+	staff->setInsertCursorPosition(*m_hlayout, t);
 
     } else {
 
@@ -1846,7 +1847,7 @@ void NotationView::slotInsertMelodyMode()
 */
 void NotationView::slotLabelChords()
 {
-    if (m_hlayout.isPageMode()) return;
+    if (m_hlayout->isPageMode()) return;
     m_chordNamesVisible = !m_chordNamesVisible;
 
     if (!m_chordNamesVisible) {
@@ -1858,7 +1859,7 @@ void NotationView::slotLabelChords()
 
 void NotationView::slotShowTempos()
 {
-    if (m_hlayout.isPageMode()) return;
+    if (m_hlayout->isPageMode()) return;
     m_temposVisible = !m_temposVisible;
 
     if (!m_temposVisible) {

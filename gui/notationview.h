@@ -28,8 +28,6 @@
 #include "editview.h"
 #include "dialogs.h" // for TempoDialog::TempoDialogAction
 #include "notationelement.h"
-#include "notationhlayout.h"
-#include "notationvlayout.h"
 #include "notationcanvasview.h"
 #include "notationstaff.h"
 #include "notationproperties.h"
@@ -39,8 +37,7 @@
 class QLabel;
 class QCanvasItem;
 class KActionMenu;
-namespace Rosegarden { class Progress; class Segment; class EventSelection; class MappedEvent; }
-using Rosegarden::timeT;
+class KPrinter;
 class RosegardenGUIDoc;
 class NotationTool;
 class NotationToolBox;
@@ -51,7 +48,12 @@ class MarkActionData;
 class ChordNameRuler;
 class RosegardenProgressDialog;
 class RosegardenProgressBar;
-class KPrinter;
+class NotationHLayout;
+class NotationVLayout;
+
+namespace Rosegarden { class Progress; class Segment;
+class EventSelection; class MappedEvent; }
+using Rosegarden::timeT;
 
 /**
  * NotationView is a view for one or more Staff objects, each of
@@ -719,8 +721,8 @@ protected:
     NotePixmapFactory *m_notePixmapFactory;
     NotePixmapFactory m_toolbarNotePixmapFactory;
     
-    NotationHLayout m_hlayout;
-    NotationVLayout m_vlayout;
+    NotationHLayout* m_hlayout;
+    NotationVLayout* m_vlayout;
 
     BarButtons *m_topBarButtons;
     BarButtons *m_bottomBarButtons;

@@ -43,7 +43,6 @@ using Rosegarden::Bool;
 using Rosegarden::String;
 using Rosegarden::Event;
 using Rosegarden::Clef;
-using Rosegarden::Key;
 using Rosegarden::TimeSignature;
 using Rosegarden::Note;
 using Rosegarden::Text;
@@ -56,7 +55,9 @@ using namespace Rosegarden::BaseProperties;
 
 NotationVLayout::NotationVLayout(Rosegarden::Composition *c,
 				 Rosegarden::Quantizer *legatoQuantizer,
-				 const NotationProperties &properties) :
+				 const NotationProperties &properties,
+                                 QObject* parent, const char* name) :
+    QObject(parent, name),
     m_composition(c),
     m_legatoQuantizer(legatoQuantizer),
     m_properties(properties)
@@ -195,7 +196,7 @@ NotationVLayout::scanStaff(StaffType &staffBase, timeT, timeT)
                 el->setLayoutY(staff.getLayoutYForHeight
 			       (Clef(*el->event()).getAxisHeight()));
 
-            } else if (el->event()->isa(Key::EventType)) {
+            } else if (el->event()->isa(Rosegarden::Key::EventType)) {
 
                 el->setLayoutY(staff.getLayoutYForHeight(12));
 

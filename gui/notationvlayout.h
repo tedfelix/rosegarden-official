@@ -22,6 +22,8 @@
 #ifndef NOTATIONVLAYOUT_H
 #define NOTATIONVLAYOUT_H
 
+#include <qobject.h>
+
 #include "LayoutEngine.h"
 #include "Staff.h"
 #include "notationelement.h"
@@ -30,19 +32,21 @@
 class NotationStaff;
 class NotationProperties;
 
-
 /**
  * Vertical notation layout
  *
  * computes the Y coordinate of notation elements
  */
 
-class NotationVLayout : public Rosegarden::VerticalLayoutEngine<NotationElement>
+class NotationVLayout : public QObject,
+                        public Rosegarden::VerticalLayoutEngine<NotationElement>
 {
 public:
     NotationVLayout(Rosegarden::Composition *c,
 		    Rosegarden::Quantizer *legatoQuantizer,
-		    const NotationProperties &properties);
+		    const NotationProperties &properties,
+                    QObject* parent, const char* name = 0);
+
     virtual ~NotationVLayout();
 
     /**

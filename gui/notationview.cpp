@@ -56,6 +56,8 @@
 #include "chordnameruler.h"
 #include "temporuler.h"
 #include "studiocontrol.h"
+#include "notationhlayout.h"
+#include "notationvlayout.h"
 
 #include "qcanvassimplesprite.h"
 #include "ktmpstatusmsg.h"
@@ -171,10 +173,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontName(NotePixmapFactory::getDefaultFont()),
     m_fontSize(NotePixmapFactory::getDefaultSize(m_fontName)),
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
-    m_hlayout(&doc->getComposition(), m_notePixmapFactory,
-	      m_legatoQuantizer, m_properties),
-    m_vlayout(&doc->getComposition(),
-	      m_legatoQuantizer, m_properties),
+    m_hlayout(new NotationHLayout(&doc->getComposition(), m_notePixmapFactory,
+                                  m_legatoQuantizer, m_properties, this)),
+    m_vlayout(new NotationVLayout(&doc->getComposition(),
+                                  m_legatoQuantizer, m_properties, this)),
     m_topBarButtons(0),
     m_bottomBarButtons(0),
     m_chordNameRuler(0),
@@ -215,7 +217,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	 NotePixmapFactory::getDefaultSize(m_fontName));
 
     int defaultSpacing = m_config->readNumEntry("spacing", 100);
-    m_hlayout.setSpacing(defaultSpacing);
+    m_hlayout->setSpacing(defaultSpacing);
 
     Note::Type defaultSmoothingType = 
 	m_config->readNumEntry("smoothing", Note::Shortest);
@@ -255,7 +257,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                    .arg(segments.size()));
     }
 
-    m_topBarButtons = new BarButtons(&m_hlayout, 20.0, 25,
+    m_topBarButtons = new BarButtons(m_hlayout, 20.0, 25,
                                      false, getCentralFrame());
     setTopBarButtons(m_topBarButtons);
 
@@ -263,19 +265,19 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	(RosegardenGUIColours::InsertCursorRuler);
 
     m_chordNameRuler = new ChordNameRuler
-	(&m_hlayout, 0, 20.0, 20, getCentralFrame());
+	(m_hlayout, 0, 20.0, 20, getCentralFrame());
     addRuler(m_chordNameRuler);
     if (showProgressive) m_chordNameRuler->show();
     m_chordNamesVisible = true;
 
     m_tempoRuler = new TempoRuler
-	(&m_hlayout, &doc->getComposition(),
+	(m_hlayout, &doc->getComposition(),
 	 20.0, 20, false, getCentralFrame());
     addRuler(m_tempoRuler);
     m_tempoRuler->hide();
     m_temposVisible = false;
 
-    m_bottomBarButtons = new BarButtons(&m_hlayout, 20.0, 25,
+    m_bottomBarButtons = new BarButtons(m_hlayout, 20.0, 25,
                                         true, getCentralFrame());
     setBottomBarButtons(m_bottomBarButtons);
 
@@ -304,8 +306,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_currentStaff = 0;
     m_staffs[0]->setCurrent(true);
 
-    m_hlayout.setPageMode(false);
-    m_hlayout.setPageWidth(getPageWidth());
+    m_hlayout->setPageMode(false);
+    m_hlayout->setPageWidth(getPageWidth());
 
     try {
 	bool layoutApplied = applyLayout();
@@ -441,10 +443,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontName(NotePixmapFactory::getDefaultFont()),
     m_fontSize(NotePixmapFactory::getDefaultSize(m_fontName)),
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
-    m_hlayout(&doc->getComposition(), m_notePixmapFactory,
-	      m_legatoQuantizer, m_properties),
-    m_vlayout(&doc->getComposition(),
-	      m_legatoQuantizer, m_properties),
+    m_hlayout(new NotationHLayout(&doc->getComposition(), m_notePixmapFactory,
+                                  m_legatoQuantizer, m_properties, this)),
+    m_vlayout(new NotationVLayout(&doc->getComposition(),
+                                  m_legatoQuantizer, m_properties, this)),
     m_topBarButtons(0),
     m_bottomBarButtons(0),
     m_chordNameRuler(0),
@@ -482,7 +484,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_fontSize = sizes[sizes.size()-1];
 
     int defaultSpacing = m_config->readNumEntry("spacing", 100);
-    m_hlayout.setSpacing(defaultSpacing);
+    m_hlayout->setSpacing(defaultSpacing);
 
     Note::Type defaultSmoothingType = 
 	m_config->readNumEntry("smoothing", Note::Shortest);
@@ -731,7 +733,7 @@ void NotationView::setupActions()
     KActionMenu *spacingActionMenu =
 	new KActionMenu(i18n("Spa&cing"), this, "stretch_actionmenu");
 
-    int defaultSpacing = m_hlayout.getSpacing();
+    int defaultSpacing = m_hlayout->getSpacing();
     std::vector<int> spacings = NotationHLayout::getAvailableSpacings();
 
     for (std::vector<int>::iterator i = spacings.begin();
@@ -1502,7 +1504,7 @@ void NotationView::initFontToolbar()
 
     new QLabel(i18n("  Spacing:  "), fontToolbar);
 
-    int defaultSpacing = m_hlayout.getSpacing();
+    int defaultSpacing = m_hlayout->getSpacing();
     std::vector<int> spacings = NotationHLayout::getAvailableSpacings();
     m_spacingSlider = new ZoomSlider<int>
         (spacings, defaultSpacing, QSlider::Horizontal, fontToolbar);
@@ -1578,8 +1580,8 @@ NotationView::setPageMode(bool pageMode)
 
     int pageWidth = getCanvasView()->canvas()->width();
 
-    m_hlayout.setPageMode(pageMode);
-    m_hlayout.setPageWidth(pageWidth);
+    m_hlayout->setPageMode(pageMode);
+    m_hlayout->setPageWidth(pageWidth);
 
     RG_DEBUG << "Page mode : page width = " << pageWidth << endl;
     
@@ -1603,7 +1605,7 @@ NotationView::setPageMode(bool pageMode)
 int
 NotationView::getPageWidth()
 {
-    if (m_hlayout.isPageMode() && getCanvasView() && getCanvasView()->canvas())
+    if (m_hlayout->isPageMode() && getCanvasView() && getCanvasView()->canvas())
         return getCanvasView()->canvas()->width();
 
     return width() - 50;
@@ -1612,7 +1614,7 @@ NotationView::getPageWidth()
 /// Scrolls the view such that the given time is centered
 void
 NotationView::scrollToTime(timeT t) {
-    double notationViewLayoutCoord = m_hlayout.getXForTime(t);
+    double notationViewLayoutCoord = m_hlayout->getXForTime(t);
     // Doesn't appear to matter which staff we use
     double notationViewCanvasCoord = getStaff(0)->getCanvasCoordsForLayoutCoords(notationViewLayoutCoord, 0).first;
     // HK: I could have sworn I saw a hard-coded scroll happen somewhere
@@ -1624,10 +1626,10 @@ NotationView::scrollToTime(timeT t) {
 void
 NotationView::paintEvent(QPaintEvent *e)
 {
-    if (m_hlayout.isPageMode()) {
-	int diff = int(getPageWidth() - m_hlayout.getPageWidth());
+    if (m_hlayout->isPageMode()) {
+	int diff = int(getPageWidth() - m_hlayout->getPageWidth());
 	if (diff > -10 && diff < 10) {
-	    m_hlayout.setPageWidth(getPageWidth());
+	    m_hlayout->setPageWidth(getPageWidth());
 	    refreshSegment(0, 0, 0);
 	}
     }
@@ -1640,8 +1642,8 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
     if (m_progress) {
 	m_progress->setOperationName(qstrtostr(i18n("Laying out score...")));
 	m_progress->processEvents();
-	m_hlayout.setProgressReporter(m_progress);
-	m_hlayout.setStaffCount(m_staffs.size());
+	m_hlayout->setProgressReporter(m_progress);
+	m_hlayout->setStaffCount(m_staffs.size());
     }
 
     START_TIMING;
@@ -1656,19 +1658,19 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 		(qstrtostr(i18n("Laying out staff %1...").arg(i + 1)));
 	}
 
-        m_hlayout.resetStaff(*m_staffs[i], startTime, endTime);
-        m_vlayout.resetStaff(*m_staffs[i], startTime, endTime);
-        m_hlayout.scanStaff(*m_staffs[i], startTime, endTime);
-        m_vlayout.scanStaff(*m_staffs[i], startTime, endTime);
+        m_hlayout->resetStaff(*m_staffs[i], startTime, endTime);
+        m_vlayout->resetStaff(*m_staffs[i], startTime, endTime);
+        m_hlayout->scanStaff(*m_staffs[i], startTime, endTime);
+        m_vlayout->scanStaff(*m_staffs[i], startTime, endTime);
     }
 
     if (m_progress) {
 	m_progress->setOperationName(qstrtostr(i18n("Reconciling staffs...")));
     }
 
-    m_hlayout.finishLayout(startTime, endTime);
-    m_vlayout.finishLayout(startTime, endTime);
-    m_hlayout.setProgressReporter(0);
+    m_hlayout->finishLayout(startTime, endTime);
+    m_vlayout->finishLayout(startTime, endTime);
+    m_hlayout->setProgressReporter(0);
 
     // find the last finishing staff for future use
 
@@ -2188,7 +2190,7 @@ void NotationView::readjustCanvasSize()
 
         NotationStaff &staff = *m_staffs[i];
 
-        staff.sizeStaff(m_hlayout);
+        staff.sizeStaff(*m_hlayout);
 	UPDATE_PROGRESS(1);
 
         if (staff.getTotalWidth() + staff.getX() > maxWidth) {
