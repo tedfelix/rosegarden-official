@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -260,7 +261,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
 AudioManagerDialog::~AudioManagerDialog()
 {
-    RG_DEBUG << "~AudioManagerDialog()\n";
+    RG_DEBUG << "\n*** AudioManagerDialog::~AudioManagerDialog\n" << endl;
     m_fileList->saveLayout(kapp->config(), m_listViewLayoutName);
 }
 
@@ -821,8 +822,10 @@ AudioManagerDialog::setSelected(Rosegarden::AudioFileId id,
 
             if (aItem->getId() == id)
             {
+		m_fileList->blockSignals(true);
                 m_fileList->ensureItemVisible(it);
                 m_fileList->setSelected(it, true);
+		m_fileList->blockSignals(false);
                 return;
             }
         }
@@ -839,8 +842,10 @@ AudioManagerDialog::setSelected(Rosegarden::AudioFileId id,
                 {
                     if (aItem->getId() == id && aItem->getSegment() == segment)
                     {
+			m_fileList->blockSignals(true);
                         m_fileList->ensureItemVisible(chIt);
                         m_fileList->setSelected(chIt, true);
+			m_fileList->blockSignals(false);
                         
                         // Only propagate to segmentcanvas if asked to
                         if (propagate)
@@ -926,7 +931,9 @@ AudioManagerDialog::slotSegmentSelection(
     }
     else
     {
+	m_fileList->blockSignals(true);
         m_fileList->clearSelection();
+	m_fileList->blockSignals(false);
     }
 
 }

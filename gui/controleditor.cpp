@@ -166,7 +166,7 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 
 ControlEditorDialog::~ControlEditorDialog()
 {
-    RG_DEBUG << "ControlEditorDialog::~ControlEditorDialog" << endl;
+    RG_DEBUG << "\n*** ControlEditorDialog::~ControlEditorDialog\n" << endl;
 
     m_listView->saveLayout(kapp->config(), ControlEditorConfigGroup);
 

@@ -674,6 +674,8 @@ SegmentSelector::clearSelected()
     //
     m_selectedItems.clear();
 
+    RG_DEBUG << "Pfffffft!!!!!!!!!" << endl;
+
     // clear the current item
     //
     m_currentItem = 0;
@@ -920,6 +922,8 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
     }
 
     if (!m_currentItem)  {
+
+	RG_DEBUG << "SegmentSelector::handleMouseMove: no current item" << endl;
 
         // do a bounding box
         QCanvasRectangle *selectionRect  = m_canvas->getSelectionRectangle();
