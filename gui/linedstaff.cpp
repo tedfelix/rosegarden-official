@@ -152,7 +152,7 @@ template <class T>
 void
 LinedStaff<T>::setX(double x)
 {
-    m_ruler->setXPos(x);
+    m_ruler->setXPos(int(x));
     m_x = x;
 }
 
