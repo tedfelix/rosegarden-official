@@ -1,6 +1,10 @@
 0.2 tasks
 =========
 
+o First time run up go to settings and walk user through the
+  MIDI and Audio setup to help them understand what they're
+  doing.
+
 o Saving RG files with audio [DONE]
 
 o Audio file indexes to RealTime incl. saving and loading

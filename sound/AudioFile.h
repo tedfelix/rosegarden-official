@@ -104,10 +104,14 @@ public:
     unsigned int getSampleRate() const { return m_sampleRate; }
     unsigned int getChannels() const { return m_channels; }
     
-    // We must continue our two abstract methods through from SoundFile.
+    // We must continue our main control abstract methods from SoundFile
+    // and add our own close() method that will add any relevant header
+    // information to an audio file that has been written and is now
+    // being closed.
     //
     virtual bool open() = 0;
     virtual bool write() = 0;
+    virtual void close() = 0;
 
     // Show the information we have on this file
     //
@@ -140,10 +144,6 @@ public:
     //
     virtual bool appendSamples(const std::string &buffer) = 0;
 
-    // Explicitly close the file - calculate some totals and write
-    // them into the header.
-    //
-    virtual void close() = 0;
 
     // Get the length of the sample file in RealTime
     //
@@ -169,6 +169,12 @@ protected:
     unsigned int   m_sampleRate;
     unsigned int   m_channels;
     unsigned int   m_fileSize;
+
+    // How many bytes do we read before we get to the data?
+    // Could be huge so we make it a long long. -1 means it
+    // hasn't been set yet.
+    //
+    long long      m_dataChunkIndex;
 
     std::ifstream *m_inFile;
     std::ofstream *m_outFile;

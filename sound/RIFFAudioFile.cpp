@@ -570,6 +570,23 @@ RIFFAudioFile::parseBody()
 }
 
 
+// The RIFF file format chunk defines our internal meta data
+//
+void
+RIFFAudioFile::readFormatChunk()
+{
+}
+
+// Write out the format chunk from our internal data
+//
+void
+RIFFAudioFile::writeFormatChunk()
+{
+}
+
+
+
+
 
 }
 

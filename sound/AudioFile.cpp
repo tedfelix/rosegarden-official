@@ -37,7 +37,8 @@ AudioFile::AudioFile(unsigned int id,
     m_channels(0),
     m_fileSize(0),
     m_inFile(0),
-    m_outFile(0)
+    m_outFile(0),
+    m_dataChunkIndex(-1)
 {
 }
 
@@ -54,7 +55,8 @@ AudioFile::AudioFile(const std::string &fileName,
     m_channels(channels),
     m_fileSize(0),
     m_inFile(0),
-    m_outFile(0)
+    m_outFile(0),
+    m_dataChunkIndex(-1)
 {
 }
 

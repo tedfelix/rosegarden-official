@@ -20,7 +20,13 @@
 */
 
 
+// Specialisation of a RIFF file - the WAV defines a format chunk
+// holding audio file meta data and a data chunk with interleaved
+// sample bytes.
+//
+
 #include "RIFFAudioFile.h"
+
 
 #ifndef _WAVAUDIOFILE_H_
 #define _WAVAUDIOFILE_H_
@@ -43,6 +49,16 @@ public:
                   unsigned int bitsPerSample);
 
     ~WAVAudioFile();
+
+    // Override these methods for the WAV
+    //
+    virtual bool open();
+    virtual bool write();
+    virtual void close();
+
+    // Get all header information
+    //
+    void parseHeader();
 
 protected:
 

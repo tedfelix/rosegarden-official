@@ -20,6 +20,13 @@
 */
 
 
+// Resource Interchange File Formt - a chunk based audio 
+// file format.  Type of chunk varies with specialisation
+// of this class - WAV files are a specialisation with just
+// a format chunk, BWF has more chunks.
+//
+//
+
 #ifndef _RIFFAUDIOFILE_H_
 #define _RIFFAUDIOFILE_H_
 
@@ -48,10 +55,11 @@ public:
 
     ~RIFFAudioFile();
 
-    // We must define our two abstract methods in this class
+    // Our main control methods
     //
     virtual bool open();
     virtual bool write();
+    virtual void close();
 
     // Show the information we have on this file
     //
@@ -93,14 +101,6 @@ public:
     //
     virtual bool appendSamples(const std::string &buffer);
 
-    // Explicitly close the file - we need to calculate some totals
-    // and write them back into the file after its closed.
-    //
-    virtual void close();
-
-    // write out the header
-    //
-
     // Get the length of the sample in Seconds/Microseconds
     //
     virtual RealTime getLength();
@@ -120,6 +120,15 @@ public:
 protected:
     virtual void parseHeader(const std::string &header);
     virtual void parseBody();
+
+    // Find and read in the format chunk of a RIFF file - without
+    // this chunk we don't actually have a RIFF file.
+    //
+    void readFormatChunk();
+
+    // Write out the Format chunk from the internal data we have
+    //
+    void writeFormatChunk();
 
     unsigned int   m_bytesPerSecond;
     unsigned int   m_bytesPerSample;

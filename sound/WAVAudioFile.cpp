@@ -36,18 +36,6 @@ WAVAudioFile::WAVAudioFile(const unsigned int &id,
                            const std::string &name,
                            const std::string &fileName):
     RIFFAudioFile(id, name, fileName)
-    /*,
-    m_type(WAV),
-    m_bitsPerSample(0),
-    m_sampleRate(0),
-    m_bytesPerSecond(0),
-    m_bytesPerSample(0),
-    m_channels(0),
-    m_type(UNKNOWN),
-    m_fileSize(0),
-    m_inFile(0),
-    m_outFile(0)
-    */
 {
     m_type = WAV;
 }
@@ -59,17 +47,6 @@ WAVAudioFile::WAVAudioFile(const std::string &fileName,
                            unsigned int bytesPerSample = 2,
                            unsigned int bitsPerSample = 16):
     RIFFAudioFile(0, "", fileName)
-    /*
-    m_type(WAV),
-    m_bitsPerSample(bitsPerSample),
-    m_sampleRate(sampleRate),
-    m_bytesPerSecond(bytesPerSecond),
-    m_bytesPerSample(bytesPerSample),
-    m_channels(channels),
-    m_fileSize(0),
-    m_inFile(0),
-    m_outFile(0)
-    */
 {
     m_type = WAV;
     m_bitsPerSample = bitsPerSample;
@@ -80,6 +57,55 @@ WAVAudioFile::WAVAudioFile(const std::string &fileName,
 }
 
 WAVAudioFile::~WAVAudioFile()
+{
+}
+
+bool
+WAVAudioFile::open()
+{
+    m_inFile = new std::ifstream(m_fileName.c_str(),
+                                 std::ios::in | std::ios::binary);
+
+    if (!(*m_inFile))
+    {
+        m_type = UNKNOWN;
+        return false;
+    }
+
+    // Get the file size and store it for comparison later
+    //
+    m_inFile->seekg(0, std::ios::end);
+    m_fileSize = m_inFile->tellg();
+    m_inFile->seekg(0, std::ios::beg);
+
+    try
+    {
+        parseHeader();
+    }
+    catch(std::string s)
+    {
+        std::cerr << "WAVAudioFile::open - EXCEPTION: \"" << s << "\""
+                  << std::endl;
+    }
+
+    return true;
+}
+
+bool
+WAVAudioFile::write()
+{
+    return true;
+}
+
+void
+WAVAudioFile::close()
+{
+}
+
+// Set the m_dataChunkIndex and other meta data
+//
+void
+WAVAudioFile::parseHeader()
 {
 }
 

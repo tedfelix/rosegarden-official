@@ -19,6 +19,7 @@ libRosegardenSound_la_SOURCES = AudioFile.cpp \
                                 MappedComposition.cpp \
                                 MappedInstrument.cpp \
                                 RIFFAudioFile.cpp \
+                                RIFFPeakChunkGenerator.cpp \
                                 SoundFile.cpp \
                                 WAVAudioFile.cpp
 
