@@ -758,10 +758,12 @@ InstrumentParameterBox::slotPluginSelected(int index, int plugin)
                 inst->setMappedId(newId);
                 inst->setAssigned(true);
 
+#ifdef HAVE_LADSPA
                 Rosegarden::StudioControl::setStudioObjectProperty
                     (newId,
                      Rosegarden::MappedLADSPAPlugin::UniqueId,
                      0);
+#endif
             }
 
 
@@ -799,11 +801,11 @@ InstrumentParameterBox::slotPluginPortChanged(int pluginIndex,
         cout << "PLUGIN ID = " << inst->getMappedId() << endl;
         // get the list of ports
         //
+#ifdef HAVE_LADSPA
         Rosegarden::MappedObjectPropertyList
             list = Rosegarden::StudioControl::
                 getStudioObjectProperty(inst->getMappedId(),
                                         Rosegarden::MappedLADSPAPlugin::Ports);
-
         cout << "COUNT = "  << list.size() << endl;
 
         if (portIndex > (int(list.size() - 1)))
@@ -820,6 +822,7 @@ InstrumentParameterBox::slotPluginPortChanged(int pluginIndex,
             (list[portIndex].toInt(),
              Rosegarden::MappedLADSPAPort::Value,
              value);
+#endif
 
         /*
         MappedObjectPropertyList::iterator it = list.begin();
