@@ -31,6 +31,7 @@
 #include <qcheckbox.h>
 #include <qslider.h>
 #include <qpushbutton.h>
+#include <qsignalmapper.h>
 
 #include "Midi.h"
 #include "Instrument.h"
@@ -80,6 +81,7 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
       m_resonanceLabel(new QLabel(i18n("Resonance"), this)),
       m_attackLabel(new QLabel(i18n("Attack"), this)),
       m_releaseLabel(new QLabel(i18n("Release"), this)),
+      m_signalMapper(new QSignalMapper(this)),
       m_selectedInstrument(0),
       m_pluginManager(doc->getPluginManager()),
       m_doc(doc)
@@ -179,7 +181,7 @@ InstrumentParameterBox::initBox()
     unsigned int defaultPlugins = 5;
     for (unsigned int i = 0; i < defaultPlugins; i++)
     {
-        PluginButton *pb = new PluginButton(this, i);
+        QPushButton *pb = new QPushButton(this);
         pb->setFont(getFont());
         pb->setText(i18n("<no plugin>"));
         m_pluginButtons.push_back(pb);
@@ -243,10 +245,17 @@ InstrumentParameterBox::initBox()
         //gridLayout->addRowSpacing(12 + 1 + i, m_pluginButtons[i]->height());
         gridLayout->addMultiCellWidget(m_pluginButtons[i],
                                        12 + i, 12 + i, 1, 2, AlignCenter);
-        connect(m_pluginButtons[i], SIGNAL(released(int)),
-                this, SLOT(slotSelectPlugin(int)));
+        m_signalMapper->setMapping(m_pluginButtons[i], i);
+
+        connect(m_pluginButtons[i], SIGNAL(clicked()),
+                m_signalMapper, SLOT(map()));
+        
 
     }
+
+    connect(m_signalMapper, SIGNAL(mapped(int)),
+            this, SLOT(slotSelectPlugin(int)));
+
 
     // Populate channel list
     for (int i = 0; i < 16; i++)

@@ -19,29 +19,29 @@
     COPYING included with this distribution for more information.
 */
 
-#include <qgroupbox.h>
-#include <qlabel.h>
+#ifndef _INSTRUMENTPARAMETERBOX_H_
+#define _INSTRUMENTPARAMETERBOX_H_
 
-#include "widgets.h"
 #include "Instrument.h"
 #include "MappedEvent.h"
 #include "MappedInstrument.h"
 #include "MappedCommon.h"
 
-#ifndef _INSTRUMENTPARAMETERBOX_H_
-#define _INSTRUMENTPARAMETERBOX_H_
+#include "widgets.h"
 
-// Display and allow modification of Instrument parameters
-//
-
-class RosegardenComboBox;
-class RosegardenGUIDoc;
 class QCheckBox;
 class QSlider;
 class QPushButton;
+class QSignalMapper;
+class QLabel;
+class RosegardenComboBox;
+class RosegardenGUIDoc;
 
 namespace Rosegarden { class AudioPluginManager; }
 
+/**
+ * Display and allow modification of Instrument parameters
+ */
 class InstrumentParameterBox : public RosegardenParameterBox
 {
 Q_OBJECT
@@ -136,7 +136,9 @@ protected:
     QLabel             *m_attackLabel;
     QLabel             *m_releaseLabel;
 
-    std::vector<PluginButton*>       m_pluginButtons;
+    QSignalMapper *m_signalMapper;
+
+    std::vector<QPushButton*>       m_pluginButtons;
 
     Rosegarden::Instrument          *m_selectedInstrument;
 
