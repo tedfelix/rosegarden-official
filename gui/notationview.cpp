@@ -2342,8 +2342,8 @@ void NotationView::initActionDataMaps()
 		QString refName
 		    (NotationStrings::getReferenceName(Note(type, dots), rest == 1));
 
-		QString shortName
-		    (NotationStrings::getShortNoteName(Note(type, dots)));
+		QString shortName(refName);
+		shortName.replace(QRegExp("-"), "_");
 
 		QString titleName
 		    (NotationStrings::getNoteName(Note(type, dots)));
@@ -2351,10 +2351,7 @@ void NotationView::initActionDataMaps()
 		titleName = titleName.left(1).upper() +
 		            titleName.right(titleName.length()-1);
 
-		shortName.replace(QRegExp(" "), "_");
-
 		if (rest) {
-		    shortName += "_rest";
 		    titleName.replace(QRegExp("note"), "rest");
 		}
 

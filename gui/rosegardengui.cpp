@@ -1192,7 +1192,7 @@ void RosegardenGUIApp::slotFileOpen()
     slotStatusHelpMsg(i18n("Opening file..."));
 
 
-    KURL url = KFileDialog::getOpenURL(":ROSEGARDEN", "*.rg|Rosegarden-4 files\n*.rose|Rosegarden-2 files\n*.mid *.midi|Standard MIDI files\n*|All files", this,
+    KURL url = KFileDialog::getOpenURL(":ROSEGARDEN", "*.rg|Rosegarden-4 files\n*|All files", this,
                                        i18n("Open File"));
     if ( url.isEmpty() ) { return; }
 
@@ -1252,9 +1252,7 @@ RosegardenGUIApp::getValidWriteFile(const QString &extension,
 				    const QString &label)
 {
     QString name = KFileDialog::getSaveFileName
-	(":ROSEGARDEN",
-	 (extension.isEmpty() ? QString("*") : ("*." + extension)), this,
-	 i18n(label));
+	(":ROSEGARDEN", i18n(extension), this, i18n(label));
 
     if (name.isEmpty()) return name;
 
@@ -1303,7 +1301,7 @@ void RosegardenGUIApp::slotFileSaveAs()
 
     KTmpStatusMsg msg(i18n("Saving file with a new filename..."), this);
 
-    QString newName = getValidWriteFile("rg", "Save as...");
+    QString newName = getValidWriteFile("*.rg|Rosegarden-4 files\n*|All files", "Save as...");
     if (newName.isEmpty()) return;
 
     SetWaitCursor waitCursor;
@@ -1947,8 +1945,10 @@ void RosegardenGUIApp::slotRevertToSaved()
 
 void RosegardenGUIApp::slotImportMIDI()
 {
-    KURL url = KFileDialog::getOpenURL(":MIDI", "*.mid *.midi|Standard MIDI files\n*|All files", this,
-                                     i18n("Open MIDI File"));
+    KURL url = KFileDialog::getOpenURL
+	(":MIDI",
+	 i18n("*.mid *.midi|Standard MIDI files\n*|All files"), this,
+	 i18n("Open MIDI File"));
     if (url.isEmpty()) { return; }
 
     QString tmpfile;
@@ -1960,8 +1960,10 @@ void RosegardenGUIApp::slotImportMIDI()
 
 void RosegardenGUIApp::slotMergeMIDI()
 {
-    KURL url = KFileDialog::getOpenURL(":MIDI", "*.mid *.midi|Standard MIDI files\n*|All files", this,
-                                     i18n("Merge MIDI File"));
+    KURL url = KFileDialog::getOpenURL
+	(":MIDI",
+	 i18n("*.mid *.midi|Standard MIDI files\n*|All files"), this,
+	 i18n("Merge MIDI File"));
     if (url.isEmpty()) { return; }
 
     QString tmpfile;
@@ -2171,8 +2173,10 @@ void RosegardenGUIApp::slotImportRG21()
 {
     if (!m_doc->saveIfModified()) return;
 
-    KURL url = KFileDialog::getOpenURL(":ROSEGARDEN21", "*.rose|Rosegarden-2 files\n*|All files", this,
-                                       i18n("Open Rosegarden 2.1 File"));
+    KURL url = KFileDialog::getOpenURL
+	(":ROSEGARDEN21",
+	 i18n("*.rose|Rosegarden-2 files\n*|All files"), this,
+	 i18n("Open Rosegarden 2.1 File"));
     if (url.isEmpty()) { return; }
 
     QString tmpfile;
@@ -2499,7 +2503,8 @@ void RosegardenGUIApp::slotExportMIDI()
 {
     KTmpStatusMsg msg(i18n("Exporting MIDI file..."), this);
 
-    QString fileName = getValidWriteFile("mid", "Export as...");
+    QString fileName = getValidWriteFile
+	("*.mid *.midi|Standard MIDI files\n*|All files", "Export as...");
     if (fileName.isEmpty()) return;
 
     exportMIDIFile(fileName);
@@ -2532,7 +2537,7 @@ void RosegardenGUIApp::slotExportCsound()
 {
     KTmpStatusMsg msg(i18n("Exporting Csound score file..."), this);
 
-    QString fileName = getValidWriteFile("", "Export as...");
+    QString fileName = getValidWriteFile("*|All files", "Export as...");
     if (fileName.isEmpty()) return;
 
     exportCsoundFile(fileName);
@@ -2561,7 +2566,8 @@ void RosegardenGUIApp::slotExportLilypond()
 {
     KTmpStatusMsg msg(i18n("Exporting Lilypond file..."), this);
 
-    QString fileName = getValidWriteFile("ly", "Export as...");
+    QString fileName = getValidWriteFile
+	("*.ly|Lilypond files\n*|All files", "Export as...");
     if (fileName.isEmpty()) return;
 
     exportLilypondFile(fileName);
@@ -2590,7 +2596,8 @@ void RosegardenGUIApp::slotExportMusicXml()
 {
     KTmpStatusMsg msg(i18n("Exporting MusicXML file..."), this);
 
-    QString fileName = getValidWriteFile("xml", "Export as...");
+    QString fileName = getValidWriteFile
+	("*.xml|XML files\n*|All files", "Export as...");
     if (fileName.isEmpty()) return;
 
     exportMusicXmlFile(fileName);

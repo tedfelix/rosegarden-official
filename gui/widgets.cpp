@@ -787,7 +787,7 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 
     int defaultType = 0;
     Rosegarden::timeT defaultUnit = 
-	Rosegarden::Note(Rosegarden::Note::Semiquaver).getDuration();
+	Rosegarden::Note(Rosegarden::Note::Demisemiquaver).getDuration();
 
     if (m_configCategory) {
 	KConfig *config = kapp->config();

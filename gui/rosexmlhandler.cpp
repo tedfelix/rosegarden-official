@@ -130,6 +130,17 @@ bool ConfigurationXmlSubHandler::startElement(const QString&, const QString&,
     m_propertyName = lcName;
     m_propertyType = atts.value("type");
 
+    if (m_propertyName == "property") {
+	// handle alternative encoding for properties with arbitrary names
+	m_propertyName = atts.value("name");
+	QString value = atts.value("value");
+	if (value) {
+	    m_propertyType = "String";
+	    m_configuration->set<String>(qstrtostr(m_propertyName),
+					 qstrtostr(value));
+	}
+    }
+
     return true;
 }
 

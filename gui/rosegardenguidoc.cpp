@@ -25,7 +25,6 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qwidget.h>
-#include <qtimer.h>
 #include <qregexp.h>
 
 // include files for KDE
@@ -273,25 +272,6 @@ void RosegardenGUIDoc::slotAutoSave()
 //         RG_DEBUG << "RosegardenGUIDoc::slotAutoSave() - doc already autosaved\n";
         return;
     }
-
-/*!!!
-    if (((RosegardenGUIApp *)parent())->
- 	getSequenceManager()->getTransportStatus() != STOPPED) {
-
- 	// Avoid auto-saving during playback.
- 	// What we really want to do is wait until the transport is
- 	// stopped, and then immediately return to this method.  But
- 	// it's simpler to just set a one-shot timer for a relatively
- 	// short period -- say 10 seconds
-
-	//!!! Aargh, no -- this will fail if the document is destroyed
-	// between now and then -- need to call back on parent to ask
-	// it to set a timer again
-
- 	QTimer::singleShot(10000, this, SLOT(slotAutoSave()));
- 	return;
-    }
-*/
       
     QString autoSaveFileName = getAutoSaveFileName();
 

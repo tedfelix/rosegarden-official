@@ -687,127 +687,6 @@
       <!-- Display conventions (annotated picture with some selected notes,
            some quantized notes, a bar of incorrect length etc) -->
 
-      <!-- Quantization, smoothing, and display of quantized notes -->
-
-      <sect2 id="nv-quantization">
-	<title>Notation from Performance Data</title>
-
-	<para>
-	  &rosegarden; is a multi-purpose program: it is a notation
-	  editor, but it is primarily a sequencer and editor for
-	  performed music.  And in performance, of course, the times
-	  and durations of notes are rarely as precise as they are on
-	  a printed score.
-        </para>
-
-        <para>
-          This means that it's often desirable for &rosegarden; to do
-          a lot of tidying of the basic note times and durations when
-          attempting to make meaningful notes to show in the notation
-          editor.  This is a kind of quantization, but a kind that
-          requires a surprising amount of guesswork to do well.
-          &rosegarden; includes a quantizer designed to do a slightly
-          better job of this than the plain grid quantizer.
-	</para>
-
-	<para>Applying
-          quantization strictly for notation is rather unimaginatively
-          referred to as <quote>notation quantization</quote>: it only
-          applies to the notes you see and edit in notation, and
-          doesn't affect the notes that play, or that you edit in
-          other views such as the matrix.  This quantization is
-          automatically applied to music imported or recorded from
-          MIDI, although not all of its possible capabilities are
-          enabled by default.
-	</para>
-
-	<para>
-	  There are two ways to see which notes have been quantized
-	  for notation.  By default, each notation view contains a Raw
-	  Note Ruler (in the group of rulers above the score) showing
-	  a rectangular block for each note.  This block is positioned
-	  so as to represent the time and duration of the note as
-	  performed, but with the top and bottom edges of the
-	  rectangle extended or shortened to represent the time after
-	  notation quantization.  If this is too much information for
-	  you, you can alternatively choose (in the configuration
-	  dialog) to show in a green colour all note heads in the
-	  score that have had their timings altered by notation
-	  quantization.
-	</para>
-
-	<para>
-	  If the quantization Rosegarden has used is not suitable,
-	  either for the entire score or for a selection of notes, you
-	  can choose to use a different level of quantization or none
-	  at all.  To apply a different quantization to some notes,
-	  select the notes and use the <link
-	  linkend="commands-nv-menu-transforms-quantize">Quantize</link>
-	  menu function (tick the box labelled <quote>Quantize for
-	  notation only</quote>).  The quantization level or type used
-	  by default can be changed in the configuration dialog.
-	</para>
-
-	<sect3 id="nv-quantization-parameters">
-	  <title>Configurable parameters for the heuristic notation quantizer</title>
-
-	  <para>
-	    to be supplied
-	  </para>
-	</sect3>
-
-  <!--
-	<para>
-	  The default smoothing level is fairly timid, and you may
-	  find that it still leaves the music in a fairly
-	  unintelligible state, with notes that should be chords
-	  displayed as overlapping individual notes, with notes
-	  truncated and followed by tiny rests, and so on &mdash;
-	  particularly if you're editing music that was recorded live.
-	  If so, you have two options:
-        </para>
-
-	<variablelist>
-
-	  <varlistentry>
-	    <term>Increase the smoothing level</term>
-	    <listitem>
-	      <para>
-		You can increase the level of smoothing with the
-		smoothing slider on the layout toolbar or the
-		Smoothing submenu options on the View menu.  The
-		default is the minimum smoothing level, which never
-		rounds a note's duration by more than the length of
-		the shortest possible note (a hemidemisemiquaver).
-	      </para>
-	    </listitem>
-	  </varlistentry>
-
-	  <varlistentry>
-	    <term>Do some real quantization</term>
-	    <listitem>
-	      <para>
-	        The alternative is to quantize the underlying notes,
-	        giving you more flexibility and power over the
-	        rounding that is used, but meaning that the notes you
-	        hear (and edit in the matrix editor) will acquire a
-	        perhaps undesirable precision.  To do so, you can use
-	        the <link
-	        linkend="commands-nv-menu-transforms-quantize">Quantize</link> menu function, which
-	        operates on a selection of notes (see <link
-	        linkend="nv-tools-selections">Selection</link>).  The
-		Notation editor will also pick up on any changes in  
-		quantization made using the Quantize dropdown on the
-		main window or the Matrix editor.
-	      </para>
-	    </listitem>
-	  </varlistentry>
-
-	</variablelist>
--->
-
-      </sect2>
-
       <!-- Tools and Selections -->
 
       <sect2 id="nv-tools-selections">
@@ -1461,6 +1340,213 @@
 	  more information.
 	</para>
       </sect2>
+
+      <!-- Quantization, smoothing, and display of quantized notes -->
+
+      <sect2 id="nv-quantization">
+	<title>Notation from Performance Data</title>
+
+	<para>
+	  &rosegarden; is a multi-purpose program: it is a notation
+	  editor, but it is primarily a sequencer and editor for
+	  performed music.  And in performance, of course, the times
+	  and durations of notes are rarely as precise as they are on
+	  a printed score.
+        </para>
+
+        <para>
+          This means that it's often desirable for &rosegarden; to do
+          a lot of tidying of the basic note times and durations when
+          attempting to make meaningful notes to show in the notation
+          editor.  This is a kind of quantization, but a kind that
+          requires a surprising amount of guesswork to do well.
+          &rosegarden; includes a quantizer designed to do a slightly
+          better job of this than the plain grid quantizer.
+	</para>
+
+	<para>Applying
+          quantization strictly for notation is rather unimaginatively
+          referred to as <quote>notation quantization</quote>: it only
+          applies to the notes you see and edit in notation, and
+          doesn't affect the notes that play, or that you edit in
+          other views such as the matrix.  This quantization is
+          automatically applied to music imported or recorded from
+          MIDI, although not all of its possible capabilities are
+          enabled by default.
+	</para>
+
+	<para>
+	  There are two ways to see which notes have been quantized
+	  for notation.  By default, each notation view contains a Raw
+	  Note Ruler (in the group of rulers above the score) showing
+	  a rectangular block for each note.  This block is positioned
+	  so as to represent the time and duration of the note as
+	  performed, but with the top and bottom edges of the
+	  rectangle extended or shortened to represent the time after
+	  notation quantization.  If this is too much information for
+	  you, you can alternatively choose (in the configuration
+	  dialog) to show in a green colour all note heads in the
+	  score that have had their timings altered by notation
+	  quantization.
+	</para>
+
+	<para>
+	  If the quantization &rosegarden; has used is not suitable,
+	  either for the entire score or for a selection of notes, you
+	  can choose to use a different level of quantization or none
+	  at all.  To apply a different quantization to some notes,
+	  select the notes and use the <link
+	  linkend="commands-nv-menu-transforms-quantize">Quantize</link>
+	  menu function (tick the box labelled <quote>Quantize for
+	  notation only</quote>).  The quantization level or type used
+	  by default can be changed in the configuration dialog.
+	</para>
+
+	<sect3 id="nv-quantization-parameters">
+	  <title>Configurable parameters for the heuristic notation quantizer</title>
+
+	  <sect4 id="nv-quantization-parameters-during">
+	    <title>Parameters for quantization itself</title>
+	    
+	    <variablelist>
+
+	      <varlistentry>
+		<term>Complexity</term>
+		<listitem>
+		  <para>The "complexity" of a notation quantizer is its
+		    most fundamental parameter.  A "complex" quantizer
+		    will be more prepared to accept that complex-looking
+		    music is in fact intended to be complex, whereas a
+		    "simple" quantizer is more likely to assume that
+		    complex-looking music results from an imprecise
+		    performance of simple music.
+		  </para>
+		  <para>The default setting is intended to produce
+		    reasonable results for a fairly wide range of music.
+		  </para>
+		</listitem>
+	      </varlistentry>
+
+	      <varlistentry>
+		<term>Base grid unit</term>
+		<listitem>
+		  <para>The base grid unit (set to a note duration
+		    value) specifies the absolute minimum unit of note
+		    that will be permitted to remain in the score after
+		    quantization.  For example, if set to a semiquaver,
+		    all notes will be placed on boundaries of a multiple
+		    of a semiquaver, with durations also a multiple of a
+		    semiquaver.
+		  </para>
+		  <para>The setting of the base grid unit is not quite
+		    as significant for a notation quantizer as it is for a
+		    plain grid quantizer, because all it does is impose an
+		    absolute limit on the level of precision permitted by
+		    the complexity parameter.  Mostly, when you find a
+		    case in which increasing the grid unit produces better
+		    results, you've actually found a case in which the
+		    quantizer simply didn't do as good a job as it should
+		    have been able to with the smaller unit.
+		  </para>
+		</listitem>
+	      </varlistentry>
+
+	      <varlistentry>
+		<term>Tuplet level</term>
+		<listitem>
+		  <para>The notation quantizer is capable of identifying
+		    tuplets (triplets and other time-squashed groups),
+		    within reasonable limits.  This parameter controls how
+		    ambitious it will attempt to be when looking for
+		    tuplets, by setting a limit on how many notes per
+		    tuplet group it will attempt to identify.  If it is
+		    set to <quote>None</quote>, the quantizer will not
+		    attempt to identify tuplets at all.
+		  </para>
+		</listitem>
+	      </varlistentry>
+
+	    </variablelist>
+
+	  </sect4>
+
+	  <sect4 id="nv-quantization-parameters-after">
+	    <title>Parameters that control tidying up after quantization</title>
+
+	    <variablelist>
+
+	      <varlistentry>
+		<term>Tie notes at barlines etc</term>
+		<listitem>
+		  <para>Causes any notes that are still found after
+		  quantization to overlap barlines or to have
+		  durations not exactly expressible with single note
+		  heads to be split into multiple notes appropriately,
+		  and tied.  This has the same effect as applying the
+		  <!-- !!! link --> "Make Notes Viable" function in
+		  the notation view.
+		  </para>
+		  <para>
+		    This parameter is not set by default because it
+		    changes the number of note events, which is
+		    undesirable when using &rosegarden; partly or
+		    principally as a MIDI sequencer.
+		  </para>
+		</listitem>
+	      </varlistentry>
+
+	      <varlistentry>
+		<term>Split-and-tie overlapping chords</term>
+		<listitem>
+		  <para>
+		    Causes overlapping notes to be split and tied, so
+		    as to make strict chords with individual noteheads
+		    tied as necessary.  This has the same effect as
+		    applying the <!-- !!! link --> "De-Counterpoint"
+		    function in the notation view.
+		  </para>
+		  <para>
+		    This parameter is not set by default partly because
+		    it changes the number of note events, which is
+		    undesirable when using &rosegarden; partly or
+		    principally as a MIDI sequencer.
+		  </para>
+		</listitem>
+	      </varlistentry>
+
+	      <varlistentry>
+		<term>Re-beam</term>
+		<listitem>
+		  <para>
+		    Causes the notes to be re-beamed into groups
+		    appropriately after quantization.  This is usually
+		    desirable.
+		  </para>
+		</listitem>
+	      </varlistentry>
+
+	      <varlistentry>
+		<term>Add articulations (staccato, tenuto,
+		slurs)</term>
+		<listitem>
+		  <para>
+		    Causes the quantizer to attempt to identify, based
+		    on the durations of individual and consecutive
+		    notes, which notes should be notated with staccato
+		    marks (for notes that fall significantly short of
+		    the following note, but not apparently short
+		    enough to merit a rest), tenuto (for notes that
+		    almost or just overlap the following note) and
+		    slurs (for series of notes that meet or overlap).
+		  </para>
+		</listitem>
+	      </varlistentry>
+	    </variablelist>
+	  </sect4>
+	</sect3>
+      </sect2>
+
+
     </sect1>
 
     <sect1 id="event-view">

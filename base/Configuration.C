@@ -92,9 +92,9 @@ Configuration::toXmlString()
     // already can)
 
     for (const_iterator i = begin(); i != end(); ++i) {
-	config <<  "<" << i->first.getName() << ">"
-	       << encode(get<String>(i->first))
-	       << "</" << i->first.getName() << ">" << endl;	
+	config <<  "<property name=\""
+	       << encode(i->first.getName()) << "\" value=\""
+	       << encode(get<String>(i->first)) << "\"/>" << endl;
     }
 
 #if (__GNUC__ < 3)

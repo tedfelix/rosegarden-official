@@ -1221,7 +1221,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 {
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
-                                          3, 2,
+                                          4, 2,
                                           10, 5);
 
     layout->addWidget(new QLabel(i18n("Filename:"), frame), 0, 0);
@@ -1257,6 +1257,8 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     m_metadata->setRenameable(1);
     m_metadata->setItemMargin(5);
     //m_metadata->setSelectionModeExt(KListView::NoSelection);
+    m_metadata->setDefaultRenameAction(QListView::Accept);
+    m_metadata->setShowSortIndicator(true);
 
     Rosegarden::Configuration &metadata = doc->getComposition().getMetadata();
     std::vector<std::string> names(metadata.getPropertyNames());
@@ -1295,12 +1297,13 @@ DocumentMetaConfigurationPage::slotAddNewProperty()
     int i = 0;
 
     while (1) {
-        propertyName = (i > 0 ? i18n("New property %1").arg(i) : i18n("New property"));
+        propertyName =
+	    (i > 0 ? i18n("{new property %1}").arg(i) : i18n("{new property}"));
         if (!m_doc->getComposition().getMetadata().has(qstrtostr(propertyName))) break;
         ++i;
     }
 
-    new KListViewItem(m_metadata, propertyName, i18n("Undefined"));
+    new KListViewItem(m_metadata, propertyName, i18n("{undefined}"));
 }
 
 void
@@ -1313,6 +1316,7 @@ void
 DocumentMetaConfigurationPage::apply()
 {
     Rosegarden::Configuration &metadata = m_doc->getComposition().getMetadata();
+    metadata.clear();
 
     for (QListViewItem *item = m_metadata->firstChild();
          item != 0; item = item->nextSibling()) {
@@ -1320,6 +1324,8 @@ DocumentMetaConfigurationPage::apply()
         metadata.set<String>(qstrtostr(item->text(0).lower()),
                              qstrtostr(item->text(1)));
     }
+
+    m_doc->slotDocumentModified();
 }
 
 

@@ -32,6 +32,7 @@
 
 #include <qstring.h>
 #include <qregexp.h> // QT3.0 replace()
+#include <qtextcodec.h>
 
 #include "lilypondio.h"
 #include "config.h"
@@ -383,7 +384,9 @@ std::string LilypondExporter::indent(const int &column) {
 // things [ { ( ) } ]
 std::string
 LilypondExporter::protectIllegalChars(std::string inStr) {
+
     QString tmpStr = strtoqstr(inStr);
+
     tmpStr.replace(QRegExp("_"), " ");
     tmpStr.replace(QRegExp("&"), "\\&");
     tmpStr.replace(QRegExp("\\^"), "\\^");
@@ -400,7 +403,14 @@ LilypondExporter::protectIllegalChars(std::string inStr) {
     tmpStr.replace(QRegExp("\""), "");
     tmpStr.replace(QRegExp("'"), "");
     tmpStr.replace(QRegExp("\\-"), "\\\\-");
-    return (qstrtostr(tmpStr));
+
+    // [cc] Convert to latin1, which is what Lilypond expects.
+    // I have no idea whether, or how, non-latin1 characters can be
+    // handled by Lilypond; I just know if you feed it utf8 you get
+    // garbage.
+
+    static QTextCodec *codec(QTextCodec::codecForName("ISO8859-1"));
+    return codec->fromUnicode(tmpStr).data();
 }
 
 bool

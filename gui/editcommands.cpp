@@ -772,7 +772,7 @@ EventQuantizeCommand::makeQuantizer(QString configGroup, std::string target,
     config->setGroup(configGroup);
 
     Rosegarden::timeT defaultUnit = 
-	Rosegarden::Note(Rosegarden::Note::Semiquaver).getDuration();
+	Rosegarden::Note(Rosegarden::Note::Demisemiquaver).getDuration();
     
     int type = config->readNumEntry("quantizetype", notation ? 2 : 0);
     Rosegarden::timeT unit = config->readNumEntry("quantizeunit",defaultUnit);

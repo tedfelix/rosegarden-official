@@ -185,42 +185,44 @@
 
 <Menu noMerge="1" name="Notes">
   <text>&amp;Notes</text>
-  <Action name="double_whole" />
-  <Action name="whole" />
-  <Action name="half" />
-  <Action name="quarter" />
-  <Action name="8th" />
-  <Action name="16th" />
-  <Action name="32nd" />
-  <Action name="64th" />
+  <!-- Reference names, but with _ instead of - -->
+  <Action name="breve" />
+  <Action name="semibreve" />
+  <Action name="minim" />
+  <Action name="crotchet" />
+  <Action name="quaver" />
+  <Action name="semiquaver" />
+  <Action name="demisemi" />
+  <Action name="hemidemisemi" />
   <Separator/>
-  <Action name="dotted_whole" />
-  <Action name="dotted_half" />
-  <Action name="dotted_quarter" />
-  <Action name="dotted_8th" />
-  <Action name="dotted_16th" />
-  <Action name="dotted_32nd" />
+  <Action name="dotted_semibreve" />
+  <Action name="dotted_minim" />
+  <Action name="dotted_crotchet" />
+  <Action name="dotted_quaver" />
+  <Action name="dotted_semiquaver" />
+  <Action name="dotted_demisemi" />
   <Separator/>
   <Action name="switch_from_rest_to_note" />
 </Menu>
 
 <Menu noMerge="1" name="Rests">
   <text>&amp;Rests</text>
-  <Action name="double_whole_rest" />
-  <Action name="whole_rest" />
-  <Action name="half_rest" />
-  <Action name="quarter_rest" />
-  <Action name="8th_rest" />
-  <Action name="16th_rest" />
-  <Action name="32nd_rest" />
-  <Action name="64th_rest" />
+  <!-- Reference names, but with _ instead of - -->
+  <Action name="rest_breve" />
+  <Action name="rest_semibreve" />
+  <Action name="rest_minim" />
+  <Action name="rest_crotchet" />
+  <Action name="rest_quaver" />
+  <Action name="rest_semiquaver" />
+  <Action name="rest_demisemi" />
+  <Action name="rest_hemidemisemi" />
   <Separator/>
-  <Action name="dotted_whole_rest" />
-  <Action name="dotted_half_rest" />
-  <Action name="dotted_quarter_rest" />
-  <Action name="dotted_8th_rest" />
-  <Action name="dotted_16th_rest" />
-  <Action name="dotted_32nd_rest" />
+  <Action name="dotted_rest_semibreve" />
+  <Action name="dotted_rest_minim" />
+  <Action name="dotted_rest_crotchet" />
+  <Action name="dotted_rest_quaver" />
+  <Action name="dotted_rest_semiquaver" />
+  <Action name="dotted_rest_demisemi" />
   <Separator/>
   <Action name="switch_from_note_to_rest" />
 </Menu>
@@ -295,22 +297,24 @@
 </ToolBar>
 
 <ToolBar name="notesToolBar" newline="true">
-  <Action name="double_whole" />
-  <Action name="whole" />
-  <Action name="half" />
-  <Action name="quarter" />
-  <Action name="8th" />
-  <Action name="16th" />
-  <Action name="32nd" />
-  <Action name="64th" />
-  <Separator/>
 
-  <Action name="dotted_whole" />
-  <Action name="dotted_half" />
-  <Action name="dotted_quarter" />
-  <Action name="dotted_8th" />
-  <Action name="dotted_16th" />
-  <Action name="dotted_32nd" />
+  <!-- Reference names, but with _ instead of - -->
+  <Action name="breve" />
+  <Action name="semibreve" />
+  <Action name="minim" />
+  <Action name="crotchet" />
+  <Action name="quaver" />
+  <Action name="semiquaver" />
+  <Action name="demisemi" />
+  <Action name="hemidemisemi" />
+  <Separator/>
+  <Action name="dotted_semibreve" />
+  <Action name="dotted_minim" />
+  <Action name="dotted_crotchet" />
+  <Action name="dotted_quaver" />
+  <Action name="dotted_semiquaver" />
+  <Action name="dotted_demisemi" />
+
   <Separator/>
 
   <Action name="chord_mode"/>
@@ -318,24 +322,22 @@
 </ToolBar>
 
 <ToolBar name="restsToolBar">
-
-  <Action name="double_whole_rest" />
-  <Action name="whole_rest" />
-  <Action name="half_rest" />
-  <Action name="quarter_rest" />
-  <Action name="8th_rest" />
-  <Action name="16th_rest" />
-  <Action name="32nd_rest" />
-  <Action name="64th_rest" />
+  <!-- Reference names, but with _ instead of - -->
+  <Action name="rest_breve" />
+  <Action name="rest_semibreve" />
+  <Action name="rest_minim" />
+  <Action name="rest_crotchet" />
+  <Action name="rest_quaver" />
+  <Action name="rest_semiquaver" />
+  <Action name="rest_demisemi" />
+  <Action name="rest_hemidemisemi" />
   <Separator/>
-
-  <Action name="dotted_whole_rest" />
-  <Action name="dotted_half_rest" />
-  <Action name="dotted_quarter_rest" />
-  <Action name="dotted_8th_rest" />
-  <Action name="dotted_16th_rest" />
-  <Action name="dotted_32nd_rest" />
-  <Separator/>
+  <Action name="dotted_rest_semibreve" />
+  <Action name="dotted_rest_minim" />
+  <Action name="dotted_rest_crotchet" />
+  <Action name="dotted_rest_quaver" />
+  <Action name="dotted_rest_semiquaver" />
+  <Action name="dotted_rest_demisemi" />
 
 </ToolBar>
 
