@@ -468,27 +468,29 @@ void SegmentItem::drawShape(QPainter& painter)
 {
     QCanvasRectangle::drawShape(painter);
 
-    /*
-       // This code (mainly the collisions() call) is causing an incredible 
-       // performance hit during playback.  Just taken it out for the moment
-       // [rwb]
-       //
-    QCanvasItemList overlaps = collisions(true);
+    // Can't use collisions() here : it's too slow. Go the simpler way.
+    //
+    QCanvasItemList items = canvas()->allItems();
 
     painter.save();
     painter.setBrush(RosegardenGUIColours::SegmentIntersectBlock);
     
-    for (QCanvasItemList::Iterator it=overlaps.begin(); it!=overlaps.end(); ++it) {
+    for (QCanvasItemList::Iterator it=items.begin(); it!=items.end(); ++it) {
+
+        if ((*it) == this) continue; // skip ourselves
+
         SegmentItem *item = dynamic_cast<SegmentItem*>(*it);
 
         if (!item) continue;
-
+        if (item->getTrack() != getTrack()) continue;
         QRect intersection = rect() & item->rect();
+        if (!intersection.isValid()) continue;
+
         painter.drawRect(intersection);
     }
 
     painter.restore();
-    */
+
         
     if (m_preview && m_showPreview) m_preview->drawShape(painter);
 
