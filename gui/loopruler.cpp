@@ -198,16 +198,19 @@ LoopRuler::getXPosition(const Rosegarden::timeT &pos)
     int result = 0;
     int thisBar = m_doc->getComposition().getBarNumber(pos, false);
 
-    cout << "POS = " << pos << " : BAR = " << thisBar << endl;
+    //cout << "POS = " << pos << " : BAR = " << thisBar << endl;
 
     for (int i = 0; i < thisBar; i++)
     {
         result += m_barWidth * m_barWidthMap[i] / m_barWidthMap[0];
     }
 
-    cout << "BAR START = " << m_doc->getComposition().getBarStart(pos) << endl;
+    std::pair<Rosegarden::timeT, Rosegarden::timeT> barRange =
+                            m_doc->getComposition().getBarRange(pos);
 
-    result += (pos - m_doc->getComposition().getBarStart(pos))
+
+    cout << "START = " << barRange.first << " - END = " << barRange.second << endl;
+    result += (pos - barRange.first)/(barRange.second - barRange.first)
               * m_barWidth * m_barWidthMap[thisBar]/m_barWidthMap[0];
 
     return result;
@@ -220,6 +223,7 @@ LoopRuler::drawLoopMarker()
     if (m_loopMarker == 0)
         m_loopMarker = new QCanvasRectangle(m_canvas);
 
+    //cout << "RESULT " << getXPosition(m_startLoop) << endl;
     getXPosition(m_startLoop);
     
 }
