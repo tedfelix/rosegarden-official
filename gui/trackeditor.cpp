@@ -304,7 +304,7 @@ void TrackEditor::setupHorizontalHeader()
 	std::pair<timeT, timeT> times = comp.getBarRange(i, false);
 
 	//!!! ??? s'pose we should divide by some resolution-dependent thing
-	int width = (times.second - times.first) / 7; // 384 -> 54
+	int width = (times.second - times.first) / 5;
 	if (width == 0) width = 10;
         m_hHeader->resizeSection(i, width);
 

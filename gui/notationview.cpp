@@ -761,39 +761,6 @@ void NotationView::setViewSize(QSize s)
     canvas()->resize(s.width(), s.height());
 }
 
-//!!! This should probably be unnecessary here and done in
-//NotationStaff instead (it should be intelligent enough to query the
-//notationhlayout itself)
-
-/*!!!
-=======
-
-void NotationView::showBars(int staffNo)
-{
-    NotationStaff &staff = *m_staffs[staffNo];
-    staff.deleteBars();
-    staff.deleteTimeSignatures();
-
-    unsigned int barCount = m_hlayout->getBarLineCount(staff);
-
-    for (unsigned int i = 0; i < barCount; ++i) {
-
-        if (m_hlayout->isBarLineVisible(staff, i)) {
-
-            staff.insertBar(unsigned(m_hlayout->getBarLineX(staff, i)),
-                            m_hlayout->isBarLineCorrect(staff, i));
-
-            int x;
-            Event *timeSig = m_hlayout->getTimeSignatureInBar(staff, i, x);
-            if (timeSig && i < barCount-1) {
-                staff.insertTimeSignature(x, TimeSignature(*timeSig));
-            }
-        }
-    }
-
-    updateRuler();
-}
-*/
 void NotationView::updateRuler()
 {
     if (m_lastFinishingStaff < 0 ||
