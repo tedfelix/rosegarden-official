@@ -214,7 +214,7 @@ protected:
  */
 class NotationConfigurationPage : public TabbedConfigurationPage
 {
-    Q_OBJECT;
+    Q_OBJECT
 
 public:
     NotationConfigurationPage(KConfig *cfg,
@@ -269,7 +269,7 @@ protected:
  */
 class MatrixConfigurationPage : public TabbedConfigurationPage
 {
-    Q_OBJECT;
+    Q_OBJECT
 
 public:
     MatrixConfigurationPage(KConfig *cfg,

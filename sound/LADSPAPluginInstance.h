@@ -126,7 +126,7 @@ protected:
     bool                      m_bypassed;
 };
 
-};
+}
 
 #endif // HAVE_LADSPA
 

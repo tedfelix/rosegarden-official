@@ -550,5 +550,5 @@ StudioControl::sendNRPN(Rosegarden::InstrumentId instrumentId,
 }
 
 
-};
+}
 

@@ -32,7 +32,7 @@ namespace Rosegarden
 {
     class Segment;
     class AudioFile;
-};
+}
 
 /**
  *
