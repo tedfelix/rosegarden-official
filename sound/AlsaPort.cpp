@@ -53,13 +53,13 @@ AlsaPort::AlsaPort(InstrumentId startId,
                    const std::string &name,
                    int client,
                    int port,
-                   bool duplex):
+                   PortDirection direction):
         m_startId(startId),
         m_endId(endId),
         m_name(name),
         m_client(client),
         m_port(port),
-        m_duplex(duplex),
+        m_direction(direction),
         m_type(0)
 {
 }
@@ -73,12 +73,12 @@ AlsaPortDescription::AlsaPortDescription(Instrument::InstrumentType type,
                                          const std::string &name,
                                          int client,
                                          int port,
-                                         bool duplex):
+                                         PortDirection direction):
         m_type(type),
         m_name(name),
         m_client(client),
         m_port(port),
-        m_duplex(duplex)
+        m_direction(direction)
 {
 }
 

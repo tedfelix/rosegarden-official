@@ -25,6 +25,17 @@ namespace Rosegarden
 {
 
 
+MappedInstrument::MappedInstrument():
+    m_type(Instrument::Midi),
+    m_channel(0),
+    m_id(0),
+    m_name(std::string("")),
+    m_port(0),
+    m_audioChannels(0),
+    m_direction(WriteOnly)
+{
+}
+
 MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
                                    MidiByte channel,
                                    InstrumentId id):
@@ -32,14 +43,16 @@ MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
     m_channel(channel),
     m_id(id),
     m_name(std::string("")),
-    m_subOrdering(0)
+    m_port(0),
+    m_audioChannels(0),
+    m_direction(WriteOnly)
 {
 }
 
 MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
                                    MidiByte channel,
                                    InstrumentId id,
-                                   MappedInstrumentSubOrdering subOrdering,
+                                   int port,
                                    const std::string &name,
                                    DeviceId device):
     m_type(type),
@@ -47,7 +60,9 @@ MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
     m_id(id),
     m_name(name),
     m_device(device),
-    m_subOrdering(subOrdering)
+    m_port(port),
+    m_audioChannels(0),
+    m_direction(WriteOnly)
 {
 }
 
@@ -57,7 +72,9 @@ MappedInstrument::MappedInstrument(const Instrument &instr):
     m_id(instr.getId()),
     m_name(instr.getName()),
     m_device((instr.getDevice())->getId()),
-    m_subOrdering(instr.getSubOrdering())
+    m_port(0),
+    m_audioChannels(instr.getAudioChannels()),
+    m_direction(WriteOnly)
 {
 }
 
@@ -67,24 +84,98 @@ MappedInstrument::MappedInstrument(Instrument *instr):
     m_id(instr->getId()),
     m_name(instr->getName()),
     m_device(instr->getDevice()->getId()),
-    m_subOrdering(instr->getSubOrdering())
+    m_port(0),
+    m_audioChannels(instr->getAudioChannels()),
+    m_direction(WriteOnly)
 {
 }
 
-
-MappedInstrument::~MappedInstrument()
+QDataStream&
+operator>>(QDataStream &dS, MappedInstrument *mI)
 {
+    unsigned int type, channel, id, device, audioChannels, direction;
+    int port;
+    QString name;
+
+    dS >> type;
+    dS >> channel;
+    dS >> id;
+    dS >> name;
+    dS >> device;
+    dS >> port;
+    dS >> audioChannels;
+    dS >> direction;
+
+    mI->setId(Instrument::InstrumentType(type));
+    mI->setChannel(MidiByte(channel));
+    mI->setId(InstrumentId(id));
+    mI->setName(std::string(name.data()));
+    mI->setDevice(DeviceId(device));
+    mI->setPort(port);
+    mI->setAudioChannels(audioChannels);
+    mI->setDirection((PortDirection)direction);
+
+    return dS;
 }
 
-MappedInstrument::MappedInstrument(MappedInstrument *mI)
+QDataStream&
+operator>>(QDataStream &dS, MappedInstrument &mI)
 {
-    m_type = mI->m_type;
-    m_channel = mI->m_channel;
-    m_id = mI->m_id;
-    m_name = mI->m_name;
-    m_subOrdering = mI->m_subOrdering;
+    unsigned int type, channel, id, device, audioChannels, direction;
+    int port;
+    QString name;
+
+    dS >> type;
+    dS >> channel;
+    dS >> id;
+    dS >> name;
+    dS >> device;
+    dS >> port;
+    dS >> audioChannels;
+    dS >> direction;
+
+    mI.setId(Instrument::InstrumentType(type));
+    mI.setChannel(MidiByte(channel));
+    mI.setId(InstrumentId(id));
+    mI.setName(std::string(name.data()));
+    mI.setDevice(DeviceId(device));
+    mI.setPort(port);
+    mI.setAudioChannels(audioChannels);
+    mI.setDirection((PortDirection)direction);
+
+    return dS;
 }
 
+QDataStream&
+operator<<(QDataStream &dS, MappedInstrument *mI)
+{
+    dS << (unsigned int)mI->getType();
+    dS << (unsigned int)mI->getChannel();
+    dS << (unsigned int)mI->getId();;
+    dS << QString(mI->getName().c_str());
+    dS << (unsigned int)mI->getDevice();
+    dS << (int)mI->getPort();
+    dS << (unsigned int)mI->getAudioChannels();
+    dS << (unsigned int)mI->getDirection();
+
+    return dS;
+}
+
+
+QDataStream&
+operator<<(QDataStream &dS, const MappedInstrument &mI)
+{
+    dS << (unsigned int)mI.getType();
+    dS << (unsigned int)mI.getChannel();
+    dS << (unsigned int)mI.getId();;
+    dS << QString(mI.getName().c_str());
+    dS << (unsigned int)mI.getDevice();
+    dS << (int)mI.getPort();
+    dS << (unsigned int)mI.getAudioChannels();
+    dS << (unsigned int)mI.getDirection();
+
+    return dS;
+}
 
 }
 

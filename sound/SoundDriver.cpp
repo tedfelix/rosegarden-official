@@ -275,7 +275,6 @@ SoundDriver::getMappedDevice(DeviceId id)
             retDevice.setId(id);
             retDevice.setName((*dIt)->getName());
             retDevice.setType((*dIt)->getType());
-            retDevice.setDuplex((*dIt)->getDuplex());
             break;
         }
     }

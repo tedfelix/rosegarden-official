@@ -39,6 +39,7 @@
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
 #include "rosestrings.h"
+#include "MappedCommon.h"
 
 #ifdef HAVE_LIBJACK
 #include <jack/types.h>
@@ -302,7 +303,8 @@ AlsaDriver::generateInstruments()
     snd_seq_client_info_t *cinfo;
     snd_seq_port_info_t *pinfo;
     int  client;
-    unsigned int cap;
+    unsigned int writeCap = SND_SEQ_PORT_CAP_SUBS_WRITE|SND_SEQ_PORT_CAP_WRITE;
+    unsigned int readCap = SND_SEQ_PORT_CAP_SUBS_READ|SND_SEQ_PORT_CAP_READ;
 
     snd_seq_client_info_alloca(&cinfo);
     snd_seq_client_info_set_client(cinfo, -1);
@@ -337,14 +339,16 @@ AlsaDriver::generateInstruments()
         snd_seq_port_info_set_client(pinfo, client);
         snd_seq_port_info_set_port(pinfo, -1);
 
-        // ignore ourselves
-        if (m_client == client) continue;
+        // Ignore ourselves and the system client
+        //
+        if (client == m_client || client == 0) continue;
 
         while (snd_seq_query_next_port(m_midiHandle, pinfo) >= 0)
         {
-            cap = (SND_SEQ_PORT_CAP_SUBS_WRITE|SND_SEQ_PORT_CAP_WRITE);
-
-            if ((snd_seq_port_info_get_capability(pinfo) & cap) == cap)
+            if (((snd_seq_port_info_get_capability(pinfo) & writeCap)
+                    == writeCap) ||
+                ((snd_seq_port_info_get_capability(pinfo) & readCap)
+                 == readCap))
             {
                 std::cout << "    "
                           << snd_seq_port_info_get_client(pinfo) << ","
@@ -352,11 +356,25 @@ AlsaDriver::generateInstruments()
                           << snd_seq_client_info_get_name(cinfo) << ", "
                           << snd_seq_port_info_get_name(pinfo) << ")";
 
+                PortDirection direction;
+
                 if (snd_seq_port_info_get_capability(pinfo) &
                     SND_SEQ_PORT_CAP_DUPLEX)
+                {
+                    direction = Duplex;
                     std::cout << "\t\t\t(DUPLEX)";
-                else
+                }
+                else if (snd_seq_port_info_get_capability(pinfo) &
+                         SND_SEQ_PORT_CAP_WRITE)
+                {
+                    direction = WriteOnly;
                     std::cout << "\t\t(WRITE ONLY)";
+                }
+                else
+                {
+                    direction = ReadOnly;
+                    std::cout << "\t\t(READ ONLY)";
+                }
 
                 // Generate a unique name using the client id
                 //
@@ -377,8 +395,7 @@ AlsaDriver::generateInstruments()
                             clientName,
                             snd_seq_port_info_get_client(pinfo),
                             snd_seq_port_info_get_port(pinfo),
-                            snd_seq_port_info_get_capability(pinfo) &
-                            SND_SEQ_PORT_CAP_DUPLEX);
+                            direction);
 
                 alsaPorts.push_back(portDescription);
 
@@ -405,7 +422,7 @@ AlsaDriver::generateInstruments()
                               (*it)->m_name,
                               (*it)->m_client,
                               (*it)->m_port,
-                              (*it)->m_duplex);
+                              (*it)->m_direction);
     }
 
 #ifdef HAVE_LIBJACK
@@ -457,8 +474,7 @@ AlsaDriver::generateInstruments()
         MappedDevice *device =
                         new MappedDevice(m_deviceRunningId,
                                          Rosegarden::Device::Audio,
-                                         "JACK Audio",
-                                         true);
+                                         "JACK Audio");
         m_devices.push_back(device);
     }
 
@@ -474,7 +490,7 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
                                   const std::string &name, 
                                   int client,
                                   int port,
-                                  bool duplex)
+                                  PortDirection direction)
 {
     // only increment device number if we're on a new client
     //
@@ -501,7 +517,7 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
                                      name,
                                      client,
                                      port,
-                                     duplex);  // a duplex port?
+                                     direction);  // port direction
 
             m_alsaPorts.push_back(alsaInstr);
 
@@ -528,7 +544,7 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
                                  name,
                                  client,
                                  port,
-                                 duplex);  // a duplex port?
+                                 direction);
 
         m_alsaPorts.push_back(alsaInstr);
 
@@ -553,8 +569,7 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
         MappedDevice *device =
                 new MappedDevice(m_deviceRunningId,
                                  Rosegarden::Device::Midi,
-                                 name,
-                                 duplex);
+                                 name);
         m_devices.push_back(device);
     }
 
@@ -2060,7 +2075,7 @@ AlsaDriver::getFirstDestination(bool duplex)
         //
         if (duplex)
         {
-            if ((*it)->m_duplex == true)
+            if ((*it)->m_direction == Duplex)
                 return destPair;
         }
         else
@@ -2068,7 +2083,7 @@ AlsaDriver::getFirstDestination(bool duplex)
             // If duplex port isn't required then choose first
             // specifically non-duplex port (should be a synth)
             //
-            if ((*it)->m_duplex == false)
+            if ((*it)->m_direction != Duplex)
                 return destPair;
         }
     }
@@ -3152,9 +3167,11 @@ AlsaDriver::checkForNewClients()
     snd_seq_client_info_t *cinfo;
     snd_seq_port_info_t *pinfo;
     int  client;
-    unsigned int cap;
     unsigned int currentClientCount = 0,
                  oldClientCount = 0;
+
+    unsigned int writeCap = SND_SEQ_PORT_CAP_SUBS_WRITE|SND_SEQ_PORT_CAP_WRITE;
+    unsigned int readCap = SND_SEQ_PORT_CAP_SUBS_READ|SND_SEQ_PORT_CAP_READ;
 
     snd_seq_client_info_alloca(&cinfo);
     snd_seq_client_info_set_client(cinfo, -1);
@@ -3175,14 +3192,16 @@ AlsaDriver::checkForNewClients()
         snd_seq_port_info_set_client(pinfo, client);
         snd_seq_port_info_set_port(pinfo, -1);
 
-        // ignore ourselves
-        if (m_client == client) continue;
+        // Ignore ourselves and the system client
+        //
+        if (client == m_client || client == 0) continue;
 
         while (snd_seq_query_next_port(m_midiHandle, pinfo) >= 0)
         {
-            cap = (SND_SEQ_PORT_CAP_SUBS_WRITE|SND_SEQ_PORT_CAP_WRITE);
-
-            if ((snd_seq_port_info_get_capability(pinfo) & cap) == cap)
+            if (((snd_seq_port_info_get_capability(pinfo) & writeCap)
+                        == writeCap) ||
+                ((snd_seq_port_info_get_capability(pinfo) & readCap)
+                        == readCap))
                 currentClientCount++;
         }
     }
@@ -3271,7 +3290,7 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id)
         return;
     }
 
-    if ((*it)->m_duplex != true)
+    if ((*it)->m_direction == WriteOnly)
     {
         std::cerr << "AlsaDriver::setRecordDevice - "
                   << "attempting to set non-duplex device (" << id 
@@ -3377,7 +3396,7 @@ AlsaDriver::sendMMC(Rosegarden::MidiByte deviceId,
     {
         // One message per duplex device
         //
-        if ((*it)->m_port == 0 && (*it)->m_duplex)
+        if ((*it)->m_port == 0 && (*it)->m_direction == Duplex)
         {
             try
             {
@@ -3432,7 +3451,7 @@ AlsaDriver::sendSystemDirect(MidiByte command, const std::string &args)
     {
         // One message per duplex device
         //
-        if ((*it)->m_port == 0 && (*it)->m_duplex)
+        if ((*it)->m_port == 0 && (*it)->m_direction == Duplex)
         {
             snd_seq_event_t event;
             memset(&event, 0, sizeof(&event));
@@ -3496,7 +3515,7 @@ AlsaDriver::sendSystemQueued(Rosegarden::MidiByte command,
     {
         // One message per duplex device
         //
-        if ((*it)->m_port == 0 && (*it)->m_duplex)
+        if ((*it)->m_port == 0 && (*it)->m_direction == Duplex)
         {
             snd_seq_event_t event;
             memset(&event, 0, sizeof(&event));
@@ -3627,8 +3646,6 @@ AlsaDriver::sendMidiClock(const RealTime &playLatency)
 
 
 }
-
-
 
 }
 

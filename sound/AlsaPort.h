@@ -22,6 +22,7 @@
 #include <set>
 #include "config.h"
 #include "Instrument.h"
+#include "MappedCommon.h"
 
 #ifndef _ALSAPORT_H_
 #define _ALSAPORT_H_
@@ -43,16 +44,16 @@ public:
              const std::string &name,
              int client,
              int port,
-             bool duplex);
+             PortDirection direction);
     ~AlsaPort();
 
-    InstrumentId m_startId;
-    InstrumentId m_endId;
-    std::string  m_name;
-    int          m_client;
-    int          m_port;
-    bool         m_duplex;   // is an input port as well?
-    unsigned int m_type;     // MIDI, synth or what?
+    InstrumentId  m_startId;
+    InstrumentId  m_endId;
+    std::string   m_name;
+    int           m_client;
+    int           m_port;
+    PortDirection m_direction; // read, write or duplex
+    unsigned int  m_type;      // MIDI, synth or what?
 };
 
 
@@ -71,16 +72,16 @@ public:
                         const std::string &name,
                         int client,
                         int port,
-                        bool duplex);
+                        PortDirection direction);
 
     Instrument::InstrumentType m_type;
     std::string                m_name;
     int                        m_client;
     int                        m_port;
-    bool                       m_duplex;
+    PortDirection              m_direction;
 };
 
-// Sort by checking duplex state
+// Sort by checking direction
 //
 struct AlsaPortCmp
 {
@@ -98,7 +99,7 @@ struct AlsaPortCmp
         // emperically correct for the moment and can't see a 
         // working alternative.
         //
-        if (a1->m_client < 128 && a1->m_duplex != a2->m_duplex)
+        if (a1->m_client < 128 && a1->m_direction != a2->m_direction)
             return true;
         else
         {

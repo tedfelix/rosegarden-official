@@ -28,6 +28,9 @@
 //
 #include <vector>
 
+#include <qstring.h>
+#include <qdatastream.h>
+
 namespace Rosegarden
 {
 
@@ -39,6 +42,15 @@ typedef float        MappedObjectValue;
 // replaced with a std::vector<> for Qt2 compatibility
 
 typedef std::vector<MappedObjectProperty> MappedObjectPropertyList;
+
+// The direction in which a port operates.
+//
+typedef enum
+{
+    ReadOnly,  // input port
+    WriteOnly, // output port
+    Duplex
+} PortDirection;
 
 }
 

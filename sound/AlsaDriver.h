@@ -80,7 +80,7 @@ public:
                                const std::string &name, 
                                int client,
                                int port,
-                               bool duplex);
+                               PortDirection direction);
 
     virtual void processEventsOut(const MappedComposition &mC,
                                   const Rosegarden::RealTime &playLatency, 

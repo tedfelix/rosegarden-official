@@ -21,6 +21,7 @@
 
 #include "Instrument.h"
 #include "MappedDevice.h"
+#include "MappedCommon.h"
 
 #ifndef _MAPPEDINSTRUMENT_H_
 #define _MAPPEDINSTRUMENT_H_
@@ -33,11 +34,11 @@
 namespace Rosegarden
 {
 
-typedef int MappedInstrumentSubOrdering;
-
 class MappedInstrument
 {
 public:
+
+    MappedInstrument();
 
     // GUI uses this constructor because it already knows
     // the name of the Instrument
@@ -52,7 +53,7 @@ public:
     MappedInstrument(Instrument::InstrumentType type,
                      MidiByte channel,
                      InstrumentId id,
-                     MappedInstrumentSubOrdering subOrdering,
+                     int port,
                      const std::string &name,
                      DeviceId device);
 
@@ -60,11 +61,7 @@ public:
     MappedInstrument(const Instrument &instrument);
     MappedInstrument(Instrument *instrument);
 
-    // extra and copy
-    MappedInstrument(MappedInstrument *mI);
-
-
-    ~MappedInstrument();
+    ~MappedInstrument() { ;}
 
     void setId(InstrumentId id) { m_id = id; }
     InstrumentId getId() const { return m_id; }
@@ -81,13 +78,21 @@ public:
     void setDevice(DeviceId device) { m_device = device; }
     DeviceId getDevice() const { return m_device; }
 
-    void setSubOrdering(MappedInstrumentSubOrdering order) { m_subOrdering = order; }
-    MappedInstrumentSubOrdering getSubOrdering() const { return m_subOrdering; }
+    void setPort(int port) { m_port = port; }
+    int getPort() const { return m_port; }
 
     // How many audio channels we've got on this audio MappedInstrument
     //
     unsigned int getAudioChannels() const { return m_audioChannels; }
     void setAudioChannels(unsigned int channels) { m_audioChannels = channels; }
+
+    PortDirection getDirection() const { return m_direction; }
+    void setDirection(PortDirection direction) { m_direction = direction; }
+
+    friend QDataStream& operator>>(QDataStream &dS, MappedInstrument *mI);
+    friend QDataStream& operator<<(QDataStream &dS, MappedInstrument *mI);
+    friend QDataStream& operator>>(QDataStream &dS, MappedInstrument &mI);
+    friend QDataStream& operator<<(QDataStream &dS, const MappedInstrument &mI);
 
 private:
 
@@ -97,12 +102,20 @@ private:
     std::string                 m_name;
     DeviceId                    m_device;
 
-    MappedInstrumentSubOrdering m_subOrdering;
+    // If this is a MIDI MappedInstrument then we might have a port
+    // number.
+    //
+    int                         m_port;
 
     // If this is an audio MappedInstrument then how many channels
     // are associated with it?
     //
     unsigned int                m_audioChannels;
+
+    // Instrument direction - like PortDirection shows what we
+    // can do with this Instrument.
+    //
+    PortDirection               m_direction;
 
 };
 

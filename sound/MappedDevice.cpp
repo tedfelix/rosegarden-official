@@ -31,22 +31,18 @@ MappedDevice::MappedDevice():
     m_id(0),
     m_type(Rosegarden::Device::Midi),
     m_name("MappedDevice default name"),
-    m_duplex(false),
-    m_client(-1),
-    m_port(-1)
+    m_client(-1)
 {
 }
 
 MappedDevice::MappedDevice(Rosegarden::DeviceId id,
                            Rosegarden::Device::DeviceType type,
-                           const std::string &name, bool duplex):
+                           const std::string &name):
     std::vector<Rosegarden::MappedInstrument*>(),
     m_id(id),
     m_type(type),
     m_name(name),
-    m_duplex(duplex),
-    m_client(-1),
-    m_port(-1)
+    m_client(-1)
 {
 }
 
@@ -60,12 +56,11 @@ MappedDevice::MappedDevice(const MappedDevice &mD):
     clear();
 
     for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); it++)
-        this->push_back(new MappedInstrument(*it));
+        this->push_back(new MappedInstrument(**it));
 
     m_id = mD.getId();
     m_type = mD.getType();
     m_name = mD.getName();
-    m_duplex = mD.getDuplex();
 }
 
 void
@@ -83,7 +78,7 @@ MappedDevice&
 MappedDevice::operator+(const MappedDevice &mD)
 {
     for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); it++)
-        this->push_back(new MappedInstrument(*it));
+        this->push_back(new MappedInstrument(**it));
 
     return *this;
 }
@@ -96,12 +91,11 @@ MappedDevice::operator=(const MappedDevice &mD)
     clear();
 
     for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); it++)
-        this->push_back(new MappedInstrument(*it));
+        this->push_back(new MappedInstrument(**it));
 
     m_id = mD.getId();
     m_type = mD.getType();
     m_name = mD.getName();
-    m_duplex = mD.getDuplex();
 
     return *this;
 }
@@ -113,41 +107,24 @@ operator>>(QDataStream &dS, MappedDevice *mD)
     int instruments = 0;
     dS >> instruments;
 
-    unsigned int type = 0, channel = 0, id = 0, device = 0;
-    int subOrder = 0;
-    QString name;
-
+    MappedInstrument mI;
     while (!dS.atEnd() && instruments)
     {
-        dS >> type;
-        dS >> channel;
-        dS >> id;
-        dS >> subOrder;
-        dS >> name;
-        dS >> device;
-
-        mD->push_back(new MappedInstrument((Instrument::InstrumentType)type,
-                                           (MidiByte)channel,
-                                           (InstrumentId)id,
-                                          (MappedInstrumentSubOrdering)subOrder,
-                                           name.utf8().data(),
-                                           (DeviceId)device));
-
+        dS >> mI;
+        mD->push_back(new MappedInstrument(mI));
         instruments--;
     }
 
-    // Name and duplex state
-    //
-    unsigned int duplex;
+    QString name;
+    unsigned int id;
     int dType;
+
     dS >> id;
     dS >> dType;
     dS >> name;
-    dS >> duplex;
     mD->setId(id);
     mD->setType(Rosegarden::Device::DeviceType(dType));
     mD->setName(std::string(name.data()));
-    mD->setDuplex(bool(duplex));
 
     if (instruments)
     {
@@ -165,41 +142,25 @@ operator>>(QDataStream &dS, MappedDevice &mD)
     int instruments;
     dS >> instruments;
 
-    unsigned int type, channel, id, device;
-    int subOrder = 0;
-    QString name;
+    MappedInstrument mI;
 
     while (!dS.atEnd() && instruments)
     {
-        dS >> type;
-        dS >> channel;
-        dS >> id;
-        dS >> subOrder;
-        dS >> name;
-        dS >> device;
-
-        mD.push_back(new MappedInstrument((Instrument::InstrumentType)type,
-                                          (MidiByte)channel,
-                                          (InstrumentId)id,
-                                          (MappedInstrumentSubOrdering)subOrder,
-                                          name.utf8().data(),
-                                          (DeviceId)device));
-
+        dS >> mI;
+        mD.push_back(new MappedInstrument(mI));
         instruments--;
     }
 
-    // Name and duplex state
-    //
-    unsigned int duplex;
+    unsigned int id;
+    QString name;
     int dType;
+
     dS >> id;
     dS >> dType;
     dS >> name;
-    dS >> duplex;
     mD.setId(id);
     mD.setType(Rosegarden::Device::DeviceType(dType));
     mD.setName(std::string(name.data()));
-    mD.setDuplex(bool(duplex));
 
     if (instruments)
     {
@@ -216,21 +177,11 @@ operator<<(QDataStream &dS, MappedDevice *mD)
     dS << mD->size();
 
     for (MappedDeviceIterator it = mD->begin(); it != mD->end(); it++)
-    {
-        dS << (unsigned int)(*it)->getType();
-        dS << (unsigned int)(*it)->getChannel();
-        dS << (unsigned int)(*it)->getId();
-        dS << (int)(*it)->getSubOrdering();
-        dS << QString((*it)->getName().c_str());
-        dS << (unsigned int)(*it)->getDevice();
-    }
+        dS << (*it);
 
-    // ID, name and duplex state
-    //
     dS << (unsigned int)(mD->getId());
     dS << (int)(mD->getType());
     dS << QString(mD->getName().c_str());
-    dS << (unsigned int)(mD->getDuplex());
 
     return dS;
 }
@@ -241,21 +192,11 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
     dS << mD.size();
 
     for (MappedDeviceConstIterator it = mD.begin(); it != mD.end(); it++)
-    {
-        dS << (unsigned int)(*it)->getType();
-        dS << (unsigned int)(*it)->getChannel();
-        dS << (unsigned int)(*it)->getId();
-        dS << (int)(*it)->getSubOrdering();
-        dS << QString((*it)->getName().c_str());
-        dS << (unsigned int)(*it)->getDevice();
-    }
+        dS << (*it);
 
-    // ID, name and duplex state
-    //
     dS << (unsigned int)(mD.getId());
     dS << (int)(mD.getType());
     dS << QString(mD.getName().c_str());
-    dS << (unsigned int)(mD.getDuplex());
 
     return dS;
 }

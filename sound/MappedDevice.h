@@ -43,7 +43,8 @@ public:
     MappedDevice();
     MappedDevice(Rosegarden::DeviceId id,
                  Rosegarden::Device::DeviceType type,
-                 const std::string &name, bool duplex);
+                 const std::string &name);
+
     MappedDevice(const MappedDevice &mD);
     ~MappedDevice();
  
@@ -59,9 +60,6 @@ public:
     friend QDataStream& operator>>(QDataStream &dS, MappedDevice &mD);
     friend QDataStream& operator<<(QDataStream &dS, const MappedDevice &mD);
 
-    bool getDuplex() const { return m_duplex; }
-    void setDuplex(bool duplex) { m_duplex = duplex; }
-
     std::string getName() const { return m_name; }
     void setName(const std::string &name) { m_name = name; }
 
@@ -74,20 +72,15 @@ public:
     int getClient() const { return m_client; }
     void setClient(int client) { m_client = client; }
 
-    int getPort() const { return m_port; }
-    void setPort(int port) { m_port = port; }
-
 protected:
 
     Rosegarden::DeviceId            m_id;
     Rosegarden::Device::DeviceType  m_type;
     std::string                     m_name;
-    bool                            m_duplex;
 
     // Sequencer-local information - we don't need to transmit this anywhere.
     //
     int                             m_client;
-    int                             m_port;
 };
 
 typedef std::vector<Rosegarden::MappedInstrument*>::const_iterator
