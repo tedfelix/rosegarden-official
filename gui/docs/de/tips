@@ -1,0 +1,72 @@
+...um eine Spur einem neuen Instrument zuzuordnen, klicken und halten Sie mit dem linken Mausknopf auf die Spurbeschriftung. Ihnen wird dann ein Menü mit den verfügbaren MIDI- und Audiogeräten angeboten, aus dem Sie ein Instrument eines dieser Geräte auswählen können.
+
+...dass Rosegarden ein Autospeichern-Feature hat?
+
+Sie können den Abstand zwischen zwei automatischen Speicherungen über Einstellungen->Rosegarden einrichten auswählen.
+
+Wenn etwas schief geht, zum Beispiel ein Stromausfall oder ein Absturz von Rosegarden (das kommt leider vor...), laden Sie einfach die Datei an der Sie gearbeitet haben, und Sie haben dann die Auswahl, ob Sie die automatisch gespeicherte Version oder das unveränderte Original laden wollen.
+
+...dass sie ein Standard-Studio erzeugen können, indem Sie eine beliebige
+.rg oder .rgd-Datei nach ~/.kde/share/apps/rosegarden/autoload.rg kopieren?
+
+Sie können auch das aktuelle Dokument als autoload.rg speichern, indem Sie Studio -> Aktuelles Dokument als Standardstudio speichern aufrufen.
+
+...dass ihr Standardstudio ein komplettes Rosegarden-Stück ist, das jedesmal geladen wird, wenn Sie ein neues Dokument erzeugen oder eine MIDI-Datei importieren?
+
+Weil Ihr Standardstudio ein komplettes Rosegarden-Stück ist, kann es Standard-Instrumentenzuordnungen, Dokumenteigenschaften, Lilypond-Header und viele andere Dinge enthalten, die Sie standardmässig in jedem neuen von Ihnen erzeugten Dokument verfügbar haben möchten.
+
+...dass Rosegarden eine Standardverbindung zu ALSA Software Synthesizern herstellt, die gestartet werden, während Rosegarden schon läuft?
+
+...dass Sie im Notationseditor Noten, die Sie auf die falsche Tonhöhe gesetzt haben, um jeweils einen Halbton mit den Pfeiltasten auf Ihrer Tastatur nach oben und unten verschieben können?
+
+...dass Sie die Richtung von Notenhälsen verändern können, indem Sie eine oder mehrere Noten auswählen und Strg-BildAuf und Strg-BildAb benutzen?
+
+...dass Sie beim Verschieben von Segmenten die Shift-Taste festhalten und so den "Einschnapp-Effekt" vermeiden und feinere Kontrolle ausüben können?
+
+...dass Sie mehrere Segmente auf mehreren Spuren gleichzeitig im Notationseditor bearbeiten können? Wählen Sie einfach die Segmente aus, und rufen Sie dann Segmente -> Im Notationseditor öffnen auf.
+
+...dass Audiosegmente, die Sie in Ihr Stück einfügen, immer an das untere Ende der Spurliste angehängt werden?
+
+...dass Sie alle Lineale, Instrumentparameter und verschiedene andere Optionen über Einstellungen -> Alles obige umschalten umschalten können?
+
+...dass Rosegarden Dateien für die Verwendung mit Lilypond, dem System für anspruchsvollen Notensatz, exportieren kann? Öffnen Sie Datei->Export->Lilypond-Datei exportieren
+
+...dass Sie verschiedene Parameter zur Steuerung von Lilypond-Exports über Einstellungen -> Rosegarden einrichten -> Notation -> Lilypond verändern können?
+
+...dass der Quantisierer, wenn er aus der Notationsansicht aus aufgerufen wird, nur das für die Notation notwendige Timing quantisieren kann -- und auf diese Weise eine gut aussehende Notation und eine vollständig menschliche MIDI-Darbeitung ermöglicht?
+
+...dass Sie Segmentbeschriftungen über die Segmentparameter-Dialogbox im Hauptfenster ändern können?
+
+...dass die Anzahl von Spuren in neuen Stücken vom Inhalt Ihrer autoload.rg-Datei abhängt? Wenn Sie lieber mit 3 oder 43 Spuren anfangen wollen, erzeugen Sie einfach ein Dokument mit der gewünschten Anzahl von Spuren sowie der weiteren Sudio- oder Stückeigenschaften, die Sie konfigurieren möchten, und benutzen dann Studio -> Aktuelles Studio als Standardstudio speichern, um dies zu Ihren neuen Standardeinstellungen zu machen.
+
+...dass Sie den Namen einer Spur verändern können, indem Sie doppelt auf die Beschriftung klicken? (Damit das funktioniert, muss die Beschriftung sichtbar sein.)
+
+...dass Rosegarden von Freiwilligen aus der ganzen Welt entwickelt wird?
+
+Die zentralen Entwickler leben in Grossbritannien und in Frankreich, und es gab Beiträge aus den USA, Spanien, Deutschland, Russland und sonstwo...
+
+...dass es Rosegarden auf Spanisch, Französisch, Deutsch und Russisch gibt?
+
+Wenn Sie daran interessiert sind, Rosegarden in eine andere Sprache zu übersetzen, schreiben Sie uns doch kurz eine Nachricht an rosegarden-devel@lists.sourceforge.net.
+
+...dass Sie die Gesamtzahl der Take eines Stücks über Bearbeiten -> Dauer des Stücks verändern ändern können?
+
+...dass Sie den Unterschied zwischen Länge der Wiedergabe und Länge der Notation für längen-quantisierte Noten im Notationseditor sehen können?
+
+Rufen Sie Einstellungen -> Rohnotenlineal zeigen auf, um dieses nützliche Feature einzuschalten.
+
+Achtung: dieses Feature funktioniert nicht in der Seitenlayoutansicht.
+
+...dass Sie Veränderungen von Tempo und Taktart einfügen können, indem Sie auf die im Bedienfeld angezeigten Werte doppelt klicken?
+
+...dass das Bedienfeld sowohl Taktschläge und 24-fps SMPTE-Frames als auch Echtzeit anzeigen kann? Klicken Sie einfach auf den kleinen Knopf an der äußersten linken oberen Ecke des Fensters.
+
+...dass Sie alle Noten einer bestimmten Höhe auswählen können, indem Sie auf diese Tonhöhe Umschalt-Klicken? Wenn Sie Umschalt-Klicken und Ziehen, können Sie sogar ganze Bereiche auswählen.
+
+...dass Sie eine Schleife im Hauptfenster erzeugen können, indem Sie auf die Zeitskala Klicken-und-Ziehen und dabei die Umschalttaste drücken? (Wenn die Zeitskala nicht sichtbar ist, rufen Sie Einstellungen -> Lineale anzeigen auf.)
+
+...das Sie einen Bereich, den Sie in der Matrix- oder Notationsansicht berabeiten, als Loop definieren können? Wählen Sie ihn aus, rufen Sie Auswahl als Schleife festlegen auf, und drücken Sie Wiedergabe.
+
+...dass Sie das MIDI-Aufnahmegerät im Konfigurationsdialog ändern können? Rufen Sie Einstellungen -> Rosegarden einrichten auf, wählen Sie die Sequencer-Seite und den Aufnahme-Reiter, und wählen dann das Gerät aus der "MIDI Record Device" Dropdown-Liste. Ihre Einstellung wird fürs nächste Mal gespeichert.
+
+Keine weiteren Tips...
