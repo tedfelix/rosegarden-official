@@ -44,7 +44,7 @@ fi
 
 AUTOMAKE_STRING=`automake --version | head -1`
 case "$AUTOMAKE_STRING" in
-  automake*1.6 | automake*1.6-* )
+  automake*1.6* | automake*1.6-* )
     echo "*** Using automake 1.6 may be unstable" ;;
   automake*1.5* | automake*1.5-* ) : ;;
   automake*1.* )
