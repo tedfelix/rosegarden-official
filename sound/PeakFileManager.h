@@ -35,6 +35,7 @@
 #include <qpixmap.h>
 
 
+
 #ifndef _PEAKFILEMANAGER_H_
 #define _PEAKFILEMANAGER_H_
 
@@ -44,6 +45,7 @@ namespace Rosegarden
 class AudioFile;
 class RealTime;
 class PeakFile;
+class Progress;
 
 
 class PeakFileManager
@@ -70,6 +72,7 @@ public:
     //
     //
     void generatePeaks(AudioFile *audioFile,
+                       Progress *progress,
                        unsigned short updatePercentage);
 
     // Generate a QPixmap 

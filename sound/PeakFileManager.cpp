@@ -36,6 +36,7 @@
 #include "AudioFile.h"
 #include "RealTime.h"
 #include "PeakFile.h"
+#include "Progress.h"
 
 namespace Rosegarden
 {
@@ -161,6 +162,7 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
 //
 void
 PeakFileManager::generatePeaks(AudioFile *audioFile,
+                               Progress *progress,
                                unsigned short updatePercentage)
 {
     std::cout << "PeakFileManager::generatePeaks - generating peaks for \""
@@ -171,7 +173,7 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
         PeakFile *peakFile = getPeakFile(audioFile);
 
         // just write out a peak file
-        peakFile->write(updatePercentage);
+        peakFile->write(progress, updatePercentage);
 
         // close writes out important things
         peakFile->close();

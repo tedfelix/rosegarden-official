@@ -22,6 +22,9 @@
 #include <iostream>
 
 #include <qfontdatabase.h>
+#include <qtimer.h>
+#include <qapplication.h>
+#include <qcursor.h>
 
 #include "widgets.h"
 #include "rosedebug.h"
@@ -150,3 +153,74 @@ RosegardenParameterBox::RosegardenParameterBox(QString label,
     setFont(boldFont);
 }
 
+RosegardenProgressDialog::RosegardenProgressDialog(QApplication *app,
+                                                   QWidget *creator,
+                                                   const char *name,
+                                                   bool modal,
+                                                   WFlags f):
+    QProgressDialog(creator, name, modal, f),
+    Rosegarden::Progress(100), // default to percent
+    m_app(app)
+{
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(slotShowMyself()));
+    timer->start(500, TRUE); // half a second
+
+    // set the cursor
+    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+}
+
+
+RosegardenProgressDialog::RosegardenProgressDialog(
+                QApplication *app,
+                const QString &labelText,
+                const QString &cancelButtonText,
+                int totalSteps,
+                QWidget *creator,
+                const char *name,
+                bool modal,
+                WFlags f):
+        QProgressDialog(labelText,
+                        cancelButtonText,
+                        totalSteps,
+                        creator,
+                        name,
+                        modal,
+                        f),
+        Rosegarden::Progress(100), // default to percent
+        m_app(app)
+{
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(slowShowMyself()));
+    timer->start(500, TRUE); // half a second
+
+    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+}
+
+RosegardenProgressDialog::~RosegardenProgressDialog()
+{
+    QApplication::restoreOverrideCursor();
+}
+
+void
+RosegardenProgressDialog::set(int value)
+{
+    if (value > m_max)
+        m_value = m_max;
+
+    setProgress(value);
+}
+
+void
+RosegardenProgressDialog::process()
+{
+    if (m_app)
+        m_app->processEvents(50);
+}
+
+void
+RosegardenProgressDialog::slotShowMyself()
+{
+    show();
+    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+}

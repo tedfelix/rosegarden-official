@@ -159,6 +159,10 @@ public:
     QDateTime getModificationDateTime()
         { return m_fileInfo->lastModified(); }
 
+    // Return file size
+    //
+    unsigned int getSize() { return m_fileSize; }
+
 protected:
 
     AudioFileType  m_type;   // AudioFile type

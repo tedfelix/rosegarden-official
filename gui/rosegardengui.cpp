@@ -2592,8 +2592,9 @@ RosegardenGUIApp::slotAudioManager()
     if (m_audioManagerDialog == 0)
     {
         m_audioManagerDialog =
-            new Rosegarden::AudioManagerDialog(this,
-                                               &m_doc->getAudioFileManager());
+          new Rosegarden::AudioManagerDialog(dynamic_cast<QApplication*>(kapp),
+                                             this,
+                                             &m_doc->getAudioFileManager());
 
         connect(m_audioManagerDialog, SIGNAL(closeClicked()),
                 SLOT(slotAudioManagerClosed()));

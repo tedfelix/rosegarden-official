@@ -47,6 +47,7 @@ namespace Rosegarden
 {
 
 class AudioFile;
+class Progress;
 
 class PeakFile : public SoundFile
 {
@@ -62,7 +63,10 @@ public:
     // Write to standard peak file
     //
     virtual bool write();
-    virtual bool write(unsigned short updatePercentage);
+
+    // Write the file with a progress dialog
+    //
+    virtual bool write(Progress *progress, unsigned short updatePercentage);
 
     // Write peak chunk to file handle (BWF)
     //
@@ -105,7 +109,7 @@ protected:
     // Write the peak header and the peaks themselves
     //
     void writeHeader(std::ofstream *file);
-    void writePeaks(std::ofstream *file);
+    void writePeaks(Progress *progress, std::ofstream *file);
 
     // Get the position of a peak for a given time
     //

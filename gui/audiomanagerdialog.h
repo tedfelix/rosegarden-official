@@ -18,6 +18,8 @@
 */
 
 #include <kdialogbase.h>
+
+#include <qapplication.h>
 #include <qlistview.h>
 #include <qpushbutton.h>
 #include <qpixmap.h>
@@ -68,7 +70,8 @@ class AudioManagerDialog : public KDialogBase
     Q_OBJECT
 
 public:
-    AudioManagerDialog(QWidget *parent,
+    AudioManagerDialog(QApplication *app,
+                       QWidget *parent,
                        AudioFileManager *aFM);
 
     // Populate the file list from the AudioFileManager
@@ -110,6 +113,7 @@ protected:
     AudioFileManager *m_audioFileManager;
 
     RealTime          m_maxLength;
+    QApplication     *m_app;
 
 };
 

@@ -60,6 +60,7 @@
 #include "rosexmlhandler.h"
 #include "xmlstorableevent.h"
 #include "rosegardendcop.h"
+#include "widgets.h"
 
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
@@ -287,8 +288,23 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
                          << " - m_composition->getDuration() : "
                          << m_composition.getDuration() << endl;
 
+    // We might need a progress dialog when we generate previews.
+    //
+    RosegardenProgressDialog *progressDlg =
+        new RosegardenProgressDialog(dynamic_cast<QApplication*>(kapp),
+                                     i18n("Generating audio previews..."),
+                                     i18n("Cancel"),
+                                     100,
+                                     (QWidget*)parent());
+
     // generate any audio previews after loading the files
-    m_audioFileManager.generatePreviews();
+    m_audioFileManager.
+        generatePreviews(dynamic_cast<Rosegarden::Progress*>(progressDlg));
+
+    // Get rid of it - if the operation above has been quick enough
+    // then we never see this dialog anyway.
+    //
+    delete progressDlg;
 
     return true;
 }
@@ -1172,7 +1188,21 @@ RosegardenGUIDoc::stopRecordingAudio()
     // into the resulting SegmentItems.
     //
     Rosegarden::AudioFile *newAudioFile = m_audioFileManager.getLastAudioFile();
-    m_audioFileManager.generatePreview(newAudioFile->getId());
+
+    // Create a progress dialog
+    //
+    RosegardenProgressDialog *progressDlg =
+        new RosegardenProgressDialog(dynamic_cast<QApplication*>(kapp),
+                                     i18n("Generating audio preview..."),
+                                     i18n("Cancel"),
+                                     100,
+                                     (QWidget*)parent());
+
+    m_audioFileManager.generatePreview(
+            dynamic_cast<Rosegarden::Progress*>(progressDlg),
+            newAudioFile->getId());
+
+    delete progressDlg;
 
     // update views
     slotUpdateAllViews(0);

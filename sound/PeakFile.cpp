@@ -28,6 +28,7 @@
 #include "AudioFile.h"
 #include "Audio.h"
 #include "Sound.h"
+#include "Progress.h"
 
 using std::cout;
 using std::cerr;
@@ -176,11 +177,11 @@ PeakFile::printStats()
 bool
 PeakFile::write()
 {
-    return write(5); // default update every 5%
+    return write(0, 5); // default update every 5%
 }
 
 bool
-PeakFile::write(unsigned short undatePercentage)
+PeakFile::write(Progress *progress, unsigned short undatePercentage)
 {
     if (m_outFile)
         {
@@ -204,7 +205,7 @@ PeakFile::write(unsigned short undatePercentage)
     writeHeader(m_outFile);
 
     // and now the peak values
-    writePeaks(m_outFile);
+    writePeaks(progress, m_outFile);
 
     return true;
 }
@@ -440,7 +441,7 @@ PeakFile::scanForward(int numberOfPeaks)
 
 
 void
-PeakFile::writePeaks(std::ofstream *file)
+PeakFile::writePeaks(Progress *progress, std::ofstream *file)
 {
     if(!file || !(*file)) return;
 
@@ -467,6 +468,11 @@ PeakFile::writePeaks(std::ofstream *file)
     // Set the format level now we've written the peak data
     //
     int bytes = m_audioFile->getBitsPerSample() / 8;
+
+    // Get approx file size for progress dialog
+    //
+    unsigned int apprxTotalBytes = m_audioFile->getSize();
+    unsigned int byteCount = 0;
 
     // Store peaks of peaks position
     //
@@ -514,6 +520,16 @@ PeakFile::writePeaks(std::ofstream *file)
             samples.length() < (m_blockSize * m_audioFile->getChannels()
                                 * bytes))
             break;
+
+        byteCount += samples.length();
+
+        // Set the progress dialog
+        //
+        if (progress)
+        {
+            progress->set((int)(double(byteCount)/
+                                double(apprxTotalBytes) * 100.0));
+        }
 
         // The sample data pointer
         //
@@ -596,7 +612,7 @@ PeakFile::writePeaks(std::ofstream *file)
             //cout << "PeakFile::writePeaks - "
                       //<< "writing peak data out" << endl;
 
-            cout << "WRITING HI VALUE = " << channelPeaks[i].first << endl;
+            //cout << "WRITING HI VALUE = " << channelPeaks[i].first << endl;
             putBytes(file, getLittleEndianFromInteger(channelPeaks[i].first,
                                                       bytes));
 
@@ -605,7 +621,7 @@ PeakFile::writePeaks(std::ofstream *file)
                 channelPeaks[i].second = -channelPeaks[i].second;
                 */
 
-            cout << "WRITING LO VALUE = " << channelPeaks[i].second << endl;
+            //cout << "WRITING LO VALUE = " << channelPeaks[i].second << endl;
             putBytes(file, getLittleEndianFromInteger(channelPeaks[i].second,
                                                       bytes));
             // count up total body bytes
@@ -615,6 +631,11 @@ PeakFile::writePeaks(std::ofstream *file)
 
         // increment number of peak frames
         m_numberOfPeaks++;
+
+        // Keep the gui updated
+        //
+        if (progress)
+            progress->process();
     }
 
     // set format number

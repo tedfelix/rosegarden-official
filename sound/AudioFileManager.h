@@ -47,6 +47,8 @@ using std::endl;
 namespace Rosegarden
 {
 
+class Progress;
+
 typedef std::vector<AudioFile*>::const_iterator AudioFileManagerIterator;
 
 class AudioFileManager : public XmlExportable
@@ -119,13 +121,14 @@ public:
     //
     virtual std::string toXmlString();
 
-    // Convenience function generate all previews on the audio file
+    // Convenience function generate all previews on the audio file.
+    // 
     //
-    void generatePreviews();
+    void generatePreviews(Progress *progress);
 
     // Generate for a single audio file
     //
-    bool generatePreview(unsigned int id);
+    bool generatePreview(Progress *progress, unsigned int id);
 
     // Get a preview for an AudioFile adjusted to Segment start and
     // end parameters (assuming they fall within boundaries).

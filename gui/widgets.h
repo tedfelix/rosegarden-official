@@ -19,12 +19,16 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qapplication.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qgroupbox.h>
 #include <qfont.h>
+#include <qprogressdialog.h>
+
+#include "Progress.h"
 
 #ifndef _WIDGETS_H_
 #define _WIDGETS_H_
@@ -134,6 +138,51 @@ public:
 
 private:
     QFont m_font;
+};
+
+class RosegardenProgressDialog : public QProgressDialog,
+                                 public Rosegarden::Progress
+{
+    Q_OBJECT
+public:
+    RosegardenProgressDialog(QApplication *app,
+                             QWidget * creator = 0,
+                             const char * name = 0,
+                             bool modal = FALSE,
+                             WFlags f = 0);
+
+    RosegardenProgressDialog(QApplication *app,
+                             const QString &labelText,
+                             const QString &cancelButtonText,
+                             int totalSteps,
+                             QWidget *creator = 0,
+                             const char *name = 0,
+                             bool modal = FALSE,
+                             WFlags f = 0);
+
+    ~RosegardenProgressDialog();
+
+    // Set the progress
+    //
+    virtual void set(int value);
+
+    // Process some X events - gets called by the file access (say) class
+    // to ensure our gui is still working.
+    //
+    virtual void process();
+
+public slots:
+    // Show yourself if a timer expires and we're still around.
+    // Hence we only appear for long operations.
+    // 
+    void slotShowMyself();
+
+private:
+
+    // Application handle
+    //
+    QApplication *m_app;
+
 };
 
 #endif // _WIDGETS_H_

@@ -30,6 +30,8 @@
 
 #include "WAVAudioFile.h"
 #include "audiomanagerdialog.h"
+#include "widgets.h"
+#include "Progress.h"
 
 using std::cout;
 using std::cerr;
@@ -41,11 +43,13 @@ namespace Rosegarden
 static const int maxPreviewWidth = 100;
 static const int previewHeight = 30;
 
-AudioManagerDialog::AudioManagerDialog(QWidget *parent,
+AudioManagerDialog::AudioManagerDialog(QApplication *app,
+                                       QWidget *parent,
                                        AudioFileManager *aFM):
     KDialogBase(parent, "", false,
                 i18n("Rosegarden Audio File Manager"), Close),
-    m_audioFileManager(aFM)
+    m_audioFileManager(aFM),
+    m_app(app)
 {
     QHBox *h = makeHBoxMainWidget();
     QVButtonGroup *v = new QVButtonGroup(i18n("Audio File actions"), h);
@@ -240,9 +244,14 @@ AudioManagerDialog::slotAdd()
             m_audioFileManager->getDirectory(std::string(newFilePath.data()));
         m_audioFileManager->setLastAddPath(newLastAddPath);
 
+        RosegardenProgressDialog *progressDlg =
+            new RosegardenProgressDialog(m_app, this);
         try
         {
             id = m_audioFileManager->addFile(std::string(newFilePath.data()));
+            m_maxLength = RealTime(0, 0); // reset to force recalculate
+            m_audioFileManager->generatePreview(
+                    dynamic_cast<Progress*>(progressDlg), id);
         }
         catch(std::string e)
         {
@@ -252,6 +261,7 @@ AudioManagerDialog::slotAdd()
             KMessageBox::sorry(this, errorString);
         }
 
+        delete progressDlg;
         populateFileList();
 
     }
@@ -343,9 +353,11 @@ AudioManagerDialog::generateEnvelopePixmap(QPixmap *pixmap, AudioFile *aF)
 
     // Resize the pixmap according
     //
+    /*
     pixmap->resize(int(double(maxPreviewWidth) *
                        (aF->getLength() / m_maxLength)),
                    pixmap->height());
+                   */
 
     m_audioFileManager->
         drawPreview(dynamic_cast<Rosegarden::WAVAudioFile*>(aF)->getId(),

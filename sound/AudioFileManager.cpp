@@ -36,6 +36,7 @@
 #include "AudioFile.h"
 #include "AudioFileManager.h"
 #include "WAVAudioFile.h"
+#include "Progress.h"
 
 
 namespace Rosegarden
@@ -515,7 +516,7 @@ AudioFileManager::toXmlString()
 // to file type.
 //
 void
-AudioFileManager::generatePreviews()
+AudioFileManager::generatePreviews(Progress *progress)
 {
     std::cout << "AudioFileManager::generatePreviews - "
               << "for " << m_audioFiles.size() << " files"
@@ -527,7 +528,7 @@ AudioFileManager::generatePreviews()
     std::vector<AudioFile*>::iterator it;
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
         if (!m_peakManager.hasValidPeaks(*it))
-            m_peakManager.generatePeaks(*it, 1);
+            m_peakManager.generatePeaks(*it, progress,  1);
 }
 
 
@@ -537,7 +538,8 @@ AudioFileManager::generatePreviews()
 // modified.
 //
 bool
-AudioFileManager::generatePreview(unsigned int id)
+AudioFileManager::generatePreview(Progress *progress,
+                                  unsigned int id)
 {
     AudioFile *audioFile = getAudioFile(id);
     
@@ -545,7 +547,7 @@ AudioFileManager::generatePreview(unsigned int id)
         return false;
 
     if (!m_peakManager.hasValidPeaks(audioFile))
-        m_peakManager.generatePeaks(audioFile, 1);
+        m_peakManager.generatePeaks(audioFile, progress, 1);
 
     return true;
 }
