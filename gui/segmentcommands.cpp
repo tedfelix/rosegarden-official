@@ -181,6 +181,86 @@ SegmentQuickCopyCommand::unexecute()
     m_detached = true;
 }
 
+//  ----------- SegmentRepeatToCopyCommand -------------
+//
+//
+SegmentRepeatToCopyCommand::SegmentRepeatToCopyCommand(
+        Rosegarden::Segment *segment):
+    XKCommand("Repeating Segment to Copies"),
+    m_composition(segment->getComposition()),
+    m_segment(segment),
+    m_detached(false)
+{
+}
+
+SegmentRepeatToCopyCommand::~SegmentRepeatToCopyCommand()
+{
+    if (m_detached)
+    {
+        std::vector<Rosegarden::Segment*>::iterator it =
+            m_newSegments.begin();
+
+        for (; it != m_newSegments.end(); it++)
+            delete (*it);
+    }
+}
+
+
+void
+SegmentRepeatToCopyCommand::execute()
+{
+    if (m_newSegments.size() == 0)
+    {
+        Rosegarden::timeT newStartTime = m_segment->getEndMarkerTime();
+        Rosegarden::timeT newDuration =
+            m_segment->getEndMarkerTime() - m_segment->getStartTime();
+        Rosegarden::Segment *newSegment;
+
+        while(newStartTime + newDuration < m_segment->getRepeatEndTime())
+        {
+            // Create new segment, transpose and turn off repeat
+            //
+            newSegment = new Segment(*m_segment);
+            newSegment->setStartTime(newStartTime);
+            newSegment->setRepeating(false);
+
+            // Insert and store
+            m_composition->addSegment(newSegment);
+            m_newSegments.push_back(newSegment);
+
+            // Move onto next
+            newStartTime += newDuration;
+        }
+
+        // fill remaining partial segment
+    }
+    else
+    {
+        std::vector<Rosegarden::Segment*>::iterator it =
+            m_newSegments.begin();
+
+        for (; it != m_newSegments.end(); it++)
+            m_composition->addSegment(*it);
+    }
+    m_segment->setRepeating(false);
+    m_detached = false;
+}
+
+
+void
+SegmentRepeatToCopyCommand::unexecute()
+{
+    std::vector<Rosegarden::Segment*>::iterator it =
+        m_newSegments.begin();
+
+    for (; it != m_newSegments.end(); it++)
+        m_composition->detachSegment(*it);
+
+    m_detached = true;
+    m_segment->setRepeating(true);
+}
+
+
 // -------- Audio Insert Segment --------
 //
 

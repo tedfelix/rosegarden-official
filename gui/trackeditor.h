@@ -162,6 +162,7 @@ public slots:
     void slotAddTracks(unsigned int nbTracks, Rosegarden::InstrumentId id);
 
     void slotDeleteSelectedSegments();
+    void slotTurnRepeatingSegmentToRealCopies();
 
 protected slots:
     void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);

@@ -823,6 +823,8 @@ public slots:
     void slotDeleteSegments(Rosegarden::SegmentSelection&);
     void slotSegmentsSelected(const Rosegarden::SegmentSelection &);
 
+    void slotRepeatingSegments();
+
 private:
 
     //--------------- Data members ---------------------------------

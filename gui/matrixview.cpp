@@ -1404,11 +1404,13 @@ MatrixView::slotChangeHorizontalZoom(int)
     // either re-center() or remember old scrollbar position
     // and restore.
     //
-    Rosegarden::timeT length = m_segments[0]->getEndTime() -
-                               m_segments[0]->getStartTime();
 
-    int newWidth = int(getXbyWorldMatrix(m_hlayout.getXForTime(length)));
+    int endX = int(m_hlayout.getXForTime(m_segments[0]->getEndMarkerTime()));
+    int startX = int(m_hlayout.getXForTime(m_segments[0]->getStartTime()));
+
+    int newWidth = int(getXbyWorldMatrix(endX - startX));
     readjustViewSize(QSize(newWidth, getViewSize().height()), true);
+
 //     applyLayout();
 #endif
 }
@@ -1505,17 +1507,18 @@ MatrixView::readjustCanvasSize()
 
     }
 
-    Rosegarden::timeT length = m_segments[0]->getEndTime() -
-                               m_segments[0]->getStartTime();
+    int endX = int(m_hlayout.getXForTime(m_segments[0]->getEndMarkerTime()));
+    int startX = int(m_hlayout.getXForTime(m_segments[0]->getStartTime()));
 
 #ifdef RGKDE3
-    int newWidth = int(getXbyWorldMatrix(m_hlayout.getXForTime(length)));
+    int newWidth = int(getXbyWorldMatrix(endX - startX));
 #else
-    int newWidth = (m_hlayout.getXForTime(length));
+    int newWidth = endX - startX;
 #endif
 
     // now get the EditView to do the biz
     readjustViewSize(QSize(newWidth, maxHeight), true);
+
     repaintRulers();
 }
 

@@ -106,6 +106,23 @@ private:
     bool m_detached;
 };
 
+class SegmentRepeatToCopyCommand : public XKCommand
+{
+public:
+    SegmentRepeatToCopyCommand(Rosegarden::Segment *segment);
+    virtual ~SegmentRepeatToCopyCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+    
+private:
+
+    Rosegarden::Composition           *m_composition;
+    Rosegarden::Segment               *m_segment;
+    std::vector<Rosegarden::Segment*>  m_newSegments;
+    bool                               m_detached;
+};
+
 class SegmentQuickCopyCommand : public XKCommand
 {
 public:

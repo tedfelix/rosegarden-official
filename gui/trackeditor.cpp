@@ -604,7 +604,7 @@ void
 TrackEditor::slotUpdateRecordingSegmentItem(Rosegarden::Segment *segment)
 {
     Composition &comp = m_document->getComposition();
-    int y = segment->getTrack() * getTrackCellHeight();
+    //int y = segment->getTrack() * getTrackCellHeight();
 
     timeT startTime = segment->getStartTime();
 
@@ -669,6 +669,41 @@ TrackEditor::slotDeleteSelectedSegments()
     addCommandToHistory(macro);
 
 }
+
+void
+TrackEditor::slotTurnRepeatingSegmentToRealCopies()
+{
+    std::cout << "TrackEditor::slotTurnRepeatingSegmentToRealCopies"
+              << std::endl;
+
+    Rosegarden::SegmentSelection segments =
+            m_segmentCanvas->getSelectedSegments();
+
+    if (segments.size() == 0)
+        return;
+
+    QString text;
+
+    if (segments.size() == 1)
+        text = i18n("Turn Repeating Segment into Real Copies");
+    else
+        text = i18n("Turn Repeating Segments into Real Copies");
+
+    KMacroCommand *macro = new KMacroCommand(text);
+
+    Rosegarden::SegmentSelection::iterator it = segments.begin();
+    for (; it != segments.end(); it++)
+    {
+        if ((*it)->isRepeating())
+        {
+            macro->addCommand(new SegmentRepeatToCopyCommand(*it));
+        }
+    }
+
+    addCommandToHistory(macro);
+
+}
+
 
 void
 TrackEditor::slotVerticalScrollTrackButtons(int y)

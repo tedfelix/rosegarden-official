@@ -367,6 +367,11 @@ void RosegardenGUIApp::setupActions()
                               actionCollection(), "join");
     action->setExclusiveGroup("segmenttools");
 
+    new KAction(i18n("Turn Repeating Segments into Real Copies"),
+                0,
+                this, SLOT(slotRepeatingSegments()),
+                actionCollection(), "repeats_to_real_copies");
+
     new KAction(i18n("Manage A&udio Segments"),
                 0, 
                 this, SLOT(slotAudioManager()),
@@ -3208,6 +3213,12 @@ void
 RosegardenGUIApp::skippedSlices(unsigned int /*slices*/)
 {
     //std::cout << "SEQUENCER HAS SKIPPED " << slices << " SLICES" << endl;
+}
+
+void
+RosegardenGUIApp::slotRepeatingSegments()
+{
+    m_view->getTrackEditor()->slotTurnRepeatingSegmentToRealCopies();
 }
 
  
