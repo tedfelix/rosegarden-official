@@ -18,7 +18,9 @@ Current Task list
 - harmonize namings of m_view* toggle actions, slotToggleXXX(), slotShowXXX()
  (m_viewSegmentParameters / slotToggleSegmentParameters / slotShowSegmentParameters)
 
-- make MIDI pitch->string configurable
+- make MIDI pitch->string convertion configurable
+
+- better error report when failing to load a resource
 
 Task list from 18/19th August meetings
 ======================================
