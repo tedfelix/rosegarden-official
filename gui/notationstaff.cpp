@@ -100,6 +100,24 @@ NotationStaff::changeFont(string fontName, int resolution)
     resizeStaffLines();
 }
 
+bool
+NotationStaff::containsY(int cy) const
+{
+    int row;
+    cy -= y();
+
+    for (row  = getRowForLayoutX(m_horizLineStart);
+	 row <= getRowForLayoutX(m_horizLineEnd); ++row) {
+
+	if (cy >= getTopOfStaffForRow(row) &&
+	    cy <  getTopOfStaffForRow(row) + getStaffHeight()) {
+	    return true;
+	}
+    }
+
+    return false;
+}
+
 void
 NotationStaff::resizeStaffLines()
 {
@@ -228,7 +246,7 @@ NotationStaff::resizeStaffLineRow(int row, double offset, double length)
 
 	    lx = (int)x() + getRowLeftX(row) + offset;
 	    ly = (int)y() + getTopOfStaffForRow(row) +
-		yCoordOfHeight(2 * h) + j; //!!!
+		getYOfHeight(2 * h) + j; //!!!
 
 //	    kdDebug(KDEBUG_AREA) << "My coords: " << x() << "," << y()
 //				 << "; setting line points to ("
@@ -298,7 +316,8 @@ NotationStaff::setLegatoDuration(Rosegarden::timeT duration)
     wq->setUnit(duration);
 }
 
-int NotationStaff::yCoordOfHeight(int h) const
+int
+NotationStaff::getYOfHeight(int h, int baseY) const
 {
     // Pitch is represented with the MIDI pitch scale; NotationTypes.h
     // contains methods to convert this to and from staff-height
@@ -313,12 +332,26 @@ int NotationStaff::yCoordOfHeight(int h) const
     // For a staff at height h, m = (8-h)/2.  Therefore the y-coord of
     // a staff at height h is (8-h)/2 * lineWidth + lineOffset
 
+    int cy;
 
-    int y = 8 - h;
-    y = getTopLineOffset() + (y * m_npf->getLineSpacing()) / 2;
-    if (h > 0 && h < 8 && (h % 2 == 1)) ++y;
-    else if (h < 0 && (-h % 2 == 1)) ++y;
-    return y;
+    if (baseY < 0) {
+	cy = getTopLineOffset();
+    } else {
+	cy = getTopLineOffsetForRow(getRowForY(baseY - y()));
+    }
+
+    cy += ((8 - h) * m_npf->getLineSpacing()) / 2;
+    if (h > 0 && h < 8 && (h % 2 == 1)) ++cy;
+    else if (h < 0 && (-h % 2 == 1)) ++cy;
+    return cy;
+}
+
+int
+NotationStaff::getHeightAtY(int cy) const
+{
+    cy -= y();
+    int row = getRowForY(cy);
+    return heightOfYCoord(cy - getTopOfStaffForRow(row));
 }
 
 int NotationStaff::heightOfYCoord(int y) const
@@ -326,7 +359,7 @@ int NotationStaff::heightOfYCoord(int y) const
     // 0 is bottom staff-line, 8 is top one, leger lines above & below
 
     //!!! the lazy route: approximate, then get the right value
-    // by calling yCoordOfHeight a few times... ugh
+    // by calling getYOfHeight a few times... ugh
 
 //    kdDebug(KDEBUG_AREA) << "\nNotationStaff::heightOfYCoord: y = " << y
 //			 << ", getTopLineOffset() = " << getTopLineOffset()
@@ -344,7 +377,7 @@ int NotationStaff::heightOfYCoord(int y) const
     int testMd = 1000;
 
     for (i = -1; i <= 1; ++i) {
-	int d = y - yCoordOfHeight(ph + i);
+	int d = y - getYOfHeight(ph + i);
 	if (d < 0) d = -d;
 	if (d < md) { md = d; mi = i; }
 	if (d < testMd) { testMd = d; testi = i; }
@@ -457,7 +490,7 @@ void NotationStaff::insertTimeSignature(unsigned int tsx,
 	new QCanvasPixmap(m_npf->makeTimeSigPixmap(timeSig));
     QCanvasSimpleSprite *sprite = new QCanvasSimpleSprite(pixmap, canvas());
     kdDebug(KDEBUG_AREA) << "Inserting time signature at " << tsx << endl;
-    sprite->move(tsx + x(), yCoordOfHeight(4) + y());
+    sprite->move(tsx + x(), getYOfHeight(4) + y());
     sprite->show();
     m_timeSigs.insert(sprite);
 }
@@ -544,19 +577,24 @@ void NotationStaff::setLines(double xfrom, double xto, bool sizeCanvas)
     PRINT_ELAPSED("NotationStaff::setLines");
 }
 
-//!!! page mode
-void NotationStaff::getClefAndKeyAtX(int myx, Clef &clef,
-				     Rosegarden::Key &key) const
+void NotationStaff::getClefAndKeyAt(int cx, int cy,
+				    Clef &clef, Rosegarden::Key &key) const
 {
+    cx -= x();
+    cy -= y();
+
     int i;
+    int row = getRowForY(cy);
+
+    //??? do I have this right?
 
     for (i = 0; i < m_clefChanges.size(); ++i) {
-	if (m_clefChanges[i].first + x() > myx) break;
+	if (m_clefChanges[i].first > (getPageWidth() * row) + cx) break;
 	clef = m_clefChanges[i].second;
     }
 
     for (i = 0; i < m_keyChanges.size(); ++i) {
-	if (m_keyChanges[i].first + x() > myx) break;
+	if (m_keyChanges[i].first > (getPageWidth() * row) + cx) break;
 	key = m_keyChanges[i].second;
     }
 }
@@ -630,7 +668,8 @@ NotationStaff::positionElements(timeT from, timeT to)
 	do {
 	    candidate = nel->findTime(getSegment().getBarStart(from - 1));
 	    if (candidate != nel->end()) from = (*candidate)->getAbsoluteTime();
-	} while (candidate != nel->begin() && !elementNotMoved(*candidate));
+	} while (candidate != nel->begin() &&
+		 (candidate == nel->end() || !elementNotMoved(*candidate)));
 	beginAt = candidate;
     }
 
@@ -1033,52 +1072,69 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 }
 
 double
-NotationStaff::getPageWidth()
+NotationStaff::getPageWidth() const
 {
     return m_pageWidth;
 }
 
 int
-NotationStaff::getRowForLayoutX(double lx)
+NotationStaff::getRowForLayoutX(double lx) const
 {
     return (int)(lx / getPageWidth());
 }
 
+//!!! simple arithmetic, you fool
+int
+NotationStaff::getRowForY(int cy) const
+{
+    int row;
+
+    for (row  = getRowForLayoutX(m_horizLineEnd);
+	 row >= getRowForLayoutX(m_horizLineStart); --row) {
+
+	if (cy > getTopOfStaffForRow(row)) {
+	    return row;
+	}
+    }
+    
+    return 0;
+}
+
 double
-NotationStaff::getXForLayoutX(double lx)
+NotationStaff::getXForLayoutX(double lx) const
 {
     return (lx - (getPageWidth() * getRowForLayoutX(lx)));
 }
 
 int
-NotationStaff::getTopOfStaffForRow(int row)
+NotationStaff::getTopOfStaffForRow(int row) const
 {
     if (!m_pageMode) return 0;
     else return (m_lineBreakGap * row);
 }
 
 int
-NotationStaff::getTopLineOffsetForRow(int row)
+NotationStaff::getTopLineOffsetForRow(int row) const
 {
     if (!m_pageMode) return getTopLineOffset();
     else return (getTopLineOffset() + (m_lineBreakGap * row));
 }
 
 int
-NotationStaff::getRowCount()
+NotationStaff::getRowCount() const
 {
     return getRowForLayoutX(m_horizLineEnd) + 1;
 }
 
 double
-NotationStaff::getRowLeftX(int row)
+NotationStaff::getRowLeftX(int row) const
 {
     if (!m_pageMode) return (row * getPageWidth());
     else return 0;
 }
 
 double
-NotationStaff::getRowRightX(int row)
+NotationStaff::getRowRightX(int row) const
 {
     if (!m_pageMode) return (row * getPageWidth()) + getPageWidth();
     else return getPageWidth();
@@ -1086,7 +1142,7 @@ NotationStaff::getRowRightX(int row)
 
 void
 NotationStaff::getPageOffsets(NotationElement *elt,
-			      double &xoff, double &yoff)
+			      double &xoff, double &yoff) const
 {
     double lx = elt->getLayoutX();
     double ly = elt->getLayoutY();

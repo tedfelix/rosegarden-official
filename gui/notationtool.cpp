@@ -296,6 +296,8 @@ NoteInserter::handleLeftButtonPress(int height, int staffNo,
 
     Event *tsig = 0, *clef = 0, *key = 0;
 
+    //!!! wrong in page mode
+
     NotationElementList::iterator closestNote =
         m_parentView->findClosestNote(e->x(), tsig, clef, key, staffNo);
 
@@ -689,9 +691,9 @@ EventSelection* NotationSelector::getSelection()
         m_selectionRect->height() <  3) return 0;
 
     double middleY = m_selectionRect->y() + m_selectionRect->height()/2;
-    int staffNo = m_parentView->findClosestStaff(middleY);
-    if (staffNo < 0) return 0;
-    Segment& originalSegment = m_parentView->getStaff(staffNo)->getSegment();
+    NotationStaff *staff = m_parentView->getStaffAtY(middleY);
+    if (!staff) return 0;
+    Segment& originalSegment = staff->getSegment();
     
     EventSelection* selection = new EventSelection(originalSegment);
 

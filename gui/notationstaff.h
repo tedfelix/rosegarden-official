@@ -88,19 +88,14 @@ public:
     NotePixmapFactory& getNotePixmapFactory() { return *m_npf; }
 
     /**
-     * Returns the Y coordinate of the specified line on the staff.
+     * Returns the y coordinate of the specified line on the staff,
+     * relative to the top of the staff.  baseY is a canvas y
+     * coordinate somewhere on the correct row, or -1 for the default
+     * row.
      *
      * 0 is the bottom staff-line, 8 is the top one.
      */
-    int yCoordOfHeight(int height) const;
-
-    /**
-     * Returns the height of the nearest line on the staff to the
-     * specified Y coordinate.
-     *
-     * 0 is the bottom staff-line, 8 is the top one.
-     */
-    int heightOfYCoord(int height) const;
+    int getYOfHeight(int height, int baseY = -1) const;
 
     /**
      * Returns the difference between the y-coord of one visible line
@@ -135,6 +130,12 @@ public:
 	return getLineSpacing() * nbLegerLines;
     }
  
+    /**
+     * Returns true if the given y-coordinate falls within (any of
+     * the rows of) this staff.
+     */
+    bool containsY(int y) const; 
+
     /**
      * Return the id of the staff
      * This will be passed to the NotationTools
@@ -248,8 +249,10 @@ public:
      */
     void setLines(double xfrom, double xto, bool resizeCanvas = false);
 
-    void getClefAndKeyAtX(int x, Rosegarden::Clef &clef, Rosegarden::Key &key)
-	const;
+    int getHeightAtY(int y) const;
+
+    void getClefAndKeyAt(int x, int y,
+			 Rosegarden::Clef &clef, Rosegarden::Key &key) const;
 
     static const int nbLines;        // number of main lines on the staff
     static const int nbLegerLines;   // number of lines above or below
@@ -294,17 +297,20 @@ protected:
     void clearStaffLineRow(int rowNo);
     void resizeStaffLineRow(int rowNo, double offset, double length);
 
-    double getPageWidth();
-    int	   getRowForLayoutX(double x);
-    double getXForLayoutX(double x);
-    int	   getTopOfStaffForRow(int row);
-    int	   getTopLineOffsetForRow(int row);
-    int	   getRowCount();
-    double getRowLeftX(int row);
-    double getRowRightX(int row);
+    double getPageWidth() const;
+    int	   getRowForLayoutX(double x) const;
+    int    getRowForY(int y) const;
+    double getXForLayoutX(double x) const;
+    int	   getTopOfStaffForRow(int row) const;
+    int	   getTopLineOffsetForRow(int row) const;
+    int	   getRowCount() const;
+    double getRowLeftX(int row) const;
+    double getRowRightX(int row) const;
 
     void   getPageOffsets(NotationElement *,
-			  double &xoff, double &yoff);
+			  double &xoff, double &yoff) const;
+
+    int heightOfYCoord(int height) const;
 
     typedef std::pair<int, QCanvasLine *> BarPair;
     typedef std::vector<BarPair> BarLineList;

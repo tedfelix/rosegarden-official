@@ -129,13 +129,6 @@ public:
     void setPageMode(bool pageMode);
 
     /**
-     * find the Staff whose Y coord range includes y, and return the
-     * index of that Staff in m_staffs.  If no Staff is suitable,
-     * return -1.
-     */
-    int findClosestStaff(double y) const;
-
-    /**
      * redo the layout of any affected views after something changes.
      * default is all staffs
      */
@@ -163,16 +156,10 @@ public:
     // the nastier they are, the better, for now, 'cos it'll
     // help remind me to deal with them.)   --cc
 
-   virtual  NotationStaff *getStaffAtY(int y) const {
-	int i = ((NotationView *)this)->findClosestStaff(y);
-	return (i >= 0 ? m_staffs[i] : 0);
-    }
+    virtual NotationStaff *getStaffAtY(int y) const;
 
-    virtual int getHeightAtY(int y) const {
-	int i = ((NotationView *)this)->findClosestStaff(y);
-	return (i >= 0 ? m_staffs[i]->heightOfYCoord(y - m_staffs[i]->y()) : -1000); //!!!
-    }
-
+    virtual int getHeightAtY(int y) const;
+/*!!!
     virtual Rosegarden::timeT getTimeAtCoordinates(int x, int y) const {
 	//!!! this is currently unused
 	return 0;
@@ -183,20 +170,18 @@ public:
 	NotationStaff *ns(dynamic_cast<NotationStaff *>(staff));
 	return (int)(ns->yCoordOfHeight(height) + ns->y());
     }
+*/
 
-    virtual int getYSnappedToLine(int y) const {
-	int i = ((NotationView *)this)->findClosestStaff(y);
-	if (i < 0) return y;
-	return (int)(m_staffs[i]->yCoordOfHeight(m_staffs[i]->heightOfYCoord
-						 (y - m_staffs[i]->y())) +
-		     m_staffs[i]->y());
-    }
+    virtual int getYOfHeight(Rosegarden::Staff<NotationElement> *staff,
+			     int height, int baseY = -1) const;
+
+    virtual int getYSnappedToLine(int y) const;
 
     virtual void getBarExtents(int x, int y, 
 			       int &rx, int &ry, int &rw, int &rh) const {
-	int i = ((NotationView *)this)->findClosestStaff(y);
-	if (i < 0) return;
-	QRect extents = m_staffs[i]->getBarExtents(x);
+	NotationStaff *staff = getStaffAtY(y);
+	if (!staff) return;
+	QRect extents = staff->getBarExtents(x);
 	rx = extents.x();
 	ry = extents.y();
 	rw = extents.width();

@@ -291,10 +291,9 @@ NotationCanvasView::setPositionMarkerHeight(QMouseEvent *e)
 //			 << e->y() << " snapped to line -> " << lineY
 //			 << " (height " << height << ")" << endl;
 
-    //!!! nasty
     int spacing =
-	m_staffLayout.getYOfHeightAtTime(m_currentStaff, 0, 0) -
-	m_staffLayout.getYOfHeightAtTime(m_currentStaff, 2, 0) - 1;
+	m_staffLayout.getYOfHeight(m_currentStaff, 0) -
+	m_staffLayout.getYOfHeight(m_currentStaff, 2) - 1;
 
     m_staffLineThreshold = spacing;
     m_vert1->setPoints(0, -spacing/2, 0, spacing/2);

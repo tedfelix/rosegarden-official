@@ -976,7 +976,7 @@ void NotationView::setCurrentSelectedNote(const char *pixmapName,
 
 void NotationView::setCurrentSelection(EventSelection* s)
 {
-    if (/* s && */ m_currentEventSelection /* &&
+    if (/*!!! s && */ m_currentEventSelection /* &&
 	s->getSegment() != m_currentEventSelection->getSegment() */) {
 	m_currentEventSelection->removeSelectionFromSegment();
 	getStaff(m_currentEventSelection->getSegment())->positionElements
@@ -1037,22 +1037,6 @@ PositionCursor* NotationView::getCursor()
 {
     return getRuler()->getCursor();
 }
-
-string NotationView::getNoteNameAtCoordinates(int x, int y) const
-{
-//!!!
-    int i = ((NotationView *)this)->findClosestStaff(y);
-    if (i < 0) return "";
-
-    Rosegarden::Clef clef;
-    Rosegarden::Key key;
-    m_staffs[i]->getClefAndKeyAtX(x, clef, key);
-
-    return
-	Rosegarden::NotationDisplayPitch
-	(getHeightAtY(y), m_currentAccidental).getAsString(clef, key);
-}
-
 
 
 //////////////////////////////////////////////////////////////////////
@@ -1811,16 +1795,57 @@ void NotationView::mouseRelease(QMouseEvent *e)
         m_tool->handleMouseRelease(e);
 }
 
-int NotationView::findClosestStaff(double y) const
+NotationStaff *
+NotationView::getStaffAtY(int y) const
 {
-    //!!! No longer accurate
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        int top = m_staffs[i]->getStaffHeight() * i;
-        int bottom = top + m_staffs[i]->getStaffHeight() + 45;
-        if (y >= top && y < bottom) return i;
+	if (m_staffs[i]->containsY(y)) return m_staffs[i];
     }
-    return -1;
+    return 0;
 }
+
+int
+NotationView::getHeightAtY(int y) const
+{
+    NotationStaff *staff = getStaffAtY(y);
+    if (!staff) return -1000;
+    return staff->getHeightAtY(y);
+}
+
+int
+NotationView::getYOfHeight(Rosegarden::Staff<NotationElement> *staff,
+			   int height, int baseY) const
+{
+    return dynamic_cast<NotationStaff *>(staff)->getYOfHeight(height, baseY);
+}
+
+int
+NotationView::getYSnappedToLine(int y) const
+{
+    NotationStaff *staff = getStaffAtY(y);
+    if (!staff) return y;
+    return staff->getYOfHeight(staff->getHeightAtY(y), y) + staff->y();
+}
+
+string
+NotationView::getNoteNameAtCoordinates(int x, int y) const
+{
+    NotationStaff *staff = getStaffAtY(y);
+    if (!staff) return "";
+
+//!!! getting wrong results for clef here -- changes within staff
+// not being taken into account properly
+
+    Rosegarden::Clef clef;
+    Rosegarden::Key key;
+    staff->getClefAndKeyAt(x, y, clef, key);
+
+    return
+	Rosegarden::NotationDisplayPitch
+	(staff->getHeightAtY(y), m_currentAccidental).getAsString(clef, key);
+}
+
+
 
 
 NotationElementList::iterator

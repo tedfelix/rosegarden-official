@@ -82,15 +82,25 @@ public:
      * notation staff) or it may just be a value proportional to the
      * distance from the start of the staff.
      */
-    virtual timeT getTimeAtCoordinates(int x, int y) const = 0;
+//!!!    virtual timeT getTimeAtCoordinates(int x, int y) const = 0;
 
     /**
      * Return the y coordinate of the given height-on-staff at the
      * given time.  (We need the time in order to handle staffs that
      * wrap around at the right-hand end of the screen.)
      */
-    virtual int getYOfHeightAtTime(Staff<T> *staff,
-				   int height, timeT time) const = 0;
+//!!!    virtual int getYOfHeightAtTime(Staff<T> *staff,
+//!!!				   int height, timeT time) const = 0;
+
+    /**
+     * Return the y coordinate of the given height-on-staff,
+     * assuming that the given baseY is within the same row of the
+     * staff as the required y coordinate should be.  (For example,
+     * baseY might be the y coordinate used to obtain the staff
+     * previously from getStaffAtY.)   baseY < 0 for default row.
+     */
+    virtual int getYOfHeight(Staff<T> *staff,
+			     int height, int baseY = -1) const = 0;
 
     /**
      * Return the y coordinate of the nearest height-on-staff to the
