@@ -130,7 +130,6 @@ namespace Rosegarden
 
 static jack_nframes_t    _jackBufferSize;
 static unsigned int      _jackSampleRate;
-static bool              _usingAudioQueueVector;
 static sample_t         *_tempOutBuffer1;
 static sample_t         *_tempOutBuffer2;
 
@@ -161,12 +160,8 @@ static int           _jackMappedEventCounter;
 //
 static const int reportPasses = 5;
 
-static const int     _jackPeakLevelsMax = 200;
-static float         _jackPeakLevels[_jackPeakLevelsMax];
-
 pthread_t            _diskThread;
 pthread_mutex_t      _diskThreadLock = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t       _dataReady = PTHREAD_COND_INITIALIZER;
 
 #endif
 
@@ -210,7 +205,6 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 #ifdef HAVE_LIBJACK
     _jackBufferSize = 0;
     _jackSampleRate = 0;
-    _usingAudioQueueVector = false;
     _passThroughCounter = 0;
 
     _jackTransportEnabled = false;
@@ -276,18 +270,6 @@ AlsaDriver::shutdown()
     // lock this and terminate safely
     pthread_mutex_lock(&_diskThreadLock);
     _threadJackClosing = true;
-
-
-    /*
-    // to close audio thread we need to change the static flag and tell thread
-    // to continue.
-    if (_threadJackClosing == false)
-    {
-        // set status and signal thread to complete
-        pthread_cond_signal(&_dataReady);
-        pthread_mutex_unlock(&_diskThreadLock);
-    }
-    */
 
     if (m_audioClient)
     {
@@ -1736,27 +1718,10 @@ AlsaDriver::stopPlayback()
     if (_jackTransportMaster && _jackTransportEnabled && m_audioClient)
         jack_transport_stop(m_audioClient);
 
-    // Wait for the queue vector to become available so we can
-    // clear it down.  We're careful with this sleep.
-    //
-    int sleepPeriod = 500; // microseconds
-    int totalSleep = 0;
-
-    while (_usingAudioQueueVector)
-    {
-        usleep(sleepPeriod);
-        totalSleep += sleepPeriod;
-
-        if (totalSleep > 1000000)
-        {
-            // Bound to be uncaught but at least we'll break out rather
-            // than just hanging here.
-            //
-            throw(std::string("AlsaDriver::stopPlayback - slept too long waiting for audio queue vector to free"));
-        }
-    }
-
+    pthread_mutex_lock(&_diskThreadLock);
     clearAudioPlayQueue();
+    pthread_mutex_unlock(&_diskThreadLock);
+
 #endif
 
 #ifdef HAVE_LADSPA
@@ -3161,38 +3126,39 @@ AlsaDriver::getSampleRate() const
 
 #ifdef HAVE_LADSPA
 
-PluginInstances
+PluginInstances&
 AlsaDriver::getUnprocessedPlugins()
 {
-    PluginInstances list;
+    m_retPluginList.clear();
+
     PluginIterator it = m_pluginInstances.begin();
     for (; it != m_pluginInstances.end(); ++it)
     {
         if (!(*it)->hasBeenProcessed() && !(*it)->isBypassed())
-            list.push_back(*it);
+            m_retPluginList.push_back(*it);
     }
-    return list;
+    return m_retPluginList;
 }
 
 // Return an ordered list of plugins for an instrument
 //
-PluginInstances
+PluginInstances&
 AlsaDriver::getInstrumentPlugins(InstrumentId id)
 {
-    OrderedPluginList orderedList;
+    m_orderedPluginList.clear();
+
     PluginIterator it = m_pluginInstances.begin();
     for (; it != m_pluginInstances.end(); ++it)
     {
         if ((*it)->getInstrument() == id)
-            orderedList.insert(*it);
+            m_orderedPluginList.insert(*it);
     }
 
-    PluginInstances list;
-    OrderedPluginIterator oIt = orderedList.begin();
-    for (; oIt != orderedList.end(); ++oIt)
-        list.push_back(*oIt);
+    m_retPluginList.clear();
+    for (OrderedPluginIterator oIt = m_orderedPluginList.begin(); oIt != m_orderedPluginList.end(); ++oIt)
+        m_retPluginList.push_back(*oIt);
 
-    return list;
+    return m_retPluginList;
 }
 
 
@@ -3340,7 +3306,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             inputLevelLeft /= float(nframes);
             if (channels == 2) inputLevelRight /= float(nframes);
 
-            if (_passThroughCounter++ > reportPasses)
+            if (_passThroughCounter > reportPasses)
             {
                 // Report the input level back to the GUI every "reportPasses"
                 //
@@ -3352,8 +3318,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     ->setData1(int(inputLevelLeft * 127.0));
                 _jackMappedEvent[_jackMappedEventCounter]
                     ->setData2(int(inputLevelRight * 127.0));
-                inst->insertMappedEventForReturn(
-                        _jackMappedEvent[_jackMappedEventCounter]);
+                inst->insertMappedEventForReturn(_jackMappedEvent[_jackMappedEventCounter]);
 
                 _jackMappedEventCounter++;
 
@@ -3370,19 +3335,18 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
         }
 
+        // Process any queue vector operations now - making sure the 
+        // disk thread doesn't access the same vector.
+        //
+        pthread_mutex_lock(&_diskThreadLock);
+
         // Ok, we're playing - so clear the temporary buffers ready
         // for writing, get the audio queue, grab the queue vector
         // for usage and prepate a string for storage of the sample
         // slice.
         //
         std::vector<PlayableAudioFile*> &audioQueue = inst->getAudioPlayQueue();
-        std::vector<PlayableAudioFile*>::iterator it;
-
-        // From here on in protect the audio queue vector from
-        // outside intervention until we've finished with it.
-        // Don't forget to relinquish it at the end of this block.
-        //
-        _usingAudioQueueVector = true;
+        std::vector<PlayableAudioFile*>::const_iterator it;
 
         // Store returned samples in this string
         //
@@ -3396,7 +3360,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         double dInSamplesInc = 0.0;
         jack_nframes_t samplesOut = 0;
 
-        int audioFilesProcessed = 0;
         float peakLevelLeft, peakLevelRight;
 
 
@@ -3467,65 +3430,13 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 }
 
                 // Get some frames from the PlayableAudioFile - this
-                // data is ringbuffered.
+                // data is ringbuffered.  Any data that can't be fetched
+                // due to end of file is automatically zeroed out - so
+                // we don't need to worry about running off the end of
+                // "real" data.
                 //
                 samplePtr = (*it)->getSampleFrames(fetchFrames);
 
-                /*
-                // If we can't fetch a whole slice then ensure that
-                // the end of it is silenced.  In a moment we'll be
-                // interating through this string using pointers
-                // which can easily blast through the end of it
-                // and into free (noisy) space.
-                //
-                if (samples.length() <
-                    (fetchFrames * (*it)->getBytesPerSample()))
-                {
-#define UNDERRUN
-#ifdef UNDERRUN
-                    std::cerr << "jackProcess - audio file buffer underrun" << std::endl;
-#endif // UNDERRUN
-
-                    int bytesToFill = (fetchFrames * (*it)->getBytesPerSample()) - samples.length();
-                    std::string empty;
-                    for (int i = 0; i < bytesToFill; ++i)
-                        empty += " ";
-
-                    samples += empty;
-
-//#define FINE_DEBUG_DISK_THREAD
-#ifdef FINE_DEBUG_DISK_THREAD
-                    std::cerr << "Found short fetch, appending  " << bytesToFill << " BYTES" << std::endl;
-#endif
-                        
-                    //(*it)->setStatus(PlayableAudioFile::DEFUNCT);
-
-                    // Simple event to inform that AudioFileId has
-                    // now stopped playing.
-                    //
-                    //_jackMappedEvent[_jackMappedEventCounter]
-                        //->setInstrument((*it)->getInstrument());
-                    //_jackMappedEvent[_jackMappedEventCounter]
-                        //->setType(MappedEvent::AudioStopped);
-                    //_jackMappedEvent[_jackMappedEventCounter]
-                        //->setData1((*it)->getAudioFile()->getId());
-                    //_jackMappedEvent[_jackMappedEventCounter]
-                        //->setData2(0);
-                    //inst->insertMappedEventForReturn(
-                            //_jackMappedEvent[_jackMappedEventCounter]);
-
-                    //_jackMappedEventCounter++;
-
-                    // return
-                    //if (_jackMappedEventCounter >= _jackMappedEventsMax)
-                        //_jackMappedEventCounter = 0;
-                }
-                */
-
-
-                // How do we convert the audio files into a format that
-                // JACK can understand?
-                // 
                 // JACK works on a normalised (-1.0 to +1.0) sample basis
                 // so all samples read from the WAV file have to be divided
                 // by their maximum possible value (0xff/2 for 8-bit and
@@ -3538,19 +3449,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 //
                 // See docs/discussions/riff-wav-format.txt) for a more
                 // detailed explanation of interleaving.
-                //
-                // The Left and Rightness of these ports isn't in any
-                // way correct I don't think.  Still a bit of a mystery
-                // that bit.
-                //
-                // 13.05.2002 - on the fly sample rate conversions are
-                //              now in place.  Clunky and non interpolated
-                //              but it'll do for the moment until some of
-                //              the other bugs are ironed out.
-                //
-                // 11.09.2002 - attempting to add plugin support will mean
-                //              major restructuring of this code.  Overdue
-                //              as it is anyway.
                 //
 
                 // Hmm, so many counters
@@ -3647,46 +3545,18 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                     // Point to next output sample
                     samplesOut++;
-
-                    /*
-                    if ((*it)->getStatus() == PlayableAudioFile::DEFUNCT)
-                    {
-                        //inst->clearDefunctFromAudioPlayQueue();
-
-                        if (samplePtr - origSamplePtr > int(samples.length()))
-                        {
-                            //std::cout << "FINAL FRAME BREAKING - "
-                                 //<< "calc = " << samplesOut * bytes * channels
-                                 //<< " : samples = " << samples.length()
-                                 //<< endl;
-                            break;
-                        }
-                        //else
-                        //{
-                            //std::cout << "FINAL FRAME OUT" << endl;
-                        //}
-                    }
-                    */
                 }
-
-                _jackPeakLevels[audioFilesProcessed * 2] = peakLevelLeft;
-                _jackPeakLevels[audioFilesProcessed * 2 + 1] = peakLevelRight;
 
                 // At this point check for plugins on this
                 // instrument and step through them in the
                 // order returned.
                 //
 #ifdef HAVE_LADSPA
-                PluginInstances list =
+                PluginInstances &list =
                     inst->getInstrumentPlugins((*it)->getInstrument());
 
                 if (list.size())
                 {
-                    /*
-                    std::cout << "GOT " << list.size() << " PLUGINS" << endl;
-                    int c = 0;
-                    */
-
                     PluginIterator pIt = list.begin();
                     for (; pIt != list.end(); ++pIt)
                     {
@@ -3694,7 +3564,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                         //
                         if ((*pIt)->isBypassed())
                         {
-                            //std::cout << "BYPASSING " << c << endl;
                             for (unsigned int i = 0; i < nframes; ++i)
                             {
                                 _pluginBufferOut1[i] = _pluginBufferIn1[i];
@@ -3704,12 +3573,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                         else
                         {
                             (*pIt)->run(_jackBufferSize);
-                            /*
-                            std::cout << "RUN = " << c++ << " : "
-                                 << "LASPA ID = " << (*pIt)->getLADSPAId()
-                                 << " : POS = " << (*pIt)->getPosition() 
-                                 << endl;
-                                 */
                         }
 
                         // Copy across the out buffers if we're a channel
@@ -3755,17 +3618,33 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 {
                     for (unsigned int i = 0; i < nframes; ++i)
                     {
-                        _tempOutBuffer1[i] += 
-                            _pluginBufferIn1[i] * volume * pan1;
-
-                        _tempOutBuffer2[i] += 
-                            _pluginBufferIn2[i] * volume * pan2;
+                        _tempOutBuffer1[i] += _pluginBufferIn1[i] * volume * pan1;
+                        _tempOutBuffer2[i] += _pluginBufferIn2[i] * volume * pan2;
                     }
                 }
 
-            }
+                if (_passThroughCounter > reportPasses)
+                {
+                    _jackMappedEvent[_jackMappedEventCounter]
+                        ->setInstrument((*it)->getInstrument());
+                    _jackMappedEvent[_jackMappedEventCounter]
+                        ->setType(MappedEvent::AudioLevel);
+                    //_jackMappedEvent[_jackMappedEventCounter]
+                        //->setData1((*it)->getAudioFile()->getId());
 
-            audioFilesProcessed++;
+                    _jackMappedEvent[_jackMappedEventCounter]->setData1(int(peakLevelLeft * 127.0));
+                    _jackMappedEvent[_jackMappedEventCounter]->setData2(int(peakLevelRight * 127.0));
+
+                    inst->insertMappedEventForReturn(
+                            _jackMappedEvent[_jackMappedEventCounter]);
+
+                    _jackMappedEventCounter++;
+
+                    // return
+                    if (_jackMappedEventCounter >= _jackMappedEventsMax)
+                        _jackMappedEventCounter = 0;
+                }
+            }
         }
 
         // Playing plugins that have no current audio input but
@@ -3778,7 +3657,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         if (inst->isPlaying())
         {
 
-            PluginInstances list = inst->getUnprocessedPlugins();
+            PluginInstances &list = inst->getUnprocessedPlugins();
             if (list.size())
             {
 
@@ -3793,28 +3672,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 PluginIterator it = list.begin();
                 for (; it != list.end(); ++it)
                 {
-                    /*
-                    float volume = 1.0f;
-    
-                    MappedAudioFader *fader =
-                        dynamic_cast<MappedAudioFader*>
-                            (inst->getMappedStudio()->
-                                 getAudioFader((*it)->getInstrument()));
-                
-                    if (fader)
-                    {
-                        MappedObjectPropertyList result =
-                            fader->getPropertyList(MappedAudioFader::FaderLevel);
-                        volume = float(result[0].toFloat())/127.0;
-                    }
-                    */
-
-                    /*
-                    std::cout << "UNPROC INSTRUMENT = " << (*it)->getInstrument()
-                         << " : POS = " << (*it)->getPosition()
-                         << endl;
-                         */
-
                     // Run the plugin
                     //
                     (*it)->run(_jackBufferSize);
@@ -3842,7 +3699,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         else if(inst->getRecordStatus() == RECORD_AUDIO ||
                 inst->getRecordStatus() == ASYNCHRONOUS_AUDIO)
         {
-            PluginInstances list = inst->getUnprocessedPlugins();
+            PluginInstances &list = inst->getUnprocessedPlugins();
             if (list.size())
             {
                 // initialise plugin input buffer with recorded samples
@@ -3891,7 +3748,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 #endif // HAVE_LADSPA
         
 
-        // Transfer the sum of the samples
+        // Transfer the sum of the samples to the jack output buffers
         //
         for (unsigned int i = 0 ; i < nframes; ++i)
         {
@@ -3899,60 +3756,19 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             *(rightBuffer++) = _tempOutBuffer2[i];
         }
 
-        // Process any queue vector operations now - making sure the 
-        // disk thread doesn't access the same vector.
-        //
-        pthread_mutex_lock(&_diskThreadLock);
         inst->pushPlayableAudioQueue();
-        pthread_mutex_unlock(&_diskThreadLock);
 
-        // Every n times through we report the current audio level
-        // back to the gui.
+        // Ok, now we can release the mutex
         //
-        if (audioQueue.size() > 0 && _passThroughCounter++ > reportPasses)
-        {
-            int audioFileCounter = 0;
-            for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
-            {
-                if ((*it)->getStatus() == PlayableAudioFile::PLAYING)
-                {
-                    _jackMappedEvent[_jackMappedEventCounter]
-                        ->setInstrument((*it)->getInstrument());
-                    _jackMappedEvent[_jackMappedEventCounter]
-                        ->setType(MappedEvent::AudioLevel);
-                    //_jackMappedEvent[_jackMappedEventCounter]
-                        //->setData1((*it)->getAudioFile()->getId());
-
-                    _jackMappedEvent[_jackMappedEventCounter]->setData1(
-                        int(_jackPeakLevels[audioFileCounter * 2] * 127.0));
-
-                    _jackMappedEvent[_jackMappedEventCounter]->setData2(
-                        int(_jackPeakLevels[audioFileCounter * 2 + 1] * 127.0));
-
-                    inst->insertMappedEventForReturn(
-                            _jackMappedEvent[_jackMappedEventCounter]);
-
-                    _jackMappedEventCounter++;
-
-                    // return
-                    if (_jackMappedEventCounter >= _jackMappedEventsMax)
-                        _jackMappedEventCounter = 0;
-
-                    audioFileCounter++;
-                }
-            }
-
-            // throw away the peak levels now
-            _passThroughCounter = 0;
-        }
-
-        _usingAudioQueueVector = false;
+        pthread_mutex_unlock(&_diskThreadLock);
 
 #ifdef HAVE_LADSPA
         // Reset all plugins so they're processed next time
         //
         inst->setAllPluginsToUnprocessed();
 #endif // HAVE_LADSPA
+
+        _passThroughCounter++;
 
     }
 
@@ -4856,43 +4672,10 @@ AlsaDriver::jackDiskThread(void *arg)
                 for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
                 {
                     if (!(*it)->isInitialised())
-                        (*it)->initialise();
+                        (*it)->initialise(); // start audio buffering
                     else
-                    {
-                        // Let the audio file work out if the buffers need filling
-                        //
-                        (*it)->fillRingBuffer();
-
-                        /*
-                        // Check how much data we have in the ringbuffer and
-                        // fill it up as necessary.  A second of sample data 
-                        // is just an arbitrary amount for the moment.
-                        //
-                        unsigned int fillLevel = (((*it)->getSampleRate() *
-                                                   (*it)->getBytesPerSample())) / 4;
-
-                        unsigned int readSpace = 
-                            (*it)->getRingBuffer()->readSpace();
-
-                        // Get the maximum buffer size we can write to and adjust
-                        // downwards so we're not reading too much at a time.
-                        // 
-                        unsigned int writeSpace = (*it)->getRingBuffer()->writeSpace();
-                        if ((fillLevel * 2) < writeSpace ) writeSpace = fillLevel * 2;
-
-#ifdef FINE_DEBUG_DISK_THREAD
-                        std::cerr << "AUDIO FILE " << (*it)->getAudioFile()->getId()
-                                  << " available buffer was = " << readSpace;
-#endif
-    
-                        if (readSpace < fillLevel)
-                        {
-                            // bytePerSample takes into account the number
-                            // of channels - calculate frames
-                            (*it)->fillRingBuffer(writeSpace);
-                        }
-                        */
-                    }
+                        (*it)->fillRingBuffer(); // Let the audio file work out if the buffers
+                                                 // need filling and if so by how much.
 
 #ifdef FINE_DEBUG_DISK_THREAD
                     std::cerr << ", is now = " << (*it)->getRingBuffer()->readSpace() << std::endl;
@@ -4903,11 +4686,6 @@ AlsaDriver::jackDiskThread(void *arg)
                 pthread_mutex_unlock(&_diskThreadLock);
             }
 
-
-            // Wait until there's a signal from the main thread to do some
-            // more processing.
-            //
-            //pthread_cond_wait (&_dataReady, &_diskThreadLock);
             usleep(10000); // sleep for a hundreth of a second
 
 #ifdef DEBUG_DISK_THREAD

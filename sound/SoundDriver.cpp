@@ -75,8 +75,7 @@ PlayableAudioFile::initialise()
     {
         int bufferSize = 32767; // 32k ringbuffer as default size
 
-        // Default to half a a second's worth of audio buffer if we have an 
-        // AudioFile handle.
+        // Default to eighth of a second's worth of data
         //
         if (m_audioFile) bufferSize = m_audioFile->getSampleRate() * m_audioFile->getBytesPerFrame() / 8;
 
@@ -89,10 +88,10 @@ PlayableAudioFile::initialise()
 
     // Put a random amount of something into the buffer to start with
     //
-    int initialSize = size / 8 + int(double(size)/4.0 * double(rand()) / double(RAND_MAX));
+    int initialSize = size / 4 + int(double(size)/2.0 * double(rand()) / double(RAND_MAX));
     std::cout << "PlayableAudioFile::initialise - initial buffer size = " << initialSize << std::endl;
 
-    m_ringBufferThreshold = size / 10;
+    m_ringBufferThreshold = size / 4;
 
     fillRingBuffer(initialSize);
 
@@ -164,7 +163,7 @@ std::string
 PlayableAudioFile::getSampleFrameSlice(const RealTime &time)
 {
     if (m_audioFile)
-   {
+    {
         return m_audioFile->getSampleFrameSlice(m_file, time);
     }
     return std::string("");

@@ -181,11 +181,11 @@ public:
 
     // Return a list of plugin instances that haven't been run()
     //
-    PluginInstances getUnprocessedPlugins();
+    PluginInstances& getUnprocessedPlugins();
 
     // Return an ordered list of plugins for an Instrument
     //
-    PluginInstances getInstrumentPlugins(InstrumentId id);
+    PluginInstances& getInstrumentPlugins(InstrumentId id);
 
     // Reset all plugin processed states (start of a new process() loop)
     //
@@ -346,6 +346,11 @@ private:
     // finding lots of plugins once we have lots of plugins available.
     //
     PluginInstances              m_pluginInstances;
+
+    // List to save realloc everytime through
+    //
+    PluginInstances              m_retPluginList; 
+    OrderedPluginList            m_orderedPluginList;
 
 #endif // HAVE_LADSPA
 
