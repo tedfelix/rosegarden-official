@@ -858,7 +858,7 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
     if (params.m_legerLines == 0) return;
 
     x0 = m_left - m_noteBodyWidth / 5 - 1;
-    x1 = m_left + m_noteBodyWidth + m_noteBodyWidth / 5 + 1;
+    x1 = m_left + m_noteBodyWidth + m_noteBodyWidth / 5 /* + 1 */;
 
     if (params.m_shifted) {
         if (params.m_stemGoesUp) {
@@ -900,7 +900,7 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 //		   << " (staff line " << getStaffLineThickness() << ")"
 //		   << ", offset " << offset << endl;
 
-    bool first = true;
+//    bool first = true;
     
     for (int i = legerLines - 1; i >= 0; --i) { 
 	if (i % 2) {
@@ -909,11 +909,11 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 		m_p->drawLine(x0, y + j, x1, y + j);
 	    }
 	    y += offset;
-	    if (first) {
-		x0 += getStemThickness();
-		x1 -= getStemThickness();
-		first = false;
-	    }
+//	    if (first) {
+//		x0 += getStemThickness();
+//		x1 -= getStemThickness();
+//		first = false;
+//	    }
 	}
     }
 }
@@ -930,7 +930,7 @@ NotePixmapFactory::makeRoomForStemAndFlags(int flagCount, int stemLength,
 	    (m_above, stemLength - m_noteBodyHeight/2);
     } else {
 	m_below = std::max
-	    (m_below, stemLength - m_noteBodyHeight/2);
+	    (m_below, stemLength - m_noteBodyHeight/2 + 1);
     }
 
     if (flagCount > 0) {
@@ -1471,9 +1471,9 @@ NotePixmapFactory::drawTie(bool above, int length, int shift)
     }
 #else
 
-    int x = m_left + m_noteBodyWidth + m_noteBodyWidth / 3 + shift;
+    int x = m_left + m_noteBodyWidth + m_noteBodyWidth / 4 + shift;
 
-    length = length - m_noteBodyWidth - m_noteBodyWidth / 2 - shift;
+    length = length - m_noteBodyWidth - m_noteBodyWidth / 3 - shift;
     if (length < m_noteBodyWidth) {
 	length = m_noteBodyWidth;
     }
@@ -1482,7 +1482,7 @@ NotePixmapFactory::drawTie(bool above, int length, int shift)
     // creating a new pixmap
     
     QPoint hotspot;
-    drawSlurAux(length, 0, above, false, hotspot,
+    drawSlurAux(length, 0, above, false, true, hotspot,
 		&m_p->painter(),
 		x,
 		above ? m_above : m_above + m_noteBodyHeight);
@@ -1956,7 +1956,8 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
     // 1 pixel wide instead of blurring
     bool smooth = m_font->isSmooth() && getNoteBodyHeight() > 5;
     QPoint hotspot;
-    drawSlurAux(length, dy, above, smooth, hotspot, 0, 0, 0);
+    if (length < getNoteBodyWidth()*2) length = getNoteBodyWidth()*2;
+    drawSlurAux(length, dy, above, smooth, false, hotspot, 0, 0, 0);
 
     m_p->end();
 
@@ -1992,22 +1993,21 @@ NotePixmapFactory::drawSlur(int length, int dy, bool above,
     Rosegarden::Profiler profiler("NotePixmapFactory::drawSlur");
     QPoint hotspot;
     m_inPrinterMethod = true;
-    drawSlurAux(length, dy, above, false, hotspot, &painter, x, y);
+    if (length < getNoteBodyWidth()*2) length = getNoteBodyWidth()*2;
+    drawSlurAux(length, dy, above, false, false, hotspot, &painter, x, y);
     m_inPrinterMethod = false;
 }
 
 void
-NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
-			       QPoint &hotspot,
-			       QPainter *painter, int x, int y)
+NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
+			       bool smooth, bool flat,
+			       QPoint &hotspot, QPainter *painter, int x, int y)
 {
     QWMatrix::TransformationMode mode = QWMatrix::transformationMode();
     QWMatrix::setTransformationMode(QWMatrix::Points);
 
     int thickness = getStaffLineThickness() * 2;
     int nbh = getNoteBodyHeight(), nbw = getNoteBodyWidth();
-
-    if (length < nbw * 2) length = nbw * 2;
 
     // Experiment with rotating the painter rather than the control points.
     double theta = 0;
@@ -2027,6 +2027,7 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
     float noteLengths = float(length) / nbw;
     if (noteLengths < 1) noteLengths = 1;
     my = int(0 - nbh * sqrt(noteLengths) / 2);
+    if (flat) my = my * 2 / 3;
 
     if (!above) my = -my;
 

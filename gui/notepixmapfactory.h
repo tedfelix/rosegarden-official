@@ -233,7 +233,8 @@ protected:
 		     QPainter *painter, int x, int y);
     void drawHairpinAux(int length, bool isCrescendo,
 			QPainter *painter, int x, int y);
-    void drawSlurAux(int length, int dy, bool above, bool smooth, QPoint &hotspot,
+    void drawSlurAux(int length, int dy, bool above, bool smooth, bool flat,
+		     QPoint &hotspot,
 		     QPainter *painter, int x, int y);
     void drawTextAux(const Rosegarden::Text &text,
 		     QPainter *painter, int x, int y);

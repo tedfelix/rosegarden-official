@@ -430,8 +430,9 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     startOffset += startMarks * 2;
     endOffset += endMarks * 2;
 
-    if (startTied) ++startOffset;
-    if (endTied) ++endOffset;
+    // no need, I think:
+//    if (startTied) ++startOffset;
+//    if (endTied) ++endOffset;
 
     if (above) {
 	startHeight = startTopHeight + startOffset;
