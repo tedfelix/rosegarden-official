@@ -476,14 +476,14 @@ LilypondExporter::write() {
     KConfig *cfg = kapp->config();
     cfg->setGroup("Notation Options");
 
-    unsigned int paperSize = cfg->readUnsignedNumEntry("lilypapersize");
-    unsigned int fontSize = cfg->readUnsignedNumEntry("lilyfontsize");
+    unsigned int paperSize = cfg->readUnsignedNumEntry("lilypapersize", 1);
+    unsigned int fontSize = cfg->readUnsignedNumEntry("lilyfontsize", 4);
 //!!!    unsigned int restType = cfg->readUnsignedNumEntry("lilyresttype");
-    bool exportLyrics = cfg->readBoolEntry("lilyexportlyrics");
-    bool exportHeaders = cfg->readBoolEntry("lilyexportheaders");
-    bool exportMidi = cfg->readBoolEntry("lilyexportmidi");
-    bool exportUnmuted = cfg->readBoolEntry("lilyexportunmuted");
-    bool exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick");
+    bool exportLyrics = cfg->readBoolEntry("lilyexportlyrics", true);
+    bool exportHeaders = cfg->readBoolEntry("lilyexportheaders", true);
+    bool exportMidi = cfg->readBoolEntry("lilyexportmidi", false);
+    bool exportUnmuted = cfg->readBoolEntry("lilyexportunmuted", false);
+    bool exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
 
     // enable "point and click" debugging via xdvi to make finding the
     // unfortunately inevitable errors easier
@@ -613,7 +613,7 @@ LilypondExporter::write() {
         // method for users to selectively export tracks...
         Rosegarden::Track *track = m_composition->getTrackByIndex((*i)->getTrack());
         
-        if (exportUnmuted && (!track->isMuted())) {
+        if (!exportUnmuted || (!track->isMuted())) {
             if ((int) (*i)->getTrack() != lastTrackIndex) {
                 if (lastTrackIndex != -1) {
                     // close the old track (Staff context)
