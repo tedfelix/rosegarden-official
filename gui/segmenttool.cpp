@@ -323,8 +323,8 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
 
     QPoint tPos = m_canvas->inverseMapPoint(pos);
 
-    RG_DEBUG << "SegmentPencil::handleMouseMove: pos " << pos << ", tPos "
-	     << tPos << endl;
+//     RG_DEBUG << "SegmentPencil::handleMouseMove: pos " << pos << ", tPos "
+// 	     << tPos << endl;
 
     SnapGrid::SnapDirection direction = SnapGrid::SnapRight;
     if (tPos.x() < m_currentItem->x()) direction = SnapGrid::SnapLeft;
