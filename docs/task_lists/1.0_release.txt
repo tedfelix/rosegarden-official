@@ -20,13 +20,6 @@ Features for 1.0 - updated 20030627
 - request: notation segment expanding itself as you enter 
            notes past the end of it
 
-- request: importing lilypond after manual hackery?
-  dmm:  No, I don't think so.  I saw the exchange Hans had on the
-  lilypond-devel list some time ago, and this feature would be extremely
-  difficult to implement.  If Hans has been working on it all this time in
-  secret, then it might make 1.0, but otherwise there's not a chance.
-
-- request: triplets of more than three (erm, quintuplets?)
 
 - Studio faders (MIDI and audio fader controls)
 
@@ -69,9 +62,22 @@ Features for 1.0 - updated 20030627
   either un-doable or something best left for after 1.0, but it's worth a look
   I think.  It may be a quick hack. [dmm]
 
+  Chris and I talked about this a bit more and while we'd like closer
+  fluidsynth integration it'll probably mean we should talk more 
+  closely with the fluidsynth team and get their support.  There are
+  things that both of us dislike about current implementation. [rwb]
+
 - control rulers [gl IN PROGESS]
+  
+  I'll have a look at this soonish [rwb]
 
 - adding instrument selection menu to tracks menu [rwb/gl]
+
+- native printing 
+  o printing resolution
+  o adding fluff and nicities to printed staves
+  o create mapping files for commerical available fonts (so one can
+    use them in RG)
 
 Completed
 ---------
@@ -79,6 +85,19 @@ Completed
 - document event filter dialog in RG manual [dmm] [DONE]
 
 - event filter dialog [dmm] [DONE]
+
+- request: triplets of more than three (erm, quintuplets?)
+    [ALREADY DONE - DOCUMENT?]
+
+To be ignored
+-------------
+
+- request: importing lilypond after manual hackery?
+  dmm:  No, I don't think so.  I saw the exchange Hans had on the
+  lilypond-devel list some time ago, and this feature would be extremely
+  difficult to implement.  If Hans has been working on it all this time in
+  secret, then it might make 1.0, but otherwise there's not a chance.
+
 
 Bugs
 ----
