@@ -61,7 +61,8 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_delay(0),
     m_realTimeDelay(0, 0),
     m_clefKeyList(0),
-    m_runtimeSegmentId(_runtimeSegmentId++)
+    m_runtimeSegmentId(_runtimeSegmentId++),
+    m_snapGridSize(-1)
 {
 }
 
@@ -88,7 +89,8 @@ Segment::Segment(const Segment &segment):
     m_delay(segment.getDelay()),
     m_realTimeDelay(segment.getRealTimeDelay()),
     m_clefKeyList(0),
-    m_runtimeSegmentId(_runtimeSegmentId++)
+    m_runtimeSegmentId(_runtimeSegmentId++),
+    m_snapGridSize(-1)
 {
     for (iterator it = segment.begin();
 	 segment.isBeforeEndMarker(it); ++it) {

@@ -188,7 +188,14 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     //
     m_parameterBox->useInstrument(instr);
 
-    m_snapGrid->setSnapTime(Rosegarden::SnapGrid::SnapToBeat);
+    // Set the snap grid from the stored size in the segment
+    //
+    int snapGridSize = m_staffs[0]->getSegment().getSnapGridSize();
+
+    if (snapGridSize != -1)
+       m_snapGrid->setSnapTime(snapGridSize);
+    else
+       m_snapGrid->setSnapTime(Rosegarden::SnapGrid::SnapToBeat);
 
     m_canvasView = new MatrixCanvasView(*m_staffs[0],
                                         m_snapGrid,
@@ -1605,6 +1612,8 @@ MatrixView::slotSetSnap(timeT t)
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i)
         m_staffs[i]->sizeStaff(m_hlayout);
+
+    m_segments[0]->setSnapGridSize(t);
 
     updateView();
 }

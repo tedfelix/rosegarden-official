@@ -480,6 +480,9 @@ public:
     // The runtime id for this segment
     //
     int getRuntimeId() const { return m_runtimeSegmentId; }
+    
+    void setSnapGridSize(int size) { m_snapGridSize = size; }
+    int getSnapGridSize() const { return m_snapGridSize; }
 
     /**
      * The compare class used by Composition
@@ -588,6 +591,10 @@ private: // assignment operator not provided
     // the sequencer.
     //
     int     m_runtimeSegmentId;
+
+    // Remember the last used snap grid size for this segment
+    //
+    int     m_snapGridSize;
 
 };
 

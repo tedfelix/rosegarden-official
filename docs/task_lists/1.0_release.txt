@@ -8,6 +8,10 @@ Features for 1.0 - updated 20030923
 
 - punch in record [rwb] [HALF COMPLETE]
 
+- matrix view 
+  o double/half speed of selection 
+  o force legato
+
 - audio threading for file r/w access [rwb]
   o mp3 support
   o libsndfile support

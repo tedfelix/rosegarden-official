@@ -153,6 +153,10 @@ public:
     //
     bool isUniqueControlParameter(const ControlParameter &con) const;
 
+    // Generate some default controllers for the MidiDevice
+    //
+    void generateDefaultControllers();
+
     virtual std::string toXmlString();
 
 protected:

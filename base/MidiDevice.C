@@ -47,6 +47,7 @@ MidiDevice::MidiDevice():
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
     generatePresentationList();
+    generateDefaultControllers();
 }
 
 MidiDevice::MidiDevice(DeviceId id,
@@ -59,6 +60,7 @@ MidiDevice::MidiDevice(DeviceId id,
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>"))
 {
     generatePresentationList();
+    generateDefaultControllers();
 }
 
 MidiDevice::MidiDevice(DeviceId id,
@@ -79,6 +81,7 @@ MidiDevice::MidiDevice(DeviceId id,
     }
 
     generatePresentationList();
+    generateDefaultControllers();
 }
 
 MidiDevice::MidiDevice(const MidiDevice &dev):
@@ -183,6 +186,38 @@ MidiDevice::generatePresentationList()
             m_presentationInstrumentList.push_back(*it);
 	}
     }
+}
+
+void
+MidiDevice::generateDefaultControllers()
+{
+    m_controlList.clear();
+
+    static std::string controls[][9] = {
+        { "Pan", "controller", "<none>", "0", "127", "64", "10", "2", "0" },
+        { "Chorus", "controller", "<none>", "0", "127", "0", "93", "3", "1" },
+        { "Volume", "controller", "<none>", "0", "127", "0", "7", "1", "2" },
+        { "Reverb", "controller", "<none>", "0", "127", "0", "91", "3", "3" },
+        { "Sustain", "controller", "<none>", "0", "127", "0", "64", "4", "4" },
+        { "Expression", "controller", "<none>", "0", "127", "0", "11", "2", "5" },
+        { "Modulation", "controller", "<none>", "0", "127", "0", "1", "4", "-1" }
+    };
+
+    for (unsigned int i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {
+
+        Rosegarden::ControlParameter con(controls[i][0],
+                                         controls[i][1],
+                                         controls[i][2],
+                                         atoi(controls[i][3].c_str()),
+                                         atoi(controls[i][4].c_str()),
+                                         atoi(controls[i][5].c_str()),
+                                         Rosegarden::MidiByte(atoi(controls[i][6].c_str())),
+                                         atoi(controls[i][7].c_str()),
+                                         atoi(controls[i][8].c_str()));
+        addControlParameter(con);
+    }
+
+
 }
 
 void

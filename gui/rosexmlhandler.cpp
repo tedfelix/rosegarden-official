@@ -730,6 +730,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         m_currentSegment->setColourIndex(colourindex);
 
+        QString snapGridSizeStr = atts.value("snapgridsize");
+        if (snapGridSizeStr) {
+            m_currentSegment->setSnapGridSize(snapGridSizeStr.toInt());
+        }
+
 	m_currentTime = startTime;
         getComposition().addSegment(m_currentSegment);
         getComposition().setSegmentStartTime(m_currentSegment, startTime);
@@ -995,6 +1000,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		(m_device);
 	    if (md) {
 		md->setVariationType(variation);
+                md->clearControlList(); // clear down default controllers
 	    }
 	}
 	else if (type == "audio")
