@@ -8,14 +8,6 @@ NotationCanvasView::contentsMousePressEvent.
 
 which handles mouse move events in order to maintain
 
-- the staff line on which the mouse pointer is on (m_currentHighlightedLine)
-
-  NOTE: a staff has 5 visible lines but also many invisible ones,
-  which correpond to leger lines and lines in-between the visible
-  ones. Any of these can be the current highlighted line
-  ("highlighted" not being quite the right term, it's here for
-  historical reasons).
-
 - the status bar items displaying the name of the note the pointer
   height corresponds to (through the hoveredOverNoteChange signal)
 

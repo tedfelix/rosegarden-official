@@ -1,0 +1,110 @@
+Rosegarden4 global design
+
+Rosegarden is split in 3 main parts :
+
+----------------------------------------------------------------------
+
+BASE : the 'base' library, which holds all "music handling" structures
+: Compositions, Segments (which you could call Tracks but we had to
+make the distinction because the word is used elsewhere) and Events,
+among others. Everything here is part of the Rosegarden namespace.
+
+See docs/discussion/names.txt
+
+An Event is the basic musical element. It's more or less a
+generalization of the concept of a MIDI event. Each note or rest is an
+event. Each key change, tempo change, is an event. etc... Event have
+properties (dynamically assigned), and only two common attributes :
+absolute time (the time from the start of the piece where the event is
+to occur), and a duration (how long the event lasts).
+
+A Track is the same thing as on a mixing table (usually assigned to an
+instrument, a voice, etc...). Track aren't represented by a class or
+data structure, only the TrackEditor implements this concept. The most
+common data structure we deal with is the Segment.
+
+A Segment is a "track part", that is, a set of Events, sorted by their
+absolute time. This is what you would call a Track, but the concept is
+a bit different. A Track can hold several segments, which can overlap
+or be seperated in time. Try playing a little with the TrackEditor,
+the blue rectangles are Segments, the horizontal headers on the left
+are the Tracks.
+
+
+This library is purposely not linked with KDE/Qt (there are no
+references to the GUI), and relies heavily on the STL.
+
+----------------------------------------------------------------------
+
+GUI : a KDE/Qt application. Like most KDE applications, it follows a
+document/view model. The document (class RosegardenGUIDoc, which wraps
+a Composition) can have several views (class RosegardenGUIView),
+although at the moment only a single one is used.
+
+This view is the TrackEditor, which shows all the Composition's
+Segments organized in Tracks. Each Segment can be edited in 2 ways :
+notation (score) or matrix (piano roll).
+
+All edition views are derived from EditView. An EditView is the class
+dealing with the edition per se of the events. It uses several
+components :
+
+- layout classes (horizontal and vertical) : these are the classes
+which determine the x,y coordinates of the graphic items representing
+the events (notes or piano roll rectangles).
+
+- Tools, which implement each edit function (insert, erase, cut'n
+paste...). These are the tools which are on the EditView toolbar.
+
+- a Toolbox which is a simple string=>tool map.
+
+- a canvas view : although this isn't a part of the EditView
+definition per se, but currently existing edit views (notation and
+matrix) use one, because they use a QCanvas to represent data.
+
+- a lined staff : (a staff with lines) like the canvas view, this
+isn't part of the EditView definition, but both views use one.
+
+
+There are currently 2 EditView : NotationView and MatrixView.
+
+
+NOTE : in the following, we're talking both about events as UI events
+or user events (mouse button clicks, mouse move, keystrokes, etc...)
+and Events (our basic music element). To help lifting the ambiguity,
+"events" is for UI events, Events is for Rosegarden::Event.
+
+Edition goes as follows : 
+
+1. The canvas view gets the user events (see
+NotationCanvasView::contentsMousePressEvent(QMouseEvent*) for
+instance). It locates where the event occured in terms of musical
+element : which note or staff line the user clicked on, which pitch
+and time this corresponds to, that kind of stuff.
+
+2. It transmits this kind of info as a signal, which is connected to a
+slot in the parent EditView.
+
+3. The EditView delegates action to the current tool.
+
+4. The tool performs the actual job (inserting or deleting a note,
+etc...).
+
+Since this action is usually complex (merely inserting a note requires
+dealing with the surrounding Events, rests or notes), it does it
+through a SegmentHelper (for instance, base/SegmentNotationHelper)
+which "wraps" the complexity into simple calls and performs all the
+hidden tasks.
+
+
+The EditView also maintains (obviously) its visual appearance with the
+layout classes, applying them when appropriate.
+
+----------------------------------------------------------------------
+
+SEQUENCER : also a KDE/Qt application, but which doesn't have a
+GUI.
+
+It communicates with the main GUI through DCOP, and sends music events
+to aRTS.
+
