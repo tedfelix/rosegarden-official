@@ -445,10 +445,26 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 
 	m_canvas->setSnapGrain(true);
 
+        // prevent item from being dragged out of screen.
+        //
 	int newX = e->x() - m_clickPoint.x() + int(m_currentItemStartX);
-        //if (newX < 0) newX = 0;
+
+        RG_DEBUG << "SegmentMover::handleMouseMove : newX = "
+                 << newX
+                 << " - canvas width : " << m_canvas->canvas()->width()
+                 << endl;
+
+        if ((newX + m_currentItem->width()) < 20) {
+            newX = 20 - m_currentItem->width();
+        }
+        
+        if (newX >= m_canvas->canvas()->width() - 20)
+            newX = m_canvas->canvas()->width() - 20;
+
         int newY = e->y();
         if (newY < 0) newY = 0;
+        if ((newY + m_currentItem->height()) >= m_canvas->canvas()->height())
+            newY = m_canvas->canvas()->height() - m_currentItem->height();
 
 	timeT newStartTime = m_canvas->grid().snapX(newX);
 	m_currentItem->setEndTime(m_currentItem->getEndTime() + newStartTime -
