@@ -1546,11 +1546,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
                 m_plugin->setId(id);
             }
+            /*
+               // we shouldn't be halting import of the RG file just because
+               // we can't match a plugin
+               //
             else
             {
                 m_errorString = "Can't find Plugin";
                 return false;
             }
+            */
         }
 
         m_section = InPlugin;
