@@ -1847,12 +1847,9 @@ RoseXmlHandler::setupDefaultControllers()
 	{ "Chorus", "controller", "<none>", "0", "127", "0", "93", "3", "1" },
 	{ "Volume", "controller", "<none>", "0", "127", "0", "7", "1", "2" },
 	{ "Reverb", "controller", "<none>", "0", "127", "0", "91", "3", "3" },
-	{ "Attack", "controller", "<none>", "0", "127", "0", "73", "5", "4" },
-	{ "Filter", "controller", "<none>", "0", "127", "0", "74", "4", "5" },
-	{ "Release", "controller", "<none>", "0", "127", "0", "72", "5", "6" },
-	{ "Resonance", "controller", "<none>", "0", "127", "0", "71", "4", "7" },
-	{ "Modulation", "controller", "<none>", "0", "127", "0", "1", "4", "-1" },
-	{ "Sustain", "controller", "<none>", "0", "127", "0", "64", "4", "-1" }
+	{ "Sustain", "controller", "<none>", "0", "127", "0", "64", "4", "4" },
+	{ "Expression", "controller", "<none>", "0", "127", "0", "11", "2", "5" },
+	{ "Modulation", "controller", "<none>", "0", "127", "0", "1", "4", "-1" }
     };    
 
     for (unsigned int i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {

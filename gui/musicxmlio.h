@@ -61,9 +61,6 @@ protected:
     void writeNote(Rosegarden::Event *e, Rosegarden::timeT lastNoteTime,
 		   const Rosegarden::Key &key, std::ofstream &str);
 
-    char convertPitchToName(int pitch, bool isFlatKeySignature);
-    bool needsAccidental(int pitch);
-
  private:
     static const int MAX_DOTS = 4;
 };

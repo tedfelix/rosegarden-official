@@ -2070,7 +2070,6 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	    m_staffs[i]->markChanged();
-//!!!            m_staffs[i]->positionAllElements();
         }
     }
 
@@ -2698,32 +2697,7 @@ void NotationView::refreshSegment(Segment *segment,
 
         Segment *ssegment = &m_staffs[i]->getSegment();
         bool thisStaff = (ssegment == segment || segment == 0);
-/*
-        NotationElementList *notes = m_staffs[i]->getViewElementList();
-        NotationElementList::iterator starti = notes->begin();
-        NotationElementList::iterator endi = notes->end();
-
-        timeT barStartTime = ssegment->getStartTime(),
-	      barEndTime   = ssegment->getEndTime();
-
-        if (startTime != endTime) {
-	    barStartTime = ssegment->getBarStartForTime(startTime);
-	    barEndTime = ssegment->getBarEndForTime(endTime);
-	    starti = notes->findTime(barStartTime);
-	    endi = notes->findTime(barEndTime);
-	}
-
-        NOTATION_DEBUG << "NotationView::refreshSegment: "
-                             << "start = " << startTime << ", end = " << endTime << ", barStart = " << barStartTime << ", barEnd = " << barEndTime << endl;
-
-*/
 	m_staffs[i]->markChanged(startTime, endTime, !thisStaff);
-/*!!!
-        if (thisStaff) {
-            m_staffs[i]->renderElements(starti, endi);
-        }
-        m_staffs[i]->positionElements(barStartTime, barEndTime);
-*/
     }
 
     PixmapArrayGC::deleteAll();

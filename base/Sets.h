@@ -153,7 +153,7 @@ protected:
  * for a NotationChord class (subclassed from this) that can.
  */
 
-template <class Element, class Container>
+template <class Element, class Container, bool singleStaff>
 class GenericChord : public AbstractSet<Element, Container>,
 		     public std::vector<typename Container::iterator>
 {
@@ -167,8 +167,7 @@ public:
     GenericChord(const Container &c,
 		 Iterator elementInChord,
 		 const Quantizer *quantizer,
-		 const Clef &clef = Clef::DefaultClef,
-		 const Key &key = Key::DefaultKey);
+		 PropertyName stemUpProperty = PropertyName::EmptyPropertyName);
 
     virtual ~GenericChord();
 
@@ -202,8 +201,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    const Clef &m_clef;
-    const Key &m_key;
+    PropertyName m_stemUpProperty;
     timeT m_time;
     int m_subordering;
 };
@@ -333,14 +331,13 @@ AbstractSet<Element, Container>::sample(const Iterator &i)
 
 //////////////////////////////////////////////////////////////////////
  
-template <class Element, class Container>
-GenericChord<Element, Container>::GenericChord(const Container &c, Iterator i,
-					       const Quantizer *q,
-					       const Clef &clef,
-					       const Key &key) :
+template <class Element, class Container, bool singleStaff>
+GenericChord<Element, Container, singleStaff>::GenericChord(const Container &c,
+							    Iterator i,
+							    const Quantizer *q,
+							    PropertyName stemUpProperty) :
     AbstractSet<Element, Container>(c, i, q),
-    m_clef(clef),
-    m_key(key),
+    m_stemUpProperty(stemUpProperty),
     m_time(q->getQuantizedAbsoluteTime(getAsEvent(i))),
     m_subordering(getAsEvent(i)->getSubOrdering())
 {
@@ -369,14 +366,14 @@ GenericChord<Element, Container>::GenericChord(const Container &c, Iterator i,
 */
 }
 
-template <class Element, class Container>
-GenericChord<Element, Container>::~GenericChord()
+template <class Element, class Container, bool singleStaff>
+GenericChord<Element, Container, singleStaff>::~GenericChord()
 {
 }
 
-template <class Element, class Container>
+template <class Element, class Container, bool singleStaff>
 bool
-GenericChord<Element, Container>::test(const Iterator &i)
+GenericChord<Element, Container, singleStaff>::test(const Iterator &i)
 {
     // We permit note or rest events etc here, because if a chord is a
     // little staggered (for performance reasons) then it's not at all
@@ -398,53 +395,51 @@ GenericChord<Element, Container>::test(const Iterator &i)
 	    type == ChannelPressure::EventType);
 }
 
-template <class Element, class Container>
+template <class Element, class Container, bool singleStaff>
 bool
-GenericChord<Element, Container>::sample(const Iterator &i)
+GenericChord<Element, Container, singleStaff>::sample(const Iterator &i)
 {
     Event *e1 = getAsEvent(i);
     if (!e1->isa(Note::EventType)) return false;
 
-    // two notes that would otherwise be in a chord but are not in
-    // the same group, or have stems pointing in different directions
-    // by design, count as separate chords
+    if (singleStaff) {
 
-    //!!! should include "... or have different notation durations"?
+	// two notes that would otherwise be in a chord but are not in
+	// the same group, or have stems pointing in different
+	// directions by design, count as separate chords
 
-/*!!! no -- not now a chord may span several tracks. hmm. oneStaff flag?
+	if (m_baseIterator != getContainer().end()) {
 
-    if (m_baseIterator != getContainer().end()) {
+	    Event *e0 = getAsEvent(m_baseIterator);
 
-	Event *e0 = getAsEvent(m_baseIterator);
-
-	if (e0->has(BaseProperties::BEAMED_GROUP_ID)) {
-	    if (e1->has(BaseProperties::BEAMED_GROUP_ID)) {
-		if (get__Int(e1, BaseProperties::BEAMED_GROUP_ID) !=
-		    get__Int(e0, BaseProperties::BEAMED_GROUP_ID)) {
+	    if (e0->has(BaseProperties::BEAMED_GROUP_ID)) {
+		if (e1->has(BaseProperties::BEAMED_GROUP_ID)) {
+		    if (get__Int(e1, BaseProperties::BEAMED_GROUP_ID) !=
+			get__Int(e0, BaseProperties::BEAMED_GROUP_ID)) {
+			return false;
+		    }
+		} else {
 		    return false;
 		}
 	    } else {
-		return false;
+		if (e1->has(BaseProperties::BEAMED_GROUP_ID)) {
+		    return false;
+		}
 	    }
-	} else {
-	    if (e1->has(BaseProperties::BEAMED_GROUP_ID)) {
-		return false;
+
+	    if (!(m_stemUpProperty == PropertyName::EmptyPropertyName)) {
+
+		if (e0->has(m_stemUpProperty) &&
+		    e1->has(m_stemUpProperty) &&
+
+		    get__Bool(e0, m_stemUpProperty) !=
+		    get__Bool(e1, m_stemUpProperty)) {
+
+		    return false;
+		}
 	    }
-	}
-
-	if (e0->has(BaseProperties::STEM_UP) &&
-	    isPersistent__Bool(e0, BaseProperties::STEM_UP) &&
-
-	    e1->has(BaseProperties::STEM_UP) &&
-	    isPersistent__Bool(e1, BaseProperties::STEM_UP) &&
-
-	    get__Bool(e0, BaseProperties::STEM_UP) !=
-	    get__Bool(e1, BaseProperties::STEM_UP)) {
-
-	    return false;
 	}
     }
-*/
 
     AbstractSet<Element, Container>::sample(i);
     push_back(i);
@@ -452,9 +447,9 @@ GenericChord<Element, Container>::sample(const Iterator &i)
 }
 
 
-template <class Element, class Container>
+template <class Element, class Container, bool singleStaff>
 std::vector<Mark>
-GenericChord<Element, Container>::getMarksForChord() const
+GenericChord<Element, Container, singleStaff>::getMarksForChord() const
 {
     std::vector<Mark> cmarks;
 
@@ -474,9 +469,9 @@ GenericChord<Element, Container>::getMarksForChord() const
 }
 
 
-template <class Element, class Container>
+template <class Element, class Container, bool singleStaff>
 std::vector<int>
-GenericChord<Element, Container>::getPitches() const
+GenericChord<Element, Container, singleStaff>::getPitches() const
 {
     std::vector<int> pitches;
 
@@ -495,9 +490,9 @@ GenericChord<Element, Container>::getPitches() const
 }
 
 
-template <class Element, class Container>
+template <class Element, class Container, bool singleStaff>
 bool
-GenericChord<Element, Container>::contains(const Iterator &itr) const
+GenericChord<Element, Container, singleStaff>::contains(const Iterator &itr) const
 {
     for (typename std::vector<typename Container::iterator>::const_iterator
 	     i = begin();
@@ -508,9 +503,9 @@ GenericChord<Element, Container>::contains(const Iterator &itr) const
 }
 
 
-template <class Element, class Container>
-typename GenericChord<Element, Container>::Iterator
-GenericChord<Element, Container>::getPreviousNote()
+template <class Element, class Container, bool singleStaff>
+typename GenericChord<Element, Container, singleStaff>::Iterator
+GenericChord<Element, Container, singleStaff>::getPreviousNote()
 {
     Iterator i(getInitialElement());
     while (1) {
@@ -523,9 +518,9 @@ GenericChord<Element, Container>::getPreviousNote()
 }
 
 
-template <class Element, class Container>
-typename GenericChord<Element, Container>::Iterator
-GenericChord<Element, Container>::getNextNote()
+template <class Element, class Container, bool singleStaff>
+typename GenericChord<Element, Container, singleStaff>::Iterator
+GenericChord<Element, Container, singleStaff>::getNextNote()
 {
     Iterator i(getFinalElement());
     while (  i != getContainer().end() &&
@@ -538,9 +533,9 @@ GenericChord<Element, Container>::getNextNote()
 }
 
 	
-template <class Element, class Container>	
+template <class Element, class Container, bool singleStaff>	
 bool
-GenericChord<Element, Container>::PitchGreater::operator()(const Iterator &a,
+GenericChord<Element, Container, singleStaff>::PitchGreater::operator()(const Iterator &a,
 							   const Iterator &b)
 {
     try {
@@ -554,8 +549,8 @@ GenericChord<Element, Container>::PitchGreater::operator()(const Iterator &a,
 }
 
 
-typedef GenericChord<Event, Segment> Chord;
-typedef GenericChord<Event, CompositionTimeSliceAdapter> GlobalChord;
+typedef GenericChord<Event, Segment, true> Chord;
+typedef GenericChord<Event, CompositionTimeSliceAdapter, false> GlobalChord;
 
 
 }

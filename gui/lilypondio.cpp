@@ -1028,8 +1028,8 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    // Examine the following event, and truncate our duration
 	    // if we overlap it.
 
-	    if (e->has(STEM_UP) && e->isPersistent<Bool>(STEM_UP)) {
-		if (e->get<Bool>(STEM_UP)) {
+	    if (e->has(NotationProperties::STEM_UP)) {
+		if (e->get<Bool>(NotationProperties::STEM_UP)) {
 		    if (lastStem != 1) {
 			str << "\\stemUp ";
 			lastStem = 1;
@@ -1105,9 +1105,9 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    writtenDuration += soundingDuration;
 
 	    std::vector<Mark> marks(chord.getMarksForChord());
-	    // problem here: this will never be set if the note has never been notated
+	    // problem here: stem direction unavailable (it's a view-local property)
 	    bool stemUp = true;
-	    e->get<Bool>(STEM_UP, stemUp);
+	    e->get<Bool>(NotationProperties::STEM_UP, stemUp);
 	    for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
 		str << composeLilyMark(*j, stemUp);
 	    }

@@ -68,80 +68,6 @@ MusicXmlExporter::~MusicXmlExporter() {
     // nothing
 }
 
-/**
- * Take a Key-change event and return an int value
- * for that key based on the circle of fifths.
- */
-int
-convertKeyToFifths(Key whichKey) {
-    int whichKeyTonic = whichKey.getTonicPitch();
-    bool isSharp = whichKey.isSharp();
-    switch (whichKeyTonic) {
-        case 0:
-            // Hee hee
-            if (isSharp) { return 12; } else { return 0; }
-        case 1:
-            if (isSharp) { return 7; } else { return -5; }
-        case 2:
-            if (isSharp) { return 2; } else { return -10; }
-        case 3:
-            if (isSharp) { return 9; } else { return -3; }
-        case 4:
-            if (isSharp) { return 4; } else { return -8; }
-        case 5:
-            if (isSharp) { return 11; } else { return -1; }
-        case 6:
-            if (isSharp) { return 6; } else { return -6; }
-        case 7:
-            if (isSharp) { return 1; } else { return -11; }
-        case 8:
-            if (isSharp) { return 8; } else { return -4; }
-        case 9:
-            if (isSharp) { return 3; } else { return -9; }
-        case 10:
-            if (isSharp) { return 10; } else { return -2; }
-        case 11:
-            if (isSharp) { return 5; } else { return -7; }
-    }
-    // Incomplete: Error!
-    return 0;
-}
-
-// converts pitch to basic note name
-// Incomplete??  probably just as limited here as it was in its original home: can't
-// handle B/C E/F or user-specified accidentals
-char
-MusicXmlExporter::convertPitchToName(int pitch, bool isFlatKeySignature) {
-    // shift to a->g, rather than c->b
-    pitch += 3;
-    pitch %= 12;
-
-    // For flat key signatures, accidentals use next note name
-    if (isFlatKeySignature &&
-        (pitch == 1 || pitch == 4 ||
-         pitch == 6 || pitch == 9 || pitch == 11)) {
-        pitch++;
-    }
-    pitch = pitch % 12;
-
-    // compensate for no c-flat or f-flat
-    if (pitch > 2) {
-        pitch++;
-    }
-    if (pitch > 8) {
-        pitch++;
-    }
-    char pitchLetter = (char)((int)(pitch/2) + 97);
-    return pitchLetter;
-}
-
-bool
-MusicXmlExporter::needsAccidental(int pitch) {
-    if (pitch > 4) {
-        pitch++;
-    }
-    return (pitch % 2 == 1);
-}
 
 /**
  * Accidentals?
@@ -180,14 +106,6 @@ MusicXmlExporter::writeNote(Event *e, Rosegarden::timeT lastNoteTime,
 	int octave = pitch.getOctave(-1);
 	str << "\t\t\t\t<octave>" << octave << "</octave>" << std::endl;
 
-/*!!!
-        str << "\t\t\t\t<step>" << convertPitchToName(pitch % 12, isFlatKeySignature) << "</step>" << std::endl;
-        // Incomplete: double sharp/flats
-        str << "\t\t\t\t<alter>" << (needsAccidental(pitch % 12)?(isFlatKeySignature?-1:1):0) << "</alter>" << std::endl;
-
-        int octave = (int)(pitch / 12);
-        str << "\t\t\t\t<octave>" << octave << "</octave>" << std::endl;
-*/
         str << "\t\t\t\t</pitch>" << std::endl;
     }
 
@@ -221,7 +139,9 @@ void
 MusicXmlExporter::writeKey(Event *event, std::ofstream &str) {
     Rosegarden::Key whichKey(*event);
     str << "\t\t\t\t<key>" << std::endl;
-    str << "\t\t\t\t<fifths>" << convertKeyToFifths(whichKey) << "</fifths>" << std::endl;
+    str << "\t\t\t\t<fifths>"
+	<< (whichKey.isSharp() ? "" : "-")
+	<< (whichKey.getAccidentalCount()) << "</fifths>" << std::endl;
     str << "\t\t\t\t<mode>";                
     if (whichKey.isMinor()) {
         str << "minor";

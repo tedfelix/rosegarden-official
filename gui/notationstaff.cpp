@@ -566,7 +566,7 @@ NotationStaff::findUnchangedBarStart(timeT from)
 }
 
 NotationElementList::iterator
-NotationStaff::findUnchangedBarEnd(timeT to, timeT &nextBarTime)
+NotationStaff::findUnchangedBarEnd(timeT to)
 {
     NotationElementList *nel = (NotationElementList *)getViewElementList();
 
@@ -579,7 +579,6 @@ NotationStaff::findUnchangedBarEnd(timeT to, timeT &nextBarTime)
     // section, for later use.
 
     NotationElementList::iterator endAt = nel->end();
-    nextBarTime = -1;
 
     int changedBarCount = 0;
     NotationElementList::iterator candidate = nel->end();
@@ -587,13 +586,11 @@ NotationStaff::findUnchangedBarEnd(timeT to, timeT &nextBarTime)
 	candidate = nel->findTime(getSegment().getBarEndForTime(to));
 	if (candidate != nel->end()) {
 	    to = (*candidate)->getViewAbsoluteTime();
-	    if (nextBarTime < 0) nextBarTime = to;
-	} else {
-	    nextBarTime = getSegment().getEndTime();
 	}
 	++changedBarCount;
     } while (changedBarCount < 4 &&
-	     candidate != nel->end() && !elementNotMoved(static_cast<NotationElement*>(*candidate)));
+	     candidate != nel->end() &&
+	     !elementNotMoved(static_cast<NotationElement*>(*candidate)));
 
     if (changedBarCount < 4) return candidate;
     else return endAt;
@@ -611,7 +608,6 @@ NotationStaff::elementNotMoved(NotationElement *elt)
     bool ok =
 	(int)(elt->getCanvasX()) == (int)(coords.first) &&
 	(int)(elt->getCanvasY()) == (int)(coords.second);
-
 
     if (!ok) {
 	NOTATION_DEBUG
@@ -884,7 +880,8 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     (void)elt->event()->get<String>(properties.DISPLAY_ACCIDENTAL, accidental);
 
     bool up = true;
-    (void)(elt->event()->get<Bool>(STEM_UP, up));
+//    (void)(elt->event()->get<Bool>(properties.STEM_UP, up));
+    (void)(elt->event()->get<Bool>(properties.VIEW_LOCAL_STEM_UP, up));
 
     bool flag = true;
     (void)(elt->event()->get<Bool>(properties.DRAW_FLAG, flag));
@@ -1128,7 +1125,7 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 {
     // first time through this, m_ready is false -- we mark it true
 
-//    NOTATION_DEBUG << "NotationStaff::markChanged (" << from << " -> " << to << ") " << movedOnly << endl;
+    NOTATION_DEBUG << "NotationStaff::markChanged (" << from << " -> " << to << ") " << movedOnly << endl;
 
     if (from == to) {
 
@@ -1146,11 +1143,14 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 	Rosegarden::Segment *segment = &getSegment();
 	Rosegarden::Composition *composition = segment->getComposition();
 
-	timeT nextBarTime = 0; // we only use this -- not an ideal api any more
-	(void)findUnchangedBarEnd(to, nextBarTime);
+	NotationElementList::iterator unchanged = findUnchangedBarEnd(to);
 
-	int finalBar = composition->getBarNumber(segment->getEndMarkerTime());
-	if (nextBarTime > 0) finalBar = composition->getBarNumber(nextBarTime);
+	int finalBar;
+	if (unchanged == getViewElementList()->end()) {
+	    finalBar = composition->getBarNumber(segment->getEndMarkerTime());
+	} else {
+	    finalBar = composition->getBarNumber((*unchanged)->getViewAbsoluteTime());
+	}
 
 	int fromBar = composition->getBarNumber(from);
 	int toBar   = composition->getBarNumber(to);
@@ -1160,8 +1160,12 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 
 	    if (bar > toBar) movedOnly = true;
 	    
+	    NOTATION_DEBUG << "bar " << bar << " status " << m_status[bar] << endl;
+
 	    if (bar >= m_lastRenderCheck.first &&
 		bar <= m_lastRenderCheck.second) {
+
+		NOTATION_DEBUG << "bar " << bar << " rendering and positioning" << endl;
 
 		if (!movedOnly || m_status[bar] == UnRendered) {
 		    renderElements
@@ -1173,14 +1177,21 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 		m_status[bar] = Positioned;
 
 	    } else if (!m_ready) {
+		NOTATION_DEBUG << "bar " << bar << " rendering and positioning" << endl;
+
 		// first time through -- we don't need a separate render phase,
 		// only to mark as not yet positioned
 		m_status[bar] = Rendered;
 
 	    } else if (movedOnly) {
-		if (m_status[bar] == Positioned) m_status[bar] = Rendered;
+		if (m_status[bar] == Positioned) {
+		    NOTATION_DEBUG << "bar " << bar << " marking unpositioned" << endl;
+		    m_status[bar] = Rendered;
+		}
 
 	    } else {
+		NOTATION_DEBUG << "bar " << bar << " marking unrendered" << endl;
+
 		m_status[bar] = UnRendered;
 	    }
 	}

@@ -33,7 +33,8 @@ class NotationStaff;
 
 
 class NotationChord : public Rosegarden::GenericChord<NotationElement,
-		                                      NotationElementList>
+		                                      NotationElementList,
+		                                      true>
 {
 public:
     NotationChord(const NotationElementList &c,
@@ -63,10 +64,12 @@ public:
     virtual int getAccidentalShift(const NotationElementList::iterator &itr)
 	const;
 
-private:
-    int getHeight(const Iterator&) const;
-
+protected:
     const NotationProperties &m_properties;
+    Rosegarden::Clef m_clef;
+    Rosegarden::Key m_key;
+
+    int getHeight(const Iterator&) const;
 };
 
 

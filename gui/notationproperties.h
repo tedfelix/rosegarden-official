@@ -48,9 +48,11 @@ public:
     static const Rosegarden::PropertyName BEAMED;
     static const Rosegarden::PropertyName BEAM_ABOVE;
     static const Rosegarden::PropertyName SLASHES;
+    static const Rosegarden::PropertyName STEM_UP;
 
     // The rest are, or may be, view-local
 
+    const Rosegarden::PropertyName VIEW_LOCAL_STEM_UP;
     const Rosegarden::PropertyName MIN_WIDTH;
     const Rosegarden::PropertyName CALCULATED_ACCIDENTAL;
     const Rosegarden::PropertyName DISPLAY_ACCIDENTAL;

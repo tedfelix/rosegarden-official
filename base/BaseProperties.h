@@ -41,12 +41,6 @@ extern PropertyName getMarkPropertyName(int markNo);
 extern const PropertyName TIED_BACKWARD;
 extern const PropertyName TIED_FORWARD;
 
-// Next one used to be in NotationProperties, but it's useful for doing
-// things like distinguishing chords for performance & analysis as well.
-// I suppose NotationProperties is happiest only holding things that are
-// local to a single specific notation view.
-extern const PropertyName STEM_UP;
-
 extern const PropertyName BEAMED_GROUP_ID;
 extern const PropertyName BEAMED_GROUP_TYPE;
 

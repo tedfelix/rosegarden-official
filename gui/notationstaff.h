@@ -329,8 +329,7 @@ protected:
      * end of a bar subsequent to the given time that doesn't appear
      * to have been affected by any changes around that time
      */
-    NotationElementList::iterator findUnchangedBarEnd(Rosegarden::timeT,
-						      Rosegarden::timeT &);
+    NotationElementList::iterator findUnchangedBarEnd(Rosegarden::timeT);
 
     /**
      * Return true if the element has a canvas item that is already

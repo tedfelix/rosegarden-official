@@ -110,6 +110,8 @@ public:
     std::string getName() const /* throw (CorruptedValue) */;
 
     int getValue() const { return m_value; }
+
+    static const PropertyName EmptyPropertyName;
     
 private:
     typedef std::map<std::string, int> intern_map;

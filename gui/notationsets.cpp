@@ -67,9 +67,12 @@ NotationChord::NotationChord(const NotationElementList &c,
 			     const NotationProperties &properties,
 			     const Rosegarden::Clef &clef,
 			     const Rosegarden::Key &key) :
-    Rosegarden::GenericChord<NotationElement, NotationElementList>(c, i, quantizer,
-							    clef, key),
-    m_properties(properties)
+    Rosegarden::GenericChord<NotationElement,
+			     NotationElementList, true>(c, i, quantizer,
+							NotationProperties::STEM_UP),
+    m_properties(properties),
+    m_clef(clef),
+    m_key(key)
 {
     // nothing else 
 }
@@ -124,16 +127,22 @@ NotationChord::hasStemUp() const
 
     for (;;) {
 	Event *e = getAsEvent(i);
-
-	if (e->has(STEM_UP) &&
-	    e->isPersistent<Bool>(STEM_UP)) {
-	    return e->get<Bool>(STEM_UP);
+/*!!!
+	if (e->has(m_properties.VIEW_LOCAL_STEM_UP)) {
+	    return e->get<Bool>(m_properties.VIEW_LOCAL_STEM_UP);
+	}
+*/
+	if (e->has(NotationProperties::STEM_UP)) {
+	    return e->get<Bool>(NotationProperties::STEM_UP);
 	}
 
-	if (e->has(NotationProperties::BEAM_ABOVE) &&
-	    e->has(NotationProperties::BEAMED) &&
-	    e->get<Bool>(NotationProperties::BEAMED)) {
-	    return e->get<Bool>(NotationProperties::BEAM_ABOVE);
+	if (e->has(NotationProperties::BEAM_ABOVE)) {
+	    if (e->has(NotationProperties::BEAMED) &&
+		e->get<Bool>(NotationProperties::BEAMED)) {
+		return  e->get<Bool>(NotationProperties::BEAM_ABOVE);
+	    } else {
+		return !e->get<Bool>(NotationProperties::BEAM_ABOVE);
+	    }
 	}
 
 	if (i == getFinalNote()) break;
@@ -380,16 +389,44 @@ NotationGroup::height(const NELIterator &i) const
 void
 NotationGroup::applyStemProperties()
 {
-    bool aboveNotes = !(m_weightAbove > m_weightBelow);
-
     NELIterator initialNote(getInitialNote()),
                   finalNote(  getFinalNote());
 
     if (initialNote == getContainer().end() ||
         initialNote == finalNote) {
+	NOTATION_DEBUG << "NotationGroup::applyStemProperties: no notes in group"
+		       << endl;
         return; // no notes, no case to answer
     }
 
+    int up = 0, down = 0;
+
+    for (NELIterator i = initialNote; i != getContainer().end(); ++i) {
+        NotationElement* el = static_cast<NotationElement*>(*i);
+        if (el->isNote()) {
+	    if (el->event()->has(NotationProperties::STEM_UP)) {
+		if (el->event()->get<Bool>(NotationProperties::STEM_UP)) ++up;
+		else ++down;
+	    }
+	}
+
+        if (i == finalNote) break;
+    }
+
+    NOTATION_DEBUG << "NotationGroup::applyStemProperties: weightAbove "
+		   << m_weightAbove << ", weightBelow " << m_weightBelow
+		   << ", up " << up << ", down " << down << endl;
+
+    bool aboveNotes = !(m_weightAbove > m_weightBelow);
+    if (up != down) {
+	if (up > down) aboveNotes = true;
+	else aboveNotes = false;
+    }
+
+    NOTATION_DEBUG << "NotationGroup::applyStemProperties: hence aboveNotes "
+		   << aboveNotes << endl;
+
+/*!!!
     if ((*initialNote)->event()->has(STEM_UP) &&
 	(*initialNote)->event()->isPersistent<Bool>(STEM_UP)) {
 	aboveNotes = (*initialNote)->event()->get<Bool>(STEM_UP);
@@ -400,9 +437,11 @@ NotationGroup::applyStemProperties()
 	aboveNotes = (*initialNote)->event()->get<Bool>
 	    (NotationProperties::BEAM_ABOVE);
     }
-
+*/
     for (NELIterator i = initialNote; i != getContainer().end(); ++i) {
         NotationElement* el = static_cast<NotationElement*>(*i);
+
+	el->event()->setMaybe<Bool>(NotationProperties::BEAM_ABOVE, aboveNotes);
         
         if (el->isNote() &&
 	    el->event()->get<Int>(NOTE_TYPE) < Note::Crotchet &&
@@ -410,15 +449,16 @@ NotationGroup::applyStemProperties()
 	    el->event()->get<Int>(BEAMED_GROUP_ID) == m_groupNo) {
 
 	    el->event()->setMaybe<Bool>(NotationProperties::BEAMED, true);
-	    el->event()->setMaybe<Bool>(NotationProperties::BEAM_ABOVE, aboveNotes);
-	    el->event()->setMaybe<Bool>(STEM_UP, aboveNotes);
+//	    el->event()->setMaybe<Bool>(m_properties.VIEW_LOCAL_STEM_UP, aboveNotes);
 
         } else if (el->isNote()) {
 	    
 	    if (i == initialNote || i == finalNote) {
-		(*i)->event()->setMaybe<Bool>(STEM_UP,  aboveNotes);
+		(*i)->event()->setMaybe<Bool>
+		    (m_properties.VIEW_LOCAL_STEM_UP,  aboveNotes);
 	    } else {
-		(*i)->event()->setMaybe<Bool>(STEM_UP, !aboveNotes);
+		(*i)->event()->setMaybe<Bool>
+		    (m_properties.VIEW_LOCAL_STEM_UP, !aboveNotes);
 	    }
 	}
 
@@ -442,14 +482,13 @@ NotationGroup::calculateBeam(NotationStaff &staff)
         initialNote == finalNote) {
         return beam; // no notes, no case to answer
     }
-
-    if ((*initialNote)->event()->has(STEM_UP) &&
-	(*initialNote)->event()->isPersistent<Bool>(STEM_UP)) {
+/*
+    if ((*initialNote)->event()->has(Notation VIEW_LOCAL_STEM_UP)) {
 	beam.aboveNotes = (*initialNote)->event()->get<Bool>(STEM_UP);
     }
-
-    if ((*initialNote)->event()->has(NotationProperties::BEAM_ABOVE) &&
-	(*initialNote)->event()->isPersistent<Bool>(NotationProperties::BEAM_ABOVE)) {
+*/
+    if ((*initialNote)->event()->has(NotationProperties::BEAM_ABOVE)/* &&
+								       (*initialNote)->event()->isPersistent<Bool>(NotationProperties::BEAM_ABOVE)*/) {
 	beam.aboveNotes = (*initialNote)->event()->get<Bool>
 	    (NotationProperties::BEAM_ABOVE);
     }
@@ -680,7 +719,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 		    (NotationProperties::BEAM_ABOVE, beam.aboveNotes);
 
 		el->event()->setMaybe<Bool>
-		    (STEM_UP, beam.aboveNotes);
+		    (m_properties.VIEW_LOCAL_STEM_UP, beam.aboveNotes);
 
 		el->event()->setMaybe<Bool>
 		    (m_properties.NOTE_HEAD_SHIFTED,
@@ -782,11 +821,15 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
         } else if (el->isNote()) {
 	    
+	    //!!! should we really be setting these here as well as in
+	    // applyStemProperties?
+/*	    
 	    if (i == initialNote || i == finalNote) {
-		(*i)->event()->setMaybe<Bool>(STEM_UP,  beam.aboveNotes);
+		(*i)->event()->setMaybe<Bool>(m_properties.VIEW_LOCAL_STEM_UP,  beam.aboveNotes);
 	    } else {
-		(*i)->event()->setMaybe<Bool>(STEM_UP, !beam.aboveNotes);
+		(*i)->event()->setMaybe<Bool>(m_properties.VIEW_LOCAL_STEM_UP, !beam.aboveNotes);
 	    }
+*/
 	}
 
         if (i == finalNote || el->getViewAbsoluteTime() > finalTime) break;

@@ -802,7 +802,7 @@ TransformsMenuChangeStemsCommand::modifySegment()
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 
 	if ((*i)->isa(Note::EventType)) {
-	    (*i)->set<Rosegarden::Bool>(STEM_UP, m_up);
+	    (*i)->set<Rosegarden::Bool>(NotationProperties::STEM_UP, m_up);
 	}
     }
 }
@@ -817,7 +817,7 @@ TransformsMenuRestoreStemsCommand::modifySegment()
 	 i != m_selection->getSegmentEvents().end(); ++i) {
 
 	if ((*i)->isa(Note::EventType)) {
-	    (*i)->unset(STEM_UP);
+	    (*i)->unset(NotationProperties::STEM_UP);
 	}
     }
 }

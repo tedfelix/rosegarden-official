@@ -79,5 +79,7 @@ string PropertyName::getName() const
 	 "name's internal value is corrupted -- see stderr for details");
 }
 
+static const PropertyName PropertyName::EmptyPropertyName = "";
+
 }
 

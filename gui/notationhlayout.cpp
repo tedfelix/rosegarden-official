@@ -264,11 +264,16 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	    NOTATION_DEBUG << "element is a " << el->event()->getType() << endl;
 
 	    if (el->event()->has(BEAMED_GROUP_ID)) {
+		NOTATION_DEBUG << "element is beamed" << endl;
 		long groupId = el->event()->get<Int>(BEAMED_GROUP_ID);
 		if (groupIds.find(groupId) == groupIds.end()) {
+		    NOTATION_DEBUG << "it's a new beamed group, applying stem properties" << endl;
 		    NotationGroup group(*staff.getViewElementList(),
+					itr,
 					m_notationQuantizer,
-					m_properties, clef, key);
+					barTimes,
+					m_properties,
+					clef, key);
 		    group.applyStemProperties();
 		    groupIds.insert(groupId);
 		}
@@ -1120,9 +1125,9 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
 	if (!bdi->second.layoutData.needsLayout) {
 
-            NOTATION_DEBUG << "NotationHLayout::layout(): bar " << barNo << " has needsLayout false" << endl;
-
 	    double offset = barX - bdi->second.layoutData.x;
+
+            NOTATION_DEBUG << "NotationHLayout::layout(): bar " << barNo << " has needsLayout false and offset of " << offset << endl;
 
 	    if (offset > -0.1 && offset < 0.1) {
 		NOTATION_DEBUG << "NotationHLayout::layout(): no offset, ignoring" << endl;
@@ -1138,6 +1143,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		 it != to && it != notes->end(); ++it) {
 
                 NotationElement* nel = static_cast<NotationElement*>(*it);
+		NOTATION_DEBUG << "NotationHLayout::layout(): shifting element's x to " << ((*it)->getLayoutX() + offset) << " (was " << (*it)->getLayoutX() << ")" << endl;
                 nel->setLayoutX((*it)->getLayoutX() + offset);
 		double airX, airWidth;
 		nel->getLayoutAirspace(airX, airWidth);

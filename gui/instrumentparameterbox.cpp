@@ -1141,7 +1141,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 	if (rmi != m_rotaries.end()) {
 
 	    rotary = rmi->second.first;
-	    bool redraw = 0; // 1 -> position, 2 -> all
+	    int redraw = 0; // 1 -> position, 2 -> all
 
 	    if (rotary->getMinValue() != it->getMin()) {
 		rotary->setMinValue(it->getMin());

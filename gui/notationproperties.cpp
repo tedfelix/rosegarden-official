@@ -26,8 +26,11 @@ const Rosegarden::PropertyName NotationProperties::HEIGHT_ON_STAFF = "HeightOnSt
 const Rosegarden::PropertyName NotationProperties::BEAMED	      = "Beamed";
 const Rosegarden::PropertyName NotationProperties::BEAM_ABOVE	      = "BeamAbove";
 const Rosegarden::PropertyName NotationProperties::SLASHES	      = "Slashes";
+const Rosegarden::PropertyName NotationProperties::STEM_UP	      = "NoteStemUp";
 
 NotationProperties::NotationProperties(const std::string &prefix) :
+
+    VIEW_LOCAL_STEM_UP          (prefix + "StemUp"),
 
     MIN_WIDTH			(prefix + "MinWidth"),
 
