@@ -1,3 +1,9 @@
+Rosegarden Sanity Tests
+=======================
+
+Introduction
+------------
+
 These tests should be run by anyone who wants to prove the level of
 Rosegarden functionality at a given release point.  These tests can
 also be used a basis for ensuring that the team has fully documented
@@ -6,20 +12,104 @@ the application as we head through beta testing.
 If anyone has taken the time to run these tests on the application
 then it would greatly help the development team if they could return
 their results along with the specification of their machine, the 
-configuration of Rosegarden and the release number.
+configuration of Rosegarden and the release number.  Fill in the
+boxes below.
 
-Bugs and feature requests should be checked and logged on the
-Rosegarden Sourceforge page:
+Bugs and feature requests should be first checked and then logged on
+the Rosegarden Sourceforge page:
 
 http://sourceforge.net/projects/rosegarden/
 
+Preferred test system and most common deployment configuration is
+with Rosegarden-4 built for ALSA with JACK (and optionally LADPSA
+plugins).
+
+Good luck!
+
 --
 
-Sanity Tests
-============
 
-1. Requirements and Installation
+Tester details
+--------------
+
+  Name                         :
+
+  Email                        :
+
+  Test date(s)                 :
+
+
+Environment Details
+-------------------
+
+  Rosegarden Version           :
+
+  CVS, tarball or RPM name
+  (include date if using CVS)  :
+
+  System processor             :
+
+  System memory                :
+
+  Linux distro (if any)        :
+
+  Soundcard                    :
+
+  Any other sound devices      :
+
+  ALSA version                 :
+
+  JACK version (if used)       :
+
+
+Tests
+=====
+
+1. Installation and File loading
 --------------------------------
+
+1.1 Installation directories
+
+From a clean system (without Rosegarden-4 installed) apply your
+RPM or install your built tarball or CVS extract.  Assuming that
+you've got the "rosegarden" and "rosegardensequencer" exectubles
+in your path you should be able to launch the application from the
+command line by typing:
+
+% rosegarden
+
+The application should present a splash-screen which will inform
+you of the steps that Rosegarden is taking to start itself.  When
+the application appears it should have the relevant pixmaps in
+place on the toolbars.
+
+1.2 Help system
+Try accessing the help from the application menu Help->Rosegarden Handbook.
+This should pop-up the handbook and allow you to navigate the help system.
+The introduction to the help system should point the user to the Rosegarden
+homepage as well as the Rosegarden Tutorials page.
+
+
+1.3 Loading an example .rg file
+
+There is a set of example files that come with Rosegarden-4 as part
+of the tarball or as extracted from CVS.  They can be found in the
+rosegarden/gui/testfiles directory or alternatively here:
+
+http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rosegarden/gui/testfiles/
+
+Fetch these testfiles and subdirectories if you don't already have
+them.  Go to the menu option File->Open... and choose the file
+"mandolin-sonatina.rg".
+
+This file should load and present you with three tracks.
+
+1.4 Loading an example audio .rg file
+
+Load the test file "outofspace.rg" from the testfiles directory.
+Open the Audio File Manager (Segments->Manage Audio Segments) and
+you should seem some audio files in there.
+
 
 2. Configuration
 -----------------
