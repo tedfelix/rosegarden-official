@@ -570,7 +570,7 @@ void RosegardenGUIApp::filePrint()
 
 void RosegardenGUIApp::quit()
 {
-    KTmpStatusMsg msg(i18n("Exiting..."), statusBar());
+    statusMsg(i18n("Exiting..."));
     saveOptions();
     // close the first window, the list makes the next one the first again.
     // This ensures that queryClose() is called on each window to ask for closing
