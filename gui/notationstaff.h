@@ -93,13 +93,6 @@ public:
 				NotationElementList::iterator to);
 
     
-    //!!! This surely shouldn't be necessary, but without it I get
-    // "no matching function for call to `NotationStaff::renderElements ()'"
-    virtual void renderElements() {
-	LinedStaff<NotationElement>::renderElements();
-    }
-
-
     /**
      * Assign suitable coordinates to the elements on the staff,
      * based entirely on the layout X and Y coordinates they were
@@ -133,13 +126,6 @@ public:
      */
     virtual void positionElements(Rosegarden::timeT from,
 				  Rosegarden::timeT to);
-    
-    //!!! This surely shouldn't be necessary, but without it I get
-    // "no matching function for call to `NotationStaff::positionElements ()'"
-    virtual void positionElements() {
-	LinedStaff<NotationElement>::positionElements();
-    }
-
     
     /**
      * Insert time signature at x-coordinate \a x.

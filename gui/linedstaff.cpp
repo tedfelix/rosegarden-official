@@ -781,7 +781,7 @@ LinedStaff<T>::renderElements(Rosegarden::ViewElementList<T>::iterator,
 
 template <class T>
 void
-LinedStaff<T>::renderElements()
+LinedStaff<T>::renderAllElements()
 {
     renderElements(getViewElementList()->begin(),
                    getViewElementList()->end());
@@ -789,7 +789,7 @@ LinedStaff<T>::renderElements()
 
 template <class T>
 void
-LinedStaff<T>::positionElements()
+LinedStaff<T>::positionAllElements()
 {
     positionElements(getSegment().getStartIndex(),
 		     getSegment().getEndIndex());

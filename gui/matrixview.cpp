@@ -115,7 +115,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     else {
         kdDebug(KDEBUG_AREA) << "MatrixView : rendering elements\n";
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->positionElements();
+	    m_staffs[i]->positionAllElements();
         }
     }
 }

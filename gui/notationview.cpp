@@ -198,8 +198,8 @@ NotationView::NotationView(RosegardenGUIView* rgView,
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
             
-            m_staffs[i]->renderElements();
-            m_staffs[i]->positionElements();
+            m_staffs[i]->renderAllElements();
+            m_staffs[i]->positionAllElements();
         }
     }
 
@@ -789,7 +789,7 @@ NotationView::changeStretch(int n)
     applyLayout();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_staffs[i]->positionElements();
+        m_staffs[i]->positionAllElements();
     }
 
     update();
@@ -807,7 +807,7 @@ void NotationView::changeLegato(int n)
     applyLayout();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_staffs[i]->positionElements();
+        m_staffs[i]->positionAllElements();
     }
 
     update();
@@ -885,8 +885,8 @@ NotationView::changeFont(string newName, int newSize)
     if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            m_staffs[i]->renderElements();
-            m_staffs[i]->positionElements();
+            m_staffs[i]->renderAllElements();
+            m_staffs[i]->positionAllElements();
         }
     }
 
@@ -911,8 +911,8 @@ NotationView::setPageMode(bool pageMode)
     if (!layoutApplied) KMessageBox::sorry(0, "Couldn't apply layout");
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            m_staffs[i]->renderElements();
-            m_staffs[i]->positionElements();
+            m_staffs[i]->renderAllElements();
+            m_staffs[i]->positionAllElements();
         }
     }
 

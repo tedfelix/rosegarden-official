@@ -355,7 +355,7 @@ public:
     /**
      * Call renderElements(from, to) on the whole staff.
      */
-    virtual void renderElements();
+    virtual void renderAllElements();
 
     /**
      * Assign suitable coordinates to the elements on the staff
@@ -372,7 +372,7 @@ public:
     /**
      * Call positionElements(from, to) on the whole staff.
      */
-    virtual void positionElements();
+    virtual void positionAllElements();
     
 protected:
     // Methods that the subclass may (indeed, should) use to convert
