@@ -23,16 +23,17 @@ if 'install' in COMMAND_LINE_TARGETS:
 ##
 ## Configure stuff    
 conf = Configure(env)
-conf.CheckLibWithHeader('alsa', 'seq.h', 'C')
+haveAlsa    = conf.CheckLibWithHeader('asound', 'alsa/asoundlib.h', 'C', 'snd_seq_port_info_set_timestamp_queue(0,0);')
 haveJack    = conf.CheckLib('jack')
 haveLadspa  = conf.CheckHeader('ladspa.h')
 haveLiblo   = conf.CheckLib('lo')
-haveLibrdf  = conf.CheckLib('rdf')
+haveLibrdf  = conf.CheckLib('lrdf')
 haveLibmad  = conf.CheckLib('mad')
-haveLibdssi = conf.CheckLib('dssi')
+haveLibdssi = conf.CheckHeader('dssi.h')
 env = conf.Finish()
 
-env.Append(CCFLAGS = '-DHAVE_ALSA')
+if haveAlsa:
+    env.Append(CCFLAGS = '-DHAVE_ALSA')
 env.Append(CCFLAGS = '-DQT_THREAD_SUPPORT')
 if haveJack:
     env.Append(CCFLAGS = '-DHAVE_JACK')
