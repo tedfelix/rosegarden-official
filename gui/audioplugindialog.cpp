@@ -379,8 +379,6 @@ AudioPluginDialog::slotPluginSelected(int i)
                 if (inst->getPort(count) == 0) {
                     inst->addPort(count, (float)(*it)->getDefaultValue());
 		    std::cerr << "Plugin port name " << (*it)->getName() << ", default: " << (*it)->getDefaultValue() << std::endl;
-		} else {
-//!!!!		    inst->getPort(count)->value = (*it)->getDefaultValue();
 		}
 
                 PluginControl *control =
@@ -622,20 +620,25 @@ void
 AudioPluginDialog::slotCopy()
 {
     int item = m_pluginList->currentItem();
-    int number = m_pluginsInList[item];
+    int number = m_pluginsInList[item] - 1;
 
-    if (number > 0)
+    if (number >= 0)
     {
         Rosegarden::AudioPluginClipboard *clipboard = 
             m_pluginManager->getPluginClipboard();
 
         clipboard->m_pluginNumber = number;
-        clipboard->m_controlValues.clear();
 
         std::cout << "AudioPluginDialog::slotCopy - plugin number = " << number
                   << std::endl;
 
+	if (m_programCombo && m_programCombo->currentItem() > 0) {
+	    clipboard->m_program = qstrtostr(m_programCombo->currentText());
+	} else {
+	    clipboard->m_program = "";
+	}
 
+        clipboard->m_controlValues.clear();
         std::vector<PluginControl*>::iterator it;
         for (it = m_pluginWidgets.begin(); it != m_pluginWidgets.end(); ++it)
         {
@@ -645,7 +648,6 @@ AudioPluginDialog::slotCopy()
             clipboard->m_controlValues.push_back((*it)->getValue());
         }
     }
-
 }
 
 void
@@ -662,7 +664,7 @@ AudioPluginDialog::slotPaste()
         for (std::vector<int>::iterator it = m_pluginsInList.begin();
                 it != m_pluginsInList.end(); ++it)
         {
-            if ((*it) == clipboard->m_pluginNumber)
+            if ((*it) == clipboard->m_pluginNumber + 1)
                 break;
             count++;
         }
@@ -671,14 +673,54 @@ AudioPluginDialog::slotPaste()
 
         // now select the plugin
         //
-        slotPluginSelected(count);
-    }
+	m_pluginList->setCurrentItem(count);
+	slotPluginSelected(count);
 
+	// and set the program
+	//
+	if (m_programCombo && clipboard->m_program != "") {
+	    m_programCombo->setCurrentText(strtoqstr(clipboard->m_program));
+	    slotPluginProgramChanged(strtoqstr(clipboard->m_program));
+	}
+	
+	// and ports
+	// 
+	count = 0;
+
+	for (std::vector<PluginControl *>::iterator i = m_pluginWidgets.begin();
+	     i != m_pluginWidgets.end(); ++i) {
+
+	    if (count < clipboard->m_controlValues.size()) {
+		(*i)->setValue(clipboard->m_controlValues[count], true);
+	    }
+	    ++count;
+	}
+    }
 }
 
 void
 AudioPluginDialog::slotDefault()
 {
+    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    if (!inst) return;
+
+    int i = m_pluginList->currentItem();
+    int n = m_pluginsInList[i];
+    if (n == 0) return;
+
+    AudioPlugin *plugin = m_pluginManager->getPlugin(n - 1);
+    if (!plugin) return;
+
+    for (std::vector<PluginControl *>::iterator i = m_pluginWidgets.begin();
+	 i != m_pluginWidgets.end(); ++i) {
+
+	for (PortIterator pi = plugin->begin(); pi != plugin->end(); ++pi) {
+	    if ((*pi)->getNumber() == (*i)->getIndex()) {
+		(*i)->setValue((*pi)->getDefaultValue(), true); // and emit
+		break;
+	    }
+	}
+    }
 }
 
 
@@ -805,6 +847,7 @@ PluginControl::setValue(float value, bool emitSignals)
     if (!emitSignals) m_dial->blockSignals(true);
     m_dial->setPosition(value);
     if (!emitSignals) m_dial->blockSignals(false);
+    else emit valueChanged(value);
 }
 
 float

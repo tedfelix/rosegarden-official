@@ -52,6 +52,7 @@ typedef std::vector<PluginPort*>::iterator PortIterator;
 struct AudioPluginClipboard
 {
     int                 m_pluginNumber;
+    std::string         m_program;
     std::vector<float>  m_controlValues;
 };
 

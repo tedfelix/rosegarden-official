@@ -41,6 +41,7 @@ AudioPluginManager::AudioPluginManager():m_sampleRate(0)
     // Clear the plugin clipboard
     //
     m_pluginClipboard.m_pluginNumber = -1;
+    m_pluginClipboard.m_program = "";
     m_pluginClipboard.m_controlValues.clear();
 
 }
