@@ -336,14 +336,15 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
                 if (beamSpacing < 0) beamSpacing = 0;
                 m_above += beamSpacing + 1;
 
-                m_right = std::max(m_right, params.m_width);
+                // allow a bit extra in case the h fixpoint is non-normal
+                m_right = std::max(m_right, params.m_width + m_noteBodyWidth);
 
             } else {
 
                 if (beamSpacing < 0) beamSpacing = 0;
                 m_below += beamSpacing + 1;
-                
-                m_right = std::max(m_right, params.m_width - m_noteBodyWidth);
+
+                m_right = std::max(m_right, params.m_width);
             }
         }
     }            
@@ -419,7 +420,11 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 	    break;
 
 	case NoteStyle::Central:
-	    s0.setX(m_left + m_noteBodyWidth/2 + 1);
+	    if (params.m_stemGoesUp ^ (hfix == NoteStyle::Reversed)) {
+		s0.setX(m_left + m_noteBodyWidth/2 + 1);
+	    } else {
+		s0.setX(m_left + m_noteBodyWidth/2);
+	    }
 	    break;
 	}
 
@@ -432,6 +437,11 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 	    } else {
 		s0.setY(m_above + m_noteBodyHeight);
 	    }
+	    if (vfix == NoteStyle::Near) {
+		stemLength -= m_noteBodyHeight/2;
+	    } else {
+		stemLength += m_noteBodyHeight/2;
+	    }		
 	    break;
 
 	case NoteStyle::Middle:

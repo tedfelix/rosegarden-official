@@ -88,12 +88,18 @@ CutAndCloseCommand::CutAndCloseCommand(Rosegarden::EventSelection &selection,
 void
 CutAndCloseCommand::CloseCommand::execute()
 {
+    // we shift all the events from m_fromTime to the end of the
+    // segment back so that they start at m_toTime instead of m_fromTime
+    assert(m_fromTime >= m_toTime);
+    if (m_fromTime == m_toTime) return;
+
     std::vector<Event *> events;
+    timeT timeDifference = m_toTime - m_fromTime;
 
     for (Segment::iterator i = m_segment->findTime(m_fromTime);
 	 i != m_segment->end(); ++i) {
 	events.push_back(new Event
-			 (**i, (*i)->getAbsoluteTime() + m_toTime - m_fromTime));
+			 (**i, (*i)->getAbsoluteTime() + timeDifference));
     }
 
     timeT oldDuration = m_segment->getDuration();
@@ -109,15 +115,21 @@ CutAndCloseCommand::CloseCommand::execute()
 void
 CutAndCloseCommand::CloseCommand::unexecute()
 {
-    std::vector<Event *> events;
+    // we shift all the events from m_toTime to the end of the
+    // segment forward so that they start at m_fromTime instead of m_toTime
+    assert(m_fromTime >= m_toTime);
+    if (m_fromTime == m_toTime) return;
 
-    timeT oldEndTime = m_segment->getEndTime();
-    timeT newEndTime = oldEndTime - m_toTime + m_fromTime;
+    std::vector<Event *> events;
+    timeT timeDifference = m_fromTime - m_toTime;
+
+    timeT segmentEndTime = m_segment->getEndTime();
+    timeT copyFromEndTime = segmentEndTime - timeDifference;
 
     for (Segment::iterator i = m_segment->findTime(m_toTime);
-	 i != m_segment->findTime(newEndTime); ++i) {
+	 i != m_segment->findNearestTime(copyFromEndTime); ++i) {
 	events.push_back(new Event
-			 (**i, (*i)->getAbsoluteTime() - m_toTime + m_fromTime));
+			 (**i, (*i)->getAbsoluteTime() + timeDifference));
     }
 
     m_segment->erase(m_segment->findTime(m_toTime), m_segment->end());

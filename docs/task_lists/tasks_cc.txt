@@ -203,6 +203,21 @@ Post-0.1.5-and-a-bit task list
 35. Add "rescale" to main view: stretch or squash a segment by a
     given ratio of note lengths
 
+36. Add configuration parameters for notation:
+
+    a. Default font
+
+    b. Default size
+
+    c. Default smoothing
+
+    d. Default stretch
+
+    e. Follow playback (perhaps this should be on a playback page
+       along with similar options for other views)
+
+    f. Insert notes notation-style (with ties) or matrix-style?
+
 
 Post-0.1.4 task list
 ====================

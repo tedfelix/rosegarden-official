@@ -8,14 +8,39 @@ this FAQ includes a number of bits of useful information that would
 normally (and will in the future) be found there instead.
 
 
-Compilation or installation errors
-----------------------------------
+Compilation or installation problems
+------------------------------------
+
+KDE2 or KDE3?
+~~~~~~~~~~~~~
+
+We've managed to end up in a bit of a mess with our attempts to
+support both KDE2 and KDE3.  The code builds for both, but you have to
+ensure the correct "admin" directory is present in the top-level
+directory, and if you change the admin directory you then have to run
+"make -f Makefile.cvs" before starting to configure and build.
+
+For the 0.1.6 release, the default admin directory is for KDE3, and
+there's an admin_kde2 for KDE2 builds.  For this release, just follow
+the instructions in the INSTALL about changing over the directories if
+you're using KDE2.
+
+For earlier releases, the reverse was true -- the default admin
+directory was for KDE2 and there was an admin_kde3 for KDE3 builds.
+Again, this is as described in the INSTALL files for those releases.
+
+However, for current CVS builds, *the INSTALL file is wrong*.  The
+INSTALL contains the 0.1.6 instructions, but in fact the default admin
+directory is for KDE2 and there's an admin_kde3 for KDE3 builds.  To
+build these for KDE3, you'll need to move admin out of the way and
+rename admin_kde3 to admin before running "make -f Makefile.cvs" --
+just as in the KDE2 instructions in the INSTALL only in reverse.
 
 
 arts/artsmidi.idl not found
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You're missing the kdemultimedia package (and associated -devel
+You may be missing the kdemultimedia package (and associated -devel
 package, if appropriate to your distribution).
 
 
