@@ -839,7 +839,8 @@ std::vector<SplitPointPair>
 AudioFileManager::getSplitPoints(AudioFileId id,
                                  const RealTime &startTime,
                                  const RealTime &endTime,
-                                 int threshold)
+                                 int threshold,
+                                 const RealTime &minTime)
 {
     AudioFile *audioFile = getAudioFile(id);
 
@@ -848,7 +849,8 @@ AudioFileManager::getSplitPoints(AudioFileId id,
     return m_peakManager.getSplitPoints(audioFile,
                                         startTime,
                                         endTime,
-                                        threshold);
+                                        threshold,
+                                        minTime);
 }
 
 }

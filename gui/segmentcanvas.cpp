@@ -368,6 +368,8 @@ SegmentNotationPreview::SegmentNotationPreview(SegmentItem& parent,
 
 void SegmentNotationPreview::drawShape(QPainter& painter)
 {
+    RG_DEBUG << "SegmentNotationPreview::drawShape" << endl;
+
     updatePreview();
     painter.save();
 

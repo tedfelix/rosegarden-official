@@ -910,11 +910,17 @@ AudioSegmentAutoSplitCommand::execute()
 	if (m_segment->getType() != Rosegarden::Segment::Audio)
 	    return;
 	
+        // Auto split the audio file - we ask for a minimum
+        // result file size of 0.2secs - that's probably fair
+        // enough.
+        //
 	std::vector<Rosegarden::SplitPointPair> rtSplitPoints =
-	    m_audioFileManager->getSplitPoints(m_segment->getAudioFileId(),
-					       m_segment->getAudioStartTime(),
-					       m_segment->getAudioEndTime(),
-					       m_threshold);
+	    m_audioFileManager->
+                getSplitPoints(m_segment->getAudioFileId(),
+                               m_segment->getAudioStartTime(),
+                               m_segment->getAudioEndTime(),
+                               m_threshold,
+                               Rosegarden::RealTime(0, 200000000));
 	
 	std::vector<Rosegarden::SplitPointPair>::iterator it;
 	Rosegarden::timeT absStartTime, absEndTime;
@@ -933,18 +939,26 @@ AudioSegmentAutoSplitCommand::execute()
 	    Segment *newSegment = new Segment(*m_segment);
 	    newSegment->setAudioStartTime(it->first);
 	    newSegment->setAudioEndTime(it->second);
+            newSegment->setAudioFileId(m_segment->getAudioFileId());
 	    
 	    // label
 	    sprintf(splitNumber, "%d", splitCount++);
-	    newSegment->setLabel(qstrtostr(i18n("%1 (autosplit %2)").arg
-					   (strtoqstr(m_segment->getLabel())).arg
-					   (splitNumber)));
+	    newSegment->
+                setLabel(qstrtostr(i18n("%1 (autosplit %2)").arg
+                        (strtoqstr(m_segment->getLabel())).arg
+                        (splitNumber)));
+
 	    newSegment->setColourIndex(m_segment->getColourIndex());
 	    
 	    newSegment->setStartTime(absStartTime);
 	    newSegment->setEndTime(absEndTime);
-	    std::cout << "CREATING FROM " << newSegment->getAudioStartTime() << " TO "
-		      << newSegment->getAudioEndTime() << std::endl;
+
+	    RG_DEBUG << "AudioSegmentAutoSplitCommand::execute "
+                     << "seg start = " << newSegment->getStartTime()
+                     << ", seg end = "<< newSegment->getEndTime()
+                     << ", audio start = " << newSegment->getAudioStartTime() 
+                     << ", audio end = " << newSegment->getAudioEndTime()
+                     << endl;
 	    
 	    m_newSegments.push_back(newSegment);
 	}

@@ -108,7 +108,8 @@ public:
     //
     std::vector<SplitPointPair> getSplitPoints(const RealTime &startTime,
                                                const RealTime &endTime,
-                                               int threshold);
+                                               int threshold,
+                                               const RealTime &minLength);
     // Accessors
     //
     int getVersion() const { return m_version; }

@@ -182,10 +182,12 @@ public:
 
     // Get a split point vector from a peak file
     //
-    std::vector<SplitPointPair> getSplitPoints(AudioFileId id,
-                                               const RealTime &startTime,
-                                               const RealTime &endTime,
-                                               int threshold);
+    std::vector<SplitPointPair> 
+        getSplitPoints(AudioFileId id,
+                       const RealTime &startTime,
+                       const RealTime &endTime,
+                       int threshold,
+                       const RealTime &minTime = RealTime(0, 100000000));
 
     // Get the peak file manager
     //

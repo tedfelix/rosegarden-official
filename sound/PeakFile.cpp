@@ -794,7 +794,8 @@ PeakFile::getTime(int peak)
 std::vector<SplitPointPair> 
 PeakFile::getSplitPoints(const RealTime &startTime,
                          const RealTime &endTime,
-                         int threshold)
+                         int threshold,
+                         const RealTime &minLength)
 {
     std::vector<SplitPointPair> points;
     std::string peakData;
@@ -863,7 +864,7 @@ PeakFile::getSplitPoints(const RealTime &startTime,
         }
         else
         {
-            if (value < fThreshold)
+            if (value < fThreshold && getTime(i) - startSplit > minLength)
             {
                 // insert values
                 points.push_back(SplitPointPair(startSplit, getTime(i)));

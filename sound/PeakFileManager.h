@@ -92,10 +92,12 @@ public:
                     
     // Get split points for a peak file
     //
-    std::vector<SplitPointPair> getSplitPoints(AudioFile *audioFile,
-                                               const RealTime &startTime,
-                                               const RealTime &endTime,
-                                               int threshold);
+    std::vector<SplitPointPair> 
+        getSplitPoints(AudioFile *audioFile,
+                       const RealTime &startTime,
+                       const RealTime &endTime,
+                       int threshold,
+                       const RealTime &minTime);
 
     std::vector<PeakFile*>::const_iterator begin() const
                 { return m_peakFiles.begin(); }
