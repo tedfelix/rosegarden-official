@@ -112,6 +112,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_actionsSetup(false),
       m_fileRecent(0),
       m_view(0),
+      m_swapView(0),
       m_doc(0),
       m_sequencerProcess(0),
       m_zoomSlider(0),
@@ -765,21 +766,21 @@ void RosegardenGUIApp::initView()
         comp.setEndMarker(endMarker);
     }
     
-    m_view = new RosegardenGUIView(m_viewTrackLabels->isChecked(), this);
+    m_swapView = new RosegardenGUIView(m_viewTrackLabels->isChecked(), this);
 
     // Connect up this signal so that we can force tool mode
     // changes from the view
-    connect(m_view, SIGNAL(activateTool(const QString&)),
+    connect(m_swapView, SIGNAL(activateTool(const QString&)),
             this,   SLOT(slotActivateTool(const QString&)));
 
-    connect(m_view,
+    connect(m_swapView,
             SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection &)),
             SLOT(slotSegmentsSelected(const Rosegarden::SegmentSelection &)));
 
-    connect(m_view, SIGNAL(toggleSolo(bool)), SLOT(slotToggleSolo(bool)));
+    connect(m_swapView, SIGNAL(toggleSolo(bool)), SLOT(slotToggleSolo(bool)));
 
-    m_doc->attachView(m_view);
-    setCentralWidget(m_view);
+    m_doc->attachView(m_swapView);
+    setCentralWidget(m_swapView);
     setCaption(m_doc->getTitle());
 
     // set the pointer position
@@ -788,21 +789,6 @@ void RosegardenGUIApp::initView()
         (comp.getElapsedRealTime(m_doc->getComposition().getPosition()));
 
 
-    // We have to do this to make sure that the 2nd call ("select")
-    // actually has any effect. Activating the same radio action
-    // doesn't work the 2nd time (like pressing down the same radio
-    // button twice - it doesn't have any effect), so if you load two
-    // files in a row, on the 2nd file a new SegmentCanvas will be
-    // created but its tool won't be set, even though it will appear
-    // to be selected.
-    //
-    actionCollection()->action("move")->activate();
-    if (m_doc->getComposition().getNbSegments() > 0)
-        actionCollection()->action("select")->activate();
-    else
-        actionCollection()->action("draw")->activate();
-
-    //
     // Transport setup
     //
 
@@ -827,7 +813,7 @@ void RosegardenGUIApp::initView()
     m_transport->SoloButton()->setOn(comp.isSolo());
 
     // set the highlighted track
-    m_view->slotSelectTrackSegments(comp.getSelectedTrack());
+    m_swapView->slotSelectTrackSegments(comp.getSelectedTrack());
 
     // We only check for the SequenceManager to make sure
     // we're not on the first pass though - we don't want
@@ -861,12 +847,29 @@ void RosegardenGUIApp::initView()
 
     }
 
-    connect(m_view, SIGNAL(stateChange(const QString&, bool)),
+    connect(m_swapView, SIGNAL(stateChange(const QString&, bool)),
             this,   SLOT  (slotStateChanged(const QString&, bool)));
+
+    delete m_view;
 
     // make sure we show
     //
+    m_view = m_swapView;
     m_view->show();
+
+    // We have to do this to make sure that the 2nd call ("select")
+    // actually has any effect. Activating the same radio action
+    // doesn't work the 2nd time (like pressing down the same radio
+    // button twice - it doesn't have any effect), so if you load two
+    // files in a row, on the 2nd file a new SegmentCanvas will be
+    // created but its tool won't be set, even though it will appear
+    // to be selected.
+    //
+    actionCollection()->action("move")->activate();
+    if (m_doc->getComposition().getNbSegments() > 0)
+        actionCollection()->action("select")->activate();
+    else
+        actionCollection()->action("draw")->activate();
 
     int zoomLevel = m_doc->getConfiguration().
         get<Rosegarden::Int>
@@ -940,7 +943,7 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 
     // finally recreate the main view
     //
-    delete m_view;
+    //delete m_view;
     initView();
 
     newDocument->syncDevices();

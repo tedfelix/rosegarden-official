@@ -1032,6 +1032,7 @@ private:
      * application's needs by changing the view class.
      */
     RosegardenGUIView* m_view;
+    RosegardenGUIView* m_swapView;
 
     /**
      * doc represents your actual document and is created only
