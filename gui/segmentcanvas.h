@@ -191,9 +191,6 @@ public:
 
     virtual ~SegmentCanvas();
 
-    /// Remove all items
-    void clear();
-
     Rosegarden::SnapGrid &grid() { return m_grid; }
 
     /// Return the brush used by all SegmentItem objects (normally, solid blue)

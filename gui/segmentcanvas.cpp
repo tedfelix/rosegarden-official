@@ -284,8 +284,7 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
 
 SegmentCanvas::~SegmentCanvas()
 {
-    // delete all remaining items
-    //clear();
+    // nothing here - canvas items are deleted by the Track Editor
 }
 
 void SegmentCanvas::slotSetTool(ToolType t)
@@ -328,6 +327,10 @@ void SegmentCanvas::slotSetTool(ToolType t)
 
 void SegmentCanvas::updateAllSegmentItems()
 {
+    // delete repeat rects which need to be deleted
+    //
+    CanvasItemGC::gc();
+
     // store the segments we currently show here to speed up
     // determining if new segments were added to the composition
     // 
@@ -530,18 +533,6 @@ void SegmentCanvas::contentsMouseMoveEvent(QMouseEvent* e)
     if (!m_tool) return;
 
     m_tool->handleMouseMove(e);
-}
-
-void SegmentCanvas::clear()
-{
-    QCanvasItemList list = canvas()->allItems();
-    QCanvasItemList::Iterator it = list.begin();
-    for (; it != list.end(); ++it) {
-	if ( *it ) {
-            kdDebug(KDEBUG_AREA) << "SegmentCanvas::clear() : deleting " << *it << "\n";
-	    delete *it;
-        }
-    }
 }
 
 // Show the split line. This is where we perform Segment splits.
