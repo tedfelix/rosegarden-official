@@ -133,6 +133,10 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     timeT keyAt = from - 1;
     std::string keyText;
 
+    if (*(segment.begin()) && (segment.begin() != segment.end()))
+        kdDebug(KDEBUG_AREA) << "chordruler: segment start time : "
+                             << (*(segment.begin()))->getAbsoluteTime() << endl;
+
     for (Segment::iterator i = segment.begin(); i != segment.end(); ++i) {
 
 	if (!(*i)->isa(Text::EventType)) continue;
@@ -160,6 +164,8 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	prevX = x + width;
     }
 
+    kdDebug(KDEBUG_AREA) << "chordruler : painting labels\n";
+
     for (Segment::iterator i = segment.begin(); i != segment.end(); ++i) {
 	
 	if (!(*i)->isa(Text::EventType)) continue;
@@ -182,6 +188,7 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 	    paint.setFont(m_font);
 	}
 
+        kdDebug(KDEBUG_AREA) << "chordruler : " << text.c_str() << endl;
 	paint.drawText(actualX, textY, strtoqstr(text));
     }
 }
