@@ -1577,6 +1577,33 @@ SequenceManager::resetControllers()
     sendMappedComposition(mC);
 }
 
+
+void
+SequenceManager::setMappedProperty(
+        Rosegarden::MappedObjectId id,
+        const Rosegarden::MappedObjectProperty &property,
+        Rosegarden::MappedObjectValue value)
+{
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    // Use new MappedEvent interface
+    //
+    streamOut << id;
+    streamOut << property;
+    streamOut << value;
+
+    if (!kapp->dcopClient()->
+            send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                 "setMappedProperty(unsigned int, const QString&, int)",
+                 data))
+    {
+        throw(i18n("Failed to contact Rosegarden sequencer"));
+    }
+}
+
+
 }
 
 

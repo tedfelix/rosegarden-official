@@ -145,9 +145,9 @@ public:
     virtual Rosegarden::MappedRealTime getAudioPlayLatency() = 0;
     virtual Rosegarden::MappedRealTime getAudioRecordLatency() = 0;
 
-    virtual void setProperty(Rosegarden::MappedObjectId id,
-                             const Rosegarden::MappedObjectProperty &property,
-                             Rosegarden::MappedObjectValue value) = 0;
+    virtual void setMappedProperty(unsigned int id,
+                                   const QString &property,
+                                   int value) = 0;
 
 };
 

@@ -982,14 +982,26 @@ RosegardenSequencerApp::initialiseStudio()
 
 
 void
-RosegardenSequencerApp::setProperty(
-        Rosegarden::MappedObjectId id,
-        const Rosegarden::MappedObjectProperty &property,
-        Rosegarden::MappedObjectValue value)
+RosegardenSequencerApp::setMappedProperty(unsigned int id,
+                                          const QString &property,
+                                          int value)
 {
     SEQUENCER_DEBUG << "setProperty" << endl;
 
     Rosegarden::MappedObject *object = m_studio.getObject(id);
+
+    Rosegarden::MappedAudioFader *fader = 
+        dynamic_cast<Rosegarden::MappedAudioFader*>(object);
+
+    if (fader)
+    {
+        if (property == i18n("value"))
+        {
+            fader->setLevel(value);
+            std::cout << "RosegardenSequencerApp::setProperty - "
+                      << "VOLUME = " << value << std::endl;
+        }
+    }
 }
 
 

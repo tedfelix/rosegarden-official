@@ -32,8 +32,9 @@
 #include <list>
 
 #include "segmentcanvas.h" // needed for SegmentCanvas::ToolType
-
 #include "rosedebug.h"
+
+#include "MappedStudio.h"
 
 namespace Rosegarden { 
     class Composition; 
@@ -216,6 +217,9 @@ signals:
     //
     void sendMappedEvent(Rosegarden::MappedEvent *mE);
     void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);
+    void setMappedProperty(Rosegarden::MappedObjectId,
+                           const Rosegarden::MappedObjectProperty &,
+                           Rosegarden::MappedObjectValue);
 
     void stateChange(const QString&, bool);
 

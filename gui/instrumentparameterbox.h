@@ -26,6 +26,7 @@
 #include "Instrument.h"
 #include "MappedEvent.h"
 #include "MappedInstrument.h"
+#include "MappedStudio.h"
 
 #ifndef _INSTRUMENTPARAMETERBOX_H_
 #define _INSTRUMENTPARAMETERBOX_H_
@@ -74,9 +75,11 @@ signals:
     void sendMappedEvent(Rosegarden::MappedEvent *mE);
     void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
 
-    // can only send this from a method
     void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);
 
+    void setMappedProperty(Rosegarden::MappedObjectId,
+                           const Rosegarden::MappedObjectProperty &,
+                           Rosegarden::MappedObjectValue);
 protected:
 
     void populateProgramList();

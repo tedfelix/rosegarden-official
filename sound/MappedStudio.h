@@ -167,7 +167,7 @@ public:
         MappedObject("MappedAudioFader",
                      AudioFader,
                      id),
-                     m_level(0), // muted
+                     m_level(80), // assume 100 is max for the moment
                      m_channels(channels) {;}
 
     ~MappedAudioFader() {;}

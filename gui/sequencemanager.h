@@ -26,11 +26,13 @@
 
 #include "audiomanagerdialog.h"
 #include "rosegardendcop.h"
-#include "MappedComposition.h"
-#include "RealTime.h"
+
+#include "Midi.h"
 #include "Sound.h"
 #include "Track.h"
-#include "Midi.h"
+#include "MappedComposition.h"
+#include "MappedStudio.h"
+#include "RealTime.h"
 
 
 // SequenceManager is a helper class that wraps the sequencing
@@ -138,6 +140,12 @@ public:
     //
     void sendMappedInstrument(const MappedInstrument &mI);
 
+    // Set a property on a MappedStudio object
+    //
+    void setMappedProperty(Rosegarden::MappedObjectId id,
+                           const Rosegarden::MappedObjectProperty &property,
+                           Rosegarden::MappedObjectValue value);
+
 public slots:
     // Empty the m_clearToSend flag
     //
@@ -154,20 +162,8 @@ private:
     // pointer to the transport dialog
     RosegardenTransportDialog *m_transport;
 
-    // A two part stop mechanism:
-    //
-    // o user activates stop button and sets this bool to true
-    // o next time the sequencer calls setPointerPosition() we
-    //   check for this flag and immediately call the stop() on
-    //   the sequencer.  We don't have to wait long and this 
-    //   means we don't get twisted up with the getSequencerSlice
-    //   blocking call from the sequencer.
-    //
-    // Note the positioning of relative elements in the sequencer
-    // are deliberate to give us a good chance to get the stop()
-    // call in before another fetch.  Actually, now the chance of
-    // the two calls interracting is virtually zero - I've not 
-    // seen any resulting hangs recently (24.07.2002)
+    // A hangover from the blocking stop() which we haven't yet
+    // removed.
     //
     bool    m_sendStop;
 

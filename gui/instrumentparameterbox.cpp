@@ -251,11 +251,15 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         m_channelValue->hide();
         m_programValue->hide();
         m_panValue->hide();
-        m_velocityValue->hide();
         m_bankCheckBox->hide();
         m_programCheckBox->hide();
         m_panCheckBox->hide();
         m_velocityCheckBox->hide();
+
+        m_velocityValue->show();
+        m_velocityValue->setDisabled(false);
+        m_velocityValue->setCurrentItem(instrument->getVelocity());
+
         return; // for the moment
     }
     else // Midi
@@ -514,6 +518,14 @@ InstrumentParameterBox::slotSelectVelocity(int index)
         return;
 
     m_selectedInstrument->setVelocity(index);
+
+    if (m_selectedInstrument->getType() == Rosegarden::Instrument::Audio)
+    {
+        emit setMappedProperty(m_selectedInstrument->getId(),
+                               QString("value"),
+                               index);
+    }
+
     updateAllBoxes();
 }
 

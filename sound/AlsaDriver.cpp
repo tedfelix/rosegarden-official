@@ -402,9 +402,11 @@ AlsaDriver::generateInstruments()
         m_studio->createObject(Rosegarden::MappedObject::AudioFader,
                                m_audioRunningId);
 
+        /*
         std::cout  << "AlsaDriver::generateInstruments - "
                    << "added audio fader (id=" << m_audioRunningId
                    << ")" << std::endl;
+                   */
 
         m_audioRunningId++;
     }
@@ -2091,6 +2093,17 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                 peakLevel = 0.0;
 
+                // Get the volume of the audio fader if we can find it
+                //
+                float volume = 1.0f;
+                Rosegarden::MappedAudioFader*fader =
+                    dynamic_cast<Rosegarden::MappedAudioFader*>
+                        (inst->getMappedStudio()->
+                             getObject((*it)->getInstrument()));
+                
+                if (fader)
+                    volume = float(fader->getLevel())/100.0;
+
                 while (samplesOut < nframes)
                 {
                     switch(bytes)
@@ -2100,7 +2113,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                 ((short)(*(unsigned char *)samplePtr)) /
                                          _8bitSampleMax;
 
-                            _leftTempBuffer[samplesOut] += outBytes;
+                            _leftTempBuffer[samplesOut] += outBytes * volume;
 
                             if (fabs(outBytes) > peakLevel)
                                 peakLevel = fabs(outBytes);
@@ -2112,14 +2125,14 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                      (*((unsigned char *)samplePtr + 1))) /
                                           _8bitSampleMax;
                             }
-                            _rightTempBuffer[samplesOut] += outBytes;
+                            _rightTempBuffer[samplesOut] += outBytes * volume;
                             break;
 
                         case 2: // for 16-bit samples
                             outBytes = (*((short*)(samplePtr))) /
                                            _16bitSampleMax;
 
-                            _leftTempBuffer[samplesOut] += outBytes;
+                            _leftTempBuffer[samplesOut] += outBytes * volume;
 
                             if (fabs(outBytes) > peakLevel)
                                 peakLevel = fabs(outBytes);
@@ -2131,7 +2144,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                                 outBytes = (*((short*)(samplePtr + 2))) /
                                            _16bitSampleMax;
                             }
-                            _rightTempBuffer[samplesOut] += outBytes;
+                            _rightTempBuffer[samplesOut] += outBytes * volume;
                             break;
 
                         case 3: // for 24-bit samples

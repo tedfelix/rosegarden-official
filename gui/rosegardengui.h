@@ -43,8 +43,9 @@
 
 // the sequencer interface
 //
-#include <MappedEvent.h>
 #include "Sound.h"
+#include "MappedEvent.h"
+#include "MappedStudio.h"
 
 class KURL;
 class KRecentFilesAction;
@@ -805,6 +806,10 @@ public slots:
     void slotSelectSegments(Rosegarden::SegmentSelection&);
     void slotDeleteSegments(Rosegarden::SegmentSelection&);
     void slotSegmentsSelected(const Rosegarden::SegmentSelection &);
+
+    void slotSetMappedProperty(Rosegarden::MappedObjectId,
+                               const Rosegarden::MappedObjectProperty &,
+                               Rosegarden::MappedObjectValue);
 
 private:
 
