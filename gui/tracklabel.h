@@ -51,7 +51,8 @@ public:
 
     // Encapsulates setting the label to highlighted or not
     //
-    void setLabelHighlight(const bool &on);
+    void setSelected(bool on);
+    bool isSelected() const { return m_selected; }
 
     void setId(Rosegarden::TrackId id) { m_id = id; }
     Rosegarden::TrackId getId() const { return m_id; }
@@ -59,14 +60,7 @@ public:
     void setPosition(int position) { m_position = position; }
     int getPosition() const { return m_position; }
 
-    bool isSelected() const { return m_selected; }
-
     QPoint getPressPosition() const { return m_pressPosition; }
-
-protected:
-    virtual void mousePressEvent(QMouseEvent *e);
-    virtual void mouseReleaseEvent(QMouseEvent *e);
-    virtual void mouseDoubleClickEvent(QMouseEvent *e);
 
 public slots:
     void slotChangeToInstrumentList();
@@ -83,6 +77,10 @@ signals:
     void changeToInstrumentList(int);
 
 protected:
+
+    virtual void mousePressEvent(QMouseEvent *e);
+    virtual void mouseReleaseEvent(QMouseEvent *e);
+    virtual void mouseDoubleClickEvent(QMouseEvent *e);
 
     Rosegarden::TrackId  m_id;
     int                  m_position;

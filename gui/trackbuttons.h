@@ -102,11 +102,11 @@ public:
 
     // Set record button down - graphically only
     //
-    void setRecordButtonDown(int recordTrack);
+    void setRecordButtonDown(int position);
 
-    // Select a label from outside this class
+    // Select a label from outside this class by position
     //
-    void selectLabel(int id);
+    void selectLabel(int trackId);
 
 signals:
     // to emit what Track has been selected
@@ -126,7 +126,7 @@ signals:
 
 public slots:
 
-    void slotSetRecordTrack(int id);
+    void slotSetRecordTrack(int position);
     void slotToggleMutedTrack(int mutedTrack);
     void slotUpdateTracks();
     void slotRenameTrack(QString newName, int trackNumber);

@@ -105,7 +105,7 @@ public:
 	return m_tracks[track];
     }
 
-    Track* getTrackByPosition(TrackId position);
+    Track* getTrackByPosition(int position);
  
     trackcontainer* getTracks() {
 	return &m_tracks;

@@ -1462,6 +1462,23 @@ void DeleteTracksCommand::execute()
 
     m_oldSegments.clear();
     m_oldTracks.clear();
+    
+    // Remap positions and track numbers
+    //
+
+    Rosegarden::Composition::trackcontainer
+                *tracks = m_composition->getTracks();
+    Rosegarden::Composition::trackiterator tit;
+
+    /*
+    for (tit = tracks->begin(); tit != tracks->end(); ++tit)
+    {
+        cout << "TRACK " << (*tit).first << " - "
+             << (*tit).second->getId()
+             << " - POSITION = " << (*tit).second->getPosition()
+             << endl;
+    }
+    */
 
     for (unsigned int i = 0; i < m_tracks.size(); ++i)
     {
@@ -1493,11 +1510,6 @@ void DeleteTracksCommand::execute()
         }
     }
 
-    // Remap positions and track numbers
-    //
-    Rosegarden::Composition::trackcontainer
-                *tracks = m_composition->getTracks();
-    Rosegarden::Composition::trackiterator tit;
 
     std::vector<Rosegarden::Track*>::iterator otIt;
     for (otIt = m_oldTracks.begin(); otIt != m_oldTracks.end(); ++otIt)
@@ -1521,6 +1533,16 @@ void DeleteTracksCommand::execute()
             }
         }
     }
+
+    /*
+    for (tit = tracks->begin(); tit != tracks->end(); ++tit)
+    {
+        cout << "TRACK " << (*tit).first << " - "
+             << (*tit).second->getId()
+             << " - POSITION = " << (*tit).second->getPosition()
+             << endl;
+    }
+    */
 
     m_detached = true;
 }

@@ -1141,7 +1141,7 @@ Composition::clearTracks()
 }
 
 Track*
-Composition::getTrackByPosition(TrackId position)
+Composition::getTrackByPosition(int position)
 {
     trackiterator it = m_tracks.begin();
 

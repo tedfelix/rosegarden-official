@@ -3240,6 +3240,18 @@ void RosegardenGUIApp::slotTrackDown()
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
 
+    /*
+    Rosegarden::Composition::trackcontainer *tracks = comp.getTracks();
+    Rosegarden::Composition::trackiterator tit;
+    for (tit = tracks->begin(); tit != tracks->end(); ++tit)
+    {
+        cout << "TRACK " << (*tit).first << " - "
+             << (*tit).second->getId()
+             << " - POSITION = " << (*tit).second->getPosition()
+             << endl;
+    }
+    */
+
     Rosegarden::TrackId tid = comp.getSelectedTrack();
     Rosegarden::TrackId pos = comp.getTrackByIndex(tid)->getPosition();
 

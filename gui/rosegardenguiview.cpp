@@ -618,9 +618,13 @@ void RosegardenGUIView::setZoomSize(double size)
 //
 void RosegardenGUIView::slotSelectTrackSegments(int trackId)
 {
-    // Show the selection
+    // update the instrument parameter box
+    Composition &comp = getDocument()->getComposition();
+
+    // Show the selection on the track buttons.  Find the position.
     //
-    m_trackEditor->getTrackButtons()->selectLabel(trackId);
+    int position = (comp.getTrackByIndex(trackId))->getPosition();
+    m_trackEditor->getTrackButtons()->selectLabel(position);
 
     Rosegarden::SegmentSelection segments;
 
@@ -631,9 +635,6 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
         if (((int)(*i)->getTrack()) == trackId)
             segments.insert(*i);
     }
-
-    // update the instrument parameter box
-    Composition &comp = getDocument()->getComposition();
 
     slotUpdateInstrumentParameterBox(comp.getTrackByIndex(trackId)->
                                      getInstrument());
@@ -663,7 +664,8 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
             if (instr && instr->getType() == Rosegarden::Instrument::Midi)
             {
                 comp.setRecordTrack(trackId);
-                getTrackEditor()->getTrackButtons()->slotSetRecordTrack(trackId);
+                getTrackEditor()->
+                    getTrackButtons()->slotSetRecordTrack(position);
             }
         }
     }

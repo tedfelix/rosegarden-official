@@ -41,7 +41,7 @@ TrackLabel::~TrackLabel()
 }
 
 void
-TrackLabel::setLabelHighlight(const bool &on)
+TrackLabel::setSelected(bool on)
 {
     if (on)
     {
@@ -79,11 +79,11 @@ TrackLabel::mouseReleaseEvent(QMouseEvent *e)
         return;
 
     if (m_selected)
-        setLabelHighlight(false);
+        setSelected(false);
     else
-        setLabelHighlight(true);
+        setSelected(true);
 
-    emit released(m_position);
+    emit released(m_id);
 }
 
 void
@@ -95,12 +95,12 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
     // Highlight this label alone and cheat using
     // the released signal
     //
-    emit released(m_position);
+    emit released(m_id);
 
     // Just in case we've got our timing wrong - reapply
     // this label highlight
     //
-    setLabelHighlight(true);
+    setSelected(true);
 
     bool ok = false;
 

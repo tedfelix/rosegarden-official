@@ -257,8 +257,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     m_trackLabels.push_back(trackLabel);
 
     // Connect it
-    connect(trackLabel, SIGNAL(released(int)),
-            this, SLOT(slotLabelSelected(int)));
+    connect(trackLabel, SIGNAL(released(int)), SIGNAL(trackSelected(int)));
 
     // instrument label
     Rosegarden::Instrument *ins =
@@ -271,7 +270,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
         instrumentName = QString(strtoqstr(ins->getName()));
 
     instrumentLabel = new InstrumentLabel(instrumentName,
-                                          Rosegarden::InstrumentId(trackId),
+                                          trackId,
                                           trackHBox);
 
     instrumentLabel->setFixedSize(labelWidth, m_cellSize - buttonGap);
@@ -300,8 +299,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     // insert label
     m_instrumentLabels.push_back(instrumentLabel);
 
-    connect(instrumentLabel, SIGNAL(released(int)),
-            this, SLOT(slotLabelSelected(int)));
+    connect(instrumentLabel, SIGNAL(released(int)), SIGNAL(trackSelected(int)));
 
     // Insert the buttons into groups
     //
@@ -378,6 +376,10 @@ TrackButtons::populateButtons()
                 slotSetRecordTrack(track->getId());
                 m_recordButtonGroup->find(i)->setDown(true);
             }
+
+            // reset track tokens
+            m_trackLabels[i]->setId(track->getId());
+            m_instrumentLabels[i]->setId(track->getId());
         }
 
         if (ins)
@@ -578,79 +580,87 @@ TrackButtons::slotUpdateTracks()
 //
 //
 void
-TrackButtons::slotSetRecordTrack(int recordTrack)
+TrackButtons::slotSetRecordTrack(int position)
 {
-    setRecordButtonDown(recordTrack);
+    setRecordButtonDown(position);
 
     // set and update
-    m_doc->getComposition().setRecordTrack(recordTrack);
+    m_doc->getComposition().setRecordTrack(m_trackLabels[position]->getId());
     emit newRecordButton();
 }
 
 void
-TrackButtons::setRecordButtonDown(int recordTrack)
+TrackButtons::setRecordButtonDown(int position)
 {
-    if (recordTrack < 0 || recordTrack > (int)m_tracks )
+    if (position < 0 || position > (int)m_tracks )
         return;
 
     // Unset the palette if we're jumping to another button
-    if (m_lastID != recordTrack && m_lastID != -1)
+    if (m_lastID != position && m_lastID != -1)
     {
        m_recordButtonGroup->find(m_lastID)->unsetPalette();
        dynamic_cast<QPushButton*>(
                m_recordButtonGroup->find(m_lastID))->setOn(false);
     }
 
-    m_recordButtonGroup->find(recordTrack)->setPalette
+    m_recordButtonGroup->find(position)->setPalette
 	(QPalette(RosegardenGUIColours::ActiveRecordTrack));
     dynamic_cast<QPushButton*>(
-            m_recordButtonGroup->find(recordTrack))->setOn(true);
+            m_recordButtonGroup->find(position))->setOn(true);
 
-    m_lastID = recordTrack;
+    m_lastID = position;
 }
 
 void
 TrackButtons::selectLabel(int position)
 {
-    std::vector<TrackLabel *>::iterator tlpIt;
-    bool changed;
-
-    for (tlpIt = m_trackLabels.begin();
-         tlpIt != m_trackLabels.end();
-         tlpIt++)
+    bool update = false;
+    for (unsigned int i = 0; i < m_trackLabels.size(); ++i)
     {
-        if ((*tlpIt)->getPosition() != position)
+        update = false;
+
+        if (m_trackLabels[i]->getPosition() == position)
         {
-            changed = (*tlpIt)->isSelected();
-            (*tlpIt)->setLabelHighlight(false);
+            if (!m_instrumentLabels[i]->isSelected())
+            {
+                update = true;
+                m_trackLabels[i]->setSelected(true);
+            }
         }
         else
         {
-            (*tlpIt)->setLabelHighlight(true);
-            changed = true;
+            if (m_instrumentLabels[i]->isSelected())
+            {
+                update = true;
+                m_trackLabels[i]->setSelected(false);
+            }
         }
 
-        if (changed) (*tlpIt)->update();
+        if (update) m_trackLabels[i]->update();
     }
 
-    std::vector<InstrumentLabel *>::iterator it;
-
-    for (it = m_instrumentLabels.begin();
-         it != m_instrumentLabels.end();
-         it++)
+    for (unsigned int i = 0; i < m_instrumentLabels.size(); ++i)
     {
-        if ((*it)->getPosition() != position)
+        update = false;
+
+        if (i == ((unsigned int)position))
         {
-            changed = (*it)->isSelected();
-            (*it)->setLabelHighlight(false);
+            if (!m_instrumentLabels[i]->isSelected())
+            {
+                update = true;
+                m_instrumentLabels[i]->setSelected(true);
+            }
         }
         else
         {
-            (*it)->setLabelHighlight(true);
-            changed = true;
+            if (m_instrumentLabels[i]->isSelected())
+            {
+                update = true;
+                m_instrumentLabels[i]->setSelected(false);
+            }
         }
 
-        if (changed) (*it)->update();
+        if (update) m_instrumentLabels[i]->update();
     }
 }
 

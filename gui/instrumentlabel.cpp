@@ -20,11 +20,13 @@
 #include "instrumentlabel.h"
 
 
-InstrumentLabel::InstrumentLabel(const QString & text,
-                                 int position,
-                                 QWidget *parent, const char *name):
-    QLabel(text, parent, name),
-    m_position(position), m_pressPosition(0, 0),
+InstrumentLabel::InstrumentLabel(const QString &label,
+                                 Rosegarden::TrackId id,
+                                 QWidget *parent,
+                                 const char *name):
+    QLabel(label, parent, name),
+    m_id(id),
+    m_pressPosition(0, 0),
     m_alternativeLabel(""),
     m_selected(false)
 {
@@ -34,10 +36,11 @@ InstrumentLabel::InstrumentLabel(const QString & text,
             this, SLOT(slotChangeToInstrumentList()));
 }
 
-InstrumentLabel::InstrumentLabel(int position,
+InstrumentLabel::InstrumentLabel(Rosegarden::TrackId id,
                                  QWidget *parent, const char *name):
     QLabel(parent, name),
-    m_position(position), m_pressPosition(0, 0)
+    m_id(id),
+    m_pressPosition(0, 0)
 {
     m_pressTimer = new QTimer();
 
@@ -64,24 +67,24 @@ InstrumentLabel::mousePressEvent(QMouseEvent *e)
 }
 
 void
-InstrumentLabel::mouseReleaseEvent(QMouseEvent *e)
+InstrumentLabel::mouseReleaseEvent(QMouseEvent * /*e*/)
 {
     // stop the timer if running
     if (m_pressTimer->isActive())
         m_pressTimer->stop();
 
     // now send released signal to update selected track
-    emit released(m_position);
+    emit released(m_id);
 }
 
 void
 InstrumentLabel::slotChangeToInstrumentList()
 {
-    emit changeToInstrumentList(m_position);
+    emit changeToInstrumentList(m_id);
 }
 
 void
-InstrumentLabel::setLabelHighlight(bool value)
+InstrumentLabel::setSelected(bool value)
 {
     m_selected = value;
 

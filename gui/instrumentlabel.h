@@ -21,6 +21,7 @@
 #include <qtimer.h>
 
 #include "Instrument.h"
+#include "Track.h"
 
 //  Display an Instrument name and can also send signals
 //  to pop up an instrument list.
@@ -33,32 +34,30 @@ class InstrumentLabel : public QLabel
 {
 Q_OBJECT
 public:
-    InstrumentLabel(const QString & text, int position,
-                    QWidget *parent=0, const char *name=0);
+    InstrumentLabel(const QString &label,
+                    Rosegarden::TrackId track,
+                    QWidget *parent=0,
+                    const char *name=0);
 
-    InstrumentLabel(int position, QWidget *parent=0, const char *name=0);
-
+    InstrumentLabel(Rosegarden::TrackId id,
+                    QWidget *parent=0,
+                    const char *name=0);
     ~InstrumentLabel();
 
-    int getPosition() const { return m_position; }
-
+    void setId(Rosegarden::TrackId id) { m_id = id; }
+    Rosegarden::TrackId getId() const { return m_id; }
     QPoint getPressPosition() const { return m_pressPosition; }
 
     bool isSelected() const { return m_selected; }
+    void setSelected(bool value);
 
 public slots:
     void slotChangeToInstrumentList();
-    void setLabelHighlight(bool value);
     //
     // Set an alternative label
     //
     void slotSetAlternativeLabel(const QString &label);
     void clearAlternativeLabel() { m_alternativeLabel = ""; }
-
-protected:
-    virtual void mousePressEvent(QMouseEvent *e);
-    virtual void mouseReleaseEvent(QMouseEvent *e);
-
 
 signals:
     // Our version of released() has an int id associated with it
@@ -67,15 +66,18 @@ signals:
 
     void changeToInstrumentList(int);
 
+protected:
 
-private:
-    int m_position;
+    virtual void mousePressEvent(QMouseEvent *e);
+    virtual void mouseReleaseEvent(QMouseEvent *e);
 
-    QTimer *m_pressTimer;
-    QPoint m_pressPosition;
-    QString m_alternativeLabel;
+    Rosegarden::TrackId       m_id;
 
-    bool m_selected;
+    QTimer                   *m_pressTimer;
+    QPoint                    m_pressPosition;
+    QString                   m_alternativeLabel;
+
+    bool                      m_selected;
 
 };
 
