@@ -25,7 +25,8 @@ namespace Rosegarden
 {
 
 Composition::Composition()
-    : m_nbTicksPerBar(384)
+    : m_nbTicksPerBar(384),
+      m_tempo(0)
 {
 //     cerr << "Composition:(" << nbTracks << ") : this = "
 //          << this <<  " - size = "
@@ -36,6 +37,20 @@ Composition::~Composition()
 {
     clear();
 }
+
+void Composition::swap(Composition& c)
+{
+    unsigned int t = m_nbTicksPerBar;
+    m_nbTicksPerBar = c.m_nbTicksPerBar;
+    c.m_nbTicksPerBar = t;
+
+    t = m_tempo;
+    m_tempo = c.m_tempo;
+    c.m_tempo = t;
+
+    m_tracks.swap(c.m_tracks);
+}
+
 
 
 Composition::iterator

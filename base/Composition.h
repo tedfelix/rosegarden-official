@@ -50,6 +50,9 @@ public:
     Composition();
     ~Composition();
 
+    /// swap the contents with other composition
+    void swap(Composition&);
+
     trackcontainer& tracks() { return m_tracks; }
 
     iterator addTrack(Track*);
