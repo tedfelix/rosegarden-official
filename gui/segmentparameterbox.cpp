@@ -23,6 +23,8 @@
 #include <qhbox.h>
 #include <qlayout.h>
 
+#include <klocale.h>
+
 #include "Segment.h"
 #include "Quantizer.h"
 #include "NotationTypes.h"
@@ -60,18 +62,18 @@ SegmentParameterBox::initBox()
 
     // bit experimental --cc
     QFont plainFont;
-    plainFont.setPixelSize(10);
+    plainFont.setPointSize(10);
 
     QFont boldFont;
-    boldFont.setPixelSize(11);
+    boldFont.setPointSize(11);
     boldFont.setBold(true);
 
     QGridLayout *gridLayout = new QGridLayout(this, 2, 2, 5, 1);
 
-    QLabel *repeatLabel = new QLabel("Repeat", this);
-    QLabel *quantizeLabel = new QLabel("Quantize", this);
-    QLabel *transposeLabel = new QLabel("Transpose", this);
-    QLabel *delayLabel = new QLabel("Delay", this);
+    QLabel *repeatLabel    = new QLabel(i18n("Repeat"), this);
+    QLabel *quantizeLabel  = new QLabel(i18n("Quantize"), this);
+    QLabel *transposeLabel = new QLabel(i18n("Transpose"), this);
+    QLabel *delayLabel     = new QLabel(i18n("Delay"), this);
 
     m_repeatValue = new RosegardenTristateCheckBox(this);
     m_repeatValue->setFont(plainFont);
@@ -124,7 +126,7 @@ SegmentParameterBox::initBox()
     transposeLabel->setFont(plainFont);
     delayLabel->setFont(plainFont);
 
-    QLabel *title = new QLabel("Segment Parameters", this);
+    QLabel *title = new QLabel(i18n("Segment Parameters"), this);
     title->setFont(boldFont);
     title->setFixedHeight(comboHeight);
 
@@ -157,7 +159,7 @@ SegmentParameterBox::initBox()
 	}
 	m_quantizeValue->insertItem(pmap, qname);
     }
-    m_quantizeValue->insertItem(noMap, "Off");
+    m_quantizeValue->insertItem(noMap, i18n("Off"));
 
     // default to last item
     m_quantizeValue->setCurrentItem(m_quantizeValue->count() - 1);
