@@ -104,6 +104,14 @@ void MatrixStaff::positionElement(MatrixElement* el)
     el->event()->get<Rosegarden::Int>(VELOCITY, velocity);
 
     el->setCanvas(m_canvas);
+
+    /*
+    if (el->event()->isSelected())
+    {
+    }
+    */
+
+
     el->setColour(m_elementColour->getColour(velocity));
     el->setCanvasX(coords.first);
     el->setCanvasY((double)coords.second);

@@ -347,6 +347,10 @@ void MatrixView::setupActions()
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 
+    new KAction(i18n("&Delete"), Key_Delete, this,
+                SLOT(slotEditDelete()), actionCollection(),
+                "delete");
+
     createGUI(getRCFileName());
 
     actionCollection()->action("paint")->activate();
@@ -677,6 +681,19 @@ void MatrixView::slotEditPaste()
     } else {
 	addCommandToHistory(command);
     }
+}
+
+void MatrixView::slotEditDelete()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Deleting selection..."), statusBar());
+
+    addCommandToHistory(new EraseCommand(*m_currentEventSelection));
+
+    // clear and clear 
+    setCurrentSelection(0);
+    m_selectedElements.erase(m_selectedElements.begin(), 
+                             m_selectedElements.end());
 }
 
 // Propagate a key press upwards

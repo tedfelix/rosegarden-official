@@ -137,6 +137,11 @@ public slots:
      */
     virtual void slotEditPaste();
 
+    /*
+     * Delete the current selection
+     */
+    void slotEditDelete();
+
     /// edition tools
     void slotPaintSelected();
     void slotEraseSelected();

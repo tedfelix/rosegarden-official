@@ -134,13 +134,20 @@ int MatrixHLayout::getFirstVisibleBar()
 int MatrixHLayout::getLastVisibleBar()
 {
     int barNo = m_firstBar + m_barData.size() - 2;
-    if (barNo < 1) barNo = 1;
+    if (barNo < m_firstBar + 1) barNo = m_firstBar + 1;
+
     return barNo;
 }
 
 double MatrixHLayout::getBarPosition(int barNo)
 {
-    if (barNo < getFirstVisibleBar() || barNo > getLastVisibleBar()) return 0;
+    if (barNo < getFirstVisibleBar()) {
+        return getBarPosition(getFirstVisibleBar());
+    }
+
+    if (barNo > getLastVisibleBar()) {
+        return getBarPosition(getLastVisibleBar());
+    }
     return m_barData[barNo - m_firstBar].first;
 }
 
