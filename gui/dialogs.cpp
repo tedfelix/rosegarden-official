@@ -1228,6 +1228,35 @@ EventEditDialog::addPersistentProperty(const Rosegarden::PropertyName &name)
 	break;
     }
     
+    case Rosegarden::RealTimeT:
+    {
+        Rosegarden::RealTime realTime = m_originalEvent.get<Rosegarden::RealTimeT>(name);
+
+        QHBox* hbox = new QHBox(m_persistentGrid);
+
+        // seconds
+        //
+	QSpinBox *spinBox = new QSpinBox
+	    (INT_MIN, INT_MAX, 1,
+             hbox, strtoqstr(name) + "%sec");
+	spinBox->setValue(realTime.sec);
+
+	QObject::connect(spinBox, SIGNAL(valueChanged(int)),
+			 this, SLOT(slotRealTimePropertyChanged(int)));
+
+        // useconds
+        //
+	spinBox = new QSpinBox
+	    (INT_MIN, INT_MAX, 1,
+             hbox, strtoqstr(name) + "%usec");
+	spinBox->setValue(realTime.usec);
+
+	QObject::connect(spinBox, SIGNAL(valueChanged(int)),
+			 this, SLOT(slotRealTimePropertyChanged(int)));
+	spinBox->show();
+	break;
+    }
+
     case Rosegarden::Bool:
     {
 	QCheckBox *checkBox = new QCheckBox
@@ -1335,6 +1364,35 @@ EventEditDialog::slotIntPropertyChanged(int value)
 }
 
 void
+EventEditDialog::slotRealTimePropertyChanged(int value) 
+{
+    const QObject *s = sender();
+    const QSpinBox *spinBox = dynamic_cast<const QSpinBox *>(s);
+    if (!spinBox) return;
+
+    m_modified = true;
+    QString propertyFullName = spinBox->name();
+
+#ifndef RGKDE3
+    QString propertyName = propertyFullName.section('%', 0, 0),
+        usecOrSec =  propertyFullName.section('%', 1, 1);
+#else
+    int sep = propertyFullName.find('%');
+    QString propertyName = propertyFullName.left(sep),
+        usecOrSec =  propertyFullName.mid(sep + 1);
+#endif
+
+    Rosegarden::RealTime realTime = m_event.get<Rosegarden::RealTimeT>(qstrtostr(propertyName));
+
+    if (usecOrSec == "sec")
+        realTime.sec = value;
+    else 
+        realTime.usec = value;
+
+    m_event.set<Rosegarden::Int>(qstrtostr(propertyName), value);
+}
+
+void
 EventEditDialog::slotBoolPropertyChanged()
 { 
     const QObject *s = sender();
@@ -1427,6 +1485,13 @@ EventEditDialog::slotPropertyMadePersistent()
 	m_event.set<Rosegarden::Int>
 	    (qstrtostr(propertyName),
 	     m_originalEvent.get<Rosegarden::Int>
+	     (qstrtostr(propertyName)));
+	break;
+
+    case Rosegarden::RealTimeT:
+	m_event.set<Rosegarden::RealTimeT>
+	    (qstrtostr(propertyName),
+	     m_originalEvent.get<Rosegarden::RealTimeT>
 	     (qstrtostr(propertyName)));
 	break;
 

@@ -307,6 +307,7 @@ public slots:
     void slotSubOrderingChanged(int value);
 
     void slotIntPropertyChanged(int);
+    void slotRealTimePropertyChanged(int);
     void slotBoolPropertyChanged();
     void slotStringPropertyChanged(const QString &);
 
