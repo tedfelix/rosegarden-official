@@ -25,6 +25,7 @@
 
 #include <qlayout.h>
 #include <qvbox.h>
+#include <qtooltip.h>
 
 #include "studiowidgets.h"
 
@@ -42,13 +43,18 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     // Plugin box
     //
     QPushButton *plugin;
-    QVBox *vbox = new QVBox(this);
-    vbox->setSpacing(2);
+    QVBox *pluginVbox = new QVBox(this);
+    pluginVbox->setSpacing(2);
 
     for (int i = 0; i < 5; i++)
     {
-        plugin = new QPushButton(vbox);
+        plugin = new QPushButton(pluginVbox);
         plugin->setText(i18n("<no plugin>"));
+
+        // Force width
+        plugin->setFixedWidth(plugin->width());
+        QToolTip::add(plugin, i18n("Audio plugin button"));
+
         m_plugins.push_back(plugin);
         m_signalMapper->setMapping(plugin, i);
         connect(plugin, SIGNAL(clicked()),
@@ -58,14 +64,16 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     // VU meter and fader
     //
     m_vuMeter = new AudioVUMeter(this);
-    m_fader = new RosegardenFader(this);
+    QToolTip::add(m_pan, i18n("Audio VU Meter"));
 
+    m_fader = new RosegardenFader(this);
     m_fader->setTickmarks(QSlider::Right);
     m_fader->setTickInterval(10);
     m_fader->setPageStep(10);
     m_fader->setMinValue(0);
     m_fader->setMaxValue(127);
     m_fader->setFixedHeight(m_vuMeter->height());
+    QToolTip::add(m_pan, i18n("Audio Fader"));
 
     // Stereo, solo, mute and pan
     //
@@ -74,26 +82,33 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     m_stereoPixmap.load(QString("%1/misc/stereo.xpm").arg(pixmapDir));
 
     m_pan = new RosegardenRotary(this);
-    m_stereoButton = new QPushButton(this);
-    m_stereoButton->setPixmap(m_monoPixmap); // default is mono
-
-    // setup the rotary's values
     m_pan->setMinValue(0.0);
     m_pan->setMaxValue(100.0);
     m_pan->setStep(1.0);
+    QToolTip::add(m_pan,
+                  i18n("Set the audio pan position in the stereo field"));
 
-    m_muteButton = new QPushButton(this);
-    m_soloButton = new QPushButton(this);
-    m_muteButton->setText("M");
-    m_soloButton->setText("S");
+    m_stereoButton = new QPushButton(this);
+    m_stereoButton->setPixmap(m_monoPixmap); // default is mono
+    m_stereoButton->setFixedSize(24, 24);
+    QToolTip::add(m_stereoButton, i18n("Mono or Stereo Audio Instrument"));
 
-    m_recordButton = new QPushButton(this);
-    m_recordButton->setText("R");
-
-    
     connect(m_stereoButton, SIGNAL(clicked()),
             this, SLOT(slotChannelStateChanged()));
 
+    m_muteButton = new QPushButton(this);
+    m_muteButton->setText("M");
+    QToolTip::add(m_muteButton, i18n("Mute this Instrument"));
+
+    m_soloButton = new QPushButton(this);
+    m_soloButton->setText("S");
+    QToolTip::add(m_soloButton, i18n("Solo this Instrument"));
+
+    m_recordButton = new QPushButton(this);
+    m_recordButton->setText("R");
+    QToolTip::add(m_recordButton,
+                  i18n("Arm recording for this audio Instrument"));
+    
     // Sort out the layout accordingly
     //
     QGridLayout *grid;
@@ -102,7 +117,7 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     {
         grid = new QGridLayout(this, 7, 2, 6, 6);
 
-        grid->addMultiCellWidget(vbox, 0, 0, 0, 1, AlignCenter);
+        grid->addMultiCellWidget(pluginVbox, 0, 0, 0, 1, AlignCenter);
 
         grid->addMultiCellWidget(m_vuMeter, 1, 1, 0, 0, AlignCenter);
         grid->addMultiCellWidget(m_fader,   1, 1, 1, 1, AlignCenter);
@@ -117,20 +132,20 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     }
     else
     {
-        grid = new QGridLayout(this, 7, 4, 6, 6);
+        grid = new QGridLayout(this, 10, 5, 6, 10);
 
-        grid->addMultiCellWidget(vbox, 0, 7, 0, 1, AlignCenter);
+        grid->addMultiCellWidget(pluginVbox, 0, 8, 0, 1, AlignCenter);
 
-        grid->addMultiCellWidget(m_vuMeter, 1, 1, 0, 0, AlignCenter);
-        grid->addMultiCellWidget(m_fader,   1, 1, 1, 1, AlignCenter);
+        grid->addMultiCellWidget(m_vuMeter,  0, 8, 2, 2, AlignCenter);
+        grid->addMultiCellWidget(m_fader,    0, 8, 3, 3, AlignCenter);
 
-        grid->addMultiCellWidget(m_stereoButton,  2, 2, 0, 0, AlignCenter);
-        grid->addMultiCellWidget(m_pan,           2, 2, 1, 1, AlignCenter);
+        grid->addWidget(m_stereoButton,  2, 4, AlignCenter);
+        grid->addWidget(m_pan,           3, 4, AlignCenter);
 
-        grid->addMultiCellWidget(m_muteButton, 3, 3, 0, 0, AlignCenter);
-        grid->addMultiCellWidget(m_soloButton, 3, 3, 1, 1, AlignCenter);
+        grid->addWidget(m_muteButton,    4, 4, AlignCenter);
+        grid->addWidget(m_soloButton,    5, 4, AlignCenter);
 
-        grid->addMultiCellWidget(m_recordButton, 4, 4, 0, 0, AlignCenter);
+        grid->addWidget(m_recordButton,  6, 4, AlignCenter);
     }
 
 }

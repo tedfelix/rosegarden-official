@@ -357,7 +357,7 @@ void RosegardenProgressDialog::removeFilter()
 //----------------------------------------
 
 RosegardenProgressBar::RosegardenProgressBar(int totalSteps,
-					     bool useDelay,
+					     bool /*useDelay*/,
 					     QWidget *creator,
 					     const char *name,
 					     WFlags f) :
@@ -560,6 +560,13 @@ RosegardenRotary::mousePressEvent(QMouseEvent *e)
         m_lastY = e->y();
         m_lastX = e->x();
     }
+    else if (e->button() == RightButton) // reset to centre position
+    {
+        m_position = (m_maxValue + m_minValue) / 2.0;
+        drawPosition();
+        emit valueChanged(m_position);
+    }
+
 }
 
 void

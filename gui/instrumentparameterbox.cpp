@@ -828,7 +828,7 @@ InstrumentParameterPanel::InstrumentParameterPanel(QWidget* parent)
 
 AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* doc, QWidget* parent)
     : InstrumentParameterPanel(parent),
-      m_audioFader(new AudioFaderWidget(this)),
+      m_audioFader(new AudioFaderWidget(this, "instrumentAudioFader", false)),
       m_pluginManager(doc->getPluginManager())
 {
     QGridLayout *gridLayout = new QGridLayout(this, 10, 6, 5, 5);
