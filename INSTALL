@@ -1,23 +1,42 @@
-This source tree builds for KDE2 as default.  To build for KDE3
-then move away then from the freshly unpacked tar file rename:
+KDE3 Build (0.1.5 release notes)
+================================
+The source tree builds for KDE2 as default and should configure as such
+straight out of the box.  To build for KDE3 it's necessary to do a little
+extra work - namely replacing the admin/ directory.  From the top level
+rosegarden/ or rosegarden-0.x.y/ directory perform the following commands
+to swap over the admin directories:
 
-  rosegarden/admin/acinclude.m4.in_kde3
+ % mv admin admin_kde2
+ % mv admin_kde3 admin
 
-to
+It's then necessary to regenerate the "configure" script like so:
 
-  rosegarden/admin/acinclude.m4.in
+  % make -f Makefile.cvs
 
-and rename:
+and now you can configure and make as usual:
 
-  rosegarden/admin/am_edit_kde3
+  % ./configure --with-qt-dir=/usr/lib/qt3 --prefix=/opt/kde3 --with-alsa=yes
+  % make
 
-to
+Note that  Rosegarden-4 v0.1.5 is the first release to support KDE3
+so there are still a few inconsistencies and bugs over and above the
+KDE2 version.
 
-  rosegarden/admin/am_edit
 
-Then configure and make as per usual.
+ALSA 0.9.0beta12 and above support
+==================================
+Rosegarden-4 v0.1.5 now supports ALSA (www.alsa-project.org).
 
-[rwb 01.05.2001]
+Rosegarden-4 v0.1.5 has been tested with ALSA 0.9.0beta12 and ALSA 0.9.0rc1
+on both KDE2 and KDE3.  If you want to use an ALSA soft synth as a Rosegarden
+Instrument you must start the synth (such as iiwusynth) _before_ you start
+Rosegarden.  You should then see the ports of the soft synth available
+in the Rosegarden Instrument list (click and hold on the Track name to
+pop up the Instrument selection list).
+
+
+
+
 
 
 Basic Installation
