@@ -1232,6 +1232,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	}
 
 	long lyricWidth = 0;
+	NotationElement *lastDynamicText = 0;
 	int count = 0;
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
@@ -1291,7 +1292,45 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		}
 		el->setLayoutAirspace(x, delta);
 
-	    } else {
+		// and if it's a dynamic, make a note of it in case a
+		// hairpin immediately follows it
+		
+		if (el->event()->has(Text::TextTypePropertyName) &&
+		    el->event()->get<String>(Text::TextTypePropertyName) ==
+		    Text::Dynamic) {
+		    lastDynamicText = el;
+		}
+
+	    } else if (el->event()->isa(Indication::EventType)) {
+
+		std::string type;
+		double ix = x;
+
+		// Check for a dynamic text at the same time as the
+		// indication and if found, move the indication to the
+		// right to make room.  We know the text should have
+		// preceded the indication in the staff because it has
+		// a smaller subordering
+
+		if (el->event()->get<String>
+		    (Indication::IndicationTypePropertyName, type) &&
+		    (type == Indication::Crescendo ||
+		     type == Indication::Decrescendo) &&
+		    lastDynamicText &&
+		    lastDynamicText->getViewAbsoluteTime() ==
+		    el->getViewAbsoluteTime()) {
+
+		    ix = x + m_npf->getTextWidth
+			(Rosegarden::Text(*lastDynamicText->event())) +
+			m_npf->getNoteBodyWidth() / 4;
+		}
+
+		el->setLayoutX(ix);
+		delta = el->event()->get<Int>(m_properties.MIN_WIDTH);
+		el->setLayoutAirspace(ix, delta);
+
+	    } else {    
+
 		delta = el->event()->get<Int>(m_properties.MIN_WIDTH);
 		el->setLayoutAirspace(x, delta);
 	    }
