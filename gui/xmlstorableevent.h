@@ -18,7 +18,7 @@
 #ifndef XMLSTORABLEELEMENT_H
 #define XMLSTORABLEELEMENT_H
 
-#include <qdom.h>
+#include <qxml.h>
 
 #include "Element2.h"
 
@@ -26,10 +26,9 @@
   *@author Guillaume Laurent, Chris Cannam, Rich Bown
   */
 
-class XMLStorableElement : public Element2  {
+class XMLStorableEvent : public Event  {
 public:
-    XMLStorableElement(const QDomNamedNodeMap &attributes,
-                       const QDomNodeList &children);
+    XMLStorableEvent(const QXmlAttributes& atts);
 protected:
     duration noteName2Duration(const QString &noteName);
     void initMap();

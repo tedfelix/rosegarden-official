@@ -15,15 +15,15 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "xmlstorableelement.h"
+#include "xmlstorableevent.h"
 
 #include <kdebug.h>
 
-#define KDEBUG_AREA 1001 // ok, this is a duplicate, but right now
+#define KDEBUG_AREA 1010 // ok, this is a duplicate, but right now
 // I just don't care
 
-Element2::duration
-XMLStorableElement::noteName2Duration(const QString &nn)
+Event::duration
+XMLStorableEvent::noteName2Duration(const QString &nn)
 {
     if (m_noteName2DurationMap.empty())
         initMap();
@@ -43,7 +43,7 @@ XMLStorableElement::noteName2Duration(const QString &nn)
 }
 
 void
-XMLStorableElement::initMap()
+XMLStorableEvent::initMap()
 {
     if (! m_noteName2DurationMap.empty())
         return;
@@ -75,31 +75,31 @@ XMLStorableElement::initMap()
 }
 
 
-XMLStorableElement::XMLStorableElement(const QDomNamedNodeMap &attributes,
-                                       const QDomNodeList &children)
+XMLStorableEvent::XMLStorableEvent(const QXmlAttributes &attributes)
 {
-    for (unsigned int i = 0; i < attributes.length(); ++i) {
-	QDomAttr n(attributes.item(i).toAttr());
+    for (int i = 0; i < attributes.length(); ++i) {
+	QString attrName(attributes.qName(i)),
+            attrVal(attributes.value(i));
 
         // special cases first : package, type, duration
-	if (n.name() == "package") {
+	if (attrName == "package") {
 
-            setPackage(n.value().latin1());
+            setPackage(attrVal.latin1());
 
-        } else if (n.name() == "type") {
+        } else if (attrName == "type") {
 
-            setType(n.value().latin1());
+            setType(attrVal.latin1());
 
-        } else if (n.name() == "duration") {
+        } else if (attrName == "duration") {
 
             bool isNumeric = true;
-            Element2::duration d = n.value().toUInt(&isNumeric);
+            Event::duration d = attrVal.toUInt(&isNumeric);
             if (!isNumeric) {
                 // It may be one of the accepted strings : breve, semibreve...
                 // whole, half-note, ...
-                d = noteName2Duration(n.value());
+                d = noteName2Duration(attrVal);
                 if (!d)
-                    kdDebug(KDEBUG_AREA) << "Bad duration : " << n.value() << endl;
+                    kdDebug(KDEBUG_AREA) << "Bad duration : " << attrVal << endl;
             }
 
             kdDebug(KDEBUG_AREA) << "Setting duration to : " << d << endl;
@@ -109,7 +109,7 @@ XMLStorableElement::XMLStorableElement(const QDomNamedNodeMap &attributes,
 
             // set generic property
             //
-            QString val(n.value());
+            QString val(attrVal);
             
             // Check if boolean val
             QString valLowerCase(val.lower());
@@ -118,17 +118,17 @@ XMLStorableElement::XMLStorableElement(const QDomNamedNodeMap &attributes,
 
             if (valLowerCase == "true" || valLowerCase == "false") {
 
-                set<Bool>(n.name().latin1(), valLowerCase == "true");
+                set<Bool>(attrName.latin1(), valLowerCase == "true");
 
             } else {
 
                 // Not a bool, check if integer val
                 numVal = val.toInt(&isNumeric);
                 if (isNumeric) {
-                    set<Int>(n.name().latin1(), numVal);
+                    set<Int>(attrName.latin1(), numVal);
                 } else {
                     // not an int either, default to string
-                    set<String>(n.name().latin1(), n.value().latin1());
+                    set<String>(attrName.latin1(), attrVal.latin1());
                 }
             }
 
@@ -137,7 +137,7 @@ XMLStorableElement::XMLStorableElement(const QDomNamedNodeMap &attributes,
     }
 }
 
-XMLStorableElement::namedurationmap
-XMLStorableElement::m_noteName2DurationMap;
+XMLStorableEvent::namedurationmap
+XMLStorableEvent::m_noteName2DurationMap;
 
 
