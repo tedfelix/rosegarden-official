@@ -8,7 +8,7 @@ Features for 1.0 - updated 20040226
 - punch in record [cc]
 
 - matrix view 
-  o double/half speed of selection 
+  o double/half speed of selection [DONE]
   o force legato [this should be a quantizer]
 
 - multiple document interface (switchable buffers, loading while playing) [rwb]

@@ -330,6 +330,15 @@ void ControlItem::updateFromValue()
     }
 }
 
+typedef std::pair<int, QCanvasItem*> ItemPair;
+struct ItemCmp
+{
+    bool operator()(const ItemPair &i1, const ItemPair &i2)
+    {
+        return i1.first > i2.first;
+    }
+};
+
 void ControlItem::draw(QPainter &painter)
 {
     if (!isEnabled())
@@ -338,6 +347,46 @@ void ControlItem::draw(QPainter &painter)
     setBrush(m_controlRuler->valueToColour(m_controlRuler->getMaxItemValue(), m_value));
 
     QCanvasRectangle::draw(painter);
+    
+
+    /*
+
+    // Attempt to get overlapping rectangles ordered automatically - 
+    // probably best not to do this here - rwb
+
+    // calculate collisions and assign Z values accordingly
+    //
+    QCanvasItemList l = collisions(false);
+
+    std::vector<ItemPair> sortList;
+
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+
+        // skip all but rectangles
+        if ((*it)->rtti() != QCanvasItem::Rtti_Rectangle) continue;
+
+        if (QCanvasRectangle *rect = dynamic_cast<QCanvasRectangle*>(*it))
+            sortList.push_back(ItemPair(rect->height(), *it));
+    }
+
+    // sort the list by height
+    std::sort(sortList.begin(), sortList.end(), ItemCmp());
+
+    int z = 20;
+
+    for (std::vector<ItemPair>::iterator it = sortList.begin();
+         it != sortList.end(); ++it)
+    {
+        RG_DEBUG << "HEIGHT = " << (*it).first << endl;
+        (*it).second->setZ(z++);
+    }
+
+    RG_DEBUG << endl << endl;
+            
+    canvas()->update();
+
+    */
+
 }
 
 void ControlItem::handleMouseButtonPress(QMouseEvent*)
