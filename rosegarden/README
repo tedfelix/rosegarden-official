@@ -16,9 +16,11 @@ more limiting.
 Build requirements
 ------------------
 
-The big requirement is KDE.  This program depends on KDE 2.1 or newer
-(including the kdemultimedia package) and Qt 2.2 or newer.  Our code
-should compile with gcc-2.95 or gcc-3.0.
+The big requirement is KDE.  This program depends on KDE 2.n for
+n >= 1 (including the kdemultimedia package), and Qt 2.n for n >= 2.
+
+Our code should compile with gcc-2.95 or gcc-3.0, although you may
+find that KDE 2.n won't easily compile with the latter.
 
 
 Compiling from source
