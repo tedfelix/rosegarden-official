@@ -117,7 +117,8 @@ void RosegardenGUIApp::initStatusBar()
 {
     ///////////////////////////////////////////////////////////////////
     // STATUSBAR
-    // TODO: add your own items you need for displaying current application status.
+    // TODO: add your own items you need for displaying current
+    // application status.
     statusBar()->insertItem(i18n(IDS_STATUS_DEFAULT), ID_STATUS_MSG);
 }
 
