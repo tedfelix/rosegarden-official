@@ -197,6 +197,7 @@ AudioFaderWidget::setAudioChannels(int channels)
             std::cerr << "AudioFaderWidget::setAudioChannels - "
                       << "unsupported channel numbers (" << channels
                       << ")" << std::endl;
+	    return;
     }
 
     // Populate audio inputs accordingly

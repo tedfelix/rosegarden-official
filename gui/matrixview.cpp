@@ -2111,6 +2111,8 @@ MatrixView::slotToggleTempoRuler()
 void
 MatrixView::slotInsertableNoteEventReceived(int pitch, bool noteOn)
 {
+    if (!noteOn) return;
+
     KToggleAction *action = dynamic_cast<KToggleAction *>
 	(actionCollection()->action("toggle_step_by_step"));
     if (!action) {
