@@ -1,4 +1,4 @@
-#!/usr/bin/ruby -w
+#!/usr/local/bin/ruby -w
 
 require 'getoptlong'
 require 'date'

@@ -6,6 +6,8 @@
 # echo "Running configure..."
 # CXX="g++ -O0 -g3 -Wall" ./configure --enable-debug --with-qt-dir=/usr/lib/qt2 --prefix=/opt/kde2.2
 
+aclocal -I .
 gmake -f Makefile.cvs
 
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib CXXFLAGS="-fexceptions" ./configure --enable-debug --prefix=/usr/local
+CXXFLAGS="-g3 -O0" ./configure --enable-debug=full --prefix=/usr/local
+aclocal -I .
