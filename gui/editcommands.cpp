@@ -231,6 +231,7 @@ PasteSegmentsCommand::execute()
     // to that as they did before
 
     timeT earliestStartTime = 0;
+    int trackOffset = 0;
 
     for (Rosegarden::Clipboard::iterator i = m_clipboard->begin();
 	 i != m_clipboard->end(); ++i) {
@@ -238,6 +239,7 @@ PasteSegmentsCommand::execute()
 	if (i == m_clipboard->begin() ||
 	    (*i)->getStartTime() < earliestStartTime) {
 	    earliestStartTime = (*i)->getStartTime();
+            trackOffset = (*i)->getTrack();
 	}
     }
 
@@ -246,9 +248,17 @@ PasteSegmentsCommand::execute()
     for (Rosegarden::Clipboard::iterator i = m_clipboard->begin();
 	 i != m_clipboard->end(); ++i) {
 
+        int newTrackId = m_composition->getSelectedTrack() 
+            + (*i)->getTrack()
+            - trackOffset;
+
+        // needs to check for valid id
+        if (newTrackId < m_composition->getMinTrackId() ||
+            newTrackId > m_composition->getMaxTrackId()) continue;
+
 	Segment *segment = new Segment(**i);
 	segment->setStartTime(segment->getStartTime() + offset);
-        segment->setTrack(m_composition->getSelectedTrack());
+        segment->setTrack(newTrackId);
         m_composition->addSegment(segment);
 	m_addedSegments.push_back(segment);
     }
