@@ -117,10 +117,9 @@ rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lkdeui -
 
 SUBDIRS = docs
 
-EXTRA_DIST = styles/*.xml \
-	fonts/mappings/rg21.xml \
-	fonts/mappings/feta.xml \
-	fonts/mappings/feta-tt.xml \
+EXTRA_DIST = \
+	fonts/*.pfa \
+	fonts/mappings/*.xml \
 	pixmaps/rg21/4/*.xpm \
 	pixmaps/rg21/8/*.xpm \
 	pixmaps/feta/4/*.xpm \
@@ -132,6 +131,7 @@ EXTRA_DIST = styles/*.xml \
 	pixmaps/transport/*.xpm \
 	pixmaps/*.png \
         pixmaps/misc/*.xpm \
+	styles/*.xml \
 	testfiles/*.rg \
         testfiles/audio/*.wav \
 	testfiles/*.rose \
