@@ -62,7 +62,8 @@ public:
                   ControlType type,
                   PluginPort *port,
                   AudioPluginManager *pluginManager,
-                  int index);
+                  int index,
+                  float initialValue);
  
     void setValue(float value);
 
@@ -101,6 +102,7 @@ public:
 public slots:
     void slotPluginSelected(int index);
     void slotPluginPortChanged(int pluginIndex, float value);
+    void slotBypassed(bool);
 
 signals:
     void pluginSelected(int pluginIndex, int plugin);

@@ -1860,6 +1860,11 @@ AlsaDriver::setPluginInstance(InstrumentId id,
 
         instance->instantiate(getSampleRate());
 
+        instance->connectPorts(_pluginBufferIn1,
+                               _pluginBufferIn2,
+                               _pluginBufferOut1,
+                               _pluginBufferOut2);
+
         //instance->deactivate();
         instance->activate();
 
@@ -2563,11 +2568,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                 if (plugin)
                 {
-                    plugin->connectPorts(_pluginBufferIn1,
-                                         _pluginBufferIn2,
-                                         _pluginBufferOut1,
-                                         _pluginBufferOut2);
-
                     plugin->run(_jackBufferSize);
 
                     // Now mix the signal

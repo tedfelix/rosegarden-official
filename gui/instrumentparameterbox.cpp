@@ -722,6 +722,8 @@ InstrumentParameterBox::slotPluginSelected(int index, int plugin)
         {
             std:: cout << "InstrumentParameterBox::slotPluginSelected - "
                        << "no plugin selected" << std::endl;
+
+            // destroy sequencer instance
         }
         else
         {
@@ -817,40 +819,13 @@ InstrumentParameterBox::slotPluginPortChanged(int pluginIndex,
                                               int portIndex,
                                               float value)
 {
-    /*
-    std::cout << "InstrumentParameterBox::slotPluginPortChanged - "
-              << "value = " << value << std::endl;
-              */
-
     Rosegarden::AudioPluginInstance *inst = 
         m_selectedInstrument->getPlugin(pluginIndex);
 
     if (inst)
     {
 
-        //cout << "PLUGIN ID = " << inst->getMappedId() << endl;
-        // get the list of ports
-        //
 #ifdef HAVE_LADSPA
-
-        /*
-        // can't use a call() during playback
-        Rosegarden::MappedObjectPropertyList
-            list = Rosegarden::StudioControl::
-                getStudioObjectProperty(inst->getMappedId(),
-                                        Rosegarden::MappedLADSPAPlugin::Ports);
-                                        */
-
-        //cout << "COUNT = "  << list.size() << endl;
-        /*
-
-        if (portIndex > (int(list.size() - 1)))
-        {
-            std::cerr << "InstrumentParameterBox::slotPluginPortChanged - "
-                      << "got port out of range on plugin" << std::endl;
-            return;
-        }
-        */
 
         Rosegarden::StudioControl::
             setStudioPluginPort(inst->getMappedId(),
@@ -860,20 +835,7 @@ InstrumentParameterBox::slotPluginPortChanged(int pluginIndex,
         std::cout << "InstrumentParameterBox::slotPluginPortChanged - "
                   << "setting plugin port to " << value << std::endl;
 
-        /*
-        Rosegarden::StudioControl::setStudioObjectProperty
-            (list[portIndex].toInt(),
-             Rosegarden::MappedLADSPAPort::Value,
-             value);
-             */
 #endif
-
-        /*
-        MappedObjectPropertyList::iterator it = list.begin();
-        for (; it != list.end(); it++)
-        {
-        }
-        */
     }
 
 }

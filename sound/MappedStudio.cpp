@@ -1361,7 +1361,7 @@ MappedLADSPAPlugin::setPort(unsigned long portNumber, float value)
         port = dynamic_cast<MappedLADSPAPort*>(*it);
 
         if (port && port->getPortNumber() == portNumber)
-            setProperty(MappedLADSPAPort::Value, value);
+            port->setProperty(MappedLADSPAPort::Value, value);
     }
 }
 

@@ -73,7 +73,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_pluginList->insertItem(i18n("<no plugin>"));
 
     connect(m_bypassButton, SIGNAL(toggled(bool)),
-            this, SIGNAL(bypassed(bool)));
+            this, SLOT(slotBypassed(bool)));
 
     // Store the height so we can resize the whole dialog later
     // if required
@@ -103,8 +103,12 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
             if (inst->isBypassed())
                 m_bypassButton->setDown(true);
 
-            // do the same to the controls too
-            slotPluginSelected(aPM->getPositionByUniqueId(inst->getId()));
+            // Get the position from the unique id (add one for the first
+            // null entry).
+            //
+            int position = aPM->getPositionByUniqueId(inst->getId()) + 1;
+            m_pluginList->setCurrentItem(position);
+            slotPluginSelected(position);
         }
         else
             slotPluginSelected(m_pluginList->currentItem());
@@ -153,6 +157,11 @@ AudioPluginDialog::slotPluginSelected(int number)
         setCaption(caption + plugin->getName());
         m_pluginId->setText(QString("%1").arg(plugin->getUniqueId()));
 
+        // Set the unique id on our own instance
+        //
+        AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+        if (inst) { inst->setId(plugin->getUniqueId()); }
+
         PortIterator it = plugin->begin();
         int count = 0;
 
@@ -184,12 +193,21 @@ AudioPluginDialog::slotPluginSelected(int number)
             //
             if ((*it)->getType() & PluginPort::Control)
             {
+                // Check for port existence and create with default value
+                // if it doesn't exist.  Modification occurs through the
+                // slotPluginPortChanged signal.
+                //
+                if (inst->getPort(count) == 0)
+                    inst->addPort(count, 0.0);
+
                 PluginControl *control =
                     new PluginControl(controlLine,
                                       PluginControl::Rotary,
                                       *it,
                                       m_pluginManager,
-                                      count);
+                                      count,
+                                      inst->getPort(count)->value);
+
 
                 connect(control, SIGNAL(valueChanged(int, float)),
                         this, SLOT(slotPluginPortChanged(int, float)));
@@ -210,6 +228,7 @@ AudioPluginDialog::slotPluginSelected(int number)
 
                 m_pluginWidgets.push_back(control);
 
+
             }
             count++;
         }
@@ -221,9 +240,22 @@ AudioPluginDialog::slotPluginSelected(int number)
 }
 
 void
-AudioPluginDialog::slotPluginPortChanged(int pluginIndex, float value)
+AudioPluginDialog::slotPluginPortChanged(int portIndex, float value)
 {
-    emit pluginPortChanged(m_index, pluginIndex, value);
+    // store the new value
+    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    inst->getPort(portIndex)->value = value;
+
+    emit pluginPortChanged(m_index, portIndex, value);
+}
+
+void
+AudioPluginDialog::slotBypassed(bool bypassed)
+{
+    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+
+    if (inst)
+        inst->setBypass(bypassed);
 }
 
 
@@ -233,7 +265,8 @@ PluginControl::PluginControl(QWidget *parent,
                              ControlType type,
                              PluginPort *port,
                              AudioPluginManager *aPM,
-                             int index):
+                             int index,
+                             float initialValue):
     QHBox(parent),
     m_type(type),
     m_port(port),
@@ -241,6 +274,7 @@ PluginControl::PluginControl(QWidget *parent,
     m_pluginManager(aPM),
     m_index(index)
 {
+    cout << "INITIAL VALUE = " << initialValue << endl;
     QFont plainFont;
     plainFont.setPointSize((plainFont.pointSize() * 9 )/ 10);
     setFont(plainFont);
@@ -285,8 +319,22 @@ PluginControl::PluginControl(QWidget *parent,
         while ((fabs(upperBound - lowerBound)) * m_multiplier < 50.0)
             m_multiplier *= 10.0;
 
+        //cout << "LOWER = " << lowerBound * m_multiplier << endl;
+        //cout << "UPPER = " << upperBound * m_multiplier << endl;
+
         m_dial->setMinValue(int(lowerBound * m_multiplier));
         m_dial->setMaxValue(int(upperBound * m_multiplier));
+
+        // Set the initial value
+        //
+        int value = int(initialValue * m_multiplier);
+        if (value < int(lowerBound * m_multiplier))
+            value = int(lowerBound * m_multiplier);
+        else if (value > int(upperBound * m_multiplier))
+            value = int(upperBound * m_multiplier);
+
+        m_dial->setValue(value);
+        slotValueChanged(value);
 
         connect(m_dial, SIGNAL(valueChanged(int)),
                 this, SLOT(slotValueChanged(int)));
@@ -295,13 +343,6 @@ PluginControl::PluginControl(QWidget *parent,
         upp->setIndent(10);
         upp->setAlignment(AlignLeft|AlignBottom);
         setStretchFactor(upp, 1);
-
-        /*
-            float diff = upperBound - lowerBound;
-            if (diff < 1.0)
-            {
-            }
-        */
     }
 }
 
