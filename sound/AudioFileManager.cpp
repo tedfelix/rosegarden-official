@@ -68,10 +68,14 @@ AudioFileManager::AudioFileManager()
 {
     pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
+#ifdef HAVE_PTHREAD_MUTEX_RECURSIVE
+    pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+#else
 #ifdef PTHREAD_MUTEX_RECURSIVE
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 #else
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
+#endif
 #endif
     pthread_mutex_init(&_audioFileManagerLock, &attr);
 
