@@ -106,10 +106,14 @@ public:
     MultiViewCommandHistory *getCommandHistory();
     void addCommandToHistory(KCommand *command);
 
-
 public slots:
 
 //!!! I suspect most of these of never actually being used as slots, only as plain methods
+
+    /**
+     * Scroll the view such that the numbered track is on-screen
+     */
+    void slotScrollToTrack(int track);
 
     /**
      * Set the position pointer during playback

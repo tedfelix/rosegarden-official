@@ -295,9 +295,6 @@ TrackEditor::init(QWidget* rosegardenguiview)
     m_pointer->setY(0);
     m_pointer->setZ(10);
     m_pointer->show();
-
-
-
 }
 
 void TrackEditor::slotReadjustCanvasSize()
@@ -579,6 +576,19 @@ TrackEditor::addCommandToHistory(KCommand *command)
     getCommandHistory()->addCommand(command);
 }
 
+void
+TrackEditor::slotScrollToTrack(int track)
+{
+    // Find the vertical track pos
+    int newY=track * getTrackCellHeight();
+
+    RG_DEBUG << "TrackEditor::scrollToTrack(" << track <<
+        ") scrolling to Y " << newY << endl;
+
+    // Scroll the segment view; it will scroll tracks by connected signals
+    //    slotVerticalScrollTrackButtons(newY);
+    m_segmentCanvas->slotScrollVertSmallSteps(newY);
+}
 
 void
 TrackEditor::slotDeleteSelectedSegments()

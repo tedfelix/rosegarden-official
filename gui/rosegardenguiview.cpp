@@ -650,6 +650,7 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
     // Show the selection on the track buttons.  Find the position.
     //
     m_trackEditor->getTrackButtons()->selectLabel(track->getPosition());
+    m_trackEditor->slotScrollToTrack(track->getPosition());
 
     Rosegarden::SegmentSelection segments;
 
