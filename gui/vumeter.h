@@ -69,6 +69,7 @@ private:
     VUMeterType m_type;
     int         m_level;          // percentage
     int         m_peakLevel;      // percentage
+    int         m_baseLevelStep;
     int         m_levelStep;
     QTimer      m_fallTimer;
     QTimer      m_peakTimer;

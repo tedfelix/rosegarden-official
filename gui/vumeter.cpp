@@ -39,7 +39,8 @@ VUMeter::VUMeter(QWidget *parent,
     m_type(type),
     m_level(0),
     m_peakLevel(0),
-    m_levelStep(3),
+    m_baseLevelStep(3),
+    m_levelStep(m_baseLevelStep),
     m_showPeakLevel(true)
 {
     setMinimumSize(width, m_originalHeight);
@@ -73,27 +74,14 @@ VUMeter::setLevel(const double &level)
 
     if (m_level < 0) m_level = 0;
     if (m_level > 100) m_level = 100;
+    m_levelStep = m_baseLevelStep;
 
-#define ALTERNATIVE_LEVEL_THEOREM_A
-#ifdef ALTERNATIVE_LEVEL_THEOREM_A
-    // at 100% the fall timer should be 40ms, at 50% it should
-    // be 80ms etc -- though beware divide-by-zero
-    int fallTimerInterval = 200;
-    if (m_level > 20) fallTimerInterval = (100/m_level) * 40;
-    if (m_fallTimer.isActive()) {
-	m_fallTimer.changeInterval(fallTimerInterval);
-    } else {
-	m_fallTimer.start(fallTimerInterval);
-	meterStart();
-    }
-#else    
     // Only start the timer when we need it
     if(m_fallTimer.isActive() == false)
     {
         m_fallTimer.start(40); // 40 ms per level fall iteration
         meterStart();
     }
-#endif
 
     // Reset level and reset timer if we're exceeding the
     // current peak
@@ -179,6 +167,10 @@ VUMeter::drawMeterLevel(QPainter* paint)
 void
 VUMeter::slotReduceLevel()
 {
+    m_levelStep = m_level * m_baseLevelStep / 100 + 1;
+    if (m_levelStep < 1)
+	m_levelStep = 1;
+
     if (m_level > 0)
         m_level -= m_levelStep;
 
