@@ -44,9 +44,6 @@ public:
                           const char *name=0);
     ~RosegardenTempoDialog();
 
-    void resetFont(QWidget *w);
-    void resetFonts();
-
     void showTempo();
     void showPosition();
 

@@ -40,14 +40,6 @@ RosegardenTempoDialog::RosegardenTempoDialog(RosegardenGUIDoc *doc,
     RosegardenTempo(parent, name, true), // modal
     m_doc(doc)
 {
-    resetFonts();
-
-    /*
-    QPalette pal; 
-    pal.setColor(QColorGroup::Foreground, Qt::black);
-    TempoSpin->setPalette(pal);
-    */
-
     connect((QObject*)OKButton, SIGNAL(released()),
             this, SLOT(slotOK()));
 
@@ -126,23 +118,6 @@ void
 RosegardenTempoDialog::slotCancel()
 {
     delete this;
-}
-
-void
-RosegardenTempoDialog::resetFont(QWidget *w)
-{
-    QFont font = w->font();
-    font.setPixelSize(10);
-    w->setFont(font);
-}
-
-void
-RosegardenTempoDialog::resetFonts()
-{
-    resetFont(TempoLabel);
-    resetFont(TempoSpin);
-    resetFont(PositionLabel);
-    resetFont(PositionValue);
 }
 
 void 
