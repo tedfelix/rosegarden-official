@@ -133,7 +133,7 @@ RosegardenGUIDoc::~RosegardenGUIDoc()
 
     deleteEditViews();
 
-    ControlRulerCanvasRepository::clear();
+//     ControlRulerCanvasRepository::clear();
 
     delete m_commandHistory; // must be deleted before the Composition is
 }

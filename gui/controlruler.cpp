@@ -243,6 +243,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     long m_value;
+    bool m_handlingMouseMove;
 
     ControlRuler* m_controlRuler;
     ElementAdapter* m_elementAdapter;
@@ -300,9 +301,9 @@ void ControlItem::updateFromValue()
 
 void ControlItem::draw(QPainter &painter)
 {
-    if (!selected())
+    if (!isEnabled())
         updateFromValue();
-
+    
     setBrush(m_controlRuler->valueToColor(m_value));
 
     QCanvasRectangle::draw(painter);
@@ -310,10 +311,14 @@ void ControlItem::draw(QPainter &painter)
 
 void ControlItem::handleMouseButtonPress(QMouseEvent*)
 {
+//     RG_DEBUG << "ControlItem::handleMouseButtonPress()\n";
+    setEnabled(true);
 }
 
 void ControlItem::handleMouseButtonRelease(QMouseEvent*)
 {
+//     RG_DEBUG << "ControlItem::handleMouseButtonRelease()\n";
+    setEnabled(false);
 }
 
 void ControlItem::handleMouseMove(QMouseEvent*, int /*deltaX*/, int deltaY)
@@ -592,6 +597,9 @@ ControlRuler::~ControlRuler()
 void ControlRuler::slotUpdate()
 {
     RG_DEBUG << "ControlRuler::slotUpdate()\n";
+
+    canvas()->setAllChanged(); // TODO: be a bit more subtle, call setChanged(<time area>)
+
     canvas()->update();
     repaint();
 }
@@ -655,16 +663,23 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
     for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
 
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
-            if (item->isSelected()) continue;
+            if (item->isSelected()) {
 
-            // clear selection unless control was pressed, in which case add the event
-            // to the current selection
-            if (!(e->state() && QMouseEvent::ControlButton)) { clearSelectedItems(); }
-            m_selectedItems << item;
-            item->setSelected(true);
-            item->handleMouseButtonPress(e);
-            ElementAdapter* adapter = item->getElementAdapter();
-            m_eventSelection->addEvent(adapter->getEvent());
+                item->handleMouseButtonPress(e);
+
+
+            } else { // select it
+            
+                // clear selection unless control was pressed, in which case add the event
+                // to the current selection
+                if (!(e->state() && QMouseEvent::ControlButton)) { clearSelectedItems(); }
+                m_selectedItems << item;
+                item->setSelected(true);
+                item->handleMouseButtonPress(e);
+                ElementAdapter* adapter = item->getElementAdapter();
+                m_eventSelection->addEvent(adapter->getEvent());
+            }
+            
 
         }
     }
@@ -1495,90 +1510,90 @@ PropertyBox::paintEvent(QPaintEvent *e)
 //
 
 
-void ControlRulerCanvasRepository::clear()
-{
-    segmentpropertycanvasmap& segmentPropertyMap = getInstance()->m_segmentPropertyCanvasMap;
+// void ControlRulerCanvasRepository::clear()
+// {
+//     segmentpropertycanvasmap& segmentPropertyMap = getInstance()->m_segmentPropertyCanvasMap;
 
-    for(segmentpropertycanvasmap::iterator i = segmentPropertyMap.begin();
-        i != segmentPropertyMap.end(); ++i) {
+//     for(segmentpropertycanvasmap::iterator i = segmentPropertyMap.begin();
+//         i != segmentPropertyMap.end(); ++i) {
 
-        delete i->second;
-    }
+//         delete i->second;
+//     }
 
-    segmentcontrollercanvasmap& segmentControllerMap = getInstance()->m_segmentControllerCanvasMap;
+//     segmentcontrollercanvasmap& segmentControllerMap = getInstance()->m_segmentControllerCanvasMap;
 
-    for(segmentcontrollercanvasmap::iterator i = segmentControllerMap.begin();
-        i != segmentControllerMap.end(); ++i) {
+//     for(segmentcontrollercanvasmap::iterator i = segmentControllerMap.begin();
+//         i != segmentControllerMap.end(); ++i) {
 
-        delete i->second;
-    }
+//         delete i->second;
+//     }
     
-}
+// }
 
-QCanvas* ControlRulerCanvasRepository::getCanvas(Rosegarden::Segment* segment,
-                                                 PropertyName propertyName,
-                                                 QSize viewSize)
-{
-    segmentpropertycanvasmap& segmentPropertyMap = getInstance()->m_segmentPropertyCanvasMap;
+// QCanvas* ControlRulerCanvasRepository::getCanvas(Rosegarden::Segment* segment,
+//                                                  PropertyName propertyName,
+//                                                  QSize viewSize)
+// {
+//     segmentpropertycanvasmap& segmentPropertyMap = getInstance()->m_segmentPropertyCanvasMap;
 
-    // first fetch the propertymap for this segment,
-    // create it if it doesn't exist
-    //
-    propertycanvasmap* propCanvasMap = segmentPropertyMap[segment];
-    if (propCanvasMap == 0) {
-        propCanvasMap = new propertycanvasmap;
-        segmentPropertyMap[segment] = propCanvasMap;
-    }
+//     // first fetch the propertymap for this segment,
+//     // create it if it doesn't exist
+//     //
+//     propertycanvasmap* propCanvasMap = segmentPropertyMap[segment];
+//     if (propCanvasMap == 0) {
+//         propCanvasMap = new propertycanvasmap;
+//         segmentPropertyMap[segment] = propCanvasMap;
+//     }
 
-    // look up the map if the canvas is there, otherwise create it
-    //
-    QCanvas* canvas = (*propCanvasMap)[propertyName];
-    if (!canvas) {
-        canvas = new QCanvas(getInstance());
-        (*propCanvasMap)[propertyName] = canvas;
-        canvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight);
-    }
+//     // look up the map if the canvas is there, otherwise create it
+//     //
+//     QCanvas* canvas = (*propCanvasMap)[propertyName];
+//     if (!canvas) {
+//         canvas = new QCanvas(getInstance());
+//         (*propCanvasMap)[propertyName] = canvas;
+//         canvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight);
+//     }
     
-    return canvas;
-}
+//     return canvas;
+// }
 
-QCanvas* ControlRulerCanvasRepository::getCanvas(Rosegarden::Segment* segment,
-                                                 ControlParameter* controller,
-                                                 QSize viewSize)
-{
-    segmentcontrollercanvasmap& segmentControllerMap = getInstance()->m_segmentControllerCanvasMap;
+// QCanvas* ControlRulerCanvasRepository::getCanvas(Rosegarden::Segment* segment,
+//                                                  ControlParameter* controller,
+//                                                  QSize viewSize)
+// {
+//     segmentcontrollercanvasmap& segmentControllerMap = getInstance()->m_segmentControllerCanvasMap;
 
-    // first fetch the controllermap for this segment,
-    // create it if it doesn't exist
-    //
-    controllercanvasmap* controllerCanvasMap = segmentControllerMap[segment];
-    if (controllerCanvasMap == 0) {
-        controllerCanvasMap = new controllercanvasmap;
-        segmentControllerMap[segment] = controllerCanvasMap;
-    }
+//     // first fetch the controllermap for this segment,
+//     // create it if it doesn't exist
+//     //
+//     controllercanvasmap* controllerCanvasMap = segmentControllerMap[segment];
+//     if (controllerCanvasMap == 0) {
+//         controllerCanvasMap = new controllercanvasmap;
+//         segmentControllerMap[segment] = controllerCanvasMap;
+//     }
 
-    // look up the map if the canvas is there, otherwise create it
-    //
-    QCanvas* canvas = (*controllerCanvasMap)[*controller];
-    if (!canvas) {
-        canvas = new QCanvas(getInstance());
-        (*controllerCanvasMap)[*controller] = canvas;
-        canvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight);
-    }
+//     // look up the map if the canvas is there, otherwise create it
+//     //
+//     QCanvas* canvas = (*controllerCanvasMap)[*controller];
+//     if (!canvas) {
+//         canvas = new QCanvas(getInstance());
+//         (*controllerCanvasMap)[*controller] = canvas;
+//         canvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight);
+//     }
     
-    return canvas;
-}
+//     return canvas;
+// }
 
-ControlRulerCanvasRepository* ControlRulerCanvasRepository::getInstance()
-{
-    if (!m_instance)
-        m_instance = new ControlRulerCanvasRepository();
+// ControlRulerCanvasRepository* ControlRulerCanvasRepository::getInstance()
+// {
+//     if (!m_instance)
+//         m_instance = new ControlRulerCanvasRepository();
     
-    return m_instance;
-}
+//     return m_instance;
+// }
 
-ControlRulerCanvasRepository::ControlRulerCanvasRepository()
-{
-}
+// ControlRulerCanvasRepository::ControlRulerCanvasRepository()
+// {
+// }
 
-ControlRulerCanvasRepository* ControlRulerCanvasRepository::m_instance = 0;
+// ControlRulerCanvasRepository* ControlRulerCanvasRepository::m_instance = 0;

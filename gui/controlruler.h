@@ -324,32 +324,35 @@ protected:
  *
  * All control ruler for a given segment and property (or controller)
  * should use the same canvas
+ *
+ * Bad idea, works only in the case of 2 matrix views opened on the same segment
+ * leaving it just in case.
  */
-class ControlRulerCanvasRepository : public QObject
-{
-public:
-    static void clear();
-    static QCanvas* getCanvas(Rosegarden::Segment*, Rosegarden::PropertyName,
-                              QSize viewSize);
-    static QCanvas* getCanvas(Rosegarden::Segment*, Rosegarden::ControlParameter*,
-                              QSize viewSize);
+// class ControlRulerCanvasRepository : public QObject
+// {
+// public:
+//     static void clear();
+//     static QCanvas* getCanvas(Rosegarden::Segment*, Rosegarden::PropertyName,
+//                               QSize viewSize);
+//     static QCanvas* getCanvas(Rosegarden::Segment*, Rosegarden::ControlParameter*,
+//                               QSize viewSize);
 
-protected:
-    typedef std::map<Rosegarden::PropertyName, QCanvas*> propertycanvasmap;
-    typedef std::map<Rosegarden::ControlParameter, QCanvas*> controllercanvasmap;
+// protected:
+//     typedef std::map<Rosegarden::PropertyName, QCanvas*> propertycanvasmap;
+//     typedef std::map<Rosegarden::ControlParameter, QCanvas*> controllercanvasmap;
 
-    typedef std::map<Rosegarden::Segment*, propertycanvasmap*> segmentpropertycanvasmap;
-    typedef std::map<Rosegarden::Segment*, controllercanvasmap*> segmentcontrollercanvasmap;
+//     typedef std::map<Rosegarden::Segment*, propertycanvasmap*> segmentpropertycanvasmap;
+//     typedef std::map<Rosegarden::Segment*, controllercanvasmap*> segmentcontrollercanvasmap;
     
-    ControlRulerCanvasRepository();
-    static ControlRulerCanvasRepository* getInstance();
+//     ControlRulerCanvasRepository();
+//     static ControlRulerCanvasRepository* getInstance();
 
-    static ControlRulerCanvasRepository* m_instance;
+//     static ControlRulerCanvasRepository* m_instance;
     
-    segmentpropertycanvasmap   m_segmentPropertyCanvasMap;
-    segmentcontrollercanvasmap m_segmentControllerCanvasMap;
+//     segmentpropertycanvasmap   m_segmentPropertyCanvasMap;
+//     segmentcontrollercanvasmap m_segmentControllerCanvasMap;
     
-};
+// };
 
 
 #endif // _CONTROLRULER_H_

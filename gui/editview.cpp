@@ -263,11 +263,13 @@ void EditView::addPropertyBox(QWidget *w)
 
 PropertyControlRuler* EditView::makePropertyControlRuler(PropertyName propertyName)
 {
-//     QCanvas* controlRulerCanvas = new QCanvas(this);
-    QCanvas* controlRulerCanvas = ControlRulerCanvasRepository::getCanvas(getCurrentSegment(), propertyName,
-                                                                          getViewSize());
-//     QSize viewSize = getViewSize();
-//     controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
+    QCanvas* controlRulerCanvas = new QCanvas(this);
+    QSize viewSize = getViewSize();
+    controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
+
+//     QCanvas* controlRulerCanvas = ControlRulerCanvasRepository::getCanvas(getCurrentSegment(), propertyName,
+//                                                                           getViewSize());
+
     PropertyControlRuler* controlRuler = new PropertyControlRuler
 	(propertyName, getCurrentStaff(), getHLayout(), this,
 	 controlRulerCanvas, m_controlRulers);
@@ -277,11 +279,11 @@ PropertyControlRuler* EditView::makePropertyControlRuler(PropertyName propertyNa
 
 ControllerEventsRuler* EditView::makeControllerEventRuler(ControlParameter *controller)
 {
-//     QCanvas* controlRulerCanvas = new QCanvas(this);
-//     QSize viewSize = getViewSize();
-//     controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
-    QCanvas* controlRulerCanvas = ControlRulerCanvasRepository::getCanvas(getCurrentSegment(), controller,
-                                                                          getViewSize());
+    QCanvas* controlRulerCanvas = new QCanvas(this);
+    QSize viewSize = getViewSize();
+    controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
+//     QCanvas* controlRulerCanvas = ControlRulerCanvasRepository::getCanvas(getCurrentSegment(), controller,
+//                                                                           getViewSize());
     
 
     ControllerEventsRuler* controlRuler = new ControllerEventsRuler
