@@ -1650,13 +1650,11 @@ void RosegardenGUIApp::slotAddTracks()
     
                 for (iit = instruments.begin(); iit != instruments.end(); iit++)
                 {
-                    if (instr == 0)
+                    if ((*iit)->getId() >= Rosegarden::MidiInstrumentBase)
                     {
                         instr = (*iit);
                         break;
                     }
-                    else
-                        break;
                 }
             }
         }

@@ -77,7 +77,7 @@ ControlRuler::~ControlRuler()
 void
 ControlRuler::slotScrollHoriz(int x)
 {
-    m_currentXOffset = -x / getHScaleFactor();
+    m_currentXOffset = (double(-x)) / getHScaleFactor();
     repaint();
 }
 
@@ -120,14 +120,15 @@ ControlRuler::paintEvent(QPaintEvent* e)
     QRect clipRect = paint.clipRegion().boundingRect();
 
     timeT from = m_rulerScale->getTimeForX
-       (clipRect.x() - m_currentXOffset - 100 - m_xorigin);
+       (clipRect.x() - m_currentXOffset - m_xorigin);
 //     timeT   to = m_rulerScale->getTimeForX
 //        (clipRect.x() + clipRect.width() - m_currentXOffset + 100 - m_xorigin);
 
 
     Segment::iterator it = m_segment->findNearestTime(from);
+    //Segment::iterator it = m_segment->begin();
 
-    for (; it != m_segment->end(); it++)
+    for (; m_segment->isBeforeEndMarker(it); it++)
     {
         if ((*it)->has(m_propertyName))
         {

@@ -101,7 +101,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     initStatusBar();
 
     QCanvas *tCanvas = new QCanvas(this);
-    tCanvas->resize(width() * 2, height() * 2);
+    //tCanvas->resize(width() * 2, height() * 2);
 
     MATRIX_DEBUG << "MatrixView : creating staff\n";
 
@@ -1408,7 +1408,7 @@ MatrixView::slotSelectAll()
     Rosegarden::Segment::iterator it = segment->begin();
     EventSelection *selection = new EventSelection(*segment);
 
-    for (; it != segment->end(); it++)
+    for (; segment->isBeforeEndMarker(it); it++)
         if ((*it)->isa(Rosegarden::Note::EventType))
             selection->addEvent(*it);
 
