@@ -29,11 +29,11 @@ NotationVLayout::layout(Event *el)
 {
     unsigned int pitch = el->get<Int>("pitch");
 
-    kdDebug(KDEBUG_AREA) << "pitch : " << pitch
-                         << " - height : " << m_pitchToHeight[pitch]
-                         << " - staffOffset : " << m_staffOffsetY
-                         << " - height + staffOffset : " << m_pitchToHeight[pitch] + m_staffOffsetY
-                         << endl;
+//     kdDebug(KDEBUG_AREA) << "pitch : " << pitch
+//                          << " - height : " << m_pitchToHeight[pitch]
+//                          << " - staffOffset : " << m_staffOffsetY
+//                          << " - height + staffOffset : " << m_pitchToHeight[pitch] + m_staffOffsetY
+//                          << endl;
 
     el->set<Int>("Notation::Y", m_pitchToHeight[pitch] + m_staffOffsetY);
 }
