@@ -917,6 +917,11 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 		// resync Devices and Instruments
 		//
 		m_doc->syncDevices();
+		
+		KConfig* config = kapp->config();
+    		config->setGroup(SequencerOptionsConfigGroup);
+		QString recordDeviceStr = config->readEntry("midirecorddevice");
+		sendMIDIRecordingDevice(recordDeviceStr);
 	    }
 
             if (m_transportStatus == PLAYING ||
@@ -1358,18 +1363,12 @@ SequenceManager::getSequencerPlugins(AudioPluginManager *aPM)
     }
 }
 
-// Clear down all temporary (non read-only) objects and then
-// add the basic audio faders only (one per instrument).
+
+// Send the MIDI recording device to the sequencer
 //
 void
-SequenceManager::reinitialiseSequencerStudio()
+SequenceManager::sendMIDIRecordingDevice(const QString recordDeviceStr)
 {
-    // Send the MIDI recording device to the sequencer
-    //
-    KConfig* config = kapp->config();
-    config->setGroup(SequencerOptionsConfigGroup);
-
-    QString recordDeviceStr = config->readEntry("midirecorddevice");
 
     if (recordDeviceStr)
     {
@@ -1386,7 +1385,20 @@ SequenceManager::reinitialiseSequencerStudio()
                          << recordDevice << endl;
         }
     }
+}
 
+// Clear down all temporary (non read-only) objects and then
+// add the basic audio faders only (one per instrument).
+//
+void
+SequenceManager::reinitialiseSequencerStudio()
+{
+    KConfig* config = kapp->config();
+    config->setGroup(SequencerOptionsConfigGroup);
+    QString recordDeviceStr = config->readEntry("midirecorddevice");
+    
+	sendMIDIRecordingDevice(recordDeviceStr);
+	
     // Toggle JACK audio ports appropriately
     //
     bool submasterOuts = config->readBoolEntry("audiosubmasterouts", false);
