@@ -1511,12 +1511,9 @@ MidiMixerWindow::setupTabs()
 	        connect(fader, SIGNAL(faderChanged(float)),
 		        this, SLOT(slotFaderLevelChanged(float)));
 
-	        //connect(pan, SIGNAL(valueChanged(float)),
-		        //this, SLOT(slotPanChanged(float)));
-
                 // Update all the faders and controllers
                 //
-                //slotUpdateInstrument((*iIt)->getId());
+                slotUpdateInstrument((*iIt)->getId());
 
                 // Increment counters
                 //
@@ -1535,37 +1532,6 @@ MidiMixerWindow::addTab(QWidget *tab, const QString &title)
     m_tabWidget->addTab(tab, title);
 }
 
-
-/*
-void 
-MidiMixerWindow::slotPanChanged(float value)
-{
-    const QObject *s = sender();
-
-    for (FaderVector::const_iterator it = m_faders.begin();
-         it != m_faders.end(); ++it)
-    {
-        if ((*it)->m_panRotary == s)
-        {
-            Rosegarden::Instrument *instr = m_studio->getInstrumentById((*it)->m_id);
-
-            if (instr)
-            {
-                instr->setPan(Rosegarden::MidiByte(value));
-                Rosegarden::MappedEvent mE((*it)->m_id,
-                                           Rosegarden::MappedEvent::MidiController,
-                                           Rosegarden::MIDI_CONTROLLER_PAN,
-                                           Rosegarden::MidiByte(value));
-                Rosegarden::StudioControl::sendMappedEvent(mE);
-            }
-
-            emit instrumentParametersChanged((*it)->m_id);
-            return;
-        }
-    }
-}
-*/
-
 void
 MidiMixerWindow::slotFaderLevelChanged(float value)
 {
@@ -1576,15 +1542,16 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
     {
         if ((*it)->m_volumeFader == s)
         {
-            Rosegarden::Instrument *instr = m_studio->getInstrumentById((*it)->m_id);
+            Rosegarden::Instrument *instr = m_studio->
+                getInstrumentById((*it)->m_id);
 
             if (instr)
             {
                 instr->setVolume(Rosegarden::MidiByte(value));
                 Rosegarden::MappedEvent mE((*it)->m_id,
-                                           Rosegarden::MappedEvent::MidiController,
-                                           Rosegarden::MIDI_CONTROLLER_VOLUME,
-                                           Rosegarden::MidiByte(value));
+                                       Rosegarden::MappedEvent::MidiController,
+                                       Rosegarden::MIDI_CONTROLLER_VOLUME,
+                                       Rosegarden::MidiByte(value));
                 Rosegarden::StudioControl::sendMappedEvent(mE);
             }
 
@@ -1615,21 +1582,27 @@ MidiMixerWindow::slotControllerChanged(float value)
     // Don't do anything if we've not matched and got solid values
     // for i and j
     //
-    if (i == m_faders.size() || j == m_faders[i]->m_controllerRotaries.size()) return;
+    if (i == m_faders.size() || j == m_faders[i]->m_controllerRotaries.size())
+        return;
 
-    //RG_DEBUG << "MidiMixerWindow::slotControllerChanged - found a controller" << endl;
+    //RG_DEBUG << "MidiMixerWindow::slotControllerChanged - found a controller"
+               //<< endl;
     
-    Rosegarden::Instrument *instr = m_studio->getInstrumentById(m_faders[i]->m_id);
+    Rosegarden::Instrument *instr = m_studio->getInstrumentById(
+            m_faders[i]->m_id);
 
     if (instr) {
 
-        //RG_DEBUG << "MidiMixerWindow::slotControllerChanged - got instrument to change" << endl;
+        //RG_DEBUG << "MidiMixerWindow::slotControllerChanged - "
+                   //<< "got instrument to change" << endl;
 
-        if (m_faders[i]->m_controllerRotaries[j].first == Rosegarden::MIDI_CONTROLLER_PAN)
+        if (m_faders[i]->m_controllerRotaries[j].first == 
+                Rosegarden::MIDI_CONTROLLER_PAN)
             instr->setPan(Rosegarden::MidiByte(value));
         else
         {
-            instr->setControllerValue(m_faders[i]->m_controllerRotaries[j].first, 
+            instr->setControllerValue(m_faders[i]->
+                    m_controllerRotaries[j].first, 
                     Rosegarden::MidiByte(value));
         }
 
@@ -1655,6 +1628,8 @@ MidiMixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
     Rosegarden::InstrumentList::const_iterator iIt;
     int count = 0;
 
+    blockSignals(true);
+
     for (it = m_studio->begin(); it != m_studio->end(); ++it)
     {
         dev = dynamic_cast<Rosegarden::MidiDevice*>(*it);
@@ -1672,11 +1647,14 @@ MidiMixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
                 {
                     // Set Volume fader
                     //
-                    m_faders[count]->m_volumeFader->setFader(float((*iIt)->getVolume()));
+                    m_faders[count]->m_volumeFader->
+                        setFader(float((*iIt)->getVolume()));
 
                     /*
-                    Rosegarden::StaticControllers &staticControls = (*iIt)->getStaticControllers();
-                    RG_DEBUG << "STATIC CONTROLS SIZE = " << staticControls.size() << endl;
+                    Rosegarden::StaticControllers &staticControls = 
+                        (*iIt)->getStaticControllers();
+                    RG_DEBUG << "STATIC CONTROLS SIZE = " 
+                             << staticControls.size() << endl;
                     */
 
                     // Set all controllers for this Instrument
@@ -1685,15 +1663,19 @@ MidiMixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
                     {
                         float value = 0.0;
 
-                        if (controls[i].getControllerValue() == Rosegarden::MIDI_CONTROLLER_PAN)
+                        if (controls[i].getControllerValue() == 
+                                Rosegarden::MIDI_CONTROLLER_PAN)
                         {
-                            m_faders[count]->m_controllerRotaries[i].second->setPosition((*iIt)->getPan());
+                            m_faders[count]->m_controllerRotaries[i].
+                                second->setPosition((*iIt)->getPan());
                         }
                         else
                         {
-                            // The ControllerValues might not yet be set on the actual Instrument
-                            // so don't always expect to find one.  There might be a hole here for
-                            // deleted Controllers to hang around on Instruments..
+                            // The ControllerValues might not yet be set on 
+                            // the actual Instrument so don't always expect
+                            // to find one.  There might be a hole here for
+                            // deleted Controllers to hang around on 
+                            // Instruments..
                             //
                             try
                             {
@@ -1703,21 +1685,25 @@ MidiMixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
                             catch(std::string s)
                             {
                                 /*
-                                RG_DEBUG << "MidiMixerWindow::slotUpdateInstrument - "
+                                RG_DEBUG << 
+                                "MidiMixerWindow::slotUpdateInstrument - "
                                          << "can't match controller " 
-                                         << int(controls[i].getControllerValue()) << " - \""
+                                         << int(controls[i].
+                                             getControllerValue()) << " - \""
                                          << s << "\"" << endl;
                                          */
                                 continue;
                             }
 
                             /*
-                            RG_DEBUG << "MidiMixerWindow::slotUpdateInstrument - MATCHED "
+                            RG_DEBUG << "MidiMixerWindow::slotUpdateInstrument"
+                                     << " - MATCHED "
                                      << int(controls[i].getControllerValue())
                                      << endl;
                                      */
 
-                            m_faders[count]->m_controllerRotaries[i].second->setPosition(value);
+                            m_faders[count]->m_controllerRotaries[i].
+                                second->setPosition(value);
                         }
                     }
                 }
@@ -1725,6 +1711,8 @@ MidiMixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
             }
         }
     }
+
+    blockSignals(false);
 }
 
 

@@ -3212,8 +3212,11 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
 	m_doc->insertRecordedAudio(position, RECORDING_AUDIO);
     }
 
-    if (m_audioMixer && m_audioMixer->isVisible()) m_audioMixer->updateMeters(mapper);
-    if (m_midiMixer && m_midiMixer->isVisible()) m_midiMixer->updateMeters(mapper);
+    if (m_audioMixer && m_audioMixer->isVisible())
+        m_audioMixer->updateMeters(mapper);
+
+    if (m_midiMixer && m_midiMixer->isVisible())
+        m_midiMixer->updateMeters(mapper);
 
     m_view->updateMeters(mapper);
 

@@ -686,7 +686,6 @@ RosegardenRotary::mouseReleaseEvent(QMouseEvent *e)
         // Hide the float text
         //
         if (_float) _float->hide();
-
     }
 }
 
@@ -770,12 +769,6 @@ RosegardenRotary::setPosition(float position)
     
     snapPosition();
     drawPosition();
-
-    if (!_float) _float = new RosegardenTextFloat(this);
-    _float->reparent(this);
-
-    // modify tip
-    _float->setText(QString("%1").arg(m_snapPosition));
 }
 
 

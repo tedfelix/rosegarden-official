@@ -999,10 +999,17 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 
 	// Eech.  If we have a mixer and this is an audio instrument, then
 	// our mixer has already used up the "is new?" token.
-	
+        //
+        // [rwb] - ah well, you see with the new MidiMixer now as well
+        // the tokens need to get used twice here as well - so I'm commenting
+        // this out completely for the moment.  Would it help if I put
+        // some of !!! these in?
+        //
+        /*
 	if (instrument->getType() != Rosegarden::Instrument::Audio) {
 	    if (!isNew) continue;
 	}
+        */
 
         // Don't send a 0 to any meters
         //

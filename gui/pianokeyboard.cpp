@@ -150,7 +150,7 @@ void PianoKeyboard::enterEvent(QEvent *)
 
 void PianoKeyboard::leaveEvent(QEvent*)
 {
-    //m_hoverHighlight->hide();
+    m_hoverHighlight->hide();
 }
 
 void PianoKeyboard::drawHoverNote(int evPitch)

@@ -281,16 +281,19 @@ InstrumentParameterBox::setSolo(bool value)
 void
 InstrumentParameterBox::slotUpdateAllBoxes()
 {
+    RG_DEBUG << "InstrumentParameterBox::slotUpdateAllBoxes" << endl;
+
     std::vector<InstrumentParameterBox*>::iterator it =
         instrumentParamBoxes.begin();
 
+    // To update all open IPBs
+    //
     for (; it != instrumentParamBoxes.end(); it++)
     {
         if ((*it) != this && m_selectedInstrument &&
             (*it)->getSelectedInstrument() == m_selectedInstrument)
             (*it)->useInstrument(m_selectedInstrument);
     }
-
 }
 
 void
@@ -788,8 +791,9 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     MidiDevice *md = dynamic_cast<MidiDevice*>
 	(instrument->getDevice());
     if (!md) {
-	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::setupForInstrument: No MidiDevice for Instrument "
-	  << instrument->getId() << endl;
+	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::setupForInstrument:"
+                 << " No MidiDevice for Instrument "
+	         << instrument->getId() << endl;
 	return;
     }
 
@@ -856,25 +860,32 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 
     // Set all the positions by controller number
     //
-    for (RotaryMap::iterator it = m_rotaries.begin() ; it != m_rotaries.end(); ++it)
+    for (RotaryMap::iterator it = m_rotaries.begin() ;
+            it != m_rotaries.end(); ++it)
     {
-        Rosegarden::MidiByte value;
-        try
+        Rosegarden::MidiByte value = 0;
+
+        // Special cases
+        //
+        if (it->first == Rosegarden::MIDI_CONTROLLER_PAN)
+            value = int(instrument->getPan());
+        else if (it->first == Rosegarden::MIDI_CONTROLLER_VOLUME)
+            value = int(instrument->getVolume());
+        else
         {
-            value = instrument->getControllerValue(Rosegarden::MidiByte(it->first));
-        }
-        catch(...)
-        {
-            continue;
+            try
+            {
+                value = instrument->getControllerValue(
+                        Rosegarden::MidiByte(it->first));
+            }
+            catch(...)
+            {
+                continue;
+            }
         }
 
         setRotaryToValue(it->first, int(value));
     }
-
-    // Special cases
-    //
-    setRotaryToValue(int(Rosegarden::MIDI_CONTROLLER_PAN), instrument->getPan());
-    setRotaryToValue(int(Rosegarden::MIDI_CONTROLLER_VOLUME), instrument->getVolume());
 }
 
 void
@@ -1065,7 +1076,8 @@ MIDIInstrumentParameterPanel::populateBankList()
     MidiDevice *md = dynamic_cast<MidiDevice*>
 	(m_selectedInstrument->getDevice());
     if (!md) {
-	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::populateBankList: No MidiDevice for Instrument "
+	RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::populateBankList:"
+                 << " No MidiDevice for Instrument "
                  << m_selectedInstrument->getId() << endl;
 	return;
     }
@@ -1073,7 +1085,10 @@ MIDIInstrumentParameterPanel::populateBankList()
     int currentBank = -1;
     Rosegarden::BankList banks;
 
-    RG_DEBUG << "MIDIInstrumentParameterPanel::populateBankList: variation type is " << md->getVariationType() << endl;
+    /*
+    RG_DEBUG << "MIDIInstrumentParameterPanel::populateBankList: "
+             << "variation type is " << md->getVariationType() << endl;
+             */
 
     if (md->getVariationType() == MidiDevice::NoVariations) {
 
@@ -1170,7 +1185,10 @@ MIDIInstrumentParameterPanel::populateProgramList()
 	return;
     }
 
-    RG_DEBUG << "MIDIInstrumentParameterPanel::populateProgramList: variation type is " << md->getVariationType() << endl;
+    /*
+    RG_DEBUG << "MIDIInstrumentParameterPanel::populateProgramList:"
+             << " variation type is " << md->getVariationType() << endl;
+    */
 
     Rosegarden::MidiBank bank(m_selectedInstrument->isPercussion(), 0, 0);
 
@@ -1212,7 +1230,10 @@ MIDIInstrumentParameterPanel::populateVariationList()
 	return;
     }
 
-    RG_DEBUG << "MIDIInstrumentParameterPanel::populateVariationList: variation type is " << md->getVariationType() << endl;
+    /*
+    RG_DEBUG << "MIDIInstrumentParameterPanel::populateVariationList:"
+             << " variation type is " << md->getVariationType() << endl;
+    */
 
     if (md->getVariationType() == MidiDevice::NoVariations) {
 	if (!m_variationLabel->isHidden()) {
@@ -1547,9 +1568,9 @@ void
 MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
 {
     /*
-     RG_DEBUG<< "MIDIInstrumentParameterPanel::slotControllerChanged - controller = "
-             << controllerNumber << "\n";
-             */
+    RG_DEBUG<< "MIDIInstrumentParameterPanel::slotControllerChanged - "
+            << "controller = " << controllerNumber << "\n";
+    */
 
     if (m_selectedInstrument == 0)
         return;
@@ -1558,15 +1579,18 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
 	(m_selectedInstrument->getDevice());
     if (!md) return;
 
+    /*
     Rosegarden::ControlParameter *controller = 
 	md->getControlParameter(Rosegarden::MidiByte(controllerNumber));
+        */
 
     int value = getValueFromRotary(controllerNumber);
 
     if (value == -1)
     {
         RG_DEBUG << "MIDIInstrumentParameterPanel::slotControllerChanged - "
-                 << "couldn't get value of rotary for controller " << controllerNumber << "\n";
+                 << "couldn't get value of rotary for controller " 
+                 << controllerNumber << "\n";
         return;
     }
 

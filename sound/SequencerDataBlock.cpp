@@ -166,6 +166,10 @@ SequencerDataBlock::getInstrumentLevel(InstrumentId id, LevelInfo &info) const
     int currentUpdateIndex = m_levelUpdateIndices[index];
     info = m_levels[index];
 
+    std::cout << "SequencerDataBlock::getInstrumentLevel - "
+              << "id = " << id
+              << ", level = " << info.level << std::endl;
+
     if (lastUpdateIndex[index] != currentUpdateIndex) {
 	lastUpdateIndex[index]  = currentUpdateIndex;
 	return true;
