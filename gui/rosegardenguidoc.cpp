@@ -790,7 +790,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 
             // Now insert the new event
             //
-            //Segment::iterator loc = m_recordSegment->insert(rEvent);
+            Segment::iterator loc = m_recordSegment->insert(rEvent);
 
             // And now fiddle with it
             //
