@@ -112,10 +112,6 @@ int MidiBankListViewItem::compare(QListViewItem *i, int col, bool ascending) con
     int thisVal = text(col).toInt(),
         otherVal = bankItem->text(col).toInt();
 
-    RG_DEBUG << "MidiBankListViewItem::compare - col = " << col
-             << " - thisVal = " << thisVal
-             << " - otherVal = " << otherVal << endl;
-    
     if (thisVal == otherVal) {
         if (col == 1) // if sorting on MSB, suborder with LSB
             return compare(i, 2, ascending);
@@ -632,15 +628,11 @@ MidiProgramsEditor::setBankName(const QString& s)
 
 void MidiProgramsEditor::blockAllSignals(bool block)
 {
-    RG_DEBUG << "MidiProgramsEditor : Blocking all signals = " << block << endl;
-
     const QObjectList* allChildren = queryList("KLineEdit", "[0-9]+");
     QObjectListIt it(*allChildren);
     QObject *obj;
 
     while ( (obj = it.current()) != 0 ) {
-//         RG_DEBUG << "Blocking signals for " << obj->name()
-//                  << ", class " << obj->className() << endl;
         obj->blockSignals(block);
         ++it;
     }
