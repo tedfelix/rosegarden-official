@@ -24,6 +24,7 @@
 #include "trackeditor.h"
 #include "segmentcanvas.h"
 #include "rosegardenguidoc.h"
+#include "rulerscale.h"
 #include "Track.h"
 #include "colours.h"
 #include "NotationTypes.h"
@@ -38,19 +39,20 @@
 using Rosegarden::Composition;
 
 TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
-                           QWidget* parent, const char* name,
-                           WFlags) :
+			 RulerScale *rulerScale,
+			 QWidget* parent, const char* name,
+			 WFlags) :
     QWidget(parent, name),
     DCOPObject("TrackEditorIface"),
     m_document(doc),
-    m_segmentsCanvas(0),
+    m_rulerScale(rulerScale),
+    m_segmentCanvas(0),
     m_hHeader(0),
     m_vHeader(0)
 {
     Composition &comp = doc->getComposition();
 
     int tracks = doc->getNbTracks();
-    //int bars = doc->getNbBars();
 
     // If we have no Track then create a default document with 10 of them
     //
@@ -78,44 +80,27 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
         comp.addInstrument(instr);
     }
 
-
-    int bars = comp.getBarNumber(comp.getEndMarker() -
-                                 comp.getStartMarker(), false);
-
-    init(tracks, bars);
-}
-
-
-TrackEditor::TrackEditor(unsigned int nbTracks,
-                           unsigned int nbBars,
-                           QWidget *parent,
-                           const char *name,
-                           WFlags) :
-    QWidget(parent, name),
-    m_document(0),
-    m_segmentsCanvas(0),
-    m_hHeader(0),
-    m_vHeader(0)
-{
-    init(nbTracks, nbBars);
+    init(tracks,
+	 comp.getBarNumber(comp.getStartMarker(), false),
+	 comp.getBarNumber(comp.getEndMarker(), false));
 }
 
 
 void
-TrackEditor::init(unsigned int nbTracks, unsigned int nbBars)
+TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 {
     kdDebug(KDEBUG_AREA) << "TrackEditor::init(nbTracks = "
-                         << nbTracks << ", nbBars = " << nbBars
-                         << ")" << endl;
+                         << nbTracks << ", firstBar = " << firstBar
+                         << ", lastBar = " << lastBar << ")" << endl;
 
     QGridLayout *grid = new QGridLayout(this, 2, 2);
 
-    grid->addWidget(m_hHeader = new QHeader(nbBars, this), 0, 1);
+    setupHorizontalHeader(firstBar, lastBar);
+
+    grid->addWidget(m_hHeader, 0, 1);
     grid->addWidget(m_vHeader =
          new Rosegarden::TrackHeader(nbTracks, this), 1, 0);
     m_vHeader->setOrientation(Qt::Vertical);
-
-    setupHorizontalHeader();
 
     // set up vert. header
     for (int i = 0; i < m_vHeader->count(); ++i) {
@@ -126,40 +111,22 @@ TrackEditor::init(unsigned int nbTracks, unsigned int nbBars)
     m_vHeader->setMinimumWidth(100);
     m_vHeader->setResizeEnabled(false);
 
-
-    Composition &comp = m_document->getComposition();
-
-    std::pair<Rosegarden::timeT, Rosegarden::timeT> times =
-                comp.getBarRange(0, false);
-
-    int firstBarWidth = times.second - times.first;
-
     QObject::connect(m_vHeader, SIGNAL(indexChange(int,int,int)),
                      this, SLOT(segmentOrderChanged(int,int,int)));
 
     QCanvas *canvas = new QCanvas(this);
 
-    int totalBarButtonWidth = 0;
+    int canvasWidth = (int)(m_rulerScale->getBarPosition(lastBar) +
+			    m_rulerScale->getBarWidth(lastBar));
 
-    for (unsigned int i = 0; i < nbBars; i++)
-    {
-        std::pair<Rosegarden::timeT, Rosegarden::timeT> times =
-            comp.getBarRange(i, false);
-
-        totalBarButtonWidth += m_hHeader->sectionSize(0) *
-                               (times.second - times.first) / firstBarWidth;
-    }
-
-    canvas->resize(totalBarButtonWidth,
-                   m_vHeader->sectionSize(0) * nbTracks);
-
+    canvas->resize(canvasWidth, m_vHeader->sectionSize(0) * nbTracks);
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
-    m_segmentsCanvas = new SegmentCanvas(m_hHeader->sectionSize(0),
-                                         m_vHeader->sectionSize(0),
-                                         *canvas, this);
+    m_segmentCanvas = new SegmentCanvas(m_hHeader->sectionSize(0),
+					m_vHeader->sectionSize(0),
+					*canvas, this);
 
-    grid->addWidget(m_segmentsCanvas, 1,1);
+    grid->addWidget(m_segmentCanvas, 1, 1);
 
     // Hide both headers - we use these for measurement and not show!
     //
@@ -167,18 +134,18 @@ TrackEditor::init(unsigned int nbTracks, unsigned int nbBars)
     m_hHeader->hide();
 
     connect(this, SIGNAL(needUpdate()),
-            m_segmentsCanvas, SLOT(update()));
+            m_segmentCanvas, SLOT(update()));
 
-    QObject::connect(m_segmentsCanvas, SIGNAL(addSegment(SegmentItem*)),
+    QObject::connect(m_segmentCanvas, SIGNAL(addSegment(SegmentItem*)),
                      this,           SLOT(addSegment(SegmentItem*)));
 
-    QObject::connect(m_segmentsCanvas, SIGNAL(deleteSegment(Rosegarden::Segment*)),
+    QObject::connect(m_segmentCanvas, SIGNAL(deleteSegment(Rosegarden::Segment*)),
                      this,           SLOT(deleteSegment(Rosegarden::Segment*)));
 
-    QObject::connect(m_segmentsCanvas, SIGNAL(updateSegmentDuration(SegmentItem*)),
+    QObject::connect(m_segmentCanvas, SIGNAL(updateSegmentDuration(SegmentItem*)),
                      this,           SLOT(updateSegmentDuration(SegmentItem*)));
 
-    QObject::connect(m_segmentsCanvas, SIGNAL(updateSegmentTrackAndStartIndex(SegmentItem*)),
+    QObject::connect(m_segmentCanvas, SIGNAL(updateSegmentTrackAndStartIndex(SegmentItem*)),
                      this,           SLOT(updateSegmentTrackAndStartIndex(SegmentItem*)));
 
     // create the position pointer
@@ -187,8 +154,6 @@ TrackEditor::init(unsigned int nbTracks, unsigned int nbBars)
     m_pointer->setPoints(0, 0, 0, canvas->height());
     m_pointer->setZ(10);
     m_pointer->show();
-
-
 }
 
 void
@@ -202,25 +167,23 @@ TrackEditor::setupSegments()
 
     for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
 
-        if ((*i)) {
+        if (!(*i)) continue;
 
-            kdDebug(KDEBUG_AREA) << "TrackEditor::setupSegments() add segment"
-                                 << " - start idx : " << (*i)->getStartIndex()
-                                 << " - nb time steps : " << (*i)->getDuration()
-                                 << " - track : " << (*i)->getTrack()
-                                 << endl;
-
-	    int startBar = comp.getBarNumber((*i)->getStartIndex(), true);
-	    int barCount = comp.getBarNumber((*i)->getEndIndex(), true)
-		- startBar +1;
-
-            int y = m_vHeader->sectionPos((*i)->getTrack());
-	    int x = m_hHeader->sectionPos(startBar);
-
-            SegmentItem *newItem = m_segmentsCanvas->addPartItem(x, y, barCount);
-            newItem->setSegment(*i);
-        }
-        
+	kdDebug(KDEBUG_AREA) << "TrackEditor::setupSegments() add segment"
+			     << " - start idx : " << (*i)->getStartIndex()
+			     << " - nb time steps : " << (*i)->getDuration()
+			     << " - track : " << (*i)->getTrack()
+			     << endl;
+	
+	int startBar = comp.getBarNumber((*i)->getStartIndex(), true);
+	int barCount = comp.getBarNumber((*i)->getEndIndex(), true)
+	    - startBar +1;
+	
+	int y = m_vHeader->sectionPos((*i)->getTrack());
+	int x = m_hHeader->sectionPos(startBar);
+	
+	SegmentItem *newItem = m_segmentCanvas->addPartItem(x, y, barCount);
+	newItem->setSegment(*i);
     }
 }
 
@@ -245,7 +208,7 @@ void TrackEditor::addSegment(int track, int start,
     int y = m_vHeader->sectionPos(track);
     int x = m_hHeader->sectionPos(startBar);
 
-    SegmentItem *newItem = m_segmentsCanvas->addPartItem(x, y, barCount);
+    SegmentItem *newItem = m_segmentCanvas->addPartItem(x, y, barCount);
     newItem->setSegment(segment);
 
     emit needUpdate();
@@ -326,10 +289,6 @@ void TrackEditor::updateSegmentTrackAndStartIndex(SegmentItem *i)
 
     m_document->documentModified();
 
-/*!!!
-    i->setTrack(track);
-    i->getSegment()->setStartIndex(startIndex);
-*/
 }
 
 
@@ -351,33 +310,34 @@ void TrackEditor::updateSegmentOrder()
 
 void TrackEditor::clear()
 {
-    m_segmentsCanvas->clear();
+    m_segmentCanvas->clear();
 }
 
 
-void TrackEditor::setupHorizontalHeader()
+void TrackEditor::setupHorizontalHeader(int firstBar, int lastBar)
 {
     QString num;
-
     Composition &comp = m_document->getComposition();
+    m_hHeader = new QHeader(lastBar - firstBar + 1, this);
 
-    for (int i = 0; i < m_hHeader->count(); ++i) {
+    int x = 0;
 
-	std::pair<timeT, timeT> times = comp.getBarRange(i, false);
+    for (int i = firstBar; i <= lastBar; ++i) {
 
-        // Get bar width according to resolution
-        //
-	int width = (times.second - times.first) /
-                    (Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration()
-                      / 20);
+	// The (i < lastBar) case resynchronises against the absolute
+	// bar position at each stage so as to avoid gradually increasing
+	// error through integer rounding
 
-	if (width == 0) width = 10;
-        m_hHeader->resizeSection(i, width);
+	int width;
+	if (i < lastBar) {
+	    width = (int)(m_rulerScale->getBarPosition(i+1) - (double)x);
+	    x += width;
+	} else {
+	    width = (int)(m_rulerScale->getBarWidth(i));
+	}
 
-	//!!! ??? I guess this is related to the bar resolution of the
-	//trackscanvas?? ... and in any case bar numbers should
-	//probably be 1-based
-        m_hHeader->setLabel(i, num.setNum(i));
+	m_hHeader->resizeSection(i - firstBar, width);
+        m_hHeader->setLabel(i - firstBar, num.setNum(i));
     }
 }
 
@@ -390,35 +350,13 @@ TrackEditor::setPointerPosition(Rosegarden::timeT position)
 //    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: time is " << position << endl;
     if (!m_pointer) return;
 
-    Composition &comp = m_document->getComposition();
-
-    int barNo = comp.getBarNumber(position, false);
-
-    // no, no good beyond end of piece:
-//    pair<timeT, timeT> times = comp.getBarRange(position);
-
-    pair<timeT, timeT> times = comp.getBarRange(barNo, false);
-
-    int canvasPosition = m_hHeader->sectionPos(barNo);
-
-//    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: canvas pos is " << canvasPosition << "; range is (" << times.first << "," << times.second << "); barno is " << barNo << "; section size is " << m_hHeader->sectionSize(barNo) << endl;
-
-    if (times.first != times.second) {
-	canvasPosition +=
-	    m_hHeader->sectionSize(barNo) * (position - times.first) /
-	    (times.second - times.first);
-    }
-
-//    kdDebug(KDEBUG_AREA) << "TrackEditor::setPointerPosition: canvas pos is now " << canvasPosition << endl;
-
-    //??? I'm having to do the distance check because it seems to be
-    //lagging otherwise -- not quite sure why
-
+    double canvasPosition = m_rulerScale->getXForTime(position);
     double distance = (double)canvasPosition - m_pointer->x();
+
     if (distance < 0.0) distance = -distance;
     if (distance >= 1.0) {
-	m_pointer->setX(canvasPosition);
 
+	m_pointer->setX(canvasPosition);
         emit scrollHorizTo(canvasPosition);
 	emit needUpdate();
     }
@@ -427,13 +365,13 @@ TrackEditor::setPointerPosition(Rosegarden::timeT position)
 void
 TrackEditor::setSelectAdd(bool value)
 {
-    m_segmentsCanvas->setSelectAdd(value);
+    m_segmentCanvas->setSelectAdd(value);
 }
 
 void
 TrackEditor::setSelectCopy(bool value)
 {
-     m_segmentsCanvas->setSelectCopy(value);
+     m_segmentCanvas->setSelectCopy(value);
 }
 
 
@@ -455,7 +393,7 @@ TrackEditor::addSegmentItem(Rosegarden::Segment *segment)
     int y = m_vHeader->sectionPos(segment->getTrack());
     int x = m_hHeader->sectionPos(startBar);
 
-    SegmentItem *newItem = m_segmentsCanvas->addPartItem(x, y, barCount);
+    SegmentItem *newItem = m_segmentCanvas->addPartItem(x, y, barCount);
     newItem->setSegment(segment);
 
     emit needUpdate();

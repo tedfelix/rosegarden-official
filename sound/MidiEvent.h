@@ -98,7 +98,7 @@ public:
 
 private:
 
-    MidiEvent& operator=(const MidiEvent mE) {;}
+    MidiEvent& operator=(const MidiEvent);
 
     unsigned int m_deltaTime;
     unsigned int m_duration;

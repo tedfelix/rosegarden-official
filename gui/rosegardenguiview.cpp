@@ -49,21 +49,23 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 {
     RosegardenGUIDoc* doc = getDocument();
 
-    // Construct the tracksEditor first so we can then
+    // This apparently arbitrary figure is what we think is an
+    // appropriate width in pixels for a 4/4 bar.  Beware of making it
+    // too narrow, as shorter bars will be proportionally smaller --
+    // the visual difference between 2/4 and 4/4 is perhaps greater
+    // than it sounds.
+
+    double barWidth44 = 100.0;  // so random, so rare
+    double unitsPerPixel =
+	Rosegarden::TimeSignature(4, 4).getBarDuration() / barWidth44;
+
+    m_rulerScale = new SimpleRulerScale
+	(&doc->getComposition(), 0, unitsPerPixel);
+    
+    // Construct the trackEditor first so we can then
     // query it for placement information
     //
-    TrackEditor *tracksEditor = 0;
-    
-    if (doc) {
-
-        kdDebug(KDEBUG_AREA) << "RosegardenGUIView() : doc != 0\n";
-        tracksEditor = new TrackEditor(doc, this);
-
-    } else {
-
-        kdDebug(KDEBUG_AREA) << "RosegardenGUIView() : no doc\n";
-        tracksEditor = new TrackEditor(12, 50, this);
-    }
+    TrackEditor *trackEditor = new TrackEditor(doc, m_rulerScale, this);
 
     // --------------- create the bar buttons ----------------
     //
@@ -82,8 +84,8 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 
     topBox->setSpacing(0);
     topBox->setMargin(0);
-    topSplit->setMinimumHeight(tracksEditor->getVHeader()->sectionSize(0));
-    topSplit->setMaximumHeight(tracksEditor->getVHeader()->sectionSize(0));
+    topSplit->setMinimumHeight(trackEditor->getVHeader()->sectionSize(0));
+    topSplit->setMaximumHeight(trackEditor->getVHeader()->sectionSize(0));
     topSplit->setSpacing(0);
     topSplit->setMargin(0);
     topSplit->setFrameStyle(Plain);
@@ -91,34 +93,18 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     QLabel *label = new QLabel(topSplit);
     label->setMinimumWidth(trackLabelWidth);
     label->setMaximumWidth(trackLabelWidth);
-    label->setMinimumHeight(tracksEditor->getVHeader()->sectionSize(0));
-    label->setMaximumHeight(tracksEditor->getVHeader()->sectionSize(0));
+    label->setMinimumHeight(trackEditor->getVHeader()->sectionSize(0));
+    label->setMaximumHeight(trackEditor->getVHeader()->sectionSize(0));
 
     QScrollView *barButtonsView = new QScrollView(topSplit);
 
     barButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
     barButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
 
-/*!!!
-    BarButtons *barButtons = new BarButtons(doc,
-                                            tracksEditor->getHHeader()->sectionSize(0),
-                                            tracksEditor->getVHeader()->sectionSize(0),
-                                            barButtonsView);
-*/
-
-    // we assume the hheader has a size judged to be appropriate for a
-    // 4/4 bar -- not sure why we should, but we do
-
-    double unitsPerPixel = Rosegarden::TimeSignature(4, 4).getBarDuration() /
-	tracksEditor->getHHeader()->sectionSize(0);
-
-    m_rulerScale = new SimpleRulerScale(&doc->getComposition(),
-					0, unitsPerPixel);
-
     BarButtons *barButtons = new BarButtons
 	(doc,
 	 m_rulerScale,
-	 tracksEditor->getHHeader()->sectionSize(0),
+	 trackEditor->getVHeader()->sectionSize(0),
 	 barButtonsView);
 
     // set a plain frame for the scrollview
@@ -127,9 +113,9 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     barButtons->setFrameStyle(Plain);
 
     barButtonsView->
-        setMinimumHeight(tracksEditor->getVHeader()->sectionSize(0));
+        setMinimumHeight(trackEditor->getVHeader()->sectionSize(0));
     barButtonsView->
-        setMaximumHeight(tracksEditor->getVHeader()->sectionSize(0));
+        setMaximumHeight(trackEditor->getVHeader()->sectionSize(0));
 
     barButtonsView->addChild(barButtons);
 
@@ -157,8 +143,8 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     QScrollView *trackButtonsView = new QScrollView(mainPane);
     TrackButtons *trackButtons = new TrackButtons(doc,
                                                   trackButtonsView,
-                                                  tracksEditor->getVHeader(),
-                                                  tracksEditor->getHHeader(),
+                                                  trackEditor->getVHeader(),
+                                                  trackEditor->getHHeader(),
                                                   trackLabelWidth);
     trackButtonsView->addChild(trackButtons);
     trackButtonsView->setFrameStyle(Plain);
@@ -168,10 +154,10 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
                                      SLOT(selectTrackSegments(int)));
 
     connect(this,         SIGNAL(signalSetSelectAdd(bool)), 
-            tracksEditor, SLOT(setSelectAdd(bool)));
+            trackEditor, SLOT(setSelectAdd(bool)));
             
     connect(this,         SIGNAL(signalSetSelectCopy(bool)), 
-            tracksEditor, SLOT(setSelectCopy(bool)));
+            trackEditor, SLOT(setSelectCopy(bool)));
             
     connect(this,       SIGNAL(signalSetTrackMeter(double, int)),
             trackButtons, SLOT(setTrackMeter(double, int)));
@@ -200,35 +186,35 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 
 
 
-    m_trackEditorScrollView->addChild(tracksEditor);
+    m_trackEditorScrollView->addChild(trackEditor);
 
-    connect(tracksEditor->canvas(), SIGNAL(editSegmentNotation(Rosegarden::Segment*)),
+    connect(trackEditor->canvas(), SIGNAL(editSegmentNotation(Rosegarden::Segment*)),
             SLOT(editSegmentNotation(Rosegarden::Segment*)));
 
-    connect(tracksEditor->canvas(), SIGNAL(editSegmentMatrix(Rosegarden::Segment*)),
+    connect(trackEditor->canvas(), SIGNAL(editSegmentMatrix(Rosegarden::Segment*)),
             SLOT(editSegmentMatrix(Rosegarden::Segment*)));
 
-    connect(tracksEditor->canvas(), SIGNAL(editSegmentAudio(Rosegarden::Segment*)),
+    connect(trackEditor->canvas(), SIGNAL(editSegmentAudio(Rosegarden::Segment*)),
             SLOT(editSegmentAudio(Rosegarden::Segment*)));
 
 
-    connect(tracksEditor,  SIGNAL(createNewSegment(SegmentItem*,int)),
+    connect(trackEditor,  SIGNAL(createNewSegment(SegmentItem*,int)),
             getDocument(), SLOT  (createNewSegment(SegmentItem*,int)));
 
-    connect(tracksEditor,  SIGNAL(scrollHorizTo(int)),
+    connect(trackEditor,  SIGNAL(scrollHorizTo(int)),
             SLOT(scrollTrackEditorHoriz(int)));
 
     connect(this,                   SIGNAL(setTool(SegmentCanvas::ToolType)),
-            tracksEditor->canvas(), SLOT  (setTool(SegmentCanvas::ToolType)));
+            trackEditor->canvas(), SLOT  (setTool(SegmentCanvas::ToolType)));
 
     connect(this,          SIGNAL(setCanvasPositionPointer(Rosegarden::timeT)),
-            tracksEditor,  SLOT(setPointerPosition(Rosegarden::timeT)));
+            trackEditor,  SLOT(setPointerPosition(Rosegarden::timeT)));
 
     connect(this, SIGNAL(selectSegments(list<Rosegarden::Segment*>)),
-            tracksEditor->canvas(), SLOT(selectSegments(list<Rosegarden::Segment*>)));
+            trackEditor->canvas(), SLOT(selectSegments(list<Rosegarden::Segment*>)));
 
     connect(this,         SIGNAL(addSegmentItem(Rosegarden::Segment*)),
-            tracksEditor, SLOT(addSegmentItem(Rosegarden::Segment*)));
+            trackEditor, SLOT(addSegmentItem(Rosegarden::Segment*)));
 
     // Connections upwards from LoopRuler - re-emission of signals
     //
@@ -242,7 +228,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
             this,       SIGNAL(setGUILoop(Rosegarden::timeT, Rosegarden::timeT)));
 
     if (doc)
-        tracksEditor->setupSegments();
+        trackEditor->setupSegments();
 }
 
 

@@ -36,6 +36,7 @@ namespace Rosegarden { class Segment; }
 class SegmentItem;
 class SegmentCanvas;
 class RosegardenGUIDoc;
+class RulerScale;
 
 /**
  * Global widget for segment edition.
@@ -53,21 +54,9 @@ public:
      * Create a new TrackEditor representing the document \a doc
      */
     TrackEditor(RosegardenGUIDoc* doc,
-                 QWidget* parent = 0, const char* name = 0,
-                 WFlags f=0);
-
-    /**
-     * Create a new empty TrackEditor 
-     *
-     * The TrackEditor will have \a nbTracks available segments, and
-     * ( \a nbBars * time resolution ) time steps.
-     *
-     * @see setTimeStepsResolution()
-     */
-    TrackEditor(unsigned int nbTracks,
-                 unsigned int nbBars,
-                 QWidget* parent = 0, const char* name = 0,
-                 WFlags f=0);
+		RulerScale *rulerScale,
+		QWidget* parent = 0, const char* name = 0,
+		WFlags f=0);
 
     /// Clear the SegmentCanvas
     void clear();
@@ -78,8 +67,8 @@ public:
      */
     void updateSegmentOrder();
 
-    SegmentCanvas*       canvas()       { return m_segmentsCanvas; }
-    const SegmentCanvas* canvas() const { return m_segmentsCanvas; }
+    SegmentCanvas*       canvas()       { return m_segmentCanvas; }
+    const SegmentCanvas* canvas() const { return m_segmentCanvas; }
 
     /**
      * Must be called after construction and signal connection
@@ -161,14 +150,15 @@ signals:
 
 protected:
 
-    void init(unsigned int nbTracks, unsigned int nbBars);
-    void setupHorizontalHeader();
+    void init(unsigned int nbTracks, int firstBar, int lastBar);
+    void setupHorizontalHeader(int firstBar, int lastBar);
 
     //--------------- Data members ---------------------------------
 
     RosegardenGUIDoc* m_document;
+    RulerScale *m_rulerScale;
 
-    SegmentCanvas *m_segmentsCanvas;
+    SegmentCanvas *m_segmentCanvas;
     QHeader *m_hHeader;
     Rosegarden::TrackHeader *m_vHeader;
 

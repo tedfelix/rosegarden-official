@@ -55,7 +55,6 @@ public:
 
     virtual void paintEvent(QPaintEvent*);
 
-//!!!    void calculateBarDivisions();
     void calculateExtents();
 
 public slots:
@@ -88,11 +87,6 @@ signals:
 private:
     void drawBarSections(QPainter*);
     void drawLoopMarker(QPainter*);  // between loop positions
-
-    // Get drawing position from pointer position and vice versa
-    //
-//!!!    int getXPosition(Rosegarden::timeT pos);
-//!!!    Rosegarden::timeT getPointerPosition(int xPos);
 
     int m_height;
     int m_snap;            // snap the loop to the nearest
