@@ -32,7 +32,7 @@ public:
     NotationVLayout(Staff&);
 
 protected:
-    virtual void layout(NotationElementList::iterator&);
+    virtual void layout(NotationElement*);
 
     Staff &m_staff;
 };

@@ -199,23 +199,23 @@ NotationView::setupActions()
 
 bool
 NotationView::showElements(NotationElementList::iterator from,
-                                NotationElementList::iterator to)
+                           NotationElementList::iterator to)
 {
     return showElements(from, to, 0, 0);
 }
 
 bool
 NotationView::showElements(NotationElementList::iterator from,
-                                NotationElementList::iterator to,
-                                QCanvasItem *item)
+                           NotationElementList::iterator to,
+                           QCanvasItem *item)
 {
     return showElements(from, to, item->x(), item->y());
 }
 
 bool
 NotationView::showElements(NotationElementList::iterator from,
-                                NotationElementList::iterator to,
-                                double dxoffset, double dyoffset)
+                           NotationElementList::iterator to,
+                           double dxoffset, double dyoffset)
 {
     static ChordPixmapFactory npf(*m_mainStaff);
 
@@ -277,7 +277,7 @@ NotationView::applyHorizontalLayout()
 
     for (NotationElementList::iterator i = m_notationElements->begin();
          i != m_notationElements->end(); ++i)
-        (*m_hlayout)(i);
+        (*m_hlayout)(*i);
 
     return m_hlayout->status();
 }
@@ -293,7 +293,7 @@ NotationView::applyVerticalLayout()
 
     for (NotationElementList::iterator i = m_notationElements->begin();
          i != m_notationElements->end(); ++i)
-        (*m_vlayout)(i);
+        (*m_vlayout)(*i);
     
     return m_vlayout->status();
 }
@@ -442,6 +442,25 @@ void
 NotationView::insertNote(int pitch, QMouseEvent *e)
 {
     // create new event and notation element, lay it out, insert it
+    Event *insertedEvent = new Event;
+
+    insertedEvent->setDuration(m_hlayout->quantizer().noteDuration(m_currentSelectedNote));
+    insertedEvent->set<Int>("pitch", pitch);
+
+    NotationElement *notationElement = new NotationElement(insertedEvent);
+
+    notationElement->event()->set<Int>("Notation::NoteType", m_currentSelectedNote);
+
+    notationElement->setX(e->x());
+    NotationElementList::iterator insertPosition = m_hlayout->insertNote(notationElement);
+
+    m_notationElements->insert(insertPosition, notationElement);
+
+    (*m_vlayout)(notationElement);
+    // (*m_hlayout)(notationElement);
+
+    //showElements(insertPosition, insertPosition, m_currentStaff);
+    showElements(m_notationElements->begin(), m_notationElements->end(), m_currentStaff);
 }
 
 
