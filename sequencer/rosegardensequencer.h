@@ -70,15 +70,18 @@ protected:
 public slots:
     virtual void quit();
 
+    // start the sequencer
+    //
     // DCOP doesn't currently like to stream bools so we have to
-    // use ints for the return types of these slots.  This is
-    // the GUI level control interface for the Sequencer.
+    // use ints for the return types of these slots.
     //
     virtual int play(const Rosegarden::timeT &position,
                      const Rosegarden::timeT &playLatency,
                      const Rosegarden::timeT &fetchLatency,
                      const double &tempo);
-    virtual int stop();
+    // stops the sequencer
+    //
+    virtual void stop();
 
     // Any sudden moves
     virtual void jumpTo(const Rosegarden::timeT &position);

@@ -829,262 +829,275 @@ void RosegardenGUIApp::changeTimeResolution()
     
 }
 
-// Called from the Sequencer - gets the next slice of events
+// This method is called from the Sequencer when it's playing.
+// It's a request to get the next slice of events for the
+// Sequencer to play.
+//
 //
 const Rosegarden::MappedComposition&
 RosegardenGUIApp::getSequencerSlice(const Rosegarden::timeT &sliceStart,
                                     const Rosegarden::timeT &sliceEnd)
 {
+    // [rwb] - moved this code in here from MappedComposition
+    //         to reduce playback latency
+    // This means we use a static MappedComposition locally rather
+    // than continually creating and throwing away them using
+    // the previous code:
+    //
+    //
+    // mappComp = new Rosegarden::MappedComposition(m_doc->getComposition(),
+    //                                              sliceStart, sliceEnd);
+    //
+    //
 
-  // [rwb] - moved this code in here from MappedComposition
-  //         to reduce playback latency
-  // This means we use a static MappedComposition locally rather
-  // than continually creating and throwing away them using
-  // the previous code:
-  //
-  //
-  // mappComp = new Rosegarden::MappedComposition(m_doc->getComposition(),
-  //                                              sliceStart, sliceEnd);
-  //
-  //
+    mappComp.clear();
 
-  mappComp.clear();
-  mappComp.setStartTime(sliceStart);
-  mappComp.setEndTime(sliceEnd);
+    // if we're closing then return no events
+    //
+    if (m_transportStatus == STOPPING)
+      return mappComp;
+  
+    mappComp.setStartTime(sliceStart);
+    mappComp.setEndTime(sliceEnd);
 
-  Rosegarden::timeT eventTime;
-
-  for (Rosegarden::Composition::iterator i = m_doc->getComposition().begin();
+    Rosegarden::timeT eventTime;
+  
+    for (Rosegarden::Composition::iterator i = m_doc->getComposition().begin();
                              i != m_doc->getComposition().end(); i++ )
-  {
-    // Skip the Track if it starts too late to be of
-    // interest to our slice.
-    if ( (*i)->getStartIndex() > sliceEnd )
-      continue;
-
-    Rosegarden::TrackPerformanceHelper helper(**i);
-
-    for ( Rosegarden::Track::iterator j = (*i)->begin(); j != (*i)->end(); j++ )
     {
-      // for the moment ensure we're all positive
-      assert((*j)->getAbsoluteTime() >= 0 );
+        // Skip the Track if it starts too late to be of
+        // interest to our slice.
+        if ( (*i)->getStartIndex() > sliceEnd )
+            continue;
 
-      // Skip this event if it isn't a note
-      //
-      if (!(*j)->isa(Rosegarden::Note::EventType))
-        continue;
+        Rosegarden::TrackPerformanceHelper helper(**i);
 
-      // Find the performance duration, i.e. taking into account any
-      // ties etc that this note may have  --cc
-      // 
-      timeT duration = helper.getSoundingDuration(j);
+        for ( Rosegarden::Track::iterator j = (*i)->begin();
+                                          j != (*i)->end(); j++ )
+        {
+            // for the moment ensure we're all positive
+            assert((*j)->getAbsoluteTime() >= 0 );
 
-      if (duration == 0) // probably in a tied series, but not as first note
-        continue;
+            // Skip this event if it isn't a note
+            //
+            if (!(*j)->isa(Rosegarden::Note::EventType))
+                continue;
 
-      // get the eventTime
-      eventTime = (unsigned int) (*j)->getAbsoluteTime();
+            // Find the performance duration, i.e. taking into account any
+            // ties etc that this note may have  --cc
+            // 
+            timeT duration = helper.getSoundingDuration(j);
 
-      // As events are stored chronologically we can escape if
-      // we're already beyond our event horizon for this slice.
-      //
-      if ( eventTime > sliceEnd )
-        break;
+            // probably in a tied series, but not as first note
+            if (duration == 0)
+                continue;
 
-      // Eliminate events before our required time
-      if ( eventTime >= sliceStart && eventTime <= sliceEnd)
-      {
-        // insert event
-        Rosegarden::MappedEvent *me = new Rosegarden::MappedEvent(**j, duration);
-        me->setInstrument((*i)->getInstrument());
-        mappComp.insert(me);
-      }
+            // get the eventTime
+            eventTime = (unsigned int) (*j)->getAbsoluteTime();
+
+            // As events are stored chronologically we can escape if
+            // we're already beyond our event horizon for this slice.
+            //
+            if ( eventTime > sliceEnd )
+                break;
+
+            // Eliminate events before our required time
+            if ( eventTime >= sliceStart && eventTime <= sliceEnd)
+            {
+                // insert event
+                Rosegarden::MappedEvent *me =
+                                  new Rosegarden::MappedEvent(**j, duration);
+                me->setInstrument((*i)->getInstrument());
+                mappComp.insert(me);
+            }
+        }
     }
-  }
 
-  return mappComp;
+    return mappComp;
 }
 
 
 void RosegardenGUIApp::importMIDI()
 {
-  KURL url = KFileDialog::getOpenURL(QString::null, "*.mid", this,
+    KURL url = KFileDialog::getOpenURL(QString::null, "*.mid", this,
                                      i18n("Open MIDI File"));
-  if (url.isEmpty()) { return; }
+    if (url.isEmpty()) { return; }
 
-  QString tmpfile;
-  KIO::NetAccess::download(url, tmpfile);
-  importMIDIFile(tmpfile);
+    QString tmpfile;
+    KIO::NetAccess::download(url, tmpfile);
+    importMIDIFile(tmpfile);
   
-  KIO::NetAccess::removeTempFile( tmpfile );
+    KIO::NetAccess::removeTempFile( tmpfile );
 }
 
 void RosegardenGUIApp::importMIDIFile(const QString &file)
 {
-  Rosegarden::MidiFile *midiFile;
+    Rosegarden::MidiFile *midiFile;
 
-  midiFile = new Rosegarden::MidiFile(file.data());
+    midiFile = new Rosegarden::MidiFile(file.data());
 
-  if (!midiFile->open())
-  {
-    KMessageBox::error(this,
-      i18n("Couldn't understand MIDI file.\nIt might be corrupted."));
-    return;
-  }
+    if (!midiFile->open())
+    {
+        KMessageBox::error(this,
+          i18n("Couldn't understand MIDI file.\nIt might be corrupted."));
+        return;
+    }
 
-  // Stop if playing
-  //
-  if (m_transportStatus == PLAYING)
-    stop();
+    // Stop if playing
+    //
+    if (m_transportStatus == PLAYING)
+        stop();
 
-  m_doc->closeDocument();
+    m_doc->closeDocument();
 
-  m_doc->newDocument();
+    m_doc->newDocument();
 
-  Rosegarden::Composition *tmpComp = midiFile->convertToRosegarden();
+    Rosegarden::Composition *tmpComp = midiFile->convertToRosegarden();
 
-  m_doc->getComposition().swap(*tmpComp);
+    m_doc->getComposition().swap(*tmpComp);
 
-  delete tmpComp;
+    delete tmpComp;
 
-  // Set modification flag
-  //
-  m_doc->setModified();
+    // Set modification flag
+    //
+    m_doc->setModified();
 
-  initView();
-
+    initView();
 }
 
 void RosegardenGUIApp::importRG21()
 {
-  KURL url = KFileDialog::getOpenURL(QString::null, "*.rose", this,
-                                     i18n("Open Rosegarden 2.1 File"));
-  if (url.isEmpty()) { return; }
+    KURL url = KFileDialog::getOpenURL(QString::null, "*.rose", this,
+                                       i18n("Open Rosegarden 2.1 File"));
+    if (url.isEmpty()) { return; }
 
-  QString tmpfile;
-  KIO::NetAccess::download(url, tmpfile);
+    QString tmpfile;
+    KIO::NetAccess::download(url, tmpfile);
 
-  // Stop if playing
-  //
-  if (m_transportStatus == PLAYING)
-    stop();
+    // Stop if playing
+    //
+    if (m_transportStatus == PLAYING)
+        stop();
     
-  importRG21File(tmpfile);
+    importRG21File(tmpfile);
 
-  KIO::NetAccess::removeTempFile(tmpfile);
+    KIO::NetAccess::removeTempFile(tmpfile);
 }
 
 void RosegardenGUIApp::importRG21File(const QString &file)
 {
-  RG21Loader rg21Loader(file);
+    RG21Loader rg21Loader(file);
 
-  m_doc->closeDocument();
-  m_doc->newDocument();
-  Rosegarden::Composition *tmpComp = rg21Loader.getComposition();
+    m_doc->closeDocument();
+    m_doc->newDocument();
+    Rosegarden::Composition *tmpComp = rg21Loader.getComposition();
 
-  m_doc->getComposition().swap(*tmpComp);
+    m_doc->getComposition().swap(*tmpComp);
 
-  delete tmpComp;
+    delete tmpComp;
 
-  // Set modification flag
-  //
-  m_doc->setModified();
+    // Set modification flag
+    //
+    m_doc->setModified();
 
-  initView();
+    initView();
 }
 
 void RosegardenGUIApp::setPointerPosition(const int &position)
 {
-  // We do this the lazily dangerous way of setting Composition
-  // time and then gui time - we should probably make this
-  // an atomic operation with observers or something to make
-  // it nice and encapsulated but as long as we only use this
-  // modifier method for changing composition time we can probably
-  // get away with it.
+    // We do this the lazily dangerous way of setting Composition
+    // time and then gui time - we should probably make this
+    // an atomic operation with observers or something to make
+    // it nice and encapsulated but as long as we only use this
+    // modifier method for changing composition time we can probably
+    // get away with it.
 
-  // set the composition time
-  m_doc->getComposition().setPosition((timeT) position);
+    // set the composition time
+    m_doc->getComposition().setPosition((timeT) position);
 
-  // and the gui time
-  m_view->setPointerPosition(position);
+    // and the gui time
+    m_view->setPointerPosition(position);
 
-  // and the time (well, position for the moment)
-  //
-  m_transport->displayTime(position);
+    // and the time (well, position for the moment)
+    //
+    m_transport->displayTime(position);
 }
 
 void RosegardenGUIApp::play()
 {
-  QByteArray data;
-  QCString replyType;
-  QByteArray replyData;
 
-  if (m_transportStatus == PLAYING)
-    return;
-
-  if (!m_sequencerProcess && !launchSequencer())
+    QByteArray data;
+    QCString replyType;
+    QByteArray replyData;
+  
+    if (m_transportStatus == PLAYING)
       return;
 
-  // make sure we toggle the play button
-  // 
-  if (m_transport->PlayButton->state() == QButton::Off)
-    m_transport->PlayButton->toggle();
+    if (!m_sequencerProcess && !launchSequencer())
+        return;
 
-  // write the start position argument to the outgoing stream
-  //
-  QDataStream streamOut(data, IO_WriteOnly);
+    // make sure we toggle the play button
+    // 
+    if (m_transport->PlayButton->state() == QButton::Off)
+        m_transport->PlayButton->toggle();
 
-  if (m_doc->getComposition().getTempo() == 0)
-  {
-    cout << "RosegardenGUIApp::play() - setting Tempo to Default value of 120.000" << endl;
-    m_doc->getComposition().setTempo(120.0);
-  }
-  else
-  {
-    cout << "RosegardenGUIApp::play() - playing at tempo " << 
-                m_doc->getComposition().getTempo() << endl;
-  }
+    // write the start position argument to the outgoing stream
+    //
+    QDataStream streamOut(data, IO_WriteOnly);
 
-  // set the tempo in the transport HERE for the moment
-  //
-  m_transport->setTempo(m_doc->getComposition().getTempo());
-
-  // The arguments we send to the sequencer
-  //
-  streamOut << m_doc->getComposition().getPosition(); // playback start position
-  streamOut << 30;                                    // playback latency
-  streamOut << 20;                                    // fetch latency
-  streamOut << m_doc->getComposition().getTempo();    // tempo
-
-  // Send Play to the Sequencer
-  if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                ROSEGARDEN_SEQUENCER_IFACE_NAME,
-       "play(Rosegarden::timeT, Rosegarden::timeT, Rosegarden::timeT, double)",
-                                data, replyType, replyData))
-  {
-    // failed - pop up and disable sequencer options
-    m_transportStatus = STOPPED;
-    KMessageBox::error(this,
-      i18n("Failed to contact RosegardenSequencer"));
-  }
-  else
-  {
-    // ensure the return type is ok
-    QDataStream streamIn(replyData, IO_ReadOnly);
-    int result;
-    streamIn >> result;
-
-    if (result)
+    if (m_doc->getComposition().getTempo() == 0)
     {
-      // completed successfully 
-      m_transportStatus = STARTING_TO_PLAY;
+      cout <<
+       "RosegardenGUIApp::play() - setting Tempo to Default value of 120.000"
+        << endl;
+      m_doc->getComposition().setTempo(120.0);
     }
     else
     {
-      m_transportStatus = STOPPED;
-      KMessageBox::error(this, i18n("Failed to start playback"));
+        cout << "RosegardenGUIApp::play() - playing at tempo " << 
+                  m_doc->getComposition().getTempo() << endl;
     }
-  }
+
+    // set the tempo in the transport HERE for the moment
+    //
+    m_transport->setTempo(m_doc->getComposition().getTempo());
+
+    // The arguments for the Sequencer
+    //
+    streamOut << m_doc->getComposition().getPosition(); // playback start position
+    streamOut << 30;                                    // playback latency
+    streamOut << 20;                                    // fetch latency
+    streamOut << m_doc->getComposition().getTempo();    // tempo
+
+    // Send Play to the Sequencer
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+         "play(Rosegarden::timeT, Rosegarden::timeT, Rosegarden::timeT, double)",
+                                  data, replyType, replyData))
+    {
+        // failed - pop up and disable sequencer options
+        m_transportStatus = STOPPED;
+        KMessageBox::error(this,
+          i18n("Failed to contact RosegardenSequencer"));
+    }
+    else
+    {
+        // ensure the return type is ok
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        int result;
+        streamIn >> result;
+  
+        if (result)
+        {
+            // completed successfully 
+            m_transportStatus = STARTING_TO_PLAY;
+        }
+        else
+        {
+            m_transportStatus = STOPPED;
+            KMessageBox::error(this, i18n("Failed to start playback"));
+        }
+    }
 
 }
 
@@ -1092,73 +1105,61 @@ void RosegardenGUIApp::play()
 // return to start of track
 void RosegardenGUIApp::stop()
 {
-  // Animate the stop button - this seems to get caught looping
-  // at the moment
-  //
-  // m_transport->StopButton->animateClick();
+    // Animate the stop button - this seems to get caught looping
+    // at the moment
+    //
+    // m_transport->StopButton->animateClick();
 
-  if (m_transportStatus == STOPPED)
-  {
-    setPointerPosition(0);
-    return;
-  }
-
-  // untoggle the play button
-  //
-  m_transport->PlayButton->toggle();
-  QByteArray data;
-  QCString replyType;
-  QByteArray replyData;
-
-  // Send a Stop to the Sequencer
-  if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                "stop()", data,
-                                replyType, replyData))
-  {
-    // failed - pop up and disable sequencer options
-    KMessageBox::error(this,
-      i18n("Failed to contact RosegardenSequencer"));
-  }
-  else
-  {
-    // ensure the return type is ok
-    QDataStream streamIn(replyData, IO_ReadOnly);
-    int result;
-    streamIn >> result;
-
-    if (!result)
+    if (m_transportStatus == STOPPED)
     {
-      KMessageBox::error(this, i18n("Failed to stop playback"));
+        setPointerPosition(0);
+        return;
     }
-  }
-  m_transportStatus = STOPPED;
+
+    // untoggle the play button
+    //
+    m_transport->PlayButton->toggle();
+    QByteArray data;
+
+    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "stop()", data))
+    {
+        // failed - pop up and disable sequencer options
+        KMessageBox::error(this,
+        i18n("Failed to contact RosegardenSequencer with \"Stop\" command"));
+    }
+
+    // this is just a send call (async) so we don't have any
+    // return type to check - we always assume it works
+    //
+    m_transportStatus = STOPPED;
 }
 
 // Jump to previous bar
 //
 void RosegardenGUIApp::rewind()
 {
-  double barNumber = ((double) m_doc->getComposition().getPosition())/
-                     ((double) m_doc->getComposition().getNbTicksPerBar());
-  int newBarNumber = (int) barNumber;
+    double barNumber = ((double) m_doc->getComposition().getPosition())/
+                       ((double) m_doc->getComposition().getNbTicksPerBar());
+    int newBarNumber = (int) barNumber;
 
-  if (barNumber < 1)
-    newBarNumber = 0;
-  else
+    if (barNumber < 1)
+        newBarNumber = 0;
+    else
     if (barNumber == (double) newBarNumber)
-      newBarNumber--;
+          newBarNumber--;
 
-  if ( m_transportStatus == PLAYING )
-  {
-    sendSequencerJump(newBarNumber *
-                         m_doc->getComposition().getNbTicksPerBar());
-  }
-  else
-  {
-    setPointerPosition(newBarNumber *
-                           m_doc->getComposition().getNbTicksPerBar());
-  }
+    if ( m_transportStatus == PLAYING )
+    {
+        sendSequencerJump(newBarNumber *
+                             m_doc->getComposition().getNbTicksPerBar());
+    }
+    else
+    {
+        setPointerPosition(newBarNumber *
+                               m_doc->getComposition().getNbTicksPerBar());
+    }
 }
 
 
@@ -1166,26 +1167,26 @@ void RosegardenGUIApp::rewind()
 //
 void RosegardenGUIApp::fastforward()
 {
-  double barNumber = ((double) m_doc->getComposition().getPosition())/
-                     ((double) m_doc->getComposition().getNbTicksPerBar());
-  int newBarNumber = (int) barNumber;
+    double barNumber = ((double) m_doc->getComposition().getPosition())/
+                       ((double) m_doc->getComposition().getNbTicksPerBar());
+    int newBarNumber = (int) barNumber;
 
-  // we need to work out where the trackseditor finishes so we
-  // don't skip beyond it.  Generally we need extra-Composition
-  // non-destructive start and end markers for the piece.
-  //
-  newBarNumber++;
+    // we need to work out where the trackseditor finishes so we
+    // don't skip beyond it.  Generally we need extra-Composition
+    // non-destructive start and end markers for the piece.
+    //
+    newBarNumber++;
 
-  if ( m_transportStatus == PLAYING )
-  {
-    sendSequencerJump(newBarNumber *
-                         m_doc->getComposition().getNbTicksPerBar());
-  }
-  else
-  {
-    setPointerPosition(newBarNumber * 
-                         m_doc->getComposition().getNbTicksPerBar());
-  }
+    if ( m_transportStatus == PLAYING )
+    {
+        sendSequencerJump(newBarNumber *
+                             m_doc->getComposition().getNbTicksPerBar());
+    }
+    else
+    {
+        setPointerPosition(newBarNumber * 
+                             m_doc->getComposition().getNbTicksPerBar());
+    }
 
 }
 
@@ -1200,28 +1201,28 @@ void RosegardenGUIApp::fastforward()
 //
 void RosegardenGUIApp::notifySequencerStatus(const int& status)
 {
-  // for the moment we don't do anything fancy
-  m_transportStatus = (TransportStatus) status;
+    // for the moment we don't do anything fancy
+    m_transportStatus = (TransportStatus) status;
 }
 
 
 void RosegardenGUIApp::sendSequencerJump(const Rosegarden::timeT &position)
 {
-  QByteArray data;
-  QDataStream streamOut(data, IO_WriteOnly);
-  streamOut << position;
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+    streamOut << position;
 
-  if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                "jumpTo(Rosegarden::timeT)",
-                                data))
-  {
-    // failed - pop up and disable sequencer options
-    m_transportStatus = STOPPED;
-    KMessageBox::error(this, i18n("Failed to contact RosegardenSequencer"));
-  }
+    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "jumpTo(Rosegarden::timeT)",
+                                  data))
+    {
+      // failed - pop up and disable sequencer options
+      m_transportStatus = STOPPED;
+      KMessageBox::error(this, i18n("Failed to contact RosegardenSequencer"));
+    }
 
-  return;
+    return;
 }
 
 void RosegardenGUIApp::editAllTracks()

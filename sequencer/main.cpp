@@ -60,29 +60,29 @@ int main(int argc, char *argv[])
 
 
     if (app.isRestored())
-        {
-            RESTORE(RosegardenSequencerApp);
-        }
+    {
+        RESTORE(RosegardenSequencerApp);
+    }
     else
-        {
-            roseSeq = new RosegardenSequencerApp();
+    {
+        roseSeq = new RosegardenSequencerApp();
 
-            // we don't show() the sequencer application as we're just taking
-            // advantage of DCOP/KApplication and there's nothing to show().
+        // we don't show() the sequencer application as we're just taking
+        // advantage of DCOP/KApplication and there's nothing to show().
 
-            KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
         
-            if (args->count())
-                {
-                    //rosegardensequencer->openDocumentFile(args->arg(0));
-                }
-            else
-                {
-                    // rosegardensequencer->openDocumentFile();
-                }
-
-            args->clear();
+        if (args->count())
+        {
+            //rosegardensequencer->openDocumentFile(args->arg(0));
         }
+        else
+        {
+            // rosegardensequencer->openDocumentFile();
+        }
+
+        args->clear();
+    }
 
     QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
     //app.dcopClient()->setDefaultObject("RosegardenGUIIface");
@@ -98,55 +98,55 @@ int main(int argc, char *argv[])
     TransportStatus lastSeqStatus = roseSeq->getStatus();
 
     while(roseSeq->getStatus() != QUIT)
-        {
-            // process any pending events (50ms of events)
-            app.processEvents(10);
+    {
+        // process any pending events (50ms of events)
+        app.processEvents(10);
 
-            // Update internal clock and send pointer position
-            // change event to GUI
-            if (roseSeq->getStatus() == PLAYING)
-                roseSeq->updateClocks();
+        // Update internal clock and send pointer position
+        // change event to GUI
+        if (roseSeq->getStatus() == PLAYING)
+            roseSeq->updateClocks();
 
-            if(roseSeq)
+        if(roseSeq)
+            {
+                switch(roseSeq->getStatus())
                 {
-                    switch(roseSeq->getStatus())
+                    case STARTING_TO_PLAY:
+                        if (!roseSeq->startPlaying())
                         {
-                        case STARTING_TO_PLAY:
-                            if (!roseSeq->startPlaying())
-                                {
-                                    // send result failed and stop Sequencer
-                                    roseSeq->setStatus(STOPPING);
-                                }
-                            else
-                                {
-                                    roseSeq->setStatus(PLAYING);
-                                }
-                            break;
+                            // send result failed and stop Sequencer
+                            roseSeq->setStatus(STOPPING);
+                        }
+                        else
+                        {
+                            roseSeq->setStatus(PLAYING);
+                        }
+                        break;
 
                         case PLAYING:
-                            if (!roseSeq->keepPlaying())
-                                {
-                                    // there's a problem or the piece has finished
-                                    // so stop playing
-                                    roseSeq->setStatus(STOPPING);
-                                }
-                            break;
-
-                        case STOPPING:
-                            roseSeq->setStatus(STOPPED);
-                            break;
-
-                        case STOPPED:
-                        default:
-                            break;
+                        if (!roseSeq->keepPlaying())
+                        {
+                            // there's a problem or the piece has
+                            // finished - so stop playing
+                            roseSeq->setStatus(STOPPING);
                         }
+                        break;
+
+                    case STOPPING:
+                        roseSeq->setStatus(STOPPED);
+                        break;
+
+                    case STOPPED:
+                    default:
+                        break;
                 }
+            }
 
-            if (lastSeqStatus != roseSeq->getStatus())
-                roseSeq->notifySequencerStatus();
+        if (lastSeqStatus != roseSeq->getStatus())
+            roseSeq->notifySequencerStatus();
 
-            lastSeqStatus = roseSeq->getStatus();
-        }
+        lastSeqStatus = roseSeq->getStatus();
+    }
 
     return app.exec();
 

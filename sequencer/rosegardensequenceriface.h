@@ -36,7 +36,7 @@ public:
                      const Rosegarden::timeT &fetchLatency,
                      const double &tempo) = 0;
     virtual void jumpTo(const Rosegarden::timeT &position) = 0;
-    virtual int stop() = 0;
+    virtual void stop() = 0;
 };
 
 #endif // _ROSEGARDENSEQUENCERIFACE_H_

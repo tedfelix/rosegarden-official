@@ -120,24 +120,23 @@ RosegardenSequencerApp::play(const Rosegarden::timeT &position,
     return true;
 }
 
-// DCOP wants us to use an int as a return type instead of a bool
+// We just "send" to this - no call (removed post 0.1
+// to prevent hangs)
 //
-int
+void
 RosegardenSequencerApp::stop()
 {
-    // process pending NOTE OFFs and stop the Sequencer
-    m_sequencer->stopPlayback();
-
     // set our state at this level to STOPPING (pending any
     // unfinished NOTES)
     m_transportStatus = STOPPING;
+
+    // process pending NOTE OFFs and stop the Sequencer
+    m_sequencer->stopPlayback();
 
     // the Sequencer doesn't need to know these once
     // we've stopped
     m_songPosition = 0;
     m_lastFetchSongPosition = 0;
-
-    return true;
 }
 
 
@@ -148,6 +147,15 @@ Rosegarden::MappedComposition*
 RosegardenSequencerApp::fetchEvents(const Rosegarden::timeT &start,
                                     const Rosegarden::timeT &end)
 {
+
+    // Always return an empty fetch if we're stopping or stopped
+    //
+    if ( m_transportStatus == STOPPED || m_transportStatus == STOPPING )
+    {
+      mappedComp->clear();
+      return mappedComp;
+    }
+
     QByteArray data, replyData;
     QCString replyType;
     QDataStream arg(data, IO_WriteOnly);

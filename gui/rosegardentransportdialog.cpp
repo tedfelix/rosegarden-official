@@ -27,6 +27,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
+#include <qlineedit.h>
 
 namespace Rosegarden
 {
@@ -188,7 +189,7 @@ void
 RosegardenTransportDialog::setTempo(const double &tempo)
 {
   m_tempo = tempo;
-  TempoSpinBox->setValue(tempo);
+  TempoLineEdit->setText(QString("%1").arg(tempo));
 }
 
 
