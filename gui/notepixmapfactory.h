@@ -48,6 +48,8 @@ public:
     void setAccidental(Rosegarden::Accidental acc) { m_accidental = acc; }
     
     void setNoteHeadShifted(bool shifted) { m_shifted          = shifted;   }
+    void setAccidentalShift(int shift)    { m_accidentalShift  = shift;     }
+    void setAccExtraShift(bool extra)     { m_accidentalExtra  = extra;     }
     void setDrawFlag(bool df)             { m_drawFlag         = df;        }
     void setDrawStem(bool ds)             { m_drawStem         = ds;        }
     void setStemGoesUp(bool up)           { m_stemGoesUp       = up;        }
@@ -92,6 +94,8 @@ private:
     Rosegarden::Accidental m_accidental;
 
     bool    m_shifted;
+    int     m_accidentalShift;
+    bool    m_accidentalExtra;
     bool    m_drawFlag;
     bool    m_drawStem;
     bool    m_stemGoesUp;
@@ -194,7 +198,8 @@ public:
     int getNoteBodyHeight(Rosegarden::Note::Type =
                           Rosegarden::Note::Crotchet) const;
 
-    int getAccidentalWidth (const Rosegarden::Accidental &) const;
+    int getAccidentalWidth (const Rosegarden::Accidental &,
+			    int shift = 0, bool extra = false) const;
     int getAccidentalHeight(const Rosegarden::Accidental &) const;
 
     int getLineSpacing()        const;
@@ -241,7 +246,7 @@ protected:
 
     int getStemLength(const NotePixmapParameters &) const;
 
-    void makeRoomForAccidental(Rosegarden::Accidental);
+    void makeRoomForAccidental(Rosegarden::Accidental, int shift, bool extra);
     void drawAccidental(Rosegarden::Accidental);
 
     void makeRoomForMarks(bool isStemmed, const NotePixmapParameters &params);

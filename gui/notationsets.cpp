@@ -214,9 +214,22 @@ NotationChord::applyAccidentalShiftProperties()
     //
     // These rules aren't really enough, but they might do for now!
 
+    //!!! Uh-oh... we have a catch-22 here.  We can't determine the
+    // proper minimum shift until we know which way the stem goes,
+    // because if we have a shifted note head and the stem goes down,
+    // we need to shift one place further than otherwise.  But we
+    // don't know for sure which way the stem goes until we've
+    // calculated the beam, and we don't do that until after we've
+    // worked out the x-coordinates based on (among other things) the
+    // accidental shift.
 
     int minShift = 0;
-    if (!hasStemUp() && hasNoteHeadShifted()) minShift = 1; // lazy
+    bool extra = false;
+
+    if (!hasStemUp() && hasNoteHeadShifted()) {
+	minShift = 1; // lazy
+	extra = true;
+    }
 
     int lastShift = minShift;
     int lastHeight = 0, maxHeight = 0;
@@ -229,7 +242,8 @@ NotationChord::applyAccidentalShiftProperties()
 	Rosegarden::Accidental acc;
 	if (e->get<String>(m_properties.DISPLAY_ACCIDENTAL, acc) &&
 	    acc != Rosegarden::Accidentals::NoAccidental) {
-	    e->set<Int>(m_properties.ACCIDENTAL_SHIFT, minShift);
+	    e->setMaybe<Int>(m_properties.ACCIDENTAL_SHIFT, minShift);
+	    e->setMaybe<Bool>(m_properties.ACCIDENTAL_EXTRA_SHIFT, extra);
 	    maxHeight = lastHeight = getHeight(*i);
 	    break;
 	}
@@ -251,22 +265,22 @@ NotationChord::applyAccidentalShiftProperties()
 
 	    if (height < lastHeight) { // lastHeight was the first, up top
 		if (lastHeight - height >= 6) {
-		    e->set<Int>(m_properties.ACCIDENTAL_SHIFT, lastShift);
+		    e->setMaybe<Int>(m_properties.ACCIDENTAL_SHIFT, lastShift);
 		} else {
-		    e->set<Int>(m_properties.ACCIDENTAL_SHIFT, lastShift+1);
+		    e->setMaybe<Int>(m_properties.ACCIDENTAL_SHIFT, lastShift+1);
 		    lastShift = lastShift+1;
 		}
 	    } else {
 		if (height - lastHeight >= 6) {
 		    if (maxHeight - height >= 6) {
-			e->set<Int>(m_properties.ACCIDENTAL_SHIFT, minShift);
+			e->setMaybe<Int>(m_properties.ACCIDENTAL_SHIFT, minShift);
 			lastShift = minShift;
 		    } else {
-			e->set<Int>(m_properties.ACCIDENTAL_SHIFT, minShift+1);
+			e->setMaybe<Int>(m_properties.ACCIDENTAL_SHIFT, minShift+1);
 			lastShift = minShift+1;
 		    }
 		} else {
-		    e->set<Int>(m_properties.ACCIDENTAL_SHIFT, lastShift+1);
+		    e->setMaybe<Int>(m_properties.ACCIDENTAL_SHIFT, lastShift+1);
 		    lastShift = lastShift+1;
 		}
 	    }
@@ -277,7 +291,7 @@ NotationChord::applyAccidentalShiftProperties()
 }
 
 int
-NotationChord::getMaxAccidentalShift() const
+NotationChord::getMaxAccidentalShift(bool &extra) const
 {
     int maxShift = 0;
 
@@ -285,7 +299,10 @@ NotationChord::getMaxAccidentalShift() const
 	Event *e = getAsEvent(*i);
 	if (e->has(m_properties.ACCIDENTAL_SHIFT)) {
 	    int shift = e->get<Int>(m_properties.ACCIDENTAL_SHIFT);
-	    if (shift > maxShift) maxShift = shift;
+	    if (shift > maxShift) {
+		maxShift = shift;
+		e->get<Bool>(m_properties.ACCIDENTAL_EXTRA_SHIFT, extra);
+	    }
 	}
     }
 
@@ -293,10 +310,11 @@ NotationChord::getMaxAccidentalShift() const
 }
 
 int
-NotationChord::getAccidentalShift(const Iterator &i) const
+NotationChord::getAccidentalShift(const Iterator &i, bool &extra) const
 {
     if (getAsEvent(i)->has(m_properties.ACCIDENTAL_SHIFT)) {
 	int shift = getAsEvent(i)->get<Int>(m_properties.ACCIDENTAL_SHIFT);
+	getAsEvent(i)->get<Bool>(m_properties.ACCIDENTAL_EXTRA_SHIFT, extra);
 	return shift;
     } else {
 	return 0;

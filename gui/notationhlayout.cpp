@@ -518,10 +518,15 @@ NotationHLayout::scanChord(NotationElementList *notes,
     float extraWidth = 0;
 
     if (someAccidental != NoAccidental) {
+	bool extraShift = false;
+	int shift = chord.getMaxAccidentalShift(extraShift);
+	extraWidth += m_npf->getAccidentalWidth(someAccidental, shift, extraShift);
+/*
 	extraWidth +=
 	    m_npf->getAccidentalWidth(someAccidental) +
 	    m_npf->getAccidentalWidth(Rosegarden::Accidentals::Sharp) *
 	    chord.getMaxAccidentalShift();
+*/
     }
 
     float layoutExtra = 0;

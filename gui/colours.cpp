@@ -114,6 +114,7 @@ namespace RosegardenGUIColours
 
     const QColor MarkerBackground = QColor(185, 255, 248);
 
+//    const QColor MuteTrackLED = QColor(218, 190, 230, QColor::Hsv);
     const QColor MuteTrackLED = QColor(211, 194, 238, QColor::Hsv);
     const QColor RecordTrackLED = QColor(0, 250, 225, QColor::Hsv);
 

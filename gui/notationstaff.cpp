@@ -1104,7 +1104,13 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
         params.setTied(false);
     }
 
-    //!!! accidental shifts
+    long accidentalShift = 0;
+    bool accidentalExtra = false;
+    if (elt->event()->get<Int>(properties.ACCIDENTAL_SHIFT, accidentalShift)) {
+	elt->event()->get<Bool>(properties.ACCIDENTAL_EXTRA_SHIFT, accidentalExtra);
+    }
+    params.setAccidentalShift(accidentalShift);
+    params.setAccExtraShift(accidentalExtra);
 
     if (beamed) {
 

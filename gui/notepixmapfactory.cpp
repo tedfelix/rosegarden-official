@@ -200,6 +200,7 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
     m_dots(dots),
     m_accidental(accidental),
     m_shifted(false),
+    m_accidentalShift(0),
     m_drawFlag(true),
     m_drawStem(true),
     m_stemGoesUp(true),
@@ -479,7 +480,9 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     if (!slashCount) slashCount = m_style->getSlashCount(params.m_noteType);
 
     if (params.m_accidental != NoAccidental) {
-        makeRoomForAccidental(params.m_accidental);
+        makeRoomForAccidental(params.m_accidental,
+			      params.m_accidentalShift,
+			      params.m_accidentalExtra);
     }
 
     NoteCharacter dot(m_font->getCharacter(NoteCharacterNames::DOT, charType));
@@ -711,7 +714,7 @@ NotePixmapFactory::getStemLength(const NotePixmapParameters &params) const
 }
 
 void
-NotePixmapFactory::makeRoomForAccidental(Accidental a)
+NotePixmapFactory::makeRoomForAccidental(Accidental a, int shift, bool extra)
 {
     // General observation: where we're only using a character to
     // determine its dimensions, we should (for the moment) just
@@ -723,6 +726,23 @@ NotePixmapFactory::makeRoomForAccidental(Accidental a)
     QPoint ah(m_font->getHotspot(m_style->getAccidentalCharName(a)));
 
     m_left += ac.getWidth() + (m_noteBodyWidth/4 - m_borderX);
+
+    // This modifier for shift won't be quite correct if a chord has
+    // more than one sort of accidental (e.g. flats _and_ sharps),
+    // because they aren't all the same width.  But we can live with
+    // that for now.
+
+    if (shift > 0) {
+	if (extra) {
+	    // The extra flag indicates that the first shift is to get
+	    // out of the way of a note head, thus has to move
+	    // possibly further, or at least a different amount.  So
+	    // replace the first shift with a different one.
+	    --shift;
+	    m_left += m_noteBodyWidth - m_noteBodyWidth/5;
+	}
+	m_left += shift * (ac.getWidth() - ah.x());
+    }
 
     int above = ah.y() - m_noteBodyHeight/2;
     int below = (ac.getHeight() - ah.y()) -
@@ -902,6 +922,8 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 
 //    bool first = true;
     
+    y -= (getLegerLineThickness() - getStaffLineThickness()) /2;
+
     for (int i = legerLines - 1; i >= 0; --i) { 
 	if (i % 2) {
 //	    NOTATION_DEBUG << "drawing at y = " << y << endl;
@@ -2530,9 +2552,21 @@ int NotePixmapFactory::getLineSpacing() const {
     return m_font->getSize() + getStaffLineThickness();
 }
 
-int NotePixmapFactory::getAccidentalWidth(const Accidental &a) const {
+int NotePixmapFactory::getAccidentalWidth(const Accidental &a,
+					  int shift, bool extraShift) const {
     if (a == Rosegarden::Accidentals::NoAccidental) return 0;
-    return m_font->getWidth(m_style->getAccidentalCharName(a));
+    int w = m_font->getWidth(m_style->getAccidentalCharName(a));
+    if (!shift) return w;
+    else {
+	int sw = w;
+	if (extraShift) {
+	    --shift;
+	    w += getNoteBodyWidth() + getStemThickness();
+	}
+	w += shift *
+	    (sw - m_font->getHotspot(m_style->getAccidentalCharName(a)).x());
+    }
+    return w;
 }
 
 int NotePixmapFactory::getAccidentalHeight(const Accidental &a) const {

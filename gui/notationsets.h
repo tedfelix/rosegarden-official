@@ -62,9 +62,9 @@ public:
 
     void applyAccidentalShiftProperties();
 
-    virtual int getMaxAccidentalShift() const;
-    virtual int getAccidentalShift(const NotationElementList::iterator &itr)
-	const;
+    virtual int getMaxAccidentalShift(bool &extra) const;
+    virtual int getAccidentalShift(const NotationElementList::iterator &itr,
+				   bool &extra) const;
 
 protected:
     const NotationProperties &m_properties;
