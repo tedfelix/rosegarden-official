@@ -168,6 +168,8 @@ void Track::setNbTimeSteps(unsigned int nbTimeSteps)
 
 void Track::erase(iterator pos)
 {
+    cerr << "Track::erase() : delete " << *pos << endl;
+
     delete *pos;
     std::multiset<Event*, Event::EventCmp>::erase(pos);
 }
@@ -182,6 +184,8 @@ void Track::erase(iterator from, iterator to)
 
 size_t Track::erase(Event* e)
 {
+    cerr << "Track::erase() : delete " << e << endl;
+
     delete e;
     return std::multiset<Event*, Event::EventCmp>::erase(e);
 }
