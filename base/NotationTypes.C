@@ -886,7 +886,9 @@ void TimeSignature::getDurationListForShortInterval(DurationList &dlist,
          << duration << ", toNextBeat " << toNextBeat << ", startOffset "
          << startOffset << ", beatDuration " << beatDuration << endl;
                
-    if (toNextBeat > duration) {
+    if (toNextBeat == duration) {
+        getDurationListAux(dlist, duration, true);
+    } else if (toNextBeat > duration) {
         getDurationListAux(dlist, duration, false);
     } else {
         // first fill up to the next crotchet (or, in 6/8 or some

@@ -215,7 +215,7 @@ void NotationView::setupActions()
          i < 8; ++i, --noteType) {
 
         icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap(noteType,
-                                                                  false,
+                                                                  0,
                                                                   NoAccidental,
                                                                   false, true, true, true));
         noteAction = new KRadioAction(i18n(actionsNote[i][0]), icon, 0, this,
@@ -247,7 +247,7 @@ void NotationView::setupActions()
          i < 8; ++i, --noteType) {
 
         icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap(noteType,
-                                                                  true,
+                                                                  1,
                                                                   NoAccidental,
                                                                   false, true, true, true));
         noteAction = new KRadioAction(i18n(actionsDottedNote[i][0]), icon, 0, this,
@@ -326,7 +326,7 @@ void NotationView::setupActions()
          i < 6; ++i, ++accidental) {
 
         icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap(Note::Crotchet,
-                                                                  false,
+                                                                  0,
                                                                   Accidental(accidental),
                                                                   false, true, true, true));
         noteAction = new KRadioAction(i18n(actionsAccidental[i][0]), icon, 0, this,
