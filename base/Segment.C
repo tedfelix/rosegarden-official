@@ -71,6 +71,7 @@ static bool isTimeSig(const Event* e)
 
 
 //!!! No longer correct -- time sigs no longer in segment -- check usage
+/*!!!
 TimeSignature Segment::getTimeSigAtEnd(timeT &absTimeOfSig)
 {
     absTimeOfSig = 0;
@@ -80,7 +81,7 @@ TimeSignature Segment::getTimeSigAtEnd(timeT &absTimeOfSig)
     absTimeOfSig = m_timeSigTime;
     return m_timeSigAtEnd;
 }
-
+*/
 
 void Segment::findTimeSigAtEnd() 
 {
@@ -395,9 +396,17 @@ int Segment::getNextId() const
 
 void Segment::fillWithRests(timeT endTime)
 {
-    timeT sigTime;
-    TimeSignature ts(getTimeSigAtEnd(sigTime));
+    timeT sigTime = 0;
     timeT duration = getDuration();
+    TimeSignature ts;
+
+    if (getReferenceSegment()) {
+	iterator tsi = findTimeSignatureAt(duration);
+	if (tsi != getReferenceSegment()->end()) {
+	    ts = TimeSignature(**tsi);
+	    sigTime = (*tsi)->getAbsoluteTime();
+	}
+    }
     
     DurationList dl;
     ts.getDurationListForInterval(dl, endTime - duration, sigTime);

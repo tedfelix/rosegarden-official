@@ -15,7 +15,7 @@ Post-0.1.1 task list
  2. Display real bar numbers and proportional bar durations on track
  canvas [DONE]
 
- 3. Tuplets
+ 3. Tuplets [DONE, apart from GUI to create them...]
 
  4. Text, lyrics etc -- need to talk about this, there are various
  possible ways to do it

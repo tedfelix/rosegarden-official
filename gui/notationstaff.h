@@ -132,6 +132,13 @@ public:
     void insertBar(unsigned int barPos, bool correct);
 
     /**
+     * Return a rectangle describing the full width and height of the
+     * bar containing the given x-cooordinate.  Used for setting a
+     * selection to the scope of a full bar.
+     */
+    QRect getBarExtents(unsigned int x);
+
+    /**
      * Insert time signature at x-coordinate \a x.
      */
     void insertTimeSignature(unsigned int x,

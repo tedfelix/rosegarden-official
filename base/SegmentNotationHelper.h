@@ -270,6 +270,24 @@ public:
 
 
     /**
+     * For each series of contiguous rests found between the start and
+     * end time, replace the series of rests with another series of
+     * the same duration but composed of the theoretically "correct"
+     * rest durations to fill the gap in the current time signature.
+     */
+    void normalizeRests(timeT startTime, timeT endTime);
+
+
+    /**
+     * For each series of contiguous rests found between the start and
+     * end time, replace the series of rests with another series of
+     * the same duration but composed of the longest possible valid
+     * rest plus the remainder
+     */
+    void mergeRestsAggressively(timeT startTime, timeT endTime);
+
+
+    /**
      * Note-quantize the Segment and set the NoteType and NoteDots
      * properties on note and rest events.  Only works when the
      * Segment is in a Composition.
@@ -321,6 +339,17 @@ private:
 
     /// used by autoBeamAux (duplicate of private method in Segment)
     bool hasEffectiveDuration(iterator i);
+
+    typedef void (SegmentNotationHelper::*Reorganizer)(timeT, timeT,
+						       std::vector<Event *>&);
+
+    void reorganizeRests(timeT, timeT, Reorganizer);
+
+    /// for use by normalizeRests
+    void normalizeContiguousRests(timeT, timeT, std::vector<Event *>&);
+
+    /// for use by mergeRestsAggressively
+    void mergeContiguousRests(timeT, timeT, std::vector<Event *>&);
 };
 
 }

@@ -126,7 +126,7 @@ protected:
     /**
      * Callback for a mouse double click event in the canvas
      */
-//     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
+    virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
 
     void processActiveItems(QMouseEvent*, QCanvasItemList);
 
@@ -138,9 +138,6 @@ protected:
 
     /// returns the staff line closest to the mouse event position
     StaffLine* findClosestLineWithinThreshold(QMouseEvent*);
-
-    /// returns the pitch the staff line is associated with
-/*!    int getPitchForLine(const StaffLine *line); */
 
     /** Returns the note name (C4, Bb3) corresponding to the given x-coord
 	on the given line (x-coord needed to take clef/key into account) */

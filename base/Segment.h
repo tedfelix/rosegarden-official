@@ -178,7 +178,7 @@ public:
      * Does not require the reference segment to exist (i.e. okay if
      * segment is not in a Composition).
      */
-    TimeSignature getTimeSigAtEnd(timeT &absTimeOfSig);
+//!!!    TimeSignature getTimeSigAtEnd(timeT &absTimeOfSig);
 
     /**
      * Inserts a single Event

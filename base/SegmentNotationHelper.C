@@ -239,7 +239,6 @@ void SegmentNotationHelper::makeRestViable(iterator i)
 	Event *e = new Event(Note::EventRestType);
 	e->setDuration(duration);
 	e->setAbsoluteTime(absTime);
-	e->setMaybe<String>("Name", "INSERTED_REST"); //!!!
 
 	insert(e);
 	absTime += duration;
@@ -1017,6 +1016,129 @@ SegmentNotationHelper::quantize()
     }
 }
 
+
+void SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
+{
+    reorganizeRests(startTime, endTime,
+		    &SegmentNotationHelper::normalizeContiguousRests);
+}
+
+void SegmentNotationHelper::mergeRestsAggressively(timeT startTime,
+						   timeT endTime)
+{
+    reorganizeRests(startTime, endTime,
+		    &SegmentNotationHelper::mergeContiguousRests);
+}
+
+
+void SegmentNotationHelper::reorganizeRests(timeT startTime, timeT endTime,
+					    Reorganizer reorganizer)
+{
+    iterator ia = segment().findTime(startTime);
+    iterator ib = segment().findTime(endTime);
+    
+    if (ia == end()) return;
+
+    std::vector<iterator> erasable;
+    std::vector<Event *> insertable;
+
+    cerr << "SegmentNotationHelper::reorganizeRests (" << startTime << ","
+	 << endTime << ")" << endl;
+
+    cerr << "ia is at " << (*ia)->getAbsoluteTime() << endl;
+    if (ib == end()) cerr << "ib is end()" << endl;
+    else cerr << "ib is at " << (*ib)->getAbsoluteTime() << endl;
+    
+
+    for (iterator i = ia; i != ib; ++i) {
+
+	cerr << "SegmentNotationHelper::reorganizeRests: looking at i, it's at "
+	     << (*i)->getAbsoluteTime() << " and has type " << (*i)->getType()
+	     << endl;
+
+	if ((*i)->isa(Note::EventRestType)) {
+
+	    timeT startTime = (*i)->getAbsoluteTime();
+	    timeT duration = 0;
+	    iterator j = i;
+
+	    for ( ; j != ib; ++j) {
+
+		cerr << "SegmentNotationHelper::reorganizeRests: looking at j, it's at "
+		     << (*j)->getAbsoluteTime() << " and has type " << (*j)->getType()
+		     << endl;
+
+		if ((*j)->isa(Note::EventRestType)) {
+		    duration += (*j)->getDuration();
+		    erasable.push_back(j);
+		} else break;
+	    }
+
+	    (this->*reorganizer)(startTime, duration, insertable);
+	    if (j == ib) break;
+	    i = j;
+	}
+    }
+
+    for (int ei = 0; ei < erasable.size(); ++ei)
+	segment().erase(erasable[ei]);
+
+    for (int ii = 0; ii < insertable.size(); ++ii)
+	segment().insert(insertable[ii]);
+}
+
+
+void SegmentNotationHelper::normalizeContiguousRests(timeT startTime,
+						     timeT duration,
+						     std::vector<Event *> &
+						         toInsert)
+{
+    timeT sigTime = 0;
+    TimeSignature ts;
+
+    cerr << "SegmentNotationHelper::normalizeContiguousRests:"
+	 << " startTime = " << startTime << ", duration = "
+	 << duration << endl;
+
+    iterator tsi = segment().findTimeSignatureAt(startTime);
+    if (tsi != segment().getReferenceSegment()->end()) {
+	ts = TimeSignature(**tsi);
+	sigTime = (*tsi)->getAbsoluteTime();
+    }
+
+    DurationList dl;
+    ts.getDurationListForInterval(dl, duration, sigTime);
+
+    timeT acc = startTime;
+
+    for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
+	Event *e = new Event(Note::EventRestType);
+	e->setDuration(*i);
+	e->setAbsoluteTime(acc);
+	toInsert.push_back(e);
+	acc += *i;
+    }
+}
+
+
+void SegmentNotationHelper::mergeContiguousRests(timeT startTime,
+						 timeT duration,
+						 std::vector<Event *> &
+						     toInsert)
+{
+    while (duration > 0) {
+
+	timeT d = Note::getNearestNote(duration).getDuration();
+
+	Event *e = new Event(Note::EventRestType);
+	e->setDuration(d);
+	e->setAbsoluteTime(startTime);
+	toInsert.push_back(e);
+
+	startTime += d;
+	duration -= d;
+    }
+}
 
 
 } // end of namespace

@@ -58,12 +58,12 @@ NotationTool::~NotationTool()
 {
 }
 
-// void NotationTool::handleMouseDblClick(int height, int staffNo,
-//                                        const QPoint &eventPos,
-//                                        NotationElement* e)
-// {
-//     handleMousePress(height, staffNo, eventPos, e);
-// }
+void NotationTool::handleMouseDblClick(int height, int staffNo,
+                                       const QPoint &eventPos,
+                                       NotationElement* e)
+{
+    // nothing
+}
 
 void NotationTool::handleMouseMove(QMouseEvent*)
 {
@@ -287,6 +287,7 @@ void NotationSelector::handleMousePress(int, int staffNo,
                                         const QPoint& p,
                                         NotationElement *element)
 {
+    kdDebug(KDEBUG_AREA) << "NotationSelector::handleMousePress" << endl;
     m_clickedStaff = staffNo;
     m_clickedElement = element;
 
@@ -298,6 +299,28 @@ void NotationSelector::handleMousePress(int, int staffNo,
     m_updateRect = true;
 
     //m_parentView.setCursorPosition(p.x());
+}
+
+void NotationSelector::handleMouseDblClick(int, int staffNo,
+					   const QPoint& p,
+					   NotationElement *element)
+{
+    kdDebug(KDEBUG_AREA) << "NotationSelector::handleMouseDblClick" << endl;
+    m_clickedStaff = staffNo;
+    m_clickedElement = element;
+    
+    NotationStaff *staff = m_parentView.getStaff(staffNo);
+    if (!staff) return;
+
+    QRect rect = staff->getBarExtents(p.x());
+
+    m_selectionRect->setX(rect.x() + 1);
+    m_selectionRect->setY(rect.y());
+    m_selectionRect->setSize(rect.width() - 1, rect.height());
+
+    m_selectionRect->show();
+    m_updateRect = false;
+    return;
 }
 
 void NotationSelector::handleMouseMove(QMouseEvent* e)
@@ -318,6 +341,7 @@ void NotationSelector::handleMouseMove(QMouseEvent* e)
 
 void NotationSelector::handleMouseRelease(QMouseEvent*)
 {
+    kdDebug(KDEBUG_AREA) << "NotationSelector::handleMouseRelease" << endl;
     m_updateRect = false;
     setViewCurrentSelection();
 

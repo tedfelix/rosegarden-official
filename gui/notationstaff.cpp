@@ -232,6 +232,25 @@ void NotationStaff::insertBar(unsigned int barPos, bool correct)
     }
 }
 
+QRect
+NotationStaff::getBarExtents(unsigned int myx)
+{
+    QRect rect(x(), y(), 0, getStaffHeight());
+
+    for (int i = 1; i < m_barLines.size(); ++i) {
+
+	if (m_barLines[i]->x() <= myx) continue;
+	
+	rect.setX(m_barLines[i-1]->x());
+	rect.setWidth(m_barLines[i]->x() - m_barLines[i-1]->x());
+
+	return rect;
+    }
+
+    return rect;
+}
+
+
 void NotationStaff::insertTimeSignature(unsigned int tsx,
 					const TimeSignature &timeSig)
 {

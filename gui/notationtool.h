@@ -56,10 +56,10 @@ public:
                                   const QPoint &eventPos,
                                   NotationElement*) = 0;
 
-//     /// defaults to calling handleMousePress
-//     virtual void handleMouseDblClick(int height, int staffNo,
-//                                      const QPoint &eventPos,
-//                                      NotationElement*);
+    /// defaults to doing nothing
+    virtual void handleMouseDblClick(int height, int staffNo,
+                                     const QPoint &eventPos,
+                                     NotationElement*);
 
     /// does nothing by default
     virtual void handleMouseMove(QMouseEvent*);
@@ -165,6 +165,10 @@ public:
 
     virtual void handleMouseMove(QMouseEvent*);
     virtual void handleMouseRelease(QMouseEvent*);
+
+    virtual void handleMouseDblClick(int height, int staffNo,
+                                     const QPoint &eventPos,
+                                     NotationElement*);
 
     /**
      * Returns the currently selected events

@@ -269,6 +269,10 @@ public slots:
     void slotGroupAutoBeam();
     void slotGroupBreak();
 
+    // transforms slots
+    void slotTransformsNormalizeRests();
+    void slotTransformsMergeRests();
+
     /// Canvas actions slots
 
     /**

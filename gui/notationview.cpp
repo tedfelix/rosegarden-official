@@ -446,6 +446,15 @@ void NotationView::setupActions()
     new KAction(i18n("Break Groups"), 0, this,
 		SLOT(slotGroupBreak()), actionCollection(), "break_group");
 
+    // setup Transforms menu
+    new KAction(i18n("Normalize Rests"), 0, this,
+		SLOT(slotTransformsNormalizeRests()), actionCollection(),
+		"normalize_rests");
+
+    new KAction(i18n("Merge Rests Aggressively"), 0, this,
+		SLOT(slotTransformsMergeRests()), actionCollection(),
+		"merge_rests_aggressively");
+
 
     // setup Settings menu
     KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
@@ -1119,6 +1128,51 @@ void NotationView::slotGroupBreak()
 	       m_currentEventSelection->getEndTime());
 }
 
+ 
+// 
+// transforms stuff
+//
+ 
+void NotationView::slotTransformsNormalizeRests()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotTransformsNormalizeRests()\n";
+
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Normalizing rests..."), statusBar());
+
+    Segment &segment = m_currentEventSelection->getSegment();
+    SegmentNotationHelper helper(segment);
+
+    helper.normalizeRests(m_currentEventSelection->getBeginTime(),
+			  m_currentEventSelection->getEndTime());
+
+    emit usedSelection();
+
+    redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
+	       m_currentEventSelection->getBeginTime(),
+	       m_currentEventSelection->getEndTime());
+}
+
+void NotationView::slotTransformsMergeRests()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotTransformsMergeRests()\n";
+
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Merging rests..."), statusBar());
+
+    Segment &segment = m_currentEventSelection->getSegment();
+    SegmentNotationHelper helper(segment);
+
+    helper.mergeRestsAggressively(m_currentEventSelection->getBeginTime(),
+				  m_currentEventSelection->getEndTime());
+
+    emit usedSelection();
+
+    redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
+	       m_currentEventSelection->getBeginTime(),
+	       m_currentEventSelection->getEndTime());
+}
+
   
 
 //
@@ -1461,10 +1515,10 @@ void NotationView::itemPressed(int height, int staffNo,
         // This won't work because a double click event is always
         // preceded by a single click event
 
-//         if (e->type() == QEvent::MouseButtonDblClick)
-//             m_tool->handleMouseDblClick(height, staffNo, eventPos, el);
-//         else
-        m_tool->handleMousePress(height, staffNo, eventPos, el);
+        if (e->type() == QEvent::MouseButtonDblClick)
+            m_tool->handleMouseDblClick(height, staffNo, eventPos, el);
+        else
+	    m_tool->handleMousePress(height, staffNo, eventPos, el);
     }
     
 }
