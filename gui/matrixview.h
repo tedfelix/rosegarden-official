@@ -393,16 +393,6 @@ public:
 public slots:
 
     /**
-     * undo
-     */
-    virtual void slotEditUndo();
-
-    /**
-     * redo
-     */
-    virtual void slotEditRedo();
-    
-    /**
      * put the indicationed text/object into the clipboard and remove * it
      * from the document
      */

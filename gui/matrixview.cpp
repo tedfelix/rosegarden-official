@@ -712,19 +712,6 @@ MatrixView::hoveredOverAbsoluteTimeChanged(unsigned int time)
 //////////////////////////////////////////////////////////////////////
 
 //
-// Undo, Redo
-//
-void MatrixView::slotEditUndo()
-{
-    KTmpStatusMsg msg(i18n("Undo..."), statusBar());
-}
-
-void MatrixView::slotEditRedo()
-{
-    KTmpStatusMsg msg(i18n("Redo..."), statusBar());
-}
-
-//
 // Cut, Copy, Paste
 //
 void MatrixView::slotEditCut()
@@ -908,11 +895,14 @@ public:
                            MatrixStaff*,
                            Rosegarden::Event *event);
 
+    virtual ~MatrixInsertionCommand();
+    
 protected:
     virtual void modifySegment();
 
     MatrixStaff* m_staff;
     Rosegarden::Event* m_event;
+    bool m_firstModify;
 };
 
 MatrixInsertionCommand::MatrixInsertionCommand(Segment &segment,
@@ -922,9 +912,16 @@ MatrixInsertionCommand::MatrixInsertionCommand(Segment &segment,
                                                Event *event) :
     BasicCommand("Insert Note", segment, time, endTime),
     m_staff(staff),
-    m_event(event)
+    m_event(event),
+    m_firstModify(true)
 {
     // nothing
+}
+
+MatrixInsertionCommand::~MatrixInsertionCommand()
+{
+    if (!m_firstModify) // we made our own copy of the event so delete it
+        delete m_event;
 }
 
 void
@@ -932,9 +929,20 @@ MatrixInsertionCommand::modifySegment()
 {
     Rosegarden::SegmentMatrixHelper helper(getSegment());
 
-    m_staff->setWrapAddedEvents(false);
-    helper.insertNote(m_event); // this DOES NOT create a new MatrixElement
+    if (m_firstModify) 
+        m_staff->setWrapAddedEvents(false); // this makes insertion not to create a new MatrixElement
+    else
+        m_staff->setWrapAddedEvents(true);
+
+    helper.insertNote(m_event);
     m_staff->setWrapAddedEvents(true);
+
+    if (m_firstModify) {
+        // copy event
+        m_event = new Event(*m_event);
+        m_firstModify = false;
+    }
+    
 }
 
 
