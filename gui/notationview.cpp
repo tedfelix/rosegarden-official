@@ -33,6 +33,7 @@
 #include "rosegardenguidoc.h"
 #include "notationview.h"
 #include "notationelement.h"
+#include "NotationTypes.h"
 
 #include "staff.h"
 #include "notepixmapfactory.h"
@@ -365,17 +366,31 @@ NotationView::showElements(NotationElementList::iterator from,
                 QCanvasPixmap notePixmap(npf.makeRestPixmap(note, dotted));
                 noteSprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 
-/*! key & clef conflated
-            } else if ((*it)->event()->isa(Key::EventPackage, Key::EventType)) {
-
-                QCanvasPixmap clefPixmap("pixmaps/clef-treble.xpm");
-                noteSprite = new QCanvasSimpleSprite(&clefPixmap, canvas());
-*/
-
             } else if ((*it)->event()->isa(Clef::EventPackage, Clef::EventType)) {
 
                 QCanvasPixmap clefPixmap(cpf.makeClefPixmap((*it)->event()->get<String>(Clef::ClefPropertyName)));
                 noteSprite = new QCanvasSimpleSprite(&clefPixmap, canvas());
+
+            } else if ((*it)->event()->isa(::Key::EventPackage, ::Key::EventType)) {
+
+                //!!! probably want to be doing this with a single
+                //canvas item actually, this is just an experiment
+
+                string keyType = (*it)->event()->get<String>(::Key::KeyPropertyName);
+                ::Key key(keyType);
+                vector<int> ah = key.getAccidentalHeights();
+                int x = dxoffset + (*it)->x();
+                for (int i = 0; i < ah.size(); ++i) {
+                    QCanvasPixmap keyPixmap(npf.makeAccidentalPixmap(key.isSharp() ? Sharp : Flat));
+                    QCanvasSimpleSprite *s = new QCanvasSimpleSprite(&keyPixmap, canvas());
+                    s->move(x, dyoffset + (*it)->y() +
+                            m_mainStaff->yCoordOfHeight(ah[i]));//???
+                    s->show();
+                    x += m_mainStaff->accidentWidth;
+                }
+                
+//                QCanvasPixmap keyPixmap(cpf.makeKeyPixmap());
+//                noteSprite = new QCanvasSimpleSprite(&keyPixmap, canvas());
 
             } else {
                     

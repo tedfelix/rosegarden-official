@@ -429,6 +429,41 @@ NotePixmapFactory::makeRestPixmap(Note::Type note, bool dotted)
     }
 }
 
+QCanvasPixmap
+NotePixmapFactory::makeAccidentalPixmap(Accidental accidental)
+{
+    //!!! unify with drawAccidental
+
+    const QPixmap *accidentalPixmap = 0;
+
+    switch (accidental) {
+
+    case NoAccidental:
+        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeAccidentalPixmap() called with NoAccidental"
+                             << endl;
+        KMessageBox::error(0, "NotePixmapFactory::makeAccidentalPixmap() called with NoAccidental");
+        return QCanvasPixmap("");//!!! throw
+        break;
+        
+    case Sharp:
+        accidentalPixmap = &m_accidentalSharp;
+        break;
+
+    case Flat:
+        accidentalPixmap = &m_accidentalFlat;
+        break;
+
+    case Natural:
+        accidentalPixmap = &m_accidentalNatural;
+        break;
+ 
+        //!!! double sharp, double flat
+    }
+
+    return QCanvasPixmap(*accidentalPixmap, m_pointZero);
+}
+        
+
 void
 NotePixmapFactory::createPixmapAndMask()
 {

@@ -130,6 +130,8 @@ public:
      */
     QCanvasPixmap makeRestPixmap(Note::Type note, bool dotted);
 
+    QCanvasPixmap makeAccidentalPixmap(Accidental accidental);
+
 protected:
     const QPixmap* tailUp(Note::Type note) const;
     const QPixmap* tailDown(Note::Type note) const;
