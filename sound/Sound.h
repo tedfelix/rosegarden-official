@@ -36,7 +36,7 @@ typedef enum
     NO_SEQUENCE_SUBSYS         // Nothing's OK
 } SoundSystemStatus;
 
-const float SAMPLE_MAX_8BIT  = (float)(0xff/2);
+const float SAMPLE_MAX_8BIT  = (float)(0xff);
 const float SAMPLE_MAX_16BIT = (float)(0xffff/2);
 const float SAMPLE_MAX_24BIT = (float)(0xffffff/2);
 

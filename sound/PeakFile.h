@@ -83,15 +83,10 @@ public:
     // Get a preview of a section of the audio file where that section
     // is "width" pixels.
     //
-    std::vector<float> getPreview(const RealTime &startIndex,
-                                  const RealTime &endIndex,
+    std::vector<float> getPreview(const RealTime &startTime,
+                                  const RealTime &endTime,
                                   int width);
 
-    QPixmap getPreview(const RealTime &startIndex,
-                       const RealTime &endIndex,
-                       int width,
-                       int height);
- 
     // Draw the preview onto the Pixmap
     //
     void drawPixmap(const RealTime &startTime,
@@ -109,7 +104,9 @@ protected:
     // Write the peak header and the peaks themselves
     //
     void writeHeader(std::ofstream *file);
-    void writePeaks(Progress *progress, std::ofstream *file);
+    void writePeaks(Progress *progress,
+                    unsigned short updatePercentage,
+                    std::ofstream *file);
 
     // Get the position of a peak for a given time
     //

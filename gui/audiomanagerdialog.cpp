@@ -83,6 +83,9 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     // a minimum width for the list box
     //m_fileList->setMinimumWidth(300);
 
+    // Show focus across all columns
+    m_fileList->setAllColumnsShowFocus(true);
+
     // connect buttons
     connect(m_deleteButton, SIGNAL(released()), SLOT(slotDeleteSelected()));
     connect(m_addButton, SIGNAL(released()), SLOT(slotAdd()));

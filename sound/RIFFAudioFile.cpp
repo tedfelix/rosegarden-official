@@ -541,11 +541,15 @@ RIFFAudioFile::readFormatChunk()
                   << std::endl;
 
         // ignore any overlapping bytes 
-        m_inFile->seekg(lengthOfFormat - 16);
+        m_inFile->seekg(lengthOfFormat - 0x10, std::ios::cur);
     }
     else
     {
-        throw("Format chunk too short");
+        std::cerr << "RIFFAudioFile::readFormatChunk - "
+                  << "truncated Format Chunk (" << lengthOfFormat << ")"
+                  << std::endl;
+        m_inFile->seekg(lengthOfFormat - 0x10, std::ios::cur);
+        //throw(std::string("Format chunk too short"));
     }
 
 
