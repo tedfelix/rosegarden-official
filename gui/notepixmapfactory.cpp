@@ -876,7 +876,7 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 	}
     }
 
-    int offset = m_noteBodyHeight + getLegerLineThickness();
+    int offset = m_noteBodyHeight + getStaffLineThickness();
     int legerLines = params.m_legerLines;
     bool below = (legerLines < 0);
     
@@ -885,28 +885,38 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 	offset = -offset;
     }
 
-    if (legerLines % 2 == 1) {
+    if (legerLines % 2) { // note is between lines
 	if (below) {
 	    // note below staff
-	    y = m_above - getLegerLineThickness();
+	    y = m_above - getLegerLineThickness() + getLegerLineThickness()/2;
 	} else {
 	    // note above staff
-	    y = m_above + m_noteBodyHeight + 1;
+	    y = m_above + m_noteBodyHeight - getLegerLineThickness()/2;
 	}
-    } else {
+    } else { // note is on a leger line
 	if (below) {
 	    // note below staff
-	    y = m_above + m_noteBodyHeight / 2;
+	    y = m_above + m_noteBodyHeight / 2 - getLegerLineThickness()/2;
 	} else {
 	    // note above staff
-	    y = m_above + m_noteBodyHeight / 2;
+	    y = m_above + m_noteBodyHeight / 2 - getLegerLineThickness()/2;
 	}
     }
+
+//!!! STILL WRONG HERE!
     
+//    NOTATION_DEBUG << "draw leger lines: " << legerLines << " lines, below "
+//		   << below
+//		   << ", note body height " << m_noteBodyHeight
+//		   << ", thickness " << getLegerLineThickness()
+//		   << " (staff line " << getStaffLineThickness() << ")"
+//		   << ", offset " << offset << endl;
+
     bool first = true;
     
-    for (int i = legerLines - 1; i >= 0; --i) {
+    for (int i = legerLines - 1; i >= -1/*0*/; --i) { //!!! one too many for test purposes
 	if (i % 2 == 1) {
+//	    NOTATION_DEBUG << "drawing at y = " << y << endl;
 	    for (int j = 0; j < getLegerLineThickness(); ++j) {
 		m_p->drawLine(x0, y + j, x1, y + j);
 	    }
@@ -1431,10 +1441,6 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
 void
 NotePixmapFactory::drawTie(bool above, int length) 
 {
-    if (length > 1000) {
-//	assert(0);
-    }
-
     int tieThickness = getStaffLineThickness() * 2;
     int tieCurve = m_font->getSize() * 2 / 3;
     int height = tieCurve + tieThickness;
@@ -1448,6 +1454,14 @@ NotePixmapFactory::drawTie(bool above, int length)
     if (length < m_noteBodyWidth * 3) {
 	length += m_noteBodyWidth - 2;
 	x -= m_noteBodyWidth/2 - 1;
+    }
+
+    if (m_inPrinterMethod) {
+	//!!!experimental!
+	QPoint hotspot;
+	drawSlurAux(length, 0, above, false, hotspot,
+		    &m_p->painter(), x, above ? m_above : m_above + m_noteBodyHeight);
+	return;
     }
 
     for (i = 0; i < tieThickness; ++i) {
@@ -1998,8 +2012,8 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
     Equation::Point a(0, 0);
     Equation::Point b(length, dy);
 
-    int mx1 = length/5;
-    int mx2 = length - length/5;
+    int mx1 = length/6;
+    int mx2 = length - length/6;
 
     double my1, my2;
     Equation::solveForYByEndPoints(a, b, mx1, my1);
@@ -2107,8 +2121,13 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 	    }
 	}
 
-	if (above) { ++my1; ++my2; }
-	else { --my1; --my2; }
+	if (above) {
+	    ++my1; ++my2;
+	    if (i % 2) { ++y1; ++y2; }
+	} else {
+	    --my1; --my2;
+	    if (i % 2) { --y1; --y2; }
+	}
     }
 
     if (m_selected) {
@@ -2200,7 +2219,7 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 
 	    for (unsigned int i = 0; i < denomS.length(); ++i) {
 		int x = width - (width - denomW) / 2 - (i + 1) * character.getWidth();
-		int y = height/2 + height/4 - (character.getHeight()/2);
+		int y = height - height/4 - (character.getHeight()/2);
 		NoteCharacter charCharacter = m_font->getCharacter
 		    (m_style->getTimeSignatureDigitName(denominator % 10));
 		m_p->drawNoteCharacter(x, y, charCharacter);

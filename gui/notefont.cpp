@@ -1241,7 +1241,7 @@ bool
 NoteFont::getLegerLineThickness(unsigned int &thickness) const
 {
     thickness = (m_size < 12 ? 1 : m_size / 12);
-    return m_fontMap.getStaffLineThickness(m_size, thickness);
+    return m_fontMap.getLegerLineThickness(m_size, thickness);
 }
 
 bool

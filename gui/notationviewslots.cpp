@@ -2087,9 +2087,9 @@ NotationView::slotRenderSomething()
 	    connect(m_renderTimer, SIGNAL(timeout()), SLOT(slotRenderSomething()));
 	    m_renderTimer->start(0, true);
 	    return;
-	} else {
-	    PixmapArrayGC::deleteAll();
 	}
     }
+
+    PixmapArrayGC::deleteAll();
 }
 

@@ -415,8 +415,11 @@ NotationStaff::renderPrintable(timeT from, timeT to)
     Clef currentClef;
     Rosegarden::Key currentKey;
 
-    NotationElementList::iterator beginAt = getViewElementList()->findTime(from);
-    NotationElementList::iterator endAt = getViewElementList()->findTime(to + 1);
+    Rosegarden::Composition *composition = getSegment().getComposition();
+    NotationElementList::iterator beginAt =
+	getViewElementList()->findTime(composition->getBarStartForTime(from));
+    NotationElementList::iterator endAt =
+	getViewElementList()->findTime(composition->getBarEndForTime(to));
 
 //!!! hmm -- last chord is getting chopped
 

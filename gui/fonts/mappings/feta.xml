@@ -20,7 +20,7 @@
 </font-requirements>
 
 <font-sizes>
-	<font-scale font-height="4.5" beam-thickness="0.5" staff-line-thickness="0.18" stem-thickness="0.18"/>
+	<font-scale font-height="4.5" beam-thickness="0.5" staff-line-thickness="0.16" leger-line-thickness="0.19" stem-thickness="0.18"/>
         <font-scale font-id="1" font-height="2.1"/>
 </font-sizes>
 
