@@ -47,6 +47,8 @@ using Rosegarden::SegmentNotationHelper;
 using Rosegarden::String;
 using Rosegarden::timeT;
 using Rosegarden::TimeSignature;
+using Rosegarden::Accidental;
+using Rosegarden::Accidentals;
 
 
 LilypondExporter::LilypondExporter(Composition *composition,
@@ -119,6 +121,9 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress, Segment::it
     }
 }
 
+// basic pitch-to-name conversion for the majority of circumstances
+// (currently needed by musicxmlio, which is why it isn't incorporated into
+// the body of convertPitchToLilyNote)
 char
 convertPitchToName(int pitch, bool isFlatKeySignature)
 {
@@ -151,6 +156,144 @@ needsAccidental(int pitch) {
         pitch++;
     }
     return (pitch % 2 == 1);
+}
+
+
+// processes input to produce a Lilypond-format note written correctly for all
+// keys and out-of-key accidental combinations.  (I hope.  :)
+//
+// Incomplete???
+// (Does anybody use musicxml?  Should we make this more generic so that the
+// improved algorithm can be applied to musicxml exports as well and dump
+// needsAccidental and convertPitchToName?  They're not needed here anymore.
+// (might be able to leave it alone and make musicxml convert from Lily
+// format)
+std::string
+convertPitchToLilyNote (long pitch, bool isFlatKeySignature,
+                        int accidentalCount, Accidental accidental)
+{
+    std::string lilyNote = "";
+    int pitchNote, c;
+    
+    // get raw semitone number
+    pitchNote = (pitch % 12);
+
+    // no accidental, or Natural
+    switch (pitchNote) {
+        case 0:  lilyNote = "c";
+                 break;
+        case 2:  lilyNote = "d";
+                 break;
+        case 4:  lilyNote = "e";
+                 break;
+        case 5:  lilyNote = "f";
+                 break;
+        case 7:  lilyNote = "g";
+                 break;
+        case 9:  lilyNote = "a";
+                 break;
+        case 11: lilyNote = "b";
+    }
+        
+    // assign out-of-key accidentals first, by BaseProperty::ACCIDENTAL
+    if (accidental != "") {
+        if (accidental == Accidentals::Sharp) {
+            switch (pitchNote) {
+                case  5: lilyNote = "eis"; // 5 + Sharp = E#
+                         break;
+                case  0: lilyNote = "bis"; // 0 + Sharp = B#
+                         break;
+                case  1: lilyNote = "cis";
+                         break;
+                case  3: lilyNote = "dis";
+                         break;
+                case  6: lilyNote = "fis";
+                         break;
+                case  8: lilyNote = "gis";
+                         break;
+                case 10: lilyNote = "ais";
+            }
+        } else if (accidental == Accidentals::Flat) {
+            switch (pitchNote) {
+                case 11: lilyNote = "ces"; // 11 + Flat = Cb
+                         break;
+                case  4: lilyNote = "fes"; //  4 + Flat = Fb
+                         break;
+                case  1: lilyNote = "des";
+                         break;
+                case  3: lilyNote = "ees";
+                         break;
+                case  6: lilyNote = "ges";
+                         break;
+                case  8: lilyNote = "aes";
+                         break;
+                case 10: lilyNote = "bes";
+            }
+        } else if (accidental == Accidentals::DoubleSharp) {
+            switch (pitchNote) {
+                case  1: lilyNote = "bisis"; // 1 + ## = B##
+                         break;
+                case  2: lilyNote = "cisis"; // 2 + ## = C##
+                         break;
+                case  4: lilyNote = "disis"; // 4 + ## = D##
+                         break;
+                case  6: lilyNote = "eisis"; // 6 + ## = E##
+                         break;
+                case  7: lilyNote = "fisis"; // 7 + ## = F##
+                         break;
+                case  9: lilyNote = "gisis"; // 9 + ## = G##
+                         break;
+                case 11: lilyNote = "aisis"; //11 + ## = A##
+                         break;
+            }
+        } else if (accidental == Accidentals::DoubleFlat) {
+            switch (pitchNote) {
+                case 10: lilyNote = "ceses"; //10 + bb = Cbb
+                         break;
+                case  0: lilyNote = "deses"; // 0 + bb = Dbb
+                         break;
+                case  2: lilyNote = "eeses"; // 2 + bb = Ebb
+                         break;
+                case  3: lilyNote = "feses"; // 3 + bb = Fbb
+                         break;
+                case  5: lilyNote = "geses"; // 5 + bb = Gbb
+                         break;
+                case  7: lilyNote = "aeses"; // 7 + bb = Abb
+                         break;
+                case  9: lilyNote = "beses"; // 9 + bb = Bbb
+                         break;
+            }
+        } else if (accidental == Accidentals::Natural) {
+            // do we have anything explicit left to do in this
+            // case?  probably not, but I'll leave this placeholder for now
+        }
+    } else {  // no explicit accidental; note must be in-key
+        for (c = 0; c <= accidentalCount; c++) {
+            if (isFlatKeySignature) {                              // Flat Keys:
+                switch (c) {
+                    case 7: if (pitchNote == 11) lilyNote = "ces"; // Cb 
+                    case 6: if (pitchNote ==  4) lilyNote = "fes"; // Fb 
+                    case 5: if (pitchNote ==  6) lilyNote = "ges"; // Gb 
+                    case 4: if (pitchNote ==  1) lilyNote = "des"; // Db 
+                    case 3: if (pitchNote ==  3) lilyNote = "ees"; // Eb 
+                    case 2: if (pitchNote ==  8) lilyNote = "aes"; // Ab 
+                    case 1: if (pitchNote == 10) lilyNote = "bes"; // Bb 
+                }
+            } else {                                               // Sharp Keys:
+                switch (c) {                                       
+                    case 7: if (pitchNote ==  0) lilyNote = "bis"; // C# 
+                    case 6: if (pitchNote ==  5) lilyNote = "eis"; // F# 
+                    case 5: if (pitchNote == 10) lilyNote = "ais"; // B  
+                    case 3: if (pitchNote ==  8) lilyNote = "gis"; // A  
+                    case 4: if (pitchNote ==  3) lilyNote = "dis"; // D  
+                    case 2: if (pitchNote ==  1) lilyNote = "cis"; // D  
+                    case 1: if (pitchNote ==  6) lilyNote = "fis"; // G  
+                }
+           }
+       } 
+    }             
+
+    return lilyNote;
 }
 
 bool
@@ -261,6 +404,8 @@ LilypondExporter::write()
 
         timeT prevTime = 0;
         int curTupletNotesRemaining = 0;
+        int accidentalCount = 0; // DMM
+        
         // Write out all events for this Segment
         for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
 
@@ -277,6 +422,8 @@ LilypondExporter::write()
             prevTime = absoluteTime;
 
             timeT duration = (*j)->getDuration();
+
+            // DMM - enharmonics modifications            
             if ((*j)->isa(Note::EventType) ||
                 (*j)->isa(Note::EventRestType)) {
                 // Tuplet code from notationhlayout.cpp
@@ -338,40 +485,37 @@ LilypondExporter::write()
                     // but for simplicity we always use absolute pitch
                     // 60 is middle C, one unit is a half-step
                     long pitch = 0;
+
+                    // DMM - enharmonics handling
+                    Accidental accidental;
+                    std::string lilyNote;
+
                     (*j)->get<Int>(BaseProperties::PITCH, pitch);
-                    str << convertPitchToName(pitch % 12, isFlatKeySignature);
-// Hans:
-// 
-// Cheap, lazy, but ultimately you can't do a lot better than this without
-// knowing the name-on-staff pitch of the note.  It could be re-figured here using
-// some kind of internal virtual staff model, but that would be redundant
-// since the magical new Pitch class will probably provide that information
-// directly, without any need to duplicate the effort here.
-//
-// I've reverted to your simple cop-out solution because it at least works
-// consistently incorrectly in all cases, whereas the horrible lengths I went
-// to in order to try to get around the problem without the name-on-staff
-// pitch are broken in several ways.  Since the entire (performance) PITCH +
-// ACCIDENTAL + Key model is flawed, it's a dead end.
- 
-                    if (needsAccidental(pitch % 12)) {
-                        if (isFlatKeySignature) {
-                            str << "es";
-                        } else {
-                            str << "is";
-                        }
+                    
+                    (*j)->get<String>(BaseProperties::ACCIDENTAL, accidental);
+
+                    lilyNote = convertPitchToLilyNote(pitch, isFlatKeySignature,
+                                                  accidentalCount, accidental);
+                    str << lilyNote;
+
+                    std::string octaveMarks = "";
+                    int octave = (int)(pitch / 12);
+
+                    // tweak the octave break for B# / Cb
+                    if ((lilyNote == "bisis")||(lilyNote == "bis")) {
+                        octave--;
+                    } else if ((lilyNote == "ceses")||(lilyNote == "ces")) {
+                        octave++;
                     }
 
-                    int octave = (int)(pitch / 12);
                     if (octave < 4) {
-                        for (; octave < 4; octave++) {
-                            str << ",";                    
-                        }
+                        for (; octave < 4; octave++) octaveMarks += ",";
                     } else {
-                        for (; octave > 4; octave--) {
-                            str << "\'";
-                        }
+                        for (; octave > 4; octave--) octaveMarks += "\'";
                     }
+
+                    str << octaveMarks;
+                    
                 } else { // it's a rest
                     if (currentlyWritingChord) {
                         currentlyWritingChord = false;
@@ -466,21 +610,19 @@ LilypondExporter::write()
                 str << "\\key ";
                 Key whichKey(**j);
                 isFlatKeySignature = !whichKey.isSharp();
-                str << convertPitchToName(whichKey.getTonicPitch(), isFlatKeySignature);
-                if (needsAccidental(whichKey.getTonicPitch())) {
-                    if (isFlatKeySignature) {
-                        str << "es";
-                    } else {
-                        str << "is";
-                    }
-                }
-
+                accidentalCount = whichKey.getAccidentalCount();
+                
+                str << convertPitchToLilyNote(whichKey.getTonicPitch(), isFlatKeySignature,
+                                              accidentalCount, "");
+                
                 if (whichKey.isMinor()) {
                     str << " \\minor";
                 } else {
                     str << " \\major";
                 }
                 str << "\n\t\t\t";
+
+                        
             } else if ((*j)->isa(Indication::EventType)) {
                 // Handle the end of these events when it's time
                 eventsToStart.insert(*j);
