@@ -520,9 +520,9 @@ NotePixmapFactory::getStemLength(const NotePixmapParameters &params) const
 
 	stemLength = std::min(stemLength, height + nbh);
 
-    } else if (m_font->getDimensions(m_style->getFlagCharName(1),
+    } else if (m_font->getDimensions(m_style->getPartialFlagCharName(true),
 				     width, height) ||
-	       m_font->getDimensions(m_style->getFlagCharName(0),
+	       m_font->getDimensions(m_style->getPartialFlagCharName(false),
 				     width, height)) {
 
 	unsigned int flagSpace = m_noteBodyHeight;
@@ -694,7 +694,7 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 	    y = m_above - getLegerLineThickness();
 	} else {
 	    // note above staff
-	    y = m_above + m_noteBodyHeight + getLegerLineThickness();
+	    y = m_above + m_noteBodyHeight;
 	}
     } else {
 	y = m_above + m_noteBodyHeight / 2;
@@ -745,7 +745,7 @@ NotePixmapFactory::makeRoomForStemAndFlags(int flagCount, int stemLength,
 	    int width = 0, height = 0;
 	    if (!m_font->getDimensions
 		(m_style->getFlagCharName(flagCount), width, height)) {
-		width = m_font->getWidth(m_style->getFlagCharName(0));
+		width = m_font->getWidth(m_style->getPartialFlagCharName(false));
 	    }
 	    m_right += width;
 	}
@@ -823,7 +823,7 @@ NotePixmapFactory::drawFlags(int flagCount,
 
 	// Handle fonts that don't have all the flags in separate characters
 
-	found = m_font->getPixmap(m_style->getFlagCharName(0),
+	found = m_font->getPixmap(m_style->getPartialFlagCharName(false),
 				  flagMap,
 				  !params.m_stemGoesUp);
 	
@@ -834,7 +834,7 @@ NotePixmapFactory::drawFlags(int flagCount,
 	
 	QPixmap oneFlagMap;
 	bool foundOne = (flagCount > 1 ?
-			 m_font->getPixmap(m_style->getFlagCharName(1),
+			 m_font->getPixmap(m_style->getPartialFlagCharName(true),
 					   oneFlagMap,
 					   !params.m_stemGoesUp) : false);
 	

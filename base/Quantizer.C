@@ -1456,13 +1456,13 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
     int events = 0, notes = 0, passes = 0;
     int setGood = 0, setBad = 0;
     
-#ifdef DEBUG_NOTATION_QUANTIZER
+//#ifdef DEBUG_NOTATION_QUANTIZER
     cout << "NotationQuantizer::Impl::quantizeRange: from time "
 	      << (from == s->end() ? -1 : (*from)->getAbsoluteTime())
 	      << " to "
 	      << (to == s->end() ? -1 : (*to)->getAbsoluteTime())
 	      << endl;
-#endif
+//#endif
 
     // This process does several passes over the data.  It's assumed
     // that this is not going to be invoked in any really time-critical

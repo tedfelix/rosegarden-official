@@ -1826,7 +1826,10 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
 		actionCollection()->action
 		(QString("note_font_size_%1").arg(sizes[i]));
 	    m_fontSizeActionMenu->remove(action);
-	    delete action;
+
+	    // Don't delete -- that could cause a crash when this
+	    // function is called from the action itself.  Instead
+	    // we reuse and reinsert existing actions below.
 	}
     }
 
@@ -1834,13 +1837,20 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
 
     for (unsigned int i = 0; i < sizes.size(); ++i) {
 
-	KToggleAction *sizeAction = 
-	    new KToggleAction
-	    (sizes[i] == 1 ? i18n("%1 pixel").arg(sizes[i]) :
-	                     i18n("%1 pixels").arg(sizes[i]),
-	     0, this,
-	     SLOT(slotChangeFontSizeFromAction()),
-	     actionCollection(), QString("note_font_size_%1").arg(sizes[i]));
+	QString actionName = QString("note_font_size_%1").arg(sizes[i]);
+
+	KToggleAction *sizeAction = dynamic_cast<KToggleAction *>
+	    (actionCollection()->action(actionName));
+
+	if (!sizeAction) {
+	    sizeAction = 
+		new KToggleAction
+		(sizes[i] == 1 ? i18n("%1 pixel").arg(sizes[i]) :
+		                 i18n("%1 pixels").arg(sizes[i]),
+		 0, this,
+		 SLOT(slotChangeFontSizeFromAction()),
+		 actionCollection(), actionName);
+	}
 
 	sizeAction->setChecked(sizes[i] == m_fontSize);
 	m_fontSizeActionMenu->insert(sizeAction);

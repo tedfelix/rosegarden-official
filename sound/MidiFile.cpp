@@ -632,6 +632,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
     //
     timeT rosegardenTime = 0;
     timeT rosegardenDuration = 0;
+    timeT maxTime = 0;
 
     // To create rests
     //
@@ -740,6 +741,9 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                 timeT(((*midiEvent)->getTime() * crotchetTime) / divisor);
             rosegardenDuration =
                 timeT(((*midiEvent)->getDuration() * crotchetTime) / divisor);
+	    if (rosegardenTime + rosegardenDuration > maxTime) {
+		maxTime = rosegardenTime + rosegardenDuration;
+	    }
 
             if ((*midiEvent)->isMeta())
             {
@@ -1097,6 +1101,10 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 	    delete track;
 	    track = 0;
 	}
+    }
+
+    if (maxTime > composition.getEndMarker()) {
+	composition.setEndMarker(composition.getBarEndForTime(maxTime));
     }
 
     return true;

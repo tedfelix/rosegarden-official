@@ -88,6 +88,7 @@ public:
     CharNameRec getNoteHeadCharName(Rosegarden::Note::Type);
 
     CharName getRestCharName(Rosegarden::Note::Type);
+    CharName getPartialFlagCharName(bool final);
     CharName getFlagCharName(int flagCount);
     CharName getAccidentalCharName(const Rosegarden::Accidental &);
     CharName getMarkCharName(const Rosegarden::Mark &);

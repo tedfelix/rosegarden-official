@@ -190,14 +190,16 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 //                    NOTATION_DEBUG << "Setting stem length to "
 //                                         << stemLength << endl;
                 } else {
+		    int minStemLength = stemLength;
 		    if (h[j] < -2 && stemUp) {
 			//!!! needs tuning, & applying for beamed stems too
-			stemLength = staff.getLayoutYForHeight(h[j]) -
+			minStemLength = staff.getLayoutYForHeight(h[j]) -
 			    staff.getLayoutYForHeight(4);
 		    } else if (h[j] > 10 && !stemUp) {
-			stemLength = staff.getLayoutYForHeight(4) -
+			minStemLength = staff.getLayoutYForHeight(4) -
 			    staff.getLayoutYForHeight(h[j]);
 		    }
+		    stemLength = std::max(minStemLength, stemLength);
 		}
 
                 el->event()->setMaybe<Int>

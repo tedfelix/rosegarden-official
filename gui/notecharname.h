@@ -53,7 +53,9 @@ extern const CharName TRIANGLE_NOTEHEAD_UP_BLACK;
 extern const CharName SQUARE_NOTEHEAD_WHITE;
 extern const CharName SQUARE_NOTEHEAD_BLACK;
 
-extern const CharName FLAG_0;
+extern const CharName FLAG_PARTIAL;
+extern const CharName FLAG_PARTIAL_FINAL;
+
 extern const CharName FLAG_1;
 extern const CharName FLAG_2;
 extern const CharName FLAG_3;

@@ -392,7 +392,7 @@ Composition::clear()
     m_loopEnd = 0;
     m_position = 0;
     m_startMarker = 0;
-    m_endMarker = 0;
+    m_endMarker = getBarRange(m_defaultNbBars).second;
     m_solo = false;
     m_selectedTrack = 0;
     updateRefreshStatuses();

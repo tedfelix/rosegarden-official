@@ -2528,9 +2528,7 @@ RosegardenGUIApp::createDocumentFromMIDIFile(const QString &file)
         Rosegarden::timeT startTime(segment.getStartTime());
         Rosegarden::timeT endTime(segment.getEndMarkerTime());
 
-        /*
-        RG_DEBUG << "segment " << count++ << ": start time " << segment.getStartTime() << ", end time " << segment.getEndTime() << ", end marker time " << segment.getEndMarkerTime() << ", events " << segment.size() << endl;
-        */
+        RG_DEBUG << "segment: start time " << segment.getStartTime() << ", end time " << segment.getEndTime() << ", end marker time " << segment.getEndMarkerTime() << ", events " << segment.size() << endl;
 
         command->addCommand(new EventQuantizeCommand
                             (segment, startTime, endTime, "Notation Options",
