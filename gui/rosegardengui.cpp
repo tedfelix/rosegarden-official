@@ -862,9 +862,13 @@ void RosegardenGUIApp::openFile(const QString& filePath)
             if (reply == KMessageBox::Yes)
                 // open the autosave file instead
                 effectiveFilePath = autoSaveFileName;
-            else
+            else {
+                // user doesn't want the autosave, so delete it
+                // so it won't bother us again if we reload
                 canRecover = false;
-
+                QFile::remove(autoSaveFileName);
+            }
+            
         } else
             canRecover = false;
     }
@@ -888,7 +892,6 @@ void RosegardenGUIApp::openFile(const QString& filePath)
         if (canRecover) {
             // Mark the document as modified,
             // set the "regular" filepath and name (not those of the autosaved doc)
-            // and remove the autosave
             //
             m_doc->slotDocumentModified();
             QFileInfo info(filePath);

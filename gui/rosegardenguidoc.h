@@ -416,6 +416,11 @@ protected:
      */
     bool isAutoSaved() const { return m_autoSaved; }
 
+    /**
+     * Returns the name of the autosave file
+     */
+    QString getAutoSaveFileName();
+
 public:	
     /**
      * the list of the views currently connected to the document

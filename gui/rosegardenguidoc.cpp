@@ -246,6 +246,17 @@ void RosegardenGUIDoc::slotDocumentRestored()
     setModified(false);
 }
 
+QString RosegardenGUIDoc::getAutoSaveFileName()
+{
+    QString filename = getAbsFilePath();
+    if (filename.isEmpty())
+        filename = QDir::currentDirPath() + "/" + getTitle();
+
+    QString autoSaveFileName = kapp->tempSaveName(filename);
+
+    return autoSaveFileName;
+}
+
 void RosegardenGUIDoc::slotAutoSave()
 {
 //     RG_DEBUG << "RosegardenGUIDoc::slotAutoSave()\n" << endl;
@@ -254,20 +265,15 @@ void RosegardenGUIDoc::slotAutoSave()
 //         RG_DEBUG << "RosegardenGUIDoc::slotAutoSave() - doc already autosaved\n";
         return;
     }
-    
-    QString filename = getAbsFilePath();
-    if (filename.isEmpty())
-        filename = QDir::currentDirPath() + "/" + getTitle();
 
-    QString autoSaveFileName = kapp->tempSaveName(filename);
+    QString autoSaveFileName = getAutoSaveFileName();
 
     RG_DEBUG << "RosegardenGUIDoc::slotAutoSave() - doc modified - saving '"
-             << filename << "' as "
+             << getAbsFilePath() << "' as "
              << autoSaveFileName << endl;
 
     saveDocument(autoSaveFileName, 0, true);
 }
-
 
 bool RosegardenGUIDoc::saveIfModified()
 {
@@ -298,6 +304,9 @@ bool RosegardenGUIDoc::saveIfModified()
             case KMessageBox::No:
                 setModified(false);
                 deleteContents();
+                // delete the autosave file so it won't annoy
+                // the user when reloading the file.
+                QFile::remove(getAutoSaveFileName());
                 completed=true;
                 break;	
 
