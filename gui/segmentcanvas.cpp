@@ -156,20 +156,13 @@ void SegmentItem::makeFont()
 
 void SegmentItem::drawShape(QPainter& painter)
 {
-/*!!!
-    No, this won't do.  QPainter::CoordPainter is Qt3 only, and I'm 
-    not going to leave in a Qt3-specific bit of code that leaves it
-    absolutely unusably slow with Qt2; I'd rather have it unusably
-    slow on both so as to remind me to do it correctly.
-
     QRect previewRect =
 	painter.hasClipping() ?
-	painter.clipRegion(QPainter::CoordPainter).boundingRect() :
+	painter.clipRegion().boundingRect() :
 	painter.viewport();
-*/
 
-    //!!! very slow
-    QRect previewRect = rect();
+    previewRect.moveBy(-painter.worldMatrix().dx(),
+		       -painter.worldMatrix().dy());
 
     QCanvasRectangle::drawShape(painter);
     Rosegarden::RulerScale *rulerScale = m_snapGrid->getRulerScale();
@@ -237,16 +230,13 @@ void SegmentItem::drawShape(QPainter& painter)
 	    if (start == m_segment->end()) start = m_segment->begin();
 	    else start = m_segment->findTime((*start)->getAbsoluteTime());
 
-            /* this debug was playing merry hell with playback [rwb]
-
-	    if (!painter.hasClipping())
-		kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: clipping is off " << endl;
-	    kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: rect is "
-				 << previewRect.width() << "x"
-				 << previewRect.height() << " at "
-				 << previewRect.x() << ","
-				 << previewRect.y() << endl;
-            */
+// 	    if (!painter.hasClipping())
+// 		kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: clipping is off " << endl;
+// 	    kdDebug(KDEBUG_AREA) << "SegmentCanvas::drawShape: rect is "
+// 				 << previewRect.width() << "x"
+// 				 << previewRect.height() << " at "
+// 				 << previewRect.x() << ","
+// 				 << previewRect.y() << endl;
 
 	    for (Segment::iterator i = start; i != end; ++i) {
 
@@ -289,6 +279,8 @@ void SegmentItem::drawShape(QPainter& painter)
 
 void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 {
+    canvas()->setChanged(rect());
+
     // Compute repeat rectangle if any
     //
     if (m_segment && inheritFromSegment) {
@@ -355,6 +347,7 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     }
 
     if (dots) m_label += "...";
+    canvas()->setChanged(rect());
 }
 
 Segment* SegmentItem::getSegment() const

@@ -718,8 +718,6 @@ public slots:
      */
     void slotAudioManager();
     void slotAudioManagerClosed();
-    bool m_actionsSetup;
-
 
 private:
 
@@ -729,6 +727,8 @@ private:
      * the configuration object of the application
      */
     KConfig* m_config;
+
+    bool m_actionsSetup;
 
     KRecentFilesAction* m_fileRecent;
 

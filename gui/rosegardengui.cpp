@@ -431,7 +431,7 @@ void RosegardenGUIApp::setupActions()
 
     connect(m_transport, SIGNAL(editTimeSignature(QWidget*)),
             SLOT(slotEditTimeSignature(QWidget*)));
-
+    
     m_actionsSetup = true;
 }
 
