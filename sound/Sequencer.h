@@ -1,21 +1,21 @@
-// -*- c-basic-offset: 2 -*-
+// -*- c-basic-offset: 4 -*-
 /*
-    Rosegarden-4 v0.1
-    A sequencer and musical notation editor.
+  Rosegarden-4 v0.1
+  A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2001
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
+  This program is Copyright 2000-2001
+  Guillaume Laurent   <glaurent@telegraph-road.org>,
+  Chris Cannam        <cannam@all-day-breakfast.com>,
+  Richard Bown        <bownie@bownie.com>
 
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+  The moral right of the authors to claim authorship of this work
+  has been asserted.
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License as
-    published by the Free Software Foundation; either version 2 of the
-    License, or (at your option) any later version.  See the file
-    COPYING included with this distribution for more information.
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of the
+  License, or (at your option) any later version.  See the file
+  COPYING included with this distribution for more information.
 */
 
 // From this class we control our sound subsystems - audio
@@ -46,60 +46,60 @@
 namespace Rosegarden
 {
 
-  // NOTE OFF queue. These hold a time ordered set of
-  // NOTE OFF events.
-  //
-  class NoteOffEvent
-  {
-  public:
+// NOTE OFF queue. These hold a time ordered set of
+// NOTE OFF events.
+//
+class NoteOffEvent
+{
+public:
     NoteOffEvent() {;}
     NoteOffEvent(const unsigned int &midiTime,
                  const unsigned int &pitch,
                  const Rosegarden::MidiByte &status):
-                  m_midiTime(midiTime),
-                  m_pitch(pitch),
-                  m_status(status) {;}
+        m_midiTime(midiTime),
+        m_pitch(pitch),
+        m_status(status) {;}
     ~NoteOffEvent() {;}
 
     struct NoteOffEventCmp
     {
-      bool operator()(NoteOffEvent *nO1, NoteOffEvent *nO2)
-      { 
-        return nO1->getMidiTime() < nO2->getMidiTime();
-      }
+        bool operator()(NoteOffEvent *nO1, NoteOffEvent *nO2)
+        { 
+            return nO1->getMidiTime() < nO2->getMidiTime();
+        }
     };
     
     unsigned int getMidiTime() { return m_midiTime; }
     Rosegarden::MidiByte getPitch() { return m_pitch; }
 
-  private: 
+private: 
     unsigned int         m_midiTime;
     Rosegarden::MidiByte m_pitch;
     Rosegarden::MidiByte m_status;
 
-  };
+};
 
-  class NoteOffQueue : public std::multiset<NoteOffEvent *,
-                                            NoteOffEvent::NoteOffEventCmp>
-  {
-  public:
+class NoteOffQueue : public std::multiset<NoteOffEvent *,
+                     NoteOffEvent::NoteOffEventCmp>
+{
+public:
     NoteOffQueue() {;}
     ~NoteOffQueue() {;}
-  private:
-  };
+private:
+};
 
 
-  class Sequencer
-  {
-  public:
+class Sequencer
+{
+public:
 
     typedef enum
-    {
-      ASYNCHRONOUS_MIDI,
-      ASYNCHRONOUS_AUDIO,
-      RECORD_MIDI,
-      RECORD_AUDIO
-    } RecordStatus;
+        {
+            ASYNCHRONOUS_MIDI,
+            ASYNCHRONOUS_AUDIO,
+            RECORD_MIDI,
+            RECORD_AUDIO
+        } RecordStatus;
 
     Sequencer();
     ~Sequencer();
@@ -110,7 +110,7 @@ namespace Rosegarden
 
     // get a vector of recorded events from aRTS
     inline std::vector<Arts::MidiEvent>* getMidiQueue()
-      { return m_midiRecordPort.getQueue(); }
+    { return m_midiRecordPort.getQueue(); }
 
     // Our current recording status.  Asynchronous record states
     // mean that we're just accepting asynchronous events but not
@@ -135,11 +135,11 @@ namespace Rosegarden
 
     // get the TimeStamp from the beginning of playing
     inline Arts::TimeStamp playTime(Arts::TimeStamp const &ts)
-      { return (deltaTime(ts, m_playStartTime)); }
+    { return (deltaTime(ts, m_playStartTime)); }
 
     // get the TimeStamp from the beginning of recording
     inline Arts::TimeStamp recordTime(Arts::TimeStamp const &ts)
-      { return (deltaTime(ts, m_recordStartTime)); }
+    { return (deltaTime(ts, m_recordStartTime)); }
 
     // See docs/discussion/sequencer_timing.txt for explanation of
     // the maths here.
@@ -147,10 +147,10 @@ namespace Rosegarden
     //
     inline Rosegarden::timeT convertToInternalTime(const Arts::TimeStamp &timeStamp)
     {
-      return (Rosegarden::timeT)
-             ((((double)(timeStamp.sec * 1000000 + timeStamp.usec)) *
-                                  m_ppq * (double) m_tempo )  /
-                                60000000.0);
+        return (Rosegarden::timeT)
+            ((((double)(timeStamp.sec * 1000000 + timeStamp.usec)) *
+              m_ppq * (double) m_tempo )  /
+             60000000.0);
     }
 
     // See docs/discussion/sequencer_timing.txt for explanation of
@@ -159,15 +159,15 @@ namespace Rosegarden
     //
     inline Arts::TimeStamp convertToArtsTimeStamp(const unsigned int &midiTime)
     {
-      // We ignore the Time Sigs for the moment
-      //
-      //
-      unsigned int usec = (unsigned int)(((double)60000000.0 *(double)midiTime)/
-                                         ((double)m_ppq * (double)m_tempo));
-      unsigned int sec = usec / 1000000;
-      usec %= 1000000;
+        // We ignore the Time Sigs for the moment
+        //
+        //
+        unsigned int usec = (unsigned int)(((double)60000000.0 *(double)midiTime)/
+                                           ((double)m_ppq * (double)m_tempo));
+        unsigned int sec = usec / 1000000;
+        usec %= 1000000;
 
-      return (Arts::TimeStamp(sec, usec));
+        return (Arts::TimeStamp(sec, usec));
     }
 
 
@@ -195,7 +195,7 @@ namespace Rosegarden
 
     Rosegarden::timeT getStartPosition() { return m_playStartPosition; }
 
-  private:
+private:
 
     void initializeMidi();
 
@@ -235,7 +235,7 @@ namespace Rosegarden
 
     std::map<unsigned int, Event*> m_noteOnMap;
 
-  };
+};
 
 
 }

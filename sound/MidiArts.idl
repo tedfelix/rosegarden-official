@@ -24,7 +24,7 @@
 
 interface RosegardenMidiRecord : Arts::MidiPort
 {
-  attribute boolean record;
-  sequence<Arts::MidiEvent> getQueue();
-  void setMidiThru(Arts::MidiPort port);
+    attribute boolean record;
+    sequence<Arts::MidiEvent> getQueue();
+    void setMidiThru(Arts::MidiPort port);
 };

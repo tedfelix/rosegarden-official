@@ -1,21 +1,21 @@
-// -*- c-basic-offset: 2 -*-
+// -*- c-basic-offset: 4 -*-
 /*
-    Rosegarden-4 v0.1
-    A sequencer and musical notation editor.
+  Rosegarden-4 v0.1
+  A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2001
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
+  This program is Copyright 2000-2001
+  Guillaume Laurent   <glaurent@telegraph-road.org>,
+  Chris Cannam        <cannam@all-day-breakfast.com>,
+  Richard Bown        <bownie@bownie.com>
 
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+  The moral right of the authors to claim authorship of this work
+  has been asserted.
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License as
-    published by the Free Software Foundation; either version 2 of the
-    License, or (at your option) any later version.  See the file
-    COPYING included with this distribution for more information.
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of the
+  License, or (at your option) any later version.  See the file
+  COPYING included with this distribution for more information.
 */
 
 
@@ -44,27 +44,27 @@
 namespace Rosegarden
 {
 
-  // Our internal MIDI structure is just a list of MidiEvents.
-  // We use a list and not a set because we want the order of
-  // the events to be arbitrary until we explicitly sort them
-  // (necessary when converting Composition absolute times to
-  // MIDI delta times).
-  //
-  typedef std::map<unsigned int, std::list<MidiEvent> > MidiComposition;
-  typedef std::list<MidiEvent>::iterator MidiTrackIterator;
+// Our internal MIDI structure is just a list of MidiEvents.
+// We use a list and not a set because we want the order of
+// the events to be arbitrary until we explicitly sort them
+// (necessary when converting Composition absolute times to
+// MIDI delta times).
+//
+typedef std::map<unsigned int, std::list<MidiEvent> > MidiComposition;
+typedef std::list<MidiEvent>::iterator MidiTrackIterator;
 
-  class MidiFile
-  {
-  public:
+class MidiFile
+{
+public:
 
     typedef enum
-    {
-         MIDI_SINGLE_TRACK_FILE          = 0x00,
-         MIDI_SIMULTANEOUS_TRACK_FILE    = 0x01,
-         MIDI_SEQUENTIAL_TRACK_FILE      = 0x02,
-         MIDI_CONVERTED_TO_APPLICATION   = 0xFE,
-         MIDI_FILE_NOT_LOADED            = 0xFF
-    } MIDIFileFormatType;
+        {
+            MIDI_SINGLE_TRACK_FILE          = 0x00,
+            MIDI_SIMULTANEOUS_TRACK_FILE    = 0x01,
+            MIDI_SEQUENTIAL_TRACK_FILE      = 0x02,
+            MIDI_CONVERTED_TO_APPLICATION   = 0xFE,
+            MIDI_FILE_NOT_LOADED            = 0xFF
+        } MIDIFileFormatType;
 
     MidiFile();
     MidiFile (const char *fn);
@@ -72,11 +72,11 @@ namespace Rosegarden
 
     MidiFile& operator=(const MidiFile& mF)
     {
-      m_filename = mF.m_filename;
-      m_timingDivision = mF.m_timingDivision;
-      m_numberOfTracks = mF.m_numberOfTracks;
-      m_format = mF.m_format;
-      return *this;
+        m_filename = mF.m_filename;
+        m_timingDivision = mF.m_timingDivision;
+        m_numberOfTracks = mF.m_numberOfTracks;
+        m_format = mF.m_format;
+        return *this;
     }
 
     // open a file of the given filename
@@ -95,7 +95,7 @@ namespace Rosegarden
     Rosegarden::Composition* convertToRosegarden();
     void convertToMidi(const Rosegarden::Composition &comp);
 
-  private:
+private:
     std::string            m_filename;
     int                    m_timingDivision;   // pulses per quarter note
     MIDIFileFormatType     m_format;
@@ -128,7 +128,7 @@ namespace Rosegarden
     void longToMidiBytes(std::ofstream* midiFile, const unsigned long &number);
     void longToVarBuffer(std::string &buffer, const unsigned long &number);
 
-  };
+};
 
 }
 

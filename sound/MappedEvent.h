@@ -1,22 +1,22 @@
-// -*- c-basic-offset: 2 -*-
+// -*- c-basic-offset: 4 -*-
 
 /*
-    Rosegarden-4 v0.1
-    A sequencer and musical notation editor.
+  Rosegarden-4 v0.1
+  A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2001
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
+  This program is Copyright 2000-2001
+  Guillaume Laurent   <glaurent@telegraph-road.org>,
+  Chris Cannam        <cannam@all-day-breakfast.com>,
+  Richard Bown        <bownie@bownie.com>
 
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+  The moral right of the authors to claim authorship of this work
+  has been asserted.
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License as
-    published by the Free Software Foundation; either version 2 of the
-    License, or (at your option) any later version.  See the file
-    COPYING included with this distribution for more information.
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of the
+  License, or (at your option) any later version.  See the file
+  COPYING included with this distribution for more information.
 */
 
 #ifndef _MAPPEDEVENT_H_
@@ -43,59 +43,59 @@ typedef unsigned int velocityT;
 class MappedEvent
 {
 public:
-  MappedEvent() {;}
+    MappedEvent() {;}
 
-  // Our main constructor used to convert from the Track Events
-  //
-  MappedEvent(const Event &e, timeT duration):
-                               m_pitch(e.get<Int>("pitch")),
-                               m_absoluteTime(e.getAbsoluteTime()),
-                               m_duration(duration),
-                               m_velocity(127) {;}
+    // Our main constructor used to convert from the Track Events
+    //
+    MappedEvent(const Event &e, timeT duration):
+        m_pitch(e.get<Int>("pitch")),
+        m_absoluteTime(e.getAbsoluteTime()),
+        m_duration(duration),
+        m_velocity(127) {;}
 
-  MappedEvent(const Event &e): m_pitch(e.get<Int>("pitch")),
-                               m_absoluteTime(e.getAbsoluteTime()),
-                               m_duration(e.getDuration()),
-                               m_velocity(127) {;}
+    MappedEvent(const Event &e): m_pitch(e.get<Int>("pitch")),
+                                 m_absoluteTime(e.getAbsoluteTime()),
+                                 m_duration(e.getDuration()),
+                                 m_velocity(127) {;}
 
-  MappedEvent(const int &pitch, const timeT &absTime, const timeT &duration,
-              const velocityT &velocity, const instrumentT &instrument):
-                              m_pitch(pitch),
-                              m_absoluteTime(absTime),
-                              m_duration(duration),
-                              m_velocity(velocity),
-                              m_instrument(instrument) {;}
-  ~MappedEvent() {;}
+    MappedEvent(const int &pitch, const timeT &absTime, const timeT &duration,
+                const velocityT &velocity, const instrumentT &instrument):
+        m_pitch(pitch),
+        m_absoluteTime(absTime),
+        m_duration(duration),
+        m_velocity(velocity),
+        m_instrument(instrument) {;}
+    ~MappedEvent() {;}
 
-  void setPitch(const int &p) { m_pitch = p; }
-  void setAbsoluteTime(const timeT &a) { m_absoluteTime = a; }
-  void setDuration(const timeT &d) { m_duration = d; }
-  void setInstrument(const instrumentT &i) { m_instrument = i; }
-  void setVelocity(const velocityT &v) { m_velocity = v; }
+    void setPitch(const int &p) { m_pitch = p; }
+    void setAbsoluteTime(const timeT &a) { m_absoluteTime = a; }
+    void setDuration(const timeT &d) { m_duration = d; }
+    void setInstrument(const instrumentT &i) { m_instrument = i; }
+    void setVelocity(const velocityT &v) { m_velocity = v; }
 
-  int   getPitch() const { return m_pitch; }
-  timeT getAbsoluteTime() const { return m_absoluteTime; }
-  timeT getDuration() const { return m_duration; }
-  velocityT getVelocity() const { return m_velocity; }
-  instrumentT getInstrument() const { return m_instrument; }
+    int   getPitch() const { return m_pitch; }
+    timeT getAbsoluteTime() const { return m_absoluteTime; }
+    timeT getDuration() const { return m_duration; }
+    velocityT getVelocity() const { return m_velocity; }
+    instrumentT getInstrument() const { return m_instrument; }
 
-  struct MappedEventCmp
-  {
-    bool operator()(const MappedEvent *mE1, const MappedEvent *mE2) const
+    struct MappedEventCmp
     {
-      return *mE1 < *mE2;
-    }
-  };
+        bool operator()(const MappedEvent *mE1, const MappedEvent *mE2) const
+        {
+            return *mE1 < *mE2;
+        }
+    };
 
-  friend bool operator<(const MappedEvent &a, const MappedEvent &b);
+    friend bool operator<(const MappedEvent &a, const MappedEvent &b);
 
 private:
 
-  int          m_pitch;
-  timeT        m_absoluteTime;
-  timeT        m_duration;
-  velocityT    m_velocity;
-  instrumentT  m_instrument;
+    int          m_pitch;
+    timeT        m_absoluteTime;
+    timeT        m_duration;
+    velocityT    m_velocity;
+    instrumentT  m_instrument;
 
 };
 

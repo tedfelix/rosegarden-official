@@ -1,22 +1,22 @@
-// -*- c-basic-offset: 2 -*-
+// -*- c-basic-offset: 4 -*-
 
 /*
-    Rosegarden-4 v0.1
-    A sequencer and musical notation editor.
+  Rosegarden-4 v0.1
+  A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2001
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
+  This program is Copyright 2000-2001
+  Guillaume Laurent   <glaurent@telegraph-road.org>,
+  Chris Cannam        <cannam@all-day-breakfast.com>,
+  Richard Bown        <bownie@bownie.com>
 
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+  The moral right of the authors to claim authorship of this work
+  has been asserted.
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License as
-    published by the Free Software Foundation; either version 2 of the
-    License, or (at your option) any later version.  See the file
-    COPYING included with this distribution for more information.
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of the
+  License, or (at your option) any later version.  See the file
+  COPYING included with this distribution for more information.
 */
 
 
@@ -38,116 +38,116 @@ using std::endl;
 static const char *description = I18N_NOOP("RosegardenSequencer");
     
 static KCmdLineOptions options[] =
-{
-    { "+[File]", I18N_NOOP("file to open"), 0 },
-    { 0, 0, 0 }
-    // INSERT YOUR COMMANDLINE OPTIONS HERE
-};
+    {
+        { "+[File]", I18N_NOOP("file to open"), 0 },
+        { 0, 0, 0 }
+        // INSERT YOUR COMMANDLINE OPTIONS HERE
+    };
 
 int main(int argc, char *argv[])
 {
 
-  KAboutData aboutData( "rosegardensequencer",
-                        I18N_NOOP("RosegardenSequencer"),
-                        VERSION, description, KAboutData::License_GPL,
-                        "(c) 2000-2001, Guillaume Laurent, Chris Cannam, Richard Bown");
+    KAboutData aboutData( "rosegardensequencer",
+                          I18N_NOOP("RosegardenSequencer"),
+                          VERSION, description, KAboutData::License_GPL,
+                          "(c) 2000-2001, Guillaume Laurent, Chris Cannam, Richard Bown");
     aboutData.addAuthor("Guillaume Laurent, Chris Cannam, Richard Bown",0, "glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com");
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
-  KApplication app;
-  RosegardenSequencerApp *roseSeq = 0;
+    KApplication app;
+    RosegardenSequencerApp *roseSeq = 0;
 
 
-  if (app.isRestored())
-  {
-    RESTORE(RosegardenSequencerApp);
-  }
-  else
-  {
-    roseSeq = new RosegardenSequencerApp();
-
-    // we don't show() the sequencer application as we're just taking
-    // advantage of DCOP/KApplication and there's nothing to show().
-
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-        
-    if (args->count())
-    {
-      //rosegardensequencer->openDocumentFile(args->arg(0));
-    }
+    if (app.isRestored())
+        {
+            RESTORE(RosegardenSequencerApp);
+        }
     else
-    {
-      // rosegardensequencer->openDocumentFile();
-    }
+        {
+            roseSeq = new RosegardenSequencerApp();
 
-    args->clear();
-  }
+            // we don't show() the sequencer application as we're just taking
+            // advantage of DCOP/KApplication and there's nothing to show().
 
-  QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-  //app.dcopClient()->setDefaultObject("RosegardenGUIIface");
+            KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+        
+            if (args->count())
+                {
+                    //rosegardensequencer->openDocumentFile(args->arg(0));
+                }
+            else
+                {
+                    // rosegardensequencer->openDocumentFile();
+                }
 
-  // Started OK
-  //
-  cout << "RosegardenSequencer - started OK" << endl;
+            args->clear();
+        }
 
-  // Now we can enter our specialised event loop.
-  // For each pass through we wait for some pending
-  // events.
-  //
-  TransportStatus lastSeqStatus = roseSeq->getStatus();
+    QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+    //app.dcopClient()->setDefaultObject("RosegardenGUIIface");
 
-  while(roseSeq->getStatus() != QUIT)
-  {
-    // process any pending events (50ms of events)
-    app.processEvents(10);
+    // Started OK
+    //
+    cout << "RosegardenSequencer - started OK" << endl;
 
-    // Update internal clock and send pointer position
-    // change event to GUI
-    if (roseSeq->getStatus() == PLAYING)
-      roseSeq->updateClocks();
+    // Now we can enter our specialised event loop.
+    // For each pass through we wait for some pending
+    // events.
+    //
+    TransportStatus lastSeqStatus = roseSeq->getStatus();
 
-    if(roseSeq)
-    {
-      switch(roseSeq->getStatus())
-      {
-        case STARTING_TO_PLAY:
-          if (!roseSeq->startPlaying())
-          {
-            // send result failed and stop Sequencer
-            roseSeq->setStatus(STOPPING);
-          }
-          else
-          {
-            roseSeq->setStatus(PLAYING);
-          }
-          break;
+    while(roseSeq->getStatus() != QUIT)
+        {
+            // process any pending events (50ms of events)
+            app.processEvents(10);
 
-        case PLAYING:
-          if (!roseSeq->keepPlaying())
-          {
-            // there's a problem or the piece has finished
-            // so stop playing
-            roseSeq->setStatus(STOPPING);
-          }
-          break;
+            // Update internal clock and send pointer position
+            // change event to GUI
+            if (roseSeq->getStatus() == PLAYING)
+                roseSeq->updateClocks();
 
-        case STOPPING:
-          roseSeq->setStatus(STOPPED);
-          break;
+            if(roseSeq)
+                {
+                    switch(roseSeq->getStatus())
+                        {
+                        case STARTING_TO_PLAY:
+                            if (!roseSeq->startPlaying())
+                                {
+                                    // send result failed and stop Sequencer
+                                    roseSeq->setStatus(STOPPING);
+                                }
+                            else
+                                {
+                                    roseSeq->setStatus(PLAYING);
+                                }
+                            break;
 
-        case STOPPED:
-        default:
-          break;
-      }
-    }
+                        case PLAYING:
+                            if (!roseSeq->keepPlaying())
+                                {
+                                    // there's a problem or the piece has finished
+                                    // so stop playing
+                                    roseSeq->setStatus(STOPPING);
+                                }
+                            break;
 
-    if (lastSeqStatus != roseSeq->getStatus())
-      roseSeq->notifySequencerStatus();
+                        case STOPPING:
+                            roseSeq->setStatus(STOPPED);
+                            break;
 
-    lastSeqStatus = roseSeq->getStatus();
-  }
+                        case STOPPED:
+                        default:
+                            break;
+                        }
+                }
 
-  return app.exec();
+            if (lastSeqStatus != roseSeq->getStatus())
+                roseSeq->notifySequencerStatus();
+
+            lastSeqStatus = roseSeq->getStatus();
+        }
+
+    return app.exec();
 
 }

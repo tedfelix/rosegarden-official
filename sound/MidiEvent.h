@@ -1,21 +1,21 @@
-// -*- c-basic-offset: 2 -*-
+// -*- c-basic-offset: 4 -*-
 /*
-    Rosegarden-4 v0.1
-    A sequencer and musical notation editor.
+  Rosegarden-4 v0.1
+  A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2001
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
+  This program is Copyright 2000-2001
+  Guillaume Laurent   <glaurent@telegraph-road.org>,
+  Chris Cannam        <cannam@all-day-breakfast.com>,
+  Richard Bown        <bownie@bownie.com>
 
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+  The moral right of the authors to claim authorship of this work
+  has been asserted.
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License as
-    published by the Free Software Foundation; either version 2 of the
-    License, or (at your option) any later version.  See the file
-    COPYING included with this distribution for more information.
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of the
+  License, or (at your option) any later version.  See the file
+  COPYING included with this distribution for more information.
 */
 
 
@@ -31,10 +31,10 @@
 
 namespace Rosegarden
 {
-  class MidiEvent
-  {
+class MidiEvent
+{
 
-  public:
+public:
     MidiEvent();
 
     // single data byte case
@@ -66,10 +66,10 @@ namespace Rosegarden
     void setTime(const unsigned int &time) { m_deltaTime = time; }
 
     inline const MidiByte messageType()
-        { return ( m_eventCode & MIDI_MESSAGE_TYPE_MASK ); }
+    { return ( m_eventCode & MIDI_MESSAGE_TYPE_MASK ); }
 
     inline const MidiByte channelNumber()
-        { return ( m_eventCode & MIDI_CHANNEL_NUM_MASK ); }
+    { return ( m_eventCode & MIDI_CHANNEL_NUM_MASK ); }
 
     inline const MidiByte eventCode() { return m_eventCode; }
 
@@ -83,20 +83,20 @@ namespace Rosegarden
     inline const MidiByte data2() { return m_data2; }
 
     inline const bool isMeta()
-      { return (m_eventCode == MIDI_FILE_META_EVENT ? true : false ); }
+    { return (m_eventCode == MIDI_FILE_META_EVENT ? true : false ); }
 
     inline std::string metaMessage() const { return m_metaMessage; }
     inline const MidiByte metaEventCode() { return m_metaEventCode; }
 
     void duration(const unsigned int& duration)
-        { m_duration = duration; }
+    { m_duration = duration; }
 
     const unsigned int& duration() { return m_duration; }
 
     friend bool operator<(const MidiEvent &a, const MidiEvent &b);
 
 
-  private:
+private:
 
     MidiEvent& operator=(const MidiEvent mE) {;}
 
@@ -110,7 +110,7 @@ namespace Rosegarden
     std::string  m_metaMessage;
     
 
-  };
+};
 }
 
 #endif // _ROSEGARDEN_MIDI_EVENT_H_

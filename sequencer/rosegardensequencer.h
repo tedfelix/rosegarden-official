@@ -1,22 +1,22 @@
-// -*- c-basic-offset: 2 -*-
+// -*- c-basic-offset: 4 -*-
 
 /*
-    Rosegarden-4 v0.1
-    A sequencer and musical notation editor.
+  Rosegarden-4 v0.1
+  A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2001
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
+  This program is Copyright 2000-2001
+  Guillaume Laurent   <glaurent@telegraph-road.org>,
+  Chris Cannam        <cannam@all-day-breakfast.com>,
+  Richard Bown        <bownie@bownie.com>
 
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+  The moral right of the authors to claim authorship of this work
+  has been asserted.
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License as
-    published by the Free Software Foundation; either version 2 of the
-    License, or (at your option) any later version.  See the file
-    COPYING included with this distribution for more information.
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of the
+  License, or (at your option) any later version.  See the file
+  COPYING included with this distribution for more information.
 */
 
 #ifndef _ROSEGARDEN_SEQUENCER_APP_H_
@@ -59,69 +59,69 @@ class RosegardenGUIView;
 class RosegardenSequencerApp : public KMainWindow,
                                virtual public RosegardenSequencerIface
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  RosegardenSequencerApp();
-  ~RosegardenSequencerApp();
+    RosegardenSequencerApp();
+    ~RosegardenSequencerApp();
 
 protected:
 
-public slots:
-  virtual void quit();
+        public slots:
+        virtual void quit();
 
-  // DCOP doesn't currently like to stream bools so we have to
-  // use ints for the return types of these slots.  This is
-  // the GUI level control interface for the Sequencer.
-  //
-  virtual int play(const Rosegarden::timeT &position,
-                   const Rosegarden::timeT &playLatency,
-                   const Rosegarden::timeT &fetchLatency,
-                   const double &tempo);
-  virtual int stop();
+    // DCOP doesn't currently like to stream bools so we have to
+    // use ints for the return types of these slots.  This is
+    // the GUI level control interface for the Sequencer.
+    //
+    virtual int play(const Rosegarden::timeT &position,
+                     const Rosegarden::timeT &playLatency,
+                     const Rosegarden::timeT &fetchLatency,
+                     const double &tempo);
+    virtual int stop();
 
-  // Any sudden moves
-  virtual void jumpTo(const Rosegarden::timeT &position);
+    // Any sudden moves
+    virtual void jumpTo(const Rosegarden::timeT &position);
 
-  void setStatus(const TransportStatus &status) { m_transportStatus = status; }
-  TransportStatus getStatus() { return m_transportStatus; }
+    void setStatus(const TransportStatus &status) { m_transportStatus = status; }
+    TransportStatus getStatus() { return m_transportStatus; }
    
-  // Process the first chunk of Sequencer events
-  bool startPlaying();
+    // Process the first chunk of Sequencer events
+    bool startPlaying();
 
-  // Process all subsequent events
-  bool keepPlaying();
+    // Process all subsequent events
+    bool keepPlaying();
 
-  // Update internal clock and send GUI position pointer movement
-  void updateClocks();
+    // Update internal clock and send GUI position pointer movement
+    void updateClocks();
 
-  // Sends status changes up to GUI
-  void notifySequencerStatus();
+    // Sends status changes up to GUI
+    void notifySequencerStatus();
 
 private:
-  Rosegarden::MappedComposition* fetchEvents(const Rosegarden::timeT &start,
-                                            const Rosegarden::timeT &end);
+    Rosegarden::MappedComposition* fetchEvents(const Rosegarden::timeT &start,
+                                               const Rosegarden::timeT &end);
 
-  Rosegarden::Sequencer *m_sequencer;
-  TransportStatus m_transportStatus;
+    Rosegarden::Sequencer *m_sequencer;
+    TransportStatus m_transportStatus;
 
-  // Position pointer
-  Rosegarden::timeT m_songPosition;
-  Rosegarden::timeT m_lastFetchSongPosition;
+    // Position pointer
+    Rosegarden::timeT m_songPosition;
+    Rosegarden::timeT m_lastFetchSongPosition;
 
-  // Latency - m_fetchLatency - when we should fetch new events and
-  //                            spool them onto aRTS
-  //
-  //         - m_playLatency  - how long we add to all events to make
-  //                            sure they play in a synchonised manner
-  //                            
-  //
-  // We can throttle these values internally at first and see how
-  // we get on.
-  //
-  Rosegarden::timeT m_fetchLatency;
-  Rosegarden::timeT m_playLatency;
-  Rosegarden::timeT m_readAhead;
+    // Latency - m_fetchLatency - when we should fetch new events and
+    //                            spool them onto aRTS
+    //
+    //         - m_playLatency  - how long we add to all events to make
+    //                            sure they play in a synchonised manner
+    //                            
+    //
+    // We can throttle these values internally at first and see how
+    // we get on.
+    //
+    Rosegarden::timeT m_fetchLatency;
+    Rosegarden::timeT m_playLatency;
+    Rosegarden::timeT m_readAhead;
 
 };
  

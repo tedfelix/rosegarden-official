@@ -1,22 +1,22 @@
-// -*- c-basic-offset: 2 -*-
+// -*- c-basic-offset: 4 -*-
 
 /*
-    Rosegarden-4 v0.1
-    A sequencer and musical notation editor.
+  Rosegarden-4 v0.1
+  A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2001
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
+  This program is Copyright 2000-2001
+  Guillaume Laurent   <glaurent@telegraph-road.org>,
+  Chris Cannam        <cannam@all-day-breakfast.com>,
+  Richard Bown        <bownie@bownie.com>
 
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+  The moral right of the authors to claim authorship of this work
+  has been asserted.
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License as
-    published by the Free Software Foundation; either version 2 of the
-    License, or (at your option) any later version.  See the file
-    COPYING included with this distribution for more information.
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of the
+  License, or (at your option) any later version.  See the file
+  COPYING included with this distribution for more information.
 */
 
 
@@ -42,34 +42,34 @@ namespace Rosegarden
 {
 
 class MappedComposition : public std::multiset<MappedEvent *,
-                                      MappedEvent::MappedEventCmp>
+                          MappedEvent::MappedEventCmp>
 {
 public:
-  MappedComposition():m_startTime(0), m_endTime(0) {;}
+    MappedComposition():m_startTime(0), m_endTime(0) {;}
 
-  MappedComposition(Rosegarden::Composition &comp,
-                    const Rosegarden::timeT &sT,
-                    const Rosegarden::timeT &eT);
+    MappedComposition(Rosegarden::Composition &comp,
+                      const Rosegarden::timeT &sT,
+                      const Rosegarden::timeT &eT);
 
-  MappedComposition(const Rosegarden::timeT &sT, const Rosegarden::timeT &eT):
-             m_startTime(sT), m_endTime(eT) {;}
-  ~MappedComposition() {;}
+    MappedComposition(const Rosegarden::timeT &sT, const Rosegarden::timeT &eT):
+        m_startTime(sT), m_endTime(eT) {;}
+    ~MappedComposition() {;}
 
-  const Rosegarden::timeT getStartTime() const { return m_startTime; }
-  const Rosegarden::timeT getEndTime() const { return m_endTime; }
-  void setStartTime(const Rosegarden::timeT &sT) { m_startTime = sT; }
-  void setEndTime(const Rosegarden::timeT &eT) { m_endTime = eT; }
+    const Rosegarden::timeT getStartTime() const { return m_startTime; }
+    const Rosegarden::timeT getEndTime() const { return m_endTime; }
+    void setStartTime(const Rosegarden::timeT &sT) { m_startTime = sT; }
+    void setEndTime(const Rosegarden::timeT &eT) { m_endTime = eT; }
 
 
-  // This section is used for serialising this class over DCOP
-  //
-  //
-  friend QDataStream& operator<<(QDataStream &dS, const MappedComposition &mC);
-  friend QDataStream& operator>>(QDataStream &dS, MappedComposition &mC);
+    // This section is used for serialising this class over DCOP
+    //
+    //
+    friend QDataStream& operator<<(QDataStream &dS, const MappedComposition &mC);
+    friend QDataStream& operator>>(QDataStream &dS, MappedComposition &mC);
 
 private:
-  Rosegarden::timeT m_startTime;
-  Rosegarden::timeT m_endTime;
+    Rosegarden::timeT m_startTime;
+    Rosegarden::timeT m_endTime;
 
 };
 
