@@ -45,8 +45,8 @@ etc
 <Menu name="Tools">
   <text>&amp;Tools</text>
 
-<Action name="erase"/>
 <Action name="select"/>
+<Action name="erase"/>
 
 <Separator/>
 

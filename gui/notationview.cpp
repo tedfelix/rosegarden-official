@@ -64,6 +64,9 @@
 
 #include "chordnameruler.h"
 
+#include "CompositionTimeSliceAdapter.h"
+#include "AnalysisTypes.h"
+
 
 using Rosegarden::Event;
 using Rosegarden::Int;
@@ -1625,9 +1628,17 @@ void NotationView::slotTransformsAddKeySignature()
 	if (i != staff->getViewElementList()->end()) {
 	    insertionTime = (*i)->getAbsoluteTime();
 	}
-
+/*!!!
 	Rosegarden::Key key;
 	if (keyEvt) key = Rosegarden::Key(*keyEvt);
+*/
+
+	//!!! experimental:
+	Rosegarden::CompositionTimeSliceAdapter adapter
+	    (&m_document->getComposition(), insertionTime,
+	     m_document->getComposition().getDuration());
+	Rosegarden::AnalysisHelper helper;
+	Rosegarden::Key key = helper.guessKey(adapter);
 
 	Rosegarden::Clef clef;
 	if (clefEvt) clef = Rosegarden::Clef(*clefEvt);

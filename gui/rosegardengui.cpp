@@ -213,19 +213,22 @@ void RosegardenGUIApp::setupActions()
                               actionCollection(), "move");
     action->setExclusiveGroup("segmenttools");
 
-    action = new KRadioAction(i18n("&Resize"), "misc", // TODO : find a better icon
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/resize.xpm"));
+    action = new KRadioAction(i18n("&Resize"), icon,
                               0,
                               this, SLOT(slotResizeSelected()),
                               actionCollection(), "resize");
     action->setExclusiveGroup("segmenttools");
 
-    action = new KRadioAction(i18n("&Split"), "wizard",
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/split.xpm"));
+    action = new KRadioAction(i18n("&Split"), icon,
                               0,
                               this, SLOT(slotSplitSelected()),
                               actionCollection(), "split");
     action->setExclusiveGroup("segmenttools");
 
-    action = new KRadioAction(i18n("&Join"), "wizard",
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/join.xpm"));
+    action = new KRadioAction(i18n("&Join"), icon,
                               0,
                               this, SLOT(slotJoinSelected()),
                               actionCollection(), "join");

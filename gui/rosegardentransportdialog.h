@@ -126,6 +126,9 @@ private:
     QTimer *m_midiInTimer;
     QTimer *m_midiOutTimer;
 
+    QPixmap m_panelOpen;
+    QPixmap m_panelClosed;
+
     void updateTimeDisplay();
 };
 

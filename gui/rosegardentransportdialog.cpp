@@ -121,6 +121,9 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     connect(PanelCloseButton, SIGNAL(released()),
 	    SLOT(slotPanelCloseButtonReleased()));
 
+    m_panelOpen = *PanelOpenButton->pixmap();
+    m_panelClosed = *PanelCloseButton->pixmap();
+
     // clear labels
     //
     slotClearMidiInLabel();
@@ -510,13 +513,23 @@ RosegardenTransportDialog::slotLoopButtonReleased()
 void
 RosegardenTransportDialog::slotPanelOpenButtonReleased()
 {
-    RecordingFrame->show();
+    if (RecordingFrame->isVisible()) {
+	RecordingFrame->hide();
+	PanelOpenButton->setPixmap(m_panelClosed);
+    } else {
+	RecordingFrame->show();
+	PanelOpenButton->setPixmap(m_panelOpen);
+    }
 }
 
 void
 RosegardenTransportDialog::slotPanelCloseButtonReleased()
 {
-    RecordingFrame->hide();
+    if (RecordingFrame->isVisible()) {
+	RecordingFrame->hide();
+	PanelOpenButton->setOn(false);
+	PanelOpenButton->setPixmap(m_panelClosed);
+    }
 }
 
 

@@ -46,9 +46,9 @@
 <ToolBar fullWidth="true" name="tracksToolBar" newline="true">
     <Action name="select"/>
 	<Action name="move"/>
+	<Action name="resize"/>
 	<Action name="draw"/>
 	<Action name="erase"/>
-	<Action name="resize"/>
     <Action name="split"/>
     <Action name="join"/>
 </ToolBar>
