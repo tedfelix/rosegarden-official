@@ -1138,7 +1138,9 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
 	} else {
 	    NotePixmapCache::iterator ci(m_dottedRestCache.find(charName));
 	    if (ci != m_dottedRestCache.end())
-		return new QCanvasPixmap(*ci->second, QPoint(0,0));
+		return new QCanvasPixmap
+		    (*ci->second, QPoint(ci->second->offsetX(),
+					 ci->second->offsetY()));
 	    else encache = true;
 	}
     }
@@ -1195,7 +1197,8 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
     QCanvasPixmap* canvasMap = makeCanvasPixmap(hotspot);
     if (encache) {
 	m_dottedRestCache.insert(std::pair<CharName, QCanvasPixmap*>
-				 (charName, new QCanvasPixmap(*canvasMap, QPoint(0,0))));
+				 (charName, new QCanvasPixmap
+				  (*canvasMap, hotspot)));
     }
     return canvasMap;
 }
