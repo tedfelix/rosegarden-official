@@ -4,6 +4,9 @@ Features for 1.0 - updated 20030923
 - integrate new JACK transport and synchronisation - also
   investigate MIDI clock, MTC and MMC [IN PROGRESS - rwb]
 
+- banks/variations [cc] [DONE] [NOT QUITE DONE AFTER ALL - just noticed
+  variation toggle status isn't being loaded from .rgd file correctly]
+
 - punch in record [rwb] [HALF COMPLETE]
 
 - audio threading for file r/w access [rwb]
@@ -36,9 +39,6 @@ Features for 1.0 - updated 20030923
   should just dump it and forget about it, though I _do_ still think it's an
   excellent idea.
 
-- implement Pitch in lilypondio in parallel with existing methods, so we can
-  eventually wean it off of the junky code it currently uses. [dmm]
-
 - fix lilypond lyric duration bug [dmm]
 
 - find decent home for event filter toolbar icons [cc? dmm?]
@@ -70,8 +70,6 @@ Features for 1.0 - updated 20030923
 Completed
 ---------
 
-- banks/variations [cc] [DONE]
-
 - named controllers for studio with associated bankeditor-like dialog [rwb/dmm]
   [DONE]
 
@@ -90,6 +88,9 @@ Completed
 - document event filter dialog in RG manual [dmm] [DONE]
 
 - event filter dialog [dmm] [DONE]
+
+- implement Pitch in lilypondio in parallel with existing methods, so we can
+  eventually wean it off of the junky code it currently uses. [dmm] [DONE -cc]
 
 - request: triplets of more than three (erm, quintuplets?)
     [ALREADY DONE - DOCUMENT?]

@@ -2633,6 +2633,7 @@ void NotationView::refreshSegment(Segment *segment,
     NOTATION_DEBUG << "*** " << endl;
 
     if (m_inhibitRefresh) return;
+    NOTATION_DEBUG << "NotationView::refreshSegment(" << segment << "," << startTime << "," << endTime << ")" << endl;
     Rosegarden::Profiler foo("NotationView::refreshSegment");
 
     installProgressEventFilter();

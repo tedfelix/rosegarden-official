@@ -1478,7 +1478,9 @@ MIDIInstrumentParameterPanel::populateProgramList()
     for (unsigned int i = 0; i < programs.size(); ++i) {
 	std::string programName = programs[i]->getName();
 	if (programName != "") {
-	    m_programValue->insertItem(strtoqstr(programName));
+	    m_programValue->insertItem(QString("%1. %2")
+				       .arg(programs[i]->getProgram() + 1)
+				       .arg(strtoqstr(programName)));
 	    if (m_selectedInstrument->getProgram() == *programs[i]) {
 		m_programValue->setCurrentItem(i);
 	    }

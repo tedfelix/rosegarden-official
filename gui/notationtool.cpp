@@ -288,10 +288,11 @@ NoteInserter::handleMouseRelease(Rosegarden::timeT,
     Segment &segment = m_nParentView->getStaff(m_clickStaffNo)->getSegment();
 
     Segment::iterator realEnd = segment.findTime(endTime);
-    if (realEnd == segment.end() || ++realEnd == segment.end()) {
-	endTime = segment.getEndTime();
+    if (!segment.isBeforeEndMarker(  realEnd) ||
+	!segment.isBeforeEndMarker(++realEnd)) {
+	endTime = segment.getEndMarkerTime();
     } else {
-	endTime = std::max(endTime, (*realEnd)->getAbsoluteTime());
+	endTime = std::max(endTime, (*realEnd)->getNotationAbsoluteTime());
     }
 
     Event *lastInsertedEvent = doAddCommand

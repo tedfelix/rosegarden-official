@@ -204,13 +204,13 @@ protected:
     struct Chunk {
 	Rosegarden::timeT duration;
 	short subordering;
-	double fixed;
-	double stretchy;
-	double x;
+	float fixed;
+	float stretchy;
+	float x;
 
-	Chunk(Rosegarden::timeT d, short sub, double f, double s) :
+	Chunk(Rosegarden::timeT d, short sub, float f, float s) :
 	    duration(d), subordering(sub), fixed(f), stretchy(s), x(0) { }
-	Chunk(short sub, double f) :
+	Chunk(short sub, float f) :
 	    duration(0), subordering(sub), fixed(f), stretchy(0), x(0) { }
     };
     typedef std::vector<Chunk> ChunkList;
@@ -220,6 +220,8 @@ protected:
      */
     struct BarData
     {
+	ChunkList chunks;
+        
 	struct BasicData
 	{   // slots that can be filled at construction time
 
@@ -233,11 +235,9 @@ protected:
 	struct SizeData
 	{   // slots that can be filled when the following bar has been scanned
 
-	    ChunkList chunks;
-	    double idealWidth;    // theoretical width of bar following barline
-	    double reconciledWidth;
-	    double fixedWidth;       // width of non-chunk items in bar
-//	    int baseWidth;        // minimum width of note items in bar
+	    float idealWidth;    // theoretical width of bar following barline
+	    float reconciledWidth;
+	    float fixedWidth;       // width of non-chunk items in bar
 	    Rosegarden::timeT actualDuration; // may exceed nominal duration
 
 	} sizeData;
@@ -249,7 +249,7 @@ protected:
 	    int timeSigX;
 
 	} layoutData;
-        
+
         BarData(NotationElementList::iterator i,
 		bool correct, Rosegarden::TimeSignature timeSig, bool newTimeSig) {
             basicData.start = i;
@@ -293,7 +293,7 @@ protected:
      * records and/or fill with empty ones as appropriate.
      */
     void setBarSizeData(Rosegarden::Staff &staff, int barNo,
-			const ChunkList &chunks, double fixedWidth,
+			const ChunkList &chunks, float fixedWidth,
 			Rosegarden::timeT actualDuration);
 
     /**
@@ -326,7 +326,7 @@ protected:
     void scanChord
     (NotationElementList *notes, NotationElementList::iterator &i,
      const Rosegarden::Clef &, const Rosegarden::Key &, AccidentalTable &,
-     double &lyricWidth, ChunkList &chunks,
+     float &lyricWidth, ChunkList &chunks,
      NotationElementList::iterator &to);
 
     typedef std::map<int, NotationElementList::iterator> TieMap;
@@ -349,7 +349,7 @@ protected:
     Rosegarden::timeT getSpacingDuration
     (Rosegarden::Staff &staff, const NotationChord &);
 
-    double getLayoutWidth(Rosegarden::ViewElement &) const;
+    float getLayoutWidth(Rosegarden::ViewElement &) const;
 
     int getBarMargin() const;
     int getPreBarMargin() const;

@@ -38,22 +38,7 @@
 #include "SegmentNotationHelper.h"
 
 #include <cmath> // for fabs()
-
-#if (__GNUC__ < 3)
-
-#include <hash_set>
-#define __HASH_NS std
-
-#else
-
-#include <ext/hash_set>
-#if (__GNUC_MINOR__ >= 1)
-#define __HASH_NS __gnu_cxx
-#else
-#define __HASH_NS std
-#endif
-
-#endif
+#include <set>
 
 using Rosegarden::Note;
 using Rosegarden::Int;
@@ -163,14 +148,15 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
     Segment &segment(staff.getSegment());
     bool isFullScan = (startTime == endTime);
+    int startBarOfStaff = getComposition()->getBarNumber(segment.getStartTime());
 
     if (isFullScan) {
 	clearBarList(staff);
 	startTime = segment.getStartTime();
-	endTime = segment.getEndMarkerTime();
+	endTime   = segment.getEndMarkerTime();
     } else {
 	startTime = getComposition()->getBarStartForTime(startTime);
-	endTime = getComposition()->getBarEndForTime(endTime);
+	endTime   = getComposition()->getBarEndForTime(endTime);
     }
 
     NotationElementList *notes = staff.getViewElementList();
@@ -178,14 +164,12 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
     int startBarNo = getComposition()->getBarNumber(startTime);
     int endBarNo = getComposition()->getBarNumber(endTime);
-
-/*!!!
+/*
     if (endBarNo > startBarNo &&
 	getComposition()->getBarStart(endBarNo) == segment.getEndMarkerTime()) {
 	--endBarNo;
     }
 */
-
     std::string name =
 	segment.getComposition()->
 	getTrackById(segment.getTrack())->getLabel();
@@ -213,6 +197,8 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	std::pair<timeT, timeT> barTimes =
 	    getComposition()->getBarRange(barNo);
 
+	if (barTimes.first >= segment.getEndMarkerTime()) break;
+
         NotationElementList::iterator from = 
 	    getStartOfQuantizedSlice(notes, barTimes.first);
 
@@ -226,9 +212,10 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	bool newTimeSig = false;
 	timeSignature = getComposition()->getTimeSignatureInBar
 	    (barNo, newTimeSig);
+	if (barNo == startBarOfStaff) newTimeSig = true;
 
-	double fixedWidth = 0.0;
-	if ((newTimeSig || barNo == startBarNo) && !timeSignature.isHidden()) {
+	float fixedWidth = 0.0;
+	if (newTimeSig && !timeSignature.isHidden()) {
 	    fixedWidth += getFixedItemSpacing() * 2 +
 		m_npf->getTimeSigWidth(timeSignature);
 	}
@@ -237,9 +224,9 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	barList.find(barNo)->second.layoutData.needsLayout = true;
 
 	ChunkList chunks;
-	double lyricWidth = 0;
+	float lyricWidth = 0;
 
-	typedef __HASH_NS::hash_set<long> GroupIdSet;
+	typedef std::set<long> GroupIdSet;
 	GroupIdSet groupIds;
 
 	NOTATION_DEBUG << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << segment.getEndMarkerTime() << "); from is at " << (from == notes->end() ? -1 : (*from)->getViewAbsoluteTime()) << ", to is at " << (to == notes->end() ? -1 : (*to)->getViewAbsoluteTime()) << endl;
@@ -385,7 +372,7 @@ void
 NotationHLayout::setBarSizeData(Staff &staff,
 				 int barNo,
 				 const ChunkList &chunks,
-				 double fixedWidth,
+				 float fixedWidth,
 				 Rosegarden::timeT actualDuration)
 {
     NOTATION_DEBUG << "setBarSizeData for " << barNo << endl;
@@ -400,7 +387,7 @@ NotationHLayout::setBarSizeData(Staff &staff,
 	i = bdl.find(barNo);
     }
 
-    i->second.sizeData.chunks = chunks;
+    i->second.chunks = chunks;
     i->second.sizeData.actualDuration = actualDuration;
     i->second.sizeData.idealWidth = 0.0;
     i->second.sizeData.reconciledWidth = 0.0;
@@ -414,7 +401,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
 			    const Rosegarden::Clef &clef,
 			    const Rosegarden::Key &key,
 			    AccidentalTable &accTable,
-			    double &lyricWidth,
+			    float &lyricWidth,
 			    ChunkList &chunks,
 			    NotationElementList::iterator &to)
 {
@@ -490,14 +477,14 @@ NotationHLayout::scanChord(NotationElementList *notes,
 
     accTable.copyFrom(newAccTable);
     
-    double extraWidth = 0;
+    float extraWidth = 0;
 
     if (someAccidental != NoAccidental) {
 	extraWidth += m_npf->getAccidentalWidth(someAccidental);
     }
 
     if (chord.hasNoteHeadShifted()) {
-	extraWidth = std::max(extraWidth, double(m_npf->getNoteBodyWidth()));
+	extraWidth = std::max(extraWidth, float(m_npf->getNoteBodyWidth()));
     }
 
     if (grace) {
@@ -506,7 +493,6 @@ NotationHLayout::scanChord(NotationElementList *notes,
 	return;
     }
 
-    //!!! suboptimal -- we've already scanned chord above
     NotationElementList::iterator myLongest = chord.getLongestElement();
     if (myLongest == notes->end()) {
 	NOTATION_DEBUG << "WARNING: NotationHLayout::scanChord: No longest element in chord!" << endl;
@@ -521,33 +507,6 @@ NotationHLayout::scanChord(NotationElementList *notes,
     itr = chord.getFinalElement();
     if (barEndsInChord) { to = itr; ++to; }
     return;
-}
-
-Staff *
-NotationHLayout::getStaffWithWidestBar(int barNo)
-{
-    double maxWidth = -1;
-    Staff *widest = 0;
-
-    for (BarDataMap::iterator mi = m_barData.begin();
-	 mi != m_barData.end(); ++mi) {
-
-	BarDataList &list = mi->second;
-	BarDataList::iterator li = list.find(barNo);
-	if (li != list.end()) {
-
-	    if (li->second.sizeData.idealWidth == 0.0) {
-		preSquishBar(barNo);
-	    }
-
-	    if (li->second.sizeData.idealWidth > maxWidth) {
-		maxWidth = li->second.sizeData.idealWidth;
-		widest = mi->first;
-	    }
-	}
-    }
-
-    return widest;
 }
 
 struct ChunkLocation {
@@ -566,7 +525,10 @@ NotationHLayout::preSquishBar(int barNo)
 {
     typedef std::vector<Chunk *> ChunkRefList;
     typedef std::map<ChunkLocation, ChunkRefList> ColumnMap;
-    ColumnMap columns;
+    static ColumnMap columns;
+    bool haveSomething = false;
+
+    columns.clear();
 
     for (BarDataMap::iterator mi = m_barData.begin();
 	 mi != m_barData.end(); ++mi) {
@@ -574,7 +536,8 @@ NotationHLayout::preSquishBar(int barNo)
 	BarDataList &bdl = mi->second;
 	BarDataList::iterator bdli = bdl.find(barNo);
 	if (bdli != bdl.end()) {
-	    ChunkList &cl(bdli->second.sizeData.chunks);
+	    haveSomething = true;
+	    ChunkList &cl(bdli->second.chunks);
 	    timeT aggregateTime = 0;
 	    for (ChunkList::iterator cli = cl.begin(); cli != cl.end(); ++cli) {
 		columns[ChunkLocation(aggregateTime, cli->subordering)].
@@ -584,6 +547,8 @@ NotationHLayout::preSquishBar(int barNo)
 	}
     }
 
+    if (!haveSomething) return;
+
     // now modify chunks in-place
 
     // What we want to do here is idle along the whole set of chunk
@@ -591,10 +556,10 @@ NotationHLayout::preSquishBar(int barNo)
     // turn and choosing a "rate" from the "slowest" of these
     // (i.e. most space per time)
 
-    double x = 0.0;
+    float x = 0.0;
     timeT prevTime = 0;
     double prevRate = 0.0;
-    double maxStretchy = 0.0;
+    float maxStretchy = 0.0;
 
     for (ColumnMap::iterator i = columns.begin(); i != columns.end(); ++i) {
 
@@ -602,7 +567,7 @@ NotationHLayout::preSquishBar(int barNo)
 	ChunkRefList &list = i->second;
 
 	double minRate = -1.0;
-	double totalFixed = 0.0;
+	float totalFixed = 0.0;
 	maxStretchy = 0.0;
 
 	for (ChunkRefList::iterator j = list.begin(); j != list.end(); ++j) {
@@ -651,6 +616,35 @@ NotationHLayout::preSquishBar(int barNo)
     }
 }
 
+Staff *
+NotationHLayout::getStaffWithWidestBar(int barNo)
+{
+    float maxWidth = -1;
+    Staff *widest = 0;
+
+    for (BarDataMap::iterator mi = m_barData.begin();
+	 mi != m_barData.end(); ++mi) {
+
+	BarDataList &list = mi->second;
+	BarDataList::iterator li = list.find(barNo);
+	if (li != list.end()) {
+
+	    NOTATION_DEBUG << "getStaffWithWidestBar: idealWidth is " << li->second.sizeData.idealWidth << endl;
+
+	    if (li->second.sizeData.idealWidth == 0.0) {
+		NOTATION_DEBUG << "getStaffWithWidestBar(" << barNo << "): found idealWidth of zero, presquishing" << endl;
+		preSquishBar(barNo);
+	    }
+
+	    if (li->second.sizeData.idealWidth > maxWidth) {
+		maxWidth = li->second.sizeData.idealWidth;
+		widest = mi->first;
+	    }
+	}
+    }
+
+    return widest;
+}
 
 void
 NotationHLayout::reconcileBarsLinear()
@@ -688,7 +682,7 @@ NotationHLayout::reconcileBarsLinear()
 	    }
 	}
 
-	double maxWidth = m_barData[widest].find(barNo)->second.sizeData.idealWidth;
+	float maxWidth = m_barData[widest].find(barNo)->second.sizeData.idealWidth;
 	if (m_pageWidth > 0.1 && maxWidth > m_pageWidth) {
 	    maxWidth = m_pageWidth;
 	}
@@ -709,7 +703,12 @@ NotationHLayout::reconcileBarsLinear()
 	    if (bdli != list.end()) {
 
 		BarData::SizeData &bd(bdli->second.sizeData);
-		if (bd.reconciledWidth != maxWidth) {
+
+		NOTATION_DEBUG << "Changing width from " << bd.reconciledWidth << " to " << maxWidth << endl;
+
+		double diff = maxWidth - bd.reconciledWidth;
+		if (diff < -0.1 || diff > 0.1) {
+		    NOTATION_DEBUG << "(So needsLayout becomes true)" << endl;
 		    bdli->second.layoutData.needsLayout = true;
 		}
 		bd.reconciledWidth = maxWidth;
@@ -879,7 +878,8 @@ NotationHLayout::reconcileBarsPage()
 		BarDataList::iterator bdli = list.find(barNo);
 		if (bdli != list.end()) {
 		    BarData::SizeData &bd(bdli->second.sizeData);
-		    if (bd.reconciledWidth != maxWidth) {
+		    double diff = maxWidth - bd.reconciledWidth;
+		    if (diff < -0.1 || diff > 0.1) {
 			bdli->second.layoutData.needsLayout = true;
 		    }
 		    bd.reconciledWidth = maxWidth;
@@ -988,8 +988,10 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
 {
     Rosegarden::Profiler profiler("NotationHLayout::finishLayout");
     m_barPositions.clear();
-/*
-    if (startTime == endTime) { // full layout
+
+    bool isFullLayout = (startTime == endTime);
+/*!!!
+    if (isFullLayout) {
 	startTime = 0;
 	endTime = getComposition()->getDuration();
     }
@@ -1012,8 +1014,7 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
 
         timeT timeCovered = endTime - startTime;
 	    
-        if (timeCovered == 0) { // full layout
-
+        if (isFullLayout) {
             NotationElementList *notes = i->first->getViewElementList();
             if (notes->begin() != notes->end()) {
                 NotationElementList::iterator j(notes->end());
@@ -1043,8 +1044,8 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
     bool isFullLayout = (startTime == endTime);
 
     // these two are for partial layouts:
-    bool haveSimpleOffset = false;
-    double simpleOffset = 0;
+//    bool haveSimpleOffset = false;
+//    double simpleOffset = 0;
 
     NOTATION_DEBUG << "NotationHLayout::layout: full layout " << isFullLayout << ", times " << startTime << "->" << endTime << endl;
 
@@ -1092,6 +1093,37 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             NOTATION_DEBUG << "Start is to" << endl;
         }
 
+	if (!bdi->second.layoutData.needsLayout) {
+
+            NOTATION_DEBUG << "NotationHLayout::layout(): bar " << barNo << " has needsLayout false" << endl;
+
+	    double offset = barX - bdi->second.layoutData.x;
+
+	    if (offset > -0.1 && offset < 0.1) {
+		NOTATION_DEBUG << "NotationHLayout::layout(): no offset, ignoring" << endl;
+		continue;
+	    }
+
+            bdi->second.layoutData.x += offset;
+	    
+            if (bdi->second.basicData.newTimeSig)
+                bdi->second.layoutData.timeSigX += (int)offset;
+	    
+            for (NotationElementList::iterator it = from;
+		 it != to && it != notes->end(); ++it) {
+
+                NotationElement* nel = static_cast<NotationElement*>(*it);
+                nel->setLayoutX((*it)->getLayoutX() + offset);
+		double airX, airWidth;
+		nel->getLayoutAirspace(airX, airWidth);
+		nel->setLayoutAirspace(airX + offset, airWidth);
+	    }
+
+	    continue;
+	}
+		
+
+#ifdef NOT_DEFINED
         if (!isFullLayout &&
 	    !bdi->second.layoutData.needsLayout &&
 	    (from == notes->end() ||
@@ -1128,9 +1160,10 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         }
 
         if (!bdi->second.layoutData.needsLayout) {
-            NOTATION_DEBUG << "NotationHLayout::layout(): bar " << " has needsLayout false" << endl;
+            NOTATION_DEBUG << "NotationHLayout::layout(): bar " << barNo << " has needsLayout false" << endl;
             continue;
         }
+#endif
 
 	bdi->second.layoutData.x = barX;
 //	x = barX + getPostBarMargin();
@@ -1148,7 +1181,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	NotationElement *lastDynamicText = 0;
 	int count = 0;
 
-	ChunkList &chunks = bdi->second.sizeData.chunks;
+	ChunkList &chunks = bdi->second.chunks;
 	ChunkList::iterator chunkitr = chunks.begin();
 	double reconcileRatio = 1.0;
 	if (bdi->second.sizeData.idealWidth > 0.0) {
@@ -1372,6 +1405,8 @@ NotationHLayout::positionChord(Staff &staff,
     double baseX, delta;
     (static_cast<NotationElement *>(*itr))->getLayoutAirspace(baseX, delta);
 
+    bool barEndsInChord = false;
+
     // To work out how much space to allot a note (or chord), start
     // with the amount alloted to the whole bar, subtract that
     // reserved for fixed-width items, and take the same proportion of
@@ -1397,17 +1432,19 @@ NotationHLayout::positionChord(Staff &staff,
 
     for (i = 0; i < chord.size(); ++i) {
 
+	if (chord[i] == to) barEndsInChord = true;
+
+	static_cast<NotationElement*>(*chord[i])->setLayoutX(baseX);
 	static_cast<NotationElement*>(*chord[i])->setLayoutAirspace(baseX, delta);
 
 	NotationElement *note = static_cast<NotationElement*>(*(chord[i]));
 	if (!note->isNote()) continue;
-
+/*!!!
 	Accidental acc = NoAccidental;
 	if (note->event()->get<String>(m_properties.DISPLAY_ACCIDENTAL, acc) &&
 	    acc != NoAccidental) {
             accWidth = std::max(accWidth, m_npf->getAccidentalWidth(acc));
 	}
-
 	if (groupId != -2) {
 	    long myGroupId = -1;
 	    if (note->event()->get<Int>(BEAMED_GROUP_ID, myGroupId) &&
@@ -1423,6 +1460,7 @@ NotationHLayout::positionChord(Staff &staff,
 		groupId = -2; // not all note-heads think they're in the group
 	    }
 	}
+*/
     }
 /*!!!
     baseX += accWidth;
@@ -1490,7 +1528,7 @@ NotationHLayout::positionChord(Staff &staff,
     // need to shift the positions of shifted notes, because that will
     // be taken into account when making their pixmaps later (in
     // NotationStaff::makeNoteSprite / NotePixmapFactory::makeNotePixmap).
-
+/*!!!
     bool barEndsInChord = false;
     for (i = 0; i < chord.size(); ++i) {
 	NotationElementList::iterator subItr = chord[i];
@@ -1499,13 +1537,13 @@ NotationHLayout::positionChord(Staff &staff,
 	if (groupId < 0) (*chord[i])->event()->unset(m_properties.BEAMED);
 	else (*chord[i])->event()->set<Int>(BEAMED_GROUP_ID, groupId);
     }
-
+*/
     itr = chord.getFinalElement();
     if (barEndsInChord) { to = itr; ++to; }
 }
 
 
-double
+float
 NotationHLayout::getLayoutWidth(Rosegarden::ViewElement &ve) const
 {
     NotationElement& e = static_cast<NotationElement&>(ve);
