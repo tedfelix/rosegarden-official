@@ -49,8 +49,9 @@ In order of importance:
     synchronisation?)
 
   o GUI support for various things that are supported in the
-    internal representation already - tuplets, n-dotted notes,
-    tempo, and text.
+    internal representation already - tuplets [DONE], n-dotted notes,
+    tempo [DONE but not in notation view yet], text, and quantization
+    beyond the simplest sort.
 
   o Segment start and end markers - moveable non-destructive markers for
     Segments
