@@ -61,6 +61,7 @@ public:
           unsigned int stepsPerBar = 384);
     ~Track();
 
+
     struct BarPosition
     {
         timeT start;          // absolute time of event following barline
@@ -86,8 +87,8 @@ public:
     // <group>...</group> instead of writing them as explicit
     // properties of the events:
     
-    static const std::string BeamedGroupIdPropertyName;
-    static const std::string BeamedGroupTypePropertyName;
+    static const PropertyName BeamedGroupIdPropertyName;
+    static const PropertyName BeamedGroupTypePropertyName;
 
 
     timeT getStartIndex() const         { return m_startIdx; }

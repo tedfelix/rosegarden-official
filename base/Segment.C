@@ -31,8 +31,8 @@ using std::cerr;
 using std::endl;
 using std::string;
 
-const string Track::BeamedGroupIdPropertyName   = "BGroupId";
-const string Track::BeamedGroupTypePropertyName = "BGroupType";
+const PropertyName Track::BeamedGroupIdPropertyName   = "BGroupId";
+const PropertyName Track::BeamedGroupTypePropertyName = "BGroupType";
     
 Track::Track(unsigned int nbTimeSteps, timeT startIdx,
              unsigned int stepsPerBar)
