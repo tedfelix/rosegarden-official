@@ -43,6 +43,7 @@ LoopRuler::LoopRuler(RulerScale *rulerScale,
       m_invert(invert),
       m_currentXOffset(0),
       m_width(-1),
+      m_activeMousePress(false),
       m_rulerScale(rulerScale),
       m_grid(rulerScale),
       m_loop(false),
@@ -197,6 +198,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
         else
 	    emit setPointerPosition(m_rulerScale->getTimeForX(x));
 
+	m_activeMousePress = true;
         emit startMouseMove(RosegardenCanvasView::FollowHorizontal);
     }
 }
@@ -227,6 +229,7 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
                 emit setLoop(m_startLoop, m_endLoop);
         }
         emit stopMouseMove();
+	m_activeMousePress = false;
     }
 }
 

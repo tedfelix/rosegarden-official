@@ -59,6 +59,8 @@ public:
 
     void setHorizScaleFactor(double dy) { m_hScaleFactor = dy; }
 
+    bool hasActiveMousePress() { return m_activeMousePress; }
+
 public slots:
     void slotSetLoopingMode(bool value);
     void slotSetLoopMarker(Rosegarden::timeT startLoop,
@@ -99,6 +101,7 @@ private:
     bool m_invert;
     int  m_currentXOffset;
     int  m_width;
+    bool m_activeMousePress;
 
     Rosegarden::RulerScale *m_rulerScale;
     Rosegarden::SnapGrid    m_grid;

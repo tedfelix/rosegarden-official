@@ -349,11 +349,21 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     topBarButtons->getLoopRuler()->setBackgroundColor
 	(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::InsertCursorRuler));
 
+    connect(topBarButtons->getLoopRuler(), SIGNAL(startMouseMove(int)),
+            m_canvasView, SLOT(startAutoScroll(int)));
+    connect(topBarButtons->getLoopRuler(), SIGNAL(stopMouseMove()),
+            m_canvasView, SLOT(stopAutoScroll()));
+
     BarButtons *bottomBarButtons = new BarButtons(getDocument(),
                                                   &m_hlayout, 0, 25,
                                                   true, getBottomWidget());
     bottomBarButtons->connectRulerToDocPointer(doc);
     setBottomBarButtons(bottomBarButtons);
+
+    connect(bottomBarButtons->getLoopRuler(), SIGNAL(startMouseMove(int)),
+            m_canvasView, SLOT(startAutoScroll(int)));
+    connect(bottomBarButtons->getLoopRuler(), SIGNAL(stopMouseMove()),
+            m_canvasView, SLOT(stopAutoScroll()));
 
     // Force height for the moment
     //
@@ -1243,7 +1253,10 @@ void MatrixView::slotMousePressed(Rosegarden::timeT time, int pitch,
     if (curSegmentStartTime > time) time=curSegmentStartTime;
 
     m_tool->handleMousePress(time, pitch, 0, e, el);
-    getCanvasView()->startAutoScroll();
+
+    if (e->button() != RightButton) {
+	getCanvasView()->startAutoScroll();
+    }
 
     // play a preview
     //playPreview(pitch);
@@ -1265,18 +1278,9 @@ void MatrixView::slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent* 
         int follow = m_tool->handleMouseMove(time, pitch, e);
         getCanvasView()->setScrollDirectionConstraint(follow);
         
-        if (follow != RosegardenCanvasView::NoFollow) {
-            getCanvasView()->doAutoScroll();
-
-//             if (follow & RosegardenCanvasView::FollowHorizontal) {
-//                 getCanvasView()->slotScrollHorizSmallSteps(e->x());
-//             }
-
-//             if (follow & RosegardenCanvasView::FollowVertical) {
-//                 getCanvasView()->slotScrollVertSmallSteps(e->y());
-//             }
-
-        }
+//        if (follow != RosegardenCanvasView::NoFollow) {
+//            getCanvasView()->doAutoScroll();
+//        }
         
         // play a preview
         if (pitch != m_previousEvPitch)
@@ -1381,7 +1385,7 @@ MatrixView::slotSetPointerPosition(timeT time, bool scroll)
         m_staffs[0]->setPointerPosition(m_hlayout, time);
     }
 
-    if (scroll)
+    if (scroll && !getCanvasView()->isAutoScrolling())
         getCanvasView()->slotScrollHoriz(static_cast<int>(getXbyWorldMatrix(m_hlayout.getXForTime(time))));
 
     updateView();
@@ -1395,7 +1399,7 @@ MatrixView::slotSetInsertCursorPosition(timeT time, bool scroll)
 
     m_staffs[0]->setInsertCursorPosition(m_hlayout, time);
 
-    if (scroll) {
+    if (scroll && !getCanvasView()->isAutoScrolling()) {
         getCanvasView()->slotScrollHoriz(static_cast<int>(getXbyWorldMatrix(m_hlayout.getXForTime(time))));
     }
 

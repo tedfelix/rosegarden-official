@@ -116,8 +116,6 @@ public:
 
 public slots:
 
-//!!! I suspect most of these of never actually being used as slots, only as plain methods
-
     /**
      * Scroll the view such that the numbered track is on-screen
      */
@@ -127,6 +125,11 @@ public slots:
      * Set the position pointer during playback
      */
     void slotSetPointerPosition(Rosegarden::timeT position);
+
+    /**
+     * Act on a canvas scroll event
+     */
+    void slotCanvasScrolled(int, int);
 
     /**
      * Adjust the canvas size to that required for the composition

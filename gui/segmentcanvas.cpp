@@ -1387,22 +1387,25 @@ SegmentCanvas::findRepeatClickedOn(QPoint pos)
 
 void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
 {
-    startAutoScroll();
-
     switch (e->button()) {
+
     case LeftButton:
     case MidButton:
+	startAutoScroll();
+
         if (m_tool) m_tool->handleMouseButtonPress(e);
         else
             RG_DEBUG << "SegmentCanvas::contentsMousePressEvent() :"
                      << this << " no tool\n";
         break;
+
     case RightButton:
         if (m_tool) m_tool->handleRightButtonPress(e);
         else
             RG_DEBUG << "SegmentCanvas::contentsMousePressEvent() :"
                      << this << " no tool\n";
         break;
+
     default:
         break;
     }

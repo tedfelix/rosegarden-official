@@ -98,7 +98,7 @@ const double RosegardenCanvasView::ScrollAccelValue = 1.04;// acceleration rate
 /// Copied from QScrollView
 void RosegardenCanvasView::startAutoScroll()
 {
-//     RG_DEBUG << "RosegardenCanvasView::startAutoScroll()\n";
+    RG_DEBUG << "RosegardenCanvasView::startAutoScroll()\n";
 
     if ( !m_autoScrollTimer.isActive() ) {
         m_autoScrollTime = InitialScrollTime;
@@ -121,7 +121,7 @@ void RosegardenCanvasView::startAutoScroll(int directionConstraint)
 
 void RosegardenCanvasView::stopAutoScroll()
 {
-//     RG_DEBUG << "RosegardenCanvasView::stopAutoScroll()\n";
+    RG_DEBUG << "RosegardenCanvasView::stopAutoScroll()\n";
 
     m_autoScrollTimer.stop();
     m_minDeltaScroll = DefaultMinDeltaScroll;
@@ -132,12 +132,14 @@ void RosegardenCanvasView::stopAutoScroll()
 
 void RosegardenCanvasView::doAutoScroll()
 {
-//     RG_DEBUG << "RosegardenCanvasView::doAutoScroll()\n";
+    RG_DEBUG << "RosegardenCanvasView::doAutoScroll()\n";
 
     static QPoint previousP;
     QPoint p = viewport()->mapFromGlobal( QCursor::pos() );
     QPoint dp = p - previousP;
     previousP = p;
+    
+    static int quiet = 0;
 
     m_autoScrollTimer.start( m_autoScrollTime );
     ScrollDirection scrollDirection = None;
@@ -171,6 +173,8 @@ void RosegardenCanvasView::doAutoScroll()
         }
     }
     
+    RG_DEBUG << "dx: " << dx << ", dy: " << dy << endl;
+
     if ( (dx || dy) &&
          ((scrollDirection == m_currentScrollDirection) || (m_currentScrollDirection == None)) ) {
         scrollBy(dx,dy);
@@ -181,14 +185,26 @@ void RosegardenCanvasView::doAutoScroll()
 	if (m_minDeltaScroll > MaxScrollDelta )
 	    m_minDeltaScroll = MaxScrollDelta;
         m_currentScrollDirection = scrollDirection;
-    } else {
-        stopAutoScroll();
+
+    } else if (dx || dy) {
+	// Don't automatically stopAutoScroll() here, the mouse button
+	// is presumably still pressed.
+	m_minDeltaScroll = DefaultMinDeltaScroll;
+	m_currentScrollDirection = None;
+    }
+
+    if (dx || dy) quiet = 0;
+    else ++quiet;
+
+    if (quiet == 100) {
+	stopAutoScroll();
+	quiet = 0;
     }
 }
 
 
 const int RosegardenCanvasView::DefaultSmoothScrollTimeInterval = 10;
-const int RosegardenCanvasView::DefaultMinDeltaScroll = 1;
+const int RosegardenCanvasView::DefaultMinDeltaScroll = 1.2;
 
 bool RosegardenCanvasView::isTimeForSmoothScroll()
 {
@@ -199,7 +215,7 @@ bool RosegardenCanvasView::isTimeForSmoothScroll()
         int ta = m_scrollAccelerationTimer.elapsed();
         int t = m_scrollTimer.elapsed();
 
-// 	RG_DEBUG << "t = " << t << ", ta = " << ta << ", int " << m_smoothScrollTimeInterval << ", delta " << m_minDeltaScroll << endl;
+	RG_DEBUG << "t = " << t << ", ta = " << ta << ", int " << m_smoothScrollTimeInterval << ", delta " << m_minDeltaScroll << endl;
 
         if (t < m_smoothScrollTimeInterval) {
 

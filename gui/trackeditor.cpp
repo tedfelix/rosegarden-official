@@ -232,14 +232,13 @@ TrackEditor::init(QWidget* rosegardenguiview)
             m_segmentCanvas, SLOT(startAutoScroll(int)));
     connect(m_topBarButtons->getLoopRuler(), SIGNAL(stopMouseMove()),
             m_segmentCanvas, SLOT(stopAutoScroll()));
-    connect(m_topBarButtons->getLoopRuler(), SIGNAL(mouseMove()),
-            m_segmentCanvas, SLOT(doAutoScroll()));
     connect(m_bottomBarButtons->getLoopRuler(), SIGNAL(startMouseMove(int)),
             m_segmentCanvas, SLOT(startAutoScroll(int)));
     connect(m_bottomBarButtons->getLoopRuler(), SIGNAL(stopMouseMove()),
             m_segmentCanvas, SLOT(stopAutoScroll()));
-    connect(m_bottomBarButtons->getLoopRuler(), SIGNAL(mouseMove()),
-            m_segmentCanvas, SLOT(doAutoScroll()));
+
+    connect(m_segmentCanvas, SIGNAL(contentsMoving(int, int)),
+            this, SLOT(slotCanvasScrolled(int, int)));
 
     // Synchronize bar buttons' scrollview with segment canvas' scrollbar
     //
@@ -501,6 +500,22 @@ void TrackEditor::slotSegmentOrderChanged(int section, int fromIdx, int toIdx)
     //!!! how do we get here? need to involve a command
     emit needUpdate();
 }
+
+void
+TrackEditor::slotCanvasScrolled(int x, int y)
+{
+    if ((m_topBarButtons && m_topBarButtons->getLoopRuler() &&
+	 m_topBarButtons->getLoopRuler()->hasActiveMousePress()) ||
+	(m_bottomBarButtons && m_bottomBarButtons->getLoopRuler() &&
+	 m_bottomBarButtons->getLoopRuler()->hasActiveMousePress())) {
+
+	int mx = m_segmentCanvas->viewport()->mapFromGlobal(QCursor::pos()).x();
+	timeT t = m_segmentCanvas->grid().getRulerScale()->getTimeForX(x + mx);
+
+	slotSetPointerPosition(t);
+    }
+}
+
 
 // Move the position pointer
 void
