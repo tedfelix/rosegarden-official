@@ -4666,7 +4666,7 @@ RosegardenGUIApp::slotManageMIDIDevices()
             this, SLOT(slotDeviceManagerClosed()));
 
     connect(this, SIGNAL(documentAboutToChange()),
-            m_deviceManager, SLOT(close()));
+            m_deviceManager, SLOT(slotFileClose()));
 
     // Cheating way of updating the track/instrument list
     //
@@ -4699,7 +4699,7 @@ RosegardenGUIApp::slotOpenMixer()
 	    this, SLOT(slotShowPluginDialog(QWidget *, Rosegarden::InstrumentId, int)));
 
     connect(this, SIGNAL(documentAboutToChange()),
-            m_mixer, SLOT(close()));
+            m_mixer, SLOT(slotFileClose()));
 
     connect(m_mixer, SIGNAL(play()),
 	    this, SLOT(slotPlay()));
@@ -4748,7 +4748,7 @@ RosegardenGUIApp::slotEditControlParameters(Rosegarden::DeviceId device)
             SLOT(slotControlEditorClosed()));
 
     connect(this, SIGNAL(documentAboutToChange()),
-            controlEditor, SLOT(close()));
+            controlEditor, SLOT(slotFileClose()));
 
     connect(m_doc, SIGNAL(devicesResyncd()),
 	    controlEditor, SLOT(slotUpdate()));

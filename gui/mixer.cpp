@@ -48,8 +48,6 @@ MixerWindow::MixerWindow(QWidget *parent,
     m_studio(&document->getStudio()),
     m_currentId(0)
 {
-    setWFlags(WDestructiveClose);
-
     m_mainBox = 0;
     populate();
 
@@ -136,14 +134,14 @@ MixerWindow::MixerWindow(QWidget *parent,
 
 MixerWindow::~MixerWindow()
 {
-    RG_DEBUG << "MixerWindow::~MixerWindow" << endl;
+    RG_DEBUG << "MixerWindow::~MixerWindow\n";
     depopulate();
 }
 
 void
 MixerWindow::slotClose()
 {
-    RG_DEBUG << "MixerWindow::slotClose()" << endl;
+    RG_DEBUG << "MixerWindow::slotClose()\n";
     close();
 }    
 
@@ -881,6 +879,7 @@ MixerWindow::slotRecordChanged()
 void
 MixerWindow::closeEvent(QCloseEvent *e)
 {
+    RG_DEBUG << "MixerWindow::closeEvent()\n";
     emit closing();
     KMainWindow::closeEvent(e);
 }
