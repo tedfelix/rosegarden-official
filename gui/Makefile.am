@@ -134,7 +134,8 @@ rosegarden_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 DISTCLEANFILES = $(rosegarden_METASOURCES)
 
 rcdir = $(kde_datadir)/rosegarden
-rc_DATA = rosegardenui.rc notation.rc
+rc_DATA = rosegardenui.rc notation.rc matrix.rc \
+	  notationeraser.rc  noteinserter.rc
 
 # make messages.po. Move this one to ../po/ and "make merge" in po
 # the -x is for skipping messages already translated in kdelibs
