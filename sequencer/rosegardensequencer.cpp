@@ -209,8 +209,8 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
 
     // Loop timing
     //
-    QTime t;
-    t.start();
+    //QTime t;
+    //t.start();
 
     if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
@@ -226,7 +226,7 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
     }
     else
     {
-        cerr << "getSequencerSlice TIME = " << t.elapsed() << " ms " << endl;
+        //cerr << "getSequencerSlice TIME = " << t.elapsed() << " ms " << endl;
 
         QDataStream reply(replyData, IO_ReadOnly);
         if (replyType == "Rosegarden::MappedComposition")
