@@ -1689,9 +1689,9 @@ EventEditDialog::slotPropertyMadePersistent()
 //
 //
 SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
-                                            RosegardenGUIDoc *doc,
-				            const Event &event,
-				            bool inserting) :
+					     RosegardenGUIDoc *doc,
+					     const Event &event,
+					     bool inserting) :
     KDialogBase(parent, 0, true, 
                 i18n(inserting ? "Insert Event" : "Edit Event"), Ok | Cancel),
     m_event(event),
@@ -1708,30 +1708,42 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 
     QFrame *frame = new QFrame(groupBox);
 
-    QGridLayout *layout = new QGridLayout(frame, 4, 3, 5, 5);
+    QGridLayout *layout = new QGridLayout(frame, 7, 3, 5, 5);
 
     layout->addWidget(new QLabel(i18n("Event type:"), frame), 0, 0);
 
-    m_typeCombo =  new KComboBox(frame);
-    layout->addWidget(m_typeCombo, 0, 1);
+    if (inserting) {
 
-    m_typeCombo->insertItem(strtoqstr(Rosegarden::Note::EventType));
-    m_typeCombo->insertItem(strtoqstr(Rosegarden::Controller::EventType));
-    m_typeCombo->insertItem(strtoqstr(Rosegarden::KeyPressure::EventType));
-    m_typeCombo->insertItem(strtoqstr(Rosegarden::ChannelPressure::EventType));
-    m_typeCombo->insertItem(strtoqstr(Rosegarden::ProgramChange::EventType));
-    m_typeCombo->insertItem(strtoqstr(Rosegarden::SystemExclusive::EventType));
-    m_typeCombo->insertItem(strtoqstr(Rosegarden::PitchBend::EventType));
-    m_typeCombo->insertItem(strtoqstr(Rosegarden::Indication::EventType));
-    m_typeCombo->insertItem(strtoqstr(Rosegarden::Text::EventType));
-    m_typeCombo->insertItem(strtoqstr(Rosegarden::Note::EventRestType));
-    m_typeCombo->insertItem(strtoqstr(Rosegarden::Clef::EventType));
-    m_typeCombo->insertItem(strtoqstr(Rosegarden::Key::EventType));
+	m_typeLabel = 0;
 
-    // Connect up the combos
-    //
-    connect(m_typeCombo, SIGNAL(activated(int)),
-            SLOT(slotEventTypeChanged(int)));
+	m_typeCombo = new KComboBox(frame);
+	layout->addWidget(m_typeCombo, 0, 1);
+	
+	m_typeCombo->insertItem(strtoqstr(Rosegarden::Note::EventType));
+	m_typeCombo->insertItem(strtoqstr(Rosegarden::Controller::EventType));
+	m_typeCombo->insertItem(strtoqstr(Rosegarden::KeyPressure::EventType));
+	m_typeCombo->insertItem(strtoqstr(Rosegarden::ChannelPressure::EventType));
+	m_typeCombo->insertItem(strtoqstr(Rosegarden::ProgramChange::EventType));
+	m_typeCombo->insertItem(strtoqstr(Rosegarden::SystemExclusive::EventType));
+	m_typeCombo->insertItem(strtoqstr(Rosegarden::PitchBend::EventType));
+	m_typeCombo->insertItem(strtoqstr(Rosegarden::Indication::EventType));
+	m_typeCombo->insertItem(strtoqstr(Rosegarden::Text::EventType));
+	m_typeCombo->insertItem(strtoqstr(Rosegarden::Note::EventRestType));
+	m_typeCombo->insertItem(strtoqstr(Rosegarden::Clef::EventType));
+	m_typeCombo->insertItem(strtoqstr(Rosegarden::Key::EventType));
+	
+	// Connect up the combos
+	//
+	connect(m_typeCombo, SIGNAL(activated(int)),
+		SLOT(slotEventTypeChanged(int)));
+
+    } else {
+
+	m_typeCombo = 0;
+
+	m_typeLabel = new QLabel(frame);
+	layout->addWidget(m_typeLabel, 0, 1);
+    } 
 
     m_timeLabel = new QLabel(i18n("Absolute time:"), frame);
     layout->addWidget(m_timeLabel, 1, 0);
@@ -1795,6 +1807,44 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     m_metaEdit = new QLineEdit(frame);
     layout->addWidget(m_metaEdit, 6, 1);
 
+    m_notationGroupBox = new QGroupBox
+	(1, Horizontal, i18n("Notation Properties"), vbox);
+
+    frame = new QFrame(m_notationGroupBox);
+
+    layout = new QGridLayout(frame, 3, 3, 5, 5);
+
+    m_lockNotationValues = new QCheckBox(i18n("Lock to changes in performed values"), frame);
+    layout->addMultiCellWidget(m_lockNotationValues, 0, 0, 0, 2);
+    m_lockNotationValues->setChecked(true);
+
+    connect(m_lockNotationValues, SIGNAL(released()),
+	    SLOT(slotLockNotationChanged()));
+
+    m_notationTimeLabel = new QLabel(i18n("Notation time:"), frame);
+    layout->addWidget(m_notationTimeLabel, 1, 0);
+    m_notationTimeSpinBox = new QSpinBox(INT_MIN, INT_MAX, Note(Note::Shortest).getDuration(), frame);
+    m_notationTimeEditButton = new QPushButton("...", frame);
+    layout->addWidget(m_notationTimeSpinBox, 1, 1);
+    layout->addWidget(m_notationTimeEditButton, 1, 2);
+
+    connect(m_notationTimeSpinBox, SIGNAL(valueChanged(int)),
+            SLOT(slotNotationAbsoluteTimeChanged(int)));
+    connect(m_notationTimeEditButton, SIGNAL(released()),
+	    SLOT(slotEditNotationAbsoluteTime()));
+
+    m_notationDurationLabel = new QLabel(i18n("Notation duration:"), frame);
+    layout->addWidget(m_notationDurationLabel, 2, 0);
+    m_notationDurationSpinBox = new QSpinBox(0, INT_MAX, Note(Note::Shortest).getDuration(), frame);
+    m_notationDurationEditButton = new QPushButton("...", frame);
+    layout->addWidget(m_notationDurationSpinBox, 2, 1);
+    layout->addWidget(m_notationDurationEditButton, 2, 2);
+
+    connect(m_notationDurationSpinBox, SIGNAL(valueChanged(int)),
+            SLOT(slotNotationDurationChanged(int)));
+    connect(m_notationDurationEditButton, SIGNAL(released()),
+	    SLOT(slotEditNotationDuration()));
+
     setupForEvent();
 }
 
@@ -1804,16 +1854,19 @@ SimpleEventEditDialog::setupForEvent()
     using Rosegarden::BaseProperties::PITCH;
     using Rosegarden::BaseProperties::VELOCITY;
 
-    m_typeCombo->blockSignals(true);
+    if (m_typeCombo) {
+	m_typeCombo->blockSignals(true);
+    }
     m_timeSpinBox->blockSignals(true);
+    m_notationTimeSpinBox->blockSignals(true);
     m_durationSpinBox->blockSignals(true);
+    m_notationDurationSpinBox->blockSignals(true);
     m_pitchSpinBox->blockSignals(true);
     m_velocitySpinBox->blockSignals(true);
     m_metaEdit->blockSignals(true);
 
     // Some common settings
     //
-
     m_durationLabel->setText(i18n("Absolute time:"));
     m_timeLabel->show();
     m_timeSpinBox->show();
@@ -1826,8 +1879,22 @@ SimpleEventEditDialog::setupForEvent()
     m_durationEditButton->show();
     m_durationSpinBox->setValue(m_event.getDuration());
 
+    m_notationGroupBox->hide();
+    m_lockNotationValues->setChecked(true);
+
+    if (m_typeLabel) m_typeLabel->setText(strtoqstr(m_event.getType()));
+
+    m_absoluteTime = m_event.getAbsoluteTime();
+    m_notationAbsoluteTime = m_event.getNotationAbsoluteTime();
+    m_duration = m_event.getDuration();
+    m_notationDuration = m_event.getNotationDuration();
+
     if (m_type == Rosegarden::Note::EventType)
     {
+	m_notationGroupBox->show();
+	m_notationTimeSpinBox->setValue(m_notationAbsoluteTime);
+	m_notationDurationSpinBox->setValue(m_notationDuration);
+
         m_pitchLabel->show();
         m_pitchLabel->setText(i18n("Note pitch:"));
         m_pitchSpinBox->show();
@@ -1849,7 +1916,7 @@ SimpleEventEditDialog::setupForEvent()
         }
         catch(Rosegarden::Event::NoData)
         {
-            m_pitchSpinBox->setValue(0);
+            m_pitchSpinBox->setValue(60);
         }
 
         try
@@ -1858,10 +1925,10 @@ SimpleEventEditDialog::setupForEvent()
         }
         catch(Rosegarden::Event::NoData)
         {
-            m_velocitySpinBox->setValue(0);
+            m_velocitySpinBox->setValue(100);
         }
-
-        m_typeCombo->setCurrentItem(0);
+	
+	if (m_typeCombo) m_typeCombo->setCurrentItem(0);
     }
     else if (m_type == Rosegarden::Controller::EventType)
     {
@@ -1905,7 +1972,7 @@ SimpleEventEditDialog::setupForEvent()
             m_velocitySpinBox->setValue(0);
         }
 
-        m_typeCombo->setCurrentItem(1);
+        if (m_typeCombo) m_typeCombo->setCurrentItem(1);
     }
     else if (m_type == Rosegarden::KeyPressure::EventType)
     {
@@ -1948,7 +2015,7 @@ SimpleEventEditDialog::setupForEvent()
             m_velocitySpinBox->setValue(0);
         }
 
-        m_typeCombo->setCurrentItem(2);
+        if (m_typeCombo) m_typeCombo->setCurrentItem(2);
     }
     else if (m_type == Rosegarden::ChannelPressure::EventType)
     {
@@ -1980,7 +2047,7 @@ SimpleEventEditDialog::setupForEvent()
             m_pitchSpinBox->setValue(0);
         }
 
-        m_typeCombo->setCurrentItem(3);
+        if (m_typeCombo) m_typeCombo->setCurrentItem(3);
     }
     else if (m_type == Rosegarden::ProgramChange::EventType)
     {
@@ -2012,7 +2079,7 @@ SimpleEventEditDialog::setupForEvent()
             m_pitchSpinBox->setValue(0);
         }
 
-        m_typeCombo->setCurrentItem(4);
+        if (m_typeCombo) m_typeCombo->setCurrentItem(4);
     }
     else if (m_type == Rosegarden::SystemExclusive::EventType)
     {
@@ -2042,7 +2109,7 @@ SimpleEventEditDialog::setupForEvent()
             m_controllerLabelValue->setText("0");
         }
 
-        m_typeCombo->setCurrentItem(5);
+        if (m_typeCombo) m_typeCombo->setCurrentItem(5);
     }
     else if (m_type == Rosegarden::PitchBend::EventType)
     {
@@ -2085,7 +2152,7 @@ SimpleEventEditDialog::setupForEvent()
             m_velocitySpinBox->setValue(0);
         }
 
-        m_typeCombo->setCurrentItem(6);
+        if (m_typeCombo) m_typeCombo->setCurrentItem(6);
     }
     else if (m_type == Rosegarden::Indication::EventType)
     {
@@ -2114,7 +2181,7 @@ SimpleEventEditDialog::setupForEvent()
             m_metaEdit->setText(i18n("<none>"));
         }
 
-        m_typeCombo->setCurrentItem(7);
+        if (m_typeCombo) m_typeCombo->setCurrentItem(7);
     }
     else if (m_type == Rosegarden::Text::EventType)
     {
@@ -2151,7 +2218,7 @@ SimpleEventEditDialog::setupForEvent()
             m_metaEdit->setText(i18n("<none>"));
         }
 
-        m_typeCombo->setCurrentItem(8);
+        if (m_typeCombo) m_typeCombo->setCurrentItem(8);
     }
     else if (m_type == Rosegarden::Note::EventRestType)
     {
@@ -2168,7 +2235,7 @@ SimpleEventEditDialog::setupForEvent()
         m_metaLabel->hide();
         m_metaEdit->hide();
 
-        m_typeCombo->setCurrentItem(9);
+        if (m_typeCombo) m_typeCombo->setCurrentItem(9);
     }
     else if (m_type == Rosegarden::Clef::EventType)
     {
@@ -2201,7 +2268,7 @@ SimpleEventEditDialog::setupForEvent()
         m_metaLabel->hide();
         m_metaEdit->hide();
 
-        m_typeCombo->setCurrentItem(10);
+        if (m_typeCombo) m_typeCombo->setCurrentItem(10);
     }
     else if (m_type == Rosegarden::Key::EventType)
     {
@@ -2234,7 +2301,7 @@ SimpleEventEditDialog::setupForEvent()
         m_metaLabel->hide();
         m_metaEdit->hide();
 
-        m_typeCombo->setCurrentItem(11);
+        if (m_typeCombo) m_typeCombo->setCurrentItem(11);
     }
     else
     {
@@ -2257,88 +2324,109 @@ SimpleEventEditDialog::setupForEvent()
         m_metaLabel->hide();
         m_metaEdit->hide();
 
-        m_typeCombo->setEnabled(false);
+        if (m_typeCombo) m_typeCombo->setEnabled(false);
     }
 
-    m_typeCombo->blockSignals(false);
+    if (m_typeCombo) m_typeCombo->blockSignals(false);
     m_timeSpinBox->blockSignals(false);
+    m_notationTimeSpinBox->blockSignals(false);
     m_durationSpinBox->blockSignals(false);
+    m_notationDurationSpinBox->blockSignals(false);
     m_pitchSpinBox->blockSignals(false);
     m_velocitySpinBox->blockSignals(false);
     m_metaEdit->blockSignals(false);
 
+    slotLockNotationChanged();
 }
 
 
 Rosegarden::Event
-SimpleEventEditDialog::getEvent() const
+SimpleEventEditDialog::getEvent()
 {
+    bool useSeparateNotationValues = 
+	(m_event.getType() == Rosegarden::Note::EventType);
+
+    if (m_typeCombo) {
+
+	int subordering = 0;
+	if (m_type == Rosegarden::Indication::EventType) {
+	    subordering = Rosegarden::Indication::EventSubOrdering;
+	} else if (m_type == Rosegarden::Clef::EventType) {
+	    subordering = Rosegarden::Clef::EventSubOrdering;
+	} else if (m_type == Rosegarden::Key::EventType) {
+	    subordering = Rosegarden::Key::EventSubOrdering;
+	} else if (m_type == Rosegarden::Text::EventType) {
+	    subordering = Rosegarden::Text::EventSubOrdering;
+	} else if (m_type == Rosegarden::Note::EventRestType) {
+	    subordering = Rosegarden::Note::EventRestSubOrdering;
+	} else if (m_type == Rosegarden::PitchBend::EventType) {
+	    subordering = Rosegarden::PitchBend::EventSubOrdering;
+	} else if (m_type == Rosegarden::Controller::EventType) {
+	    subordering = Rosegarden::Controller::EventSubOrdering;
+	} else if (m_type == Rosegarden::KeyPressure::EventType) {
+	    subordering = Rosegarden::KeyPressure::EventSubOrdering;
+	} else if (m_type == Rosegarden::ChannelPressure::EventType) {
+	    subordering = Rosegarden::ChannelPressure::EventSubOrdering;
+	} else if (m_type == Rosegarden::ProgramChange::EventType) {
+	    subordering = Rosegarden::ProgramChange::EventSubOrdering;
+	} else if (m_type == Rosegarden::SystemExclusive::EventType) {
+	    subordering = Rosegarden::SystemExclusive::EventSubOrdering;
+	}
+
+	m_event = Event(m_type,
+			m_absoluteTime,
+			m_duration,
+			subordering,
+			(useSeparateNotationValues ?
+			 m_notationAbsoluteTime : m_absoluteTime),
+			(useSeparateNotationValues ?
+			 m_notationDuration : m_duration));
+
+	// ensure these are set on m_event correctly
+	slotPitchChanged(m_pitchSpinBox->value());
+	slotVelocityChanged(m_velocitySpinBox->value());
+    }
+
     Event event(m_event,
 		m_absoluteTime,
 		m_duration,
 		m_event.getSubOrdering(),
-		(m_absoluteTime != m_event.getAbsoluteTime() ?
-		 m_absoluteTime : m_event.getNotationAbsoluteTime()),
-		(m_duration != m_event.getDuration() ?
-		 m_duration : m_event.getNotationDuration()));
+		(useSeparateNotationValues ?
+		 m_notationAbsoluteTime : m_absoluteTime),
+		(useSeparateNotationValues ?
+		 m_notationDuration : m_duration));
 
     // Values from the pitch and velocity spin boxes should already
     // have been set on m_event (and thus on event) by slotPitchChanged
     // and slotVelocityChanged.  Absolute time and duration were set in
     // the event ctor above; that just leaves the meta values.
 
-    switch(m_typeCombo->currentItem())
-    {
-        case 0: // Note
-            break;
+    if (m_type == Rosegarden::Indication::EventType) {
 
-        case 1: // Controller
-            break;
+	event.set<String>(Rosegarden::Indication::IndicationTypePropertyName,
+			  qstrtostr(m_metaEdit->text()));
 
-        case 2: // KeyPressure
-            break;
+    } else if (m_type == Rosegarden::Text::EventType) {
 
-        case 3: // ChannelPressure
-            break;
+	event.set<String>(Rosegarden::Text::TextTypePropertyName,
+			  qstrtostr(m_controllerLabelValue->text()));
+	event.set<String>(Rosegarden::Text::TextPropertyName,
+			  qstrtostr(m_metaEdit->text()));
 
-        case 4: // ProgramChange
-            break;
+    } else if (m_type == Rosegarden::Clef::EventType) {
 
-        case 5: // SystemExclusive
+	event.set<String>(Rosegarden::Clef::ClefPropertyName,
+			  qstrtostr(m_controllerLabelValue->text()));
+
+    } else if (m_type == Rosegarden::Key::EventType) {
+	
+	event.set<String>(Rosegarden::Key::KeyPropertyName,
+			  qstrtostr(m_controllerLabelValue->text()));
+
+    } else if (m_type == Rosegarden::SystemExclusive::EventType) {
+
 	    //!!! incomplete both here and in setupForEvent
             // we should copy across raw data
-            break;
-
-        case 6: // PitchBend
-            break;
-
-        case 7: // Indication
-	    event.set<String>(Rosegarden::Indication::IndicationTypePropertyName,
-			      qstrtostr(m_metaEdit->text()));
-            break;
-
-        case 8: // Text
-	    event.set<String>(Rosegarden::Text::TextTypePropertyName,
-			      qstrtostr(m_controllerLabelValue->text()));
-	    event.set<String>(Rosegarden::Text::TextPropertyName,
-			      qstrtostr(m_metaEdit->text()));
-            break;
-
-        case 9: //  Rest
-            break;
-
-        case 10: // Clef
-	    event.set<String>(Rosegarden::Clef::ClefPropertyName,
-			      qstrtostr(m_controllerLabelValue->text()));
-            break;
-
-        case 11: // Key
-	    event.set<String>(Rosegarden::Key::KeyPropertyName,
-			      qstrtostr(m_controllerLabelValue->text()));
-            break;
-
-        default:
-            break;
     }
 
     return event;
@@ -2352,12 +2440,31 @@ SimpleEventEditDialog::slotEventTypeChanged(int value)
     m_modified = true;
 
     setupForEvent();
+
+    // update whatever pitch and velocity correspond to
+    if (!m_pitchSpinBox->isHidden()) slotPitchChanged(m_pitchSpinBox->value());
+    if (!m_velocitySpinBox->isHidden()) slotVelocityChanged(m_velocitySpinBox->value());
 }
 
 void 
 SimpleEventEditDialog::slotAbsoluteTimeChanged(int value)
 {
     m_absoluteTime = value;
+
+    if (m_notationGroupBox->isHidden()) {
+	m_notationAbsoluteTime = value;
+    } else if (m_lockNotationValues->isChecked()) {
+	m_notationAbsoluteTime = value;
+	m_notationTimeSpinBox->setValue(value);
+    }
+
+    m_modified = true;
+}
+
+void 
+SimpleEventEditDialog::slotNotationAbsoluteTimeChanged(int value)
+{
+    m_notationAbsoluteTime = value;
     m_modified = true;
 }
 
@@ -2365,6 +2472,21 @@ void
 SimpleEventEditDialog::slotDurationChanged(int value)
 {
     m_duration = value;
+
+    if (m_notationGroupBox->isHidden()) {
+	m_notationDuration = value;
+    } else if (m_lockNotationValues->isChecked()) {
+	m_notationDuration = value;
+	m_notationDurationSpinBox->setValue(value);
+    }
+
+    m_modified = true;
+}
+
+void 
+SimpleEventEditDialog::slotNotationDurationChanged(int value)
+{
+    m_notationDuration = value;
     m_modified = true;
 }
 
@@ -2373,50 +2495,25 @@ SimpleEventEditDialog::slotPitchChanged(int value)
 {
     m_modified = true;
 
-    // set properties according to type
-    switch (m_typeCombo->currentItem())
-    {
-        case 0:
-            m_event.set<Int>(Rosegarden::BaseProperties::PITCH, value);
-            break;
+    if (m_type == Rosegarden::Note::EventType) {
+	m_event.set<Int>(Rosegarden::BaseProperties::PITCH, value);
 
-        case 1:
-            m_event.set<Int>(Rosegarden::Controller::NUMBER, value);
-            break;
+    } else if (m_type == Rosegarden::Controller::EventType) {
+	m_event.set<Int>(Rosegarden::Controller::NUMBER, value);
 
-        case 2:
-            m_event.set<Int>(Rosegarden::KeyPressure::PITCH, value);
-            break;
+    } else if (m_type == Rosegarden::KeyPressure::EventType) {
+	m_event.set<Int>(Rosegarden::KeyPressure::PITCH, value);
 
-        case 3:
-            m_event.set<Int>(Rosegarden::ChannelPressure::PRESSURE, value);
-            break;
+    } else if (m_type == Rosegarden::ChannelPressure::EventType) {
+	m_event.set<Int>(Rosegarden::ChannelPressure::PRESSURE, value);
 
-        case 4:
-            m_event.set<Int>(Rosegarden::ProgramChange::PROGRAM, value);
-            break;
+    } else if (m_type == Rosegarden::ProgramChange::EventType) {
+	m_event.set<Int>(Rosegarden::ProgramChange::PROGRAM, value);
 
-        case 5:
-            // SysEx
-            //m_event.set<Int>();
-            break;
-
-        case 6:
-            m_event.set<Int>(Rosegarden::PitchBend::MSB, value);
-            break;
-
-        case 7:
-            // Indication
-            break;
-
-        case 8:
-            // Text
-            break;
-
-        default:
-            break;
+    } else if (m_type == Rosegarden::PitchBend::EventType) {
+	m_event.set<Int>(Rosegarden::PitchBend::MSB, value);
     }
-
+    //!!!??? sysex?
 }
 
 void
@@ -2424,47 +2521,17 @@ SimpleEventEditDialog::slotVelocityChanged(int value)
 {
     m_modified = true;
 
-    // set properties according to type
-    switch (m_typeCombo->currentItem())
-    {
-        case 0:
-            m_event.set<Int>(Rosegarden::BaseProperties::VELOCITY, value);
-            break;
+    if (m_type == Rosegarden::Note::EventType) {
+	m_event.set<Int>(Rosegarden::BaseProperties::VELOCITY, value);
+    
+    } else if (m_type == Rosegarden::Controller::EventType) {
+	m_event.set<Int>(Rosegarden::Controller::VALUE, value);
 
-        case 1:
-            m_event.set<Int>(Rosegarden::Controller::VALUE, value);
-            break;
+    } else if (m_type == Rosegarden::KeyPressure::EventType) {
+	m_event.set<Int>(Rosegarden::KeyPressure::PRESSURE, value);
 
-        case 2:
-            m_event.set<Int>(Rosegarden::KeyPressure::PRESSURE, value);
-            break;
-
-        case 3:
-            // none for ChannelPressure
-            break;
-
-        case 4:
-            // none for ProgramChange
-            break;
-
-        case 5:
-            // none for SysEx
-            break;
-
-        case 6:
-            m_event.set<Int>(Rosegarden::PitchBend::LSB, value);
-            break;
-
-        case 7:
-            // Indication
-            break;
-
-        case 8:
-            // Text
-            break;
-
-        default:
-            break;
+    } else if (m_type == Rosegarden::PitchBend::EventType) {
+	m_event.set<Int>(Rosegarden::PitchBend::LSB, value);
     }
 }
 
@@ -2472,6 +2539,16 @@ void
 SimpleEventEditDialog::slotMetaChanged(const QString &)
 {
     m_modified = true;
+}
+
+void
+SimpleEventEditDialog::slotLockNotationChanged()
+{
+    bool enable = !m_lockNotationValues->isChecked();
+    m_notationTimeSpinBox->setEnabled(enable);
+    m_notationTimeEditButton->setEnabled(enable);
+    m_notationDurationSpinBox->setEnabled(enable);
+    m_notationDurationEditButton->setEnabled(enable);
 }
 
 void
@@ -2486,6 +2563,17 @@ SimpleEventEditDialog::slotEditAbsoluteTime()
 }
 
 void
+SimpleEventEditDialog::slotEditNotationAbsoluteTime()
+{
+    TimeDialog dialog(this, i18n("Edit Event Notation Time"),
+		      &m_doc->getComposition(),
+		      m_notationTimeSpinBox->value());
+    if (dialog.exec() == QDialog::Accepted) {
+	m_notationTimeSpinBox->setValue(dialog.getTime());
+    }
+}
+
+void
 SimpleEventEditDialog::slotEditDuration()
 {
     TimeDialog dialog(this, i18n("Edit Duration"),
@@ -2494,6 +2582,18 @@ SimpleEventEditDialog::slotEditDuration()
 		      m_durationSpinBox->value());
     if (dialog.exec() == QDialog::Accepted) {
 	m_durationSpinBox->setValue(dialog.getTime());
+    }
+}
+
+void
+SimpleEventEditDialog::slotEditNotationDuration()
+{
+    TimeDialog dialog(this, i18n("Edit Notation Duration"),
+		      &m_doc->getComposition(),
+		      m_notationTimeSpinBox->value(),
+		      m_notationDurationSpinBox->value());
+    if (dialog.exec() == QDialog::Accepted) {
+	m_notationDurationSpinBox->setValue(dialog.getTime());
     }
 }
 

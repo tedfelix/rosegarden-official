@@ -84,6 +84,15 @@ public:
 	m_data(new EventData(type, absoluteTime, duration, subOrdering)),
 	m_nonPersistentProperties(0) { }
 
+    Event(const std::string &type,
+	  timeT absoluteTime, timeT duration, short subOrdering,
+	  timeT notationAbsoluteTime, timeT notationDuration) :
+	m_data(new EventData(type, absoluteTime, duration, subOrdering)),
+	m_nonPersistentProperties(0) {
+	setNotationAbsoluteTime(notationAbsoluteTime);
+	setNotationDuration(notationDuration);
+    }
+
     Event(const Event &e) :
 	m_nonPersistentProperties(0) { share(e); }
 

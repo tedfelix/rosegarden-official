@@ -383,7 +383,7 @@ public:
 		          bool inserting = false); // inserting or editing
 
     bool isModified() const { return m_modified; }
-    Rosegarden::Event getEvent() const;
+    Rosegarden::Event getEvent();
 
     // Setup the dialog for a new event type
     void setupForEvent();
@@ -392,11 +392,16 @@ public slots:
     void slotEventTypeChanged(int value);
     void slotAbsoluteTimeChanged(int value);
     void slotDurationChanged(int value);
+    void slotNotationAbsoluteTimeChanged(int value);
+    void slotNotationDurationChanged(int value);
     void slotPitchChanged(int value);
     void slotVelocityChanged(int value);
     void slotMetaChanged(const QString &);
     void slotEditAbsoluteTime();
+    void slotEditNotationAbsoluteTime();
     void slotEditDuration();
+    void slotEditNotationDuration();
+    void slotLockNotationChanged();
     void slotEditPitch();
 
 protected:
@@ -405,15 +410,18 @@ protected:
 
     std::string              m_type;
     Rosegarden::timeT        m_absoluteTime;
+    Rosegarden::timeT        m_notationAbsoluteTime;
     Rosegarden::timeT        m_duration;
+    Rosegarden::timeT        m_notationDuration;
 
     KComboBox               *m_typeCombo;
+    QLabel                  *m_typeLabel;
+
     QLabel                  *m_timeLabel;
     QLabel                  *m_durationLabel;
     QLabel                  *m_pitchLabel;
     QLabel                  *m_velocityLabel;
     QLabel                  *m_metaLabel;
-
     QLabel                  *m_controllerLabel;
     QLabel                  *m_controllerLabelValue;
 
@@ -425,6 +433,15 @@ protected:
     QPushButton             *m_timeEditButton;
     QPushButton             *m_durationEditButton;
     QPushButton             *m_pitchEditButton;
+
+    QGroupBox               *m_notationGroupBox;
+    QLabel                  *m_notationTimeLabel;
+    QLabel                  *m_notationDurationLabel;
+    QSpinBox                *m_notationTimeSpinBox;
+    QSpinBox                *m_notationDurationSpinBox;
+    QPushButton             *m_notationTimeEditButton;
+    QPushButton             *m_notationDurationEditButton;
+    QCheckBox               *m_lockNotationValues;
 
     QLineEdit               *m_metaEdit;
 
