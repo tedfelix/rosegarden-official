@@ -654,6 +654,8 @@ void NotationView::slotSaveOptions()
     m_config->writeEntry("Show Chord Name Ruler", m_chordNamesVisible);
     m_config->writeEntry("Show Tempo Ruler", m_temposVisible);
     m_config->writeEntry("Show Annotations", m_annotationsVisible);
+
+    m_config->sync();
 }
 
 void NotationView::readOptions()

@@ -803,7 +803,9 @@ RosegardenGUIDoc *RosegardenGUIApp::getDocument() const
 }
 
 void RosegardenGUIApp::slotSaveOptions()
-{	
+{
+    RG_DEBUG << "RosegardenGUIApp::slotSaveOptions()\n";
+
     m_config->setGroup("General Options");
     m_config->writeEntry("Show Transport",               m_viewTransport->isChecked());
     m_config->writeEntry("Expanded Transport",           m_transport->isExpanded());
@@ -815,6 +817,8 @@ void RosegardenGUIApp::slotSaveOptions()
     m_config->writeEntry("Show Previews",                m_viewPreviews->isChecked());
 
     m_fileRecent->saveEntries(m_config);
+
+    m_config->sync();
 }
 
 

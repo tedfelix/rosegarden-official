@@ -344,6 +344,8 @@ void MatrixView::slotSaveOptions()
 {        
     m_config->setGroup("Matrix Options");
     // no options to save at the moment
+
+    m_config->sync();
 }
 
 void MatrixView::readOptions()
