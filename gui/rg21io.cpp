@@ -30,6 +30,8 @@
 
 using Rosegarden::Event;
 using Rosegarden::Track;
+using Rosegarden::Int;
+using Rosegarden::String;
 
 RG21Loader::RG21Loader(const QString& fileName)
     : m_file(fileName),
@@ -37,6 +39,7 @@ RG21Loader::RG21Loader(const QString& fileName)
       m_composition(0),
       m_currentTrack(0),
       m_currentTrackTime(0),
+      m_currentTrackNb(0),
       m_nbStaves(0)
 {
 
@@ -62,8 +65,8 @@ bool RG21Loader::parseClef()
 
     Event *clefEvent = new Event(Rosegarden::Clef::EventType);
     clefEvent->setAbsoluteTime(0);
-    clefEvent->set<Rosegarden::String>(Rosegarden::Clef::ClefPropertyName,
-                                       clefName);
+    clefEvent->set<String>(Rosegarden::Clef::ClefPropertyName,
+                           clefName);
     
     m_currentTrack->insert(clefEvent);
 
@@ -73,6 +76,7 @@ bool RG21Loader::parseClef()
 bool RG21Loader::parseChordItem()
 {
     using Rosegarden::Note;
+    using Rosegarden::timeT;
 
     if (m_tokens.count() < 4) return false;
     
@@ -85,8 +89,40 @@ bool RG21Loader::parseChordItem()
     } catch (Note::BadType b) {
         kdDebug(KDEBUG_AREA) << "RG21Loader::parseChordItem: Bad duration: "
                              << durationString << endl;
+        return false;
     }
 
+    QStringList::Iterator i = m_tokens.begin(); 
+
+    int chordMods = (*i).toInt(); ++i;
+    int nbNotes   = (*i).toInt(); ++i;
+
+    for(;i != m_tokens.end(); ++i) {
+        long pitch = (*i).toInt();
+
+        Event *noteEvent = new Event(Note::EventType);
+        noteEvent->setDuration(duration);
+        noteEvent->setAbsoluteTime(m_currentTrackTime);
+        noteEvent->set<Int>("pitch", pitch);
+
+        m_currentTrack->insert(noteEvent);
+    }
+
+    m_currentTrackTime += duration;
+
+    return true;
+}
+
+void RG21Loader::closeTrackOrComposition()
+{
+    if (m_currentTrack) {
+        m_currentTrack->setInstrument(m_currentTrackNb);
+        m_composition->insert(m_currentTrack);
+        m_currentTrack = 0;
+        m_currentTrackTime = 0;
+    } else {
+        // ??
+    }
 }
 
 bool RG21Loader::parse()
@@ -103,19 +139,31 @@ bool RG21Loader::parse()
         QString firstToken = m_tokens.first();
         
         if (firstToken == "Staves" || firstToken == "Staffs") { // nb staves
+
             m_nbStaves = m_tokens[1].toUInt();
-            
+            m_composition = new Rosegarden::Composition;
+
         } else if (firstToken == "Name") { // Staff name
+
             m_currentStaffName = m_tokens[1]; // we don't do anything with it yet
             m_currentTrack = new Rosegarden::Track;
-
+            ++m_currentTrackNb;
+            
         } else if (firstToken == "Clef") {
+
             parseClef();
+
         } else if (firstToken == ":") {
+
             m_tokens.remove(m_tokens.begin()); // get rid of 1st token ':'
             parseChordItem();
-        }
 
+        } else if (firstToken == "End") {
+
+            closeTrackOrComposition();
+            
+        }
+        
     }
     
     return true;

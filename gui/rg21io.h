@@ -41,6 +41,7 @@ protected:
     bool parse();
     bool parseClef();
     bool parseChordItem();
+    void closeTrackOrComposition();
 
     QFile m_file;
     QTextStream *m_stream;
@@ -48,6 +49,7 @@ protected:
     Rosegarden::Composition* m_composition;
     Rosegarden::Track* m_currentTrack;
     unsigned int m_currentTrackTime;
+    unsigned int m_currentTrackNb;
 
     QString m_currentLine;
     QString m_currentStaffName;
