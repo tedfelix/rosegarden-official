@@ -202,6 +202,8 @@ void EditView::readjustViewSize(QSize requestedSize, bool exact)
 			 << newSize.height() << ")" << endl;
 
     setViewSize(newSize);
+
+    getCanvasView()->slotUpdate();
 }
 
 MultiViewCommandHistory *EditView::getCommandHistory()
