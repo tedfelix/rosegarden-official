@@ -17,7 +17,7 @@ o Complete segment edit shortcuts (click/copy/multiple
 
 o MIDI recording [DONE - first pass]
 
-o Write Rosegarden tempo events to exported MIDI
+o Write Rosegarden tempo events to exported MIDI [DONE]
 
 o Audio.  Still.
   Most likely wait until all the above has been implemented
