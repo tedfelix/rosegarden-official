@@ -208,7 +208,8 @@ void RosegardenGUIView::print(KPrinter *pPrinter, Composition* p)
     }
 
     NotationView *notationView = new NotationView(getDocument(),
-                                                  segmentsToEdit);
+                                                  segmentsToEdit,
+                                                  pPrinter);
     notationView->show();
     kapp->processEvents();
 
