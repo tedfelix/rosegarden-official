@@ -922,7 +922,9 @@ SequenceManager::checkSoundSystemStatus()
                 break;
 
             case Rosegarden::MIDI_SUBSYS_OK:
-                throw(i18n("Audio subsystem has failed to initialise"));
+                // for the moment we're fine
+                //
+                //throw(i18n("Audio subsystem has failed to initialise"));
                 break;
 
             case Rosegarden::AUDIO_SUBSYS_OK:

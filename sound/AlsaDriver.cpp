@@ -1284,25 +1284,25 @@ AlsaDriver::processPending(const RealTime &playLatency)
 //
 #ifdef HAVE_JACK
 int
-jackProcess(nframes_t nframes, void *arg)
+AlsaDriver::jackProcess(nframes_t nframes, void *arg)
 {
     return 0;
 }
 
 int
-jackBufferSize(nframes_t nframes, void *arg)
+AlsaDriver::jackBufferSize(nframes_t nframes, void *arg)
 {
     return 0;
 }
 
 int
-jackSampleRate(nframes_t nframes, void *arg)
+AlsaDriver::jackSampleRate(nframes_t nframes, void *arg)
 {
     return 0;
 }
 
 void
-jackShutdown(void *arg)
+AlsaDriver::jackShutdown(void *arg)
 {
 }
 #endif
