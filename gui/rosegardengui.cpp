@@ -823,16 +823,16 @@ void RosegardenGUIApp::initView()
     // Set the solo button
     m_transport->SoloButton()->setOn(comp.isSolo());
 
-    // set the highlighted track
-    m_swapView->slotSelectTrackSegments(comp.getSelectedTrack());
-
-    connect(m_swapView, SIGNAL(stateChange(const QString&, bool)),
-            this,   SLOT  (slotStateChanged(const QString&, bool)));
-
     // make sure we show
     //
     RosegardenGUIView *oldView = m_view;
     m_view = m_swapView;
+
+    // set the highlighted track
+    m_view->slotSelectTrackSegments(comp.getSelectedTrack());
+
+    connect(m_view, SIGNAL(stateChange(const QString&, bool)),
+            this,   SLOT  (slotStateChanged(const QString&, bool)));
 
     // We only check for the SequenceManager to make sure
     // we're not on the first pass though - we don't want
