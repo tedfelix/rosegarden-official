@@ -135,7 +135,11 @@ Colour::toXmlString() const
     output << "<colour red=\"" << m_r
            << "\" green=\"" << m_g
            << "\" blue=\"" << m_b
+#if (__GNUC__ < 3)
+           << "\"/>" << std::endl << std::ends;
+#else
            << "\"/>" << std::endl;
+#endif
 
     return output.str();
 }
@@ -147,7 +151,11 @@ Colour::dataToXmlString() const
     output << "red=\"" << m_r
            << "\" green=\"" << m_g
            << "\" blue=\"" << m_b
+#if (__GNUC__ < 3)
+           << "\"" << std::ends;
+#else
            << "\"";
+#endif
 
     return output.str();
 }

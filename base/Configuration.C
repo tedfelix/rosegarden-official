@@ -130,22 +130,16 @@ namespace CompositionMetadataKeys
 
 
 // Keep these in lower case
-const PropertyName DocumentConfiguration::MetronomePitch        = "metronomepitch";
-const PropertyName DocumentConfiguration::MetronomeBarVelocity  = "metronomebarvelocity";
-const PropertyName DocumentConfiguration::MetronomeBeatVelocity = "metronomebeatvelocity";
+const PropertyName DocumentConfiguration::MetronomeDevice        = "metronomedevice";
 const PropertyName DocumentConfiguration::FetchLatency          = "fetchlatency";
-const PropertyName DocumentConfiguration::MetronomeDuration     = "metronomeduration";
 const PropertyName DocumentConfiguration::SequencerOptions      = "sequenceroptions";
 const PropertyName DocumentConfiguration::ZoomLevel             = "zoomlevel";
 
 
 DocumentConfiguration::DocumentConfiguration()
 {
-    set<Int>(MetronomePitch, 37);
-    set<Int>(MetronomeBarVelocity, 120);
-    set<Int>(MetronomeBeatVelocity, 80);
+    set<Int>(MetronomeDevice, 0);
     set<RealTimeT>(FetchLatency,      RealTime(0, 50000));    
-    set<RealTimeT>(MetronomeDuration, RealTime(0, 10000));    
     set<Int>(ZoomLevel, 0);
 }
     
@@ -184,17 +178,11 @@ DocumentConfiguration::toXmlString()
     std::stringstream config;
 
     config << endl << "<configuration>" << endl
-           << "    <" << MetronomePitch        << " type=\"Int\">" << get<Int>(MetronomePitch)        << "</" << MetronomePitch        << ">\n"
-           << "    <" << MetronomeBarVelocity  << " type=\"Int\">" << get<Int>(MetronomeBarVelocity)  << "</" << MetronomeBarVelocity  << ">\n"
-           << "    <" << MetronomeBeatVelocity << " type=\"Int\">" << get<Int>(MetronomeBeatVelocity) << "</" << MetronomeBeatVelocity << ">\n";
+           << "    <" << MetronomeDevice        << " type=\"Int\">" << get<Int>(MetronomeDevice)        << "</" << MetronomeDevice        << ">\n";
 
     RealTime r = get<RealTimeT>(FetchLatency);
     
     config << "    <" << FetchLatency << " type=\"RealTime\">" << r.sec << "," << r.usec << "</" << FetchLatency << ">" << endl;
-
-    r =  get<RealTimeT>(MetronomeDuration);
-
-    config << "    <" << MetronomeDuration << " type=\"RealTime\">" << r.sec << "," << r.usec << "</" << MetronomeDuration << ">" << endl;
 
     config << "    <" << ZoomLevel << " type=\"Int\">" << get<Int>(ZoomLevel)
            << "</" << ZoomLevel << ">\n";

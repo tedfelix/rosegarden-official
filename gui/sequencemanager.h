@@ -195,6 +195,9 @@ public:
     void segmentModified(Segment*);
 
     virtual bool event(QEvent *e);
+
+    // moved from protected for the moment [rwb]
+    void resetMetronomeMmapper();
     
 public slots:
     // Empty the m_clearToSend flag
@@ -218,7 +221,6 @@ protected slots:
 protected:
 
     void resetCompositionMmapper();
-    void resetMetronomeMmapper();
     void resetControlBlockMmapper();
     
     //--------------- Data members ---------------------------------

@@ -1570,7 +1570,6 @@ MetronomeConfigurationPage::MetronomeConfigurationPage(RosegardenGUIDoc *doc,
 
     layout->addWidget(new QLabel(i18n("Metronome Device"), frame), 0, 0);
     m_metronomeDevice = new RosegardenComboBox(frame);
-    m_metronomeDevice->setCurrentItem(config.get<Int>("metronomedevice", 0));
     layout->addWidget(m_metronomeDevice, 0, 1);
 
     Rosegarden::DeviceList *devices = doc->getStudio().getDevices();
@@ -1588,6 +1587,8 @@ MetronomeConfigurationPage::MetronomeConfigurationPage(RosegardenGUIDoc *doc,
 	    m_metronomeDevice->insertItem(label);
         }
     }
+
+    m_metronomeDevice->setCurrentItem(config.get<Int>("metronomedevice", 0));
 
     layout->addWidget(new QLabel(i18n("Metronome Instrument"), frame), 1, 0);
     m_metronomeInstrument = new RosegardenComboBox(frame);
@@ -1617,17 +1618,18 @@ MetronomeConfigurationPage::MetronomeConfigurationPage(RosegardenGUIDoc *doc,
     addTab(frame, i18n("Modify Metronome settings"));
 
     // populate the dialog
-    populate();
+    populate(m_metronomeDevice->currentItem());
+
+    // connect up the device list
+    connect(m_metronomeDevice, SIGNAL(activated(int)),
+            this, SLOT(populate(int)));
 }
 
 void
-MetronomeConfigurationPage::populate()
+MetronomeConfigurationPage::populate(int device)
 {
     // clear
     m_metronomeInstrument->clear();
-
-    // get the studio
-    Rosegarden::Studio &studio = m_doc->getStudio();
 
     Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
     Rosegarden::DeviceListConstIterator it;
@@ -1640,8 +1642,10 @@ MetronomeConfigurationPage::populate()
 
         if (dev && dev->getDirection() == MidiDevice::Play)
         {
-            if (++count == m_metronomeDevice->currentItem())
+            if (count == device)
                 break;
+
+            count++;
         }
     }
 
@@ -1652,15 +1656,58 @@ MetronomeConfigurationPage::populate()
     Rosegarden::InstrumentList list = dev->getPresentationInstruments();
     Rosegarden::InstrumentList::iterator iit;
 
-    for (iit = list.begin(); iit != list.end(); ++iit)
+    Rosegarden::MidiMetronome *metronome = dev->getMetronome();
+
+    // if we've got no metronome against this device then create one
+    if (metronome == 0)
     {
-        m_metronomeInstrument->
-                insertItem(strtoqstr((*iit)->getPresentationName()));
+        Rosegarden::MidiProgram 
+            prg(Rosegarden::MidiBank(true, 0, 0),
+                0, // program
+                std::string("Metronome"));
+
+        for (iit = list.begin(); iit != list.end(); ++iit)
+        {
+            if ((*iit)->getMidiChannel() == 9) break;
+        }
+
+        InstrumentId id = SystemInstrumentBase;
+        if (iit != list.end())
+        {
+            id = (*iit)->getId();
+        }
+
+        dev->setMetronome(id,
+                          prg,
+                          Rosegarden::MidiByte(37),
+                          Rosegarden::MidiByte(120),
+                          Rosegarden::MidiByte(80));
+
+        metronome = dev->getMetronome();
     }
 
-    m_metronomePitch->setValue(dev->getMetronome()->getPitch());
-    m_metronomeBarVely->setValue(dev->getMetronome()->getBarVelocity());
-    m_metronomeBeatVely->setValue(dev->getMetronome()->getBeatVelocity());
+    // metronome should now be set but we still check it
+    if (metronome)
+    {
+        int position = 0;
+        int count = 0;
+        for (iit = list.begin(); iit != list.end(); ++iit)
+        {
+            m_metronomeInstrument->
+                    insertItem(strtoqstr((*iit)->getPresentationName()));
+    
+            if ((*iit)->getId() == metronome->getInstrument())
+            {
+                position = count;
+            }
+            count++;
+        }
+        m_metronomeInstrument->setCurrentItem(position);
+
+        m_metronomePitch->setValue(metronome->getPitch());
+        m_metronomeBarVely->setValue(metronome->getBarVelocity());
+        m_metronomeBeatVely->setValue(metronome->getBeatVelocity());
+    }
 
 }
 
@@ -1673,12 +1720,56 @@ MetronomeConfigurationPage::apply()
     //
     Configuration &config = m_doc->getConfiguration();
 
-    /*
-    config.set<Int>("metronomebarvelocity", m_metronomeBarVely->value());
-    config.set<Int>("metronomebeatvelocity", m_metronomeBeatVely->value());
-    config.set<Int>("metronomechannel", m_metronomeChannel->value());
+    Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
+    Rosegarden::DeviceListConstIterator it;
+    int count = 0;
+    Rosegarden::MidiDevice *dev = 0;
+
+    for (it = devices->begin(); it != devices->end(); it++)
+    {
+        dev = dynamic_cast<Rosegarden::MidiDevice*>(*it);
+
+        if (dev && dev->getDirection() == MidiDevice::Play)
+        {
+            if (count == m_metronomeDevice->currentItem())
+                break;
+
+            count++;
+        }
+    }
+
     config.set<Int>("metronomedevice", m_metronomeDevice->currentItem());
-    */
+
+    Rosegarden::MidiMetronome *metronome = dev->getMetronome();
+    if (metronome == 0) return;
+
+
+    // get instrument
+    if (count > 0 && dev) 
+    {
+        Rosegarden::InstrumentList list = dev->getPresentationInstruments();
+
+        Rosegarden::Instrument *inst = 
+            list[m_metronomeInstrument->currentItem()];
+
+        if (inst)
+        {
+            metronome->setInstrument(inst->getId());
+        }
+
+    }
+
+    metronome->setPitch(
+            Rosegarden::MidiByte(m_metronomePitch->value()));
+
+    metronome->setBarVelocity(
+            Rosegarden::MidiByte(m_metronomeBarVely->value()));
+
+    metronome->setBeatVelocity(
+            Rosegarden::MidiByte(m_metronomeBeatVely->value()));
+
+    // horrible hardcode metronome reset
+    m_doc->getSequenceManager()->resetMetronomeMmapper();
 
     m_doc->slotDocumentModified();
 }

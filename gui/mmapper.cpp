@@ -765,7 +765,12 @@ void MetronomeMmapper::setupMetronome()
 
     // set our metronome
     //
-    if (!m_metronome) { m_metronome = metronome; }
+    if (!m_metronome)
+    { 
+        m_metronome = metronome;
+        m_barVelocity = metronome->getBarVelocity();
+        m_beatVelocity = metronome->getBeatVelocity();
+    }
 
 }
 

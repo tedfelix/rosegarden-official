@@ -245,7 +245,12 @@ ColourMap::toXmlString(std::string name) const
                << "\" " << pos->second.first.dataToXmlString() << "/>" << std::endl;
     }
 
+#if (__GNUC__ < 3)
+    output << "        </colourmap>" << std::endl << std::ends;
+#else
     output << "        </colourmap>" << std::endl;
+#endif
+
 
     return output.str();
 

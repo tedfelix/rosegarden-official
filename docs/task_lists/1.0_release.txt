@@ -2,7 +2,9 @@ Features for 1.0 - updated 20030923
 -----------------------------------
 
 - integrate new JACK transport and synchronisation - also
-  investigate MIDI clock, MTC and MMC [rwb]
+  investigate MIDI clock, MTC and MMC [IN PROGRESS - rwb]
+
+- metronome [IN PROGRESS - rwb]
 
 - banks/variations [cc]
 
@@ -20,7 +22,6 @@ Features for 1.0 - updated 20030923
 
 - request: notation segment expanding itself as you enter 
            notes past the end of it
-
 
 - Studio faders (MIDI and audio fader controls)
 

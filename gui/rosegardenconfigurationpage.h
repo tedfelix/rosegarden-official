@@ -453,7 +453,7 @@ public:
     static QString title()     { return i18n("Metronome Settings"); }
 
 public slots:
-    void populate();
+    void populate(int dev);
 
 protected:
 
