@@ -46,11 +46,11 @@ else
    else
      with_jack=no
   fi
-  ], with_jack=$with_alsa)
+  ], with_jack=yes)
 
-   dnl only use JACK when jack/jack.h is found
-  if test "$ac_header_jack_jack_h" != "yes"; then
-    with_jack=no
+  dnl only use JACK when jack/jack.h is found
+  if test "$with_jack" = "yes"; then
+     AC_CHECK_HEADERS(jack/jack.h,,[with_jack=no])
   fi
 
   if test "$with_jack" = "yes"; then
@@ -74,8 +74,8 @@ else
   ], with_ladspa=yes)
 
   dnl only use LADSPA when ladspa.h is found
-  if test "$ac_header_ladspa_h" != "yes"; then
-    with_ladspa=no
+  if test "$with_ladspa" != "yes"; then
+    AC_CHECK_HEADERS(ladspa.h,,[with_ladspa=no])
   fi
 
   if test "$with_ladspa" = "yes"; then
