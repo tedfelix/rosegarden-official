@@ -931,6 +931,7 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
     // prepare selection rectangle
     m_selectionRect = new QCanvasRectangle(canvas());
     m_selectionRect->setPen(RosegardenGUIColours::SelectionRectangle);
+    m_selectionRect->setZ(1000);  // Always in front
     m_selectionRect->hide();
 }
 

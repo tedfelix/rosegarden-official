@@ -715,7 +715,9 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
     // clear the selection vector.  If we're clicking on an item and it's 
     // not in the selection - then also clear the selection.
     //
-    if (!item || (!m_segmentAddMode && !(item->isSelected()))) {
+    if ((!m_segmentAddMode && !item) || 
+        (!m_segmentAddMode && !(item->isSelected()))) {
+    //if (!item || (!m_segmentAddMode && !(item->isSelected()))) {
         clearSelected();
     }
 
@@ -968,9 +970,9 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
             selectionRect->setSize(w, h);
 	    m_canvas->canvas()->update();
 
-            // Get collisions and do selection
+            // Get collisions and do selection (true for exact collisions)
             //
-            QCanvasItemList l = selectionRect->collisions(true); // exact collisions
+            QCanvasItemList l = selectionRect->collisions(true);
 
             // selection management
             SegmentSelection oldSelection = getSelectedSegments();
@@ -983,11 +985,25 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
                 {
                     if (SegmentItem *item = dynamic_cast<SegmentItem*>(*it))
                     {
-                        segCount++;
-                        slotSelectSegmentItem(item);
-                        newSelection.insert(item->getSegment());
+                        if (m_segmentAddMode)
+                        {
+                            slotSelectSegmentItem(item);
+                            addToSelection(item);
+                        }
+                        else
+                        {
+                            segCount++;
+                            slotSelectSegmentItem(item);
+                            newSelection.insert(item->getSegment());
+                        }
                     }
                 }
+            }
+
+            if (m_segmentAddMode)
+            { 
+                emit selectedSegments(getSelectedSegments());
+                return FollowHorizontal | FollowVertical;
             }
 
             // Check for unselected items with this piece of crap
