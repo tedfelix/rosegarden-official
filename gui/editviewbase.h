@@ -26,7 +26,8 @@
 #include <set>
 
 #include <qaccel.h>
-#include <kmainwindow.h>
+
+#include <kdockwidget.h>
 
 #include "Event.h" // for timeT -- can't predeclare a typedef
 
@@ -47,7 +48,7 @@ class EditToolBox;
 class BasicCommand;
 
 
-class EditViewBase : public KMainWindow
+class EditViewBase : public KDockMainWindow
 {
     static const unsigned int ID_STATUS_MSG;
     static const unsigned int NbLayoutRows;
@@ -260,7 +261,7 @@ protected slots:
     virtual void slotUpdateToolbars();
     
 protected:
-    QFrame* getCentralFrame() { return m_centralFrame; }
+    QWidget* getCentralWidget() { return m_centralFrame; }
 
     void initSegmentRefreshStatusIds();
 
@@ -309,6 +310,7 @@ protected:
     EditTool*    m_tool;
     EditToolBox* m_toolBox;
 
+    KDockWidget *m_mainDockWidget;
     QFrame      *m_centralFrame;
     QGridLayout *m_grid;
 

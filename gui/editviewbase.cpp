@@ -55,7 +55,7 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
                            std::vector<Rosegarden::Segment *> segments,
                            unsigned int cols,
                            QWidget *parent, const char *name) :
-    KMainWindow(parent, name),
+    KDockMainWindow(parent, name),
     m_viewNumber(-1),
     m_viewLocalPropertyPrefix(makeViewLocalPropertyPrefix()),
     m_config(kapp->config()),
@@ -63,8 +63,9 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_segments(segments),
     m_tool(0),
     m_toolBox(0),
-    m_centralFrame(new QFrame(this)),
-    m_grid(new QGridLayout(m_centralFrame, NbLayoutRows, cols)),
+    m_mainDockWidget(0),
+    m_centralFrame(0),
+    m_grid(0),
     m_mainCol(cols - 1),
     m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId()),
     m_needUpdate(false),
@@ -74,14 +75,25 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_controlDown(false),
     m_inCtor(true)
 {
+
+    QPixmap dummyPixmap; // any icon will do
+    m_mainDockWidget = createDockWidget("Rosegarden EditView DockWidget", dummyPixmap, 0L, "editview_dock_widget");
+    // allow others to dock to the left and right sides only
+    m_mainDockWidget->setDockSite(KDockWidget::DockLeft | KDockWidget::DockRight);
+    // forbit docking abilities of m_mainDockWidget itself
+    m_mainDockWidget->setEnableDocking(KDockWidget::DockNone);
+    setView(m_mainDockWidget); // central widget in a KDE mainwindow
+    setMainDockWidget(m_mainDockWidget); // master dockwidget
+
+    m_centralFrame = new QFrame(m_mainDockWidget);
+    m_grid = new QGridLayout(m_centralFrame, NbLayoutRows, cols);
+
+    m_mainDockWidget->setWidget(m_centralFrame);
+
     initSegmentRefreshStatusIds();
 
     m_doc->attachEditView(this);
     
-    setCentralWidget(m_centralFrame);
-
-    m_centralFrame->setMargin(0);
-
     QObject::connect
         (getCommandHistory(), SIGNAL(commandExecuted()),
          this,                  SLOT(update()));

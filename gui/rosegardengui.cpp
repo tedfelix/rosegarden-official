@@ -203,100 +203,98 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     emit startupStatusMessage(i18n("Initialising plugin manager..."));
     m_pluginManager = new Rosegarden::AudioPluginManager();
 
-    ///////////////////////////////////////////////////////////////////
-        // call inits to invoke all other construction parts
-        //
-        emit startupStatusMessage(i18n("Initialising view..."));
-        initStatusBar();
-        setupActions();
-        iFaceDelayedInit(this);
-        initZoomToolbar();
+    // call inits to invoke all other construction parts
+    //
+    emit startupStatusMessage(i18n("Initialising view..."));
+    initStatusBar();
+    setupActions();
+    iFaceDelayedInit(this);
+    initZoomToolbar();
 
-        QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-        QPixmap mainPixmap(pixmapDir + "/toolbar/matrix.xpm");
-        m_mainDockWidget = createDockWidget("Rosegarden MainDockWidget", mainPixmap, 0L, "main_dock_widget");
-        // allow others to dock to the left and right sides only
-        m_mainDockWidget->setDockSite(KDockWidget::DockLeft | KDockWidget::DockRight);
-        // forbit docking abilities of m_mainDockWidget itself
-        m_mainDockWidget->setEnableDocking(KDockWidget::DockNone);
-        setView(m_mainDockWidget); // central widget in a KDE mainwindow
-        setMainDockWidget(m_mainDockWidget); // master dockwidget
+    QPixmap dummyPixmap; // any icon will do
+    m_mainDockWidget = createDockWidget("Rosegarden MainDockWidget", dummyPixmap, 0L, "main_dock_widget");
+    // allow others to dock to the left and right sides only
+    m_mainDockWidget->setDockSite(KDockWidget::DockLeft | KDockWidget::DockRight);
+    // forbit docking abilities of m_mainDockWidget itself
+    m_mainDockWidget->setEnableDocking(KDockWidget::DockNone);
+    setView(m_mainDockWidget); // central widget in a KDE mainwindow
+    setMainDockWidget(m_mainDockWidget); // master dockwidget
 
-        m_dockLeft = createDockWidget("params dock", mainPixmap, 0L,
-                                      i18n("Segment & Instrument Parameters"));
-        m_dockLeft->manualDock(m_mainDockWidget,            // dock target
-                               KDockWidget::DockLeft, // dock site
-                               20);                   // relation target/this (in percent)
+    m_dockLeft = createDockWidget("params dock", dummyPixmap, 0L,
+                                  i18n("Segment & Instrument Parameters"));
+    m_dockLeft->manualDock(m_mainDockWidget,            // dock target
+                           KDockWidget::DockLeft, // dock site
+                           20);                   // relation target/this (in percent)
 
-        connect(m_dockLeft, SIGNAL(iMBeingClosed()),
-                this, SLOT(slotParametersClosed()));
-        connect(m_dockLeft, SIGNAL(hasUndocked()),
-                this, SLOT(slotParametersClosed()));
-        // Apparently, hasUndocked() is emitted when the dock widget's
-        // 'close' button on the dock handle is clicked.
-        connect(m_mainDockWidget, SIGNAL(docking(KDockWidget*, KDockWidget::DockPosition)),
-                this, SLOT(slotParametersDockedBack(KDockWidget*, KDockWidget::DockPosition)));
+    connect(m_dockLeft, SIGNAL(iMBeingClosed()),
+            this, SLOT(slotParametersClosed()));
+    connect(m_dockLeft, SIGNAL(hasUndocked()),
+            this, SLOT(slotParametersClosed()));
+    // Apparently, hasUndocked() is emitted when the dock widget's
+    // 'close' button on the dock handle is clicked.
+    connect(m_mainDockWidget, SIGNAL(docking(KDockWidget*, KDockWidget::DockPosition)),
+            this, SLOT(slotParametersDockedBack(KDockWidget*, KDockWidget::DockPosition)));
 
-        stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
+    stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
 
-        RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
+    RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
 
-        QFrame* vbox = new QFrame(m_dockLeft);
-        QVBoxLayout* vboxLayout = new QVBoxLayout(vbox, 5);
-        m_dockLeft->setWidget(vbox);
-        m_segmentParameterBox = new SegmentParameterBox(doc, vbox);
-        vboxLayout->addWidget(m_segmentParameterBox);
-        m_instrumentParameterBox = new InstrumentParameterBox(doc, vbox);
-        vboxLayout->addWidget(m_instrumentParameterBox);
-        vboxLayout->addStretch();
+    QFrame* vbox = new QFrame(m_dockLeft);
+    QVBoxLayout* vboxLayout = new QVBoxLayout(vbox, 5);
+    m_dockLeft->setWidget(vbox);
+    m_segmentParameterBox = new SegmentParameterBox(doc, vbox);
+    vboxLayout->addWidget(m_segmentParameterBox);
+    m_instrumentParameterBox = new InstrumentParameterBox(doc, vbox);
+    vboxLayout->addWidget(m_instrumentParameterBox);
+    vboxLayout->addStretch();
 
 
-        // Load the initial document (this includes doc's own autoload)
-        //
-        setDocument(doc);
+    // Load the initial document (this includes doc's own autoload)
+    //
+    setDocument(doc);
 
-        emit startupStatusMessage(i18n("Starting sequence manager..."));
+    emit startupStatusMessage(i18n("Starting sequence manager..."));
 
-        // transport is created by setupActions()
-        m_seqManager = new Rosegarden::SequenceManager(m_doc, m_transport);
+    // transport is created by setupActions()
+    m_seqManager = new Rosegarden::SequenceManager(m_doc, m_transport);
 
-        // Make sure we get the sequencer status now
-        //
-        emit startupStatusMessage(i18n("Getting sound driver status..."));
-        (void)m_seqManager->getSoundDriverStatus();
+    // Make sure we get the sequencer status now
+    //
+    emit startupStatusMessage(i18n("Getting sound driver status..."));
+    (void)m_seqManager->getSoundDriverStatus();
 
-        // If we're restarting the gui then make sure any transient
-        // studio objects are cleared away.
-        emit startupStatusMessage(i18n("Clearing studio data..."));
-        m_seqManager->reinitialiseSequencerStudio();
+    // If we're restarting the gui then make sure any transient
+    // studio objects are cleared away.
+    emit startupStatusMessage(i18n("Clearing studio data..."));
+    m_seqManager->reinitialiseSequencerStudio();
 
-        // Send the transport control statuses for MMC and JACK
-        //
-        m_seqManager->sendTransportControlStatuses();
+    // Send the transport control statuses for MMC and JACK
+    //
+    m_seqManager->sendTransportControlStatuses();
 
-        // Get the plugins available at the sequencer
-        //
-        emit startupStatusMessage(i18n("Enumerating plugins..."));
-        m_seqManager->getSequencerPlugins(m_pluginManager);
+    // Get the plugins available at the sequencer
+    //
+    emit startupStatusMessage(i18n("Enumerating plugins..."));
+    m_seqManager->getSequencerPlugins(m_pluginManager);
 
-        // Now autoload
-        //
-        stateChanged("new_file");
-        stateChanged("have_segments",    KXMLGUIClient::StateReverse);
-        stateChanged("have_selection",   KXMLGUIClient::StateReverse);
-        slotTestClipboard();
+    // Now autoload
+    //
+    stateChanged("new_file");
+    stateChanged("have_segments",    KXMLGUIClient::StateReverse);
+    stateChanged("have_selection",   KXMLGUIClient::StateReverse);
+    slotTestClipboard();
 
-        // Check for lack of MIDI devices and disable Studio options accordingly
-        //
-        if (!m_doc->getStudio().haveMidiDevices())
-            stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
+    // Check for lack of MIDI devices and disable Studio options accordingly
+    //
+    if (!m_doc->getStudio().haveMidiDevices())
+        stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
 
-        emit startupStatusMessage(i18n("Starting..."));
+    emit startupStatusMessage(i18n("Starting..."));
 
-        // All toolbars should be created before this is called
-        setAutoSaveSettings(RosegardenGUIApp::MainWindowConfigGroup, true);
+    // All toolbars should be created before this is called
+    setAutoSaveSettings(RosegardenGUIApp::MainWindowConfigGroup, true);
 
-        readOptions();
+    readOptions();
 }
 
 RosegardenGUIApp::~RosegardenGUIApp()

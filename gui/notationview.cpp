@@ -436,7 +436,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     }
     
 
-    setCanvasView(new NotationCanvasView(*this, tCanvas, getCentralFrame()));
+    setCanvasView(new NotationCanvasView(*this, tCanvas, getCentralWidget()));
 
     if (segments.size() == 1) {
         setCaption(QString("%1 - Segment Track #%2 - Notation")
@@ -453,23 +453,23 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     setTopBarButtons(new BarButtons(getDocument(),
                                     m_hlayout, 20.0, 25,
-				    false, getCentralFrame()));
+				    false, getCentralWidget()));
 
     m_topBarButtons->getLoopRuler()->setBackgroundColor
 	(RosegardenGUIColours::InsertCursorRuler);
 
     m_chordNameRuler = new ChordNameRuler
-	(m_hlayout, doc, segments, 20.0, 20, getCentralFrame());
+	(m_hlayout, doc, segments, 20.0, 20, getCentralWidget());
     addRuler(m_chordNameRuler);
     if (showProgressive) m_chordNameRuler->show();
 
     m_tempoRuler = new TempoRuler
-	(m_hlayout, doc, 20.0, 20, false, getCentralFrame());
+	(m_hlayout, doc, 20.0, 20, false, getCentralWidget());
     addRuler(m_tempoRuler);
     m_tempoRuler->hide();
 
     m_rawNoteRuler = new RawNoteRuler
-	(m_hlayout, segments[0], 20.0, 20, getCentralFrame());
+	(m_hlayout, segments[0], 20.0, 20, getCentralWidget());
     addRuler(m_rawNoteRuler);
     m_rawNoteRuler->show();
 
@@ -730,7 +730,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     QCanvas *tCanvas = new QCanvas(this);
     tCanvas->resize(width() * 2, height() * 2);//!!! 
 
-    setCanvasView(new NotationCanvasView(*this, tCanvas, getCentralFrame()));
+    setCanvasView(new NotationCanvasView(*this, tCanvas, getCentralWidget()));
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], 0, // snap

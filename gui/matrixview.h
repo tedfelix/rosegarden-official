@@ -402,6 +402,22 @@ public slots:
 
 protected slots:
      void slotCanvasBottomWidgetHeightChanged(int newHeight);
+
+    /**
+     * Re-dock the parameters box to its initial position
+     */
+    void slotDockParametersBack();
+
+    /**
+     * The parameters box was closed
+     */
+    void slotParametersClosed();
+
+    /**
+     * The parameters box was docked back
+     */
+    void slotParametersDockedBack(KDockWidget*, KDockWidget::DockPosition);
+
     
 protected:
     virtual Rosegarden::RulerScale* getHLayout();
@@ -485,6 +501,7 @@ protected:
      */
     int m_previousEvPitch;
 
+    KDockWidget         *m_dockLeft;
     MatrixCanvasView    *m_canvasView;
     QDeferScrollView    *m_pianoView;
     PianoKeyboard       *m_pianoKeyboard;

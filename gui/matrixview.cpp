@@ -103,12 +103,32 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_hoveredOverNoteName(0),
       m_selectionCounter(0),
       m_previousEvPitch(0),
+      m_dockLeft(0),
       m_canvasView(0),
       m_pianoView(0),
       m_lastNote(0),
       m_quantizations(Rosegarden::BasicQuantizer::getStandardQuantizations())
 {
     MATRIX_DEBUG << "MatrixView ctor\n";
+
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/toolbar");
+    QPixmap matrixPixmap(pixmapDir + "/matrix.xpm");
+
+    m_dockLeft = createDockWidget("params dock", matrixPixmap, 0L,
+                                  i18n("Instrument Parameters"));
+    m_dockLeft->manualDock(m_mainDockWidget,            // dock target
+                           KDockWidget::DockLeft, // dock site
+                           20);                   // relation target/this (in percent)
+
+    connect(m_dockLeft, SIGNAL(iMBeingClosed()),
+            this, SLOT(slotParametersClosed()));
+    connect(m_dockLeft, SIGNAL(hasUndocked()),
+            this, SLOT(slotParametersClosed()));
+    // Apparently, hasUndocked() is emitted when the dock widget's
+    // 'close' button on the dock handle is clicked.
+    connect(m_mainDockWidget, SIGNAL(docking(KDockWidget*, KDockWidget::DockPosition)),
+            this, SLOT(slotParametersDockedBack(KDockWidget*, KDockWidget::DockPosition)));
+
     Rosegarden::Composition &comp = doc->getComposition();
 
     m_toolBox = new MatrixToolBox(this);
@@ -143,7 +163,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     MATRIX_DEBUG << "MatrixView : creating canvas view\n";
 
-    m_pianoView = new QDeferScrollView(getCentralFrame());
+    m_pianoView = new QDeferScrollView(getCentralWidget());
     m_pianoKeyboard = new PianoKeyboard(m_pianoView->viewport());
     
     m_pianoView->setVScrollBarMode(QScrollView::AlwaysOff);
@@ -153,7 +173,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     m_grid->addWidget(m_pianoView, CANVASVIEW_ROW, 1);
 
-    m_parameterBox = new MatrixParameterBox(getCentralFrame(), getDocument());
+    m_parameterBox = new MatrixParameterBox(m_dockLeft, getDocument());
+    m_dockLeft->setWidget(m_parameterBox);
 
     // Set the instrument we're using on this segment
     //
@@ -174,12 +195,14 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     m_canvasView = new MatrixCanvasView(*m_staffs[0],
                                         m_snapGrid,
                                         tCanvas,
-                                        getCentralFrame());
+                                        getCentralWidget());
     setCanvasView(m_canvasView);
 
     // do this after we have a canvas
     setupActions();
     setupAddControlRulerMenu();
+
+    stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
 
     // tool bars
     initActionsToolbar();
@@ -268,7 +291,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     BarButtons *topBarButtons = new BarButtons(getDocument(),
                                                &m_hlayout, int(xorigin), 25,
-                                               false, getCentralFrame());
+                                               false, getCentralWidget());
     setTopBarButtons(topBarButtons);
 
     QObject::connect
@@ -315,12 +338,12 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 //!!!    addPropertyViewRuler(Rosegarden::BaseProperties::VELOCITY);
 
     m_chordNameRuler = new ChordNameRuler
-	(&m_hlayout, doc, segments, 0, 20, getCentralFrame());
+	(&m_hlayout, doc, segments, 0, 20, getCentralWidget());
     m_chordNameRuler->setStudio(&getDocument()->getStudio());
     addRuler(m_chordNameRuler);
 
     m_tempoRuler = new TempoRuler
-	(&m_hlayout, doc, 0, 20, false, getCentralFrame());
+	(&m_hlayout, doc, 0, 20, false, getCentralWidget());
     addRuler(m_tempoRuler);
 
     // Scroll view to centre middle-C and warp to pointer position
@@ -623,6 +646,11 @@ void MatrixView::setupActions()
     //
     // Settings menu
     //
+    new KAction(i18n("Show Instrument Parameters"), 0, this,
+                SLOT(slotDockParametersBack()),
+                actionCollection(),
+                "show_inst_parameters");
+
     new KToggleAction(i18n("Show Ch&ord Name Ruler"), 0, this,
                       SLOT(slotToggleChordsRuler()),
                       actionCollection(), "show_chords_ruler");
@@ -638,6 +666,23 @@ void MatrixView::setupActions()
     else
         actionCollection()->action("select")->activate();
 }
+
+void MatrixView::slotDockParametersBack()
+{
+    m_dockLeft->dockBack();
+}
+
+void MatrixView::slotParametersClosed()
+{
+    stateChanged("parametersbox_closed");
+}
+
+void MatrixView::slotParametersDockedBack(KDockWidget* dw, KDockWidget::DockPosition)
+{
+    if (dw == m_dockLeft)
+        stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
+}
+
 
 void MatrixView::initStatusBar()
 {
@@ -1817,14 +1862,14 @@ MatrixView::addPropertyViewRuler(const Rosegarden::PropertyName &property)
                                                         property,
                                                         xorigin,
                                                         height,
-                                                        getCentralFrame());
+                                                        getCentralWidget());
 
     addRuler(newRuler);
 
     PropertyBox *newControl = new PropertyBox(strtoqstr(property), 
                                               m_parameterBox->width() + m_pianoKeyboard->width(),
                                               height,
-                                              getCentralFrame());
+                                              getCentralWidget());
 
     addPropertyBox(newControl);
 

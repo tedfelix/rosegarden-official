@@ -167,7 +167,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
     // define some note filtering buttons in a group
     //
     m_filterGroup =
-        new QButtonGroup(1, Horizontal, i18n("Event filters"), getCentralFrame());
+        new QButtonGroup(1, Horizontal, i18n("Event filters"), getCentralWidget());
 
     m_noteCheckBox = new QCheckBox(i18n("Note"), m_filterGroup);
     m_programCheckBox = new QCheckBox(i18n("Program Change"), m_filterGroup);
@@ -187,7 +187,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
     connect(m_filterGroup, SIGNAL(released(int)),
             SLOT(slotModifyFilter(int)));
 
-    m_eventList = new KListView(getCentralFrame());
+    m_eventList = new KListView(getCentralWidget());
     m_eventList->setItemsRenameable(true);
 
     m_grid->addWidget(m_eventList, 2, 1);
