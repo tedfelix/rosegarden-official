@@ -28,6 +28,8 @@ class StaffLine;
 
 class NotationCanvasView : public QCanvasView
 {
+    Q_OBJECT
+
 public:
     NotationCanvasView(QCanvas *viewing=0, QWidget *parent=0,
                        const char *name=0, WFlags f=0);
