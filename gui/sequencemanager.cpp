@@ -56,7 +56,7 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_doc(doc),
     m_compositionMmapper(new CompositionMmapper(m_doc)),
     m_controlBlockMmapper(new ControlBlockMmapper(m_doc)),
-    m_metronomeMmapper(0),
+    m_metronomeMmapper(new MetronomeMmapper(m_doc)),
     m_transportStatus(STOPPED),
     m_soundDriverStatus(NO_DRIVER),
     m_transport(transport),
@@ -1542,7 +1542,7 @@ void SequenceManager::resetCompositionMmapper()
 
 
     delete m_metronomeMmapper;
-    m_metronomeMmapper = new MetronomeMmapper(m_doc, 2); // metronome depth
+    m_metronomeMmapper = new MetronomeMmapper(m_doc);
 }
 
 
