@@ -94,7 +94,7 @@ NotationHLayout::~NotationHLayout()
 // can probably be improved dramatically without too much work
 
 int NotationHLayout::getIdealBarWidth(Staff &staff,
-				      int fixedWidth,
+                                      int fixedWidth,
                                       NotationElementList::iterator shortest,
                                       const NotePixmapFactory &npf,
                                       int shortCount,
@@ -140,14 +140,12 @@ int NotationHLayout::getIdealBarWidth(Staff &staff,
 } 
 
 
-// Compute bar data and cached properties.
-
 void
 NotationHLayout::preparse(Staff &staff,
-			  int firstBar, int lastBar)
+                          int firstBar, int lastBar)
 {
     const Track::BarPositionList &barPositions =
-	staff.getViewElementsManager()->getTrack().getBarPositions();
+        staff.getViewElementsManager()->getTrack().getBarPositions();
     NotationElementList *notes = staff.getNotationElementList();
 
     Key key;
@@ -162,60 +160,60 @@ NotationHLayout::preparse(Staff &staff,
     
     for (int barNo = firstBar; barNo <= lastBar; ++barNo) {
 
-	kdDebug(KDEBUG_AREA) << "preparse: Looking at bar " << barNo << endl;
+        kdDebug(KDEBUG_AREA) << "preparse: Looking at bar " << barNo << endl;
 
-	NotationElementList::iterator shortest = notes->end();
-	int shortCount = 0;
+        NotationElementList::iterator shortest = notes->end();
+        int shortCount = 0;
         int totalCount = 0;
 
-	NotationElementList::iterator from =
-	    notes->findTime(barPositions[barNo].start);
+        NotationElementList::iterator from =
+            notes->findTime(barPositions[barNo].start);
 
-	NotationElementList::iterator to;
+        NotationElementList::iterator to;
         if (barNo < (int)barPositions.size() - 1) {
-	    to = notes->findTime(barPositions[barNo+1].start);
-	} else {
-	    to = notes->end();
-	}
+            to = notes->findTime(barPositions[barNo+1].start);
+        } else {
+            to = notes->end();
+        }
 
-	for (NotationElementList::iterator it = from; it != to; ++it) {
+        for (NotationElementList::iterator it = from; it != to; ++it) {
         
-	    NotationElement *el = (*it);
-	    int mw = getMinWidth(npf, *el);
+            NotationElement *el = (*it);
+            int mw = getMinWidth(npf, *el);
 
-	    if (el->event()->isa(Clef::EventType)) {
+            if (el->event()->isa(Clef::EventType)) {
 
-		fixedWidth += mw;
-		clef = Clef(*el->event());
+                fixedWidth += mw;
+                clef = Clef(*el->event());
 
-		//!!! Probably not strictly the right thing to do
-		// here, but I hope it'll do well enough in practice
-		accTable = AccidentalTable(key, clef);
-		newAccTable = accTable;
+                //!!! Probably not strictly the right thing to do
+                // here, but I hope it'll do well enough in practice
+                accTable = AccidentalTable(key, clef);
+                newAccTable = accTable;
 
-	    } else if (el->event()->isa(Key::EventType)) {
+            } else if (el->event()->isa(Key::EventType)) {
 
-		fixedWidth += mw;
-		key = Key(*el->event());
+                fixedWidth += mw;
+                key = Key(*el->event());
 
-		accTable = AccidentalTable(key, clef);
-		newAccTable = accTable;
+                accTable = AccidentalTable(key, clef);
+                newAccTable = accTable;
 
-	    } else if (el->event()->isa(TimeSignature::EventType)) {
+            } else if (el->event()->isa(TimeSignature::EventType)) {
 
-		fixedWidth += mw;
-		timeSignature = TimeSignature(*el->event());
+                fixedWidth += mw;
+                timeSignature = TimeSignature(*el->event());
 
-	    } else if (el->isNote() || el->isRest()) {
+            } else if (el->isNote() || el->isRest()) {
 
-		bool hasDuration = true;
+                bool hasDuration = true;
 
-		if (el->isNote()) {
+                if (el->isNote()) {
 
                     long pitch = 64;
                     if (!el->event()->get<Int>("pitch", pitch)) {
                         kdDebug(KDEBUG_AREA) <<
-			    "WARNING: NotationHLayout::preparse: couldn't get pitch for element, using default pitch of " << pitch << endl;
+                            "WARNING: NotationHLayout::preparse: couldn't get pitch for element, using default pitch of " << pitch << endl;
                     }
 
                     Accidental explicitAccidental = NoAccidental;
@@ -246,11 +244,11 @@ NotationHLayout::preparse(Staff &staff,
                     // accTable because there may be other notes in
                     // this chord that need accTable to be the same as
                     // it is for this one)
-		    
+                    
                     Accidental dacc = accTable.getDisplayAccidental(acc, h);
 
-                    //		kdDebug(KDEBUG_AREA) << "display accidental = " << dacc << endl;
-		    
+                    //                kdDebug(KDEBUG_AREA) << "display accidental = " << dacc << endl;
+                    
                     el->event()->setMaybe<Int>
                         (Properties::DISPLAY_ACCIDENTAL, dacc);
 
@@ -262,51 +260,51 @@ NotationHLayout::preparse(Staff &staff,
                         mw = getMinWidth(npf, *el);
                     }
 
-		    Chord chord(*notes, it);
-		    if (chord.size() >= 2 && it != chord.getFinalElement()) {
-			// we're in a chord, but not at the end of it yet
-			hasDuration = false;
-		    } else {
-			accTable = newAccTable;
-		    }
-		}
+                    Chord chord(*notes, it);
+                    if (chord.size() >= 2 && it != chord.getFinalElement()) {
+                        // we're in a chord, but not at the end of it yet
+                        hasDuration = false;
+                    } else {
+                        accTable = newAccTable;
+                    }
+                }
 
-		if (hasDuration) {
-		
-		    // either we're not in a chord or the chord is about
-		    // to end: update shortest data accordingly
+                if (hasDuration) {
+                
+                    // either we're not in a chord or the chord is about
+                    // to end: update shortest data accordingly
 
                     ++totalCount;
-		    
-		    int d = 0;
-		    try {
-			d = el->event()->get<Int>
-			    (Quantizer::NoteDurationProperty);
-		    } catch (Event::NoData e) {
-			kdDebug(KDEBUG_AREA) << "No quantized duration in note/rest! event is " << *(el->event()) << endl;
-		    }
+                    
+                    int d = 0;
+                    try {
+                        d = el->event()->get<Int>
+                            (Quantizer::NoteDurationProperty);
+                    } catch (Event::NoData e) {
+                        kdDebug(KDEBUG_AREA) << "No quantized duration in note/rest! event is " << *(el->event()) << endl;
+                    }
 
-		    int sd = 0;
-		    try {
-		    if (shortest == notes->end() ||
-			d <= (sd = (*shortest)->event()->get<Int>
-			      (Quantizer::NoteDurationProperty))) {
-			if (d == sd) ++shortCount;
-			else {
-			    kdDebug(KDEBUG_AREA) << "New shortest! Duration is " << d << " (at " << el->getAbsoluteTime() << " time units)"<< endl;
-			    shortest = it;
-			    shortCount = 1;
-			}
-		    }
-		    } catch (Event::NoData e) {
-			kdDebug(KDEBUG_AREA) << "No quantized duration in shortest! event is " << *((*shortest)->event()) << endl;
-		    }
-		}
-	    }
+                    int sd = 0;
+                    try {
+                    if (shortest == notes->end() ||
+                        d <= (sd = (*shortest)->event()->get<Int>
+                              (Quantizer::NoteDurationProperty))) {
+                        if (d == sd) ++shortCount;
+                        else {
+                            kdDebug(KDEBUG_AREA) << "New shortest! Duration is " << d << " (at " << el->getAbsoluteTime() << " time units)"<< endl;
+                            shortest = it;
+                            shortCount = 1;
+                        }
+                    }
+                    } catch (Event::NoData e) {
+                        kdDebug(KDEBUG_AREA) << "No quantized duration in shortest! event is " << *((*shortest)->event()) << endl;
+                    }
+                }
+            }
 
-	    el->event()->setMaybe<Int>(Properties::MIN_WIDTH, mw);
-	}
-	
+            el->event()->setMaybe<Int>(Properties::MIN_WIDTH, mw);
+        }
+        
         addNewBar(barNo, from,
                   getIdealBarWidth(staff, fixedWidth, shortest, npf,
                                    shortCount, totalCount, timeSignature),
@@ -326,38 +324,38 @@ NotationHLayout::AccidentalTable::AccidentalTable(Key key, Clef clef) :
     unsigned int i;
     for (i = 0; i < 7; ++i) push_back(NoAccidental);
     for (i = 0; i < heights.size(); ++i) {
-	(*this)[Key::canonicalHeight(heights[i])] =
-	    (key.isSharp() ? Sharp : Flat);
+        (*this)[Key::canonicalHeight(heights[i])] =
+            (key.isSharp() ? Sharp : Flat);
     }
 }
 
 Accidental
 NotationHLayout::AccidentalTable::getDisplayAccidental(Accidental accidental,
-						       int height) const
+                                                       int height) const
 {
     height = Key::canonicalHeight(height);
 
     if (accidental == NoAccidental) {
-	accidental = m_key.getAccidentalAtHeight(height, m_clef);
+        accidental = m_key.getAccidentalAtHeight(height, m_clef);
     }
 
 //    kdDebug(KDEBUG_AREA) << "accidental = " << accidental << ", stored accidental at height " << height << " is " << (*this)[height] << endl;
 
     if ((*this)[height] != NoAccidental) {
 
-	if (accidental == NoAccidental || accidental == Natural) {
-	    return Natural;
-	} else if (accidental == (*this)[height]) {
-	    return NoAccidental;
-	} else {
-	    //!!! aargh.  What we really want to do now is have two
-	    //accidentals shown: first a natural, then the one
-	    //required for the note.  But there's no scope for that in
-	    //our accidental structure (RG2.1 is superior here)
-	    return accidental;
-	}
+        if (accidental == NoAccidental || accidental == Natural) {
+            return Natural;
+        } else if (accidental == (*this)[height]) {
+            return NoAccidental;
+        } else {
+            //!!! aargh.  What we really want to do now is have two
+            //accidentals shown: first a natural, then the one
+            //required for the note.  But there's no scope for that in
+            //our accidental structure (RG2.1 is superior here)
+            return accidental;
+        }
     } else {
-	return accidental;
+        return accidental;
     }
 }
 
@@ -367,7 +365,7 @@ NotationHLayout::AccidentalTable::update(Accidental accidental, int height)
     height = Key::canonicalHeight(height);
 
     if (accidental == NoAccidental) {
-	accidental = m_key.getAccidentalAtHeight(height, m_clef);
+        accidental = m_key.getAccidentalAtHeight(height, m_clef);
     }
 
 //    kdDebug(KDEBUG_AREA) << "updating height" << height << " from " << (*this)[height] << " to " << accidental << endl;
@@ -385,10 +383,10 @@ void
 NotationHLayout::layout(Staff &staff)
 {
     if (&staff != m_lastStaffPreparsed) {
-	kdDebug(KDEBUG_AREA)
-	    << "NotationHLayout::layout(): Staff is different from last one preparsed" << endl
-	    << "(The code to manage layout across many staffs at once has not yet been written.)" << endl;
-	throw false;
+        kdDebug(KDEBUG_AREA)
+            << "NotationHLayout::layout(): Staff is different from last one preparsed" << endl
+            << "(The code to manage layout across many staffs at once has not yet been written.)" << endl;
+        throw false;
     }
 
     NotationElementList *notes = staff.getNotationElementList();
@@ -422,7 +420,7 @@ NotationHLayout::layout(Staff &staff)
         bdi->x = x + staff.getBarMargin() / 2;
         x += staff.getBarMargin();
 
-	bool haveAccidentalInThisChord = false;
+        bool haveAccidentalInThisChord = false;
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
             
@@ -496,42 +494,42 @@ NotationHLayout::layout(Staff &staff)
                     el->setLayoutX(el->getLayoutX() + shift);
                 }
                 
-		// Retrieve the record the presence of any display
-		// accidental.  We'll need to shift the x-coord
-		// slightly if there is one, because the
-		// notepixmapfactory quite reasonably places the hot
-		// spot at the start of the note head, not at the
-		// start of the whole pixmap.  But we can't do that
-		// here because it needs to be done for all notes in a
-		// chord, when at least one of those notes has an
-		// accidental.
+                // Retrieve the record the presence of any display
+                // accidental.  We'll need to shift the x-coord
+                // slightly if there is one, because the
+                // notepixmapfactory quite reasonably places the hot
+                // spot at the start of the note head, not at the
+                // start of the whole pixmap.  But we can't do that
+                // here because it needs to be done for all notes in a
+                // chord, when at least one of those notes has an
+                // accidental.
 
-		Accidental acc(NoAccidental);
-		{
-		    long acc0;
-		    if (el->event()->get<Int>
+                Accidental acc(NoAccidental);
+                {
+                    long acc0;
+                    if (el->event()->get<Int>
                         (Properties::DISPLAY_ACCIDENTAL, acc0)) {
-			acc = (Accidental)acc0;
-		    }
-		}
-		if (acc != NoAccidental) haveAccidentalInThisChord = true;
-		
+                        acc = (Accidental)acc0;
+                    }
+                }
+                if (acc != NoAccidental) haveAccidentalInThisChord = true;
+                
                 Chord chord(*notes, it);
                 if (chord.size() < 2 || it == chord.getFinalElement()) {
 
-		    // either we're not in a chord, or the chord is
-		    // about to end: update the delta now, and add any
-		    // additional accidental spacing
+                    // either we're not in a chord, or the chord is
+                    // about to end: update the delta now, and add any
+                    // additional accidental spacing
 
-		    if (haveAccidentalInThisChord) {
-			for (int i = 0; i < (int)chord.size(); ++i) {
-			    (*chord[i])->setLayoutX
-				((*chord[i])->getLayoutX() +
-				 npf.getAccidentalWidth());
-			}
-		    }
+                    if (haveAccidentalInThisChord) {
+                        for (int i = 0; i < (int)chord.size(); ++i) {
+                            (*chord[i])->setLayoutX
+                                ((*chord[i])->getLayoutX() +
+                                 npf.getAccidentalWidth());
+                        }
+                    }
 
-                    //		    kdDebug(KDEBUG_AREA) << "This is the final chord element (of " << chord.size() << ")" << endl;
+                    //                    kdDebug(KDEBUG_AREA) << "This is the final chord element (of " << chord.size() << ")" << endl;
 
 //                     kdDebug(KDEBUG_AREA) << "Note idealWidth : "
 //                                          << bdi->idealWidth
@@ -539,19 +537,19 @@ NotationHLayout::layout(Staff &staff)
 //                                          << bdi->fixedWidth << endl;
 
                 } else {
-		    kdDebug(KDEBUG_AREA) << "This is not the final chord element (of " << chord.size() << ")" << endl;
-		    delta = 0;
-		}
+                    kdDebug(KDEBUG_AREA) << "This is not the final chord element (of " << chord.size() << ")" << endl;
+                    delta = 0;
+                }
 
-		// See if we're in a group, and add the beam if so.
-		// This needs to happen after the chord-related
-		// manipulations abpve because the beam's position
-		// depends on the x-coord of the note, which depends
-		// on the presence of accidentals somewhere in the
-		// chord.  (All notes in a chord should be in the same
-		// group, so the leaving-group calculation will only
-		// happen after all the notes in the final chord of
-		// the group have been processed.)
+                // See if we're in a group, and add the beam if so.
+                // This needs to happen after the chord-related
+                // manipulations abpve because the beam's position
+                // depends on the x-coord of the note, which depends
+                // on the presence of accidentals somewhere in the
+                // chord.  (All notes in a chord should be in the same
+                // group, so the leaving-group calculation will only
+                // happen after all the notes in the final chord of
+                // the group have been processed.)
 
                 long groupNo = -1;
 

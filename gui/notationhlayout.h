@@ -48,49 +48,69 @@ public:
     //should be okay working on one staff at a time.)
     void layout(Staff &staff);
 
+    /**
+     * Compute bar data and cached properties.
+     */
+    void preparse(const Rosegarden::Track::BarPositionList &barPositions,
+                  int firstBar, int lastBar);
+
+    /**
+     * Performs the final layout of all notation elements
+     */
+    void layout();
+
+    /**
+     * Inner class for bar data, used by preparse()
+     */
     struct BarData
     {
-	int barNo;	      // of corresponding BarPosition in Track
+        int barNo;              // of corresponding BarPosition in Track
         NotationElementList::iterator start; // i.e. event following barline
         int x;                // coordinate for display of barline
         int idealWidth;       // theoretical width of bar following barline
         int fixedWidth;       // minimum possible width of bar following barline
         
         BarData(int ibarno, NotationElementList::iterator istart,
-		int ix, int iwidth, int fwidth) :
+                int ix, int iwidth, int fwidth) :
             barNo(ibarno), start(istart), x(ix), idealWidth(iwidth),
             fixedWidth(fwidth) { }
     };
 
     typedef std::vector<BarData> BarDataList;
 
-    /// returns the bar positions computed from the last call to preparse()
+    /// Returns the bar positions computed from the last call to preparse()
     BarDataList& getBarData() { return m_barData; }
     const BarDataList& getBarData() const { return m_barData; }
 
-    /// resets the internal position counters of the object
+    /// Resets the internal position counters of the object
     void reset();
 
     //!!! dubious.
+    /**
+     * Returns the total length of all elements once layout is done
+     *
+     * This is simply the X position of the last element.
+     */
     double getTotalWidth() { return m_totalWidth; }
 
 protected:
     class AccidentalTable : public std::vector<Rosegarden::Accidental>
     {
     public:
-	AccidentalTable(Rosegarden::Key, Rosegarden::Clef);
-	Rosegarden::Accidental getDisplayAccidental(Rosegarden::Accidental,
-						    int height) const;
-	void update(Rosegarden::Accidental, int height);
+        AccidentalTable(Rosegarden::Key, Rosegarden::Clef);
+        Rosegarden::Accidental getDisplayAccidental(Rosegarden::Accidental,
+                                                    int height) const;
+        void update(Rosegarden::Accidental, int height);
     private:
-	Rosegarden::Key m_key;
-	Rosegarden::Clef m_clef;
+        Rosegarden::Key m_key;
+        Rosegarden::Clef m_clef;
     };
-	    
+            
     void addNewBar(int barNo, NotationElementList::iterator start,
                    int width, int fwidth);
 
     int getMinWidth(const NotePixmapFactory &, const NotationElement &) const;
+
     int getComfortableGap(const NotePixmapFactory &npf,
                           Rosegarden::Note::Type type) const;
     int getIdealBarWidth(Staff &staff, int fixedWidth,

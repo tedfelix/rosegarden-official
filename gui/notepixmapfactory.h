@@ -33,8 +33,8 @@ typedef std::vector<Rosegarden::Accidental> Accidentals;
 
 /**
  * Helper class to compute various offsets
- * Used by the NotePixmapFactory
- * @author Guillaume Laurent
+ *
+ * @see NotePixmapFactory
  */
 class NotePixmapOffsets
 {
@@ -111,9 +111,7 @@ protected:
 
 
 /**
- * Generates QCanvasPixmaps for single notes and chords
- * (chords unused)
- *
+ * Generates QCanvasPixmaps for various notation items
  */
 class NotePixmapFactory
 {

@@ -80,7 +80,7 @@ protected:
     /// returns the pitch the staff line is associated with
 /*!    int getPitchForLine(const StaffLine *line); */
 
-    /// returns the note name (C4, Bb3) the staff line is associated with
+    /// Returns the note name (C4, Bb3) the staff line is associated with
     QString getNoteNameForLine(const StaffLine *line);
 
     /// the staff line over which the mouse cursor is

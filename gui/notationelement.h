@@ -80,16 +80,16 @@ public:
      */
     void setLayoutY(double y) { m_y = y; }
 
-    /// sets the associated event's note type, note dottedness, and duration
+    /// Sets the associated event's note type, note dottedness, and duration
     void setNote(Rosegarden::Note);
 
-    /// returns a Note corresponding to the state of the associated event
+    /// Returns a Note corresponding to the state of the associated event
     Rosegarden::Note getNote() const;
 
-    /// returns true if the wrapped event is a rest
+    /// Returns true if the wrapped event is a rest
     bool isRest() const;
 
-    /// returns true if the wrapped event is a note
+    /// Returns true if the wrapped event is a note
     bool isNote() const;
 
     /**
@@ -102,7 +102,7 @@ public:
      */
     void setCanvasItem(QCanvasItem *e, double dxoffset, double dyoffset);
 
-    /// returns the associated canvas item
+    /// Returns the associated canvas item
     QCanvasItem* canvasItem() { return m_canvasItem; }
 
 protected:

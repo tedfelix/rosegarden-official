@@ -26,10 +26,11 @@
 #include "notationelement.h"
 
 /**
-  *@author Guillaume Laurent, Chris Cannam, Richard Bown
-  */
-
-class NotationVLayout : public LayoutEngine /* : public NotationLayout */
+ * Vertical notation layout
+ *
+ * computes the Y coordinate of notation elements
+ */
+class NotationVLayout : public LayoutEngine
 {
 public:
     NotationVLayout();

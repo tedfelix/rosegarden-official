@@ -23,13 +23,14 @@
 
 #include "Event.h"
 
-// Property names for properties that are computed and cached within
-// the notation module, but that need not necessarily be saved with
-// the file.
-
-// If you add something here, remember to add the definition to
-// notationproperties.cpp as well...
-
+/**
+ * Property names for properties that are computed and cached within
+ * the notation module, but that need not necessarily be saved with
+ * the file.
+ *
+ * If you add something here, remember to add the definition to
+ * notationproperties.cpp as well...
+ */
 class Properties
 {
 public:
