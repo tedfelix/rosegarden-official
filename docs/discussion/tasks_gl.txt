@@ -6,10 +6,10 @@
   result can be note, 4th note rest, half note rest or 4th note rest, note,
   half note rest, or half note rest, note, 4th note rest, etc...
 
-* give ViewElements a pointer to the Event they represent
+* give ViewElements a pointer to the Event they represent - DONE
 
-* give Track a pointer to the ViewElementsManager which represents it
+* give Track a pointer to the ViewElementsManager which represents it - Questionnable.
 
 * status message and beep on input rejection in NotationView.
 
-* backport Qt3 QCanvasSpline
+* backport Qt3 QCanvasSpline - DONE
