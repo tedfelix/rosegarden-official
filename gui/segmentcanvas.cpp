@@ -63,7 +63,8 @@ SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT duration,
     m_startTime(startTime),
     m_duration(duration),
     m_selected(false),
-    m_snapGrid(snapGrid)
+    m_snapGrid(snapGrid),
+    m_repeatRectangle(0)
 {
     if (!m_font) makeFont();
 
@@ -75,7 +76,8 @@ SegmentItem::SegmentItem(Segment *segment,
     QCanvasRectangle(0, 0, 1, 1, canvas),
     m_segment(segment),
     m_selected(false),
-    m_snapGrid(snapGrid)
+    m_snapGrid(snapGrid),
+    m_repeatRectangle(0)
 {
     if (!m_font) makeFont();
 
@@ -84,6 +86,8 @@ SegmentItem::SegmentItem(Segment *segment,
 
 SegmentItem::~SegmentItem()
 {
+    if (m_repeatRectangle)
+        CanvasItemGC::mark(m_repeatRectangle);
 }
 
 void SegmentItem::makeFont()
@@ -96,19 +100,24 @@ void SegmentItem::makeFont()
     m_fontHeight = m_fontMetrics->boundingRect("|^M,g").height();
 }
 
-void SegmentItem::draw(QPainter& painter)
+void SegmentItem::drawShape(QPainter& painter)
 {
-    QCanvasRectangle::draw(painter);
+    QCanvasRectangle::drawShape(painter);
 
-    if (m_segment && m_segment->isRepeating()) painter.drawRoundRect(m_repeatRectangle);
+    // draw label
     painter.setFont(*m_font);
-    painter.drawText(m_labelPos, m_label);
+    QRect labelRect = rect();
+    labelRect.setX(labelRect.x() + 3);
+    painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
 }
-
 
 void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 {
+    // Compute repeat rectangle if any
+    //
     if (m_segment && inheritFromSegment) {
+
+        if (!m_repeatRectangle) m_repeatRectangle = new QCanvasRectangle(canvas());
 
 	m_track = m_segment->getTrack();
 	m_startTime = m_segment->getStartTime();
@@ -120,18 +129,24 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 	    timeT repeatStart = m_startTime + m_duration;
 	    timeT repeatEnd = m_segment->getRepeatEndTime();
 
-	    m_repeatRectangle.setX
-		(int(m_snapGrid->getRulerScale()->getXForTime(repeatStart)));
-	    m_repeatRectangle.setY
+	    m_repeatRectangle->setX
+		(int(m_snapGrid->getRulerScale()->getXForTime(repeatStart)) + 1);
+	    m_repeatRectangle->setY
 		(m_snapGrid->getYBinCoordinate(m_track));
-	    m_repeatRectangle.setSize
-		(QSize((int)m_snapGrid->getRulerScale()->getWidthForDuration
+	    m_repeatRectangle->setSize
+		((int)m_snapGrid->getRulerScale()->getWidthForDuration
 		 (repeatStart, repeatEnd - repeatStart) + 1,
-		 m_snapGrid->getYSnap()));
+		 m_snapGrid->getYSnap());
 
-	}
+            m_repeatRectangle->show();
+	} else {
+            m_repeatRectangle->hide();
+        }
+        
     }
 
+    // Compute main rectangle
+    //
     setX(m_snapGrid->getRulerScale()->getXForTime(m_startTime));
     setY(m_snapGrid->getYBinCoordinate(m_track));
 
@@ -141,6 +156,8 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
 
     setSize(int(w) + 1, h);
 
+    // Compute label
+    //
     bool dots = false;
 
     while (m_label.length() > 0 &&
@@ -158,10 +175,6 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     }
 
     if (dots) m_label += "...";
-
-    m_labelPos.setX(int(m_snapGrid->getRulerScale()->getXForTime(m_startTime) + 3));
-    m_labelPos.setY(m_snapGrid->getYBinCoordinate(m_track) +
-                    (m_snapGrid->getYSnap()/2 + m_fontHeight) * 2 / 3);
 }
 
 Segment* SegmentItem::getSegment() const
@@ -270,6 +283,8 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
 
 SegmentCanvas::~SegmentCanvas()
 {
+    // delete all remaining items
+    //clear();
 }
 
 void SegmentCanvas::slotSetTool(ToolType t)
@@ -521,8 +536,10 @@ void SegmentCanvas::clear()
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it) {
-	if ( *it )
+	if ( *it ) {
+            kdDebug(KDEBUG_AREA) << "SegmentCanvas::clear() : deleting " << *it << std::endl;
 	    delete *it;
+        }
     }
 }
 

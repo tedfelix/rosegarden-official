@@ -102,7 +102,11 @@ public:
     // Select this SegmentItem
     void setSelected(const bool &select, const QBrush &highlightBrush);
 
-    virtual void draw (QPainter&);
+    /**
+     * Paint the label inside the rectangle
+     * (Override from QCanvasPolygonalItem)
+     */
+    virtual void drawShape(QPainter&);
 
 protected:
     Rosegarden::Segment *m_segment;
@@ -117,9 +121,8 @@ protected:
     bool m_selected;
     Rosegarden::SnapGrid *m_snapGrid;
 
-    QRect   m_repeatRectangle;
+    QCanvasRectangle*   m_repeatRectangle;
     QString m_label;
-    QPoint m_labelPos;
 
     static QFont *m_font;
     static QFontMetrics *m_fontMetrics;
