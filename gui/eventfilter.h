@@ -28,11 +28,13 @@
 
 #include <qvariant.h>
 #include <kdialog.h>
+#include <kdialogbase.h>
 #include "Quantizer.h"   // named durations
 #include "qspinbox.h"
 #include "qcombobox.h"
 #include "qcheckbox.h"
 #include "kconfig.h"
+#include "widgets.h"
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -42,6 +44,8 @@ class QComboBox;
 class QLabel;
 class QPushButton;
 class QSpinBox;
+
+class RosegardenPitchChooser;
 
 /*
  * Creates a dialog box to allow the user to dial up various selection
@@ -103,6 +107,9 @@ protected:
     // initialize the dialog
     void initDialog();
 
+    // populate the duration combos
+    void populateDurationCombos();
+
     // convert duration from combobox index into actual RG duration
     // between 0 and LONG_MAX
     long getDurationFromIndex(int index);
@@ -159,6 +166,8 @@ protected:
     QLabel* 	 m_wheelFromLabel;
     QLabel* 	 m_wheelToLabel;
     
+    QPushButton* m_pitchFromChooserButton;
+    QPushButton* m_pitchToChooserButton;
     QPushButton* m_buttonAll;
     QPushButton* m_buttonCancel;
     QPushButton* m_buttonNone;
@@ -208,6 +217,30 @@ protected slots:
     void slotValueToChanged(int value);
     void slotWheelFromChanged(int value);
     void slotWheelToChanged(int value);
+
+    // create a pitch chooser widget sub-dialog to show pitch on staff
+    void slotPitchFromChooser();
+    void slotPitchToChooser();
 };
+
+
+/*
+ * Creates a small dialog box containing a RosegardenPitchChooser widget
+ */
+class PitchPickerDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+
+    PitchPickerDialog(QWidget* parent, int initialPitch, bool isFrom);
+    ~PitchPickerDialog();
+
+    int getPitch() { return m_pitch->getPitch(); }
+    
+private:
+    RosegardenPitchChooser* m_pitch;
+};
+
 
 #endif // _eventfilter_H_

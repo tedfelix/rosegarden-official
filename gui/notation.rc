@@ -306,7 +306,7 @@
   <Action name="text" />
   <Separator/>
   <Action name="toggle_step_by_step"/>
-  <Action name="event_filter"/>
+  <Action name="filter_selection"/>
 </ToolBar>
 
 <ToolBar name="Transport Toolbar">
@@ -468,7 +468,7 @@
     <Action name="preview_selection"/>
     <Action name="normalize_rests"/>
     <Action name="clear_selection"/>
-    <Action name="event_filter"/>
+    <Action name="filter_selection"/>
   </enable>
 </State>
 

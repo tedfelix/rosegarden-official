@@ -34,8 +34,7 @@
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qlayout.h>
-//#include <qtooltip.h>
-//#include <qwhatsthis.h>
+#include <qtooltip.h>
 
 #include "midipitchlabel.h"	// number to text pitch display
 #include "rosedebug.h"          // debug stream
@@ -48,12 +47,13 @@
 #include "Event.h"              // "
 #include "rosedebug.h"          // debug stream
 
-//#include <kmessagebox.h>
 
 using Rosegarden::Note;
 
 const char* const EventFilterDialog::ConfigGroup = "EventFilter Dialog";
 
+// EventFilterDialog
+//
 // Constructs a dialog to select various criteria used to filter events out of
 // selections
 EventFilterDialog::EventFilterDialog(QWidget* parent)
@@ -77,137 +77,355 @@ EventFilterDialog::initDialog()
     setCaption(i18n("Event Filter"));
     setBackgroundOrigin(KDialog::WidgetOrigin);
     setFocusPolicy(KDialog::StrongFocus);
-    layout = new QGridLayout(this, 1, 1, 13, 5);
+
+    //---------[ Buttons ]--------------------------------------
+    QWidget* privateLayoutWidget = new QWidget(this);
+    privateLayoutWidget->setGeometry(QRect(440, 285, 170, 75));
+    QGridLayout* buttonLayout = new QGridLayout(privateLayoutWidget, 1, 1, 11, 6); 
+
+    m_buttonAll = new QPushButton(i18n("All"), privateLayoutWidget);
+    m_buttonAll->setAutoDefault(true);
+    QToolTip::add(m_buttonAll, i18n("include everything"));  
+    buttonLayout->addWidget( m_buttonAll, 0, 0 );
     
-    m_noteCheckBox = new QCheckBox(i18n("Note"),this);
-    m_noteCheckBox->setChecked(cfg->readBoolEntry("notecheckbox", true));
+    m_buttonNone = new QPushButton(i18n("None"), privateLayoutWidget);
+    m_buttonNone->setAutoDefault(true);
+    QToolTip::add(m_buttonNone, i18n("zero the controls"));  
+    buttonLayout->addWidget( m_buttonNone, 0, 1 );
+    
+    m_buttonOK = new QPushButton(i18n("OK"), privateLayoutWidget);
+    m_buttonOK->setAutoDefault(true);
+    m_buttonOK->setDefault(true);
+    buttonLayout->addWidget(m_buttonOK, 1, 0);
+
+    m_buttonCancel = new QPushButton(i18n("Cancel"), privateLayoutWidget);
+    m_buttonCancel->setAutoDefault(true);
+    buttonLayout->addWidget( m_buttonCancel, 1, 1 );
+
+    connect(m_buttonOK, SIGNAL(clicked()), this, SLOT(slotButtonOK()));
+    connect(m_buttonCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(m_buttonAll, SIGNAL(clicked()), this, SLOT(slotToggleAll()));
+    connect(m_buttonNone, SIGNAL(clicked()), this, SLOT(slotToggleNone()));
+
+
+    //----------[ Note Filter Widgets ]-------------------------
+    
+    // Frame
+    QFrame* noteFrame = new QFrame(this);
+    noteFrame->setGeometry(QRect( 10, 10, 607, 144 ) );
+    noteFrame->setFrameShape(QFrame::Box );
+    noteFrame->setFrameShadow(QFrame::Sunken );
+    QGridLayout* noteFrameLayout = new QGridLayout(noteFrame, 1, 1, 11, 6); 
+
+    // Master Checkbox
+    m_noteCheckBox = new QCheckBox(i18n("Note"),noteFrame);
     cfg->setGroup(EventFilterDialog::ConfigGroup);
-    layout->addWidget(m_noteCheckBox, 0, 0);
+    m_noteCheckBox->setChecked(cfg->readBoolEntry("notecheckbox", true));
+    noteFrameLayout->addWidget(m_noteCheckBox, 0, 0);
+    connect(m_noteCheckBox, SIGNAL(stateChanged(int)), this,
+	    SLOT(slotNoteCheckBoxToggle(int))); 
 
-    m_pitchToLabel = new QLabel(i18n("to:"),this);
-    layout->addWidget(m_pitchToLabel, 0, 4);
+    // Labels
+    m_pitchFromLabel = new QLabel(i18n("from:"),noteFrame);
+    noteFrameLayout->addWidget(m_pitchFromLabel, 0, 2);
 
-    m_pitchFromLabel = new QLabel(i18n("from:"),this);
-    layout->addWidget(m_pitchFromLabel, 0, 2);
+    m_pitchToLabel = new QLabel(i18n("to:"),noteFrame);
+    noteFrameLayout->addWidget(m_pitchToLabel, 0, 4);
 
-    m_notePitchIncludeComboBox = new QComboBox(0, this);
+    m_pitchLabel = new QLabel(i18n("Pitch:"), noteFrame);
+    noteFrameLayout->addWidget(m_pitchLabel, 1, 1);
+    
+    m_velocityLabel = new QLabel(i18n("Velocity:"), noteFrame);
+    noteFrameLayout->addWidget(m_velocityLabel, 2, 1);
+    
+    m_durationLabel = new QLabel(i18n("Duration:"), noteFrame);
+    noteFrameLayout->addWidget(m_durationLabel, 3, 1);
+
+    // Include Boxes
+    m_notePitchIncludeComboBox = new QComboBox(0, noteFrame);
     m_notePitchIncludeComboBox->insertItem(i18n("include"));
     m_notePitchIncludeComboBox->insertItem(i18n("exclude"));
     cfg->setGroup(EventFilterDialog::ConfigGroup);
     m_notePitchIncludeComboBox->setCurrentItem(cfg->readBoolEntry("pitchinclude", 0));
-    layout->addWidget(m_notePitchIncludeComboBox, 1, 0);
-
-    m_pitchLabel = new QLabel(i18n("Pitch:"),this);
-    layout->addWidget(m_pitchLabel, 1, 1);
-
-    m_noteVelocityIncludeComboBox = new QComboBox(0, this);
+    noteFrameLayout->addWidget(m_notePitchIncludeComboBox, 1, 0);
+    
+    m_noteVelocityIncludeComboBox = new QComboBox(0, noteFrame);
     m_noteVelocityIncludeComboBox->insertItem(i18n("include"));
     m_noteVelocityIncludeComboBox->insertItem(i18n("exclude"));
     cfg->setGroup(EventFilterDialog::ConfigGroup);
     m_noteVelocityIncludeComboBox->setCurrentItem(cfg->readBoolEntry("velocityinclude", 0));
-    layout->addWidget(m_noteVelocityIncludeComboBox, 2, 0);
-
-    m_noteDurationIncludeComboBox = new QComboBox(0, this);
+    noteFrameLayout->addWidget(m_noteVelocityIncludeComboBox, 2, 0);
+    
+    m_noteDurationIncludeComboBox = new QComboBox(0, noteFrame);
     m_noteDurationIncludeComboBox->insertItem(i18n("include"));
     m_noteDurationIncludeComboBox->insertItem(i18n("exclude"));
     cfg->setGroup(EventFilterDialog::ConfigGroup);
     m_noteDurationIncludeComboBox->setCurrentItem(cfg->readBoolEntry("durationinclude", 0));
-    layout->addWidget(m_noteDurationIncludeComboBox, 3, 0);
+    noteFrameLayout->addWidget(m_noteDurationIncludeComboBox, 3, 0);
 
-    m_velocityLabel = new QLabel(i18n("Velocity:"),this);
-    layout->addWidget(m_velocityLabel, 2, 1);
-    
-    // from dialogs.cpp - to display the humanized pitches
-    // (has this been internationalized, or does it always return English?)
-    Rosegarden::MidiPitchLabel plFrom(0);
-    m_pitchFromValueLabel = new QLabel(plFrom.getQString(),this);
-    layout->addWidget(m_pitchFromValueLabel, 1, 3);
-
-    m_pitchFromSpinBox = new QSpinBox(this);
+    // Pitch From
+    m_pitchFromSpinBox = new QSpinBox(noteFrame);
     m_pitchFromSpinBox->setMaxValue(127);
     cfg->setGroup(EventFilterDialog::ConfigGroup);
     m_pitchFromSpinBox->setValue(cfg->readUnsignedNumEntry("pitchfrom", 0));
-    layout->addWidget(m_pitchFromSpinBox, 1, 2);
+    noteFrameLayout->addWidget(m_pitchFromSpinBox, 1, 2);
     connect(m_pitchFromSpinBox, SIGNAL(valueChanged(int)),
 	    SLOT(slotPitchFromChanged(int)));
 
-    Rosegarden::MidiPitchLabel plTo(127);
-    m_pitchToValueLabel = new QLabel(plTo.getQString(),this);
-    layout->addWidget(m_pitchToValueLabel, 1, 5);
+    m_pitchFromChooserButton = new QPushButton(i18n("..."), noteFrame);
+    m_pitchFromChooserButton->setSizePolicy(QSizePolicy((QSizePolicy::SizeType)0,
+	(QSizePolicy::SizeType)0, 0, 0, m_pitchFromChooserButton->
+	sizePolicy().hasHeightForWidth()));
+    QToolTip::add(m_pitchFromChooserButton, i18n("choose a pitch using a staff"));  
+    noteFrameLayout->addWidget(m_pitchFromChooserButton, 1, 3);
+    connect(m_pitchFromChooserButton, SIGNAL(clicked()),
+	    SLOT(slotPitchFromChooser()));
 
-    m_pitchToSpinBox = new QSpinBox(this);
+    // Pitch To
+    m_pitchToSpinBox = new QSpinBox(noteFrame);
     m_pitchToSpinBox->setMaxValue(127);
     cfg->setGroup(EventFilterDialog::ConfigGroup);
     m_pitchToSpinBox->setValue(cfg->readUnsignedNumEntry("pitchto", 127));
-    layout->addWidget(m_pitchToSpinBox, 1, 4);
+    noteFrameLayout->addWidget(m_pitchToSpinBox, 1, 4);
     connect(m_pitchToSpinBox, SIGNAL(valueChanged(int)),
 	    SLOT(slotPitchToChanged(int)));
 
-    m_velocityFromSpinBox = new QSpinBox(this);
+    m_pitchToChooserButton = new QPushButton(i18n("..."), noteFrame);
+    m_pitchToChooserButton->setSizePolicy(QSizePolicy((QSizePolicy::SizeType)0,
+	(QSizePolicy::SizeType)0, 0, 0, m_pitchToChooserButton->
+	sizePolicy().hasHeightForWidth()));
+    QToolTip::add(m_pitchToChooserButton, i18n("choose a pitch using a staff"));  
+    noteFrameLayout->addWidget(m_pitchToChooserButton, 1, 5);
+    connect(m_pitchToChooserButton, SIGNAL(clicked()),
+	    SLOT(slotPitchToChooser()));
+
+    // spacer, to help keep From/To columns from going out of alignment
+    // relative to each other in the three separate frames...
+    QSpacerItem* spacer_0 =
+	new QSpacerItem(80, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    noteFrameLayout->addItem(spacer_0, 2, 2);
+
+    QSpacerItem* spacer_1 =
+	 new QSpacerItem(50, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    noteFrameLayout->addItem(spacer_1, 2, 4);
+    
+    // Velocity From/To
+    m_velocityFromSpinBox = new QSpinBox(noteFrame);
     m_velocityFromSpinBox->setMaxValue(127);
     cfg->setGroup(EventFilterDialog::ConfigGroup);
     m_velocityFromSpinBox->setValue(cfg->readUnsignedNumEntry("velocityfrom", 0));
-    layout->addWidget(m_velocityFromSpinBox, 2, 2);
+    noteFrameLayout->addWidget(m_velocityFromSpinBox, 2, 2);
     connect(m_velocityFromSpinBox, SIGNAL(valueChanged(int)),
 	    SLOT(slotVelocityFromChanged(int)));
 
-    m_velocityToSpinBox = new QSpinBox(this);
+    m_velocityToSpinBox = new QSpinBox(noteFrame);
     m_velocityToSpinBox->setMaxValue(127);
     cfg->setGroup(EventFilterDialog::ConfigGroup);
     m_velocityToSpinBox->setValue(cfg->readUnsignedNumEntry("velocityto", 127));
-    layout->addWidget(m_velocityToSpinBox, 2, 4);
+    noteFrameLayout->addWidget( m_velocityToSpinBox, 2, 4 );
     connect(m_velocityToSpinBox, SIGNAL(valueChanged(int)),
 	    SLOT(slotVelocityToChanged(int)));
 
-    m_durationLabel = new QLabel(i18n("Duration:"), this);
-    layout->addWidget(m_durationLabel, 3, 1);
-
-    m_controllerCheckBox = new QCheckBox(i18n("Controller"),this);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_controllerCheckBox->setChecked(cfg->readBoolEntry("controllercheckbox", false));
-    layout->addWidget(m_controllerCheckBox, 4, 0);
-
-    m_controllerFromLabel = new QLabel(i18n("from:"),this);
-    layout->addWidget(m_controllerFromLabel, 4, 2);
-
-    m_controllerToLabel = new QLabel(i18n("to:"),this);
-    layout->addWidget(m_controllerToLabel, 4, 4);
-
-    m_noteDurationFromComboBox = new QComboBox(0, this);
+    
+    // Duration From/To
+    m_noteDurationFromComboBox = new QComboBox(0, noteFrame);
     m_noteDurationFromComboBox->insertItem(i18n("unlimited"));
     m_noteDurationFromComboBox->setSizePolicy(QSizePolicy((QSizePolicy::SizeType)0,
 		(QSizePolicy::SizeType)0, 0, 0,
 		m_noteDurationFromComboBox->sizePolicy().hasHeightForWidth()));
-    layout->addMultiCellWidget(m_noteDurationFromComboBox, 3, 3, 2, 3);
+    noteFrameLayout->addWidget(m_noteDurationFromComboBox, 3, 2);
     connect(m_noteDurationFromComboBox, SIGNAL(activated(int)),
 		SLOT(slotDurationFromChanged(int)));
 
-    m_noteDurationToComboBox = new QComboBox(0, this);
+    m_noteDurationToComboBox = new QComboBox(0, noteFrame);
     m_noteDurationToComboBox->insertItem(i18n("unlimited"));
     m_noteDurationToComboBox->setSizePolicy(QSizePolicy((QSizePolicy::SizeType)0,
 		(QSizePolicy::SizeType)0, 0, 0,
 		m_noteDurationToComboBox->sizePolicy().hasHeightForWidth())); 
-    layout->addMultiCellWidget(m_noteDurationToComboBox, 3, 3, 4, 5);
+    noteFrameLayout->addWidget(m_noteDurationToComboBox, 3, 4);
+//    noteFrameLayout->addMultiCellWidget(m_noteDurationToComboBox, 3, 3, 2, 3);
     connect(m_noteDurationToComboBox, SIGNAL(activated(int)),
 	    	SLOT(slotDurationToChanged(int)));
 
-    // lifted from segmentparameterbox.cpp on 5/31/03
-    //
-    // populate the quantize combos with reasonable durations and associated
-    // pixmaps
-    //
-    // note: this is being generated spontaneously, but converting this info
-    // into an actual duration by combo index is hard coded, and subject to
-    // breakage should the code here do something unexpected...
-    // 
-    // this relationship needs to be solidified at some point
-    //
+    populateDurationCombos();
+
+
+    //----------[ Controller Filter Widgets ]---------------------
+
+    // Frame
+    QFrame* controllerFrame = new QFrame(this);
+    controllerFrame->setGeometry(QRect(10, 170, 602, 110));
+    controllerFrame->setFrameShape( QFrame::Box );
+    controllerFrame->setFrameShadow( QFrame::Sunken );
+    QGridLayout* controllerFrameLayout = new QGridLayout(controllerFrame, 1, 1, 11, 6); 
+
+    // Master Checkbox
+    m_controllerCheckBox = new QCheckBox(i18n("Controller"),controllerFrame);
+    cfg->setGroup(EventFilterDialog::ConfigGroup);
+    m_controllerCheckBox->setChecked(cfg->readBoolEntry("controllercheckbox", false));
+    controllerFrameLayout->addWidget(m_controllerCheckBox, 0, 0);
+    connect(m_controllerCheckBox, SIGNAL(stateChanged(int)), this,
+	    SLOT(slotControllerCheckBoxToggle(int)));
+
+    // Labels
+    m_controllerFromLabel = new QLabel(i18n("from:"), controllerFrame);
+    controllerFrameLayout->addWidget(m_controllerFromLabel, 0, 2);
+
+    m_controllerToLabel = new QLabel(i18n("to:"), controllerFrame);
+    controllerFrameLayout->addWidget(m_controllerToLabel, 0, 4);
+   
+    m_numberLabel = new QLabel(i18n("Number:"), controllerFrame);
+    controllerFrameLayout->addWidget(m_numberLabel, 1, 1);
+    
+    m_valueLabel = new QLabel(i18n("Value:"), controllerFrame);
+    controllerFrameLayout->addWidget(m_valueLabel, 2, 1);
+
+    // Include Boxes
+    m_controllerNumberIncludeComboBox = new QComboBox(0, controllerFrame);
+    m_controllerNumberIncludeComboBox->insertItem(i18n("include"));
+    m_controllerNumberIncludeComboBox->insertItem(i18n("exclude"));
+    cfg->setGroup(EventFilterDialog::ConfigGroup);
+    m_controllerNumberIncludeComboBox->setCurrentItem(
+	cfg->readUnsignedNumEntry("controllerinclude", 0));
+    controllerFrameLayout->addWidget(m_controllerNumberIncludeComboBox, 1, 0);
+
+    m_controllerValueIncludeComboBox = new QComboBox(0, controllerFrame);
+    m_controllerValueIncludeComboBox->insertItem(i18n("include"));
+    m_controllerValueIncludeComboBox->insertItem(i18n("exclude"));
+    cfg->setGroup(EventFilterDialog::ConfigGroup);
+    m_controllerValueIncludeComboBox->setCurrentItem(
+	    cfg->readUnsignedNumEntry("valueinclude", 0));
+    controllerFrameLayout->addWidget(m_controllerValueIncludeComboBox, 2, 0);
+
+    // Spin Boxes From/To
+    m_controllerNumberFromSpinBox = new QSpinBox(controllerFrame);
+    m_controllerNumberFromSpinBox->setMaxValue(127);
+    cfg->setGroup(EventFilterDialog::ConfigGroup);
+    m_controllerNumberFromSpinBox->setValue(cfg->readUnsignedNumEntry("controllerfrom", 0));
+    controllerFrameLayout->addWidget(m_controllerNumberFromSpinBox, 1, 2);
+    connect(m_controllerNumberFromSpinBox, SIGNAL(valueChanged(int)),
+	    SLOT(slotControllerFromChanged(int)));
+
+    m_controllerNumberToSpinBox = new QSpinBox(controllerFrame);
+    m_controllerNumberToSpinBox->setMaxValue(127);
+    cfg->setGroup(EventFilterDialog::ConfigGroup);
+    m_controllerNumberToSpinBox->setValue(cfg->readUnsignedNumEntry("controllerto", 127));
+    controllerFrameLayout->addWidget( m_controllerNumberToSpinBox, 1, 4 );
+    connect(m_controllerNumberToSpinBox, SIGNAL(valueChanged(int)),
+	    SLOT(slotControllerToChanged(int)));
+
+    m_controllerValueFromSpinBox = new QSpinBox(controllerFrame);
+    m_controllerValueFromSpinBox->setMaxValue(127);
+    cfg->setGroup(EventFilterDialog::ConfigGroup);
+    m_controllerValueFromSpinBox->setValue(cfg->readUnsignedNumEntry("valuefrom", 0));
+    controllerFrameLayout->addWidget(m_controllerValueFromSpinBox, 2, 2);
+    connect(m_controllerValueFromSpinBox, SIGNAL(valueChanged(int)),
+	    SLOT(slotValueFromChanged(int)));
+
+    m_controllerValueToSpinBox = new QSpinBox(controllerFrame);
+    m_controllerValueToSpinBox->setMaxValue(127);
+    cfg->setGroup(EventFilterDialog::ConfigGroup);
+    m_controllerValueToSpinBox->setValue(cfg->readUnsignedNumEntry("valueto", 127));
+    controllerFrameLayout->addWidget( m_controllerValueToSpinBox, 2, 4 );
+    connect(m_controllerValueToSpinBox, SIGNAL(valueChanged(int)),
+	    SLOT(slotValueToChanged(int)));
+
+    // Spacers
+    QSpacerItem* spacer_2 =
+	new QSpacerItem(121, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    controllerFrameLayout->addItem( spacer_2, 1, 3 );
+    
+    QSpacerItem* spacer_3 =
+	new QSpacerItem( 190, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+    controllerFrameLayout->addItem( spacer_3, 1, 5 );
+
+
+    //----------[ Wheel Filter Widgets ]--------------------------
+    
+    // Frame
+    QFrame* wheelFrame = new QFrame(this);
+    wheelFrame->setGeometry(QRect(10, 290, 413, 76));
+    wheelFrame->setFrameShape(QFrame::Box);
+    wheelFrame->setFrameShadow(QFrame::Sunken);
+    QGridLayout* wheelFrameLayout = new QGridLayout(wheelFrame, 1, 1, 11, 6); 
+
+    // Master Checkbox
+    m_wheelCheckBox = new QCheckBox(i18n("Wheel"), wheelFrame);
+    cfg->setGroup(EventFilterDialog::ConfigGroup);
+    m_wheelCheckBox->setChecked(cfg->readBoolEntry("wheelcheckbox", false));
+    wheelFrameLayout->addWidget(m_wheelCheckBox, 0, 0);
+    connect(m_wheelCheckBox, SIGNAL(stateChanged(int)), this,
+	    SLOT(slotWheelCheckBoxToggle(int)));
+
+    // Labels
+    m_wheelFromLabel = new QLabel(i18n("from:"), wheelFrame);
+    wheelFrameLayout->addWidget(m_wheelFromLabel, 0, 2);
+    
+    m_wheelToLabel = new QLabel(i18n("to:"), wheelFrame);
+    wheelFrameLayout->addWidget(m_wheelToLabel, 0, 4);
+    
+    m_wheelAmountLabel = new QLabel(i18n("Amount:"), wheelFrame);
+    wheelFrameLayout->addMultiCellWidget(m_wheelAmountLabel, 1, 2, 1, 1);
+
+    // Include Box
+    m_wheelAmountIncludeComboBox = new QComboBox(0, wheelFrame);
+    m_wheelAmountIncludeComboBox->insertItem(i18n("include"));
+    m_wheelAmountIncludeComboBox->insertItem(i18n("exclude"));
+    cfg->setGroup(EventFilterDialog::ConfigGroup);
+    m_wheelAmountIncludeComboBox->setCurrentItem(
+	    cfg->readUnsignedNumEntry("wheelinclude", 0));
+    wheelFrameLayout->addMultiCellWidget(m_wheelAmountIncludeComboBox, 1, 2, 0, 0);
+
+    // Spin Boxes From/To
+    m_wheelAmountFromSpinBox = new QSpinBox(wheelFrame);
+    m_wheelAmountFromSpinBox->setMaxValue(8191);
+    m_wheelAmountFromSpinBox->setMinValue(-8192);
+    cfg->setGroup(EventFilterDialog::ConfigGroup);
+    m_wheelAmountFromSpinBox->setValue(cfg->readNumEntry("wheelfrom", -8192));
+    wheelFrameLayout->addWidget(m_wheelAmountFromSpinBox, 2, 2);
+    connect(m_wheelAmountFromSpinBox, SIGNAL(valueChanged(int)),
+	    SLOT(slotWheelFromChanged(int)));
+
+    m_wheelAmountToSpinBox = new QSpinBox(wheelFrame);
+    m_wheelAmountToSpinBox->setMaxValue(8191);
+    m_wheelAmountToSpinBox->setMinValue(-8192);
+    cfg->setGroup(EventFilterDialog::ConfigGroup);
+    m_wheelAmountToSpinBox->setValue(cfg->readNumEntry("wheelto", 8191));
+    wheelFrameLayout->addWidget(m_wheelAmountToSpinBox, 2, 4);
+    connect(m_wheelAmountToSpinBox, SIGNAL(valueChanged(int)),
+	    SLOT(slotWheelToChanged(int)));
+
+    // Spacer
+    QSpacerItem* spacer_4 =
+	new QSpacerItem(121, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    wheelFrameLayout->addMultiCell(spacer_4, 0, 1, 3, 3); 
+   
+    // Set Initial Size
+    resize( QSize(624, 375).expandedTo(minimumSizeHint()) );
+    
+    // Force a sync with the checkboxes in the event that they were read false
+    // from kconfig data.
+    slotWheelCheckBoxToggle(0);
+    slotControllerCheckBoxToggle(0);
+    slotWheelCheckBoxToggle(0);
+} // end initDialog
+
+// Populate the duration combos with a few reasonable values, including
+// pixmaps; as per the segment parameters widget in the main window
+//
+// lifted from segmentparameterbox.cpp on 5/31/03
+//
+// NOTE: these combos are calculated, rather than fixed, but the code that
+// picks a duration by index is dependant upon each index having a previously
+// expected value.  This could break easily at some point.
+void
+EventFilterDialog::populateDurationCombos()
+{
     NotePixmapFactory npf;
     QPixmap noMap = NotePixmapFactory::toQPixmap(npf.makeToolbarPixmap("menu-no-note"));
 
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i)
     {
-
         Rosegarden::timeT time = m_standardQuantizations[i];
         Rosegarden::timeT error = 0;
         QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
@@ -223,161 +441,22 @@ EventFilterDialog::initDialog()
 	    cfg->readUnsignedNumEntry("durationfrom", (m_noteDurationToComboBox->count() - 1)));
     m_noteDurationToComboBox->setCurrentItem(
 	    cfg->readUnsignedNumEntry("durationto", 0));
-
-    m_controllerNumberIncludeComboBox = new QComboBox(0, this);
-    m_controllerNumberIncludeComboBox->insertItem(i18n("include"));
-    m_controllerNumberIncludeComboBox->insertItem(i18n("exclude"));
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_controllerNumberIncludeComboBox->setCurrentItem(
-	cfg->readUnsignedNumEntry("controllerinclude", 0));
-    layout->addWidget(m_controllerNumberIncludeComboBox, 5, 0);
-
-    m_numberLabel = new QLabel(i18n("Number:"),this);
-    layout->addWidget(m_numberLabel, 5, 1);
-
-    m_controllerNumberFromSpinBox = new QSpinBox(this);
-    m_controllerNumberFromSpinBox->setMaxValue(127);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_controllerNumberFromSpinBox->setValue(cfg->readUnsignedNumEntry("controllerfrom", 0));
-    layout->addWidget(m_controllerNumberFromSpinBox, 5, 2);
-    connect(m_controllerNumberFromSpinBox, SIGNAL(valueChanged(int)),
-	    SLOT(slotControllerFromChanged(int)));
-
-    m_controllerNumberToSpinBox = new QSpinBox(this);
-    m_controllerNumberToSpinBox->setMaxValue(127);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_controllerNumberToSpinBox->setValue(cfg->readUnsignedNumEntry("controllerto", 127));
-    layout->addWidget(m_controllerNumberToSpinBox, 5, 4);
-    connect(m_controllerNumberToSpinBox, SIGNAL(valueChanged(int)),
-	    SLOT(slotControllerToChanged(int)));
-
-    m_valueLabel = new QLabel(i18n("Value:"),this);
-    layout->addWidget(m_valueLabel, 6, 1);
-
-    m_controllerValueIncludeComboBox = new QComboBox(0, this);
-    m_controllerValueIncludeComboBox->insertItem(i18n("include"));
-    m_controllerValueIncludeComboBox->insertItem(i18n("exclude"));
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_controllerValueIncludeComboBox->setCurrentItem(
-	    cfg->readUnsignedNumEntry("valueinclude", 0));
-    layout->addWidget(m_controllerValueIncludeComboBox, 6, 0);
-
-    m_controllerValueFromSpinBox = new QSpinBox(this);
-    m_controllerValueFromSpinBox->setMaxValue(127);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_controllerValueFromSpinBox->setValue(cfg->readUnsignedNumEntry("valuefrom", 0));
-    layout->addWidget(m_controllerValueFromSpinBox, 6, 2);
-    connect(m_controllerValueFromSpinBox, SIGNAL(valueChanged(int)),
-	    SLOT(slotValueFromChanged(int)));
-
-    m_controllerValueToSpinBox = new QSpinBox(this);
-    m_controllerValueToSpinBox->setMaxValue(127);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_controllerValueToSpinBox->setValue(cfg->readUnsignedNumEntry("valueto", 127));
-    layout->addWidget(m_controllerValueToSpinBox, 6, 4);
-    connect(m_controllerValueToSpinBox, SIGNAL(valueChanged(int)),
-	    SLOT(slotValueToChanged(int)));
-
-    m_wheelCheckBox = new QCheckBox(i18n("Wheel"),this);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_wheelCheckBox->setChecked(cfg->readBoolEntry("wheelcheckbox", false));
-    layout->addWidget(m_wheelCheckBox, 7, 0);
-
-    m_wheelAmountIncludeComboBox = new QComboBox(0, this);
-    m_wheelAmountIncludeComboBox->insertItem(i18n("include"));
-    m_wheelAmountIncludeComboBox->insertItem(i18n("exclude"));
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_wheelAmountIncludeComboBox->setCurrentItem(
-	    cfg->readUnsignedNumEntry("wheelinclude", 0));
-    layout->addWidget(m_wheelAmountIncludeComboBox, 8, 0);
-
-    m_wheelFromLabel = new QLabel(i18n("from:"),this);
-    layout->addWidget(m_wheelFromLabel, 7, 2);
-
-    m_wheelAmountFromSpinBox = new QSpinBox(this);
-    m_wheelAmountFromSpinBox->setMaxValue(8191);
-    m_wheelAmountFromSpinBox->setMinValue(-8192);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_wheelAmountFromSpinBox->setValue(cfg->readNumEntry("wheelfrom", -8192));
-    layout->addWidget(m_wheelAmountFromSpinBox, 8, 2);
-    connect(m_wheelAmountFromSpinBox, SIGNAL(valueChanged(int)),
-	    SLOT(slotWheelFromChanged(int)));
-
-    m_wheelAmountLabel = new QLabel(i18n("Amount:"),this);
-    layout->addWidget(m_wheelAmountLabel, 8, 1);
-
-    m_wheelAmountToSpinBox = new QSpinBox(this);
-    m_wheelAmountToSpinBox->setMaxValue(8191);
-    m_wheelAmountToSpinBox->setMinValue(-8192);
-    cfg->setGroup(EventFilterDialog::ConfigGroup);
-    m_wheelAmountToSpinBox->setValue(cfg->readNumEntry("wheelto", 8191));
-    layout->addWidget(m_wheelAmountToSpinBox, 8, 4);
-    connect(m_wheelAmountToSpinBox, SIGNAL(valueChanged(int)),
-	    SLOT(slotWheelToChanged(int)));
-
-    m_wheelToLabel = new QLabel(i18n("to:"), this);
-    layout->addWidget(m_wheelToLabel, 7, 4);
-
-    m_buttonCancel = new QPushButton(i18n("Cancel"), this);
-    m_buttonCancel->setAutoDefault(true);
-    layout->addWidget(m_buttonCancel, 13, 3);
-
-    m_buttonOK = new QPushButton(i18n("OK"), this);
-    m_buttonOK->setAutoDefault(true);
-    m_buttonOK->setDefault(true);
-    layout->addWidget(m_buttonOK, 13, 2);
-
-    m_buttonNone = new QPushButton(i18n("None"),this);
-    m_buttonNone->setAutoDefault(true);
-    layout->addWidget(m_buttonNone, 13, 5);
-
-    m_buttonAll = new QPushButton(i18n("All"),this);
-    m_buttonAll->setAutoDefault(true);
-    layout->addWidget(m_buttonAll, 13, 4);
-
-    // line to set off buttons until I get around to doing the QFrames G
-    // wanted...
-    QFrame* line;
-    line = new QFrame(this);
-    line->setFrameShape(QFrame::HLine);
-//    line->setFrameShadow(QFrame::Sunken);
-    layout->addMultiCellWidget(line, 12, 1, 12, 5);
-    
-    resize(QSize(500, 300).expandedTo(minimumSizeHint()));
-
-    // signals and slots connections
-    connect(m_buttonOK, SIGNAL(clicked()), this, SLOT(slotButtonOK()));
-    connect(m_buttonCancel, SIGNAL(clicked()), this, SLOT(reject()));
-    connect(m_buttonAll, SIGNAL(clicked()), this, SLOT(slotToggleAll()));
-    connect(m_buttonNone, SIGNAL(clicked()), this, SLOT(slotToggleNone()));
-    
-    connect(m_noteCheckBox, SIGNAL(stateChanged(int)), this,
-	    SLOT(slotNoteCheckBoxToggle(int))); 
-    connect(m_controllerCheckBox, SIGNAL(stateChanged(int)), this,
-	    SLOT(slotControllerCheckBoxToggle(int)));
-    connect(m_wheelCheckBox, SIGNAL(stateChanged(int)), this,
-	    SLOT(slotWheelCheckBoxToggle(int)));
-
-    // force a sync with the checkboxes in the event that they were read false
-    // from kconfig data.
-    slotWheelCheckBoxToggle(0);
-    slotControllerCheckBoxToggle(0);
-    slotWheelCheckBoxToggle(0);
 }
 
 void
 EventFilterDialog::slotToggleAll()
 {
-    m_noteDurationFromComboBox   ->setCurrentItem(11);
-    m_noteDurationToComboBox     ->setCurrentItem(0); // hard coded, but shouldn't be
-    m_controllerNumberFromSpinBox->setValue(0);
-    m_controllerNumberToSpinBox  ->setValue(127);
-    m_controllerValueFromSpinBox ->setValue(0);
-    m_controllerValueToSpinBox   ->setValue(127);
+    RG_DEBUG << "EventFilterDialog::slotToggleAll()" << endl;
     m_pitchFromSpinBox           ->setValue(0);
     m_pitchToSpinBox             ->setValue(127);
     m_velocityFromSpinBox        ->setValue(0);
     m_velocityToSpinBox          ->setValue(127);
+    m_noteDurationFromComboBox   ->setCurrentItem(11); // hard coded; should be variable
+    m_noteDurationToComboBox     ->setCurrentItem(0);
+    m_controllerNumberFromSpinBox->setValue(0);
+    m_controllerNumberToSpinBox  ->setValue(127);
+    m_controllerValueFromSpinBox ->setValue(0);
+    m_controllerValueToSpinBox   ->setValue(127);
     m_wheelAmountFromSpinBox     ->setValue(-8192);
     m_wheelAmountToSpinBox       ->setValue(8191);
 }
@@ -385,16 +464,17 @@ EventFilterDialog::slotToggleAll()
 void
 EventFilterDialog::slotToggleNone()
 {
+    RG_DEBUG << "EventFilterDialog::slotToggleNone()" << endl;
+    m_pitchFromSpinBox           ->setValue(0);
+    m_pitchToSpinBox             ->setValue(0);
+    m_velocityFromSpinBox        ->setValue(0);
+    m_velocityToSpinBox          ->setValue(0);
     m_noteDurationFromComboBox   ->setCurrentItem(11);
     m_noteDurationToComboBox     ->setCurrentItem(11);
     m_controllerNumberFromSpinBox->setValue(0);
     m_controllerNumberToSpinBox  ->setValue(0);
     m_controllerValueFromSpinBox ->setValue(0);
     m_controllerValueToSpinBox   ->setValue(0);
-    m_pitchFromSpinBox           ->setValue(0);
-    m_pitchToSpinBox             ->setValue(0);
-    m_velocityFromSpinBox        ->setValue(0);
-    m_velocityToSpinBox          ->setValue(0);
     m_wheelAmountFromSpinBox     ->setValue(0);
     m_wheelAmountToSpinBox       ->setValue(0);
 }
@@ -478,9 +558,6 @@ EventFilterDialog::slotWheelCheckBoxToggle(int)
 void
 EventFilterDialog::slotPitchFromChanged(int pitch)
 {
-    Rosegarden::MidiPitchLabel pl(pitch);
-    m_pitchFromValueLabel->setText(" " + pl.getQString());
-    // ensure that From <= To
     if (pitch > m_pitchToSpinBox->value())
 	m_pitchToSpinBox->setValue(pitch);
 }
@@ -488,9 +565,6 @@ EventFilterDialog::slotPitchFromChanged(int pitch)
 void
 EventFilterDialog::slotPitchToChanged(int pitch)
 {
-    Rosegarden::MidiPitchLabel pl(pitch);
-    m_pitchToValueLabel->setText(" " + pl.getQString());
-    // ensure that From <= To
     if (pitch < m_pitchFromSpinBox->value())
 	m_pitchFromSpinBox->setValue(pitch);
 }
@@ -565,6 +639,34 @@ EventFilterDialog::slotWheelToChanged(int value)
 	m_wheelAmountFromSpinBox->setValue(value);
 }
 
+void
+EventFilterDialog::slotPitchFromChooser()
+{
+    PitchPickerDialog dialog(this, m_pitchFromSpinBox->value(), true);
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        m_pitchFromSpinBox->setValue(dialog.getPitch());
+    }
+}
+
+void
+EventFilterDialog::slotPitchToChooser()
+{
+    PitchPickerDialog dialog(this, m_pitchToSpinBox->value(), false);
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        m_pitchToSpinBox->setValue(dialog.getPitch());
+    }
+}
+
+// Returns a duration based on a combo box index
+//
+// NOTE: the combos are populated with calculated values, but this code
+// assumes that they are always calculated in the same way, and that it can
+// expect a fixed relationship between combo index and the duration it's
+// supposed to represent.  This could break in the future.
 long
 EventFilterDialog::getDurationFromIndex(int index)
 {
@@ -693,15 +795,60 @@ EventFilterDialog::keepEvent(Rosegarden::Event* const &e)
 	    if (!EventFilterDialog::eventInRange(getDuration(), property)) return false; 
 	    property = 0; 
 	} 
-	else if ((*e).isa(Rosegarden::Controller::EventType) && filterController() )
+	else if ((*e).isa(Rosegarden::Controller::EventType) && filterController())
 	{
-	    RG_DEBUG << "event was a controller...  filter not implemented" << endl;
-	} else if ((*e).isa(Rosegarden::PitchBend::EventType) && filterWheel() )
+	    // controller number
+	    (*e).get<Rosegarden::Int>(Rosegarden::Controller::NUMBER, property);
+	    if (!EventFilterDialog::eventInRange(getController(), property)) return false;
+	    property = 0;
+
+	    // controller value
+	    (*e).get<Rosegarden::Int>(Rosegarden::Controller::VALUE, property);
+	    if (!EventFilterDialog::eventInRange(getValue(), property)) return false;
+	    
+	}
+	else if ((*e).isa(Rosegarden::PitchBend::EventType) && filterWheel())
 	{
-	    RG_DEBUG << "event was a wheel... filter not implemented" << endl;
+	    // pitch bend amount
+	    (*e).get<Rosegarden::Int>(Rosegarden::PitchBend::MSB, property);
+	    unsigned char MSB = char(property);
+	    (*e).get<Rosegarden::Int>(Rosegarden::PitchBend::LSB, property);
+	    unsigned char LSB = char(property);
+
+	    property = LSB;
+	    property <<= 7;
+	    property += MSB;
+
+	    RG_DEBUG << "pitch bend was " << property << endl;
+	    
+	    if (!EventFilterDialog::eventInRange(getWheel(), property)) return false;
 	}
 	return true;
     }
     return false;
 }
 
+// PitchPickerDialog
+//
+// Constructs a dialog to contain a RosegardenPitchChooser widget to feed back
+// to the main event filter dialog and provide a spiffy way for users to
+// choose the pitch they want on a staff.
+PitchPickerDialog::PitchPickerDialog(QWidget *parent, int initialPitch, bool isFrom) :
+    KDialogBase(parent, 0, true, i18n("Pitch Selector"), Ok | Cancel)
+{
+    QVBox *vBox = makeVBoxMainWidget();
+
+    QFrame *frame = new QFrame(vBox);
+
+    QGridLayout *layout = new QGridLayout(frame, 4, 3, 10, 5);
+
+    QString toFrom = (isFrom ? "Starting" : "Ending");
+
+    m_pitch = new RosegardenPitchChooser(i18n("%1 Pitch").arg(toFrom), frame, initialPitch);
+    layout->addMultiCellWidget(m_pitch, 0, 0, 0, 2, Qt::AlignHCenter);
+}
+
+PitchPickerDialog::~PitchPickerDialog()
+{
+    // Nothing here...
+}
