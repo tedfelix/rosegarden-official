@@ -429,7 +429,11 @@ Sequencer::processEventsOut(const Rosegarden::MappedComposition &mC,
         }
     }
 
+    // do MIDI events
     processMidiOut(mC, playLatency);
+
+    // do any audio events
+    processAudioQueue();
 }
 
 void
@@ -439,7 +443,6 @@ Sequencer::processAudioQueue()
     // Now check queue for events that need playing
     std::vector<PlayableAudioFile*>::iterator it;
     RealTime currentTime = getSequencerTime();
-
 
     for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); ++it)
     {

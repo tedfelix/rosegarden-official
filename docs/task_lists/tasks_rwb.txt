@@ -4,8 +4,6 @@ updated 07.03.2001
 
 Currently looking at:
 
-o Looping doesn't pick up first loop events cleanly
-
 o Playing Audio files broken - get seeking working
 
 o Split/Join - segment start and end markers
@@ -15,6 +13,8 @@ o smooth position pointer
 o Latency dialog
 
 o Segment paramters and modifiers - looping of Segments, quantisation
+
+o Looping doesn't pick up first loop events cleanly [BETTER]
 
 
 ==
