@@ -1522,7 +1522,7 @@ SegmentNotationHelper::getClefAndKeyAt(timeT time, Clef &clef, Key &key)
     Event *clefEvent = 0;
     Event *keyEvent = 0;
 
-    std::cerr << "SegmentNotationHelper::getClefAndKeyAt(" << time << ")" << std::endl;
+    //std::cerr << "SegmentNotationHelper::getClefAndKeyAt(" << time << ")" << std::endl;
 
     iterator i = segment().findTime(time);
     while (i != end() && (*i)->getAbsoluteTime() == time) ++i;
@@ -1531,7 +1531,7 @@ SegmentNotationHelper::getClefAndKeyAt(timeT time, Clef &clef, Key &key)
 
 	--i;
 
-	std::cerr << "Event type " << (*i)->getType() << " at " << (*i)->getAbsoluteTime() << std::endl;
+	//std::cerr << "Event type " << (*i)->getType() << " at " << (*i)->getAbsoluteTime() << std::endl;
 
 	if (!clefEvent && (*i)->isa(Rosegarden::Clef::EventType)) {
 	    clefEvent = *i;

@@ -35,10 +35,10 @@
 #include <fstream>
 #include <vector>
 
+#include <qobject.h>
+
 
 #include "PeakFile.h"
-
-class QObject;
 
 namespace Rosegarden
 {
@@ -46,8 +46,9 @@ namespace Rosegarden
 class AudioFile;
 class RealTime;
 
-class PeakFileManager
+class PeakFileManager : public QObject
 {
+    Q_OBJECT
 public:
     // updatePercentage tells this object how often to throw a
     // percentage complete message - active between 0-100 only
@@ -75,7 +76,6 @@ public:
     //
     //
     void generatePeaks(AudioFile *audioFile,
-                       QObject *progress,
                        unsigned short updatePercentage);
 
     // Get a vector of floats as the preview
@@ -102,6 +102,9 @@ public:
 
     std::vector<PeakFile*>::const_iterator end() const
                 { return m_peakFiles.end(); }
+
+signals:
+    void setProgress(int);
 
 protected:
 

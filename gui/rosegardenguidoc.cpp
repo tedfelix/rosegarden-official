@@ -434,10 +434,12 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     // reuse the previous one
     progressDlg.setLabel(i18n("Generating audio previews..."));
 
+    connect(&m_audioFileManager, SIGNAL(setProgress(int)),
+            progressDlg.progressBar(), SLOT(setValue(int)));
     try
     {
         // generate any audio previews after loading the files
-        m_audioFileManager.generatePreviews(&progressDlg);
+        m_audioFileManager.generatePreviews();
     }
     catch(std::string e)
     {
@@ -1676,10 +1678,12 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
     RosegardenProgressDialog progressDlg(i18n("Generating audio preview..."),
                                          100, (QWidget*)parent());
 
+    connect(&m_audioFileManager, SIGNAL(setProgress(int)),
+            progressDlg.progressBar(), SLOT(setValue(int)));
+            
     try
     {
-        m_audioFileManager.generatePreview(&progressDlg,
-                                           newAudioFile->getId());
+        m_audioFileManager.generatePreview(newAudioFile->getId());
     }
     catch(std::string e)
     {

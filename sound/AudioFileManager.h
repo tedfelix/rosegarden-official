@@ -26,6 +26,7 @@
 #include <map>
 
 #include <qpixmap.h>
+#include <qobject.h>
 
 #include "AudioFile.h"
 #include "XmlExportable.h"
@@ -46,16 +47,15 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-class QObject;
-
 namespace Rosegarden
 {
 
 
 typedef std::vector<AudioFile*>::const_iterator AudioFileManagerIterator;
 
-class AudioFileManager : public XmlExportable
+class AudioFileManager : public QObject, public XmlExportable
 {
+    Q_OBJECT
 public:
     AudioFileManager();
     ~AudioFileManager();
@@ -127,11 +127,11 @@ public:
     // Convenience function generate all previews on the audio file.
     // 
     //
-    void generatePreviews(QObject *progress);
+    void generatePreviews();
 
     // Generate for a single audio file
     //
-    bool generatePreview(QObject *progress, AudioFileId id);
+    bool generatePreview(AudioFileId id);
 
     // Get a preview for an AudioFile adjusted to Segment start and
     // end parameters (assuming they fall within boundaries).
@@ -191,6 +191,9 @@ public:
     // Get the peak file manager
     //
     const PeakFileManager& getPeakFileManager() const { return m_peakManager; }
+
+signals:
+    void setProgress(int);
 
 private:
     std::string getFileInPath(const std::string &file);

@@ -171,7 +171,6 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
 //
 void
 PeakFileManager::generatePeaks(AudioFile *audioFile,
-                               QObject *progress,
                                unsigned short updatePercentage)
 {
     std::cout << "PeakFileManager::generatePeaks - generating peaks for \""
@@ -182,7 +181,7 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
         PeakFile *peakFile = getPeakFile(audioFile);
 
         QObject::connect(peakFile, SIGNAL(setProgress(int)),
-                         progress, SLOT(setValue(int)));
+                         this,     SIGNAL(setProgress(int)));
 
         // Just write out a peak file
         //

@@ -1023,14 +1023,19 @@ AudioManagerDialog::addFile(const KURL& kurl)
         return false;
     }
 
+    // Connect the progress dialog
+    //
+    connect(&m_doc->getAudioFileManager(), SIGNAL(setProgress(int)),
+            progressDlg.progressBar(), SLOT(setValue(int)));
+
     try
     {
-        m_doc->getAudioFileManager().generatePreview(&progressDlg, id);
+        m_doc->getAudioFileManager().generatePreview(id);
     }
     catch(std::string e)
     {
-        //delete progressDlg;
-        //progressDlg = 0;
+        CurrentProgressDialog::freeze();
+
         QString message = strtoqstr(e) + "\n\n" +
                           i18n("Try copying this file to a directory where you have write permission and re-add it");
         KMessageBox::information(this, message);

@@ -52,6 +52,11 @@ AudioFileManager::AudioFileManager()
     // shaken out.
     //
     setAudioPath("~/rosegarden");
+
+    // Retransmit progress
+    //
+    connect(&m_peakManager, SIGNAL(setProgress(int)),
+            this,           SIGNAL(setProgress(int)));
 }
 
 AudioFileManager::~AudioFileManager()
@@ -528,7 +533,7 @@ AudioFileManager::toXmlString()
 // to file type.
 //
 void
-AudioFileManager::generatePreviews(QObject *progress)
+AudioFileManager::generatePreviews()
 {
     std::cout << "AudioFileManager::generatePreviews - "
               << "for " << m_audioFiles.size() << " files"
@@ -541,7 +546,7 @@ AudioFileManager::generatePreviews(QObject *progress)
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); ++it)
     {
         if (!m_peakManager.hasValidPeaks(*it))
-            m_peakManager.generatePeaks(*it, progress,  1);
+            m_peakManager.generatePeaks(*it, 1);
     }
 }
 
@@ -552,8 +557,7 @@ AudioFileManager::generatePreviews(QObject *progress)
 // modified.
 //
 bool
-AudioFileManager::generatePreview(QObject *progress,
-                                  AudioFileId id)
+AudioFileManager::generatePreview(AudioFileId id)
 {
     AudioFile *audioFile = getAudioFile(id);
     
@@ -561,7 +565,7 @@ AudioFileManager::generatePreview(QObject *progress,
         return false;
 
     if (!m_peakManager.hasValidPeaks(audioFile))
-        m_peakManager.generatePeaks(audioFile, progress, 1);
+        m_peakManager.generatePeaks(audioFile, 1);
 
     return true;
 }
