@@ -289,9 +289,9 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 	    SLOT(slotShowPluginDialog(QWidget *, Rosegarden::InstrumentId, int)));
 
     connect(m_instrumentParameterBox,
-	    SIGNAL(startPluginGUI(Rosegarden::InstrumentId, int)),
+	    SIGNAL(showPluginGUI(Rosegarden::InstrumentId, int)),
 	    this,
-	    SLOT(slotStartPluginGUI(Rosegarden::InstrumentId, int)));
+	    SLOT(slotShowPluginGUI(Rosegarden::InstrumentId, int)));
 
     // Load the initial document (this includes doc's own autoload)
     //
@@ -5521,6 +5521,16 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
 	    SIGNAL(pluginProgramChanged(Rosegarden::InstrumentId, int, QString)),
 	    this,
 	    SLOT(slotPluginProgramChanged(Rosegarden::InstrumentId, int, QString)));
+    
+    connect(dialog,
+	    SIGNAL(showPluginGUI(Rosegarden::InstrumentId, int)),
+	    this,
+	    SLOT(slotShowPluginGUI(Rosegarden::InstrumentId, int)));
+    
+    connect(dialog,
+	    SIGNAL(stopPluginGUI(Rosegarden::InstrumentId, int)),
+	    this,
+	    SLOT(slotStopPluginGUI(Rosegarden::InstrumentId, int)));
 
     connect(dialog,
 	    SIGNAL(bypassed(Rosegarden::InstrumentId, int, bool)),
@@ -5545,6 +5555,9 @@ void
 RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
 				     int index, int plugin)
 {
+    // It's assumed that ports etc will already have been set up on
+    // the AudioPluginInstance before this is invoked.
+
     Rosegarden::Instrument *instrument = m_doc->getStudio().
         getInstrumentById(instrumentId);
     
@@ -5560,6 +5573,8 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
     if (plugin == -1)
     {
 	// Destroy plugin instance
+	//!!! seems iffy -- why can't we just unassign it?
+
 	if (Rosegarden::StudioControl::
 	    destroyStudioObject(inst->getMappedId()))
 	{
@@ -5572,30 +5587,17 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
     }
     else
     {
-	Rosegarden::AudioPlugin *plgn = 
-	    m_doc->getPluginManager()->getPlugin(plugin);
-	
 	// If unassigned then create a sequencer instance of this
 	// AudioPluginInstance.
 	//
 	if (inst->isAssigned())
 	{
-	    // unassign, destory and recreate
-/*
-	    std::cout << "MAPPED ID = " << inst->getMappedId() 
-		      << " for Instrument " << inst->getIdentifier() << std::endl;
-*/
-	    
-	    RG_DEBUG << "RosegardenGUIApp::slotPluginSelected - "
-		     << "MappedObjectId = "
-		     << inst->getMappedId()
-		     << " - UniqueId = " << plgn->getUniqueId()
-		     << endl;
-	    
+	    // unassign, destroy and recreate
+
 	    Rosegarden::StudioControl::setStudioObjectProperty
 		(inst->getMappedId(),
 		 Rosegarden::MappedPluginSlot::Identifier,
-		 plgn->getIdentifier());
+		 strtoqstr(inst->getIdentifier()));
 	}
 	else
 	{
@@ -5628,8 +5630,55 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
 	    Rosegarden::StudioControl::setStudioObjectProperty
 		(newId,
 		 Rosegarden::MappedPluginSlot::Identifier,
-		     plgn->getIdentifier());
+		 strtoqstr(inst->getIdentifier()));
 	}
+    }
+
+    int pluginMappedId = inst->getMappedId();
+
+    //!!! much code duplicated here from RosegardenGUIDoc::initialiseStudio
+    
+    // Set opaque string configuration data (e.g. for DSSI plugin)
+    //
+    Rosegarden::MappedObjectPropertyList config;
+    for (Rosegarden::AudioPluginInstance::ConfigMap::const_iterator
+	     i = inst->getConfiguration().begin();
+	 i != inst->getConfiguration().end(); ++i) {
+	config.push_back(strtoqstr(i->first));
+	config.push_back(strtoqstr(i->second));
+    }
+    Rosegarden::StudioControl::setStudioObjectPropertyList
+	(pluginMappedId,
+	 Rosegarden::MappedPluginSlot::Configuration,
+	 config);
+    
+    // Set the bypass
+    //
+    Rosegarden::StudioControl::setStudioObjectProperty
+	(pluginMappedId,
+	 Rosegarden::MappedPluginSlot::Bypassed,
+	 Rosegarden::MappedObjectValue(inst->isBypassed()));
+    
+    // Set the program
+    //
+    if (inst->getProgram() != "") {
+	Rosegarden::StudioControl::setStudioObjectProperty
+	    (pluginMappedId,
+	     Rosegarden::MappedPluginSlot::Program,
+	     strtoqstr(inst->getProgram()));
+    }
+    
+    // Set all the port values
+    // 
+    Rosegarden::PortInstanceIterator portIt;
+    
+    for (portIt = inst->begin();
+	 portIt != inst->end(); ++portIt)
+    {
+	Rosegarden::StudioControl::setStudioPluginPort
+	    (pluginMappedId,
+	     (*portIt)->number,
+	     (*portIt)->value);
     }
     
     // Set modified
@@ -5735,11 +5784,52 @@ RosegardenGUIApp::slotPluginBypassed(Rosegarden::InstrumentId instrumentId,
 }
 
 void
-RosegardenGUIApp::slotStartPluginGUI(Rosegarden::InstrumentId instrument,
-				     int index)
+RosegardenGUIApp::slotPluginConfigurationChanged(Rosegarden::InstrumentId instrumentId,
+						 int index,
+						 QString key,
+						 QString value)
+{
+    Rosegarden::Instrument *instrument = m_doc->getStudio().
+        getInstrumentById(instrumentId);
+    
+    Rosegarden::AudioPluginInstance *inst = instrument->getPlugin(index);
+
+    if (inst)
+    {
+	inst->setConfigurationValue(qstrtostr(key), qstrtostr(value));
+
+	Rosegarden::MappedObjectPropertyList config;
+	for (Rosegarden::AudioPluginInstance::ConfigMap::const_iterator
+		 i = inst->getConfiguration().begin();
+	     i != inst->getConfiguration().end(); ++i) {
+	    config.push_back(strtoqstr(i->first));
+	    config.push_back(strtoqstr(i->second));
+	}
+	Rosegarden::StudioControl::setStudioObjectPropertyList
+	    (inst->getMappedId(),
+	     Rosegarden::MappedPluginSlot::Configuration,
+	     config);
+
+        // Set modified
+        m_doc->slotDocumentModified();
+    }
+}
+
+void
+RosegardenGUIApp::slotShowPluginGUI(Rosegarden::InstrumentId instrument,
+				    int index)
 {
 #ifdef HAVE_LIBLO
-    m_pluginGUIManager->startGUI(instrument, index);
+    m_pluginGUIManager->showGUI(instrument, index);
+#endif
+}
+
+void
+RosegardenGUIApp::slotStopPluginGUI(Rosegarden::InstrumentId instrument,
+				    int index)
+{
+#ifdef HAVE_LIBLO
+    m_pluginGUIManager->stopGUI(instrument, index);
 #endif
 }
 

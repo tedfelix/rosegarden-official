@@ -46,6 +46,8 @@ Features for 1.0 - updated 20040331
 
 - plugins - randomise button and time related frequency parameters
 
+- linked help for dialogs
+
 
 Recently DONE
 -------------

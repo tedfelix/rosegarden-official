@@ -1293,17 +1293,17 @@ RosegardenSequencerApp::setMappedProperty(int id,
 }
 
 void
-RosegardenSequencerApp::setMappedProperty(int id, const QString &property,
-        Rosegarden::MappedObjectValueList value)
+RosegardenSequencerApp::setMappedPropertyList(int id, const QString &property,
+					      const Rosegarden::MappedObjectPropertyList &values)
 {
-    SEQUENCER_DEBUG << "setProperty: id = " << id
-                    << " : property list size = \"" << value.size()
+    SEQUENCER_DEBUG << "setPropertyList: id = " << id
+                    << " : property list size = \"" << values.size()
                     << "\"" << endl;
 
     Rosegarden::MappedObject *object = m_studio->getObjectById(id);
 
     if (object)
-        object->setProperty(property, value);
+        object->setPropertyList(property, values);
 }
 
 

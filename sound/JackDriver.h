@@ -100,6 +100,10 @@ public:
 					  int position,
 					  QString program);
 
+    virtual void configurePlugin(InstrumentId id,
+				 int position, 
+				 QString key, QString value);
+
     virtual RunnablePluginInstance *getSynthPlugin(InstrumentId id);
 
     virtual unsigned int getSampleRate() const { return m_sampleRate; }

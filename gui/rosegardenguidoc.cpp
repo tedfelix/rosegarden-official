@@ -769,11 +769,26 @@ void RosegardenGUIDoc::initialiseStudio()
                          (*it)->getId());
 
                     // Set the plugin type id - this will set it up ready
-                    // for port settings
+                    // for the rest of the settings
+		    //
                     Rosegarden::StudioControl::setStudioObjectProperty
                         (pluginMappedId,
                          Rosegarden::MappedPluginSlot::Identifier,
                          plugin->getIdentifier().c_str());
+
+		    // Set opaque string configuration data (e.g. for DSSI plugin)
+		    //
+		    Rosegarden::MappedObjectPropertyList config;
+		    for (Rosegarden::AudioPluginInstance::ConfigMap::const_iterator
+			     i = plugin->getConfiguration().begin();
+			 i != plugin->getConfiguration().end(); ++i) {
+			config.push_back(strtoqstr(i->first));
+			config.push_back(strtoqstr(i->second));
+		    }
+		    Rosegarden::StudioControl::setStudioObjectPropertyList
+			(pluginMappedId,
+			 Rosegarden::MappedPluginSlot::Configuration,
+			 config);
 
                     // Set the bypass
                     //
@@ -791,6 +806,8 @@ void RosegardenGUIDoc::initialiseStudio()
 			     strtoqstr(plugin->getProgram()));
 		    }
 
+		    // Set all the port values
+		    // 
                     Rosegarden::PortInstanceIterator portIt;
 
                     for (portIt = plugin->begin();
@@ -800,8 +817,6 @@ void RosegardenGUIDoc::initialiseStudio()
                             (pluginMappedId,
                              (*portIt)->number,
                              (*portIt)->value);
-                        //RG_DEBUG << "SETTING PORT " << (*portIt)->id << " to "
-                                 //<< (*portIt)->value << endl;
                     }
                 }
             }

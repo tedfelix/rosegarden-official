@@ -66,9 +66,9 @@ public:
 
     // Set a value to a list
     //
-    static bool setStudioObjectProperty(MappedObjectId id,
-                                        const MappedObjectProperty &property,
-                                        MappedObjectValueList value);
+    static bool setStudioObjectPropertyList(MappedObjectId id,
+					    const MappedObjectProperty &property,
+					    const MappedObjectPropertyList &values);
 
     // cheat so we can avoid making calls() during playback
     //

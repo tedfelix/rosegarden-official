@@ -131,11 +131,16 @@ public slots:
     void slotCopy();
     void slotPaste();
     void slotDefault();
+    void slotShowGUI();
+
+    virtual void slotDetails();
 
 signals:
     void pluginSelected(Rosegarden::InstrumentId, int pluginIndex, int plugin);
     void pluginPortChanged(Rosegarden::InstrumentId, int pluginIndex, int portIndex, float value);
     void pluginProgramChanged(Rosegarden::InstrumentId, int pluginIndex, QString program);
+    void showPluginGUI(Rosegarden::InstrumentId, int pluginIndex);
+    void stopPluginGUI(Rosegarden::InstrumentId, int pluginIndex);
 
     // is the plugin being bypassed
     void bypassed(Rosegarden::InstrumentId, int pluginIndex, bool bp);
@@ -167,6 +172,7 @@ protected:
     QPushButton         *m_copyButton;
     QPushButton         *m_pasteButton;
     QPushButton         *m_defaultButton;
+    QPushButton         *m_guiButton;
 
     KComboBox           *m_programCombo;
     std::vector<PluginControl*> m_pluginWidgets;
@@ -175,6 +181,7 @@ protected:
     int                  m_index;
 
     bool                 m_generating;
+    bool                 m_guiShown;
 
     QAccel              *m_accelerators;
 

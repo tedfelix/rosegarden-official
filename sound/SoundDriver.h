@@ -208,6 +208,11 @@ public:
 					  int position,
 					  QString program) = 0;
 
+    virtual void configurePlugin(InstrumentId id,
+				 int position,
+				 QString key,
+				 QString value) = 0;
+
     virtual void setAudioBussLevels(int bussId,
 				    float dB,
 				    float pan) = 0;

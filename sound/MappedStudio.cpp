@@ -124,6 +124,7 @@ const MappedObjectProperty MappedPluginSlot::Position = "position";
 const MappedObjectProperty MappedPluginSlot::Bypassed = "bypassed";
 const MappedObjectProperty MappedPluginSlot::Programs = "programs";
 const MappedObjectProperty MappedPluginSlot::Program = "program";
+const MappedObjectProperty MappedPluginSlot::Configuration = "configuration";
 
 const MappedObjectProperty MappedPluginPort::PortNumber = "portnumber";
 const MappedObjectProperty MappedPluginPort::Name = "name";
@@ -1397,6 +1398,8 @@ MappedPluginSlot::setProperty(const MappedObjectProperty &property,
 	    }
 	}
 
+	m_configuration.clear();
+
     } else if (property == PluginName) {
 	m_name = value;
     } else if (property == Label) {
@@ -1414,8 +1417,8 @@ MappedPluginSlot::setProperty(const MappedObjectProperty &property,
 
 	if (studio) {
 	    studio->getSoundDriver()->setPluginInstanceProgram(m_instrument,
-							     m_position,
-							     value);
+							       m_position,
+							       value);
 	}
     } else {
 
@@ -1427,13 +1430,47 @@ MappedPluginSlot::setProperty(const MappedObjectProperty &property,
 }
 
 void
-MappedPluginSlot::setPropertyList(const MappedObjectProperty &,
-				  const QStringList &)
+MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
+				  const MappedObjectPropertyList &values)
 {
+    if (property == Configuration) {
+
+	MappedStudio *studio =
+	    dynamic_cast<MappedStudio*>(getParent());
+
+	for (MappedObjectPropertyList::const_iterator i = values.begin();
+	     i != values.end(); ++i) {
+
+	    QString key = *i;
+	    QString value = *++i;
+
+	    if (m_configuration.find(key) != m_configuration.end() &&
+		m_configuration[key] == value) continue;
+	    
+	    if (studio) {
+		studio->getSoundDriver()->configurePlugin(m_instrument,
+							  m_position,
+							  key, value);
+	    }
+	}
+
+	m_configuration.clear();
+	
+	for (MappedObjectPropertyList::const_iterator i = values.begin();
+	     i != values.end(); ++i) {
+
+	    QString key = *i;
+	    QString value = *++i;
+
+	    m_configuration[key] = value;
+	}
+    } else {
+	
 #ifdef DEBUG_MAPPEDSTUDIO
-    std::cerr << "MappedPluginSlot::setPropertyList - "
-	      << "not a list property" << std::endl;
+	std::cerr << "MappedPluginSlot::setPropertyList - "
+		  << "not a list property" << std::endl;
 #endif
+    }
 }	
 
 void

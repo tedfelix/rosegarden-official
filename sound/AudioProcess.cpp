@@ -850,6 +850,13 @@ AudioInstrumentMixer::setPluginProgram(InstrumentId id, int position, QString pr
 }
 
 void
+AudioInstrumentMixer::configurePlugin(InstrumentId id, int position, QString key, QString value)
+{
+    RunnablePluginInstance *instance = getPluginInstance(id, position);
+    if (instance) instance->configure(key, value);
+}
+
+void
 AudioInstrumentMixer::resetAllPlugins()
 {
     //!!! lock still required here to protect against calling

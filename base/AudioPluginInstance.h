@@ -20,6 +20,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 #include "XmlExportable.h"
 
@@ -136,6 +137,11 @@ public:
     int getMappedId() const { return m_mappedId; }
     void setMappedId(int value) { m_mappedId = value; }
 
+    typedef std::map<std::string, std::string> ConfigMap;
+    const ConfigMap &getConfiguration() { return m_config; }
+    std::string getConfigurationValue(std::string k) const;
+    void setConfigurationValue(std::string k, std::string v);
+
 protected:
 
     int                                m_mappedId;
@@ -151,6 +157,7 @@ protected:
 
     std::string                        m_program;
 
+    ConfigMap                          m_config;
 };
 
 }

@@ -154,9 +154,9 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
 }
 
 bool
-StudioControl::setStudioObjectProperty(MappedObjectId id,
+StudioControl::setStudioObjectPropertyList(MappedObjectId id,
                         const MappedObjectProperty &property,
-                        MappedObjectValueList value)
+                        const MappedObjectPropertyList &values)
 {
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
@@ -165,9 +165,9 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
     //
     streamOut << id;
     streamOut << property;
-    streamOut << value;
+    streamOut << values;
 
-    rgapp->sequencerSend("setMappedProperty(int, QString, std::vector<float>)",
+    rgapp->sequencerSend("setMappedPropertyList(int, QString, MappedObjectPropertyList)",
                          data);
     
     return true;

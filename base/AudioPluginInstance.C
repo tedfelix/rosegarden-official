@@ -119,6 +119,12 @@ AudioPluginInstance::toXmlString()
                << "\"/>" << std::endl;
     }
 
+    for (ConfigMap::iterator i = m_config.begin(); i != m_config.end(); ++i) {
+	plugin << "                <configure key=\""
+	       << encode(i->first) << "\"=\""
+	       << encode(i->second) << "\"/>" << std::endl;
+    }
+
     if (m_position == Instrument::SYNTH_PLUGIN_POSITION) {
 	plugin << "            </synth>";
     } else {
@@ -182,7 +188,20 @@ AudioPluginInstance::clearPorts()
     for (; it != m_ports.end(); ++it)
         delete (*it);
     m_ports.erase(m_ports.begin(), m_ports.end());
+}
 
+std::string
+AudioPluginInstance::getConfigurationValue(std::string k) const
+{
+    ConfigMap::const_iterator i = m_config.find(k);
+    if (i != m_config.end()) return i->second;
+    return "";
+}
+	
+void
+AudioPluginInstance::setConfigurationValue(std::string k, std::string v)
+{
+    m_config[k] = v;
 }
 
 }

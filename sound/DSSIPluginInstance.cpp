@@ -421,11 +421,22 @@ DSSIPluginInstance::setPortValue(unsigned int portNumber, float value)
 }
 
 void
+DSSIPluginInstance::configure(QString key,
+			      QString value)
+{
+    if (!m_descriptor || !m_descriptor->configure) return;
+    
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::configure(" << key << "," << value << ")" << std::endl;
+#endif
+
+    m_descriptor->configure(m_instanceHandle, key.data(), value.data());
+}
+
+void
 DSSIPluginInstance::sendEvent(const RealTime &eventTime,
 			      const snd_seq_event_t *event)
 {
-    //!!! how to ensure events are ordered in the target buffer?
-
 #ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance::sendEvent at " << eventTime << std::endl;
 #endif

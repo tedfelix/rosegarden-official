@@ -82,6 +82,7 @@ public:
     void setStudio(Rosegarden::Studio *studio) { m_studio = studio; }
 
     void startGUI(Rosegarden::InstrumentId id, int position);
+    void showGUI(Rosegarden::InstrumentId id, int position);
     void stopGUI(Rosegarden::InstrumentId id, int position);
 
     void postMessage(OSCMessage *message); // I take over ownership of message

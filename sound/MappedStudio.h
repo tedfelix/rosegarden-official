@@ -23,7 +23,7 @@
 #include <string>
 #include <vector>
 #include <qdatastream.h>
-#include <qstringlist.h>
+#include <qstring.h>
 
 #include "MappedCommon.h"
 #include "Instrument.h"
@@ -109,15 +109,10 @@ public:
     virtual void setProperty(const MappedObjectProperty &/* property */,
                              QString /* value */) { }
 
-    // Not a requirement - but an occasionally useful method
-    //
-    virtual void setProperty(const MappedObjectProperty & /*property*/,
-                             MappedObjectValueList /*value*/) { }
-
     // Only relevant to objects that have list properties
     //
     virtual void setPropertyList(const MappedObjectProperty &/* property */,
-				 const QStringList &/* values */) { }
+				 const MappedObjectPropertyList &/* values */) { }
 
     // Ownership
     //
@@ -454,10 +449,11 @@ public:
     static const MappedObjectProperty PortCount;
     static const MappedObjectProperty Ports;
     static const MappedObjectProperty Program;
-    static const MappedObjectProperty Programs;
+    static const MappedObjectProperty Programs; // list property
     static const MappedObjectProperty Instrument;
     static const MappedObjectProperty Position;
     static const MappedObjectProperty Bypassed;
+    static const MappedObjectProperty Configuration; // list property
 
     MappedPluginSlot(MappedObject *parent, MappedObjectId id);
     ~MappedPluginSlot();
@@ -478,7 +474,7 @@ public:
                              QString value);
 
     virtual void setPropertyList(const MappedObjectProperty &,
-				 const QStringList &);
+				 const MappedObjectPropertyList &);
 
     void setPort(unsigned long portNumber, float value);
 
@@ -498,6 +494,8 @@ protected:
     InstrumentId              m_instrument;
     int                       m_position;
     bool                      m_bypassed;
+
+    std::map<QString, QString> m_configuration;
 };
 
 class MappedPluginPort : public MappedObject

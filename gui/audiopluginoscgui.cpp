@@ -120,7 +120,6 @@ static int osc_message_handler(const char *path, const char *types, lo_arg **arg
     message->setTarget(instrument);
     message->setTargetData(position);
     message->setMethod(qstrtostr(method));
-    message->clearArgs();
 
     int arg = 0;
     while (types && arg < argc && types[arg]) {
@@ -200,6 +199,21 @@ AudioPluginOSCGUIManager::startGUI(InstrumentId instrument, int position)
 
 	RG_DEBUG << "AudioPluginOSCGUIManager::startGUI: failed to start GUI: "
 		 << e.getMessage() << endl;
+    }
+}
+
+void
+AudioPluginOSCGUIManager::showGUI(InstrumentId instrument, int position)
+{
+    if (m_guis.find(instrument) != m_guis.end() &&
+	m_guis[instrument].find(position) != m_guis[instrument].end()) {
+	
+	OSCMessage *showMessage = new OSCMessage;
+	showMessage->setMethod("show");
+	m_guis[instrument][position]->sendToGUI(showMessage);
+
+    } else {
+	startGUI(instrument, position);
     }
 }
 
@@ -466,7 +480,6 @@ AudioPluginOSCGUIManager::dispatch()
 	    
 	    OSCMessage *showMessage = new OSCMessage;
 	    showMessage->setMethod("show");
-	    showMessage->clearArgs();
 	    gui->sendToGUI(showMessage);
 
 	} else if (method == "configure") {
@@ -492,7 +505,10 @@ AudioPluginOSCGUIManager::dispatch()
 	    }
 	    QString value = &arg->s;
 
-	    //!!!
+	    RG_DEBUG << "AudioPluginOSCGUIManager: configure(" << key << "," << value
+		     << ")" << endl;
+
+	    m_app->slotPluginConfigurationChanged(instrument, position, key, value);
 
 	} else if (method == "midi") {
 
@@ -603,7 +619,9 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(Rosegarden::AudioPluginInstance *instance,
 
 AudioPluginOSCGUI::~AudioPluginOSCGUI()
 {
-    //!!! tell GUI to exit
+    OSCMessage *showMessage = new OSCMessage;
+    showMessage->setMethod("quit");
+    sendToGUI(showMessage);
 }
 
 void

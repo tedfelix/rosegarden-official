@@ -1771,8 +1771,6 @@ JackDriver::releaseAudioQueueLocks()
     return rv;
 }
 
-//!!! should really eliminate these and call on mixer directly from
-// driver I s'pose
 
 void
 JackDriver::setPluginInstance(InstrumentId id, QString identifier,
@@ -1825,6 +1823,12 @@ void
 JackDriver::setPluginInstanceProgram(InstrumentId id, int position, QString program)
 {
     if (m_instrumentMixer) m_instrumentMixer->setPluginProgram(id, position, program);
+}
+
+void
+JackDriver::configurePlugin(InstrumentId id, int position, QString key, QString value)
+{
+    if (m_instrumentMixer) m_instrumentMixer->configurePlugin(id, position, key, value);
 }
 
 RunnablePluginInstance *

@@ -181,6 +181,15 @@ public:
 #endif
     }
 
+    virtual void configurePlugin(InstrumentId id,
+				 int position,
+				 QString key,
+				 QString value) {
+#ifdef HAVE_LIBJACK
+	if (m_jackDriver) m_jackDriver->configurePlugin(id, position, key, value);
+#endif
+    }
+
     virtual void setAudioBussLevels(int bussId,
 				    float dB,
 				    float pan) {

@@ -58,14 +58,18 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                                      AudioPluginManager *aPM,
                                      Instrument *instrument,
                                      int index):
-    KDialogBase(parent, "", false, i18n("Audio Plugin"), Close),
+    KDialogBase(parent, "", false, i18n("Audio Plugin"), Close | Details),
     m_pluginManager(aPM),
     m_instrument(instrument),
     m_index(index),
-    m_generating(true)
+    m_generating(true),
+    m_guiShown(false)
 {
     setSizePolicy(QSizePolicy(QSizePolicy::Preferred,
                               QSizePolicy::Fixed));
+
+    setButtonText(Details, i18n("Editor"));
+    //!!! need to know whether a GUI is available or not
 
     QVBox *vbox = makeVBoxMainWidget();
 
@@ -130,6 +134,21 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_generating = false;
 
     m_accelerators = new QAccel(this);
+}
+
+void
+AudioPluginDialog::slotDetails()
+{
+    slotShowGUI();
+}
+
+void
+AudioPluginDialog::slotShowGUI()
+{
+    if (!m_guiShown) {
+	emit showPluginGUI(m_instrument->getId(), m_index);
+	m_guiShown = true;
+    }
 }
 
 void
@@ -230,6 +249,13 @@ AudioPluginDialog::slotCategorySelected(int)
 void
 AudioPluginDialog::slotPluginSelected(int i)
 {
+    bool guiWasShown = m_guiShown;
+
+    if (m_guiShown) {
+	emit stopPluginGUI(m_instrument->getId(), m_index);
+	m_guiShown = false;
+    }
+
     int number = m_pluginsInList[i];
 
     RG_DEBUG << "AudioPluginDialog::::slotPluginSelected - "
@@ -238,9 +264,6 @@ AudioPluginDialog::slotPluginSelected(int i)
     QString caption =
 	strtoqstr(m_instrument->getName()) +
 	QString(" [ %1 ] - ").arg(m_index + 1);
-
-    // tell the sequencer
-    emit pluginSelected(m_instrument->getId(), m_index, number - 1);
 
     if (number == 0)
     {
@@ -265,7 +288,10 @@ AudioPluginDialog::slotPluginSelected(int i)
     m_programCombo = 0;
 
     makePluginParamsBox(parent);
-    
+
+    AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
+    if (!inst) return;
+
     if (plugin)
     {
         setCaption(caption + plugin->getName());
@@ -276,13 +302,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 
         QToolTip::hide();
         QToolTip::remove(m_pluginList);
-
         QToolTip::add(m_pluginList, pluginInfo);
-
-        // Set the identifier on our own instance - clear the ports down
-        //
-        AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
-	if (!inst) return;
 
 	inst->setIdentifier(plugin->getIdentifier().data());
 
@@ -290,21 +310,6 @@ AudioPluginDialog::slotPluginSelected(int i)
 	// action (after the constructor)
 	//
 	if (m_generating == false) inst->clearPorts();
-
-	int current = 0;
-	QStringList programs = getProgramsForInstance(inst, current);
-
-	if (programs.count() > 0) {
-	    m_programCombo = new KComboBox(m_pluginParamsBox);
-	    m_programCombo->insertStringList(programs);
-	    m_programCombo->setCurrentItem(current);
-	    m_gridLayout->addMultiCellWidget(new QLabel(i18n("Program:  "), m_pluginParamsBox),
-					     0, 0, 0, 0, Qt::AlignRight);
-	    m_gridLayout->addMultiCellWidget(m_programCombo,
-					     0, 0, 1, 7, Qt::AlignLeft);
-	    connect(m_programCombo, SIGNAL(activated(const QString &)),
-		    this, SLOT(slotPluginProgramChanged(const QString &)));
-	}
 
         PortIterator it = plugin->begin();
         int count = 0;
@@ -371,6 +376,29 @@ AudioPluginDialog::slotPluginSelected(int i)
 
     adjustSize();
     setFixedSize(minimumSizeHint());
+
+    // tell the sequencer
+    emit pluginSelected(m_instrument->getId(), m_index, number - 1);
+
+    int current = 0;
+    QStringList programs = getProgramsForInstance(inst, current);
+    
+    if (programs.count() > 0) {
+	m_programCombo = new KComboBox(m_pluginParamsBox);
+	m_programCombo->insertStringList(programs);
+	m_programCombo->setCurrentItem(current);
+	m_gridLayout->addMultiCellWidget(new QLabel(i18n("Program:  "), m_pluginParamsBox),
+					 0, 0, 0, 0, Qt::AlignRight);
+	m_gridLayout->addMultiCellWidget(m_programCombo,
+					 0, 0, 1, 7, Qt::AlignLeft);
+	connect(m_programCombo, SIGNAL(activated(const QString &)),
+		this, SLOT(slotPluginProgramChanged(const QString &)));
+    }
+
+    if (guiWasShown) {
+	emit showPluginGUI(m_instrument->getId(), m_index);
+	m_guiShown = true;
+    }
 }
 
 QStringList

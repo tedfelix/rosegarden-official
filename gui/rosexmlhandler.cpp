@@ -1687,6 +1687,22 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_plugin->addPort(portId, value);
         }
 
+    } else if (lcName == "configure") {
+
+        if (m_section != InPlugin)
+        {
+            m_errorString = "Found Configure outside Plugin";
+            return false;
+        }
+
+        QString key = atts.value("key");
+        QString value = atts.value("value");
+
+        if (m_plugin)
+        {
+            m_plugin->setConfigurationValue(qstrtostr(key), qstrtostr(value));
+        }
+
     } else if (lcName == "metronome") {
 
         if (m_section != InStudio)

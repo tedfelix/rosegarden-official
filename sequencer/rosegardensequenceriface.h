@@ -242,10 +242,10 @@ public:
 
     // Set a MappedObject to a property list
     //
-    virtual void setMappedProperty(
+    virtual void setMappedPropertyList(
                                int id,
                                const QString &property,
-                               std::vector<float> value) = 0;
+                               const Rosegarden::MappedObjectPropertyList &values) = 0;
 
     // Get a mapped object id for a object type
     //
