@@ -312,7 +312,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 
     QLabel *programLabel = 0;
 
-    if (plugin->isSynth()) {
+    if (plugin && plugin->isSynth()) {
 
 	programLabel = new QLabel(i18n("Program:  "), m_pluginParamsBox);
 	m_programCombo = new KComboBox(m_pluginParamsBox);
@@ -412,7 +412,7 @@ AudioPluginDialog::slotPluginSelected(int i)
     // tell the sequencer
     emit pluginSelected(m_instrument->getId(), m_index, number - 1);
 
-    if (plugin->isSynth()) {
+    if (plugin && plugin->isSynth()) {
 	int current = 0;
 	QStringList programs = getProgramsForInstance(inst, current);
     
