@@ -2,7 +2,9 @@
 #ifndef _ELEMENT2_H_
 #define _ELEMENT2_H_
 
-#include <map>
+// Std
+#include <list>
+//#include <map>
 #include <hash_map>
 #include <string>
 
@@ -172,8 +174,29 @@ PropertyStore<P>::unparse()
     return PropertyDefn<P>::unparse(m_data);
 }
 
+//////////////////////////////////////////////////////////////////////
+
 class ViewElement;
-typedef vector<ViewElement*> ViewElements;
+class ViewElements : public vector<ViewElement*>
+{
+public:
+    ViewElements(const ViewElements &e) : vector<ViewElement*>(e) {}
+    ~ViewElements();
+};
+
+
+// see rosegarden/docs/discussion/names.txt - Events are the basic datatype
+class Element2;
+typedef Element2 Event;
+class EventList : public list<Event*>
+{
+public:
+    EventList(const EventList &e) : list<Event*>(e) {}
+    ~EventList();
+};
+
+//////////////////////////////////////////////////////////////////////
+
 
 class Element2
 {
@@ -201,11 +224,16 @@ public:
     void setPackage(const string &p) { m_package = p; }
     void setType(const string &t)    { m_type = t; }
 
+    EventList* group()             { return m_group; }
+    const EventList* group() const { return m_group; }
+    void setGroup(EventList*);
+
     duration getDuration() const { return m_duration; }
     void setDuration(duration d)      { m_duration = d; }
 
-    ViewElements& viewElements()             { return *m_viewElements; }
-    const ViewElements& viewElements() const { return *m_viewElements; }
+    ViewElements* viewElements()             { return m_viewElements; }
+    const ViewElements* viewElements() const { return m_viewElements; }
+    void setViewElements(ViewElements*);
 
     bool has(const string &name) const;
 
@@ -235,6 +263,8 @@ private:
 
     /// The ViewElements this Event corresponds to (one per View type)
     ViewElements *m_viewElements;
+
+    EventList *m_group;
 
     //    typedef map<string, PropertyStoreBase *> PropertyMap;
     typedef hash_map<string, PropertyStoreBase*, hashstring, eqstring> PropertyMap;
@@ -306,13 +336,6 @@ Element2::setFromString(const string &name, string value)
 {
     set<P>(name, PropertyDefn<P>::parse(value));
 }
-
-// Std
-#include <list>
-
-// see rosegarden/docs/discussion/names.txt - Events are the basic datatype
-typedef Element2 Event;
-typedef list<Event*> EventList;
 
 
 class ViewElement

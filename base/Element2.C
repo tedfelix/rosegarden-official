@@ -66,7 +66,8 @@ PropertyStoreBase::~PropertyStoreBase()
 
 Element2::Element2()
     : m_duration(0),
-      m_viewElements(0)
+      m_viewElements(0),
+      m_group(0)
 {
 }
 
@@ -74,7 +75,8 @@ Element2::Element2(const string &package, const string &type)
     : m_package(package),
       m_type(type),
       m_duration(0),
-      m_viewElements(0)
+      m_viewElements(0),
+      m_group(0)
 {
 }
 
@@ -87,6 +89,7 @@ Element2::~Element2()
 {
     scrapMap();
     delete m_viewElements;
+    delete m_group;
 }
 
 Element2&
@@ -125,7 +128,30 @@ Element2::copyFrom(const Element2 &e)
         m_properties.insert(PropertyPair((*i).first, (*i).second->clone()));
     }
 
-    m_viewElements = new ViewElements(e.viewElements());
+    m_viewElements = new ViewElements(*(e.viewElements()));
+}
+
+
+void
+Element2::setGroup(EventList *el)
+{
+    if (m_group) {
+        // this will also delete all elements in m_group
+        delete m_group;
+    }
+    
+    m_group = el;
+}
+
+void
+Element2::setViewElements(ViewElements *ve)
+{
+    if (m_viewElements) {
+        // this will also delete all elements in m_group
+        delete m_viewElements;
+    }
+    
+    m_viewElements = ve;
 }
 
 
@@ -137,6 +163,20 @@ ViewElement::ViewElement(Event *e)
 
 ViewElement::~ViewElement()
 {
+}
+
+EventList::~EventList()
+{
+    // delete content
+    for(iterator it = begin(); it != end(); ++it)
+        delete (*it);
+}
+
+ViewElements::~ViewElements()
+{
+    // delete content
+    for(iterator it = begin(); it != end(); ++it)
+        delete (*it);
 }
 
 
