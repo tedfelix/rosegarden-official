@@ -669,7 +669,7 @@ AdjustMenuTupletCommand::modifySegment()
 	     getSegment().isBeforeEndMarker(i); ++i) {
 
 	    if ((*i)->getNotationAbsoluteTime() >=
-		getStartTime() + (m_unit * m_tupled)) break;
+	        getStartTime() + (m_unit * m_tupled)) break;
 
 	    Event *e = *i;
 
