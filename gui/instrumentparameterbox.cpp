@@ -423,8 +423,9 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
     RG_DEBUG << "AudioInstrumentParameterPanel::slotSetRecord - "
              << "value = " << value << endl;
 
-    if (m_selectedInstrument)
-        cout << "INSTRUMENT NAME = " << m_selectedInstrument->getName() << endl;
+    //if (m_selectedInstrument)
+        //cout << "INSTRUMENT NAME = " 
+               //<< m_selectedInstrument->getName() << endl;
 
     // Set the background colour for the button
     //
@@ -448,6 +449,9 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
 
             connect(m_audioFader->m_fader, SIGNAL(faderChanged(int)),
                     this, SLOT(slotSelectAudioLevel(int)));
+
+            // Set the prepend text on the audio fader
+            m_audioFader->m_fader->setPrependText(i18n("Record level = "));
         }
     }
     else
@@ -469,6 +473,9 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
 
             connect(m_audioFader->m_fader, SIGNAL(faderChanged(int)),
                     this, SLOT(slotSelectAudioLevel(int)));
+
+            // Set the prepend text on the audio fader
+            m_audioFader->m_fader->setPrependText(i18n("Playback level = "));
         }
     }
 
@@ -1044,19 +1051,29 @@ AudioInstrumentParameterPanel::slotRecord()
 
     // At the moment we can't turn a recording button off
     //
-    if (!m_audioFader->m_recordButton->isOn())
+    if (m_audioFader->m_recordButton->isOn())
     {
         m_audioFader->m_recordButton->setOn(true);
 
         if (m_selectedInstrument)
         {
-            cout << "SETTING FADER RECORD LEVEL = " 
-                 << int(m_selectedInstrument->getRecordLevel()) << endl;
+            //std::cout << "SETTING FADER RECORD LEVEL = " 
+                 //<< int(m_selectedInstrument->getRecordLevel()) << endl;
+
             // set the fader value to the record value
             m_audioFader->m_fader->
                 setFader(m_selectedInstrument->getRecordLevel());
         }
+
+        emit recordButton(m_selectedInstrument->getId(),
+                          m_audioFader->m_recordButton->isOn());
     }
+    else
+    {
+        m_audioFader->m_recordButton->setOn(true);
+    }
+
+    /*
     else
     {
         if (m_selectedInstrument)
@@ -1068,10 +1085,8 @@ AudioInstrumentParameterPanel::slotRecord()
             cout << "SETTING FADER LEVEL = " 
                  << int(m_selectedInstrument->getVelocity()) << endl;
         }
-
-        emit recordButton(m_selectedInstrument->getId(),
-                          m_audioFader->m_recordButton->isOn());
     }
+    */
 }
 
 void
@@ -1085,7 +1100,7 @@ AudioInstrumentParameterPanel::slotSetPan(float pan)
          Rosegarden::MappedAudioFader::Pan,
          Rosegarden::MappedObjectValue(pan));
 
-    m_selectedInstrument->setPan(int(pan));
+    m_selectedInstrument->setPan(Rosegarden::MidiByte(pan + 100.0));
 }
 
 void

@@ -300,14 +300,22 @@ public slots:
 
     void slotFloatTimeout();
 
+    // Prependable text for tooltip
+    //
+    void setPrependText(const QString &text) { m_prependText = text; }
+
 signals:
     void faderChanged(int);
 
+protected slots:
+    void slotShowFloatText();
+
 protected:
-    void showFloatText();
 
     RosegardenTextFloat *m_float;
     QTimer              *m_floatTimer;
+
+    QString              m_prependText;
 };
 
 

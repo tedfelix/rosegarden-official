@@ -1,5 +1,5 @@
-0.9(?) tasks
-============
+0.9 tasks
+=========
 
 o MTC/MMC - transport awareness
   - we're now sending Midi RealTime sequencer control messages
@@ -9,8 +9,8 @@ o MTC/MMC - transport awareness
 
 o Audio
    - new fader widget [DONE]
-   - recording stereo WAVs [ALMOST DONE]
-   - audio connection management
+   - recording stereo WAVs [DONE]
+   - audio connection management [FIRST PASS DONE]
    - hardcoded format segment values
    - panning [DONE]
    - plugin bypass [DONE but a couple of bugs]
@@ -20,7 +20,7 @@ o Audio
    - libsoundfile support (LSFSoundFile class?)
    - MP3/OGG support
    - exceptions and return values
-   - stereo vu meters (0dB level = 1.0f etc)
+   - stereo vu meters (0dB level = 1.0f etc) [HALF DONE]
    - jack process tidy up (Bob Ham inspired) [DONE]
    - notify disk space available on audio path [DONE]
    - countdown dialog for audio recording [DONE]
@@ -28,7 +28,7 @@ o Audio
 
 o Audio busses and routing
    - n jack input routes [DONE]
-   - multiple audio record arm
+   - multiple audio record arm [HALF DONE - for 0.9.5]
 
 o JACK autostart and process management  [SCRIPT?]
 o automatic Sequencer process management [SCRIPT?]

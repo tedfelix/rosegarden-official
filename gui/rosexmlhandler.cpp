@@ -1350,6 +1350,30 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         setSubHandler(new ConfigurationXmlSubHandler
 		      (lcName, &getComposition().getMetadata()));
 
+    } else if (lcName == "recordlevel") {
+
+        if (m_section != InInstrument)
+        {
+            m_errorString = i18n("Found recordLevel outside Instrument");
+            return false;
+        }
+
+        int value = atts.value("value").toInt();
+
+        m_instrument->setRecordLevel(value);
+
+
+    } else if (lcName == "audioinput") {
+
+        if (m_section != InInstrument)
+        {
+            m_errorString = i18n("Found audioInput outside Instrument");
+            return false;
+        }
+        int value = atts.value("value").toInt();
+
+        m_instrument->setMappedAudioInput(value);
+
     } else {
         RG_DEBUG << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
     }

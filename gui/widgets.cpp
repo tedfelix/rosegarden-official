@@ -447,10 +447,14 @@ RosegardenProgressDialog* CurrentProgressDialog::m_currentProgressDialog = 0;
 RosegardenFader::RosegardenFader(QWidget *parent):
     QSlider(Qt::Vertical, parent),
     m_float(new RosegardenTextFloat(this)),
-    m_floatTimer(new QTimer())
+    m_floatTimer(new QTimer()),
+    m_prependText("")
 {
     connect(this, SIGNAL(sliderMoved(int)),
             this, SLOT(slotValueChanged(int)));
+
+    connect(this, SIGNAL(sliderPressed()),
+            this, SLOT(slotShowFloatText()));
 
     // connect timer
     connect(m_floatTimer, SIGNAL(timeout()), this, SLOT(slotFloatTimeout()));
@@ -470,7 +474,7 @@ RosegardenFader::slotValueChanged(int value)
 
     emit faderChanged(adjValue);
 
-    showFloatText();
+    slotShowFloatText();
 }
 
 void 
@@ -487,13 +491,13 @@ RosegardenFader::setFader(int value)
 }
 
 void
-RosegardenFader::showFloatText()
+RosegardenFader::slotShowFloatText()
 {
     float dbValue = 10.0 * log10(float(maxValue() - value())/100.0);
 
     // draw on the float text
     //m_float->setText(QString("%1").arg(maxValue() - value()));
-    m_float->setText(QString("%1 dB").arg(dbValue));
+    m_float->setText(QString("%1%2 dB").arg(m_prependText).arg(dbValue));
 
     // Reposition - we need to sum the relative positions up to the
     // topLevel or dialog to please move().

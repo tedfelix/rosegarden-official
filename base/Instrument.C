@@ -259,70 +259,73 @@ Instrument::toXmlString()
     instrument << "\" channel=\"" << (int)m_channel;
     instrument << "\" type=\"";
 
-    switch(m_type)
+    if (m_type == Midi)
     {
-        case Midi:
-            instrument << "midi";
-            break;
+        instrument << "midi\">" << std::endl;
 
-        case Audio:
-            instrument << "audio";
-            break;
+        if (m_sendBankSelect)
+        {
+            instrument << "            <bank msb=\"" << (int)m_msb;
+            instrument << "\" lsb=\"" << (int)m_lsb << "\"/>" << std::endl;
+        }
 
-        default:
-            instrument << "unknown";
-            break;
-    }
-
-    instrument << "\">" << std::endl;
-
-    if (m_sendBankSelect)
-    {
-        instrument << "            <bank msb=\"" << (int)m_msb;
-        instrument << "\" lsb=\"" << (int)m_lsb << "\"/>" << std::endl;
-    }
-
-    if (m_sendProgramChange)
-    {
-        instrument << "            <program id=\""
-                   << (int)m_programChange << "\"/>"
-                   << std::endl;
-    }
+        if (m_sendProgramChange)
+        {
+            instrument << "            <program id=\""
+                       << (int)m_programChange << "\"/>"
+                       << std::endl;
+        }
     
-    instrument << "            <pan value=\""
-               << (int)m_pan << "\"/>" << std::endl;
+        instrument << "            <pan value=\""
+                   << (int)m_pan << "\"/>" << std::endl;
 
-    instrument << "            <volume value=\""
-               << (int)m_velocity << "\"/>" << std::endl;
+        instrument << "            <volume value=\""
+                   << (int)m_velocity << "\"/>" << std::endl;
 
-    // Advanced MIDI controls
-    //
-    instrument << "            <reverb value=\""
-                   << (int)m_reverb << "\"/>" << std::endl;
+        // Advanced MIDI controls
+        //
+        instrument << "            <reverb value=\""
+                       << (int)m_reverb << "\"/>" << std::endl;
 
-    instrument << "            <chorus value=\""
-                   << (int)m_chorus << "\"/>" << std::endl;
+        instrument << "            <chorus value=\""
+                       << (int)m_chorus << "\"/>" << std::endl;
 
-    instrument << "            <filter value=\""
-                   << (int)m_filter << "\"/>" << std::endl;
+        instrument << "            <filter value=\""
+                       << (int)m_filter << "\"/>" << std::endl;
 
-    instrument << "            <resonance value=\""
-                   << (int)m_resonance << "\"/>" << std::endl;
+        instrument << "            <resonance value=\""
+                       << (int)m_resonance << "\"/>" << std::endl;
 
-    instrument << "            <attack value=\""
-                   << (int)m_attack << "\"/>" << std::endl;
+        instrument << "            <attack value=\""
+                       << (int)m_attack << "\"/>" << std::endl;
 
-    instrument << "            <release value=\""
-                   << (int)m_release << "\"/>" << std::endl;
+        instrument << "            <release value=\""
+                       << (int)m_release << "\"/>" << std::endl;
 
-
-    PluginInstanceIterator it = m_audioPlugins.begin();
-    for (; it != m_audioPlugins.end(); it++)
+    }
+    else // Audio
     {
-        instrument << (*it)->toXmlString();
+        instrument << "audio\">" << std::endl;
+
+        instrument << "            <pan value=\""
+                   << (int)m_pan << "\"/>" << std::endl;
+
+        instrument << "            <volume value=\""
+                   << (int)m_velocity << "\"/>" << std::endl;
+
+        instrument << "            <recordLevel value=\""
+                   << (int)m_recordLevel << "\"/>" << std::endl;
+
+        instrument << "            <audioInput value=\""
+                   << m_mappedAudioInput << "\"/>" << std::endl;
+
+        PluginInstanceIterator it = m_audioPlugins.begin();
+        for (; it != m_audioPlugins.end(); it++)
+        {
+            instrument << (*it)->toXmlString();
+        }
     }
         
-
     instrument << "        </instrument>" << std::endl
 #if (__GNUC__ < 3)
                << std::endl << std::ends;
