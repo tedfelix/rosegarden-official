@@ -579,6 +579,8 @@ void RosegardenGUIApp::initView()
     // Transport setup
     //
 
+    slotEnableTransport(true);
+
     // set the tempo in the transport
     //
     m_transport->setTempo(comp.getTempo());
@@ -661,6 +663,9 @@ bool RosegardenGUIApp::openDocumentFile(const char* _cmdl)
     m_doc->saveIfModified();
     m_doc->closeDocument();
 
+    slotEnableTransport(false); // disable transport prior to loading
+    // we can't process transport events while reading the file
+
     if (m_doc->openDocument(_cmdl)) {
 
         initView();
@@ -711,6 +716,7 @@ void RosegardenGUIApp::openFile(const QString& url)
       slotStop();
 
     m_doc->closeDocument();
+    slotEnableTransport(false);
     m_doc->openDocument(u->path());
 
     initView();
@@ -861,7 +867,9 @@ void RosegardenGUIApp::readProperties(KConfig* _cfg)
             QString tempname = kapp->checkRecoverFile(filename, canRecover);
   	
             if (canRecover) {
+                slotEnableTransport(false);
                 m_doc->openDocument(tempname);
+                slotEnableTransport(true);
                 m_doc->setModified();
                 QFileInfo info(filename);
                 m_doc->setAbsFilePath(info.absFilePath());
@@ -870,7 +878,9 @@ void RosegardenGUIApp::readProperties(KConfig* _cfg)
             }
         } else {
             if (!filename.isEmpty()) {
+                slotEnableTransport(false);
                 m_doc->openDocument(filename);
+                slotEnableTransport(true);
             }
         }
 
@@ -1422,6 +1432,12 @@ void RosegardenGUIApp::slotStatusHelpMsg(const QString &text)
     ///////////////////////////////////////////////////////////////////
     // change status message of whole statusbar temporary (text, msec)
     statusBar()->message(text, 2000);
+}
+
+void RosegardenGUIApp::slotEnableTransport(bool enable)
+{
+    if (m_transport)
+        m_transport->setEnabled(enable);
 }
 
 void RosegardenGUIApp::slotPointerSelected()

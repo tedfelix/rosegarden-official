@@ -547,6 +547,11 @@ public slots:
     void slotStatusHelpMsg(const QString &text);
 
     /**
+     * enables/disables the transport window
+     */
+    void slotEnableTransport(bool);
+
+    /**
      * segment select tool
      */
     void slotPointerSelected();
