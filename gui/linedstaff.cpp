@@ -380,15 +380,20 @@ LinedStaff::getBarExtents(double x, int y) const
 	double layoutX = m_barLines[i].first;
         int barRow = getRowForLayoutX(layoutX);
 
-        QCanvasLine *line = m_barLines[i].second;
-
         if (m_pageMode != LinearMode && (barRow < row)) continue;
-        if (line->x() <= x) continue;
 
-        return QRect(int(m_barLines[i-1].second->x()),
+        QCanvasLine *line = dynamic_cast<QCanvasLine*>
+            (m_barLines[i].second);
+
+        if (line)
+        {
+            if (line->x() <= x) continue;
+
+            return QRect(int(m_barLines[i-1].second->x()),
                      getCanvasYForTopOfStaff(barRow),
                      int(line->x() - m_barLines[i-1].second->x()),
                      getHeightOfRow());
+        }
     }
 
     // failure
