@@ -394,7 +394,21 @@ EraseNotationCommand::modifySegment()
 	    m_relayoutEndTime = getSegment().getEndTime();
 	}
 
-	eventsToErase.push_back(*i);
+	// Erasing rests is dangerous and unnecessary -- when we erase
+	// a note or rest, any surrounding rests may be erased and
+	// collapsed as well, which means we may blow up when attempting
+	// subsequently to erase one of those explicitly.  If we never
+	// explicitly erase a rest, we should be fine.
+
+	//!!! unless we _really_ want to do it, and should find some
+	// way to make it work at the SegmentNotationHelper level -- 
+	// perhaps we should anyway (eraseEvents method?) -- we
+	// desperately need a method to make all the rests in a
+	// region valid and "canonical" 
+
+	if (!(*i)->isa(Rosegarden::Note::EventRestType)) {
+	    eventsToErase.push_back(*i);
+	}
     }
 
     SegmentNotationHelper helper(getSegment());

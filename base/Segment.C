@@ -301,6 +301,18 @@ Segment::iterator Segment::findTime(timeT t) const
 }
 
 
+Segment::iterator
+Segment::findNearestTime(timeT t) const
+{
+    iterator i = findTime(t);
+    if (i == end() || (*i)->getAbsoluteTime() > t) {
+	if (i == begin()) return end();
+	else --i;
+    }
+    return i;
+}
+
+
 timeT
 Segment::getBarStartForTime(timeT t) const
 {

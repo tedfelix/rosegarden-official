@@ -57,7 +57,7 @@ public:
      * Add an Event to the selection.  The Event should come from
      * the Segment that was passed to the constructor.
      */
-    void addEvent(Event* e) { m_segmentEvents.insert(e); }
+    void addEvent(Event* e);
 
     /**
      * Test whether a given Event (in the Segment) is part of
@@ -69,12 +69,12 @@ public:
      * Return the time at which the first Event in the selection
      * begins.
      */
-    timeT getBeginTime() const;
+    timeT getBeginTime() const { return m_beginTime; }
 
     /**
      * Return the time at which the last Event in the selection ends.
      */
-    timeT getEndTime() const;
+    timeT getEndTime() const { return m_endTime; }
 
     /**
      * Return the total duration spanned by the selection.
@@ -114,6 +114,9 @@ protected:
 
     /// iterators pointing to Events from the original Segment
     eventcontainer m_segmentEvents;
+
+    timeT m_beginTime;
+    timeT m_endTime;
 };
 
 

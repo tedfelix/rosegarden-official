@@ -1133,13 +1133,13 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
              << endl;
 
 	if (!testOnly) {
-	    //!!! No! This will break Segment ordering! Y'know, there'd be
-	    // a lot to be said for removing Event::setAbsoluteTime and only
-	    // allowing time (& subordering, and possibly duration as well)
-	    // to be set at construction time -- only problem is it'd make
-	    // it painful to copy an event and change the copy's time
-	    (*lastEvent)->setAbsoluteTime(finalTime);
-	    (*lastEvent)->setDuration((*lastEvent)->getDuration() - (finalTime - eventTime));
+	    // can't safely change the absolute time of an event in a segment
+	    Event *newEvent = new Event(**lastEvent);
+	    newEvent->setAbsoluteTime(finalTime);
+	    newEvent->setDuration((*lastEvent)->getDuration() -
+				  (finalTime - eventTime));
+	    segment().erase(lastEvent);
+	    segment().insert(newEvent);
 	    duration = finalTime + (*lastEvent)->getDuration() - time;
 	    checkLastRest = true;
 	}
@@ -1174,7 +1174,7 @@ SegmentNotationHelper::quantize()
     }
 }
 
-
+/*!!!
 void
 SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
 {
@@ -1187,6 +1187,101 @@ SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
     reorganizeRests(startTime, endTime,
 		    &SegmentNotationHelper::normalizeContiguousRests);
 }
+*/
+
+void
+SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
+{
+    // First stage: erase all existing rests in this range.
+
+    cerr << "SegmentNotationHelper::normalizeRests " << startTime << " -> "
+	 << endTime << endl;
+
+    iterator ia = segment().findTime(startTime);
+    iterator ib = segment().findTime(endTime);
+    timeT segmentEndTime = segment().getEndTime();
+    
+    if (ia == end()) return;
+
+    std::vector<iterator> erasable;
+
+    for (iterator i = ia; i != ib && i != end(); ++i) {
+	if ((*i)->isa(Note::EventRestType)) erasable.push_back(i);
+    }
+
+    for (unsigned int ei = 0; ei < erasable.size(); ++ei) {
+	segment().erase(erasable[ei]);
+    }
+    
+    // Second stage: find the gaps that need to be filled with
+    // rests.  We don't mind about the case where two simultaneous
+    // notes end at different times -- we're only interested in
+    // the one ending sooner.  Each time an event ends, we start
+    // a candidate gap.
+    
+    // Re-find this, as it might have been erased
+    ia = segment().findTime(startTime);
+    if (ib != end()) ++ib;
+    
+    std::vector<std::pair<timeT, timeT> > gaps;
+    timeT lastNoteEnds = startTime;
+    Segment::iterator i = ia;
+
+    for (; i != ib && i != end(); ++i) {
+
+	if (!(*i)->isa(Note::EventType)) continue;
+
+	timeT thisNoteStarts = (*i)->getAbsoluteTime();
+
+	if (thisNoteStarts > lastNoteEnds) {
+	    gaps.push_back(std::pair<timeT, timeT>
+			   (lastNoteEnds,
+			    thisNoteStarts - lastNoteEnds));
+	}
+	lastNoteEnds = thisNoteStarts;
+    }
+
+    if (endTime > lastNoteEnds) {
+	gaps.push_back(std::pair<timeT, timeT>
+		       (lastNoteEnds, endTime - lastNoteEnds));
+    }
+/*!!!
+    if (i == end() && segmentEndTime > lastEventEnds) {
+	gaps.push_back(std::pair<timeT, timeT>
+		       (lastEventEnds,
+			segmentEndTime - lastEventEnds));
+    }
+*/
+    timeT duration;
+
+    for (unsigned int gi = 0; gi < gaps.size(); ++gi) {
+
+        startTime = gaps[gi].first;
+	duration = gaps[gi].second;
+
+	cerr << "Gap: " << startTime << " , " << duration << endl;
+
+	TimeSignature ts;
+	timeT sigTime =
+	    segment().getComposition()->getTimeSignatureAt(startTime, ts);
+
+	DurationList dl;
+	ts.getDurationListForInterval(dl, duration, startTime - sigTime);
+
+	timeT acc = startTime;
+
+	for (DurationList::iterator di = dl.begin(); di != dl.end(); ++di) {
+	    Event *e = new Event(Note::EventRestType);
+	    e->setDuration(*di);
+	    e->setAbsoluteTime(acc);
+	    cerr<<"inserting:\n"<<endl;
+	    e->dump(cerr);
+	    segment().insert(e);
+	    acc += *di;
+	}
+    }
+}
+
 
 void
 SegmentNotationHelper::collapseRestsAggressively(timeT startTime,

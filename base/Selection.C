@@ -25,7 +25,9 @@
 namespace Rosegarden {
 
 EventSelection::EventSelection(Segment& t)
-    : m_originalSegment(t)
+    : m_originalSegment(t),
+      m_beginTime(0),
+      m_endTime(0)
 {
 }
 
@@ -33,24 +35,20 @@ EventSelection::~EventSelection()
 {
 }
 
+void EventSelection::addEvent(Event *e)
+{ 
+    if (e->getAbsoluteTime() < m_beginTime) {
+	m_beginTime = e->getAbsoluteTime();
+    }
+    if (e->getAbsoluteTime() + e->getDuration() > m_endTime) {
+	m_endTime = e->getAbsoluteTime() + e->getDuration();
+    }
+    m_segmentEvents.insert(e);
+}
+
 bool EventSelection::contains(Event *e) const
 {
     return m_segmentEvents.find(e) != m_segmentEvents.end();
-}
-
-timeT EventSelection::getBeginTime() const
-{
-    if (m_segmentEvents.empty()) return 0;
-    eventcontainer::const_iterator i = m_segmentEvents.begin();
-    return (*i)->getAbsoluteTime();
-}
-
-timeT EventSelection::getEndTime() const
-{
-    if (m_segmentEvents.empty()) return 0;
-    eventcontainer::const_iterator i = m_segmentEvents.end();
-    --i;
-    return (*i)->getAbsoluteTime() + (*i)->getDuration();
 }
 
 timeT EventSelection::getTotalDuration() const

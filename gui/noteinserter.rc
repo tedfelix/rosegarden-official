@@ -5,6 +5,7 @@
 <Menu noMerge="1" name="NoteInserter">
   <Action name="erase" />
   <Action name="select" />
+  <Action name="rests" />
   <Separator/>
   <Action name="toggle_dot" />
   <Separator/>
@@ -14,6 +15,14 @@
   <Action name="natural_accidental" />
   <Action name="double_sharp_accidental" />
   <Action name="double_flat_accidental" />
+</Menu>
+
+<Menu noMerge="1" name="RestInserter">
+  <Action name="erase" />
+  <Action name="select" />
+  <Action name="notes" />
+  <Separator/>
+  <Action name="toggle_dot" />
 </Menu>
 
 </kpartgui>
