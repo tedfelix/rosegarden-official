@@ -77,10 +77,10 @@ void ViewElementsManager::insertNewEvents(Rosegarden::Track::iterator from,
 
         NotationElement *el = new NotationElement(*i);
 
-        //         kdDebug(KDEBUG_AREA) << "ViewElementsManager::notationElementList() : inserting "
-        //                              << (*i)->getType() << " of duration "
-        //                              << (*i)->getDuration() << " at time " 
-        //                              << (*i)->getAbsoluteTime() << endl;
+//         kdDebug(KDEBUG_AREA) << "ViewElementsManager::notationElementList() : inserting "
+//                              << (*i)->getType() << " of duration "
+//                              << (*i)->getDuration() << " at time " 
+//                              << (*i)->getAbsoluteTime() << endl;
 
         m_notationElements->insert(el);
     }
