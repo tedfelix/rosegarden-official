@@ -134,7 +134,7 @@ ControlRuler::paintEvent(QPaintEvent* e)
             int x = int(m_rulerScale->getXForTime((*it)->getAbsoluteTime()))
                     + m_currentXOffset + int(m_xorigin);
 
-            if (x > (clipRect.x() + clipRect.width())) break;
+            if ((x * getHScaleFactor()) > (clipRect.x() + clipRect.width())) break;
 
             int width = 
                 int(m_rulerScale->getXForTime((*it)->getAbsoluteTime() +

@@ -24,18 +24,18 @@
 #define _LOOPRULER_H_
 
 #include "Event.h"
-#include "RulerScale.h"
 #include "SnapGrid.h"
 
 #include "rosegardenguidoc.h"
 #include "widgets.h"
+
+namespace Rosegarden { class RulerScale; }
 
 /**
  * LoopRuler is a widget that shows bar and beat durations on a
  * ruler-like scale, and reacts to mouse clicks by sending relevant
  * signals to modify position pointer and playback/looping states.
 */
-
 class LoopRuler : public QWidget, public HZoomable
 {
     Q_OBJECT

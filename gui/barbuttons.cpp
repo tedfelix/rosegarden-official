@@ -224,7 +224,7 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
 	firstBar = m_rulerScale->getFirstVisibleBar();
     }
 
-    painter.drawLine(m_currentXOffset, 0, visibleRect().width(), 0);
+    painter.drawLine(m_currentXOffset, 0, visibleRect().width() / getHScaleFactor(), 0);
 
     float minimumWidth = 25.0;
     float testSize = ((float)(m_rulerScale->getBarPosition(firstBar + 1) -
@@ -246,7 +246,7 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
 
 	double x = m_rulerScale->getBarPosition(i) + m_xorigin + m_currentXOffset;
 
-	if (x > clipRect.x() + clipRect.width()) break;
+	if ((x * getHScaleFactor()) > clipRect.x() + clipRect.width()) break;
 
         // always the first bar number
         if (every && i != firstBar)

@@ -118,7 +118,7 @@ void LoopRuler::drawBarSections(QPainter* paint)
     for (int i = firstBar; i <= lastBar; ++i) {
 
 	double x = m_rulerScale->getBarPosition(i) + m_currentXOffset + m_xorigin;
-	if (x > clipRect.x() + clipRect.width()) break;
+	if ((x * getHScaleFactor()) > clipRect.x() + clipRect.width()) break;
 	    
 	double width = m_rulerScale->getBarWidth(i);
 	if (width == 0) continue;
@@ -175,7 +175,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
 {
     if (mE->button() == LeftButton)
     {
-	double x = mE->pos().x() * getHScaleFactor() - m_currentXOffset;
+	double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset;
         
         if (m_loop)
             m_endLoop = m_startLoop = m_grid.snapX(x);
@@ -215,7 +215,7 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
 void
 LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
 {
-    double x = mE->pos().x() - m_currentXOffset;
+    double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset;
     if (x < 0) x = 0;
     
     if (mE->button() == LeftButton && !m_loop)
@@ -225,7 +225,7 @@ LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
 void
 LoopRuler::mouseMoveEvent(QMouseEvent *mE)
 {
-    double x = mE->pos().x() - m_currentXOffset;
+    double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset;
     if (x < 0) x = 0;
     
     if (m_loop)
