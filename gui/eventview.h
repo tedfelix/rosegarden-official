@@ -108,6 +108,8 @@ protected:
     KListView   *m_eventList;
     int          m_eventFilter;
 
+    static int   m_lastSetEventFilter;
+
     QButtonGroup   *m_filterGroup;
     QCheckBox      *m_noteCheckBox;
     QCheckBox      *m_textCheckBox;

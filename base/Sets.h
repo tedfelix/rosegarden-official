@@ -367,7 +367,17 @@ template <class Element, class Container>
 bool
 GenericChord<Element, Container>::test(const Iterator &i)
 {
-    return (getAsEvent(i)->isa(Note::EventType) &&
+    // We permit note or rest events here, because if a chord is a
+    // little staggered (for performance reasons) then it's not at all
+    // unlikely we could get other events (even rests) in the middle
+    // of it.  So long as sample() only permits notes, we should be
+    // okay with this.  The notation engine will have to be careful
+    // to omit rests found in the middle of chords, but other sorts
+    // of events might be significant so we won't be so blase about
+    // them here.
+
+    return ((getAsEvent(i)->isa(Note::EventType) ||
+	     getAsEvent(i)->isa(Note::EventRestType)) &&
 	    getQuantizer().getQuantizedAbsoluteTime(getAsEvent(i)) == m_time &&
 	    getAsEvent(i)->getSubOrdering() == m_subordering);
 }
@@ -376,6 +386,9 @@ template <class Element, class Container>
 bool
 GenericChord<Element, Container>::sample(const Iterator &i)
 {
+    Event *e1 = getAsEvent(i);
+    if (!e1->isa(Note::EventType)) return false;
+
     // two notes that would otherwise be in a chord but are not in
     // the same group, or have stems pointing in different directions
     // by design, count as separate chords
@@ -383,7 +396,6 @@ GenericChord<Element, Container>::sample(const Iterator &i)
     if (m_baseIterator != getContainer().end()) {
 
 	Event *e0 = getAsEvent(m_baseIterator);
-	Event *e1 = getAsEvent(i);
 
 	if (e0->has(BaseProperties::BEAMED_GROUP_ID)) {
 	    if (e1->has(BaseProperties::BEAMED_GROUP_ID)) {

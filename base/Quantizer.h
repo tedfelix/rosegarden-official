@@ -43,6 +43,7 @@ class Quantizer
 {
 public:
     static const std::string RawEventData;
+    static const std::string RawEventKeepTiming;
     static const std::string DefaultTarget;
     static const std::string GlobalSource;
 
@@ -63,7 +64,12 @@ public:
      * These may be strings, specifying a prefix for the names
      * of properties to contain the timings, or may be the special
      * value RawEventData in which case the event's absolute time
-     * and duration will be used instead of properties.
+     * and duration will be used instead of properties, or
+     * RawEventKeepTiming in which case the event's absolute time
+     * and duration will be used but (paradoxically but usefully)
+     * the original timing of the event will be retained through
+     * the PERFORMANCE_DELAY and PERFORMANCE_TRUNCATION properties,
+     * at least until the event is next edited.
      * 
      * If source specifies a property prefix for properties that are
      * found not to exist, they will be pre-filled from the original
@@ -79,6 +85,8 @@ public:
      * order to adjust its timings.  This operation (deliberately)
      * loses any non-persistent properties in the events.  This
      * does not happen if target is a property prefix.
+     *
+     * RawEventKeepTiming cannot be used as the source.
      *
      *   Examples:
      *
@@ -239,10 +247,10 @@ public:
      * quantized values into the event, so this is not a good
      * substitute for actually quantizing something.
      *
-     * (If the target is RawEventData, this will always return
-     * the raw duration regardless of whether the event appears
-     * to have actually been quantized.  This method is thus
-     * only useful if target is not RawEventData.)
+     * (If the target is RawEventData or RawEventKeepTiming, this will
+     * always return the raw duration regardless of whether the event
+     * appears to have actually been quantized.  This method is thus
+     * only useful if target is not RawEventData or RawEventKeepTiming.)
      */
     timeT getQuantizedDuration(Event *el) const;
 
@@ -253,10 +261,10 @@ public:
      * write the quantized values into the event, so this is not
      * a good substitute for actually quantizing something.
      *
-     * (If the target is RawEventData, this will always return
-     * the raw time regardless of whether the event appears
-     * to have actually been quantized.  This method is thus
-     * only useful if target is not RawEventData.)
+     * (If the target is RawEventData or RawEventKeepTiming, this will
+     * always return the raw time regardless of whether the event
+     * appears to have actually been quantized.  This method is thus
+     * only useful if target is not RawEventData or RawEventKeepTiming.)
      */
     timeT getQuantizedAbsoluteTime(Event *el) const;
 

@@ -34,8 +34,11 @@
 #include <qbuttongroup.h>
 #include <qregexp.h>
 #include <qtooltip.h>
+#include <qdir.h>
 
 #include <klocale.h>
+#include <kglobal.h>
+#include <kstddirs.h>
 #include <kmessagebox.h>
 #include <klistview.h>
 #include <klineedit.h>
@@ -1198,8 +1201,18 @@ BankEditorDialog::getCommandHistory()
 void
 BankEditorDialog::slotImport()
 {
-   KURL url = KFileDialog::getOpenURL(":ROSEGARDEN", "*.rg*",
-                            this, i18n("Import Banks from Device in File"));
+    QString deviceDir = KGlobal::dirs()->findResource("appdata", "library/");
+    QDir dir(deviceDir);
+    if (!dir.exists()) {
+	deviceDir = ":ROSEGARDENDEVICE";
+    } else {
+	deviceDir = "file://" + deviceDir;
+    }
+
+    KURL url = KFileDialog::getOpenURL
+	(deviceDir,
+	 "*.rgd|Rosegarden device file\n*.rg|Rosegarden file",
+	 this, i18n("Import Banks from Device in File"));
 
     if (url.isEmpty()) return;
 

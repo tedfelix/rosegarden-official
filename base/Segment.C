@@ -548,7 +548,8 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
     // right duration, then we need to normalize it too
     iterator scooter = ia;
     while (scooter-- != begin()) {
-	if ((*scooter)->isa(Note::EventRestType)) {
+//	if ((*scooter)->isa(Note::EventRestType)) { //!!! experimental
+	if ((*scooter)->getDuration() > 0) { 
 	    if ((*scooter)->getAbsoluteTime() + (*scooter)->getDuration() !=
 		startTime) {
 		startTime = (*scooter)->getAbsoluteTime();
@@ -556,8 +557,10 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
 		ia = scooter;
 	    }
 	    break;
+/*!!!
 	} else if ((*scooter)->getDuration() > 0) {
 	    break;
+*/
 	}
     }
 
@@ -584,6 +587,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
     if (ib != end()) ++ib;
     
     std::vector<std::pair<timeT, timeT> > gaps;
+    timeT lastNoteStarts = startTime;
     timeT lastNoteEnds = startTime;
     iterator i = ia;
 
@@ -593,11 +597,25 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
 
 	timeT thisNoteStarts = (*i)->getAbsoluteTime();
 
+	//!!! This may be problematic.  We could end up adding a rest
+	// in the middle of what turns out to be a chord once the
+	// smoothing/quantization has happened.  That might mess
+	// things up pretty badly, I think.
+
+	if (thisNoteStarts < lastNoteEnds &&
+	    thisNoteStarts > lastNoteStarts) { //!!! experimental
+	    gaps.push_back(std::pair<timeT, timeT>
+			   (lastNoteStarts,
+			    thisNoteStarts - lastNoteStarts));
+	}
+
 	if (thisNoteStarts > lastNoteEnds) {
 	    gaps.push_back(std::pair<timeT, timeT>
 			   (lastNoteEnds,
 			    thisNoteStarts - lastNoteEnds));
 	}
+
+	lastNoteStarts = thisNoteStarts;
 	lastNoteEnds = thisNoteStarts + (*i)->getDuration();
     }
 

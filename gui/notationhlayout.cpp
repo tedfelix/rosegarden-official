@@ -597,9 +597,21 @@ NotationHLayout::scanChord(NotationElementList *notes,
     bool barEndsInChord = false;
     bool grace = false;
 
-    for (unsigned int i = 0; i < chord.size(); ++i) {
+//!!!    for (unsigned int i = 0; i < chord.size(); ++i) {
+
+    // We don't need to get the chord's notes in pitch order here,
+    // but we do need to ensure we see any random non-note events
+    // that may crop up in the middle of it.
+
+    for (NotationElementList::iterator i = chord.getInitialElement();
+	 i != notes->end(); ++i) {
 	
-	NotationElement *el = *chord[i];
+	NotationElement *el = *i; //!!! *chord[i];
+	if (el->isRest()) {
+	    el->event()->setMaybe<Bool>(m_properties.REST_TOO_SHORT, true);
+	    if (i == chord.getFinalElement()) break;
+	    continue;
+	}
 
 	if (el->isGrace()) grace = true;
 	
@@ -632,7 +644,9 @@ NotationHLayout::scanChord(NotationElementList *notes,
 	if (someAccidental == NoAccidental) someAccidental = dacc;
 
 	newAccTable.update(acc, h);
-	if (chord[i] == to) barEndsInChord = true;
+	if (i /*!!! chord[i] */ == to) barEndsInChord = true;
+
+	if (i == chord.getFinalElement()) break;
     }
 
     accTable.copyFrom(newAccTable);
@@ -676,11 +690,32 @@ NotationHLayout::scanChord(NotationElementList *notes,
 
 void
 NotationHLayout::scanRest
-(NotationElementList *notes, NotationElementList::iterator &itr,
+(NotationElementList *notes,
+ NotationElementList::iterator &itr,
  int &, int &baseWidth,
  NotationElementList::iterator &shortest, int &shortCount)
-{
+{ 
     timeT d = m_legatoQuantizer->getQuantizedDuration((*itr)->event());
+
+    // find any cases where rests are too short to appear:
+    // we ignore any rest which has a quantized duration of
+    // zero, or which overlaps a following event that starts
+    // less than the shortest note's duration after it
+    
+    bool tooShort = (d == 0);
+    if (!tooShort) {
+	NotationElementList::iterator ni(itr);
+	if (++ni != notes->end()) {
+	    if (m_legatoQuantizer->getQuantizedAbsoluteTime((*ni)->event()) -
+		m_legatoQuantizer->getQuantizedAbsoluteTime((*itr)->event())
+		< Note(Note::Shortest).getDuration()) {
+		tooShort = true;
+	    }
+	}
+    }
+    (*itr)->event()->setMaybe<Bool>(m_properties.REST_TOO_SHORT, tooShort);
+    if (tooShort) return;
+
     baseWidth += getMinWidth(**itr);
 
     timeT sd = 0;
@@ -1351,10 +1386,11 @@ NotationHLayout::positionRest(StaffType &staff,
                               const TimeSignature &timeSignature)
 {
     NotationElement *rest = *itr;
-    if (m_legatoQuantizer->getQuantizedDuration((*itr)->event()) == 0) {
-	// this rest won't appear at all, so don't allot it any space
-	return 0;
-    }
+
+    // return 0 for any cases where rests are too short to appear
+    bool tooShort = false;
+    if ((*itr)->event()->get<Bool>(m_properties.REST_TOO_SHORT, tooShort) &&
+	tooShort) return 0;
 
     // To work out how much space to allot a rest, as for a note,
     // start with the amount alloted to the whole bar, subtract that
@@ -1365,10 +1401,10 @@ NotationHLayout::positionRest(StaffType &staff,
 
     timeT barDuration = bdi->second.sizeData.actualDuration;
     if (barDuration == 0) barDuration = timeSignature.getBarDuration();
+    timeT spacingDuration = getSpacingDuration(staff, itr);
 
     long delta = (((int)bdi->second.sizeData.idealWidth -
-		        bdi->second.sizeData.fixedWidth) *
-		  getSpacingDuration(staff, itr)) /
+		        bdi->second.sizeData.fixedWidth) * spacingDuration) /
 	barDuration;
 
     rest->setLayoutAirspace(rest->getLayoutX(), delta);

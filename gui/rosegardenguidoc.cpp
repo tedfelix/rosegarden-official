@@ -495,6 +495,9 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	        //values or knowledge about the quantizer.  We probably
 	        //just want to make versions of the getFromSource/setToXX
 	        //methods public in the Quantizer
+
+		//!!! we have the same problem with performance delay/duration
+		// need a general solution for this, I guess
     
 	        outStream << '\t'
 		    << XmlStorableEvent(**i).toXmlString(expectedTime) << endl;

@@ -42,6 +42,7 @@ NotationProperties::NotationProperties(const std::string &prefix) :
     SLUR_Y_DELTA		(prefix + "SlurYDelta"),
     SLUR_LENGTH			(prefix + "SlurLength"),
     LYRIC_EXTRA_WIDTH		(prefix + "LyricExtraWidth"),
+    REST_TOO_SHORT              (prefix + "RestTooShort"),
 
     NOTE_TYPE			(prefix + "NoteType"),
     NOTE_DOTS			(prefix + "NoteDots"),

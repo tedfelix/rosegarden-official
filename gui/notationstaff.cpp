@@ -699,10 +699,9 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		m_notationView->getLegatoQuantizer()->getQuantizedDuration
 		(elt->event());
 
-	    // We ignore any rest which has a quantized duration of
-	    // zero, or which overlaps a following event that starts
-	    // less than the shortest note's duration after it
-
+	    bool ignoreRest = false;
+	    elt->event()->get<Bool>(properties.REST_TOO_SHORT, ignoreRest);
+	    /*!!!	    
 	    bool ignoreRest = (duration == 0);
 	    if (!ignoreRest) {
 		if (nextElt) {
@@ -715,7 +714,7 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		    }
 		}
 	    }
-
+	    */
 	    if (!ignoreRest) {
 
 		Note::Type note =

@@ -642,11 +642,10 @@
 	        rounding that is used, but meaning that the notes you
 	        hear (and edit in the matrix editor) will acquire a
 	        perhaps undesirable precision.  To do so, you can use
-	        the <!-- !!!link
-	        linkend="commands-nv-transforms-quantize"
-	        -->Quantize<!-- /link --> menu function, which
-	        operates on a selection of notes (see <!-- !!! link
-	        linkend="nv-selection" -->Selection<!-- /link -->).  The
+	        the <link
+	        linkend="commands-nv-menu-transforms-quantize">Quantize</link> menu function, which
+	        operates on a selection of notes (see <link
+	        linkend="nv-tools-selections">Selection</link>).  The
 		notation editor will also pick up on any changes in  
 		quantization made using the Quantize dropdown on the
 		main window or the matrix editor.
@@ -2212,6 +2211,242 @@
 		<para>to be continued</para>
 	      </listitem>
 	    </varlistentry>
+	  </variablelist>
+	</para>
+
+      </sect2>
+
+      <sect2 id="commands-nv-menu-transforms">
+	<title>The Transforms Menu</title>
+	<para>
+	  <variablelist>
+
+	    <varlistentry id="commands-nv-menu-transforms-normalize-rests">
+	      <term><menuchoice>
+		  <guimenu>Transforms</guimenu>
+		  <guimenuitem>Normalize Rests</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>Makes the rests in the selection
+		  theoretically correct.</action>
+
+		  This function examines each sequence of consecutive
+		  rests found in the selection, and adjusts, splits
+		  and merges rests as necessary to ensure that the
+		  rests have theoretically correct durations and fall
+		  on the correct boundaries.
+		</para>
+
+		<para>For example, a 4/4 bar containing a crotchet
+		(quarter-note), then a minim (half-note) rest and a
+		crotchet rest will be rearranged to place the crotchet
+		rest first, as the minim rest should not cross the
+		central beat boundary of the bar.
+		</para>
+
+		<para>This function is also useful in occasional
+		situations where Rosegarden has made a bad job of
+		maintaining the rests correctly within a bar, for
+		example when editing imported MIDI data.  Normalizing
+		the rests will usually make the arrangement of notes
+		in such a situation a bit clearer.  (Rosegarden always
+		normalizes the rests as a matter of course when
+		importing or recording MIDI, but things can sometimes
+		get muddled up again.)</para>
+
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-transforms-collapse-rests">
+	      <term><menuchoice>
+		  <guimenu>Transforms</guimenu>
+		  <guimenuitem>Collapse Rests</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>Makes multiple short rests into fewer longer
+		  ones.</action>
+
+		  This function merges consecutive rests into longer
+		  rests, wherever possible.  That is, wherever two
+		  consecutive rests in the selection are found to have
+		  a total duration expressible as a single longer
+		  rest, they will be merged.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-transforms-collapse-notes">
+	      <term><menuchoice>
+		  <guimenu>Transforms</guimenu>
+		  <guimenuitem>Collapse Equal-Pitch Notes</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>
+		  <action>Makes multiple short notes into fewer longer
+		  ones.</action>
+
+		  This function merges consecutive notes into longer
+		  notes, wherever possible.  That is, wherever two
+		  consecutive notes of equal pitch in the selection
+		  are found to have a total duration expressible as a
+		  single longer note, they will be merged.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-transforms-tie-notes">
+	      <term><menuchoice>
+		  <guimenu>Transforms</guimenu>
+		  <guimenuitem>Tie Equal-Pitch Notes</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para><action>Ties consecutive notes whenever possible.</action>
+
+		  This function ties together any consecutive notes of
+		  equal pitch found in the selection.  Tied notes are
+		  shown with a curved line joining the note heads, and
+		  are played as a single long note.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-transforms-untie-notes">
+	      <term><menuchoice>
+		  <guimenu>Transforms</guimenu>
+		  <guimenuitem>Untie Notes</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para><action>Breaks ties between notes.</action>
+
+		  Any tied notes found in the selection are untied,
+		  and will subsequently be played as separate
+		  notes.</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-transforms-make-viable">
+	      <term><menuchoice>
+		  <guimenu>Transforms</guimenu>
+		  <guimenuitem>Make Notes Viable</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para><action>Splits notes at displayable
+		durations.</action> This function is intended to deal
+		with notes that have excessively long durations that
+		overflow barlines or that are too long to be displayed
+		as a single note.  It takes any such notes and splits
+		them into shorter, tied notes.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-transforms-de-counterpoint">
+	      <term><menuchoice>
+		  <guimenu>Transforms</guimenu>
+		  <guimenuitem>De-Counterpoint</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para><action>Turns counterpoint into a series of split-and-tied notes and chords.</action>
+
+		  Rosegarden has no explicit support for counterpoint
+		  (multiple lines of notes edited separately on the
+		  same staff), but it will do its best to approximate
+		  it when it finds notes in a segment that are
+		  apparently contrapuntal, i.e. that overlap but that
+		  are not precise enough to be treated as chords.  For
+		  example, when a short note starts shortly after a
+		  longer note, Rosegarden will show the longer note
+		  and a short "spacing" rest together, followed by the
+		  shorter note.  Unfortunately this often isn't what
+		  you want.
+		</para>
+
+		<para>The De-Counterpoint function can be applied to a
+		selection that contains overlapping notes.  It will
+		split overlapping notes at the point where they
+		overlap, and tie together the resulting split notes,
+		ensuring that the music takes the form of a series of
+		chords and/or single notes starting and ending in neat
+		blocks, with some notes possibly tied.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-transforms-quantize">
+	      <term><menuchoice>
+		  <guimenu>Transforms</guimenu>
+		  <guimenuitem>Quantize...</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para><action>Quantizes the selection.</action></para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-transforms-fix-smoothing">
+	      <term><menuchoice>
+		  <guimenu>Transforms</guimenu>
+		  <guimenuitem>Fix Smoothed Values</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para><action>Makes the note durations in the current
+		view permanent.</action>
+
+		  When notating recorded or performance MIDI,
+		  Rosegarden usually has to round off the durations of
+		  some notes so that they can be displayed as normal
+		  note types.  This is known as <link
+		  linkend="nv-quantization">smoothing</link>, and it
+		  normally does not affect the notes actually played,
+		  it's just a convenience for display.  The Fix
+		  Smoothed Values function takes the current smoothed
+		  note durations and sets them such that they are used
+		  for performance (and editing in the matrix view,
+		  etc) as well as for notation.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-transforms-interpret">
+	      <term><menuchoice>
+		  <guimenu>Transforms</guimenu>
+		  <guimenuitem>Interpret...</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para>to be continued</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry id="commands-nv-menu-transforms-transpose">
+	      <term><menuchoice>
+		  <guimenu>Transforms</guimenu>
+		  <guimenuitem>Transpose</guimenuitem>
+		</menuchoice></term>
+	      <listitem>
+		<para><action>Alters the pitch of the selected
+		notes.</action> This submenu contains basic
+		transposition functions which move the selected notes
+		up or down a semitone or a whole octave in pitch, as
+		well as a general transpose function that allows you
+		to choose how far up or down you want to transpose the
+		selection.
+		</para>
+
+		<para>These functions simply change the stored pitches
+		of the notes in the selection, so that they both play
+		and appear at the new pitches.  They do not deal with
+		performance transposition (displaying one pitch and
+		playing another), for which see the main window's
+		segment parameter box; nor do they help you with
+		transposing from one key into another, for which see
+		the <link
+		linkend="commands-nv-menu-edit-add-key-signature">key
+		change</link> function.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
 	  </variablelist>
 	</para>
 

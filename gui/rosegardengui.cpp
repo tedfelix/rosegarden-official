@@ -1115,7 +1115,7 @@ void RosegardenGUIApp::slotFileOpen()
     slotStatusHelpMsg(i18n("Opening file..."));
 
 
-    KURL url = KFileDialog::getOpenURL(":ROSEGARDEN", "*.rg", this,
+    KURL url = KFileDialog::getOpenURL(":ROSEGARDEN", "*.rg|Rosegarden files", this,
                                        i18n("Open File"));
     if ( url.isEmpty() ) { return; }
 
@@ -1827,7 +1827,7 @@ void RosegardenGUIApp::slotRevertToSaved()
 
 void RosegardenGUIApp::slotImportMIDI()
 {
-    KURL url = KFileDialog::getOpenURL(":MIDI", "*.mid", this,
+    KURL url = KFileDialog::getOpenURL(":MIDI", "*.mid *.midi|Standard MIDI files", this,
                                      i18n("Open MIDI File"));
     if (url.isEmpty()) { return; }
 
@@ -1840,8 +1840,8 @@ void RosegardenGUIApp::slotImportMIDI()
 
 void RosegardenGUIApp::slotMergeMIDI()
 {
-    KURL url = KFileDialog::getOpenURL(":MIDI", "*.mid", this,
-                                     i18n("Open MIDI File"));
+    KURL url = KFileDialog::getOpenURL(":MIDI", "*.mid *.midi|Standard MIDI files", this,
+                                     i18n("Merge MIDI File"));
     if (url.isEmpty()) { return; }
 
     QString tmpfile;
@@ -1959,7 +1959,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
 void RosegardenGUIApp::slotImportRG21()
 {
-    KURL url = KFileDialog::getOpenURL(":ROSEGARDEN21", "*.rose", this,
+    KURL url = KFileDialog::getOpenURL(":ROSEGARDEN21", "*.rose|Rosegarden 2.1 file", this,
                                        i18n("Open Rosegarden 2.1 File"));
     if (url.isEmpty()) { return; }
 

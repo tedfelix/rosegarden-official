@@ -155,6 +155,7 @@ void MatrixCanvasView::contentsMouseDoubleClickEvent (QMouseEvent* e)
         return;
     }
 
+    contentsMousePressEvent(e);
 }
 
 void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)

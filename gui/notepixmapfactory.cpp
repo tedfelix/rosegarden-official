@@ -1066,6 +1066,10 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
 void
 NotePixmapFactory::drawTie(bool above, int length) 
 {
+    if (length > 1000) {
+	assert(0);
+    }
+
     int tieThickness = getStaffLineThickness() * 2;
     int tieCurve = m_font->getCurrentSize() * 2 / 3;
     int height = tieCurve + tieThickness;

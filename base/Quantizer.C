@@ -24,6 +24,7 @@
 #include "BaseProperties.h"
 #include "NotationTypes.h"
 #include "Selection.h"
+#include "Composition.h"
 
 #include <iostream>
 #include <cstdio> // for sprintf
@@ -34,6 +35,7 @@ using std::endl;
 namespace Rosegarden {
 
 const std::string Quantizer::RawEventData = "";
+const std::string Quantizer::RawEventKeepTiming = "!";
 const std::string Quantizer::DefaultTarget = "DefaultQ";
 const std::string Quantizer::GlobalSource = "GlobalQ";
 
@@ -44,6 +46,8 @@ Quantizer::Quantizer(std::string source,
     m_type(type), m_unit(unit), m_maxDots(maxDots),
     m_source(source), m_target(target)
 {
+    assert(m_source != RawEventKeepTiming);
+
     if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
     makePropertyNames();
 }
@@ -54,6 +58,8 @@ Quantizer::Quantizer(const StandardQuantization &sq,
     m_type(sq.type), m_unit(sq.unit), m_maxDots(sq.maxDots),
     m_source(source), m_target(target)
 {
+    assert(m_source != RawEventKeepTiming);
+
     if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
     makePropertyNames();
 }    
@@ -389,7 +395,7 @@ Quantizer::fixQuantizedValues(Segment *s, Segment::iterator from,
 
     quantize(s, from, to);
 
-    if (m_target != RawEventData) {
+    if (m_target != RawEventData && m_target != RawEventKeepTiming) {
 
 	for (Segment::iterator nextFrom = from; from != to; from = nextFrom) {
 
@@ -404,13 +410,22 @@ Quantizer::fixQuantizedValues(Segment *s, Segment::iterator from,
 
 	insertNewEvents(s);
     }
+
+    if (m_target == RawEventKeepTiming) {
+	// lose the KeepTiming part
+	
+	for (Segment::iterator i = from; from != to; ++i) {
+	    (*i)->unset(BaseProperties::PERFORMANCE_DELAY);
+	    (*i)->unset(BaseProperties::PERFORMANCE_TRUNCATION);
+	}
+    }
 }
 
 
 timeT
 Quantizer::getQuantizedDuration(Event *e) const
 {
-    if (m_target == RawEventData ||
+    if (m_target == RawEventData || m_target == RawEventKeepTiming ||
 	!(e->isa(Note::EventType) || e->isa(Note::EventRestType))) {
 	return e->getDuration();
     } else {
@@ -426,7 +441,7 @@ Quantizer::getQuantizedDuration(Event *e) const
 timeT
 Quantizer::getQuantizedAbsoluteTime(Event *e) const
 {
-    if (m_target == RawEventData) {
+    if (m_target == RawEventData || m_target == RawEventKeepTiming) {
 	return e->getAbsoluteTime();
     } else {
 	if (e->has(m_targetProperties[AbsoluteTimeValue])) {
@@ -481,6 +496,11 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
 	absTimeQuantizeUnit = Note(unitNoteType).getDuration();
     }
 
+    bool doBarlines = false;
+    if (s->getComposition()) doBarlines = true;
+    int lastNoteBar = 0;
+    timeT lastEnd = 0;
+
     for (Segment::iterator nextFrom = from ; from != to; from = nextFrom) {
 
 	++nextFrom;
@@ -495,6 +515,8 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
 	    aq.quantize(absTimeQuantizeUnit, m_maxDots, absoluteTime,
 			0, 0, true);
 
+	if (lastEnd == 0) lastEnd = qAbsoluteTime;
+
 	if ((*from)->isa(Note::EventType)) {
 
 	    timeT followingRestDuration = 0;
@@ -507,7 +529,22 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
 		 qAbsoluteTime - absoluteTime, followingRestDuration, false);
 	    excess = (qAbsoluteTime + qDuration) - (absoluteTime + duration);
 
+	    if (doBarlines) {
+		lastNoteBar = s->getComposition()->getBarNumber(qAbsoluteTime);
+	    }
+
+	    lastEnd = qAbsoluteTime + qDuration;
+
 	} else if ((*from)->isa(Note::EventRestType)) {
+
+	    if (doBarlines &&
+		(lastNoteBar <
+		 s->getComposition()->getBarNumber(qAbsoluteTime))) {
+		// start of a new bar
+		excess = 0;
+	    }
+
+	    //!!!
 
 	    if (excess >= duration) {
 		
@@ -524,7 +561,14 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
 		qDuration = dq.quantize
 		    (m_unit, m_maxDots, duration,
 		     qAbsoluteTime - absoluteTime, 0, false);
+		//!!! 
+		if (qDuration < absTimeQuantizeUnit) {
+		    qDuration = 0;
+		}
+		//!!! we don't take into account the fact that the next
+		// note moves one way or the other as well
 	    }
+
 	} else continue;
 
 	setToTarget(s, from, qAbsoluteTime, qDuration);
@@ -573,10 +617,14 @@ Quantizer::unquantize(Segment *s,
     for (Segment::iterator nextFrom = from; from != to; from = nextFrom) {
 	++nextFrom;
 
-	if (m_target == RawEventData) {
+	if (m_target == RawEventData || m_target == RawEventKeepTiming) {
 	    setToTarget(s, from,
 			getFromSource(*from, AbsoluteTimeValue),
 			getFromSource(*from, DurationValue));
+	    if (m_target == RawEventKeepTiming) {
+		(*from)->unset(BaseProperties::PERFORMANCE_DELAY);
+		(*from)->unset(BaseProperties::PERFORMANCE_TRUNCATION);
+	    }
 	    
 	} else {
 	    removeTargetProperties(*from);
@@ -596,13 +644,18 @@ Quantizer::unquantize(EventSelection *selection) const
 
     for (; it != selection->getSegmentEvents().end(); it++) {
 
-	if (m_target == RawEventData) {
+	if (m_target == RawEventData || m_target == RawEventKeepTiming) {
 
             Segment::iterator from = selection->getSegment().findSingle(*it);
             Segment::iterator to = selection->getSegment().findSingle(*it);
 	    setToTarget(&selection->getSegment(), from,
 			getFromSource(*from, AbsoluteTimeValue),
 			getFromSource(*to, DurationValue));
+
+	    if (m_target == RawEventKeepTiming) {
+		(*it)->unset(BaseProperties::PERFORMANCE_DELAY);
+		(*it)->unset(BaseProperties::PERFORMANCE_TRUNCATION);
+	    }
 	    
 	} else {
 	    removeTargetProperties(*it);
@@ -631,6 +684,7 @@ Quantizer::getFromSource(Event *e, ValueType v) const
 
 	bool haveSource = e->has(m_sourceProperties[v]);
 	bool haveTarget = ((m_target == RawEventData) ||
+			   (m_target == RawEventKeepTiming) ||
 			   (e->has(m_targetProperties[v])));
 	timeT t = 0;
 
@@ -648,7 +702,7 @@ Quantizer::getFromSource(Event *e, ValueType v) const
 timeT
 Quantizer::getFromTarget(Event *e, ValueType v) const
 {
-    if (m_target == RawEventData) {
+    if (m_target == RawEventData || m_target == RawEventKeepTiming) {
 
 	if (v == AbsoluteTimeValue) return e->getAbsoluteTime();
 	else return e->getDuration();
@@ -667,7 +721,7 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
 {
     //cerr << "Quantizer::setToTarget: target is \"" << m_target << "\", absTime is " << absTime << ", duration is " << duration << " (unit is " << m_unit << ", original values are absTime " << (*i)->getAbsoluteTime() << ", duration " << (*i)->getDuration() << ")" << endl;
 
-    if (m_target == RawEventData) {
+    if (m_target == RawEventData || m_target == RawEventKeepTiming) {
 
 	timeT st = 0, sd = 0;
 	bool haveSt = false, haveSd = false;
@@ -677,6 +731,16 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
 	}
 
 	Event *e = new Event(**i, absTime, duration);
+
+	if (m_target == RawEventKeepTiming) {
+	    timeT delay = 0, truncation = 0;
+	    if (haveSt) delay = absTime - st;
+	    else delay = absTime - (*i)->getAbsoluteTime();
+	    if (haveSd) truncation = sd - duration + delay;
+	    else truncation = (*i)->getDuration() - duration + delay;
+	    e->setMaybe<Int>(BaseProperties::PERFORMANCE_DELAY, delay);
+	    e->setMaybe<Int>(BaseProperties::PERFORMANCE_TRUNCATION, truncation);
+	}
 
 	if (haveSt) e->setMaybe<Int>(m_sourceProperties[AbsoluteTimeValue],st);
 	if (haveSd) e->setMaybe<Int>(m_sourceProperties[DurationValue],    sd);
@@ -699,7 +763,7 @@ Quantizer::removeProperties(Event *e) const
 	e->unset(m_sourceProperties[DurationValue]);
     }
 
-    if (m_target != RawEventData) {
+    if (m_target != RawEventData && m_target != RawEventKeepTiming) {
 	e->unset(m_targetProperties[AbsoluteTimeValue]);
 	e->unset(m_targetProperties[DurationValue]);
     }	
@@ -708,7 +772,7 @@ Quantizer::removeProperties(Event *e) const
 void
 Quantizer::removeTargetProperties(Event *e) const
 {
-    if (m_target != RawEventData) {
+    if (m_target != RawEventData && m_target != RawEventKeepTiming) {
 	e->unset(m_targetProperties[AbsoluteTimeValue]);
 	e->unset(m_targetProperties[DurationValue]);
     }	
@@ -722,7 +786,7 @@ Quantizer::makePropertyNames()
 	m_sourceProperties[DurationValue]     = m_source + "DurationSource";
     }
 
-    if (m_target != RawEventData) {
+    if (m_target != RawEventData && m_target != RawEventKeepTiming) {
 	m_targetProperties[AbsoluteTimeValue] = m_target + "AbsoluteTimeTarget";
 	m_targetProperties[DurationValue]     = m_target + "DurationTarget";
     }
@@ -745,7 +809,7 @@ Quantizer::insertNewEvents(Segment *s) const
 	s->insert(m_toInsert[i]);
     }
 
-    if (sz > 0 && m_target == RawEventData) {
+    if (sz > 0 && (m_target == RawEventData || m_target == RawEventKeepTiming)){
 	s->normalizeRests(minTime, maxTime);
     }
 

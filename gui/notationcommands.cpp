@@ -838,6 +838,10 @@ TransformsMenuDeCounterpointCommand::modifySegment()
     // note "n" found, if the next following note "m" not at the same
     // absolute time as n starts before n ends, then split n at m-n.
 
+    // also, if m starts at the same time as n but has a different
+    // duration, we should split the longer of n and m at the shorter
+    // one's duration.
+    
     // Is it reasonable to impose that m should also be in the
     // selection?  Probably.
 
@@ -855,34 +859,64 @@ TransformsMenuDeCounterpointCommand::modifySegment()
 
 	EventSelection::eventcontainer::iterator j = i;
 	++j;
+	if (!(*i)->isa(Note::EventType)) {
+	    i = j;
+	    continue;
+	}
 
 	Segment::iterator si = segment.findSingle(*i);
-	Segment::iterator sj = si;
-	if (si == segment.end()) { // shouldn't happen, but
+	if (si == segment.end()) { // can happen if sj erased below
 	    i = j;
 	    continue;
 	}
 	timeT ti = (*si)->getAbsoluteTime();
+	timeT di = (*si)->getDuration();
 
-	// find next note at a different time but also in selection
-	while (sj != segment.end() &&
-	       ((*sj)->getAbsoluteTime() == ti ||
-		!m_selection->contains(*sj))) ++sj;
+	// find next event that's also in selection but is either at
+	// a different time or (if a note) has a different duration
+	Segment::iterator sj = si;
+	while (sj != segment.end()) {
+	    if (m_selection->contains(*sj)) {
+		if ((*sj)->getAbsoluteTime() > ti) break;
+		if ((*sj)->isa(Note::EventType) &&
+		    (*sj)->getDuration() != di) break;
+	    }
+	    ++sj;
+	}
 
 	if (sj == segment.end()) break; // no split, no more notes
 	timeT tj = (*sj)->getAbsoluteTime();
+	timeT dj = (*sj)->getDuration();
 
-	if (tj - ti < (*si)->getDuration()) {
-	    // split
-	    Event *e1 = new Event(**si, ti, tj - ti);
-	    Event *e2 = new Event(**si, tj, (*si)->getDuration() - (tj - ti));
+	Event *e1 = 0, *e2 = 0;
+	Segment::iterator toGo = segment.end();
+
+	if (tj == ti && dj != di) {
+	    // do the same-time-different-durations case
+	    if (di > dj) { // split *si
+		e1 = new Event(**si, ti, dj);
+		e2 = new Event(**si, ti + dj, di - dj);
+		toGo = si;
+	    } else { // split *sj
+		e1 = new Event(**sj, ti, di);
+		e2 = new Event(**sj, ti + di, dj - di);
+		toGo = sj;
+	    }
+	} else if (tj - ti > 0 && tj - ti < di) { // split *si
+	    e1 = new Event(**si, ti, tj - ti);
+	    e2 = new Event(**si, tj, di - (tj - ti));
+	    toGo = si;
+	}
+	
+	if (e1 && e2) { // e2 is the new note
 	    e1->set<Bool>(TIED_FORWARD, true);
 	    e2->set<Bool>(TIED_BACKWARD, true);
 	    segment.insert(e1);
 	    segment.insert(e2);
 	    // so that e2 is itself a candidate for splitting later:
 	    m_selection->addEvent(e2);
-	    segment.erase(si);
+	    if (*toGo == *j) ++j; // avoid stepping on just-erased 2nd event
+	    if (toGo != segment.end()) segment.erase(toGo);
 	}
 
 	i = j;
@@ -1108,7 +1142,7 @@ TransformsMenuInterpretCommand::modifySegment()
     if (m_interpretations & ApplyTextDynamics) applyTextDynamics();
     if (m_interpretations & ApplyHairpins) applyHairpins();
     if (m_interpretations & StressBeats) stressBeats();
-    if (m_interpretations & Articulate) articulate();
+    if (m_interpretations & Articulate) articulate(false); //!!!
 
     //!!! Finally, in future we should extend this to allow
     // indications on one segment (e.g. top line of piano staff) to
@@ -1171,9 +1205,10 @@ TransformsMenuInterpretCommand::getVelocityForDynamic(std::string text)
     else if (text == "mp")    velocity = 80;
     else if (text == "mf")    velocity = 90;
     else if (text == "f")     velocity = 105;
-    else if (text == "fff")   velocity = 113;
+    else if (text == "ff")    velocity = 110;
+    else if (text == "fff")   velocity = 115;
     else if (text == "ffff")  velocity = 120;
-    else if (text == "fffff") velocity = 127;
+    else if (text == "fffff") velocity = 125;
 
     NOTATION_DEBUG << "TransformsMenuInterpretCommand::getVelocityForDynamic: unrecognised dynamic " << text << endl;
 
@@ -1184,12 +1219,16 @@ void
 TransformsMenuInterpretCommand::applyHairpins()
 {
     Segment &segment(getSegment());
+    int velocityToApply = -1;
 
     for (EventSelection::eventcontainer::iterator ecitr =
 	     m_selection->getSegmentEvents().begin();
 	 ecitr != m_selection->getSegmentEvents().end(); ++ecitr) {
 
 	Event *e = *ecitr;
+	if (Text::isTextOfType(e, Text::Dynamic)) {
+	    velocityToApply = -1;
+	}
 	if (!e->isa(Note::EventType)) continue;
 	bool crescendo = true;
 
@@ -1201,18 +1240,24 @@ TransformsMenuInterpretCommand::applyHairpins()
 	
 	if (inditr == m_indications.end()) {
 	    inditr = findEnclosingIndication(e, Indication::Decrescendo);
-	    if (inditr == m_indications.end()) continue;
+	    if (inditr == m_indications.end()) {
+		if (velocityToApply > 0) {
+		    e->set<Int>(VELOCITY, velocityToApply);
+		}		    
+		continue;
+	    }
 	    crescendo = false;
 	}
 	 
 	// The starting velocity for the indication is easy -- it's
-	// just the velocity of the last note before the indication
-	// begins that has a velocity
+	// just the velocity of the last note at or before the
+	// indication begins that has a velocity
 
 	timeT hairpinStartTime = inditr->first;
-	Segment::iterator itr(segment.findTime(hairpinStartTime));
+	// ensure we scan all of the events at this time:
+	Segment::iterator itr(segment.findTime(hairpinStartTime + 1));
 	while (itr == segment.end() ||
-	       (*itr)->getAbsoluteTime() >= inditr->first ||
+	       (*itr)->getAbsoluteTime() > hairpinStartTime ||
 	       !(*itr)->isa(Note::EventType) ||
 	       !(*itr)->has(VELOCITY)) {
 	    if (itr == segment.begin()) {
@@ -1251,24 +1296,33 @@ TransformsMenuInterpretCommand::applyHairpins()
 	    ++itr;
 	}
 
+	if (( crescendo && (endingVelocity < startingVelocity)) ||
+	    (!crescendo && (endingVelocity > startingVelocity))) {
+	    // we've got it wrong; prefer following the hairpin to
+	    // following whatever direction we got the dynamic from
+	    endingVelocity = startingVelocity;
+	    // and then fall into the next conditional to set up the
+	    // velocities
+	}
+
 	if (endingVelocity == startingVelocity) {
 	    // calculate an ending velocity based on starting velocity
 	    // and hairpin duration (okay, we'll leave that bit for later)
 	    endingVelocity = startingVelocity * (crescendo ? 120 : 80) / 100;
 	}
 	
-	double proportion = ((e->getAbsoluteTime() - hairpinStartTime) /
-			     (hairpinEndTime - hairpinStartTime));
-	long velocity = startingVelocity;
-	if (proportion < -0.01 || proportion > 0.01) {
-	    velocity = int((endingVelocity - startingVelocity) * proportion +
-			   startingVelocity);
-	}
+	double proportion = 
+	    (double(e->getAbsoluteTime() - hairpinStartTime) /
+	     double(hairpinEndTime - hairpinStartTime));
+	long velocity =
+	    int((endingVelocity - startingVelocity) * proportion +
+		startingVelocity);
 
 	NOTATION_DEBUG << "TransformsMenuInterpretCommand::applyHairpins: velocity of note at " << e->getAbsoluteTime() << " is " << velocity << " (" << proportion << " through hairpin from " << startingVelocity << " to " << endingVelocity <<")" << endl;
-	if (velocity < 0) velocity = 0;
+	if (velocity < 10) velocity = 10;
 	if (velocity > 127) velocity = 127;
 	e->set<Int>(VELOCITY, velocity);
+	velocityToApply = velocity;
     }
 }
 
@@ -1298,14 +1352,14 @@ TransformsMenuInterpretCommand::stressBeats()
 	long velocity = 100;
 	e->get<Int>(VELOCITY, velocity);
 	velocity += velocity * velocityChange / 100;
-	if (velocity < 0) velocity = 0;
+	if (velocity < 10) velocity = 10;
 	if (velocity > 127) velocity = 127;
 	e->set<Int>(VELOCITY, velocity);
     }
 }
 
 void
-TransformsMenuInterpretCommand::articulate()
+TransformsMenuInterpretCommand::articulate(bool changeRealDurations)
 {
     // Basic articulations:
     //
@@ -1435,7 +1489,7 @@ TransformsMenuInterpretCommand::articulate()
 	    long velocity = 100;
 	    e->get<Int>(VELOCITY, velocity);
 	    velocity += velocity * velocityChange / 100;
-	    if (velocity < 0) velocity = 0;
+	    if (velocity < 10) velocity = 10;
 	    if (velocity > 127) velocity = 127;
 	    e->set<Int>(VELOCITY, velocity);
 	    
@@ -1450,14 +1504,20 @@ TransformsMenuInterpretCommand::articulate()
 	    if (durationChange != 0) { 
 		
 		//!!! deal with tuplets
-		//!!! mark this event so that we don't misquantize or
-		// misdisplay because the duration has changed
 		
-		duration += duration * durationChange / 100;
+		timeT truncation = duration * (-durationChange) / 100;
+
+		if (changeRealDurations) {
 		
-		Event *newEvent = new Event(*e, e->getAbsoluteTime(), duration);
-		toInsert.push_back(newEvent);
-		toErase.push_back(e);
+		    Event *newEvent = new Event
+			(*e, e->getAbsoluteTime(), duration);
+		    toInsert.push_back(newEvent);
+		    toErase.push_back(e);
+
+		} else {
+
+		    e->setMaybe<Int>(PERFORMANCE_TRUNCATION, truncation);
+		}
 	    }
 	}
 

@@ -55,6 +55,7 @@
 
 
 using Rosegarden::Int;
+using Rosegarden::String;
 using Rosegarden::BaseProperties;
 
 // EventView specialisation of a QListViewItem with the
@@ -137,6 +138,9 @@ EventViewItem::compare(QListViewItem *i, int col, bool ascending) const
 
 ////////////////////////////////////////////////////////////////////////
 
+int
+EventView::m_lastSetEventFilter = -1;
+
 EventView::EventView(RosegardenGUIDoc *doc,
                      std::vector<Rosegarden::Segment *> segments,
                      QWidget *parent):
@@ -145,6 +149,8 @@ EventView::EventView(RosegardenGUIDoc *doc,
 		  ProgramChange | PitchBend | Indication | Other),
     m_doc(doc)
 {
+    if (m_lastSetEventFilter < 0) m_lastSetEventFilter = m_eventFilter;
+    else m_eventFilter = m_lastSetEventFilter;
 
     initStatusBar();
     setupActions();
@@ -196,16 +202,15 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
     m_eventList->addColumn(i18n("Time  "));
     m_eventList->addColumn(i18n("Duration  "));
-    m_eventList->addColumn(i18n("Type  "));
+    m_eventList->addColumn(i18n("Event Type  "));
     m_eventList->addColumn(i18n("Pitch  "));
     m_eventList->addColumn(i18n("Velocity  "));
-    m_eventList->addColumn(i18n("Data1  "));
-    m_eventList->addColumn(i18n("Data2  "));
-
-    setButtonsToFilter();
-    applyLayout();
+    m_eventList->addColumn(i18n("Type (Data1)  "));
+    m_eventList->addColumn(i18n("Value (Data2)  "));
 
     readOptions();
+    setButtonsToFilter();
+    applyLayout();
 }
 
 EventView::~EventView()
@@ -308,19 +313,42 @@ EventView::applyLayout(int /*staffNo*/)
             if ((*it)->has(Rosegarden::Controller::NUMBER)) {
                 data1Str = QString("%1  ").
                     arg((*it)->get<Int>(Rosegarden::Controller::NUMBER));
+            } else if ((*it)->has(Rosegarden::Text::TextTypePropertyName)) {
+		data1Str = QString("%1  ").
+		    arg(strtoqstr((*it)->get<String>
+				  (Rosegarden::Text::TextTypePropertyName)));
+	    } else if ((*it)->has(Rosegarden::Indication::
+				  IndicationTypePropertyName)) {
+		data1Str = QString("%1  ").
+		    arg(strtoqstr((*it)->get<String>
+				  (Rosegarden::Indication::
+				   IndicationTypePropertyName)));
+	    } else if ((*it)->has(Rosegarden::Key::KeyPropertyName)) {
+		data1Str = QString("%1  ").
+		    arg(strtoqstr((*it)->get<String>
+				  (Rosegarden::Key::KeyPropertyName)));
+	    } else if ((*it)->has(Rosegarden::Clef::ClefPropertyName)) {
+		data1Str = QString("%1  ").
+		    arg(strtoqstr((*it)->get<String>
+				  (Rosegarden::Clef::ClefPropertyName)));
+	    } else if ((*it)->has(Rosegarden::PitchBend::MSB)) {
+                data1Str = QString("%1  ").
+                    arg((*it)->get<Int>(Rosegarden::PitchBend::MSB));
             }
 
             if ((*it)->has(Rosegarden::Controller::VALUE)) {
                 data2Str = QString("%1  ").
                     arg((*it)->get<Int>(Rosegarden::Controller::VALUE));
-            }
-
-            if ((*it)->has(Rosegarden::PitchBend::MSB)) {
-                data1Str = QString("%1  ").
-                    arg((*it)->get<Int>(Rosegarden::PitchBend::MSB));
-            }
-
-            if ((*it)->has(Rosegarden::PitchBend::LSB)) {
+            } else if ((*it)->has(Rosegarden::Text::TextPropertyName)) {
+		data2Str = QString("%1  ").
+		    arg(strtoqstr((*it)->get<String>
+				  (Rosegarden::Text::TextPropertyName)));
+	    } else if ((*it)->has(Rosegarden::Indication::
+				  IndicationTypePropertyName)) {
+		data2Str = QString("%1  ").
+		    arg((*it)->get<Int>(Rosegarden::Indication::
+					IndicationDurationPropertyName));
+	    } else if ((*it)->has(Rosegarden::PitchBend::LSB)) {
                 data2Str = QString("%1  ").
                     arg((*it)->get<Int>(Rosegarden::PitchBend::LSB));
             }
@@ -458,6 +486,7 @@ EventView::readOptions()
 {
     m_config->setGroup("EventList Options");
     EditViewBase::readOptions();
+    m_eventFilter = m_config->readNumEntry("eventfilter", m_eventFilter);
     m_eventList->restoreLayout(m_config, LayoutConfigGroupName);
 }
 
@@ -466,6 +495,8 @@ const char* const EventView::LayoutConfigGroupName = "EventList Layout";
 void
 EventView::slotSaveOptions()
 {
+    m_config->setGroup("EventList Options");
+    m_config->writeEntry("eventfilter", m_eventFilter);
     m_eventList->saveLayout(m_config, LayoutConfigGroupName);
 }
 
@@ -581,6 +612,8 @@ EventView::slotModifyFilter(int button)
                 break;
         }
     }
+
+    m_lastSetEventFilter = m_eventFilter;
 
     applyLayout(0);
 }

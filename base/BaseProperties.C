@@ -47,6 +47,9 @@ const PropertyName PITCH		= "pitch";
 const PropertyName VELOCITY		= "velocity";
 const PropertyName ACCIDENTAL		= "accidental";
 
+const PropertyName PERFORMANCE_DELAY    = "perfdelay";
+const PropertyName PERFORMANCE_TRUNCATION = "perftrunc";
+
 const PropertyName MARK_COUNT		= "marks";
 
 PropertyName getMarkPropertyName(int markNo)

@@ -644,7 +644,7 @@ private:
     void applyTextDynamics();
     void applyHairpins();
     void stressBeats();
-    void articulate(); // must be applied last
+    void articulate(bool changeRealDurations); // must be applied last
 
     // test if the event is within an indication of the given type, return
     // an iterator pointing to that indication if so
