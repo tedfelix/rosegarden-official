@@ -37,6 +37,7 @@ TracksEditor::TracksEditor(RosegardenGUIDoc* doc,
                            QWidget* parent, const char* name,
                            WFlags)
     : QWidget(parent, name),
+      DCOPObject("TracksEditorIface"),
       m_document(doc),
       m_tracksCanvas(0),
       m_hHeader(0), m_vHeader(0),
@@ -155,6 +156,28 @@ TracksEditor::setupTracks()
         
     }
 }
+
+void TracksEditor::addTrack(int instrument, int start,
+                            unsigned int nbTimeSteps)
+{
+    if (!m_document) return; // sanity check
+
+    Composition &comp = m_document->getComposition();
+
+    Rosegarden::Track* track = new Rosegarden::Track(nbTimeSteps, start);
+    track->setInstrument(instrument);
+    comp.addTrack(track);
+
+    int y = m_vHeader->sectionPos(instrument),
+        x = m_hHeader->sectionPos(start);
+
+    TrackItem *newItem = m_tracksCanvas->addPartItem(x, y, nbTimeSteps);    
+    newItem->setTrack(track);
+
+    emit needUpdate();
+}
+
+
 
 unsigned int TracksEditor::getTimeStepsResolution() const
 {

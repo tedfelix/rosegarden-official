@@ -25,6 +25,8 @@
 #include <qwidget.h>
 #include <qheader.h>
 
+#include "trackseditoriface.h"
+
 namespace Rosegarden { class Track; }
 class TrackItem;
 class TracksCanvas;
@@ -37,7 +39,8 @@ class RosegardenGUIDoc;
  *@author Guillaume Laurent, Chris Cannam, Rich Bown
  */
 
-class TracksEditor : public QWidget  {
+class TracksEditor : public QWidget, virtual public TracksEditorIface
+{
    Q_OBJECT
 public: 
     TracksEditor(RosegardenGUIDoc* doc,
@@ -67,6 +70,12 @@ public:
      * Returns the horizontal resolution of the grid in MIDI timesteps
      */
     unsigned int getTimeStepsResolution() const;
+
+    /**
+     * DCOP interface
+     */
+    virtual void addTrack(int instrument, int start, unsigned int nbTimeSteps);
+
 
 public slots:
     /**

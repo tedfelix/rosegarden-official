@@ -1,10 +1,38 @@
 bin_PROGRAMS = rosegardengui
-rosegardengui_SOURCES = trackscanvas.cpp trackseditor.cpp rosedebug.cpp staffline.cpp notationcanvasview.cpp notationview.cpp viewelementsmanager.cpp notationelement.cpp notationsets.cpp quantizer.cpp rosexmlhandler.cpp xmlstorableevent.cpp notationvlayout.cpp notationhlayout.cpp layoutengine.cpp qcanvassimplesprite.cpp staff.cpp qcanvasspritegroupable.cpp qcanvaslinegroupable.cpp qcanvasitemgroup.cpp qcanvasgroupableitem.cpp notepixmapfactory.cpp rosegardenguiview.cpp rosegardenguidoc.cpp rosegardengui.cpp main.cpp rosegardenguiiface.skel
+rosegardengui_SOURCES = trackscanvas.cpp \
+			trackseditor.cpp \
+			rosedebug.cpp \
+			staffline.cpp \
+			notationcanvasview.cpp \
+			notationview.cpp \
+			viewelementsmanager.cpp \
+			notationelement.cpp \
+			notationsets.cpp \
+			quantizer.cpp \
+			rosexmlhandler.cpp \
+			xmlstorableevent.cpp \
+			notationvlayout.cpp \
+			notationhlayout.cpp \
+			layoutengine.cpp \
+			qcanvassimplesprite.cpp \
+			staff.cpp \
+			qcanvasspritegroupable.cpp \
+			qcanvaslinegroupable.cpp \
+			qcanvasitemgroup.cpp \
+			qcanvasgroupableitem.cpp \
+			notepixmapfactory.cpp \
+			rosegardenguiview.cpp \
+			rosegardenguidoc.cpp \
+			rosegardengui.cpp \
+			main.cpp \
+			rosegardenguiiface.skel \
+			trackseditoriface.skel
+
 rosegardengui_LDADD   = -lcore -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET)
 
 SUBDIRS = docs
 
-EXTRA_DIST = main.cpp rosegardengui.cpp rosegardengui.h rosegardenguidoc.cpp rosegardenguidoc.h rosegardenguiview.cpp rosegardenguiview.h resource.h rosegardengui.desktop rosegardengui.xpm mini-rosegardengui.xpm notepixmapfactory.cpp notepixmapfactory.h qcanvasgroupableitem.cpp qcanvasgroupableitem.h qcanvasitemgroup.cpp qcanvasitemgroup.h qcanvaslinegroupable.cpp qcanvaslinegroupable.h qcanvasspritegroupable.cpp qcanvasspritegroupable.h staff.cpp staff.h qcanvassimplesprite.cpp qcanvassimplesprite.h layoutengine.cpp layoutengine.h notationhlayout.cpp notationhlayout.h notationvlayout.cpp notationvlayout.h xmlstorableevent.cpp xmlstorableevent.h rosexmlhandler.cpp rosexmlhandler.h quantizer.cpp quantizer.h rosedebug.h notationelement.cpp notationelement.h notationsets.cpp notationsets.h viewelementsmanager.cpp viewelementsmanager.h notationview.cpp notationview.h notationcanvasview.cpp notationcanvasview.h staffline.cpp staffline.h rosedebug.cpp trackseditor.cpp trackseditor.h trackscanvas.cpp trackscanvas.h rosegardenguiiface.h rosegardenguiiface.cpp
+EXTRA_DIST = main.cpp rosegardengui.cpp rosegardengui.h rosegardenguidoc.cpp rosegardenguidoc.h rosegardenguiview.cpp rosegardenguiview.h resource.h rosegardengui.desktop rosegardengui.xpm mini-rosegardengui.xpm notepixmapfactory.cpp notepixmapfactory.h qcanvasgroupableitem.cpp qcanvasgroupableitem.h qcanvasitemgroup.cpp qcanvasitemgroup.h qcanvaslinegroupable.cpp qcanvaslinegroupable.h qcanvasspritegroupable.cpp qcanvasspritegroupable.h staff.cpp staff.h qcanvassimplesprite.cpp qcanvassimplesprite.h layoutengine.cpp layoutengine.h notationhlayout.cpp notationhlayout.h notationvlayout.cpp notationvlayout.h xmlstorableevent.cpp xmlstorableevent.h rosexmlhandler.cpp rosexmlhandler.h quantizer.cpp quantizer.h rosedebug.h notationelement.cpp notationelement.h notationsets.cpp notationsets.h viewelementsmanager.cpp viewelementsmanager.h notationview.cpp notationview.h notationcanvasview.cpp notationcanvasview.h staffline.cpp staffline.h rosedebug.cpp trackseditor.cpp trackseditor.h trackscanvas.cpp trackscanvas.h rosegardenguiiface.h rosegardenguiiface.cpp trackseditoriface.cpp
 
 install-data-local:
 	$(mkinstalldirs) $(kde_appsdir)/Applications/
