@@ -648,7 +648,7 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
         if (selector) selector->slotSelectSegmentItem(item);
 
 	// Are we resizing from start or end?
-	if (item->rect().x() + item->rect().width()/2 > e->x()) {
+	if (item->rect().x() + item->rect().width()/2 > tPos.x()) {
 	    m_resizeStart = true;
 	} else {
 	    m_resizeStart = false;
