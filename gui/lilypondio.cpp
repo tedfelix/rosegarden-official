@@ -868,6 +868,8 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
     KConfig *cfg = kapp->config();
     cfg->setGroup(NotationView::ConfigGroup);
     bool exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
+    bool prefixArticulations =
+	(cfg->readUnsignedNumEntry("lilylanguage", 1) == 0);
     int lastStem = 0; // 0 => unset, -1 => down, 1 => up
 
     timeT barStart = m_composition->getBarStart(barNo);
@@ -913,7 +915,8 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	if ((*i)->getNotationAbsoluteTime() >= barEnd) break;
 
 	// First test whether we're entering or leaving a group,
-	// before we consider how to write the event itself
+	// before we consider how to write the event itself (at least
+	// for pre-2.0 Lilypond output)
 
 	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
 	    
@@ -953,7 +956,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			    tupletRatio = std::pair<int, int>(numerator, denominator);
 			}
 		    } else if (groupType == GROUP_TYPE_BEAMED) {
-			if (exportBeams) str << "[ ";
+			if (exportBeams) str << "[ "; //!!! wrong for 2.0
 
 		    } else if (groupType == GROUP_TYPE_GRACE) {
 			str << "\\grace { ";
@@ -1020,7 +1023,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    }
 
 	    if (chord.size() > 1) str << "< ";
-	    handleEndingEvents(eventsInProgress, i, str);
+	    if (prefixArticulations) handleEndingEvents(eventsInProgress, i, str);
 
 	    for (i = chord.getInitialElement(); s->isBeforeEndMarker(i); ++i) {
 
@@ -1068,13 +1071,13 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    }
 	    if (marks.size() > 0) str << " ";
 
-	    handleStartingEvents(eventsToStart, str);
+	    if (prefixArticulations) handleStartingEvents(eventsToStart, str);
 	    if (chord.size() > 1) str << "> ";
 	    if (tiedForward) str << "~ ";
 
 	} else if ((*i)->isa(Note::EventRestType)) {
 
-	    handleEndingEvents(eventsInProgress, i, str);
+	    if (prefixArticulations) handleEndingEvents(eventsInProgress, i, str);
 
 	    str << "r";
 	    if (duration != prevDuration) {
@@ -1089,7 +1092,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    }
 
 	    str << " ";
-	    handleStartingEvents(eventsToStart, str);
+	    if (prefixArticulations) handleStartingEvents(eventsToStart, str);
 
 	} else if ((*i)->isa(Clef::EventType)) {
 	    
@@ -1137,8 +1140,14 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	} else if ((*i)->isa(Text::EventType)) {
 	    
 	    handleText(*i, lilyText, lilyLyrics);
+	}
 
-	} else if ((*i)->isa(Indication::EventType)) {
+	if (!prefixArticulations) {
+	    handleEndingEvents(eventsInProgress, i, str);
+	    handleStartingEvents(eventsToStart, str);
+	}
+
+	if ((*i)->isa(Indication::EventType)) {
 	    eventsToStart.insert(*i);
 	    eventsInProgress.insert(*i);
 	}
