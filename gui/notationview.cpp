@@ -22,6 +22,7 @@
 
 #include <qstring.h>
 #include <qregexp.h>
+#include <qpaintdevicemetrics.h>
 
 #include <kmessagebox.h>
 #include <kstatusbar.h>
@@ -30,6 +31,7 @@
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kapp.h>
+#include <kprinter.h>
 
 #include "notationview.h"
 
@@ -279,7 +281,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], 0, // snap
-                                             i, this, false, width() - 50,
+                                             i, this, false, getPageWidth(),
                                              m_fontName, m_fontSize));
     }
 
@@ -303,7 +305,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_staffs[0]->setCurrent(true);
 
     m_hlayout.setPageMode(false);
-    m_hlayout.setPageWidth(width() - 50);
+    m_hlayout.setPageWidth(getPageWidth());
 
     try {
 	bool layoutApplied = applyLayout();
@@ -421,7 +423,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 // Notation Print mode
 //
 NotationView::NotationView(RosegardenGUIDoc *doc,
-                           std::vector<Segment *> segments)
+                           std::vector<Segment *> segments,
+                           KPrinter *printer)
     : EditView(doc, segments, 1, 0, "printview"),
     m_properties(getViewLocalPropertyPrefix()),
     m_currentEventSelection(0),
@@ -460,12 +463,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_documentDestroyed(false),
     m_ok(false)
 {
-//     initActionDataMaps(); // does something only the 1st time it's called
-    
-//     m_toolBox = new NotationToolBox(this);
-
     assert(segments.size() > 0);
-    NOTATION_DEBUG << "NotationView ctor" << endl;
+    NOTATION_DEBUG << "NotationView print ctor" << endl;
 
 
     // Initialise the display-related defaults that will be needed
@@ -496,50 +495,25 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 			    defaultSmoothing);
     *m_legatoQuantizer = q;
     
-
-//     setupActions();
-//     initFontToolbar();
-//     initStatusBar();
-    
     setBackgroundMode(PaletteBase);
 
+    QPaintDeviceMetrics pdm(printer);
+
     QCanvas *tCanvas = new QCanvas(this);
-    tCanvas->resize(width() * 2, height() * 2);
+    RG_DEBUG << "Print area size : "
+             << pdm.width() << ", " << pdm.height()
+             << " - printer resolution : " << printer->resolution() << "\n";
+
+    tCanvas->resize(pdm.width(), pdm.height());
     
     setCanvasView(new NotationCanvasView(*this, m_horizontalScrollBar,
                                          tCanvas, getCentralFrame()));
 
-//     m_topBarButtons = new BarButtons(&m_hlayout, 20.0, 25,
-//                                      false, getCentralFrame());
-//     setTopBarButtons(m_topBarButtons);
-
-//     m_topBarButtons->getLoopRuler()->setBackgroundColor
-// 	(RosegardenGUIColours::InsertCursorRuler);
-
-//     m_chordNameRuler = new ChordNameRuler
-// 	(&m_hlayout, 0, 20.0, 20, getCentralFrame());
-//     addRuler(m_chordNameRuler);
-//     if (showProgressive) m_chordNameRuler->show();
-//     m_chordNamesVisible = true;
-
-//     m_tempoRuler = new TempoRuler
-// 	(&m_hlayout, &doc->getComposition(),
-// 	 20.0, 20, false, getCentralFrame());
-//     addRuler(m_tempoRuler);
-//     m_tempoRuler->hide();
-//     m_temposVisible = false;
-
-//     m_bottomBarButtons = new BarButtons(&m_hlayout, 20.0, 25,
-//                                         true, getCentralFrame());
-//     setBottomBarButtons(m_bottomBarButtons);
-
     for (unsigned int i = 0; i < segments.size(); ++i) {
         m_staffs.push_back(new NotationStaff(canvas(), segments[i], 0, // snap
-                                             i, this, false, width() - 50,
+                                             i, this, false, getPageWidth(),
                                              m_fontName, m_fontSize));
     }
-
-//     m_chordNameRuler->setComposition(&doc->getComposition());
 
     positionStaffs();
     m_currentStaff = 0;
@@ -575,6 +549,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 NotationView::~NotationView()
 {
     NOTATION_DEBUG << "-> ~NotationView()\n";
+
+    slotSaveOptions();
 
     if (m_documentDestroyed) return;
 
@@ -674,7 +650,6 @@ void NotationView::positionStaffs()
 void NotationView::slotSaveOptions()
 {
     m_config->setGroup("Notation Options");
-    EditView::slotSaveOptions();
 
     m_config->writeEntry("Show Chord Name Ruler", m_chordNamesVisible);
     m_config->writeEntry("Show Tempo Ruler", m_temposVisible);
@@ -1400,6 +1375,10 @@ void NotationView::setupActions()
 		"clear_selection");
 
     createGUI(getRCFileName());
+
+    // transport toolbar is hidden by default
+    //
+    toolBar("transportToolBar")->hide();
 }
 
 bool
@@ -1581,12 +1560,16 @@ NotationView::setPageMode(bool pageMode)
 	if (m_tempoRuler && m_temposVisible) m_tempoRuler->show();
     }
 
+    int pageWidth = getCanvasView()->canvas()->width();
+
     m_hlayout.setPageMode(pageMode);
-    m_hlayout.setPageWidth(width() - 50);
+    m_hlayout.setPageWidth(pageWidth);
+
+    RG_DEBUG << "Page mode : page width = " << pageWidth << endl;
     
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         m_staffs[i]->setPageMode(pageMode);
-        m_staffs[i]->setPageWidth(width() - 50);
+        m_staffs[i]->setPageWidth(pageWidth);
     }
 
     bool layoutApplied = applyLayout();
@@ -1601,14 +1584,23 @@ NotationView::setPageMode(bool pageMode)
     updateView();
 }   
 
+int
+NotationView::getPageWidth()
+{
+    if (m_hlayout.isPageMode() && getCanvasView() && getCanvasView()->canvas())
+        return getCanvasView()->canvas()->width();
+
+    return width() - 50;
+}
+
 
 void
 NotationView::paintEvent(QPaintEvent *e)
 {
     if (m_hlayout.isPageMode()) {
-	int diff = int(width() - 50 - m_hlayout.getPageWidth());
+	int diff = int(getPageWidth() - m_hlayout.getPageWidth());
 	if (diff > -10 && diff < 10) {
-	    m_hlayout.setPageWidth(width() - 50);
+	    m_hlayout.setPageWidth(getPageWidth());
 	    refreshSegment(0, 0, 0);
 	}
     }
