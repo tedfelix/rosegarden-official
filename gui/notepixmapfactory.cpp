@@ -1509,9 +1509,17 @@ NotePixmapFactory::drawTie(bool above, int length, int shift)
     }
 #else
 
-    int x = m_left + m_noteBodyWidth + m_noteBodyWidth / 4 + shift;
+    int origLength = length;
 
-    length = length - m_noteBodyWidth - m_noteBodyWidth / 3 - shift;
+    int x = m_left + m_noteBodyWidth + m_noteBodyWidth / 4 + shift;
+    length = origLength - m_noteBodyWidth - m_noteBodyWidth / 3 - shift;
+
+    // if the length is short, move the tie a bit closer to both notes
+    if (length < m_noteBodyWidth*2) {
+	x = m_left + m_noteBodyWidth + shift;
+	length = origLength - m_noteBodyWidth - shift;
+    }
+
     if (length < m_noteBodyWidth) {
 	length = m_noteBodyWidth;
     }
