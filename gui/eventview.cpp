@@ -27,6 +27,7 @@
 #include <qlayout.h>
 #include <qlistview.h>
 #include <klocale.h>
+#include <kconfig.h>
 
 #include "eventview.h"
 #include "rosegardenguidoc.h"
@@ -41,10 +42,10 @@ using Rosegarden::BaseProperties;
 EventView::EventView(RosegardenGUIDoc *doc,
                      std::vector<Rosegarden::Segment *> segments,
                      QWidget *parent):
-    EditView(doc, segments, 2, parent, "eventview")
+    EditViewBase(doc, segments, 2, parent, "eventview")
 {
 
-    m_horizontalScrollBar->setDisabled(true);
+    readOptions();
 
     QVBox *filterBox = new QVBox(getCentralFrame());
     m_grid->addWidget(filterBox, 2, 0);
@@ -54,7 +55,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
     if (segments.size() == 1)
     {
-        setCaption(QString("%1  - Event List for Segment Track #%2")
+        setCaption(QString(i18n("%1  - Event List for Segment Track #%2"))
                    .arg(doc->getTitle())
                    .arg(segments[0]->getTrack()));
     }
@@ -173,3 +174,9 @@ EventView::setViewSize(QSize s)
 
 
 
+void EventView::readOptions()
+{
+    m_config->setGroup("EventList Options");
+    EditViewBase::readOptions();
+    
+}

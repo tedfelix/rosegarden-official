@@ -237,8 +237,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
 MatrixView::~MatrixView()
 {
-    saveOptions();
-
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         delete m_staffs[i]; // this will erase all "notes" canvas items
     }
@@ -266,10 +264,10 @@ MatrixView::~MatrixView()
     for (it = allItems.begin(); it != allItems.end(); ++it) delete *it;
 }
 
-void MatrixView::saveOptions()
+void MatrixView::slotSaveOptions()
 {        
     m_config->setGroup("Matrix Options");
-    EditView::saveOptions();
+    EditView::slotSaveOptions();
 
     m_config->writeEntry("Show Tools Toolbar", true); // in case we
                                                       // may want to
@@ -297,6 +295,8 @@ void MatrixView::readOptions()
 
 void MatrixView::setupActions()
 {   
+    EditView::setupActions("matrix.rc");
+
     // File menu
     KStdAction::close   (this, SLOT(slotCloseWindow()),    actionCollection());
 
@@ -343,16 +343,7 @@ void MatrixView::setupActions()
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 
-    KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
-    KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
-
-    KStdAction::saveOptions(this, SLOT(save_options()), actionCollection());
-    KStdAction::preferences(this, SLOT(customize()), actionCollection());
-
-    KStdAction::keyBindings(this, SLOT(editKeys()), actionCollection());
-    KStdAction::configureToolbars(this, SLOT(editToolbars()), actionCollection());
-
-    createGUI("matrix.rc");
+    createGUI(getRCFileName());
 
     actionCollection()->action("paint")->activate();
 }

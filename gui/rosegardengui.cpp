@@ -2488,8 +2488,8 @@ void RosegardenGUIApp::slotEditToolbars()
 {
     KEditToolbar dlg(actionCollection(), "rosegardenui.rc");
 
-    connect( &dlg, SIGNAL(newToolbarConfig()),
-             SLOT(slotUpdateToolbars()) );
+    connect(&dlg, SIGNAL(newToolbarConfig()),
+            SLOT(slotUpdateToolbars()));
 
     dlg.exec();
 }

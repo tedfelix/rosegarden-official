@@ -494,13 +494,15 @@ protected:
      */
     void initActionDataMaps();
 
+protected slots:
     /**
      * save general Options like all bar positions and status as well
      * as the geometry and the recent file list to the configuration
      * file
      */
-    virtual void saveOptions();
+    virtual void slotSaveOptions();
 
+protected:
     /**
      * read general Options again and initialize all variables like the recent file list
      */

@@ -199,7 +199,7 @@ protected:
      * as the geometry and the recent file list to the configuration
      * file
      */
-    virtual void saveOptions();
+    virtual void slotSaveOptions();
 
     /**
      * read general Options again and initialize all variables like the recent file list

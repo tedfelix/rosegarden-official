@@ -369,7 +369,6 @@ NotationView::~NotationView()
 {
     kdDebug(KDEBUG_AREA) << "-> ~NotationView()\n";
 
-    saveOptions();
     if (m_documentDestroyed) return;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
@@ -455,10 +454,10 @@ void NotationView::positionStaffs()
     }
 }    
 
-void NotationView::saveOptions()
+void NotationView::slotSaveOptions()
 {
     m_config->setGroup("Notation Options");
-    EditView::saveOptions();
+    EditView::slotSaveOptions();
 
     m_config->writeEntry("Show Notes Toolbar",       getToggleAction("show_notes_toolbar")->isChecked());
     m_config->writeEntry("Show Rests Toolbar",       getToggleAction("show_rests_toolbar")->isChecked());
@@ -508,7 +507,9 @@ void NotationView::readOptions()
 }
 
 void NotationView::setupActions()
-{   
+{
+    EditView::setupActions("notation.rc");
+
     KRadioAction* noteAction = 0;
     
     // View menu stuff
@@ -897,8 +898,6 @@ void NotationView::setupActions()
                 "add_key_signature");
 
     // setup Settings menu
-    KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
-
     static const char* actionsToolbars[][4] = 
         {
             { "Show &Notes Toolbar",  "1slotToggleNotesToolBar()",  "show_notes_toolbar",                    "palette-notes" },
@@ -983,15 +982,7 @@ void NotationView::setupActions()
     accelerators->connectItem(accelerators->insertItem(Key_Right + SHIFT),
 			      this, SLOT(slotExtendSelectionForward()));
 
-    KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()), actionCollection());
-
-    KStdAction::saveOptions(this, SLOT(save_options()), actionCollection());
-    KStdAction::preferences(this, SLOT(customize()), actionCollection());
-
-    KStdAction::keyBindings(this, SLOT(editKeys()), actionCollection());
-    KStdAction::configureToolbars(this, SLOT(editToolbars()), actionCollection());
-
-    createGUI("notation.rc");
+    createGUI(getRCFileName());
 }
 
 void

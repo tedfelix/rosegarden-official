@@ -31,11 +31,11 @@
 
 #include <qlistview.h>
 
-#include "editview.h"
+#include "editviewbase.h"
 
 class RosegardenGUIDoc;
 
-class EventView : public EditView
+class EventView : public EditViewBase
 {
     Q_OBJECT
 public:
@@ -65,6 +65,10 @@ signals:
 public slots:
 protected:
 
+    virtual void readOptions();
+
+
+    //--------------- Data members ---------------------------------
     QListView *m_eventList;
 
 };
