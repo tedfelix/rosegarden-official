@@ -696,17 +696,6 @@ Composition::addTempo(timeT time, double tempo)
 }
 
 int
-Composition::addTempo(Event tempoEvent)
-{
-    ReferenceSegment::iterator i =
-	m_tempoSegment.insert(&tempoEvent);
-    m_barPositionsNeedCalculating = true;
-    updateRefreshStatuses();
-
-    return std::distance(m_tempoSegment.begin(), i);
-}
-
-int
 Composition::addRawTempo(timeT time, int tempo)
 {
     Event *tempoEvent = new Event(TempoEventType, time);

@@ -545,7 +545,7 @@ AddTimeSignatureAndNormalizeCommand::~AddTimeSignatureAndNormalizeCommand()
 
 AddTempoChangeCommand::~AddTempoChangeCommand()
 {
-    if (m_oldTempo) delete m_oldTempo;
+    // nothing here either
 }
 
 void
@@ -553,18 +553,12 @@ AddTempoChangeCommand::execute()
 {
     int oldIndex = m_composition->getTempoChangeNumberAt(m_time);
 
-    if(oldIndex >= 0)
+    if (oldIndex >= 0)
     {
         std::pair<timeT, long> data = 
             m_composition->getRawTempoChange(oldIndex);
 
-        if (data.first == m_time)
-        {
-            m_oldTempo =
-                new Rosegarden::Event(Composition::TempoEventType, m_time);
-            m_oldTempo->set<Rosegarden::Int>(Composition::TempoProperty,
-                                             data.second);
-        }
+        if (data.first == m_time) m_oldTempo = data.second;
     }
 
     m_tempoChangeIndex = m_composition->addTempo(m_time, m_tempo);
@@ -575,9 +569,8 @@ AddTempoChangeCommand::unexecute()
 {
     m_composition->removeTempoChange(m_tempoChangeIndex);
 
-    if (m_oldTempo)
-    {
-        m_composition->addTempo(*m_oldTempo);
+    if (m_oldTempo != 0) {
+        m_composition->addRawTempo(m_time, m_oldTempo);
     }
 }
 

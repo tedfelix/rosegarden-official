@@ -305,6 +305,11 @@ NoteInserter::getOffsetWithinRest(int staffNo,
 				  const NotationElementList::iterator &i,
 				  double offset)
 {
+    //!!! To make this work correctly in tuplet mode, our divisor would
+    // have to be the tupletified duration of the tuplet unit -- we can
+    // do that, we just haven't yet
+    if (m_tupletMode) return 0;
+
     NotationStaff *staff = m_nParentView->getStaff(staffNo);
 
     kdDebug(KDEBUG_AREA) << "NoteInserter::getOffsetWithinRest: offset is " << offset << endl;

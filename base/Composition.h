@@ -377,11 +377,6 @@ public:
      */
     int addTempo(timeT time, double tempo);
 
-    /*
-     * Insert a TempoEvent 
-     */
-    int addTempo(Event tempoEvent);
-
     /**
      * Add a tempo-change event at the given time, to the given
      * tempo (in beats per hour).  Removes any existing tempo

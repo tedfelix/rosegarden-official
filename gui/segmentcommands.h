@@ -235,8 +235,8 @@ public:
 private:
     Rosegarden::Composition *m_composition;
     Rosegarden::timeT m_time;
-    double m_tempo;
-    Rosegarden::Event *m_oldTempo;
+    double m_tempo; // bpm
+    int m_oldTempo; // bph
     int m_tempoChangeIndex;
 };
 
