@@ -296,6 +296,7 @@ public slots:
     void slotMarksAddTextMark();
     void slotMarksRemoveMarks();
 
+    void slotEditAddClef();
     void slotEditAddTempo();
     void slotEditAddTimeSignature();
     void slotEditAddKeySignature();

@@ -1141,6 +1141,12 @@ NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef)
     m_p.drawPixmap(x, y - clefPixmap.offsetY(), clefPixmap);
     m_pm.drawPixmap(x, y - clefPixmap.offsetY(), *(clefPixmap.mask()));
 
+    for (h = 0; h <= 8; h += 2) {
+        y = (lw * 2) + ((8 - h) * lw) / 2;
+	m_p.drawLine(x/2, y, m_generatedPixmap->width() - x/2 - 1, y);
+	m_pm.drawLine(x/2, y, m_generatedPixmap->width() - x/2 - 1, y);
+    }
+
     return makeCanvasPixmap(m_pointZero);
 }
 

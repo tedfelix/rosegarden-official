@@ -167,6 +167,17 @@ int Clef::getAxisHeight() const
     else return 6;
 }
 
+Clef::ClefList
+Clef::getClefs()
+{
+    ClefList clefs;
+    clefs.push_back(Clef(Bass));
+    clefs.push_back(Clef(Tenor));
+    clefs.push_back(Clef(Alto));
+    clefs.push_back(Clef(Treble));
+    return clefs;
+}
+
 Event *Clef::getAsEvent(timeT absoluteTime) const
 {
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);

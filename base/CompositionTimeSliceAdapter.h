@@ -36,6 +36,7 @@ using std::pair;
 
 class Event;
 class Composition;
+class SegmentSelection;
 
 /**
  * CompositionTimeSliceAdapter makes a Composition act like a sorted
@@ -57,6 +58,18 @@ public:
     CompositionTimeSliceAdapter(Composition* c,
 				timeT begin = 0,
 				timeT end = 0);
+
+    /**
+     * Construct a CompositionTimeSliceAdapter that operates on the
+     * given section in time of the given set of segments within the
+     * given composition.  If begin and end are equal, the whole
+     * duration of the composition will be used.
+     */
+    CompositionTimeSliceAdapter(Composition* c,
+				SegmentSelection* s,
+				timeT begin = 0,
+				timeT end = 0);
+
     ~CompositionTimeSliceAdapter() { };
 
     iterator begin();
@@ -82,6 +95,7 @@ public:
 
 private:
     Composition* m_composition;
+    SegmentSelection* m_segments;
     timeT m_begin;
     timeT m_end;
 };

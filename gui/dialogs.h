@@ -363,4 +363,42 @@ protected:
 };
 
 
+class ClefDialog : public KDialogBase
+{
+    Q_OBJECT
+
+public:
+    enum ConversionType {
+	NoConversion,
+	ChangeOctave,
+	Transpose
+    };
+
+    ClefDialog(QWidget *parent,
+	       NotePixmapFactory *npf,
+	       Rosegarden::Clef defaultClef,
+	       bool showConversionOptions = true);
+
+    Rosegarden::Clef getClef() const;
+    ConversionType getConversionType() const;
+
+protected:
+    NotePixmapFactory *m_notePixmapFactory;
+    Rosegarden::Clef m_clef;
+    
+    QLabel *m_clefLabel;
+    QLabel *m_clefNameLabel;
+
+    QRadioButton *m_noConversionButton;
+    QRadioButton *m_changeOctaveButton;
+    QRadioButton *m_transposeButton;
+    
+    void redrawClefPixmap();
+    
+public slots:
+    void slotClefUp();
+    void slotClefDown();
+};
+  
+
 #endif

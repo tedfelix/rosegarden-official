@@ -647,7 +647,7 @@ NotationHLayout::reconcileBarsLinear()
 			     << " to " << m_totalWidth << endl;
 
 	m_barPositions[barNo] = m_totalWidth;
-	m_totalWidth += getPostBarMargin() + maxWidth + getPreBarMargin();
+	m_totalWidth += maxWidth;
 
 	// Now apply width to this bar on all staffs
 
@@ -816,7 +816,7 @@ NotationHLayout::reconcileBarsPage()
 	    }
 
 	    m_barPositions[barNo] = m_totalWidth;
-	    m_totalWidth += getPostBarMargin() + maxWidth + getPreBarMargin();
+	    m_totalWidth += maxWidth;
 
 	    for (BarDataMap::iterator i = m_barData.begin();
 		 i != m_barData.end(); ++i) {

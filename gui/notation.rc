@@ -28,8 +28,9 @@ etc
   <Action name="select_to_end"/>
   <Action name="select_whole_staff"/>
   <Separator/>
-  <Action name="add_tempo"/>
+  <Action name="add_clef"/>
   <Action name="add_key_signature"/>
+  <Action name="add_tempo"/>
   <Action name="add_time_signature"/>
 </Menu>
 

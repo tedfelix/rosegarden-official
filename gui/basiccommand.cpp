@@ -80,7 +80,7 @@ BasicCommand::execute()
 	copyFrom(m_redoEvents);
     }
 
-    m_segment.updateRefreshStatuses(getBeginTime(), getEndTime());
+    m_segment.updateRefreshStatuses(getBeginTime(), getRelayoutEndTime());
 }
 
 void
@@ -93,7 +93,7 @@ BasicCommand::unexecute()
 
     copyFrom(&m_savedEvents);
 
-    m_segment.updateRefreshStatuses(getBeginTime(), getEndTime());
+    m_segment.updateRefreshStatuses(getBeginTime(), getRelayoutEndTime());
 }
     
 void

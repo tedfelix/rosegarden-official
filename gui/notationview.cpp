@@ -638,6 +638,10 @@ void NotationView::setupActions()
                 SLOT(slotMarksRemoveMarks()), actionCollection(),
                 "remove_marks");
 
+    new KAction(ClefInsertionCommand::getGlobalName(), 0, this,
+                SLOT(slotEditAddClef()), actionCollection(),
+                "add_clef");
+
     new KAction(AddTempoChangeCommand::getGlobalName(), 0, this,
                 SLOT(slotEditAddTempo()), actionCollection(),
                 "add_tempo");
@@ -1678,6 +1682,38 @@ void NotationView::slotMarksRemoveMarks()
         addCommandToHistory(new MarksMenuRemoveMarksCommand
                             (*m_currentEventSelection));
 }
+
+void NotationView::slotEditAddClef()
+{
+    NotationStaff *staff = m_staffs[m_currentStaff];
+    double layoutX = staff->getLayoutXOfInsertCursor();
+    if (layoutX >= 0) {
+
+	Rosegarden::Event *clefEvt = 0, *keyEvt = 0;
+	Segment &segment = staff->getSegment();
+	timeT insertionTime = getInsertionTime(clefEvt, keyEvt);
+
+	Rosegarden::Clef clef;
+	if (clefEvt) clef = Rosegarden::Clef(*clefEvt);
+
+	ClefDialog *dialog = new ClefDialog(this, m_notePixmapFactory, clef);
+
+	if (dialog->exec() == QDialog::Accepted) {
+
+	    ClefDialog::ConversionType conversion = dialog->getConversionType();
+
+	    bool shouldChangeOctave = (conversion != ClefDialog::NoConversion);
+	    bool shouldTranspose = (conversion == ClefDialog::Transpose);
+	    
+	    addCommandToHistory
+		(new ClefInsertionCommand
+		 (segment, insertionTime, dialog->getClef(),
+		  shouldChangeOctave, shouldTranspose));
+	}
+
+	delete dialog;
+    }
+}			
 
 void NotationView::slotEditAddTempo()
 {

@@ -29,6 +29,7 @@
 #include "CompositionTimeSliceAdapter.h"
 #include "Segment.h"
 #include "Composition.h"
+#include "Selection.h"
 
 namespace Rosegarden {
 
@@ -39,6 +40,22 @@ CompositionTimeSliceAdapter::CompositionTimeSliceAdapter(Composition *c,
 							 timeT begin,
 							 timeT end) :
     m_composition(c),
+    m_segments(0),
+    m_begin(begin),
+    m_end(end)
+{
+    if (begin == end) {
+	m_begin = 0;
+	m_end = c->getDuration();
+    }
+};
+
+CompositionTimeSliceAdapter::CompositionTimeSliceAdapter(Composition *c,
+							 SegmentSelection* s,
+							 timeT begin,
+							 timeT end) :
+    m_composition(c),
+    m_segments(s),
     m_begin(begin),
     m_end(end)
 {
@@ -58,6 +75,8 @@ CompositionTimeSliceAdapter::begin() {
     // after m_begin.
     for (Composition::iterator ci = m_composition->begin();
          ci != m_composition->end(); ++ci) {
+
+	if (m_segments && m_segments->find(*ci) == m_segments->end()) continue;
 
         if (!(*ci)->empty() && (*ci)->getEndTime() >= m_begin) {
             Segment::iterator j = (*ci)->findTime(m_begin);

@@ -70,9 +70,12 @@ class ClefInsertionCommand : public BasicCommand
 public:
     ClefInsertionCommand(Rosegarden::Segment &segment,
 			 Rosegarden::timeT time,
-			 Rosegarden::Clef clef);
+			 Rosegarden::Clef clef,
+			 bool shouldChangeOctave = false,
+			 bool shouldTranspose = false);
     virtual ~ClefInsertionCommand();
 
+    static QString getGlobalName(Rosegarden::Clef *clef = 0);
     virtual Rosegarden::timeT getRelayoutEndTime();
 
     Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
@@ -81,6 +84,9 @@ protected:
     virtual void modifySegment();
 
     Rosegarden::Clef m_clef;
+    bool m_shouldChangeOctave;
+    bool m_shouldTranspose;
+
     Rosegarden::Event *m_lastInsertedEvent;
 };
 

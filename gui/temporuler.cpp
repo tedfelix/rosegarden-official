@@ -126,7 +126,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
 	timeT time(m_composition->getTimeSignatureChange(sigNo).first);
 	if (timePoints.find(time) != timePoints.end()) {
-	    timePoints[time] += timeSigChangeHere;
+	    timePoints[time] |= timeSigChangeHere;
 	} else {
 	    timePoints.insert(TimePoints::value_type(time, timeSigChangeHere));
 	}

@@ -159,6 +159,10 @@ public:
 
     Clef &operator=(const Clef &c);
 
+    bool operator==(const Clef &c) const {
+	return c.m_clef == m_clef;
+    }
+
     ~Clef() { }
 
     std::string getClefType() const { return m_clef; }
@@ -188,6 +192,13 @@ public:
      * of the clef's axis -- the line around which the clef is drawn.
      */
     int getAxisHeight() const;
+
+    typedef std::vector<Clef> ClefList;
+
+    /**
+     * Return all the clefs, in ascending order of pitch
+     */
+    static ClefList getClefs();
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
@@ -254,7 +265,7 @@ public:
 
     Key &operator=(const Key &kc);
 
-    bool operator==(const Key &k) {
+    bool operator==(const Key &k) const {
 	return k.m_name == m_name;
     }
 

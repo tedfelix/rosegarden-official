@@ -1596,3 +1596,127 @@ TempoDialog::slotRadioButtonPressed(int id)
 }
 
 
+
+ClefDialog::ClefDialog(QWidget *parent,
+		       NotePixmapFactory *npf,
+		       Rosegarden::Clef defaultClef,
+		       bool showConversionOptions) :
+    KDialogBase(parent, 0, true, i18n("Clef"), Ok | Cancel),
+    m_notePixmapFactory(npf),
+    m_clef(defaultClef)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+
+    QGroupBox *clefFrame = new QGroupBox
+	(1, Horizontal, i18n("Clef"), vbox);
+    
+    QButtonGroup *conversionFrame = new QButtonGroup
+	(1, Horizontal, i18n("Existing notes following clef change"), vbox);
+	
+    QHBox *clefBox = new QHBox(clefFrame);
+    
+    BigArrowButton *clefDown = new BigArrowButton(clefBox, Qt::LeftArrow);
+    QToolTip::add(clefDown, i18n("Lower clef"));
+
+    QHBox *clefLabelBox = new QVBox(clefBox);
+    
+    m_clefLabel = new QLabel(i18n("Clef"), clefLabelBox);
+    m_clefLabel->setAlignment(AlignVCenter | AlignHCenter);
+
+    m_clefNameLabel = new QLabel(i18n("Clef"), clefLabelBox);
+    m_clefNameLabel->setAlignment(AlignVCenter | AlignHCenter);
+
+    BigArrowButton *clefUp = new BigArrowButton(clefBox, Qt::RightArrow);
+    QToolTip::add(clefUp, i18n("Higher clef"));
+      
+    if (showConversionOptions) {
+	m_noConversionButton =
+	    new QRadioButton
+	    (i18n("Maintain current pitches"), conversionFrame);
+	m_changeOctaveButton =
+	    new QRadioButton
+	    (i18n("Transpose into appropriate octave"), conversionFrame);
+	m_transposeButton = 0;
+//	m_transposeButton =
+//	    new QRadioButton
+//	    (i18n("Maintain current positions on the staff"), conversionFrame);
+	m_changeOctaveButton->setChecked(true);
+    } else {
+	m_noConversionButton = 0;
+	m_changeOctaveButton = 0;
+	m_transposeButton = 0;
+	conversionFrame->hide();
+    }
+    
+    QObject::connect(clefUp, SIGNAL(pressed()), this, SLOT(slotClefUp()));
+    QObject::connect(clefDown, SIGNAL(pressed()), this, SLOT(slotClefDown()));
+
+    redrawClefPixmap();
+}
+
+Rosegarden::Clef
+ClefDialog::getClef() const
+{
+    return m_clef;
+}
+
+ClefDialog::ConversionType
+ClefDialog::getConversionType() const
+{
+    if (m_noConversionButton && m_noConversionButton->isChecked()) {
+	return NoConversion;
+    } else if (m_changeOctaveButton && m_changeOctaveButton->isChecked()) {
+	return ChangeOctave;
+    } else if (m_transposeButton && m_transposeButton->isChecked()) {
+	return Transpose;
+    }
+    return NoConversion;
+}
+
+void
+ClefDialog::slotClefUp()
+{
+    Rosegarden::Clef::ClefList clefs(Rosegarden::Clef::getClefs());
+
+    for (Rosegarden::Clef::ClefList::iterator i = clefs.begin();
+	 i != clefs.end(); ++i) {
+
+	if (m_clef == *i) {
+	    if (++i == clefs.end()) i = clefs.begin();
+	    m_clef = *i;
+	    break;
+	}
+    }
+
+    redrawClefPixmap();
+}
+
+
+void
+ClefDialog::slotClefDown()
+{
+    Rosegarden::Clef::ClefList clefs(Rosegarden::Clef::getClefs());
+
+    for (Rosegarden::Clef::ClefList::iterator i = clefs.begin();
+	 i != clefs.end(); ++i) {
+
+	if (m_clef == *i) {
+	    if (i == clefs.begin()) i = clefs.end();
+	    m_clef = *--i;
+	    break;
+	}
+    }
+
+    redrawClefPixmap();
+}
+
+void
+ClefDialog::redrawClefPixmap()
+{
+    QCanvasPixmap pmap = m_notePixmapFactory->makeClefDisplayPixmap(m_clef);
+    m_clefLabel->setPixmap(pmap);
+    QString name(m_clef.getClefType().c_str());
+    name = name.left(1).upper() + name.right(name.length() - 1);
+    m_clefNameLabel->setText(name);
+}
+

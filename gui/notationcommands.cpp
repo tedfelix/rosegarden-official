@@ -137,9 +137,15 @@ RestInsertionCommand::modifySegment()
 
 
 ClefInsertionCommand::ClefInsertionCommand(Segment &segment, timeT time,
-					   Clef clef) :
-    BasicCommand("Insert Clef", segment, time, time + 1),
+					   Clef clef,
+					   bool shouldChangeOctave,
+					   bool shouldTranspose) :
+    BasicCommand(getGlobalName(&clef), segment, time,
+		 ((shouldChangeOctave || shouldTranspose) ?
+		  segment.getEndTime() : time + 1)),
     m_clef(clef),
+    m_shouldChangeOctave(shouldChangeOctave),
+    m_shouldTranspose(shouldTranspose),
     m_lastInsertedEvent(0)
 {
     // nothing
@@ -148,6 +154,18 @@ ClefInsertionCommand::ClefInsertionCommand(Segment &segment, timeT time,
 ClefInsertionCommand::~ClefInsertionCommand()
 {
     // nothing
+}
+
+QString
+ClefInsertionCommand::getGlobalName(Rosegarden::Clef *clef) 
+{
+    if (clef) {
+	QString name(clef->getClefType().c_str());
+	name = name.left(1).upper() + name.right(name.length()-1);
+	return QString("Change to ") + name + " Cle&f...";
+    } else {
+	return "Add Cle&f Change...";
+    }
 }
 
 timeT
@@ -162,8 +180,37 @@ ClefInsertionCommand::modifySegment()
 {
     SegmentNotationHelper helper(getSegment());
 
+    Clef oldClef;
+    Rosegarden::Key key;
+    helper.getClefAndKeyAt(getBeginTime(), oldClef, key);
+
     Segment::iterator i = helper.insertClef(getBeginTime(), m_clef);
     if (i != helper.segment().end()) m_lastInsertedEvent = *i;
+
+    if (m_clef != oldClef) {
+
+	int semitones = 0;
+
+	if (m_shouldChangeOctave) {
+	    semitones += 12 * (m_clef.getOctave() - oldClef.getOctave());
+	}
+	if (m_shouldTranspose) {
+	    semitones -= m_clef.getPitchOffset() - oldClef.getPitchOffset();
+	}
+
+	if (semitones != 0) {
+	    while (i != helper.segment().end()) {
+		if ((*i)->isa(Note::EventType)) {
+		    long pitch = 0;
+		    if ((*i)->get<Int>(PITCH, pitch)) {
+			pitch += semitones;
+			(*i)->set<Int>(PITCH, pitch);
+		    }
+		}
+		++i;
+	    }
+	}
+    }
 }
 
 
