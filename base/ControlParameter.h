@@ -60,7 +60,7 @@ public:
 
     void setName(const std::string &name) { m_name = name; }
     void setType(const std::string &type) { m_type = type; }
-    void setDescription(const std::string &des) { m_type = des; }
+    void setDescription(const std::string &des) { m_description = des; }
 
     void setMin(int min) { m_min = min; }
     void setMax(int max) { m_max = max; }
