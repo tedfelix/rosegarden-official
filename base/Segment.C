@@ -203,7 +203,7 @@ void Track::calculateBarPositions()
 
             if (thisBarTime >= barDuration) {
                 barCorrect = (thisBarTime == barDuration);
-                thisBarTime = 0;
+                thisBarTime = thisBarTime -  barDuration;
                 startNewBar = true;
             }
         }

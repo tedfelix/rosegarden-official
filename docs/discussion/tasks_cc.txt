@@ -11,7 +11,7 @@ References in round brackets are to 0.1_planned_features.txt.
 
  2. General split-on-insert [DONE, cleanup and some fixes needed]
 
- 3. Auto-beaming on input
+ 3. Auto-beaming on input [DONE]
 
  4. More than one track per editing window (for 0.1, I think it only
  has to be possible to display these tracks, we don't necessarily have
@@ -29,7 +29,7 @@ References in round brackets are to 0.1_planned_features.txt.
 
  7. Various subtle improvements to notation layout, for example moving
  long notes to the right to be more central in their space (A9)
-
+ 
  Throughout: Code documentation
 
 
