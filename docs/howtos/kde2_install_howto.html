@@ -9,20 +9,19 @@
 
     <h2>Files needed</h2> 
     <ul>
-      <li><a href ="ftp://ftp.trolltech.com/qt/source/qt-x11-2.1.1.tar.gz">Qt 2.1.1</a>
-      <li><a href ="ftp://ftp.kde.org/pub/kde/unstable/distribution/2.0Beta2/tar/src/kde-qt-addon-1.91.tar.bz2">kde-qt-addon</a>
-      <li><a href ="ftp://ftp.kde.org/pub/kde/unstable/distribution/2.0Beta2/tar/src/kdelibs-1.91.tar.bz2">kdelibs</a>
+      <li><a href ="ftp://ftp.trolltech.com/qt/source/qt-x11-2.2.0-beta1.tar.gz">Qt 2.1.1</a>
+      <li><a href ="ftp://ftp.kde.org/pub/kde/unstable/distribution/2.0Beta3/tar/src/kde-qt-addon-1.92.tar.bz2">kde-qt-addon</a>
+      <li><a href ="ftp://ftp.kde.org/pub/kde/unstable/distribution/2.0Beta3/tar/src/kdelibs-1.92.tar.bz2">kdelibs</a>
     </ul>
 
-    <b>NOTE from June 10, 9:47 : the ftp.kde.org links are broken right now. It appears they
-       are moving things here and there. I'll try to keep the links updated</b>.
+    <p>
+      <b>UPDATE: You need Qt 2.2.0 beta to compile the current code.</b>
+    </p>
 
     <p>These are not RPMs because I've had troubles with them
     (conflicts with KDE 1) and wanted to have everything installed in
     one directory (/opt/kde2) so uninstall would be a simple 'rm
-    -rf'. You may still want to try them, they are <a
-    href="ftp://ftp.kde.org/pub/kde/unstable/distribution/rpm/">here</a>. You
-    can go Qt 2.1.0, that's not really a problem.
+    -rf'.
 
     <h2>Compilation</h2>
 
@@ -31,7 +30,7 @@
     the installation procedure, you need to untar Qt <i>where you want
     to install it</i> (in our case that would be /opt/kde2 - I suggest
     we all install things at the same place to avoid stupid setup
-    problems :-). So you do that, and now you have a /opt/kde2/qt-2.1.1.
+    problems :-). So you do that, and now you have a /opt/kde2/qt-2.2.0.
 
     <p>I also have a 'qt2' symlink in /opt/kde2, so as to make qt
     upgrades easier and avoid the dependency on the version number.
@@ -79,7 +78,7 @@
     <address><a href="mailto:glaurent@telegraph-road.org">Guillaume Laurent</a></address>
 <!-- Created: Wed Jun  7 19:04:58 CEST 2000 -->
 <!-- hhmts start -->
-Last modified: Wed Jun  7 19:40:10 CEST 2000
+Last modified: Mon Aug 14 01:15:47 CEST 2000
 <!-- hhmts end -->
   </body>
 </html>
