@@ -29,6 +29,10 @@
 // representation - NOTE ONs with durations) and turn them
 // into MIDI events (generate and segment NOTE OFFs).
 //
+// Recording wise we take aRTS events and turn them into
+// a MappedComposition before sending it up to the gui.
+//
+//
 
 #ifndef _ROSEGARDEN_SEQUENCER_H_
 #define _ROSEGARDEN_SEQUENCER_H_
@@ -40,7 +44,6 @@
 #include "Midi.h"
 #include "MidiRecord.h"
 #include "MidiEvent.h"
-#include "Segment.h"
 
 
 namespace Rosegarden
@@ -108,10 +111,6 @@ public:
     //
     void record(const RecordStatus& recordStatus);
 
-    // get a vector of recorded events from aRTS
-    inline std::vector<Arts::MidiEvent>* getMidiQueue()
-    { return m_midiRecordPort.getQueue(); }
-
     // Our current recording status.  Asynchronous record states
     // mean that we're just accepting asynchronous events but not
     // recording them - they are forwarded onto the GUI for level/
@@ -171,9 +170,10 @@ public:
     }
 
 
-    // process a raw aRTS MIDI event into internal representation
-    void processMidiIn(const Arts::MidiCommand &midiCommand,
-                       const Arts::TimeStamp &timeStamp);
+    // this method turns any recorded MIDI into a MappedComposition
+    // and returns it to the gui
+    //
+    MappedComposition getMappedComposition();
 
     // Process MappedComposition into MIDI events and send to aRTS.
     void processMidiOut(Rosegarden::MappedComposition mappedComp,
@@ -197,7 +197,20 @@ public:
 
 private:
 
+    // set-up
     void initializeMidi();
+
+    // get a vector of recorded events from aRTS
+    // (only for internal use)
+    //
+    inline std::vector<Arts::MidiEvent>* getMidiQueue()
+        { return m_midiRecordPort.getQueue(); }
+
+    // process a raw aRTS MIDI event into internal representation
+    // (only for internal use)
+    //
+    void processMidiIn(const Arts::MidiCommand &midiCommand,
+                       const Arts::TimeStamp &timeStamp);
 
     // aRTS devices
     //
@@ -231,9 +244,9 @@ private:
     unsigned int           m_ppq;   // sequencer resolution
     double                 m_tempo; // Beats Per Minute
 
-    Rosegarden::Segment     *m_recordSegment;
+    MappedComposition      m_recordComposition;
 
-    std::map<unsigned int, Event*> m_noteOnMap;
+    std::map<unsigned int, MappedEvent*> m_noteOnMap;
 
 };
 

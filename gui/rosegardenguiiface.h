@@ -56,18 +56,30 @@ k_dcop:
     virtual void fileClose()                     = 0;
     virtual void quit()                          = 0;
 
-    // Sequener gets slice of Events in a MappedComposition
+    // Sequencer gets slice of MappedEvents wrapped in a
+    // MappedComposition.  These are lightweight versions
+    // of what we have in Event and Composition.  
+    //
     virtual const Rosegarden::MappedComposition&
             getSequencerSlice(const Rosegarden::timeT &sliceStart,
                               const Rosegarden::timeT &sliceEnd) = 0;
 
+    // The Sequencer sends back MappedCompositions full of
+    // newly recorded MappedEvents for storage and presentation
+    // by the GUI
+    //
+    virtual void processRecordedMidi(const Rosegarden::MappedComposition &mC)=0;
+
     // Sequencer updates GUI pointer position
+    //
     virtual void setPointerPosition(const int &position) = 0;
 
     // Sequencer updates GUI with status
+    //
     virtual void notifySequencerStatus(const int &status) = 0;
 
     // Actions proxy
+    //
     DCOPRef action( const QCString &name );
     QCStringList actions();
     QMap<QCString,DCOPRef> actionMap();

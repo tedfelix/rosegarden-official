@@ -24,7 +24,6 @@
 #include "MidiArts.h"
 #include "MidiFile.h"
 #include "Composition.h"
-#include "Segment.h"
 #include "Event.h"
 #include "NotationTypes.h"
 #include "BaseProperties.h"
@@ -44,8 +43,7 @@ Sequencer::Sequencer():
     m_startPlayback(true),
     m_playing(false),
     m_ppq(Note(Note::Crotchet).getDuration()),
-    m_tempo(120.0),     // default tempo
-    m_recordSegment(0)
+    m_tempo(120.0)     // default tempo
 {
     initializeMidi();
 }
@@ -141,10 +139,6 @@ Sequencer::record(const RecordStatus& recordStatus)
 
 	cout << "Recording Started at : " << m_recordStartTime.sec << " : "
 	     << m_recordStartTime.usec << endl;
-                                     
-	m_recordSegment = new Segment;
-	m_recordSegment->setTrack(1);
-	m_recordSegment->setStartIndex(0);
 
     }
     else
@@ -189,12 +183,6 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
     Rosegarden::MidiByte message;
     //Rosegarden::Event *event;
 
-    if (m_recordSegment == 0)
-    {
-	cerr << "RosegardenSequencer - no Segment created to processMidi on to - is recording enabled?" << endl;
-	exit(1);
-    }
-
     channel = midiCommand.status & MIDI_CHANNEL_NUM_MASK;
     message = midiCommand.status & MIDI_MESSAGE_TYPE_MASK;
 
@@ -215,7 +203,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
     case MIDI_NOTE_ON:
 	if ( m_noteOnMap[chanNoteKey] == 0 )
 	{
-	    m_noteOnMap[chanNoteKey] = new Event;
+	    m_noteOnMap[chanNoteKey] = new MappedEvent;
 
 	    // set time since recording started in Absolute internal time
 	    /*
@@ -224,8 +212,16 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 	    */
 
 	    // set note type and pitch
-	    m_noteOnMap[chanNoteKey]->setType(Note::EventType);
-	    m_noteOnMap[chanNoteKey]->set<Int>(BaseProperties::PITCH, midiCommand.data1);
+	    //m_noteOnMap[chanNoteKey]->setType(Note::EventType);
+	    //m_noteOnMap[chanNoteKey]->set<Int>(BaseProperties::PITCH, midiCommand.data1);
+
+            // Set time, pitch and velocity on the MappedEvent
+            //
+            m_noteOnMap[chanNoteKey]->
+                            setAbsoluteTime(convertToInternalTime(timeStamp));
+            m_noteOnMap[chanNoteKey]->setPitch(midiCommand.data1);
+            m_noteOnMap[chanNoteKey]->setVelocity(midiCommand.data2);
+
 	}
 	break;
 
@@ -234,10 +230,8 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 	//
 	if ( m_noteOnMap[chanNoteKey] != 0 )
 	{
-	    /*
-	      duration = convertToMidiTime(timeStamp) -
-	      m_noteOnMap[chanNoteKey]->getAbsoluteTime();
-	    */
+            duration = convertToInternalTime(timeStamp) -
+                       m_noteOnMap[chanNoteKey]->getAbsoluteTime();
 
 	    // for the moment, ensure we're positive like this
 	    //
@@ -248,7 +242,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 
 	    // insert the record
 	    //
-	    m_recordSegment->insert(m_noteOnMap[chanNoteKey]);
+	    m_recordComposition.insert(m_noteOnMap[chanNoteKey]);
 
 	    // tell us about it
 	    cout << "INSERTED NOTE at time " 
@@ -486,4 +480,38 @@ Sequencer::getSequencerTime()
     return (0);
 }
 
+MappedComposition
+Sequencer::getMappedComposition()
+{
+    // clear out our global segment
+    //
+    m_recordComposition.clear();
+
+    if (recordStatus() != RECORD_MIDI)
+        return m_recordComposition;
+
+    vector<Arts::MidiEvent>::iterator midiQueueIt;
+    vector<Arts::MidiEvent> *midiQueue;
+
+    // get the MIDI queue
+    //
+    midiQueue = getMidiQueue();
+    
+    // Process it into the internal Composition
+    for (midiQueueIt = midiQueue->begin();
+         midiQueueIt != midiQueue->end();
+         midiQueueIt++)
+    {
+        processMidiIn(midiQueueIt->command,
+                      recordTime(midiQueueIt->time));
+    }
+
+    return m_recordComposition;
+
 }
+
+
+
+}
+
+

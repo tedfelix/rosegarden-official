@@ -109,6 +109,13 @@ public slots:
     // Sends status changes up to GUI
     void notifySequencerStatus();
 
+    // These two methods process any pending MIDI or audio
+    // and send them up to the gui for storage and display
+    //
+    void processRecordedMidi();
+    void processRecordedAudio();
+
+
 private:
     Rosegarden::MappedComposition* fetchEvents(const Rosegarden::timeT &start,
                                                const Rosegarden::timeT &end);

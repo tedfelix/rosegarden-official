@@ -105,7 +105,12 @@ RosegardenSequencerApp::play(const Rosegarden::timeT &position,
     // the main event loop
     //
     m_songPosition = position;
-    m_transportStatus = STARTING_TO_PLAY;
+
+    if (m_transportStatus != RECORDING_MIDI &&
+        m_transportStatus != RECORDING_AUDIO )
+    {
+        m_transportStatus = STARTING_TO_PLAY;
+    }
 
     // Set up latencies
     //
@@ -361,10 +366,10 @@ RosegardenSequencerApp::record(const Rosegarden::timeT &position,
 
     TransportStatus localRecordMode = (TransportStatus) recordMode;
 
-    if (localRecordMode == RECORDING_MIDI)
+    if (localRecordMode == STARTING_TO_RECORD_MIDI)
     {
     }
-    else if (localRecordMode == RECORDING_AUDIO)
+    else if (localRecordMode == STARTING_TO_RECORD_AUDIO)
     {
     }
     else
@@ -379,6 +384,36 @@ RosegardenSequencerApp::record(const Rosegarden::timeT &position,
     m_transportStatus = localRecordMode;
 
     return play(position, playLatency, fetchLatency, tempo);
+}
+
+
+void
+RosegardenSequencerApp::processRecordedMidi()
+{
+    QByteArray data, replyData;
+    QCString replyType;
+    QDataStream arg(data, IO_WriteOnly);
+
+    arg << m_sequencer->getMappedComposition();
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+                                  ROSEGARDEN_GUI_IFACE_NAME,
+                                 "processRecordedMidi(Rosegarden::MappedComposition)",
+                                  data, replyType, replyData, true))
+    {
+	cerr << "RosegardenSequencer::processRecordedMidi() - " <<
+                "can't call RosegardenGUI client" << endl;
+
+	// Stop the sequencer so we can see if we can try again later
+	//
+	m_transportStatus = STOPPING;
+    }
+}
+
+
+void
+RosegardenSequencerApp::processRecordedAudio()
+{
 }
 
 

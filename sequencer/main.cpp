@@ -123,12 +123,66 @@ int main(int argc, char *argv[])
                         }
                         break;
 
-                        case PLAYING:
+                    case PLAYING:
                         if (!roseSeq->keepPlaying())
                         {
                             // there's a problem or the piece has
                             // finished - so stop playing
                             roseSeq->setStatus(STOPPING);
+                        }
+                        break;
+
+                    case STARTING_TO_RECORD_MIDI:
+                        if (!roseSeq->startPlaying())
+                        {
+                            roseSeq->setStatus(STOPPING);
+                        }
+                        else
+                        {
+                            roseSeq->setStatus(RECORDING_MIDI);
+                        }
+                        break;
+
+                    case STARTING_TO_RECORD_AUDIO:
+                        if (!roseSeq->startPlaying())
+                        {
+                            roseSeq->setStatus(STOPPING);
+                        }
+                        else
+                        {
+                            roseSeq->setStatus(RECORDING_AUDIO);
+                        }
+                        break;
+
+                    case RECORDING_MIDI:
+                        if (!roseSeq->keepPlaying())
+                        {
+                            // there's a problem or the piece has
+                            // finished - so stop playing
+                            roseSeq->setStatus(STOPPING);
+                        }
+                        else
+                        {
+                            // Now process any incoming MIDI events
+                            // and return them to the gui
+                            //
+                            roseSeq->processRecordedMidi();
+                        }
+                        break;
+
+                    case RECORDING_AUDIO:
+                        if (!roseSeq->keepPlaying())
+                        {
+                            // there's a problem or the piece has
+                            // finished - so stop playing
+                            roseSeq->setStatus(STOPPING);
+                        }
+                        else
+                        {
+                            // Now process any incoming audio
+                            // and return it to the gui
+                            //
+                            roseSeq->processRecordedAudio();
                         }
                         break;
 

@@ -43,6 +43,8 @@ enum TransportStatus
      RECORDING_AUDIO,
      STOPPING,
      STARTING_TO_PLAY,
+     STARTING_TO_RECORD_MIDI,
+     STARTING_TO_RECORD_AUDIO,
      QUIT
 };
 

@@ -1415,6 +1415,14 @@ RosegardenGUIApp::closeTransport()
   cerr << "TRANSPORT CLOSED" << endl;
 }
 
+// Called when we want to start recording from the GUI.
+// This method tells the sequencer to start recording and
+// from then on the sequencer returns MappedCompositions
+// to the GUI via the "processRecordedMidi() method -
+// also called via DCOP
+//
+//
+
 void
 RosegardenGUIApp::record()
 {
@@ -1440,15 +1448,15 @@ RosegardenGUIApp::record()
     switch (m_doc->getComposition().getTrackByIndex(rID)->getType())
     {
         case Rosegarden::Track::Midi:
-            recordType = RECORDING_MIDI;
+            recordType = STARTING_TO_RECORD_MIDI;
             break;
 
         case Rosegarden::Track::Audio:
-            recordType = RECORDING_AUDIO;
+            recordType = STARTING_TO_RECORD_AUDIO;
             break;
 
         default:
-            recordType = RECORDING_MIDI;
+            recordType = STARTING_TO_RECORD_MIDI;
             break;
     }
 
@@ -1524,6 +1532,20 @@ RosegardenGUIApp::record()
         }
     }
 
+}
+
+
+
+// This method accepts an incoming MappedComposition and goes about
+// inserting it into the Composition and updating the display to show
+// what has been recorded and where.
+//
+//
+void
+RosegardenGUIApp::processRecordedMidi(const Rosegarden::MappedComposition &mC)
+{
+    std::cout << "processRecordMidi has returned a composition with " <<
+              mC.size() << " elements" << endl;
 }
 
 

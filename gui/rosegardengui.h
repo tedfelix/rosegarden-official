@@ -122,11 +122,19 @@ public:
     virtual void exportMIDIFile(const QString &url);
 
     /**
-     * the Sequencer accesses this method via DCOP
+     * The Sequencer calls this method to get a MappedCompositon
+     * full of MappedEvents for it to play.
      */
     const Rosegarden::MappedComposition&
             getSequencerSlice(const Rosegarden::timeT &sliceStart,
                               const Rosegarden::timeT &sliceEnd);
+
+    /**
+     * The Sequencer sends back a MappedComposition full of
+     * any MappedEvents that it's recorded.
+     *
+     */
+    void processRecordedMidi(const Rosegarden::MappedComposition &mC);
 
 protected:
 
