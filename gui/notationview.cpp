@@ -1591,7 +1591,7 @@ void NotationView::setupActions()
                 SLOT(slotGroupDecrescendo()), actionCollection(), "decrescendo");
 
     new KAction(GroupMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::Ottavo2Up), icon, 0, this,
+                (Rosegarden::Indication::Ottavo2Up), 0, 0, this,
                 SLOT(slotGroupOctave2Up()), actionCollection(), "octave_2up");
 
     icon = QIconSet

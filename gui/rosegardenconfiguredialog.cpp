@@ -191,7 +191,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 
     layout->addWidget(new QLabel(i18n("Default editor (for double-click on segment)"),
                                  frame), 0, 0);
-    layout->addWidget(new QLabel(i18n("Number of count-in bars when recording"),
+    layout->addWidget(new QLabel(i18n("Number of count-in measures when recording"),
                                  frame), 1, 0);
     layout->addWidget(new QLabel(i18n("Always use default studio when loading files"),
 		                 frame), 2, 0);
@@ -1636,7 +1636,7 @@ static QString durationToString(Rosegarden::Composition &comp,
 				Rosegarden::timeT duration,
 				Rosegarden::RealTime rt)
 {
-    return i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 bars)")
+    return i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 measures)")
 	.arg(rt.sec / 60).arg(rt.sec % 60)
 	.arg(rt.msec() / 100).arg((rt.msec() / 10) % 10)
 	.arg(duration).arg(comp.getBarNumber(absTime + duration) -

@@ -987,10 +987,29 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 		    
 	    } else {
 
-		NOTATION_DEBUG
-		    << "Unrecognised indicationType " << indicationType << endl;
-		if (m_showUnknowns) {
-		    pixmap = m_notePixmapFactory->makeUnknownPixmap();
+		int octaves = 0;
+
+		if (indicationType == Indication::Ottavo2Up) octaves = 2;
+		else if (indicationType == Indication::OttavoUp) octaves = 1;
+		else if (indicationType == Indication::OttavoDown) octaves = -1;
+		else if (indicationType == Indication::Ottavo2Down) octaves = -2;
+
+		if (octaves != 0) {
+		    if (m_printPainter) {
+			m_notePixmapFactory->drawOttavo
+			    (length, octaves,
+			     *m_printPainter, int(coords.first), coords.second);
+		    } else {
+			pixmap = m_notePixmapFactory->makeOttavoPixmap
+			    (length, octaves);
+		    }
+		} else {
+
+		    NOTATION_DEBUG
+			<< "Unrecognised indicationType " << indicationType << endl;
+		    if (m_showUnknowns) {
+			pixmap = m_notePixmapFactory->makeUnknownPixmap();
+		    }
 		}
 	    }
 

@@ -295,6 +295,8 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_timeSigFontMetrics(m_timeSigFont),
     m_bigTimeSigFont("new century schoolbook", 12, QFont::Normal),
     m_bigTimeSigFontMetrics(m_bigTimeSigFont),
+    m_ottavoFont("times", 8, QFont::Normal, true),
+    m_ottavoFontMetrics(m_ottavoFont),
     m_generatedPixmap(0),
     m_generatedMask(0),
     m_generatedWidth(-1),
@@ -316,6 +318,8 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_timeSigFontMetrics(m_timeSigFont),
     m_bigTimeSigFont(npf.m_bigTimeSigFont),
     m_bigTimeSigFontMetrics(m_bigTimeSigFont),
+    m_ottavoFont("times", 8, QFont::Normal, true),
+    m_ottavoFontMetrics(m_ottavoFont),
     m_generatedPixmap(0),
     m_generatedMask(0),
     m_generatedWidth(-1),
@@ -340,6 +344,8 @@ NotePixmapFactory::operator=(const NotePixmapFactory &npf)
 	m_tupletCountFontMetrics = QFontMetrics(m_tupletCountFont);
 	m_textMarkFont = npf.m_textMarkFont;
 	m_textMarkFontMetrics = QFontMetrics(m_textMarkFont);
+	m_ottavoFont = npf.m_ottavoFont;
+	m_ottavoFontMetrics = QFontMetrics(m_ottavoFontMetrics);
 	init(npf.m_font->getName(), npf.m_font->getSize());
 	m_dottedRestCache->clear();
 	m_textFontCache.clear();
@@ -395,6 +401,9 @@ NotePixmapFactory::init(std::string fontName, int size)
 
     m_textMarkFont.setPixelSize(size * 2);
     m_textMarkFontMetrics = QFontMetrics(m_textMarkFont);
+
+    m_ottavoFont.setPixelSize(size * 2);
+    m_ottavoFontMetrics = QFontMetrics(m_ottavoFont);
 }
 
 NotePixmapFactory::~NotePixmapFactory()
@@ -2350,7 +2359,64 @@ void
 NotePixmapFactory::drawOttavoAux(int length, int octavesUp,
 				 QPainter *painter, int x, int y)
 {
-    // ...
+    int height = m_ottavoFontMetrics.height();
+    int backpedal = 0;
+    QString label;
+    QRect r;
+
+    if (octavesUp == 2 || octavesUp == -2) {
+	label = "15ma";
+	backpedal = m_ottavoFontMetrics.width("15") / 2;
+    } else {
+	label = "8va";
+	backpedal = m_ottavoFontMetrics.width("8") / 2;
+    }
+
+    int width = length + backpedal;
+    
+    if (painter) {
+	painter->save();
+	m_p->beginExternal(painter);
+	painter->translate(x - backpedal, y - height);
+    } else {
+	createPixmapAndMask(width, height);
+    }
+
+    QPen pen(Qt::DashLine);
+    pen.setWidth(getStemThickness());
+
+    if (m_selected) {
+	m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
+	pen.setColor(RosegardenGUIColours::SelectedElement);
+    }
+
+    m_p->painter().setFont(m_ottavoFont);
+    if (!m_inPrinterMethod) m_p->maskPainter().setFont(m_ottavoFont);
+
+    m_p->drawText(0, m_ottavoFontMetrics.ascent(), label);
+
+    m_p->painter().setPen(pen);
+    if (!m_inPrinterMethod) m_p->maskPainter().setPen(pen);
+
+    int y0 = m_ottavoFontMetrics.ascent() * 2 / 3 - getStemThickness()/2;
+    int y1 = (octavesUp < 0 ? 0 : m_ottavoFontMetrics.ascent());
+    
+    m_p->drawLine(m_ottavoFontMetrics.width(label) + getStemThickness(),
+		  y0, width - 1, y0);
+
+    pen.setStyle(Qt::SolidLine);
+    m_p->painter().setPen(pen);
+    if (!m_inPrinterMethod) m_p->maskPainter().setPen(pen);
+
+    m_p->drawLine(width - getStemThickness() * 2, y0,
+		  width - getStemThickness() * 2, y1);
+
+    m_p->painter().setPen(QPen());
+    if (!m_inPrinterMethod) m_p->maskPainter().setPen(QPen());
+    
+    if (painter) {
+	painter->restore();
+    }
 }
 
 void

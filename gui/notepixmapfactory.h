@@ -323,6 +323,9 @@ protected:
     QFont m_bigTimeSigFont;
     QFontMetrics m_bigTimeSigFontMetrics;
 
+    QFont m_ottavoFont;
+    QFontMetrics m_ottavoFontMetrics;
+
     QPixmap *m_generatedPixmap;
     QBitmap *m_generatedMask;
 

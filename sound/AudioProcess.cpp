@@ -1298,7 +1298,6 @@ AudioInstrumentMixer::kick(bool wantLock)
 
     bool readSomething = false;
     processBlocks(false, readSomething);
-//    if (m_bussMixer) m_bussMixer->signal();
     if (readSomething) m_fileReader->signal();
     m_fileReader->updateDefunctStatuses();
 

@@ -276,7 +276,12 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 		    getSlurList(staff).push_back(i);
 		}
 
-		el->setLayoutY(staff.getLayoutYForHeight(-9));
+		if (indicationType == Indication::OttavoUp ||
+		    indicationType == Indication::Ottavo2Up) {
+		    el->setLayoutY(staff.getLayoutYForHeight(15));
+		} else {
+		    el->setLayoutY(staff.getLayoutYForHeight(-9));
+		}
 	    }
         }
     }

@@ -521,11 +521,11 @@ msgid "Scope"
 msgstr "Bereik"
 
 #: dialogs.cpp:169
-msgid "Insertion point is at start of bar %1."
+msgid "Insertion point is at start of measure %1."
 msgstr "Invoegpunt is aan het begin van balk %1."
 
 #: dialogs.cpp:173
-msgid "Insertion point is in the middle of bar %1."
+msgid "Insertion point is in the middle of measure %1."
 msgstr "Invoegpunt is in het midden van balk %1."
 
 #: dialogs.cpp:178
@@ -533,15 +533,15 @@ msgid "Insertion point is at start of composition."
 msgstr "Invoegpunt is aan het begin van de compositie."
 
 #: dialogs.cpp:183
-msgid "Start bar %1 here"
+msgid "Start measure %1 here"
 msgstr "Start balk %1 hier"
 
 #: dialogs.cpp:187
-msgid "Change time from start of bar %1"
+msgid "Change time from start of measure %1"
 msgstr "Verander starttijd van balk %1"
 
 #: dialogs.cpp:194
-msgid "Time change will take effect at the start of bar %1."
+msgid "Time change will take effect at the start of measure %1."
 msgstr "Tijdsverandering zal plaatsvinden aan begin van balk %1."
 
 #: dialogs.cpp:200
@@ -961,11 +961,11 @@ msgid "%1.%2 s,"
 msgstr "%1.%2 s"
 
 #: dialogs.cpp:2643
-msgid "at the start of bar %1."
+msgid "at the start of measure %1."
 msgstr "aan het begin van balk %1."
 
 #: dialogs.cpp:2647
-msgid "in the middle of bar %1."
+msgid "in the middle of measure %1."
 msgstr "in het midden van balk %1."
 
 #: dialogs.cpp:2667
@@ -1891,7 +1891,7 @@ msgid "Real time:"
 msgstr ""
 
 #: markereditor.cpp:70
-msgid "In bar:"
+msgid "In measure:"
 msgstr "In balk:"
 
 #: markereditor.cpp:87
@@ -3455,7 +3455,7 @@ msgid "Default editor (for double-click on segment)"
 msgstr "Standaardbewerker (bij dubbelklikken op segment)"
 
 #: rosegardenconfiguredialog.cpp:193
-msgid "Number of count-in bars when recording"
+msgid "Number of count-in measures when recording"
 msgstr ""
 
 #: rosegardenconfiguredialog.cpp:195
@@ -3791,7 +3791,7 @@ msgid "Filename:"
 msgstr "Bestandsnaam"
 
 #: rosegardenconfiguredialog.cpp:1394
-msgid "%1 minutes %2.%3%4 seconds (%5 units, %6 bars)"
+msgid "%1 minutes %2.%3%4 seconds (%5 units, %6 measures)"
 msgstr "%1 minuten %2.%3.%4 seconden (%5 eenheiden, %6 balken)"
 
 #: rosegardenconfiguredialog.cpp:1400
@@ -4935,11 +4935,11 @@ msgid "units"
 msgstr ""
 
 #: widgets.cpp:1447
-msgid "Bars:"
+msgid "Measures:"
 msgstr ""
 
 #: widgets.cpp:1447
-msgid "Bar:"
+msgid "Measure:"
 msgstr ""
 
 #: widgets.cpp:1456

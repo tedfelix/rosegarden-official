@@ -136,7 +136,8 @@ from the latest source files with the command
   $ ./scripts/update_i18n_messages
 
 (This moves the Qt moc files out of the way and then runs "make -f
-admin/Makefile.common package-messages".)
+admin/Makefile.common package-messages".  You will need to make sure
+you have KDEDIR set correctly before running it.)
 
 Similarly, language files can be "merged" to include new diffs using
 

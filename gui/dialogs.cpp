@@ -191,11 +191,11 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 	    if (barNo != 0 || !atStartOfBar) {
 		if (atStartOfBar) {
 		    scopeText = QString
-			(i18n("Insertion point is at start of bar %1."))
+			(i18n("Insertion point is at start of measure %1."))
 			.arg(barNo + 1);
 		} else {
 		    scopeText = QString
-			(i18n("Insertion point is in the middle of bar %1."))
+			(i18n("Insertion point is in the middle of measure %1."))
 		    .arg(barNo + 1);
 		}
 	    } else {
@@ -205,7 +205,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 	
 	    new QLabel(scopeText, groupBox);
 	    m_asGivenButton = new QRadioButton
-		(i18n("Start bar %1 here").arg(barNo + 2), groupBox);
+		(i18n("Start measure %1 here").arg(barNo + 2), groupBox);
 
 	    if (!atStartOfBar) {
 		m_startOfBarButton = new QRadioButton
@@ -216,7 +216,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 		m_asGivenButton->setChecked(true);
 	    }
 	} else {
-	    new QLabel(i18n("Time change will take effect at the start of bar %1.")
+	    new QLabel(i18n("Time change will take effect at the start of measure %1.")
 		       .arg(barNo + 1), groupBox);
 	}
     }
@@ -2706,11 +2706,11 @@ TempoDialog::populateTempo()
     int barNo = comp.getBarNumber(m_tempoTime);
     if (comp.getBarStart(barNo) == m_tempoTime) {
 	m_tempoBarLabel->setText
-	    (i18n("at the start of bar %1.").arg(barNo+1));
+	    (i18n("at the start of measure %1.").arg(barNo+1));
 	m_tempoChangeStartOfBar->setEnabled(false);
     } else {
 	m_tempoBarLabel->setText(
-	    i18n("in the middle of bar %1.").arg(barNo+1));
+	    i18n("in the middle of measure %1.").arg(barNo+1));
 	m_tempoChangeStartOfBar->setEnabled(true);
     }
 
@@ -2730,7 +2730,7 @@ TempoDialog::populateTempo()
 	    lastms.sprintf("%03d", lastRT.msec());
 	    int lastBar = comp.getBarNumber(lastTempoTime);
 	    m_tempoChangeBeforeAt->setText
-		(i18n("        (at %1.%2 s, in bar %3)").arg(lastRT.sec)
+		(i18n("        (at %1.%2 s, in measure %3)").arg(lastRT.sec)
 		 .arg(lastms).arg(lastBar+1));
 	    m_tempoChangeBeforeAt->show();
 

@@ -149,7 +149,7 @@ private:
 	    iterator_base n(*this); n -= i; return n;
 	}
 
-	FastVector<T>::difference_type operator-(const iterator_base &i) const{
+	typename FastVector<T>::difference_type operator-(const iterator_base &i) const{
 	    assert(m_v == i.m_v);
             return m_i - i.m_i;
 	}

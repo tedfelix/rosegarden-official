@@ -1614,7 +1614,7 @@ RosegardenTimeWidget::init(bool editable)
 	}
     }
 
-    label = new QLabel(m_isDuration ? i18n("Bars:") : i18n("Bar:"), frame);
+    label = new QLabel(m_isDuration ? i18n("Measures:") : i18n("Measure:"), frame);
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 1, 0);
 

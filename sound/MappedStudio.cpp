@@ -1815,15 +1815,9 @@ MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
     std::vector<unsigned long> list = getPluginsInLibrary(pluginHandle);
     std::vector<unsigned long>::iterator pIt = list.begin();
 
-    std::cout << list.size() << " plugins in library" << std::endl;
-
     for (; pIt != list.end(); pIt++)
     {
-	std::cout << "inspecting one of 'em" << std::endl;
-
         if (getPluginInstance(*pIt, false)) {
-	    std::cout << "still in use, returning" << std::endl;
-
 	    pthread_mutex_unlock(&_mappedObjectContainerLock);
             return;
 	}
@@ -1921,8 +1915,8 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 
             if (descriptor)
             {
-		std::cout << "Found plugin; label is " << descriptor->Label
-			  << "; " << (LADSPA_IS_HARD_RT_CAPABLE(descriptor->Properties) ? "is" : "is not") << " hard RT capable" << std::endl;
+//		std::cout << "Found plugin; label is " << descriptor->Label
+//			  << "; " << (LADSPA_IS_HARD_RT_CAPABLE(descriptor->Properties) ? "is" : "is not") << " hard RT capable" << std::endl;
 
 		std::string category = "";
 		
@@ -1943,7 +1937,7 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 		    def_uri = lrdf_get_default_uri(descriptor->UniqueID);
 		    if (def_uri) {
 			defs = lrdf_get_setting_values(def_uri);
-			std::cout << "Have " << defs->count << " default settings" << std::endl;
+//			std::cout << "Have " << defs->count << " default settings" << std::endl;
 		    }
 		}
 #endif // HAVE_LIBLRDF
@@ -1997,7 +1991,7 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 			    {
 				if (defs->items[j].pid == controlPortNumber)
 				{
-				    std::cout << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << "; applying this to port number " << i << " with name " << port->getPortName() << std::endl;
+//				    std::cout << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << "; applying this to port number " << i << " with name " << port->getPortName() << std::endl;
 				    port->setDefault(defs->items[j].value);
 				}
 			    }

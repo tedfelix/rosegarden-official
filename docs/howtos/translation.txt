@@ -1,7 +1,8 @@
 How to make a new translation for Rosegarden :
 
-- do 'make package-messages' to ensure messages are up to date. This
-will update the 'rosegarden.pot' file in the po/ directory.
+- run './scripts/update_i18n_messages' from the top-level directory to
+ensure messages are up to date. This will update the 'rosegarden.pot'
+file in the po/ directory.
 
 - go to the po/ directory, copy 'rosegarden.pot' to the new xx.po file
 you want to translate, for instance fr.po
