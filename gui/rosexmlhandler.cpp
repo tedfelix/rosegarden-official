@@ -825,14 +825,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         {
             m_device = getStudio().getDevice(id);
 
-            if (m_device->getType() == Rosegarden::Device::Midi)
+            if (m_device && m_device->getType() == Rosegarden::Device::Midi)
                 m_device->setName(qstrtostr(nameStr));
         }
         else if (type == "audio")
         {
             m_device = getStudio().getDevice(id);
 
-            if (m_device->getType() == Rosegarden::Device::Audio)
+            if (m_device && m_device->getType() == Rosegarden::Device::Audio)
                 m_device->setName(qstrtostr(nameStr));
         }
         else
