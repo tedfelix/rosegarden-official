@@ -1,0 +1,38 @@
+# -*- python -*-
+############################
+## load the config
+
+## use the environment set in the top-level
+## SConstruct file
+
+Import( "env" )
+myenv=env.Copy()
+Import("soundLibs")
+
+rgseqSources = Split("""
+mmappedcontrolblock.cpp
+mmappedsegment.cpp
+rosegardensequencer.cpp
+main.cpp
+sequencermapper.cpp
+rosegardensequenceriface_skel.cpp
+""")
+
+myenv['LIBS'].append('kdeui')
+myenv['LIBS'].append('kdecore')
+myenv['LIBS'].append('base')
+myenv['LIBS'].append('RosegardenSound')
+myenv['LIBS'].append('RosegardenSequencer')
+
+myenv['LIBPATH'].append('../base')
+myenv['LIBPATH'].append('../sound')
+
+myenv.Dcop( ['rosegardensequenceriface.h'] )
+
+rgseq = myenv.Program('rosegardensequencer', rgseqSources,
+              CPPPATH = ['../base', '../sound', '../gui', '..', '.'],
+               )
+
+for dep in soundLibs:
+    Depends(rgseq, dep)
+

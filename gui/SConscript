@@ -1,0 +1,163 @@
+# -*- python -*-
+############################
+## load the config
+
+## use the environment set in the top-level
+## SConstruct file
+
+Import( "env" )
+myenv=env.Copy()
+Import("soundLibs")
+
+rgSources = Split("""
+        audiocommands.cpp 
+        audiomanagerdialog.cpp 
+        audioplugindialog.cpp 
+        audiopluginmanager.cpp 
+	audiopluginoscgui.cpp 
+	audiopreviewthread.cpp 
+	audiosynthmanager.cpp 
+        bankeditor.cpp
+        barbuttons.cpp 
+	basiccommand.cpp 
+	chordnameruler.cpp 
+	colours.cpp 
+	colourwidgets.cpp 
+        commondialogs.cpp 
+        compositionview.cpp 
+        constants.cpp 
+        controleditor.cpp 
+        controlruler.cpp 
+	csoundio.cpp 
+	deviceeditor.cpp 
+	devicemanager.cpp 
+	dialogs.cpp 
+	editcommands.cpp 
+	edittool.cpp 
+	editview.cpp 
+	editviewbase.cpp 
+        eventcommands.cpp 
+	eventfilter.cpp 
+        eventview.cpp 
+        hydrogenio.cpp 
+	importdevicedialog.cpp 
+        instrumentparameterbox.cpp 
+	kde32_kfontrequester.cpp 
+	kde32_ktabwidget.cpp 
+	kde32_ktabbar.cpp 
+	kstartuplogo.cpp 
+	ktmpstatusmsg.cpp 
+        lilypondio.cpp 
+        linedstaff.cpp 
+        loopruler.cpp 
+	main.cpp 
+        markereditor.cpp 
+	matrixcanvasview.cpp 
+	matrixcommands.cpp 
+	matrixelement.cpp 
+	matrixhlayout.cpp 
+        matrixparameterbox.cpp 
+	matrixstaff.cpp 
+	matrixtool.cpp 
+	matrixview.cpp 
+	matrixvlayout.cpp 
+        midifilter.cpp 
+        midipitchlabel.cpp 
+	mixer.cpp 
+	mmapper.cpp 
+	multiviewcommandhistory.cpp 
+	mupio.cpp 
+        musicxmlio.cpp 
+	notationcanvasview.cpp 
+	notationcommands.cpp 
+	notationelement.cpp 
+	notationhlayout.cpp 
+	notationproperties.cpp 
+	notationsets.cpp 
+	notationstaff.cpp 
+	notationstrings.cpp 
+	notationtool.cpp 
+	notationview.cpp 
+	notationviewslots.cpp 
+	notationvlayout.cpp 
+	notecharname.cpp 
+	notefont.cpp 
+	notefontviewer.cpp 
+	notepixmapfactory.cpp 
+	notestyle.cpp 
+	pianokeyboard.cpp 
+	pixmapfunctions.cpp 
+	playlist.cpp 
+	qcanvasgroupableitem.cpp 
+	qcanvassimplesprite.cpp 
+	qdeferscrollview.cpp 
+	rawnoteruler.cpp 
+	rg21io.cpp 
+	rgapplication.cpp 
+	rgled.cpp 
+	rosedebug.cpp 
+	rosegardencanvasview.cpp 
+        rosegardenconfiguredialog.cpp 
+	rosegardengui.cpp 
+	rosegardenguidoc.cpp 
+	rosegardenguiiface.cpp 
+	rosegardenguiview.cpp 
+	rosegardenscrollview.cpp 
+        rosegardentransport.ui 
+        rosegardentransportdialog.cpp 
+	rosestrings.cpp 
+	rosexmlhandler.cpp 
+	scrollbox.cpp 
+        segmentcommands.cpp 
+        segmentparameterbox.cpp 
+        segmenttool.cpp 
+        sequencemanager.cpp 
+        sequencermapper.cpp 
+	spline.cpp 
+	staffline.cpp 
+        studiocommands.cpp 
+        studiocontrol.cpp 
+        studiowidgets.cpp 
+	tempocolour.cpp 
+	temporuler.cpp 
+	tempoview.cpp 
+	textruler.cpp 
+	timewidget.cpp 
+        trackbuttons.cpp 
+	trackeditor.cpp 
+        trackheader.cpp 
+        tracklabel.cpp 
+	trackseditoriface_skel.cpp 
+	triggermanager.cpp 
+        velocitycolour.cpp 
+        vumeter.cpp 
+        widgets.cpp
+	xmlstorableevent.cpp
+""")
+
+# KDE libs
+myenv['LIBS'].append('kdeui')
+myenv['LIBS'].append('kdecore')
+myenv['LIBS'].append('kdeprint')
+myenv['LIBS'].append('kio')
+
+myenv['LIBS'].append('Xft')
+
+# RG libs
+myenv['LIBS'].append('base')
+myenv['LIBS'].append('RosegardenSound')
+myenv['LIBS'].append('RosegardenSequencer')
+
+myenv['LIBPATH'].append('../base')
+myenv['LIBPATH'].append('../sound')
+myenv['LIBPATH'].append('/usr/X11R6/lib')
+
+rg = myenv.Program('rosegarden', rgSources,
+              CPPPATH = ['/usr/X11R6/include/X11/Xft',
+                         '/usr/include/freetype2',
+                         '../base', '../sound', '..', '.'],
+               )
+
+for dep in soundLibs:
+    Depends(rg, dep)
+
