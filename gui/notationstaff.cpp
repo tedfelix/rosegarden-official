@@ -1126,6 +1126,8 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 {
     // first time through this, m_ready is false -- we mark it true
 
+    NOTATION_DEBUG << "NotationStaff::markChanged (" << from << " -> " << to << ") " << movedOnly << endl;
+
     if (from == to) m_status.clear();
     else {
 	
@@ -1182,7 +1184,7 @@ NotationStaff::checkRendered(timeT from, timeT to)
     if (!m_ready) return;
     Rosegarden::Composition *composition = getSegment().getComposition();
 
-//    NOTATION_DEBUG << "NotationStaff::checkRendered: " << from << " -> " << to << endl;
+    NOTATION_DEBUG << "NotationStaff::checkRendered: " << from << " -> " << to << endl;
 
     int fromBar = composition->getBarNumber(from);
     int toBar   = composition->getBarNumber(to);
@@ -1192,7 +1194,7 @@ NotationStaff::checkRendered(timeT from, timeT to)
     for (int bar = fromBar; bar <= toBar; ++bar) {
 //	NOTATION_DEBUG << "NotationStaff::checkRendered: bar " << bar << " status "
 //		       << m_status[bar] << endl;
-    
+   
 	switch (m_status[bar]) {
 	    
 	case UnRendered:

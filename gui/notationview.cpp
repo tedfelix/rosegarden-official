@@ -3008,10 +3008,10 @@ NotationView::checkRendered(double cx0, double cx1)
     for (int i = 0; i < m_staffs.size(); ++i) {
 	NotationStaff *staff = m_staffs[i];
 	LinedStaff::LinedStaffCoords cc0 = staff->getLayoutCoordsForCanvasCoords(cx0, 0);
-	LinedStaff::LinedStaffCoords cc1 = staff->getLayoutCoordsForCanvasCoords(cx1,
-										 staff->getTotalHeight() + staff->getY());
+	LinedStaff::LinedStaffCoords cc1 = staff->getLayoutCoordsForCanvasCoords(cx1, staff->getTotalHeight() + staff->getY());
 	timeT t0 = m_hlayout->getTimeForX(cc0.first);
 	timeT t1 = m_hlayout->getTimeForX(cc1.first);
+	NOTATION_DEBUG << "NotationView::checkRendered: cx0=" << cx0 << " cx1=" << cx1 << " cc0.first=" << cc0.first << " cc1.first=" << cc1.first << " t0=" << t0 << " t1=" << t1 << endl;
 	staff->checkRendered(t0, t1);
     }
 }
