@@ -1,0 +1,44 @@
+<tip category="Rosegarden|General">
+<html>
+<p>...that can select your autosave interval from Settings->Configure
+Rosegarden?
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that you can create a default studio by copying any .rg or .rgd file to
+~/.kde/share/apps/rosegarden/autoload.rg?
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>If you're having problems with stem directions in your Lilypond export not
+matching what's in the notation editor, you can force all the stem direction
+properties for the composition to become permanent, and thus ensure their
+correct export, by toggling the direction of one of the stems while in the
+notation editor.</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that if you misplace a note, you can move it one halfstep at a time with the up
+and down arrow keys on your keyboard.
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that you can toggle stem directions in the notation editor by selecting
+one or more notes and using ctrl-PgUp and ctrl-PgDwn?
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that you can edit multiple segments on multiple tracks simultaneously in
+the notation editor?
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that when you insert audio segments into your composition, they always
+insert at the bottom of the track list?
+</html>
+</tip>
