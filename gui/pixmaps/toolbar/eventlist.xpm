@@ -4,7 +4,7 @@ static char *magick[] = {
 "22 18 6 1",
 "X c #000000",
 "O c #404040",
-". c #c0c0c0",
+". c None",
 "r c #d04040",
 "o c #808080",
 "  c None",
