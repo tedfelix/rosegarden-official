@@ -26,22 +26,22 @@ namespace Rosegarden
 
 using std::vector;
 
-RosegardenMidiRecord_impl::RosegardenMidiRecord_impl(): _record(false)
+RosegardenMidiRecord_impl::RosegardenMidiRecord_impl(): m_record(false)
 {
-  _midiEventQueue = new vector<Arts::MidiEvent>();
+  m_midiEventQueue = new vector<Arts::MidiEvent>();
 }
 
 RosegardenMidiRecord_impl::~RosegardenMidiRecord_impl()
 {
-  delete _midiEventQueue;
+  delete m_midiEventQueue;
 }
 
 
 void
 RosegardenMidiRecord_impl::processCommand(const Arts::MidiCommand &midiCommand)
 {
-  _midiThru.processCommand(midiCommand);
-  Arts::TimeStamp ts = _midiThru.time();
+  m_midiThru.processCommand(midiCommand);
+  Arts::TimeStamp ts = m_midiThru.time();
   addToList(Arts::MidiEvent(ts, midiCommand));
 }
 
@@ -49,24 +49,24 @@ void
 RosegardenMidiRecord_impl::processEvent(const Arts::MidiEvent &midiEvent)
 {
   
-  _midiThru.processEvent(midiEvent);
+  m_midiThru.processEvent(midiEvent);
   addToList(midiEvent);
 }
 
 void
 RosegardenMidiRecord_impl::addToList(const Arts::MidiEvent &midiEvent)
 {
-  if (_record == true)
+  if (m_record == true)
   {
-    _midiEventQueue->push_back(midiEvent);
+    m_midiEventQueue->push_back(midiEvent);
   }
 }
 
 vector<Arts::MidiEvent> *
 RosegardenMidiRecord_impl::getQueue()
 {
-  vector<Arts::MidiEvent> *returnQueue = _midiEventQueue;
-  _midiEventQueue = new vector<Arts::MidiEvent>();
+  vector<Arts::MidiEvent> *returnQueue = m_midiEventQueue;
+  m_midiEventQueue = new vector<Arts::MidiEvent>();
   return returnQueue;
 }
 

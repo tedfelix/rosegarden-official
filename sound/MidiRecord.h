@@ -24,8 +24,9 @@
 #include "MidiArts.h"
 #include <arts/artsmidi.h>
 
-// Extends the Arts MIDI skeleton for Rosegarden
-//
+// Extends the Arts MIDI skeleton.  This provides a basic specialised
+// aRts recording port which is loaded dynamically when the Sequencer
+// initialises (see docs/howtos/artsd-mcop-notes).
 //
 
 namespace Rosegarden
@@ -41,18 +42,18 @@ namespace Rosegarden
     void processCommand(const Arts::MidiCommand &midiCommand);
     void processEvent(const Arts::MidiEvent &midiEvent);
 
-    bool record() { return _record; }
-    void record(bool recordFlag) { _record = recordFlag; }
-    void setMidiThru(Arts::MidiPort port) { _midiThru = port; }
+    bool record() { return m_record; }
+    void record(bool recordFlag) { m_record = recordFlag; }
+    void setMidiThru(Arts::MidiPort port) { m_midiThru = port; }
   
-    Arts::TimeStamp time() { return _midiThru.time(); }
+    Arts::TimeStamp time() { return m_midiThru.time(); }
 
     std::vector<Arts::MidiEvent> *getQueue();
 
   private:
-    bool _record;
-    Arts::MidiPort _midiThru;
-    std::vector<Arts::MidiEvent> *_midiEventQueue;
+    bool                          m_record;
+    Arts::MidiPort                m_midiThru;
+    std::vector<Arts::MidiEvent> *m_midiEventQueue;
 
     void addToList(const Arts::MidiEvent &mE);
   };

@@ -20,8 +20,13 @@
 // From this class we control our sound subsystems - audio
 // and MIDI are initialised, playback and recording handles
 // are available to the higher levels for sending and 
-// retreiving MIDI and audio.
+// retreiving MIDI and audio.  When the Rosegarden sequencer
+// (sequencer/) initialises it creates a Rosegarden::Sequencer
+// object which prepares itself for playback and recording.
 //
+// At this level we accept MappedCompositions (single point
+// representation - NOTE ONs with durations) and turn them
+// into MIDI events (generate and track NOTE OFFs).
 //
 
 #ifndef _ROSEGARDEN_SEQUENCER_H_
@@ -40,7 +45,9 @@
 namespace Rosegarden
 {
 
-  // Note Off queues handled by the following classes
+  // NOTE OFF queue. These hold a time ordered set of
+  // NOTE OFF events.
+  //
   class NoteOffEvent
   {
   public:
@@ -48,9 +55,9 @@ namespace Rosegarden
     NoteOffEvent(const unsigned int &midiTime,
                  const unsigned int &pitch,
                  const Rosegarden::MidiByte &status):
-                  _midiTime(midiTime),
-                  _pitch(pitch),
-                  _status(status) {;}
+                  m_midiTime(midiTime),
+                  m_pitch(pitch),
+                  m_status(status) {;}
     ~NoteOffEvent() {;}
 
     struct NoteOffEventCmp
@@ -61,13 +68,13 @@ namespace Rosegarden
       }
     };
     
-    unsigned int getMidiTime() { return _midiTime; }
-    Rosegarden::MidiByte getPitch() { return _pitch; }
+    unsigned int getMidiTime() { return m_midiTime; }
+    Rosegarden::MidiByte getPitch() { return m_pitch; }
 
   private: 
-    unsigned int _midiTime;
-    Rosegarden::MidiByte _pitch;
-    Rosegarden::MidiByte _status;
+    unsigned int         m_midiTime;
+    Rosegarden::MidiByte m_pitch;
+    Rosegarden::MidiByte m_status;
 
   };
 
@@ -102,21 +109,21 @@ namespace Rosegarden
 
     // get a vector of recorded events from aRTS
     inline std::vector<Arts::MidiEvent>* getMidiQueue()
-      { return _midiRecordPort.getQueue(); }
+      { return m_midiRecordPort.getQueue(); }
 
     // Our current recording status.  Asynchronous record states
     // mean that we're just accepting asynchronous events but not
     // recording them - they are forwarded onto the GUI for level/
     // activity display purposes.
     //
-    RecordStatus recordStatus() { return _recordStatus; }
+    RecordStatus recordStatus() { return m_recordStatus; }
     
     // set and get tempo
-    const double getTempo() const { return _tempo; }
-    void setTempo(const double &tempo) { _tempo = tempo; }
+    const double getTempo() const { return m_tempo; }
+    void setTempo(const double &tempo) { m_tempo = tempo; }
 
     // resolution - required?
-    const unsigned int resolution() const { return _ppq; }
+    const unsigned int resolution() const { return m_ppq; }
 
     // get the difference in TimeStamps
     Arts::TimeStamp deltaTime(const Arts::TimeStamp &ts1,
@@ -127,11 +134,11 @@ namespace Rosegarden
 
     // get the TimeStamp from the beginning of playing
     inline Arts::TimeStamp playTime(Arts::TimeStamp const &ts)
-      { return (deltaTime(ts, _playStartTime)); }
+      { return (deltaTime(ts, m_playStartTime)); }
 
     // get the TimeStamp from the beginning of recording
     inline Arts::TimeStamp recordTime(Arts::TimeStamp const &ts)
-      { return (deltaTime(ts, _recordStartTime)); }
+      { return (deltaTime(ts, m_recordStartTime)); }
 
     // See docs/discussion/sequencer_timing.txt for explanation of
     // the maths here.
@@ -141,7 +148,7 @@ namespace Rosegarden
     {
       return (Rosegarden::timeT)
              ((((double)(timeStamp.sec * 1000000 + timeStamp.usec)) *
-                                  _ppq * (double) _tempo )  /
+                                  m_ppq * (double) m_tempo )  /
                                 60000000.0);
     }
 
@@ -155,7 +162,7 @@ namespace Rosegarden
       //
       //
       unsigned int usec = (unsigned int)(((double)60000000.0 *(double)midiTime)/
-                                         ((double)_ppq * (double)_tempo));
+                                         ((double)m_ppq * (double)m_tempo));
       unsigned int sec = usec / 1000000;
       usec %= 1000000;
 
@@ -177,7 +184,7 @@ namespace Rosegarden
 
     Rosegarden::timeT getSequencerTime();
 
-    bool isPlaying() { return _playing; }
+    bool isPlaying() { return m_playing; }
 
     void stopPlayback();
 
@@ -185,7 +192,7 @@ namespace Rosegarden
     void processNotesOff(unsigned int midiTime);
     void allNotesOff();
 
-    Rosegarden::timeT getStartPosition() { return _playStartPosition; }
+    Rosegarden::timeT getStartPosition() { return m_playStartPosition; }
 
   private:
 
@@ -193,36 +200,39 @@ namespace Rosegarden
 
     // aRTS devices
     //
-    Arts::Dispatcher       _dispatcher;
-    Arts::SoundServer      _soundServer;
-    Arts::MidiManager      _midiManager;
-    Arts::MidiClient       _midiPlayClient;
-    Arts::MidiClient       _midiRecordClient;
-    RosegardenMidiRecord   _midiRecordPort;
-    Arts::MidiPort         _midiPlayPort;
+    Arts::Dispatcher       m_dispatcher;
+    Arts::SoundServer      m_soundServer;
+    Arts::MidiManager      m_midiManager;
+    Arts::MidiClient       m_midiPlayClient;
+    Arts::MidiClient       m_midiRecordClient;
+    RosegardenMidiRecord   m_midiRecordPort;
+    Arts::MidiPort         m_midiPlayPort;
 
-    // TimeStamps mark the real world times of the commencement
-    // of play or record.  These are for internal use when calculating
-    // how to queue up playback.
+    // TimeStamps mark the real world (aRts) times of the start
+    // of play or record.  These are for internal use when
+    // calculating how to queue up playback.
     //
-    Arts::TimeStamp _playStartTime;
-    Arts::TimeStamp _recordStartTime;
-    NoteOffQueue _noteOffQueue;
+    Arts::TimeStamp        m_playStartTime;
+    Arts::TimeStamp        m_recordStartTime;
+    NoteOffQueue           m_noteOffQueue;
 
-    Rosegarden::timeT _playStartPosition;
+    // Absolute time playback start position
+    Rosegarden::timeT      m_playStartPosition;
 
     // Current recording status
-    RecordStatus _recordStatus;
+    RecordStatus           m_recordStatus;
 
-    bool _startPlayback;
-    bool _playing;
+    // Playback flags
+    bool                   m_startPlayback;
+    bool                   m_playing;
 
-    unsigned int _ppq;   // sequencer resolution
-    double _tempo; // Beats Per Minute
+    // Internal measures
+    unsigned int           m_ppq;   // sequencer resolution
+    double                 m_tempo; // Beats Per Minute
 
-    Rosegarden::Track *_recordTrack;
+    Rosegarden::Track     *m_recordTrack;
 
-    std::map<unsigned int, Event*> _noteOnMap;
+    std::map<unsigned int, Event*> m_noteOnMap;
 
   };
 

@@ -256,6 +256,8 @@ void RosegardenGUIApp::initView()
     setCentralWidget(m_view);
     setCaption(m_doc->getTitle());
 
+    setPointerPosition(m_doc->getComposition().getPosition());
+
 }
 
 void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
@@ -267,6 +269,7 @@ void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
 
     m_doc->saveIfModified();
     m_doc->closeDocument();
+
     m_doc->openDocument(_cmdl);
 
     initView();
@@ -306,6 +309,11 @@ void RosegardenGUIApp::openFile(const QString& url)
         KMessageBox::sorry(this, i18n("You do not have read permission to this file."));
         return;
     }
+
+    // Stop if playing
+    //
+    if (m_transportStatus == PLAYING)
+      stop();
 
     m_doc->closeDocument();
     m_doc->openDocument(u->path());
@@ -785,8 +793,8 @@ RosegardenGUIApp::getSequencerSlice(const Rosegarden::timeT &sliceStart,
   //
 
   mappComp.clear();
-  mappComp.startTime(sliceStart);
-  mappComp.endTime(sliceEnd);
+  mappComp.setStartTime(sliceStart);
+  mappComp.setEndTime(sliceEnd);
 
   Rosegarden::timeT eventTime;
 
@@ -868,7 +876,13 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
     return;
   }
 
+  // Stop if playing
+  //
+  if (m_transportStatus == PLAYING)
+    stop();
+
   m_doc->closeDocument();
+
   m_doc->newDocument();
 
   Rosegarden::Composition *tmpComp = midiFile->convertToRosegarden();
@@ -894,6 +908,11 @@ void RosegardenGUIApp::importRG21()
   QString tmpfile;
   KIO::NetAccess::download(url, tmpfile);
 
+  // Stop if playing
+  //
+  if (m_transportStatus == PLAYING)
+    stop();
+    
   importRG21File(tmpfile);
 
   KIO::NetAccess::removeTempFile(tmpfile);
@@ -902,7 +921,7 @@ void RosegardenGUIApp::importRG21()
 void RosegardenGUIApp::importRG21File(const QString &file)
 {
   RG21Loader rg21Loader(file);
-    
+
   m_doc->closeDocument();
   m_doc->newDocument();
   Rosegarden::Composition *tmpComp = rg21Loader.getComposition();

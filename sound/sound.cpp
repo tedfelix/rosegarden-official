@@ -17,6 +17,10 @@
     COPYING included with this distribution for more information.
 */
 
+// TEST APPLICATION - this is only used for testing out
+// bits and bobs of the sound system from time to time.
+//
+// [rwb]
 
 #include <iostream>
 #include <arts/artsmidi.h>
@@ -34,6 +38,7 @@
 using std::vector;
 using std::endl;
 using std::cout;
+
 
 int
 main(int argc, char **argv)

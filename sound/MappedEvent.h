@@ -47,36 +47,36 @@ public:
   // Our main constructor used to convert from the Track Events
   //
   MappedEvent(const Event &e, timeT duration):
-                               _pitch(e.get<Int>("pitch")),
-                               _absoluteTime(e.getAbsoluteTime()),
-                               _duration(duration),
-                               _velocity(127) {;}
+                               m_pitch(e.get<Int>("pitch")),
+                               m_absoluteTime(e.getAbsoluteTime()),
+                               m_duration(duration),
+                               m_velocity(127) {;}
 
-  MappedEvent(const Event &e): _pitch(e.get<Int>("pitch")),
-                               _absoluteTime(e.getAbsoluteTime()),
-                               _duration(e.getDuration()),
-                               _velocity(127) {;}
+  MappedEvent(const Event &e): m_pitch(e.get<Int>("pitch")),
+                               m_absoluteTime(e.getAbsoluteTime()),
+                               m_duration(e.getDuration()),
+                               m_velocity(127) {;}
 
   MappedEvent(const int &pitch, const timeT &absTime, const timeT &duration,
               const velocityT &velocity, const instrumentT &instrument):
-                              _pitch(pitch),
-                              _absoluteTime(absTime),
-                              _duration(duration),
-                              _velocity(velocity),
-                              _instrument(instrument) {;}
+                              m_pitch(pitch),
+                              m_absoluteTime(absTime),
+                              m_duration(duration),
+                              m_velocity(velocity),
+                              m_instrument(instrument) {;}
   ~MappedEvent() {;}
 
-  void setPitch(const int &p) { _pitch = p; }
-  void setAbsoluteTime(const timeT &a) { _absoluteTime = a; }
-  void setDuration(const timeT &d) { _duration = d; }
-  void setInstrument(const instrumentT &i) { _instrument = i; }
-  void setVelocity(const velocityT &v) { _velocity = v; }
+  void setPitch(const int &p) { m_pitch = p; }
+  void setAbsoluteTime(const timeT &a) { m_absoluteTime = a; }
+  void setDuration(const timeT &d) { m_duration = d; }
+  void setInstrument(const instrumentT &i) { m_instrument = i; }
+  void setVelocity(const velocityT &v) { m_velocity = v; }
 
-  int   getPitch() const { return _pitch; }
-  timeT getAbsoluteTime() const { return _absoluteTime; }
-  timeT getDuration() const { return _duration; }
-  velocityT getVelocity() const { return _velocity; }
-  instrumentT getInstrument() const { return _instrument; }
+  int   getPitch() const { return m_pitch; }
+  timeT getAbsoluteTime() const { return m_absoluteTime; }
+  timeT getDuration() const { return m_duration; }
+  velocityT getVelocity() const { return m_velocity; }
+  instrumentT getInstrument() const { return m_instrument; }
 
   struct MappedEventCmp
   {
@@ -90,11 +90,11 @@ public:
 
 private:
 
-  int          _pitch;
-  timeT        _absoluteTime;
-  timeT        _duration;
-  velocityT    _velocity;
-  instrumentT  _instrument;
+  int          m_pitch;
+  timeT        m_absoluteTime;
+  timeT        m_duration;
+  velocityT    m_velocity;
+  instrumentT  m_instrument;
 
 };
 

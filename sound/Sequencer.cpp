@@ -36,14 +36,14 @@ using std::cout;
 using std::endl;
 
 Sequencer::Sequencer():
-                       _playStartTime(0, 0),
-                       _recordStartTime(0, 0),
-                       _recordStatus(ASYNCHRONOUS_MIDI),
-                       _startPlayback(true),
-                       _playing(false),
-                       _ppq(Note(Note::Crotchet).getDuration()),
-                       _tempo(120.0),     // default tempo
-                       _recordTrack(0)
+                       m_playStartTime(0, 0),
+                       m_recordStartTime(0, 0),
+                       m_recordStatus(ASYNCHRONOUS_MIDI),
+                       m_startPlayback(true),
+                       m_playing(false),
+                       m_ppq(Note(Note::Crotchet).getDuration()),
+                       m_tempo(120.0),     // default tempo
+                       m_recordTrack(0)
 {
   initializeMidi();
 }
@@ -56,50 +56,50 @@ Sequencer::~Sequencer()
 void
 Sequencer::initializeMidi()
 {
-  _midiManager = Arts::Reference("global:Arts_MidiManager");
-  if (_midiManager.isNull())
+  m_midiManager = Arts::Reference("global:Arts_MidiManager");
+  if (m_midiManager.isNull())
   {
     cerr << "RosegardenSequencer - Can't get aRTS MidiManager" << endl;
     exit(1);
   }
 
-  _soundServer = Arts::Reference("global:Arts_SoundServer");
-  if (_soundServer.isNull())
+  m_soundServer = Arts::Reference("global:Arts_SoundServer");
+  if (m_soundServer.isNull())
   {
     cerr << "RosegardenSequencer - Can't get aRTS SoundServer" << endl;
     exit(1);
   }
 
-  _midiRecordPort = Arts::DynamicCast(_soundServer.createObject("RosegardenMidiRecord"));
+  m_midiRecordPort = Arts::DynamicCast(m_soundServer.createObject("RosegardenMidiRecord"));
 
 
-  if (_midiRecordPort.isNull())
+  if (m_midiRecordPort.isNull())
   {
     cerr << "RosegardenSequencer - Can't create aRTS MidiRecorder" << endl;
     exit(1);
   }
 
-  _midiPlayClient = _midiManager.addClient(Arts::mcdPlay,
+  m_midiPlayClient = m_midiManager.addClient(Arts::mcdPlay,
                                            Arts::mctApplication,
                                           "Rosegarden (play)","rosegarden");
-  if (_midiPlayClient.isNull())
+  if (m_midiPlayClient.isNull())
   {
     cerr << "RosegardenSequencer - Can't create aRTS MidiClient" << endl;
     exit(1);
   }
 
-  _midiPlayPort = _midiPlayClient.addOutputPort();
-  if (_midiPlayPort.isNull())
+  m_midiPlayPort = m_midiPlayClient.addOutputPort();
+  if (m_midiPlayPort.isNull())
   {
     cerr << "RosegardenSequencer - Can't create aRTS Midi Output Port" << endl;
     exit(1);
   }
 
-  _midiRecordClient = _midiManager.addClient(Arts::mcdRecord,
+  m_midiRecordClient = m_midiManager.addClient(Arts::mcdRecord,
                                              Arts::mctApplication,
                                              "Rosegarden (record)",
                                              "rosegarden");
-  if (_midiRecordClient.isNull())
+  if (m_midiRecordClient.isNull())
   {
     cerr << "RosegardenSequencer - Can't create aRTS MidiRecordClient" << endl;
     exit(1);
@@ -107,11 +107,11 @@ Sequencer::initializeMidi()
 
   // Create our recording midi port
   //
-  _midiRecordClient.addInputPort(_midiRecordPort);
+  m_midiRecordClient.addInputPort(m_midiRecordPort);
 
   // set MIDI thru
   //
-  _midiRecordPort.setMidiThru(_midiPlayPort);
+  m_midiRecordPort.setMidiThru(m_midiPlayPort);
 
 }
 
@@ -124,25 +124,25 @@ Sequencer::record(const RecordStatus& recordStatus)
     cout << "Recording MIDI" << endl;
 
     // turn MIDI event recording on 
-    _midiRecordPort.record(true);
+    m_midiRecordPort.record(true);
 
     // if we're already playing then just toggle recording
     // at this point, if not we jump back by the count in
 /*
-    if ( !_playing )
+    if ( !m_playing )
       play();
 */
 
     // set status and the record start position
-    _recordStatus = RECORD_MIDI;
-    _recordStartTime = _midiRecordPort.time();
+    m_recordStatus = RECORD_MIDI;
+    m_recordStartTime = m_midiRecordPort.time();
 
-    cout << "Recording Started at : " << _recordStartTime.sec << " : "
-                                      << _recordStartTime.usec << endl;
+    cout << "Recording Started at : " << m_recordStartTime.sec << " : "
+                                      << m_recordStartTime.usec << endl;
                                      
-    _recordTrack = new Track;
-    _recordTrack->setInstrument(1);
-    _recordTrack->setStartIndex(0);
+    m_recordTrack = new Track;
+    m_recordTrack->setInstrument(1);
+    m_recordTrack->setStartIndex(0);
 
   }
   else
@@ -187,7 +187,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
   Rosegarden::MidiByte message;
   //Rosegarden::Event *event;
 
-  if (_recordTrack == 0)
+  if (m_recordTrack == 0)
   {
     cerr << "RosegardenSequencer - no Track created to processMidi on to - is recording enabled?" << endl;
     exit(1);
@@ -211,30 +211,30 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
   switch(message)
   {
     case MIDI_NOTE_ON:
-      if ( _noteOnMap[chanNoteKey] == 0 )
+      if ( m_noteOnMap[chanNoteKey] == 0 )
       {
-        _noteOnMap[chanNoteKey] = new Event;
+        m_noteOnMap[chanNoteKey] = new Event;
 
         // set time since recording started in Absolute internal time
 /*
-        _noteOnMap[chanNoteKey]->
+        m_noteOnMap[chanNoteKey]->
             setAbsoluteTime(convertToMidiTime(timeStamp));
 */
 
         // set note type and pitch
-        _noteOnMap[chanNoteKey]->setType(Note::EventType);
-        _noteOnMap[chanNoteKey]->set<Int>("pitch", midiCommand.data1);
+        m_noteOnMap[chanNoteKey]->setType(Note::EventType);
+        m_noteOnMap[chanNoteKey]->set<Int>("pitch", midiCommand.data1);
       }
       break;
 
     case MIDI_NOTE_OFF:
       // if we match an open NOTE_ON
       //
-      if ( _noteOnMap[chanNoteKey] != 0 )
+      if ( m_noteOnMap[chanNoteKey] != 0 )
       {
 /*
         duration = convertToMidiTime(timeStamp) -
-                   _noteOnMap[chanNoteKey]->getAbsoluteTime();
+                   m_noteOnMap[chanNoteKey]->getAbsoluteTime();
 */
 
         // for the moment, ensure we're positive like this
@@ -242,20 +242,20 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
         assert(duration >= 0);
 
         // set the duration
-        _noteOnMap[chanNoteKey]->setDuration(duration);
+        m_noteOnMap[chanNoteKey]->setDuration(duration);
 
         // insert the record
         //
-        _recordTrack->insert(_noteOnMap[chanNoteKey]);
+        m_recordTrack->insert(m_noteOnMap[chanNoteKey]);
 
         // tell us about it
         cout << "INSERTED NOTE at time " 
-             << _noteOnMap[chanNoteKey]->getAbsoluteTime()
+             << m_noteOnMap[chanNoteKey]->getAbsoluteTime()
              << " of duration "
-             << _noteOnMap[chanNoteKey]->getDuration() << endl;
+             << m_noteOnMap[chanNoteKey]->getDuration() << endl;
 
         // reset the reference
-        _noteOnMap[chanNoteKey] = 0;
+        m_noteOnMap[chanNoteKey] = 0;
 
       }
       else
@@ -293,11 +293,11 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
   unsigned int midiRelativeStopTime = 0;
 
   // get current port time at start of playback
-  if (_startPlayback)
+  if (m_startPlayback)
   {
-    _playStartTime = _midiPlayPort.time();
-    _startPlayback = false;
-    _playing = true;
+    m_playStartTime = m_midiPlayPort.time();
+    m_startPlayback = false;
+    m_playing = true;
   }
 
 
@@ -305,14 +305,14 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
                                     i != mappedComp.end(); ++i )
   {
     // sort out the correct TimeStamp for playback
-    assert((*i)->getAbsoluteTime() >= _playStartPosition);
+    assert((*i)->getAbsoluteTime() >= m_playStartPosition);
 
     // add the fiddle factor for timeT to MIDI conversion in here
-    midiRelativeTime = (*i)->getAbsoluteTime() - _playStartPosition +
+    midiRelativeTime = (*i)->getAbsoluteTime() - m_playStartPosition +
                                                playLatency;
 
 
-    event.time = aggregateTime(_playStartTime,
+    event.time = aggregateTime(m_playStartTime,
                                convertToArtsTimeStamp(midiRelativeTime));
 
     midiRelativeStopTime = midiRelativeTime +
@@ -324,7 +324,7 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
     event.command.data2 = 127;  // hardcode velocity
 
     // Test our timing
-    Arts::TimeStamp now = _midiPlayPort.time();
+    Arts::TimeStamp now = m_midiPlayPort.time();
     int secAhead = event.time.sec - now.sec;
     int uSecAhead = event.time.usec - now.sec;
 
@@ -345,10 +345,10 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
 
     // if a NOTE ON
     // send the event out
-    _midiPlayPort.processEvent(event);
+    m_midiPlayPort.processEvent(event);
 
-    int secFromStart = event.time.sec - _playStartTime.sec;
-    int usecFromStart = event.time.usec - _playStartTime.usec;
+    int secFromStart = event.time.sec - m_playStartTime.sec;
+    int usecFromStart = event.time.usec - m_playStartTime.usec;
 
     if (usecFromStart < 0)
     {
@@ -365,7 +365,7 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
                             (Rosegarden::MidiByte)event.command.data1,
                             (Rosegarden::MidiByte)event.command.status);
 
-    _noteOffQueue.insert(noteOffEvent);
+    m_noteOffQueue.insert(noteOffEvent);
 
   }
 
@@ -375,9 +375,9 @@ Sequencer::processMidiOut(Rosegarden::MappedComposition mappedComp,
   //
   if (midiRelativeTime == 0)
   {
-    Arts::TimeStamp now = _midiPlayPort.time();
-    int sec = now.sec - _playStartTime.sec;
-    int usec = now.usec - _playStartTime.usec;
+    Arts::TimeStamp now = m_midiPlayPort.time();
+    int sec = now.sec - m_playStartTime.sec;
+    int usec = now.usec - m_playStartTime.usec;
  
     if (usec < 0)
     {
@@ -401,24 +401,24 @@ Sequencer::processNotesOff(unsigned int midiTime)
   MidiByte channel = 0;
 
   // process any pending NOTE OFFs
-  for ( NoteOffQueue::iterator i = _noteOffQueue.begin();
-                               i != _noteOffQueue.end(); ++i )
+  for ( NoteOffQueue::iterator i = m_noteOffQueue.begin();
+                               i != m_noteOffQueue.end(); ++i )
 
   {
     // If there's a pregnant NOTE OFF around then send it
     if ((*i)->getMidiTime() <= midiTime)
     {
-      //event.time = _midiPlayPort.time();
-      event.time = aggregateTime(_playStartTime,
+      //event.time = m_midiPlayPort.time();
+      event.time = aggregateTime(m_playStartTime,
                               convertToArtsTimeStamp((*i)->getMidiTime()));
       event.command.data1 = (*i)->getPitch();
       event.command.data2 = 127;
       event.command.status = Arts::mcsNoteOff | channel;
-      _midiPlayPort.processEvent(event);
+      m_midiPlayPort.processEvent(event);
 
        // Remove the note from the queue
        //
-      _noteOffQueue.erase(i);
+      m_noteOffQueue.erase(i);
     }
   }
 }
@@ -435,47 +435,47 @@ Sequencer::allNotesOff()
   Arts::MidiEvent event;
   MidiByte channel = 0;
 
-  for ( NoteOffQueue::iterator i = _noteOffQueue.begin();
-                               i != _noteOffQueue.end(); ++i )
+  for ( NoteOffQueue::iterator i = m_noteOffQueue.begin();
+                               i != m_noteOffQueue.end(); ++i )
   {
-    event.time = aggregateTime(_playStartTime,
+    event.time = aggregateTime(m_playStartTime,
                             convertToArtsTimeStamp((*i)->getMidiTime()));
     event.command.data1 = (*i)->getPitch();
     event.command.data2 = 127;
     event.command.status = Arts::mcsNoteOff | channel;
-    _midiPlayPort.processEvent(event);
+    m_midiPlayPort.processEvent(event);
 
     // Erase the event
     //
-    _noteOffQueue.erase(i);
+    m_noteOffQueue.erase(i);
   }
 }
 
 void 
 Sequencer::initializePlayback(const timeT &position)
 {
-  _startPlayback = true;
-  _playStartTime.sec = 0;
-  _playStartTime.usec = 0;
-  _playStartPosition = position;
+  m_startPlayback = true;
+  m_playStartTime.sec = 0;
+  m_playStartTime.usec = 0;
+  m_playStartPosition = position;
 }
 
 void
 Sequencer::stopPlayback()
 {
   allNotesOff();
-  _playing = false;
+  m_playing = false;
 }
 
 Rosegarden::timeT
 Sequencer::getSequencerTime()
 {
-  if (_playing)
+  if (m_playing)
   {
-    Arts::TimeStamp artsTimeNow = _midiPlayPort.time();
+    Arts::TimeStamp artsTimeNow = m_midiPlayPort.time();
     unsigned int internalRelativeTime = convertToInternalTime(artsTimeNow) -
-                                        convertToInternalTime(_playStartTime);
-    return (_playStartPosition + internalRelativeTime);
+                                        convertToInternalTime(m_playStartTime);
+    return (m_playStartPosition + internalRelativeTime);
   }
 
   return (0);

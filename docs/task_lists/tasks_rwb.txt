@@ -40,7 +40,7 @@ Known Bugs
 
  - MIDI file tempos aren't working yet
 
- - occasional gui/sequencer hangs while DCOP call in progress
+ - occasional gui/sequencer hangs while DCOP call in progress [STILL AN ISSUE?]
 
  - sending All Notes Off to aRts when they're already queued?
    More a feature than a bug - waiting for aRts to support it.

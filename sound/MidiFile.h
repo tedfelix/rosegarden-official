@@ -43,8 +43,11 @@
 namespace Rosegarden
 {
 
-  // Our internal MIDI structure is just a list of MidiEvents
-  // vector or list?
+  // Our internal MIDI structure is just a list of MidiEvents.
+  // We use a list and not a set because we want the order of
+  // the events to be arbitrary until we explicitly sort them
+  // (necessary when converting Composition absolute times to
+  // MIDI delta times).
   //
   typedef std::map<unsigned int, std::list<MidiEvent> > MidiComposition;
   typedef std::list<MidiEvent>::iterator MidiTrackIterator;
@@ -68,10 +71,10 @@ namespace Rosegarden
 
     MidiFile& operator=(const MidiFile& mF)
     {
-      _filename = mF._filename;
-      _timingDivision = mF._timingDivision;
-      _numberOfTracks = mF._numberOfTracks;
-      _format = mF._format;
+      m_filename = mF.m_filename;
+      m_timingDivision = mF.m_timingDivision;
+      m_numberOfTracks = mF.m_numberOfTracks;
+      m_format = mF.m_format;
       return *this;
     }
 
@@ -81,10 +84,10 @@ namespace Rosegarden
     // write a file of the internal filename
     bool write();
 
-    const std::string& filename() { return _filename; }
-    const int& timingDivision() { return _timingDivision; }
-    const MIDIFileFormatType& format() { return _format; }
-    const unsigned int& numberOfTracks() { return _numberOfTracks; }
+    const std::string& filename() { return m_filename; }
+    const int& timingDivision() { return m_timingDivision; }
+    const MIDIFileFormatType& format() { return m_format; }
+    const unsigned int& numberOfTracks() { return m_numberOfTracks; }
 
     // Conversion in and out of Rosegarden
     //
@@ -92,21 +95,21 @@ namespace Rosegarden
     void convertToMidi(const Rosegarden::Composition &comp);
 
   private:
-    std::string _filename;
-    int _timingDivision;   // pulses per quarter note
-    MIDIFileFormatType _format;
-    unsigned int _numberOfTracks;
+    std::string            m_filename;
+    int                    m_timingDivision;   // pulses per quarter note
+    MIDIFileFormatType     m_format;
+    unsigned int           m_numberOfTracks;
 
     // Internal counters
     //
-    unsigned long _trackByteCount;
-    bool _decrementCount;
+    unsigned long         m_trackByteCount;
+    bool                  m_decrementCount;
 
     // Internal representation
     //
-    MidiComposition _midiComposition;
+    MidiComposition       m_midiComposition;
 
-    // Split the tasks up
+    // Split the tasks up with these top level private methods
     //
     bool parseHeader(const std::string& midiHeader);
     bool parseTrack(std::ifstream* midiFile, const unsigned int &trackNum);

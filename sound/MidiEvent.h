@@ -60,37 +60,37 @@ namespace Rosegarden
 
     void print();
 
-    unsigned int time() const { return _deltaTime; }
+    unsigned int time() const { return m_deltaTime; }
     unsigned int addTime(const unsigned int &time);
-    void setTime(const unsigned int &time) { _deltaTime = time; }
+    void setTime(const unsigned int &time) { m_deltaTime = time; }
 
     inline const MidiByte messageType()
-        { return ( _eventCode & MIDI_MESSAGE_TYPE_MASK ); }
+        { return ( m_eventCode & MIDI_MESSAGE_TYPE_MASK ); }
 
     inline const MidiByte channelNumber()
-        { return ( _eventCode & MIDI_CHANNEL_NUM_MASK ); }
+        { return ( m_eventCode & MIDI_CHANNEL_NUM_MASK ); }
 
-    inline const MidiByte eventCode() { return _eventCode; }
+    inline const MidiByte eventCode() { return m_eventCode; }
 
-    inline const MidiByte note() { return _data1; }
-    inline const MidiByte velocity() { return _data2; }
+    inline const MidiByte note() { return m_data1; }
+    inline const MidiByte velocity() { return m_data2; }
 
     // Just so we don't have to call them note and vely
     // for things that they're not
     //
-    inline const MidiByte data1() { return _data1; }
-    inline const MidiByte data2() { return _data2; }
+    inline const MidiByte data1() { return m_data1; }
+    inline const MidiByte data2() { return m_data2; }
 
     inline const bool isMeta()
-      { return (_eventCode == MIDI_FILE_META_EVENT ? true : false ); }
+      { return (m_eventCode == MIDI_FILE_META_EVENT ? true : false ); }
 
-    inline std::string metaMessage() const { return _metaMessage; }
-    inline const MidiByte metaEventCode() { return _metaEventCode; }
+    inline std::string metaMessage() const { return m_metaMessage; }
+    inline const MidiByte metaEventCode() { return m_metaEventCode; }
 
     void duration(const unsigned int& duration)
-        { _duration = duration; }
+        { m_duration = duration; }
 
-    const unsigned int& duration() { return _duration; }
+    const unsigned int& duration() { return m_duration; }
 
     friend bool operator<(const MidiEvent &a, const MidiEvent &b);
 
@@ -99,14 +99,14 @@ namespace Rosegarden
 
     MidiEvent& operator=(const MidiEvent mE) {;}
 
-    unsigned int _deltaTime;
-    unsigned int _duration;
-    MidiByte _eventCode;
-    MidiByte _data1;
-    MidiByte _data2;
+    unsigned int m_deltaTime;
+    unsigned int m_duration;
+    MidiByte     m_eventCode;
+    MidiByte     m_data1;         // or Note
+    MidiByte     m_data2;         // or Velocity
 
-    MidiByte _metaEventCode;
-    std::string   _metaMessage;
+    MidiByte     m_metaEventCode;
+    std::string  m_metaMessage;
     
 
   };

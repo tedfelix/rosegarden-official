@@ -26,7 +26,7 @@
 #include "MidiFile.h"
 #include "Track.h"
 #include "NotationTypes.h"
-#include "TrackNotationHelper.h" //cc
+#include "TrackNotationHelper.h"
 #include "TrackPerformanceHelper.h"
 
 
@@ -42,21 +42,21 @@ using std::endl;
 using std::ends;
 using std::ios;
 
-MidiFile::MidiFile():_filename("unnamed.mid"),
-                     _timingDivision(0),
-                     _format(MIDI_FILE_NOT_LOADED),
-                     _numberOfTracks(0),
-                     _trackByteCount(0),
-                     _decrementCount(false)
+MidiFile::MidiFile():m_filename("unnamed.mid"),
+                     m_timingDivision(0),
+                     m_format(MIDI_FILE_NOT_LOADED),
+                     m_numberOfTracks(0),
+                     m_trackByteCount(0),
+                     m_decrementCount(false)
 {
 }
 
-MidiFile::MidiFile(const char *fn):_filename(fn),
-                                   _timingDivision(0),
-                                   _format(MIDI_FILE_NOT_LOADED),
-                                   _numberOfTracks(0),
-                                   _trackByteCount(0),
-                                   _decrementCount(false)
+MidiFile::MidiFile(const char *fn):m_filename(fn),
+                                   m_timingDivision(0),
+                                   m_format(MIDI_FILE_NOT_LOADED),
+                                   m_numberOfTracks(0),
+                                   m_trackByteCount(0),
+                                   m_decrementCount(false)
 {
 }
 
@@ -95,7 +95,7 @@ MidiFile::midiBytesToInt(const string& bytes)
 // Our MIDI file accessor function and best regarded as single point of entry
 // despite the ifstream pointer flying around the place.  Gets a specified
 // number of bytes from the MIDI byte stream.  For each track section we
-// can read only a specified number of bytes held in _trackByteCount.
+// can read only a specified number of bytes held in m_trackByteCount.
 //
 //
 const string
@@ -104,10 +104,10 @@ MidiFile::getMidiBytes(ifstream* midiFile, const unsigned int &numberOfBytes)
   string stringRet;
   char fileMidiByte;
 
-  if (_decrementCount && (numberOfBytes > (unsigned int)_trackByteCount))
+  if (m_decrementCount && (numberOfBytes > (unsigned int)m_trackByteCount))
   {
     cerr << "Attempt to get more bytes than allowed on Track - ( " <<
-          numberOfBytes << " > " << _trackByteCount << " )" << endl;
+          numberOfBytes << " > " << m_trackByteCount << " )" << endl;
     throw(std::string("Attempt to get more bytes than allowed on Track"));
   }
 
@@ -139,8 +139,8 @@ MidiFile::getMidiBytes(ifstream* midiFile, const unsigned int &numberOfBytes)
   }
 
   // decrement the byte count
-  if (_decrementCount)
-    _trackByteCount -= stringRet.length();
+  if (m_decrementCount)
+    m_trackByteCount -= stringRet.length();
 
   return stringRet;
 }
@@ -178,16 +178,16 @@ MidiFile::getNumberFromMidiBytes(ifstream* midiFile)
 
 
 // Seeks to the next track in the midi file and sets the number
-// of bytes to be read in the counter _trackByteCount.
+// of bytes to be read in the counter m_trackByteCount.
 //
 bool
 MidiFile::skipToNextTrack(ifstream *midiFile)
 {
   string buffer, buffer2;
-  _trackByteCount = 0;
-  _decrementCount = false;
+  m_trackByteCount = 0;
+  m_decrementCount = false;
 
-  while(!midiFile->eof() && (_decrementCount == false ))
+  while(!midiFile->eof() && (m_decrementCount == false ))
   {
     buffer = getMidiBytes(midiFile, 4); 
 
@@ -198,13 +198,13 @@ MidiFile::skipToNextTrack(ifstream *midiFile)
 #endif
 
     {
-      _trackByteCount = midiBytesToLong(getMidiBytes(midiFile, 4));
-      _decrementCount = true;
+      m_trackByteCount = midiBytesToLong(getMidiBytes(midiFile, 4));
+      m_decrementCount = true;
     }
 
   }
 
-  if ( _trackByteCount == 0 ) // we haven't found a track
+  if ( m_trackByteCount == 0 ) // we haven't found a track
     return(false);
   else
     return(true);
@@ -223,7 +223,7 @@ MidiFile::open()
   bool retOK = true;
 
   // Open the file
-  ifstream *midiFile = new ifstream(_filename.c_str(), ios::in | ios::binary);
+  ifstream *midiFile = new ifstream(m_filename.c_str(), ios::in | ios::binary);
 
   try
   {
@@ -232,11 +232,11 @@ MidiFile::open()
       // Parse the MIDI header first.  The first 14 bytes of the file.
       if (!parseHeader(getMidiBytes(midiFile, 14)))
       {
-        _format = MIDI_FILE_NOT_LOADED;
+        m_format = MIDI_FILE_NOT_LOADED;
         return(false);
       }
 
-      for ( unsigned int i = 0; i < _numberOfTracks; i++ )
+      for ( unsigned int i = 0; i < m_numberOfTracks; i++ )
       {
 
 #ifdef MIDI_DEBUG
@@ -248,7 +248,7 @@ MidiFile::open()
 #ifdef MIDI_DEBUG
           cerr << "Couldn't find Track " << i << endl;
 #endif
-          _format = MIDI_FILE_NOT_LOADED;
+          m_format = MIDI_FILE_NOT_LOADED;
           return(false);
         }
 
@@ -259,7 +259,7 @@ MidiFile::open()
 #ifdef MIDI_DEBUG
           std::cerr << "Track " << i << " parsing failed" << endl;
 #endif
-          _format = MIDI_FILE_NOT_LOADED;
+          m_format = MIDI_FILE_NOT_LOADED;
           return(false);
         }
       }
@@ -270,7 +270,7 @@ MidiFile::open()
       std::cerr << "MidiFile::open - \"" << _filename <<
                    "\" not recognised as a MIDI file" << endl;
 #endif
-      _format = MIDI_FILE_NOT_LOADED;
+      m_format = MIDI_FILE_NOT_LOADED;
       return(false);
     }
 
@@ -328,11 +328,11 @@ MidiFile::parseHeader(const string &midiHeader)
     return(false);
   }
 
-  _format = (MIDIFileFormatType) midiBytesToInt(midiHeader.substr(8,2));
-  _numberOfTracks = midiBytesToInt(midiHeader.substr(10,2));
-  _timingDivision = midiBytesToInt(midiHeader.substr(12,2));
+  m_format = (MIDIFileFormatType) midiBytesToInt(midiHeader.substr(8,2));
+  m_numberOfTracks = midiBytesToInt(midiHeader.substr(10,2));
+  m_timingDivision = midiBytesToInt(midiHeader.substr(12,2));
 
-  if ( _format == MIDI_SEQUENTIAL_TRACK_FILE )
+  if ( m_format == MIDI_SEQUENTIAL_TRACK_FILE )
   {
 
 #ifdef MIDI_DEBUG
@@ -344,7 +344,7 @@ MidiFile::parseHeader(const string &midiHeader)
   }
   
 
-  if ( _timingDivision < 0 )
+  if ( m_timingDivision < 0 )
   {
 
 #ifdef MIDI_DEBUG
@@ -370,7 +370,7 @@ MidiFile::parseTrack(ifstream* midiFile, const unsigned int &trackNum)
   unsigned long deltaTime;
   string metaMessage;
 
-  while (!midiFile->eof() && ( _trackByteCount > 0 ) )
+  while (!midiFile->eof() && ( m_trackByteCount > 0 ) )
   {
     deltaTime = getNumberFromMidiBytes(midiFile);
 
@@ -384,7 +384,7 @@ MidiFile::parseTrack(ifstream* midiFile, const unsigned int &trackNum)
     if (!(midiByte & MIDI_STATUS_BYTE_MASK))
     {
       midiFile->seekg(-1, ios::cur);
-      _trackByteCount++;
+      m_trackByteCount++;
     }
     else
       eventCode = midiByte;
@@ -397,7 +397,7 @@ MidiFile::parseTrack(ifstream* midiFile, const unsigned int &trackNum)
 
       MidiEvent e(deltaTime, MIDI_FILE_META_EVENT, eventCode, metaMessage);
 
-      _midiComposition[trackNum].push_back(e);
+      m_midiComposition[trackNum].push_back(e);
     }
     else
     {
@@ -420,7 +420,7 @@ MidiFile::parseTrack(ifstream* midiFile, const unsigned int &trackNum)
 
           // create and store our event
           midiEvent = new MidiEvent(deltaTime, eventCode, data1, data2);
-          _midiComposition[trackNum].push_back(*midiEvent);
+          m_midiComposition[trackNum].push_back(*midiEvent);
           delete(midiEvent);
 
           break;
@@ -431,7 +431,7 @@ MidiFile::parseTrack(ifstream* midiFile, const unsigned int &trackNum)
 
           // create and store our event
           midiEvent = new MidiEvent(deltaTime, eventCode, data1);
-          _midiComposition[trackNum].push_back(*midiEvent);
+          m_midiComposition[trackNum].push_back(*midiEvent);
           delete(midiEvent);
 
           break;
@@ -492,15 +492,15 @@ MidiFile::convertToRosegarden()
 
   //!!! cc -- attempt to avoid floating-point rounding errors
   timeT crotchetTime = Note(Note::Crotchet).getDuration();
-  int divisor = _timingDivision ? _timingDivision : 1;
+  int divisor = m_timingDivision ? m_timingDivision : 1;
 
 //  float timingFactor = 0.0;
 
-//  if ( _timingDivision )
+//  if ( m_timingDivision )
 //    timingFactor = (float) Note(Note::Crotchet).getDuration() /
-//                   (float) _timingDivision;
+//                   (float) m_timingDivision;
 
-  for ( unsigned int i = 0; i < _numberOfTracks; i++ )
+  for ( unsigned int i = 0; i < m_numberOfTracks; i++ )
   {
     trackTime = 0;
     notesOnTrack = false;
@@ -510,8 +510,8 @@ MidiFile::convertToRosegarden()
     // returns the sum of the current Midi Event delta
     // time plus the argument.
     //
-    for ( midiEvent = (_midiComposition[i].begin());
-          midiEvent != (_midiComposition[i].end());
+    for ( midiEvent = (m_midiComposition[i].begin());
+          midiEvent != (m_midiComposition[i].end());
           ++midiEvent )
     {
       trackTime = midiEvent->addTime(trackTime);
@@ -520,8 +520,8 @@ MidiFile::convertToRosegarden()
     // Consolidate NOTE ON and NOTE OFF events into a
     // NOTE ON with a duration and delete the NOTE OFFs.
     //
-    for ( midiEvent = (_midiComposition[i].begin());
-          midiEvent != (_midiComposition[i].end());
+    for ( midiEvent = (m_midiComposition[i].begin());
+          midiEvent != (m_midiComposition[i].end());
           ++midiEvent )
     {
       if (midiEvent->messageType() == MIDI_NOTE_ON)
@@ -532,7 +532,7 @@ MidiFile::convertToRosegarden()
         noteOffFound = false;
 
         for ( noteOffSearch = midiEvent; 
-              noteOffSearch != (_midiComposition[i].end());
+              noteOffSearch != (m_midiComposition[i].end());
               noteOffSearch++ )
         {
           if ( ( midiEvent->channelNumber() == noteOffSearch->channelNumber() )
@@ -541,7 +541,7 @@ MidiFile::convertToRosegarden()
                      ( noteOffSearch->velocity() == 0x00 ) ) ) )
           {
             midiEvent->duration(noteOffSearch->time() - midiEvent->time());
-            _midiComposition[i].erase(noteOffSearch);
+            m_midiComposition[i].erase(noteOffSearch);
             noteOffFound = true;
             break;
           }
@@ -573,15 +573,15 @@ MidiFile::convertToRosegarden()
       composition->addTrack(rosegardenTrack);
       compositionTrack++;
 
-      for ( midiEvent = (_midiComposition[i].begin());
-            midiEvent != (_midiComposition[i].end());
+      for ( midiEvent = (m_midiComposition[i].begin());
+            midiEvent != (m_midiComposition[i].end());
             ++midiEvent )
       {
 
 	//!!! cc -- what does it mean if there is no timing division?
         // we've calculated divisor (or timingFactor) on the basis that
         // there might not be, so shouldn't we just use it regardless?
-        if (_timingDivision)
+        if (m_timingDivision)
         {
           //!!! cc -- avoid floating-point
           rosegardenTime = ((timeT)midiEvent->time() * crotchetTime) / divisor;
@@ -751,7 +751,7 @@ MidiFile::convertToRosegarden()
   //
   if (composition->getTempo() == 0)
   {
-    if (_timingDivision)
+    if (m_timingDivision)
       //!!! cc -- avoid floating-point
       composition->setTempo((120 * crotchetTime) / divisor);
 //      composition->setTempo(((timeT)(timingFactor * 120)));
@@ -786,17 +786,16 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 
   //int midiInstrument;
 
-  //!!! cc -- I'm seeing floating-point rounding errors in the resulting file
-  _timingDivision = Note(Note::Crotchet).getDuration() * 120 / 
-      (int)comp.getTempo(); //!!! cc -- why isn't Composition's tempo an int?
-//  _timingDivision = (int)((float) Note(Note::Crotchet).getDuration() * 120.0 /
-//                          (float) comp.getTempo());
+  // [cc] int rather than floating point
+  //
+  m_timingDivision = Note(Note::Crotchet).getDuration() * 120 / 
+      (int)comp.getTempo();
 
-  _format = MIDI_SIMULTANEOUS_TRACK_FILE;
+  m_format = MIDI_SIMULTANEOUS_TRACK_FILE;
 
   // Clear out anything we have stored in this object already.
   //
-  _midiComposition.clear();
+  m_midiComposition.clear();
 
   // Insert the Rosegarden Signature Track here and any relevant
   // file META information - this will get written out just like
@@ -806,27 +805,25 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TEXT_MARKER,
                             "Created by Rosegarden 4.0");
 
-  _midiComposition[trackNumber].push_back(*midiEvent);
+  m_midiComposition[trackNumber].push_back(*midiEvent);
 
   midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TEXT_MARKER,
                             "http://rosegarden.sourceforge.net");
 
-  _midiComposition[trackNumber].push_back(*midiEvent);
+  m_midiComposition[trackNumber].push_back(*midiEvent);
 
   midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_SET_TEMPO,
                             (int)comp.getTempo());
 
-  _midiComposition[trackNumber].push_back(*midiEvent);
+  m_midiComposition[trackNumber].push_back(*midiEvent);
 
   trackNumber = 1;
 
   // Our Composition to MIDI timing factor
   //
 
-  //!!! cc -- avoiding floating-point
+  // [cc] -- avoiding floating-point
   timeT crotchetDuration = Note(Note::Crotchet).getDuration();
-//  float timingFactor = (float) _timingDivision/
-//                       (float) Note(Note::Crotchet).getDuration();
 
 #ifdef MIDI_DEBUG
   cout << "TIMING DIVISION = " << _timingDivision << endl;
@@ -849,11 +846,11 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
       trackName << "Track " << trackNumber << ends;
 
       midiEvent = new MidiEvent(0, MIDI_FILE_META_EVENT, MIDI_TRACK_NAME, trackName.str());
-      _midiComposition[trackNumber].push_front(*midiEvent);
+      m_midiComposition[trackNumber].push_front(*midiEvent);
 
       // insert a program change
       midiEvent = new MidiEvent(0, MIDI_PROG_CHANGE | midiChannel, 0);
-      _midiComposition[trackNumber].push_front(*midiEvent);
+      m_midiComposition[trackNumber].push_front(*midiEvent);
     }
 
  
@@ -865,11 +862,9 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
       {
         // Set delta time temporarily to absolute time for this event.
         //
-        //!!! cc -- avoiding floating-point
+        // [cc] -- avoiding floating-point
 	midiEventAbsoluteTime =
-	    (*el)->getAbsoluteTime() * _timingDivision / crotchetDuration;
-//        midiEventAbsoluteTime = (int)(timingFactor * (float)
-//                                                  ((*el)->getAbsoluteTime()));
+	    (*el)->getAbsoluteTime() * m_timingDivision / crotchetDuration;
                               
         // insert the NOTE_ON at the appropriate channel
         //
@@ -878,18 +873,15 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
                                   (*el)->get<Int>("pitch"),     // pitch
                                   127);                         // velocity
 
-        _midiComposition[trackNumber].push_back(*midiEvent);
-
+        m_midiComposition[trackNumber].push_back(*midiEvent);
 
         // Get the sounding time for the matching NOTE_OFF.
         // We use TrackPerformanceHelper::getSoundingDuration()
         // to work out the tied duration of the NOTE.
         //
-        //!!! cc -- avoiding floating-point
+        // [cc] avoiding floating-point
 	midiEventAbsoluteTime +=
-	    helper.getSoundingDuration(el) * _timingDivision / crotchetDuration;
-//        midiEventAbsoluteTime += (int)(timingFactor * (float)
-//                                            (helper.getSoundingDuration(el)));
+	    helper.getSoundingDuration(el) * m_timingDivision / crotchetDuration;
 
         // insert the matching NOTE OFF
         //
@@ -898,7 +890,7 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
                                   (*el)->get<Int>("pitch"),
                                   127);
 
-        _midiComposition[trackNumber].push_back(*midiEvent);
+        m_midiComposition[trackNumber].push_back(*midiEvent);
 
       }
       else if ((*el)->isa(Note::EventRestType))
@@ -922,7 +914,7 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
 
   // Setup number of tracks in daddy object
   //
-  _numberOfTracks = trackNumber;
+  m_numberOfTracks = trackNumber;
 
 
   // Now gnash through the MIDI events and turn the absolute times
@@ -933,24 +925,24 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   int lastMidiTime;
   int endOfTrackTime;
 
-  for (unsigned int i = 0; i < _numberOfTracks; i++)
+  for (unsigned int i = 0; i < m_numberOfTracks; i++)
   {
     lastMidiTime = 0;
 
     // First sort the list
     //
-    _midiComposition[i].sort();
+    m_midiComposition[i].sort();
 
     // insert end of track event
-    endOfTrackTime = _midiComposition[i].end()->time();
+    endOfTrackTime = m_midiComposition[i].end()->time();
 
     midiEvent = new MidiEvent(endOfTrackTime, MIDI_FILE_META_EVENT,
                               MIDI_END_OF_TRACK, "");
 
-    _midiComposition[i].push_back(*midiEvent);
+    m_midiComposition[i].push_back(*midiEvent);
 
-    for ( midiEventIt = (_midiComposition[i].begin());
-          midiEventIt != (_midiComposition[i].end()); midiEventIt++ )
+    for ( midiEventIt = (m_midiComposition[i].begin());
+          midiEventIt != (m_midiComposition[i].end()); midiEventIt++ )
     {
       midiEventAbsoluteTime = midiEventIt->time() - lastMidiTime;
       lastMidiTime = midiEventIt->time();
@@ -1043,7 +1035,6 @@ MidiFile::longToVarBuffer(std::string &buffer, const unsigned long &number)
 
 
  
-
 // Write out the MIDI file header
 //
 bool
@@ -1063,16 +1054,16 @@ MidiFile::writeHeader(std::ofstream* midiFile)
   // Write File Format
   //
   *midiFile << (MidiByte) 0x00;            
-  *midiFile << (MidiByte) _format;
+  *midiFile << (MidiByte) m_format;
 
   // Number of Tracks we're writing and add one for
   // a first Data track.
   //
-  intToMidiBytes(midiFile, _numberOfTracks);
+  intToMidiBytes(midiFile, m_numberOfTracks);
 
   // Timing Division
   //
-  intToMidiBytes(midiFile, _timingDivision);
+  intToMidiBytes(midiFile, m_timingDivision);
 
   return(true);
 }
@@ -1091,16 +1082,16 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
   //
   string trackBuffer;
 
-  // Our timing factor here converts into the MIDI _timingDivision
+  // Our timing factor here converts into the MIDI m_timingDivision
   //
   /*!!! cc -- apparently not needed
   float timingFactor = 0.0;
-  timingFactor = (float) _timingDivision /
+  timingFactor = (float) m_timingDivision /
                  (float) Note(Note::Crotchet).getDuration();
   */
 
-  for ( midiEvent = (_midiComposition[trackNumber].begin());
-        midiEvent != (_midiComposition[trackNumber].end()); ++midiEvent )
+  for ( midiEvent = (m_midiComposition[trackNumber].begin());
+        midiEvent != (m_midiComposition[trackNumber].end()); ++midiEvent )
   {
     // Write the time to the buffer in MIDI format
     //
@@ -1191,12 +1182,13 @@ MidiFile::write()
   bool retOK = true;
 
   std::ofstream *midiFile =
-           new std::ofstream(_filename.c_str(), ios::out | ios::binary);
+           new std::ofstream(m_filename.c_str(), ios::out | ios::binary);
 
 
   if (!(*midiFile))
   {
     std::cerr << "MidiFile::write() - can't write file" << endl;
+    m_format = MIDI_FILE_NOT_LOADED;
     return false;
   }
 
@@ -1205,14 +1197,19 @@ MidiFile::write()
 
   // And now the Tracks
   //
-  for(unsigned int i = 0; i < _numberOfTracks; i++ )
+  for(unsigned int i = 0; i < m_numberOfTracks; i++ )
   {
     if (!writeTrack(midiFile, i))
+    {
       retOK = false;
+    }
   }
 
   midiFile->close();
 
+  if(!retOK)
+    m_format = MIDI_FILE_NOT_LOADED;
+   
   return (retOK);
 }
 

@@ -54,10 +54,10 @@ velocityT                 velocity;
 MappedComposition::MappedComposition(Rosegarden::Composition &comp,
                                      const Rosegarden::timeT &sT,
                                      const Rosegarden::timeT &eT):
-  _startTime(sT),
-  _endTime(eT)
+  m_startTime(sT),
+  m_endTime(eT)
 {
-  assert(_endTime >= _startTime);
+  assert(m_endTime >= m_startTime);
     
   Rosegarden::timeT eventTime;
 
@@ -65,7 +65,7 @@ MappedComposition::MappedComposition(Rosegarden::Composition &comp,
   {
     // Skip the Track if it starts too late to be of
     // interest to our slice.
-    if ( (*i)->getStartIndex() > int(_endTime) )
+    if ( (*i)->getStartIndex() > int(m_endTime) )
       continue;
 
     TrackPerformanceHelper helper(**i);
@@ -94,11 +94,11 @@ MappedComposition::MappedComposition(Rosegarden::Composition &comp,
       // As events are stored chronologically we can escape if
       // we're already beyond our event horizon for this slice.
       //
-      if ( eventTime > _endTime )
+      if ( eventTime > m_endTime )
         break;
 
       // Eliminate events before our required time
-      if ( eventTime >= _startTime && eventTime <= _endTime)
+      if ( eventTime >= m_startTime && eventTime <= m_endTime)
       {
         // insert event
         MappedEvent *me = new MappedEvent(**j, duration);

@@ -26,7 +26,10 @@
 // MappedComposition is used with MappedEvent to create a sequence
 // of MIDI ready events ready for playing.  The QDataStream operators
 // are a necessary part of the DCOP transmission process allowing 
-// the whole class to be serialized.
+// the whole class to be serialized.  The core application is sent
+// a request specifying a time slice between given start and end
+// points which it fills with MappedEvents which are cut down
+// (sequencer suitable) versions of the core Events.
 //
 
 #include <Composition.h>
@@ -41,20 +44,20 @@ class MappedComposition : public std::multiset<MappedEvent *,
                                       MappedEvent::MappedEventCmp>
 {
 public:
-  MappedComposition():_startTime(0), _endTime(0) {;}
+  MappedComposition():m_startTime(0), m_endTime(0) {;}
 
   MappedComposition(Rosegarden::Composition &comp,
                     const Rosegarden::timeT &sT,
                     const Rosegarden::timeT &eT);
 
   MappedComposition(const Rosegarden::timeT &sT, const Rosegarden::timeT &eT):
-             _startTime(sT), _endTime(eT) {;}
+             m_startTime(sT), m_endTime(eT) {;}
   ~MappedComposition() {;}
 
-  const Rosegarden::timeT startTime() const { return _startTime; }
-  const Rosegarden::timeT endTime() const { return _endTime; }
-  void startTime(const Rosegarden::timeT &sT) { _startTime = sT; }
-  void endTime(const Rosegarden::timeT &eT) { _endTime = eT; }
+  const Rosegarden::timeT getStartTime() const { return m_startTime; }
+  const Rosegarden::timeT getEndTime() const { return m_endTime; }
+  void setStartTime(const Rosegarden::timeT &sT) { m_startTime = sT; }
+  void setEndTime(const Rosegarden::timeT &eT) { m_endTime = eT; }
 
 
   // This section is used for serialising this class over DCOP
@@ -64,8 +67,8 @@ public:
   friend QDataStream& operator>>(QDataStream &dS, MappedComposition &mC);
 
 private:
-  Rosegarden::timeT _startTime;
-  Rosegarden::timeT _endTime;
+  Rosegarden::timeT m_startTime;
+  Rosegarden::timeT m_endTime;
 
 };
 
