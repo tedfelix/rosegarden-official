@@ -55,6 +55,7 @@ protected:
 
 private slots:
     void reduceLevel();
+    void stopShowingPeak();
 
 protected:
     int         m_originalHeight;
@@ -69,6 +70,8 @@ private:
     int         m_peakLevel;      // percentage
     int         m_levelStep;
     QTimer      m_fallTimer;
+    QTimer      m_peakTimer;
+    bool        m_showPeakLevel;
 
 };
 
