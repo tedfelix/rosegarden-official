@@ -387,6 +387,13 @@ QString MatrixStaff::getNoteNameForPitch(unsigned int pitch)
     return QString("%1%2").arg(noteNamesSharps[pitch]).arg(octave);
 }
 
+void MatrixStaff::eventAdded(const Rosegarden::Segment *segment, Rosegarden::Event *e)
+{
+    if (!m_wrapAddedEvents) return;
+
+    LinedStaff<MatrixElement>::eventAdded(segment, e);
+}
+
 
 //----------------------------------------------------------------------
 
@@ -930,26 +937,19 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT,
         Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
         kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseRelease() : helper.insertNote()\n";
 
-        helper.insertNote(m_currentElement->event()); // this creates a new MatrixElement
+        m_currentStaff->setWrapAddedEvents(false);
+        helper.insertNote(m_currentElement->event()); // this DOES NOT create a new MatrixElement
+        m_currentStaff->setWrapAddedEvents(true);
 
-	//!!! should be done automatically
-	// (by putting this into a BasicCommand)
-        kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseRelease() : parentView->refreshSegment()\n";
+        m_currentStaff->getViewElementList()->insert(m_currentElement);
 
-	m_mParentView->refreshSegment
-	    (&m_currentStaff->getSegment(),
-	     m_currentElement->event()->getAbsoluteTime(),
-	     m_currentElement->event()->getAbsoluteTime() +
-	     m_currentElement->event()->getDuration());
-
-        kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseRelease() : delete currentElement\n";
-
-	delete m_currentElement;
-
+        m_mParentView->canvas()->update();
+        
     } else {
 
+        Event* ev = m_currentElement->event();
         delete m_currentElement;
-
+        delete ev;
     }
     
     m_currentElement = 0;

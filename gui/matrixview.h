@@ -328,10 +328,20 @@ public:
 
     virtual void positionElement(MatrixElement*);
 
+    /**
+     * Override from Rosegarden::Staff<T>
+     * Check a flag before wrapping event
+     */
+    virtual void eventAdded(const Rosegarden::Segment *, Rosegarden::Event *);
+
     QString getNoteNameForPitch(unsigned int pitch);
+
+    void setWrapAddedEvents(bool wrap = true) { m_wrapAddedEvents = wrap; }
 
 private:
     double m_scaleFactor;
+
+    bool m_wrapAddedEvents;
 };
 
 
