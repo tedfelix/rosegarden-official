@@ -465,6 +465,7 @@ NotationHLayout::reconcileBars()
 	++barNo;
     }
 
+#ifdef NOT_DEFINED
     
     Track &refTrack = *(m_barData.begin()->first->getViewElementsManager()->getTrack().getReferenceTrack());
     kdDebug(KDEBUG_AREA)
@@ -496,7 +497,7 @@ NotationHLayout::reconcileBars()
                 << list[j].correct << endl;
         }
     }
-
+#endif
 
     PRINT_ELAPSED("NotationHLayout::reconcileBars");
 }	

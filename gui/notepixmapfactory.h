@@ -159,6 +159,7 @@ public:
 				const Rosegarden::Clef &clef);
     QCanvasPixmap makeTimeSigPixmap(const Rosegarden::TimeSignature& sig);
     QCanvasPixmap makeUnknownPixmap();
+    QCanvasPixmap makeToolbarPixmap(const char *name);
 
     int getNoteBodyHeight()    const { return m_noteBodyEmpty.height(); }
     int getNoteBodyWidth()     const { return m_noteBodyEmpty.width(); }

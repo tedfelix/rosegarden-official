@@ -14,14 +14,12 @@
   <Action name="32nd" />
   <Action name="64th" />
   <Separator/>
-  <Action name="dotted_breve" />
   <Action name="dotted_whole_note" />
   <Action name="dotted_half" />
   <Action name="dotted_quarter" />
   <Action name="dotted_8th" />
   <Action name="dotted_16th" />
   <Action name="dotted_32nd" />
-  <Action name="dotted_64th" />
 </Menu>
 
 <Menu noMerge="1" name="Rests">
@@ -35,14 +33,12 @@
   <Action name="32nd_rest" />
   <Action name="64th_rest" />
   <Separator/>
-  <Action name="dotted_breve_rest" />
   <Action name="dotted_whole_note_rest" />
   <Action name="dotted_half_rest" />
   <Action name="dotted_quarter_rest" />
   <Action name="dotted_8th_rest" />
   <Action name="dotted_16th_rest" />
   <Action name="dotted_32nd_rest" />
-  <Action name="dotted_64th_rest" />
 </Menu>
 
 <Menu noMerge="1" name="Accidentals">
@@ -82,14 +78,12 @@
   <Action name="32nd" />
   <Action name="64th" />
 
-  <Action name="dotted_breve" />
   <Action name="dotted_whole_note" />
   <Action name="dotted_half" />
   <Action name="dotted_quarter" />
   <Action name="dotted_8th" />
   <Action name="dotted_16th" />
   <Action name="dotted_32nd" />
-  <Action name="dotted_64th" />
 </ToolBar>
 
 <ToolBar name="restsToolBar">
@@ -103,22 +97,13 @@
   <Action name="32nd_rest" />
   <Action name="64th_rest" />
 
-  <Action name="dotted_breve_rest" />
   <Action name="dotted_whole_note_rest" />
   <Action name="dotted_half_rest" />
   <Action name="dotted_quarter_rest" />
   <Action name="dotted_8th_rest" />
   <Action name="dotted_16th_rest" />
   <Action name="dotted_32nd_rest" />
-  <Action name="dotted_64th_rest" />
 
-</ToolBar>
-
-<ToolBar name="clefsToolBar">
-  <Action name="treble_clef" />
-  <Action name="tenor_clef" />
-  <Action name="alto_clef" />
-  <Action name="bass_clef" />
 </ToolBar>
 
 <ToolBar name="accidentalsToolBar">
@@ -128,6 +113,13 @@
   <Action name="natural_accidental" />
   <Action name="double_sharp_accidental" />
   <Action name="double_flat_accidental" />
+</ToolBar>
+
+<ToolBar name="clefsToolBar">
+  <Action name="treble_clef" />
+  <Action name="tenor_clef" />
+  <Action name="alto_clef" />
+  <Action name="bass_clef" />
 </ToolBar>
 
 <ToolBar name="metaToolbar" newline="true">

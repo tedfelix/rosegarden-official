@@ -95,7 +95,8 @@ public:
     /**
      * Set the note or rest selected by the user from the toolbars
      */
-    void setCurrentSelectedNote(bool isRest, Rosegarden::Note::Type,
+    void setCurrentSelectedNote(const char *pixmapName,
+                                bool isRest, Rosegarden::Note::Type,
 				int dots = 0);
 
 public slots:

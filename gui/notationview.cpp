@@ -211,25 +211,23 @@ void NotationView::setupActions()
     //
     // Notes
     //
-    static const char* actionsNote[][3] = 
-        {   // i18n,     slotName,         action name
-            { "Breve",   "1slotBreve()",   "breve" },
-            { "Whole",   "1slotWhole()",   "whole_note" },
-            { "Half",    "1slotHalf()",    "half" },
-            { "Quarter", "1slotQuarter()", "quarter" },
-            { "8th",     "1slot8th()",     "8th" },
-            { "16th",    "1slot16th()",    "16th" },
-            { "32th",    "1slot32nd()",    "32th" },
-            { "64th",    "1slot64th()",    "64th" }
+    static const char* actionsNote[][4] = 
+        {   // i18n,     slotName,         action name,     pixmap
+            { "Breve",   "1slotBreve()",   "breve",         "breve" },
+            { "Whole",   "1slotWhole()",   "whole_note",    "semibreve" },
+            { "Half",    "1slotHalf()",    "half",          "minim" },
+            { "Quarter", "1slotQuarter()", "quarter",       "crotchet" },
+            { "8th",     "1slot8th()",     "8th",           "quaver" },
+            { "16th",    "1slot16th()",    "16th",          "semiquaver" },
+            { "32nd",    "1slot32nd()",    "32nd",          "demisemi" },
+            { "64th",    "1slot64th()",    "64th",          "hemidemisemi" }
         };
    
     for (unsigned int i = 0, noteType = Note::Longest;
          i < 8; ++i, --noteType) {
 
-        icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap(noteType,
-                                                                  0,
-                                                                  NoAccidental,
-                                                                  false, true, true, true));
+        icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
+                        (actionsNote[i][3]));
         noteAction = new KRadioAction(i18n(actionsNote[i][0]), icon, 0, this,
                                       actionsNote[i][1],
                                       actionCollection(), actionsNote[i][2]);
@@ -243,25 +241,23 @@ void NotationView::setupActions()
     //
     // Dotted Notes
     //
-    static const char* actionsDottedNote[][3] = 
+    static const char* actionsDottedNote[][4] = 
         {
-            { "Dotted Breve",   "1slotDottedBreve()",   "dotted_breve" },
-            { "Dotted Whole",   "1slotDottedWhole()",   "dotted_whole_note" },
-            { "Dotted Half",    "1slotDottedHalf()",    "dotted_half" },
-            { "Dotted Quarter", "1slotDottedQuarter()", "dotted_quarter" },
-            { "Dotted 8th",     "1slotDotted8th()",     "dotted_8th" },
-            { "Dotted 16th",    "1slotDotted16th()",    "dotted_16th" },
-            { "Dotted 32th",    "1slotDotted32nd()",    "dotted_32th" },
-            { "Dotted 64th",    "1slotDotted64th()",    "dotted_64th" }
+            { "Dotted Breve",   "1slotDottedBreve()",   "dotted_breve",      "dotted-breve" },
+            { "Dotted Whole",   "1slotDottedWhole()",   "dotted_whole_note", "dotted-semibreve" },
+            { "Dotted Half",    "1slotDottedHalf()",    "dotted_half",       "dotted-minim" },
+            { "Dotted Quarter", "1slotDottedQuarter()", "dotted_quarter",    "dotted-crotchet" },
+            { "Dotted 8th",     "1slotDotted8th()",     "dotted_8th",        "dotted-quaver" },
+            { "Dotted 16th",    "1slotDotted16th()",    "dotted_16th",       "dotted-semiquaver" },
+            { "Dotted 32nd",    "1slotDotted32nd()",    "dotted_32nd",       "dotted-demisemi" },
+            { "Dotted 64th",    "1slotDotted64th()",    "dotted_64th",       "dotted-hemidemisemi" }
         };
 
     for (unsigned int i = 0, noteType = Note::Longest;
          i < 8; ++i, --noteType) {
 
-        icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap(noteType,
-                                                                  1,
-                                                                  NoAccidental,
-                                                                  false, true, true, true));
+        icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
+                        (actionsDottedNote[i][3]));
         noteAction = new KRadioAction(i18n(actionsDottedNote[i][0]), icon, 0, this,
                                       actionsDottedNote[i][1],
                                       actionCollection(), actionsDottedNote[i][2]);
@@ -272,22 +268,23 @@ void NotationView::setupActions()
     //
     // Rests
     //
-    static const char* actionsRest[][3] = 
+    static const char* actionsRest[][4] = 
         {
-            { "Breve Rest",   "1slotRBreve()",   "breve_rest" },
-            { "Whole Rest",   "1slotRWhole()",   "whole_note_rest" },
-            { "Half Rest",    "1slotRHalf()",    "half_rest" },
-            { "Quarter Rest", "1slotRQuarter()", "quarter_rest" },
-            { "8th Rest",     "1slotR8th()",     "8th_rest" },
-            { "16th Rest",    "1slotR16th()",    "16th_rest" },
-            { "32th Rest",    "1slotR32nd()",    "32th_rest" },
-            { "64th Rest",    "1slotR64th()",    "64th_rest" }
+            { "Breve Rest",   "1slotRBreve()",   "breve_rest",      "rest-breve" },
+            { "Whole Rest",   "1slotRWhole()",   "whole_note_rest", "rest-semibreve" },
+            { "Half Rest",    "1slotRHalf()",    "half_rest",       "rest-minim" },
+            { "Quarter Rest", "1slotRQuarter()", "quarter_rest",    "rest-crotchet" },
+            { "8th Rest",     "1slotR8th()",     "8th_rest",        "rest-quaver" },
+            { "16th Rest",    "1slotR16th()",    "16th_rest",       "rest-semiquaver" },
+            { "32nd Rest",    "1slotR32nd()",    "32nd_rest",       "rest-demisemi" },
+            { "64th Rest",    "1slotR64th()",    "64th_rest",       "rest-hemidemisemi" }
         };
 
     for (unsigned int i = 0, noteType = Note::Longest;
          i < 8; ++i, --noteType) {
 
-        icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap(Note(noteType, false)));
+        icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
+                        (actionsRest[i][3]));
         noteAction = new KRadioAction(i18n(actionsRest[i][0]), icon, 0, this,
                                       actionsRest[i][1],
                                       actionCollection(), actionsRest[i][2]);
@@ -298,22 +295,23 @@ void NotationView::setupActions()
     //
     // Dotted Rests
     //
-    static const char* actionsDottedRest[][3] = 
+    static const char* actionsDottedRest[][4] = 
         {
-            { "Dotted Breve Rest",   "1slotDottedRBreve()",   "dotted_breve_rest" },
-            { "Dotted Whole Rest",   "1slotDottedRWhole()",   "dotted_whole_note_rest" },
-            { "Dotted Half Rest",    "1slotDottedRHalf()",    "dotted_half_rest" },
-            { "Dotted Quarter Rest", "1slotDottedRQuarter()", "dotted_quarter_rest" },
-            { "Dotted 8th Rest",     "1slotDottedR8th()",     "dotted_8th_rest" },
-            { "Dotted 16th Rest",    "1slotDottedR16th()",    "dotted_16th_rest" },
-            { "Dotted 32th Rest",    "1slotDottedR32nd()",    "dotted_32th_rest" },
-            { "Dotted 64th Rest",    "1slotDottedR64th()",    "dotted_64th_rest" }
+            { "Dotted Breve Rest",   "1slotDottedRBreve()",   "dotted_breve_rest",      "dotted-rest-breve" },
+            { "Dotted Whole Rest",   "1slotDottedRWhole()",   "dotted_whole_note_rest", "dotted-rest-semibreve" },
+            { "Dotted Half Rest",    "1slotDottedRHalf()",    "dotted_half_rest",       "dotted-rest-minim" },
+            { "Dotted Quarter Rest", "1slotDottedRQuarter()", "dotted_quarter_rest",    "dotted-rest-crotchet" },
+            { "Dotted 8th Rest",     "1slotDottedR8th()",     "dotted_8th_rest",        "dotted-rest-quaver" },
+            { "Dotted 16th Rest",    "1slotDottedR16th()",    "dotted_16th_rest",       "dotted-rest-semiquaver" },
+            { "Dotted 32nd Rest",    "1slotDottedR32nd()",    "dotted_32nd_rest",       "dotted-rest-demisemi" },
+            { "Dotted 64th Rest",    "1slotDottedR64th()",    "dotted_64th_rest",       "dotted-rest-hemidemisemi" }
         };
 
     for (unsigned int i = 0, noteType = Note::Longest;
          i < 8 && noteType > 0; ++i, --noteType) {
 
-        icon = QIconSet(m_toolbarNotePixmapFactory.makeRestPixmap(Note(noteType, 1)));
+        icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
+                        (actionsDottedRest[i][3]));
         noteAction = new KRadioAction(i18n(actionsDottedRest[i][0]), icon, 0, this,
                                       actionsDottedRest[i][1],
                                       actionCollection(), actionsDottedRest[i][2]);
@@ -324,23 +322,21 @@ void NotationView::setupActions()
     //
     // Accidentals
     //
-    static const char* actionsAccidental[][3] = 
+    static const char* actionsAccidental[][4] = 
         {
-            { "No accidental",  "1slotNoAccidental()",  "no_accidental" },
-            { "Sharp",          "1slotSharp()",         "sharp_accidental" },
-            { "Flat",           "1slotFlat()",          "flat_accidental" },
-            { "Natural",        "1slotNatural()",       "natural_accidental" },
-            { "Double sharp",   "1slotDoubleSharp()",   "double_sharp_accidental" },
-            { "Double flat",    "1slotDoubleFlat()",    "double_flat_accidental" }
+            { "No accidental",  "1slotNoAccidental()",  "no_accidental",           "accidental-none" },
+            { "Sharp",          "1slotSharp()",         "sharp_accidental",        "accidental-sharp" },
+            { "Flat",           "1slotFlat()",          "flat_accidental",         "accidental-flat" },
+            { "Natural",        "1slotNatural()",       "natural_accidental",      "accidental-natural" },
+            { "Double sharp",   "1slotDoubleSharp()",   "double_sharp_accidental", "accidental-doublesharp" },
+            { "Double flat",    "1slotDoubleFlat()",    "double_flat_accidental",  "accidental-doubleflat" }
         };
 
     for (unsigned int i = 0, accidental = NoAccidental;
          i < 6; ++i, ++accidental) {
 
-        icon = QIconSet(m_toolbarNotePixmapFactory.makeNotePixmap(Note::Crotchet,
-                                                                  0,
-                                                                  Accidental(accidental),
-                                                                  false, true, true, true));
+        icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap
+                        (actionsAccidental[i][3]));
         noteAction = new KRadioAction(i18n(actionsAccidental[i][0]), icon, 0, this,
                                       actionsAccidental[i][1],
                                       actionCollection(), actionsAccidental[i][2]);
@@ -353,28 +349,28 @@ void NotationView::setupActions()
     //
 
     // Treble
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeClefPixmap(Clef(Clef::Treble)));
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-treble"));
     noteAction = new KRadioAction(i18n("Treble Clef"), icon, 0, this,
                                   SLOT(slotTrebleClef()),
                                   actionCollection(), "treble_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Tenor
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeClefPixmap(Clef(Clef::Tenor)));
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-tenor"));
     noteAction = new KRadioAction(i18n("Tenor Clef"), icon, 0, this,
                                   SLOT(slotTenorClef()),
                                   actionCollection(), "tenor_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Alto
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeClefPixmap(Clef(Clef::Alto)));
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-alto"));
     noteAction = new KRadioAction(i18n("Alto Clef"), icon, 0, this,
                                   SLOT(slotAltoClef()),
                                   actionCollection(), "alto_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Bass
-    icon = QIconSet(m_toolbarNotePixmapFactory.makeClefPixmap(Clef(Clef::Bass)));
+    icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-bass"));
     noteAction = new KRadioAction(i18n("Bass Clef"), icon, 0, this,
                                   SLOT(slotBassClef()),
                                   actionCollection(), "bass_clef");
@@ -402,20 +398,28 @@ void NotationView::setupActions()
     // setup Settings menu
     KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
 
-    static const char* actionsToolbars[][3] = 
+    static const char* actionsToolbars[][4] = 
         {
-            { "Show Notes Toolbar",  "1slotToggleNotesToolBar()",  "show_notes_toolbar" },
-            { "Show Rests Toolbar",  "1slotToggleRestsToolBar()",  "show_rests_toolbar" },
-            { "Show Accidentals Toolbar",   "1slotToggleAccidentalsToolBar()",  "show_accidentals_toolbar" },
-            { "Show Clefs Toolbar",         "1slotToggleClefsToolBar()",        "show_clefs_toolbar" }
+            { "Show Notes Toolbar",  "1slotToggleNotesToolBar()",  "show_notes_toolbar",                    "palette-notes" },
+            { "Show Rests Toolbar",  "1slotToggleRestsToolBar()",  "show_rests_toolbar",                    "palette-rests" },
+            { "Show Accidentals Toolbar",   "1slotToggleAccidentalsToolBar()",  "show_accidentals_toolbar", "palette-accidentals" },
+            { "Show Clefs Toolbar",         "1slotToggleClefsToolBar()",        "show_clefs_toolbar",       "palette-clefs" }
         };
 
     for (unsigned int i = 0; i < 4; ++i) {
 
+        icon = QIconSet(m_toolbarNotePixmapFactory.makeToolbarPixmap(actionsToolbars[i][3]));
+
+        KToggleAction* toolbarAction = new KToggleAction
+            (i18n(actionsToolbars[i][0]), icon, 0,
+             this, actionsToolbars[i][1],
+             actionCollection(), actionsToolbars[i][2]);
+
+/*
         KToggleAction* toolbarAction = new KToggleAction(i18n(actionsToolbars[i][0]), 0,
                                                          this, actionsToolbars[i][1],
                                                          actionCollection(), actionsToolbars[i][2]);
-
+*/
         toolbarAction->setChecked(true);
     }
     
@@ -471,7 +475,7 @@ bool NotationView::showElements(Staff *staff,
 
     for (NotationElementList::iterator it = from; it != end; ++it) {
 
-        if (positionOnly) {
+        if (positionOnly && (*it)->canvasItem()) {
 
             // We can't only reposition if the event is a beamed note,
             // because changing the position normally requires
@@ -490,7 +494,7 @@ bool NotationView::showElements(Staff *staff,
                 continue;
             }
 
-            // beamed note -- fall through
+            // beamed note or something without a pixmap -- fall through
         }
 
         //
@@ -698,21 +702,14 @@ bool NotationView::applyLayout(int staffNo)
 }
 
 
-void NotationView::setCurrentSelectedNote(bool rest, Note::Type n, int dots)
+void NotationView::setCurrentSelectedNote(const char *pixmapName,
+                                          bool rest, Note::Type n, int dots)
 {
-    if (rest)
-        setTool(new RestInserter(n, dots, *this));
-    else
-        setTool(new NoteInserter(n, dots, *this));
+    if (rest) setTool(new RestInserter(n, dots, *this));
+    else      setTool(new NoteInserter(n, dots, *this));
 
-    if (!rest) {
-        m_currentNotePixmap->setPixmap
-            (m_toolbarNotePixmapFactory.makeNotePixmap(n, dots, NoAccidental,
-                                                       false, true, true, true));
-    } else {
-        m_currentNotePixmap->setPixmap
-            (m_toolbarNotePixmapFactory.makeRestPixmap(Note(n, dots)));
-    }
+    m_currentNotePixmap->setPixmap
+        (m_toolbarNotePixmapFactory.makeToolbarPixmap(pixmapName));
 
     emit changeCurrentNote(rest, n);
 }
@@ -851,97 +848,97 @@ NotationView::setPositionPointer(const int& /*position*/)
 void NotationView::slotBreve()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotBreve()\n";
-    setCurrentSelectedNote(false, Note::Breve);
+    setCurrentSelectedNote("breve", false, Note::Breve);
 }
 
 void NotationView::slotWhole()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotWhole()\n";
-    setCurrentSelectedNote(false, Note::WholeNote);
+    setCurrentSelectedNote("semibreve", false, Note::WholeNote);
 }
 
 void NotationView::slotHalf()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotHalf()\n";
-    setCurrentSelectedNote(false, Note::HalfNote);
+    setCurrentSelectedNote("minim", false, Note::HalfNote);
 }
 
 void NotationView::slotQuarter()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotQuarter()\n";
-    setCurrentSelectedNote(false, Note::QuarterNote);
+    setCurrentSelectedNote("crotchet", false, Note::QuarterNote);
 }
 
 void NotationView::slot8th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot8th()\n";
-    setCurrentSelectedNote(false, Note::EighthNote);
+    setCurrentSelectedNote("quaver", false, Note::EighthNote);
 }
 
 void NotationView::slot16th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot16th()\n";
-    setCurrentSelectedNote(false, Note::SixteenthNote);
+    setCurrentSelectedNote("semiquaver", false, Note::SixteenthNote);
 }
 
 void NotationView::slot32nd()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot32nd()\n";
-    setCurrentSelectedNote(false, Note::ThirtySecondNote);
+    setCurrentSelectedNote("demisemi", false, Note::ThirtySecondNote);
 }
 
 void NotationView::slot64th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot64th()\n";
-    setCurrentSelectedNote(false, Note::SixtyFourthNote);
+    setCurrentSelectedNote("hemidemisemi", false, Note::SixtyFourthNote);
 }
 
 void NotationView::slotDottedBreve()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDottedBreve()\n";
-    setCurrentSelectedNote(false, Note::Breve, 1);
+    setCurrentSelectedNote("dotted-breve", false, Note::Breve, 1);
 }
 
 void NotationView::slotDottedWhole()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDottedWhole()\n";
-    setCurrentSelectedNote(false, Note::WholeNote, 1);
+    setCurrentSelectedNote("dotted-semibreve", false, Note::WholeNote, 1);
 }
 
 void NotationView::slotDottedHalf()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDottedHalf()\n";
-    setCurrentSelectedNote(false, Note::HalfNote, 1);
+    setCurrentSelectedNote("dotted-minim", false, Note::HalfNote, 1);
 }
 
 void NotationView::slotDottedQuarter()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDottedQuarter()\n";
-    setCurrentSelectedNote(false, Note::QuarterNote, 1);
+    setCurrentSelectedNote("dotted-crotchet", false, Note::QuarterNote, 1);
 }
 
 void NotationView::slotDotted8th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDotted8th()\n";
-    setCurrentSelectedNote(false, Note::EighthNote, 1);
+    setCurrentSelectedNote("dotted-quaver", false, Note::EighthNote, 1);
 }
 
 void NotationView::slotDotted16th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDotted16th()\n";
-    setCurrentSelectedNote(false, Note::SixteenthNote, 1);
+    setCurrentSelectedNote("dotted-semiquaver", false, Note::SixteenthNote, 1);
 }
 
 void NotationView::slotDotted32nd()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDotted32nd()\n";
-    setCurrentSelectedNote(false, Note::ThirtySecondNote, 1);
+    setCurrentSelectedNote("dotted-demisemi", false, Note::ThirtySecondNote, 1);
 }
 
 void NotationView::slotDotted64th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDotted64th()\n";
-    setCurrentSelectedNote(false, Note::SixtyFourthNote, 1);
+    setCurrentSelectedNote("dotted-hemidemisemi", false, Note::SixtyFourthNote, 1);
 }
 
 //----------------------------------------
@@ -951,97 +948,97 @@ void NotationView::slotDotted64th()
 void NotationView::slotRBreve()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotRBreve()\n";
-    setCurrentSelectedNote(true, Note::Breve);
+    setCurrentSelectedNote("rest-breve", true, Note::Breve);
 }
 
 void NotationView::slotRWhole()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotRWhole()\n";
-    setCurrentSelectedNote(true, Note::WholeNote);
+    setCurrentSelectedNote("rest-semibreve", true, Note::WholeNote);
 }
 
 void NotationView::slotRHalf()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotRHalf()\n";
-    setCurrentSelectedNote(true, Note::HalfNote);
+    setCurrentSelectedNote("rest-minim", true, Note::HalfNote);
 }
 
 void NotationView::slotRQuarter()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotRQuarter()\n";
-    setCurrentSelectedNote(true, Note::QuarterNote);
+    setCurrentSelectedNote("rest-crotchet", true, Note::QuarterNote);
 }
 
 void NotationView::slotR8th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotR8th()\n";
-    setCurrentSelectedNote(true, Note::EighthNote);
+    setCurrentSelectedNote("rest-quaver", true, Note::EighthNote);
 }
 
 void NotationView::slotR16th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotR16th()\n";
-    setCurrentSelectedNote(true, Note::SixteenthNote);
+    setCurrentSelectedNote("rest-semiquaver", true, Note::SixteenthNote);
 }
 
 void NotationView::slotR32nd()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotR32nd()\n";
-    setCurrentSelectedNote(true, Note::ThirtySecondNote);
+    setCurrentSelectedNote("rest-demisemi", true, Note::ThirtySecondNote);
 }
 
 void NotationView::slotR64th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotR64th()\n";
-    setCurrentSelectedNote(true, Note::SixtyFourthNote);
+    setCurrentSelectedNote("rest-hemidemisemi", true, Note::SixtyFourthNote);
 }
 
 void NotationView::slotDottedRBreve()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDottedRBreve()\n";
-    setCurrentSelectedNote(true, Note::Breve, 1);
+    setCurrentSelectedNote("dotted-rest-breve", true, Note::Breve, 1);
 }
 
 void NotationView::slotDottedRWhole()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDottedRWhole()\n";
-    setCurrentSelectedNote(true, Note::WholeNote, 1);
+    setCurrentSelectedNote("dotted-rest-semibreve", true, Note::WholeNote, 1);
 }
 
 void NotationView::slotDottedRHalf()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDottedRHalf()\n";
-    setCurrentSelectedNote(true, Note::HalfNote, 1);
+    setCurrentSelectedNote("dotted-rest-minim", true, Note::HalfNote, 1);
 }
 
 void NotationView::slotDottedRQuarter()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDottedRQuarter()\n";
-    setCurrentSelectedNote(true, Note::QuarterNote, 1);
+    setCurrentSelectedNote("dotted-rest-crotchet", true, Note::QuarterNote, 1);
 }
 
 void NotationView::slotDottedR8th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDottedR8th()\n";
-    setCurrentSelectedNote(true, Note::EighthNote, 1);
+    setCurrentSelectedNote("dotted-rest-quaver", true, Note::EighthNote, 1);
 }
 
 void NotationView::slotDottedR16th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDottedR16th()\n";
-    setCurrentSelectedNote(true, Note::SixteenthNote, 1);
+    setCurrentSelectedNote("dotted-rest-semiquaver", true, Note::SixteenthNote, 1);
 }
 
 void NotationView::slotDottedR32nd()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDottedR32nd()\n";
-    setCurrentSelectedNote(true, Note::ThirtySecondNote, 1);
+    setCurrentSelectedNote("dotted-rest-demisemi", true, Note::ThirtySecondNote, 1);
 }
 
 void NotationView::slotDottedR64th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotDottedR64th()\n";
-    setCurrentSelectedNote(true, Note::SixtyFourthNote, 1);
+    setCurrentSelectedNote("dotted-rest-hemidemisemi", true, Note::SixtyFourthNote, 1);
 }
 
 //----------------------------------------
@@ -1083,21 +1080,29 @@ void NotationView::slotDoubleFlat()
 //----------------------------------------
 void NotationView::slotTrebleClef()
 {
+    m_currentNotePixmap->setPixmap
+        (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-treble"));
     setTool(new ClefInserter(Clef::Treble, *this));
 }
 
 void NotationView::slotTenorClef()
 {
+    m_currentNotePixmap->setPixmap
+        (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-tenor"));
     setTool(new ClefInserter(Clef::Tenor, *this));
 }
 
 void NotationView::slotAltoClef()
 {
+    m_currentNotePixmap->setPixmap
+        (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-alto"));
     setTool(new ClefInserter(Clef::Alto, *this));
 }
 
 void NotationView::slotBassClef()
 {
+    m_currentNotePixmap->setPixmap
+        (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-bass"));
     setTool(new ClefInserter(Clef::Bass, *this));
 }
 
@@ -1407,7 +1412,7 @@ void ClefInserter::handleClick(int /*height*/, const QPoint &eventPos,
 	(m_parentView.getStaff(staffNo)->getViewElementsManager()->getTrack());
     nt.insertClef(time, m_clef);
 
-    m_parentView.redoLayout(staffNo, time, time);
+    m_parentView.redoLayout(staffNo, time, time + 1);
 }
 
 

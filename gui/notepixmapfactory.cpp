@@ -779,6 +779,14 @@ NotePixmapFactory::makeUnknownPixmap()
 }
 
 QCanvasPixmap
+NotePixmapFactory::makeToolbarPixmap(const char *name)
+{
+//    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QString pixmapDir = "./pixmaps";
+    return QCanvasPixmap(pixmapDir + "/toolbar/" + name + ".xpm");
+}
+
+QCanvasPixmap
 NotePixmapFactory::makeKeyPixmap(const Key &key, const Clef &clef)
 {
     std::vector<int> ah = key.getAccidentalHeights(clef);

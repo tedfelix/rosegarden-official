@@ -168,40 +168,21 @@ void Staff::deleteBars()
 
     m_barLines.clear();
 }
-/*
-void Staff::setLinesLength(unsigned int length)
-{
-    for (barlines::iterator i = m_staffLines.begin();
-         i != m_staffLines.end(); ++i) {
 
-        QPoint startPt = (*i)->startPoint();
-        
-        (*i)->setPoints(startPt.x(), startPt.y(),
-                        startPt.x() + length, startPt.y());
-    }
-}
-*/
 void Staff::setLines(double xfrom, double xto)
 {
     for (barlines::iterator i = m_staffLines.begin();
          i != m_staffLines.end(); ++i) {
 
         QPoint p = (*i)->startPoint();
-        (*i)->setPoints(xfrom - 4, p.y(), xto, p.y());
-
-/*
-        QPoint startPt = (*i)->startPoint();
-        
-        (*i)->setPoints(startPt.x(), startPt.y(),
-                        startPt.x() + length, startPt.y());
-*/
+        (*i)->setPoints((int)xfrom - 4, p.y(), (int)xto, p.y());
     }
 
     QPoint sp = m_initialBarA->startPoint();
     QPoint ep = m_initialBarA->endPoint();
 
-    m_initialBarA->setPoints(xfrom - 4, sp.y(), xfrom - 4, ep.y());
-    m_initialBarB->setPoints(xfrom, sp.y(), xfrom, ep.y());
+    m_initialBarA->setPoints((int)xfrom - 4, sp.y(), (int)xfrom - 4, ep.y());
+    m_initialBarB->setPoints((int)xfrom, sp.y(), (int)xfrom, ep.y());
 }
 
 const int Staff::nbLines = 5;
