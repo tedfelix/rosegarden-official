@@ -490,7 +490,7 @@ void RosegardenGUIApp::slotFileSave()
 
 void RosegardenGUIApp::slotFileSaveAs()
 {
-    if (!m_doc->isModified()) return;
+    //if (!m_doc->isModified()) return;
 
     slotStatusMsg(i18n("Saving file with a new filename..."));
 
