@@ -30,13 +30,15 @@ using std::endl;
 
 
 VUMeter::VUMeter(QWidget *parent,
-                 const VUMeterType &type,
-                 const int &width,
-                 const int &height,
+                 VUMeterType type,
+                 int width,
+                 int height,
+                 VUAlignment alignment,
                  const char *name):
     QLabel(parent, name),
     m_originalHeight(height),
     m_type(type),
+    m_alignment(alignment),
     m_level(0),
     m_peakLevel(0),
     m_baseLevelStep(3),

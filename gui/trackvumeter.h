@@ -24,14 +24,18 @@
 #ifndef _TRACKVUMETER_H_
 #define _TRACKVUMETER_H_
 
+// VUMeter is the wrong term really.  But I'm a thickhead that needs
+// correcting.  So correct me.
+//
+
 class TrackVUMeter: public VUMeter
 {
 public:
      TrackVUMeter(QWidget *parent = 0,
-                  const VUMeterType &type = Plain,
-                  const int &width = 0,
-                  const int &height = 0,
-                  const int &position = 0,
+                  VUMeterType type = Plain,
+                  int width = 0,
+                  int height = 0,
+                  int position = 0,
                   const char *name = 0);
 
     int getPosition() const { return m_position; }
@@ -45,6 +49,22 @@ private:
     int m_textHeight;
 
 };
+
+// AudioVUMeter - a vertical audio meter
+//
+class AudioVUMeter : public VUMeter
+{
+public:
+    AudioVUMeter(QWidget *parent = 0,
+                 VUMeterType type = Plain,
+                 int width = 0,
+                 int height = 0,
+                 const char *name = 0);
+protected:
+    virtual void meterStart();
+    virtual void meterStop();
+};
+
 
 
 #endif // _TRACKVUMETER_H_

@@ -110,6 +110,7 @@ EXTRA_DIST = rosegardenguiiface.kidl trackseditoriface.kidl \
 	pixmaps/toolbar/*.xpm \
 	pixmaps/transport/*.xpm \
 	pixmaps/splash.png \
+        pixmaps/misc/*.xpm \
 	testfiles/*.rg \
         testfiles/audio/*.wav \
 	testfiles/*.rose
@@ -130,6 +131,7 @@ install-data-local:
 	- $(INSTALL_DATA) $(srcdir)/mini-rosegarden.xpm $(kde_icondir)/hicolor/16x16/apps/rosegarden.xpm
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/styles
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/misc
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/rg21
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/rg21/4
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/rg21/8
@@ -142,6 +144,7 @@ install-data-local:
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/toolbar
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/transport
 	$(INSTALL_DATA) $(srcdir)/styles/*.xml $(kde_datadir)/$(data_dirname)/styles
+	$(INSTALL_DATA) $(srcdir)/pixmaps/misc/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/misc
 	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/mapping.xml $(kde_datadir)/$(data_dirname)/pixmaps/rg21
 	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/4/*.xpm     $(kde_datadir)/$(data_dirname)/pixmaps/rg21/4
 	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/8/*.xpm     $(kde_datadir)/$(data_dirname)/pixmaps/rg21/8

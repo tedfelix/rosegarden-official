@@ -41,10 +41,17 @@ public:
         AudioPeakHold
     } VUMeterType;
 
+    typedef enum
+    {
+        Horizontal,
+        Vertical
+    } VUAlignment;
+
     VUMeter(QWidget *parent = 0,
-            const VUMeterType &type = Plain,
-            const int &width = 0,
-            const int &height = 0,
+            VUMeterType type = Plain,
+            int width = 0,
+            int height = 0,
+            VUAlignment alignment = Horizontal,
             const char *name = 0);
     ~VUMeter();
 
@@ -68,6 +75,8 @@ private:
     void drawMeterLevel(QPainter* paint);
 
     VUMeterType m_type;
+    VUAlignment m_alignment;
+
     int         m_level;          // percentage
     int         m_peakLevel;      // percentage
     int         m_baseLevelStep;

@@ -27,12 +27,12 @@ using std::cerr;
 using std::endl;
 
 TrackVUMeter::TrackVUMeter(QWidget *parent,
-                           const VUMeterType &type,
-                           const int &width,
-                           const int &height,
-                           const int &position,
+                           VUMeterType type,
+                           int width,
+                           int height,
+                           int position,
                            const char *name):
-    VUMeter(parent, type, width, height, name),
+    VUMeter(parent, type, width, height, VUMeter::Horizontal, name),
     m_position(position), m_textHeight(12)
 {
     setAlignment(AlignCenter);
@@ -55,4 +55,27 @@ TrackVUMeter::meterStop()
     setMaximumHeight(m_textHeight);
     setText(QString("%1").arg(m_position + 1));
 }
+
+//  ------------------  AudioVUMeter ---------------------
+
+AudioVUMeter::AudioVUMeter(QWidget *parent,
+                           VUMeterType type,
+                           int width,
+                           int height,
+                           const char *name):
+    VUMeter(parent, type, width, height, VUMeter::Vertical, name)
+{
+}
+
+void
+AudioVUMeter::meterStart()
+{
+}
+
+
+void
+AudioVUMeter::meterStop()
+{
+}
+
 

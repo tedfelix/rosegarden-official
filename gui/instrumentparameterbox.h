@@ -37,6 +37,7 @@ class QLabel;
 class RosegardenComboBox;
 class RosegardenGUIDoc;
 class QWidgetStack;
+class AudioVUMeter;
 
 namespace Rosegarden
 {
@@ -151,6 +152,10 @@ protected:
     QLabel             *m_pluginLabel;
 
     std::vector<QPushButton*>                     m_pluginButtons;
+    RosegardenRotary                             *m_panRotary;
+    QPushButton                                  *m_stereoButton;
+    QPushButton                                  *m_monoButton;
+    AudioVUMeter                                 *m_audioMeter;
 
     QSignalMapper                                *m_signalMapper;
     std::map<int, Rosegarden::AudioPluginDialog*> m_pluginDialogs;

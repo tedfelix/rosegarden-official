@@ -22,6 +22,8 @@
 #include <iostream>
 #include <cstdio>
 
+#include <kglobal.h>
+#include <kstddirs.h>
 #include <klocale.h>
 #include <kapp.h>
 
@@ -45,6 +47,7 @@
 #include "widgets.h"
 #include "studiocontrol.h"
 #include "rosegardenguidoc.h"
+#include "trackvumeter.h"
 
 #include "rosestrings.h"
 #include "rosedebug.h"
@@ -812,13 +815,14 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
       m_signalMapper(new QSignalMapper(this)),
       m_pluginManager(doc->getPluginManager())
 {
-    QGridLayout *gridLayout = new QGridLayout(this, 7, 2);
+    QGridLayout *gridLayout = new QGridLayout(this, 10, 3);
     // Some top space
 //     gridLayout->addRowSpacing(0, 8);
 //     gridLayout->addRowSpacing(1, 30);
 
     QLabel* audioLevelLabel = new QLabel(i18n("Level"), this);
     QLabel* pluginLabel = new QLabel(i18n("Plugins"), this);
+    QLabel *panLabel = new QLabel(i18n("Pan"), this);
 
     m_audioLevelFader->setLineStep(1);
 
@@ -834,31 +838,62 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
         m_pluginButtons.push_back(pb);
     }
 
-    // Instrument label : first row, both cols
-    gridLayout->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 1, AlignCenter);
+    // Instrument label : first row, all cols
+    gridLayout->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 2, AlignCenter);
 
     // Fader column (col. 0)
-    gridLayout->addWidget(audioLevelLabel, 1, 0, AlignCenter);
-    gridLayout->addMultiCellWidget(m_audioLevelFader, 2, 5, 0, 0, AlignCenter);
-    gridLayout->addWidget(m_audioLevelValue, 6, 0, AlignCenter);
+    gridLayout->addMultiCellWidget(m_audioLevelFader, 2, 4, 1, 1, AlignLeft);
+
+    m_audioMeter = new AudioVUMeter(this,
+                                    VUMeter::AudioPeakHold,
+                                    20,
+                                    m_audioLevelFader->height());
+    gridLayout->addMultiCellWidget(m_audioMeter, 2, 4, 0, 0, AlignCenter);
+                                 
+    gridLayout->addWidget(audioLevelLabel,   5, 0, AlignCenter);
+    gridLayout->addWidget(m_audioLevelValue, 5, 1, AlignLeft);
+
+    m_panRotary = new RosegardenRotary(this, 0.0, 127.0, 1.0, 5.0, 64.0, 20);
+    m_stereoButton = new QPushButton(this);
+    m_stereoButton->setToggleButton(true);
+    m_monoButton = new QPushButton(this);
+    m_monoButton->setToggleButton(true);
 
     // Plugins column (col. 1)
-    gridLayout->addWidget(pluginLabel, 1, 1, AlignCenter);
+    gridLayout->addWidget(pluginLabel, 1, 2, AlignCenter);
 
     for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
     {
         gridLayout->addWidget(m_pluginButtons[i],
-                              2 + i, 1, AlignCenter);
+                              2 + i, 2, AlignCenter);
         m_signalMapper->setMapping(m_pluginButtons[i], i);
 
         connect(m_pluginButtons[i], SIGNAL(clicked()),
                 m_signalMapper, SLOT(map()));
-
     }
+
+    gridLayout->addWidget(panLabel,       6, 0, AlignCenter);
+    gridLayout->addWidget(m_panRotary,    6, 1, AlignLeft);
+
+    // Frig that G will sort out?!  I hate these fooking GridLayouts - 
+    // they always waste _so_ much of my time.
+    //
+    gridLayout->addRowSpacing(7, m_pluginButtons[0]->height());
+    gridLayout->addWidget(m_monoButton,   7, 0, AlignCenter);
+    gridLayout->addWidget(m_stereoButton, 7, 1, AlignLeft);
+
+    // get the mono and stereo pixmaps
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QPixmap monoPixmap, stereoPixmap;
+    monoPixmap.load(QString("%1/misc/mono.xpm").arg(pixmapDir));
+    stereoPixmap.load(QString("%1/misc/stereo.xpm").arg(pixmapDir));
+    m_stereoButton->setPixmap(stereoPixmap);
+    m_stereoButton->setFixedSize(40, 20);
+    m_monoButton->setPixmap(monoPixmap);
+    m_monoButton->setFixedSize(40, 20);
 
     connect(m_signalMapper, SIGNAL(mapped(int)),
             this, SLOT(slotSelectPlugin(int)));
-
 
     connect(m_audioLevelFader, SIGNAL(faderChanged(int)),
             this, SLOT(slotSelectAudioLevel(int)));
