@@ -28,6 +28,8 @@
 #include <kstddirs.h>
 #include <kmessagebox.h>
 
+#include <sys/time.h>
+
 #include "rgapplication.h"
 #include "constants.h"
 #include "audiopluginmanager.h"
@@ -833,6 +835,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                                              *audioManagerDialog)
 {
     static bool boolShowingWarning = false;
+    static long warningShownAt = 0;
 
     if (m_doc == 0 || mC.size() == 0) return;
 
@@ -943,17 +946,22 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         i18n("JACK Audio subsystem has died or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
 		    } else if ((*i)->getData1() == Rosegarden::MappedEvent::FailureXRuns) {
-			if (!boolShowingWarning) {
+			struct timeval tv;
+			(void)gettimeofday(&tv, 0);
+
+			if (tv.tv_sec - warningShownAt >= 5 &&
+			    !boolShowingWarning) {
 
 			    QString message = i18n("JACK Audio subsystem is losing sample frames.");
 			    boolShowingWarning = true;
 		    
-			    KMessageBox::information
-//				(dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
-				(0, 
-				 message);
+			    KMessageBox::information(0, message);
 			    boolShowingWarning = false;
+
+			    (void)gettimeofday(&tv, 0);
+			    warningShownAt = tv.tv_sec;
 			}
+
 		    } else if (!m_shownOverrunWarning) {
 			
 			QString message;
