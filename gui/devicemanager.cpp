@@ -232,6 +232,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 
 DeviceManagerDialog::~DeviceManagerDialog()
 {
+    std::cerr << "DeviceManagerDialog dtor" << std::endl;
 }
 
 void
@@ -242,6 +243,7 @@ DeviceManagerDialog::slotClose()
 	m_document = 0;
     }
 
+//!!!???    delete this;
     close();
 }    
 

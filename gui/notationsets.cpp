@@ -639,7 +639,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 	}
         beam.startY = max(max(c0 + sl, c1 + ml), c2 + el);
     }  
-	    
+/*	    
     NOTATION_DEBUG << "NotationGroup::calculateBeam: beam data:" << endl
 		   << "gradient: " << beam.gradient << endl
 		   << "(c0 " << c0 << ", c2 " << c2 << ", extremeDX " << extremeDX << ")" << endl
@@ -647,7 +647,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 		   << "aboveNotes: " << beam.aboveNotes << endl
 		   << "shortestNoteType: " << shortestNoteType << endl
 		   << "necessary: " << beam.necessary << endl;
-    
+*/  
     return beam;
 }
 
@@ -945,11 +945,24 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 
 	if (followBeam) { // adjust to move text slightly away from beam
 
+	    int maxEndBeamCount = 1;
+	    long bc;
+	    if ((*initialNoteOrRest)->event()->get<Int>
+		(m_properties.BEAM_NEXT_BEAM_COUNT, bc)){
+		if (bc > maxEndBeamCount) maxEndBeamCount = bc;
+	    }
+	    if ((*finalNote)->event()->get<Int>
+		(m_properties.BEAM_NEXT_BEAM_COUNT, bc)) {
+		if (bc > maxEndBeamCount) maxEndBeamCount = bc;
+	    }
+
+	    int extraBeamSpace = maxEndBeamCount * nh;
+
 	    if (beam.aboveNotes) {
-		startY -= nh; endY -= nh;
+		startY -= extraBeamSpace; endY -= extraBeamSpace;
 		finalX += nh;
 	    } else {
-		startY += nh; endY += nh;
+		startY += extraBeamSpace; endY += extraBeamSpace;
 		finalX -= nh;
 	    }
 

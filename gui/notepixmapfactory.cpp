@@ -1213,22 +1213,21 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     int startX = m_left + indent;
     int endX = startX + w;
 
-    int startY = params.m_tuplingLineY + m_above + m_noteBodyHeight / 2;
+    int startY = params.m_tuplingLineY + m_above + getLineSpacing() / 2;
     int endY = startY + (int)(params.m_tuplingLineGradient * w);
 
     if (startY == endY) ++thickness;
 
-    int tickOffset = m_noteBodyHeight/2 - thickness;
+    int tickOffset = getLineSpacing()/2;
     if (params.m_tuplingLineY >= 0) tickOffset = -tickOffset;
 
-/*
-    NOTATION_DEBUG << "adjusted params.m_tuplingLineWidth = "
-			 << tlw
-			 << ", cr.width = " << cr.width()
-			 << ", tickOffset = " << tickOffset << endl;
-    NOTATION_DEBUG << "line: (" << startX << "," << startY << ") -> ("
-			 << endX << "," << endY << ")" << endl;
-*/
+//    NOTATION_DEBUG << "adjusted params.m_tuplingLineWidth = "
+//			 << tlw
+//			 << ", cr.width = " << cr.width()
+//			 << ", tickOffset = " << tickOffset << endl;
+//    NOTATION_DEBUG << "line: (" << startX << "," << startY << ") -> ("
+//			 << endX << "," << endY << ")" << endl;
+
     bool smooth = m_font->isSmooth();
 
     if (!params.m_tuplingLineFollowsBeam) {

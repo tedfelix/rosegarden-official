@@ -146,7 +146,7 @@ NotationStaff::insertTimeSignature(double layoutX,
 void
 NotationStaff::deleteTimeSignatures()
 {
-    NOTATION_DEBUG << "NotationStaff::deleteTimeSignatures()" << endl;
+//    NOTATION_DEBUG << "NotationStaff::deleteTimeSignatures()" << endl;
     
     for (SpriteSet::iterator i = m_timeSigs.begin();
 	 i != m_timeSigs.end(); ++i) {
@@ -522,13 +522,13 @@ NotationStaff::positionElements(timeT from, timeT to)
 	}
     }
 
-    NOTATION_DEBUG << "NotationStaff " << this << "::positionElements "
-		   << from << " -> " << to << ": "
-		   << elementsPositioned << " elements positioned, "
-		   << elementsRendered << " re-rendered"
-		   << endl;
+//    NOTATION_DEBUG << "NotationStaff " << this << "::positionElements "
+//		   << from << " -> " << to << ": "
+//		   << elementsPositioned << " elements positioned, "
+//		   << elementsRendered << " re-rendered"
+//		   << endl;
 
-    NotePixmapFactory::dumpStats(std::cerr);
+//    NotePixmapFactory::dumpStats(std::cerr);
 }
 
 void
@@ -1171,7 +1171,7 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 	    if (bar >= m_lastRenderCheck.first &&
 		bar <= m_lastRenderCheck.second) {
 
-		NOTATION_DEBUG << "bar " << bar << " rendering and positioning" << endl;
+//		NOTATION_DEBUG << "bar " << bar << " rendering and positioning" << endl;
 
 		if (!movedOnly || m_status[bar] == UnRendered) {
 		    renderElements
@@ -1183,7 +1183,7 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 		m_status[bar] = Positioned;
 
 	    } else if (!m_ready) {
-		NOTATION_DEBUG << "bar " << bar << " rendering and positioning" << endl;
+//		NOTATION_DEBUG << "bar " << bar << " rendering and positioning" << endl;
 
 		// first time through -- we don't need a separate render phase,
 		// only to mark as not yet positioned
@@ -1191,12 +1191,12 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 
 	    } else if (movedOnly) {
 		if (m_status[bar] == Positioned) {
-		    NOTATION_DEBUG << "bar " << bar << " marking unpositioned" << endl;
+//		    NOTATION_DEBUG << "bar " << bar << " marking unpositioned" << endl;
 		    m_status[bar] = Rendered;
 		}
 
 	    } else {
-		NOTATION_DEBUG << "bar " << bar << " marking unrendered" << endl;
+//		NOTATION_DEBUG << "bar " << bar << " marking unrendered" << endl;
 
 		m_status[bar] = UnRendered;
 	    }
@@ -1212,7 +1212,7 @@ NotationStaff::checkRendered(timeT from, timeT to)
     if (!m_ready) return false;
     Rosegarden::Composition *composition = getSegment().getComposition();
 
-    NOTATION_DEBUG << "NotationStaff::checkRendered: " << from << " -> " << to << endl;
+//    NOTATION_DEBUG << "NotationStaff::checkRendered: " << from << " -> " << to << endl;
 
     int fromBar = composition->getBarNumber(from);
     int toBar   = composition->getBarNumber(to);
@@ -1221,8 +1221,8 @@ NotationStaff::checkRendered(timeT from, timeT to)
     if (fromBar > toBar) std::swap(fromBar, toBar);
 
     for (int bar = fromBar; bar <= toBar; ++bar) {
-	NOTATION_DEBUG << "NotationStaff::checkRendered: bar " << bar << " status "
-		       << m_status[bar] << endl;
+//	NOTATION_DEBUG << "NotationStaff::checkRendered: bar " << bar << " status "
+//		       << m_status[bar] << endl;
 
 	switch (m_status[bar]) {
 	    

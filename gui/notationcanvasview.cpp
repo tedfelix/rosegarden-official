@@ -406,8 +406,8 @@ NotationCanvasView::viewportPaintEvent(QPaintEvent *e)
 	cy(e->rect().y()),
 	cw(e->rect().width()),
 	ch(e->rect().height());
-    NOTATION_DEBUG << "NotationCanvasView::viewportPaintEvent: (" << cx << ","
-		   << cy << ") size (" << cw << "x" << ch << ")" << endl;
+//    NOTATION_DEBUG << "NotationCanvasView::viewportPaintEvent: (" << cx << ","
+//		   << cy << ") size (" << cw << "x" << ch << ")" << endl;
     QCanvasView::viewportPaintEvent(e);
 
     cx += contentsX();

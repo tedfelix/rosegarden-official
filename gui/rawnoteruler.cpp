@@ -366,7 +366,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 {
     if (!m_segment || !m_segment->getComposition()) return;
     
-    START_TIMING;
+//    START_TIMING;
 
     QPainter paint(this);
     paint.setClipRegion(e->region());
@@ -463,6 +463,6 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 
     }
 
-    PRINT_ELAPSED("RawNoteRuler::paintEvent: complete");
+//    PRINT_ELAPSED("RawNoteRuler::paintEvent: complete");
 }
 

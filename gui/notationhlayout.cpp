@@ -248,6 +248,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	chunks.clear();
 
 	float lyricWidth = 0;
+	int graceCount = 0;
 
 	typedef std::set<long> GroupIdSet;
 	GroupIdSet groupIds;
@@ -310,12 +311,15 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 		    el->event()->get<String>(Text::TextTypePropertyName) ==
 		    Text::Lyric) {
 		    lyricWidth = m_npf->getTextWidth(Text(*el->event()));
+		    NOTATION_DEBUG << "Setting lyric width to " << lyricWidth
+				   << " for text " << el->event()->get<String>(Text::TextPropertyName) << endl;
 		}
 		chunks.push_back(Chunk(el->event()->getSubOrdering(), 0));
 
 	    } else if (el->isNote()) {
 		
-		scanChord(notes, itr, clef, key, accTable, lyricWidth, chunks, to);
+		scanChord(notes, itr, clef, key, accTable,
+			  lyricWidth, chunks, graceCount, to);
 
 	    } else if (el->isRest()) {
 
@@ -424,13 +428,14 @@ NotationHLayout::setBarSizeData(Staff &staff,
  
 void
 NotationHLayout::scanChord(NotationElementList *notes,
-			    NotationElementList::iterator &itr,
-			    const Rosegarden::Clef &clef,
-			    const Rosegarden::Key &key,
-			    AccidentalTable &accTable,
-			    float &lyricWidth,
-			    ChunkList &chunks,
-			    NotationElementList::iterator &to)
+			   NotationElementList::iterator &itr,
+			   const Rosegarden::Clef &clef,
+			   const Rosegarden::Key &key,
+			   AccidentalTable &accTable,
+			   float &lyricWidth,
+			   ChunkList &chunks,
+			   int &graceCount,
+			   NotationElementList::iterator &to)
 {
     NotationChord chord(*notes, itr, m_notationQuantizer, m_properties);
     AccidentalTable newAccTable(accTable);
@@ -521,8 +526,12 @@ NotationHLayout::scanChord(NotationElementList *notes,
     }
 
     if (grace) {
-	chunks.push_back(Chunk(-1, extraWidth + m_npf->getNoteBodyWidth()));
+	chunks.push_back(Chunk(-10 + graceCount,
+			       extraWidth + m_npf->getNoteBodyWidth()));
+	if (graceCount < 9) ++graceCount;
 	return;
+    } else {
+	graceCount = 0;
     }
 
     NotationElementList::iterator myLongest = chord.getLongestElement();
@@ -532,9 +541,13 @@ NotationHLayout::scanChord(NotationElementList *notes,
 
     timeT d = (*myLongest)->getViewDuration();
 
+    NOTATION_DEBUG << "Lyric width is " << lyricWidth << endl;
+
     chunks.push_back(Chunk(d, 0, extraWidth,
 			   std::max(layoutExtra + getLayoutWidth(**myLongest),
 				    lyricWidth)));
+
+    lyricWidth = 0;
 
     itr = chord.getFinalElement();
     if (barEndsInChord) { to = itr; ++to; }
