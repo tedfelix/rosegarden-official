@@ -887,12 +887,16 @@ RosegardenSequencerApp::setAudioMonitoring(bool value)
             m_sequencer->getRecordStatus() == Rosegarden::ASYNCHRONOUS_MIDI)
     {
         m_sequencer->record(Rosegarden::ASYNCHRONOUS_AUDIO);
+        std::cout << "RosegardenSequencerApp::setAudioMonitoring - "
+                  << "monitoring audio input" << std::endl;
         return;
     }
 
     if (value == false &&
             m_sequencer->getRecordStatus() == Rosegarden::ASYNCHRONOUS_AUDIO)
     {
+        std::cout << "RosegardenSequencerApp::setAudioMonitoring - "
+                  << "monitoring MIDI input" << std::endl;
         m_sequencer->record(Rosegarden::ASYNCHRONOUS_MIDI);
     }
     

@@ -1689,6 +1689,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             //
             std::string buffer;
             unsigned char b1, b2;
+            float inputLevel = 0.0;
 
             for (unsigned int i = 0; i < nframes; i++)
             {
@@ -1696,7 +1697,26 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                 b1 = (unsigned char)((long)(inputBuffer[i] * _16bitSampleMax) >> 8);
                 buffer += b2;
                 buffer += b1;
+
+                // We're monitoring levels here 
+                //
+                inputLevel += fabs(inputBuffer[i]);
+
             }
+
+            inputLevel /= float(nframes);
+
+            // Simple event to inform that AudioFileId has
+            // now stopped playing.
+            //
+            MappedEvent *mE =
+                new MappedEvent((inst)->getAudioMonitoringInstrument(),
+                                MappedEvent::AudioLevel,
+                                0, // file id always empty
+                                int(inputLevel * 127.0));
+
+            // send completion event
+            inst->insertMappedEventForReturn(mE);
 
             if (inst->getRecordStatus() == RECORD_AUDIO)
             {

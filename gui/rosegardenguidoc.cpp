@@ -1323,6 +1323,55 @@ RosegardenGUIDoc::slotNewRecordButton()
 
     // Document modified
     setModified(true);
+
+    // If we're got an audio track then tell someone goddamn
+    //
+    Rosegarden::Track *recordTrack
+        = m_composition.getTrackByIndex(m_composition.getRecordTrack());
+
+    if (recordTrack)
+    {
+        Rosegarden::Instrument *recordInstr =
+            m_studio.getInstrumentById(recordTrack->getInstrument());
+
+        if (recordInstr)
+        {
+            bool monitorAudio = false;
+            if (recordInstr->getType() == Rosegarden::Instrument::Audio)
+                monitorAudio = true;
+
+            QByteArray data;
+            QDataStream streamOut(data, IO_WriteOnly);
+
+            streamOut << recordInstr->getId();
+
+            if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                          ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                          "setAudioMonitoringInstrument(unsigned int)",
+                                          data))
+            {
+                std::cerr << "RosegardenGUIDoc::slotNewRecordButton - "
+                          << "can't set monitoring instrument at sequencer"
+                          << std::endl;
+            }
+
+            QByteArray data2;
+            QDataStream streamOut2(data, IO_WriteOnly);
+
+            streamOut2 << monitorAudio;
+
+            if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                          ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                          "setAudioMonitoring(bool)",
+                                          data))
+            {
+                std::cerr << "RosegardenGUIDoc::slotNewRecordButton - "
+                          << "can't turn on audio monitoring at sequencer"
+                          << std::endl;
+            }
+        }
+    }
+
 }
 
 Rosegarden::RealTime

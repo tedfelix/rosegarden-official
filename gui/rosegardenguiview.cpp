@@ -542,6 +542,14 @@ void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
 {
     double value = ((double)mE->getVelocity()) / 127.0;
 
+    if (mE->getType() == Rosegarden::MappedEvent::AudioLevel)
+    {
+        // Don't always send all audio levels so we don't
+        // get vu meter flickering
+        //
+        if (value < 0.05) return;
+
+    }
     m_trackEditor->getTrackButtons()->
         slotSetMetersByInstrument(value, mE->getInstrument());
 }
