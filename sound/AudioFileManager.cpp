@@ -148,6 +148,13 @@ AudioFileManager::addSearchPath(const std::string &path)
     if (hPath[hPath.size() - 1] != '/')
         hPath += std::string("/");
 
+    // get the home directory
+    if (hPath[0] == '~')
+    {
+        hPath.erase(0, 1);
+        hPath = string(getenv("HOME")) + hPath;
+    }
+
     m_audioSearchPath.push_back(hPath);
 }
 
@@ -214,10 +221,6 @@ AudioFileManager::fileExists(const unsigned int &id)
 
 }
 
-
-
-
 }
-
 
 
