@@ -1,8 +1,26 @@
-#include "Sequencer.h"
+/*
+    Rosegarden-4 v0.1
+    A sequencer and musical notation editor.
 
+    This program is Copyright 2000-2001
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <bownie@bownie.com>
+
+    The moral right of the authors to claim authorship of this work
+    has been asserted.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+
+
+#include "Sequencer.h"
 #include <iostream>
 #include "MidiArts.h"
-
 #include "MidiFile.h"
 #include "Composition.h"
 #include "Track.h"
@@ -11,10 +29,13 @@
 namespace Rosegarden
 {
 
-Sequencer::Sequencer(): _playing(false), _recordStatus(ASYNCHRONOUS_MIDI)
+Sequencer::Sequencer():
+                       _playing(false),
+                       _recordStatus(ASYNCHRONOUS_MIDI),
+                       _ppq(960)
 {
-  _songPosition.usec = 0;
-  _songPosition.sec = 0;
+  _songTime.usec = 0;
+  _songTime.sec = 0;
 
   initializeMidi();
 }
@@ -92,14 +113,15 @@ Sequencer::initializeMidi()
 void
 Sequencer::incrementSongPosition(long inc)
 {
-  _songPosition.usec += inc;
-  _songPosition.sec += _songPosition.usec / 1000000;
-  _songPosition.usec %= 1000000;
+  _songTime.usec += inc;
+  _songTime.sec += _songTime.usec / 1000000;
+  _songTime.usec %= 1000000;
 }
 
 void
 Sequencer::record(const RecordStatus& recordStatus)
 {
+
   if ( recordStatus == RECORD_MIDI )
   {
     cout << "Recording MIDI" << endl;
@@ -112,12 +134,17 @@ Sequencer::record(const RecordStatus& recordStatus)
     if ( !_playing )
     {
       _playing = true;
-      _songPosition -= 8;  // arbitrary for the moment
+      _songTime.sec -= 2;  // arbitrary for the moment
     }
 
     // set status and the record start position
     _recordStatus = RECORD_MIDI;
-    _recordStartPosition = _midiRecordPort.time();
+    _recordStartTime = _midiRecordPort.time();
+    _songTime = _recordStartTime;
+
+    cout << "Recording Started at : " << _recordStartTime.sec << " : "
+                                      << _recordStartTime.usec << endl;
+                                     
   }
   else
   {
@@ -132,12 +159,12 @@ Sequencer::play()
    if ( !_playing)
    {
      _playing = true;
-     _playStartPosition = _midiRecordPort.time();
+     _playStartTime = _midiRecordPort.time();
    }
    else
    {
      // jump back to last start position and carry on playing
-     _songPosition = _playStartPosition; 
+     _songTime = _playStartTime; 
    }
 }
 
@@ -154,9 +181,27 @@ Sequencer::stop()
   else
   {
     // if already stopped then return to zero
-    _songPosition.usec = 0;
-    _songPosition.sec = 0;
+    _songTime.usec = 0;
+    _songTime.sec = 0;
   }
+}
+
+Arts::TimeStamp
+Sequencer::recordTime(Arts::TimeStamp ts)
+{
+  long usec = ts.usec - _recordStartTime.usec;
+  long sec = ts.sec -  _recordStartTime.sec;
+
+  if ( usec < 0 )
+  {
+    sec--;
+    usec += 1000000;
+  }
+
+  // also should check to see if the clock has
+  // cycled into negative or back to zero
+
+  return (Arts::TimeStamp(sec, usec));
 }
 
 };

@@ -18,7 +18,9 @@
 */
 
 // From this class we control our sound subsystems - audio
-// and MIDI are initialised, playback and recording handled.
+// and MIDI are initialised, playback and recording handles
+// are available to the higher levels for sending and 
+// retreiving MIDI and audio.
 //
 //
 
@@ -67,8 +69,8 @@ namespace Rosegarden
       { _midiPlayPort.processEvent(midiEvent); }
     
     void incrementSongPosition(long inc);
-    long songPositionSeconds() { return _songPosition.sec; }
-    long songPositionMicroSeconds() { return _songPosition.usec; }
+    long songPositionSeconds() { return _songTime.sec; }
+    long songPositionMicroSeconds() { return _songTime.usec; }
 
     // Our current recording status.  Asynchronous record states
     // mean that we're just accepting asynchronous events but not
@@ -78,6 +80,14 @@ namespace Rosegarden
     RecordStatus recordStatus() { return _recordStatus; }
 
     inline bool isPlaying() { return _playing; }
+
+    const unsigned int tempo() const { return _tempo; }
+    const unsigned int resolution() const { return _ppq; }
+
+    void tempo(const unsigned int &tempo) { _tempo = tempo; }
+
+    // get the TimeStamp from the beginning of recording
+    Arts::TimeStamp recordTime(Arts::TimeStamp ts);
 
   private:
 
@@ -94,15 +104,16 @@ namespace Rosegarden
 
     // some positions in time
     //
-    Arts::TimeStamp _songPosition;
-    Arts::TimeStamp _playStartPosition;
-    Arts::TimeStamp _recordStartPosition;
-
-    Arts::TimeStamp _playbackTime;
+    Arts::TimeStamp _songTime;
+    Arts::TimeStamp _playStartTime;
+    Arts::TimeStamp _recordStartTime;
 
     RecordStatus _recordStatus;
 
     bool _playing;
+
+    unsigned int _ppq;   // sequencer resolution
+    unsigned int _tempo; // sequencer tempo
 
   };
 

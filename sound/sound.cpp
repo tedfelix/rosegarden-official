@@ -57,15 +57,12 @@ main(int argc, char **argv)
   //
   Rosegarden::Sequencer sequencer;
 
+  // set the tempo
+  sequencer.tempo(120);
 
-  // pause and wait for notes to queue
-  //
   unsigned long i;
   vector<Arts::MidiEvent>::iterator midiQueueIt;
   vector<Arts::MidiEvent> *midiQueue;
-
-  cout << "MIDI Recording ready" << endl;
-
   Arts::TimeStamp midiTime;
   Arts::MidiEvent event;
   
@@ -85,21 +82,16 @@ main(int argc, char **argv)
 
     if (midiQueue->size() > 0)
     {
-      cout << "SONG POSITION = " << sequencer.songPositionSeconds() << endl;
-      cout << endl;
-      cout << midiQueue->size() << " MIDI events read" << endl;
-
       for (midiQueueIt = midiQueue->begin();
            midiQueueIt != midiQueue->end();
            midiQueueIt++)
       {
-        cout << "MIDI COMMAND" << endl;
-        cout << midiQueueIt->time.usec << endl;
-        cout << "Data1 = " << (Rosegarden::MidiByte) midiQueueIt->command.data1 << endl;
-        cout << "Data2 = " << (Rosegarden::MidiByte) midiQueueIt->command.data2 << endl << endl;
-        cout << "Time = " << (long)(midiQueueIt->time.sec) << " : " << (long)(midiQueueIt->time.usec) << endl;
+        Arts::TimeStamp ts = sequencer.recordTime(midiQueueIt->time);
+
+        //cout << "Data1 = " << (Rosegarden::MidiByte) midiQueueIt->command.data1 << endl;
+        //cout << "Data2 = " << (Rosegarden::MidiByte) midiQueueIt->command.data2 << endl << endl;
+        cout << "MIDI EVENT @ " << ts.sec << "s + " << ts.usec << "ms" << endl;
       }
-      cout << endl;
    }
 
    //sequencer.incrementSongPosition(60000);
