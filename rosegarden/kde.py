@@ -118,7 +118,7 @@ def detect_kde(env):
 			if len(uic):
 				print YELLOW + "uic was found as " + uic + NORMAL
 			else:
-				print RED + "uic was not found - put it in your PATH ?" + NORMAL
+				print RED + "uic was not found - set QTDIR put it in your PATH ?" + NORMAL
 				sys.exit(1)
 	env['QT_UIC'] = uic
 
@@ -130,8 +130,11 @@ def detect_kde(env):
 		moc = os.popen("which moc 2>/dev/null").read().strip()
 		if len(moc):
 			print YELLOW + "moc was found as " + moc + NORMAL
+		elif os.path.isfile("/usr/share/qt3/bin/moc"):
+			moc = "/usr/share/qt3/bin/moc"
+			print YELLOW + "moc was found as " + moc + NORMAL
 		else:
-			print RED + "moc was not found - put it in your PATH ?" + NORMAL
+			print RED + "moc was not found - set QTDIR or put it in your PATH ?" + NORMAL
 			sys.exit(1)
 	env['QT_MOC'] = moc
 

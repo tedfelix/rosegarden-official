@@ -40,29 +40,31 @@ def generate(env):
 			debuglevel = env['ARGS'].get('debug', None)
 			print CYAN+'** Enabling debug for the project **' + NORMAL
 			if (debuglevel == "full"):
-				env['DEBUGLEVEL'] = '-g3'
+				env['DEBUGLEVEL'] = '-DDEBUG:-g3'
 			else:
-				env['DEBUGLEVEL'] = '-g'
-		else:
-			env['DEBUGLEVEL'] = None
+				env['DEBUGLEVEL'] = '-DDEBUG:-g'
+		elif env.has_key('DEBUGLEVEL'):
+			env.__delitem__('DEBUGLEVEL')
 
 		# user-specified prefix
 		if env['ARGS'].get('prefix', None):
 			env['PREFIX'] = env['ARGS'].get('prefix', None)
 			print CYAN+'** set the installation prefix for the project : ' + env['PREFIX'] +' **'+ NORMAL
-		else:
-			env['PREFIX'] = None
+		elif env.has_key('PREFIX'):
+			env.__delitem__('PREFIX')
 
 		# user-specified include paths
 		env['EXTRAINCLUDES'] = env['ARGS'].get('extraincludes', None)
 		if env['ARGS'].get('extraincludes', None):
 			print CYAN+'** set extra include paths for the project : ' + env['EXTRAINCLUDES'] +' **'+ NORMAL
+		elif env.has_key('EXTRAINCLUDES'):
+			env.__delitem__('EXTRAINCLUDES')
 
 		# and finally save the options in a cache
 		opts.Save('generic.cache.py', env)
 
 	if env.has_key('DEBUGLEVEL'):
-		env.AppendUnique(CPPFLAGS = [env['DEBUGLEVEL']])
+		env.AppendUnique(CPPFLAGS = [str(env['DEBUGLEVEL']).split(':')])
 
 	if env.has_key('EXTRAINCLUDES'):
 		incpaths = []
