@@ -153,8 +153,11 @@ public:
     // Return a list of MappedInstruments as a DCOP friendly MappedDevice.
     //
     //
-    const MappedDevice& getMappedDevice()
-        { return m_soundDriver->getMappedDevice(); }
+    MappedDevice getMappedDevice(DeviceId id)
+        { return m_soundDriver->getMappedDevice(id); }
+
+    // get total number of devices
+    unsigned int getDevices() { return m_soundDriver->getDevices(); }
 
 
     // Process anything that needs to go on in the background 

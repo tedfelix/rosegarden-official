@@ -33,6 +33,8 @@
 namespace Rosegarden
 {
 
+typedef unsigned int DeviceId;
+
 class Instrument;
 typedef std::vector<Instrument *> InstrumentList;
 
@@ -45,13 +47,19 @@ public:
         Audio
     } DeviceType;
 
-    Device(const std::string &name, DeviceType type):
-        m_name(name), m_type(type) { }
+    Device(DeviceId id, const std::string &name, DeviceType type):
+        m_name(name), m_type(type), m_id(id) { }
 
     virtual ~Device() {;}
 
+    void setType(DeviceType type) { m_type = type; }
     DeviceType getType() const { return m_type; }
+
+    void setName(const std::string &name) { m_name = name; }
     std::string getName() const { return m_name; }
+
+    void setId(DeviceId id) { m_id = id; }
+    DeviceId getId() const { return m_id; }
 
     // Accessing instrument lists - Devices should only
     // show the world what they want it to see
@@ -70,6 +78,7 @@ protected:
     InstrumentList     m_instruments;
     std::string        m_name;
     DeviceType         m_type;
+    DeviceId           m_id;
 
 };
 

@@ -45,8 +45,8 @@ AlsaDriver::AlsaDriver():
     m_maxQueues(-1),
     m_midiInputPortConnected(false),
     m_alsaPlayStartTime(0, 0),
-    m_alsaRecordStartTime(0, 0)
-
+    m_alsaRecordStartTime(0, 0),
+    m_currentPair(-1, -1)
 {
     std::cout << "Rosegarden AlsaDriver - " << m_name << std::endl;
 }
@@ -230,9 +230,14 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
                                   int port,
                                   bool duplex)
 {
+    // only increment device number if we're on a new client
+    //
+    if (client != m_currentPair.first && m_currentPair.first != -1)
+        m_deviceRunningId++;
  
     if (type == Instrument::Midi)
     {
+
         // Create AlsaPort with the start and end MappedInstrumnet
         //
         AlsaPort *alsaInstr = new AlsaPort(m_midiRunningId,
@@ -260,14 +265,20 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
             MappedInstrument *instr = new MappedInstrument(type,
                                                            channel,
                                                            m_midiRunningId++,
-                                                           channelName);
+                                                           channelName,
+                                                           m_deviceRunningId);
             m_instruments.push_back(instr);
         }
+
     }
     else  // audio
     {
         m_audioRunningId++;
     }
+
+    // Store these numbers for next time through
+    m_currentPair.first = client;
+    m_currentPair.second = port;
 }
 
 
@@ -641,7 +652,10 @@ AlsaDriver::processAudioQueue()
 RealTime
 AlsaDriver::getSequencerTime()
 {
-    return getAlsaTime() + m_playStartPosition - m_alsaPlayStartTime;
+    if(m_playing)
+       return getAlsaTime() + m_playStartPosition - m_alsaPlayStartTime;
+
+    return RealTime(0, 0);
 }
 
 // Gets the time of the ALSA queue
@@ -662,8 +676,11 @@ AlsaDriver::getAlsaTime()
     }
 
     sequencerTime.sec = snd_seq_queue_status_get_real_time(status)->tv_sec;
-    sequencerTime.usec = snd_seq_queue_status_get_real_time(status)->tv_nsec
-                         / 1000;
+
+    double microSeconds = snd_seq_queue_status_get_real_time(status)->tv_nsec
+                          /1000.0;
+
+    sequencerTime.usec = (int)microSeconds;
 
     snd_seq_queue_status_free(status);
 
@@ -887,7 +904,11 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         if (instrument != 0)
             channel = instrument->getChannel();
         else
+        {
+            std::cerr << "processMidiOut() - couldn't get Instrument for Event"
+                      << std::endl;
             channel = 0;
+        }
 
         switch((*i)->getType())
         {
@@ -898,6 +919,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                                       channel,
                                       (*i)->getPitch(),
                                       (*i)->getVelocity());
+                cout << "PITCH = " << (int)(*i)->getPitch() << endl;
                 break;
 
             case MappedEvent::MidiProgramChange:
@@ -939,6 +961,17 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                 break;
         }
 
+        if (now)
+        {
+            RealTime nowTime = getAlsaTime();
+            snd_seq_real_time_t outTime = { nowTime.sec,
+                                         nowTime.usec * 1000 };
+            snd_seq_ev_schedule_real(event, m_queue, 0, &outTime);
+            snd_seq_event_output_direct(m_midiHandle, event);
+        }
+        else
+            snd_seq_event_output(m_midiHandle, event);
+
         // Add note to note off stack
         //
         if ((*i)->getType() == MappedEvent::MidiNote)
@@ -950,23 +983,10 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                                  (*i)->getInstrument());
             m_noteOffQueue.insert(noteOffEvent);
         }
-
-        snd_seq_event_output(m_midiHandle, event);
-        //snd_seq_event_output_buffer(m_midiHandle, event);
-        //snd_seq_event_output_direct(m_midiHandle, event);
-
     }
 
-    /*
-    cout << "PENDING EVENTS = " << snd_seq_event_output_pending(m_midiHandle)
-         << endl;
-         */
+    snd_seq_drain_output(m_midiHandle);
 
-    //showQueueStatus(m_queue);
-    snd_seq_drain_output(m_midiHandle); // the new "flush" it seems
-    //snd_seq_sync_output_queue(m_midiHandle);
-
-    //printSystemInfo();
     processNotesOff(midiRelativeTime);
 
     delete event;

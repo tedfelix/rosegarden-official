@@ -36,12 +36,13 @@
 namespace Rosegarden
 {
 
-AudioDevice::AudioDevice():Device("Default Audio Device", Device::Audio)
+AudioDevice::AudioDevice():Device(0, "Default Audio Device", Device::Audio)
 {
    createInstruments();
 }
 
-AudioDevice::AudioDevice(const std::string &name):Device(name, Device::Audio)
+AudioDevice::AudioDevice(DeviceId id, const std::string &name):
+    Device(id, name, Device::Audio)
 {
    createInstruments();
 }

@@ -47,16 +47,18 @@ Studio::~Studio()
 
 
 void
-Studio::addDevice(const std::string &name, Device::DeviceType type)
+Studio::addDevice(const std::string &name,
+                  DeviceId id,
+                  Device::DeviceType type)
 {
     switch(type)
     {
         case Device::Midi:
-            m_devices.push_back(new MidiDevice(name));
+            m_devices.push_back(new MidiDevice(id, name));
             break;
 
         case Device::Audio:
-            m_devices.push_back(new AudioDevice(name));
+            m_devices.push_back(new AudioDevice(id, name));
             break;
 
         default:
@@ -359,9 +361,17 @@ Studio::unassignAllInstruments()
     }
 }
 
+Device*
+Studio::getDevice(DeviceId id)
+{
+    std::vector<Device*>::iterator it;
 
+    for (it = m_devices.begin(); it != m_devices.end(); it++)
+        if ((*it)->getId() == id)
+            return (*it);
 
-
+    return 0;
+}
 
 
 }

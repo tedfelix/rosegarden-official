@@ -36,7 +36,7 @@ namespace Rosegarden
 {
 
 MidiDevice::MidiDevice():
-    Device("Default Midi Device", Device::Midi),
+    Device(0, "Default Midi Device", Device::Midi),
     m_programList(new ProgramList()),
     m_bankList(new BankList()),
     m_metronome(new MidiMetronome())
@@ -44,8 +44,8 @@ MidiDevice::MidiDevice():
     createInstruments();
 }
 
-MidiDevice::MidiDevice(const std::string &name):
-    Device(name, Device::Midi),
+MidiDevice::MidiDevice(DeviceId id, const std::string &name):
+    Device(id, name, Device::Midi),
     m_programList(new ProgramList()),
     m_bankList(new BankList()),
     m_metronome(new MidiMetronome())

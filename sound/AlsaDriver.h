@@ -165,6 +165,11 @@ private:
     RealTime                     m_alsaPlayStartTime;
     RealTime                     m_alsaRecordStartTime;
 
+
+    // used when deciding what device number we're on
+    // (multiple ports for a client)
+    //
+    ClientPortPair               m_currentPair;
 };
 
 }

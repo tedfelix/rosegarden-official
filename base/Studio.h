@@ -51,7 +51,9 @@ public:
     Studio();
     ~Studio();
 
-    void addDevice(const std::string &name, Device::DeviceType type);
+    void addDevice(const std::string &name,
+                   DeviceId id,
+                   Device::DeviceType type);
     void addDevice(Device *device);
 
     // Return the combined instrument list from all devices
@@ -89,6 +91,10 @@ public:
     // Return the device list
     //
     DeviceList* getDevices() { return &m_devices; }
+
+    // Get a device by ID
+    //
+    Device* getDevice(DeviceId id);
 
     // Export as XML string
     //

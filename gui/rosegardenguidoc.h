@@ -39,6 +39,7 @@
 #include "AudioFileManager.h"
 #include "Studio.h"
 #include "Configuration.h"
+#include "MappedDevice.h"
 
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIView;
@@ -227,6 +228,12 @@ public:
     * Send "alive" to sequencer and collect Instrument data
     */
     void alive();
+
+    /*
+     * Get a MappedDevice from the sequencer and add the
+     * results to our Studio
+     */
+    void getMappedDevice(Rosegarden::DeviceId id);
 
 public slots:
     /**

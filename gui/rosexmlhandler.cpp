@@ -524,57 +524,11 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         }
 
         QString type = (atts.value("type")).lower();
+        int id = (atts.value("id")).toInt();
 
-        if (type == "midi")
+        if (type == "midi" || type == "audio")
         {
-
-            // Get the first MidiDevice
-            //
-            DeviceList *devices =  m_studio.getDevices();
-            DeviceListIterator it;
-
-            for (it = devices->begin(); it != devices->end(); it++)
-            {
-                if((*it)->getType() == Device::Midi)
-                {
-                    m_device = *it;
-                    break;
-                }
-            }
-
-            // Create one if not found
-            //
-            if (m_device == 0)
-            {
-                m_device = new Rosegarden::MidiDevice(atts.value("name").data());
-                m_studio.addDevice(m_device);
-            }
-
-        }
-        else if (type == "audio")
-        {
-            // Get the first AudioDevice
-            //
-            DeviceList *devices =  m_studio.getDevices();
-            DeviceListIterator it;
-
-            for (it = devices->begin(); it != devices->end(); it++)
-            {
-                if((*it)->getType() == Device::Audio)
-                {
-                    m_device = *it;
-                    break;
-                }
-            }
-
-            // Create one if not found
-            //
-            if (m_device == 0)
-            {
-                m_device = new Rosegarden::AudioDevice(atts.value("name").data());
-                m_studio.addDevice(m_device);
-
-            }
+            m_device = m_studio.getDevice(id);
         }
         else
         {

@@ -41,7 +41,7 @@ class MidiDevice : public Device
 
 public:
     MidiDevice();
-    MidiDevice(const std::string &name);
+    MidiDevice(DeviceId id, const std::string &name);
     virtual ~MidiDevice();
 
     virtual void createInstruments();

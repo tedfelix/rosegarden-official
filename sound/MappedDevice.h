@@ -19,9 +19,12 @@
   COPYING included with this distribution for more information.
 */
 
+#include <string>
 #include <vector>
+
 #include <qdatastream.h>
-#include "MappedInstrument.h"
+
+#include "Device.h"
 
 #ifndef _MAPPEDDEVICE_H_
 #define _MAPPEDDEVICE_H_
@@ -31,6 +34,8 @@
 
 namespace Rosegarden
 {
+
+class MappedInstrument;
 
 class MappedDevice : public std::vector<Rosegarden::MappedInstrument*>
 {

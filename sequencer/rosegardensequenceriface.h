@@ -114,7 +114,13 @@ public:
                                     long audioStartMarkerSec,
                                     long audioStartMarkerUSec) = 0;
 
-    virtual const Rosegarden::MappedDevice& getMappedDevice() = 0;
+    // Return number of devices found
+    //
+    virtual unsigned int getDevices() = 0;
+
+    // Return device by number
+    //
+    virtual Rosegarden::MappedDevice getMappedDevice(unsigned int id) = 0;
 
     // The GUI let's us know it's alive
     //

@@ -20,6 +20,7 @@
 */
 
 #include "Instrument.h"
+#include "MappedDevice.h"
 
 #ifndef _MAPPEDINSTRUMENT_H_
 #define _MAPPEDINSTRUMENT_H_
@@ -49,7 +50,8 @@ public:
     MappedInstrument(Instrument::InstrumentType type,
                      MidiByte channel,
                      InstrumentId id,
-                     const std::string &name);
+                     const std::string &name,
+                     DeviceId device);
 
     // extra and copy
     MappedInstrument(MappedInstrument *mI);
@@ -68,6 +70,9 @@ public:
     void setName(const std::string &name) { m_name = name; }
     const std::string& getName() const { return m_name; }
 
+    void setDevice(DeviceId device) { m_device = device; }
+    DeviceId getDevice() const { return m_device; }
+
 
 private:
 
@@ -75,6 +80,7 @@ private:
     MidiByte                    m_channel;
     InstrumentId                m_id;
     std::string                 m_name;
+    DeviceId                    m_device;
 
 };
 

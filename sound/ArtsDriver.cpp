@@ -76,8 +76,10 @@ ArtsDriver::generateInstruments()
         MappedInstrument *instr = new MappedInstrument(Instrument::Audio,
                                                        channel,
                                                        m_audioRunningId++,
-                                                       channelName);
+                                                       channelName,
+                                                       m_deviceRunningId);
         m_instruments.push_back(instr);
+        m_deviceRunningId++;
     }
 
     name = "aRts MIDI";
@@ -89,9 +91,10 @@ ArtsDriver::generateInstruments()
         MappedInstrument *instr = new MappedInstrument(Instrument::Midi,
                                                        channel,
                                                        m_midiRunningId++,
-                                                       channelName);
+                                                       channelName,
+                                                       m_deviceRunningId);
         m_instruments.push_back(instr);
-
+        m_deviceRunningId++;
     }
 
 

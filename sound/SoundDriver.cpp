@@ -32,8 +32,8 @@ SoundDriver::SoundDriver(const std::string &name):
     m_playing(false),
     m_recordStatus(ASYNCHRONOUS_MIDI),
     m_midiRunningId(MidiInstrumentBase),
-    m_audioRunningId(AudioInstrumentBase)
-
+    m_audioRunningId(AudioInstrumentBase),
+    m_deviceRunningId(0)
 {
 }
 
@@ -88,6 +88,31 @@ SoundDriver::setMappedInstrument(MappedInstrument *mI)
 
 
 }
+
+// m_deviceRunningId should carry the id of the last allocated device
+//
+unsigned int
+SoundDriver::getDevices()
+{
+    return m_deviceRunningId + 1;
+}
+
+MappedDevice
+SoundDriver::getMappedDevice(DeviceId id)
+{
+    MappedDevice retDevice;
+    std::vector<Rosegarden::MappedInstrument*>::iterator it;
+
+    // If we match then change existing entry
+    for (it = m_instruments.begin(); it != m_instruments.end(); it++)
+    {
+        if ((*it)->getDevice() == id)
+            retDevice.push_back(*it);
+    }
+
+    return retDevice;
+}
+
 
 }
 

@@ -52,6 +52,7 @@
 #include "segmentcommands.h"
 
 #include "MappedDevice.h"
+#include "MappedInstrument.h"
 #include "MidiDevice.h"
 #include "AudioDevice.h"
 
@@ -738,7 +739,7 @@ RosegardenGUIDoc::alive()
     while(!kapp->dcopClient()->
            isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
     {
-        kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::alive() - "
+        kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - "
                              << "waiting for Sequencer to come up"
                              << std::endl;
 
@@ -747,12 +748,13 @@ RosegardenGUIDoc::alive()
     }
 
     QByteArray data;
+
     if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
                                   "alive()",
                                   data))
     {
-        kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::alive() - "
+        kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - "
                              << "can't call the Sequencer" << std::endl;
         return;
     }
@@ -761,12 +763,71 @@ RosegardenGUIDoc::alive()
     QCString replyType;
     QDataStream arg(data, IO_WriteOnly);
 
+    // Get number of devices the sequencer has found
+    //
     if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
                                   ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                  "getMappedDevice()",
+                                  "getDevices()",
                                   data, replyType, replyData, true))
     {
-        kdDebug(KDEBUG_AREA) << "SequenceManager::alive() - "
+        kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - "
+                             << "can't get number of devices" << std::endl;
+        return;
+    }
+
+    unsigned int devices = 0;
+
+    if (replyType == "unsigned int")
+    {
+        QDataStream reply(replyData, IO_ReadOnly);
+        reply >> devices;
+    }
+    else
+    {
+        kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - "
+                             << "got unknown returntype from getDevices()"
+                             << std::endl;
+        return;
+    }
+
+    // Clear the Studio before population
+    //
+    m_studio.clear();
+
+    for (unsigned int i = 0; i < devices; i++)
+    {
+        getMappedDevice(i);
+    }
+
+    std::cout << "RosegardenGUIDoc::getMappedDevice - "
+              << "Sequencer alive - Instruments synced"
+              << std::endl;
+
+    // Ok, we've sync'd - make sure that this app doesn't
+    // drive this sync again by switching our startUpSync
+    // flag off.
+    //
+    m_startUpSync = false;
+
+}
+
+
+void
+RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
+{
+    QByteArray data;
+    QByteArray replyData;
+    QCString replyType;
+    QDataStream arg(data, IO_WriteOnly);
+
+    arg << (unsigned int)id;
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "getMappedDevice(unsigned int)",
+                                  data, replyType, replyData, true))
+    {
+        kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice() - "
                              << "can't call Sequencer" << std::endl;
         return;
     }
@@ -776,7 +837,7 @@ RosegardenGUIDoc::alive()
 
     if (replyType == "Rosegarden::MappedDevice")
     {
-        kdDebug(KDEBUG_AREA)  << "SequenceManager::alive() - "
+        kdDebug(KDEBUG_AREA)  << "RosegardenGUIDoc::getMappedDevice() - "
                               << "got Rosegarden::MappedDevice" << std::endl;
 
         // unfurl
@@ -784,71 +845,51 @@ RosegardenGUIDoc::alive()
     }
 
     kdDebug(KDEBUG_AREA) << std::endl
-                         << "SequenceManager::alive() - MappedDevices" << std::endl;
+                         << "RosegardenGUIDoc::getMappedDevice - MappedDevices"
+                         << std::endl;
 
-    // Clear and recreate the studio from the initialisation data
-    // sent up from the SoundDriver.  If we've got Midi then we
-    // create a MidiDevice, if we've got Audio then an AudioDevice.
-    // Names are created and relationships between Devices/Instruments
-    // and Studio are created.
+    // See if we've got this device already
     //
-    m_studio.clear();
+    Rosegarden::Device *device = m_studio.getDevice(id);
+    Rosegarden::Instrument::InstrumentType type;
 
-    Rosegarden::MidiDevice *midiDevice = 
-        new Rosegarden::MidiDevice("MIDI device");
+    if(device == 0 && (*(mD->begin())))
+    {
+        type = (*(mD->begin()))->getType();
 
-    Rosegarden::AudioDevice *audioDevice = 
-        new Rosegarden::AudioDevice("Audio device");
+        if (type  == Rosegarden::Instrument::Midi)
+        {
+            device = new Rosegarden::MidiDevice(id, "MIDI device");
+            m_studio.addDevice(device);
+        }
+        else if (type  == Rosegarden::Instrument::Audio)
+        {
+            device = new Rosegarden::AudioDevice(id, "Audio device");
+            m_studio.addDevice(device);
+        }
+        else
+        {
+            kdDebug(KDEBUG_AREA)  << "RosegardenGUIDoc::getMappedDevice - "
+                                  << "unknown device" << std::endl;
+        }
+    }
 
     Rosegarden::Instrument *instrument;
     Rosegarden::MappedDeviceIterator it;
 
-    m_studio.addDevice(audioDevice);
-    m_studio.addDevice(midiDevice);
-
     for (it = mD->begin(); it != mD->end(); it++)
     {
-        if ((*it)->getType() == Rosegarden::Instrument::Midi)
-        {
-            instrument = new Rosegarden::Instrument(
+        instrument = new Rosegarden::Instrument(
                                              (*it)->getId(),
-                                             Rosegarden::Instrument::Midi,
+                                             (*it)->getType(),
                                              (*it)->getName(),
                                              (*it)->getChannel(),
-                                             midiDevice);
-            midiDevice->addInstrument(instrument);
-            std::cout << "ADDING " << (*it)->getName() 
-                      << " - " << (*it)->getId() << std::endl;
-        }
-        else
-        if ((*it)->getType() == Rosegarden::Instrument::Audio)
-        {
-            instrument = new Rosegarden::Instrument(
-                                             (*it)->getId(),
-                                             Rosegarden::Instrument::Audio,
-                                             (*it)->getName(),
-                                             (*it)->getChannel(),
-                                             audioDevice);
-            audioDevice->addInstrument(instrument);
-            std::cout << "ADDING " << (*it)->getName() 
-                      << " - " << (*it)->getId() << std::endl;
-        }
-        else
-        {
-        }
-        //std::cout << "    " << (*it)->getName() << std::endl;
+                                             device);
+        device->addInstrument(instrument);
+        std::cout << "ADDING " << (*it)->getName() 
+                  << " - " << (*it)->getId() << std::endl;
     }
     std::cout << std::endl;
-
-    std::cout << "SequenceManager::alive() - "
-              << "Sequencer alive - Instruments synced"
-              << std::endl;
-
-    // Ok, we've sync'd - make sure that this app doesn't
-    // drive this sync again by switching our startUpSync
-    // flag off.
-    //
-    m_startUpSync = false;
 
 }
 

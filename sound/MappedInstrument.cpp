@@ -38,11 +38,13 @@ MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
 MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
                                    MidiByte channel,
                                    InstrumentId id,
-                                   const std::string &name):
+                                   const std::string &name,
+                                   DeviceId device):
     m_type(type),
     m_channel(channel),
     m_id(id),
-    m_name(name)
+    m_name(name),
+    m_device(device)
 {
 }
 

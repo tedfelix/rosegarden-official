@@ -20,6 +20,7 @@
 */
 
 #include "MappedDevice.h"
+#include "MappedInstrument.h"
 
 namespace Rosegarden
 {
@@ -81,9 +82,7 @@ operator>>(QDataStream &dS, MappedDevice *mD)
     int instruments;
     dS >> instruments;
 
-    unsigned int type;
-    unsigned int channel;
-    unsigned int id;
+    unsigned int type, channel, id, device;
     QString name;
 
     while (!dS.atEnd() && instruments)
@@ -92,11 +91,13 @@ operator>>(QDataStream &dS, MappedDevice *mD)
         dS >> channel;
         dS >> id;
         dS >> name;
+        dS >> device;
 
         mD->push_back(new MappedInstrument((Instrument::InstrumentType)type,
                                            (MidiByte)channel,
                                            (InstrumentId)id,
-                                           std::string(name.data())));
+                                           std::string(name.data()),
+                                           (DeviceId)device));
 
         instruments--;
     }
@@ -117,9 +118,7 @@ operator>>(QDataStream &dS, MappedDevice &mD)
     int instruments;
     dS >> instruments;
 
-    unsigned int type;
-    unsigned int channel;
-    unsigned int id;
+    unsigned int type, channel, id, device;
     QString name;
 
     while (!dS.atEnd() && instruments)
@@ -128,11 +127,13 @@ operator>>(QDataStream &dS, MappedDevice &mD)
         dS >> channel;
         dS >> id;
         dS >> name;
+        dS >> device;
 
         mD.push_back(new MappedInstrument((Instrument::InstrumentType)type,
                                           (MidiByte)channel,
                                           (InstrumentId)id,
-                                          std::string(name.data())));
+                                          std::string(name.data()),
+                                          (DeviceId)device));
 
         instruments--;
     }
@@ -157,6 +158,7 @@ operator<<(QDataStream &dS, MappedDevice *mD)
         dS << (unsigned int)(*it)->getChannel();
         dS << (unsigned int)(*it)->getId();
         dS << QString((*it)->getName().c_str());
+        dS << (unsigned int)(*it)->getDevice();
     }
 
     return dS;
@@ -173,6 +175,7 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
         dS << (unsigned int)(*it)->getChannel();
         dS << (unsigned int)(*it)->getId();
         dS << QString((*it)->getName().c_str());
+        dS << (unsigned int)(*it)->getDevice();
     }
 
     return dS;

@@ -721,10 +721,16 @@ RosegardenSequencerApp::processMappedEvent(unsigned int id,
 
 // Get the MappedDevice (DCOP wrapped vector of MappedInstruments)
 //
-const Rosegarden::MappedDevice&
-RosegardenSequencerApp::getMappedDevice()
+Rosegarden::MappedDevice
+RosegardenSequencerApp::getMappedDevice(unsigned int id)
 {
-    return m_sequencer->getMappedDevice();
+    return m_sequencer->getMappedDevice(id);
+}
+
+unsigned int
+RosegardenSequencerApp::getDevices()
+{
+    return m_sequencer->getDevices();
 }
 
 

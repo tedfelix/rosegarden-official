@@ -39,7 +39,7 @@ class AudioDevice : public Device
 
 public:
     AudioDevice();
-    AudioDevice(const std::string &name);
+    AudioDevice(DeviceId id, const std::string &name);
     virtual ~AudioDevice();
 
     virtual void createInstruments();

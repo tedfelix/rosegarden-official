@@ -228,13 +228,16 @@ public:
     RealTime getStartPosition() const { return m_playStartPosition; }
     RecordStatus getRecordStatus() const { return m_recordStatus; }
 
-    // Return the MappedDevice full of the Instrument mappings
+    // Return a MappedDevice full of the Instrument mappings
     // that the driver has discovered.  The gui can then use
     // this list (complete with names) to generate its proper
     // Instruments under the MidiDevice and AudioDevice.
     //
-    const Rosegarden::MappedDevice& getMappedDevice()
-        { return m_instruments; }
+    Rosegarden::MappedDevice getMappedDevice(DeviceId id);
+
+    // Return the number of devices we've found
+    //
+    unsigned int getDevices();
 
 protected:
     // Helper functions to be implemented by subclasses
@@ -261,15 +264,13 @@ protected:
     //
     std::vector<PlayableAudioFile*> m_audioPlayQueue;
 
-    //std::vector<AudioFile*> m_audioFiles;
-    //
-
     // This is our driver's own list of MappedInstruments.
-    // MappedDevice is wrapper to enable sending over DCOP
-    // as a whole.  MappedDevice is really just a fancy
-    // vector of MappedInstruments and can be used as such.
     //
-    MappedDevice             m_instruments;
+    std::vector<MappedInstrument*>             m_instruments;
+
+    // List of device names by DeviceId
+    //
+    std::vector<std::string>                   m_deviceName;
 
     MappedComposition        m_recordComposition;
     RecordStatus             m_recordStatus;
@@ -277,6 +278,7 @@ protected:
 
     InstrumentId             m_midiRunningId;
     InstrumentId             m_audioRunningId;
+    DeviceId                 m_deviceRunningId;
 
 };
 
