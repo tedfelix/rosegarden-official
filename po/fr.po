@@ -8,11 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2003-01-18 13:29+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2003-01-18 13:35+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=ISO-9660\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: main.cpp:307
@@ -1488,7 +1488,7 @@ msgstr ""
 
 #: dialogs.cpp:1156 audiomanagerdialog.cpp:185
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: dialogs.cpp:1161
 msgid "Type"
@@ -2734,67 +2734,67 @@ msgstr ""
 
 #: audiomanagerdialog.cpp:153
 msgid "Rosegarden Audio File Manager"
-msgstr ""
+msgstr "Gestion de fichiers audio"
 
 #: audiomanagerdialog.cpp:163
 msgid "Audio File actions"
-msgstr ""
+msgstr "Operations sur les fichiers audio"
 
 #: audiomanagerdialog.cpp:168
 msgid "No RosegardenGUIDoc - internal error"
-msgstr ""
+msgstr "RosegardenGUIDoc manquant - erreur interne"
 
 #: audiomanagerdialog.cpp:173
 msgid "Add Audio File"
-msgstr ""
+msgstr "Ajouter un fichier audio"
 
 #: audiomanagerdialog.cpp:174
 msgid "Remove Audio FIle"
-msgstr ""
+msgstr "Enlever un fichier audio"
 
 #: audiomanagerdialog.cpp:175
 msgid "Play Preview"
-msgstr ""
+msgstr "Jouer la preview"
 
 #: audiomanagerdialog.cpp:176
 msgid "Rename File"
-msgstr ""
+msgstr "Renommer le fichier"
 
 #: audiomanagerdialog.cpp:177
 msgid "Insert into Composition"
-msgstr ""
+msgstr "Inserer dans la composition"
 
 #: audiomanagerdialog.cpp:178
 msgid "Remove All Audio Files"
-msgstr ""
+msgstr "Enlever tous les fichiers audio"
 
 #: audiomanagerdialog.cpp:181
 msgid "Drag'n Drop .wav files here"
-msgstr ""
+msgstr "Drag'n droppez des .wav ici"
 
 #: audiomanagerdialog.cpp:186
 msgid "Duration"
-msgstr ""
+msgstr "Durée"
 
 #: audiomanagerdialog.cpp:187
 msgid "Envelope"
-msgstr ""
+msgstr "Enveloppe"
 
 #: audiomanagerdialog.cpp:189
 msgid "Resolution"
-msgstr ""
+msgstr "Resolution"
 
 #: audiomanagerdialog.cpp:190
 msgid "Channels"
-msgstr ""
+msgstr "Canneaux"
 
 #: audiomanagerdialog.cpp:191
 msgid "Sample rate"
-msgstr ""
+msgstr "Fréquence d'échantillonage"
 
 #: audiomanagerdialog.cpp:283
 msgid "<no audio files>"
-msgstr ""
+msgstr "<Aucun fichiers audio>"
 
 #: audiomanagerdialog.cpp:525
 msgid "Really delete audio file \"%1\" and all associated audio segments ?"
