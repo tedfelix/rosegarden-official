@@ -179,13 +179,13 @@ RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,
                                                    const char *name,
                                                    bool modal):
     KProgressDialog(creator, name,
-                    i18n("Processing..."), QString::null, modal),
-    Rosegarden::Progress(100), // default to percent
-    m_timeoutSet(clock()),
-    m_firstTimeout(true),
-    m_shown(false)
+                    i18n("Processing..."), QString::null, modal)
 {
 //     setCaption(i18n("Processing..."));
+    RG_DEBUG << "RosegardenProgressDialog::RosegardenProgressDialog - "
+             << labelText() << endl;
+
+    QTimer::singleShot(20, this, SLOT(slotShowMyself()));
 }
 
 
@@ -199,70 +199,28 @@ RosegardenProgressDialog::RosegardenProgressDialog(
 		    name,
                     i18n("Processing..."),
                     labelText,
-		    modal),
-    Rosegarden::Progress(totalSteps),
-    m_timeoutSet(clock()),
-    m_firstTimeout(true),
-    m_shown(false)
+		    modal)
 {
     progressBar()->setTotalSteps(totalSteps);
+    RG_DEBUG << "RosegardenProgressDialog::RosegardenProgressDialog - "
+             << labelText << endl;
 }
 
 void
-RosegardenProgressDialog::setOperationName(std::string name)
+RosegardenProgressDialog::slotSetOperationName(QString name)
 {
-    setLabel(strtoqstr(name));
+    RG_DEBUG << "RosegardenProgressDialog::slotSetOperationName("
+             << name << ") visible : " << isVisible() << endl;
+    
+    setLabel(name);
 }
 
-void
-RosegardenProgressDialog::setCompleted(int value)
+void RosegardenProgressDialog::slotCancel()
 {
-    if (value > m_max)
-        m_value = m_max;
-    else
-	m_value = value; //???
-
-    if (m_shown) progressBar()->setProgress(value);
+    RG_DEBUG << "RosegardenProgressDialog::slotCancel()\n";
+    emit operationCancelled();
 }
 
-void
-RosegardenProgressDialog::processEvents()
-{
-    if (m_shown) {
-	kapp->processEvents(50);
-	update();
-    } else {
-
-	if (m_timeoutSet != 0) {
-
-	    clock_t now = clock();
-	    int msElapsed = (now - m_timeoutSet) * 1000 / CLOCKS_PER_SEC;
-	    
-	    if (msElapsed > 5/*00*/) {
-		if (!m_firstTimeout || ((m_value * 4) < (m_max * 3))) {
-		    slotShowMyself();
-		} else {
-		    m_firstTimeout = false;
-		    m_timeoutSet = now;
-		}
-	    }
-	}
-    }
-}
-
-void
-RosegardenProgressDialog::slotShowMyself()
-{
-    progressBar()->setProgress(m_value);
-    show();
-    m_shown = true;
-}
-
-void
-RosegardenProgressDialog::done()
-{
-    close();
-}
 
 //----------------------------------------
 
@@ -271,74 +229,8 @@ RosegardenProgressBar::RosegardenProgressBar(int totalSteps,
 					     QWidget *creator,
 					     const char *name,
 					     WFlags f) :
-    KProgress(totalSteps, creator, name, f),
-    Rosegarden::Progress(totalSteps),
-    m_timeoutSet(0),
-    m_shown(true),
-    m_useDelay(useDelay),
-    m_changedCursor(false)
+    KProgress(totalSteps, creator, name, f)
 {
-}
-
-RosegardenProgressBar::~RosegardenProgressBar()
-{
-}
-
-void
-RosegardenProgressBar::setCompleted(int value)
-{
-    if (m_value == 0 && value < m_max/2 && m_useDelay) {
-	m_shown = false;
-	m_timeoutSet = clock();
-    }
-
-    if (value > m_max)
-        m_value = m_max;
-    else
-	m_value = value; //???
-
-    if (m_shown) setProgress(value);
-}    
-
-void
-RosegardenProgressBar::processEvents()
-{
-    if (m_timeoutSet != 0) {
-	clock_t now = clock();
-
-	if ((now - m_timeoutSet) * 1000 / CLOCKS_PER_SEC > 300) {
-
-	    // we don't really want to call processEvents here because
-	    // it's likely to break stuff (we don't have the option of
-	    // being a modal dialog because we aren't a dialog so we don't
-	    // want to permit editing-type events to happen)
-
-	    setProgress(m_value);
-	    m_shown = true;
-	    m_timeoutSet = 0;
-
-	    if (!m_changedCursor) {
-		QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
-		m_changedCursor = true;
-	    }
-	}
-    }
-
-    if (m_shown) update();
-
-    // kapp->processEvents(50); - enabled this if installing as event filter
-}
-
-void
-RosegardenProgressBar::done()
-{
-    reset();
-    if (m_changedCursor) {
-	QApplication::restoreOverrideCursor();
-	m_changedCursor = false;
-    }
-    m_shown = true;
-    m_value = 0;
 }
 
 bool
@@ -359,8 +251,10 @@ RosegardenProgressBar::eventFilter(QObject *watched, QEvent *e)
 
     else
 
-        return QProgressBar::eventFilter(watched, e);
+        return KProgress::eventFilter(watched, e);
 }
+
+//----------------------------------------
 
 RosegardenFader::RosegardenFader(QWidget *parent):
     QSlider(Qt::Vertical, parent)
@@ -550,7 +444,7 @@ RosegardenRotary::drawPosition()
         paint.setPen
             (kapp->palette().color(QPalette::Active, QColorGroup::Base));
 
-    paint.drawLine(hyp, hyp, x, y);
+    paint.drawLine(int(hyp), int(hyp), int(x), int(y));
 
     // Draw the new position
     //
@@ -562,7 +456,7 @@ RosegardenRotary::drawPosition()
     y = hyp + 0.8 * hyp * cos(angle);
 
     paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
-    paint.drawLine(hyp, hyp, x, y);
+    paint.drawLine(int(hyp), int(hyp), int(x), int(y));
 
     m_lastPosition = m_position;
 } 

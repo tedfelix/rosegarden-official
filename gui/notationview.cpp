@@ -24,6 +24,8 @@
 #include <qregexp.h>
 #include <qpaintdevicemetrics.h>
 
+#include <qtimer.h> // delete me
+
 #include <kmessagebox.h>
 #include <kstatusbar.h>
 #include <klocale.h>
@@ -38,7 +40,6 @@
 #include "NotationTypes.h"
 #include "Quantizer.h"
 #include "Selection.h"
-#include "Progress.h"
 #include "BaseProperties.h"
 
 #include "Profiler.h"
@@ -190,7 +191,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_spacingSlider(0),
     m_smoothingSlider(0),
     m_fontSizeActionMenu(0),
-    m_progress(0),
+    m_progressDisplayer(PROGRESS_NONE),
+    m_progressEventFilterInstalled(false),
     m_inhibitRefresh(true),
     m_documentDestroyed(false),
     m_ok(false)
@@ -287,17 +289,19 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                              m_fontName, m_fontSize));
     }
 
+    RosegardenProgressDialog *progressDlg = 0;
+
     if (showProgressive) {
 	show();
-	RosegardenProgressDialog *progressDlg = new RosegardenProgressDialog
-	    (i18n("Starting..."), 100, this);
+        RG_DEBUG << "NotationView : setting up progress dialog\n";
+
+	progressDlg = new RosegardenProgressDialog(i18n("Starting..."),
+                                                   100, this);
 	progressDlg->setAutoClose(false);
-	m_progress = progressDlg;
+        progressDlg->setAutoReset(true);
+        progressDlg->setMinimumDuration(500);
         setupProgress(progressDlg);
-	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->setProgressReporter(m_progress);
-	}
-	progressDlg->hide();
+        progressDlg->show();
     }
 
     m_chordNameRuler->setComposition(&doc->getComposition());
@@ -330,11 +334,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     }
 
     if (showProgressive) {
-	m_progress->done();
-	m_progress = 0;
-	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->setProgressReporter(0);
-	}
+        delete progressDlg;
+        setupDefaultProgress();
     }
 
     //
@@ -457,7 +458,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_spacingSlider(0),
     m_smoothingSlider(0),
     m_fontSizeActionMenu(0),
-    m_progress(0),
+    m_progressDisplayer(PROGRESS_NONE),
+    m_progressEventFilterInstalled(false),
     m_inhibitRefresh(true),
     m_documentDestroyed(false),
     m_ok(false)
@@ -1548,7 +1550,6 @@ void NotationView::initStatusBar()
     sb->addWidget(m_selectionCounter);
 
     m_progressBar = new RosegardenProgressBar(100, true, sb);
-    setupProgress(m_progressBar);
     sb->addWidget(m_progressBar);
 }
 
@@ -1638,11 +1639,10 @@ NotationView::paintEvent(QPaintEvent *e)
 
 bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 {
-    if (m_progress) {
-	m_progress->setOperationName(qstrtostr(i18n("Laying out score...")));
-	m_progress->processEvents();
-	m_hlayout->setStaffCount(m_staffs.size());
-    }
+    emit setOperationName(i18n("Laying out score..."));
+    kapp->processEvents();
+
+    m_hlayout->setStaffCount(m_staffs.size());
 
     START_TIMING;
     unsigned int i;
@@ -1651,10 +1651,8 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 
         if (staffNo >= 0 && (int)i != staffNo) continue;
 
-	if (m_progress) {
-	    m_progress->setOperationName
-		(qstrtostr(i18n("Laying out staff %1...").arg(i + 1)));
-	}
+        emit setOperationName(i18n("Laying out staff %1...").arg(i + 1));
+        kapp->processEvents();
 
         m_hlayout->resetStaff(*m_staffs[i], startTime, endTime);
         m_vlayout->resetStaff(*m_staffs[i], startTime, endTime);
@@ -1662,9 +1660,8 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
         m_vlayout->scanStaff(*m_staffs[i], startTime, endTime);
     }
 
-    if (m_progress) {
-	m_progress->setOperationName(qstrtostr(i18n("Reconciling staffs...")));
-    }
+    emit setOperationName(i18n("Reconciling staffs..."));
+    kapp->processEvents();
 
     m_hlayout->finishLayout(startTime, endTime);
     m_vlayout->finishLayout(startTime, endTime);
@@ -1742,15 +1739,8 @@ void NotationView::setCurrentSelectedNote(NoteActionData noteAction)
 void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 {
     if (!m_currentEventSelection && !s) return;
-    bool usingProgressBar = false;
 
-    if (!m_progress) {
-	m_progress = m_progressBar;
-	usingProgressBar = true;
-	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->setProgressReporter(m_progress);
-	}
-    }
+    installProgressEventFilter();
 
     EventSelection *oldSelection = m_currentEventSelection;
     m_currentEventSelection = s;
@@ -1826,13 +1816,7 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 
     delete oldSelection;
 
-    if (usingProgressBar) {
-	m_progress->done();
-	m_progress = 0;
-	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->setProgressReporter(0);
-	}
-    }
+    removeProgressEventFilter();
 
     int eventsSelected = 0;
     if (s) eventsSelected = s->getSegmentEvents().size();
@@ -1948,7 +1932,7 @@ NotationView::getInsertionTime(Event *&clefEvt,
 
 
 
-NotationStaff *
+LinedStaff<NotationElement>*
 NotationView::getStaffForCanvasY(int y) const
 {
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
@@ -2051,15 +2035,7 @@ void NotationView::refreshSegment(Segment *segment,
 
     if (m_inhibitRefresh) return;
 
-    bool usingProgressBar = false;
-
-    if (!m_progress) {
-	m_progress = m_progressBar;
-	usingProgressBar = true;
-	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->setProgressReporter(m_progress);
-	}
-    }
+    installProgressEventFilter();
 
     emit usedSelection();
 
@@ -2101,13 +2077,8 @@ void NotationView::refreshSegment(Segment *segment,
     PRINT_ELAPSED("NotationView::refreshSegment (without update/GC)");
 
     PixmapArrayGC::deleteAll();
-    if (usingProgressBar) {
-	m_progress->done();
-	m_progress = 0;
-	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->setProgressReporter(0);
-	}
-    }	
+
+    removeProgressEventFilter();
 
     Event::dumpStats(cerr);
     doDeferredCursorMove();
@@ -2182,9 +2153,9 @@ void NotationView::setMenuStates()
 
 #define UPDATE_PROGRESS(n) \
 	progressCount += (n); \
-	if (m_progress && (progressTotal > 0)) { \
-	    m_progress->setCompleted(progressCount * 100 / progressTotal); \
-	    m_progress->processEvents(); \
+	if (progressTotal > 0) { \
+	    emit setProgress(progressCount * 100 / progressTotal); \
+	    kapp->processEvents(); \
 	}
 
 void NotationView::readjustCanvasSize()
@@ -2194,11 +2165,8 @@ void NotationView::readjustCanvasSize()
     double maxWidth = 0.0;
     int maxHeight = 0;
 
-    if (m_progress) {
-	m_progress->setOperationName
-	    (qstrtostr(i18n("Sizing and allocating canvas...")));
-	m_progress->processEvents();
-    }
+    emit setOperationName(i18n("Sizing and allocating canvas..."));
+    kapp->processEvents();
 
     int progressTotal = m_staffs.size() + 2;
     int progressCount = 0;
@@ -2326,22 +2294,96 @@ void NotationView::initActionDataMaps()
 
 void NotationView::setupProgress(KProgress* bar)
 {
-    m_hlayout->disconnect(SIGNAL(setProgress(int)));
-    m_hlayout->disconnect(SIGNAL(incrementProgress(int)));
+    if (bar) {
+        RG_DEBUG << "NotationView::setupProgress(bar)\n";
+
+        connect(m_hlayout, SIGNAL(setProgress(int)),
+                bar,       SLOT(setValue(int)));
+
+        connect(m_hlayout, SIGNAL(incrementProgress(int)),
+                bar,       SLOT(advance(int)));
+
+        connect(this,      SIGNAL(setProgress(int)),
+                bar,       SLOT(setValue(int)));
+
+        connect(this,      SIGNAL(incrementProgress(int)),
+                bar,       SLOT(advance(int)));
+
+        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+            connect(m_staffs[i], SIGNAL(setProgress(int)),
+                    bar,         SLOT(setValue(int)));
+
+            connect(m_staffs[i], SIGNAL(incrementProgress(int)),
+                    bar,         SLOT(advance(int)));
+        }
+    }
     
-    connect(m_hlayout, SIGNAL(setProgress(int)),
-            bar,       SLOT(setValue(int)));
-
-    connect(m_hlayout, SIGNAL(incrementProgress(int)),
-            bar,       SLOT(advance(int)));
 }
 
-void NotationView::setupProgress(KProgressDialog* dialog)
+void NotationView::setupProgress(RosegardenProgressDialog* dialog)
 {
-    setupProgress(dialog->progressBar());
+    RG_DEBUG << "NotationView::setupProgress(dialog)\n";
+    disconnectProgress();
+    
+    if (dialog) {
+        setupProgress(dialog->progressBar());
+
+        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+            connect(m_staffs[i], SIGNAL(setOperationName(QString)),
+                    dialog,      SLOT(slotSetOperationName(QString)));
+        }
+    
+        connect(this, SIGNAL(setOperationName(QString)),
+                dialog,      SLOT(slotSetOperationName(QString)));
+        m_progressDisplayer = PROGRESS_DIALOG;
+    }
+    
 }
 
+void NotationView::disconnectProgress()
+{
+    RG_DEBUG << "NotationView::disconnectProgress()\n";
 
+    m_hlayout->disconnect();
+    disconnect(SIGNAL(setProgress(int)));
+    disconnect(SIGNAL(incrementProgress(int)));
+    disconnect(SIGNAL(setOperationName(QString)));
+
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+        m_staffs[i]->disconnect();
+    }
+}
+
+void NotationView::setupDefaultProgress()
+{
+    if (m_progressDisplayer != PROGRESS_BAR) {
+        RG_DEBUG << "NotationView::setupDefaultProgress()\n";
+        disconnectProgress();
+        setupProgress(m_progressBar);
+        m_progressDisplayer = PROGRESS_BAR;
+    }
+}
+
+void NotationView::installProgressEventFilter()
+{
+    if (m_progressDisplayer == PROGRESS_BAR &&
+        !m_progressEventFilterInstalled) {
+        RG_DEBUG << "NotationView::installProgressEventFilter()\n";
+        kapp->installEventFilter(m_progressBar);
+        m_progressEventFilterInstalled = true;
+    }
+}
+
+void NotationView::removeProgressEventFilter()
+{
+    if (m_progressDisplayer == PROGRESS_BAR &&
+        m_progressEventFilterInstalled) {
+        RG_DEBUG << "NotationView::removeProgressEventFilter()\n";
+        kapp->removeEventFilter(m_progressBar);
+        m_progressBar->setValue(0);
+        m_progressEventFilterInstalled = false;
+    }
+}
     
 NotationView::NoteActionDataMap* NotationView::m_noteActionDataMap = 0;
 NotationView::MarkActionDataMap* NotationView::m_markActionDataMap = 0;

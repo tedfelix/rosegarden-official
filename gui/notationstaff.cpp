@@ -26,6 +26,7 @@
 #include <kapp.h>
 #include <kconfig.h>
 
+#include "notationview.h"
 #include "notationstaff.h"
 #include "qcanvassimplesprite.h"
 #include "notationproperties.h"
@@ -34,12 +35,9 @@
 #include "colours.h"
 #include "notestyle.h"
 #include "widgets.h"
-#include "notationview.h"
-#include "progressreporter.h"
 
 #include "Event.h"
 #include "Segment.h"
-#include "Progress.h"
 #include "Quantizer.h"
 #include "NotationTypes.h"
 #include "SegmentNotationHelper.h"
@@ -71,8 +69,9 @@ using std::string;
 NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
                              Rosegarden::SnapGrid *snapGrid, int id,
 			     NotationView *view,
-			     bool pageMode, double pageWidth, 
+			     bool pageMode, double pageWidth,
                              string fontName, int resolution) :
+    ProgressReporter(0),
     LinedStaff<NotationElement>(canvas, segment, snapGrid, id, resolution,
 				resolution / 16 + 1, // line thickness
 				pageMode, pageWidth,
@@ -82,8 +81,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
     m_graceNotePixmapFactory(0),
     m_previewSprite(0),
     m_staffName(0),
-    m_notationView(view),
-    m_progress(0)
+    m_notationView(view)
 {
     changeFont(fontName, resolution);
     
@@ -325,13 +323,11 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 {
     NOTATION_DEBUG << "NotationStaff " << this << "::renderElements()" << endl;
     START_TIMING;
-    if (m_progress) {
-	m_progress->setOperationName
-	    (qstrtostr(i18n("Rendering staff %1...").arg(getId() + 1)));
-	m_progress->setCompleted(0);
-	m_progress->processEvents();
-	if (m_progress->wasOperationCancelled()) throw ProgressReporter::Cancelled();//!!!
-    }
+
+    emit setOperationName(i18n("Rendering staff %1...").arg(getId() + 1));
+    emit setProgress(0);
+    kapp->processEvents();
+    if (isOperationCancelled()) throw Cancelled();//!!!
 
     Clef currentClef; // default is okay to start with
 
@@ -357,15 +353,13 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	renderSingleElement(*it, (nextIt == to ? 0 : *nextIt),
 			    currentClef, selected);
 
-	if (m_progress &&
-	    (endTime > startTime) &&
+	if ((endTime > startTime) &&
 	    (++elementCount % 20 == 0)) {
 
 	    timeT myTime = (*it)->getAbsoluteTime();
-	    m_progress->setCompleted
-		((myTime - startTime) * 100 / (endTime - startTime));
-	    m_progress->processEvents();
-	    if (m_progress->wasOperationCancelled()) throw ProgressReporter::Cancelled();//!!!
+	    emit setProgress((myTime - startTime) * 100 / (endTime - startTime));
+	    kapp->processEvents();
+	    if (isOperationCancelled()) throw Cancelled();//!!!
 	}
     }
 
@@ -381,13 +375,10 @@ NotationStaff::positionElements(timeT from, timeT to)
     NOTATION_DEBUG << "NotationStaff " << this << "::positionElements()"
                          << from << " -> " << to << "\n";
     START_TIMING;
-    if (m_progress) {
-	m_progress->setOperationName
-	    (qstrtostr(i18n("Positioning staff %1...").arg(getId() + 1)));
-	m_progress->setCompleted(0);
-	m_progress->processEvents();
-	if (m_progress->wasOperationCancelled()) throw ProgressReporter::Cancelled();//!!!
-    }
+    emit setOperationName(i18n("Positioning staff %1...").arg(getId() + 1));
+    emit setProgress(0);
+    kapp->processEvents();
+    if (isOperationCancelled()) throw Cancelled();//!!!
 
     const NotationProperties &properties(m_notationView->getProperties());
 
@@ -485,13 +476,12 @@ NotationStaff::positionElements(timeT from, timeT to)
 	(*it)->reposition(coords.first, (double)coords.second);
 	(*it)->setSelected(selected);
 
-	if (m_progress &&
-	    (to > from) &&
+	if ((to > from) &&
 	    (++elementsPositioned % 20 == 0)) {
 	    timeT myTime = (*it)->getAbsoluteTime();
-	    m_progress->setCompleted((myTime - from) * 100 / (to - from));
-	    m_progress->processEvents();
-	    if (m_progress->wasOperationCancelled()) throw ProgressReporter::Cancelled();//!!!
+	    emit setProgress((myTime - from) * 100 / (to - from));
+	    kapp->processEvents();
+	    if (isOperationCancelled()) throw Cancelled();//!!!
 	}
     }
 

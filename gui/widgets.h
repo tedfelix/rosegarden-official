@@ -34,8 +34,6 @@
 #include <qcolor.h>
 #include <kprogress.h>
 
-#include "Progress.h"
-
 #ifndef _WIDGETS_H_
 #define _WIDGETS_H_
 
@@ -157,8 +155,7 @@ private:
     QFont m_font;
 };
 
-class RosegardenProgressDialog : public KProgressDialog,
-                                 public Rosegarden::Progress
+class RosegardenProgressDialog : public KProgressDialog
 {
     Q_OBJECT
 public:
@@ -172,47 +169,16 @@ public:
                              const char *name = 0,
                              bool modal = true);
 
-    // Set the name of the current operation
-    //
-    virtual void setOperationName(std::string);
-
-    // Set the progress
-    //
-    virtual void setCompleted(int value);
-
-    // Process some X events - gets called by the file access (say) class
-    // to ensure our gui is still working.
-    //
-    virtual void processEvents();
-
-    // Destroy
-    //
-    virtual void done();
-
-    virtual bool wasOperationCancelled() {
-	return KProgressDialog::wasCancelled();
-    }
-    
 public slots:
-    // After a timeout, judge whether we should show ourselves yet
-    // and do so if so.
-    // Hence we only appear for long operations.
-    // 
-//!!!    void slotTimerElapsed();
+    void slotSetOperationName(QString);
+    void slotCancel();
     
-    // Show ourselves.
-    // 
-    void slotShowMyself();
-
-private:
-    clock_t m_timeoutSet;
-    bool m_firstTimeout;
-    bool m_shown;
+signals:
+    void operationCancelled();
 };
 
 
-class RosegardenProgressBar : public KProgress,
-			      public Rosegarden::Progress
+class RosegardenProgressBar : public KProgress
 {
     Q_OBJECT
 
@@ -223,21 +189,7 @@ public:
 			  const char *name = 0,
 			  WFlags f = 0);
 
-    ~RosegardenProgressBar();
-
-    virtual void setOperationName(std::string) { }
-    virtual void setCompleted(int value);
-    virtual void processEvents();
-    virtual void done();
-
     virtual bool eventFilter(QObject *watched, QEvent *e);
-    
-private:
-    clock_t m_timeoutSet;
-    bool m_firstTimeout;
-    bool m_shown;
-    bool m_useDelay;
-    bool m_changedCursor;
 };
    
 class HZoomable

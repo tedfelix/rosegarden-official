@@ -1685,7 +1685,7 @@ SequenceManager::reinitialiseSequencerStudio()
 // Clear down all playing notes and reset controllers
 //
 void
-SequenceManager::panic(RosegardenProgressDialog *progress)
+SequenceManager::panic()
 {
     SEQMAN_DEBUG << "panic button" << endl;
 
@@ -1702,12 +1702,12 @@ SequenceManager::panic(RosegardenProgressDialog *progress)
         if ((*it)->getType() == Instrument::Midi)
             maxDevices++;
 
-    progress->setCompleted(10);
+    emit setProgress(10);
     for (it = list.begin(); it != list.end(); it++)
     {
         if ((*it)->getType() == Instrument::Midi)
         {
-            progress->setCompleted(int(70.0 * float(device)/float(maxDevices)));
+            emit setProgress(int(70.0 * float(device)/float(maxDevices)));
             for (unsigned int i = 0; i < 128; i++)
             {
                 try
@@ -1726,14 +1726,13 @@ SequenceManager::panic(RosegardenProgressDialog *progress)
                 } 
                 mC.insert(mE);
             }
-            progress->processEvents();
 
             device++;
         }
     }
 
     Rosegarden::StudioControl::sendMappedComposition(mC);
-    progress->setCompleted(90);
+    emit setProgress(90);
 
     resetControllers();
 }

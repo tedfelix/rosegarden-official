@@ -28,6 +28,7 @@
 #include "edittool.h"
 #include "notationelement.h"
 #include "notestyle.h"
+#include "notationstaff.h"
 
 class QCanvasRectangle;
 

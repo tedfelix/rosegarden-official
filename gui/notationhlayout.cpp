@@ -19,6 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <kapp.h>
+
 #include "notationhlayout.h"
 #include "notationstaff.h"
 #include "rosestrings.h"
@@ -31,7 +33,6 @@
 #include "widgets.h"
 #include "Quantizer.h"
 #include "Composition.h"
-#include "Progress.h"
 #include "SegmentNotationHelper.h"
 
 #include <cmath> // for fabs()
@@ -493,8 +494,9 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	}
 
         emit setProgress((barTimes.second - startTime) * 95 / (endTime - startTime));
+        kapp->processEvents(50);
 
-        if (isCancelled()) throw Cancelled();
+        if (isOperationCancelled()) throw Cancelled();
 	++barNo;
     }
 
@@ -1068,8 +1070,9 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
 	 i != m_barData.end(); ++i) {
 	
         emit setProgress(100 * staffNo / m_barData.size());
+        kapp->processEvents(50);
 
-        if (isCancelled()) throw Cancelled();
+        if (isOperationCancelled()) throw Cancelled();
 
         timeT timeCovered = endTime - startTime;
 	    
@@ -1115,7 +1118,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
     double x = 0, barX = 0;
     TieMap tieMap;
-    resetCancelledState();
+    resetOperationCancelledState();
 
     timeT lastIncrement =
 	(isFullLayout && (notes->begin() != notes->end())) ?
@@ -1304,7 +1307,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		    lastIncrement +=
 			(sinceIncrement / m_timePerProgressIncrement)
 			* m_timePerProgressIncrement;
-		    if (isCancelled()) throw Cancelled();
+		    if (isOperationCancelled()) throw Cancelled();
 		}
 	    }
         }
@@ -1659,7 +1662,7 @@ NotationHLayout::reset()
     m_barData.clear();
     m_barPositions.clear();
     m_totalWidth = 0;
-    resetCancelledState();
+    resetOperationCancelledState();
 }
 
 void

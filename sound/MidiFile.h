@@ -22,16 +22,17 @@
 #ifndef _ROSEGARDEN_MIDI_FILE_H_
 #define _ROSEGARDEN_MIDI_FILE_H_
 
-#include "Midi.h"
-#include "MidiEvent.h"
-#include "Composition.h"
-#include "SoundFile.h"
-
-
 #include <fstream>
 #include <string>
 #include <list>
 #include <map>
+
+#include <qobject.h>
+
+#include "Midi.h"
+#include "MidiEvent.h"
+#include "Composition.h"
+#include "SoundFile.h"
 
 // Conversion class for Rosegarden::Composition to and
 // from MIDI Files.  Despite the fact you can reuse this
@@ -61,10 +62,10 @@ typedef std::map<unsigned int, std::vector<MidiEvent*> > MidiComposition;
 typedef std::vector<MidiEvent*>::iterator MidiTrackIterator;
 
 class Studio;
-class Progress;
 
-class MidiFile : public SoundFile
+class MidiFile : public QObject, public SoundFile
 {
+    Q_OBJECT
 public:
 
     typedef enum
@@ -76,8 +77,8 @@ public:
 	MIDI_FILE_NOT_LOADED            = 0xFF
     } MIDIFileFormatType;
 
-    MidiFile(Studio *studio, Progress *progress);
-    MidiFile (const std::string &fn, Studio *studio, Progress *progress);
+    MidiFile(Studio *studio);
+    MidiFile (const std::string &fn, Studio *studio);
     ~MidiFile();
 
     MidiFile& operator=(const MidiFile& mF)
@@ -104,6 +105,10 @@ public:
     Rosegarden::Composition* convertToRosegarden();
     void convertToMidi(Rosegarden::Composition &comp);
 
+signals:
+    void setProgress(int);
+    void incrementProgress(int);
+    
 private:
 
     int                    m_timingDivision;   // pulses per quarter note
@@ -147,10 +152,6 @@ private:
     // The pointer to the Studio for Instrument stuff
     //
     Studio   *m_studio;
-
-    // Progress dialog
-    //
-    Progress *m_progress;
 
 };
 

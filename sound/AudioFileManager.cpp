@@ -42,8 +42,6 @@
 #include "AudioFileManager.h"
 #include "WAVAudioFile.h"
 #include "BWFAudioFile.h"
-#include "Progress.h"
-
 
 namespace Rosegarden
 {

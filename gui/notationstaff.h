@@ -27,6 +27,7 @@
 #include "notepixmapfactory.h"
 #include "notationelement.h"
 #include "linedstaff.h"
+#include "progressreporter.h"
 
 namespace Rosegarden { class Quantizer; class Progress; }
 
@@ -46,7 +47,7 @@ class NotationView;
  * base class.
  */
 
-class NotationStaff : public LinedStaff<NotationElement>
+class NotationStaff : public ProgressReporter, public LinedStaff<NotationElement>
 {
 public:
 
@@ -236,10 +237,6 @@ public:
      */
     virtual bool wrapEvent(Rosegarden::Event *);
 
-    void setProgressReporter(Rosegarden::Progress *progress) {
-	m_progress = progress;
-    }
-
 protected:
 
     // definition of staff
@@ -322,7 +319,6 @@ protected:
     QCanvasSimpleSprite *m_previewSprite;
     QCanvasSimpleSprite *m_staffName;
     NotationView *m_notationView;
-    Rosegarden::Progress *m_progress;
     bool m_colourQuantize;
 };
 

@@ -1800,8 +1800,13 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
                                          this);
 
     midiFile = new Rosegarden::MidiFile(qstrtostr(file),
-                                        &m_doc->getStudio(),
-                                        &progressDlg);
+                                        &m_doc->getStudio());
+
+    connect(midiFile, SIGNAL(setProgress(int)),
+            progressDlg.progressBar(), SLOT(setValue(int)));
+
+    connect(midiFile, SIGNAL(incrementProgress(int)),
+            progressDlg.progressBar(), SLOT(advance(int)));
 
     if (!midiFile->open())
     {
@@ -2087,25 +2092,25 @@ void RosegardenGUIApp::slotExportMIDI()
 
 void RosegardenGUIApp::exportMIDIFile(const QString &file)
 {
-    RosegardenProgressDialog *progressDlg =
-            new RosegardenProgressDialog(i18n("Exporting MIDI file..."),
+    RosegardenProgressDialog progressDlg(i18n("Exporting MIDI file..."),
                                          100,
                                          this);
 
     Rosegarden::MidiFile midiFile(qstrtostr(file),
-                                 &m_doc->getStudio(),
-                                  progressDlg);
+                                 &m_doc->getStudio());
+
+    connect(&midiFile, SIGNAL(setProgress(int)),
+            progressDlg.progressBar(), SLOT(setValue(int)));
+
+    connect(&midiFile, SIGNAL(incrementProgress(int)),
+            progressDlg.progressBar(), SLOT(advance(int)));
 
     midiFile.convertToMidi(m_doc->getComposition());
 
     if (!midiFile.write())
     {
         KMessageBox::sorry(this, i18n("The MIDI File has not been exported."));
-        delete progressDlg;
-        return;
     }
-
-    delete progressDlg;
 }
 
 void RosegardenGUIApp::slotExportCsound()
@@ -3351,13 +3356,17 @@ RosegardenGUIApp::slotPanic()
 {
     if (m_seqManager)
     {
-        RosegardenProgressDialog *progressDlg =
-            new RosegardenProgressDialog(i18n("Sending MIDI panic..."),
-                                         100,
-                                         this);
-        m_seqManager->panic(progressDlg);
+        RosegardenProgressDialog progressDlg(i18n("Sending MIDI panic..."),
+                                             100,
+                                             this);
 
-        delete progressDlg;
+        connect(m_seqManager, SIGNAL(setProgress(int)),
+                progressDlg.progressBar(), SLOT(setValue(int)));
+        connect(m_seqManager, SIGNAL(incrementProgress(int)),
+                progressDlg.progressBar(), SLOT(advance(int)));
+        
+        m_seqManager->panic();
+
     }
 }
 

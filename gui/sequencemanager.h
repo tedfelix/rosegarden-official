@@ -145,7 +145,7 @@ public:
 
     // Send all note offs and resets to MIDI devices
     //
-    void panic(RosegardenProgressDialog *progress);
+    void panic();
 
     // Send an MC to the view
     //
@@ -161,7 +161,10 @@ public slots:
     // Empty the m_clearToSend flag
     //
     //void slotClearToSendElapsed();
-
+signals:
+    void setProgress(int);
+    void incrementProgress(int);
+    
 private:
     Rosegarden::MappedComposition m_mC;
     RosegardenGUIDoc *m_doc;

@@ -29,7 +29,6 @@
 #include "AudioFile.h"
 #include "Audio.h"
 #include "Sound.h"
-#include "Progress.h"
 
 using std::cout;
 using std::cerr;

@@ -27,9 +27,9 @@
 
 #include "editview.h"
 #include "dialogs.h" // for TempoDialog::TempoDialogAction
+#include "linedstaff.h"
 #include "notationelement.h"
 #include "notationcanvasview.h"
-#include "notationstaff.h"
 #include "notationproperties.h"
 #include "zoomslider.h"
 #include "NotationTypes.h"
@@ -47,11 +47,13 @@ class NoteActionData;
 class MarkActionData;
 class ChordNameRuler;
 class RosegardenProgressBar;
+class RosegardenProgressDialog;
 class KProgress;
 class KProgressDialog;
 class ProgressReporter;
 class NotationHLayout;
 class NotationVLayout;
+class NotationStaff;
 
 namespace Rosegarden { class Progress; class Segment;
 class EventSelection; class MappedEvent; }
@@ -214,7 +216,8 @@ public:
     /**
      * From LinedStaffManager
      */
-    virtual NotationStaff *getStaffForCanvasY(int y) const;
+//     virtual NotationStaff* getStaffForCanvasY(int y) const;
+    virtual LinedStaff<NotationElement>* getStaffForCanvasY(int y) const;
 
 
     /**
@@ -565,6 +568,11 @@ signals:
     void rewindPlaybackToBeginning();
     void jumpPlaybackTo(Rosegarden::timeT);
 
+    /// progress Report
+    void setProgress(int);
+    void incrementProgress(int);
+    void setOperationName(QString);
+
 protected:
 
     virtual void paintEvent(QPaintEvent* e);
@@ -677,7 +685,11 @@ protected:
     void removeViewLocalProperties(Rosegarden::Event*);
 
     void setupProgress(KProgress*);
-    void setupProgress(KProgressDialog*);
+    void setupProgress(RosegardenProgressDialog*);
+    void setupDefaultProgress();
+    void disconnectProgress();
+    void installProgressEventFilter();
+    void removeProgressEventFilter();
 
     //--------------- Data members ---------------------------------
 
@@ -754,7 +766,11 @@ protected:
     ZoomSlider<int> *m_smoothingSlider;
     KActionMenu *m_fontSizeActionMenu;
 
-    Rosegarden::Progress *m_progress;
+    enum { PROGRESS_NONE,
+           PROGRESS_BAR,
+           PROGRESS_DIALOG } m_progressDisplayer;
+    bool m_progressEventFilterInstalled;
+
     bool m_inhibitRefresh;
     bool m_documentDestroyed;
     bool m_ok;

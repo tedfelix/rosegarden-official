@@ -37,7 +37,6 @@
 #include "Track.h"
 #include "Instrument.h"
 #include "Studio.h"
-#include "Progress.h"
 #include "MidiTypes.h"
 
 #if (__GNUC__ < 3)
@@ -47,6 +46,7 @@
 #include <sstream>
 #endif
 
+#include <kapp.h>
 
 namespace Rosegarden
 {
@@ -60,30 +60,26 @@ using std::endl;
 using std::ends;
 using std::ios;
 
-MidiFile::MidiFile(Studio *studio,
-                   Progress *progress):
+MidiFile::MidiFile(Studio *studio):
                      SoundFile(std::string("unnamed.mid")),
                      m_timingDivision(0),
                      m_format(MIDI_FILE_NOT_LOADED),
                      m_numberOfTracks(0),
                      m_trackByteCount(0),
                      m_decrementCount(false),
-                     m_studio(studio),
-                     m_progress(progress)
+                     m_studio(studio)
 {
 }
 
 MidiFile::MidiFile(const std::string &fn,
-                   Studio *studio,
-                   Progress *progress):
+                   Studio *studio):
                      SoundFile(fn),
                      m_timingDivision(0),
                      m_format(MIDI_FILE_NOT_LOADED),
                      m_numberOfTracks(0),
                      m_trackByteCount(0),
                      m_decrementCount(false),
-                     m_studio(studio),
-                     m_progress(progress)
+                     m_studio(studio)
 {
 }
 
@@ -187,17 +183,14 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
 
     // update a progress dialog if we have one
     //
-    if (m_progress)
-    {
-	bytesGot += numberOfBytes;
-	if (bytesGot > 500) {
+    bytesGot += numberOfBytes;
+    if (bytesGot > 500) {
 
-	    m_progress->setCompleted((int)(double(midiFile->tellg())/
-					   double(m_fileSize) * 100.0));
-	    m_progress->processEvents();
+        emit setProgress((int)(double(midiFile->tellg())/
+                                double(m_fileSize) * 100.0));
+        kapp->processEvents(500);
 
-	    bytesGot = 0;
-	}
+        bytesGot = 0;
     }
 
     return stringRet;
@@ -1198,7 +1191,7 @@ MidiFile::convertToMidi(Rosegarden::Composition &comp)
 
 		    m_midiComposition[trackNumber].push_back(midiEvent);
 		}
-		else if ((*el)->isa(Key::EventType))
+		else if ((*el)->isa(Rosegarden::Key::EventType))
 		{
 		    Rosegarden::Key key(**el);
 
@@ -1564,14 +1557,11 @@ MidiFile::writeTrack(std::ofstream* midiFile, Rosegarden::TrackId trackNumber)
         // For the moment just keep the app updating until we work
         // out a good way of accounting for this write.
         //
-        if (m_progress)
-        {
-	    ++progressCount;
+        ++progressCount;
 
-	    if (progressCount % 500 == 0) {
-		m_progress->setCompleted(progressCount * 100 / progressTotal);
-		m_progress->processEvents();
-	    }
+        if (progressCount % 500 == 0) {
+            emit setProgress(progressCount * 100 / progressTotal);
+            kapp->processEvents(500);
         }
     }
 

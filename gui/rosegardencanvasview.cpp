@@ -34,6 +34,22 @@ RosegardenCanvasView::RosegardenCanvasView(QScrollBar* hsb, QCanvas* canvas,
     setHScrollBarMode(AlwaysOff);
 }
 
+void RosegardenCanvasView::fitWidthToContents()
+{
+    QRect allItemsBoundingRect;
+
+    QCanvasItemList items = canvas()->allItems();
+
+    QCanvasItemList::Iterator it;
+
+    for (it = items.begin(); it != items.end(); ++it) {
+        allItemsBoundingRect |= (*it)->boundingRect();
+    }
+
+    QSize currentSize = canvas()->size();
+    
+    resizeContents(allItemsBoundingRect.width(), currentSize.height());
+}
 
 void RosegardenCanvasView::polish()
 {

@@ -28,7 +28,6 @@
 #include "Event.h"
 #include "AudioFileManager.h"
 #include "Studio.h"
-#include "Progress.h"
 #include "rosegardenguidoc.h"
 #include "progressreporter.h"
 

@@ -43,6 +43,12 @@ public:
 
     virtual void polish();
 
+    /**
+     * Sets the canvas width to be exactly the width needed to show
+     * all the items
+     */
+    void fitWidthToContents();
+
 public slots:
     /// Update the RosegardenCanvasView after a change of content
     virtual void slotUpdate();

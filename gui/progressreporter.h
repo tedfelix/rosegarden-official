@@ -41,8 +41,8 @@ protected:
       from slotCancel() because Qt is generally compiled without
       exception support, so we can't throw from a slot.
     */
-    bool isCancelled() const { return m_isCancelled; }
-    void resetCancelledState() { m_isCancelled = false; }
+    bool isOperationCancelled() const { return m_isCancelled; }
+    void resetOperationCancelledState() { m_isCancelled = false; }
 
 protected slots:
     virtual void slotCancel() { m_isCancelled = true; };
@@ -51,6 +51,7 @@ signals:
     /// Report progress
     void setProgress(int);
     void incrementProgress(int);
+    void setOperationName(QString);
 
 protected:
     //--------------- Data members ---------------------------------
