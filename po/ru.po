@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "POT-Creation-Date: 2003-04-27 18:02+0200\n"
-"PO-Revision-Date: 2003-04-29 18:23+0400\n"
+"PO-Revision-Date: 2003-05-02 20:04+0400\n"
 "Last-Translator: Alexandre Prokoudine <avp@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -4427,11 +4427,11 @@ msgstr "Разгруппирование..."
 
 #: notationviewslots.cpp:687
 msgid "Making grace notes..."
-msgstr ""
+msgstr "Создаются форшлаги..."
 
 #: notationviewslots.cpp:695
 msgid "Making non-grace notes..."
-msgstr ""
+msgstr "Удаляются форшлаги..."
 
 #: notationviewslots.cpp:708
 msgid "Adding slur..."
@@ -4511,7 +4511,7 @@ msgstr "Текст: "
 
 #: notationviewslots.cpp:1136
 msgid "Estimated time signature shown"
-msgstr ""
+msgstr "Вычисленные ключевые знаки альтерации показаны вверху"
 
 #: notationviewslots.cpp:1180
 msgid "Estimated key signature shown"
@@ -4531,7 +4531,7 @@ msgstr ""
 
 #: studiowidgets.cpp:90
 msgid "Set the audio pan position in the stereo field"
-msgstr ""
+msgstr "Установить панорамирование для звуковых файлов в стерео"
 
 #: studiowidgets.cpp:98
 msgid "Mono or Stereo Audio Instrument"
@@ -4667,7 +4667,7 @@ msgstr "Обход"
 
 #: audioplugindialog.cpp:79
 msgid "Bypass this plugin."
-msgstr ""
+msgstr "Обойти этот модуль"
 
 #: audioplugindialog.cpp:84 audioplugindialog.cpp:154
 msgid "<id>"
@@ -4675,7 +4675,7 @@ msgstr "<id>"
 
 #: audioplugindialog.cpp:86
 msgid "Unique ID of plugin."
-msgstr ""
+msgstr "Уникальный ID модуля"
 
 #: matrixcommands.cpp:63
 msgid "Erase Note"
