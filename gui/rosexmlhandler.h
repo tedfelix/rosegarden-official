@@ -25,22 +25,27 @@
 #include "Composition.h"
 #include "Event.h"
 
-/**Handler for the Rosegarden XML format
- *
- *@author Guillaume Laurent, Chris Cannam, Richard Bown
- */
-
 class XmlStorableEvent;
 
-class RoseXmlHandler : public QXmlDefaultHandler  {
+/**
+ * Handler for the Rosegarden XML format
+ */
+class RoseXmlHandler : public QXmlDefaultHandler
+{
 public:
+
+    /**
+     * Construct a new RoseXmlHandler which will put the data extracted
+     * from the XML file into the specified composition
+     */
     RoseXmlHandler(Rosegarden::Composition &composition);
+
     virtual ~RoseXmlHandler();
 
-    // return the error protocol if parsing failed
+    /// return the error protocol if parsing failed
     QString errorProtocol();
 
-    // overloaded handler functions
+    /// overloaded handler functions
     virtual bool startDocument();
     virtual bool startElement(const QString& namespaceURI,
                               const QString& localName,
@@ -53,6 +58,7 @@ public:
 
     virtual bool characters(const QString& ch);
 
+    /// Return the error string set during the parsing (if any)
     QString errorString();
 
     bool error(const QXmlParseException& exception);

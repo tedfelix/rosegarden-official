@@ -33,19 +33,18 @@ class QCanvasLineGroupable;
 /**
  * The Staff is a repository for information about the notation
  * representation of a single Track.  This includes all of the
- * NotationElements representing the Events on that Track, as well as
- * basic positional and size data.
+ * NotationElements representing the Events on that Track, the staff
+ * lines, as well as basic positional and size data.
  *
  * Staff owns the ViewElementsManager and NotationElementList objects
  * it contains, but not the Track object it's constructed from.
  */
-
 class Staff : public QCanvasItemGroup
 {
 public:
     typedef std::vector<QCanvasLineGroupable*> barlines;
     
-    Staff(QCanvas *, Rosegarden::Track *, int resolution);
+    Staff(QCanvas*, Rosegarden::Track*, int resolution);
     ~Staff();
 
     // bit dubious, really -- I'd rather have a NotePixmapFactory that
