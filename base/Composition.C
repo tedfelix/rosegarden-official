@@ -577,10 +577,10 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
     Event dummy;
     //!!!
     dummy.set<Int>(TempoTimestampProperty, t);
-    Segment::iterator i = lower_bound(m_tempoSegment.begin(),
-				      m_tempoSegment.end(),
-				      &dummy,
-				      compareTempoTimestamps);
+    Segment::const_iterator i = lower_bound(m_tempoSegment.begin(),
+                                            m_tempoSegment.end(),
+                                            &dummy,
+                                            compareTempoTimestamps);
 
     if (i == m_tempoSegment.begin()) {
 	return realTime2Time(t, m_defaultTempo);
@@ -595,7 +595,7 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
 }
 
 bool
-Composition::compareTempoTimestamps(const Event *&e1, const Event *&e2)
+Composition::compareTempoTimestamps(const Event *e1, const Event *e2)
 {
     RealTime r1 = e1->get<Int>(TempoTimestampProperty);
     RealTime r2 = e2->get<Int>(TempoTimestampProperty);

@@ -340,7 +340,7 @@ protected:
     mutable bool m_tempoTimestampsNeedCalculating;
     RealTime time2RealTime(timeT time, double tempo) const;
     timeT realTime2Time(RealTime rtime, double tempo) const;
-    static bool compareTempoTimestamps(const Event *&, const Event *&);
+    static bool compareTempoTimestamps(const Event *, const Event *);
 
 private:
     Composition(const Composition &);
