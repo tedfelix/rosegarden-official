@@ -9,7 +9,7 @@ References in round brackets are to 0.1_planned_features.txt.
  1. Basic Rosegarden 2.1 import (A12) - DONE (almost - missing time sigs)
 
  2. Finish insertion -- keys, dots, accidentals etc.  (May need
- input from Chris on accidentals) (A9a)
+ input from Chris on accidentals) (A9a) - DONE
 
  3. Tidy framework ("make install", pixmaps, resource.h) (A13, C2ish)
 
@@ -41,3 +41,5 @@ Older task list
 * pause in the middle of the bars
 
 * link notes
+
+* "close" menu item on notation window
