@@ -1182,7 +1182,8 @@ MoveCommand::MoveCommand(Segment &s, timeT delta, bool useNotationTimings,
 			 EventSelection &sel) :
     BasicCommand(getGlobalName(), s,
 		 delta < 0 ? sel.getStartTime() + delta : sel.getStartTime(),
-		 delta < 0 ? sel.getEndTime()+1 : sel.getEndTime()+1 + delta),
+		 delta < 0 ? sel.getEndTime()+1 : sel.getEndTime()+1 + delta,
+		 true),
     m_selection(&sel),
     m_delta(delta),
     m_useNotationTimings(useNotationTimings),
@@ -1206,6 +1207,11 @@ MoveCommand::getGlobalName(Rosegarden::timeT delta)
 void
 MoveCommand::modifySegment()
 {
+    RG_DEBUG << "MoveCommand::modifySegment: delta is " << m_delta
+	     << ", useNotationTimings " << m_useNotationTimings
+	     << ", start time " << m_selection->getStartTime()
+	     << ", end time " << m_selection->getEndTime() << endl;
+
     std::vector<Event *> toErase;
     std::vector<Event *> toInsert;
 
@@ -1224,8 +1230,7 @@ MoveCommand::modifySegment()
 	toErase.push_back(*i);
 	timeT newTime =
 	    (m_useNotationTimings ?
-	     (*i)->getNotationAbsoluteTime() : (*i)->getAbsoluteTime()) +
-	    (b0 - a0);
+	     (*i)->getNotationAbsoluteTime() : (*i)->getAbsoluteTime()) + m_delta;
 	toInsert.push_back(new Event(**i, newTime));
     }
 
@@ -1241,6 +1246,7 @@ MoveCommand::modifySegment()
 	Segment::iterator jtr = segment.end();
 
 	// somewhat like the NoteOverlay part of PasteEventsCommand::modifySegment
+/* nah -- let's do a de-counterpoint afterwards perhaps
 	if (m_useNotationTimings && toInsert[j]->isa(Note::EventType)) {
 	    long pitch = 0;
 	    Accidental explicitAccidental = NoAccidental;
@@ -1250,15 +1256,22 @@ MoveCommand::modifySegment()
 		    (toInsert[j]->getAbsoluteTime(),
 		     Note::getNearestNote(toInsert[j]->getDuration()),
 		     pitch, explicitAccidental);
+		delete toInsert[j];
+		toInsert[j] = *jtr;
 	    }
 	} else {
+*/
 	    jtr = segment.insert(toInsert[j]);
-	}
+//	}
 
         // insert new event back into selection
         m_selection->addEvent(toInsert[j]);
 
 	if (jtr != segment.end()) m_lastInsertedEvent = toInsert[j];
+    }
+
+    if (m_useNotationTimings) {
+	SegmentNotationHelper(segment).deCounterpoint(b0, b1);
     }
 
     segment.normalizeRests(a0, a1);

@@ -529,7 +529,7 @@ LinedStaff::sizeStaff(Rosegarden::HorizontalLayoutEngine &layout)
 	    insertTimeSignature(timeSigX, currentTimeSignature);
 	}
 
-	RG_DEBUG << "LinedStaff::sizeStaff: inserting bar at " << x << " on staff " << this << endl;
+//	RG_DEBUG << "LinedStaff::sizeStaff: inserting bar at " << x << " on staff " << this << endl;
 	
 	int displayBarNo = 0;
 	if (showBarNumbersEvery() > 0 &&

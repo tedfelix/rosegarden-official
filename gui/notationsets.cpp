@@ -227,7 +227,8 @@ NotationChord::applyAccidentalShiftProperties()
 	Event *e = getAsEvent(*i);
 
 	Rosegarden::Accidental acc;
-	if (e->get<String>(m_properties.DISPLAY_ACCIDENTAL, acc)) {
+	if (e->get<String>(m_properties.DISPLAY_ACCIDENTAL, acc) &&
+	    acc != Rosegarden::Accidentals::NoAccidental) {
 	    e->set<Int>(m_properties.ACCIDENTAL_SHIFT, minShift);
 	    maxHeight = lastHeight = getHeight(*i);
 	    break;
@@ -245,7 +246,8 @@ NotationChord::applyAccidentalShiftProperties()
 	}
 
 	Rosegarden::Accidental acc;
-	if (e->get<String>(m_properties.DISPLAY_ACCIDENTAL, acc)) {
+	if (e->get<String>(m_properties.DISPLAY_ACCIDENTAL, acc) &&
+	    acc != Rosegarden::Accidentals::NoAccidental) {
 
 	    if (height < lastHeight) { // lastHeight was the first, up top
 		if (lastHeight - height >= 6) {

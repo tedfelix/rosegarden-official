@@ -2015,7 +2015,7 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
     if (dy != 0) {
 	// We have opposite (dy) and adjacent (length).
 	theta = atan(double(dy) / double(length)) * 180.0 / M_PI;
-	NOTATION_DEBUG << "slur: dy is " << dy << ", length " << length << ", rotating through " << theta << endl;
+//	NOTATION_DEBUG << "slur: dy is " << dy << ", length " << length << ", rotating through " << theta << endl;
 	rotate = true;
     }
 
@@ -2050,7 +2050,7 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
 	    int height = bottomRight.y() - topLeft.y() + thickness - 1 + abs(dy);
 	    hotspot = QPoint(0, -topLeft.y() + (dy < 0 ? -dy : 0));
 
-	    NOTATION_DEBUG << "slur: bottomRight (" << bottomRight.x() << "," << bottomRight.y() << "), topLeft (" << topLeft.x() << "," << topLeft.y() << "), width " << width << ", height " << height << ", hotspot (" << hotspot.x() << "," << hotspot.y() << "), dy " << dy << ", thickness " << thickness << endl;
+//	    NOTATION_DEBUG << "slur: bottomRight (" << bottomRight.x() << "," << bottomRight.y() << "), topLeft (" << topLeft.x() << "," << topLeft.y() << "), width " << width << ", height " << height << ", hotspot (" << hotspot.x() << "," << hotspot.y() << "), dy " << dy << ", thickness " << thickness << endl;
 
 	    if (painter) {
 
