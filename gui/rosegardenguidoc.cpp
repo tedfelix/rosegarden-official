@@ -196,6 +196,7 @@ bool RosegardenGUIDoc::saveDocument(const QString &filename, const char *format 
     /////////////////////////////////////////////////
     // TODO: Add your document saving code here
     /////////////////////////////////////////////////
+    KMessageBox::sorry(0, "Not implemented yet");
 
     m_modified=false;
     return true;
@@ -205,12 +206,12 @@ void RosegardenGUIDoc::deleteContents()
 {
     deleteViews();
 
-    for(EventList::iterator i = m_elements.begin();
-        i != m_elements.end(); ++i) {
+    for(EventList::iterator i = m_events.begin();
+        i != m_events.end(); ++i) {
         delete *i;
     }
 
-    m_elements.clear();
+    m_events.clear();
 }
 
 void RosegardenGUIDoc::deleteViews()
@@ -236,7 +237,7 @@ bool
 RosegardenGUIDoc::xmlParse(QFile &file)
 {
     // parse xml file
-    RoseXmlHandler handler(m_elements);
+    RoseXmlHandler handler(m_events);
 
     QXmlInputSource source(file);
     QXmlSimpleReader reader;

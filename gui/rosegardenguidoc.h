@@ -99,8 +99,8 @@ public:
     /** deletes the document views */
     void deleteViews();
 
-    EventList&       getElements()       { return m_elements; }
-    const EventList& getElements() const { return m_elements; }
+    EventList&       getEvents()       { return m_events; }
+    const EventList& getEvents() const { return m_events; }
 
 public slots:
 
@@ -132,7 +132,7 @@ private:
     /** the document's data : the events (or elements) constituting
      * the document
     */
-    EventList m_elements;
+    EventList m_events;
 
 };
 
