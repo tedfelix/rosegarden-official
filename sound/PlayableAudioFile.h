@@ -239,6 +239,8 @@ protected:
 
     std::vector<RingBuffer<sample_t> *> m_ringBuffers; // one per channel
 
+    size_t                m_totalFrames;  // total frames
+
 private:
     PlayableAudioFile(const PlayableAudioFile &pAF); // not provided
 };

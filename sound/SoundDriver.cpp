@@ -121,7 +121,7 @@ SoundDriver::getAudioPlayQueueNotDefunct()
     {
 #ifdef DEBUG_PLAYABLE
 	std::cout << "SoundDriver::getAudioPlayQueueNotDefunct: id "
-		  << (*it)->getRuntimeSegmentId() << ", status " << (*it)->getStatus() << " (defunct is " << PlayableAudioFile::DEFUNCT << "), initialised " << (*it)->isInitialised() << std::endl;
+		  << (*it)->getRuntimeSegmentId() << ", status " << (*it)->getStatus() << " (defunct is " << PlayableAudioFile::DEFUNCT << ")" /*, initialised " << (*it)->isInitialised()*/ << std::endl;
 #endif
 
         if ((*it)->getStatus() != PlayableAudioFile::DEFUNCT) {
@@ -150,7 +150,7 @@ SoundDriver::getAudioPlayQueuePerInstrument(InstrumentId instrument)
     {
 #ifdef DEBUG_PLAYABLE
 	std::cout << "SoundDriver::getAudioPlayQueuePerInstrument(" << instrument << "): id "
-		  << (*it)->getRuntimeSegmentId() << ", instrument " << (*it)->getInstrument() << ", status " << (*it)->getStatus() << " (defunct is " << PlayableAudioFile::DEFUNCT << "), initialised " << (*it)->isInitialised() << std::endl;
+		  << (*it)->getRuntimeSegmentId() << ", instrument " << (*it)->getInstrument() << ", status " << (*it)->getStatus() << " (defunct is " << PlayableAudioFile::DEFUNCT << ")" /*, initialised " << (*it)->isInitialised()*/ << std::endl;
 #endif
 
         if ((*it)->getStatus() != PlayableAudioFile::DEFUNCT &&
@@ -362,6 +362,8 @@ SoundDriver::clearAudioFiles()
 void
 SoundDriver::cancelAudioFile(MappedEvent *mE)
 {
+    std::cout << "SoundDriver::cancelAudioFile" << std::endl;
+
     std::list<PlayableAudioFile *>::iterator it;
 
     pthread_mutex_lock(&_audioQueueLock);

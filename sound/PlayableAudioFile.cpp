@@ -26,7 +26,7 @@ namespace Rosegarden
 {
 
 //#define DEBUG_PLAYABLE 1
-#define DEBUG_RECORDABLE 1
+//#define DEBUG_RECORDABLE 1
 
 PlayableAudioFile::SmallFileMap PlayableAudioFile::m_smallFileCache;
 
@@ -55,7 +55,8 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
     m_smallFileSize(smallFileSize),
     m_isSmallFile(false),
     m_workBuffer(0),
-    m_workBufferSize(0)
+    m_workBufferSize(0),
+    m_totalFrames(0)
 {
 #ifdef DEBUG_PLAYABLE
     std::cerr << "PlayableAudioFile::PlayableAudioFile - creating " << this << std::endl;
@@ -144,6 +145,7 @@ PlayableAudioFile::initialise(size_t bufferSize)
 //	+ (bufferSize / 10);
 //!!!    m_ringBufferThreshold = bufferSize / 4;
 
+    m_totalFrames = 0;
     m_initialised = true;
 }
 
@@ -462,6 +464,33 @@ PlayableAudioFile::updateBuffers()
 
     const unsigned char *ubuf = 0;
 
+    // Check and adjust for audio end marker
+    //
+    RealTime nextDuration = 
+        Rosegarden::RealTime::frame2RealTime
+            (m_totalFrames + fileFrames, sourceSampleRate);
+
+    // Test for file end marker and reset frames accodingly
+    //
+    if (nextDuration > m_duration)
+    {
+        RealTime diffTime = 
+            m_duration - Rosegarden::RealTime::frame2RealTime
+                (m_totalFrames, sourceSampleRate);
+
+#ifdef DEBUG_PLAYABLE
+        std::cerr << "PlayableAudioFile::updateBuffers: got end file marker."
+            << std::endl;
+#endif
+        // Reset frames
+        frames = Rosegarden::RealTime::realTime2Frame
+            (diffTime, sourceSampleRate);
+
+        // After this fetch we're at the end of the file
+        //
+        m_fileEnded = true;
+    }
+
     if (m_isSmallFile) {
 
 	size_t bytes = m_audioFile->getBytesPerFrame() * fileFrames;
@@ -515,6 +544,10 @@ PlayableAudioFile::updateBuffers()
 	fileFrames = m_fileBuffer.size() / m_audioFile->getBytesPerFrame();
 	ubuf = (const unsigned char *)m_fileBuffer.c_str();
     }
+
+    // Keep a running total of how far into the file we are
+    //
+    m_totalFrames += fileFrames;
 
     if (!ubuf) {
 #ifdef DEBUG_PLAYABLE
