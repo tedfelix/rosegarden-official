@@ -430,6 +430,7 @@ void RosegardenGUIApp::initZoomToolbar()
     m_zoomSlider = new ZoomSlider<double>
 	(zoomSizes, 1.0, QSlider::Horizontal, zoomToolbar);
     m_zoomSlider->setTracking(true);
+    m_zoomSlider->setFocusPolicy(QWidget::NoFocus);
 
     connect(m_zoomSlider, SIGNAL(valueChanged(int)),
 	    this, SLOT(slotChangeZoom(int)));

@@ -76,7 +76,7 @@ void QCanvasRepeatRectangle::drawShape(QPainter& painter)
         height = rect().height();
 
     while (pos < (width + x())) {
-        painter.drawLine(pos, y(), pos, y() + height - 1);
+        painter.drawLine(pos, int(y()), pos, int(y()) + height - 1);
         pos += m_repeatInterval;
     }
 }
@@ -610,6 +610,7 @@ void SegmentCanvas::slotHideSplitLine()
 
 void SegmentCanvas::slotExternalWheelEvent(QWheelEvent* e)
 {
+    e->accept();
     wheelEvent(e);
 }
 

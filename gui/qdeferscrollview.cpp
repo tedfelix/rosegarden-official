@@ -25,6 +25,7 @@
 QDeferScrollView::QDeferScrollView(QWidget* parent, const char *name, WFlags f)
     : QScrollView(parent, name, f)
 {
+    setFocusPolicy(QWidget::WheelFocus);
 }
 
 void QDeferScrollView::contentsWheelEvent(QWheelEvent* e)
