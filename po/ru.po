@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "POT-Creation-Date: 2003-01-18 19:47+0100\n"
-"PO-Revision-Date: 2003-01-28 21:35+0300\n"
+"PO-Revision-Date: 2003-02-03 16:05+0300\n"
 "Last-Translator: Alexandre Prokoudine <avp@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -3073,7 +3073,7 @@ msgstr ""
 
 #: matrixview.cpp:1639
 msgid "Grid"
-msgstr ""
+msgstr "Сетка"
 
 #: matrixview.cpp:1663
 msgid "None"
@@ -3113,27 +3113,27 @@ msgstr ""
 
 #: notationview.cpp:770
 msgid "Note &Font"
-msgstr ""
+msgstr "Нотный шрифт"
 
 #: notationview.cpp:792
 msgid "Si&ze"
-msgstr ""
+msgstr "Размер"
 
 #: notationview.cpp:799
 msgid "Spa&cing"
-msgstr ""
+msgstr "Промежуток"
 
 #: notationview.cpp:822
 msgid "S&moothing"
-msgstr ""
+msgstr "Сглаживание"
 
 #: notationview.cpp:859
 msgid "Note &Style"
-msgstr ""
+msgstr "Нотный стиль"
 
 #: notationview.cpp:881
 msgid "Insert Rest"
-msgstr ""
+msgstr "Вставить паузу"
 
 #: notationview.cpp:885
 msgid "Switch from Note to Rest"
@@ -3145,31 +3145,31 @@ msgstr ""
 
 #: notationview.cpp:956
 msgid "&Treble Clef"
-msgstr ""
+msgstr "Дискантовый ключ"
 
 #: notationview.cpp:963
 msgid "Te&nor Clef"
-msgstr ""
+msgstr "Теноровый ключ"
 
 #: notationview.cpp:970
 msgid "&Alto Clef"
-msgstr ""
+msgstr "Альтовый ключ"
 
 #: notationview.cpp:977
 msgid "&Bass Clef"
-msgstr ""
+msgstr "Басовый ключ"
 
 #: notationview.cpp:984
 msgid "&Text"
-msgstr ""
+msgstr "Текст"
 
 #: notationview.cpp:1009
 msgid "Select from Sta&rt"
-msgstr ""
+msgstr "Выделить с начала дорожки"
 
 #: notationview.cpp:1013
 msgid "Select to &End"
-msgstr ""
+msgstr "Выделить до конца дорожки"
 
 #: notationview.cpp:1017
 msgid "Select Whole St&aff"
@@ -3177,35 +3177,35 @@ msgstr ""
 
 #: notationview.cpp:1021
 msgid "C&ut and Close"
-msgstr ""
+msgstr "Вырезать и закрыть"
 
 #: notationview.cpp:1025
 msgid "Pa&ste..."
-msgstr ""
+msgstr "Вставить..."
 
 #: notationview.cpp:1041
 msgid "&Linear Layout"
-msgstr ""
+msgstr "Линейное представление"
 
 #: notationview.cpp:1047
 msgid "&Page Layout"
-msgstr ""
+msgstr "Страничное представление"
 
 #: notationview.cpp:1060
 msgid "Show &Annotations"
-msgstr ""
+msgstr "Показывать аннотации"
 
 #: notationview.cpp:1064
 msgid "Open L&yric Editor"
-msgstr ""
+msgstr "Открыть редактор текстов"
 
 #: notationview.cpp:1089
 msgid "Tri&plet Insert Mode"
-msgstr ""
+msgstr "Режим ввода триолей"
 
 #: notationview.cpp:1095
 msgid "C&hord Insert Mode"
-msgstr ""
+msgstr "Режим ввода аккордов"
 
 #: notationview.cpp:1197
 msgid "&Dump selected events to stderr"
@@ -3225,7 +3225,7 @@ msgstr ""
 
 #: notationview.cpp:1453
 msgid "  Font:  "
-msgstr ""
+msgstr "  Шрифт:  "
 
 #: notationview.cpp:1477
 msgid "Unknown font \"%1\", using default"
@@ -3233,15 +3233,15 @@ msgstr ""
 
 #: notationview.cpp:1485
 msgid "  Size:  "
-msgstr ""
+msgstr "  Размер:  "
 
 #: notationview.cpp:1493
 msgid "  Spacing:  "
-msgstr ""
+msgstr "  Промежуток:  "
 
 #: notationview.cpp:1502
 msgid "  Smoothing:  "
-msgstr ""
+msgstr "  Сглаживание:  "
 
 #: notationview.cpp:1631
 msgid "Laying out score..."
@@ -3269,15 +3269,15 @@ msgstr ""
 
 #: notationviewslots.cpp:71
 msgid " Triplet Chord"
-msgstr ""
+msgstr " "
 
 #: notationviewslots.cpp:73
 msgid " Chord"
-msgstr ""
+msgstr " Аккорд"
 
 #: notationviewslots.cpp:77
 msgid " Triplet"
-msgstr ""
+msgstr " Триоль"
 
 #: notationviewslots.cpp:96
 msgid "Hidden annotations"
@@ -3424,26 +3424,29 @@ msgid ""
 "The current file has been modified.\n"
 "Do you want to save it?"
 msgstr ""
+"Открытый сейчас файл был изменён.\n"
+"Вы хотите его сохранить?"
 
 #: rosegardenguidoc.cpp:364
 msgid "Can't open file '"
-msgstr ""
+msgstr "Не удаётся открыть файл '"
 
 #: rosegardenguidoc.cpp:373
 msgid "Reading file..."
-msgstr ""
+msgstr "Читается файл..."
 
 #: rosegardenguidoc.cpp:394
 msgid "Error when parsing file '%1' : \"%2\""
 msgstr ""
 
 #: rosegardenguidoc.cpp:417
+#, fuzzy
 msgid "Generating audio previews..."
-msgstr ""
+msgstr "Создаётся предпросмотр аудиосегментов"
 
 #: rosegardenguidoc.cpp:718
 msgid "File Loading Cancelled"
-msgstr ""
+msgstr "Загрузка файла отменена"
 
 #: rosegardenguidoc.cpp:729
 msgid ""
@@ -3455,11 +3458,11 @@ msgstr ""
 
 #: eventview.cpp:161
 msgid "Event filters"
-msgstr ""
+msgstr "Фильтры событий"
 
 #: eventview.cpp:163 midifilter.cpp:45 midifilter.cpp:81
 msgid "Note"
-msgstr ""
+msgstr "Нота"
 
 #: eventview.cpp:164 midifilter.cpp:46 midifilter.cpp:82
 msgid "Program Change"
@@ -3467,7 +3470,7 @@ msgstr ""
 
 #: eventview.cpp:165 midifilter.cpp:50 midifilter.cpp:86
 msgid "Controller"
-msgstr ""
+msgstr "Контроллер"
 
 #: eventview.cpp:166 midifilter.cpp:49 midifilter.cpp:85
 msgid "Pitch Bend"
@@ -3487,15 +3490,15 @@ msgstr ""
 
 #: eventview.cpp:170
 msgid "Rest"
-msgstr ""
+msgstr "Пауза"
 
 #: eventview.cpp:171
 msgid "Indication"
-msgstr ""
+msgstr "Индикация"
 
 #: eventview.cpp:173
 msgid "Other"
-msgstr ""
+msgstr "Другое"
 
 #: eventview.cpp:186
 msgid "%1  - Event List for Segment Track #%2"
@@ -3503,31 +3506,31 @@ msgstr ""
 
 #: eventview.cpp:203
 msgid "Time  "
-msgstr ""
+msgstr "Время  "
 
 #: eventview.cpp:204
 msgid "Duration  "
-msgstr ""
+msgstr "Продолжительность  "
 
 #: eventview.cpp:205
 msgid "Event Type  "
-msgstr ""
+msgstr "Тип события  "
 
 #: eventview.cpp:206
 msgid "Pitch  "
-msgstr ""
+msgstr "Питч  "
 
 #: eventview.cpp:207
 msgid "Velocity  "
-msgstr ""
+msgstr "Скорость  "
 
 #: eventview.cpp:208
 msgid "Type (Data1)  "
-msgstr ""
+msgstr "Тип (Data1)  "
 
 #: eventview.cpp:209
 msgid "Value (Data2)  "
-msgstr ""
+msgstr "Значение (Data2)  "
 
 #: eventview.cpp:389
 msgid "<no events at this filter level>"
@@ -3539,35 +3542,35 @@ msgstr ""
 
 #: rosegardenconfigurationpage.h:161
 msgid "General Configuration"
-msgstr ""
+msgstr "Основные настройки"
 
 #: rosegardenconfigurationpage.h:272
 msgid "Latency"
-msgstr ""
+msgstr "Латентность"
 
 #: rosegardenconfigurationpage.h:273
 msgid "Sequencer Latency"
-msgstr ""
+msgstr "Латентность секвенсера"
 
 #: rosegardenconfigurationpage.h:348
 msgid "Audio"
-msgstr ""
+msgstr "Аудио"
 
 #: rosegardenconfigurationpage.h:349
 msgid "Audio Settings"
-msgstr ""
+msgstr "Установки аудио"
 
 #: rosegardenconfigurationpage.h:377
 msgid "Sequencer"
-msgstr ""
+msgstr "Секвенсер"
 
 #: rosegardenconfigurationpage.h:378
 msgid "Sequencer Settings"
-msgstr ""
+msgstr "Установки секвенсера"
 
 #: notestyle.cpp:514
 msgid "Can't open style file %1"
-msgstr ""
+msgstr "Не удаётся открыть стилевой файл %1"
 
 #: notestyle.cpp:549
 msgid "type is a required attribute of note"
@@ -3587,7 +3590,7 @@ msgstr ""
 
 #: rosegardentransportdialog.cpp:72
 msgid "Transport"
-msgstr ""
+msgstr "Транспорт"
 
 #: rosegardentransportdialog.cpp:617 rosegardentransportdialog.cpp:690
 msgid "PITCH WHEEL"
@@ -3595,7 +3598,7 @@ msgstr ""
 
 #: rosegardentransportdialog.cpp:623 rosegardentransportdialog.cpp:696
 msgid "CONTROLLER"
-msgstr ""
+msgstr "КОНТРОЛЛЕР"
 
 #: rosegardentransportdialog.cpp:628 rosegardentransportdialog.cpp:701
 msgid "PROG CHNGE"
@@ -3623,11 +3626,11 @@ msgstr ""
 
 #: audioplugindialog.cpp:47
 msgid "Audio Plugin"
-msgstr ""
+msgstr "Аудиоплугин"
 
 #: audioplugindialog.cpp:59
 msgid "Plugin"
-msgstr ""
+msgstr "Плугин"
 
 #: audioplugindialog.cpp:64
 msgid "(none)"
@@ -3643,7 +3646,7 @@ msgstr ""
 
 #: studiocommands.h:45
 msgid "Modify &MIDI Bank"
-msgstr ""
+msgstr "Изменить MIDI-банк"
 
 #: studiocommands.h:73
 msgid "Modify &Device Mapping"
@@ -3655,7 +3658,7 @@ msgstr ""
 
 #: midifilter.cpp:33
 msgid "Modify MIDI filters..."
-msgstr ""
+msgstr "Изменить MIDI-фильтры"
 
 #: midifilter.cpp:43
 msgid "THRU events to ignore"
@@ -3667,17 +3670,17 @@ msgstr ""
 
 #: matrixcommands.cpp:38
 msgid "Insert Note"
-msgstr ""
+msgstr "Вставить ноту"
 
 #: matrixcommands.cpp:61
 msgid "Erase Note"
-msgstr ""
+msgstr "Стереть ноту"
 
 #: matrixcommands.cpp:94
 msgid "Move Note"
-msgstr ""
+msgstr "Переместить ноту"
 
 #: matrixcommands.cpp:94
 msgid "Modify Note"
-msgstr ""
+msgstr "Изменить ноту"
 
