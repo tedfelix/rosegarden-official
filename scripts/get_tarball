@@ -3,6 +3,6 @@
 cd /home/glaurent/tmp
 
 # Keep yesterday's copy just in case
-mv rosegarden-cvsroot.tar.gz rosegarden-cvsroot.tar.gz.bk
+mv rosegarden-cvsroot.tar.bz2 rosegarden-cvsroot.tar.bz2.bk
 
-wget http://cvs.sourceforge.net/cvstarballs/rosegarden-cvsroot.tar.gz
+wget http://cvs.sourceforge.net/cvstarballs/rosegarden-cvsroot.tar.bz2
