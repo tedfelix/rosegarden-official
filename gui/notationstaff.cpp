@@ -1075,9 +1075,12 @@ NotationStaff::setPainterWindow(QPainter *painter, double lx, double dx, double 
 	return 0.0;
     }
 
-    painter->setWindow(int(x), 0, int(available), getRowSpacing());
+    painter->setWindow(int(dx), 0, int(available), getRowSpacing());
 
-//    painter->translate( //!!!!???
+    LinedStaffCoords origCoords = getCanvasCoordsForLayoutCoords(lx, 0);
+    double x1 = coords.first - origCoords.first;
+    int y1 = coords.second - origCoords.second;
+    painter->translate(x1, y1);
 
     return available;
 }
