@@ -20,15 +20,14 @@ o Latency dialog
 o Segment paramters and modifiers - looping of Segments, quantisation
   [GETTING THERE]
 
-o Looping doesn't pick up first loop events cleanly [BETTER]
-
 o Instrument display - aRTS environment, MIDI/Audio assignable
   parameters [GETTING THERE]
 
 o File writing - lots need writing out, Device, Studio etc.
 
 
-==
+Lower priority pending
+----------------------
 
 o Segment labelling
 
@@ -50,8 +49,12 @@ o Audio noise eliminator - recording
 o Audio output VU meters
 
 
-Recently completed/fixed
-------------------------
+Completed for 0.1.4
+===================
+
+- autoload file, first pass [DONE]
+
+- Looping doesn't pick up first loop events cleanly [BETTER]
 
 - Start device specific controllers from XML (pan etc) [DONE]
 
@@ -99,11 +102,8 @@ Recently completed/fixed
 
 -------------------------- MUCH OLDER STUFF ----------------------------
 
-
-
-
-Post 0.1 work
-=============
+Pre 0.1.4 work
+==============
 
 o Transport GUI with time, buttons and more features [DONE]
 

@@ -444,9 +444,43 @@ RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent *mE)
 {
     assert(mE > 0);
 
-    MidiPitchLabel *midiPitchLabel = new MidiPitchLabel(mE->getPitch());
-    InDisplay->setText(midiPitchLabel->getQString() +
+    switch (mE->getType())
+    {
+        case MappedEvent::MidiNote:
+            {
+                MidiPitchLabel *mPL = new MidiPitchLabel(mE->getPitch());
+                InDisplay->setText(mPL->getQString() +
 		       QString("  %1").arg(mE->getVelocity()));
+            }
+            break;
+
+        case MappedEvent::MidiPitchWheel:
+            {
+                InDisplay->setText(i18n("PITCH WHEEL"));
+            }
+            break;
+
+        case MappedEvent::MidiController:
+            {
+                InDisplay->setText(i18n("CONTROLLER"));
+            }
+            break;
+        case MappedEvent::MidiProgramChange:
+            {
+                InDisplay->setText(i18n("PROG CHNGE"));
+            }
+            break;
+
+        case MappedEvent::MidiKeyPressure:
+        case MappedEvent::MidiChannelPressure:
+            {
+                InDisplay->setText(i18n("PRESSURE"));
+            }
+            break;
+
+        default:  // do nothing
+            return;
+    }
 
     // Reset the timer if it's already running
     //
@@ -475,9 +509,43 @@ RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
 {
     assert(mE > 0);
 
-    MidiPitchLabel *midiPitchLabel = new MidiPitchLabel(mE->getPitch());
-    OutDisplay->setText(midiPitchLabel->getQString() +
-			QString("  %1").arg(mE->getVelocity()));
+    switch (mE->getType())
+    {
+        case MappedEvent::MidiNote:
+            {
+                MidiPitchLabel *mPL = new MidiPitchLabel(mE->getPitch());
+                OutDisplay->setText(mPL->getQString() +
+		       QString("  %1").arg(mE->getVelocity()));
+            }
+            break;
+
+        case MappedEvent::MidiPitchWheel:
+            {
+                OutDisplay->setText(i18n("PITCH WHEEL"));
+            }
+            break;
+
+        case MappedEvent::MidiController:
+            {
+                OutDisplay->setText(i18n("CONTROLLER"));
+            }
+            break;
+        case MappedEvent::MidiProgramChange:
+            {
+                OutDisplay->setText(i18n("PROG CHNGE"));
+            }
+            break;
+
+        case MappedEvent::MidiKeyPressure:
+        case MappedEvent::MidiChannelPressure:
+            {
+                OutDisplay->setText(i18n("PRESSURE"));
+            }
+            break;
+
+        default:  // do nothing
+            return;
+    }
 
     // Reset the timer if it's already running
     //

@@ -317,13 +317,15 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
     Rosegarden::MidiByte message;
     Rosegarden::RealTime guiTimeStamp(timeStamp.sec, timeStamp.usec);
   
-    // remove the plyback latency from the timing
+    // Remove the playback latency from the timing
+    //
     guiTimeStamp = guiTimeStamp - playLatency;
 
     channel = midiCommand.status & MIDI_CHANNEL_NUM_MASK;
     message = midiCommand.status & MIDI_MESSAGE_TYPE_MASK;
 
     // Check for a hidden NOTE OFF (NOTE ON with zero velocity)
+    //
     if ( message == MIDI_NOTE_ON && midiCommand.data2 == 0 )
     {
         message = MIDI_NOTE_OFF;
@@ -340,16 +342,6 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
             if ( m_noteOnMap[chanNoteKey] == 0 )
             {
                 m_noteOnMap[chanNoteKey] = new MappedEvent;
-
-                // set time since recording started in Absolute internal time
-                /*
-                  m_noteOnMap[chanNoteKey]->
-                  setAbsoluteTime(convertToMidiTime(timeStamp));
-                */
-
-                // set note type and pitch
-                //m_noteOnMap[chanNoteKey]->setType(Note::EventType);
-                //m_noteOnMap[chanNoteKey]->set<Int>(BaseProperties::PITCH, midiCommand.data1);
 
                 // Set time, pitch and velocity on the MappedEvent
                 //
@@ -378,12 +370,12 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
                 m_noteOnMap[chanNoteKey]->setDuration(duration);
 
                 // insert the record
-                    //
-                    m_recordComposition.insert(m_noteOnMap[chanNoteKey]);
+                //
+                m_recordComposition.insert(m_noteOnMap[chanNoteKey]);
 
-                    // tell us about it
+                // tell us about it
 #ifdef MIDI_DEBUG
-                    cout << "INSERTED NOTE at time " 
+                cout << "INSERTED NOTE at time " 
                      << m_noteOnMap[chanNoteKey]->getAbsoluteTime()
                      << " of duration "
                      << m_noteOnMap[chanNoteKey]->getDuration() << endl;
@@ -391,10 +383,67 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 
                 // reset the reference
                 m_noteOnMap[chanNoteKey] = 0;
-
             }
             else
                 cerr << "MIDI_NOTE_OFF with no matching MIDI_NOTE_ON" << endl;
+            break;
+
+        case MIDI_POLY_AFTERTOUCH:
+            {
+                MappedEvent *mE = new MappedEvent();
+                mE->setType(MappedEvent::MidiKeyPressure);
+                mE->setEventTime(guiTimeStamp);
+                mE->setData1(midiCommand.data1);
+                mE->setData2(midiCommand.data2);
+                m_recordComposition.insert(mE);
+            }
+            break;
+
+        case MIDI_CTRL_CHANGE:
+            {
+                MappedEvent *mE = new MappedEvent();
+                mE->setType(MappedEvent::MidiController);
+                mE->setEventTime(guiTimeStamp);
+                mE->setData1(midiCommand.data1);
+                mE->setData2(midiCommand.data2);
+                m_recordComposition.insert(mE);
+            }
+            break;
+
+        case MIDI_PROG_CHANGE:
+            {
+                MappedEvent *mE = new MappedEvent();
+                mE->setType(MappedEvent::MidiProgramChange);
+                mE->setEventTime(guiTimeStamp);
+                mE->setData1(midiCommand.data1);
+                mE->setData2(midiCommand.data2);
+                m_recordComposition.insert(mE);
+            }
+            break;
+
+        case MIDI_CHNL_AFTERTOUCH:
+            {
+                MappedEvent *mE = new MappedEvent();
+                mE->setType(MappedEvent::MidiChannelPressure);
+                mE->setEventTime(guiTimeStamp);
+                mE->setData1(midiCommand.data1);
+                mE->setData2(midiCommand.data2);
+                m_recordComposition.insert(mE);
+            }
+            break;
+
+        case MIDI_PITCH_BEND:
+            {
+                MappedEvent *mE = new MappedEvent();
+                mE->setType(MappedEvent::MidiPitchWheel);
+                mE->setEventTime(guiTimeStamp);
+                mE->setData1(midiCommand.data1);
+                mE->setData2(midiCommand.data2);
+                m_recordComposition.insert(mE);
+            }
+            break;
+
+        case MIDI_SYSTEM_EXCLUSIVE:
             break;
 
         default:

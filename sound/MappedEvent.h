@@ -198,6 +198,8 @@ public:
     //
     MidiByte getData1() const { return m_data1; }
     MidiByte getData2() const { return m_data2; }
+    void setData1(MidiByte d1) { m_data1 = d1; }
+    void setData2(MidiByte d2) { m_data2 = d2; }
 
     // Also use the pitch as the Audio file ID
     //

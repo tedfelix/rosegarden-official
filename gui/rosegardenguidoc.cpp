@@ -46,6 +46,7 @@
 #include "Clipboard.h"
 #include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
+#include "NotationTypes.h"
 #include "segmentcommands.h"
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
@@ -54,6 +55,8 @@ using Rosegarden::Composition;
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
 using Rosegarden::Event;
+using Rosegarden::PitchBend;
+using Rosegarden::Controller;
 using Rosegarden::Int;
 using Rosegarden::String;
 using Rosegarden::timeT;
@@ -494,18 +497,50 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC)
         //
         for (i = mC.begin(); i != mC.end(); ++i)
         {
-            // Create and populate a new Event (for the moment
-            // all we get from the Sequencer is Notes)
-            //
-            //
-
             absTime = m_composition.
                           getElapsedTimeForRealTime((*i)->getEventTime());
             duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
-            rEvent = new Event(Rosegarden::Note::EventType, absTime, duration);
+            switch((*i)->getType())
+            {
+                case Rosegarden::MappedEvent::MidiNote:
+                   // Create and populate a new Event (for the moment
+                   // all we get from the Sequencer is Notes)
+                   //
+                   rEvent = new Event(Rosegarden::Note::EventType,
+                                      absTime,
+                                      duration);
 
-            rEvent->set<Int>(PITCH, (*i)->getPitch());
-            rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
+                   rEvent->set<Int>(PITCH, (*i)->getPitch());
+                   rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
+                   break;
+
+                case Rosegarden::MappedEvent::MidiPitchWheel:
+                   {
+                       PitchBend *pB = new PitchBend((*i)->getData1(),
+                                                     (*i)->getData2());
+                       rEvent = pB->getAsEvent(absTime);
+                   }
+                   break;
+
+                case Rosegarden::MappedEvent::MidiController:
+                   {
+                       // Just fix this for the moment
+                       //
+                       Controller *con = new Controller(Controller::Pan,
+                                                        (*i)->getData1(),
+                                                        (*i)->getData2());
+
+                       rEvent = con->getAsEvent(absTime);
+                   }
+                   break;
+
+                default:
+                   std::cerr << "insertRecordedMidi() - "
+                             << "UNSUPPORTED MAPPED EVENT"
+                             << std::endl;
+                   continue;
+                   break;
+            }
 
             // Set the start index and then insert into the Composition
             //
