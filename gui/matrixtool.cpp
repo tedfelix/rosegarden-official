@@ -1064,7 +1064,7 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
     using Rosegarden::BaseProperties::PITCH;
     timeT diffTime = newTime - m_currentElement->getViewAbsoluteTime();
     int diffPitch = 0;
-    if (m_currentElement->event()->has(Rosegarden::Int::PITCH)) {
+    if (m_currentElement->event()->has(PITCH)) {
 	diffPitch = newPitch -
 	    m_currentElement->event()->get<Rosegarden::Int>(PITCH);
     }
@@ -1098,7 +1098,7 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
         {
             timeT newTime = (*it)->getAbsoluteTime() + diffTime;
             int newPitch = 60;
-	    if ((*it)->has(Rosegarden::Int::PITCH)) {
+	    if ((*it)->has(PITCH)) {
 		newPitch = (*it)->get<Rosegarden::Int>(PITCH) + diffPitch;
 	    }
             
