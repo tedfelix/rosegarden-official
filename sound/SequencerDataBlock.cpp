@@ -37,8 +37,20 @@ SequencerDataBlock::SequencerDataBlock(bool initialise)
 	m_recordEventIndex = 0;
 	m_recordLevel.level = 0;
 	m_recordLevel.levelRight = 0;
+	memset(m_knownInstruments, 0,
+	       SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS * sizeof(InstrumentId));
+	m_knownInstrumentCount = 0;
+	memset(m_levelUpdateIndices, 0,
+	       SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS * sizeof(int));
 	memset(m_levels, 0,
 	       SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS * sizeof(LevelInfo));
+	memset(m_submasterLevelUpdateIndices, 0,
+	       SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS * sizeof(int));
+	memset(m_submasterLevels, 0,
+	       SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS * sizeof(LevelInfo));
+	m_masterLevelUpdateIndex = 0;
+	m_masterLevel.level = 0;
+	m_masterLevel.levelRight = 0;
     }
 }
 
@@ -210,6 +222,62 @@ SequencerDataBlock::getTrackLevel(TrackId id, LevelInfo &info) const
 
     return false;
 }
+
+bool
+SequencerDataBlock::getSubmasterLevel(int submaster, LevelInfo &info) const
+{
+    static int lastUpdateIndex[SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS];
+
+    if (submaster < 0 || submaster > SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS) {
+	info.level = info.levelRight = 0;
+	return false;
+    }
+
+    int currentUpdateIndex = m_submasterLevelUpdateIndices[submaster];
+    info = m_submasterLevels[submaster];
+
+    if (lastUpdateIndex[submaster] != currentUpdateIndex) {
+	lastUpdateIndex[submaster]  = currentUpdateIndex;
+	return true;
+    } else {
+	return false; // no change
+    }
+}
+
+void
+SequencerDataBlock::setSubmasterLevel(int submaster, const LevelInfo &info)
+{
+    if (submaster < 0 || submaster > SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS) {
+	return;
+    }
+
+    m_submasterLevels[submaster] = info;
+    ++m_submasterLevelUpdateIndices[submaster];
+}
+
+bool
+SequencerDataBlock::getMasterLevel(LevelInfo &level) const
+{
+    static int lastUpdateIndex = 0;
+
+    int currentIndex = m_masterLevelUpdateIndex;
+    level = m_masterLevel;
+
+    if (lastUpdateIndex != currentIndex) {
+	lastUpdateIndex  = currentIndex;
+	return true;
+    } else {
+	return false;
+    }
+}
+
+void
+SequencerDataBlock::setMasterLevel(const LevelInfo &info)
+{
+    m_masterLevel = info;
+    ++m_masterLevelUpdateIndex;
+}
+
     
 
 }

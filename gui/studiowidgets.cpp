@@ -563,7 +563,7 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
 	m_vuMeter = new AudioVUMeter(this);
     } else {
 	m_vuMeter = new AudioVUMeter(this,
-				     VUMeter::AudioPeakHold,
+				     VUMeter::AudioPeakHoldLong,
 				     true,
 				     14,
 				     240);

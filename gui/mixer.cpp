@@ -25,6 +25,7 @@
 #include "rosedebug.h"
 
 #include "Studio.h"
+#include "AudioLevel.h"
 
 #include <klocale.h>
 #include <kconfig.h>
@@ -118,16 +119,30 @@ MixerWindow::updateMeters(SequencerMapper *mapper)
 	RG_DEBUG << "MixerWindow::updateMeters: id " << id << ", level left "
 		 << info.level << endl;
 	
-	// The values passed through are long-fader values, which is
-	// what we want.  (At least until we rework the meter widget
-	// to understand dB.)
+	// The values passed through are long-fader values
+	float dBleft = Rosegarden::AudioLevel::fader_to_dB
+	    (info.level, 127, Rosegarden::AudioLevel::LongFader);
 
 	if (fader->isStereo()) {
-	    fader->m_vuMeter->setLevel(float(info.level) / 127.0,
-				       float(info.levelRight) / 127.0);
+	    float dBright = Rosegarden::AudioLevel::fader_to_dB
+		(info.levelRight, 127, Rosegarden::AudioLevel::LongFader);
+
+	    fader->m_vuMeter->setLevel(dBleft, dBright);
+
 	} else {
-	    fader->m_vuMeter->setLevel(float(info.level) / 127.0);
+	    fader->m_vuMeter->setLevel(dBleft);
 	}
+    }
+
+    Rosegarden::LevelInfo masterInfo;
+    if (mapper->getMasterLevel(masterInfo)) {
+
+	float dBleft = Rosegarden::AudioLevel::fader_to_dB
+	    (masterInfo.level, 127, Rosegarden::AudioLevel::LongFader);
+	float dBright = Rosegarden::AudioLevel::fader_to_dB
+	    (masterInfo.levelRight, 127, Rosegarden::AudioLevel::LongFader);
+
+	m_master->m_vuMeter->setLevel(dBleft, dBright);
     }
 }
 

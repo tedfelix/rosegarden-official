@@ -1113,8 +1113,10 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     int increment = 0;
 
 #ifdef HAVE_LIBJACK
-    increment = 1;
-    label = new QLabel(i18n("Number of JACK audio inputs"), frame);
+
+    increment = 2;
+
+    label = new QLabel(i18n("Number of audio inputs:"), frame);
     m_jackInputs = new QSpinBox(frame);
 
     layout->addWidget(label,        0, 0);
@@ -1124,11 +1126,23 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 
     m_jackInputs->setValue(jackAudioInputs);
     m_jackInputs->setMinValue(2);
-    m_jackInputs->setMaxValue(24); // completely arbitrary of course!
+    m_jackInputs->setMaxValue(64); // completely arbitrary of course!
+
+    label = new QLabel(i18n("Number of audio submaster outputs:"), frame);
+    m_submasters = new QSpinBox(frame);
+
+    layout->addWidget(label,        1, 0);
+    layout->addWidget(m_submasters, 1, 1);
+
+    int submasterCount = m_cfg->readNumEntry("audiosubmasters", 4);
+
+    m_submasters->setValue(submasterCount);
+    m_submasters->setMinValue(0);
+    m_submasters->setMaxValue(8);
 
 #endif // HAVE_LIBJACK
 
-    label = new QLabel(i18n("Minutes of audio recording"), frame);
+    label = new QLabel(i18n("Minutes of audio recording:"), frame);
     m_audioRecordMinutes = new QSpinBox(frame);
 
     layout->addWidget(label,                0 + increment, 0);
@@ -1140,7 +1154,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     m_audioRecordMinutes->setMinValue(1);
     m_audioRecordMinutes->setMaxValue(60);
 
-    addTab(frame, i18n("Recording"));
+    addTab(frame, i18n("Record and Mix"));
 
     //  -------------- Synchronisation tab -----------------
     //
@@ -1325,6 +1339,8 @@ SequencerConfigurationPage::apply()
     // Jack audio inputs
     //
     m_cfg->writeEntry("jackaudioinputs", m_jackInputs->value());
+
+    m_cfg->writeEntry("audiosubmasters", m_submasters->value());
 
     // Audio record minutes
     //

@@ -116,6 +116,28 @@ protected:
 };
     
 
+class MidiFaderWidget : public QFrame
+{
+    Q_OBJECT
+
+public:
+    MidiFaderWidget(QWidget *parent,
+		    QString id = "");
+    
+    AudioVUMeter              *m_vuMeter;
+
+    RosegardenFader           *m_fader;
+
+    QPushButton               *m_muteButton;
+    QPushButton               *m_soloButton;
+    QPushButton               *m_recordButton;
+    RosegardenRotary          *m_pan;
+
+    KComboBox                 *m_output; 
+
+    QString                    m_id;
+};
+
 
 class AudioFaderWidget : public QFrame
 {

@@ -113,6 +113,8 @@ const MappedObjectProperty MappedAudioFader::FaderLevel = "faderLevel";
 const MappedObjectProperty MappedAudioFader::FaderRecordLevel = "faderRecordLevel";
 const MappedObjectProperty MappedAudioFader::Pan = "pan";
 
+const MappedObjectProperty MappedAudioBuss::Level = "level";
+
 const MappedObjectProperty MappedAudioPluginManager::Plugins = "plugins";
 const MappedObjectProperty MappedAudioPluginManager::PluginIds = "pluginids";
 
@@ -345,6 +347,15 @@ MappedStudio::createObject(MappedObjectType type,
                                   id,
                                   2, // channels
                                   readOnly);
+
+        // push to the studio's child stack
+        addChild(mO);
+    }
+    else if (type == MappedObject::AudioBuss)
+    {
+        mO = new MappedAudioBuss(this,
+				 id,
+				 readOnly);
 
         // push to the studio's child stack
         addChild(mO);
@@ -608,6 +619,31 @@ MappedStudio::getAudioFader(Rosegarden::InstrumentId id)
 	if (fader->getInstrument() == id) {
 	    rv = fader;
 	    break;
+	}
+    }
+
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    return rv;
+}
+
+MappedAudioBuss *
+MappedStudio::getAudioBuss(int bussNumber)
+{
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+
+    MappedObjectCategory &category = m_objects[AudioBuss];
+    MappedAudioBuss *rv = 0;
+
+    int count = 0;
+
+    for (MappedObjectCategory::iterator i = category.begin();
+	 i != category.end(); ++i) {
+	MappedAudioBuss *buss = dynamic_cast<MappedAudioBuss *>(i->second);
+	if (buss) {
+	    if (count >= bussNumber) {
+		rv = buss;
+		break;
+	    }
 	}
     }
 
@@ -916,21 +952,105 @@ MappedAudioFader::setProperty(const MappedObjectProperty &property,
 //
 MappedAudioBuss::MappedAudioBuss(MappedObject *parent,
                                  MappedObjectId id,
-                                 MappedObjectValue channels,
                                  bool readOnly):
     MappedAudioObject(parent,
                       "MappedAudioBuss",
                       AudioBuss,
                       id,
-                      channels,
-                      readOnly)
+		      2, // stereo
+                      readOnly),
+    m_level(0)
 {
+    //!!! I'm not sure we actually need to remember what this is
+    // connected to, here
 }
 
 MappedAudioBuss::~MappedAudioBuss()
 {
 }
 
+MappedObjectPropertyList
+MappedAudioBuss::getPropertyList(const MappedObjectProperty &property)
+{
+    MappedObjectPropertyList list;
+
+    if (property == "")
+    {
+        list.push_back(MappedAudioBuss::Level);
+        list.push_back(MappedAudioObject::ConnectionsIn);
+        list.push_back(MappedAudioObject::ConnectionsOut);
+    }
+    else if (property == Level)
+    {
+        list.push_back(MappedObjectProperty("%1").arg(m_level));
+    }
+    else if (property == MappedAudioObject::ConnectionsIn)
+    {
+        Rosegarden::MappedObjectValueList::const_iterator 
+            it = m_connectionsIn.begin();
+
+        for( ; it != m_connectionsIn.end(); ++it)
+        {
+            list.push_back(QString("%1").arg(*it));
+        }
+    }
+    else if (property == MappedAudioObject::ConnectionsOut)
+    {
+        Rosegarden::MappedObjectValueList::const_iterator 
+            it = m_connectionsOut.begin();
+
+        for( ; it != m_connectionsOut.end(); ++it)
+        {
+            list.push_back(QString("%1").arg(*it));
+        }
+    }
+
+    return list;
+}
+
+bool
+MappedAudioBuss::getProperty(const MappedObjectProperty &property,
+			     MappedObjectValue &value)
+{
+    if (property == Level) {
+	value = m_level;
+    } else {
+#ifdef DEBUG_MAPPEDSTUDIO
+        std::cerr << "MappedAudioBuss::getProperty - "
+                  << "unsupported or non-scalar property" << std::endl;
+#endif
+        return false;
+    }
+    return true;
+}
+
+void
+MappedAudioBuss::setProperty(const MappedObjectProperty &property,
+			     MappedObjectValue value)
+{
+    if (property == MappedAudioBuss::Level)
+    {
+        m_level = value;
+    }
+    else if (property == MappedAudioObject::ConnectionsIn)
+    {
+        m_connectionsIn.clear();
+        m_connectionsIn.push_back(value);
+    }
+    else if (property == MappedAudioObject::ConnectionsOut)
+    {
+        m_connectionsOut.clear();
+        m_connectionsOut.push_back(value);
+    }
+    else
+    {
+#ifdef DEBUG_MAPPEDSTUDIO
+        std::cerr << "MappedAudioBuss::setProperty - "
+                  << "unsupported property" << std::endl;
+#endif
+        return;
+    }
+}
 
 
 // ----------------- MappedAudioPluginManager -----------------

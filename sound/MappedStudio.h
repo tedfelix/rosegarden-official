@@ -178,6 +178,7 @@ private:
 
 
 class MappedAudioFader;
+class MappedAudioBuss;
 
 // Works as a factory and virtual plug-board for all our other
 // objects whether they be MIDI or audio.
@@ -250,6 +251,8 @@ public:
     // Get an audio fader for an InstrumentId.  Convenience function.
     //
     MappedAudioFader *getAudioFader(Rosegarden::InstrumentId id);
+
+    MappedAudioBuss *getAudioBuss(int bussNumber);
 
     MappedObject* getPluginInstance(Rosegarden::InstrumentId id,
                                     int position);
@@ -334,7 +337,6 @@ private:
 // n input connections and m output connections - subclasses
 // can do the cleverness if n != m
 //
-//
 
 class MappedAudioObject : public MappedObject
 {
@@ -392,7 +394,7 @@ public:
 
     MappedAudioFader(MappedObject *parent,
                      MappedObjectId id,
-                     MappedObjectValue channels = 2, // sterep default
+                     MappedObjectValue channels = 2, // stereo default
                      bool readOnly = false);
     ~MappedAudioFader();
 
@@ -428,13 +430,33 @@ protected:
 class MappedAudioBuss : public MappedAudioObject
 {
 public:
+    // A buss is much simpler than an instrument fader.  It's always
+    // stereo, and just has a level associated with it.  The level may
+    // be a submaster fader level or a send mix level, it depends on
+    // what the purpose of the buss is.  At the moment we just have a
+    // 1-1 relationship between busses and submasters, and no send
+    // channels.
+
+    // properties
+    //
+    static const MappedObjectProperty Level;
 
     MappedAudioBuss(MappedObject *parent,
                     MappedObjectId id,
-                    MappedObjectValue channels = 2,  // stereo default
                     bool readOnly = false);
     ~MappedAudioBuss();
 
+    virtual MappedObjectPropertyList getPropertyList(
+                        const MappedObjectProperty &property);
+
+    virtual bool getProperty(const MappedObjectProperty &property,
+			     MappedObjectValue &value);
+
+    virtual void setProperty(const MappedObjectProperty &property,
+                             MappedObjectValue value);
+
+protected:
+    MappedObjectValue             m_level;
 };
 
 #ifdef HAVE_LADSPA

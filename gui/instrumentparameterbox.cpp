@@ -803,17 +803,19 @@ AudioInstrumentParameterPanel::setAudioMeter(float dBleft, float dBright)
     std::cerr << "AudioInstrumentParameterPanel::setAudioMeter: (" << dBleft
 	      << "," << dBright << ")" << std::endl;
     
-    double ch1 = (double)Rosegarden::AudioLevel::dB_to_fader
-	(dBleft, 127, Rosegarden::AudioLevel::ShortFader);
+//    double ch1 = (double)Rosegarden::AudioLevel::dB_to_fader
+//	(dBleft, 127, Rosegarden::AudioLevel::ShortFader);
 
     if (m_selectedInstrument)
     {
         if (m_selectedInstrument->getAudioChannels() == 1) {
-            m_audioFader->m_vuMeter->setLevel(ch1 / 127.0);
+//            m_audioFader->m_vuMeter->setLevel(ch1 / 127.0);
+	    m_audioFader->m_vuMeter->setLevel(dBleft);
 	} else {
-	    double ch2 = (double)Rosegarden::AudioLevel::dB_to_fader
-		(dBright, 127, Rosegarden::AudioLevel::ShortFader);
-            m_audioFader->m_vuMeter->setLevel(ch1 / 127.0, ch2 / 127.0);
+//	    double ch2 = (double)Rosegarden::AudioLevel::dB_to_fader
+//		(dBright, 127, Rosegarden::AudioLevel::ShortFader);
+//            m_audioFader->m_vuMeter->setLevel(ch1 / 127.0, ch2 / 127.0);
+	    m_audioFader->m_vuMeter->setLevel(dBleft, dBright);
 	}
     }
 }

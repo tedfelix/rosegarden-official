@@ -47,12 +47,19 @@ public:
 
     const QColor& getColour(int value);
 
+    int getLoudKnee() const { return m_loudKnee; }
+    int getMediumKnee() const { return m_mediumKnee; }
+    int getQuietKnee() const { return m_quietKnee; }
+
+    QColor getLoudColour() const { return m_loudColour; }
+    QColor getMediumColour() const { return m_mediumColour; }
+    QColor getQuietColour() const { return m_quietColour; }
 
 private:
 
     QColor m_loudColour;
     QColor m_mediumColour;
-    QColor m_quietColor;
+    QColor m_quietColour;
     int    m_loudKnee;
     int    m_mediumKnee;
     int    m_quietKnee;

@@ -91,7 +91,7 @@ protected:
 		   bool useRests,
 		   std::ofstream &);
 
-    void handleText(const Rosegarden::Event *, std::string &lilyText, std::string &lilyLyrics);
+    void handleText(const Rosegarden::Event *, std::string &lilyText, std::string &lilyLyrics, bool oldStyle);
     void writePitch(const Rosegarden::Event *note, const Rosegarden::Key &key, std::ofstream &);
     void writeStyle(const Rosegarden::Event *note, std::string &prevStyle, int col, std::ofstream &);
     void writeDuration(Rosegarden::timeT duration, std::ofstream &);

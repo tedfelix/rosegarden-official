@@ -33,7 +33,7 @@ VelocityColour::VelocityColour(const QColor &loud,
                                int quietKnee):
         m_loudColour(loud),
         m_mediumColour(medium),
-        m_quietColor(quiet),
+        m_quietColour(quiet),
         m_loudKnee(loudKnee),
         m_mediumKnee(mediumKnee),
         m_quietKnee(quietKnee),
@@ -52,9 +52,9 @@ VelocityColour::VelocityColour(const QColor &loud,
     // these calculations when playing.
     //
     //
-    m_loStartRed   = m_quietColor.red()   * m_multiplyFactor;
-    m_loStartGreen = m_quietColor.green() * m_multiplyFactor;
-    m_loStartBlue  = m_quietColor.blue()  * m_multiplyFactor;
+    m_loStartRed   = m_quietColour.red()   * m_multiplyFactor;
+    m_loStartGreen = m_quietColour.green() * m_multiplyFactor;
+    m_loStartBlue  = m_quietColour.blue()  * m_multiplyFactor;
 
     m_loStepRed    = ( m_mediumColour.red() * m_multiplyFactor
                        - m_loStartRed ) / m_mediumKnee;
@@ -88,7 +88,7 @@ VelocityColour::getColour(int value)
 
     if (value < m_quietKnee)
     {
-        return m_quietColor;
+        return m_quietColour;
     }
     else if (value < m_mediumKnee)
     {

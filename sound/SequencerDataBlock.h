@@ -43,6 +43,7 @@ class MappedComposition;
 
 
 #define SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS 512 // can't be a symbol
+#define SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS   64 // can't be a symbol
 #define SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE 1024 // MIDI events
 
 class SequencerDataBlock
@@ -76,6 +77,12 @@ public:
     bool getInstrumentLevel(InstrumentId id, LevelInfo &) const;
     void setInstrumentLevel(InstrumentId id, const LevelInfo &);
 
+    bool getSubmasterLevel(int submaster, LevelInfo &) const;
+    void setSubmasterLevel(int submaster, const LevelInfo &);
+
+    bool getMasterLevel(LevelInfo &) const;
+    void setMasterLevel(const LevelInfo &);
+
     void setControlBlock(ControlBlock *cb) { m_controlBlock = cb; }
     
 protected:
@@ -107,6 +114,12 @@ protected:
 
     int m_levelUpdateIndices[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
     LevelInfo m_levels[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
+
+    int m_submasterLevelUpdateIndices[SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS];
+    LevelInfo m_submasterLevels[SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS];
+
+    int m_masterLevelUpdateIndex;
+    LevelInfo m_masterLevel;
 };
 
 }

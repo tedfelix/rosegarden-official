@@ -57,6 +57,15 @@ public:
 	m_sequencerDataBlock->setInstrumentLevel(id, info);
     }
 
+    void setSubmasterLevel(int submaster,
+			   const Rosegarden::LevelInfo &info) {
+	m_sequencerDataBlock->setSubmasterLevel(submaster, info);
+    }
+
+    void setMasterLevel(const Rosegarden::LevelInfo &info) {
+	m_sequencerDataBlock->setMasterLevel(info);
+    }
+
     Rosegarden::SequencerDataBlock *getSequencerDataBlock() {
 	return m_sequencerDataBlock;
     }

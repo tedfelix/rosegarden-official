@@ -933,11 +933,19 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 	Rosegarden::Track *track = i->second;
 
 	Rosegarden::LevelInfo info;
-	mapper->getInstrumentLevel(track->getInstrument(), info);
+	bool isNew = mapper->getInstrumentLevel(track->getInstrument(), info);
 
 	Rosegarden::Instrument *instrument =
 	    getDocument()->getStudio().getInstrumentById(track->getInstrument());
 	if (!instrument) continue;
+
+	//!!! If we have a mixer and this is an audio instrument, then
+	// our mixer has already used up the "is new?" token.  We need
+	// a better way to manage that, clearly.
+	
+	if (instrument->getType() != Rosegarden::Instrument::Audio) {
+	    if (!isNew) continue;
+	}
 
         // Don't send a 0 to any meters
         //

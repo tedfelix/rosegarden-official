@@ -622,6 +622,7 @@ LilypondExporter::write()
         case 5 : font = 23; break;
         case 6 : font = 26; break;
     }
+    //!!! lilypond 2.1 appears to have abolished this.
     str << indent(col) << "\\include \"paper" << font << ".ly\"" << std::endl;
    
     // open \score section
@@ -717,6 +718,15 @@ LilypondExporter::write()
 	    }
             str << indent(col++) << "\\context Voice = \"" << voiceNumber.str()
                 << "\" {"; // indent+
+
+	    if (!oldStyle) {
+		// matter of taste, and I assume this works in oldStyle too,
+		// but I was finding the need for it all the time in my 2.0
+		// tests just now
+		str << indent(col)
+		    << "\\property Voice.TextScript \\override #'padding = #2.0"
+		    << std::endl;
+	    }
 
 	    Rosegarden::SegmentNotationHelper helper(**i);
 	    helper.setNotationProperties();
@@ -1082,7 +1092,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 			textType == Text::Lyric)
 			note_ended_with_a_lyric = true;
 
-		    handleText(*i, lilyText, lilyLyrics);
+		    handleText(*i, lilyText, lilyLyrics, oldStyle);
 
 		} else if ((*i)->isa(Note::EventType)) {
 
@@ -1222,7 +1232,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		textType == Text::Lyric)
 		note_ended_with_a_lyric = true;
 
-	    handleText(*i, lilyText, lilyLyrics);
+	    handleText(*i, lilyText, lilyLyrics, oldStyle);
 	}
 
 	if ((*i)->isa(Indication::EventType)) {
@@ -1304,21 +1314,30 @@ LilypondExporter::writeSkip(const Rosegarden::TimeSignature &timeSig,
 
 void
 LilypondExporter::handleText(const Rosegarden::Event *textEvent,
-			     std::string &lilyText, std::string &lilyLyrics)
+			     std::string &lilyText, std::string &lilyLyrics,
+			     bool oldStyle)
 {
     try {
 	Rosegarden::Text text(*textEvent);
 	std::string s = protectIllegalChars(text.getText());
 	
 	if (text.getTextType() == Text::Tempo) {
-	    
+
 	    // print above staff, bold, large
-	    lilyText += "^#'((bold Large)\"" + s + "\")";
+	    if (oldStyle) {
+		lilyText += "^#'((bold Large)\"" + s + "\")";
+	    } else {
+		lilyText += "^\\markup { \\bold \\large " + s + " } ";
+	    }
 
 	} else if (text.getTextType() == Text::LocalTempo) {
 
 	    // print above staff, bold, small
-	    lilyText += "^#'(bold \"" + s + "\")";
+	    if (oldStyle) {
+		lilyText += "^#'(bold \"" + s + "\")";
+	    } else {
+		lilyText += "^\\markup { \\bold " + s + " } ";
+	    }
 
 	} else if (text.getTextType() == Text::Lyric) {
 
@@ -1332,7 +1351,7 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 		s == "ff"  || s == "fff" || s == "rfz" ||
 		s == "sf") {
 	    
-		lilyText = "-\\" + s;
+		lilyText += "-\\" + s + " ";
 
 	    } else {
 		std::cerr << "LilypondExporter::write() - illegal Lilypond dynamic: "
@@ -1341,12 +1360,16 @@ LilypondExporter::handleText(const Rosegarden::Event *textEvent,
 
 	} else if (text.getTextType() == Text::Direction) {
 
-	    lilyText = " \\mark \"" + s + "\"";
+	    lilyText += " \\mark \"" + s + "\"";
 
 	} else if (text.getTextType() == Text::LocalDirection) {
 
 	    // print below staff, bold italics, small
-	    lilyText = "_#'((bold italic) \"" + s + "\")";
+	    if (oldStyle) {
+		lilyText += "_#'((bold italic) \"" + s + "\")";
+	    } else {
+		lilyText += "_\\markup { \\bold \\italic " + s + " } ";
+	    }
 
 	} else {
 

@@ -667,6 +667,9 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	}
     }
 
+    float masterPeakLeft = 0.0;
+    float masterPeakRight = 0.0;
+
     for (InstrumentId id = instrumentBase;
 	 id < instrumentBase + instruments;
 	 ++id) {
@@ -689,6 +692,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		    float sample = m_tempOutBuffer[i];
 		    leftBuffer[i] += sample;
 		    if (sample > peakLeft) peakLeft = sample;
+		    if (leftBuffer[i] > masterPeakLeft)
+			masterPeakLeft = leftBuffer[i];
 		}
 	    }
 	}
@@ -707,6 +712,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		    float sample = m_tempOutBuffer[i];
 		    rightBuffer[i] += sample;
 		    if (sample > peakRight) peakRight = sample;
+		    if (rightBuffer[i] > masterPeakRight)
+			masterPeakRight = rightBuffer[i];
 		}
 	    }
 
@@ -725,6 +732,15 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		(peakRight, 127, AudioLevel::LongFader);
 	    sdb->setInstrumentLevel(id, info);
 	}
+    }
+
+    if (sdb) {
+	Rosegarden::LevelInfo info;
+	info.level = AudioLevel::multiplier_to_fader
+	    (masterPeakLeft, 127, AudioLevel::LongFader);
+	info.levelRight = AudioLevel::multiplier_to_fader
+	    (masterPeakRight, 127, AudioLevel::LongFader);
+	sdb->setMasterLevel(info);
     }
 
     if (m_alsaDriver->isPlaying()) m_mixer->signal();
@@ -819,6 +835,8 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
 bool
 JackDriver::start()
 {
+    if (!m_client) return;
+
     prebufferAudio();
 
     // m_waiting is true if we are waiting for the JACK transport
@@ -859,6 +877,8 @@ JackDriver::start()
 void
 JackDriver::stop()
 {
+    if (!m_client) return;
+
     flushAudio();
 
     if (m_jackTransportEnabled) {

@@ -548,7 +548,8 @@ void RosegardenGUIDoc::initialiseStudio()
 
     Rosegarden::InstrumentList list = m_studio.getAllInstruments();
     Rosegarden::InstrumentList::iterator it = list.begin();
-    int count = 0;
+    int audioCount = 0;
+
 
     for (; it != list.end(); it++)
     {
@@ -598,7 +599,7 @@ void RosegardenGUIDoc::initialiseStudio()
                 Rosegarden::MappedAudioFader::Pan,
                 Rosegarden::MappedObjectValue(float((*it)->getPan())) - 100.0);
 
-            count++;
+            audioCount++;
 
 #ifdef HAVE_LADSPA
 
@@ -675,8 +676,33 @@ void RosegardenGUIDoc::initialiseStudio()
         }
     }
 
+    if (audioCount > 0) {
+	// then we need some submasters.
+	
+	KConfig* config = kapp->config();
+	config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+	int submasters = config->readNumEntry("audiosubmasters", 4);
+
+	for (int i = 0; i < submasters; ++i) {
+	    
+	    //!!! We will need Studio objects on the GUI side to
+	    // represent these too.
+
+            Rosegarden::MappedObjectId mappedId =
+                Rosegarden::StudioControl::createStudioObject(
+                        Rosegarden::MappedObject::AudioBuss);
+
+            // Set the level
+            //
+            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
+                Rosegarden::MappedAudioFader::FaderLevel,
+	        Rosegarden::MappedObjectValue(0.0)); //!!! for now.
+
+	}
+    }
+
     RG_DEBUG << "RosegardenGUIDoc::initialiseStudio - "
-             << "initialised studio including " << count
+             << "initialised studio including " << audioCount
              << " audio faders" << endl;
 
 }

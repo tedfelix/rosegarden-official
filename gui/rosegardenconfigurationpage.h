@@ -480,6 +480,7 @@ protected:
     // we have.
     //
     QSpinBox     *m_jackInputs;
+    QSpinBox     *m_submasters;
 
 #endif // HAVE_LIBJACK
 

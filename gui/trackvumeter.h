@@ -56,7 +56,7 @@ class AudioVUMeter : public VUMeter
 {
 public:
     AudioVUMeter(QWidget *parent = 0,
-                 VUMeterType type = VUMeter::AudioPeakHold,
+                 VUMeterType type = VUMeter::AudioPeakHoldShort,
                  bool stereo = true,
                  int width = 12,
                  int height = 140,

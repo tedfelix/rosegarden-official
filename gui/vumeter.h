@@ -38,7 +38,8 @@ public:
     {
         Plain,
         PeakHold,
-        AudioPeakHold
+	AudioPeakHoldShort, 
+        AudioPeakHoldLong
     } VUMeterType;
 
     typedef enum
@@ -47,7 +48,9 @@ public:
         Vertical
     } VUAlignment;
 
-    // Mono and stereo level setting
+    // Mono and stereo level setting.  The AudioPeakHold meter type
+    // expects its levels in dB; other types expect levels between 0
+    // and 1.
     //
     void setLevel(double level);
     void setLevel(double leftLevel, double rightLevel);
@@ -81,19 +84,23 @@ private slots:
 
 private:
 
-    void drawMeterLevel(QPainter* paint);
+    void drawMeterLevel(QPainter *paint);
+    void drawColouredBar(QPainter *paint, int channel,
+			 int x, int y, int w, int h);
 
     VUMeterType m_type;
     VUAlignment m_alignment;
 
-    int         m_levelLeft;          // percentage
-    int         m_peakLevelLeft;      // percentage
+    int         m_maxLevel;
+
+    int         m_levelLeft;
+    int         m_peakLevelLeft;
     int         m_levelStepLeft;
     QTimer     *m_fallTimerLeft;
     QTimer     *m_peakTimerLeft;
 
-    int         m_levelRight;          // percentage
-    int         m_peakLevelRight;      // percentage
+    int         m_levelRight;
+    int         m_peakLevelRight;
     int         m_levelStepRight;
     QTimer     *m_fallTimerRight;
     QTimer     *m_peakTimerRight;
