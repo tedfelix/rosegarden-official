@@ -1585,7 +1585,9 @@ NotationHLayout::getBarPosition(int bar)
 	if (barHere >= bar) return i->second[bar].x;
     }
 
-    return getBarPosition(getLastVisibleBar());
+    int lvb = getLastVisibleBar();
+    if (lvb < 0) return 0;
+    return getBarPosition(lvb);
 }
 
 bool

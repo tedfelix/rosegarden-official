@@ -545,7 +545,7 @@ public:
     // REFRESH STATUS
 
     // delegate RefreshStatusArray API
-    unsigned int getNewRefreshStatusId() { m_refreshStatusArray.getNewRefreshStatusId(); }
+    unsigned int getNewRefreshStatusId() { return m_refreshStatusArray.getNewRefreshStatusId(); }
     RefreshStatus& getRefreshStatus(unsigned int id) { return m_refreshStatusArray.getRefreshStatus(id); }
     /// Set all refresh statuses to true
     void updateRefreshStatuses() { m_refreshStatusArray.updateRefreshStatuses(); }

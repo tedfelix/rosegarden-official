@@ -135,8 +135,78 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                          tCanvas, getCentralFrame()));
 
     //
+    // Window appearance (options, title...)
+    //
+    readOptions();
+
+    if (segments.size() == 1) {
+        setCaption(QString("%1 - Segment Track #%2")
+                   .arg(doc->getTitle())
+                   .arg(segments[0]->getTrack()));
+    } else if (segments.size() == doc->getComposition().getNbSegments()) {
+        setCaption(QString("%1 - All Segments")
+                   .arg(doc->getTitle()));
+    } else {
+        setCaption(QString("%1 - %2-Segment Partial View")
+                   .arg(doc->getTitle())
+                   .arg(segments.size()));
+    }
+
+
+    m_topBarButtons = new BarButtons(&m_hlayout, 25,
+                                     false, getCentralFrame());
+    setTopBarButtons(m_topBarButtons);
+
+    m_topBarButtons->getLoopRuler()->setBackgroundColor
+	(RosegardenGUIColours::InsertCursorRuler);
+
+    m_chordNameRuler = new ChordNameRuler
+	(&m_hlayout, &doc->getComposition(), 20, getCentralFrame());
+    addRuler(m_chordNameRuler);
+    m_chordNameRuler->hide();
+    m_chordNamesVisible = false;
+
+    m_bottomBarButtons = new BarButtons(&m_hlayout, 25,
+                                        true, getCentralFrame());
+    setBottomBarButtons(m_bottomBarButtons);
+    
+    show();
+    kapp->processEvents();
+
+    for (unsigned int i = 0; i < segments.size(); ++i) {
+        m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,
+                                             false, width() - 50,
+                                             m_fontName, m_fontSize));
+    }
+
+    positionStaffs();
+    m_currentStaff = 0;
+    m_staffs[0]->setCurrent(true);
+
+    bool layoutApplied = applyLayout();
+    if (!layoutApplied) KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
+    else {
+        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+            
+            m_staffs[i]->renderAllElements();
+            m_staffs[i]->positionAllElements();
+            m_staffs[i]->getSegment().getRefreshStatus(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
+	    canvas()->update();
+
+        }
+    }
+
+    //
     // Connect signals
     //
+
+    QObject::connect
+	(m_topBarButtons->getLoopRuler(),
+	 SIGNAL(setPointerPosition(Rosegarden::timeT)),
+	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
+
+    m_bottomBarButtons->connectRulerToDocPointer(doc);
+
     QObject::connect
         (getCanvasView(), SIGNAL(itemPressed(int, int, QMouseEvent*, NotationElement*)),
          this,            SLOT  (slotItemPressed(int, int, QMouseEvent*, NotationElement*)));
@@ -164,74 +234,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     QObject::connect
 	(doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
-
-    //
-    // Window appearance (options, title...)
-    //
-    readOptions();
-
-    if (segments.size() == 1) {
-        setCaption(QString("%1 - Segment Track #%2")
-                   .arg(doc->getTitle())
-                   .arg(segments[0]->getTrack()));
-    } else if (segments.size() == doc->getComposition().getNbSegments()) {
-        setCaption(QString("%1 - All Segments")
-                   .arg(doc->getTitle()));
-    } else {
-        setCaption(QString("%1 - %2-Segment Partial View")
-                   .arg(doc->getTitle())
-                   .arg(segments.size()));
-    }
-    
-    show();
-
-    for (unsigned int i = 0; i < segments.size(); ++i) {
-        m_staffs.push_back(new NotationStaff(canvas(), segments[i], i,
-                                             false, width() - 50,
-                                             m_fontName, m_fontSize));
-    }
-
-    positionStaffs();
-    m_currentStaff = 0;
-    m_staffs[0]->setCurrent(true);
-
-    bool layoutApplied = applyLayout();
-    if (!layoutApplied) KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
-    else {
-        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            
-            m_staffs[i]->renderAllElements();
-            m_staffs[i]->positionAllElements();
-            m_staffs[i]->getSegment().getRefreshStatus(m_segmentsRefreshStatusIds[i]).setNeedsRefresh(false);
-	    canvas()->update();
-
-        }
-    }
-
-
-    m_topBarButtons = new BarButtons(&m_hlayout, 25,
-                                     false, getCentralFrame());
-    setTopBarButtons(m_topBarButtons);
-
-    QObject::connect
-	(m_topBarButtons->getLoopRuler(),
-	 SIGNAL(setPointerPosition(Rosegarden::timeT)),
-	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
-
-    m_topBarButtons->getLoopRuler()->setBackgroundColor
-	(RosegardenGUIColours::InsertCursorRuler);
-
-    m_chordNameRuler = new ChordNameRuler
-	(&m_hlayout, &doc->getComposition(), 20, getCentralFrame());
-    addRuler(m_chordNameRuler);
-    m_chordNameRuler->hide();
-    m_chordNamesVisible = false;
-
-    m_bottomBarButtons = new BarButtons(&m_hlayout, 25,
-                                        true, getCentralFrame());
-    setBottomBarButtons(m_bottomBarButtons);
-
-    m_bottomBarButtons->connectRulerToDocPointer(doc);
 
     m_selectDefaultNote->activate();
 }

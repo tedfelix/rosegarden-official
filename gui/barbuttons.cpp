@@ -205,6 +205,6 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
 	if (x > clipRect.x() + clipRect.width()) break;
 
 	painter.drawLine(x, 0, x, m_barHeight);
-	painter.drawText(x + 4, 12, QString("%1").arg(i));
+	if (i >= 0) painter.drawText(x + 4, 12, QString("%1").arg(i));
     }
 }
