@@ -335,7 +335,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         KMessageBox::error(0, strtoqstr(e));
     }
 
-    if (isUsingSequencer())
+    if (isSequencerRunning())
     {
         // Initialise MIDI controllers
         //
@@ -562,15 +562,15 @@ void RosegardenGUIDoc::deleteViews()
     pViewList->clear();
 }
 
-bool RosegardenGUIDoc::isUsingSequencer()
+bool RosegardenGUIDoc::isSequencerRunning()
 {
     RosegardenGUIApp* parentApp = dynamic_cast<RosegardenGUIApp*>(parent());
     if (!parentApp) {
-        RG_DEBUG << "RosegardenGUIDoc::isUsingSequencer() : parentApp == 0\n!";
+        RG_DEBUG << "RosegardenGUIDoc::isSequencerRunning() : parentApp == 0\n!";
         return false;
     }
     
-    return parentApp->isUsingSequencer();
+    return parentApp->isSequencerRunning();
 }
 
 bool
@@ -1030,7 +1030,7 @@ RosegardenGUIDoc::alive()
     // Probably unnecessary but better safe than sorry.
     //
 
-    while (isUsingSequencer() &&
+    while (isSequencerRunning() &&
 	   !kapp->dcopClient()->
             isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
     {
@@ -1041,7 +1041,7 @@ RosegardenGUIDoc::alive()
         sleep(1); // 1s
     }
 
-    if (isUsingSequencer() == false)
+    if (!isSequencerRunning())
         return;
 
     QByteArray data;

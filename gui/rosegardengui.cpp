@@ -2145,8 +2145,8 @@ void RosegardenGUIApp::slotRefreshTimeDisplay()
 
 bool RosegardenGUIApp::launchSequencer()
 {
-    if (m_useSequencer == false)
-        return false;
+    if (!isUsingSequencer() || isSequencerRunning())
+        return false; // no need to launch anything
 
     if (m_sequencerProcess)
     {
@@ -2180,20 +2180,48 @@ bool RosegardenGUIApp::launchSequencer()
         RG_DEBUG << "sequencer options \"" << options << "\"" << endl;
     }
     
-    connect(m_sequencerProcess, SIGNAL(processExited(KProcess*)),
-            this, SLOT(slotSequencerExited(KProcess*)));
-
     bool res = m_sequencerProcess->start();
     
     if (!res) {
         KMessageBox::error(0, i18n("Couldn't start the sequencer"));
         RG_DEBUG << "Couldn't start the sequencer\n";
         m_sequencerProcess = 0;
-	m_useSequencer = false; // otherwise we hang waiting for it
+        // If starting it didn't even work, fall back to no sequencer mode
+	m_useSequencer = false;
     }
-    else
-        if (m_seqManager) m_seqManager->checkSoundDriverStatus();
+    else {
+        // connect processExited only after start, otherwise
+        // a failed startup will call slotSequencerExited()
+        // right away and we don't get to check the result
+        // of m_sequencerProcess->start() and thus make the distinction
+        // between the case where the sequencer was successfully launched
+        // but crashed right away, or the case where the process couldn't
+        // be launched at all (missing executable, etc...)
+        //
+        // We also re-check that the process is still running at this
+        // point in case it crashed between the moment we check res above
+        // and now.
+        //
+        if (m_sequencerProcess->isRunning()) {
 
+            connect(m_sequencerProcess, SIGNAL(processExited(KProcess*)),
+                    this, SLOT(slotSequencerExited(KProcess*)));
+            try {
+                if (m_seqManager) m_seqManager->checkSoundDriverStatus();
+            } catch (Rosegarden::Exception e) {
+                m_sequencerProcess = 0;
+                m_useSequencer = false;
+            }
+
+        } else { // if it crashed so fast, it's probably pointless
+            // to try restarting it later, so also fall back to no
+            // sequencer mode
+            m_sequencerProcess = 0;
+            m_useSequencer = false;
+        }
+            
+    }
+    
     return res;
 }
 
@@ -2206,8 +2234,9 @@ void RosegardenGUIApp::slotSequencerExited(KProcess*)
 
     KMessageBox::error(0, i18n("Sequencer exited"));
 
-    m_sequencerProcess = 0;
-    m_useSequencer = false;
+    m_sequencerProcess = 0; // isSequencerRunning() will return false
+    // but isUsingSequencer() will keep returning true
+    // so pressing the play button may attempt to restart the sequencer
 }
 
 
@@ -2560,7 +2589,8 @@ void RosegardenGUIApp::notifySequencerStatus(const int& status)
 void
 RosegardenGUIApp::slotRecord()
 {
-   if (!m_sequencerProcess && !launchSequencer())
+    if (!isUsingSequencer() ||
+        (!isSequencerRunning() && !launchSequencer()))
         return;
 
     if (m_seqManager->getTransportStatus() == RECORDING_MIDI ||
@@ -2587,8 +2617,10 @@ RosegardenGUIApp::slotRecord()
 void
 RosegardenGUIApp::slotToggleRecord()
 {
-    if (!m_sequencerProcess && !launchSequencer())
+    if (!isUsingSequencer() ||
+        (!isSequencerRunning() && !launchSequencer()))
         return;
+
     try
     {
         m_seqManager->record(true);
@@ -2624,21 +2656,9 @@ RosegardenGUIApp::slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
 
 void RosegardenGUIApp::slotPlay()
 {
-    try
-    {
-        if (!m_sequencerProcess && !launchSequencer())
-                    return;
-    }
-    catch(std::string e)
-    {
-        std::cerr << "RosegardenGUIApp::slotPlay - " << e << std::endl;
-    }
-    catch(QString e)
-    {
-        std::cerr << "RosegardenGUIApp::slotPlay - " << e << std::endl;
-    }
-
-
+    if (!isUsingSequencer() ||
+        (!isSequencerRunning() && !launchSequencer()))
+        return;
 
     // If we're armed and ready to record then do this instead (calling
     // slotRecord ensures we don't toggle the recording state in

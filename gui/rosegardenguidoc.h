@@ -208,10 +208,9 @@ public:
     Rosegarden::Clipboard *getClipboard() { return m_clipboard; }
 
     /**
-     * Returns whether to use the sequencer (in certain
-     * specific circumstances -- see RosegardenGUIApp::slotSequencerExited)
+     * Returns whether the sequencer us running
      */
-    bool isUsingSequencer();
+    bool isSequencerRunning();
 
     /**
      * insert some recorded MIDI events into our recording Segment

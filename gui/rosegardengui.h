@@ -231,11 +231,20 @@ public:
     bool launchSequencer();
 
     /**
+     * Returns whether we're using a sequencer.
+     * false if the '--nosequencer' option was given
+     * true otherwise.
+     * This doesn't give the state of the sequencer
+     * @see #isSequencerRunning
+     */
+    bool isUsingSequencer() { return m_useSequencer; }
+
+    /**
      * Returns whether there's a sequencer running.
      * The result is dynamically updated depending on the sequencer's
      * status.
      */
-    bool isUsingSequencer() { return m_useSequencer; }
+    bool isSequencerRunning() { return m_useSequencer && (m_sequencerProcess != 0); }
     
     /**
      * Set the sequencer status - pass through DCOP as an int
