@@ -3,4 +3,4 @@
 Makefile
 Makefile.in
 *.lo
-libcore.la
+libbase.la
