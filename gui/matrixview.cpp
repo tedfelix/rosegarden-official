@@ -114,7 +114,7 @@ const unsigned int MatrixVLayout::maxMIDIPitch = 127;
 
 //-----------------------------------
 
-MatrixHLayout::MatrixHLayout(unsigned int durationScaleFactor)
+MatrixHLayout::MatrixHLayout(float durationScaleFactor)
     : m_totalWidth(0),
       m_durationScaleFactor(durationScaleFactor)
 {
@@ -126,6 +126,7 @@ MatrixHLayout::~MatrixHLayout()
 
 void MatrixHLayout::reset()
 {
+    m_barData.clear();
 }
 
 void MatrixHLayout::resetStaff(StaffType&)
@@ -146,19 +147,28 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType& staff)
     for (i = from; i != to; ++i) {
 
         MatrixElement *el = (*i);
-        Rosegarden::timeT duration = el->event()->getDuration();
-        Rosegarden::timeT time =  el->event()->getAbsoluteTime();
 
-        el->setLayoutX(time * m_durationScaleFactor);
-        double width = duration * m_durationScaleFactor;
-        el->setWidth(int(width));
+        if (el->isNote()) {
 
-        currentX = el->getLayoutX() + width;
+            Rosegarden::timeT duration = el->event()->getDuration();
+            Rosegarden::timeT time =  el->event()->getAbsoluteTime();
 
+            el->setLayoutX(time * m_durationScaleFactor);
+            double width = duration * m_durationScaleFactor;
+            el->setWidth(int(width));
+
+            currentX = el->getLayoutX() + width;
+
+        } else { // it's a time sig change
+
+        }
     }
 
     // margin at the right end of the window
     m_totalWidth = currentX + 50;
+
+//     MatrixStaff& mstaff = dynamic_cast<MatrixStaff&>(staff);
+//     mstaff.setBarData(m_barData);
 }
 
 double MatrixHLayout::getTotalWidth()
@@ -225,8 +235,14 @@ MatrixStaff::MatrixStaff(QCanvas* c, Segment* segment,
 MatrixStaff::~MatrixStaff()
 {
     // delete all lines
-    for(StaffLineList::iterator i = m_staffLines.begin();
-        i != m_staffLines.end(); ++i) {
+    for(StaffLineList::iterator i = m_staffHLines.begin();
+        i != m_staffHLines.end(); ++i) {
+        (*i)->hide();
+        delete (*i);
+    }
+
+    for(StaffLineList::iterator i = m_staffVLines.begin();
+        i != m_staffVLines.end(); ++i) {
         (*i)->hide();
         delete (*i);
     }
@@ -250,10 +266,10 @@ void MatrixStaff::renderElements()
 		   getViewElementList()->end());
 }
 
-void MatrixStaff::resizeStaffLines()
+void MatrixStaff::resizeStaffHLines()
 {
-    for(StaffLineList::iterator i = m_staffLines.begin();
-        i != m_staffLines.end(); ++i) {
+    for(StaffLineList::iterator i = m_staffHLines.begin();
+        i != m_staffHLines.end(); ++i) {
         QCanvasLine* line = (*i);
         int y = line->startPoint().y();
         line->setPoints(0, y, m_canvas->size().width(), y);
@@ -262,22 +278,46 @@ void MatrixStaff::resizeStaffLines()
 
 bool MatrixStaff::wrapEvent(Rosegarden::Event* e)
 {
-    return e->isa(Rosegarden::Note::EventType);
+    return
+        e->isa(Rosegarden::Note::EventType) || 
+        e->isa(Rosegarden::TimeSignature::EventType);
 }
 
 void MatrixStaff::createLines()
 {
-    for(unsigned int i = 0; i <= nbLines; ++i) {
+    for(unsigned int i = 0; i <= nbHLines; ++i) {
         QCanvasLine* line = new QCanvasLine(m_canvas);
         int y = i * m_pitchScaleFactor;
         line->setPoints(0, y, m_canvas->size().width(), y);
         line->show();
-        m_staffLines.push_back(line);
+        m_staffHLines.push_back(line);
+    }
+
+    // compute nb vertical lines
+    float durationScaleFactor = 0.25; // get it from vlayout
+    float quaverDuration = 96.0;
+   
+    unsigned int nbVLines = int(getSegment().getDuration() / quaverDuration);
+
+    for (unsigned int i = 0; i <= nbVLines; ++i) {
+        QCanvasLine* line = new QCanvasLine(m_canvas);
+        double x = i * quaverDuration * durationScaleFactor;
+        line->setPoints(0, 0, 0, m_canvas->size().height());
+        line->setX(x);
+        if ((i % 4) != 0)
+            line->setPen(Qt::lightGray);
+        line->show();
+        m_staffVLines.push_back(line);
     }
 }
 
+bool MatrixStaff::isBarLine(double)
+{
+    return false;
+}
 
-const unsigned int MatrixStaff::nbLines = 127;
+
+const unsigned int MatrixStaff::nbHLines = 127;
     
 //----------------------------------------------------------------------
 
@@ -286,8 +326,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        QWidget *parent)
     : EditView(doc, segments, parent),
       m_canvasView(0),
-      m_hLayout(new MatrixHLayout),
-      m_vLayout(new MatrixVLayout)
+      m_hlayout(new MatrixHLayout),
+      m_vlayout(new MatrixVLayout)
 {
     setupActions();
 
@@ -295,7 +335,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                                   // Try to guess approximate height
                                   segments.size() *
                                   MatrixVLayout::defaultPitchScaleFactor *
-                                  MatrixStaff::nbLines);
+                                  MatrixStaff::nbHLines);
     
     m_canvasView = new MatrixCanvasView(tCanvas, this);
 
@@ -316,8 +356,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
 MatrixView::~MatrixView()
 {
-    delete m_hLayout;
-    delete m_vLayout;
+    delete m_hlayout;
+    delete m_vlayout;
 
     // Delete remaining canvas items.
     QCanvasItemList allItems = canvas()->allItems();
@@ -366,12 +406,18 @@ void MatrixView::initStatusBar()
 
 bool MatrixView::applyLayout()
 {
+    m_hlayout->reset();
+    m_vlayout->reset();
+        
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_hLayout->scanStaff(*m_staffs[i]);
-        m_vLayout->scanStaff(*m_staffs[i]);
+        m_hlayout->scanStaff(*m_staffs[i]);
+        m_vlayout->scanStaff(*m_staffs[i]);
     }
 
-    readjustViewSize(QSize(int(m_hLayout->getTotalWidth()),
+    m_hlayout->finishLayout();
+    m_vlayout->finishLayout();
+
+    readjustViewSize(QSize(int(m_hlayout->getTotalWidth()),
                            getViewSize().height()));
     
     return true;

@@ -153,10 +153,15 @@ protected:
     unsigned int m_staffIdScaleFactor;
 };
 
+//------------------------------
+
+typedef std::vector<QCanvasLine *> HLineList;
+typedef std::vector<double> BarData;
+
 class MatrixHLayout : public Rosegarden::HorizontalLayoutEngine<MatrixElement>
 {
 public:
-    MatrixHLayout(unsigned int durationScaleFactor = 1);
+    MatrixHLayout(float durationScaleFactor = 0.25);
     virtual ~MatrixHLayout();
 
     /**
@@ -179,7 +184,7 @@ public:
     /**
      * Returns the total number of bar lines on the given staff
      */
-    virtual unsigned int getBarLineCount(StaffType &staff) ;
+    virtual unsigned int getBarLineCount(StaffType &staff);
 
     /**
      * Returns the x-coordinate of the given bar number (zero-based)
@@ -203,12 +208,15 @@ public:
      */
     virtual void finishLayout();
 
-    void setDurationScaleFactor(unsigned int f) { m_durationScaleFactor = f; }
-    unsigned int getDurationScaleFactor()       { return m_durationScaleFactor; }
+    void setDurationScaleFactor(float f) { m_durationScaleFactor = f; }
+    float getDurationScaleFactor()       { return m_durationScaleFactor; }
 
 protected:
+    BarData m_barData;
+    HLineList m_hlines;
+
     double m_totalWidth;
-    unsigned int m_durationScaleFactor;
+    float m_durationScaleFactor;
 };
 
 //------------------------------------------------------------
@@ -217,6 +225,8 @@ typedef Rosegarden::ViewElementList<MatrixElement> MatrixElementList;
 
 class MatrixStaff : public Rosegarden::Staff<MatrixElement>
 {
+    typedef std::vector<QCanvasLine *> StaffLineList;
+
 public:
     MatrixStaff(QCanvas*, Rosegarden::Segment*, unsigned int id,
                 unsigned int pitchScaleFactor = MatrixVLayout::defaultPitchScaleFactor);
@@ -239,15 +249,19 @@ public:
     /**
      * This must be called each time the canvas is resized
      */
-    void resizeStaffLines();
+    void resizeStaffHLines();
 
-    static const unsigned int nbLines;
+    static const unsigned int nbHLines;
+
+    void setBarData(const BarData& bd) { m_barData = bd; }
+
+    bool isBarLine(double x);
 
 protected:
 
     /**
      * Override from Rosegarden::Staff<T>
-     * Don't wrap rests
+     * Wrap only notes and time sig changes
      */
     virtual bool wrapEvent(Rosegarden::Event*);
 
@@ -255,15 +269,17 @@ protected:
     void createLines();
 
 
-    typedef std::vector<QCanvasLine *> StaffLineList;
+    //--------------- Data members ---------------------------------
 
-    StaffLineList m_staffLines;
+    StaffLineList m_staffHLines, m_staffVLines;
 
     QCanvas* m_canvas;
 
     unsigned int m_id;
 
     unsigned int m_pitchScaleFactor;
+
+    BarData m_barData;
 };
 
 
@@ -351,8 +367,8 @@ protected:
 
     std::vector<MatrixStaff*> m_staffs;
     
-    MatrixHLayout* m_hLayout;
-    MatrixVLayout* m_vLayout;
+    MatrixHLayout* m_hlayout;
+    MatrixVLayout* m_vlayout;
 };
 
 
