@@ -791,7 +791,9 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Track *track =
 	comp.getTrackById(comp.getSelectedTrack());
+#ifdef HAVE_ALSA
     Rosegarden::InstrumentId id = track->getInstrument();
+#endif
     
     Rosegarden::MappedComposition tempMC =
 	applyFiltering(mC,

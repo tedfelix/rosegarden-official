@@ -563,6 +563,9 @@ AudioInstrumentParameterPanel::slotPluginPortChanged(int pluginIndex,
         m_doc->slotDocumentModified();
 
 #endif // HAVE_LADSPA
+
+	(void)portIndex; // avoid compiler warnings
+	(void)value;
     }
 
 }
