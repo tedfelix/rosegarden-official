@@ -160,7 +160,10 @@ public slots:
     void slotEraseSelected();
 
     // Canvas actions slots
-    void insertNote(int height, const QPoint&);
+    void noteClicked(int height, const QPoint&);
+    void insertNote(NotationElementList::iterator closestNote, int pitch);
+    void deleteNote(NotationElementList::iterator note);
+
     void hoveredOverNoteChanged(const QString&);
     void hoveredOverAbsoluteTimeChange(unsigned int);
 
@@ -242,6 +245,8 @@ protected:
      */
     bool replaceRestWithNote(NotationElementList::iterator, NotationElement*);
 
+    bool deleteMode()          { return m_deleteMode; }
+    void setDeleteMode(bool d) { m_deleteMode = d; }
 
 #ifdef NOT_DEFINED
     void perfTest();
@@ -279,6 +284,8 @@ protected:
     bool m_currentSelectedNoteDotted;
 
     KAction* m_selectDefaultNote;
+
+    bool m_deleteMode;
 };
 
 #endif

@@ -96,8 +96,7 @@ RestSplitter::RestSplitter(timeT restDuration,
 }
 
     
-timeT
-RestSplitter::nextBit()
+timeT RestSplitter::nextBit()
 {
     if (m_remainDuration == 0) return 0;
 
@@ -118,8 +117,7 @@ RestSplitter::nextBit()
     return m_currentBit;
 }
 
-timeT
-RestSplitter::m_baseRestDuration = 384; // whole note rest
+timeT RestSplitter::m_baseRestDuration = 384; // whole note rest
 
 //////////////////////////////////////////////////////////////////////
 
@@ -147,7 +145,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_currentSelectedNoteIsRest(false),
     m_currentSelectedNoteType(Note::QuarterNote),
     m_currentSelectedNoteDotted(false),
-    m_selectDefaultNote(0)
+    m_selectDefaultNote(0),
+    m_deleteMode(false)
 {
 
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
@@ -159,8 +158,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 
     setCentralWidget(m_canvasView);
 
-    QObject::connect(m_canvasView, SIGNAL(noteInserted(int, const QPoint&)),
-                     this,         SLOT  (insertNote  (int, const QPoint&)));
+    QObject::connect(m_canvasView, SIGNAL(noteClicked(int, const QPoint&)),
+                     this,         SLOT  (noteClicked(int, const QPoint&)));
 
     QObject::connect(m_canvasView, SIGNAL(hoveredOverNoteChange(const QString&)),
                      this,         SLOT  (hoveredOverNoteChanged(const QString&)));
@@ -168,8 +167,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     QObject::connect(m_canvasView, SIGNAL(hoveredOverAbsoluteTimeChange(unsigned int)),
                      this,         SLOT  (hoveredOverAbsoluteTimeChange(unsigned int)));
 
-//     QObject::connect(this,         SIGNAL(changeCurrentNote(Note::Type)),
-//                      m_canvasView, SLOT(currentNoteChanged(Note::Type)));
+    //     QObject::connect(this,         SIGNAL(changeCurrentNote(Note::Type)),
+    //                      m_canvasView, SLOT(currentNoteChanged(Note::Type)));
 
     readOptions();
 
@@ -228,8 +227,7 @@ NotationView::~NotationView()
     kdDebug(KDEBUG_AREA) << "<- ~NotationView()\n";
 }
 
-void
-NotationView::saveOptions()
+void NotationView::saveOptions()
 {	
     m_config->setGroup("Notation Options");
     m_config->writeEntry("Geometry", size());
@@ -238,8 +236,7 @@ NotationView::saveOptions()
     m_config->writeEntry("ToolBarPos", (int) toolBar()->barPos());
 }
 
-void
-NotationView::readOptions()
+void NotationView::readOptions()
 {
     m_config->setGroup("Notation Options");
 	
@@ -250,8 +247,7 @@ NotationView::readOptions()
     }
 }
 
-void
-NotationView::setupActions()
+void NotationView::setupActions()
 {
     KRadioAction* noteAction = 0;
     
@@ -447,31 +443,28 @@ void NotationView::initStatusBar()
 }
 
 
-bool
-NotationView::showElements(NotationElementList::iterator from,
-                           NotationElementList::iterator to)
+bool NotationView::showElements(NotationElementList::iterator from,
+                                NotationElementList::iterator to)
 {
     return showElements(from, to, 0, 0);
 }
 
-bool
-NotationView::showElements(NotationElementList::iterator from,
-                           NotationElementList::iterator to,
-                           QCanvasItem *item)
+bool NotationView::showElements(NotationElementList::iterator from,
+                                NotationElementList::iterator to,
+                                QCanvasItem *item)
 {
     return showElements(from, to, item->x(), item->y());
 }
 
-bool
-NotationView::showElements(NotationElementList::iterator from,
-                           NotationElementList::iterator to,
-                           double dxoffset, double dyoffset)
+bool NotationView::showElements(NotationElementList::iterator from,
+                                NotationElementList::iterator to,
+                                double dxoffset, double dyoffset)
 {
     kdDebug(KDEBUG_AREA) << "NotationView::showElements()" << endl;
 
     if (from == to) return true;
 
-//    static ChordPixmapFactory npf(*m_mainStaff);
+    //    static ChordPixmapFactory npf(*m_mainStaff);
     // let's revert to this for now
     NotePixmapFactory &npf(m_notePixmapFactory);
     Clef currentClef; // default is okay to start with
@@ -503,7 +496,7 @@ NotationView::showElements(NotationElementList::iterator from,
                 bool tail = true;
                 (void)((*it)->event()->get<Bool>(P_DRAW_TAIL, tail));
 
-//		kdDebug(KDEBUG_AREA) << "NotationView::showElements(): found a note of type " << note << " with accidental " << accidental << endl;
+                //		kdDebug(KDEBUG_AREA) << "NotationView::showElements(): found a note of type " << note << " with accidental " << accidental << endl;
                 
                 bool beamed = false;
                 (void)((*it)->event()->get<Bool>(P_BEAMED, beamed));
@@ -518,10 +511,10 @@ NotationView::showElements(NotationElementList::iterator from,
 		    if ((*it)->event()->get<Bool>(P_BEAM_PRIMARY_NOTE)) {
 
 			int myY = (*it)->event()->get<Int>(P_BEAM_MY_Y);
-//			int nextY = (*it)->event()->get<Int>(P_BEAM_NEXT_Y);
-//			int dx = (*it)->event()->get<Int>(P_BEAM_SECTION_WIDTH);
+                        //			int nextY = (*it)->event()->get<Int>(P_BEAM_NEXT_Y);
+                        //			int dx = (*it)->event()->get<Int>(P_BEAM_SECTION_WIDTH);
 
-//                        kdDebug(KDEBUG_AREA) << "NotationView::showElements(): should be drawing a beam here... event is " << *(*it)->event() << endl;
+                        //                        kdDebug(KDEBUG_AREA) << "NotationView::showElements(): should be drawing a beam here... event is " << *(*it)->event() << endl;
 
 			stemLength = myY - (int)(*it)->getLayoutY();
 			if (stemLength < 0) stemLength = -stemLength;
@@ -583,7 +576,7 @@ NotationView::showElements(NotationElementList::iterator from,
                 QCanvasPixmap keyPixmap
                     (npf.makeKeyPixmap
                      (Rosegarden::Key((*it)->event()->get<String>
-			  (Rosegarden::Key::KeyPropertyName)),
+                                      (Rosegarden::Key::KeyPropertyName)),
                       currentClef));
                 sprite = new QCanvasSimpleSprite(&keyPixmap, canvas());
 
@@ -624,9 +617,8 @@ NotationView::showElements(NotationElementList::iterator from,
     return true;
 }
 
-bool
-NotationView::showBars(NotationElementList::iterator from,
-                       NotationElementList::iterator to)
+bool NotationView::showBars(NotationElementList::iterator from,
+                            NotationElementList::iterator to)
 {
     if (from == to) return true;
 
@@ -634,14 +626,14 @@ NotationView::showBars(NotationElementList::iterator from,
     NotationElementList::iterator lastElement = to;
     --lastElement;
 
-//     kdDebug(KDEBUG_AREA) << "NotationView::showBars() : from->x = " <<(*from)->x()
-//                          << " - lastElement->x = " << (*lastElement)->x() << endl
-//                          << "lastElement : " << *(*lastElement) << endl;
+    //     kdDebug(KDEBUG_AREA) << "NotationView::showBars() : from->x = " <<(*from)->x()
+    //                          << " - lastElement->x = " << (*lastElement)->x() << endl
+    //                          << "lastElement : " << *(*lastElement) << endl;
     
     m_currentStaff->deleteBars(int((*from)->getEffectiveX()));
         
     for (NotationHLayout::BarPositions::const_iterator it = barPos.begin();
-        it != barPos.end(); ++it) {
+         it != barPos.end(); ++it) {
 
         kdDebug(KDEBUG_AREA) << "Adding bar at pos " << it->x << endl;
         m_currentStaff->insertBar(it->x, it->correct);
@@ -651,8 +643,7 @@ NotationView::showBars(NotationElementList::iterator from,
 }
 
 
-bool
-NotationView::applyLayout()
+bool NotationView::applyLayout()
 {
     bool rcp = applyHorizontalPreparse();
     bool rcv = applyVerticalLayout();
@@ -664,8 +655,7 @@ NotationView::applyLayout()
 }
 
 
-bool
-NotationView::applyHorizontalPreparse()
+bool NotationView::applyHorizontalPreparse()
 {
     if (!m_hlayout) {
         KMessageBox::error(0, "No Horizontal Layout engine");
@@ -681,8 +671,7 @@ NotationView::applyHorizontalPreparse()
 }
 
 
-bool
-NotationView::applyHorizontalLayout()
+bool NotationView::applyHorizontalLayout()
 {
     if (!m_hlayout) {
         KMessageBox::error(0, "No Horizontal Layout engine");
@@ -697,8 +686,7 @@ NotationView::applyHorizontalLayout()
 }
 
 
-bool 
-NotationView::applyVerticalLayout()
+bool NotationView::applyVerticalLayout()
 {
     if (!m_vlayout) {
         KMessageBox::error(0, "No Vertical Layout engine");
@@ -714,8 +702,7 @@ NotationView::applyVerticalLayout()
 }
 
 
-void
-NotationView::setCurrentSelectedNote(bool rest, Note::Type n)
+void NotationView::setCurrentSelectedNote(bool rest, Note::Type n)
 {
     m_currentSelectedNoteIsRest = rest;
     m_currentSelectedNoteType = n;
@@ -731,6 +718,8 @@ NotationView::setCurrentSelectedNote(bool rest, Note::Type n)
     }
 
     emit changeCurrentNote(rest, n);
+
+    setDeleteMode(false);
 }
 
 
@@ -738,48 +727,42 @@ NotationView::setCurrentSelectedNote(bool rest, Note::Type n)
 //                    Slots
 //////////////////////////////////////////////////////////////////////
 
-void
-NotationView::slotEditUndo()
+void NotationView::slotEditUndo()
 {
     slotStatusMsg(i18n("Undo..."));
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void
-NotationView::slotEditRedo()
+void NotationView::slotEditRedo()
 {
     slotStatusMsg(i18n("Redo..."));
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void
-NotationView::slotEditCut()
+void NotationView::slotEditCut()
 {
     slotStatusMsg(i18n("Cutting selection..."));
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void
-NotationView::slotEditCopy()
+void NotationView::slotEditCopy()
 {
     slotStatusMsg(i18n("Copying selection to clipboard..."));
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void
-NotationView::slotEditPaste()
+void NotationView::slotEditPaste()
 {
     slotStatusMsg(i18n("Inserting clipboard contents..."));
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void
-NotationView::slotToggleToolBar()
+void NotationView::slotToggleToolBar()
 {
     slotStatusMsg(i18n("Toggle the toolbar..."));
 
@@ -791,8 +774,7 @@ NotationView::slotToggleToolBar()
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void
-NotationView::slotToggleStatusBar()
+void NotationView::slotToggleStatusBar()
 {
     slotStatusMsg(i18n("Toggle the statusbar..."));
 
@@ -805,8 +787,7 @@ NotationView::slotToggleStatusBar()
 }
 
 
-void
-NotationView::slotStatusMsg(const QString &text)
+void NotationView::slotStatusMsg(const QString &text)
 {
     ///////////////////////////////////////////////////////////////////
     // change status message permanently
@@ -815,8 +796,7 @@ NotationView::slotStatusMsg(const QString &text)
 }
 
 
-void
-NotationView::slotStatusHelpMsg(const QString &text)
+void NotationView::slotStatusHelpMsg(const QString &text)
 {
     ///////////////////////////////////////////////////////////////////
     // change status message of whole statusbar temporary (text, msec)
@@ -825,146 +805,141 @@ NotationView::slotStatusHelpMsg(const QString &text)
 
 //////////////////////////////////////////////////////////////////////
 
-void
-NotationView::slotBreve()
+void NotationView::slotBreve()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotBreve()\n";
     setCurrentSelectedNote(false, Note::Breve);
 }
 
-void
-NotationView::slotWhole()
+void NotationView::slotWhole()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotWhole()\n";
     setCurrentSelectedNote(false, Note::WholeNote);
 }
 
-void
-NotationView::slotHalf()
+void NotationView::slotHalf()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotHalf()\n";
     setCurrentSelectedNote(false, Note::HalfNote);
 }
 
-void
-NotationView::slotQuarter()
+void NotationView::slotQuarter()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotQuarter()\n";
     setCurrentSelectedNote(false, Note::QuarterNote);
 }
 
-void
-NotationView::slot8th()
+void NotationView::slot8th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot8th()\n";
     setCurrentSelectedNote(false, Note::EighthNote);
 }
 
-void
-NotationView::slot16th()
+void NotationView::slot16th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot16th()\n";
     setCurrentSelectedNote(false, Note::SixteenthNote);
 }
 
-void
-NotationView::slot32nd()
+void NotationView::slot32nd()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot32nd()\n";
     setCurrentSelectedNote(false, Note::ThirtySecondNote);
 }
 
-void
-NotationView::slot64th()
+void NotationView::slot64th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot64th()\n";
     setCurrentSelectedNote(false, Note::SixtyFourthNote);
 }
 
-void
-NotationView::slotRBreve()
+void NotationView::slotRBreve()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotRBreve()\n";
     setCurrentSelectedNote(true, Note::Breve);
 }
 
-void
-NotationView::slotRWhole()
+void NotationView::slotRWhole()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotRWhole()\n";
     setCurrentSelectedNote(true, Note::WholeNote);
 }
 
-void
-NotationView::slotRHalf()
+void NotationView::slotRHalf()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotRHalf()\n";
     setCurrentSelectedNote(true, Note::HalfNote);
 }
 
-void
-NotationView::slotRQuarter()
+void NotationView::slotRQuarter()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotRQuarter()\n";
     setCurrentSelectedNote(true, Note::QuarterNote);
 }
 
-void
-NotationView::slotR8th()
+void NotationView::slotR8th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotR8th()\n";
     setCurrentSelectedNote(true, Note::EighthNote);
 }
 
-void
-NotationView::slotR16th()
+void NotationView::slotR16th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotR16th()\n";
     setCurrentSelectedNote(true, Note::SixteenthNote);
 }
 
-void
-NotationView::slotR32nd()
+void NotationView::slotR32nd()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotR32nd()\n";
     setCurrentSelectedNote(true, Note::ThirtySecondNote);
 }
 
-void
-NotationView::slotR64th()
+void NotationView::slotR64th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotR64th()\n";
     setCurrentSelectedNote(true, Note::SixtyFourthNote);
 }
 
-void
-NotationView::slotEraseSelected()
+void NotationView::slotEraseSelected()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotEraseSelected()\n";
-    KMessageBox::sorry(this, "Not implemented yet");
+    setDeleteMode(true);
 }
 
-void
-NotationView::insertNote(int height, const QPoint &eventPos)
+void NotationView::noteClicked(int height, const QPoint &eventPos)
 {
     Rosegarden::Key key;
     Clef clef;
     NotationElementList::iterator closestNote =
         findClosestNote(eventPos.x(), clef, key);
 
-    kdDebug(KDEBUG_AREA) << "NotationView::insertNote called; height is "
-                         << height << endl;
-
-    //!!! still need to take accidental into account
-    int pitch = Rosegarden::NotationDisplayPitch(height, NoAccidental).
-        getPerformancePitch(clef, key);
-
-    kdDebug(KDEBUG_AREA) << "NotationView::insertNote called; pitch is "
-                         << pitch << endl;
-
     if (closestNote == m_notationElements->end()) {
         return;
     }
+
+    if (deleteMode()) {
+        deleteNote(closestNote);
+    } else {
+
+        //!!! still need to take accidental into account
+        int pitch = Rosegarden::NotationDisplayPitch(height, NoAccidental).
+            getPerformancePitch(clef, key);
+
+        insertNote(closestNote, pitch);
+    }
+}
+
+void NotationView::deleteNote(NotationElementList::iterator closestNote)
+{
+    KMessageBox::sorry(0, "Not Implemented Yet");
+}
+
+void NotationView::insertNote(NotationElementList::iterator closestNote, int pitch)
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::insertNote called; pitch is "
+                         << pitch << endl;
+
 
     // We are going to modify the document so mark it as such
     //
@@ -1027,8 +1002,8 @@ NotationView::insertNote(int height, const QPoint &eventPos)
             
     }
 
-//     kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements before relayout : "
-//                          << endl << *m_notationElements << endl;
+    //     kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements before relayout : "
+    //                          << endl << *m_notationElements << endl;
 
     redoLayout(redoLayoutStart);
     
