@@ -29,7 +29,6 @@
   <Action name="select_from_start"/>
   <Action name="select_to_end"/>
   <Action name="select_whole_staff"/>
-  <Action name="preview_selection"/>
   <Action name="clear_selection"/>
   <Separator/>
   <Action name="add_tempo"/>
