@@ -124,11 +124,16 @@ void EditView::paintEvent(QPaintEvent* e)
     m_needUpdate = false;
 }
 
-void EditView::updateControlRulers()
+void EditView::updateControlRulers(bool updateHPos)
 {
     for(int i = 0; i < m_controlRulers->count(); ++i) {
         ControlRuler* ruler = dynamic_cast<ControlRuler*>(m_controlRulers->page(i));
-        if (ruler) ruler->slotUpdate();
+        if (ruler) {
+            if (updateHPos)
+                ruler->slotUpdateElementsHPos();
+            else
+                ruler->slotUpdate();
+        }
     }
 }
 

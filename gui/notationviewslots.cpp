@@ -374,6 +374,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
     }
 
     positionPages();
+    updateControlRulers(true);
     updateView();
 }
 

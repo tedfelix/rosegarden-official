@@ -234,7 +234,7 @@ protected:
     /**
      * Update all control rulers
      */
-    void updateControlRulers();
+    void updateControlRulers(bool updateHPos=false);
 
     /**
      * Set zoom factor of control rulers

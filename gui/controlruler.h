@@ -76,6 +76,9 @@ public:
 
     QCanvasRectangle* getSelectionRectangle() { return m_selectionRect; }
 
+    Rosegarden::RulerScale* getRulerScale() { return m_rulerScale; }
+
+
     static const int DefaultRulerHeight;
     static const int MinItemHeight;
     static const int MaxItemHeight;
@@ -87,6 +90,7 @@ signals:
 public slots:
     /// override RosegardenCanvasView - we don't want to change the main hscrollbar
     virtual void slotUpdate();
+    virtual void slotUpdateElementsHPos();
     
 protected:
     virtual void contentsMousePressEvent(QMouseEvent*);

@@ -101,9 +101,10 @@ class ElementAdapter
 public:
     virtual ~ElementAdapter() {};
 
-    virtual bool getValue(long&) = 0;
-    virtual void setValue(long)  = 0;
-    virtual Event* getEvent() = 0;
+    virtual bool   getValue(long&) = 0;
+    virtual void   setValue(long)  = 0;
+    virtual timeT  getTime()       = 0;
+    virtual Event* getEvent()      = 0;
 };
 
 //////////////////////////////
@@ -115,6 +116,7 @@ public:
 
     virtual bool getValue(long&);
     virtual void setValue(long);
+    virtual timeT getTime();
 
     virtual Event* getEvent() { return m_viewElement->event(); }
     ViewElement* getViewElement() { return m_viewElement; }
@@ -143,6 +145,11 @@ void ViewElementAdapter::setValue(long val)
     m_viewElement->event()->set<Rosegarden::Int>(m_propertyName, val);
 }
 
+timeT ViewElementAdapter::getTime()
+{
+    return m_viewElement->getViewAbsoluteTime();
+}
+
 //////////////////////////////
 
 class ControllerEventAdapter : public ElementAdapter
@@ -152,6 +159,7 @@ public:
 
     virtual bool getValue(long&);
     virtual void setValue(long);
+    virtual timeT getTime();
 
     virtual Event* getEvent() { return m_event; }
 
@@ -170,6 +178,11 @@ bool ControllerEventAdapter::getValue(long& val)
 void ControllerEventAdapter::setValue(long val)
 {
     m_event->set<Rosegarden::Int>(Rosegarden::Controller::VALUE, val);
+}
+
+timeT ControllerEventAdapter::getTime()
+{
+    return m_event->getAbsoluteTime();
 }
 
 //
@@ -201,6 +214,9 @@ public:
     virtual void handleMouseWheel(QWheelEvent *e);
 
     virtual void setSelected(bool yes);
+
+    /// update horizontal position
+    void updateHPos();
 
     /// recompute height according to represented value prior to a canvas repaint
     virtual void updateFromValue();
@@ -316,6 +332,12 @@ void ControlItem::setSelected(bool s)
     else setPen(QPen(Qt::black, BorderThickness));
 
     canvas()->update();
+}
+
+void ControlItem::updateHPos()
+{
+    setX(m_controlRuler->getRulerScale()->getXForTime(getElementAdapter()->getTime()));
+    
 }
 
 
@@ -557,10 +579,22 @@ ControlRuler::~ControlRuler()
 {
 }
 
-void
-ControlRuler::slotUpdate()
+void ControlRuler::slotUpdate()
 {
     RG_DEBUG << "ControlRuler::slotUpdate()\n";
+    canvas()->update();
+}
+
+void ControlRuler::slotUpdateElementsHPos()
+{
+    QCanvasItemList list = canvas()->allItems();
+    QCanvasItemList::Iterator it = list.begin();
+    for (; it != list.end(); ++it) {
+        ControlItem* item = dynamic_cast<ControlItem*>(*it);
+        if (!item) continue;
+        item->updateHPos();
+    }
+
     canvas()->update();
 }
 
