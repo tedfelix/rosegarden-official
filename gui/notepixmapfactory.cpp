@@ -85,28 +85,6 @@ class NotePixmapCache : public std::map<CharName, QCanvasPixmap*>
     // nothing to add -- just so we can predeclare it in the header
 };
 
-// static QFont getSerifFont()
-// {
-//     QFontDatabase fdb;
-//     QStringList families = fdb.families();
-//     for (QStringList::Iterator f = families.begin(); f != families.end(); ++f) {
-//         QString family = *f;
-//         QStringList styles = fdb.styles( family );
-//         for ( QStringList::Iterator s = styles.begin(); s != styles.end(); ++s ) {
-//             QString style = *s;
-//             QString dstyle = "\t" + style + " (";
-//             QValueList<int> smoothies = fdb.smoothSizes( family, style );
-//             for ( QValueList<int>::Iterator points = smoothies.begin();
-//                   points != smoothies.end(); ++points ) {
-//                 dstyle += QString::number( *points ) + " ";
-//             }
-//             dstyle = dstyle.left( dstyle.length() - 1 ) + ")";
-//             qDebug( dstyle );
-//         }
-//     }
-
-// }
-
 class NotePixmapPainter
 {
     // Just a trivial class that instructs two painters to do the
@@ -2837,8 +2815,8 @@ QFont
 NotePixmapFactory::getTextFont(const Rosegarden::Text &text) const
 {
     std::string type(text.getTextType());
-//     TextFontCache::iterator i = m_textFontCache.find(type.c_str());
-//     if (i != m_textFontCache.end()) return i->second;
+    TextFontCache::iterator i = m_textFontCache.find(type.c_str());
+    if (i != m_textFontCache.end()) return i->second;
 
     /*
      * Text types:
@@ -2900,12 +2878,12 @@ NotePixmapFactory::getTextFont(const Rosegarden::Text &text) const
     textFont.setWeight(weight);
     textFont.setItalic(italic);
 
-    NOTATION_DEBUG << "NotePixmapFactory::getTextFont: requested size " << size
-		   << " for type " << type << endl;
+//     NOTATION_DEBUG << "NotePixmapFactory::getTextFont: requested size " << size
+// 		   << " for type " << type << endl;
 
-    NOTATION_DEBUG << "NotePixmapFactory::getTextFont: returning font '"
-                   << textFont.toString() << "' for type " << type.c_str()
-                   << " text : " << text.getText().c_str() << endl;
+//     NOTATION_DEBUG << "NotePixmapFactory::getTextFont: returning font '"
+//                    << textFont.toString() << "' for type " << type.c_str()
+//                    << " text : " << text.getText().c_str() << endl;
 
     m_textFontCache[type.c_str()] = textFont;
     return textFont;
@@ -2932,8 +2910,8 @@ NotePixmapFactory::drawText(const Rosegarden::Text &text,
 {
     Rosegarden::Profiler profiler("NotePixmapFactory::drawText");
 
-    NOTATION_DEBUG << "NotePixmapFactory::drawText() " << text.getText().c_str()
-                   << " - type : " << text.getTextType().c_str() << endl;
+//     NOTATION_DEBUG << "NotePixmapFactory::drawText() " << text.getText().c_str()
+//                    << " - type : " << text.getTextType().c_str() << endl;
 
     std::string type(text.getTextType());
 
@@ -2954,45 +2932,24 @@ NotePixmapFactory::drawTextAux(const Rosegarden::Text &text,
 {
     QString s(strtoqstr(text.getText()));
     QFont textFont(getTextFont(text));
-
+    QFontMetrics textMetrics(textFont);
+    
     int offset = 2;
+    int width = textMetrics.width(s) + 2*offset;
+    int height = textMetrics.height() + 2*offset;
 
     if (painter) {
-        NOTATION_DEBUG << "NotePixmapFactory::drawTextAux() : got painter for "
-                       << text.getText().c_str()
-                       << " - painter active : " << painter->isActive()
-                       << endl;
 	painter->save();
 	m_p->beginExternal(painter);
 	painter->translate(x - offset, y - offset);
+    } else {
+	createPixmapAndMask(width, height);
     }
-
+    
     if (m_selected) m_p->painter().setPen(RosegardenGUIColours::SelectedElement);
     else if (m_shaded) m_p->painter().setPen(Qt::gray);
 
-    QFontMetrics textMetrics(textFont);
-    
-    QRect boundingRect = textMetrics.boundingRect(s);
-    
-    int width = boundingRect.width() + 2*offset;
-    int height = boundingRect.height() + 2*offset;
-
-    if (!painter) {
-        NOTATION_DEBUG << "NotePixmapFactory::drawTextAux() : no painter for '"
-                       << text.getText().c_str()
-                       << "' creating pixmap w=" << width << ", h=" << height
-                       << endl;
-        
-	createPixmapAndMask(width, height);
-    }
-
     m_p->painter().setFont(textFont);
-    
-    QFontInfo fInfo = m_p->painter().fontInfo();
-    NOTATION_DEBUG << "NotePixmapFactory::drawTextAux() : painter font pixel size = "
-                   << fInfo.pixelSize() << " - point size = " << fInfo.pointSize()
-                   << " - text = " << text.getText().c_str() << endl;
-
     if (!m_inPrinterMethod) m_p->maskPainter().setFont(textFont);
 
     m_p->drawText(offset, textMetrics.ascent() + offset, s);
