@@ -75,6 +75,7 @@ rosegarden_SOURCES = \
         sequencemanager.cpp \
 	spline.cpp \
 	staffline.cpp \
+        studiocommands.cpp \
         studiocontrol.cpp \
 	temporuler.cpp \
 	textruler.cpp \

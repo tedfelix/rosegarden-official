@@ -21,6 +21,8 @@
 #include <algorithm>
 
 #include <klocale.h>
+#include <kmessagebox.h>
+
 #include <qhbox.h>
 #include <qvbox.h>
 #include <qlabel.h>
@@ -34,6 +36,8 @@
 #include "bankeditor.h"
 #include "widgets.h"
 #include "rosestrings.h"
+#include "rosegardenguidoc.h"
+#include "studiocommands.h"
 
 #include "Studio.h"
 #include "MidiDevice.h"
@@ -43,10 +47,11 @@
 bool _newBank = false;
 
 BankEditorDialog::BankEditorDialog(QWidget *parent,
-                                   Rosegarden::Studio *studio):
+                                   RosegardenGUIDoc *doc):
     KDialogBase(parent, "", true, i18n("Manage Banks and Programs..."),
                 Ok | Apply | Cancel),
-    m_studio(studio),
+    m_studio(&doc->getStudio()),
+    m_doc(doc),
     m_modified(false)
 {
 
@@ -63,7 +68,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_deviceCombo = new RosegardenComboBox(false, deviceBox);
     m_deviceCombo->setEditable(true);
 
-    Rosegarden::DeviceList *devices = studio->getDevices();
+    Rosegarden::DeviceList *devices = m_studio->getDevices();
     Rosegarden::DeviceListIterator it;
     for (it = devices->begin(); it != devices->end(); it++)
     {
@@ -262,6 +267,22 @@ BankEditorDialog::slotPopulateDevice(int devNo)
     if (m_modified)
     {
         // then ask if we want to apply the changes
+        int reply =
+            KMessageBox::questionYesNo(this, i18n("There are some changes pending for this MIDI device.  Apply these changes?"));
+
+        if (reply == KMessageBox::Yes)
+        {
+            std::cout << "APPLY" << std::endl;
+            ModifyBankCommand *command =
+                new ModifyBankCommand(m_studio,
+                                      devNo,
+                                      0,
+                                      0,
+                                      0,
+                                      m_programList);
+
+        }
+
     }
 
     // Populate from actual MidiDevice
@@ -649,6 +670,10 @@ BankEditorDialog::banklistContains(int msb, int lsb)
     return false;
 }
 
+void
+BankEditorDialog::addCommandToHistory(KCommand *command)
+{
+}
 
 
 // ---------------------- ProgramLine -----------------------------

@@ -3331,7 +3331,7 @@ void
 RosegardenGUIApp::slotEditBanks()
 {
     BankEditorDialog *dialog =
-        new BankEditorDialog(this, &m_doc->getStudio());
+        new BankEditorDialog(this, m_doc);
 
     if (dialog->exec() == QDialog::Accepted)
     {

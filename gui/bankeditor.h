@@ -29,6 +29,8 @@ class RosegardenComboBox;
 class QPushButton;
 class QFrame;
 class QSpinBox;
+class RosegardenGUIDoc;
+class KCommand;
 
 namespace Rosegarden { class Studio; class MidiDevice; }
 
@@ -63,7 +65,7 @@ class BankEditorDialog : public KDialogBase
 
 public:
     BankEditorDialog(QWidget *parent,
-                     Rosegarden::Studio *studio);
+                     RosegardenGUIDoc *doc);
 
     std::vector<Rosegarden::MidiProgram>
         getBankSubset(Rosegarden::MidiByte msb, Rosegarden::MidiByte lsb);
@@ -78,6 +80,9 @@ public:
     bool banklistContains(int msb, int lsb);
 
     void setModified(bool value);
+
+    void addCommandToHistory(KCommand *command);
+
 
 public slots:
     void slotPopulateBank(int bank);
@@ -108,6 +113,7 @@ protected:
 
     //--------------- Data members ---------------------------------
     Rosegarden::Studio      *m_studio;
+    RosegardenGUIDoc        *m_doc;
 
     QTabWidget              *m_programTab;
     RosegardenComboBox      *m_deviceCombo;
@@ -122,7 +128,6 @@ protected:
 
     QFrame                  *m_mainFrame;
 
-    std::vector<std::string>                 m_deviceList;
     std::vector<Rosegarden::MidiBank>        m_bankList;
     std::vector<Rosegarden::MidiProgram>     m_programList;
 
