@@ -27,6 +27,7 @@
 #include <qcheckbox.h>
 #include <qlayout.h>
 #include <qaccel.h>
+#include <qtooltip.h>
 
 #include <klocale.h>
 #include <kcombobox.h>
@@ -68,24 +69,24 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 
     m_pluginList = new KComboBox(pluginSelectionBox);
     m_pluginList->insertItem(i18n("(none)"));
+    QToolTip::add(m_pluginList, i18n("Select a plugin from this list."));
 
     QHBox *h = new QHBox(pluginSelectionBox);
 
     // top line
     m_bypass = new QCheckBox(i18n("Bypass"), h);
+    QToolTip::add(m_bypass, i18n("Bypass this plugin."));
 
     connect(m_bypass, SIGNAL(toggled(bool)),
             this, SLOT(slotBypassChanged(bool)));
 
-    m_pluginId = new QLabel(i18n("<no id>"), h);
+    m_pluginId = new QLabel(i18n("<id>"), h);
     m_pluginId->setAlignment(AlignRight);
+    QToolTip::add(m_pluginId, i18n("Unique ID of plugin."));
 
     connect(m_pluginList, SIGNAL(activated(int)),
             this, SLOT(slotPluginSelected(int)));
-/*!!!
-    connect(m_pluginList, SIGNAL(propagate(int)),
-            this, SLOT(slotPluginSelected(int)));
-*/
+
     std::vector<QString> names = m_pluginManager->getPluginNames();
     std::vector<QString>::iterator it = names.begin();
 
@@ -124,9 +125,6 @@ void
 AudioPluginDialog::makePluginParamsBox(QWidget *parent)
 {
     m_pluginParamsBox = new QFrame(parent);
-    //     m_pluginParamsBox = new QGroupBox
-    //         (1, Horizontal, i18n("Plugin Parameters"), vbox);
-    //m_pluginParamsBox->hide();
 
     m_gridLayout = new QGridLayout(m_pluginParamsBox,
                                    1,   // rows (will expand)
@@ -152,7 +150,12 @@ AudioPluginDialog::slotPluginSelected(int number)
     if (number == 0)
     {
         setCaption(caption + i18n("<no plugin>"));
-        m_pluginId->setText(i18n("<no id>"));
+        m_pluginId->setText(i18n("<id>"));
+
+        QToolTip::hide();
+        QToolTip::remove(m_pluginList);
+
+        QToolTip::add(m_pluginList, i18n("Select a plugin from this list."));
     }
 
     AudioPlugin *plugin = m_pluginManager->getPlugin(number - 1);
@@ -169,6 +172,14 @@ AudioPluginDialog::slotPluginSelected(int number)
     {
         setCaption(caption + plugin->getName());
         m_pluginId->setText(QString("Id: %1").arg(plugin->getUniqueId()));
+
+        QString pluginInfo = plugin->getAuthor() + QString("\n") + 
+                             plugin->getCopyright();
+
+        QToolTip::hide();
+        QToolTip::remove(m_pluginList);
+
+        QToolTip::add(m_pluginList, pluginInfo);
 
         // Set the unique id on our own instance - clear the ports down
         //
@@ -192,22 +203,6 @@ AudioPluginDialog::slotPluginSelected(int number)
 
         for (; it != plugin->end(); ++it)
         {
-//             if (((float(count))/2.0) == (float(count/2)))
-//             {
-// 		controlLine = new QHBox(m_pluginParamsBox);
-//                 controlLine->show();
-
-//                 // store so we can remove it later
-//                 m_controlLines.push_back(controlLine);
-//             }
-//             else
-//             {
-//                 // spacer
-//                 QLabel *label = new QLabel(QString("   "), controlLine);
-//                 label->show();
-//             }
-
-
             // Weed out non-control ports and those which have erroneous
             // looking bounds - uninitialised values?
             //
@@ -264,11 +259,6 @@ AudioPluginDialog::slotPluginPortChanged(float value)
     const PluginControl* control = dynamic_cast<const PluginControl*>(object);
 
     if (!control) return;
-
-//     RG_DEBUG << "AudioPluginDialog::slotPluginPortChanged("
-//              << value << ") from control "
-//              << control->getIndex()
-//              << endl;
 
     // store the new value
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
@@ -336,7 +326,12 @@ PluginControl::PluginControl(QWidget *parent,
         // defaults
         float lowerBound = 0.0;
         float upperBound = 1.0;
-	float defaultValue = (float)(port->getDefaultValue());
+
+        // Default value appears to be more or less ignored in most
+        // plugins so let's ignore it ourselves.
+        //
+	//float defaultValue = (float)(port->getDefaultValue());
+        //cout << "DEFAULT VALUE = " << defaultValue << endl;
 
         if (m_port->getRange() & PluginPort::Below)
             lowerBound = float(port->getLowerBound());

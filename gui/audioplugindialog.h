@@ -147,7 +147,6 @@ protected:
     QCheckBox		*m_bypass;
 
     std::vector<PluginControl*> m_pluginWidgets;
-//     std::vector<QHBox*>         m_controlLines;
     QGridLayout         *m_gridLayout;
 
     int                  m_index;
