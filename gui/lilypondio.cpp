@@ -844,6 +844,7 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    break;
 	}
 
+	//!!! for notes, this really needs to happen after all the other duration calculations below
 	if (absTime + duration > barEnd) {
 	    overlong = true;
 	    duration = barEnd - absTime;
