@@ -1071,6 +1071,8 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     layout = new QGridLayout(frame, 4, 4, 10, 5);
 
 #ifdef HAVE_LIBJACK
+#define OFFER_JACK_START_OPTION 1
+#ifdef OFFER_JACK_START_OPTION
     label = new QLabel(i18n("Rosegarden can start the JACK audio daemon (jackd) for you\nautomatically if it isn't already running when Rosegarden starts.\n\nThis is recommended for beginners and those who use Rosegarden as their main\naudio application, but it might not be to the liking of advanced users.\n\nIf you want to start JACK automatically, make sure the command includes a full\npath where necessary as well as any command-line arguments you want to use.\n\nFor example: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n"), frame);
 
     layout->addMultiCellWidget(label, 1, 1, 0, 3);
@@ -1100,6 +1102,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // set the initial state
     slotJackToggled();
 
+#endif // OFFER_JACK_START_OPTION
 #endif // HAVE_LIBJACK
 
     addTab(frame, i18n("Startup"));
@@ -1620,10 +1623,12 @@ SequencerConfigurationPage::apply()
 
 #ifdef HAVE_LIBJACK
 
+#ifdef OFFER_JACK_START_OPTION
     // Jack control
     //
     m_cfg->writeEntry("jackstart", m_startJack->isChecked());
     m_cfg->writeEntry("jackcommand", m_jackPath->text());
+#endif // OFFER_JACK_START_OPTION
 
     // Jack audio inputs
     //

@@ -692,6 +692,11 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	}
     }
 
+    if (jack_cpu_load(m_client) > 98.0) {
+	reportFailure(Rosegarden::MappedEvent::FailureCPUOverload);
+	return jackProcessEmpty(nframes);
+    }
+
 #ifdef DEBUG_JACK_PROCESS
     Rosegarden::Profiler profiler2("jackProcess post mix", true);
 #endif

@@ -179,7 +179,9 @@ public:
         // Audio subsystem failed to mix instruments fast enough
         FailureMixUnderrun       = 5,
 	// Using a timer that has too low a resolution (e.g. 100Hz system timer)
-	WarningImpreciseTimer    = 6
+	WarningImpreciseTimer    = 6,
+	// Too much CPU time spent in audio processing -- risk of xruns and lockup
+	FailureCPUOverload       = 7
     } FailureCode;	
 
     MappedEvent(): m_trackId(0),

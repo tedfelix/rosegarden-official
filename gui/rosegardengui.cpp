@@ -261,6 +261,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     if (m_useSequencer) {
 
 #ifdef HAVE_LIBJACK
+#define OFFER_JACK_START_OPTION 1
+#ifdef OFFER_JACK_START_OPTION
         // First we check if jackd is running allready
 
         std::string jackClientName = "rosegarden";
@@ -281,6 +283,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
             //this client was just for testing
             jack_client_close(testJackClient);
         }
+#endif // OFFER_JACK_START_OPTION
 #endif // HAVE_LIBJACK
 
         emit startupStatusMessage(i18n("Starting sequencer..."));

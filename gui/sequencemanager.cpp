@@ -1033,6 +1033,19 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 			}
 #endif
 
+		    } else if ((*i)->getData1() == MappedEvent::FailureCPUOverload) {
+
+#define REPORT_CPU_OVERLOAD 1
+#ifdef REPORT_CPU_OVERLOAD
+
+			stopping();
+
+			KMessageBox::error(
+			    dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
+			    i18n("Run out of processor power for real-time audio processing.  Cannot continue."));
+
+#endif
+
 		    } else if (!m_shownOverrunWarning) {
 			
 			QString message;
