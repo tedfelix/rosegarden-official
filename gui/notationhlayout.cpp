@@ -267,7 +267,7 @@ NotationHLayout::preparse(NotationElementList::iterator from,
 NotationHLayout::AccidentalTable::AccidentalTable(Key key, Clef clef) :
     m_key(key), m_clef(clef)
 {
-    vector<int> heights(key.getAccidentalHeights(clef));
+    std::vector<int> heights(key.getAccidentalHeights(clef));
     unsigned int i;
     for (i = 0; i < 7; ++i) push_back(NoAccidental);
     for (i = 0; i < heights.size(); ++i) {
