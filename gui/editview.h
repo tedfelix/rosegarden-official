@@ -237,6 +237,11 @@ protected:
     void updateControlRulers();
 
     /**
+     * Set zoom factor of control rulers
+     */
+    void setControlRulersZoom(QWMatrix);
+
+    /**
      * Find the control ruler for the given property name
      * if it's already been created, return 0 otherwise
      */
@@ -335,13 +340,14 @@ protected:
 
     RosegardenCanvasView *m_canvasView;
 
-    QVBoxLayout *m_rulerBox;
-    QVBoxLayout *m_controlBox;
-    QVBox       *m_bottomBox;
-    BarButtons  *m_topBarButtons;
-    BarButtons  *m_bottomBarButtons;
+    QVBoxLayout  *m_rulerBox;
+    QVBoxLayout  *m_controlBox;
+    QVBox        *m_bottomBox;
+    BarButtons   *m_topBarButtons;
+    BarButtons   *m_bottomBarButtons;
     ControlRuler *m_controlRuler;
-    QTabWidget  *m_controlRulers;
+    QTabWidget   *m_controlRulers;
+    QWMatrix      m_currentRulerZoomMatrix;
 
     static const unsigned int RULERS_ROW;
     static const unsigned int CONTROLS_ROW;

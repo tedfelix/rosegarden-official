@@ -132,6 +132,16 @@ void EditView::updateControlRulers()
     }
 }
 
+void EditView::setControlRulersZoom(QWMatrix zoomMatrix)
+{
+    m_currentRulerZoomMatrix = zoomMatrix;
+    
+    for(int i = 0; i < m_controlRulers->count(); ++i) {
+        ControlRuler* ruler = dynamic_cast<ControlRuler*>(m_controlRulers->page(i));
+        if (ruler) ruler->setWorldMatrix(zoomMatrix);
+    }
+}
+
 
 void EditView::setTopBarButtons(BarButtons* w)
 {
@@ -205,6 +215,7 @@ ControllerEventsRuler* EditView::makeControllerEventRuler(Rosegarden::ControlPar
 
 void EditView::addControlRuler(ControlRuler* ruler)
 {
+    ruler->setWorldMatrix(m_currentRulerZoomMatrix);
     m_controlRulers->addTab(ruler, ruler->getName());
     m_controlRulers->showPage(ruler);
     

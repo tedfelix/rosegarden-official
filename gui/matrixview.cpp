@@ -1762,6 +1762,10 @@ MatrixView::slotChangeHorizontalZoom(int)
     zoomMatrix.scale(zoomValue, 1.0);
     m_canvasView->setWorldMatrix(zoomMatrix);
 
+    // make control rulers zoom too
+    //
+    setControlRulersZoom(zoomMatrix);
+
     if (m_topBarButtons) m_topBarButtons->setHScaleFactor(zoomValue);
     if (m_bottomBarButtons) m_bottomBarButtons->setHScaleFactor(zoomValue);
 
