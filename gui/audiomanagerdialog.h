@@ -20,6 +20,7 @@
 #include <kdialogbase.h>
 #include <qlistbox.h>
 #include <qpushbutton.h>
+#include <qpixmap.h>
 
 #include <string>
 
@@ -78,6 +79,7 @@ signals:
 
 protected:
     virtual void closeEvent(QCloseEvent *e);
+    void generateEnvelopePixmap(QPixmap *pixmap, AudioFile *aF);
 
     QListBox         *m_fileList;
     QPushButton      *m_addButton;

@@ -553,6 +553,24 @@ AudioFile::getPreview(const RealTime &resolution)
     return preview;
 }
 
+RealTime
+AudioFile::getLength()
+{
+    // The total length of data chunk = m_fileSize - 44 (fixed header size)
+    // and so it's easy to work out the length of the file:
+
+    // bytesPerSample allows for number of channels
+    //
+    double frames = ( m_fileSize - 44 ) / m_bytesPerSample;
+    double seconds = frames / ((double)m_sampleRate);
+
+    int secs = seconds;
+    int usecs = ( seconds - secs ) * 1000000;
+
+    return RealTime(secs, usecs);
+}
+
+
 
 }
 

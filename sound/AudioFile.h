@@ -146,6 +146,10 @@ public:
     //
     void writeHeader();
 
+    // Get the length of the sample in Seconds/Microseconds
+    //
+    RealTime getLength();
+
 private:
 
     void parseHeader(const std::string &header);

@@ -30,6 +30,10 @@
 
 #include "audiomanagerdialog.h"
 
+using std::cout;
+using std::cerr;
+using std::endl;
+
 namespace Rosegarden
 {
 
@@ -99,17 +103,24 @@ AudioManagerDialog::populateFileList()
     // enable selection
     m_fileList->setSelectionMode(QListBox::Single);
 
+    // for the sample file length
+    QString usecs;
+    RealTime length;
 
     for (it = m_audioFileManager->begin();
          it != m_audioFileManager->end();
          it++)
     {
-        // clear and paint on it
-        audioPixmap->fill(Qt::blue);
-        QPainter audioPainter(audioPixmap);
+        generateEnvelopePixmap(audioPixmap, *it);
+
+        length = (*it)->getLength();
+        usecs.sprintf("%6d", length.usec);
 
         QString label = QString((*it)->getShortFilename().c_str()) + " (" +
-                        QString((*it)->getName().c_str()) + ")";
+                        //QString((*it)->getName().c_str()) + ") - " + 
+                        QString("%1.%2 s").arg(length.sec)
+                                          .arg(usecs) + ")";
+
              
         // this inserts the list item at the same time as creating
         listBoxPixmap = new QListBoxPixmap(m_fileList,
@@ -271,6 +282,18 @@ AudioManagerDialog::closeEvent(QCloseEvent *e)
 {
     e->accept();
 }
+
+void
+AudioManagerDialog::generateEnvelopePixmap(QPixmap *pixmap, AudioFile *aF)
+{
+    // clear and paint on it
+    pixmap->fill(Qt::blue);
+    QPainter audioPainter(pixmap);
+
+    std::cout << "SAMPLE LENGTH = " << aF->getLength() << std::endl;
+    //std::vector<float> values = aF->getPreview(aF->);
+}
+
 
 }
 
