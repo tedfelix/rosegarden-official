@@ -22,6 +22,7 @@
 
 #include "viewelementsmanager.h"
 #include "notationelement.h"
+#include "notationproperties.h"
 
 #ifndef NDEBUG
 
@@ -62,6 +63,24 @@ NotationElement::getEffectiveY() throw (NoCanvasItem)
         return m_canvasItem->y();
     else
         throw NoCanvasItem();
+}
+
+void
+NotationElement::setNote(Note note)
+{
+    event()->setDuration(note.getDuration());
+    event()->set<Int>(P_NOTE_TYPE, note.getType());
+    event()->set<Bool>(P_NOTE_DOTTED, note.isDotted());
+}
+
+Note
+NotationElement::getNote() const
+{
+    Note::Type ntype = event()->get<Int>(P_NOTE_TYPE);
+    bool isDotted = false;
+    event()->get<Bool>(P_NOTE_DOTTED, isDotted);
+    
+    return Note(ntype, isDotted);
 }
 
 

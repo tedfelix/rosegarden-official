@@ -23,6 +23,7 @@
 
 #include <multiset.h>
 #include "Event.h"
+#include "NotationTypes.h"
 
 class QCanvasItem;
 class NotationElementList;
@@ -57,6 +58,12 @@ public:
 
     void setLayoutX(double x) { m_x = x; }
     void setLayoutY(double y) { m_y = y; }
+
+    /// sets the associated event's note type, note dottedness, and duration
+    void setNote(Note);
+
+    /// returns a Note corresponding to the state of the associated event
+    Note getNote() const;
 
     bool isRest() const;
     bool isNote() const;
