@@ -379,24 +379,24 @@ NotationHLayout::layout()
 		// nasty hack: if there's a time signature or key
 		// before this, swap places with it...
 
-/*!! no, this really isn't the right thing
-		if (it != m_notationElements.begin()) {
-		    NotationElementList::iterator it0(it);
-		    for (;;) {
-			--it0;
-			int x0;
-			if (((*it0)->event()->isa(TimeSignature::EventType) ||
-			     (*it0)->event()->isa(Key::EventType)) &&
-			    (x0 = (*it0)->getLayoutX()) < x) {
-			    el->setLayoutX(x0);
-			    (*it0)->setLayoutX
-				((x + delta) -
-				 (*it0)->event()->get<Int>(P_MIN_WIDTH));
-			} else break;
-			if (it0 == m_notationElements.begin()) break;
-		    }
-		}
-*/
+                /*!! no, this really isn't the right thing
+                  if (it != m_notationElements.begin()) {
+                  NotationElementList::iterator it0(it);
+                  for (;;) {
+                  --it0;
+                  int x0;
+                  if (((*it0)->event()->isa(TimeSignature::EventType) ||
+                  (*it0)->event()->isa(Key::EventType)) &&
+                  (x0 = (*it0)->getLayoutX()) < x) {
+                  el->setLayoutX(x0);
+                  (*it0)->setLayoutX
+                  ((x + delta) -
+                  (*it0)->event()->get<Int>(P_MIN_WIDTH));
+                  } else break;
+                  if (it0 == m_notationElements.begin()) break;
+                  }
+                  }
+                */
 
                 clef = Clef(*el->event());
 
@@ -409,23 +409,23 @@ NotationHLayout::layout()
 
 		// nasty hack: if there's a time signature before
 		// this, move it to after...
-/*!! no, not right
-		if (it != m_notationElements.begin()) {
-		    NotationElementList::iterator it0(it);
-		    for (;;) {
-			--it0;
-			int x0;
-			if ((*it0)->event()->isa(TimeSignature::EventType) &&
-			    (x0 = (*it0)->getLayoutX()) < x) {
-			    el->setLayoutX(x0);
-			    (*it0)->setLayoutX
-				((x + delta) -
-				 (*it0)->event()->get<Int>(P_MIN_WIDTH));
-			} else break;
-			if (it0 == m_notationElements.begin()) break;
-		    }
-		}
-*/
+                /*!! no, not right
+                  if (it != m_notationElements.begin()) {
+                  NotationElementList::iterator it0(it);
+                  for (;;) {
+                  --it0;
+                  int x0;
+                  if ((*it0)->event()->isa(TimeSignature::EventType) &&
+                  (x0 = (*it0)->getLayoutX()) < x) {
+                  el->setLayoutX(x0);
+                  (*it0)->setLayoutX
+                  ((x + delta) -
+                  (*it0)->event()->get<Int>(P_MIN_WIDTH));
+                  } else break;
+                  if (it0 == m_notationElements.begin()) break;
+                  }
+                  }
+                */
                 key = Key(*el->event());
 		accTable = AccidentalTable(key, clef);
 		newAccTable = accTable;
@@ -444,6 +444,12 @@ NotationHLayout::layout()
                     //!!! not right for partial bar?
                     timeSignature.getBarDuration();
 
+//                 kdDebug(KDEBUG_AREA) << "Rest idealWidth : "
+//                                      << bpi->idealWidth
+//                                      << " - fixedWidth : "
+//                                      << bpi->fixedWidth << endl;
+
+
             } else if (el->isNote()) {
                 
 		// deal with accidentals: update this note according
@@ -457,12 +463,12 @@ NotationHLayout::layout()
 		Accidental acc((Accidental)el->event()->get<Int>(P_ACCIDENTAL));
 		int height(el->event()->get<Int>(P_HEIGHT_ON_STAFF));
 		
-//		kdDebug(KDEBUG_AREA) << "accidental = " << acc <<
-//		    ", height = " << height << endl;
+                //		kdDebug(KDEBUG_AREA) << "accidental = " << acc <<
+                //		    ", height = " << height << endl;
 
 		Accidental dacc = accTable.getDisplayAccidental(acc, height);
 
-//		kdDebug(KDEBUG_AREA) << "display accidental = " << dacc << endl;
+                //		kdDebug(KDEBUG_AREA) << "display accidental = " << dacc << endl;
 
 		el->event()->setMaybe<Int>(P_DISPLAY_ACCIDENTAL, dacc);
 		newAccTable.update(acc, height);
@@ -498,7 +504,7 @@ NotationHLayout::layout()
 		    // about to end: update the spacing and accidental
 		    // table accordingly
 
-//		    kdDebug(KDEBUG_AREA) << "This is the final chord element (of " << chord.size() << ")" << endl;
+                    //		    kdDebug(KDEBUG_AREA) << "This is the final chord element (of " << chord.size() << ")" << endl;
 
                     // To work out how much space to allot a note (or
                     // chord), start with the amount alloted to the
@@ -512,6 +518,11 @@ NotationHLayout::layout()
                         //!!! not right for partial bar?
                         timeSignature.getBarDuration();
 
+//                     kdDebug(KDEBUG_AREA) << "Note idealWidth : "
+//                                          << bpi->idealWidth
+//                                          << " - fixedWidth : "
+//                                          << bpi->fixedWidth << endl;
+
 		    accTable = newAccTable;
 
                 } else {
@@ -521,6 +532,7 @@ NotationHLayout::layout()
             }
 
             x += delta;
+            kdDebug(KDEBUG_AREA) << "x = " << x << endl;
         }
     }
 }
