@@ -730,11 +730,6 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
 
     if (isStemmed && params.m_drawStem) {
 
-	if (m_selected)
-	    m_p->painter().setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement));
-	else
-	    m_p->painter().setPen(Qt::black);
-
 	if (flagCount > 0 && !drawFlag && params.m_beamed) {
 	    drawBeams(endPoint, params, flagCount);
         }
@@ -742,6 +737,12 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
 	if (slashCount > 0) {
 	    drawSlashes(startPoint, params, slashCount);
 	}
+
+	if (m_selected)
+	    m_p->painter().setPen(Rosegarden::GUIPalette::getColour(Rosegarden::GUIPalette::SelectedElement));
+	else
+	    m_p->painter().setPen(Qt::black);
+
 	// If we draw stems after beams, instead of beams after stems,
 	// beam anti-aliasing won't damage stems but we have to shorten the
 	// stems slightly first so that the stems don't extend all the way
