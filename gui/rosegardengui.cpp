@@ -85,8 +85,13 @@ RosegardenGUIApp::RosegardenGUIApp()
     // accept dnd
     setAcceptDrops(true);
 
+    // Try to start the sequencer
+    //
+    launchSequencer();
+
     ///////////////////////////////////////////////////////////////////
     // call inits to invoke all other construction parts
+    //
     
     initStatusBar();
     initDocument();

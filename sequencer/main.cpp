@@ -252,6 +252,7 @@ int main(int argc, char *argv[])
         //
         usleep(sequencerSleep);
 
+        /*
         // While we're sending the "alive" signal
         //
         if (roseSeq->sendAlive())
@@ -271,6 +272,7 @@ int main(int argc, char *argv[])
                 sendAliveCount = 0;
            }
         }
+        */
     }
 
 

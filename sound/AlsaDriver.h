@@ -123,6 +123,8 @@ protected:
     virtual void processAudioQueue();
 
 private:
+    const RealTime& getAlsaTime();
+
     std::vector<AlsaPort*>       m_alsaPorts;
 
 
@@ -148,7 +150,8 @@ private:
     //
     bool                         m_midiInputPortConnected;
 
-    //m_alsaRecordStartTime;
+    RealTime                     m_alsaPlayStartTime;
+    RealTime                     m_alsaRecordStartTime;
 
 };
 

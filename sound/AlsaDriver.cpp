@@ -39,7 +39,9 @@ AlsaDriver::AlsaDriver():
     m_maxClients(-1),
     m_maxPorts(-1),
     m_maxQueues(-1),
-    m_midiInputPortConnected(false)
+    m_midiInputPortConnected(false),
+    m_alsaPlayStartTime(0, 0),
+    m_alsaRecordStartTime(0, 0)
 
 {
     std::cout << "Rosegarden AlsaDriver - " << m_name << std::endl;
@@ -179,7 +181,7 @@ AlsaDriver::generateInstruments()
                 if (snd_seq_port_info_get_capability(pinfo) &
                     SND_SEQ_PORT_CAP_DUPLEX)
                 {
-                    std::cout << "\t\t(DUPLEX)";
+                    std::cout << "\t\t(DUPLEX)" << std::endl;
                     inputName = std::string(snd_seq_port_info_get_name(pinfo));
                     inputClient = snd_seq_port_info_get_client(pinfo);
                     inputPort = snd_seq_port_info_get_port(pinfo);
@@ -255,6 +257,8 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
             sprintf(number, ", Channel %d", channel);
             channelName = name + std::string(number);
 
+            if (channel == 9)
+                channelName = name + std::string(", Drums (9)");
             MappedInstrument *instr = new MappedInstrument(type,
                                                            channel,
                                                            m_midiRunningId++,
@@ -511,61 +515,9 @@ AlsaDriver::initialisePlayback(const RealTime &position)
     std::cout << "AlsaDriver - initialisePlayback" << std::endl;
     int result;
 
+    m_alsaPlayStartTime = RealTime(0, 0);
     m_playStartPosition = position;
     m_startPlayback = true;
-
-    /*
-    // Set a default tempo
-    //
-    snd_seq_queue_tempo_t *tempo;
-    snd_seq_queue_tempo_alloca(&tempo);
-    std::memset(tempo, 0, snd_seq_queue_tempo_sizeof());
-    int r = snd_seq_get_queue_tempo(m_midiHandle, m_midiQueue, tempo);
-    snd_seq_queue_tempo_set_tempo(tempo, 10);
-    snd_seq_queue_tempo_set_ppq(tempo, 960);
-    r = snd_seq_set_queue_tempo(m_midiHandle, m_midiQueue, tempo);
-
-    snd_seq_event_t *ev = snd_seq_create_event();
-    //ev->queue             = m_midiHandle->queue;
-    ev->dest.client       = SND_SEQ_CLIENT_SYSTEM;
-    ev->dest.port         = SND_SEQ_PORT_SYSTEM_TIMER;
-    //ev->data.queue.queue  = m_midiHandle->queue;
-    ev->flags             = SND_SEQ_TIME_STAMP_REAL
-                           | SND_SEQ_TIME_MODE_REL;
-
-    ev->time.time.tv_sec  = 0;
-    ev->time.time.tv_nsec = 0;
-    ev->type              = SND_SEQ_EVENT_START;
-    snd_seq_event_output(m_midiHandle, ev);
-    //snd_seq_flush_output(m_midiHandle);
-    snd_seq_drain_output(m_midiHandle);
-    */
-
-    /*
-    double tempo = 120.0;
-
-    snd_seq_queue_tempo_t *qtempo;
-    snd_seq_queue_tempo_alloca(&qtempo);
-    memset(qtempo, 0, snd_seq_queue_tempo_sizeof());
-    snd_seq_queue_tempo_set_ppq(qtempo, resolution);
-
-
-    long resolution = 960; // ppq
-    double tempo = 90.0;
-
-    snd_seq_queue_tempo_t *qtempo;
-    snd_seq_queue_tempo_alloca(&qtempo);
-    snd_seq_queue_tempo_set_ppq(qtempo, resolution);
-    snd_seq_queue_tempo_set_tempo(qtempo, (unsigned int)(60.0*1000000.0/tempo));
-
-    if (snd_seq_set_queue_tempo(m_midiHandle, m_midiQueue, qtempo) < 0)
-    {
-        std::cerr << "AlsaDriver::initialisePlayback - "
-                  << "couldn't set queue tempo"
-                  << std::endl;
-    }
-    */
-
 
     // Start the timer
     if ((result = snd_seq_start_queue(m_midiHandle, m_midiQueue, NULL)) < 0)
@@ -586,6 +538,7 @@ AlsaDriver::stopPlayback()
     allNotesOff();
     snd_seq_stop_queue(m_midiHandle, m_midiQueue, 0);
     snd_seq_drain_output(m_midiHandle);
+    m_playing = false;
 }
 
 
@@ -595,6 +548,7 @@ AlsaDriver::resetPlayback(const RealTime &position, const RealTime &latency)
 {
     allNotesOff();
     m_playStartPosition = position;
+    m_alsaPlayStartTime = getAlsaTime() - latency;
 }
 
 void
@@ -699,16 +653,16 @@ AlsaDriver::processAudioQueue()
 RealTime
 AlsaDriver::getSequencerTime()
 {
-    RealTime sequencerTime(0, 0);
+    return getAlsaTime() + m_playStartPosition - m_alsaPlayStartTime;
+}
 
-    /* 
-    // I wonder what this does?
-    //
-    snd_seq_port_subscribe_t *sub;
-    snd_seq_port_subscribe_malloc(&sub);
-    snd_seq_port_subscribe_get_time_real(sub);
-    snd_seq_port_subscribe_free(sub);
-    */
+// Gets the time of the ALSA queue
+//
+const
+RealTime&
+AlsaDriver::getAlsaTime()
+{
+    RealTime sequencerTime(0, 0);
 
     snd_seq_queue_status_t *status;
     snd_seq_queue_status_malloc(&status);
@@ -726,8 +680,9 @@ AlsaDriver::getSequencerTime()
 
     snd_seq_queue_status_free(status);
 
-    return sequencerTime + m_playStartPosition;
+    return sequencerTime;
 }
+
 
 // Get all pending input events and turn them into a MappedComposition.
 //
@@ -888,7 +843,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
 
         midiRelativeTime = (*i)->getEventTime() - m_playStartPosition +
-                           playLatency;
+                           playLatency + m_alsaPlayStartTime;
 
         // Second and nanoseconds for ALSA
         //
@@ -1015,6 +970,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 {
     if (m_startPlayback)
     {
+        m_alsaPlayStartTime = getAlsaTime();
         m_startPlayback= false;
         m_playing = true;
     }

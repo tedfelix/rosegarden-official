@@ -6,7 +6,18 @@ Currently looking at:
 
 o Sequencer's getMappedComposition for sync and async is
   suddenly bombing out post aRts/ALSA split
+  [DONE]
 
+o ALSA:
+  - ffwd/rwding/looping [DONE - still not wonderful but will do for mo]
+  - MIDI recording timestamps
+  - first pass Audio
+  - latencies
+  - hanging notes
+
+o Recording Segment doesn't appear anymore
+
+o Instrument naming on InstrumentButtons
 
 o Looping marker set from file load/top level - Looping
   set from Clients - Looping BUG crashing sequencer

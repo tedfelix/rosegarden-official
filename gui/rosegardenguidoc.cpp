@@ -33,6 +33,7 @@
 
 #include <string>
 
+#include <unistd.h> // sleep
 #include <zlib.h>
 
 // application specific includes
@@ -726,16 +727,16 @@ RosegardenGUIDoc::alive()
     //
     // Probably unnecessary but better safe than sorry.
     //
-    kapp->processEvents(5); // 10 ms is enough?
 
-
-    if (!kapp->dcopClient()->
-            isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
+    while(!kapp->dcopClient()->
+           isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
     {
         std::cout << "SequenceManager::alive() - "
-                  << "no Sequencer yet available, I'll wait for it to poll me"
+                  << "waiting for Sequencer to come up"
                   << std::endl;
-        return;
+
+        kapp->processEvents(1000);
+        sleep(1); // 1s
     }
 
     QByteArray data;
