@@ -27,9 +27,9 @@
 #include "rosedebug.h"
 
 LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
-                     const int &bars,
-                     const int &barWidth,
-                     const int &height,
+                     int bars,
+                     int barWidth,
+                     int height,
                      QWidget *parent,
                      const char *name)
     : QWidget(parent, name),
@@ -202,7 +202,7 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
 //
 //
 Rosegarden::timeT
-LoopRuler::getPointerPosition(const int &xPos)
+LoopRuler::getPointerPosition(int xPos)
 {
     Rosegarden::timeT result = 0;
     Rosegarden::timeT runningPosition = 0;
@@ -229,7 +229,7 @@ LoopRuler::getPointerPosition(const int &xPos)
 // Compute an X position on the LoopRuler from a given pos
 //
 int
-LoopRuler::getXPosition(const Rosegarden::timeT &pos)
+LoopRuler::getXPosition(Rosegarden::timeT pos)
 {
     int result = 0;
     int thisBar = m_doc->getComposition().getBarNumber(pos, false);

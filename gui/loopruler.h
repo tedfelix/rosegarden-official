@@ -44,9 +44,9 @@ class LoopRuler : public QWidget
 
 public:
     LoopRuler(RosegardenGUIDoc *doc,
-              const int &bars = 0,
-              const int &barWidth = 0,
-              const int &height = 0,
+              int bars = 0,
+              int barWidth = 0,
+              int height = 0,
               QWidget* parent = 0,
               const char *name = 0);
 
@@ -87,8 +87,8 @@ private:
 
     // Get drawing position from pointer position and vice versa
     //
-    int getXPosition(const Rosegarden::timeT &pos);
-    Rosegarden::timeT getPointerPosition(const int &xPos);
+    int getXPosition(Rosegarden::timeT pos);
+    Rosegarden::timeT getPointerPosition(int xPos);
 
     int m_bars;
     int m_barWidth;
