@@ -1996,7 +1996,8 @@ MatrixView::slotChangeHorizontalZoom(int)
 {
     double zoomValue = m_hZoomSlider->getCurrentSize();
 
-    m_zoomLabel->setText(i18n("%1%").arg(zoomValue*100.0 * 2)); // GROSS HACK - see in matrixstaff.h
+//     m_zoomLabel->setText(i18n("%1%").arg(zoomValue*100.0 * 2)); // GROSS HACK - see in matrixstaff.h - BREAKS MATRIX VIEW, see bug 1000595
+    m_zoomLabel->setText(i18n("%1%").arg(zoomValue*100.0));
 
     MATRIX_DEBUG << "MatrixView::slotChangeHorizontalZoom() : zoom factor = "
                  << zoomValue << endl;
