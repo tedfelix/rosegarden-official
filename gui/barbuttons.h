@@ -54,30 +54,7 @@ public:
      */
     void recalculate();
 
-signals:
-    // Passed through from LoopRuler
-    //
-    void setPointerPosition(Rosegarden::timeT position);
-    void setPlayPosition(Rosegarden::timeT position);
-    void setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs);
-
-    void signalSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT);
-
-public slots:
-    // Re-emit
-    //
-    void slotSetPointerPosition(Rosegarden::timeT position)
-        { emit setPointerPosition(position); }
-
-    void slotSetPlayPosition(Rosegarden::timeT position)
-        { emit setPlayPosition(position); }
-
-    void slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
-        { emit setLoop(lhs, rhs); }
-
-    void slotSetLoopMarker(Rosegarden::timeT lhs, Rosegarden::timeT rhs);
-
-    void setLoopingMode(bool value);
+    LoopRuler* getLoopRuler() { return m_loopRuler; }
 
 private:
     void drawButtons(bool recalc);

@@ -81,15 +81,6 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
     m_loopRuler = new LoopRuler
 	(m_doc, m_rulerScale, m_loopRulerHeight, m_invert, buttonBar);
 
-    connect(m_loopRuler, SIGNAL(setPointerPosition(Rosegarden::timeT)),
-            this,      SLOT(slotSetPointerPosition(Rosegarden::timeT)));
-
-    connect(m_loopRuler, SIGNAL(setPlayPosition(Rosegarden::timeT)),
-            this,      SLOT(slotSetPlayPosition(Rosegarden::timeT)));
-
-    connect(m_loopRuler, SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
-            this,      SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
-
     if (!m_invert) {
 	m_hButtonBar = new QHBox(buttonBar);
     }
@@ -200,16 +191,3 @@ BarButtons::recalculate()
 	bar->setMaximumSize(width, m_barHeight - m_loopRulerHeight);
     }
 }
-
-void BarButtons::slotSetLoopMarker(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
-{
-    m_loopRuler->setLoopMarker(lhs, rhs);
-}
-
-void
-BarButtons::setLoopingMode(bool value)
-{
-    m_loopRuler->setLoopingMode(value);
-}
-
-
