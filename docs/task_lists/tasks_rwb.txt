@@ -4,17 +4,21 @@ updated 15.04.2002
 
 Currently looking at:
 
+
+o ALSA audio
+
 o ALSA:
   - ffwd/rwding/looping [DONE - still not wonderful but will do for mo]
   - MIDI recording timestamps [DONE]
-  - first pass Audio
-  - recording timing is wrong - bars are displaced by count-in
+  - recording timing is wrong - bars are displaced by count-in [FIXED]
   - hanging notes on stop [DONE - VOICES_OFF type controller call and
                                   processPending()]
   - configure [DONE with GL]
   - start-up bug [FIXED?]
   - metronome broken with ALSA? [NO - just wasn't implemented - NOW FIXED]
-  - MIDI THRU to current selected instrument
+  - MIDI THRU to current selected instrument [DONE]
+
+  - ALL Synth instruments have the same channel!
 
 o MappedDevice transmission is breaking occasionally
   [HOPEFULLY FIXED in MappedDevice itself]
@@ -26,6 +30,7 @@ o Recording Segment doesn't appear anymore
   [FIXED - typo]
 
 o Recording Segment ghost is left - extends wrong side
+  [FIXED]
 
 o Instrument naming on InstrumentButtons
   [DONE]

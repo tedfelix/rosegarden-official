@@ -507,9 +507,11 @@ void
 RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                                      TransportStatus status)
 {
-    // Just create a new record Segment if we don't have one already
+    // Just create a new record Segment if we don't have one already.
+    // Make sure we don't recreate the m_recordSegment if it's already
+    // freed.
     //
-    if (m_recordSegment == 0)
+    if (m_recordSegment == 0 && status == RECORDING_MIDI)
     {
         m_recordSegment = new Segment();
         m_recordSegment->setTrack(m_composition.getRecordTrack());
@@ -818,15 +820,14 @@ RosegardenGUIDoc::alive()
     //
     m_studio.clear();
 
-    cout << "DEVICES = " << devices << endl;
     for (unsigned int i = 0; i < devices; i++)
     {
         getMappedDevice(i);
     }
 
-    std::cout << "RosegardenGUIDoc::getMappedDevice - "
-              << "Sequencer alive - Instruments synced"
-              << std::endl;
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::getMappedDevice - "
+                         << "Sequencer alive - Instruments synced"
+                         << std::endl;
 
     // Ok, we've sync'd - make sure that this app doesn't
     // drive this sync again by switching our startUpSync

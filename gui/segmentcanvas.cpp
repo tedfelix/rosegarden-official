@@ -531,7 +531,6 @@ void SegmentCanvas::showRecordingSegmentItem(TrackId track,
 
     } else {
 	
-        cout << "ADDED RECORDING SEGMENT" << endl;
 	m_recordingSegment = addSegmentItem(track, startTime, duration);
 	m_recordingSegment->
             setPen(RosegardenGUIColours::RecordingSegmentBorder);
@@ -549,7 +548,6 @@ void SegmentCanvas::deleteRecordingSegmentItem()
 	delete m_recordingSegment;
 	m_recordingSegment = 0;
         canvas()->update();
-        cout << "DELETEING RECORDING SEGMENT" << endl;
     }
 }
 
