@@ -324,6 +324,8 @@ public:
     static QString title() { return i18n("About"); }
 
 protected slots:
+    void slotAddNewProperty();
+    void slotDeleteProperty();
     
 protected:
 

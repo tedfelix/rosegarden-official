@@ -1087,7 +1087,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     addTab(frame, i18n("Summary"));
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 1, 1, 10, 5);
+    layout = new QGridLayout(frame, 2, 2, 10, 5);
 
     m_metadata = new KListView(frame);
     m_metadata->addColumn("Name");
@@ -1105,8 +1105,22 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 			  strtoqstr(metadata.get<String>(names[i])));
     }
 
-    layout->addWidget(m_metadata, 0, 0);
+    layout->addMultiCellWidget(m_metadata, 0, 0, 0, 1);
 
+    QPushButton* addPropButton = new QPushButton(i18n("Add New Property"),
+                                                 frame);
+    layout->addWidget(addPropButton, 1, 0, Qt::AlignHCenter);
+
+    QPushButton* deletePropButton = new QPushButton(i18n("Delete Property"),
+                                                    frame);
+    layout->addWidget(deletePropButton, 1, 1, Qt::AlignHCenter);
+
+    connect(addPropButton, SIGNAL(clicked()),
+            this, SLOT(slotAddNewProperty()));
+
+    connect(deletePropButton, SIGNAL(clicked()),
+            this, SLOT(slotDeleteProperty()));
+    
 /*!!!    layout->addWidget(new QLabel(i18n("Copyright"), frame), 3, 0);
     m_copyright = new QLineEdit
 	(strtoqstr(doc->getComposition().getCopyrightNote()), frame);
@@ -1118,6 +1132,17 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 
 }
 
+void
+DocumentMetaConfigurationPage::slotAddNewProperty()
+{
+    new KListViewItem(m_metadata, i18n("<property>"), i18n("<value>"));
+}
+
+void
+DocumentMetaConfigurationPage::slotDeleteProperty()
+{
+    delete m_metadata->currentItem();
+}
 
 void
 DocumentMetaConfigurationPage::apply()
