@@ -1638,7 +1638,10 @@ NoteFont::getCharacterColoured(CharName charName,
 			       bool inverted)
 {
     QPixmap pixmap;
-    if (getColouredPixmap(charName, pixmap, hue, minValue, inverted)) {
+    if (!getColouredPixmap(charName, pixmap, hue, minValue, inverted)) {
+
+	NOTATION_DEBUG << "NoteFont::getCharacterColoured: No coloured pixmap available for " << charName.getName() << " in hue " << hue << "!" << endl;
+
 	return false;
     }
 
