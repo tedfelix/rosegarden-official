@@ -1,26 +1,29 @@
 // -*- c-basic-offset: 4 -*-
 
 /*
-    Rosegarden-4 v0.1
-    A sequencer and musical notation editor.
+  Rosegarden-4 v0.1
+  A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2001
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
+  This program is Copyright 2000-2001
+  Guillaume Laurent   <glaurent@telegraph-road.org>,
+  Chris Cannam        <cannam@all-day-breakfast.com>,
+  Richard Bown        <bownie@bownie.com>
 
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+  The moral right of the authors to claim authorship of this work
+  has been asserted.
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License as
-    published by the Free Software Foundation; either version 2 of the
-    License, or (at your option) any later version.  See the file
-    COPYING included with this distribution for more information.
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of the
+  License, or (at your option) any later version.  See the file
+  COPYING included with this distribution for more information.
 */
+
+#include <qpopupmenu.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kaction.h>
 
 #include "Event.h"
 #include "NotationTypes.h"
@@ -48,22 +51,68 @@ using Rosegarden::timeT;
 //               Notation Tools
 //////////////////////////////////////////////////////////////////////
 
-NotationTool::NotationTool(NotationView& view)
-    : m_parentView(view)
+NotationTool::NotationTool(const QString& menuName, NotationView* view)
+    : QObject(view),
+      m_menuName(menuName),
+      m_parentView(view),
+      m_menu(0)
 {
-    m_parentView.setCanvasCursor(Qt::arrowCursor);
+    m_parentView->setCanvasCursor(Qt::arrowCursor);
 }
 
 NotationTool::~NotationTool()
 {
+    delete m_menu;
+    m_parentView->factory()->removeClient(this);
 }
 
-void NotationTool::handleMouseDblClick(int height, int staffNo,
-                                       const QPoint &eventPos,
-                                       NotationElement* e)
+void NotationTool::createMenu(const QString& rcFileName)
+{
+    setXMLFile(rcFileName);
+    m_parentView->factory()->addClient(this);
+
+    QWidget* tmp =  m_parentView->factory()->container(m_menuName, this);
+
+    m_menu = dynamic_cast<QPopupMenu*>(tmp);
+}
+
+void NotationTool::handleMousePress(int height, int staffNo,
+                                    QMouseEvent* e,
+                                    NotationElement* el)
+{
+    switch (e->button()) {
+    case Qt::LeftButton:
+        handleLeftButtonPress(height, staffNo, e, el);
+        break;
+    case Qt::RightButton:
+        handleRightButtonPress(height, staffNo, e, el);
+        break;
+    case Qt::MidButton:
+        handleMidButtonPress(height, staffNo, e, el);
+        break;
+    }
+}
+
+void NotationTool::handleMidButtonPress(int, int,
+                                        QMouseEvent*,
+                                        NotationElement*)
+{
+}
+
+void NotationTool::handleRightButtonPress(int, int,
+                                          QMouseEvent*,
+                                          NotationElement*)
+{
+    showMenu();
+}
+
+void NotationTool::handleMouseDblClick(int, int,
+                                       QMouseEvent*,
+                                       NotationElement*)
 {
     // nothing
 }
+
 
 void NotationTool::handleMouseMove(QMouseEvent*)
 {
@@ -73,16 +122,33 @@ void NotationTool::handleMouseRelease(QMouseEvent*)
 {
 }
 
+void NotationTool::showMenu()
+{
+    if (m_menu)
+        m_menu->exec(QCursor::pos());
+}
+
 //------------------------------
 
 NoteInserter::NoteInserter(Rosegarden::Note::Type type,
                            unsigned int dots,
-                           NotationView& view)
-    : NotationTool(view),
+                           NotationView* view)
+    : NotationTool("NoteInserter", view),
       m_noteType(type),
       m_noteDots(dots)
 {
-    m_parentView.setCanvasCursor(Qt::crossCursor);
+    m_parentView->setCanvasCursor(Qt::crossCursor);
+}
+
+NoteInserter::NoteInserter(Rosegarden::Note::Type type,
+                           unsigned int dots,
+                           const QString& menuName,
+                           NotationView* view)
+    : NotationTool(menuName, view),
+      m_noteType(type),
+      m_noteDots(dots)
+{
+    m_parentView->setCanvasCursor(Qt::crossCursor);
 }
 
 NoteInserter::~NoteInserter()
@@ -90,26 +156,26 @@ NoteInserter::~NoteInserter()
 }
 
 void    
-NoteInserter::handleMousePress(int height, int staffNo,
-                               const QPoint &eventPos,
-                               NotationElement*)
+NoteInserter::handleLeftButtonPress(int height, int staffNo,
+                                   QMouseEvent* e,
+                                   NotationElement*)
 {
     if (height == StaffLine::NoHeight || staffNo < 0) return;
 
     Event *tsig = 0, *clef = 0, *key = 0;
 
     NotationElementList::iterator closestNote =
-        m_parentView.findClosestNote(eventPos.x(), tsig, clef, key, staffNo);
+        m_parentView->findClosestNote(e->x(), tsig, clef, key, staffNo);
 
     //!!! Could be nicer! Likewise the other inserters.
 
     if (closestNote ==
-        m_parentView.getStaff(staffNo)->getViewElementList()->end()) {
+        m_parentView->getStaff(staffNo)->getViewElementList()->end()) {
         return;
     }
 
 
-    kdDebug(KDEBUG_AREA) << "NoteInserter::handleMousePress() : accidental = "
+    kdDebug(KDEBUG_AREA) << "NoteInserter::handleLeftButtonPress() : accidental = "
                          << m_accidental << endl;
 
     int pitch = Rosegarden::NotationDisplayPitch(height, m_accidental).
@@ -119,30 +185,30 @@ NoteInserter::handleMousePress(int height, int staffNo,
 
     // We are going to modify the document so mark it as such
     //
-    m_parentView.getDocument()->setModified();
+    m_parentView->getDocument()->setModified();
 
     Note note(m_noteType, m_noteDots);
-    SegmentNotationHelper nt(m_parentView.getStaff(staffNo)->getSegment());
+    SegmentNotationHelper nt(m_parentView->getStaff(staffNo)->getSegment());
 
     timeT time = (*closestNote)->getAbsoluteTime();
     timeT endTime = time + note.getDuration(); //???
     Event *newEvent = doInsert(nt, time, note, pitch, m_accidental);
 
-    m_parentView.redoLayout(staffNo, time, endTime);
-    m_parentView.setSingleSelectedEvent(staffNo, newEvent);
+    m_parentView->redoLayout(staffNo, time, endTime);
+    m_parentView->setSingleSelectedEvent(staffNo, newEvent);
 }
 
 Event *NoteInserter::doInsert(SegmentNotationHelper& nt,
-			      Rosegarden::timeT absTime,
-			      const Note& note, int pitch,
-			      Accidental accidental)
+                              Rosegarden::timeT absTime,
+                              const Note& note, int pitch,
+                              Accidental accidental)
 {
     Segment::iterator i = nt.insertNote(absTime, note, pitch, accidental);
 
     if (i != nt.segment().end()) {
-	return (*i);
+        return (*i);
     } else {
-	return 0;
+        return 0;
     }
 }
 
@@ -156,84 +222,91 @@ Rosegarden::Accidental NoteInserter::m_accidental = NoAccidental;
 //------------------------------
 
 RestInserter::RestInserter(Rosegarden::Note::Type type,
-                           unsigned int dots, NotationView& view)
-    : NoteInserter(type, dots, view)
+                           unsigned int dots,
+                           NotationView* view)
+    : NoteInserter(type, dots, "RestInserter", view)
 {
 }
 
 Event *RestInserter::doInsert(SegmentNotationHelper& nt,
-			      Rosegarden::timeT absTime,
-			      const Note& note, int,
-			      Accidental)
+                              Rosegarden::timeT absTime,
+                              const Note& note, int,
+                              Accidental)
 {
     Segment::iterator i = nt.insertRest(absTime, note);
 
     if (i != nt.segment().end()) {
-	return (*i);
+        return (*i);
     } else {
-	return 0;
+        return 0;
     }
 }
 
 //------------------------------
 
-ClefInserter::ClefInserter(std::string clefType, NotationView& view)
-    : NotationTool(view),
+ClefInserter::ClefInserter(std::string clefType, NotationView* view)
+    : NotationTool("ClefInserter", view),
       m_clef(clefType)
 {
-    m_parentView.setCanvasCursor(Qt::crossCursor);
+    m_parentView->setCanvasCursor(Qt::crossCursor);
 }
     
-void ClefInserter::handleMousePress(int, int staffNo,
-                                    const QPoint &eventPos,
-                                    NotationElement*)
+void ClefInserter::handleLeftButtonPress(int, int staffNo,
+                                        QMouseEvent* e,
+                                        NotationElement*)
 {
     Event *tsig = 0, *clef = 0, *key = 0;
 
     if (staffNo < 0) return;
 
     NotationElementList::iterator closestNote =
-        m_parentView.findClosestNote
-        (eventPos.x(), tsig, clef, key, staffNo, 100);
+        m_parentView->findClosestNote
+        (e->x(), tsig, clef, key, staffNo, 100);
 
     if (closestNote ==
-        m_parentView.getStaff(staffNo)->getViewElementList()->end()) {
+        m_parentView->getStaff(staffNo)->getViewElementList()->end()) {
         return;
     }
 
     timeT time = (*closestNote)->getAbsoluteTime();
     SegmentNotationHelper nt
-        (m_parentView.getStaff(staffNo)->getSegment());
+        (m_parentView->getStaff(staffNo)->getSegment());
 
-    m_parentView.getDocument()->setModified();
+    m_parentView->getDocument()->setModified();
 
     Segment::iterator i = nt.insertClef(time, m_clef);
     Event *newEvent = 0;
     if (i != nt.segment().end()) newEvent = *i;
 
-    m_parentView.redoLayout(staffNo, time, time + 1);
-    m_parentView.setSingleSelectedEvent(staffNo, newEvent);
+    m_parentView->redoLayout(staffNo, time, time + 1);
+    m_parentView->setSingleSelectedEvent(staffNo, newEvent);
 }
 
 
 //------------------------------
 
-NotationEraser::NotationEraser(NotationView& view)
-    : NotationTool(view),
+NotationEraser::NotationEraser(NotationView* view)
+    : NotationTool("NotationEraser", view),
       m_collapseRest(false)
 {
-    m_parentView.setCanvasCursor(Qt::pointingHandCursor);
+    m_parentView->setCanvasCursor(Qt::pointingHandCursor);
+
+    new KToggleAction(i18n("Toggle Rest Collapse"), 0, this,
+                      SLOT(toggleRestCollapse()), actionCollection(),
+                      "toggle_rest_collapse");
+
+    createMenu("notationeraser.rc");
 }
 
-void NotationEraser::handleMousePress(int, int staffNo,
-                                      const QPoint&,
-                                      NotationElement* element)
+void NotationEraser::handleLeftButtonPress(int, int staffNo,
+                                          QMouseEvent*,
+                                          NotationElement* element)
 {
     bool needLayout = false;
     if (!element || staffNo < 0) return;
 
     SegmentNotationHelper nt
-        (m_parentView.getStaff(staffNo)->getSegment());
+        (m_parentView->getStaff(staffNo)->getSegment());
 
     timeT absTime = 0;
 
@@ -256,16 +329,22 @@ void NotationEraser::handleMousePress(int, int staffNo,
     }
     
     if (needLayout) {
-        m_parentView.getDocument()->setModified();
-        m_parentView.redoLayout(staffNo, absTime, absTime);
+        m_parentView->getDocument()->setModified();
+        m_parentView->redoLayout(staffNo, absTime, absTime);
     }
 }
 
+void NotationEraser::toggleRestCollapse()
+{
+    m_collapseRest = !m_collapseRest;
+}
+
+
 //------------------------------
 
-NotationSelector::NotationSelector(NotationView& view)
-    : NotationTool(view),
-      m_selectionRect(new QCanvasRectangle(m_parentView.canvas())),
+NotationSelector::NotationSelector(NotationView* view)
+    : NotationTool("NotationSelector", view),
+      m_selectionRect(new QCanvasRectangle(m_parentView->canvas())),
       m_updateRect(false),
       m_clickedStaff(-1),
       m_clickedElement(0)
@@ -273,46 +352,46 @@ NotationSelector::NotationSelector(NotationView& view)
     m_selectionRect->hide();
     m_selectionRect->setPen(Qt::blue);
 
-    connect(&m_parentView, SIGNAL(usedSelection()),
-            this,          SLOT(hideSelection()));
+    connect(m_parentView, SIGNAL(usedSelection()),
+            this,         SLOT(hideSelection()));
 }
 
 NotationSelector::~NotationSelector()
 {
     delete m_selectionRect;
-    m_parentView.canvas()->update();
+    m_parentView->canvas()->update();
 }
 
-void NotationSelector::handleMousePress(int, int staffNo,
-                                        const QPoint& p,
-                                        NotationElement *element)
+void NotationSelector::handleLeftButtonPress(int, int staffNo,
+                                            QMouseEvent* e,
+                                            NotationElement *element)
 {
     kdDebug(KDEBUG_AREA) << "NotationSelector::handleMousePress" << endl;
     m_clickedStaff = staffNo;
     m_clickedElement = element;
 
-    m_selectionRect->setX(p.x());
-    m_selectionRect->setY(p.y());
+    m_selectionRect->setX(e->x());
+    m_selectionRect->setY(e->y());
     m_selectionRect->setSize(0,0);
 
     m_selectionRect->show();
     m_updateRect = true;
 
-    //m_parentView.setCursorPosition(p.x());
+    //m_parentView->setCursorPosition(p.x());
 }
 
 void NotationSelector::handleMouseDblClick(int, int staffNo,
-					   const QPoint& p,
-					   NotationElement *element)
+                                           QMouseEvent* e,
+                                           NotationElement *element)
 {
     kdDebug(KDEBUG_AREA) << "NotationSelector::handleMouseDblClick" << endl;
     m_clickedStaff = staffNo;
     m_clickedElement = element;
     
-    NotationStaff *staff = m_parentView.getStaff(staffNo);
+    NotationStaff *staff = m_parentView->getStaff(staffNo);
     if (!staff) return;
 
-    QRect rect = staff->getBarExtents(p.x());
+    QRect rect = staff->getBarExtents(e->x());
 
     m_selectionRect->setX(rect.x() + 1);
     m_selectionRect->setY(rect.y());
@@ -336,7 +415,7 @@ void NotationSelector::handleMouseMove(QMouseEvent* e)
 
     m_selectionRect->setSize(w,h);
 
-    m_parentView.canvas()->update();
+    m_parentView->canvas()->update();
 }
 
 void NotationSelector::handleMouseRelease(QMouseEvent*)
@@ -349,14 +428,14 @@ void NotationSelector::handleMouseRelease(QMouseEvent*)
     // an individual event, then select just that event
     
     if (m_selectionRect->width()  > -2 &&
-	m_selectionRect->width()  <  2 &&
-	m_selectionRect->height() > -2 &&
-	m_selectionRect->height() <  2 &&
-	m_clickedElement != 0	       &&
-	m_clickedStaff >= 0) {
+        m_selectionRect->width()  <  2 &&
+        m_selectionRect->height() > -2 &&
+        m_selectionRect->height() <  2 &&
+        m_clickedElement != 0               &&
+        m_clickedStaff >= 0) {
 
-	m_parentView.setSingleSelectedEvent
-	    (m_clickedStaff, m_clickedElement->event());
+        m_parentView->setSingleSelectedEvent
+            (m_clickedStaff, m_clickedElement->event());
     }
 }
 
@@ -364,7 +443,7 @@ void NotationSelector::hideSelection()
 {
     m_selectionRect->hide();
     m_selectionRect->setSize(0,0);
-    m_parentView.canvas()->update();
+    m_parentView->canvas()->update();
 }
 
 
@@ -375,18 +454,18 @@ EventSelection* NotationSelector::getSelection()
     //
     if (!m_selectionRect->visible()) return 0;
 
-//    kdDebug(KDEBUG_AREA) << "Selection x,y: " << m_selectionRect->x() << ","
-//			 << m_selectionRect->y() << "; w,h: " << m_selectionRect->width() << "," << m_selectionRect->height() << endl;
+    //    kdDebug(KDEBUG_AREA) << "Selection x,y: " << m_selectionRect->x() << ","
+    //                         << m_selectionRect->y() << "; w,h: " << m_selectionRect->width() << "," << m_selectionRect->height() << endl;
 
     if (m_selectionRect->width()  > -2 &&
-	m_selectionRect->width()  <  2 &&
+        m_selectionRect->width()  <  2 &&
         m_selectionRect->height() > -2 &&
         m_selectionRect->height() <  2) return 0;
 
     double middleY = m_selectionRect->y() + m_selectionRect->height()/2;
-    int staffNo = m_parentView.findClosestStaff(middleY);
+    int staffNo = m_parentView->findClosestStaff(middleY);
     if (staffNo < 0) return 0;
-    Segment& originalSegment = m_parentView.getStaff(staffNo)->getSegment();
+    Segment& originalSegment = m_parentView->getStaff(staffNo)->getSegment();
     
     EventSelection* selection = new EventSelection(originalSegment);
 
@@ -422,8 +501,8 @@ EventSelection* NotationSelector::getSelection()
 
             selection->addEvent(el.event());
 
-//             kdDebug(KDEBUG_AREA) << "Selected event : \n";
-//             el.event()->dump(std::cerr);
+            //             kdDebug(KDEBUG_AREA) << "Selected event : \n";
+            //             el.event()->dump(std::cerr);
         }
         
     }
@@ -434,28 +513,30 @@ EventSelection* NotationSelector::getSelection()
 void NotationSelector::setViewCurrentSelection()
 {
     EventSelection* selection = getSelection();
-    m_parentView.setCurrentSelection(selection);
+    m_parentView->setCurrentSelection(selection);
 }
 
 //------------------------------
 
-NotationSelectionPaster::NotationSelectionPaster(NotationView& parent,
-                                                 EventSelection& es)
-    : NotationTool(parent),
+NotationSelectionPaster::NotationSelectionPaster(EventSelection& es,
+                                                 NotationView* parent)
+    : NotationTool("NotationPaster", parent),
       m_selection(es)
 {
-    m_parentView.setCanvasCursor(Qt::crossCursor);
+    m_parentView->setCanvasCursor(Qt::crossCursor);
 }
 
 NotationSelectionPaster::~NotationSelectionPaster()
 {
 }
 
-void NotationSelectionPaster::handleMousePress(int, int staffNo,
-                                               const QPoint &eventPos,
-                                               NotationElement*)
+void NotationSelectionPaster::handleLeftButtonPress(int, int staffNo,
+                                                   QMouseEvent* e,
+                                                   NotationElement*)
 {
-    kdDebug(KDEBUG_AREA) << "NotationSelectionPaster::handleMousePress : staffNo = "
+    QPoint eventPos = e->pos();
+    
+    kdDebug(KDEBUG_AREA) << "NotationSelectionPaster::handleLeftButtonPress : staffNo = "
                          << staffNo
                          << "event pos : "
                          << eventPos.x() << "," << eventPos.y() << endl;
@@ -465,29 +546,29 @@ void NotationSelectionPaster::handleMousePress(int, int staffNo,
     Event *tsig = 0, *clef = 0, *key = 0;
 
     NotationElementList::iterator closestNote =
-        m_parentView.findClosestNote(eventPos.x(), tsig, clef, key, staffNo);
+        m_parentView->findClosestNote(eventPos.x(), tsig, clef, key, staffNo);
 
     if (closestNote ==
-        m_parentView.getStaff(staffNo)->getViewElementList()->end()) {
+        m_parentView->getStaff(staffNo)->getViewElementList()->end()) {
         return;
     }
 
     timeT time = (*closestNote)->getAbsoluteTime();
 
-    Segment& segment = m_parentView.getStaff(staffNo)->getSegment();
+    Segment& segment = m_parentView->getStaff(staffNo)->getSegment();
 
     if (m_selection.pasteToSegment(segment, time)) {
 
-        m_parentView.redoLayout(staffNo,
+        m_parentView->redoLayout(staffNo,
                                 0,
                                 time + m_selection.getTotalDuration() + 1);
 
     } else {
         
-        m_parentView.slotStatusHelpMsg(i18n("Couldn't paste at this point"));
+        m_parentView->slotStatusHelpMsg(i18n("Couldn't paste at this point"));
     }
     
-    //m_parentView.slotStatusHelpMsg(i18n("Ready."));
+    //m_parentView->slotStatusHelpMsg(i18n("Ready."));
 
 }
 

@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::NotationTool" version="1">
+
+<Menu name="NotationEraser">
+  <Action name="toggle_rest_collapse" />
+</Menu>
+
+</kpartgui>

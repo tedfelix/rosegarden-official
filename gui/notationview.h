@@ -76,7 +76,7 @@ public:
 
     /// Return a pointer to the staff at the specified index
     NotationStaff *getStaff(int i) {
-	if (i >= 0 && i < m_staffs.size()) return m_staffs[i];
+	if (i >= 0 && unsigned(i) < m_staffs.size()) return m_staffs[i];
 	else return 0;
     }
 

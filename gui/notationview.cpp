@@ -109,9 +109,9 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     setupActions();
 
     kdDebug(KDEBUG_AREA) << "NotationView: Quantizer status is:\n"
-			 << "Unit = " << segments[0]->getQuantizer()->getUnit()
-			 << "\nMax Dots = "
-			 << segments[0]->getQuantizer()->getMaxDots() << endl;
+                         << "Unit = " << segments[0]->getQuantizer()->getUnit()
+                         << "\nMax Dots = "
+                         << segments[0]->getQuantizer()->getMaxDots() << endl;
 
     initFontToolbar(segments[0]->getQuantizer()->getUnit());
     initStatusBar();
@@ -438,22 +438,22 @@ void NotationView::setupActions()
 
     // setup Group menu
     new KAction(i18n("Beam Group"), 0, this,
-		SLOT(slotGroupBeam()), actionCollection(), "beam");
+                SLOT(slotGroupBeam()), actionCollection(), "beam");
 
     new KAction(i18n("Auto-Beam Group"), 0, this,
-		SLOT(slotGroupAutoBeam()), actionCollection(), "auto_beam");
+                SLOT(slotGroupAutoBeam()), actionCollection(), "auto_beam");
 
     new KAction(i18n("Break Groups"), 0, this,
-		SLOT(slotGroupBreak()), actionCollection(), "break_group");
+                SLOT(slotGroupBreak()), actionCollection(), "break_group");
 
     // setup Transforms menu
     new KAction(i18n("Normalize Rests"), 0, this,
-		SLOT(slotTransformsNormalizeRests()), actionCollection(),
-		"normalize_rests");
+                SLOT(slotTransformsNormalizeRests()), actionCollection(),
+                "normalize_rests");
 
     new KAction(i18n("Merge Rests Aggressively"), 0, this,
-		SLOT(slotTransformsMergeRests()), actionCollection(),
-		"merge_rests_aggressively");
+                SLOT(slotTransformsMergeRests()), actionCollection(),
+                "merge_rests_aggressively");
 
 
     // setup Settings menu
@@ -539,7 +539,7 @@ NotationStaff *
 NotationView::getStaff(const Segment &segment)
 {
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	if (&(m_staffs[i]->getSegment()) == &segment) return m_staffs[i];
+        if (&(m_staffs[i]->getSegment()) == &segment) return m_staffs[i];
     }
     return 0;
 }
@@ -549,7 +549,7 @@ void NotationView::initFontToolbar(int legatoUnit)
     KToolBar *fontToolbar = toolBar("fontToolBar");
 
     kdDebug(KDEBUG_AREA) << "NotationView::initFontToolbar: legatoUnit is "
-			 << legatoUnit << endl;
+                         << legatoUnit << endl;
     
     if (!fontToolbar) {
         kdDebug(KDEBUG_AREA)
@@ -642,11 +642,11 @@ void NotationView::showBars(int staffNo)
             staff.insertBar(unsigned(m_hlayout->getBarLineX(staff, i)),
                             m_hlayout->isBarLineCorrect(staff, i));
 
-	    int x;
-	    Event *timeSig = m_hlayout->getTimeSignatureInBar(staff, i, x);
-	    if (timeSig && i < barCount-1) {
-		staff.insertTimeSignature(x, TimeSignature(*timeSig));
-	    }
+            int x;
+            Event *timeSig = m_hlayout->getTimeSignatureInBar(staff, i, x);
+            if (timeSig && i < barCount-1) {
+                staff.insertTimeSignature(x, TimeSignature(*timeSig));
+            }
         }
     }
 
@@ -669,12 +669,12 @@ void NotationView::updateRuler()
     
     for (unsigned int i = 0; i < m_hlayout->getBarLineCount(staff); ++i) {
 
-	int x;
-	Event *timeSigEvent = m_hlayout->getTimeSignatureInBar(staff, i, x);
-	if (timeSigEvent) timeSignature = TimeSignature(*timeSigEvent);
+        int x;
+        Event *timeSigEvent = m_hlayout->getTimeSignatureInBar(staff, i, x);
+        if (timeSigEvent) timeSignature = TimeSignature(*timeSigEvent);
 
         m_ruler->addStep(m_hlayout->getBarLineX(staff, i),
-			 timeSignature.getBeatsPerBar());
+                         timeSignature.getBeatsPerBar());
     }
 
     m_ruler->update();
@@ -844,8 +844,8 @@ bool NotationView::applyLayout(int staffNo)
 void NotationView::setCurrentSelectedNote(const char *pixmapName,
                                           bool rest, Note::Type n, int dots)
 {
-    if (rest) setTool(new RestInserter(n, dots, *this));
-    else      setTool(new NoteInserter(n, dots, *this));
+    if (rest) setTool(new RestInserter(n, dots, this));
+    else      setTool(new NoteInserter(n, dots, this));
 
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap(pixmapName));
@@ -856,7 +856,7 @@ void NotationView::setCurrentSelectedNote(const char *pixmapName,
 void NotationView::setCurrentSelection(EventSelection* s)
 {
     if (m_currentEventSelection && s != m_currentEventSelection) {
-	getStaff(m_currentEventSelection->getSegment())->showSelection(0);
+        getStaff(m_currentEventSelection->getSegment())->showSelection(0);
     }
 
     delete m_currentEventSelection;
@@ -1077,14 +1077,14 @@ void NotationView::slotGroupBeam()
     SegmentNotationHelper helper(segment);
 
     helper.makeBeamedGroup(m_currentEventSelection->getBeginTime(),
-			   m_currentEventSelection->getEndTime(),
-			   "beamed"); //!!!
+                           m_currentEventSelection->getEndTime(),
+                           "beamed"); //!!!
 
     emit usedSelection();
 
     redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
-	       m_currentEventSelection->getBeginTime(),
-	       m_currentEventSelection->getEndTime());
+               m_currentEventSelection->getBeginTime(),
+               m_currentEventSelection->getEndTime());
 }
 
 void NotationView::slotGroupAutoBeam()
@@ -1098,14 +1098,14 @@ void NotationView::slotGroupAutoBeam()
     SegmentNotationHelper helper(segment);
 
     helper.autoBeam(m_currentEventSelection->getBeginTime(),
-		    m_currentEventSelection->getEndTime(),
-		    "beamed"); //!!!
+                    m_currentEventSelection->getEndTime(),
+                    "beamed"); //!!!
 
     emit usedSelection();
 
     redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
-	       m_currentEventSelection->getBeginTime(),
-	       m_currentEventSelection->getEndTime());
+               m_currentEventSelection->getBeginTime(),
+               m_currentEventSelection->getEndTime());
 }
 
 void NotationView::slotGroupBreak()
@@ -1119,13 +1119,13 @@ void NotationView::slotGroupBreak()
     SegmentNotationHelper helper(segment);
 
     helper.unbeam(m_currentEventSelection->getBeginTime(),
-		  m_currentEventSelection->getEndTime());
+                  m_currentEventSelection->getEndTime());
 
     emit usedSelection();
 
     redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
-	       m_currentEventSelection->getBeginTime(),
-	       m_currentEventSelection->getEndTime());
+               m_currentEventSelection->getBeginTime(),
+               m_currentEventSelection->getEndTime());
 }
 
  
@@ -1144,13 +1144,13 @@ void NotationView::slotTransformsNormalizeRests()
     SegmentNotationHelper helper(segment);
 
     helper.normalizeRests(m_currentEventSelection->getBeginTime(),
-			  m_currentEventSelection->getEndTime());
+                          m_currentEventSelection->getEndTime());
 
     emit usedSelection();
 
     redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
-	       m_currentEventSelection->getBeginTime(),
-	       m_currentEventSelection->getEndTime());
+               m_currentEventSelection->getBeginTime(),
+               m_currentEventSelection->getEndTime());
 }
 
 void NotationView::slotTransformsMergeRests()
@@ -1164,13 +1164,13 @@ void NotationView::slotTransformsMergeRests()
     SegmentNotationHelper helper(segment);
 
     helper.mergeRestsAggressively(m_currentEventSelection->getBeginTime(),
-				  m_currentEventSelection->getEndTime());
+                                  m_currentEventSelection->getEndTime());
 
     emit usedSelection();
 
     redoLayout(getStaff(m_currentEventSelection->getSegment())->getId(),
-	       m_currentEventSelection->getBeginTime(),
-	       m_currentEventSelection->getEndTime());
+               m_currentEventSelection->getBeginTime(),
+               m_currentEventSelection->getEndTime());
 }
 
   
@@ -1448,28 +1448,28 @@ void NotationView::slotTrebleClef()
 {
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-treble"));
-    setTool(new ClefInserter(Clef::Treble, *this));
+    setTool(new ClefInserter(Clef::Treble, this));
 }
 
 void NotationView::slotTenorClef()
 {
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-tenor"));
-    setTool(new ClefInserter(Clef::Tenor, *this));
+    setTool(new ClefInserter(Clef::Tenor, this));
 }
 
 void NotationView::slotAltoClef()
 {
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-alto"));
-    setTool(new ClefInserter(Clef::Alto, *this));
+    setTool(new ClefInserter(Clef::Alto, this));
 }
 
 void NotationView::slotBassClef()
 {
     m_currentNotePixmap->setPixmap
         (m_toolbarNotePixmapFactory.makeToolbarPixmap("clef-bass"));
-    setTool(new ClefInserter(Clef::Bass, *this));
+    setTool(new ClefInserter(Clef::Bass, this));
 }
 
 
@@ -1485,13 +1485,13 @@ void NotationView::slotBassClef()
 void NotationView::slotEraseSelected()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotEraseSelected()\n";
-    setTool(new NotationEraser(*this));
+    setTool(new NotationEraser(this));
 }
 
 void NotationView::slotSelectSelected()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotSelectSelected()\n";
-    setTool(new NotationSelector(*this));
+    setTool(new NotationSelector(this));
 }
 
 //----------------------------------------------------------------------
@@ -1500,8 +1500,6 @@ void NotationView::itemPressed(int height, int staffNo,
                                QMouseEvent* e,
                                NotationElement* el)
 {
-    QPoint eventPos = e->pos();
-
     ButtonState btnState = e->state();
 
     if (btnState & ShiftButton) { // on shift-click, set cursor position
@@ -1516,9 +1514,9 @@ void NotationView::itemPressed(int height, int staffNo,
         // preceded by a single click event
 
         if (e->type() == QEvent::MouseButtonDblClick)
-            m_tool->handleMouseDblClick(height, staffNo, eventPos, el);
+            m_tool->handleMouseDblClick(height, staffNo, e, el);
         else
-	    m_tool->handleMousePress(height, staffNo, eventPos, el);
+            m_tool->handleMousePress(height, staffNo, e, el);
     }
     
 }
@@ -1651,8 +1649,8 @@ void NotationView::redoLayout(int staffNo, timeT startTime, timeT endTime)
     Segment *segment = 0;
     if (staffNo >= 0) segment = &m_staffs[staffNo]->getSegment();
     for (NotationViewSet::iterator i = m_viewsExtant.begin();
-	 i != m_viewsExtant.end(); ++i) {
-	(*i)->redoLayoutAdvised(segment, startTime, endTime);
+         i != m_viewsExtant.end(); ++i) {
+        (*i)->redoLayoutAdvised(segment, startTime, endTime);
     }
 }
 
@@ -1663,9 +1661,9 @@ void NotationView::redoLayoutAdvised(Segment *segment, timeT startTime, timeT en
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
         Segment *ssegment = &m_staffs[i]->getSegment();
-	bool thisStaff = (ssegment == segment || segment == 0);
+        bool thisStaff = (ssegment == segment || segment == 0);
 
-	if (thisStaff && (segment != 0)) applyLayout(i);
+        if (thisStaff && (segment != 0)) applyLayout(i);
 
         NotationElementList *notes = m_staffs[i]->getViewElementList();
         NotationElementList::iterator starti = notes->begin();
