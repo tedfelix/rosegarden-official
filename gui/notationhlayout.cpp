@@ -228,6 +228,9 @@ NotationHLayout::legatoQuantize(Segment &segment)
 {
     m_legatoQuantizer->quantize(&segment, segment.begin(), segment.end());
 
+    bool justSeenGraceNote = false;
+    timeT graceNoteStart = 0;
+
     for (Segment::iterator i = segment.begin();
 	 segment.isBeforeEndMarker(i); ++i) {
 
@@ -243,6 +246,28 @@ NotationHLayout::legatoQuantize(Segment &segment)
 	}
 
 	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
+
+	    if ((*i)->isa(Note::EventType)) {
+		
+		timeT graceNoteOffset = 0;
+
+		if ((*i)->has(IS_GRACE_NOTE) &&
+		    (*i)->get<Bool>(IS_GRACE_NOTE)) {
+
+		    if (!justSeenGraceNote) {
+			graceNoteStart =
+			    m_legatoQuantizer->getQuantizedAbsoluteTime(*i);
+			justSeenGraceNote = true;
+		    }
+
+		} else if (justSeenGraceNote) {
+
+		    duration +=
+			m_legatoQuantizer->getQuantizedAbsoluteTime(*i) -
+			graceNoteStart;
+		    justSeenGraceNote = false;
+		}
+	    }
 
 	    Note n(Note::getNearestNote(duration));
 
@@ -1123,8 +1148,8 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	    kdDebug(KDEBUG_AREA) << "NotationHLayout::layout(): there's a time sig in this bar" << endl;
 	}
 
-	bool justSeenGraceNote = false;
-	timeT graceNoteStart = 0;
+//!!!	bool justSeenGraceNote = false;
+//	timeT graceNoteStart = 0;
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
             
@@ -1145,7 +1170,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
 	    if (el->isNote()) {
 
-		timeT graceNoteOffset = 0;
+/*!!!		timeT graceNoteOffset = 0;
 
 		if ((*it)->isGrace()) {
 
@@ -1160,11 +1185,11 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 			(*it)->getAbsoluteTime() - graceNoteStart;
 		    justSeenGraceNote = false;
 		}
-
+*/
 		// This modifies "it" and "tieMap"
 		delta = positionChord
 		    (staff, it, bdi, timeSignature, clef, key, tieMap,
-		     graceNoteOffset, to);
+		     /*!!!	     graceNoteOffset */0, to);
 
 	    } else if (el->isRest()) {
 

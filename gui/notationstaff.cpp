@@ -952,6 +952,8 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     if (elt->isGrace()) {
 
 	params.setLegerLines(0);
+	m_graceNotePixmapFactory->setSelected
+	    (m_notePixmapFactory->isSelected());
 	QCanvasPixmap notePixmap
 	    (m_graceNotePixmapFactory->makeNotePixmap(params));
 	item = new QCanvasNotationSprite
