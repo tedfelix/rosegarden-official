@@ -36,7 +36,10 @@ class LogParser
     @logs.each { |key, value| puts "Log for :", value.sort.join(", "), "" , key, "\n---------------\n" }
   end
 
+  HeadRevNum = Regexp.new('^\d+\.\d+$')
+
   def parseFileLog
+
     workingFile = @logstream.readline
     workingFile.slice!(/^Working file: /)
     workingFile.chomp!
@@ -45,12 +48,19 @@ class LogParser
     @logstream.each do |line|
 
       # Beginning of log entry is 'revision x.y'
-      if (line =~ /^revision [\d.]+$/)
+      if (m = /^revision ([\d.]+)$/.match(line) )
+	revisionNumber = m[1]
 	logEntry, lastLog = parseLogEntry
-	files = @logs[logEntry] || []
-	files << workingFile unless files.include? workingFile
-	@logs[logEntry] = files
-	nbLogs += 1
+
+	# Take the long in account only if it's from HEAD
+	if (HeadRevNum.match(revisionNumber))
+	  files = @logs[logEntry] || []
+	  files << workingFile unless files.include? workingFile
+	  @logs[logEntry] = files
+	  nbLogs += 1
+	else
+	  puts "Skipping log for branch #{revisionNumber}" if $DEBUG
+	end
       end
 
       # End of file log is '============'
@@ -74,7 +84,7 @@ class LogParser
     logEntry = ""
     line = ""
     until (line =~ /^[-=]+$/)
-      logEntry += line unless line.nil?
+      logEntry += line unless line.nil? || line =~ /^branches:\s+[\d.]+;$/
       line = @logstream.readline
     end
 
@@ -96,9 +106,9 @@ def usage
 end
 ########## And now for something completely different
 
-# logparser = LogParser.new(File.new ARGV[0])
-# logparser.parse
-# exit
+logparser = LogParser.new(File.new ARGV[0])
+logparser.parse
+exit
 
 timeFormat = /[\d]{4}-[\d]{2}-[\d]{2}/
 yesterday = Date.today - 1
