@@ -519,14 +519,14 @@ void MatrixView::setupActions()
 		       actionCollection(), "chord_mode"))->
 	setChecked(false);
 
-    QCanvasPixmap pixmap2(pixmapDir + "/toolbar/step_by_step.xpm");
-    icon = QIconSet(pixmap2);
+    pixmap.load(pixmapDir + "/toolbar/step_by_step.xpm");
+    icon = QIconSet(pixmap);
     new KToggleAction(i18n("Ste&p Recording"), icon, 0, this,
                 SLOT(slotToggleStepByStep()), actionCollection(),
                 "toggle_step_by_step");
 
-    QCanvasPixmap pixmap3(pixmapDir + "/toolbar/quantize.xpm");
-    icon = QIconSet(pixmap3);
+    pixmap.load(pixmapDir + "/toolbar/quantize.xpm");
+    icon = QIconSet(pixmap);
     new KAction(EventQuantizeCommand::getGlobalName(), icon, Key_Equal, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");

@@ -179,8 +179,8 @@ MatrixPainter::MatrixPainter(MatrixView* parent)
                 SLOT(slotMoveSelected()), actionCollection(),
                 "move");
 
-    QCanvasPixmap pixmap2(pixmapDir + "/toolbar/resize.xpm");
-    icon = QIconSet(pixmap2);
+    pixmap.load(pixmapDir + "/toolbar/resize.xpm");
+    icon = QIconSet(pixmap);
     new KAction(i18n("Switch to Resize Tool"), icon, 0, this,
                 SLOT(slotResizeSelected()), actionCollection(),
                 "resize");
@@ -358,8 +358,8 @@ MatrixEraser::MatrixEraser(MatrixView* parent)
                 SLOT(slotMoveSelected()), actionCollection(),
                 "move");
 
-    QCanvasPixmap pixmap2(pixmapDir + "/toolbar/resize.xpm");
-    icon = QIconSet(pixmap2);
+    pixmap.load(pixmapDir + "/toolbar/resize.xpm");
+    icon = QIconSet(pixmap);
     new KAction(i18n("Switch to Resize Tool"), icon, 0, this,
                 SLOT(slotResizeSelected()), actionCollection(),
                 "resize");
@@ -773,8 +773,8 @@ MatrixMover::MatrixMover(MatrixView* parent)
                 SLOT(slotEraseSelected()), actionCollection(),
                 "erase");
 
-    QCanvasPixmap pixmap2(pixmapDir + "/toolbar/resize.xpm");
-    icon = QIconSet(pixmap2);
+    pixmap.load(pixmapDir + "/toolbar/resize.xpm");
+    icon = QIconSet(pixmap);
     new KAction(i18n("Switch to Resize Tool"), icon, 0, this,
                 SLOT(slotResizeSelected()), actionCollection(),
                 "resize");

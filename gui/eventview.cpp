@@ -1202,15 +1202,15 @@ EventView::setupActions()
                 SLOT(slotEditDelete()), actionCollection(),
                 "delete");
     
-    QCanvasPixmap pixmap2(pixmapDir + "/toolbar/event-edit.xpm");
-    icon = QIconSet(pixmap2);
+    pixmap.load(pixmapDir + "/toolbar/event-edit.xpm");
+    icon = QIconSet(pixmap);
 
     new KAction(i18n("&Edit Event"), icon, Key_E, this,
                 SLOT(slotEditEvent()), actionCollection(),
                 "edit_simple");
     
-    QCanvasPixmap pixmap3(pixmapDir + "/toolbar/event-edit-advanced.xpm");
-    icon = QIconSet(pixmap3);
+    pixmap.load(pixmapDir + "/toolbar/event-edit-advanced.xpm");
+    icon = QIconSet(pixmap);
 
     new KAction(i18n("&Advanced Event Editor"), icon, Key_A, this,
                 SLOT(slotEditEventAdvanced()), actionCollection(),
@@ -1234,8 +1234,8 @@ EventView::setupActions()
 
     KRadioAction *action;
 
-    QCanvasPixmap pixmap4(pixmapDir + "/toolbar/time-musical.xpm");
-    icon = QIconSet(pixmap4);
+    pixmap.load(pixmapDir + "/toolbar/time-musical.xpm");
+    icon = QIconSet(pixmap);
 
     action = new KRadioAction(i18n("&Musical Times"), icon, 0, this,
 			      SLOT(slotMusicalTime()),
@@ -1243,8 +1243,8 @@ EventView::setupActions()
     action->setExclusiveGroup("timeMode");
     if (timeMode == 0) action->setChecked(true);
 
-    QCanvasPixmap pixmap5(pixmapDir + "/toolbar/time-real.xpm");
-    icon = QIconSet(pixmap5);
+    pixmap.load(pixmapDir + "/toolbar/time-real.xpm");
+    icon = QIconSet(pixmap);
 
     action = new KRadioAction(i18n("&Real Times"), icon, 0, this,
 			      SLOT(slotRealTime()),
@@ -1252,8 +1252,8 @@ EventView::setupActions()
     action->setExclusiveGroup("timeMode");
     if (timeMode == 1) action->setChecked(true);
 
-    QCanvasPixmap pixmap6(pixmapDir + "/toolbar/time-raw.xpm");
-    icon = QIconSet(pixmap6);
+    pixmap.load(pixmapDir + "/toolbar/time-raw.xpm");
+    icon = QIconSet(pixmap);
 
     action = new KRadioAction(i18n("Ra&w Times"), icon, 0, this,
 			      SLOT(slotRawTime()),

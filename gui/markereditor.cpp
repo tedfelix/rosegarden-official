@@ -413,8 +413,8 @@ MarkerEditorDialog::setupActions()
     action->setExclusiveGroup("timeMode");
     if (timeMode == 0) action->setChecked(true);
 
-    QCanvasPixmap pixmap2(pixmapDir + "/toolbar/time-real.xpm");
-    icon = QIconSet(pixmap2);
+    pixmap.load(pixmapDir + "/toolbar/time-real.xpm");
+    icon = QIconSet(pixmap);
 
     action = new KRadioAction(i18n("&Real Times"), icon, 0, this,
                               SLOT(slotRealTime()),
@@ -422,8 +422,8 @@ MarkerEditorDialog::setupActions()
     action->setExclusiveGroup("timeMode");
     if (timeMode == 1) action->setChecked(true);
 
-    QCanvasPixmap pixmap3(pixmapDir + "/toolbar/time-raw.xpm");
-    icon = QIconSet(pixmap3);
+    pixmap.load(pixmapDir + "/toolbar/time-raw.xpm");
+    icon = QIconSet(pixmap);
 
     action = new KRadioAction(i18n("Ra&w Times"), icon, 0, this,
                               SLOT(slotRawTime()),

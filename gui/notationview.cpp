@@ -1455,16 +1455,16 @@ void NotationView::setupActions()
     linearModeAction->setExclusiveGroup("layoutMode");
     if (layoutMode == 0) linearModeAction->setChecked(true);
 
-    QCanvasPixmap pixmap2(pixmapDir + "/toolbar/continuous-page-mode.xpm");
-    icon = QIconSet(pixmap2);
+    pixmap.load(pixmapDir + "/toolbar/continuous-page-mode.xpm");
+    icon = QIconSet(pixmap);
     KRadioAction *continuousPageModeAction = new KRadioAction
         (i18n("&Continuous Page Layout"), icon, 0, this, SLOT(slotContinuousPageMode()),
          actionCollection(), "continuous_page_mode");
     continuousPageModeAction->setExclusiveGroup("layoutMode");
     if (layoutMode == 1) continuousPageModeAction->setChecked(true);
 
-    QCanvasPixmap pixmap3(pixmapDir + "/toolbar/multi-page-mode.xpm");
-    icon = QIconSet(pixmap3);
+    pixmap.load(pixmapDir + "/toolbar/multi-page-mode.xpm");
+    icon = QIconSet(pixmap);
     KRadioAction *multiPageModeAction = new KRadioAction
         (i18n("&Multiple Page Layout"), icon, 0, this, SLOT(slotMultiPageMode()),
          actionCollection(), "multi_page_mode");

@@ -218,14 +218,14 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
                 SLOT(slotOpenInMatrix()), actionCollection(),
                 "open_in_matrix");
 
-    QCanvasPixmap pixmap2(pixmapDir + "/toolbar/notation.xpm");
-    icon = QIconSet(pixmap2);
+    pixmap.load(pixmapDir + "/toolbar/notation.xpm");
+    icon = QIconSet(pixmap);
     new KAction(i18n("Open in &Notation Editor"), icon, 0, this,
                 SLOT(slotOpenInNotation()), actionCollection(),
                 "open_in_notation");
 
-    QCanvasPixmap pixmap3(pixmapDir + "/toolbar/eventlist.xpm");
-    icon = QIconSet(pixmap3);
+    pixmap.load(pixmapDir + "/toolbar/eventlist.xpm");
+    icon = QIconSet(pixmap);
     new KAction(i18n("Open in &Event List Editor"), icon, 0, this,
                 SLOT(slotOpenInEventList()), actionCollection(),
                 "open_in_event_list");
