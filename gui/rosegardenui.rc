@@ -9,9 +9,9 @@
   </Menu>
   <Menu name="Tracks">
 	<text>Tracks</text>
+	<Action name="move"/>
 	<Action name="draw"/>
 	<Action name="erase"/>
-	<Action name="move"/>
 	<Action name="resize"/>
 	<Action name="change_time_res"/>
   </Menu>
@@ -29,9 +29,9 @@
 </MenuBar>
 
 <ToolBar fullWidth="true" name="tracksToolBar" newline="true">
+	<Action name="move"/>
 	<Action name="draw"/>
 	<Action name="erase"/>
-	<Action name="move"/>
 	<Action name="resize"/>
 </ToolBar>
 
