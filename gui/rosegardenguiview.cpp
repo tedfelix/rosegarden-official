@@ -63,6 +63,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
                                                                   allEvents.end());
 
     m_mainStaff->move(20, 15);
+    m_mainStaff->show();
 
     m_vlayout = new NotationVLayout(*m_mainStaff);
     m_hlayout = new NotationHLayout((Staff::noteWidth + 2) * 4, // this shouldn't be constant
@@ -298,6 +299,7 @@ RosegardenGUIView::showElements(NotationElementList::iterator from,
                                                                   canvas());
         noteSprite->move(dxoffset + (*it)->x(),
                          dyoffset + (*it)->y());
+        noteSprite->show();
         
     }
 
