@@ -371,6 +371,11 @@ signals:
     void changeAccidental(Rosegarden::Accidental);
 
     /**
+     * Emitted when the tuplet mode has been toggled by the user
+     */
+    void changeTupletMode(bool newTupletMode);
+
+    /**
      * Emitted when the selection has been cut or copied
      *
      * @see NotationSelector#hideSelection

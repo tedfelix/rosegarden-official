@@ -576,7 +576,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
             // Recover viability for the second half of any split rest
 
-	    makeRestViable(last);
+//!!!commented out because it screws up tuplets at the moment	    makeRestViable(last);
 	}
 
 	return insertSingleSomething(i, duration, pitch, isRest, tiedBack,

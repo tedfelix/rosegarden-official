@@ -142,6 +142,9 @@ public slots:
     /// Set the accidental for the notes which will be inserted
     void slotSetAccidental(Rosegarden::Accidental);
 
+    /// Set the tuplet mode
+    void slotSetTupletMode(bool);
+
     /**
      * Set the accidental for the notes which will be inserted
      * and put the parent view toolbar in sync
@@ -185,6 +188,7 @@ protected:
     Rosegarden::Note::Type m_noteType;
     unsigned int m_noteDots;
     bool m_autoBeam;
+    bool m_tupletMode;
 
     Rosegarden::Accidental m_accidental;
 

@@ -150,12 +150,13 @@ NoteInserter::NoteInserter(NotationView* view)
       m_noteType(Rosegarden::Note::Quaver),
       m_noteDots(0),
       m_autoBeam(true),
+      m_tupletMode(false),
       m_accidental(Accidentals::NoAccidental)
 {
     QIconSet icon;
 
     KToggleAction *autoBeamAction =
-	new KToggleAction(i18n("Intelligent Auto-Beam"), 0, this,
+	new KToggleAction(i18n("Auto-Beam when appropriate"), 0, this,
 			  SLOT(slotToggleAutoBeam()), actionCollection(),
 			  "toggle_auto_beam");
     autoBeamAction->setChecked(true);
@@ -201,6 +202,9 @@ NoteInserter::NoteInserter(NotationView* view)
 
     connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
             this,         SLOT(slotSetAccidental(Rosegarden::Accidental)));
+
+    connect(m_parentView, SIGNAL(changeTupletMode(bool)),
+            this,         SLOT(slotSetTupletMode(bool)));
 }
 
 NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
@@ -208,11 +212,14 @@ NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
       m_noteType(Rosegarden::Note::Quaver),
       m_noteDots(0),
       m_autoBeam(false),
+      m_tupletMode(false),
       m_accidental(Accidentals::NoAccidental)
 {
     connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
             this,         SLOT(slotSetAccidental(Rosegarden::Accidental)));
 
+    connect(m_parentView, SIGNAL(changeTupletMode(bool)),
+            this,         SLOT(slotSetTupletMode(bool)));
 }
 
 NoteInserter::~NoteInserter()
@@ -337,15 +344,31 @@ Event *
 NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 			   const Note &note, int pitch, Accidental accidental)
 {
-    NoteInsertionCommand *command = 
+    NoteInsertionCommand *insertionCommand =
 	new NoteInsertionCommand
-        (segment, time, endTime, note, pitch, accidental, m_autoBeam);
-    m_nParentView->addCommandToHistory(command);
+        (segment, time, endTime, note, pitch, accidental,
+	 m_autoBeam && !m_tupletMode);
+    Command *activeCommand = insertionCommand;
+
+    if (m_tupletMode) {
+	Segment::iterator i(segment.findTime(time));
+	if (i != segment.end() &&
+	    !(*i)->has(Rosegarden::BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+
+	    MacroCommand *command = new MacroCommand(insertionCommand->name());
+	    command->addCommand(new GroupMenuTupletCommand
+				(segment, time, note.getDuration()));
+	    command->addCommand(insertionCommand);
+	    activeCommand = command;
+	}
+    }
+
+    m_nParentView->addCommandToHistory(activeCommand);
     
     kdDebug(KDEBUG_AREA) << "NoteInserter::doAddCommand: accidental is "
 			 << accidental << endl;
 
-    return command->getLastInsertedEvent();
+    return insertionCommand->getLastInsertedEvent();
 } 
 
 void NoteInserter::slotSetNote(Rosegarden::Note::Type nt)
@@ -363,6 +386,11 @@ void NoteInserter::slotSetAccidental(Rosegarden::Accidental accidental)
     kdDebug(KDEBUG_AREA) << "NoteInserter::setAccidental: accidental is "
 			 << accidental << endl;
     m_accidental = accidental;
+}
+
+void NoteInserter::slotSetTupletMode(bool tupletMode)
+{
+    m_tupletMode = tupletMode;
 }
 
 void NoteInserter::slotSetAccidentalSync(Rosegarden::Accidental accidental)

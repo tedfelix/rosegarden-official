@@ -1928,7 +1928,9 @@ void NotationView::slotDotted64th()
 void NotationView::slotToggleTriplet()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotToggleTriplet()\n";
+    
     m_tupletMode = !m_tupletMode;
+    emit changeTupletMode(m_tupletMode);
 }
 
 //----------------------------------------
