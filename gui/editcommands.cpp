@@ -260,6 +260,8 @@ PasteEventsCommand::isPossible()
     timeT origin = source->getFirstEventTime();
     timeT duration = source->getDuration() - origin;
 
+    kdDebug(KDEBUG_AREA) << "NotationView::slotEditPaste: paste time is " << pasteTime << ", origin is " << origin << ", duration is " << duration << endl;
+
     SegmentNotationHelper helper(getSegment());
     return helper.removeRests(pasteTime, duration, true);
 }
