@@ -99,8 +99,11 @@ public:
 
     bool const isSelected() { return m_selected; }
 
-    // Select this SegmentItem
-    void setSelected(const bool &select, const QBrush &highlightBrush);
+    /// Select this SegmentItem
+    void setSelected(bool select, const QBrush &highlightBrush);
+
+    /// show or hide the repeat rect
+    void showRepeatRect(bool);
 
     /**
      * Paint the label inside the rectangle

@@ -144,6 +144,8 @@ void SegmentItem::drawShape(QPainter& painter)
     QRect labelRect = rect();
     labelRect.setX(labelRect.x() + 3);
     painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
+
+    recalculateRectangle(false);
 }
 
 void SegmentItem::recalculateRectangle(bool inheritFromSegment)
@@ -257,13 +259,22 @@ void SegmentItem::normalize()
 // Set this SegmentItem as selected/highlighted - we send
 // in the QBrush we need at the same time
 //
-void SegmentItem::setSelected(const bool &select, const QBrush &brush)
+void SegmentItem::setSelected(bool select, const QBrush &brush)
 {
     setBrush(brush);
     m_selected = select;
     setZ(select ? 2 : 1); // selected items come to the front
 }
 
+void SegmentItem::showRepeatRect(bool s)
+{
+    if (!m_repeatRectangle) return;
+    
+    if (s)
+        m_repeatRectangle->show();
+    else
+        m_repeatRectangle->hide();
+}
 
 //////////////////////////////////////////////////////////////////////
 ////             SegmentSplitLine
@@ -981,7 +992,7 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
         m_currentItem = item;
 	m_currentItemStartX = item->x();
 	m_clickPoint = e->pos();
-        return;
+        m_currentItem->showRepeatRect(false);
     }
 }
 
@@ -997,6 +1008,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
                             m_currentItem->getDuration(),
                             m_currentItem->getTrack());
         addCommandToHistory(command);
+        m_currentItem->showRepeatRect(true);
     }
 
     m_currentItem = 0;
