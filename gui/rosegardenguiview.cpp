@@ -319,11 +319,11 @@ void RosegardenGUIView::slotShowInstrumentParameters(bool v)
 void RosegardenGUIView::slotShowRulers(bool v)
 {
     if (v) {
-        m_trackEditor->getTopBarButtons()->show();
-        m_trackEditor->getBottomBarButtons()->show();
+        m_trackEditor->getTopBarButtons()->getLoopRuler()->show();
+        m_trackEditor->getBottomBarButtons()->getLoopRuler()->show();
     } else {
-        m_trackEditor->getTopBarButtons()->hide();
-        m_trackEditor->getBottomBarButtons()->hide();
+        m_trackEditor->getTopBarButtons()->getLoopRuler()->hide();
+        m_trackEditor->getBottomBarButtons()->getLoopRuler()->hide();
     }
 }
 
