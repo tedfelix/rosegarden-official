@@ -102,7 +102,7 @@ signals:
      * It should be connected to the update() slot of widgets
      * which need to repaint after a command
      */
-    void update();
+    void commandExecuted();
 
     /**
      * This is emitted every time we reach the index where you

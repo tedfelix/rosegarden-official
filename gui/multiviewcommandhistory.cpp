@@ -134,7 +134,7 @@ MultiViewCommandHistory::addCommand(Command *command, bool execute)
     
     if (execute) {
 	command->execute();
-        emit update();
+        emit commandExecuted();
 	emit commandExecuted(command);
     }
 
@@ -148,7 +148,7 @@ MultiViewCommandHistory::slotUndo()
 
     Command *command = m_undoStack.top();
     command->unexecute();
-    emit update();
+    emit commandExecuted();
     emit commandExecuted(command);
 
     m_redoStack.push(command);
@@ -167,7 +167,7 @@ MultiViewCommandHistory::slotRedo()
 
     Command *command = m_redoStack.top();
     command->execute();
-    emit update();
+    emit commandExecuted();
     emit commandExecuted(command);
 
     m_undoStack.push(command);
