@@ -177,21 +177,26 @@ public:
 
     void setModified(bool value);
 
+    void checkModified();
 
 public slots:
     void slotPopulateDevice(QListViewItem*);
 
     void slotOk();
     void slotApply();
+    void slotClose();
 
     void slotAddBank();
     void slotDeleteBank();
     void slotDeleteAllBanks();
 
-    void slotImportBank();
-    void slotExportBank();
+    void slotImport();
+    void slotExport();
 
     void slotModifyDeviceOrBankName(QListViewItem*, const QString&,int);
+
+    void slotCopy();
+    void slotPaste();
 
 protected:
     MidiDeviceListViewItem* getParentDeviceItem(QListViewItem*);
@@ -211,6 +216,10 @@ protected:
 
     QPushButton             *m_importBanks;
     QPushButton             *m_exportBanks;
+
+    QPushButton             *m_copyPrograms;
+    QPushButton             *m_pastePrograms;
+    std::pair<int, int>      m_copyBank;
 
     std::vector<std::string>                     m_deviceList;
     MidiProgramsEditor::MidiBankContainer        m_bankList;
@@ -276,7 +285,7 @@ public slots:
 protected:
     RosegardenComboBox *m_deviceCombo;
 
-    QButtonGroup        *m_buttonGroup;
+    QButtonGroup       *m_buttonGroup;
     QRadioButton       *m_mergeBanks;
     QRadioButton       *m_overwriteBanks;
 

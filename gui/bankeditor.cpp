@@ -459,10 +459,11 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
                                    RosegardenGUIDoc *doc):
     KDialogBase(parent, "bankeditordialog", true,
                 i18n("Manage Banks and Programs..."),
-                Ok | Apply | Cancel,
+                Ok | Apply | Close,
                 Ok, true),
     m_studio(&doc->getStudio()),
     m_doc(doc),
+    m_copyBank(-1, -1),
     m_modified(false),
     m_keepBankList(false),
     m_lastDevice(0),
@@ -496,7 +497,10 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     m_importBanks = new QPushButton(i18n("Import Banks"), bankBox);
     m_exportBanks = new QPushButton(i18n("Export Banks"), bankBox);
+    new QLabel(bankBox); // spacer
 
+    m_copyPrograms = new QPushButton(i18n("Copy Programs"), bankBox);
+    m_pastePrograms = new QPushButton(i18n("Paste Programs"), bankBox);
 
     connect(m_listView, SIGNAL(currentChanged(QListViewItem*)),
             this,       SLOT(slotPopulateDevice(QListViewItem*)));
@@ -522,10 +526,16 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
             this, SLOT(slotDeleteAllBanks()));
 
     connect(m_importBanks, SIGNAL(clicked()),
-            this, SLOT(slotImportBank()));
+            this, SLOT(slotImport()));
 
     connect(m_exportBanks, SIGNAL(clicked()),
-            this, SLOT(slotExportBankI()));
+            this, SLOT(slotExport()));
+
+    connect(m_copyPrograms, SIGNAL(clicked()),
+            this, SLOT(slotCopy()));
+
+    connect(m_pastePrograms, SIGNAL(clicked()),
+            this, SLOT(slotPaste()));
 
     // Initialise the dialog
     //
@@ -591,6 +601,10 @@ BankEditorDialog::initDialog()
     //
     slotPopulateDevice(m_listView->firstChild());
     m_listView->setSelected(m_listView->firstChild(), true);
+
+    m_copyPrograms->setEnabled(false);
+    m_pastePrograms->setEnabled(false);
+
 }
 
 
@@ -601,20 +615,14 @@ BankEditorDialog::getCurrentMidiDevice()
 }
 
 void
-BankEditorDialog::slotPopulateDevice(QListViewItem* item)
+BankEditorDialog::checkModified()
 {
-    RG_DEBUG << "BankEditorDialog::slotPopulateDevice\n";
-
-    if (!item) return;
-
     if (m_modified)
     {
         // then ask if we want to apply the changes
-        QString text = QString("\"%1\"").
-                       arg(strtoqstr(m_deviceList[m_lastDevice])) +
-                       i18n(" - there are some pending changes for this device.\nApply these changes?");
 
-        int reply = KMessageBox::questionYesNo(this, text);
+        int reply = KMessageBox::questionYesNo(this,
+                                               i18n("Apply pending changes?"));
 
         if (reply == KMessageBox::Yes)
         {
@@ -651,18 +659,26 @@ BankEditorDialog::slotPopulateDevice(QListViewItem* item)
         setModified(false);
     }
 
-    MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(item);
+}
+
+void
+BankEditorDialog::slotPopulateDevice(QListViewItem* item)
+{
+    RG_DEBUG << "BankEditorDialog::slotPopulateDevice\n";
+
+    if (!item) return;
+
+    checkModified();
     
+    MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(item);
     if (!bankItem) {
         RG_DEBUG << "BankEditorDialog::slotPopulateDevice : not a bank item - disabling\n";
         m_deleteBank->setEnabled(false);
-        m_deleteAllBanks->setEnabled(false);
         m_programEditor->clearAll();
         return;
     }
     
     m_deleteBank->setEnabled(true);
-    m_deleteAllBanks->setEnabled(true);
 
     Rosegarden::MidiDevice *device = getMidiDevice(bankItem->getDevice());
 
@@ -728,6 +744,12 @@ BankEditorDialog::slotApply()
         initDialog();
     }
 }
+void
+BankEditorDialog::slotClose()
+{
+    checkModified();
+    reject();
+}
 
 MidiDeviceListViewItem*
 BankEditorDialog::getParentDeviceItem(QListViewItem* item)
@@ -755,11 +777,19 @@ BankEditorDialog::slotAddBank()
     QListViewItem* currentItem = m_listView->currentItem();
 
     MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentItem);
-
     Rosegarden::MidiDevice *device = getMidiDevice(currentItem);
    
     if (device)
     {
+        // If the bank and program lists are empty then try to
+        // populate them.
+        //
+        if (m_bankList.size() == 0 && m_programList.size() == 0)
+        {
+            m_bankList = device->getBanks();
+            m_programList = device->getPrograms();
+        }
+
         std::pair<int, int> bank = getFirstFreeBank(m_listView->currentItem());
 
         Rosegarden::MidiBank newBank;
@@ -768,12 +798,13 @@ BankEditorDialog::slotAddBank()
         newBank.name = "<new bank>";
         m_bankList.push_back(newBank);
 
-        QListViewItem* newBankItem = new MidiBankListViewItem(deviceItem->getDevice(),
-                                                              m_bankList.size() - 1,
-                                                              deviceItem,
-                                                              strtoqstr(newBank.name),
-                                                              QString("%1").arg(newBank.msb),
-                                                              QString("%1").arg(newBank.lsb));
+        QListViewItem* newBankItem =
+            new MidiBankListViewItem(deviceItem->getDevice(),
+                                     m_bankList.size() - 1,
+                                     deviceItem,
+                                     strtoqstr(newBank.name),
+                                     QString("%1").arg(newBank.msb),
+                                     QString("%1").arg(newBank.lsb));
         keepBankListForNextPopulate();
         m_listView->setCurrentItem(newBankItem);
 
@@ -963,7 +994,7 @@ BankEditorDialog::getCommandHistory()
 }
 
 void
-BankEditorDialog::slotImportBank()
+BankEditorDialog::slotImport()
 {
     KURL url = KFileDialog::getOpenURL(":ROSEGARDEN", "*.rg",
                             this, i18n("Import Banks from Device in File"));
@@ -1112,7 +1143,17 @@ BankEditorDialog::slotImportBank()
 }
 
 void
-BankEditorDialog::slotExportBank()
+BankEditorDialog::slotCopy()
+{
+}
+
+void
+BankEditorDialog::slotPaste()
+{
+}
+
+void
+BankEditorDialog::slotExport()
 {
 }
 
