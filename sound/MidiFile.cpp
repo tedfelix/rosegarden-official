@@ -750,9 +750,13 @@ MidiFile::convertToRosegarden()
 // Takes a Composition and turns it into internal MIDI representation
 // that can then be written out to file.
 //
-// For the moment we should watch to make sure that multiple
-// Track (parts) don't equate to multiple tracks in the MIDI
-// Composition.
+// For the moment we should watch to make sure that multiple Track
+// (parts) don't equate to multiple tracks in the MIDI Composition.
+//
+// This is a two pass operation - firstly convert the RG Composition
+// into MIDI events and insert anything extra we need (i.e. NOTE OFFs)
+// with absolute times before then processing all timings into delta
+// times.
 //
 //
 void
@@ -761,9 +765,8 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   MidiEvent *midiEvent;
   int trackNumber = 0;
 
-  int trackStartTime;
-  int lastEventDeltaTime;
-  int midiEventDeltaTime;
+  //int trackStartTime;
+  int midiEventAbsoluteTime;
   int midiChannel = 0;
 
   //int midiInstrument;
@@ -783,7 +786,6 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   //
   //
 
-
   // Our Composition to MIDI timing factor
   //
   float timingFactor = (float) _timingDivision/
@@ -794,18 +796,16 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   cout << "TIMING FACTOR   = " << timingFactor << endl;
 #endif 
 
+
+  // In pass one just insert all events including new NOTE OFFs at the right
+  // absolute times.
+  //
   for (Rosegarden::Composition::const_iterator trk = comp.begin();
                                                trk != comp.end(); ++trk)
   {
     // We use this later to get NOTE durations
     //
     TrackPerformanceHelper helper(**trk);
-
-    trackStartTime = (int)(timingFactor * (float)(*trk)->getStartIndex());
-
-    // Reset this for ever track
-    //
-    lastEventDeltaTime = 0;
 
     for (Rosegarden::Track::iterator el = (*trk)->begin();
                                      el != (*trk)->end(); ++el)
@@ -815,17 +815,12 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
       {
         // Set delta time temporarily to absolute time for this event.
         //
-        midiEventDeltaTime = (int)(timingFactor * (float)
+        midiEventAbsoluteTime = (int)(timingFactor * (float)
                                                   ((*el)->getAbsoluteTime()));
                               
-        // Convert to proper delta time and store the marker
-        //
-        midiEventDeltaTime -= lastEventDeltaTime;
-        lastEventDeltaTime = midiEventDeltaTime;
-
         // insert the NOTE_ON at the appropriate channel
         //
-        midiEvent = new MidiEvent(midiEventDeltaTime,           // time
+        midiEvent = new MidiEvent(midiEventAbsoluteTime,        // time
                                   MIDI_NOTE_ON + midiChannel,   // eventcode
                                   (*el)->get<Int>("pitch"),     // pitch
                                   127);                         // velocity
@@ -837,12 +832,11 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
         // We use TrackPerformanceHelper::getSoundingDuration()
         // to work out the tied duration of the NOTE.
         //
-        midiEventDeltaTime += (int)(timingFactor * (float)
+        midiEventAbsoluteTime += (int)(timingFactor * (float)
                                             (helper.getSoundingDuration(el)));
-
         // insert the matching NOTE OFF
         //
-        midiEvent = new MidiEvent(midiEventDeltaTime,
+        midiEvent = new MidiEvent(midiEventAbsoluteTime,
                                   MIDI_NOTE_OFF + midiChannel,
                                   (*el)->get<Int>("pitch"),
                                   127);
@@ -872,12 +866,33 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
     trackNumber++;
   }
 
-  // Setup number of tracks
+  // Setup number of tracks in daddy object
   //
   _numberOfTracks = trackNumber;
 
+  // Now gnash through the MIDI events and turn the absolute times
+  // into delta times.
+  //
+  //
+  MidiTrackIterator midiEventIt;
+  int lastMidiTime;
+
+  for (unsigned int i = 0; i < _numberOfTracks; i++)
+  {
+    lastMidiTime = 0;
+    for ( midiEventIt = (_midiComposition[i].begin());
+          midiEventIt != (_midiComposition[i].end()); midiEventIt++ )
+    {
+      midiEventAbsoluteTime = midiEventIt->time() - lastMidiTime;
+      lastMidiTime = midiEventIt->time();
+      midiEventIt->setTime(midiEventAbsoluteTime);
+    }
+  }
+
   return;
 }
+
+
 
 // Convert an integer into a two byte representation and
 // write out to the MidiFile.

@@ -38,20 +38,20 @@ namespace Rosegarden
 
     // single data byte case
     //
-    MidiEvent(const unsigned long &deltaTime,
+    MidiEvent(const unsigned int &deltaTime,
               const MidiByte &eventCode,
               const MidiByte &data1);
 
     // double data byte
     //
-    MidiEvent(const unsigned long &deltaTime,
+    MidiEvent(const unsigned int &deltaTime,
               const MidiByte &eventCode,
               const MidiByte &data1,
               const MidiByte &data2);
 
     // meta event
     //
-    MidiEvent(const unsigned long &deltaTime,
+    MidiEvent(const unsigned int &deltaTime,
               const MidiByte &eventCode,
               const MidiByte &metaEventCode,
               const std::string &metaMessage);
@@ -60,8 +60,9 @@ namespace Rosegarden
 
     void print();
 
-    unsigned long time() { return _deltaTime; }
-    unsigned long addTime(const unsigned long &time);
+    unsigned int time() { return _deltaTime; }
+    unsigned int addTime(const unsigned int &time);
+    void setTime(const unsigned int &time) { _deltaTime = time; }
 
     inline const MidiByte messageType()
         { return ( _eventCode & MIDI_MESSAGE_TYPE_MASK ); }
@@ -80,17 +81,17 @@ namespace Rosegarden
     inline std::string metaMessage() const { return _metaMessage; }
     inline const MidiByte metaMessageType() { return _metaEventCode; }
 
-    void duration(const unsigned long& duration)
+    void duration(const unsigned int& duration)
         { _duration = duration; }
 
-    const unsigned long& duration() { return _duration; }
+    const unsigned int& duration() { return _duration; }
 
   private:
 
     MidiEvent& operator=(const MidiEvent mE) {;}
 
-    unsigned long _deltaTime;
-    unsigned long _duration;
+    unsigned int _deltaTime;
+    unsigned int _duration;
     MidiByte _eventCode;
     MidiByte _data1;
     MidiByte _data2;

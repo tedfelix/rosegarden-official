@@ -32,7 +32,7 @@ MidiEvent::MidiEvent()
 {
 }
 
-MidiEvent::MidiEvent(const unsigned long &deltaTime,
+MidiEvent::MidiEvent(const unsigned int &deltaTime,
                      const MidiByte &eventCode,
                      const MidiByte &data1):
                        _deltaTime(deltaTime),
@@ -44,7 +44,7 @@ MidiEvent::MidiEvent(const unsigned long &deltaTime,
 {
 }
 
-MidiEvent::MidiEvent(const unsigned long &deltaTime,
+MidiEvent::MidiEvent(const unsigned int &deltaTime,
                      const MidiByte &eventCode,
                      const MidiByte &data1,
                      const MidiByte &data2):
@@ -58,7 +58,7 @@ MidiEvent::MidiEvent(const unsigned long &deltaTime,
 {
 }
 
-MidiEvent::MidiEvent(const unsigned long &deltaTime,
+MidiEvent::MidiEvent(const unsigned int &deltaTime,
                      const MidiByte &eventCode,
                      const MidiByte &metaEventCode,
                      const string &metaMessage):
@@ -79,7 +79,7 @@ MidiEvent::~MidiEvent()
 void
 MidiEvent::print()
 {
-  unsigned long tempo;
+  unsigned int tempo;
   int tonality;
   string sharpflat;
 
@@ -137,8 +137,8 @@ MidiEvent::print()
         break;
 
       case MIDI_SET_TEMPO:
-        tempo = ((unsigned long)(((MidiByte)_metaMessage[0]) << 16)) + 
-                ((unsigned long)(((MidiByte)_metaMessage[1]) << 8)) +
+        tempo = ((unsigned int)(((MidiByte)_metaMessage[0]) << 16)) + 
+                ((unsigned int)(((MidiByte)_metaMessage[1]) << 8)) +
                 (short)(MidiByte)_metaMessage[2]; 
         tempo = 60000000/tempo;
         cout << "SET TEMPO:\t" << tempo << endl;
@@ -230,9 +230,9 @@ MidiEvent::print()
 }
 
 // Adds the argument to _deltaTime and returns the result
-// thus aggregating the times as we go along
-unsigned long
-MidiEvent::addTime(const unsigned long &time)
+// thus aggregating the times as we go aint
+unsigned int
+MidiEvent::addTime(const unsigned int &time)
 {
   _deltaTime += time;
   return _deltaTime;
