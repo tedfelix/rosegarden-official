@@ -152,9 +152,6 @@ public:
 	m_composition = composition;
     }
 
-    /// Only valid when in a Composition
-    const Quantizer *getQuantizer() const;
-
 
     /**
      * Inserts a single Event
@@ -429,7 +426,10 @@ protected:
     typedef Segment::iterator iterator;
 
     Segment &segment() { return m_segment; }
-    const Quantizer &quantizer() { return *(segment().getQuantizer()); }
+
+    const Quantizer &basicQuantizer();
+    const Quantizer &noteQuantizer();
+    const Quantizer &legatoQuantizer();
 
     Segment::iterator begin() { return segment().begin(); }
     Segment::iterator end()   { return segment().end();   }

@@ -104,6 +104,11 @@ NotationHLayout::getAvailableSpacings()
     return m_availableSpacings;
 }
 
+const Quantizer *
+NotationHLayout::getQuantizer() const
+{
+    return getComposition()->getLegatoQuantizer();
+}
 
 NotationHLayout::BarDataList &
 NotationHLayout::getBarData(StaffType &staff)
@@ -175,7 +180,7 @@ double NotationHLayout::getIdealBarWidth(StaffType &staff,
         return fixedWidth;
     }
 
-    int d = (*shortest)->getQuantizedDuration();
+    int d = getQuantizer()->getQuantizedDuration((*shortest)->event());
 
     if (d == 0) {
 //        kdDebug(KDEBUG_AREA) << "Second trivial return" << endl;
@@ -218,7 +223,9 @@ NotationHLayout::getStartOfQuantizedSlice(const NotationElementList *notes,
     while (true) {
 	if (i == notes->begin()) return i;
 	--j;
-	if ((*j)->getQuantizedAbsoluteTime() < t) return i;
+	if (getQuantizer()->getQuantizedAbsoluteTime((*j)->event()) < t) {
+	    return i;
+	}
 	i = j;
     }
 }
@@ -241,10 +248,8 @@ NotationHLayout::scanStaff(StaffType &staff)
 
     barList.clear();
 
-    Composition *composition = t.getComposition();
-
-    int barNo = composition->getBarNumber(t.getStartTime());
-    int endBarNo = composition->getBarNumber(t.getEndTime());
+    int barNo = getComposition()->getBarNumber(t.getStartTime());
+    int endBarNo = getComposition()->getBarNumber(t.getEndTime());
     int barCounter = 0;
 
     SegmentNotationHelper nh(t);
@@ -257,7 +262,7 @@ NotationHLayout::scanStaff(StaffType &staff)
 
     while (barNo <= endBarNo) {
 
-	std::pair<timeT, timeT> barTimes = composition->getBarRange(barNo);
+	std::pair<timeT, timeT> barTimes = getComposition()->getBarRange(barNo);
 
         NotationElementList::iterator from = 
 	    getStartOfQuantizedSlice(notes, barTimes.first);
@@ -284,7 +289,7 @@ NotationHLayout::scanStaff(StaffType &staff)
 
 	Event *timeSigEvent = 0;
 	bool newTimeSig = false;
-	timeSignature = composition->getTimeSignatureInBar(barNo, newTimeSig);
+	timeSignature = getComposition()->getTimeSignatureInBar(barNo, newTimeSig);
 
 	if (newTimeSig) {
 	    timeSigEvent = timeSignature.getAsEvent(barTimes.first);
@@ -418,7 +423,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
 			   int &shortCount,
 			   NotationElementList::iterator &to)
 {
-    Chord chord(*notes, itr);
+    Chord chord(*notes, itr, getQuantizer());
     AccidentalTable newAccTable(accTable);
     Accidental someAccidental = NoAccidental;
     bool barEndsInChord = false;
@@ -471,12 +476,12 @@ NotationHLayout::scanChord(NotationElementList *notes,
 
     NotationElementList::iterator myShortest = chord.getShortestElement();
 
-    timeT d = (*myShortest)->getQuantizedDuration();
+    timeT d = getQuantizer()->getQuantizedDuration((*myShortest)->event());
     baseWidth += getMinWidth(**myShortest);
 
     timeT sd = 0;
     if (shortest != notes->end()) {
-	sd = (*shortest)->getQuantizedDuration();
+	sd = getQuantizer()->getQuantizedDuration((*shortest)->event());
     }
 
     if (d > 0 && (sd == 0 || d <= sd)) {
@@ -499,13 +504,12 @@ NotationHLayout::scanRest
  int &, int &baseWidth,
  NotationElementList::iterator &shortest, int &shortCount)
 {
-    timeT d = (*itr)->getQuantizedDuration();
+    timeT d = getQuantizer()->getQuantizedDuration((*itr)->event());
     baseWidth += getMinWidth(**itr);
 
     timeT sd = 0;
     if (shortest != notes->end()) {
-	sd = (*shortest)->getQuantizedDuration();
-
+	sd = getQuantizer()->getQuantizedDuration((*shortest)->event());
     }
 
     if (d > 0 && (sd == 0 || d <= sd)) {
@@ -567,9 +571,9 @@ NotationHLayout::fillFakeBars()
 
         Segment &segment = staff->getSegment();
 
-	for (int b = 0; b < segment.getComposition()->getNbBars(); ++b) {
+	for (int b = 0; b < getComposition()->getNbBars(); ++b) {
 
-	    if (segment.getComposition()->getBarRange(b).first
+	    if (getComposition()->getBarRange(b).first
 		>= segment.getStartTime()) break;
 
             list.push_front(BarData(-1, staff->getViewElementList()->end()));
@@ -1060,14 +1064,15 @@ timeT
 NotationHLayout::getSpacingDuration(StaffType &staff,
 				    const NotationElementList::iterator &i)
 {
-    timeT t((*i)->getQuantizedAbsoluteTime());
-    timeT d((*i)->getQuantizedDuration());
+    timeT t(getQuantizer()->getQuantizedAbsoluteTime((*i)->event()));
+    timeT d(getQuantizer()->getQuantizedDuration((*i)->event()));
 
     NotationElementList::iterator j(i), e(staff.getViewElementList()->end());
-    while (j != e && (*j)->getQuantizedAbsoluteTime() == t) ++j;
+    while (j != e &&
+	   getQuantizer()->getQuantizedAbsoluteTime((*j)->event()) == t) {
+	++j;
+    }
     if (j == e) return d;
-//    else return (*j)->getQuantizedAbsoluteTime() - t;
-    // better for things like short tuplets:
     else return (*j)->getAbsoluteTime() - (*i)->getAbsoluteTime();
 }
 
@@ -1081,7 +1086,7 @@ NotationHLayout::positionChord(StaffType &staff,
 			       TieMap &tieMap,
 			       NotationElementList::iterator &to)
 {
-    Chord chord(*staff.getViewElementList(), itr, clef, key);
+    Chord chord(*staff.getViewElementList(), itr, getQuantizer(), clef, key);
     double baseX = (*itr)->getLayoutX();
 
     // To work out how much space to allot a note (or chord), start
@@ -1231,7 +1236,8 @@ NotationHLayout::positionChord(StaffType &staff,
 	nextGroupId != groupId) {
 	
 	NotationStaff &notationStaff = dynamic_cast<NotationStaff &>(staff);
-	NotationGroup group(*staff.getViewElementList(), itr, clef, key);
+	NotationGroup group(*staff.getViewElementList(), itr,
+			    getQuantizer(), clef, key);
 	group.applyBeam(notationStaff);
 	group.applyTuplingLine(notationStaff);
     }

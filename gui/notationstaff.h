@@ -60,8 +60,6 @@ public:
      */
     virtual void changeFont(std::string fontName, int resolution);
 
-    virtual void setLegatoDuration(Rosegarden::timeT duration);
-
     LinedStaff<NotationElement>::setPageMode;
     LinedStaff<NotationElement>::setPageWidth;
     LinedStaff<NotationElement>::setRowSpacing;

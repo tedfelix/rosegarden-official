@@ -88,22 +88,6 @@ NotationElement::isNote() const
     return event()->isa(Note::EventType);
 }
 
-timeT
-NotationElement::getQuantizedDuration() const
-{
-    timeT d = getDuration();
-    event()->get<Int>(Quantizer::LegatoDurationProperty, d);
-    return d;
-}
-
-timeT
-NotationElement::getQuantizedAbsoluteTime() const
-{
-    timeT t = getAbsoluteTime();
-    event()->get<Int>(Quantizer::AbsoluteTimeProperty, t);
-    return t;
-}
-
 void
 NotationElement::setCanvasItem(QCanvasItem *e, double dxoffset, double dyoffset)
 {

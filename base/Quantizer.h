@@ -25,181 +25,220 @@
 #include "Segment.h"
 #include "Event.h"
 #include "NotationTypes.h"
+#include <string>
 
 namespace Rosegarden {
 
 /**
-
    The Quantizer class rounds the starting times and durations of note
    and rest events according to one of a set of possible criteria.
-   These criteria are:
-
-   -- "Unit quantization": For note events, starting time and duration
-   are rounded to the nearest multiple of a given unit duration (by
-   default, the duration of the shortest available note).  Rests are
-   quantized in the same way, except where preceded by a note that has
-   been lengthened by quantization, in which case the rest is
-   shortened correspondingly before rounding.  This is the simplest
-   sort of quantization.
-
-   -- "Note quantization": Starting time is quantized as in unit
-   quantization, but duration is first quantized by unit and then
-   rounded to the nearest available note duration with a maximum of a
-   given number of dots.
-
-   -- "Legato quantization": As for note quantization, except that the
-   given unit (for the initial unit-quantization step) is only taken
-   into account if examining a note event whose duration will be
-   caused to increase and that is followed by enough rest space to
-   permit that increase.  Otherwise, the minimum unit is used.  It is
-   therefore normal to perform legato quantization with larger units
-   than the other kinds.
-
-   [For example, say you have an event with duration 178.  A unit
-   quantizer with a demisemi unit (duration 12) will quantize this to
-   duration 180 (the nearest value divisible by 12).  But 180 is not a
-   good note duration: a note quantizer would instead quantize to 192
-   (the nearest note duration: a minim).]
-
-   The results of the quantization are stored in separate properties
-   in each event; quantization is not destructive of the event's
-   intrinsic absolute time and duration.
-
-   Note that although the quantizer may give rest events a duration of
-   zero, it will never do so to note events.
-
-   For best results, always quantize a whole segment or section of segment
-   at once.  The quantizer can only do the right thing for rest events
-   if given a whole section to consider at once.
 */
 
 class Quantizer
 {
 public:
+    static const std::string DefaultPropertyNamePrefix;
+    enum QuantizationType { UnitQuantize, NoteQuantize, LegatoQuantize };
+
+    struct StandardQuantization {
+	QuantizationType type;
+	timeT		 unit;
+	int		 maxDots;
+	std::string	 name;
+	std::string	 noteName;  // empty string if none
+
+	StandardQuantization(QuantizationType _type,
+			     timeT _unit, int _maxDots,
+			     std::string _name,
+			     std::string _noteName) :
+	    type(_type), unit(_unit), maxDots(_maxDots),
+	    name(_name), noteName(_noteName) { }
+    };
+
+
     /**
-     * Constructs a quantizer programmed to do unit quantization
-     * to a resolution of "unit" time units (defaulting to the
-     * shortest note duration), and note quantization with up to
-     * "maxDots" dots per note.
+     * Construct a quantizer programmed to do a single sort of
+     * quantization.
+     *
+     * \arg propertyNamePrefix : common prefix for the property
+     * names used to store quantized values in events; permits
+     * use of more than one quantizer on a given event at a time.
+     * Quantization is not destructive of the event's intrinsic
+     * absolute time and duration.
+     *
+     * \arg type : Type of quantization to carry out, as follows:
+     *
+     *   "UnitQuantize": For note events, starting time and duration
+     *   are rounded to the nearest multiple of a given unit duration
+     *   (by default, the duration of the shortest available note).
+     *   Rests are quantized in the same way, except where preceded by
+     *   a note that has been lengthened by quantization, in which
+     *   case the rest is shortened correspondingly before rounding.
+     *   This is the simplest sort of quantization.
+     * 
+     *   "Note": Starting time is quantized as in unit quantization,
+     *   but duration is first quantized by unit and then rounded to
+     *   the nearest available note duration with a maximum of a given
+     *   number of dots.
+     * 
+     *   "Legato": As for note quantization, except that the given
+     *   unit (for the initial unit-quantization step) is only taken
+     *   into account if examining a note event whose duration will be
+     *   caused to increase and that is followed by enough rest space
+     *   to permit that increase.  Otherwise, the minimum unit is
+     *   used.  It is therefore normal to perform legato quantization
+     *   with larger units than the other kinds.
+     *
+     *   [For example, say you have an event with duration 178.  A
+     *   unit quantizer with a demisemi unit (duration 12) will
+     *   quantize this to duration 180 (the nearest value divisible by
+     *   12).  But 180 is not a good note duration: a note quantizer
+     *   would instead quantize to 192 (the nearest note duration: a
+     *   minim).]
+     *
+     * \arg unit : Quantization unit.  Default is the shortest note
+     * duration.
+     *
+     * \arg maxDots : how many dots to allow on a note before
+     * declaring it not a valid note type.  Only of interest for
+     * note or legato quantization.
+     *
+     * Note that although the quantizer may give rest events a
+     * duration of zero, it will never do so to note events -- you
+     * can't make a note disappear completely by quantizing it.
+     *
+     * For best results, always quantize a whole segment or section
+     * of segment at once.  The quantizer can only do the right thing
+     * for rest events if given a whole section to consider at once.
+     *
+     * The configuration of a Quantizer can't be changed after
+     * construction.  Instead, construct a new one and assign it
+     * if necessary.  (Construction and assignment are cheap.)
      */
-    Quantizer(int unit = -1, int maxDots = 2);
+    Quantizer(std::string propertyNamePrefix = DefaultPropertyNamePrefix,
+	      QuantizationType type = UnitQuantize,
+	      timeT unit = -1, int maxDots = 2);
+
+    /**
+     * Construct a quantizer based on a standard quantization
+     * setup.
+     */
+    Quantizer(const StandardQuantization &,
+	      std::string propertyNamePrefix = DefaultPropertyNamePrefix);
+
+    Quantizer(const Quantizer &);
+    Quantizer &operator=(const Quantizer &);
+
     ~Quantizer();
 
-    static const PropertyName AbsoluteTimeProperty;
-    static const PropertyName DurationProperty;
-    static const PropertyName NoteDurationProperty;
-    static const PropertyName LegatoDurationProperty;
-    
-    void setUnit(int unit)        { m_unit = unit; }
-    void setUnit(Note note)	  { m_unit = note.getDuration(); }
-    void setMaxDots(int maxDots)  { m_maxDots = maxDots; }
-
-    int getUnit() const           { return m_unit; }
-    int getMaxDots() const        { return m_maxDots; }
+    /**
+     * Get the name of the property this Quantizer places the
+     * quantized absolute time in on each event it quantizes.
+     * This name will depend on the propertyNamePrefix passed
+     * to the Quantizer's constructor.
+     */
+    PropertyName getAbsoluteTimeProperty() const {
+	return m_absoluteTimeProperty;
+    }
 
     /**
-     * Unit-quantizes a section of a segment.  Sets the DurationProperty
-     * and AbsoluteTimeProperty on all note and rest events; does not
-     * change the event's intrinsic absoluteTime and duration.
+     * Get the name of the property this Quantizer places the
+     * quantized duration in on each event it quantizes.
+     * This name will depend on the propertyNamePrefix passed
+     * to the Quantizer's constructor.
      */
-    void quantizeByUnit(Segment::iterator from, Segment::iterator to) const;
+    PropertyName getDurationProperty() const {
+	return m_durationProperty;
+    }
 
     /**
-     * Note-quantizes a section of a segment.  Sets the
-     * DurationProperty, NoteDurationProperty and AbsoluteTimeProperty
-     * properties on all note and rest events; does not change the
-     * event's intrinsic absoluteTime and duration.
+     * Get the type of quantization this Quantizer performs.
      */
-    void quantizeByNote(Segment::iterator from, Segment::iterator to) const;
+    QuantizationType getType() const { return m_type; }
 
     /**
-     * Legato-quantizes a section of a segment.  Sets the
-     * DurationProperty, LegatoDurationProperty and AbsoluteTimeProperty
-     * properties on all note and rest events; does not change the
-     * event's intrinsic absoluteTime and duration.
+     * Get the unit of the Quantizer.
      */
-    void quantizeLegato(Segment::iterator from, Segment::iterator to) const;
+    timeT getUnit() const { return m_unit; }
 
     /**
-     * Unit-quantizes a section of a segment, then sets the absolute
-     * time and duration of each event to its quantized values.  This
-     * is a destructive operation that should only be carried out on
-     * the user's explicit request.
+     * If this is a Note or Legato Quantizer, get the maximum
+     * number of dots permissible on a note before the quantizer
+     * decides it's not a legal note.
      */
-    void fixUnitQuantizedValues(Segment::iterator from, Segment::iterator to)
+    int getMaxDots() const { return m_maxDots; }
+
+    /**
+     * Quantize a section of a Segment.  This is the recommended
+     * method for general quantization.
+     */
+    void quantize(Segment::iterator from, Segment::iterator to) const;
+
+    /**
+     * Quantize a section of a Segment, and force the quantized
+     * results into the formal absolute time and duration of
+     * the events.  This is a destructive operation that should
+     * not be carried out except on a user's explicit request.
+     *
+     * //!!! NB -- this will fail if quantization ever changes the
+     * theoretical order of events, which might happen if two
+     * events have different durations that quantize to the same
+     * value but also have different suborderings.  Need to
+     * consider this whole issue of allowing people to change
+     * events' absolute times after they've been inserted.
+     */
+    void fixQuantizedValues(Segment::iterator from, Segment::iterator to)
 	const;
 
     /**
-     * Note-quantizes a section of a segment, then sets the absolute
-     * time and duration of each event to its quantized values.  This
-     * is a destructive operation that should only be carried out on
-     * the user's explicit request.
+     * Get the contents of the quantized duration property of
+     * the given event, or quantize it if the property is so far
+     * unset.  Could return an incorrect result if the real
+     * duration of the event has changed since it was last
+     * quantized.  Note that quantizing individual events may be
+     * less reliable than quantizing whole Segments; this should
+     * not be used as a substitute for batch-style quantization.
      */
-    void fixNoteQuantizedValues(Segment::iterator from, Segment::iterator to)
-	const;
+    timeT getQuantizedDuration(Event *el) const;
 
     /**
-     * Legato-quantizes a section of a segment, then sets the absolute
-     * time and duration of each event to its quantized values.  This
-     * is a destructive operation that should only be carried out on
-     * the user's explicit request.
+     * Get the contents of the quantized absolute time property of
+     * the given event, or quantize it if the property is so far
+     * unset.  Note that quantizing individual events may be
+     * less reliable than quantizing whole Segments; this should
+     * not be used as a substitute for batch-style quantization.
      */
-    void fixLegatoQuantizedValues(Segment::iterator from, Segment::iterator to)
-	const;
+    timeT getQuantizedAbsoluteTime(Event *el) const;
 
     /**
-     * Returns the DurationProperty if it exists; otherwise quantizes
-     * the event by unit and then returns that property.  If the
-     * event's duration has been changed since it was last quantized,
-     * or the last quantization used a different unit, this method may
-     * return the wrong value.  Also, this method cannot take into
-     * account the proper relationship between notes and rests; you
-     * should always prefer to quantize whole segments where possible.
+     * Treat the given time as if it were the absolute time of
+     * an Event, and return a quantized value.  (This may be
+     * necessary for Note and Legato quantizers, to avoid rounding
+     * absolute times to note-duration lengths.)
      */
-    timeT getUnitQuantizedDuration(Rosegarden::Event *el) const;
+    timeT quantizeAbsoluteTime(timeT absoluteTime) const;
 
     /**
-     * Returns the AbsoluteTimeProperty if it exists; otherwise
-     * quantizes the event by unit and then returns that property.  If
-     * the event's absolute time has been changed since it was last
-     * quantized, or the last quantization used a different unit, this
-     * method may return the wrong value.  Also, this method cannot
-     * take into account the proper relationship between notes and
-     * rests; you should always prefer to quantize whole segments where
-     * possible.
+     * Treat the given time as if it were the duration of
+     * an Event, and return a quantized value.
      */
-    timeT getUnitQuantizedAbsoluteTime(Rosegarden::Event *el) const;
+    timeT quantizeDuration(timeT duration) const;
 
     /**
-     * Returns the NoteDurationProperty if it exists, otherwise
-     * quantizes the event by note and then returns that property.  If
-     * the event's duration has been changed since it was last
-     * quantized, or the last quantization used a different maxDots
-     * value, this may return the wrong value.  Also, this method
-     * cannot take into account the proper relationship between notes
-     * and rests; you should always prefer to quantize whole segments
-     * where possible.
+     * Unquantize all events in the given range, for this
+     * quantizer.  Properties set by other quantizers with
+     * different propertyNamePrefix values will remain.
      */
-    timeT getNoteQuantizedDuration(Rosegarden::Event *el) const;
+    void unquantize(Segment::iterator from, Segment::iterator to) const;
 
     /**
-     * Unit-quantizes a single duration, assumed to be of a note
-     * rather than a rest.
+     * Unquantize the given event, for this
+     * quantizer.  Properties set by other quantizers with
+     * different propertyNamePrefix values will remain.
      */
-    timeT quantizeByUnit(timeT duration) const;
+    void unquantize(Event *el) const;
 
-    /**
-     * Note-quantizes a single duration, assumed to be of a note
-     * rather than a rest.
-     */
-    timeT quantizeByNote(timeT duration) const;
-
-    /**
-     * Removes the quantization properties from an event.  This is
-     * necessary if you should change the duration of an event but
-     * don't want to take the time to requantize it straight away.
-     */
-    void unquantize(Rosegarden::Event *el) const;
+    static std::vector<StandardQuantization> getStandardQuantizations();
 
 protected:
     class SingleQuantizer {
@@ -233,14 +272,18 @@ protected:
     };
 
     void quantize(Segment::iterator from, Segment::iterator to,
-		  const SingleQuantizer &absq, const SingleQuantizer &dq,
-		  PropertyName durationProperty, bool legato) const;
+		  const SingleQuantizer &absq, const SingleQuantizer &dq)
+	const;
 
     timeT findFollowingRestDuration(Segment::iterator from,
 				    Segment::iterator to) const;
 
-    int m_unit;
+    QuantizationType m_type;
+    timeT m_unit;
     int m_maxDots;
+
+    PropertyName m_absoluteTimeProperty;
+    PropertyName m_durationProperty;
 };
 
 }

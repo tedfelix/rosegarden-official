@@ -28,6 +28,7 @@
 #include "Staff.h"
 #include "LayoutEngine.h"
 #include "FastVector.h"
+#include "Quantizer.h"
 
 #include <vector>
 
@@ -284,6 +285,8 @@ protected:
     int getFixedItemSpacing() const {
 	return (int)((m_npf.getNoteBodyWidth() / 5) * m_spacing);
     }
+
+    const Rosegarden::Quantizer *getQuantizer() const;
 
     //--------------- Data members ---------------------------------
 

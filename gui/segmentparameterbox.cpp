@@ -29,8 +29,9 @@
 
 SegmentParameterBox::SegmentParameterBox(QWidget *parent,
                                          const char *name,
-                                         WFlags f)
-  :QFrame(parent, name, f)
+                                         WFlags f) :
+    QFrame(parent, name, f),
+    m_standardQuantizations(Rosegarden::Quantizer::getStandardQuantizations())
 {
     setFixedSize(120, 120);
     initBox();
@@ -110,6 +111,13 @@ SegmentParameterBox::initBox()
 
     // populate the quantize combo
     //
+
+    for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
+	m_quantizeValue->insertItem(m_standardQuantizations[i].name.c_str());
+    }
+    m_quantizeValue->insertItem("Off");
+
+/*
     QuantizeValues qVal;
     QuantizeListIterator it;
 
@@ -117,6 +125,7 @@ SegmentParameterBox::initBox()
     {
         m_quantizeValue->insertItem(QString(((*it).second).c_str()));
     }
+*/
 
     // default to last item
     m_quantizeValue->setCurrentItem(m_quantizeValue->count() - 1);

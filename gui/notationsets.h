@@ -28,6 +28,7 @@
 #include "notepixmapfactory.h"
 
 class NotationStaff;
+namespace Rosegarden { class Quantizer; }
 
 
 /**
@@ -91,20 +92,21 @@ public:
     virtual bool contains(const NELIterator &) const = 0;
 
 protected:
-    NotationSet(const NotationElementList &nel, NELIterator elementInSet);
+    NotationSet(const NotationElementList &nel, NELIterator elementInSet,
+		const Rosegarden::Quantizer *);
     void initialise();
 
     virtual bool test(const NELIterator &i) = 0;
     virtual void sample(const NELIterator &i);
 
     const NotationElementList &getList() const { return m_nel; }
+    const Rosegarden::Quantizer &getQuantizer() const { return *m_quantizer; }
 
 private:
-    //--------------- Data members ---------------------------------
-
     const NotationElementList &m_nel;
     NELIterator m_initial, m_final, m_shortest, m_longest, m_highest, m_lowest;
     NELIterator m_baseIterator;
+    const Rosegarden::Quantizer *m_quantizer;
 };
 
 
@@ -126,6 +128,7 @@ public:
        which case this constructor will write those properties
        in to the chord for you */
     Chord(const NotationElementList &nel, NELIterator elementInChord,
+	  const Rosegarden::Quantizer *quantizer,
           const Rosegarden::Clef &clef = Rosegarden::Clef::DefaultClef,
           const Rosegarden::Key &key = Rosegarden::Key::DefaultKey);
 
@@ -179,6 +182,7 @@ public:
      * size 0.
      */
     NotationGroup(const NotationElementList &nel, NELIterator elementInGroup,
+		  const Rosegarden::Quantizer *,
                   const Rosegarden::Clef &clef, const Rosegarden::Key &key);
 
     virtual ~NotationGroup();

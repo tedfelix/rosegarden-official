@@ -56,7 +56,7 @@ class RulerScale
 {
 public:
     virtual ~RulerScale();
-    Composition *getComposition() { return m_composition; }
+    Composition *getComposition() const { return m_composition; }
 
     /**
      * Return the number of the first visible bar.

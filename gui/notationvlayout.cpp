@@ -23,6 +23,7 @@
 #include "notationstaff.h"
 #include "rosedebug.h"
 #include "NotationTypes.h"
+#include "Composition.h"
 #include "BaseProperties.h"
 #include "notepixmapfactory.h"
 #include "notationproperties.h"
@@ -50,7 +51,8 @@ using Rosegarden::timeT;
 using namespace Rosegarden::BaseProperties;
 using namespace NotationProperties;
 
-NotationVLayout::NotationVLayout()
+NotationVLayout::NotationVLayout(Rosegarden::Composition *c) :
+    m_composition(c)
 {
     // empty
 }
@@ -58,6 +60,12 @@ NotationVLayout::NotationVLayout()
 NotationVLayout::~NotationVLayout()
 {
     // empty
+}
+
+const Rosegarden::Quantizer *
+NotationVLayout::getQuantizer()
+{
+    return m_composition->getLegatoQuantizer();
 }
 
 NotationVLayout::SlurList &
@@ -115,7 +123,7 @@ NotationVLayout::scanStaff(StaffType &staffBase)
 
         } else if (el->isNote()) {
 
-            Chord chord(*notes, i);
+            Chord chord(*notes, i, getQuantizer());
             if (chord.size() == 0) continue;
 
             std::vector<int> h;
@@ -271,7 +279,8 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 	    if ((*scooter)->event()->get<Bool>
 		(CHORD_PRIMARY_NOTE, primary) && primary) {
 
-		Chord chord(*(staff.getViewElementList()), scooter);
+		Chord chord(*(staff.getViewElementList()), scooter,
+			    getQuantizer());
 
 		if (beamed) {
 		    if (stemUp) beamAbove = true;

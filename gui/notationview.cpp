@@ -106,7 +106,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
     m_hlayout(new NotationHLayout(&doc->getComposition(),
 				  *m_notePixmapFactory)),
-    m_vlayout(new NotationVLayout()),
+    m_vlayout(new NotationVLayout(&doc->getComposition())),
     m_topBarButtons(0),
     m_bottomBarButtons(0),
     m_fontSizeSlider(0),
@@ -119,12 +119,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     setupActions();
 
-    kdDebug(KDEBUG_AREA) << "NotationView: Quantizer status is:\n"
-                         << "Unit = " << segments[0]->getQuantizer()->getUnit()
-                         << "\nMax Dots = "
-                         << segments[0]->getQuantizer()->getMaxDots() << endl;
-
-    initFontToolbar(segments[0]->getQuantizer()->getUnit());
+    initFontToolbar
+	(m_document->getComposition().getLegatoQuantizer()->getUnit());
     initStatusBar();
     
     setBackgroundMode(PaletteBase);
@@ -835,10 +831,9 @@ void NotationView::slotChangeLegato(int n)
     if (n >= (int)m_legatoDurations.size())
         n = m_legatoDurations.size() - 1;
 
-    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-        m_staffs[i]->setLegatoDuration(m_legatoDurations[n]);
-    }
-
+    m_document->getComposition().setLegatoQuantizerDuration
+	(m_legatoDurations[n]);
+    
     applyLayout();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {

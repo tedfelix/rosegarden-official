@@ -59,13 +59,6 @@ Segment::~Segment()
 }
 
 
-const Quantizer *
-Segment::getQuantizer() const
-{
-    return getComposition()->getQuantizer();
-}
-
-
 void Segment::setStartTime(timeT idx)
 {
     int idxDiff = idx - m_startIdx;
@@ -354,7 +347,10 @@ void Segment::fillWithRests(timeT startTime,
     timeT restDuration = endTime - startTime;
 
     if (permitQuantize) {
-	restDuration = getQuantizer()->quantizeByUnit(restDuration);
+	restDuration =
+	    (getComposition() ? 
+	     getComposition()->getBasicQuantizer()->quantizeDuration(restDuration) :
+	     Quantizer().quantizeDuration(restDuration));
     }
 
     cerr << "Segment(" << this << ")::fillWithRests: endTime "
@@ -480,6 +476,21 @@ void Segment::notifyRemove(Event *e) const
 
 
 SegmentHelper::~SegmentHelper() { }
+
+const Quantizer &
+SegmentHelper::basicQuantizer() {
+    return *(segment().getComposition()->getBasicQuantizer());
+}
+
+const Quantizer &
+SegmentHelper::noteQuantizer() {
+    return *(segment().getComposition()->getNoteQuantizer());
+}
+
+const Quantizer &
+SegmentHelper::legatoQuantizer() {
+    return *(segment().getComposition()->getLegatoQuantizer());
+}
 
  
 }

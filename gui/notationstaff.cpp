@@ -25,6 +25,7 @@
 #include "qcanvassimplesprite.h"
 #include "notationproperties.h"
 #include "Selection.h"
+#include "Composition.h"
 #include "BaseProperties.h"
 
 #include "rosedebug.h"
@@ -66,7 +67,6 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
 	),
     m_npf(0)
 {
-    setLegatoDuration(Note(Note::Shortest).getDuration());
     changeFont(fontName, resolution);
 }
 
@@ -82,23 +82,6 @@ NotationStaff::changeFont(string fontName, int resolution)
 
     delete m_npf;
     m_npf = new NotePixmapFactory(fontName, resolution);
-}
-
-void
-NotationStaff::setLegatoDuration(Rosegarden::timeT duration)
-{
-//!!!
-    kdDebug(KDEBUG_AREA) << "NotationStaff::setLegatoDuration" << endl;
-
-    const Rosegarden::Quantizer *q = getSegment().getQuantizer();
-
-
-    kdDebug(KDEBUG_AREA) << "NotationStaff: Quantizer status is:\n"
-			 << "Unit = " << q->getUnit()
-			 << "\nMax Dots = " << q->getMaxDots() << endl;
-
-    Rosegarden::Quantizer *wq = const_cast<Rosegarden::Quantizer *>(q);
-    wq->setUnit(duration);
 }
 
 void
@@ -609,18 +592,18 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	} else if (elt->isRest()) {
 
 //    kdDebug(KDEBUG_AREA) << "NotationStaff::renderSingleElement: about to query legato duration property" << endl;
-	    timeT duration = elt->event()->get<Int>
-		(Rosegarden::Quantizer::LegatoDurationProperty);
+//	    timeT duration = elt->event()->get<Int>
+//		(Rosegarden::Quantizer::LegatoDurationProperty);
 //kdDebug(KDEBUG_AREA) << "done" <<endl;
 
-	    if (duration > 0) {
+//	    if (duration > 0) {
 		Note::Type note = elt->event()->get<Int>(NOTE_TYPE);
 		int dots = elt->event()->get<Int>(NOTE_DOTS);
 		pixmap = new QCanvasPixmap
 		    (m_npf->makeRestPixmap(Note(note, dots)));
-	    } else {
+//	    } else {
 //		kdDebug(KDEBUG_AREA) << "Omitting too-short rest" << endl;
-	    }
+//	    }
 
 	} else if (elt->event()->isa(Clef::EventType)) {
 
@@ -865,8 +848,10 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 bool
 NotationStaff::wrapEvent(Rosegarden::Event *e)
 {
-    if (e->isa(Note::EventRestType) &&
-	e->getDuration() <= Note(Note::Shortest).getDuration()/2) return false;
-    else return true;
+    if (e->isa(Note::EventRestType)) {
+	if (getSegment().getComposition()->
+	    getLegatoQuantizer()->getQuantizedDuration(e) == 0) return false;
+    }
+    return true;
 }
 

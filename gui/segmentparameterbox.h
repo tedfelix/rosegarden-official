@@ -26,6 +26,9 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 
+#include "Quantizer.h"
+
+
 // Provides a mechanism for viewing and modifying the parameters
 // associated with a Rosegarden Segment.
 //
@@ -127,6 +130,9 @@ private:
     RosegardenComboBox         *m_delayValue;
 
     std::vector<Rosegarden::Segment*> m_segments;
+
+    std::vector<Rosegarden::Quantizer::StandardQuantization>
+    m_standardQuantizations;
 };
 
 

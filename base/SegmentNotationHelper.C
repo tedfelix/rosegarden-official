@@ -52,8 +52,8 @@ SegmentNotationHelper::getNextAdjacentNote(iterator i,
     if (i == end()) return i;
     if (!(*i)->isa(Note::EventType)) return end();
 
-    timeT iEnd = quantizer().quantizeByUnit((*i)->getAbsoluteTime() +
-					    (*i)->getDuration());
+    timeT iEnd = legatoQuantizer().quantizeAbsoluteTime
+	((*i)->getAbsoluteTime() + (*i)->getDuration());
     long ip = 0, jp = 0;
     if (!(*i)->get<Int>(PITCH, ip) && matchPitch) return end();
 
@@ -61,7 +61,8 @@ SegmentNotationHelper::getNextAdjacentNote(iterator i,
 	if (j == end() || ++j == end()) return j;
 	if (!(*j)->isa(Note::EventType)) continue;
 
-	timeT jStart = quantizer().quantizeByUnit((*j)->getAbsoluteTime());
+	timeT jStart = legatoQuantizer().quantizeAbsoluteTime
+	    ((*j)->getAbsoluteTime());
 	if (jStart > iEnd) return end();
 
 	if (matchPitch) {
@@ -83,9 +84,10 @@ SegmentNotationHelper::getPreviousAdjacentNote(iterator i,
     if (i == end()) return i;
     if (!(*i)->isa(Note::EventType)) return end();
 
-    timeT iStart = quantizer().quantizeByUnit((*i)->getAbsoluteTime());
-    timeT iEnd   = quantizer().quantizeByUnit((*i)->getAbsoluteTime() +
-					      (*i)->getDuration());
+    timeT iStart = legatoQuantizer().quantizeAbsoluteTime
+	((*i)->getAbsoluteTime());
+    timeT iEnd   = legatoQuantizer().quantizeAbsoluteTime
+	((*i)->getAbsoluteTime() + (*i)->getDuration());
     long ip = 0, jp = 0;
     if (!(*i)->get<Int>(PITCH, ip) && matchPitch) return end();
 
@@ -94,8 +96,8 @@ SegmentNotationHelper::getPreviousAdjacentNote(iterator i,
 	if (!(*j)->isa(Note::EventType)) continue;
 	if ((*j)->getAbsoluteTime() < rangeStart) return end();
 
-	timeT jEnd = quantizer().quantizeByUnit((*j)->getAbsoluteTime() +
-						(*j)->getDuration());
+	timeT jEnd = legatoQuantizer().quantizeAbsoluteTime
+	    ((*j)->getAbsoluteTime() + (*j)->getDuration());
 
 	// don't consider notes that end after i ends or before i begins
 
@@ -116,7 +118,7 @@ SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
     iterator elPos = segment().findSingle(e);
     if (elPos == end()) return false;
 
-    timeT myDuration = quantizer().getNoteQuantizedDuration(*elPos);
+    timeT myDuration = legatoQuantizer().getQuantizedDuration(*elPos);
 
     iterator nextEvent = segment().findContiguousNext(elPos),
 	 previousEvent = segment().findContiguousPrevious(elPos);
@@ -128,7 +130,7 @@ SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
     // collapse to right if (a) not at end...
     if (nextEvent != end() &&
 	// ...(b) notes can be merged to a single, valid unit
- 	isCollapseValid(quantizer().getNoteQuantizedDuration(*nextEvent),
+ 	isCollapseValid(legatoQuantizer().getQuantizedDuration(*nextEvent),
 			myDuration) &&
 	// ...(c) event is in same bar (no cross-bar collapsing)
 	(*nextEvent)->getAbsoluteTime() <
@@ -138,7 +140,7 @@ SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
 
         e->setDuration(e->getDuration() + (*nextEvent)->getDuration());
 
-        quantizer().unquantize(e);
+        legatoQuantizer().unquantize(e);
 
         collapseForward = true;
         erase(nextEvent);
@@ -147,7 +149,7 @@ SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
 
     // logic is exactly backwards from collapse to right logic above
     if (previousEvent != end() &&
-	isCollapseValid(quantizer().getNoteQuantizedDuration(*previousEvent),
+	isCollapseValid(legatoQuantizer().getQuantizedDuration(*previousEvent),
 			myDuration) &&
 	(*previousEvent)->getAbsoluteTime() >
 	    segment().getBarStartForTime(e->getAbsoluteTime())) {
@@ -156,7 +158,7 @@ SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
         (*previousEvent)->setDuration(e->getDuration() +
                                       (*previousEvent)->getDuration());
 
-        quantizer().unquantize(*previousEvent);
+        legatoQuantizer().unquantize(*previousEvent);
 
         collapseForward = false;
         erase(elPos);
@@ -239,7 +241,7 @@ SegmentNotationHelper::expandIntoTie(iterator from, iterator to, timeT baseDurat
 
 	// set the initial event's duration to base
 	(*i)->setDuration(baseDuration);
-	quantizer().unquantize(*i);
+	legatoQuantizer().unquantize(*i);
             
 	// Add 2nd event
 	Event* ev = new Event(*(*i));
@@ -272,7 +274,7 @@ SegmentNotationHelper::expandIntoTie(iterator from, iterator to, timeT baseDurat
 	    ev->unset(BEAMED_GROUP_TYPE);
 	}
 
-	quantizer().unquantize(ev);
+	legatoQuantizer().unquantize(ev);
 
         // We don't want to do the insert yet, as we'd find ourselves
         // iterating over the new event unexpectedly (symptom: we get
@@ -295,12 +297,14 @@ bool
 SegmentNotationHelper::isViable(timeT duration, int dots)
 {
     bool viable;
-    duration = quantizer().quantizeByUnit(duration);
+    duration = basicQuantizer().quantizeDuration(duration);
 
     if (dots >= 0) {
-        viable = (duration == Quantizer(1, dots).quantizeByNote(duration));
+        viable = (duration == Quantizer(Quantizer::DefaultPropertyNamePrefix,
+					Quantizer::NoteQuantize, 1, dots).
+		  quantizeDuration(duration));
     } else {
-        viable = (duration == quantizer().quantizeByNote(duration));
+        viable = (duration == legatoQuantizer().quantizeDuration(duration));
     }
 
     return viable;
@@ -365,7 +369,7 @@ SegmentNotationHelper::makeNoteViable(iterator i)
     }
     
     Event *e = new Event(*(*i));
-    quantizer().unquantize(e);
+    legatoQuantizer().unquantize(e);
 
     bool lastTiedForward;
     e->get<Bool>(TIED_FORWARD, lastTiedForward);
@@ -443,7 +447,7 @@ SegmentNotationHelper::collapseRestsForInsert(iterator i,
     if (d >= desiredDuration || j == end()) return ++i;
 
     (*i)->setDuration(d + (*j)->getDuration());
-    quantizer().unquantize(*i);
+    legatoQuantizer().unquantize(*i);
     erase(j);
 
     return collapseRestsForInsert(i, desiredDuration);
@@ -508,7 +512,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration, int pitch,
 
 	if ((*i)->isa(Note::EventType)) {
 
-	    if (!isExpandValid(quantizer().getNoteQuantizedDuration(*i),
+	    if (!isExpandValid(legatoQuantizer().getQuantizedDuration(*i),
                                duration)) {
 
 		cerr << "Bad split, coercing new note" << endl;
@@ -895,7 +899,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 
         // only look at one note in each chord, and at rests
         if (!hasEffectiveDuration(i)) continue;
-        timeT idur = quantizer().getNoteQuantizedDuration(*i);
+        timeT idur = legatoQuantizer().getQuantizedDuration(*i);
 
 	if (accumulator % average == 0 &&  // "beamable duration" threshold
 	    idur < crotchet) {
@@ -925,7 +929,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 	    for (iterator j = i; j != to; ++j) {
 
 		if (!hasEffectiveDuration(j)) continue;
-                timeT jdur = quantizer().getNoteQuantizedDuration(*j);
+                timeT jdur = legatoQuantizer().getQuantizedDuration(*j);
 
 		if ((*j)->isa(Note::EventType)) {
 		    if (jdur < crotchet) ++beamable;
@@ -958,7 +962,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 		    || (++jnext == to)     
 		    || ((*j    )->isa(Note::EventType) &&
 			(*jnext)->isa(Note::EventType) &&
-			quantizer().getNoteQuantizedDuration(*jnext) > jdur)
+			legatoQuantizer().getQuantizedDuration(*jnext) > jdur)
 		    || ((*jnext)->isa(Note::EventRestType))) {
 
 		    if (k != end() && beamable >= 2) {
@@ -1172,13 +1176,15 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 void
 SegmentNotationHelper::quantize()
 {
-    quantizer().quantizeLegato(begin(), end());
+    legatoQuantizer().quantize(begin(), end());
 
     for (iterator i = begin(); i != end(); ++i) {
 
 	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
 
-	    timeT duration = (*i)->get<Int>(Quantizer::LegatoDurationProperty);
+	    timeT duration =
+		(*i)->get<Int>(legatoQuantizer().getDurationProperty());
+
 	    Note n(Note::getNearestNote(duration));
 	    (*i)->setMaybe<Int>(NOTE_TYPE, n.getNoteType());
 	    (*i)->setMaybe<Int>(NOTE_DOTS, n.getDots());
@@ -1438,7 +1444,7 @@ SegmentNotationHelper::collapseNoteAggressively(Event *note,
     (*i)->setDuration(std::max(iEnd, jEnd) - (*i)->getAbsoluteTime());
     (*i)->unset(TIED_BACKWARD);
     (*i)->unset(TIED_FORWARD);
-    quantizer().unquantize(*i);
+    legatoQuantizer().unquantize(*i);
     //!!! TUPLET_NOMINAL_DURATION?
 
     segment().erase(j);

@@ -22,28 +22,52 @@
 
 #include "Quantizer.h"
 #include "BaseProperties.h"
+#include "NotationTypes.h"
 
 #include <iostream>
+#include <cstdio> // for sprintf
 
 namespace Rosegarden {
 
-const PropertyName Quantizer::AbsoluteTimeProperty = "QuantizedAbsoluteTime";
-const PropertyName Quantizer::DurationProperty	   = "QuantizedDuration";
-const PropertyName Quantizer::NoteDurationProperty = "QuantizedNoteDuration";
-const PropertyName Quantizer::LegatoDurationProperty = "QuantizedLegatoDuration";
+const std::string Quantizer::DefaultPropertyNamePrefix = "DefaultQ";
 
-Quantizer::Quantizer(int unit, int maxDots) :
-    m_unit(unit), m_maxDots(maxDots)
+Quantizer::Quantizer(std::string propertyNamePrefix,
+		     QuantizationType type,
+		     timeT unit, int maxDots) :
+    m_type(type), m_unit(unit), m_maxDots(maxDots),
+    m_absoluteTimeProperty(propertyNamePrefix + "AbsoluteTime"),
+    m_durationProperty(propertyNamePrefix + "Duration")
 {
-    if (unit < 0) setUnit(Note(Note::Shortest));
+    if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
+}
 
-    if (m_maxDots != 1 && m_maxDots != 2) {
-	std::cerr << "Quantizer::Quantizer: WARNING: m_maxDots = " << m_maxDots
-	     << std::endl;
-	// dump core, please
-	char *myString = (char *)1;
-	std::cerr << "myString -> " << myString << std::endl;
-    }
+Quantizer::Quantizer(const StandardQuantization &sq,
+		     std::string propertyNamePrefix) :
+    m_type(sq.type), m_unit(sq.unit), m_maxDots(sq.maxDots),
+    m_absoluteTimeProperty(propertyNamePrefix + "AbsoluteTime"),
+    m_durationProperty(propertyNamePrefix + "Duration")
+{
+    if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
+}    
+
+Quantizer::Quantizer(const Quantizer &q) :
+    m_type(q.m_type), m_unit(q.m_unit), m_maxDots(q.m_maxDots),
+    m_absoluteTimeProperty(q.m_absoluteTimeProperty),
+    m_durationProperty(q.m_durationProperty)
+{
+    // nothing else
+}
+
+Quantizer &
+Quantizer::operator=(const Quantizer &q)
+{
+    if (&q == this) return *this;
+    m_type = q.m_type;
+    m_unit = q.m_unit;
+    m_maxDots = q.m_maxDots;
+    m_absoluteTimeProperty = q.m_absoluteTimeProperty;
+    m_durationProperty = q.m_durationProperty;
+    return *this;
 }
 
 Quantizer::~Quantizer()
@@ -164,12 +188,122 @@ Quantizer::LegatoQuantizer::quantize(int unit, int maxDots, timeT duration,
 
 
 void
+Quantizer::quantize(Segment::iterator from, Segment::iterator to) const
+{
+    switch (m_type) {
+
+    case UnitQuantize:
+	quantize(from, to, UnitQuantizer(), UnitQuantizer());
+	break;
+
+    case NoteQuantize:
+	quantize(from, to, UnitQuantizer(), NoteQuantizer());
+	break;
+
+    case LegatoQuantize:
+	// Legato quantization is relatively slow (hence the name?) and
+	// with the minimal unit it's equivalent to note quantization
+
+	if (m_unit == Note(Note::Shortest).getDuration()) {
+	    quantize(from, to, UnitQuantizer(), NoteQuantizer());
+	} else {
+	    quantize(from, to, UnitQuantizer(), LegatoQuantizer());
+	}
+	break;
+    }
+}
+
+void
+Quantizer::fixQuantizedValues(Segment::iterator from,
+			      Segment::iterator to) const
+{
+    quantize(from, to);
+
+    for (; from != to; ++from) {
+	if ((*from)->has(getAbsoluteTimeProperty())) {
+	    (*from)->setAbsoluteTime((*from)->get<Int>
+				     (getAbsoluteTimeProperty()));
+	}
+	if ((*from)->has(getDurationProperty())) {
+	    (*from)->setDuration((*from)->get<Int>
+				 (getDurationProperty()));
+	}
+	unquantize(*from);
+    }
+}
+
+
+timeT
+Quantizer::getQuantizedDuration(Event *e) const
+{
+    long d;
+    if (e->get<Int>(getDurationProperty(), d)) return (timeT)d;
+    else return quantizeDuration(e->getDuration());
+}
+
+
+timeT
+Quantizer::getQuantizedAbsoluteTime(Event *e) const
+{
+    long d;
+    if (e->get<Int>(getAbsoluteTimeProperty(), d)) return (timeT)d;
+    else return quantizeAbsoluteTime(e->getAbsoluteTime());
+}
+
+
+timeT 
+Quantizer::quantizeAbsoluteTime(timeT absoluteTime) const
+{
+    timeT d = 0;
+
+    switch (m_type) {
+
+    case UnitQuantize:
+	d = UnitQuantizer().quantize(m_unit, m_maxDots, absoluteTime, 0);
+	break;
+
+    case NoteQuantize:
+	d = UnitQuantizer().quantize(m_unit, m_maxDots, absoluteTime, 0);
+	break;
+
+    case LegatoQuantize:
+	d = UnitQuantizer().quantize(Note(Note::Shortest).getDuration(),
+					m_maxDots, absoluteTime, 0);
+	break;
+    }
+
+    return d;
+}
+
+
+timeT 
+Quantizer::quantizeDuration(timeT duration) const
+{
+    timeT d = 0;
+
+    switch (m_type) {
+
+    case UnitQuantize:
+	d = UnitQuantizer().quantize(m_unit, m_maxDots, duration, 0);
+	break;
+
+    case NoteQuantize:
+    case LegatoQuantize:
+	d = NoteQuantizer().quantize(m_unit, m_maxDots, duration, 0);
+	break;
+    }
+
+    return d;
+}
+
+
+void
 Quantizer::quantize(Segment::iterator from, Segment::iterator to,
-		    const SingleQuantizer &aq, const SingleQuantizer &dq,
-		    PropertyName durationProperty, bool legato) const
+		    const SingleQuantizer &aq, const SingleQuantizer &dq) const
 {
     timeT excess = 0;
-
+    bool legato = (m_type == LegatoQuantize);
+    
     // For the moment, legato quantization always uses the minimum
     // unit (rather than the potentially large legato unit) for the
     // absolute time.  Ideally we'd be able to specify both
@@ -216,8 +350,8 @@ Quantizer::quantize(Segment::iterator from, Segment::iterator to,
 	    }
 	} else continue;
 
-	(*from)->setMaybe<Int>(AbsoluteTimeProperty, qAbsoluteTime);
-	(*from)->setMaybe<Int>(durationProperty, qDuration);
+	(*from)->setMaybe<Int>(getAbsoluteTimeProperty(), qAbsoluteTime);
+	(*from)->setMaybe<Int>(getDurationProperty(), qDuration);
     }
 }
 
@@ -239,138 +373,59 @@ Quantizer::findFollowingRestDuration(Segment::iterator from,
     return 0;
 }
 
-
 void
-Quantizer::quantizeByUnit(Segment::iterator from, Segment::iterator to) const
+Quantizer::unquantize(Segment::iterator from, Segment::iterator to) const
 {
-    quantize(from, to,
-	     UnitQuantizer(), UnitQuantizer(), DurationProperty, false);
-}
-
-timeT
-Quantizer::quantizeByUnit(timeT duration) const
-{
-    return UnitQuantizer().quantize(m_unit, m_maxDots, duration, 0);
-}
-
-timeT
-Quantizer::getUnitQuantizedDuration(Event *e) const
-{
-    long d;
-    if (e->get<Int>(DurationProperty, d)) return (timeT)d;
-    else return quantizeByUnit(e->getDuration());
-}
-
-timeT
-Quantizer::getUnitQuantizedAbsoluteTime(Event *e) const
-{
-    long d;
-    if (e->get<Int>(AbsoluteTimeProperty, d)) return (timeT)d;
-    else return quantizeByUnit(e->getAbsoluteTime());
-}
-
-
-void
-Quantizer::quantizeByNote(Segment::iterator from, Segment::iterator to) const
-{
-    quantize(from, to,
-	     UnitQuantizer(), NoteQuantizer(), NoteDurationProperty, false);
+    for (; from != to; ++from) unquantize(*from);
 }
 
 void
-Quantizer::quantizeLegato(Segment::iterator from, Segment::iterator to) const
+Quantizer::unquantize(Event *e) const
 {
-    // Legato quantization is relatively slow (hence the name?) and
-    // with the minimal unit it's equivalent to note quantization
+    e->unset(getAbsoluteTimeProperty());
+    e->unset(getDurationProperty());
+}
 
-    if (m_unit == Note(Note::Shortest).getDuration()) {
-	quantize(from, to,
-		 UnitQuantizer(), NoteQuantizer(),
-		 LegatoDurationProperty, false);
-    } else {
-	quantize(from, to,
-		 UnitQuantizer(), LegatoQuantizer(),
-		 LegatoDurationProperty, true);
+
+std::vector<Quantizer::StandardQuantization>
+Quantizer::getStandardQuantizations()
+{
+    std::vector<StandardQuantization> v;
+    char buf[100];
+
+    for (Note::Type nt = Note::Breve; nt >= Note::Hemidemisemiquaver; --nt) {
+
+	Note note(nt);
+	timeT unit = note.getDuration();
+	
+	sprintf(buf, "1/%ld", Note(Note::Semibreve).getDuration() / unit);
+	if (nt == Note::Breve) sprintf(buf, "2/1");
+	
+	v.push_back
+	    (StandardQuantization(Quantizer::UnitQuantize, note.getDuration(),
+				  2, buf, note.getEnglishName()));
+	
+	if (nt < Note::Quaver && nt > Note::Hemidemisemiquaver) {
+	    // include dotted durations as well
+	    
+	    note = Note(nt, 1);
+	    unit = note.getDuration();
+	
+	    sprintf(buf, "1/%ld", Note(Note::Semibreve).getDuration() / unit);
+	    
+	    v.push_back
+		(StandardQuantization(Quantizer::UnitQuantize,
+				      note.getDuration(),
+				      2, buf, note.getEnglishName()));
+	}
     }
+    
+    v.push_back
+	(StandardQuantization(Quantizer::UnitQuantize,
+			      Note(Note::Semibreve).getDuration() / 96,
+			      2, "1/96", ""));
+
+    return v;
 }
-
-timeT 
-Quantizer::quantizeByNote(timeT duration) const
-{
-    return NoteQuantizer().quantize(m_unit, m_maxDots, duration, 0);
-}
-
-
-timeT
-Quantizer::getNoteQuantizedDuration(Event *e) const
-{
-    long d;
-    if (e->get<Int>(NoteDurationProperty, d)) return (timeT)d;
-    else return quantizeByNote(e->getDuration());
-}
-
-
-void
-Quantizer::fixUnitQuantizedValues(Segment::iterator from,
-				  Segment::iterator to) const
-{
-    quantizeByUnit(from, to);
-
-    for (; from != to; ++from) {
-	if ((*from)->has(AbsoluteTimeProperty)) {
-	    (*from)->setAbsoluteTime((*from)->get<Int>(AbsoluteTimeProperty));
-	}
-	if ((*from)->has(DurationProperty)) {
-	    (*from)->setDuration((*from)->get<Int>(DurationProperty));
-	}
-	unquantize(*from);
-    }
-}
-
-
-void
-Quantizer::fixNoteQuantizedValues(Segment::iterator from,
-				  Segment::iterator to) const
-{
-    quantizeByNote(from, to);
-
-    for (; from != to; ++from) {
-	if ((*from)->has(AbsoluteTimeProperty)) {
-	    (*from)->setAbsoluteTime((*from)->get<Int>(AbsoluteTimeProperty));
-	}
-	if ((*from)->has(NoteDurationProperty)) {
-	    (*from)->setDuration((*from)->get<Int>(NoteDurationProperty));
-	}
-	unquantize(*from);
-    }
-}
-
-
-void
-Quantizer::fixLegatoQuantizedValues(Segment::iterator from,
-				  Segment::iterator to) const
-{
-    quantizeLegato(from, to);
-
-    for (; from != to; ++from) {
-	if ((*from)->has(AbsoluteTimeProperty)) {
-	    (*from)->setAbsoluteTime((*from)->get<Int>(AbsoluteTimeProperty));
-	}
-	if ((*from)->has(LegatoDurationProperty)) {
-	    (*from)->setDuration((*from)->get<Int>(LegatoDurationProperty));
-	}
-	unquantize(*from);
-    }
-}
-
-
-void Quantizer::unquantize(Event *e) const
-{
-    e->unset(DurationProperty);
-    e->unset(NoteDurationProperty);
-    e->unset(LegatoDurationProperty);
-    e->unset(AbsoluteTimeProperty);
-}
-
 
 }

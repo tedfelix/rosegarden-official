@@ -47,7 +47,8 @@ using Rosegarden::timeT;
 using namespace Rosegarden::BaseProperties;
 using namespace NotationProperties;
 
-NotationSet::NotationSet(const NotationElementList &nel, NELIterator i) :
+NotationSet::NotationSet(const NotationElementList &nel, NELIterator i,
+			 const Quantizer *q) :
     m_nel(nel),
     m_initial(nel.end()),
     m_final(nel.end()),
@@ -55,7 +56,8 @@ NotationSet::NotationSet(const NotationElementList &nel, NELIterator i) :
     m_longest(nel.end()),
     m_highest(nel.end()),
     m_lowest(nel.end()),
-    m_baseIterator(i)
+    m_baseIterator(i),
+    m_quantizer(q)
 {
     // ...
 }
@@ -90,15 +92,16 @@ NotationSet::initialise()
 void
 NotationSet::sample(const NELIterator &i)
 {
-    timeT d((*i)->getQuantizedDuration());
+    const Quantizer &q(getQuantizer());
+    timeT d(q.getQuantizedDuration((*i)->event()));
 
     if (d > 0) {
         if (m_longest == m_nel.end() ||
-            d > (*m_longest)->getQuantizedDuration()) {
+            d > q.getQuantizedDuration((*m_longest)->event())) {
             m_longest = i;
         }
         if (m_shortest == m_nel.end() ||
-            d < (*m_shortest)->getQuantizedDuration()) {
+            d < q.getQuantizedDuration((*m_shortest)->event())) {
             m_shortest = i;
         }
     }
@@ -167,11 +170,11 @@ public:
 //////////////////////////////////////////////////////////////////////
 
 Chord::Chord(const NotationElementList &nel, NELIterator i,
-             const Clef &clef, const Key &key) :
-    NotationSet(nel, i),
+	     const Quantizer *q, const Clef &clef, const Key &key) :
+    NotationSet(nel, i, q),
     m_clef(clef),
     m_key(key),
-    m_time((*i)->getQuantizedAbsoluteTime())
+    m_time(q->getQuantizedAbsoluteTime((*i)->event()))
 {
     initialise();
 
@@ -206,7 +209,8 @@ Chord::~Chord()
 
 bool Chord::test(const NELIterator &i)
 {
-    return ((*i)->isNote() && ((*i)->getQuantizedAbsoluteTime() == m_time));
+    return ((*i)->isNote() &&
+	    getQuantizer().getQuantizedAbsoluteTime((*i)->event()) == m_time);
 }
 
 void Chord::sample(const NELIterator &i)
@@ -351,8 +355,9 @@ std::vector<Mark> Chord::getMarksForChord() const
 //////////////////////////////////////////////////////////////////////
 
 NotationGroup::NotationGroup(const NotationElementList &nel,
-                             NELIterator i, const Clef &clef, const Key &key) :
-    NotationSet(nel, i),
+                             NELIterator i, const Quantizer *q,
+			     const Clef &clef, const Key &key) :
+    NotationSet(nel, i, q),
     //!!! What if the clef and/or key change in the course of the group?
     m_clef(clef),
     m_key(key),
@@ -489,8 +494,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     beam.necessary =
          (*initialNote)->event()->getDuration() < crotchet
         && (*finalNote)->event()->getDuration() < crotchet
-        && (*finalNote)->getQuantizedAbsoluteTime() >
-	 (*initialNote)->getQuantizedAbsoluteTime();
+        && getQuantizer().getQuantizedAbsoluteTime(  (*finalNote)->event()) >
+	   getQuantizer().getQuantizedAbsoluteTime((*initialNote)->event());
 
     // We continue even if the beam is not necessary, because the
     // same data is used to generate the tupling line in tupled
@@ -498,8 +503,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 
     // if (!beam.necessary) return beam;
 
-    Chord initialChord(getList(), initialNote, m_clef, m_key),
-            finalChord(getList(),   finalNote, m_clef, m_key);
+    Chord initialChord(getList(), initialNote, &getQuantizer(), m_clef, m_key),
+            finalChord(getList(),   finalNote, &getQuantizer(), m_clef, m_key);
 
     if (initialChord.getInitialElement() == finalChord.getInitialElement()) {
         return beam;
@@ -647,7 +652,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
         if ((*i)->isNote()) {
 
-	    Chord chord(getList(), i, m_clef, m_key);
+	    Chord chord(getList(), i, &getQuantizer(), m_clef, m_key);
 	    unsigned int j;
 
 //            kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: Found chord" << endl;

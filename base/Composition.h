@@ -74,27 +74,63 @@ public:
      */
     timeT getDuration() const;
 
-    const Quantizer *getQuantizer() const {
-	return &m_quantizer;
+    /**
+     * Return a quantizer that quantizes to the our most basic
+     * units (i.e. a unit quantizer whose unit is our shortest
+     * note duration).
+     */
+    const Quantizer *getBasicQuantizer() const {
+	return &m_basicQuantizer;
     }
+
+    /**
+     * Return a quantizer that does note-quantization with the
+     * default number of dots.
+     */
+    const Quantizer *getNoteQuantizer() const {
+	return &m_noteQuantizer;
+    }
+
+    /**
+     * Return a quantizer that does legato-quantization with the
+     * default number of dots.
+     */
+    const Quantizer *getLegatoQuantizer() const {
+	return &m_legatoQuantizer;
+    }
+
+    void setLegatoQuantizerDuration(timeT duration);
+
 
 
     //////
     //
     //  INSTRUMENT & TRACK
 
-    Track* getTrackByIndex(const unsigned int &track)
-            { return m_tracks[track]; }
-    Instrument* getInstrumentByIndex(const unsigned int &instr)
-            { return m_instruments[instr]; }
+    Track* getTrackByIndex(const unsigned int &track) {
+	return m_tracks[track];
+    }
+    Instrument* getInstrumentByIndex(const unsigned int &instr) {
+	return m_instruments[instr];
+    }
  
-    trackcontainer* getTracks() { return &m_tracks; }
-    instrumentcontainer* getInstruments() { return &m_instruments; }
+    trackcontainer* getTracks() {
+	return &m_tracks;
+    }
+    instrumentcontainer* getInstruments() {
+	return &m_instruments;
+    }
 
-    int getRecordTrack() const { return m_recordTrack; }
-    void setRecordTrack(const int &recordTrack) { m_recordTrack = recordTrack; }
+    int getRecordTrack() const {
+	return m_recordTrack;
+    }
+    void setRecordTrack(const int &recordTrack) {
+	m_recordTrack = recordTrack;
+    }
 
-    int getNbTracks() const { return m_tracks.size(); }
+    int getNbTracks() const {
+	return m_tracks.size();
+    }
 
     /**
      * Clear out the Track container
@@ -561,7 +597,9 @@ protected:
     /// Contains tempo events
     mutable ReferenceSegment m_tempoSegment;
 
-    Quantizer m_quantizer;
+    Quantizer m_basicQuantizer;
+    Quantizer m_noteQuantizer;
+    Quantizer m_legatoQuantizer;
 
     timeT m_position;
     double m_defaultTempo;
