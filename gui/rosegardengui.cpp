@@ -27,6 +27,7 @@
 #include <qinputdialog.h>
 #include <qobjectlist.h>
 #include <qlayout.h>
+#include <qbitmap.h>
 
 // include files for KDE
 #include <kcursor.h>
@@ -149,20 +150,6 @@ static void _settingLog(QString msg)
 #endif
 
 
-// Too broad : the cursor is also shown on progress dialogs
-//
-
-#ifdef RG_WAIT_CURSOR_OVERRIDE
-SetWaitCursor::SetWaitCursor()
-{
-    QApplication::setOverrideCursor(KCursor::waitCursor());
-}
-
-SetWaitCursor::~SetWaitCursor()
-{
-    QApplication::restoreOverrideCursor();
-}
-#else
 SetWaitCursor::SetWaitCursor()
     : m_guiApp(dynamic_cast<RosegardenGUIApp*>(kapp->mainWidget()))
 {
@@ -174,12 +161,12 @@ SetWaitCursor::SetWaitCursor()
              m_guiApp->getView()->getTrackEditor()->getSegmentCanvas() &&
              m_guiApp->getView()->getTrackEditor()->getSegmentCanvas()->viewport())) {
             
-            m_currentSegmentCanvasCursor = m_guiApp->getView()->getTrackEditor()->getSegmentCanvas()->viewport()->cursor();
+            m_saveSegmentCanvasCursor = m_guiApp->getView()->getTrackEditor()->getSegmentCanvas()->viewport()->cursor();
 
         }
 
         RG_DEBUG << "SetWaitCursor::SetWaitCursor() : setting waitCursor\n";
-        m_currentCursor = m_guiApp->cursor();
+        m_saveCursor = m_guiApp->cursor();
 
         m_guiApp->setCursor(KCursor::waitCursor());
     }
@@ -190,20 +177,32 @@ SetWaitCursor::~SetWaitCursor()
     if (m_guiApp) {
 
         RG_DEBUG << "SetWaitCursor::SetWaitCursor() : restoring normal cursor\n";
-
-        m_guiApp->setCursor(m_currentCursor);
-
+        QWidget* viewport = 0;
+        QCursor currentSegmentCanvasCursor;
+        
         if ((m_guiApp->getView() &&
              m_guiApp->getView()->getTrackEditor() &&
              m_guiApp->getView()->getTrackEditor()->getSegmentCanvas() &&
              m_guiApp->getView()->getTrackEditor()->getSegmentCanvas()->viewport())) {
-             
-            m_guiApp->getView()->getTrackEditor()->getSegmentCanvas()->viewport()->setCursor(m_currentSegmentCanvasCursor);
+            viewport = m_guiApp->getView()->getTrackEditor()->getSegmentCanvas()->viewport();
+            currentSegmentCanvasCursor = viewport->cursor();
         }
 
+        m_guiApp->setCursor(m_saveCursor);
+
+        if (viewport) {
+            if (currentSegmentCanvasCursor.shape() == KCursor::waitCursor().shape()) {
+                viewport->setCursor(m_saveSegmentCanvasCursor);
+            } else {
+                viewport->setCursor(currentSegmentCanvasCursor); // because m_guiApp->setCursor() has replaced it
+            }
+        }
+        
+        // otherwise, it's been modified elsewhere, so leave it as is            
+
     }
+
 }
-#endif
 
 RosegardenGUIApp *RosegardenGUIApp::m_myself = 0;
 

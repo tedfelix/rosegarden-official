@@ -1419,8 +1419,8 @@ public:
 
 protected:
     RosegardenGUIApp* m_guiApp;
-    QCursor m_currentCursor;
-    QCursor m_currentSegmentCanvasCursor;
+    QCursor m_saveCursor;
+    QCursor m_saveSegmentCanvasCursor;
 };
  
 #endif // ROSEGARDENGUI_H
