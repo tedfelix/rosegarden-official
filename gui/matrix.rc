@@ -1,4 +1,4 @@
- <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
 <kpartgui name="Rosegarden::Matrix" version="085">
   
