@@ -404,6 +404,8 @@ public:
 
 protected slots:
 
+    void slotShowStatus();
+
 protected:
 
     // General

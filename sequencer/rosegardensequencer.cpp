@@ -1281,3 +1281,9 @@ RosegardenSequencerApp::setQuarterNoteLength(long timeSec, long timeUSec)
     m_sequencer->setMIDIClockInterval(usecs);
 }
 
+QString
+RosegardenSequencerApp::getStatusLog()
+{
+    return m_sequencer->getStatusLog();
+}
+

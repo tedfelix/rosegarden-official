@@ -250,6 +250,9 @@ public:
     //
     virtual void setQuarterNoteLength(long timeSec, long timeUSec) = 0;
 
+    // Return a (potentially lengthy) human-readable status log
+    //
+    virtual QString getStatusLog() = 0;
 };
 
 #endif // _ROSEGARDENSEQUENCERIFACE_H_

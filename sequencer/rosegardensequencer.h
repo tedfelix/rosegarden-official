@@ -245,6 +245,10 @@ public:
     //
     virtual void setQuarterNoteLength(long timeSec, long timeUSec);
 
+    // Get a status report
+    // 
+    virtual QString getStatusLog();
+
     //
     //
     //

@@ -281,6 +281,8 @@ public:
     //
     virtual void sendMidiClock(const RealTime &playLatency) = 0;
 
+    virtual QString getStatusLog() { return ""; }
+
     // Mapped Instruments
     //
     void setMappedInstrument(MappedInstrument *mI);

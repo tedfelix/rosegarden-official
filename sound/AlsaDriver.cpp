@@ -4296,6 +4296,12 @@ AlsaDriver::sendMidiClock(const RealTime &playLatency)
 
 }
 
+QString
+AlsaDriver::getStatusLog()
+{
+    return QString::fromUtf8(_audit.c_str());
+}
+
 }
 
 

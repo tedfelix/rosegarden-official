@@ -30,6 +30,7 @@
 #include "widgets.h"
 #include "midipitchlabel.h"
 #include "colours.h"
+#include "rosegardendcop.h"
 
 #include "RealTime.h"
 
@@ -56,6 +57,7 @@
 #include <qregexp.h>
 #include <qstringlist.h>
 #include <qtextedit.h>
+#include <dcopclient.h>
 
 #include <kapp.h>
 #include <klocale.h>
@@ -2810,6 +2812,45 @@ InterpretDialog::getInterpretations()
     }
 }
 
+
+
+
+ShowSequencerStatusDialog::ShowSequencerStatusDialog(QWidget *parent) :
+    KDialogBase(parent, 0, true, i18n("Sequencer status"), Close)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+
+    new QLabel(i18n("Sequencer status:"), vbox);
+
+    QString status(i18n("Status not available."));
+
+    QCString replyType;
+    QByteArray replyData;
+    QByteArray data;
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "getStatusLog()", data, replyType, replyData)) {
+	status = i18n("Sequencer is not running or is not responding.");
+    } else {
+	QDataStream streamIn(replyData, IO_ReadOnly);
+	QString result;
+	streamIn >> result;
+	if (!result) {
+	    status = i18n("Sequencer is not returning a valid status report.");
+	} else {
+	    status = result;
+	}
+    }
+
+    QTextEdit *text = new QTextEdit(vbox);
+    text->setTextFormat(Qt::PlainText);
+    text->setReadOnly(true);
+    text->setMinimumWidth(300);
+    text->setMinimumHeight(200);
+
+    text->setText(status);
+}
 
 // ------------------ CountdownDialog -------------------
 //

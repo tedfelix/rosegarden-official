@@ -1,0 +1,132 @@
+
+Notation layout and rendering code structure
+============================================
+
+The NotationView stores one NotationStaff object per Segment.
+Visually, these staffs might appear next to one another or above one
+another, depending on whether the segments are on the same or
+different tracks -- that is, the notation view assigns y-coords to
+staffs depending on which track they're on, so there is one "line" per
+track rather than per staff object.
+
+NotationStaff ultimately inherits from
+Rosegarden::Staff<NotationElement>, which wraps a ViewElementList.
+This is a list of view objects each of which has a pointer to an Event
+in the staff's Segment; when the segment changes, the view element
+list is updated.  The view elements however store some layout data
+that isn't relevant to the basic events, and not every event
+necessarily has an element in the view element list (for example
+controllers only appear if we're configured to show them as question
+marks -- see NotationStaff::wrapEvent()).
+
+
+The layout phase
+----------------
+
+Practically all of the business of assigning positions to bars (as
+well as x-coords to notes etc of course) happens in NotationHLayout,
+which works entirely on view elements rather than events themselves.
+A single layout object is used to lay out all staffs, in a multi- pass
+process, invoked from NotationView::applyLayout as follows:
+
+  1. Call resetStaff on the layout for each staff in turn.  If
+     this is a relayout after an edit on a single segment, it
+     will only be called for the single staff that has changed.
+     resetStaff just discards any cached layout data (the BarData
+     structs, of which the layout stores one per bar per staff:
+     these structs are subdivided into "basic", "size", and
+     "layout" data which will be referred to below).
+
+  2. Call scanStaff on the layout for each staff in turn, or
+     again for only a single staff if only one segment changed.
+     scanStaff steps through the staff bar by bar.  For each
+     bar, it first assigns the BarData's "basic" data (time sig
+     etc), then calculates a theoretical ideal width for the bar
+     (using NotationHLayout::getIdealBarWidth) and sets it to
+     the BarData's "size" data.  (Actually it calculates three
+     widths: ideal, fixed and base -- more about those later.)
+
+  3. Once scanStaff has been called for all changed staffs, the
+     view calls finishLayout once.  This always operates on all
+     staffs, whether they've changed or not, because bar-width
+     changes on other staffs may force a reposition.  It does
+     two sub-passes:
+
+     3a. reconcileBars{Linear,Page} -- obviously the method used
+         depends on the view mode.  (This is the only significant
+         part of NotationHLayout to work differently in page
+         mode.)  What this does is look at the ideal bar widths
+         on all staffs for each bar in turn, and adjust the size
+         data of the BarData record so that all the bars fit.  In
+         linear mode this is quite simple -- we just make all bars
+         the width of the widest one.  In page mode we also have
+         to juggle slightly to ensure a justified line at the
+         right side of the page.
+
+     3b. layout() -- called by finishLayout, for each staff.
+         This is responsible for actually assigning the x-coord
+         for each note (and for recording the x-coords of the bar
+         lines, although they've effectively been calculated
+         already through all the bar-width calculations -- the
+         width of each bar is completely fixed before this method
+         is entered.)
+
+I mentioned that each bar has three widths (ideal, fixed, base)
+associated with it.  The fixed width is the amount of space taken up
+in this bar by elements whose space does not vary, i.e. clefs and
+suchlike, plus the margin before and after the barline.  The base
+width is the minimum amount needed for all the variable-width things
+like notes and rests, that is, the width their glyphs take up with no
+gaps between them.  Thus the absolute minimal width for a bar is the
+fixed + base widths, and the difference between this and the ideal
+width is the amount of spare space that can be divided up amongst
+variable-width elements according to their relative durations and so
+forth.
+
+So that summarises NotationHLayout.  The same passes are called for
+NotationVLayout, but that's much much simpler.  Also note that exactly
+the same control structure is used for matrix layout, though that's
+completely trivial in comparison (particularly as there can only ever
+be one staff).
+
+
+The render phase
+----------------
+
+The next bit of work is done by the NotationStaff and its parent the
+LinedStaff.  Three passes here.
+
+  1. LinedStaff::sizeStaff (called from
+     NotationView::readjustCanvasSize, from applyLayout) draws
+     and/or repositions the bar lines and staff lines.
+
+  2. NotationStaff::renderElements() regenerates any sprites
+     that are known by the NotationView to have changed.
+
+  3. NotationStaff::positionElements() assigns the coordinates
+     to the canvas pixmaps and also regenerates any that have
+     not changed -- only moved -- but whose pixmaps are dependent
+     on their widths (e.g. beamed notes), and any elements that
+     have no pixmaps at all yet.
+
+Finally, note that all the coordinates calculated by the layout class
+are what are (unsurprisingly) referred to as "layout" coordinates.
+These are always linear, even in page mode: that is, bars have
+monotonically increasing layout x-coordinates.  The translation from
+layout coordinates to canvas coordinates (taking into account the
+origin of the staff, the possibility of page mode, and any gap between
+the staff rows in page mode etc) is done by LinedStaff, and also in
+NotationStaff (by using LinedStaff methods).
+
+I'm sure all this stuff is far more complicated than it needs to be.
+In particular I suspect we could have done it more simply if we'd
+designed-in page mode from the outset, rather than doing linear mode
+first and then thinking page mode was a neat idea at some point
+afterwards.  I also think it'd have been simpler and quicker not to
+bother using the QCanvas at all, but instead to render directly onto a
+widget like RG2.1 does: we could just re- layout the entire visible
+area of score after each edit and it'd probably still be quicker,
+without any of those really complicated layout-cacheing bits and bobs.
+The downside is it'd make it harder to do smooth scrolling instead of
+the bar-by-bar scrolling seen in RG2.1.
+

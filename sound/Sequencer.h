@@ -312,6 +312,8 @@ public:
     void sendMidiClock(const RealTime &playLatency)
         { m_soundDriver->sendMidiClock(playLatency); }
 
+    QString getStatusLog() { return m_soundDriver->getStatusLog(); }
+
 protected:
 
     SoundDriver                                *m_soundDriver;

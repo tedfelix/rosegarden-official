@@ -648,6 +648,14 @@ private:
 };
 
 
+class ShowSequencerStatusDialog : public KDialogBase
+{
+    Q_OBJECT
+public:
+    ShowSequencerStatusDialog(QWidget *parent);
+};
+
+
 // Timer dialog for counting down
 //
 

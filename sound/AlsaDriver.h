@@ -232,6 +232,7 @@ public:
 
 #endif
 
+    virtual QString getStatusLog();
 
 protected:
     typedef std::vector<AlsaPortDescription *> AlsaPortList;

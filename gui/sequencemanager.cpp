@@ -1392,6 +1392,7 @@ SequenceManager::checkSoundDriverStatus()
                                   data, replyType, replyData))
     {
         // failed - pop up and disable sequencer options
+	m_soundDriverStatus = NO_DRIVER;
         throw(i18n("Failed to contact Rosegarden sequencer"));
     }
     else

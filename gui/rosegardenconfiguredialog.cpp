@@ -45,6 +45,13 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 
+#include "Composition.h"
+#include "Configuration.h"
+#include "RealTime.h"
+#include "MidiDevice.h"
+
+#include "SoundDriver.h"
+
 #include "rosestrings.h"
 #include "rosegardenconfiguredialog.h"
 #include "rosegardenconfigurationpage.h"
@@ -52,10 +59,8 @@
 #include "notationstrings.h"
 #include "notestyle.h"
 #include "rosegardenguidoc.h"
-#include "Composition.h"
-#include "Configuration.h"
-#include "RealTime.h"
 #include "rosedebug.h"
+#include "sequencemanager.h"
 #include "notepixmapfactory.h"
 #include "matrixtool.h"
 #include "notationtool.h"
@@ -63,7 +68,6 @@
 #include "editcommands.h"
 #include "studiocontrol.h"
 #include "widgets.h"
-#include "MidiDevice.h"
 #include "audiopluginmanager.h"
 #include "diskspace.h"
 
@@ -308,8 +312,6 @@ void GeneralConfigurationPage::apply()
     }
     else
         m_cfg->writeEntry("externalaudioeditor", externalAudioEditor);
-
-
 }
 
 
@@ -863,7 +865,6 @@ void LatencyConfigurationPage::apply()
     m_cfg->writeEntry("jackrecordlatencyusec", jackRecord * 1000);
 
 #endif  // HAVE_LIBJACK
-
 }
 
 // Fetch values from sequencer and apply them
@@ -924,33 +925,56 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // ---------------- General tab ------------------
     //
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 4, 2, 10, 5);
+    QGridLayout *layout = new QGridLayout(frame, 4, 3, 10, 5);
+
+    layout->addWidget(new QLabel(i18n("Sequencer status"), frame), 0, 0);
+    
+    QString status(i18n("Unknown"));
+    Rosegarden::SequenceManager *mgr = doc->getSequenceManager();
+    if (mgr) {
+	int driverStatus = mgr->getSoundDriverStatus();
+	switch (driverStatus) {
+	case Rosegarden::AUDIO_OK:
+	    status = i18n("No MIDI, audio OK"); break;
+	case Rosegarden::MIDI_OK:
+	    status = i18n("MIDI OK, no audio"); break;
+	case Rosegarden::AUDIO_OK | Rosegarden::MIDI_OK:
+	    status = i18n("MIDI OK, audio OK"); break;
+	default:
+	    status = i18n("No driver"); break;
+	}
+    }
+
+    layout->addWidget(new QLabel(status, frame), 0, 1);
+
+    QPushButton *showStatusButton = new QPushButton(i18n("Show detailed status"),
+						    frame);
+    QObject::connect(showStatusButton, SIGNAL(clicked()),
+		     this, SLOT(slotShowStatus()));
+    layout->addWidget(showStatusButton, 0, 2);
 
     // Send Controllers
     //
-    QLabel *label = new QLabel("Send MIDI Controllers at start of playback\n(will incur noticeable initial delay)", frame);
+    QLabel *label = new QLabel("Send MIDI Controllers at start of playback\n     (will incur noticeable initial delay)", frame);
 
     QString controllerTip = i18n("Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all MIDI devices every\ntime you hit play if you so wish.  Please note that this option will usually incur a\ndelay at the start of playback due to the amount of data being transmitted.");
     QToolTip::add(label, controllerTip);
-    layout->addWidget(label, 0, 0);
+    layout->addWidget(label, 1, 0);
 
     m_sendControllersAtPlay = new QCheckBox(frame);
-    layout->addWidget(m_sendControllersAtPlay, 0, 1,  Qt::AlignHCenter);
-    QToolTip::add(m_sendControllersAtPlay, controllerTip);
-
     bool sendControllers = m_cfg->readBoolEntry("alwayssendcontrollers", false);
     m_sendControllersAtPlay->setChecked(sendControllers);
+    QToolTip::add(m_sendControllersAtPlay, controllerTip);
+    layout->addMultiCellWidget(m_sendControllersAtPlay, 1, 1, 1, 2);
 
 
     // Command-line
     //
-    layout->addMultiCellWidget(new QLabel(i18n("Sequencer command line options\n(any change made here will come into effect the next time you start Rosegarden)"), frame),
-                               1, 1,
-                               0, 1);
+    layout->addWidget(new QLabel(i18n("Sequencer command line options\n     (takes effect only from next restart)"), frame), 2, 0);
 
-    layout->addWidget(new QLabel(i18n("Options:"), frame), 2, 0, Qt::AlignHCenter);
     m_sequencerArguments = new QLineEdit("", frame);
-    layout->addWidget(m_sequencerArguments, 2, 1);
+    layout->addMultiCellWidget(m_sequencerArguments, 2, 2, 1, 2);
+    
 
     // Get the options
     //
@@ -1119,6 +1143,13 @@ SequencerConfigurationPage::SequencerConfigurationPage(
 }
 
 void
+SequencerConfigurationPage::slotShowStatus()
+{
+    ShowSequencerStatusDialog *dialog = new ShowSequencerStatusDialog(this);
+    dialog->exec();
+}
+
+void
 SequencerConfigurationPage::apply()
 {
     m_cfg->setGroup("Sequencer Options");
@@ -1232,9 +1263,9 @@ SequencerConfigurationPage::apply()
              Rosegarden::MidiInstrumentBase, // InstrumentId
              Rosegarden::MappedEvent::SystemJackTransport,
              Rosegarden::MidiByte(jackValue));
-#endif // HAVE_LIBJACK
  
     Rosegarden::StudioControl::sendMappedEvent(mE);
+#endif // HAVE_LIBJACK
 
     // Now write the MMC entry
     //
@@ -1291,8 +1322,6 @@ SequencerConfigurationPage::apply()
                 Rosegarden::MidiByte(midiClock));
 
     Rosegarden::StudioControl::sendMappedEvent(mE);
-
-
 }
 
 // ---
