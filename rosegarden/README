@@ -1,11 +1,12 @@
 
-Rosegarden-4 v0.9.8
+Rosegarden-4 v0.9.9
 ===================
 
 Rosegarden-4 is a MIDI and audio sequencer and musical notation editor.
 
-This is an beta release, containing nearly all of the features
-expected for 1.0 but without all of the correctness and stability.
+The 0.9.9 release marks the start of the official beta period and a
+feature freeze for 1.0.  This release contains all of the features
+expected for 1.0.
 
 Please keep an eye on the FAQ for known problems and workarounds:
 
@@ -35,6 +36,23 @@ also need JACK 0.77 or newer.
 Compiling from source
 ---------------------
 
+If you obtained the source code from a distribution tarball: 
+
+  Just run 
+
+    ./configure
+
+  plus appropriate "--with-qt-dir=..." and "--prefix=..." options.
+  Then proceed with "make" and "make install".
+
+
+NOTE: The installation prefix should be the same as the one of your
+KDE installation. However you can install to another directory, but
+then you'll have to append it to your KDEDIRS variable. For instance :
+
+KDEDIRS=/usr:/home/glaurent/rosegarden
+
+
 If you obtained the source code from the SourceForge CVS repository:
 
   grab one of the developers' configure scripts such as
@@ -51,23 +69,6 @@ If you obtained the source code from the SourceForge CVS repository:
   After configuring, run "make" and, if the compile succeeds, "make
   install".  (The pixmaps need to be installed to the global KDE
   directories before the application will run correctly.)
-
-
-If you obtained the source code from a distribution tarball: 
-
-  Just run 
-
-    ./configure
-
-  plus appropriate "--with-qt-dir=..." and "--prefix=..." options.
-  Then proceed with "make" and "make install".
-
-
-NOTE: The installation prefix should be the same as the one of your
-KDE installation. However you can install to another directory, but
-then you'll have to append it to your KDEDIRS variable. For instance :
-
-KDEDIRS=/usr:/home/glaurent/rosegarden
 
 
 Running Rosegarden
@@ -102,8 +103,17 @@ far as that's possible, given the not always superb standards of our
 own code.
 
 
-Documentation
--------------
+User documentation
+------------------
+
+There is a semi-reference Help (Help menu -> Rosegarden Handbook),
+which is not yet complete but is slated to be completed by 1.0.  There
+is also a tutorial (Help menu -> Rosegarden Online Tutorial), which
+again is scheduled for completion for the 1.0 release.
+
+
+Developer documentation
+-----------------------
 
 All the documentation we have is in the docs/ subdirectory.  Good
 starting-points include:

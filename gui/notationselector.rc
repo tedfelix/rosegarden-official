@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::NotationTool" version="098">
+<kpartgui name="Rosegarden::NotationTool" version="099">
 
 <Menu noMerge="1" name="NotationSelector">
   <Action name="insert" />

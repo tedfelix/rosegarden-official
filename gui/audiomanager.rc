@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::AudioManagerDialog" version="098">
+<kpartgui name="Rosegarden::AudioManagerDialog" version="099">
   
 <MenuBar>
 
