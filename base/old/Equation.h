@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 
 #ifndef _EQUATION_H_
 #define _EQUATION_H_

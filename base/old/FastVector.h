@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 // -*- c-file-style:  "bsd" -*-
 #ifndef _FAST_VECTOR_H_
 #define _FAST_VECTOR_H_

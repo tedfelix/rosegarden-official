@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 #ifndef TRACKSEDITORIFACE_H
 #define TRACKSEDITORIFACE_H
 

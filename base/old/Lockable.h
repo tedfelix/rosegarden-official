@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 // -*- c-file-style:  "bsd" -*-
 #ifndef _LOCKABLE_H_
 #define _LOCKABLE_H_

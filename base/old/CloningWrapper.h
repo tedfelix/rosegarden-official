@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 // -*- c-file-style:  "bsd" -*-
 #ifndef _CLONING_WRAPPER_H_
 #define _CLONING_WRAPPER_H_
