@@ -372,7 +372,14 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	    //!!! The SegmentQ-properties need to be backed up despite
 	    //being non-persistent (they're non-persistent because we
 	    //want to lose them when copying the events, not when
-	    //saving them).  What's the best way to do that?
+	    //saving them).  What's the best way to do that?  We want
+	    //to do it here, not in XmlStorableEvent, because the
+	    //XmlStorableEvent _is_ the class of Event that's placed
+	    //into the segment when reading, so it doesn't want to be
+	    //burdened with a separate record of the unquantized 
+	    //values or knowledge about the quantizer.  We probably
+	    //just want to make versions of the getFromSource/setToXX
+	    //methods public in the Quantizer
 
 	    outStream << '\t'
 		<< XmlStorableEvent(**i).toXmlString(expectedTime) << endl;

@@ -49,15 +49,14 @@ class CompositionTimeSliceAdapter
 public:
     class iterator;
 
-    //!!! -1 is actually valid for either of these args now, so it'd
-    // be better to default to something else rather than appearing
-    // to use "magic" (but in fact non-magic) values.  Either zero
-    // and the composition's end time, or zero and zero.  Or something.
+    /**
+     * Construct a CompositionTimeSliceAdapter that operates on the
+     * given section in time of the given composition.  If begin and
+     * end are equal, the whole composition will be used.
+     */
     CompositionTimeSliceAdapter(Composition* c,
-				timeT begin = -1, timeT end = -1) :
-	m_composition(c),
-	m_begin(begin),
-	m_end(end) { };
+				timeT begin = 0,
+				timeT end = 0);
     ~CompositionTimeSliceAdapter() { };
 
     iterator begin();

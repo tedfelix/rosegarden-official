@@ -25,6 +25,7 @@
 #include <qxml.h>
 
 #include "Event.h"
+namespace Rosegarden { class Quantizer; }
 
 /**
  * An Event which can generate an XML representation of itself,
@@ -46,9 +47,9 @@ public:
 		     Rosegarden::timeT &absoluteTime);
 
     /**
-     * Construct an XmlStorableEvent from the specified Event
+     * Construct an XmlStorableEvent from the specified Event.
      */
-    XmlStorableEvent(const Rosegarden::Event&);
+    XmlStorableEvent(Rosegarden::Event&);
 
     /**
      * Set the Element properties from the XML attributes \a atts

@@ -236,6 +236,20 @@ public:
     timeT getQuantizedAbsoluteTime(Event *el) const;
 
     /**
+     * Return the unquantized absolute time of the event --
+     * the absolute time that would be restored by a call to
+     * unquantize.
+     */
+    timeT getUnquantizedAbsoluteTime(Event *el) const;
+
+    /**
+     * Return the unquantized absolute time of the event --
+     * the absolute time that would be restored by a call to
+     * unquantize.
+     */
+    timeT getUnquantizedDuration(Event *el) const;
+
+    /**
      * Treat the given time as if it were the absolute time of
      * an Event, and return a quantized value.  (This may be
      * necessary for Note and Legato quantizers, to avoid rounding
@@ -256,13 +270,6 @@ public:
      */
     void unquantize(Segment *,
 		    Segment::iterator from, Segment::iterator to) const;
-
-    /**
-     * Unquantize the given event, for this
-     * quantizer.  Properties set by other quantizers with
-     * different propertyNamePrefix values will remain.
-     */
-//    void unquantize(Event *el) const;
 
 protected:
     class SingleQuantizer {

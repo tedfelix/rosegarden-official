@@ -426,6 +426,18 @@ Quantizer::findFollowingRestDuration(Segment::iterator from,
     return 0;
 }
 
+timeT
+Quantizer::getUnquantizedAbsoluteTime(Event *e) const
+{
+    return getFromSource(e, AbsoluteTimeValue);
+}
+
+timeT
+Quantizer::getUnquantizedDuration(Event *e) const
+{
+    return getFromSource(e, DurationValue);
+}
+
 void
 Quantizer::unquantize(Segment *s,
 		      Segment::iterator from, Segment::iterator to) const
@@ -447,6 +459,7 @@ Quantizer::unquantize(Segment *s,
     
     insertNewEvents(s);
 }
+
 
 timeT
 Quantizer::getFromSource(Event *e, ValueType v) const

@@ -28,16 +28,6 @@ namespace Rosegarden
 using std::string;
 using std::ostream;
 
-/*!!!
-Event::EventData::EventData() :
-    m_refCount(1),
-    m_absoluteTime(0),
-    m_duration(0),
-    m_subOrdering(0)
-{
-    // empty
-}
-*/
 
 Event::EventData::EventData(const std::string &type, timeT absoluteTime,
 			    timeT duration, int subOrdering) :

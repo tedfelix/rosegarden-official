@@ -310,3 +310,33 @@ EraseCommand::getRelayoutEndTime()
 {
     return m_relayoutEndTime;
 }
+
+
+
+EventEditCommand::EventEditCommand(Rosegarden::Segment &segment,
+				   Rosegarden::Event *eventToModify,
+				   const Rosegarden::Event &newEvent) :
+    BasicCommand(name(),
+		 segment,
+		 std::min(eventToModify->getAbsoluteTime(),
+			  newEvent.getAbsoluteTime()),
+		 std::max(eventToModify->getAbsoluteTime() +
+			  eventToModify->getDuration(),
+			  newEvent.getAbsoluteTime() +
+			  newEvent.getDuration()),
+		 true), // bruteForceRedo
+    m_oldEvent(eventToModify),
+    m_newEvent(newEvent)
+{
+    // nothing else to see here
+}
+
+void
+EventEditCommand::modifySegment()
+{
+    Segment &segment(getSegment());
+    segment.eraseSingle(m_oldEvent);
+    segment.insert(new Event(m_newEvent));
+    segment.normalizeRests(getBeginTime(), getEndTime());
+}
+

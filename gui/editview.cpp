@@ -285,83 +285,6 @@ void EditView::slotToggleStatusBar()
         statusBar()->show();
 }
 
-// void EditView::slotCommandExecuted(Command *command)
-// {
-//     kdDebug(KDEBUG_AREA) << "EditView::slotCommandExecuted() - "
-//                          << name() << " update()\n";
-//     update();
-
-//     // might be better done with a visitor pattern or some such
-
-//     if (dynamic_cast<IntraSegmentCommand *>(command) != 0) {
-
-//         BasicCommand *basicCommand = 0;
-
-// 	//!!! check that the affected segment is one of ours
-
-//         if ((basicCommand = dynamic_cast<BasicCommand *>(command)) != 0) {
-//             refreshSegment(&basicCommand->getSegment(),
-//                            basicCommand->getBeginTime(),
-//                            basicCommand->getRelayoutEndTime());
-//         } else {
-//             // partial segment command, but not a basic command
-//             Rosegarden::Segment *segment = &basicCommand->getSegment();
-//             refreshSegment(segment);
-//         }
-
-//         return;
-//     }
-
-//     SegmentCommand *segmentCommand = dynamic_cast<SegmentCommand *>(command);
-//     if (segmentCommand) {
-        
-//         SegmentCommand::SegmentSet segments;
-//         segmentCommand->getSegments(segments);
-
-// 	// For the moment we'll have to close the view if any of the
-// 	// segments we handle has been deleted.  Any other changes,
-// 	// and we should probably redraw everything.  How tedious.
-
-// 	bool foundOne = false;
-
-// 	for (int i = 0; i < m_segments.size(); ++i) {
-
-// 	    if (!m_segments[i]->getComposition()) {
-// 		// oops, I think we've been deleted
-// 		close();
-// 		return;
-// 	    } else if (segments.find(m_segments[i]) != segments.end()) {
-// 		foundOne = true;
-// 		break;
-// 	    }
-// 	}
-
-// 	if (foundOne) refreshSegment(0);
-//         return;
-//     }
-
-//     TimeAndTempoChangeCommand *timeCommand =
-//         dynamic_cast<TimeAndTempoChangeCommand *>(command);
-//     if (timeCommand) {
-// 	refreshSegment(0);
-//         return;
-//     }
-
-//     CompoundCommand *compoundCommand =
-// 	dynamic_cast<CompoundCommand *>(command);
-//     if (compoundCommand) {
-// 	for (int i = 0; i < compoundCommand->getCommandCount(); ++i) {
-// 	    slotCommandExecuted(compoundCommand->getCommand(i));
-// 	}
-// 	return;
-//     }
-
-//     kdDebug(KDEBUG_AREA)
-//         << "Warning: EditView::slotCommandExecuted:\n"
-//         << "Unknown sort of Command, don't know how to refresh"
-//         << endl;
-// }
-
 //
 // Status messages
 //
@@ -416,10 +339,12 @@ void EditView::initSegmentRefreshStatusIds()
 
 bool EditView::isCompositionModified()
 {
-    return m_document->getComposition().getRefreshStatus(m_compositionRefreshStatusId).needsRefresh();
+    return m_document->getComposition().getRefreshStatus
+	(m_compositionRefreshStatusId).needsRefresh();
 }
 
 void EditView::setCompositionModified(bool c)
 {
-    m_document->getComposition().getRefreshStatus(m_compositionRefreshStatusId).setNeedsRefresh(c);
+    m_document->getComposition().getRefreshStatus
+	(m_compositionRefreshStatusId).setNeedsRefresh(c);
 }

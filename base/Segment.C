@@ -156,7 +156,8 @@ void Segment::erase(iterator pos)
 
     std::multiset<Event*, Event::EventCmp>::erase(pos);
     notifyRemove(e);
-    updateRefreshStatuses(e->getAbsoluteTime(), e->getAbsoluteTime() + e->getDuration());//!!! getEndTime());
+    updateRefreshStatuses(e->getAbsoluteTime(),
+			  e->getAbsoluteTime() + e->getDuration());
     delete e;
 }
 
@@ -173,7 +174,8 @@ Segment::iterator Segment::insert(Event *e)
 
     iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
     notifyAdd(e);
-    updateRefreshStatuses(e->getAbsoluteTime(), e->getAbsoluteTime() + e->getDuration());//!!! getEndTime());
+    updateRefreshStatuses(e->getAbsoluteTime(),
+			  e->getAbsoluteTime() + e->getDuration());
     return i;
 }
 
@@ -433,18 +435,6 @@ Segment::normalizeRests(timeT startTime, timeT endTime, bool permitQuantize)
     
     if (ia == end()) return;
 
-/*!!!
-    std::vector<iterator> erasable;
-
-    for (iterator i = ia; i != ib && i != end(); ++i) {
-	if ((*i)->isa(Note::EventRestType)) erasable.push_back(i);
-    }
-
-    for (unsigned int ei = 0; ei < erasable.size(); ++ei) {
-	erase(erasable[ei]);
-    }
-*/
-//!!!
     for (iterator i = ia, j = i; i != ib && i != end(); i = j) {
 	++j;
 	if ((*i)->isa(Note::EventRestType)) erase(i);

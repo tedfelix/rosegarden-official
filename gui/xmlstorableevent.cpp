@@ -23,6 +23,7 @@
 #include "NotationTypes.h"
 #include "SegmentNotationHelper.h"
 #include "BaseProperties.h"
+#include "Quantizer.h"
 
 #include "rosedebug.h"
 
@@ -133,8 +134,8 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
     setAbsoluteTime(absoluteTime);
 }
 
-XmlStorableEvent::XmlStorableEvent(const Event &e)
-    : Event(e)
+XmlStorableEvent::XmlStorableEvent(Event &e) :
+    Event(e)
 {
 }
 

@@ -76,8 +76,6 @@ ChordNameRuler::slotScrollHoriz(int x)
 QSize
 ChordNameRuler::sizeHint() const
 {
-    //!!! could be improved upon
-
     double width =
 	m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
 	m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar());
@@ -105,20 +103,12 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     paint.setClipRect(e->rect().normalize());
 
     QRect clipRect = paint.clipRegion().boundingRect();
-/*!!!
-    kdDebug(KDEBUG_AREA)
-	<< "Range (pixels): " << (clipRect.x() - m_currentXOffset) 
-	<< " -> " << (clipRect.x() + clipRect.width() - m_currentXOffset)
-	<< endl;
-*/
+
     timeT from = m_rulerScale->getTimeForX
 	(clipRect.x() - m_currentXOffset - 100);
     timeT   to = m_rulerScale->getTimeForX
 	(clipRect.x() + clipRect.width() - m_currentXOffset + 100);
-/*!!!
-    kdDebug(KDEBUG_AREA)
-	<< "Range (times): " << from << " -> " << to << endl;
-*/
+
     CompositionTimeSliceAdapter adapter(m_composition, from, to + 1);
     Segment segment;
     AnalysisHelper helper;

@@ -35,6 +35,19 @@ namespace Rosegarden {
 using std::list;
 using std::pair;
 
+CompositionTimeSliceAdapter::CompositionTimeSliceAdapter(Composition *c,
+							 timeT begin,
+							 timeT end) :
+    m_composition(c),
+    m_begin(begin),
+    m_end(end)
+{
+    if (begin == end) {
+	m_begin = 0;
+	m_end = c->getDuration();
+    }
+};
+
 CompositionTimeSliceAdapter::iterator
 CompositionTimeSliceAdapter::begin() {
     iterator i;

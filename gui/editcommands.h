@@ -121,4 +121,28 @@ private:
 };
 
 
+/**
+ * Replace an event with another one (likely to be used in
+ * conjunction with EventEditDialog)
+ */
+
+class EventEditCommand : public BasicCommand
+{
+public:
+    EventEditCommand(Rosegarden::Segment &segment,
+		     Rosegarden::Event *eventToModify,
+		     const Rosegarden::Event &newEvent);
+
+    static QString name() {
+	return "Edit E&vent";
+    }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::Event *m_oldEvent; // only used on 1st execute
+    Rosegarden::Event m_newEvent; // only used on 1st execute
+};
+
 #endif
