@@ -25,6 +25,7 @@
 #include "colours.h"
 
 #include <qcanvas.h>
+#include <qpainter.h>
 
 #include "rosedebug.h"
 

@@ -24,6 +24,7 @@
 
 #include <qevent.h>
 #include <qobject.h>
+#include <qdict.h>
 
 #include <kxmlguiclient.h>
 
