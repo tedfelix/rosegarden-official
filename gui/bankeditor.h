@@ -249,6 +249,8 @@ protected:
     MidiProgramsEditor      *m_programEditor;
     KListView               *m_listView;
 
+    QPushButton             *m_closeButton;
+
     QPushButton             *m_addBank;
     QPushButton             *m_deleteBank;
     QPushButton             *m_deleteAllBanks;

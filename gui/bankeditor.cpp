@@ -46,6 +46,7 @@
 #include <klistview.h>
 #include <klineedit.h>
 #include <kfiledialog.h>
+#include <kseparator.h>
 #include <kaction.h>
 #include <kstdaction.h>
 #include <kio/netaccess.h>
@@ -573,12 +574,18 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_lastMSB(0),
     m_lastLSB(0)
 {
-    QHBox* mainFrame = new QHBox(this); // makeHBoxMainWidget();
+    QVBox* mainFrame = new QVBox(this);
     setCentralWidget(mainFrame);
 
     setCaption(i18n("Manage MIDI Banks and Programs"));
 
     QSplitter* splitter = new QSplitter(mainFrame);
+
+    QFrame* btnBox = new QFrame(mainFrame);
+    QHBoxLayout* layout = new QHBoxLayout(btnBox);
+
+    m_closeButton = new QPushButton(btnBox);
+    layout->addWidget(m_closeButton, 0, Qt::AlignRight);
 
     //
     // Left-side list view
@@ -710,7 +717,11 @@ BankEditorDialog::~BankEditorDialog()
 void
 BankEditorDialog::setupActions()
 {
-    KStdAction::close (this, SLOT(slotFileClose()),         actionCollection());
+    KAction* close = KStdAction::close (this, SLOT(slotFileClose()),         actionCollection());
+
+    m_closeButton->setText(close->text());
+    connect(m_closeButton, SIGNAL(clicked()),
+            this, SLOT(slotFileClose()));
 
     KStdAction::copy     (this, SLOT(slotEditCopy()),       actionCollection());
     KStdAction::paste    (this, SLOT(slotEditPaste()),      actionCollection());
