@@ -22,10 +22,17 @@
 #include <config.h>
 #endif 
 
+// Std
+#include <list>
+
 // include files for QT
 #include <qobject.h>
 #include <qstring.h>
 #include <qlist.h>
+#include <qdom.h>
+
+// Element
+#include "Element2.h"
 
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIView;
@@ -42,8 +49,11 @@ class RosegardenGUIView;
   */
 class RosegardenGUIDoc : public QObject
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
+
+    typedef list<Element2*> ElementList;
+
     /** Constructor for the fileclass of the application */
     RosegardenGUIDoc(QWidget *parent, const char *name=0);
     /** Destructor for the fileclass of the application */
@@ -78,22 +88,28 @@ class RosegardenGUIDoc : public QObject
     /** returns the title of the document */
     const QString &getTitle() const;
 	
-  public slots:
-    /** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
-     * As this view normally repaints itself, it is excluded from the paintEvent.
-     */
-    void slotUpdateAllViews(RosegardenGUIView *sender);
+public slots:
+/** calls repaint() on all views connected to the document object and is called by the view by which the document has been changed.
+ * As this view normally repaints itself, it is excluded from the paintEvent.
+ */
+void slotUpdateAllViews(RosegardenGUIView *sender);
+
+protected:
+    bool xmlParse(const QString &xmldata);
+    bool xmlParseElement(const QDomElement &elmnt);
  	
-  public:	
+public:	
     /** the list of the views currently connected to the document */
     static QList<RosegardenGUIView> *pViewList;	
 
-  private:
+private:
     /** the modified flag of the current document */
     bool modified;
     QString title;
     QString absFilePath;
 
+    QDomDocument m_doc;
+    ElementList m_elements;
 };
 
 #endif // ROSEGARDENGUIDOC_H
