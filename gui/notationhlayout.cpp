@@ -31,7 +31,7 @@ NotationHLayout::NotationHLayout(unsigned int barWidth,
       m_nbTimeUnitsInCurrentBar(0),
       m_previousNbTimeUnitsInCurrentBar(0),
       m_currentPos(barMargin),
-      m_noteWidthMap(LastNote)
+      m_noteWidthTable(LastNote)
 {
     initNoteWidthTable();
     m_timeUnitsPerBar = m_quantizer.wholeNoteDuration();
@@ -55,7 +55,7 @@ NotationHLayout::layout(NotationElement *el)
     // kdDebug(KDEBUG_AREA) << "m_nbTimeUnitsInCurrentBar : " << m_nbTimeUnitsInCurrentBar << endl;
 
     if (m_nbTimeUnitsInCurrentBar > m_timeUnitsPerBar) {
-        kdDebug(KDEBUG_AREA) << "split element" << endl;
+        kdDebug(KDEBUG_AREA) << "Bar has wrong length" << endl;
         // TODO
     } else if (m_nbTimeUnitsInCurrentBar == m_timeUnitsPerBar) {
         kdDebug(KDEBUG_AREA) << "start a new bar" << endl;
@@ -69,7 +69,7 @@ NotationHLayout::layout(NotationElement *el)
     Note note = Note(el->event()->get<Int>("Notation::NoteType")); // check the property is here ?
 
     // Move current pos to next note
-    m_currentPos += m_noteWidthMap[note] + Staff::noteWidth + m_noteMargin;
+    m_currentPos += m_noteWidthTable[note] + Staff::noteWidth + m_noteMargin;
 
     kdDebug(KDEBUG_AREA) << "m_currentPos pushed to = " << m_currentPos << endl;
 }
@@ -77,21 +77,21 @@ NotationHLayout::layout(NotationElement *el)
 void
 NotationHLayout::initNoteWidthTable(void)
 {
-    m_noteWidthMap[Whole]        = m_barWidth;
-    m_noteWidthMap[Half]         = m_barWidth / 2;
-    m_noteWidthMap[Quarter]      = m_barWidth / 4;
-    m_noteWidthMap[Eighth]       = m_barWidth / 8;
-    m_noteWidthMap[Sixteenth]    = m_barWidth / 16;
-    m_noteWidthMap[ThirtySecond] = m_barWidth / 32;
-    m_noteWidthMap[SixtyFourth]  = m_barWidth / 64;
+    m_noteWidthTable[Whole]        = m_barWidth;
+    m_noteWidthTable[Half]         = m_barWidth / 2;
+    m_noteWidthTable[Quarter]      = m_barWidth / 4;
+    m_noteWidthTable[Eighth]       = m_barWidth / 8;
+    m_noteWidthTable[Sixteenth]    = m_barWidth / 16;
+    m_noteWidthTable[ThirtySecond] = m_barWidth / 32;
+    m_noteWidthTable[SixtyFourth]  = m_barWidth / 64;
 
-    m_noteWidthMap[WholeDotted]        = m_noteWidthMap[Whole]        + m_noteWidthMap[Half];
-    m_noteWidthMap[HalfDotted]         = m_noteWidthMap[Half]         + m_noteWidthMap[Quarter];
-    m_noteWidthMap[QuarterDotted]      = m_noteWidthMap[Quarter]      + m_noteWidthMap[Eighth];
-    m_noteWidthMap[EighthDotted]       = m_noteWidthMap[Eighth]       + m_noteWidthMap[Sixteenth];
-    m_noteWidthMap[SixteenthDotted]    = m_noteWidthMap[Sixteenth]    + m_noteWidthMap[ThirtySecond];
-    m_noteWidthMap[ThirtySecondDotted] = m_noteWidthMap[ThirtySecond] + m_noteWidthMap[SixtyFourth];
-    m_noteWidthMap[SixtyFourthDotted]  = m_noteWidthMap[SixtyFourth]  + m_noteWidthMap[SixtyFourth] / 2;
+    m_noteWidthTable[WholeDotted]        = m_noteWidthTable[Whole]        + m_noteWidthTable[Half];
+    m_noteWidthTable[HalfDotted]         = m_noteWidthTable[Half]         + m_noteWidthTable[Quarter];
+    m_noteWidthTable[QuarterDotted]      = m_noteWidthTable[Quarter]      + m_noteWidthTable[Eighth];
+    m_noteWidthTable[EighthDotted]       = m_noteWidthTable[Eighth]       + m_noteWidthTable[Sixteenth];
+    m_noteWidthTable[SixteenthDotted]    = m_noteWidthTable[Sixteenth]    + m_noteWidthTable[ThirtySecond];
+    m_noteWidthTable[ThirtySecondDotted] = m_noteWidthTable[ThirtySecond] + m_noteWidthTable[SixtyFourth];
+    m_noteWidthTable[SixtyFourthDotted]  = m_noteWidthTable[SixtyFourth]  + m_noteWidthTable[SixtyFourth] / 2;
 
 }
 

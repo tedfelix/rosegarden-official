@@ -62,10 +62,10 @@ protected:
     unsigned int m_previousNbTimeUnitsInCurrentBar;
     unsigned int m_currentPos;
 
-    typedef vector<unsigned int> NoteWidthMap;
+    typedef vector<unsigned int> NoteWidthTable;
 
     /// maps note types (Whole, Half, etc...) to the width they should take on the bar
-    NoteWidthMap m_noteWidthMap;
+    NoteWidthTable m_noteWidthTable;
 
 };
 
