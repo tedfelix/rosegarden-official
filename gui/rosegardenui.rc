@@ -70,6 +70,8 @@
         <Action name="manage_devices"/>
         <Action name="modify_banks"/>
         <Action name="modify_midi_filters"/>
+        <Separator/>
+        <Action name="save_default_studio"/>
   </Menu>
   <Menu name="Transport">
         <text>T&amp;ransport</text>

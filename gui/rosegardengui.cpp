@@ -251,6 +251,7 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotImportRG21()), actionCollection(),
                 "file_import_rg21");
 
+
     new KAction(i18n("Export &MIDI file..."), 0, 0, this,
                 SLOT(slotExportMIDI()), actionCollection(),
                 "file_export_midi");
@@ -565,6 +566,10 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("&Remap Instruments..."), 0, this,
                 SLOT(slotRemapInstruments()),
                 actionCollection(), "remap_instruments");
+
+    new KAction(i18n("&Save Studio as Default"), 0, this,
+                SLOT(slotSaveDefaultStudio()),
+                actionCollection(), "save_default_studio");
 
     // Transport controls [rwb]
     //
@@ -4062,6 +4067,19 @@ RosegardenGUIApp::slotRemapInstruments()
 
 }
 
+void
+RosegardenGUIApp::slotSaveDefaultStudio()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotSaveDefaultStudio" << endl;
+
+    KTmpStatusMsg msg(i18n("Saving current studio as default..."), this);
+
+    KStandardDirs standardDirs;
+    QString autoloadFile = standardDirs.localkdedir() + "share/apps/rosegarden/autoload.rg";
+    
+    SetWaitCursor waitCursor;
+    m_doc->saveDocument(autoloadFile);
+}
 
 void
 RosegardenGUIApp::slotModifyMIDIFilters()

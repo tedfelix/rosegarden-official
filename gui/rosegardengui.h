@@ -636,6 +636,11 @@ public slots:
     void slotModifyMIDIFilters();
 
     /**
+     * Save Studio as Default
+     */
+    void slotSaveDefaultStudio();
+
+    /**
      * toggles the toolbar
      */
     void slotToggleToolBar();
