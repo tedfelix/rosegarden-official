@@ -641,8 +641,8 @@ NotePixmapFactory::drawTie(bool above, int length)
     int tieCurve = m_font->getCurrentSize() / 2;
     int height = tieCurve + tieThickness;
     int x = m_left + m_noteBodyWidth / 2;
-    int y = (above ? m_left - tieCurve :
-                     m_above + m_noteBodyHeight + tieCurve);
+    int y = (above ? m_above - height - tieCurve/2 :
+                     m_above + m_noteBodyHeight + tieCurve/2 + 1);
     int i;
 
     if (length < tieCurve * 2) length = tieCurve * 2;
@@ -652,46 +652,42 @@ NotePixmapFactory::drawTie(bool above, int length)
         if (above) {
 
             m_p.drawArc
-                (x, y + i, x + tieCurve, y + tieCurve + i, 180*16, 90*16);
+                (x, y + i, tieCurve*2, tieCurve*2, 90*16, 70*16);
             m_pm.drawArc
-                (x, y + i, x + tieCurve, y + tieCurve + i, 180*16, 90*16);
+                (x, y + i, tieCurve*2, tieCurve*2, 90*16, 70*16);
 
             m_p.drawLine
-                (x + tieCurve, y + i, x + length - tieCurve - 1, y + i);
+                (x + tieCurve, y + i, x + length - tieCurve - 2, y + i);
             m_pm.drawLine
-                (x + tieCurve, y + i, x + length - tieCurve - 1, y + i);
+                (x + tieCurve, y + i, x + length - tieCurve - 2, y + i);
 
             m_p.drawArc
-                (x + length - tieCurve - 1, y + i,
-                 x + length - 1, y + tieCurve + i,
-                 270*16, 90*16);
+                (x + length - 2*tieCurve - 1, y + i,
+                 tieCurve*2, tieCurve*2, 20*16, 70*16);
             m_pm.drawArc
-                (x + length - tieCurve - 1, y + i,
-                 x + length - 1, y + tieCurve + i,
-                 270*16, 90*16);
+                (x + length - 2*tieCurve - 1, y + i,
+                 tieCurve*2, tieCurve*2, 20*16, 70*16);
 
         } else {
 
             m_p.drawArc
-                (x, y + i, x + tieCurve, y + tieCurve + i, 90*16, 90*16);
+                (x, y + i - tieCurve, tieCurve*2, tieCurve*2, 200*16, 70*16);
             m_pm.drawArc
-                (x, y + i, x + tieCurve, y + tieCurve + i, 90*16, 90*16);
+                (x, y + i - tieCurve, tieCurve*2, tieCurve*2, 200*16, 70*16);
 
             m_p.drawLine
                 (x + tieCurve, y + height - i - 1,
-                 x + length - tieCurve - 1, y + height - i - 1);
+                 x + length - tieCurve - 2, y + height - i - 1);
             m_pm.drawLine
                 (x + tieCurve, y + height - i - 1,
-                 x + length - tieCurve - 1, y + height - i - 1);
+                 x + length - tieCurve - 2, y + height - i - 1);
 
             m_p.drawArc
-                (x + length - tieCurve - 1, y + i,
-                 x + length - 1, y + tieCurve + i,
-                 0, 90*16);
+                (x + length - 2*tieCurve - 1, y + i - tieCurve,
+                 tieCurve*2, tieCurve*2, 270*16, 70*16);
             m_pm.drawArc
-                (x + length - tieCurve - 1, y + i,
-                 x + length - 1, y + tieCurve + i,
-                 0*16, 90*16);
+                (x + length - 2*tieCurve - 1, y + i - tieCurve,
+                 tieCurve*2, tieCurve*2, 270*16, 70*16);
         }
     }
 }
