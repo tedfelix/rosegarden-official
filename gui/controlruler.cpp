@@ -182,12 +182,35 @@ protected:
 
 bool ControllerEventAdapter::getValue(long& val)
 {
-    return m_event->get<Rosegarden::Int>(Rosegarden::Controller::VALUE, val);
+    if (m_event->getType() == Rosegarden::Controller::EventType)
+    {
+        return m_event->get<Rosegarden::Int>(Rosegarden::Controller::VALUE, val);
+    }
+    else if (m_event->getType() == Rosegarden::PitchBend::EventType)
+    {
+        long value = 0;
+        value = m_event->get<Rosegarden::Int>(Rosegarden::PitchBend::MSB);
+        value <<= 7;
+        value |= m_event->get<Rosegarden::Int>(Rosegarden::PitchBend::LSB);
+        return value;
+    }
+    else
+        return 0;
 }
 
 void ControllerEventAdapter::setValue(long val)
 {
-    m_event->set<Rosegarden::Int>(Rosegarden::Controller::VALUE, val);
+    if (m_event->getType() == Rosegarden::Controller::EventType)
+    {
+        m_event->set<Rosegarden::Int>(Rosegarden::Controller::VALUE, val);
+    }
+    else if (m_event->getType() == Rosegarden::PitchBend::EventType)
+    {
+        int lsb = val & 0x7f;
+        int msb = (val >> 7) & 0x7f;
+        m_event->set<Rosegarden::Int>(Rosegarden::PitchBend::MSB, msb);
+        m_event->set<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
+    }
 }
 
 timeT ControllerEventAdapter::getTime()
@@ -462,39 +485,53 @@ void ControlChangeCommand::modifySegment()
 /**
  * Command for inserting a new controller event
  */
-class ControllerEventInsertCommand : public BasicCommand
+class ControlRulerEventInsertCommand : public BasicCommand
 {
 public:
-    ControllerEventInsertCommand(timeT insertTime, long number, long initialValue, Segment &segment);
-    virtual ~ControllerEventInsertCommand() {;}
+    ControlRulerEventInsertCommand(const std::string &type, 
+                                   timeT insertTime, 
+                                   long number, 
+                                   long initialValue,
+                                   Segment &segment);
+
+    virtual ~ControlRulerEventInsertCommand() {;}
 
 protected:
 
     virtual void modifySegment();
 
+    std::string m_type;
     long m_number;
     long m_initialValue;
 };
 
-ControllerEventInsertCommand::ControllerEventInsertCommand(timeT insertTime,
-                                                           long number, long initialValue,
-                                                           Segment &segment)
+ControlRulerEventInsertCommand::ControlRulerEventInsertCommand(const std::string &type,
+                                                               timeT insertTime,
+                                                               long number, long initialValue,
+                                                               Segment &segment)
     : BasicCommand(i18n("Insert Controller Event"),
                    segment,
                    insertTime, 
                    (insertTime + Rosegarden::Note(Rosegarden::Note::Quaver).getDuration())), // must have a duration other undo doesn't work
+      m_type(type),
       m_number(number),
       m_initialValue(initialValue)
 {
 }
 
-void ControllerEventInsertCommand::modifySegment()
+void ControlRulerEventInsertCommand::modifySegment()
 {
-    Event* controllerEvent = new Event(Rosegarden::Controller::EventType,
-                                       getStartTime());
+    Event* controllerEvent = new Event(m_type, getStartTime());
 
-    controllerEvent->set<Rosegarden::Int>(Rosegarden::Controller::VALUE, m_initialValue);
-    controllerEvent->set<Rosegarden::Int>(Rosegarden::Controller::NUMBER, m_number);
+    if (m_type == Rosegarden::Controller::EventType)
+    {
+        controllerEvent->set<Rosegarden::Int>(Rosegarden::Controller::VALUE, m_initialValue);
+        controllerEvent->set<Rosegarden::Int>(Rosegarden::Controller::NUMBER, m_number);
+    }
+    else if (m_type == Rosegarden::PitchBend::EventType)
+    {
+        // set the value accordingly
+    }
     
     getSegment().insert(controllerEvent);
 }
@@ -868,8 +905,8 @@ int ControlRuler::valueToHeight(long val)
     long scaleVal = val * (ItemHeightRange);
     
     int res = -(int(scaleVal / getMaxItemValue()) + MinItemHeight);
-//     RG_DEBUG << "ControlRuler::valueToHeight : val = " << val << " - height = " << res
-//              << " - scaleVal = " << scaleVal << endl;
+     RG_DEBUG << "ControlRuler::valueToHeight : val = " << val << " - height = " << res
+              << " - scaleVal = " << scaleVal << endl;
     return res;
 }
 
@@ -1039,7 +1076,6 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
             // do something
             RG_DEBUG << "ControllerEventsRuler::ControllerEventsRuler - " 
                      << "found pitch bend" << endl;
-            continue;
         }
         else
             continue;
@@ -1222,8 +1258,9 @@ void ControllerEventsRuler::insertControllerEvent()
         if (ok) number = res.toULong();
     }
     
-    ControllerEventInsertCommand* command = 
-        new ControllerEventInsertCommand(insertTime, number, initialValue, m_segment);
+    ControlRulerEventInsertCommand* command = 
+        new ControlRulerEventInsertCommand(m_controller->getType(),
+                                           insertTime, number, initialValue, m_segment);
 
     m_parentEditView->addCommandToHistory(command);
 }
@@ -1415,8 +1452,9 @@ ControllerEventsRuler::drawControlLine(Rosegarden::timeT startTime,
         else if (value > m_controller->getMax())
             value = m_controller->getMax();
 
-        ControllerEventInsertCommand* command = 
-            new ControllerEventInsertCommand(time, m_controller->getControllerValue(), value, m_segment);
+        ControlRulerEventInsertCommand* command = 
+            new ControlRulerEventInsertCommand(m_controller->getType(),
+                    time, m_controller->getControllerValue(), value, m_segment);
 
         macro->addCommand(command);
 
