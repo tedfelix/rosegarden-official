@@ -112,5 +112,57 @@ Composition::clear()
     m_tracks.erase(begin(), end());
     
 }
+
+
+
+// Create a Mapped Composition over a slice of time - used by
+// the Sequencer.
+//
+MappedComposition*
+Composition::getMappedComposition(const unsigned int &sliceStart,
+                                  const unsigned int &sliceEnd)
+{
+  MappedComposition *returnSlice = new MappedComposition(sliceStart, sliceEnd);
+  unsigned int eventTime;
+  Track::iterator nextEl;
+
+  assert(sliceEnd >= sliceStart);
+
+  for (Composition::iterator i = begin(); i != end(); ++i )
+  {
+    if ( (*i)->getStartIndex() >= sliceEnd )
+      continue;
+
+    for ( Track::iterator j = (*i)->begin(); j != (*i)->end(); ++j )
+    {
+      cout << "ELEMENT = " << *j << endl;    
+      nextEl = j;
+      ++nextEl;
+
+      if (nextEl != (*i)->end())
+      {
+        // for the moment ensure we're all positive
+        assert((*j)->getAbsoluteTime() > 0 );
+
+        // get the eventTime
+        eventTime = (unsigned int) (*j)->getAbsoluteTime();
+  
+        // eventually filter only for the events we're interested in
+        if ( eventTime >= sliceStart && eventTime <= sliceEnd )
+        {
+          // insert event
+          MappedEvent *me = new MappedEvent(**j);
+          me->instrument((*i)->getInstrument());
+          returnSlice->insert(me);
+          cout << "INSERTED EVENT" << endl;
+        }
+      }
+    }
+  }
+
+  return returnSlice;
+}
+
+
  
 }

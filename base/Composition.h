@@ -24,6 +24,7 @@
 #include <set>
 
 #include "Track.h"
+#include "MappedEvent.h"
 
 namespace Rosegarden 
 {
@@ -64,6 +65,10 @@ public:
     const_iterator begin() const { return m_tracks.begin(); }
     iterator       end()         { return m_tracks.end(); }
     const_iterator end() const   { return m_tracks.end(); }
+
+    MappedComposition* getMappedComposition(const unsigned int &sliceStart,
+                                            const unsigned int &sliceEnd);
+
 
 //     Track*       operator[](int i)       { return m_tracks[i]; }
 //     const Track* operator[](int i) const { return m_tracks[i]; }
