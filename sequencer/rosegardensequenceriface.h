@@ -176,6 +176,11 @@ public:
     //
     virtual unsigned int getSampleRate() const = 0;
 
+    // Initialise/Reinitialise the studio back down to read only objects
+    // and set to defaults.
+    //
+    virtual void reinitialiseStudio() = 0;
+
 
 };
 

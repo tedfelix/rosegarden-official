@@ -216,6 +216,10 @@ public:
     //
     virtual unsigned int getSampleRate() const;
 
+    // Reinitialise the studio
+    //
+    virtual void reinitialiseStudio();
+
     //
     //
     //

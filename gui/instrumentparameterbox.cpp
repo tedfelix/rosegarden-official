@@ -742,6 +742,14 @@ InstrumentParameterBox::slotPluginSelected(int index, int plugin)
                 std::cout << "InstrumentParameterBox::slotPluginSelected - "
                           << "modifying MappedObjectId = "
                           << inst->getMappedId() << std::endl;
+
+#ifdef HAVE_LADSPA
+                Rosegarden::StudioControl::setStudioObjectProperty
+                    (inst->getMappedId(),
+                     Rosegarden::MappedLADSPAPlugin::UniqueId,
+                     plgn->getUniqueId());
+#endif
+
             }
             else
             {
@@ -762,7 +770,7 @@ InstrumentParameterBox::slotPluginSelected(int index, int plugin)
                 Rosegarden::StudioControl::setStudioObjectProperty
                     (newId,
                      Rosegarden::MappedLADSPAPlugin::UniqueId,
-                     0);
+                     plgn->getUniqueId());
 #endif
             }
 
@@ -790,15 +798,18 @@ InstrumentParameterBox::slotPluginPortChanged(int pluginIndex,
                                               int portIndex,
                                               float value)
 {
+    /*
     std::cout << "InstrumentParameterBox::slotPluginPortChanged - "
               << "value = " << value << std::endl;
+              */
 
     Rosegarden::AudioPluginInstance *inst = 
         m_selectedInstrument->getPlugin(pluginIndex);
 
     if (inst)
     {
-        cout << "PLUGIN ID = " << inst->getMappedId() << endl;
+
+        //cout << "PLUGIN ID = " << inst->getMappedId() << endl;
         // get the list of ports
         //
 #ifdef HAVE_LADSPA
@@ -806,7 +817,8 @@ InstrumentParameterBox::slotPluginPortChanged(int pluginIndex,
             list = Rosegarden::StudioControl::
                 getStudioObjectProperty(inst->getMappedId(),
                                         Rosegarden::MappedLADSPAPlugin::Ports);
-        cout << "COUNT = "  << list.size() << endl;
+
+        //cout << "COUNT = "  << list.size() << endl;
 
         if (portIndex > (int(list.size() - 1)))
         {

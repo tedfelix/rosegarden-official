@@ -1758,7 +1758,26 @@ SequenceManager::getSequencerMappedObjectId(
 
 
 
+void
+SequenceManager::reinitialiseSequencerStudio()
+{
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
 
+    SEQMAN_DEBUG << "reinitialising studio" << endl;
+
+    if (!kapp->dcopClient()->
+            send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                 "reinitialiseStudio()",
+                 data))
+    {
+        SEQMAN_DEBUG << "failed to reinitialise studio" << endl;
+        return;
+    }
+
+    SEQMAN_DEBUG << "reinitialised studio" << endl;
+}
 
 
 }

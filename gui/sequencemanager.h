@@ -165,6 +165,10 @@ public:
     Rosegarden::MappedObjectId getSequencerMappedObjectId(
             Rosegarden::MappedObject::MappedObjectType type);
 
+    // Reinitialise the studio
+    //
+    void reinitialiseSequencerStudio();
+
 public slots:
     // Empty the m_clearToSend flag
     //

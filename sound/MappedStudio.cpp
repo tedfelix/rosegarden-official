@@ -117,10 +117,19 @@ MappedObject::getChildren(MappedObjectType type)
 void
 MappedObject::clearChildren()
 {
+    // remove references from the studio as well as from the object
+    MappedObject *studioObject = getParent();
+    while (!dynamic_cast<MappedStudio*>(studioObject))
+        studioObject = studioObject->getParent();
+
+    MappedStudio *studio = dynamic_cast<MappedStudio*>(studioObject);
+
     std::vector<MappedObject*>::iterator it = m_children.begin();
     for (; it != m_children.end(); it++)
-        delete (*it);
+        studio->destroyObject(*it); // remove from studio and destroy
+
     m_children.erase(m_children.begin(), m_children.end());
+
 }
 
 void
@@ -132,12 +141,9 @@ MappedObject::clone(MappedObject *object)
     //
     if (m_children.size())
     {
-        MappedObject *studio;
-        do
-        {
-            studio = getParent();
-        }
-        while (!dynamic_cast<MappedStudio*>(studio));
+        MappedObject *studio = getParent();
+        while (!dynamic_cast<MappedStudio*>(studio))
+            studio = studio->getParent();
 
         std::vector<MappedObject*>::iterator it = m_children.begin();
         for (; it != m_children.end(); it++)
@@ -146,9 +152,12 @@ MappedObject::clone(MappedObject *object)
                 dynamic_cast<MappedStudio*>(studio)
                     ->createObject((*it)->getType(), false);
             object->addChild(child);
+            cout << "ADD CHILD" << endl;
             (*it)->clone(child);
         }
     }
+    else
+        std::cerr << "NO CHILDREN TO CLONE" << endl;
 }
 
 
@@ -266,6 +275,23 @@ MappedStudio::getObjectOfType(MappedObjectType type)
 
 
 bool
+MappedStudio::destroyObject(MappedObject *object)
+{
+    std::vector<MappedObject*>::iterator it;
+    for (it = m_objects.begin(); it != m_objects.end(); it++)
+    {
+        if ((*it) == object)
+        {
+            delete (*it);
+            m_objects.erase(it);
+            return true;
+        }
+    }
+   
+    return false;
+}
+
+bool
 MappedStudio::destroyObject(MappedObjectId id)
 {
     std::vector<MappedObject*>::iterator it;
@@ -375,6 +401,44 @@ MappedStudio::setProperty(const MappedObjectProperty &property,
     }
 
 }
+
+// Remove all non read-only objects from the studio
+//
+void
+MappedStudio::clearTemporaries()
+{
+    std::vector<MappedObject*>::iterator it = m_objects.begin();
+    std::vector<std::vector<MappedObject*>::iterator> dead;
+
+    while (it != m_objects.end())
+    {
+        if (!(*it)->isReadOnly())
+        {
+            delete (*it);
+            dead.push_back(it);
+        }
+
+        it++;
+    }
+
+    std::vector<std::vector<MappedObject*>::iterator>::iterator dIt;
+    dIt = dead.end();
+
+    if (dIt != dead.begin())
+    {
+        std::cout << "MappedStudio::clearTemporaries - "
+                  << "clearing " << dead.size() << " temporary objects"
+                  << std::endl;
+        do
+        {
+            dIt--;
+            m_objects.erase(*dIt);
+    
+        } while(dIt != dead.begin());
+    }
+
+}
+
 
 // ------------ MappedAudioFader ----------------
 //
@@ -751,6 +815,28 @@ MappedAudioPluginManager::setProperty(const MappedObjectProperty &property,
     }
 }
 
+MappedObject*
+MappedAudioPluginManager::getReadOnlyPlugin(unsigned long uniqueId)
+{
+    std::vector<MappedObject*>::iterator it = m_children.begin();
+
+    for(; it != m_children.end(); it++)
+    {
+        if ((*it)->getType() == LADSPAPlugin &&
+            (*it)->isReadOnly())
+        {
+            MappedLADSPAPlugin *plugin =
+                dynamic_cast<MappedLADSPAPlugin*>(*it);
+
+            if (plugin->getUniqueId() == uniqueId)
+                return *it;
+        }
+    }
+
+    return 0;
+}
+
+
 
 //  ------------------ MappedLADSPAPlugin ------------------
 //
@@ -803,13 +889,15 @@ MappedLADSPAPlugin::getPropertyList(const MappedObjectProperty &property)
         else if (property == MappedLADSPAPlugin::Ports)
         {
             // list the port object ids
-
+            /*
             MappedObjectPropertyList list = 
                 getChildren(MappedObject::LADSPAPort);
-
-            cout << "GOT " << list.size() << " CHILDREN" << endl;
             return list;
-            //return getChildren(MappedObject::LADSPAPort);
+            cout << "GOT " << list.size() << " CHILDREN" << endl;
+            */
+
+            return getChildren(MappedObject::LADSPAPort);
+
         }
     }
 
@@ -826,21 +914,70 @@ MappedLADSPAPlugin::setProperty(const MappedObjectProperty &property,
     {
         // manufacture the ports for this plugin type
 
+        /*
         cout << "GET PLUGIN ID = " << int(value) << endl;
-        MappedStudio *studio = dynamic_cast<MappedStudio*>
-                                   (getParent()->getParent());
-        MappedObject *plugin = studio->getObject(int(value));
+        MappedStudio *studio =
+            dynamic_cast<MappedStudio*>(getParent()->getParent());
+
+        MappedLADSPAPlugin *plugin =
+            dynamic_cast<MappedLADSPAPlugin*>(studio->getObject(int(value)));
 
         if (plugin)
         {
+            */
             // populate our ports from here
-        }
+        MappedAudioPluginManager *pluginManager =
+            dynamic_cast<MappedAudioPluginManager*>(getParent());
 
+        MappedLADSPAPlugin *roPlugin =
+                dynamic_cast<MappedLADSPAPlugin*>
+                    (pluginManager->getReadOnlyPlugin(((unsigned long)value)));
+
+        if (roPlugin == 0)
+        {
+            std::cerr << "COULDN'T GET RO PLUGIN" << std::endl;
+            return;
+        }
+        cout << "CLONING" << endl;
+        cout << "NAME = " << roPlugin->getLabel() << endl;
+        roPlugin->clone(this);
 
     }
 
 }
 
+void
+MappedLADSPAPlugin::clone(MappedObject *object)
+{
+    object->clearChildren();
+
+    // If we have children then create new versions and clone then
+    //
+    if (m_children.size())
+    {
+        std::cout << "MappedLADSPAPlugin::clone - cloning "
+                  << m_children.size() << " children" << std::endl;
+
+        MappedObject *studio = getParent();
+        while(!(dynamic_cast<MappedStudio*>(studio)))
+            studio = studio->getParent();
+
+        std::vector<MappedObject*>::iterator it = m_children.begin();
+        for (; it != m_children.end(); it++)
+        {
+            MappedObject *child =
+                dynamic_cast<MappedStudio*>(studio)
+                    ->createObject(LADSPAPort, false);
+            object->addChild(child);
+            child->setParent(object);
+
+            (*it)->clone(child);
+        }
+    }
+    else
+        std::cerr << "MappedLADSPAPlugin::clone - " 
+                  << "no children to clone" << std::endl;
+}
 #endif // HAVE_LADSPA
 
 
@@ -886,11 +1023,13 @@ MappedLADSPAPort::getPropertyList(const MappedObjectProperty &property)
 
 void
 MappedLADSPAPort::setProperty(const MappedObjectProperty &property,
-                              MappedObjectValue /*value*/)
+                              MappedObjectValue value)
 {
     if (property == MappedLADSPAPort::Value)
     {
-        cout << "SETTING PORT VALUE" << endl;
+        std::cout << "MappedLADSPAPort::setProperty value = "
+                  << value << std::endl;
+        m_value = value;
     }
 
 
@@ -899,7 +1038,6 @@ MappedLADSPAPort::setProperty(const MappedObjectProperty &property,
 void
 MappedLADSPAPort::clone(MappedObject *object)
 {
-    std::cout << "CLONING PORT" << endl;
     object->setProperty(MappedLADSPAPort::Value, m_value);
 }
 

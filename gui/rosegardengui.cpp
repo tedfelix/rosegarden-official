@@ -137,6 +137,10 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     //
     (void)m_seqManager->getSoundDriverStatus();
 
+    // If we're restarting the gui then make sure any transient
+    // studio objects are cleared away.
+    m_seqManager->reinitialiseSequencerStudio();
+
     // Get the plugins available at the sequencer
     //
     m_seqManager->getSequencerPlugins(m_pluginManager);

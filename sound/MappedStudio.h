@@ -190,6 +190,7 @@ public:
     // Destroy a MappedObject
     //
     bool destroyObject(MappedObjectId id);
+    bool destroyObject(MappedObject *object);
 
     // Get an object
     //
@@ -206,6 +207,11 @@ public:
     // Empty the studio of everything
     //
     void clear();
+
+    // Clear the temporary elements leaving all read-only (system)
+    // elements in place.
+    //
+    void clearTemporaries();
 
     // Property list
     //
@@ -237,9 +243,10 @@ private:
     //
     MappedObjectId             m_runningObjectId;
 
-    // All of our mapped (virtual) studio resides in this vector -
-    // probably eventually want to make this more efficient.
-    //
+    // All of our mapped (virtual) studio resides in this vector as
+    // well as having all their parent/child relationships.  Because
+    // some things are just blobs with no connections we need to
+    // maintain both - don't forget about this.
     //
     std::vector<MappedObject*> m_objects;
 };
@@ -335,6 +342,9 @@ public:
     // populate this object with descriptor information
     void populate(const LADSPA_Descriptor *descriptor);
 
+    // redefine
+    virtual void clone(MappedObject *object);
+
 protected:
 
     unsigned long m_uniqueId;
@@ -402,6 +412,12 @@ protected:
 // provides an interface for plugging them into the
 // faders/Instruments.
 //
+// Rather confusingly this manager holds both the class of 
+// the plugin (in a read-only manner) as well as the actual
+// live instances of the plugin.  While this isn't very
+// clever or very efficient it works for the moment until
+// we have the energy or patience to change it.
+//
 //
 class MappedAudioPluginManager : public MappedObject
 {
@@ -441,6 +457,9 @@ public:
 
 #endif
 
+    // Get the class of this plugin so we can clone() it
+    //
+    MappedObject* getReadOnlyPlugin(unsigned long uniqueId);
 
 protected:
     // Help discover plugins
