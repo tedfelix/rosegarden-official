@@ -32,7 +32,7 @@
 #include <kstatusbar.h>
 #include <klistbox.h>
 
-#if KDE_VERSION >= 320
+#if KDE_VERSION >= 197120 // 320
 #include <ktabwidget.h>
 #else
 #include "kde32_ktabwidget.h"
@@ -64,10 +64,6 @@
 
 using Rosegarden::PropertyName;
 
-#if KDE_VERSION < 320
-using KDE32Backport::KTabWidget;
-#endif
-
 //----------------------------------------------------------------------
 const unsigned int EditView::CONTROLS_ROW         = 0;
 const unsigned int EditView::RULERS_ROW           = CONTROLS_ROW + 1;
@@ -89,7 +85,11 @@ EditView::EditView(RosegardenGUIDoc *doc,
     m_topBarButtons(0),
     m_bottomBarButtons(0),
     m_controlRuler(0),
+#if KDE_VERSION < 197120
+    m_controlRulers(new KDE32Backport::KTabWidget(getBottomWidget(), "controlrulers"))
+#else
     m_controlRulers(new KTabWidget(getBottomWidget(), "controlrulers"))
+#endif
 {
     m_controlRulers->setHoverCloseButton(true);
     connect(m_controlRulers, SIGNAL(closeRequest(QWidget*)),

@@ -21,7 +21,7 @@
 #include <kiconloader.h>
 
 #include "kde32_ktabwidget.h"
-#include "ktabbar.h"
+#include "kde32_ktabbar.h"
 
 namespace KDE32Backport
 {
