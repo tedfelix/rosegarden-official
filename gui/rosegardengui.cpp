@@ -1404,6 +1404,7 @@ RosegardenGUIDoc *RosegardenGUIApp::getDocument() const
 void RosegardenGUIApp::slotSaveOptions()
 {
     RG_DEBUG << "RosegardenGUIApp::slotSaveOptions()\n";
+    RG_DEBUG << "SETTING 2 : transport flap extended = " << m_transport->isExpanded() << endl;
 
     kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     kapp->config()->writeEntry("Show Transport",               m_viewTransport->isChecked());
@@ -1442,6 +1443,7 @@ void RosegardenGUIApp::readOptions()
     slotToggleTransport();
 
     opt = kapp->config()->readBoolEntry("Expanded Transport", false);
+    RG_DEBUG << "SETTING 3 : transport flap extended = " << opt << endl;
     if(opt)
         m_transport->slotPanelOpenButtonClicked();
     else
@@ -1532,6 +1534,8 @@ void RosegardenGUIApp::showEvent(QShowEvent* e)
 
 bool RosegardenGUIApp::queryClose()
 {
+    RG_DEBUG << "SETTING 1 : transport flap extended = " << m_transport->isExpanded() << endl;
+
     bool canClose = m_doc->saveIfModified();
 
     if (canClose) {
