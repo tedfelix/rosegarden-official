@@ -32,6 +32,7 @@
 #include "notationvlayout.h"
 #include "notationcanvasview.h"
 #include "notationstaff.h"
+#include "notationrulerscale.h"
 #include "NotationTypes.h"
 
 class QCanvasItem;
@@ -423,30 +424,6 @@ protected:
     virtual void setViewSize(QSize);
 
     /**
-     * Find the NotationElement whose coords are closest to (x,y)
-     *
-     * If notesAndRestsOnly is true, will return the closest note
-     * or rest but will never return any other kind of element.
-     *
-     * If the closest event is further than \a proximityThreshold
-     * horizontally away from (x,y), in pixels, end() is returned.
-     * (If proximityThreshold is negative, there will be no limit
-     * to the distances that will be considered.)
-     *
-     * Also returns the time signature, clef and key in force
-     * at the given coordinates.
-     */
-/*!!!
-    NotationElementList::iterator findClosestEvent
-    (double x, double y,
-     Rosegarden::Event *&timeSignature,
-     Rosegarden::Event *&clef,
-     Rosegarden::Event *&key,
-     int staffNo, bool notesAndRestsOnly = true,
-     unsigned int proximityThreshold = 10);
-*/
-
-    /**
      * Set the note pixmap factory
      *
      * The previous pixmap factory is deleted
@@ -515,6 +492,8 @@ protected:
     virtual NotationCanvasView *getCanvasView() {
 	return static_cast<NotationCanvasView *>(m_canvasView);
     }
+
+    NotationRulerScale m_rulerScale;
 };
 
 #endif

@@ -25,13 +25,15 @@
 
 class NotationHLayout;
 class NotationStaff;
+namespace Rosegarden { class Composition; }
 
 class NotationRulerScale : public RulerScale
 {
 public:
-    NotationRulerScale(NotationHLayout *layout);
+    NotationRulerScale();
     virtual ~NotationRulerScale();
 
+    void setLayout(NotationHLayout *layout);
     void setFirstStartingStaff(NotationStaff *firstStartingStaff);
     void setLastFinishingStaff(NotationStaff *lastFinishingStaff);
 
@@ -48,6 +50,7 @@ protected:
     int m_firstBar;
 
     int getLayoutBarNumber(int n);
+    Rosegarden::Composition *getComposition();
 };
 
 #endif

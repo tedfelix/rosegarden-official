@@ -42,12 +42,14 @@
 #include "notationview.h"
 #include "notationelement.h"
 #include "notationproperties.h"
+#include "notationrulerscale.h"
 
 #include "notationstaff.h"
 #include "notepixmapfactory.h"
 #include "notationtool.h"
 #include "qcanvassimplesprite.h"
 #include "ktmpstatusmsg.h"
+#include "barbuttons.h"
 
 #include "rosedebug.h"
 
@@ -192,6 +194,7 @@ NotationView::NotationView(RosegardenGUIView* rgView,
     //
     m_vlayout = new NotationVLayout();
     m_hlayout = new NotationHLayout(*m_notePixmapFactory);
+    m_rulerScale.setLayout(m_hlayout);
 
     bool layoutApplied = applyLayout();
     if (!layoutApplied) KMessageBox::sorry(0, i18n("Couldn't apply score layout"));
@@ -202,6 +205,11 @@ NotationView::NotationView(RosegardenGUIView* rgView,
             m_staffs[i]->positionAllElements();
         }
     }
+
+    BarButtons *barButtons = new BarButtons
+	(rgView->getDocument(), &m_rulerScale, 25, m_barButtonsView);
+
+    m_barButtonsView->addChild(barButtons);
 
     //
     // Position pointer
@@ -941,15 +949,32 @@ bool NotationView::applyLayout(int staffNo)
 
     // find the last finishing staff for future use
 
-    timeT endTime = -1;
+    timeT endTime = -1; //!!! change this: -1 is valid now
     m_lastFinishingStaff = -1;
 
+    int firstStartingStaff = -1;
+    timeT startTime = -1; //!!! likewise
+
     for (i = 0; i < m_staffs.size(); ++i) {
+
+	timeT thisStartTime = m_staffs[i]->getSegment().getStartIndex();
+	if (thisStartTime < startTime || startTime == -1) {
+	    startTime = thisStartTime;
+	    firstStartingStaff = i;
+	}
+
         timeT thisEndTime = m_staffs[i]->getSegment().getEndIndex();
         if (thisEndTime > endTime) {
             endTime = thisEndTime;
             m_lastFinishingStaff = i;
         }
+    }
+
+    if (firstStartingStaff != -1) {
+	m_rulerScale.setFirstStartingStaff(m_staffs[firstStartingStaff]);
+    }
+    if (m_lastFinishingStaff != -1) {
+	m_rulerScale.setLastFinishingStaff(m_staffs[m_lastFinishingStaff]);
     }
 
     readjustCanvasSize();

@@ -42,6 +42,8 @@
 #include "matrixtool.h"
 #include "rosegardenguidoc.h"
 #include "ktmpstatusmsg.h"
+#include "rulerscale.h"
+#include "barbuttons.h"
 
 #include "rosedebug.h"
 
@@ -57,7 +59,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_hlayout(new MatrixHLayout),
       m_vlayout(new MatrixVLayout),
       m_hoveredOverAbsoluteTime(0),
-      m_hoveredOverNoteName(0)
+      m_hoveredOverNoteName(0),
+      m_rulerScale(&doc->getComposition(), 0, 0,
+		   Rosegarden::Note(Rosegarden::Note::Crotchet).getDuration()
+		   / 20)
 {
     m_toolBox = new MatrixToolBox(this);
 
@@ -82,6 +87,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     setCanvasView(canvasView);
 
 //    setCentralWidget(m_canvasView);
+
+    BarButtons *barButtons = new BarButtons
+	(doc, &m_rulerScale, 25, m_barButtonsView);
+
+    m_barButtonsView->addChild(barButtons);
 
     QObject::connect
         (getCanvasView(), SIGNAL(activeItemPressed(QMouseEvent*, QCanvasItem*)),

@@ -39,7 +39,6 @@ class QCanvasItem;
 class QScrollView;
 class QCanvasView;
 class ActiveItem;
-class RulerScale;
 class BarButtons;
 class QVBox;
 
@@ -228,7 +227,6 @@ protected:
     virtual void setCanvasView(QCanvasView *cv);
     QCanvasView *m_canvasView;
 
-    RulerScale *m_rulerScale;
     QScrollView *m_barButtonsView;
     BarButtons *m_barButtons;
     QVBox *m_topBox;

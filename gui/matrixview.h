@@ -32,6 +32,7 @@
 #include "editview.h"
 #include "matrixcanvasview.h"
 #include "matrixelement.h"
+#include "rulerscale.h"
 
 namespace Rosegarden { class Segment; }
 
@@ -68,6 +69,7 @@ public:
 
     MatrixStaff* getStaff(int) { return m_staffs[0]; } // deal with 1 staff only
     virtual void update();
+
 
 public slots:
 
@@ -168,6 +170,8 @@ protected:
     virtual MatrixCanvasView *getCanvasView() {
 	return static_cast<MatrixCanvasView *>(m_canvasView);
     }
+
+    SimpleRulerScale m_rulerScale;
 };
 
 #endif
