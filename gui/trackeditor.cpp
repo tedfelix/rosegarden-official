@@ -531,7 +531,7 @@ void TrackEditor::slotScrollHoriz(int hpos)
 }
 
 
-// Show a Segment as it's being recorded
+// Show a Segment as its being recorded
 //
 void
 TrackEditor::slotUpdateRecordingSegmentItem(Rosegarden::Segment *segment)

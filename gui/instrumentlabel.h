@@ -47,6 +47,7 @@ public:
 
 public slots:
     void slotChangeToInstrumentList();
+    void setLabelHighlight(bool value);
 
 
 protected:
@@ -55,6 +56,10 @@ protected:
 
 
 signals:
+    // Our version of released() has an int id associated with it
+    //
+    void released(int);
+
     void changeToInstrumentList(int);
 
 

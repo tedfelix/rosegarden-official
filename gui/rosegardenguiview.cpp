@@ -78,6 +78,11 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     m_segmentParameterBox = new SegmentParameterBox(vbox);
     m_instrumentParameterBox = new InstrumentParameterBox(vbox);
 
+    int width = m_segmentParameterBox->width();
+
+    if (width > m_instrumentParameterBox->width())
+       m_instrumentParameterBox->setMinimumWidth(width);
+
     // Connect up command path
     //
     connect(m_segmentParameterBox, SIGNAL(addCommandToHistory(KCommand*)),
@@ -238,6 +243,16 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
 
     // update the segment parameter box
     m_segmentParameterBox->useSegments(segments);
+
+    // update the instrument parameter box
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Rosegarden::Studio &studio = getDocument()->getStudio();
+
+    Rosegarden::Instrument *instrument = 
+        studio.getInstrumentById(
+                comp.getTrackByIndex(trackId)->getInstrument());
+
+    m_instrumentParameterBox->useInstrument(instrument);
 }
 
 // Show a segment as it records

@@ -20,6 +20,7 @@
 */
 
 #include <string>
+#include <vector>
 
 #include "Device.h"
 #include "Instrument.h"
@@ -30,6 +31,8 @@
 
 namespace Rosegarden
 {
+
+typedef std::vector<std::string> ProgramList;
 
 class MidiDevice : public Device
 {
@@ -45,6 +48,10 @@ public:
                       MidiByte pitch, MidiByte channel,
                       const std::string &name);
     MidiMetronome* getMetronome() const { return m_metronome; }
+
+    // Get a program list for a certain bank
+    //
+    ProgramList getProgramList(MidiByte msb, MidiByte lsb);
 
     void addProgram(MidiProgram *program);
     void addBank(MidiBank *bank);
@@ -69,9 +76,6 @@ private:
     // of the rosegarden file and at the gui map names only.
     //
     //
-    MidiByte                  m_bankMSB;     // Send as Controller 0
-    MidiByte                  m_bankLSB;     // Send as Controller 32
-    bool                      m_bankSelect;  // send bank select?
 
     // We store voice names that depend on bank select state
     // - we can create our own and save them out

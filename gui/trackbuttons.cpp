@@ -265,6 +265,10 @@ TrackButtons::drawButtons()
         // insert label
         m_instrumentLabels.push_back(instrumentLabel);
 
+        connect(instrumentLabel, SIGNAL(released(int)),
+                SLOT(slotLabelSelected(int)));
+
+
         // Insert the buttons into groups
         //
         m_recordButtonGroup->insert(record, i);
@@ -394,11 +398,22 @@ TrackButtons::slotLabelSelected(int position)
          tlpIt++)
     {
         
-        if ((*tlpIt)->getPosition() != position &&
-            (*tlpIt)->isSelected())
-        {
+        if ((*tlpIt)->getPosition() != position)
             (*tlpIt)->setLabelHighlight(false);
-        }
+        else
+            (*tlpIt)->setLabelHighlight(true);
+    }
+
+    std::vector<InstrumentLabel *>::iterator it;
+
+    for (it = m_instrumentLabels.begin();
+         it != m_instrumentLabels.end();
+         it++)
+    {
+        if ((*it)->getPosition() != position)
+            (*it)->setLabelHighlight(false);
+        else
+            (*it)->setLabelHighlight(true);
     }
 
     // Propagate this message upstairs
@@ -406,6 +421,8 @@ TrackButtons::slotLabelSelected(int position)
     emit(trackSelected(position));
 
 }
+
+
 
 // Return a vector of highlighted tracks by querying the TrackLabels
 // for highlight state.

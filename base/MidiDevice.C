@@ -29,7 +29,6 @@ namespace Rosegarden
 
 MidiDevice::MidiDevice():
     Device("Default Midi Device", Device::Midi),
-    m_bankMSB(0), m_bankLSB(0), m_bankSelect(false),
     m_metronome(new MidiMetronome())
 {
     createInstruments();
@@ -37,7 +36,6 @@ MidiDevice::MidiDevice():
 
 MidiDevice::MidiDevice(const std::string &name):
     Device(name, Device::Midi),
-    m_bankMSB(0), m_bankLSB(0), m_bankSelect(false),
     m_metronome(new MidiMetronome())
 {
     createInstruments();
@@ -105,6 +103,29 @@ MidiDevice::setMetronome(MidiByte msb, MidiByte lsb, MidiByte program,
     m_metronome->name = name;
     m_metronome->channel = channel;
 }
+
+
+// Create a Program list
+//
+ProgramList
+MidiDevice::getProgramList(MidiByte msb, MidiByte lsb)
+{
+    ProgramList list;
+    std::vector<MidiProgram*>::iterator it;
+
+    for (it = m_programList.begin(); it != m_programList.end(); it++)
+    {
+        // If the bank matches
+        if (msb == (*it)->msb && lsb == (*it)->lsb)
+        {
+            list.push_back((*it)->name);
+        }
+    }
+
+    return list;
+
+}
+
 
 
 

@@ -544,8 +544,8 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         Rosegarden::MidiProgram *program = new Rosegarden::MidiProgram();
         program->name = std::string(nameStr.data());
         program->program = pc;
-        //program->msb = m_msb;
-        //program->lsb = m_lsb;
+        program->msb = m_msb;
+        program->lsb = m_lsb;
 
         // Insert the program
         //

@@ -57,7 +57,7 @@ InstrumentLabel::mousePressEvent(QMouseEvent *e)
     m_pressPosition = e->globalPos();
 
     // start a timer on this hold
-    m_pressTimer->start(100, true); // 400ms, single shot
+    m_pressTimer->start(400, true); // 400ms, single shot
 
 }
 
@@ -67,6 +67,9 @@ InstrumentLabel::mouseReleaseEvent(QMouseEvent *e)
     // stop the timer if running
     if (m_pressTimer->isActive())
         m_pressTimer->stop();
+
+    // now send released signal to update selected track
+    emit released(m_position);
 }
 
 void
@@ -74,5 +77,16 @@ InstrumentLabel::slotChangeToInstrumentList()
 {
     emit changeToInstrumentList(m_position);
 }
+
+void
+InstrumentLabel::setLabelHighlight(bool value)
+{
+    if (value)
+        setBackgroundMode(PaletteBase);
+    else
+        setBackgroundMode(PaletteBackground);
+}
+
+
 
 

@@ -47,18 +47,15 @@ struct MidiBank
     std::string name;
 };
 
-struct MidiProgram
+struct MidiProgram : public MidiBank
 {
     MidiByte program;
-    std::string name;
 };
 
 // A mapped MIDI instrument - a drum track click for example
 //
 struct MidiMetronome : public MidiProgram
 {
-    MidiByte msb;
-    MidiByte lsb;
     MidiByte pitch;
     MidiByte channel;
 };

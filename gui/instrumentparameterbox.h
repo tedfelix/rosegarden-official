@@ -20,9 +20,12 @@
 */
 
 #include <qframe.h>
+#include "guielements.h"
 
 #ifndef _INSTRUMENTPARAMETERBOX_H_
 #define _INSTRUMENTPARAMETERBOX_H_
+
+namespace Rosegarden { class Instrument; }
 
 class InstrumentParameterBox : public QFrame
 {
@@ -32,8 +35,13 @@ public:
     InstrumentParameterBox(QWidget *parent=0, const char *name=0, WFlags f=0);
     ~InstrumentParameterBox();
 
+    void useInstrument(Rosegarden::Instrument *instrument);
 private:
     void initBox();
+    RosegardenComboBox *m_channelValue;
+    RosegardenComboBox *m_programValue;
+    RosegardenComboBox *m_panValue;
+    RosegardenComboBox *m_volumeValue;
 
 };
 
