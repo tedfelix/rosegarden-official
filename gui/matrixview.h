@@ -532,6 +532,8 @@ protected:
 
     virtual void updateViewCaption();
 
+    int computePostLayoutWidth();
+
     //--------------- Data members ---------------------------------
 
     std::vector<MatrixStaff*> m_staffs;

@@ -897,8 +897,14 @@ QSize MatrixView::getViewSize()
 
 void MatrixView::setViewSize(QSize s)
 {
+    MATRIX_DEBUG  << "MatrixView::setViewSize() w = " << s.width()
+                  << endl;
+
     canvas()->resize(s.width(), s.height());
     getCanvasView()->resizeContents(s.width(), s.height());
+
+    MATRIX_DEBUG  << "MatrixView::setViewSize() contentsWidth = " << getCanvasView()->contentsWidth()
+                  << endl;
 }
 
 void MatrixView::repaintRulers()
@@ -2063,10 +2069,9 @@ MatrixView::slotChangeHorizontalZoom(int)
     // and restore.
     //
 
-    int endX = int(m_hlayout.getXForTime(m_segments[0]->getEndMarkerTime()));
-    int startX = int(m_hlayout.getXForTime(m_segments[0]->getStartTime()));
+    int newWidth = computePostLayoutWidth();
 
-    int newWidth = int(getXbyWorldMatrix(endX - startX));
+//     int newWidth = int(getXbyWorldMatrix(getCanvasView()->canvas()->width()));
 
     // We DO NOT resize the canvas(), only the area it's displaying on
     //
@@ -2298,23 +2303,7 @@ MatrixView::readjustCanvasSize()
 
     }
 
-    Segment *segment = m_segments[0];
-    Rosegarden::Composition *composition = segment->getComposition();
-    int   endX = int(m_hlayout.getXForTime
-		     (composition->getBarEndForTime
-		      (segment->getEndMarkerTime())));
-    int startX = int(m_hlayout.getXForTime
-		     (composition->getBarStartForTime
-		      (segment->getStartTime())));
-
-    RG_DEBUG << "MatrixView::readjustCanvasSize() : startX = " 
-             << startX
-             << " endX = " << endX
-             << " endmarkertime : " << segment->getEndMarkerTime()
-             << " barEnd for time : " << composition->getBarEndForTime(segment->getEndMarkerTime())
-             << endl;
-    
-    int newWidth = int(getXbyWorldMatrix(endX - startX));
+    int newWidth = computePostLayoutWidth();
 
     // now get the EditView to do the biz
     readjustViewSize(QSize(newWidth, maxHeight), true);
@@ -2488,6 +2477,30 @@ MatrixView::updateViewCaption()
                    .arg(getDocument()->getTitle())
                    .arg(m_segments.size()));
     }
+}
+
+int MatrixView::computePostLayoutWidth()
+{
+    Segment *segment = m_segments[0];
+    Rosegarden::Composition *composition = segment->getComposition();
+    int   endX = int(m_hlayout.getXForTime
+		     (composition->getBarEndForTime
+		      (segment->getEndMarkerTime())));
+    int startX = int(m_hlayout.getXForTime
+		     (composition->getBarStartForTime
+		      (segment->getStartTime())));
+
+    int newWidth = int(getXbyWorldMatrix(endX - startX));
+
+    MATRIX_DEBUG << "MatrixView::readjustCanvasSize() : startX = " 
+                 << startX
+                 << " endX = " << endX
+                 << " newWidth = " << newWidth
+                 << " endmarkertime : " << segment->getEndMarkerTime()
+                 << " barEnd for time : " << composition->getBarEndForTime(segment->getEndMarkerTime())
+                 << endl;
+
+    return newWidth;
 }
 
 
