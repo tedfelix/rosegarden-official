@@ -19,10 +19,9 @@
 #define VIEWELEMENTSMANAGER_H
 
 #include "Element2.h"
+#include "notationelement.h"
 
 class NotationElement;
-
-typedef list<NotationElement*> NotationElementList;
 
 /**
   *@author Guillaume Laurent, Chris Cannam, Rich Bown

@@ -42,4 +42,7 @@ protected:
     double m_y;
 };
 
+typedef list<NotationElement*> NotationElementList;
+
+
 #endif
