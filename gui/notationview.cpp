@@ -1982,6 +1982,12 @@ NotationView::slotSetInsertCursorPosition(timeT t)
     NotationElementList::iterator i = 
 	staff->getViewElementList()->findNearestTime(t);
 
+    if (i == staff->getViewElementList()->end()) {
+	m_insertionTime = staff->getSegment().getStartTime();
+    } else {
+	m_insertionTime = (*i)->getAbsoluteTime();
+    }
+
     if (i == staff->getViewElementList()->end() ||
 	t == segment.getEndTime() ||
 	t == segment.getBarStartForTime(t)) {
