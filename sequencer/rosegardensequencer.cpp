@@ -41,7 +41,9 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     m_lastFetchSongPosition(0, 0),
     m_fetchLatency(0, 200000),
     m_playLatency(0, 300000),
-    m_readAhead(0, 40000)
+    m_readAhead(0, 40000),
+    m_loopStart(0, 0),
+    m_loopEnd(0, 0)
 {
     // Without DCOP we are nothing
     QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
@@ -114,8 +116,6 @@ RosegardenSequencerApp::stop()
     std::cout << "RosegardenSequencerApp::play() - stopping" << endl;
 
 }
-
-
 
 // Get a slice of events from the GUI
 //
@@ -213,15 +213,12 @@ RosegardenSequencerApp::startPlaying()
 bool
 RosegardenSequencerApp::keepPlaying()
 {
-    if (m_songPosition > ( m_lastFetchSongPosition - m_fetchLatency ) )
+    if (m_songPosition > ( m_lastFetchSongPosition - m_fetchLatency))
     {
-    
-        // increment past last song fetch position by one microsecond
-        //m_lastFetchSongPosition.usec++;
+        m_sequencer->processMidiOut(*fetchEvents(m_lastFetchSongPosition,
+                                    m_lastFetchSongPosition + m_readAhead),
+                                    m_playLatency);
 
-        m_sequencer->processMidiOut( *fetchEvents(m_lastFetchSongPosition,
-                              m_lastFetchSongPosition + m_readAhead),
-                         m_playLatency);
         m_lastFetchSongPosition = m_lastFetchSongPosition + m_readAhead;
     }
 
@@ -510,4 +507,24 @@ RosegardenSequencerApp::record(const long &timeSec,
 }
 
 
+void
+RosegardenSequencerApp::setLoop(const Rosegarden::RealTime &loopStart,
+                                const Rosegarden::RealTime &loopEnd)
+{
+    m_loopStart = loopStart;
+    m_loopEnd = loopEnd;
+
+    // Requires thought
+}
+
+
+void
+RosegardenSequencerApp::setLoop(const long &loopStartSec,
+                                const long &loopStartUSec,
+                                const long &loopEndSec,
+                                const long &loopEndUSec)
+{
+    setLoop(Rosegarden::RealTime(loopStartSec, loopStartUSec),
+            Rosegarden::RealTime(loopEndSec, loopEndUSec));
+}
 

@@ -83,6 +83,11 @@ public slots:
                const Rosegarden::RealTime &fetchLatency,
                const int &recordMode);
 
+    // looping
+    void setLoop(const Rosegarden::RealTime &loopStart,
+                const Rosegarden::RealTime &loopEnd);
+
+
     // Play wrapper for DCOP
     //
     virtual int play(const long &timeSec,
@@ -108,6 +113,12 @@ public slots:
     //
     //
     virtual void jumpTo(const long &posSec, const long &posUsec);
+
+    // Set a loop on the Sequencer
+    //
+    virtual void setLoop(const long &loopStartSec, const long &loopStartUSec,
+                         const long &loopEndSec, const long &loopEndUSec);
+ 
 
     // stops the sequencer
     //
@@ -169,6 +180,9 @@ private:
     Rosegarden::RealTime m_fetchLatency;
     Rosegarden::RealTime m_playLatency;
     Rosegarden::RealTime m_readAhead;
+
+    Rosegarden::RealTime m_loopStart;
+    Rosegarden::RealTime m_loopEnd;
 
 };
  

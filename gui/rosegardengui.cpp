@@ -1924,6 +1924,31 @@ RosegardenGUIApp::setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
               << m_doc->getComposition().getLoopStart()
               << " END = "
               << m_doc->getComposition().getLoopEnd() << std::endl;
+
+
+    // Let the sequencer know about the loop markers
+    //
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    Rosegarden::RealTime loopStart =
+            m_doc->getComposition().getElapsedRealTime(lhs);
+    Rosegarden::RealTime loopEnd =
+            m_doc->getComposition().getElapsedRealTime(rhs);
+
+    streamOut << loopStart.sec;
+    streamOut << loopStart.usec;
+    streamOut << loopEnd.sec;
+    streamOut << loopEnd.usec;
+  
+    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                 "setLoop(long int, long int, long int, long int)", data))
+    {
+        // failed - pop up and disable sequencer options
+        KMessageBox::error(this,
+        i18n("Failed to contact Rosegarden sequencer with \"setLoop\""));
+    }
 }
 
 

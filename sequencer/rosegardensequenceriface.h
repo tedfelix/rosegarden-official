@@ -50,6 +50,11 @@ public:
 
     virtual void jumpTo(const long &posSec, const long &posUSec) = 0;
 
+    virtual void setLoop(const long &loopStartSec,
+                         const long &loopStartUSec,
+                         const long &loopEndSec,
+                         const long &loopEndUSec) = 0;
+
     virtual void stop() = 0;
 
 };
