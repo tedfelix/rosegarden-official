@@ -372,6 +372,11 @@ public:
     timeT getAudioStartTime() const { return m_audioStartIdx; }
     timeT getAudioEndTime() const { return m_audioEndIdx; }
 
+    // Is this Segment repeating?
+    //
+    bool isRepeating() const { return m_repeating; }
+    void setRepeating(bool value) { m_repeating = value; }
+
 private:
     timeT m_startIdx;
     unsigned int m_track;
@@ -396,6 +401,8 @@ private:
 
     timeT m_audioStartIdx;      // how far into m_audioFileID our Segment starts
     timeT m_audioEndIdx;        // how far into m_audioFileID our Segment ends
+
+    bool m_repeating;           // is this segment repeating?
 };
 
 

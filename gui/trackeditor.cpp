@@ -174,6 +174,14 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     grid->addWidget(m_horizontalScrollBar, 3, 1);
 
+  
+    // Segment and Instrument Parameter Boxes [rwb]
+    //
+    //m_segmentParameterBox = new SegmentParameterBox(this);
+    //m_segmentParameterBox->setMinimumHeight(200);
+    //
+    //m_instrumentParameterBox = new InstrumentParameterBox(this);
+
     //
     // Track Buttons
     //

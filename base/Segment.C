@@ -46,7 +46,8 @@ Segment::Segment(SegmentType segmentType, timeT startIdx) :
     m_type(segmentType),
     m_audioFileID(0),
     m_audioStartIdx(0),
-    m_audioEndIdx(0)
+    m_audioEndIdx(0),
+    m_repeating(false)
 {
     // nothing
 }
