@@ -4,8 +4,6 @@
 o Audio file playing feedback - async events and how to
   operate outside the ALSA timing loop
 
-o Fix/Complete repeating Segments [ALMOST COMPLETE]
-
 o Get Segment joining working
 
 o Audio volume faders - studio concept on sequencer
@@ -57,6 +55,8 @@ o selection of ALSA recording device
 
 Completed for 0.1.7 (0.2.0)
 ===========================
+
+o Fix/Complete repeating Segments [DONE]
 
 o Sync audio and MIDI [using JACK sliders]
 

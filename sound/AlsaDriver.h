@@ -153,6 +153,11 @@ public:
     bool createAudioFile(const std::string &fileName);
     void appendToAudioFile(const std::string &buffer);
 
+    // We can return audio control signals to the gui using MappedEvents.
+    // Meter levels or audio file completions can go in here.
+    //
+    void insertMappedEventForReturn(MappedEvent *mE);
+
 #endif
 
 
@@ -229,6 +234,8 @@ private:
     jack_port_t                 *m_audioInputPort;
     jack_port_t                 *m_audioOutputPortLeft;
     jack_port_t                 *m_audioOutputPortRight;
+
+    bool                         m_audioMeterSent;
 
 #endif
 

@@ -92,6 +92,7 @@ static unsigned int      _jackSampleRate;
 static bool              _usingAudioQueueVector;
 static sample_t         *_leftTempBuffer;
 static sample_t         *_rightTempBuffer;
+static int               _passThroughCounter;
 
 static const float  _8bitSampleMax  = (float)(0xff/2);
 static const float  _16bitSampleMax = (float)(0xffff/2);
@@ -115,13 +116,15 @@ AlsaDriver::AlsaDriver():
     m_alsaPlayStartTime(0, 0),
     m_alsaRecordStartTime(0, 0),
     m_currentPair(-1, -1),
-    m_addedMetronome(false)
+    m_addedMetronome(false),
+    m_audioMeterSent(false)
 {
     std::cout << "Rosegarden AlsaDriver - " << m_name << std::endl;
 #ifdef HAVE_JACK
     _jackBufferSize = 0;
     _jackSampleRate = 0;
     _usingAudioQueueVector = false;
+    _passThroughCounter = 0;
 #endif
 }
 
@@ -983,6 +986,17 @@ AlsaDriver::processAudioQueue(const RealTime &playLatency, bool now)
             (*it)->getStatus() == PlayableAudioFile::PLAYING)
         {
              (*it)->setStatus(PlayableAudioFile::DEFUNCT);
+
+             // Simple event to inform that AudioFileId has
+             // now stopped playing.
+             //
+             MappedEvent *mE =
+                 new MappedEvent((*it)->getAudioFile()->getId(),
+                                 MappedEvent::AudioStopped,
+                                 0);
+
+             // send completion event
+             insertMappedEventForReturn(mE);
         }
     }
 
@@ -1036,7 +1050,12 @@ AlsaDriver::getAlsaTime()
 MappedComposition*
 AlsaDriver::getMappedComposition(const RealTime &playLatency)
 {
-    m_recordComposition.clear();
+    // If we're already inserted some audio VU meter events then
+    // don't clear them from the composition.
+    //
+    if (m_audioMeterSent == false)
+        m_recordComposition.clear();
+
 
     if (m_recordStatus != RECORD_MIDI &&
         m_recordStatus != RECORD_AUDIO &&
@@ -1200,6 +1219,10 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
 
         snd_seq_free_event(event);
     }
+
+    // reset this whatever
+    //
+    m_audioMeterSent = false;
 
     return &m_recordComposition;
 }
@@ -1785,6 +1808,17 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     (fetchFrames * (*it)->getBytesPerSample()))
                 {
                     (*it)->setStatus(PlayableAudioFile::DEFUNCT);
+
+                    // Simple event to inform that AudioFileId has
+                    // now stopped playing.
+                    //
+                    MappedEvent *mE =
+                        new MappedEvent((*it)->getAudioFile()->getId(),
+                                        MappedEvent::AudioStopped,
+                                        0);
+
+                    // send completion event
+                    inst->insertMappedEventForReturn(mE);
                 }
 
 
@@ -1927,6 +1961,27 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         //
         inst->pushPlayableAudioQueue();
 
+
+        // Every time times through we report the current audio level
+        // back to the gui.
+        //
+        if (audioQueue.size() > 0 && _passThroughCounter++ > 10)
+        {
+            for (it = audioQueue.begin(); it != audioQueue.end(); it++)
+            {
+                MappedEvent *mE =
+                    new MappedEvent((*it)->getAudioFile()->getId(),
+                                    MappedEvent::AudioLevel,
+                                    0,    // pitch
+                                    100); // velocity
+
+                // send completion event
+                inst->insertMappedEventForReturn(mE);
+            }
+
+            _passThroughCounter = 0;
+        }
+
         // clear down the audio queue if we're not playing
         //
         /*
@@ -2068,6 +2123,23 @@ AlsaDriver::appendToAudioFile(const std::string &buffer)
     _recordFile->appendSamples(buffer);
 }
 
+
+void
+AlsaDriver::insertMappedEventForReturn(MappedEvent *mE)
+{
+    // If we haven't inserted a MappedEvent yet this update period
+    // then clear down the composition and flag
+    //
+    if (m_audioMeterSent == false)
+    {
+        m_recordComposition.clear();
+        m_audioMeterSent = true;
+    }
+
+    // Insert the event ready for return at the next opportunity
+    //
+    m_recordComposition.insert(mE);
+}
 
 
 

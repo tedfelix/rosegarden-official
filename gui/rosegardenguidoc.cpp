@@ -677,6 +677,8 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
             absTime = m_composition.
                           getElapsedTimeForRealTime((*i)->getEventTime());
             duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
+            rEvent = 0;
+
             switch((*i)->getType())
             {
                 case Rosegarden::MappedEvent::MidiNote:
@@ -721,11 +723,17 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                              << std::endl;
                    break;
 
+                   // Audio control signals - ignore these
+                case Rosegarden::MappedEvent::Audio:
+                case Rosegarden::MappedEvent::AudioCancel:
+                case Rosegarden::MappedEvent::AudioLevel:
+                case Rosegarden::MappedEvent::AudioStopped:
+                   break;
+
                 default:
                    std::cerr << "RosegardenGUIDoc::insertRecordedMidi() - "
                              << "GOT UNSUPPORTED MAPPED EVENT"
                              << std::endl;
-                   continue;
                    break;
             }
 

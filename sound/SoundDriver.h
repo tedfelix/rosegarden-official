@@ -88,6 +88,10 @@ public:
     void setStartIndex(const RealTime &time) { m_startIndex = time; }
     RealTime getStartIndex() const { return m_startIndex; }
 
+    // Get audio file for interrogation
+    //
+    AudioFile* getAudioFile() { return m_audioFile; }
+
     // Reaches through to AudioFile interface using our local file handle
     //
     //

@@ -62,7 +62,10 @@ public:
         MidiChannelPressure,
         MidiPitchWheel,
         MidiController,
-        Audio
+        Audio,               // sent from the gui to play an audio file
+        AudioCancel,         // sent from gui to stop playing an audio file
+        AudioLevel,          // sent to the gui with audio level on Instrument
+        AudioStopped         // sent to the gui to inform an audio file stopped
     } MappedEventType;
 
     MappedEvent(): m_instrument(0),
