@@ -356,6 +356,8 @@ public:
 
     bool isBeingDestroyed() { return m_beingDestroyed; }
 
+    static const unsigned int MinNbOfTracks; // 64
+
 public slots:
     /**
      * calls repaint() on all views connected to the document object
@@ -460,7 +462,6 @@ protected:
      */
     QString getAutoSaveFileName();
 
-protected:
     //--------------- Data members ---------------------------------
 
     /**

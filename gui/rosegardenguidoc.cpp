@@ -404,18 +404,18 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
                          << " - m_composition->getDuration() : "
                          << m_composition.getDuration() << endl;
 
-    // Ensure a minimum of 256 tracks
+    // Ensure a minimum of 64 tracks
     //
     int nbTracks = m_composition.getNbTracks();
     Rosegarden::TrackId maxTrackId = m_composition.getMaxTrackId();
     Rosegarden::InstrumentId instBase = Rosegarden::MidiInstrumentBase;
 
-    for(int i = nbTracks; i < 256; ++i) {
+    for(int i = nbTracks; i < MinNbOfTracks; ++i) {
 
         Rosegarden::Track *track;
 
         char tmp[256];
-        sprintf(tmp, "#%d", i);
+        sprintf(tmp, "#%d", i + 1);
         std::string label = "untitled ";
         label += tmp;
 
@@ -1842,7 +1842,4 @@ RosegardenGUIDoc::getClipboard()
     return app->getClipboard();
 }
 
-
-
-
-
+const unsigned int RosegardenGUIDoc::MinNbOfTracks = 64;
