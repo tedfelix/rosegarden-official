@@ -351,7 +351,8 @@ PasteEventsCommand::modifySegment()
     SegmentNotationHelper helper(*destination);
 
     RG_DEBUG << "PasteEventsCommand::modifySegment() : paste type = "
-                         << m_pasteType << endl;
+             << m_pasteType << " - pasteTime = "
+             << pasteTime << " - origin = " << origin << endl;
     
     switch (m_pasteType) {
 
@@ -373,7 +374,7 @@ PasteEventsCommand::modifySegment()
 	std::vector<Event *> copies;
 	for (Segment::iterator i = destination->findTime(pasteTime);
 	     i != destination->end(); ++i) {
-	    Event *e = new Event(**i, e->getAbsoluteTime() + duration);
+	    Event *e = new Event(**i, (*i)->getAbsoluteTime() + duration);
 	    copies.push_back(e);
 	}
 
@@ -401,7 +402,7 @@ PasteEventsCommand::modifySegment()
 		}
 	    } else {
 		Event *e = new Event
-		    (**i, e->getAbsoluteTime() - origin + pasteTime);
+		    (**i, (*i)->getAbsoluteTime() - origin + pasteTime);
 		destination->insert(e);
 	    }
 	}
@@ -414,7 +415,8 @@ PasteEventsCommand::modifySegment()
 	    if ((*i)->isa(Note::EventRestType)) continue;
 
 	    Event *e = new Event
-		(**i, e->getAbsoluteTime() - origin + pasteTime);
+		(**i, (*i)->getAbsoluteTime() - origin + pasteTime);
+
 	    destination->insert(e);
 	}
 	break;
