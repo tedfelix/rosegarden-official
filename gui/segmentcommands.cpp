@@ -1041,6 +1041,12 @@ SegmentMergeCommand::execute()
 
 	for (unsigned int i = 1; i < m_oldSegments.size(); ++i) {
 
+	    if (m_oldSegments[i]->getStartTime() >
+		m_newSegment->getEndMarkerTime()) {
+		m_newSegment->setEndMarkerTime
+		    (m_oldSegments[i]->getStartTime());
+	    }
+
 	    for (Segment::iterator si = m_oldSegments[i]->begin();
 		 m_oldSegments[i]->isBeforeEndMarker(si); ++si) {
 		m_newSegment->insert(new Event(**si));
