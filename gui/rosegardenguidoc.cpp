@@ -129,7 +129,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
     KConfig* config = kapp->config();
     config->setGroup("General Options");
     unsigned int autosaveSeconds =
-	config->readUnsignedNumEntry("autosaveinterval", 20);
+	config->readUnsignedNumEntry("autosaveinterval", 60);
 
     setAutoSavePeriod(autosaveSeconds);
 }

@@ -161,7 +161,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
                                                           true));
 
     m_autosaveInterval = new QSpinBox(0, 600, 10, frame);
-    m_autosaveInterval->setValue(m_cfg->readUnsignedNumEntry("autosaveinterval", 20));
+    m_autosaveInterval->setValue(m_cfg->readUnsignedNumEntry("autosaveinterval", 60));
     layout->addWidget(m_autosaveInterval, 5, 1);
 
     addTab(frame, i18n("General"));
