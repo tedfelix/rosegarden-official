@@ -35,7 +35,7 @@
 #include "NotationTypes.h"
 
 class QCanvasItem;
-namespace Rosegarden { class Segment; class EventSelection; }
+namespace Rosegarden { class Segment; class EventSelection; class MappedEvent; }
 class RosegardenGUIDoc;
 class NotationTool;
 class NotationToolBox;
@@ -120,6 +120,11 @@ public:
      */
     void setSingleSelectedEvent(Rosegarden::Segment &segment,
 				Rosegarden::Event *event);
+
+    /// Show and sound the given note
+    void previewNote(int staffNo, Rosegarden::timeT time,
+		     int pitch, int height,
+		     const Rosegarden::Note &note);
 
     /// Changes the font of the staffs on the view
     void slotChangeFont(std::string newFont);
@@ -360,6 +365,8 @@ signals:
      * @see NotationSelector#hideSelection
      */
     void usedSelection();
+
+    void notePlayed(Rosegarden::MappedEvent *);
 
 protected:
     /**

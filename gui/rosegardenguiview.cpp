@@ -206,6 +206,12 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 
     NotationView *notationView =
 	new NotationView(getDocument(), segmentsToEdit, this);
+
+    // For sending note previews
+    //
+    connect(notationView, SIGNAL(notePlayed(Rosegarden::MappedEvent*)),
+            this, SLOT(slotSendMappedEvent(Rosegarden::MappedEvent*)));
+
     notationView->show();
 }
 
@@ -230,26 +236,6 @@ void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment* p)
 {
     std::cout << "RosegardenGUIView::slotEditSegmentAudio() - got segment" << endl;
 }
-
-void RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
-{
-    if (p->getNbSegments() == 0) {
-        KMessageBox::sorry(0, "Please create some tracks first (until we implement menu state management)");
-        return;
-    }
-
-    SetWaitCursor waitCursor;
-
-    std::vector<Rosegarden::Segment *> segmentsToEdit;
-
-    for (Rosegarden::Composition::iterator i = p->begin(); i != p->end(); ++i) {
-        segmentsToEdit.push_back(*i);
-    }
-
-    NotationView *notationView = new NotationView(getDocument(), segmentsToEdit, this);
-    notationView->show();
-}
-
 
 void RosegardenGUIView::setZoomSize(double size)
 {

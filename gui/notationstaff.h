@@ -102,7 +102,7 @@ public:
      * their final positions.  Also, this operates on the entire staff
      * so that it can update its record of key and clef changes during
      * the course of the staff, which is needed to support the
-     * getClefAndKeyAtX() method.
+     * getClefAndKeyAtCanvasCoords() method.
      *
      * This method also updates the selected-ness of any elements it
      * sees (i.e. it turns the selected ones blue and the unselected

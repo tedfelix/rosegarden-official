@@ -304,12 +304,6 @@ void RosegardenGUIApp::setupActions()
       this, SLOT(slotChangeTimeResolution()),
       actionCollection(), "change_time_res");
     */
-/*!!!
-    new KAction(i18n("&Score Editor"),
-                0,
-                this, SLOT(slotEditAllTracks()),
-                actionCollection(), "edit_all_tracks");
-*/
 
     new KAction(i18n("Select &All Segments"), 0, this,
 		SLOT(slotSelectAll()), actionCollection(),
@@ -1557,12 +1551,6 @@ void RosegardenGUIApp::slotRefreshTimeDisplay()
     slotSetPointerPosition(m_doc->getComposition().getPosition());
 }
 
-
-
-void RosegardenGUIApp::slotEditAllTracks()
-{
-    m_view->editAllTracks(&m_doc->getComposition());
-}
 
 
 // Sequencer auxiliary process management

@@ -128,6 +128,14 @@ public:
                                        QMouseEvent*,
                                        Rosegarden::ViewElement* el);
 
+    virtual void handleMouseMove(Rosegarden::timeT time,
+                                 int height,
+                                 QMouseEvent*);
+
+    virtual void handleMouseRelease(Rosegarden::timeT time,
+                                    int height,
+                                    QMouseEvent*);
+
     virtual void ready();
 
     Rosegarden::Note getCurrentNote() {
@@ -193,6 +201,12 @@ protected:
     unsigned int m_noteDots;
     bool m_autoBeam;
     bool m_tupletMode;
+
+    bool m_clickHappened;
+    Rosegarden::timeT m_clickTime;
+    int m_clickPitch;
+    int m_clickHeight;
+    int m_clickStaffNo;
 
     Rosegarden::Accidental m_accidental;
 

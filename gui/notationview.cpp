@@ -1016,6 +1016,40 @@ void NotationView::setSingleSelectedEvent(Segment &segment, Event *event)
     setCurrentSelection(selection);
 }
 
+void NotationView::previewNote(int staffNo, Rosegarden::timeT time,
+			       int pitch, int height,
+			       const Rosegarden::Note &note)
+{ 
+    Rosegarden::Composition &comp = m_document->getComposition();
+    Rosegarden::Studio &studio = m_document->getStudio();
+
+    Rosegarden::Track *track = comp.getTrackByIndex
+	(m_staffs[staffNo]->getSegment().getTrack());
+
+    Rosegarden::Instrument *ins =
+        studio.getInstrumentById(track->getInstrument());
+
+    // check for null instrument
+    //
+    if (ins == 0) return;
+
+    // Send out note of half second duration
+    //
+    Rosegarden::MappedEvent *mE = 
+        new Rosegarden::MappedEvent(ins->getID(),
+                                    Rosegarden::MappedEvent::MidiNoteOneShot,
+                                    pitch,
+                                    Rosegarden::MidiMaxValue,
+                                    Rosegarden::RealTime(0,0),
+                                    Rosegarden::RealTime(0, 500000),
+                                    Rosegarden::RealTime(0, 0));
+
+    emit notePlayed(mE);
+
+    //!!! and the rest
+}
+
+
 void NotationView::setNotePixmapFactory(NotePixmapFactory* f)
 {
     delete m_notePixmapFactory;
@@ -1909,8 +1943,8 @@ void NotationView::slotLabelChords()
 //----------------------------------------------------------------------
 
 void NotationView::slotItemPressed(int height, int staffNo,
-                               QMouseEvent* e,
-                               NotationElement* el)
+				   QMouseEvent* e,
+				   NotationElement* el)
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotItemPressed(height = "
                          << height << ", staffNo = " << staffNo

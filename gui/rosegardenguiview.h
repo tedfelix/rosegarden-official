@@ -112,13 +112,6 @@ public:
     void selectTool(SegmentCanvas::ToolType tool);
 
     /**
-     * Edit all the segment at once
-     *
-     * Show all the tracks in a single Notation window
-     */
-    void editAllTracks(Rosegarden::Composition*);
-
-    /**
      * These two are just-passing-through methods called from
      * the GUI when it has key presses that the SegmentCanvas
      * or anything else downstairsis interested in.

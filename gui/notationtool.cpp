@@ -218,6 +218,7 @@ NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
       m_noteDots(0),
       m_autoBeam(false),
       m_tupletMode(false),
+      m_clickHappened(false),
       m_accidental(Accidentals::NoAccidental)
 {
     connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
@@ -269,14 +270,46 @@ NoteInserter::handleLeftButtonPress(Rosegarden::timeT,
 
     kdDebug(KDEBUG_AREA) << "Insertion time: " << time << endl;
 
-    int pitch = Rosegarden::NotationDisplayPitch(height, m_accidental).
+    m_clickPitch = Rosegarden::NotationDisplayPitch(height, m_accidental).
         getPerformancePitch(clef ? Clef(*clef) : Clef::DefaultClef,
                             key ? Rosegarden::Key(*key) :
                             Rosegarden::Key::DefaultKey);
 
+    m_clickTime = time;
+    m_clickStaffNo = staffNo;
+    m_clickHappened = true;
+
+    m_nParentView->previewNote(m_clickStaffNo, m_clickTime,
+			       m_clickPitch, m_clickHeight,
+			       Note(m_noteType, m_noteDots));
+}
+
+
+void
+NoteInserter::handleMouseMove(Rosegarden::timeT time,
+			      int height,
+			      QMouseEvent *)
+{
+    //!!! need to change notationview to pass time & height correctly here
+    if (m_clickHappened) {
+	m_nParentView->previewNote(m_clickStaffNo, m_clickTime,
+				   m_clickPitch, m_clickHeight,
+				   Note(m_noteType, m_noteDots));
+    }
+}
+
+
+void
+NoteInserter::handleMouseRelease(Rosegarden::timeT,
+				 int,
+				 QMouseEvent *)
+{
+    if (!m_clickHappened) return;
+    m_clickHappened = false;
+
     Note note(m_noteType, m_noteDots);
-    timeT endTime = time + note.getDuration();
-    Segment &segment = m_nParentView->getStaff(staffNo)->getSegment();
+    timeT endTime = m_clickTime + note.getDuration();
+    Segment &segment = m_nParentView->getStaff(m_clickStaffNo)->getSegment();
 
     Segment::iterator realEnd = segment.findTime(endTime);
     if (realEnd == segment.end() || ++realEnd == segment.end()) {
@@ -285,11 +318,12 @@ NoteInserter::handleLeftButtonPress(Rosegarden::timeT,
 	endTime = std::max(endTime, (*realEnd)->getAbsoluteTime());
     }
 
-    Event *lastInsertedEvent =
-	doAddCommand(segment, time, endTime, note, pitch, m_accidental);
+    Event *lastInsertedEvent = doAddCommand
+	(segment, m_clickTime, endTime, note, m_clickPitch, m_accidental);
 
     if (lastInsertedEvent) {
-	m_nParentView->setSingleSelectedEvent(staffNo, lastInsertedEvent);
+	m_nParentView->setSingleSelectedEvent
+	    (m_clickStaffNo, lastInsertedEvent);
     }
 }
 

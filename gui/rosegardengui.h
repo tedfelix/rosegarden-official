@@ -486,11 +486,6 @@ public slots:
     void slotAddTracks();
 
     /**
-     * edit all tracks at once
-     */
-    void slotEditAllTracks();
-
-    /**
      * Set the song position pointer
      */
     void slotSetPointerPosition(Rosegarden::RealTime time);
