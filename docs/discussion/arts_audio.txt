@@ -1,0 +1,91 @@
+From: Stefan Westerfeld <stefan@space.twc.de>
+To: kde-multimedia@max.tat.physik.uni-tuebingen.de
+Subject: Re: Recording PCM audio with aRts
+
+   Hi!
+
+On Thu, Jun 07, 2001 at 07:07:54PM +0100, Rik Hemsley wrote:
+> I'd like to write a quick-and-simple audio recorder which uses aRts.
+> 
+> Having looked through the available documentation on arts-project.org,
+> I don't really have a clue about how to proceed.
+> 
+> Is there more documentation, or can someone give me a quick overview
+> of how I would go about selecting, opening, reading and closing an
+> input device ?
+
+* selecting:
+
+aRts currently uses no explicit selection of input sources, neither for midi
+nor for audio. Rather the current strategy is through the (Audio|Midi)Manager
+objects. This works like that:
+
+  1. you start recording (playing), describing what you do
+  2. there are predefined points where you can record data from (play data to),
+     which the user can connect your application to through artscontrol
+  3. the next time your application records (plays) again, it will be connected
+     to the same point again
+
+It might be that you might want to change something in there, but thats the
+way it works right now.
+
+* opening, reading, closing:
+
+Well, recording is still somewhat on the aRts TODO list, but here is an
+overview what works and what does not.
+
+A. recording with server-side objects
+
+Creating a Synth_AMAN_RECORD (which does that AudioManager thing), and
+connecting it to a Synth_CAPTURE_WAV is the simplest style of recording.
+It will create a wave file in /tmp/mcop-<username>/... - I did hardcode
+that for now because of security considerations (what if you get an .arts
+file by mail that "records" some file which already exists and thus overwrites
+it? or creates a file which you - as stupid user - will never find again?).
+
+Recording with server-side objects has the advantage that it is simple and
+well-supported, but has the disadvantage that it does write files - if you
+write them - server side. You can easily create your own objects which then
+run server-side and do the recording there.
+
+There is no explicit open() and close() within the flow system by the way.
+
+B. recording with the aRts C API
+
+There is arts_record_stream(int rate, int bits, int channels, const char *name);
+(the last parameter is used for the audio manager thing again). However,
+recording via C API is not implemented yet (returns E_NOIMPL). We'd need an
+equivalent to SimpleSoundServer::attach() here, to make recording
+implementable. And some AudioToByteStream implementation. The problem is that
+resampling from float to something else is right now not easy to do within
+aRts (I need to fix that), so that AudioToByteStream is not a one-liner.
+
+C. recording with CSL
+
+CSL does support recording to a degree - it doesn't do resampling yet. But
+well, there you have another API where you can open/read/close things. One
+day, the aRts C API might be implemented on top of CSL, and then recording
+would work.
+
+
+So... as conclusion I'd say, it would be great if you write that simple
+recording application (we really really need that), and fix things on
+the way. (/me currently always uses artsbuilder with .arts files to do
+recording, which is probably not the ideal thing).
+
+   Cu... Stefan
+-- 
+  -* Stefan Westerfeld, stefan@space.twc.de (PGP!), Hamburg/Germany
+     KDE Developer, project infos at http://space.twc.de/~stefan/kde *-         
+_______________________________________________
+Kde-multimedia mailing list
+Kde-multimedia@master.kde.org
+http://master.kde.org/mailman/listinfo/kde-multimedia
+
+-----End of forwarded message-----
+
+-- 
+  -* Stefan Westerfeld, stefan@space.twc.de (PGP!), Hamburg/Germany
+     KDE Developer, project infos at http://space.twc.de/~stefan/kde *-         
+
+

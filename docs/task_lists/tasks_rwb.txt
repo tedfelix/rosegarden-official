@@ -1,10 +1,12 @@
 Current 0.2 TO-DOs [update 14.1.2001]
 ==================
 
+o Audio.  First level support. [IN PROGESS]
+
 o Bar lines widget (similar to TrackButtons).
   Implementation to allow for:
 
-  - Looping
+  - Looping [just about DONE - bar width issues]
 
   - Start and End Markers for Composition growth and shrinkage
 
@@ -18,10 +20,6 @@ o Complete segment edit shortcuts (click/copy/multiple
 o MIDI recording [DONE - first pass]
 
 o Write Rosegarden tempo events to exported MIDI [DONE]
-
-o Audio.  Still.
-  Most likely wait until all the above has been implemented
-  before tackling audio.
 
 o Segment level Undo/Redo
 
