@@ -47,7 +47,7 @@
 #include <qstringlist.h>
 #include <qtable.h>
 #include <qheader.h>
-#include <qinputdialog.h>
+#include <klineeditdlg.h>
 
 #include <kcombobox.h>
 #include <klistview.h>
@@ -1773,8 +1773,8 @@ ColourConfigurationPage::slotAddNew()
 
     bool ok = false;
 
-    QString newName = QInputDialog::getText(i18n("New Color Name"), i18n("Enter new name"),
-                                            QLineEdit::Normal, i18n("New"), &ok);
+    QString newName = KLineEditDlg::getText(i18n("New Color Name"), i18n("Enter new name"),
+                                            i18n("New"), &ok);
     if ((ok == true) && (!newName.isEmpty()))
     {
         KColorDialog box(this, "", true);
