@@ -61,9 +61,9 @@ public:
      *   (useful when the tail should be collapsed with the one of a neighboring note)
      * @param stalkGoesUp : if the note's stalk should go up or down
      */
-    QPixmap makeNotePixmap(Note note,
-                           bool drawTail,
-                           bool stalkGoesUp = true);
+    QCanvasPixmap makeNotePixmap(Note note,
+                                 bool drawTail,
+                                 bool stalkGoesUp = true);
 
     /**
      * Generate a pixmap for a chord
@@ -74,9 +74,9 @@ public:
      *   (useful when the tail should be collapsed with the one of a neighboring chord)
      * @param stalkGoesUp : if the note's stalk should go up or down
      */
-    QPixmap makeChordPixmap(const chordpitches &pitches,
-                            Note note, bool drawTail,
-                            bool stalkGoesUp = true);
+    QCanvasPixmap makeChordPixmap(const chordpitches &pitches,
+                                  Note note, bool drawTail,
+                                  bool stalkGoesUp = true);
 
 protected:
     /**
