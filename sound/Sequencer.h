@@ -216,6 +216,11 @@ public:
 	m_soundDriver->setConnection(deviceId, connection);
     }
 
+    void setPlausibleConnection(unsigned int deviceId, QString connection)
+    {
+	m_soundDriver->setPlausibleConnection(deviceId, connection);
+    }
+
     // Process anything that needs to go on in the background 
     // (NoteOffs etc).
     //

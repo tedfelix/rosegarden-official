@@ -405,6 +405,7 @@ public:
 				  MidiDevice::DeviceDirection,
 				  unsigned int) { return ""; }
     virtual void setConnection(DeviceId, QString) { }
+    virtual void setPlausibleConnection(DeviceId id, QString c) { setConnection(id, c); }
 
     // Return the whole audio play queue
     //

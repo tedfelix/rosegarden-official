@@ -109,6 +109,7 @@ protected:
 
     void addMIDIDevice(QString name, bool createAtSequencer);
     void setMIDIDeviceConnection(QString connection);
+    void skipToNextPlayDevice();
     void setupDefaultControllers();
 
     //--------------- Data members ---------------------------------
@@ -138,6 +139,7 @@ protected:
 
     RosegardenFileSection             m_section;
     Rosegarden::Device               *m_device;
+    Rosegarden::DeviceId              m_deviceRunningId;
     bool                              m_percussion;
     Rosegarden::MidiByte              m_msb;
     Rosegarden::MidiByte              m_lsb;

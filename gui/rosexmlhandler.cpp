@@ -238,6 +238,7 @@ RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
       m_foundTempo(false),
       m_section(NoSection),
       m_device(0),
+      m_deviceRunningId(Rosegarden::Device::NO_DEVICE),
       m_msb(0),
       m_lsb(0),
       m_instrument(0),
@@ -945,40 +946,30 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (type == "midi")
         {
-            m_device = getStudio().getDevice(id);
-	    QString variation = atts.value("variation").lower();
-	    if (!variation.isNull()) {
-		
-		Rosegarden::MidiDevice *md =
-		    dynamic_cast<Rosegarden::MidiDevice *>(m_device);
-		if (md) {
-		    if (variation == "lsb") {
-			md->setVariationType(Rosegarden::MidiDevice::VariationFromLSB);
-		    } else if (variation == "msb") {
-			md->setVariationType(Rosegarden::MidiDevice::VariationFromLSB);
-		    } else if (variation == "") {
-			md->setVariationType(Rosegarden::MidiDevice::NoVariations);
-		    }
-		}
-	    }
-
 	    QString direction = atts.value("direction").lower();
 
 	    if (direction.isNull() ||
 		direction == "" ||
 		direction == "play") { // ignore inputs
 
-		Rosegarden::MidiDevice *md =
-		    dynamic_cast<Rosegarden::MidiDevice *>(m_device);
+		// This will leave m_device set only if there is a
+		// valid play midi device to modify:
+		skipToNextPlayDevice();
+
+//		m_device = getStudio().getDevice(id);
+	    
+//		Rosegarden::MidiDevice *md =
+//		    dynamic_cast<Rosegarden::MidiDevice *>(m_device);
 		    
-		if (md && md->getDirection() == Rosegarden::MidiDevice::Play) {
+//		if (md && md->getDirection() == Rosegarden::MidiDevice::Play) {
+		if (m_device) {
 		    if (nameStr && nameStr != "") {
 			m_device->setName(qstrtostr(nameStr));
 		    }
 		} else if (nameStr && nameStr != "") {
 		    addMIDIDevice(nameStr, m_createDevices); // also sets m_device
-		} else {
-		    m_device = 0;
+//		} else {
+//		    m_device = 0;
 		}
 	    }
 
@@ -986,6 +977,24 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 	    if (m_createDevices && m_device &&
 		!connection.isNull() && connection != "") {
 		setMIDIDeviceConnection(connection);
+	    }
+
+	    QString vstr = atts.value("variation").lower();
+	    Rosegarden::MidiDevice::VariationType variation =
+		Rosegarden::MidiDevice::NoVariations;
+	    if (!vstr.isNull()) {
+		if (vstr == "lsb") {
+		    variation = Rosegarden::MidiDevice::VariationFromLSB;
+		} else if (vstr == "msb") {
+		    variation = Rosegarden::MidiDevice::VariationFromLSB;
+		} else if (vstr == "") {
+		    variation = Rosegarden::MidiDevice::NoVariations;
+		}
+	    }
+	    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>
+		(m_device);
+	    if (md) {
+		md->setVariationType(variation);
 	    }
 	}
 	else if (type == "audio")
@@ -1778,12 +1787,43 @@ RoseXmlHandler::addMIDIDevice(QString name, bool createAtSequencer)
     // instruments will be sync'd later in the natural course of things
     getStudio().addDevice(qstrtostr(name), deviceId, Device::Midi);
     m_device = getStudio().getDevice(deviceId);
+    m_deviceRunningId = deviceId;
 }
 
+void
+RoseXmlHandler::skipToNextPlayDevice()
+{
+    SEQMAN_DEBUG << "RoseXmlHandler::skipToNextPlayDevice; m_deviceRunningId is " << m_deviceRunningId << endl;
+
+    for (Rosegarden::DeviceList::iterator i = getStudio().getDevices()->begin();
+	 i != getStudio().getDevices()->end(); ++i) {
+
+	Rosegarden::MidiDevice *md =
+	    dynamic_cast<Rosegarden::MidiDevice *>(*i);
+	
+	if (md && md->getDirection() == Rosegarden::MidiDevice::Play) {
+	    if (m_deviceRunningId == Rosegarden::Device::NO_DEVICE ||
+		md->getId() > m_deviceRunningId) {
+
+		SEQMAN_DEBUG << "RoseXmlHandler::skipToNextPlayDevice: found next device: id " << md->getId() << endl;
+
+		m_device = md;
+		m_deviceRunningId = md->getId();
+		return;
+	    }
+	}
+    }
+
+    SEQMAN_DEBUG << "RoseXmlHandler::skipToNextPlayDevice: fresh out of devices" << endl;
+
+    m_device = 0;
+}
 
 void
 RoseXmlHandler::setMIDIDeviceConnection(QString connection)
 {
+    SEQMAN_DEBUG << "RoseXmlHandler::setMIDIDeviceConnection(" << connection << ")" << endl;
+
     Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>(m_device);
     if (!md) return;
 		    
@@ -1795,7 +1835,7 @@ RoseXmlHandler::setMIDIDeviceConnection(QString connection)
     arg << (unsigned int)md->getId();
     arg << connection;
 
-    rgapp->sequencerCall("setConnection(unsigned int, QString)",
+    rgapp->sequencerCall("setPlausibleConnection(unsigned int, QString)",
                          replyType, replyData, data);
     // connection should be sync'd later in the natural course of things
 }

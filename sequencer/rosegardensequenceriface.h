@@ -178,6 +178,13 @@ public:
     // 
     virtual void setConnection(unsigned int deviceId, QString connection) = 0;
 
+    // Reconnect a device to a particular connection or to the closest
+    // thing to that connection currently available (using some heuristic).
+    // Ignored if driver does not permit reconnections.
+    // 
+    virtual void setPlausibleConnection(unsigned int deviceId,
+					QString idealConnection) = 0;
+
     // Set audio monitoring Instrument - tells the sequencer that the
     // gui is currently monitoring audio and which Instrument to report
     // the input level against - this is so we can get a real time

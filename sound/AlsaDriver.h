@@ -174,6 +174,7 @@ public:
 				  MidiDevice::DeviceDirection direction,
 				  unsigned int connectionNo);
     virtual void setConnection(DeviceId deviceId, QString connection);
+    virtual void setPlausibleConnection(DeviceId deviceId, QString connection);
 
 #ifdef HAVE_LADSPA
 
@@ -314,7 +315,7 @@ private:
     bool                         m_looping;
 
     // added metronome yet?
-    bool                         m_addedMetronome;
+//!!!    bool                         m_addedMetronome;
 
     // sending of audio meter data in MappedComposition return stream
     //
@@ -356,6 +357,9 @@ private:
 
     typedef std::map<DeviceId, ClientPortPair> DevicePortMap;
     DevicePortMap m_devicePortMap;
+
+    typedef std::map<ClientPortPair, DeviceId> PortDeviceMap;
+    PortDeviceMap m_suspendedPortMap;
 
     std::string getPortName(ClientPortPair port);
     ClientPortPair getPortByName(std::string name);

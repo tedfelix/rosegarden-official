@@ -1083,6 +1083,13 @@ RosegardenSequencerApp::setConnection(unsigned int deviceId,
 }
 
 void
+RosegardenSequencerApp::setPlausibleConnection(unsigned int deviceId,
+					       QString connection)
+{
+    m_sequencer->setPlausibleConnection(deviceId, connection);
+}
+
+void
 RosegardenSequencerApp::sequencerAlive()
 {
     if (!kapp->dcopClient()->

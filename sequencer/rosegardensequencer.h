@@ -185,7 +185,9 @@ public:
     virtual QString getConnection(int type, unsigned int direction,
 				  unsigned int connectionNo);
     virtual void setConnection(unsigned int deviceId, QString connection);
-
+    virtual void setPlausibleConnection(unsigned int deviceId,
+					QString idealConnection);
+    
     // Audio monitoring
     //
     virtual void setAudioMonitoring(long value);

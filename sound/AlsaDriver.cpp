@@ -41,6 +41,8 @@
 #include "rosestrings.h"
 #include "MappedCommon.h"
 
+#include <qregexp.h>
+
 #ifdef HAVE_LIBJACK
 #include <jack/types.h>
 #include <unistd.h> // for usleep
@@ -192,7 +194,6 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_loopStartTime(0, 0),
     m_loopEndTime(0, 0),
     m_looping(false),
-    m_addedMetronome(false),
     m_audioMeterSent(false)
 
 
@@ -598,7 +599,6 @@ AlsaDriver::generateInstruments()
 {
     // Reset these before each Instrument hunt
     //
-    m_addedMetronome = false;
     m_audioRunningId = AudioInstrumentBase;
     m_midiRunningId = MidiInstrumentBase;
 
@@ -607,6 +607,7 @@ AlsaDriver::generateInstruments()
     m_instruments.clear();
     m_devices.clear();
     m_devicePortMap.clear();
+    m_suspendedPortMap.clear();
 
     AlsaPortList::iterator it = m_alsaPorts.begin();
     for (; it != m_alsaPorts.end(); it++)
@@ -837,45 +838,8 @@ AlsaDriver::getSpareDeviceId()
 void
 AlsaDriver::addInstrumentsForDevice(MappedDevice *device)
 {
-    MappedInstrument *instr;
     std::string channelName;
     char number[100];
-
-    static int metronomeRunningId = 0; //!!! should be m_metronomeRunningId
-
-    // If we haven't added a metronome then add one to the first
-    // device we add.   This is accomplished by adding a
-    // MappedInstrument for Instrument #0
-    //
-    if (!m_addedMetronome && device->getDirection() != MidiDevice::Record)
-    {
-/*!!!
-	for (int channel = 0; channel < 16; ++channel)
-	{
-	    sprintf(number, " #%d", channel);
-	    channelName = "Metronome" + std::string(number);
-	    instr = new MappedInstrument(Instrument::Midi,
-					 9, // always the drum channel
-					 channel,
-					 channelName,
-					 device->getId());
-	    
-	    m_instruments.push_back(instr);
-	}
-
-	m_addedMetronome = true;
-*/
-
-	//!!! experimental
-	instr = new MappedInstrument(Instrument::Midi,
-				     9, // always the drum channel
-				     metronomeRunningId++,
-				     "Metronome",
-				     device->getId());
-	m_instruments.push_back(instr);
-	m_addedMetronome = false; // we want one on each device now
-
-    }
 
     for (int channel = 0; channel < 16; ++channel)
     {
@@ -1029,6 +993,7 @@ AlsaDriver::getConnection(Device::DeviceType type,
 void
 AlsaDriver::setConnection(DeviceId id, QString connection)
 {
+    AUDIT_START;
     ClientPortPair port(getPortByName(connection.data()));
 
     if (port.first != -1 && port.second != -1) {
@@ -1049,6 +1014,111 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
 	    }
 	}
     }
+
+    AUDIT_UPDATE;
+}
+
+void
+AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
+{
+    AUDIT_START;
+    ClientPortPair port(getPortByName(idealConnection.data()));
+
+    AUDIT_STREAM << "AlsaDriver::setPlausibleConnection: connection like "
+		 << idealConnection << " requested for device " << id << std::endl;
+
+    if (port.first != -1 && port.second != -1) {
+
+	m_devicePortMap[id] = port;
+
+	for (unsigned int i = 0; i < m_devices.size(); ++i) {
+
+	    if (m_devices[i]->getId() == id) {
+		m_devices[i]->setConnection(idealConnection.data());
+		break;
+	    }
+	}
+
+	AUDIT_STREAM << "AlsaDriver::setPlausibleConnection: exact match available"
+		     << std::endl;
+	AUDIT_UPDATE;
+	return;
+    }
+
+    // What we want is a connection that:
+    // 
+    //  * is in the right "class" (the 0-63/64-127/128+ range of client id)
+    //  * has at least some text in common
+    //  * is not yet in use for any device.
+    // 
+    // To do this, we exploit our privileged position as part of AlsaDriver
+    // and use our knowledge of how connection strings are made (see
+    // AlsaDriver::generatePortList above) to pick out the relevant parts
+    // of the requested string.
+    
+    int client = 0;
+    int colon = idealConnection.find(":");
+    if (colon >= 0) client = idealConnection.left(colon).toInt();
+
+    int firstSpace = idealConnection.find(" ");
+    int endOfText  = idealConnection.find(QRegExp("[^\\w ]"), firstSpace);
+
+    QString text;
+    if (endOfText < 2) {
+	text = idealConnection.mid(firstSpace + 1);
+    } else {
+	text = idealConnection.mid(firstSpace + 1, endOfText - firstSpace - 2);
+    }
+
+    for (int testName = 1; testName >= 0; --testName) {
+
+	for (unsigned int i = 0; i < m_alsaPorts.size(); ++i) {
+
+	    AlsaPortDescription *port = m_alsaPorts[i];
+
+	    if (client > 0 && (port->m_client / 64 != client / 64)) continue;
+	    
+	    if (testName && text != "" &&
+		!QString(port->m_name.c_str()).contains(text)) continue;
+	    
+	    bool used = false;
+	    for (DevicePortMap::iterator dpmi = m_devicePortMap.begin();
+		 dpmi != m_devicePortMap.end(); ++dpmi) {
+		if (dpmi->second.first  == port->m_client &&
+		    dpmi->second.second == port->m_port) {
+		    used = true;
+		    break;
+		}
+	    }
+	    if (used) continue;
+
+	    // OK, this one will do
+
+	    AUDIT_STREAM << "AlsaDriver::setPlausibleConnection: fuzzy match "
+			 << port->m_name << " available" << std::endl;
+
+	    m_devicePortMap[id] = ClientPortPair(port->m_client, port->m_port);
+
+	    for (unsigned int i = 0; i < m_devices.size(); ++i) {
+
+		if (m_devices[i]->getId() == id) {
+		    m_devices[i]->setConnection(port->m_name);
+		    
+		    // in this case we don't request a device resync,
+		    // because this is only invoked at times such as
+		    // file load when the GUI is well aware that the
+		    // whole situation is in upheaval anyway
+		    
+		    AUDIT_UPDATE;
+		    return;
+		}
+	    }
+	}
+    }
+
+    AUDIT_STREAM << "AlsaDriver::setPlausibleConnection: nothing suitable available"
+		 << std::endl;
+    AUDIT_UPDATE;
 }
 
 void
@@ -2274,7 +2344,7 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
 #endif
                break;
 
-               // these cases are handled by slotCheckForNewClients
+               // these cases are handled by checkForNewClients
                //
             case SND_SEQ_EVENT_PORT_SUBSCRIBED:
             case SND_SEQ_EVENT_PORT_UNSUBSCRIBED:
@@ -4114,7 +4184,8 @@ AlsaDriver::checkForNewClients()
     generatePortList(&newPorts);
 
     // If any devices have connections that no longer exist,
-    // clear those connections.
+    // clear those connections and stick them in the suspended
+    // port map in case they come back online later.
 
     for (MappedDeviceList::iterator i = m_devices.begin();
 	 i != m_devices.end(); ++i) {
@@ -4132,6 +4203,7 @@ AlsaDriver::checkForNewClients()
 	}
 	
 	if (!found) {
+	    m_suspendedPortMap[pair] = (*i)->getId();
 	    m_devicePortMap[(*i)->getId()] = ClientPortPair(-1, -1);
 	    (*i)->setConnection("");
 	}
@@ -4153,6 +4225,20 @@ AlsaDriver::checkForNewClients()
 	    std::string portName = (*i)->m_name;
 	    ClientPortPair portPair = ClientPortPair((*i)->m_client,
 						     (*i)->m_port);
+
+	    if (m_suspendedPortMap.find(portPair) != m_suspendedPortMap.end()) {
+		AUDIT_STREAM << "(Reusing suspended device)" << std::endl;
+
+		Rosegarden::DeviceId id = m_suspendedPortMap[portPair];
+
+		for (MappedDeviceList::iterator j = m_devices.begin();
+		     j != m_devices.end(); ++j) {
+		    if ((*j)->getId() == id) (*j)->setConnection(portName);
+		}
+
+		m_suspendedPortMap.erase(m_suspendedPortMap.find(portPair));
+		continue;
+	    }
 	    
 	    bool needPlayDevice = true, needRecordDevice = true;
 
