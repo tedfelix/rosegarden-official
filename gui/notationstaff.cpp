@@ -483,7 +483,7 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 		pixmap = new QCanvasPixmap
 		    (m_npf->makeRestPixmap(Note(note, dots)));
 	    } else {
-		kdDebug(KDEBUG_AREA) << "Omitting too-short rest" << endl;
+//		kdDebug(KDEBUG_AREA) << "Omitting too-short rest" << endl;
 	    }
 
 	} else if (elt->event()->isa(Clef::EventType)) {
@@ -729,5 +729,13 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
     QCanvasPixmap notePixmap(m_npf->makeNotePixmap(params));
     return new QCanvasNotationSprite(*elt,
                                      new QCanvasPixmap(notePixmap), m_canvas);
+}
+
+bool
+NotationStaff::wrapEvent(Rosegarden::Event *e)
+{
+    if (e->isa(Note::EventRestType) &&
+	e->getDuration() <= Note(Note::Shortest).getDuration()/2) return false;
+    else return true;
 }
 

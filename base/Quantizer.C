@@ -170,17 +170,22 @@ Quantizer::quantize(Segment::iterator from, Segment::iterator to,
 {
     timeT excess = 0;
 
+    // For the moment, legato quantization always uses the minimum
+    // unit (rather than the potentially large legato unit) for the
+    // absolute time.  Ideally we'd be able to specify both
+    // separately.
+
+    timeT absTimeQuantizeUnit =
+	legato ? Note(Note::Shortest).getDuration() : m_unit;
+
     for ( ; from != to; ++from) {
 
 	timeT absoluteTime   = (*from)->getAbsoluteTime();
 	timeT duration	     = dq.getDuration(*from);
 	timeT qDuration	     = 0;
 
-	// wacky legato-stylee big-unit quantization doesn't interest us here;
-	// we'd need a separate unit for it if it did
 	timeT qAbsoluteTime  =
-	    aq.quantize(Note(Note::Shortest).getDuration(),
-			m_maxDots, absoluteTime, 0);
+	    aq.quantize(absTimeQuantizeUnit, m_maxDots, absoluteTime, 0);
 
 	if ((*from)->isa(Note::EventType)) {
 
@@ -275,8 +280,18 @@ Quantizer::quantizeByNote(Segment::iterator from, Segment::iterator to) const
 void
 Quantizer::quantizeLegato(Segment::iterator from, Segment::iterator to) const
 {
-    quantize(from, to,
-	     UnitQuantizer(), LegatoQuantizer(), LegatoDurationProperty, true);
+    // Legato quantization is relatively slow (hence the name?) and
+    // with the minimal unit it's equivalent to note quantization
+
+    if (m_unit == Note(Note::Shortest).getDuration()) {
+	quantize(from, to,
+		 UnitQuantizer(), NoteQuantizer(),
+		 LegatoDurationProperty, false);
+    } else {
+	quantize(from, to,
+		 UnitQuantizer(), LegatoQuantizer(),
+		 LegatoDurationProperty, true);
+    }
 }
 
 timeT 

@@ -65,6 +65,7 @@ void LoopRuler::drawBarSections(QPainter* paint)
 {
     int subSectionLinePos, barWidth;
     int runningWidth = 0;
+    int runningTime = 0;
 
     paint->setPen(RosegardenGUIColours::LoopRulerForeground);
 
@@ -76,13 +77,20 @@ void LoopRuler::drawBarSections(QPainter* paint)
 
         paint->drawLine(runningWidth, 2 * m_height / 7, runningWidth, m_height);
 
-        int beatsBar = m_doc->getComposition().getTimeSignatureAt(runningWidth).getBeatsPerBar();
+	Rosegarden::TimeSignature timeSig =
+	    m_doc->getComposition().getTimeSignatureAt(runningTime);
+
+        int beatsBar = timeSig.getBeatsPerBar();
+	Rosegarden::timeT beatDuration = timeSig.getBeatDuration();
+	float beatSize = float(m_barWidth * beatDuration) / m_barWidthMap[0];
 
         for (int j = 0; j < beatsBar; j++)
         {
             if (j == 0) continue;
             
-            subSectionLinePos = (runningWidth) + (barWidth * j/beatsBar);
+//            subSectionLinePos = (runningWidth) + (barWidth * j/beatsBar);
+	    subSectionLinePos = (int)(runningWidth + j * beatSize);
+	    if (subSectionLinePos - runningWidth >= barWidth) break;
 
             paint->drawLine(subSectionLinePos, m_height,
                             subSectionLinePos, 5 * m_height / 7);
@@ -90,7 +98,7 @@ void LoopRuler::drawBarSections(QPainter* paint)
         }
 
         runningWidth += barWidth;
-
+	runningTime += m_barWidthMap[i];
     }
 
 }

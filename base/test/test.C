@@ -232,7 +232,7 @@ int main(int argc, char **argv)
         TimeSignature ts(2,4);
         DurationList dlist;
         ts.getDurationListForInterval
-                (dlist, 1206,
+                (dlist, 1209,
                  ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
         int acc = 0;
         for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
@@ -260,7 +260,7 @@ int main(int argc, char **argv)
         ts = TimeSignature(6,8);
         dlist = DurationList();
         ts.getDurationListForInterval
-                (dlist, 1206,
+                (dlist, 1209,
                  ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
         acc = 0;
         for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
@@ -273,7 +273,7 @@ int main(int argc, char **argv)
         ts = TimeSignature(3,4);
         dlist = DurationList();
         ts.getDurationListForInterval
-                (dlist, 1206,
+                (dlist, 1209,
                  ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
         acc = 0;
         for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
@@ -286,7 +286,7 @@ int main(int argc, char **argv)
         ts = TimeSignature(4,4);
         dlist = DurationList();
         ts.getDurationListForInterval
-                (dlist, 1206,
+                (dlist, 1209,
                  ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
         acc = 0;
         for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
@@ -299,7 +299,7 @@ int main(int argc, char **argv)
         ts = TimeSignature(3,8);
         dlist = DurationList();
         ts.getDurationListForInterval
-                (dlist, 1206,
+                (dlist, 1209,
                  ts.getBarDuration() - Note(Note::Semiquaver, true).getDuration());
         acc = 0;
         for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {

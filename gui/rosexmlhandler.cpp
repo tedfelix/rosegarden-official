@@ -80,7 +80,79 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 {
     QString lcName = qName.lower();
 
-    if (lcName == "rosegarden-data") {
+    if (lcName == "event") {
+
+//        kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: found event, current time is " << m_currentTime << endl;
+
+        if (m_currentEvent) {
+            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: Warning: new event found at time " << m_currentTime << " before previous event has ended; previous event will be lost" << endl;
+            delete m_currentEvent;
+        }
+
+        m_currentEvent = new XmlStorableEvent(atts, m_currentTime);
+
+        if (m_inGroup) {
+            m_currentEvent->setMaybe<Int>(BEAMED_GROUP_ID, m_groupId);
+            m_currentEvent->setMaybe<String>(BEAMED_GROUP_TYPE, m_groupType);
+	    if (m_groupType == GROUP_TYPE_TUPLED) {
+		m_currentEvent->set<Int>
+		    (BEAMED_GROUP_TUPLED_LENGTH, m_groupTupledLength);
+		m_currentEvent->set<Int>
+		    (BEAMED_GROUP_TUPLED_COUNT, m_groupTupledCount);
+		m_currentEvent->set<Int>
+		    (BEAMED_GROUP_UNTUPLED_LENGTH, m_groupUntupledLength);
+	    }
+        }
+
+	timeT duration = m_currentEvent->getDuration();
+        
+        if (!m_inChord) {
+
+            m_currentTime = m_currentEvent->getAbsoluteTime() + duration;
+
+//            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: (we're not in a chord) " << endl;
+
+        } else if (duration != 0) {
+
+            // set chord duration to the duration of the shortest
+            // element with a non-null duration (if no such elements,
+            // leave it as 0).
+
+	    if (m_chordDuration == 0 || duration < m_chordDuration) {
+		m_chordDuration = duration;
+	    }
+        }
+
+    } else if (lcName == "property") {
+        
+        if (!m_currentEvent) {
+            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: Warning: Found property outside of event at time " << m_currentTime << ", ignoring" << endl;
+        } else {
+            m_currentEvent->setPropertiesFromAttributes(atts);
+        }
+
+    } else if (lcName == "chord") {
+
+        m_inChord = true;
+
+    } else if (lcName == "group") {
+
+        if (!m_currentSegment) {
+            m_errorString = i18n("Got group outside of a segment");
+            return false;
+        }
+        
+        m_inGroup = true;
+        m_groupId = m_currentSegment->getNextId();
+        m_groupType = atts.value("type");
+
+	if (m_groupType == GROUP_TYPE_TUPLED) {
+	    m_groupTupledLength = atts.value("length").toInt();
+	    m_groupTupledCount = atts.value("count").toInt();
+	    m_groupUntupledLength = atts.value("untupled").toInt();
+	}
+
+    } else if (lcName == "rosegarden-data") {
         // set to some state which says it's ok to parse the rest
 
     } else if (lcName == "timesignature") {
@@ -254,49 +326,6 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         m_composition.addSegment(m_currentSegment);
     
-    } else if (lcName == "event") {
-
-//        kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: found event, current time is " << m_currentTime << endl;
-
-        if (m_currentEvent) {
-            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: Warning: new event found at time " << m_currentTime << " before previous event has ended; previous event will be lost" << endl;
-            delete m_currentEvent;
-        }
-
-        m_currentEvent = new XmlStorableEvent(atts, m_currentTime);
-
-        if (m_inGroup) {
-            m_currentEvent->setMaybe<Int>(BEAMED_GROUP_ID, m_groupId);
-            m_currentEvent->setMaybe<String>(BEAMED_GROUP_TYPE, m_groupType);
-	    if (m_groupType == GROUP_TYPE_TUPLED) {
-		m_currentEvent->set<Int>
-		    (BEAMED_GROUP_TUPLED_LENGTH, m_groupTupledLength);
-		m_currentEvent->set<Int>
-		    (BEAMED_GROUP_TUPLED_COUNT, m_groupTupledCount);
-		m_currentEvent->set<Int>
-		    (BEAMED_GROUP_UNTUPLED_LENGTH, m_groupUntupledLength);
-	    }
-        }
-
-	timeT duration = m_currentEvent->getDuration();
-        
-        if (!m_inChord) {
-
-            m_currentTime = m_currentEvent->getAbsoluteTime() + duration;
-
-//            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: (we're not in a chord) " << endl;
-
-        } else if (duration != 0) {
-
-            // set chord duration to the duration of the shortest
-            // element with a non-null duration (if no such elements,
-            // leave it as 0).
-
-	    if (m_chordDuration == 0 || duration < m_chordDuration) {
-		m_chordDuration = duration;
-	    }
-        }
-        
     } else if (lcName == "resync") {
 	
 	QString time(atts.value("time"));
@@ -304,35 +333,6 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 	int numTime = time.toInt(&isNumeric);
 	if (isNumeric) m_currentTime = numTime;
 
-    } else if (lcName == "chord") {
-
-        m_inChord = true;
-
-    } else if (lcName == "group") {
-
-        if (!m_currentSegment) {
-            m_errorString = i18n("Got group outside of a segment");
-            return false;
-        }
-        
-        m_inGroup = true;
-        m_groupId = m_currentSegment->getNextId();
-        m_groupType = atts.value("type");
-
-	if (m_groupType == GROUP_TYPE_TUPLED) {
-	    m_groupTupledLength = atts.value("length").toInt();
-	    m_groupTupledCount = atts.value("count").toInt();
-	    m_groupUntupledLength = atts.value("untupled").toInt();
-	}
-
-    } else if (lcName == "property") {
-        
-        if (!m_currentEvent) {
-            kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement: Warning: Found property outside of event at time " << m_currentTime << ", ignoring" << endl;
-        } else {
-            m_currentEvent->setPropertiesFromAttributes(atts);
-        }
-        
     } else {
         kdDebug(KDEBUG_AREA) << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
     }

@@ -182,6 +182,12 @@ public:
      bool notesAndRestsOnly = false,
      unsigned int proximityThreshold = 10);
 
+    /**
+     * Overridden from Rosegarden::Staff<T>.
+     * We want to avoid wrapping really short rests
+     */
+    virtual bool wrapEvent(Rosegarden::Event *);
+
 protected:
 
     // definition of staff

@@ -720,7 +720,7 @@ MidiFile::convertToRosegarden()
                 // insert rests if we need them
                 //
                 if (endOfLastNote < rosegardenTime ) {
-                    rosegardenSegment->fillWithRests(rosegardenTime);
+                    rosegardenSegment->fillWithRests(rosegardenTime, true);
                 }
 
                 endOfLastNote = rosegardenTime + rosegardenDuration;

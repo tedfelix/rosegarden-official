@@ -90,15 +90,15 @@ NotationSet::initialise()
 void
 NotationSet::sample(const NELIterator &i)
 {
-    timeT d(durationOf(i));
+    timeT d((*i)->getQuantizedDuration());
 
     if (d > 0) {
         if (m_longest == m_nel.end() ||
-            d > durationOf(m_longest)) {
+            d > (*m_longest)->getQuantizedDuration()) {
             m_longest = i;
         }
         if (m_shortest == m_nel.end() ||
-            d < durationOf(m_shortest)) {
+            d < (*m_shortest)->getQuantizedDuration()) {
             m_shortest = i;
         }
     }
@@ -115,19 +115,6 @@ NotationSet::sample(const NELIterator &i)
             m_lowest = i;
         }
     }
-}
-
-timeT
-NotationSet::durationOf(const NELIterator &i)
-{
-//    kdDebug(KDEBUG_AREA) << "NotationSet::durationOf: about to query legato duration property" << endl;
-    long d = 0;
-    if (!(*i)->event()->get<Int>(Quantizer::LegatoDurationProperty, d)) {
-	// presumably not a note or rest
-	d = (*i)->getDuration();
-    }
-//    kdDebug(KDEBUG_AREA) << "done" << endl;
-    return d;
 }
 
 NotationSet::NELIterator
@@ -184,7 +171,7 @@ Chord::Chord(const NotationElementList &nel, NELIterator i,
     NotationSet(nel, i),
     m_clef(clef),
     m_key(key),
-    m_time((*i)->getAbsoluteTime())
+    m_time((*i)->getQuantizedAbsoluteTime())
 {
     initialise();
 
@@ -219,7 +206,7 @@ Chord::~Chord()
 
 bool Chord::test(const NELIterator &i)
 {
-    return ((*i)->isNote() && ((*i)->getAbsoluteTime() == m_time));
+    return ((*i)->isNote() && ((*i)->getQuantizedAbsoluteTime() == m_time));
 }
 
 void Chord::sample(const NELIterator &i)
@@ -502,7 +489,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     beam.necessary =
          (*initialNote)->event()->getDuration() < crotchet
         && (*finalNote)->event()->getDuration() < crotchet
-        && (*finalNote)->getAbsoluteTime() > (*initialNote)->getAbsoluteTime();
+        && (*finalNote)->getQuantizedAbsoluteTime() >
+	 (*initialNote)->getQuantizedAbsoluteTime();
 
     // We continue even if the beam is not necessary, because the
     // same data is used to generate the tupling line in tupled

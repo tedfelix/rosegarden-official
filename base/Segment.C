@@ -42,8 +42,7 @@ Segment::Segment(timeT startIdx) :
     m_startIdx(startIdx),
     m_track(0),
     m_id(0),
-    m_composition(0),
-    m_quantizer(0)
+    m_composition(0)
 {
     // nothing
 }
@@ -310,7 +309,7 @@ int Segment::getNextId() const
 
 
 
-void Segment::fillWithRests(timeT endTime)
+void Segment::fillWithRests(timeT endTime, bool permitQuantize)
 {
     timeT duration = getDuration();
     TimeSignature ts;
@@ -320,13 +319,26 @@ void Segment::fillWithRests(timeT endTime)
 	sigTime = getComposition()->getTimeSignatureAt(duration, ts);
     }
 
+    //!!! Since the rests are only used for notation, it may well
+    // make sense to quantize the fill-with-rests duration before
+    // splitting it up -- we may find it rounds quite nicely.
+    // Perhaps only when explicitly called as fillWithRests rather
+    // than called from setDuration?  Let's try this, and see how
+    // it looks
+
+    timeT restDuration = endTime - duration;
+
+    if (permitQuantize) {
+	restDuration = getQuantizer()->quantizeByUnit(restDuration);
+    }
+
     cerr << "Segment(" << this << ")::fillWithRests: endTime "
 	 << endTime << ", duration " << duration << ", composition "
 	 << (getComposition() ? "exists" : "does not exist") << ", sigTime "
 	 << sigTime << ", timeSig duration " << ts.getBarDuration() << endl;
     
     DurationList dl;
-    ts.getDurationListForInterval(dl, endTime - duration, duration - sigTime);
+    ts.getDurationListForInterval(dl, restDuration, duration - sigTime);
 
     timeT acc = getStartIndex() + duration;
 

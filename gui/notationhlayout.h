@@ -146,6 +146,23 @@ public:
     (StaffType &staff, unsigned int barNo, double &timeSigX);
 
 protected:
+    class AccidentalTable
+    {
+    public:
+        AccidentalTable(Rosegarden::Key, Rosegarden::Clef);
+	AccidentalTable(const AccidentalTable &);
+	AccidentalTable &operator=(const AccidentalTable &);
+        Rosegarden::Accidental getDisplayAccidental(Rosegarden::Accidental,
+                                                    int height) const;
+        void update(Rosegarden::Accidental, int height);
+	void copyFrom(const AccidentalTable &); // must have same clef & key
+
+    private:
+        Rosegarden::Key m_key;
+        Rosegarden::Clef m_clef;
+	Rosegarden::Accidental m_accidentals[7];
+    };
+
     /**
      * Inner class for bar data, used by scanStaff()
      */
@@ -206,16 +223,33 @@ protected:
      int shortCount, int totalCount,
      const Rosegarden::TimeSignature &timeSignature) const;
 
+    /// Find earliest element with quantized time of t or greater
+    NotationElementList::iterator getStartOfQuantizedSlice 
+    (const NotationElementList *, Rosegarden::timeT t) const;
+
+    Rosegarden::timeT scanChord
+    (NotationElementList *notes, NotationElementList::iterator &i,
+     const Rosegarden::Clef &, const Rosegarden::Key &, AccidentalTable &,
+     int &fixedWidth, int &baseWidth,
+     NotationElementList::iterator &shortest, int &shortCount,
+     NotationElementList::iterator &to);
+
+    Rosegarden::timeT scanRest
+    (NotationElementList *notes, NotationElementList::iterator &i,
+     int &fixedWidth, int &baseWidth,
+     NotationElementList::iterator &shortest, int &shortCount);
+
     typedef std::map<int, NotationElementList::iterator> TieMap;
 
     // This modifies the NotationElementList::iterator passed to it,
-    // moving it on to the last note in the chord, and modifies the
-    // TieMap as well
+    // moving it on to the last note in the chord; updates the TieMap;
+    // and may modify the to-iterator if it turns out to point at a
+    // note within the chord
     long positionChord
     (StaffType &staff, 
      NotationElementList::iterator &, const BarDataList::iterator &,
      const Rosegarden::TimeSignature &, const Rosegarden::Clef &clef,
-     const Rosegarden::Key &key, TieMap &);
+     const Rosegarden::Key &key, TieMap &, NotationElementList::iterator &to);
 
     long positionRest
     (StaffType &staff, 
@@ -225,23 +259,6 @@ protected:
     /// Difference between absolute time of next event and of this
     Rosegarden::timeT getSpacingDuration
     (StaffType &staff, const NotationElementList::iterator &);
-
-    class AccidentalTable
-    {
-    public:
-        AccidentalTable(Rosegarden::Key, Rosegarden::Clef);
-	AccidentalTable(const AccidentalTable &);
-	AccidentalTable &operator=(const AccidentalTable &);
-        Rosegarden::Accidental getDisplayAccidental(Rosegarden::Accidental,
-                                                    int height) const;
-        void update(Rosegarden::Accidental, int height);
-	void copyFrom(const AccidentalTable &); // must have same clef & key
-
-    private:
-        Rosegarden::Key m_key;
-        Rosegarden::Clef m_clef;
-	Rosegarden::Accidental m_accidentals[7];
-    };
 
     int getMinWidth(NotationElement &) const;
     int getComfortableGap(Rosegarden::Note::Type type) const;

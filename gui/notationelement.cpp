@@ -28,6 +28,7 @@
 
 #include "NotationTypes.h"
 #include "Event.h"
+#include "Quantizer.h"
 
 #include <kmessagebox.h>
 
@@ -36,6 +37,7 @@ using Rosegarden::Note;
 using Rosegarden::Int;
 using Rosegarden::Bool;
 using Rosegarden::timeT;
+using Rosegarden::Quantizer;
 
 NotationElement::NotationElement(Event *event)
     : ViewElement(event),
@@ -83,6 +85,22 @@ bool
 NotationElement::isNote() const
 {
     return event()->isa(Note::EventType);
+}
+
+timeT
+NotationElement::getQuantizedDuration() const
+{
+    timeT d = getDuration();
+    event()->get<Int>(Quantizer::LegatoDurationProperty, d);
+    return d;
+}
+
+timeT
+NotationElement::getQuantizedAbsoluteTime() const
+{
+    timeT t = getAbsoluteTime();
+    event()->get<Int>(Quantizer::AbsoluteTimeProperty, t);
+    return t;
 }
 
 void

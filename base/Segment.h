@@ -240,8 +240,14 @@ public:
      * currently on the segment to the endTime given.  Actually, this
      * does much the same as setDuration does when it extends a segment.
      * Hm.
+     *
+     * If permitQuantize is true, the rest duration may be rounded
+     * before filling -- this could significantly simplify the
+     * resulting score when (for example) interpreting a MIDI file.
+     * permitQuantize should not be used if the precise duration of
+     * the track will subsequently be of interest.
      */
-    void fillWithRests(timeT endTime);
+    void fillWithRests(timeT endTime, bool permitQuantize = false);
 
     /**
      * The compare class used by Composition
@@ -283,8 +289,6 @@ private:
 
     typedef std::set<SegmentObserver *> ObserverSet;
     ObserverSet m_observers;
-
-    const Quantizer *m_quantizer;
 
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;

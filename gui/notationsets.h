@@ -99,8 +99,6 @@ protected:
 
     const NotationElementList &getList() const { return m_nel; }
 
-    Rosegarden::timeT durationOf(const NELIterator &i);
-
 private:
     //--------------- Data members ---------------------------------
 

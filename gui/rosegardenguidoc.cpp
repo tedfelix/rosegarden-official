@@ -406,7 +406,9 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg)
     reader.setContentHandler(&handler);
     reader.setErrorHandler(&handler);
 
+    START_TIMING;
     bool ok = reader.parse(source);
+    PRINT_ELAPSED("RosegardenGUIDoc::xmlParse (reader.parse())");
 
     if (!ok) errMsg = handler.errorString();
 

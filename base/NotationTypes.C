@@ -922,6 +922,19 @@ void TimeSignature::getDurationListForInterval(DurationList &dlist,
 
 	}
 
+	// cc: In practice, if the time we have remaining is shorter
+	// than our shortest note then we should just insert a single
+	// unit of the correct time; we won't be able to do anything
+	// useful with any shorter units anyway.
+
+	else if (durationRemaining <= Note(Note::Shortest).getDuration()) {
+
+	    dlist.push_back(durationRemaining);
+	    offset += durationRemaining;
+	    durationRemaining = 0;
+
+	}
+
 	// If that fails, keep halving the beat division until we
 	// find something to insert. (This could be part of the beat-division
 	// case; it's only in its own place for clarity.)

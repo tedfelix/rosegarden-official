@@ -87,6 +87,12 @@ public:
     /// Returns true if the wrapped event is a note
     bool isNote() const;
 
+    /// Returns the legato-quantized duration if it exists, else unquantized
+    Rosegarden::timeT getQuantizedDuration() const;
+
+    /// Returns the unit-quantized absolute time if it exists, else unquantized
+    Rosegarden::timeT getQuantizedAbsoluteTime() const;
+
     /**
      * Sets the canvas item representing this notation element on screen.
      *
