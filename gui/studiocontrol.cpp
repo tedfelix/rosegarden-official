@@ -123,11 +123,32 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
     QByteArray data;
     QDataStream streamOut(data, IO_WriteOnly);
 
+    SEQMAN_DEBUG << "setStudioObjectProperty" << endl;
+
     streamOut << id;
     streamOut << property;
     streamOut << value;
 
     rgapp->sequencerSend("setMappedProperty(int, QString, float)", data);
+
+    return true;
+}
+
+bool
+StudioControl::setStudioObjectProperties(const MappedObjectIdList &ids,
+					 const MappedObjectPropertyList &properties,
+					 const MappedObjectValueList &values)
+{
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    SEQMAN_DEBUG << "setStudioObjectProperties" << endl;
+
+    streamOut << ids;
+    streamOut << properties;
+    streamOut << values;
+
+    rgapp->sequencerSend("setMappedProperties(Rosegarden::MappedObjectIdList, Rosegarden::MappedObjectPropertyList, Rosegarden::MappedObjectValueList)", data);
 
     return true;
 }

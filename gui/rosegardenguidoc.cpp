@@ -616,6 +616,15 @@ void RosegardenGUIDoc::initialiseStudio()
     Rosegarden::BussList busses = m_studio.getBusses();
     Rosegarden::RecordInList recordIns = m_studio.getRecordIns();
 
+    // To reduce the number of DCOP calls at this stage, we put some
+    // of the float property values in a big list and commit in one
+    // single call at the end.  We can only do this with properties
+    // that aren't depended on by other port, connection, or non-float
+    // properties during the initialisation process.
+    Rosegarden::MappedObjectIdList ids;
+    Rosegarden::MappedObjectPropertyList properties;
+    Rosegarden::MappedObjectValueList values;
+
     for (unsigned int i = 0; i < busses.size(); ++i) {
 	
 	// first one is master
@@ -628,15 +637,13 @@ void RosegardenGUIDoc::initialiseStudio()
 	     Rosegarden::MappedAudioBuss::BussId,
 	     Rosegarden::MappedObjectValue(i));
 	
-	Rosegarden::StudioControl::setStudioObjectProperty
-	    (mappedId,
-	     Rosegarden::MappedAudioBuss::Level,
-	     Rosegarden::MappedObjectValue(busses[i]->getLevel()));
+	ids.push_back(mappedId);
+	properties.push_back(Rosegarden::MappedAudioBuss::Level);
+	values.push_back(Rosegarden::MappedObjectValue(busses[i]->getLevel()));
 	
-	Rosegarden::StudioControl::setStudioObjectProperty
-	    (mappedId,
-	     Rosegarden::MappedAudioBuss::Pan,
-	     Rosegarden::MappedObjectValue(busses[i]->getPan()) - 100.0);
+	ids.push_back(mappedId);
+	properties.push_back(Rosegarden::MappedAudioBuss::Pan);
+	values.push_back(Rosegarden::MappedObjectValue(busses[i]->getPan()) - 100.0);
 	
 	busses[i]->setMappedId(mappedId);
     }
@@ -676,33 +683,34 @@ void RosegardenGUIDoc::initialiseStudio()
 
             // Set the instrument id against this object
             //
-            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
-                Rosegarden::MappedObject::Instrument,
-                Rosegarden::MappedObjectValue((*it)->getId()));
+	    Rosegarden::StudioControl::setStudioObjectProperty
+		(mappedId,
+		 Rosegarden::MappedObject::Instrument,
+		 Rosegarden::MappedObjectValue((*it)->getId()));
 
             // Set the level
             //
-            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
-                Rosegarden::MappedAudioFader::FaderLevel,
-                Rosegarden::MappedObjectValue((*it)->getLevel()));
+            ids.push_back(mappedId);
+            properties.push_back(Rosegarden::MappedAudioFader::FaderLevel);
+	    values.push_back(Rosegarden::MappedObjectValue((*it)->getLevel()));
 
             // Set the record level
             //
-            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
-                Rosegarden::MappedAudioFader::FaderRecordLevel,
-                Rosegarden::MappedObjectValue((*it)->getRecordLevel()));
+            ids.push_back(mappedId);
+            properties.push_back(Rosegarden::MappedAudioFader::FaderRecordLevel);
+	    values.push_back(Rosegarden::MappedObjectValue((*it)->getRecordLevel()));
 
             // Set the number of channels
             //
-            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
-                Rosegarden::MappedAudioFader::Channels,
-                Rosegarden::MappedObjectValue((*it)->getAudioChannels()));
+            ids.push_back(mappedId);
+            properties.push_back(Rosegarden::MappedAudioFader::Channels);
+	    values.push_back(Rosegarden::MappedObjectValue((*it)->getAudioChannels()));
 
             // Set the pan - 0 based
             //
-            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
-                Rosegarden::MappedAudioFader::Pan,
-                Rosegarden::MappedObjectValue(float((*it)->getPan())) - 100.0);
+            ids.push_back(mappedId);
+            properties.push_back(Rosegarden::MappedAudioFader::Pan);
+	    values.push_back(Rosegarden::MappedObjectValue(float((*it)->getPan())) - 100.0);
 
 	    // Set up connections: first clear any existing ones (shouldn't
 	    // be necessary, but)
@@ -737,9 +745,9 @@ void RosegardenGUIDoc::initialiseStudio()
 		}
 	    }
 
-            Rosegarden::StudioControl::setStudioObjectProperty(mappedId,
-                Rosegarden::MappedAudioFader::InputChannel, 
-                Rosegarden::MappedObjectValue(channel));
+            ids.push_back(mappedId);
+	    properties.push_back(Rosegarden::MappedAudioFader::InputChannel);
+	    values.push_back(Rosegarden::MappedObjectValue(channel));
 
 	    if (rmi > 0) {
 		Rosegarden::StudioControl::connectStudioObjects(rmi, mappedId);
@@ -771,22 +779,23 @@ void RosegardenGUIDoc::initialiseStudio()
                                //<< pluginMappedId << endl;
 
                     // Set the position
-                    Rosegarden::StudioControl::setStudioObjectProperty
-                        (pluginMappedId,
-                         Rosegarden::MappedObject::Position,
-                         Rosegarden::MappedObjectValue(plugin->getPosition()));
+		    Rosegarden::StudioControl::setStudioObjectProperty
+			(pluginMappedId,
+			 Rosegarden::MappedObject::Position,
+			 Rosegarden::MappedObjectValue(plugin->getPosition()));
 
                     // Set the id of this instrument on the plugin
                     //
-                    Rosegarden::StudioControl::setStudioObjectProperty
-                        (pluginMappedId,
-                         Rosegarden::MappedObject::Instrument,
-                         (*it)->getId());
+		    Rosegarden::StudioControl::setStudioObjectProperty
+			(pluginMappedId,
+			 Rosegarden::MappedObject::Instrument,
+			 (*it)->getId());
 
                     // Set the plugin type id - this will set it up ready
-                    // for the rest of the settings
+                    // for the rest of the settings.  String value, so can't
+		    // go in the main property list.
 		    //
-                    Rosegarden::StudioControl::setStudioObjectProperty
+		    Rosegarden::StudioControl::setStudioObjectProperty
                         (pluginMappedId,
                          Rosegarden::MappedPluginSlot::Identifier,
                          plugin->getIdentifier().c_str());
@@ -800,6 +809,7 @@ void RosegardenGUIDoc::initialiseStudio()
 			config.push_back(strtoqstr(i->first));
 			config.push_back(strtoqstr(i->second));
 		    }
+
 		    Rosegarden::StudioControl::setStudioObjectPropertyList
 			(pluginMappedId,
 			 Rosegarden::MappedPluginSlot::Configuration,
@@ -807,10 +817,9 @@ void RosegardenGUIDoc::initialiseStudio()
 
                     // Set the bypass
                     //
-                    Rosegarden::StudioControl::setStudioObjectProperty
-                        (pluginMappedId,
-                         Rosegarden::MappedPluginSlot::Bypassed,
-                         Rosegarden::MappedObjectValue(plugin->isBypassed()));
+                    ids.push_back(pluginMappedId);
+		    properties.push_back(Rosegarden::MappedPluginSlot::Bypassed);
+		    values.push_back(Rosegarden::MappedObjectValue(plugin->isBypassed()));
 
                     // Set the program
                     //
@@ -837,6 +846,9 @@ void RosegardenGUIDoc::initialiseStudio()
             }
         }
     }
+
+    // Now commit all the remaining changes
+    Rosegarden::StudioControl::setStudioObjectProperties(ids, properties, values);
 
     KConfig* config = kapp->config();
     config->setGroup(Rosegarden::SequencerOptionsConfigGroup);

@@ -589,6 +589,11 @@ JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
     std::cerr << "JackDriver::setAudioPorts(" << faderOuts << "," << submasterOuts << ")" << std::endl;
 #endif
 
+    if (!m_client) {
+	std::cerr << "JackDriver::setAudioPorts(" << faderOuts << "," << submasterOuts << "): no client yet" << std::endl;
+	return;
+    }
+
     if (faderOuts) {
 	InstrumentId instrumentBase;
 	int instruments;
@@ -1729,8 +1734,10 @@ JackDriver::updateAudioData()
     int inputs = m_alsaDriver->getMappedStudio()->
 	getObjectCount(MappedObject::AudioInput);
 
-    // this will return with no work if the inputs are already correct:
-    createRecordInputs(inputs);
+    if (m_client) {
+	// this will return with no work if the inputs are already correct:
+	createRecordInputs(inputs);
+    }
 
     m_bussMixer->updateInstrumentConnections();
 

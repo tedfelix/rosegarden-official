@@ -1215,6 +1215,10 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
     int startBar = getComposition()->getBarNumber(startTime);
 
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+    bool showInvisibles = config->readBoolEntry("showinvisibles", true);
+
     for (BarPositionList::iterator bpi = m_barPositions.begin();
 	 bpi != m_barPositions.end(); ++bpi) {
 
@@ -1335,6 +1339,11 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		NOTATION_DEBUG << "element is a " << el->event()->getType() << " (pitch " << pitch << ")" << endl;
 	    } else {
 		NOTATION_DEBUG << "element is a " << el->event()->getType() << endl;
+	    }
+
+	    bool invisible = false;
+	    if (el->event()->get<Bool>(INVISIBLE, invisible) && invisible) {
+		if (!showInvisibles) continue;
 	    }
 
 	    if (chunkitr != chunks.end()) {

@@ -419,8 +419,9 @@ SequenceManager::stop()
     QCString replyType;
     QByteArray replyData;
 
+    bool failed = false;
     if (!rgapp->sequencerCall("stop()", replyType, replyData)) {
-        throw(Exception("Failed to contact Rosegarden sequencer with stop command.   Please save your composition and restart Rosegarden to continue."));
+	failed = true;
     }
 
     // restore
@@ -455,6 +456,10 @@ SequenceManager::stop()
     // We don't reset controllers at this point - what happens with static 
     // controllers the next time we play otherwise?  [rwb]
     //resetControllers();
+
+    if (failed) {
+        throw(Exception("Failed to contact Rosegarden sequencer with stop command.   Please save your composition and restart Rosegarden to continue."));
+    }
 }
 
 // Jump to previous bar

@@ -196,6 +196,10 @@ AudioPluginDialog::populatePluginCategoryList()
 	}
     }
 
+    if (inst) {
+	RG_DEBUG << "AudioPluginDialog::populatePluginCategoryList: inst id " << inst->getIdentifier() << ", cat " << currentCategory << endl;
+    }
+
     if (categories.empty()) {
 	m_pluginCategoryBox->hide();
 	m_pluginLabel->hide();
@@ -232,7 +236,7 @@ AudioPluginDialog::populatePluginList()
     if (m_pluginCategoryList->currentItem() > 0) {
 	needCategory = true;
 	if (m_pluginCategoryList->currentItem() == 1) {
-	    category = QString();
+	    category = "";
 	} else {
 	    category = m_pluginCategoryList->currentText();
 	}
@@ -257,7 +261,9 @@ AudioPluginDialog::populatePluginList()
 	if ((*i)->isSynth() != isSynth()) continue;
 
 	if (needCategory) {
-	    if ((*i)->getCategory() != category) continue;
+	    QString cat = "";
+	    if ((*i)->getCategory()) cat = (*i)->getCategory();
+	    if (cat != category) continue;
 	}
 
 	plugins[(*i)->getName()] = PluginPair(count, *i);

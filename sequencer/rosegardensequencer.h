@@ -231,6 +231,12 @@ public:
                                    const QString &property,
                                    float value);
 
+    // Set many properties on many MappedObjects
+    //
+    virtual void setMappedProperties(const Rosegarden::MappedObjectIdList &ids,
+				     const Rosegarden::MappedObjectPropertyList &properties,
+				     const Rosegarden::MappedObjectValueList &values);
+
     // Set a MappedObject to a string
     //
     virtual void setMappedProperty(int id,

@@ -1282,6 +1282,29 @@ RosegardenSequencerApp::setMappedProperty(int id,
 }
 
 void
+RosegardenSequencerApp::setMappedProperties(const Rosegarden::MappedObjectIdList &ids,
+					    const Rosegarden::MappedObjectPropertyList &properties,
+					    const Rosegarden::MappedObjectValueList &values)
+{
+    Rosegarden::MappedObject *object = 0;
+    Rosegarden::MappedObjectId prevId = 0;
+
+    for (size_t i = 0;
+	 i < ids.size() && i < properties.size() && i < values.size();
+	 ++i) {
+
+	if (i == 0 || ids[i] != prevId) {
+	    object = m_studio->getObjectById(ids[i]);
+	    prevId = ids[i];
+	}
+
+	if (object) {
+	    object->setProperty(properties[i], values[i]);
+	}
+    }
+}
+
+void
 RosegardenSequencerApp::setMappedProperty(int id,
                                           const QString &property,
                                           const QString &value)

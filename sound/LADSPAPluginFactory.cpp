@@ -203,12 +203,12 @@ LADSPAPluginFactory::getPortMinimum(const LADSPA_Descriptor *descriptor, int por
 	descriptor->PortRangeHints[port].HintDescriptor;
 
     MappedObjectValue minimum = 0.0;
-    MappedObjectValue lb = descriptor->PortRangeHints[port].LowerBound;
-    MappedObjectValue ub = descriptor->PortRangeHints[port].UpperBound;
 		
     if (LADSPA_IS_HINT_BOUNDED_BELOW(d)) {
+	MappedObjectValue lb = descriptor->PortRangeHints[port].LowerBound;
 	minimum = lb;
     } else if (LADSPA_IS_HINT_BOUNDED_ABOVE(d)) {
+	MappedObjectValue ub = descriptor->PortRangeHints[port].UpperBound;
 	minimum = std::min(0.0, ub - 1.0);
     }
     
@@ -225,13 +225,13 @@ LADSPAPluginFactory::getPortMaximum(const LADSPA_Descriptor *descriptor, int por
     LADSPA_PortRangeHintDescriptor d =
 	descriptor->PortRangeHints[port].HintDescriptor;
 
-    MappedObjectValue maximum = 0.0;
-    MappedObjectValue lb = descriptor->PortRangeHints[port].LowerBound;
-    MappedObjectValue ub = descriptor->PortRangeHints[port].UpperBound;
+    MappedObjectValue maximum = 1.0;
     
     if (LADSPA_IS_HINT_BOUNDED_ABOVE(d)) {
+	MappedObjectValue ub = descriptor->PortRangeHints[port].UpperBound;
 	maximum = ub;
     } else {
+	MappedObjectValue lb = descriptor->PortRangeHints[port].LowerBound;
 	maximum = lb + 1.0;
     }
     

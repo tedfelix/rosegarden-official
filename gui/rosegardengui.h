@@ -1279,6 +1279,8 @@ public slots:
     void slotStopPluginGUI(Rosegarden::InstrumentId, int index);
     void slotPluginGUIExited(Rosegarden::InstrumentId, int index);
 
+    void slotDocumentDevicesResyncd();
+
 protected:
     /**
      * Jog a selection of segments by an amount
@@ -1341,6 +1343,7 @@ private:
     KAction *m_ffwdEndTransport;
 
     KProcess* m_sequencerProcess;
+    bool m_sequencerCheckedIn;
 
 #ifdef HAVE_LIBJACK
     KProcess* m_jackProcess;

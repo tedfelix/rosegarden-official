@@ -736,7 +736,7 @@ AudioInstrumentMixer::~AudioInstrumentMixer()
     
     for (std::vector<sample_t *>::iterator i = m_processBuffers.begin();
 	 i != m_processBuffers.end(); ++i) {
-	delete *i;
+	delete[] *i;
     }
 
     std::cerr << "AudioInstrumentMixer::~AudioInstrumentMixer exiting" << std::endl;
@@ -949,9 +949,8 @@ AudioInstrumentMixer::configurePlugin(InstrumentId id, int position, QString key
 void
 AudioInstrumentMixer::resetAllPlugins()
 {
-    //!!! lock still required here to protect against calling
-    // activate/deactivate at the same time as run()... what can
-    // we do about that? anything?
+    // lock required here to protect against calling
+    // activate/deactivate at the same time as run()
 
     getLock();
 
@@ -1271,7 +1270,6 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
 	    BufferRec &rec = i->second;
 
 	    if (rec.empty) {
-//!!!		processEmptyBlocks(id);
 		continue;
 	    }
 

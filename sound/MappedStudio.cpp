@@ -32,10 +32,34 @@
 static pthread_mutex_t _mappedObjectContainerLock;
 
 
-// These four functions are stolen and adapted from Qt3 qvaluevector.h
+// These stream functions are stolen and adapted from Qt3 qvaluevector.h
 //
 // ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 //
+QDataStream& operator>>(QDataStream& s, Rosegarden::MappedObjectIdList& v)
+{
+    v.clear();
+    Q_UINT32 c;
+    s >> c;
+    v.resize(c);
+    for(Q_UINT32 i = 0; i < c; ++i)
+    {
+        Rosegarden::MappedObjectId t;
+        s >> t;
+        v[i] = t;
+    }
+    return s;
+}
+
+QDataStream& operator<<(QDataStream& s, const Rosegarden::MappedObjectIdList& v)
+{
+    s << (Q_UINT32)v.size();
+    Rosegarden::MappedObjectIdList::const_iterator it = v.begin();
+    for( ; it != v.end(); ++it )
+        s << *it;
+    return s;
+}
+
 QDataStream& operator>>(QDataStream& s, Rosegarden::MappedObjectPropertyList& v)
 {
     v.clear();

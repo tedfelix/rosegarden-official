@@ -220,6 +220,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_dockLeft(0),
       m_doc(0),
       m_sequencerProcess(0),
+      m_sequencerCheckedIn(false),
       m_zoomSlider(0),
       m_seqManager(0),
       m_transport(0),
@@ -1415,6 +1416,9 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     // finally recreate the main view
     //
     initView();
+
+    connect(m_doc, SIGNAL(devicesResyncd()),
+	    this, SLOT(slotDocumentDevicesResyncd()));
 
     m_doc->syncDevices();
     m_doc->clearModifiedStatus();
@@ -3957,13 +3961,25 @@ bool RosegardenGUIApp::launchJack()
 }
 #endif //HAVE_LIBJACK
 
+void RosegardenGUIApp::slotDocumentDevicesResyncd()
+{
+    m_sequencerCheckedIn = true;
+}
+
 void RosegardenGUIApp::slotSequencerExited(KProcess*)
 {
     RG_DEBUG << "RosegardenGUIApp::slotSequencerExited Sequencer exited\n";
 
     KStartupLogo::hideIfStillThere();
 
-    KMessageBox::error(0, i18n("The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.\nFor assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com."));
+    if (m_sequencerCheckedIn) {
+
+	KMessageBox::error(0, i18n("The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.\nPlease exit and restart Rosegarden to restore sound capability."));
+
+    } else {
+
+	KMessageBox::error(0, i18n("The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.\nFor assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com."));
+    }
 
     m_sequencerProcess = 0; // isSequencerRunning() will return false
     // but isUsingSequencer() will keep returning true

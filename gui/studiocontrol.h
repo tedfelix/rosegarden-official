@@ -58,13 +58,19 @@ public:
                                         const MappedObjectProperty &property,
                                         MappedObjectValue value);
 
+    // Set many values to values
+    //
+    static bool setStudioObjectProperties(const MappedObjectIdList &ids,
+					  const MappedObjectPropertyList &properties,
+					  const MappedObjectValueList &values);
+
     // Set a value to a string 
     //
     static bool setStudioObjectProperty(MappedObjectId id,
                                         const MappedObjectProperty &property,
 					const QString &value);
 
-    // Set a value to a list
+    // Set a value to a string list
     //
     static bool setStudioObjectPropertyList(MappedObjectId id,
 					    const MappedObjectProperty &property,
