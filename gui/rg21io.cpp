@@ -202,7 +202,8 @@ bool RG21Loader::parseRest()
     timeT duration = convertRG21Duration(i);
     
     Event *restEvent = new Event(Rosegarden::Note::EventRestType,
-				 m_currentSegmentTime, duration);
+				 m_currentSegmentTime, duration,
+				 Rosegarden::Note::EventRestSubOrdering);
 
     setGroupProperties(restEvent);
 

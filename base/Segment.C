@@ -504,7 +504,8 @@ Segment::fillWithRests(timeT startTime, timeT endTime)
     timeT acc = startTime;
 
     for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
-	Event *e = new Event(Note::EventRestType, acc, *i);
+	Event *e = new Event(Note::EventRestType, acc, *i,
+			     Note::EventRestSubOrdering);
 	insert(e);
 	acc += *i;
     }

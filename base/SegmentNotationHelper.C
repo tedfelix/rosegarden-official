@@ -789,7 +789,8 @@ SegmentNotationHelper::insertRest(timeT absoluteTime, Note note)
     }
 
     Event *modelEvent = new Event(Note::EventRestType, absoluteTime,
-				  note.getDuration());
+				  note.getDuration(),
+				  Note::EventRestSubOrdering);
 
     i = insertSomething(i, duration, modelEvent, false);
     delete modelEvent;
@@ -1115,7 +1116,8 @@ SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
 
 	// replace with a rest
 	Event *newRest = new Event(Note::EventRestType,
-				   e->getAbsoluteTime(), e->getDuration());
+				   e->getAbsoluteTime(), e->getDuration(),
+				   Note::EventRestSubOrdering);
 	insert(newRest);
 	erase(i);
 
@@ -1759,7 +1761,8 @@ SegmentNotationHelper::normalizeContiguousRests(timeT startTime,
     timeT acc = startTime;
 
     for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
-	Event *e = new Event(Note::EventRestType, acc, *i);
+	Event *e = new Event(Note::EventRestType, acc, *i,
+			     Note::EventRestSubOrdering);
 	toInsert.push_back(e);
 	acc += *i;
     }
@@ -1775,7 +1778,8 @@ SegmentNotationHelper::mergeContiguousRests(timeT startTime,
 
 	timeT d = Note::getNearestNote(duration).getDuration();
 
-	Event *e = new Event(Note::EventRestType, startTime, d);
+	Event *e = new Event(Note::EventRestType, startTime, d,
+			     Note::EventRestSubOrdering);
 	toInsert.push_back(e);
 
 	startTime += d;

@@ -1310,6 +1310,7 @@ Pitch::getPerformancePitchFromRG21Pitch(int heightOnStaff,
 
 const string Note::EventType = "note";
 const string Note::EventRestType = "rest";
+const int Note::EventRestSubOrdering = 10;
 
 const timeT Note::m_shortestTime = basePPQ / 16;
 

@@ -827,6 +827,8 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 
     bool overlong = false;
 
+    Rosegarden::PropertyName skipProperty = "LilypondExportSkipThisEvent";
+
     while (s->isBeforeEndMarker(i)) {
 
 	timeT duration = (*i)->getNotationDuration();
@@ -913,6 +915,12 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 	    }
 	}
 
+	if ((*i)->has(skipProperty)) {
+	    (*i)->unset(skipProperty);
+	    ++i;
+	    continue;
+	}
+
 	if ((*i)->isa(Note::EventType)) {
 
 	    Rosegarden::Chord chord(*s, i, m_composition->getNotationQuantizer());
@@ -930,9 +938,25 @@ LilypondExporter::writeBar(Rosegarden::Segment *s,
 		    << e.getMessage() << std::endl;
 	    }
 
+	    // Examine the following event, and truncate our duration
+	    // if we overlap it.
+
 	    timeT toNext = duration;
 	    Segment::iterator nextElt = chord.getFinalElement();
+
 	    if (s->isBeforeEndMarker(++nextElt)) {
+		// The quantizer sometimes sticks a rest at the same time
+		// as this note -- don't use that one here, and mark it as
+		// not to be exported -- it's just a heavy-handed way of
+		// rendering counterpoint in RG
+		if ((*nextElt)->isa(Note::EventRestType) &&
+		    (*nextElt)->getNotationAbsoluteTime() == absTime) {
+		    (*nextElt)->set<Bool>(skipProperty, true);
+		    ++nextElt;
+		}
+	    }
+
+	    if (s->isBeforeEndMarker(nextElt)) {
 		toNext = (*nextElt)->getNotationAbsoluteTime() - absTime;
 		if (toNext < duration) {
 		    duration = toNext;

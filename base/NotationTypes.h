@@ -772,6 +772,7 @@ class Note
 public:
     static const std::string EventType;
     static const std::string EventRestType;
+    static const int EventRestSubOrdering;
 
     typedef int Type; // not an enum, too much arithmetic at stake
 
