@@ -57,7 +57,7 @@ InstrumentLabel::mousePressEvent(QMouseEvent *e)
     m_pressPosition = e->globalPos();
 
     // start a timer on this hold
-    m_pressTimer->start(400, true); // 400ms, single shot
+    m_pressTimer->start(200, true); // 200ms, single shot
 
 }
 

@@ -25,6 +25,7 @@
 
 #include <vector>
 #include "Instrument.h"
+#include "Track.h"
 
 #include <qframe.h>
 #include <qpopupmenu.h>
@@ -76,6 +77,11 @@ public:
     std::vector<int> getHighlightedTracks();
 
     void changeTrackInstrumentLabels(InstrumentTrackLabels label);
+
+    // Precalculate the Instrument popup so we don't have to every
+    // time it appears
+    //
+    void populateInstrumentPopup();
 
 signals:
     // to emit what Track has been selected

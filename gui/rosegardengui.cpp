@@ -1987,8 +1987,6 @@ void RosegardenGUIApp::slotTrackDown()
     Rosegarden::TrackId tid = comp.getSelectedTrack();
     Rosegarden::TrackId pos = comp.getTrackByIndex(tid)->getPosition();
 
-    cout << "TID = " << tid << endl;
-
     Rosegarden::Track *track = comp.getTrackByPosition(pos + 1);
 
     // If the track exists

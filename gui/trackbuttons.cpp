@@ -38,6 +38,8 @@
 
 #include "rosedebug.h"
 
+using Rosegarden::TrackId;
+
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            unsigned int trackCellHeight,
                            unsigned int trackLabelWidth,
@@ -100,6 +102,10 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
     connect(m_muteButtonGroup, SIGNAL(released(int)),
             this, SLOT(slotToggleMutedTrack(int)));
 
+    // Populate instrument popup menu just once at start-up
+    //
+    populateInstrumentPopup();
+
 }
 
 // Draw the mute and record buttons, track labels and VU meters
@@ -114,7 +120,7 @@ TrackButtons::makeButtons()
 
     // Populate the widgets
     //
-    for (int i = 0; i < m_tracks; i++)
+    for (TrackId i = 0; i < m_tracks; i++)
     {
         trackHBox = makeButton(i);
 
@@ -309,7 +315,7 @@ TrackButtons::mutedTracks()
 {
     std::vector<int> mutedTracks;
 
-    for (int i = 0; i < m_tracks; i++)
+    for (TrackId i = 0; i < m_tracks; i++)
     {
         if (m_muteButtonGroup->find(i)->isDown())
             mutedTracks.push_back(i);
@@ -325,7 +331,7 @@ TrackButtons::mutedTracks()
 void
 TrackButtons::slotToggleMutedTrack(int mutedTrack)
 {
-    if (mutedTrack < 0 || mutedTrack > m_tracks )
+    if (mutedTrack < 0 || mutedTrack > (int)m_tracks )
         return;
 
     bool set = true;
@@ -339,7 +345,7 @@ TrackButtons::slotToggleMutedTrack(int mutedTrack)
 void
 TrackButtons::slotUpdateTracks()
 {
-    int newNbTracks = m_doc->getComposition().getNbTracks();
+    TrackId newNbTracks = m_doc->getComposition().getNbTracks();
 
     if (newNbTracks == m_tracks) return; // nothing to do
 
@@ -372,7 +378,7 @@ TrackButtons::slotUpdateTracks()
 void
 TrackButtons::slotSetRecordTrack(int recordTrack)
 {
-    if (recordTrack < 0 || recordTrack > m_tracks )
+    if (recordTrack < 0 || recordTrack > (int)m_tracks )
         return;
 
     // Unset the palette if we're jumping to another button
@@ -529,22 +535,6 @@ TrackButtons::slotInstrumentSelection(int position)
     // populate this instrument widget
     m_instrumentLabels[position]->setText(instrumentName);
 
-    // clear the popup
-    m_instrumentPopup->clear();
-
-    // position index
-    int i = 0;
-
-    // Get the list
-    Rosegarden::InstrumentList list = studio.getPresentationInstruments();
-    Rosegarden::InstrumentList::iterator it;
-
-    for (it = list.begin(); it != list.end(); it++)
-    {
-        m_instrumentPopup->
-            insertItem(QString((*it)->getName().c_str()), i++);
-    }
-
     // Hide the track label if we're in Track only mode
     if (m_trackInstrumentLabels == ShowTrack)
     {
@@ -580,6 +570,28 @@ TrackButtons::slotInstrumentSelection(int position)
     //
     m_popupItem = position;
 
+}
+
+void
+TrackButtons::populateInstrumentPopup()
+{
+    Rosegarden::Studio &studio = m_doc->getStudio();
+
+    // clear the popup
+    m_instrumentPopup->clear();
+
+    // position index
+    int i = 0;
+
+    // Get the list
+    Rosegarden::InstrumentList list = studio.getPresentationInstruments();
+    Rosegarden::InstrumentList::iterator it;
+
+    for (it = list.begin(); it != list.end(); it++)
+    {
+        m_instrumentPopup->
+            insertItem(QString((*it)->getName().c_str()), i++);
+    }
 }
 
 // Set the relevant Instrument for the Track
@@ -627,7 +639,7 @@ TrackButtons::changeTrackInstrumentLabels(InstrumentTrackLabels label)
     //
     if (m_trackInstrumentLabels != label)
     {
-        for (int i = 0; i < m_tracks; i++)
+        for (int i = 0; i < (int)m_tracks; i++)
         {
             switch(m_trackInstrumentLabels)
             {
@@ -655,7 +667,7 @@ TrackButtons::changeTrackInstrumentLabels(InstrumentTrackLabels label)
     m_trackInstrumentLabels = label;
 
     // update and reconnect with new value
-    for (int i = 0; i < m_tracks; i++)
+    for (int i = 0; i < (int)m_tracks; i++)
     {
         switch(label)
         {
