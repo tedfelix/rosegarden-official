@@ -195,11 +195,12 @@ install-data-local:
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/fonts/feta/12
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/fonts/mappings
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/library
+	$(INSTALL_DATA) $(srcdir)/styles/*.xml $(kde_datadir)/$(data_dirname)/styles
 	$(INSTALL_DATA) $(srcdir)/testfiles/glazunov.rg $(kde_datadir)/$(data_dirname)/examples
 	$(INSTALL_DATA) $(srcdir)/testfiles/notation-for-string-orchestra-in-D-minor.rg $(kde_datadir)/$(data_dirname)/examples
-	$(INSTALL_DATA) $(srcdir)/styles/*.xml $(kde_datadir)/$(data_dirname)/styles
 	$(INSTALL_DATA) $(srcdir)/testfiles/ravel-pc-gmaj-adagio.rg $(kde_datadir)/$(data_dirname)/examples
 	$(INSTALL_DATA) $(srcdir)/testfiles/perfect-moment.rg $(kde_datadir)/$(data_dirname)/examples
+	$(INSTALL_DATA) $(srcdir)/testfiles/children.rg $(kde_datadir)/$(data_dirname)/examples
 	$(INSTALL_DATA) $(srcdir)/fonts/*.pfa $(kde_datadir)/$(data_dirname)/fonts
 	$(INSTALL_DATA) $(srcdir)/fonts/mappings/*.xml $(kde_datadir)/$(data_dirname)/fonts/mappings
 	$(INSTALL_DATA) $(srcdir)/pixmaps/misc/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/misc
