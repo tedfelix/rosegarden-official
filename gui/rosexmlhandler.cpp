@@ -595,8 +595,10 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         if (!m_currentSegment)
         {
-            m_errorString = i18n("found audio begin index outside segment");
-            return false;
+            // Don't fail - as this segment could be defunct if we
+            // skipped loading the audio file
+            //
+            return true;
         }
 
         if (m_currentSegment->getType() != Rosegarden::Segment::Audio)
@@ -616,8 +618,10 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         if (!m_currentSegment)
         {
-            m_errorString = i18n("found audio end index outside segment");
-            return false;
+            // Don't fail - as this segment could be defunct if we
+            // skipped loading the audio file
+            //
+            return true;
         }
 
         if (m_currentSegment->getType() != Rosegarden::Segment::Audio)
