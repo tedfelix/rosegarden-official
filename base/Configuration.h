@@ -56,6 +56,10 @@ public:
 		      expected + ", found " + actual + ")", file, line) { }
     };
 
+    Configuration() {;}
+    Configuration(const Configuration &);
+    ~Configuration();
+
     template <PropertyType P>
     void
     set(const PropertyName &name,
@@ -100,6 +104,7 @@ class DocumentConfiguration : public Configuration
 public:
     DocumentConfiguration();
     DocumentConfiguration(const DocumentConfiguration &);
+    ~DocumentConfiguration();
 
     DocumentConfiguration& operator=(const DocumentConfiguration &);
 

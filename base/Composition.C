@@ -79,6 +79,17 @@ Composition::ReferenceSegment::~ReferenceSegment()
     clear();
 }
 
+Composition::ReferenceSegment::ReferenceSegment(const ReferenceSegment &seg):
+    FastVector<Rosegarden::Event *>()
+{
+    clear();
+
+    for (iterator i = begin(); i != end(); ++i)
+	this->push_back(new Event(**i));
+
+    m_eventType = seg.getEventType();
+}
+
 Composition::ReferenceSegment&
 Composition::ReferenceSegment::operator=(const ReferenceSegment &seg)
 {

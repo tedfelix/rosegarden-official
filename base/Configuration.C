@@ -41,6 +41,23 @@
 namespace Rosegarden
 {
 
+Configuration::Configuration(const Configuration &conf)
+{
+    clear();
+
+    // Copy everything
+    //
+    for (const_iterator i = conf.begin(); i != conf.end(); ++i)
+        insert(PropertyPair(i->first, i->second->clone()));
+}
+
+Configuration::~Configuration()
+{
+    clear();
+}
+
+
+
 std::string
 Configuration::toXmlString()
 {
@@ -75,7 +92,7 @@ Configuration::operator=(const Configuration &conf)
     // Copy everything
     //
     for (const_iterator i = conf.begin(); i != conf.end(); ++i)
-        insert(PropertyPair(i->first, i->second));
+        insert(PropertyPair(i->first, i->second->clone()));
 
     return (*this);
 }
@@ -112,8 +129,14 @@ DocumentConfiguration::DocumentConfiguration(const DocumentConfiguration &conf):
     Configuration()
 {
     for (const_iterator i = conf.begin(); i != conf.end(); ++i)
-        insert(PropertyPair(i->first, i->second));
+        insert(PropertyPair(i->first, i->second->clone()));
 }
+
+DocumentConfiguration::~DocumentConfiguration()
+{
+    clear();
+}
+
 
 DocumentConfiguration&
 DocumentConfiguration::operator=(const DocumentConfiguration &conf)
@@ -121,7 +144,7 @@ DocumentConfiguration::operator=(const DocumentConfiguration &conf)
     clear();
 
     for (const_iterator i = conf.begin(); i != conf.end(); ++i)
-        insert(PropertyPair(i->first, i->second));
+        insert(PropertyPair(i->first, i->second->clone()));
 
     return *this;
 }

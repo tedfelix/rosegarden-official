@@ -585,6 +585,7 @@ public:
 	ReferenceSegment(std::string eventType);
 	virtual ~ReferenceSegment();
 
+        ReferenceSegment(const ReferenceSegment &);
         ReferenceSegment& operator=(const ReferenceSegment &);
 	
 	typedef Impl::iterator iterator;

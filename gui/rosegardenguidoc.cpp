@@ -144,17 +144,21 @@ RosegardenGUIDoc::RosegardenGUIDoc(RosegardenGUIDoc *doc)
     m_title = doc->getTitle();
     m_absFilePath = doc->getAbsFilePath();
 
-    m_composition = doc->getComposition();
     m_audioFileManager = doc->getAudioFileManager();
     m_studio = doc->getStudio();
-
     m_config = doc->getConfiguration();
+    m_composition = doc->getComposition();
 }
 
 RosegardenGUIDoc&
 RosegardenGUIDoc::operator=(const RosegardenGUIDoc &doc)
 {
     if (&doc == this) return *this;
+
+    // clear floating objects
+    if (m_recordSegment) delete m_recordSegment;
+    delete m_commandHistory;
+    delete m_clipboard;
 
     m_modified = doc.isModified();
     m_autoSaved = doc.isAutoSaved();
@@ -169,7 +173,6 @@ RosegardenGUIDoc::operator=(const RosegardenGUIDoc &doc)
     m_audioFileManager = doc.getAudioFileManager();
     m_studio = doc.getStudio();
     m_config = doc.getConfiguration();
-
     m_composition = doc.getComposition();
 
     return *this;
