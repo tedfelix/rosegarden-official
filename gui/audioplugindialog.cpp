@@ -65,9 +65,9 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                                      int index):
     KDialogBase(parent, "", false, i18n("Audio Plugin"),
 #ifdef HAVE_LIBLO
-		Close | Details),
+		Close | Details | Help),
 #else
-		Close),
+		Close | Help),
 #endif
     m_pluginManager(aPM),
 #ifdef HAVE_LIBLO
@@ -79,6 +79,8 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_generating(true),
     m_guiShown(false)
 {
+    setHelp("studio-plugins");
+
     setSizePolicy(QSizePolicy(QSizePolicy::Preferred,
                               QSizePolicy::Fixed));
 

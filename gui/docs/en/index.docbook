@@ -1404,6 +1404,61 @@
 
     <sect1 id="studio-plugins">
       <title>Audio Plugins</title>
+      <para>An audio plugin is a piece of software, separate from
+      Rosegarden, that Rosegarden can load and use in order to perform
+      a particular audio processing task.  These can be broadly
+      divided into effects plugins and synth plugins.  Effects plugins
+      take an audio input and manipulate it to produce a different
+      audio output; synth plugins take MIDI-like events as input and
+      turn them into audio output.  Rosegarden uses the Linux standard
+      LADSPA plugin API for effects and the DSSI plugin API for
+      synths, permitting the use of large numbers of open-source
+      plugins made available by many developers.
+      </para>
+      <para>The use of plugins has a cost in CPU time, as audio
+      processing in real time usually takes a significant amount of
+      work even on a modern CPU. It also has a potential cost in
+      reliability: when Rosegarden is running a plugin, if the plugin
+      hangs or crashes, so does Rosegarden.  Many plugins are very
+      reliable, but it's inevitable that some will not be so well
+      tested.
+      </para>
+      <sect2 id="studio-plugins-effects">
+	<title>Effects plugins</title> <para>An effects plugin is
+	something that you can use to modify an audio signal in a
+	controllable way.  Examples include reverb, delay effects,
+	dynamic compression and so on.
+	</para>
+	<para>Every audio or synth-plugin instrument in Rosegarden has
+	five associated effects slots.  By default these are empty,
+	but you can load plugins into them in order to chain up to
+	five effects onto the audio signal before it goes through
+	fader level and pan processing.</para>
+
+	<para>To load a plugin to a slot, click its button on the
+	<link linkend="segment-view-instrumentparameterbox-audio">instrument
+	parameter box</link>:
+	</para>
+	<para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-pluginbuttons.png" format="PNG"/>
+	      </imageobject>
+	      <textobject>
+	      <phrase>Plugin Slot Buttons</phrase>
+	      </textobject>
+	    </mediaobject>
+          </screenshot>
+        </para>
+	<para>(These buttons are also available in the <link
+	linkend="studio-audio-mixer">audio mixer</link>.)
+	</para>
+	<para>This will
+	pop up the plugin dialog.  This dialog shows you
+	the available categories of effects in the first menu; select
+	one, and you can then choose your plugin in the second menu.
+	</para>
       <para>
 	<screenshot>
 	  <mediaobject>
@@ -1416,6 +1471,112 @@
           </mediaobject>
         </screenshot>
       </para>
+
+	<para>Below the plugin selection menus, the dialog gives you a
+	varying number of rotary controllers showing all the
+	modifiable parameters for the plugin you have selected.  To
+	change a value, just click a rotary and drag up and down or
+	left and right.  (Up or right to raise the value, down or left
+	to lower it.)  You can also use the mouse wheel to change the
+	value, and click with the middle mouse button to reset it to
+	its initial default.</para>
+
+	<para>It is also possible to copy one plugin with its current
+	configuration into another slot, so as to use the same plugin
+	settings with more than one instrument.  Just click the Copy
+	button when you have the plugin set up the way you want it,
+	and then open another plugin slot's plugin dialog and click
+	Paste.</para>
+
+	<para>Finally, you can use the Bypass button to remove a
+	plugin temporarily from processing while retaining its
+	configuration in case you want to re-enable it later.
+	</para>
+      </sect2>
+      <sect2 id="studio-plugins-synths">
+	<title>Synth plugins</title>
+	<para>
+	  Synth plugins can be used in place of hardware or standalone
+	  soft-synth MIDI devices, to generate sounds from your note
+	  event segments.</para>
+
+	<para>Using a synth plugin gives you somewhat better control
+	and repeatability than using an external MIDI device, because
+	Rosegarden will be able to load the correct plugins for you
+	and use the correct settings the next time you load your same
+	file.  Plugins may also offer better timing resolution than
+	external MIDI devices, and synth plugin instruments have the
+	advantage of being routable like audio instruments, which also
+	means you can add effects plugins on top of them.
+	</para>
+	
+	<para>To make use of a synth plugin, first <link
+	linkend="segment-view-instruments">assign a track</link> to a
+	synth plugin instrument, and then load a synth plugin by
+	clicking on the topmost button in the <link
+	linkend="segment-view-instrumentparameterbox-synth">instrument
+	parameter box</link>:</para>
+	  
+	<para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-synthpluginbuttons.png" format="PNG"/>
+	      </imageobject>
+	      <textobject>
+	      <phrase>Synth Plugin Buttons</phrase>
+	      </textobject>
+	    </mediaobject>
+          </screenshot>
+        </para>
+
+	<para>This will bring up the same plugin dialog as shown above
+	for effects plugins, but with a list of synth plugins instead
+	of effects.  Once again, you will be shown the particular set
+	of rotary parameters for the synth you have selected.  Synth
+	plugins may also have "programs", selectable from a menu --
+	this menu will only appear if you choose a synth that supports
+	them.  When you have selected and configured a synth plugin
+	for an instrument, any MIDI data on tracks assigned to that
+	instrument should play through that synth, as should any
+	incoming MIDI data during recording or monitoring.
+	</para>
+      </sect2>
+
+      <sect2 id="studio-plugins-guis">
+	<title>Plugin native editor windows</title>
+
+	<para>Most plugins can be controlled completely using the
+	rotary controllers in Rosegarden's plugin dialog.  However, a
+	few plugins (generally synths) also have their own editor
+	windows which can be switched on or off from Rosegarden and
+	which may provide more complete or more organised
+	controls.</para>
+
+	<para>When you select a plugin that has its own editor window,
+	the button at the lower left of the plugin dialog labelled
+	"Editor" will become active:</para>
+
+	<para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-plugineditorbutton.png" format="PNG"/>
+	      </imageobject>
+	      <textobject>
+	      <phrase>A Plugin Editor Button</phrase>
+	      </textobject>
+	    </mediaobject>
+          </screenshot>
+        </para>
+
+	<para>(For synth plugins, there is a similar button in the
+	instrument parameter box.)  Clicking this button should show
+	the plugin's own editor window.  Any changes you make in this
+	editor window should also be reflected in Rosegarden's own
+	plugin dialog, if visible, and of course should be saved in
+	your Rosegarden file as normal.</para>
+      </sect2>
     </sect1>
 
     <sect1 id="studio-metronome">
