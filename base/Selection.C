@@ -75,14 +75,17 @@ EventSelection::~EventSelection()
 
 void EventSelection::addEvent(Event *e)
 { 
+    timeT eventDuration = e->getDuration();
+    if (eventDuration == 0) eventDuration = 1;
+
     if (contains(e)) return;
 
     if (e->getAbsoluteTime() < m_beginTime || !m_haveRealStartTime) {
 	m_beginTime = e->getAbsoluteTime();
 	m_haveRealStartTime = true;
     }
-    if (e->getAbsoluteTime() + e->getDuration() > m_endTime) {
-	m_endTime = e->getAbsoluteTime() + e->getDuration();
+    if (e->getAbsoluteTime() + eventDuration > m_endTime) {
+	m_endTime = e->getAbsoluteTime() + eventDuration;
     }
     m_segmentEvents.insert(e);
 }

@@ -396,6 +396,7 @@ ControlChangeCommand::ControlChangeCommand(QCanvasItemList selectedItems,
     : BasicCommand(getGlobalName(), segment, start, end, true),
       m_selectedItems(selectedItems)
 {
+    RG_DEBUG << "ControlChangeCommand : from " << start << " to " << end << endl;
 }
 
 
@@ -566,6 +567,20 @@ void ControlRuler::updateSelection()
 void
 ControlRuler::clearSelectedItems()
 {
+    // debug
+    RG_DEBUG << "ControlRuler::clearSelectedItems() : m_selectedItems : \n";
+    for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
+        RG_DEBUG << (*it) << endl;
+    }
+
+    RG_DEBUG << "ControlRuler::clearSelectedItems() : all canvas items : \n";
+    QCanvasItemList list = canvas()->allItems();
+    for (QCanvasItemList::Iterator it=list.begin(); it!=list.end(); ++it) {
+        RG_DEBUG << (*it) << endl;
+    }
+    // debug
+
+    
     for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
         (*it)->setSelected(false);
     }
@@ -679,6 +694,8 @@ void PropertyControlRuler::elementRemoved(const Rosegarden::Staff *, ViewElement
 {
     RG_DEBUG << "PropertyControlRuler::elementRemoved(\n";
 
+    clearSelectedItems();
+
     QCanvasItemList allItems = canvas()->allItems();
 
     for (QCanvasItemList::Iterator it=allItems.begin(); it!=allItems.end(); ++it) {
@@ -754,6 +771,8 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
 void ControllerEventsRuler::eventRemoved(const Segment*, Event *e)
 {
     if (!e->isa(Rosegarden::Controller::EventType)) return;
+
+    clearSelectedItems();
 
     QCanvasItemList allItems = canvas()->allItems();
 
