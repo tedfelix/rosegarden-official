@@ -48,9 +48,7 @@ protected:
 
     void insertNote(const StaffLine*, const QPoint&);
 
-    QCanvasItem* m_movingItem;
-    bool m_draggingItem;
-
+    StaffLine* m_currentHighlightedLine;
 };
 
 

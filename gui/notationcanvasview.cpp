@@ -25,35 +25,68 @@
 NotationCanvasView::NotationCanvasView(QCanvas *viewing, QWidget *parent,
                                        const char *name, WFlags f)
     : QCanvasView(viewing, parent, name, f),
-      m_movingItem(0),
-      m_draggingItem(false)
+      m_currentHighlightedLine(0)
 {
+    viewport()->setMouseTracking(true);
 }
 
 void
-NotationCanvasView::contentsMouseReleaseEvent (QMouseEvent*)
+NotationCanvasView::contentsMouseReleaseEvent(QMouseEvent*)
 {
-    m_draggingItem = false;
     canvas()->update();
 }
 
 void
-NotationCanvasView::contentsMouseMoveEvent (QMouseEvent *e)
+NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 {
-    if(m_draggingItem) {
-        m_movingItem->move(e->x(), e->y());
-        canvas()->update();
+    bool needUpdate = false;
+    
+    if (m_currentHighlightedLine) {
+        m_currentHighlightedLine->setHighlighted(false);
+        needUpdate = true;
     }
+
+    m_currentHighlightedLine = 0;
+
+    QCanvasItemList itemList = canvas()->collisions(e->pos());
+
+    if(itemList.isEmpty()) return;
+
+    QCanvasItemList::Iterator it;
+
+    for (it = itemList.begin(); it != itemList.end(); ++it) {
+
+        QCanvasItem *item = *it;
+
+        StaffLine *staffLine;
+    
+        if ((staffLine = dynamic_cast<StaffLine*>(item))) {
+            m_currentHighlightedLine = staffLine;
+            m_currentHighlightedLine->setHighlighted(true);
+            needUpdate = true;
+            break;
+        }
+    }
+
+    if (needUpdate)
+        canvas()->update();
 }
 
 void
-NotationCanvasView::contentsMousePressEvent (QMouseEvent *e)
+NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 {
     kdDebug(KDEBUG_AREA) << "mousepress" << endl;
 
-    QPoint eventPos = viewportToContents(e->pos());
+    if (m_currentHighlightedLine) {
+        kdDebug(KDEBUG_AREA) << "mousepress : m_currentHighlightedLine != 0 - inserting note - staff pitch :"
+                             << m_currentHighlightedLine->associatedPitch() << endl;
+        insertNote(m_currentHighlightedLine, e->pos());
 
-    QCanvasItemList itemList = canvas()->collisions(eventPos);
+        return;
+    }
+    
+
+    QCanvasItemList itemList = canvas()->collisions(e->pos());
 
     if(itemList.isEmpty()) { // click was not on an item
         kdDebug(KDEBUG_AREA) << "mousepress : Not on an item" << endl;
@@ -71,7 +104,7 @@ NotationCanvasView::contentsMousePressEvent (QMouseEvent *e)
         if ((staffLine = dynamic_cast<StaffLine*>(item))) {
             kdDebug(KDEBUG_AREA) << "mousepress : on a staff Line - insert note - staff pitch :"
                                  << staffLine->associatedPitch() << endl;
-            insertNote(staffLine, eventPos);
+            insertNote(staffLine, e->pos());
             // staffLine->setPen(blue); - debug feedback to confirm which line what clicked on
         
             return;
