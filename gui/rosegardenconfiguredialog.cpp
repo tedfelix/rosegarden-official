@@ -1768,8 +1768,9 @@ MetronomeConfigurationPage::apply()
     metronome->setBeatVelocity(
             Rosegarden::MidiByte(m_metronomeBeatVely->value()));
 
-    // horrible hardcode metronome reset
-    m_doc->getSequenceManager()->resetMetronomeMmapper();
+    // using frigged method for the moment
+    m_doc->getSequenceManager()->
+        metronomeChanged(metronome->getInstrument(), true, true);
 
     m_doc->slotDocumentModified();
 }

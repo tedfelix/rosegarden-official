@@ -25,6 +25,7 @@
 #include <string>
 
 #include "Event.h"
+#include "XmlExportable.h"
 
 // A Marker is a user defined point in a Composition that can be
 // used to define looping points - jump to, make notes at etc.
@@ -38,7 +39,7 @@
 namespace Rosegarden
 {
 
-class Marker
+class Marker : public XmlExportable
 {
 public:
     Marker():m_time(0), m_name(std::string("<unnamed>")), 
@@ -55,6 +56,9 @@ public:
     void setTime(Rosegarden::timeT time) { m_time = time; }
     void setName(const std::string &name) { m_name = name; }
     void setDescription(const std::string &des) { m_description = des; }
+
+    // export as XML
+    virtual std::string toXmlString();
 
 protected:
 

@@ -1330,7 +1330,7 @@ void SequenceManager::resetMetronomeMmapper()
 
 void SequenceManager::resetControlBlockMmapper()
 {
-    SEQMAN_DEBUG << "SequenceManager::resetMetronomeMmapper()\n";
+    SEQMAN_DEBUG << "SequenceManager::resetControlBlockMmapper()\n";
 
     m_controlBlockMmapper->setDocument(m_doc);
 }
@@ -1503,10 +1503,32 @@ void SequenceManager::trackChanged(const Composition *, Track* t)
     m_controlBlockMmapper->updateTrackData(t);
 }
 
+void SequenceManager::metronomeChanged(Rosegarden::InstrumentId id,
+                                       bool playMetronome,
+                                       bool recordMetronome)
+{
+    SEQMAN_DEBUG << "SequenceManager::metronomeChanged (simple)"
+                 << " - playMetronome = " 
+                 << playMetronome
+                 << ", recordMetronome = " 
+                 << recordMetronome 
+                 << ", instrument = "
+                 << m_metronomeMmapper->getMetronomeInstrument()
+                 << endl;
+
+    m_controlBlockMmapper->updateMetronomeData(id, playMetronome, recordMetronome);
+}
+
 void SequenceManager::metronomeChanged(const Composition *, bool playMetronome, bool recordMetronome)
 {
-    SEQMAN_DEBUG << "SequenceManager::metronomeChanged(playMetronome = " << playMetronome
-                 << ", recordMetronome = " << recordMetronome << endl;
+    SEQMAN_DEBUG << "SequenceManager::metronomeChanged - playMetronome = " 
+                 << playMetronome
+                 << ", recordMetronome = " 
+                 << recordMetronome 
+                 << ", instrument = "
+                 << m_metronomeMmapper->getMetronomeInstrument()
+                 << endl;
+
     m_controlBlockMmapper->updateMetronomeData(m_metronomeMmapper->getMetronomeInstrument(), playMetronome, recordMetronome);
 }
 

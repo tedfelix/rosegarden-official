@@ -4421,10 +4421,20 @@ RosegardenGUIApp::slotEditMarkers()
     connect(m_markerEditor, SIGNAL(closing()),
             SLOT(slotMarkerEditorClosed()));
 
+    connect(m_markerEditor, SIGNAL(jumpToMarker(Rosegarden::timeT)),
+            this, SLOT(slotSetPointer(Rosegarden::timeT)));
+
     plugAccelerators(m_markerEditor, m_markerEditor->getAccelerators());
 
     m_markerEditor->show();
 }
+
+void
+RosegardenGUIApp::slotSetPointer(Rosegarden::timeT t)
+{
+    m_doc->setPointerPosition(t);
+}
+
 
 void
 RosegardenGUIApp::slotMarkerEditorClosed()

@@ -1200,7 +1200,16 @@ std::string Composition::toXmlString()
 
     composition << "<metadata>" << endl
 		<< m_metadata.toXmlString() << endl
-		<< "</metadata>" << endl;
+		<< "</metadata>" << endl << endl;
+
+    composition << "<markers>" << endl;
+    for (markerconstiterator mIt = m_markers.begin();
+         mIt != m_markers.end(); ++mIt)
+    {
+        composition << (*mIt)->toXmlString();
+    }
+    composition << "</markers>" << endl;
+                
 
 #if (__GNUC__ < 3)
     composition << "</composition>" << std::ends;
@@ -1335,22 +1344,23 @@ void breakpoint()
     //std::cerr << "breakpoint()\n";
 }
 
-void 
-Composition::addMarker(Rosegarden::Marker *marker)
+// Just empty out the markers
+void
+Composition::clearMarkers()
 {
-    /*
-    markeriterator it = m_markers.begin();
+    markerconstiterator it = m_markers.begin();
 
     for (; it != m_markers.end(); ++it)
     {
-        if (marker->getTime() == (*it)->getTime())
-        {
-            delete (*it);
-            (*it) = marker;
-            return;
-        }
+        delete *it;
     }
-    */
+
+    m_markers.clear();
+}
+
+void 
+Composition::addMarker(Rosegarden::Marker *marker)
+{
     m_markers.push_back(marker);
     updateRefreshStatuses();
 }

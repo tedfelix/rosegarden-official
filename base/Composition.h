@@ -174,6 +174,7 @@ public:
     void addMarker(Rosegarden::Marker *marker);
     bool detachMarker(Rosegarden::Marker *marker);
     bool isMarkerAtPosition(Rosegarden::timeT time) const;
+    void clearMarkers();
 
     //////
     //

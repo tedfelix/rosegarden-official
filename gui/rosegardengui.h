@@ -819,6 +819,15 @@ public slots:
      */
     void slotSetPointerPosition(Rosegarden::timeT t);
 
+    /*
+     * Ugh, another version - this is the one we can use safely
+     * when playing or stopped that actually moves the pointer
+     * through the Document interface.  This is probably the
+     * only version we need now but the whole pointer situation
+     * is so confused it'll take a while to clear it out.
+     */
+    void slotSetPointer(Rosegarden::timeT t);
+
     /**
      * Set the pointer position and start playing (from LoopRuler)
      */

@@ -25,6 +25,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
                      Instrument.C \
                      LayoutEngine.C \
                      Lock.C \
+                     Marker.C \
                      MidiDevice.C \
                      MidiProgram.C \
                      MidiTypes.C \

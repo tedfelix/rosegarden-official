@@ -33,6 +33,7 @@
 #include <qspinbox.h>
 
 #include "Composition.h"
+#include "Event.h" // for timeT definition
 
 class RosegardenGUIDoc;
 class KCommand;
@@ -100,10 +101,11 @@ public slots:
     void slotDeleteAll();
     void slotClose();
     void slotEdit(QListViewItem *);
+    void slotItemClicked(QListViewItem *);
 
 signals:
     void closing();
-
+    void jumpToMarker(Rosegarden::timeT);
 
 protected:
     virtual void closeEvent(QCloseEvent *);

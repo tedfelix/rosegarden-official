@@ -196,8 +196,10 @@ public:
 
     virtual bool event(QEvent *e);
 
-    // moved from protected for the moment [rwb]
-    void resetMetronomeMmapper();
+    // test method for the moment
+    void metronomeChanged(Rosegarden::InstrumentId id,
+                          bool playMetronome,
+                          bool recordMetronome);
     
 public slots:
     // Empty the m_clearToSend flag
@@ -222,6 +224,7 @@ protected:
 
     void resetCompositionMmapper();
     void resetControlBlockMmapper();
+    void resetMetronomeMmapper();
     
     //--------------- Data members ---------------------------------
 

@@ -125,6 +125,9 @@ MarkerEditorDialog::MarkerEditorDialog(QWidget *parent,
     connect(m_listView, SIGNAL(doubleClicked(QListViewItem *)),
             SLOT(slotEdit(QListViewItem *)));
 
+    connect(m_listView, SIGNAL(pressed(QListViewItem *)),
+            this, SLOT(slotItemClicked(QListViewItem *)));
+
     // Highlight all columns - enable extended selection mode
     //
     m_listView->setAllColumnsShowFocus(true);
@@ -445,6 +448,20 @@ MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
     layout->addWidget(new QLabel(i18n("Description:"), frame), 2, 0);
     m_desEdit = new QLineEdit(des, frame);
     layout->addWidget(m_desEdit, 2, 1);
+}
+
+void
+MarkerEditorDialog::slotItemClicked(QListViewItem *item)
+{
+    RG_DEBUG << "MarkerEditorDialog::slotItemClicked" << endl;
+
+    if (item)
+    {
+        RG_DEBUG << "MarkerEditorDialog::slotItemClicked - "
+                 << "jump to marker at " << item->text(0).toInt() << endl;
+
+        emit jumpToMarker(Rosegarden::timeT(item->text(0).toInt()));
+    }
 }
 
 const char* const MarkerEditorDialog::MarkerEditorConfigGroup = "Marker Editor";

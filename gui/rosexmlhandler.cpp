@@ -1484,7 +1484,36 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
-    } else {
+    } else if (lcName == "markers") {
+
+        if (!m_inComposition)
+        {
+            m_errorString = "Found Markers outside Composition";
+            return false;
+        }
+
+        // clear down any markers
+        getComposition().clearMarkers();
+
+    } else if (lcName == "marker") {
+        if (!m_inComposition)
+        {
+            m_errorString = "Found Marker outside Composition";
+            return false;
+        }
+        int time = atts.value("time").toInt();
+        QString name = atts.value("name");
+        QString descr = atts.value("description");
+
+        Rosegarden::Marker *marker = 
+            new Rosegarden::Marker(time,
+                                   qstrtostr(name),
+                                   qstrtostr(descr));
+
+        getComposition().addMarker(marker);
+    }
+    else
+    {
         RG_DEBUG << "RoseXmlHandler::startElement : Don't know how to parse this : " << qName << endl;
     }
 
