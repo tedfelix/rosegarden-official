@@ -171,6 +171,7 @@ protected slots:
 protected:
     bool addFile(const KURL& kurl);
     bool isSelectedTrackAudio();
+    bool isSelectedSegmentMidi() const;
     void selectFileListItemNoSignal(QListViewItem*);
     void enableButtons();
 

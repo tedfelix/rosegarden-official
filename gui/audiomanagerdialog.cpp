@@ -44,6 +44,7 @@
 #include "rosegardenguiview.h"
 #include "rosestrings.h"
 #include "rosedebug.h"
+#include "audiocommands.h"
 
 #include "WAVAudioFile.h"
 
@@ -327,6 +328,7 @@ AudioManagerDialog::slotPopulateFileList()
     m_playButton->setDisabled(true);
     m_renameButton->setDisabled(true);
     m_insertButton->setDisabled(true);
+    m_distributeMidiButton->setDisabled(true);
     m_deleteAllButton->setDisabled(true);
     m_exportButton->setDisabled(true);
 
@@ -749,6 +751,7 @@ AudioManagerDialog::enableButtons()
     m_deleteButton->setEnabled(true);
     m_renameButton->setEnabled(true);
     m_insertButton->setEnabled(isSelectedTrackAudio());
+    m_distributeMidiButton->setEnabled(isSelectedSegmentMidi());
     m_deleteAllButton->setEnabled(true);
     m_exportButton->setDisabled(true);
 
@@ -1158,46 +1161,62 @@ AudioManagerDialog::isSelectedTrackAudio()
     
 }
 
+bool
+AudioManagerDialog::isSelectedSegmentMidi() const
+{
+    QList<RosegardenGUIView>& viewList = m_doc->getViewList();
+    RosegardenGUIView *w = 0;
+    Rosegarden::SegmentSelection selection;
+
+    for(w = viewList.first(); w != 0; w = viewList.next())
+        selection = w->getSelection();
+
+
+    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
+         i != selection.end(); ++i)
+    {
+        if ((*i)->getType() == Rosegarden::Segment::Internal)
+            return true;
+    }
+
+    return false;
+}
+
+
 void
 AudioManagerDialog::slotDistributeOnMidiSegment()
 {
     RG_DEBUG << "AudioManagerDialog::slotDistributeOnMidiSegment" << endl;
 
-    Rosegarden::Composition &comp = m_doc->getComposition();
+    //Rosegarden::Composition &comp = m_doc->getComposition();
 
     QList<RosegardenGUIView>& viewList = m_doc->getViewList();
     RosegardenGUIView *w = 0;
     Rosegarden::SegmentSelection selection;
 
     for(w = viewList.first(); w != 0; w = viewList.next())
-    {
         selection = w->getSelection();
-    }
 
-    // Store the insert times in a local vector
-    //
-    std::vector<Rosegarden::timeT> insertTimes;
-
-    for (Rosegarden::SegmentSelection::iterator i = selection.begin();
-         i != selection.end(); ++i)
+    AudioFile *audioFile = getCurrentSelection();
+    if (audioFile)
     {
-        // For MIDI (Internal) Segments only of course
-        //
-        if ((*i)->getType() == Rosegarden::Segment::Internal)
-        {
-            for (Segment::iterator it = (*i)->begin(); it != (*i)->end(); ++it)
-            {
-                insertTimes.push_back((*it)->getAbsoluteTime());
-            }
-        }
-    }
+        DistributeAudioCommand *command =
+            new DistributeAudioCommand(&m_doc->getComposition(),
+                                       selection,
+                                       audioFile);
+        getCommandHistory()->addCommand(command);
 
-    for (unsigned int i = 0; i < insertTimes.size(); ++i)
+    }
+    else
     {
         RG_DEBUG << "AudioManagerDialog::slotDistributeOnMidiSegment - "
-                 << "insert audio segment at " << insertTimes[i]
-                 << endl;
+                 << "no audio file selected" << endl;
     }
+
+    selection.clear();
+
+    for(w = viewList.first(); w != 0; w = viewList.next())
+        w->slotSetSelectedSegments(selection);
 }
 
 
