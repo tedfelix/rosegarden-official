@@ -177,7 +177,6 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
                  parent, name),
       m_bankEditor(bankEditor),
       m_mainFrame(new QFrame(this)),
-      m_bankName(new QLabel(m_mainFrame)),
       m_percussion(new QCheckBox(m_mainFrame)),
       m_msb(new QSpinBox(m_mainFrame)),
       m_lsb(new QSpinBox(m_mainFrame)),
@@ -191,29 +190,17 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
                                               6,  // cols
                                               2); // margin
  
-
-
-    /*
-    gridLayout->addWidget(new QLabel(i18n("Bank Name"), m_mainFrame),
-                          0, 0, AlignLeft);
-                          */
-    QFont boldFont = m_bankName->font();
-    boldFont.setBold(true);
-    m_bankName->setFont(boldFont);
-
-    gridLayout->addMultiCellWidget(m_bankName, 0, 0, 0, 1, AlignLeft);
-
     gridLayout->addWidget(new QLabel(i18n("Percussion"), m_mainFrame),
-                          1, 0, AlignLeft);
-    gridLayout->addWidget(m_percussion, 1, 1, AlignLeft);
+                          0, 0, AlignLeft);
+    gridLayout->addWidget(m_percussion, 0, 1, AlignLeft);
     connect(m_percussion, SIGNAL(clicked()),
 	    this, SLOT(slotNewPercussion()));
 
     gridLayout->addWidget(new QLabel(i18n("MSB Value"), m_mainFrame),
-                          2, 0, AlignLeft);
+                          1, 0, AlignLeft);
     m_msb->setMinValue(0);
     m_msb->setMaxValue(127);
-    gridLayout->addWidget(m_msb, 2, 1, AlignLeft);
+    gridLayout->addWidget(m_msb, 1, 1, AlignLeft);
 
     QToolTip::add(m_msb,
             i18n("Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
@@ -225,10 +212,10 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
             this, SLOT(slotNewMSB(int)));
 
     gridLayout->addWidget(new QLabel(i18n("LSB Value"), m_mainFrame),
-                          3, 0, AlignLeft);
+                          2, 0, AlignLeft);
     m_lsb->setMinValue(0);
     m_lsb->setMaxValue(127);
-    gridLayout->addWidget(m_lsb, 3, 1, AlignLeft);
+    gridLayout->addWidget(m_lsb, 2, 1, AlignLeft);
 
     connect(m_lsb, SIGNAL(valueChanged(int)),
             this, SLOT(slotNewLSB(int)));
@@ -239,7 +226,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
                                         Qt::Horizontal,
                                         i18n("Librarian"),
                                         m_mainFrame);
-    gridLayout->addMultiCellWidget(groupBox, 0, 3, 3, 5);
+    gridLayout->addMultiCellWidget(groupBox, 0, 2, 3, 5);
 
 
     new QLabel(i18n("Name"), groupBox);
@@ -344,8 +331,9 @@ MidiProgramsEditor::clearAll()
 
     for(unsigned int i = 0; i < m_programNames.size(); ++i)
         m_programNames[i]->clear();
-    
-    m_bankName->clear();
+
+    setTitle(i18n("Bank and Program details"));
+
     m_percussion->setChecked(false);
     m_msb->setValue(0);
     m_lsb->setValue(0);
@@ -664,7 +652,7 @@ MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
 void
 MidiProgramsEditor::setBankName(const QString& s)
 {
-    m_bankName->setText(s);
+    setTitle(s);
 }
 
 void MidiProgramsEditor::blockAllSignals(bool block)
@@ -1420,6 +1408,19 @@ BankEditorDialog::slotReset()
     resetProgramList();
     m_programEditor->resetMSBLSB();
     m_programEditor->populateBank(m_listView->currentItem());
+
+    MidiDeviceListViewItem* deviceItem = getParentDeviceItem
+	(m_listView->currentItem());
+    if (deviceItem) {
+	Rosegarden::MidiDevice *device = getMidiDevice(deviceItem);
+	m_variationToggle->setChecked(device->getVariationType() !=
+				      Rosegarden::MidiDevice::NoVariations);
+	m_variationCombo->setEnabled(m_variationToggle->isChecked());
+	m_variationCombo->setCurrentItem
+	    (device->getVariationType() ==
+	     Rosegarden::MidiDevice::VariationFromLSB ? 0 : 1);
+    }
+
     updateDialog();
 
     setModified(false);

@@ -155,7 +155,6 @@ protected:
 
     QFrame                   *m_mainFrame;
 
-    QLabel                   *m_bankName;
     QCheckBox                *m_percussion;
     QSpinBox                 *m_msb;
     QSpinBox                 *m_lsb;
