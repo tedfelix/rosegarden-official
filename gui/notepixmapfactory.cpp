@@ -1735,10 +1735,10 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
     
     if      (dy >  nbh * 4) my2 -= nbh;
     else if (dy < -nbh * 4) my1 -= nbh;
-
+/*!!!
     if      (dy >  length / 2) my1 += nbh / 2;
     else if (dy < -length / 2) my2 += nbh / 2;
-    
+*/
     if      (my1 > my2 + nbh) my1 = my2 + nbh;
     else if (my2 > my1 + nbh) my2 = my1 + nbh;
     
