@@ -38,10 +38,6 @@
 #endif // HAVE_LIBLRDF
 
 static pthread_mutex_t _mappedObjectContainerLock;
-extern "C" {
-    /* Found in NPTLWorkaround.c */
-    void initRecursiveMutex(pthread_mutex_t *);
-}
 
 
 // These four functions are stolen and adapted from Qt3 qvaluevector.h
@@ -302,7 +298,14 @@ MappedStudio::MappedStudio():MappedObject(0,
                                           true),
                              m_runningObjectId(1)
 {
-    initRecursiveMutex(&_mappedObjectContainerLock);
+    pthread_mutexattr_t attr;
+    pthread_mutexattr_init(&attr);
+#ifdef PTHREAD_MUTEX_RECURSIVE
+    pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+#else
+    pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
+#endif
+    pthread_mutex_init(&_mappedObjectContainerLock, &attr);
 }
 
 MappedStudio::~MappedStudio()
