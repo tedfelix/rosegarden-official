@@ -1,0 +1,219 @@
+
+#heading {
+    background: #ccd4a0;
+    width: 100%;
+    height: 104px;
+}
+
+#nav {
+    position: absolute;
+    left: 0px;
+    top: 110px;
+    width: 160px;
+    height: 90%;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 0px;
+    text-align: top;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+}
+
+#main {
+    position: absolute;
+    left: 205px;
+    top: 92px;
+    width: auto;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-right: 20px;
+} 
+
+.donate {
+    float: right;
+    width: 16em;
+    margin-top: 30px;
+    margin-left: 20px;
+    margin-right: 0px;
+    margin-bottom: 20px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    border-width: medium;
+    border-color: #ccd4a0;
+    border-style: solid;
+    font-style: normal;
+    font-weight: medium;
+    font-family: sans-serif;
+    font-size: 0.7em;
+}
+
+.paypal {
+    margin-top: 6px;
+    text-align: center;    
+    margin-bottom: 6px;
+}
+    
+
+#heading {
+    background: #ccd4a0;
+}
+
+body {
+    background: #ffffff;
+    background-image: url("bg.png");
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+}
+
+body,p,td,ul,ol,li,blockquote { 
+    font-size: 1em;
+    font-style: normal;
+    font-family: georgia, "book antiqua", palatino, garamond, serif; 
+}
+
+h1,h2,h3,h4,h5,h6,h7 { 
+    font-weight: bold;
+    font-style: normal;
+    font-family: sans-serif;
+}
+
+h1,h2,h3 { 
+    margin-top: 30px;
+}
+
+h4,h5,h6,h7 { 
+    margin-top: 20px;
+}
+
+code {
+    font-size: 0.9em;
+    font-style: normal;
+    font-family: "andale mono", "monotype.com", lucidatypewriter, monospaced;
+}
+
+h4,h5,h6,h7 {
+    margin-bottom: 0px;
+}
+
+.faqanswer {
+    margin-top: 1.8em;
+}
+
+.faqtoc {
+    font-weight: medium;
+}
+
+.faqtoc {
+    font-weight: medium;
+}
+
+.faqheader {
+    font-weight: bold;
+    color: #000000;
+}
+
+.navselected {
+    font-size: 0.9em;
+    margin-right: 0.4em;
+    font-family: sans-serif;
+    font-weight: bold;
+    color: #000000;
+}
+
+.navunselected {
+    font-size: 0.9em;
+    margin-right: 0.4em;
+    font-family: sans-serif;
+    font-weight: bold;
+    color: #e3e8c7;
+}
+
+.navlink {
+    font-size: 0.9em;
+    padding-left: 0.8em;
+    margin-left: 0.6em;
+    margin-top: 0.5em;
+    font-family: sans-serif;
+    font-weight: bold;
+    color: #ba2c2c;
+}
+
+.navtitle {
+    font-size: 0.9em;
+    padding-left: 0.8em;
+    margin-left: 0.6em;
+    margin-top: 1.1em;
+    margin-bottom: 0.7em;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+small,.navtext {
+    font-size: 0.8em;
+    font-family: sans-serif;
+    margin-bottom: 8px;
+}
+
+a {
+    color: #ba2c2c; 
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.toc3>a {
+    font-weight: normal;
+    font-style: italic;
+    color: #000000;
+}
+
+.toc3>a:visited {
+    color: #000000;
+}
+
+.toc1,.toc2,.toc3 {
+    padding-top: 0.4em;
+}
+
+.toc1,.toc2,.toc3,.toc4 {
+    padding-bottom: 0.6em;
+}
+
+.toc4 {
+    padding-left: 2em;
+}
+
+.toc4 {
+#    font-size: smaller;
+}
+
+.oddcontent,.evencontent {
+    margin-top: 1.4em;
+}
+
+a:active {
+    color: #00aa00;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #64684f;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+p,li {
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+li.close {
+    margin-top: 0px;
+}
