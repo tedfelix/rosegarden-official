@@ -3123,7 +3123,11 @@ void NotationView::refreshSegment(Segment *segment,
 			    KTmpStatusMsg::getDefaultId());
 
     Event::dumpStats(std::cerr);
-    slotSetInsertCursorPosition(getInsertionTime(), false, false);
+    if (m_deferredCursorMove == NoCursorMoveNeeded) {
+	slotSetInsertCursorPosition(getInsertionTime(), false, false);
+    } else {
+	doDeferredCursorMove();
+    }
     slotSetPointerPosition(getDocument()->getComposition().getPosition(), false);
 
     if (m_currentEventSelection &&

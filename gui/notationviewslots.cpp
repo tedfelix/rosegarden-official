@@ -1995,6 +1995,8 @@ void
 NotationView::slotSetInsertCursorPosition(double x, int y, bool scroll,
                                           bool updateNow)
 {
+    NOTATION_DEBUG << "NotationView::slotSetInsertCursorPosition: x " << x << ", y " << y << ", scroll " << scroll << ", now " << updateNow << endl;
+
     slotSetCurrentStaff(x, y);
 
     NotationStaff *staff = m_staffs[m_currentStaff];
@@ -2014,6 +2016,8 @@ NotationView::slotSetInsertCursorPosition(double x, int y, bool scroll,
 void
 NotationView::slotSetInsertCursorPosition(timeT t, bool scroll, bool updateNow)
 {
+    NOTATION_DEBUG << "NotationView::slotSetInsertCursorPosition: time " << t << ", scroll " << scroll << ", now " << updateNow << endl;
+
     m_insertionTime = t;
     if (scroll) {
         m_deferredCursorMove = CursorMoveAndMakeVisible;
@@ -2027,6 +2031,8 @@ void
 NotationView::slotSetInsertCursorAndRecentre(timeT t, double cx, int,
                                              bool updateNow)
 {
+    NOTATION_DEBUG << "NotationView::slotSetInsertCursorAndRecentre: time " << t << ", cx " << cx << ", now " << updateNow << ", contentsx" << getCanvasView()->contentsX() << ", w " << getCanvasView()->visibleWidth() << endl;
+
     m_insertionTime = t;
 
     // We only do the scroll bit if cx is in the right two-thirds of
