@@ -673,7 +673,7 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
     x1 = m_left + m_noteBodyWidth + m_noteBodyWidth / 5 + 1;
     y = m_above + m_noteBodyHeight / 2;
     
-    int offset = m_noteBodyHeight + 1;
+    int offset = m_noteBodyHeight + getLegerLineThickness();
     int legerLines = params.m_legerLines;
     
     if (legerLines < 0) {
@@ -701,7 +701,7 @@ NotePixmapFactory::drawLegerLines(const NotePixmapParameters &params)
 	    y += offset/2;
 	    if (legerLines < 0) {
 		--y;
-	    }
+/	    }
 	}                
     }
 }
@@ -2086,7 +2086,7 @@ int NotePixmapFactory::getNoteBodyHeight(Note::Type type)
 }
 
 int NotePixmapFactory::getLineSpacing() const {
-    return m_font->getSize() + 1;
+    return m_font->getSize() + getStaffLineThickness();
 }
 
 int NotePixmapFactory::getAccidentalWidth(const Accidental &a) const {
