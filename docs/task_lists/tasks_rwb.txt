@@ -1,6 +1,6 @@
 
-Task list from 18/19th August meetings
-======================================
+Task list from 18/19th August meetings (and a few more added since then)
+=======================================================================
 
 Aim: "working sequencer, framework for instrument management".
 
@@ -34,14 +34,27 @@ References in round brackets are to 0.1_planned_features.txt.
 
  7. Tightening up Sequencer loop - make playback more efficient [DONE]
 
- 8. Ensuring that Tempo is used correctly throughout Editor and Sequencer.
+ 8. Ensuring that Tempo is used correctly throughout Editor and Sequencer. [DONE]
 
 
-Bugs
-====
+Known Bugs
+==========
 
  - occasional gui/sequencer hangs while DCOP call in progress
 
  - playback currently stumbling and poor
 
  - sending All Notes Off to aRTS when they're already queued?
+
+
+Post 0.1 TO-DOs
+===============
+
+o Handle Meta Events at the Editor and Midi levels - write then out to file
+
+o Meaningful Sys Ex handling
+
+o Recording mechanism
+
+o Transport GUI with time, buttons and more features
+

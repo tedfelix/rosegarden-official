@@ -122,6 +122,7 @@ namespace Rosegarden
     bool skipToNextTrack(std::ifstream *midiFile);
     void intToMidiBytes(std::ofstream* midiFile, int number);
     void longToMidiBytes(std::ofstream* midiFile, const unsigned long &number);
+    void longToBuffer(std::string &buffer, const unsigned long &number);
 
   };
 

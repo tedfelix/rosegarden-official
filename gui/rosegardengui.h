@@ -401,8 +401,6 @@ public slots:
      */
     void sequencerExited(KProcess*);
 
-private:
-
     /**
      * Start the sequencer auxiliary process
      * (built in the 'sequencer' directory)
@@ -410,6 +408,9 @@ private:
      * @see sequencerExited()
      */
     bool launchSequencer();
+
+private:
+
 
     /**
      * the configuration object of the application

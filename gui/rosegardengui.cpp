@@ -83,8 +83,6 @@ RosegardenGUIApp::RosegardenGUIApp()
 
     m_selectDefaultTool->activate();
 
-    launchSequencer();
-
 //     ///////////////////////////////////////////////////////////////////
 //     // disable menu and toolbar items at startup
 //     disableCommand(ID_FILE_SAVE);
@@ -937,10 +935,8 @@ void RosegardenGUIApp::play()
   if (m_transportStatus == PLAYING)
     return;
 
-/*   Allow ourselves to use an externally controlled Sequencer process for the moment
   if (!m_sequencerProcess && !launchSequencer())
       return;
-*/
 
   // write the start position argument to the outgoing stream
   //
@@ -1136,6 +1132,12 @@ void RosegardenGUIApp::editAllTracks()
 bool RosegardenGUIApp::launchSequencer()
 {
     if (m_sequencerProcess) return true;
+
+    // If we've already registered a sequencer then we can use that one
+    //
+    if (kapp->dcopClient()->
+        isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
+      return true;
 
     KTmpStatusMsg msg(i18n("Starting the sequencer..."), statusBar());
     

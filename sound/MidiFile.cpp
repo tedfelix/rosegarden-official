@@ -766,8 +766,11 @@ MidiFile::convertToMidi(const Rosegarden::Composition &comp)
   _midiComposition.clear();
 
   // Insert the Rosegarden Signature Track here and any relevant
-  // file META information
+  // file META information - this will get written out just like
+  // any other MIDI track.
   //
+  //
+
 
   // Our Composition to MIDI timing factor
   //
@@ -891,6 +894,27 @@ MidiFile::longToMidiBytes(std::ofstream* midiFile, const unsigned long &number)
   *midiFile << (MidiByte) lower2;
 
 }
+
+void
+MidiFile::longToBuffer(std::string &buffer, const unsigned long &number)
+{
+  MidiByte upper1;
+  MidiByte lower1;
+  MidiByte upper2;
+  MidiByte lower2;
+
+  upper1 = (number & 0xff000000) >> 24;
+  lower1 = (number & 0x00ff0000) >> 16;
+  upper2 = (number & 0x0000ff00) >> 8;
+  lower2 = (number & 0x000000ff);
+
+  buffer += upper1;
+  buffer += lower1;
+  buffer += upper2;
+  buffer += lower2;
+}
+
+
  
 
 // Write out the MIDI file header
@@ -917,7 +941,7 @@ MidiFile::writeHeader(std::ofstream* midiFile)
   // Number of Tracks we're writing and add one for
   // a first Data track.
   //
-  intToMidiBytes(midiFile, _numberOfTracks + 1);
+  intToMidiBytes(midiFile, _numberOfTracks);
 
   // Timing Division
   //
@@ -944,12 +968,18 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
   MidiTrackIterator midiEvent;
   int lastRosegardenTime;
 
+  // Our timing factor here converts into the MIDI _timingDivision
+  //
+  float timingFactor = 0.0;
+  timingFactor = (float) _timingDivision /
+                 (float) Note(Note::Crotchet).getDuration();
+
   for ( midiEvent = (_midiComposition[trackNumber].begin());
         midiEvent != (_midiComposition[trackNumber].end()); ++midiEvent )
   {
-    // Write the time
-    
-    
+    // Write the time to the buffer
+    //
+    longToBuffer(trackBuffer, midiEvent->time());
 
     if (midiEvent->isMeta())
     {
@@ -991,10 +1021,11 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
   // ..length of buffer..
   //
   longToMidiBytes(midiFile, (long)trackBuffer.length());
+  cout << "LENGTH of BUFFER = " << trackBuffer.length() << endl;
 
   // ..then the buffer itself..
   //
-  *midiFile << trackBuffer.c_str();
+  *midiFile << trackBuffer;
 
   return(true);
 }

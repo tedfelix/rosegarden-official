@@ -77,6 +77,10 @@ int main(int argc, char *argv[])
     app.dcopClient()->registerAs(app.name(), false);
     app.dcopClient()->setDefaultObject("RosegardenGUIIface");
 
+    // Check for sequencer and launch if needed
+    //
+    rosegardengui->launchSequencer();
+
     return app.exec();
 
 }  

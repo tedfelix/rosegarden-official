@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
   KApplication app;
   RosegardenSequencerApp *roseSeq = 0;
 
+
   if (app.isRestored())
   {
     RESTORE(RosegardenSequencerApp);
