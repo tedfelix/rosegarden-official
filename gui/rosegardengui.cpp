@@ -887,6 +887,8 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     delete m_view;
     initView();
 
+    newDocument->clearModifiedStatus();
+
     emit documentChanged(newDocument);
 }
 
