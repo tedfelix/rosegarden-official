@@ -26,6 +26,7 @@
 #include "Segment.h"
 
 #include <iostream>
+#include <cassert>
 
 namespace Rosegarden 
 {
