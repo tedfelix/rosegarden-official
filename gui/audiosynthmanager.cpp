@@ -34,6 +34,10 @@
 #include "rosegardenguidoc.h"
 #include "rosedebug.h"
 
+#ifdef HAVE_LIBLO
+#include "audiopluginoscgui.h"
+#endif
+
 #include "Studio.h"
 
 
@@ -41,11 +45,18 @@ const char *const SynthPluginManagerDialog::SynthPluginManagerConfigGroup =
 "Synth Plugin Manager";
 
 SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
-						   RosegardenGUIDoc *doc) :
+						   RosegardenGUIDoc *doc
+#ifdef HAVE_LIBLO
+						   , AudioPluginOSCGUIManager *guiManager
+#endif
+    ) :
     KMainWindow(parent, "synthpluginmanagerdialog"),
     m_document(doc),
     m_studio(&doc->getStudio()),
     m_pluginManager(doc->getPluginManager())
+#ifdef HAVE_LIBLO
+    , m_guiManager(guiManager)
+#endif
 {
     setCaption(i18n("Manage Synth Plugins"));
 
@@ -54,7 +65,7 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
 
     QVBoxLayout *mainLayout = new QVBoxLayout(mainBox, 10, 10);
 
-    QGroupBox *groupBox = new QGroupBox(1, Horizontal, i18n("Plugins"), mainBox);
+    QGroupBox *groupBox = new QGroupBox(1, Horizontal, i18n("Synth plugins"), mainBox);
     mainLayout->addWidget(groupBox);
 
     QFrame *pluginFrame = new QFrame(groupBox);
@@ -81,7 +92,9 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
 	Rosegarden::Instrument *instrument = m_studio->getInstrumentById(id);
 	if (!instrument) continue;
 
-	pluginLayout->addWidget(new QLabel(instrument->getPresentationName().c_str(),
+//	pluginLayout->addWidget(new QLabel(instrument->getPresentationName().c_str(),
+//					   pluginFrame), i, 0);
+	pluginLayout->addWidget(new QLabel(QString("%1").arg(i + 1),
 					   pluginFrame), i, 0);
 
 	Rosegarden::AudioPluginInstance *plugin = instrument->getPlugin
@@ -115,6 +128,20 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
 	pluginLayout->addWidget(pluginCombo, i, 1);
 
 	m_synthCombos.push_back(pluginCombo);
+
+	QPushButton *controlsButton = new QPushButton(i18n("Controls"), pluginFrame);
+	pluginLayout->addWidget(controlsButton, i, 2);
+	connect(controlsButton, SIGNAL(clicked()), this, SLOT(slotControlsButtonClicked()));
+	m_controlsButtons.push_back(controlsButton);
+
+#ifdef HAVE_LIBLO
+	QPushButton *guiButton = new QPushButton(i18n("Editor >>"), pluginFrame);
+	pluginLayout->addWidget(guiButton, i, 3);
+	guiButton->setEnabled(m_guiManager->hasGUI
+			      (id, Rosegarden::Instrument::SYNTH_PLUGIN_POSITION));
+	connect(guiButton, SIGNAL(clicked()), this, SLOT(slotGUIButtonClicked()));
+	m_guiButtons.push_back(guiButton);
+#endif
     }
 
     QFrame* btnBox = new QFrame(mainBox);
@@ -150,6 +177,30 @@ SynthPluginManagerDialog::~SynthPluginManagerDialog()
 }
 
 void
+SynthPluginManagerDialog::updatePlugin(Rosegarden::InstrumentId id, int plugin)
+{
+    if (id < Rosegarden::SoftSynthInstrumentBase) return;
+    int row = id - Rosegarden::SoftSynthInstrumentBase;
+    if (row >= m_synthCombos.size()) return;
+
+    KComboBox *comboBox = m_synthCombos[row];
+
+    for (unsigned int i = 0; i < m_synthPlugins.size(); ++i) {
+	if (m_synthPlugins[i] == plugin) {
+	    blockSignals(true);
+	    comboBox->setCurrentItem(i);
+	    blockSignals(false);
+	    return;
+	}
+    }
+
+    blockSignals(true);
+    comboBox->setCurrentItem(0);
+    blockSignals(false);
+    return;
+}
+
+void
 SynthPluginManagerDialog::slotClose()
 {
     close();
@@ -160,6 +211,48 @@ SynthPluginManagerDialog::closeEvent(QCloseEvent *e)
 {
     emit closing();
     KMainWindow::closeEvent(e);
+}
+
+void
+SynthPluginManagerDialog::slotGUIButtonClicked()
+{
+    const QObject *s = sender();
+
+    int instrumentNo = -1;
+
+    for (unsigned int i = 0; i < m_guiButtons.size(); ++i) {
+	if (s == m_guiButtons[i]) instrumentNo = i;
+    }
+
+    if (instrumentNo == -1)  {
+	RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotGUIButtonClicked: unknown sender" << endl;
+	return;
+    }	
+    
+    Rosegarden::InstrumentId id = Rosegarden::SoftSynthInstrumentBase + instrumentNo;
+    
+    emit showPluginGUI(id, Rosegarden::Instrument::SYNTH_PLUGIN_POSITION);
+}
+
+void
+SynthPluginManagerDialog::slotControlsButtonClicked()
+{
+    const QObject *s = sender();
+
+    int instrumentNo = -1;
+
+    for (unsigned int i = 0; i < m_controlsButtons.size(); ++i) {
+	if (s == m_controlsButtons[i]) instrumentNo = i;
+    }
+
+    if (instrumentNo == -1)  {
+	RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotControlsButtonClicked: unknown sender" << endl;
+	return;
+    }	
+    
+    Rosegarden::InstrumentId id = Rosegarden::SoftSynthInstrumentBase + instrumentNo;
+    
+    emit showPluginDialog(this, id, Rosegarden::Instrument::SYNTH_PLUGIN_POSITION);
 }
 
 void
@@ -230,6 +323,14 @@ SynthPluginManagerDialog::slotPluginChanged(int index)
 	    }
 	}
     }
+
+#ifdef HAVE_LIBLO
+    if (instrumentNo < m_guiButtons.size()) {
+	m_guiButtons[instrumentNo]->setEnabled
+	    (m_guiManager->hasGUI
+	     (id, Rosegarden::Instrument::SYNTH_PLUGIN_POSITION));
+    }
+#endif
     
     emit pluginSelected(id, Rosegarden::Instrument::SYNTH_PLUGIN_POSITION,
 			m_synthPlugins[index]);

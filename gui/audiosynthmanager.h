@@ -24,10 +24,16 @@
 #include <kmainwindow.h>
 #include <vector>
 
+#include "config.h"
 #include "Instrument.h"
 
 class RosegardenGUIDoc;
 class KComboBox;
+class QPushButton;
+
+#ifdef HAVE_LIBLO
+class AudioPluginOSCGUIManager;
+#endif
 
 namespace Rosegarden {
     class Studio;
@@ -41,17 +47,27 @@ class SynthPluginManagerDialog : public KMainWindow
 
 public:
     SynthPluginManagerDialog(QWidget *parent,
-			     RosegardenGUIDoc *doc);
+			     RosegardenGUIDoc *doc
+#ifdef HAVE_LIBLO
+			     , AudioPluginOSCGUIManager *guiManager
+#endif
+	);
 
     virtual ~SynthPluginManagerDialog();
+
+    void updatePlugin(Rosegarden::InstrumentId id, int plugin);
 
 signals:
     void closing();
     void pluginSelected(Rosegarden::InstrumentId, int pluginIndex, int plugin);
+    void showPluginDialog(QWidget *, Rosegarden::InstrumentId, int pluginIndex);
+    void showPluginGUI(Rosegarden::InstrumentId, int pluginIndex);
 
 protected slots:
     void slotClose();
     void slotPluginChanged(int index);
+    void slotControlsButtonClicked();
+    void slotGUIButtonClicked();
 
 protected:
     virtual void closeEvent(QCloseEvent *);
@@ -62,6 +78,12 @@ protected:
     Rosegarden::AudioPluginManager *m_pluginManager;
     std::vector<int> m_synthPlugins;
     std::vector<KComboBox *> m_synthCombos;
+    std::vector<QPushButton *> m_controlsButtons;
+    std::vector<QPushButton *> m_guiButtons;
+
+#ifdef HAVE_LIBLO
+    AudioPluginOSCGUIManager *m_guiManager;
+#endif
 
     static const char* const SynthPluginManagerConfigGroup;
 };

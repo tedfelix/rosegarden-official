@@ -496,6 +496,19 @@ AudioPluginDialog::slotPluginProgramChanged(const QString &value)
 }
 
 void
+AudioPluginDialog::updatePlugin(int number)
+{
+    for (unsigned int i = 0; i < m_pluginsInList.size(); ++i) {
+	if (m_pluginsInList[i] == number + 1) {
+	    blockSignals(true);
+	    m_pluginList->setCurrentItem(i);
+	    blockSignals(false);
+	    return;
+	}
+    }
+}
+
+void
 AudioPluginDialog::updatePluginPortControl(int port)
 {        
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);

@@ -667,6 +667,7 @@ AudioPluginOSCGUIManager::dispatch()
 
 	    RG_DEBUG << "AudioPluginOSCGUIManager: GUI exiting" << endl;
 	    stopGUI(instrument, position);
+	    m_app->slotPluginGUIExited(instrument, position);
 
 	} else {
 

@@ -1251,6 +1251,7 @@ public slots:
 					int index, QString key, QString value);
     void slotShowPluginGUI(Rosegarden::InstrumentId, int index);
     void slotStopPluginGUI(Rosegarden::InstrumentId, int index);
+    void slotPluginGUIExited(Rosegarden::InstrumentId, int index);
 
 protected:
     /**

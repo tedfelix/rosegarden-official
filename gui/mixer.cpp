@@ -652,12 +652,15 @@ AudioMixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
 
 void
 AudioMixerWindow::slotPluginSelected(Rosegarden::InstrumentId id,
-				int index, int plugin)
+				     int index, int plugin)
 {
     if (id >= (int)Rosegarden::AudioInstrumentBase) {
 
 	FaderRec &rec = m_faders[id];
 	if (!rec.m_populated || !rec.m_pluginBox) return;
+
+	// nowhere to display synth plugin info yet
+	if (index >= rec.m_plugins.size()) return;
 
 	if (plugin == -1) {
 

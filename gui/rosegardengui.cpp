@@ -5180,7 +5180,11 @@ RosegardenGUIApp::slotManageSynths()
 	return;
     }
 
-    m_synthManager = new SynthPluginManagerDialog(this, m_doc);
+    m_synthManager = new SynthPluginManagerDialog(this, m_doc
+#ifdef HAVE_LIBLO
+						  , m_pluginGUIManager
+#endif
+	);
     
     connect(m_synthManager, SIGNAL(closing()),
             this, SLOT(slotSynthPluginManagerClosed()));
@@ -5192,6 +5196,30 @@ RosegardenGUIApp::slotManageSynths()
 	    SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
 	    this,
 	    SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
+
+    // connect up to the instrument parameter box so it can update its label
+    connect(m_synthManager,
+	    SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
+	    m_instrumentParameterBox,
+	    SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
+
+    connect(m_synthManager,
+	    SIGNAL(showPluginDialog(QWidget *, Rosegarden::InstrumentId, int)),
+	    this,
+	    SLOT(slotShowPluginDialog(QWidget *, Rosegarden::InstrumentId, int)));
+
+    connect(m_synthManager,
+	    SIGNAL(showPluginGUI(Rosegarden::InstrumentId, int)),
+	    this,
+	    SLOT(slotShowPluginGUI(Rosegarden::InstrumentId, int)));
+
+    // and to the mixer, if we have it
+    if (m_audioMixer) {
+	connect(m_synthManager,
+		SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
+		m_audioMixer,
+		SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
+    }
 
     m_synthManager->show();
 }
@@ -5247,6 +5275,13 @@ RosegardenGUIApp::slotOpenAudioMixer()
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
 	    m_audioMixer,
 	    SLOT(slotUpdateInstrument(Rosegarden::InstrumentId)));
+
+    if (m_synthManager) {
+	connect(m_synthManager,
+		SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
+		m_audioMixer,
+		SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
+    }
 
     plugAccelerators(m_audioMixer, m_audioMixer->getAccelerators());
 
@@ -5562,6 +5597,10 @@ void
 RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
 				     int index, int plugin)
 {
+    const QObject *s = sender();
+
+    bool fromSynthMgr = (s == m_synthManager);
+
     // It's assumed that ports etc will already have been set up on
     // the AudioPluginInstance before this is invoked.
 
@@ -5690,6 +5729,15 @@ RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
 	     (*portIt)->value);
     }
     
+    if (fromSynthMgr) {
+	int key = (index << 16) + instrumentId;
+	if (m_pluginDialogs[key]) {
+	    m_pluginDialogs[key]->updatePlugin(plugin);
+	}
+    } else if (m_synthManager) {
+	m_synthManager->updatePlugin(instrumentId, plugin);
+    }
+
     // Set modified
     m_doc->slotDocumentModified();
 }
@@ -5884,6 +5932,16 @@ RosegardenGUIApp::slotStopPluginGUI(Rosegarden::InstrumentId instrument,
 #ifdef HAVE_LIBLO
     m_pluginGUIManager->stopGUI(instrument, index);
 #endif
+}
+
+void
+RosegardenGUIApp::slotPluginGUIExited(Rosegarden::InstrumentId instrument,
+				      int index)
+{
+    int key = (index << 16) + instrument;
+    if (m_pluginDialogs[key]) {
+	m_pluginDialogs[key]->guiExited();
+    }
 }
 
 void

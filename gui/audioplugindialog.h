@@ -130,9 +130,11 @@ public:
 
     bool isSynth() { return m_index == int(Instrument::SYNTH_PLUGIN_POSITION); }
 
+    void updatePlugin(int number);
     void updatePluginPortControl(int port);
     void updatePluginProgramControl();
     void updatePluginProgramList();
+    void guiExited() { m_guiShown = false; }
 
 public slots:
     void slotCategorySelected(int);
