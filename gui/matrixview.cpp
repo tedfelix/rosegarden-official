@@ -65,6 +65,7 @@
 #include "zoomslider.h"
 #include "notepixmapfactory.h"
 #include "controlruler.h"
+#include "studiocontrol.h"
 
 #include "rosedebug.h"
 
@@ -142,14 +143,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     if (instr) m_parameterBox->useInstrument(instr);
 
     m_grid->addWidget(m_parameterBox, 2, 0);
-
-    connect(m_parameterBox,
-            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent *)),
-            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent *)));
-
-    connect(m_parameterBox,
-            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument&)),
-            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument&)));
 
     m_snapGrid->setSnapTime(Rosegarden::SnapGrid::SnapToBeat);
 
@@ -904,7 +897,7 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
                                       Rosegarden::RealTime(0, 0),
                                       Rosegarden::RealTime(0, 500000),
                                       Rosegarden::RealTime(0, 0));
-        emit sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
     }
     catch(...) {;}
 
@@ -973,7 +966,7 @@ void MatrixView::playNote(Rosegarden::Event *event)
                                       duration,
                                       Rosegarden::RealTime(0, 0));
 
-        emit sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
     }
     catch(...) {;}
 }
@@ -1007,7 +1000,7 @@ void MatrixView::playNote(const Rosegarden::Segment &segment, int pitch)
                                       Rosegarden::RealTime(0, 500000),
                                       Rosegarden::RealTime(0, 0));
 
-        emit sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
     }
     catch(...) {;}
 }

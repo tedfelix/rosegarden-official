@@ -1,4 +1,4 @@
-0.2 tasks
+0.3 tasks
 =========
 
 o Performance
@@ -6,19 +6,13 @@ o Performance
   - fix MIDI recording [FIXED]
   - audio/MIDI looping and start position
 
-o Make AlsaDriver send NoteOn(0)s as well as NoteOffs [WAITING FOR FEEDBACK]
-
 o Make RG a jack mixer (transport, control client)
 
 o JACK connection management - stereo, panning
 
-o AudioManager and AudioFile commands
-
 o Matrix Hypereditor [HALF COMPLETED]
 
 o Matrix width bug [HALF COMPLETED]
-
-o Matrix position of events at high zoom levels [FIXED with fiddel factor]
 
 o Matrix pointer width
 
@@ -39,9 +33,57 @@ o Matrix tools - cut and join
 
 o MIDI export broken for key sig and SysExs
 
+o Finite audio recording time - check for available disk space
+
+
 
 Post 0.2
 ========
+
+
+o Complete and make sure segment edit shortcuts are consistent 
+  across segmentcanvas and views (click/copy/multiple segment drag)
+
+o AudioManager and AudioFile commands [CAN WAIT]
+
+o Prove and improve simultaneous audio and MIDI track performance
+  Improve performance:
+   - file access
+   - maths in JACK and MIDI loops
+   - memory usage and access
+   - build without debug and test
+
+o Get Segment joining working
+
+o Realtime downsampling buggy (8 bit)
+
+o First time run up go to settings and walk user through the
+  MIDI and Audio setup to help them understand what they're
+  doing.
+
+o Toggle record mode for punch in/out [Half complete]
+
+o aRts 1.0.0 support
+
+o realtime MIDI filtering - what events are forwarded
+
+o Audio noise eliminator - recording
+
+o Segment colouring
+
+o selection of ALSA recording device
+
+Completed for 0.3(?)
+====================
+
+o Recording controller changes through StudioControl - remove
+  the ugly signal paths for sendMappedStuff [DONE]
+
+o Matrix position of events at high zoom levels [FIXED with fiddle factor]
+
+o Make AlsaDriver send NoteOn(0)s as well as NoteOffs [WAITING FOR FEEDBACK]
+
+o Matrix view auto scrolling, fix scrolling [DONE]
 
 o Chorus, Reverb, Resonance, Filter, Attack, Release MIDI controls [DONE]
 
@@ -62,47 +104,6 @@ o Fix EventList - add eventlist.rc [DONE]
 o LADSPA realtime plugin support [DONE]
 
 o Audio volume faders - studio concept on sequencer [DONE]
-
-o Complete and make sure segment edit shortcuts are consistent 
-  across segmentcanvas and views (click/copy/multiple segment drag)
-
-o Prove and improve simultaneous audio and MIDI track performance
-  Improve performance:
-   - file access
-   - maths in JACK and MIDI loops
-   - memory usage and access
-   - build without debug and test
-
-o Get Segment joining working
-
-o Realtime downsampling buggy (8 bit)
-
-o Matrix view auto scrolling, fix scrolling
-
-o First time run up go to settings and walk user through the
-  MIDI and Audio setup to help them understand what they're
-  doing.
-
-o Toggle record mode for punch in/out [Half complete]
-
-o Finite audio recording time - check for available disk space
-
-o aRts 1.0.0 support
-
-o realtime MIDI filtering - what events are forwarded
-
-o Audio noise eliminator - recording
-
-o Segment colouring
-
-o selection of ALSA recording device
-
-o MIDI reverb and chorus on Instrument parameters [NON-STANDARD so
-  save these for the Studio information]
-
-Completed for 0.21
-==================
-
 o Sysexs MIDI file in/out
 
 o Segment previews still buggy [cc FIXED]

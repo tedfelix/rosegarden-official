@@ -46,6 +46,7 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 
+
 InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
                                                QWidget *parent)
     : RosegardenParameterBox(i18n("Instrument Parameters"), parent),
@@ -586,7 +587,7 @@ InstrumentParameterBox::slotActivateProgramChange(bool value)
                                      (Rosegarden::MidiByte)0);
         // Send the controller change
         //
-        emit sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
         updateAllBoxes();
     }
     catch(...) {;}
@@ -672,7 +673,7 @@ InstrumentParameterBox::slotSelectProgram(int index)
                                      (Rosegarden::MidiByte)0);
         // Send the controller change
         //
-        emit sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
     }
     catch(...) {;}
 
@@ -698,9 +699,7 @@ InstrumentParameterBox::slotSelectPan(int index)
                                      Rosegarden::MappedEvent::MidiController,
                                      Rosegarden::MIDI_CONTROLLER_PAN,
                                      (Rosegarden::MidiByte)index);
-        // Send the controller change
-        //
-        emit sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
     }
     catch(...) {;}
 
@@ -754,9 +753,7 @@ InstrumentParameterBox::slotSelectBank(int index)
                                         Rosegarden::MappedEvent::MidiController,
                                         Rosegarden::MIDI_CONTROLLER_BANK_MSB,
                                         bank->msb);
-        // Send the msb
-        //
-        emit sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
 
         mE = new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
                                         Rosegarden::MappedEvent::MidiController,
@@ -764,7 +761,7 @@ InstrumentParameterBox::slotSelectBank(int index)
                                         bank->lsb);
         // Send the lsb
         //
-        emit sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
     }
     catch(...) {;}
 
@@ -782,7 +779,7 @@ InstrumentParameterBox::slotSelectChannel(int index)
     m_selectedInstrument->setMidiChannel(index);
 
     // don't use the emit - use this method instead
-    emit sendMappedInstrument(
+    Rosegarden::StudioControl::sendMappedInstrument(
             Rosegarden::MappedInstrument(m_selectedInstrument));
     updateAllBoxes();
 }
@@ -1003,9 +1000,7 @@ InstrumentParameterBox::slotSelectChorus(float index)
                                      Rosegarden::MappedEvent::MidiController,
                                      Rosegarden::MIDI_CONTROLLER_CHORUS,
                                      (Rosegarden::MidiByte)index);
-        // Send the controller change
-        //
-        emit sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
     }
     catch(...) {;}
 
@@ -1027,9 +1022,7 @@ InstrumentParameterBox::slotSelectReverb(float index)
                                      Rosegarden::MappedEvent::MidiController,
                                      Rosegarden::MIDI_CONTROLLER_REVERB,
                                      (Rosegarden::MidiByte)index);
-        // Send the controller change
-        //
-        emit sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
     }
     catch(...) {;}
 
@@ -1052,9 +1045,7 @@ InstrumentParameterBox::slotSelectHighPass(float index)
                                      Rosegarden::MappedEvent::MidiController,
                                      Rosegarden::MIDI_CONTROLLER_FILTER,
                                      (Rosegarden::MidiByte)index);
-        // Send the controller change
-        //
-        emit sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
     }
     catch(...) {;}
 
@@ -1076,7 +1067,7 @@ InstrumentParameterBox::slotSelectResonance(float index)
                                      Rosegarden::MappedEvent::MidiController,
                                      Rosegarden::MIDI_CONTROLLER_RESONANCE,
                                      (Rosegarden::MidiByte)index);
-        emit sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
 
         // Send the controller change
         //
@@ -1089,7 +1080,7 @@ InstrumentParameterBox::slotSelectResonance(float index)
                                      (Rosegarden::MidiByte)0);
         // Send the controller change
         //
-        emit sendMappedEvent(mE);
+        emit Rosegarden::StudioControl::sendMappedEvent(mE);
         mE = 
          new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
                                      Rosegarden::MappedEvent::MidiController,
@@ -1097,7 +1088,7 @@ InstrumentParameterBox::slotSelectResonance(float index)
                                      (Rosegarden::MidiByte)33);
         // Send the controller change
         //
-        emit sendMappedEvent(mE);
+        emit Rosegarden::StudioControl::sendMappedEvent(mE);
         mE = 
          new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
                                      Rosegarden::MappedEvent::MidiController,
@@ -1105,7 +1096,7 @@ InstrumentParameterBox::slotSelectResonance(float index)
                                      (Rosegarden::MidiByte)index);
         // Send the controller change
         //
-        emit sendMappedEvent(mE);
+        emit Rosegarden::StudioControl::sendMappedEvent(mE);
         */
     }
     catch(...) {;}
@@ -1129,9 +1120,7 @@ InstrumentParameterBox::slotSelectAttack(float index)
                                      Rosegarden::MappedEvent::MidiController,
                                      Rosegarden::MIDI_CONTROLLER_ATTACK,
                                      (Rosegarden::MidiByte)index);
-        // Send the controller change
-        //
-        emit sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
     }
     catch(...) {;}
 
@@ -1153,9 +1142,7 @@ InstrumentParameterBox::slotSelectRelease(float index)
                                      Rosegarden::MappedEvent::MidiController,
                                      Rosegarden::MIDI_CONTROLLER_RELEASE,
                                      (Rosegarden::MidiByte)index);
-        // Send the controller change
-        //
-        emit sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
     }
     catch(...) {;}
 

@@ -70,9 +70,6 @@ signals:
     void modifySnapTime(Rosegarden::timeT);
     */
 
-    void sendMappedEvent(Rosegarden::MappedEvent *mE);
-    void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);
-
 protected:
 
     RosegardenComboBox         *m_quantizeCombo;

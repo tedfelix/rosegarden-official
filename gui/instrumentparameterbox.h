@@ -94,10 +94,7 @@ signals:
     // This is necessary for controlling MIDI devices in
     // real time during playback.
     //
-    void sendMappedEvent(Rosegarden::MappedEvent *mE);
     void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
-
-    void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);
 
 protected:
 

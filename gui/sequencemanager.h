@@ -54,8 +54,6 @@ namespace Rosegarden
 class AudioPluginManager;
 class RosegardenTransportDialog;
 
-typedef std::pair<Rosegarden::MidiByte, Rosegarden::MidiByte> MidiControlPair;
-
 class SequenceManager : public QObject
 {
     Q_OBJECT
@@ -109,12 +107,6 @@ public:
     void setTransportStatus(const TransportStatus &status);
     TransportStatus getTransportStatus() const { return m_transportStatus; }
 
-    // For immediate processing at the other end - use this method
-    //
-    void sendMappedComposition(const Rosegarden::MappedComposition &mC);
-    void sendMappedEvent(Rosegarden::MappedEvent *mE);
-
-
     // Update our GUI with latest audio recording information - actual
     // sample file is recorded directly at the sequencer level so this
     // is just for informational purposes.
@@ -138,10 +130,6 @@ public:
     // Reset MIDI controllers
     //
     void resetControllers();
-
-    // Send this to the sequencer to update its map
-    //
-    void sendMappedInstrument(const MappedInstrument &mI);
 
     // Get the plugins that are available at the sequencer and
     // put them in the local pluginmanager

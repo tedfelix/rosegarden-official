@@ -213,12 +213,6 @@ public slots:
 signals:
     void activateTool(SegmentCanvas::ToolType);
 
-    // Re-emit sendMidiController (going up towards SequenceManager
-    // through the GUIApp)
-    //
-    void sendMappedEvent(Rosegarden::MappedEvent *mE);
-    void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);
-
     void stateChange(const QString&, bool);
 
     // Inform that we've got a SegmentSelection

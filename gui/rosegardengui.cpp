@@ -81,6 +81,7 @@
 #include "matrixtool.h"
 #include "notationtool.h"
 #include "audiopluginmanager.h"
+#include "studiocontrol.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -599,16 +600,6 @@ void RosegardenGUIApp::initView()
     // changes from the view
     connect(m_view, SIGNAL(activateTool(SegmentCanvas::ToolType)),
             this,   SLOT(slotActivateTool(SegmentCanvas::ToolType)));
-
-    // So that the GUIView can send immediate controllers
-    //
-    connect(m_view, SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)),
-            this, SLOT(slotSendMappedEvent(Rosegarden::MappedEvent*)));
-    
-    connect(m_view,
-            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument &)),
-            this,
-            SLOT(slotSendMappedInstrument(const Rosegarden::MappedInstrument&)));
 
     connect(m_view,
             SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection &)),
@@ -2492,22 +2483,6 @@ RosegardenGUIApp::slotUnsetLoop()
     m_doc->setLoop(0, 0);
 }
 
-void
-RosegardenGUIApp::slotSendMappedEvent(Rosegarden::MappedEvent *mE)
-{
-    if (m_seqManager)
-        m_seqManager->sendMappedEvent(mE);
-}
-
-void
-RosegardenGUIApp::slotSendMappedInstrument(
-        const Rosegarden::MappedInstrument &mI)
-{
-    if (m_seqManager)
-        m_seqManager->sendMappedInstrument(mI);
-}
-
-
 // Find and load the autoload file to set up a default Studio
 //
 //
@@ -3026,8 +3001,7 @@ RosegardenGUIApp::slotPlayAudioFile(unsigned int id,
                                       duration,                  // duration
                                       startTime);                // start index
 
-        if (m_seqManager)
-            m_seqManager->sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
     }
     catch(...) {;}
 
@@ -3175,8 +3149,7 @@ RosegardenGUIApp::slotCancelAudioPlayingFile(Rosegarden::AudioFileId id)
                                         Rosegarden::MappedEvent::AudioCancel,
                                         id);
 
-        if (m_seqManager)
-            m_seqManager->sendMappedEvent(mE);
+        Rosegarden::StudioControl::sendMappedEvent(mE);
     }
     catch(...) {;}
 }

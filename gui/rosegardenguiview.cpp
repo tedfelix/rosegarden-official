@@ -140,18 +140,6 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             SLOT(slotDroppedAudio(QString)));
     
 
-    // Re-emit the sendMidiController
-    //
-    connect(m_instrumentParameterBox,
-            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)),
-            this,
-            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)));
-
-    connect(m_instrumentParameterBox,
-            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument &)),
-            this,
-            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument &)));
-
     connect(m_instrumentParameterBox,
             SIGNAL(changeInstrumentLabel(Rosegarden::InstrumentId, QString)),
             this,
@@ -344,12 +332,6 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 //!!!    if (par)
 //        par->plugAccelerators(notationView, notationView->getAccelerators());
 
-    // For sending note previews
-    //
-    connect(notationView,
-            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)),
-            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)));
-
     // For tempo changes (ugh -- it'd be nicer to make a tempo change
     // command that could interpret all this stuff from the dialog)
     //
@@ -410,16 +392,6 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
     if (par)
         par->plugAccelerators(matrixView, matrixView->getAccelerators());
 
-    // For sending key presses
-    //
-    connect(matrixView,
-            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)),
-            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)));
-
-    connect(matrixView,
-            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument&)),
-            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument&)));
-
     matrixView->show();
 }
 
@@ -456,13 +428,6 @@ void RosegardenGUIView::slotEditSegmentEventList(Rosegarden::Segment *p)
 
     if (par)
         par->plugAccelerators(eventView, eventView->getAccelerators());
-
-    // For sending key presses
-    //
-    /*
-    connect(eventView, SIGNAL(keyPressed(Rosegarden::MappedEvent*)),
-            this, SIGNAK(sendMappedEvent(Rosegarden::MappedEvent*)));
-            */
 
     eventView->show();
 }

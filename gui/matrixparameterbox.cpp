@@ -194,14 +194,6 @@ MatrixParameterBox::initBox()
 
     m_instrumentParameterBox = new InstrumentParameterBox(m_doc, this);
 
-    connect(m_instrumentParameterBox,
-            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)),
-            SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)));
-
-    connect(m_instrumentParameterBox,
-            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument&)),
-            SIGNAL(sendMappedInstrument(const Rosegarden::MappedInstrument&)));
-
     // Insert everything
     gridLayout->addMultiCellWidget(m_instrumentParameterBox, 0, 7, 0, 2);
 

@@ -1126,7 +1126,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
         // the moment.  aRts automatically does MIDI through,
         // this does it to the currently selected instrument.
         //
-        sendMappedComposition(retMC);
+        Rosegarden::StudioControl::sendMappedComposition(retMC);
 #endif 
     }
 }
@@ -1340,26 +1340,6 @@ SequenceManager::insertMetronomeClicks(const timeT &sliceStart,
     }
 }
 
-void
-SequenceManager::sendMappedInstrument(const MappedInstrument &mI)
-{
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << mI.getType();
-    streamOut << mI.getChannel();
-    streamOut << mI.getId();
-
-    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
-             "setMappedInstrument(int, unsigned char, unsigned int)", data))
-    {
-        throw(i18n("Failed to contact Rosegarden sequencer"));
-    }
-}
-
-
-
 // Send Instrument list to Sequencer and ensure that initial program
 // changes follow them.  Sending the instruments ensures that we have
 // channels available on the Sequencer and then the program changes
@@ -1380,7 +1360,7 @@ SequenceManager::preparePlayback()
     InstrumentList::iterator it = list.begin();
     for (; it != list.end(); it++)
     {
-        sendMappedInstrument(MappedInstrument(*it));
+        Rosegarden::StudioControl::sendMappedInstrument(MappedInstrument(*it));
 
         // Send program changes for MIDI Instruments
         //
@@ -1457,6 +1437,7 @@ SequenceManager::preparePlayback()
             }
 
 
+            /*
             // Send all the advanced controls
             //
             std::vector<MidiControlPair> advancedControls;
@@ -1499,6 +1480,7 @@ SequenceManager::preparePlayback()
 
                 mC.insert(mE);
             }
+            */
         }
         else if ((*it)->getType() == Instrument::Audio)
         {
@@ -1515,7 +1497,7 @@ SequenceManager::preparePlayback()
     }
 
     // Send the MappedComposition if it's got anything in it
-    sendMappedComposition(mC);
+    Rosegarden::StudioControl::sendMappedComposition(mC);
 
     // Set up the audio playback latency
     //
@@ -1527,81 +1509,6 @@ SequenceManager::preparePlayback()
     m_playbackAudioLatency = Rosegarden::RealTime(jackSec, jackUSec);
 
 }
-
-void
-SequenceManager::sendMappedComposition(const Rosegarden::MappedComposition &mC)
-{
-    if (mC.size() == 0)
-        return;
-
-    QCString replyType;
-    QByteArray replyData;
-
-    MappedComposition::iterator it = mC.begin();
-
-    // scan output MappedComposition
-    //
-    for (; it != mC.end(); it++)
-    {
-        QByteArray data;
-        QDataStream streamOut(data, IO_WriteOnly);
-
-        // Use new MappedEvent interface
-        //
-        streamOut << (*it);
-        if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                      "processMappedEvent(Rosegarden::MappedEvent)",
-                                      data))
-        {
-            throw(i18n("Failed to contact Rosegarden sequencer"));
-        }
-
-        /*
-        cout << "PC TYPE = " << (*it)->getType() << endl;
-        cout << "PC ID = " << (*it)->getInstrument() << endl;
-        cout << "PC PC = " << (int)(*it)->getPitch() << endl << endl;
-        */
-
-        /*
-        streamOut << (*it)->getInstrument();
-        streamOut << (*it)->getType();
-        streamOut << (*it)->getData1();
-        streamOut << (*it)->getData2();
-        streamOut << (*it)->getEventTime().sec;
-        streamOut << (*it)->getEventTime().usec;
-        streamOut << (*it)->getDuration().sec;
-        streamOut << (*it)->getDuration().usec;
-        streamOut << (*it)->getAudioStartMarker().sec;
-        streamOut << (*it)->getAudioStartMarker().usec;
-
-        if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
-          "processMappedEvent(unsigned int, int, unsigned char, unsigned char, long int, long int, long int, long int, long int, long int)", data))
-        {
-            throw(i18n("Failed to contact Rosegarden sequencer"));
-        }
-        */
-    }
-}
-
-void
-SequenceManager::sendMappedEvent(Rosegarden::MappedEvent *mE)
-{
-    Rosegarden::MappedComposition mC;
-
-    /*
-    cout << "ID = " << mE->getInstrument() << endl;
-    cout << "TYPE = " << mE->getType() << endl;
-    cout << "D1 = " << (int)mE->getData1() << endl;
-    cout << "D2 = " << (int)mE->getData2() << endl;
-    */
-
-    mC.insert(mE);
-    sendMappedComposition(mC);
-
-}
-
 
 void
 SequenceManager::processRecordedAudio(const Rosegarden::RealTime &time)
@@ -1641,7 +1548,7 @@ SequenceManager::resetControllers()
 
         mC.insert(mE);
     }
-    sendMappedComposition(mC);
+    Rosegarden::StudioControl::sendMappedComposition(mC);
 }
 
 

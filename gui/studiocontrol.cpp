@@ -193,8 +193,61 @@ StudioControl::setStudioPluginPort(MappedObjectId pluginId,
                  "setMappedPort(int, unsigned long int, float)",
                  data))
     {
-        SEQMAN_DEBUG << "setStudioPluginPort - "
-                     << "failed to contact Rosegarden sequencer" << endl;
+        RG_DEBUG << "failed to contact RG sequencer" << endl;
+    }
+}
+
+
+void
+StudioControl::sendMappedEvent(Rosegarden::MappedEvent *mE)
+{
+    Rosegarden::MappedComposition mC;
+    mC.insert(mE);
+    StudioControl::sendMappedComposition(mC);
+}
+
+void
+StudioControl::sendMappedComposition(const Rosegarden::MappedComposition &mC)
+{
+    if (mC.size() == 0)
+        return;
+
+    QCString replyType;
+    QByteArray replyData;
+
+    MappedComposition::iterator it = mC.begin();
+
+    for (; it != mC.end(); it++)
+    {
+        QByteArray data;
+        QDataStream streamOut(data, IO_WriteOnly);
+
+        streamOut << (*it);
+        if (!kapp->dcopClient()->
+                send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                     ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                     "processMappedEvent(Rosegarden::MappedEvent)", data))
+        {
+            RG_DEBUG << "failed to contact RG sequencer" << endl;
+        }
+    }
+}
+
+void
+StudioControl::sendMappedInstrument(const Rosegarden::MappedInstrument &mI)
+{
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    streamOut << mI.getType();
+    streamOut << mI.getChannel();
+    streamOut << mI.getId();
+
+    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+             "setMappedInstrument(int, unsigned char, unsigned int)", data))
+    {
+        RG_DEBUG << "failed to contact RG sequencer" << endl;
     }
 }
 

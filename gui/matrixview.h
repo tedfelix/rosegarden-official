@@ -182,12 +182,6 @@ signals:
      */
     void usedSelection();
 
-    /*
-     * We're modified the Instrument so inform anyone else
-     *
-     */
-    void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);
-
 public slots:
 
     /**

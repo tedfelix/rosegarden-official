@@ -55,6 +55,8 @@
 #include "MappedRealTime.h"
 #include "MidiDevice.h"
 #include "AudioDevice.h"
+#include "Studio.h"
+#include "Midi.h"
 
 #include "rosestrings.h"
 #include "rosedebug.h"
@@ -66,6 +68,7 @@
 #include "rosegardendcop.h"
 #include "widgets.h"
 #include "trackeditor.h"
+#include "studiocontrol.h"
 
 
 QList<RosegardenGUIView> *RosegardenGUIDoc::pViewList = 0L;
@@ -339,6 +342,10 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         RosegardenGUIApp *win=(RosegardenGUIApp *) parent();
         KMessageBox::error(win, strtoqstr(e));
     }
+
+    // Initialise MIDI controllers
+    //
+    initialiseControllers();
 
     // Get rid of it - if the operation above has been quick enough
     // then we never see this dialog anyway.
@@ -791,7 +798,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 
             // Now insert the new event
             //
-            Segment::iterator loc = m_recordSegment->insert(rEvent);
+            /*Segment::iterator loc = */ m_recordSegment->insert(rEvent);
 
             // And now fiddle with it
             //
@@ -1561,5 +1568,70 @@ RosegardenGUIDoc::getAudioRecordLatency()
     }
 }
 
+// This is like SequenceManager::preparePlayback() but we only do it
+// once per file load as it takes a bit longer.
+//
+void
+RosegardenGUIDoc::initialiseControllers()
+{
+    Rosegarden::InstrumentList list = m_studio.getAllInstruments();
+    Rosegarden::MappedComposition mC;
+    Rosegarden::MappedEvent *mE;
+
+    Rosegarden::InstrumentList::iterator it = list.begin();
+    for (; it != list.end(); it++)
+    {
+        if ((*it)->getType() == Rosegarden::Instrument::Midi)
+        {
+            std::vector<Rosegarden::MidiControlPair> advancedControls;
+            advancedControls.
+                push_back(Rosegarden::
+                        MidiControlPair(Rosegarden::MIDI_CONTROLLER_CHORUS,
+                                       (*it)->getChorus()));
+            advancedControls.
+                push_back(Rosegarden::
+                        MidiControlPair(Rosegarden::MIDI_CONTROLLER_REVERB,
+                                       (*it)->getReverb()));
+            advancedControls.
+                push_back(Rosegarden::
+                        MidiControlPair(Rosegarden::MIDI_CONTROLLER_RESONANCE,
+                                       (*it)->getResonance()));
+            advancedControls.
+                push_back(Rosegarden::
+                        MidiControlPair(Rosegarden::MIDI_CONTROLLER_FILTER,
+                                       (*it)->getFilter()));
+            advancedControls.
+                push_back(Rosegarden::
+                        MidiControlPair(Rosegarden::MIDI_CONTROLLER_ATTACK,
+                                       (*it)->getAttack()));
+            advancedControls.
+                push_back(Rosegarden::
+                        MidiControlPair(Rosegarden::MIDI_CONTROLLER_RELEASE,
+                                       (*it)->getRelease()));
+
+            std::vector<Rosegarden::MidiControlPair>::iterator
+                    iit = advancedControls.begin();
+            for (; iit != advancedControls.end(); iit++)
+            {
+                try
+                {
+                    mE =
+                        new Rosegarden::MappedEvent((*it)->getId(),
+                                        Rosegarden::MappedEvent::MidiController,
+                                        iit->first,
+                                        iit->second);
+                }
+                catch(...)
+                {
+                    continue;
+                }
+
+                mC.insert(mE);
+            }
+        }
+    }
+
+    Rosegarden::StudioControl::sendMappedComposition(mC);
+}
 
 

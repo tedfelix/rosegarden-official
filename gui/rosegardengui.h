@@ -738,16 +738,6 @@ public slots:
     void slotTogglePreviews();
 
     /*
-     * slotSendMidiController
-     **/
-    void slotSendMappedEvent(Rosegarden::MappedEvent *mE);
-
-    /*
-     * Set/Insert Mapped Instrument
-     */
-    void slotSendMappedInstrument(const Rosegarden::MappedInstrument &mI);
-
-    /*
      * Select Track up or down
      */
     void slotTrackUp();

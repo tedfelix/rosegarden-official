@@ -187,12 +187,6 @@ public slots:
      */
     virtual void slotTestClipboard();
 
-signals:
-    /*
-     * We want to play a note at the sequencer
-     */
-    void sendMappedEvent(Rosegarden::MappedEvent *mE);
-
 protected:
 
     virtual void paintEvent(QPaintEvent* e);

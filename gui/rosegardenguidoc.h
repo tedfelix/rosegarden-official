@@ -295,6 +295,10 @@ public:
     Rosegarden::AudioPluginManager* getPluginManager()
         { return m_pluginManager; }
 
+    // Initialise the MIDI controllers after we've loaded a file
+    //
+    void initialiseControllers();
+
 public slots:
     /**
      * calls repaint() on all views connected to the document object

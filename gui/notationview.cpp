@@ -55,6 +55,7 @@
 #include "widgets.h"
 #include "chordnameruler.h"
 #include "temporuler.h"
+#include "studiocontrol.h"
 
 #include "qcanvassimplesprite.h"
 #include "ktmpstatusmsg.h"
@@ -1888,7 +1889,7 @@ void NotationView::playNote(Rosegarden::Segment &s, int pitch)
                                     Rosegarden::RealTime(0, 500000),
                                     Rosegarden::RealTime(0, 0));
 
-    emit sendMappedEvent(mE);
+    Rosegarden::StudioControl::sendMappedEvent(mE);
 }
 
 void NotationView::showPreviewNote(int staffNo, double layoutX,

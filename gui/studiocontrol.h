@@ -19,6 +19,8 @@
 
 #include "MappedCommon.h"
 #include "MappedStudio.h"
+#include "MappedComposition.h"
+#include "MappedInstrument.h"
 
 #ifndef _STUDIOCONTROL_H_
 #define _STUDIOCONTROL_H_
@@ -28,6 +30,8 @@
 
 namespace Rosegarden
 {
+
+typedef std::pair<Rosegarden::MidiByte, Rosegarden::MidiByte> MidiControlPair;
 
 class StudioControl
 {
@@ -56,6 +60,16 @@ public:
     static void setStudioPluginPort(MappedObjectId pluginId,
                                     unsigned long portId,
                                     MappedObjectValue value);
+
+    // Send controllers and other one off MIDI events using these
+    // interfaces.
+    //
+    static void sendMappedEvent(Rosegarden::MappedEvent *mE);
+    static void sendMappedComposition(const Rosegarden::MappedComposition &mC);
+
+    // MappedInstrument
+    //
+    static void sendMappedInstrument(const Rosegarden::MappedInstrument &mI);
 };
 
 }
