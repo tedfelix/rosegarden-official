@@ -442,12 +442,16 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
 #endif
 
                 if (evt->getType() == MappedEvent::TimeSignature) {
-                    // do something
-                    //SEQUENCER_DEBUG << "timeSig event\n";
+
+		    // Process time sig and tempo changes along with
+		    // everything else, as the sound driver probably
+		    // wants to know when they happen
+
+		    c->insert(evt);
 
                 } else if (evt->getType() == MappedEvent::Tempo) {
-                    // do something else
-                    //SEQUENCER_DEBUG << "tempo event\n";
+
+		    c->insert(evt);
 
                 } else if (acceptEvent(evt, evtIsFromMetronome) &&
 

@@ -4819,7 +4819,7 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
     // Create the plugin dialog
     //
     Rosegarden::AudioPluginDialog *dialog =
-	new Rosegarden::AudioPluginDialog(this,
+	new Rosegarden::AudioPluginDialog(parent,
 					  m_doc->getPluginManager(),
 					  instrument,
 					  index);

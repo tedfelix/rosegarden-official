@@ -68,7 +68,9 @@ MixerWindow::MixerWindow(QWidget *parent,
 				     QString("%1").arg(count));
 
 	    fader->m_fader->setFader((*i)->getLevel());
-	    
+	    fader->m_pan->setPosition((*i)->getPan() - 100);
+	    fader->setAudioChannels((*i)->getAudioChannels());
+
 	    connect(fader->m_fader, SIGNAL(faderChanged(float)),
 		    this, SLOT(slotFaderLevelChanged(float)));
 
@@ -91,9 +93,12 @@ MixerWindow::MixerWindow(QWidget *parent,
 
 	AudioFaderWidget *fader = 
 	    new AudioFaderWidget(mainBox, AudioFaderWidget::FaderStrip,
-				 QString("sub%1").arg(count), false);
+				 i18n("S%1").arg(count),
+				 false, false, false);
 
 	fader->m_fader->setFader((*i)->getLevel());
+	fader->m_pan->setPosition((*i)->getPan() - 100);
+	fader->setAudioChannels(2);
 	    
 	connect(fader->m_fader, SIGNAL(faderChanged(float)),
 		this, SLOT(slotFaderLevelChanged(float)));
@@ -106,7 +111,7 @@ MixerWindow::MixerWindow(QWidget *parent,
     if (busses.size() > 0) {
 	AudioFaderWidget *fader = 
 	    new AudioFaderWidget
-	    (mainBox, AudioFaderWidget::FaderStrip, "R", false);
+	    (mainBox, AudioFaderWidget::FaderStrip, i18n("Rec"), false, false, false);
 	fader->m_fader->setFader(0.0);
 	connect(fader->m_fader, SIGNAL(faderChanged(float)),
 		this, SLOT(slotFaderLevelChanged(float)));
@@ -114,7 +119,7 @@ MixerWindow::MixerWindow(QWidget *parent,
 	m_monitor = fader;
 
 	fader = new AudioFaderWidget
-	    (mainBox, AudioFaderWidget::FaderStrip, "M", false);
+	    (mainBox, AudioFaderWidget::FaderStrip, i18n("M"), false, false, false);
 	fader->m_fader->setFader(busses[0]->getLevel());
 	connect(fader->m_fader, SIGNAL(faderChanged(float)),
 		this, SLOT(slotFaderLevelChanged(float)));

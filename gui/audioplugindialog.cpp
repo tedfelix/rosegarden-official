@@ -184,8 +184,8 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent)
                                    8,  // columns
                                    5); // margin
 
-    m_gridLayout->setColStretch(1, 2);
     m_gridLayout->setColStretch(3, 2);
+    m_gridLayout->setColStretch(7, 2);
 }
 
 void

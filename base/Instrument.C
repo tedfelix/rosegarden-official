@@ -482,7 +482,7 @@ Instrument::getControllerValue(MidiByte controller) const
 Buss::Buss(BussId id) :
     m_id(id),
     m_level(0.0),
-    m_pan(MidiMidValue),
+    m_pan(100),
     m_mappedId(0)
 {
 }

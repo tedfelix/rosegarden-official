@@ -192,6 +192,8 @@ public:
                      LayoutType type,
 		     QString id = "",
 		     bool haveInOut = true,
+		     bool havePlugins = true,
+		     bool haveMiscButtons = true, // solo, record, mono/stereo
                      const char *name = 0);
 
     void setAudioChannels(int);
