@@ -29,7 +29,7 @@
 // include files for QT
 #include <qobject.h>
 #include <qstring.h>
-#include <qlist.h>
+#include <qptrlist.h>
 #include <qxml.h>
 
 #include "rosegardendcop.h"
