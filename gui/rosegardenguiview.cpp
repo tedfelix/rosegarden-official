@@ -125,8 +125,8 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
 
 RosegardenGUIView::~RosegardenGUIView()
 {
-    delete m_rulerScale;
     kdDebug(KDEBUG_AREA) << "~RosegardenGUIView()\n";
+    delete m_rulerScale;
 }
 
 RosegardenGUIDoc*

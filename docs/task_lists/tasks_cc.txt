@@ -219,7 +219,12 @@ Post-0.1.5-and-a-bit task list
 
     f. Insert notes notation-style (with ties) or matrix-style?
 
-37. Add Show/Hide Annotations; make it easier to edit an annotation
+    g. Auto-beam on insert
+
+    h. Collapse rests after erase
+
+37. Add Show/Hide Annotations; make it easier to edit an annotation,
+    and possible to move and resize them
 
 
 Post-0.1.4 task list

@@ -402,38 +402,53 @@ NoteStyle::setBaseStyle(NoteStyleName name)
 }
 
 void
+NoteStyle::checkDescription(Note::Type note)
+{
+    if (m_baseStyle && (m_notes.find(note) == m_notes.end())) {
+	m_baseStyle->checkDescription(note);
+	m_notes[note] = m_baseStyle->m_notes[note];
+    }
+}
+
+void
 NoteStyle::setShape(Note::Type note, NoteHeadShape shape)
 {
+    checkDescription(note);
     m_notes[note].shape = shape;
 }
 
 void
 NoteStyle::setCharName(Note::Type note, CharName charName)
 {
+    checkDescription(note);
     m_notes[note].charName = charName;
 }
 
 void
 NoteStyle::setFilled(Note::Type note, bool filled)
 {
+    checkDescription(note);
     m_notes[note].filled = filled;
 }
 
 void
 NoteStyle::setStem(Note::Type note, bool stem)
 {
+    checkDescription(note);
     m_notes[note].stem = stem;
 }
 
 void
 NoteStyle::setFlagCount(Note::Type note, int flags)
 {
+    checkDescription(note);
     m_notes[note].flags = flags;
 }
 
 void
 NoteStyle::setStemFixPoints(Note::Type note, HFixPoint hfix, VFixPoint vfix)
 {
+    checkDescription(note);
     m_notes[note].hfix = hfix;
     m_notes[note].vfix = vfix;
 }    

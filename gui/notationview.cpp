@@ -206,7 +206,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_bottomBarButtons(0),
     m_tupletMode(false),
     m_fontSizeSlider(0),
-    m_selectDefaultNote(0)
+    m_selectDefaultNote(0),
+    m_documentDestroyed(false)
 {
     initActionDataMaps(); // does something only the 1st time it's called
     
@@ -341,6 +342,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	(doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
+    QObject::connect
+	(doc, SIGNAL(destroyed()), this, SLOT(slotDocumentDestroyed()));
+
     m_selectDefaultNote->activate();
     slotSetInsertCursorPosition(0);
     slotSetPointerPosition(doc->getComposition().getPosition());
@@ -354,9 +358,11 @@ NotationView::~NotationView()
     saveOptions();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	for (Segment::iterator j = m_staffs[i]->getSegment().begin();
-	     j != m_staffs[i]->getSegment().end(); ++j) {
-	    removeViewLocalProperties(*j);
+	if (!m_documentDestroyed) {
+	    for (Segment::iterator j = m_staffs[i]->getSegment().begin();
+		 j != m_staffs[i]->getSegment().end(); ++j) {
+		removeViewLocalProperties(*j);
+	    }
 	}
         delete m_staffs[i]; // this will erase all "notes" canvas items
     }
@@ -370,6 +376,14 @@ NotationView::~NotationView()
 
     kdDebug(KDEBUG_AREA) << "<- ~NotationView()\n";
 }
+
+void
+NotationView::slotDocumentDestroyed()
+{
+    kdDebug(KDEBUG_AREA) << "NotationView::slotDocumentDestroyed()\n";
+    m_documentDestroyed = true;
+}
+
     
 void
 NotationView::removeViewLocalProperties(Rosegarden::Event *e)

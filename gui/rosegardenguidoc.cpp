@@ -108,6 +108,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 
 RosegardenGUIDoc::~RosegardenGUIDoc()
 {
+    kdDebug(KDEBUG_AREA) << "~RosegardenGUIDoc()\n";
     delete m_commandHistory; // must be deleted before the Composition is
     delete m_clipboard;
 }

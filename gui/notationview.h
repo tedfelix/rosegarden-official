@@ -434,6 +434,9 @@ public slots:
     /// Changes the display quantization of the staffs on the view
     void slotChangeLegato(int newLegatoIndex);
 
+    /// The document has been destroyed, and we're about to go with it
+    void slotDocumentDestroyed();
+
 signals:
     /**
      * Emitted when the note selected in the palette changes
@@ -627,6 +630,8 @@ protected:
 
     typedef QMap<QString, MarkActionData> MarkActionDataMap;
     static MarkActionDataMap *m_markActionDataMap;
+
+    bool m_documentDestroyed;
 };
 
 #endif

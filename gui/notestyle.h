@@ -174,6 +174,8 @@ protected:
 
     NoteDescriptionMap m_notes;
     NoteStyle *m_baseStyle;
+
+    void checkDescription(Rosegarden::Note::Type type);
 };
 
 
