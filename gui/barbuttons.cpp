@@ -47,12 +47,15 @@ public:
 
     void scrollHoriz(int x);
 
+    void setWidth(int width) { m_width = width; }
+
 protected:
     virtual void paintEvent(QPaintEvent*);
 
     //--------------- Data members ---------------------------------
     int m_barHeight;
     int m_currentXOffset;
+    int m_width;
 
     QFont *m_barFont;
 
@@ -70,7 +73,7 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
                        WFlags f):
     QVBox(parent, name, f),
     m_invert(invert),
-    m_loopRulerHeight(8),
+    m_loopRulerHeight(10),
     m_offset(4),
     m_currentXOffset(0),
     m_doc(doc),
@@ -80,7 +83,7 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
 
     setSpacing(0);
 
-    if (m_invert) {
+    if (!m_invert) {
 	m_hButtonBar = new BarButtonsWidget(m_rulerScale,
                                             barHeight - m_loopRulerHeight, this);
     }
@@ -92,7 +95,7 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
     //
     m_loopRuler = new LoopRuler(m_rulerScale, m_loopRulerHeight, m_invert, this);
 
-    if (!m_invert) {
+    if (m_invert) {
 	m_hButtonBar = new BarButtonsWidget(m_rulerScale,
                                             barHeight - m_loopRulerHeight, this);
     }
@@ -101,16 +104,15 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
 
 void BarButtons::scrollHoriz(int x)
 {
-    // This can't work - we want a pseudo-scroll,
-    // e.g. actually repainting a different part of the widgets
-    //
-//     int oldOffset = m_currentXOffset;
-//     m_currentXOffset = x;
-
-//     scroll(oldOffset - m_currentXOffset, 0);
-
     m_loopRuler->scrollHoriz(x);
     m_hButtonBar->scrollHoriz(x);
+}
+
+
+void BarButtons::setMinimumWidth(int width)
+{
+    m_hButtonBar->setMinimumWidth(width);
+    m_loopRuler->setMinimumWidth(width);
 }
 
 
@@ -125,6 +127,7 @@ BarButtonsWidget::BarButtonsWidget(RulerScale *rulerScale,
     : QWidget(parent, name, f),
       m_barHeight(barHeight),
       m_currentXOffset(0),
+      m_width(-1),
       m_rulerScale(rulerScale)
 {
     m_barFont = new QFont("helvetica", 12);
@@ -145,11 +148,13 @@ void BarButtonsWidget::scrollHoriz(int x)
 
 QSize BarButtonsWidget::sizeHint() const
 {
-    double width = m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
-	m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar()) -
-	m_rulerScale->getBarPosition(m_rulerScale->getFirstVisibleBar());
+    int lastBar =
+	m_rulerScale->getLastVisibleBar();
+    double width =
+	m_rulerScale->getBarPosition(lastBar) +
+	m_rulerScale->getBarWidth(lastBar);
 
-    return QSize(int(width), m_barHeight);
+    return QSize(std::max(int(width), m_width), m_barHeight);
 }
 
 void BarButtonsWidget::paintEvent(QPaintEvent*)
@@ -170,12 +175,8 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
     for (int i = firstBar; i <= lastBar; ++i) {
 
 	double x = m_rulerScale->getBarPosition(i) + m_currentXOffset;
+
 	if (x > clipRect.x() + clipRect.width()) break;
-
-//        double width = m_rulerScale->getBarWidth(i);
-//        if (width == 0) continue;
-
-//	if (x + width < clipRect.x()) continue;
 
 	painter.drawLine(x, 0, x, m_barHeight);
 	painter.drawText(x + 4, 12, QString("%1").arg(i));

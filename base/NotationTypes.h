@@ -97,25 +97,42 @@ typedef std::string Mark;
   
 namespace Marks
 {
-    extern const Mark NoMark;
-    extern const Mark Accent;
-    extern const Mark Tenuto;
-    extern const Mark Staccato;
-    extern const Mark Sforzando;
-    extern const Mark Rinforzando;
-    extern const Mark Trill;
-    extern const Mark Turn;
-    extern const Mark Pause;
-    extern const Mark UpBow;
-    extern const Mark DownBow;
+    extern const Mark NoMark;         // " "
+    extern const Mark Accent;         // ">"
+    extern const Mark Tenuto;         // "-"  ("legato" in RG2.1)
+    extern const Mark Staccato;       // "."
+    extern const Mark Sforzando;      // "sf"
+    extern const Mark Rinforzando;    // "rf"
+    extern const Mark Trill;          // "tr"
+    extern const Mark Turn;           // "~"
+    extern const Mark Pause;          // aka "fermata"
+    extern const Mark UpBow;          // "v"
+    extern const Mark DownBow;        // a square with the bottom side missing
 
+    /**
+     * Given a string, return a mark that will be recognised as a
+     * text mark containing that string.  For example, the Sforzando
+     * mark is actually defined as getTextMark("sf").
+     */
     extern Mark getTextMark(std::string text);
+
+    /**
+     * Return true if the given mark is a text mark.
+     */
     extern bool isTextMark(Mark mark);
+
+    /**
+     * Extract the string from a text mark.
+     */
     extern std::string getTextFromMark(Mark mark);
 }
 
 
-// somewhat mechanical:
+/**
+ * Clefs are represented as one of a set of standard strings, stored
+ * within a clef Event.  The Clef class defines those standards and
+ * provides a few bits of information about the clefs.
+ */
 
 class Clef {
 public:
@@ -224,7 +241,7 @@ public:
     Key(int accidentalCount, bool isSharp, bool isMinor)
         /* throw (BadKeySpec) */;
 
-    /// Construct the key with the given tonic and mode.
+    /// Construct the key with the given tonic and mode. (Ambiguous.)
     Key(int tonicPitch, bool isMinor)
         /* throw (BadKeySpec) */;
 
@@ -317,7 +334,9 @@ public:
      * same status in terms of accidentals as it had when
      * found in the given previous key.
      */
-    int convertFrom(int pitch, const Key &previousKey) const;
+    int convertFrom(int pitch, const Key &previousKey,
+		    const Accidental &explicitAccidental =
+		    Accidentals::NoAccidental) const;
 
     /**
      * Return the result of transposing the given pitch into
@@ -380,6 +399,14 @@ private:
 
 };
 
+
+/**
+ * Indication is a collective name for graphical marks that span a
+ * series of events, such as slurs, ties, dynamic marks etc.  These
+ * are stored in indication Events with a type and duration.  The
+ * Indication class gives a basic set of indication types.
+ */
+
 class Indication
 {
 public:
@@ -416,6 +443,11 @@ private:
     timeT m_duration;
 };
 
+
+
+/**
+ * Definitions for use in the text Event type.
+ */
 
 class Text
 {
@@ -463,7 +495,8 @@ public:
      * Construct a NotationDisplayPitch containing the given staff
      * height and accidental
      */
-    NotationDisplayPitch(int heightOnStaff, Accidental accidental);
+    NotationDisplayPitch(int heightOnStaff,
+			 const Accidental &accidental);
 
     /**
      * Construct a NotationDisplayPitch containing the height and
@@ -471,11 +504,11 @@ public:
      * in the given clef and key
      */
     NotationDisplayPitch(int pitch, const Clef &clef, const Key &key,
-                         Accidental explicitAccidental = 
+                         const Accidental &explicitAccidental = 
 			 Accidentals::NoAccidental);
 
-    int        getHeightOnStaff() const { return m_heightOnStaff; }
-    Accidental getAccidental()    const { return m_accidental; }
+    int getHeightOnStaff() const { return m_heightOnStaff; }
+    Accidental getAccidental() const { return m_accidental; }
 
     /**
      * Calculate and return the performance (MIDI) pitch 
@@ -509,7 +542,7 @@ private:
     void rawPitchToDisplayPitch(int, const Clef &, const Key &,
                                 int &, Accidental &) const;
     void displayPitchToRawPitch(int, Accidental, const Clef &, const Key &,
-                                int &, bool ignoreOffset = false) const;
+				int &, bool ignoreOffset = false) const;
 };
 
 
@@ -646,9 +679,9 @@ private:
 /**
  * TimeSignature contains arithmetic methods relevant to time
  * signatures and bar durations, including code for splitting long
- * rest intervals into bite-sized chunks.  Although there is a
- * TimeSignature Event type, TimeSignature Events don't appear in
- * regular Segments but only in the Composition's reference segment.
+ * rest intervals into bite-sized chunks.  Although there is a time
+ * signature Event type, these Events don't appear in regular Segments
+ * but only in the Composition's reference segment.
  */
 
 class TimeSignature
@@ -683,51 +716,70 @@ public:
 
     TimeSignature &operator=(const TimeSignature &ts);
 
-    int getNumerator()    const { return m_numerator; }
-    int getDenominator()  const { return m_denominator; }
-    int getBarDuration()  const { return m_barDuration; }
+    int getNumerator()     const { return m_numerator; }
+    int getDenominator()   const { return m_denominator; }
+    timeT getBarDuration() const { return m_barDuration; }
 
-    // We say the "unit" of the time is the duration of the note
-    // implied by the denominator.  For example, the unit of 4/4 time
-    // is the crotchet, and that of 6/8 is the quaver.  The numerator
-    // of the time signature gives the number of units per bar.
-
+    /**
+     * Return the unit of the time signature.  This is the note
+     * implied by the denominator.  For example, the unit of 4/4 time
+     * is the crotchet, and that of 6/8 is the quaver.  (The numerator
+     * of the time signature gives the number of units per bar.)
+     */
     Note::Type getUnit()  const;
-    int getUnitDuration() const;
 
-    // The "beat" of the time depends on whether the signature implies
-    // dotted or undotted time.  The beat of 4/4 time is the crotchet,
-    // the same as its unit, but that of 6/8 is the dotted crotchet
-    // (there are only two beats in a 6/8 bar).  We don't worry
-    // ourselves with more complex times (7/16 anyone?) at the moment
+    /**
+     * Return the duration of the unit of the time signature.
+     * See also getUnit().  In most cases getBeatDuration() gives
+     * a more meaningful value.
+     */
+    timeT getUnitDuration() const;
 
+    /**
+     * Return true if this time signature indicates dotted time.
+     */
     bool isDotted() const;
 
-    int getBeatDuration() const { return m_beatDuration; }
+    /**
+     * Return the duration of the beat of the time signature.  For
+     * example, the beat of 4/4 time is the crotchet, the same as its
+     * unit, but that of 6/8 is the dotted crotchet (there are only
+     * two beats in a 6/8 bar).  The beat therefore depends on whether
+     * the signature indicates dotted or undotted time.
+     */
+    timeT getBeatDuration() const { return m_beatDuration; }
+
+    /**
+     * Return the number of beats in a complete bar.
+     */
     int getBeatsPerBar()  const {
         return getBarDuration() / getBeatDuration();
     }
 
-    /// Returned event is on heap; caller takes responsibility for ownership
-    Event *getAsEvent(timeT absoluteTime) const;
-
-    // get the "optimal" list of rest durations to make up a bar of
-    // this time signature
-
+    /**
+     * Get the "optimal" list of rest durations to make up a bar in
+     * this time signature.
+     */
     void getDurationListForBar(DurationList &dlist) const;
 
-    // get the "optimal" list of rest durations to make up a time
-    // interval of the given total duration, starting at the given
-    // offset after the start of a bar
-
+    /**
+     * Get the "optimal" list of rest durations to make up a time
+     * interval of the given total duration, starting at the given
+     * offset after the start of a bar, assuming that the interval
+     * is entirely in this time signature.
+     */
     void getDurationListForInterval(DurationList &dlist,
                                     int intervalDuration,
                                     int startOffset = 0) const;
 
-    // Get the level of emphasis for a position in a bar. 0 is lots
-    // of emphasis, smaller numbers are less.
+    /**
+     * Get the level of emphasis for a position in a bar. 0 is lots
+     * of emphasis, smaller numbers are less.
+     */
+    int getEmphasisForTime(timeT offset);
 
-    int getEmphasisForTime(int offset);
+    /// Returned event is on heap; caller takes responsibility for ownership
+    Event *getAsEvent(timeT absoluteTime) const;
 
 private:
     int m_numerator;

@@ -39,6 +39,7 @@ LoopRuler::LoopRuler(RulerScale *rulerScale,
       m_invert(invert),
       m_lastXPaint(0),
       m_currentXOffset(0),
+      m_width(-1),
       m_rulerScale(rulerScale),
       m_grid(rulerScale),
       m_loop(false),
@@ -65,11 +66,11 @@ void LoopRuler::scrollHoriz(int x)
 
 QSize LoopRuler::sizeHint() const
 {
-    double width = m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
-	m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar()) -
-	m_rulerScale->getBarPosition(m_rulerScale->getFirstVisibleBar());
+    double width =
+	m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
+	m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar());
 
-    return QSize(int(width), m_height);
+    return QSize(std::max(int(width), m_width), m_height);
 }
 
 QSize LoopRuler::minimumSizeHint() const

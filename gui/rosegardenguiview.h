@@ -115,22 +115,6 @@ public:
     void setControl(const bool &value);
 
     /**
-     * A newly recorded Segment has to be added to the view
-     *
-     */
-//!!!    void createSegmentItem(Rosegarden::Segment* segment);
-
-    /*
-     * Destroy a SegmentItem
-     */
-//!!!    void deleteSegmentItem(Rosegarden::Segment* segment);
-
-    /*
-     * Update a SegmentItem to reflect changes in the Segment
-     */
-//!!!    void updateSegmentItem(Rosegarden::Segment* segment);
-
-    /**
      * Show a Segment as it records - remove the SegmentItem
      * when no longer needed
      */
@@ -166,11 +150,8 @@ public slots:
     void selectTrackSegments(int);
 
 signals:
-    // This signals is emitted upwards towards the top level
-    // objects and sets the position pointer (this emit
-    // sets off a chain of events that comes back down
-    // through setCanvasPositionPointer() to actually
-    // move the pointer line
+    // Signals to tell the main GUI and any other views to
+    // update their various status indications
     //
     void setGUIPositionPointer(Rosegarden::timeT);
     void setGUIPlayPosition(Rosegarden::timeT);

@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>408</width>
+            <width>416</width>
             <height>134</height>
         </rect>
     </property>
@@ -77,6 +77,10 @@
                 <name>toolTip</name>
                 <string>Rewind to beginning</string>
             </property>
+            <property>
+                <name>whatsThis</name>
+                <string>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</string>
+            </property>
         </widget>
         <widget>
             <class>QPushButton</class>
@@ -112,6 +116,10 @@
             <property>
                 <name>toolTip</name>
                 <string>Fast forward</string>
+            </property>
+            <property>
+                <name>whatsThis</name>
+                <string>Moves the current pointer position forwards one bar.</string>
             </property>
         </widget>
         <widget>
@@ -161,6 +169,10 @@
                 <name>toolTip</name>
                 <string>Play/Pause</string>
             </property>
+            <property>
+                <name>whatsThis</name>
+                <string>Plays from the current pointer position, or pauses playback if already in progress.</string>
+            </property>
         </widget>
         <widget>
             <class>QPushButton</class>
@@ -196,6 +208,10 @@
             <property>
                 <name>toolTip</name>
                 <string>Stop</string>
+            </property>
+            <property>
+                <name>whatsThis</name>
+                <string>Stops playback or recording.</string>
             </property>
         </widget>
         <widget>
@@ -233,6 +249,10 @@
                 <name>toolTip</name>
                 <string>Fast forward to end</string>
             </property>
+            <property>
+                <name>whatsThis</name>
+                <string>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</string>
+            </property>
         </widget>
         <widget>
             <class>QPushButton</class>
@@ -268,6 +288,10 @@
             <property>
                 <name>toolTip</name>
                 <string>Rewind</string>
+            </property>
+            <property>
+                <name>whatsThis</name>
+                <string>Moves the current pointer position back one bar.</string>
             </property>
         </widget>
         <widget>

@@ -300,6 +300,8 @@ NotationStaff::positionElements(timeT from, timeT to)
     // Track back bar-by-bar until we find one whose start position
     // hasn't changed, and begin the reposition from there
 
+    //!!! can result in infinite loop when from is beyond the end
+
     NotationElementList::iterator beginAt = nel->begin();
     do {
 	beginAt = nel->findTime(getSegment().getBarStartForTime(from - 1));

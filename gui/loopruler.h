@@ -61,6 +61,8 @@ public:
 
     void scrollHoriz(int x);
 
+    void setMinimumWidth(int width) { m_width = width; }
+
 public slots:
     void setLoopingMode(bool value);
     void setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop);
@@ -96,6 +98,7 @@ private:
     bool m_invert;
     int  m_lastXPaint;
     int  m_currentXOffset;
+    int  m_width;
 
     Rosegarden::RulerScale *m_rulerScale;
     Rosegarden::SnapGrid    m_grid;

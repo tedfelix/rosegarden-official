@@ -232,6 +232,10 @@ Key::Key(int accidentalCount, bool isSharp, bool isMinor)
     throw BadKeySpec();
 }
 
+// Unfortunately this is ambiguous -- e.g. B major / Cb major.
+// We need an isSharp argument, but we already have a constructor
+// with that signature.  Not quite sure what's the best solution.
+
 Key::Key(int tonicPitch, bool isMinor)
     // throw (BadKeySpec)
     : m_accidentalHeights(0)
@@ -316,17 +320,19 @@ void Key::checkAccidentalHeights() const
     }
 }
 
-int Key::convertFrom(int pitch, const Key &previousKey) const
+int Key::convertFrom(int pitch, const Key &previousKey,
+		     const Accidental &explicitAccidental) const
 {
-    NotationDisplayPitch ndp(pitch, Clef(), previousKey);
+    NotationDisplayPitch ndp(pitch, Clef(), previousKey, explicitAccidental);
     return ndp.getPerformancePitch(Clef(), *this);
 }
 
 int Key::transposeFrom(int pitch, const Key &previousKey) const
 {
-    pitch += getTonicPitch();
-    pitch -= previousKey.getTonicPitch();
-    return pitch;
+    int delta = getTonicPitch() - previousKey.getTonicPitch();
+    if (delta >  6) delta -= 12;
+    if (delta < -6) delta += 12;
+    return pitch + delta;
 }
 
 Event *Key::getAsEvent(timeT absoluteTime) const
@@ -383,7 +389,7 @@ Key::KeyDetails::KeyDetails()
 
 Key::KeyDetails::KeyDetails(bool sharps, bool minor, int sharpCount,
                             std::string equivalence, std::string rg2name,
-							int tonicPitch)
+			    int tonicPitch)
     : m_sharps(sharps), m_minor(minor), m_sharpCount(sharpCount),
       m_equivalence(equivalence), m_rg2name(rg2name), m_tonicPitch(tonicPitch)
 {
@@ -392,7 +398,7 @@ Key::KeyDetails::KeyDetails(bool sharps, bool minor, int sharpCount,
 Key::KeyDetails::KeyDetails(const Key::KeyDetails &d)
     : m_sharps(d.m_sharps), m_minor(d.m_minor),
       m_sharpCount(d.m_sharpCount), m_equivalence(d.m_equivalence),
-      m_rg2name(d.m_rg2name)
+      m_rg2name(d.m_rg2name), m_tonicPitch(d.m_tonicPitch)
 {
 }
 
@@ -401,7 +407,7 @@ Key::KeyDetails& Key::KeyDetails::operator=(const Key::KeyDetails &d)
     if (&d == this) return *this;
     m_sharps = d.m_sharps; m_minor = d.m_minor;
     m_sharpCount = d.m_sharpCount; m_equivalence = d.m_equivalence;
-    m_rg2name = d.m_rg2name;
+    m_rg2name = d.m_rg2name; m_tonicPitch = d.m_tonicPitch;
     return *this;
 }
 
@@ -498,7 +504,8 @@ Text::getAsEvent(timeT absoluteTime) const
 // NotationDisplayPitch
 //////////////////////////////////////////////////////////////////////
 
-NotationDisplayPitch::NotationDisplayPitch(int heightOnStaff, Accidental accidental)
+NotationDisplayPitch::NotationDisplayPitch(int heightOnStaff,
+					   const Accidental &accidental)
     : m_heightOnStaff(heightOnStaff),
       m_accidental(accidental)
 {
@@ -506,7 +513,7 @@ NotationDisplayPitch::NotationDisplayPitch(int heightOnStaff, Accidental acciden
 
 NotationDisplayPitch::NotationDisplayPitch(int pitch, const Clef &clef,
                                            const Key &key,
-                                           Accidental explicitAccidental) :
+                                           const Accidental &explicitAccidental) :
     m_accidental(explicitAccidental)
 {
     rawPitchToDisplayPitch(pitch, clef, key, m_heightOnStaff, m_accidental);

@@ -92,7 +92,7 @@ Indication
    likely that an indication will be a distinct type of event,
    appearing in the event list immediately before the series of events
    it spans and with a property indicating the duration of that
-   series.
+   series. [yep -- see Indication in NotationTypes.h]
 
  * In the GUI, these should be referred to by their individual names
    (slur, hairpin etc) unless there is a need for a collective name

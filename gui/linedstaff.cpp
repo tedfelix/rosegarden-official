@@ -369,6 +369,8 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
 	    currentTimeSignature = Rosegarden::TimeSignature(*timeSig);
 	    insertTimeSignature(timeSigX, currentTimeSignature);
 	}
+
+	kdDebug(KDEBUG_AREA) << "LinedStaff::sizeStaff: inserting bar at " << x << " on staff " << this << endl;
 	
 	insertBar(x,
 		  ((barNo == lastBar) ? 0 :

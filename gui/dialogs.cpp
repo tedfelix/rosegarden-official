@@ -84,8 +84,10 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     }
 
     QVBox *vbox = makeVBoxMainWidget();
-    QHBox *numBox = new QHBox(vbox);
-    QHBox *denomBox = new QHBox(vbox);
+    QGroupBox *groupBox = new QGroupBox
+	(1, Horizontal, i18n("Time signature"), vbox);
+    QHBox *numBox = new QHBox(groupBox);
+    QHBox *denomBox = new QHBox(groupBox);
 
     BigArrowButton *numDown   = new BigArrowButton(numBox, Qt::LeftArrow);
     BigArrowButton *denomDown = new BigArrowButton(denomBox, Qt::LeftArrow);

@@ -614,14 +614,19 @@ NotationHLayout::reconcileBarsLinear()
     // which for now we make the maximum width required for this bar
     // on any staff.
 
-    unsigned int barNo = 0;
+    int barNo = 0;
     bool aWidthChanged = false;
 
     for (;;) {
 
 	StaffType *widest = getStaffWithWidestBar(barNo);
+
+	kdDebug(KDEBUG_AREA) << "NotationHLayout::reconcileBarsLinear: barNo " << barNo << ": widest staff is " << widest << std::endl;
+
 	if (!widest) break; // reached end of piece
 	double maxWidth = m_barData[widest][barNo].idealWidth;
+
+	kdDebug(KDEBUG_AREA) << "... and its width is " << maxWidth << endl;
 
 	// Now apply width to this bar on all staffs
 
@@ -629,7 +634,7 @@ NotationHLayout::reconcileBarsLinear()
 
 	    BarDataList &list = i->second;
 
-	    if (list.size() > signed(barNo)) {
+	    if (list.size() > barNo) {
 
 		BarData &bd(list[barNo]);
 
@@ -1372,7 +1377,7 @@ NotationHLayout::getLastVisibleBar()
     int bar = -1;
     for (BarDataMap::iterator i = m_barData.begin();
 	 i != m_barData.end(); ++i) {
-	int barHere = getLastVisibleBarOnStaff(*i->first);
+	int barHere = i->second.size() - 1;
 	if (barHere > bar) bar = barHere;
     }
     return bar;
@@ -1386,13 +1391,14 @@ NotationHLayout::getLastVisibleBarOnStaff(StaffType &staff)
 }
 
 double
-NotationHLayout::getBarPosition(int i)
+NotationHLayout::getBarPosition(int bar)
 {
-    BarDataMap::iterator bdi = m_barData.begin();
-    if (bdi == m_barData.end()) return 0;
-    if (i < 0) i = 0;
-    if (i >= bdi->second.size()) i = bdi->second.size() - 1;
-    return bdi->second[i].x;
+    for (BarDataMap::iterator i = m_barData.begin();
+	 i != m_barData.end(); ++i) {
+	int barHere = i->second.size() - 1;
+	if (barHere >= bar) return i->second[bar].x;
+    }
+    return getBarPosition(getLastVisibleBar());
 }
 
 bool

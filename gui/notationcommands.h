@@ -101,7 +101,6 @@ public:
 	}
     }
 
-    virtual Rosegarden::timeT getRelayoutEndTime();
     Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 
 protected:
@@ -109,7 +108,6 @@ protected:
 
     Rosegarden::Key m_key;
     Rosegarden::Event *m_lastInsertedEvent;
-    Rosegarden::timeT m_relayoutEndTime;
     bool m_convert;
     bool m_transpose;
 };

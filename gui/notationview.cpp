@@ -203,12 +203,13 @@ NotationView::NotationView(RosegardenGUIView* rgView,
 
     m_topBarButtons = new BarButtons
 	(rgView->getDocument(), m_hlayout, 25, false, m_topBarButtonsView);
+    m_topBarButtons->setMinimumWidth(canvas()->width());
     m_topBarButtonsView->addChild(m_topBarButtons);
 
     m_bottomBarButtons = new BarButtons
 	(rgView->getDocument(), m_hlayout, 25, true, m_bottomBarButtonsView);
+    m_bottomBarButtons->setMinimumWidth(canvas()->width());
     m_bottomBarButtonsView->addChild(m_bottomBarButtons);
-
 
     //
     // Position pointer
@@ -921,10 +922,10 @@ NotationView::setPageMode(bool pageMode)
     m_hlayout->setPageWidth(width() - 50);
     
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-//        m_staffs[i]->move(0, 0);
+//!!!        m_staffs[i]->move(0, 0);
         m_staffs[i]->setPageMode(pageMode);
         m_staffs[i]->setPageWidth(width() - 50);
-//        m_staffs[i]->move(20, m_staffs[i]->getHeightOfRow() * i + 45);
+//!!!        m_staffs[i]->move(20, m_staffs[i]->getHeightOfRow() * i + 45);
     }
 
     bool layoutApplied = applyLayout();
@@ -987,8 +988,14 @@ bool NotationView::applyLayout(int staffNo)
     }
 
     readjustCanvasSize();
-    if (m_topBarButtons) m_topBarButtons->update();
-    if (m_bottomBarButtons) m_bottomBarButtons->update();
+    if (m_topBarButtons) {
+	m_topBarButtons->setMinimumWidth(canvas()->width());
+	m_topBarButtons->update();
+    }
+    if (m_bottomBarButtons) {
+	m_bottomBarButtons->setMinimumWidth(canvas()->width());
+	m_bottomBarButtons->update();
+    }
 
     PRINT_ELAPSED("NotationView::applyLayout");
     return true;
@@ -1644,42 +1651,9 @@ NotationView::setGUIPositionPointer(timeT time)
 
     if (!m_pointer->visible() || (int)m_pointer->x() != (int)x) {
 	m_pointer->show();
-	m_pointer->setX(x);
+	m_pointer->setX(x + 20); //!!! arbitrary, same as in positionStaffs
 	update();
     }
-
-    /*    
-
-    if (m_lastFinishingStaff < 0 ||
-        unsigned(m_lastFinishingStaff) >= m_staffs.size()) return;
-    std::pair<timeT, timeT> times = comp.getBarRangeForTime(position);
-
-    double canvasPosition = m_hlayout->getTotalWidth();
-
-    NotationStaff &staff = *m_staffs[m_lastFinishingStaff];
-
-    if (unsigned(barNo) < m_hlayout->getBarLineCount(staff)) {
-
-	canvasPosition = m_hlayout->getBarLineX(staff, barNo);
-
-	if (times.first != times.second) {
-
-            double barWidth;
-            if (unsigned(barNo) + 1 < m_hlayout->getBarLineCount(staff)) {
-                barWidth =
-                    m_hlayout->getBarLineX(staff, barNo + 1) - canvasPosition;
-            } else {
-                barWidth = m_hlayout->getTotalWidth() - canvasPosition;
-            }
-
-            canvasPosition += barWidth * (position - times.first) /
-                (times.second - times.first);
-        }
-    }
-
-    m_pointer->setX(canvasPosition + 20);
-    update();
-    */
 }
 
 //////////////////////////////////////////////////////////////////////

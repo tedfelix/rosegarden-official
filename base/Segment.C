@@ -296,6 +296,7 @@ Segment::iterator Segment::findTime(timeT t) const
 timeT
 Segment::getBarStartForTime(timeT t) const
 {
+    if (t < getStartTime()) t = getStartTime();
     return getComposition()->getBarStartForTime(t);
 }
 
@@ -303,7 +304,8 @@ Segment::getBarStartForTime(timeT t) const
 timeT
 Segment::getBarEndForTime(timeT t) const
 {
-    return getComposition()->getBarEndForTime(t);
+    if (t > getEndTime()) t = getEndTime();
+    return getComposition()->getBarEndForTime(t - 1);
 }
 
 

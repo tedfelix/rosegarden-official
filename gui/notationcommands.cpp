@@ -138,10 +138,10 @@ KeyInsertionCommand::KeyInsertionCommand(Segment &segment, timeT time,
 					 Rosegarden::Key key,
 					 bool convert,
 					 bool transpose) :
-    BasicCommand(name(&key), segment, time, time + 1),
+    BasicCommand(name(&key), segment, time,
+		 ((convert || transpose) ? segment.getEndTime() : time + 1)),
     m_key(key),
     m_lastInsertedEvent(0),
-    m_relayoutEndTime(getEndTime()),
     m_convert(convert),
     m_transpose(transpose)
 {
@@ -151,12 +151,6 @@ KeyInsertionCommand::KeyInsertionCommand(Segment &segment, timeT time,
 KeyInsertionCommand::~KeyInsertionCommand()
 {
     // nothing
-}
-
-timeT
-KeyInsertionCommand::getRelayoutEndTime()
-{
-    return m_relayoutEndTime;
 }
 
 void
@@ -198,18 +192,9 @@ KeyInsertionCommand::modifySegment()
 		} else {
 		    (*i)->set<Int>(Rosegarden::BaseProperties::PITCH,
 				   m_key.transposeFrom(pitch, oldKey));
-		    kdDebug(KDEBUG_AREA) << "transpose from "
-					 << pitch << " to " <<
-			(*i)->get<Int>(Rosegarden::BaseProperties::PITCH)
-					 << " (" << oldKey.getName()
-					 << " to " << m_key.getName() << ")"
-			<< endl;
 		}
 
 		(*i)->unset(Rosegarden::BaseProperties::ACCIDENTAL);
-
-		m_relayoutEndTime =
-		    (*i)->getAbsoluteTime() + (*i)->getDuration();
 	    }
 	}
     }

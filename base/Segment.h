@@ -221,18 +221,24 @@ public:
     iterator findContiguousPrevious(iterator) const;
     
     /**
-     * Return the starting time of the bar that contains time t.
-     * This simply delegates to the Composition, and so can only work
-     * if the Segment is in a Composition.  See Composition for some
-     * more interesting time signature and bar related methods.
+     * Return the starting time of the bar that contains time t.  This
+     * differs from Composition's bar methods in that it will truncate
+     * to the start and end times of this Segment, and is guaranteed
+     * to return the start time of a bar that is at least partially
+     * within this Segment.
+     * 
+     * (See Composition for most of the generally useful bar methods.)
      */
     timeT getBarStartForTime(timeT t) const;
 
     /**
-     * Return the ending time of the bar that contains time t.
-     * This simply delegates to the Composition, and so can only work
-     * if the Segment is in a Composition.  See Composition for some
-     * more interesting time signature and bar related methods.
+     * Return the ending time of the bar that contains time t.  This
+     * differs from Composition's bar methods in that it will truncate
+     * to the start and end times of this Segment, and is guaranteed
+     * to return the end time of a bar that is at least partially
+     * within this Segment.
+     * 
+     * (See Composition for most of the generally useful bar methods.)
      */
     timeT getBarEndForTime(timeT t) const;
 

@@ -47,6 +47,8 @@ public:
                WFlags f=0);
 
     LoopRuler* getLoopRuler() { return m_loopRuler; }
+    
+    void setMinimumWidth(int width);
 
 public slots:
     void scrollHoriz(int x);

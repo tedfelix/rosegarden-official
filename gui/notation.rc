@@ -27,12 +27,17 @@ etc
   <Action name="show_clefs_toolbar"        />
   </Menu>
 -->
+  <Separator/>
+  <Action name="label_chords"/>
 </Menu>
 
 <Menu name="edit">
   <Action name="select_from_start"/>
   <Action name="select_to_end"/>
   <Action name="select_whole_staff"/>
+  <Separator/>
+  <Action name="add_key_signature"/>
+  <Action name="add_time_signature"/>
 </Menu>
 
 <Menu name="Tools">
@@ -109,39 +114,18 @@ etc
   <Action name="simple_tuplet"/>
   <Action name="break_group"/>
   <Separator/>
-  <Action name="tie"/>
-  <Action name="slur"/>
-  <Action name="crescendo"/>
-  <Action name="decrescendo"/>
-  <Action name="remove_indications"/>
-</Menu>
-
-<Menu name="Transforms">
-  <text>Trans&amp;forms</text>
-  <Action name="collapse_notes"/>
-  <Action name="collapse_rests_aggressively"/>
-  <Action name="normalize_rests"/>
-  <Separator/>
-  <Action name="label_chords"/>
-  <Separator/>
-  <Menu name="Transpose">
-  <text>Trans&amp;pose</text>
-  <Action name="transpose_up"/>
-  <Action name="transpose_up_octave"/>
-  <Action name="transpose_down"/>
-  <Action name="transpose_down_octave"/>
-  <Action name="general_transpose"/>
-  </Menu>
-  <Separator/>
-  <Action name="invert"/>
-  <Action name="retrograde"/>
-  <Separator/>
   <Menu name="Stems">
     <text>&amp;Stem Direction</text>
     <Action name="stems_up"/>
     <Action name="stems_down"/>
     <Action name="restore_stems"/>
   </Menu>
+  <Separator/>
+  <Action name="tie"/>
+  <Action name="slur"/>
+  <Action name="crescendo"/>
+  <Action name="decrescendo"/>
+  <Action name="remove_indications"/>
   <Separator/>
   <Menu name="Marks">
     <text>&amp;Marks</text>
@@ -160,9 +144,27 @@ etc
     <Separator/>
     <Action name="add_text_mark"/>
   </Menu>
+</Menu>
+
+<Menu name="Transforms">
+  <text>Trans&amp;forms</text>
+  <Action name="collapse_notes"/>
+  <Action name="collapse_rests_aggressively"/>
+  <Action name="normalize_rests"/>
   <Separator/>
-  <Action name="add_key_signature"/>
-  <Action name="add_time_signature"/>
+  <Menu name="Transpose">
+  <text>Trans&amp;pose</text>
+  <Action name="transpose_up"/>
+  <Action name="transpose_down"/>
+  <Separator/>
+  <Action name="transpose_up_octave"/>
+  <Action name="transpose_down_octave"/>
+  <Separator/>
+  <Action name="general_transpose"/>
+  </Menu>
+  <Separator/>
+  <Action name="invert"/>
+  <Action name="retrograde"/>
 </Menu>
 
 <Menu  name="settings"><text>&amp;Settings</text>
