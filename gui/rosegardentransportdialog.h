@@ -45,6 +45,7 @@ public:
 
     bool isShowingTimeToEnd();
     bool isShowingBarTime();
+    bool isExpanded();
 
     void setTempo(const double &tempo);
     void setTimeSignature(const Rosegarden::TimeSignature &timeSig);

@@ -577,6 +577,7 @@ void RosegardenGUIApp::saveOptions()
     m_config->writeEntry("Show Toolbar",                 m_viewToolBar->isChecked());
     m_config->writeEntry("Show Tracks Toolbar",          m_viewTracksToolBar->isChecked());
     m_config->writeEntry("Show Transport",               m_viewTransport->isChecked());
+    m_config->writeEntry("Expanded Transport",           m_transport->isExpanded());
     m_config->writeEntry("Show Track labels",            m_viewTrackLabels->isChecked());
     m_config->writeEntry("Show Statusbar",               m_viewStatusBar->isChecked());
     m_config->writeEntry("Show Segment Parameters",      m_viewSegmentParameters->isChecked());
@@ -613,6 +614,12 @@ void RosegardenGUIApp::readOptions()
     opt = m_config->readBoolEntry("Show Transport", false);
     m_viewTransport->setChecked(opt);
     slotToggleTransport();
+
+    opt = m_config->readBoolEntry("Expanded Transport", false);
+    if(opt)
+        m_transport->slotPanelOpenButtonReleased();
+    else
+        m_transport->slotPanelCloseButtonReleased();
 
     opt = m_config->readBoolEntry("Show Track labels", true);
     m_viewTrackLabels->setChecked(opt);

@@ -548,6 +548,12 @@ RosegardenTransportDialog::slotPanelCloseButtonReleased()
 }
 
 
+bool 
+RosegardenTransportDialog::isExpanded()
+{
+    return (RecordingFrame->isVisible());
+}
+
 }
 
 
