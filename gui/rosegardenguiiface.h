@@ -72,6 +72,15 @@ k_dcop:
     //
     virtual void processRecordedMidi(const Rosegarden::MappedComposition &mC)=0;
 
+    // Recorded audio is written to a file by the Sequencer so
+    // instead of sending sample data back to the GUI we just
+    // send a timing update with an audio level so we can draw
+    // a simulcrum of the input wave.
+    //
+    virtual void processRecordedAudio(long recordTimeSec,
+                                      long recordTimeUsec,
+                                      float audioLevel)=0;
+
     // Used to map unexpected (async) MIDI events to the user interface.
     // We can show these on the Transport or on a MIDI Mixer.
     //

@@ -101,6 +101,16 @@ PlayableAudioFile::getChannels()
     return 0;
 }
 
+unsigned int
+PlayableAudioFile::getSampleRate()
+{
+    if (m_audioFile)
+    {
+        return m_audioFile->getSampleRate();
+    }
+    return 0;
+}
+
 
 // How many bits per sample in the base AudioFile?
 //

@@ -40,6 +40,14 @@ AudioFile::AudioFile(const unsigned int &id,
 {
 }
 
+AudioFile::AudioFile(const std::string &fileName):
+    SoundFile(fileName), m_id(0), m_name(""),
+    m_bitsPerSample(0), m_sampleRate(0), m_bytesPerSecond(0),
+    m_bytesPerSample(0), m_channels(0), m_type(AUDIO_NOT_LOADED),
+    m_fileSize(0), m_file(0)
+{
+}
+
 AudioFile::~AudioFile()
 {
     if (m_file)

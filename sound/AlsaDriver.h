@@ -33,6 +33,11 @@
 //
 #ifdef HAVE_JACK
 #include <jack/jack.h>
+
+// convenience typedef
+//
+typedef jack_default_audio_sample_t sample_t;
+
 #endif
 
 // Specialisation of SoundDriver to support ALSA (http://www.alsa-project.org)
@@ -124,12 +129,9 @@ public:
     //
     virtual void processPending(const RealTime &playLatency);
 
+    float getLastRecordedAudioLevel();
+
 #ifdef HAVE_JACK
-
-    //static void setBufferSize(nframes_t bSize) { m_bufferSize = bSize; }
-    //static nframes_t getBufferSize() { return m_bufferSize; }
-
-    //static nframes_t             m_bufferSize;
 
     jack_port_t* getJackInputPort() { return m_audioInputPort; }
 
@@ -204,9 +206,9 @@ private:
 
 #ifdef HAVE_JACK
 
-    static int  jackProcess(nframes_t nframes, void *arg);
-    static int  jackBufferSize(nframes_t nframes, void *arg);
-    static int  jackSampleRate(nframes_t nframes, void *arg);
+    static int  jackProcess(jack_nframes_t nframes, void *arg);
+    static int  jackBufferSize(jack_nframes_t nframes, void *arg);
+    static int  jackSampleRate(jack_nframes_t nframes, void *arg);
     static void jackShutdown(void *arg);
     static int  jackGraphOrder(void *);
     static int  jackXRun(void *);

@@ -56,10 +56,18 @@ class AudioFile : public SoundFile
 {
 public:
 
-
+    // the "read" constructor - open a file
+    // an assign a name and id to it.
+    //
     AudioFile(const unsigned int &id,
               const std::string &name,
               const std::string &fileName);
+
+    // the "write" constructor - we only really want
+    // to specify a filename
+    //
+    AudioFile(const std::string &fileName);
+
     ~AudioFile();
 
     std::string getName() const { return m_name; }

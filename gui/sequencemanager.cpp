@@ -1187,5 +1187,13 @@ SequenceManager::sendMappedEvent(Rosegarden::MappedEvent *mE)
 }
 
 
+void
+SequenceManager::processRecordedAudio(const Rosegarden::RealTime &time,
+                                      float audioLevel)
+{
+    std::cout << "PROCESS RECORDED AUDIO" << std::endl;
+}
+
+
 }
 

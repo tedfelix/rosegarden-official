@@ -444,9 +444,34 @@ RosegardenSequencerApp::processRecordedMidi()
 }
 
 
+// Send an update 
 void
 RosegardenSequencerApp::processRecordedAudio()
 {
+    QByteArray data, replyData;
+    QCString replyType;
+    QDataStream arg(data, IO_WriteOnly);
+
+    Rosegarden::RealTime time = m_sequencer->getSequencerTime();
+
+    // Send out current time and last audio level
+    //
+    arg << time.sec;
+    arg << time.usec;
+    arg << m_sequencer->getLastRecordedAudioLevel();
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+                                  ROSEGARDEN_GUI_IFACE_NAME,
+                                 "processRecordedAudio(long int, long int, float)",
+                                  data, replyType, replyData, true))
+    {
+        cerr << "RosegardenSequencer::processRecordedMidi() - " 
+             <<   "can't call RosegardenGUI client" << endl;
+
+        // Stop the sequencer
+        //
+        m_transportStatus = STOPPING;
+    }
 }
 
 

@@ -1854,6 +1854,18 @@ RosegardenGUIApp::processRecordedMidi(const Rosegarden::MappedComposition &mC)
     m_seqManager->processRecordedMidi(mC);
 }
 
+void
+RosegardenGUIApp:: processRecordedAudio(long recordTimeSec,
+                                        long recordTimeUsec,
+                                        float audioLevel)
+{
+    m_seqManager->processRecordedAudio(Rosegarden::RealTime(recordTimeSec,
+                                                            recordTimeUsec),
+                                       audioLevel);
+}
+
+
+
 // This method is a callback from the Sequencer to update the GUI
 // with state change information.  The GUI requests the Sequencer
 // to start playing or to start recording and enters a pending

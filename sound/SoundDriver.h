@@ -99,6 +99,7 @@ public:
     //
     unsigned int getChannels();
     unsigned int getBitsPerSample();
+    unsigned int getSampleRate();
 
 private:
     RealTime              m_startTime;
@@ -217,6 +218,10 @@ public:
     //
     virtual void processPending(const RealTime &playLatency) = 0;
 
+    // Return the last recorded audio level
+    //
+    virtual float getLastRecordedAudioLevel() = 0;
+
     // Mapped Instruments
     //
     void setMappedInstrument(MappedInstrument *mI);
@@ -278,6 +283,7 @@ public:
     // accessing the vector.
     //
     void pushPlayableAudioQueue();
+
 
 protected:
     // Helper functions to be implemented by subclasses

@@ -152,6 +152,13 @@ public:
      */
     void processRecordedMidi(const Rosegarden::MappedComposition &mC);
 
+    /*
+     * Retrieve an audio time update at the latest audio sample level
+     *
+     */
+    void processRecordedAudio(long recordTimeSec,
+                              long recordTimeUsec,
+                              float audioLevel);
 
     /**
      * Process unexpected MIDI events for the benefit of the GUI

@@ -179,6 +179,13 @@ public:
     //
     void processPending(const RealTime &playLatency)
         { m_soundDriver->processPending(playLatency); }
+
+    // Return a value (RMS perhaps) of the last recorded audio slice
+    //
+    float getLastRecordedAudioLevel()
+    {
+        return m_soundDriver->getLastRecordedAudioLevel();
+    }
     
 private:
 

@@ -1,7 +1,0 @@
-Current Bugs
-============
-
-o MatrixView crashes app on open - KDE3 [rwb 09.05.2002]
-
-o Vertical thumb on TrackEditor jumps during playback  - KDE3 [rwb 09.05.2002]
-

@@ -100,6 +100,14 @@ public:
     void sendMappedComposition(const Rosegarden::MappedComposition &mC);
     void sendMappedEvent(Rosegarden::MappedEvent *mE);
 
+
+    // Update our GUI with latest audio recording information - actual
+    // sample file is recorded directly at the sequencer level so this
+    // is just for informational purposes.
+    //
+    void processRecordedAudio(const Rosegarden::RealTime &time,
+                              float audioLevel);
+
 private:
 
     Rosegarden::MappedComposition m_mC;

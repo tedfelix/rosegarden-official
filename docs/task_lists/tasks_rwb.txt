@@ -2,8 +2,11 @@
 ====================================
 
 o basic JACK audio
-  - click on sample start
+  - click on sample start (resampling probably required)
   - multiple sample (Segments problem?) [FIXED]
+  - audio recording
+
+o Audio previews
 
 o Jumping vertical scroll thumb on playback [RosegardenCanvasView::slotUpdate]
 

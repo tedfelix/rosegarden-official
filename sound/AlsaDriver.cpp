@@ -85,11 +85,12 @@ namespace Rosegarden
 {
 
 #ifdef HAVE_JACK
-static nframes_t    _jackBufferSize;
-static unsigned int _jackSampleRate;
-static bool         _usingAudioQueueVector;
-static sample_t    *_leftTempBuffer;
-static sample_t    *_rightTempBuffer;
+
+static jack_nframes_t    _jackBufferSize;
+static unsigned int      _jackSampleRate;
+static bool              _usingAudioQueueVector;
+static sample_t         *_leftTempBuffer;
+static sample_t         *_rightTempBuffer;
 
 static const float  _8bitSampleMax  = (float)(0xff/2);
 static const float  _16bitSampleMax = (float)(0xffff/2);
@@ -295,6 +296,35 @@ AlsaDriver::generateInstruments()
 
     std::cout << std::endl;
 
+#ifdef HAVE_JACK
+
+    // Create a number of audio Instruments - these are just
+    // logical Instruments anyway and so we can create as 
+    // many as we like and then use them as Tracks.
+    //
+
+    // New device
+    //
+    m_deviceRunningId++;
+
+    MappedInstrument *instr;
+    char number[100];
+    std::string audioName;
+
+    for (int channel = 0; channel < 16; channel++)
+    {
+        sprintf(number, "%d", channel);
+        audioName = "Audio Track " + std::string(number);
+        instr = new MappedInstrument(Instrument::Audio,
+                                     channel,
+                                     m_audioRunningId++,
+                                     audioName,
+                                     m_deviceRunningId);
+        m_instruments.push_back(instr);
+    }
+
+#endif
+
 }
 
 // Create a local ALSA port for reference purposes
@@ -381,10 +411,6 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
             m_instruments.push_back(instr);
         }
 
-    }
-    else  // audio
-    {
-        m_audioRunningId++;
     }
 
     // Store these numbers for next time through
@@ -624,6 +650,12 @@ AlsaDriver::initialiseAudio()
                                                 JackPortIsOutput,
                                                 0);
 
+    // set some latencies - these don't appear to do anything yet
+    //
+    //jack_port_set_latency(m_audioOutputPortLeft, 1024);
+    //jack_port_set_latency(m_audioOutputPortRight, 1024);
+    //jack_port_set_latency(m_audioInputPort, 1024);
+
 
     // Get the initial buffer size before we activate the client
     //
@@ -704,16 +736,13 @@ AlsaDriver::initialiseAudio()
     }
 
 
+    /*
     // Get write latency now we're connected
     //
     std::cout << "AlsaDriver::initialiseAudio - "
               << "JACK write latency = "
               << jack_port_get_latency(m_audioOutputPortLeft) 
               << std::endl;
-    /*
-    cout << "CONNECTED = " << jack_port_connected(m_audioOutputPort) << endl;
-    std::cout << "JACK ports = " << jack_get_ports(m_audioClient, NULL, NULL,
-            JackPortIsPhysical|JackPortIsInput) << endl;
     */
 
 #endif
@@ -1477,6 +1506,13 @@ AlsaDriver::processPending(const RealTime &playLatency)
     }
 }
 
+float
+AlsaDriver::getLastRecordedAudioLevel() 
+{
+    return 0.0f;
+}
+
+
 // ------------ JACK callbacks -----------
 //
 //
@@ -1493,7 +1529,7 @@ AlsaDriver::processPending(const RealTime &playLatency)
 //
 //
 int
-AlsaDriver::jackProcess(nframes_t nframes, void *arg)
+AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 {
     AlsaDriver *inst = static_cast<AlsaDriver*>(arg);
 
@@ -1568,10 +1604,14 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
         //
         std::string samples;
 
-        // Some counting
+        // Define a huge number of counters and helpers
         //
         int layerCount = 0;
-        int elementCount = 0;
+        int samplesIn = 0;
+        int oldSamplesIn = 0;
+        double dSamplesIn = 0.0;
+        double dInSamplesInc = 0.0;
+        jack_nframes_t samplesOut = 0;
 
         for (it = audioQueue.begin(); it != audioQueue.end(); it++)
         {
@@ -1592,12 +1632,38 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
                 int channels = (*it)->getChannels();
                 int bytes = (*it)->getBitsPerSample() / 8;
 
+
+                // How many frames to fetch will actually be
+                // decided by sampling rate differences.  At 
+                // any time we fetch:
+                //
+                //                 source (file) sample rate
+                //     nframes *  ---------------------------
+                //                  destination sample rate
+                //
+                // frames from the sample file.
+                //
+                jack_nframes_t fetchFrames = nframes;
+                unsigned int sampleRate = (*it)->getSampleRate();
+
+                if (sampleRate != _jackSampleRate)
+                {
+                    fetchFrames = (jack_nframes_t)(nframes *
+                                                   (((double)sampleRate)/
+                                                   ((double)_jackSampleRate)));
+
+                    /*
+                    std::cout << "RATE MISMATCH : will fetch "
+                               << fetchFrames << " frames" << std::endl;
+                               */
+                }
+
                 // Get the number of frames according to the number of
                 // channels.
                 //
                 try
                 {
-                    samples = (*it)->getSampleFrames(nframes);
+                    samples = (*it)->getSampleFrames(fetchFrames);
                 }
                 catch(std::string es)
                 {
@@ -1605,12 +1671,6 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
                     continue;
                 }
 
-                // Now point to the string
-                char *samplePtr = (char *)(samples.c_str());
-                char *endOfSamples = samplePtr + samples.length();
-                float outBytes;
-
-                elementCount = 0;
 
                 // How do we convert the audio files into a format that
                 // JACK can understand?
@@ -1632,7 +1692,24 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
                 // way correct I don't think.  Still a bit of a mystery
                 // that bit.
                 //
-                while (samplePtr < endOfSamples)
+                // 13.05.2002 - on the fly sample rate conversions are
+                //              now in place.  Clunky and non interpolated
+                //              but it'll do for the moment until some of
+                //              the other bugs 
+
+                // Hmm, so many counters
+                //
+                samplesIn = 0;
+                oldSamplesIn = 0;
+                dSamplesIn = 0.0;
+                dInSamplesInc = ((double)fetchFrames)/((double)nframes);
+                samplesOut = 0;
+
+                // Now point to the string
+                char *samplePtr = (char *)(samples.c_str());
+                float outBytes;
+
+                while (samplesOut < nframes)
                 {
                     switch(bytes)
                     {
@@ -1640,39 +1717,36 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
                             outBytes =
                                 ((short)(*(unsigned char *)samplePtr)) /
                                          _8bitSampleMax;
-                            samplePtr++;
 
-                            _leftTempBuffer[elementCount] += outBytes;
+                            _leftTempBuffer[samplesOut] += outBytes;
 
                             if (channels == 2)
                             {
                                 outBytes =
-                                    ((short)(*(unsigned char *)samplePtr)) /
+                                    ((short)
+                                     (*((unsigned char *)samplePtr + 1))) /
                                           _8bitSampleMax;
-                                             
-                                samplePtr++;
                             }
-                            _rightTempBuffer[elementCount] += outBytes;
+                            _rightTempBuffer[samplesOut] += outBytes;
                             break;
 
                         case 2: // for 16-bit samples
                             outBytes = (*((short*)(samplePtr))) /
                                            _16bitSampleMax;
-                            //assert(outBytes >= -1 && outBytes <= 1);
-                            samplePtr += 2;
 
-                            _leftTempBuffer[elementCount] += outBytes;
+                            _leftTempBuffer[samplesOut] += outBytes;
 
                             // Get other sample if we have one
                             //
                             if (channels == 2)
                             {
-                                outBytes = (*((short*)(samplePtr))) /
+                                outBytes = (*((short*)(samplePtr + 2))) /
                                            _16bitSampleMax;
-                                //assert(outBytes >= -1 && outBytes <= 1);
-                                samplePtr += 2;
                             }
-                            _rightTempBuffer[elementCount] += outBytes;
+                            _rightTempBuffer[samplesOut] += outBytes;
+                            break;
+
+                        case 3: // for 24-bit samples
                             break;
 
                         default:
@@ -1682,7 +1756,24 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
                     }
                     
                     // next out element
-                    elementCount++;
+                    dSamplesIn += dInSamplesInc;
+                    samplesIn = (int)dSamplesIn;
+                    
+                    // If we're advancing..
+                    //
+                    if (oldSamplesIn != samplesIn)
+                    {
+                        // ..increment pointer by correct amount of bytes
+                        //
+                        samplePtr += bytes * channels *
+                                     (samplesIn - oldSamplesIn);
+                    }
+
+                    // store value for next time around
+                    oldSamplesIn = samplesIn;
+
+                    // Point to next output sample
+                    samplesOut++;
                 }
             }
             layerCount++;
@@ -1715,7 +1806,7 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
 // Pick up any change of buffer size
 //
 int
-AlsaDriver::jackBufferSize(nframes_t nframes, void *)
+AlsaDriver::jackBufferSize(jack_nframes_t nframes, void *)
 {
     std::cout << "AlsaDriver::jackBufferSize - buffer size changed to "
               << nframes << std::endl;
@@ -1734,7 +1825,7 @@ AlsaDriver::jackBufferSize(nframes_t nframes, void *)
 // Sample rate change
 //
 int
-AlsaDriver::jackSampleRate(nframes_t nframes, void *)
+AlsaDriver::jackSampleRate(jack_nframes_t nframes, void *)
 {
     std::cout << "AlsaDriver::jackSampleRate - sample rate changed to "
                << nframes << std::endl;
