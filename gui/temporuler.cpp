@@ -248,7 +248,11 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
 	    QString tempoString;
 	    if (frac) {
-		tempoString = QString("%1.%2").arg(bpm).arg(frac);
+		if (frac < 10) {
+		    tempoString = QString("%1.0%2").arg(bpm).arg(frac);
+		} else {
+		    tempoString = QString("%1.%2").arg(bpm).arg(frac);
+		}
 	    } else {
 		tempoString = QString("%1").arg(bpm);
 	    }
