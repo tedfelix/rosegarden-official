@@ -31,7 +31,6 @@
 #include "BaseProperties.h"
 #include "MappedEvent.h"
 #include "MappedComposition.h"
-#include "AudioFilePlayer.h"
 
 namespace Rosegarden
 {
@@ -47,8 +46,7 @@ Sequencer::Sequencer():
     m_recordStatus(ASYNCHRONOUS_MIDI),
     m_startPlayback(true),
     m_playing(false),
-    m_sequencerStatus(NO_SEQUENCE_SUBSYS),
-    m_audioFilePlayer(0)
+    m_sequencerStatus(NO_SEQUENCE_SUBSYS)
 {
 
     // Get a reference on the aRTS sound server
@@ -414,10 +412,8 @@ Sequencer::processEventsOut(Rosegarden::MappedComposition mC,
     {
         if ((*i)->getType() == MappedEvent::Audio)
         {
-            std::cout << "processAudioOut() - queuing Audio event" << std::endl;
-            m_audioFilePlayer->queueAudio((*i)->getAudioID(),
-                                          (*i)->getStartIndex(),
-                                          (*i)->getDuration());
+            queueAudio((*i)->getAudioID(), (*i)->getStartIndex(),
+                       (*i)->getDuration(), playLatency);
         }
     }
 
@@ -792,19 +788,89 @@ Sequencer::getMappedComposition()
 
 }
 
-void
-Sequencer::queueAudioFile(AudioFile *audioFile,
-                          const RealTime &startTime,
-                          const RealTime &duration)
+bool
+Sequencer::addAudioFile(const string &fileName, const unsigned int &id)
 {
-    PlayableAudioFile *newAF = new PlayableAudioFile(audioFile,
-                                                     startTime,
+    AudioFile *ins = new AudioFile(id, fileName, fileName);
+    try
+    {
+        ins->open();
+    }
+    catch(string s)
+    {
+        return false;
+    }
+
+    m_audioFiles.push_back(ins);
+
+    cout << "AudioFilePlayer::addAudioFile() = \"" << fileName << "\"" << endl;
+
+    return true;
+}
+
+bool
+Sequencer::removeAudioFile(const unsigned int &id)
+{
+    std::vector<AudioFile*>::iterator it = getAudioFile(id);
+
+    if(it == 0)
+        return false;
+
+    m_audioFiles.erase(it);
+
+    return true;
+}
+
+std::vector<AudioFile*>::iterator
+Sequencer::getAudioFile(const unsigned int &id)
+{
+    std::vector<AudioFile*>::iterator it;
+    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
+    {
+        if ((*it)->getID() == id)
+            return it;
+    }
+
+    return 0;
+}
+
+
+void
+Sequencer::clearAudioFiles()
+{
+    cout << "Sequencer::clearAudioFiles() - clearing down audio files" << endl;
+
+    std::vector<AudioFile*>::iterator it;
+    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
+    {
+        delete(*it);
+        m_audioFiles.erase(it);
+    }
+
+}
+
+
+bool
+Sequencer::queueAudio(const unsigned int &id, const RealTime startIndex,
+                      const RealTime duration, const RealTime playLatency)
+{
+    std::vector<AudioFile*>::iterator it = getAudioFile(id);
+
+    if (it == 0)
+        return false;
+
+    std::cout << "processAudioOut() - queuing Audio event" << std::endl;
+
+    // register the AudioFile in the playback queue
+    //
+    PlayableAudioFile *newAF = new PlayableAudioFile(*it,
+                                                     startIndex - playLatency,
                                                      duration,
                                                      m_soundServer);
     m_audioPlayQueue.push_back(newAF);
 
+    return true;
 }
-
 
 
 }

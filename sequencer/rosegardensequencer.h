@@ -49,7 +49,6 @@
 #include "MappedComposition.h"
 #include "Sequencer.h"
 #include "Event.h"
-#include "AudioFilePlayer.h"
 
 class KURL;
 class KRecentFilesAction;
@@ -212,9 +211,6 @@ private:
     Rosegarden::RealTime m_loopStart;
     Rosegarden::RealTime m_loopEnd;
 
-    // Manage and play audio files at the sequencer level
-    //
-    Rosegarden::AudioFilePlayer *m_audioFilePlayer;
 };
  
 #endif // _ROSEGARDEN_SEQUENCER_APP_H_

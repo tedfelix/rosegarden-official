@@ -79,6 +79,7 @@ AudioFileManager::removeFile(const unsigned int &id)
     {
         if ((*it)->getID() == id)
         {
+            delete(*it);
             m_audioFiles.erase(it);
             return true;
         }
@@ -220,6 +221,22 @@ AudioFileManager::fileExists(const unsigned int &id)
     return false;
 
 }
+
+void
+AudioFileManager::clear()
+{
+    vector<AudioFile*>::iterator it;
+
+    for (it = m_audioFiles.begin();
+         it != m_audioFiles.end();
+         it++)
+    {
+        delete(*it);
+        m_audioFiles.erase(it);
+    }
+}
+
+
 
 }
 

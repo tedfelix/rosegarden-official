@@ -73,13 +73,10 @@ public:
     //
     virtual int getSoundSystemStatus() = 0;
 
-    // Add and delete audio files on the sequencer
+    // Add and delete audio files on the Sequencer
     //
     virtual int addAudioFile(const QString &fileName, const int &id) = 0;
     virtual int deleteAudioFile(const int &id) = 0;
-
-    // clear down the AudioFilePlayer
-    //
     virtual void deleteAllAudioFiles() = 0;
 
 

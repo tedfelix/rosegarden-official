@@ -387,6 +387,7 @@ void RosegardenGUIDoc::deleteContents()
     deleteViews();
 
     m_composition.clear();
+    m_audioFileManager.clear();
 }
 
 void RosegardenGUIDoc::deleteViews()

@@ -225,12 +225,6 @@ public:
     void processEventsOut(Rosegarden::MappedComposition mC,
                           const Rosegarden::RealTime &playLatency);
 
-    // Queue up an audio file
-    //
-    void queueAudioFile(Rosegarden::AudioFile *audioFile,
-                        const Rosegarden::RealTime &startTime,
-                        const Rosegarden::RealTime &duration);
-
     // Process the audio queue
     //
     void processAudioQueue();
@@ -273,8 +267,26 @@ public:
     void setPlayStartPosition(const Rosegarden::RealTime &pos)
         { m_playStartPosition = pos; }
 
-    void setAudioFilePlayer(AudioFilePlayer *afp)
-        { m_audioFilePlayer = afp; }
+    // Add an AudioFile reference at the Sequencer
+    //
+    bool addAudioFile(const string &fileName, const unsigned int &id);
+
+    // Remove an AudioFile reference from the Sequencer
+    //
+    bool removeAudioFile(const unsigned int &id);
+
+    // Empty all the AudioFiles from the Sequencer
+    //
+    void clearAudioFiles();
+
+    // Queue up an audio sample for playing
+    //
+    bool queueAudio(const unsigned int &id, const RealTime startIndex,
+                    const RealTime duration, const RealTime playLatency);
+
+protected:
+    std::vector<AudioFile*>::iterator getAudioFile(const unsigned int &id);
+
 
 private:
     // start MIDI and Audio subsystems
@@ -345,7 +357,9 @@ private:
     //
     SequencerStatus        m_sequencerStatus;
 
-    AudioFilePlayer       *m_audioFilePlayer;
+    std::vector<AudioFile*> m_audioFiles;
+    Rosegarden::Sequencer  *m_sequencer;
+
 
 };
 

@@ -82,6 +82,8 @@ public:
     std::vector<AudioFile*>::const_iterator end()
         { return m_audioFiles.end(); }
 
+    void clear();
+
 private:
     std::string getFileInPath(const std::string &file);
 
