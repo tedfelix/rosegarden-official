@@ -552,7 +552,6 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
         for (SegmentSelection::const_iterator nIt = newSelection.begin();
                 nIt != newSelection.end(); ++nIt)
         {
-            selector->addToSelection(*nIt);
             selector->slotSelectSegmentItem(m_canvas->getSegmentItem(*nIt));
         }
     }
@@ -1258,7 +1257,6 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
         for (SegmentSelection::const_iterator nIt = newSelection.begin();
                 nIt != newSelection.end(); ++nIt)
         {
-            addToSelection(*nIt);
             slotSelectSegmentItem(m_canvas->getSegmentItem(*nIt));
         }
 
@@ -1459,7 +1457,6 @@ void SegmentSelector::updateSelectionRect(int w, int h)
             if (SegmentItem *item = dynamic_cast<SegmentItem*>(*it)) {
                 if (m_segmentAddMode) {
                     slotSelectSegmentItem(item);
-                    addToSelection(item);
                 } else {
                     segCount++;
                     slotSelectSegmentItem(item);
