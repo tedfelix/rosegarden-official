@@ -38,7 +38,7 @@ Older task list
 
 * tracks toolbox on right click
 
-* pause in the middle of the bars
+* pause in the middle of the bars - DONE (by Chris)
 
 * link notes
 
