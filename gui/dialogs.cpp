@@ -1080,7 +1080,8 @@ TextEventDialog::slotTypeChanged(const QString &)
     if (type == Rosegarden::Text::Dynamic ||
 	type == Rosegarden::Text::LocalDirection ||
 	type == Rosegarden::Text::UnspecifiedType ||
-	type == Rosegarden::Text::Lyric) {
+	type == Rosegarden::Text::Lyric ||
+	type == Rosegarden::Text::Annotation) {
 
 	m_staffAboveLabel->show();
 	m_staffBelowLabel->hide();
