@@ -913,8 +913,33 @@ BankEditorDialog::updateDialog()
         if (midiDevice->getDirection() == Rosegarden::MidiDevice::Record)
             continue;
 
-        if (m_deviceNameMap.find(midiDevice->getId()) != m_deviceNameMap.end()) {
-            // device already displayed
+        if (m_deviceNameMap.find(midiDevice->getId()) != m_deviceNameMap.end()) 
+        {
+            // Device already displayed but make sure the label is up to date
+            //
+            //
+            QListViewItem* currentItem = m_listView->currentItem();
+
+            if (currentItem)
+            {
+                MidiDeviceListViewItem* deviceItem = 
+                    getParentDeviceItem(currentItem);
+
+                if (deviceItem &&
+                    deviceItem->getDevice() == midiDevice->getId())
+                {
+                    deviceItem->setText(0, strtoqstr(midiDevice->getName()));
+                    m_deviceNameMap[midiDevice->getId()] = 
+                        midiDevice->getName();
+                }
+
+                /*
+                cout << "NEW TEXT FOR DEVICE " << midiDevice->getId()
+                     << " IS " << midiDevice->getName() << endl;
+                cout << "LIST ITEM ID = " << deviceItem->getDevice() << endl;
+                */
+            }
+
             continue;
         }
 
@@ -1009,7 +1034,8 @@ BankEditorDialog::updateDeviceItem(MidiDeviceListViewItem* deviceItem)
     MidiBankListViewItem* child = dynamic_cast<MidiBankListViewItem*>(deviceItem->firstChild());
     
     while(child) {
-        if (child->getBank() >= banks.size()) childrenToDelete.push_back(child);
+        if (child->getBank() >= int(banks.size()))
+            childrenToDelete.push_back(child);
         else { // update the banks MSB/LSB which might have changed
             child->setMSB(banks[child->getBank()].msb);
             child->setLSB(banks[child->getBank()].lsb);
@@ -1783,6 +1809,8 @@ BankEditorDialog::slotImport()
     }
 
     delete doc;
+
+    updateDialog();
 }
 
 void

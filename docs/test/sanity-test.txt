@@ -230,10 +230,20 @@ last MIDI events recorded.
 12. Printing
 ------------
 
+12.1 File->Print
+
+
 13. Import
 ----------
 
 13.1 Import a MIDI File
+Use the File->Import MIDI File menu option to import a MIDI file.
+The file should import with a progress dialog in place - MIDI programs/
+voices should be assigned to sensible (expected) values on import.
+Try playing the imported file to make sure it's correct.
+
+
+13.2
 
 
 14. Export
