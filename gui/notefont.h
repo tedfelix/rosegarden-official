@@ -299,10 +299,6 @@ public:
 
 
 private:
-    //--------------- Data members ---------------------------------
-
-    int m_currentSize;
-    NoteFontMap m_fontMap;
 
     QPixmap *lookup(CharName charName, bool inverted) const;
     void add(CharName charName, bool inverted, QPixmap *pixmap) const;
@@ -318,6 +314,11 @@ private:
 
     typedef std::map<std::string, PixmapMap *>
             FontPixmapMap;
+
+    //--------------- Data members ---------------------------------
+
+    int m_currentSize;
+    NoteFontMap m_fontMap;
 
     mutable PixmapMap *m_map; // pointer at a member of m_fontPixmapMap
     static FontPixmapMap *m_fontPixmapMap;
