@@ -39,6 +39,8 @@
 #include "Instrument.h"
 #include "Midi.h"
 #include "AudioLevel.h"
+#include "MidiTypes.h"
+#include "Segment.h"
 
 #include "widgets.h"
 #include "rosestrings.h"
@@ -769,13 +771,18 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
-        QString value = atts.value("value");
+        QString type = atts.value("type");
+        //RG_DEBUG << "RoseXmlHandler::startElement - controller type = " << type << endl;
 
-        if (value != "")
+        if (type == strtoqstr(Rosegarden::PitchBend::EventType))
+            m_currentSegment->addEventRuler(Rosegarden::PitchBend::EventType);
+        else if (type == strtoqstr(Rosegarden::Controller::EventType))
         {
-            m_currentSegment->addController(Rosegarden::MidiByte(value.toInt()));
-        }
+            QString value = atts.value("value");
 
+            if (value != "")
+                m_currentSegment->addEventRuler(Rosegarden::Controller::EventType, value.toInt());
+        }
 
     } else if (lcName == "resync") {
 

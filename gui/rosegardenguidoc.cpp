@@ -992,18 +992,25 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment, KPr
 	        outStream << "</chord>\n";
 	    }
 
-            // Add controllers 
-            Rosegarden::Segment::ControllerList list = segment->getControllerList();
+            // Add EventRulers to segment - we call them controllers because of 
+            // a historical mistake in naming them.  My bad.  RWB.
+            //
+            Rosegarden::Segment::EventRulerList list = segment->getEventRulerList();
 
             if (list.size())
             {
                 outStream << "<gui>\n"; // gui elements
-                Rosegarden::Segment::ControllerListConstIterator it;
+                Rosegarden::Segment::EventRulerListConstIterator it;
                 for (it = list.begin(); it != list.end(); ++it)
                 {
-                    outStream << "  <controller value=\""
-                              << int(*it)
-                              << "\"/>\n";
+                    outStream << "  <controller type=\"" << (*it)->m_type;
+
+                    if ((*it)->m_type == Rosegarden::Controller::EventType)
+                    {
+                        outStream << "\" value =\"" << (*it)->m_controllerValue;
+                    }
+
+                    outStream << "\"/>\n";
                 }
                 outStream << "</gui>\n";
             }

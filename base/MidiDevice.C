@@ -659,14 +659,24 @@ MidiDevice::getControlParameter(int index)
 }
 
 ControlParameter *
-MidiDevice::getControlParameter(Rosegarden::MidiByte controllerValue)
+MidiDevice::getControlParameter(const std::string &type, Rosegarden::MidiByte controllerValue)
 {
     ControlList::iterator it = m_controlList.begin();
 
     for (; it != m_controlList.end(); ++it)
     {
-        if (it->getControllerValue() == controllerValue)
-            return &*it;
+        if (it->getType() == type)
+        {
+            // Return matched on type for most events
+            //
+            if (type != Rosegarden::Controller::EventType) 
+                return &*it;
+            
+            // Also match controller value for Controller events
+            //
+            if (it->getControllerValue() == controllerValue)
+                return  &*it;
+        }
     }
 
     return 0;

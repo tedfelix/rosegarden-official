@@ -55,6 +55,8 @@ public:
     QColor getMediumColour() const { return m_mediumColour; }
     QColor getQuietColour() const { return m_quietColour; }
 
+    int getMaxValue() const { return m_maxValue; }
+
 private:
 
     QColor m_loudColour;

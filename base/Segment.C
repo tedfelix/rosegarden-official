@@ -117,6 +117,12 @@ Segment::~Segment()
 	delete m_clefKeyList;
     }
 
+    // Clear EventRulers
+    //
+    EventRulerListIterator it;
+    for (it = m_eventRulerList.begin(); it != m_eventRulerList.end(); ++it) delete *it;
+    m_eventRulerList.clear();
+
     // delete content
     for (iterator it = begin(); it != end(); ++it) delete (*it);
 
@@ -1011,33 +1017,47 @@ Segment::setColourIndex(const unsigned int input)
 }
 
 void
-Segment::addController(MidiByte controller)
+Segment::addEventRuler(const std::string &type, int controllerValue, bool active)
 {
-    ControllerListConstIterator it;
+    EventRulerListConstIterator it;
 
-    for (it = m_controllerList.begin(); it != m_controllerList.end(); ++it)
-        if ((*it) == controller)
+    for (it = m_eventRulerList.begin(); it != m_eventRulerList.end(); ++it)
+        if ((*it)->m_type == type && (*it)->m_controllerValue == controllerValue)
             return;
 
-    m_controllerList.push_back(controller);
+    m_eventRulerList.push_back(new EventRuler(type, controllerValue, active));
 }
 
 bool 
-Segment::deleteController(MidiByte controller)
+Segment::deleteEventRuler(const std::string &type, int controllerValue)
 {
-    ControllerListIterator it;
+    EventRulerListIterator it;
 
-    for (it = m_controllerList.begin(); it != m_controllerList.end(); ++it)
+    for (it = m_eventRulerList.begin(); it != m_eventRulerList.end(); ++it)
     {
-        if (*it == controller)
+        if ((*it)->m_type == type && (*it)->m_controllerValue == controllerValue)
         {
-            m_controllerList.erase(it);
+            delete *it;
+            m_eventRulerList.erase(it);
             return true;
         }
     }
 
     return false;
 }
+
+Segment::EventRuler*
+Segment::getEventRuler(const std::string &type, int controllerValue)
+{
+    EventRulerListConstIterator it;
+    for (it = m_eventRulerList.begin(); it != m_eventRulerList.end(); ++it)
+        if ((*it)->m_type == type && (*it)->m_controllerValue == controllerValue)
+            return *it;
+
+    return 0;
+}
+
+
 
 SegmentHelper::~SegmentHelper() { }
 

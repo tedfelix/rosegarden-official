@@ -137,7 +137,7 @@ public:
     // Access ControlParameters (read/write)
     //
     ControlParameter *getControlParameter(int index);
-    ControlParameter *getControlParameter(Rosegarden::MidiByte controllerNumber);
+    ControlParameter *getControlParameter(const std::string &type, Rosegarden::MidiByte controllerNumber);
 
     // Modify ControlParameters
     //

@@ -192,10 +192,14 @@ bool ControllerEventAdapter::getValue(long& val)
         value = m_event->get<Rosegarden::Int>(Rosegarden::PitchBend::MSB);
         value <<= 7;
         value |= m_event->get<Rosegarden::Int>(Rosegarden::PitchBend::LSB);
-        return value;
+
+        //RG_DEBUG << "PitchBend Get Value = " << value << endl;
+
+        val = value;
+        return true;
     }
-    else
-        return 0;
+
+    return false;
 }
 
 void ControllerEventAdapter::setValue(long val)
@@ -206,6 +210,8 @@ void ControllerEventAdapter::setValue(long val)
     }
     else if (m_event->getType() == Rosegarden::PitchBend::EventType)
     {
+        RG_DEBUG << "PitchBend Set Value = " << val << endl;
+
         int lsb = val & 0x7f;
         int msb = (val >> 7) & 0x7f;
         m_event->set<Rosegarden::Int>(Rosegarden::PitchBend::MSB, msb);
@@ -292,7 +298,7 @@ ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
     setX(xx);
     setY(canvas()->height());
     updateFromValue();
-    RG_DEBUG << "ControlItem x = " << x() << " - y = " << y() << " - width = " << width << endl;
+    //RG_DEBUG << "ControlItem x = " << x() << " - y = " << y() << " - width = " << width << endl;
     show();
 }
 
@@ -327,7 +333,7 @@ void ControlItem::draw(QPainter &painter)
     if (!isEnabled())
         updateFromValue();
     
-    setBrush(m_controlRuler->valueToColor(m_value));
+    setBrush(m_controlRuler->valueToColour(m_controlRuler->getMaxItemValue(), m_value));
 
     QCanvasRectangle::draw(painter);
 }
@@ -530,7 +536,11 @@ void ControlRulerEventInsertCommand::modifySegment()
     }
     else if (m_type == Rosegarden::PitchBend::EventType)
     {
-        // set the value accordingly
+        // Convert to PitchBend MSB/LSB
+        int lsb = m_initialValue & 0x7f;
+        int msb = (m_initialValue >> 7) & 0x7f;
+        controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::MSB, msb);
+        controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
     }
     
     getSegment().insert(controllerEvent);
@@ -620,8 +630,8 @@ ControlRuler::ControlRuler(Segment& segment,
 
     setFixedHeight(sizeHint().height());
 
-    connect(this, SIGNAL(stateChange(QString, bool)),
-            m_parentEditView, SLOT(slotStateChanged(QString, bool)));
+    connect(this, SIGNAL(stateChange(const QString&, bool)),
+            m_parentEditView, SLOT(slotStateChanged(const QString&, bool)));
 
     m_numberFloat->hide();
 
@@ -793,10 +803,12 @@ void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
 
     // Borrowed from RosegardenRotary - compute total position within window
     //
-    QPoint totalPos = mapTo(topLevelWidget(), this->pos());
+    QPoint totalPos = mapTo(topLevelWidget(), e->pos());
 
-    m_numberFloat->move(totalPos.x() + e->x() + 20,
-                        totalPos.y() + e->y() - 10);
+    // Allow for scrollbar
+    //
+    m_numberFloat->move(totalPos.x() + 20 - horizontalScrollBar()->value(), totalPos.y() - 10);
+
     int value = 0;
 
     for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
@@ -905,8 +917,10 @@ int ControlRuler::valueToHeight(long val)
     long scaleVal = val * (ItemHeightRange);
     
     int res = -(int(scaleVal / getMaxItemValue()) + MinItemHeight);
-     RG_DEBUG << "ControlRuler::valueToHeight : val = " << val << " - height = " << res
-              << " - scaleVal = " << scaleVal << endl;
+
+    //RG_DEBUG << "ControlRuler::valueToHeight : val = " << val << " - height = " << res
+             //<< " - scaleVal = " << scaleVal << endl;
+
     return res;
 }
 
@@ -918,14 +932,22 @@ long ControlRuler::heightToValue(int h)
     val /= (ItemHeightRange);
     val = std::min(val, long(getMaxItemValue()));
 
-//     RG_DEBUG << "ControlRuler::heightToValue : height = " << h << " - val = " << val << endl;
+     RG_DEBUG << "ControlRuler::heightToValue : height = " << h << " - val = " << val << endl;
 
     return val;
 }
 
-QColor ControlRuler::valueToColor(int val)
+QColor ControlRuler::valueToColour(int max, int val)
 {
-    return DefaultVelocityColour::getInstance()->getColour(val);
+    int maxDefault = DefaultVelocityColour::getInstance()->getMaxValue();
+
+    int value = val;
+
+    // Scale value accordingly
+    //
+    if (maxDefault != max) value = int(double(maxDefault) * double(val)/double(max));
+
+    return DefaultVelocityColour::getInstance()->getColour(value);
 }
 
 
@@ -1048,6 +1070,11 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
     else
         m_controller = 0;
 
+
+    // Reset range information for this controller type
+    if (m_controller->getType() == Rosegarden::PitchBend::EventType)
+        setMaxItemValue(16383); // 2 ^ 14
+
     m_segment.addObserver(this);
 
     for(Segment::iterator i = m_segment.begin();
@@ -1071,16 +1098,8 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
             {
                 continue;
             }
-        } else if (m_controller->getType() == Rosegarden::PitchBend::EventType)
-        {
-            // do something
-            RG_DEBUG << "ControllerEventsRuler::ControllerEventsRuler - " 
-                     << "found pitch bend" << endl;
         }
-        else
-            continue;
-
-        RG_DEBUG << "ControllerEventsRuler: adding element\n";
+        //RG_DEBUG << "ControllerEventsRuler: adding element\n";
 
  	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime());
  	new ControlItem(this, new ControllerEventAdapter(*i), int(x + m_staffOffset),
@@ -1176,7 +1195,7 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
 
     // Check for specific controller value if we need to 
     //
-    if (m_controller)
+    if (e->getType() == Rosegarden::Controller::EventType)
     {
         try
         {
@@ -1189,7 +1208,6 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
             return;
         }
     }
-
 
     RG_DEBUG << "ControllerEventsRuler::elementAdded()\n";
 
@@ -1421,8 +1439,8 @@ void ControllerEventsRuler::layoutItem(ControlItem* item)
 
     item->setWidth(width);
 
-    RG_DEBUG << "ControllerEventsRuler::layoutItem ControlItem x = " << x 
-             << " - width = " << width << endl;
+    //RG_DEBUG << "ControllerEventsRuler::layoutItem ControlItem x = " << x 
+             //<< " - width = " << width << endl;
 }
 
 void

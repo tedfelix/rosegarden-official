@@ -787,7 +787,9 @@ EditView::setupControllerTabs()
     // Setup control rulers the Segment already has some stored against it.
     //
     Rosegarden::Segment *segment = getCurrentSegment();
-    Rosegarden::Segment::ControllerList list = segment->getControllerList();
+    Rosegarden::Segment::EventRulerList list = segment->getEventRulerList();
+
+    RG_DEBUG << "EditView::setupControllerTabs - got " << list.size() << " EventRulers" << endl;
 
     if (list.size())
     {
@@ -795,18 +797,23 @@ EditView::setupControllerTabs()
 	    (getCurrentDevice());
 	if (!md) return;
 
-        Rosegarden::Segment::ControllerListConstIterator it;
+        Rosegarden::Segment::EventRulerListIterator it;
 
         for (it = list.begin(); it != list.end(); ++it)
         {
             // Get ControlParameter object from controller value
             //
-            ControlParameter *controlParameter = md->getControlParameter(*it);
+            ControlParameter *controlParameter = 
+                md->getControlParameter((*it)->m_type, Rosegarden::MidiByte((*it)->m_controllerValue));
+
+            RG_DEBUG << "EditView::setupControllerTabs - " 
+                     << "Control Parameter type = " << (*it)->m_type << endl;
 
             if (controlParameter)
             {
                 ControllerEventsRuler* controlRuler = makeControllerEventRuler(controlParameter);
                 addControlRuler(controlRuler);
+                RG_DEBUG << "EditView::setupControllerTabs - adding Ruler" << endl;
             }
         }
 
@@ -859,7 +866,7 @@ EditView::slotAddControlRuler(int controller)
     // remember what we've opened against it.
     //
     Rosegarden::Staff *staff = getCurrentStaff();
-    staff->getSegment().addController(control.getControllerValue());
+    staff->getSegment().addEventRuler(control.getType(), control.getControllerValue());
 }
 
 void EditView::slotRemoveControlRuler(QWidget* w)
@@ -873,7 +880,8 @@ void EditView::slotRemoveControlRuler(QWidget* w)
         //
         if (controller) {
             Rosegarden::Staff *staff = getCurrentStaff();
-            bool value = staff->getSegment().deleteController(controller->getControllerValue());
+            bool value = staff->getSegment().
+                deleteEventRuler(controller->getType(), controller->getControllerValue());
 
             if (value) 
                 RG_DEBUG << "slotRemoveControlRuler : removed controller from segment\n";

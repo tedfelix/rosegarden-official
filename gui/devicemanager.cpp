@@ -100,7 +100,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     m_importButton = new QPushButton(i18n("Import..."), buttons);
     m_exportButton = new QPushButton(i18n("Export..."), buttons);
     m_banksButton = new QPushButton(i18n("Banks..."), buttons);
-    m_controllersButton = new QPushButton(i18n("Controllers..."), buttons);
+    m_controllersButton = new QPushButton(i18n("Control Events..."), buttons);
     vlayout->addWidget(buttons);
     vlayout->addStretch(10);
 
@@ -115,7 +115,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     QToolTip::add(m_banksButton,
 		  i18n("View and edit Banks and Programs for the selected device"));
     QToolTip::add(m_controllersButton,
-		  i18n("View and edit Controllers for the selected device"));
+		  i18n("View and edit Control Events for the selected device - these are special Event types that you can define against your device and control through Control Rulers or the Instrument Parameter Box "));
 
     connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddPlayDevice()));
     connect(m_deletePlayButton, SIGNAL(clicked()), this, SLOT(slotDeletePlayDevice()));

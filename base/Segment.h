@@ -512,15 +512,28 @@ public:
     /// For use by SegmentObserver objects like Composition & ViewElementsManager
     void removeObserver(SegmentObserver *obs) { m_observers.remove(obs); }
 
-    // List of visible controllers attached to this segment
+    // List of visible EventRulers attached to this segment
     //
-    typedef std::vector<MidiByte> ControllerList;
-    typedef std::vector<MidiByte>::iterator ControllerListIterator;
-    typedef std::vector<MidiByte>::const_iterator ControllerListConstIterator;
+    class EventRuler
+    {
+    public:
+        EventRuler(const std::string &type, int controllerValue, bool active):
+            m_type(type), m_controllerValue(controllerValue), m_active(active) {;}
 
-    ControllerList& getControllerList() { return m_controllerList; }
-    void addController(MidiByte controller);
-    bool deleteController(MidiByte controller);
+        std::string m_type;            // Event Type
+        int         m_controllerValue; // if controller event, then which value
+        bool        m_active;          // is this Ruler active?
+    };
+
+    typedef std::vector<EventRuler*> EventRulerList;
+    typedef std::vector<EventRuler*>::iterator EventRulerListIterator;
+    typedef std::vector<EventRuler*>::const_iterator EventRulerListConstIterator;
+
+    EventRulerList& getEventRulerList() { return m_eventRulerList; }
+    EventRuler* getEventRuler(const std::string &type, int controllerValue = -1);
+
+    void addEventRuler(const std::string &type, int controllerValue = -1, bool active = 0);
+    bool deleteEventRuler(const std::string &type, int controllerValue = -1);
 
     //////
     //
@@ -576,9 +589,9 @@ private:
     typedef std::multiset<Event*, ClefKeyCmp> ClefKeyList;
     mutable ClefKeyList *m_clefKeyList;
 
-    // Controllers currently selected as visible on this segment
+    // EventRulers currently selected as visible on this segment
     //
-    ControllerList                m_controllerList;
+    EventRulerList                m_eventRulerList;
 
 private: // stuff to support SegmentObservers
 

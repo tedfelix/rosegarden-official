@@ -54,7 +54,7 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     QVBox* mainFrame = new QVBox(this);
     setCentralWidget(mainFrame);
 
-    setCaption(i18n("Manage Control Parameters"));
+    setCaption(i18n("Manage Control Events"));
 
     QString deviceName(i18n("<no device>"));
     Rosegarden::MidiDevice *md =
@@ -63,14 +63,14 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 
     // spacing hack!
     new QLabel("", mainFrame);
-    new QLabel(i18n("  Control Parameters for %1 (device %2)").arg(deviceName).
+    new QLabel(i18n("  Control Events for %1 (device %2)").arg(deviceName).
 	       arg(device), mainFrame);
     new QLabel("", mainFrame);
 
     m_listView = new KListView(mainFrame);
-    m_listView->addColumn(i18n("Controller name  "));
-    m_listView->addColumn(i18n("Controller type  "));
-    m_listView->addColumn(i18n("Controller value  "));
+    m_listView->addColumn(i18n("Control Event name  "));
+    m_listView->addColumn(i18n("Control Event type  "));
+    m_listView->addColumn(i18n("Control Event value  "));
     m_listView->addColumn(i18n("Description  "));
     m_listView->addColumn(i18n("Max  "));
     m_listView->addColumn(i18n("Min  "));
@@ -191,17 +191,35 @@ ControlEditorDialog::slotUpdate()
         value.sprintf("%d (0x%x)", it->getControllerValue(),
                                  it->getControllerValue());
 
-        item = new ControlParameterItem(i++,
-                                        m_listView,
-                                        strtoqstr(it->getName()),
-                                        strtoqstr(it->getType()),
-                                        value,
-                                        strtoqstr(it->getDescription()),
-                                        QString("%1").arg(it->getMin()),
-                                        QString("%1").arg(it->getMax()),
-                                        QString("%1").arg(it->getDefault()),
-                                        colour,
-                                        position);
+        if (it->getType() == Rosegarden::PitchBend::EventType)
+        {
+            item = new ControlParameterItem(i++,
+                                            m_listView,
+                                            strtoqstr(it->getName()),
+                                            strtoqstr(it->getType()),
+                                            QString("-"),
+                                            strtoqstr(it->getDescription()),
+                                            QString("%1").arg(it->getMin()),
+                                            QString("%1").arg(it->getMax()),
+                                            QString("%1").arg(it->getDefault()),
+                                            colour,
+                                            position);
+        }
+        else
+        {
+            item = new ControlParameterItem(i++,
+                                            m_listView,
+                                            strtoqstr(it->getName()),
+                                            strtoqstr(it->getType()),
+                                            value,
+                                            strtoqstr(it->getDescription()),
+                                            QString("%1").arg(it->getMin()),
+                                            QString("%1").arg(it->getMax()),
+                                            QString("%1").arg(it->getDefault()),
+                                            colour,
+                                            position);
+        }
+
 
         // create and set a colour pixmap
         //
@@ -446,7 +464,7 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     m_hexValue = new QLabel(frame);
     layout->addWidget(m_hexValue, 3, 1);
 
-    layout->addWidget(new QLabel(i18n("Controller value:"), frame), 3, 0);
+    layout->addWidget(new QLabel(i18n("Control Event value:"), frame), 3, 0);
     m_controllerBox = new QSpinBox(frame);
     layout->addWidget(m_controllerBox, 3, 2);
 
