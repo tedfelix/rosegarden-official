@@ -83,7 +83,8 @@ LilypondExporter::~LilypondExporter() {
 }
 
 void
-LilypondExporter::handleStartingEvents(eventstartlist &eventsToStart, bool &addTie, std::ofstream &str) {
+LilypondExporter::handleStartingEvents(eventstartlist &eventsToStart,
+        std::ofstream &str) {
     for (eventstartlist::iterator m = eventsToStart.begin();
          m != eventsToStart.end();
          ++m) {
@@ -99,20 +100,19 @@ LilypondExporter::handleStartingEvents(eventstartlist &eventsToStart, bool &addT
         } else {
             // Not an indication
         }
+        
         // Incomplete: erase during iteration not guaranteed
         // This is bad, but can't find docs on return value at end
         // i.e. I want to increment m with m = events...erase(m), but
         // what is returned when erase(eventsToStart.end())?
         eventsToStart.erase(m);
     }
-    if (addTie) {
-        str << "~ ";
-        addTie = false;
-    }
+    // DMM - addTie removed because it was doing the wrong thing here.
 }
 
 void
-LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress, Segment::iterator &j, std::ofstream &str) {
+LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress, Segment::iterator &j,
+        std::ofstream &str) {
     for (eventendlist::iterator k = eventsInProgress.begin();
          k != eventsInProgress.end();
          ++k) {
@@ -123,13 +123,14 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress, Segment::it
         if ((*k)->getAbsoluteTime() + indicationDuration <=
             (*j)->getAbsoluteTime() + (*j)->getDuration()) {
             if ((*k)->isa(Indication::EventType)) {
-                std::string whichIndication((*k)->get<String>(Indication::IndicationTypePropertyName));
+                std::string whichIndication((*k)->get<String>
+                        (Indication::IndicationTypePropertyName));
         
                 if (whichIndication == Indication::Slur) {
                     str << ") ";
                 } else if (whichIndication == Indication::Crescendo ||
                            whichIndication == Indication::Decrescendo) {
-                    str << "\\! ";
+                    str << "\\! "; 
                 }
                 eventsInProgress.erase(k);
             } else {
@@ -363,13 +364,34 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
 
 // return a string of tabs, used to make it easier to change the horizontal
 // layout of export if sections need to be added/moved
-std::string LilypondExporter::indent(const int &column) {
+std::string
+LilypondExporter::indent(const int &column) {
     std::string outStr = "";
     for (int c = 1; c <= column; c++) {
         outStr += "    ";
     }
     return outStr;
 }
+
+// close a chord bracket if necessary, and/or add a tie if necessary (tie must
+// be outside of chord bracket or Lilypond complains and does silly things...
+// this was originally a part of handleStartingEvents, but I split it out
+// into this because handleStartingEvents was doing indescribably terrible
+// things to slurs/hairpins involving chords
+void
+LilypondExporter::closeChordWriteTie(bool &addTie, bool &currentlyWritingChord,
+                                     std::ofstream &str) {
+    // end chord bracket
+    if (currentlyWritingChord) {
+        currentlyWritingChord = false;
+        str << "> ";
+    }
+    // and/or add a tie (to end of chord, or between plain notes)
+    if (addTie) {
+        addTie = false;
+        str << "~ ";
+    }
+}    
 
 // find/protect illegal chars in user-supplied strings
 //
@@ -461,6 +483,14 @@ LilypondExporter::write() {
     bool exportHeaders = cfg->readBoolEntry("lilyexportheaders");
     bool exportMidi = cfg->readBoolEntry("lilyexportmidi");
     bool exportUnmuted = cfg->readBoolEntry("lilyexportunmuted");
+    bool exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick");
+
+    // enable "point and click" debugging via xdvi to make finding the
+    // unfortunately inevitable errors easier
+    if (exportPointAndClick) {
+        str << "% point and click debugging:" << std::endl;
+        str << "#(set-point-and-click! 'line)" << std::endl;
+    }
 
     // Lilypond \header block
     str << "\\version \"1.6.0\"" << std::endl;
@@ -475,7 +505,7 @@ LilypondExporter::write() {
     
     // open \header section if there's metadata to grab, and if the user
     // wishes it
-    if (!propertyNames.empty() || exportHeaders) {
+    if (!propertyNames.empty() && exportHeaders) {
         str << "\\header {" << std::endl;
         col++;  // indent+
 
@@ -541,7 +571,8 @@ LilypondExporter::write() {
     str << indent(++col) << "\\notes <" << std::endl;  // indent+
 
     // Make chords offset colliding notes by default
-    str << indent(++col) << "\\property Score.NoteColumn \\override #\'force-hshift = #1.0"
+    str << indent(++col) << "% force offset of colliding notes in chords:" << std::endl;
+    str << indent(col) << "\\property Score.NoteColumn \\override #\'force-hshift = #1.0"
         << std::endl;
     
     // set initial time signature
@@ -574,8 +605,8 @@ LilypondExporter::write() {
         timeT lastChordTime = m_composition->getStartMarker() - 1;
         bool currentlyWritingChord = false;
       
-        // We may need to wait before adding a tie or slur
-        // if we are currently in a chord
+        // We may need to wait before adding a tie if we are currently in a
+        // chord
         bool addTie = false;
 
         // do nothing if track is muted...  this provides a crude but easily implemented
@@ -621,7 +652,6 @@ LilypondExporter::write() {
             // No worries about overlapping segments, because Voices can overlap
             // voiceCounter is a hack because Lilypond does not by default make 
             // them unique
-
             std::ostringstream voiceNumber, lyricNumber;
             voiceNumber << "voice " << voiceCounter;
             lyricNumber << "lyric " << voiceCounter++;
@@ -657,7 +687,7 @@ LilypondExporter::write() {
 
             // declare these outside the scope of the coming for loop
             std::string lilyText = "";      // text events
-            std::ostringstream lilyLyrics;  // stream to collect/hold lyric events 
+            std::ostringstream lilyLyrics;  // stream to collect/hold lyric events
             
             // Write out all events for this Segment
             for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
@@ -675,11 +705,23 @@ LilypondExporter::write() {
 
                 if (multipleTimeSignatures) {
                     timeSignatureIterator++;
-                    timeSignature = m_composition->getTimeSignatureChange(timeSignatureIterator); */
+                    timeSignature = m_composition->getTimeSignatureChange(timeSignatureIterator);
+                    */
                 
                 if (j == (*i)->begin() ||
                     (prevTime < m_composition->getBarStartForTime(absoluteTime))) {
-                    str << std::endl << indent(col);  // carriage return at end of line
+
+                    // bar check, for debugging measures that don't count out
+                    // make this a toggle...
+/*                    if (prevTime <= m_composition->getBarStartForTime(absoluteTime)) {
+                        str << " | ";
+                    }
+good idea, but why are measures in 4/4 coming out with 5-6 beats?  this is no good...
+*/
+
+                    
+                    // end the line for the current measure
+                    str << std::endl << indent(col);
                     
                     // DMM - this is really pretty much an ugly hack, but it works...
                     // check time signature against previous one; if different,
@@ -807,8 +849,7 @@ LilypondExporter::write() {
                         if (currentlyWritingChord &&
                             (!nextNoteIsInChord ||
                              (nextNoteIsInChord && lastChordTime != absoluteTime))) {
-                            str << "> ";
-                            currentlyWritingChord = false;
+                            closeChordWriteTie(addTie, currentlyWritingChord, str);
                         }
                         if (curTupletNotesRemaining > 0) {
                             curTupletNotesRemaining--;
@@ -830,6 +871,7 @@ LilypondExporter::write() {
                         long velocity = 127;
                         (*j)->get<Int>(BaseProperties::VELOCITY, velocity);
 
+                        // close out any pending slurs/hairpins
                         handleEndingEvents(eventsInProgress, j, str);
 
                         // Note pitch (need name as well as octave)
@@ -893,11 +935,7 @@ LilypondExporter::write() {
                         }
 
                     } else { // it's a rest
-                        if (currentlyWritingChord) {
-                            currentlyWritingChord = false;
-                            handleStartingEvents(eventsToStart, addTie, str);
-                            str << "> ";
-                        }
+
                         if (curTupletNotesRemaining > 0) {
                             curTupletNotesRemaining--;
                             if (curTupletNotesRemaining == 0) {
@@ -965,29 +1003,38 @@ LilypondExporter::write() {
                         str << length;
                     }
                     
-                    // Add a tie if necessary (or postpone it if we're in a chord)
+                    // decide whether or not we need a tie, to be handled later...
+                    // this complication is necessary because Lilypond does
+                    // bizarre things when ties are inside chord brackets, and
+                    // this allows us to ensure that ties always come after
+                    // chords have been closed out
                     bool tiedForward = false;
                     (*j)->get<Bool>(BaseProperties::TIED_FORWARD, tiedForward);
                     if (tiedForward) {
-                        // Lilypond doesn't like ties inside chords, so defer writing
-                        // This should go in eventsToStart, but ties aren't Indications
                         addTie = true;
                     }
                     
                     // Add a space before the next note/event
                     str << " ";
 
-                    if (!currentlyWritingChord) {
-                        // And write any deferred start-of-events
-                        handleStartingEvents(eventsToStart, addTie, str);
+                    // handle start of slurs/hairpins
+                    handleStartingEvents(eventsToStart, str);
+
+                    // catch ties not in chords...  this is an unabashed
+                    // kludge...  this should use closeChordWriteTie, but that
+                    // function won't do the right job here.  If we're *not*
+                    // writing a chord, we need to write a tie here to avoid
+                    // deferring it to the wrong spot; otherwise
+                    // closeChordWriteTie will handle the tie when it's called
+                    // in various other places.
+                    if (!currentlyWritingChord && addTie) {
+                        str << "~ ";
+                        addTie = false;
                     }
+
                 } else if ((*j)->isa(Clef::EventType)) {
-                    if (currentlyWritingChord) {
-                        // Incomplete: Consolidate
-                        currentlyWritingChord = false;
-                        handleStartingEvents(eventsToStart, addTie, str);
-                        str << "> ";
-                    }
+                    
+                    closeChordWriteTie(addTie, currentlyWritingChord, str);
 
                     // Incomplete: Set which note the clef should center on  (DMM - why?)
                     str << "\\clef ";
@@ -1006,12 +1053,8 @@ LilypondExporter::write() {
                     str << indent(col);
 
                 } else if ((*j)->isa(Rosegarden::Key::EventType)) {
-                    if (currentlyWritingChord) {
-                        // Incomplete: Consolidate
-                        currentlyWritingChord = false;
-                        handleStartingEvents(eventsToStart, addTie, str);
-                        str << "> ";
-                    }
+
+                    closeChordWriteTie(addTie, currentlyWritingChord, str);
 
                     str << "\\key ";
                     Rosegarden::Key whichKey(**j);
@@ -1030,6 +1073,10 @@ LilypondExporter::write() {
                             
                 } else if ((*j)->isa(Indication::EventType)) {
                     // Handle the end of these events when it's time
+                    //
+                    // If we get an indication, add the event to
+                    // eventsToStart, keep track of on-going events with
+                    // eventsInProgress, which are both std::multiset
                     eventsToStart.insert(*j);
                     eventsInProgress.insert(*j);
                 } else {
@@ -1037,12 +1084,8 @@ LilypondExporter::write() {
                               << (*j)->getType();
                 }
             }
-            if (currentlyWritingChord) {
-                // Incomplete: Consolidate
-                currentlyWritingChord = false;
-                handleStartingEvents(eventsToStart, addTie, str);
-                str << "> ";
-            }
+
+            closeChordWriteTie(addTie, currentlyWritingChord, str);
             
             // close Voice context
             str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-  

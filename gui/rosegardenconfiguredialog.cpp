@@ -581,20 +581,11 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
         i18n("Export \\midi block"), frame);
     m_lilyExportMidi->setChecked(m_cfg->readBoolEntry("lilyexportmidi", false));
     layout->addWidget(m_lilyExportMidi, 3, 1);
-
-/* This is vastly more complicated to implement than I thought, essentially
- * like using a nuclear bomb to dig a hole in the ground for the foundation to
- * a tool shed.  This will likely disappear soon, unless I come up with
- * something clever.  Some features, while nice, just aren't worth the cost.
- * 
-    layout->addWidget(new QLabel(
-        i18n("Fill time gaps with:"), frame), 5, 0);
-
-    m_lilyRestType = new RosegardenComboBox(frame);
-    m_lilyRestType->insertItem("\\skip");
-    m_lilyRestType->insertItem("multi-measure rests");
-    m_lilyRestType->setCurrentItem(m_cfg->readUnsignedNumEntry("lilyresttype", 0));
-    layout->addWidget(m_lilyRestType, 5, 1); */
+    
+    m_lilyExportPointAndClick = new QCheckBox(
+        i18n("Enable \"point and click\" debugging"), frame);
+    m_lilyExportPointAndClick->setChecked(m_cfg->readBoolEntry("lilyexportpointandclick", false));
+    layout->addWidget(m_lilyExportPointAndClick, 4, 0);
     
     addTab(frame, i18n("Lilypond"));  
 }
@@ -677,7 +668,7 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("lilyexportheader", m_lilyExportHeaders->isChecked());
     m_cfg->writeEntry("lilyexportmidi", m_lilyExportMidi->isChecked());
     m_cfg->writeEntry("lilyexportunmuted", m_lilyExportUnmuted->isChecked());
-//!!!    m_cfg->writeEntry("lilyresttype", m_lilyRestType->currentItem());
+    m_cfg->writeEntry("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
 
     (void)m_quantizeFrame->getQuantizer(); // this also writes to the config
 }

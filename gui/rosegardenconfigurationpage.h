@@ -240,6 +240,7 @@ protected:
     QCheckBox *m_lilyExportLyrics;
     QCheckBox *m_lilyExportMidi;
     QCheckBox *m_lilyExportUnmuted;
+    QCheckBox *m_lilyExportPointAndClick;
 //!!!    QComboBox *m_lilyRestType;
 
     void populateSizeCombo(QComboBox *combo, std::string font, int dfltSize);

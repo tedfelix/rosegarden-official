@@ -58,7 +58,7 @@ public:
 protected:
     Rosegarden::Composition *m_composition;
     std::string m_fileName;
-    void handleStartingEvents(eventstartlist &eventsToStart, bool &addTie, std::ofstream &str);
+    void handleStartingEvents(eventstartlist &eventsToStart, std::ofstream &str);
     void handleEndingEvents(eventendlist &eventsInProgress, Segment::iterator &j, std::ofstream &str);
 
     // convert note event into Lilypond format note string using combination
@@ -78,7 +78,10 @@ protected:
     // return a string full of column tabs
     std::string indent(const int &column);
                   
-
+    // close chord if necessary, and/or add tie if necessary; can do one or
+    // both independantly
+    void closeChordWriteTie(bool &addTie, bool &currentlyWritingChord, std::ofstream &str);
+    
  private:
     static const int MAX_DOTS = 4;
 };
