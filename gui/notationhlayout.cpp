@@ -42,13 +42,11 @@ NotationHLayout::NotationHLayout(NotationElementList& elements,
 }
 
 void
-NotationHLayout::layout(NotationElementList::iterator &it)
+NotationHLayout::layout(NotationElement *el)
 {
     // if (el) is time sig change, reflect that
 
     // kdDebug(KDEBUG_AREA) << "Layout" << endl;
-
-    NotationElement *el = *it;
 
     m_quantizer.quantize(el->event());
 
@@ -62,9 +60,8 @@ NotationHLayout::layout(NotationElementList::iterator &it)
 
     // Store note position
     //
-    m_lastElementPos = ElementHPos(m_currentPos, it);
-
-    m_notePositions.push_back(m_lastElementPos);
+//     m_lastElementPos = ElementHPos(m_currentPos, it);
+//     m_notePositions.push_back(m_lastElementPos);
 
     Note note = Note(el->event()->get<Int>("Notation::NoteType")); // check the property is here ?
 
@@ -155,29 +152,32 @@ NotationHLayout::barPositions() const
 }
 
 NotationElementList::iterator
-NotationHLayout::insertNote(NotationElement *el, unsigned int xPos)
+NotationHLayout::insertNote(NotationElement *el)
 {
-    ElementHPos elementPos(xPos);
+//     ElementHPos elementPos(xPos);
     
-    vector<ElementHPos>::iterator insertPoint = lower_bound(m_notePositions.begin(),
-                                                            m_notePositions.end(),
-                                                            elementPos);
+//     vector<ElementHPos>::iterator insertPoint = lower_bound(m_notePositions.begin(),
+//                                                             m_notePositions.end(),
+//                                                             elementPos);
+
+    NotationElementList::iterator insertPoint = lower_bound(m_notationElements.begin(),
+                                                            m_notationElements.end(),
+                                                            el);
     
-    if (insertPoint != m_notePositions.end()) {
+    if (insertPoint != m_notationElements.end()) {
 
         ++insertPoint;
-        elementPos.pos = insertPoint->pos;
-        el->setX(elementPos.pos);
+        // readjust horizontal position of inserted element
+        el->setX((*insertPoint)->x());
         
-        m_notePositions.insert(insertPoint, elementPos);
-
         // TODO
         // reapply layout on all following notes
 
-        return insertPoint->it;
+        return insertPoint;
 
     } else {
-        m_notePositions.push_back(elementPos);
+        --insertPoint;
+        el->setX((*insertPoint)->x() + Staff::noteWidth + m_noteMargin);
         return m_notationElements.end();
     }
 

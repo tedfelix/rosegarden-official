@@ -63,14 +63,16 @@ public:
 
     ElementHPos& lastElementPos() { return m_lastElementPos; }
 
-    NotationElementList::iterator insertNote(NotationElement *el, unsigned int xPos);
+    NotationElementList::iterator insertNote(NotationElement *el);
+
+    Quantizer& quantizer() { return m_quantizer; }
 
 protected:
     /*
      * Breaks down a note which doesn't fit in a bar into shorter notes - disabled for now */
     //     const vector<unsigned int>& splitNote(unsigned int noteLen);
 
-    virtual void layout(NotationElementList::iterator&);
+    virtual void layout(NotationElement*);
 
     void initNoteWidthTable();
 
