@@ -207,8 +207,6 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     dS >> audioUsec;
     dS >> dataLength;
 
-    if (dS.atEnd()) return dS;
-
     for (unsigned int i = 0; i < dataLength; i++)
     {
         dS >> dataElement;
@@ -249,8 +247,6 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     dS >> audioSec;
     dS >> audioUsec;
     dS >> dataLength;
-
-    if (dS.atEnd()) return dS;
 
     for (unsigned int i = 0; i < dataLength; i++)
     {
