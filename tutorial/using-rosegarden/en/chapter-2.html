@@ -21,7 +21,7 @@ A { text-decoration: none }
 <A HREF="chapter-1.html">Previous</A>
 <A HREF="chapter-3.html">Next</A>
 <HR>
-<H1><A NAME="2">2 Producing Sound (final)</A></H1>
+<H1><A NAME="2">2 Producing Sound</A></H1>
 <P>Many users have written to ask why they are unable to get Rosegarden
  to make any noise. It is the most common question asked on the
  rosegarden-user mailing list by far, and is especially troublesome for
@@ -60,12 +60,13 @@ COLOR="#9966cc"> ALSA soft synths</FONT> and<FONT COLOR="#5e11a6"> synth
 <P>If you have no idea what you have inside your box, and you have no
  idea how to configure any of this stuff, one good place to start is to
  have a look and see how far your distro has gotten you for free. Most
- modern distros should load ALSA over OSS (the old sound system), and
- they should detect and configure a wide variety of soundcards for you
- automatically. KDE has a useful information center that can display
- information about your sound configuration. It will typically be found
- on the KDE menu under<B> System -&gt; Info Center</B>, or you can run it
- manually by typing &quot;kinfocenter&quot; into an alt+F2 run command box.</P>
+ modern distros should load ALSA in preference to OSS (the old sound
+ system), and they should detect and configure a wide variety of
+ soundcards for you automatically. KDE has a useful information center
+ that can display information about your sound configuration. It will
+ typically be found on the KDE menu under<B> System -&gt; Info Center</B>,
+ or you can run it manually by typing &quot;kinfocenter&quot; into an<B> alt</B>+<B>
+F2</B> run command box.</P>
 <P STYLE="font-weight: medium">Here is a sample of its output, with
  explanations superimposed on the screenshot:</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic1"
@@ -224,7 +225,7 @@ SRC="../pixmaps/configure-soundfont.png" ></P>
 <H4 CLASS="western"><A NAME="2_1_3_2">2.1.3.2 Cards without Synth
  Support under ALSA</A></H4>
 <P>This is really the &quot;everything else&quot; category. It includes too many
- soundcards to list, each with its own set of modules. The Sound Blaster
+ soundcards to list; each with its own set of modules. The Sound Blaster
  PCI and Ensoniq AudioPCI cards (ens-1370, ens-1371, ens-1373), and
  integrated snd-intel8x0 and snd-via82xx are probably the most common,
  but soundcards that fall into this category are legion. The process for
@@ -352,7 +353,7 @@ SRC="../pixmaps/qjackctl-silvan.png" ></P>
  soundcard, you may need to twiddle the &quot;Interface&quot; setting. I don't
  actually have any experience in such a situation, so you are on your
  own to experiment in that case.</P>
-<P ALIGN="LEFT" STYLE="font-weight: medium"> Discovering the best
+<P ALIGN="LEFT" STYLE="font-weight: medium">Discovering the best
  combination is a process of playing with the &quot;Frames/Period&quot;, &quot;Sample
  Rate&quot; and &quot;Periods/Buffer&quot; settings. Your objective here is to find the
  lowest possible latency, as reported in the lower right-hand corner of

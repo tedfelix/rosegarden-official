@@ -21,8 +21,7 @@ A { text-decoration: none }
 <A HREF="chapter-4.html">Previous</A>
 <A HREF="chapter-6.html">Next</A>
 <HR>
-<H1><A NAME="5">5 Managing Instruments (needs VST plugins; finish audio)</A>
-</H1>
+<H1><A NAME="5">5 Managing Instruments</A></H1>
 <P>You want to play a particular track using a hammered dulcimer, or
  else you've got an audio track that needs some EQ. In either case, you
  need an introduction to the<B> instrument</B>. Instruments are
@@ -117,14 +116,14 @@ SRC="../pixmaps/jack-instrument-diagram.jpg" ></P>
  Notice also that instrument #10 has (D) in parenthesis, indicating that
  this instrument is normally used for playing drums. (Whether it
  actually plays drums depends on the capabilities of the MIDI equipment
- or software synth represented by this &quot;device,&quot; and probably depends on
+ or software synth represented by this device, and probably depends on
  this instrument continuing to remain at the default channel assignment
  of 10.) In this example, I arranged beforehand for this instrument to
  play using the &quot;Power&quot; drum kit.</P>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
- The remaining &quot;instruments&quot; are not assigned to anything in particular
+ The remaining instruments are not assigned to anything in particular
  yet, and on most General MIDI-compliant equipment (or software synths)
- these &quot;instruments&quot; will probably play using a factory default piano
+ these instruments will probably play using a factory default piano
  program, with volume and other controllers set to neutral default
  values. Some equipment may not actually produce any noise until you
  explicitly assign a program to any instruments you use.</P>
@@ -133,8 +132,8 @@ SRC="../pixmaps/jack-instrument-diagram.jpg" ></P>
  track has had its output routed to a MIDI output device and instrument,
  and is therefore a MIDI track, the<B> Instrument Parameters</B> box
  will display controls similar to these. They allow you to reassign the
- channel for this &quot;instrument,&quot; and to dial in a program. Depending on
- how your synth/soundfont is set up, you may have to deal with a few
+ channel for this instrument, and to dial in a program. Depending on how
+ your synth/soundfont is set up, you may have to deal with a few
  different scenarios here.</P>
 <H3 CLASS="western"><A NAME="5_3_1">5.3.1 Simple General MIDI
  Instruments</A></H3>
@@ -189,9 +188,9 @@ SRC="../pixmaps/jack-instrument-diagram.jpg" ></P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic46"
 SRC="../pixmaps/matrix-pick-tr-808.png" ></P>
 <P ALIGN="LEFT"><I>NOTE: Pay particular attention to the fact that since
- the drum programs we're after in this case are</I> not<I> in the same
- bank as the General MIDI programs, the<B> Percussion</B> checkbox is</I>
- not<I> checked.</I></P>
+ the drum programs we're after in this case are</I><B> not</B><I> in the
+ same bank as the General MIDI programs, the<B> Percussion</B> checkbox
+ is</I><B> not</B><I> checked.</I></P>
 <H3 CLASS="western"><A NAME="5_3_6">5.3.6 Controller Knobs</A></H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">You may
  change the default controller values by adjusting the knobs. The
@@ -252,25 +251,25 @@ SRC="../pixmaps/matrix-pick-tr-808.png" ></P>
 <H2 CLASS="western"><A NAME="5_6">5.6 Audio Instrument Parameters</A></H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Audio
  instruments have different controls available in the<B> Instrument
- Parameters</B> box..</P>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">stereo
- channels, and a mono/stereo toggle. (<IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic8" SRC="../pixmaps/audio-mono.png" > <IMG ALIGN="BOTTOM" BORDER="0"
-NAME="Graphic9" SRC="../pixmaps/audio-stereo.png" >).</P>
+ Parameters</B> box.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">They have a
+ mono/stereo toggle, (<IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic8"
+SRC="../pixmaps/audio-mono.png" > <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic9" SRC="../pixmaps/audio-stereo.png" >) and various controls
+ for adding plugins and adjusting levels.</P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic7" SRC="../pixmaps/instrument-parameters-audio.png"
 ></P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you wish
- to assign LADSPA plugins to the track, you may use one of the &quot;&lt;no
+ to assign LADSPA plugins to the instrument, you may use one of the &quot;&lt;no
  plugin&gt;&quot; buttons to summon a dialog similar to this one. You can narrow
  in on what you want using the<B> Category:</B> selector, and then dial
  in a particular plugin with the<B> Plugin:</B> selector. As you dial
  through these, the knobs in the bottom half of this dialog box will
  change to reflect the controls that are available for this particular
  plugin; ranging from one knob to a screen full of them. You can layer
- up to five plugins for each instrument in the &quot;JACK Audio&quot; device,
- hardware allowing. Some plugins are particularly expensive in their use
- of your system's resources, so using too many may cause performance
- problems.</P>
+ up to five plugins for each instrument in the &quot;Audio&quot; device, hardware
+ allowing. Some plugins are particularly expensive in their use of your
+ system's resources, so using too many may cause performance problems.</P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic1" SRC="../pixmaps/JACK-plugins.png"
 ></P>
@@ -343,9 +342,11 @@ SRC="../pixmaps/synth-plugin-editor-button.png" > button you can use
 SRC="../pixmaps/synth-plugin-xsynth-gui.png" ></P>
 <P ALIGN="LEFT"><I>TIP: This thing is uncomfortably large for my screen.
  If you have the same problem, remember that you can drag it around even
- when its title bar is hidden off the top of the screen. Hold down the
- Alt key while clicking on the window with your mouse, and reposition it
- as necessary to get to all of the controls.</I></P>
+ when its title bar is hidden off the top of the screen. Hold down the</I><B>
+
+<!--SPAN STYLE="font-style: normal"-->
+ Alt</B><I> key while clicking on the window with your mouse, and
+ reposition it as necessary to get to all of the controls.</I></P>
 <H4 CLASS="western"><A NAME="5_7_1_2">5.7.1.2 FluidSynth</A></H4>
 <P>FluidSynth-DSSI is a plugin built around the same underlying engine
  that powers QSynth. The plugin implementation isn't quite as friendly

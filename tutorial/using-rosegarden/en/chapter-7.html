@@ -22,7 +22,7 @@ A { text-decoration: none }
 <A HREF="chapter-8.html">Next</A>
 <HR>
 <H1 STYLE="font-style: normal"><A NAME="7">7 <FONT FACE="arial">A
- Different View (needs final edit)</FONT></A></H1>
+ Different View</FONT></A></H1>
 <P STYLE="border: none; padding: 0in">So far, we've only looked at the
  main window, and have not really edited anything. Rosegarden provides
  three different editors, each with its own unique view of the data. You
@@ -141,9 +141,9 @@ NAME="Graphic40" SRC="../pixmaps/event-list-advanced-edit.png" >
  insertion point. In this example, I've done it using the transport in
  beat:bar mode to ensure I'm in exactly the desired spot to insert a
  program change at bar 2, beat 1, tick 0.</P>
-<P>Remember that the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic30"
-SRC="../pixmaps/transport-switch-modes.png" > button changes display
- modes on the transport.</P>
+<P STYLE="text-decoration: none"><I>Remember that the <IMG ALIGN="BOTTOM"
+BORDER="0" NAME="Graphic30" SRC="../pixmaps/transport-switch-modes.png" >
+ button changes display modes on the transport.</I></P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic26"
 SRC="../pixmaps/event-list-add-program-change-set-insert-point.png" ></P>
 <H5 CLASS="western"><A NAME="7_1_2_1_2">7.1.2.1.2 Open the Editor,
@@ -325,10 +325,10 @@ SRC="../pixmaps/matrix-arbitrary-resize.png" ></P>
 <H3 CLASS="western"><A NAME="7_3_3">7.3.3 Selecting and Acting on
  Multiple Notes</A></H3>
 <P>All of these operations can be performed on more than one note at a
- time. In order to do so, you need to make a selection. You can use the <IMG
-ALIGN="BOTTOM" BORDER="0" NAME="Graphic13" SRC="../pixmaps/matrix-arrow-cursor.png"
-> cursor to select individual notes one by one while holding
- down the shift key.</P>
+ time. In order to do so, you need to make a selection.</P>
+<P> You can use the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic13"
+SRC="../pixmaps/matrix-arrow-cursor.png" > cursor to select individual
+ notes one by one while holding down the shift key.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic14"
 SRC="../pixmaps/matrix-select-individual-notes.png" ></P>
 <P ALIGN="LEFT">If you wish to select a broad range of notes, you can
@@ -388,15 +388,7 @@ SRC="../pixmaps/matrix-arranged-velocity.png" ></P>
 <P ALIGN="LEFT" STYLE="font-weight: medium"><I>NOTE: It can indeed be
  somewhat tricky to know which note you're adjusting if there are
  several notes of the same duration at the same time. When multiple
- notes occur at the same time, use the</I>
-<!--SPAN STYLE="font-style: normal"-->
-<B> [</B>
-<!--SPAN STYLE="font-weight: medium"-->
-
-<!--SPAN STYLE="font-weight: medium"-->
-<I> and</I><B> ]</B><I>
-
-<!--SPAN STYLE="font-weight: medium"-->
+ notes occur at the same time, use the</I><B> [</B><I> and</I><B> ]</B><I>
  keys to flip through the available choices, then watch the matrix above
  for the color change that reveals which note you are adjusting.</I></P>
 <H4 CLASS="western"><A NAME="7_3_4_2">7.3.4.2 Setting Multiple Velocity
@@ -410,9 +402,7 @@ SRC="../pixmaps/matrix-arranged-velocity.png" ></P>
 SRC="../pixmaps/matrix-adjust-velocities.png" ></P>
 <P ALIGN="LEFT"><I>TIP: If you find that you have notes that don't have
  velocity properties for some reason (there are no bars on the velocity
- ruler for those notes), you can also use<B> Set Event Velocities</B>
-<!--SPAN STYLE="font-weight: medium"-->
- to
+ ruler for those notes), you can also use<B> Set Event Velocities</B> to
  create new ones.</I></P>
 <H4 CLASS="western"><A NAME="7_3_4_3">7.3.4.3 
 <BR>
@@ -529,9 +519,9 @@ SRC="../pixmaps/matrix-set-loop.png" ></P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic50"
 SRC="../pixmaps/matrix-first-bar.png" ></P>
 <H4 CLASS="western"><A NAME="7_4_1_5">7.4.1.5 Copy the Pattern</A></H4>
-<P>Select all the event and paste them three times. Use the top ruler to
- set the local cursor to the destination for each paste operation. You
- should wind up with something like this:</P>
+<P>Select all the events and paste them three times. Use the top ruler
+ to set the local cursor to the destination for each paste operation.
+ You should wind up with something like this:</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic52"
 SRC="../pixmaps/matrix-after-copies.png" ></P>
 <H4 CLASS="western"><A NAME="7_4_1_6">7.4.1.6 Finish with a Fill</A></H4>
@@ -572,12 +562,9 @@ BORDER="0" NAME="Graphic56" SRC="../pixmaps/event-list-filter-selection.png"
 > icon to summon the event filter dialog.</P>
 <P>Then I used the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic57"
 SRC="../pixmaps/dot-dot-dot-button.png" > icon to pop up the pitch
- chooser for the f<B>rom:</B>
-<!--SPAN STYLE="font-weight: medium"-->
- pitch. In this case, E3.</P>
-<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
-NAME="Graphic58" SRC="../pixmaps/matrix-event-filter-B.png" >
-</P>
+ chooser for the f<B>rom:</B> pitch. In this case, E3.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic58"
+SRC="../pixmaps/matrix-event-filter-B.png" ></P>
 <P ALIGN="LEFT" STYLE="font-weight: medium"><I>TIP: I find it a bit
  tricky to use the pitch picker in this dialog from the matrix view
  because I'm comparing a constantly changing clef and staff to a pitch
@@ -585,16 +572,12 @@ NAME="Graphic58" SRC="../pixmaps/matrix-event-filter-B.png" >
  taken to looking at the status bar at the bottom of the window as I
  hover over notes. It shows the absolute MIDI pitch, and makes it a
  breeze dialing the values I want straight in.</I></P>
-<P ALIGN="LEFT">
-<!--SPAN STYLE="font-weight: medium"-->
-I repeated the process for the<B> to:</B> pitch,
- selecting B#3. Since I wanted to select the notes in between these two
- extremes first, I left the associated combo box set to &quot;include.&quot; This
- caused it to include all the notes between E3 and B#3.
-<!--SPAN STYLE="font-weight: medium"-->
- Since I wanted
- to grab notes irrespective of duration or velocity, I left these
- filters at all-inclusive settings.</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">I repeated the process for
+ the<B> to:</B> pitch, selecting B#3. Since I wanted to select the notes
+ in between these two extremes first, I left the associated combo box
+ set to &quot;include.&quot; This caused it to include all the notes between E3
+ and B#3. Since I wanted to grab notes irrespective of duration or
+ velocity, I left these filters at all-inclusive settings.</P>
 <H4 ALIGN="LEFT" CLASS="western" STYLE="font-weight: medium"><A NAME="7_4_2_3">
 7.4.2.3 Adjust the Velocities</A></H4>
 <P ALIGN="LEFT">After clicking OK to apply the filter, the following
