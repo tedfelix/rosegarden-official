@@ -123,6 +123,7 @@ private:
     FaderRec m_monitor;
     FaderRec m_master;
 
+    void depopulate();
     void populate();
 
     void updateFader(int id); // instrument id if large enough, monitor if -1, master/sub otherwise

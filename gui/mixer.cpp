@@ -48,6 +48,8 @@ MixerWindow::MixerWindow(QWidget *parent,
     m_studio(&document->getStudio()),
     m_currentId(0)
 {
+    setWFlags(WDestructiveClose);
+
     m_mainBox = 0;
     populate();
 
@@ -123,6 +125,7 @@ MixerWindow::MixerWindow(QWidget *parent,
 MixerWindow::~MixerWindow()
 {
     RG_DEBUG << "MixerWindow::~MixerWindow" << endl;
+    depopulate();
 }
 
 void
@@ -133,24 +136,33 @@ MixerWindow::slotClose()
 }    
 
 void
+MixerWindow::depopulate()
+{
+    if (!m_mainBox) return;
+    
+    // All the widgets will be deleted when the main box goes,
+    // except that we need to delete the AudioRouteMenus first
+    // because they aren't actually widgets but do contain them
+    
+    for (FaderMap::iterator i = m_faders.begin();
+	 i != m_faders.end(); ++i) {
+	delete i->second.m_input;
+	delete i->second.m_output;
+    }
+    
+    m_faders.clear();
+    m_submasters.clear();
+    
+    delete m_mainBox;
+    m_mainBox = 0;
+}    
+
+void
 MixerWindow::populate()
 {
     if (m_mainBox) {
 
-	// All the widgets will be deleted when the main box goes,
-	// except that we need to delete the AudioRouteMenus first
-	// because they aren't actually widgets but do contain them
-	
-	for (FaderMap::iterator i = m_faders.begin();
-	     i != m_faders.end(); ++i) {
-	    delete i->second.m_input;
-	    delete i->second.m_output;
-	}
-
-	m_faders.clear();
-	m_submasters.clear();
-
-	delete m_mainBox;
+	depopulate();
 
     } else {
 
