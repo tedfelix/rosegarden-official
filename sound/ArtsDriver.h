@@ -26,6 +26,7 @@
 #include <arts/soundserver.h>
 #include <arts/artsflow.h>     // aRts audio subsys
 #include <arts/artsmodules.h>  // aRts wav modules
+#include <arts/qiomanager.h>
 
 #include "MidiRecord.h"        // local MIDI record implementation
 #include "SoundDriver.h"
@@ -126,7 +127,8 @@ private:
     // aRts MIDI devices
     //
     Arts::MidiManager        m_midiManager;
-    Arts::Dispatcher         m_dispatcher;
+    Arts::QIOManager        *m_qIOManager;
+    Arts::Dispatcher        *m_dispatcher;
     Arts::MidiClient         m_midiPlayClient;
     Arts::MidiClient         m_midiRecordClient;
     RosegardenMidiRecord     m_midiRecordPort;

@@ -49,6 +49,9 @@ ArtsDriver::ArtsDriver(MappedStudio *studio):
 {
     std::cout << "Rosegarden ArtsDriver - " << m_name << std::endl;
 
+    m_qIOManager = new Arts::QIOManager();
+    m_dispatcher = new Arts::Dispatcher(m_qIOManager);
+
     // Get a reference on the aRts sound server
     //
 
@@ -67,6 +70,11 @@ ArtsDriver::ArtsDriver(MappedStudio *studio):
 ArtsDriver::~ArtsDriver()
 {
     std::cout << "ArtsDriver::~ArtsDriver" << std::endl;
+    m_midiRecordClient.removePort(m_midiRecordPort);
+    m_midiPlayClient.removePort(m_midiPlayPort);
+
+    delete m_dispatcher;
+    delete m_qIOManager;
 }
 
 // Create a list of possible instruments for this driver
@@ -402,7 +410,7 @@ ArtsDriver::processNotesOff(const RealTime &time)
 }
 
 void
-ArtsDriver::processAudioQueue(const RealTime &playLatency, bool /*now*/)
+ArtsDriver::processAudioQueue(const RealTime &/*playLatency*/, bool /*now*/)
 {
     // Now check queue for events that need playing
     std::vector<PlayableAudioFile*>::iterator it;

@@ -65,7 +65,7 @@ endif
 endif
 
 libRosegardenSequencer_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -module -no-undefined
-libRosegardenSequencer_la_LIBADD   = -lartsmidi $(LIB_QT) -lsoundserver_idl libRosegardenSound.la ../base/libbase.la -lartsflow -lartsmodules @ALSA_LIBS@
+libRosegardenSequencer_la_LIBADD   = -lartsmidi $(LIB_QT) -lsoundserver_idl libRosegardenSound.la ../base/libbase.la -lartsflow -lartsmodules -lartskde @ALSA_LIBS@
 
 libRosegardenSequencer_la_CFLAGS = @ALSA_CFLAGS@
 
