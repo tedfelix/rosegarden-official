@@ -71,7 +71,7 @@ RosegardenGUIApp::RosegardenGUIApp()
 
 RosegardenGUIApp::~RosegardenGUIApp()
 {
-
+    kdDebug(KDEBUG_AREA) << "~RosegardenGUIApp()\n";
 }
 
 
