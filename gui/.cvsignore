@@ -6,3 +6,4 @@ Makefile
 Makefile.in
 *_skel.cpp
 *_meta_unload.cpp
+*.kidl
