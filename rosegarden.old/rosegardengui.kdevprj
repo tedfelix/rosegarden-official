@@ -76,9 +76,9 @@ type=DATA
 
 [Workspace_1]
 browser_file=file:/home/glaurent/.kde/share/apps/kdevelop/KDE-Documentation//kab/KabAPI.html
-cpp_file=/home/glaurent/rosegarden/rosegardengui/rosegardengui/trackseditor.cpp
-header_file=/home/glaurent/rosegarden/rosegardengui/rosegardengui/trackscanvas.h
-openfiles=Untitled.h,Untitled.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/rosegardengui.h,/home/glaurent/rosegarden/rosegardengui/rosegardengui/main.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/trackseditor.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/trackseditor.h,/home/glaurent/rosegarden/rosegardengui/rosegardengui/trackscanvas.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/trackscanvas.h
+cpp_file=/home/glaurent/rosegarden/rosegardengui/rosegardengui/main.cpp
+header_file=/home/glaurent/rosegarden/rosegardengui/gl_configure
+openfiles=Untitled.h,Untitled.cpp,/home/glaurent/rosegarden/rosegardengui/rosegardengui/rosegardengui.h,/home/glaurent/rosegarden/rosegardengui/rosegardengui/main.cpp,/home/glaurent/rosegarden/rosegardengui/configure.files,/home/glaurent/rosegarden/rosegardengui/config.h.in,/home/glaurent/rosegarden/rosegardengui/gl_configure
 show_outputview=true
 show_treeview=true
 
