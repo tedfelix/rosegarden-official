@@ -70,26 +70,69 @@
   not be left out in order to maintain a consistent documentation
   style across all KDE apps. -->
 
+
+  <!--
+
+
+
+
+
+
+    Notes on style and terminology for Rosegarden handbook
+    ======================================================
+
+     * Aim to be clear, brief and direct, but be informal.
+
+     * Write instructions in the second person.  For example,
+       don't write: "Segments can be selected by clicking on
+       them with the arrow tool", write "You can select
+       segments by clicking on them with the arrow tool".
+
+     * It's perfectly permissible to pause to explain why
+       something is the way it is, particularly if it might
+       not be obvious.
+
+     * Bear in mind we can link extensively from any part of
+       the handbook to any other.  Unfortunately DocBook won't
+       allow you to write a link to a target that doesn't
+       exist yet, so if you want to link to something that's
+       not yet been written, either make a note of the planned
+       link in an XML comment, or go and create a stub for the
+       bit that hasn't been written yet, or else just write in
+       a way that allows for a link to be easily added later
+       (we could do an editing phase specially for links).
+
+     * Be strict about using the correct terminology for
+       Rosegarden data structures (segment, event, track,
+       instrument, composition), but don't capitalise the
+       words.  Capitalisation is useful in technical documents
+       to make it clear that you're referring to a precise
+       concept, but you shouldn't have to do it to make your
+       meaning clear in user documentation.  If something
+       seems ambiguous without, try rewording it instead.
+
+
+
+
+
+  -->
+
+
   <chapter id="introduction">
     <title>Introduction</title>
-
-    <!-- The introduction chapter contains a brief introduction for
-    the application that explains what it does, where to get new
-    versions of the app, where to report problems, and a brief
-    revision history of the app. Basically a long version of the
-    abstract. -->
 
     <para>
       <application>Rosegarden</application> is a MIDI and audio
       sequencer and musical notation editor.  It allows the user to
       record, arrange and compose music.  Music is represented either
-      by traditional score/MIDI data or by sets of audio files either
-      imported or recorded from a microphone, guitar or whatever audio
-      source you care to specify.  Music data can be edited to create a
-      composition, effects can be applied and the resulting mix can be
-      burnt to CD or turned into MP3/ogg format suitable for distributio
-      on the web.  Professional notation editing support also provides high
-      quality printed output of the composition.
+      by traditional score or MIDI data, or by sets of audio files
+      either imported or recorded from a microphone, guitar or
+      whatever audio source you care to specify.  Music data can be
+      edited to create a composition, effects can be applied and the
+      resulting mix can be burnt to CD or turned into MP3/ogg format
+      suitable for distribution on the web.  Professional notation
+      editing support also provides high quality printed output of the
+      composition.
     </para>
 
     <para>
@@ -100,12 +143,12 @@
     </para>
 
     <para>
-    This help will guide you through the major features of the
-    software and provide help with basic concepts.  If there's something
-    you don't understand or require further help with the please
-    visit 
-    <ulink url="http://www.all-day-breakfast.com/rosegarden/">the Rosegarden website</ulink>
-    for the FAQ and mailing list instructions.
+    This handbook will guide you through the major features of the
+    software and provide help with basic concepts.  If there's
+    something you don't understand or require further help with the
+    please visit <ulink
+    url="http://www.all-day-breakfast.com/rosegarden/">the Rosegarden
+    website</ulink> for the FAQ and mailing list instructions.
     </para>
 
     <!-- Note that the revhistory tags apply to the documentation
@@ -148,83 +191,6 @@
     </sect1>
   </chapter>
 
-  <!-- cc: I think we should omit the Installation chapter -->
-
-      <!-- List any special requirements for your application
-      here. This should include: .Libraries or other software that is
-      not included in kdesupport, kdelibs, or kdebase.  .Hardware
-      requirements like amount of RAM, disk space, graphics card
-      capabilities, screen resolution, special expansion cards, etc.
-      .Operating systems the app will run on. If your app is designed
-      only for a specific OS, (you wrote a graphical LILO configurator
-      for example) put this information here.  -->
-<!--
-  <chapter id="installation">
-    <title>Installation</title>
-
-    <sect1 id="getting-rosegarden">
-      <title>How to obtain Rosegarden</title>
-
-      <para>
-	To obtain the latest version of <application>Rosegarden</application>, visit <ulink url="http://www.all-day-breakfast.com/rosegarden/">the Rosegarden website</ulink>.
-      </para>
-    </sect1>
-
-    <sect1 id="requirements">
-      <title>Requirements</title>
-
-      <para>
-
-	In order to successfully use
-	<application>Rosegarden</application>, you need KDE
-	1.1. Foobar.lib is required in order to support the advanced
-	<application>Rosegarden</application>
-	features. <application>Rosegarden</application> uses about 5
-	megs of memory to run, but this may vary depending on your
-	platform and configuration.
-
-      </para>
-
-      <para>
-
-	All required libraries as well as
-	<application>Rosegarden</application> itself can be found on
-	<ulink url="http://www.all-day-breakfast.com/rosegarden/"> The
-	<application>Rosegarden</application> home page</ulink>.
-
-      </para>
-
-    </sect1>
-
-    <sect1 id="compilation">
-      <title>Compilation and installation</title>
-
-      <para>
-	In order to compile and install Rosegarden on your system, type the following in the base
-	directory of the Rosegarden distribution:
-	<screen width="40">
-	  <prompt>%</prompt> <userinput>./configure</userinput>
-	  <prompt>%</prompt> <userinput>make</userinput>
-	  <prompt>%</prompt> <userinput>make install</userinput>
-	</screen>
-      </para>
-
-      <para>Since Rosegarden uses autoconf and automake you should have not trouble compiling it.
-	Should you run into problems please report them to the author at <ulink url="mailto:glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com"> Guillaume Laurent, Chris Cannam, Rich Bown</ulink>.</para>
-
-    </sect1>
-
-    <sect1 id="configuration">
-      <title>Configuration</title>
-
-      <para>Don't forget to tell your system to start the <filename>dtd</filename>
-	dicer-toaster daemon first, or Rosegarden won't work !</para>
-
-    </sect1>
-
-  </chapter>
--->
-
 
 <!--
   **********************************
@@ -246,44 +212,19 @@
     <!-- Note that all graphics should be in .png format. Use no
     gifs because of patent issues. -->
 
-    <!--
-    <para>
-
-      <screenshot>
-	<mediaobject>
-	  <imageobject>
-	    <imagedata fileref="example.png" format="PNG"/>
-	  </imageobject>
-	  <textobject>
-	    <phrase>An example image</phrase>
-	  </textobject>
-	</mediaobject>
-      </screenshot>
-
-    </para>
-
-    <sect1 id="rosegarden-features-overview">
-      <title>Features overview</title>
-
-      <para>It slices! It dices! and it comes with a free toaster!</para>
-      <para>
-	The Squiggle Tool <guiicon><inlinemediaobject><imageobject><imagedata fileref="squiggle.png" format="PNG"/></imageobject></inlinemediaobject></guiicon> is used to draw squiggly lines all
-	over the <application>Rosegarden</application> main window. It's not a bug, it's a feature!
-      </para>
-
-    </sect1>
-    -->
-
     <sect1 id="track_editor">
       <title>The Track Editor</title>
       <para>
-      <application>Rosegarden</application>'s main layout is similar in
-      concept to many other popular sequencers.  It is based around a
-      Track concept - the main window shows a Track Editor with a list of Tracks
-      and their associated Instruments down the left hand side.  The user can
-      manipulate and move blocks of music data (Segments) on the Track Editor
-      as well as opening the Segments themselves for editing in specialised
-      clients known as Views.
+      <application>Rosegarden</application>'s main layout is similar
+      in concept to many other popular sequencers.  It is based around
+      a track concept - the main window shows a track editor with a
+      list of tracks and their associated instruments down the left
+      hand side.  You can manipulate and move blocks of music
+      data (segments) on the track editor as well as opening the
+      segments themselves in specialised editors (<link
+      linkend="notation-view">notation</link>, <link
+      linkend="matrix-view">matrix</link>, and <link
+      linkend="event-view">event list</link>).
       </para>
 
       <para>
@@ -300,24 +241,26 @@
       </para>
 
       <para>
-      Tracks can be assigned to a range of Instruments (either MIDI or
-      Audio). Instruments can be selected from a pop-up menu that appears
-      when the user clicks and hold with the left mouse button on the
-      Track labels.  In the screenshot we see two Segments (shown as
-      yellow blocks) on the Track Editor.  These Segments are shown on
-      Tracks tat are assigned to the IIWUSYNTH instrument.
+      Tracks can be assigned to a range of MIDI or audio instruments.
+      To assign a track to an instrument, click and hold with the left
+      mouse button on the track label: a pop-up menu will appear with
+      a list of all the available instruments in it.  In the picture
+      above we see two segments (shown as yellowy-green blocks) on the
+      track editor, shown on tracks that are assigned to the "IIWU
+      Synth" instrument.
       </para>
     </sect1>
 
     <sect1 id="transport">
     <title>The Transport</title>
       <para>
-        The Track Editor display a series of Segments arranged against the
-        assigned Instruments.  When we want to hear the Composition,
-        <application>Rosegarden</application> sweeps a pointer across the
-        Tracks from left to right playing the contents of the Segments as
-        it hits them.  The pointer's position on the screen is tracked and
-        controlled by a dialog called the Transport.
+        The track editor display a series of segments arranged against
+        the assigned instruments.  When you play a composition,
+        <application>Rosegarden</application> sweeps a pointer across
+        the tracks from left to right playing the contents of the
+        segments as it crosses them.  The pointer's position on the
+        screen is tracked and controlled by a dialog called the
+        transport.
       </para>
     
       <para>
@@ -334,37 +277,95 @@
       </para>
 
       <para>
-        If the Transport isn't visible it can activated by going to the
-        Settings menu (Settings->Show Transport).
+        If the transport isn't visible, you can activate it by going
+        to the Settings menu (Settings->Show Transport).
       </para>
     
       <para>
-        The Transport shows the current position of the pointer either in
-        terms of absolute time from the first bar (in seconds) or in SMTPE
-        time or alternatively in bars and beats.  It can also show time from
-        the end of composition if you should so wish.  These functions are
-        controlled by the small buttons on the left of the main 
-        Transport display.
+        The transport shows the current position of the pointer either
+        in terms of absolute time from the first bar (in seconds) or
+        in SMTPE time or alternatively in bars and beats.  It can also
+        show time from the end of composition if you should so wish.
+        These functions are controlled by the small buttons on the
+        left of the main transport display.
       </para>
 
       <para>
-        The main controls on the Transport start the sequencer playing
+        The main controls on the transport start the sequencer playing
         and pause it, fast forward the pointer position, rewind it, stop
         it or jump to beginning or end of composition.
       </para>
 
       <para>
         Additional controls and a MIDI event display are hidden on the
-        bottom flap on the Transport which is toggleable.  Also on this
-        extra portion there are buttons for recording, looping, soloing
-        and for turning on a metronome.
+        bottom flap on the transport, which can be toggled on or off
+        using the arrow button next to it at the left.  Also on this
+        extra portion there are buttons for recording, looping,
+        soloing and for turning on a metronome.
       </para>
 
     </sect1>
 
-    <sect1 id="basics">
-      <title>How Rosegarden stores a composition</title>
-      <para></para>
+    <sect1 id="studio">
+      <title>The Studio</title>
+
+      <sect2 id="studio-introduction">
+	<title>Introduction</title>
+	<para>
+	
+	  Rosegarden has the concept of a "studio", which is a
+	  description of the collection of sound devices attached to
+	  the computer together with their MIDI patch information and
+	  related data.
+
+	</para><para>
+
+	  If you want to use any MIDI devices other than General MIDI
+	  (GM) compatible synthesizers, you will normally have to set
+	  up a studio configuration yourself.  Rosegarden has no way
+	  to examine the hardware you actually have plugged in, so it
+	  relies on you to set up your studio in a way that matches
+	  the actual configuration of your synths and other
+	  instruments.  The studio setup is then saved with every file
+	  you save.
+	  
+	</para>
+
+      </sect2>
+      <sect2 id="studio-midi-import">
+	<title>Studio mapping on MIDI import</title>
+	<para>
+	  
+	  When you import a MIDI file into a composition, Rosegarden
+	  uses the existing studio setup to determine how to map the
+	  MIDI programs onto Rosegarden instruments.  The aim is to
+	  ensure that every MIDI program gets mapped to an instrument
+	  that really exists in your studio (and thus is actually
+	  attached to your computer), so that all the MIDI tracks
+	  can be heard.
+
+	</para><para>
+
+	  The MIDI program-change and bank-select events found in the
+	  imported file are used when importing, but only as an aid to
+	  help find the appropriate instrument for each MIDI track
+	  from the set of instruments in your studio.  So, for
+	  example, if your studio is currently set up to contain only
+	  GM instruments, and you import a MIDI file with GS program
+	  changes onto it, Rosegarden will remap the GS banks back
+	  onto GM because they're all it knows that you have at the
+	  time you import the file.  It doesn't remember the original
+	  GS program numbers.
+
+	</para><para>
+
+	  This means that you should always ensure that your studio is
+	  correctly configured for the devices you actually have,
+	  before you import the MIDI file.  Otherwise the program data
+	  in the MIDI file may be lost.
+
+	</para>
+      </sect2>
     </sect1>
 
     <sect1 id="segment-view">
@@ -372,7 +373,7 @@
       <para></para>
     </sect1>
 
-    <sect1 id="matrix-editor">
+    <sect1 id="matrix-view">
       <title>The Matrix editor</title>
       <para></para>
     </sect1>
@@ -1288,6 +1289,10 @@
       </sect2>
     </sect1>
 
+    <sect1 id="event-view">
+      <title>The Event List editor</title>
+      <para></para>
+    </sect1>
 
   </chapter>
 
@@ -2236,6 +2241,10 @@
     used for apps that use plugins or that provide their own scripting hooks
     and/or development libraries. -->
 
+  <!-- cc: I think we should document the DCOP API here, but I don't
+  think we should include extensive developer docs, although we should
+  point to where they can be found in the source tree or online. -->
+
     <para>
       Programming <application>Rosegarden</application> plugins is a joy to behold. Just read through the next
       66 pages of API's to learn how!
@@ -2369,49 +2378,6 @@
     </refentry>
 
   </chapter>
-
-
-
-  <!-- cc: I also think we should omit this chapter, but link to the online FAQ from the handbook's introduction -->
-
-    <!-- (OPTIONAL but recommended) This chapter should include all of
-    the silly (and not-so-silly) newbie questions that fill up your
-    mailbox. This chapter should be reserved for BRIEF questions and
-    answers! If one question uses more than a page or so then it
-    should probably be part of the "Using this Application" chapter
-    instead. You should use links to cross-reference questions to the
-    parts of your documentation that answer them.  This is also a
-    great place to provide pointers to other FAQ's if your users must
-    do some complicated configuration on other programs in order for
-    your application work. -->
-<!--
-  <chapter id="faq">
-    <title>Questions and Answers</title>
-
-    <para></para>
-
-    <qandaset>
-      <qandaentry>
-	<question>
-	  <para>My Mouse doesn't work. How do I quit <application>Rosegarden</application>?</para>
-	</question>
-	<answer>
-	  <para>You silly goose! Check out the <link linkend="commands">Commands
-	      Section</link> for the answer.</para>
-	</answer>
-      </qandaentry>
-      <qandaentry>
-	<question>
-	  <para>Why can't I twiddle my documents?</para>
-	</question>
-	<answer>
-	  <para>You can only twiddle your documents if you have the foobar.lib
-	    installed.</para>
-	</answer>
-      </qandaentry>
-    </qandaset>
-  </chapter>
--->
 
 
   <chapter id="credits">
