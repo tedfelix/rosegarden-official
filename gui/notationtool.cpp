@@ -600,7 +600,7 @@ void ClefInserter::handleLeftButtonPress(Rosegarden::timeT,
 
 TextInserter::TextInserter(NotationView* view)
     : NotationTool("TextInserter", view),
-      m_text("")
+      m_text("", Rosegarden::Text::Dynamic)
 {
 }
 
@@ -630,8 +630,7 @@ void TextInserter::handleLeftButtonPress(Rosegarden::timeT,
     timeT time = (*closestElement)->getAbsoluteTime();
 
     TextEventDialog *dialog = new TextEventDialog
-	(m_nParentView, m_nParentView->getNotePixmapFactory(), m_text,
-	 Rosegarden::Text::Dynamic);
+	(m_nParentView, m_nParentView->getNotePixmapFactory(), m_text);
 
     if (dialog->exec() == QDialog::Accepted) {
 	

@@ -539,7 +539,6 @@ Text::getUserStyles()
 {
     std::vector<std::string> v;
 
-    v.push_back(UnspecifiedType);
     v.push_back(Dynamic);
     v.push_back(Lyric);
     v.push_back(Direction);
