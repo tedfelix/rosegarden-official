@@ -406,7 +406,7 @@ RosegardenRotary::RosegardenRotary(QWidget *parent,
     _float->hide();
 
     QToolTip::add(this,
-                 "Click and drag up and down or left and right to modify.\nDouble click to edit value directly.");
+                  i18n("Click and drag up and down or left and right to modify.\nDouble click to edit value directly."));
     setFixedSize(size, size);
 
     emit valueChanged(m_snapPosition);
