@@ -29,14 +29,6 @@ Features for 1.0 - updated 20030923
 - Studio faders (MIDI and audio fader controls)
 
 - look at other updates for RG manual [dmm]
-    
-- request: import studio from file
-  
-  dmm - stubbed out in GUI, but I've had no time to figure out how to
-  implement it, and what time I might have in the forseeable future is better
-  spent hacking on the Lilypond bugs, so either someone finish this or we
-  should just dump it and forget about it, though I _do_ still think it's an
-  excellent idea.
 
 - fix lilypond lyric duration bug [dmm]
 
@@ -51,7 +43,7 @@ Features for 1.0 - updated 20030923
 
 - native printing 
   o adding fluff and nicities to printed staves
-  o getting mapping working for feta TT
+  o getting mapping working for feta TT [DONE]
 
 - notation
   o staff connections above/below (bracketing)
@@ -68,6 +60,14 @@ Features for 1.0 - updated 20030923
 
 Completed
 ---------
+    
+- request: import studio from file [DONE --cc]
+  
+  dmm - stubbed out in GUI, but I've had no time to figure out how to
+  implement it, and what time I might have in the forseeable future is better
+  spent hacking on the Lilypond bugs, so either someone finish this or we
+  should just dump it and forget about it, though I _do_ still think it's an
+  excellent idea.
 
 - banks/variations [cc] [DONE] [NOT QUITE DONE AFTER ALL - just noticed
   variation toggle status isn't being loaded from .rgd file correctly]
