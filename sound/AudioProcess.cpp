@@ -715,6 +715,8 @@ AudioInstrumentMixer::resetAllPlugins()
 
 	    if (instance) {
 		instance->deactivate();
+		instance->updateIdealChannelCount(m_sampleRate,
+						  m_bufferMap[id].channels);
 		instance->activate();
 	    }
 #endif

@@ -132,6 +132,19 @@ LADSPAPluginInstance::init(int idealChannelCount)
     }
 }
 
+void
+LADSPAPluginInstance::updateIdealChannelCount(unsigned long sampleRate, int channels)
+{
+    if (m_audioPortsIn.size() != 1) return;
+    if (channels == m_instanceCount) return;
+
+    cleanup();
+    m_instanceCount = channels;
+    instantiate(sampleRate);
+    if (isOK()) connectPorts();
+}
+
+
 LADSPAPluginInstance::~LADSPAPluginInstance()
 {
     cleanup();

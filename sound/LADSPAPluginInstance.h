@@ -92,6 +92,9 @@ public:
     virtual bool isBypassed() const { return m_bypassed; }
     virtual void setBypassed(bool bypassed) { m_bypassed = bypassed; }
 
+    void updateIdealChannelCount(unsigned long sampleRate,
+				 int channels); // may re-instantiate
+
     // Order by instrument and then position
     //
     struct PluginCmp
