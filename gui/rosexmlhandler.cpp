@@ -316,7 +316,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 	    // stored id
 	    
 	    if (!m_currentSegment) {
-		m_errorString = i18n("Got grouped event outside of a segment");
+		m_errorString = "Got grouped event outside of a segment";
 		return false;
 	    }
 	    
@@ -383,7 +383,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "group") {
 
         if (!m_currentSegment) {
-            m_errorString = i18n("Got group outside of a segment");
+            m_errorString = "Got group outside of a segment";
             return false;
         }
         
@@ -408,7 +408,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != NoSection)
         {
-            m_errorString = i18n("Found Studio in another section");
+            m_errorString = "Found Studio in another section";
             return false;
         }
 
@@ -436,7 +436,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_inComposition == false)
         {
-            m_errorString = i18n("TimeSignature object found outside Composition");
+            m_errorString = "TimeSignature object found outside Composition";
             return false;
         }
 
@@ -479,7 +479,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != NoSection)
         {
-            m_errorString = i18n("Found Composition in another section");
+            m_errorString = "Found Composition in another section";
             return false;
         }
         
@@ -578,7 +578,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InComposition)
         {
-            m_errorString = i18n("Track object found outside Composition");
+            m_errorString = "Track object found outside Composition";
             return false;
         }
 
@@ -628,7 +628,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != NoSection)
         {
-            m_errorString = i18n("Found Segment in another section");
+            m_errorString = "Found Segment in another section";
             return false;
         }
         
@@ -745,7 +745,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InAudioFiles)
         {
-            m_errorString = i18n("Audio object found outside Audio section");
+            m_errorString = "Audio object found outside Audio section";
             return false;
         }
 
@@ -755,7 +755,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (id.isEmpty() || file.isEmpty() || label.isEmpty())
         {
-            m_errorString = i18n("Audio object has empty parameters");
+            m_errorString = "Audio object has empty parameters";
             return false;
         }
 
@@ -820,7 +820,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InAudioFiles)
         {
-            m_errorString = i18n("Audiopath object found outside AudioFiles section");
+            m_errorString = "Audiopath object found outside AudioFiles section";
             return false;
         }
 
@@ -828,7 +828,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (search.isEmpty())
         {
-            m_errorString = i18n("Audiopath has no value");
+            m_errorString = "Audiopath has no value";
             return false;
         }
 
@@ -847,7 +847,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_currentSegment->getType() != Rosegarden::Segment::Audio)
         {
-            m_errorString = i18n("found audio begin index in non audio segment");
+            m_errorString = "Found audio begin index in non audio segment";
             return false;
         }
 
@@ -870,7 +870,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_currentSegment->getType() != Rosegarden::Segment::Audio)
         {
-            m_errorString = i18n("found audio end index in non audio segment");
+            m_errorString = "found audio end index in non audio segment";
             return false;
         }
 
@@ -880,7 +880,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (markerTime < m_currentSegment->getAudioStartTime())
         {
-            m_errorString = i18n("audio end index before audio start marker");
+            m_errorString = "Audio end index before audio start marker";
             return false;
         }
 
@@ -900,7 +900,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InStudio)
         {
-            m_errorString = i18n("Found Device outside Studio");
+            m_errorString = "Found Device outside Studio";
             return false;
         }
 
@@ -910,7 +910,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             
         if (idString.isNull())
         {
-            m_errorString = i18n("No ID on Device tag");
+            m_errorString = "No ID on Device tag";
             return false;
         }
         int id = idString.toInt();
@@ -969,7 +969,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
         else
         {
-            m_errorString = i18n("Found unknown Device type");
+            m_errorString = "Found unknown Device type";
             return false;
         }
 
@@ -993,7 +993,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         {
             if (m_section != InStudio && m_section != InInstrument)
             {
-                m_errorString = i18n("Found Bank outside Studio or Instrument");
+                m_errorString = "Found Bank outside Studio or Instrument";
                 return false;
             }
 
@@ -1070,8 +1070,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             }
             else
             {
-                m_errorString =
-                    i18n("Found Program outside Studio and Instrument");
+                m_errorString = "Found Program outside Studio and Instrument";
                 return false;
             }
         }
@@ -1080,7 +1079,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InStudio)
         {
-            m_errorString = i18n("Found ControlParameter outside Studio");
+            m_errorString = "Found ControlParameter outside Studio";
             return false;
         }
 
@@ -1110,7 +1109,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InInstrument)
         {
-            m_errorString = i18n("Found Reverb outside Instrument");
+            m_errorString = "Found Reverb outside Instrument";
             return false;
         }
 
@@ -1124,7 +1123,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InInstrument)
         {
-            m_errorString = i18n("Found Chorus outside Instrument");
+            m_errorString = "Found Chorus outside Instrument";
             return false;
         }
 
@@ -1137,7 +1136,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InInstrument)
         {
-            m_errorString = i18n("Found Filter outside Instrument");
+            m_errorString = "Found Filter outside Instrument";
             return false;
         }
 
@@ -1151,7 +1150,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InInstrument)
         {
-            m_errorString = i18n("Found Resonance outside Instrument");
+            m_errorString = "Found Resonance outside Instrument";
             return false;
         }
 
@@ -1165,7 +1164,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InInstrument)
         {
-            m_errorString = i18n("Found Attack outside Instrument");
+            m_errorString = "Found Attack outside Instrument";
             return false;
         }
 
@@ -1178,7 +1177,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InInstrument)
         {
-            m_errorString = i18n("Found Release outside Instrument");
+            m_errorString = "Found Release outside Instrument";
             return false;
         }
 
@@ -1191,7 +1190,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InInstrument)
         {
-            m_errorString = i18n("Found Pan outside Instrument");
+            m_errorString = "Found Pan outside Instrument";
             return false;
         }
 
@@ -1208,7 +1207,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InInstrument)
         {
-            m_errorString = i18n("Found Volume outside Instrument");
+            m_errorString = "Found Volume outside Instrument";
             return false;
         }
 
@@ -1226,7 +1225,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InInstrument)
         {
-            m_errorString = i18n("Found Plugin outside Instrument");
+            m_errorString = "Found Plugin outside Instrument";
             return false;
         }
 
@@ -1266,7 +1265,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             }
             else
             {
-                m_errorString = i18n("Can't find Plugin");
+                m_errorString = "Can't find Plugin";
                 return false;
             }
         }
@@ -1277,7 +1276,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InPlugin)
         {
-            m_errorString = i18n("Found Port outside Plugin");
+            m_errorString = "Found Port outside Plugin";
             return false;
         }
         unsigned long portId = atts.value("id").toULong();
@@ -1307,7 +1306,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InStudio)
         {
-            m_errorString = i18n("Found Metronome outside Studio");
+            m_errorString = "Found Metronome outside Studio";
             return false;
         }
 
@@ -1348,7 +1347,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InStudio)
         {
-            m_errorString = i18n("Found Instrument outside Studio");
+            m_errorString = "Found Instrument outside Studio";
             return false;
         }
 
@@ -1364,7 +1363,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             type = Rosegarden::Instrument::Audio;
         else
         {
-            m_errorString = i18n("Found unknown Instrument type");
+            m_errorString = "Found unknown Instrument type";
             return false;
         }
             
@@ -1391,7 +1390,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != NoSection)
         {
-            m_errorString = i18n("Found AudioFiles inside another section");
+            m_errorString = "Found AudioFiles inside another section";
             return false;
         }
 
@@ -1406,7 +1405,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "metadata") {
 	
 	if (m_section != InComposition) {
-            m_errorString = i18n("Found Metadata outside Composition");
+            m_errorString = "Found Metadata outside Composition";
             return false;
         }
 
@@ -1417,7 +1416,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InInstrument)
         {
-            m_errorString = i18n("Found recordLevel outside Instrument");
+            m_errorString = "Found recordLevel outside Instrument";
             return false;
         }
 
@@ -1430,7 +1429,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InInstrument)
         {
-            m_errorString = i18n("Found audioInput outside Instrument");
+            m_errorString = "Found audioInput outside Instrument";
             return false;
         }
         int value = atts.value("value").toInt();
@@ -1452,11 +1451,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             }
             else
             { // This will change later once we get more of the Appearance code sorted out
-                RG_DEBUG << i18n("RoseXmlHandler::startElement : Found colourmap with unknown name") << endl;
+                RG_DEBUG << "RoseXmlHandler::startElement : Found colourmap with unknown name\n";
             }
         }
         else {
-            m_errorString = i18n("Found colourmap outside Appearance");
+            m_errorString = "Found colourmap outside Appearance";
             return false;
         }
 
@@ -1474,7 +1473,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
         else
         {
-            m_errorString = i18n("Found colourpair outside ColourMap");
+            m_errorString = "Found colourpair outside ColourMap";
             return false;
         }
 
@@ -1514,7 +1513,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
             m_currentSegment->insert(m_currentEvent);
             m_currentEvent = 0;
         } else if (!m_currentSegment && m_currentEvent) {
-            m_errorString = i18n("Got event outside of a Segment");
+            m_errorString = "Got event outside of a Segment";
             return false;
         }
         

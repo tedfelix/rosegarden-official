@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
-"POT-Creation-Date: 2003-09-14 12:54+0200\n"
+"POT-Creation-Date: 2003-09-14 17:57+0200\n"
 "PO-Revision-Date: 2003-06-23 00:11+0200\n"
 "Last-Translator: Pedro Lopez-Cabanillas <plcl@bigfoot.com>\n"
 "Language-Team: Spanish <rosegarden-devel@lists.sourceforge.net>\n"
@@ -172,308 +172,6 @@ msgstr "Controlador"
 #: controlruler.cpp:973
 msgid "%1 controller"
 msgstr "controlador %1"
-
-#: rc.cpp:1 rc.cpp:14 rc.cpp:35 rc.cpp:54
-msgid "Tools Toolbar"
-msgstr "Barra de Herramientas de Herramientas"
-
-#: rc.cpp:2 rc.cpp:15 rc.cpp:36 rc.cpp:57
-msgid "Transport Toolbar"
-msgstr "Barra de Herramientas de Transporte"
-
-#: rc.cpp:3 rc.cpp:16
-msgid "Actions Toolbar"
-msgstr "Barra de Herramientas de Acciones"
-
-#: rc.cpp:4 rc.cpp:17 rc.cpp:58
-msgid "Zoom Toolbar"
-msgstr "Barra de Herramientas de Ampliación"
-
-#: rc.cpp:6
-msgid "&Grid"
-msgstr "&Rejilla"
-
-#: rc.cpp:7 rc.cpp:25
-msgid "Trans&forms"
-msgstr "Trans&formar"
-
-#: rc.cpp:8
-msgid "&Velocity"
-msgstr "&Velocidad"
-
-#: rc.cpp:9 rc.cpp:26
-msgid "Trans&pose"
-msgstr "Trans&portar"
-
-#: rc.cpp:10 rc.cpp:27 rosegardengui.cpp:457 matrixview.cpp:430
-msgid "&Move"
-msgstr "&Mover"
-
-#: rc.cpp:11 rc.cpp:28 rc.cpp:52
-msgid "T&ransport"
-msgstr "T&ransporte"
-
-#: rc.cpp:19
-msgid "&Group"
-msgstr "&Grupo"
-
-#: rc.cpp:20 rc.cpp:30
-msgid "&Notes"
-msgstr "&Notas"
-
-#: rc.cpp:21
-msgid "S&tem Direction"
-msgstr "Dirección de las &Plicas"
-
-#: rc.cpp:22
-msgid "S&lashes"
-msgstr "Co&rchetes"
-
-#: rc.cpp:23
-msgid "&Force Accidentals"
-msgstr "&Forzar Alteraciones"
-
-#: rc.cpp:24
-msgid "Mar&ks"
-msgstr "Mar&cadores"
-
-#: rc.cpp:31
-msgid "&Rests"
-msgstr "&Silencios"
-
-#: rc.cpp:32
-msgid "&Accidentals"
-msgstr "&Alteraciones"
-
-#: rc.cpp:33
-msgid "&Clefs"
-msgstr "&Claves"
-
-#: rc.cpp:37
-msgid "Notes Toolbar"
-msgstr "Barra de Herramientas de Notas"
-
-#: rc.cpp:38
-msgid "Rests Toolbar"
-msgstr "Barra de Herramientas de Silencios"
-
-#: rc.cpp:39
-msgid "Accidentals Toolbar"
-msgstr "Barra de Herramientas de Alteraciones"
-
-#: rc.cpp:40
-msgid "Clefs Toolbar"
-msgstr "Barra de Herramientas de Claves"
-
-#: rc.cpp:41
-msgid "Marks Toolbar"
-msgstr "Barra de Herramientas de Marcadores"
-
-#: rc.cpp:42
-msgid "Group Toolbar"
-msgstr "Barra de Herramientas de Grupo"
-
-#: rc.cpp:43
-msgid "Meta Toolbar"
-msgstr "Meta-Barra de Herramientas"
-
-#: rc.cpp:44
-msgid "Layout Toolbar"
-msgstr "Barra de Herramientas de Formato"
-
-#: rc.cpp:45
-msgid "&Import"
-msgstr "&Importar"
-
-#: rc.cpp:46
-msgid "&Merge"
-msgstr "&Mezclar"
-
-#: rc.cpp:47
-msgid "&Export"
-msgstr "&Exportar"
-
-#: rc.cpp:48
-msgid "Seg&ments"
-msgstr "Seg&mentos"
-
-#: rc.cpp:49
-msgid "Trac&ks"
-msgstr "Pis&tas"
-
-#: rc.cpp:50
-#, fuzzy
-msgid "Set Instrument"
-msgstr "Instrumento"
-
-#: rc.cpp:51
-msgid "&Studio"
-msgstr "E&studio"
-
-#: rc.cpp:55
-msgid "Tracks Toolbar"
-msgstr "Barra de Herramientas de Pistas"
-
-#: rc.cpp:56
-msgid "Editors Toolbar"
-msgstr "Barra de Herramientas de Editores"
-
-#: rc.cpp:59 rosegardentransportdialog.cpp:71
-msgid "Rosegarden Transport"
-msgstr "Transporte de Rosegarden"
-
-#: rc.cpp:61
-msgid "Show additional controls"
-msgstr "Mostrar controles adicionales"
-
-#: rc.cpp:63
-msgid "Switch between real time, musical time, and SMPTE frames"
-msgstr "Conmutar entre tiempo real, tiempo musical y cuadros SMPTE"
-
-#: rc.cpp:65
-msgid "Display time to end"
-msgstr "Muestra tiempo restante"
-
-#: rc.cpp:67
-msgid "Fast forward"
-msgstr "Avance rápido"
-
-#: rc.cpp:68
-msgid "Moves the current pointer position forwards one bar."
-msgstr "Mueve la posición actual del cursor un compás hacia delante"
-
-#: rc.cpp:70
-msgid "Fast forward to end"
-msgstr "Avance rápido hacia el final"
-
-#: rc.cpp:71
-msgid ""
-"Moves the pointer position to the end of the composition.  (This may mean "
-"going backwards if the pointer is already beyond the end.)"
-msgstr ""
-"Mueve la posición del cursor al final de la composición. (Esto puede "
-"significar rebobinado si la posición ya está más allá del final.)"
-
-#: rc.cpp:73
-msgid "Play/Pause"
-msgstr "Reproducción/Pausa"
-
-#: rc.cpp:74
-msgid ""
-"Plays from the current pointer position, or pauses playback if already in "
-"progress."
-msgstr ""
-"Toca desde la posición actual del cursor, o para la reproducción si ya está "
-"tocando."
-
-#: rc.cpp:76
-msgid "Rewind"
-msgstr "Rebobinar"
-
-#: rc.cpp:77
-msgid "Moves the current pointer position back one bar."
-msgstr "Mueve la posición actual del cursor un compás hacia atrás"
-
-#: rc.cpp:78
-msgid "SIG"
-msgstr "SIG"
-
-#: rc.cpp:79
-msgid "DIV"
-msgstr "DIV"
-
-#: rc.cpp:80
-msgid "/16"
-msgstr "/16"
-
-#: rc.cpp:81
-msgid "TEMPO"
-msgstr "TEMPO"
-
-#: rc.cpp:82
-msgid "END"
-msgstr "FIN"
-
-#: rc.cpp:83
-msgid "BAR"
-msgstr "COMPÁS"
-
-#: rc.cpp:86
-msgid "Stops playback or recording."
-msgstr "Para la grabación o reproducción"
-
-#: rc.cpp:88
-msgid "Rewind to beginning"
-msgstr "Rebobinar al principio"
-
-#: rc.cpp:89
-msgid ""
-"Moves the pointer position to the start of the composition. (This may mean "
-"going forwards if the pointer is currently before the start.)"
-msgstr ""
-"Mueve la posición del cursor al inicio de la composición (esto puede "
-"significar adelantarlo si el cursor está actualmente antes del inicio)"
-
-#: rc.cpp:91
-msgid "Hide additional controls"
-msgstr "Ocultar controles adicionales"
-
-#: rc.cpp:93
-msgid "Panic Button"
-msgstr "Botón de Pánico"
-
-#: rc.cpp:94
-msgid "Resets all MIDI devices if you've got stuck notes"
-msgstr "Restablece todos los dispositivos MIDI cuando hay notas colgadas"
-
-#: rc.cpp:96 rosegardenconfigurationpage.h:452
-msgid "Metronome"
-msgstr "Metrónomo"
-
-#: rc.cpp:97
-msgid "Provides a metronome click for you to play along with"
-msgstr "Proporciona una señal de metrónomo para tocar con ella"
-
-#: rc.cpp:99
-msgid "Solo"
-msgstr "Solo"
-
-#: rc.cpp:100
-msgid "Mutes all but the currently selected track"
-msgstr "Silencia todas las pistas excepto la seleccionada"
-
-#: rc.cpp:102 segmentcommands.cpp:526 deviceeditor.cpp:142
-#: deviceeditor.cpp:365
-msgid "Record"
-msgstr "Grabar"
-
-#: rc.cpp:103
-msgid "Record either MIDI or audio"
-msgstr "Grabar tanto MIDI como audio"
-
-#: rc.cpp:105
-msgid "Loop"
-msgstr "Repetir"
-
-#: rc.cpp:106
-msgid "Turn on and off the loop markers (if set)"
-msgstr "Activa y desactiva las marcas de repetición (si hay)"
-
-#: rc.cpp:107
-msgid "Shows MIDI activity in and out of Rosegarden"
-msgstr "Muestra actividad de entrada y salida MIDI en Rosegarden"
-
-#: rc.cpp:108 rc.cpp:111
-msgid "NO EVENTS"
-msgstr "SIN EVENTOS"
-
-#: rc.cpp:109
-msgid "IN"
-msgstr "IN"
-
-#: rc.cpp:110
-msgid "OUT"
-msgstr "OUT"
 
 #: bankeditor.cpp:178
 msgid "Bank and Program details"
@@ -1168,6 +866,20 @@ msgstr ""
 "dispositivo que prefiera de la lista desplegable de dispositivos de "
 "grabación MIDI.  La selección se recordará para la siguiente ocasión.</p>\n"
 
+#: notefont.cpp:77
+#, fuzzy
+msgid "Can't open font mapping file %1 or %2"
+msgstr "No se puede abrir el archivo de mapeado "
+
+#: notefont.cpp:81
+#, fuzzy
+msgid "Can't open font mapping file %1"
+msgstr "No se puede abrir el archivo de mapeado "
+
+#: notefont.cpp:1407
+msgid "Can't obtain a default font -- no fonts found"
+msgstr ""
+
 #: rosegardenguiview.cpp:220
 msgid "No non-audio segments in composition"
 msgstr "No hay segmentos no-audio en la composición"
@@ -1179,178 +891,6 @@ msgstr "La selección sólo puede contener segmentos de Audio o de No-audio"
 #: rosegardenguiview.cpp:357
 msgid "No non-audio segments selected"
 msgstr "No hay segmentos no-audio seleccionados"
-
-#: rosexmlhandler.cpp:319
-msgid "Got grouped event outside of a segment"
-msgstr "Se ha obtenido un evento agrupado fuera de un segmento"
-
-#: rosexmlhandler.cpp:386
-msgid "Got group outside of a segment"
-msgstr "Se ha obtenido un grupo fuera de un segmento"
-
-#: rosexmlhandler.cpp:411
-msgid "Found Studio in another section"
-msgstr "Encontrado Estudio en otra sección"
-
-#: rosexmlhandler.cpp:439
-msgid "TimeSignature object found outside Composition"
-msgstr "Objeto de cambio de compás encontrado fuera de la Composición"
-
-#: rosexmlhandler.cpp:482
-msgid "Found Composition in another section"
-msgstr "Encontrada Composición en otra sección"
-
-#: rosexmlhandler.cpp:581
-msgid "Track object found outside Composition"
-msgstr "Objeto Pista encontrado fuera de la Composición"
-
-#: rosexmlhandler.cpp:631
-msgid "Found Segment in another section"
-msgstr "Encontrado Segmento en otra sección"
-
-#: rosexmlhandler.cpp:748
-msgid "Audio object found outside Audio section"
-msgstr "Objeto de Audio encontrado fuera de la sección de Audio"
-
-#: rosexmlhandler.cpp:758
-msgid "Audio object has empty parameters"
-msgstr "Objeto de Audio tiene parámetros vacíos"
-
-#: rosexmlhandler.cpp:823
-msgid "Audiopath object found outside AudioFiles section"
-msgstr "Objeto Audiopath encontrado fuera de la sección de Archivos de Audio"
-
-#: rosexmlhandler.cpp:831
-msgid "Audiopath has no value"
-msgstr "Audiopath no tiene un valor"
-
-#: rosexmlhandler.cpp:850
-msgid "found audio begin index in non audio segment"
-msgstr "encontrado índice de comienzo de audio en un segmento no-audio"
-
-#: rosexmlhandler.cpp:873
-msgid "found audio end index in non audio segment"
-msgstr "encontrado índice final de audio en un segmento no-audio"
-
-#: rosexmlhandler.cpp:883
-msgid "audio end index before audio start marker"
-msgstr "índice de final de audio anterior al marcador de inicio de audio"
-
-#: rosexmlhandler.cpp:903
-msgid "Found Device outside Studio"
-msgstr "Encontrado Dispositivo fuera del Estudio"
-
-#: rosexmlhandler.cpp:913
-msgid "No ID on Device tag"
-msgstr "No hay ID en la etiqueta de Dispositivo"
-
-#: rosexmlhandler.cpp:972
-msgid "Found unknown Device type"
-msgstr "Encontrado tipo de Dispositivo desconocido"
-
-#: rosexmlhandler.cpp:996
-msgid "Found Bank outside Studio or Instrument"
-msgstr "Encontrado Banco fuera del Estudio o Instrumento"
-
-#: rosexmlhandler.cpp:1074
-msgid "Found Program outside Studio and Instrument"
-msgstr "Encontrado Programa fuera del Estudio e Instrumento"
-
-#: rosexmlhandler.cpp:1083
-#, fuzzy
-msgid "Found ControlParameter outside Studio"
-msgstr "Encontrado Instrumento fuera del Estudio"
-
-#: rosexmlhandler.cpp:1113
-msgid "Found Reverb outside Instrument"
-msgstr "Encontrada Reverberación fuera del Instrumento"
-
-#: rosexmlhandler.cpp:1127
-msgid "Found Chorus outside Instrument"
-msgstr "Encontrado Coro fuera del Instrumento"
-
-#: rosexmlhandler.cpp:1140
-msgid "Found Filter outside Instrument"
-msgstr "Encontrado Filtro fuera del Instrumento"
-
-#: rosexmlhandler.cpp:1154
-msgid "Found Resonance outside Instrument"
-msgstr "Encontrada Resonancia fuera del Instrumento"
-
-#: rosexmlhandler.cpp:1168
-msgid "Found Attack outside Instrument"
-msgstr "Encontrado Ataque fuera del Instrumento"
-
-#: rosexmlhandler.cpp:1181
-msgid "Found Release outside Instrument"
-msgstr "Encontrada Liberación fuera del Instrumento"
-
-#: rosexmlhandler.cpp:1194
-msgid "Found Pan outside Instrument"
-msgstr "Encontrado Panorama fuera del Instrumento"
-
-#: rosexmlhandler.cpp:1211
-msgid "Found Volume outside Instrument"
-msgstr "Encontrado Volumen fuera del Instrumento"
-
-#: rosexmlhandler.cpp:1229
-msgid "Found Plugin outside Instrument"
-msgstr "Encontrado Plugin fuera del Instrumento"
-
-#: rosexmlhandler.cpp:1269
-msgid "Can't find Plugin"
-msgstr "No puedo encontrar Plugin"
-
-#: rosexmlhandler.cpp:1280
-msgid "Found Port outside Plugin"
-msgstr "Encontrado Puerto fuera de Plugin"
-
-#: rosexmlhandler.cpp:1310
-msgid "Found Metronome outside Studio"
-msgstr "Encontrado Metrónomo fuera del Estudio"
-
-#: rosexmlhandler.cpp:1351
-msgid "Found Instrument outside Studio"
-msgstr "Encontrado Instrumento fuera del Estudio"
-
-#: rosexmlhandler.cpp:1367
-msgid "Found unknown Instrument type"
-msgstr "Encontrado tipo de Instrumento desconocido"
-
-#: rosexmlhandler.cpp:1394
-msgid "Found AudioFiles inside another section"
-msgstr "Encontrado AudioFiles dentro de otra sección"
-
-#: rosexmlhandler.cpp:1409
-msgid "Found Metadata outside Composition"
-msgstr "Encontrado Metadata fuera de Composición"
-
-#: rosexmlhandler.cpp:1420
-msgid "Found recordLevel outside Instrument"
-msgstr ""
-"Encontrado \"recordLevel\" (volumen de grabación) fuera de \"Instrument\""
-
-#: rosexmlhandler.cpp:1433
-msgid "Found audioInput outside Instrument"
-msgstr "Encontrado \"audioInput\" (entrada de Audio) fuera de \"Instrument\""
-
-#: rosexmlhandler.cpp:1455
-msgid "RoseXmlHandler::startElement : Found colourmap with unknown name"
-msgstr ""
-
-#: rosexmlhandler.cpp:1459
-#, fuzzy
-msgid "Found colourmap outside Appearance"
-msgstr "Encontrado Volumen fuera del Instrumento"
-
-#: rosexmlhandler.cpp:1477
-#, fuzzy
-msgid "Found colourpair outside ColourMap"
-msgstr "Encontrado Puerto fuera de Plugin"
-
-#: rosexmlhandler.cpp:1517
-msgid "Got event outside of a Segment"
-msgstr "Encontrado Evento fuera de Segmento"
 
 #: rosegardentempo.cpp:35
 msgid "Set Tempo"
@@ -1376,126 +916,6 @@ msgstr "0"
 #: rosegardentempo.cpp:66
 msgid "is currently"
 msgstr "está actualmente"
-
-#: notefont.cpp:77
-#, fuzzy
-msgid "Can't open font mapping file %1 or %2"
-msgstr "No se puede abrir el archivo de mapeado "
-
-#: notefont.cpp:81
-#, fuzzy
-msgid "Can't open font mapping file %1"
-msgstr "No se puede abrir el archivo de mapeado "
-
-#: notefont.cpp:174
-#, fuzzy
-msgid "note-height is a required attribute of font-size"
-msgstr "altura-de-nota es un atributo requerido de cuándo"
-
-#: notefont.cpp:225
-#, fuzzy
-msgid "font-height is a required attribute of font-scale"
-msgstr "altura-de-nota es un atributo requerido de cuándo"
-
-#: notefont.cpp:312
-#, fuzzy
-msgid "base is a required attribute of codebase"
-msgstr "el tipo es un atributo requerido de la nota"
-
-#: notefont.cpp:318
-msgid "invalid base attribute \"%1\" (must be integer >= 0)"
-msgstr ""
-
-#: notefont.cpp:325
-#, fuzzy
-msgid "font-id is a required attribute of codebase"
-msgstr "el tipo es un atributo requerido de la nota"
-
-#: notefont.cpp:331 notefont.cpp:389 notefont.cpp:479
-msgid "invalid font-id attribute \"%1\" (must be integer >= 0)"
-msgstr ""
-
-#: notefont.cpp:342
-msgid "name is a required attribute of symbol"
-msgstr "el nombre es un atributo requerido del símbolo"
-
-#: notefont.cpp:356
-msgid "invalid code attribute \"%1\" (must be integer >= 0)"
-msgstr ""
-
-#: notefont.cpp:364
-msgid "symbol must have either src or code attribute"
-msgstr ""
-
-#: notefont.cpp:377
-msgid "invalid inversion code attribute \"%1\" (must be integer >= 0)"
-msgstr ""
-
-#: notefont.cpp:404
-msgid "name is a required attribute of hotspot"
-msgstr "\"name\" es un atributo requerido de \"hotspot\""
-
-#: notefont.cpp:412
-#, fuzzy
-msgid "scaled-element must be in hotspot-element"
-msgstr "elemento \"when\" debe estar en elemento \"hotspot\""
-
-#: notefont.cpp:422
-#, fuzzy
-msgid "y is a required attribute of scaled"
-msgstr "y es un atributo requerido de cuándo"
-
-#: notefont.cpp:438
-msgid "when-element must be in hotspot-element"
-msgstr "elemento \"when\" debe estar en elemento \"hotspot\""
-
-#: notefont.cpp:444
-msgid "note-height is a required attribute of when"
-msgstr "altura-de-nota es un atributo requerido de cuándo"
-
-#: notefont.cpp:455
-msgid "y is a required attribute of when"
-msgstr "y es un atributo requerido de cuándo"
-
-#: notefont.cpp:484
-#, fuzzy
-msgid "font-id is a required attribute of font-requirement"
-msgstr "el tipo es un atributo requerido de la nota"
-
-#: notefont.cpp:494
-#, fuzzy
-msgid "font-requirement may have name or names attribute, but not both"
-msgstr ""
-"elementos globales y notas pueden tener forma o nombre de carácter, pero no "
-"ambos"
-
-#: notefont.cpp:502
-msgid "Warning: Unable to load font \"%1\""
-msgstr ""
-
-#: notefont.cpp:519
-msgid "Warning: Unable to load any of the fonts in \"%1\""
-msgstr ""
-
-#: notefont.cpp:526
-msgid "font-requirement must have either name or names attribute"
-msgstr ""
-
-#: notefont.cpp:541 notefont.cpp:551
-msgid "%1 at line %2, column %3"
-msgstr ""
-
-#: notefont.cpp:922
-msgid "No sizes listed for font \"%1\""
-msgstr ""
-
-#: notefont.cpp:928
-msgid "Font \"%1\" not available in size %2"
-msgstr ""
-
-#: notefont.cpp:1412
-msgid "Can't obtain a default font -- no fonts found"
-msgstr ""
 
 #: ktmpstatusmsg.cpp:68
 msgid "  Ready."
@@ -1818,6 +1238,10 @@ msgstr "&Eliminar"
 #: rosegardengui.cpp:451 matrixview.cpp:420
 msgid "&Draw"
 msgstr "&Dibujar"
+
+#: rosegardengui.cpp:457 rc.cpp:10 rc.cpp:27 matrixview.cpp:430
+msgid "&Move"
+msgstr "&Mover"
 
 #: rosegardengui.cpp:464
 msgid "&Resize"
@@ -2650,6 +2074,305 @@ msgstr "<sin título>"
 #: instrumentparameterbox.cpp:1111
 msgid "<no instrument>"
 msgstr "<sin instrumento>"
+
+#: rc.cpp:1 rc.cpp:14 rc.cpp:35 rc.cpp:54
+msgid "Tools Toolbar"
+msgstr "Barra de Herramientas de Herramientas"
+
+#: rc.cpp:2 rc.cpp:15 rc.cpp:36 rc.cpp:57
+msgid "Transport Toolbar"
+msgstr "Barra de Herramientas de Transporte"
+
+#: rc.cpp:3 rc.cpp:16
+msgid "Actions Toolbar"
+msgstr "Barra de Herramientas de Acciones"
+
+#: rc.cpp:4 rc.cpp:17 rc.cpp:58
+msgid "Zoom Toolbar"
+msgstr "Barra de Herramientas de Ampliación"
+
+#: rc.cpp:6
+msgid "&Grid"
+msgstr "&Rejilla"
+
+#: rc.cpp:7 rc.cpp:25
+msgid "Trans&forms"
+msgstr "Trans&formar"
+
+#: rc.cpp:8
+msgid "&Velocity"
+msgstr "&Velocidad"
+
+#: rc.cpp:9 rc.cpp:26
+msgid "Trans&pose"
+msgstr "Trans&portar"
+
+#: rc.cpp:11 rc.cpp:28 rc.cpp:52
+msgid "T&ransport"
+msgstr "T&ransporte"
+
+#: rc.cpp:19
+msgid "&Group"
+msgstr "&Grupo"
+
+#: rc.cpp:20 rc.cpp:30
+msgid "&Notes"
+msgstr "&Notas"
+
+#: rc.cpp:21
+msgid "S&tem Direction"
+msgstr "Dirección de las &Plicas"
+
+#: rc.cpp:22
+msgid "S&lashes"
+msgstr "Co&rchetes"
+
+#: rc.cpp:23
+msgid "&Force Accidentals"
+msgstr "&Forzar Alteraciones"
+
+#: rc.cpp:24
+msgid "Mar&ks"
+msgstr "Mar&cadores"
+
+#: rc.cpp:31
+msgid "&Rests"
+msgstr "&Silencios"
+
+#: rc.cpp:32
+msgid "&Accidentals"
+msgstr "&Alteraciones"
+
+#: rc.cpp:33
+msgid "&Clefs"
+msgstr "&Claves"
+
+#: rc.cpp:37
+msgid "Notes Toolbar"
+msgstr "Barra de Herramientas de Notas"
+
+#: rc.cpp:38
+msgid "Rests Toolbar"
+msgstr "Barra de Herramientas de Silencios"
+
+#: rc.cpp:39
+msgid "Accidentals Toolbar"
+msgstr "Barra de Herramientas de Alteraciones"
+
+#: rc.cpp:40
+msgid "Clefs Toolbar"
+msgstr "Barra de Herramientas de Claves"
+
+#: rc.cpp:41
+msgid "Marks Toolbar"
+msgstr "Barra de Herramientas de Marcadores"
+
+#: rc.cpp:42
+msgid "Group Toolbar"
+msgstr "Barra de Herramientas de Grupo"
+
+#: rc.cpp:43
+msgid "Meta Toolbar"
+msgstr "Meta-Barra de Herramientas"
+
+#: rc.cpp:44
+msgid "Layout Toolbar"
+msgstr "Barra de Herramientas de Formato"
+
+#: rc.cpp:45
+msgid "&Import"
+msgstr "&Importar"
+
+#: rc.cpp:46
+msgid "&Merge"
+msgstr "&Mezclar"
+
+#: rc.cpp:47
+msgid "&Export"
+msgstr "&Exportar"
+
+#: rc.cpp:48
+msgid "Seg&ments"
+msgstr "Seg&mentos"
+
+#: rc.cpp:49
+msgid "Trac&ks"
+msgstr "Pis&tas"
+
+#: rc.cpp:50
+#, fuzzy
+msgid "Set Instrument"
+msgstr "Instrumento"
+
+#: rc.cpp:51
+msgid "&Studio"
+msgstr "E&studio"
+
+#: rc.cpp:55
+msgid "Tracks Toolbar"
+msgstr "Barra de Herramientas de Pistas"
+
+#: rc.cpp:56
+msgid "Editors Toolbar"
+msgstr "Barra de Herramientas de Editores"
+
+#: rc.cpp:59 rosegardentransport.cpp:1719 rosegardentransportdialog.cpp:71
+msgid "Rosegarden Transport"
+msgstr "Transporte de Rosegarden"
+
+#: rc.cpp:61 rosegardentransport.cpp:1721
+msgid "Show additional controls"
+msgstr "Mostrar controles adicionales"
+
+#: rc.cpp:63 rosegardentransport.cpp:1723
+msgid "Switch between real time, musical time, and SMPTE frames"
+msgstr "Conmutar entre tiempo real, tiempo musical y cuadros SMPTE"
+
+#: rc.cpp:65 rosegardentransport.cpp:1725
+msgid "Display time to end"
+msgstr "Muestra tiempo restante"
+
+#: rc.cpp:67 rosegardentransport.cpp:1727
+msgid "Fast forward"
+msgstr "Avance rápido"
+
+#: rc.cpp:68 rosegardentransport.cpp:1728
+msgid "Moves the current pointer position forwards one bar."
+msgstr "Mueve la posición actual del cursor un compás hacia delante"
+
+#: rc.cpp:70 rosegardentransport.cpp:1730
+msgid "Fast forward to end"
+msgstr "Avance rápido hacia el final"
+
+#: rc.cpp:71 rosegardentransport.cpp:1731
+msgid ""
+"Moves the pointer position to the end of the composition.  (This may mean "
+"going backwards if the pointer is already beyond the end.)"
+msgstr ""
+"Mueve la posición del cursor al final de la composición. (Esto puede "
+"significar rebobinado si la posición ya está más allá del final.)"
+
+#: rc.cpp:73 rosegardentransport.cpp:1733
+msgid "Play/Pause"
+msgstr "Reproducción/Pausa"
+
+#: rc.cpp:74 rosegardentransport.cpp:1734
+msgid ""
+"Plays from the current pointer position, or pauses playback if already in "
+"progress."
+msgstr ""
+"Toca desde la posición actual del cursor, o para la reproducción si ya está "
+"tocando."
+
+#: rc.cpp:76 rosegardentransport.cpp:1736
+msgid "Rewind"
+msgstr "Rebobinar"
+
+#: rc.cpp:77 rosegardentransport.cpp:1737
+msgid "Moves the current pointer position back one bar."
+msgstr "Mueve la posición actual del cursor un compás hacia atrás"
+
+#: rc.cpp:78 rosegardentransport.cpp:1738
+msgid "SIG"
+msgstr "SIG"
+
+#: rc.cpp:79 rosegardentransport.cpp:1739
+msgid "DIV"
+msgstr "DIV"
+
+#: rc.cpp:80 rosegardentransport.cpp:1740
+msgid "/16"
+msgstr "/16"
+
+#: rc.cpp:81 rosegardentransport.cpp:1741
+msgid "TEMPO"
+msgstr "TEMPO"
+
+#: rc.cpp:82 rosegardentransport.cpp:1742
+msgid "END"
+msgstr "FIN"
+
+#: rc.cpp:83 rosegardentransport.cpp:1743
+msgid "BAR"
+msgstr "COMPÁS"
+
+#: rc.cpp:86 rosegardentransport.cpp:1746
+msgid "Stops playback or recording."
+msgstr "Para la grabación o reproducción"
+
+#: rc.cpp:88 rosegardentransport.cpp:1748
+msgid "Rewind to beginning"
+msgstr "Rebobinar al principio"
+
+#: rc.cpp:89 rosegardentransport.cpp:1749
+msgid ""
+"Moves the pointer position to the start of the composition. (This may mean "
+"going forwards if the pointer is currently before the start.)"
+msgstr ""
+"Mueve la posición del cursor al inicio de la composición (esto puede "
+"significar adelantarlo si el cursor está actualmente antes del inicio)"
+
+#: rc.cpp:91 rosegardentransport.cpp:1751
+msgid "Hide additional controls"
+msgstr "Ocultar controles adicionales"
+
+#: rc.cpp:93 rosegardentransport.cpp:1753
+msgid "Panic Button"
+msgstr "Botón de Pánico"
+
+#: rc.cpp:94 rosegardentransport.cpp:1754
+msgid "Resets all MIDI devices if you've got stuck notes"
+msgstr "Restablece todos los dispositivos MIDI cuando hay notas colgadas"
+
+#: rc.cpp:96 rosegardentransport.cpp:1756 rosegardenconfigurationpage.h:452
+msgid "Metronome"
+msgstr "Metrónomo"
+
+#: rc.cpp:97 rosegardentransport.cpp:1757
+msgid "Provides a metronome click for you to play along with"
+msgstr "Proporciona una señal de metrónomo para tocar con ella"
+
+#: rc.cpp:99 rosegardentransport.cpp:1759
+msgid "Solo"
+msgstr "Solo"
+
+#: rc.cpp:100 rosegardentransport.cpp:1760
+msgid "Mutes all but the currently selected track"
+msgstr "Silencia todas las pistas excepto la seleccionada"
+
+#: rc.cpp:102 rosegardentransport.cpp:1762 segmentcommands.cpp:526
+#: deviceeditor.cpp:142 deviceeditor.cpp:365
+msgid "Record"
+msgstr "Grabar"
+
+#: rc.cpp:103 rosegardentransport.cpp:1763
+msgid "Record either MIDI or audio"
+msgstr "Grabar tanto MIDI como audio"
+
+#: rc.cpp:105 rosegardentransport.cpp:1765
+msgid "Loop"
+msgstr "Repetir"
+
+#: rc.cpp:106 rosegardentransport.cpp:1766
+msgid "Turn on and off the loop markers (if set)"
+msgstr "Activa y desactiva las marcas de repetición (si hay)"
+
+#: rc.cpp:107 rosegardentransport.cpp:1767
+msgid "Shows MIDI activity in and out of Rosegarden"
+msgstr "Muestra actividad de entrada y salida MIDI en Rosegarden"
+
+#: rc.cpp:108 rc.cpp:111 rosegardentransport.cpp:1768
+#: rosegardentransport.cpp:1771
+msgid "NO EVENTS"
+msgstr "SIN EVENTOS"
+
+#: rc.cpp:109 rosegardentransport.cpp:1769
+msgid "IN"
+msgstr "IN"
+
+#: rc.cpp:110 rosegardentransport.cpp:1770
+msgid "OUT"
+msgstr "OUT"
 
 #: dialogs.cpp:104
 msgid "Time Signature"
@@ -6072,6 +5795,184 @@ msgstr "Parámetros de Segmento"
 #: studiocommands.h:291
 msgid "&Modify Control Parameter"
 msgstr ""
+
+#~ msgid "Got grouped event outside of a segment"
+#~ msgstr "Se ha obtenido un evento agrupado fuera de un segmento"
+
+#~ msgid "Got group outside of a segment"
+#~ msgstr "Se ha obtenido un grupo fuera de un segmento"
+
+#~ msgid "Found Studio in another section"
+#~ msgstr "Encontrado Estudio en otra sección"
+
+#~ msgid "TimeSignature object found outside Composition"
+#~ msgstr "Objeto de cambio de compás encontrado fuera de la Composición"
+
+#~ msgid "Found Composition in another section"
+#~ msgstr "Encontrada Composición en otra sección"
+
+#~ msgid "Track object found outside Composition"
+#~ msgstr "Objeto Pista encontrado fuera de la Composición"
+
+#~ msgid "Found Segment in another section"
+#~ msgstr "Encontrado Segmento en otra sección"
+
+#~ msgid "Audio object found outside Audio section"
+#~ msgstr "Objeto de Audio encontrado fuera de la sección de Audio"
+
+#~ msgid "Audio object has empty parameters"
+#~ msgstr "Objeto de Audio tiene parámetros vacíos"
+
+#~ msgid "Audiopath object found outside AudioFiles section"
+#~ msgstr ""
+#~ "Objeto Audiopath encontrado fuera de la sección de Archivos de Audio"
+
+#~ msgid "Audiopath has no value"
+#~ msgstr "Audiopath no tiene un valor"
+
+#~ msgid "found audio begin index in non audio segment"
+#~ msgstr "encontrado índice de comienzo de audio en un segmento no-audio"
+
+#~ msgid "found audio end index in non audio segment"
+#~ msgstr "encontrado índice final de audio en un segmento no-audio"
+
+#~ msgid "audio end index before audio start marker"
+#~ msgstr "índice de final de audio anterior al marcador de inicio de audio"
+
+#~ msgid "Found Device outside Studio"
+#~ msgstr "Encontrado Dispositivo fuera del Estudio"
+
+#~ msgid "No ID on Device tag"
+#~ msgstr "No hay ID en la etiqueta de Dispositivo"
+
+#~ msgid "Found unknown Device type"
+#~ msgstr "Encontrado tipo de Dispositivo desconocido"
+
+#~ msgid "Found Bank outside Studio or Instrument"
+#~ msgstr "Encontrado Banco fuera del Estudio o Instrumento"
+
+#~ msgid "Found Program outside Studio and Instrument"
+#~ msgstr "Encontrado Programa fuera del Estudio e Instrumento"
+
+#, fuzzy
+#~ msgid "Found ControlParameter outside Studio"
+#~ msgstr "Encontrado Instrumento fuera del Estudio"
+
+#~ msgid "Found Reverb outside Instrument"
+#~ msgstr "Encontrada Reverberación fuera del Instrumento"
+
+#~ msgid "Found Chorus outside Instrument"
+#~ msgstr "Encontrado Coro fuera del Instrumento"
+
+#~ msgid "Found Filter outside Instrument"
+#~ msgstr "Encontrado Filtro fuera del Instrumento"
+
+#~ msgid "Found Resonance outside Instrument"
+#~ msgstr "Encontrada Resonancia fuera del Instrumento"
+
+#~ msgid "Found Attack outside Instrument"
+#~ msgstr "Encontrado Ataque fuera del Instrumento"
+
+#~ msgid "Found Release outside Instrument"
+#~ msgstr "Encontrada Liberación fuera del Instrumento"
+
+#~ msgid "Found Pan outside Instrument"
+#~ msgstr "Encontrado Panorama fuera del Instrumento"
+
+#~ msgid "Found Volume outside Instrument"
+#~ msgstr "Encontrado Volumen fuera del Instrumento"
+
+#~ msgid "Found Plugin outside Instrument"
+#~ msgstr "Encontrado Plugin fuera del Instrumento"
+
+#~ msgid "Can't find Plugin"
+#~ msgstr "No puedo encontrar Plugin"
+
+#~ msgid "Found Port outside Plugin"
+#~ msgstr "Encontrado Puerto fuera de Plugin"
+
+#~ msgid "Found Metronome outside Studio"
+#~ msgstr "Encontrado Metrónomo fuera del Estudio"
+
+#~ msgid "Found Instrument outside Studio"
+#~ msgstr "Encontrado Instrumento fuera del Estudio"
+
+#~ msgid "Found unknown Instrument type"
+#~ msgstr "Encontrado tipo de Instrumento desconocido"
+
+#~ msgid "Found AudioFiles inside another section"
+#~ msgstr "Encontrado AudioFiles dentro de otra sección"
+
+#~ msgid "Found Metadata outside Composition"
+#~ msgstr "Encontrado Metadata fuera de Composición"
+
+#~ msgid "Found recordLevel outside Instrument"
+#~ msgstr ""
+#~ "Encontrado \"recordLevel\" (volumen de grabación) fuera de \"Instrument\""
+
+#~ msgid "Found audioInput outside Instrument"
+#~ msgstr ""
+#~ "Encontrado \"audioInput\" (entrada de Audio) fuera de \"Instrument\""
+
+#, fuzzy
+#~ msgid "Found colourmap outside Appearance"
+#~ msgstr "Encontrado Volumen fuera del Instrumento"
+
+#, fuzzy
+#~ msgid "Found colourpair outside ColourMap"
+#~ msgstr "Encontrado Puerto fuera de Plugin"
+
+#~ msgid "Got event outside of a Segment"
+#~ msgstr "Encontrado Evento fuera de Segmento"
+
+#, fuzzy
+#~ msgid "note-height is a required attribute of font-size"
+#~ msgstr "altura-de-nota es un atributo requerido de cuándo"
+
+#, fuzzy
+#~ msgid "font-height is a required attribute of font-scale"
+#~ msgstr "altura-de-nota es un atributo requerido de cuándo"
+
+#, fuzzy
+#~ msgid "base is a required attribute of codebase"
+#~ msgstr "el tipo es un atributo requerido de la nota"
+
+#, fuzzy
+#~ msgid "font-id is a required attribute of codebase"
+#~ msgstr "el tipo es un atributo requerido de la nota"
+
+#~ msgid "name is a required attribute of symbol"
+#~ msgstr "el nombre es un atributo requerido del símbolo"
+
+#~ msgid "name is a required attribute of hotspot"
+#~ msgstr "\"name\" es un atributo requerido de \"hotspot\""
+
+#, fuzzy
+#~ msgid "scaled-element must be in hotspot-element"
+#~ msgstr "elemento \"when\" debe estar en elemento \"hotspot\""
+
+#, fuzzy
+#~ msgid "y is a required attribute of scaled"
+#~ msgstr "y es un atributo requerido de cuándo"
+
+#~ msgid "when-element must be in hotspot-element"
+#~ msgstr "elemento \"when\" debe estar en elemento \"hotspot\""
+
+#~ msgid "note-height is a required attribute of when"
+#~ msgstr "altura-de-nota es un atributo requerido de cuándo"
+
+#~ msgid "y is a required attribute of when"
+#~ msgstr "y es un atributo requerido de cuándo"
+
+#, fuzzy
+#~ msgid "font-id is a required attribute of font-requirement"
+#~ msgstr "el tipo es un atributo requerido de la nota"
+
+#, fuzzy
+#~ msgid "font-requirement may have name or names attribute, but not both"
+#~ msgstr ""
+#~ "elementos globales y notas pueden tener forma o nombre de carácter, pero "
+#~ "no ambos"
 
 #, fuzzy
 #~ msgid "InstrumentLabel"

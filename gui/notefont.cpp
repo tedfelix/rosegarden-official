@@ -171,7 +171,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         QString s = attributes.value("note-height");
         if (!s) {
-            m_errorString = i18n("note-height is a required attribute of font-size");
+            m_errorString = "note-height is a required attribute of font-size";
             return false;
         }
         int noteHeight = s.toInt();
@@ -222,7 +222,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         s = attributes.value("font-height");
 	if (s) fontHeight = s.toDouble();
 	else {
-	    m_errorString = i18n("font-height is a required attribute of font-scale");
+	    m_errorString = "font-height is a required attribute of font-scale";
 	    return false;
 	}
 
@@ -309,26 +309,26 @@ NoteFontMap::startElement(const QString &, const QString &,
 	bool ok;
 	QString base = attributes.value("base");
 	if (!base) {
-	    m_errorString = i18n("base is a required attribute of codebase");
+	    m_errorString = "base is a required attribute of codebase";
 	    return false;
 	}
 	bn = base.toInt(&ok);
 	if (!ok || bn < 0) {
 	    m_errorString =
-		i18n("invalid base attribute \"%1\" (must be integer >= 0)").
+		QString("invalid base attribute \"%1\" (must be integer >= 0)").
 		arg(base);
 	    return false;
 	}
 	
 	QString fontId = attributes.value("font-id");
 	if (!fontId) {
-	    m_errorString = i18n("font-id is a required attribute of codebase");
+	    m_errorString = "font-id is a required attribute of codebase";
 	    return false;
 	}
 	fn = fontId.stripWhiteSpace().toInt(&ok);
 	if (!ok || fn < 0) {
 	    m_errorString =
-		i18n("invalid font-id attribute \"%1\" (must be integer >= 0)").
+		QString("invalid font-id attribute \"%1\" (must be integer >= 0)").
 		arg(fontId);
 	    return false;
 	}
@@ -339,7 +339,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         QString symbolName = attributes.value("name");
         if (!symbolName) {
-            m_errorString = i18n("name is a required attribute of symbol");
+            m_errorString = "name is a required attribute of symbol";
             return false;
         }
         SymbolData symbolData;
@@ -353,7 +353,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 	    n = code.stripWhiteSpace().toInt(&ok);
 	    if (!ok || n < 0) {
 		m_errorString =
-		    i18n("invalid code attribute \"%1\" (must be integer >= 0)").
+		    QString("invalid code attribute \"%1\" (must be integer >= 0)").
 		    arg(code);
 		return false;
 	    }
@@ -361,7 +361,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 	}
 
         if (!src && n < 0) {
-            m_errorString = i18n("symbol must have either src or code attribute");
+            m_errorString = "symbol must have either src or code attribute";
             return false;
         }
         if (src) symbolData.setSrc(qstrtostr(src));
@@ -374,7 +374,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 	    n = inversionCode.stripWhiteSpace().toInt(&ok);
 	    if (!ok || n < 0) {
 		m_errorString =
-		    i18n("invalid inversion code attribute \"%1\" (must be integer >= 0)").
+		    QString("invalid inversion code attribute \"%1\" (must be integer >= 0)").
 		    arg(inversionCode);
 		return false;
 	    }
@@ -386,7 +386,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 	    n = fontId.stripWhiteSpace().toInt(&ok);
 	    if (!ok || n < 0) {
 		m_errorString =
-		    i18n("invalid font-id attribute \"%1\" (must be integer >= 0)").
+		    QString("invalid font-id attribute \"%1\" (must be integer >= 0)").
 		    arg(fontId);
 		return false;
 	    }
@@ -401,7 +401,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         QString s = attributes.value("name");
         if (!s) {
-            m_errorString = i18n("name is a required attribute of hotspot");
+            m_errorString = "name is a required attribute of hotspot";
             return false;
         }
         m_hotspotCharName = qstrtostr(s.upper());
@@ -409,7 +409,7 @@ NoteFontMap::startElement(const QString &, const QString &,
     } else if (lcName == "scaled") {
 
         if (m_hotspotCharName == "") {
-            m_errorString = i18n("scaled-element must be in hotspot-element");
+            m_errorString = "scaled-element must be in hotspot-element";
             return false;
         }
 
@@ -419,7 +419,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
 	s = attributes.value("y");
 	if (!s) {
-	    m_errorString = i18n("y is a required attribute of scaled");
+	    m_errorString = "y is a required attribute of scaled";
 	    return false;
 	}
 	double y = s.toDouble();
@@ -435,13 +435,13 @@ NoteFontMap::startElement(const QString &, const QString &,
     } else if (lcName == "when") {
 
         if (m_hotspotCharName == "") {
-            m_errorString = i18n("when-element must be in hotspot-element");
+            m_errorString = "when-element must be in hotspot-element";
             return false;
         }
 
         QString s = attributes.value("note-height");
         if (!s) {
-            m_errorString = i18n("note-height is a required attribute of when");
+            m_errorString = "note-height is a required attribute of when";
             return false;
         }
         int noteHeight = s.toInt();
@@ -452,7 +452,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         s = attributes.value("y");
         if (!s) {
-            m_errorString = i18n("y is a required attribute of when");
+            m_errorString = "y is a required attribute of when";
             return false;
         }
         int y = s.toInt();
@@ -476,12 +476,12 @@ NoteFontMap::startElement(const QString &, const QString &,
 	    n = id.stripWhiteSpace().toInt(&ok);
 	    if (!ok) {
 		m_errorString =
-		    i18n("invalid font-id attribute \"%1\" (must be integer >= 0)").
+		    QString("invalid font-id attribute \"%1\" (must be integer >= 0)").
 		    arg(id);
 		return false;
 	    }
 	} else {
-	    m_errorString = i18n("font-id is a required attribute of font-requirement");
+	    m_errorString = "font-id is a required attribute of font-requirement";
 	    return false;
 	}
 
@@ -490,8 +490,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
 	if (name) {
 	    if (names) {
-		m_errorString =
-		    i18n("font-requirement may have name or names attribute, but not both");
+		m_errorString = "font-requirement may have name or names attribute, but not both";
 		return false;
 	    }
 
@@ -499,7 +498,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 	    if (checkFont(name, 12, font)) {
 		m_fonts[n] = font;
 	    } else {
-		cerr << i18n("Warning: Unable to load font \"%1\"").arg(name) << endl;
+		cerr << QString("Warning: Unable to load font \"%1\"").arg(name) << endl;
 		m_ok = false;
 	    }
 
@@ -516,14 +515,13 @@ NoteFontMap::startElement(const QString &, const QString &,
 		}
 	    }
 	    if (!have) {
-		cerr << i18n("Warning: Unable to load any of the fonts in \"%1\"").
+		cerr << QString("Warning: Unable to load any of the fonts in \"%1\"").
 		    arg(names) << endl;
 		m_ok = false;
 	    }
 
 	} else {
-	    m_errorString =
-		i18n("font-requirement must have either name or names attribute");
+	    m_errorString = "font-requirement must have either name or names attribute";
 	    return false;
 	}	    
 
@@ -538,7 +536,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 bool
 NoteFontMap::error(const QXmlParseException& exception)
 {
-    m_errorString = i18n("%1 at line %2, column %3")
+    m_errorString = QString("%1 at line %2, column %3")
 	.arg(exception.message())
 	.arg(exception.lineNumber())
 	.arg(exception.columnNumber());
@@ -548,7 +546,7 @@ NoteFontMap::error(const QXmlParseException& exception)
 bool
 NoteFontMap::fatalError(const QXmlParseException& exception)
 {
-    m_errorString = i18n("%1 at line %2, column %3")
+    m_errorString = QString("%1 at line %2, column %3")
 	.arg(exception.message())
 	.arg(exception.lineNumber())
 	.arg(exception.columnNumber());
@@ -919,15 +917,12 @@ NoteFont::NoteFont(string fontName, int size) :
     if (sizes.size() > 0) {
         m_size = *sizes.begin();
     } else {
-        throw BadFont(qstrtostr(i18n("No sizes listed for font \"%1\"")
-                      .arg(strtoqstr(fontName))));
+        throw BadFont(std::string("No sizes listed for font ") + fontName);
     }
 
     if (size > 0) {
         if (sizes.find(size) == sizes.end()) {
-            throw BadFont(qstrtostr(i18n("Font \"%1\" not available in size %2")
-                          .arg(strtoqstr(fontName))
-                          .arg(size)));
+            throw BadFont(qstrtostr(QString("Font \"%1\" not available in size %2").arg(fontName).arg(size)));
         } else {
             m_size = size;
         }
