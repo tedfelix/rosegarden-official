@@ -52,6 +52,9 @@ etc
   <Action name="simple_tuplet"/>
   <Action name="break_tuplets"/>
   <Separator/>
+  <Action name="grace"/>
+  <Action name="ungrace"/>
+  <Separator/>
   <Action name="slur"/>
   <Action name="crescendo"/>
   <Action name="decrescendo"/>
@@ -344,6 +347,8 @@ etc
     <Action name="auto_beam"/>
     <Action name="break_group"/>
     <Action name="break_tuplets"/>
+    <Action name="grace"/>
+    <Action name="ungrace"/>
     <Action name="slur"/>
     <Action name="crescendo"/>
     <Action name="decrescendo"/>

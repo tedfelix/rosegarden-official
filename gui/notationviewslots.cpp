@@ -422,6 +422,15 @@ void NotationView::slotGroupAutoBeam()
                         (*m_currentEventSelection, m_legatoQuantizer));
 }
 
+void NotationView::slotGroupBreak()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Breaking groups..."), statusBar());
+
+    addCommandToHistory(new GroupMenuBreakCommand
+                        (*m_currentEventSelection));
+}
+
 void NotationView::slotGroupSimpleTuplet()
 {
     slotGroupTuplet(true);
@@ -495,15 +504,22 @@ void NotationView::slotGroupTuplet(bool simple)
 			(*segment, t, unit, untupled, tupled));
 }
 
-
-void NotationView::slotGroupBreak()
+void NotationView::slotGroupGrace()
 {
     if (!m_currentEventSelection) return;
-    KTmpStatusMsg msg(i18n("Breaking groups..."), statusBar());
+    KTmpStatusMsg msg(i18n("Making grace notes..."), statusBar());
 
-    addCommandToHistory(new GroupMenuBreakCommand
-                        (*m_currentEventSelection));
+    addCommandToHistory(new GroupMenuGraceCommand(*m_currentEventSelection));
 }
+
+void NotationView::slotGroupUnGrace()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Making non-grace notes..."), statusBar());
+
+    addCommandToHistory(new GroupMenuUnGraceCommand(*m_currentEventSelection));
+}
+
 
 //
 // indications stuff

@@ -86,6 +86,8 @@ const PropertyName BEAMED_GROUP_UNTUPLED_COUNT	 = "untupledcount";
 // rounding -- unless otherwise specified
 const PropertyName TUPLET_NOMINAL_DURATION	 = "TupletNominalDuration";
 
+// persistent
+const PropertyName GRACE_NOMINAL_DURATION        = "GraceNominalDuration";
 
 const std::string GROUP_TYPE_BEAMED		 = "beamed";
 const std::string GROUP_TYPE_TUPLED		 = "tupled";

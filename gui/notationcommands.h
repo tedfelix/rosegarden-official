@@ -214,6 +214,19 @@ protected:
 };
 
 
+class GroupMenuBreakCommand : public BasicSelectionCommand
+{
+public:
+    GroupMenuBreakCommand(Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(), selection) { }
+
+    static QString getGlobalName() { return "&Unbeam"; }
+
+protected:
+    virtual void modifySegment();
+};
+
+
 class GroupMenuTupletCommand : public BasicCommand
 {
 public:
@@ -237,13 +250,27 @@ private:
 };
 
 
-class GroupMenuBreakCommand : public BasicSelectionCommand
+class GroupMenuGraceCommand : public BasicSelectionCommand
 {
 public:
-    GroupMenuBreakCommand(Rosegarden::EventSelection &selection) :
+    GroupMenuGraceCommand(Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection) { }
+
+    static QString getGlobalName() { return "Make &Grace Notes"; }
+
+protected:
+    virtual void modifySegment();
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+};
+
+class GroupMenuUnGraceCommand : public BasicSelectionCommand
+{
+public:
+    GroupMenuUnGraceCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection) { }
 
-    static QString getGlobalName() { return "&Unbeam"; }
+    static QString getGlobalName() { return "Ung&race"; }
 
 protected:
     virtual void modifySegment();

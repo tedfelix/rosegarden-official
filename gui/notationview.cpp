@@ -670,6 +670,12 @@ void NotationView::setupActions()
     new KAction(i18n(GroupMenuTupletCommand::getGlobalName(false)), 0, this,
 		SLOT(slotGroupGeneralTuplet()), actionCollection(), "tuplet");
 
+    new KAction(i18n(GroupMenuGraceCommand::getGlobalName()), 0, this,
+		SLOT(slotGroupGrace()), actionCollection(), "grace");
+
+    new KAction(i18n(GroupMenuUnGraceCommand::getGlobalName()), 0, this,
+		SLOT(slotGroupUnGrace()), actionCollection(), "ungrace");
+
     new KAction(i18n(GroupMenuAddIndicationCommand::getGlobalName
                 (Rosegarden::Indication::Slur)), 0, this,
                 SLOT(slotGroupSlur()), actionCollection(), "slur");

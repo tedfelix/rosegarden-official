@@ -245,6 +245,12 @@ NotationHLayout::legatoQuantize(Segment &segment)
 	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
 
 	    Note n(Note::getNearestNote(duration));
+
+	    timeT graceDuration;
+	    if ((*i)->get<Int>(GRACE_NOMINAL_DURATION, graceDuration)) {
+		n = Note::getNearestNote(graceDuration);
+	    }
+
 	    (*i)->setMaybe<Int>(m_properties.NOTE_TYPE, n.getNoteType());
 	    (*i)->setMaybe<Int>(m_properties.NOTE_DOTS, n.getDots());
 	}
@@ -420,7 +426,7 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 
 	    } else {
 		
-		kdDebug(KDEBUG_AREA) << "Found something I don't know about" << endl;
+		kdDebug(KDEBUG_AREA) << "Found something I don't know about (type is " << el->event()->getType() << ")" << endl;
 		fixedWidth += mw;
 	    }
 
@@ -1361,12 +1367,6 @@ NotationHLayout::positionChord(StaffType &staff,
 	note->event()->get<Bool>(TIED_BACKWARD, tiedBack);
 
 	int pitch = note->event()->get<Int>(PITCH);
-	if (tiedForwards) {
-	    note->event()->setMaybe<Int>(m_properties.TIE_LENGTH, 0);
-	    tieMap[pitch] = chord[i];
-	} else {
-	    note->event()->unset(m_properties.TIE_LENGTH);
-	}
 
 	if (tiedBack) {
 	    TieMap::iterator ti(tieMap.find(pitch));
@@ -1385,7 +1385,14 @@ NotationHLayout::positionChord(StaffType &staff,
 		} else {
 		    tieMap.erase(pitch);
 		}
-	    }
+	    }		
+	}
+
+	if (tiedForwards) {
+	    note->event()->setMaybe<Int>(m_properties.TIE_LENGTH, 0);
+	    tieMap[pitch] = chord[i];
+	} else {
+	    note->event()->unset(m_properties.TIE_LENGTH);
 	}
     }
 

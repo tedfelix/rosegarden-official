@@ -406,6 +406,97 @@ GroupMenuAutoBeamCommand::modifySegment()
                     GROUP_TYPE_BEAMED, m_quantizer);
 }
 
+void
+GroupMenuBreakCommand::modifySegment()
+{
+    SegmentNotationHelper helper(getSegment());
+
+    helper.unbeam(getStartTime(), getEndTime());
+}
+
+void
+GroupMenuGraceCommand::modifySegment()
+{
+    //!!! problem for undo: we also modify things that start at the
+    // end time of the last note in the selection -- perhaps better
+    // make this a basic command and work out the end time ourselves
+
+    Segment &s(getSegment());
+    timeT startTime = getStartTime();
+    timeT endOfLastGraceNote = startTime;
+    int graceGroupId = s.getNextId();
+    int subordering = -1;
+
+    std::vector<Event *> newEvents;
+    std::vector<Event *> oldEvents;
+    std::vector<Segment::iterator> oldSegmentIterators;
+
+    // first turn the selected events into grace notes
+
+    for (EventSelection::eventcontainer::iterator i =
+	     m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if (!(*i)->isa(Note::EventType)) continue;
+
+	Event *e = new Event(**i, startTime, 0, subordering);
+	e->set<Int>(GRACE_NOMINAL_DURATION, (*i)->getDuration());
+	e->set<Int>(BEAMED_GROUP_ID, graceGroupId);
+	e->set<String>(BEAMED_GROUP_TYPE, GROUP_TYPE_GRACE);
+	
+	newEvents.push_back(e);
+	oldEvents.push_back(*i);
+
+	if ((*i)->getAbsoluteTime() + (*i)->getDuration() >
+	    endOfLastGraceNote) {
+	    endOfLastGraceNote = 
+		(*i)->getAbsoluteTime() + (*i)->getDuration();
+	}
+
+	--subordering;
+    }
+
+    // then take any notes immediately following and extend them back
+    // to fill in the space formerly occupied by the now-grace-notes
+    
+    Segment::iterator i0, i1;
+    s.getTimeSlice(endOfLastGraceNote, i0, i1);
+
+    while (i0 != i1 && i0 != s.end()) {
+
+	if (!(*i0)->isa(Note::EventType)) continue;
+
+	Event *e = new Event
+	    (**i0, startTime,
+	     (*i0)->getDuration() > 0 ?
+	     (*i0)->getDuration() + (endOfLastGraceNote - startTime) : 0);
+	
+	newEvents.push_back(e);
+	oldSegmentIterators.push_back(i0);
+
+	++i0;
+    }
+
+    for (unsigned int i = 0; i < oldSegmentIterators.size(); ++i) {
+	s.erase(oldSegmentIterators[i]);
+    }
+
+    for (unsigned int i = 0; i < oldEvents.size(); ++i) {
+	s.eraseSingle(oldEvents[i]);
+    }
+
+    for (unsigned int i = 0; i < newEvents.size(); ++i) {
+	s.insert(newEvents[i]);
+    }
+}
+
+void
+GroupMenuUnGraceCommand::modifySegment()
+{
+    //!!!
+}
+
+
 GroupMenuTupletCommand::GroupMenuTupletCommand(Rosegarden::Segment &segment,
 					       timeT startTime,
 					       timeT unit,
@@ -426,14 +517,6 @@ GroupMenuTupletCommand::modifySegment()
     helper.makeTupletGroup(getStartTime(), m_untupled, m_tupled, m_unit);
 }
 
-
-void
-GroupMenuBreakCommand::modifySegment()
-{
-    SegmentNotationHelper helper(getSegment());
-
-    helper.unbeam(getStartTime(), getEndTime());
-}
 
 
 GroupMenuAddIndicationCommand::GroupMenuAddIndicationCommand(std::string indicationType, 

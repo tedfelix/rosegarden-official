@@ -282,10 +282,12 @@ public slots:
     /// group slots
     void slotGroupBeam();
     void slotGroupAutoBeam();
+    void slotGroupBreak();
     void slotGroupSimpleTuplet();
     void slotGroupGeneralTuplet();
     void slotGroupTuplet(bool simple);
-    void slotGroupBreak();
+    void slotGroupGrace();
+    void slotGroupUnGrace();
     void slotGroupSlur();
     void slotGroupCrescendo();
     void slotGroupDecrescendo();
