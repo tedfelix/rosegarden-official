@@ -240,6 +240,14 @@ AlsaDriver::~AlsaDriver()
 void
 AlsaDriver::shutdown()
 {
+    // This thread should already have completed at this point
+    //
+    if (_diskThread)
+    {
+        pthread_cancel(_diskThread);
+        _diskThread = 0;
+    }
+
     // to ensure that only one thread does the closing
     if (_threadAlsaClosing) return;
 
@@ -327,9 +335,9 @@ AlsaDriver::shutdown()
     std::cerr << "AlsaDriver::shutdown - cancelling disk thread" << std::endl;
 #endif
 
-    // This thread should already have completed at this point
+    // Clear the mutex
     //
-    if (_diskThread) pthread_join(_diskThread, NULL);
+    pthread_mutex_destroy(&_diskThreadLock);
 
 #endif // HAVE_LIBJACK
     AUDIT_UPDATE;
@@ -1394,10 +1402,6 @@ AlsaDriver::initialiseAudio()
     AUDIT_START;
     AUDIT_STREAM << std::endl;
 
-    // setup disk thread
-    //
-    pthread_create(&_diskThread, NULL, jackDiskThread, this);
-
     // Using JACK instead
     //
     std::string jackClientName = "rosegarden";
@@ -1579,6 +1583,14 @@ AlsaDriver::initialiseAudio()
     AUDIT_STREAM << "AlsaDriver::initialiseAudio - "
                  << "initialised JACK audio subsystem"
                  << std::endl;
+
+    AUDIT_STREAM << "AlsaDriver::initialiseAudio - "
+                 << "creating disk thread" << std::endl;
+
+    // setup disk thread
+    //
+    pthread_create(&_diskThread, NULL, jackDiskThread, this);
+    pthread_detach(_diskThread);
 
     AUDIT_UPDATE;
 #endif
@@ -3833,9 +3845,10 @@ AlsaDriver::jackShutdown(void *arg)
 #endif
 
     AlsaDriver *inst = static_cast<AlsaDriver*>(arg);
+    /*
     if (inst) inst->shutdown();
-
     delete inst;
+    */
 }
 
 int
