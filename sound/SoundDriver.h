@@ -391,8 +391,13 @@ public:
 
     // Set MMC master/slave
     //
-    bool isMMCMaster() const { return m_mmcMaster; }
+    bool isMMCMaster() const { return (m_mmcMaster && m_mmcEnabled); }
     void setMasterMMC(bool mmc) { m_mmcMaster = mmc; }
+
+    // MMC Id
+    //
+    int getMMCId() const { return ((int)(m_mmcId)); }
+    void setMMCId(int id) { m_mmcId = (Rosegarden::MidiByte)(id); }
 
 protected:
     // Helper functions to be implemented by subclasses
@@ -467,10 +472,11 @@ protected:
 
     std::vector<std::string>     m_args;
 
-    // MMC control
+    // MMC status and ID
     //
     bool                         m_mmcEnabled;
     bool                         m_mmcMaster;
+    Rosegarden::MidiByte         m_mmcId;      // device id
 
 
 };

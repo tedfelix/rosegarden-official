@@ -157,7 +157,10 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_audioMonitoringInstrument(Rosegarden::AudioInstrumentBase),
     m_audioPlayLatency(0, 0),
     m_audioRecordLatency(0, 0),
-    m_studio(studio)
+    m_studio(studio),
+    m_mmcEnabled(false),
+    m_mmcMaster(false),
+    m_mmcId(0)           // default MMC id of 0
 {
 }
 
@@ -418,4 +421,5 @@ SoundDriver::cancelAudioFile(InstrumentId instrumentId, AudioFileId audioFileId)
 
 
 }
+
 

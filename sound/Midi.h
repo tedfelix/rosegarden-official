@@ -74,8 +74,43 @@ const MidiByte MIDI_STOP                   = 0xFC;
 const MidiByte MIDI_ACTIVE_SENSING         = 0xFE;
 const MidiByte MIDI_SYSTEM_RESET           = 0xFF;
 
-  
+// System Exclusive Extensions
+//
+
+// Non-commercial use
+//
+const MidiByte MIDI_SYSEX_NONCOMMERCIAL    = 0x7D;
+
+// Universal non-real time use
+// Format:
+//
+//   0xF0 0x7E <device id> <sub id #1> <sub id #2> <data> 0xF7
+//
+const MidiByte MIDI_SYSEX_NON_RT           = 0x7E;
+
+// RealTime e.g Midi Machine Control (MMC)
+//
+//   0xF0 0x7F <device id> <sub id #1> <sub id #2> <data> 0xF7
+//
+const MidiByte MIDI_SYSEX_RT               = 0x7F;
+
+// MMC commands
+//
+const MidiByte MIDI_MMC_STOP               = 0x01;
+const MidiByte MIDI_MMC_PLAY               = 0x02;
+const MidiByte MIDI_MMC_DEFERRED_PLAY      = 0x03;
+const MidiByte MIDI_MMC_FAST_FORWARD       = 0x04;
+const MidiByte MIDI_MMC_REWIND             = 0x05;
+const MidiByte MIDI_MMC_RECORD_STROBE      = 0x06; // punch in
+const MidiByte MIDI_MMC_RECORD_EXIT        = 0x07; // punch out
+const MidiByte MIDI_MMC_RECORD_PAUSE       = 0x08;
+const MidiByte MIDI_MMC_PAUSE              = 0x08;
+const MidiByte MIDI_MMC_EJECT              = 0x0A;
+const MidiByte MIDI_MMC_LOCATE             = 0x44; // jump to
+
+
 // Midi Event Code for META Event
+//
 const MidiByte MIDI_FILE_META_EVENT        = 0xFF;
 
 // META Event Codes

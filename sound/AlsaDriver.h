@@ -268,6 +268,9 @@ public:
 
     // ----------------------- End of Virtuals ----------------------
 
+    // Create and send an MMC command
+    //
+    void sendMMC(Rosegarden::MidiByte command);
 
 #ifdef HAVE_LADSPA
 

@@ -968,6 +968,12 @@ AlsaDriver::initialisePlayback(const RealTime &position)
     m_alsaPlayStartTime = getAlsaTime();
     m_playStartPosition = position;
     m_startPlayback = true;
+
+    if (isMMCMaster())
+    {
+        sendMMC(MIDI_MMC_PLAY);
+    }
+
 }
 
 
@@ -3422,6 +3428,27 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id)
     else
         m_midiInputPortConnected = true;
 }
+
+void
+AlsaDriver::sendMMC(Rosegarden::MidiByte command)
+{
+    MappedComposition mC;
+
+/*
+    try
+    {
+         MappedEvent *mE =
+             new MappedEvent(0,
+                             MappedEvent::MidiSystemExclusive,
+                             0);
+
+    }
+    catch(...) {;}
+*/
+
+}
+
+
 
 }
 
