@@ -456,6 +456,10 @@ JackDriver::createInputPorts(unsigned int totalPorts, bool deactivate)
                                        JACK_DEFAULT_AUDIO_TYPE,
                                        JackPortIsInput|JackPortIsTerminal,
                                        0);
+	if (!inputPort) {
+	    AUDIT_STREAM << "JackDriver::createJackInputPorts: failed to create input port " << portName << std::endl;
+	    return;
+	}
 	m_inputPorts.push_back(inputPort);
 
 
@@ -867,15 +871,21 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes)
     if (m_alsaDriver->getRecordStatus() == RECORD_AUDIO &&
 	m_alsaDriver->areClocksRunning()) {
 
-	m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-			    inputBufferLeft, 0, nframes);
+	if (inputBufferLeft) {
+	    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
+				inputBufferLeft, 0, nframes);
+	}
     
 	if (channels == 2) {
-	    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-				inputBufferRight, 1, nframes);
+	    if (inputBufferRight) {
+		m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
+				    inputBufferRight, 1, nframes);
+	    }
 	} else {
-	    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-				inputBufferLeft, 1, nframes);
+	    if (inputBufferLeft) {
+		m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
+				    inputBufferLeft, 1, nframes);
+	    }
 	}
     
 	wroteSomething = true;
