@@ -571,6 +571,19 @@ bool MatrixView::applyLayout(int /*staffNo*/)
     return true;
 }
 
+void MatrixView::refreshSegment(Segment *segment,
+				timeT startTime, timeT endTime)
+{
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+	if (&m_staffs[i]->getSegment() == segment) {
+	    applyLayout();
+	    m_staffs[i]->positionElements(startTime, endTime);
+	    canvas()->update();
+	    return;
+	}
+    }
+}
+
 QSize MatrixView::getViewSize()
 {
     return canvas()->size();

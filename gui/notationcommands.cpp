@@ -51,23 +51,6 @@ using std::cerr;
 using std::endl;
 
 
-BasicSelectionCommand::BasicSelectionCommand(const QString &name,
-					     EventSelection &selection,
-					     bool bruteForceRedo) :
-    BasicCommand(name,
-		 selection.getSegment(),
-		 selection.getBeginTime(),
-		 selection.getEndTime(),
-		 bruteForceRedo)
-{
-    // nothing else
-}
-
-BasicSelectionCommand::~BasicSelectionCommand()
-{
-    // nothing
-}
-
 NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
                                            timeT endTime, Note note, int pitch,
                                            Accidental accidental) :

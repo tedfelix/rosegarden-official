@@ -353,6 +353,10 @@ public:
 
     virtual bool applyLayout(int staffNo = -1);
 
+    virtual void refreshSegment(Rosegarden::Segment *segment,
+				Rosegarden::timeT startTime,
+				Rosegarden::timeT endTime);
+
     QCanvas* canvas() { return m_canvasView->canvas(); }
 
     MatrixStaff* getStaff(int) { return m_staffs[0]; } // deal with 1 staff only

@@ -146,8 +146,6 @@ signals:
     void setPositionPointer(int);
     void activateTool(SegmentCanvas::ToolType);
     void selectSegments(list<Rosegarden::Segment*>);
-    void segmentModified(Rosegarden::Segment *,
-			 Rosegarden::timeT, Rosegarden::timeT);
 
 protected:
     //--------------- Data members ---------------------------------

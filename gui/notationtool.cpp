@@ -730,9 +730,9 @@ void NotationSelectionPaster::handleLeftButtonPress(Rosegarden::timeT,
 
     if (m_selection.pasteToSegment(segment, time)) {
 
-        m_nParentView->redoLayout(&segment,
-                                  0,
-                                  time + m_selection.getTotalDuration() + 1);
+        m_nParentView->refreshSegment(&segment,
+				      0,
+				      time + m_selection.getTotalDuration() + 1);
 
     } else {
         

@@ -25,10 +25,13 @@
 #include <vector>
 
 #include <kmainwindow.h>
+#include "Event.h" // for timeT -- can't predeclare a typedef
 
 namespace Rosegarden { class Segment; }
 
 class RosegardenGUIDoc;
+class MultiViewCommandHistory;
+class KCommand;
 class EditTool;
 class EditToolBox;
 class BasicCommand;
@@ -38,6 +41,7 @@ class EditView : public KMainWindow
     static const unsigned int ID_STATUS_MSG;
 
     Q_OBJECT
+
 public:
     EditView(RosegardenGUIDoc *doc,
              std::vector<Rosegarden::Segment *> segments,
@@ -47,7 +51,23 @@ public:
     const RosegardenGUIDoc *getDocument() const { return m_document; }
     RosegardenGUIDoc *getDocument() { return m_document; }
 
+    //!!! I don't think we gain anything by specifying this here, do we?
     virtual bool applyLayout(int staffNo = -1) = 0;
+
+    /**
+     * Refresh part of a Segment following a modification made in this
+     * or another view.  The startTime and endTime give the extents of
+     * the modified region.  This method is called following a
+     * modification to any Segment; no attempt has been made to check
+     * that the given Segment is actually shown in this view, so take
+     * care.
+     *
+     * If startTime < 0, start at beginning of Segment; if endTime <
+     * 0, end at end of Segment.
+     */
+    virtual void refreshSegment(Rosegarden::Segment *segment,
+				Rosegarden::timeT startTime,
+				Rosegarden::timeT endTime) = 0;
 
     /**
      * "Clever" readjustment of the view size
@@ -60,9 +80,14 @@ public:
     virtual void readjustViewSize(QSize newSize, bool exact = false);
 
     /**
+     * Get the document's global command history
+     */
+    virtual MultiViewCommandHistory *getCommandHistory();
+
+    /**
      * Add a Command to the history
      */
-    virtual void addCommandToHistory(BasicCommand*);
+    virtual void addCommandToHistory(KCommand *);
 
 public slots:
     /**
@@ -70,16 +95,6 @@ public slots:
      */
     virtual void closeWindow();
 
-//     /**
-//      * undo
-//      */
-//     virtual void slotEditUndo() = 0;
-
-//     /**
-//      * redo
-//      */
-//     virtual void slotEditRedo() = 0;
-    
     /**
      * put the indicationed text/object into the clipboard and remove * it
      * from the document
@@ -123,6 +138,11 @@ public slots:
      * @param text the text that is displayed in the statusbar
      */
     virtual void slotStatusHelpMsg(const QString &text);
+
+    /**
+     * Receives word of a modification, calls segmentModified
+     */
+    virtual void slotCommandExecuted(KCommand *command);
 
 protected:
 

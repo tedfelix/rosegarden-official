@@ -129,7 +129,7 @@ MultiViewCommandHistory::addCommand(KCommand *command, bool execute)
     
     if (execute) {
 	command->execute();
-	emit commandExecuted();
+	emit commandExecuted(command);
     }
 
     updateButtons();
@@ -140,10 +140,11 @@ MultiViewCommandHistory::undo()
 {
     if (m_undoStack.empty()) return;
 
-    m_undoStack.top()->unexecute();
-    emit commandExecuted();
+    KCommand *command = m_undoStack.top();
+    command->unexecute();
+    emit commandExecuted(command);
 
-    m_redoStack.push(m_undoStack.top());
+    m_redoStack.push(command);
     m_undoStack.pop();
 
     clipCommands();
@@ -157,10 +158,11 @@ MultiViewCommandHistory::redo()
 {
     if (m_redoStack.empty()) return;
 
-    m_redoStack.top()->execute();
-    emit commandExecuted();
+    KCommand *command = m_redoStack.top();
+    command->execute();
+    emit commandExecuted(command);
 
-    m_undoStack.push(m_redoStack.top());
+    m_undoStack.push(command);
     m_redoStack.pop();
     // no need to clip
     updateButtons();

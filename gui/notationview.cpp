@@ -56,7 +56,6 @@
 #include "Quantizer.h"
 #include "staffruler.h"
 #include "notationcommands.h"
-#include "multiviewcommandhistory.h"
 
 using Rosegarden::Event;
 using Rosegarden::Int;
@@ -83,8 +82,6 @@ using std::set;
 using namespace Rosegarden::BaseProperties;
 
 //////////////////////////////////////////////////////////////////////
-
-NotationView::NotationViewSet NotationView::m_viewsExtant;
 
 NotationView::NotationView(RosegardenGUIView* rgView,
                            vector<Segment *> segments,
@@ -219,15 +216,10 @@ NotationView::NotationView(RosegardenGUIView* rgView,
     m_pointer->show();
 
     m_selectDefaultNote->activate();
-
-    m_viewsExtant.insert(this);
 }
 
 NotationView::~NotationView()
 {
-    m_viewsExtant.erase(this);
-    getCommandHistory()->detachView(actionCollection());
-
     kdDebug(KDEBUG_AREA) << "-> ~NotationView()\n";
 
     saveOptions();
@@ -497,9 +489,6 @@ void NotationView::setupActions()
          actionCollection(), "page_mode");
     pageModeAction->setExclusiveGroup("layoutMode");
 
-    // setup edit menu
-    getCommandHistory()->attachView(actionCollection());
-
     KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
     KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
     KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
@@ -753,12 +742,6 @@ void NotationView::initStatusBar()
                    KTmpStatusMsg::getDefaultId(), 1);
     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(), 
                          AlignLeft | AlignVCenter);
-}
-
-MultiViewCommandHistory *
-NotationView::getCommandHistory()
-{
-    return getDocument()->getCommandHistory();
 }
 
 QSize NotationView::getViewSize()
@@ -1062,20 +1045,6 @@ PositionCursor* NotationView::getCursor()
     return getRuler()->getCursor();
 }
 
-void NotationView::addCommandToHistory(BasicCommand* command)
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::addCommandToHistory\n";
-
-    QObject::connect(command, SIGNAL(finishExecute(Rosegarden::Segment*,
-                                                   Rosegarden::timeT,
-                                                   Rosegarden::timeT)),
-                     this, SLOT(commandFinished(Rosegarden::Segment*,
-                                                Rosegarden::timeT,
-                                                Rosegarden::timeT)));
-    getCommandHistory()->addCommand(command);
-
-}
-
 //////////////////////////////////////////////////////////////////////
 //                    Slots
 //////////////////////////////////////////////////////////////////////
@@ -1096,9 +1065,9 @@ void NotationView::slotEditCut()
 
     emit usedSelection();
 
-    redoLayout(&m_currentEventSelection->getSegment(),
-               m_currentEventSelection->getBeginTime(),
-               m_currentEventSelection->getEndTime());
+    refreshSegment(&m_currentEventSelection->getSegment(),
+		   m_currentEventSelection->getBeginTime(),
+		   m_currentEventSelection->getEndTime());
 
     kdDebug(KDEBUG_AREA) << "NotationView::slotEditCut() : selection duration = "
                          << m_currentEventSelection->getTotalDuration() << endl;
@@ -1149,9 +1118,9 @@ void NotationView::slotEditPaste()
 
     if (m_currentEventSelection->pasteToSegment(segment, time)) {
 
-        redoLayout(&segment,
-                   0,
-                   time + m_currentEventSelection->getTotalDuration() + 1);
+	refreshSegment(&segment,
+		       0,
+		       time + m_currentEventSelection->getTotalDuration() + 1);
 
     } else {
         
@@ -1449,23 +1418,12 @@ void NotationView::slotDebugDump()
 }
 
 
-//
-// Post processing of a command
-//                     
-void NotationView::commandFinished(Rosegarden::Segment *segment,
-                                   Rosegarden::timeT startTime,
-                                   Rosegarden::timeT endTime)
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::commandFinished()\n";
-
-    redoLayout(segment, startTime, endTime);
-}
-
 // Code required to work out where to put the pointer
 // (i.e. where is the nearest note) and also if indeed
 // it should be currently shown at all for this view
 // (is it within scope)
 //!!! No consideration of scope yet
+//!!! Should be a staff task
 // 
 void
 NotationView::setPositionPointer(int position)
@@ -2039,18 +1997,8 @@ NotationView::findClosestNote(double eventX, double eventY,
 }
 
 
-void NotationView::redoLayout(Segment *segment, timeT startTime, timeT endTime)
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::redoLayout()\n";
-
-    for (NotationViewSet::iterator i = m_viewsExtant.begin();
-         i != m_viewsExtant.end(); ++i) {
-        (*i)->segmentModified(segment, startTime, endTime);
-    }
-}
-
-void NotationView::segmentModified(Segment *segment,
-				   timeT startTime, timeT endTime)
+void NotationView::refreshSegment(Segment *segment,
+				  timeT startTime, timeT endTime)
 {
     START_TIMING;
 
@@ -2088,7 +2036,7 @@ void NotationView::segmentModified(Segment *segment,
             endi = notes->findTime(endTime);
         }
 
-        kdDebug(KDEBUG_AREA) << "NotationView::redoLayoutAdvised: "
+        kdDebug(KDEBUG_AREA) << "NotationView::refreshSegment: "
                              << "start = " << startTime << ", end = " << endTime << ", barStart = " << barStartTime << ", barEnd = " << barEndTime << endl;
 
         if (thisStaff) {
@@ -2099,14 +2047,14 @@ void NotationView::segmentModified(Segment *segment,
 
     updateRuler(); //!!! to staff
 
-    PRINT_ELAPSED("NotationView::redoLayoutAdvised (without update/GC)");
+    PRINT_ELAPSED("NotationView::refreshSegment (without update/GC)");
 
     canvas()->update();
     PixmapArrayGC::deleteAll();
 
     Event::dumpStats(cerr);
 
-    PRINT_ELAPSED("NotationView::redoLayoutAdvised (including update/GC)");
+    PRINT_ELAPSED("NotationView::refreshSegment (including update/GC)");
 }
 
 

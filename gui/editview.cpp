@@ -27,14 +27,17 @@
 
 #include "editview.h"
 #include "edittool.h"
+#include "basiccommand.h"
 #include "rosegardenguidoc.h"
+#include "multiviewcommandhistory.h"
+#include "rosedebug.h"
 #include "ktmpstatusmsg.h"
 
 //----------------------------------------------------------------------
 const unsigned int EditView::ID_STATUS_MSG = 1;
 
 EditView::EditView(RosegardenGUIDoc *doc,
-                   std::vector<Rosegarden::Segment *> segments,
+                   std::vector<Rosegarden::Segment *>,
                    QWidget *parent)
     : KMainWindow(parent),
       m_config(kapp->config()),
@@ -42,10 +45,17 @@ EditView::EditView(RosegardenGUIDoc *doc,
       m_tool(0),
       m_toolBox(0)
 {
+    // add undo and redo to edit menu and toolbar
+    getCommandHistory()->attachView(actionCollection());
+    
+    QObject::connect
+	(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
+	 this,		      SLOT(slotCommandExecuted(KCommand *)));
 }
 
 EditView::~EditView()
 {
+    getCommandHistory()->detachView(actionCollection());
 }
 
 void EditView::readjustViewSize(QSize requestedSize, bool exact)
@@ -55,12 +65,8 @@ void EditView::readjustViewSize(QSize requestedSize, bool exact)
         return;
     }
 
-    QSize currentSize = getViewSize();
-    
     int requestedWidth  = requestedSize.width(),
         requestedHeight = requestedSize.height(),
-//        currentWidth    = currentSize.width(),
-//        currentHeight   = currentSize.height(),
 	windowWidth     = width(),
 	windowHeight	= height();
 
@@ -69,28 +75,17 @@ void EditView::readjustViewSize(QSize requestedSize, bool exact)
     newSize.setWidth(((requestedWidth / windowWidth) + 1) * windowWidth);
     newSize.setHeight(((requestedHeight / windowHeight) + 1) * windowHeight);
 
-/*!!!
-    if ((requestedWidth < currentWidth) &&
-        ((requestedWidth / currentWidth) < 0.75))
-
-        newSize.setWidth(requestedWidth);
-
-    else // requestedWidth >= currentWidth
-        newSize.setWidth(requestedWidth + requestedWidth / 2);
-
-    if ((requestedHeight < currentHeight) &&
-        ((requestedHeight / currentHeight) < 0.75))
-
-        newSize.setHeight(requestedHeight);
-
-    else // requestedHeight >= currentHeight
-        newSize.setHeight(requestedHeight + requestedHeight / 2);
-*/
     setViewSize(newSize);
 }
 
-void EditView::addCommandToHistory(BasicCommand*)
+MultiViewCommandHistory *EditView::getCommandHistory()
 {
+    return getDocument()->getCommandHistory();
+}
+
+void EditView::addCommandToHistory(KCommand *command)
+{
+    getCommandHistory()->addCommand(command);
 }
 
 void EditView::setTool(EditTool* tool)
@@ -135,6 +130,21 @@ void EditView::slotToggleStatusBar()
         statusBar()->hide();
     else
         statusBar()->show();
+}
+
+void EditView::slotCommandExecuted(KCommand *command)
+{
+    BasicCommand *basicCommand = 0;
+    if ((basicCommand = dynamic_cast<BasicCommand *>(command)) != 0) {
+	refreshSegment
+	    (&basicCommand->getSegment(), basicCommand->getBeginTime(),
+					  basicCommand->getEndTime());
+    } else {
+	kdDebug(KDEBUG_AREA)
+	    << "Warning: EditView::slotCommandExecuted:\n"
+	    << "KCommand is not a BasicCommand, don't know how to refresh"
+	    << endl;
+    }
 }
 
 //

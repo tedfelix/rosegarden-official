@@ -19,6 +19,9 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef _BASIC_COMMAND_H_
+#define _BASIC_COMMAND_H_
+
 /**
  * Command that handles undo on a single Segment by brute-force,
  * saving the affected area of the Segment before the execute() and
@@ -36,6 +39,9 @@
 
 #include "Segment.h"
 #include "SegmentNotationHelper.h"
+
+class EventSelection;
+
 
 class BasicCommand : public QObject, public KCommand
 {
@@ -77,12 +83,6 @@ protected:
 
     virtual void beginExecute();
 
-signals:
-
-    void finishExecute(Rosegarden::Segment*,
-                       Rosegarden::timeT,
-                       Rosegarden::timeT);
-
 private:
     //--------------- Data members ---------------------------------
 
@@ -97,3 +97,20 @@ private:
     Rosegarden::Segment *m_redoEvents;
 };
 
+
+/**
+ * Subclass of BasicCommand that manages the brute-force undo and redo
+ * extends based on a given selection.
+ */
+
+class BasicSelectionCommand : public BasicCommand
+{
+public:
+    virtual ~BasicSelectionCommand();
+
+protected:
+    BasicSelectionCommand(const QString &name, EventSelection &selection,
+			  bool bruteForceRedoRequired = false);
+};
+
+#endif

@@ -24,24 +24,7 @@
 #include <kcommand.h>
 #include <klocale.h>
 
-class EventSelection;
-
 #include "basiccommand.h"
-
-/**
- * Subclass of BasicCommand that manages the brute-force undo and redo
- * extends based on a given selection.
- */
-
-class BasicSelectionCommand : public BasicCommand
-{
-public:
-    virtual ~BasicSelectionCommand();
-
-protected:
-    BasicSelectionCommand(const QString &name, EventSelection &selection,
-			  bool bruteForceRedoRequired = false);
-};
 
 
 // Insertion commands

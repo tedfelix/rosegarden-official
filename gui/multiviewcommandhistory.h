@@ -92,7 +92,7 @@ signals:
      * (whether by addCommand, undo or redo).
      * You can use this to update the GUI, for instance.
      */
-    void commandExecuted();
+    void commandExecuted(KCommand *);
 
     /**
      * This is emitted every time we reach the index where you

@@ -20,6 +20,7 @@
 */
 
 #include "basiccommand.h"
+#include "eventselection.h"
 
 #include <qstring.h>
 
@@ -68,12 +69,6 @@ BasicCommand::execute()
     } else {
 	copyFrom(m_redoEvents);
     }
-
-    kdDebug(KDEBUG_AREA) << "BasicCommand::execute() - emit finishExecute()\n";
-
-    emit finishExecute(&m_segment,
-                       m_savedEvents.getStartIndex(),
-                       getRelayoutEndTime());
 }
 
 void
@@ -85,9 +80,6 @@ BasicCommand::unexecute()
     }
 
     copyFrom(&m_savedEvents);
-    emit finishExecute(&m_segment,
-                       m_savedEvents.getStartIndex(),
-                       getRelayoutEndTime());
 }
     
 void
@@ -112,3 +104,21 @@ BasicCommand::copyFrom(Rosegarden::Segment *events)
     events->clear();
 }
 
+
+
+BasicSelectionCommand::BasicSelectionCommand(const QString &name,
+					     EventSelection &selection,
+					     bool bruteForceRedo) :
+    BasicCommand(name,
+		 selection.getSegment(),
+		 selection.getBeginTime(),
+		 selection.getEndTime(),
+		 bruteForceRedo)
+{
+    // nothing else
+}
+
+BasicSelectionCommand::~BasicSelectionCommand()
+{
+    // nothing
+}
