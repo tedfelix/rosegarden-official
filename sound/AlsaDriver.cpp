@@ -2682,7 +2682,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
                     }
                 }
 #else
-                if (0)
+                if (0) {}
 #endif // HAVE_LADSPA
                 else // straight through without plugins
                 {
