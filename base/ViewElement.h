@@ -85,9 +85,9 @@ template <class T>
 class ViewElementList : public std::multiset<T *, ViewElementComparator<T> >
 {
     typedef std::multiset<T *, ViewElementComparator<T> > set_type;
+public:
     typedef typename set_type::iterator iterator;
 
-public:
     ViewElementList() : set_type() { }
     virtual ~ViewElementList();
 
