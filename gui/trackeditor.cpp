@@ -99,7 +99,7 @@ TrackEditor::init(unsigned int nbTracks, unsigned int nbBars)
 
     QCanvas *canvas = new QCanvas(this);
     canvas->resize(m_hHeader->sectionSize(0) * nbBars,
-                   /*m_vHeader->sectionSize(0)*/ 20 * nbTracks);
+                   m_vHeader->sectionSize(0) * nbTracks);
 
     canvas->setBackgroundColor(Qt::lightGray);
 
