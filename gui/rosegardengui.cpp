@@ -1285,10 +1285,14 @@ void RosegardenGUIApp::slotAutoSplitSelection()
 
             if (aSD->exec() == QDialog::Accepted)
             {
+                // split to threshold
+                //
+	        command->addCommand(
+                        new AudioSegmentAutoSplitCommand(m_doc,
+                                                         *i,
+                                                         aSD->getThreshold()));
             }
         }
-        else
-	    command->addCommand(new SegmentAutoSplitCommand(*i));
     }
 
     m_view->slotAddCommandToHistory(command);

@@ -23,6 +23,7 @@
 #include <kdialogbase.h>
 #include <qstring.h>
 #include <qcanvas.h>
+#include <qspinbox.h>
 
 #include <string>
 
@@ -32,7 +33,6 @@
 class QWidget;
 class QLineEdit;
 class QCheckBox;
-class QSpinBox;
 class QLabel;
 class RosegardenComboBox;
 class QGroupBox;
@@ -548,6 +548,10 @@ public:
     //
     void drawPreview();
     void drawSplits(int threshold);
+
+    // Get the threshold
+    //
+    int getThreshold() { return m_thresholdSpin->value(); }
 
 public slots:
     void slotThresholdChanged(int);

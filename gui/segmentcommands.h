@@ -235,7 +235,7 @@ class AudioSegmentSplitCommand : public XKCommand
 {
 public:
     AudioSegmentSplitCommand(Rosegarden::Segment *segment,
-                        Rosegarden::timeT splitTime);
+                             Rosegarden::timeT splitTime);
     virtual ~AudioSegmentSplitCommand();
 
     virtual void execute();
@@ -273,7 +273,9 @@ private:
 class AudioSegmentAutoSplitCommand : public XKCommand
 {
 public:
-    AudioSegmentAutoSplitCommand(Rosegarden::Segment *segment);
+    AudioSegmentAutoSplitCommand(RosegardenGUIDoc *doc,
+                                 Rosegarden::Segment *segment,
+                                 int threshold);
     virtual ~AudioSegmentAutoSplitCommand();
 
     virtual void execute();
@@ -282,10 +284,12 @@ public:
     static QString getGlobalName() { return "&Auto-Split"; }
 
 private:
-    Rosegarden::Segment *m_segment;
-    Rosegarden::Composition *m_composition;
-    std::vector<Rosegarden::Segment *> m_newSegments;
-    bool m_detached;
+    Rosegarden::Segment                *m_segment;
+    Rosegarden::Composition            *m_composition;
+    Rosegarden::AudioFileManager       *m_audioFileManager;
+    std::vector<Rosegarden::Segment *>  m_newSegments;
+    bool                                m_detached;
+    int                                 m_threshold;
 };
 
 class SegmentAutoSplitCommand : public XKCommand

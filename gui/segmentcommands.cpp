@@ -24,12 +24,14 @@
 #include "NotationTypes.h"
 #include "Property.h"
 #include "Composition.h"
+#include "PeakFile.h"
 
 using Rosegarden::Composition;
 using Rosegarden::Segment;
 using Rosegarden::Event;
 using Rosegarden::timeT;
 using Rosegarden::TrackId;
+using Rosegarden::AudioFileManager;
 
 
 SegmentCommand::SegmentCommand(QString name, const std::vector<Rosegarden::Segment*>& segments)
@@ -678,15 +680,29 @@ SegmentSplitCommand::unexecute()
     m_detached = true;
 }
 
+struct AutoSplitPoint
+{
+    timeT time;
+    timeT lastSoundTime;
+    Rosegarden::Clef clef;
+    Rosegarden::Key key;
+    AutoSplitPoint(timeT t, timeT lst, Rosegarden::Clef c, Rosegarden::Key k) :
+	time(t), lastSoundTime(lst), clef(c), key(k) { }
+};
+
 
 // ----------- Audio Segment Auto-Split ------
 //
 AudioSegmentAutoSplitCommand::AudioSegmentAutoSplitCommand(
-        Segment *segment) :
+        RosegardenGUIDoc *doc,
+        Segment *segment,
+        int threshold) :
     XKCommand(getGlobalName()),
     m_segment(segment),
     m_composition(segment->getComposition()),
-    m_detached(false)
+    m_audioFileManager(&(doc->getAudioFileManager())),
+    m_detached(false),
+    m_threshold(threshold)
 {
 }
 
@@ -704,122 +720,59 @@ AudioSegmentAutoSplitCommand::~AudioSegmentAutoSplitCommand()
 void
 AudioSegmentAutoSplitCommand::execute()
 {
-    /*
     std::vector<AutoSplitPoint> splitPoints;
 
-    Rosegarden::Clef clef;
-    Rosegarden::Key key;
-    timeT segmentStart = m_segment->getStartTime();
-    timeT lastSoundTime = segmentStart;
-    timeT lastSplitTime = segmentStart - 1;
+    if (m_segment->getType() != Rosegarden::Segment::Audio)
+        return;
 
-    for (Segment::iterator i = m_segment->begin();
-	 m_segment->isBeforeEndMarker(i); ++i) {
-	
-	timeT myTime = (*i)->getAbsoluteTime();
-	int barNo = m_composition->getBarNumber(myTime);
+    std::vector<Rosegarden::SplitPointPair> rtSplitPoints =
+        m_audioFileManager->getSplitPoints(m_segment->getAudioFileId(),
+                                           m_segment->getAudioStartTime(),
+                                           m_segment->getAudioEndTime(),
+                                           m_threshold);
 
-	if ((*i)->isa(Rosegarden::Clef::EventType)) {
-	    clef = Rosegarden::Clef(**i);
-	} else if ((*i)->isa(Rosegarden::Key::EventType)) {
-	    key = Rosegarden::Key(**i);
-	}
+    std::vector<Rosegarden::SplitPointPair>::iterator it;
+    Rosegarden::timeT absStartTime, absEndTime;
+    std::vector<Rosegarden::timeT> endTimes;
 
-	if (myTime <= lastSplitTime) continue;
+    for (it = rtSplitPoints.begin(); it != rtSplitPoints.end(); it++)
+    {
+        absStartTime = m_segment->getStartTime() +
+            m_composition->getElapsedTimeForRealTime(it->first);
 
-	bool newTimeSig = false;
-	Rosegarden::TimeSignature tsig =
-	    m_composition->getTimeSignatureInBar(barNo, newTimeSig);
-	
-	if (newTimeSig) {
+        absEndTime = m_segment->getStartTime() +
+            m_composition->getElapsedTimeForRealTime(it->second);
 
-	    // If there's a new time sig in this bar and we haven't
-	    // already made a split in this bar, make one
+	Segment *newSegment = new Segment(*m_segment);
+        newSegment->setAudioStartTime(it->first);
+        newSegment->setAudioEndTime(it->second);
+        newSegment->setLabel(
+                m_segment->getLabel() + std::string(" (autosplit)"));
 
-	    if (splitPoints.size() == 0 ||
-		m_composition->getBarNumber
-		(splitPoints[splitPoints.size()-1].time) < barNo) {
-
-		splitPoints.push_back(AutoSplitPoint(myTime, lastSoundTime,
-						     clef, key));
-		lastSoundTime = lastSplitTime = myTime;
-	    }
-
-	} else if ((*i)->isa(Rosegarden::Note::EventRestType)) {
-
-	    // Otherwise never start a subsegment on a rest
-	    
-	    continue;
-
-	} else {
-
-	    // When we meet a non-rest event, start a new split
-	    // if an entire bar has passed since the last one
-
-	    int lastSoundBarNo = m_composition->getBarNumber(lastSoundTime);
-
-	    if (lastSoundBarNo < barNo - 1 ||
-		(lastSoundBarNo == barNo - 1 &&
-		 m_composition->getBarStartForTime(lastSoundTime) ==
-		 lastSoundTime &&
-		 lastSoundTime > segmentStart)) {
-
-		splitPoints.push_back
-		    (AutoSplitPoint
-		     (m_composition->getBarStartForTime(myTime), lastSoundTime,
-		      clef, key));
-		lastSplitTime = myTime;
-	    }
-	}
-
-	lastSoundTime = std::max(lastSoundTime, myTime + (*i)->getDuration());
-    }
-	
-    for (unsigned int split = 0; split <= splitPoints.size(); ++split) {
-
-	Segment *newSegment = new Segment();
-	newSegment->setTrack(m_segment->getTrack());
-	newSegment->setLabel(m_segment->getLabel() + " " +
-			     qstrtostr(i18n("(part)")));
-
-	timeT startTime = segmentStart;
-	if (split > 0) {
-	    startTime = splitPoints[split-1].time;
-	    newSegment->insert(splitPoints[split-1].clef.getAsEvent(startTime));
-	    newSegment->insert(splitPoints[split-1].key.getAsEvent(startTime));
-	}
-
-	Segment::iterator i = m_segment->findTime(startTime);
-
-	while (m_segment->isBeforeEndMarker(i)) {
-	    timeT t = (*i)->getAbsoluteTime();
-	    if (split < splitPoints.size() &&
-		t >= splitPoints[split].lastSoundTime) break;
-	    newSegment->insert(new Event(**i));
-	    ++i;
-	}
+        newSegment->setStartTime(absStartTime);
+        endTimes.push_back(absEndTime);
 
 	m_newSegments.push_back(newSegment);
     }
 	    
     m_composition->detachSegment(m_segment);
+
     for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
 	m_composition->addSegment(m_newSegments[i]);
+        m_newSegments[i]->setEndTime(endTimes[i]);
     }
+
     m_detached = true;
-    */
 }
 
 void
 AudioSegmentAutoSplitCommand::unexecute()
 {
-    /*
     for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
 	m_composition->detachSegment(m_newSegments[i]);
     }
     m_composition->addSegment(m_segment);
     m_detached = false;
-    */
 }
 
 // ----------- Segment Auto-Split ------------
@@ -843,16 +796,6 @@ SegmentAutoSplitCommand::~SegmentAutoSplitCommand()
 	}
     }
 }
-
-struct AutoSplitPoint
-{
-    timeT time;
-    timeT lastSoundTime;
-    Rosegarden::Clef clef;
-    Rosegarden::Key key;
-    AutoSplitPoint(timeT t, timeT lst, Rosegarden::Clef c, Rosegarden::Key k) :
-	time(t), lastSoundTime(lst), clef(c), key(k) { }
-};
 
 void
 SegmentAutoSplitCommand::execute()

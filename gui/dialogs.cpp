@@ -2241,8 +2241,9 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
     m_canvasView->setDragAutoScroll(false);
 
     QHBox *hbox = new QHBox(w);
-    new QLabel(i18n("Threshold %"), hbox);
+    new QLabel(i18n("Threshold"), hbox);
     m_thresholdSpin = new QSpinBox(hbox);
+    m_thresholdSpin->setSpecialValueText("%");
     connect(m_thresholdSpin, SIGNAL(valueChanged(int)),
             SLOT(slotThresholdChanged(int)));
 
