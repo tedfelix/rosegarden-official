@@ -1,0 +1,248 @@
+Return-Path: <silvan@windows-sucks.com>
+Received: (from root@localhost)
+	by swift3.swiftinter.net (8.11.6/8.11.6) id gBCNN7Q15352
+	for bownie@bownie.com; Thu, 12 Dec 2002 23:23:07 GMT
+Received: from ns2.swva.net (ns2.swva.net [66.37.69.242])
+	by swift3.swiftinter.net (8.11.6/8.11.6) with ESMTP id gBCNN6x15331
+	for <bownie@bownie.com>; Thu, 12 Dec 2002 23:23:07 GMT
+Received: from giganator.family.lan [66.37.75.174] by ns2.swva.net with ESMTP
+  (SMTPD32-7.13) id AAAC18200090; Thu, 12 Dec 2002 18:24:28 -0500
+Content-Type: text/plain;
+  charset="iso-8859-1"
+From: Silvan <silvan@windows-sucks.com>
+To: Richard Bown <bownie@bownie.com>
+Subject: Re: [Rosegarden-devel] More GS/Studio thoughts...
+Date: Thu, 12 Dec 2002 17:34:40 -0500
+User-Agent: KMail/1.4.3
+Cc: Rosegarden-Devel <rosegarden-devel@lists.sourceforge.net>
+References: <3DE78023.2060109@beleg.no-ip.com> <200212102124.01688.silvan@windows-sucks.com> <200212110805.39898.bownie@bownie.com>
+In-Reply-To: <200212110805.39898.bownie@bownie.com>
+MIME-Version: 1.0
+Message-Id: <200212121734.40921.silvan@windows-sucks.com>
+X-Virus-Scanned: by AMaViS perl-11
+Content-Transfer-Encoding: 8bit
+X-MIME-Autoconverted: from quoted-printable to 8bit by swift3.swiftinter.net id gBCNN7Q15352
+X-UIDL: [?D!!&Bo"!g_d"!~U"#!
+Status: R 
+X-Status: N
+
+On Wednesday 11 December 2002 03:05 am, Richard Bown wrote:
+
+> Ok, there's a lot of confusion about Devices/Instruments at the moment.
+> Here's hopefully a reasonable explanation of what's going on.
+
+I did figure it out, more or less.  I got the right names loaded for the right 
+synth eventually, but it was fiddly.  Lots of trial and error, and the list 
+kept flipping around because the alphabetical order changed, and I lost track 
+of what was where.
+
+I've been thinking about all of this a good bit.  The current nomenclature is 
+very confusing.  I have some ideas how it might be more obvious, and include 
+my drum thing too.
+
+Instead of calling them "devices" call them "ports" and do away with the 
+marriage of a port to a particular set of patches as a "device."  I think 
+that would be less ambiguous.  Users could change the port name to be 
+something nice, like the name of the synth attached to it, if they want.
+
+Instead of calling the entire structure a "bank" call it an "instrument map" 
+that can contain one bank or several.  All "instrument maps" contain at least 
+one bank.  By default, if un-configured, all ports will be born with the "GM 
+instruments" instrument map, then a user can load one of the pre-sets that 
+will eventually ship with RG, create his own bank, or alter an existing bank.
+
+As far as this drum thing, I think I've hit on the simplest possible solution.  
+Just have a special bank that's completely outside of the normal scheme of 
+things, bound to a particular instrument map.  Add it to the top of the edit 
+list as a separate category, even separated by a line or something, and bind 
+it to channel 10.  You could have an [Add Percussion Map] (or something) 
+button, and what you'd come up with might look a bit like this:
+
+Port      Instrument Map        LSB    MSB
+IWU Synth General MIDI
+             | 
+             +-General MIDI      0      0   
+ 
+Roland    GS mk II
+             |
+             +-GS drumkits       -      -
+             |
+             +-bank 0            0      0
+             |
+             +-bank 1            8      0
+
+For that matter, every instrument map could just automatically have a drum 
+bank for channel 10.  If you're using a  synth that switches drum kits by 
+bank changes, you don't need a patch list for channel 10, so you leave it 
+blank and use the bank selector to pick the kit, which would be obvious from 
+the way you named the banks
+
+Yamaha    XG
+            |
+            +-<channel 10>       -      -
+            |
+            +-GM tones           0      0
+            |
+            +-jazz drums        123    456
+            |
+            +-orch. drums       567    89
+
+So for one of those you'd leave the [ ] program un-checked and use [x] bank to 
+pick the drum kit on the track that's tuned to channel 10.
+
+Seems this add-on could be something that you read if it's there, and if it's 
+not there, you just fill this new, extra bank with nothing, so that way it 
+wouldn't break any of the existing code.  Some new code would need to be 
+written to deal with this, but it seems like a minimally-invasive approach.
+
+I think that could work, but it's been a long day.  Since I started this 
+message I've spent seven hours in the hospital with my wife.  Carpal tunnel 
+surgery.  15 minutes for the procedure, six hours and 45 minutes of pre- and 
+post-op.  I'm a little out of it.
+
+
+
+-- 
+Michael McIntyre         USDA zone 6b in SW VA, USA
+Silvan Pagan [silvan@windows-sucks.com] Linux Druid
+---------[ registered Linux user #243621 ]---------
+http://www.geocities.com/Paris/Rue/5407/index.html
+
+
+--
+
+
+Return-Path: <rosegarden-devel-admin@lists.sourceforge.net>
+Received: (from root@localhost)
+	by swift3.swiftinter.net (8.11.6/8.11.6) id gBD89Bg03709
+	for bownie@bownie.com; Fri, 13 Dec 2002 08:09:11 GMT
+Received: from sc8-sf-list2.sourceforge.net (lists.sourceforge.net [66.35.250.206])
+	by swift3.swiftinter.net (8.11.6/8.11.6) with ESMTP id gBD89Ax03698
+	for <bownie@bownie.com>; Fri, 13 Dec 2002 08:09:10 GMT
+Received: from sc8-sf-list1-b.sourceforge.net ([10.3.1.13] helo=sc8-sf-list1.sourceforge.net)
+	by sc8-sf-list2.sourceforge.net with esmtp (Exim 3.31-VA-mm2 #1 (Debian))
+	id 18MktW-0003vP-00; Fri, 13 Dec 2002 00:10:02 -0800
+Received: from msgdirector1.onetel.net.uk ([212.67.96.148] ident=mirapoint)
+	by sc8-sf-list1.sourceforge.net with esmtp (Exim 3.31-VA-mm2 #1 (Debian))
+	id 18MksS-0001R7-00
+	for <rosegarden-devel@lists.sourceforge.net>; Fri, 13 Dec 2002 00:08:56 -0800
+Received: from pushrod (213-78-113-33.friaco.onetel.net.uk [213.78.113.33])
+	by msgdirector1.onetel.net.uk (Mirapoint)
+	with ESMTP id AOA54612;
+	Fri, 13 Dec 2002 08:08:46 GMT
+Content-Type: text/plain;
+  charset="iso-8859-1"
+From: Richard Bown <bownie@bownie.com>
+To: Silvan <silvan@windows-sucks.com>
+Subject: Re: [Rosegarden-devel] More GS/Studio thoughts...
+X-Mailer: KMail [version 1.4]
+Cc: Rosegarden-Devel <rosegarden-devel@lists.sourceforge.net>
+References: <3DE78023.2060109@beleg.no-ip.com> <200212110805.39898.bownie@bownie.com> <200212121734.40921.silvan@windows-sucks.com>
+In-Reply-To: <200212121734.40921.silvan@windows-sucks.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Message-Id: <200212130801.32662.bownie@bownie.com>
+Sender: rosegarden-devel-admin@lists.sourceforge.net
+Errors-To: rosegarden-devel-admin@lists.sourceforge.net
+X-BeenThere: rosegarden-devel@lists.sourceforge.net
+X-Mailman-Version: 2.0.9-sf.net
+Precedence: bulk
+List-Help: <mailto:rosegarden-devel-request@lists.sourceforge.net?subject=help>
+List-Post: <mailto:rosegarden-devel@lists.sourceforge.net>
+List-Subscribe: <https://lists.sourceforge.net/lists/listinfo/rosegarden-devel>,
+	<mailto:rosegarden-devel-request@lists.sourceforge.net?subject=subscribe>
+List-Id: <rosegarden-devel.lists.sourceforge.net>
+List-Unsubscribe: <https://lists.sourceforge.net/lists/listinfo/rosegarden-devel>,
+	<mailto:rosegarden-devel-request@lists.sourceforge.net?subject=unsubscribe>
+List-Archive: <http://sourceforge.net/mailarchive/forum.php?forum=rosegarden-devel>
+X-Original-Date: Fri, 13 Dec 2002 08:01:32 +0000
+Date: Fri, 13 Dec 2002 08:01:32 +0000
+X-Virus-Scanned: by AMaViS perl-11
+X-UIDL: ON#"!HF:"!Ya4"!KQ3!!
+Status: R 
+X-Status: N
+
+On Thursday 12 December 2002 22:34, Silvan wrote:
+
+> I did figure it out, more or less.  I got the right names loaded for
+> the right synth eventually, but it was fiddly.  Lots of trial and
+> error, and the list kept flipping around because the alphabetical
+> order changed, and I lost track of what was where.
+
+Yeah, it's a pain - next thing to be sorted.
+
+> I've been thinking about all of this a good bit.  The current
+> nomenclature is very confusing.  I have some ideas how it might be
+> more obvious, and include my drum thing too.
+
+I like the layout thing you've suggested and the channel 10 bank is 
+certainly a solution that would work - I don't think having it as 
+default is a particularly fair option but we can certainly have it as a 
+toggleable feature.
+
+I like the introduction of "instrument map" between Device and Bank as 
+that makes it obvious what the Banks are doing.  I'm a bit worried 
+about nomenclature too but we do have to be careful to be consistent 
+with ourselves whilst also offering enough to both the novice and the 
+experienced MIDI user so that they both know what's going on.  The 
+whole Program Change idiom is massively confusing but it's what they 
+are - we already use Instruments for both Audio and MIDI targets for 
+Rosegarden Tracks.
+
+What I'd like to do is incorporate your suggestions but keep the basis 
+of what we have now.  I don't think it matters that much if we use 
+Devices or Ports although internally an ALSA port is a child of a ALSA 
+client (which is analogous to a Device) so I prefer to keep it as is.  
+Also again the conceptual relationship is that a JACK client maps to a 
+JACK Audio Device in RG as an ALSA client maps to a MIDI Device in RG.
+
+So, borrowing your diagram:
+
+Device    Instrument Map        LSB    MSB
+IWU Synth General MIDI
+             | 
+             +-General MIDI      0      0   
+ 
+Roland    GS mk II
+             |
+             +-GS drumkits       -      -
+             |
+             +-bank 0            0      0
+             |
+             +-bank 1            8      0
+
+The Device name is what ALSA detects (and what we currently have in the 
+Instrument menu dropdowns), the Instrument Map name is the old Device 
+name (as loaded from the RG file) and then we can have an option 
+against the Device to create some default Banks:
+
+o GM Bank
+o GS Bank
+o GS Drums
+o XG Bank
+
+I hope you can appreciate why I'm loathe to change the names of Devices 
+here.  While Ports is the name that a lot of software tends to prefer I 
+think it's misleading when you're first setting up a computer to have 
+to think of a physical MIDI Port in the same way that you think of a 
+synth on that soundcard as being a Port, and also be thinking of a 
+softsynth as being a Port.  Plus it's a one-to-one relationship between 
+Devices now and MIDI Ports - everything else is the same and the 
+addition of the "Instrument Map" heading for a flexibly named set of 
+Program Changes to me makes sense.
+
+Wishing your wife a speedy recovery.
+
+B
+
+
+-------------------------------------------------------
+This sf.net email is sponsored by:
+With Great Power, Comes Great Responsibility 
+Learn to use your power at OSDN's High Performance Computing Channel
+http://hpc.devchannel.org/
+_______________________________________________
+Rosegarden-devel mailing list
+Rosegarden-devel@lists.sourceforge.net
+https://lists.sourceforge.net/lists/listinfo/rosegarden-devel
+
