@@ -61,7 +61,7 @@ EventSelection::EventSelection(Segment& t, timeT beginTime, timeT endTime, bool 
     if (overlap) {
         i = t.findTime(beginTime);
 
-        while (i != t.begin()) {
+        while (i != t.begin() && i != t.end()) {
 
             if ((*i)->getAbsoluteTime() + (*i)->getDuration() > beginTime)
             {
