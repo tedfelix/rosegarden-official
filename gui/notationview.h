@@ -69,8 +69,13 @@ public:
 
     /**
      * Copy the selected Events to the specified track
+     * This requires that enough rest space is available at the
+     * paste point.
+     *
+     * @return false if the paste could not be performed (if there
+     * wasn't enough rest space to hold all notes)
      */
-    void pasteToTrack(Rosegarden::Track&, Rosegarden::timeT);
+    bool pasteToTrack(Rosegarden::Track&, Rosegarden::timeT);
 
     void push_back(Rosegarden::Event* e) { m_trackEvents.push_back(e); }
 

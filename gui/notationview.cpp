@@ -112,6 +112,9 @@ void EventSelection::cut()
         nt.deleteEvent(*i);
     }
 
+    // We have no guarantee that the events are added in time-sorted
+    // order, so we must sort them
+    //
     sort(m_ownEvents.begin(), m_ownEvents.end(),
          Event::EventCmp());
 
@@ -130,16 +133,21 @@ void EventSelection::copy()
         m_ownEvents.push_back(new Event(*(*i)));
     }
 
+    sort(m_ownEvents.begin(), m_ownEvents.end(),
+         Event::EventCmp());
+
     updateBeginEndTime();
 
     m_trackEvents.clear();
 }
 
-void EventSelection::pasteToTrack(Track& t, timeT atTime)
+bool EventSelection::pasteToTrack(Track& t, timeT atTime)
 {
     TrackNotationHelper nt(t);
 
-    nt.removeRests(atTime, getTotalDuration());
+    if (! nt.removeRests(atTime, getTotalDuration())) {
+        return false;
+    }
 
     timeT offsetTime = atTime - (*(m_ownEvents.begin()))->getAbsoluteTime();
 
@@ -152,6 +160,8 @@ void EventSelection::pasteToTrack(Track& t, timeT atTime)
 
         t.insert(e);
     }
+
+    return true;
 }
 
 timeT EventSelection::getTotalDuration() const
@@ -1848,14 +1858,19 @@ void NotationSelectionPaster::handleMousePress(int /*height*/, int staffNo,
 
     Track& track = m_parentView.getStaff(staffNo)->getTrack();
 
-    m_selection.pasteToTrack(track, time);
+    if (m_selection.pasteToTrack(track, time)) {
 
-    m_parentView.redoLayout(staffNo,
-                            0,
-                            time + m_selection.getTotalDuration() + 1);
+        m_parentView.redoLayout(staffNo,
+                                0,
+                                time + m_selection.getTotalDuration() + 1);
 
-    m_parentView.canvas()->update();
+        m_parentView.canvas()->update();
 
+    } else {
+        
+        m_parentView.slotStatusHelpMsg(i18n("Couldn't paste at this point"));
+    }
+    
     //m_parentView.slotStatusHelpMsg(i18n("Ready."));
 
 }
