@@ -171,6 +171,13 @@ public:
     void setStartTime(timeT);
 
     /**
+     * DO NOT USE THIS METHOD
+     * Simple accessor for the m_startTime member. Used by
+     * Composition#setSegmentStartTime
+     */
+    void setStartTimeDataMember(timeT t) { m_startTime = t; }
+    
+    /**
      * Set the end marker (nominal end time) of this Segment.
      * 
      * If the given time is later than the current end of the

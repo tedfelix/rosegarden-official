@@ -184,6 +184,26 @@ public:
     void deleteSegment(iterator);
 
     /**
+     * Delete the Segment if it is part of the Composition
+     * \return true if the Segment was found and deleted
+     *
+     * NOTE: The Segment is deleted from the composition and
+     * destroyed
+     */
+    bool deleteSegment(Segment*);
+
+    /**
+     * DO NOT USE THIS METHOD
+     *
+     * Set a Segment's start time while keeping the integrity of the
+     * Composition multiset.
+     *
+     * The segment is removed and re-inserted from the composition
+     * so the ordering is preserved.
+     */
+    void setSegmentStartTime(Segment*, timeT);
+
+    /**
      * Test whether a Segment exists in this Composition.
      */
     bool contains(const Segment *);
@@ -199,15 +219,6 @@ public:
      * if it does not exist in this Composition.
      */
     iterator findSegment(Segment *);
-
-    /**
-     * Delete the Segment if it is part of the Composition
-     * \return true if the Segment was found and deleted
-     *
-     * NOTE: The Segment is deleted from the composition and
-     * destroyed
-     */
-    bool deleteSegment(Segment*);
 
     /**
      * Remove the Segment if it is part of the Composition,

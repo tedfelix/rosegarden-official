@@ -433,6 +433,20 @@ Composition::findSegment(const Segment *s)
     return find(begin(), end(), s);
 }
 
+void Composition::setSegmentStartTime(Segment *segment, timeT startTime)
+{
+    // remove the segment from the multiset
+    iterator i = find(begin(), end(), segment);
+    if (i == end()) return;
+    
+    m_segments.erase(i);
+
+    segment->setStartTimeDataMember(startTime);
+
+    // re-add it
+    m_segments.insert(segment);    
+}
+
 timeT
 Composition::getDuration() const
 {
@@ -642,6 +656,8 @@ Composition::addTimeSignature(timeT t, TimeSignature timeSig)
 	m_timeSigSegment.insert(timeSig.getAsEvent(t));
     m_barPositionsNeedCalculating = true;
 
+    cerr << "Composition::addTimeSignature() - updateRefreshStatuses()\n";
+
     updateRefreshStatuses();
 
     return std::distance(m_timeSigSegment.begin(), i);
@@ -732,6 +748,7 @@ Composition::removeTimeSignature(int n)
 {
     m_timeSigSegment.erase(m_timeSigSegment[n]);
     m_barPositionsNeedCalculating = true;
+    cerr << "Composition::removeTimeSignature() - updateRefreshStatuses()\n";
     updateRefreshStatuses();
 }
 
@@ -775,6 +792,7 @@ Composition::addTempo(timeT time, double tempo)
     ReferenceSegment::iterator i = m_tempoSegment.insert(tempoEvent);
 
     m_tempoTimestampsNeedCalculating = true;
+    cerr << "Composition::addTempo() - updateRefreshStatuses()\n";
     updateRefreshStatuses();
 
 #ifdef DEBUG_TEMPO_STUFF
@@ -792,6 +810,7 @@ Composition::addRawTempo(timeT time, int tempo)
 
     ReferenceSegment::iterator i = m_tempoSegment.insert(tempoEvent);
 
+    cerr << "Composition::addRawTempo() - updateRefreshStatuses()\n";
     updateRefreshStatuses();
     m_tempoTimestampsNeedCalculating = true;
 
@@ -829,6 +848,7 @@ Composition::removeTempoChange(int n)
 {
     m_tempoSegment.erase(m_tempoSegment[n]);
     m_tempoTimestampsNeedCalculating = true;
+    cerr << "Composition::removeTempoChange() - updateRefreshStatuses()\n";
     updateRefreshStatuses();
 }
 
@@ -1249,6 +1269,10 @@ Composition::getNewTrackId() const
 }
 
 
+void breakpoint()
+{
+    std::cerr << "breakpoint()\n";
+}
 
 }
 

@@ -59,9 +59,13 @@ unsigned int RefreshStatusArray<RS>::getNewRefreshStatusId()
     return res;
 }
 
+void breakpoint();
+
 template<class RS>
 void RefreshStatusArray<RS>::updateRefreshStatuses()
 {
+    std::cerr << "updateRefreshStatuses()\n";
+    breakpoint();
     for(unsigned int i = 0; i < m_refreshStatuses.size(); ++i)
         m_refreshStatuses[i].setNeedsRefresh(true);
 }
