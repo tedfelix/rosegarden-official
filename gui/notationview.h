@@ -69,21 +69,10 @@ public:
     /// draw all elements
     virtual bool showElements(int staffNo);
 
-    /// draw all elements in range
-    virtual bool showElements(int staffNo,
-			      NotationElementList::iterator from,
-                              NotationElementList::iterator to);
-
-    /// draw all elements in range at coordinates relative to the specified canvas item
-    virtual bool showElements(NotationElementList::iterator from,
+    /// draw all elements in range at coordinates relative to staff
+    virtual bool showElements(Staff *staff,
+                              NotationElementList::iterator from,
                               NotationElementList::iterator to,
-                              QCanvasItem*,
-                              bool positionOnly = false);
-
-    /// draw all elements in range, with dx,dy offset
-    virtual bool showElements(NotationElementList::iterator from,
-                              NotationElementList::iterator to,
-                              double dxoffset, double dyoffset,
                               bool positionOnly = false);
 
     /// Calls all the relevant preparse and layout methods
@@ -302,7 +291,8 @@ protected:
     /**
      * redo the layout after insertion.  default is all staffs
      */
-    void redoLayout(int staffNo = -1, Rosegarden::timeT startTime = 0);
+    void redoLayout(int staffNo = -1, Rosegarden::timeT startTime = 0,
+                    Rosegarden::timeT endTime = -1); // -1 => end of staff
 
     /**
      * readjust the width of the canvas after a layout

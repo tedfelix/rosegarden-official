@@ -449,38 +449,27 @@ void NotationView::initStatusBar()
 bool NotationView::showElements(int staffNo)
 {
     NotationElementList *notes = m_staffs[staffNo]->getNotationElementList();
-    return showElements(notes->begin(), notes->end(), m_staffs[staffNo]);
+    return showElements(m_staffs[staffNo], notes->begin(), notes->end());
 }
 
-bool NotationView::showElements(int staffNo,
-				NotationElementList::iterator from,
-                                NotationElementList::iterator to)
-{
-    return showElements(from, to, m_staffs[staffNo]);
-}
-
-bool NotationView::showElements(NotationElementList::iterator from,
+bool NotationView::showElements(Staff *staff,
+                                NotationElementList::iterator from,
                                 NotationElementList::iterator to,
-                                QCanvasItem *item,
                                 bool positionOnly)
 {
-    return showElements(from, to, item->x(), item->y(), positionOnly);
-}
+    double dxoffset = staff->x(), dyoffset = staff->y();
 
-bool NotationView::showElements(NotationElementList::iterator from,
-                                NotationElementList::iterator to,
-                                double dxoffset, double dyoffset,
-                                bool positionOnly)
-{
     kdDebug(KDEBUG_AREA) << "NotationView::showElements()" << endl;
 
-    if (from == to) return true;
     START_TIMING;
 
     NotePixmapFactory &npf(m_notePixmapFactory);
     Clef currentClef; // default is okay to start with
 
-    for (NotationElementList::iterator it = from; it != to; ++it) {
+    NotationElementList::iterator end =
+        staff->getNotationElementList()->end();
+
+    for (NotationElementList::iterator it = from; it != end; ++it) {
 
         if (positionOnly) {
 
@@ -573,6 +562,8 @@ bool NotationView::showElements(NotationElementList::iterator from,
 				 << (*(*it)->event())
                                  << endl;
         }
+
+        if (it == to) positionOnly = true; // from now on
     }
 
     kdDebug(KDEBUG_AREA) << "NotationView::showElements() exiting" << endl;
@@ -1206,21 +1197,29 @@ NotationView::findClosestNote(double eventX, Event *&timeSignature,
 }
 
 
-void NotationView::redoLayout(int staffNo, timeT startTime)
+void NotationView::redoLayout(int staffNo, timeT startTime, timeT endTime)
 {
     applyLayout(staffNo);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
         Track *track = m_staffs[i]->getTrack();
-        timeT barStartTime = track->findBarStartTime(startTime);
 
 	NotationElementList *notes = m_staffs[i]->getNotationElementList();
+        NotationElementList::iterator starti = notes->begin();
+        NotationElementList::iterator endi = notes->end();
 
-        NotationElementList::iterator starti = 
-            notes->findTime(barStartTime);
+        if (startTime > 0) {
+            timeT barStartTime = track->findBarStartTime(startTime);
+            starti = notes->findTime(barStartTime);
+        }
 
-	showElements(starti, notes->end(), m_staffs[i],
+        if (endTime >= 0) {
+            timeT barEndTime = track->findBarEndTime(endTime);
+            endi = notes->findTime(barEndTime);
+        }
+
+	showElements(m_staffs[i], starti, endi,
                      (staffNo >= 0 && (int)i != staffNo));
 	showBars(i);
     }
@@ -1320,9 +1319,10 @@ NoteInserter::handleClick(int height, const QPoint &eventPos,
 	(m_parentView.getStaff(staffNo)->getViewElementsManager()->getTrack());
 
     timeT time = (*closestNote)->getAbsoluteTime();
+    timeT endTime = time + note.getDuration(); //???
     doInsert(nt, time, note, pitch, m_accidental);
 
-    m_parentView.redoLayout(staffNo, time);
+    m_parentView.redoLayout(staffNo, time, endTime);
 }
 
 void NoteInserter::doInsert(TrackNotationHelper& nt,
@@ -1381,12 +1381,12 @@ void ClefInserter::handleClick(int /*height*/, const QPoint &eventPos,
         return;
     }
 
-    Rosegarden::timeT absTime = (*closestNote)->getAbsoluteTime();
+    timeT time = (*closestNote)->getAbsoluteTime();
     TrackNotationHelper nt
 	(m_parentView.getStaff(staffNo)->getViewElementsManager()->getTrack());
-    nt.insertClef(absTime, m_clef);
+    nt.insertClef(time, m_clef);
 
-    m_parentView.redoLayout(staffNo, absTime);
+    m_parentView.redoLayout(staffNo, time, time);
 }
 
 
@@ -1441,5 +1441,5 @@ void NotationEraser::handleClick(int, const QPoint&,
     }
     
     if (needLayout)
-        m_parentView.redoLayout(staffNo, absTime);
+        m_parentView.redoLayout(staffNo, absTime, absTime);
 }
