@@ -93,6 +93,12 @@ SequencerMmapper::refresh()
     SEQUENCER_DEBUG << "SequencerMmapper : refresh\n";
 
     if (m_needsRefresh) {
+
+        long *bufPos = (long*)m_mmappedBuffer;
+
+        *bufPos++ = m_position.sec;
+        *bufPos = m_position.usec;
+
         ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
 
         //rgapp->sequencerSend("remapControlBlock()");
@@ -104,6 +110,11 @@ SequencerMmapper::refresh()
 void
 SequencerMmapper::updatePositionPointer(Rosegarden::RealTime time)
 {
+    /*
+    SEQUENCER_DEBUG << "SequencerMmapper::updatePositionPointer - "
+                    << " position = " << time << std::endl;
+                    */
+
     m_position = time;
     m_needsRefresh = true;
 }

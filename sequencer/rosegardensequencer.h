@@ -52,6 +52,7 @@
 #include "Event.h"
 #include "MappedStudio.h"
 #include "mmappedsegment.h"
+#include "sequencermapper.h"
 
 class KURL;
 class KRecentFilesAction;
@@ -433,6 +434,8 @@ protected:
     ControlBlockMmapper*            m_controlBlockMmapper;
 
     bool                            m_isEndOfCompReached;
+
+    SequencerMmapper                m_sequencerMapper;
     
 };
  

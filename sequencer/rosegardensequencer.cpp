@@ -347,11 +347,15 @@ RosegardenSequencerApp::updateClocks()
     m_sequencer->sendMidiClock(m_playLatency);
 
     // If we're not playing etc. then that's all we need to do
-
+    //
     if (m_transportStatus != PLAYING &&
         m_transportStatus != RECORDING_MIDI &&
         m_transportStatus != RECORDING_AUDIO)
         return;
+
+    // Remap the position pointer
+    //
+    m_sequencerMapper.updatePositionPointer(m_sequencer->getSequencerTime());
 
     QByteArray data, replyData;
     QCString replyType;

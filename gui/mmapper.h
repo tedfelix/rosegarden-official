@@ -21,6 +21,13 @@
 #ifndef _MMAPPER_H_
 #define _MMAPPER_H_
 
+// This file defines outgoing mmapped file data - stuff that the GUI is writing for 
+// the sequencer to digest.  Look at sequencermapper (in gui/ and sequencer/) for 
+// data that is written by the sequencer for the gui to digest.
+//
+//
+//
+
 #include <map>
 #include <vector>
 
