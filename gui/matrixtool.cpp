@@ -148,6 +148,78 @@ MatrixInsertionCommand::modifySegment()
     
 }
 
+//------------------------------
+
+class MatrixEraseCommand : public BasicCommand
+{
+public:
+    MatrixEraseCommand(Rosegarden::Segment &segment,
+                       MatrixStaff*,
+                       Rosegarden::Event *event);
+
+    virtual ~MatrixEraseCommand();
+    
+    virtual Rosegarden::timeT getRelayoutEndTime();
+
+protected:
+    virtual void modifySegment();
+
+    MatrixStaff* m_staff;
+    Rosegarden::Event *m_event; // only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::timeT m_relayoutEndTime;
+    std::string makeName(std::string);
+};
+
+MatrixEraseCommand::MatrixEraseCommand(Rosegarden::Segment &segment,
+                                       MatrixStaff* staff,
+                                       Event *event) :
+    BasicCommand(makeName(event->getType()).c_str(),
+                 segment,
+		 event->getAbsoluteTime(),
+		 event->getAbsoluteTime() + event->getDuration(),
+		 true),
+    m_staff(staff),
+    m_event(event),
+    m_relayoutEndTime(getEndTime())
+{
+    // nothing
+}
+
+MatrixEraseCommand::~MatrixEraseCommand()
+{
+    // nothing
+}
+
+string
+MatrixEraseCommand::makeName(string e)
+{
+    string n = "Erase ";
+    n += (char)toupper(e[0]);
+    n += e.substr(1);
+    return n;
+}
+
+timeT
+MatrixEraseCommand::getRelayoutEndTime()
+{
+    return m_relayoutEndTime;
+}
+
+void
+MatrixEraseCommand::modifySegment()
+{
+    Rosegarden::SegmentMatrixHelper helper(getSegment());
+
+    string eventType = m_event->getType();
+
+    if (eventType == Note::EventType) {
+
+	helper.deleteNote(m_event, false);
+	return;
+
+    }
+}
+
 
 //------------------------------
 
