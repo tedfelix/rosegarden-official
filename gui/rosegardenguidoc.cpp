@@ -2129,15 +2129,17 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
 
     // Create a progress dialog
     //
-    RosegardenProgressDialog progressDlg(i18n("Generating audio preview..."),
-                                         100, (QWidget*)parent());
-    progressDlg.show();
+    RosegardenProgressDialog *progressDlg = new RosegardenProgressDialog
+	(i18n("Generating audio preview..."), 100, (QWidget*)parent());
+    progressDlg->setAutoClose(false);
+    progressDlg->setAutoReset(false);
+    progressDlg->show();
 
-    connect(&progressDlg, SIGNAL(cancelClicked()),
+    connect(progressDlg, SIGNAL(cancelClicked()),
             this, SLOT(slotPreviewCancel()));
 
     connect(&m_audioFileManager, SIGNAL(setProgress(int)),
-            progressDlg.progressBar(), SLOT(setValue(int)));
+            progressDlg->progressBar(), SLOT(setValue(int)));
             
     try
     {
@@ -2150,6 +2152,8 @@ RosegardenGUIDoc::finalizeAudioFile(Rosegarden::AudioFileId /*id*/)
         KMessageBox::error(0, strtoqstr(e));
 	CurrentProgressDialog::thaw();
     }
+
+    delete progressDlg;
 
     m_commandHistory->addCommand
 	(new SegmentRecordCommand(m_recordSegment));
