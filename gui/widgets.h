@@ -452,6 +452,7 @@ public:
 
 signals:
     void pitchChanged(int);
+    void preview(int);
 
 public slots:
     void slotSetPitch(int);
@@ -485,6 +486,10 @@ public:
 			   int defaultPitch = 60);
     
     int getPitch() const;
+
+signals:
+    void pitchChanged(int);
+    void preview(int);
 
 public slots:
     void slotSetPitch(int);

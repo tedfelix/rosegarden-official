@@ -1138,6 +1138,7 @@ RosegardenPitchDragLabel::mousePressEvent(QMouseEvent *e)
 	m_clickedY = e->y();
 	m_clickedPitch = m_pitch;
 	m_clicked = true;
+	emit preview(m_pitch);
     }
 }
 
@@ -1159,6 +1160,7 @@ RosegardenPitchDragLabel::mouseMoveEvent(QMouseEvent *e)
 	    m_pitch = newPitch;
 	    calculatePixmap(up);
 	    emit pitchChanged(m_pitch);
+	    emit preview(m_pitch);
 	    paintEvent(0);
 	}
     }
@@ -1179,6 +1181,7 @@ RosegardenPitchDragLabel::wheelEvent(QWheelEvent *e)
 	    ++m_pitch;
 	    calculatePixmap(true);
 	    emit pitchChanged(m_pitch);
+	    emit preview(m_pitch);
 	    paintEvent(0);
 	}
     } else {
@@ -1186,6 +1189,7 @@ RosegardenPitchDragLabel::wheelEvent(QWheelEvent *e)
 	    --m_pitch;
 	    calculatePixmap(false);
 	    emit pitchChanged(m_pitch);
+	    emit preview(m_pitch);
 	    paintEvent(0);
 	}
     }
@@ -1267,8 +1271,17 @@ RosegardenPitchChooser::RosegardenPitchChooser(QString title,
     connect(m_pitch, SIGNAL(valueChanged(int)),
 	    this, SLOT(slotSetPitch(int)));
 
+    connect(m_pitch, SIGNAL(valueChanged(int)),
+	    this, SIGNAL(pitchChanged(int)));
+
     connect(m_pitchDragLabel, SIGNAL(pitchChanged(int)),
 	    this, SLOT(slotSetPitch(int)));
+
+    connect(m_pitchDragLabel, SIGNAL(pitchChanged(int)),
+	    this, SIGNAL(pitchChanged(int)));
+
+    connect(m_pitchDragLabel, SIGNAL(preview(int)),
+	    this, SIGNAL(preview(int)));
 }
 
 int

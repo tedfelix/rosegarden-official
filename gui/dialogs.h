@@ -803,6 +803,7 @@ public slots:
     void slotApply();
     void slotSetModified();
     void slotResolutionChanged(int);
+    void slotPreviewPitch(int);
     void populate(int dev);
 
 protected:
@@ -814,7 +815,7 @@ protected:
     RosegardenComboBox *m_metronomeDevice;
     RosegardenComboBox *m_metronomeInstrument;
     RosegardenComboBox *m_metronomeResolution;
-    QSpinBox           *m_metronomePitch;
+    RosegardenPitchChooser *m_metronomePitch;
     QSpinBox           *m_metronomeBarVely;
     QSpinBox           *m_metronomeBeatVely;
     QSpinBox           *m_metronomeSubBeatVely;

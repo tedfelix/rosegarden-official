@@ -4742,7 +4742,7 @@ RosegardenGUIApp::slotModifyMIDIFilters()
 void
 RosegardenGUIApp::slotManageMetronome()
 {
-    RG_DEBUG << "RosegardenGUIApp::slotModifyMIDIFilters" << endl;
+    RG_DEBUG << "RosegardenGUIApp::slotManageMetronome" << endl;
 
     ManageMetronomeDialog dialog(this, m_doc);
 

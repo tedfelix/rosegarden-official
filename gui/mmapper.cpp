@@ -693,7 +693,7 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
     }
 
     Composition& c = m_doc->getComposition();
-    Rosegarden::timeT t = 0;
+    Rosegarden::timeT t = c.getBarStart(-20); // somewhat arbitrary
     int depth = m_metronome->getDepth();
 
     while (t < c.getEndMarker()) {
