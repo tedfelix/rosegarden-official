@@ -1891,8 +1891,8 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 	    }
 	}
 	    
-	Rosegarden::Composition *tmpComp = midiFile->convertToRosegarden
-	    (&m_doc->getComposition(), append);
+	/*Rosegarden::Composition *tmpComp =*/
+            midiFile->convertToRosegarden(&m_doc->getComposition(), append);
     }
 
     delete midiFile;
@@ -3429,6 +3429,12 @@ RosegardenGUIApp::slotEditBanks()
     {
         RG_DEBUG << "slotEditBanks - accepted" << endl;
     }
+
+    // Crudely force bank update
+    //
+    if (m_view)
+       m_view->selectTrack(m_doc->getComposition().getSelectedTrack());
+
 }
 
 void

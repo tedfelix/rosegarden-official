@@ -483,43 +483,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_listView->setShowSortIndicator(true);
     m_listView->setItemsRenameable(true);
 
-    // Fill list view
-    //
-    Rosegarden::DeviceList *devices = m_studio->getDevices();
-    Rosegarden::DeviceListIterator it;
-    int deviceIdx = 0;
-    for (it = devices->begin(); it != devices->end(); ++it, ++deviceIdx)
-    {
-        if ((*it)->getType() == Rosegarden::Device::Midi)
-        {
-            Rosegarden::MidiDevice* midiDevice = dynamic_cast<Rosegarden::MidiDevice*>(*it);
-            
-            m_deviceList.push_back(midiDevice->getName());
-            QString itemName = strtoqstr(midiDevice->getName());
-
-            RG_DEBUG << "BankEditorDialog : adding "
-                     << itemName << endl;
-
-            QListViewItem* deviceItem = new MidiDeviceListViewItem(deviceIdx,
-                                                                   m_listView, itemName);
-            deviceItem->setOpen(true);
-
-            MidiProgramsEditor::MidiBankContainer banks = midiDevice->getBanks();
-            // add banks for this device
-            for (unsigned int i = 0; i < banks.size(); ++i) {
-                RG_DEBUG << "BankEditorDialog : adding "
-                         << itemName << " - " << strtoqstr(banks[i].name)
-                         << endl;
-                new MidiBankListViewItem(deviceIdx, i, deviceItem,
-                                         strtoqstr(banks[i].name),
-                                         QString("%1").arg(banks[i].msb),
-                                         QString("%1").arg(banks[i].lsb));
-            }
-            
-            
-        }
-    }
-
     QGroupBox *bankBox  = new QGroupBox(3,
                                         Qt::Horizontal,
                                         i18n("Manage Banks..."),
@@ -529,52 +492,15 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_deleteBank     = new QPushButton(i18n("Delete Bank"),             bankBox);
     m_deleteAllBanks = new QPushButton(i18n("Delete All Device Banks"), bankBox);
 
-    m_importBanks = new QPushButton(i18n("Import Bank to Device"), bankBox);
+    m_importBanks = new QPushButton(i18n("Import Banks"), bankBox);
     m_exportBanks = new QPushButton(i18n("Export Banks"), bankBox);
 
 
     connect(m_listView, SIGNAL(currentChanged(QListViewItem*)),
             this,       SLOT(slotPopulateDevice(QListViewItem*)));
 
-    //
-    // Right-side Midi Program Editor
-    //
-
-
-    /*
-    deviceBox->addSpace(0);
-    deviceBox->addSpace(0);
-    deviceBox->addSpace(0);
-    m_metronomeCheckBox =
-        new QCheckBox(i18n("use as Metronome device"), deviceBox);
-    deviceBox->addSpace(0);
-
-    connect(m_metronomeCheckBox, SIGNAL(stateChanged(int)),
-            this, SLOT(slotMetronomeChecked(int)));
-
-    deviceBox->addSpace(0);
-    deviceBox->addSpace(0);
-    deviceBox->addSpace(0);
-    m_instrumentLabel = new QLabel(i18n("Metronome instrument"), deviceBox);
-    m_metronomeInstrument = new RosegardenComboBox(true, deviceBox);
-
-    deviceBox->addSpace(0);
-    deviceBox->addSpace(0);
-    deviceBox->addSpace(0);
-    m_pitchLabel = new QLabel(i18n("Metronome voice"), deviceBox);
-    m_metronomePitch = new QSpinBox(deviceBox);
-
-    m_instrumentLabel->setDisabled(true);
-    m_metronomeInstrument->setDisabled(true);
-    m_pitchLabel->setDisabled(true);
-    m_metronomePitch->setDisabled(true);
-    */
-
-
     m_programEditor = new MidiProgramsEditor(this, splitter);
 
-
-    slotPopulateDevice(m_listView->firstChild());
 
     // default buttons states
     enableButtonOK(false);
@@ -599,6 +525,10 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     connect(m_exportBanks, SIGNAL(clicked()),
             this, SLOT(slotExportBankI()));
 
+    // Initialise the dialog
+    //
+    initDialog();
+
     // Check for no Midi devices and disable everything
     //
     if (m_studio->getMidiDevice(0) == 0)
@@ -608,6 +538,60 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     }
 
 };
+
+void
+BankEditorDialog::initDialog()
+{
+    // Clear down
+    //
+    m_deviceList.clear();
+    m_listView->clear();
+
+    // Fill list view
+    //
+    Rosegarden::DeviceList *devices = m_studio->getDevices();
+    Rosegarden::DeviceListIterator it;
+
+    int deviceIdx = 0;
+    for (it = devices->begin(); it != devices->end(); ++it, ++deviceIdx)
+    {
+        if ((*it)->getType() == Rosegarden::Device::Midi)
+        {
+            Rosegarden::MidiDevice* midiDevice = dynamic_cast<Rosegarden::MidiDevice*>(*it);
+            
+            m_deviceList.push_back(midiDevice->getName());
+            QString itemName = QString("[%1] %2").
+                arg(deviceIdx).arg(strtoqstr(midiDevice->getName()));
+
+            RG_DEBUG << "BankEditorDialog : adding "
+                     << itemName << endl;
+
+            QListViewItem* deviceItem = new MidiDeviceListViewItem(deviceIdx,
+                                                                   m_listView, itemName);
+            deviceItem->setOpen(true);
+
+            MidiProgramsEditor::MidiBankContainer banks = midiDevice->getBanks();
+            // add banks for this device
+            for (unsigned int i = 0; i < banks.size(); ++i) {
+                RG_DEBUG << "BankEditorDialog : adding "
+                         << itemName << " - " << strtoqstr(banks[i].name)
+                         << endl;
+                new MidiBankListViewItem(deviceIdx, i, deviceItem,
+                                         strtoqstr(banks[i].name),
+                                         QString("%1").arg(banks[i].msb),
+                                         QString("%1").arg(banks[i].lsb));
+            }
+            
+            
+        }
+    }
+
+    // Select the first Device
+    //
+    slotPopulateDevice(m_listView->firstChild());
+    m_listView->setSelected(m_listView->firstChild(), true);
+}
+
 
 Rosegarden::MidiDevice*
 BankEditorDialog::getCurrentMidiDevice()
@@ -651,12 +635,16 @@ BankEditorDialog::slotPopulateDevice(QListViewItem* item)
         RG_DEBUG << "BankEditorDialog::slotPopulateDevice : not a bank item - disabling\n";
         m_deleteBank->setEnabled(false);
         m_deleteAllBanks->setEnabled(false);
+        m_importBanks->setEnabled(true);
+        m_exportBanks->setEnabled(true);
         m_programEditor->clearAll();
         return;
     }
     
     m_deleteBank->setEnabled(true);
     m_deleteAllBanks->setEnabled(true);
+    m_importBanks->setEnabled(false);
+    m_exportBanks->setEnabled(false);
 
     Rosegarden::MidiDevice *device = getMidiDevice(bankItem->getDevice());
 
@@ -936,7 +924,7 @@ void
 BankEditorDialog::slotImportBank()
 {
     KURL url = KFileDialog::getOpenURL(":ROSEGARDEN", "*.rg",
-                            this, i18n("Import Banks from Rosegarden File"));
+                            this, i18n("Import Banks from Device in File"));
 
     if (url.isEmpty()) return;
 
@@ -960,45 +948,113 @@ BankEditorDialog::slotImportBank()
 
     }
 
-    if (doc->openDocument(target)) {
-
+    if (doc->openDocument(target))
+    {
         Rosegarden::DeviceList *list = doc->getStudio().getDevices();
         Rosegarden::DeviceListIterator it = list->begin();
-        unsigned int count = 0;
 
         if (list->size() == 0)
         {
-             KMessageBox::sorry(this, i18n("No Banks found"));
+             KMessageBox::sorry(this, i18n("No Devices found in file"));
+             delete doc;
              return;
         }
         else
-        for (; it != list->end(); ++it)
         {
-            Rosegarden::MidiDevice *device = 
-                dynamic_cast<Rosegarden::MidiDevice*>(*it);
-
-            if (device)
+            std::vector<QString> importList;
+            int count = 0;
+            
+            for (; it != list->end(); ++it)
             {
-                std::vector<Rosegarden::MidiBank> banks = device->getBanks();
+                Rosegarden::MidiDevice *device = 
+                    dynamic_cast<Rosegarden::MidiDevice*>(*it);
 
-                // We've got a bank on a Device fom this file
-                //
-                if (banks.size())
+                if (device)
                 {
-                    if (device->getName() == "")
+                    std::vector<Rosegarden::MidiBank> banks =
+                        device->getBanks();
+
+                    // We've got a bank on a Device fom this file
+                    //
+                    if (banks.size())
                     {
-                        std::cout << "DEVICE " << count++ << std::endl;
-                    }
-                    else
-                    {
-                        std::cout << "DEVICE NAME = "
-                                  << device->getName() << std::endl;
+                        if (device->getName() == "")
+                        {
+                            QString deviceNo =
+                                QString("Device %1").arg(count++);
+                            importList.push_back(deviceNo);
+                        }
+                        else
+                        {
+                            importList.push_back(strtoqstr(device->getName()));
+                        }
                     }
                 }
             }
 
-        }
 
+            // If we have our devices then we offer the selection otherwise
+            // we just 
+            //
+            if (importList.size())
+            {
+                ImportDeviceDialog *dialog =
+                    new ImportDeviceDialog(this, importList);
+
+                int res = dialog->exec();
+
+                if (res > -1)
+                {
+                    count = 0;
+                    bool found = false;
+                    std::vector<Rosegarden::MidiBank> banks;
+                    std::vector<Rosegarden::MidiProgram> programs;
+
+                    for (it = list->begin(); it != list->end(); ++it)
+                    {
+                        Rosegarden::MidiDevice *device = 
+                            dynamic_cast<Rosegarden::MidiDevice*>(*it);
+
+                        if (device)
+                        {
+                            if (count == res)
+                            {
+                                banks = device->getBanks();
+                                programs = device->getPrograms();
+                                found = true;
+                                break;
+                            }
+                            else
+                                count++;
+                        }
+
+                    }
+
+                    if (found)
+                    {
+                        MidiDeviceListViewItem* deviceItem =
+                            dynamic_cast<MidiDeviceListViewItem*>
+                                (m_listView->selectedItem());
+
+                        if (deviceItem)
+                        {
+                            ModifyDeviceCommand *command =
+                                new ModifyDeviceCommand(
+                                        m_studio,
+                                        deviceItem->getDevice(),
+                                        qstrtostr(importList[res]),
+                                        banks,
+                                        programs);
+
+                            addCommandToHistory(command);
+
+                            // Redraw the dialog
+                            initDialog();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     delete doc;
@@ -1172,6 +1228,37 @@ MultiViewCommandHistory*
 RemapInstrumentDialog::getCommandHistory()
 {
     return m_doc->getCommandHistory();
+}
+
+
+// ------------------- ImportDeviceDialog --------------------
+//
+ImportDeviceDialog::ImportDeviceDialog(QWidget *parent,
+                                       std::vector<QString> devices):
+    KDialogBase(parent, "importdevicedialog", true,
+                i18n("Import Banks from Device..."),
+                Ok | Cancel, Ok, true)
+{
+    QVBox* mainFrame = makeVBoxMainWidget();
+    m_deviceCombo = new RosegardenComboBox(mainFrame);
+
+    // Create the combo
+    //
+    std::vector<QString>::iterator it = devices.begin();
+    for (; it != devices.end(); it++)
+        m_deviceCombo->insertItem(*it);
+}
+
+void
+ImportDeviceDialog::slotOk()
+{
+    done(m_deviceCombo->currentItem());
+}
+
+void
+ImportDeviceDialog::slotCancel()
+{
+    done(-1);
 }
 
 

@@ -1105,8 +1105,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             bypassed = true;
 
         // Check that ID exists
-        Rosegarden::AudioPlugin *plugin = getAudioPluginManager()->
-            getPluginByUniqueId(id);
+        //
+        Rosegarden::AudioPlugin *plugin = 0;
+        if (getAudioPluginManager())
+            plugin = getAudioPluginManager()->getPluginByUniqueId(id);
 
         // If we find the plugin all is well and good but if
         // we don't we just skip it.

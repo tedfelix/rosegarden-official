@@ -156,6 +156,10 @@ public:
     BankEditorDialog(QWidget *parent,
                      RosegardenGUIDoc *doc);
 
+    // Initialise the devices/banks and programs - the whole lot
+    //
+    void initDialog();
+
     std::pair<int, int> getFirstFreeBank(QListViewItem*);
 
     void addCommandToHistory(KCommand *command);
@@ -172,6 +176,7 @@ public:
     MidiProgramsEditor::MidiProgramContainer&   getProgramList()  { return m_programList; }
 
     void setModified(bool value);
+
 
 public slots:
     void slotPopulateDevice(QListViewItem*);
@@ -253,5 +258,24 @@ protected:
     RosegardenComboBox  *m_toCombo;
 };
 
+// --------------------- ImportDeviceDialog --------------------------
+//
+//
+
+class ImportDeviceDialog : public KDialogBase
+{
+    Q_OBJECT
+public:
+    ImportDeviceDialog(QWidget *parent,
+                       std::vector<QString> devices);
+
+public slots:
+    void slotOk();
+    void slotCancel();
+
+protected:
+    RosegardenComboBox *m_deviceCombo;
+
+};
 #endif // _BANKEDITOR_H_
 
