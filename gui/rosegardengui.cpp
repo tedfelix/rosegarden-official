@@ -2436,16 +2436,6 @@ RosegardenGUIApp::slotCloseTransport()
     m_viewTransport->setChecked(false);
 }
 
-void
-RosegardenGUIApp::slotRaiseTransport()
-{
-    RG_DEBUG << "RosegardenGUIApp::slotRaiseTransport()\n";
-    if (m_viewTransport->isChecked()) {
-        m_transport->raise();
-    }
-}
-
-
 // We use this slot to active a tool mode on the GUI
 // from a layer below the top level.  For example when
 // we select a Track on the trackeditor and want this

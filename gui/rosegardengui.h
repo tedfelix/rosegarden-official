@@ -774,9 +774,6 @@ public slots:
     /// When the transport closes 
     void slotCloseTransport();
 
-    /// When an editor window is raised
-    void slotRaiseTransport();
-
     /**
      * Put the GUI into a given ToolType edit mode
      */
