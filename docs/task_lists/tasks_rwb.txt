@@ -13,7 +13,10 @@ o basic JACK audio
   - "split silence" function to automatically split up an audio segment
      into a number of segments when the amplitude falls below a given
      threshold.
+  - set tempo event to length of audio sample
   - audio VU meters
+
+o Fix latency dialog with audio allowances
 
 o Create WAV files [DONE]
 
@@ -49,8 +52,6 @@ o Looping marker set from file load/top level - Looping
   set from Clients - Looping BUG crashing sequencer
   Looping memory
 
-o Playing Audio files broken - get seeking working
-
 o Split/Join
 
 o Segment start and end markers
@@ -74,6 +75,13 @@ For later releases
 ------------------
 
 o Audio noise eliminator - recording
+
+Completed for 0.1.6
+-------------------
+
+o Playing Audio files broken - get seeking working [DONE]
+
+
 
 --
 

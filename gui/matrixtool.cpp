@@ -24,6 +24,7 @@
 
 #include "BaseProperties.h"
 #include "SegmentMatrixHelper.h"
+#include "Composition.h"
 
 #include "matrixtool.h"
 #include "matrixview.h"
@@ -381,18 +382,31 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
 
     // Round event time to a multiple of resolution
     timeT noteDuration = newNote.getDuration();
-    
     time = (time / noteDuration) * noteDuration;
 
+    // get staff and attempt to get segment start time
+    m_currentStaff = m_mParentView->getStaff(staffNo);
+    Rosegarden::timeT barStart = 0;
+
+    if (m_currentStaff->getSegment().getComposition())
+    {
+        Rosegarden::Composition *comp =
+            m_currentStaff->getSegment().getComposition();
+
+        barStart = comp->getBarStart(
+                       comp->getBarNumber(
+                           m_currentStaff->getSegment().getStartTime()));
+    }
+
     Event* el = newNote.getAsNoteEvent(time, pitch);
+
+    time -= barStart;
 
     // set a default velocity
     using Rosegarden::BaseProperties::VELOCITY;
     el->set<Rosegarden::Int>(VELOCITY, 100);
 
     m_currentElement = new MatrixElement(el);
-
-    m_currentStaff = m_mParentView->getStaff(staffNo);
 
     int y = m_currentStaff->getLayoutYForHeight(pitch) - m_currentStaff->getElementHeight() / 2;
 
@@ -408,44 +422,84 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
 }
 
 void MatrixPainter::handleMouseMove(Rosegarden::timeT newTime,
-                                    int,
+                                    int pitch,
                                     QMouseEvent*)
 {
     // sanity check
     if (!m_currentElement) return;
 
-    //!!! Rather than using m_basicDuration as the unit for painting,
-    // we should probably be using a Rosegarden::SnapGrid with an
-    // appropriate snap time (SnapToUnit as a default, for example).
-    // SnapGrid requires a RulerScale -- but we have one of those, as
-    // HorizontalLayout subclasses RulerScale.  Apart from anything
-    // else, using SnapGrid will ensure that time-signature changes
-    // are handled correctly (at least if MatrixHLayout handles them,
-    // which it presently doesn't but needs to be made to anyway)
-
-    newTime = (newTime / m_basicDuration) * m_basicDuration;
-
-    if (newTime == m_currentElement->getAbsoluteTime()) return;
-
-    timeT newDuration = newTime - m_currentElement->getAbsoluteTime();
-
     using Rosegarden::BaseProperties::PITCH;
 
-    kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseMove : new time = "
-                         << newTime << ", old time = "
-                         << m_currentElement->getAbsoluteTime()
-                         << ", new duration = "
-                         << newDuration
-                         << ", pitch = "
-                         << m_currentElement->event()->get<Rosegarden::Int>(PITCH)
-                         << endl;
+    if (pitch == m_currentElement->event()->get<Rosegarden::Int>(PITCH))
+    {
+        //!!! Rather than using m_basicDuration as the unit for painting,
+        // we should probably be using a Rosegarden::SnapGrid with an
+        // appropriate snap time (SnapToUnit as a default, for example).
+            // SnapGrid requires a RulerScale -- but we have one of those, as
+        // HorizontalLayout subclasses RulerScale.  Apart from anything
+        // else, using SnapGrid will ensure that time-signature changes
+        // are handled correctly (at least if MatrixHLayout handles them,
+        // which it presently doesn't but needs to be made to anyway)
 
-    m_currentElement->setDuration(newDuration);
+        newTime = (newTime / m_basicDuration) * m_basicDuration;
 
-    double width = newDuration * m_currentStaff->getTimeScaleFactor();
-    m_currentElement->setWidth(int(width));
+        if (newTime == m_currentElement->getAbsoluteTime()) return;
 
-    m_mParentView->canvas()->update();
+        timeT newDuration = newTime - m_currentElement->getAbsoluteTime();
+
+
+        kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseMove : new time = "
+                             << newTime << ", old time = "
+                             << m_currentElement->getAbsoluteTime()
+                             << ", new duration = "
+                             << newDuration
+                             << ", pitch = "
+                             << m_currentElement->event()->get<Rosegarden::Int>(PITCH)
+                             << endl;
+
+        m_currentElement->setDuration(newDuration);
+
+        double width = newDuration * m_currentStaff->getTimeScaleFactor();
+        m_currentElement->setWidth(int(width));
+    
+        m_mParentView->canvas()->update();
+    }
+    else
+    {
+        // destroy and recreate event on the same staff as we used above
+        // but for a different pitch
+        delete m_currentElement;
+
+        Note newNote(m_resolution);
+
+        // Round event time to a multiple of resolution
+        timeT noteDuration = newNote.getDuration();
+    
+        newTime = (newTime / noteDuration) * noteDuration;
+
+        Event* el = newNote.getAsNoteEvent(newTime, pitch);
+
+        // set a default velocity
+        using Rosegarden::BaseProperties::VELOCITY;
+        el->set<Rosegarden::Int>(VELOCITY, 100);
+
+        m_currentElement = new MatrixElement(el);
+
+        //m_currentStaff = m_mParentView->getStaff(staffNo);
+
+        int y = m_currentStaff->getLayoutYForHeight(pitch) - m_currentStaff->getElementHeight() / 2;
+
+        m_currentElement->setLayoutY(y);
+        m_currentElement->setLayoutX(newTime * m_currentStaff->getTimeScaleFactor());
+        m_currentElement->setHeight(m_currentStaff->getElementHeight());
+
+        double width = noteDuration * m_currentStaff->getTimeScaleFactor();
+        m_currentElement->setWidth(int(width));
+
+        m_currentStaff->positionElement(m_currentElement);
+        m_mParentView->update();
+    }
+
 }
 
 void MatrixPainter::handleMouseRelease(Rosegarden::timeT,

@@ -471,12 +471,22 @@ void MatrixView::slotResizeSelected()
 }
 
 void MatrixView::slotMousePressed(Rosegarden::timeT time, int pitch,
-                              QMouseEvent* e, MatrixElement* el)
+                                  QMouseEvent* e, MatrixElement* el)
 {
     kdDebug(KDEBUG_AREA) << "MatrixView::mousePressed at pitch "
                          << pitch << ", time " << time << endl;
 
+    Rosegarden::Segment &segment = m_staffs[0]->getSegment();
+    Rosegarden::Composition *composition = segment.getComposition();
+    Rosegarden::timeT firstBar =
+        composition->getBarStart(composition->
+                getBarNumber(segment.getStartTime()));
+
     m_tool->handleMousePress(time, pitch, 0, e, el);
+
+    // play a preview
+    playPreview(pitch);
+
 }
 
 void MatrixView::slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent* e)
@@ -486,7 +496,21 @@ void MatrixView::slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent* 
         updateView();
     }
     else 
-        m_tool->handleMouseMove(time, pitch, e);
+    {
+        Rosegarden::Segment &segment = m_staffs[0]->getSegment();
+        Rosegarden::Composition *composition = segment.getComposition();
+        Rosegarden::timeT firstBar =
+            composition->getBarStart(composition->
+                    getBarNumber(segment.getStartTime()));
+
+        m_tool->handleMouseMove(time - firstBar, pitch, e);
+        // play a preview
+        if (pitch != m_previousEvPitch)
+        {
+            playPreview(pitch);
+            m_previousEvPitch = pitch;
+        }
+    }
 }
 
 void MatrixView::slotMouseReleased(Rosegarden::timeT time, int pitch, QMouseEvent* e)
@@ -496,7 +520,10 @@ void MatrixView::slotMouseReleased(Rosegarden::timeT time, int pitch, QMouseEven
         setActiveItem(0);
         updateView();
     }
+
+    // send the real event time now (not adjusted for beginning of bar)
     m_tool->handleMouseRelease(time, pitch, e);
+    m_previousEvPitch = 0;
 }
 
 void
@@ -718,5 +745,33 @@ void MatrixView::playNote(Rosegarden::Event *event)
 }
 
 
+void MatrixView::playPreview(int pitch)
+{
+    Rosegarden::Composition &comp = m_document->getComposition();
+    Rosegarden::Studio &studio = m_document->getStudio();
+
+    Rosegarden::Track *track = comp.getTrackByIndex(
+            m_staffs[0]->getSegment().getTrack());
+
+    Rosegarden::Instrument *ins =
+        studio.getInstrumentById(track->getInstrument());
+
+    // check for null instrument
+    //
+    if (ins == 0)
+        return;
+    // Send out note of half second duration
+    //
+    Rosegarden::MappedEvent *mE = 
+        new Rosegarden::MappedEvent(ins->getID(),
+                                    Rosegarden::MappedEvent::MidiNoteOneShot,
+                                    pitch,
+                                    Rosegarden::MidiMaxValue,
+                                    Rosegarden::RealTime(0, 0),
+                                    Rosegarden::RealTime(0, 500000),
+                                    Rosegarden::RealTime(0, 0));
+
+    emit keyPressed(mE);
+}
 
 

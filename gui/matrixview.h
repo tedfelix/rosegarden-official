@@ -108,6 +108,10 @@ public:
     //
     void playNote(Rosegarden::Event *event);
 
+    // Play a preview (same as above but a simpler interface)
+    //
+    void playPreview(int pitch);
+
 signals:    
     /**
      * Emitted when the selection has been cut or copied
