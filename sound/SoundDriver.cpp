@@ -102,7 +102,7 @@ PlayableAudioFile::getSampleFrames(unsigned int frames)
         int bytes = frames * getBytesPerSample();
         size_t count = m_ringBuffer->read(&data, bytes);
 
-        cout << "GOT " << count << " BYTES from " << bytes << endl;
+        std::cout << "GOT " << count << " BYTES from " << bytes << std::endl;
 
         if (count != size_t(bytes))
         {
@@ -155,7 +155,7 @@ PlayableAudioFile::fillRingBuffer(int bytes)
 
         }
 
-        cerr << "WRITING " << data.length() << " BYTES" << endl;
+        std::cerr << "WRITING " << data.length() << " BYTES" << std::endl;
         m_ringBuffer->write(data);
     }
 
