@@ -3,6 +3,10 @@ Features for release 0.1
 - be able to store music in multiple tracks and display multiple
   tracks (however basic that display may be)
 
+- updating one edit window when something is edited in another
+  (however crudely we do it at first).  -- at the moment if you
+  delete a note in one window then insert in another, it crashes
+
 - track part deletion
 
 - proper saving/restoring of track part start time
