@@ -2191,7 +2191,12 @@ void RosegardenGUIApp::slotEditInEventList()
 
 void RosegardenGUIApp::slotEditTempos()
 {
-    m_view->slotEditTempos();
+    m_view->slotEditTempos(m_doc->getComposition().getPosition());
+}
+
+void RosegardenGUIApp::slotEditTempos(Rosegarden::timeT openAtTime)
+{
+    m_view->slotEditTempos(openAtTime);
 }
 
 void RosegardenGUIApp::slotToggleToolBar()

@@ -148,6 +148,10 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             SIGNAL(editRepeat(Rosegarden::Segment*, Rosegarden::timeT)),
             SLOT(slotEditRepeat(Rosegarden::Segment*, Rosegarden::timeT)));
 
+    connect(m_trackEditor->getTempoRuler(),
+	    SIGNAL(doubleClicked(Rosegarden::timeT)),
+	    SLOT(slotEditTempos(Rosegarden::timeT)));
+
     connect(m_trackEditor,
             SIGNAL(droppedDocument(QString)),
             parent,
@@ -256,9 +260,9 @@ RosegardenGUIView::getSelection()
 }
 
 void
-RosegardenGUIView::slotEditTempos()
+RosegardenGUIView::slotEditTempos(Rosegarden::timeT t)
 {
-    TempoView *tempoView = new TempoView(getDocument(), this);
+    TempoView *tempoView = new TempoView(getDocument(), this, t);
 
     connect(tempoView,
             SIGNAL(changeTempo(Rosegarden::timeT,

@@ -641,6 +641,7 @@ public slots:
      * open a tempo/timesig edit view
      */
     void slotEditTempos();
+    void slotEditTempos(Rosegarden::timeT openAtTime);
 
     /**
      * Edit the tempo - called from a Transport signal

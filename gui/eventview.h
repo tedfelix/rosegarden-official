@@ -140,6 +140,7 @@ protected slots:
 protected:
 
     virtual void readOptions();
+    void makeInitialSelection(Rosegarden::timeT);
     QString makeTimeString(Rosegarden::timeT time, int timeMode);
     QString makeDurationString(Rosegarden::timeT time,
 			       Rosegarden::timeT duration, int timeMode);

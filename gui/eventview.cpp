@@ -251,6 +251,8 @@ EventView::EventView(RosegardenGUIDoc *doc,
     setButtonsToFilter();
     applyLayout();
 
+    makeInitialSelection(doc->getComposition().getPosition());
+
     setOutOfCtor();
 }
 
@@ -509,6 +511,33 @@ EventView::applyLayout(int /*staffNo*/)
     m_deletedEvents.clear();
 
     return true;
+}
+
+void
+EventView::makeInitialSelection(Rosegarden::timeT time)
+{
+    m_listSelection.clear();
+
+    EventViewItem *goodItem = 0;
+    int goodItemNo = 0;
+
+    for (int i = 0; m_eventList->itemAtIndex(i); ++i) {
+
+	EventViewItem *item = dynamic_cast<EventViewItem *>
+	    (m_eventList->itemAtIndex(i));
+
+	if (item) {
+	    if (item->getEvent()->getAbsoluteTime() > time) break;
+	    goodItem = item;
+	    goodItemNo = i;
+	}
+    }
+
+    if (goodItem) {
+	m_listSelection.push_back(goodItemNo);
+	m_eventList->setSelected(goodItem, true);
+	m_eventList->ensureItemVisible(goodItem);
+    }
 }
 
 QString

@@ -93,6 +93,17 @@ TempoRuler::slotScrollHoriz(int x)
     }
 }
 
+
+void
+TempoRuler::mousePressEvent(QMouseEvent *e)
+{
+    if (e->type() == QEvent::MouseButtonDblClick) {
+	timeT t = m_rulerScale->getTimeForX
+	    (e->x() - m_currentXOffset - 100 - m_xorigin);
+	emit doubleClicked(t);
+    }
+}
+
 QSize
 TempoRuler::sizeHint() const
 {

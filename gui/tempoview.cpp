@@ -111,7 +111,7 @@ TempoListItem::compare(QListViewItem *i, int col, bool ascending) const
 int
 TempoView::m_lastSetFilter = -1;
 
-TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent):
+TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, Rosegarden::timeT openTime):
     EditViewBase(doc, std::vector<Rosegarden::Segment *>(), 2, parent, "tempoview"),
     m_filter(Tempo | TimeSignature),
     m_ignoreUpdates(true)
@@ -166,8 +166,10 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent):
     setButtonsToFilter();
     applyLayout();
 
-    setOutOfCtor();
+    makeInitialSelection(openTime);
+
     m_ignoreUpdates = false;
+    setOutOfCtor();
 }
 
 TempoView::~TempoView()
@@ -331,6 +333,35 @@ TempoView::applyLayout(int /*staffNo*/)
     m_listSelection.clear();
 
     return true;
+}
+
+void
+TempoView::makeInitialSelection(Rosegarden::timeT time)
+{
+    m_listSelection.clear();
+
+    TempoListItem *goodItem = 0;
+    int goodItemNo = 0;
+
+    for (int i = 0; m_list->itemAtIndex(i); ++i) {
+
+	TempoListItem *item = dynamic_cast<TempoListItem *>
+	    (m_list->itemAtIndex(i));
+
+	m_list->setSelected(item, false);
+
+	if (item) {
+	    if (item->getTime() > time) break;
+	    goodItem = item;
+	    goodItemNo = i;
+	}
+    }
+
+    if (goodItem) {
+	m_listSelection.push_back(goodItemNo);
+	m_list->setSelected(goodItem, true);
+	m_list->ensureItemVisible(goodItem);
+    }
 }
 
 QString

@@ -162,7 +162,7 @@ public slots:
     void slotEditSegmentEventList(Rosegarden::Segment*);
     void slotSegmentAutoSplit(Rosegarden::Segment*);
     void slotEditRepeat(Rosegarden::Segment*, Rosegarden::timeT);
-    void slotEditTempos();
+    void slotEditTempos(Rosegarden::timeT);
 
     /**
      *

@@ -51,7 +51,7 @@ class TempoView : public EditViewBase, public Rosegarden::CompositionObserver
     };
 
 public:
-    TempoView(RosegardenGUIDoc *doc, QWidget *parent);
+    TempoView(RosegardenGUIDoc *doc, QWidget *parent, Rosegarden::timeT);
     virtual ~TempoView();
 
     static const char* const ConfigGroup;
@@ -134,6 +134,7 @@ protected slots:
 protected:
 
     virtual void readOptions();
+    void makeInitialSelection(Rosegarden::timeT);
     QString makeTimeString(Rosegarden::timeT time, int timeMode);
 
     //--------------- Data members ---------------------------------

@@ -24,6 +24,7 @@
 #define _TEMPORULER_H_
 
 #include <qwidget.h>
+#include "Event.h"
 
 namespace Rosegarden {
     class RulerScale;
@@ -67,11 +68,15 @@ public:
 
     void setMinimumWidth(int width) { m_width = width; }
 
+signals:
+    void doubleClicked(Rosegarden::timeT);
+
 public slots:
     void slotScrollHoriz(int x);
 
 protected:
     virtual void paintEvent(QPaintEvent *);
+    virtual void mousePressEvent(QMouseEvent *);
 
 private:
     double m_xorigin;
