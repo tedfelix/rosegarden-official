@@ -167,11 +167,11 @@ Staff<T>::findEvent(Event *e)
 	      typename ViewElementList<T>::iterator>
         r = m_viewElementList->equal_range(&dummy);
 
-    cerr << "called equal_range for event " << e << " (" << e->getAbsoluteTime() << "," << e->getSubOrdering() << ")" << endl;
+    std::cerr << "called equal_range for event " << e << " (" << e->getAbsoluteTime() << "," << e->getSubOrdering() << ")" << std::endl;
     for (typename ViewElementList<T>::iterator i = r.first; i != r.second; ++i) {
-	cerr << "looking at " << (*i)->event() << " (" << (*i)->event()->getAbsoluteTime() << "," << (*i)->event()->getSubOrdering() << ")" << endl;
+	std::cerr << "looking at " << (*i)->event() << " (" << (*i)->event()->getAbsoluteTime() << "," << (*i)->event()->getSubOrdering() << ")" << std::endl;
         if ((*i)->event() == e) {
-	    cerr << "matches" << endl;
+	    std::cerr << "matches\n";
             return i;
         }
     }
@@ -200,15 +200,15 @@ Staff<T>::eventRemoved(const Segment *t, Event *e)
 
     // If we have it, lose it
 
-    cerr << "Staff<T>::eventRemoved for " << e << endl;
+    std::cerr << "Staff<T>::eventRemoved for " << e << std::endl;
 
     typename ViewElementList<T>::iterator i = findEvent(e);
     if (i != m_viewElementList->end()) {
-	cerr << "Found" << endl;
+	std::cerr << "Found" << std::endl;
         m_viewElementList->erase(i);
         return;
     }
-    cerr << "Not found" << endl;
+    std::cerr << "Not found\n";
 }
 
 template <class T>
