@@ -111,9 +111,11 @@ MusicXmlExporter::writeNote(Event *e, Rosegarden::timeT lastNoteTime,
 
 	Rosegarden::Accidental acc(pitch.getAccidental(key.isSharp()));
 	Rosegarden::Accidental displayAcc(pitch.getDisplayAccidental(key));
+
+	bool cautionary;
 	Rosegarden::Accidental processedDisplayAcc =
 	    accTable.processDisplayAccidental
-	    (displayAcc, pitch.getHeightOnStaff(clef, key));
+	    (displayAcc, pitch.getHeightOnStaff(clef, key), cautionary);
 
 	if (acc == Rosegarden::Accidentals::DoubleFlat) {
 	    str << "\t\t\t\t\t<alter>-2</alter>" << std::endl;

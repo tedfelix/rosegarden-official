@@ -1819,8 +1819,11 @@ AccidentalTable::operator=(const AccidentalTable &t)
 }
 
 Accidental
-AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height)
+AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
+					  bool &cautionary)
 {
+    cautionary = false; //!!! for now
+
     Accidental acc = acc0;
 
     int canonicalHeight = Key::canonicalHeight(height);
@@ -1864,13 +1867,35 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height)
 
     } else {
 
-	//!!!
+	if (normalAcc == NoAccidental) {
+	    normalAcc = keyAcc;
+	}
 
+	if (canonicalAcc == NoAccidental) {
+	    canonicalAcc = keyAcc;
+	}
+
+	if (acc == normalAcc) {
+	    if (acc == NoAccidental && canonicalAcc != acc) {
+		acc = Natural;
+		cautionary = true;
+	    } else {
+		acc = NoAccidental;
+	    }
+	} else if (acc == canonicalAcc) {
+	    if (acc != NoAccidental) {
+		cautionary = true;
+	    } else {
+		acc = Natural;
+	    }
+	} else if (acc == NoAccidental) {
+	    acc = Natural;
+	}
     }
 
-    // only remember this if not NoAccidental
+    // only remember this if a real non-cautionary accidental is being set
     
-    if (acc != NoAccidental) {
+    if (acc != NoAccidental && !cautionary) {
 	m_newAccidentals[height] = AccidentalRec(acc, false);
 	m_newCanonicalAccidentals[canonicalHeight] = AccidentalRec(acc, false);
     }

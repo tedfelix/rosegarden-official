@@ -507,7 +507,8 @@ NotationHLayout::scanChord(NotationElementList *notes,
 	// (accidentals in force when the last chord ended) and tell
 	// accTable about accidentals from this note.
                     
-	Accidental dacc = accTable.processDisplayAccidental(acc, h);
+	bool cautionary;
+	Accidental dacc = accTable.processDisplayAccidental(acc, h, cautionary);
 	el->event()->setMaybe<String>(m_properties.DISPLAY_ACCIDENTAL, dacc);
 	if (someAccidental == NoAccidental) someAccidental = dacc;
 

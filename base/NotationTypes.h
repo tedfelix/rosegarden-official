@@ -1097,7 +1097,8 @@ public:
     AccidentalTable &operator=(const AccidentalTable &);
 
     Accidental processDisplayAccidental(const Accidental &displayAcc,
-					int heightOnStaff);
+					int heightOnStaff,
+					bool &cautionary);
 
     void update();
 
