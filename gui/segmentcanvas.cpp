@@ -470,122 +470,23 @@ void SegmentItem::drawShape(QPainter& painter)
 {
     QCanvasRectangle::drawShape(painter);
 
-    if (m_preview && m_showPreview) m_preview->drawShape(painter);
+    QCanvasItemList overlaps = collisions(true);
 
-#if 0
-    //
-    // Keeping around for reference
-    // Will throw away soon.
-    //
-    Rosegarden::RulerScale *rulerScale = m_snapGrid->getRulerScale();
+    painter.save();
+    painter.setBrush(RosegardenGUIColours::SegmentIntersectBlock);
+    
+    for (QCanvasItemList::Iterator it=overlaps.begin(); it!=overlaps.end(); ++it) {
+        SegmentItem *item = dynamic_cast<SegmentItem*>(*it);
 
-    // TODO : remove this...
-    QRect previewRect =
-	painter.xFormDev(painter.hasClipping() ?
-	painter.clipRegion().boundingRect() :
-	painter.viewport());
+        if (!item) continue;
 
-    previewRect = previewRect.intersect(rect());
+        QRect intersection = rect() & item->rect();
+        painter.drawRect(intersection);
+    }
 
-   if (previewRect.width() <= 0 || previewRect.height() <= 0) return;
-   // ... up to here
-
-//     timeT startTime = rulerScale->getTimeForX(previewRect.x());
-//     timeT   endTime = rulerScale->getTimeForX(previewRect.x() +
-// 					      previewRect.width());
-
-    if (m_showPreview && m_segment &&
-	m_segment->getType() == Rosegarden::Segment::Audio)
-    {
-        // Draw waveform preview - fetch the audio waveform data as
-        // a vector of floats (normalised between -1.0 and +1.0)
-        // and then draw over the period we're viewing.
-        //
-/*
-	if (!painter.hasClipping())
-	    RG_DEBUG << "SegmentCanvas::drawShape: clipping is off " << endl;
-	RG_DEBUG << "SegmentCanvas::drawShape: rect is "
-			     << previewRect.width() << "x"
-			     << previewRect.height() << " at "
-			     << previewRect.x() << ","
-			     << previewRect.y() << endl;
-*/
-        // Set up pen and get rectangle
-        painter.setPen(RosegardenGUIColours::SegmentAudioPreview);
+    painter.restore();
         
-        // Fetch vector of floats adjusted to our resolution
-        //
-        Rosegarden::AudioFileManager &aFM = m_doc->getAudioFileManager();
-        Rosegarden::Composition &comp = m_doc->getComposition();
-
-
-        /*
-	timeT audioStart = startTime - m_segment->getStartTime();
-	timeT audioEnd = endTime - m_segment->getStartTime();
-
-	if (audioEnd > m_segment->getAudioEndTime()) {
-	    audioEnd = m_segment->getAudioEndTime();
-	}
-        */
-
-        std::vector<float> values =
-            aFM.getPreview(m_segment->getAudioFileID(),
-	                   m_segment->getAudioStartTime(),
-	                   m_segment->getAudioEndTime(),
-                           previewRect.width());
-
-        std::vector<float>::iterator it;
-
-        // perhaps antialias this somehow at some point
-        int i = 0;
-        int height = rect().height()/2 - 3;
-        for (it = values.begin(); it != values.end(); it++)
-        {
-            painter.drawLine(previewRect.x() + i,
-                             previewRect.y() + rect().height()/2
-                                 + (*it) * height,
-                             previewRect.x() + i,
-                             previewRect.y() + rect().height()/2
-                                 - (*it) * height);
-            i++;
-        }
-
-        // perhaps draw an XOR'd label at some point
-        /*
-	painter.setPen(RosegardenGUIColours::SegmentLabel);
-        painter.setFont(*m_font);
-        QRect labelRect = rect();
-        labelRect.setX(labelRect.x() + 3);
-        painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
-        */
-    }
-    else
-    {
-	if (m_showPreview && m_segment) {
-            updatePreview();
-            painter.save();
-
-            painter.translate(rect().x(), rect().y());
-            painter.setPen(RosegardenGUIColours::SegmentInternalPreview);
-            QRect viewportRect = painter.xFormDev(painter.viewport());
-            
-            for(unsigned int i = 0; i < m_previewInfo.size(); ++i) {
-                //
-                // draw rectangles, discarding those which are clipped
-                //
-                QRect p = m_previewInfo[i];
-                if ((p.x() + p.width()) >= viewportRect.x() &&
-                    p.x() <= (viewportRect.x() + viewportRect.width())) {
-                    painter.drawRect(p);
-		}
-            }
-
-            painter.restore();
-	}
-    }
-
-    // recalculateRectangle(false);
-#endif
+    if (m_preview && m_showPreview) m_preview->drawShape(painter);
 
     // draw label
     if (m_segment && m_segment->getType() != Rosegarden::Segment::Audio)
