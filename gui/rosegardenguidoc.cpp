@@ -34,6 +34,7 @@
 #include <kmessagebox.h>
 #include <kapp.h>
 #include <kconfig.h>
+#include <kstddirs.h>
 
 #include <string>
 #include <vector>
@@ -114,6 +115,13 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 
     connect(m_commandHistory, SIGNAL(documentRestored()),
 	    this, SLOT(slotDocumentRestored()));
+
+    // always autoload a new document
+    performAutoload();
+
+    // now set it up as a "new document"
+    newDocument();
+
 }
 
 RosegardenGUIDoc::~RosegardenGUIDoc()
@@ -300,24 +308,32 @@ bool RosegardenGUIDoc::saveIfModified()
     return completed;
 }
 
-void RosegardenGUIDoc::closeDocument()
-{
-
-}
-
-bool RosegardenGUIDoc::newDocument()
+void RosegardenGUIDoc::newDocument()
 {
     setModified(false);
     setAbsFilePath(QString::null);
     setTitle(i18n("Untitled"));
-
     m_commandHistory->clear();
-
-    // synchronise sequencer
-    //prepareAudio(); // this is called elsewhere
-
-    return true;
 }
+
+void RosegardenGUIDoc::performAutoload()
+{
+    QString autoloadFile =
+        KGlobal::dirs()->findResource("appdata", "autoload.rg"); 
+
+    QFileInfo autoloadFileInfo(autoloadFile);
+
+    if (!autoloadFileInfo.isReadable())
+    {
+        RG_DEBUG << "RosegardenGUIDoc::performAutoload - "
+                 << "can't find autoload file - defaulting" << endl;
+        return;
+    }
+
+    openDocument(autoloadFile);
+
+}
+
 
 bool RosegardenGUIDoc::openDocument(const QString& filename,
                                     const char* /*format*/ /*=0*/)
@@ -372,7 +388,6 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         return false;
 
     } else if (cancelled) {
-        closeDocument();
         newDocument();
         return false;
     }

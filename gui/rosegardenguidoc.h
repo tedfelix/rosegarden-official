@@ -145,16 +145,6 @@ public:
     unsigned int getAutoSavePeriod() const;
 
     /**
-     * initializes the document generally
-     */
-    bool newDocument();
-
-    /**
-     * closes the actual document
-     */
-    void closeDocument();
-
-    /**
      * loads the document by filename and format and emits the
      * updateViews() signal
      */
@@ -392,6 +382,15 @@ signals:
     void loopChanged(Rosegarden::timeT, Rosegarden::timeT);
 
 protected:
+    /**
+     * initializes the document generally
+     */
+    void newDocument();
+
+    /**
+     * Autoload
+     */
+    void performAutoload();
 
     /**
      * Parse the Rosegarden file \a file

@@ -278,13 +278,6 @@ public:
      */
     virtual void skippedSlices(unsigned int slices);
 
-
-    /*
-     * Autoload the autoload song for Studio parameters
-     *
-     */
-    bool performAutoload();
-
 protected:
 
     static const void* SequencerExternal;

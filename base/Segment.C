@@ -536,8 +536,10 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     // First stage: erase all existing non-tupleted rests in this range.
 
+    /*
     cerr << "Segment::normalizeRests " << startTime << " -> "
 	 << endTime << endl;
+         */
 
     timeT segmentEndTime = m_endTime;
 
@@ -640,9 +642,11 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
 	timeT thisNoteStarts = q->getQuantizedAbsoluteTime(*i);
 
+        /*
 	cerr << "scanning: thisNoteStarts " << thisNoteStarts
 	     << ", lastNoteStarts " << lastNoteStarts
 	     << ", lastNoteEnds " << lastNoteEnds << endl;
+             */
 
 	//!!! This may be problematic.  We could end up adding a rest
 	// in the middle of what turns out to be a chord once the
@@ -676,7 +680,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     for (unsigned int gi = 0; gi < gaps.size(); ++gi) {
 
-	cerr << "gap " << gi << ": " << gaps[gi].first << " -> " << gaps[gi].second << endl;
+	//cerr << "gap " << gi << ": " << gaps[gi].first << " -> " << gaps[gi].second << endl;
 
         startTime = gaps[gi].first;
 	duration = gaps[gi].second;

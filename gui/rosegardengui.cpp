@@ -147,8 +147,9 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     iFaceDelayedInit(this);
     initZoomToolbar();
 
-    if (!performAutoload())
-        initView();
+    // Load the initial document (this includes doc's own autoload)
+    //
+    setDocument(new RosegardenGUIDoc(this, m_pluginManager));
 
     emit startupStatusMessage(i18n("Starting sequence manager..."));
 
@@ -829,6 +830,11 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 {
     // Take care of all subparts which depend on the document
 
+    // Caption
+    //
+    QString caption= kapp->caption();	
+    setCaption(caption + ": " + newDocument->getTitle());
+
     // reset AudioManagerDialog
     //
     delete m_audioManagerDialog;
@@ -843,7 +849,7 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 
     // this will delete all edit views
     //
-    delete oldDoc;
+    if (oldDoc != 0) delete oldDoc;
     
     // copied from initDocument();
     // connect needed signals
@@ -986,14 +992,7 @@ void RosegardenGUIApp::openFile(const QString& filePath)
     } else {
         // Create a new document
 
-        if(!performAutoload()) {
-
-            m_doc->newDocument();
-
-            QString caption=kapp->caption();	
-            setCaption(caption+": "+m_doc->getTitle());
-            initView();
-        }
+        setDocument(new RosegardenGUIDoc(this, m_pluginManager));
     }
 }
 
@@ -1190,17 +1189,7 @@ void RosegardenGUIApp::slotFileNew()
 
     if (makeNew) {
 
-        // Perform autoload to create a new document - if that fails
-        // then create a new Document the old fashioned way.
-        //
-        if(!performAutoload())
-        {
-            m_doc->newDocument();
-
-            QString caption=kapp->caption();	
-            setCaption(caption+": "+m_doc->getTitle());
-            initView();
-        }
+        setDocument(new RosegardenGUIDoc(this, m_pluginManager));
     }
 }
 
@@ -2169,11 +2158,9 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     Rosegarden::MidiFile *midiFile;
 
-    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
-
-    // Copy the Studio from the current document
+    // Create new document (autoload is inherent)
     //
-    newDoc->copyStudio(m_doc->getStudio());
+    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
 
     midiFile = new Rosegarden::MidiFile(qstrtostr(file),
                                         &newDoc->getStudio());
@@ -2182,6 +2169,8 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
     RosegardenProgressDialog progressDlg(i18n("Importing MIDI file..."),
                                          200,
                                          this);
+
+    CurrentProgressDialog::set(&progressDlg);
 
     connect(midiFile, SIGNAL(setProgress(int)),
             progressDlg.progressBar(), SLOT(setValue(int)));
@@ -2202,9 +2191,6 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
         slotStop();
 
     if (!merge) {
-
-	//newDoc->closeDocument();
-	//newDoc->newDocument();
 
         Rosegarden::Composition *tmpComp = new Rosegarden::Composition();
         tmpComp = midiFile->convertToRosegarden();
@@ -2374,15 +2360,14 @@ void RosegardenGUIApp::slotImportRG21()
 void RosegardenGUIApp::importRG21File(const QString &file)
 {
     KStartupLogo::hideIfStillThere();
-    RosegardenProgressDialog progressDlg(i18n("Importing Rosegarden 2.1 file..."),
-                                         100,
-                                         this);
+    RosegardenProgressDialog progressDlg(
+            i18n("Importing Rosegarden 2.1 file..."), 100, this);
 
-    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
+    CurrentProgressDialog::set(&progressDlg);
 
-    // Copy the Studio from the current document
+    // Inherent autoload
     //
-    newDoc->copyStudio(m_doc->getStudio());
+    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
 
     RG21Loader rg21Loader(file, &newDoc->getStudio());
 
@@ -2396,7 +2381,22 @@ void RosegardenGUIApp::importRG21File(const QString &file)
 
     rg21Loader.parse();
 
+    // "your starter for 40%" - helps the "freeze" work
+    //
+    progressDlg.progressBar()->advance(40);
+
     Rosegarden::Composition *tmpComp = rg21Loader.getComposition();
+
+    // Check for success
+    //
+    if (tmpComp == 0) 
+    {
+        CurrentProgressDialog::freeze();
+        KMessageBox::error(this,
+          i18n("Can't load Rosegarden 2.1 file.  It appears to be corrupted."));
+        return;
+    }
+
     newDoc->getComposition().swap(*tmpComp);
 
     // assign to existing document
@@ -3261,41 +3261,6 @@ RosegardenGUIApp::slotUnsetLoop()
     // of the display items
     m_doc->setLoop(0, 0);
 }
-
-// Find and load the autoload file to set up a default Studio
-//
-//
-bool RosegardenGUIApp::performAutoload()
-{
-    QString autoloadFile =
-        KGlobal::dirs()->findResource("appdata", "autoload.rg");
-
-    QFileInfo autoloadFileInfo(autoloadFile);
-
-    if (!autoloadFileInfo.isReadable())
-    {
-        RG_DEBUG
-            << "RosegardenGUIApp::performAutoload() - "
-            << "Can't find autoload file - no default Studio loaded\n";
-
-        return false;
-    }
-
-    // Else we try to open it
-    //
-    RG_DEBUG
-        << "RosegardenGUIApp::performAutoload() - autoloading\n";
-
-    openFile(autoloadFile);
-
-    // So we don't get the "autoload" title
-    //
-    m_doc->newDocument();
-    setCaption(m_doc->getTitle());
-
-    return true;
-}
-
 
 
 // Just set the solo value in the Composition equal to the state
