@@ -66,6 +66,10 @@ NotationTool::~NotationTool()
     m_parentView->factory()->removeClient(this);
 }
 
+void NotationTool::finalize()
+{
+}
+
 void NotationTool::createMenu(const QString& rcFileName)
 {
     setXMLFile(rcFileName);
@@ -138,6 +142,23 @@ NoteInserter::NoteInserter(Rosegarden::Note::Type type,
       m_noteDots(dots)
 {
     m_parentView->setCanvasCursor(Qt::crossCursor);
+
+    for (unsigned int i = 0, accidental = NoAccidental;
+         i < 6; ++i, ++accidental) {
+
+        KRadioAction* noteAction = new KRadioAction(i18n(m_actionsAccidental[i][0]),
+                                                    0, this,
+                                                    m_actionsAccidental[i][1],
+                                                    actionCollection(),
+                                                    m_actionsAccidental[i][2]);
+        noteAction->setExclusiveGroup("accidentals");
+    }
+
+    new KToggleAction(i18n("Toggle Dot"), 0, this,
+                      SLOT(toggleDot()), actionCollection(),
+                      "toggle_dot");
+
+    createMenu("noteinserter.rc");
 }
 
 NoteInserter::NoteInserter(Rosegarden::Note::Type type,
@@ -153,6 +174,12 @@ NoteInserter::NoteInserter(Rosegarden::Note::Type type,
 
 NoteInserter::~NoteInserter()
 {
+}
+
+void NoteInserter::finalize()
+{
+    connect(m_parentView, SIGNAL(changeAccidental(Rosegarden::Accidental)),
+            this, SLOT(setAccidental(Rosegarden::Accidental)));
 }
 
 void    
@@ -215,9 +242,61 @@ Event *NoteInserter::doInsert(SegmentNotationHelper& nt,
 void NoteInserter::setAccidental(Rosegarden::Accidental accidental)
 {
     m_accidental = accidental;
+    KAction* action =
+        actionCollection()->action(m_actionsAccidental[accidental][2]);
+
+    KToggleAction* tAction = 0;
+    
+    if ((tAction = dynamic_cast<KToggleAction*>(action)))
+        tAction->setChecked(true);
+    else
+        KMessageBox::error(0, "NoteInserter::setAccidental : couldn't find action");
 }
 
-Rosegarden::Accidental NoteInserter::m_accidental = NoAccidental;
+void NoteInserter::slotNoAccidental()
+{
+    m_parentView->actionCollection()->action("no_accidental")->activate();
+}
+
+void NoteInserter::slotSharp()
+{
+    m_parentView->actionCollection()->action("sharp_accidental")->activate();
+}
+
+void NoteInserter::slotFlat()
+{
+    m_parentView->actionCollection()->action("flat_accidental")->activate();
+}
+
+void NoteInserter::slotNatural()
+{
+    m_parentView->actionCollection()->action("natural_accidental")->activate();
+}
+
+void NoteInserter::slotDoubleSharp()
+{
+    m_parentView->actionCollection()->action("double_sharp_accidental")->activate();
+}
+
+void NoteInserter::slotDoubleFlat()
+{
+    m_parentView->actionCollection()->action("double_flat_accidental")->activate();
+}
+
+void NoteInserter::slotToggleDot()
+{
+    m_noteDots = (m_noteDots) ? 0 : 1;
+}
+
+const char* NoteInserter::m_actionsAccidental[][4] = 
+    {
+        { "No accidental",  "1slotNoAccidental()",  "no_accidental",           "accidental-none" },
+        { "Sharp",          "1slotSharp()",         "sharp_accidental",        "accidental-sharp" },
+        { "Flat",           "1slotFlat()",          "flat_accidental",         "accidental-flat" },
+        { "Natural",        "1slotNatural()",       "natural_accidental",      "accidental-natural" },
+        { "Double sharp",   "1slotDoubleSharp()",   "double_sharp_accidental", "accidental-doublesharp" },
+        { "Double flat",    "1slotDoubleFlat()",    "double_flat_accidental",  "accidental-doubleflat" }
+    };
 
 //------------------------------
 

@@ -61,6 +61,12 @@ public:
     virtual ~NotationTool();
 
     /**
+     * Is called by NotationView after creation
+     * Add any signal/slot connection here
+     */
+    virtual void finalize();
+
+    /**
      * Dispatch the event to Left/Middle/Right MousePress
      */
     virtual void handleMousePress(int height, int staffNo,
@@ -127,6 +133,8 @@ namespace Rosegarden { class SegmentNotationHelper; }
  */
 class NoteInserter : public NotationTool
 {
+    Q_OBJECT
+
 public:
     NoteInserter(Rosegarden::Note::Type, unsigned int dots,
                  NotationView*);
@@ -136,9 +144,12 @@ public:
                                        QMouseEvent*,
                                        NotationElement* el);
 
-    /// Set the accidental for the notes which will be inserted
-    static void setAccidental(Rosegarden::Accidental);
+    virtual void finalize();
 
+public slots:
+    /// Set the accidental for the notes which will be inserted
+    void setAccidental(Rosegarden::Accidental);
+ 
 protected:
     /// this ctor is used by RestInserter
     NoteInserter(Rosegarden::Note::Type, unsigned int dots,
@@ -148,11 +159,23 @@ protected:
                                         Rosegarden::timeT absTime,
                                         const Rosegarden::Note&, int pitch,
                                         Rosegarden::Accidental);
+protected slots:
+    // RMB menu slots
+    void slotNoAccidental();
+    void slotSharp();
+    void slotFlat();
+    void slotNatural();
+    void slotDoubleSharp();
+    void slotDoubleFlat();
+    void slotToggleDot();
 
+protected:
     Rosegarden::Note::Type m_noteType;
     unsigned int m_noteDots;
 
-    static Rosegarden::Accidental m_accidental;
+    Rosegarden::Accidental m_accidental;
+
+    static const char* m_actionsAccidental[][4];
 };
 
 /**

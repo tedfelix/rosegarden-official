@@ -883,6 +883,7 @@ void NotationView::setTool(NotationTool* tool)
 {
     delete m_tool;
     m_tool = tool;
+    m_tool->finalize();
 }
 
 void NotationView::setNotePixmapFactory(NotePixmapFactory* f)
@@ -1412,32 +1413,32 @@ void NotationView::slotDottedR64th()
 //----------------------------------------
 void NotationView::slotNoAccidental()
 {
-    NoteInserter::setAccidental(Rosegarden::NoAccidental);
+    emit changeAccidental(Rosegarden::NoAccidental);
 }
 
 void NotationView::slotSharp()
 {
-    NoteInserter::setAccidental(Rosegarden::Sharp);
+    emit changeAccidental(Rosegarden::Sharp);
 }
 
 void NotationView::slotFlat()
 {
-    NoteInserter::setAccidental(Rosegarden::Flat);
+    emit changeAccidental(Rosegarden::Flat);
 }
 
 void NotationView::slotNatural()
 {
-    NoteInserter::setAccidental(Rosegarden::Natural);
+    emit changeAccidental(Rosegarden::Natural);
 }
 
 void NotationView::slotDoubleSharp()
 {
-    NoteInserter::setAccidental(Rosegarden::DoubleSharp);
+    emit changeAccidental(Rosegarden::DoubleSharp);
 }
 
 void NotationView::slotDoubleFlat()
 {
-    NoteInserter::setAccidental(Rosegarden::DoubleFlat);
+    emit changeAccidental(Rosegarden::DoubleFlat);
 }
 
 

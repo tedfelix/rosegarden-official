@@ -348,6 +348,11 @@ signals:
      */
     void usedSelection();
 
+    /**
+     * Emitted when a new accidental has been choosen by the user
+     */
+    void changeAccidental(Rosegarden::Accidental);
+
 protected:
 
     /**
