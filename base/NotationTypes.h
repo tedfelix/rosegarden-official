@@ -36,6 +36,7 @@
  *   Accidental
  *   Clef
  *   Key
+ *   Indication
  *   NotationDisplayPitch
  *   Note
  *   TimeSignature
@@ -69,11 +70,16 @@ typedef std::list<int> DurationList;
     
 /**
  * Accidental is hardly worth making a class, but there are conversion
- * functions to and from strings available in NotationDisplayPitch
+ * functions to and from strings available in NotationDisplayPitch.
  */
 
 enum Accidental {
     NoAccidental, Sharp, Flat, Natural, DoubleSharp, DoubleFlat
+};
+
+
+enum Mark {
+    NoMark, Dot, Legato, Accent, Sforzando, Rinforzando, Trill, Turn, Pause
 };
 
 

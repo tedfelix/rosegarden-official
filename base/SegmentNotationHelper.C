@@ -132,6 +132,7 @@ Segment::iterator SegmentNotationHelper::expandIntoTie(iterator from, iterator t
 	}
 
         if ((*i)->getDuration() != eventDuration) {
+	    if ((*i)->getDuration() == 0) continue;
 	    cerr << "WARNING: SegmentNotationHelper::expandIntoTie(): (*i)->getDuration() != eventDuration (" << (*i)->getDuration() << " vs " << eventDuration << "), changing eventDuration to match\n";
             eventDuration = (*i)->getDuration();
         }

@@ -302,6 +302,8 @@ void NotationStaff::deleteTimeSignatures()
 
 void NotationStaff::setLines(double xfrom, double xto)
 {
+    START_TIMING;
+
     for (LineList::iterator i = m_staffLines.begin();
          i != m_staffLines.end(); ++i) {
 
@@ -314,6 +316,8 @@ void NotationStaff::setLines(double xfrom, double xto)
 
     m_initialBarA->setPoints((int)xfrom - 4, sp.y(), (int)xfrom - 4, ep.y());
     m_initialBarB->setPoints((int)xfrom, sp.y(), (int)xfrom, ep.y());
+
+    PRINT_ELAPSED("NotationStaff::setLines");
 }
 
 void NotationStaff::getClefAndKeyAtX(int myx, Clef &clef,
@@ -420,7 +424,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 	    ++changedBarCount;
 	} while (changedBarCount < 4 &&
 		 candidate != nel->end() && !elementNotMoved(*candidate));
-	endAt = candidate;
+	if (changedBarCount < 4) endAt = candidate;
     }
 
     for (NotationElementList::iterator it = beginAt; it != endAt; ++it) {

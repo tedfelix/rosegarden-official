@@ -855,7 +855,7 @@ NotationView::changeFont(string newName, int newSize)
 
 bool NotationView::applyLayout(int staffNo)
 {
-    kdDebug(KDEBUG_AREA) << "NotationView::applyLayout() : entering; we have " << m_staffs.size() << " staffs" << endl;
+    START_TIMING;
     unsigned int i;
 
     for (i = 0; i < m_staffs.size(); ++i) {
@@ -887,7 +887,7 @@ bool NotationView::applyLayout(int staffNo)
 
     readjustCanvasSize();
 
-    kdDebug(KDEBUG_AREA) << "NotationView::applyLayout() : done" << endl;
+    PRINT_ELAPSED("NotationView::applyLayout");
     return true;
 }
 
@@ -1724,6 +1724,8 @@ NotationView::findClosestNote(double eventX, Event *&timeSignature,
                               Event *&clef, Event *&key, int staffNo,
                               unsigned int proximityThreshold)
 {
+    START_TIMING;
+
     double minDist = 10e9,
         prevDist = 10e9;
 
@@ -1784,6 +1786,8 @@ NotationView::findClosestNote(double eventX, Event *&timeSignature,
         return notes->end();
     }
         
+    PRINT_ELAPSED("NotationView::findClosestNote");
+
     return res;
 }
 
@@ -1864,10 +1868,9 @@ void NotationView::redoLayoutAdvised(Segment *segment,
 
 void NotationView::readjustCanvasSize()
 {
-    double totalHeight = 0.0, totalWidth = m_hlayout->getTotalWidth();
+    START_TIMING;
 
-    kdDebug(KDEBUG_AREA) << "NotationView::readjustCanvasWidth() : totalWidth = "
-                         << totalWidth << endl;
+    double totalHeight = 0.0, totalWidth = m_hlayout->getTotalWidth();
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
@@ -1875,14 +1878,14 @@ void NotationView::readjustCanvasSize()
 
         NotationStaff &staff = *m_staffs[i];
         unsigned int barCount = m_hlayout->getBarLineCount(staff);
-        
+
         for (unsigned int j = 0; j < barCount; ++j) {
             if (m_hlayout->isBarLineVisible(staff, j)) {
                 xleft = m_hlayout->getBarLineX(staff, j);
                 break;
             }
         }
-        
+
         if (barCount > 0) {
             xright = m_hlayout->getBarLineX(staff, barCount - 1);
         }
@@ -1894,15 +1897,29 @@ void NotationView::readjustCanvasSize()
         totalHeight += staff.getStaffHeight() + 15;
     }
 
-    if (canvas()->width()  < totalWidth ||
-        canvas()->height() < totalHeight) {
+    // We want to avoid resizing the canvas too often, so let's make
+    // sure it's always an integer multiple of the view's dimensions
+    
+    int iWidth = (int)width(), iHeight = (int)height();
+    int widthMultiple = ((int)(totalWidth + 50) / iWidth) + 1;
+    int heightMultiple = ((int)(totalHeight + 50) / iHeight) + 1;
 
-        kdDebug(KDEBUG_AREA) << "NotationView::readjustCanvasWidth() to "
-                             << totalWidth << endl;
+    if (canvas()->width() < (widthMultiple * iWidth) ||
+	canvas()->height() < (heightMultiple * iHeight)) {
 
-        canvas()->resize(int(totalWidth) + 50, int(totalHeight) + 50);
+	cerr/*        kdDebug(KDEBUG_AREA)*/ << "NotationView::readjustCanvasWidth() to "
+					     << totalWidth << " (iWidth is " << iWidth << " so need width of " << (widthMultiple * iWidth) << ")" << endl;
+
+	canvas()->resize(std::max(widthMultiple * iWidth,
+				  (int)canvas()->width()),
+			 std::max(heightMultiple * iHeight,
+				  (int)canvas()->height()));
+
+//        canvas()->resize(int(totalWidth) + 50, int(totalHeight) + 50);
         m_ruler->resize();
     }
+
+    PRINT_ELAPSED("NotationView::readjustCanvasWidth total");
 }
 
 void
