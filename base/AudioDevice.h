@@ -22,6 +22,7 @@
 #include <string>
 
 #include "Device.h"
+#include "Instrument.h"
 
 // An AudioDevice defines Instruments where we can play our
 // audio Segments.
@@ -44,6 +45,10 @@ public:
 
     virtual void createInstruments();
     virtual void addInstrument(Instrument*);
+
+    // An untainted Instrument we can use for playing previews
+    //
+    InstrumentId getPreviewInstrument();
 
     // Turn into XML string
     //

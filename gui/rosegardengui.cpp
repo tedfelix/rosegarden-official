@@ -2618,6 +2618,16 @@ RosegardenGUIApp::slotAudioManager()
 
         connect(m_audioManagerDialog, SIGNAL(closeClicked()),
                 SLOT(slotAudioManagerClosed()));
+
+        connect(m_audioManagerDialog, SIGNAL(playAudioFile(unsigned int)),
+                SLOT(slotPlayAudioFile(unsigned int)));
+
+        connect(m_audioManagerDialog, SIGNAL(addAudioFile(unsigned int)),
+                SLOT(slotAddAudioFile(unsigned int)));
+
+        connect(m_audioManagerDialog, SIGNAL(deleteAudioFile(unsigned int)),
+                SLOT(slotDeleteAudioFile(unsigned int)));
+
         m_audioManagerDialog->show();
     }
 }
@@ -2627,6 +2637,77 @@ RosegardenGUIApp::slotAudioManagerClosed()
 {
     if (m_audioManagerDialog)
         m_audioManagerDialog = 0;
+}
+
+
+void
+RosegardenGUIApp::slotPlayAudioFile(unsigned int id)
+{
+    Rosegarden::AudioFile *aF = m_doc->getAudioFileManager().getAudioFile(id);
+
+    if (aF == 0)
+        return;
+
+    Rosegarden::MappedEvent *mE =
+        new Rosegarden::MappedEvent(m_doc->getStudio().
+                                        getAudioPreviewInstrument(),
+                                    id,
+                                    Rosegarden::RealTime(0, 0),  // start 
+                                    aF->getLength(),             // duration
+                                    Rosegarden::RealTime(0, 0)); // start index
+
+    m_seqManager->sendMappedEvent(mE);
+}
+
+// Add an audio file to the sequencer - the AudioManagerDialog has
+// already added it to the AudioFileManager.
+//
+void
+RosegardenGUIApp::slotAddAudioFile(unsigned int id)
+{
+    Rosegarden::AudioFile *aF = m_doc->getAudioFileManager().getAudioFile(id);
+
+    if (aF == 0)
+        return;
+
+    QCString replyType;
+    QByteArray replyData;
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    // We have to pass the filename as a QString
+    //
+    streamOut << QString(strtoqstr(aF->getFilename()));
+    streamOut << aF->getId();
+
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "addAudioFile(QString, int)", data, replyType, replyData))
+    {
+        std::cerr << "RosegardenGUIApp::slotAddAudioFile - "
+                  << "couldn't add audio file"
+                  << std::endl;
+        return;
+    }
+    else
+    {
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        int result;
+        streamIn >> result;
+        if (!result)
+        {
+            std::cerr << "RosegardenGUIApp::slotAddAudioFile - "
+                      << "failed to add file \""
+                      << aF->getFilename() << "\"" << endl;
+        }
+    }
+}
+
+void
+RosegardenGUIApp::slotDeleteAudioFile(unsigned int id)
+{
+    cout << "DELETE AUDIO FILE = " << id << endl;
+
 }
 
 

@@ -142,7 +142,7 @@ PeakFile::parseHeader()
                                      dateTime[5].toInt(),
                                      dateTime[6].toInt()));
 
-    printStats();
+    //printStats();
 
 }
 
@@ -303,7 +303,7 @@ PeakFile::isValid()
 
 bool
 PeakFile::writeToHandle(std::ofstream *file,
-                        unsigned short updatePercentage)
+                        unsigned short /*updatePercentage*/)
 {
     // Remember the position where we pass in the ofstream pointer
     // so we can return there to write close() information.
@@ -444,7 +444,7 @@ PeakFile::scanForward(int numberOfPeaks)
 
 void
 PeakFile::writePeaks(Progress *progress,
-                     unsigned short updatePercentage,
+                     unsigned short /*updatePercentage*/,
                      std::ofstream *file)
 {
     if(!file || !(*file)) return;
@@ -584,9 +584,10 @@ PeakFile::writePeaks(Progress *progress,
                 }
                 else
                 {
-                    //cout << "SAMPLE = " << (int)sampleValue << endl;
-                    if (showCount++ < 300)
+                    /*
+                    if (showCount++ < 10)
                         cout << "SAMPLES = " << sampleValue << endl;
+                    */
 
                     // Store maximum for this block
                     //
@@ -661,59 +662,27 @@ PeakFile::getPreview(const RealTime &startTime,
 {
     std::vector<float> ret;
 
-    /*
-    int startPeak = ((startIndex.sec * 1000000.0 + startIndex.usec) *
-                      m_audioFile->getSampleRate()) / (m_blockSize * 1000000);
-
-    RealTime sampleLength = m_audioFile->getLength() - startIndex;
-
-    int endPeak = ((sampleLength.sec * 1000000.0 + sampleLength.usec) *
-                      m_audioFile->getSampleRate()) / (m_blockSize * 1000000);
-
-    int endPreviewPeak = ((endIndex.sec * 1000000.0 + endIndex.usec) *
-                      m_audioFile->getSampleRate()) / (m_blockSize * 1000000);
-
-                      */
-
     double startPeak = getPeak(startTime);
     double endPeak = getPeak(endTime);
     double sampleEndPeak = getPeak(m_audioFile->getLength() - startTime);
-
-    /*
-    cout << "START INDEX = " << startIndex << endl;
-    cout << "SAMPLE LEN = " <<  sampleLength << endl;
-    cout << "END PREVIEW = " << endIndex << endl;
-    */
 
     // Sanity check
     if (startPeak > endPeak)
         return ret;
 
-    // actual possible sample length in RealTime
+    // Actual possible sample length in RealTime
     //
     double step = double(sampleEndPeak - startPeak) / double(width);
-
-    /*
-    cout << "SAMPLE LEN = " << sampleLength << endl;
-    cout << "STEP       = " << step << endl;
-    */
-
-
+    std::string peakData;
+    int peakNumber;
     float hiValue = 0.0f;
     float loValue = 0.0f;
-
-    std::string peakData;
 
     cout << "PeakFile::getPreview - getting preview for \""
               << m_audioFile->getFilename() << "\"" << endl;
 
-    // Walk through the peak values 
+    // Get a divisor
     //
-    /*
-    cout << "START = " << startPeak << endl;
-    cout << "END   = " << endPeak << endl;
-    */
-
     float divisor = 0.0f;
     switch(m_format)
     {
@@ -732,21 +701,14 @@ PeakFile::getPreview(const RealTime &startTime,
             return ret;
     }
 
-    int peakNumber;
-
     for (int i = 0; i < width; i++)
     {
-        //int peakNumber = startPeak + (int)(step * double(i));
         peakNumber = int(startPeak + (i * step));
 
         // Seek to value
         //
         if (scanToPeak(peakNumber) == false)
             ret.push_back(0.0f);
-
-        cout << "PEAK = " << peakNumber << endl;
-        cout << "SCAN = " << m_inFile->tellg() << endl;
-
 
         hiValue = 0.0f;
         loValue = 0.0f;
@@ -764,14 +726,17 @@ PeakFile::getPreview(const RealTime &startTime,
                 // Problem with the get - probably an EOF
                 // return the results so far.
                 //
+                /*
                 cout << "PeakFile::getPreview - \"" << e << "\"\n"
                           << endl;
+                */
                 return ret;
             }
 
-            if (peakData.length() == m_format * m_pointsPerValue)
+            if (peakData.length() == (unsigned int)(m_format *
+                                                    m_pointsPerValue))
             {
-                int intDivisor = divisor;
+                int intDivisor = int(divisor);
                 int inValue =
                     getIntegerFromLittleEndian(peakData.substr(0, m_format));
 
@@ -804,8 +769,10 @@ PeakFile::getPreview(const RealTime &startTime,
             }
         }
 
+        /*
         cout << "READING HI VALUE = " << hiValue/float(m_channels) << endl;
         cout << "READING LO VALUE = " << loValue/float(m_channels) << endl;
+        */
 
         hiValue /= (divisor * (float)m_channels);
         loValue /= (divisor * (float)m_channels);
@@ -854,124 +821,6 @@ PeakFile::drawPixmap(const RealTime &startTime,
 
     return;
 
-
-    /*
-    cout << "PeakFile::drawPixmap" << endl;
-
-    double startPeak = getPeak(startTime);
-    double endPeak = getPeak(endTime);
-    double sampleEndPeak = getPeak(m_audioFile->getLength() - startTime);
-
-    cout << "START PEAK = " << startPeak << endl;
-    cout << "END PEAK   = " <<  endPeak << endl;
-    cout << "SAMPLE END = " << sampleEndPeak << endl;
-
-    RealTime sampleEndTime = m_audioFile->getLength();
-    int peakNumber = 0;
-
-    double step = (endPeak - startPeak) / double(pixmap->width());
-
-    double xStep = 1.0 / step;
-    double yStep = pixmap->height() / 2;
-
-    double hiValue = 0.0f;
-    double loValue = 0.0f;
-
-    QPainter painter(pixmap);
-    pixmap->fill(kapp->palette().color(QPalette::Active,
-                                       QColorGroup::Base));
-    painter.setPen(Qt::black);
-    std::string peakData;
-
-    double divisor = 0.0f;
-    switch(m_format)
-    {
-        case 1:
-            //divisor = SAMPLE_MAX_8BIT;
-            divisor = 0xFF;
-            break;
-
-        case 2:
-            divisor = SAMPLE_MAX_16BIT;
-            break;
-
-        default:
-            cerr << "PeakFile::getPreview - unsupported peak length format"
-                      << endl;
-            return;
-    }
-
-    double value;
-
-    for (int i = 0; i < pixmap->width(); i++)
-    {
-        peakNumber = int(startPeak + (i * step));
-
-        // If we've gone passed the end of the sample then don't
-        // paint on the pixmap any more
-        if (scanToPeak(peakNumber) == false)
-            break;
-
-        hiValue = 0.0f;
-        loValue = 0.0f;
-
-        for (int j = 0; j < m_channels; j++)
-        {
-            try
-            {
-                peakData = getBytes(m_inFile, m_format * m_pointsPerValue);
-            }
-            catch(std::string e)
-            {
-                cout << "PeakFile::drawPixmap - \"" << e << "\"" << endl;
-            }
-
-            if (peakData.length() == m_format * m_pointsPerValue)
-            {
-                int intDivisor = divisor;
-                int inValue =
-                    getIntegerFromLittleEndian(peakData.substr(0, m_format));
-
-                if (inValue > intDivisor)
-                    inValue = intDivisor - inValue;
-
-                hiValue += float(inValue);
-
-                if (m_pointsPerValue == 2)
-                {
-                    inValue = 
-                        getIntegerFromLittleEndian(
-                                peakData.substr(m_format, m_format));
-
-                    if (inValue > intDivisor)
-                        inValue = intDivisor - inValue;
-
-                    loValue += float(inValue);
-                }
-            }
-            else
-            {
-                // We didn't get the whole peak block - return what
-                // we've got so far
-                //
-                cerr << "PeakFile::getPreview - "
-                     << "failed to get complete peak block"
-                     << endl;
-            }
-        }
-
-        hiValue /= (divisor * (float)m_channels);
-        loValue /= (divisor * (float)m_channels);
-
-        value = fabs(hiValue);
-
-        // Draw the line
-        //
-        painter.drawLine(i, yStep + value * yStep,
-                         i, yStep - value * yStep);
-
-    }
-*/
 }
 
 double

@@ -543,7 +543,7 @@ RIFFAudioFile::readFormatChunk()
         // ignore any overlapping bytes 
         m_inFile->seekg(lengthOfFormat - 0x10, std::ios::cur);
     }
-    else
+    else if (lengthOfFormat < 0x10)
     {
         std::cerr << "RIFFAudioFile::readFormatChunk - "
                   << "truncated Format Chunk (" << lengthOfFormat << ")"

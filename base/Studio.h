@@ -112,6 +112,10 @@ public:
     //
     virtual std::string toXmlString();
 
+    // Get an audio preview Instrument
+    //
+    InstrumentId getAudioPreviewInstrument();
+
 private:
 
     DeviceList m_devices;

@@ -732,10 +732,14 @@ public slots:
     void slotTestClipboard();
 
     /**
-     * View the audio file manager
+     * View the audio file manager - and some associated actions
      */
     void slotAudioManager();
     void slotAudioManagerClosed();
+
+    void slotAddAudioFile(unsigned int);
+    void slotDeleteAudioFile(unsigned int);
+    void slotPlayAudioFile(unsigned int);
 
 private:
 

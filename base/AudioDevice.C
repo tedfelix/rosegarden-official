@@ -102,6 +102,13 @@ AudioDevice::addInstrument(Instrument *instrument)
     m_instruments.push_back(instrument);
 }
 
+// For the moment just use the first audio Instrument
+//
+InstrumentId
+AudioDevice::getPreviewInstrument()
+{
+    return AudioInstrumentBase;
+}
 
 }
 

@@ -430,6 +430,30 @@ Studio::getSegmentName(InstrumentId id)
     return std::string("");
 }
 
+InstrumentId
+Studio::getAudioPreviewInstrument()
+{
+    AudioDevice *audioDevice;
+    std::vector<Device*>::iterator it;
+
+    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    {
+        audioDevice = dynamic_cast<AudioDevice*>(*it);
+
+        // Just the first one will do - we can make this more
+        // subtle if we need to later.
+        //
+        if (audioDevice)
+            return audioDevice->getPreviewInstrument();
+    }
+
+    // system instrument -  won't accept audio
+    return 0;
+}
+
+
+
+
 }
 
 
