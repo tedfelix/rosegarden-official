@@ -124,6 +124,9 @@ TracksEditor::init(unsigned int nbTracks, unsigned int nbBars)
     QObject::connect(m_tracksCanvas, SIGNAL(resizeTrack(Rosegarden::Track*)),
                      this,           SLOT(resizeTrack(Rosegarden::Track*)));
 
+    QObject::connect(m_tracksCanvas, SIGNAL(updateTrackInstrument(TrackItem*)),
+                     this,           SLOT(updateTrackInstrument(TrackItem*)));
+
 }
 
 void
@@ -175,6 +178,8 @@ TracksEditor::addTrack(TrackItem *p)
 {
     // find instrument for part
     //
+    emit createNewTrack(p);
+
     int instrument = m_vHeader->sectionAt(static_cast<int>(p->y()));
     p->setInstrument(instrument);
 
@@ -182,7 +187,6 @@ TracksEditor::addTrack(TrackItem *p)
         .arg(instrument).arg(p->y())
                          << ", p = " << p << endl;
 
-    emit createNewTrack(p);
 }
 
 void
@@ -205,6 +209,15 @@ TracksEditor::resizeTrack(Rosegarden::Track *p)
     kdDebug(KDEBUG_AREA) << "TracksEditor::resizeTrack() : not implemented\n";
 }
 
+void
+TracksEditor::updateTrackInstrument(TrackItem *i)
+{
+    int instrument = m_vHeader->sectionAt(i->y());
+
+    kdDebug(KDEBUG_AREA) << "TracksEditor::updateTrackInstrument() : set instrument to " << instrument << endl;
+
+    i->setInstrument(instrument);
+}
 
 bool
 TracksEditor::moveTrack(int /*section*/, int /*fromIdx*/, int /*toIdx*/)

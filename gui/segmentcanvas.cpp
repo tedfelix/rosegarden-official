@@ -69,6 +69,17 @@ void TrackItem::setWidthToLengthRatio(unsigned int r)
     m_widthToLengthRatio = r;
 }
 
+int TrackItem::getInstrument() const
+{
+    return m_track->getInstrument();
+}
+
+void TrackItem::setInstrument(int i)
+{
+    m_track->setInstrument(i);
+}
+
+
 unsigned int TrackItem::m_widthToLengthRatio = 1;
 
 
@@ -373,6 +384,9 @@ TrackMover::TrackMover(TracksCanvas *c)
 {
     m_canvas->setCursor(Qt::pointingHandCursor);
 
+    connect(this, SIGNAL(updateTrackInstrument(TrackItem*)),
+            c,    SIGNAL(updateTrackInstrument(TrackItem*)));
+
     kdDebug(KDEBUG_AREA) << "TrackMover()\n";
 }
 
@@ -392,6 +406,7 @@ void TrackMover::handleMouseButtonRelase(QMouseEvent*)
         m_currentItem->getTrack()->setStartIndex(m_currentItem->x() / m_canvas->grid().hstep());
         kdDebug(KDEBUG_AREA) << "TrackMover::handleMouseButtonRelase() : set part start time to "
                              << m_currentItem->getTrack()->getStartIndex() << endl;
+        emit updateTrackInstrument(m_currentItem);
     }
 
     m_currentItem = 0;
@@ -401,6 +416,7 @@ void TrackMover::handleMouseMove(QMouseEvent *e)
 {
     if (m_currentItem) {
         m_currentItem->setX(m_canvas->grid().snapX(e->pos().x()));
+        m_currentItem->setY(m_canvas->grid().snapY(e->pos().y()));
         m_canvas->canvas()->update();
     }
 }

@@ -36,8 +36,8 @@ public:
     unsigned int getLength() const;
     unsigned int getStartIndex() const;
 
-    int  getInstrument() const { return m_instrument; }
-    void setInstrument(int i)  { m_instrument = i; }
+    int  getInstrument() const;
+    void setInstrument(int i);
 
     void setTrack(Rosegarden::Track *p)  { m_track = p; }
     Rosegarden::Track* getTrack() const  { return m_track; }
@@ -123,6 +123,7 @@ signals:
     void addTrack(TrackItem*);
     void deleteTrack(Rosegarden::Track*);
     void resizeTrack(Rosegarden::Track*);
+    void updateTrackInstrument(TrackItem*);
     void editTrack(Rosegarden::Track*);
     void editTrackSmall(Rosegarden::Track*);
 
@@ -201,12 +202,16 @@ signals:
 
 class TrackMover : public TrackTool
 {
+    Q_OBJECT
 public:
     TrackMover(TracksCanvas*);
 
     virtual void handleMouseButtonPress(QMouseEvent*);
     virtual void handleMouseButtonRelase(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
+
+signals:
+    void updateTrackInstrument(TrackItem*);
 };
 
 /**
