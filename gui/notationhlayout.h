@@ -22,7 +22,6 @@
 #define NOTATIONHLAYOUT_H
 
 #include "layoutengine.h"
-//#include "quantizer.h"
 #include "notationelement.h"
 #include "staff.h"
 
@@ -99,25 +98,3 @@ protected:
     BarDataList m_barData;
 };
 
-#ifdef NOT_DEFINED
-
-// Looks like we don't need this at the moment but I'd rather keep it around just in case
-class ElementHPos
-{
-public:
-    ElementHPos(unsigned int p=0) : pos(p) {}
-    ElementHPos(unsigned int p, NotationElementList::iterator i) : pos(p), it(i) {}
-
-    ElementHPos& operator=(const ElementHPos &h) { pos = h.pos; it = h.it; return *this; }
-
-    unsigned int pos;
-    NotationElementList::iterator it;
-};
-
-inline bool operator<(const ElementHPos &h1, const ElementHPos &h2) { return h1.pos < h2.pos; }
-inline bool operator>(const ElementHPos &h1, const ElementHPos &h2) { return h1.pos > h2.pos; }
-inline bool operator==(const ElementHPos &h1, const ElementHPos &h2) { return h1.pos == h2.pos; }
-
-#endif
-
-#endif
