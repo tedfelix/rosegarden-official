@@ -330,7 +330,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotEditTempo()),
                 actionCollection(), "add_tempo");
 
-    new KAction(i18n("Edit Document Properties"), 0, this,
+    new KAction(i18n("Document Properties"), 0, this,
                 SLOT(slotEditDocumentProperties()),
                 actionCollection(), "edit_doc_properties");
 
