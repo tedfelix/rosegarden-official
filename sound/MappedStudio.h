@@ -140,6 +140,7 @@ public:
     // Ownership
     //
     MappedObject* getParent() { return m_parent; }
+    const MappedObject* getParent() const { return m_parent; }
     void setParent(MappedObject *parent) { m_parent = parent; }
 
     // Get a list of child ids - get a list of a certain type
@@ -279,6 +280,7 @@ public:
     // initialise plugins etc.
     //
     Rosegarden::Sequencer* getSequencer() { return m_sequencer; }
+    const Rosegarden::Sequencer* getSequencer() const { return m_sequencer; }
     void setSequencer(Rosegarden::Sequencer *sequencer)
         { m_sequencer = sequencer; }
 
@@ -620,6 +622,8 @@ public:
     virtual void clone(MappedObject *object);
 
 protected:
+    unsigned int getSampleRate() const;
+
     std::string           m_portName;
     LADSPA_PortRangeHint  m_portRangeHint;
     LADSPA_PortDescriptor m_portDescriptor;

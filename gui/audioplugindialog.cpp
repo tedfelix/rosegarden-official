@@ -423,7 +423,7 @@ PluginControl::PluginControl(QWidget *parent,
                                       step,         // step
                                       pageStep,     // page step
                                       initialValue, // initial
-                                      29,           // size
+                                      30,           // size
 				      ticks,
 				      snapToTicks);
 

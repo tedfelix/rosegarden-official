@@ -1228,7 +1228,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 		 smallStep,
 		 bigStep,
 		 it->getDefault(),
-		 21);
+		 20);
 
 	    rotary->setKnobColour(knobColour);
 

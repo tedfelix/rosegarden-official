@@ -1210,8 +1210,6 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
 
     else if (property == MappedAudioPluginManager::PluginIds)
     {
-
-
         // get the list of plugin ids
         //
         MappedStudio *studio = dynamic_cast<MappedStudio*>(m_parent);
@@ -1304,10 +1302,7 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
                 plugin = dynamic_cast<MappedLADSPAPlugin*>
                             (studio->getNext(plugin));
             }
-
-	    std::cerr << "found a plugin, next is " << plugin << std::endl;
         }
-
     }
 
 #endif // HAVE_LADSPA
@@ -2215,7 +2210,7 @@ MappedLADSPAPort::getProperty(const MappedObjectProperty &property,
 			      MappedObjectValue &value)
 {
     if (property == Default) {
-	value = m_default;
+	value = getDefault();
     } else if (property == Value) {
 	value = m_value;
     } else {
@@ -2277,35 +2272,71 @@ MappedLADSPAPort::clone(MappedObject *object)
     object->setProperty(MappedLADSPAPort::Value, m_value);
 }
 
+unsigned int
+MappedLADSPAPort::getSampleRate() const
+{
+    const MappedObject *parent = getParent();
+    const MappedStudio *studio = 0;
+
+    while (parent && !(studio = dynamic_cast<const MappedStudio *>(parent)))
+	parent = parent->getParent();
+
+    // The normal case is for the studio and its sequencer to exist;
+    // these 48K returns are just to be on the safe side
+
+    if (!studio) return 48000;
+
+    const Sequencer *seq = studio->getSequencer();
+    if (!seq) return 48000;
+
+    return seq->getSampleRate();
+}
+
 MappedObjectValue
 MappedLADSPAPort::getMinimum() const
 {
     LADSPA_PortRangeHintDescriptor d = m_portRangeHint.HintDescriptor;
+
+    MappedObjectValue val = 0.0;
     
     if (LADSPA_IS_HINT_BOUNDED_BELOW(d)) {
-	return m_portRangeHint.LowerBound;
+
+	val = m_portRangeHint.LowerBound;
+
     } else if (LADSPA_IS_HINT_BOUNDED_ABOVE(d)) {
 	if (m_haveDefault) {
-	    return std::min(0.0, std::min(m_portRangeHint.UpperBound,
-					  m_default) - 1.0);
+	    val = std::min(0.0, std::min(m_portRangeHint.UpperBound,
+					 m_default) - 1.0);
 	} else {
-	    return std::min(0.0, m_portRangeHint.UpperBound - 1.0);
+	    val = std::min(0.0, m_portRangeHint.UpperBound - 1.0);
 	}
-    } else {
-	return 0.0;
     }
+
+    if (LADSPA_IS_HINT_SAMPLE_RATE(d)) {
+	val *= getSampleRate();
+    }
+
+    return val;
 }
 
 MappedObjectValue
 MappedLADSPAPort::getMaximum() const
 {
     LADSPA_PortRangeHintDescriptor d = m_portRangeHint.HintDescriptor;
+
+    MappedObjectValue val = 0.0;
     
     if (LADSPA_IS_HINT_BOUNDED_ABOVE(d)) {
-	return m_portRangeHint.UpperBound;
+	val = m_portRangeHint.UpperBound;
     } else {
-	return getMinimum() + 1.0;
+	val = getMinimum() + 1.0;
     }
+
+    if (LADSPA_IS_HINT_SAMPLE_RATE(d)) {
+	val *= getSampleRate();
+    }
+
+    return val;
 }
 
 MappedObjectValue
@@ -2318,6 +2349,7 @@ MappedLADSPAPort::getDefault() const
 
     LADSPA_PortRangeHintDescriptor d = m_portRangeHint.HintDescriptor;
     LADSPA_Data min = getMinimum(), max = getMaximum();
+    MappedObjectValue val = 0.0;
 
 #ifdef DEBUG_MAPPEDSTUDIO
     std::cerr << "MappedLADSPAPort::getDefault: min is " << min
@@ -2330,73 +2362,81 @@ MappedLADSPAPort::getDefault() const
 #ifdef DEBUG_MAPPEDSTUDIO
 	std::cerr << "MappedLADSPAPort::getDefault: no default" << std::endl;
 #endif
-	return min;
-    }
+	val = min;
 
-    if (LADSPA_IS_HINT_DEFAULT_MINIMUM(d)) {
+    } else if (LADSPA_IS_HINT_DEFAULT_MINIMUM(d)) {
+
 #ifdef DEBUG_MAPPEDSTUDIO
 	std::cerr << "MappedLADSPAPort::getDefault: min default" << std::endl;
 #endif
-	return min;
-    }
+	val = min;
 
-    if (LADSPA_IS_HINT_DEFAULT_LOW(d)) {
+    } else if (LADSPA_IS_HINT_DEFAULT_LOW(d)) {
+
 #ifdef DEBUG_MAPPEDSTUDIO
 	std::cerr << "MappedLADSPAPort::getDefault: low default" << std::endl;
 #endif
 	if (logarithmic) {
-	    return powf(10, log10(min) * 0.75 + log10(max) * 0.25);
+	    val = powf(10, log10(min) * 0.75 + log10(max) * 0.25);
 	} else {
-	    return min * 0.75 + max * 0.25;
+	    val = min * 0.75 + max * 0.25;
 	}
-    }
 
-    if (LADSPA_IS_HINT_DEFAULT_MIDDLE(d)) {
+    } else if (LADSPA_IS_HINT_DEFAULT_MIDDLE(d)) {
+
 #ifdef DEBUG_MAPPEDSTUDIO
 	std::cerr << "MappedLADSPAPort::getDefault: middle default" << std::endl;
 #endif
 	if (logarithmic) {
-	    return powf(10, log10(min) * 0.5 + log10(max) * 0.5);
+	    val = powf(10, log10(min) * 0.5 + log10(max) * 0.5);
 	} else {
-	    return min * 0.5 + max * 0.5;
+	    val = min * 0.5 + max * 0.5;
 	}
-    }
 
-    if (LADSPA_IS_HINT_DEFAULT_HIGH(d)) {
+    } else if (LADSPA_IS_HINT_DEFAULT_HIGH(d)) {
+
 #ifdef DEBUG_MAPPEDSTUDIO
 	std::cerr << "MappedLADSPAPort::getDefault: high default" << std::endl;
 #endif
 	if (logarithmic) {
-	    return powf(10, log10(min) * 0.25 + log10(max) * 0.75);
+	    val = powf(10, log10(min) * 0.25 + log10(max) * 0.75);
 	} else {
-	    return min * 0.25 + max * 0.75;
+	    val = min * 0.25 + max * 0.75;
 	}
-    }
 
-    if (LADSPA_IS_HINT_DEFAULT_MAXIMUM(d)) {
+    } else if (LADSPA_IS_HINT_DEFAULT_MAXIMUM(d)) {
+
 #ifdef DEBUG_MAPPEDSTUDIO
 	std::cerr << "MappedLADSPAPort::getDefault: max default" << std::endl;
 #endif
-	return max;
+	val = max;
+
+    } else if (LADSPA_IS_HINT_DEFAULT_0(d)) {
+
+	val = 0.0;
+
+    } else if (LADSPA_IS_HINT_DEFAULT_1(d)) {
+
+	val = 1.0;
+
+    } else if (LADSPA_IS_HINT_DEFAULT_100(d)) {
+
+	val = 100.0;
+
+    } else if (LADSPA_IS_HINT_DEFAULT_440(d)) {
+
+	val = 440.0;
+
+    } else {
+
+	val = min;
     }
 
-    if (LADSPA_IS_HINT_DEFAULT_0(d)) {
-	return 0.0;
+    if (LADSPA_IS_HINT_SAMPLE_RATE(d)) {
+	val *= getSampleRate();
     }
 
-    if (LADSPA_IS_HINT_DEFAULT_1(d)) {
-	return 1.0;
-    }
-
-    if (LADSPA_IS_HINT_DEFAULT_100(d)) {
-	return 100.0;
-    }
-
-    if (LADSPA_IS_HINT_DEFAULT_440(d)) {
-	return 440.0;
-    }
-
-    return min;
+    return val;
 }
 
 PluginPort::PortDisplayHint
