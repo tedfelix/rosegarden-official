@@ -411,7 +411,7 @@ int main(int argc, char *argv[])
     // (this code borrowed from KDevelop 2.0,
     // (c) The KDevelop Development Team
     //
-    KConfig* config = KGlobal::config();
+    KConfig* config = kapp->config();
     config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
     KStartupLogo* startLogo = 0L;
 

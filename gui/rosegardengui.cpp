@@ -105,7 +105,6 @@ using Rosegarden::RosegardenTransportDialog;
 RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
                                    QObject *startupStatusMessageReceiver)
     : KMainWindow(0), RosegardenIface(this), DCOPObject("RosegardenIface"),
-      m_config(kapp->config()),
       m_actionsSetup(false),
       m_fileRecent(0),
       m_view(0),
@@ -190,12 +189,11 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     if (m_doc->getStudio().getMidiDevice(0) == 0)
         stateChanged("got_midi_devices");
 
-    // All toolbars should be created before this is called
-    m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
-    setAutoSaveSettings("MainView", true);
-
     emit startupStatusMessage(i18n("Starting..."));
     readOptions();
+    // All toolbars should be created before this is called
+    kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+    setAutoSaveSettings("MainView", true);
 
 }
 
@@ -1056,20 +1054,20 @@ void RosegardenGUIApp::slotSaveOptions()
 {
     RG_DEBUG << "RosegardenGUIApp::slotSaveOptions()\n";
 
-    m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
-    m_config->writeEntry("Show Transport",               m_viewTransport->isChecked());
-    m_config->writeEntry("Expanded Transport",           m_transport->isExpanded());
-    m_config->writeEntry("Show Track labels",            m_viewTrackLabels->isChecked());
-    m_config->writeEntry("Show Segment Parameters",      m_viewSegmentParameters->isChecked());
-    m_config->writeEntry("Show Instrument Parameters",   m_viewInstrumentParameters->isChecked());
-    m_config->writeEntry("Show Rulers",                  m_viewRulers->isChecked());
-    m_config->writeEntry("Show Tempo Ruler",             m_viewTempoRuler->isChecked());
-    m_config->writeEntry("Show Chord Name Ruler",        m_viewChordNameRuler->isChecked());
-    m_config->writeEntry("Show Previews",                m_viewPreviews->isChecked());
+    kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+    kapp->config()->writeEntry("Show Transport",               m_viewTransport->isChecked());
+    kapp->config()->writeEntry("Expanded Transport",           m_transport->isExpanded());
+    kapp->config()->writeEntry("Show Track labels",            m_viewTrackLabels->isChecked());
+    kapp->config()->writeEntry("Show Segment Parameters",      m_viewSegmentParameters->isChecked());
+    kapp->config()->writeEntry("Show Instrument Parameters",   m_viewInstrumentParameters->isChecked());
+    kapp->config()->writeEntry("Show Rulers",                  m_viewRulers->isChecked());
+    kapp->config()->writeEntry("Show Tempo Ruler",             m_viewTempoRuler->isChecked());
+    kapp->config()->writeEntry("Show Chord Name Ruler",        m_viewChordNameRuler->isChecked());
+    kapp->config()->writeEntry("Show Previews",                m_viewPreviews->isChecked());
 
-    m_fileRecent->saveEntries(m_config);
+    m_fileRecent->saveEntries(kapp->config());
 
-    m_config->sync();
+    kapp->config()->sync();
 }
 
 
@@ -1087,51 +1085,53 @@ void RosegardenGUIApp::readOptions()
 
     bool opt;
 
-    m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
+    kapp->config()->setGroup(Rosegarden::GeneralOptionsConfigGroup);
 
-    opt = m_config->readBoolEntry("Show Transport", true);
+    opt = kapp->config()->readBoolEntry("Show Transport", true);
     m_viewTransport->setChecked(opt);
     slotToggleTransport();
 
-    opt = m_config->readBoolEntry("Expanded Transport", false);
+    opt = kapp->config()->readBoolEntry("Expanded Transport", false);
     if(opt)
         m_transport->slotPanelOpenButtonReleased();
     else
         m_transport->slotPanelCloseButtonReleased();
 
-    opt = m_config->readBoolEntry("Show Track labels", true);
+    opt = kapp->config()->readBoolEntry("Show Track labels", true);
     m_viewTrackLabels->setChecked(opt);
     slotToggleTrackLabels();
 
-    opt = m_config->readBoolEntry("Show Segment Parameters", false);
+    opt = kapp->config()->readBoolEntry("Show Segment Parameters", false);
     m_viewSegmentParameters->setChecked(opt);
     slotToggleSegmentParameters();
 
-    opt = m_config->readBoolEntry("Show Instrument Parameters", false);
+    RG_DEBUG << "RosegardenGUIApp::readOptions() : hasKey 'Show Segment Parameters' : " << kapp->config()->hasKey("Show Segment Parameters") << endl;
+
+    opt = kapp->config()->readBoolEntry("Show Instrument Parameters", false);
     m_viewInstrumentParameters->setChecked(opt);
     slotToggleInstrumentParameters();
 
-    opt = m_config->readBoolEntry("Show Rulers", false);
+    opt = kapp->config()->readBoolEntry("Show Rulers", false);
     m_viewRulers->setChecked(opt);
     slotToggleRulers();
 
-    opt = m_config->readBoolEntry("Show Tempo Ruler", false);
+    opt = kapp->config()->readBoolEntry("Show Tempo Ruler", false);
     m_viewTempoRuler->setChecked(opt);
     slotToggleTempoRuler();
 
-    opt = m_config->readBoolEntry("Show Chord Name Ruler", false);
+    opt = kapp->config()->readBoolEntry("Show Chord Name Ruler", false);
     m_viewChordNameRuler->setChecked(opt);
     slotToggleChordNameRuler();
 
-    opt = m_config->readBoolEntry("Show Previews", false);
+    opt = kapp->config()->readBoolEntry("Show Previews", false);
     m_viewPreviews->setChecked(opt);
     slotTogglePreviews();
 
     // initialise the recent file list
     //
-    m_fileRecent->loadEntries(m_config);
+    m_fileRecent->loadEntries(kapp->config());
 
-    QSize size(m_config->readSizeEntry("Geometry"));
+    QSize size(kapp->config()->readSizeEntry("Geometry"));
 
     if(!size.isEmpty()) {
         resize(size);
@@ -3449,7 +3449,7 @@ void RosegardenGUIApp::slotConfigure()
     RG_DEBUG << "RosegardenGUIApp::slotConfigure\n";
 
     Rosegarden::ConfigureDialog *configDlg = 
-        new Rosegarden::ConfigureDialog(m_doc, m_config, this);
+        new Rosegarden::ConfigureDialog(m_doc, kapp->config(), this);
 
     connect(configDlg, SIGNAL(updateAutoSaveInterval(unsigned int)),
             this, SLOT(slotUpdateAutoSaveInterval(unsigned int)));
