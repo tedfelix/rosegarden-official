@@ -518,7 +518,12 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 
     static int unknownCounter;
     static int counters[3][2]; // [system/hardware/software][out/in]
-    static const char *names[3][2] = {
+    static const char *firstNames[3][2] = {
+	{ "MIDI output system device", "MIDI input system device" },
+	{ "MIDI hardware synth", "MIDI hardware input device" },
+	{ "MIDI soft synth", "MIDI software input" }
+    };
+    static const char *countedNames[3][2] = {
 	{ "MIDI output system device %d", "MIDI input system device %d" },
 	{ "MIDI hardware synth %d", "MIDI hardware input device %d" },
 	{ "MIDI soft synth %d", "MIDI software input %d" }
@@ -537,9 +542,14 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 	int type = (port->m_client <  64 ? SYSTEM :
 		    port->m_client < 128 ? HARDWARE : SOFTWARE);
 
-	sprintf(clientId,
-		names[type][requestedDirection],
-		++counters[type][requestedDirection]);
+	if (counters[type][requestedDirection] == 0) {
+	    sprintf(clientId, firstNames[type][requestedDirection]);
+	    ++counters[type][requestedDirection];
+	} else {
+	    sprintf(clientId,
+		    countedNames[type][requestedDirection],
+		    ++counters[type][requestedDirection]);
+	}
 
 	m_devicePortMap[m_deviceRunningId] = ClientPortPair(port->m_client,
 							    port->m_port);
@@ -673,19 +683,59 @@ AlsaDriver::getPortName(ClientPortPair port)
     
 
 unsigned int
-AlsaDriver::getConnections(DeviceId)
+AlsaDriver::getConnections(DeviceId id)
 {
-    return m_alsaPorts.size();
+    // return connections of the correct direction
+    
+    for (unsigned int i = 0; i < m_devices.size(); ++i) {
+
+	if (m_devices[i]->getId() == id) {
+
+	    MidiDevice::DeviceDirection direction = m_devices[i]->getDirection();
+
+	    int count = 0;
+	    for (unsigned int j = 0; j < m_alsaPorts.size(); ++j) {
+		if ((direction == MidiDevice::Play && m_alsaPorts[j]->isWriteable()) ||
+		    (direction == MidiDevice::Record && m_alsaPorts[j]->isReadable())) {
+		    ++count;
+		}
+	    }
+
+	    return count;
+	}
+    }
+
+    return 0;
 }
 
 QString
-AlsaDriver::getConnection(DeviceId, unsigned int connectionNo)
+AlsaDriver::getConnection(DeviceId id, unsigned int connectionNo)
 {
-    //!!! We should really only return ports of the same direction
-    // (i.e. duplex or read-only ports for input devices, duplex
-    // or write-only for output)
-    if (connectionNo >= m_alsaPorts.size()) return "";
-    return QString(m_alsaPorts[connectionNo]->m_name.c_str());
+    // return connections of the correct direction
+    
+    for (unsigned int i = 0; i < m_devices.size(); ++i) {
+
+	if (m_devices[i]->getId() == id) {
+
+	    MidiDevice::DeviceDirection direction = m_devices[i]->getDirection();
+
+	    AlsaPortList tempList;
+	    for (unsigned int j = 0; j < m_alsaPorts.size(); ++j) {
+		if ((direction == MidiDevice::Play && m_alsaPorts[j]->isWriteable()) ||
+		    (direction == MidiDevice::Record && m_alsaPorts[j]->isReadable())) {
+		    tempList.push_back(m_alsaPorts[j]);
+		}
+	    }
+
+	    if (connectionNo >= 0 && connectionNo < tempList.size()) {
+		return tempList[connectionNo]->m_name.c_str();
+	    } else {
+		return "";
+	    }
+	}
+    }
+
+    return "";
 }
 
 void

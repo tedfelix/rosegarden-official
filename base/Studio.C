@@ -524,7 +524,7 @@ Studio::getSegmentName(InstrumentId id)
                     }
                     else
                     {
-                        return (*iit)->getName();
+                        return midiDevice->getName() + " " + (*iit)->getName();
                     }
                 }
             }

@@ -94,7 +94,6 @@ ArtsDriver::generateInstruments()
         MappedInstrument *instr = new MappedInstrument(Instrument::Midi,
                                                        channel,
                                                        m_midiRunningId++,
-                                                       0,
                                                        channelName,
                                                        m_deviceRunningId);
         m_instruments.push_back(instr);
@@ -111,7 +110,6 @@ ArtsDriver::generateInstruments()
         MappedInstrument *instr = new MappedInstrument(Instrument::Audio,
                                                        channel,
                                                        m_audioRunningId++,
-                                                       0,
                                                        channelName,
                                                        m_deviceRunningId);
         m_instruments.push_back(instr);

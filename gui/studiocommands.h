@@ -113,3 +113,24 @@ protected:
 };
 
 
+// because ModifyDeviceCommand is overkill for this
+
+class RenameDeviceCommand : public KNamedCommand
+{
+public:
+    RenameDeviceCommand(Rosegarden::Studio *studio,
+			Rosegarden::DeviceId deviceId,
+			std::string name);
+
+    static QString getGlobalName() { return i18n("Rename Device"); }
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    Rosegarden::Studio *m_studio;
+    Rosegarden::DeviceId m_deviceId;
+    std::string m_name;
+};
+
+
