@@ -681,14 +681,12 @@ void RosegardenGUIApp::setupActions()
     // Tracks menu
     //
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/add_tracks.xpm"));
-    new KAction(i18n("&Add Tracks..."), icon,  
-                0,
+    new KAction(i18n("&Add Tracks..."), icon, CTRL + Key_T,
                 this, SLOT(slotAddTracks()),
                 actionCollection(), "add_tracks");
 
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/delete_track.xpm"));
-    new KAction(i18n("&Delete Track"), icon, 
-                0,
+    new KAction(i18n("&Delete Track"), icon, CTRL + Key_D,
                 this, SLOT(slotDeleteTrack()),
                 actionCollection(), "delete_track");
 

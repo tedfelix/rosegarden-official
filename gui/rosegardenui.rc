@@ -276,6 +276,9 @@
 </State>
 
 <State name="audio_segment_selected">
+     <enable>
+        <Action name="set_tempo_to_segment_length"/>
+     </enable>
       <disable>
         <Action name="edit_default"/>
         <Action name="edit_notation"/>
@@ -285,7 +288,6 @@
         <Action name="rescale"/>
         <Action name="split_by_pitch"/>
         <Action name="collapse"/>
-        <Action name="set_tempo_to_segment_length"/>
         <Action name="repeats_to_real_copies"/>
      </disable>
 </State>
