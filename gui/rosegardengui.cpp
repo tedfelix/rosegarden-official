@@ -914,6 +914,11 @@ RosegardenGUIApp::getSequencerSlice(const Rosegarden::timeT &sliceStart,
 
         Rosegarden::SegmentPerformanceHelper helper(**i);
 
+        // Skip segment if the track is muted
+        //
+        if (m_doc->getComposition().getTrackByIndex((*i)->getTrack())->isMuted())
+            continue;
+
         for ( Rosegarden::Segment::iterator j = (*i)->begin();
                                           j != (*i)->end(); j++ )
         {

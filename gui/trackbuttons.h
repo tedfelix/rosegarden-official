@@ -69,14 +69,14 @@ public:
     //
     list<int> mutedTracks();
 
-    // Set the buttons
-    //
-    void setRecordTrack(const int &recordTrack);
-    void setMutedTrack(const int &mutedTrack);
-
 
 public slots:
-    void colourRecordButton(int id);
+
+    // We use these to set the Track and Composition
+    // objects with our returned values
+    //
+    void setRecordTrack(int id);
+    void toggleMutedTrack(int mutedTrack);
 
 
 private:

@@ -42,7 +42,8 @@ Composition::Composition() :
     m_position(0),
     m_currentTempo(120.0),
     m_defaultTempo(120.0),
-    m_barPositionsNeedCalculating(true)
+    m_barPositionsNeedCalculating(true),
+    m_recordTrack(0)
 {
     // nothing
 }

@@ -149,7 +149,7 @@ TrackButtons::drawButtons()
 
         // Set the label from the Track object on the Composition
         //
-        Rosegarden::Track *track = m_doc->getComposition().getTrack(i);
+        Rosegarden::Track *track = m_doc->getComposition().getTrackByIndex(i);
 
         // Enforce this
         //
@@ -180,8 +180,18 @@ TrackButtons::drawButtons()
         record->setMinimumSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
         record->setMaximumSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
 
+        // set the mute button
+        //
         if (track->isMuted())
             mute->setDown(true);
+
+        // set the record button down
+        //
+        if (m_doc->getComposition().getRecordTrack() == i)
+        {
+            setRecordTrack(i);
+            record->setDown(true);
+        }
 
     }
 
@@ -195,7 +205,10 @@ TrackButtons::drawButtons()
 
 
     connect(m_recordButtonGroup, SIGNAL(released(int)),
-            this, SLOT(colourRecordButton(int)));
+            this, SLOT(setRecordTrack(int)));
+
+    connect(m_muteButtonGroup, SIGNAL(released(int)),
+            this, SLOT(toggleMutedTrack(int)));
 
 }
 
@@ -234,29 +247,21 @@ TrackButtons::mutedTracks()
 }
 
 
-// Set the record button (button group is exclusive)
+// Toggle a mute button
 //
 //
 void
-TrackButtons::setRecordTrack(const int &recordTrack)
-{
-    if ( recordTrack < 0 || recordTrack > m_tracks )
-        return;
-
-    m_recordButtonGroup->find(recordTrack)->setDown(true);
-}
-
-
-// Set a mute button
-//
-//
-void
-TrackButtons::setMutedTrack(const int &mutedTrack)
+TrackButtons::toggleMutedTrack(int mutedTrack)
 {
     if (mutedTrack < 0 || mutedTrack > m_tracks )
         return;
 
-    m_muteButtonGroup->find(mutedTrack)->setDown(true);
+    bool set = true;
+
+    if (m_doc->getComposition().getTrackByIndex(mutedTrack)->isMuted())
+        set = false;
+
+    m_doc->getComposition().getTrackByIndex(mutedTrack)->setMuted(set);
 }
 
 
@@ -265,16 +270,20 @@ TrackButtons::setMutedTrack(const int &mutedTrack)
 //
 //
 void
-TrackButtons::colourRecordButton(int id)
+TrackButtons::setRecordTrack(int recordTrack)
 {
+    if (recordTrack < 0 || recordTrack > m_tracks )
+        return;
+
     // Unset the palette if we're jumping to another button
-    if (m_lastID != id && m_lastID != -1)
+    if (m_lastID != recordTrack && m_lastID != -1)
     {
        m_recordButtonGroup->find(m_lastID)->unsetPalette();
     }
 
-    m_recordButtonGroup->find(id)->setPalette(QPalette(red));
-    m_lastID = id;
+    m_doc->getComposition().setRecordTrack(recordTrack);
+    m_recordButtonGroup->find(recordTrack)->setPalette(QPalette(red));
+    m_lastID = recordTrack;
 }
 
 

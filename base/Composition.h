@@ -87,12 +87,15 @@ public:
     segmentcontainer& getSegments() { return m_segments; }
     const segmentcontainer& getSegments() const { return m_segments; }
 
-    Track* getTrack(const int &track) { return &(m_tracks[track]); }
-    Instrument* getInstrument(const int &instr)
+    Track* getTrackByIndex(const int &track) { return &(m_tracks[track]); }
+    Instrument* getInstrumentByIndex(const int &instr)
             { return &(m_instruments[instr]); }
  
     trackcontainer getTracks() { return m_tracks; }
     instrumentcontainer getInstruments() { return m_instruments; }
+
+    int getRecordTrack() { return m_recordTrack; }
+    void setRecordTrack(const int &recordTrack) { m_recordTrack = recordTrack; }
 
     unsigned int getNbSegments() const { return m_segments.size(); }
     int getNbTracks() const { return m_tracks.size(); }
@@ -261,6 +264,7 @@ protected:
     trackcontainer m_tracks;
     segmentcontainer m_segments;
     instrumentcontainer m_instruments;
+    int m_recordTrack;
 
     /// Contains time signature and new-bar events.
     mutable Segment m_referenceSegment;
