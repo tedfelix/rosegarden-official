@@ -3,6 +3,7 @@
 #define _ELEMENT2_H_
 
 #include <map>
+#include <hash_map>
 #include <string>
 
 #include <cstring>
@@ -17,6 +18,26 @@
 // static-stylee Element (probably dominated by map lookup/insert; a
 // vector might be faster in practice as we expect relatively few
 // properties per element)
+
+struct eqstring
+{
+    bool operator()(const string &s1, const string &s2) const
+    {
+        return s1 == s2;
+    }
+};
+
+struct hashstring
+{
+    static hash<const char*> _H;
+    
+    size_t operator()(const string &s) const
+    {
+        return _H(s.c_str());
+    }
+};
+
+hash<const char*> hashstring::_H;
 
 enum PropertyType { Int, String, Bool, Tag };
 
@@ -208,7 +229,8 @@ private:
 
     string m_package;
     string m_type;
-    typedef map<string, PropertyStoreBase *> PropertyMap;
+    //    typedef map<string, PropertyStoreBase *> PropertyMap;
+    typedef hash_map<string, PropertyStoreBase*, hashstring, eqstring> PropertyMap;
     typedef PropertyMap::value_type PropertyPair;
     PropertyMap m_properties;
 };
