@@ -154,7 +154,6 @@ public:
 #else
     { return value; }
 #endif
-    
         
     double getXbyInverseWorldMatrix(double value)
 #ifdef RGKDE3
@@ -163,15 +162,7 @@ public:
     { return value; }
 #endif
 
-#ifdef RGKDE3
-    /*
-     * Get world matrices
-     */
-    const QWMatrix & getWorldMatrix () const
-        { return m_canvasView->worldMatrix(); }
-    const QWMatrix & getInverseWorldMatrix () const
-        { return m_canvasView->inverseWorldMatrix(); }
-#endif
+    QPoint inverseMapPoint(const QPoint& p) { return m_canvasView->inverseMapPoint(p); }
 
     /*
      * Repaint the control rulers

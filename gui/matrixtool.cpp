@@ -285,19 +285,13 @@ MatrixPainter::MatrixPainter(QString name, MatrixView* parent)
 void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
                                           int pitch,
                                           int staffNo,
-                                          QMouseEvent *inE,
+                                          QMouseEvent *e,
                                           Rosegarden::ViewElement *element)
 {
     MATRIX_DEBUG << "MatrixPainter::handleLeftButtonPress : pitch = "
                          << pitch << ", time : " << time << endl;
 
-#ifdef RGKDE3
-    QPoint p = m_mParentView->getInverseWorldMatrix().map(inE->pos());
-    QMouseEvent *e =
-        new QMouseEvent(inE->type(), p, inE->button(), inE->state());
-#else
-    QMouseEvent *e = inE;
-#endif
+    QPoint p = m_mParentView->inverseMapPoint(e->pos());
 
     // Don't create an overlapping event on the same note on the same channel
     if (dynamic_cast<MatrixElement*>(element))
@@ -311,7 +305,7 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
 
     m_currentStaff = m_mParentView->getStaff(staffNo);
  
-    Event *el = new Event(Note::EventType, time, grid.getSnapTime(e->x()));
+    Event *el = new Event(Note::EventType, time, grid.getSnapTime(p.x()));
     el->set<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, pitch);
     el->set<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, 100);
 
@@ -332,8 +326,6 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
 
     // preview
     m_mParentView->playNote(el);
-
-    delete e;
 }
 
 bool MatrixPainter::handleMouseMove(Rosegarden::timeT time,
@@ -462,6 +454,8 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
 {
     MATRIX_DEBUG << "MatrixSelector::handleMousePress" << endl;
 
+    QPoint p = m_mParentView->inverseMapPoint(e->pos());
+
     m_currentStaff = m_mParentView->getStaff(staffNo);
 
     // Do the merge selection thing
@@ -488,7 +482,7 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
         if ((x + width ) - resizeStart > 10)
             resizeStart = x + width - 10;
 
-        if (e->x() > resizeStart)
+        if (p.x() > resizeStart)
         {
             m_dispatchTool = m_parentView->
                 getToolBox()->getTool(MatrixResizer::ToolName);
@@ -508,8 +502,8 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
     }
     else
     {
-        m_selectionRect->setX(e->x());
-        m_selectionRect->setY(e->y());
+        m_selectionRect->setX(p.x());
+        m_selectionRect->setY(p.y());
         m_selectionRect->setSize(0,0);
 
         m_selectionRect->show();
@@ -559,6 +553,8 @@ void MatrixSelector::handleMouseDblClick(Rosegarden::timeT time,
 bool MatrixSelector::handleMouseMove(timeT time, int height,
                                      QMouseEvent *e)
 {
+    QPoint p = m_mParentView->inverseMapPoint(e->pos());
+
     if (m_dispatchTool)
     {
         return m_dispatchTool->handleMouseMove(time, height, e);
@@ -566,8 +562,8 @@ bool MatrixSelector::handleMouseMove(timeT time, int height,
 
     if (!m_updateRect) return false;
 
-    int w = int(e->x() - m_selectionRect->x());
-    int h = int(e->y() - m_selectionRect->y());
+    int w = int(p.x() - m_selectionRect->x());
+    int h = int(p.y() - m_selectionRect->y());
 
     // Qt rectangle dimensions appear to be 1-based
     if (w > 0) ++w; else --w;
@@ -1017,8 +1013,7 @@ bool MatrixResizer::handleMouseMove(Rosegarden::timeT newTime,
 }
 
 void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
-                                       int,
-                                       QMouseEvent * /*e*/)
+                                       int, QMouseEvent*)
 {
     if (!m_currentElement || !m_currentStaff) return;
 

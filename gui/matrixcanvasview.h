@@ -22,6 +22,8 @@
 #ifndef MATRIXCANVASVIEW_H
 #define MATRIXCANVASVIEW_H
 
+#include <qwmatrix.h>
+
 #include "Event.h"
 
 #include "rosegardencanvasview.h"
@@ -45,6 +47,13 @@ public:
 
     void setSmoothModifier(Qt::ButtonState s) { m_smoothModifier = s; }
     Qt::ButtonState getSmoothModifier()       { return m_smoothModifier; }
+
+    /// Map a point with the inverse world matrix
+#ifdef RGKDE3
+    QPoint inverseMapPoint(const QPoint& p) { return inverseWorldMatrix().map(p); }
+#else
+    QPoint inverseMapPoint(const QPoint& p) { return p; }
+#endif
 
 signals:
 

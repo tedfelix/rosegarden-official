@@ -19,8 +19,6 @@
     COPYING included with this distribution for more information.
 */
 
-#include <qwmatrix.h>
-
 #include "matrixcanvasview.h"
 #include "matrixstaff.h"
 #include "matrixelement.h"
@@ -54,18 +52,12 @@ MatrixCanvasView::~MatrixCanvasView()
 
 void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 {
-#ifdef RGKDE3
-    QPoint p = inverseWorldMatrix().map(e->pos());
-#else
-    QPoint p = e->pos();
-#endif
-
-    QMouseEvent *nE = new QMouseEvent(e->type(), p, e->button(), e->state());
+    QPoint p = inverseMapPoint(e->pos());
 
     if (m_snapGrid->getSnapTime(p.x()))
         m_lastSnap = m_snapGrid->getSnapTime(p.x());
 
-    updateGridSnap(nE);
+    updateGridSnap(e);
 
     MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent: snap time is " << m_snapGrid->getSnapTime(p.x()) << endl;
 
@@ -78,7 +70,7 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 //     MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent() at pitch "
 //                          << evPitch << ", time " << evTime << endl;
 
-    QCanvasItemList itemList = canvas()->collisions(e->pos());
+    QCanvasItemList itemList = canvas()->collisions(p);
     QCanvasItemList::Iterator it;
     MatrixElement* mel = 0;
     QCanvasItem* activeItem = 0;
@@ -101,12 +93,12 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
     }
 
     if (activeItem) { // active item takes precedence over notation elements
-        emit activeItemPressed(nE, activeItem);
+        emit activeItemPressed(e, activeItem);
         m_mouseWasPressed = true;
         return;
     }
 
-    emit mousePressed(evTime, evPitch, nE, mel);
+    emit mousePressed(evTime, evPitch, e, mel);
     m_mouseWasPressed = true;
 
     // Ignore click if it was above the staff and not
@@ -118,18 +110,12 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 
 void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 {
-#ifdef RGKDE3
-    QPoint p = inverseWorldMatrix().map(e->pos());
-#else
-    QPoint p = e->pos();
-#endif
-
-    QMouseEvent *nE = new QMouseEvent(e->type(), p, e->button(), e->state());
+    QPoint p = inverseMapPoint(e->pos());
 
     if (m_snapGrid->getSnapTime(p.x()))
         m_lastSnap = m_snapGrid->getSnapTime(p.x());
 
-    updateGridSnap(nE);
+    updateGridSnap(e);
 
     if (m_ignoreClick) return;
 
@@ -149,17 +135,13 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
         m_previousEvPitch = evPitch;
     }
 
-    if (m_mouseWasPressed) emit mouseMoved(evTime, evPitch, nE);
+    if (m_mouseWasPressed) emit mouseMoved(evTime, evPitch, e);
     
 }
 
 void MatrixCanvasView::contentsMouseDoubleClickEvent (QMouseEvent* e)
 {
-#ifdef RGKDE3
-    QPoint p = inverseWorldMatrix().map(e->pos());
-#else
-    QPoint p = e->pos();
-#endif
+    QPoint p = inverseMapPoint(e->pos());
 
     if (!m_staff.containsCanvasY(p.y())) {
         m_ignoreClick = true;
@@ -170,13 +152,7 @@ void MatrixCanvasView::contentsMouseDoubleClickEvent (QMouseEvent* e)
 
 void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
 {
-#ifdef RGKDE3
-    QPoint p = inverseWorldMatrix().map(e->pos());
-#else
-    QPoint p = e->pos();
-#endif
-
-    QMouseEvent *nE = new QMouseEvent(e->type(), p, e->button(), e->state());
+    QPoint p = inverseMapPoint(e->pos());
 
     if (m_ignoreClick) {
         m_ignoreClick = false;
@@ -189,7 +165,7 @@ void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
     timeT emTime = m_staff.getSegment().getEndMarkerTime();
     if (evTime > emTime) evTime = emTime;
 
-    emit mouseReleased(evTime, evPitch, nE);
+    emit mouseReleased(evTime, evPitch, e);
     m_mouseWasPressed = false;
 
     // Restore grid snap
