@@ -887,13 +887,13 @@ void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
 
 
 void
-RosegardenGUIView::setControl(const bool &value)
+RosegardenGUIView::setControl(bool value)
 {
     m_trackEditor->slotSetSelectCopy(value);
 }
 
 void
-RosegardenGUIView::setShift(const bool &value)
+RosegardenGUIView::setShift(bool value)
 {
     m_trackEditor->slotSetSelectAdd(value);
     m_trackEditor->getTopBarButtons()->getLoopRuler()->

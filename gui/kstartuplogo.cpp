@@ -100,7 +100,7 @@ void KStartupLogo::paintEvent(QPaintEvent*)
     paint.drawText(m_pixmap.width() - (width + 10), y, m_statusMessage);
 }
 
-void KStartupLogo::slotShowStatusMessage(const QString &message)
+void KStartupLogo::slotShowStatusMessage(QString message)
 {
     m_statusMessage = message;
     paintEvent(0);
@@ -119,7 +119,7 @@ void KStartupLogo::close()
 }
 
 
-void KStartupLogo::mousePressEvent( QMouseEvent*)
+void KStartupLogo::mousePressEvent(QMouseEvent*)
 {
     // for the haters of raising startlogos
     if (m_readyToHide)

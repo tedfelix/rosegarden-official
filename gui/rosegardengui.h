@@ -119,17 +119,17 @@ public:
     /**
      * open a file
      */
-    virtual void openFile(const QString &filePath);
+    virtual void openFile(QString filePath);
 
     /**
      * open a URL
      */
-    virtual void openURL(const QString &url);
+    virtual void openURL(QString url);
 
     /**
      * merge a file with the existing document
      */ 
-    virtual void mergeFile(const QString &filePath);
+    virtual void mergeFile(QString filePath);
 
     /**
      * open a URL
@@ -139,27 +139,27 @@ public:
     /**
      * export a MIDI file
      */
-    void exportMIDIFile(const QString &url);
+    void exportMIDIFile(QString url);
 
     /**
      * export a Csound scorefile
      */
-    void exportCsoundFile(const QString &url);
+    void exportCsoundFile(QString url);
 
     /**
      * export a Mup file
      */
-    void exportMupFile(const QString &url);
+    void exportMupFile(QString url);
 
     /**
      * export a Lilypond file
      */
-    void exportLilypondFile(const QString &url);
+    void exportLilypondFile(QString url);
 
     /**
      * export a MusicXml file
      */
-    void exportMusicXmlFile(const QString &url);
+    void exportMusicXmlFile(QString url);
 
     /**
      * Get the sequence manager object
@@ -291,22 +291,22 @@ protected:
     /**
      * Create document from a file
      */
-    RosegardenGUIDoc* createDocument(const QString &filePath);
+    RosegardenGUIDoc* createDocument(QString filePath);
 
     /**
      * Create a document from RG file
      */
-    RosegardenGUIDoc* createDocumentFromRGFile(const QString &filePath);
+    RosegardenGUIDoc* createDocumentFromRGFile(QString filePath);
 
     /**
      * Create document from MIDI file
      */
-    RosegardenGUIDoc* createDocumentFromMIDIFile(const QString &filePath);
+    RosegardenGUIDoc* createDocumentFromMIDIFile(QString filePath);
 
     /**
      * Create document from RG21 file
      */
-    RosegardenGUIDoc* createDocumentFromRG21File(const QString &filePath);
+    RosegardenGUIDoc* createDocumentFromRG21File(QString filePath);
 
     /**/
     /**/
@@ -413,7 +413,7 @@ protected:
      * good and that (if it exists) the user agrees to overwrite.
      * Return a null string if the write should not go ahead.
      */
-    QString getValidWriteFile(const QString &extension, const QString &label);
+    QString getValidWriteFile(QString extension, QString label);
 
     /**
      * Set the current document
@@ -424,7 +424,7 @@ protected:
     void setDocument(RosegardenGUIDoc*);
 
 signals:
-    void startupStatusMessage(const QString &message);
+    void startupStatusMessage(QString message);
 
     /// emitted just before the document is changed
     void documentAboutToChange();
@@ -757,7 +757,7 @@ public slots:
      *
      * @param text the text that is displayed in the statusbar
      */
-    void slotStatusMsg(const QString &text);
+    void slotStatusMsg(QString text);
 
     /**
      * changes the status message of the whole statusbar for two
@@ -767,7 +767,7 @@ public slots:
      *
      * @param text the text that is displayed in the statusbar
      */
-    void slotStatusHelpMsg(const QString &text);
+    void slotStatusHelpMsg(QString text);
 
     /**
      * enables/disables the transport window
@@ -889,7 +889,7 @@ public slots:
     /**
      * Put the GUI into a given Tool edit mode
      */
-    void slotActivateTool(const QString& toolName);
+    void slotActivateTool(QString toolName);
 
     /**
      * Toggles either the play or record metronome according
@@ -1017,7 +1017,7 @@ public slots:
      * Hopefully we'll be able to get rid of this eventually,
      * I should slip this in KMainWindow for KDE 4.
      */
-    void slotStateChanged(const QString&, bool noReverse);
+    void slotStateChanged(QString, bool noReverse);
 
     /**
      * A command has happened; check the clipboard in case we

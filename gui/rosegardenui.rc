@@ -207,7 +207,13 @@
         </enable>
 </State>
 
-<State name="file_modified">
+<State name="new_file_modified">
+        <enable>
+                <Action name="file_save"/>
+        </enable>
+</State>
+
+<State name="saved_file_modified">
         <enable>
                 <Action name="file_revert"/>
                 <Action name="file_save"/>

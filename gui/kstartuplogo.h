@@ -44,7 +44,7 @@ public:
     void setHideEnabled(bool enabled) { m_readyToHide = enabled; };
 
 public slots:
-    void slotShowStatusMessage(const QString &);
+    void slotShowStatusMessage(QString);
     virtual void close();
 
 protected:

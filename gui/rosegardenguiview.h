@@ -115,7 +115,7 @@ public:
     /**
      * Select a tool at the SegmentCanvas
      */
-    void selectTool(const QString toolName);
+    void selectTool(QString toolName);
 
     /**
      * These two are just-passing-through methods called from
@@ -123,8 +123,8 @@ public:
      * or anything else downstairsis interested in.
      *
      */
-    void setShift(const bool &value);
-    void setControl(const bool &value);
+    void setShift(bool value);
+    void setControl(bool value);
 
     /**
      * Show a Segment as it records - remove the SegmentItem
@@ -246,9 +246,9 @@ public slots:
     void slotSynchroniseWithComposition();
 
 signals:
-    void activateTool(const QString& toolName);
+    void activateTool(QString toolName);
 
-    void stateChange(const QString&, bool);
+    void stateChange(QString, bool);
 
     // Inform that we've got a SegmentSelection
     //

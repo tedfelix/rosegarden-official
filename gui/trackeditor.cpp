@@ -205,8 +205,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(m_trackButtons, SIGNAL(instrumentSelected(int)),
             rosegardenguiview, SLOT(slotUpdateInstrumentParameterBox(int)));
 
-    connect(this, SIGNAL(stateChange(const QString&, bool)),
-            rosegardenguiview, SIGNAL(stateChange(const QString&, bool)));
+    connect(this, SIGNAL(stateChange(QString, bool)),
+            rosegardenguiview, SIGNAL(stateChange(QString, bool)));
 
     connect(m_trackButtons, SIGNAL(modified()),
             m_doc, SLOT(slotDocumentModified()));

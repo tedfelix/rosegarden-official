@@ -572,8 +572,8 @@ ControlRuler::ControlRuler(Segment& segment,
 
     setFixedHeight(sizeHint().height());
 
-    connect(this, SIGNAL(stateChange(const QString&, bool)),
-            m_parentEditView, SLOT(slotStateChanged(const QString&, bool)));
+    connect(this, SIGNAL(stateChange(QString, bool)),
+            m_parentEditView, SLOT(slotStateChanged(QString, bool)));
 
     m_numberFloat->hide();
 

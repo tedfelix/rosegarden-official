@@ -83,7 +83,7 @@ public:
     static const int ItemHeightRange;
 
 signals:
-    void stateChange(const QString&, bool);
+    void stateChange(QString, bool);
 
 public slots:
     /// override RosegardenCanvasView - we don't want to change the main hscrollbar

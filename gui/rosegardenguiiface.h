@@ -49,13 +49,13 @@ public:
     void iFaceDelayedInit(KMainWindow*);
 
 k_dcop:
-    virtual void openFile(const QString &file) = 0;
-    virtual void openURL(const QString &url) = 0;
-    virtual void mergeFile(const QString &file) = 0;
-    virtual void fileNew()                       = 0;
-    virtual void fileSave()                      = 0;
-    virtual void fileClose()                     = 0;
-    virtual void quit()                          = 0;
+    virtual void openFile(QString file)  = 0;
+    virtual void openURL(QString url)    = 0;
+    virtual void mergeFile(QString file) = 0;
+    virtual void fileNew()               = 0;
+    virtual void fileSave()              = 0;
+    virtual void fileClose()             = 0;
+    virtual void quit()                  = 0;
 
     virtual void play() = 0;
     virtual void stop() = 0;

@@ -183,7 +183,7 @@ signals:
     /**
      * sent back to RosegardenGUI
      */
-    void stateChange(const QString&, bool);
+    void stateChange(QString, bool);
 
     /**
      * A URI to a Rosegarden document was dropped on the canvas

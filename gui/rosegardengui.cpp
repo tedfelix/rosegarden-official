@@ -145,9 +145,9 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
 
     if (startupStatusMessageReceiver) {
-        QObject::connect(this, SIGNAL(startupStatusMessage(const QString &)),
+        QObject::connect(this, SIGNAL(startupStatusMessage(QString)),
                          startupStatusMessageReceiver,
-                         SLOT(slotShowStatusMessage(const QString &)));
+                         SLOT(slotShowStatusMessage(QString)));
     }
 
     // Try to start the sequencer
@@ -257,11 +257,10 @@ void RosegardenGUIApp::setupActions()
                                           actionCollection());
     KStdAction::save  (this, SLOT(slotFileSave()),          actionCollection());
     KStdAction::saveAs(this, SLOT(slotFileSaveAs()),        actionCollection());
+    KStdAction::revert(this, SLOT(slotRevertToSaved()),     actionCollection());
     KStdAction::close (this, SLOT(slotFileClose()),         actionCollection());
     KStdAction::print (this, SLOT(slotFilePrint()),         actionCollection());
     KStdAction::printPreview (this, SLOT(slotFilePrintPreview()),         actionCollection());
-
-    KStdAction::revert(this, SLOT(slotRevertToSaved()),      actionCollection());
 
     new KAction(i18n("Import &MIDI file..."), 0, 0, this,
                 SLOT(slotImportMIDI()), actionCollection(),
@@ -829,8 +828,8 @@ void RosegardenGUIApp::initView()
 
     // Connect up this signal so that we can force tool mode
     // changes from the view
-    connect(m_swapView, SIGNAL(activateTool(const QString&)),
-            this,   SLOT(slotActivateTool(const QString&)));
+    connect(m_swapView, SIGNAL(activateTool(QString)),
+            this,   SLOT(slotActivateTool(QString)));
 
     connect(m_swapView,
             SIGNAL(segmentsSelected(const Rosegarden::SegmentSelection &)),
@@ -883,8 +882,8 @@ void RosegardenGUIApp::initView()
     // set the highlighted track
     m_view->slotSelectTrackSegments(comp.getSelectedTrack());
 
-    connect(m_view, SIGNAL(stateChange(const QString&, bool)),
-            this,   SLOT  (slotStateChanged(const QString&, bool)));
+    connect(m_view, SIGNAL(stateChange(QString, bool)),
+            this,   SLOT  (slotStateChanged(QString, bool)));
 
     // We only check for the SequenceManager to make sure
     // we're not on the first pass though - we don't want
@@ -1052,18 +1051,21 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 
 
 void
-RosegardenGUIApp::openFile(const QString &filePath)
+RosegardenGUIApp::openFile(QString filePath)
 {
+    RG_DEBUG << "RosegardenGUIApp::openFile " << filePath << endl;
+
     RosegardenGUIDoc *doc = createDocument(filePath);
     if (doc)
     {
         setDocument(doc);
-        m_fileRecent->addURL(QFileInfo(filePath).absFilePath());
+        QFileInfo fInfo(filePath);
+        m_fileRecent->addURL(fInfo.absFilePath());
     }
 }
 
 RosegardenGUIDoc*
-RosegardenGUIApp::createDocument(const QString& filePath)
+RosegardenGUIApp::createDocument(QString filePath)
 {
     QFileInfo info(filePath);
     RosegardenGUIDoc *doc = 0;
@@ -1119,7 +1121,7 @@ RosegardenGUIApp::createDocument(const QString& filePath)
 }
 
 RosegardenGUIDoc* 
-RosegardenGUIApp::createDocumentFromRGFile(const QString& filePath)
+RosegardenGUIApp::createDocumentFromRGFile(QString filePath)
 {
     // Check for an autosaved file to recover
     QString effectiveFilePath = filePath;
@@ -1395,7 +1397,7 @@ void RosegardenGUIApp::slotOpenDroppedURL(QString url)
     openURL(KURL(url));
 }
 
-void RosegardenGUIApp::openURL(const QString& url)
+void RosegardenGUIApp::openURL(QString url)
 {
     RG_DEBUG << "RosegardenGUIApp::openURL: QString " << url << endl;
     openURL(KURL(url));
@@ -1523,8 +1525,8 @@ void RosegardenGUIApp::slotFileSave()
 }
 
 QString
-RosegardenGUIApp::getValidWriteFile(const QString &descriptiveExtension,
-                                    const QString &label)
+RosegardenGUIApp::getValidWriteFile(QString descriptiveExtension,
+                                    QString label)
 {
     // extract first extension listed in descriptiveExtension, for instance,
     // ".rg" from "*.rg|Rosegarden files", or ".mid" from "*.mid *.midi|MIDI Files"
@@ -2136,7 +2138,7 @@ void RosegardenGUIApp::slotToggleStatusBar()
 }
 
 
-void RosegardenGUIApp::slotStatusMsg(const QString &text)
+void RosegardenGUIApp::slotStatusMsg(QString text)
 {
     ///////////////////////////////////////////////////////////////////
     // change status message permanently
@@ -2145,7 +2147,7 @@ void RosegardenGUIApp::slotStatusMsg(const QString &text)
 }
 
 
-void RosegardenGUIApp::slotStatusHelpMsg(const QString &text)
+void RosegardenGUIApp::slotStatusHelpMsg(QString text)
 {
     ///////////////////////////////////////////////////////////////////
     // change status message of whole statusbar temporary (text, msec)
@@ -2406,7 +2408,7 @@ void RosegardenGUIApp::slotMoveTrackUp()
 
 void RosegardenGUIApp::slotRevertToSaved()
 {
-    std::cout << "RosegardenGUIApp::slotRevertToSaved" << std::endl;
+    RG_DEBUG << "RosegardenGUIApp::slotRevertToSaved" << endl;
 
     if(m_doc->isModified())
     {
@@ -2461,7 +2463,7 @@ void RosegardenGUIApp::slotMergeMIDI()
 }
 
 RosegardenGUIDoc*
-RosegardenGUIApp::createDocumentFromMIDIFile(const QString &file)
+RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
 {
     //if (!merge && !m_doc->saveIfModified()) return;
 
@@ -2634,7 +2636,7 @@ void RosegardenGUIApp::slotMergeRG21()
 }
 
 RosegardenGUIDoc*
-RosegardenGUIApp::createDocumentFromRG21File(const QString &file)
+RosegardenGUIApp::createDocumentFromRG21File(QString file)
 {
     KStartupLogo::hideIfStillThere();
     RosegardenProgressDialog progressDlg(
@@ -2683,7 +2685,7 @@ RosegardenGUIApp::createDocumentFromRG21File(const QString &file)
 }
 
 void
-RosegardenGUIApp::mergeFile(const QString &filePath)
+RosegardenGUIApp::mergeFile(QString filePath)
 {
     RosegardenGUIDoc *doc = createDocument(filePath);
 
@@ -3114,7 +3116,7 @@ void RosegardenGUIApp::slotExportMIDI()
     exportMIDIFile(fileName);
 }
 
-void RosegardenGUIApp::exportMIDIFile(const QString &file)
+void RosegardenGUIApp::exportMIDIFile(QString file)
 {
     RosegardenProgressDialog progressDlg(i18n("Exporting MIDI file..."),
                                          100,
@@ -3151,7 +3153,7 @@ void RosegardenGUIApp::slotExportCsound()
     exportCsoundFile(fileName);
 }
 
-void RosegardenGUIApp::exportCsoundFile(const QString &file)
+void RosegardenGUIApp::exportCsoundFile(QString file)
 {
     RosegardenProgressDialog progressDlg(i18n("Exporting Csound score file..."),
                                          100,
@@ -3183,7 +3185,7 @@ void RosegardenGUIApp::slotExportMup()
     exportMupFile(fileName);
 }
 
-void RosegardenGUIApp::exportMupFile(const QString &file)
+void RosegardenGUIApp::exportMupFile(QString file)
 {
     RosegardenProgressDialog progressDlg(i18n("Exporting Mup file..."),
                                          100,
@@ -3217,7 +3219,7 @@ void RosegardenGUIApp::slotExportLilypond()
     exportLilypondFile(fileName);
 }
 
-void RosegardenGUIApp::exportLilypondFile(const QString &file)
+void RosegardenGUIApp::exportLilypondFile(QString file)
 {
     LilypondOptionsDialog *dialog = new LilypondOptionsDialog(this);
     if (dialog->exec() != QDialog::Accepted) return;
@@ -3253,7 +3255,7 @@ void RosegardenGUIApp::slotExportMusicXml()
     exportMusicXmlFile(fileName);
 }
 
-void RosegardenGUIApp::exportMusicXmlFile(const QString &file)
+void RosegardenGUIApp::exportMusicXmlFile(QString file)
 {
     RosegardenProgressDialog progressDlg(i18n("Exporting MusicXML file..."),
                                          100,
@@ -3288,7 +3290,7 @@ RosegardenGUIApp::slotCloseTransport()
 //
 //
 void
-RosegardenGUIApp::slotActivateTool(const QString& toolName)
+RosegardenGUIApp::slotActivateTool(QString toolName)
 {
     if (toolName == SegmentSelector::ToolName) {
         actionCollection()->action("select")->activate();
@@ -3990,14 +3992,23 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
 void
 RosegardenGUIApp::slotDocumentModified(bool m)
 {
-    RG_DEBUG << "RosegardenGUIApp::slotDocumentModified(" << m << ")\n";
-    slotStateChanged("file_modified", m);
+    RG_DEBUG << "RosegardenGUIApp::slotDocumentModified(" << m << ") - doc path = "
+             << m_doc->getAbsFilePath() << endl;
+
+    if (!m_doc->getAbsFilePath().isEmpty()) {
+        slotStateChanged("saved_file_modified", m);
+    } else {
+        slotStateChanged("new_file_modified", m);
+    }
+    
 }
 
 void
-RosegardenGUIApp::slotStateChanged(const QString& s,
+RosegardenGUIApp::slotStateChanged(QString s,
                                    bool noReverse)
 {
+    RG_DEBUG << "RosegardenGUIApp::slotStateChanged " << s << "," << noReverse << endl;
+
     stateChanged(s, noReverse ? KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 }
 
