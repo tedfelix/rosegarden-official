@@ -118,14 +118,17 @@ VUMeter::VUMeter(QWidget *parent,
 	red    = AudioLevel::dB_to_fader(   0.0, max, AudioLevel::ShortFader);
 	orange = AudioLevel::dB_to_fader(  -2.0, max, AudioLevel::ShortFader);
 	green  = AudioLevel::dB_to_fader( -10.0, max, AudioLevel::ShortFader);
+	m_background = QColor(50, 50, 50);
     } else if (m_type == AudioPeakHoldLong) {
 	red    = AudioLevel::dB_to_fader(   0.0, max, AudioLevel::ShortFader);
 	orange = AudioLevel::dB_to_fader(  -2.0, max, AudioLevel::ShortFader);
 	green  = AudioLevel::dB_to_fader( -10.0, max, AudioLevel::ShortFader);
+	m_background = QColor(50, 50, 50);
     } else {
 	red    = max * 92 / 100;
 	orange = max * 60 / 100;
 	green  = max * 10 / 100;
+	m_background = Qt::black;
     }
 
     if (m_type == AudioPeakHoldLong ||
@@ -239,8 +242,8 @@ VUMeter::paintEvent(QPaintEvent*)
     if (m_type == VUMeter::AudioPeakHoldShort ||
 	m_type == VUMeter::AudioPeakHoldLong)
     {
-	paint.setPen(Qt::black);
-	paint.setBrush(Qt::black);
+	paint.setPen(m_background);
+	paint.setBrush(m_background);
 	paint.drawRect(0, 0, width(), height());
         drawMeterLevel(&paint);
     }
@@ -248,8 +251,8 @@ VUMeter::paintEvent(QPaintEvent*)
     {
         if (m_fallTimerLeft->isActive())
         {
-	    paint.setPen(Qt::black);
-	    paint.setBrush(Qt::black);
+	    paint.setPen(m_background);
+	    paint.setBrush(m_background);
 	    paint.drawRect(0, 0, width(), height());
             drawMeterLevel(&paint);
         }
@@ -360,8 +363,8 @@ VUMeter::drawMeterLevel(QPainter* paint)
 
 	    drawColouredBar(paint, 0, 0, y, hW - 1, height() - y);
 
-	    paint->setPen(Qt::black);
-	    paint->setBrush(Qt::black);
+	    paint->setPen(m_background);
+	    paint->setBrush(m_background);
 	    paint->drawRect(0, 0, hW, y);
 
             if (m_showPeakLevel)
@@ -379,8 +382,8 @@ VUMeter::drawMeterLevel(QPainter* paint)
             y = height() - (m_levelRight * height()) / m_maxLevel;
 	    drawColouredBar(paint, 1, hW + 1, y, width() - hW + 1, height() - y);
 
-	    paint->setPen(Qt::black);
-	    paint->setBrush(Qt::black);
+	    paint->setPen(m_background);
+	    paint->setBrush(m_background);
 	    paint->drawRect(hW, 0, width() - hW + 2, y);
 
             if (m_showPeakLevel)
@@ -395,8 +398,8 @@ VUMeter::drawMeterLevel(QPainter* paint)
         }
         else // horizontal
         {
-	    paint->setPen(Qt::black);
-	    paint->setBrush(Qt::black);
+	    paint->setPen(m_background);
+	    paint->setBrush(m_background);
 	    paint->drawRect(0, 0, width(), height());
 
             cout << "HERE HORIZ STEREO" << endl;
@@ -421,8 +424,8 @@ VUMeter::drawMeterLevel(QPainter* paint)
     }
     else
     {
-//	paint->setPen(Qt::black);
-//	paint->setBrush(Qt::black);
+//	paint->setPen(m_background);
+//	paint->setBrush(m_background);
 //	paint->drawRect(0, 0, width(), height());
 
 //        paint->setPen(mixedColour);
@@ -436,8 +439,8 @@ VUMeter::drawMeterLevel(QPainter* paint)
 //            paint->drawRect(0, height(), width(), y);
 	    drawColouredBar(paint, 0, 0, height(), width(), y);
 
-	    paint->setPen(Qt::black);
-	    paint->setBrush(Qt::black);
+	    paint->setPen(m_background);
+	    paint->setBrush(m_background);
 	    paint->drawRect(0, 0, width(), y);
 
             if (m_showPeakLevel)
@@ -463,8 +466,8 @@ VUMeter::drawMeterLevel(QPainter* paint)
 //            paint->drawRect(0, 0, x, height());
 	    drawColouredBar(paint, 0, 0, 0, x, height());
 
-	    paint->setPen(Qt::black);
-	    paint->setBrush(Qt::black);
+	    paint->setPen(m_background);
+	    paint->setBrush(m_background);
 	    paint->drawRect(x, 0, width() - x, height());
 
             if (m_showPeakLevel)

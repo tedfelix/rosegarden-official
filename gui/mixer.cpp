@@ -68,6 +68,8 @@ MixerWindow::MixerWindow(QWidget *parent,
 		new AudioFaderWidget(mainBox, AudioFaderWidget::FaderStrip,
 				     QString("%1").arg(count));
 
+	    fader->m_fader->setFader((*i)->getLevel());
+	    
 	    connect(fader->m_fader, SIGNAL(faderChanged(float)),
 		    this, SLOT(slotFaderLevelChanged(float)));
 
@@ -89,6 +91,8 @@ MixerWindow::MixerWindow(QWidget *parent,
 	    new AudioFaderWidget(mainBox, AudioFaderWidget::FaderStrip,
 				 QString("sub%1").arg(count), false);
 
+	fader->m_fader->setFader((*i)->getLevel());
+	    
 	connect(fader->m_fader, SIGNAL(faderChanged(float)),
 		this, SLOT(slotFaderLevelChanged(float)));
 
@@ -101,9 +105,9 @@ MixerWindow::MixerWindow(QWidget *parent,
 	AudioFaderWidget *fader = 
 	    new AudioFaderWidget
 	    (mainBox, AudioFaderWidget::FaderStrip, "M", false);
+	fader->m_fader->setFader(busses[0]->getLevel());
 	connect(fader->m_fader, SIGNAL(faderChanged(float)),
 		this, SLOT(slotFaderLevelChanged(float)));
-
 	mainLayout->addWidget(fader);
 	m_master = fader;
     }
@@ -114,6 +118,26 @@ MixerWindow::~MixerWindow()
 
 }
 
+
+void
+MixerWindow::updateFader(int id)
+{
+    if (id >= (int)Rosegarden::AudioInstrumentBase) {
+	AudioFaderWidget *fader = m_faders[id];
+	Rosegarden::Instrument *instrument = m_studio->getInstrumentById(id);
+	fader->m_fader->setFader(instrument->getLevel());
+	fader->setAudioChannels(instrument->getAudioChannels());
+	fader->m_pan->setPosition(instrument->getPan() - 100);
+    } else {
+	AudioFaderWidget *fader = (id == 0 ? m_master : m_submasters[id-1]);
+	Rosegarden::BussList busses = m_studio->getBusses();
+	Rosegarden::Buss *buss = busses[id];
+	fader->m_fader->setFader(buss->getLevel());
+	fader->setAudioChannels(2);
+	fader->m_pan->setPosition(buss->getPan() - 100);
+    }
+}
+	
 
 void
 MixerWindow::slotFaderLevelChanged(float dB)
@@ -140,7 +164,7 @@ MixerWindow::slotFaderLevelChanged(float dB)
 	 i != m_submasters.end(); ++i) {
 
 	if (s == (*i)->m_fader) {
-	    if (busses.size() > index) {
+	    if ((int)busses.size() > index) {
 		Rosegarden::StudioControl::setStudioObjectProperty
 		    (Rosegarden::MappedObjectId(busses[index]->getMappedId()),
 		     Rosegarden::MappedAudioBuss::Level,

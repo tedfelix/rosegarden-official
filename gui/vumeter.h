@@ -90,6 +90,7 @@ private:
 
     VUMeterType m_type;
     VUAlignment m_alignment;
+    QColor      m_background;
 
     int         m_maxLevel;
 

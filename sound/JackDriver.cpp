@@ -774,7 +774,9 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes)
     
     if (fader) {
 	float f = 2;
-	(void)fader->getProperty(MappedAudioFader::Channels, f);
+	//!!! nah, this is just going to return 1 for the moment because
+	// we don't have the proper correlation between instruments and recording
+//	(void)fader->getProperty(MappedAudioFader::Channels, f);
 	int channels = (int)f;
     }
     
