@@ -133,7 +133,7 @@ public:
      * index of that Staff in m_staffs.  If no Staff is suitable,
      * return -1.
      */
-    int findClosestStaff(double y);
+    int findClosestStaff(double y) const;
 
     /**
      * redo the layout of any affected views after something changes.

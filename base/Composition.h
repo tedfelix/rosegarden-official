@@ -143,7 +143,9 @@ public:
      * Return the total number of bars in the composition
      */
     unsigned int getNbBars() const {
-	return getBarNumber(getDuration(), false) + 1;
+	timeT d = getDuration();
+	if (d == 0) return 0;
+	else return getBarNumber(getDuration(), false) + 1;
     }
 
     /**

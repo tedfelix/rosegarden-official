@@ -263,17 +263,18 @@ Composition::getBarNumber(timeT t, bool truncate) const
 {
     calculateBarPositions();
 
-    std::cerr << "Composition::getBarNumber: time is " << t
-	      << " (my duration is " << getDuration() << ")" << endl;
+    //    std::cerr << "Composition::getBarNumber: time is " << t
+    //	      << " (my duration is " << getDuration() << ")" << endl;
 
     Segment::iterator i = m_referenceSegment.findTime(t);
     long n = 0;
 
     if (i == m_referenceSegment.end()) {
 
-	n = m_referenceSegment.size() - 1;
+	n = m_referenceSegment.size() - 1; //!!! tempo events break this
 
 	if (!truncate) {
+	    if (n < 0) n = 0; // ref seg can only contain 0, 2, or more bars
 	    TimeSignature sig = getTimeSignatureAt(t);
 	    n += (t - m_referenceSegment.getDuration()) / sig.getBarDuration();
 	}
@@ -293,7 +294,7 @@ Composition::getBarNumber(timeT t, bool truncate) const
 	n += slack;
     }
 
-    std::cerr << "Composition::getBarNumber: returning " << n << endl;
+//    std::cerr << "Composition::getBarNumber: returning " << n << endl;
 
     return (int)n;
 }

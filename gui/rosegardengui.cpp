@@ -1195,7 +1195,6 @@ void RosegardenGUIApp::rewind()
     // want to cope with bars beyond the actual end of the piece
     int barNumber = composition.getBarNumber(position - 1, false);
     timeT jumpTo = composition.getBarRange(barNumber, false).first;
-//    timeT jumpTo   = composition.getBarStart(position - 1);
 
     if ( m_transportStatus == PLAYING )
     {
@@ -1218,7 +1217,6 @@ void RosegardenGUIApp::fastforward()
     int  barNumber = composition.getBarNumber(position, false);
     timeT   jumpTo = composition.getBarRange(barNumber + 1, false).first;
 
-//    if (jumpTo > composition.getDuration()) jumpTo = composition.getDuration();
 
     // we need to work out where the trackseditor finishes so we
     // don't skip beyond it.  Generally we need extra-Composition
