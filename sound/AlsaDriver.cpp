@@ -1480,11 +1480,11 @@ AlsaDriver::stopPlayback()
     if (m_recordStatus == RECORD_MIDI)
         m_recordStatus = ASYNCHRONOUS_MIDI;
 
-    stopClocks();
+    stopClocks(); // Resets ALSA timer to zero, tells JACK driver to stop
 
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) {
-	m_jackDriver->stop();
+//!!!	m_jackDriver->stop();
 	m_jackDriver->getAudioQueueLocks();
     }
 #endif
@@ -1495,7 +1495,7 @@ AlsaDriver::stopPlayback()
     }
 #endif
 
-    startClocks();
+    startClocksApproved(); // restarts ALSA timer without starting JACK transport
 }
 
 void
@@ -2192,6 +2192,14 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 					  (*i)->getPitch(),
 					  (*i)->getVelocity());
 		    needNoteOff = true;
+
+		    if (!isSoftSynth && getSequencerDataBlock()) {
+			Rosegarden::LevelInfo info;
+			info.level = (*i)->getVelocity();
+			info.levelRight = 0;
+			getSequencerDataBlock()->setInstrumentLevel
+			    ((*i)->getInstrument(), info);
+		    }
                 }
                 break;
 
@@ -2208,15 +2216,6 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 					  channel,
 					  (*i)->getPitch(),
 					  (*i)->getVelocity());
-
-		    //!!! I don't understand how we know what the
-		    //duration is for note off purposes?  this is
-		    //clearly nonsense, and I think the cause of
-		    //silent or blippy notes during record monitoring,
-		    //but if I remove it, I get no note-offs for most
-		    //notes during playback.  I'm missing something
-		    //here.
-//		    needNoteOff = true;
 
 		    if (!isSoftSynth && getSequencerDataBlock()) {
 			Rosegarden::LevelInfo info;
@@ -2407,7 +2406,7 @@ AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev,
 
 	synthPlugin->sendEvent(t, ev);
 
-	if (now) m_jackDriver->setHaveSoftSynthAsyncEvent();
+	if (now) m_jackDriver->setHaveAsyncAudioEvent();
     }
 #endif
 }
@@ -2956,6 +2955,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 	    }
 	}
 	m_jackDriver->updateAudioData();
+	m_jackDriver->setHaveAsyncAudioEvent();
     }
 #endif
 }

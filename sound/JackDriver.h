@@ -172,7 +172,7 @@ public:
     // already.  It will switch this off again itself when things
     // fall silent.
     // 
-    void setHaveSoftSynthAsyncEvent() { m_haveSoftSynthAsyncEvent = true; }
+    void setHaveAsyncAudioEvent() { m_haveAsyncAudioEvent = true; }
 
     RealTime getNextSliceStart(const RealTime &now) const;
 
@@ -247,7 +247,7 @@ protected:
     float                        m_masterLevel;
     unsigned long                m_directMasterAudioInstruments; // bitmap
     unsigned long                m_directMasterSynthInstruments;
-    bool                         m_haveSoftSynthAsyncEvent;
+    bool                         m_haveAsyncAudioEvent;
 
     int                          m_recordInput;
     int                          m_recordInputChannel; // -1 -> stereo

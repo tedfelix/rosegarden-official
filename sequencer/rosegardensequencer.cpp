@@ -281,7 +281,7 @@ RosegardenSequencerApp::startPlaying()
     m_driver->initialiseAudioQueue(audioEvents);
 
 //    SEQUENCER_DEBUG << "RosegardenSequencerApp::startPlaying: pausing to simulate high-load environment" << endl;
-//    ::sleep(1);
+//    ::sleep(2);
 
     // and only now do we signal to start the clock
     //

@@ -1184,7 +1184,9 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
 	InstrumentId id = i->first;
 	BufferRec &rec = i->second;
 
-	rec.empty = (m_synths[id] == 0 && !queue->haveFilesForInstrument(id));
+	if (id >= SoftSynthInstrumentBase) rec.empty = (m_synths[id] == 0);
+	else rec.empty = !queue->haveFilesForInstrument(id);
+
 	if (rec.empty) {
 	    for (PluginList::iterator j = m_plugins[id].begin();
 		 j != m_plugins[id].end(); ++j) {
@@ -1225,9 +1227,12 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
 
 	    size_t playCount = MAX_FILES_PER_INSTRUMENT;
 
-	    queue->getPlayingFilesForInstrument(rec.filledTo,
-						blockDuration, id,
-						playing, playCount);
+	    if (id >= SoftSynthInstrumentBase) playCount = 0;
+	    else {
+		queue->getPlayingFilesForInstrument(rec.filledTo,
+						    blockDuration, id,
+						    playing, playCount);
+	    }
 
 	    if (processBlock(id, playing, playCount, readSomething)) {
 		more = true;
@@ -1304,9 +1309,9 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
     RealTime bufferTime = rec.filledTo;
 
 #ifdef DEBUG_MIXER
-    if (m_driver->isPlaying()) {
+//    if (m_driver->isPlaying()) {
 	if ((id % 100) == 0) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): buffer time is " << bufferTime << std::endl;
-    }
+//    }
 #endif
 
     unsigned int channels = rec.channels;
@@ -1329,9 +1334,9 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 	    minWriteSpace = thisWriteSpace;
 	    if (minWriteSpace < m_blockSize) {
 #ifdef DEBUG_MIXER
-		if (m_driver->isPlaying()) {
+//		if (m_driver->isPlaying()) {
 		    if ((id % 100) == 0) std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): only " << minWriteSpace << " write space on channel " << ch << " for block size " << m_blockSize << std::endl;
-		}
+//		}
 #endif
 		return false;
 	    }  
@@ -1694,7 +1699,7 @@ AudioFileReader::kick(bool wantLock)
 
     AudioPlayQueue::FileSet playing;
     
-    queue->getPlayingFiles(now, RealTime(1, 0), playing);
+    queue->getPlayingFiles(now, m_driver->getAudioReadBufferLength(), playing);
     
     for (AudioPlayQueue::FileSet::iterator fi = playing.begin();
 	 fi != playing.end(); ++fi) {

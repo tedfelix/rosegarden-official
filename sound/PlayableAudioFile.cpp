@@ -26,7 +26,7 @@ namespace Rosegarden
 {
 
 //#define DEBUG_RING_BUFFER_POOL 1
-//#define DEBUG_PLAYABLE 1
+#define DEBUG_PLAYABLE 1
 //#define DEBUG_RECORDABLE 1
 
 class RingBufferPool
@@ -247,7 +247,7 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
 //    m_smallFileSize = 0;
 
 #ifdef DEBUG_PLAYABLE
-    std::cerr << "PlayableAudioFile::PlayableAudioFile - creating " << this << std::endl;
+    std::cerr << "PlayableAudioFile::PlayableAudioFile - creating " << this << " for instrument " << instrumentId << std::endl;
 #endif
 
     if (!m_ringBufferPool) {
@@ -717,7 +717,7 @@ PlayableAudioFile::updateBuffers()
 	m_audioFile->getSampleFrames(m_file, m_rawFileBuffer, fileFrames);
 
 #ifdef DEBUG_PLAYABLE
-    std::cerr << "requested " << fileFrames << " frames from file for " << nframes << " frames, got " << obtained << " bytes" << std::endl;
+    std::cerr << "requested " << fileFrames << " frames from file for " << nframes << " frames, got " << obtained << " frames" << std::endl;
 #endif
 
 

@@ -32,7 +32,7 @@
 #ifdef HAVE_ALSA
 #ifdef HAVE_LIBJACK
 
-#define DEBUG_JACK_DRIVER 1
+//#define DEBUG_JACK_DRIVER 1
 //#define DEBUG_JACK_PROCESS 1
 
 namespace Rosegarden
@@ -61,7 +61,7 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
     m_masterLevel(1.0),
     m_directMasterAudioInstruments(0L),
     m_directMasterSynthInstruments(0L),
-    m_haveSoftSynthAsyncEvent(false),
+    m_haveAsyncAudioEvent(false),
     m_recordInput(1000),
     m_recordInputChannel(-1),
     m_recordLevel(0.0),
@@ -658,27 +658,25 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 #endif
 
     if (m_alsaDriver->getLowLatencyMode()) {
-
 	if (m_alsaDriver->areClocksRunning()) {
-
-	    if (m_alsaDriver->isPlaying() || m_haveSoftSynthAsyncEvent) {
+	    if (m_alsaDriver->isPlaying() || m_haveAsyncAudioEvent) {
 
 		if (m_instrumentMixer->tryLock() == 0) {
 		    m_instrumentMixer->kick(false);
 		    m_instrumentMixer->releaseLock();
-#ifdef DEBUG_JACK_PROCESS
+//#ifdef DEBUG_JACK_PROCESS
 		} else {
 		    std::cerr << "JackDriver::jackProcess: no instrument mixer lock available" << std::endl;
-#endif
+//#endif
 		}
 		if (m_bussMixer->getBussCount() > 0) {
 		    if (m_bussMixer->tryLock() == 0) {
 			m_bussMixer->kick(false);
 			m_bussMixer->releaseLock();
-#ifdef DEBUG_JACK_PROCESS
+//#ifdef DEBUG_JACK_PROCESS
 		    } else {
 			std::cerr << "JackDriver::jackProcess: no buss mixer lock available" << std::endl;
-#endif
+//#endif
 		    }
 		}
 	    }
@@ -711,15 +709,23 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		}
 	    } else if (m_alsaDriver->areClocksRunning()) {
 		jackProcessRecord(nframes, 0, 0); // for monitoring
+
+		if (!m_haveAsyncAudioEvent) {
+#ifdef DEBUG_JACK_PROCESS
+		    std::cerr << "JackDriver::jackProcess: no interesting async events" << std::endl;
+#endif
+		    return jackProcessEmpty(nframes);
+		}
+	    } else {
+		return jackProcessEmpty(nframes);
 	    }
-	    return jackProcessEmpty(nframes);
 	} else if (state == JackTransportStarting) {
 	    return jackProcessEmpty(nframes);
 	} else if (state == JackTransportRolling) {
 	    if (m_waiting) {
-//#ifdef DEBUG_JACK_PROCESS
+#ifdef DEBUG_JACK_PROCESS
 		std::cerr << "JackDriver::jackProcess: telling ALSA driver to go!" << std::endl;
-//#endif
+#endif
 		m_alsaDriver->startClocksApproved();
 		m_waiting = false;
 	    }
@@ -740,7 +746,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 #endif
 	    jackProcessRecord(nframes, 0, 0); // for monitoring
 
-	    if (!m_haveSoftSynthAsyncEvent) {
+	    if (!m_haveAsyncAudioEvent) {
 #ifdef DEBUG_JACK_PROCESS
 		std::cerr << "JackDriver::jackProcess: no interesting async events" << std::endl;
 #endif
@@ -834,7 +840,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     std::cerr << "JackDriver::jackProcess: have " << audioInstruments << " audio and " << synthInstruments << " synth instruments" << std::endl;
 #endif
 
-    bool allSynthsDormant = true;
+    bool allInstrumentsDormant = true;
+    static RealTime dormantTime = RealTime::zeroTime;
 
     for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
 	
@@ -898,7 +905,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
 	    } else {
 
-		if (id >= SoftSynthInstrumentBase) allSynthsDormant = false;
+		allInstrumentsDormant = false;
 
 		size_t actual = rb->read(instrument[ch], nframes);
 
@@ -909,6 +916,9 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 #endif
 
 		if (actual < nframes) {
+
+		    std::cerr << "JackDriver::jackProcess: read " << actual << " of " << nframes << " frames for instrument " << id << " channel " << ch << std::endl;
+
 		    reportFailure(Rosegarden::MappedEvent::FailureMixUnderrun);
 		}
 		for (size_t f = 0; f < nframes; ++f) {
@@ -936,6 +946,18 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		(peak[1], 127, AudioLevel::LongFader);
 
 	    sdb->setInstrumentLevel(id, info);
+	}
+    }
+
+    if (m_haveAsyncAudioEvent) {
+	if (!allInstrumentsDormant) {
+	    dormantTime = RealTime::zeroTime;
+	} else {
+	    dormantTime = dormantTime +
+		RealTime::frame2RealTime(m_bufferSize, m_sampleRate);
+	    if (dormantTime > RealTime(10, 0)) {
+		m_haveAsyncAudioEvent = false;
+	    }
 	}
     }
 
@@ -1371,7 +1393,7 @@ JackDriver::stop()
 {
     if (!m_client) return;
 
-    m_haveSoftSynthAsyncEvent = false;
+    m_haveAsyncAudioEvent = false;
 
 #ifdef DEBUG_JACK_DRIVER
     struct timeval tv;

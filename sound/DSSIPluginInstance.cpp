@@ -26,7 +26,7 @@
 
 #ifdef HAVE_DSSI
 
-//#define DEBUG_DSSI 1
+#define DEBUG_DSSI 1
 //#define DEBUG_DSSI_PROCESS 1
 
 namespace Rosegarden
@@ -441,8 +441,6 @@ DSSIPluginInstance::selectProgram(QString program)
     // port-controller mappings
     //
     // proper handling of MIDI program changes and other such
-    // 
-    // asynchronous events not handled properly in AlsaDriver
 
     if (found) {
 	//!!! no -- must be scheduled for call from audio context, with run()
