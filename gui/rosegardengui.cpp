@@ -1318,6 +1318,9 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
     // and the tempo
     m_transport->setTempo(comp.getTempoAt(elapsedTime));
 
+    // and the time sig
+    m_transport->setTimeSignature(comp.getTimeSignatureAt(elapsedTime));
+
     // and the time...
     //
     if (m_transport->isShowingBarTime()) {
@@ -1363,6 +1366,9 @@ void RosegardenGUIApp::setPointerPosition(timeT t)
 
     // and the tempo
     m_transport->setTempo(comp.getTempoAt(t));
+
+    // and the time sig
+    m_transport->setTimeSignature(comp.getTimeSignatureAt(t));
 
     // and the time
     //

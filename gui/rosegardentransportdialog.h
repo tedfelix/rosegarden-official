@@ -47,6 +47,7 @@ public:
     bool isShowingBarTime();
 
     void setTempo(const double &tempo);
+    void setTimeSignature(const Rosegarden::TimeSignature &timeSig);
 
     // Called indirectly from the sequencer and from the GUI to
     // show incoming and outgoing MIDI events on the Transport
@@ -103,6 +104,8 @@ private:
     int m_tenThousandths;
 
     double m_tempo;
+    int m_numerator;
+    int m_denominator;
 
     QTimer *m_midiInTimer;
     QTimer *m_midiOutTimer;

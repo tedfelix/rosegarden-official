@@ -371,6 +371,20 @@ RosegardenTransportDialog::setTempo(const double &tempo)
     TempoDisplay->setText(tempoString);
 }
 
+void
+RosegardenTransportDialog::setTimeSignature(const Rosegarden::TimeSignature &timeSig)
+{
+    int numerator = timeSig.getNumerator();
+    int denominator = timeSig.getDenominator();
+    if (m_numerator == numerator && m_denominator == denominator) return;
+    m_numerator = numerator;
+    m_denominator = denominator;
+
+    QString timeSigString;
+    timeSigString.sprintf("%d/%d", numerator, denominator);
+    TimeSigDisplay->setText(timeSigString);
+}
+
 
 // Set the midi label to this MappedEvent
 //
