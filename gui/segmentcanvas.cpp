@@ -510,13 +510,40 @@ void SegmentItem::drawShape(QPainter& painter)
         
     if (m_preview && m_showPreview) m_preview->drawShape(painter);
 
+    // Don't show label if we're showing the preview
+    //
+    if (m_showPreview  && m_segment->getType() == Rosegarden::Segment::Audio)
+        return;
+
     // draw label
-    if (m_segment && m_segment->getType() != Rosegarden::Segment::Audio)
+    if (m_segment) 
     {
-        painter.setPen(RosegardenGUIColours::SegmentLabel);
         painter.setFont(*m_font);
         QRect labelRect = rect();
-        labelRect.setX(labelRect.x() + 3);
+        int x = labelRect.x() + 3;
+        int y = labelRect.y();
+
+        // This will be useful over the top of audio previews once
+        // we've got vertical zooming too - for the moment it's nice
+        // to have it for audio segments too.  [rwb]
+        //
+        if(m_segment->getType() == Rosegarden::Segment::Audio)
+        {
+            painter.setPen(Qt::white);
+            for (int wX = x - 2; wX < x + 2; wX++)
+                for (int wY = y - 2; wY < y + 2; wY++)
+                {
+                    labelRect.setX(wX);
+                    labelRect.setY(wY);
+                    painter.drawText(labelRect,
+                                     Qt::AlignLeft|Qt::AlignVCenter,
+                                     m_label);
+                }
+        }
+
+        labelRect.setX(x);
+        labelRect.setY(y);
+        painter.setPen(RosegardenGUIColours::SegmentLabel);
         painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
     }
 

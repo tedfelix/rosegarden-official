@@ -218,7 +218,11 @@ InstrumentParameterBox::initBox()
 
     for (unsigned int i = 0; i < m_pluginButtons.size(); i++)
     {
-        gridLayout->addRowSpacing(12 + 1 + i, m_pluginButtons[i]->height());
+        // Unfortunately while this fixes some of our layout problems
+        // it also fixes the size of hidden rows making our parameter
+        // box a bit unwieldy.
+        //
+        //gridLayout->addRowSpacing(12 + 1 + i, m_pluginButtons[i]->height());
         gridLayout->addMultiCellWidget(m_pluginButtons[i],
                                        12 + i, 12 + i, 1, 2, AlignCenter);
         connect(m_pluginButtons[i], SIGNAL(released(int)),

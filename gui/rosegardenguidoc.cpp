@@ -1265,7 +1265,7 @@ RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime &time,
 
             label += std::string("(recorded audio)");
         }
-
+        m_recordSegment->setLabel(label);
         
         // new audio file will have been pushed to the back of the
         // AudioFileManager queue - fetch it out and get the 
