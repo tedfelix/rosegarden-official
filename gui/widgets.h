@@ -224,6 +224,7 @@ private:
     bool m_firstTimeout;
     bool m_shown;
     bool m_useDelay;
+    bool m_changedCursor;
 };
    
 			      

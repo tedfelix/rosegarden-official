@@ -277,7 +277,8 @@ RosegardenProgressBar::RosegardenProgressBar(int totalSteps,
     Rosegarden::Progress(totalSteps),
     m_timeoutSet(0),
     m_shown(true),
-    m_useDelay(useDelay)
+    m_useDelay(useDelay),
+    m_changedCursor(false)
 {
 }
 
@@ -317,6 +318,7 @@ RosegardenProgressBar::processEvents()
 	    setProgress(m_value);
 	    QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
 	    m_shown = true;
+	    m_changedCursor = true;
 	    m_timeoutSet = 0;
 	}
     }
@@ -328,8 +330,9 @@ void
 RosegardenProgressBar::done()
 {
     reset();
-    if (m_shown && m_useDelay) {
+    if (m_changedCursor) {
 	QApplication::restoreOverrideCursor();
+	m_changedCursor = false;
     }
     m_shown = true;
     m_value = 0;
