@@ -921,7 +921,8 @@ ArtsDriver::processEventsOut(const MappedComposition &mC,
         if ((*i)->getType() == MappedEvent::Audio)
         {
             PlayableAudioFile *audioFile =
-                    new PlayableAudioFile(getAudioFile((*i)->getAudioID()),
+                    new PlayableAudioFile((*i)->getInstrument(),
+                                          getAudioFile((*i)->getAudioID()),
                                           (*i)->getEventTime(),
                                           (*i)->getAudioStartMarker(),
                                           (*i)->getDuration());
