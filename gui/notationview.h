@@ -356,7 +356,7 @@ public slots:
     void setCursorPosition(unsigned int);
 
     /// Gets the position of the cursor as a pixel X coord
-    unsigned int getCursorPosition() const;
+    //unsigned int getCursorPosition() const;
 
 signals:
     /**
