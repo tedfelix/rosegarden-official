@@ -243,9 +243,6 @@ Segment::clearEndMarker()
 }
 
 
-#endif
-
-
 void
 Segment::erase(iterator pos)
 {
