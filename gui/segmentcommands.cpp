@@ -37,7 +37,7 @@ using Rosegarden::AudioFileManager;
 
 
 SegmentCommand::SegmentCommand(QString name, const std::vector<Rosegarden::Segment*>& segments)
-    : XKCommand(name)
+    : KNamedCommand(name)
 {
     m_segments.resize(segments.size());
     std::copy(segments.begin(), segments.end(), m_segments.begin());
@@ -111,7 +111,7 @@ void SegmentCommandRepeat::unexecute()
 // --------- Erase Segment --------
 //
 SegmentEraseCommand::SegmentEraseCommand(Segment *segment) :
-    XKCommand("Erase Segment"),
+    KNamedCommand("Erase Segment"),
     m_composition(segment->getComposition()),
     m_segment(segment),
     m_detached(false)
@@ -149,7 +149,7 @@ SegmentEraseCommand::unexecute()
 // --------- Copy Segment ---------
 //
 SegmentQuickCopyCommand::SegmentQuickCopyCommand(Segment *segment):
-    XKCommand("Quick-Copy Segment"),
+    KNamedCommand("Quick-Copy Segment"),
     m_composition(segment->getComposition()),
     m_segmentToCopy(segment),
     m_segment(0),
@@ -186,7 +186,7 @@ SegmentQuickCopyCommand::unexecute()
 //
 SegmentRepeatToCopyCommand::SegmentRepeatToCopyCommand(
         Rosegarden::Segment *segment):
-    XKCommand("Repeating Segment to Copies"),
+    KNamedCommand("Repeating Segment to Copies"),
     m_composition(segment->getComposition()),
     m_segment(segment),
     m_detached(false)
@@ -272,7 +272,7 @@ AudioSegmentInsertCommand::AudioSegmentInsertCommand(
         Rosegarden::AudioFileId audioFileId,
         const Rosegarden::RealTime &audioStartTime,
         const Rosegarden::RealTime &audioEndTime):
-    XKCommand("Create Segment"),
+    KNamedCommand("Create Segment"),
     m_composition(&(doc->getComposition())),
     m_studio(&(doc->getStudio())),
     m_audioFileManager(&(doc->getAudioFileManager())),
@@ -356,7 +356,7 @@ SegmentInsertCommand::SegmentInsertCommand(RosegardenGUIDoc *doc,
                                            TrackId track,
                                            timeT startTime,
                                            timeT endTime):
-    XKCommand("Create Segment"),
+    KNamedCommand("Create Segment"),
     m_composition(&(doc->getComposition())),
     m_studio(&(doc->getStudio())),
     m_segment(0),
@@ -427,7 +427,7 @@ SegmentInsertCommand::unexecute()
 //
 
 SegmentRecordCommand::SegmentRecordCommand(Segment *s) :
-    XKCommand("Record"),
+    KNamedCommand("Record"),
     m_composition(s->getComposition()),
     m_segment(s),
     m_detached(false)
@@ -463,7 +463,7 @@ SegmentRecordCommand::unexecute()
 //
 
 SegmentReconfigureCommand::SegmentReconfigureCommand(QString name) :
-    XKCommand(name)
+    KNamedCommand(name)
 {
 }
 
@@ -543,7 +543,7 @@ SegmentReconfigureCommand::swap()
 
 AudioSegmentSplitCommand::AudioSegmentSplitCommand(Segment *segment,
 					           timeT splitTime) :
-    XKCommand("Split Audio Segment"),
+    KNamedCommand("Split Audio Segment"),
     m_segment(segment),
     m_newSegment(0),
     m_splitTime(splitTime),
@@ -647,7 +647,7 @@ AudioSegmentSplitCommand::unexecute()
 
 SegmentSplitCommand::SegmentSplitCommand(Segment *segment,
 					 timeT splitTime) :
-    XKCommand("Split Segment"),
+    KNamedCommand("Split Segment"),
     m_segment(segment),
     m_newSegment(0),
     m_splitTime(splitTime),
@@ -781,7 +781,7 @@ AudioSegmentAutoSplitCommand::AudioSegmentAutoSplitCommand(
         RosegardenGUIDoc *doc,
         Segment *segment,
         int threshold) :
-    XKCommand(getGlobalName()),
+    KNamedCommand(getGlobalName()),
     m_segment(segment),
     m_composition(segment->getComposition()),
     m_audioFileManager(&(doc->getAudioFileManager())),
@@ -867,7 +867,7 @@ AudioSegmentAutoSplitCommand::unexecute()
 //
 
 SegmentAutoSplitCommand::SegmentAutoSplitCommand(Segment *segment) :
-    XKCommand(getGlobalName()),
+    KNamedCommand(getGlobalName()),
     m_segment(segment),
     m_composition(segment->getComposition()),
     m_detached(false)
@@ -1005,7 +1005,7 @@ SegmentAutoSplitCommand::unexecute()
 
 SegmentMergeCommand::SegmentMergeCommand(const Rosegarden::SegmentSelection &
 					 segments) :
-    XKCommand(getGlobalName()),
+    KNamedCommand(getGlobalName()),
     m_newSegment(0),
     m_detached(false) // true if the old segments are detached, not the new
 {
@@ -1087,7 +1087,7 @@ SegmentMergeCommand::unexecute()
 SegmentRescaleCommand::SegmentRescaleCommand(Segment *s,
 					     int multiplier,
 					     int divisor) :
-    XKCommand(getGlobalName()),
+    KNamedCommand(getGlobalName()),
     m_segment(s),
     m_newSegment(0),
     m_multiplier(multiplier),
@@ -1151,7 +1151,7 @@ SegmentRescaleCommand::unexecute()
 
 
 SegmentChangeQuantizationCommand::SegmentChangeQuantizationCommand(Rosegarden::StandardQuantization *sq) :
-    XKCommand(getGlobalName(sq)),
+    KNamedCommand(getGlobalName(sq)),
     m_quantization(sq)
 {
     // nothing
@@ -1236,7 +1236,7 @@ SegmentChangeQuantizationCommand::getGlobalName(Rosegarden::StandardQuantization
 AddTimeSignatureCommand::AddTimeSignatureCommand(Composition *composition,
 						 timeT time,
 						 Rosegarden::TimeSignature timeSig) :
-    XKCommand(getGlobalName()),
+    KNamedCommand(getGlobalName()),
     m_composition(composition),
     m_time(time),
     m_timeSignature(timeSig),
@@ -1413,7 +1413,7 @@ ChangeCompositionLengthCommand::ChangeCompositionLengthCommand(
         Rosegarden::Composition *composition,
         Rosegarden::timeT startTime,
         Rosegarden::timeT endTime):
-            XKCommand(getGlobalName()),
+            KNamedCommand(getGlobalName()),
             m_composition(composition),
             m_startTime(startTime),
             m_endTime(endTime),

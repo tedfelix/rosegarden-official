@@ -29,7 +29,7 @@
 class RosegardenGUIDoc;
 namespace Rosegarden { class Studio; }
 
-class ModifyDeviceCommand : public XKCommand
+class ModifyDeviceCommand : public KNamedCommand
 {
 public:
     ModifyDeviceCommand(Rosegarden::Studio *studio,
@@ -57,7 +57,7 @@ protected:
 
 };
 
-class ModifyDeviceMappingCommand : public XKCommand
+class ModifyDeviceMappingCommand : public KNamedCommand
 {
 public:
     ModifyDeviceMappingCommand(RosegardenGUIDoc *doc,
@@ -78,7 +78,7 @@ protected:
                              m_mapping;
 };
 
-class ModifyInstrumentMappingCommand : public XKCommand
+class ModifyInstrumentMappingCommand : public KNamedCommand
 {
 public:
     ModifyInstrumentMappingCommand(RosegardenGUIDoc *doc,

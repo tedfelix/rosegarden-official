@@ -75,13 +75,13 @@ public:
     static QString getGlobalName() { return "C&ut and Close"; }
 
 protected:
-    class CloseCommand : public XKCommand
+    class CloseCommand : public KNamedCommand
     {
     public:
 	CloseCommand(Rosegarden::Segment *segment,
 		     Rosegarden::timeT fromTime,
 		     Rosegarden::timeT toTime) :
-	    XKCommand("Close"),
+	    KNamedCommand("Close"),
 	    m_segment(segment),
 	    m_fromTime(fromTime),
 	    m_toTime(toTime) { }
@@ -99,7 +99,7 @@ protected:
 
 /// Copy a selection
 
-class CopyCommand : public XKCommand
+class CopyCommand : public KNamedCommand
 {
 public:
     /// Make a CopyCommand that copies events from within a Segment
@@ -125,7 +125,7 @@ protected:
 
 /// Paste one or more segments from the clipboard into the composition
 
-class PasteSegmentsCommand : public XKCommand
+class PasteSegmentsCommand : public KNamedCommand
 {
 public:
     PasteSegmentsCommand(Rosegarden::Composition *composition,
@@ -297,7 +297,7 @@ private:
 };
 
 
-class SetLyricsCommand : public XKCommand
+class SetLyricsCommand : public KNamedCommand
 {
 public:
     SetLyricsCommand(Rosegarden::Segment *segment, QString newLyricData);

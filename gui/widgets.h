@@ -34,17 +34,9 @@
 #include <qcolor.h>
 #include <qdatetime.h>
 
-#ifdef RGKDE3
-
 #define private protected // ugly hack but we want to access KProgressDialog::mShowTimer
 #include <kprogress.h>
 #undef private
-
-#else // include without the hack
-
-#include <kprogress.h>
-
-#endif
 
 /** Create out own check box which is always Tristate 
  * and allows us to click only between on and off
@@ -163,12 +155,6 @@ protected:
 private:
     QFont m_font;
 };
-
-// KDE2 goo 
-#ifndef RGKDE3
-#define KProgressDialog RGKProgressDialog
-#include "kprogress_imported.h"
-#endif
 
 class RosegardenProgressDialog : public KProgressDialog
 {

@@ -31,7 +31,7 @@ ModifyDeviceCommand::ModifyDeviceCommand(
         const std::string &name,
         std::vector<Rosegarden::MidiBank> bankList,
         std::vector<Rosegarden::MidiProgram> programList):
-    XKCommand(getGlobalName()),
+    KNamedCommand(getGlobalName()),
     m_studio(studio),
     m_device(device),
     m_name(name),
@@ -72,7 +72,7 @@ ModifyDeviceMappingCommand::ModifyDeviceMappingCommand(
         RosegardenGUIDoc *doc,
         Rosegarden::DeviceId fromDevice,
         Rosegarden::DeviceId toDevice):
-            XKCommand(getGlobalName()),
+            KNamedCommand(getGlobalName()),
             m_composition(&doc->getComposition()),
             m_studio(&doc->getStudio()),
             m_fromDevice(fromDevice),
@@ -186,7 +186,7 @@ ModifyInstrumentMappingCommand::ModifyInstrumentMappingCommand(
         RosegardenGUIDoc *doc,
         Rosegarden::InstrumentId fromInstrument,
         Rosegarden::InstrumentId toInstrument):
-            XKCommand(getGlobalName()),
+            KNamedCommand(getGlobalName()),
             m_composition(&doc->getComposition()),
             m_studio(&doc->getStudio()),
             m_fromInstrument(fromInstrument),

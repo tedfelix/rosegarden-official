@@ -148,7 +148,7 @@ CutAndCloseCommand::CloseCommand::unexecute()
 
 CopyCommand::CopyCommand(EventSelection &selection,
 			 Rosegarden::Clipboard *clipboard) :
-    XKCommand(getGlobalName()),
+    KNamedCommand(getGlobalName()),
     m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Rosegarden::Clipboard;
@@ -158,7 +158,7 @@ CopyCommand::CopyCommand(EventSelection &selection,
 
 CopyCommand::CopyCommand(SegmentSelection &selection,
 			 Rosegarden::Clipboard *clipboard) :
-    XKCommand(getGlobalName()),
+    KNamedCommand(getGlobalName()),
     m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Rosegarden::Clipboard;
@@ -195,7 +195,7 @@ CopyCommand::unexecute()
 PasteSegmentsCommand::PasteSegmentsCommand(Rosegarden::Composition *composition,
 					   Rosegarden::Clipboard *clipboard,
 					   Rosegarden::timeT pasteTime) :
-    XKCommand(getGlobalName()),
+    KNamedCommand(getGlobalName()),
     m_composition(composition),
     m_clipboard(clipboard),
     m_pasteTime(pasteTime)
@@ -756,7 +756,7 @@ EventUnquantizeCommand::modifySegment()
 
 
 SetLyricsCommand::SetLyricsCommand(Segment *segment, QString newLyricData) :
-    XKCommand(getGlobalName()),
+    KNamedCommand(getGlobalName()),
     m_segment(segment),
     m_newLyricData(newLyricData)
 {

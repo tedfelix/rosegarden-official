@@ -38,12 +38,6 @@
 
 namespace Rosegarden { class EventSelection; }
 
-#ifdef RGKDE3
-typedef KNamedCommand XKCommand;
-#else
-typedef KCommand XKCommand;
-#endif
-
 /**
  * BasicCommand is an abstract subclass of Command that manages undo,
  * redo and notification of changes within a contiguous region of a
@@ -52,7 +46,7 @@ typedef KCommand XKCommand;
  * modified by the command, ready to be restored verbatim on undo.
  */
 
-class BasicCommand : public XKCommand
+class BasicCommand : public KNamedCommand
 {
 public:
     virtual ~BasicCommand();

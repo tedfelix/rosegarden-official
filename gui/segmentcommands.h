@@ -33,16 +33,10 @@
 #include "AudioFileManager.h"
 #include "Selection.h"
 
-#ifdef RGKDE3
-typedef KNamedCommand XKCommand;
-#else
-typedef KCommand XKCommand;
-#endif
-
 /**
  * Base class for commands from the SegmentParameterBox
  */
-class SegmentCommand : public XKCommand
+class SegmentCommand : public KNamedCommand
 {
 public:
     SegmentCommand(QString name, const std::vector<Rosegarden::Segment*>&);
@@ -92,7 +86,7 @@ protected:
 
 ////////////////////////////////////////////////////////////
 
-class SegmentEraseCommand : public XKCommand
+class SegmentEraseCommand : public KNamedCommand
 {
 public:
     SegmentEraseCommand(Rosegarden::Segment *segment);
@@ -107,7 +101,7 @@ private:
     bool m_detached;
 };
 
-class SegmentRepeatToCopyCommand : public XKCommand
+class SegmentRepeatToCopyCommand : public KNamedCommand
 {
 public:
     SegmentRepeatToCopyCommand(Rosegarden::Segment *segment);
@@ -124,7 +118,7 @@ private:
     bool                               m_detached;
 };
 
-class SegmentQuickCopyCommand : public XKCommand
+class SegmentQuickCopyCommand : public KNamedCommand
 {
 public:
     SegmentQuickCopyCommand(Rosegarden::Segment *segment);
@@ -144,7 +138,7 @@ private:
 };
 
 
-class AudioSegmentInsertCommand : public XKCommand
+class AudioSegmentInsertCommand : public KNamedCommand
 {
 public:
     AudioSegmentInsertCommand(RosegardenGUIDoc *doc,
@@ -171,7 +165,7 @@ private:
     bool                          m_detached;
 };
 
-class SegmentInsertCommand : public XKCommand
+class SegmentInsertCommand : public KNamedCommand
 {
 public:
     SegmentInsertCommand(RosegardenGUIDoc *doc,
@@ -201,7 +195,7 @@ private:
  * correctly, and it provides the ability to undo recording.  (The
  * unexecute does remove the segment, it doesn't just pretend to.)
  */
-class SegmentRecordCommand : public XKCommand
+class SegmentRecordCommand : public KNamedCommand
 {
 public:
     SegmentRecordCommand(Rosegarden::Segment *segment);
@@ -221,7 +215,7 @@ private:
  * SegmentReconfigureCommand is a general-purpose command for
  * moving, resizing or changing the track of one or more segments
  */
-class SegmentReconfigureCommand : public XKCommand
+class SegmentReconfigureCommand : public KNamedCommand
 {
 public:
     SegmentReconfigureCommand(QString name);
@@ -251,7 +245,7 @@ private:
 };
 
 
-class AudioSegmentSplitCommand : public XKCommand
+class AudioSegmentSplitCommand : public KNamedCommand
 {
 public:
     AudioSegmentSplitCommand(Rosegarden::Segment *segment,
@@ -271,7 +265,7 @@ private:
     Rosegarden::RealTime m_previousEndAudioTime;
 };
 
-class SegmentSplitCommand : public XKCommand
+class SegmentSplitCommand : public KNamedCommand
 {
 public:
     SegmentSplitCommand(Rosegarden::Segment *segment,
@@ -290,7 +284,7 @@ private:
     std::string m_segmentLabel;
 };
 
-class AudioSegmentAutoSplitCommand : public XKCommand
+class AudioSegmentAutoSplitCommand : public KNamedCommand
 {
 public:
     AudioSegmentAutoSplitCommand(RosegardenGUIDoc *doc,
@@ -312,7 +306,7 @@ private:
     int                                 m_threshold;
 };
 
-class SegmentAutoSplitCommand : public XKCommand
+class SegmentAutoSplitCommand : public KNamedCommand
 {
 public:
     SegmentAutoSplitCommand(Rosegarden::Segment *segment);
@@ -331,7 +325,7 @@ private:
 };
 
 
-class SegmentMergeCommand : public XKCommand
+class SegmentMergeCommand : public KNamedCommand
 {
 public:
     SegmentMergeCommand(const Rosegarden::SegmentSelection &segments);
@@ -349,7 +343,7 @@ private:
 };
 
 
-class SegmentRescaleCommand : public XKCommand
+class SegmentRescaleCommand : public KNamedCommand
 {
 public:
     SegmentRescaleCommand(Rosegarden::Segment *segment,
@@ -371,7 +365,7 @@ private:
 };
 
 
-class SegmentChangeQuantizationCommand : public XKCommand
+class SegmentChangeQuantizationCommand : public KNamedCommand
 {
 public:
     /// Set quantization on segments.  If sq is null, switch quantization off.
@@ -398,7 +392,7 @@ private:
 };
 
 
-class AddTimeSignatureCommand : public XKCommand
+class AddTimeSignatureCommand : public KNamedCommand
 {
 public:
     AddTimeSignatureCommand(Rosegarden::Composition *composition,
@@ -433,12 +427,12 @@ public:
 
 
 
-class ModifyDefaultTempoCommand : public XKCommand
+class ModifyDefaultTempoCommand : public KNamedCommand
 {
 public:
     ModifyDefaultTempoCommand(Rosegarden::Composition *composition,
                               double tempo):
-	XKCommand(getGlobalName()),
+	KNamedCommand(getGlobalName()),
         m_composition(composition),
         m_tempo(tempo) {}
 
@@ -456,12 +450,12 @@ private:
 };
 
 
-class RemoveTempoChangeCommand : public XKCommand
+class RemoveTempoChangeCommand : public KNamedCommand
 {
 public:
     RemoveTempoChangeCommand(Rosegarden::Composition *composition,
                              int index):
-	XKCommand(getGlobalName()),
+	KNamedCommand(getGlobalName()),
         m_composition(composition),
         m_tempoChangeIndex(index),
         m_oldTime(0),
@@ -483,13 +477,13 @@ private:
 
 
 
-class AddTempoChangeCommand : public XKCommand
+class AddTempoChangeCommand : public KNamedCommand
 {
 public:
     AddTempoChangeCommand(Rosegarden::Composition *composition,
                           Rosegarden::timeT time,
                           double tempo):
-	XKCommand(getGlobalName()),
+	KNamedCommand(getGlobalName()),
         m_composition(composition),
         m_time(time),
         m_tempo(tempo),
@@ -512,13 +506,13 @@ private:
 };
 
 
-class AddTracksCommand : public XKCommand
+class AddTracksCommand : public KNamedCommand
 {
 public:
     AddTracksCommand(Rosegarden::Composition *composition,
                      unsigned int nbTracks,
                      Rosegarden::InstrumentId id): 
-        XKCommand(getGlobalName()),
+        KNamedCommand(getGlobalName()),
         m_composition(composition),
         m_nbNewTracks(nbTracks),
         m_instrumentId(id) {}
@@ -534,7 +528,7 @@ private:
     Rosegarden::InstrumentId m_instrumentId;
 };
 
-class ChangeCompositionLengthCommand : public XKCommand
+class ChangeCompositionLengthCommand : public KNamedCommand
 {
 public:
     ChangeCompositionLengthCommand(Rosegarden::Composition *composition,
