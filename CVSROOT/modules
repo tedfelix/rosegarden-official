@@ -35,5 +35,5 @@ toplevel !gui/rosegardengui !gui/admin !gui/po gui
 #
 rosegarden &admin &core &docs &gui &po &sound
 
-rgtest -d rosegarden toplevel &admin &core &docs &gui &po &sound
+rgtest -d rosegarden &toplevel &admin &core &docs &gui &po &sound
 
