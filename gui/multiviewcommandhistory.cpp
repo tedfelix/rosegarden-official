@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 /*
     Rosegarden-4
     A sequencer and musical notation editor.
@@ -250,25 +252,25 @@ MultiViewCommandHistory::slotRedoActivated(int pos)
 void
 MultiViewCommandHistory::slotUndoAboutToShow()
 {
-    updateMenu("Und&o", KStdAction::stdName(KStdAction::Undo), m_undoStack);
+    updateMenu(true, KStdAction::stdName(KStdAction::Undo), m_undoStack);
 }
 
 void
 MultiViewCommandHistory::slotRedoAboutToShow()
 {
-    updateMenu("Re&do", KStdAction::stdName(KStdAction::Redo), m_redoStack);
+    updateMenu(false, KStdAction::stdName(KStdAction::Redo), m_redoStack);
 }
 
 void
 MultiViewCommandHistory::updateButtons()
 {
-    updateButton("Und&o", KStdAction::stdName(KStdAction::Undo), m_undoStack);
-    updateButton("Re&do", KStdAction::stdName(KStdAction::Redo), m_redoStack);
+    updateButton(true,  KStdAction::stdName(KStdAction::Undo), m_undoStack);
+    updateButton(false, KStdAction::stdName(KStdAction::Redo), m_redoStack);
 }
 
 
 void
-MultiViewCommandHistory::updateButton(const QString &text,
+MultiViewCommandHistory::updateButton(bool undo,
 				      const QString &name,
 				      CommandStack &stack)
 {
@@ -276,22 +278,27 @@ MultiViewCommandHistory::updateButton(const QString &text,
 
 	KAction *action = (*i)->action(name);
 	if (!action) continue;
+	QString text;
 
 	if (stack.empty()) {
 	    action->setEnabled(false);
-	    action->setText(QString(i18n("Nothing to %1")).arg(text));
+	    if (undo) text = i18n("Nothing to undo");
+	    else      text = i18n("Nothing to redo");
+	    action->setText(text);
 	} else {
 	    action->setEnabled(true);
 	    QString commandName = stack.top()->name();
 	    commandName.replace(QRegExp("&"), "");
-	    action->setText(text + " " + commandName);
+	    if (undo) text = i18n("Und&o %1").arg(commandName);
+	    else      text = i18n("Re&do %1").arg(commandName);
+	    action->setText(text);
 	}
     }
 }
 
 
 void
-MultiViewCommandHistory::updateMenu(const QString &text,
+MultiViewCommandHistory::updateMenu(bool undo,
 				    const QString &name,
 				    CommandStack &stack)
 {
@@ -320,7 +327,10 @@ MultiViewCommandHistory::updateMenu(const QString &text,
 	    QString commandName = command->name();
 	    commandName.replace(QRegExp("&"), "");
 
-	    menu->insertItem(QString("%1 %2").arg(text).arg(commandName), j++);
+	    QString text;
+	    if (undo) text = i18n("Und&o %1").arg(commandName);
+	    else      text = i18n("Re&do %1").arg(commandName);
+	    menu->insertItem(text, j++);
 	}
 
 	while (!tempStack.empty()) {

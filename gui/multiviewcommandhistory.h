@@ -125,10 +125,8 @@ private:
     int m_savedAt;
 
     void updateButtons();
-    void updateButton(const QString &text, const QString &name,
-		      CommandStack &stack);
-    void updateMenu(const QString &text, const QString &name,
-		    CommandStack &stack);
+    void updateButton(bool undo, const QString &name, CommandStack &stack);
+    void updateMenu(bool undo, const QString &name, CommandStack &stack);
     void clipCommands();
 
     void clipStack(CommandStack &stack, int limit);
