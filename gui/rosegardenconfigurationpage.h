@@ -377,6 +377,11 @@ protected slots:
     //
     void calculateStats();
 
+    void slotFoundMountPoint(const QString&,
+                             unsigned long kBSize,
+                             unsigned long kBUsed,
+                             unsigned long kBAvail);
+    
 protected:
 
     //--------------- Data members ---------------------------------

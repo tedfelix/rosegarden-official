@@ -20,7 +20,6 @@ rosegarden_SOURCES = \
 	deviceeditor.cpp \
 	devicemanager.cpp \
 	dialogs.cpp \
-        diskspace.cpp \
 	editcommands.cpp \
 	edittool.cpp \
 	editview.cpp \

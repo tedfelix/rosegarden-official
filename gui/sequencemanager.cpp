@@ -44,9 +44,6 @@
 #include "MidiDevice.h"
 #include "rosestrings.h"
 #include "mmapper.h"
-// #include "widgets.h"
-// #include "dialogs.h"
-#include "diskspace.h"
 #include "sequencermapper.h"
 
 
@@ -676,29 +673,24 @@ punchin:
 
         case Instrument::Audio: {
 
-            // check for disk space available
-            DiskSpace *space;
-            AudioFileManager &afm = 
-                m_doc->getAudioFileManager();
-            QString audioPath = strtoqstr(afm.getAudioPath());
-
-            try {
-                space = new DiskSpace(audioPath);
-            }
-            catch(QString e)
-                {
-                    // Add message and re-throw
-                    //
-                    QString m = i18n("Audio record path \"") +
-                        audioPath + QString("\". ") + e + QString("\n") +
-                        i18n("Edit your audio path properties (Edit->Edit Document Properties->Audio)");
-                    throw(m);
-                }
+//             AudioFileManager &afm = m_doc->getAudioFileManager();
+//             QString mountPoint = KIO::findPathMountPoint(strtoqstr(afm.getAudioPath()));
+//             KDiskFreeSp * job = new KDiskFreeSp;
+//             connect(job, SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long,
+//                                                 unsigned long)),
+//                     this, SLOT(slotFoundMountPoint(const QString&, unsigned long, unsigned long,
+//                                                    unsigned long)));
+//             m_gotDiskSpaceResult = false;
+//             job->readDF(mountPoint);
+//             while (!m_gotDiskSpaceResult) {
+//                 rgapp::refreshGUI(50);
+//             }
+            
 
             // Check the disk space available is within current
             // audio recording limit
             //
-            config->setGroup(SequencerOptionsConfigGroup);
+//             config->setGroup(SequencerOptionsConfigGroup);
 
 	    // Ask the document to update its record latencies so as to
 	    // do latency compensation when we stop
@@ -1929,6 +1921,17 @@ SequenceManager::slotCountdownStop()
 
     stopping(); // erm - simple as that
 }
+
+void
+SequenceManager::slotFoundMountPoint(const QString&,
+                                     unsigned long kBSize,
+                                     unsigned long /*kBUsed*/,
+                                     unsigned long kBAvail)
+{
+    m_gotDiskSpaceResult = true;
+    m_diskSpaceKBAvail = kBAvail;
+}
+
 
 
 

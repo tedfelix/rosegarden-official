@@ -58,6 +58,7 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <kcolordialog.h>
+#include <kdiskfreesp.h>
 
 #include "constants.h"
 #include "colours.h"
@@ -83,7 +84,7 @@
 #include "widgets.h"
 #include "colourwidgets.h"
 #include "audiopluginmanager.h"
-#include "diskspace.h"
+// #include "diskspace.h"
 #include "segmentcommands.h"
 #include "rgapplication.h"
 
@@ -2000,21 +2001,15 @@ AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
 void
 AudioConfigurationPage::calculateStats()
 {
-    Rosegarden::DiskSpace *space;
-    try
-    {
-        space = new Rosegarden::DiskSpace(m_path->text());
-    }
-    catch (QString e)
-    {
-        KMessageBox::error(this, e);
-        return;
-    }
-    
-    float mbSize = float(space->getFreeKBytes())/1024.0;
-    QString mbSizeStr;
-    mbSizeStr.sprintf("%10.3f", mbSize);
-    m_diskSpace->setText(QString("%1 MB").arg(mbSizeStr));
+    // This stolen from KDE libs kfile/kpropertiesdialog.cpp
+    //
+    QString mountPoint = KIO::findPathMountPoint(m_path->text());
+    KDiskFreeSp * job = new KDiskFreeSp;
+    connect(job, SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long,
+                                        unsigned long)),
+            this, SLOT(slotFoundMountPoint(const QString&, unsigned long, unsigned long,
+                                           unsigned long)));
+    job->readDF(mountPoint);
 
     // Work out minutes of recordable stereo from centralised sample rate value
     //
@@ -2025,21 +2020,41 @@ AudioConfigurationPage::calculateStats()
         m_minutesAtStereo->setText(i18n("<sample rate not available>"));
         return;
     }
+}
+
+void
+AudioConfigurationPage::slotFoundMountPoint(const QString&,
+					    unsigned long kBSize,
+					    unsigned long /*kBUsed*/,
+					    unsigned long kBAvail )
+{
+    m_diskSpace->setText(i18n("%1 out of %2 (%3% used)")
+                         .arg(KIO::convertSizeFromKB(kBAvail))
+                         .arg(KIO::convertSizeFromKB(kBSize))
+                         .arg( 100 - (int)(100.0 * kBAvail / kBSize) ));
+
+
+    Rosegarden::AudioPluginManager *apm = m_doc->getPluginManager();
 
     // Work out total bytes and divide this by the sample rate times the
     // number of channels (2) times the number of bytes per sample (2)
     // times 60 seconds.
     //
-    float stereoMins = ( float(space->getFreeKBytes()) * 1024.0 ) / 
-                       ( float(apm->getSampleRate()) * 2.0 * 2.0 * 60.0 );
+    int sampleRate = apm->getSampleRate();
+    if (sampleRate == 0) // yes, this can happen
+        sampleRate = 44 * 1000; // more sensible default here ?
+    
+    float stereoMins = ( float(kBAvail) ) / 
+                       ( float(sampleRate) * 2.0 * 2.0 * 60.0 );
     QString minsStr;
     minsStr.sprintf("%8.1f", stereoMins);
 
     m_minutesAtStereo->
         setText(QString("%1 %2 %3Hz").arg(minsStr)
                                      .arg(i18n("minutes at"))
-                                     .arg(apm->getSampleRate()));
+                                     .arg(sampleRate));
 }
+
 
 void
 AudioConfigurationPage::slotFileDialog()

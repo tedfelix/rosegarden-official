@@ -235,6 +235,10 @@ protected slots:
     //
     void slotAllowReport() { m_canReport = true; }
 
+    void slotFoundMountPoint(const QString&,
+                             unsigned long kBSize,
+                             unsigned long kBUsed,
+                             unsigned long kBAvail);
 protected:
 
     void resetCompositionMmapper();
@@ -242,6 +246,7 @@ protected:
     void resetMetronomeMmapper();
     void resetTempoSegmentMmapper();
     void resetTimeSigSegmentMmapper();
+    void checkRefreshStatus();
     
     //--------------- Data members ---------------------------------
 
@@ -283,8 +288,6 @@ protected:
     unsigned int m_compositionRefreshStatusId;
     bool m_updateRequested;
 
-    void checkRefreshStatus();
-
     // Information that the sequencer is providing to us - for the moment
     // it's only the position pointer.
     //
@@ -295,6 +298,8 @@ protected:
     QTimer                    *m_reportTimer;
     bool                       m_canReport;
 
+    bool                       m_gotDiskSpaceResult;
+    unsigned long              m_diskSpaceKBAvail;
 };
 
 }
