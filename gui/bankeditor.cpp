@@ -755,7 +755,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_exportBanks = new QPushButton(i18n("Export..."), bankBox);
     gridLayout->addWidget(m_importBanks, 1, 0);
     gridLayout->addWidget(m_exportBanks, 1, 1);
-//    bankBox->addSpace(10); // spacer
 
     // Tips
     //
@@ -781,7 +780,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
             this,       SLOT(slotPopulateDevice(QListViewItem*)));
 
     QFrame *vbox = new QFrame(splitter);
-    QVBoxLayout *vboxLayout = new QVBoxLayout(vbox, 10, 10);
+    QVBoxLayout *vboxLayout = new QVBoxLayout(vbox, 8, 6);
 
     m_programEditor = new MidiProgramsEditor(this, vbox);
     vboxLayout->addWidget(m_programEditor);
