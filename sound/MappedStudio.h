@@ -21,6 +21,8 @@
 
 #include <string> 
 
+#include <qvaluevector.h>
+#include <qpair.h>
 #include <qdatastream.h>
 
 #include "Instrument.h"
@@ -41,10 +43,14 @@
 namespace Rosegarden
 {
 
-
+// Some types
+//
 typedef unsigned int MappedObjectId;
 typedef QString      MappedObjectProperty;
 typedef int          MappedObjectValue;
+
+typedef QValueVector<QPair<QString, int> > MappedObjectPropertyList;
+
 
 // Every MappedStudio object derives from this class - if an
 // object is static then you're only allowed one per Studio
@@ -53,6 +59,10 @@ typedef int          MappedObjectValue;
 class MappedObject
 {
 public:
+
+    // Some common properties
+    //
+    static const MappedObjectProperty FaderLevel;
 
     // The object we can create
     //
@@ -82,6 +92,8 @@ public:
 
     std::string getName() { return m_name; }
     void setName(const std::string &name) { m_name= name; }
+
+    virtual MappedObjectPropertyList getPropertyList() = 0;
 
 protected:
 
@@ -133,6 +145,10 @@ public:
     //
     void clear();
 
+    // Property list
+    //
+    virtual MappedObjectPropertyList getPropertyList();
+
     // Return the object vector
     //
     //std::vector<MappedObject*>* getObjects() const { return &m_objects; }
@@ -182,6 +198,10 @@ public:
     MappedObjectValue getLevel();
     void setLevel(MappedObjectValue param);
 
+    // Property list
+    //
+    virtual MappedObjectPropertyList getPropertyList();
+
 protected:
 
     MappedObjectValue m_level;
@@ -199,6 +219,11 @@ class MappedAudioPluginManager : public MappedObject, public PluginManager
 public:
     MappedAudioPluginManager(MappedObjectId id);
     ~MappedAudioPluginManager();
+
+    // Property list
+    //
+    virtual MappedObjectPropertyList getPropertyList();
+
 
 protected:
 

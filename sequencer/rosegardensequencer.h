@@ -197,6 +197,15 @@ public:
                                    const QString &property,
                                    int value);
 
+    // Get a MappedObject for a type
+    //
+    virtual int getMappedObjectId(int type);
+
+    // get a Property list from an Object
+    //
+    virtual QValueVector<QString> getPropertyList(unsigned int id,
+                                                  const QString &property);
+
     //
     //
     //

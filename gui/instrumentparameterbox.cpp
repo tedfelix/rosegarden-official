@@ -548,7 +548,7 @@ InstrumentParameterBox::slotSelectVelocity(int index)
         //
         m_volumeValue->setNum(index);
         emit setMappedProperty(m_selectedInstrument->getId(),
-                               QString("value"),
+                               Rosegarden::MappedObject::FaderLevel,
                                index);
     }
 

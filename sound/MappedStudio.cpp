@@ -25,6 +25,7 @@
 namespace Rosegarden
 {
 
+const MappedObjectProperty MappedObject::FaderLevel = "faderLevel";
 
 MappedStudio::MappedStudio():MappedObject("MappedStudio",
                                           Studio,
@@ -148,6 +149,13 @@ MappedStudio::clear()
 
 }
 
+MappedObjectPropertyList
+MappedStudio::getPropertyList()
+{
+    return MappedObjectPropertyList();
+}
+
+
 MappedObject*
 MappedStudio::getObject(MappedObjectId id)
 {
@@ -173,6 +181,12 @@ void
 MappedAudioFader::setLevel(MappedObjectValue param)
 {
     m_level = param;
+}
+
+MappedObjectPropertyList 
+MappedAudioFader::getPropertyList()
+{
+    return MappedObjectPropertyList();
 }
 
 /*
@@ -240,6 +254,13 @@ MappedAudioPluginManager::MappedAudioPluginManager(MappedObjectId id)
 
 MappedAudioPluginManager::~MappedAudioPluginManager()
 {
+}
+
+
+MappedObjectPropertyList
+MappedAudioPluginManager::getPropertyList()
+{
+    return MappedObjectPropertyList();
 }
 
 

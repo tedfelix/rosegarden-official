@@ -22,6 +22,9 @@
 #define _ROSEGARDENSEQUENCERIFACE_H_
 
 #include <dcopobject.h>
+#include <qvaluevector.h>
+#include <qpair.h>
+
 #include "rosegardendcop.h"
 #include "Event.h"
 #include "MappedComposition.h"
@@ -145,9 +148,20 @@ public:
     virtual Rosegarden::MappedRealTime getAudioPlayLatency() = 0;
     virtual Rosegarden::MappedRealTime getAudioRecordLatency() = 0;
 
+    // Set a property on a MappedObject
+    //
     virtual void setMappedProperty(unsigned int id,
                                    const QString &property,
                                    int value) = 0;
+
+    // Get a mapped object id for a object type
+    //
+    virtual int getMappedObjectId(int type) = 0;
+
+    // Get a list of properties of a certain type from an object
+    //
+    virtual QValueVector<QString> getPropertyList(unsigned int id,
+                                                  const QString &property) = 0;
 
 };
 
