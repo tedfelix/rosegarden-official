@@ -477,7 +477,7 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotEditDocumentProperties()),
                 actionCollection(), "edit_doc_properties");
 
-    new KAction(i18n("Manage MIDI &Devices, Banks and Programs..."), 0, this,
+    new KAction(i18n("Manage MIDI &Devices..."), 0, this,
                 SLOT(slotEditBanks()),
                 actionCollection(), "modify_banks");
 

@@ -513,7 +513,7 @@ MidiProgramsEditor::setBankName(const QString& s)
 BankEditorDialog::BankEditorDialog(QWidget *parent,
                                    RosegardenGUIDoc *doc):
     KDialogBase(parent, "bankeditordialog", true,
-                i18n("Manage Banks and Programs..."),
+                i18n("Manage MIDI Devices..."),
                 Ok | Apply | Close,
                 Ok, true),
     m_studio(&doc->getStudio()),
@@ -562,8 +562,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QToolTip::add(m_deleteAllBanks,
                   i18n("Delete all Banks from the current Device"));
 
-    m_importBanks = new QPushButton(i18n("Import Banks"), bankBox);
-    m_exportBanks = new QPushButton(i18n("Export Banks"), bankBox);
+    m_importBanks = new QPushButton(i18n("Import Device"), bankBox);
+    m_exportBanks = new QPushButton(i18n("Export Device"), bankBox);
     new QLabel(bankBox); // spacer
 
     // Tips
@@ -1198,7 +1198,7 @@ BankEditorDialog::getCommandHistory()
 void
 BankEditorDialog::slotImport()
 {
-    KURL url = KFileDialog::getOpenURL(":ROSEGARDEN", "*.rg",
+   KURL url = KFileDialog::getOpenURL(":ROSEGARDEN", "*.rg*",
                             this, i18n("Import Banks from Device in File"));
 
     if (url.isEmpty()) return;
@@ -1425,7 +1425,7 @@ BankEditorDialog::slotPaste()
 void
 BankEditorDialog::slotExport()
 {
-    QString extension = "rg";
+    QString extension = "rgd";
 
     QString name =
         KFileDialog::getSaveFileName(":ROSEGARDEN",
