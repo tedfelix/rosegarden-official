@@ -58,6 +58,7 @@ public:
 
 protected:
     virtual void threadRun() = 0;
+    virtual int getPriority() { return 0; }
 
     std::string       m_name;
 
@@ -126,6 +127,7 @@ public:
 
 protected:
     virtual void threadRun();
+    virtual int getPriority() { return 3; }
 
     void processBlocks();
     void generateBuffers();
@@ -215,6 +217,7 @@ public:
 
 protected:
     virtual void threadRun();
+    virtual int getPriority() { return 3; }
 
     void processBlocks(bool forceFill, bool &readSomething);
     void processEmptyBlocks(InstrumentId id);
@@ -272,6 +275,7 @@ public:
 
 protected:
     virtual void threadRun();
+    virtual int getPriority() { return 2; }
 };
 
 
@@ -292,6 +296,7 @@ public:
 
 protected:
     virtual void threadRun();
+    virtual int getPriority() { return 2; }
 
     typedef std::pair<AudioFile *, RecordableAudioFile *> FilePair;
     typedef std::map<InstrumentId, FilePair> FileMap;

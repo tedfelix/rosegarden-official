@@ -87,7 +87,29 @@ AudioThread::run()
     std::cerr << m_name << "::run()" << std::endl;
 #endif
 
-    pthread_create(&m_thread, NULL, staticThreadRun, this);
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
+
+    int priority = getPriority();
+
+    if (priority > 0) {
+
+	if (pthread_attr_setschedpolicy(&attr, SCHED_FIFO)) {
+	    std::cerr << m_name << "::run: WARNING: couldn't set FIFO scheduling "
+		      << "on new thread" << std::endl;
+	}	
+	
+	struct sched_param param;
+	memset(&param, 0, sizeof(struct sched_param));
+	param.sched_priority = priority;
+    
+	if (pthread_attr_setschedparam(&attr, &param)) {
+	    std::cerr << m_name << "::run: WARNING: couldn't set priority "
+		      << priority << " on new thread" << std::endl;
+	}
+    }
+
+    pthread_create(&m_thread, &attr, staticThreadRun, this);
 
 #ifdef DEBUG_THREAD_CREATE_DESTROY
     std::cerr << m_name << "::run() done" << std::endl;
