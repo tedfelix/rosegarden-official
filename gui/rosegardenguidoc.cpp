@@ -514,6 +514,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
     
     Rosegarden::MappedComposition::iterator i;
     Rosegarden::Event *rEvent;
+    timeT duration, absTime;
 
     // process all the incoming MappedEvents
     //
@@ -525,10 +526,12 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
         //
         rEvent = new Event(Rosegarden::Note::EventType);
 
-        rEvent->setAbsoluteTime(m_composition.getElapsedTimeForRealTime(
-                                                    (*i)->getAbsoluteTime()));
-        rEvent->setDuration(m_composition.getElapsedTimeForRealTime(
-                                                    (*i)->getDuration()));
+        absTime = m_composition.
+                          getElapsedTimeForRealTime((*i)->getAbsoluteTime());
+        duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
+
+        rEvent->setAbsoluteTime(absTime);
+        rEvent->setDuration(duration);
         rEvent->set<Int>(PITCH, (*i)->getPitch());
         rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
 
@@ -536,7 +539,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
         //
         if (firstEvent)
         {
-            m_recordSegment->setStartIndex(rEvent->getAbsoluteTime());
+            m_recordSegment->setStartIndex(absTime);
             firstEvent = false;
         }
 
@@ -546,8 +549,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
         if (rEvent->getAbsoluteTime() + rEvent->getDuration() >
             m_endOfLastRecordedNote)
         {
-            m_recordSegment->fillWithRests(rEvent->getAbsoluteTime() +
-                                           rEvent->getDuration());
+            m_recordSegment->fillWithRests(absTime + duration);
         }
 
         // Now insert the new event
@@ -560,10 +562,9 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
         if (!helper.isViable(rEvent))
             helper.makeNoteViable(loc);
 
-        // Update counter
+        // Update our counter
         //
-        m_endOfLastRecordedNote = rEvent->getAbsoluteTime() +
-                                  rEvent->getDuration();
+        m_endOfLastRecordedNote = absTime + duration;
 
         cout << "insertRecordedMidi() - RECORD TIME = " 
              << (*i)->getAbsoluteTime() - playLatency
@@ -572,6 +573,14 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 
 }
 
+// Tidy up a recorded Segment when we've finished recording
+//
+void
+RosegardenGUIDoc::stopRecordingMidi()
+{
+    m_recordSegment = 0;
+    m_endOfLastRecordedNote = 0;
+}
 
 
 

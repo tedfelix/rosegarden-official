@@ -1315,6 +1315,16 @@ void RosegardenGUIApp::stop()
         return;
     }
 
+
+    // If we're recording MIDI then tidy up the recording Segment
+    //
+    if (m_transportStatus == RECORDING_MIDI)
+    {
+        m_doc->stopRecordingMidi();
+    } 
+
+
+
     QByteArray data;
 
     if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,

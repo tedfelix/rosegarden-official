@@ -174,6 +174,13 @@ public:
     void insertRecordedMidi(const Rosegarden::MappedComposition &mc,
                             const Rosegarden::RealTime &playLatency);
 
+    /*
+     * Tidy up the recording Segment
+     *
+     */
+    void stopRecordingMidi();
+
+
 public slots:
 
     /**
