@@ -46,8 +46,6 @@ void RosegardenCanvasView::polish()
 
 void RosegardenCanvasView::slotUpdate()
 {
-    RG_DEBUG << "RosegardenCanvasView::slotUpdate()\n";
-
     CanvasItemGC::gc();
 
     canvas()->update();
