@@ -659,6 +659,10 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotRepeatQuantizeSelection()), actionCollection(),
                 "repeat_quantize");
 
+    new KAction(i18n("Groove Quantize"), 0, this,
+                SLOT(slotGrooveQuantize()), actionCollection(),
+                "groove_quantize");
+
     new KAction(SegmentRescaleCommand::getGlobalName(), 0, this,
                 SLOT(slotRescaleSelection()), actionCollection(),
                 "rescale");
@@ -2061,6 +2065,22 @@ void RosegardenGUIApp::slotRepeatQuantizeSelection()
     }
 
     m_view->slotAddCommandToHistory(command);
+}
+
+void RosegardenGUIApp::slotGrooveQuantize()
+{
+    if (!m_view->haveSelection()) return;
+
+    //!!! can't do this if >1 segment selected? no state for that?
+
+    Rosegarden::SegmentSelection selection = m_view->getSelection();
+    
+    //!!! for now -- experiment
+    if (selection.begin() != selection.end()) {
+	Rosegarden::Segment *s = *selection.begin();
+	Rosegarden::GrooveQuantizer q(s, Rosegarden::GrooveQuantizer::AdjustTempo);
+	q.quantize(s);
+    }
 }
 
 void RosegardenGUIApp::slotJoinSegments()

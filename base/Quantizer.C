@@ -770,7 +770,148 @@ LegatoQuantizer::quantizeTime(timeT t) const
     }
     return t;
 }
+
+
+class GrooveQuantizer::Impl
+{
+public:
+    Impl(GrooveQuantizer *const q, Segment *groove, GrooveQuantizer::Method m) :
+	m_groove(groove), m_method(m), m_q(q) { }
+    Impl(const Impl &i) :
+	m_groove(i.m_groove), m_method(i.m_method), m_q(i.m_q) { }
+
+    void quantizeRange(Segment *,
+		       Segment::iterator,
+		       Segment::iterator) const;
+
+protected:
+    Segment *m_groove;
+    GrooveQuantizer::Method m_method;
+    GrooveQuantizer *m_q;
+};
+
+
+GrooveQuantizer::GrooveQuantizer(Segment *groove, Method method) :
+    Quantizer(RawEventData),
+    m_impl(new Impl(this, groove, method))
+{
+    // nothing
+}
+
+GrooveQuantizer::GrooveQuantizer(std::string source, std::string target,
+				 Segment *groove, Method method) :
+    Quantizer(source, target),
+    m_impl(new Impl(this, groove, method))
+{
+    // nothing
+}
+
+GrooveQuantizer::GrooveQuantizer(const GrooveQuantizer &q) :
+    Quantizer(q.m_target),
+    m_impl(new Impl(*q.m_impl))
+{
+    // nothing
+}
+
+GrooveQuantizer::~GrooveQuantizer()
+{
+    delete m_impl;
+}
+
+void
+GrooveQuantizer::quantizeRange(Segment *s,
+			       Segment::iterator i,
+			       Segment::iterator j) const
+{
+    m_impl->quantizeRange(s, i, j);
+}
+
+void
+GrooveQuantizer::Impl::quantizeRange(Segment *s,
+				     Segment::iterator from,
+				     Segment::iterator to) const
+{
+    //!!! need an additional option: per-chord, per-beat, per-bar.
+    // Let's work per-beat for the moment.  Even for this, we should
+    // probably use TimeSignature.getDivisions()
     
+    Composition *comp = s->getComposition();
+    if (!comp) return;
+
+    std::vector<timeT> beatTimeTs;
+    std::vector<RealTime> beatRealTimes;
+
+    timeT fromTime = s->getEndMarkerTime(), toTime = s->getEndMarkerTime();
+    if (s->isBeforeEndMarker(from)) fromTime = (*from)->getAbsoluteTime();
+    if (s->isBeforeEndMarker(to)) toTime = (*to)->getAbsoluteTime();
+
+    int startBar = comp->getBarNumber(fromTime);
+    int endBar = comp->getBarNumber(toTime) + 1;
+
+    for (int barNo = startBar; barNo <= endBar; ++barNo) {
+	bool dummy;
+	TimeSignature sig = comp->getTimeSignatureInBar(barNo, dummy);
+	for (int i = 0; i < sig.getBeatsPerBar(); ++i) {
+	    beatTimeTs.push_back(comp->getBarStart(barNo) + i * sig.getBeatDuration());
+	}
+    }
+
+    Segment::iterator gfrom = m_groove->findTime(fromTime);
+    Segment::iterator gto = m_groove->findTime(toTime);
+
+    for (Segment::iterator i = gfrom;
+	 i != gto && m_groove->isBeforeEndMarker(i);
+	 ++i) {
+	if ((*i)->isa(Note::EventType)) {
+	    beatRealTimes.push_back(s->getComposition()->getElapsedRealTime
+				    ((*i)->getAbsoluteTime()));
+	}
+    }
+
+    int beats = std::min(beatTimeTs.size(), beatRealTimes.size());
+
+    std::cout << beats << " beats" << std::endl;
+    if (beats < 2) return;
+
+    // Remove existing tempo changes between fromTime and toTime
+    while (comp->getTempoChangeNumberAt(fromTime-1) <
+	   comp->getTempoChangeNumberAt(toTime))
+	comp->removeTempoChange(comp->getTempoChangeNumberAt(fromTime-1)+1);
+
+    int n = comp->getTempoChangeNumberAt(fromTime-1);
+    long prevRawTempo = -1;
+    if (n >= 0) {
+	std::pair<timeT, long> tempoChange = comp->getRawTempoChange
+	    (comp->getTempoChangeNumberAt(fromTime-1));
+	prevRawTempo = tempoChange.second;
+    }
+
+    std::cout << "starting raw tempo: " << prevRawTempo << std::endl;
+
+    timeT quarter = Note(Note::Crotchet).getDuration();
+
+    for (int beat = 1; beat < beats; ++beat) {
+	timeT beatTime = beatTimeTs[beat] - beatTimeTs[beat-1];
+	RealTime beatRealTime = beatRealTimes[beat] - beatRealTimes[beat-1];
+	// Calculate tempo in quarter notes per hour.
+	// This is 3600 / {quarter note duration in seconds}
+	// = 3600 / ( {beat in seconds} * {quarter in ticks} / { beat in ticks} )
+	// = ( 3600 * {beat in ticks} ) / ( {beat in seconds} * {quarter in ticks} )
+	double beatSec = double(beatRealTime.sec) +
+	    double(beatRealTime.usec() / 1000000.0);
+	double qph = (3600.0 * beatTime) / (beatSec * quarter);
+	long rawTempo = long(qph + 0.000001);
+
+	std::cout << "prev beat: " << beatTimeTs[beat] << ", prev beat real time " << beatRealTimes[beat] << std::endl;
+	std::cout << "time " << beatTime << ", rt " << beatRealTime << ", beatSec " << beatSec << ", rawTempo " << rawTempo << std::endl;
+
+	if (rawTempo != prevRawTempo) {
+	    comp->addRawTempo(beatTimeTs[beat-1], rawTempo);
+	    prevRawTempo = rawTempo;
+	}
+    }
+	
+}
 
 
 class NotationQuantizer::Impl

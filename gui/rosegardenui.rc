@@ -54,6 +54,8 @@
         <Action name="relabel_segment"/>
         <Action name="quantize_selection"/>
 	<Action name="repeat_quantize"/>
+	<Action name="groove_quantize"/>
+        <Separator/>
         <Action name="rescale"/>
 <!--    <Action name="harmonize_selection"/> -->
         <Action name="set_segment_start"/>

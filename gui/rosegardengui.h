@@ -607,6 +607,11 @@ public slots:
     void slotRepeatQuantizeSelection();
 
     /**
+     * Calculate timing/tempo info based on selected segment
+     */
+    void slotGrooveQuantize();
+
+    /**
      * Rescale the selected segments by a factor requested from
      * the user
      */

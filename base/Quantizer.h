@@ -336,6 +336,61 @@ private:
 };
 
 
+/**
+ * GrooveQuantizer applies timings found in a reference segment to
+ * other segments or to the composition as a whole via the tempo map.
+ * 
+ * It has three general methods of operation:
+ *
+ * AdjustEvents: Move events so that their onset times occur at the
+ * times found in the reference segment, without adjusting tempo.
+ *
+ * AdjustTempo: Modify the tempo map so as to place evenly-gridded
+ * beats at the times found in the reference segment.  This is a
+ * useful way to generate a tempo map to add some life to a quantized
+ * performance without affecting its quantized nature.  Note that
+ * this method does not actually use its segment argument: it still
+ * has to be supplied to satisfy the base class, so passing in the
+ * groove reference segment again would do OK.
+ * 
+ * AdjustTempoAndCompensate: Modify the tempo map so as to place
+ * evenly-gridded beats at the times found in the reference segment,
+ * and also move events so that their ultimate performance real times
+ * are unchanged by the operation.  This is one way to generate a
+ * tempo map matching an existing performance, while tidying up the
+ * performance for improved visual quantization.
+ */
+class GrooveQuantizer : public Quantizer
+{
+public:
+    enum Method {
+	AdjustEvents,
+	AdjustTempo,
+	AdjustTempoAndCompensate
+    };
+
+    GrooveQuantizer(Segment *groove, Method method);
+    GrooveQuantizer(std::string source, std::string target, Segment *groove,
+		    Method method);
+    GrooveQuantizer(const GrooveQuantizer &);
+    ~GrooveQuantizer();
+
+protected:
+    virtual void quantizeRange(Segment *,
+			       Segment::iterator,
+			       Segment::iterator) const;
+
+protected:
+    // avoid having to rebuild absolutely everything each time we
+    // tweak the implementation
+    class Impl;
+    Impl *m_impl;
+
+private:
+    GrooveQuantizer &operator=(const GrooveQuantizer &); // not provided
+};
+    
+
 class NotationQuantizer : public Quantizer
 {
 public:
