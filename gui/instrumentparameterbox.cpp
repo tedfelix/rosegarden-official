@@ -647,31 +647,43 @@ AudioInstrumentParameterPanel::slotBypassed(int pluginIndex, bool bp)
              Rosegarden::MappedObjectValue(bp));
 #endif // HAVE_LADSPA
 
-        // Set the bypass colour on the plugin button
-        if (bp)
-        {
-            m_audioFader->m_plugins[pluginIndex]->
-                setPaletteForegroundColor(kapp->palette().
-                        color(QPalette::Active, QColorGroup::Button));
 
-            m_audioFader->m_plugins[pluginIndex]->
-                setPaletteBackgroundColor(kapp->palette().
-                        color(QPalette::Active, QColorGroup::ButtonText));
-        }
-        else
-        {
-            m_audioFader->m_plugins[pluginIndex]->
-                setPaletteForegroundColor(kapp->palette().
-                        color(QPalette::Active, QColorGroup::ButtonText));
-
-            m_audioFader->m_plugins[pluginIndex]->
-                setPaletteBackgroundColor(kapp->palette().
-                        color(QPalette::Active, QColorGroup::Button));
-        }
+        /// Set the colour on the button
+        //
+        setBypassButtonColour(pluginIndex, bp);
 
         // Set the bypass on the instance
         //
         inst->setBypass(bp);
+    }
+}
+
+// Set the button colour
+//
+void
+AudioInstrumentParameterPanel::setBypassButtonColour(int pluginIndex,
+                                                     bool bypassState)
+{
+    // Set the bypass colour on the plugin button
+    if (bypassState)
+    {
+        m_audioFader->m_plugins[pluginIndex]->
+            setPaletteForegroundColor(kapp->palette().
+                    color(QPalette::Active, QColorGroup::Button));
+
+        m_audioFader->m_plugins[pluginIndex]->
+            setPaletteBackgroundColor(kapp->palette().
+                    color(QPalette::Active, QColorGroup::ButtonText));
+    }
+    else
+    {
+        m_audioFader->m_plugins[pluginIndex]->
+            setPaletteForegroundColor(kapp->palette().
+                    color(QPalette::Active, QColorGroup::ButtonText));
+
+        m_audioFader->m_plugins[pluginIndex]->
+            setPaletteBackgroundColor(kapp->palette().
+                    color(QPalette::Active, QColorGroup::Button));
     }
 }
 
@@ -881,6 +893,8 @@ AudioInstrumentParameterPanel::slotSetPan(float pan)
         (Rosegarden::MappedObjectId(m_selectedInstrument->getMappedId()),
          Rosegarden::MappedAudioFader::Pan,
          Rosegarden::MappedObjectValue(pan));
+
+    m_selectedInstrument->setPan(int(pan));
 }
 
 void
@@ -914,14 +928,28 @@ AudioInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument* instru
             if (pluginClass)
                 m_audioFader->m_plugins[i]->
                     setText(pluginClass->getLabel());
+
+            setBypassButtonColour(i, inst->isBypassed());
+
         }
         else
+        {
             m_audioFader->m_plugins[i]->setText(i18n("<no plugin>"));
+
+            if (inst)
+                setBypassButtonColour(i, inst->isBypassed());
+            else
+                setBypassButtonColour(i, false);
+        }
     }
 
     // Set the number of channels on the fader widget
     //
     m_audioFader->setAudioChannels(instrument->getAudioChannels());
+
+    // Pan
+    //
+    m_audioFader->m_pan->setPosition(instrument->getPan());
 }
 
 void

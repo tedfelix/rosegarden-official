@@ -27,6 +27,7 @@
 #include <qvbox.h>
 #include <qtooltip.h>
 
+#include "Instrument.h"
 #include "studiowidgets.h"
 
 
@@ -82,8 +83,8 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     m_stereoPixmap.load(QString("%1/misc/stereo.xpm").arg(pixmapDir));
 
     m_pan = new RosegardenRotary(this);
-    m_pan->setMinValue(0.0);
-    m_pan->setMaxValue(100.0);
+    m_pan->setMinValue(Rosegarden::MidiMinValue);
+    m_pan->setMaxValue(Rosegarden::MidiMaxValue);
     m_pan->setStep(1.0);
     QToolTip::add(m_pan,
                   i18n("Set the audio pan position in the stereo field"));

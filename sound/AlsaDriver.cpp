@@ -118,6 +118,11 @@ static bool _jackTransportMaster;
 
 static Rosegarden::MappedEvent _jackMappedEvent;
 
+// How many passes through JACK's process loop before reporting
+// audio level.  So we avoid flooding.
+//
+static const int reportPasses = 5;
+
 #endif
 
 static bool              _threadJackClosing;
@@ -2525,15 +2530,18 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
             inputLevel /= float(nframes);
 
-            // Return an event to inform the GUI that AudioFileId has
-            // now stopped playing.
-            //
-            _jackMappedEvent.setInstrument((inst)->
-                    getAudioMonitoringInstrument());
-            _jackMappedEvent.setType(MappedEvent::AudioLevel);
-            _jackMappedEvent.setData1(0);
-            _jackMappedEvent.setData2(int(inputLevel * 127.0));
-            inst->insertMappedEventForReturn(&_jackMappedEvent);
+            if (_passThroughCounter++ > reportPasses)
+            {
+                // Return an event to inform the GUI that AudioFileId has
+                // now stopped playing.
+                //
+                _jackMappedEvent.setInstrument((inst)->
+                        getAudioMonitoringInstrument());
+                _jackMappedEvent.setType(MappedEvent::AudioLevel);
+                _jackMappedEvent.setData1(0);
+                _jackMappedEvent.setData2(int(inputLevel * 127.0));
+                inst->insertMappedEventForReturn(&_jackMappedEvent);
+            }
 
             if (inst->getRecordStatus() == RECORD_AUDIO)
             {
@@ -2991,10 +2999,10 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         inst->pushPlayableAudioQueue();
 
 
-        // Every time times through we report the current audio level
+        // Every n times through we report the current audio level
         // back to the gui.
         //
-        if (audioQueue.size() > 0 && _passThroughCounter++ > 5)
+        if (audioQueue.size() > 0 && _passThroughCounter++ > reportPasses)
         {
             int i = 0;
             for (it = audioQueue.begin(); it != audioQueue.end(); ++it)

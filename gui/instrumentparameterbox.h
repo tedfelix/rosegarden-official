@@ -138,6 +138,10 @@ public:
     //
     void setAudioMeter(double ch1, double ch2);
 
+    // Set the button colour
+    //
+    void setBypassButtonColour(int pluginIndex, bool bypassState);
+
 public slots:
     // From AudioFaderWidget
     //
