@@ -109,10 +109,10 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
 
     m_layout->addStretch(20);
 
-    connect(m_recordButtonGroup, SIGNAL(released(int)),
+    connect(m_recordButtonGroup, SIGNAL(clicked(int)),
             this, SLOT(slotSetRecordTrack(int)));
 
-    connect(m_muteButtonGroup, SIGNAL(released(int)),
+    connect(m_muteButtonGroup, SIGNAL(clicked(int)),
             this, SLOT(slotToggleMutedTrack(int)));
 
     // Populate instrument popup menu just once at start-up
@@ -377,7 +377,7 @@ TrackButtons::populateButtons()
             // Set record button from track
             //
             if (m_doc->getComposition().getRecordTrack() == track->getId())
-                slotSetRecordTrack(track->getPosition());
+                setRecordTrack(track->getPosition());
 
             // reset track tokens
             m_trackLabels[i]->setId(track->getId());
@@ -532,7 +532,7 @@ TrackButtons::slotUpdateTracks()
 
     track = comp.getTrackById(comp.getRecordTrack());
     if (track)
-        slotSetRecordTrack(track->getPosition());
+        setRecordTrack(track->getPosition());
 
     if (newNbTracks == m_tracks)
     {
@@ -597,11 +597,17 @@ TrackButtons::slotUpdateTracks()
 void
 TrackButtons::slotSetRecordTrack(int position)
 {
+    setRecordTrack(position);
+    emit newRecordButton();
+}
+
+void
+TrackButtons::setRecordTrack(int position)
+{
     setRecordButtonDown(position);
 
     // set and update
     m_doc->getComposition().setRecordTrack(m_trackLabels[position]->getId());
-    emit newRecordButton();
 }
 
 void

@@ -68,42 +68,23 @@ public:
 
     ~TrackButtons();
 
-    // Return the track selected for recording
-    //
+    /// Return the track selected for recording
     int selectedRecordTrack();
 
-    // Return a vector of muted tracks
-    //
+    /// Return a vector of muted tracks
     std::vector<int> mutedTracks();
 
-    // Return a vector of highlighted tracks
-    //
+    /// Return a vector of highlighted tracks
     std::vector<int> getHighlightedTracks();
 
     void changeTrackInstrumentLabels(InstrumentTrackLabels label);
 
-    // Precalculate the Instrument popup so we don't have to every
-    // time it appears
-    //
-    void populateInstrumentPopup();
-
-    // Populate the track buttons themselves with Instrument information
-    //
-    void populateButtons();
-
-    // Remove buttons and clear iterators for a position
-    //
-    void removeButtons(unsigned int position);
-
-    // Change the instrument label to something else like
-    // an actual program name rather than a meaningless
-    // device number and midi channel
-    //
+    /**
+     * Change the instrument label to something else like
+     * an actual program name rather than a meaningless
+     * device number and midi channel
+     */
     void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
-
-    // Set record button down - graphically only
-    //
-    void setRecordButtonDown(int position);
 
     // Select a label from outside this class by position
     //
@@ -146,7 +127,30 @@ public slots:
     //
     void slotLabelSelected(int position);
 
-private:
+protected:
+
+    /**
+     * Precalculate the Instrument popup so we don't have to every
+     * time it appears
+     */
+    void populateInstrumentPopup();
+
+    /**
+     * Populate the track buttons themselves with Instrument information
+     */
+    void populateButtons();
+
+    /**
+     * Remove buttons and clear iterators for a position
+     */
+    void removeButtons(unsigned int position);
+
+    /**
+     * Set record button down - graphically only
+     */
+    void setRecordButtonDown(int position);
+
+    void setRecordTrack(int position);
 
     /**
      *  buttons, starting at the specified index
