@@ -42,6 +42,9 @@ public:
 signals:
     void closing();
 
+protected slots:
+    void slotClose();
+
 protected:
     virtual void closeEvent(QCloseEvent *);
 
@@ -86,7 +89,6 @@ protected slots:
     void slotMuteChanged();
     void slotRecordChanged();
     void slotSelectPlugin();
-    void slotClose();
     
     // to be called if something changes in an instrument parameter box
     void slotUpdateInstrument(Rosegarden::InstrumentId);

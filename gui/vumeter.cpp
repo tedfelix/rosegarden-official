@@ -255,6 +255,7 @@ VUMeter::paintEvent(QPaintEvent*)
     }
     else if (m_type == VUMeter::FixedHeightVisiblePeakHold)
     {
+        //RG_DEBUG << "VUMeter::paintEvent - height = " << height() << endl;
 	paint.setPen(m_background);
 	paint.setBrush(m_background);
 	paint.drawRect(0, 0, width(), height());
@@ -446,19 +447,11 @@ VUMeter::drawMeterLevel(QPainter* paint)
     }
     else
     {
-//	paint->setPen(m_background);
-//	paint->setBrush(m_background);
-//	paint->drawRect(0, 0, width(), height());
-
-//        paint->setPen(mixedColour);
-//        paint->setBrush(mixedColour);
-
         // Paint a vertical meter according to type
         //
         if (m_alignment == VUMeter::Vertical)
         {
             int y = height() - (m_levelLeft * height()) / m_maxLevel;
-//            paint->drawRect(0, height(), width(), y);
 	    drawColouredBar(paint, 0, 0, y, width(), height());
 
 	    paint->setPen(m_background);
@@ -483,7 +476,6 @@ VUMeter::drawMeterLevel(QPainter* paint)
         else
         {
             int x = (m_levelLeft * width()) / m_maxLevel;
-//            paint->drawRect(0, 0, x, height());
 	    drawColouredBar(paint, 0, 0, 0, x, height());
 
 	    paint->setPen(m_background);

@@ -263,6 +263,7 @@ rc_DATA = bankeditor.rc \
         matrixresizer.rc \
         matrixmover.rc \
         matrixpainter.rc \
+        midimixer.rc \
 	mixer.rc \
 	notationeraser.rc \
 	notation.rc \

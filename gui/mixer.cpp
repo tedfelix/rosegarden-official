@@ -72,6 +72,13 @@ MixerWindow::closeEvent(QCloseEvent *e)
     KMainWindow::closeEvent(e);
 }
 
+void
+MixerWindow::slotClose()
+{
+    RG_DEBUG << "MixerWindow::slotClose()\n";
+    close();
+}    
+
 AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 			 RosegardenGUIDoc *document):
         MixerWindow(parent, document)
@@ -178,13 +185,6 @@ AudioMixerWindow::~AudioMixerWindow()
     RG_DEBUG << "AudioMixerWindow::~AudioMixerWindow\n";
     depopulate();
 }
-
-void
-AudioMixerWindow::slotClose()
-{
-    RG_DEBUG << "AudioMixerWindow::slotClose()\n";
-    close();
-}    
 
 void
 AudioMixerWindow::depopulate()
@@ -1302,8 +1302,11 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
 			 RosegardenGUIDoc *document):
         MixerWindow(parent, document)
 {
-    QVBoxLayout *vlay = new QVBoxLayout(this, 0, KDialog::spacingHint());
-    m_tabWidget = new QTabWidget(this);
+    QHBox *hbox = new QHBox(this);
+    setCentralWidget(hbox);
+
+    QVBoxLayout *vlay = new QVBoxLayout(hbox, 0, KDialog::spacingHint());
+    m_tabWidget = new QTabWidget(hbox);
     vlay->addWidget(m_tabWidget);
     m_tabWidget->setTabPosition(QTabWidget::Bottom);
     setCaption(i18n("MIDI Mixer"));
@@ -1311,6 +1314,47 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     // Initial setup
     //
     setupTabs();
+
+    KStdAction::close(this,
+		      SLOT(slotClose()),
+		      actionCollection());
+
+    QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-play")));
+    new KAction(i18n("&Play"), icon, Key_Enter, this,
+		SIGNAL(play()), actionCollection(), "play");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-stop")));
+    new KAction(i18n("&Stop"), icon, Key_Insert, this,
+		SIGNAL(stop()), actionCollection(), "stop");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-rewind")));
+    new KAction(i18n("Re&wind"), icon, Key_End, this,
+		SIGNAL(rewindPlayback()), actionCollection(),
+		"playback_pointer_back_bar");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-ffwd")));
+    new KAction(i18n("&Fast Forward"), icon, Key_PageDown, this,
+		SIGNAL(fastForwardPlayback()), actionCollection(),
+		"playback_pointer_forward_bar");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-rewind-end")));
+    new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
+		SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
+		"playback_pointer_start");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-ffwd-end")));
+    new KAction(i18n("Fast Forward to &End"), icon, 0, this,
+		SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
+		"playback_pointer_end");
+
+    createGUI("midimixer.rc");
+
 }
 
 void 
@@ -1342,8 +1386,11 @@ MidiMixerWindow::setupTabs()
 
             // MIDI Mixer label
             //
+            /*
             QLabel *label = new QLabel(QString("%1 %2").arg(strtoqstr(dev->getName()))
                         .arg(i18n("MIDI Mixer")), frame);
+                        */
+            QLabel *label = new QLabel("", frame);
             mainLayout->addMultiCellWidget(label, 0, 0, 0, 16, Qt::AlignCenter);
 
             // control labels
@@ -1683,8 +1730,7 @@ MidiMixerVUMeter::MidiMixerVUMeter(QWidget *parent,
                            int width,
                            int height,
                            const char *name):
-    VUMeter(parent, type, false, width, height, VUMeter::Vertical, name),
-    m_textHeight(12)
+    VUMeter(parent, type, false, width, height, VUMeter::Vertical, name)
 {
     setAlignment(AlignCenter);
 }
@@ -1693,18 +1739,12 @@ MidiMixerVUMeter::MidiMixerVUMeter(QWidget *parent,
 void
 MidiMixerVUMeter::meterStart()
 {
-    clear();
-    setMinimumHeight(m_originalHeight);
-    setMaximumHeight(m_originalHeight);
 }
 
 
 void
 MidiMixerVUMeter::meterStop()
 {
-    setMinimumHeight(m_textHeight);
-    setMaximumHeight(m_textHeight);
-    //setText(QString("%1").arg(m_position + 1));
 }
 
 
