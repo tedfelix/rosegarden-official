@@ -1685,6 +1685,7 @@ NotationView::hoveredOverAbsoluteTimeChange(unsigned int time)
 NotationTool::NotationTool(NotationView& view)
     : m_parentView(view)
 {
+    m_parentView.setCanvasCursor(Qt::arrowCursor);
 }
 
 NotationTool::~NotationTool()
@@ -1708,12 +1709,11 @@ NoteInserter::NoteInserter(Rosegarden::Note::Type type,
       m_noteType(type),
       m_noteDots(dots)
 {
-    m_parentView.setCursor(Qt::arrowCursor);
+    m_parentView.setCanvasCursor(Qt::crossCursor);
 }
 
 NoteInserter::~NoteInserter()
 {
-    m_parentView.setCursor(Qt::arrowCursor);
 }
 
 void    
@@ -1795,6 +1795,7 @@ ClefInserter::ClefInserter(std::string clefType, NotationView& view)
     : NotationTool(view),
       m_clef(clefType)
 {
+    m_parentView.setCanvasCursor(Qt::crossCursor);
 }
     
 void ClefInserter::handleMousePress(int, int staffNo,
@@ -1831,6 +1832,7 @@ void ClefInserter::handleMousePress(int, int staffNo,
 NotationEraser::NotationEraser(NotationView& view)
     : NotationTool(view)
 {
+    m_parentView.setCanvasCursor(Qt::pointingHandCursor);
 }
 
 void NotationEraser::handleMousePress(int, int staffNo,
@@ -1881,15 +1883,12 @@ NotationSelector::NotationSelector(NotationView& view)
 
     connect(&m_parentView, SIGNAL(usedSelection()),
             this,          SLOT(hideSelection()));
-
-    m_parentView.setCursor(Qt::crossCursor);
 }
 
 NotationSelector::~NotationSelector()
 {
     delete m_selectionRect;
     m_parentView.canvas()->update();
-    m_parentView.setCursor(Qt::arrowCursor);
 }
 
 void NotationSelector::handleMousePress(int, int,
@@ -2016,12 +2015,11 @@ NotationSelectionPaster::NotationSelectionPaster(NotationView& parent,
     : NotationTool(parent),
       m_selection(es)
 {
-    m_parentView.setCursor(Qt::crossCursor);
+    m_parentView.setCanvasCursor(Qt::crossCursor);
 }
 
 NotationSelectionPaster::~NotationSelectionPaster()
 {
-    m_parentView.setCursor(Qt::arrowCursor);
 }
 
 void NotationSelectionPaster::handleMousePress(int, int staffNo,

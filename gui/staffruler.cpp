@@ -56,7 +56,8 @@ StaffRuler::StaffRuler(int xPos, int yPos, QCanvas* c)
     m_background->setY(0);
     m_background->setSize(canvas()->width(), m_yPos);
 
-    QColor bgColor(105, 170, 228);
+//    QColor bgColor(105, 170, 228);
+    QColor bgColor(212, 212, 212);
     
     m_background->setBrush(bgColor);
     m_background->setPen(bgColor);

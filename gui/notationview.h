@@ -156,6 +156,10 @@ public:
     NotationStaff* getStaff(int i) { return m_staffs[i]; }
 
     QCanvas* canvas() { return m_canvasView->canvas(); }
+    
+    void setCanvasCursor(const QCursor &cursor) {
+	m_canvasView->setCursor(cursor);
+    }
 
     /**
      * Set the note or rest selected by the user from the toolbars

@@ -218,7 +218,7 @@ void TracksCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
 
 void TracksCanvas::contentsMouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == LeftButton) m_tool->handleMouseButtonRelase(e);
+    if (e->button() == LeftButton) m_tool->handleMouseButtonRelease(e);
 }
 
 void TracksCanvas::contentsMouseMoveEvent(QMouseEvent* e)
@@ -331,7 +331,7 @@ void TrackPencil::handleMouseButtonPress(QMouseEvent *e)
 
 }
 
-void TrackPencil::handleMouseButtonRelase(QMouseEvent*)
+void TrackPencil::handleMouseButtonRelease(QMouseEvent*)
 {
     if (!m_currentItem) return;
 
@@ -405,7 +405,7 @@ void TrackEraser::handleMouseButtonPress(QMouseEvent *e)
     m_currentItem = m_canvas->findPartClickedOn(e->pos());
 }
 
-void TrackEraser::handleMouseButtonRelase(QMouseEvent*)
+void TrackEraser::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentItem) emit deleteTrack(m_currentItem->getTrack());
     delete m_currentItem;
@@ -443,7 +443,7 @@ void TrackMover::handleMouseButtonPress(QMouseEvent *e)
     }
 }
 
-void TrackMover::handleMouseButtonRelase(QMouseEvent*)
+void TrackMover::handleMouseButtonRelease(QMouseEvent*)
 {
     if (m_currentItem)
         emit updateTrackInstrumentAndStartIndex(m_currentItem);
@@ -485,7 +485,7 @@ void TrackResizer::handleMouseButtonPress(QMouseEvent *e)
     }
 }
 
-void TrackResizer::handleMouseButtonRelase(QMouseEvent*)
+void TrackResizer::handleMouseButtonRelease(QMouseEvent*)
 {
     if (!m_currentItem) return;
 

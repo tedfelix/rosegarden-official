@@ -242,7 +242,7 @@ public:
     virtual ~TrackTool();
 
     virtual void handleMouseButtonPress(QMouseEvent*)  = 0;
-    virtual void handleMouseButtonRelase(QMouseEvent*) = 0;
+    virtual void handleMouseButtonRelease(QMouseEvent*) = 0;
     virtual void handleMouseMove(QMouseEvent*)         = 0;
 
 protected:
@@ -261,7 +261,7 @@ public:
     TrackPencil(TracksCanvas*);
 
     virtual void handleMouseButtonPress(QMouseEvent*);
-    virtual void handleMouseButtonRelase(QMouseEvent*);
+    virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
@@ -279,7 +279,7 @@ public:
     TrackEraser(TracksCanvas*);
 
     virtual void handleMouseButtonPress(QMouseEvent*);
-    virtual void handleMouseButtonRelase(QMouseEvent*);
+    virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
@@ -293,7 +293,7 @@ public:
     TrackMover(TracksCanvas*);
 
     virtual void handleMouseButtonPress(QMouseEvent*);
-    virtual void handleMouseButtonRelase(QMouseEvent*);
+    virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
@@ -310,7 +310,7 @@ public:
     TrackResizer(TracksCanvas*);
 
     virtual void handleMouseButtonPress(QMouseEvent*);
-    virtual void handleMouseButtonRelase(QMouseEvent*);
+    virtual void handleMouseButtonRelease(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
 
 signals:
