@@ -123,7 +123,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
                                  frame), 3, 0);
     layout->addWidget(new QLabel(i18n("Selector greedy mode"),
                                  frame), 4, 0);
-    layout->addWidget(new QLabel(i18n("Auto-save interval (in minutes)"),
+    layout->addWidget(new QLabel(i18n("Auto-save interval (in seconds)"),
                                  frame), 5, 0);
 
     m_client = new QComboBox(frame);
@@ -160,8 +160,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
     m_selectorGreedyMode->setChecked(m_cfg->readBoolEntry("selectorgreedymode",
                                                           true));
 
-    m_autosaveInterval = new QSpinBox(frame);
-    m_autosaveInterval->setValue(m_cfg->readUnsignedNumEntry("autosaveinterval", 5));
+    m_autosaveInterval = new QSpinBox(0, 600, 10, frame);
+    m_autosaveInterval->setValue(m_cfg->readUnsignedNumEntry("autosaveinterval", 20));
     m_autosaveInterval->setMaxValue(120);
     m_autosaveInterval->setMinValue(1);
     layout->addWidget(m_autosaveInterval, 5, 1);
@@ -245,6 +245,7 @@ void GeneralConfigurationPage::apply()
 
     unsigned int autosaveInterval = m_autosaveInterval->value();
     m_cfg->writeEntry("autosaveInterval", autosaveInterval);
+    m_doc->setAutoSavePeriod(autosaveInterval);
 
     QString externalAudioEditor = getExternalAudioEditor();
 
