@@ -1,0 +1,24 @@
+#!/bin/sh
+
+unset CDPATH
+
+SRCDIR=/home/glaurent/rosegarden
+
+cd $SRCDIR
+
+VERSION=`grep INIT_AUTOMAKE configure.in.in | cut -d ',' -f2 | tr -d ')'`
+
+echo "VERSION = $VERSION"
+
+DESTDIR=/home/glaurent/tmp/rosegarden-$VERSION
+
+rm -rf $DESTDIR
+
+echo "Copying files..."
+cp -R $SRCDIR $DESTDIR
+
+cd $DESTDIR || exit -1
+
+echo "Building distrib..."
+make distclean && sh ./gl_configure && make dist
+
