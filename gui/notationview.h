@@ -161,7 +161,8 @@ public slots:
 
     // Canvas actions slots
     void noteClicked(int height, const QPoint&, NotationElement*);
-    void insertNote(NotationElementList::iterator closestNote, int pitch);
+    void insertNote(NotationElementList::iterator closestNote,
+		    Rosegarden::Event *timesig, int pitch);
     void deleteNote(NotationElement* note);
 
     void hoveredOverNoteChanged(const QString&);
@@ -235,15 +236,18 @@ protected:
     /**
      * find the NotationElement which X is closest to eventX
      */
-    NotationElementList::iterator findClosestNote(double eventX,
-                                                  Rosegarden::Clef&,
-                                                  Rosegarden::Key&);
+    NotationElementList::iterator findClosestNote
+      (double eventX,
+       Rosegarden::Event *&timeSignature,
+       Rosegarden::Event *&clef,
+       Rosegarden::Event *&key);
 
     /**
      * replace the rest element pointed to by the iterator
      * by the NotationElement
      */
-    bool replaceRestWithNote(NotationElementList::iterator, NotationElement*);
+    bool replaceRestWithNote(NotationElementList::iterator, NotationElement*,
+			     Rosegarden::Event *timesig);
 
     bool deleteMode()          { return m_deleteMode; }
     void setDeleteMode(bool d) { m_deleteMode = d; }

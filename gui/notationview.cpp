@@ -916,10 +916,12 @@ void NotationView::noteClicked(int height, const QPoint &eventPos,
 
     } else if (!deleteMode()) {
 
-        Rosegarden::Key key;
-        Clef clef;
+      //        Rosegarden::Key key;
+      //        Clef clef;
+      //	TimeSignature tsig;
+        Event *tsig = 0, *clef = 0, *key = 0;
         NotationElementList::iterator closestNote =
-            findClosestNote(eventPos.x(), clef, key);
+            findClosestNote(eventPos.x(), tsig, clef, key);
 
         if (closestNote == m_notationElements->end()) {
             return;
@@ -928,9 +930,11 @@ void NotationView::noteClicked(int height, const QPoint &eventPos,
 
         //!!! still need to take accidental into account
         int pitch = Rosegarden::NotationDisplayPitch(height, NoAccidental).
-            getPerformancePitch(clef, key);
+            getPerformancePitch(clef ? Clef(*clef) : Clef::DefaultClef,
+				key ? Rosegarden::Key(*key) :
+     				      Rosegarden::Key::DefaultKey);
 
-        insertNote(closestNote, pitch);
+        insertNote(closestNote, tsig, pitch);
     }
 }
 
@@ -977,7 +981,8 @@ void NotationView::deleteNote(NotationElement* element)
         redoLayout(m_notationElements->begin());
 }
 
-void NotationView::insertNote(NotationElementList::iterator closestNote, int pitch)
+void NotationView::insertNote(NotationElementList::iterator closestNote,
+			      Event *timesig, int pitch)
 {
     kdDebug(KDEBUG_AREA) << "NotationView::insertNote called; pitch is "
                          << pitch << endl;
@@ -1004,7 +1009,7 @@ void NotationView::insertNote(NotationElementList::iterator closestNote, int pit
         kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : replacing rest with note"
                              << endl;
 
-        if (!replaceRestWithNote(closestNote, newNotationElement))
+        if (!replaceRestWithNote(closestNote, newNotationElement, timesig))
             return;
         else
             --redoLayoutStart;
@@ -1053,7 +1058,8 @@ void NotationView::insertNote(NotationElementList::iterator closestNote, int pit
 
 
 NotationElementList::iterator
-NotationView::findClosestNote(double eventX, Clef &clef, Rosegarden::Key &key)
+NotationView::findClosestNote(double eventX, Event *&timeSignature,
+			      Event *&clef, Event *&key)
 {
     static const unsigned int proximityThreshold = 10; // in pixels
 
@@ -1065,17 +1071,23 @@ NotationView::findClosestNote(double eventX, Clef &clef, Rosegarden::Key &key)
     // TODO: this is grossly inefficient
     //
     for (it = m_notationElements->begin();
-         it != m_notationElements->end(); ++it) {
-
+         it != m_notationElements->end(); ++it) 
+{
         if (!(*it)->isNote() && !(*it)->isRest()) {
             if ((*it)->event()->isa(Clef::EventType)) {
                 kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found clef: type is "
                                      << (*it)->event()->get<String>(Clef::ClefPropertyName) << endl;
-                clef = Clef(*(*it)->event());
+		//          clef = Clef(*(*it)->event());
+		clef = (*it)->event();
+            } else if ((*it)->event()->isa(TimeSignature::EventType)) {
+	      kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found time sig " << endl;
+	      //          tsig = TimeSignature(*(*it)->event());
+	        timeSignature = (*it)->event();
             } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
                 kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found key: type is "
                                      << (*it)->event()->get<String>(Rosegarden::Key::KeyPropertyName) << endl;
-                key = Rosegarden::Key(*(*it)->event());
+		//          key = Rosegarden::Key(*(*it)->event());
+		key = (*it)->event();
             }
             continue;
         }
@@ -1239,7 +1251,8 @@ void NotationView::redoLayout(NotationElementList::iterator from)
 
 
 bool NotationView::replaceRestWithNote(NotationElementList::iterator rest,
-                                       NotationElement *newNote)
+                                       NotationElement *newNote,
+				       Event *timesig)
 {
     // if the new note's duration is longer than the rest it's
     // supposed to replace, set it to the rest's duration
@@ -1256,22 +1269,32 @@ bool NotationView::replaceRestWithNote(NotationElementList::iterator rest,
     newNote->setAbsoluteTime((*rest)->getAbsoluteTime());
 
     if (!newNoteIsSameDurationAsRest) { // we need to insert shorter rests
-        
-        RestSplitter splitter((*rest)->getDuration(),
-                              newNote->getDuration());
+
+        Rosegarden::DurationList dl;
+	TimeSignature timeSignature = timesig ? TimeSignature(*timesig) :
+  	    TimeSignature::DefaultTimeSignature;
+	timeSignature.getDurationListForInterval
+            (dl, (*rest)->getDuration() - newNote->getDuration(),
+	     (*rest)->getAbsoluteTime() + newNote->getDuration() -
+	     (timesig ? timesig->getAbsoluteTime() : 0));
+
+	//  RestSplitter splitter((*rest)->getDuration(),
+	//                              newNote->getDuration());
 
         timeT restAbsoluteTime = newNote->getAbsoluteTime() + newNote->getDuration();
     
-        while(timeT bit = splitter.nextBit()) {
-            kdDebug(KDEBUG_AREA) << "Inserting rest of duration " << bit
+        //  while(timeT bit = splitter.nextBit()) {
+        for (unsigned int i = 0; i < dl.size(); ++i) {
+  	    int duration = dl[i];
+            kdDebug(KDEBUG_AREA) << "Inserting rest of duration " << duration
                                  << " at time " << restAbsoluteTime << endl;
 
             Event *newRest = new Event;
             newRest->setType("rest");
-            newRest->setDuration(bit);
+            newRest->setDuration(duration);
             newRest->setAbsoluteTime(restAbsoluteTime);
             newRest->setMaybe<String>("Name", "INSERTED_REST");
-            restAbsoluteTime += bit;
+            restAbsoluteTime += duration;
 
             m_viewElementsManager->wrapAndInsert(newRest, true);
         }
