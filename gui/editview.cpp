@@ -130,7 +130,12 @@ void EditView::readjustViewSize(QSize requestedSize, bool exact)
     Rosegarden::Profiler profiler("EditView::readjustViewSize", true);
 
     if (exact) {
+        RG_DEBUG << "EditView::readjustViewSize: exact size requested ("
+                 << requestedSize.width() << ", " << requestedSize.height()
+                 << ")\n";
+
         setViewSize(requestedSize);
+        getCanvasView()->slotUpdate();
         return;
     }
 
