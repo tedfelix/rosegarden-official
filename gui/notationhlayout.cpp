@@ -1366,7 +1366,7 @@ NotationHLayout::positionChord(Staff &staff,
 
     NOTATION_DEBUG << "NotationHLayout::positionChord: x = " << baseX << endl;
 
-    // re. #938545 (Broken notation: Duplicated note can float outside
+    // #938545 (Broken notation: Duplicated note can float outside
     // stave) -- We need to iterate over all elements in the chord
     // range here, not just the ordered set of notes actually in the
     // chord.  They all have the same x-coord, so there's no

@@ -456,7 +456,8 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
 
 		if (e0->has(m_stemUpProperty) &&
 		    e1->has(m_stemUpProperty) &&
-
+		    isPersistent__Bool(e0, m_stemUpProperty) &&
+		    isPersistent__Bool(e1, m_stemUpProperty) &&
 		    get__Bool(e0, m_stemUpProperty) !=
 		    get__Bool(e1, m_stemUpProperty)) {
 
