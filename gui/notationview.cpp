@@ -198,13 +198,13 @@ NotationView::NotationView(RosegardenGUIView* rgView,
         }
     }
 
-    BarButtons *topBarButtons = new BarButtons
+    m_topBarButtons = new BarButtons
 	(rgView->getDocument(), m_hlayout, 25, false, m_topBarButtonsView);
-    m_topBarButtonsView->addChild(topBarButtons);
+    m_topBarButtonsView->addChild(m_topBarButtons);
 
-    BarButtons *bottomBarButtons = new BarButtons
+    m_bottomBarButtons = new BarButtons
 	(rgView->getDocument(), m_hlayout, 25, true, m_bottomBarButtonsView);
-    m_bottomBarButtonsView->addChild(bottomBarButtons);
+    m_bottomBarButtonsView->addChild(m_bottomBarButtons);
 
 
     //
@@ -980,6 +980,8 @@ bool NotationView::applyLayout(int staffNo)
 */
 
     readjustCanvasSize();
+    m_topBarButtons->recalculate();
+    m_bottomBarButtons->recalculate();
 
     PRINT_ELAPSED("NotationView::applyLayout");
     return true;

@@ -23,13 +23,13 @@
 #define SEGMENTCANVAS_H
 
 #include "Event.h"
+#include "Track.h"
 #include "RulerScale.h"
 
 #include <qwidget.h>
 #include <qcanvas.h>
 #include <list>
 
-using Rosegarden::timeT;
 namespace Rosegarden {
     class Segment;
 }
@@ -48,32 +48,42 @@ public:
     /**
      * Create a new segment item without an associated segment (yet)
      */
-    SegmentItem(int y, timeT startTime, timeT duration,
-		Rosegarden::RulerScale *rulerScale, QCanvas* canvas);
+    SegmentItem(Rosegarden::TrackId track,
+		Rosegarden::timeT startTime, Rosegarden::timeT duration,
+		Rosegarden::SnapGrid *snapGrid, QCanvas* canvas);
 
     /**
      * Create a new segment item with an associated segment
      */
-    SegmentItem(int y, Rosegarden::Segment *segment,
-		Rosegarden::RulerScale *rulerScale, QCanvas* canvas);
+    SegmentItem(Rosegarden::Segment *segment,
+		Rosegarden::SnapGrid *snapGrid, QCanvas* canvas);
 
     /// Return the item's associated segment 
-    Rosegarden::Segment* getSegment() const;
+    Rosegarden::Segment *getSegment() const;
 
     /// Set the segment this SegmentItem will represent
     void setSegment(Rosegarden::Segment *s);
 
-    timeT getStartTime() const { return m_startTime; }
-    void setStartTime(timeT t);
+    /// Update start time of the rectangle (doesn't modify underlying segment)
+    void setStartTime(Rosegarden::timeT t);
+    Rosegarden::timeT getStartTime() const { return m_startTime; }
 
-    timeT getDuration() const { return m_duration; }
-    void setDuration(timeT d);
+    /// Update duration of the rectangle (doesn't modify underlying segment)
+    void setDuration(Rosegarden::timeT d);
+    Rosegarden::timeT getDuration() const { return m_duration; }
+
+    /// Update track of the rectangle (doesn't modify underlying segment)
+    void setTrack(Rosegarden::TrackId track);
+    Rosegarden::TrackId getTrack() const { return m_track; }
 
     /**
      * Reset the rectangle's location and dimensions following
      * a change in the ruler scale.
+     * 
+     * If inheritFromSegment is true, will take dimensions from
+     * the underlying segment if there is one (overriding m_*)
      */
-    void recalculateRectangle();
+    void recalculateRectangle(bool inheritFromSegment = true);
     
     /**
      * Modify start time and duration so as to maintain dimensions
@@ -83,9 +93,6 @@ public:
      */
     void normalize();
 
-    /// Return the track for the item's segment
-    int getTrack() const;
-
     bool const isSelected() { return m_selected; }
 
     // Select this SegmentItem
@@ -93,23 +100,20 @@ public:
 
     virtual int rtti() const { return SegmentItemRTTI; }
 
-    /// Set (and get) the height of all new SegmentItem objects
-    static void setItemHeight(unsigned int);
-    static unsigned int getItemHeight() { return m_itemHeight; }
-    
 protected:
     Rosegarden::Segment *m_segment;
 
     // We need to duplicate these from the segment, because we
     // frequently want to create SegmentItems before their
     // associated Segments
-    timeT m_startTime;
-    timeT m_duration;
-    bool m_selected;
-    Rosegarden::RulerScale *m_rulerScale;
+    Rosegarden::TrackId m_track;
+    Rosegarden::timeT m_startTime;
+    Rosegarden::timeT m_duration;
 
-    static unsigned int m_itemHeight;
+    bool m_selected;
+    Rosegarden::SnapGrid *m_snapGrid;
 };
+
 
 // Marker on Segments to show exactly where a split will
 // be made.
@@ -179,9 +183,16 @@ public:
     const QPen& pen()      const { return m_pen; }
 
     /**
-     * Add a SegmentItem at the specified height
+     * Add a SegmentItem of the specified geometry, with no
+     * underlying Segment
      */
-    SegmentItem* addSegmentItem(int y, timeT startTime, timeT duration);
+    SegmentItem* addSegmentItem(Rosegarden::TrackId track,
+				Rosegarden::timeT startTime, Rosegarden::timeT duration);
+
+    /**
+     * Add a SegmentItem for the given underlying Segment
+     */
+    SegmentItem *addSegmentItem(Rosegarden::Segment *segment);
 
     /**
      * Find which SegmentItem is under the specified point
@@ -200,10 +211,23 @@ public:
      */
     QBrush getSegmentBrush() const { return m_brush; }
 
+    /**
+     * Set the snap resolution of the grid to something suitable.
+     * 
+     * fineTool indicates whether the current tool is a fine-grain sort
+     * (such as the resize or move tools) or a coarse one (such as the
+     * segment creation pencil).  If the user is requesting extra-fine
+     * resolution (through the setFineGrain method) that will also be
+     * taken into account.
+     */
+    void setSnapGrain(bool fine);
+
     /*
      * Show a preview of the Segment we're recording
      */
-    void showRecordingSegmentItem(int y, timeT startTime, timeT duration);
+    void showRecordingSegmentItem(Rosegarden::TrackId track,
+				  Rosegarden::timeT startTime,
+				  Rosegarden::timeT duration);
     void deleteRecordingSegmentItem();
 
 public slots:
@@ -313,6 +337,8 @@ private:
     QBrush m_highlightBrush;
     QPen m_pen;
     QPopupMenu *m_editMenu;
+
+    bool m_fineGrain;
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -329,14 +355,11 @@ public:
     virtual void handleMouseButtonRelease(QMouseEvent*) = 0;
     virtual void handleMouseMove(QMouseEvent*)         = 0;
 
-    void setFineGrain(bool value) { m_fineGrain = value; }
-
 protected:
     //--------------- Data members ---------------------------------
 
     SegmentCanvas*  m_canvas;
     SegmentItem* m_currentItem;
-    bool m_fineGrain;
 };
 
 //////////////////////////////
@@ -362,7 +385,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     bool m_newRect;
-    int  m_y;
+    Rosegarden::TrackId m_track;
     Rosegarden::timeT m_startTime;
     Rosegarden::timeT m_duration;
 };

@@ -57,6 +57,7 @@
 using std::cerr;
 using std::endl;
 using std::cout;
+using Rosegarden::timeT;
 
 static Rosegarden::MappedComposition mappComp;
 

@@ -296,12 +296,5 @@ SnapGrid::snapX(double x) const
     return snapped;
 }
 
-int
-SnapGrid::snapY(int y) const
-{
-    if (m_vstep == 0) return y;
-    else return y / m_vstep * m_vstep;
-}
-
 
 }

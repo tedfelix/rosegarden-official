@@ -41,6 +41,7 @@
 
 using Rosegarden::Composition;
 using Rosegarden::RulerScale;
+using Rosegarden::timeT;
 
 TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 			 RulerScale *rulerScale,
@@ -198,7 +199,7 @@ TrackEditor::setupSegments()
 
 
 void TrackEditor::addSegment(int track, int start,
-                            unsigned int nbTimeSteps)
+			     unsigned int nbTimeSteps)
 {
     if (!m_document) return; // sanity check
 
@@ -235,9 +236,9 @@ TrackEditor::addSegment(int y, Rosegarden::timeT time, Rosegarden::timeT duratio
 {
     // first find track for segment, as it is used for indexing
     //
-    Rosegarden::TrackId track = static_cast<Rosegarden::TrackId>(m_vHeader->sectionAt(y));
+//!!!    Rosegarden::TrackId track = static_cast<Rosegarden::TrackId>(m_vHeader->sectionAt(y));
 
-    emit createNewSegment(time, duration, track);
+    emit createNewSegment(time, duration, y);
 }
 
 

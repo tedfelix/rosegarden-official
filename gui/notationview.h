@@ -472,6 +472,9 @@ protected:
     NotationHLayout* m_hlayout;
     NotationVLayout* m_vlayout;
 
+    BarButtons *m_topBarButtons;
+    BarButtons *m_bottomBarButtons;
+
     template <class T>
     class ZoomSlider : public QSlider
     {

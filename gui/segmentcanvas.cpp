@@ -40,41 +40,51 @@ using Rosegarden::Segment;
 using Rosegarden::Note;
 using Rosegarden::RulerScale;
 using Rosegarden::SnapGrid;
+using Rosegarden::TrackId;
+using Rosegarden::timeT;
 
 //////////////////////////////////////////////////////////////////////
 //                SegmentItem
 //////////////////////////////////////////////////////////////////////
 
-SegmentItem::SegmentItem(int y, timeT startTime, timeT duration,
-                         RulerScale *rulerScale, QCanvas *canvas) :
-    QCanvasRectangle((int)rulerScale->getXForTime(startTime),
-                     y, 
-                     (int)rulerScale->getWidthForDuration(startTime, duration),
-                     m_itemHeight, canvas),
+SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT duration,
+                         SnapGrid *snapGrid, QCanvas *canvas) :
+    QCanvasRectangle(0, 0, 1, 1, canvas),
     m_segment(0),
+    m_track(track),
     m_startTime(startTime),
     m_duration(duration),
     m_selected(false),
-    m_rulerScale(rulerScale)
+    m_snapGrid(snapGrid)
 {
-    // nothing else
+    recalculateRectangle(true);
 }
 
-SegmentItem::SegmentItem(int y, Segment *segment,
-                         RulerScale *rulerScale, QCanvas *canvas) :
-    QCanvasRectangle((int)rulerScale->getXForTime(segment->getStartTime()),
-                     y,
-                     (int)rulerScale->
-                          getWidthForDuration(segment->getStartTime(),
-                                              segment->getDuration()),
-                     m_itemHeight, canvas),
+SegmentItem::SegmentItem(Segment *segment,
+                         SnapGrid *snapGrid, QCanvas *canvas) :
+    QCanvasRectangle(0, 0, 1, 1, canvas),
     m_segment(segment),
-    m_startTime(segment->getStartTime()),
-    m_duration(segment->getDuration()),
     m_selected(false),
-    m_rulerScale(rulerScale)
+    m_snapGrid(snapGrid)
 {
-    // nothing else 
+    recalculateRectangle(true);
+}
+
+void
+SegmentItem::recalculateRectangle(bool inheritFromSegment)
+{
+    if (m_segment && inheritFromSegment) {
+	m_track = m_segment->getTrack();
+	m_startTime = m_segment->getStartTime();
+	m_duration = m_segment->getDuration();
+    }
+	
+    setX(m_snapGrid->getRulerScale()->getXForTime(m_startTime));
+    setY(m_snapGrid->getYBinCoordinate(m_track));
+
+    setSize((int)m_snapGrid->getRulerScale()->
+	    getWidthForDuration(m_startTime, m_duration),
+	    m_snapGrid->getYSnap());
 }
 
 Segment *
@@ -87,36 +97,28 @@ void
 SegmentItem::setSegment(Segment *segment)
 {
     m_segment = segment;
-
-    m_startTime = segment->getStartTime();
-    m_duration = segment->getDuration();
-
-    setX(m_rulerScale->getXForTime(m_startTime));
-    setSize((int)m_rulerScale->getWidthForDuration(m_startTime, m_duration),
-            height());
+    recalculateRectangle(true);
 }
 
 void
 SegmentItem::setStartTime(timeT t)
 {
     m_startTime = t;
-    setX(m_rulerScale->getXForTime(m_startTime));
+    recalculateRectangle(false);
 }
 
 void
 SegmentItem::setDuration(timeT d)
 {
     m_duration = d;
-    setSize((int)m_rulerScale->getWidthForDuration(m_startTime, m_duration),
-            height());
+    recalculateRectangle(false);
 }
 
 void
-SegmentItem::recalculateRectangle()
+SegmentItem::setTrack(TrackId track)
 {
-    setX(m_rulerScale->getXForTime(m_startTime));
-    setSize((int)m_rulerScale->getWidthForDuration(m_startTime, m_duration),
-            height());
+    m_track = track;
+    recalculateRectangle(false);
 }
 
 void
@@ -125,18 +127,8 @@ SegmentItem::normalize()
     if (m_duration < 0) {
 	m_duration = -m_duration;
 	m_startTime -= m_duration;
-	recalculateRectangle();
+	recalculateRectangle(false);
     }
-}
-
-int SegmentItem::getTrack() const
-{
-    return m_segment->getTrack();
-}
-
-void SegmentItem::setItemHeight(unsigned int h)
-{
-    m_itemHeight = h;
 }
 
 // Set this SegmentItem as selected/highlighted - we send
@@ -148,8 +140,6 @@ SegmentItem::setSelected(const bool &select, const QBrush &brush)
     setBrush(brush);
     m_selected = select;
 }
-
-unsigned int SegmentItem::m_itemHeight = 10;
 
 
 //////////////////////////////////////////////////////////////////////
@@ -200,11 +190,10 @@ SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, int vStep,
     m_brush(RosegardenGUIColours::SegmentBlock),
     m_highlightBrush(RosegardenGUIColours::SegmentHighlightBlock),
     m_pen(RosegardenGUIColours::SegmentBorder),
-    m_editMenu(new QPopupMenu(this))
+    m_editMenu(new QPopupMenu(this)),
+    m_fineGrain(false)
 {
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
-
-    SegmentItem::setItemHeight(vStep);
 }
 
 SegmentCanvas::~SegmentCanvas()
@@ -367,7 +356,7 @@ SegmentCanvas::showSplitLine(int x, int y)
 {
     if (m_splitLine == 0)
         m_splitLine = new SegmentSplitLine(x, y,
-                                           SegmentItem::getItemHeight() - 1,
+					   m_grid.getYSnap(),
                                            m_grid.getRulerScale(),
                                            canvas());
     else
@@ -386,12 +375,24 @@ SegmentCanvas::hideSplitLine()
 }
 
 
+SegmentItem *
+SegmentCanvas::addSegmentItem(TrackId track, timeT startTime, timeT duration)
+{
+    SegmentItem *newItem = new SegmentItem
+	(track, startTime, duration, &m_grid, canvas());
+
+    newItem->setPen(m_pen);
+    newItem->setBrush(m_brush);
+    newItem->setVisible(true);     
+    newItem->setZ(1);           // Segment at Z=1, Pointer at Z=10 [rwb]
+
+    return newItem;
+}
 
 SegmentItem *
-SegmentCanvas::addSegmentItem(int y, timeT startTime, timeT duration)
+SegmentCanvas::addSegmentItem(Segment *segment)
 {
-    SegmentItem* newItem = new SegmentItem
-	(y, startTime, duration, m_grid.getRulerScale(), canvas());
+    SegmentItem *newItem = new SegmentItem(segment, &m_grid, canvas());
 
     newItem->setPen(m_pen);
     newItem->setBrush(m_brush);
@@ -402,17 +403,17 @@ SegmentCanvas::addSegmentItem(int y, timeT startTime, timeT duration)
 }
 
 void
-SegmentCanvas::showRecordingSegmentItem(int y, timeT startTime, timeT duration)
+SegmentCanvas::showRecordingSegmentItem(TrackId track, timeT startTime, timeT duration)
 {
     if (m_recordingSegment) {
 
 	m_recordingSegment->setStartTime(startTime);
 	m_recordingSegment->setDuration(duration);
-	m_recordingSegment->setY(y);
+	m_recordingSegment->setTrack(track);
 
     } else {
 	
-	m_recordingSegment = addSegmentItem(y, startTime, duration);
+	m_recordingSegment = addSegmentItem(track, startTime, duration);
 	m_recordingSegment->
             setPen(RosegardenGUIColours::RecordingSegmentBorder);
         m_recordingSegment->
@@ -516,11 +517,22 @@ SegmentCanvas::setSelectCopy(const bool &value)
     selTool->setSegmentCopy(value);
 }
 
+
+void
+SegmentCanvas::setSnapGrain(bool fine)
+{
+    if (m_fineGrain) {
+	grid().setSnapTime(SnapGrid::NoSnap);
+    } else {
+	grid().setSnapTime(fine ? SnapGrid::SnapToBeat : SnapGrid::SnapToBar);
+    }
+}
+
+
 void
 SegmentCanvas::setFineGrain(bool value)
 {
-    kdDebug(KDEBUG_AREA) << "SegmentCanvas::setFineGrain(" << value << ")" << endl;
-    m_tool->setFineGrain(value);
+    m_fineGrain = value;
 }
 
 
@@ -530,8 +542,7 @@ SegmentCanvas::setFineGrain(bool value)
 
 SegmentTool::SegmentTool(SegmentCanvas* canvas)
     : m_canvas(canvas),
-      m_currentItem(0),
-      m_fineGrain(false)
+      m_currentItem(0)
 {
     m_canvas->setCursor(Qt::arrowCursor);
 }
@@ -548,7 +559,7 @@ SegmentTool::~SegmentTool()
 SegmentPencil::SegmentPencil(SegmentCanvas *c)
     : SegmentTool(c),
       m_newRect(false),
-      m_y(0),
+      m_track(0),
       m_startTime(0),
       m_duration(0)
 {
@@ -580,14 +591,9 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     } else { // we are not, so create one
 
-	// a little hardcoded, for now
-	if (m_fineGrain) {
-	    m_canvas->grid().setSnapTime(SnapGrid::NoSnap);
-	} else {
-	    m_canvas->grid().setSnapTime(SnapGrid::SnapToBar);
-	}
+	m_canvas->setSnapGrain(false);
 
-	int y = m_canvas->grid().snapY(e->pos().y());
+	TrackId track = m_canvas->grid().getYBin(e->pos().y());
 	timeT time = m_canvas->grid().snapX(e->pos().x());
 	timeT duration = m_canvas->grid().getSnapTime(e->pos().x());
 	if (duration == 0) duration = Note(Note::Shortest).getDuration();
@@ -595,9 +601,9 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
         // Don't use the m_currentItem for the moment as we
         // don't want to create a SegmentItem at this level
         //
-	    //m_currentItem = m_canvas->addSegmentItem(y, time, duration);
+	//m_currentItem = m_canvas->addSegmentItem(y, time, duration);
         m_newRect = true;
-        m_y = y;
+        m_track = track;
         m_startTime = time;
         m_duration = duration;
 
@@ -612,7 +618,7 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
 
     if (m_newRect) {
 
-        emit addSegment(m_y, m_startTime, m_duration);
+        emit addSegment(m_track, m_startTime, m_duration);
         
     }
     /*else {
@@ -631,11 +637,7 @@ void SegmentPencil::handleMouseMove(QMouseEvent *e)
 {
     if (!m_currentItem) return;
 
-    if (m_fineGrain) {
-	m_canvas->grid().setSnapTime(SnapGrid::NoSnap);
-    } else {
-	m_canvas->grid().setSnapTime(SnapGrid::SnapToBar);
-    }
+    m_canvas->setSnapGrain(false);
 
     timeT time = m_canvas->grid().snapX(e->pos().x());
     timeT duration = time - m_currentItem->getStartTime();
@@ -725,16 +727,14 @@ void SegmentMover::handleMouseMove(QMouseEvent *e)
 {
     if (m_currentItem) {
 
-	if (m_fineGrain) {
-	    m_canvas->grid().setSnapTime(SnapGrid::NoSnap);
-	} else {
-	    m_canvas->grid().setSnapTime(SnapGrid::SnapToBeat);
-	}
+	m_canvas->setSnapGrain(true);
 
 	int x = e->pos().x() - m_clickPoint.x();
 	m_currentItem->setStartTime(m_canvas->grid().snapX
 				    (m_currentItemStartX + x));
-        m_currentItem->setY(m_canvas->grid().snapY(e->pos().y()));
+
+	TrackId track = m_canvas->grid().getYBin(e->pos().y());
+        m_currentItem->setTrack(track);
         m_canvas->canvas()->update();
     }
 }
@@ -779,11 +779,7 @@ void SegmentResizer::handleMouseMove(QMouseEvent *e)
 {
     if (!m_currentItem) return;
 
-    if (m_fineGrain) {
-	m_canvas->grid().setSnapTime(SnapGrid::NoSnap);
-    } else {
-	m_canvas->grid().setSnapTime(SnapGrid::SnapToBeat);
-    }
+    m_canvas->setSnapGrain(true);
 
     timeT time = m_canvas->grid().snapX(e->pos().x());
     timeT duration = time - m_currentItem->getStartTime();
@@ -907,11 +903,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	return;
     }
 
-    if (m_fineGrain) {
-	m_canvas->grid().setSnapTime(SnapGrid::NoSnap);
-    } else {
-	m_canvas->grid().setSnapTime(SnapGrid::SnapToBeat);
-    }
+    m_canvas->setSnapGrain(true);
 
     if (m_currentItem->isSelected())
     {
@@ -924,7 +916,10 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 	    int x = e->pos().x() - m_clickPoint.x(),
 		y = e->pos().y() - m_clickPoint.y();
 	    it->second->setStartTime(m_canvas->grid().snapX(it->first.x() + x));
-	    it->second->setY(m_canvas->grid().snapY(it->first.y() + y));
+
+	    TrackId track = m_canvas->grid().getYBin(it->first.y() + y);
+	    it->second->setTrack(track);
+
 	    m_canvas->canvas()->update();
 	    emit updateSegmentTrackAndStartTime(it->second);
 	}
@@ -980,10 +975,7 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 
     if (item)
     {
-        if (m_fineGrain)
-            m_canvas->grid().setSnapTime(SnapGrid::NoSnap);
-        else
-            m_canvas->grid().setSnapTime(SnapGrid::SnapToBeat);
+	m_canvas->setSnapGrain(true);
 
         // Split this Segment at snapped time
         emit splitSegment(item->getSegment(),
@@ -1018,10 +1010,7 @@ SegmentSplitter::handleMouseMove(QMouseEvent *e)
 void
 SegmentSplitter::drawSplitLine(QMouseEvent *e)
 { 
-    if (m_fineGrain)
-        m_canvas->grid().setSnapTime(SnapGrid::NoSnap);
-    else
-        m_canvas->grid().setSnapTime(SnapGrid::SnapToBeat);
+    m_canvas->setSnapGrain(true);
 
     // Turn the real X into a snapped X
     //

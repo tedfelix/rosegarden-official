@@ -255,7 +255,8 @@ protected:
      * place clicktrack events into the global MappedComposition
      *
      */
-    void insertMetronomeClicks(timeT sliceStart, timeT sliceEnd);
+    void insertMetronomeClicks(Rosegarden::timeT sliceStart,
+			       Rosegarden::timeT sliceEnd);
 
 public slots:
     /**

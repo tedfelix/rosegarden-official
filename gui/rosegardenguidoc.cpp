@@ -55,6 +55,7 @@ using Rosegarden::SegmentNotationHelper;
 using Rosegarden::Event;
 using Rosegarden::Int;
 using Rosegarden::String;
+using Rosegarden::timeT;
 
 using namespace Rosegarden::BaseProperties;
 
