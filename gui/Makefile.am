@@ -105,8 +105,8 @@ rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lkdeui -
 
 SUBDIRS = docs
 
-EXTRA_DIST = rosegardenguiiface.kidl trackseditoriface.kidl \
-	styles/*.xml \
+#EXTRA_DIST = rosegardenguiiface.kidl trackseditoriface.kidl \
+EXTRA_DIST = styles/*.xml \
 	pixmaps/rg21/mapping.xml \
 	pixmaps/rg21/4/*.xpm \
 	pixmaps/rg21/8/*.xpm \

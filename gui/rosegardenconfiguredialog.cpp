@@ -971,6 +971,10 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     addTab(frame, i18n("General"));
 
 
+    /*
+
+    // For the moment we don't show any of this until it's finished - rwb
+
 #ifdef HAVE_LIBJACK
     // JACK control tab
     //
@@ -1009,6 +1013,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     addTab(frame, i18n("JACK control"));
 
 #endif // HAVE_LIBJACK
+    */
 
 
     // ------------------ Record tab ---------------------
