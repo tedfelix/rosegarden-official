@@ -1479,32 +1479,26 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
     m_tempoValueSpinBox->setValidator(validator);
 
     // Scope Box
-    QGroupBox *scopeBox = new QGroupBox(1, Horizontal,
-                                        i18n("Scope"), vbox);
-//    m_optionButtons->addSpace(10); // 10 pix space
+    QButtonGroup *scopeBox = new QButtonGroup(1, Horizontal,
+					      i18n("Scope"), vbox);
 
     QHBox *currentBox = new QHBox(scopeBox);
     new QLabel(i18n("The pointer is currently at "), currentBox);
     m_tempoTimeLabel = new QLabel(currentBox);
-    QHBox *currentBarBox = new QHBox(scopeBox);
-    new QLabel(currentBarBox);
-    m_tempoBarLabel = new QLabel(currentBarBox);
+    m_tempoBarLabel = new QLabel(currentBox);
 
-    m_optionButtons = new QVButtonGroup(scopeBox);
+    m_tempoChangeHere = new QRadioButton
+	(i18n("This tempo applies from here onwards"), scopeBox);
 
-    // id == 0
-    QRadioButton *tempoChangeHere = new QRadioButton
-	(i18n("This tempo applies from here onwards"),
-	 m_optionButtons);
+    m_tempoChangeBefore = new QRadioButton(scopeBox);
+    m_tempoChangeBeforeAt = new QLabel(scopeBox);
 
-    // id == 1
-    m_tempoChangeBefore = new QRadioButton(m_optionButtons);
-    m_tempoChangeBeforeAt = new QLabel(m_optionButtons);
+    m_tempoChangeStartOfBar = new QRadioButton
+	(i18n("This tempo applies from the start of this bar"), scopeBox);
 
-    // id == 2
-    m_tempoChangeGlobal = new QRadioButton(m_optionButtons);
+    m_tempoChangeGlobal = new QRadioButton(scopeBox);
 
-    QHBox *optionHBox = new QHBox(m_optionButtons);
+    QHBox *optionHBox = new QHBox(scopeBox);
     new QLabel(optionHBox);
     m_defaultBox = new QCheckBox
 	(i18n("Also make this the default for new segments"), optionHBox);
@@ -1513,11 +1507,10 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
     // disable initially
     m_defaultBox->setDisabled(true);
 
-    connect(m_optionButtons, SIGNAL(pressed(int)),
-            SLOT(slotRadioButtonPressed(int)));
+    connect(m_tempoChangeGlobal, SIGNAL(clicked()),
+            SLOT(slotGlobalTempoChangeClicked()));
 
-//    m_optionButtons->setButton(0);
-    tempoChangeHere->setChecked(true);
+    m_tempoChangeHere->setChecked(true);
 
     populateTempo();
 }
@@ -1553,16 +1546,18 @@ TempoDialog::populateTempo()
     Rosegarden::RealTime tempoTime= comp.getElapsedRealTime(m_tempoTime);
     QString milliSeconds;
     milliSeconds.sprintf("%03ld", tempoTime.usec / 1000);
-    m_tempoTimeLabel->setText(i18n("%1.%2 s").arg(tempoTime.sec)
+    m_tempoTimeLabel->setText(i18n("%1.%2 s,").arg(tempoTime.sec)
 			      .arg(milliSeconds));
 
     int barNo = comp.getBarNumber(m_tempoTime);
     if (comp.getBarStart(barNo) == m_tempoTime) {
 	m_tempoBarLabel->setText
-	    (i18n("(at the start of bar %1)").arg(barNo+1));
+	    (i18n("at the start of bar %1").arg(barNo+1));
+	m_tempoChangeStartOfBar->setEnabled(false);
     } else {
 	m_tempoBarLabel->setText(
-	    i18n("(in the middle of bar %1)").arg(barNo+1));
+	    i18n("in the middle of bar %1").arg(barNo+1));
+	m_tempoChangeStartOfBar->setEnabled(true);
     }
 
     int tempoChangeNo = comp.getTempoChangeNumberAt(m_tempoTime);
@@ -1580,25 +1575,31 @@ TempoDialog::populateTempo()
 	    (i18n("    (at %1.%2 s, in bar %3)").arg(lastRT.sec)
 	     .arg(lastms).arg(lastBar+1));
 
-	m_tempoChangeBefore->show();
-	m_tempoChangeBeforeAt->show();
+	m_tempoChangeBefore->setEnabled(true);
+	m_tempoChangeBeforeAt->setEnabled(true);
 
     } else {
-	m_tempoChangeBefore->hide();
-	m_tempoChangeBeforeAt->hide();
+	m_tempoChangeBefore->setEnabled(false);
+	m_tempoChangeBeforeAt->setEnabled(false);
     }
 
     if (comp.getTempoChangeCount() > 0) {
 
 	m_tempoChangeGlobal->setText
 	    (i18n("This tempo applies to the whole segment"));
-	m_tempoChangeGlobal->show();
-	m_defaultBox->show();
+	m_tempoChangeGlobal->setEnabled(true);
+	m_defaultBox->setEnabled(true);
 
     } else {
-	m_tempoChangeGlobal->hide();
-	m_defaultBox->hide();
+	m_tempoChangeGlobal->setEnabled(false);
+	m_defaultBox->setEnabled(false);
     }
+}
+
+void
+TempoDialog::slotGlobalTempoChangeClicked()
+{
+    m_defaultBox->setEnabled(m_tempoChangeGlobal->isChecked());
 }
 
 void
@@ -1614,11 +1615,18 @@ TempoDialog::slotOk()
     if ((int)tempoDouble != m_tempoValueSpinBox->value())
         tempoDouble = m_tempoValueSpinBox->value();
 
-    TempoDialogAction action =
-        (TempoDialogAction)m_optionButtons->id(m_optionButtons->selected());
+    TempoDialogAction action = AddTempo;
 
-    if (action == GlobalTempo && m_defaultBox->isChecked())
-        action = GlobalTempoWithDefault;
+    if (m_tempoChangeBefore->isChecked()) {
+	action = ReplaceTempo;
+    } else if (m_tempoChangeStartOfBar->isChecked()) {
+	action = AddTempoAtBarStart;
+    } else if (m_tempoChangeGlobal->isChecked()) {
+	action = GlobalTempo;
+	if (m_defaultBox->isChecked()) {
+	    action = GlobalTempoWithDefault;
+	}
+    }
 
     emit changeTempo(m_tempoTime,
                      tempoDouble,
@@ -1626,15 +1634,6 @@ TempoDialog::slotOk()
     delete this;
 }
 
-
-void
-TempoDialog::slotRadioButtonPressed(int id)
-{
-    if (id == 2)
-        m_defaultBox->setDisabled(false);
-    else
-        m_defaultBox->setDisabled(true);
-}
 
 
 

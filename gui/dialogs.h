@@ -327,6 +327,7 @@ public:
     typedef enum{
         AddTempo,
         ReplaceTempo,
+        AddTempoAtBarStart,
         GlobalTempo,
         GlobalTempoWithDefault
     } TempoDialogAction;
@@ -340,7 +341,7 @@ public:
 
 public slots:
      virtual void slotOk();
-     void slotRadioButtonPressed(int);
+     void slotGlobalTempoChangeClicked();
 
 signals:
     // Return results in this signal
@@ -360,11 +361,11 @@ protected:
     QLabel             *m_tempoBarLabel;
     RosegardenSpinBox  *m_tempoValueSpinBox;
     
+    QRadioButton       *m_tempoChangeHere;
     QRadioButton       *m_tempoChangeBefore;
     QLabel	       *m_tempoChangeBeforeAt;
+    QRadioButton       *m_tempoChangeStartOfBar;
     QRadioButton       *m_tempoChangeGlobal;
-
-    QVButtonGroup      *m_optionButtons;
     QCheckBox          *m_defaultBox;
 };
 
