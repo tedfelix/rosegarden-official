@@ -157,7 +157,6 @@ public:
 
 public slots:
 
-
     /**
      * put the indicationed text/object into the clipboard and remove * it
      * from the document
@@ -336,6 +335,9 @@ public slots:
     /// Set the time pointer position during playback
     void slotSetPointerPosition(Rosegarden::timeT position);
 
+    /// Set the insertion pointer position (from the bottom LoopRuler)
+    void slotSetInsertPosition(Rosegarden::timeT position);
+
     /// Changes the font of the staffs on the view
     void slotChangeFont(const QString &newFont);
 
@@ -498,8 +500,6 @@ protected:
     std::vector<int> m_legatoDurations;
 
     KAction* m_selectDefaultNote;
-
-    QCanvasLine *m_pointer;
 
     virtual NotationCanvasView *getCanvasView() {
 	return static_cast<NotationCanvasView *>(m_canvasView);

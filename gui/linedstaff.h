@@ -276,7 +276,6 @@ public:
      * staff.  baseY is a canvas y coordinate somewhere on the
      * correct row, or -1 for the default row.
      */
-    //!!! should be protected?
     virtual int getCanvasYForHeight(int height, int baseY = -1) const;
 
     /**
@@ -321,10 +320,40 @@ public:
     virtual double getLayoutXOfCursor() const;
 
     /**
-     * Move the insertion cursor to the layout-X coordinate
-     * corresponding to the given canvas coordinates.
+     * Move the playback pointer to the layout-X coordinate
+     * corresponding to the given canvas coordinates, and show it.
      */
-    virtual void setCursorPosition(double x, int y);
+    virtual void setPointerPosition(double x, int y);
+
+    /**
+     * Move the playback pointer to the layout-X coordinate
+     * corresponding to the given time, and show it.
+     */
+    virtual void setPointerPosition(Rosegarden::HorizontalLayoutEngine<T> &,
+				    Rosegarden::timeT);
+
+    /**
+     * Hide the playback pointer.
+     */
+    virtual void hidePointer();
+
+    /**
+     * Move the insertion pointer to the layout-X coordinate
+     * corresponding to the given canvas coordinates, and show it.
+     */
+    virtual void setInsertPosition(double x, int y);
+
+    /**
+     * Move the insertion pointer to the layout-X coordinate
+     * corresponding to the given time, and show it.
+     */
+    virtual void setInsertPosition(Rosegarden::HorizontalLayoutEngine<T> &,
+				   Rosegarden::timeT);
+
+    /**
+     * Hide the insert pointer.
+     */
+    virtual void hideInsert();
 
     /**
      * Query the given horizontal layout object (which is assumed to
@@ -509,6 +538,7 @@ protected:
     BarLineList m_beatLines;
     BarLineList m_barConnectingLines;
 
+    QCanvasLine *m_pointer;
     StaffRuler *m_ruler;
 };
 

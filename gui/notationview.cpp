@@ -50,6 +50,7 @@
 #include "ktmpstatusmsg.h"
 #include "trackeditor.h"
 #include "barbuttons.h"
+#include "loopruler.h"
 
 #include "rosedebug.h"
 
@@ -105,8 +106,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_topBarButtons(0),
     m_bottomBarButtons(0),
     m_fontSizeSlider(0),
-    m_selectDefaultNote(0),
-    m_pointer(0)
+    m_selectDefaultNote(0)
 {
     m_toolBox = new NotationToolBox(this);
 
@@ -208,16 +208,14 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     m_bottomBarButtons = new BarButtons
 	(m_hlayout, 25, true, m_bottomBarButtonsView);
+
+    QObject::connect
+	(m_bottomBarButtons->getLoopRuler(),
+	 SIGNAL(setPointerPosition(Rosegarden::timeT)),
+	 this, SLOT(slotSetInsertPosition(Rosegarden::timeT)));
+
     m_bottomBarButtons->setMinimumWidth(canvas()->width());
     m_bottomBarButtonsView->addChild(m_bottomBarButtons);
-
-    //
-    // Position pointer
-    //
-    m_pointer = new QCanvasLine(canvas());
-    m_pointer->setPen(RosegardenGUIColours::TimePointer);
-    m_pointer->setPoints(0, 20, 0, canvas()->height());
-    m_pointer->show();
 
     m_selectDefaultNote->activate();
 }
@@ -1638,23 +1636,44 @@ NotationView::slotSetPointerPosition(timeT time)
     Rosegarden::Composition &comp = m_document->getComposition();
     int barNo = comp.getBarNumber(time);
 
-    if (barNo < m_hlayout->getFirstVisibleBar() ||
-	barNo > m_hlayout->getLastVisibleBar()) {
-	if (m_pointer->visible()) {
-	    m_pointer->hide();
-	    update();
+    for (int i = 0; i < m_staffs.size(); ++i) {
+	if (barNo < m_hlayout->getFirstVisibleBarOnStaff(*m_staffs[i]) ||
+	    barNo > m_hlayout-> getLastVisibleBarOnStaff(*m_staffs[i])) {
+	    m_staffs[i]->hidePointer();
+	} else {
+	    m_staffs[i]->setPointerPosition(*m_hlayout, time);
 	}
-	return;
     }
 
+    update();
+}
+
+void
+NotationView::slotSetInsertPosition(timeT time)
+{
+    //!!! For now.  Probably unlike slotSetPointerPosition this one
+    // should snap to the nearest event.  We do probably want to keep
+    // the cursor in LinedStaff though, because then we can place it
+    // on a particular row in page mode (we should remove the rulers
+    // in page mode, but allow the insert cursor to be placed using
+    // shift-click or click-with-select-tool or whatever -- which also
+    // means LinedStaff will still need a "current row", although we
+    // still need a "current staff" too which makes things complicated
+    // enough already.  Should we bother showing the playback pointer
+    // in page mode?  Probably, in which case I suppose that should
+    // go in LinedStaff too).
+
+    Rosegarden::Composition &comp = m_document->getComposition();
     double x = m_hlayout->getXForTime(time);
 
-    if (!m_pointer->visible() || (int)m_pointer->x() != (int)x) {
-	m_pointer->show();
-	m_pointer->setX(x + 20); //!!! arbitrary, same as in positionStaffs
-	update();
-    }
+    m_staffs[m_currentStaff]->setInsertPosition
+	(x + 20, m_staffs[m_currentStaff]->getY()); //!!! as previous method
+
+    update();
 }
+
+    
+
 
 //////////////////////////////////////////////////////////////////////
 
@@ -2000,7 +2019,7 @@ void NotationView::slotItemPressed(int height, int staffNo,
 		m_staffs[m_currentStaff]->setCurrent(true, (int)e->y());
 	    }
 
-	    m_staffs[m_currentStaff]->setCursorPosition(e->x(), (int)e->y());
+	    m_staffs[m_currentStaff]->setInsertPosition(e->x(), (int)e->y());
 	}
 
 	update();
