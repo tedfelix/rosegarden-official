@@ -150,7 +150,7 @@ RosegardenSequencerApp::fetchEvents(const Rosegarden::RealTime &start,
 
         endLoop = getSlice(start, m_loopEnd, firstFetch);
         beginLoop = getSlice(m_loopStart,
-                             m_loopStart + loopOverlap, firstFetch);
+                             m_loopStart + loopOverlap, true);
 
         // move the start time of the begin section one loop width
         // into the future and ensure that we keep the clocks level

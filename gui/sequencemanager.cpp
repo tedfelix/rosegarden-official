@@ -43,18 +43,9 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     m_doc(doc),
     m_transportStatus(STOPPED),
     m_soundSystemStatus(Rosegarden::NO_SEQUENCE_SUBSYS),
-    m_transport(transport)
-    /*
-    m_clearToSend(false),
-    m_clearToSendInterval(15),
+    m_transport(transport),
     m_sendStop(false)
-    */
 {
-    /*
-    m_clearToSendTimer = new QTimer(this);
-    connect(m_clearToSendTimer, SIGNAL(timeout()),
-            this, SLOT(slotClearToSendElapsed()));
-            */
 }
 
 
@@ -78,19 +69,6 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                                    const Rosegarden::RealTime &sliceEnd,
                                    bool firstFetch)
 {
-    // If we're clear to send at this end then don't service
-    // any sequencer request.
-    //
-    /*
-    if (m_clearToSend)
-    {
-        cout << "SEQUENCER SNUNK THROUGH" << endl;
-
-        m_mC.clear();
-        return &m_mC;
-    }
-    */
-
     Composition &comp = m_doc->getComposition();
     Studio &studio = m_doc->getStudio();
   
@@ -378,18 +356,6 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	    m_mC.insert(mE);
         }
     }
-
-    // Set clearToSend time
-    //
-    /*
-    if(m_clearToSendTimer->isActive())
-        m_clearToSendTimer->stop();
-
-    // Set timer and set the flag for the duration of this timer
-    //
-    m_clearToSendTimer->start(m_clearToSendInterval, true);
-    m_clearToSend = true;
-    */
 
     return &m_mC;
 }
@@ -1228,9 +1194,6 @@ SequenceManager::preparePlayback()
     // Send the MappedComposition if it's got anything in it
     sendMappedComposition(mC);
 
-    // set the timer gap for
-    //m_clearToSendInterval = 15;
-
 }
 
 void
@@ -1337,15 +1300,6 @@ SequenceManager::sendAudioLatencies()
       throw(i18n("Failed to contact Rosegarden sequencer to send audio latenices"));
     }
 }
-
-/*
-void
-SequenceManager::slotClearToSendElapsed()
-{
-    //m_clearToSend = false;
-}
-*/
-
 
 }
 
