@@ -37,25 +37,23 @@ NotationCanvasView::NotationCanvasView(QCanvas *viewing, QWidget *parent,
     QCanvasView(viewing, parent, name, f),
     m_currentHighlightedLine(0),
     m_lastYPosNearStaff(0),
-    m_staffLineThreshold(10), //!!!
+    m_staffLineThreshold(10),
+    m_legerLineOffset(false),
     m_positionTracking(false)
 {
     viewport()->setMouseTracking(true);
 
     m_positionMarker = new QCanvasItemGroup(viewing);
 
-    QCanvasLineGroupable *line =
-	new QCanvasLineGroupable(viewing, m_positionMarker);
-    line->setPoints(0, 0, 0, 8); //!!!
-    line->setPen(QPen(QColor(64, 64, 64), 1));
+    m_vert1 = new QCanvasLineGroupable(viewing, m_positionMarker);
+    m_vert1->setPoints(0, 0, 0, 8);
+    m_vert1->setPen(QPen(QColor(64, 64, 64), 1));
 
-    line = new QCanvasLineGroupable(viewing, m_positionMarker);
-    line->setPoints(17, 0, 17, 8); //!!!
-    line->setPen(QPen(QColor(64, 64, 64), 1));
+    m_vert2 = new QCanvasLineGroupable(viewing, m_positionMarker);
+    m_vert2->setPoints(17, 0, 17, 8);
+    m_vert2->setPen(QPen(QColor(64, 64, 64), 1));
 
     m_positionMarker->hide();
-
-    m_legerLinePositionMarker = 0; // for now
 }
 
 NotationCanvasView::~NotationCanvasView()
@@ -96,24 +94,20 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 
     } else {
 
-	int x = e->x() - 8; //!!!
+	int x = e->x() - 8; // magic based on mouse cursor size
 	bool needUpdate = (m_positionTracking && (m_positionMarker->x() != x));
 	m_positionMarker->setX(x);
 
 	if (prevLine != m_currentHighlightedLine) {
 
 	    if (m_positionTracking) {
-		m_positionMarker->setY
-		    (m_currentHighlightedLine->y() +
-		     m_currentHighlightedLine->startPoint().y() - 4);//!!!
+		setPositionMarkerHeight(m_currentHighlightedLine);
 		m_positionMarker->show();
 		needUpdate = true;
 	    }
 
-	    QString noteName = getNoteNameForLine(m_currentHighlightedLine,
-						  e->x());
-
-	    emit hoveredOverNoteChange(noteName);
+	    emit hoveredOverNoteChange
+		(getNoteNameForLine(m_currentHighlightedLine, e->x()));
 	}
 
 	if (needUpdate) canvas()->update();
@@ -271,12 +265,13 @@ NotationCanvasView::posIsTooFarFromStaff(const QPoint &pos)
     
 }
 
-QString NotationCanvasView::getNoteNameForLine(const StaffLine *line,
-					       int x)
+QString
+NotationCanvasView::getNoteNameForLine(const StaffLine *line, int x)
 {
     int h = line->getHeight();
 
-    //!!! Need to take currently-selected accidental into account
+    // Ideally we'd need to take currently-selected accidental into
+    // account, but that information is tricky to get and not essential
 
     const NotationStaff *staff =
 	dynamic_cast<const NotationStaff *>(line->group());
@@ -292,8 +287,92 @@ QString NotationCanvasView::getNoteNameForLine(const StaffLine *line,
     return QString(noteName.c_str());
 }
 
+int
+NotationCanvasView::getStaffLineSpacing(const StaffLine *line)
+{
+    //!!! There should be a better structure for doing this stuff
 
-StaffLine* NotationCanvasView::findClosestLineWithinThreshold(QMouseEvent* e)
+    const NotationStaff *staff =
+	dynamic_cast<const NotationStaff *>(line->group());
+
+    return staff->getLineSpacing() - 1;
+}
+
+int
+NotationCanvasView::getLegerLineCount(const StaffLine *line, bool &offset)
+{
+    //!!! This is far too specifically notation-related to be here, really
+
+    int height = line->getHeight();
+
+    if (height < 0) {
+
+	offset = ((-height % 2) == 1);
+	return height / 2;
+
+    } else if (height > 8) {
+
+	offset = ((height % 2) == 1);
+	return (height - 8) / 2;
+    }
+
+    return 0;
+}
+
+void
+NotationCanvasView::setPositionMarkerHeight(const StaffLine *line)
+{
+    int spacing = getStaffLineSpacing(line);
+    m_staffLineThreshold = spacing;
+    m_vert1->setPoints(0, -spacing/2, 0, spacing/2);
+    m_vert2->setPoints(17, -spacing/2, 17, spacing/2); // magic based on mouse cursor size
+    m_positionMarker->setY(line->y() + line->startPoint().y());
+
+    bool legerLineOffset = false;
+    int  legerLineCount = getLegerLineCount(line, legerLineOffset);
+
+    if (legerLineCount  != (int)m_legerLines.size() ||
+	legerLineOffset != m_legerLineOffset) {
+
+	bool above = false;
+	if (legerLineCount < 0) {
+	    above = true;
+	    legerLineCount = -legerLineCount;
+	}
+
+	int i;
+	for (i = 0; i < (int)m_legerLines.size(); ++i) {
+	    delete m_legerLines[i];
+	}
+	m_legerLines.clear();
+
+	for (i = 0; i < legerLineCount; ++i) {
+
+	    QCanvasLineGroupable *line = 
+		new QCanvasLineGroupable(canvas(), m_positionMarker);
+
+	    line->setPen(QPen(QColor(64, 64, 64), 1));
+
+	    int y = (int)m_positionMarker->y() +
+		(above ? -1 : 1) * (i * (spacing + 1));
+	    int x = (int)m_positionMarker->x() + 1;
+
+	    if (legerLineOffset) {
+		if (above) y -= spacing/2 + 1;
+		else y += spacing/2;
+	    }
+
+	    line->setPoints(x, y, x+15, y); // magic based on mouse cursor size
+	    m_legerLines.push_back(line);
+	}
+
+	m_legerLineOffset = legerLineOffset;
+    }
+}
+
+    
+StaffLine *
+NotationCanvasView::findClosestLineWithinThreshold(QMouseEvent* e)
 {
 //    kdDebug(KDEBUG_AREA) << "NotationCanvasView::findClosestLineWithinThreshold()\n";
     
@@ -318,6 +397,8 @@ StaffLine* NotationCanvasView::findClosestLineWithinThreshold(QMouseEvent* e)
         QCanvasItem *item = *it;
 
         if ((line = dynamic_cast<StaffLine*>(item))) {
+
+	    if (!line->isSignificant()) continue;
 
             unsigned int dist = 0;
 	    int y = (int)(line->y() + line->startPoint().y());

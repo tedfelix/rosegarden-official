@@ -23,12 +23,14 @@
 #define NOTATIONCANVASVIEW_H
 
 #include <qcanvas.h>
+#include <vector>
 
 // #include "notepixmapfactory.h"
 
 class StaffLine;
 class NotationElement;
 class QCanvasItemGroup;
+class QCanvasLineGroupable;
 
 /**
  * Central widget for the NotationView window
@@ -140,6 +142,12 @@ protected:
 	on the given line (x-coord needed to take clef/key into account) */
     QString getNoteNameForLine(const StaffLine *line, int x);
 
+    int getStaffLineSpacing(const StaffLine *line);
+
+    int getLegerLineCount(const StaffLine *line, bool &offset);
+
+    void setPositionMarkerHeight(const StaffLine *line);
+
     NotationElement *getElementAtXCoord(QMouseEvent *e);
 
     /// the staff line over which the mouse cursor is
@@ -150,7 +158,10 @@ protected:
     unsigned int m_staffLineThreshold;
 
     QCanvasItemGroup *m_positionMarker;
-    QCanvasItemGroup *m_legerLinePositionMarker;
+    QCanvasLineGroupable *m_vert1;
+    QCanvasLineGroupable *m_vert2;
+    std::vector<QCanvasLineGroupable *> m_legerLines;
+    bool m_legerLineOffset;
 
     bool m_positionTracking;
 };

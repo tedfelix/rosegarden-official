@@ -55,8 +55,7 @@ using namespace Rosegarden::BaseProperties;
 using namespace NotationProperties;
 
 const int NotationStaff::nbLines      = 5;
-const int NotationStaff::nbLegerLines = 5;
-const int NotationStaff::linesOffset  = 55;
+const int NotationStaff::nbLegerLines = 8;
 
 using std::string;
 
@@ -66,7 +65,6 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
     Rosegarden::Staff<NotationElement>(*segment),
     QCanvasItemGroup(canvas),
     m_id(id),
-    m_barLineHeight(0),
     m_horizLineLength(0),
     m_initialBarA(0),
     m_initialBarB(0),
@@ -104,9 +102,9 @@ NotationStaff::changeFont(string fontName, int resolution)
     // concerned with pitch in this class, only with staff-height.
 
     // Now, the y-coord of a staff m whole-lines below the top
-    // staff-line (where 0 <= m <= 4) is m * lineWidth + linesOffset.
+    // staff-line (where 0 <= m <= 4) is m * lineWidth + lineOffset.
     // For a staff at height h, m = (8-h)/2.  Therefore the y-coord of
-    // a staff at height h is (8-h)/2 * lineWidth + linesOffset
+    // a staff at height h is (8-h)/2 * lineWidth + lineOffset
 
     int h;
     for (h = 0; h < int(m_staffLines.size()); ++h) {
@@ -132,6 +130,7 @@ NotationStaff::changeFont(string fontName, int resolution)
             StaffLine *line = new StaffLine(canvas(), this, h);
             int y = yCoordOfHeight(h) + i;
             line->setPoints(0, y, m_horizLineLength, y);
+	    if (i > 0) line->setSignificant(false);
 
             if ((h % 2 == 1) ||
                 (h < 0 || h > (nbLines * 2 - 2))) {
@@ -150,8 +149,6 @@ NotationStaff::changeFont(string fontName, int resolution)
         }
     }
 
-    m_barLineHeight = (nbLines - 1) * m_npf->getLineSpacing();
-
     delete m_initialBarA;
     delete m_initialBarB;
 
@@ -161,14 +158,14 @@ NotationStaff::changeFont(string fontName, int resolution)
     pen.setCapStyle(Qt::SquareCap);
     m_initialBarA = new QCanvasLineGroupable(canvas(), this);
     m_initialBarA->setPen(pen);
-    m_initialBarA->setPoints(0, linesOffset + 1,
-                             0, m_barLineHeight + linesOffset - 1);
+    m_initialBarA->setPoints(0, getTopLineOffset() + 1,
+                             0, getBarLineHeight() + getTopLineOffset() - 1);
     
     // Second line - thin
     //
     m_initialBarB = new QCanvasLineGroupable(canvas(), this);
-    m_initialBarB->setPoints(4, linesOffset,
-                             4, m_barLineHeight + linesOffset);
+    m_initialBarB->setPoints(4, getTopLineOffset(),
+                             4, getBarLineHeight() + getTopLineOffset());
 }    
 
 void
@@ -193,7 +190,7 @@ int NotationStaff::yCoordOfHeight(int h) const
     // 0 is bottom staff-line, 8 is top one, leger lines above & below
 
     int y = 8 - h;
-    y = linesOffset + (y * m_npf->getLineSpacing()) / 2;
+    y = getTopLineOffset() + (y * m_npf->getLineSpacing()) / 2;
     if (h > 0 && h < 8 && (h % 2 == 1)) ++y;
     else if (h < 0 && (-h % 2 == 1)) ++y;
     return y;
@@ -218,8 +215,8 @@ void NotationStaff::insertBar(unsigned int barPos, bool correct)
         QCanvasLineGroupable* barLine =
             new QCanvasLineGroupable(canvas(), this);
 
-        barLine->setPoints(0, linesOffset,
-                           0, getBarLineHeight() + linesOffset);
+        barLine->setPoints(0, getTopLineOffset(),
+                           0, getBarLineHeight() + getTopLineOffset());
         barLine->moveBy(barPos + x() + i, y());
         if (!correct) barLine->setPen(QPen(red, 1));
         barLine->show();

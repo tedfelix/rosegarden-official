@@ -133,6 +133,7 @@ void RosegardenGUIDoc::documentRestored()
 
 bool RosegardenGUIDoc::saveIfModified()
 {
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::saveIfModified()" << endl;
     bool completed=true;
 
     if(m_modified) {

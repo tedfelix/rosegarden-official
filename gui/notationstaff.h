@@ -84,25 +84,39 @@ public:
     int yCoordOfHeight(int height) const;
 
     /**
-     * Returns the height of a bar line.
+     * Returns the difference between the y-coord of one visible line
+     * and that of its neighbour
      */
-    unsigned int getBarLineHeight() const { return m_barLineHeight; }
+    unsigned int getLineSpacing() const {
+	return m_npf->getLineSpacing();
+    }
 
     /**
-     * Returns the margin surrounding a bar line.
-     *
-     * The bar line is in the middle of the margin.
+     * Returns the height of a bar line.
      */
-    unsigned int getBarMargin() const { return m_npf->getBarMargin(); }
+    unsigned int getBarLineHeight() const {
+	return getLineSpacing() * (nbLines - 1);
+    }
 
     /**
      * Returns the total height of a staff
      */
     unsigned int getStaffHeight() const {
-	return (m_resolution + 1) * nbLines + linesOffset * 2 + 1;
+	return getTopLineOffset() * 2 + getBarLineHeight()
+	    + m_npf->getStaffLineThickness();
     }
 
     /**
+     * Returns the space between the top of the staff object and the
+     * first visible line on the staff.  (This is the same as the
+     * space between the last visible line and the bottom of the staff
+     * object.)
+     */
+    unsigned int getTopLineOffset() const {
+	return getLineSpacing() * nbLegerLines;
+    }
+ 
+   /**
      * Return the id of the staff
      * This will be passed to the NotationTools
      * so they know on which staff a mouse event occurred
@@ -169,7 +183,6 @@ public:
 
     static const int nbLines;        // number of main lines on the staff
     static const int nbLegerLines;   // number of lines above or below
-    static const int linesOffset;    // from top of canvas to top line (bad!)
 
 protected:
 
@@ -186,7 +199,6 @@ protected:
 
     int m_id;
 
-    int m_barLineHeight;
     int m_horizLineLength;
     int m_resolution;
 

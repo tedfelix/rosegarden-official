@@ -496,7 +496,6 @@ void NotationEraser::handleLeftButtonPress(int, int staffNo,
                                           QMouseEvent*,
                                           NotationElement* element)
 {
-    bool needLayout = false;
     if (!element || staffNo < 0) return;
 
     long pitch = 0;

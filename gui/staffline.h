@@ -38,7 +38,10 @@ public:
     enum { NoHeight = -150 };
  
     void setHeight(int h) { m_height = h; }
-    int getHeight() const { return m_height; }
+    int  getHeight() const { return m_height; }
+
+    void setSignificant(bool s) { m_significant = s; }
+    bool isSignificant() const { return m_significant; }
 
     /**
      * "highlight" the line (set its pen to red)
@@ -47,6 +50,7 @@ public:
 
 protected:
     int m_height;
+    bool m_significant;
 
     QPen m_normalPen;
 };

@@ -25,7 +25,8 @@
 
 StaffLine::StaffLine(QCanvas *c, QCanvasItemGroup *g, int height) :
     QCanvasLineGroupable(c, g),
-    m_height(height)
+    m_height(height),
+    m_significant(true)
 {
     setZ(1);
 }

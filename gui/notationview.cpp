@@ -97,6 +97,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_canvasView(new NotationCanvasView(new QCanvas(width() * 2,
                                                     height() * 2),
                                         this)),
+    m_lastFinishingStaff(-1),
     m_ruler(new StaffRuler(20, 0, canvas())),
     m_activeItem(0),
     m_hlayout(0),
@@ -104,8 +105,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_tool(0),
     m_fontSizeSlider(0),
     m_selectDefaultNote(0),
-    m_pointer(0),
-    m_lastFinishingStaff(-1)
+    m_pointer(0)
 {
     assert(segments.size() > 0);
     kdDebug(KDEBUG_AREA) << "NotationView ctor" << endl;
@@ -817,7 +817,7 @@ NotationView::changeFont(string newName, int newSize)
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         m_staffs[i]->move(0, 0);
         m_staffs[i]->changeFont(m_fontName, m_fontSize);
-        m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 15);
+        m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 45);
     }
 
     bool layoutApplied = applyLayout();
@@ -1604,7 +1604,7 @@ int NotationView::findClosestStaff(double eventY)
 {
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         int top = m_staffs[i]->getStaffHeight() * i;
-        int bottom = top + m_staffs[i]->getStaffHeight() + 15;
+        int bottom = top + m_staffs[i]->getStaffHeight() + 45;
         if (eventY >= top && eventY < bottom) return i;
     }
     return -1;

@@ -283,7 +283,7 @@ void RosegardenGUIApp::setupActions()
     //
     connect((QObject *)m_transport, SIGNAL(destroyed()),
             (QObject *)m_viewTransport, SLOT(setChecked(false)));
-                
+	                    
     createGUI("rosegardenui.rc");
 }
 
@@ -658,6 +658,8 @@ void RosegardenGUIApp::fileSaveAs()
 
 void RosegardenGUIApp::fileClose()
 {
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::fileClose()" << endl;
+    
     if (!m_doc) return;
 
     KTmpStatusMsg msg(i18n("Closing file..."), statusBar());
@@ -686,6 +688,8 @@ void RosegardenGUIApp::filePrint()
 
 void RosegardenGUIApp::quit()
 {
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::quit()" << endl;
+    
     statusMsg(i18n("Exiting..."));
     saveOptions();
     // close the first window, the list makes the next one the first again.

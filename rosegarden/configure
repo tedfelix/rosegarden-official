@@ -858,7 +858,7 @@ fi
 
 PACKAGE=rosegarden
 
-VERSION=0.1
+VERSION=0.1.2
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
@@ -7956,7 +7956,6 @@ for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
 
   case "$ac_given_INSTALL" in
   [/$]*) INSTALL="$ac_given_INSTALL" ;;
-"") ;;
   *) INSTALL="$ac_dots$ac_given_INSTALL" ;;
   esac
 
@@ -8096,10 +8095,6 @@ test -z "$CONFIG_HEADERS" || echo timestamp > stamp-h
 
 exit 0
 EOF
-if test "x$with_fast_perl" = "xyes" ; then
-  perl -i.bak $ac_aux_dir/conf.change.pl $CONFIG_STATUS || mv $CONFIG_STATUS.bak $CONFIG_STATUS; 
-  rm -f $CONFIG_STATUS.bak;
-fi 
 chmod +x $CONFIG_STATUS
 rm -fr confdefs* $ac_clean_files
 test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
