@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4 -*-
 
 /*
     Rosegarden-4
@@ -299,11 +300,13 @@ public slots:
 
 protected:
     RosegardenComboBox *m_deviceCombo;
+    QLabel             *m_label;
 
     QButtonGroup       *m_buttonGroup;
     QRadioButton       *m_mergeBanks;
     QRadioButton       *m_overwriteBanks;
 
 };
+
 #endif // _BANKEDITOR_H_
 

@@ -122,21 +122,12 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
 	++deviceCount;
     }
 
-    m_table->adjustColumn(NAME_COL);
-    if (m_table->columnWidth(NAME_COL) < 80)
-	m_table->setColumnWidth(NAME_COL, 80);
-
-    m_table->adjustColumn(LABEL_COL);
-    if (m_table->columnWidth(LABEL_COL) < 120)
-	m_table->setColumnWidth(LABEL_COL, 120);
-
-    m_table->adjustColumn(DIRECTION_COL);
-    if (m_table->columnWidth(DIRECTION_COL) < 100)
-	m_table->setColumnWidth(DIRECTION_COL, 100);
-
-    m_table->adjustColumn(CONNECTION_COL);
-    if (m_table->columnWidth(CONNECTION_COL) < 250)
-	m_table->setColumnWidth(CONNECTION_COL, 250);
+    int minColumnWidths[] = { 80, 120, 100, 250 };
+    for (int i = 0; i < 4; ++i) {
+	m_table->adjustColumn(i);
+	if (m_table->columnWidth(i) < minColumnWidths[i])
+	    m_table->setColumnWidth(i, minColumnWidths[i]);
+    }
 
     QHBox *hbox = new QHBox(mainBox);
     QPushButton *addButton = new QPushButton(i18n("Add Play Device"), hbox);

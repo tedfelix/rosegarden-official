@@ -37,6 +37,8 @@
 #include <qtooltip.h>
 #include <qdir.h>
 
+#include <kapp.h>
+#include <kconfig.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kstddirs.h>
@@ -1411,6 +1413,8 @@ BankEditorDialog::slotImport()
                                         overwrite);
                             addCommandToHistory(command);
 
+			    setModified(true);
+
                             // Redraw the dialog
                             initDialog();
                         }
@@ -1475,21 +1479,40 @@ BankEditorDialog::importFromSF2(QString filename)
 	Rosegarden::DeviceId deviceId = deviceItem->getDevice();
 	Rosegarden::Device *device = m_studio->getDevice(deviceId);
 
-	if (device) {
-	    ModifyDeviceCommand *command =
-		new ModifyDeviceCommand(
-		    m_studio,
-		    deviceId,
-		    device->getName(),
-		    "",
-		    "",
-		    banks,
-		    programs,
-		    true); //!!! overwrite flag -- offer usual dialog with choice
-	    addCommandToHistory(command);
+	std::vector<QString> importList;
+	importList.push_back(filename);
+	ImportDeviceDialog *dialog = new ImportDeviceDialog(this, importList);
+
+	int res = dialog->exec();
+
+	// Check for overwrite flag and reset res as necessary
+	//
+	bool overwrite = false;
+	if (res >> 24) {
+	    overwrite = true;
+	    res &= 0xffffff;
+	}
+
+	if (res > -1) {
+
+	    if (device) {
+		ModifyDeviceCommand *command =
+		    new ModifyDeviceCommand(
+			m_studio,
+			deviceId,
+			device->getName(),
+			"",
+			"",
+			banks,
+			programs,
+			overwrite);
+		addCommandToHistory(command);
+		
+		setModified(true);
 	
-	    // Redraw the dialog
-	    initDialog();
+		// Redraw the dialog
+		initDialog();
+	    }
 	}
     }
 }
@@ -1801,7 +1824,24 @@ ImportDeviceDialog::ImportDeviceDialog(QWidget *parent,
     QGroupBox *groupBox = new QGroupBox(2, Qt::Horizontal,
                                         i18n("Source device"),
                                         mainFrame);
-    m_deviceCombo = new RosegardenComboBox(groupBox);
+
+    if (devices.size() > 1) {
+
+	m_deviceCombo = new RosegardenComboBox(groupBox);
+
+	// Create the combo
+	//
+	std::vector<QString>::iterator it = devices.begin();
+	for (; it != devices.end(); it++)
+	    m_deviceCombo->insertItem(*it);
+
+	m_label = 0;
+
+    } else {
+	
+	m_deviceCombo = 0;
+	m_label = new QLabel(devices[0], groupBox);
+    }
 
     m_buttonGroup = new QButtonGroup(1, Qt::Horizontal,
                                      i18n("Import behaviour"),
@@ -1810,20 +1850,23 @@ ImportDeviceDialog::ImportDeviceDialog(QWidget *parent,
     m_overwriteBanks =
         new QRadioButton(i18n("Overwrite Banks"), m_buttonGroup);
 
-    m_buttonGroup->setButton(0);
-
-    // Create the combo
-    //
-    std::vector<QString>::iterator it = devices.begin();
-    for (; it != devices.end(); it++)
-        m_deviceCombo->insertItem(*it);
+    KConfig *config = kapp->config();
+    config->setGroup("General Options");
+    bool overwrite = config->readBoolEntry("importbanksoverwrite", false);
+    if (overwrite) m_buttonGroup->setButton(1);
+    else m_buttonGroup->setButton(0);
 }
 
 void
 ImportDeviceDialog::slotOk()
 {
-    int beh = m_buttonGroup->id(m_buttonGroup->selected());
-    done(m_deviceCombo->currentItem() + (beh << 24));
+    int v = m_buttonGroup->id(m_buttonGroup->selected());
+    KConfig *config = kapp->config();
+    config->setGroup("General Options");
+    config->writeEntry("importbanksoverwrite", v == 1);
+    v <<= 24;
+    if (m_deviceCombo) v += m_deviceCombo->currentItem();
+    done (v);
 }
 
 void

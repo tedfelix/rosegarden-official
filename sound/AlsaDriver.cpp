@@ -470,6 +470,7 @@ AlsaDriver::generateInstruments()
 	    if (!device) {
 		std::cerr << "WARNING: Failed to create record device" << std::endl;
 	    } else {
+		//!!! why do we bother adding instruments for record devices?
 		addInstrumentsForDevice(device);
 		m_devices.push_back(device);
 	    }
@@ -3504,15 +3505,6 @@ AlsaDriver::checkForNewClients()
     snd_seq_client_info_alloca(&cinfo);
     snd_seq_client_info_set_client(cinfo, -1);
 
-/*!!!
-    MappedDeviceList::iterator it = m_devices.begin();
-    for (; it != m_devices.end(); ++it)
-    {
-        if ((*it)->getType() == Device::Midi)
-            oldPortCount++;
-    }
-*/
-
     // Count current ports
     //
     while (snd_seq_query_next_client(m_midiHandle, cinfo) >= 0)
@@ -3681,7 +3673,7 @@ AlsaDriver::setPluginInstanceBypass(InstrumentId id,
 // MIDI record device.
 //
 void
-AlsaDriver::setRecordDevice(DeviceId id /*!!!, int port */)
+AlsaDriver::setRecordDevice(DeviceId id)
 {
     // Locate a suitable port
     //
@@ -3698,51 +3690,18 @@ AlsaDriver::setRecordDevice(DeviceId id /*!!!, int port */)
     sender.client = pair.first;
     sender.port = pair.second;
 
-    //!!! check direction
-
-#ifdef NOT_DEFINED
-    InstrumentId typicalId = 0;
-
-    // Find a typical InstrumentId for this device
-    //
-    MappedInstrumentList::iterator mIt = m_instruments.begin();
-    for (; mIt != m_instruments.end(); ++mIt)
-    {
-        if ((*mIt)->getDevice() == id /*!!! && (*mIt)->getPort() == port */)
-        {
-            typicalId = (*mIt)->getId();
-            break;
-        }
+    for (MappedDeviceList::iterator i = m_devices.begin();
+	 i != m_devices.end(); ++i) {
+	if ((*i)->getId() == id) {
+	    if ((*i)->getDirection() != MidiDevice::Record) {
+		std::cerr << "AlsaDriver::setRecordDevice - "
+			  << "attempting to set play device (" << id 
+			  << ") to record device" << std::endl;
+		return;
+	    }
+	    break;
+	}
     }
-
-
-    AlsaPortList::iterator it = m_alsaPorts.begin();
-    for (; it != m_alsaPorts.end(); ++it)
-    {
-        sender.client = (*it)->m_client;
-        sender.port = (*it)->m_port;
-
-	//!!!!!!!!
-        if (typicalId >= (*it)->m_startId &&
-            typicalId <= (*it)->m_endId) break;
-    }
-
-    if (it == m_alsaPorts.end())
-    {
-        std::cerr << "AlsaDriver::setRecordDevice - "
-                  << "couldn't match device id (" << id << ") to ALSA port"
-                  << std::endl;
-        return;
-    }
-
-    if ((*it)->m_direction == WriteOnly)
-    {
-        std::cerr << "AlsaDriver::setRecordDevice - "
-                  << "attempting to set non-read device (" << id 
-                  << ") to record device" << std::endl;
-        return;
-    }
-#endif
 
     snd_seq_port_subscribe_t *subs;
     snd_seq_port_subscribe_alloca(&subs);

@@ -337,6 +337,10 @@ CreateOrDeleteDeviceCommand::execute()
 	SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
 		     << " added device " << m_deviceId << endl;
 
+	// Add the device to the Studio now, so that we can name it --
+	// otherwise the name will be lost
+	m_studio->addDevice(m_name, m_deviceId, m_type);
+
     } else {
 
 	// Delete

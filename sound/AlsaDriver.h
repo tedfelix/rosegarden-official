@@ -152,7 +152,7 @@ public:
 
     // Set the record device
     //
-    void setRecordDevice(DeviceId id /*!!!, int port */);
+    void setRecordDevice(DeviceId id);
     void unsetRecordDevices();
 
     virtual bool canReconnect(Device::DeviceType type);

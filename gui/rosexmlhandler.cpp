@@ -904,9 +904,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_device = getStudio().getDevice(id);
 	    QString direction = atts.value("direction").lower();
 
-	    if (direction.isNull() || direction == "play") { // ignore inputs
+	    if (direction.isNull() ||
+		direction == "" ||
+		direction == "play") { // ignore inputs
 
-		if (m_device && m_device->getType() == Rosegarden::Device::Midi) {
+		MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
+		    
+		if (md && md->getDirection() == Rosegarden::MidiDevice::Play) {
 		    if (nameStr && nameStr != "") {
 			m_device->setName(qstrtostr(nameStr));
 		    }
@@ -1530,8 +1534,8 @@ RoseXmlHandler::addMIDIDevice(QString name)
     SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
 		 << " added device " << deviceId << endl;
 
-    // add the device, so we can set our pointer to it -- instruments
-    // will be sync'd later in the natural course of things
+    // add the device, so we can name it and set our pointer to it --
+    // instruments will be sync'd later in the natural course of things
     getStudio().addDevice(qstrtostr(name), deviceId, Device::Midi);
     m_device = getStudio().getDevice(deviceId);
 }
