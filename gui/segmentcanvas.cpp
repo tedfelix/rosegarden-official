@@ -15,6 +15,10 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <qpopupmenu.h>
+
+#include <klocale.h>
+
 #include "trackscanvas.h"
 
 #include "rosedebug.h"
@@ -81,9 +85,12 @@ TracksCanvas::TracksCanvas(int gridH, int gridV,
     m_newRect(false),
     m_grid(gridH, gridV),
     m_brush(new QBrush(Qt::blue)),
-    m_pen(new QPen(Qt::black))
+    m_pen(new QPen(Qt::black)),
+    m_editMenu(new QPopupMenu(this))
 {
-};
+    m_editMenu->insertItem(I18N_NOOP("Edit"),
+                           this, SIGNAL(editTrackPart(TrackPart*)));
+}
 
 
 TracksCanvas::~TracksCanvas()
@@ -98,45 +105,70 @@ TracksCanvas::update()
     canvas()->update();
 }
 
-void TracksCanvas::contentsMousePressEvent(QMouseEvent* e)
+TrackPartItem*
+TracksCanvas::findPartClickedOn(QPoint pos)
 {
-    if (e->button() != LeftButton) return;
-
-    m_newRect = false;
-
-    // Check if we're clicking on a rect
-    QCanvasItemList l=canvas()->collisions(e->pos());
+    QCanvasItemList l=canvas()->collisions(pos);
 
     if (l.count()) {
 
         for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
-            if (TrackPartItem *item = dynamic_cast<TrackPartItem*>(*it)) {
-                m_currentItem = item;
-                return;
-            }
+            if (TrackPartItem *item = dynamic_cast<TrackPartItem*>(*it))
+                return item;
         }
 
-    } else {
+    }
 
-        int gx = m_grid.snapX(e->pos().x()),
-            gy = m_grid.snapY(e->pos().y());
+    return 0;
+}
 
-//         qDebug("Creating new rect. at %d, %d - h = %d, v = %d",
-//                gx, gy, m_grid.hstep(), m_grid.vstep());
+void
+TracksCanvas::contentsMousePressEvent(QMouseEvent* e)
+{
+    m_newRect = false;
+    m_currentItem = 0;
 
-        m_currentItem = new TrackPartItem(gx, gy,
-                                          m_grid.hstep(),
-                                          m_grid.vstep(),
-                                          canvas());
+    if (e->button() == LeftButton) {
 
-        m_currentItem->setPen(*m_pen);
-        m_currentItem->setBrush(*m_brush);
-        m_currentItem->setVisible(true);
+        // Check if we're clicking on a rect
+        //
+        TrackPartItem *item = findPartClickedOn(e->pos());
 
-        m_newRect = true;
+        if (item) {
+             // we are, so set currentItem to it
+            m_currentItem = item;
+            return;
 
-        update();
+        } else { // we are not, so create one
 
+            int gx = m_grid.snapX(e->pos().x()),
+                gy = m_grid.snapY(e->pos().y());
+
+            //         qDebug("Creating new rect. at %d, %d - h = %d, v = %d",
+            //                gx, gy, m_grid.hstep(), m_grid.vstep());
+
+            m_currentItem = new TrackPartItem(gx, gy,
+                                              m_grid.hstep(),
+                                              m_grid.vstep(),
+                                              canvas());
+
+            m_currentItem->setPen(*m_pen);
+            m_currentItem->setBrush(*m_brush);
+            m_currentItem->setVisible(true);
+
+            m_newRect = true;
+
+            update();
+        }
+
+    } else if (e->button() == RightButton) { // popup menu if over a part
+
+        TrackPartItem *item = findPartClickedOn(e->pos());
+
+        if (item) {
+            m_currentItem = item;
+            m_editMenu->exec(QCursor::pos());
+        }
     }
 }
 

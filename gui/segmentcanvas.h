@@ -89,9 +89,12 @@ protected:
     void contentsMouseMoveEvent(QMouseEvent*);
     virtual void wheelEvent(QWheelEvent*);
 
+    TrackPartItem* findPartClickedOn(QPoint);
+
 signals:
     void addTrackPart(TrackPart*);
     void deleteTrackPart(TrackPart*);
+    void editTrackPart(TrackPart*);
 
 private:
     bool m_newRect;
@@ -105,6 +108,8 @@ private:
     QBrush *m_brush;
     QPen *m_pen;
 
+    QPopupMenu *m_editMenu;
+    
 };
 
 
