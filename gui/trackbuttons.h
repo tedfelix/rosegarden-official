@@ -65,6 +65,8 @@ public:
                  const char* name = 0,
                  WFlags f=0);
 
+    ~TrackButtons();
+
     // Return the track selected for recording
     //
     int selectedRecordTrack();
@@ -152,7 +154,8 @@ private:
     std::vector<InstrumentLabel *> m_instrumentLabels;
     std::vector<QFrame *> m_trackHBoxes;
 
-    QPopupMenu *m_instrumentPopup;
+    QPopupMenu               *m_instrumentPopup;
+    std::vector<QPopupMenu*>  m_instrumentSubMenu;
 
     // Number of tracks on our view
     //

@@ -113,6 +113,12 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
     m_msb->setMaxValue(127);
     gridLayout->addWidget(m_msb, 1, 5, AlignRight);
 
+    QToolTip::add(m_msb,
+            i18n("Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
+
+    QToolTip::add(m_lsb,
+            i18n("Selects a LSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
+
     connect(m_msb, SIGNAL(valueChanged(int)),
             this, SLOT(slotNewMSB(int)));
 
