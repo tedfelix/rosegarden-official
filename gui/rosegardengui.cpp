@@ -56,6 +56,7 @@
 #include "MidiFile.h"
 #include "rg21io.h"
 #include "csoundio.h"
+#include "lilypondio.h"
 #include "rosegardendcop.h"
 #include "ktmpstatusmsg.h"
 #include "SegmentPerformanceHelper.h"
@@ -179,6 +180,10 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("Export &MIDI file..."), 0, 0, this,
                 SLOT(slotExportMIDI()), actionCollection(),
                 "file_export_midi");
+
+    new KAction(i18n("Export &Lilypond file..."), 0, 0, this,
+                SLOT(slotExportLilypond()), actionCollection(),
+                "file_export_lilypond");
 
     new KAction(i18n("Export &Csound score file..."), 0, 0, this,
                 SLOT(slotExportCsound()), actionCollection(),
@@ -1675,6 +1680,62 @@ void RosegardenGUIApp::exportCsoundFile(const QString &file)
     CsoundExporter e(&m_doc->getComposition(), qstrtostr(file));
     if (!e.write()) {
 	KMessageBox::sorry(this, i18n("The Csound file has not been exported."));
+    }
+}
+
+void RosegardenGUIApp::slotExportLilypond()
+{
+    KTmpStatusMsg msg(i18n("Exporting to Lilypond file..."), statusBar());
+
+    QString fileName=KFileDialog::getSaveFileName(QDir::currentDirPath(),
+                                                  i18n("*.ly"), this, i18n("Export as..."));
+
+    if (fileName.isEmpty())
+      return;
+
+    KURL *u = new KURL(fileName);
+
+    if (u->isMalformed())
+    {
+        KMessageBox::sorry(this, i18n("This is not a valid filename.\n"));
+        return;
+    }
+
+    if (!u->isLocalFile())
+    {
+        KMessageBox::sorry(this, i18n("This is not a local file.\n"));
+        return;
+    }
+
+    QFileInfo info(fileName);
+
+    if (info.isDir())
+    {
+        KMessageBox::sorry(this, i18n("You have specified a directory"));
+        return;
+    }
+
+    if (info.exists())
+    {
+        int overwrite = KMessageBox::questionYesNo(this,
+                               i18n("The specified file exists.  Overwrite?"));
+
+        if (overwrite != KMessageBox::Yes)
+         return;
+    }
+
+    // Go ahead and export the file
+    //
+    exportLilypondFile(fileName);
+}
+
+void RosegardenGUIApp::exportLilypondFile(const QString &file)
+{
+    SetWaitCursor waitCursor;
+
+    LilypondExporter e(&m_doc->getComposition(), qstrtostr(file));
+    if (!e.write()) {
+	KMessageBox::sorry(this, i18n("The Lilypond file has not been exported."));
     }
 }
 

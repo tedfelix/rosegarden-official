@@ -177,6 +177,18 @@ public:
         }
     };
 
+    struct EventEndCmp
+    {
+        bool operator()(const Event &e1, const Event &e2) const {
+            return e1.getAbsoluteTime() + e1.getDuration() <=
+                e2.getAbsoluteTime() + e2.getDuration();
+        }
+        bool operator()(const Event *e1, const Event *e2) const {
+            return e1->getAbsoluteTime() + e1->getDuration() <=
+                e2->getAbsoluteTime() + e2->getDuration();
+        }
+    };
+
     static bool compareEvent2Time(const Event *e, timeT t) {
         return e->getAbsoluteTime() < t;
     }

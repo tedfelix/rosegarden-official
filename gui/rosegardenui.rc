@@ -11,6 +11,7 @@
     <Menu name="export" append="new_merge"><text>&amp;Export</text>
       <Action name="file_export_midi" />
       <Action name="file_export_csound" />
+      <Action name="file_export_lilypond" />
     </Menu>
   </Menu>
   <Menu name="edit">

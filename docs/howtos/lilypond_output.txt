@@ -1,0 +1,35 @@
+Message-ID: <20020604161954.45702.qmail@mail.com>
+From: "Hans Kieserman" <hkieserman@mail.com>
+To: rosegarden-devel@lists.sourceforge.net
+Date: Tue, 04 Jun 2002 11:19:54 -0500
+
+
+The Lilypond export code generates a lilypond typesetting file.  You
+still need to run it through lilypond (use ly2dvi -P <filename>) to
+get something viewable.
+
+Multiple tracks are laid out on separate Staffs BY NAME.  This means
+that if you want different Staffs for different tracks, you need to
+name the tracks differently.
+
+Expect lots of error messages from lilypond.  Lilypond has some quirky
+"features", such as the fact that you have to attach Indications to
+notes (order matters), limited multiple slurs (can't start two slurs
+in the same place), etc. that make it a little bit of a hack
+translation from time-based sound events to typesetting.
+
+It is sort of expected that users will "fix up" the output with any
+particular typesetting features they want after export.  Adding full
+lilypond control to the GUI would be unwieldy and a "concurrent
+design" nightmare as we tried to keep bars, etc. the same in both
+programs.  It would be an interesting problem, I suppose- let me know
+if anyone thinks it's worthwhile.
+
+And the Note() crash means that multiple segments doesn't work at the
+moment- they'll all be written, but all start at time 0
+(i.e. overlap).
+
+Let me know if you have any trouble getting lilypond etc. to run.
+
+Hans
+

@@ -16,6 +16,7 @@ rosegarden_SOURCES = \
         instrumentparameterbox.cpp \
 	kstartuplogo.cpp \
 	ktmpstatusmsg.cpp \
+        lilypondio.cpp \
         loopruler.cpp \
 	main.cpp \
 	matrixcanvasview.cpp \
