@@ -52,12 +52,14 @@ using Rosegarden::timeT;
 using Rosegarden::TimeSignature;
 using Rosegarden::Accidental;
 using Rosegarden::Accidentals;
-
+using Rosegarden::Text;
+using Rosegarden::PropertyName;
+using Rosegarden::Marks;
 
 LilypondExporter::LilypondExporter(Composition *composition,
                                    std::string fileName) :
-    m_composition(composition),
-    m_fileName(fileName) {
+                                   m_composition(composition),
+                                   m_fileName(fileName) {
     // nothing else
 }
 
@@ -116,18 +118,14 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress, Segment::it
                 }
                 eventsInProgress.erase(k);
             } else {
-                std::cerr << "\n[Lilypond] Unhandled Deferred Ending Event type: " << (*k)->getType();
+                std::cerr << "\nLilypondExporter::handleEndingEvents - unhandled deferred ending event, type: " << (*k)->getType();
             }
         }
     }
 }
 
 // processes input to produce a Lilypond-format note written correctly for all
-// keys and out-of-key accidental combinations.  (I hope.  :)
-//
-// Incomplete???  Probably this should be shared by musicxmlio so that it can
-// benefit from improved enharmonic handling, though it's too Lilypond
-// specific at the moment to serve that purpose.
+// keys and out-of-key accidental combinations.
 std::string
 LilypondExporter::convertPitchToLilyNote (long pitch, bool isFlatKeySignature,
                         int accidentalCount, Accidental accidental) {
@@ -137,7 +135,7 @@ LilypondExporter::convertPitchToLilyNote (long pitch, bool isFlatKeySignature,
     // get raw semitone number
     pitchNote = (pitch % 12);
 
-    // no accidental, or Natural
+    // no accidental, or notes with Natural property
     switch (pitchNote) {
         case 0:  lilyNote = "c";
                  break;
@@ -152,6 +150,19 @@ LilypondExporter::convertPitchToLilyNote (long pitch, bool isFlatKeySignature,
         case 9:  lilyNote = "a";
                  break;
         case 11: lilyNote = "b";
+                 break;
+        // failsafe to deal with annoying fact that imported/recorded notes don't have
+        // persistent accidental properties
+        case 1:  lilyNote = (isFlatKeySignature) ? "des" : "cis";
+                 break;
+        case 3:  lilyNote = (isFlatKeySignature) ? "ees" : "dis";
+                 break;
+        case 6:  lilyNote = (isFlatKeySignature) ? "ges" : "fis";
+                 break;
+        case 8:  lilyNote = (isFlatKeySignature) ? "aes" : "gis";
+                 break;
+        case 10: lilyNote = (isFlatKeySignature) ? "bes" : "ais";
+                 break;
     }
         
     // assign out-of-key accidentals first, by BaseProperty::ACCIDENTAL
@@ -225,6 +236,13 @@ LilypondExporter::convertPitchToLilyNote (long pitch, bool isFlatKeySignature,
         } else if (accidental == Accidentals::Natural) {
             // do we have anything explicit left to do in this
             // case?  probably not, but I'll leave this placeholder for now
+            //
+            // eg. note is B + Natural in key Cb, but since it has Natural
+            // it winds up here, instead of getting the Cb from the key below.
+            // since it will be called "b" from the first switch statement in
+            // the entry to this complex logic block, and nothing here changes it,
+            // the implicit handling to this point should resolve the case
+            // without further effort.
         }
     } else {  // no explicit accidental; note must be in-key
         for (c = 0; c <= accidentalCount; c++) {
@@ -250,10 +268,85 @@ LilypondExporter::convertPitchToLilyNote (long pitch, bool isFlatKeySignature,
                 }
            }
        } 
-    }             
+    }
+
+    // leave this in to see if there are any _other_ problems that are going
+    // to break this method...
+    if (lilyNote == "") {
+        std::cerr << "LilypondExporter::convertPitchToLilyNote() -  WARNING: cannot resolve note"
+                  << std::endl << "pitch = " << pitchNote << "\tkey sig. = "
+                  << ((isFlatKeySignature) ? "flat" : "sharp") << "\tno. of accidentals = "
+                  << accidentalCount << "\textra accidental = \"" << accidental << "\""
+                  << std::endl;
+        
+    }
 
     return lilyNote;
 }
+
+// composes and returns a string to be appended to a note in order to
+// represent various Marks (tenuto, accents, etc.)
+//
+// warning:  text markup features are slated to be re-written
+// and the syntax/semantics completely altered, so this will probably
+// need extensive reworking eventually, possibly with version awareness
+// 
+std::string
+LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
+
+    std::string inStr = "", outStr = "";
+    std::string prefix = (stemUp) ? "_" : "^";
+    
+    // shoot text mark straight through unless it's sf, rf or tr
+    if (Marks::isTextMark(eventMark)) {
+        inStr = Marks::getTextFromMark(eventMark);
+        if (inStr == "sf") {
+            inStr = "#\'((bold italic) \"sf\")"; // sf in bold/italic
+        } else if (inStr == "rf") {
+            inStr = "#\'((bold italic) \"rf\")"; // rf in bold/italic
+        } else if (inStr == "tr") {
+            inStr = "\\trill";                   // Lilypond \trill is prettier
+        } else {
+            outStr = prefix + "\"" + inStr + "\"";
+        }
+    } else {
+//        outStr = prefix;
+        outStr = "-";  // let Lilypond decide, since stemUp is unpredictable
+
+        // use full \accent format for maximal clarity to those unfamiliar
+        // with Lilypond, using this feature primarily as a way to print, and for greater
+        // legibility here
+        if (eventMark == Marks::Accent) {
+            outStr += "\\accent";
+        } else if (eventMark == Marks::Tenuto) {
+            outStr += "\\tenuto";
+        } else if (eventMark == Marks::Staccato) {
+            outStr += "\\staccato";
+        } else if (eventMark == Marks::Staccatissimo) {
+            outStr += "\\staccatissimo";
+        } else if (eventMark == Marks::Marcato) {
+            outStr += "\\marcato";
+        } else if (eventMark == Marks::Turn) {
+            outStr += "\\turn";
+        } else if (eventMark == Marks::Pause) {
+            outStr += "\\fermata";
+        } else if (eventMark == Marks::UpBow) {
+            outStr += "\\upbow";
+        } else if (eventMark == Marks::DownBow) {
+            outStr += "\\downbow";
+        } else {
+            outStr = "";
+            std::cerr << "LilypondExporter::composeLilyMark() - unhandled mark:  "
+                      << eventMark << std::endl;
+        }
+    }
+
+/* WIP     std::cout << "mark handler:  inStr: " << inStr << " outStr: " << outStr <<
+            "stemUp: " << ((stemUp) ? "true" : "false") << std::endl; */
+
+    return outStr;
+}
+
 
 bool
 LilypondExporter::write() {
@@ -367,6 +460,7 @@ LilypondExporter::write() {
         timeT prevTime = 0;
         int curTupletNotesRemaining = 0;
         int accidentalCount = 0; // DMM
+//        int timeSignatureIterator = 0;
         
         // Write out all events for this Segment
         for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
@@ -379,6 +473,13 @@ LilypondExporter::write() {
             // new bar
             bool multipleTimeSignatures = ((m_composition->getTimeSignatureCount ()) > 1);
             
+/*  WIP       long timeSignatureCount = m_composition->getTimeSignatureCount();
+            bool multipleTimeSignatures = (timeSignatureCount > 1);
+
+            if (multipleTimeSignatures) {
+                timeSignatureIterator++;
+                timeSignature = m_composition->getTimeSignatureChange(timeSignatureIterator); */
+            
             if (j == (*i)->begin() ||
                 (prevTime < m_composition->getBarStartForTime(absoluteTime))) {
                 str << "\n\t\t\t";
@@ -386,11 +487,26 @@ LilypondExporter::write() {
                 // DMM - this is really pretty much an ugly hack, but it works...
                 // check time signature against previous one; if different,
                 // write new one here at bar line...
+                // FIXME - rewrite this to getTimeSignatureChange for time
+                // sig. 1, look at "now" to see if it's time to write it, and
+                // when we get to that point, ++ the time sig iterator to grab
+                // the next change and be looking for that, etc. until out of
+                // events.  Probably much less ugly and worth doing, but the
+                // existing implementation works well enough to put off doing
+                // that until after text events and marks are working....
+                // just basically that the current method wastes a lot of CPU
+                // cycles checking stuff that doesn't really have to be
+                // checked because the times are known in advance if you look.
                 TimeSignature prevTimeSignature = timeSignature;
                 if (multipleTimeSignatures) {
                     timeSignature = m_composition->getTimeSignatureAt(absoluteTime);
-                    if ((timeSignature.getNumerator() != prevTimeSignature.getNumerator()) || 
-                        (timeSignature.getDenominator() != prevTimeSignature.getDenominator())) {
+                    if (
+                        (timeSignature.getNumerator() != prevTimeSignature.getNumerator())
+                        || 
+                        (timeSignature.getDenominator() != prevTimeSignature.getDenominator())
+                        &&
+                        !(timeSignature.isHidden())
+                       ) {
                         str << "\\time "
                             << timeSignature.getNumerator() << "/"
                             << timeSignature.getDenominator() << "\n\t\t\t";
@@ -400,10 +516,15 @@ LilypondExporter::write() {
             
             prevTime = absoluteTime;
 
-            timeT duration = (*j)->getDuration();
+            timeT duration = (*j)->getNotationDuration();
 
-            if ((*j)->isa(Note::EventType) ||
-                (*j)->isa(Note::EventRestType)) {
+            if ((*j)->isa(Text::EventType)) {
+                std::cout << "TEXT: coming soon... " << std::endl;
+                // compare to Indication events...  NotationTypes
+                //
+                // 
+            } else if ((*j)->isa(Note::EventType) ||
+                        (*j)->isa(Note::EventRestType)) {
                 // Tuplet code from notationhlayout.cpp
                 int tcount = 0;
                 int ucount = 0;
@@ -412,14 +533,16 @@ LilypondExporter::write() {
                     ucount = (*j)->get<Int>(BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT);
                     assert(tcount != 0);
 
-                    duration = ((*j)->getDuration() / tcount) * ucount;
+                    duration = ((*j)->getNotationDuration() / tcount) * ucount;
                     if (curTupletNotesRemaining == 0) {
                         // +1 is a hack so we can close the tuplet bracket
                         // at the right time
                         curTupletNotesRemaining = ucount + 1;
                     }
                 }
+                
                 Note tmpNote = Note::getNearestNote(duration, MAX_DOTS);
+                std::string lilyMark = "";
 
                 if ((*j)->isa(Note::EventType)) {
                     // Algorithm for writing chords:
@@ -464,7 +587,10 @@ LilypondExporter::write() {
                     // 60 is middle C, one unit is a half-step
                     long pitch = 0;
 
-                    // DMM - enharmonics handling
+                    // format of Lilypond note is:
+                    // name + (duration) + octave + text markup
+
+                    // calculate note name
                     Accidental accidental;
                     std::string lilyNote;
 
@@ -474,8 +600,10 @@ LilypondExporter::write() {
 
                     lilyNote = convertPitchToLilyNote(pitch, isFlatKeySignature,
                                                   accidentalCount, accidental);
+
                     str << lilyNote;
 
+                    // octave marks
                     std::string octaveMarks = "";
                     int octave = (int)(pitch / 12);
 
@@ -493,7 +621,28 @@ LilypondExporter::write() {
                     }
 
                     str << octaveMarks;
+
+                    // marks
+                    long markCount = 0;
+                    bool stemUp;
+                    std::string eventMark = "",
+                                stem = "";
                     
+                    (*j)->get<Int>(BaseProperties::MARK_COUNT, markCount);
+                    (*j)->get<Bool>(BaseProperties::STEM_UP, stemUp);
+
+                    if (markCount > 0) {
+                            (*j)->get<String>(BaseProperties::getMarkPropertyName(0), eventMark);
+                            lilyMark = composeLilyMark(eventMark, stemUp);
+                            lilyNote += lilyMark;
+                    }
+
+                    if (markCount > 1) {
+                        std::cerr << "LilypondExporter::composeLilyMark() - WARNING:"
+                                  << " Lilypond only alows one mark per note." << std::endl
+                                  << "Note has " << markCount << " marks.  Using first mark: "
+                                  << ((lilyMark == "") ? "\"\"" : lilyMark) << std::endl;
+                    }
                 } else { // it's a rest
                     if (currentlyWritingChord) {
                         currentlyWritingChord = false;
@@ -542,6 +691,12 @@ LilypondExporter::write() {
                     lastNumDots = tmpNote.getDots();
                 }
 
+                // write marks after duration
+                if (lilyMark != "") {
+                    str << lilyMark;
+                    lilyMark = "";  // clear for next iteration
+                }
+                
                 // Add a tie if necessary (or postpone it if we're in a chord)
                 bool tiedForward = false;
                 (*j)->get<Bool>(BaseProperties::TIED_FORWARD, tiedForward);
@@ -567,7 +722,6 @@ LilypondExporter::write() {
                 }
 
                 // Incomplete: Set which note the clef should center on
-//cc            str << "\t\t\t\\clef ";
                 str << "\\clef ";
                 std::string whichClef((*j)->get<String>(Clef::ClefPropertyName));
                 if (whichClef == Clef::Treble) { str << "treble\n"; }
@@ -584,7 +738,6 @@ LilypondExporter::write() {
                     str << "> ";
                 }
 
-//cc            str << "\n\t\t\t\\key ";
                 str << "\\key ";
                 Key whichKey(**j);
                 isFlatKeySignature = !whichKey.isSharp();
@@ -604,10 +757,8 @@ LilypondExporter::write() {
                 // Handle the end of these events when it's time
                 eventsToStart.insert(*j);
                 eventsInProgress.insert(*j);
-//            } else if ((*j)->isa(Mark::EventType)) {
-//            in progress...
             } else {
-                std::cerr << "\n[Lilypond] Unhandled Event type: " << (*j)->getType();
+                std::cerr << "\nLilypondExporter::write() - unhandled event type: " << (*j)->getType();
             }
         }
         if (currentlyWritingChord) {
