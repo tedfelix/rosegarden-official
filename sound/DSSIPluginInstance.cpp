@@ -26,7 +26,7 @@
 
 #ifdef HAVE_DSSI
 
-#define DEBUG_DSSI 1
+//#define DEBUG_DSSI 1
 //#define DEBUG_DSSI_PROCESS 1
 
 namespace Rosegarden
@@ -431,6 +431,19 @@ DSSIPluginInstance::selectProgram(QString program)
 	}
     }
 
+    //!!! Missing bits of DSSI:
+    // 
+    // select_program (below) should be called from audio thread -- simple enough
+    //
+    // configure return value is not yet returned to RG GUI -- needs to be shown
+    // to user
+    //
+    // port-controller mappings
+    //
+    // proper handling of MIDI program changes and other such
+    // 
+    // asynchronous events not handled properly in AlsaDriver
+
     if (found) {
 	//!!! no -- must be scheduled for call from audio context, with run()
 	m_descriptor->select_program(m_instanceHandle, bankNo, programNo);
@@ -596,8 +609,9 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 	}
 
 #ifdef DEBUG_DSSI_PROCESS
-	std::cerr << "DSSIPluginInstance::run: evTime " << evTime << ", frameOffset " << frameOffset
-		  << ", block size " << m_blockSize << std::endl;
+	std::cerr << "DSSIPluginInstance::run: evTime " << evTime << ", blockTime " << blockTime << ", frameOffset " << frameOffset
+		  << ", blockSize " << m_blockSize << std::endl;
+	std::cerr << "Type: " << int(ev->type) << ", pitch: " << int(ev->data.note.note) << ", velocity: " << int(ev->data.note.velocity) << std::endl;
 #endif
 
 	if (frameOffset >= int(m_blockSize)) break;

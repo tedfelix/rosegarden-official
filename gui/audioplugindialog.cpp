@@ -166,6 +166,9 @@ AudioPluginDialog::slotShowGUI()
 {
     emit showPluginGUI(m_instrument->getId(), m_index);
     m_guiShown = true;
+
+    //!!! need to get notification of when a plugin gui exits from the
+    //gui manager
 }
 
 void

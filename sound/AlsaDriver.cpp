@@ -1639,7 +1639,7 @@ AlsaDriver::allNotesOff()
 }
 
 void
-AlsaDriver::processNotesOff(const RealTime &time)
+AlsaDriver::processNotesOff(const RealTime &time, bool now)
 {
     if (m_noteOffQueue.empty()) return;
 
@@ -1701,7 +1701,7 @@ AlsaDriver::processNotesOff(const RealTime &time)
 
 	// send note off
 	if (isSoftSynth) {
-	    processSoftSynthEventOut(ev->getInstrument(), &event, false);
+	    processSoftSynthEventOut(ev->getInstrument(), &event, now);
 	} else {
 	    snd_seq_event_output(m_midiHandle, &event);
 	}
@@ -2113,7 +2113,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
 	if (now || m_playing == false) midiRelativeTime = getAlsaTime();
 
-	processNotesOff(midiRelativeTime);
+	processNotesOff(midiRelativeTime, now);
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
 	RealTime alsaTimeNow = getAlsaTime();
@@ -2204,6 +2204,14 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 					  channel,
 					  (*i)->getPitch(),
 					  (*i)->getVelocity());
+
+		    //!!! I don't understand how we know what the
+		    //duration is for note off purposes?  this is
+		    //clearly nonsense, and I think the cause of
+		    //silent or blippy notes during record monitoring,
+		    //but if I remove it, I get no note-offs for most
+		    //notes during playback.  I'm missing something
+		    //here.
 		    needNoteOff = true;
 
 		    if (!isSoftSynth && getSequencerDataBlock()) {
@@ -2352,11 +2360,17 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 				 (*i)->getPitch(),
 				 channel,
 				 (*i)->getInstrument());
+
+#ifdef DEBUG_ALSA
+	    std::cerr << "Adding NOTE OFF at " << midiRelativeStopTime
+		      << std::endl;
+#endif
+
 	    m_noteOffQueue.insert(noteOffEvent);
         }
     }
 
-    processNotesOff(sliceEnd - m_playStartPosition + m_alsaPlayStartTime);
+    processNotesOff(sliceEnd - m_playStartPosition + m_alsaPlayStartTime, now);
 
     if (m_queueRunning || now) {
 	checkAlsaError(snd_seq_drain_output(m_midiHandle), "processMidiOut(): draining");
@@ -2379,7 +2393,7 @@ AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev,
 
 	RealTime t(ev->time.time.tv_sec, ev->time.time.tv_nsec);
 
-	if (now) t = getSequencerTime();
+	if (now) t = RealTime::zeroTime;//!!! getSequencerTime();
 	else t = t + m_playStartPosition - m_alsaPlayStartTime;
 
 #ifdef DEBUG_ALSA
@@ -3088,7 +3102,7 @@ void
 AlsaDriver::processPending()
 {
     if (!m_playing) {
-	processNotesOff(getAlsaTime());
+	processNotesOff(getAlsaTime(), true);
 	checkAlsaError(snd_seq_drain_output(m_midiHandle), "processPending(): draining");
     }
 

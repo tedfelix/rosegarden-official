@@ -737,7 +737,12 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	    std::cerr << "JackDriver::jackProcess: not playing" << std::endl;
 #endif
 	    jackProcessRecord(nframes, 0, 0); // for monitoring
-	    return jackProcessEmpty(nframes);
+
+	    //!!! We don't actually want to be doing the instrument
+	    // mix malarkey when stopped, unless there is some work to
+	    // do -- perhaps the instrument mixer could report whether
+	    // it's had any async events lately?
+//!!!	    return jackProcessEmpty(nframes);
 	}
     }
 
@@ -1525,9 +1530,21 @@ JackDriver::flushAudio()
 #ifdef DEBUG_JACK_DRIVER
     std::cerr << "JackDriver::flushAudio" << std::endl;
 #endif
-
+/*!!!
     m_instrumentMixer->emptyBuffers();
     m_bussMixer->emptyBuffers();
+*/
+    
+    //!!! experimental to get async synth events agogo
+    m_fileReader->fillBuffers(RealTime::zeroTime);
+
+    //!!! tidy
+    if (m_bussMixer->getBussCount() > 0) {
+	m_instrumentMixer->fillBuffers(RealTime::zeroTime);
+	m_bussMixer->fillBuffers(RealTime::zeroTime);
+    } else {
+	m_instrumentMixer->fillBuffers(RealTime::zeroTime);
+    }
 }
  
 void
