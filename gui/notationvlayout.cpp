@@ -204,6 +204,10 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 //			       << " time : " << (el->getViewAbsoluteTime())
 //			       << endl;
 	    }
+	    else {
+	        el->event()->setMaybe<Bool>(m_properties.REST_OUTSIDE_STAVE,
+					    false);
+	    }
 
         } else if (el->isNote()) {
 
