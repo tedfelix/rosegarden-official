@@ -151,19 +151,7 @@ std::vector<QCanvasPixmapArray*> PixmapArrayGC::m_pixmapArrays;
 
 //////////////////////////////////////////////////////////////////////
 
-// void ConstantWidthRectangle::drawShape(QPainter &p)
-// {
-//     bool xForm = p.hasWorldXForm();
-//     p.setWorldXForm(false);
-//     QPoint origXY(x(), y());
-    
-//     QPoint xFormedXY = p.xForm(origXY);
-//     setX(xFormedXY.x());
-//     setY(xFormedXY.y());
-
-//     QCanvasRectangle::drawShape(p);
-
-//     setX(origXY.x());
-//     setY(origXY.y());
-//     p.setWorldXForm(xForm);
-// }
+void ConstantWidthRectangle::drawShape(QPainter &p)
+{
+    p.drawRect((int)x(), (int)y(), width() / p.worldMatrix().m11(), height());
+}
