@@ -269,7 +269,6 @@ void GeneralConfigurationPage::apply()
     SegmentSelector::setGreedyMode(greedyMode);
     m_cfg->writeEntry("selectorgreedymode", m_selectorGreedyMode->isChecked());
 
-    bool textures = m_backgroundTextures->isChecked();
     m_cfg->writeEntry("backgroundtextures", m_backgroundTextures->isChecked());
 
     unsigned int autosaveInterval = m_autosaveInterval->value();
@@ -412,7 +411,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     }
 
     layout->addWidget(m_spacing, 1, 1);
-
+/*!!!
     layout->addWidget(new QLabel(i18n("Default smoothing"), frame), 2, 0);
     
     m_smoothing = new QComboBox(frame);
@@ -433,13 +432,19 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     }
 
     layout->addWidget(m_smoothing, 2, 1);
-    
+*/
     m_showUnknowns = new QCheckBox
 	(i18n("Show non-notation events as question marks"), frame);
     bool defaultShowUnknowns = m_cfg->readBoolEntry("showunknowns", true);
     m_showUnknowns->setChecked(defaultShowUnknowns);
-    layout->addWidget(m_showUnknowns, 3, 1);
-    
+    layout->addWidget(m_showUnknowns, 2, 1);
+
+    m_colourQuantize = new QCheckBox
+	(i18n("Show notation-quantized notes in a different colour"), frame);
+    bool defaultColourQuantize = m_cfg->readBoolEntry("colourquantize", false);
+    m_colourQuantize->setChecked(defaultColourQuantize);
+    layout->addWidget(m_colourQuantize, 3, 1);
+
     addTab(frame, i18n("Layout"));
 
     frame = new QFrame(m_tabWidget);
@@ -531,14 +536,6 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_quantizeFrame = new RosegardenQuantizeParameters
 	(m_tabWidget, false, "Notation Options", preamble);
 
-/*!!!    
-    m_colourQuantize = new QCheckBox
-	(i18n("Show smoothed notes in a different colour"), frame);
-    bool defaultColourQuantize = m_cfg->readBoolEntry("colourquantize", true);
-    m_colourQuantize->setChecked(defaultColourQuantize);
-    layout->addWidget(m_colourQuantize, 3, 1);
-*/
-
     addTab(m_quantizeFrame, i18n("Quantize"));
 }
 
@@ -601,15 +598,19 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("spacing", s[m_spacing->currentItem()]);
 
     m_cfg->writeEntry("layoutmode", m_layoutMode->currentItem());
+/*!!!
     m_cfg->writeEntry("smoothing",
 		      m_smoothing->currentItem() + Note::Shortest);
-//!!!    m_cfg->writeEntry("colourquantize", m_colourQuantize->isChecked());
+*/
+    m_cfg->writeEntry("colourquantize", m_colourQuantize->isChecked());
     m_cfg->writeEntry("showunknowns", m_showUnknowns->isChecked());
     m_cfg->writeEntry("style", m_noteStyle->currentText());
     m_cfg->writeEntry("inserttype", m_insertType->currentItem());
     m_cfg->writeEntry("autobeam", m_autoBeam->isChecked());
     m_cfg->writeEntry("collapse", m_collapseRests->isChecked());
     m_cfg->writeEntry("pastetype", m_pasteType->currentItem());
+
+    (void)m_quantizeFrame->getQuantizer(); // this also writes to the config
 }
 
 

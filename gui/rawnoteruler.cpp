@@ -153,8 +153,11 @@ RawNoteRuler::buildForest(Segment *s,
 
     for (Segment::iterator i = from; i != to && s->isBeforeEndMarker(i); ) {
 	if (!(*i)->isa(Note::EventType)) { ++i; continue; }
-	
+
 	std::pair<timeT, timeT> iex = getExtents(i);
+
+	std::cerr << "buildForest: event at " << (*i)->getAbsoluteTime() << ", extents " << iex.first << "->" << iex.second << std::endl;
+	
 	if (iex.first == iex.second) { ++i; continue; }
 	if (iex.first >= endTime) break;
 
@@ -163,6 +166,8 @@ RawNoteRuler::buildForest(Segment *s,
 	m_forest.push_back(node);
 
 	i = s->findTime(iex.second);
+
+	std::cerr << "findTime " << iex.second << " returned iterator at " << (i == s->end() ? -1 : (*i)->getAbsoluteTime()) << std::endl;
     }
 }
 

@@ -642,26 +642,26 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     m_standardQuantizations
         (Rosegarden::BasicQuantizer::getStandardQuantizations())
 {
-    QGridLayout *mainLayout = new QGridLayout(this, preamble ? 4 : 3, 1, 10, 5);
+    QGridLayout *mainLayout = new QGridLayout(this, preamble ? 3 : 2, 2, 10, 5);
 
     if (preamble) {
 	QLabel *label = new QLabel(preamble, this);
 	label->setAlignment(Qt::WordBreak);
-	mainLayout->addWidget(label, 0, 0);
+	mainLayout->addMultiCellWidget(label, 0, 0, 0, 1);
     }
 
     QGroupBox *quantizerBox = new QGroupBox
-	(1, Horizontal, i18n("Quantizer"), this);
+	(1, Horizontal, i18n("Quantizer type"), this);
     mainLayout->addWidget(quantizerBox, preamble ? 1 : 0, 0);
     QFrame *typeFrame = new QFrame(quantizerBox);
 
-    QGridLayout *layout = new QGridLayout(typeFrame, 1, 2, 5, 3);
+    QGridLayout *layout = new QGridLayout(typeFrame, 1, 1, 5, 3);
 
-    layout->addWidget(new QLabel(i18n("Quantizer type:"), typeFrame), 0, 0);
+//!!!    layout->addWidget(new QLabel(i18n("Quantizer type:"), typeFrame), 0, 0);
     m_typeCombo = new RosegardenComboBox(false, typeFrame);
     m_typeCombo->insertItem(i18n("Grid quantizer"));
     m_typeCombo->insertItem(i18n("Heuristic notation quantizer"));
-    layout->addWidget(m_typeCombo, 0, 1);
+    layout->addWidget(m_typeCombo, 0, 0);
 
     m_notationTarget = new QCheckBox
 	(i18n("Quantize for notation only (leave performance unchanged)"),
@@ -669,7 +669,43 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
     if (!showNotationOption) m_notationTarget->hide();
 
     QHBox *parameterBox = new QHBox(this);
-    mainLayout->addWidget(parameterBox, preamble ? 2 : 1, 0);
+    mainLayout->addWidget(parameterBox, preamble ? 1 : 0, 1);
+
+    m_notationBox = new QGroupBox
+	(1, Horizontal, i18n("Notation parameters"), parameterBox);
+    QFrame *notationFrame = new QFrame(m_notationBox);
+
+    layout = new QGridLayout(notationFrame, 3, 2, 5, 3);
+
+    layout->addWidget(new QLabel(i18n("Base grid unit:"), notationFrame),
+		      1, 0);
+    m_notationUnitCombo = new RosegardenComboBox(false, notationFrame);
+    layout->addWidget(m_notationUnitCombo, 1, 1);
+
+    layout->addWidget(new QLabel(i18n("Complexity:"),
+				 notationFrame), 0, 0);
+
+    m_simplicityCombo = new RosegardenComboBox(false, notationFrame);
+    m_simplicityCombo->insertItem(i18n("Very high"));
+    m_simplicityCombo->insertItem(i18n("High"));
+    m_simplicityCombo->insertItem(i18n("Normal"));
+    m_simplicityCombo->insertItem(i18n("Low"));
+    m_simplicityCombo->insertItem(i18n("Absurdly facile"));
+    layout->addWidget(m_simplicityCombo, 0, 1);
+
+    layout->addWidget(new QLabel(i18n("Tuplet level:"),
+				 notationFrame), 2, 0);
+    m_maxTuplet = new RosegardenComboBox(false, notationFrame);
+    m_maxTuplet->insertItem(i18n("None"));
+    m_maxTuplet->insertItem(i18n("2-in-the-time-of-3"));
+    m_maxTuplet->insertItem(i18n("Triplet"));
+    m_maxTuplet->insertItem(i18n("4-Tuplet"));
+    m_maxTuplet->insertItem(i18n("5-Tuplet"));
+    m_maxTuplet->insertItem(i18n("6-Tuplet"));
+    m_maxTuplet->insertItem(i18n("7-Tuplet"));
+    m_maxTuplet->insertItem(i18n("8-Tuplet"));
+    m_maxTuplet->insertItem(i18n("Any"));
+    layout->addWidget(m_maxTuplet, 2, 1);
 
     m_gridBox = new QGroupBox
 	(1, Horizontal, i18n("Grid parameters"), parameterBox);
@@ -685,45 +721,12 @@ RosegardenQuantizeParameters::RosegardenQuantizeParameters(QWidget *parent,
 	(i18n("Quantize durations as well as start times"), gridFrame);
     layout->addMultiCellWidget(m_durationCheckBox, 1, 1, 0, 1);
 
-    m_notationBox = new QGroupBox
-	(1, Horizontal, i18n("Notation parameters"), parameterBox);
-    QFrame *notationFrame = new QFrame(m_notationBox);
-
-    layout = new QGridLayout(notationFrame, 2, 4, 5, 3);
-
-    layout->addWidget(new QLabel(i18n("Base grid unit:"), notationFrame),
-		      0, 0);
-    m_notationUnitCombo = new RosegardenComboBox(false, notationFrame);
-    layout->addWidget(m_notationUnitCombo, 0, 1);
-
-    layout->addWidget(new QLabel(i18n("General complexity:"),
-				 notationFrame), 1, 0);
-
-    m_simplicityCombo = new RosegardenComboBox(false, notationFrame);
-    m_simplicityCombo->insertItem(i18n("Very high"));
-    m_simplicityCombo->insertItem(i18n("High"));
-    m_simplicityCombo->insertItem(i18n("Normal"));
-    m_simplicityCombo->insertItem(i18n("Low"));
-    m_simplicityCombo->insertItem(i18n("Absurdly facile"));
-    layout->addWidget(m_simplicityCombo, 1, 1);
-
-    layout->addWidget(new QLabel(i18n("Tuplet level:"),
-				 notationFrame), 1, 2);
-    m_maxTuplet = new RosegardenComboBox(false, notationFrame);
-    m_maxTuplet->insertItem(i18n("None"));
-    m_maxTuplet->insertItem(i18n("2-in-the-time-of-3"));
-    m_maxTuplet->insertItem(i18n("Triplet"));
-    m_maxTuplet->insertItem(i18n("4-Tuplet"));
-    m_maxTuplet->insertItem(i18n("5-Tuplet"));
-    m_maxTuplet->insertItem(i18n("6-Tuplet"));
-    m_maxTuplet->insertItem(i18n("7-Tuplet"));
-    m_maxTuplet->insertItem(i18n("8-Tuplet"));
-    m_maxTuplet->insertItem(i18n("Any"));
-    layout->addWidget(m_maxTuplet, 1, 3);
-
     QGroupBox *postProcessingBox = new QGroupBox
 	(1, Horizontal, i18n("After quantization"), this);
-    mainLayout->addWidget(postProcessingBox, preamble ? 3 : 2, 0);
+    mainLayout->addMultiCellWidget(postProcessingBox,
+				   preamble ? 2 : 1,
+				   preamble ? 2 : 1,
+				   0, 1);
     QFrame *postFrame = new QFrame(postProcessingBox);
 
     layout = new QGridLayout(postFrame, 2, 2, 5, 3);
