@@ -260,41 +260,71 @@ NotationView::readOptions()
 void
 NotationView::setupActions()
 {
-    // setup Notes menu
+    KRadioAction* noteAction = 0;
+    
+    // setup Notes menu & toolbar
+
+    // Whole
     QIconSet icon(m_notePixmapFactory.makeNotePixmap
                   (Note::WholeNote, false, NoAccidental, true, true, true));
-    new KAction(i18n("Whole"), icon, 0, this,
-                SLOT(slotWhole()), actionCollection(), "whole_note" );
-
+    noteAction = new KRadioAction(i18n("Whole"), icon, 0, this,
+                                  SLOT(slotWhole()),
+                                  actionCollection(), "whole_note" );
+    noteAction->setExclusiveGroup("notes");
+    
+    // Half
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
                     (Note::HalfNote, false, NoAccidental, true, true, true));
-    new KAction(i18n("Half"), icon, 0, this,
-                SLOT(slotHalf()), actionCollection(), "half" );
+    noteAction = new KRadioAction(i18n("Half"), icon, 0, this,
+                                  SLOT(slotHalf()),
+                                  actionCollection(), "half" );
+    noteAction->setExclusiveGroup("notes");
 
+    // Quarter
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::QuarterNote, false, NoAccidental, true, true, true));
-    new KAction(i18n("Quarter"), icon, 0, this,
-                SLOT(slotQuarter()), actionCollection(), "quarter" );
+                    (Note::QuarterNote, false, NoAccidental,
+                     true, true, true));
+    noteAction = new KRadioAction(i18n("Quarter"), icon, 0, this,
+                                  SLOT(slotQuarter()),
+                                  actionCollection(), "quarter" );
+    noteAction->setExclusiveGroup("notes");
 
+    // 8th
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::EighthNote, false, NoAccidental, true, true, true));
-    new KAction(i18n("8th"), icon, 0, this,
-                SLOT(slot8th()), actionCollection(), "8th" );
+                    (Note::EighthNote, false, NoAccidental,
+                     true, true, true));
+    noteAction = new KRadioAction(i18n("8th"), icon, 0, this,
+                                  SLOT(slot8th()),
+                                  actionCollection(), "8th" );
+    noteAction->setExclusiveGroup("notes");
 
+    // 16th
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::SixteenthNote, false, NoAccidental, true, true, true));
-    new KAction(i18n("16th"), icon, 0, this,
-                SLOT(slot16th()), actionCollection(), "16th" );
+                    (Note::SixteenthNote, false, NoAccidental,
+                     true, true, true));
+    noteAction = new KRadioAction(i18n("16th"), icon, 0, this,
+                                  SLOT(slot16th()),
+                                  actionCollection(), "16th" );
+    noteAction->setExclusiveGroup("notes");
 
+    // 32nd
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::ThirtySecondNote, false, NoAccidental, true, true, true));
-    new KAction(i18n("32nd"), icon, 0, this,
-                SLOT(slot32nd()), actionCollection(), "32nd" );
+                    (Note::ThirtySecondNote, false, NoAccidental,
+                     true, true, true));
+    noteAction = new KRadioAction(i18n("32nd"), icon, 0, this,
+                                  SLOT(slot32nd()),
+                                  actionCollection(), "32nd" );
+    noteAction->setExclusiveGroup("notes");
 
+    // 64th
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::SixtyFourthNote, false, NoAccidental, true, true, true));
-    new KAction(i18n("64th"), icon, 0, this,
-                SLOT(slot64th()), actionCollection(), "64th" );
+                    (Note::SixtyFourthNote, false, NoAccidental,
+                     true, true, true));
+
+    noteAction = new KRadioAction(i18n("64th"), icon, 0, this,
+                                  SLOT(slot64th()),
+                                  actionCollection(), "64th" );
+    noteAction->setExclusiveGroup("notes");
     
 
     // setup edit menu
