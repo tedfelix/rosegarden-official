@@ -1837,6 +1837,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     if (!midiFile->open())
     {
+        CurrentProgressDialog::freeze();
         KMessageBox::error(this,
           i18n("Couldn't understand MIDI file.\nIt might be corrupted."));
         return;
