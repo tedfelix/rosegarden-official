@@ -112,6 +112,8 @@ protected:
     void deactivate();
     void connectPorts();
 
+    void selectProgramAux(QString program, bool backupPortValues);
+
     void initialiseGroupMembership();
     void runGrouped(const RealTime &);
     
@@ -123,8 +125,17 @@ protected:
     std::vector<std::pair<unsigned long, LADSPA_Data*> > m_controlPortsIn;
     std::vector<std::pair<unsigned long, LADSPA_Data*> > m_controlPortsOut;
 
+    std::vector<LADSPA_Data> m_backupControlPortsIn;
+
     std::vector<int>          m_audioPortsIn;
     std::vector<int>          m_audioPortsOut;
+
+    struct ProgramControl {
+	int msb;
+	int lsb;
+	int program;
+    };
+    ProgramControl m_pendingProgram;
 
     RingBuffer<snd_seq_event_t> m_eventBuffer;
 

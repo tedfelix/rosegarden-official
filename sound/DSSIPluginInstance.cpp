@@ -77,6 +77,8 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
 
     m_ownBuffers = true;
 
+    m_pendingProgram.lsb = m_pendingProgram.msb = m_pendingProgram.program = -1;
+
     instantiate(sampleRate);
     if (isOK()) {
 	connectPorts();
@@ -114,6 +116,8 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
 #endif
 
     init();
+
+    m_pendingProgram.lsb = m_pendingProgram.msb = m_pendingProgram.program = -1;
 
     instantiate(sampleRate);
     if (isOK()) {
@@ -154,6 +158,7 @@ DSSIPluginInstance::init()
 		LADSPA_Data *data = new LADSPA_Data(0.0);
 		m_controlPortsIn.push_back(
                     std::pair<unsigned long, LADSPA_Data*>(i, data));
+		m_backupControlPortsIn.push_back(0.0);
 	    } else {
 		LADSPA_Data *data = new LADSPA_Data(0.0);
 		m_controlPortsOut.push_back(
@@ -401,6 +406,12 @@ DSSIPluginInstance::getCurrentProgram()
 void
 DSSIPluginInstance::selectProgram(QString program)
 {
+    selectProgramAux(program, true);
+}
+
+void
+DSSIPluginInstance::selectProgramAux(QString program, bool backupPortValues)
+{
     // better if this were more efficient!
 
 #ifdef DEBUG_DSSI
@@ -431,6 +442,46 @@ DSSIPluginInstance::selectProgram(QString program)
 	}
     }
 
+    if (!found) return;
+    m_program = program;
+
+    m_pendingProgram.msb = bankNo / 128;
+    m_pendingProgram.lsb = bankNo % 128;
+    m_pendingProgram.program = programNo;
+
+    if (backupPortValues) {
+
+	// The DSSI select_program call is an audio context one,
+	// processed by run().  We therefore need to wait for the next
+	// run() call to happen before we can update our port values
+	// and return.  (Although we won't wait _too_ long.)  The fact
+	// that this only happens if backupPortValues is true means
+	// that we won't cause trouble when called from activate() etc.
+
+	int i = 0, maxi = 15;
+	RealTime lrt = m_lastRunTime;
+
+	while (i < maxi && m_lastRunTime == lrt) {
+	    struct timespec ts;
+	    ts.tv_sec = 0;
+	    ts.tv_nsec = 20000000; // 20 ms
+	    nanosleep(&ts, 0);
+	    ++i;
+	}
+	
+	if (i == maxi && m_lastRunTime == lrt) {
+	    // screw it: if a run() hasn't happened by now, then
+	    // evidently we aren't running at all -- call
+	    // select_program ourselves
+	    m_pendingProgram.lsb = m_pendingProgram.msb = m_pendingProgram.program = -1;
+	    m_descriptor->select_program(m_instanceHandle, bankNo, programNo);
+	}
+
+	for (size_t i = 0; i < m_backupControlPortsIn.size(); ++i) {
+	    m_backupControlPortsIn[i] = *m_controlPortsIn[i].second;
+	}
+    }
+
     //!!! Missing bits of DSSI:
     // 
     // select_program (below) should be called from audio thread -- simple enough
@@ -441,12 +492,12 @@ DSSIPluginInstance::selectProgram(QString program)
     // port-controller mappings
     //
     // proper handling of MIDI program changes and other such
-
+/*!!!
     if (found) {
 	//!!! no -- must be scheduled for call from audio context, with run()
 	m_descriptor->select_program(m_instanceHandle, bankNo, programNo);
-	m_program = program;
     }
+*/
 }
 
 void
@@ -460,20 +511,18 @@ DSSIPluginInstance::activate()
     m_eventBuffer.reset();
     m_descriptor->LADSPA_Plugin->activate(m_instanceHandle);
 
-    // We don't re-select the program when activating, unless no
-    // program has yet been selected at all.
+    if (m_program) {
+#ifdef DEBUG_DSSI
+	std::cerr << "DSSIPluginInstance::activate: restoring program " << m_program << std::endl;
+#endif
+	selectProgramAux(m_program, false);
+    }
 
-    if (!m_program) {
-
-	if (m_descriptor->get_program && m_descriptor->select_program) {
-
-	    const DSSI_Program_Descriptor *programDescriptor;
-	    if ((programDescriptor = m_descriptor->get_program(m_instanceHandle, 0))) {
-		m_program = QString("%1. %2").arg(1).arg(programDescriptor->Name);
-	    }
-
-	    if (m_program) selectProgram(m_program);
-	}
+    for (size_t i = 0; i < m_backupControlPortsIn.size(); ++i) {
+#ifdef DEBUG_DSSI
+	std::cerr << "DSSIPluginInstance::activate: setting port " << m_controlPortsIn[i].first << " to " << m_backupControlPortsIn[i] << std::endl;
+#endif
+	*m_controlPortsIn[i].second = m_backupControlPortsIn[i];
     }
 }
 
@@ -532,6 +581,7 @@ DSSIPluginInstance::setPortValue(unsigned int portNumber, float value)
         if (m_controlPortsIn[i].first == portNumber)
         {
             (*m_controlPortsIn[i].second) = value;
+	    m_backupControlPortsIn[i] = value;
         }
     }
 }
@@ -639,6 +689,13 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 	ev->time.tick = frameOffset;
 	m_eventBuffer.skip(1);
 	if (++evCount >= EVENT_BUFFER_SIZE) break;
+    }
+
+    if (m_pendingProgram.program >= 0 && m_descriptor->select_program) {
+	int program = m_pendingProgram.program;
+	int bank = m_pendingProgram.lsb + 128 * m_pendingProgram.msb;
+	m_pendingProgram.lsb = m_pendingProgram.msb = m_pendingProgram.program = -1;
+	m_descriptor->select_program(m_instanceHandle, bank, program);
     }
 
 #ifdef DEBUG_DSSI_PROCESS
@@ -762,6 +819,18 @@ DSSIPluginInstance::runGrouped(const RealTime &blockTime)
 	    if (++counts[index] >= EVENT_BUFFER_SIZE) break;
 	}
 
+	if (instance->m_pendingProgram.program >= 0 &&
+	    instance->m_descriptor->select_program) {
+	    int program = instance->m_pendingProgram.program;
+	    int bank = instance->m_pendingProgram.lsb +
+		128 * instance->m_pendingProgram.msb;
+	    instance->m_pendingProgram.lsb =
+		instance->m_pendingProgram.msb =
+		instance->m_pendingProgram.program = -1;
+	    instance->m_descriptor->select_program
+		(instance->m_instanceHandle, bank, program);
+	}
+
 	++index;
     }
 
@@ -780,6 +849,11 @@ DSSIPluginInstance::deactivate()
     std::cerr << "DSSIPluginInstance::deactivate " << m_identifier << std::endl;
 #endif
     if (!m_descriptor || !m_descriptor->LADSPA_Plugin->deactivate) return;
+
+    for (size_t i = 0; i < m_backupControlPortsIn.size(); ++i) {
+	m_backupControlPortsIn[i] = *m_controlPortsIn[i].second;
+    }
+
     m_descriptor->LADSPA_Plugin->deactivate(m_instanceHandle);
 #ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance::deactivate " << m_identifier << " done" << std::endl;
