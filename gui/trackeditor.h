@@ -48,6 +48,11 @@ public:
     void clear();
 
     bool moveTrack(int section, int fromIdx, int toIdx);
+
+    // called by parent view widget when reading a music file
+    bool addTrackPart(unsigned int trackNb,
+                      unsigned int start, unsigned int nbBars);
+    
     TrackPart* getTrackAtIdx(int idx);
 
 protected slots:
@@ -61,7 +66,8 @@ signals:
 protected:
 
     void init(unsigned int nbTracks, unsigned int nbBars);
-    
+    void setupTracks();
+
     RosegardenGUIDoc* m_document;
 
     TracksCanvas *m_tracksCanvas;

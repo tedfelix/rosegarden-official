@@ -41,8 +41,10 @@ TracksEditor::TracksEditor(RosegardenGUIDoc* doc,
         docNbBars = doc->getNbBars();
     }
 
-    if ( docNbTracks > 0 && docNbBars > 0)
+    if (docNbTracks > 0 && docNbBars > 0) {
         init(docNbTracks, docNbBars);
+        setupTracks();
+    }
     else
         init(64, 100);
 }
@@ -114,6 +116,25 @@ TracksEditor::init(unsigned int nbTracks, unsigned int nbBars)
 }
 
 void
+TracksEditor::setupTracks()
+{
+    if (!m_document) return; // sanity check
+    
+    const Composition &comp = m_document->getComposition();
+    unsigned int trackNb = 0;
+
+    for (Composition::const_iterator i = comp.begin();
+         i != comp.end(); ++i, ++trackNb) {
+
+        if ((*i))
+            addTrackPart(trackNb,
+                         (*i)->getStartIndex(),
+                         (*i)->getNbBars());
+    }
+}
+
+
+void
 TracksEditor::trackOrderChanged(int section, int fromIdx, int toIdx)
 {
     kdDebug(KDEBUG_AREA) << QString("TracksEditor::trackOrderChanged(section : %1, from %2, to %3)")
@@ -146,7 +167,7 @@ TracksEditor::deleteTrackPart(TrackPart*)
 bool
 TracksEditor::moveTrack(int /*section*/, int /*fromIdx*/, int /*toIdx*/)
 {
-	// just reset every part's Y coordinate
+    // just reset every part's Y coordinate
     for (list<TrackPart*>::iterator iter = m_trackParts.begin();
          iter != m_trackParts.end(); ++iter) {
         TrackPart* p = *iter;
@@ -169,8 +190,32 @@ TracksEditor::getTrackAtIdx(int section)
     return 0;
 }
 
+
+bool
+TracksEditor::addTrackPart(unsigned int trackNb,
+                           unsigned int start, unsigned int nbBars)
+{
+    int x = 0, y = 0;
+
+    x = m_vHeader->sectionPos(trackNb);
+    // TODO : compute y according to track start
+
+    TrackPartItem* newPartItem = new TrackPartItem(x, y,
+                                                   m_tracksCanvas->gridHStep() * nbBars,
+                                                   m_tracksCanvas->grid().vstep(),
+                                                   m_tracksCanvas->canvas());
+    
+    TrackPart *newPart = new TrackPart(newPartItem,
+                                       m_tracksCanvas->gridHStep());
+    newPart->setTrackNb(trackNb);
+    m_trackParts.push_back(newPart);
+
+    return true;
+}
+
+
 void
 TracksEditor::clear()
 {
- m_tracksCanvas->clear();
+    m_tracksCanvas->clear();
 }
