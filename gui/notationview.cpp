@@ -711,7 +711,7 @@ NotationView::insertNote(int height, const QPoint &eventPos)
     //
 /*!    insertedEvent->setTimeDuration(m_hlayout->quantizer().noteDuration(m_currentSelectedNote)); */
 
-    insertedEvent->set<Int>("pitch", pitch, true);
+    insertedEvent->set<Int>("pitch", pitch);
 
     // Create associated notationElement and set its note type
     //
@@ -720,7 +720,7 @@ NotationView::insertNote(int height, const QPoint &eventPos)
     //!!! no dottedness yet
     newNotationElement->setNote(Note(m_currentSelectedNote));
 
-    newNotationElement->event()->set<String>("Name", "INSERTED_NOTE", false);
+    newNotationElement->event()->setMaybe<String>("Name", "INSERTED_NOTE");
 
     NotationElementList::iterator redoLayoutStart = closestNote;
     
@@ -897,7 +897,7 @@ NotationView::replaceRestWithNote(NotationElementList::iterator rest,
             newRest->setType("rest");
             newRest->setDuration(bit);
             newRest->setAbsoluteTime(restAbsoluteTime);
-            newRest->set<String>("Name", "INSERTED_REST", false);
+            newRest->setMaybe<String>("Name", "INSERTED_REST");
             NotationElement *newNotationRest = new NotationElement(newRest);
             restAbsoluteTime += bit;
             // m_notationElements->insert(newNotationRest);

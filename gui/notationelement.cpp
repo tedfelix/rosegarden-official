@@ -69,8 +69,8 @@ void
 NotationElement::setNote(Note note)
 {
     event()->setDuration(note.getDuration());
-    event()->set<Int>(P_NOTE_TYPE, note.getNoteType(), false);
-    event()->set<Bool>(P_NOTE_DOTTED, note.isDotted(), false);
+    event()->setMaybe<Int>(P_NOTE_TYPE, note.getNoteType());
+    event()->setMaybe<Bool>(P_NOTE_DOTTED, note.isDotted());
 }
 
 Note

@@ -138,7 +138,7 @@ NotationHLayout::preparse(NotationElementList::iterator from,
 
         if (el->isNote() || el->isRest()) m_quantizer.quantize(el->event());
         int mw = getMinWidth(npf, *el);
-        el->event()->set<Int>(P_MIN_WIDTH, mw, false);
+        el->event()->setMaybe<Int>(P_MIN_WIDTH, mw);
 
         if (el->event()->isa(Clef::EventType)) {
 
@@ -187,11 +187,11 @@ NotationHLayout::preparse(NotationElementList::iterator from,
                     kdDebug(KDEBUG_AREA) << "pitch : " << pitch << endl;
                     NotationDisplayPitch p(pitch, clef, key);
                     int h = p.getHeightOnStaff();
-                    el->event()->set<Int>(P_HEIGHT_ON_STAFF, h, false);
-                    el->event()->set<Int>(P_ACCIDENTAL,
-                                          (int)p.getAccidental(), false);
-                    el->event()->set<String>(P_NOTE_NAME, p.getAsString
-                                             (clef, key), false);
+                    el->event()->setMaybe<Int>(P_HEIGHT_ON_STAFF, h);
+                    el->event()->setMaybe<Int>(P_ACCIDENTAL,
+                                               (int)p.getAccidental());
+                    el->event()->setMaybe<String>(P_NOTE_NAME, p.getAsString
+                                                  (clef, key));
                 } catch (Event::NoData) {
                     kdDebug(KDEBUG_AREA) <<
                         "NotationHLayout::preparse: couldn't get pitch for element"

@@ -76,12 +76,12 @@ NotationVLayout::layout(NotationElementList::iterator from,
                 try {
 
                     el->setLayoutY(m_staff.yCoordOfHeight(h[j]));
-                    el->event()->set<Bool>(P_STALK_UP, stalkUp, false);
+                    el->event()->setMaybe<Bool>(P_STALK_UP, stalkUp);
 
-                    el->event()->set<Bool>
+                    el->event()->setMaybe<Bool>
                         (P_DRAW_TAIL,
                          ((stalkUp && j == notes.size()-1) ||
-                          (!stalkUp && j == 0)), false);
+                          (!stalkUp && j == 0)));
 
                 } catch (Event::NoData) {
                     kdDebug(KDEBUG_AREA) <<

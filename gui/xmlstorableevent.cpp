@@ -66,17 +66,17 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes)
 
             if (valLowerCase == "true" || valLowerCase == "false") {
 
-                set<Bool>(attrName.latin1(), valLowerCase == "true", true);
+                set<Bool>(attrName.latin1(), valLowerCase == "true");
 
             } else {
 
                 // Not a bool, check if integer val
                 numVal = val.toInt(&isNumeric);
                 if (isNumeric) {
-                    set<Int>(attrName.latin1(), numVal, true);
+                    set<Int>(attrName.latin1(), numVal);
                 } else {
                     // not an int either, default to string
-                    set<String>(attrName.latin1(), attrVal.latin1(), true);
+                    set<String>(attrName.latin1(), attrVal.latin1());
                 }
             }
 

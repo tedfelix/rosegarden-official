@@ -101,6 +101,11 @@ public:
              bool persistent = true)
 	throw (BadType);
 
+    // set non-persistent, but only if there's no persistent value already
+    template <PropertyType P>
+    void setMaybe(const string &name, PropertyDefn<P>::basic_type value)
+        throw (BadType);
+
     template <PropertyType P>
     void setFromString(const string &name, string value,
                        bool persistent = true)
@@ -255,11 +260,24 @@ Event::set(const string &name, PropertyDefn<P>::basic_type value,
 
 template <PropertyType P>
 void
+Event::setMaybe(const string &name, PropertyDefn<P>::basic_type value)
+    throw (BadType)
+{
+    // no need to catch NoData from isPersistent, as the has() check
+    // should mean it never happens
+    if (has(name) && isPersistent<P>(name)) return;
+    set<P>(name, value, false);
+}
+
+
+template <PropertyType P>
+void
 Event::setFromString(const string &name, string value, bool persistent)
     throw (BadType)
 {
     set<P>(name, PropertyDefn<P>::parse(value), persistent);
 }
+
 
 //////////////////////////////////////////////////////////////////////
 
