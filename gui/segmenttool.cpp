@@ -136,6 +136,7 @@ SegmentTool::handleRightButtonPress(QMouseEvent *e)
         if (!item->isSelected()) {
 
             SegmentSelector* selector = dynamic_cast<SegmentSelector*>(getToolBox()->getTool("segmentselector"));
+            selector->clearSelected();
             selector->slotSelectSegmentItem(item);
             emit selectedSegments(selector->getSelectedSegments());
             

@@ -185,6 +185,7 @@ private:
 
 
 class SegmentTool;
+class SegmentSelector;
 class SegmentToolBox;
 
 /**
@@ -361,6 +362,7 @@ signals:
 protected:
 
     SegmentItem *findSegmentItem(Rosegarden::Segment *segment); // slow
+    SegmentSelector* getSegmentSelectorTool();
 
     //--------------- Data members ---------------------------------
 
