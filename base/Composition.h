@@ -436,6 +436,17 @@ public:
     static RealTime getTempoTimestamp(const Event *e);
     static void setTempoTimestamp(Event *e, RealTime r);
 
+    // Who's making this racket?
+    //
+    std::string getCopyrightNote() const { return m_copyright; }
+    void setCopyrightNote(const string &cr) { m_copyright = cr; }
+
+    // Recording count-in
+    //
+    int getCountInBars() const { return m_countInBars; }
+    void setCountInBars(int countInBars) { m_countInBars = countInBars; }
+
+
 protected:
 
     class ReferenceSegment;
@@ -490,6 +501,8 @@ protected:
     static const PropertyName TempoTimestampSecProperty;
     static const PropertyName TempoTimestampUsecProperty;
 
+    static const unsigned int DefaultCountInBars;
+
 
     struct ReferenceSegmentEventCmp
     {
@@ -543,6 +556,9 @@ protected:
     mutable bool m_tempoTimestampsNeedCalculating;
     RealTime time2RealTime(timeT time, double tempo) const;
     timeT realTime2Time(RealTime rtime, double tempo) const;
+
+    std::string m_copyright;
+    unsigned int m_countInBars;
 
 private:
     Composition(const Composition &);

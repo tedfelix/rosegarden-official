@@ -612,6 +612,7 @@ MidiFile::convertToRosegarden()
                     break;
 
                 case MIDI_COPYRIGHT_NOTICE:
+                    composition->setCopyrightNote(midiEvent->metaMessage());
                     break;
                     
                 case MIDI_TRACK_NAME:

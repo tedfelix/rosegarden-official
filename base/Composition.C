@@ -52,6 +52,8 @@ const PropertyName Composition::TempoProperty = "BeatsPerHour";
 const PropertyName Composition::TempoTimestampSecProperty = "TimestampSec";
 const PropertyName Composition::TempoTimestampUsecProperty = "TimestampUsec";
 
+const unsigned int Composition::DefaultCountInBars = 2;
+
 
 bool
 Composition::ReferenceSegmentEventCmp::operator()(const Event &e1,
@@ -216,7 +218,9 @@ Composition::Composition() :
     m_loopStart(0),
     m_loopEnd(0),
     m_barPositionsNeedCalculating(true),
-    m_tempoTimestampsNeedCalculating(true)
+    m_tempoTimestampsNeedCalculating(true),
+    m_copyright(""),
+    m_countInBars(DefaultCountInBars)
 {
     // nothing else
 }
@@ -390,6 +394,8 @@ Composition::clear()
     m_position = 0;
     m_startMarker = 0;
     m_endMarker = 0;
+    m_copyright = "";
+    m_countInBars = DefaultCountInBars;
 }
 
 Composition::ReferenceSegment::iterator

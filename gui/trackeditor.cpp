@@ -401,43 +401,17 @@ TrackEditor::updateRecordingSegmentItem(Rosegarden::Segment *segment)
     }
 
     timeT startTime = segment->getStartTime();
-    timeT duration = segment->getDuration();
 
-    //!!! or do we want
-    // timeT duration = comp.getPosition() - startTime;
-    //???
+    // Show recording SegmentItem from recording start point to
+    // current point position
+    //
+    timeT duration = comp.getPosition() - startTime;
+
+    // Alternatively show it to the last recorded event
+    //
+    //timeT duration = segment->getDuration();
 
     m_segmentCanvas->showRecordingSegmentItem(y, startTime, duration);
-
-/*!!!
-
-    int startBar = comp.getBarNumber(segment->getStartTime(), false);
-    std::pair<timeT, timeT> bar = comp.getBarRange(startBar, false);
-     
-    int xAdj = (segment->getStartTime() - bar.first) *
-                m_hHeader->sectionSize(startBar)/
-                (bar.second - bar.first);
-
-    int x = m_hHeader->sectionPos(startBar) + xAdj;
-
-    int endBar = comp.getBarNumber(comp.getPosition(), false);
-    bar = comp.getBarRange(endBar, false);
-
-    int wAdj = (comp.getPosition() - bar.first) *
-                m_hHeader->sectionSize(endBar)/
-                (bar.second - bar.first);
-
-    int width = m_hHeader->sectionPos(endBar) + wAdj - x;
-
-    //int width = m_hHeader->sectionPos(endBar)  - x;
-    //cout << "WADJ = " << wAdj << endl;
-    //cout << "X = " << x << " : WIDTH = " << width << endl;
-    //cout << "START INDEX = " << segment->getStartTime() << endl;
-    //cout << "POSITION    = " << comp.getPosition() << endl;
-    //cout << "BAR RANGE = " << bar.first << " - " << bar.second << endl;
-
-    m_segmentCanvas->showRecordingSegmentItem(x, y, width);
-*/
 
     emit needUpdate();
 }

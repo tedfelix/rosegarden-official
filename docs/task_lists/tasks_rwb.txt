@@ -4,25 +4,29 @@ updated 05.02.2001
 
 Currently looking at:
 
-- Playing Audio files
+o Playing Audio files
   o synchronisation with MIDI [SITUATION IMPROVED]
   o clearing down handles without crashing aRTS [STILL BUGGY]
 
-- Sequencer memory leak
+o Sequencer memory leak
 
-- SoundFile file reading debacle
+o SoundFile file reading debacle
 
-- Looping at the origin - Looping bug?
+o Looping at the origin - Looping bug?
 
-- Recording segments - trails [PARTIALLY DONE]
+o End of loop flyback sends duplicate copies of start of loop events
+
+o bar and loop ruler bar widths for partial bars
+
+o rg file saving is still broken for some trivial cases (Segments wrong size)
+
 
 ==
 
 
-o Track addition/deletion and moving on TrackButtons canvas - needs UNDO
+o Track addition/deletion and moving on TrackButtons canvas - needs undo!
   
-o Complete segment edit shortcuts (click/copy/multiple
-  segment drag)
+o Complete segment edit shortcuts (click/copy/multiple segment drag)
 
 o Segment colouring
 
@@ -44,40 +48,36 @@ o Audio output VU meters
 
 o MIDI CC, PC and sysex handling
 
-o Bar lines widget (similar to TrackButtons).
+Recently completed
+------------------
+
+- Bar lines widget (similar to TrackButtons).
   Implementation to allow for:
 
   - Looping [DONE]
 
   - Start and End Markers for Composition growth and shrinkage [ALMOST DONE]
 
-o basic MIDI recording [DONE]
+- basic MIDI recording [DONE]
 
-o Write Rosegarden tempo events to exported MIDI [DONE]
+- Write Rosegarden tempo events to exported MIDI [DONE]
 
-o MIDI output VU meters and Transport feedback [DONE]
+- MIDI output VU meters and Transport feedback [DONE]
 
-o Audio file support in rg file. [DONE]
+- Audio file support in rg file. [DONE]
   Audio WAV file header authentification [DONE]
   Audio Segments [DONE]
   Audio playing proof of concept [DONE]
   Audio recording proof of concept [DONE]
   Sequencing of plain Audio files [DONE]
 
-o Segment movement resolution [CC]
+- Segment movement resolution [CC]
 
-Current Bugs
-============
-
-o End of loop flyback sends duplicate copies of start of loop events
-
-o bar and loop ruler bar widths for partial bars
-
-o rg file saving is still broken for some trivial cases (Segments wrong size)
+- Recording segments - trails [DONE]
 
 
 
-
+-------------------------- MUCH OLDER STUFF ----------------------------
 
 
 
