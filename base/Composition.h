@@ -487,10 +487,10 @@ public:
     std::string getCopyrightNote() const { return m_copyright; }
     void setCopyrightNote(const std::string &cr) { m_copyright = cr; }
 
-    // Recording count-in
-    //
-    int getCountInBars() const { return m_countInBars; }
-    void setCountInBars(int countInBars) { m_countInBars = countInBars; }
+//     // Recording count-in
+//     //
+//     int getCountInBars() const { return m_countInBars; }
+//     void setCountInBars(int countInBars) { m_countInBars = countInBars; }
 
 
     // We can have the metronome on or off while playing or
@@ -673,7 +673,7 @@ protected:
     timeT realTime2Time(RealTime rtime, double tempo) const;
 
     std::string m_copyright;
-    unsigned int m_countInBars;
+//     unsigned int m_countInBars;
 
     bool m_playMetronome;
     bool m_recordMetronome;

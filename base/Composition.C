@@ -52,7 +52,7 @@ const PropertyName Composition::TempoProperty = "BeatsPerHour";
 const PropertyName Composition::TempoTimestampSecProperty = "TimestampSec";
 const PropertyName Composition::TempoTimestampUsecProperty = "TimestampUsec";
 
-const unsigned int Composition::DefaultCountInBars = 2;
+// const unsigned int Composition::DefaultCountInBars = 2;
 
 
 bool
@@ -213,7 +213,7 @@ Composition::Composition() :
     m_barPositionsNeedCalculating(true),
     m_tempoTimestampsNeedCalculating(true),
     m_copyright(""),
-    m_countInBars(DefaultCountInBars),
+//     m_countInBars(DefaultCountInBars),
     m_playMetronome(false),
     m_recordMetronome(true),
     m_needsRefresh(true)
@@ -410,7 +410,7 @@ Composition::clear()
     m_solo = false;
     m_selectedTrack = 0;
     m_copyright = "";
-    m_countInBars = DefaultCountInBars;
+//     m_countInBars = DefaultCountInBars;
     updateRefreshStatuses();
 }
 
