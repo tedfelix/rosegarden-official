@@ -56,6 +56,7 @@
 #include "segmentparameterbox.h"
 #include "instrumentparameterbox.h"
 #include "eventview.h"
+#include "dialogs.h"
 
 using Rosegarden::SimpleRulerScale;
 using Rosegarden::Composition;
@@ -112,6 +113,10 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     connect(m_trackEditor->getSegmentCanvas(),
             SIGNAL(editSegmentAudio(Rosegarden::Segment*)),
             SLOT(slotEditSegmentAudio(Rosegarden::Segment*)));
+
+    connect(m_trackEditor->getSegmentCanvas(),
+            SIGNAL(audioSegmentAutoSplit(Rosegarden::Segment*)),
+            SLOT(slotSegmentAutoSplit(Rosegarden::Segment*)));
 
     connect(m_trackEditor->getSegmentCanvas(),
             SIGNAL(editSegmentEventList(Rosegarden::Segment*)),
@@ -328,6 +333,22 @@ void RosegardenGUIView::slotEditSegmentMatrix(Rosegarden::Segment* p)
     matrixView->show();
 }
 
+void RosegardenGUIView::slotSegmentAutoSplit(Rosegarden::Segment *segment)
+{
+    AudioSplitDialog *aSD = new AudioSplitDialog(this,
+                                                 segment,
+                                                 getDocument());
+
+    if (aSD->exec() == QDialog::Accepted)
+    {
+        KCommand *command =
+            new AudioSegmentAutoSplitCommand(getDocument(),
+                    segment, aSD->getThreshold());
+        slotAddCommandToHistory(command);
+    }
+}
+
+
 void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
 {
     std::cout << "RosegardenGUIView::slotEditSegmentAudio() - "
@@ -459,23 +480,27 @@ void RosegardenGUIView::selectTrack(int trackId)
     // Select track for recording if the current one is MIDI
     // and the one we're going to is MIDI.
     //
-    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Composition &comp = getDocument()->getComposition();
     Rosegarden::Studio &studio = getDocument()->getStudio();
     Rosegarden::Track *track = comp.getTrackByIndex(comp.getRecordTrack());
-    Rosegarden::Instrument *instr = studio.getInstrumentById(track->getInstrument());
 
-    if (instr->getType() == Rosegarden::Instrument::Midi)
+    if (track)
     {
-        track = comp.getTrackByIndex(trackId);
-        instr = studio.getInstrumentById(track->getInstrument());
+        Rosegarden::Instrument *instr =
+            studio.getInstrumentById(track->getInstrument());
 
-        if (instr->getType() == Rosegarden::Instrument::Midi)
+        if (instr && instr->getType() == Rosegarden::Instrument::Midi)
         {
-            comp.setRecordTrack(trackId);
-            getTrackEditor()->getTrackButtons()->slotSetRecordTrack(trackId);
+            track = comp.getTrackByIndex(trackId);
+            instr = studio.getInstrumentById(track->getInstrument());
+
+            if (instr->getType() == Rosegarden::Instrument::Midi)
+            {
+                comp.setRecordTrack(trackId);
+                getTrackEditor()->getTrackButtons()->slotSetRecordTrack(trackId);
+            }
         }
     }
-    
 }
 
 
@@ -508,18 +533,22 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
     //
     Rosegarden::Studio &studio = getDocument()->getStudio();
     Rosegarden::Track *track = comp.getTrackByIndex(comp.getRecordTrack());
-    Rosegarden::Instrument *instr =
-        studio.getInstrumentById(track->getInstrument());
 
-    if (instr->getType() == Rosegarden::Instrument::Midi)
+    if (track)
     {
-        track = comp.getTrackByIndex(trackId);
-        instr = studio.getInstrumentById(track->getInstrument());
+        Rosegarden::Instrument *instr =
+            studio.getInstrumentById(track->getInstrument());
 
-        if (instr->getType() == Rosegarden::Instrument::Midi)
+        if (instr && instr->getType() == Rosegarden::Instrument::Midi)
         {
-            comp.setRecordTrack(trackId);
-            getTrackEditor()->getTrackButtons()->slotSetRecordTrack(trackId);
+            track = comp.getTrackByIndex(trackId);
+            instr = studio.getInstrumentById(track->getInstrument());
+
+            if (instr->getType() == Rosegarden::Instrument::Midi)
+            {
+                comp.setRecordTrack(trackId);
+                getTrackEditor()->getTrackButtons()->slotSetRecordTrack(trackId);
+            }
         }
     }
     
