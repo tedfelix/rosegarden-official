@@ -530,7 +530,7 @@ NotationHLayout::reconcileBarsLinear()
 
 	    BarDataList &list = i->second;
 
-	    if ((int)list.size() > barNo) {
+	    if (list.size() > barNo) {
 
 		BarData &bd(list[barNo]);
 
@@ -606,7 +606,7 @@ NotationHLayout::reconcileBarsPage()
 
 		    BarDataList &list = i->second;
 
-		    if ((int)list.size() > barNo) {
+		    if (list.size() > barNo) {
 			BarData &bd(list[barNo]);
 			if ((nextStretchFactor * (double)bd.idealWidth) <
 			    ((double)bd.fixedWidth + (double)bd.baseWidth)) {
@@ -644,7 +644,7 @@ NotationHLayout::reconcileBarsPage()
     for (int row = 0; row < (int)rowData.size(); ++row) {
 
 	barNoThisRow = barNo;
-	int finalBarThisRow = barNo + rowData[row].first - 1;
+	unsigned int finalBarThisRow = barNo + rowData[row].first - 1;
 
 	pageWidthSoFar = 0;
 	stretchFactor = m_pageWidth / (double)rowData[row].second;
@@ -656,11 +656,12 @@ NotationHLayout::reconcileBarsPage()
 	    StaffType *widest = getStaffWithWidestBar(barNo);
 	    if (!widest) break; // reached end of piece (shouldn't happen)
 	    if (finalRow && (stretchFactor > 1.0)) stretchFactor = 1.0;
-	    int maxWidth = stretchFactor * m_barData[widest][barNo].idealWidth;
+	    int maxWidth = (int)
+		(stretchFactor * m_barData[widest][barNo].idealWidth);
 
 	    if (barNoThisRow == finalBarThisRow) {
 		if (!finalRow || (maxWidth >= (m_pageWidth - pageWidthSoFar))) {
-		    maxWidth = m_pageWidth - pageWidthSoFar - 1;
+		    maxWidth = (int)(m_pageWidth - pageWidthSoFar - 1);
 		}
 	    }
 	    
@@ -668,7 +669,7 @@ NotationHLayout::reconcileBarsPage()
 
 		BarDataList &list = i->second;
 
-		if ((int)list.size() > barNo) {
+		if (list.size() > barNo) {
 
 		    BarData &bd(list[barNo]);
 

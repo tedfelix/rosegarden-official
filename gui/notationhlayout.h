@@ -76,6 +76,11 @@ public:
     virtual void setPageWidth(double pageWidth) { m_pageWidth = pageWidth; }
 
     /**
+     * Get the page width
+     */
+    virtual double getPageWidth() { return m_pageWidth; }
+
+    /**
      * Gets the current spacing factor (1.0 == "normal" spacing)
      */
     double getSpacing() const { return m_spacing; }

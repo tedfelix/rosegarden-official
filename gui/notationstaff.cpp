@@ -185,7 +185,7 @@ NotationStaff::resizeStaffLineRow(int row, double offset, double length)
     int h, j;
     int staffLineThickness = m_npf->getStaffLineThickness();
 
-    if (row > 0 && offset == 0.0) {
+    if (m_pageMode && row > 0 && offset == 0.0) {
 	offset = (double)m_npf->getBarMargin() / 2;
 	length -= offset;
     }
@@ -197,7 +197,7 @@ NotationStaff::resizeStaffLineRow(int row, double offset, double length)
     delete m_staffConnectingLines[row];
     line = 0;
 
-    if (m_connectingLineHeight > 0.1) {
+    if (m_pageMode && m_connectingLineHeight > 0.1) {
 	line = new QCanvasLine(canvas());
 	lx = (int)x() + getRowLeftX(row) + offset + length - 1;
 	ly = (int)y() + getTopLineOffsetForRow(row);
@@ -417,7 +417,7 @@ void NotationStaff::insertBar(unsigned int barPos, bool correct)
 	    connectingLine->moveBy
 		(getRowLeftX(row) + getXForLayoutX(barPos) + x() + i, y());
 
-	    connectingLine->setPen(QPen(QColor(160, 160, 160), 1));
+	    connectingLine->setPen(QPen(QColor(192, 192, 192), 1));
 	    connectingLine->setZ(-3);
 	    connectingLine->show();
 

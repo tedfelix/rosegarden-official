@@ -183,7 +183,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 	if (i < m_staffs.size() - 1) {
 	    m_staffs[i]->setConnectingLineHeight
 		(m_staffs[i]->getTopLineOffset() +
-		 m_staffs[i+1]->getTopLineOffset());
+		 (m_staffs[i+1]->getStaffHeight() -
+		  m_staffs[i+1]->getTopLineOffset()));
 	}
         m_staffs[i]->move(20, h + 45);
         m_staffs[i]->show();
@@ -1027,6 +1028,7 @@ void NotationView::setNotePixmapFactory(NotePixmapFactory* f)
 
 void NotationView::setHLayout(NotationHLayout* l)
 {
+    if (m_hlayout) l->setPageWidth(m_hlayout->getPageWidth());
     delete m_hlayout;
     m_hlayout = l;
 }

@@ -62,7 +62,8 @@ Post-0.1.1 task list
      positionChord thing in notationhlayout" [DONE]
 
 16. Fix staff ruler so it's owned by the staff (and works in page mode);
-    fix bar-at-end-of-row in page mode
+    fix bar-at-end-of-row in page mode; switch to doubles instead of
+    ints in notationhlayout x-coord calculations
 
 
 
