@@ -74,9 +74,6 @@ private:
 
   double m_tempo;
   double m_ppq;
-
-  unsigned long long m_microSeconds;
-
 };
 
 }

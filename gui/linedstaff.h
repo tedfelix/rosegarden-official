@@ -159,6 +159,15 @@ protected:
 	    (getLineCount() - 1) * getHeightPerLine();
     }
 
+    /**
+     * Returns true if elements fill the spaces between lines,
+     * false if elements can fall on lines.  If true, the lines
+     * will be displaced vertically by half a line spacing.
+     */
+    virtual bool elementsInSpaces() const {
+	return false;
+    }
+
 protected:
     /// Subclass may wish to expose this
     virtual void setResolution(int resolution);

@@ -281,6 +281,7 @@ protected:
     virtual int getLegerLineCount() const;
     virtual int getBottomLineHeight() const;
     virtual int getHeightPerLine() const;
+    virtual bool elementsInSpaces() const;
 
     /**
      * Override from Rosegarden::Staff<T>

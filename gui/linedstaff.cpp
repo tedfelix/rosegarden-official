@@ -400,6 +400,10 @@ LinedStaff<T>::insertBar(int layoutX, bool isCorrect)
         line->moveBy
             (getCanvasXForLayoutX(layoutX) + i, getCanvasYForTopLine(row));
 
+	if (elementsInSpaces()) {
+	    line->moveBy(0, -getLineSpacing()/2);
+	}
+
         if (isCorrect) line->setPen(QPen(RosegardenGUIColours::BarLine, 1));
         else line->setPen(QPen(RosegardenGUIColours::BarLineIncorrect, 1));
         line->setZ(-1);
@@ -418,6 +422,10 @@ LinedStaff<T>::insertBar(int layoutX, bool isCorrect)
             line->moveBy
                 (getCanvasXForLayoutX(layoutX) + i,
                  getCanvasYForTopLine(row));
+
+	    if (elementsInSpaces()) {
+		line->moveBy(0, -getLineSpacing()/2);
+	    }
 
             line->setPen
                 (QPen(RosegardenGUIColours::StaffConnectingLine, 1));

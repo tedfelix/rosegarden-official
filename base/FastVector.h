@@ -163,7 +163,6 @@ public:
     public:
         iterator() : iterator_base() { }
 	iterator(const iterator_base &i) : iterator_base(i) { }
-//!!!        iterator(const iterator &i) : iterator_base(i) { }
         iterator &operator=(const iterator &i) {
             iterator_base::operator=(i);
             return *this;
@@ -186,7 +185,6 @@ public:
     public:
         reverse_iterator() : iterator_base() { }
 	reverse_iterator(const iterator_base &i) : iterator_base(i) { }
-//!!!        reverse_iterator(const reverse_iterator &i) : iterator_base(i) { }
         reverse_iterator &operator=(const reverse_iterator &i) {
             iterator_base::operator=(i);
             return *this;
@@ -209,8 +207,6 @@ public:
     public:
         const_iterator() : iterator_base() { }
 	const_iterator(const iterator_base &i) : iterator_base(i) { }
-//!!!        const_iterator(const iterator &i) : iterator_base(i) { }
-//!!!        const_iterator(const const_iterator &i) : iterator_base(i) { }
 //        const_iterator &operator=(const iterator &i) {
 //            iterator_base::operator=(i);
 //            return *this;
@@ -235,8 +231,6 @@ public:
     public:
         const_reverse_iterator() : iterator_base() { }
 	const_reverse_iterator(const iterator_base &i) : iterator_base(i) { }
-//!!!        const_reverse_iterator(const reverse_iterator &i) : iterator_base(i) { }
-//!!!        const_reverse_iterator(const const_reverse_iterator &i) : iterator_base(i) { }
 //        const_reverse_iterator &operator=(const reverse_iterator &i) {
 //            iterator_base::operator=(i);
 //            return *this;

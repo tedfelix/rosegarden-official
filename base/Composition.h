@@ -35,8 +35,38 @@
 namespace Rosegarden 
 {
 
-typedef unsigned long long RealTime; // usec
+struct RealTime
+{
+    long sec;
+    long usec;
+
+    RealTime(long s, long u) :
+	sec(s), usec(u) {
+	while (usec > 1000000) { usec -= 1000000; ++sec; }
+	while (usec < 0) { usec += 1000000; --sec; }
+    }
+
+    RealTime(const RealTime &r) :
+	sec(r.sec), usec(r.usec) { }
+
+    RealTime &operator=(const RealTime &r) {
+	sec = r.sec; usec = r.usec; return *this;
+    }
+
+    RealTime operator+(const RealTime &r) const {
+	return RealTime(sec + r.sec, usec + r.usec);
+    }
+    RealTime operator-(const RealTime &r) const {
+	return RealTime(sec - r.sec, usec - r.usec);
+    }
+
+    bool operator<(const RealTime &r) const {
+	if (sec == r.sec) return usec < r.usec;
+	else return sec < r.sec;
+    }
+};
     
+
 typedef std::map<int, Instrument> instrumentcontainer;
 typedef std::map<int, Track> trackcontainer;
 
@@ -58,16 +88,6 @@ class Composition : public SegmentObserver,
 {
     
 public:
-    class ReferenceSegment;
-
-    static const std::string BarEventType;
-    static const PropertyName BarNumberProperty;
-    static const PropertyName BarHasTimeSigProperty;
-
-    static const std::string TempoEventType; 
-    static const PropertyName TempoProperty; // stored in beats per hour
-    static const PropertyName TempoTimestampProperty;
-
     typedef std::set<Segment*, Segment::SegmentCmp> segmentcontainer;
 
     typedef segmentcontainer::iterator iterator;
@@ -387,6 +407,22 @@ public:
     //
     virtual string toXmlString();
 
+    static RealTime getTempoTimestamp(const Event *e);
+    static void setTempoTimestamp(Event *e, RealTime r);
+
+
+protected:
+
+    class ReferenceSegment;
+
+    static const std::string BarEventType;
+    static const PropertyName BarNumberProperty;
+    static const PropertyName BarHasTimeSigProperty;
+
+    static const std::string TempoEventType; 
+    static const PropertyName TempoProperty; // stored in beats per hour
+    static const PropertyName TempoTimestampSecProperty;
+    static const PropertyName TempoTimestampUsecProperty;
 
 
     struct ReferenceSegmentEventCmp
@@ -437,7 +473,6 @@ public:
 	std::string m_eventType;
     };
 
-protected:
 
     trackcontainer m_tracks;
     segmentcontainer m_segments;

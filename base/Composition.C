@@ -43,7 +43,8 @@ const PropertyName Composition::BarHasTimeSigProperty = "BarHasTimeSig";
 
 const std::string Composition::TempoEventType = "tempo";
 const PropertyName Composition::TempoProperty = "BeatsPerHour";
-const PropertyName Composition::TempoTimestampProperty = "Timestamp";
+const PropertyName Composition::TempoTimestampSecProperty = "TimestampSec";
+const PropertyName Composition::TempoTimestampUsecProperty = "TimestampUsec";
 
 
 bool
@@ -54,10 +55,8 @@ Composition::ReferenceSegmentEventCmp::operator()(const Event &e1,
 	e1.getAbsoluteTime() >= 0) {
 	return e1 < e2;
     } else {
-	//!!! shouldn't just be longs
-	long r1 = 0, r2 = 0;
-	e1.get<Int>(TempoTimestampProperty, r1);
-	e2.get<Int>(TempoTimestampProperty, r2);
+	RealTime r1 = getTempoTimestamp(&e1);
+	RealTime r2 = getTempoTimestamp(&e2);
 	return r1 < r2;
     }
 }
@@ -169,7 +168,7 @@ Composition::ReferenceSegment::findRealTime(RealTime t)
     Event dummy;
     dummy.setAbsoluteTime(-1);
     dummy.setSubOrdering(MIN_SUBORDERING);
-    dummy.set<Int>(TempoTimestampProperty, t);
+    setTempoTimestamp(&dummy, t);
     return find(&dummy);
 }
 
@@ -188,9 +187,7 @@ Composition::ReferenceSegment::iterator
 Composition::ReferenceSegment::findNearestRealTime(RealTime t)
 {
     iterator i = findRealTime(t);
-    long t0(0); //!!! should be longer
-    if (i == end() ||
-	((*i)->get<Int>(TempoTimestampProperty, t0) && t0 > t)) {
+    if (i == end() || (getTempoTimestamp(*i) > t)) {
 	if (i == begin()) return end();
 	else --i;
     }
@@ -668,7 +665,7 @@ Composition::getElapsedRealTime(timeT t) const
 	return time2RealTime(t, m_defaultTempo);
     }
 
-    return (RealTime)((*i)->get<Int>(TempoTimestampProperty)) +
+    return getTempoTimestamp(*i) +
 	time2RealTime(t - (*i)->getAbsoluteTime(),
 		      (double)((*i)->get<Int>(TempoProperty)) / 60.0);
 }
@@ -684,7 +681,7 @@ Composition::getElapsedTimeForRealTime(RealTime t) const
     }
 
     return (*i)->getAbsoluteTime() +
-	realTime2Time(t - (*i)->get<Int>(TempoTimestampProperty),
+	realTime2Time(t - getTempoTimestamp(*i),
 		      (double)((*i)->get<Int>(TempoProperty)) / 60.0);
 }
 
@@ -701,16 +698,9 @@ Composition::calculateTempoTimestamps() const
     for (ReferenceSegment::iterator i = m_tempoSegment.begin();
 	 i != m_tempoSegment.end(); ++i) {
 
-	//!!! Potential rounding problems, coercing an unsigned long long
-	// into a signed long.  We probably need all the space we can get,
-	// if we're storing microseconds -- in particular, 32 bits is not
-	// really quite enough
+	setTempoTimestamp(*i, time2RealTime((*i)->getAbsoluteTime(), tempo));
 
-	(*i)->setMaybe<Int>
-	    (TempoTimestampProperty,
-	     (long)time2RealTime((*i)->getAbsoluteTime(), tempo));
-
-	(*i)->dump(cerr);
+//	(*i)->dump(cerr);
 
 	tempo = (double)((*i)->get<Int>(TempoProperty)) / 60.0;
 	base = (*i)->getAbsoluteTime();
@@ -722,17 +712,35 @@ Composition::calculateTempoTimestamps() const
 RealTime
 Composition::time2RealTime(timeT t, double tempo) const
 {
-    return (RealTime)
-	((6e7L * (double)t) /
-	 ((double)Note(Note::Crotchet).getDuration() * tempo));
+    double factor = Note(Note::Crotchet).getDuration() * tempo;
+    long sec = (long)((60.0 * (double)t) / factor);
+    t -= realTime2Time(RealTime(sec, 0), tempo);
+    return RealTime(sec, (long)((6e7L * (double)t) / factor));
 }
 
 timeT
-Composition::realTime2Time(RealTime t, double tempo) const
+Composition::realTime2Time(RealTime rt, double tempo) const
 {
-    return (timeT)
-	(((double)t * (double)Note(Note::Crotchet).getDuration() * tempo) /
-	 6e7L);
+    double factor = Note(Note::Crotchet).getDuration() * tempo;
+    double t = ((double)rt.sec * factor) / 60.0;
+    t += ((double)rt.usec * factor) / 6e7L;
+    return (timeT)t;
+}
+
+RealTime
+Composition::getTempoTimestamp(const Event *e) 
+{
+    long sec = 0, usec = 0;
+    e->get<Int>(TempoTimestampSecProperty, sec);
+    e->get<Int>(TempoTimestampUsecProperty, usec);
+    return RealTime(sec, usec);
+}
+
+void
+Composition::setTempoTimestamp(Event *e, RealTime t)
+{
+    e->setMaybe<Int>(TempoTimestampSecProperty, t.sec);
+    e->setMaybe<Int>(TempoTimestampUsecProperty, t.usec);
 }
 
 void
@@ -865,7 +873,6 @@ string Composition::toXmlString()
 
     return composition.str();
 }
-
 
 
 }

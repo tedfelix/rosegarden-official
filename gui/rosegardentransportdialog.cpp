@@ -113,23 +113,21 @@ RosegardenTransportDialog::loadPixmaps()
 //
 //
 void
-RosegardenTransportDialog::displayTime(Rosegarden::RealTime microSeconds)
+RosegardenTransportDialog::displayTime(Rosegarden::RealTime rt)
 {
-    m_microSeconds = microSeconds;
+    m_tenThousandths = ( rt.usec / 100 ) % 10;
+    m_thousandths = ( rt.usec / 1000 ) % 10;
+    m_hundreths = ( rt.usec / 10000 ) % 10;
+    m_tenths = ( rt.usec / 100000 ) % 10;
 
-    m_tenThousandths = ( m_microSeconds / 100 ) % 10;
-    m_thousandths = ( m_microSeconds / 1000 ) % 10;
-    m_hundreths = ( m_microSeconds / 10000 ) % 10;
-    m_tenths = ( m_microSeconds / 100000 ) % 10;
+    m_unitSeconds = ( rt.sec ) % 10;
+    m_tenSeconds = ( rt.sec / 10 ) % 6;
 
-    m_unitSeconds = ( m_microSeconds / 1000000 ) % 10;
-    m_tenSeconds = ( m_microSeconds / 10000000 ) % 6;
-
-    m_unitMinutes = (m_microSeconds / 60000000) % 10;
-    m_tenMinutes = (m_microSeconds / 600000000) % 6;
+    m_unitMinutes = ( rt.sec / 60) % 10;
+    m_tenMinutes = ( rt.sec / 600) % 6;
     
-    m_unitHours = ((unsigned int)m_microSeconds / 3600000000LL) % 10;
-    m_tenHours = ((unsigned int)m_microSeconds / 36000000000LL) % 24;
+    m_unitHours = ( rt.sec / 3600) % 10;
+    m_tenHours = (rt.sec / 36000) % 24;
 
     if (m_tenThousandths != m_lastTenThousandths)
     {

@@ -2093,11 +2093,11 @@ void NotationView::readjustCanvasSize()
         staff.sizeStaff(*m_hlayout);
 
         if (staff.getTotalWidth() + staff.getX() > maxWidth) {
-            maxWidth = staff.getTotalWidth() + staff.getX();
+            maxWidth = staff.getTotalWidth() + staff.getX() + 1;
         }
 
         if (staff.getTotalHeight() + staff.getY() > maxHeight) {
-            maxHeight = staff.getTotalHeight() + staff.getY();
+            maxHeight = staff.getTotalHeight() + staff.getY() + 1;
         }
     }
 

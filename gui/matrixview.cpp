@@ -198,6 +198,8 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase)
     timeT from = composition->getBarStart(segment.getStartIndex()),
 	    to = composition->getBarEnd  (segment.getEndIndex  ());
 
+    //!!! Deal with time signatures...
+
     while (from < to) {
 	m_barData.push_back(BarData(from * staff.getTimeScaleFactor(), 0));
 	from = composition->getBarEnd(from);
@@ -292,11 +294,12 @@ MatrixStaff::~MatrixStaff()
     // nothing
 }
 
-int MatrixStaff::getLineCount()        const { return MatrixVLayout::
-						      maxMIDIPitch + 2; }
-int MatrixStaff::getLegerLineCount()   const { return 0; }
-int MatrixStaff::getBottomLineHeight() const { return 0; }
-int MatrixStaff::getHeightPerLine()    const { return 1; }
+int  MatrixStaff::getLineCount()        const { return MatrixVLayout::
+						      maxMIDIPitch + 1; }
+int  MatrixStaff::getLegerLineCount()   const { return 0; }
+int  MatrixStaff::getBottomLineHeight() const { return 0; }
+int  MatrixStaff::getHeightPerLine()    const { return 1; }
+bool MatrixStaff::elementsInSpaces()    const { return true; }
 
 bool MatrixStaff::wrapEvent(Rosegarden::Event* e)
 {
@@ -660,7 +663,7 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
 
     m_currentStaff = m_mParentView->getStaff(staffNo);
 
-    int y = m_currentStaff->getLayoutYForHeight(pitch) - m_currentStaff->getElementHeight();
+    int y = m_currentStaff->getLayoutYForHeight(pitch) - m_currentStaff->getElementHeight() / 2;
 
     m_currentElement->setLayoutY(y);
     m_currentElement->setLayoutX(time * m_currentStaff->getTimeScaleFactor());
