@@ -401,7 +401,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     bool cancelled = false;
 
     bool okay = readFromFile(filename, fileContents);
-    if (!okay) errMsg = "Couldn't read from file";
+    if (!okay) errMsg = "Not a Rosegarden-4 file";
     else {
 
         // parse xml file
