@@ -1,6 +1,6 @@
 0.2 TO-DO for rwb
 -----------------
-updated 09.04.2002
+updated 12.04.2002
 
 Currently looking at:
 
@@ -13,7 +13,10 @@ o ALSA:
   - MIDI recording timestamps
   - first pass Audio
   - latencies
-  - hanging notes
+  - hanging notes on stop [DONE - VOICES_OFF type controller call]
+
+o MappedDevice transmission is breaking occasionally [HOPEFULLY FIXED
+  in MappedDevice itself]
 
 o Recording Segment doesn't appear anymore
 

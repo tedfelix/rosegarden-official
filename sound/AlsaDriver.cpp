@@ -345,11 +345,6 @@ AlsaDriver::initialiseMidi()
     cout << "    INPUT PAIR  = " << inputDevice.first << ", "
                                 << inputDevice.second << endl;
 
-    /*
-    ClientPortPair outputDevice = getFirstDestination(false);
-    cout << "    OUTPUT PAIR = " << outputDevice.first << ", "
-                                 << outputDevice.second << endl;
-                                 */
     std::vector<AlsaPort*>::iterator it;
 
     // Connect to all available output client/ports
@@ -367,12 +362,32 @@ AlsaDriver::initialiseMidi()
         }
     }
 
-    // Connect from the input port
+    // Connect input port - enabling timestamping on the way through.
+    // We have to fill out the subscription information as follows:
     //
-    if (snd_seq_connect_from(m_midiHandle,
-                             m_port,
-                             inputDevice.first,
-                             inputDevice.second) < 0)
+    snd_seq_addr_t sender, dest;
+    snd_seq_port_subscribe_t *subs;
+    snd_seq_port_subscribe_alloca(&subs);
+
+    sender.client = inputDevice.first;
+    sender.port = inputDevice.second;
+    dest.client = m_client;
+    dest.port = m_port;
+
+    snd_seq_port_subscribe_set_sender(subs, &sender);
+    snd_seq_port_subscribe_set_dest(subs, &dest);
+
+    snd_seq_port_subscribe_set_queue(subs, m_queue);
+
+    // enable time-stamp-update mode 
+    //
+    snd_seq_port_subscribe_set_time_update(subs, 1);
+
+    // set so we realtime timestamps
+    //
+    snd_seq_port_subscribe_set_time_real(subs, 1);
+
+    if (snd_seq_subscribe_port(m_midiHandle, subs) < 0)
     {
         std::cerr << "AlsaDriver::initialiseMidi() - "
                   << "can't subscribe input client/port"
@@ -398,47 +413,7 @@ AlsaDriver::initialiseMidi()
         return;
     }
 
-    /*
-    // 
-    // DON'T SET UP QUEUE TIMER UNTIL WE UNDERSTAND WHY
-    // IT BREAKS PLAYBACK
-
-    // Set up a queue and timer
-    //
-    //
-    
-    snd_timer_id_t *timerId;
-    snd_seq_queue_timer_t *queueTimer;
-
-    snd_seq_queue_timer_alloca(&queueTimer);
-    snd_timer_id_alloca(&timerId);
-
-    snd_timer_id_set_class(timerId, SND_TIMER_CLASS_PCM);
-    snd_timer_id_set_card(timerId, 0) ; // pcm_card = 0
-    snd_timer_id_set_device(timerId, 0) ; // pcm_device = 0
-    snd_timer_id_set_subdevice(timerId, 0);
-
-    snd_seq_queue_timer_set_id(queueTimer, timerId);
-    snd_seq_queue_timer_set_type(queueTimer, SND_SEQ_TIMER_ALSA);
-    snd_seq_queue_timer_set_resolution(queueTimer, 960);
-
-    if (snd_seq_set_queue_timer(m_midiHandle, m_queue, queueTimer) < 0)
-    {
-        std::cerr << "AlsaDriver::initialisePlayback - "
-                  << "can't assign queue timer"
-                  << std::endl;
-        m_driverStatus = NO_DRIVER;
-        return;
-    }
-    */
-
     getSystemInfo();
-
-    /*
-    std::cout << "Max queues   = " << m_maxQueues << std::endl;
-    std::cout << "Max clients  = " << m_maxClients << std::endl;
-    std::cout << "Max ports    = " << m_maxPorts << std::endl;
-    */
 
     // Modify status with success
     //
@@ -700,7 +675,7 @@ AlsaDriver::getAlsaTime()
 //
 //
 MappedComposition*
-AlsaDriver::getMappedComposition(const RealTime & /*playLatency*/)
+AlsaDriver::getMappedComposition(const RealTime & playLatency)
 {
     m_recordComposition.clear();
 
@@ -708,6 +683,8 @@ AlsaDriver::getMappedComposition(const RealTime & /*playLatency*/)
     //
     if(m_midiInputPortConnected == false)
         return &m_recordComposition;
+
+    Rosegarden::RealTime eventTime;
 
     do
     {
@@ -721,6 +698,10 @@ AlsaDriver::getMappedComposition(const RealTime & /*playLatency*/)
         MidiByte channel = event->data.note.channel;
         unsigned int chanNoteKey = ( channel << 8 ) + event->data.note.note;
 
+        eventTime.sec = event->time.time.tv_sec;
+        eventTime.usec = event->time.time.tv_nsec / 1000;
+        eventTime = eventTime + m_alsaRecordStartTime;
+
         switch(event->type)
         {
 
@@ -732,12 +713,15 @@ AlsaDriver::getMappedComposition(const RealTime & /*playLatency*/)
                     m_noteOnMap[chanNoteKey]->setPitch(event->data.note.note);
                     m_noteOnMap[chanNoteKey]->
                         setVelocity(event->data.note.velocity);
+                    m_noteOnMap[chanNoteKey]->setEventTime(eventTime);
 
+                    /*
                     std::cout << "NOTE ON TIMESTAMP = "
                               << event->time.time.tv_sec
                               << " . "
                               << event->time.time.tv_nsec
                               << std::endl;
+                              */
                     break;
                 }
 
@@ -746,12 +730,25 @@ AlsaDriver::getMappedComposition(const RealTime & /*playLatency*/)
             case SND_SEQ_EVENT_NOTEOFF:
                 if (m_noteOnMap[chanNoteKey] != 0)
                 {
-                    m_noteOnMap[chanNoteKey]->setDuration(RealTime(0, 1000));
+                    RealTime duration = eventTime -
+                         m_noteOnMap[chanNoteKey]->getEventTime();
+
+                    assert(duration >= RealTime(0, 0));
+
+                    m_noteOnMap[chanNoteKey]->setDuration(duration);
+
+                    std::cout << "Inserted NOTE at "
+                              << m_noteOnMap[chanNoteKey]->getEventTime()
+                              << " with duration "
+                              << m_noteOnMap[chanNoteKey]->getDuration()
+                              << std::endl;
+
                     m_recordComposition.insert(m_noteOnMap[chanNoteKey]);
 
                     // reset the reference
                     //
                     m_noteOnMap[chanNoteKey] = 0;
+
                 }
                 break;
 
@@ -998,8 +995,9 @@ AlsaDriver::record(const RecordStatus& recordStatus)
 {
     if (recordStatus == RECORD_MIDI)
     {
+        // start recording
         m_recordStatus = RECORD_MIDI;
-        //m_alsaRecordStartTime
+        m_alsaRecordStartTime = getSequencerTime();
     }
     else if (recordStatus == RECORD_AUDIO)
     {
