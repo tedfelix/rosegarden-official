@@ -250,6 +250,10 @@ AlsaDriver::~AlsaDriver()
 void
 AlsaDriver::shutdown()
 {
+    AUDIT_START;
+    AUDIT_STREAM << "AlsaDriver::~AlsaDriver - shutting down" << std::endl;
+
+#ifdef HAVE_LIBJACK
     // This thread should already have completed at this point
     //
     if (_diskThread)
@@ -257,12 +261,10 @@ AlsaDriver::shutdown()
         pthread_cancel(_diskThread);
         _diskThread = 0;
     }
+#endif
 
     // to ensure that only one thread does the closing
     if (_threadAlsaClosing) return;
-
-    AUDIT_START;
-    AUDIT_STREAM << "AlsaDriver::~AlsaDriver - shutting down" << std::endl;
 
     if (_threadAlsaClosing == false && m_midiHandle)
     {
@@ -1968,7 +1970,7 @@ AlsaDriver::processAudioQueue(const RealTime &playLatency, bool now)
                 insertMappedEventForReturn(mE);
             }
             catch(...) {;}
-
+#ifdef HAVE_LIBJACK
             for (unsigned int j = 0; _ringBuffer.size(); ++j)
             {
                 if (_ringBuffer[j].second == (*it)->getRingBuffer())
@@ -1977,6 +1979,7 @@ AlsaDriver::processAudioQueue(const RealTime &playLatency, bool now)
                     break;
                 }
             }
+#endif
             
         }
     }
