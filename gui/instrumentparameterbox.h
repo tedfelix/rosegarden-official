@@ -279,7 +279,7 @@ protected:
 
     std::vector<Rosegarden::MidiBank>    m_banks;
     std::vector<Rosegarden::MidiProgram> m_programs;
-    std::vector<Rosegarden::MidiByte>    m_variations;
+    Rosegarden::MidiByteList             m_variations;
 };
 
 

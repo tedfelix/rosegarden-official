@@ -1262,9 +1262,17 @@ BankEditorDialog::populateDevice(QListViewItem* item)
         m_deleteBank->setEnabled(false);
         m_copyPrograms->setEnabled(false);
         m_pastePrograms->setEnabled(false);
-	m_optionBox->setEnabled(false);
+
+	m_variationToggle->setChecked(device->getVariationType() !=
+				      Rosegarden::MidiDevice::NoVariations);
+	m_variationCombo->setEnabled(m_variationToggle->isChecked());
+	m_variationCombo->setCurrentItem
+	    (device->getVariationType() ==
+	     Rosegarden::MidiDevice::VariationFromLSB ? 0 : 1);
+
         stateChanged("on_bank_item", KXMLGUIClient::StateReverse);
         m_programEditor->clearAll();
+
         return;
     }
 
@@ -1288,15 +1296,7 @@ BankEditorDialog::populateDevice(QListViewItem* item)
     m_lastBank = m_bankList[bankItem->getBank()];
 
     m_programEditor->populateBank(item);
-
-    m_optionBox->setEnabled(true);
-    m_variationToggle->setChecked(device->getVariationType() !=
-				  Rosegarden::MidiDevice::NoVariations);
-    m_variationCombo->setEnabled(m_variationToggle->isChecked());
-    m_variationCombo->setCurrentItem(device->getVariationType() ==
-				     Rosegarden::MidiDevice::VariationFromLSB ?
-				     0 : 1);
-
+	
     m_lastDevice = bankItem->getDeviceId();
 }
 
@@ -1306,16 +1306,6 @@ BankEditorDialog::slotApply()
     RG_DEBUG << "BankEditorDialog::slotApply()\n";
 
     ModifyDeviceCommand *command;
-
-    Rosegarden::MidiDevice::VariationType variation =
-	Rosegarden::MidiDevice::NoVariations;
-    if (m_variationToggle->isChecked()) {
-	if (m_variationCombo->currentItem() == 0) {
-	    variation = Rosegarden::MidiDevice::VariationFromLSB;
-	} else {
-	    variation = Rosegarden::MidiDevice::VariationFromMSB;
-	}
-    }
     
     // Make sure that we don't delete all the banks and programs
     // if we've not populated them here yet.
@@ -1334,7 +1324,7 @@ BankEditorDialog::slotApply()
                                           m_deviceNameMap[m_lastDevice],
                                           device->getLibrarianName(),
                                           device->getLibrarianEmail(),
-					  variation,
+					  device->getVariationType(),
                                           tempBank,
                                           tempProg,
                                           true,
@@ -1354,7 +1344,7 @@ BankEditorDialog::slotApply()
                                           m_deviceNameMap[m_lastDevice],
                                           device->getLibrarianName(),
                                           device->getLibrarianEmail(),
-					  variation,
+					  device->getVariationType(),
                                           m_bankList,
                                           m_programList,
                                           true,
@@ -1733,13 +1723,44 @@ void
 BankEditorDialog::slotVariationToggled()
 {
     m_variationCombo->setEnabled(m_variationToggle->isChecked());
-    setModified(true);
+
+    //!!! not using a command here yet
+
+    Rosegarden::MidiDevice *device = getMidiDevice(m_lastDevice);
+    if (!device) return;
+
+    Rosegarden::MidiDevice::VariationType variation =
+	Rosegarden::MidiDevice::NoVariations;
+    if (m_variationToggle->isChecked()) {
+	if (m_variationCombo->currentItem() == 0) {
+	    variation = Rosegarden::MidiDevice::VariationFromLSB;
+	} else {
+	    variation = Rosegarden::MidiDevice::VariationFromMSB;
+	}
+    }
+
+    device->setVariationType(variation);
 }
 
 void
 BankEditorDialog::slotVariationChanged(int)
 {
-    setModified(true);
+    //!!! not using a command here yet
+
+    Rosegarden::MidiDevice *device = getMidiDevice(m_lastDevice);
+    if (!device) return;
+
+    Rosegarden::MidiDevice::VariationType variation =
+	Rosegarden::MidiDevice::NoVariations;
+    if (m_variationToggle->isChecked()) {
+	if (m_variationCombo->currentItem() == 0) {
+	    variation = Rosegarden::MidiDevice::VariationFromLSB;
+	} else {
+	    variation = Rosegarden::MidiDevice::VariationFromMSB;
+	}
+    }
+
+    device->setVariationType(variation);
 }
 
 void

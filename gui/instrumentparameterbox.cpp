@@ -603,6 +603,8 @@ MIDIInstrumentParameterPanel::populateBankList()
     int currentBank = -1;
     Rosegarden::BankList banks;
 
+    RG_DEBUG << "MIDIInstrumentParameterPanel::populateBankList: variation type is " << md->getVariationType() << endl;
+
     if (md->getVariationType() == MidiDevice::NoVariations) {
 
 	m_bankLabel->show();
@@ -642,6 +644,8 @@ MIDIInstrumentParameterPanel::populateBankList()
 	    for (unsigned int i = 0; i < bytes.size(); ++i) {
 		Rosegarden::BankList bl = md->getBanksByMSB
 		    (m_selectedInstrument->isPercussion(), bytes[i]);
+		RG_DEBUG << "MIDIInstrumentParameterPanel::populateBankList: have " << bl.size() << " variations for msb " << bytes[i] << endl;
+
 		if (bl.size() == 0) continue;
 		if (m_selectedInstrument->getMSB() == bytes[i]) {
 		    currentBank = banks.size();
@@ -652,6 +656,7 @@ MIDIInstrumentParameterPanel::populateBankList()
 	    for (unsigned int i = 0; i < bytes.size(); ++i) {
 		Rosegarden::BankList bl = md->getBanksByLSB
 		    (m_selectedInstrument->isPercussion(), bytes[i]);
+		RG_DEBUG << "MIDIInstrumentParameterPanel::populateBankList: have " << bl.size() << " variations for lsb " << bytes[i] << endl;
 		if (bl.size() == 0) continue;
 		if (m_selectedInstrument->getLSB() == bytes[i]) {
 		    currentBank = banks.size();
@@ -690,6 +695,8 @@ MIDIInstrumentParameterPanel::populateProgramList()
 	return;
     }
 
+    RG_DEBUG << "MIDIInstrumentParameterPanel::populateProgramList: variation type is " << md->getVariationType() << endl;
+
     Rosegarden::MidiBank bank(m_selectedInstrument->isPercussion(), 0, 0);
 
     if (m_selectedInstrument->sendsBankSelect()) {
@@ -698,11 +705,14 @@ MIDIInstrumentParameterPanel::populateProgramList()
 
     Rosegarden::ProgramList programs = md->getPrograms(bank);
     for (unsigned int i = 0; i < programs.size(); ++i) {
-	m_programValue->insertItem(strtoqstr(programs[i]->getName()));
-	if (m_selectedInstrument->getProgram() == *programs[i]) {
-	    m_programValue->setCurrentItem(i);
+	std::string programName = programs[i]->getName();
+	if (programName != "") {
+	    m_programValue->insertItem(strtoqstr(programName));
+	    if (m_selectedInstrument->getProgram() == *programs[i]) {
+		m_programValue->setCurrentItem(i);
+	    }
+	    m_programs.push_back(*programs[i]);
 	}
-	m_programs.push_back(*programs[i]);
     }
 
     m_programValue->setEnabled(m_selectedInstrument->sendsProgramChange());
@@ -744,6 +754,8 @@ MIDIInstrumentParameterPanel::populateVariationList()
 	return;
     }
 
+    RG_DEBUG << "MIDIInstrumentParameterPanel::populateVariationList: variation type is " << md->getVariationType() << endl;
+
     if (md->getVariationType() == MidiDevice::NoVariations) {
 	m_variationLabel->hide();
 	m_variationCheckBox->hide();
@@ -752,15 +764,51 @@ MIDIInstrumentParameterPanel::populateVariationList()
     } 
 
     bool useMSB = (md->getVariationType() == MidiDevice::VariationFromMSB);
+    Rosegarden::MidiByteList variations;
 
     if (useMSB) {
 	Rosegarden::MidiByte lsb = m_selectedInstrument->getLSB();
-	m_variations = md->getDistinctMSBs(lsb);
+	variations = md->getDistinctMSBs(m_selectedInstrument->isPercussion(),
+					 lsb);
+	RG_DEBUG << "MIDIInstrumentParameterPanel::populateVariationList: have " << variations.size() << " variations for lsb " << lsb << endl;
+
     } else {
 	Rosegarden::MidiByte msb = m_selectedInstrument->getMSB();
-	m_variations = md->getDistinctLSBs(msb);
+	variations = md->getDistinctLSBs(m_selectedInstrument->isPercussion(),
+					 msb);
+	RG_DEBUG << "MIDIInstrumentParameterPanel::populateVariationList: have " << variations.size() << " variations for msb " << msb << endl;
     }
     
+    m_variationValue->setCurrentItem(-1);
+
+    for (unsigned int i = 0; i < variations.size(); ++i) {
+
+	Rosegarden::MidiProgram program;
+
+	if (useMSB) {
+	    program = Rosegarden::MidiProgram
+		(Rosegarden::MidiBank(m_selectedInstrument->isPercussion(),
+				      variations[i],
+				      m_selectedInstrument->getLSB()),
+		 m_selectedInstrument->getProgramChange());
+	} else {
+	    program = Rosegarden::MidiProgram
+		(Rosegarden::MidiBank(m_selectedInstrument->isPercussion(),
+				      m_selectedInstrument->getMSB(),
+				      variations[i]),
+		 m_selectedInstrument->getProgramChange());
+	}
+
+	std::string programName = md->getProgramName(program);
+	if (programName != "") { // yes, that is how you know whether it exists
+	    m_variationValue->insertItem(strtoqstr(programName));
+	    if (m_selectedInstrument->getProgram() == program) {
+		m_variationValue->setCurrentItem(i);
+	    }
+	    m_variations.push_back(variations[i]);
+	}
+    }
+
     if (m_variations.size() < 2) {
 	m_variationLabel->hide();
 	m_variationCheckBox->hide();
@@ -770,30 +818,11 @@ MIDIInstrumentParameterPanel::populateVariationList()
 	m_variationLabel->show();
 	m_variationCheckBox->show();
 	m_variationValue->show();
-    }
 
-    m_variationValue->setCurrentItem(-1);
-
-    for (unsigned int i = 0; i < m_variations.size(); ++i) {
-
-	Rosegarden::MidiProgram program;
-
-	if (useMSB) {
-	    program = Rosegarden::MidiProgram
-		(Rosegarden::MidiBank(m_selectedInstrument->isPercussion(),
-				      m_variations[i],
-				      m_selectedInstrument->getLSB()),
-		 m_selectedInstrument->getProgramChange());
+	if (m_programValue->width() > m_variationValue->width()) {
+	    m_variationValue->setMinimumWidth(m_programValue->width());
 	} else {
-	    program = Rosegarden::MidiProgram
-		(Rosegarden::MidiBank(m_selectedInstrument->isPercussion(),
-				      m_selectedInstrument->getMSB(),
-				      m_variations[i]),
-		 m_selectedInstrument->getProgramChange());
-	}
-	m_variationValue->insertItem(strtoqstr(md->getProgramName(program)));
-	if (m_selectedInstrument->getProgram() == program) {
-	    m_variationValue->setCurrentItem(i);
+	    m_programValue->setMinimumWidth(m_variationValue->width());
 	}
     }
 
