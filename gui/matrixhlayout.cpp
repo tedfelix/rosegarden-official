@@ -88,6 +88,7 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase,
     m_firstBar = composition->getBarNumber(segment.getStartTime());
     timeT from = composition->getBarStart(m_firstBar),
 	    to = composition->getBarEndForTime(segment.getEndMarkerTime());
+
     double startPosition = from;
 
     // 1. Bar lines and time signatures.  We only re-make these on
@@ -103,7 +104,15 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase,
 	
 	MATRIX_DEBUG << "MatrixHLayout::scanStaff() : start time = " << startTime << ", first bar = " << m_firstBar << ", end time = " << endTime << ", end marker time = "  << segment.getEndMarkerTime() << ", from = " << from << ", to = " << to << endl;
 	
-	while (from < to) {
+        // hack for partial bars
+        //
+        timeT adjTo = to;
+
+        if (composition->getBarStartForTime(segment.getEndMarkerTime())
+            != segment.getEndMarkerTime())
+            adjTo++;
+
+	while (from < adjTo) {
 	    
 	    bool isNew = false;
 	    Rosegarden::TimeSignature timeSig =

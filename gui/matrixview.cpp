@@ -445,7 +445,7 @@ void MatrixView::initStatusBar()
 }
 
 
-bool MatrixView::applyLayout(int /*staffNo*/,
+bool MatrixView::applyLayout(int staffNo,
 			     timeT startTime,
 			     timeT endTime)
 {
@@ -455,6 +455,9 @@ bool MatrixView::applyLayout(int /*staffNo*/,
     m_vlayout.reset();
         
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+
+        if (staffNo >= 0 && (int)i != staffNo) continue;
+
         m_hlayout.scanStaff(*m_staffs[i], startTime, endTime);
         m_vlayout.scanStaff(*m_staffs[i], startTime, endTime);
     }
@@ -462,26 +465,7 @@ bool MatrixView::applyLayout(int /*staffNo*/,
     m_hlayout.finishLayout();
     m_vlayout.finishLayout();
 
-    if (startTime == endTime) { // full layout
-
-	double maxWidth = 0.0, maxHeight = 0.0;
-
-	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->sizeStaff(m_hlayout);
-	    
-	    if (m_staffs[i]->getX() +
-		m_staffs[i]->getTotalWidth() > maxWidth) {
-		maxWidth = m_staffs[i]->getX() + m_staffs[i]->getTotalWidth();
-	    }
-	    
-	    if (m_staffs[i]->getY() +
-		m_staffs[i]->getTotalHeight() > maxHeight) {
-		maxHeight = m_staffs[i]->getY() + m_staffs[i]->getTotalHeight();
-	    }
-	}
-
-	readjustViewSize(QSize(int(maxWidth), int(maxHeight)), true);
-    }
+    readjustCanvasSize();
     
     return true;
 }
@@ -505,6 +489,7 @@ void MatrixView::refreshSegment(Segment *segment,
     }
 
     m_staffs[0]->positionElements(startTime, endTime);
+    repaintRulers();
 }
 
 QSize MatrixView::getViewSize()
@@ -518,13 +503,15 @@ void MatrixView::setViewSize(QSize s)
 
 }
 
-void MatrixView::updateView()
+void MatrixView::repaintRulers()
 {
     for (unsigned int i = 0; i != m_controlRulers.size(); i++)
-    {
         m_controlRulers[i].first->repaint();
-    }
+}
 
+
+void MatrixView::updateView()
+{
     canvas()->update();
 }
 
@@ -1321,28 +1308,17 @@ MatrixView::slotChangeHorizontalZoom(int)
     if (m_topBarButtons) m_topBarButtons->update();
     if (m_bottomBarButtons) m_bottomBarButtons->update();
 
-    /*
-
     // If you do adjust the viewsize then please remember to 
     // either re-center() or remember old scrollbar position
     // and restore.
     //
-
     Rosegarden::timeT length = m_segments[0]->getEndTime() -
                                m_segments[0]->getStartTime();
 
-    int height = m_canvasView->visibleHeight();
+    int newWidth = getXbyInverseWorldMatrix(int(m_hlayout.getXForTime(length)));
+    setViewSize(QSize(newWidth, getViewSize().height()));
+    applyLayout();
 
-    //setViewSize(QSize(int(m_hlayout.getXForTime(length)), height));
-    //cout << "WIDTH = " << m_hlayout.getXForTime(length) << endl;
-
-    readjustViewSize(QSize(int(m_hlayout.getXForTime(length)), height), true);
-
-    */
-
-    m_canvasView->slotUpdate();
-    //refreshSegment(0, 0, 0);
-    updateView();
 }
 
 unsigned int
@@ -1413,6 +1389,33 @@ MatrixView::slotSelectAll()
             selection->addEvent(*it);
 
     setCurrentSelection(selection, false);
+}
+
+
+void
+MatrixView::readjustCanvasSize()
+{
+    double maxWidth = 0.0;
+    int maxHeight = 0;
+
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+
+        MatrixStaff &staff = *m_staffs[i];
+
+        staff.sizeStaff(m_hlayout);
+
+        if (staff.getTotalWidth() + staff.getX() > maxWidth) {
+            maxWidth = staff.getTotalWidth() + staff.getX() + 1;
+        }
+
+        if (staff.getTotalHeight() + staff.getY() > maxHeight) {
+            maxHeight = staff.getTotalHeight() + staff.getY() + 1;
+        }
+
+    }
+
+    // now get the EditView to do the biz
+    readjustViewSize(QSize(int(maxWidth), maxHeight));
 }
 
 

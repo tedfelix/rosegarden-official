@@ -153,6 +153,17 @@ public:
 
     double getXbyInverseWorldMatrix(double value)
         { return m_canvasView->inverseWorldMatrix().m11() * value; }
+    /*
+     * Repaint the control rulers
+     *
+     */
+    void repaintRulers();
+
+    /*
+     * Readjust the canvas size
+     *
+     */
+    void readjustCanvasSize();
 
 signals:    
     /**
@@ -288,7 +299,6 @@ public slots:
      *
      */
     void slotSelectAll();
-
 
 protected:
 
