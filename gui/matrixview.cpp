@@ -278,11 +278,14 @@ MatrixElement::MatrixElement(Rosegarden::Event *event) :
     m_layoutX(0.0),
     m_layoutY(0.0)
 {
+    kdDebug(KDEBUG_AREA) << "new MatrixElement "
+                         << this << " wrapping " << event << endl;
 }
 
 MatrixElement::~MatrixElement()
 {
-    kdDebug(KDEBUG_AREA) << "MatrixElement " << this << "::~MatrixElement()" << endl;
+    kdDebug(KDEBUG_AREA) << "MatrixElement " << this << "::~MatrixElement() wrapping "
+                         << event() << endl;
 
     m_canvasRect->hide();
     delete m_canvasRect;
@@ -924,19 +927,24 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT,
     //
     if (m_currentElement->getDuration() != 0) {
         
-        //m_currentStaff->insert(m_currentElement->event(), true);
         Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
-        helper.insertNote(m_currentElement->event());
+        kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseRelease() : helper.insertNote()\n";
+
+        helper.insertNote(m_currentElement->event()); // this creates a new MatrixElement
 
 	//!!! should be done automatically
 	// (by putting this into a BasicCommand)
+        kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseRelease() : parentView->refreshSegment()\n";
+
 	m_mParentView->refreshSegment
 	    (&m_currentStaff->getSegment(),
 	     m_currentElement->event()->getAbsoluteTime(),
 	     m_currentElement->event()->getAbsoluteTime() +
 	     m_currentElement->event()->getDuration());
+
+        kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseRelease() : delete currentElement\n";
+
 	delete m_currentElement;
-//        m_currentStaff->getViewElementList()->insert(m_currentElement);
 
     } else {
 
