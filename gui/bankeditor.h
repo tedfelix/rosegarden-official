@@ -184,6 +184,10 @@ public:
     //
     void selectDeviceItem(Rosegarden::MidiDevice *device);
 
+    // Select a device/bank combination
+    //
+    void selectDeviceBankItem(int device, int bank);
+
 public slots:
     void slotPopulateDevice(QListViewItem*);
 

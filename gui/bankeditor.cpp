@@ -603,9 +603,6 @@ BankEditorDialog::initDialog()
     slotPopulateDevice(m_listView->firstChild());
     m_listView->setSelected(m_listView->firstChild(), true);
 
-    m_copyPrograms->setEnabled(false);
-    m_pastePrograms->setEnabled(false);
-
 }
 
 
@@ -684,11 +681,17 @@ BankEditorDialog::slotPopulateDevice(QListViewItem* item)
 
         RG_DEBUG << "BankEditorDialog::slotPopulateDevice : not a bank item - disabling\n";
         m_deleteBank->setEnabled(false);
+        m_copyPrograms->setEnabled(false);
+        m_pastePrograms->setEnabled(false);
         m_programEditor->clearAll();
         return;
     }
     
     m_deleteBank->setEnabled(true);
+    m_copyPrograms->setEnabled(true);
+
+    if (m_copyBank != std::pair<int, int>(-1, -1))
+        m_pastePrograms->setEnabled(true);
 
     Rosegarden::MidiDevice *device = getMidiDevice(bankItem->getDevice());
 
@@ -869,8 +872,18 @@ BankEditorDialog::slotDeleteBank()
             // the listview automatically selects a new current item
             delete currentItem;
 
+            // Don't allow pasting from this defunt device
+            //
+            if (m_copyBank.first == bankItem->getDevice() &&
+                m_copyBank.second == bankItem->getBank())
+            {
+                m_pastePrograms->setEnabled(false);
+                m_copyBank = std::pair<int, int>(-1, -1);
+            }
+
             slotApply();
             selectDeviceItem(device);
+
         }
     }
 }
@@ -899,13 +912,24 @@ BankEditorDialog::slotDeleteAllBanks()
         m_bankList.clear();
         m_programList.clear();
 
-        // Urgh, we have this horrible flag that we're using to frig this
+        // Don't allow pasting from this defunt device
+        //
+        if (m_copyBank.first == deviceItem->getDevice())
+        {
+            m_pastePrograms->setEnabled(false);
+            m_copyBank = std::pair<int, int>(-1, -1);
+        }
+
+        // Urgh, we have this horrible flag that we're using to frig this.
+        // (we might not need this anymore but I'm too scared to remove it
+        // now).
         //
         m_deleteAll = true;
         slotApply();
         m_deleteAll = false;
 
         selectDeviceItem(device);
+
     }
 }
 
@@ -1017,7 +1041,37 @@ BankEditorDialog::selectDeviceItem(Rosegarden::MidiDevice *device)
         }
 
     }
-    while (child = child->nextSibling());
+    while ((child = child->nextSibling()));
+}
+void
+BankEditorDialog::selectDeviceBankItem(int device, int bank)
+{
+    QListViewItem *deviceChild = m_listView->firstChild();
+    QListViewItem *bankChild;
+    int deviceCount = 0, bankCount = 0;
+
+    do
+    {
+        bankChild = deviceChild->firstChild();
+
+        if (bankChild)
+        {
+            do
+            {
+                if (device == deviceCount && bank == bankCount)
+                {
+                    m_listView->setSelected(bankChild, true);
+                    return;
+                }
+                bankCount++;
+
+            } while ((bankChild = bankChild->nextSibling()));
+        }
+
+        deviceCount++;
+        bankCount = 0;
+    }
+    while ((deviceChild = deviceChild->nextSibling()));
 }
 
 void
@@ -1205,14 +1259,82 @@ BankEditorDialog::slotImport()
     delete doc;
 }
 
+// Store the current bank for copy
+//
 void
 BankEditorDialog::slotCopy()
 {
+    MidiBankListViewItem* bankItem
+        = dynamic_cast<MidiBankListViewItem*>(m_listView->currentItem());
+
+    if (bankItem)
+    {
+        m_copyBank = std::pair<int, int>(bankItem->getDevice(),
+                                         bankItem->getBank());
+        m_pastePrograms->setEnabled(true);
+    }
 }
 
 void
 BankEditorDialog::slotPaste()
 {
+    MidiBankListViewItem* bankItem
+        = dynamic_cast<MidiBankListViewItem*>(m_listView->currentItem());
+
+    if (bankItem)
+    {
+        // Get the full program and bank list for the source device
+        //
+        Rosegarden::MidiDevice *device = getMidiDevice(m_copyBank.first);
+        std::vector<Rosegarden::MidiBank> tempBank = device->getBanks();
+
+        MidiProgramsEditor::MidiProgramContainer::iterator it;
+        std::vector<Rosegarden::MidiProgram> tempProg;
+
+        // Remove programs that will be overwritten
+        //
+        for (it = m_programList.begin(); it != m_programList.end(); it++)
+        {
+            if (it->msb != m_lastMSB || it->lsb != m_lastLSB)
+                tempProg.push_back(*it);
+        }
+        m_programList = tempProg;
+
+        // Now get source list and msb/lsb
+        //
+        tempProg = device->getPrograms();
+        int sourceMSB = tempBank[m_copyBank.second].msb;
+        int sourceLSB = tempBank[m_copyBank.second].lsb;
+
+        // Add the new programs
+        //
+        for (it = tempProg.begin(); it != tempProg.end(); it++)
+        {
+            if (it->msb == sourceMSB && it->lsb == sourceLSB)
+            {
+                // Insert with new MSB and LSB
+                //
+                Rosegarden::MidiProgram copyProgram;
+                copyProgram.name = it->name;
+                copyProgram.program = it->program;
+                copyProgram.msb = m_lastMSB;
+                copyProgram.lsb = m_lastLSB;
+
+                m_programList.push_back(copyProgram);
+            }
+        }
+
+        // Save these for post-apply 
+        //
+        int devPos = bankItem->getDevice();
+        int bankPos = bankItem->getBank();
+
+        slotApply();
+
+        // Select same bank
+        //
+        selectDeviceBankItem(devPos, bankPos);
+    }
 }
 
 void
