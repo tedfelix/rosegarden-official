@@ -187,14 +187,11 @@ void RosegardenCanvasView::updateBottomWidgetGeometry()
 
     int bottomWidgetHeight = m_bottomWidget->sizeHint().height();
 
-    RG_DEBUG << "RosegardenCanvasView::updateBottomWidgetGeometry() : bottomWidgetHeight = " << bottomWidgetHeight
-             << endl;
-    
     setMargins(0, 0, 0, bottomWidgetHeight);
     QRect r = frameRect();
     int hScrollBarHeight = 0;
     if (horizontalScrollBar()->isVisible())
-        hScrollBarHeight = horizontalScrollBar()->height();
+        hScrollBarHeight = horizontalScrollBar()->height() + 2; // + 2 offset needed to preserve border shadow
 
     int vScrollBarWidth = 0;
     if (verticalScrollBar()->isVisible())
