@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "POT-Creation-Date: 2003-03-23 21:45+0000\n"
-"PO-Revision-Date: 2003-03-25 15:01+0300\n"
+"PO-Revision-Date: 2003-03-30 16:14+0400\n"
 "Last-Translator: Alexandre Prokoudine <avp@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2541,7 +2541,7 @@ msgstr "Показывать ненотные события как символ
 
 #: rosegardenconfiguredialog.cpp:432
 msgid "Show notation-quantized notes in a different colour"
-msgstr ""
+msgstr "Отображать квантизованные в партитуре ноты другим цветом"
 
 #: rosegardenconfiguredialog.cpp:437
 msgid "Layout"
@@ -2581,6 +2581,10 @@ msgid ""
 "data for notation purposes only. This does not affect playback, and does not "
 "affect editing in any of the views except notation."
 msgstr ""
+"Rosegarden может автоматически квантизовать записываемые или\n"
+"импортируемые MIDI-данные исключетельно к контексте нотации.\n"
+"Это никак не повлияет на воспроизведение, а на редактирование\n"
+"данных &mdash; только в режиме нотного редактора."
 
 #: rosegardenconfiguredialog.cpp:541
 msgid "Paper size to use in \\paper block"
@@ -3353,6 +3357,11 @@ msgid ""
 "We recommend you re-save this file from this version of Rosegarden,\n"
 "to ensure that it can still be re-loaded in future versions."
 msgstr ""
+"В этом файле содержится один или несколько устаревших элементов.\n"
+"Поддержка этих элементов в следующих версиях программы может\n"
+"быть удалена. Рекомендуем заново сохранить файл из это версии RG,\n"
+"чтобы обеспечить поддерживаемость файла в следующих версиях\n"
+"программы."
 
 #: rosegardenguiview.cpp:199
 msgid "No non-audio segments in composition"
@@ -3552,7 +3561,7 @@ msgstr "(часть)"
 
 #: segmentcommands.cpp:1148
 msgid "(rescaled)"
-msgstr ""
+msgstr "(перемасштабировано)"
 
 #: segmentcommands.h:404
 msgid "Add Time Si&gnature Change..."
@@ -3726,11 +3735,11 @@ msgstr "<без имени>"
 
 #: trackeditor.cpp:651
 msgid "Turn Repeating Segment into Real Copies"
-msgstr ""
+msgstr "Превратить повторение сегмента в его настоящие копии"
 
 #: trackeditor.cpp:653
 msgid "Turn Repeating Segments into Real Copies"
-msgstr ""
+msgstr "Превратить повторение сегментов в их настоящие копии"
 
 #: widgets.cpp:190 widgets.cpp:194 widgets.cpp:217
 msgid "Processing..."
@@ -4038,7 +4047,7 @@ msgstr "Включить или выключить метки петли (есл
 
 #: rc.cpp:75
 msgid "Shows MIDI activity in and out of Rosegarden"
-msgstr ""
+msgstr "Отображает MIDI-события в/вне Rosegarden"
 
 #: rc.cpp:76 rc.cpp:79
 msgid "NO EVENTS"
