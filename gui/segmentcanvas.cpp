@@ -489,6 +489,7 @@ void SegmentItem::drawShape(QPainter& painter)
     }
 
     painter.restore();
+    */
         
     if (m_preview && m_showPreview) m_preview->drawShape(painter);
 
@@ -502,7 +503,6 @@ void SegmentItem::drawShape(QPainter& painter)
         painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
     }
 
-    */
 }
 
 void SegmentItem::recalculateRectangle(bool inheritFromSegment)

@@ -3,12 +3,12 @@
 
 o Performance
   - MIDI playback [found a big collisions() problem that's now commented out]
-  - fix MIDI recording
+  - fix MIDI recording [FIXED]
   - audio/MIDI looping and start position
 
-o Make AlsaDriver send NoteOn(0)s as well as NoteOffs
+o Make AlsaDriver send NoteOn(0)s as well as NoteOffs [WAITING FOR FEEDBACK]
 
-o Send ALSA notes() rather than using note offs
+o Send ALSA notes() rather than using note offs [DONE]
 
 o Make RG a jack mixer (transport, control client)
 

@@ -413,7 +413,7 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
     timeT excess = 0;
     bool legato = (m_type == LegatoQuantize);
 
-    assert(m_toInsert.size() == 0);
+    //assert(m_toInsert.size() == 0);
 
 //    timeT fromTime = 0, toTime = 0;
 //    bool haveFromTime = false;
@@ -528,7 +528,7 @@ void
 Quantizer::unquantize(Segment *s,
 		      Segment::iterator from, Segment::iterator to) const
 {
-    assert(m_toInsert.size() == 0);
+    //assert(m_toInsert.size() == 0);
 
     for (Segment::iterator nextFrom = from; from != to; from = nextFrom) {
 	++nextFrom;
@@ -549,7 +549,7 @@ Quantizer::unquantize(Segment *s,
 void
 Quantizer::unquantize(EventSelection *selection) const
 {
-    assert(m_toInsert.size() == 0);
+    //assert(m_toInsert.size() == 0);
 
     Rosegarden::EventSelection::eventcontainer::iterator it
         = selection->getSegmentEvents().begin();
