@@ -66,13 +66,30 @@ int testPitchInOctave(Accidental &acc, Key &key, int octave, int pio)
     return rv;
 }
 
-int testPitch(Accidental &acc, Key &key, int pp)
+int testPitch(Accidental &acc, Key &key, Clef &clef, int pp)
 {
     int rv = 0;
 
     Pitch pitch(pp, acc);
+    NotationDisplayPitch ndp(pp, clef, key, acc);
 
-    
+    int h = pitch.getHeightOnStaff(clef, key);
+    int nh = ndp.getHeightOnStaff();
+    if (h != nh) {
+	cout << "testPitch: " << pp << ", " << acc << ", " << key.getName() << ", " << clef.getClefType() << ": "
+	     << "height is " << h << " (ndp returns " << nh << ")" << endl;
+	rv = 1;
+    }
+
+    Accidental pa = pitch.getDisplayAccidental(key);
+    Accidental na = ndp.getAccidental();
+    if (pa != na) {
+	cout << "testPitch: " << pp << ", " << acc << ", " << key.getName() << ", " << clef.getClefType() << ": "
+	     << "display acc is " << pa << " (ndp returns " << na << ")" << endl;
+	rv = 1;
+    }
+
+    return rv;
 }
 
 int testHeight(Accidental &acc, Key &key, Clef &clef, int height)
@@ -98,12 +115,17 @@ int testHeight(Accidental &acc, Key &key, Clef &clef, int height)
 	rv = 1;
     }
 
-    Accidental nacc = ndp.getAccidental();
-    Accidental pacc = pitch.getAccidental(key.isSharp());
-    if (nacc != pacc) {
-	cout << "testHeight: " << height << " " << acc << ", " << key.getName() << ", " << clef.getClefType() << ": "
-	    "acc " << pacc << " (ndp returns " << nacc << ")" << endl;
-	rv = 1;
+    // for NoAccidental, the Pitch object will acquire the accidental
+    // from the current key whereas NotationDisplayPitch will not --
+    // hence we skip this test for NoAccidental
+    if (acc != Accidentals::NoAccidental) {
+	Accidental nacc = ndp.getAccidental();
+	Accidental pacc = pitch.getAccidental(key.isSharp());
+	if (nacc != pacc) {
+	    cout << "testHeight: " << height << " " << acc << ", " << key.getName() << ", " << clef.getClefType() << ": "
+		"acc " << pacc << " (ndp returns " << nacc << ")" << endl;
+	    rv = 1;
+	}
     }
 
     if (!rv && verbose) {
@@ -142,11 +164,11 @@ int main(int argc, char **argv)
 		}
 	    }
 	    
-	    for (int p = 0; p < 128; ++p) {
-		testPitch(accidentals[a], keys[k], p);
-	    }
-	    
 	    for (int c = 0; c < clefs.size(); ++c) {
+
+		for (int p = 0; p < 128; ++p) {
+		    testPitch(accidentals[a], keys[k], clefs[c], p);
+		}
 
 		for (int h = -20; h < 30; ++h) {
 		    testHeight(accidentals[a], keys[k], clefs[c], h);
