@@ -1922,7 +1922,7 @@ EventSelection* NotationSelector::getSelection()
         
     }
 
-    return selection;
+    return (selection->getAddedEvents() > 0) ? selection : 0;
 }
 
 void NotationSelector::setViewCurrentSelection()

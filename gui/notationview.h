@@ -90,6 +90,7 @@ public:
     Rosegarden::timeT getEndTime()         const { return m_endTime; }
     Rosegarden::timeT getTotalDuration()   const;
     unsigned int      getNbEvents()        const { return m_ownEvents.size(); }
+    unsigned int      getAddedEvents()     const { return m_trackEvents.size(); }
 
     const Rosegarden::Track &getTrack() const { return m_originalTrack; }
     
