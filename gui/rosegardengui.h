@@ -204,6 +204,8 @@ public:
 
 protected:
 
+    virtual void paintEvent(QPaintEvent*);
+
     /**
      * Overridden virtuals for Qt drag 'n drop (XDND)
      */

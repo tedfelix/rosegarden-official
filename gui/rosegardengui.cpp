@@ -187,9 +187,9 @@ void RosegardenGUIApp::setupActions()
                                         "show_transport");
 
     m_viewTrackLabels = new KToggleAction(i18n("Show Track &Labels"), 0, this,
-                                             SLOT(slotToggleTrackLabels()),
-                                             actionCollection(),
-                                             "show_tracklabels");
+                                          SLOT(slotToggleTrackLabels()),
+                                          actionCollection(),
+                                          "show_tracklabels");
 
     m_viewSegmentParameters = new KToggleAction(i18n("Show &Segment Parameters"), 0, this,
                                                 SLOT(slotToggleSegmentParameters()),
@@ -284,21 +284,21 @@ void RosegardenGUIApp::setupActions()
                 actionCollection(), "add_tracks");
 
     new KAction(i18n("Select Next Track"),
-                     Key_Down, 
-                     this, SLOT(slotTrackDown()),
-                     actionCollection(), "select_next_track");
+                Key_Down, 
+                this, SLOT(slotTrackDown()),
+                actionCollection(), "select_next_track");
 
     new KAction(i18n("Select Previous Track"),
-                     Key_Up, 
-                     this, SLOT(slotTrackUp()),
-                     actionCollection(), "select_previous_track");
+                Key_Up, 
+                this, SLOT(slotTrackUp()),
+                actionCollection(), "select_previous_track");
 
     /*
-    new KAction(i18n("Change &Time Resolution..."), 
-                0,
-                this, SLOT(slotChangeTimeResolution()),
-                actionCollection(), "change_time_res");
-                */
+      new KAction(i18n("Change &Time Resolution..."), 
+      0,
+      this, SLOT(slotChangeTimeResolution()),
+      actionCollection(), "change_time_res");
+    */
 
     new KAction(i18n("&Score Editor"),
                 0,
@@ -338,25 +338,25 @@ void RosegardenGUIApp::setupActions()
     m_ffwdTransport->setGroup("transportcontrols");
 
     m_rewindTransport = new KAction(i18n("Re&wind"), 0, Key_End, this,
-                                  SLOT(slotRewind()), actionCollection(),
-                                  "rewind");
+                                    SLOT(slotRewind()), actionCollection(),
+                                    "rewind");
     m_rewindTransport->setGroup("transportcontrols");
 
     m_recordTransport = new KAction(i18n("&Record"), 0, Key_End, this,
-                                  SLOT(slotRecord()), actionCollection(),
-                                  "record");
+                                    SLOT(slotRecord()), actionCollection(),
+                                    "record");
 
     m_recordTransport->setGroup("transportcontrols");
 
     m_rewindEndTransport = new KAction(i18n("Rewind to Beginning"), 0, 0, this,
-                                  SLOT(slotRewindToBeginning()), actionCollection(),
-                                  "rewindtobeginning");
+                                       SLOT(slotRewindToBeginning()), actionCollection(),
+                                       "rewindtobeginning");
 
     m_rewindEndTransport->setGroup("transportcontrols");
 
     m_ffwdEndTransport = new KAction(i18n("Fast Forward to End"), 0, 0, this,
-                                  SLOT(slotFastForwardToEnd()), actionCollection(),
-                                   "fastforwardtoend");
+                                     SLOT(slotFastForwardToEnd()), actionCollection(),
+                                     "fastforwardtoend");
 
     m_ffwdEndTransport->setGroup("transportcontrols");
 
@@ -370,86 +370,86 @@ void RosegardenGUIApp::setupActions()
     // accelerators in the dialog - nasty but works for the
     // moment.
     //
-/*
-    m_playTransport->plug(m_transport->PlayButton);
-    m_stopTransport->plug(m_transport->StopButton);
-    m_rewindTransport->plug(m_transport->RewindButton);
-    m_ffwdTransport->plug(m_transport->FfwdButton);
-*/
+    /*
+      m_playTransport->plug(m_transport->PlayButton);
+      m_stopTransport->plug(m_transport->StopButton);
+      m_rewindTransport->plug(m_transport->RewindButton);
+      m_ffwdTransport->plug(m_transport->FfwdButton);
+    */
 
     QAccel *a = new QAccel(m_transport);
 
     connect((QObject *) m_transport->PlayButton,
-             SIGNAL(released()),
-             SLOT(slotPlay()));
+            SIGNAL(released()),
+            SLOT(slotPlay()));
 
     a->connectItem(a->insertItem(Key_Enter),
                    this,
                    SLOT(slotPlay()));
 
     connect((QObject *) m_transport->StopButton,
-             SIGNAL(released()),
-             SLOT(slotStop()));
+            SIGNAL(released()),
+            SLOT(slotStop()));
              
     a->connectItem(a->insertItem(Key_Insert),
                    this,
                    SLOT(slotStop()));
 
     connect((QObject *) m_transport->FfwdButton,
-             SIGNAL(released()),
-             SLOT(slotFastforward()));
+            SIGNAL(released()),
+            SLOT(slotFastforward()));
             
     a->connectItem(a->insertItem(Key_PageDown),
                    this,
                    SLOT(slotFastforward()));
 
-    connect((QObject *) m_transport->RewindButton,
-             SIGNAL(released()),
-             SLOT(slotRewind()));
+    connect(m_transport->RewindButton,
+            SIGNAL(released()),
+            SLOT(slotRewind()));
 
     a->connectItem(a->insertItem(Key_End),
                    this,
                    SLOT(slotRewind()));
 
-    connect((QObject *) m_transport->RecordButton,
-             SIGNAL(released()),
-             SLOT(slotRecord()));
+    connect(m_transport->RecordButton,
+            SIGNAL(released()),
+            SLOT(slotRecord()));
 
     a->connectItem(a->insertItem(Key_Space),
                    this,
                    SLOT(slotRecord()));
 
-    connect((QObject *) m_transport->RewindEndButton,
-             SIGNAL(released()),
-             SLOT(slotRewindToBeginning()));
+    connect(m_transport->RewindEndButton,
+            SIGNAL(released()),
+            SLOT(slotRewindToBeginning()));
 
 
-    connect((QObject *) m_transport->FfwdEndButton,
-             SIGNAL(released()),
-             SLOT(slotFastForwardToEnd()));
+    connect(m_transport->FfwdEndButton,
+            SIGNAL(released()),
+            SLOT(slotFastForwardToEnd()));
 
-    connect((QObject *)m_transport->MetronomeButton,
+    connect(m_transport->MetronomeButton,
             SIGNAL(released()),
             SLOT(slotToggleMetronome()));
             
-    connect((QObject *)m_transport->SoloButton,
+    connect(m_transport->SoloButton,
             SIGNAL(released()),
             SLOT(slotToggleSolo()));
             
-    connect((QObject *) m_transport->TimeDisplayButton,
-             SIGNAL(released()),
-             SLOT(slotRefreshTimeDisplay()));
+    connect(m_transport->TimeDisplayButton,
+            SIGNAL(released()),
+            SLOT(slotRefreshTimeDisplay()));
 
-    connect((QObject *) m_transport->ToEndButton,
-             SIGNAL(released()),
-             SLOT(slotRefreshTimeDisplay()));
+    connect(m_transport->ToEndButton,
+            SIGNAL(released()),
+            SLOT(slotRefreshTimeDisplay()));
 
     createGUI("rosegardenui.rc");
 
     // Ensure that the checkbox is unchecked if the dialog
     // is closed
-    connect((QObject *)m_transport, SIGNAL(closed()),
-                                    SLOT(slotCloseTransport()));
+    connect(m_transport, SIGNAL(closed()),
+            SLOT(slotCloseTransport()));
 
     // Handle loop setting and unsetting from the transport loop button
     //
@@ -457,10 +457,10 @@ void RosegardenGUIApp::setupActions()
     connect(m_transport, SIGNAL(unsetLoop()), SLOT(slotUnsetLoop()));
 
     connect(m_transport, SIGNAL(editTempo(QWidget*)),
-                         SLOT(slotEditTempo(QWidget*)));
+            SLOT(slotEditTempo(QWidget*)));
 
     connect(m_transport, SIGNAL(editTimeSignature(QWidget*)),
-                         SLOT(slotEditTimeSignature(QWidget*)));
+            SLOT(slotEditTimeSignature(QWidget*)));
 }
 
 
@@ -477,8 +477,8 @@ void RosegardenGUIApp::initDocument()
     m_doc = new RosegardenGUIDoc(this, m_useSequencer);
     m_doc->newDocument();
     m_doc->getCommandHistory()->attachView(actionCollection());
-//    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
-//	    SLOT(slotCommandExecuted(KCommand *)));
+   connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+           SLOT(update()));
 }
 
 void RosegardenGUIApp::initView()
@@ -809,6 +809,12 @@ void RosegardenGUIApp::readProperties(KConfig* _cfg)
     QString caption=kapp->caption();
     setCaption(caption+": "+m_doc->getTitle());
 }		
+
+void RosegardenGUIApp::paintEvent(QPaintEvent* e)
+{
+    slotRefreshTimeDisplay();
+    KMainWindow::paintEvent(e);
+}
 
 void RosegardenGUIApp::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -2053,7 +2059,6 @@ void RosegardenGUIApp::slotEditTempo(QWidget *parent)
         new Rosegarden::RosegardenTempoDialog(m_doc, parent);
 
     tempoDlg->show();
-
 }
 
 void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent)
