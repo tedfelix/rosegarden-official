@@ -126,7 +126,7 @@ SoundFile::getBytes(unsigned int numberOfBytes)
             oldLength = rS.length();
 
             rS += m_readBuffer.substr(m_readChunkPtr,
-                                      numberOfBytes - rS.length());
+                                      numberOfBytes - oldLength);
 
             m_readChunkPtr += (numberOfBytes - oldLength);
         }

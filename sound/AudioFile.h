@@ -27,6 +27,8 @@
 #include <vector>
 #include <math.h>
 
+#include <qfileinfo.h>
+
 #include "SoundFile.h"
 #include "RealTime.h"
 
@@ -152,6 +154,11 @@ public:
     //
     virtual std::string getPeakFilename() = 0;
 
+    // Return the modification timestamp
+    //
+    QDateTime getModificationDateTime()
+        { return m_fileInfo->lastModified(); }
+
 protected:
 
     AudioFileType  m_type;   // AudioFile type
@@ -168,6 +175,8 @@ protected:
     // hasn't been set yet.
     //
     long long      m_dataChunkIndex;
+
+    QFileInfo     *m_fileInfo;
 
 };
 

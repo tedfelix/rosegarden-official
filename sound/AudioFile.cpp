@@ -38,6 +38,7 @@ AudioFile::AudioFile(unsigned int id,
     m_fileSize(0),
     m_dataChunkIndex(-1)
 {
+    m_fileInfo = new QFileInfo(QString(fileName.c_str()));
 }
 
 AudioFile::AudioFile(const std::string &fileName,
@@ -54,10 +55,12 @@ AudioFile::AudioFile(const std::string &fileName,
     m_fileSize(0),
     m_dataChunkIndex(-1)
 {
+    m_fileInfo = new QFileInfo(QString(fileName.c_str()));
 }
 
 AudioFile::~AudioFile()
 {
+    delete m_fileInfo;
 }
 
 }

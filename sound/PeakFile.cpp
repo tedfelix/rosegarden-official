@@ -32,17 +32,13 @@ PeakFile::PeakFile(AudioFile *audioFile):
     m_audioFile(audioFile),
     m_version(-1),                         // -1 defines new file - start at 0
     m_format(1),                           // default is 8-bit peak format
+    m_pointsPerValue(0),
     m_blockSize(256),                      // default block size is 256 samples
+    m_channels(0),
     m_numberOfPeaks(0),
     m_positionPeakOfPeaks(0),
     m_offsetToPeaks(0),
-    m_year(0),
-    m_month(0),
-    m_day(0),
-    m_hours(0),
-    m_minutes(0),
-    m_seconds(0),
-    m_milliseconds(0),
+    m_modificationTime(QDate(1970, 1, 1), QTime(0, 0, 0)),
     m_chunkStartPosition(0)
 {
 }
@@ -80,26 +76,81 @@ PeakFile::parseHeader()
 
     m_inFile->seekg(0, std::ios::beg);
 
-    std::string levelIdentifier = getBytes(4);
+    // get full header length
+    //
+    std::string header = getBytes(128);
 
 #if (__GNUC__ < 3)
-    if (levelIdentifier.compare(Rosegarden::AUDIO_BWF_PEAK_ID, 0, 4) != 0)
+    if (header.compare(Rosegarden::AUDIO_BWF_PEAK_ID, 0, 4) != 0)
 #else
-    if (levelIdentifier.compare(0, 4, Rosegarden::AUDIO_BWF_PEAK_ID) != 0)
+    if (header.compare(0, 4, Rosegarden::AUDIO_BWF_PEAK_ID) != 0)
 #endif
     {
         throw(std::string("PeakFile::parseHeader - can't find LEVL identifier"));
     }
 
+    int length = getIntegerFromLittleEndian(header.substr(4, 4));
+
     // Get the length of the header minus the first 8 bytes
     //
-    int length = getIntegerFromLittleEndian(getBytes(4));
-
     if (length == 0)
         throw(std::string("PeakFile::parseHeader - can't get header length"));
 
-    std::string headerStr = getBytes(length);
+    // Get the file information
+    //
+    m_version = getIntegerFromLittleEndian(header.substr(8, 4));
+    m_format = getIntegerFromLittleEndian(header.substr(12, 4));
+    m_pointsPerValue = getIntegerFromLittleEndian(header.substr(16, 4));
+    m_blockSize = getIntegerFromLittleEndian(header.substr(20, 4));
+    m_channels = getIntegerFromLittleEndian(header.substr(24, 4));
+    m_numberOfPeaks = getIntegerFromLittleEndian(header.substr(28, 4));
+    m_positionPeakOfPeaks = getIntegerFromLittleEndian(header.substr(32, 4));
 
+    // Read in date string and convert it up to QDateTime
+    //
+    QString dateString = QString(header.substr(40, 28).c_str());
+
+    m_modificationTime.setDate(QDate(dateString.section(":", 0, 0).toInt(),
+                                       dateString.section(":", 1, 1).toInt(),
+                                       dateString.section(":", 2, 2).toInt()));
+
+    m_modificationTime.setTime(QTime(dateString.section(":", 3, 3).toInt(),
+                                     dateString.section(":", 4, 4).toInt(),
+                                     dateString.section(":", 5, 5).toInt(),
+                                     dateString.section(":", 6, 6).toInt()));
+
+    printStats();
+
+}
+
+void
+PeakFile::printStats()
+{
+    std::cout << std::endl;
+    std::cout << "STATS for PeakFile \"" << m_fileName << "\"" << std::endl
+              << "-----" << std::endl << std::endl;
+
+    std::cout << "  VERSION = " << m_version << std::endl
+              << "  FORMAT  = " << m_format << std::endl
+              << "  BYTES/VALUE = " << m_pointsPerValue << std::endl
+              << "  BLOCKSIZE   = " << m_blockSize << std::endl
+              << "  CHANNELS    = " << m_channels << std::endl
+              << "  PEAK FRAMES = " << m_numberOfPeaks << std::endl
+              << "  PEAK OF PKS = " << m_positionPeakOfPeaks << std::endl
+              << std::endl;
+
+    std::cout << "DATE" << std::endl
+              << "----" << std::endl << std::endl
+              << "  YEAR    = " << m_modificationTime.date().year() << std::endl
+              << "  MONTH   = " << m_modificationTime.date().month()<< std::endl
+              << "  DAY     = " << m_modificationTime.date().day() << std::endl
+              << "  HOUR    = " << m_modificationTime.time().hour() << std::endl
+              << "  MINUTE  = " << m_modificationTime.time().minute()
+              << std::endl
+              << "  SECOND  = " << m_modificationTime.time().second()
+              << std::endl
+              << "  MSEC    = " << m_modificationTime.time().msec()
+              << std::endl << std::endl;
 }
 
 bool
@@ -165,19 +216,19 @@ PeakFile::close()
     //
     m_outFile->seekp(4, std::ios::cur);
 
-    // Get the date and format it
+    // Set modification time to now
     //
-    QDate *date = new QDate();
-    QTime *time = new QTime();
+    m_modificationTime = m_modificationTime.currentDateTime();
+
     QString fDate;
     fDate.sprintf("%04d:%02d:%02d:%02d:%02d:%02d:%03d",
-                    date->currentDate().year(),
-                    date->currentDate().month(),
-                    date->currentDate().day(),
-                    time->currentTime().hour(),
-                    time->currentTime().minute(),
-                    time->currentTime().second(),
-                    time->currentTime().msec());
+                    m_modificationTime.date().year(),
+                    m_modificationTime.date().month(),
+                    m_modificationTime.date().day(),
+                    m_modificationTime.time().hour(),
+                    m_modificationTime.time().minute(),
+                    m_modificationTime.time().second(),
+                    m_modificationTime.time().msec());
 
     std::string dateString(fDate.data());
 
@@ -186,9 +237,6 @@ PeakFile::close()
     dateString += "     ";
     putBytes(m_outFile, dateString);
 
-    delete date;
-    delete time;
-
     // Ok, now close and tidy up
     //
     m_outFile->close();
@@ -196,10 +244,17 @@ PeakFile::close()
     m_outFile = 0;
 }
 
+// If the audio file is more recently modified that the modification time
+// on this peak file then we're invalid.  The action to rectify this is
+// usually to regenerate the peak data.
+//
 bool
 PeakFile::isValid()
 {
-    return false;
+    if (m_audioFile->getModificationDateTime() > m_modificationTime)
+        return false;
+
+    return true;
 }
 
 bool
@@ -244,15 +299,22 @@ PeakFile::writeHeader(std::ofstream *file)
     // Points per value          - 1 = 1 peak and has vertical about x-axis
     //                             2 = 2 peaks so differs above and below x-axis
     //
-    header += getLittleEndianFromInteger(2, 4); // hardcode to 2 for the mo
+    // .. hardcode to 2 for the mo
+    m_pointsPerValue = 2;
+    header += getLittleEndianFromInteger(m_pointsPerValue, 4);
 
     // Block size - default and recommended is 256 
     //
     header += getLittleEndianFromInteger(m_blockSize, 4);
 
+    // Set channels up if they're currently empty
+    //
+    if (m_channels == 0 && m_audioFile)
+        m_channels = m_audioFile->getChannels();
+
     // Peak channels - same as AudioFile channels
     //
-    header += getLittleEndianFromInteger(m_audioFile->getChannels(), 4);
+    header += getLittleEndianFromInteger(m_channels, 4);
 
     // Number of peak frames - we write this at close() and so
     // for the moment put spacing 0's in.

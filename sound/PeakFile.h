@@ -18,6 +18,7 @@
   COPYING included with this distribution for more information.
 */
 
+#include <qdatetime.h>
 
 #ifndef _PEAKFILE_H_
 #define _PEAKFILE_H_
@@ -67,6 +68,10 @@ public:
     //
     bool isValid();
 
+    // Vital file stats
+    //
+    void printStats();
+
 protected:
     // Write the peak header and the peaks themselves
     //
@@ -83,20 +88,16 @@ protected:
     //
     int m_version;
     int m_format;  // bytes in peak value (1 or 2)
+    int m_pointsPerValue;
     int m_blockSize;
+    int m_channels;
     int m_numberOfPeaks;
     int m_positionPeakOfPeaks;
     int m_offsetToPeaks;
 
     // Peak timestamp
     //
-    short m_year;
-    short m_month;
-    short m_day;
-    short m_hours;
-    short m_minutes;
-    short m_seconds;
-    short m_milliseconds;
+    QDateTime m_modificationTime;
 
     std::streampos m_chunkStartPosition;
     

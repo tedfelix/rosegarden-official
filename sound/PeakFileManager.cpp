@@ -59,13 +59,20 @@ PeakFileManager::~PeakFileManager()
 bool
 PeakFileManager::hasValidPeaks(AudioFile *audioFile)
 {
+    bool rV = true;
+
     if (audioFile->getType() == WAV)
     {
-        // check external peak file
+        // Check external peak file
         PeakFile *peakFile = new PeakFile(audioFile);
 
+        // If it doesn't open and parse correctly
         if (peakFile->open() == false)
-            return false;
+            rV = false;
+
+        // or if the data is old or invalid
+        if (peakFile->isValid() == false)
+            rV = false;
 
         delete peakFile;
     }
@@ -77,10 +84,10 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
     {
         std::cout << "PeakFileManager::hasValidPeaks - unsupported file type"
                   << std::endl;
-        return false;
+        rV = false;
     }
 
-    return true;
+    return rV;
 
 }
 
