@@ -62,8 +62,6 @@ NotationTool::NotationTool(const QString& menuName, NotationView* view)
 
 NotationTool::~NotationTool()
 {
-    delete m_menu;
-    m_parentView->factory()->removeClient(this);
 }
 
 void NotationTool::finalize()
@@ -139,7 +137,8 @@ NoteInserter::NoteInserter(Rosegarden::Note::Type type,
                            NotationView* view)
     : NotationTool("NoteInserter", view),
       m_noteType(type),
-      m_noteDots(dots)
+      m_noteDots(dots),
+      m_accidental(Rosegarden::NoAccidental)
 {
     m_parentView->setCanvasCursor(Qt::crossCursor);
 
