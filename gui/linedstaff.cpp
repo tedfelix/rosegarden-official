@@ -633,7 +633,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     if (barNo > 0) {
 
 	QFont font;
-	font.setPixelSize(m_resolution * 2);
+	font.setPixelSize(m_resolution * 3 / 2);
 	QFontMetrics metrics(font);
 	QString text = QString("%1").arg(barNo);
 

@@ -85,9 +85,6 @@ NotationChord::getHeight(const Iterator &i) const
 	return h;
     }
 
-//!!!    int pitch = getAsEvent(i)->get<Int>(PITCH);
-//!!!    Rosegarden::NotationDisplayPitch p(pitch, m_clef, m_key);
-//    h = p.getHeightOnStaff();
     try {
 	Rosegarden::Pitch pitch(*getAsEvent(i));
 	h = pitch.getHeightOnStaff(m_clef, m_key);
@@ -119,18 +116,27 @@ NotationChord::hasStem() const
 bool
 NotationChord::hasStemUp() const
 {
-    Iterator initialNote(getInitialNote());
+    // believe anything found in any of the notes, if in a persistent
+    // property or a property apparently set by the beaming algorithm
 
-    // believe whatever's recorded in the first note, if it's
-    // persistent or if it was apparently set by the beaming algorithm
+    Iterator i(getInitialNote());
 
-    Event *initialEvent = getAsEvent(initialNote);
+    for (;;) {
+	Event *e = getAsEvent(i);
 
-    if (initialEvent->has(STEM_UP) &&
-	(initialEvent->isPersistent<Bool>(STEM_UP) ||
-	 (initialEvent->has(NotationProperties::BEAMED) &&
-	  (initialEvent->get<Bool>(NotationProperties::BEAMED))))) {
-	return initialEvent->get<Bool>(STEM_UP);
+	if (e->has(STEM_UP) &&
+	    e->isPersistent<Bool>(STEM_UP)) {
+	    return e->get<Bool>(STEM_UP);
+	}
+
+	if (e->has(NotationProperties::BEAM_ABOVE) &&
+	    e->has(NotationProperties::BEAMED) &&
+	    e->get<Bool>(NotationProperties::BEAMED)) {
+	    return e->get<Bool>(NotationProperties::BEAM_ABOVE);
+	}
+
+	if (i == getFinalNote()) break;
+	++i;
     }
 
     int high = getHeight(getHighestNote()), low = getHeight(getLowestNote());
@@ -381,6 +387,12 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 	beam.aboveNotes = (*initialNote)->event()->get<Bool>(STEM_UP);
     }
 
+    if ((*initialNote)->event()->has(NotationProperties::BEAM_ABOVE) &&
+	(*initialNote)->event()->isPersistent<Bool>(NotationProperties::BEAM_ABOVE)) {
+	beam.aboveNotes = (*initialNote)->event()->get<Bool>
+	    (NotationProperties::BEAM_ABOVE);
+    }
+
     timeT crotchet = Note(Note::Crotchet).getDuration();
     beam.necessary =
          (*initialNote)->getViewDuration() < crotchet
@@ -595,9 +607,6 @@ NotationGroup::applyBeam(NotationStaff &staff)
 		NotationElement *el = static_cast<NotationElement*>(*chord[j]);
 
 		el->event()->setMaybe<Bool>
-		    (STEM_UP, beam.aboveNotes);
-
-		el->event()->setMaybe<Bool>
 		    (m_properties.CHORD_PRIMARY_NOTE, false);
 
 		el->event()->setMaybe<Bool>
@@ -605,6 +614,20 @@ NotationGroup::applyBeam(NotationStaff &staff)
 
 		el->event()->setMaybe<Bool>
 		    (NotationProperties::BEAMED, true);
+
+		el->event()->setMaybe<Bool>
+		    (NotationProperties::BEAM_ABOVE, beam.aboveNotes);
+
+		el->event()->setMaybe<Bool>
+		    (STEM_UP, beam.aboveNotes);
+
+		el->event()->setMaybe<Bool>
+		    (m_properties.NOTE_HEAD_SHIFTED,
+		     chord.isNoteHeadShifted(chord[j]));
+
+                el->event()->setMaybe<Bool>
+		    (m_properties.NEEDS_EXTRA_SHIFT_SPACE,
+		     chord.hasNoteHeadShifted() && !beam.aboveNotes);
 	    }
 
 	    if (beam.aboveNotes) j = 0;
@@ -699,7 +722,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
         } else if (el->isNote()) {
 	    
 	    if (i == initialNote || i == finalNote) {
-		(*i)->event()->setMaybe<Bool>(STEM_UP, beam.aboveNotes);
+		(*i)->event()->setMaybe<Bool>(STEM_UP,  beam.aboveNotes);
 	    } else {
 		(*i)->event()->setMaybe<Bool>(STEM_UP, !beam.aboveNotes);
 	    }

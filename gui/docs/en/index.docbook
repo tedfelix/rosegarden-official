@@ -4474,9 +4474,10 @@
 	heads and so on.  These styles are all defined in XML style
 	definition files installed along with the application, and
 	it's possible to create a new one by writing a simple XML
-	file.  You can refer to the files installed in the styles
-	subdirectory of the Rosegarden installation directory for
-	examples.
+	file.  Rosegarden simply looks at the set of installed files
+	to determine which styles to offer the user.  You can refer to
+	the default set of files in the styles subdirectory of the
+	Rosegarden installation directory for examples.
       </para>
 
       <para>
@@ -4500,11 +4501,140 @@
 	  <title>rosegarden-note-style</title>
 
 	  <para>This element must exist in every style file, and
-	  should contain all the other elements.  It has no
-	  attributes.  (The name of the style is currently drawn from
-	  the name of the file it is defined in.  At some point in the
-	  future we may add internationalizable style name attributes
-	  to the rosegarden-note-style element.)</para>
+	  should contain all the other elements.  It has one optional
+	  attribute, "base-style", which may be used to name a style
+	  from which this style takes the default values for any
+	  parameters not specified elsewhere in the present file.
+	  It's often good practice to define a style in terms of the
+	  minimal difference from a given base style: see the supplied
+	  Cross.xml for a particularly simple example.
+	  </para>
+
+	  <para>Note that the "rosegarden-note-style" element does not
+	  give the name of the style being defined, which is instead
+	  currently drawn from the name of the file.  At some point in
+	  the future we may add internationalizable style name
+	  attributes to this element.</para>
+	</sect3>
+
+	<sect3 id="developers-note-styles-global-note">
+	  <title>global, note</title>
+	  
+	  <para>Within the "rosegarden-note-style" element, there may
+	  be one "global" element and any number of "note" elements.
+	  We describe these together, as they have almost identical
+	  sets of attributes.  The "global" element simply provides
+	  default values for those parameters not specified for a
+	  particular note type in any following "note" element.
+	  </para>
+
+	  <para>The attributes for these elements are as follows.  All
+	  of these are optional except as described:</para>
+
+	  <variablelist>
+
+	    <varlistentry>
+	      <term>type</term>
+	      <listitem>
+		<para>Only relevant to the "note" element, and
+		mandatory for that element.  This attribute specifies
+		which sort of note is being styled.  Legal values are
+		textual American or British note names (from "64th",
+		"sixth-fourth note", "hemidemisemiquaver" etc to
+		"double whole note").
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>shape</term>
+	      <listitem>
+		<para>Defines a note head shape for this style.  Any
+		string is a legal value, but the only values
+		implemented so far are "angled oval", "level oval",
+		"breve", "cross", "triangle up", "triangle down",
+		"diamond" and "rectangle".  The value "number" is also
+		recognised but not yet implemented.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>charname</term>
+	      <listitem>
+		<para>Defines a note font character name to be used as
+		the note head for this style.  An element may supply a
+		"shape" or "charname" attribute, but not both.  The
+		name should be one of those defined in the current
+		notation font's <link
+		linkend="developers-note-fonts-mapping-format-font-symbol-map">symbol
+		map</link> (in a "name" attribute).
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>filled</term>
+	      <listitem>
+		<para>Specifies whether this note should have a filled
+		head (where applicable, i.e. where the shape attribute
+		supplies a shape that is available both filled and
+		unfilled).  Must be "true" or "false".
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>stem</term>
+	      <listitem>
+		<para>Specifies whether this note should have a stem.
+		Must be "true" or "false".
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>flags</term>
+	      <listitem>
+		<para>Defines how many flags or beams this note should
+		have.  The valid range is 0 to 4.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>slashes</term>
+	      <listitem>
+		<para>Defines how many slashes this note should have
+		across its stem.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>hfixpoint</term>
+	      <listitem>
+		<para>Specifies in which x position the stem fixes to
+		the note head.  Acceptable values are "normal" (the
+		right side when the stem points up, the left when it
+		points down), "central", and "reversed" (left side
+		when the stem points up, right when it points down).
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>vfixpoint</term>
+	      <listitem>
+		<para>Specifies in which y position the stem fixes to
+		the note head.  Acceptable values are "near" (the stem
+		fixes to the top when pointing up, the bottom when
+		pointing down), "middle", or "far".
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	  </variablelist>
 	</sect3>
       </sect2>
     </sect1>

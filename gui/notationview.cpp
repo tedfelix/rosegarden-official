@@ -692,23 +692,24 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
     
     setBackgroundMode(PaletteBase);
+    m_config->setGroup(NotationView::ConfigGroup);
 
-    QPaintDeviceMetrics pdm(printer);
+//!!!    QPaintDeviceMetrics pdm(printer);
 
     QCanvas *tCanvas = new QCanvas(this);
-
+    tCanvas->resize(width() * 2, height() * 2);//!!! 
+/*!!!
     RG_DEBUG << "Print area size : "
              << pdm.width() << ", " << pdm.height()
              << " - printer resolution : " << printer->resolution() << "\n";
 
-    m_config->setGroup(NotationView::ConfigGroup);
     unsigned int printSizePt = m_config->readUnsignedNumEntry("printingnotesize", 6);
     double printSizePx = printSizePt * (double)printer->resolution() / 72.0;
     double scaleFactor = printSizePx / (double)m_fontSize; 
 
     tCanvas->resize(int(pdm.width()  / scaleFactor),
 		    int(pdm.height() / scaleFactor));
-    
+*/
     setCanvasView(new NotationCanvasView(*this, tCanvas, getCentralFrame()));
 
     for (unsigned int i = 0; i < segments.size(); ++i) {
@@ -2531,8 +2532,8 @@ void NotationView::print(KPrinter* printer)
 
     // We need to be in multi-page mode at this point
 
-    double printSizePx = m_printSize * (double)printer->resolution() / 72.0;
-    double scaleFactor = printSizePx / (double)m_fontSize;
+//!!!    double printSizePx = m_printSize * (double)printer->resolution() / 72.0;
+//!!!    double scaleFactor = printSizePx / (double)m_fontSize;
 
     int pageWidth = getPageWidth();
     int pageHeight = getPageHeight();
@@ -2545,9 +2546,12 @@ void NotationView::print(KPrinter* printer)
 	if (pageCount > maxPageCount) maxPageCount = pageCount;
     }
     
+    QPaintDeviceMetrics pdm(printer); //!!!
     QPainter printpainter(printer);
-    printpainter.scale(scaleFactor, scaleFactor);
-    printpainter.translate(0, -topMargin);
+//!!!    printpainter.scale(scaleFactor, scaleFactor);
+    printpainter.scale((double)pdm.width()  / (double)pageWidth,
+		       (double)pdm.height() / (double)pageHeight);
+//!!!    printpainter.translate(0, -topMargin);
 
     for (int page = 0; page < maxPageCount; ++page) {
 

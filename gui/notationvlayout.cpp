@@ -157,14 +157,13 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 		el = static_cast<NotationElement*>(*chord[j]);
 		el->setLayoutY(staff.getLayoutYForHeight(h[j]));
 
-		// we can't only set this if it hasn't already been
-		// set, because we may have inserted more notes on the
-		// chord since it was last set.  we have to make sure
-		// the bit that sets this for beamed groups is called
-		// after this bit (i.e. that notationview calls
-		// notationhlayout after notationvlayout)... or else
-		// introduce two separate properties (beamed stem up
-		// and non-beamed stem up)
+		// These calculations and assignments are pretty much final
+		// if the chord is not in a beamed group, but if it is then
+		// they will be reworked by NotationGroup::applyBeam, which
+		// is called from NotationHLayout::layout, which is called
+		// after this.  Any inaccuracies here for beamed groups
+		// should be stamped out there.
+
                 el->event()->setMaybe<Bool>(STEM_UP, stemUp);
 
 		bool primary =
