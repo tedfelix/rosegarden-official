@@ -272,6 +272,7 @@ RIFFAudioFile::readFormatChunk()
     if (hS.compare(0, 4, Rosegarden::AUDIO_RIFF_ID) != 0)
 #endif
     {
+        std::cerr << "RIFFAudioFile::parseHeader - can't find RIFF identifier\n";
         throw((std::string("RIFFAudioFile::parseHeader - can't find RIFF identifier")));
     }
 
@@ -280,9 +281,10 @@ RIFFAudioFile::readFormatChunk()
 #if (__GNUC__ < 3)
     if (hS.compare(Rosegarden::AUDIO_WAVE_ID, 8, 4) != 0)
 #else
-    if (hS.compare(4, 4, Rosegarden::AUDIO_WAVE_ID) != 0)
+    if (hS.compare(8, 4, Rosegarden::AUDIO_WAVE_ID) != 0)
 #endif
     {
+        std::cerr << "Can't find WAV identifier\n";
         throw((std::string("Can't find WAV identifier")));
     }
 
@@ -294,9 +296,10 @@ RIFFAudioFile::readFormatChunk()
 #if (__GNUC__ < 3)
     if (hS.compare(Rosegarden::AUDIO_FORMAT_ID, 12, 4) != 0)
 #else
-    if (hS.compare(4, 4, Rosegarden::AUDIO_FORMAT_ID) != 0)
+    if (hS.compare(12, 4, Rosegarden::AUDIO_FORMAT_ID) != 0)
 #endif
     {
+        std::cerr << "Can't find FORMAT identifier\n";
         throw((std::string("Can't find FORMAT identifier")));
     }
 
