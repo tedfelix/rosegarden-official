@@ -52,7 +52,7 @@ StaffRuler::StaffRuler(int xPos, int yPos,
       m_mainLine(new QCanvasLineGroupable(c, this)),
       m_greyBackground(new QCanvasRectangleGroupable(c, this)),
       m_whiteBackground(new QCanvasRectangleGroupable(c, this)),
-      m_cursor(new PositionCursor(m_mainLinePos + 20, canvas(), canvas()))
+      m_cursor(new PositionCursor(m_mainLinePos + m_yPos + 20, canvas(), canvas()))
 {
     m_greyBackground->setX(0);
     m_greyBackground->setY(m_yPos);
@@ -75,7 +75,8 @@ StaffRuler::StaffRuler(int xPos, int yPos,
 
     m_mainLine->setPoints(0, m_mainLinePos,
                           canvas()->width(), m_mainLinePos);
-    
+    //m_mainLine->setPen(red); // DEBUG
+
     m_mainLine->show();
     m_cursor->show();
 
@@ -127,10 +128,10 @@ void StaffRuler::makeStep(int stepValue,
                           double stepPos, double nextStepPos,
                           unsigned short nbSubsteps)
 {
-    kdDebug(KDEBUG_AREA) << "StaffRuler::makeStep: stepValue = " << stepValue
-			 << ", stepPos = " << stepPos << ", nextStepPos = "
-			 << nextStepPos << ", nbSubsteps = " << nbSubsteps
-			 << endl;
+//     kdDebug(KDEBUG_AREA) << "StaffRuler::makeStep: stepValue = " << stepValue
+// 			 << ", stepPos = " << stepPos << ", nextStepPos = "
+// 			 << nextStepPos << ", nbSubsteps = " << nbSubsteps
+// 			 << endl;
 
     if (stepPos == nextStepPos) return; // yes, this can happen
 
@@ -138,8 +139,9 @@ void StaffRuler::makeStep(int stepValue,
     //
     QCanvasLineGroupable* stepLine = new QCanvasLineGroupable(canvas(), this);
     
-    stepLine->setPoints(int(stepPos) + m_xPos, m_mainLinePos,
-                        int(stepPos) + m_xPos, m_mainLinePos - m_stepLineHeight);
+    stepLine->setPoints(int(stepPos) + m_xPos, 0,
+                        int(stepPos) + m_xPos, -m_stepLineHeight);
+    stepLine->setY(m_mainLinePos + m_yPos);
     stepLine->show();
 
     // Make label
@@ -149,7 +151,7 @@ void StaffRuler::makeStep(int stepValue,
 
     QCanvasText* label = new QCanvasTextGroupable(labelText, canvas(), this);
     label->setX(stepPos + m_xPos);
-    label->setY(m_mainLinePos + 4);
+    label->setY(m_mainLinePos + 4 + m_yPos);
     label->setTextFlags(Qt::AlignHCenter);
 
     // Prepare StepElement
@@ -166,8 +168,9 @@ void StaffRuler::makeStep(int stepValue,
 
         QCanvasLineGroupable* subStep = new QCanvasLineGroupable(canvas(), this);
     
-        subStep->setPoints(int(subStepPos) + m_xPos, m_mainLinePos,
-                           int(subStepPos) + m_xPos, m_mainLinePos - m_subStepLineHeight);
+        subStep->setPoints(int(subStepPos) + m_xPos, 0,
+                           int(subStepPos) + m_xPos, -m_subStepLineHeight);
+        subStep->setY(m_mainLinePos + m_yPos);
         subStep->show();
 
         stepEl.addSubStep(subStep);
@@ -190,6 +193,9 @@ void StaffRuler::setYPos(int ypos)
     double deltaY = ypos - m_yPos;
 
     moveBy(0, deltaY);
+    m_yPos = ypos;
+
+    m_cursor->setGripHeight(m_mainLinePos + m_yPos + 20);
 }
 
 void StaffRuler::handleMousePress(QMouseEvent* e)
@@ -260,3 +266,9 @@ void PositionCursor::setMinPosition(int p)
     if (getPosition() < getMinPosition())
         setPosition(getMinPosition());
 }
+
+void PositionCursor::setGripHeight(int p)
+{
+    m_grip->setY(p);
+}
+

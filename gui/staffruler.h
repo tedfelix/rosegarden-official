@@ -55,6 +55,8 @@ public:
     int getMinPosition() const { return m_minPos; }
     void setMinPosition(int p);
 
+    void setGripHeight(int p);
+
     // ActiveItem interface
     virtual void handleMousePress(QMouseEvent*);
     virtual void handleMouseMove(QMouseEvent*);
