@@ -83,14 +83,14 @@ EventFilterDialog::initDialog()
     privateLayoutWidget->setGeometry(QRect(430, 285, 190, 90));
     QGridLayout* buttonLayout = new QGridLayout(privateLayoutWidget, 1, 1, 11, 6); 
 
-    m_buttonAll = new QPushButton(i18n("All"), privateLayoutWidget);
+    m_buttonAll = new QPushButton(i18n("Include all"), privateLayoutWidget);
     m_buttonAll->setAutoDefault(true);
-    QToolTip::add(m_buttonAll, i18n("include everything"));  
+    QToolTip::add(m_buttonAll, i18n("Include entire range of values"));  
     buttonLayout->addWidget( m_buttonAll, 0, 0 );
     
-    m_buttonNone = new QPushButton(i18n("None"), privateLayoutWidget);
+    m_buttonNone = new QPushButton(i18n("Exclude all"), privateLayoutWidget);
     m_buttonNone->setAutoDefault(true);
-    QToolTip::add(m_buttonNone, i18n("zero the controls"));  
+    QToolTip::add(m_buttonNone, i18n("Exclude entire range of values"));  
     buttonLayout->addWidget( m_buttonNone, 0, 1 );
     
     m_buttonOK = new QPushButton(i18n("OK"), privateLayoutWidget);
