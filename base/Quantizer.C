@@ -272,7 +272,7 @@ Quantizer::quantize(EventSelection *selection)
     RangeList ranges;
 
     Segment::iterator i = segment.findTime(selection->getStartTime());
-    Segment::iterator j;
+    Segment::iterator j = i;
     Segment::iterator k = segment.findTime(selection->getEndTime());
 
     while (j != k) {
@@ -293,7 +293,8 @@ Quantizer::quantize(EventSelection *selection)
     //
     m_manualClear = true;
 
-    for (RangeList::iterator r = ranges.begin(); r != ranges.end(); ++r)
+    RangeList::iterator r = ranges.end();
+    while(r-- != ranges.begin())
     {
         m_toInsert.clear();
         quantize(&segment, r->first, r->second);
