@@ -381,6 +381,7 @@ protected:
     std::vector<Rosegarden::timeT>                       m_snapValues;
 
     std::vector<std::pair<ControlRuler*, ControlBox*> >  m_controlRulers;
+
 };
 
 #endif

@@ -1292,15 +1292,19 @@ MatrixView::initZoomToolbar()
     }
 
     std::vector<double> zoomSizes; // in units-per-pixel
-    double defaultBarWidth44 = 100.0;
-    double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
+
+    //double defaultBarWidth44 = 100.0;
+    //double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
+
     static double factors[] = { 0.025, 0.05, 0.1, 0.2, 0.5,
                                 1.0, 1.5, 2.5, 5.0, 10.0, 20.0 };
     // Zoom labels
     //
     for (unsigned int i = 0; i < sizeof(factors)/sizeof(factors[0]); ++i)
+    {
 //         zoomSizes.push_back(duration44 / (defaultBarWidth44 * factors[i]));
         zoomSizes.push_back(factors[i]);
+    }
 
     m_hZoomSlider = new ZoomSlider<double>
         (zoomSizes, -1, QSlider::Horizontal, zoomToolbar);
@@ -1326,14 +1330,14 @@ MatrixView::slotChangeHorizontalZoom(int)
 //     m_zoomLabel->setText(i18n("%1%").arg(duration44/value));
     m_zoomLabel->setText(i18n("%1%").arg(value*100.0));
 
-    QWMatrix zoomTransfo;
-
     MATRIX_DEBUG << "MatrixView::slotChangeHorizontalZoom() : zoom factor = "
                  << value << endl;
 
-    zoomTransfo.scale(value, 1.0);
-
-    m_canvasView->setWorldMatrix(zoomTransfo);
+    // Set zoom matrix
+    //
+    QWMatrix zoomMatrix;
+    zoomMatrix.scale(value, 1.0);
+    m_canvasView->setWorldMatrix(zoomMatrix);
 
     BarButtons* barButtons = dynamic_cast<BarButtons*>(m_topBarButtons);
     if (barButtons) barButtons->setHScaleFactor(value);

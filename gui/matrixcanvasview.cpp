@@ -19,6 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <qwmatrix.h>
+
 #include "matrixcanvasview.h"
 #include "matrixstaff.h"
 #include "matrixelement.h"
@@ -52,15 +54,18 @@ MatrixCanvasView::~MatrixCanvasView()
 
 void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 {
-    if (m_snapGrid->getSnapTime(e->x()))
-        m_lastSnap = m_snapGrid->getSnapTime(e->x());
+    QPoint p = inverseWorldMatrix().map(e->pos());
+    QMouseEvent *nE = new QMouseEvent(e->type(), p, e->button(), e->state());
 
-    updateGridSnap(e);
+    if (m_snapGrid->getSnapTime(p.x()))
+        m_lastSnap = m_snapGrid->getSnapTime(p.x());
 
-    MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent: snap time is " << m_snapGrid->getSnapTime(e->x()) << endl;
+    updateGridSnap(nE);
 
-    timeT evTime = m_snapGrid->snapX(e->x(), SnapGrid::SnapLeft);
-    int evPitch = m_staff.getHeightAtCanvasY(e->y());
+    MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent: snap time is " << m_snapGrid->getSnapTime(p.x()) << endl;
+
+    timeT evTime = m_snapGrid->snapX(p.x(), SnapGrid::SnapLeft);
+    int evPitch = m_staff.getHeightAtCanvasY(p.y());
 
     timeT emTime = m_staff.getSegment().getEndMarkerTime();
     if (evTime > emTime) evTime = emTime;
@@ -68,7 +73,7 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 //     MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent() at pitch "
 //                          << evPitch << ", time " << evTime << endl;
 
-    QCanvasItemList itemList = canvas()->collisions(e->pos());
+    QCanvasItemList itemList = canvas()->collisions(p);
     QCanvasItemList::Iterator it;
     MatrixElement* mel = 0;
     QCanvasItem* activeItem = 0;
@@ -90,32 +95,35 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
     }
 
     if (activeItem) { // active item takes precedence over notation elements
-        emit activeItemPressed(e, activeItem);
+        emit activeItemPressed(nE, activeItem);
         m_mouseWasPressed = true;
         return;
     }
 
-    emit mousePressed(evTime, evPitch, e, mel);
+    emit mousePressed(evTime, evPitch, nE, mel);
     m_mouseWasPressed = true;
 
     // Ignore click if it was above the staff and not
     // on an active item
     //
-    if (!m_staff.containsCanvasY(e->y()) && !activeItem)
+    if (!m_staff.containsCanvasY(p.y()) && !activeItem)
         m_ignoreClick = true;
 }
 
 void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 {
-    if (m_snapGrid->getSnapTime(e->x()))
-        m_lastSnap = m_snapGrid->getSnapTime(e->x());
+    QPoint p = inverseWorldMatrix().map(e->pos());
+    QMouseEvent *nE = new QMouseEvent(e->type(), p, e->button(), e->state());
 
-    updateGridSnap(e);
+    if (m_snapGrid->getSnapTime(p.x()))
+        m_lastSnap = m_snapGrid->getSnapTime(p.x());
+
+    updateGridSnap(nE);
 
     if (m_ignoreClick) return;
 
-    timeT evTime = m_snapGrid->snapX(e->x());
-    int evPitch = m_staff.getHeightAtCanvasY(e->y());
+    timeT evTime = m_snapGrid->snapX(p.x());
+    int evPitch = m_staff.getHeightAtCanvasY(p.y());
 
     timeT emTime = m_staff.getSegment().getEndMarkerTime();
     if (evTime > emTime) evTime = emTime;
@@ -130,13 +138,15 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
         m_previousEvPitch = evPitch;
     }
 
-    if (m_mouseWasPressed) emit mouseMoved(evTime, evPitch, e);
+    if (m_mouseWasPressed) emit mouseMoved(evTime, evPitch, nE);
     
 }
 
 void MatrixCanvasView::contentsMouseDoubleClickEvent (QMouseEvent* e)
 {
-    if (!m_staff.containsCanvasY(e->y())) {
+    QPoint p = inverseWorldMatrix().map(e->pos());
+
+    if (!m_staff.containsCanvasY(p.y())) {
         m_ignoreClick = true;
         return;
     }
@@ -145,18 +155,21 @@ void MatrixCanvasView::contentsMouseDoubleClickEvent (QMouseEvent* e)
 
 void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
 {
+    QPoint p = inverseWorldMatrix().map(e->pos());
+    QMouseEvent *nE = new QMouseEvent(e->type(), p, e->button(), e->state());
+
     if (m_ignoreClick) {
         m_ignoreClick = false;
         return;
     }
 
-    timeT evTime = m_snapGrid->snapX(e->x());
-    int evPitch = m_staff.getHeightAtCanvasY(e->y());
+    timeT evTime = m_snapGrid->snapX(p.x());
+    int evPitch = m_staff.getHeightAtCanvasY(p.y());
 
     timeT emTime = m_staff.getSegment().getEndMarkerTime();
     if (evTime > emTime) evTime = emTime;
 
-    emit mouseReleased(evTime, evPitch, e);
+    emit mouseReleased(evTime, evPitch, nE);
     m_mouseWasPressed = false;
 
     // Restore grid snap

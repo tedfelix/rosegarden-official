@@ -131,6 +131,7 @@ protected:
 
     Qt::ButtonState       m_smoothModifier;
     Rosegarden::timeT     m_lastSnap;
+
 };
 
 
