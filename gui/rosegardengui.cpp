@@ -37,6 +37,8 @@
 #include <kconfig.h>
 #include <kprocess.h>
 #include <dcopclient.h>
+#include <qiconset.h>
+#include <kstddirs.h>
 
 #include <kaction.h>
 #include <kstdaction.h>
@@ -163,13 +165,13 @@ void RosegardenGUIApp::setupActions()
 
     KRadioAction *action = 0;
     
-    // Wild and ineffective cheat to get the "pointer" icon working
-    // 
-    KIconLoader iconLoad;
-    iconLoad.addAppDir(QString("kiconedit"));
+    // Create the select icon
+    //
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QIconSet icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/select.xpm"));
 
     // TODO : add some shortcuts here
-    action = new KRadioAction(i18n("&Select"), "pointer",
+    action = new KRadioAction(i18n("&Select"), icon,
                               0,
                               this, SLOT(pointerSelect()),
                               actionCollection(), "select");
