@@ -49,7 +49,9 @@
 
 23. Show/hide annotations
 
-24. Thoroughly scan all following task lists to find more stuff to do...
+24. See http://sourceforge.net/mailarchive/message.php?msg_id=1824903
+
+25. Thoroughly scan all following task lists to find more stuff to do...
 
 
 Post-0.1.5-and-a-bit task list
