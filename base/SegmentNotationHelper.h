@@ -228,6 +228,17 @@ public:
     Clef guessClef(iterator from, iterator to);
     
 
+    /**
+     * Remove all rests starting at \a time for \a duration,
+     * splitting the last rest if needed.
+     *
+     * If there's an event which is not a rest in this interval,
+     * return false.
+     *
+     * Used for Event pasting.
+     */ 
+    bool removeRests(timeT time, timeT duration);
+    
 private:
 
     /**

@@ -859,5 +859,75 @@ Clef TrackNotationHelper::guessClef(iterator from, iterator to)
     else                   return Clef(Clef::Treble);
 }
 
+bool TrackNotationHelper::removeRests(timeT time, timeT duration)
+{
+    Event dummy;
+    
+    dummy.setAbsoluteTime(time);
+
+    cerr << "TrackNotationHelper::removeRests(" << time
+         << ", " << duration << ")\n";
+
+    iterator from = track().lower_bound(&dummy);
+
+    if (from == track().end()) return false;
+    
+    iterator to = from;
+
+    cerr << "TrackNotationHelper::removeRests : start at "
+         << (*to)->getAbsoluteTime() << endl;
+
+    timeT eventTime = time;
+    timeT finalTime = time + duration;
+
+    // Iterate on events, checking if all are rests
+    //
+    while ((eventTime < finalTime) && (to != end())) {
+
+        cerr << "TrackNotationHelper::removeRests : eventTime : "
+             << eventTime << " finalTime : " << finalTime << endl;
+        
+        if (!(*to)->isa(Note::EventRestType)) {
+            // a non-rest was found
+            cerr << "TrackNotationHelper::removeRests : an event of type "
+                 << (*to)->getType() << " was found - abort\n";
+            return false;
+        }
+
+        timeT nextEventDuration = (*to)->getDuration();
+
+        cerr << "TrackNotationHelper::removeRests : nextEventDuration : "
+             << nextEventDuration << endl;
+
+        if ((eventTime + nextEventDuration) <= finalTime)
+            eventTime += nextEventDuration;
+        else
+            break;
+
+        ++to;
+    }
+
+    if (eventTime < finalTime) {
+        // shorten last event's duration 
+
+        iterator lastEvent = to;
+        ++lastEvent;
+
+        cerr << "TrackNotationHelper::removeRests : shorten last event duration from "
+             << (*lastEvent)->getDuration() << " to "
+             << (*lastEvent)->getDuration() - (finalTime - eventTime)
+             << endl;
+
+        (*lastEvent)->setAbsoluteTime(finalTime);
+        (*lastEvent)->setDuration((*lastEvent)->getDuration() - (finalTime - eventTime));
+    }
+
+    track().erase(from, to);
+
+    return true;
 }
+
+
+
+} // end of namespace
 
