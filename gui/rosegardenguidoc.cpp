@@ -798,6 +798,7 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                 case Rosegarden::MappedEvent::AudioLevel:
                 case Rosegarden::MappedEvent::AudioStopped:
                 case Rosegarden::MappedEvent::AudioGeneratePreview:
+                case Rosegarden::MappedEvent::SystemUpdateInstruments:
                    break;
 
                 default:

@@ -31,7 +31,9 @@ MappedDevice::MappedDevice():
     m_id(0),
     m_type(Rosegarden::Device::Midi),
     m_name("MappedDevice default name"),
-    m_duplex(false)
+    m_duplex(false),
+    m_client(-1),
+    m_port(-1)
 {
 }
 
@@ -42,7 +44,9 @@ MappedDevice::MappedDevice(Rosegarden::DeviceId id,
     m_id(id),
     m_type(type),
     m_name(name),
-    m_duplex(duplex)
+    m_duplex(duplex),
+    m_client(-1),
+    m_port(-1)
 {
 }
 

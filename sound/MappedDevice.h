@@ -71,6 +71,12 @@ public:
     Rosegarden::Device::DeviceType getType() const { return m_type; }
     void setType(Rosegarden::Device::DeviceType type) { m_type = type; }
 
+    int getClient() const { return m_client; }
+    void setClient(int client) { m_client = client; }
+
+    int getPort() const { return m_port; }
+    void setPort(int port) { m_port = port; }
+
 protected:
 
     Rosegarden::DeviceId            m_id;
@@ -78,6 +84,10 @@ protected:
     std::string                     m_name;
     bool                            m_duplex;
 
+    // Sequencer-local information - we don't need to transmit this anywhere.
+    //
+    int                             m_client;
+    int                             m_port;
 };
 
 typedef std::vector<Rosegarden::MappedInstrument*>::const_iterator

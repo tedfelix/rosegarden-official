@@ -1147,6 +1147,14 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                             Rosegarden::AudioFileId((*i)->getData1()));
                 }
 
+                if ((*i)->getType() ==
+                        Rosegarden::MappedEvent::SystemUpdateInstruments)
+                {
+                    // resync Instruments
+                    //
+                    //m_doc->alive();
+                    ;
+                }
 
                 continue;
 

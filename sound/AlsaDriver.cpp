@@ -270,7 +270,6 @@ AlsaDriver::generateInstruments()
     int  client;
     unsigned int cap;
 
-
     snd_seq_client_info_alloca(&cinfo);
     snd_seq_client_info_set_client(cinfo, -1);
 
@@ -294,10 +293,15 @@ AlsaDriver::generateInstruments()
     //
     while (snd_seq_query_next_client(m_midiHandle, cinfo) >= 0)
     {
+
         client = snd_seq_client_info_get_client(cinfo);
         snd_seq_port_info_alloca(&pinfo);
         snd_seq_port_info_set_client(pinfo, client);
         snd_seq_port_info_set_port(pinfo, -1);
+
+        // ignore ourselves
+        if (m_client == client) continue;
+
         while (snd_seq_query_next_port(m_midiHandle, pinfo) >= 0)
         {
             cap = (SND_SEQ_PORT_CAP_SUBS_WRITE|SND_SEQ_PORT_CAP_WRITE);
@@ -3053,9 +3057,107 @@ AlsaDriver::appendToAudioFile(const std::string &buffer)
 #endif
 
 
+// At some point make this check for just different numbers of clients
+//
 bool
 AlsaDriver::checkForNewClients()
 {
+    snd_seq_client_info_t *cinfo;
+    snd_seq_port_info_t *pinfo;
+    int  client;
+    unsigned int cap;
+    unsigned int clientCount = 0;
+
+    snd_seq_client_info_alloca(&cinfo);
+    snd_seq_client_info_set_client(cinfo, -1);
+
+    int existingClients = 0;
+    std::vector<MappedDevice*>::iterator it = m_devices.begin();
+    for (; it != m_devices.end(); it++)
+    {
+        if ((*it)->getType() == Rosegarden::Device::Midi)
+            existingClients++;
+    }
+
+
+    while (snd_seq_query_next_client(m_midiHandle, cinfo) >= 0)
+    {
+        client = snd_seq_client_info_get_client(cinfo);
+        snd_seq_port_info_alloca(&pinfo);
+        snd_seq_port_info_set_client(pinfo, client);
+        snd_seq_port_info_set_port(pinfo, -1);
+
+        // ignore ourselves
+        if (m_client == client) continue;
+
+        while (snd_seq_query_next_port(m_midiHandle, pinfo) >= 0)
+        {
+            cap = (SND_SEQ_PORT_CAP_SUBS_WRITE|SND_SEQ_PORT_CAP_WRITE);
+
+            if ((snd_seq_port_info_get_capability(pinfo) & cap) == cap)
+            {
+                if ((snd_seq_port_info_get_capability(pinfo) &
+                     SND_SEQ_PORT_TYPE_SYNTH) == SND_SEQ_PORT_TYPE_SYNTH)
+                {
+                    // we've got a synth
+                    ;
+                }
+
+                if (snd_seq_port_info_get_capability(pinfo) &
+                    SND_SEQ_PORT_CAP_DUPLEX)
+                {
+                    // we've got duplex
+                    ;
+                }
+
+                // Generate a unique name using the client id
+                //
+                char clientId[10];
+                sprintf(clientId,
+                        "%d ",
+                        snd_seq_port_info_get_client(pinfo));
+
+                std::string fullClientName = 
+                    std::string(snd_seq_client_info_get_name(cinfo));
+
+                /*
+                unsigned int pos = fullClientName.find_first_of(" ");
+
+                if (pos)
+                {
+                    fullClientName = fullClientName.substr(0, pos);
+                }
+                else
+                    fullClientName = fullClientName.substr(0, 10);
+                    */
+
+                std::string clientName =
+                    std::string(clientId) + fullClientName;
+            }
+        }
+
+        clientCount++;
+    }
+
+    // Have we got a different numbe of clients than we had before?
+    //
+    if (clientCount + 1 != existingClients)
+    {
+        /*
+        cout << "CLIENT COUNT    = " << clientCount << endl;
+        cout << "EXISTING CLIENT = " << existingClients << endl;
+        */
+
+        generateInstruments();
+
+        MappedEvent *mE =
+            new MappedEvent(0, MappedEvent::SystemUpdateInstruments,
+                            0, 0);
+        // send completion event
+        insertMappedEventForReturn(mE);
+        return true;
+    }
+
     return false;
 }
 

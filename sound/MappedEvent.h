@@ -63,24 +63,27 @@ class MappedEvent
 public:
     typedef enum
     {
-        MidiNote             = 0x0001,
-        MidiNoteOneShot      = 0x0002,  // doesn't need NOTE OFFs
-        MidiProgramChange    = 0x0004,
-        MidiKeyPressure      = 0x0008,
-        MidiChannelPressure  = 0x0010,
-        MidiPitchBend        = 0x0020,
-        MidiController       = 0x0040,
-        MidiSystemExclusive  = 0x0080,
+        MidiNote                = 0x0001,
+        MidiNoteOneShot         = 0x0002,  // doesn't need NOTE OFFs
+        MidiProgramChange       = 0x0004,
+        MidiKeyPressure         = 0x0008,
+        MidiChannelPressure     = 0x0010,
+        MidiPitchBend           = 0x0020,
+        MidiController          = 0x0040,
+        MidiSystemExclusive     = 0x0080,
         // sent from the gui to play an audio file
-        Audio                = 0x0100,
+        Audio                   = 0x0100,
         // sent from gui to stop playing an audio file
-        AudioCancel          = 0x0200,
+        AudioCancel             = 0x0200,
         // sent to the gui with audio level on Instrument
-        AudioLevel           = 0x0400,
+        AudioLevel              = 0x0400,
         // sent to the gui to inform an audio file stopped
-        AudioStopped         = 0x0800,
+        AudioStopped            = 0x0800,
         // the gui is clear to generate a preview for a new audio file
-        AudioGeneratePreview = 0x1000
+        AudioGeneratePreview    = 0x1000,
+
+        // update Instruments
+        SystemUpdateInstruments = 0x2000
 
     } MappedEventType;
 

@@ -307,9 +307,9 @@ int main(int argc, char *argv[])
                 {
                     // Tell the gui to synchronise Instruments
                     //
+                    SEQUENCER_DEBUG << "client list changed" << endl;
                 }
                 
-                //SEQUENCER_DEBUG << "checking for new clients" << endl;
                 newClientCheck = 0;
             }
         }

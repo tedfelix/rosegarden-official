@@ -273,11 +273,12 @@ SoundDriver::getMappedDevice(DeviceId id)
         }
     }
 
+    /*
     std::cout << "SoundDriver::getMappedDevice - "
               << "name = \"" << retDevice.getName() 
               << "\" type = " << retDevice.getType()
               << std::endl;
-         
+              */
 
     return retDevice;
 }
