@@ -414,6 +414,14 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
     SegmentSelector* selector = dynamic_cast<SegmentSelector*>
             (getToolBox()->getTool("segmentselector"));
 
+    // #1027303: Segment move issue
+    // Clear selection if we're clicking on an item that's not in it
+    // and we're not in add mode
+    if (selector && item &&
+	!item->isSelected() && !selector->isSegmentAdding()) {
+	selector->clearSelected();
+    }
+
     if (item) {
 
         m_currentItem = item;
