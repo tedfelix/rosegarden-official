@@ -1209,7 +1209,20 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
     // Set Studio Device name
     //
     if (instrument->getDevice()) {
-	m_deviceLabel->setText(strtoqstr(instrument->getDevice()->getName()));
+
+        int depth = instrument->getDevice()->getSubOrderDepth();
+
+        if (depth)
+        {
+            QString label = 
+                strtoqstr(instrument->getDevice()->getName()) +
+                i18n(" / sub-group ") +
+                QString("%1").arg(instrument->getSubOrdering() + 1);
+            m_deviceLabel->setText(label);
+        }
+        else
+	    m_deviceLabel->setText(strtoqstr(instrument->getDevice()->getName()));
+
     } else {
 	m_deviceLabel->setText("");
     }

@@ -19,10 +19,6 @@ o Audio
    - libsoundfile support (LSFSoundFile class?)
    - exceptions and return values
 
-o selection of ALSA recording device [HALF COMPLETE]
-
-o extra cascade level in Instrument selection menu
-
 o Instrument/Device naming
 
 o Toggle record mode for punch in/out [HALF COMPLETE]
@@ -46,6 +42,10 @@ o ALSA client detection bug on laptop - going from no clients
   is getting sent twice from the GUI..? [FIXED]
 
 o "Revert file" option [DONE]
+
+o selection of ALSA recording device [DONE]
+
+o extra cascade level in Instrument selection menu [DONE]
 
 
 
