@@ -109,7 +109,7 @@ template<class T>
 void
 ZoomSlider<T>::setToDefault()
 {
-    setValue(getIndex(sizes, m_defaultValue));
+    setValue(getIndex(m_sizes, m_defaultValue));
 }
 
 template <class T>
