@@ -525,14 +525,21 @@ AudioBussMixer::processBlocks()
 
     // any unprocessed instruments need to be skipped, or they'll block
 
-    InstrumentId instrumentBase;
-    int instruments;
-    m_driver->getAudioInstrumentNumbers(instrumentBase, instruments);
+    InstrumentId audioInstrumentBase;
+    int audioInstruments;
+    m_driver->getAudioInstrumentNumbers(audioInstrumentBase, audioInstruments);
 
-    if (int(processedInstruments.size()) != instruments) {
+    InstrumentId synthInstrumentBase;
+    int synthInstruments;
+    m_driver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
 
-	for (InstrumentId id = instrumentBase; 
-	     id < instrumentBase + instruments; ++id) {
+    if (int(processedInstruments.size()) != audioInstruments + synthInstruments) {
+
+	for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
+
+	    InstrumentId id;
+	    if (i < audioInstruments) id = audioInstrumentBase + i;
+	    else id = synthInstrumentBase + (i - audioInstruments);
 
 	    if (m_instrumentMixer->isInstrumentEmpty(id)) continue;
 
@@ -643,7 +650,7 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 
     RunnablePluginInstance *oldInstance = 0;
 
-    if (position == Instrument::SYNTH_PLUGIN_POSITION) {
+    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
 
 	oldInstance = m_synths[id];
 	m_synths[id] = instance;
@@ -675,7 +682,7 @@ AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
 {
     getLock();
 
-    if (position == Instrument::SYNTH_PLUGIN_POSITION) {
+    if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
 
 	if (m_synths[id]) {
 	    m_synths[id]->deactivate();
@@ -796,6 +803,7 @@ AudioInstrumentMixer::resetAllPlugins()
 
 	if (instance) {
 	    instance->deactivate();
+	    std::cerr << "AudioInstrumentMixer::resetAllPlugins: setting " << channels << " channels on synth for instrument " << id << std::endl;
 	    instance->setIdealChannelCount(channels);
 	    instance->activate();
 	}
@@ -818,6 +826,7 @@ AudioInstrumentMixer::resetAllPlugins()
 
 	    if (instance) {
 		instance->deactivate();
+		std::cerr << "AudioInstrumentMixer::resetAllPlugins: setting " << channels << " channels on plugin for instrument " << id << std::endl;
 		instance->setIdealChannelCount(channels);
 		instance->activate();
 	    }
@@ -830,9 +839,13 @@ AudioInstrumentMixer::resetAllPlugins()
 void
 AudioInstrumentMixer::generateBuffers()
 {
-    InstrumentId instrumentBase;
-    int instruments;
-    m_driver->getAudioInstrumentNumbers(instrumentBase, instruments);
+    InstrumentId audioInstrumentBase;
+    int audioInstruments;
+    m_driver->getAudioInstrumentNumbers(audioInstrumentBase, audioInstruments);
+
+    InstrumentId synthInstrumentBase;
+    int synthInstruments;
+    m_driver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
 
     unsigned int maxChannels = 0;
 
@@ -844,9 +857,11 @@ AudioInstrumentMixer::generateBuffers()
     std::cerr << "AudioInstrumentMixer::generateBuffers: Buffer length is " << bufferLength << "; buffer samples " << bufferSamples << " (sample rate " << m_sampleRate << ")" << std::endl;
 #endif
     
-    for (InstrumentId id = instrumentBase;
-	 id < instrumentBase + instruments;
-	 ++id) {
+    for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
+
+	InstrumentId id;
+	if (i < audioInstruments) id = audioInstrumentBase + i;
+	else id = synthInstrumentBase + (i - audioInstruments);
 
 	// Get a fader for this instrument - if we can't then this
 	// isn't a valid audio track.
@@ -935,12 +950,19 @@ AudioInstrumentMixer::emptyBuffers(RealTime currentTime)
 
     generateBuffers();
 
-    InstrumentId instrumentBase;
-    int instrumentCount;
-    m_driver->getAudioInstrumentNumbers(instrumentBase, instrumentCount);
-    
-    for (InstrumentId id = instrumentBase;
-	 id < instrumentBase + instrumentCount; ++id) {
+    InstrumentId audioInstrumentBase;
+    int audioInstruments;
+    m_driver->getAudioInstrumentNumbers(audioInstrumentBase, audioInstruments);
+
+    InstrumentId synthInstrumentBase;
+    int synthInstruments;
+    m_driver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
+
+    for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
+
+	InstrumentId id;
+	if (i < audioInstruments) id = audioInstrumentBase + i;
+	else id = synthInstrumentBase + (i - audioInstruments);
 
 	m_bufferMap[id].dormant = true;
 	m_bufferMap[id].zeroFrames = 0;
@@ -954,21 +976,25 @@ AudioInstrumentMixer::emptyBuffers(RealTime currentTime)
     releaseLock();
 }
 
+/* Branch-free optimizer-resistant denormal killer courtesy of Simon
+   Jenkins on LAD: */
+
+static inline float flushToZero(volatile float f)
+{
+   f += 9.8607615E-32f;
+   return f - 9.8607615E-32f;
+}
+
 static inline void denormalKill(float *buffer, int size)
 {
     for (int i = 0; i < size; ++i) {
-	buffer[i] += 1e-18f;
-	buffer[i] -= 1e-18f;
+	buffer[i] = flushToZero(buffer[i]);
     }
 }
 
 void
 AudioInstrumentMixer::processBlocks(bool forceFill, bool &readSomething)
 {
-    InstrumentId instrumentBase;
-    int instrumentCount;
-    m_driver->getAudioInstrumentNumbers(instrumentBase, instrumentCount);
-
 #ifdef DEBUG_MIXER
     if (m_driver->isPlaying())
 	std::cerr << "AudioInstrumentMixer::processBlocks(" << forceFill << ")" << std::endl;
@@ -976,19 +1002,22 @@ AudioInstrumentMixer::processBlocks(bool forceFill, bool &readSomething)
 
     const AudioPlayQueue *queue = m_driver->getAudioQueue();
 
-    for (InstrumentId id = instrumentBase;
-	 id < instrumentBase + instrumentCount; ++id) {
-	
-	m_bufferMap[id].empty =
-	    (m_plugins[id].empty() && !queue->haveFilesForInstrument(id));
+    for (BufferMap::iterator i = m_bufferMap.begin();
+	 i != m_bufferMap.end(); ++i) {
+
+	InstrumentId id = i->first;
+	BufferRec &rec = i->second;
+
+	rec.empty = (m_plugins[id].empty() && m_synths[id] == 0 &&
+		     !queue->haveFilesForInstrument(id));
 
 	MappedAudioFader *fader =
 	    m_driver->getMappedStudio()->getAudioFader(id);
 
 	if (!fader) {
-	    m_bufferMap[id].gainLeft  = 0.0;
-	    m_bufferMap[id].gainRight = 0.0;
-	    m_bufferMap[id].volume    = 0.0;
+	    rec.gainLeft  = 0.0;
+	    rec.gainRight = 0.0;
+	    rec.volume    = 0.0;
 	} else {
 	    	    
 	    float faderLevel = 0.0;
@@ -999,13 +1028,13 @@ AudioInstrumentMixer::processBlocks(bool forceFill, bool &readSomething)
 	    float pan = 0.0;
 	    (void)fader->getProperty(MappedAudioFader::Pan, pan);
 
-	    m_bufferMap[id].gainLeft = 
+	    rec.gainLeft = 
 		volume * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
 
-	    m_bufferMap[id].gainRight =
+	    rec.gainRight =
 		volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
 	    
-	    m_bufferMap[id].volume = volume;
+	    rec.volume = volume;
 	}
 
 	// For a while we were setting empty to true if the volume on
@@ -1024,15 +1053,18 @@ AudioInstrumentMixer::processBlocks(bool forceFill, bool &readSomething)
 
 	more = false;
 
-	for (InstrumentId id = instrumentBase;
-	     id < instrumentBase + instrumentCount; ++id) {
+	for (BufferMap::iterator i = m_bufferMap.begin();
+	     i != m_bufferMap.end(); ++i) {
 
-	    if (m_bufferMap[id].empty) {
+	    InstrumentId id = i->first;
+	    BufferRec &rec = i->second;
+
+	    if (rec.empty) {
 //!!!		processEmptyBlocks(id);
 		continue;
 	    }
 
-	    queue->getPlayingFilesForInstrument(m_bufferMap[id].filledTo,
+	    queue->getPlayingFilesForInstrument(rec.filledTo,
 						blockDuration,
 						id, playing);
 	    
@@ -1207,6 +1239,24 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 	memset(m_processBuffers[ch], 0, sizeof(sample_t) * m_blockSize);
     }
 	
+    RunnablePluginInstance *synth = m_synths[id];
+
+    if (synth && !synth->isBypassed()) {
+
+	synth->run(bufferTime);
+
+	unsigned int ch = 0;
+
+	while (ch < synth->getAudioOutputCount() && ch < channels) {
+	    denormalKill(synth->getAudioOutputBuffers()[ch],
+			 m_blockSize);
+	    memcpy(m_processBuffers[ch],
+		   synth->getAudioOutputBuffers()[ch],
+		   m_blockSize * sizeof(sample_t));
+	    ++ch;
+	}
+    }
+
     if (haveBlock) {
 	    
 	// Mix in a block from each playing file on this instrument.

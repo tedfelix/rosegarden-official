@@ -256,6 +256,7 @@ public:
     virtual void setCurrentTimer(QString) { }
 
     virtual void getAudioInstrumentNumbers(InstrumentId &, int &) = 0;
+    virtual void getSoftSynthInstrumentNumbers(InstrumentId &, int &) = 0;
 
     // Handle audio file references
     //

@@ -51,6 +51,11 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
     m_sampleRate(sampleRate),
     m_bypassed(false)
 {
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::DSSIPluginInstance(" << identifier << ")"
+	      << std::endl;
+#endif
+
     init();
 
     m_inputBuffers  = new sample_t*[m_audioPortsIn.size()];
@@ -91,6 +96,11 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
     m_sampleRate(sampleRate),
     m_bypassed(false)
 {
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::DSSIPluginInstance[buffers supplied](" << identifier << ")"
+	      << std::endl;
+#endif
+
     init();
 
     instantiate(sampleRate);
@@ -101,6 +111,10 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
 void
 DSSIPluginInstance::init()
 {
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::init" << std::endl;
+#endif
+
     // Discover ports numbers and identities
     //
     const LADSPA_Descriptor *descriptor = m_descriptor->LADSPA_Plugin;
@@ -140,6 +154,11 @@ DSSIPluginInstance::init()
 void
 DSSIPluginInstance::setIdealChannelCount(int channels)
 {
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::setIdealChannelCount: channel count "
+	      << channels << " (was " << m_idealChannelCount << ")" << std::endl;
+#endif
+
     if (channels == m_idealChannelCount) return;
     m_idealChannelCount = channels;
 
@@ -149,6 +168,8 @@ DSSIPluginInstance::setIdealChannelCount(int channels)
 	    delete[] m_outputBuffers[i];
 	}
 
+	delete[] m_outputBuffers;
+
 	m_outputBufferCount = channels;
 
 	m_outputBuffers = new sample_t*[m_outputBufferCount];
@@ -156,6 +177,8 @@ DSSIPluginInstance::setIdealChannelCount(int channels)
 	for (size_t i = 0; i < m_outputBufferCount; ++i) {
 	    m_outputBuffers[i] = new sample_t[m_blockSize];
 	}
+
+	connectPorts();
     }
 }
 
@@ -215,6 +238,10 @@ DSSIPluginInstance::instantiate(unsigned long sampleRate)
 void
 DSSIPluginInstance::activate()
 {
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::activate" << std::endl;
+#endif
+
     if (!m_descriptor || !m_descriptor->LADSPA_Plugin->activate) return;
     m_descriptor->LADSPA_Plugin->activate(m_instanceHandle);
 }
@@ -223,6 +250,9 @@ void
 DSSIPluginInstance::connectPorts()
 {
     if (!m_descriptor || !m_descriptor->LADSPA_Plugin->connect_port) return;
+    std::cerr << "DSSIPluginInstance::connectPorts: " << m_audioPortsIn.size() 
+	      << " audio ports in, " << m_audioPortsOut.size() << " out, "
+	      << m_outputBufferCount << " output buffers" << std::endl;
 
     assert(sizeof(LADSPA_Data) == sizeof(float));
     assert(sizeof(sample_t) == sizeof(float));
@@ -276,6 +306,9 @@ void
 DSSIPluginInstance::sendEvent(const RealTime &eventTime,
 			      const snd_seq_event_t *event)
 {
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::sendEvent at " << eventTime << std::endl;
+#endif
     snd_seq_event_t ev(*event);
     ev.time.time.tv_sec = eventTime.sec;
     ev.time.time.tv_nsec = eventTime.nsec;
@@ -286,7 +319,11 @@ void
 DSSIPluginInstance::run(const RealTime &blockTime)
 {
     if (!m_descriptor || !m_descriptor->run_synth) return;
-    
+ 
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::run(" << blockTime << ")" << std::endl;
+#endif
+   
     static snd_seq_event_t localEventBuffer[EVENT_BUFFER_SIZE];
     int evCount = 0;
 
@@ -331,6 +368,9 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 void
 DSSIPluginInstance::deactivate()
 {
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::deactivate" << std::endl;
+#endif
     if (!m_descriptor || !m_descriptor->LADSPA_Plugin->deactivate) return;
     m_descriptor->LADSPA_Plugin->deactivate(m_instanceHandle);
 }
@@ -338,6 +378,9 @@ DSSIPluginInstance::deactivate()
 void
 DSSIPluginInstance::cleanup()
 {
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::cleanup" << std::endl;
+#endif
     if (!m_descriptor) return;
 
     if (!m_descriptor->LADSPA_Plugin->cleanup) {

@@ -558,24 +558,27 @@ AlsaDriver::generateInstruments()
     {
     MappedInstrument *instr;
     char number[100];
+    InstrumentId first;
+    int count;
+    getSoftSynthInstrumentNumbers(first, count);
 
     DeviceId ssiDeviceId = getSpareDeviceId();
 
     if (m_driverStatus & AUDIO_OK)
     {
-        for (int i = 0; i < 16; ++i)
+        for (int i = 0; i < count; ++i)
         {
             sprintf(number, " #%d", i + 1);
             std::string name = "Synth plugin" + std::string(number);
             instr = new MappedInstrument(Instrument::SoftSynth,
                                          i,
-                                         SoftSynthInstrumentBase + i,
+                                         first + i,
                                          name,
                                          ssiDeviceId);
             m_instruments.push_back(instr);
 
             m_studio->createObject(MappedObject::AudioFader,
-                                   SoftSynthInstrumentBase + i);
+                                   first + i);
         }
 
         MappedDevice *device =

@@ -214,6 +214,16 @@ public:
 	audioInstrumentCount = 0;
 #endif
     }
+ 
+    virtual void getSoftSynthInstrumentNumbers(InstrumentId &ssInstrumentBase,
+					       int &ssInstrumentCount) {
+	ssInstrumentBase = SoftSynthInstrumentBase;
+#ifdef HAVE_DSSI
+	ssInstrumentCount = 16;
+#else
+	ssInstrumentCount = 0;
+#endif
+    }
 
     virtual QString getStatusLog();
 
