@@ -40,6 +40,13 @@ public:
 signals:
     void notePressed(int pitch);
 
+    /**
+     * Emitted when the mouse cursor moves to a different key
+     *
+     * \a noteName contains the MIDI name of the corresponding note
+     */
+    void hoveredOverNoteChanged(const QString &noteName);
+
 protected:
     // ActiveItem interface
 //     virtual void mousePressEvent       (QMouseEvent*);
@@ -49,7 +56,6 @@ protected:
 
     virtual void paintEvent(QPaintEvent*);
 
-    void addTips();
     void computeKeyPos();
 
     //--------------- Data members ---------------------------------

@@ -34,7 +34,6 @@ PianoKeyboard::PianoKeyboard(QSize keySize, QWidget *parent,
       m_nbKeys(88)
 {
     computeKeyPos();
-    addTips();
 }
 
 QSize PianoKeyboard::sizeHint() const
@@ -108,27 +107,3 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
                        m_blackKeySize.width(), m_blackKeySize.height());
 }
 
-void PianoKeyboard::addTips()
-{
-    unsigned int prevY = 0;
-
-    for(unsigned int i = 0; i < m_whiteKeyPos.size(); ++i) {
-        unsigned int y = m_whiteKeyPos[i];
-        
-        QRect rect(0, prevY, m_keySize.width(), y - prevY);
-
-        QToolTip::add(this, rect, QString("%1").arg(i));
-        prevY = y;
-    }
-    
-    prevY = 0;
-
-    for(unsigned int j = 0; j < m_blackKeyPos.size(); ++j) {
-        
-        unsigned int y = m_blackKeyPos[j];
-        QRect rect(0, prevY, m_blackKeySize.width(), y - prevY);
-
-        QToolTip::add(this, rect, QString("black %1").arg(j));
-        prevY = y;
-    }
-}
