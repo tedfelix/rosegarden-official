@@ -29,7 +29,7 @@
 // coding the velocity components of all MappedEvents to maximum (127)
 //
 
-#include "Event.h"
+#include <Event.h>
 #include <multiset.h>
 #include <qdatastream.h>
 

@@ -30,7 +30,8 @@ using std::cout;
 using std::endl;
 
 // We use some globals here for speed - we're
-// making a lot of these conversions.
+// making a lot of these conversions when sending
+// this class over DCOP
 //
 MappedCompositionIterator it;
 MappedEvent               *insertEvent;
@@ -40,6 +41,51 @@ timeT                     absTime;
 timeT                     duration;
 instrumentT               instrument;
 velocityT                 velocity;
+
+
+
+MappedComposition::MappedComposition(Rosegarden::Composition &comp,
+                                     const unsigned int &sT,
+                                     const unsigned int &eT):
+  _startTime(sT),
+  _endTime(eT)
+{
+  unsigned int eventTime;
+
+  assert(_endTime >= _startTime);
+    
+  for (Composition::iterator i = comp.begin(); i != comp.end(); i++ )
+  {
+    if ( (*i)->getStartIndex() >= int(_endTime) )
+      continue;
+
+    for ( Track::iterator j = (*i)->begin(); j != (*i)->end(); j++ )
+    {
+      // for the moment ensure we're all positive
+      //assert((*j)->getAbsoluteTime() >= 0 );
+
+      // Skip this event if it doesn't have pitch
+      // (check that the event has "velocity" soon as well)
+      //
+      if (!(*j)->has("pitch"))
+        continue;
+
+      // get the eventTime
+      eventTime = (unsigned int) (*j)->getAbsoluteTime();
+
+      // eventually filter only for the events we're interested in
+      if ( eventTime >= _startTime && eventTime <= _endTime )
+      {
+        // insert event
+        MappedEvent *me = new MappedEvent(**j);
+        me->setInstrument((*i)->getInstrument());
+        this->insert(me);
+      }
+    }
+  }
+}
+
+
 
 // turn a MappedComposition into a data stream
 //
@@ -93,6 +139,8 @@ operator>>(QDataStream &dS, MappedComposition &mC)
 
   return dS;
 }
+
+
 
 }
 

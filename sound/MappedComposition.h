@@ -29,6 +29,7 @@
 // the whole class to be serialized.
 //
 
+#include <Composition.h>
 #include "MappedEvent.h"
 #include <multiset.h>
 #include <qdatastream.h>
@@ -41,6 +42,10 @@ class MappedComposition : public std::multiset<MappedEvent *,
 {
 public:
   MappedComposition():_startTime(0), _endTime(0) {;}
+
+  MappedComposition(Rosegarden::Composition &comp,
+                    const unsigned int &sT, const unsigned int &eT);
+
   MappedComposition(const unsigned int &sT, const unsigned int &eT):
              _startTime(sT), _endTime(eT) {;}
   ~MappedComposition() {;}
