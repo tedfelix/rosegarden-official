@@ -40,7 +40,8 @@ Known Bugs
 
  - occasional gui/sequencer hangs while DCOP call in progress
 
- - playback currently stumbling and poor
+ - playback currently stumbling and poor [FIXED - note off queue was filling up
+   and getting all out of shape]
 
  - sending All Notes Off to aRTS when they're already queued?
 

@@ -964,8 +964,8 @@ void RosegardenGUIApp::play()
   // The arguments we send to the sequencer
   //
   streamOut << m_doc->getComposition().getPosition(); // playback start position
-  streamOut << 20;                                    // playback latency
-  streamOut << 10;                                    // fetch latency
+  streamOut << 30;                                    // playback latency
+  streamOut << 20;                                    // fetch latency
   streamOut << m_doc->getComposition().getTempo();    // tempo
 
   // Send Play to the Sequencer

@@ -415,6 +415,10 @@ Sequencer::processNotesOff(unsigned int midiTime)
       event.command.data2 = 127;
       event.command.status = Arts::mcsNoteOff | channel;
       _midiPlayPort.processEvent(event);
+
+       // Remove the note from the queue
+       //
+      _noteOffQueue.erase(i);
     }
   }
 }
@@ -440,6 +444,10 @@ Sequencer::allNotesOff()
     event.command.data2 = 127;
     event.command.status = Arts::mcsNoteOff | channel;
     _midiPlayPort.processEvent(event);
+
+    // Erase the event
+    //
+    _noteOffQueue.erase(i);
   }
 }
 

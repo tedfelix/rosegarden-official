@@ -1,62 +1,51 @@
 Rosegarden Sequencer Timing Explained
-Richard Bown 26.9.2001
+Richard Bown 28.9.2001
 
-Simpe equations but they're never explained in the
-source code are they?  I put this document here as 
-a reminder to myself as much as anyone else.
+Simlpe equations but they're never explained in the source code
+are they?  I put this document here as a reminder to myself as
+much as anyone else.
 
-Ok, to convert our internal timing representation to a time
-at which a note should be played we need to consider some
-basic principles.  Note that aRts uses second and microsecond
-based TimeStamps for Midi Events so this suits our purposes
-nicely.
+Chris reminds me that these justifications stink.  They do, well
+thet did more, but hey they help me.
+
+Ok, to convert our internal timing representation to a time at
+which a note should be played we need to consider some basic
+principles.  Note that aRts uses second and microsecond based
+TimeStamps for Midi Events so this suits our purposes nicely.
 
 A Sequencer runs at a specified granularity - usually written
 in pulses per quarter note (PPQ) or known as the Timing Division.
 
-If we can find out how long a bar lasts (specified by Tempo) and
-how many bars into the piece we are (in whole and part numbers)
-we can arrive at the time the note should be played.
-
-We'll work all of this out in microseconds (usec).
+Work out how long a beat last.  We'll work all of this out in
+microseconds (usec).
 
 Length of a Beat (usecs)  =   60.0 * 1000000   (usecs in a minute)
                               --------------
                                    Tempo       (Beats per minute)
 
 
-We can have a varying number of beats in a bar according to what
-time signature we're using.
-
-         Time Sig         =  Number of Beats in a Bar  (denote as TSb)
-                             ------------------------
-                               Length of each beat     (denote as TSl)
-
+For the moment forget time signature.  I was convinced that the
+extra 4 we needed came from that - but I was probably making it
+all up - extra four and all.  All I know is what I hear goddammit.
 
 To find when a note should sound, convert its internal representation
-of time into number of bars into the piece it plays:
+of time into number of beats i.e. absolute time divided by length of
+beat:
 
- Number of Bars at which note plays  =
+ Number of Beats at which note plays  =
 
                  internalTime   (internal time of note)
                  ------------
-                 PPQ * 4.0    (length of bar in internal time)
+                    PPQ         (internal length of beat)
 
 
-Ok, we have the basic building blocks, now we must also ensure that
-the length of each beat (in the time sig) is factored in.
-
-Time at which note plays = 
+OK, so now trivially.  Time at which note plays:
                       
-   Length of a Beat (usecs) * Number of Beats in a Bar *
-                                 Number of Bars at which note plays
-
-
-    =           60.0 * 1000000 * TSb * internalTime
+                60.0 * 1000000 *  internalTime
                 -----------------------------------
-                         4.0 * PPQ * Tempo
+                         PPQ * Tempo
               
-
-If TSb = 4 (which it is a lot of the time) this falls out nicely.
-
+Either I've gone mad or that's too simple or I've just been 
+even more stupid than I ever imagined all this time.  At least
+with aRts we deal with real measures of time anyway.
 
