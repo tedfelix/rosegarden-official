@@ -41,6 +41,7 @@ class QFontMetrics;
 class QCanvasRepeatRectangle;
 
 class SegmentItemPreview;
+class QScrollBar;
 
 /**
  * The graphical item (rectangle) which represents a Segment

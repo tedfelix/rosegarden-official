@@ -851,7 +851,6 @@ void MatrixView::slotEditDelete()
 //
 void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
 {
-    cout << "HERE = " << y << endl;
     Rosegarden::Composition &comp = m_document->getComposition();
     Rosegarden::Studio &studio = m_document->getStudio();
 

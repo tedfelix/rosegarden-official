@@ -20,7 +20,7 @@ o "Revert file" option
 
 o Matrix tools - cut and join 
                - multiple resize [DONE]
-               - wire up quantize
+               - wire up quantize [DONE]
 
 o MIDI export broken for key sig and SysExs
 
@@ -39,10 +39,6 @@ o Prove and improve simultaneous audio and MIDI track performance
    - build without debug and test
 
 o Get Segment joining working
-
-o More MIDI events at Composition level. Sys Exs, Program Changes,
-  Controller changes etc. etc. [DONE at composition level, some
-  bugs and MIDI import/export to sort out]
 
 o Realtime downsampling buggy (8 bit)
 
@@ -75,6 +71,10 @@ Completed for 0.21
 o Sysexs MIDI file in/out
 
 o Segment previews still buggy [cc FIXED]
+
+o More MIDI events at Composition level. Sys Exs, Program Changes,
+  Controller changes etc. etc. [DONE at composition level, some
+  bugs and MIDI import/export to sort out]
 
 
 
