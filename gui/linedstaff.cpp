@@ -23,6 +23,7 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 #include "SnapGrid.h"
+#include "qcanvassimplesprite.h"
 
 #include "Profiler.h"
 
@@ -50,8 +51,8 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_endLayoutX(0),
     m_current(false),
     m_currentRow(0),
-    m_pointer(new QCanvasRectangle(canvas)),
-    m_insertCursor(new QCanvasRectangle(canvas))
+    m_pointer(new ConstantWidthRectangle(canvas)),
+    m_insertCursor(new ConstantWidthRectangle(canvas))
 {
     m_pointer->setPen(RosegardenGUIColours::Pointer);
     m_pointer->setBrush(RosegardenGUIColours::Pointer);
@@ -83,8 +84,8 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_endLayoutX(0),
     m_current(false),
     m_currentRow(0),
-    m_pointer(new QCanvasRectangle(canvas)),
-    m_insertCursor(new QCanvasRectangle(canvas))
+    m_pointer(new ConstantWidthRectangle(canvas)),
+    m_insertCursor(new ConstantWidthRectangle(canvas))
 {
     m_pointer->setPen(RosegardenGUIColours::Pointer);
     m_pointer->setBrush(RosegardenGUIColours::Pointer);
@@ -116,8 +117,8 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_endLayoutX(0),
     m_current(false),
     m_currentRow(0),
-    m_pointer(new QCanvasRectangle(canvas)),
-    m_insertCursor(new QCanvasRectangle(canvas))
+    m_pointer(new ConstantWidthRectangle(canvas)),
+    m_insertCursor(new ConstantWidthRectangle(canvas))
 {
     m_pointer->setPen(RosegardenGUIColours::Pointer);
     m_pointer->setBrush(RosegardenGUIColours::Pointer);
