@@ -280,6 +280,9 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
                          << " - m_composition->getDuration() : "
                          << m_composition.getDuration() << endl;
 
+    // generate any audio previews after loading the files
+    m_audioFileManager.generatePreviews();
+
     return true;
 }
 
@@ -1126,20 +1129,19 @@ RosegardenGUIDoc::stopRecordingAudio()
     // something in the record segment (that's why it was added
     // to the composition)
     m_commandHistory->addCommand (new SegmentRecordCommand(m_recordSegment));
-
     m_recordSegment = 0;
+
+    // Get the last added audio file - the one we've just recorded
+    // and generate a preview of this audio file for population
+    // into the resulting SegmentItems.
+    //
+    Rosegarden::AudioFile *newAudioFile = m_audioFileManager.getLastAudioFile();
+    m_audioFileManager.generatePreview(newAudioFile->getId());
+
+    // update views
     slotUpdateAllViews(0);
 
-    // now tell the sequencer about the new file that it's just
-    // finished recording
-    /*
-    QCString replyType;
-    QByteArray replyData;
-    */
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    // Get the last added audio file - the one we've just recorded.
+    // Now install the file in the sequencer
     //
     // We're playing fast and loose with DCOP here - we just send
     // this request and carry on regardless otherwise the sequencer
@@ -1147,7 +1149,8 @@ RosegardenGUIDoc::stopRecordingAudio()
     // don't get a return type.  Ugly and hacky but it appears to
     // work for me - so hey.
     //
-    Rosegarden::AudioFile *newAudioFile = m_audioFileManager.getLastAudioFile();
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
     streamOut << QString(strtoqstr(newAudioFile->getFilename()));
     streamOut << newAudioFile->getId();
     if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
@@ -1158,5 +1161,6 @@ RosegardenGUIDoc::stopRecordingAudio()
                   << std::endl;
         return;
     }
+
 }
 

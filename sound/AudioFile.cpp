@@ -483,8 +483,9 @@ AudioFile::close()
 
 // Get a normalised (-1.0 to +1.0 float) preview of the audio file
 // at a certain resolution - don't use a small resolution on a large
-// file or you could be waiting for a while.  Until this has been
-// optimised.
+// file or you could be waiting for a while - until this has been
+// optimised.  Don't use to high a resolution or your data will
+// be meaningless of course.
 //
 std::vector<float>
 AudioFile::getPreview(const RealTime &resolution)
@@ -541,6 +542,7 @@ AudioFile::getPreview(const RealTime &resolution)
 
         // store
         preview.push_back(meanValue);
+        cout << "MEAN = " << meanValue << endl;
     }
     while(scanForward(previewFile, resolution));
 

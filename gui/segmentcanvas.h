@@ -52,13 +52,15 @@ public:
      */
     SegmentItem(Rosegarden::TrackId track,
 		Rosegarden::timeT startTime, Rosegarden::timeT duration,
-		Rosegarden::SnapGrid *snapGrid, QCanvas* canvas);
+		Rosegarden::SnapGrid *snapGrid, QCanvas* canvas,
+                RosegardenGUIDoc *doc);
 
     /**
      * Create a new segment item with an associated segment
      */
     SegmentItem(Rosegarden::Segment *segment,
-		Rosegarden::SnapGrid *snapGrid, QCanvas* canvas);
+		Rosegarden::SnapGrid *snapGrid, QCanvas* canvas,
+                RosegardenGUIDoc *doc);
 
     ~SegmentItem();
 
@@ -113,6 +115,7 @@ public:
 
 protected:
     Rosegarden::Segment *m_segment;
+    RosegardenGUIDoc    *m_doc;
 
     // We need to duplicate these from the segment, because we
     // frequently want to create SegmentItems before their

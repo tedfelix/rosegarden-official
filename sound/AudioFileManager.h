@@ -20,6 +20,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include "AudioFile.h"
 #include "XmlExportable.h"
@@ -71,6 +72,10 @@ public:
     //
     bool fileExists(unsigned int id);
 
+    // get audio file by id
+    //
+    AudioFile* getAudioFile(unsigned int id);
+
     // Get the list of files
     //
     std::vector<AudioFile*>::const_iterator begin()
@@ -100,6 +105,14 @@ public:
     //
     virtual std::string toXmlString();
 
+    // Convenience function generate all previews on the audio file
+    //
+    void generatePreviews();
+
+    // Generate for a single audio file
+    //
+    bool generatePreview(unsigned int id);
+
 private:
     std::string getFileInPath(const std::string &file);
 
@@ -107,6 +120,7 @@ private:
 
     std::vector<AudioFile*> m_audioFiles;
     std::string m_audioPath;
+    std::map<unsigned int, std::vector<float> > m_previewMap;
 
 };
 

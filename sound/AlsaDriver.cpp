@@ -657,9 +657,11 @@ AlsaDriver::initialiseAudio()
 
     // set some latencies - these don't appear to do anything yet
     //
-    //jack_port_set_latency(m_audioOutputPortLeft, 1024);
-    //jack_port_set_latency(m_audioOutputPortRight, 1024);
-    //jack_port_set_latency(m_audioInputPort, 1024);
+    /*
+    jack_port_set_latency(m_audioOutputPortLeft, 1024);
+    jack_port_set_latency(m_audioOutputPortRight, 1024);
+    jack_port_set_latency(m_audioInputPort, 1024);
+    */
 
 
     // Get the initial buffer size before we activate the client
@@ -740,7 +742,6 @@ AlsaDriver::initialiseAudio()
                   << "cannot connect to JACK input port" << std::endl;
     }
 
-
     /*
     // Get write latency now we're connected
     //
@@ -748,7 +749,14 @@ AlsaDriver::initialiseAudio()
               << "JACK write latency = "
               << jack_port_get_latency(m_audioOutputPortLeft) 
               << std::endl;
-    */
+
+    // Get write latency now we're connected
+    //
+    std::cout << "AlsaDriver::initialiseAudio - "
+              << "JACK read latency = "
+              << jack_port_get_latency(m_audioInputPort) 
+              << std::endl;
+              */
 
 #endif
 }

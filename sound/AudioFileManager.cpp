@@ -192,7 +192,7 @@ AudioFileManager::getFileInPath(const std::string &file)
     if (file[0] == '/')
         return file;
 
-    std::vector<std::string>::iterator it;
+    //std::vector<std::string>::iterator it;
 
     search = m_audioPath + file;
 
@@ -351,6 +351,72 @@ AudioFileManager::toXmlString()
 
     return audioFiles.str();
 }
+
+// Generate previews and cache them locally - we can probably
+// do this to file at some point.  Resolution is currently
+// just arbirtary.
+//
+void
+AudioFileManager::generatePreviews()
+{
+    std::vector<AudioFile*>::iterator it;
+    m_previewMap.clear();
+
+    std::cout << "AudioFileManager::generatePreviews - "
+              << "for " << m_audioFiles.size() << " files"
+              << std::endl;
+
+    for (it = m_audioFiles.begin();
+         it != m_audioFiles.end();
+         it++)
+    {
+        std::cout << "AudioFileManager::generatePreviews - "
+                  << "generating preview for \""
+                  << (*it)->getFilename() << "\"" << std::endl;
+        m_previewMap[(*it)->getId()] =
+            (*it)->getPreview(Rosegarden::RealTime(0, 2000));
+    }
+}
+
+
+// Generate a preview for a specific audio file - say if
+// one has just been added to the AudioFileManager.
+// Also used for generating previews if the file has been
+// modified.
+//
+bool
+AudioFileManager::generatePreview(unsigned int id)
+{
+    AudioFile *audioFile = getAudioFile(id);
+    
+    if (audioFile == 0)
+        return false;
+
+    // clear any previous entry
+    m_previewMap[id].clear();
+
+    // insert new map
+    m_previewMap[id] = audioFile->getPreview(Rosegarden::RealTime(0, 2000));
+
+    return true;
+}
+
+AudioFile*
+AudioFileManager::getAudioFile(unsigned int id)
+{
+    std::vector<AudioFile*>::iterator it;
+
+    for (it = m_audioFiles.begin();
+         it != m_audioFiles.end();
+         it++)
+    {
+        if ((*it)->getId() == id)
+            return (*it);
+    }
+    return 0;
+}
+
+
 
 
 }

@@ -92,9 +92,11 @@ QFontMetrics *SegmentItem::m_fontMetrics = 0;
 int SegmentItem::m_fontHeight = 0;
 
 SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT duration,
-                         SnapGrid *snapGrid, QCanvas *canvas) :
+                         SnapGrid *snapGrid, QCanvas *canvas,
+                         RosegardenGUIDoc *doc) :
     QCanvasRectangle(0, 0, 1, 1, canvas),
     m_segment(0),
+    m_doc(doc),
     m_track(track),
     m_startTime(startTime),
     m_duration(duration),
@@ -108,9 +110,12 @@ SegmentItem::SegmentItem(TrackId track, timeT startTime, timeT duration,
 }
 
 SegmentItem::SegmentItem(Segment *segment,
-                         SnapGrid *snapGrid, QCanvas *canvas) :
+                         SnapGrid *snapGrid,
+                         QCanvas *canvas,
+                         RosegardenGUIDoc *doc) :
     QCanvasRectangle(0, 0, 1, 1, canvas),
     m_segment(segment),
+    m_doc(doc),
     m_selected(false),
     m_snapGrid(snapGrid),
     m_repeatRectangle(0)
@@ -140,11 +145,25 @@ void SegmentItem::drawShape(QPainter& painter)
 {
     QCanvasRectangle::drawShape(painter);
 
-    // draw label
-    painter.setFont(*m_font);
-    QRect labelRect = rect();
-    labelRect.setX(labelRect.x() + 3);
-    painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
+    if (m_segment && m_segment->getType() == Rosegarden::Segment::Audio)
+    {
+        // draw preview
+        Rosegarden::AudioFileManager &aFM = m_doc->getAudioFileManager();
+
+        // draw label
+        painter.setFont(*m_font);
+        QRect labelRect = rect();
+        labelRect.setX(labelRect.x() + 3);
+        painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
+    }
+    else
+    {
+        // draw label
+        painter.setFont(*m_font);
+        QRect labelRect = rect();
+        labelRect.setX(labelRect.x() + 3);
+        painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
+    }
 
     recalculateRectangle(false);
 }
@@ -620,7 +639,7 @@ SegmentItem *
 SegmentCanvas::addSegmentItem(TrackId track, timeT startTime, timeT duration)
 {
     SegmentItem *newItem = new SegmentItem
-	(track, startTime, duration, &m_grid, canvas());
+	(track, startTime, duration, &m_grid, canvas(), m_doc);
 
     newItem->setPen(m_pen);
     newItem->setBrush(m_brush);
@@ -633,7 +652,7 @@ SegmentCanvas::addSegmentItem(TrackId track, timeT startTime, timeT duration)
 SegmentItem *
 SegmentCanvas::addSegmentItem(Segment *segment)
 {
-    SegmentItem *newItem = new SegmentItem(segment, &m_grid, canvas());
+    SegmentItem *newItem = new SegmentItem(segment, &m_grid, canvas(), m_doc);
 
     newItem->setPen(m_pen);
     newItem->setBrush(m_brush);
