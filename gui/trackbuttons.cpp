@@ -114,9 +114,9 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            WFlags f)
     : QFrame(parent, name, f),
       m_doc(doc),
-      m_recordButtonGroup(new QButtonGroup(this)),
-      m_muteSigMapper(new QSignalMapper(this)),
       m_layout(new QVBoxLayout(this)),
+      m_recordSigMapper(new QSignalMapper(this)),
+      m_muteSigMapper(new QSignalMapper(this)),
       m_clickedSigMapper(new QSignalMapper(this)),
       m_instListSigMapper(new QSignalMapper(this)),
       m_tracks(doc->getComposition().getNbTracks()),
@@ -140,17 +140,13 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
     //
     m_layout->setSpacing(m_borderGap);
 
-    // Create an exclusive buttongroup for record
-    //
-    m_recordButtonGroup->setExclusive(true);
-
     // Now draw the buttons and labels and meters
     //
     makeButtons();
 
     m_layout->addStretch(20);
 
-    connect(m_recordButtonGroup, SIGNAL(clicked(int)),
+    connect(m_recordSigMapper, SIGNAL(mapped(int)),
             this, SLOT(slotSetRecordTrack(int)));
 
     connect(m_muteSigMapper, SIGNAL(mapped(int)),
@@ -217,7 +213,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     QFrame *trackHBox = 0;
 
     KLedButton *mute = 0;
-    QPushButton *record = 0;
+    KLedButton *record = 0;
 
     TrackVUMeter *vuMeter = 0;
     TrackLabel *trackLabel = 0;
@@ -264,24 +260,32 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     // Create another little gap
     hblayout->addSpacing(vuSpacing);
 
-    // Create buttons
+    //
+    // 'mute' and 'record' leds
+    //
     mute = new KLedButton(Qt::green, trackHBox);
     QToolTip::add(mute, i18n("Mute track"));
     hblayout->addWidget(mute);
-    record = new QPushButton(trackHBox);
+    record = new KLedButton(Qt::red, trackHBox);
     QToolTip::add(record, i18n("Record on this track"));
     hblayout->addWidget(record);
 
-    record->setFlat(true);
+    record->setLook(KLed::Sunken);
     mute->setLook(KLed::Sunken);
+    record->off();
 
+    // Connect them to their sigmappers
+    connect(record, SIGNAL(stateChanged(bool)),
+            m_recordSigMapper, SLOT(map()));
     connect(mute, SIGNAL(stateChanged(bool)),
             m_muteSigMapper, SLOT(map()));
+    m_recordSigMapper->setMapping(record, trackId);
     m_muteSigMapper->setMapping(mute, trackId);
 
     // Store the KLedButton
     //
     m_muteLeds.push_back(mute);
+    m_recordLeds.push_back(record);
 
 
     //
@@ -337,12 +341,6 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
 
     trackLabel->showLabel(m_trackInstrumentLabels);
 
-    // Insert the buttons into groups
-    //
-    m_recordButtonGroup->insert(record, trackId);
-    record->setToggleButton(true);
-    record->setText("R"); 
-
     mute->setFixedSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
     record->setFixedSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
 
@@ -368,13 +366,7 @@ void TrackButtons::setButtonMapping(QObject* obj, Rosegarden::TrackId trackId)
 //
 int TrackButtons::selectedRecordTrack()
 {
-   QButton *retButton = m_recordButtonGroup->selected();
-
-   // if none selected
-   if (!retButton)
-     return -1;
-
-   return m_recordButtonGroup->id(retButton);
+    return m_lastID;
 }
 
 // Fill out the buttons with Instrument information
@@ -481,71 +473,32 @@ TrackButtons::removeButtons(unsigned int position)
              << "deleting track button at position "
              << position << endl;
 
-    unsigned int i = 0;
-    std::vector<QFrame*>::iterator it;
-    for (it = m_trackHBoxes.begin(); it != m_trackHBoxes.end(); ++it)
-    {
-        if (i == position) break;
-        i++;
+    if (position >= m_trackHBoxes.size()) {
+        RG_DEBUG << "%%%%%%%%% BIG PROBLEM : TrackButtons::removeButtons() was passed a non-existing index\n";
+        return;
     }
+        
+    std::vector<TrackLabel*>::iterator tit = m_trackLabels.begin();
+    tit += position;
+    m_trackLabels.erase(tit);
 
-    if (it != m_trackHBoxes.end())
-        m_trackHBoxes.erase(it);
-
-    i = 0;
-    std::vector<TrackLabel*>::iterator tit;
-    for (tit = m_trackLabels.begin(); tit != m_trackLabels.end(); ++tit)
-    {
-        if (i == position) break;
-        i++;
-    }
-
-    if (tit != m_trackLabels.end()) 
-    {
-        //delete (*iit);
-        m_trackLabels.erase(tit);
-    }
-
-    i = 0;
-    std::vector<TrackVUMeter*>::iterator vit;
-    for (vit = m_trackMeters.begin(); vit != m_trackMeters.end(); ++vit)
-    {
-        if (i == position) break;
-        i++;
-    }
-
-    if (vit != m_trackMeters.end())
-    {
-        //delete (*vit);
-        m_trackMeters.erase(vit);
-    }
-
+    std::vector<TrackVUMeter*>::iterator vit = m_trackMeters.begin();
+    vit += position;
+    m_trackMeters.erase(vit);
+    
     std::vector<KLedButton*>::iterator mit = m_muteLeds.begin();
     mit += position;
     m_muteLeds.erase(mit);
-    
-//     i = 0;
-//     std::vector<KLedButton*>::iterator mit;
-//     for (mit = m_muteLeds.begin(); mit != m_muteLeds.end(); ++mit)
-//     {
-//         if (i == position) break;
-//         i++;
-//     }
 
-//     if (mit != m_muteLeds.end())
-//     {
-//         //delete (*vit);
-//         m_muteLeds.erase(mit);
-//     }
-
-    // Get rid of the buttons
-    //
-
-    QButton* button = m_recordButtonGroup->find(position);
-    m_recordButtonGroup->remove(button);
-    //delete button;
+    mit = m_recordLeds.begin();
+    mit += position;
+    m_recordLeds.erase(mit);
 
     delete m_trackHBoxes[position]; // deletes all child widgets (button, led, label...)
+
+    std::vector<QFrame*>::iterator it = m_trackHBoxes.begin();
+    it += position;
+    m_trackHBoxes.erase(it);
 
 }
 
@@ -652,20 +605,13 @@ TrackButtons::setRecordButtonDown(int position)
     if (position < 0 || position >= (int)m_tracks)
         return;
 
-    if (m_recordButtonGroup->find(position) == 0) return;
+    KLedButton* led = m_recordLeds[position];
+    
+    led->on();
 
-    // Unset the palette if we're jumping to another button
-    if (m_lastID != position && m_lastID != -1)
-    {
-       m_recordButtonGroup->find(m_lastID)->unsetPalette();
-       dynamic_cast<QPushButton*>(
-               m_recordButtonGroup->find(m_lastID))->setOn(false);
+    if (m_lastID != position && m_lastID != -1) {
+        m_recordLeds[m_lastID]->off();
     }
-
-    m_recordButtonGroup->find(position)->setPalette
-	(QPalette(RosegardenGUIColours::ActiveRecordTrack));
-    dynamic_cast<QPushButton*>(
-            m_recordButtonGroup->find(position))->setOn(true);
 
     m_lastID = position;
 }

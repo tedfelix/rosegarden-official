@@ -230,15 +230,16 @@ protected:
 
     RosegardenGUIDoc                 *m_doc;
 
-    QButtonGroup                     *m_recordButtonGroup;
-    QSignalMapper                    *m_muteSigMapper;
     QVBoxLayout                      *m_layout;
 
     std::vector<KLedButton *>         m_muteLeds;
+    std::vector<KLedButton *>         m_recordLeds;
     std::vector<TrackLabel *>         m_trackLabels;
     std::vector<TrackVUMeter *>       m_trackMeters;
     std::vector<QFrame *>             m_trackHBoxes;
 
+    QSignalMapper                    *m_recordSigMapper;
+    QSignalMapper                    *m_muteSigMapper;
     QSignalMapper                    *m_clickedSigMapper;
     QSignalMapper                    *m_instListSigMapper;
 
