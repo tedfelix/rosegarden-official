@@ -3,6 +3,9 @@
 <kpartgui name="BankEditor" version="085">
 
 <MenuBar>
+  <Menu name="file">
+   <Action name="file_close_discard"/>
+  </Menu>
 </MenuBar>
 
 <ToolBar name="mainToolBar">

@@ -216,16 +216,19 @@ public slots:
     void slotFileSave();
     void slotFileSaveAs();
     void slotFileClose();
+    void slotFileCloseAndDiscard();
 
     void slotEditCopy();
     void slotEditPaste();
 
 signals:
-    void closing();
+    void closing(bool changesMade);
     void saveAsDefaultStudio();
     void saveAsOtherStudio();
 
 protected:
+    virtual void closeEvent(QCloseEvent*);
+
     void updateDeviceItem(QListViewItem* deviceItem,
                           Rosegarden::MidiDevice* midiDevice);
 
@@ -239,6 +242,9 @@ protected:
     void populateDevice(QListViewItem*);
 
     void setupActions();
+
+    bool getKeepChanges() { return m_keepChanges; }
+    void setKeepChanges(bool k) { m_keepChanges = k; }
 
     //--------------- Data members ---------------------------------
     Rosegarden::Studio      *m_studio;
@@ -264,6 +270,7 @@ protected:
     MidiProgramsEditor::MidiProgramContainer     m_programList;
 
     bool                     m_modified;
+    bool                     m_keepChanges;
     bool                     m_keepBankList;
     bool                     m_deleteAll;
 

@@ -2256,14 +2256,16 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 {
     if (!merge && !m_doc->saveIfModified()) return;
 
-    Rosegarden::MidiFile *midiFile;
+
 
     // Create new document (autoload is inherent)
     //
     RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
 
-    midiFile = new Rosegarden::MidiFile(qstrtostr(file),
-                                        &newDoc->getStudio());
+    std::string fname(QFile::encodeName(file));
+
+    Rosegarden::MidiFile midiFile(fname,
+                                  &newDoc->getStudio());
 
     KStartupLogo::hideIfStillThere();
     RosegardenProgressDialog progressDlg(i18n("Importing MIDI file..."),
@@ -2272,18 +2274,18 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     CurrentProgressDialog::set(&progressDlg);
 
-    connect(midiFile, SIGNAL(setProgress(int)),
+    connect(&midiFile, SIGNAL(setProgress(int)),
             progressDlg.progressBar(), SLOT(setValue(int)));
 
-    connect(midiFile, SIGNAL(incrementProgress(int)),
+    connect(&midiFile, SIGNAL(incrementProgress(int)),
             progressDlg.progressBar(), SLOT(advance(int)));
 
-    if (!midiFile->open())
-    {
-        CurrentProgressDialog::freeze();
-        KMessageBox::error(this, strtoqstr(midiFile->getError())); //!!! i18n
-        return;
-    }
+    if (!midiFile.open())
+        {
+            CurrentProgressDialog::freeze();
+            KMessageBox::error(this, strtoqstr(midiFile.getError())); //!!! i18n
+            return;
+        }
 
     // Stop if playing
     //
@@ -2293,7 +2295,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
     if (!merge) {
 
         Rosegarden::Composition *tmpComp = new Rosegarden::Composition();
-        tmpComp = midiFile->convertToRosegarden();
+        tmpComp = midiFile.convertToRosegarden();
         newDoc->getComposition().swap(*tmpComp);
         delete tmpComp;
 
@@ -2301,7 +2303,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
         bool append = false;
 
-        if (midiFile->hasTimeChanges() &&
+        if (midiFile.hasTimeChanges() &&
             newDoc->getComposition().getDuration() > 0) {
 
             //!!! This isn't adequate.  We really need to know whether
@@ -2322,7 +2324,6 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
             CurrentProgressDialog::thaw();
 
             if (mergeType == KMessageBox::Cancel) {
-                delete midiFile;
                 return;
             } else if (mergeType == KMessageBox::Yes) {
                 append = true;
@@ -2330,7 +2331,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
         }
             
         /*Rosegarden::Composition *tmpComp =*/
-            midiFile->convertToRosegarden(&newDoc->getComposition(), append);
+        midiFile.convertToRosegarden(&newDoc->getComposition(), append);
     }
 
 
@@ -2338,8 +2339,6 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
     //
     setDocument(newDoc);
     
-    delete midiFile;
-
     // Set modification flag
     //
     m_doc->slotDocumentModified();
@@ -2347,10 +2346,10 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
     // Set the caption
     //
     if (!merge)
-    {
-        m_doc->setTitle(QFileInfo(file).fileName());
-        m_doc->setAbsFilePath(QFileInfo(file).absFilePath());
-    }
+        {
+            m_doc->setTitle(QFileInfo(file).fileName());
+            m_doc->setAbsFilePath(QFileInfo(file).absFilePath());
+        }
 
     m_fileRecent->addURL(file);
 
@@ -2802,8 +2801,10 @@ void RosegardenGUIApp::exportMIDIFile(const QString &file)
                                          100,
                                          this);
 
-    Rosegarden::MidiFile midiFile(qstrtostr(file),
-                                 &m_doc->getStudio());
+    std::string fname(QFile::encodeName(file));
+
+    Rosegarden::MidiFile midiFile(fname,
+                                  &m_doc->getStudio());
 
     connect(&midiFile, SIGNAL(setProgress(int)),
             progressDlg.progressBar(), SLOT(setValue(int)));
@@ -2814,9 +2815,9 @@ void RosegardenGUIApp::exportMIDIFile(const QString &file)
     midiFile.convertToMidi(m_doc->getComposition());
 
     if (!midiFile.write())
-    {
-        KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
-    }
+        {
+            KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
+        }
 }
 
 void RosegardenGUIApp::slotExportCsound()
@@ -2836,7 +2837,7 @@ void RosegardenGUIApp::exportCsoundFile(const QString &file)
                                          100,
                                          this);
 
-    CsoundExporter e(this, &m_doc->getComposition(), qstrtostr(file));
+    CsoundExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setProgress(int)),
             progressDlg.progressBar(), SLOT(setValue(int)));
@@ -2869,7 +2870,7 @@ void RosegardenGUIApp::exportLilypondFile(const QString &file)
                                          100,
                                          this);
 
-    LilypondExporter e(this, &m_doc->getComposition(), qstrtostr(file));
+    LilypondExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setProgress(int)),
             progressDlg.progressBar(), SLOT(setValue(int)));
@@ -2901,7 +2902,7 @@ void RosegardenGUIApp::exportMusicXmlFile(const QString &file)
                                          100,
                                          this);
 
-    MusicXmlExporter e(this, m_doc, qstrtostr(file));
+    MusicXmlExporter e(this, m_doc, std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setProgress(int)),
             progressDlg.progressBar(), SLOT(setValue(int)));
@@ -4110,8 +4111,8 @@ RosegardenGUIApp::slotEditBanks()
 {
     BankEditorDialog* bankEditor = new BankEditorDialog(this, m_doc);
     
-    connect(bankEditor, SIGNAL(closing()),
-            this, SLOT(slotBankEditorClosed()));
+    connect(bankEditor, SIGNAL(closing(bool)),
+            this, SLOT(slotBankEditorClosed(bool)));
 
     connect(bankEditor, SIGNAL(saveAsDefaultStudio()),
             this, SLOT(slotSaveDefaultStudio()));
@@ -4121,12 +4122,15 @@ RosegardenGUIApp::slotEditBanks()
 }
 
 void
-RosegardenGUIApp::slotBankEditorClosed()
+RosegardenGUIApp::slotBankEditorClosed(bool changesMade)
 {
-//         if (m_view) && SOMETHING WAS CHANGED - TODO
-//             m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
     RG_DEBUG << "RosegardenGUIApp::slotBankEditorClosed()\n";
 
+    if (changesMade) {
+        if (m_view)
+            m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
+    }
+    
     stateChanged("bankeditor_shown", KXMLGUIClient::StateReverse);    
 }
 

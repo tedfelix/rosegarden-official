@@ -966,8 +966,7 @@ public slots:
     void slotRepeatingSegments();
     void slotRelabelSegments();
 
-    // Panic button pressed
-    //
+    /// Panic button pressed
     void slotPanic();
 
     // Auto-save
@@ -978,9 +977,13 @@ public slots:
     //
     void slotUpdateAutoSaveInterval(unsigned int interval);
 
-    // BankEditor closed
-    //
-    void slotBankEditorClosed();
+    /**
+     * BankEditor closed
+     *
+     * @param changesMade : true if some changes were made and the
+     * main GUI needs updating
+     */
+    void slotBankEditorClosed(bool changesMade);
 
 private:
 

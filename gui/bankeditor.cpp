@@ -560,6 +560,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_doc(doc),
     m_copyBank(Rosegarden::Device::NO_DEVICE, -1),
     m_modified(false),
+    m_keepChanges(false),
     m_keepBankList(false),
     m_deleteAll(false),
     m_lastDevice(Rosegarden::Device::NO_DEVICE),
@@ -711,6 +712,11 @@ BankEditorDialog::setupActions()
     action->setText(i18n("Save Studio as..."));
 
     KStdAction::close (this, SLOT(slotFileClose()),         actionCollection());
+
+    new KAction(i18n("Close and &Discard"), 0, 0, this,
+                SLOT(slotFileCloseAndDiscard()), actionCollection(),
+                "file_close_discard");
+
 
     KStdAction::copy     (this, SLOT(slotEditCopy()),       actionCollection());
     KStdAction::paste    (this, SLOT(slotEditPaste()),      actionCollection());
@@ -994,13 +1000,14 @@ BankEditorDialog::slotApply()
     addCommandToHistory(command);
 
     setModified(false);
-    initDialog();
+    setKeepChanges(true);
 }
 
 void
 BankEditorDialog::slotUpdate()
 {
     initDialog();
+    setKeepChanges(true);
 }
 
 
@@ -1754,11 +1761,22 @@ void
 BankEditorDialog::slotFileClose()
 {
     RG_DEBUG << "BankEditorDialog::slotFileClose()\n";
-    emit closing();
-    
     close();
 }
 
+void
+BankEditorDialog::slotFileCloseAndDiscard()
+{
+    setKeepChanges(false);
+    slotFileClose();
+}
+
+void
+BankEditorDialog::closeEvent(QCloseEvent *e)
+{
+    emit closing(getKeepChanges());
+    KMainWindow::closeEvent(e);
+}
 
 
 void MidiProgramsEditor::blockAllSignals(bool block)

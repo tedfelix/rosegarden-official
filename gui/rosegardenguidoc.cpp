@@ -414,15 +414,10 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
         Rosegarden::Track *track;
 
-        char tmp[256];
-        sprintf(tmp, "#%d", i + 1);
-        std::string label = "untitled ";
-        label += tmp;
-
         track = new Rosegarden::Track(maxTrackId + 1,          // id
                                       (i + instBase) % 16,     // instrument
                                       i,                       // position
-                                      label, 
+                                      "untitled", 
                                       false);                  // mute
 
         m_composition.addTrack(track);
