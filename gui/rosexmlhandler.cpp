@@ -289,14 +289,23 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             m_composition.setLoopEnd(loopEnd);
         }
 
+        QString selectedTrackStr = atts.value("selected");
+
+        if (selectedTrackStr)
+        {
+            Rosegarden::TrackId selectedTrack =
+                (Rosegarden::TrackId)selectedTrackStr.toInt();
+
+            m_composition.setSelectedTrack(selectedTrack);
+        }
+
         QString soloTrackStr = atts.value("solo");
         if (soloTrackStr)
         {
-            Rosegarden::TrackId soloTrack =
-                (Rosegarden::TrackId)soloTrackStr.toInt();
-
-            m_composition.setSelectedTrack(soloTrack);
-            m_composition.setSolo(true);
+            if (soloTrackStr.toInt() == 1)
+                m_composition.setSolo(true);
+            else
+                m_composition.setSolo(false);
         }
 
     } else if (lcName == "track") {
