@@ -552,7 +552,7 @@ MidiFile::convertToRosegarden()
 	    }
 	}
 
-	if (notesOnSegment)
+	if (notesOnSegment) //!!! Not adequate -- we need to load tempo and timesig events at least even if there are no notes
 	{
 	    // Create Segment on Composition object
 	    rosegardenSegment = new Segment;

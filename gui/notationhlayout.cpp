@@ -540,7 +540,8 @@ NotationHLayout::reconcileBarsLinear()
 		if (bd.idealWidth != maxWidth) {
 		    if (bd.idealWidth > 0.0) {
 			double ratio = maxWidth / bd.idealWidth;
-			bd.fixedWidth += bd.fixedWidth * ((ratio - 1.0)/2.0);
+			bd.fixedWidth +=
+			    bd.fixedWidth * (int)((ratio - 1.0)/2.0);
 		    }
 		    bd.idealWidth = maxWidth;
                     aWidthChanged = true;
@@ -681,7 +682,8 @@ NotationHLayout::reconcileBarsPage()
 		    bd.needsLayout = true;
 		    if (bd.idealWidth > 0) {
 			double ratio = maxWidth / bd.idealWidth;
-			bd.fixedWidth += bd.fixedWidth * ((ratio - 1.0)/2.0);
+			bd.fixedWidth +=
+			    bd.fixedWidth * (int)((ratio - 1.0)/2.0);
 		    }
 		    bd.idealWidth = maxWidth;
 		}
@@ -899,7 +901,7 @@ NotationHLayout::positionRest(StaffType &,
     // reserved for fixed-width items, and take the same proportion of
     // the remainder as our duration is of the whole bar's duration.
 
-    long delta = ((bdi->idealWidth - bdi->fixedWidth) *
+    long delta = (((int)bdi->idealWidth - bdi->fixedWidth) *
                   rest->event()->getDuration()) /
         //!!! not right for partial bar?
         timeSignature.getBarDuration();
@@ -938,7 +940,7 @@ NotationHLayout::positionChord(StaffType &staff,
     // the remainder as our duration is of the whole bar's duration.
     // We use the shortest note in the chord, should the durations vary
                     
-    long delta = ((bdi->idealWidth - bdi->fixedWidth) *
+    long delta = (((int)bdi->idealWidth - bdi->fixedWidth) *
                   (*chord.getShortestElement())->event()->getDuration()) /
         //!!! not right for partial bar?
         timeSignature.getBarDuration();

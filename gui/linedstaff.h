@@ -39,8 +39,7 @@
  */
 
 template <class T>
-class LinedStaff : public Rosegarden::Staff<T>,
-		   public QCanvasItemGroup
+class LinedStaff : public Rosegarden::Staff<T>
 {
 protected:
     /**
@@ -53,8 +52,12 @@ protected:
      *
      * \a resolution is the number of blank pixels between
      *    staff lines
+     *
+     * \a lineThickness is the number of pixels thick a
+     *    staff line should be
      */
-    LinedStaff(QCanvas *, Rosegarden::Segment *, int id, int resolution);
+    LinedStaff(QCanvas *, Rosegarden::Segment *, int id,
+	       int resolution, int lineThickness);
 
     /**
      * Create a new LinedStaff for the given Segment, with a
@@ -67,13 +70,18 @@ protected:
      * \a resolution is the number of blank pixels between
      *    staff lines
      *
+     * \a lineThickness is the number of pixels thick a
+     *    staff line should be
+     *
      * \a pageWidth is the width of a window (to determine
      *    when to break lines for page layout)
      *
-     * \a lineBreakGap is the distance in pixels between
+     * \a rowSpacing is the distance in pixels between
      *    the tops of consecutive rows on this staff
      */
-    LinedStaff(QCanvas *, Rosegarden::Segment *, int id, int resolution);
+    LinedStaff(QCanvas *, Rosegarden::Segment *, int id,
+	       int resolution, int lineThickness,
+	       double pageWidth, int rowSpacing);
 
 public:
     virtual ~LinedStaff();
@@ -114,7 +122,7 @@ protected:
     virtual void setPageWidth(double pageWidth);
 
     /// Subclass may wish to expose this
-    virtual void setLineBreakGap(int lineBreakGap);
+    virtual void setRowSpacing(int rowSpacing);
 
 public:
     /**
@@ -161,11 +169,11 @@ public:
     virtual int getHeightOfRow() const;
     
     /**
-     * Returns true if the given y-coordinate falls within (any of
-     * the rows of) this staff.  False if it falls in the gap
-     * between two rows.
+     * Returns true if the given canvas y-coordinate falls within
+     * (any of the rows of) this staff.  False if it falls in the
+     * gap between two rows.
      */
-    virtual bool containsY(int y) const; 
+    virtual bool containsY(int canvasY) const; 
 
     /**
      * Returns the y coordinate of the specified line on the staff,
@@ -245,22 +253,176 @@ protected:
     // perspective to create and manipulate many relatively short
     // canvas lines rather than a smaller number of very long ones.)
    
-    int getRowForLayoutX(double x) const;
+    int getLineSpacing() const {
+	return m_resolution + m_lineThickness;
+    }
 
-    int getRowForCanvasY(int y) const;
+    int getTopLineOffset() const {
+	return getLineSpacing() * getLegerLineCount();
+    }
 
-    double getCanvasXForLayoutX(double x) const;
+    int getBarLineHeight() const {
+	return getLineSpacing() * (getLineCount() - 1) + m_lineThickness;
+    }
 
-    int getCanvasYForTopOfStaff(int row = -1) const;
+    int getRowForLayoutX(double x) const {
+	return (int)(x / m_pageWidth);
+    }
 
-    int getCanvasYForTopLine(int row = -1) const;
+    int getRowForCanvasY(int y) const {
+	return ((y - m_y) / m_rowSpacing);
+    }
 
-    double getCanvasXForLeftOfRow(int row) const;
+    double getCanvasXForLayoutX(double x) const {
+	return m_x + x - (m_pageWidth * getRowForLayoutX(x));
+    }
 
-    double getCanvasXForRightOfRow(int row) const;
+    int getCanvasYForTopOfStaff(int row = -1) const {
+	if (!m_pageMode || row <= 0) return m_y;
+	else return m_y + (row * m_rowSpacing);
+    }
+
+    int getCanvasYForTopLine(int row = -1) const {
+	return getCanvasYForTopOfStaff(row) + getTopLineOffset();
+    }
+
+    double getCanvasXForLeftOfRow(int row) const {
+	if (!m_pageMode) return m_x + (row * m_pageWidth);
+	else return m_x;
+    }
+
+    double getCanvasXForRightOfRow(int row) const {
+	return getCanvasXForLeftOfRow(row) + m_pageWidth;
+    }
 
     std::pair<double, int>
-    getCanvasCoordsForLayoutCoords(double x, int y) const;
+    getCanvasCoordsForLayoutCoords(double x, int y) const {
+	int row = getRowForLayoutX(x);
+	return std::pair<double, int>
+	    (getCanvasXForLayoutX(x), getCanvasYForTopOfStaff(row) + y);
+    }
+
+    std::pair<double, int>
+    getCanvasOffsetsForLayoutCoords(double x, int y) const {
+	std::pair<double, int> cc = getCanvasCoordsForLayoutCoords(x, y);
+	return std::pair<double, int>(cc.first - x, cc.second - y);
+    }
+    
+protected:
+    QCanvas *m_canvas;
+
+    int	     m_id;
+
+    double   m_x;
+    int	     m_y;
+    int	     m_resolution;
+    int	     m_lineThickness;
+    
+    bool     m_pageMode;
+    double   m_pageWidth;
+    int	     m_rowSpacing;
 };
+
+
+
+template <class T>
+LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
+			  int id, int resolution, int lineThickness) :
+    Rosegarden::Staff<T>(segment),
+    m_canvas(canvas),
+    m_id(id),
+    m_x(0.0),
+    m_y(0),
+    m_resolution(resolution),
+    m_lineThickness(lineThickness),
+    m_pageMode(false),
+    m_pageWidth(0.0),
+    m_rowSpacing(0.0)
+{
+    // nothing
+}
+
+template <class T>
+LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
+			  int id, int resolution, int lineThickness,
+			  double pageWidth, int rowSpacing) :
+    Rosegarden::Staff<T>(segment),
+    m_canvas(canvas),
+    m_id(id),
+    m_x(0.0),
+    m_y(0),
+    m_resolution(resolution),
+    m_lineThickness(lineThickness),
+    m_pageMode(true),
+    m_pageWidth(pageWidth),
+    m_rowSpacing(rowSpacing)
+{
+    // nothing
+}
+
+template <class T>
+LinedStaff<T>::~LinedStaff()
+{
+    // nothing yet
+}
+
+template <class T>
+void
+LinedStaff<T>::setPageMode(bool pageMode)
+{
+    m_pageMode = pageMode;
+}
+
+template <class T>
+void
+LinedStaff<T>::setPageWidth(double pageWidth)
+{
+    m_pageWidth = pageWidth;
+}
+
+template <class T>
+void
+LinedStaff<T>::setRowSpacing(int rowSpacing)
+{
+    m_rowSpacing = rowSpacing;
+}
+
+template <class T>
+int
+LinedStaff<T>::getId() const
+{
+    return m_id;
+}
+
+template <class T>
+void
+LinedStaff<T>::setX(double x)
+{
+    m_x = x;
+}
+
+template <class T>
+void
+LinedStaff<T>::setY(int y)
+{
+    m_y = y;
+}
+
+//!!! getTotalWidth
+
+//!!! getTotalHeight
+
+template <class T>
+int 
+LinedStaff<T>::getHeightOfRow() const
+{
+    return getTopLineOffset() * 2 + getBarLineHeight() + m_lineThickness;
+}
+
+//template <class T>
+//bool
+//LinedStaff<T>::containsY(int y) const
+
+
 
 #endif
