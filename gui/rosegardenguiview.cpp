@@ -198,8 +198,10 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 	    segmentsToEdit.push_back(*i);
 	}
 
-    } else {
+    } else if (p) {
 	segmentsToEdit.push_back(p);
+    } else {
+	return;
     }
 
     NotationView *notationView =

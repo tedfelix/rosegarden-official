@@ -304,11 +304,20 @@ void RosegardenGUIApp::setupActions()
       this, SLOT(slotChangeTimeResolution()),
       actionCollection(), "change_time_res");
     */
-
+/*!!!
     new KAction(i18n("&Score Editor"),
                 0,
                 this, SLOT(slotEditAllTracks()),
                 actionCollection(), "edit_all_tracks");
+*/
+
+    new KAction(i18n("Select &All Segments"), 0, this,
+		SLOT(slotSelectAll()), actionCollection(),
+		"select_all");
+
+    new KAction(i18n("Open in &Notation Editor"), 0, this,
+		SLOT(slotEditAsNotation()), actionCollection(),
+		"edit_as_notation");
 
     new KAction(AddTempoChangeCommand::name(),
                 0,
@@ -1126,6 +1135,21 @@ void RosegardenGUIApp::slotEditPaste()
 				  clipboard, insertionTime));
 }
 
+void RosegardenGUIApp::slotSelectAll()
+{
+    SegmentCanvas *canvas = m_view->getTrackEditor()->getSegmentCanvas();
+    Rosegarden::Composition &composition = m_doc->getComposition();
+
+    for (Rosegarden::Composition::iterator i = composition.begin();
+	 i != composition.end(); ++i) {
+	canvas->addToSelection(*i);
+    }
+}
+
+void RosegardenGUIApp::slotEditAsNotation()
+{
+    m_view->slotEditSegmentNotation(0);
+}
 
 void RosegardenGUIApp::slotToggleToolBar()
 {

@@ -396,6 +396,14 @@ SegmentCanvas::removeFromSelection(Segment *segment)
     selTool->removeFromSelection(segment);
 }
 
+void
+SegmentCanvas::addToSelection(Segment *segment)
+{
+    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
+    if (!selTool) return;
+    selTool->addToSelection(segment);
+}
+
 
 SegmentItem*
 SegmentCanvas::findSegmentItem(Rosegarden::Segment *segment)

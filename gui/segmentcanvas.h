@@ -230,6 +230,11 @@ public:
     void removeFromSelection(Rosegarden::Segment *segment);
 
     /**
+     * Add the given Segment to the selection, if we know anything about it
+     */
+    void addToSelection(Rosegarden::Segment *);
+
+    /**
      * Find which SegmentItem is under the specified point
      *
      * Note : this doesn't handle overlapping SegmentItems yet

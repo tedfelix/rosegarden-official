@@ -16,17 +16,6 @@
     <text>&amp;Font</text>
 etc
 -->
-<!-- I like this better than putting them in Settings, but...
-  <Menu name="Toolbars">
-  <text>&amp;Toolbars</text>
-  <Action name="show_notes_toolbar"        />
-  <Action name="show_rests_toolbar"        />
-  <Action name="show_dotted_notes_toolbar" />
-  <Action name="show_dotted_rests_toolbar" />
-  <Action name="show_accidentals_toolbar"  />
-  <Action name="show_clefs_toolbar"        />
-  </Menu>
--->
   <Separator/>
   <Action name="label_chords"/>
 </Menu>

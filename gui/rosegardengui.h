@@ -391,6 +391,16 @@ public slots:
     void slotEditPaste();
 
     /**
+     * select all segments on all tracks
+     */
+    void slotSelectAll();
+
+    /**
+     * open a notation view with all currently-selected segments in it
+     */
+    void slotEditAsNotation();
+
+    /**
      * toggles the toolbar
      */
     void slotToggleToolBar();
