@@ -67,7 +67,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
       m_hoveredOverNoteName(0),
       m_previousEvPitch(0),
       m_canvasView(0),
-      m_pianoView(0)
+      m_pianoView(0),
+      m_lastNote(0)
 {
     kdDebug(KDEBUG_AREA) << "MatrixView ctor\n";
 
@@ -140,8 +141,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
          this,      SLOT  (slotHoveredOverKeyChanged(unsigned int)));
 
     QObject::connect
-        (m_pianoKeyboard, SIGNAL(keyPressed(unsigned int)),
-         this,      SLOT  (slotKeyPressed(unsigned int)));
+        (m_pianoKeyboard, SIGNAL(keyPressed(unsigned int, bool)),
+         this,      SLOT  (slotKeyPressed(unsigned int, bool)));
 
     QObject::connect
         (getCanvasView(), SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
@@ -554,13 +555,21 @@ void MatrixView::slotEditPaste()
 
 // Propagate a key press upwards
 //
-void MatrixView::slotKeyPressed(unsigned int y)
+void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
 {
     Rosegarden::Composition &comp = m_document->getComposition();
     Rosegarden::Studio &studio = m_document->getStudio();
 
     MatrixStaff& staff = *(m_staffs[0]);
-    int evPitch = staff.getHeightAtCanvasY(y);
+    Rosegarden::MidiByte evPitch = staff.getHeightAtCanvasY(y);
+
+    // Don't do anything if we're part of a run up the keyboard
+    //
+    if (m_lastNote == evPitch && repeating)
+        return;
+
+    // Save value
+    m_lastNote = evPitch;
 
     Rosegarden::Track *track = comp.getTrackByIndex(
             m_staffs[0]->getSegment().getTrack());
@@ -577,7 +586,7 @@ void MatrixView::slotKeyPressed(unsigned int y)
     //
     Rosegarden::MappedEvent *mE = 
         new Rosegarden::MappedEvent(ins->getID(),
-                                    Rosegarden::MappedEvent::MidiNote,
+                                    Rosegarden::MappedEvent::MidiNoteOneShot,
                                     evPitch,
                                     Rosegarden::MidiMaxValue,
                                     Rosegarden::RealTime(0,0),

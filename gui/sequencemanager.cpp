@@ -575,11 +575,17 @@ SequenceManager::record()
     //
     m_transport->MetronomeButton->setOn(comp.useRecordMetronome());
 
-    // Adjust backwards by the bar count in
+    // If we are looping then jump to start of loop and start recording,
+    // if we're not 
     //
-    int startBar = comp.getBarNumber(comp.getPosition());
-    startBar -= comp.getCountInBars();
-    m_doc->setPointerPosition(comp.getBarRange(startBar).first);
+    if(comp.isLooping())
+        m_doc->setPointerPosition(comp.getLoopStart());
+    else
+    {
+        int startBar = comp.getBarNumber(comp.getPosition());
+        startBar -= comp.getCountInBars();
+        m_doc->setPointerPosition(comp.getBarRange(startBar).first);
+    }
 
 
     // Some locals
@@ -639,9 +645,8 @@ SequenceManager::record()
     m_transport->setTempo(comp.getTempo());
 
     // The arguments for the Sequencer  - record is similar to playback,
-    // we must being playing to record
+    // we must being playing to record.
     //
-
     Rosegarden::RealTime startPos =comp.getElapsedRealTime(comp.getPosition());
     Rosegarden::Configuration &config = m_doc->getConfiguration();
 

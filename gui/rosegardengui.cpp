@@ -1664,7 +1664,8 @@ RosegardenGUIApp::showVisuals(Rosegarden::MappedComposition *mC)
 
     for (it = mC->begin(); it != mC->end(); ++it )
     {
-        if ((*it)->getType() == Rosegarden::MappedEvent::MidiNote)
+        if ((*it)->getType() == Rosegarden::MappedEvent::MidiNote ||
+            (*it)->getType() == Rosegarden::MappedEvent::MidiNoteOneShot)
         {
             m_transport->setMidiOutLabel(*it);
             m_view->showVisuals(*it);

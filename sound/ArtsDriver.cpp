@@ -558,6 +558,7 @@ ArtsDriver::processMidiOut(const MappedComposition &mC,
         switch((*i)->getType())
         {
             case MappedEvent::MidiNote:
+            case MappedEvent::MidiNoteOneShot:
                 event.command.status = Arts::mcsNoteOn | channel;
                 event.command.data1 = (*i)->getPitch();
                 event.command.data2 = (*i)->getVelocity();

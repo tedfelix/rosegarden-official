@@ -37,7 +37,13 @@ public:
     virtual QSize minimumSizeHint() const;
 
 signals:
-    void keyPressed(unsigned int y);
+
+    /*
+     * The repeating flag is there to tell the MatrixView not to send
+     * the same note again as we're in the middle of a swoosh.
+     * MatrixView does the y -> Note calculation, see.
+     */
+    void keyPressed(unsigned int y, bool repeating);
 
     /**
      * Emitted when the mouse cursor moves to a different key
@@ -52,6 +58,7 @@ protected:
 
     virtual void mouseMoveEvent(QMouseEvent*);
     virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseReleaseEvent(QMouseEvent*);
 
     // compute all key positions and store them
     //
@@ -65,6 +72,8 @@ protected:
     std::vector<unsigned int> m_whiteKeyPos;
     std::vector<unsigned int> m_blackKeyPos;
     std::vector<unsigned int> m_labelKeyPos;
+
+    bool                      m_mouseDown;
 };
 
 #endif

@@ -481,6 +481,7 @@ RosegardenTransportDialog::setMidiInLabel(const Rosegarden::MappedEvent *mE)
     switch (mE->getType())
     {
         case MappedEvent::MidiNote:
+        case MappedEvent::MidiNoteOneShot:
             {
                 // don't do anything if we've got an effective NOTE OFF
                 //
@@ -550,6 +551,7 @@ RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
     switch (mE->getType())
     {
         case MappedEvent::MidiNote:
+        case MappedEvent::MidiNoteOneShot:
             {
                 MidiPitchLabel *mPL = new MidiPitchLabel(mE->getPitch());
                 OutDisplay->setText(mPL->getQString() +

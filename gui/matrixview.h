@@ -182,7 +182,7 @@ public slots:
 
     // Catch the keyboard being pressed
     //
-    void slotKeyPressed(unsigned int y);
+    void slotKeyPressed(unsigned int y, bool repeating);
 
     // Handle scrolling between view and PianoKeyboard
     //
@@ -254,6 +254,11 @@ protected:
     MatrixCanvasView    *m_canvasView;
     QScrollView         *m_pianoView;
     PianoKeyboard       *m_pianoKeyboard;
+
+    // The last note we sent in case we're swooshing up and
+    // down the keyboard and don't want repeat notes sending
+    //
+    Rosegarden::MidiByte m_lastNote;
 
 
 };

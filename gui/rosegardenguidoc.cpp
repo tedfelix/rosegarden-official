@@ -577,9 +577,15 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                    }
                    break;
 
+                case Rosegarden::MappedEvent::MidiNoteOneShot:
+                   std::cerr << "RosegardenGUIDoc::insertRecordedMidi() - "
+                             << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot"
+                             << std::endl;
+                   break;
+
                 default:
-                   std::cerr << "insertRecordedMidi() - "
-                             << "UNSUPPORTED MAPPED EVENT"
+                   std::cerr << "RosegardenGUIDoc::insertRecordedMidi() - "
+                             << "GOT UNSUPPORTED MAPPED EVENT"
                              << std::endl;
                    continue;
                    break;

@@ -53,6 +53,7 @@ public:
     typedef enum
     {
         MidiNote,
+        MidiNoteOneShot, // doesn't need NOTE OFFs
         MidiProgramChange,
         MidiKeyPressure,
         MidiChannelPressure,

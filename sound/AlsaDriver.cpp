@@ -976,9 +976,22 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
         switch((*i)->getType())
         {
+            case MappedEvent::MidiNoteOneShot:
+                {
+                    // Just an arbitrary duration for one-shot Notes
+                    // for the moment until we work out the timing
+                    // conversion.
+                    //
+                    int duration = 100;
+                    snd_seq_ev_set_note(event,
+                                        channel,
+                                        (*i)->getPitch(),
+                                        (*i)->getVelocity(),
+                                        duration);
+                }
+                break;
+
             case MappedEvent::MidiNote:
-                // Could use just snd_seq_ev_set_note with duration instead
-                //
                 snd_seq_ev_set_noteon(event,
                                       channel,
                                       (*i)->getPitch(),

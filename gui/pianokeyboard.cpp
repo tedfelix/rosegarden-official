@@ -31,7 +31,8 @@ PianoKeyboard::PianoKeyboard(QWidget *parent,
     : QWidget(parent, name, f),
       m_keySize(48, 18),
       m_blackKeySize(24, 8),
-      m_nbKeys(88)
+      m_nbKeys(88),
+      m_mouseDown(false)
 {
     computeKeyPos();
     setMouseTracking(true);
@@ -120,15 +121,24 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
 
 void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
 {
-    /*
-    if (e->button() == LeftButton || e->button() == RightButton)
-        emit keyPressed(e->y());
+    if (m_mouseDown)
+        emit keyPressed(e->y(), true); // we're swooshing
     else
-    */
         emit hoveredOverKeyChanged(e->y());
 }
 
 void PianoKeyboard::mousePressEvent(QMouseEvent *e)
 {
-    emit keyPressed(e->y());
+    if (e->button() == LeftButton)
+    {
+        m_mouseDown = true;
+        emit keyPressed(e->y(), false);
+    }
 }
+
+void PianoKeyboard::mouseReleaseEvent(QMouseEvent *e)
+{
+    if (e->button() == LeftButton)
+        m_mouseDown = false;
+}
+

@@ -7,6 +7,14 @@ Currently looking at:
 
 o ALSA audio
 
+o Starting playback in middle of long Events should actually play them
+
+o Velocity-coloured Matrix Events
+
+o Running key up PianoKeyboard should produce note run
+
+o Segment labelling
+
 o ALSA:
   - ffwd/rwding/looping [DONE - still not wonderful but will do for mo]
   - MIDI recording timestamps [DONE]
@@ -18,7 +26,7 @@ o ALSA:
   - metronome broken with ALSA? [NO - just wasn't implemented - NOW FIXED]
   - MIDI THRU to current selected instrument [DONE]
   - Instrument label on InstrumentParameterBox [DONE]
-  - ALL Synth instruments have the same channel occasionally!
+  - ALL Synth instruments have the same channel occasionally! [???]
 
 o Looping marker set from file load/top level - Looping
   set from Clients - Looping BUG crashing sequencer
@@ -39,8 +47,6 @@ o Segment paramters and modifiers - looping of Segments, quantisation
 Lower priority pending
 ----------------------
 
-o Segment labelling
-
 o Client (Notation/Matrix) labelling as per Segment/Instrument/Track
 
 o Complete segment edit shortcuts (click/copy/multiple segment drag)
@@ -57,6 +63,7 @@ o Segment Zooming - (midi and audio previews of Segments)
 o Audio noise eliminator - recording
 
 o Audio output VU meters
+
 
 Completed POST 0.1.4
 ====================
@@ -93,6 +100,7 @@ Completed POST 0.1.4
 - trackbuttons and segmentcanvas tied scrolling
   [DONE]
 
+- missing events in playback [FIXED - RealTime timestamps issue]
 
 --
 
