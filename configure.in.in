@@ -105,6 +105,9 @@ else
     AC_CHECK_LIB(lrdf, lrdf_dump)
   fi
 
+  dnl check for mad MP3 library
+  AC_CHECK_LIB(mad, mad_bit_length)
+
 dnl fi is for ALSA
 fi
 
