@@ -10,7 +10,7 @@
 # necessary for getting the job done.  So instead I wrote a script to make the
 # various docs.
 
-langs="en de es ru"
+langs="en es"  # de is grotesquely out of date, and ru doesn't really exist
 
 startdir=$PWD
 
@@ -83,7 +83,7 @@ Put() {
 #		user=$(cat /home/silvan/ZTQXP3)
 #		curl -u "$user" -T "$1" ftp://users.adelphia.net/public_html/
 		scp $1 dmmcintyr@rosegarden.sourceforge.net:/home/groups/r/ro/rosegarden/htdocs/pdf
-		ssh -l dmmcintyr rosegarden.sourceforge.net chmod 644 /home/groups/r/ro/rosegarden/htdocs/pdf/using-rosegarden.pdf
+		ssh -l dmmcintyr rosegarden.sourceforge.net chmod 644 /home/groups/r/ro/rosegarden/htdocs/pdf/*.pdf
 
 # probably don't need this now that I'm using ssh to upload it...
 #
