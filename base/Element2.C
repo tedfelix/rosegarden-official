@@ -241,14 +241,14 @@ Composition::Composition(unsigned int nbTracks)
     : m_tracks(nbTracks),
       m_nbTicksPerBar(960 * 4 * 4)
 {
+    cerr << "Composition:(" << nbTracks << ") : this = "
+         << this <<  " - size = "
+         << m_tracks.size() << endl;
 }
 
 Composition::~Composition()
 {
-    for(trackcontainer::iterator i = m_tracks.begin();
-        i != m_tracks.end(); ++i) {
-        delete *(i);
-    }
+    clear();
 }
 
 
@@ -256,10 +256,9 @@ Composition::~Composition()
 bool
 Composition::addTrack(Track *track = 0, int idx = -1)
 {
-    if (idx > m_tracks.size()) {
-        return false; // throw ?
-    }
-    
+    cerr << "Composition::addTrack(track = " << track << ", "
+         << idx << ")\n";
+
     if (!track) track = new Track;
     
     if (idx < 0) {
@@ -272,11 +271,18 @@ Composition::addTrack(Track *track = 0, int idx = -1)
 
             m_tracks.resize(idx + 2);
 
-        } else if (m_tracks[idx]) return false; // there's already a track at
-        // that index
-        
+        } else if (m_tracks[idx]) {
+            cerr << "Composition::addTrack() : there's already a track at this index\n";
+            return false; // there's already a track at
+            // that index
+        }
+
+        cerr << "Composition::addTrack() : adding track at idx "
+             << idx << endl;
         m_tracks[idx] = track;
     }
+
+    return true;
 }
 
 void
@@ -307,5 +313,15 @@ Composition::getNbBars() const
     }
     
     return maxNbBars;
+}
+
+void
+Composition::clear()
+{
+    for(trackcontainer::iterator i = m_tracks.begin();
+        i != m_tracks.end(); ++i) {
+        delete (*i);
+        (*i) = 0;
+    }
 }
 

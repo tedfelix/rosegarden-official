@@ -425,9 +425,10 @@ public:
 
     unsigned int getNbTracks() const { return m_tracks.size(); }
     unsigned int getNbBars() const;
+    void         clear();
 
     unsigned int getNbTicksPerBar() const { return m_nbTicksPerBar; }
-    void getNbTicksPerBar(unsigned int n) { m_nbTicksPerBar = n; }
+    void setNbTicksPerBar(unsigned int n) { m_nbTicksPerBar = n; }
 
     // Some vector<> API delegation
     iterator       begin()       { return m_tracks.begin(); }
@@ -437,7 +438,6 @@ public:
 
     Track*       operator[](int i)       { return m_tracks[i]; }
     const Track* operator[](int i) const { return m_tracks[i]; }
-    void             clear()                 { m_tracks.clear(); }
 
 protected:
     trackcontainer m_tracks;
