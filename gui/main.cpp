@@ -27,8 +27,7 @@
 #include "rosegardengui.h"
 
 static const char *description =
-I18N_NOOP("RosegardenGUI");
-// INSERT A DESCRIPTION FOR YOUR APPLICATION HERE
+I18N_NOOP("Rosegarden - A Notation Editor and MIDI Sequencer for KDE");
 	
 	
 static KCmdLineOptions options[] =
@@ -41,10 +40,11 @@ static KCmdLineOptions options[] =
 int main(int argc, char *argv[])
 {
 
-    KAboutData aboutData( "rosegardengui", I18N_NOOP("RosegardenGUI"),
+    KAboutData aboutData( "rosegardengui", I18N_NOOP("Rosegarden"),
                           VERSION, description, KAboutData::License_GPL,
                           "(c) 2000-2001, Guillaume Laurent, Chris Cannam, Richard Bown");
-    aboutData.addAuthor("Guillaume Laurent, Chris Cannam, Richard Bown",0, "glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com");
+    aboutData.addAuthor("Guillaume Laurent, Chris Cannam, Richard Bown",0,
+                        "glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com");
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
@@ -74,8 +74,8 @@ int main(int argc, char *argv[])
     }
 
     QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-    kapp->dcopClient()->registerAs(kapp->name(), false);
-    //app.dcopClient()->setDefaultObject("RosegardenGUIIface");
+    app.dcopClient()->registerAs(app.name(), false);
+    app.dcopClient()->setDefaultObject("RosegardenGUIIface");
 
     return app.exec();
 
