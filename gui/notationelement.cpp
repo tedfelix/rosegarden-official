@@ -41,7 +41,8 @@ NotationElement::NotationElement(Event *event)
 
 NotationElement::~NotationElement()
 {
-    // de-register from "observer"
+//     kdDebug(KDEBUG_AREA) << "~NotationElement()\n";
+
     delete m_canvasItem;
 }
 
