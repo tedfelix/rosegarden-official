@@ -1596,8 +1596,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_section != InInstrument)
         {
-            m_errorString = "Found Plugin outside Instrument";
-            return false;
+	    if (m_section == InBuss) {
+		m_instrument = 0;
+		// and continue, effectively ignoring the plugin
+	    } else {
+		m_errorString = "Found Plugin outside Instrument";
+		return false;
+	    }
         }
 
         // Despite being InInstrument we might not actually have a valid
