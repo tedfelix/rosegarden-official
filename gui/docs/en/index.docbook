@@ -536,11 +536,74 @@
 	<title>Devices, Instruments and Connections</title>
 
 	<para>Rosegarden uses the term Studio to refer to everything
-	it knows about the sound devices attached to the computer.
+	it knows about the sound systems attached to the computer.
 	This may include &MIDI; and audio hardware and other sound
 	software, and includes information about connections,
 	configuration, &MIDI; patches and so on.</para>
 
+	<para>Three pieces of terminology are essential here:
+
+	  <variablelist>
+
+	    <varlistentry>
+	      <term>Device</term>
+	      <listitem>
+		<para>A <quote>device</quote>, as far as Rosegarden is
+		concerned, is simply something capable of producing
+		sounds.  This may be a MIDI synth or an audio device.
+		MIDI devices do not necessarily correspond directly to
+		physical MIDI ports: they are just things with names
+		that you can refer to, expected to work in particular
+		ways.  Configuration information such as MIDI patch
+		maps can be attached to devices.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>Instrument</term>
+	      <listitem>
+		<para>Each device has a number of
+		<quote>instruments</quote>, each of which is assumed
+		to make a particular sound.  These are the things that
+		you can assign tracks to in order to choose which
+		sound they play.  By default, a device contains 16
+		instruments, created for you at startup: if the device
+		is a MIDI device, then these will each be initialised
+		to one of the 16 MIDI channels.  The instrument is
+		where you set all the properties of a particular
+		voice, such as program settings, reverb, volume etc.
+		</para>
+	      </listitem>
+	    </varlistentry>
+
+	    <varlistentry>
+	      <term>Connection</term>
+	      <listitem>
+		<para>While a MIDI device is simply a name and a
+		collection of configuration information, the
+		<quote>connection</quote> specifies which MIDI port it
+		is physically attached to.  This can be configured in
+		the Manage MIDI Devices dialog.  (Audio devices do not
+		have connections in the same way.)
+		</para>
+	      </listitem>
+	    </varlistentry>
+	  </variablelist>
+	</para>
+
+	<para>For example, imagine a setup consisting of a PC with two
+	physical MIDI ports, one of which has an external synth
+	attached to it.  Here you would normally configure Rosegarden
+	so as to have one MIDI device, corresponding to the synth.
+	You could then configure this device with the correct name and
+	patch map, and then specify a connection for it that
+	corresponded to the relevant MIDI port on your soundcard.
+	Each of the 16 default instruments on the device could then be
+	configured with a suitable program, and you would then assign
+	tracks to those.</para>
+
+	<!--
 	<para>
 	
 	  &rosegarden; has the concept of a <quote>studio</quote>, which is a
@@ -562,7 +625,7 @@
 	  you save.
 	  
 	</para>
-
+-->
       </sect2>
       <sect2 id="studio-midi-import">
 	<title>Studio mapping on &MIDI; import</title>

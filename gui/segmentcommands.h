@@ -118,6 +118,26 @@ private:
     bool                               m_detached;
 };
 
+class SegmentSingleRepeatToCopyCommand : public KNamedCommand
+{
+public:
+    SegmentSingleRepeatToCopyCommand(Rosegarden::Segment *segment,
+				     Rosegarden::timeT time);
+    virtual ~SegmentSingleRepeatToCopyCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+    Rosegarden::Segment *getNewSegment() const { return m_newSegment; }
+
+private:
+    Rosegarden::Composition *m_composition;
+    Rosegarden::Segment *m_segment;
+    Rosegarden::Segment *m_newSegment;
+    Rosegarden::timeT m_time;
+    bool m_detached;
+};
+
 class SegmentQuickCopyCommand : public KNamedCommand
 {
 public:

@@ -266,6 +266,49 @@ SegmentRepeatToCopyCommand::unexecute()
 }
 
 
+
+SegmentSingleRepeatToCopyCommand::SegmentSingleRepeatToCopyCommand(
+        Rosegarden::Segment *segment,
+	Rosegarden::timeT time):
+    KNamedCommand(i18n("Turn Single Repeat into Copy")),
+    m_composition(segment->getComposition()),
+    m_segment(segment),
+    m_newSegment(0),
+    m_time(time),
+    m_detached(false)
+{
+}
+
+SegmentSingleRepeatToCopyCommand::~SegmentSingleRepeatToCopyCommand()
+{
+    if (m_detached) delete m_newSegment;
+}
+
+void
+SegmentSingleRepeatToCopyCommand::execute()
+{
+    if (!m_newSegment) {
+
+        Rosegarden::timeT duration =
+            m_segment->getEndMarkerTime() - m_segment->getStartTime();
+
+	m_newSegment = new Segment(*m_segment);
+	m_newSegment->setStartTime(m_time);
+	m_newSegment->setRepeating(true);
+    }
+
+    m_composition->addSegment(m_newSegment);
+    m_detached = false;
+}
+
+void
+SegmentSingleRepeatToCopyCommand::unexecute()
+{
+    m_composition->detachSegment(m_newSegment);
+    m_detached = true;
+}
+
+
 // -------- Audio Insert Segment --------
 //
 

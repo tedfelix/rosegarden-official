@@ -33,7 +33,6 @@
 #include <qlayout.h>
 #include <qtooltip.h>
 #include <qobjectlist.h>
-#include <qmessagebox.h>
 #include <qgrid.h>
 #include <qbitmap.h>
 #include <qspinbox.h>
@@ -49,6 +48,7 @@
 #include <klocale.h>
 #include <karrowbutton.h>
 #include <kfiledialog.h>
+#include <kmessagebox.h>
 #include <kcombobox.h>
 
 #include "RealTime.h"
@@ -1450,12 +1450,13 @@ EventEditDialog::slotPropertyDeleted()
 
     QString propertyName = pushButton->name();
 
-    if (QMessageBox::warning
-	(this, i18n("Edit Event"),
+    if (KMessageBox::warningContinueCancel
+	(this,
 	 i18n("Are you sure you want to delete the \"%1\" property?\n\n"
 	      "Removing necessary properties may cause unexpected behaviour.").
 	 arg(propertyName),
-	 i18n("&Delete"), i18n("&Cancel"), 0, 1) != 0) return;
+	 i18n("Edit Event"),
+	 i18n("&Delete")) != KMessageBox::Continue) return;
 
     m_modified = true;
     QObjectList *list = m_persistentGrid->queryList(0, propertyName, false);
@@ -1479,13 +1480,14 @@ EventEditDialog::slotPropertyMadePersistent()
 
     QString propertyName = pushButton->name();
 
-    if (QMessageBox::warning
-	(this, i18n("Edit Event"),
+    if (KMessageBox::warningContinueCancel
+	(this,
 	 i18n("Are you sure you want to make the \"%1\" property persistent?\n\n"
 	      "This could cause problems if it overrides a different "
 	      "computed value later on.").
 	 arg(propertyName),
-	 i18n("Make &Persistent"), i18n("&Cancel"), 0, 1) != 0) return;
+	 i18n("Edit Event"),
+	 i18n("Make &Persistent")) != KMessageBox::Continue) return;
 
     QObjectList *list = m_nonPersistentGrid->queryList(0, propertyName, false);
     QObjectListIt i(*list);
