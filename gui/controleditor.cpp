@@ -36,6 +36,8 @@
 #include "studiocommands.h"
 #include "widgets.h"
 
+const QString notShowing(i18n("<not showing>"));
+
 ControlEditorDialog::ControlEditorDialog(QWidget *parent,
                                          RosegardenGUIDoc *doc):
     KMainWindow(parent, "controleditordialog"),
@@ -57,10 +59,10 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     m_listView->addColumn(i18n("Min  "));
     m_listView->addColumn(i18n("Default  "));
     m_listView->addColumn(i18n("Color  "));
-    m_listView->addColumn(i18n("Show on Instrument panel"));
+    m_listView->addColumn(i18n("Position on instrument panel"));
 
     // Align centrally
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < 9; ++i)
         m_listView->setColumnAlignment(i, Qt::AlignHCenter);
 
 
@@ -172,6 +174,16 @@ ControlEditorDialog::slotUpdate()
 
     for (; it != m_studio->endControllers(); ++it)
     {
+        Rosegarden::Composition &comp =  m_doc->getComposition();
+
+        QString colour = 
+            strtoqstr(comp.getGeneralColourMap().getNameByIndex((*it)->getColourIndex()));
+
+        if (colour == "") colour = i18n("<default>");
+
+        QString position = QString("%1").arg((*it)->getIPBPosition());
+        if (position.toInt() == -1) position = notShowing;
+
         item = new ControlParameterItem(i++,
                                         m_listView,
                                         strtoqstr((*it)->getName()),
@@ -182,15 +194,22 @@ ControlEditorDialog::slotUpdate()
                                         QString("%1").arg((*it)->getMin()),
                                         QString("%1").arg((*it)->getMax()),
                                         QString("%1").arg((*it)->getDefault()),
-                                        QString("%1").arg((*it)->getColourIndex()));
+                                        colour,
+                                        position);
+
+        // create and set a colour pixmap
+        //
+        QPixmap colourPixmap(16, 16);
+        Rosegarden::Colour c = comp.getGeneralColourMap().getColourByIndex((*it)->getColourIndex());
+        colourPixmap.fill(QColor(c.getRed(), c.getGreen(), c.getBlue()));
+        item->setPixmap(7, colourPixmap);
 
         m_listView->insertItem(item);
     }
 
     if (m_listView->childCount() == 0)
     {
-        QListViewItem *item = new QListViewItem(m_listView,
-                                                i18n("<none>"));
+        QListViewItem *item = new QListViewItem(m_listView, i18n("<none>"));
         m_listView->insertItem(item);
 
         m_listView->setSelectionMode(QListView::NoSelection);
@@ -343,7 +362,7 @@ ControlEditorDialog::slotEdit(QListViewItem *i)
     {
         ControlParameterEditDialog *dialog = 
             new ControlParameterEditDialog::ControlParameterEditDialog(
-                    this, m_studio->getControlParameter(item->getId()));
+                    this, m_studio->getControlParameter(item->getId()), m_doc);
 
         if (dialog->exec() == QDialog::Accepted)
         {
@@ -387,9 +406,11 @@ const char* const ControlEditorDialog::ControlEditorConfigGroup = "Control Edito
 
 ControlParameterEditDialog::ControlParameterEditDialog(
             QWidget *parent,
-            Rosegarden::ControlParameter *control):
+            Rosegarden::ControlParameter *control,
+            RosegardenGUIDoc *doc):
     KDialogBase(parent, 0, true,
                 i18n("Edit Control Parameter"), Ok | Cancel),
+    m_doc(doc),
     m_control(control)
 {
     m_dialogControl = *control; // copy in the ControlParameter
@@ -435,6 +456,10 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     m_colourCombo = new RosegardenComboBox(frame);
     layout->addWidget(m_colourCombo, 7, 1);
 
+    layout->addWidget(new QLabel(i18n("Instrument Parameter Box position:"), frame), 8, 0);
+    m_ipbPosition = new RosegardenComboBox(frame);
+    layout->addWidget(m_ipbPosition, 8, 1);
+
     connect(m_nameEdit, SIGNAL(textChanged(const QString&)),
             SLOT(slotNameChanged(const QString&)));
 
@@ -459,6 +484,9 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     connect(m_colourCombo, SIGNAL(activated(int)),
             SLOT(slotColourChanged(int)));
 
+    connect(m_ipbPosition, SIGNAL(activated(int)),
+            SLOT(slotIPBPositionChanged(int)));
+
     //m_nameEdit->selectAll();
     //m_description->selectAll();
 
@@ -477,28 +505,53 @@ ControlParameterEditDialog::ControlParameterEditDialog(
 
     // populate combos
     m_typeCombo->insertItem(strtoqstr(Rosegarden::Controller::EventType));
-    m_typeCombo->insertItem(strtoqstr(Rosegarden::PitchBend::EventType));
+    //m_typeCombo->insertItem(strtoqstr(Rosegarden::PitchBend::EventType));
 
-    m_colourCombo->insertItem(i18n("Red"));
-    m_colourCombo->insertItem(i18n("Blue"));
-    m_colourCombo->insertItem(i18n("Green"));
+    // Populate colour combo
+    //
+    //
+    Rosegarden::ColourMap &colourMap = m_doc->getComposition().getGeneralColourMap();
+    Rosegarden::RCMap::const_iterator it;
+    QPixmap colourPixmap(16, 16);
+    int pos = 0, setItem = 0;
+
+    for (it = colourMap.begin(); it != colourMap.end(); ++it)
+    {
+        Rosegarden::Colour c = it->second.first;
+        colourPixmap.fill(QColor(c.getRed(), c.getGreen(), c.getBlue()));
+        m_colourCombo->insertItem(colourPixmap, strtoqstr(it->second.second));
+
+        if (control->getColourIndex() == it->first) setItem = pos;
+
+        pos++;
+    }
+
+    // Populate IPB position combo
+    //
+    m_ipbPosition->insertItem(notShowing);
+    for (unsigned int i = 0; i < 16; i++)
+    {
+        m_ipbPosition->insertItem(QString("%1").arg(i));
+    }
 
     m_nameEdit->setText(strtoqstr(control->getName()));
 
     if (control->getType() == Rosegarden::Controller::EventType)
         m_typeCombo->setCurrentItem(0);
+    /*
     else if (control->getType() == Rosegarden::PitchBend::EventType)
         m_typeCombo->setCurrentItem(1);
+        */
 
     m_description->setText(strtoqstr(control->getDescription()));
     m_controllerBox->setValue(int(control->getControllerValue()));
     m_minBox->setValue(control->getMin());
     m_maxBox->setValue(control->getMax());
     m_defaultBox->setValue(control->getDefault());
-    
-    m_colourCombo->setCurrentItem(0);
+    m_colourCombo->setCurrentItem(setItem);
 
-
+    // set combo position
+    m_ipbPosition->setCurrentItem(control->getIPBPosition() + 1);
 }
 
 void 
@@ -562,6 +615,8 @@ void
 ControlParameterEditDialog::slotIPBPositionChanged(int value)
 {
     RG_DEBUG << "ControlParameterEditDialog::slotIPBPositionChanged" << endl;
-    m_dialogControl.setIPBPosition(value);
+    m_dialogControl.setIPBPosition(value - 1);
 }
+
+
 

@@ -78,7 +78,7 @@ ControlParameter::ControlParameter(const ControlParameter &control):
         m_default(control.getDefault()),
         m_controllerValue(control.getControllerValue()),
         m_colourIndex(control.getColourIndex()),
-        m_ipbPosition(-1)  // doesn't appear on IPB by default
+        m_ipbPosition(control.getIPBPosition())
 {
 }
 

@@ -51,15 +51,17 @@ public:
                          QString str5,
                          QString str6,
                          QString str7,
-                         QString str8):
+                         QString str8,
+                         QString str9):
         QListViewItem(parent, str1, str2, str3, str4, str5, str6, str7, str8),
-        m_id(id) { }
+        m_id(id) { setText(8, str9); }
 
     int getId() const { return m_id; }
 
 protected:
 
-    int m_id;
+    int     m_id;
+    QString m_string9;
 };
 
 class ControlParameterEditDialog : public KDialogBase
@@ -67,7 +69,8 @@ class ControlParameterEditDialog : public KDialogBase
     Q_OBJECT
 public:
     ControlParameterEditDialog(QWidget *parent,
-                               Rosegarden::ControlParameter *control);
+                               Rosegarden::ControlParameter *control,
+                               RosegardenGUIDoc *doc);
 
     Rosegarden::ControlParameter& getControl() { return m_dialogControl; }
 
