@@ -87,7 +87,8 @@ RosegardenGUIApp::RosegardenGUIApp()
     initDocument();
     setupActions();
 
-    initView();
+    if (!performAutoload())
+        initView();
 
     // Create a sequence manager
     m_seqManager = new Rosegarden::SequenceManager(m_doc, m_transport);
@@ -113,7 +114,7 @@ RosegardenGUIApp::RosegardenGUIApp()
 
     // Now autoload
     //
-    performAutoload();
+
 }
 
 RosegardenGUIApp::~RosegardenGUIApp()
@@ -515,7 +516,7 @@ void RosegardenGUIApp::initView()
 
 }
 
-void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
+bool RosegardenGUIApp::openDocumentFile(const char* _cmdl)
 {
     KTmpStatusMsg msg(i18n("Opening file..."), statusBar());
     
@@ -528,9 +529,10 @@ void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
     if (m_doc->openDocument(_cmdl)) {
 
         initView();
-
+        return true;
     }
 
+    return false;
 }
 
 void RosegardenGUIApp::openFile(const QString& url)
@@ -1808,8 +1810,7 @@ RosegardenGUIApp::slotSendMappedEvent(Rosegarden::MappedEvent *mE)
 // Find and load the autoload file to set up a default Studio
 //
 //
-void
-RosegardenGUIApp::performAutoload()
+bool RosegardenGUIApp::performAutoload()
 {
     QString autoloadFile =
         KGlobal::dirs()->findResource("appdata", "autoload.rg");
@@ -1823,7 +1824,7 @@ RosegardenGUIApp::performAutoload()
             << "Can't find autoload file - no default Studio loaded"
             << endl;
 
-        return;
+        return false;
     }
 
     // Else we try to open it
@@ -1831,7 +1832,7 @@ RosegardenGUIApp::performAutoload()
     kdDebug(KDEBUG_AREA)
         << "RosegardenGUIApp::performAutoload() - autoloading" << endl;
 
-    openDocumentFile(autoloadFile.data());
+    return openDocumentFile(autoloadFile.data());
 }
 
 

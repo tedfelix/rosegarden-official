@@ -90,8 +90,10 @@ public:
 
     /**
      * opens a file specified by commandline option
+     *
+     * @return true if file was successfully opened, false otherwise
      */
-    void openDocumentFile(const char *_cmdl=0);
+    bool openDocumentFile(const char *_cmdl=0);
 
     /**
      * returns a pointer to the current document connected to the
@@ -188,7 +190,7 @@ public:
      * Autoload the autoload song for Studio parameters
      *
      */
-    void performAutoload();
+    bool performAutoload();
 
 protected:
 
