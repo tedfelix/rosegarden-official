@@ -61,6 +61,7 @@
 
 using Rosegarden::SimpleRulerScale;
 using Rosegarden::Composition;
+using Rosegarden::timeT;
 
 
 RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
@@ -352,6 +353,17 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     connect(notationView, SIGNAL(jumpPlaybackTo(Rosegarden::timeT)),
 	    getDocument(), SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
+    // Encourage the notation view window to open to the same
+    // interval as the current segment view
+    if (m_trackEditor->getHorizontalScrollBar()->value() > 1) { // don't scroll unless we need to
+        // first find the time at the center of the visible segment canvas
+        int centerX = (int)(m_trackEditor->getSegmentCanvas()->contentsX() +
+                            m_trackEditor->getSegmentCanvas()->visibleWidth() / 2);
+        timeT centerSegmentView = m_trackEditor->getRulerScale()->getTimeForX(centerX);
+        // then scroll the notation view to that time, "localized" for the current segment
+        notationView->scrollToTime(centerSegmentView);
+        notationView->updateView();
+    }
     notationView->show();
 }
 

@@ -40,6 +40,7 @@ class QLabel;
 class QCanvasItem;
 class KActionMenu;
 namespace Rosegarden { class Progress; class Segment; class EventSelection; class MappedEvent; }
+using Rosegarden::timeT;
 class RosegardenGUIDoc;
 class NotationTool;
 class NotationToolBox;
@@ -186,6 +187,9 @@ public:
 
     /// Returns the page width according to the layout mode (page/linear)
     int getPageWidth();
+
+    /// Scrolls the view such that the given time is centered
+    void scrollToTime(timeT t);
 
     NotePixmapFactory *getNotePixmapFactory() const {
 	return m_notePixmapFactory;

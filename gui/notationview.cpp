@@ -1593,6 +1593,17 @@ NotationView::getPageWidth()
     return width() - 50;
 }
 
+/// Scrolls the view such that the given time is centered
+void
+NotationView::scrollToTime(timeT t) {
+    double notationViewLayoutCoord = m_hlayout.getXForTime(t);
+    // Doesn't appear to matter which staff we use
+    double notationViewCanvasCoord = getStaff(0)->getCanvasCoordsForLayoutCoords(notationViewLayoutCoord, 0).first;
+    // HK: I could have sworn I saw a hard-coded scroll happen somewhere
+    // (i.e. a default extra scroll to make up for the staff not beginning on
+    // the left edge) but now I can't find it.
+    slotScrollHoriz(int(notationViewCanvasCoord));// + DEFAULT_STAFF_OFFSET);
+}
 
 void
 NotationView::paintEvent(QPaintEvent *e)

@@ -80,6 +80,7 @@ public:
     BarButtons*    getBottomBarButtons()    { return m_bottomBarButtons; }
     TrackButtons*  getTrackButtons()        { return m_trackButtons; }
     QScrollBar*    getHorizontalScrollBar() { return m_horizontalScrollBar; }
+    Rosegarden::RulerScale*    getRulerScale() { return m_rulerScale; }
 
     int getTrackCellHeight() const;
 
