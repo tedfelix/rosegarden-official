@@ -67,7 +67,7 @@ Event::operator=(const Event &e)
 }    
 
 bool
-Event::has(const string &name) const
+Event::has(const PropertyName &name) const
 {
     PropertyMap::const_iterator i = m_properties.find(name);
     return (i != m_properties.end());
@@ -94,14 +94,14 @@ Event::copyFrom(const Event &e)
 }
 
 void
-Event::unset(const string &name)
+Event::unset(const PropertyName &name)
 {
     m_properties.erase(name);
 }
     
 
 string
-Event::getPropertyType(const string &name) const
+Event::getPropertyType(const PropertyName &name) const
     // throw (NoData)
 {
     PropertyMap::const_iterator i = m_properties.find(name);
@@ -114,7 +114,7 @@ Event::getPropertyType(const string &name) const
    
 
 string
-Event::getAsString(const string &name) const
+Event::getAsString(const PropertyName &name) const
     // throw (NoData)
 {
     PropertyMap::const_iterator i = m_properties.find(name);
@@ -181,12 +181,29 @@ Event::getNonPersistentPropertyNames() const
     return v;
 }
 
+#ifdef PROPERTY_NAME_IS_INT
+
+static size_t PropertyNameDeepSize(const PropertyName &s) {
+    return sizeof(s);
+}
+
+#else
+
+static size_t PropertyNameDeepSize(const PropertyName &s) {
+    // amount of storage space a specific PropertyName takes up, above
+    // and beyond sizeof(PropertyName)
+    return sizeof(s) + s.size();
+}
+
+#endif // PROPERTY_NAME_IS_INT
+
 size_t
 Event::getStorageSize() const
 {
-    size_t s = sizeof(*this);
+    size_t s = sizeof(*this) + m_type.size();
     for (PropertyMap::const_iterator i = m_properties.begin();
          i != m_properties.end(); ++i) {
+        s += PropertyNameDeepSize(i->first);
         s += i->second->getStorageSize();
     }
     return s;

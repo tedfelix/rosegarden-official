@@ -26,7 +26,7 @@ namespace Rosegarden
 using std::string;
     
 string
-PropertyDefn<Int>::name()
+PropertyDefn<Int>::typeName()
 {
     return "Int";
 }    
@@ -45,7 +45,7 @@ PropertyDefn<Int>::unparse(PropertyDefn<Int>::basic_type i)
 }
 
 string
-PropertyDefn<String>::name()
+PropertyDefn<String>::typeName()
 {
     return "String";
 }    
@@ -63,7 +63,7 @@ PropertyDefn<String>::unparse(PropertyDefn<String>::basic_type i)
 }
 
 string
-PropertyDefn<Bool>::name()
+PropertyDefn<Bool>::typeName()
 {
     return "Bool";
 }    

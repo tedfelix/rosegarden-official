@@ -23,6 +23,12 @@
 
 #include <string>
 
+#if (__GNUC__ < 3)
+#include <hash_map>
+#else
+#include <ext/hash_map>
+#endif
+
 namespace Rosegarden 
 {
 
@@ -32,14 +38,14 @@ template <PropertyType P>
 class PropertyDefn
 {
 public:
-    static std::string name() { return "Undefined"; }
     struct PropertyDefnNotDefined {
 	PropertyDefnNotDefined() { assert(0); }
     };
     typedef PropertyDefnNotDefined basic_type;
+
+    static std::string typeName() { return "Undefined"; }
     static basic_type parse(std::string);
     static std::string unparse(basic_type);
-
 };
 
 template <PropertyType P>
@@ -61,9 +67,9 @@ template <>
 class PropertyDefn<Int>
 {
 public:
-    static std::string name();
     typedef long basic_type;
 
+    static std::string typeName();
     static basic_type parse(std::string s);
     static std::string unparse(basic_type i);
 };
@@ -73,9 +79,9 @@ template <>
 class PropertyDefn<String>
 {
 public:
-    static std::string name();
     typedef std::string basic_type;
 
+    static std::string typeName();
     static basic_type parse(std::string s);
     static std::string unparse(basic_type i);
 };
@@ -84,9 +90,9 @@ template <>
 class PropertyDefn<Bool>
 {
 public:
-    static std::string name();
     typedef bool basic_type;
 
+    static std::string typeName();
     static basic_type parse(std::string s);
     static std::string unparse(basic_type i);
 };
@@ -173,7 +179,7 @@ template <PropertyType P>
 std::string
 PropertyStore<P>::getTypeName() const
 {
-    return PropertyDefn<P>::name();
+    return PropertyDefn<P>::typeName();
 }
 
 template <PropertyType P>

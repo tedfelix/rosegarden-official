@@ -41,7 +41,7 @@ enum Accidental {
 class Clef {
 public:
     static const std::string EventType;
-    static const std::string ClefPropertyName;
+    static const PropertyName ClefPropertyName;
     static const Clef DefaultClef;
     struct BadClefName { };
 
@@ -82,10 +82,23 @@ private:
      will return all the properties of the key.
 */
 
+struct eqstring {
+    bool operator() (const std::string &s1, const std::string &s2) const {
+        return s1 == s2;
+    }
+};
+
+struct hashstring {
+    static std::hash<const char *> _H;
+    size_t operator() (const std::string &s) const { return _H(s.c_str()); }
+};
+
+std::hash<const char *> hashstring::_H;
+
 class Key {
 public:
     static const std::string EventType;
-    static const std::string KeyPropertyName;
+    static const PropertyName KeyPropertyName;
     static const Key DefaultKey;
     struct BadKeyName { };
 
@@ -222,11 +235,11 @@ public:
     static const std::string EventType;
     static const std::string EventRestType;
 
-    static const std::string NoteType;
-    static const std::string NoteDots;
+    static const PropertyName NoteType;
+    static const PropertyName NoteDots;
 
-    static const std::string TiedBackwardPropertyName;
-    static const std::string TiedForwardPropertyName;
+    static const PropertyName TiedBackwardPropertyName;
+    static const PropertyName TiedForwardPropertyName;
 
     typedef int Type; // not an enum, too much arithmetic at stake
 
@@ -339,8 +352,8 @@ class TimeSignature
 {
 public:
     static const std::string EventType;
-    static const std::string NumeratorPropertyName;
-    static const std::string DenominatorPropertyName;
+    static const PropertyName NumeratorPropertyName;
+    static const PropertyName DenominatorPropertyName;
     static const TimeSignature DefaultTimeSignature;
     struct BadTimeSignature { };
 

@@ -1,6 +1,9 @@
 CC	 = g++
 CPPFLAGS = -g
-LIBCORE  = ../libcore.a
+
+###LIBCORE  = ../.libs/libcore.a
+LIBCORE  = ../Property.o ../Event.o
+
 INCPATH  = -I..
 
 SRCS	:= test.C
@@ -13,7 +16,9 @@ clean:
 %.o: %.C
 	$(CC) $(CPPFLAGS) -c $< $(INCPATH) -o $@
 
-test: test.o
+###test: test.o
+###	$(CC) $< $(LIBCORE) -o $@
+test: test.o ../Property.o ../Event.o
 	$(CC) $< $(LIBCORE) -o $@
 
 depend:

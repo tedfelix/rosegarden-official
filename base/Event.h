@@ -23,38 +23,57 @@
 
 #include "Property.h"
 
-#if (__GNUC__ < 3)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
-
 #include <string>
 #ifndef NDEBUG
 #include <iostream>
 #endif
 
-struct eqstring
-{
-    bool operator()(const std::string &s1, const std::string &s2) const {
-        return s1 == s2;
-    }
-};
-
-struct hashstring
-{
-    static std::hash<const char*> _H;
-    size_t operator()(const std::string &s) const {
-        return _H(s.c_str());
-    }
-};
-
-std::hash<const char*> hashstring::_H;
-
 namespace Rosegarden 
 {
 
 typedef int timeT;
+
+#ifdef PROPERTY_NAME_IS_INT
+
+typedef int PropertyName;
+
+struct PropertyNamesEqual
+{
+    bool operator() (const PropertyName &s1, const PropertyName &s2) const {
+        return s1 == s2;
+    }
+};
+
+struct PropertyNameHash
+{
+    size_t operator() (const PropertyName &s) const {
+        return (size_t)s;
+    }
+};
+
+#else
+
+typedef std::string PropertyName;
+
+struct PropertyNamesEqual
+{
+    bool operator() (const PropertyName &s1, const PropertyName &s2) const {
+        return s1 == s2;
+    }
+};
+
+struct PropertyNameHash
+{
+    static std::hash<const char *> _H;
+
+    size_t operator() (const PropertyName &s) const {
+        return _H(s.c_str());
+    }
+};
+
+std::hash<const char *> PropertyNameHash::_H;
+
+#endif // PROPERTY_NAME_IS_INT
     
 class Event
 {
@@ -86,47 +105,47 @@ public:
     timeT getDuration()     const    { return m_duration; }
     void setDuration(timeT d)        { m_duration = d; }
 
-    bool has(const std::string &name) const;
+    bool has(const PropertyName &name) const;
 
     template <PropertyType P>
-    PropertyDefn<P>::basic_type get(const std::string &name) const
+    PropertyDefn<P>::basic_type get(const PropertyName &name) const
         /* throw (NoData, BadType) */;
 
     // no throw, returns bool
     template <PropertyType P>
-    bool get(const std::string &name, PropertyDefn<P>::basic_type &val) const;
+    bool get(const PropertyName &name, PropertyDefn<P>::basic_type &val) const;
 
     template <PropertyType P>
-    bool isPersistent(const std::string &name) const
+    bool isPersistent(const PropertyName &name) const
         /* throw (NoData) */;
 
     template <PropertyType P>
-    void setPersistence(const std::string &name, bool persistent)
+    void setPersistence(const PropertyName &name, bool persistent)
         /* throw (NoData) */;
 
-    std::string getPropertyType(const std::string &name) const
+    std::string getPropertyType(const PropertyName &name) const
  	/* throw (NoData) */;
-    std::string getAsString(const std::string &name) const
+    std::string getAsString(const PropertyName &name) const
  	/* throw (NoData) */;
 
     template <PropertyType P>
-    void set(const std::string &name, PropertyDefn<P>::basic_type value,
+    void set(const PropertyName &name, PropertyDefn<P>::basic_type value,
              bool persistent = true)
         /* throw (BadType) */;
 
     // set non-persistent, but only if there's no persistent value already
     template <PropertyType P>
-    void setMaybe(const std::string &name, PropertyDefn<P>::basic_type value)
+    void setMaybe(const PropertyName &name, PropertyDefn<P>::basic_type value)
         /* throw (BadType) */;
 
     template <PropertyType P>
-    void setFromString(const std::string &name, std::string value,
+    void setFromString(const PropertyName &name, std::string value,
                        bool persistent = true)
  	/* throw (BadType) */;
 
-    void unset(const std::string &name);
+    void unset(const PropertyName &name);
     
-    typedef std::vector<std::string> PropertyNames;
+    typedef std::vector<PropertyName> PropertyNames;
     PropertyNames getPropertyNames() const;
     PropertyNames getPersistentPropertyNames() const;
     PropertyNames getNonPersistentPropertyNames() const;
@@ -149,7 +168,8 @@ public:
         return t <  e->getAbsoluteTime();
     }
 
-    size_t getStorageSize() const; // for debugging and inspection purposes
+    // approximate, for debugging and inspection purposes
+    size_t getStorageSize() const;
 
 #ifndef NDEBUG
     void dump(std::ostream&) const;
@@ -174,8 +194,8 @@ private:
 
     unsigned int m_viewElementRefCount;
 
-    typedef std::hash_map<std::string, PropertyStoreBase*, hashstring, eqstring>
-        PropertyMap;
+    typedef std::hash_map<PropertyName, PropertyStoreBase*,
+                          PropertyNameHash, PropertyNamesEqual> PropertyMap;
     typedef PropertyMap::value_type PropertyPair;
     PropertyMap m_properties;
 };
@@ -183,7 +203,7 @@ private:
 
 template <PropertyType P>
 bool
-Event::get(const std::string &name, PropertyDefn<P>::basic_type &val) const
+Event::get(const PropertyName &name, PropertyDefn<P>::basic_type &val) const
 {
     PropertyMap::const_iterator i = m_properties.find(name);
     if (i != m_properties.end()) { 
@@ -196,7 +216,7 @@ Event::get(const std::string &name, PropertyDefn<P>::basic_type &val) const
         else {
 #ifndef NDEBUG
             std::cerr << "Event::get() Error: Attempt to get property \"" << name
-                 << "\" as " << PropertyDefn<P>::name() <<", actual type is "
+                 << "\" as " << PropertyDefn<P>::typeName() <<", actual type is "
                  << sb->getTypeName() << std::endl;
 #endif
             return false;
@@ -222,7 +242,7 @@ Event::get(const std::string &name, PropertyDefn<P>::basic_type &val) const
 
 template <PropertyType P>
 PropertyDefn<P>::basic_type
-Event::get(const std::string &name) const
+Event::get(const PropertyName &name) const
     // throw (NoData, BadType)
 {
     PropertyMap::const_iterator i = m_properties.find(name);
@@ -233,7 +253,7 @@ Event::get(const std::string &name) const
         else {
 #ifndef NDEBUG
             std::cerr << "Event::get() Error: Attempt to get property \"" << name
-                 << "\" as " << PropertyDefn<P>::name() <<", actual type is "
+                 << "\" as " << PropertyDefn<P>::typeName() <<", actual type is "
                  << sb->getTypeName() << std::endl;
 #endif
             throw BadType();
@@ -251,7 +271,7 @@ Event::get(const std::string &name) const
 
 template <PropertyType P>
 bool
-Event::isPersistent(const std::string &name) const
+Event::isPersistent(const PropertyName &name) const
     // throw (NoData)
 {
     PropertyMap::const_iterator i = m_properties.find(name);
@@ -268,7 +288,7 @@ Event::isPersistent(const std::string &name) const
 
 template <PropertyType P>
 void
-Event::setPersistence(const std::string &name, bool persistent)
+Event::setPersistence(const PropertyName &name, bool persistent)
     // throw (NoData)
 {
     PropertyMap::const_iterator i = m_properties.find(name);
@@ -285,7 +305,7 @@ Event::setPersistence(const std::string &name, bool persistent)
 
 template <PropertyType P>
 void
-Event::set(const std::string &name, PropertyDefn<P>::basic_type value,
+Event::set(const PropertyName &name, PropertyDefn<P>::basic_type value,
            bool persistent)
     // throw (BadType)
 {
@@ -299,7 +319,7 @@ Event::set(const std::string &name, PropertyDefn<P>::basic_type value,
         } else {
 #ifndef NDEBUG
             std::cerr << "Error: Element: Attempt to set property \"" << name
-                 << "\" as " << PropertyDefn<P>::name() <<", actual type is "
+                 << "\" as " << PropertyDefn<P>::typeName() <<", actual type is "
                  << sb->getTypeName() << std::endl;
 #endif
             throw BadType();
@@ -314,7 +334,7 @@ Event::set(const std::string &name, PropertyDefn<P>::basic_type value,
 
 template <PropertyType P>
 void
-Event::setMaybe(const std::string &name, PropertyDefn<P>::basic_type value)
+Event::setMaybe(const PropertyName &name, PropertyDefn<P>::basic_type value)
     // throw (BadType)
 {
     // no need to catch NoData from isPersistent, as the has() check
@@ -326,7 +346,7 @@ Event::setMaybe(const std::string &name, PropertyDefn<P>::basic_type value)
 
 template <PropertyType P>
 void
-Event::setFromString(const std::string &name, std::string value, bool persistent)
+Event::setFromString(const PropertyName &name, std::string value, bool persistent)
     // throw (BadType)
 {
     set<P>(name, PropertyDefn<P>::parse(value), persistent);

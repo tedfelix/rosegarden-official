@@ -4,7 +4,10 @@
 
 #include "Event.h"
 #include "Track.h"
+
+#ifdef TEST_NOTATION_TYPES
 #include "NotationTypes.h"
+#endif
 
 #include <cstdio>
 
@@ -13,6 +16,20 @@
 
 using namespace std;
 using namespace Rosegarden;
+
+#ifdef PROPERTY_NAME_IS_INT
+static const PropertyName DURATION_PROPERTY = 2143213;
+static const PropertyName SOME_BOOL_PROPERTY = 2132;
+static const PropertyName SOME_STRING_PROPERTY = 325432;
+static const PropertyName NONEXISTENT_PROPERTY = 12;
+static const PropertyName ANNOTATION_PROPERTY = 15935254;
+#else
+static const PropertyName DURATION_PROPERTY = "duration";
+static const PropertyName SOME_BOOL_PROPERTY = "someBoolProp";
+static const PropertyName SOME_STRING_PROPERTY = "someStringProp";
+static const PropertyName NONEXISTENT_PROPERTY = "nonexistentprop";
+static const PropertyName ANNOTATION_PROPERTY = "annotation";
+#endif // PROPERTY_NAME_IS_INT
 
 int main(int argc, char **argv)
 {
@@ -23,11 +40,11 @@ int main(int argc, char **argv)
              << "sizeof Event : " << sizeof(Event) << endl;
 
         Event e("note");
-        e.set<Int>("duration", 20);
-        cout << "duration is " << e.get<Int>("duration") << endl;
+        e.set<Int>(DURATION_PROPERTY, 20);
+        cout << "duration is " << e.get<Int>(DURATION_PROPERTY) << endl;
 
-        e.set<Bool>("someBoolProp", true);
-        e.set<String>("someStringProp", "foobar");
+        e.set<Bool>(SOME_BOOL_PROPERTY, true);
+        e.set<String>(SOME_STRING_PROPERTY, "foobar");
 
         cout << "sizeof event after some properties set : "
              << sizeof e << endl;
@@ -37,50 +54,51 @@ int main(int argc, char **argv)
         cout << endl << "dump finished" << endl;
 
         try {
-                cout << "duration is " << e.get<String>("duration") << endl;
+                cout << "duration is " << e.get<String>(DURATION_PROPERTY) << endl;
         } catch (Event::BadType bt) {
                 cout << "Correctly caught BadType when trying to get<String> of duration" << endl;
         }
 
         string s;
     
-        if (!e.get<String>("duration", s)) {
+        if (!e.get<String>(DURATION_PROPERTY, s)) {
                 cout << "Correctly got error when trying to get<String> of duration" << endl;
         } else {
                 cerr << "ERROR AT " << __LINE__ << endl;
         }
     
         try {
-                cout << "dummy prop is " << e.get<String>("nonexistentprop") << endl;
+                cout << "dummy prop is " << e.get<String>(NONEXISTENT_PROPERTY) << endl;
         } catch (Event::NoData bt) {
                 cout << "Correctly caught NoData when trying to get non existent property" << endl;
         }
 
-        if (!e.get<String>("nonexistentprop", s)) {
+        if (!e.get<String>(NONEXISTENT_PROPERTY, s)) {
                 cout << "Correctly got error when trying to get<String> of non existent property" << endl;
         } else {
                 cerr << "ERROR AT " << __LINE__ << endl;
         }
 
 
-        e.setFromString<Int>("duration", "30");
-        cout << "duration is " << e.get<Int>("duration") << endl;
+        e.setFromString<Int>(DURATION_PROPERTY, "30");
+        cout << "duration is " << e.get<Int>(DURATION_PROPERTY) << endl;
 
-        e.setFromString<String>("annotation", "This is my house");
-        cout << "annotation is " << e.get<String>("annotation") << endl;
+        e.setFromString<String>(ANNOTATION_PROPERTY, "This is my house");
+        cout << "annotation is " << e.get<String>(ANNOTATION_PROPERTY) << endl;
 
         long durationVal;
-        if (e.get<Int>("duration", durationVal))
+        if (e.get<Int>(DURATION_PROPERTY, durationVal))
                 cout << "duration is " << durationVal << endl;
         else
                 cerr << "ERROR AT " << __LINE__ << endl;
 
-        if (e.get<String>("annotation", s))
+        if (e.get<String>(ANNOTATION_PROPERTY, s))
                 cout << "annotation is " << s << endl;
         else
                 cerr << "ERROR AT " << __LINE__ << endl;
 
-#if 0
+#define TEST_SPEED 1
+#if TEST_SPEED
         cout << "Testing speed of Event..." << endl;
         int i;
         long j;
@@ -93,7 +111,11 @@ int main(int argc, char **argv)
         st = times(&spare);
         for (i = 0; i < gsCount; ++i) {
                 if (i%4==0) sprintf(b+4, "%d", i);
+#ifdef PROPERTY_NAME_IS_INT
+                e1.set<Int>(i/4, i);
+#else
                 e1.set<Int>(b, i);
+#endif
         }
         et = times(&spare);
         cout << "Event: " << gsCount << " setInts: " << (et-st)*10 << "ms\n";
@@ -102,7 +124,11 @@ int main(int argc, char **argv)
         j = 0;
         for (i = 0; i < gsCount; ++i) {
                 if (i%4==0) sprintf(b+4, "%d", i);
+#ifdef PROPERTY_NAME_IS_INT
+                e1.get<Int>(i/4);
+#else
                 j += e1.get<Int>(b);
+#endif
         }
         et = times(&spare);
         cout << "Event: " << gsCount << " getInts: " << (et-st)*10 << "ms\n";
@@ -110,7 +136,11 @@ int main(int argc, char **argv)
         st = times(&spare);
         for (i = 0; i < 100; ++i) {
                 Event e11(e1);
+#ifdef PROPERTY_NAME_IS_INT
+                (void)e11.get<Int>(0);
+#else
                 (void)e11.get<Int>(b);
+#endif
         }
         et = times(&spare);
         cout << "Event: 100 copy ctors of " << e1.getStorageSize() << "-byte element: "
@@ -121,7 +151,11 @@ int main(int argc, char **argv)
         st = times(&spare);
         for (i = 0; i < gsCount; ++i) {
                 if (i%4==0) sprintf(b+4, "%ds", i);
+#ifdef PROPERTY_NAME_IS_INT
+                e1.set<String>(i/4 + 1000000, b);
+#else
                 e1.set<String>(b, b);
+#endif
         }
         et = times(&spare);
         cout << "Event: " << gsCount << " setStrings: " << (et-st)*10 << "ms\n";
@@ -130,7 +164,11 @@ int main(int argc, char **argv)
         j = 0;
         for (i = 0; i < gsCount; ++i) {
                 if (i%4==0) sprintf(b+4, "%ds", i);
+#ifdef PROPERTY_NAME_IS_INT
+                j += e1.get<String>(i/4 + 1000000).size();
+#else
                 j += e1.get<String>(b).size();
+#endif
         }
         et = times(&spare);
         cout << "Event: " << gsCount << " getStrings: " << (et-st)*10 << "ms\n";
@@ -138,7 +176,11 @@ int main(int argc, char **argv)
         st = times(&spare);
         for (i = 0; i < 100; ++i) {
                 Event e11(e1);
+#ifdef PROPERTY_NAME_IS_INT
+                (void)e11.get<String>(1000000);
+#else
                 (void)e11.get<String>(b);
+#endif
         }
         et = times(&spare);
         cout << "Event: 100 copy ctors of " << e1.getStorageSize() << "-byte element: "
@@ -147,7 +189,7 @@ int main(int argc, char **argv)
         return 0;
 #else
         cout << "Skipping test speed of Event\n";
-#endif
+#endif // TEST_SPEED
 
 #ifdef NOT_DEFINED
         cout << "Testing track shrinking\n";
@@ -172,8 +214,9 @@ int main(int argc, char **argv)
         if (nbBars != 3) {
                 cerr << "%%%ERROR : track new nbBars should be 3\n";
         }
-#endif
+#endif // NOT_DEFINED
 
+#ifdef TEST_NOTATION_TYPES
         cout << "Testing duration-list stuff\n";
 
         cout << "2/4..." << endl;
@@ -279,5 +322,6 @@ int main(int argc, char **argv)
                      << " - duration : " << (*i)->getDuration()
                      << endl;
         }
+#endif // TEST_NOTATION_TYPES
 };
 
