@@ -40,8 +40,7 @@ VUMeter::VUMeter(QWidget *parent,
     m_level(0),
     m_peakLevel(0),
     m_levelStep(3),
-    m_showPeakLevel(true),
-    m_colourKnee(65)
+    m_showPeakLevel(true)
 {
     setMinimumSize(width, m_originalHeight);
     setMaximumSize(width, m_originalHeight);
@@ -53,36 +52,13 @@ VUMeter::VUMeter(QWidget *parent,
             this,         SLOT(slotStopShowingPeak()));
 
 
-    // Set up the colours - first the low band (green -> orange)
-    //
-    m_loStartRed = RosegardenGUIColours::LevelMeterGreen.red();
-    m_loStartGreen = RosegardenGUIColours::LevelMeterGreen.green();
-    m_loStartBlue = RosegardenGUIColours::LevelMeterGreen.blue();
-
-    m_loStepRed = (RosegardenGUIColours::LevelMeterOrange.red() -
-                          m_loStartRed) / m_colourKnee;
-
-    m_loStepGreen = (RosegardenGUIColours::LevelMeterOrange.green() -
-                            m_loStartGreen) / m_colourKnee;
-
-    m_loStepBlue = (RosegardenGUIColours::LevelMeterOrange.blue() -
-                           m_loStartBlue) / m_colourKnee;
-
-
-    // Set up the colours for mixing between orange and red
-    //
-    m_hiStartRed = RosegardenGUIColours::LevelMeterOrange.red();
-    m_hiStartGreen = RosegardenGUIColours::LevelMeterOrange.green();
-    m_hiStartBlue = RosegardenGUIColours::LevelMeterOrange.blue();
-
-    m_hiStepRed = (RosegardenGUIColours::LevelMeterRed.red() -
-                          m_hiStartRed) / m_colourKnee;
-
-    m_hiStepGreen = (RosegardenGUIColours::LevelMeterRed.green() -
-                          m_hiStartGreen) / m_colourKnee;
-
-    m_hiStepBlue = (RosegardenGUIColours::LevelMeterRed.blue() -
-                          m_hiStartBlue) / m_colourKnee;
+    m_velocityColour = new VelocityColour(RosegardenGUIColours::LevelMeterRed,
+                                          RosegardenGUIColours::LevelMeterOrange,
+                                          RosegardenGUIColours::LevelMeterGreen,
+                                          100, // max
+                                          92,  // red knee
+                                          60,  // orange knee
+                                          10); // green knee
 
 }
 
@@ -164,39 +140,12 @@ VUMeter::drawMeterLevel(QPainter* paint)
         paint->drawLine(x, 0, x, height());
     }
 
-    // Set the colour according to current level -
-    // mix colours from green to orange to red.
+    // Get the colour from the VelocityColour helper
     //
-    if (m_level < 15) // bottom 15% get pure green
-    {
-        paint->setPen(RosegardenGUIColours::LevelMeterGreen);
-        paint->setBrush(RosegardenGUIColours::LevelMeterGreen);
-    }
-    else if (m_level < m_colourKnee) // now green to orange
-    {
-        QColor mixedColour((int)(m_loStartRed + m_loStepRed * m_level),
-                           (int)(m_loStartGreen + m_loStepGreen * m_level),
-                           (int)(m_loStartBlue + m_loStepBlue * m_level));
+    QColor mixedColour = m_velocityColour->getColour(m_level);
+    paint->setPen(mixedColour);
+    paint->setBrush(mixedColour);
 
-        paint->setPen(mixedColour);
-        paint->setBrush(mixedColour);
-    }
-    else if (m_level >= m_colourKnee && m_level < 95)
-    {
-        double mixFactor = (double)m_level - m_colourKnee;
-
-        QColor mixedColour((int)(m_hiStartRed + m_hiStepRed * mixFactor),
-                           (int)(m_hiStartGreen + m_hiStepGreen * mixFactor),
-                           (int)(m_hiStartBlue + m_hiStepBlue * mixFactor));
-
-        paint->setPen(mixedColour);
-        paint->setBrush(mixedColour);
-    }
-    else  // top 5% get complete red
-    {
-        paint->setPen(RosegardenGUIColours::LevelMeterRed);
-        paint->setBrush(RosegardenGUIColours::LevelMeterRed);
-    }
 
     // Proper width
     //

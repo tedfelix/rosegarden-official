@@ -24,6 +24,8 @@
 #include <qpainter.h>
 #include <qtimer.h>
 
+#include "velocitycolour.h"
+
 #ifndef _VUMETER_H_
 #define _VUMETER_H_
 
@@ -72,25 +74,9 @@ private:
     QTimer      m_peakTimer;
     bool        m_showPeakLevel;
 
-    // At what percentage we cut from low to high band colour
+    // We use this to work out our colours
     //
-    int         m_colourKnee;
-
-    // Convenient storage of mix colours and steps
-    //
-    double      m_loStartRed;
-    double      m_loStartGreen;
-    double      m_loStartBlue;
-    double      m_loStepRed;
-    double      m_loStepGreen;
-    double      m_loStepBlue;
-
-    double      m_hiStartRed;
-    double      m_hiStartGreen;
-    double      m_hiStartBlue;
-    double      m_hiStepRed;
-    double      m_hiStepGreen;
-    double      m_hiStepBlue;
+    VelocityColour *m_velocityColour;
 
 
 };

@@ -69,6 +69,7 @@ rosegarden_SOURCES = \
 	trackseditoriface.skel \
         trackvumeter.cpp \
         vumeter.cpp \
+        velocitycolour.cpp \
         widgets.cpp \
 	xmlstorableevent.cpp
 
