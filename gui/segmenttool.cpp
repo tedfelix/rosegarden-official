@@ -205,6 +205,8 @@ void SegmentPencil::ready()
 
 void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 {
+    if (e->button() != LeftButton) return;
+    
     m_newRect = false;
     m_currentItem = 0;
 
@@ -238,8 +240,10 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     m_canvas->slotUpdate();
 }
 
-void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
+void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 {
+    if (e->button() != LeftButton) return;
+
     if (!m_currentItem) return;
     m_currentItem->normalize();
 
