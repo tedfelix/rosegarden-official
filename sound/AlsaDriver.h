@@ -188,8 +188,8 @@ public:
 
 #ifdef HAVE_LIBJACK
 
-    jack_port_t* getJackInputPortLeft() { return m_audioInputPortLeft; }
-    jack_port_t* getJackInputPortRight() { return m_audioInputPortRight; }
+    jack_port_t* getJackInputPort(unsigned int portNumber)
+        { return m_audioInputPorts[portNumber]; }
 
     jack_port_t* getJackOutputPortLeft() { return m_audioOutputPortLeft; }
     jack_port_t* getJackOutputPortRight() { return m_audioOutputPortRight; }
@@ -243,6 +243,13 @@ protected:
     // Get a JACk frame from a RealTime
     //
     jack_nframes_t getJACKFrame(const RealTime &time);
+
+    // Modify input ports
+    //
+    void setTotalAudioInputPorts(unsigned int total);
+    unsigned int getTotalAudioInputPorts() const
+        { return m_audioInputPortTotal; }
+
 
 #endif // HAVE_LIBJACK
 
@@ -311,14 +318,15 @@ private:
     static int  jackXRun(void *);
 
     jack_client_t               *m_audioClient;
-    jack_port_t                 *m_audioInputPortLeft;
-    jack_port_t                 *m_audioInputPortRight;
+    std::vector<jack_port_t*>    m_audioInputPorts;
     jack_port_t                 *m_audioOutputPortLeft;
     jack_port_t                 *m_audioOutputPortRight;
 
     jack_nframes_t               m_transportPosition;
 
     AudioScheduler              *m_audioScheduler;
+
+    unsigned int                 m_audioInputPortTotal;
 
 #endif // HAVE_LIBJACK
 

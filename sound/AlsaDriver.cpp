@@ -156,6 +156,7 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 #ifdef HAVE_LIBJACK
     ,m_audioClient(0)
     ,m_transportPosition(0)
+    ,m_audioInputPortTotal(2) // 2 audio input ports
 #endif
 
 {
@@ -205,8 +206,10 @@ AlsaDriver::~AlsaDriver()
         _threadJackClosing = true;
         std::cout << "AlsaDriver::~AlsaDriver - closing JACK client"
                   << std::endl;
-        jack_port_unregister(m_audioClient, m_audioInputPortLeft);
-        jack_port_unregister(m_audioClient, m_audioInputPortRight);
+
+        for (unsigned int i = 0; i < m_audioInputPorts.size(); ++i)
+            jack_port_unregister(m_audioClient, m_audioInputPorts[i]);
+
         jack_port_unregister(m_audioClient, m_audioOutputPortLeft);
         jack_port_unregister(m_audioClient, m_audioOutputPortRight);
 
@@ -836,6 +839,16 @@ AlsaDriver::initialiseMidi()
               << std::endl;
 }
 
+#ifdef HAVE_LIBJACK
+void
+AlsaDriver::setTotalAudioInputPorts(unsigned int total)
+{
+    m_audioInputPortTotal = total;
+}
+
+#endif
+
+
 // We don't even attempt to use ALSA audio.  We just use JACK instead.
 // See comment at the top of this file and jackProcess() for further
 // information on how we use this.
@@ -878,18 +891,19 @@ AlsaDriver::initialiseAudio()
     std::cout << "AlsaDriver::initialiseAudio - JACK sample rate = "
               << _jackSampleRate << std::endl;
 
-    m_audioInputPortLeft =
-        jack_port_register(m_audioClient,
-                           "in_1",
-                           JACK_DEFAULT_AUDIO_TYPE,
-                           JackPortIsInput|JackPortIsTerminal,
-                           0);
-    m_audioInputPortRight =
-        jack_port_register(m_audioClient,
-                           "in_2",
-                           JACK_DEFAULT_AUDIO_TYPE,
-                           JackPortIsInput|JackPortIsTerminal,
-                           0);
+    jack_port_t *inputPort;
+    char portName[10];
+
+    for (unsigned int i = 0; i < m_audioInputPortTotal; i++)
+    {
+        sprintf(portName, "in_%d", i + 1);
+        inputPort = jack_port_register(m_audioClient,
+                                       portName,
+                                       JACK_DEFAULT_AUDIO_TYPE,
+                                       JackPortIsInput|JackPortIsTerminal,
+                                       0);
+         m_audioInputPorts.push_back(inputPort);
+    }
 
     m_audioOutputPortLeft = jack_port_register(m_audioClient,
                                                "out_1",
@@ -987,14 +1001,14 @@ AlsaDriver::initialiseAudio()
 
     // now input
     if (jack_connect(m_audioClient, capture_1.c_str(),
-                     jack_port_name(m_audioInputPortLeft)))
+                     jack_port_name(m_audioInputPorts[0])))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
                   << "cannot connect to JACK input port" << std::endl;
     }
 
     if (jack_connect(m_audioClient, capture_2.c_str(),
-                     jack_port_name(m_audioInputPortRight)))
+                     jack_port_name(m_audioInputPorts[1])))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
                   << "cannot connect to JACK input port" << std::endl;
@@ -1006,7 +1020,7 @@ AlsaDriver::initialiseAudio()
         jack_port_get_total_latency(m_audioClient, m_audioOutputPortLeft);
 
     jack_nframes_t inputLatency = 
-        jack_port_get_total_latency(m_audioClient, m_audioInputPortLeft);
+        jack_port_get_total_latency(m_audioClient, m_audioInputPorts[0]);
 
     double latency = double(outputLatency) / double(_jackSampleRate);
 
@@ -2542,8 +2556,6 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
         sample_t *rightBuffer = static_cast<sample_t*>
             (jack_port_get_buffer(inst->getJackOutputPortRight(),
                                   nframes));
-
-
         // Are we recording?
         //
         if (inst->getRecordStatus() == RECORD_AUDIO ||
@@ -2552,7 +2564,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
             // Get input buffer
             //
             sample_t *inputBufferLeft = static_cast<sample_t*>
-                (jack_port_get_buffer(inst->getJackInputPortLeft(),
+                (jack_port_get_buffer(inst->getJackInputPort(0),
                                       nframes));
 
             /*
