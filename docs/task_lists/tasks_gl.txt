@@ -1,6 +1,12 @@
 Current Task list
 ======================================
 
+- try to improve sequencer latency problems (GUI & seq. should mmap a
+tmp file which would hold easy-to-parse event data. File should have
+lines of fixed length).
+
+- show selected zones à la RG2.1
+
 - Matrix undo DONE
 
 - insertion in the middle of rests DONE (by Chris)
