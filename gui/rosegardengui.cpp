@@ -172,11 +172,11 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotImportRG21()), actionCollection(),
                 "file_import_rg21");
 
-    new KAction(i18n("Export as &MIDI file..."), 0, 0, this,
+    new KAction(i18n("Export &MIDI file..."), 0, 0, this,
                 SLOT(slotExportMIDI()), actionCollection(),
                 "file_export_midi");
 
-    new KAction(i18n("Export as &Csound score file..."), 0, 0, this,
+    new KAction(i18n("Export &Csound score file..."), 0, 0, this,
                 SLOT(slotExportCsound()), actionCollection(),
                 "file_export_csound");
 

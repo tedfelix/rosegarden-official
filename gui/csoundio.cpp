@@ -62,10 +62,22 @@ CsoundExporter::write()
         return false;
     }
 
-    int instrument = 1;
+    str << ";; Csound score file written by Rosegarden-4\n\n";
+    if (m_composition->getCopyrightNote() != "") {
+	str << ";; Copyright note:\n;; "
+//!!! really need to remove newlines from copyright note
+	    << m_composition->getCopyrightNote() << "\n";
+    }
 
     for (Composition::iterator i = m_composition->begin();
 	 i != m_composition->end(); ++i) {
+
+	str << "\n;; Segment: \"" << (*i)->getLabel() << "\"\n";
+	str << ";; on Track: \""
+	    << m_composition->getTrackByIndex((*i)->getTrack())->getLabel()
+	    << "\"\n";
+	str << ";;\n;; Inst\tTime\tDur\tPitch\tVely\n"
+	    << ";; ----\t----\t---\t-----\t----\n";
 
 	for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
 
@@ -77,23 +89,25 @@ CsoundExporter::write()
 		long velocity = 127;
 		(*j)->get<Int>(BaseProperties::VELOCITY, velocity);
 
-		str << "i" << instrument << "\t"
+		str << "   i"
+		    << (*i)->getTrack() << "\t"
 		    << convertTime((*j)->getAbsoluteTime()) << "\t"
 		    << convertTime((*j)->getDuration()) << "\t"
 		    << 3 + (pitch / 12) << ((pitch % 12) < 10 ? ".0" : ".")
 		    << pitch % 12 << "\t"
 		    << velocity << "\t\n";
+
+	    } else {
+		str << ";; Event type: " << (*j)->getType() << endl;
 	    }
 	}
-
-	++instrument;
     }
 
     int tempoCount = m_composition->getTempoChangeCount();
 
     if (tempoCount > 0) {
 
-	str << "t ";
+	str << "\nt ";
 
 	for (int i = 0; i < tempoCount - 1; ++i) {
 
@@ -118,7 +132,7 @@ CsoundExporter::write()
 	    << std::endl;
     }
 
-    str << "e" << std::endl;
+    str << "\ne" << std::endl;
     str.close();
     return true;
 }

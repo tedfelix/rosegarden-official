@@ -1968,6 +1968,7 @@ void
 NotationView::slotSetInsertCursorPosition(timeT t)
 {
     m_insertionTime = t;
+    if (m_staffs.size() == 0) return;
     NotationStaff *staff = m_staffs[m_currentStaff];
     Segment &segment = staff->getSegment();
 
