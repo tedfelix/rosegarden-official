@@ -156,7 +156,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
       m_clipboard(new Rosegarden::Clipboard),
       m_playList(0),
       m_deviceManager(0),
-      m_mixer(0),
+      m_audioMixer(0),
+      m_midiMixer(0),
       m_bankEditor(0),
       m_markerEditor(0),
       m_playTimer(new QTimer(this))
@@ -722,9 +723,13 @@ void RosegardenGUIApp::setupActions()
     // Studio menu
     //
     icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/mixer.xpm"));
-    new KAction(i18n("Audio Mi&xer"), icon, 0, this,
-		SLOT(slotOpenMixer()),
+    new KAction(i18n("&Audio Mixer"), icon, 0, this,
+		SLOT(slotOpenAudioMixer()),
 		actionCollection(), "audio_mixer");
+
+    new KAction(i18n("Midi Mi&xer"), icon, 0, this,
+		SLOT(slotOpenMidiMixer()),
+		actionCollection(), "midi_mixer");
 
     new KAction(i18n("Manage MIDI &Devices"), 0, this,
                 SLOT(slotManageMIDIDevices()),
@@ -1064,8 +1069,8 @@ void RosegardenGUIApp::initView()
     delete m_deviceManager;
     m_deviceManager = 0;
 
-    delete m_mixer;
-    m_mixer = 0;
+    delete m_audioMixer;
+    m_audioMixer = 0;
 
     delete m_bankEditor;
     m_bankEditor = 0;
@@ -3111,7 +3116,7 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
 	m_doc->insertRecordedAudio(position, RECORDING_AUDIO);
     }
 
-    if (m_mixer && m_mixer->isVisible()) m_mixer->updateMeters(mapper);
+    if (m_audioMixer && m_audioMixer->isVisible()) m_audioMixer->updateMeters(mapper);
     m_view->updateMeters(mapper);
 
     if (elapsedTime >= comp.getEndMarker())
@@ -4771,51 +4776,100 @@ RosegardenGUIApp::slotManageMIDIDevices()
 }
 
 void
-RosegardenGUIApp::slotOpenMixer()
+RosegardenGUIApp::slotOpenAudioMixer()
 {
-    if (m_mixer) {
-	m_mixer->raise();
+    if (m_audioMixer) {
+	m_audioMixer->raise();
 	return;
     }
 
-    m_mixer = new MixerWindow(this, m_doc);
+    m_audioMixer = new AudioMixerWindow(this, m_doc);
     
-    connect(m_mixer, SIGNAL(closing()),
-            this, SLOT(slotMixerClosed()));
+    connect(m_audioMixer, SIGNAL(closing()),
+            this, SLOT(slotAudioMixerClosed()));
 
-    connect(m_mixer, SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)),
+    connect(m_audioMixer, SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)),
 	    this, SLOT(slotShowPluginDialog(QWidget *, Rosegarden::InstrumentId, int)));
 
     connect(this, SIGNAL(documentAboutToChange()),
-            m_mixer, SLOT(close()));
+            m_audioMixer, SLOT(close()));
 
     connect(m_view, SIGNAL(checkTrackAssignments()),
-	    m_mixer, SLOT(slotTrackAssignmentsChanged()));
+	    m_audioMixer, SLOT(slotTrackAssignmentsChanged()));
 
-    connect(m_mixer, SIGNAL(play()),
+    connect(m_audioMixer, SIGNAL(play()),
 	    this, SLOT(slotPlay()));
-    connect(m_mixer, SIGNAL(stop()),
+    connect(m_audioMixer, SIGNAL(stop()),
 	    this, SLOT(slotStop()));
-    connect(m_mixer, SIGNAL(fastForwardPlayback()),
+    connect(m_audioMixer, SIGNAL(fastForwardPlayback()),
 	    this, SLOT(slotFastforward()));
-    connect(m_mixer, SIGNAL(rewindPlayback()),
+    connect(m_audioMixer, SIGNAL(rewindPlayback()),
 	    this, SLOT(slotRewind()));
-    connect(m_mixer, SIGNAL(fastForwardPlaybackToEnd()),
+    connect(m_audioMixer, SIGNAL(fastForwardPlaybackToEnd()),
 	    this, SLOT(slotFastForwardToEnd()));
-    connect(m_mixer, SIGNAL(rewindPlaybackToBeginning()),
+    connect(m_audioMixer, SIGNAL(rewindPlaybackToBeginning()),
 	    this, SLOT(slotRewindToBeginning()));
 
-    connect(m_mixer,
+    connect(m_audioMixer,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
 	    m_instrumentParameterBox,
 	    SLOT(slotInstrumentParametersChanged(Rosegarden::InstrumentId)));
 
     connect(m_instrumentParameterBox,
 	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
-	    m_mixer,
+	    m_audioMixer,
 	    SLOT(slotUpdateInstrument(Rosegarden::InstrumentId)));
 
-    m_mixer->show();
+    m_audioMixer->show();
+}
+
+
+void
+RosegardenGUIApp::slotOpenMidiMixer()
+{
+    if (m_midiMixer) {
+	m_midiMixer->raise();
+	return;
+    }
+
+    m_midiMixer = new MidiMixerWindow(this, m_doc);
+    
+    connect(m_midiMixer, SIGNAL(closing()),
+            this, SLOT(slotMidiMixerClosed()));
+
+    connect(m_midiMixer, SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)),
+	    this, SLOT(slotShowPluginDialog(QWidget *, Rosegarden::InstrumentId, int)));
+
+    connect(this, SIGNAL(documentAboutToChange()),
+            m_midiMixer, SLOT(close()));
+
+    connect(m_view, SIGNAL(checkTrackAssignments()),
+	    m_midiMixer, SLOT(slotTrackAssignmentsChanged()));
+
+    connect(m_midiMixer, SIGNAL(play()),
+	    this, SLOT(slotPlay()));
+    connect(m_midiMixer, SIGNAL(stop()),
+	    this, SLOT(slotStop()));
+    connect(m_midiMixer, SIGNAL(fastForwardPlayback()),
+	    this, SLOT(slotFastforward()));
+    connect(m_midiMixer, SIGNAL(rewindPlayback()),
+	    this, SLOT(slotRewind()));
+    connect(m_midiMixer, SIGNAL(fastForwardPlaybackToEnd()),
+	    this, SLOT(slotFastForwardToEnd()));
+    connect(m_midiMixer, SIGNAL(rewindPlaybackToBeginning()),
+	    this, SLOT(slotRewindToBeginning()));
+
+    connect(m_midiMixer,
+	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
+	    m_instrumentParameterBox,
+	    SLOT(slotInstrumentParametersChanged(Rosegarden::InstrumentId)));
+
+    connect(m_instrumentParameterBox,
+	    SIGNAL(instrumentParametersChanged(Rosegarden::InstrumentId)),
+	    m_midiMixer,
+	    SLOT(slotUpdateInstrument(Rosegarden::InstrumentId)));
+
+    m_midiMixer->show();
 }
 
 void
@@ -4980,15 +5034,15 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
 	    SLOT(slotPluginBypassed(Rosegarden::InstrumentId, int, bool)));
 
     // and to the mixer, if we have it
-    if (m_mixer) {
+    if (m_audioMixer) {
 	connect(dialog,
 		SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
-		m_mixer,
+		m_audioMixer,
 		SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
 
 	connect(dialog,
 		SIGNAL(bypassed(Rosegarden::InstrumentId, int, bool)),
-		m_mixer,
+		m_audioMixer,
 		SLOT(slotPluginBypassed(Rosegarden::InstrumentId, int, bool)));
     }
     
@@ -5245,11 +5299,19 @@ RosegardenGUIApp::slotDeviceManagerClosed()
 }
 
 void
-RosegardenGUIApp::slotMixerClosed()
+RosegardenGUIApp::slotAudioMixerClosed()
 {
-    RG_DEBUG << "RosegardenGUIApp::slotMixerClosed()\n";
+    RG_DEBUG << "RosegardenGUIApp::slotAudioMixerClosed()\n";
 
-    m_mixer = 0;
+    m_audioMixer = 0;
+}
+
+void
+RosegardenGUIApp::slotMidiMixerClosed()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotMidiMixerClosed()\n";
+
+    m_midiMixer = 0;
 }
 
 void

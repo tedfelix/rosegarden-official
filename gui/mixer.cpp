@@ -49,11 +49,25 @@ static const unsigned int MIXER_OMIT_UNASSIGNED_FADERS = 1 << 3;
 
 
 MixerWindow::MixerWindow(QWidget *parent,
-			 RosegardenGUIDoc *document) :
+			      RosegardenGUIDoc *document) :
     KMainWindow(parent, "mixerwindow"),
     m_document(document),
     m_studio(&document->getStudio()),
     m_currentId(0)
+{
+}
+
+void
+MixerWindow::closeEvent(QCloseEvent *e)
+{
+    RG_DEBUG << "MixerWindow::closeEvent()\n";
+    emit closing();
+    KMainWindow::closeEvent(e);
+}
+
+AudioMixerWindow::AudioMixerWindow(QWidget *parent,
+			 RosegardenGUIDoc *document):
+        MixerWindow(parent, document)
 {
     m_mainBox = 0;
     populate();
@@ -152,21 +166,21 @@ MixerWindow::MixerWindow(QWidget *parent,
     createGUI("mixer.rc");
 }
 
-MixerWindow::~MixerWindow()
+AudioMixerWindow::~AudioMixerWindow()
 {
-    RG_DEBUG << "MixerWindow::~MixerWindow\n";
+    RG_DEBUG << "AudioMixerWindow::~AudioMixerWindow\n";
     depopulate();
 }
 
 void
-MixerWindow::slotClose()
+AudioMixerWindow::slotClose()
 {
-    RG_DEBUG << "MixerWindow::slotClose()\n";
+    RG_DEBUG << "AudioMixerWindow::slotClose()\n";
     close();
 }    
 
 void
-MixerWindow::depopulate()
+AudioMixerWindow::depopulate()
 {
     if (!m_mainBox) return;
     
@@ -188,7 +202,7 @@ MixerWindow::depopulate()
 }    
 
 void
-MixerWindow::populate()
+AudioMixerWindow::populate()
 {
     if (m_mainBox) {
 
@@ -533,7 +547,7 @@ MixerWindow::populate()
 }
 
 bool
-MixerWindow::isInstrumentAssigned(Rosegarden::InstrumentId id)
+AudioMixerWindow::isInstrumentAssigned(Rosegarden::InstrumentId id)
 {
     Rosegarden::Composition::trackcontainer &tracks =
 	m_document->getComposition().getTracks();
@@ -549,7 +563,7 @@ MixerWindow::isInstrumentAssigned(Rosegarden::InstrumentId id)
 }    
 
 void
-MixerWindow::slotTrackAssignmentsChanged()
+AudioMixerWindow::slotTrackAssignmentsChanged()
 {
     for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
 
@@ -565,9 +579,9 @@ MixerWindow::slotTrackAssignmentsChanged()
 }
 
 void
-MixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
+AudioMixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
 {
-    RG_DEBUG << "MixerWindow::slotUpdateInstrument(" << id << ")" << endl;
+    RG_DEBUG << "AudioMixerWindow::slotUpdateInstrument(" << id << ")" << endl;
 
     blockSignals(true);
 
@@ -588,7 +602,7 @@ MixerWindow::slotUpdateInstrument(Rosegarden::InstrumentId id)
 }
 
 void
-MixerWindow::slotPluginSelected(Rosegarden::InstrumentId id,
+AudioMixerWindow::slotPluginSelected(Rosegarden::InstrumentId id,
 				int index, int plugin)
 {
     if (id >= (int)Rosegarden::AudioInstrumentBase) {
@@ -621,14 +635,14 @@ MixerWindow::slotPluginSelected(Rosegarden::InstrumentId id,
 }
 
 void
-MixerWindow::slotPluginBypassed(Rosegarden::InstrumentId instrumentId,
+AudioMixerWindow::slotPluginBypassed(Rosegarden::InstrumentId instrumentId,
 				int , bool )
 {
     updatePluginButtons(instrumentId);
 }
 
 void
-MixerWindow::updateFader(int id)
+AudioMixerWindow::updateFader(int id)
 {
     if (id == -1) {
 
@@ -662,7 +676,7 @@ MixerWindow::updateFader(int id)
 
 
 void
-MixerWindow::updateRouteButtons(int id)
+AudioMixerWindow::updateRouteButtons(int id)
 {
     if (id >= (int)Rosegarden::AudioInstrumentBase) {
 	FaderRec &rec = m_faders[id];
@@ -674,7 +688,7 @@ MixerWindow::updateRouteButtons(int id)
 
 
 void
-MixerWindow::updateStereoButton(int id)
+AudioMixerWindow::updateStereoButton(int id)
 {
     if (id >= (int)Rosegarden::AudioInstrumentBase) {
 
@@ -694,7 +708,7 @@ MixerWindow::updateStereoButton(int id)
 
 
 void
-MixerWindow::updateMiscButtons(int )
+AudioMixerWindow::updateMiscButtons(int )
 {
     //... complications here, because the mute/solo status is actually
     // per-track rather than per-instrument... doh.
@@ -702,7 +716,7 @@ MixerWindow::updateMiscButtons(int )
 
 
 void
-MixerWindow::updatePluginButtons(int id)
+AudioMixerWindow::updatePluginButtons(int id)
 {
     if (id >= (int)Rosegarden::AudioInstrumentBase) {
 
@@ -775,7 +789,7 @@ MixerWindow::updatePluginButtons(int id)
 }
 
 void
-MixerWindow::slotSelectPlugin()
+AudioMixerWindow::slotSelectPlugin()
 {
     const QObject *s = sender();
 
@@ -802,7 +816,7 @@ MixerWindow::slotSelectPlugin()
 }
 
 void
-MixerWindow::slotInputChanged()
+AudioMixerWindow::slotInputChanged()
 {
     const QObject *s = sender();
 
@@ -814,7 +828,7 @@ MixerWindow::slotInputChanged()
 }
 
 void
-MixerWindow::slotOutputChanged()
+AudioMixerWindow::slotOutputChanged()
 {
     const QObject *s = sender();
 
@@ -826,7 +840,7 @@ MixerWindow::slotOutputChanged()
 }
 
 void
-MixerWindow::slotFaderLevelChanged(float dB)
+AudioMixerWindow::slotFaderLevelChanged(float dB)
 {
     const QObject *s = sender();
 
@@ -888,7 +902,7 @@ MixerWindow::slotFaderLevelChanged(float dB)
 }
 
 void
-MixerWindow::slotPanChanged(float pan)
+AudioMixerWindow::slotPanChanged(float pan)
 {
     const QObject *s = sender();
 
@@ -935,7 +949,7 @@ MixerWindow::slotPanChanged(float pan)
 }
 
 void
-MixerWindow::slotChannelsChanged()
+AudioMixerWindow::slotChannelsChanged()
 {
     const QObject *s = sender();
 
@@ -967,33 +981,25 @@ MixerWindow::slotChannelsChanged()
 }
 
 void
-MixerWindow::slotSoloChanged()
+AudioMixerWindow::slotSoloChanged()
 {
     //...
 }
 
 void
-MixerWindow::slotMuteChanged()
+AudioMixerWindow::slotMuteChanged()
 {
     //...
 }
 
 void
-MixerWindow::slotRecordChanged()
+AudioMixerWindow::slotRecordChanged()
 {
     //...
 }
 
 void
-MixerWindow::closeEvent(QCloseEvent *e)
-{
-    RG_DEBUG << "MixerWindow::closeEvent()\n";
-    emit closing();
-    KMainWindow::closeEvent(e);
-}
-
-void
-MixerWindow::updateMeters(SequencerMapper *mapper)
+AudioMixerWindow::updateMeters(SequencerMapper *mapper)
 {
     for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
 
@@ -1059,7 +1065,7 @@ MixerWindow::updateMeters(SequencerMapper *mapper)
 }
 
 void
-MixerWindow::slotSetInputCountFromAction()
+AudioMixerWindow::slotSetInputCountFromAction()
 {
     const QObject *s = sender();
     QString name = s->name();
@@ -1089,7 +1095,7 @@ MixerWindow::slotSetInputCountFromAction()
 }
 
 void
-MixerWindow::slotSetSubmasterCountFromAction()
+AudioMixerWindow::slotSetSubmasterCountFromAction()
 {
     const QObject *s = sender();
     QString name = s->name();
@@ -1129,7 +1135,7 @@ MixerWindow::slotSetSubmasterCountFromAction()
 }
 
 
-void MixerWindow::FaderRec::setVisible(bool visible)
+void AudioMixerWindow::FaderRec::setVisible(bool visible)
 {
     if (visible) {
         if (m_input)  m_input->getWidget()->show();
@@ -1163,7 +1169,7 @@ void MixerWindow::FaderRec::setVisible(bool visible)
 
 
 void
-MixerWindow::FaderRec::setPluginButtonsVisible(bool visible)
+AudioMixerWindow::FaderRec::setPluginButtonsVisible(bool visible)
 {
     if (!m_pluginBox) return;
 
@@ -1177,7 +1183,7 @@ MixerWindow::FaderRec::setPluginButtonsVisible(bool visible)
 
 
 void
-MixerWindow::slotShowFaders()
+AudioMixerWindow::slotShowFaders()
 {
     KToggleAction *action = dynamic_cast<KToggleAction *>
         (actionCollection()->action("show_audio_faders"));
@@ -1201,7 +1207,7 @@ MixerWindow::slotShowFaders()
 }
 
 void
-MixerWindow::slotShowSubmasters()
+AudioMixerWindow::slotShowSubmasters()
 {
 
     KToggleAction *action = dynamic_cast<KToggleAction *>
@@ -1226,7 +1232,7 @@ MixerWindow::slotShowSubmasters()
 }
 
 void
-MixerWindow::slotShowPluginButtons()
+AudioMixerWindow::slotShowPluginButtons()
 {
 
     KToggleAction *action = dynamic_cast<KToggleAction *>
@@ -1248,7 +1254,7 @@ MixerWindow::slotShowPluginButtons()
 }
 
 void
-MixerWindow::slotShowUnassignedFaders()
+AudioMixerWindow::slotShowUnassignedFaders()
 {
     KToggleAction *action = dynamic_cast<KToggleAction *>
         (actionCollection()->action("show_unassigned_faders"));
@@ -1264,7 +1270,7 @@ MixerWindow::slotShowUnassignedFaders()
 }
 
 void
-MixerWindow::toggleNamedWidgets(bool show, const char* const name)
+AudioMixerWindow::toggleNamedWidgets(bool show, const char* const name)
 {
     QLayoutIterator it = m_mainBox->layout()->iterator();
     QLayoutItem *child;
@@ -1281,4 +1287,26 @@ MixerWindow::toggleNamedWidgets(bool show, const char* const name)
     }
 
 }
+
+// ---- MidiMixerWindow ----
+//
+//
+MidiMixerWindow::MidiMixerWindow(QWidget *parent,
+			 RosegardenGUIDoc *document):
+        MixerWindow(parent, document)
+{
+    QVBoxLayout *vlay = new QVBoxLayout(this, 0, KDialog::spacingHint());
+    m_tabWidget = new QTabWidget(this);
+    vlay->addWidget(m_tabWidget);
+
+    QFrame *frame = new QFrame(m_tabWidget);
+    addTab(frame, i18n("Device 1"));
+}
+
+void 
+MidiMixerWindow::addTab(QWidget *tab, const QString &title)
+{
+    m_tabWidget->addTab(tab, title);
+}
+
 

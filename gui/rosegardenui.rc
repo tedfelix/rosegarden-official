@@ -83,6 +83,7 @@
   <Menu name="Studio">
         <text>&amp;Studio</text>
         <Action name="audio_mixer"/>
+        <Action name="midi_mixer"/>
         <Separator/>
         <Action name="manage_devices"/>
 	<Action name="manage_metronome"/>
@@ -159,6 +160,7 @@
         <Action name="edit_notation"/>
         <Action name="edit_event_list"/>
         <Action name="audio_mixer"/>
+        <Action name="midi_mixer"/>
         <Action name="quantize_selection"/>
 </ToolBar>
 
@@ -297,6 +299,7 @@
      <enable>
        <Action name="modify_banks"/>
        <Action name="remap_instruments"/>
+       <Action name="midi_mixer"/>
      </enable>
 </State>
 

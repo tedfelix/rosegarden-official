@@ -30,18 +30,35 @@ class RosegardenGUIDoc;
 namespace Rosegarden { class Studio; }
 class SequencerMapper;
 
-class MixerWindow : public KMainWindow
+class MixerWindow: public KMainWindow
 {
     Q_OBJECT
 
 public:
     MixerWindow(QWidget *parent, RosegardenGUIDoc *document);
-    ~MixerWindow();
+
+signals:
+    void closing();
+
+protected:
+    virtual void closeEvent(QCloseEvent *);
+
+    RosegardenGUIDoc *m_document;
+    Rosegarden::Studio *m_studio;
+    Rosegarden::InstrumentId m_currentId;
+};
+
+class AudioMixerWindow : public MixerWindow
+{
+    Q_OBJECT
+
+public:
+    AudioMixerWindow(QWidget *parent, RosegardenGUIDoc *document);
+    ~AudioMixerWindow();
 
     void updateMeters(SequencerMapper *mapper);
 
 signals:
-    void closing();
     void selectPlugin(QWidget *, Rosegarden::InstrumentId id, int index);
 
     void play();
@@ -83,18 +100,11 @@ protected slots:
     void slotShowPluginButtons();
     void slotShowUnassignedFaders();
 
-protected:
-    virtual void closeEvent(QCloseEvent *);
-
 private:
 
     void toggleNamedWidgets(bool show, const char* const);
     
 
-    RosegardenGUIDoc *m_document;
-    Rosegarden::Studio *m_studio;
-
-    // Not practical to use a single widget for this, as we want to
     // manage the various bits of it in horizontal/vertical slices
     // with other faders:
 
@@ -153,8 +163,21 @@ private:
 
     QPixmap m_monoPixmap;
     QPixmap m_stereoPixmap;
+};
 
-    Rosegarden::InstrumentId m_currentId;
+class MidiMixerWindow : public MixerWindow
+{
+    Q_OBJECT
+
+public:
+    MidiMixerWindow(QWidget *parent, RosegardenGUIDoc *document);
+
+    void addTab(QWidget *tab, const QString &title);
+
+protected:
+
+    QTabWidget    *m_tabWidget;
+
 };
 
 #endif

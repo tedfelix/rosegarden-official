@@ -53,7 +53,8 @@ class KProcess;
 // forward declaration of the RosegardenGUI classes
 class BankEditorDialog;
 class DeviceManagerDialog;
-class MixerWindow;
+class AudioMixerWindow;
+class MidiMixerWindow;
 class RosegardenGUIDoc;
 class RosegardenGUIView;
 template <class T> class ZoomSlider;
@@ -681,9 +682,10 @@ public slots:
     void slotManageMIDIDevices();
 
     /**
-     * Show the mixer
+     * Show the mixers
      */
-    void slotOpenMixer();
+    void slotOpenAudioMixer();
+    void slotOpenMidiMixer();
     
     /**
      * Edit Banks/Programs
@@ -1134,7 +1136,8 @@ public slots:
     /**
      * called when the Mixer is being closed
      */
-    void slotMixerClosed();
+    void slotAudioMixerClosed();
+    void slotMidiMixerClosed();
 
     /**
      * when ControlEditor is being closed
@@ -1279,7 +1282,8 @@ private:
 
     PlayListDialog        *m_playList;
     DeviceManagerDialog   *m_deviceManager;
-    MixerWindow           *m_mixer;
+    AudioMixerWindow      *m_audioMixer;
+    MidiMixerWindow       *m_midiMixer;
     BankEditorDialog      *m_bankEditor;
     MarkerEditorDialog    *m_markerEditor;
     std::set<ControlEditorDialog *> m_controlEditors;
