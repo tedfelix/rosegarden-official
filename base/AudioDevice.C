@@ -57,9 +57,10 @@ AudioDevice::createInstruments()
                            std::string(instNum);
 
         m_instruments.push_back(
-                new Instrument(i + AudioInstrumentBase, // id
-                               Instrument::Audio,       // type
-                               name));                  // name
+                new Instrument(i + AudioInstrumentBase,     // id
+                               Instrument::Audio,           // type
+                               name,                        // name
+                               dynamic_cast<Device*>(this))); // parent device
     }
 
 }

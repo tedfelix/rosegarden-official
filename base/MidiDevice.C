@@ -59,10 +59,11 @@ MidiDevice::createInstruments()
                            std::string(" #") +std::string(instNum);
 
         m_instruments.push_back(
-            new Instrument(i + MidiInstrumentBase,    // id
-                           Instrument::Midi,          // type
-                           name,                      // name
-                           (MidiByte)i));             // channel
+            new Instrument(i + MidiInstrumentBase,        // id
+                           Instrument::Midi,              // type
+                           name,                          // name
+                           (MidiByte)i,                   // channel
+                           dynamic_cast<Device*>(this))); // parent device 
     }
 
 }
@@ -79,7 +80,6 @@ MidiDevice::clearProgramList()
 
 
 }
-
 
 void
 MidiDevice::addProgram(MidiProgram *prog)

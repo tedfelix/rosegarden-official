@@ -31,6 +31,7 @@
 #include "BaseProperties.h"
 #include "MappedEvent.h"
 #include "MappedComposition.h"
+#include "MappedInstrument.h"
 
 namespace Rosegarden
 {
@@ -890,6 +891,34 @@ Sequencer::queueAudio(const unsigned int &id,
 
     return true;
 }
+
+void
+Sequencer::setMappedInstrument(MappedInstrument *mI)
+{
+    std::vector<Rosegarden::MappedInstrument*>::iterator it;
+
+    // If we match then change existing entry
+    for (it = m_instruments.begin(); it != m_instruments.end(); it++)
+    {
+        if ((*it)->getID() == mI->getID())
+        {
+            (*it)->setChannel(mI->getChannel());
+            (*it)->setType(mI->getType());
+            return;
+        }
+    }
+    
+    // else create a new one
+    m_instruments.push_back(mI);
+
+    std::cout << "Sequencer::setMappedInstrument() : "
+              << "type = " << mI->getType() << " : "
+              << "channel = " << (int)(mI->getChannel()) << " : "
+              << "id = " << mI->getID() << endl;
+
+}
+
+
 
 
 }

@@ -60,6 +60,7 @@
 namespace Rosegarden
 {
 
+class MappedInstrument;
 class AudioFilePlayer;
 
 // NOTE OFF queue. This holds a time ordered set of
@@ -286,6 +287,10 @@ public:
                     const RealTime &duration,
                     const RealTime &playLatency);
 
+    // Set a MappedInstrument at the Sequencer level
+    //
+    void setMappedInstrument(MappedInstrument *mI);
+
 protected:
     std::vector<AudioFile*>::iterator getAudioFile(const unsigned int &id);
 
@@ -360,6 +365,8 @@ private:
 
     std::vector<AudioFile*> m_audioFiles;
     Rosegarden::Sequencer  *m_sequencer;
+
+    std::vector<Rosegarden::MappedInstrument*> m_instruments;
 
 
 };

@@ -627,34 +627,13 @@ void
 RosegardenSequencerApp::setMappedInstrument(int type, unsigned char channel,
                                             unsigned int id)
 {
-    // Convert the types
-    //
     Rosegarden::InstrumentId mID = (Rosegarden::InstrumentId)id;
     Rosegarden::Instrument::InstrumentType mType = 
         (Rosegarden::Instrument::InstrumentType)type;
     Rosegarden::MidiByte mChannel = (Rosegarden::MidiByte)channel;
 
-    std::vector<Rosegarden::MappedInstrument*>::iterator it;
-
-    // If we match then change
-    for (it = m_instruments.begin(); it != m_instruments.end(); it++)
-    {
-        if ((*it)->getID() == mID)
-        {
-            (*it)->setChannel(mChannel);
-            (*it)->setType(mType);
-            return;
-        }
-    }
-
-    // else create
-    m_instruments.push_back(
+    m_sequencer->setMappedInstrument(
             new Rosegarden::MappedInstrument (mType, mChannel, mID));
-
-    std::cout << "RosegardenSequencerApp::setMappedInstrument()"
-              << " - type = " << mType << " : "
-              << "channel = " << (int)mChannel << " : "
-              << "id = " << mID << endl;
 
 }
 

@@ -31,29 +31,6 @@
 namespace Rosegarden
 {
 
-struct MidiBank
-{
-    MidiByte msb;
-    MidiByte lsb;
-    std::string name;
-};
-
-struct MidiProgram
-{
-    MidiByte program;
-    MidiByte msb;
-    MidiByte lsb;
-    std::string name;
-};
-
-// A mapped MIDI instrument - a drum track click for example
-//
-struct MidiMetronome : public MidiProgram
-{
-    MidiByte pitch;
-    MidiByte channel;
-};
-        
 class MidiDevice : public Device
 {
 

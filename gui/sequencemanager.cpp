@@ -941,9 +941,11 @@ void
 SequenceManager::preparePlayback()
 {
     Rosegarden::Studio &studio = m_doc->getStudio();
-
     Rosegarden::InstrumentList list = studio.getInstruments();
 
+    // Send the MappedInstruments (minimal Instrument information
+    // required for Performance) to the Sequencer
+    //
     InstrumentList::iterator it = list.begin();
     for (; it != list.end(); it++)
     {
@@ -960,7 +962,17 @@ SequenceManager::preparePlayback()
         {
             throw(i18n("Failed to contact Rosegarden sequencer"));
         }
+
+        // Send program changes for MIDI Instruments
+        //
+        if ((*it)->getType() == Instrument::Midi)
+        {
+            if ((*it)->getMidiChannel() == 9) // drum channel
+            {
+            }
+        }
     }
+
 }
 
 
