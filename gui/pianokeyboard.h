@@ -65,6 +65,7 @@ protected:
 
     std::vector<unsigned int> m_whiteKeyPos;
     std::vector<unsigned int> m_blackKeyPos;
+    std::vector<unsigned int> m_labelKeyPos;
 };
 
 

@@ -24,6 +24,8 @@
 #include <qpainter.h>
 #include <qtooltip.h>
 
+#include <klocale.h>
+
 #include "rosedebug.h"
 
 PianoKeyboard::PianoKeyboard(QSize keySize, QWidget *parent,
@@ -62,6 +64,9 @@ void PianoKeyboard::computeKeyPos()
 
         m_whiteKeyPos.push_back(y);
 
+        if (posInOctave == 0)
+            m_labelKeyPos.push_back(y + (keyHeight * 3 / 4));
+
         if (posInOctave == 0 ||
             posInOctave == 2 ||
             posInOctave == 6 ||
@@ -94,16 +99,24 @@ void PianoKeyboard::computeKeyPos()
 
 void PianoKeyboard::paintEvent(QPaintEvent*)
 {
+    static QFont pFont("helvetica", 8);
+
     QPainter paint(this);
+
+    paint.setFont(pFont);
 
     for(unsigned int i = 0; i < m_whiteKeyPos.size(); ++i)
         paint.drawLine(0, m_whiteKeyPos[i],
                        m_keySize.width(), m_whiteKeyPos[i]);
 
+    for(unsigned int i = 0; i < m_labelKeyPos.size(); ++i)
+        paint.drawText(m_blackKeySize.width(), m_labelKeyPos[i],
+                       QString(i18n("C %1")).arg(i));
+
     paint.setBrush(colorGroup().foreground());
 
-    for(unsigned int j = 0; j < m_blackKeyPos.size(); ++j)
-        paint.drawRect(0, m_blackKeyPos[j],
+    for(unsigned int i = 0; i < m_blackKeyPos.size(); ++i)
+        paint.drawRect(0, m_blackKeyPos[i],
                        m_blackKeySize.width(), m_blackKeySize.height());
 }
 
