@@ -1508,7 +1508,18 @@ void RosegardenGUIApp::showEvent(QShowEvent* e)
 
 bool RosegardenGUIApp::queryClose()
 {
-    return m_doc->saveIfModified();
+    bool canClose = m_doc->saveIfModified();
+
+    if (canClose) {
+        // or else the closing of the transport will toggle off the 'view transport' action,
+        // and its state will be saved as 'off'
+        //
+        disconnect(m_transport, SIGNAL(closed()),
+                   this, SLOT(slotCloseTransport()));
+    }
+
+    return canClose;
+
 }
 
 bool RosegardenGUIApp::queryExit()
@@ -1824,14 +1835,12 @@ void RosegardenGUIApp::slotFilePrintPreview()
 
 void RosegardenGUIApp::slotQuit()
 {
-    RG_DEBUG << "RosegardenGUIApp::slotQuit()" << endl;
-    
     slotStatusMsg(i18n("Exiting..."));
 
     Rosegarden::Profiles::getInstance()->dump();
 
     // close the first window, the list makes the next one the first again.
-    // This ensures thatslotQueryClose() is called on each window to ask for closing
+    // This ensures that queryClose() is called on each window to ask for closing
     KMainWindow* w;
     if (memberList) {
 
@@ -5557,4 +5566,3 @@ RosegardenGUIApp::slotShowTip()
 
 const void* RosegardenGUIApp::SequencerExternal = (void*)-1;
 const char* const RosegardenGUIApp::MainWindowConfigGroup = "MainView";
-
