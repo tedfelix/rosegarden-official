@@ -1144,6 +1144,28 @@ SequenceManager::resetControllers()
     Rosegarden::StudioControl::sendMappedComposition(mC);
 }
 
+void
+SequenceManager::resetMidiNetwork()
+{
+    SEQMAN_DEBUG << "SequenceManager::resetMidiNetwork - resetting\n";
+    Rosegarden::MappedComposition mC;
+
+    // Should do all Midi Instrument - not just guess like this is doing
+    // currently.
+
+    for (unsigned int i = 0; i < 16; i++)
+    {
+        Rosegarden::MappedEvent *mE =
+            new Rosegarden::MappedEvent(Rosegarden::MidiInstrumentBase + i,
+                                        Rosegarden::MappedEvent::MidiController,
+                                        MIDI_SYSTEM_RESET,
+                                        0);
+
+        mC.insert(mE);
+    }
+    showVisuals(mC);
+    Rosegarden::StudioControl::sendMappedComposition(mC);
+}
 
 void
 SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)

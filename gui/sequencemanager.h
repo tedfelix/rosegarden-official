@@ -84,7 +84,10 @@ public:
      */
     RosegardenGUIDoc* getDocument();
 
+    //
     // Transport controls
+    //
+
     void play();
 
     // We don't call stop() directly - using stopping() and then
@@ -124,63 +127,60 @@ public:
      */
     void preparePlayback(bool forceProgramChanges = false);
 
-    // Check and set sequencer status
+    /// Check and set sequencer status
     void setTransportStatus(const TransportStatus &status);
     TransportStatus getTransportStatus() const { return m_transportStatus; }
 
-    // Update our GUI with latest audio recording information - actual
-    // sample file is recorded directly at the sequencer level so this
-    // is just for informational purposes.
-    //
+    /**
+     * Update our GUI with latest audio recording information - actual
+     * sample file is recorded directly at the sequencer level so this
+     * is just for informational purposes.
+     */
     void processRecordedAudio(const Rosegarden::RealTime &time);
 
-    // Suspend the sequencer to allow for a safe DCOP call() i.e. one
-    // when we don't hang both clients 'cos they're blocking on each
-    // other.
-    //
+    /**
+     * Suspend the sequencer to allow for a safe DCOP call() i.e. one
+     * when we don't hang both clients 'cos they're blocking on each
+     * other.
+     */
     void suspendSequencer(bool value);
 
-    // Slice fetched
-    //
+    /// Slice fetched
     bool getSliceFetched() const { return m_sliceFetched; }
     void setSliceFetched(bool value) { m_sliceFetched = value; }
 
-    // Send the audio level to VU meters
-    //
+    /// Send the audio level to VU meters
     void sendAudioLevel(Rosegarden::MappedEvent *mE);
 
-    // Find what has been initialised and what hasn't
-    //
+    /// Find what has been initialised and what hasn't
     unsigned int getSoundDriverStatus() { return m_soundDriverStatus; }
 
-    // Reset MIDI controllers
-    //
+    /// Reset MIDI controllers
     void resetControllers();
 
-    // Get the plugins that are available at the sequencer and
-    // put them in the local pluginmanager
-    //
+    /// Reset MIDI network
+    void resetMidiNetwork();
+
+    /**
+     * Get the plugins that are available at the sequencer and put
+     * them in the local pluginmanager
+     */
     void getSequencerPlugins(Rosegarden::AudioPluginManager *);
 
 
-    // Reinitialise the studio
-    //
+    /// Reinitialise the studio
     void reinitialiseSequencerStudio();
 
-    // Send JACK and MMC transport control statuses
-    //
+    /// Send JACK and MMC transport control statuses
     void sendTransportControlStatuses();
 
-    // Send all note offs and resets to MIDI devices
-    //
+    /// Send all note offs and resets to MIDI devices
     void panic();
 
-    // Send an MC to the view
-    //
+    /// Send an MC to the view
     void showVisuals(const Rosegarden::MappedComposition &mC);
 
-    // Apply in-situ filtering to a MappedComposition
-    //
+    /// Apply in-situ filtering to a MappedComposition
     Rosegarden::MappedComposition
         applyFiltering(const Rosegarden::MappedComposition &mC,
                        Rosegarden::MappedEvent::MappedEventType filter);
@@ -188,7 +188,9 @@ public:
     CountdownDialog* getCountdownDialog() { return m_countdownDialog; }
 
 
+    //
     // CompositionObserver interface
+    //
     virtual void segmentAdded              (const Composition*, Segment*);
     virtual void segmentRemoved            (const Composition*, Segment*);
     virtual void segmentRepeatChanged      (const Composition*, Segment*, bool);
@@ -209,21 +211,16 @@ public:
 
     virtual bool event(QEvent *e);
 
-    // for the gui to call to indicate that the metronome needs to be remapped
+    /// for the gui to call to indicate that the metronome needs to be remapped
     void metronomeChanged(Rosegarden::InstrumentId id, bool regenerateTicks);
 
-    // Return the current sequencer memory mapped file
-    //
+    /// Return the current sequencer memory mapped file
     SequencerMapper* getSequencerMapper() { return m_sequencerMapper; }
 
-    // Ensure that the sequencer file is mapped
-    //
+    /// Ensure that the sequencer file is mapped
     void mapSequencer();
     
 public slots:
-    // Empty the m_clearToSend flag
-    //
-    //void slotClearToSendElapsed();
 
     void update();
 

@@ -4968,8 +4968,13 @@ RosegardenGUIApp::slotImportStudioFromFile(const QString &file)
 void
 RosegardenGUIApp::slotResetMidiNetwork()
 {
-    if (m_seqManager)
+    if (m_seqManager) {
+        
         m_seqManager->preparePlayback(true);
+
+        m_seqManager->resetMidiNetwork();
+    }
+    
 }
 
 
