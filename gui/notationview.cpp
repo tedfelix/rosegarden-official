@@ -2033,11 +2033,11 @@ void NotationView::refreshSegment(Segment *segment,
 
         timeT barStartTime = -1, barEndTime = -1;
         
-	barStartTime = ssegment->getBarStart(startTime);
+	barStartTime = ssegment->getBarStartForTime(startTime);
         starti = notes->findTime(barStartTime);
 	//!!!???starti = notes->findTime(startTime);
 
-	barEndTime = ssegment->getBarEnd(endTime);
+	barEndTime = ssegment->getBarEndForTime(endTime);
 	endi = notes->findTime(barEndTime);
 	//!!!???endi = notes->findTime(endTime);
 

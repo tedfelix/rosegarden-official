@@ -294,16 +294,16 @@ Segment::iterator Segment::findTime(timeT t) const
 
 
 timeT
-Segment::getBarStart(timeT t) const
+Segment::getBarStartForTime(timeT t) const
 {
-    return getComposition()->getBarStart(t);
+    return getComposition()->getBarStartForTime(t);
 }
 
 
 timeT
-Segment::getBarEnd(timeT t) const
+Segment::getBarEndForTime(timeT t) const
 {
-    return getComposition()->getBarEnd(t);
+    return getComposition()->getBarEndForTime(t);
 }
 
 

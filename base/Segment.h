@@ -226,7 +226,7 @@ public:
      * if the Segment is in a Composition.  See Composition for some
      * more interesting time signature and bar related methods.
      */
-    timeT getBarStart(timeT t) const;
+    timeT getBarStartForTime(timeT t) const;
 
     /**
      * Return the ending time of the bar that contains time t.
@@ -234,7 +234,7 @@ public:
      * if the Segment is in a Composition.  See Composition for some
      * more interesting time signature and bar related methods.
      */
-    timeT getBarEnd(timeT t) const;
+    timeT getBarEndForTime(timeT t) const;
 
     /**
      * Returns a numeric id of some sort

@@ -132,7 +132,7 @@ SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
 			myDuration) &&
 	// ...(c) event is in same bar (no cross-bar collapsing)
 	(*nextEvent)->getAbsoluteTime() <
-	    segment().getBarEnd(e->getAbsoluteTime())) {
+	    segment().getBarEndForTime(e->getAbsoluteTime())) {
 
         // collapse right is OK; collapse e with nextEvent
 
@@ -150,7 +150,7 @@ SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
 	isCollapseValid(quantizer().getNoteQuantizedDuration(*previousEvent),
 			myDuration) &&
 	(*previousEvent)->getAbsoluteTime() >
-	    segment().getBarStart(e->getAbsoluteTime())) {
+	    segment().getBarStartForTime(e->getAbsoluteTime())) {
 	
         // collapse left is OK; collapse e with previousEvent
         (*previousEvent)->setDuration(e->getDuration() +
@@ -789,9 +789,9 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 	timeT t = (*from)->getAbsoluteTime();
 
 	iterator barStart =
-	    segment().findTime(segment().getBarStart(t));
+	    segment().findTime(segment().getBarStartForTime(t));
 	iterator barEnd = 
-	    segment().findTime(segment().getBarEnd(t));
+	    segment().findTime(segment().getBarEndForTime(t));
 
 	TimeSignature timeSig =
 	    segment().getComposition()->getTimeSignatureAt(t);

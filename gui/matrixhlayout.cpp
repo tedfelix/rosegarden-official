@@ -68,14 +68,14 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase)
     Rosegarden::Segment &segment = staff.getSegment();
     Rosegarden::Composition *composition = segment.getComposition();
 
-    timeT from = composition->getBarStart(segment.getStartTime()),
-	    to = composition->getBarEnd  (segment.getEndTime  ());
+    timeT from = composition->getBarStartForTime(segment.getStartTime()),
+	    to = composition->getBarEndForTime  (segment.getEndTime  ());
 
     //!!! Deal with time signatures...
 
     while (from < to) {
 	m_barData.push_back(BarData(from * staff.getTimeScaleFactor(), 0));
-	from = composition->getBarEnd(from);
+	from = composition->getBarEndForTime(from);
     }
     m_barData.push_back(BarData(to * staff.getTimeScaleFactor(), 0));
 

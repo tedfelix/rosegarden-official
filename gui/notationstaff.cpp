@@ -305,7 +305,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 
     NotationElementList::iterator beginAt = nel->begin();
     do {
-	beginAt = nel->findTime(getSegment().getBarStart(from - 1));
+	beginAt = nel->findTime(getSegment().getBarStartForTime(from - 1));
 	if (beginAt != nel->end()) from = (*beginAt)->getAbsoluteTime();
     } while (beginAt != nel->begin() &&
 	     (beginAt == nel->end() || !elementNotMoved(*beginAt)));
@@ -324,7 +324,7 @@ NotationStaff::positionElements(timeT from, timeT to)
     int changedBarCount = 0;
     NotationElementList::iterator candidate = nel->end();
     do {
-	candidate = nel->findTime(getSegment().getBarEnd(to));
+	candidate = nel->findTime(getSegment().getBarEndForTime(to));
 	if (candidate != nel->end()) {
 	    to = (*candidate)->getAbsoluteTime();
 	    if (nextBarTime < 0) nextBarTime = to;

@@ -200,24 +200,26 @@ public:
     int getNbBars() const;
 
     /**
-     * Return the starting time of the bar that contains time t
-     *!!! rename to ...ForTime and add a getBarStart that takes n?
-     */
-    timeT getBarStart(timeT t) const;
-
-    /**
-     * Return the ending time of the bar that contains time t
-     *!!! rename to ...ForTime and add a getBarEnd that takes n?
-     */
-    timeT getBarEnd(timeT t) const;
-
-    /**
      * Return the number of the bar that starts at or contains time t.
      *
      * Will happily return computed bar numbers for times before
      * the start or beyond the real end of the composition.
      */
     int getBarNumber(timeT t) const;
+
+    /**
+     * Return the starting time of bar n
+     */
+    timeT getBarStart(int n) const {
+	return getBarRange(n).first;
+    } 
+
+    /**
+     * Return the ending time of bar n
+     */
+    timeT getBarEnd(int n) const {
+	return getBarRange(n).second;
+    }
 
     /**
      * Return the time range of bar n.
@@ -227,6 +229,20 @@ public:
      * requirement that 0 <= n < getNbBars()).
      */
     std::pair<timeT, timeT> getBarRange(int n) const;
+
+    /**
+     * Return the starting time of the bar that contains time t
+     */
+    timeT getBarStartForTime(timeT t) const {
+	return getBarRangeForTime(t).first;
+    }
+
+    /**
+     * Return the ending time of the bar that contains time t
+     */
+    timeT getBarEndForTime(timeT t) const {
+	return getBarRangeForTime(t).second;
+    }
 
     /**
      * Return the starting and ending times of the bar that contains
@@ -564,6 +580,7 @@ protected:
     /// affects m_timeSigSegment
     void calculateBarPositions() const;
     mutable bool m_barPositionsNeedCalculating;
+    ReferenceSegment::iterator getTimeSignatureAtAux(timeT t) const;
 
     /// affects m_tempoSegment
     void calculateTempoTimestamps() const;

@@ -457,23 +457,10 @@ Composition::getBarNumber(timeT t) const
     return n;
 }
 
-timeT
-Composition::getBarStart(timeT t) const
-{
-    return getBarRangeForTime(t).first;
-}
-
-timeT
-Composition::getBarEnd(timeT t) const
-{
-    return getBarRangeForTime(t).second;
-}
 
 std::pair<timeT, timeT>
 Composition::getBarRangeForTime(timeT t) const
 {
-    //!!! we could optimise somewhat by making a getBarRangeAux that takes
-    // a ReferenceSegment::iterator
     return getBarRange(getBarNumber(t));
 }
 
@@ -556,7 +543,7 @@ Composition::getTimeSignatureAt(timeT t) const
 timeT
 Composition::getTimeSignatureAt(timeT t, TimeSignature &timeSig) const
 {
-    ReferenceSegment::iterator i = m_timeSigSegment.findNearestTime(t);
+    ReferenceSegment::iterator i = getTimeSignatureAtAux(t);
 
     if (i == m_timeSigSegment.end()) {
 	timeSig = TimeSignature();
@@ -573,11 +560,34 @@ Composition::getTimeSignatureInBar(int barNo, bool &isNew) const
     isNew = false;
     timeT t = getBarRange(barNo).first;
 
-    ReferenceSegment::iterator i = m_timeSigSegment.findNearestTime(t);
+    ReferenceSegment::iterator i = getTimeSignatureAtAux(t);
+
     if (i == m_timeSigSegment.end()) return TimeSignature();
     if (t == (*i)->getAbsoluteTime()) isNew = true;
 
     return TimeSignature(**i);
+}
+
+Composition::ReferenceSegment::iterator
+Composition::getTimeSignatureAtAux(timeT t) const
+{
+    ReferenceSegment::iterator i = m_timeSigSegment.findNearestTime(t);
+    
+    // In negative time, if there's no time signature actually defined
+    // prior to the point of interest then we use the next time
+    // signature after it, so long as it's no later than time zero.
+    // This is the only rational way to deal with count-in bars where
+    // the correct time signature otherwise won't appear until we hit
+    // bar zero.
+
+    if (t < 0 && i == m_timeSigSegment.end()) {
+	i = m_timeSigSegment.findTime(t);
+	if (i != m_timeSigSegment.end() && (*i)->getAbsoluteTime() > 0) {
+	    i  = m_timeSigSegment.end();
+	}
+    }
+    
+    return i;
 }
 
 int
