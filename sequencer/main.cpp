@@ -293,7 +293,6 @@ int main(int argc, char *argv[])
 
 	// Process small number of pending events (argument is max time in ms)
 	app.processEvents(1);
-	process = true;
 	(void)gettimeofday(&tv, 0);
 	timeNow = Rosegarden::RealTime(tv.tv_sec, tv.tv_usec);
 	Rosegarden::RealTime toNextTick = (nextTick - timeNow);
