@@ -32,21 +32,18 @@
 // ---------------- AudioFaderWidget ------------------
 //
 
-AudioFaderWidget::AudioFaderWidget(QWidget *parent, const char *name):
+AudioFaderWidget::AudioFaderWidget(QWidget *parent,
+                                   const char *name,
+                                   bool vertical):
     QWidget(parent, name),
     m_signalMapper(new QSignalMapper(this)),
     m_isStereo(false)
 {
-    QGridLayout *grid = new QGridLayout(this,
-                                        7, 2,
-                                        6, 6);
     // Plugin box
     //
     QPushButton *plugin;
     QVBox *vbox = new QVBox(this);
     vbox->setSpacing(2);
-
-    grid->addMultiCellWidget(vbox, 0, 0, 0, 1, AlignCenter);
 
     for (int i = 0; i < 5; i++)
     {
@@ -70,9 +67,6 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent, const char *name):
     m_fader->setMaxValue(127);
     m_fader->setFixedHeight(m_vuMeter->height());
 
-    grid->addMultiCellWidget(m_vuMeter, 1, 1, 0, 0, AlignCenter);
-    grid->addMultiCellWidget(m_fader,   1, 1, 1, 1, AlignCenter);
-
     // Stereo, solo, mute and pan
     //
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
@@ -88,24 +82,56 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent, const char *name):
     m_pan->setMaxValue(100.0);
     m_pan->setStep(1.0);
 
-    grid->addMultiCellWidget(m_stereoButton,  2, 2, 0, 0, AlignCenter);
-    grid->addMultiCellWidget(m_pan,           2, 2, 1, 1, AlignCenter);
-
     m_muteButton = new QPushButton(this);
     m_soloButton = new QPushButton(this);
     m_muteButton->setText("M");
     m_soloButton->setText("S");
 
-    grid->addMultiCellWidget(m_muteButton, 3, 3, 0, 0, AlignCenter);
-    grid->addMultiCellWidget(m_soloButton, 3, 3, 1, 1, AlignCenter);
-
     m_recordButton = new QPushButton(this);
     m_recordButton->setText("R");
 
-    grid->addMultiCellWidget(m_recordButton, 4, 4, 0, 0, AlignCenter);
-
+    
     connect(m_stereoButton, SIGNAL(clicked()),
             this, SLOT(slotChannelStateChanged()));
+
+    // Sort out the layout accordingly
+    //
+    QGridLayout *grid;
+   
+    if (vertical == true)
+    {
+        grid = new QGridLayout(this, 7, 2, 6, 6);
+
+        grid->addMultiCellWidget(vbox, 0, 0, 0, 1, AlignCenter);
+
+        grid->addMultiCellWidget(m_vuMeter, 1, 1, 0, 0, AlignCenter);
+        grid->addMultiCellWidget(m_fader,   1, 1, 1, 1, AlignCenter);
+
+        grid->addMultiCellWidget(m_stereoButton,  2, 2, 0, 0, AlignCenter);
+        grid->addMultiCellWidget(m_pan,           2, 2, 1, 1, AlignCenter);
+
+        grid->addMultiCellWidget(m_muteButton, 3, 3, 0, 0, AlignCenter);
+        grid->addMultiCellWidget(m_soloButton, 3, 3, 1, 1, AlignCenter);
+
+        grid->addMultiCellWidget(m_recordButton, 4, 4, 0, 0, AlignCenter);
+    }
+    else
+    {
+        grid = new QGridLayout(this, 7, 4, 6, 6);
+
+        grid->addMultiCellWidget(vbox, 0, 7, 0, 1, AlignCenter);
+
+        grid->addMultiCellWidget(m_vuMeter, 1, 1, 0, 0, AlignCenter);
+        grid->addMultiCellWidget(m_fader,   1, 1, 1, 1, AlignCenter);
+
+        grid->addMultiCellWidget(m_stereoButton,  2, 2, 0, 0, AlignCenter);
+        grid->addMultiCellWidget(m_pan,           2, 2, 1, 1, AlignCenter);
+
+        grid->addMultiCellWidget(m_muteButton, 3, 3, 0, 0, AlignCenter);
+        grid->addMultiCellWidget(m_soloButton, 3, 3, 1, 1, AlignCenter);
+
+        grid->addMultiCellWidget(m_recordButton, 4, 4, 0, 0, AlignCenter);
+    }
 
 }
 

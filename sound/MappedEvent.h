@@ -65,42 +65,42 @@ public:
     {
         // INVALID
         //
-        InvalidMappedEvent = -1,
+        InvalidMappedEvent       = 0x00000,
 
-        // VALID
+        // Keep the MidiNotes bit flaggable so that filtering works
         //
-        MidiNote = 0,
-        MidiNoteOneShot,  // doesn't need NOTE OFFs
-        MidiProgramChange,
-        MidiKeyPressure,
-        MidiChannelPressure,
-        MidiPitchBend,
-        MidiController,
-        MidiSystemExclusive,
+        MidiNote                 = 0x00001,
+        MidiNoteOneShot          = 0x00002,  // doesn't need NOTE OFFs
+        MidiProgramChange        = 0x00004,
+        MidiKeyPressure          = 0x00008,
+        MidiChannelPressure      = 0x00010, // 16
+        MidiPitchBend            = 0x00020, // 32
+        MidiController           = 0x00040, // 64
+        MidiSystemExclusive      = 0x00080, // 128
 
         // Sent from the gui to play an audio file
-        Audio = 40,
+        Audio                    = 0x00100,
         // Sent from gui to cancel playing an audio file
-        AudioCancel,
+        AudioCancel              = 0x00200,
         // Sent to the gui with audio level on Instrument
-        AudioLevel,
+        AudioLevel               = 0x00800,
         // Sent to the gui to inform an audio file stopped
-        AudioStopped,
+        AudioStopped             = 0x01000,
         // The gui is clear to generate a preview for a new audio file
-        AudioGeneratePreview,
+        AudioGeneratePreview     = 0x02000,
 
         // Update Instruments - new ALSA client detected
-        SystemUpdateInstruments = 80,
+        SystemUpdateInstruments  = 0x04000,
         // Set RG as JACK master/slave
-        SystemJackTransport,
+        SystemJackTransport      = 0x08000,
         // Set RG as MMC master/slave
-        SystemMMCTransport,
+        SystemMMCTransport       = 0x10000,
         // Set System Messages and MIDI Clock
-        SystemMIDIClock,
+        SystemMIDIClock          = 0x20000,
         // Set Record device
-        SystemRecordDevice,
+        SystemRecordDevice       = 0x40000,
         // Set Metronome device
-        SystemMetronomeDevice
+        SystemMetronomeDevice    = 0x80000
 
     } MappedEventType;
 

@@ -50,7 +50,9 @@ class AudioFaderWidget : public QWidget
     Q_OBJECT
 
 public:
-    AudioFaderWidget(QWidget *parent, const char *name=0);
+    AudioFaderWidget(QWidget *parent,
+                     const char *name=0,
+                     bool vertical=true);
 
     void setAudioChannels(int);
 
