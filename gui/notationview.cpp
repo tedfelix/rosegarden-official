@@ -638,7 +638,7 @@ NotationView::showBars(NotationElementList::iterator from,
 //                          << " - lastElement->x = " << (*lastElement)->x() << endl
 //                          << "lastElement : " << *(*lastElement) << endl;
     
-    m_currentStaff->deleteBars((*from)->getEffectiveX());
+    m_currentStaff->deleteBars(int((*from)->getEffectiveX()));
         
     for (NotationHLayout::BarPositions::const_iterator it = barPos.begin();
         it != barPos.end(); ++it) {
@@ -972,21 +972,10 @@ NotationView::insertNote(int height, const QPoint &eventPos)
 
     // create new event
     //
-    Event *insertedEvent = new Event;
+    Event *insertedEvent = 0;
+    NotationElement *newNotationElement = 0;
+    initNewEvent(insertedEvent, newNotationElement, pitch);
 
-    if (m_currentSelectedNoteIsRest) {
-        insertedEvent->setType("rest");
-    } else {
-        insertedEvent->setType(Note::EventType);
-        insertedEvent->set<Int>("pitch", pitch);
-    }
-
-    NotationElement *newNotationElement =
-        new NotationElement(insertedEvent);
-    newNotationElement->setNote(Note(m_currentSelectedNoteType,
-                                     m_currentSelectedNoteDotted ? 1 : 0));
-
-    newNotationElement->event()->setMaybe<String>("Name", "INSERTED_NOTE");
 
     NotationElementList::iterator redoLayoutStart = closestNote;
     
@@ -1024,78 +1013,13 @@ NotationView::insertNote(int height, const QPoint &eventPos)
         //
         // Chording a note of a different time
         //
-        Rosegarden::Event* closestEvent = (*closestNote)->event();
+        chordEvent(closestNote, insertedEvent, newNotationElement);
 
-        if (closestEvent->getDuration() != insertedEvent->getDuration()) {
-
-            // Try expanding either the inserted event or the events
-            // in the track, or alter inserted note's duration as last
-            // resort
-            Rosegarden::Track &track = getTrack();
-
-            if (closestEvent->getDuration() < insertedEvent->getDuration()) {
-                // new note is being chorded with notes which are shorter
-                // shorten its duration to same one as other notes
-
-//                 Rosegarden::Track::iterator lastInsertedEvent;
-                
-//                 if (track.expandAndInsertEvent(insertedEvent,
-//                                                 closestEvent->getDuration(),
-//                                                 lastInsertedEvent)) {
-                    
-//                     // put a NotationElement around the newly created event
-
-//                     m_viewElementsManager->insert(*lastInsertedEvent);
-                    
-//                 } else {
-                    // force the new note to be of the same length as the existing one
-                    newNotationElement->setNote((*closestNote)->getNote());
-//                 }
-                
-            } else if (closestEvent->getDuration() > insertedEvent->getDuration()) {
-
-                Rosegarden::Track::iterator start, end, newEnd;
-                track.getTimeSlice((*closestNote)->event()->getAbsoluteTime(),
-                                   start, end);
-
-                // new note is being chorded with notes which are longer
-                // for the moment, do the same as in other case
-                if (track.expandIntoTie(start, end,
-                                        insertedEvent->getDuration(),
-                                        newEnd)) {
-
-                    // put NotationElements around the newly created events
-                    ++newEnd; // insertNewEvents works on a [from,to[ range
-                    // and we need to wrap this last event
-                    m_viewElementsManager->insertNewEvents(start, newEnd);
-
-
-                } else {
-                    // expansion is not possible, so force the inserted note
-                    // to the duration of the one already present
-                    newNotationElement->setNote((*closestNote)->getNote());
-                }
-
-            }
-        }
-        
         newNotationElement->setAbsoluteTime((*closestNote)->getAbsoluteTime());
-        // m_notationElements->insert(newNotationElement);
 
 	//!!! should do this if we're between two events in the same
 	//group, as well
-	long groupNo;
-	if ((*closestNote)->event()->get<Int>
-            (Track::BeamedGroupIdPropertyName, groupNo)) {
-
-	    newNotationElement->event()->setMaybe<Int>
-                (Track::BeamedGroupIdPropertyName, groupNo);
-
-	    newNotationElement->event()->setMaybe<String>
-		(Track::BeamedGroupTypePropertyName,
-		 (*closestNote)->event()->get<String>
-                 (Track::BeamedGroupTypePropertyName));
-	}
+        setupGroup(closestNote, newNotationElement);
 
         kdDebug(KDEBUG_AREA) << "new event is: " << (*newNotationElement) << endl;
 
@@ -1106,32 +1030,8 @@ NotationView::insertNote(int height, const QPoint &eventPos)
 //     kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements before relayout : "
 //                          << endl << *m_notationElements << endl;
 
-    applyLayout(); // TODO : be more subtle than this
-
-//     kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements after relayout : "
-//                          << endl << *m_notationElements << endl;
-
-    // (*m_hlayout)(notationElement);
-
-    // TODO : m_currentStaff should be updated by the mouse click 
-
-    if (redoLayoutStart != m_notationElements->begin())
-        showElements(
-	    //!!! sadly we can't just redo from where we are, because
-	    //things like beamed notes earlier in the same group may
-	    //need to be redrawn with different beam angles.  We may
-	    //be able to get away with redrawing from the start of the
-	    //group or bar, but for now let's just do this:
-                     m_notationElements->begin()  /*--redoLayoutStart */,
-                     m_notationElements->end(),
-                     m_currentStaff);
-    else
-        showElements(m_notationElements->begin(),
-                     m_notationElements->end(),
-                     m_currentStaff);
-
-    showBars(m_notationElements->begin(),
-             m_notationElements->end());
+    redoLayout(redoLayoutStart);
+    
 }
 
 
@@ -1195,9 +1095,134 @@ NotationView::findClosestNote(double eventX, Clef &clef, Rosegarden::Key &key)
     return res;
 }
 
-bool
-NotationView::replaceRestWithNote(NotationElementList::iterator rest,
-                                  NotationElement *newNote)
+void NotationView::initNewEvent(Event*& newEvent,
+                                NotationElement*& newElement,
+                                int pitch)
+{
+    newEvent = new Event;
+
+    if (m_currentSelectedNoteIsRest) {
+        newEvent->setType("rest");
+    } else {
+        newEvent->setType(Note::EventType);
+        newEvent->set<Int>("pitch", pitch);
+    }
+
+    newElement = new NotationElement(newEvent);
+    newElement->setNote(Note(m_currentSelectedNoteType,
+                             m_currentSelectedNoteDotted ? 1 : 0));
+
+    //newNotationElement->event()->setMaybe<String>("Name", "INSERTED_NOTE");
+}
+
+void NotationView::chordEvent(NotationElementList::iterator closestNote,
+                              Rosegarden::Event* insertedEvent,
+                              NotationElement* newNotationElement)
+{
+    Rosegarden::Event* closestEvent = (*closestNote)->event();
+
+    if (closestEvent->getDuration() != insertedEvent->getDuration()) {
+
+        // Try expanding either the inserted event or the events
+        // in the track, or alter inserted note's duration as last
+        // resort
+        Rosegarden::Track &track = getTrack();
+
+        if (closestEvent->getDuration() < insertedEvent->getDuration()) {
+            // new note is being chorded with notes which are shorter
+            // shorten its duration to same one as other notes
+
+            //                 Rosegarden::Track::iterator lastInsertedEvent;
+                
+            //                 if (track.expandAndInsertEvent(insertedEvent,
+            //                                                 closestEvent->getDuration(),
+            //                                                 lastInsertedEvent)) {
+                    
+            //                     // put a NotationElement around the newly created event
+
+            //                     m_viewElementsManager->insert(*lastInsertedEvent);
+                    
+            //                 } else {
+            // force the new note to be of the same length as the existing one
+            newNotationElement->setNote((*closestNote)->getNote());
+            //                 }
+                
+        } else if (closestEvent->getDuration() > insertedEvent->getDuration()) {
+
+            Rosegarden::Track::iterator start, end, newEnd;
+            track.getTimeSlice((*closestNote)->event()->getAbsoluteTime(),
+                               start, end);
+
+            // new note is being chorded with notes which are longer
+            // for the moment, do the same as in other case
+            if (track.expandIntoTie(start, end,
+                                    insertedEvent->getDuration(),
+                                    newEnd)) {
+
+                // put NotationElements around the newly created events
+                ++newEnd; // insertNewEvents works on a [from,to[ range
+                // and we need to wrap this last event
+                m_viewElementsManager->insertNewEvents(start, newEnd);
+
+
+            } else {
+                // expansion is not possible, so force the inserted note
+                // to the duration of the one already present
+                newNotationElement->setNote((*closestNote)->getNote());
+            }
+
+        }
+    }
+}
+
+void NotationView::setupGroup(NotationElementList::iterator closestNote,
+                              NotationElement* newNotationElement)
+{
+    long groupNo = 0;
+    if ((*closestNote)->event()->get<Int>(Track::BeamedGroupIdPropertyName,
+                                          groupNo)) {
+
+        newNotationElement->event()->setMaybe<Int>(Track::BeamedGroupIdPropertyName, groupNo);
+
+        newNotationElement->event()->setMaybe<String>(Track::BeamedGroupTypePropertyName,
+                                                      (*closestNote)->event()->get<String>
+                                                      (Track::BeamedGroupTypePropertyName));
+    }
+}
+
+void NotationView::redoLayout(NotationElementList::iterator from)
+{
+    applyLayout(); // TODO : be more subtle than this
+
+    //     kdDebug(KDEBUG_AREA) << "NotationView::insertNote() : Elements after relayout : "
+    //                          << endl << *m_notationElements << endl;
+
+    // (*m_hlayout)(notationElement);
+
+    // TODO : m_currentStaff should be updated by the mouse click 
+
+    if (from != m_notationElements->begin())
+        showElements(
+                     //!!! sadly we can't just redo from where we are, because
+                     //things like beamed notes earlier in the same group may
+                     //need to be redrawn with different beam angles.  We may
+                     //be able to get away with redrawing from the start of the
+                     //group or bar, but for now let's just do this:
+                     m_notationElements->begin()  /*--redoLayoutStart */,
+                     m_notationElements->end(),
+                     m_currentStaff);
+    else
+        showElements(m_notationElements->begin(),
+                     m_notationElements->end(),
+                     m_currentStaff);
+
+    showBars(m_notationElements->begin(),
+             m_notationElements->end());
+}
+
+
+bool NotationView::replaceRestWithNote(NotationElementList::iterator rest,
+                                       NotationElement *newNote)
 {
     // if the new note's duration is longer than the rest it's
     // supposed to replace, set it to the rest's duration

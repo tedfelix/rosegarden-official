@@ -191,6 +191,38 @@ protected:
      */
     void initStatusBar();
 
+
+    //
+    // The methods below are all used by insertNote()
+    //
+
+    /**
+     * create a new Event and NotationElement for insertion
+     * @return newEvent and newElement pointing to newly created
+     * objects
+     */
+    void initNewEvent(Rosegarden::Event*& newEvent,
+                      NotationElement*& newElement,
+                      int pitch);
+    
+    /**
+     * chord new event with existing news
+     */
+    void chordEvent(NotationElementList::iterator closestNote,
+                    Rosegarden::Event* insertedEvent,
+                    NotationElement* newNotationElement);
+
+    /**
+     * set the group id of the newly inserted notation element
+     */
+    void setupGroup(NotationElementList::iterator closestNote,
+                    NotationElement* newNotationElement);
+    
+    /**
+     * redo the layout after insertion
+     */
+    void redoLayout(NotationElementList::iterator from);
+
     /**
      * show bar lines
      */
