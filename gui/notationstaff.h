@@ -29,7 +29,6 @@
 #include "linedstaff.h"
 
 class QCanvasSimpleSprite;
-class EventSelection;
 
 /**
  * The Staff is a repository for information about the notation

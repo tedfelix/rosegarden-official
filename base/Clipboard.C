@@ -19,6 +19,7 @@
 */
 
 #include "Clipboard.h"
+#include "Selection.h"
 
 namespace Rosegarden
 {
@@ -103,6 +104,21 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to)
     Segment::iterator ito   = copyFrom->findTime(to);
 
     for (Segment::iterator i = ifrom; i != ito && i != end(); ++i) {
+	s->insert(new Event(**i));
+    }
+
+    return s;
+}
+
+Segment *
+Clipboard::newSegment(const EventSelection *copyFrom)
+{
+    Segment *s = new Segment();
+    m_segments.insert(s);
+
+    const EventSelection::eventcontainer &events(copyFrom->getSegmentEvents());
+    for (EventSelection::eventcontainer::iterator i = events.begin();
+	 i != events.end(); ++i) {
 	s->insert(new Event(**i));
     }
 

@@ -140,21 +140,21 @@ protected:
 
 // Cut, copy, paste, erase selection
 
-class CutSelectionCommand : public CompoundCommand
+class CutNotationCommand : public CompoundCommand
 {
 public:
-    CutSelectionCommand(EventSelection &selection,
+    CutNotationCommand(Rosegarden::EventSelection &selection,
 			Rosegarden::Clipboard *clipboard);
 
     static QString name() { return "Cu&t"; }
 };
 
-class CopySelectionCommand : public KCommand // no refresh needed
+class CopyNotationCommand : public KCommand // no refresh needed
 {
 public:
-    CopySelectionCommand(EventSelection &selection,
-			 Rosegarden::Clipboard *clipboard);
-    virtual ~CopySelectionCommand();
+    CopyNotationCommand(Rosegarden::EventSelection &selection,
+			Rosegarden::Clipboard *clipboard);
+    virtual ~CopyNotationCommand();
 
     static QString name() { return "&Copy"; }
 
@@ -166,12 +166,12 @@ protected:
     Rosegarden::Clipboard *m_targetClipboard;
 };
 
-class PasteCommand : public BasicCommand
+class PasteNotationCommand : public BasicCommand
 {
 public:
-    PasteCommand(Rosegarden::Segment &segment,
-		 Rosegarden::Clipboard *clipboard,
-		 Rosegarden::timeT pasteTime);
+    PasteNotationCommand(Rosegarden::Segment &segment,
+			 Rosegarden::Clipboard *clipboard,
+			 Rosegarden::timeT pasteTime);
 
     static QString name() { return "&Paste"; }
 
@@ -189,10 +189,10 @@ protected:
     Rosegarden::Clipboard *m_clipboard;
 };
 
-class EraseSelectionCommand : public BasicSelectionCommand
+class EraseNotationCommand : public BasicSelectionCommand
 {
 public:
-    EraseSelectionCommand(EventSelection &selection);
+    EraseNotationCommand(Rosegarden::EventSelection &selection);
 
     static QString name() { return "&Erase"; }
 
@@ -202,7 +202,7 @@ protected:
     virtual void modifySegment();
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     Rosegarden::timeT m_relayoutEndTime;
 };
 
@@ -214,7 +214,7 @@ private:
 class GroupMenuBeamCommand : public BasicSelectionCommand
 {
 public:
-    GroupMenuBeamCommand(EventSelection &selection) :
+    GroupMenuBeamCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(name(), selection) { }
 
     static QString name() { return "&Beam Group"; }
@@ -227,7 +227,7 @@ protected:
 class GroupMenuAutoBeamCommand : public BasicSelectionCommand
 {
 public:
-    GroupMenuAutoBeamCommand(EventSelection &selection) :
+    GroupMenuAutoBeamCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(name(), selection) { }
 
     static QString name() { return "&Auto-Beam"; }
@@ -240,7 +240,7 @@ protected:
 class GroupMenuBreakCommand : public BasicSelectionCommand
 {
 public:
-    GroupMenuBreakCommand(EventSelection &selection) :
+    GroupMenuBreakCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(name(), selection) { }
 
     static QString name() { return "&Unbeam"; }
@@ -254,7 +254,7 @@ class GroupMenuAddIndicationCommand : public BasicCommand
 {
 public:
     GroupMenuAddIndicationCommand(std::string indicationType,
-				  EventSelection &selection);
+				  Rosegarden::EventSelection &selection);
     virtual ~GroupMenuAddIndicationCommand();
 
     Rosegarden::Event *getLastInsertedEvent() {
@@ -282,7 +282,7 @@ protected:
 class TransformsMenuNormalizeRestsCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuNormalizeRestsCommand(EventSelection &selection) :
+    TransformsMenuNormalizeRestsCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(name(), selection) { }
 
     static QString name() { return "&Normalize Rests"; }
@@ -295,7 +295,7 @@ protected:
 class TransformsMenuCollapseRestsCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuCollapseRestsCommand(EventSelection &selection) :
+    TransformsMenuCollapseRestsCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(name(), selection) { }
 
     static QString name() { return "&Collapse Rests"; }
@@ -308,7 +308,7 @@ protected:
 class TransformsMenuCollapseNotesCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuCollapseNotesCommand(EventSelection &selection) :
+    TransformsMenuCollapseNotesCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(name(), selection, true),
 	m_selection(&selection) { }
 
@@ -318,14 +318,14 @@ protected:
     virtual void modifySegment();
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
     
   
 class TransformsMenuChangeStemsCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuChangeStemsCommand(bool up, EventSelection &selection) :
+    TransformsMenuChangeStemsCommand(bool up, Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(name(up), selection, true),
 	m_selection(&selection), m_up(up) { }
 
@@ -337,7 +337,7 @@ protected:
     virtual void modifySegment();
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     bool m_up;
 };
 
@@ -345,7 +345,7 @@ private:
 class TransformsMenuRestoreStemsCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuRestoreStemsCommand(EventSelection &selection) :
+    TransformsMenuRestoreStemsCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(name(), selection, true),
 	m_selection(&selection) { }
 
@@ -357,14 +357,14 @@ protected:
     virtual void modifySegment();
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 
 
 class TransformsMenuTransposeCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuTransposeCommand(int semitones, EventSelection &selection) :
+    TransformsMenuTransposeCommand(int semitones, Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(name(), selection, true),
 	m_selection(&selection), m_semitones(semitones) { }
 
@@ -376,7 +376,7 @@ protected:
     virtual void modifySegment();
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     int m_semitones;
 };
 
@@ -384,7 +384,7 @@ private:
 class TransformsMenuTransposeOneStepCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuTransposeOneStepCommand(bool up, EventSelection &selection) :
+    TransformsMenuTransposeOneStepCommand(bool up, Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(name(up), selection, true),
 	m_selection(&selection), m_up(up) { }
 
@@ -396,7 +396,7 @@ protected:
     virtual void modifySegment();
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     bool m_up;
 };
 
@@ -404,7 +404,7 @@ private:
 class TransformsMenuTransposeOctaveCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuTransposeOctaveCommand(bool up, EventSelection &selection) :
+    TransformsMenuTransposeOctaveCommand(bool up, Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(name(up), selection, true),
 	m_selection(&selection), m_up(up) { }
 
@@ -416,7 +416,7 @@ protected:
     virtual void modifySegment();
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     bool m_up;
 };
 
@@ -425,7 +425,7 @@ class TransformsMenuAddMarkCommand : public BasicSelectionCommand
 {
 public:
     TransformsMenuAddMarkCommand(Rosegarden::Mark mark,
-				 EventSelection &selection) :
+				 Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(name(mark), selection, true),
 	m_selection(&selection), m_mark(mark) { }
 
@@ -435,7 +435,7 @@ protected:
     virtual void modifySegment();
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     Rosegarden::Mark m_mark;
 };
 
@@ -444,7 +444,7 @@ class TransformsMenuAddTextMarkCommand : public BasicSelectionCommand
 {
 public:
     TransformsMenuAddTextMarkCommand(std::string text,
-				     EventSelection &selection) :
+				     Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(name(), selection, true),
 	m_selection(&selection), m_text(text) { }
 
@@ -456,7 +456,7 @@ protected:
     virtual void modifySegment();
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     std::string m_text;
 };
 
@@ -464,7 +464,7 @@ private:
 class TransformsMenuRemoveMarksCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuRemoveMarksCommand(EventSelection &selection) :
+    TransformsMenuRemoveMarksCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(name(), selection, true),
 	m_selection(&selection) { }
 
@@ -476,7 +476,7 @@ protected:
     virtual void modifySegment();
 
 private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 
 

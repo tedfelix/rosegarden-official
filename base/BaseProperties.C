@@ -44,6 +44,8 @@ const PropertyName PITCH		= "pitch";
 const PropertyName VELOCITY		= "velocity";
 const PropertyName ACCIDENTAL		= "accidental";
 
+const PropertyName SELECTED		= "selected";
+
 const PropertyName MARK_COUNT		= "marks";
 
 PropertyName getMarkPropertyName(int markNo)

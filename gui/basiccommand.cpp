@@ -20,13 +20,14 @@
 */
 
 #include "basiccommand.h"
-#include "eventselection.h"
+#include "Selection.h"
 
 #include <qstring.h>
 
 #include "rosedebug.h"
 
 using Rosegarden::Segment;
+using Rosegarden::EventSelection;
 using Rosegarden::Event;
 using Rosegarden::timeT;
 

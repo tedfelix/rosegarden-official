@@ -36,7 +36,7 @@
 #include "command.h"
 #include "Segment.h"
 
-class EventSelection;
+namespace Rosegarden { class EventSelection; }
 
 
 /**
@@ -110,7 +110,8 @@ public:
     virtual ~BasicSelectionCommand();
 
 protected:
-    BasicSelectionCommand(const QString &name, EventSelection &selection,
+    BasicSelectionCommand(const QString &name,
+			  Rosegarden::EventSelection &selection,
 			  bool bruteForceRedoRequired = false);
 };
 

@@ -134,7 +134,7 @@ protected:
     MatrixStaff* m_currentStaff;
 };
 
-#include "eventselection.h"
+#include "Selection.h"
 class QCanvasRectangle;
 
 class MatrixSelector : public MatrixTool
@@ -185,7 +185,7 @@ public:
      *
      * The returned result is owned by the caller
      */
-    EventSelection* getSelection();
+    Rosegarden::EventSelection* getSelection();
 
     static const QString ToolName;
 

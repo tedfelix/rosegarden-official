@@ -49,6 +49,7 @@
 #include "rosedebug.h"
 
 using Rosegarden::Segment;
+using Rosegarden::EventSelection;
 using Rosegarden::timeT;
 
 //----------------------------------------------------------------------
@@ -453,7 +454,7 @@ void MatrixView::slotEditCut()
 
     kdDebug(KDEBUG_AREA) << "MatrixView::slotEditCut() : cutting selection\n";
 
-    m_currentEventSelection->cut();
+//!!!    m_currentEventSelection->cut();
 
     emit usedSelection();
 
@@ -470,7 +471,7 @@ void MatrixView::slotEditCopy()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), statusBar());
 
-    m_currentEventSelection->copy();
+//!!!    m_currentEventSelection->copy();
 
     emit usedSelection();
 }

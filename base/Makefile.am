@@ -25,6 +25,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     SegmentMatrixHelper.C \
 		     SegmentNotationHelper.C \
 		     SegmentPerformanceHelper.C \
+		     Selection.C \
                      Track.C \
 		     ViewElement.C
 

@@ -11,7 +11,6 @@ rosegarden_SOURCES = \
 	dialogs.cpp \
 	edittool.cpp \
 	editview.cpp \
-	eventselection.cpp \
 	kstartuplogo.cpp \
 	ktmpstatusmsg.cpp \
         loopruler.cpp \
@@ -52,7 +51,6 @@ rosegarden_SOURCES = \
 	rosexmlhandler.cpp \
 	segmentcanvas.cpp \
         segmentcommands.cpp \
-        segmentselection.cpp \
         sequencemanager.cpp \
 	spline.cpp \
 	staffline.cpp \

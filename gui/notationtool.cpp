@@ -30,8 +30,8 @@
 #include "NotationTypes.h"
 #include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
+#include "Selection.h"
 
-#include "eventselection.h"
 #include "rosegardenguidoc.h"
 #include "notationtool.h"
 #include "notationview.h"
@@ -46,6 +46,7 @@
 using Rosegarden::Accidental;
 using Rosegarden::Accidentals;
 using Rosegarden::Event;
+using Rosegarden::EventSelection;
 using Rosegarden::Clef;
 using Rosegarden::Note;
 using Rosegarden::Int;
@@ -784,25 +785,14 @@ void NotationSelectionPaster::handleLeftButtonPress(Rosegarden::timeT,
     timeT time = (*closestElement)->getAbsoluteTime();
 
     Segment& segment = staff->getSegment();
+    PasteNotationCommand *command = new PasteNotationCommand
+	(segment, m_parentView->getDocument()->getClipboard(), time);
 
-
-    //!!! how to identify if paste failed
-    m_parentView->addCommandToHistory
-	(new PasteCommand(segment, m_parentView->getDocument()->getClipboard(),
-			  time));
-
-
-//    if (m_selection.pasteToSegment(segment, time)) {
-
-//        m_nParentView->refreshSegment
-//	    (&segment, 0, time + m_selection.getTotalDuration() + 1);
-
-//    } else {
-        
-//        m_parentView->slotStatusHelpMsg(i18n("Couldn't paste at this point"));
-//    }
-    
-    //m_parentView->slotStatusHelpMsg(i18n("Ready."));
-
+    if (!command->isPossible()) {
+	m_parentView->slotStatusHelpMsg(i18n("Couldn't paste at this point"));
+    } else {
+	m_parentView->addCommandToHistory(command);
+	m_parentView->slotStatusHelpMsg(i18n("Ready."));
+    }
 }
 

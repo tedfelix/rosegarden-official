@@ -35,7 +35,7 @@
 #include "NotationTypes.h"
 
 class QCanvasItem;
-namespace Rosegarden { class Segment; }
+namespace Rosegarden { class Segment; class EventSelection; }
 class RosegardenGUIDoc;
 class NotationTool;
 class NotationToolBox;
@@ -101,7 +101,7 @@ public:
      * Set the current event selection
      * @see NotationSelector
      */
-    void setCurrentSelection(EventSelection*);
+    void setCurrentSelection(Rosegarden::EventSelection*);
 
     /**
      * Set the current event selection to a single event
@@ -452,7 +452,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     /// The current selection of Events (for cut/copy/paste)
-    EventSelection* m_currentEventSelection;
+    Rosegarden::EventSelection* m_currentEventSelection;
 
     /// Displayed in the status bar, holds the pixmap of the current note
     QLabel* m_currentNotePixmap;

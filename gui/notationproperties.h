@@ -50,7 +50,6 @@ extern const Rosegarden::PropertyName TIE_LENGTH;
 extern const Rosegarden::PropertyName SLUR_ABOVE;
 extern const Rosegarden::PropertyName SLUR_Y_DELTA;
 extern const Rosegarden::PropertyName SLUR_LENGTH;
-extern const Rosegarden::PropertyName SELECTED;
 
 // Set in applyBeam in notationsets.cpp:
 

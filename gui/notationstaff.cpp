@@ -21,11 +21,10 @@
 
 #include <algorithm>
 
-#include "eventselection.h"
 #include "notationstaff.h"
 #include "qcanvassimplesprite.h"
 #include "notationproperties.h"
-#include "eventselection.h"
+#include "Selection.h"
 #include "BaseProperties.h"
 
 #include "rosedebug.h"

@@ -36,7 +36,6 @@
 #include <kstdaction.h>
 #include <kapp.h>
 
-#include "eventselection.h"
 #include "rosegardenguiview.h"
 #include "rosegardenguidoc.h"
 #include "notationview.h"
@@ -57,6 +56,7 @@
 #include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
 #include "Quantizer.h"
+#include "Selection.h"
 #include "notationcommands.h"
 #include "segmentcommands.h"
 #include "dialogs.h"
@@ -71,6 +71,7 @@ using Rosegarden::String;
 using Rosegarden::Note;
 using Rosegarden::Segment;
 using Rosegarden::SegmentNotationHelper;
+using Rosegarden::EventSelection;
 using Rosegarden::Clef;
 using Rosegarden::Key;
 using Rosegarden::TimeSignature;
@@ -1104,8 +1105,8 @@ void NotationView::slotEditCut()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Cutting selection..."), statusBar());
 
-    addCommandToHistory(new CutSelectionCommand(*m_currentEventSelection,
-						m_document->getClipboard()));
+    addCommandToHistory(new CutNotationCommand(*m_currentEventSelection,
+					       m_document->getClipboard()));
 }
 
 void NotationView::slotEditCopy()
@@ -1113,8 +1114,8 @@ void NotationView::slotEditCopy()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), statusBar());
 
-    addCommandToHistory(new CopySelectionCommand(*m_currentEventSelection,
-						 m_document->getClipboard()));
+    addCommandToHistory(new CopyNotationCommand(*m_currentEventSelection,
+						m_document->getClipboard()));
 
     emit usedSelection();
 }
@@ -1151,7 +1152,7 @@ void NotationView::slotEditPaste()
 	insertionTime = (*i)->getAbsoluteTime();
     }
 
-    PasteCommand *command = new PasteCommand
+    PasteNotationCommand *command = new PasteNotationCommand
 	(segment, m_document->getClipboard(), insertionTime);
 
     if (!command->isPossible()) {

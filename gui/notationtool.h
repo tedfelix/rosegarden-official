@@ -29,9 +29,10 @@
 
 class QCanvasRectangle;
 
+namespace Rosegarden { class EventSelection; }
+
 class NotationView;
 class NotationElement;
-class EventSelection;
 class QPopupMenu;
 
 //////////////////////////////////////////////////////////////////////
@@ -318,7 +319,7 @@ public:
      *
      * The returned result is owned by the caller
      */
-    EventSelection* getSelection();
+    Rosegarden::EventSelection* getSelection();
 
     static const QString ToolName;
 
@@ -368,12 +369,12 @@ public:
                                        Rosegarden::ViewElement* el);
 
 protected:
-    NotationSelectionPaster(EventSelection&,
+    NotationSelectionPaster(Rosegarden::EventSelection&,
                             NotationView*);
 
     //--------------- Data members ---------------------------------
 
-    EventSelection& m_selection;
+    Rosegarden::EventSelection& m_selection;
 
 };
 

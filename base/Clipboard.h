@@ -26,6 +26,7 @@
 
 namespace Rosegarden
 {
+class EventSelection;
 
 /**
  * Simple container for segments, that can serve as a clipboard for
@@ -97,6 +98,12 @@ public:
      * (The clipboard retains ownership of the new segment.)
      */
     Segment *newSegment(const Segment *copyFrom, timeT from, timeT to);
+
+    /**
+     * Add a new segment to the clipboard, containing copied of
+     * the events in the given selection.
+     */
+    Segment *newSegment(const EventSelection *copyFrom);
 
     /**
      * Clear the current clipboard and re-fill it by copying from c.

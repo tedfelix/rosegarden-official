@@ -18,10 +18,10 @@
 */
 
 #include "notationcommands.h"
-#include "eventselection.h"
 #include "notationview.h"
 #include "rosegardenguidoc.h"
 
+#include "Selection.h"
 #include "SegmentNotationHelper.h"
 #include "BaseProperties.h"
 #include "Clipboard.h"
@@ -43,6 +43,7 @@ using Rosegarden::Accidental;
 using Rosegarden::Accidentals::NoAccidental;
 using Rosegarden::Indication;
 using Rosegarden::NotationDisplayPitch;
+using Rosegarden::EventSelection;
 
 using std::string;
 using std::cerr;
@@ -247,36 +248,30 @@ EraseEventCommand::modifySegment()
 
 
 
-CutSelectionCommand::CutSelectionCommand(EventSelection &selection,
+CutNotationCommand::CutNotationCommand(EventSelection &selection,
 					 Rosegarden::Clipboard *clipboard) :
     CompoundCommand(name())
 {
-    addCommand(new CopySelectionCommand(selection, clipboard));
-    addCommand(new EraseSelectionCommand(selection));
+    addCommand(new CopyNotationCommand(selection, clipboard));
+    addCommand(new EraseNotationCommand(selection));
 }
 
-CopySelectionCommand::CopySelectionCommand(EventSelection &selection,
+CopyNotationCommand::CopyNotationCommand(EventSelection &selection,
 					   Rosegarden::Clipboard *clipboard) :
     KCommand(name()),
     m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Rosegarden::Clipboard;
-    Segment *s = m_sourceClipboard->newSegment();
-
-    for (EventSelection::eventcontainer::iterator i =
-	     selection.getSegmentEvents().begin();
-	 i != selection.getSegmentEvents().end(); ++i) {
-	s->insert(new Event(**i));
-    }
+    Segment *s = m_sourceClipboard->newSegment(&selection);
 }
 
-CopySelectionCommand::~CopySelectionCommand()
+CopyNotationCommand::~CopyNotationCommand()
 {
     delete m_sourceClipboard;
 }
 
 void
-CopySelectionCommand::execute()
+CopyNotationCommand::execute()
 {
     Rosegarden::Clipboard temp(*m_targetClipboard);
     m_targetClipboard->copyFrom(m_sourceClipboard);
@@ -284,16 +279,16 @@ CopySelectionCommand::execute()
 }
 
 void
-CopySelectionCommand::unexecute()
+CopyNotationCommand::unexecute()
 {
     Rosegarden::Clipboard temp(*m_sourceClipboard);
     m_sourceClipboard->copyFrom(m_targetClipboard);
     m_targetClipboard->copyFrom(&temp);
 }
 
-PasteCommand::PasteCommand(Rosegarden::Segment &segment,
-			   Rosegarden::Clipboard *clipboard,
-			   Rosegarden::timeT pasteTime) :
+PasteNotationCommand::PasteNotationCommand(Rosegarden::Segment &segment,
+					   Rosegarden::Clipboard *clipboard,
+					   Rosegarden::timeT pasteTime) :
     BasicCommand(name(), segment, pasteTime,
 		 getEffectiveEndTime(segment, clipboard, pasteTime)),
     m_relayoutEndTime(getEndTime()),
@@ -316,7 +311,7 @@ PasteCommand::PasteCommand(Rosegarden::Segment &segment,
 }
 
 timeT
-PasteCommand::getEffectiveEndTime(Rosegarden::Segment &segment,
+PasteNotationCommand::getEffectiveEndTime(Rosegarden::Segment &segment,
 				  Rosegarden::Clipboard *clipboard,
 				  Rosegarden::timeT pasteTime)
 {
@@ -331,13 +326,13 @@ PasteCommand::getEffectiveEndTime(Rosegarden::Segment &segment,
 }
 
 timeT
-PasteCommand::getRelayoutEndTime()
+PasteNotationCommand::getRelayoutEndTime()
 {
     return m_relayoutEndTime;
 }
 
 bool
-PasteCommand::isPossible() 
+PasteNotationCommand::isPossible() 
 {
     if (m_clipboard->isEmpty() || !m_clipboard->isSingleSegment()) {
 	return false;
@@ -355,7 +350,7 @@ PasteCommand::isPossible()
 
 
 void
-PasteCommand::modifySegment()
+PasteNotationCommand::modifySegment()
 {
     if (!m_clipboard->isSingleSegment()) return;
 
@@ -377,7 +372,7 @@ PasteCommand::modifySegment()
 }
 
 
-EraseSelectionCommand::EraseSelectionCommand(EventSelection &selection) :
+EraseNotationCommand::EraseNotationCommand(EventSelection &selection) :
     BasicSelectionCommand(name(), selection, true),
     m_selection(&selection),
     m_relayoutEndTime(getEndTime())
@@ -386,7 +381,7 @@ EraseSelectionCommand::EraseSelectionCommand(EventSelection &selection) :
 }
 
 void
-EraseSelectionCommand::modifySegment()
+EraseNotationCommand::modifySegment()
 {
     std::vector<Event *> eventsToErase;
     EventSelection::eventcontainer::iterator i;
@@ -409,7 +404,7 @@ EraseSelectionCommand::modifySegment()
 }
 
 timeT
-EraseSelectionCommand::getRelayoutEndTime()
+EraseNotationCommand::getRelayoutEndTime()
 {
     return m_relayoutEndTime;
 }

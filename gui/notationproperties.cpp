@@ -39,7 +39,6 @@ const Rosegarden::PropertyName TIE_LENGTH           = "TieLength";
 const Rosegarden::PropertyName SLUR_ABOVE	    = "SlurAbove";
 const Rosegarden::PropertyName SLUR_Y_DELTA	    = "SlurYDelta";
 const Rosegarden::PropertyName SLUR_LENGTH          = "SlurLength";
-const Rosegarden::PropertyName SELECTED		    = "Selected";
 
 const Rosegarden::PropertyName BEAMED               = "Beamed";
 const Rosegarden::PropertyName BEAM_GRADIENT        = "BeamGradient";

@@ -33,14 +33,16 @@
 #include "matrixcanvasview.h"
 #include "matrixelement.h"
 
-namespace Rosegarden { class Segment; }
+namespace Rosegarden { 
+    class Segment;
+    class EventSelection;
+}
 
 class RosegardenGUIDoc;
 class MatrixStaff;
 class MatrixCanvasView;
 class MatrixHLayout;
 class MatrixVLayout;
-class EventSelection;
 class PianoKeyboard;
 
 class QMouseEvent;
@@ -79,7 +81,7 @@ public:
     MatrixStaff* getStaff(int) { return m_staffs[0]; } // deal with 1 staff only
     virtual void update();
 
-    void setCurrentSelection(EventSelection* s);
+    void setCurrentSelection(Rosegarden::EventSelection* s);
 
 signals:    
     /**
@@ -185,7 +187,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     /// The current selection of Events (for cut/copy/paste)
-    EventSelection* m_currentEventSelection;
+    Rosegarden::EventSelection* m_currentEventSelection;
 
     std::vector<MatrixStaff*> m_staffs;
 
