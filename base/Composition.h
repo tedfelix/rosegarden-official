@@ -498,10 +498,8 @@ public:
     }
     
     std::string getCopyrightNote() const { 
-	std::string copyright;
-	m_metadata.get<String>(CompositionMetadataKeys::Copyright,
-			       copyright);
-	return copyright;
+	return m_metadata.get<String>(CompositionMetadataKeys::Copyright,
+				      "");
     }
     void setCopyrightNote(const std::string &cr) {
 	m_metadata.set<String>(CompositionMetadataKeys::Copyright, cr);
@@ -698,7 +696,6 @@ protected:
     timeT realTime2Time(RealTime rtime, double tempo) const;
 
     Configuration m_metadata;
-    std::string m_copyright;
 
     bool m_playMetronome;
     bool m_recordMetronome;

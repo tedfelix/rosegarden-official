@@ -72,10 +72,10 @@ Configuration::operator=(const Configuration &conf)
 {
     clear();
 
+    // Copy everything
+    //
     for (const_iterator i = conf.begin(); i != conf.end(); ++i)
-    {
-        //insert<PropertyStore<P> *>((i)->first, (i)->second);
-    }
+        insert(PropertyPair(i->first, i->second));
 
     return (*this);
 }
@@ -108,14 +108,21 @@ DocumentConfiguration::DocumentConfiguration()
     set<RealTimeT>(MetronomeDuration, RealTime(0, 10000));    
 }
     
-DocumentConfiguration::DocumentConfiguration(const DocumentConfiguration &config):
+DocumentConfiguration::DocumentConfiguration(const DocumentConfiguration &conf):
     Configuration()
 {
+    for (const_iterator i = conf.begin(); i != conf.end(); ++i)
+        insert(PropertyPair(i->first, i->second));
 }
 
 DocumentConfiguration&
-DocumentConfiguration::operator=(const DocumentConfiguration &config)
+DocumentConfiguration::operator=(const DocumentConfiguration &conf)
 {
+    clear();
+
+    for (const_iterator i = conf.begin(); i != conf.end(); ++i)
+        insert(PropertyPair(i->first, i->second));
+
     return *this;
 }
 

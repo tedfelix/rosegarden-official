@@ -31,6 +31,7 @@
 #include "Instrument.h"
 #include "RealTime.h"
 #include "PropertyMap.h"
+#include "Exception.h"
 
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
@@ -41,8 +42,19 @@ namespace Rosegarden
 class Configuration : public PropertyMap
 {
 public:
-    struct NoData { };
-    struct BadType { };
+    class NoData : public Exception {
+    public:
+	NoData(std::string property, std::string file, int line) :
+	    Exception("No data found for property " + property, file, line) { }
+    };
+
+    class BadType : public Exception {
+    public:
+	BadType(std::string property, std::string expected, std::string actual,
+		std::string file, int line) :
+	    Exception("Bad type for " + property + " (expected " +
+		      expected + ", found " + actual + ")", file, line) { }
+    };
 
     template <PropertyType P>
     void
@@ -140,11 +152,16 @@ Configuration::get(const PropertyName &name,
 {
     const_iterator i = find(name);
 
-    PropertyStoreBase *sb = i->second;
-    if (sb->getType() == P)
-        return (static_cast<PropertyStore<P> *>(sb))->getData();
+    if (i == end()) return defaultVal;
 
-    return defaultVal;
+    PropertyStoreBase *sb = i->second;
+    if (sb->getType() == P) {
+        return (static_cast<PropertyStore<P> *>(sb))->getData();
+    } else {
+	throw BadType(name.getName(),
+		      PropertyDefn<P>::typeName(), sb->getTypeName(),
+		      __FILE__, __LINE__);
+    }
 }
 
 template <PropertyType P>
@@ -154,15 +171,16 @@ Configuration::get(const PropertyName &name) const
 {
     const_iterator i = find(name);
 
+    if (i == end()) throw NoData(name.getName(), __FILE__, __LINE__);
+
     PropertyStoreBase *sb = i->second;
-    if (sb->getType() == P)
+    if (sb->getType() == P) {
         return (static_cast<PropertyStore<P> *>(sb))->getData();
-
-
-    std::cerr << "Configuration::get(): Error: Attempt to get property \"" << name
-              << "\" which doesn't exist\n" << std::endl;
-
-    throw NoData();
+    } else {
+	throw BadType(name.getName(),
+		      PropertyDefn<P>::typeName(), sb->getTypeName(),
+		      __FILE__, __LINE__);
+    }
 }
 
  

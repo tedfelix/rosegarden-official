@@ -227,7 +227,6 @@ Composition::Composition() :
     m_loopEnd(0),
     m_barPositionsNeedCalculating(true),
     m_tempoTimestampsNeedCalculating(true),
-    m_copyright(""),
 //     m_countInBars(DefaultCountInBars),
     m_playMetronome(false),
     m_recordMetronome(true),
@@ -259,7 +258,6 @@ Composition::Composition(const Composition &comp):
     m_loopEnd(comp.getLoopEnd()),
     m_barPositionsNeedCalculating(true),
     m_tempoTimestampsNeedCalculating(true),
-    m_copyright(comp.getCopyrightNote()),
     m_playMetronome(comp.usePlayMetronome()),
     m_recordMetronome(comp.useRecordMetronome()),
     m_needsRefresh(true)
@@ -321,16 +319,6 @@ Composition::operator=(const Composition &comp)
     m_tempoTimestampsNeedCalculating = true;
 
     m_metadata = comp.getMetadata();
-
-    // causes crash at the mo
-    try
-    {
-        m_copyright = comp.getCopyrightNote();
-    }
-    catch (Configuration::NoData)
-    {
-        m_copyright = "";
-    }
 
     m_playMetronome = comp.usePlayMetronome();
     m_recordMetronome = comp.useRecordMetronome();
@@ -565,7 +553,6 @@ Composition::clear()
     m_endMarker = 0;
     m_solo = false;
     m_selectedTrack = 0;
-    m_copyright = "";
 //     m_countInBars = DefaultCountInBars;
     updateRefreshStatuses();
 }
