@@ -49,8 +49,7 @@ public:
     TrackLabel(Rosegarden::TrackId id,
                int position,
                QWidget *parent,
-               const char *name=0,
-               WFlags f=0);
+               const char *name=0);
 
     ~TrackLabel();
 
