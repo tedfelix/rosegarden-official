@@ -61,7 +61,7 @@ LoopRuler::~LoopRuler()
 
 void LoopRuler::scrollHoriz(int x)
 {
-    m_currentXOffset = -x;
+    m_currentXOffset = -x / getHScaleFactor();
 
     repaint();
 }
@@ -175,8 +175,8 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
 {
     if (mE->button() == LeftButton)
     {
-	double x = mE->pos().x() - m_currentXOffset;
-
+	double x = mE->pos().x() * getHScaleFactor() - m_currentXOffset;
+        
         if (m_loop)
             m_endLoop = m_startLoop = m_grid.snapX(x);
         else

@@ -148,11 +148,6 @@ void BarButtons::setHScaleFactor(double dy)
 
 void BarButtons::paintEvent(QPaintEvent *e)
 {
-    /*
-    m_hButtonBar->repaint();
-    m_loopRuler->repaint();
-    */
-
     m_hButtonBar->update();
     m_loopRuler->update();
     QWidget::paintEvent(e);
@@ -189,7 +184,7 @@ BarButtonsWidget::~BarButtonsWidget()
 
 void BarButtonsWidget::scrollHoriz(int x)
 {
-    m_currentXOffset = -x;
+    m_currentXOffset = -x / getHScaleFactor();
 
     repaint();
 }
