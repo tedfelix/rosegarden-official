@@ -119,6 +119,7 @@ TrackButtons::makeButtons()
         trackHBox = makeButton(i);
 
         m_layout->addWidget(trackHBox);
+        m_trackHBoxes.push_back(trackHBox);
     }
 }
 
@@ -348,12 +349,15 @@ TrackButtons::slotUpdateTracks()
             QFrame *trackHBox = makeButton(i);
             trackHBox->show();
             m_layout->insertWidget(i, trackHBox);
+            m_trackHBoxes.push_back(trackHBox);
         }
 
     } else {
 
-        for(unsigned int i = m_tracks; i >= newNbTracks; --i) {
-            // delete widget
+        for(unsigned int i = m_tracks; i > newNbTracks; --i) {
+            QFrame *trackHBox = m_trackHBoxes.back();
+            delete trackHBox;
+            m_trackHBoxes.pop_back();
         }
 
     }    

@@ -118,6 +118,7 @@ private:
     std::vector<TrackLabel *> m_trackLabels;
     std::vector<TrackVUMeter *> m_trackMeters;
     std::vector<InstrumentLabel *> m_instrumentLabels;
+    std::vector<QFrame *> m_trackHBoxes;
 
     QPopupMenu *m_instrumentPopup;
 
