@@ -43,9 +43,10 @@ NotePixmapOffsets::offsetsFor(Note note,
     m_stalkGoesUp = stalkGoesUp;
     m_noteHasStalk = note < Whole;
 
-    m_bodyOffset.setX(0); m_bodyOffset.setY(0);
-    m_hotSpot.setX(0); m_hotSpot.setY(0);
-
+    m_bodyOffset.setX(0);     m_bodyOffset.setY(0);
+    m_hotSpot.setX(0);        m_hotSpot.setY(0);
+    m_accidentOffset.setX(0); m_accidentOffset.setY(0);
+    
     if (note > QuarterDotted)
         m_bodySize = m_noteBodyEmptySize;
     else
@@ -153,7 +154,6 @@ NotePixmapOffsets::computeBodyOffset()
 
         m_hotSpot.setY(m_bodySize.height() / 2);
 
-        m_stalkPoints.first.setX(m_bodyOffset.x());
         m_stalkPoints.first.setY(m_bodySize.height() / 2);
 
         m_stalkPoints.second.setX(m_stalkPoints.first.x());
@@ -222,7 +222,10 @@ NotePixmapOffsets::computeBodyOffset()
         m_hotSpot.setX(m_bodyOffset.x());
     
 
-    m_stalkPoints.first.setX(m_bodyOffset.x() + m_bodySize.width() - 2);
+    if (m_stalkGoesUp)
+        m_stalkPoints.first.setX(m_bodyOffset.x() + m_bodySize.width() - 2);
+    else
+        m_stalkPoints.first.setX(m_bodyOffset.x());
 
     m_stalkPoints.second.setX(m_stalkPoints.first.x());
 
@@ -354,7 +357,7 @@ NotePixmapFactory::makeNotePixmap(Note note,
     if (accident != NoAccident)
         drawAccident(accident, stalkGoesUp);
     
-
+    //#define ROSE_DEBUG_NOTE_PIXMAP_FACTORY
 #ifdef ROSE_DEBUG_NOTE_PIXMAP_FACTORY
     // add red dots at each corner of the pixmap
     m_p.setPen(Qt::red); m_p.setBrush(Qt::red);
@@ -515,13 +518,21 @@ NotePixmapFactory::drawStalk(Note note,
 
             tailPixmap = tailDown(note);
 
-            m_p.drawPixmap (1,
+            m_p.drawPixmap (m_offsets.stalkPoints().first.x() + 1,
                             m_generatedPixmapHeight - tailPixmap->height(),
                             *tailPixmap);
 
-            m_pm.drawPixmap(1,
+            m_pm.drawPixmap(m_offsets.stalkPoints().first.x() + 1,
                             m_generatedPixmapHeight - tailPixmap->height(),
                             *(tailPixmap->mask()));
+
+//             m_p.drawPixmap (1,
+//                             m_generatedPixmapHeight - tailPixmap->height(),
+//                             *tailPixmap);
+
+//             m_pm.drawPixmap(1,
+//                             m_generatedPixmapHeight - tailPixmap->height(),
+//                             *(tailPixmap->mask()));
         }
 
     }
