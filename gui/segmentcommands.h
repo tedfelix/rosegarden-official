@@ -219,6 +219,7 @@ private:
     Rosegarden::timeT m_splitTime;
     Rosegarden::timeT *m_previousEndMarkerTime;
     bool m_detached;
+    std::string m_segmentLabel;
 };
 
 

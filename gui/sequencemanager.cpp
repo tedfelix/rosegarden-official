@@ -252,7 +252,12 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	// Need to know how many times we've repeated to get here,
 	// so we can adjust the performance times again later
 	//
-	int repeatNo = (seekStartTime - segmentStartTime) / segmentDuration; 
+	int repeatNo;
+       
+        if (segmentDuration != 0)
+            repeatNo = (seekStartTime - segmentStartTime) / segmentDuration;
+        else
+            repeatNo = 0;
 
 	// Locate a suitable starting iterator
 	//

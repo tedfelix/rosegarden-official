@@ -391,7 +391,25 @@ SegmentSplitCommand::execute()
 {
     if (!m_newSegment) {
 
-	m_newSegment = new Segment;
+        if (m_segment->getType() == Rosegarden::Segment::Audio)
+        {
+	    m_newSegment = new Segment(Rosegarden::Segment::Audio);
+            m_newSegment->setAudioFileID(m_segment->getAudioFileID());
+
+            // get the RealTime split time
+            Rosegarden::RealTime splitDiff =
+                m_segment->getComposition()->getRealTimeDifference(
+                        m_segment->getStartTime(), m_splitTime);
+
+            m_newSegment->setAudioStartTime
+                (m_segment->getAudioStartTime() + splitDiff);
+            m_newSegment->setAudioEndTime(m_segment->getAudioEndTime());
+
+            m_segment->setAudioEndTime(m_segment->getAudioStartTime() + splitDiff);
+        }
+        else
+	    m_newSegment = new Segment;
+
 	m_newSegment->setTrack(m_segment->getTrack());
 	m_newSegment->setStartTime(m_splitTime);
 	m_segment->getComposition()->addSegment(m_newSegment);
@@ -441,6 +459,13 @@ SegmentSplitCommand::execute()
 	    ++it;
 	}
 	m_newSegment->setEndTime(m_segment->getEndTime());
+        m_newSegment->setEndMarkerTime(m_segment->getEndMarkerTime());
+
+        // Set labels
+        //
+        m_segmentLabel = m_segment->getLabel();
+        m_segment->setLabel(m_segmentLabel + std::string(" (split)"));
+        m_newSegment->setLabel(m_segment->getLabel());
     }
 
     // Resize left hand Segment
@@ -459,14 +484,6 @@ SegmentSplitCommand::execute()
     }
 
     m_detached = false;
-
-    // Some special things for audio segments
-    //
-    if (m_segment->getType() == Rosegarden::Segment::Audio)
-    {
-        m_newSegment->setAudioFileID(m_segment->getAudioFileID());
-        //m_newSegment->setAudioStartTime
-    }
 
 }
 
@@ -493,6 +510,7 @@ SegmentSplitCommand::unexecute()
 	m_segment->clearEndMarker();
     }
 
+    m_segment->setLabel(m_segmentLabel);
     m_segment->getComposition()->detachSegment(m_newSegment);
     m_detached = true;
 }
