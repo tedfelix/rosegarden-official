@@ -27,7 +27,7 @@ PitchToHeight::PitchToHeight(unsigned short staffLineWidth)
     // commodity ref
     vector<int>& pitchToHeight(*m_pitchToHeight);
 
-    int height = 12 + 5 * staffLineWidth,
+    int height =  4 * staffLineWidth - Staff::noteHeight / 2 + 2,
         offset = 0;
 
     for(unsigned int note = 0, pitch = 0;
