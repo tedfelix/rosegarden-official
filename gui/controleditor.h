@@ -49,6 +49,10 @@ public slots:
     void slotReset();
     void slotUpdate();
 
+    void slotAdd();
+    void slotDelete();
+    void slotClose();
+
 signals:
 
 protected:
@@ -61,6 +65,9 @@ protected:
     QPushButton             *m_closeButton;
     QPushButton             *m_resetButton;
     QPushButton             *m_applyButton;
+
+    QPushButton             *m_addButton;
+    QPushButton             *m_deleteButton;
 
     KListView               *m_listView;
 };

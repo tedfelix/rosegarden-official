@@ -28,6 +28,7 @@
 
 #include "controleditor.h"
 #include "rosegardenguidoc.h"
+#include "rosedebug.h"
 
 ControlEditorDialog::ControlEditorDialog(QWidget *parent,
                                          RosegardenGUIDoc *doc):
@@ -56,17 +57,39 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 
     QHBoxLayout* layout = new QHBoxLayout(btnBox, 4, 10);
 
+    m_addButton = new QPushButton(i18n("Add"), btnBox);
+    m_deleteButton = new QPushButton(i18n("Delete"), btnBox);
+
     m_closeButton = new QPushButton(i18n("Close"), btnBox);
     m_applyButton = new QPushButton(i18n("Apply"), btnBox);
     m_resetButton = new QPushButton(i18n("Reset"), btnBox);
 
     layout->addStretch(10);
+    layout->addWidget(m_addButton);
+    layout->addWidget(m_deleteButton);
+    layout->addSpacing(30);
+
     layout->addWidget(m_applyButton);
     layout->addWidget(m_resetButton);
     layout->addSpacing(15);
+
     layout->addWidget(m_closeButton);
     layout->addSpacing(5);
 
+    connect(m_addButton, SIGNAL(released()),
+            SLOT(slotAdd()));
+
+    connect(m_deleteButton, SIGNAL(released()),
+            SLOT(slotDelete()));
+
+    connect(m_closeButton, SIGNAL(released()),
+            SLOT(slotClose()));
+
+    connect(m_applyButton, SIGNAL(released()),
+            SLOT(slotApply()));
+
+    connect(m_resetButton, SIGNAL(released()),
+            SLOT(slotReset()));
     setupActions();
 
     initDialog();
@@ -85,16 +108,45 @@ ControlEditorDialog::initDialog()
 void 
 ControlEditorDialog::slotApply()
 {
+    RG_DEBUG << "ControlEditorDialog::slotApply" << endl;
 }
 
 void 
 ControlEditorDialog::slotReset()
 {
+    RG_DEBUG << "ControlEditorDialog::slotReset" << endl;
 }
 
 void
 ControlEditorDialog::slotUpdate()
 {
+    RG_DEBUG << "ControlEditorDialog::slotUpdate" << endl;
+}
+
+void
+ControlEditorDialog::slotAdd()
+{
+    RG_DEBUG << "ControlEditorDialog::slotAdd" << endl;
+
+    //if (!m_listView->currentItem())
+    /*
+    QListViewItem *item = new QListViewItem(m_listView,
+                                            "pan",
+                                            "0",
+
+                                            */
+}
+
+void
+ControlEditorDialog::slotDelete()
+{
+    RG_DEBUG << "ControlEditorDialog::slotDelete" << endl;
+}
+
+void
+ControlEditorDialog::slotClose()
+{
+    RG_DEBUG << "ControlEditorDialog::slotClose" << endl;
 }
 
 void
