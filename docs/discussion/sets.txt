@@ -2,6 +2,7 @@
 Some terminology for sets of events and notational artifacts
 ============================================================
 
+
 Chord
 -----
 
@@ -17,6 +18,7 @@ Chord
  * In the GUI, chords should be referred to simply as chords, and
    chord-related menu functions should appear together on a menu
    called Chord.
+
 
 Beamed Group
 ------------
@@ -46,6 +48,7 @@ Beamed Group
    Groups").  Menu functions relating to them should all appear
    together on a menu called Group.
 
+
 Tie
 ---
 
@@ -72,6 +75,7 @@ Tie
    glissandi!), and should probably appear on the Group menu, or on
    the same menu as slurs (see below).
 
+
 Indication
 ----------
 
@@ -92,6 +96,7 @@ Indication
    ("Remove All Indications").  Menu functions relating to them should
    appear on the Group menu, unless we happen to have a Dynamic menu
    for the hairpin function.
+
 
 Mark
 ----

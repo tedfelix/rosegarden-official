@@ -164,41 +164,24 @@ private:
     void checkAccidentalHeights() const;
 };
 
+
 /*
-  -- Pitch
 
-     Events store pitch values using the MIDI pitch scale and as
-     simple integers.  These are fixed-frequency pitches, independent
-     of clef and key.  Adding 12 to a pitch increments it by one
-     octave; pitch 60 is the treble-clef middle C.  (Previous rewrites
-     have considered using double the MIDI pitch so as to allow
-     quarter-tones; this time let's go for the simpler option as if we
-     ever want quarter-tones we can always code them using special
-     Event properties.)
-     
-     For notation purposes we need a display pitch, which is a
-     composite of height on the staff plus accidental.  The
-     correspondence between display pitch and raw pitch depends on the
-     clef and key.  For height on the staff, we use the RG2.1
-     convention of 0 = bottom line, 1 = gap between bottom two lines
-     and so on up to 8 = top line.  Negative heights are below the
-     staff (i.e. on leger lines), heights over 8 are above.
+  When we insert a note, we need to query the height of the staff line
+  next to which it's being inserted, then translate this back to raw
+  pitch according to the clef in force at the x-coordinate at which
+  the note is inserted.  For display, we translate from raw pitch
+  using both the clef and the key in force.
 
-     When we insert a note, we need to query the height of the staff
-     line next to which it's being inserted, then translate this back
-     to raw pitch according to the clef in force at the x-coordinate
-     at which the note is inserted.  For display, we translate from
-     raw pitch using both the clef and the key in force.
+  Whether an accidental should be displayed or not depends on the
+  current key, on whether we've already shown the same accidental for
+  that pitch in the same bar, on whether the note event explicitly
+  requests an accidental...  All we calculate here is whether the
+  pitch "should" have an accidental, not whether it really will
+  (e.g. if the accidental has already appeared).
 
-     Whether an accidental should be displayed or not depends on the
-     current key, on whether we've already shown the same accidental
-     for that pitch in the same bar, on whether the note event
-     explicitly requests an accidental...  All we calculate here is
-     whether the pitch "should" have an accidental, not whether it
-     really will (e.g. if the accidental has already appeared).
+  (See also docs/discussion/units.txt for explanation of pitch units.)
 
-     If we ever see pitch as a plain integer, we assume it's a raw
-     internal pitch.
 */
 
 class NotationDisplayPitch
@@ -228,14 +211,6 @@ private:
                                 int &) const;
 };
 
-
-/*
-  -- Duration
-
-     Events store duration as simple integers where 6 units = one
-     hemidemisemiquaver (and 1 unit = 4 MIDI clocks).
-
-*/     
 
 class TimeSignature;
 

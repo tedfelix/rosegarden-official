@@ -1,0 +1,76 @@
+
+Basic units
+===========
+
+
+Performance pitch
+-----------------
+
+Events store pitch values in simple integers.  These are
+fixed-frequency pitches in the MIDI pitch scale, independent of clef
+and key.  Adding 12 to a pitch increments it by one octave; pitch 60
+is the treble-clef middle C.  (Previous rewrites have considered using
+double the MIDI pitch so as to allow quarter-tones; this time let's go
+for the simpler option as if we ever want quarter-tones we can always
+code them using special Event properties.)
+
+
+Display pitch
+-------------
+
+For notation purposes we need a display pitch, which is a composite of
+height on the staff plus accidental.  The correspondence between
+display pitch and raw pitch depends on the clef and key.  For height
+on the staff, we use the RG2.1 convention of 0 = bottom line, 1 = gap
+between bottom two lines and so on up to 8 = top line.  Negative
+heights are below the staff (i.e. on leger lines), heights over 8 are
+above.
+
+If we ever see pitch as a plain integer, we assume it's a raw internal
+pitch rather than a display pitch.  A plain integer used for display
+pitch would probably be referred to as a "height" rather than a pitch,
+as it would be lacking the extra information (accidental, clef, key)
+required to interpret it as a true pitch.
+
+
+Duration
+--------
+
+Events store duration as simple integers where 6 units = one
+hemidemisemiquaver.  Thus also 1 unit = 4 MIDI clocks.  Rationale:
+
+MIDI's tempo-independent unit, the clock, is "1/24th of a quarter
+note", i.e. 1/3 of a demisemiquaver.  Rosegarden 2.1 uses a unit of
+one hemidemisemiquaver; this is not evenly expressible in MIDI clocks.
+Rosegarden 2.1 can also handle dotted hemidemis in some contexts.
+
+We probably need no better than hemidemi resolution (leaving aside
+situations involving interesting tuplet grouping); but we want to be
+able to represent MIDI clocks and Rosegarden 2.1 hemidemis and dotted
+hemidemis without loss, so we will need an effective resolution down
+to 1/6 hemidemisemiquaver.
+
+Let's settle on that, then:
+
+           1 unit  = 1/4 clock
+           4 units =   1 clock
+           6 units = 3/2 clocks = 1 hemidemisemiquaver
+          12 units =   3 clocks = 1 demisemiquaver
+          24 units =   6 clocks = 1 semiquaver
+          48 units =  12 clocks = 1 quaver
+          96 units =  24 clocks = 1 crotchet
+         192 units =  48 clocks = 1 minim
+         384 units =  96 clocks = 1 semibreve
+         768 units = 192 clocks = 1 breve
+
+and the longest note, a dotted breve, is 1152 units long.
+
+At this resolution, a 32-bit signed integer can store a maximum
+duration of (nearly) 2^31 / 6 hemidemisemiquavers, which is 2^26 / 3
+crotchets, which is just short of 5.6 million bars of 4/4 time.
+
+The delta-times in MIDI files are represented in terms of the
+timebase, defined in the MIDI file-format standard as the number of
+delta-time units per crotchet.  So to convert from MIDI file deltas to
+our time units, multiply by 96 and divide by the timebase.
+
