@@ -40,7 +40,6 @@
 #include "notepixmapfactory.h"
 #include "qcanvaslinegroupable.h"
 #include "qcanvassimplesprite.h"
-#include "quantizer.h"
 #include "resource.h"
 
 #include "rosedebug.h"

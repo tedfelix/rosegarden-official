@@ -193,7 +193,7 @@ void Track::calculateBarPositions()
         Event *e = *i;
         absoluteTime = e->getAbsoluteTime();
 
-        if (startNewBar) addNewBar(i, true, barCorrect);
+        if (startNewBar) addNewBar(absoluteTime, true, barCorrect);
         startNewBar = false;
 
         if (e->isa(TimeSignature::EventType)) {
@@ -205,6 +205,9 @@ void Track::calculateBarPositions()
                 // insert the bar line before this event, and also
                 // before any preceding clef or key events
 
+                /*!!! No, this is meaningless when we're setting bars by
+                   time rather than iterator
+
                 iterator i0(i), i1(i);
                 while (i0 == i ||
                        (*i0)->isa(Clef::EventType) ||
@@ -213,8 +216,11 @@ void Track::calculateBarPositions()
                     if (i0 == begin()) break; // shouldn't happen anyway
                     --i0;
                 }
-                
+
                 addNewBar(i1, true, true);
+                */
+
+                addNewBar(absoluteTime, true, true);
             }
 
             timeSignature = TimeSignature(*e);
@@ -253,10 +259,14 @@ void Track::calculateBarPositions()
                 startNewBar = true;
             }
         }
+
+        // solely so that absoluteTime is correct after we hit end():
+        absoluteTime += e->getDuration();
     }
 
     if (startNewBar || thisBarTime > 0) {
-        addNewBar(i, false, thisBarTime == timeSignature.getBarDuration());
+        addNewBar(absoluteTime, false,
+                  thisBarTime == timeSignature.getBarDuration());
     }
 }
 

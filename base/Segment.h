@@ -43,11 +43,11 @@ public:
     
     struct BarPosition
     {
-        iterator start;       // i.e. event following barline
+        timeT start;          // absolute time of event following barline
         bool fixed;           // user-supplied new-bar or timesig event?
         bool correct;         // false if preceding bar has incorrect duration
         
-        BarPosition(iterator istart, bool ifixed, bool icorrect) :
+        BarPosition(timeT istart, bool ifixed, bool icorrect) :
             start(istart), fixed(ifixed), correct(icorrect) { }
     };
 
@@ -221,7 +221,7 @@ protected:
 
     static bool checkExpansionValid(timeT maxDuration, timeT minDuration);
 
-    void addNewBar(iterator start, bool fixed, bool correct) {
+    void addNewBar(timeT start, bool fixed, bool correct) {
         m_barPositions.push_back(BarPosition(start, fixed, correct));
     }
 
