@@ -2099,6 +2099,7 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
                    // chop off SYX and EOX bytes from data block
                    // Fix for 674731 by Pedro Lopez-Cabanillas (20030601)
                    mE->setDataBlock(data.substr(1, data.length() - 2));
+                   mE->setEventTime(eventTime);
                    m_recordComposition.insert(mE);
                }
                break;
