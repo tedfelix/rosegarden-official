@@ -56,12 +56,15 @@ RosegardenComboBox::wheelEvent(QWheelEvent *e)
 
     if (m_reverse)
          value = -value;
+
+    RG_DEBUG << "RosegardenComboBox::wheelEvent(" << value << ")\n";
        
     if (value < 0)
     {
         if (currentItem() < count() - 1)
         {
             setCurrentItem(currentItem() + 1);
+	    emit activated(currentText());
 	    emit activated(currentItem());
         }
     }
@@ -70,6 +73,7 @@ RosegardenComboBox::wheelEvent(QWheelEvent *e)
         if (currentItem() > 0)
         {
             setCurrentItem(currentItem() - 1);
+	    emit activated(currentText());
 	    emit activated(currentItem());
         }
     }
