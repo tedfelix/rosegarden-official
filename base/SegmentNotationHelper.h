@@ -290,7 +290,7 @@ public:
     void quantize();
 
     
-private:
+protected:
 
     /**
      * Collapse multiple consecutive rests into one, in preparation
