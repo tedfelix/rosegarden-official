@@ -49,6 +49,9 @@ public:
     timeT getAbsoluteTime() const  { return event()->getAbsoluteTime(); }
     void  setAbsoluteTime(timeT d) { event()->setAbsoluteTime(d); }
 
+    timeT getDuration() const  { return event()->getDuration(); }
+    void  setDuration(timeT d) { event()->setDuration(d); }
+
     void dump(std::ostream&) const;
 
     friend bool operator<(const ViewElement&, const ViewElement&);
