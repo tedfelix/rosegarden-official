@@ -45,8 +45,8 @@ public:
     static const std::string EventType;
     static const int EventSubOrdering;
 
-    static const PropertyName MSBPropertyName;
-    static const PropertyName LSBPropertyName;
+    static const PropertyName MSB;
+    static const PropertyName LSB;
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
@@ -65,8 +65,8 @@ public:
     static const std::string EventType;
     static const int EventSubOrdering;
 
-    static const PropertyName Data1PropertyName;
-    static const PropertyName Data2PropertyName;
+    static const PropertyName DATA1;
+    static const PropertyName DATA2;
 
     static const std::string UnspecifiedType;
     static const std::string Modulation;

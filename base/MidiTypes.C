@@ -31,8 +31,8 @@ namespace Rosegarden
 const std::string PitchBend::EventType = "pitchbend";
 const int PitchBend::EventSubOrdering = -70;
 
-const PropertyName PitchBend::MSBPropertyName = "msb";
-const PropertyName PitchBend::LSBPropertyName = "lsb";
+const PropertyName PitchBend::MSB = "msb";
+const PropertyName PitchBend::LSB = "lsb";
 
 PitchBend::PitchBend(Rosegarden::MidiByte msb,
                      Rosegarden::MidiByte lsb):
@@ -49,8 +49,8 @@ Event*
 PitchBend::getAsEvent(timeT absoluteTime) const
 {
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
-    e->set<Int>(MSBPropertyName, (int)m_msb);
-    e->set<Int>(LSBPropertyName, (int)m_lsb);
+    e->set<Int>(MSB, (int)m_msb);
+    e->set<Int>(LSB, (int)m_lsb);
     return e;
 }
 
@@ -61,8 +61,8 @@ PitchBend::getAsEvent(timeT absoluteTime) const
 const std::string Controller::EventType = "controller";
 const int Controller::EventSubOrdering = -70;
 
-const PropertyName Controller::Data1PropertyName = "data1";
-const PropertyName Controller::Data2PropertyName = "data2";
+const PropertyName Controller::DATA1 = "data1";
+const PropertyName Controller::DATA2 = "data2";
 
 const std::string Controller::UnspecifiedType = "unspecified";
 const std::string Controller::Modulation = "modulation";
@@ -86,8 +86,8 @@ Event*
 Controller::getAsEvent(timeT absoluteTime) const
 {
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
-    e->set<Int>(Data1PropertyName, (int)m_data1);
-    e->set<Int>(Data2PropertyName, (int)m_data2);
+    e->set<Int>(DATA1, (int)m_data1);
+    e->set<Int>(DATA2, (int)m_data2);
     return e;
 }
 

@@ -630,6 +630,11 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
             duration = m_composition.getElapsedTimeForRealTime((*i)->getDuration());
             rEvent = 0;
 
+            /*
+            PitchBend *pB;
+            Controller *con;
+            */
+
             switch((*i)->getType())
             {
                 case Rosegarden::MappedEvent::MidiNote:
@@ -649,23 +654,29 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                    break;
 
                 case Rosegarden::MappedEvent::MidiPitchBend:
-                   {
-                       PitchBend *pB = new PitchBend((*i)->getData1(),
-                                                     (*i)->getData2());
-                       rEvent = pB->getAsEvent(absTime);
-                   }
+                   rEvent = new Event(Rosegarden::PitchBend::EventType,
+                                      absTime);
+
+                   rEvent->set<Int>(PitchBend::MSB, (*i)->getData1());
+                   rEvent->set<Int>(PitchBend::LSB, (*i)->getData2());
+                   /*
+                   pB = new PitchBend((*i)->getData1(), (*i)->getData2());
+                   rEvent = new Event(pB->getAsEvent(absTime));
+                   */
                    break;
 
                 case Rosegarden::MappedEvent::MidiController:
-                   {
-                       // Just fix this for the moment
-                       //
-                       Controller *con = new Controller(Controller::Pan,
-                                                        (*i)->getData1(),
-                                                        (*i)->getData2());
+                   rEvent = new Event(Rosegarden::Controller::EventType,
+                                      absTime);
 
-                       rEvent = con->getAsEvent(absTime);
-                   }
+                   rEvent->set<Int>(Controller::DATA1, (*i)->getData1());
+                   rEvent->set<Int>(Controller::DATA2, (*i)->getData2());
+                   /*
+                   con = new Controller(Controller::Pan,
+                                        (*i)->getData1(),
+                                        (*i)->getData2());
+                   rEvent = new Event(con->getAsEvent(absTime));
+                   */
                    break;
 
                 case Rosegarden::MappedEvent::MidiProgramChange:
