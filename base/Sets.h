@@ -31,6 +31,7 @@
 #include "BaseProperties.h"
 #include "NotationTypes.h"
 #include "MidiTypes.h"
+#include "Quantizer.h"
 
 namespace Rosegarden
 {
@@ -367,10 +368,10 @@ GenericChord<Element, Container, singleStaff>::GenericChord(const Container &c,
     m_subordering(getAsEvent(i)->getSubOrdering()),
     m_firstReject(c.end())
 {
-    initialise();
+	AbstractSet<Element, Container>::initialise();
 
-    if (size() > 1) {
-        std::stable_sort(begin(), end(), PitchGreater());
+    if (std::vector<typename Container::iterator>::size() > 1) {
+        std::stable_sort(std::vector<typename Container::iterator>::begin(), std::vector<typename Container::iterator>::end(), PitchGreater());
     }
 
 /*!!! this should all be removed ultimately
@@ -402,7 +403,7 @@ bool
 GenericChord<Element, Container, singleStaff>::test(const Iterator &i)
 {
     Event *e = getAsEvent(i);
-    if (getQuantizer().getQuantizedAbsoluteTime(e) != m_time) return false;
+    if (AbstractSet<Element, Container>::getQuantizer().getQuantizedAbsoluteTime(e) != m_time) return false;
 
     // We permit note or rest events etc here, because if a chord is a
     // little staggered (for performance reasons) then it's not at all
@@ -433,7 +434,7 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
 {
     Event *e1 = getAsEvent(i);
     if (!e1->isa(Note::EventType)) {
-	if (goingForwards && m_firstReject == getContainer().end()) m_firstReject = i;
+	if (goingForwards && m_firstReject == AbstractSet<Element, Container>::getContainer().end()) m_firstReject = i;
 	return false;
     }
 
@@ -448,9 +449,9 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
 	// that's no problem.  In fact we should actually modify the
 	// one that isn't so as to suggest that it is.
 
-	if (m_baseIterator != getContainer().end()) {
+	if (AbstractSet<Element, Container>::m_baseIterator != AbstractSet<Element, Container>::getContainer().end()) {
 
-	    Event *e0 = getAsEvent(m_baseIterator);
+	    Event *e0 = getAsEvent(AbstractSet<Element, Container>::m_baseIterator);
 
 	    if (!(m_stemUpProperty == PropertyName::EmptyPropertyName)) {
 
@@ -461,7 +462,7 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
 		    get__Bool(e0, m_stemUpProperty) !=
 		    get__Bool(e1, m_stemUpProperty)) {
 
-		    if (goingForwards && m_firstReject == getContainer().end())
+		    if (goingForwards && m_firstReject == AbstractSet<Element, Container>::getContainer().end())
 			m_firstReject = i;
 		    return false;
 		}
@@ -471,7 +472,7 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
 		if (e1->has(BaseProperties::BEAMED_GROUP_ID)) {
 		    if (get__Int(e1, BaseProperties::BEAMED_GROUP_ID) !=
 			get__Int(e0, BaseProperties::BEAMED_GROUP_ID)) {
-			if (goingForwards && m_firstReject == getContainer().end())
+			if (goingForwards && m_firstReject == AbstractSet<Element, Container>::getContainer().end())
 			    m_firstReject = i;
 			return false;
 		    }
@@ -527,7 +528,7 @@ GenericChord<Element, Container, singleStaff>::getMarkCountForChord() const
 
     std::set<Mark> cmarks;
 
-    for (unsigned int i = 0; i < size(); ++i) {
+    for (unsigned int i = 0; i < std::vector<typename Container::iterator>::size(); ++i) {
 
 	Event *e = getAsEvent((*this)[i]);
 	std::vector<Mark> marks(Marks::getMarks(*e));
@@ -547,7 +548,7 @@ GenericChord<Element, Container, singleStaff>::getMarksForChord() const
 {
     std::vector<Mark> cmarks;
 
-    for (unsigned int i = 0; i < size(); ++i) {
+    for (unsigned int i = 0; i < std::vector<typename Container::iterator>::size(); ++i) {
 
 	Event *e = getAsEvent((*this)[i]);
 	std::vector<Mark> marks(Marks::getMarks(*e));
@@ -575,7 +576,7 @@ GenericChord<Element, Container, singleStaff>::getPitches() const
     std::vector<int> pitches;
 
     for (typename std::vector<typename Container::iterator>::const_iterator
-	     i = begin(); i != end(); ++i) {
+	     i = std::vector<typename Container::iterator>::begin(); i != std::vector<typename Container::iterator>::end(); ++i) {
 	if (getAsEvent(*i)->has(BaseProperties::PITCH)) {
 	    int pitch = get__Int
 		(getAsEvent(*i), Rosegarden::BaseProperties::PITCH);
@@ -594,8 +595,8 @@ bool
 GenericChord<Element, Container, singleStaff>::contains(const Iterator &itr) const
 {
     for (typename std::vector<typename Container::iterator>::const_iterator
-	     i = begin();
-	 i != end(); ++i) {
+	     i = std::vector<typename Container::iterator>::begin();
+	 i != std::vector<typename Container::iterator>::end(); ++i) {
         if (*i == itr) return true;
     }
     return false;
@@ -606,9 +607,9 @@ template <class Element, class Container, bool singleStaff>
 typename GenericChord<Element, Container, singleStaff>::Iterator
 GenericChord<Element, Container, singleStaff>::getPreviousNote()
 {
-    Iterator i(getInitialElement());
+    Iterator i(AbstractSet<Element, Container>::getInitialElement());
     while (1) {
-	if (i == getContainer().begin()) return getContainer().end();
+	if (i == AbstractSet<Element, Container>::getContainer().begin()) return AbstractSet<Element, Container>::getContainer().end();
 	--i;
 	if (getAsEvent(i)->isa(Note::EventType)) {
 	    return i;
@@ -621,14 +622,14 @@ template <class Element, class Container, bool singleStaff>
 typename GenericChord<Element, Container, singleStaff>::Iterator
 GenericChord<Element, Container, singleStaff>::getNextNote()
 {
-    Iterator i(getFinalElement());
-    while (  i != getContainer().end() &&
-	   ++i != getContainer().end()) {
+    Iterator i(AbstractSet<Element, Container>::getFinalElement());
+    while (  i != AbstractSet<Element, Container>::getContainer().end() &&
+	   ++i != AbstractSet<Element, Container>::getContainer().end()) {
 	if (getAsEvent(i)->isa(Note::EventType)) {
 	    return i;
 	}
     }
-    return getContainer().end();
+    return AbstractSet<Element, Container>::getContainer().end();
 }
 
 

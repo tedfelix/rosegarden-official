@@ -174,10 +174,10 @@ public:
             return *this;
         }
 
-        T &operator*() { return m_v->at(m_i); }
+        T &operator*() { return iterator_base::m_v->at(iterator_base::m_i); }
 	T *operator->() { return &(operator*()); }
 
-	const T &operator*() const { return m_v->at(m_i); }
+	const T &operator*() const { return iterator_base::m_v->at(iterator_base::m_i); }
 	const T *operator->() const { return &(operator*()); }
 
     protected:
@@ -196,10 +196,10 @@ public:
             return *this;
         }
 
-        T &operator*() { return m_v->at(m_v->size() - m_i - 1); }
+        T &operator*() { return iterator_base::m_v->at(iterator_base::m_v->size() - iterator_base::m_i - 1); }
 	T *operator->() { return &(operator*()); }
 
-	const T &operator*() const { return m_v->at(m_v->size() - m_i - 1); }
+	const T &operator*() const { return iterator_base::m_v->at(iterator_base::m_v->size() - iterator_base::m_i - 1); }
 	const T *operator->() const { return &(operator*()); }
 
     protected:
@@ -218,7 +218,7 @@ public:
             return *this;
         }
 
-	const T &operator*() const { return m_v->at(m_i); }
+	const T &operator*() const { return iterator_base::m_v->at(iterator_base::m_i); }
 	const T *operator->() const { return &(operator*()); }
 
     protected:
@@ -238,7 +238,7 @@ public:
             return *this;
         }
 
-	const T &operator*() const { return m_v->at(m_v->size() - m_i - 1); }
+	const T &operator*() const { return iterator_base::m_v->at(iterator_base::m_v->size() - iterator_base::m_i - 1); }
 	const T *operator->() const { return &(operator*()); }
 
     protected:
@@ -555,7 +555,7 @@ typename FastVector<T>::iterator FastVector<T>::erase
 {
     assert(i.m_v == this && j.m_v == this && j.m_i >= i.m_i);
     for (size_type k = i.m_i; k < j.m_i; ++k) remove(i.m_i);
-    return FastVector<T>::iterator(this, i.m_i);
+    return iterator(this, i.m_i);
 }
 
 template <class T>
