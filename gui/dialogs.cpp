@@ -2336,6 +2336,16 @@ AudioSplitDialog::drawPreview()
 
     }
 
+    // zero line
+    QCanvasLine *line = new QCanvasLine(m_canvas);
+    line->setPoints(startX + 0,
+                    halfHeight,
+                    startX + m_previewWidth,
+                    halfHeight);
+    line->setPen(Qt::black);
+    line->setBrush(Qt::black);
+    line->setVisible(true);
+
     m_canvas->update();
 }
 

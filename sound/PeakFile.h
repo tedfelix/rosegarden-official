@@ -99,8 +99,8 @@ public:
 
     // Find threshold crossing points
     //
-    std::vector<SplitPointPair> getSplitPoints(const RealTime &startIndex,
-                                               const RealTime &endIndex,
+    std::vector<SplitPointPair> getSplitPoints(const RealTime &startTime,
+                                               const RealTime &endTime,
                                                int threshold);
 
 protected:
@@ -113,7 +113,11 @@ protected:
 
     // Get the position of a peak for a given time
     //
-    double getPeak(const RealTime &time);
+    int getPeak(const RealTime &time);
+
+    // And the time of a peak
+    //
+    RealTime getTime(int peak);
 
     // Parse the header
     //

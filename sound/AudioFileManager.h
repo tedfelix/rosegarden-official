@@ -140,23 +140,23 @@ public:
     // supply the details.
     //
     std::vector<float> getPreview(AudioFileId id,
-                                  const RealTime &startIndex, 
-                                  const RealTime &endIndex,
+                                  const RealTime &startTime, 
+                                  const RealTime &endTime,
                                   int width);
 
     // Draw a fixed size (fixed by QPixmap) preview of an audio file
     //
     void drawPreview(AudioFileId id,
-                     const RealTime &startIndex, 
-                     const RealTime &endIndex,
+                     const RealTime &startTime, 
+                     const RealTime &endTime,
                      QPixmap *pixmap);
 
     // Usually used to show how an audio Segment makes up part of
     // an audio file.
     //
     void drawHighlightedPreview(AudioFileId it,
-                                const RealTime &startIndex,
-                                const RealTime &endIndex,
+                                const RealTime &startTime,
+                                const RealTime &endTime,
                                 const RealTime &highlightStart,
                                 const RealTime &highlightEnd,
                                 QPixmap *pixmap);
@@ -183,8 +183,8 @@ public:
     // Get a split point vector from a peak file
     //
     std::vector<SplitPointPair> getSplitPoints(AudioFileId id,
-                                               const RealTime &startIndex,
-                                               const RealTime &endIndex,
+                                               const RealTime &startTime,
+                                               const RealTime &endTime,
                                                int threshold);
 
 private:

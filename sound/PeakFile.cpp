@@ -613,8 +613,8 @@ PeakFile::getPreview(const RealTime &startTime,
 {
     std::vector<float> ret;
 
-    double startPeak = getPeak(startTime);
-    double endPeak = getPeak(endTime);
+    int startPeak = getPeak(startTime);
+    int endPeak = getPeak(endTime);
 
     // Sanity check
     if (startPeak > endPeak)
@@ -653,7 +653,7 @@ PeakFile::getPreview(const RealTime &startTime,
 
     for (int i = 0; i < width; i++)
     {
-        peakNumber = int(startPeak + int(double(i) * step));
+        peakNumber = startPeak + int(double(i) * step);
 
         // Seek to value
         //
@@ -732,26 +732,45 @@ PeakFile::getPreview(const RealTime &startTime,
     return ret;
 }
 
-double
+int
 PeakFile::getPeak(const RealTime &time)
 {
     double frames = ((time.sec * 1000000.0) + time.usec) *
                         m_audioFile->getSampleRate() / 1000000.0;
-    return (frames / double(m_blockSize));
+    return int(frames / double(m_blockSize));
+}
+
+RealTime
+PeakFile::getTime(int peak)
+{
+    long usecs = peak * m_blockSize * 1000000 / m_audioFile->getSampleRate();
+    return RealTime(usecs/1000000, usecs % 1000000);
 }
 
 // Get pairs of split points for areas that exceed a percentage
 // threshold
 //
 std::vector<SplitPointPair> 
-PeakFile::getSplitPoints(const RealTime &startIndex,
-                         const RealTime &endIndex,
+PeakFile::getSplitPoints(const RealTime &startTime,
+                         const RealTime &endTime,
                          int threshold)
 {
     std::vector<SplitPointPair> points;
     std::string peakData;
 
-    scanToPeak(0);
+    int startPeak = getPeak(startTime);
+    int endPeak = getPeak(endTime);
+
+    cout << "START PEAK = " << startPeak << endl;
+    cout << "START PEAK TIME = " << startTime << endl;
+    cout << "START PEAK TIME REGEN = " << getTime(startPeak) << endl;
+    cout << "END PEAK = " << endPeak << endl;
+    cout << "END PEAK TIME = " << endTime << endl;
+    cout << "END PEAK TIME REGEN = " << getTime(endPeak) << endl;
+
+    if (endPeak < startPeak) return std::vector<SplitPointPair>();
+
+    scanToPeak(startPeak);
 
     float divisor = 0.0f;
     switch(m_format)
@@ -768,7 +787,12 @@ PeakFile::getSplitPoints(const RealTime &startIndex,
             return points;
     }
 
-    for (int i = 0; i < m_numberOfPeaks; i++)
+    float value;
+    float fThreshold = float(threshold)/100.0;
+    bool belowThreshold = true;
+    RealTime startSplit;
+
+    for (int i = 0; i < endPeak - startPeak; i++)
     {
         try
         {
@@ -785,12 +809,36 @@ PeakFile::getSplitPoints(const RealTime &startIndex,
             int peakValue =
                 getIntegerFromLittleEndian(peakData.substr(0, m_format));
 
-            float value = float(peakValue) / divisor;
+            value = fabs(float(peakValue) / divisor);
+        }
 
+        if (belowThreshold)
+        {
+            if (value > fThreshold)
+            {
+                startSplit = getTime(i);
+                belowThreshold = false;
+            }
+        }
+        else
+        {
+            if (value <= fThreshold)
+            {
+                // insert values
+                points.push_back(SplitPointPair(startSplit, getTime(i)));
+                belowThreshold = true;
+            }
         }
 
         if (!scanForward(1)) // forward one peak
             break;
+    }
+
+    // if we've got a split point open the close it
+    if (belowThreshold == false)
+    {
+        points.push_back(SplitPointPair(startSplit,
+                                        getTime(endPeak - startPeak)));
     }
 
     return points;

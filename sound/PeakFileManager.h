@@ -76,8 +76,8 @@ public:
     // Get a vector of floats as the preview
     //
     std::vector<float> getPreview(AudioFile *audioFile,
-                                  const RealTime &startIndex,
-                                  const RealTime &endIndex,
+                                  const RealTime &startTime,
+                                  const RealTime &endTime,
                                   int   width,
                                   bool  showMinima);
 
@@ -88,8 +88,8 @@ public:
     // Get split points for a peak file
     //
     std::vector<SplitPointPair> getSplitPoints(AudioFile *audioFile,
-                                               const RealTime &startIndex,
-                                               const RealTime &endIndex,
+                                               const RealTime &startTime,
+                                               const RealTime &endTime,
                                                int threshold);
 protected:
 

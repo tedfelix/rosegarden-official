@@ -589,8 +589,8 @@ AudioFileManager::getAudioFile(AudioFileId id)
 
 std::vector<float>
 AudioFileManager::getPreview(AudioFileId id,
-                             const RealTime &startIndex,
-                             const RealTime &endIndex,
+                             const RealTime &startTime,
+                             const RealTime &endTime,
                              int width)
 {
     AudioFile *audioFile = getAudioFile(id);
@@ -599,24 +599,24 @@ AudioFileManager::getPreview(AudioFileId id,
         return std::vector<float>();
 
     return m_peakManager.getPreview(audioFile,
-                                    startIndex,
-                                    endIndex,
+                                    startTime,
+                                    endTime,
                                     width,
                                     false);
 }
 
 void
 AudioFileManager::drawPreview(AudioFileId id,
-                              const RealTime &startIndex,
-                              const RealTime &endIndex,
+                              const RealTime &startTime,
+                              const RealTime &endTime,
                               QPixmap *pixmap)
 {
     AudioFile *audioFile = getAudioFile(id);
 
     std::vector<float> values = m_peakManager.getPreview
                                         (audioFile,
-                                         startIndex,
-                                         endIndex,
+                                         startTime,
+                                         endTime,
                                          pixmap->width(),
                                          false);
 
@@ -655,8 +655,8 @@ AudioFileManager::drawPreview(AudioFileId id,
 
 void
 AudioFileManager::drawHighlightedPreview(AudioFileId id,
-                                         const RealTime &startIndex,
-                                         const RealTime &endIndex,
+                                         const RealTime &startTime,
+                                         const RealTime &endTime,
                                          const RealTime &highlightStart,
                                          const RealTime &highlightEnd,
                                          QPixmap *pixmap)
@@ -665,15 +665,15 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
 
     std::vector<float> values = m_peakManager.getPreview
                                         (audioFile,
-                                         startIndex,
-                                         endIndex,
+                                         startTime,
+                                         endTime,
                                          pixmap->width(),
                                          false);
 
     int startWidth = (int)(double(pixmap->width()) * (highlightStart /
-                                                      (endIndex - startIndex)));
+                                                      (endTime - startTime)));
     int endWidth = (int)(double(pixmap->width()) * (highlightEnd /
-                                                    (endIndex - startIndex)));
+                                                    (endTime - startTime)));
 
     QPainter painter(pixmap);
     pixmap->fill(kapp->palette().color(QPalette::Active,
@@ -736,8 +736,8 @@ AudioFileManager::print()
 
 std::vector<SplitPointPair>
 AudioFileManager::getSplitPoints(AudioFileId id,
-                                 const RealTime &startIndex,
-                                 const RealTime &endIndex,
+                                 const RealTime &startTime,
+                                 const RealTime &endTime,
                                  int threshold)
 {
     AudioFile *audioFile = getAudioFile(id);
@@ -745,8 +745,8 @@ AudioFileManager::getSplitPoints(AudioFileId id,
     if (audioFile == 0) return std::vector<SplitPointPair>();
 
     return m_peakManager.getSplitPoints(audioFile,
-                                        startIndex,
-                                        endIndex,
+                                        startTime,
+                                        endTime,
                                         threshold);
 }
 

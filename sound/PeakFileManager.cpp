@@ -208,8 +208,8 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
 
 std::vector<float>
 PeakFileManager::getPreview(AudioFile *audioFile,
-                            const RealTime &startIndex,
-                            const RealTime &endIndex,
+                            const RealTime &startTime,
+                            const RealTime &endTime,
                             int width,
                             bool showMinima)
 {
@@ -229,8 +229,8 @@ PeakFileManager::getPreview(AudioFile *audioFile,
         try
         {
             peakFile->open();
-            rV = peakFile->getPreview(startIndex,
-                                      endIndex,
+            rV = peakFile->getPreview(startTime,
+                                      endTime,
                                       width,
                                       showMinima);
         }
@@ -267,16 +267,16 @@ PeakFileManager::clear()
 
 std::vector<SplitPointPair>
 PeakFileManager::getSplitPoints(AudioFile *audioFile,
-                                const RealTime &startIndex,
-                                const RealTime &endIndex,
+                                const RealTime &startTime,
+                                const RealTime &endTime,
                                 int threshold)
 {
     PeakFile *peakFile = getPeakFile(audioFile);
 
     if (peakFile == 0) return std::vector<SplitPointPair>();
 
-    return peakFile->getSplitPoints(startIndex,
-                                    endIndex,
+    return peakFile->getSplitPoints(startTime,
+                                    endTime,
                                     threshold);
 
 }
