@@ -22,8 +22,8 @@
 
 #include "rosedebug.h"
 
-NotationCanvasView::NotationCanvasView(QCanvas *viewing=0, QWidget *parent=0,
-                                       const char *name=0, WFlags f=0)
+NotationCanvasView::NotationCanvasView(QCanvas *viewing, QWidget *parent,
+                                       const char *name, WFlags f)
     : QCanvasView(viewing, parent, name, f),
       m_movingItem(0),
       m_draggingItem(false)
@@ -63,8 +63,11 @@ NotationCanvasView::contentsMousePressEvent (QMouseEvent *e)
     StaffLine *staffLine;
     
     if ((staffLine = dynamic_cast<StaffLine*>(item))) {
-        kdDebug(KDEBUG_AREA) << "mousepress : on a staff Line - insert note" << endl;
+        kdDebug(KDEBUG_AREA) << "mousepress : on a staff Line - insert note - staff pitch :"
+                             << staffLine->associatedPitch() << endl;
         insertNote(staffLine, e);
+        staffLine->setPen(blue);
+        
         return;
     }
     
