@@ -413,7 +413,7 @@ void RosegardenGUIApp::initZoomToolbar()
     std::vector<double> zoomSizes; // in units-per-pixel
     double defaultBarWidth44 = 100.0;
     double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
-    static double factors[] = { 0.1, 0.2, 0.5, 1.0, 1.5, 2.5, 5.0 };
+    static double factors[] = { 0.025, 0.05, 0.1, 0.2, 0.5, 1.0, 1.5, 2.5, 5.0 };
     for (unsigned int i = 0; i < sizeof(factors)/sizeof(factors[0]); ++i) {
 	zoomSizes.push_back(duration44 / (defaultBarWidth44 * factors[i]));
     }
@@ -460,7 +460,7 @@ void RosegardenGUIApp::initView()
     if (comp.getStartMarker() == 0 &&
         comp.getEndMarker() == 0)
     {
-        int endMarker = comp.getBarRange(10 + comp.getNbBars()).second;
+        int endMarker = comp.getBarRange(100 + comp.getNbBars()).second;
         comp.setEndMarker(endMarker);
     }
     

@@ -748,15 +748,10 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
 
     Rosegarden::RealTime eventTime(0, 0);
 
-    do
+    snd_seq_event_t *event;
+
+    while(snd_seq_event_input(m_midiHandle, &event) > 0)
     {
-        snd_seq_event_t *event;
-
-        // Check for input events and return if nothing returned
-        //
-        if (snd_seq_event_input(m_midiHandle, &event) < 0)
-            return &m_recordComposition;
-
         unsigned int channel = (unsigned int)event->data.note.channel;
         unsigned int chanNoteKey = ( channel << 8 ) +
                                    (unsigned int) event->data.note.note;
@@ -902,7 +897,6 @@ AlsaDriver::getMappedComposition(const RealTime &playLatency)
 
         snd_seq_free_event(event);
     }
-    while (snd_seq_event_input_pending(m_midiHandle, 0) > 0);
 
     return &m_recordComposition;
 }
