@@ -42,11 +42,11 @@ public:
     virtual void contentsMouseMoveEvent(QMouseEvent *e);
 
 signals:
-    void noteInserted(int pitch, QMouseEvent*);
+    void noteInserted(int pitch, const QPoint&);
     
 protected:
 
-    void insertNote(const StaffLine*, QMouseEvent*);
+    void insertNote(const StaffLine*, const QPoint&);
 
     QCanvasItem* m_movingItem;
     bool m_draggingItem;

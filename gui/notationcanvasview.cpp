@@ -51,55 +51,62 @@ NotationCanvasView::contentsMousePressEvent (QMouseEvent *e)
 {
     kdDebug(KDEBUG_AREA) << "mousepress" << endl;
 
-    QCanvasItemList itemList = canvas()->collisions(e->pos());
+    QPoint eventPos = viewportToContents(e->pos());
+
+    QCanvasItemList itemList = canvas()->collisions(eventPos);
 
     if(itemList.isEmpty()) { // click was not on an item
         kdDebug(KDEBUG_AREA) << "mousepress : Not on an item" << endl;
         return;
     }
 
-    QCanvasItem *item = itemList.first();
+    QCanvasItemList::Iterator it;
 
-    StaffLine *staffLine;
+    for (it = itemList.begin(); it != itemList.end(); ++it) {
+
+        QCanvasItem *item = *it;
+
+        StaffLine *staffLine;
     
-    if ((staffLine = dynamic_cast<StaffLine*>(item))) {
-        kdDebug(KDEBUG_AREA) << "mousepress : on a staff Line - insert note - staff pitch :"
-                             << staffLine->associatedPitch() << endl;
-        insertNote(staffLine, e);
-        // staffLine->setPen(blue); - debug feedback to confirm which line what clicked on
+        if ((staffLine = dynamic_cast<StaffLine*>(item))) {
+            kdDebug(KDEBUG_AREA) << "mousepress : on a staff Line - insert note - staff pitch :"
+                                 << staffLine->associatedPitch() << endl;
+            insertNote(staffLine, eventPos);
+            // staffLine->setPen(blue); - debug feedback to confirm which line what clicked on
         
-        return;
-    }
-    
-
-    QCanvasGroupableItem *gitem;
-
-    if((gitem = dynamic_cast<QCanvasGroupableItem*>(item))) {
-        kdDebug(KDEBUG_AREA) << "mousepress : Groupable item" << endl;
-        QCanvasItemGroup *t = gitem->group();
-
-        if(t->active())
-            m_movingItem = t;
-        else {
-            kdDebug(KDEBUG_AREA) << "mousepress : Unmoveable groupable item" << endl;
-            m_movingItem = 0; // this is not a moveable item
             return;
         }
-    } else {
-        m_movingItem = item;
     }
+    
 
-    m_draggingItem = true;
-    m_movingItem->move(e->x(), e->y());
+//     QCanvasGroupableItem *gitem;
+
+//     if((gitem = dynamic_cast<QCanvasGroupableItem*>(item))) {
+//         kdDebug(KDEBUG_AREA) << "mousepress : Groupable item" << endl;
+//         QCanvasItemGroup *t = gitem->group();
+
+//         if(t->active())
+//             m_movingItem = t;
+//         else {
+//             kdDebug(KDEBUG_AREA) << "mousepress : Unmoveable groupable item" << endl;
+//             m_movingItem = 0; // this is not a moveable item
+//             return;
+//         }
+//     } else {
+//         m_movingItem = item;
+//     }
+
+//     m_draggingItem = true;
+//     m_movingItem->move(e->x(), e->y());
     canvas()->update();
 }
 
 
 void
-NotationCanvasView::insertNote(const StaffLine *line, QMouseEvent *e)
+NotationCanvasView::insertNote(const StaffLine *line, const QPoint &pos)
 {
     kdDebug(KDEBUG_AREA) << "insertNote at pitch " << line->associatedPitch() << endl;
 
-    emit noteInserted(line->associatedPitch(), e);
+    emit noteInserted(line->associatedPitch(), pos);
     
 }

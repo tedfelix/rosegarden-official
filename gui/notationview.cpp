@@ -40,6 +40,69 @@
 
 #include "rosedebug.h"
 
+class RestSplitter
+{
+public:
+    /**
+     * restDuration : duration of rest being replaced
+     * replacedBit  : duration of note replacing the rest
+     */
+    RestSplitter(Event::timeT restDuration, Event::timeT replacedBit);
+    
+    Event::timeT nextBit();
+
+protected:
+    Event::timeT m_restDuration;
+    Event::timeT m_remainDuration;
+    Event::timeT m_replacedBit;
+    Event::timeT m_currentBit;
+    
+    static Event::timeT m_baseRestDuration;
+};
+
+RestSplitter::RestSplitter(Event::timeT restDuration,
+                           Event::timeT replacedBit)
+    : m_restDuration(restDuration),
+      m_remainDuration(0),
+      m_replacedBit(replacedBit),
+      m_currentBit(m_baseRestDuration)
+{
+    kdDebug(KDEBUG_AREA) << "RestSplitter::RestSplitter() : restDuration = "
+                         << restDuration << " - replacedBit = "
+                         << replacedBit << endl;
+
+    m_remainDuration = restDuration - replacedBit;
+
+    while (m_currentBit > m_remainDuration) m_currentBit /= 2;
+
+}
+
+    
+Event::timeT
+RestSplitter::nextBit()
+{
+    if (m_remainDuration == 0) return 0;
+
+    if (m_remainDuration >= m_currentBit) {
+
+        m_remainDuration -= m_currentBit;
+
+    } else {
+
+        if (m_currentBit == 6)
+            return 0;
+
+        m_currentBit /= 2;
+
+        m_remainDuration -= m_currentBit;
+    }
+    
+    return m_currentBit;
+}
+
+Event::timeT
+RestSplitter::m_baseRestDuration = 384; // whole note rest
+
 
 NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
     : KMainWindow(parent),
@@ -63,8 +126,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
 
     setCentralWidget(m_canvasView);
 
-    QObject::connect(m_canvasView, SIGNAL(noteInserted(int, QMouseEvent*)),
-                     this, SLOT(insertNote(int, QMouseEvent*)));
+    QObject::connect(m_canvasView, SIGNAL(noteInserted(int, const QPoint&)),
+                     this, SLOT(insertNote(int, const QPoint&)));
 
     readOptions();
 
@@ -494,7 +557,7 @@ NotationView::slot64th()
 }
 
 void
-NotationView::insertNote(int pitch, QMouseEvent *e)
+NotationView::insertNote(int pitch, const QPoint &eventPos)
 {
     // create new event
     //
@@ -514,22 +577,11 @@ NotationView::insertNote(int pitch, QMouseEvent *e)
     newNotationElement->event()->set<Int>("Notation::NoteType", m_currentSelectedNote);
     newNotationElement->event()->set<String>("Name", "INSERTED_NOTE");
 
-    // give a "fake" X coord to the notation element (where the click was received)
-    newNotationElement->setX(e->x());
+    NotationElementList::iterator closestNote = findClosestNote(eventPos.x());
 
-    // readjust newNotationElement->X
-
-    kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : approx. x : "
-                         << newNotationElement->x() << endl;
-
-    NotationElementList::iterator closestNote = findClosestNote(newNotationElement->x());
-
+    NotationElementList::iterator redoLayoutStart = closestNote;
+    
     if (closestNote != m_notationElements->end()) {
-
-//         newNotationElement->setX((*closestNote)->x());
-
-//         kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : adjusted x : "
-//                              << newNotationElement->x() << endl;
 
         if ((*closestNote)->isRest()) {
 
@@ -541,10 +593,9 @@ NotationView::insertNote(int pitch, QMouseEvent *e)
 
             if (!replaceRestWithNote(closestNote, newNotationElement))
                 return;
+            else
+                --redoLayoutStart;
             
-//             kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : insert over rest is not implemented yet"
-//                                  << endl;
-
         } else {
 
             kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : insert over note - absoluteTime = "
@@ -561,8 +612,7 @@ NotationView::insertNote(int pitch, QMouseEvent *e)
 
         kdDebug(KDEBUG_AREA) << "NotationHLayout::insertNote : note appended" << endl;
         m_notationElements->insert(newNotationElement);
-//         --closestNote;
-//         newNotationElement->setX((*closestNote)->x() + Staff::noteWidth + m_noteMargin);
+
     }
 
     //
@@ -582,8 +632,8 @@ NotationView::insertNote(int pitch, QMouseEvent *e)
 
     // TODO : m_currentStaff should be updated by the mouse click 
 
-    if (closestNote != m_notationElements->begin())
-        showElements(--closestNote,
+    if (redoLayoutStart != m_notationElements->begin())
+        showElements(--redoLayoutStart,
                      m_notationElements->end(),
                      m_currentStaff);
     else
@@ -601,7 +651,9 @@ NotationView::findClosestNote(double eventX)
 
     NotationElementList::iterator it, res;
     
-    for (it = m_notationElements->begin(); it != m_notationElements->end(); ++it) {
+    for (it = m_notationElements->begin();
+         it != m_notationElements->end(); ++it) {
+
         double dist;
         
         if ( (*it)->x() >= eventX)
@@ -610,8 +662,8 @@ NotationView::findClosestNote(double eventX)
             dist = eventX - (*it)->x();
 
         if (dist < minDist) {
-//             kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : minDist was "
-//                                  << minDist << " now = " << dist << endl;
+            kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : minDist was "
+                                 << minDist << " now = " << dist << endl;
             minDist = dist;
             res = it;
         }
@@ -641,14 +693,37 @@ NotationView::replaceRestWithNote(NotationElementList::iterator rest,
         return false;
     }
 
-    // simple case : rest is same length as new element
+    bool newNoteIsSameDurationAsRest = (*rest)->event()->duration() == newNote->event()->duration();
+
+    // set new note absolute time to the one of the rest it's replacing
     //
-    if ((*rest)->event()->duration() == newNote->event()->duration()) {
-        newNote->setAbsoluteTime((*rest)->event()->absoluteTime());
-        m_notationElements->insert(newNote);
-        m_notationElements->erase(rest);
-        return true;
+    newNote->setAbsoluteTime((*rest)->event()->absoluteTime());
+
+    if (!newNoteIsSameDurationAsRest) { // we need to insert shorter rests
+        
+        RestSplitter splitter((*rest)->event()->duration(),
+                              newNote->event()->duration());
+
+        Event::timeT restAbsoluteTime = newNote->event()->absoluteTime() +
+            newNote->event()->duration();
+    
+        while(Event::timeT bit = splitter.nextBit()) {
+            kdDebug(KDEBUG_AREA) << "Inserting rest of duration " << bit
+                                 << " at time " << restAbsoluteTime << endl;
+
+            Event *newRest = new Event;
+            newRest->setType("rest");
+            newRest->setTimeDuration(bit);
+            newRest->setAbsoluteTime(restAbsoluteTime);
+            newRest->set<String>("Name", "INSERTED_REST");
+            NotationElement *newNotationRest = new NotationElement(newRest);
+            restAbsoluteTime += bit;
+            m_notationElements->insert(newNotationRest);
+        }
     }
+    
+    m_notationElements->insert(newNote);
+    m_notationElements->erase(rest);
 
     return true;
 }
