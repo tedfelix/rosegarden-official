@@ -769,22 +769,23 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QToolTip::add(m_pastePrograms,
             i18n("Paste Program names from clipboard to current Bank"));
 
-    QGroupBox *optionBox  = new QVGroupBox(i18n("Options"),
-					 leftPart);
-
-    QHBox *variationBox = new QHBox(optionBox);
-    QCheckBox *variationToggle = new QCheckBox(i18n("Show Variation list based on "), variationBox);
-    QComboBox *variationCombo = new RosegardenComboBox(false, variationBox);
-    variationCombo->insertItem(i18n("MSB"));
-    variationCombo->insertItem(i18n("LSB"));
-
-
     connect(m_listView, SIGNAL(currentChanged(QListViewItem*)),
             this,       SLOT(slotPopulateDevice(QListViewItem*)));
 
-    m_programEditor = new MidiProgramsEditor(this, splitter);
+    QVBox *vbox = new QVBox(splitter);
+
+    m_programEditor = new MidiProgramsEditor(this, vbox);
 
     m_programEditor->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
+
+    m_optionBox  = new QVGroupBox(i18n("Options"),
+					   vbox);
+
+    QHBox *variationBox = new QHBox(m_optionBox);
+    m_variationToggle = new QCheckBox(i18n("Show Variation list based on "), variationBox);
+    m_variationCombo = new KComboBox(false, variationBox);
+    m_variationCombo->insertItem(i18n("LSB"));
+    m_variationCombo->insertItem(i18n("MSB"));
 
     // device/bank modification
     connect(m_listView, SIGNAL(itemRenamed             (QListViewItem*,const QString&,int)),
@@ -810,6 +811,12 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     connect(m_pastePrograms, SIGNAL(clicked()),
             this, SLOT(slotEditPaste()));
+
+    connect(m_variationToggle, SIGNAL(clicked()),
+	    this, SLOT(slotVariationToggled()));
+    
+    connect(m_variationCombo, SIGNAL(activated(int)),
+	    this, SLOT(slotVariationChanged(int)));
 
     setupActions();
 
@@ -838,6 +845,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     if (!haveMidiPlayDevice) {
         leftPart->setDisabled(true);
         m_programEditor->setDisabled(true);
+	m_optionBox->setDisabled(true);
     }
 
     setAutoSaveSettings("BankEditor", true);
@@ -1254,6 +1262,7 @@ BankEditorDialog::populateDevice(QListViewItem* item)
         m_deleteBank->setEnabled(false);
         m_copyPrograms->setEnabled(false);
         m_pastePrograms->setEnabled(false);
+	m_optionBox->setEnabled(false);
         stateChanged("on_bank_item", KXMLGUIClient::StateReverse);
         m_programEditor->clearAll();
         return;
@@ -1280,6 +1289,14 @@ BankEditorDialog::populateDevice(QListViewItem* item)
 
     m_programEditor->populateBank(item);
 
+    m_optionBox->setEnabled(true);
+    m_variationToggle->setChecked(device->getVariationType() !=
+				  Rosegarden::MidiDevice::NoVariations);
+    m_variationCombo->setEnabled(m_variationToggle->isChecked());
+    m_variationCombo->setCurrentItem(device->getVariationType() ==
+				     Rosegarden::MidiDevice::VariationFromLSB ?
+				     0 : 1);
+
     m_lastDevice = bankItem->getDeviceId();
 }
 
@@ -1290,6 +1307,16 @@ BankEditorDialog::slotApply()
 
     ModifyDeviceCommand *command;
 
+    Rosegarden::MidiDevice::VariationType variation =
+	Rosegarden::MidiDevice::NoVariations;
+    if (m_variationToggle->isChecked()) {
+	if (m_variationCombo->currentItem() == 0) {
+	    variation = Rosegarden::MidiDevice::VariationFromLSB;
+	} else {
+	    variation = Rosegarden::MidiDevice::VariationFromMSB;
+	}
+    }
+    
     // Make sure that we don't delete all the banks and programs
     // if we've not populated them here yet.
     //
@@ -1307,6 +1334,7 @@ BankEditorDialog::slotApply()
                                           m_deviceNameMap[m_lastDevice],
                                           device->getLibrarianName(),
                                           device->getLibrarianEmail(),
+					  variation,
                                           tempBank,
                                           tempProg,
                                           true,
@@ -1326,6 +1354,7 @@ BankEditorDialog::slotApply()
                                           m_deviceNameMap[m_lastDevice],
                                           device->getLibrarianName(),
                                           device->getLibrarianEmail(),
+					  variation,
                                           m_bankList,
                                           m_programList,
                                           true,
@@ -1618,7 +1647,7 @@ BankEditorDialog::slotModifyDeviceOrBankName(QListViewItem* item, const QString 
                  << "modify bank name to " << label << endl;
 
         if (m_bankList[bankItem->getBank()].getName() != qstrtostr(label)) {
-            m_bankList[bankItem->getBank()].getName() = qstrtostr(label);
+            m_bankList[bankItem->getBank()].setName(qstrtostr(label));
             setModified(true);
         }
         
@@ -1698,6 +1727,19 @@ BankEditorDialog::selectDeviceBankItem(Rosegarden::DeviceId deviceId,
         bankCount = 0;
     }
     while ((deviceChild = deviceChild->nextSibling()));
+}
+
+void
+BankEditorDialog::slotVariationToggled()
+{
+    m_variationCombo->setEnabled(m_variationToggle->isChecked());
+    setModified(true);
+}
+
+void
+BankEditorDialog::slotVariationChanged(int)
+{
+    setModified(true);
 }
 
 void

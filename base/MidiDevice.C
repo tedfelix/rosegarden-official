@@ -331,10 +331,10 @@ MidiDevice::getBankByMsbLsb(bool percussion, MidiByte msb, MidiByte lsb) const
     return 0;
 }
 
-std::vector<const MidiBank *>
+const BankList
 MidiDevice::getBanks(bool percussion) const
 {
-    std::vector<const MidiBank *> banks;
+    BankList banks;
 
     for (BankList::const_iterator it = m_bankList->begin();
 	 it != m_bankList->end(); ++it) {
@@ -344,10 +344,10 @@ MidiDevice::getBanks(bool percussion) const
     return banks;
 }
 
-std::vector<const MidiBank *>
+const BankList
 MidiDevice::getBanksByMSB(bool percussion, MidiByte msb) const
 {
-    std::vector<const MidiBank *> banks;
+    BankList banks;
 
     for (BankList::const_iterator it = m_bankList->begin();
 	 it != m_bankList->end(); ++it) {
@@ -358,10 +358,10 @@ MidiDevice::getBanksByMSB(bool percussion, MidiByte msb) const
     return banks;
 }
 
-std::vector<const MidiBank *>
+const BankList
 MidiDevice::getBanksByLSB(bool percussion, MidiByte lsb) const
 {
-    std::vector<const MidiBank *> banks;
+    BankList banks;
 
     for (BankList::const_iterator it = m_bankList->begin();
 	 it != m_bankList->end(); ++it) {
@@ -372,7 +372,7 @@ MidiDevice::getBanksByLSB(bool percussion, MidiByte lsb) const
     return banks;
 }
 
-std::vector<MidiByte>
+MidiByteList
 MidiDevice::getDistinctMSBs(bool percussion, int lsb) const
 {
     std::set<MidiByte> msbs;
@@ -383,7 +383,7 @@ MidiDevice::getDistinctMSBs(bool percussion, int lsb) const
 	    (lsb == -1 || (*it)->getLSB() == lsb)) msbs.insert((*it)->getMSB());
     }
 
-    std::vector<MidiByte> v;
+    MidiByteList v;
     for (std::set<MidiByte>::iterator i = msbs.begin(); i != msbs.end(); ++i) {
 	v.push_back(*i);
     }
@@ -391,7 +391,7 @@ MidiDevice::getDistinctMSBs(bool percussion, int lsb) const
     return v;
 }
 
-std::vector<MidiByte>
+MidiByteList
 MidiDevice::getDistinctLSBs(bool percussion, int msb) const
 {
     std::set<MidiByte> lsbs;
@@ -402,12 +402,25 @@ MidiDevice::getDistinctLSBs(bool percussion, int msb) const
 	    (msb == -1 || (*it)->getMSB() == msb)) lsbs.insert((*it)->getLSB());
     }
 
-    std::vector<MidiByte> v;
+    MidiByteList v;
     for (std::set<MidiByte>::iterator i = lsbs.begin(); i != lsbs.end(); ++i) {
 	v.push_back(*i);
     }
 
     return v;
+}
+
+const ProgramList
+MidiDevice::getPrograms(const MidiBank &bank) const
+{
+    ProgramList programs;
+
+    for (ProgramList::const_iterator it = m_programList->begin();
+	 it != m_programList->end(); ++it) {
+	if ((*it)->getBank() == bank) programs.push_back(*it);
+    }
+
+    return programs;
 }
 
 std::string
@@ -549,7 +562,7 @@ MidiDevice::addInstrument(Instrument *instrument)
 }
 
 std::string
-MidiDevice::getProgramName(const MidiProgram &program)
+MidiDevice::getProgramName(const MidiProgram &program) const
 {
     ProgramList::iterator it;
 

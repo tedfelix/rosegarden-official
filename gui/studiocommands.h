@@ -42,6 +42,18 @@ public:
                         const std::string &name,
                         const std::string &librarianName,
                         const std::string &librarianEmail,
+			Rosegarden::MidiDevice::VariationType variationType,
+                        std::vector<Rosegarden::MidiBank> bankList,
+                        std::vector<Rosegarden::MidiProgram> programList,
+                        bool overwrite,
+			bool rename);
+    
+    // leave variation alone
+    ModifyDeviceCommand(Rosegarden::Studio *studio,
+                        Rosegarden::DeviceId device,
+                        const std::string &name,
+                        const std::string &librarianName,
+                        const std::string &librarianEmail,
                         std::vector<Rosegarden::MidiBank> bankList,
                         std::vector<Rosegarden::MidiProgram> programList,
                         bool overwrite,
@@ -59,6 +71,7 @@ protected:
     std::string                            m_name;
     std::string                            m_librarianName;
     std::string                            m_librarianEmail;
+    Rosegarden::MidiDevice::VariationType  m_variationType;
     std::vector<Rosegarden::MidiBank>      m_bankList;
     std::vector<Rosegarden::MidiProgram>   m_programList;
 
@@ -67,9 +80,11 @@ protected:
     std::vector<Rosegarden::MidiProgram>   m_oldProgramList;
     std::string                            m_oldLibrarianName;
     std::string                            m_oldLibrarianEmail;
+    Rosegarden::MidiDevice::VariationType  m_oldVariationType;
 
     bool                                   m_overwrite;
     bool                                   m_rename;
+    bool                                   m_changeVariation;
 
 };
 

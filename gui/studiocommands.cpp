@@ -38,6 +38,32 @@ ModifyDeviceCommand::ModifyDeviceCommand(
         const std::string &name,
         const std::string &librarianName,
         const std::string &librarianEmail,
+	Rosegarden::MidiDevice::VariationType variationType,
+        std::vector<Rosegarden::MidiBank> bankList,
+        std::vector<Rosegarden::MidiProgram> programList,
+        bool overwrite,
+	bool rename):
+    KNamedCommand(getGlobalName()),
+    m_studio(studio),
+    m_device(device),
+    m_name(name),
+    m_librarianName(librarianName),
+    m_librarianEmail(librarianEmail),
+    m_variationType(variationType),
+    m_bankList(bankList),
+    m_programList(programList),
+    m_overwrite(overwrite),
+    m_rename(rename),
+    m_changeVariation(true)
+{
+}
+
+ModifyDeviceCommand::ModifyDeviceCommand(
+        Rosegarden::Studio *studio,
+	Rosegarden::DeviceId device,
+        const std::string &name,
+        const std::string &librarianName,
+        const std::string &librarianEmail,
         std::vector<Rosegarden::MidiBank> bankList,
         std::vector<Rosegarden::MidiProgram> programList,
         bool overwrite,
@@ -51,7 +77,8 @@ ModifyDeviceCommand::ModifyDeviceCommand(
     m_bankList(bankList),
     m_programList(programList),
     m_overwrite(overwrite),
-    m_rename(rename)
+    m_rename(rename),
+    m_changeVariation(false)
 {
 }
 
@@ -80,6 +107,9 @@ ModifyDeviceCommand::execute()
     m_oldProgramList = midiDevice->getPrograms();
     m_oldLibrarianName = midiDevice->getLibrarianName();
     m_oldLibrarianEmail = midiDevice->getLibrarianEmail();
+    m_oldVariationType = midiDevice->getVariationType();
+
+    if (m_changeVariation) midiDevice->setVariationType(m_variationType);
 
     if (m_overwrite)
     {
@@ -126,6 +156,7 @@ ModifyDeviceCommand::unexecute()
     midiDevice->replaceBankList(m_oldBankList);
     midiDevice->replaceProgramList(m_oldProgramList);
     midiDevice->setLibrarian(m_oldLibrarianName, m_oldLibrarianEmail);
+    if (m_changeVariation) midiDevice->setVariationType(m_oldVariationType);
 }
 
 // -------------------- ModifyDeviceMapping -----------------------

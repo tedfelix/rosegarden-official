@@ -26,6 +26,7 @@
 #include "MappedEvent.h"
 #include "MappedInstrument.h"
 #include "MappedCommon.h"
+#include "MidiProgram.h"
 
 #include "widgets.h"
 
@@ -241,7 +242,14 @@ public slots:
 
 protected:
 
+    // fill (or hide) bank combo based on whether the instrument is percussion
+    void populateBankList();
+
+    // fill program combo based on current bank
     void populateProgramList();
+
+    // fill (or hide) variation combo based on current bank and program
+    void populateVariationList();
 
     //--------------- Data members ---------------------------------
 
@@ -268,6 +276,10 @@ protected:
     RosegardenRotary   *m_resonanceRotary;
     RosegardenRotary   *m_attackRotary;
     RosegardenRotary   *m_releaseRotary;
+
+    std::vector<Rosegarden::MidiBank>    m_banks;
+    std::vector<Rosegarden::MidiProgram> m_programs;
+    std::vector<Rosegarden::MidiByte>    m_variations;
 };
 
 

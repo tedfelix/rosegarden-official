@@ -36,6 +36,7 @@ namespace Rosegarden
 typedef std::vector<std::string> StringList;
 typedef std::vector<MidiProgram*> ProgramList;
 typedef std::vector<MidiBank*> BankList;
+typedef std::vector<MidiByte> MidiByteList;
 
 class MidiDevice : public Device
 {
@@ -78,8 +79,8 @@ public:
 
     // Get a program list for a certain bank (disregarding bank name)
     //
+//!!! need?
     StringList getProgramList(const MidiBank &bank);
-    std::string getProgramName(const MidiProgram &program);
 
     // Get a list of all banks
     //
@@ -104,14 +105,18 @@ public:
     //!!! lose -- what we really need is getBankName or something
     const MidiBank* getBankByMsbLsb(bool percussion, MidiByte msb, MidiByte lsb) const;
 
-    std::vector<const MidiBank *> getBanks(bool percussion) const;
-    std::vector<const MidiBank *> getBanksByMSB(bool percussion, MidiByte msb) const;
-    std::vector<const MidiBank *> getBanksByLSB(bool percussion, MidiByte lsb) const;
-    std::vector<MidiByte> getDistinctMSBs(bool percussion, int lsb = -1) const;
-    std::vector<MidiByte> getDistinctLSBs(bool percussion, int msb = -1) const;
+    const BankList getBanks(bool percussion) const;
+    const BankList getBanksByMSB(bool percussion, MidiByte msb) const; 
+    const BankList getBanksByLSB(bool percussion, MidiByte lsb) const;
+    MidiByteList getDistinctMSBs(bool percussion, int lsb = -1) const;
+    MidiByteList getDistinctLSBs(bool percussion, int msb = -1) const;
+    const ProgramList getPrograms(const MidiBank &bank) const;
     std::string getBankName(const MidiBank &bank) const;
+    std::string getProgramName(const MidiProgram &program) const;
 
+//!!! need?
     const MidiProgram* getProgramByIndex(int index) const;
+//!!! need?
     const MidiProgram* getProgram(const MidiBank &bank, int index) const;
 
     virtual std::string toXmlString();
@@ -121,6 +126,7 @@ public:
 
     // Return a copy of banks and programs
     //
+    //!!! need these?
     std::vector<MidiBank> getBanks() const;
     std::vector<MidiProgram> getPrograms() const;
 

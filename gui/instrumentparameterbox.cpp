@@ -58,6 +58,9 @@
 #include "studiocontrol.h"
 #include "studiowidgets.h"
 
+using Rosegarden::Instrument;
+using Rosegarden::MidiDevice;
+
 InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
                                                QWidget *parent)
     : RosegardenParameterBox(1, Qt::Horizontal, i18n("Instrument Parameters"), parent),
@@ -146,7 +149,7 @@ InstrumentParameterBox::setAudioMeter(double ch1, double ch2)
 }
 
 void
-InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
+InstrumentParameterBox::useInstrument(Instrument *instrument)
 {
     RG_DEBUG << "useInstrument() - populate Instrument\n";
 
@@ -166,7 +169,7 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
 
     // Hide or Show according to Instrumen type
     //
-    if (instrument->getType() == Rosegarden::Instrument::Audio)
+    if (instrument->getType() == Instrument::Audio)
     {
         m_audioInstrumentParameters->setupForInstrument(m_selectedInstrument);
 //!!!        m_widgetStack->raiseWidget(m_audioInstrumentParameters);
@@ -185,7 +188,7 @@ void
 InstrumentParameterBox::setMute(bool value)
 {
     if (m_selectedInstrument && 
-            m_selectedInstrument->getType() == Rosegarden::Instrument::Audio)
+            m_selectedInstrument->getType() == Instrument::Audio)
     {
         m_audioInstrumentParameters->slotSetMute(value);
     }
@@ -198,7 +201,7 @@ void
 InstrumentParameterBox::setRecord(bool value)
 {
     if (m_selectedInstrument &&
-            m_selectedInstrument->getType() == Rosegarden::Instrument::Audio)
+            m_selectedInstrument->getType() == Instrument::Audio)
     {
         m_audioInstrumentParameters->slotSetRecord(value);
     }
@@ -208,7 +211,7 @@ void
 InstrumentParameterBox::setSolo(bool value)
 {
     if (m_selectedInstrument &&
-            m_selectedInstrument->getType() == Rosegarden::Instrument::Audio)
+            m_selectedInstrument->getType() == Instrument::Audio)
     {
         m_audioInstrumentParameters->slotSetSolo(value);
     }
@@ -292,14 +295,22 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
     if (m_selectedInstrument == 0)
         return;
 
-    Rosegarden::MidiBank *bank = 
-        dynamic_cast<Rosegarden::MidiDevice*>
-            (m_selectedInstrument->getDevice())->getBankByIndex(index);
+    MidiDevice *md = dynamic_cast<MidiDevice*>
+	(m_selectedInstrument->getDevice());
+    if (!md) {
+	std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
+		  << m_selectedInstrument->getId() << std::endl;
+	return;
+    }
+
+    const Rosegarden::MidiBank *bank = &m_banks[index];
+
+//!!! wrong now
 
     m_selectedInstrument->setMSB(bank->getMSB());
     m_selectedInstrument->setLSB(bank->getLSB());
 
-    // repopulate program list
+    // repopulate program list (variation list is populated by slotSelectProgram)
     populateProgramList();
 
     Rosegarden::MappedEvent *mE = 
@@ -319,6 +330,7 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
 
     // also need to resend Program change to activate new program
     slotSelectProgram(m_selectedInstrument->getProgramChange());
+
     emit updateAllBoxes();
 }
 
@@ -328,42 +340,41 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
     if (m_selectedInstrument == 0)
         return;
 
-    Rosegarden::MidiProgram *prg;
+    MidiDevice *md = dynamic_cast<MidiDevice*>
+	(m_selectedInstrument->getDevice());
+    if (!md) {
+	std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
+		  << m_selectedInstrument->getId() << std::endl;
+	return;
+    }
 
+    const Rosegarden::MidiProgram *prg = &m_programs[index];
+    
     if (m_selectedInstrument->sendsBankSelect())
     {
-	Rosegarden::MidiBank bank(m_selectedInstrument->getProgram().getBank());
-        prg =
-            dynamic_cast<Rosegarden::MidiDevice*>
-            (m_selectedInstrument->getDevice())->getProgram(bank, index);
-
         // Send the bank select message before any PC message
         //
         Rosegarden::MappedEvent *mE = 
             new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
                                     Rosegarden::MappedEvent::MidiController,
                                     Rosegarden::MIDI_CONTROLLER_BANK_MSB,
-                                    bank.getMSB());
+                                    prg->getBank().getMSB());
         Rosegarden::StudioControl::sendMappedEvent(mE);
 
         mE = new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
                                     Rosegarden::MappedEvent::MidiController,
                                     Rosegarden::MIDI_CONTROLLER_BANK_LSB,
-                                    bank.getLSB());
+                                    prg->getBank().getLSB());
         Rosegarden::StudioControl::sendMappedEvent(mE);
 
-        RG_DEBUG << "sending bank select "
-		 << bank.getMSB() << " : "
-		 << bank.getLSB() << endl;
-    }
-    else
-    {
-        prg = dynamic_cast<Rosegarden::MidiDevice*>
-            (m_selectedInstrument->getDevice())->getProgramByIndex(index);
+//        RG_DEBUG << "sending bank select "
+//		 << bank.getMSB() << " : "
+//		 << bank.getLSB() << endl;
     }
 
     if (prg == 0)
     {
+	//!!! how will we deal with case where banks/programs have been deleted between gui interactions? should store indices after all?
         RG_DEBUG << "program change not found in bank" << endl;
         return;
     }
@@ -371,6 +382,8 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
     m_selectedInstrument->setProgramChange(prg->getProgram());
 
     RG_DEBUG << "sending program change " << prg->getProgram() << endl;
+
+    //!!! wrong now
 
     Rosegarden::MappedEvent *mE = 
      new Rosegarden::MappedEvent(m_selectedInstrument->getId(), 
@@ -380,6 +393,8 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
     // Send the controller change
     //
     Rosegarden::StudioControl::sendMappedEvent(mE);
+
+    populateVariationList();
 
     emit changeInstrumentLabel(m_selectedInstrument->getId(),
 			       strtoqstr(m_selectedInstrument->
@@ -403,7 +418,7 @@ MIDIInstrumentParameterPanel::slotSelectPan(float value)
     // within an unsigned char is 0 - 200 - so we adjust by 100
     //
     float adjValue = value;
-    if (m_selectedInstrument->getType() == Rosegarden::Instrument::Audio)
+    if (m_selectedInstrument->getType() == Instrument::Audio)
         value += 100;
 
     m_selectedInstrument->setPan(Rosegarden::MidiByte(adjValue));
@@ -442,7 +457,7 @@ AudioInstrumentParameterPanel::slotSelectAudioLevel(int value)
     if (m_selectedInstrument == 0)
         return;
 
-    if (m_selectedInstrument->getType() == Rosegarden::Instrument::Audio)
+    if (m_selectedInstrument->getType() == Instrument::Audio)
     {
         // If this is the record track then we store and send the record level
         //
@@ -505,7 +520,7 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
             setPalette(QPalette(RosegardenGUIColours::ActiveRecordTrack));
 
         if (m_selectedInstrument &&
-            (m_selectedInstrument->getType() == Rosegarden::Instrument::Audio))
+            (m_selectedInstrument->getType() == Instrument::Audio))
         {
             // set the fader value to the record value
 
@@ -529,7 +544,7 @@ AudioInstrumentParameterPanel::slotSetRecord(bool value)
         m_audioFader->m_recordButton->unsetPalette();
 
         if (m_selectedInstrument &&
-            (m_selectedInstrument->getType() == Rosegarden::Instrument::Audio))
+            (m_selectedInstrument->getType() == Instrument::Audio))
         {
             disconnect(m_audioFader->m_fader, SIGNAL(faderChanged(int)),
                        this, SLOT(slotSelectAudioLevel(int)));
@@ -568,9 +583,94 @@ MIDIInstrumentParameterPanel::slotSelectChannel(int index)
 }
 
 
+void
+MIDIInstrumentParameterPanel::populateBankList()
+{
+    if (m_selectedInstrument == 0)
+	return;
 
+    m_bankValue->clear();
+    m_banks.clear();
 
+    MidiDevice *md = dynamic_cast<MidiDevice*>
+	(m_selectedInstrument->getDevice());
+    if (!md) {
+	std::cerr << "WARNING: MIDIInstrumentParameterPanel::populateBankList: No MidiDevice for Instrument "
+		  << m_selectedInstrument->getId() << std::endl;
+	return;
+    }
 
+    int currentBank = -1;
+    Rosegarden::BankList banks;
+
+    if (md->getVariationType() == MidiDevice::NoVariations) {
+
+	m_bankLabel->show();
+	m_bankCheckBox->show();
+	m_bankValue->show();
+	banks = md->getBanks(m_selectedInstrument->isPercussion());
+
+	for (unsigned int i = 0; i < banks.size(); ++i) {
+	    if (m_selectedInstrument->getProgram().getBank() == *banks[i]) {
+		currentBank = i;
+	    }
+	}
+
+    } else {
+
+	Rosegarden::MidiByteList bytes;
+	bool useMSB = (md->getVariationType() == MidiDevice::VariationFromLSB);
+
+	if (useMSB) {
+	    bytes = md->getDistinctMSBs(m_selectedInstrument->isPercussion());
+	} else {
+	    bytes = md->getDistinctLSBs(m_selectedInstrument->isPercussion());
+	}
+	
+	if (bytes.size() < 2) {
+	    m_bankLabel->hide();
+	    m_bankCheckBox->hide();
+	    m_bankValue->hide();
+
+	} else {
+	    m_bankLabel->show();
+	    m_bankCheckBox->show();
+	    m_bankValue->show();
+	}
+
+	if (useMSB) {
+	    for (unsigned int i = 0; i < bytes.size(); ++i) {
+		Rosegarden::BankList bl = md->getBanksByMSB
+		    (m_selectedInstrument->isPercussion(), bytes[i]);
+		if (bl.size() == 0) continue;
+		if (m_selectedInstrument->getMSB() == bytes[i]) {
+		    currentBank = banks.size();
+		}
+		banks.push_back(bl[0]);
+	    }
+	} else {
+	    for (unsigned int i = 0; i < bytes.size(); ++i) {
+		Rosegarden::BankList bl = md->getBanksByLSB
+		    (m_selectedInstrument->isPercussion(), bytes[i]);
+		if (bl.size() == 0) continue;
+		if (m_selectedInstrument->getLSB() == bytes[i]) {
+		    currentBank = banks.size();
+		}
+		banks.push_back(bl[0]);
+	    }
+	}
+    }
+
+    for (Rosegarden::BankList::const_iterator i = banks.begin();
+	 i != banks.end(); ++i) {
+	m_banks.push_back(**i);
+	m_bankValue->insertItem(strtoqstr((*i)->getName()));
+    }
+	    
+    m_bankValue->setCurrentItem(currentBank);
+    m_bankValue->setEnabled(m_selectedInstrument->sendsBankSelect());
+}    
+	
 // Populate program list by bank context
 //
 void
@@ -579,24 +679,36 @@ MIDIInstrumentParameterPanel::populateProgramList()
     if (m_selectedInstrument == 0)
         return;
 
-    // The program list
     m_programValue->clear();
+    m_programs.clear();
 
-
-    Rosegarden::MidiByte msb = 0;
-    Rosegarden::MidiByte lsb = 0;
-
-    if (m_selectedInstrument->sendsBankSelect())
-    {
-        msb = m_selectedInstrument->getMSB();
-        lsb = m_selectedInstrument->getLSB();
+    MidiDevice *md = dynamic_cast<MidiDevice*>
+	(m_selectedInstrument->getDevice());
+    if (!md) {
+	std::cerr << "WARNING: MIDIInstrumentParameterPanel::populateProgramList: No MidiDevice for Instrument "
+		  << m_selectedInstrument->getId() << std::endl;
+	return;
     }
 
-    Rosegarden::StringList list = 
-        dynamic_cast<Rosegarden::MidiDevice*>
-            (m_selectedInstrument->getDevice())->getProgramList
-	(Rosegarden::MidiBank(m_selectedInstrument->isPercussion(), msb, lsb));
+    Rosegarden::MidiBank bank(m_selectedInstrument->isPercussion(), 0, 0);
 
+    if (m_selectedInstrument->sendsBankSelect()) {
+	bank = m_selectedInstrument->getProgram().getBank();
+    }
+
+    Rosegarden::ProgramList programs = md->getPrograms(bank);
+    for (unsigned int i = 0; i < programs.size(); ++i) {
+	m_programValue->insertItem(strtoqstr(programs[i]->getName()));
+	if (m_selectedInstrument->getProgram() == *programs[i]) {
+	    m_programValue->setCurrentItem(i);
+	}
+	m_programs.push_back(*programs[i]);
+    }
+
+    m_programValue->setEnabled(m_selectedInstrument->sendsProgramChange());
+
+/*!!!
+    Rosegarden::StringList list = md->getProgramList(bank);
     Rosegarden::StringList::iterator it;
 
     for (it = list.begin(); it != list.end(); it++) {
@@ -604,18 +716,92 @@ MIDIInstrumentParameterPanel::populateProgramList()
         m_programValue->insertItem(strtoqstr(*it));
 
 	const Rosegarden::MidiProgram *program = 
-	    dynamic_cast<Rosegarden::MidiDevice*>
-	    (m_selectedInstrument->getDevice())->
-	    getProgramByIndex(m_programValue->count() - 1);
+	    md->getProgramByIndex(m_programValue->count() - 1);
 
 	if (m_selectedInstrument->getProgramChange() == program->getProgram()) {
 	    m_programValue->setCurrentItem(m_programValue->count() - 1);
 	}
     }
-
+*/
 //    m_programValue->setCurrentItem(
 //            (int)m_selectedInstrument->getProgramChange());
 }
+
+void
+MIDIInstrumentParameterPanel::populateVariationList()
+{
+    if (m_selectedInstrument == 0)
+	return;
+
+    m_variationValue->clear();
+    m_variations.clear();
+
+    MidiDevice *md = dynamic_cast<MidiDevice*>
+	(m_selectedInstrument->getDevice());
+    if (!md) {
+	std::cerr << "WARNING: MIDIInstrumentParameterPanel::populateVariationList: No MidiDevice for Instrument "
+		  << m_selectedInstrument->getId() << std::endl;
+	return;
+    }
+
+    if (md->getVariationType() == MidiDevice::NoVariations) {
+	m_variationLabel->hide();
+	m_variationCheckBox->hide();
+	m_variationValue->hide();
+	return;
+    } 
+
+    bool useMSB = (md->getVariationType() == MidiDevice::VariationFromMSB);
+
+    if (useMSB) {
+	Rosegarden::MidiByte lsb = m_selectedInstrument->getLSB();
+	m_variations = md->getDistinctMSBs(lsb);
+    } else {
+	Rosegarden::MidiByte msb = m_selectedInstrument->getMSB();
+	m_variations = md->getDistinctLSBs(msb);
+    }
+    
+    if (m_variations.size() < 2) {
+	m_variationLabel->hide();
+	m_variationCheckBox->hide();
+	m_variationValue->hide();
+	
+    } else {
+	m_variationLabel->show();
+	m_variationCheckBox->show();
+	m_variationValue->show();
+    }
+
+    m_variationValue->setCurrentItem(-1);
+
+    for (unsigned int i = 0; i < m_variations.size(); ++i) {
+
+	Rosegarden::MidiProgram program;
+
+	if (useMSB) {
+	    program = Rosegarden::MidiProgram
+		(Rosegarden::MidiBank(m_selectedInstrument->isPercussion(),
+				      m_variations[i],
+				      m_selectedInstrument->getLSB()),
+		 m_selectedInstrument->getProgramChange());
+	} else {
+	    program = Rosegarden::MidiProgram
+		(Rosegarden::MidiBank(m_selectedInstrument->isPercussion(),
+				      m_selectedInstrument->getMSB(),
+				      m_variations[i]),
+		 m_selectedInstrument->getProgramChange());
+	}
+	m_variationValue->insertItem(strtoqstr(md->getProgramName(program)));
+	if (m_selectedInstrument->getProgram() == program) {
+	    m_variationValue->setCurrentItem(i);
+	}
+    }
+
+    m_variationValue->setEnabled(m_selectedInstrument->sendsBankSelect());
+}
+
+
+    
 
 void
 InstrumentParameterBox::slotUpdateAllBoxes()
@@ -1184,7 +1370,7 @@ AudioInstrumentParameterPanel::setAudioMeter(double ch1, double ch2)
 
 
 void
-AudioInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument* instrument)
+AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 {
     m_selectedInstrument = instrument;
 
@@ -1513,11 +1699,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
 
 //!!! dup with trackbuttons.cpp
 static QString
-getPresentationName(Rosegarden::Instrument *instr)
+getPresentationName(Instrument *instr)
 {
     if (!instr) {
 	return i18n("<no instrument>");
-    } else if (instr->getType() == Rosegarden::Instrument::Audio) {
+    } else if (instr->getType() == Instrument::Audio) {
 	return strtoqstr(instr->getName());
     } else {
 	return strtoqstr(instr->getDevice()->getName() + " " + 
@@ -1527,8 +1713,16 @@ getPresentationName(Rosegarden::Instrument *instr)
 
 
 void
-MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrument)
+MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 {
+    MidiDevice *md = dynamic_cast<MidiDevice*>
+	(instrument->getDevice());
+    if (!md) {
+	std::cerr << "WARNING: MIDIInstrumentParameterPanel::setupForInstrument: No MidiDevice for Instrument "
+		  << instrument->getId() << std::endl;
+	return;
+    }
+
     m_selectedInstrument = instrument;
 
     // Set instrument name
@@ -1537,44 +1731,42 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
 
     // Set Studio Device name
     //
-    if (instrument->getDevice()) {
-	QString connection(strtoqstr(instrument->getDevice()->getConnection()));
-	if (connection == "") {
-	    m_connectionLabel->setText(i18n("[ %1 ]").arg(i18n("No connection")));
-	} else {
-
-	    // remove trailing "(duplex)", "(read only)", "(write only)" etc
-	    connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");
-
-	    QString text = i18n("[ %1 ]").arg(connection);
-	    QString origText(text);
-
-	    QFontMetrics metrics(m_connectionLabel->fontMetrics());
-	    int maxwidth = metrics.width
-		("Program: [X]   Acoustic Grand Piano 123");// kind of arbitrary!
-
-	    int hlen = text.length() / 2;
-	    while (metrics.width(text) > maxwidth && text.length() > 10) {
-		--hlen;
-		text = origText.left(hlen) + "..." + origText.right(hlen);
-	    }
-
-	    if (text.length() > origText.length() - 7) text = origText;
-	    m_connectionLabel->setText(text);
-	}
+    QString connection(strtoqstr(md->getConnection()));
+    if (connection == "") {
+	m_connectionLabel->setText(i18n("[ %1 ]").arg(i18n("No connection")));
     } else {
-	m_connectionLabel->setText("");
+	
+	// remove trailing "(duplex)", "(read only)", "(write only)" etc
+	connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");
+	
+	QString text = i18n("[ %1 ]").arg(connection);
+	QString origText(text);
+	
+	QFontMetrics metrics(m_connectionLabel->fontMetrics());
+	int maxwidth = metrics.width
+	    ("Program: [X]   Acoustic Grand Piano 123");// kind of arbitrary!
+	
+	int hlen = text.length() / 2;
+	while (metrics.width(text) > maxwidth && text.length() > 10) {
+	    --hlen;
+	    text = origText.left(hlen) + "..." + origText.right(hlen);
+	}
+	
+	if (text.length() > origText.length() - 7) text = origText;
+	m_connectionLabel->setText(text);
     }
 
     // Enable all check boxes
     //
     m_programCheckBox->setDisabled(false);
     m_bankCheckBox->setDisabled(false);
+    m_variationCheckBox->setDisabled(false);
 
     // Activate all checkboxes
     //
     m_programCheckBox->setChecked(instrument->sendsProgramChange());
     m_bankCheckBox->setChecked(instrument->sendsBankSelect());
+    m_variationCheckBox->setChecked(instrument->sendsBankSelect());
 
     // Basic parameters
     //
@@ -1584,25 +1776,13 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
 
     // Check for program change
     //
-    if (instrument->sendsProgramChange())
-    {
-        m_programValue->setDisabled(false);
-        populateProgramList();
-    }
-    else
-    {
-        m_programValue->setDisabled(true);
-	m_programValue->clear();
-        m_programValue->setCurrentItem(-1);
-    }
+    populateBankList();
+    populateProgramList();
+    populateVariationList();
+    m_percussionCheckBox->setChecked(instrument->isPercussion());
 
-    // clear bank list
-    m_bankValue->clear();
-
-    // create bank list
-    Rosegarden::StringList list = 
-        dynamic_cast<Rosegarden::MidiDevice*>
-            (instrument->getDevice())->getBankList();
+/*!!!
+    Rosegarden::StringList list = md->getBankList();
 
     Rosegarden::StringList::iterator it;
 
@@ -1614,8 +1794,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
 	if (instrument->sendsBankSelect())
 	{
 	    const Rosegarden::MidiBank *bank = 
-		dynamic_cast<Rosegarden::MidiDevice*>(instrument->getDevice())
-		->getBankByIndex(m_bankValue->count() - 1);
+		md->getBankByIndex(m_bankValue->count() - 1);
 
 	    if (instrument->getProgram().getBank() == *bank) {
 		m_bankValue->setCurrentItem(m_bankValue->count() - 1);
@@ -1628,7 +1807,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
         m_bankValue->setDisabled(true);
         m_bankValue->setCurrentItem(-1);
     }
-
+*/
     // Advanced MIDI controllers
     //
     m_chorusRotary->setPosition(float(instrument->getChorus()));

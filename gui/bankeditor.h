@@ -236,6 +236,9 @@ public slots:
     void slotEditCopy();
     void slotEditPaste();
 
+    void slotVariationToggled();
+    void slotVariationChanged(int);
+
 signals:
     void closing();
     void deviceNamesChanged();
@@ -273,6 +276,10 @@ protected:
     
     MidiProgramsEditor      *m_programEditor;
     KListView               *m_listView;
+
+    QGroupBox               *m_optionBox;
+    QCheckBox               *m_variationToggle;
+    KComboBox               *m_variationCombo;
 
     QPushButton             *m_closeButton;
     QPushButton             *m_resetButton;
