@@ -1825,8 +1825,7 @@ void DeleteTracksCommand::execute()
             m_oldTracks.push_back(track);
             if (m_composition->detachTrack(track) == false)
             {
-                RG_DEBUG << "DeleteTracksCommand::execute - "
-                         << "can't detach track" << endl;
+                RG_DEBUG << "DeleteTracksCommand::execute - can't detach track" << endl;
             }
         }
     }
@@ -1836,19 +1835,15 @@ void DeleteTracksCommand::execute()
     {
         for (tit = tracks.begin(); tit != tracks.end(); ++tit)
         {
-            if ((*tit).second->getId() > (*otIt)->getId())
+            if ((*tit).second->getPosition() > (*otIt)->getPosition())
             {
                 // If the track we've removed was after the current
                 // track then decrement the track position.
                 //
-                int newPosition = (*tit).second->getPosition();
-                if ((*tit).second->getPosition() > (*otIt)->getPosition())
-                    --newPosition;
+                int newPosition = (*tit).second->getPosition() - 1;
 
-                m_composition->resetTrackIdAndPosition
-                    ((*tit).second->getId(),
-                     (*tit).second->getId() - 1,
-                     newPosition);
+                (*tit).second->setPosition(newPosition);
+                
             }
         }
     }
@@ -1878,19 +1873,14 @@ void DeleteTracksCommand::unexecute()
         {
             --tit;
 
-            if ((*tit).second->getId() >= (*otIt)->getId())
+            if ((*tit).second->getPosition() >= (*otIt)->getPosition())
             {
                 // If the track we're adding has position after the
                 // current track then increment position.
                 //
-                int newPosition = (*tit).second->getPosition();
-                if ((*tit).second->getPosition() >= (*otIt)->getPosition())
-                   ++newPosition;
+                int newPosition = (*tit).second->getPosition() + 1;
 
-                m_composition->resetTrackIdAndPosition
-                    ((*tit).second->getId(),
-                     (*tit).second->getId() + 1,
-                     newPosition);
+                (*tit).second->setPosition(newPosition);
             }
 
             if (tit == tracks.begin()) break;
