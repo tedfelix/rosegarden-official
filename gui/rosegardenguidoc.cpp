@@ -912,7 +912,25 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment, KPr
 	    if (inChord) {
 	        outStream << "</chord>\n";
 	    }
+
+            // Add controllers 
+            Rosegarden::Segment::ControllerList list = segment->getControllerList();
+
+            if (list.size())
+            {
+                outStream << "<gui>\n"; // gui elements
+                Rosegarden::Segment::ControllerListConstIterator it;
+                for (it = list.begin(); it != list.end(); ++it)
+                {
+                    outStream << "  <controller value=\""
+                              << int(*it)
+                              << "\"/>\n";
+                }
+                outStream << "</gui>\n";
+            }
+
         }
+
 
     outStream << "</segment>\n"; //-------------------------
 

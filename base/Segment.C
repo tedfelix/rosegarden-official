@@ -981,6 +981,34 @@ Segment::setColourIndex(const unsigned int input)
     if (m_composition) m_composition->updateRefreshStatuses();
 }
 
+void
+Segment::addController(MidiByte controller)
+{
+    ControllerListConstIterator it;
+
+    for (it = m_controllerList.begin(); it != m_controllerList.end(); ++it)
+        if ((*it) == controller)
+            return;
+
+    m_controllerList.push_back(controller);
+}
+
+bool 
+Segment::deleteController(MidiByte controller)
+{
+    ControllerListIterator it;
+
+    for (it = m_controllerList.begin(); it != m_controllerList.end(); ++it)
+    {
+        if ((*it) == controller)
+        {
+            m_controllerList.erase(it);
+            return true;
+        }
+    }
+
+    return false;
+}
 
 SegmentHelper::~SegmentHelper() { }
 

@@ -32,6 +32,7 @@
 #include "NotationTypes.h"
 #include "RefreshStatus.h"
 #include "RealTime.h"
+#include "MidiProgram.h"
 
 namespace Rosegarden 
 {
@@ -492,6 +493,15 @@ public:
     /// For use by SegmentObserver objects like Composition & ViewElementsManager
     void removeObserver(SegmentObserver *obs) { m_observers.remove(obs); }
 
+    // List of visible controllers attached to this segment
+    //
+    typedef std::vector<MidiByte> ControllerList;
+    typedef std::vector<MidiByte>::iterator ControllerListIterator;
+    typedef std::vector<MidiByte>::const_iterator ControllerListConstIterator;
+
+    ControllerList& getControllerList() { return m_controllerList; }
+    void addController(MidiByte controller);
+    bool deleteController(MidiByte controller);
 
     //////
     //
@@ -546,6 +556,10 @@ private:
     };
     typedef std::multiset<Event*, ClefKeyCmp> ClefKeyList;
     mutable ClefKeyList *m_clefKeyList;
+
+    // Controllers currently selected as visible on this segment
+    //
+    ControllerList                m_controllerList;
 
 private: // stuff to support SegmentObservers
 

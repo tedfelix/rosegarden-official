@@ -340,6 +340,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     readOptions();
     setOutOfCtor();
+    setupControllerTabs();
 }
 
 MatrixView::~MatrixView()

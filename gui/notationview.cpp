@@ -623,6 +623,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     setConfigDialogPageIndex(1);
     setOutOfCtor();
+    setupControllerTabs();
     
     NOTATION_DEBUG << "NotationView ctor exiting" << endl;
 }

@@ -731,6 +731,30 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
 	m_groupIdMap.clear();
 
+    } else if (lcName == "gui") {
+
+        if (m_section != InSegment)
+        {
+            m_errorString = "Found GUI element outside Segment";
+            return false;
+        }
+
+    } else if (lcName == "controller") {
+
+        if (m_section != InSegment)
+        {
+            m_errorString = "Found Controller element outside Segment";
+            return false;
+        }
+
+        QString value = atts.value("value");
+
+        if (value != "")
+        {
+            m_currentSegment->addController(Rosegarden::MidiByte(value.toInt()));
+        }
+
+
     } else if (lcName == "resync") {
 
 	m_deprecation = true;

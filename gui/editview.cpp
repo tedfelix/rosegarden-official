@@ -618,19 +618,57 @@ EditView::setupAddControlRulerMenu()
         int i = 0;
         for (Rosegarden::ControlListConstIterator it = list->begin(); it != list->end(); ++it)
         {
-            //addControlRulerMenu->insertItem("Insert your items here");
             QString itemStr = i18n("%1 ruler").arg(strtoqstr((*it)->getName()));
             addControlRulerMenu->insertItem(itemStr, i++);
         }
 
-        connect(addControlRulerMenu, SIGNAL(activated(int)), SLOT(slotAddControlRuler(int)));
+        connect(addControlRulerMenu, SIGNAL(activated(int)),
+                SLOT(slotAddControlRuler(int)));
     }
 }
 
 void
+EditView::setupControllerTabs()
+{
+    // Setup control rulers the Segment already has some stored against it.
+    //
+    Rosegarden::Segment *segment = getCurrentSegment();
+    Rosegarden::Segment::ControllerList list = segment->getControllerList();
+
+    if (list.size())
+    {
+        Rosegarden::Studio &studio = getDocument()->getStudio();
+        Rosegarden::Segment::ControllerListConstIterator it;
+
+        for (it = list.begin(); it != list.end(); ++it)
+        {
+            // Get ControlParameter object from controller value
+            //
+            Rosegarden::ControlParameter *controlParameter = studio.getControlParameter(int(*it));
+
+            if (controlParameter)
+            {
+                ControllerEventsRuler* controlRuler = makeControllerEventRuler(controlParameter);
+                addControlRuler(controlRuler);
+            }
+        }
+
+        if (!m_controlRulers->isVisible())
+            m_controlRulers->show();
+
+        getBottomWidget()->layout()->invalidate();
+        getBottomWidget()->updateGeometry();
+        getCanvasView()->updateBottomWidgetGeometry();
+    }
+}
+
+
+
+void
 EditView::slotAddControlRuler(int controller)
 {
-    std::cout << "EditView::slotAddControlRuler - item = " << controller << std::endl;
+    std::cout << "EditView::slotAddControlRuler - item = " 
+              << controller << std::endl;
 
     Rosegarden::Studio &studio = getDocument()->getStudio();
     Rosegarden::ControlList *list = studio.getControlParameters();
@@ -650,6 +688,12 @@ EditView::slotAddControlRuler(int controller)
         getBottomWidget()->layout()->invalidate();
         getBottomWidget()->updateGeometry();
         getCanvasView()->updateBottomWidgetGeometry();
+
+        // Add the controller to the segment so the views can
+        // remember what we've opened against it.
+        //
+        Rosegarden::Staff *staff = getCurrentStaff();
+        staff->getSegment().addController(Rosegarden::MidiByte(controller));
     }
 }
 

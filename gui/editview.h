@@ -264,6 +264,11 @@ protected:
     void setupAddControlRulerMenu();
 
     /**
+     * Do this after any other segment setup in a subordinate view
+     */
+    void setupControllerTabs();
+
+    /**
      * Create an action menu for inserting notes from the PC keyboard,
      * and add it to the action collection.  This is one of the methods
      * called by setupActions().
