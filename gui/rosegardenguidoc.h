@@ -155,6 +155,7 @@ public:
 
     unsigned int getNbTracks() const { return m_composition.getNbTracks(); }
     unsigned int getDuration() const { return m_composition.getDuration(); }
+    unsigned int getNbBars()	     { return m_composition.getNbBars();   }
 
 public slots:
 

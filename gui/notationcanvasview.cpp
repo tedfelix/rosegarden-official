@@ -80,7 +80,8 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
                 m_lastYPosNearStaff = e->y();
 
                 //int pitch = getPitchForLine(m_currentHighlightedLine);
-                QString noteName = getNoteNameForLine(m_currentHighlightedLine);
+                QString noteName = getNoteNameForLine(m_currentHighlightedLine,
+						      e->x());
 //                 kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMouseMoveEvent() : "
 //                                      << noteName << endl;
 
@@ -245,15 +246,23 @@ NotationCanvasView::posIsTooFarFromStaff(const QPoint &pos)
 
 //??? ew... can't be doing this here can we? don't have the right info
 
-QString NotationCanvasView::getNoteNameForLine(const StaffLine *line)
+QString NotationCanvasView::getNoteNameForLine(const StaffLine *line,
+					       int x)
 {
     int h = line->getHeight();
 
     //!!! TODO -- take clef & key into account, and then accidental
-    std::string noteName = Rosegarden::NotationDisplayPitch(h,
-                                                       Rosegarden::NoAccidental).
-        getAsString(Rosegarden::Clef::DefaultClef,
-                    Rosegarden::Key::DefaultKey);
+
+    const NotationStaff *staff =
+	dynamic_cast<const NotationStaff *>(line->group());
+
+    Rosegarden::Clef clef;
+    Rosegarden::Key key;
+    staff->getClefAndKeyAtX(x, clef, key);
+
+    std::string noteName =
+	Rosegarden::NotationDisplayPitch(h, Rosegarden::NoAccidental).
+        getAsString(clef, key);
 
     return QString(noteName.c_str());
 }

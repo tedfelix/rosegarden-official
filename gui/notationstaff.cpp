@@ -291,6 +291,22 @@ void NotationStaff::setLines(double xfrom, double xto)
     m_initialBarB->setPoints((int)xfrom, sp.y(), (int)xfrom, ep.y());
 }
 
+void NotationStaff::getClefAndKeyAtX(int myx, Clef &clef,
+				     Rosegarden::Key &key) const
+{
+    unsigned int i;
+
+    for (i = 0; i < m_clefChanges.size(); ++i) {
+	if (m_clefChanges[i].first + x() > myx) break;
+	clef = m_clefChanges[i].second;
+    }
+
+    for (i = 0; i < m_keyChanges.size(); ++i) {
+	if (m_keyChanges[i].first + x() > myx) break;
+	key = m_keyChanges[i].second;
+    }
+}
+
 
 bool NotationStaff::showElements()
 {
@@ -315,9 +331,26 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
     START_TIMING;
 
     Clef currentClef; // default is okay to start with
+    m_clefChanges.empty();
+
+    Rosegarden::Key currentKey; // likewise
+    m_keyChanges.empty();
+
     NotationElementList::iterator end = getViewElementList()->end();
 
     for (NotationElementList::iterator it = from; it != end; ++it) {
+
+	if ((*it)->event()->isa(Clef::EventType)) {
+	    currentClef = Clef(*(*it)->event());
+	    m_clefChanges.push_back(ClefChange((*it)->getLayoutX(),
+					       currentClef));
+	}
+
+	if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
+	    currentKey = Rosegarden::Key(*(*it)->event());
+	    m_keyChanges.push_back(KeyChange((*it)->getLayoutX(),
+					     currentKey));
+	}
 
 	bool needNewSprite = true;
 	bool needBlueSprite = false;
@@ -416,17 +449,14 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
 
             } else if ((*it)->event()->isa(Clef::EventType)) {
 
-		currentClef = Clef(*(*it)->event());
                 pixmap = new QCanvasPixmap
-                    (m_npf->makeClefPixmap(currentClef));
+                    (m_npf->makeClefPixmap(Rosegarden::Clef(*(*it)->event())));
 
             } else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
 
                 pixmap = new QCanvasPixmap
                     (m_npf->makeKeyPixmap
-                     (Rosegarden::Key((*it)->event()->get<String>
-                                      (Rosegarden::Key::KeyPropertyName)),
-                      currentClef));
+		     (Rosegarden::Key(*(*it)->event()), currentClef));
 
             } else {
                     

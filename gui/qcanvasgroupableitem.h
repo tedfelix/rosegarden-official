@@ -57,8 +57,11 @@ public:
     /// Returns the QCanvasItemGroup this groupable item belongs to
     QCanvasItemGroup* group() { return m_group; }
 
+    /// Returns the QCanvasItemGroup this groupable item belongs to
+    const QCanvasItemGroup* group() const { return m_group; }
+
     /// Returns the QCanvasItem which this groupable item wraps
-    QCanvasItem*      item()  { return m_item; }
+    QCanvasItem *item() { return m_item; }
 
     /**
      * Same as moveBy(), except that the move is done relative to the

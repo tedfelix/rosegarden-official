@@ -370,18 +370,32 @@ RosegardenGUIDoc::createNewTrack(TrackItem *p, int instrument)
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewTrack(item : "
                          << p << ")\n";
 
-//    Track *newTrack = new Track(p->getItemNbTimeSteps(), p->getStartIndex());
-    Track *newTrack = new Track(p->getStartIndex());
+    Track *newTrack = new Track();
     newTrack->setInstrument(instrument);
-
-    // store ptr to new track in track part item
-    p->setTrack(newTrack);
 
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewTrack() new track = "
                          << newTrack << endl;
     
     m_composition.addTrack(newTrack);
-    newTrack->setDuration(p->getItemNbTimeSteps());
+
+    int startBar = p->getStartBar();
+    int barCount = p->getItemNbBars();
+
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewTrack() startBar = " 
+			 << startBar << ", barCount = " << barCount << endl;
+
+    timeT startIndex = m_composition.getBarRange(startBar).first;
+    timeT duration = m_composition.getBarRange(startBar + barCount).first -
+	startIndex;
+
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::createNewTrack() startIndex = " 
+			 << startIndex << ", duration = " << duration << endl;
+
+    newTrack->setStartIndex(startIndex);
+    newTrack->setDuration(duration);
+
+    // store ptr to new track in track part item
+    p->setTrack(newTrack);
 
     setModified();
 }

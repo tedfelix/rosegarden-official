@@ -100,11 +100,14 @@ public:
 
     unsigned int getNbTracks() const { return m_tracks.size(); }
 
-    /// returns the duration of the longest track
-    unsigned int getDuration() const;
+    /// returns the absolute end time of the track that ends last
+    timeT getDuration() const;
+
+    /// returns the total number of bars in the composition
+    unsigned int getNbBars() { return getBarNumber(getDuration()) + 1; }
 
     /// Removes all Tracks from the Composition and destroys them
-    void         clear();
+    void clear();
 
 
     //!!! The following four functions are currently entirely untested
@@ -125,9 +128,13 @@ public:
     timeT getBarEnd(timeT t);
 
     /**
-     * Return the time range of bar n.  Relatively inefficient
+     * Return the time range of bar n.  Relatively inefficient.
+     * If truncate is true, will stop at end of track and return last
+     * real bar if n is out of range; otherwise will happily return
+     * theoretical timings for bars beyond the real end of composition
+     * (this is used when extending tracks on the track editor).
      */
-    std::pair<timeT, timeT> getBarRange(int n);
+    std::pair<timeT, timeT> getBarRange(int n, bool truncate = false);
 
 
     //!!! these should go, as the results they return are entirely

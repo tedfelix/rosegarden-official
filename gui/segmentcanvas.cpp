@@ -40,24 +40,24 @@ TrackItem::TrackItem(int x, int y,
                      int nbSteps,
                      QCanvas* canvas)
     : QCanvasRectangle(x, y,
-                       nbStepsToWidth(nbSteps), m_itemHeight,
+                       nbBarsToWidth(nbSteps), m_itemHeight,
                        canvas),
       m_track(0)
 {
 }
 
-unsigned int TrackItem::getItemNbTimeSteps() const
+int TrackItem::getItemNbBars() const
 {
-    kdDebug(KDEBUG_AREA) << "TrackItem::getItemNbTimeSteps() : "
+    kdDebug(KDEBUG_AREA) << "TrackItem::getItemNbBars() : "
                          << rect().width() / m_widthToDurationRatio
                          << endl;
 
-    return widthToNbSteps(width());
+    return widthToNbBars(width());
 }
 
-timeT TrackItem::getStartIndex() const
+int TrackItem::getStartBar() const
 {
-    return timeT(x() / m_widthToDurationRatio * m_timeStepsResolution);
+    return (int)(x() / m_widthToDurationRatio * m_barResolution);
 }
 
 int TrackItem::getInstrument() const
@@ -75,14 +75,14 @@ void TrackItem::setWidthToDurationRatio(unsigned int r)
     m_widthToDurationRatio = r;
 }
 
-void TrackItem::setTimeStepsResolution(unsigned int r)
+void TrackItem::setBarResolution(unsigned int r)
 {
-    m_timeStepsResolution = r;
+    m_barResolution = r;
 }
 
-unsigned int TrackItem::getTimeStepsResolution()
+unsigned int TrackItem::getBarResolution()
 {
-    return m_timeStepsResolution;
+    return m_barResolution;
 }
 
 void TrackItem::setItemHeight(unsigned int h)
@@ -90,22 +90,24 @@ void TrackItem::setItemHeight(unsigned int h)
     m_itemHeight = h;
 }
 
-unsigned int TrackItem::nbStepsToWidth(unsigned int nbSteps)
+unsigned int TrackItem::nbBarsToWidth(unsigned int nbBars)
 {
-    if (nbSteps < m_timeStepsResolution) nbSteps = m_timeStepsResolution;
+    if (nbBars < m_barResolution) nbBars = m_barResolution;
 
-    return nbSteps * m_widthToDurationRatio / m_timeStepsResolution;
+    return nbBars * m_widthToDurationRatio / m_barResolution;
 }
 
-unsigned int TrackItem::widthToNbSteps(unsigned int width)
+unsigned int TrackItem::widthToNbBars(unsigned int width)
 {
-    return width * m_timeStepsResolution / m_widthToDurationRatio;
+    return width * m_barResolution / m_widthToDurationRatio;
 }
 
 
 unsigned int TrackItem::m_widthToDurationRatio = 1;
-unsigned int TrackItem::m_timeStepsResolution = 384;
+unsigned int TrackItem::m_barResolution = 1;
 unsigned int TrackItem::m_itemHeight = 10;
+
+
 
 //////////////////////////////////////////////////////////////////////
 //                TracksCanvas
@@ -245,9 +247,9 @@ void TracksCanvas::clear()
 
 /// called when reading a music file
 TrackItem*
-TracksCanvas::addPartItem(int x, int y, unsigned int nbSteps)
+TracksCanvas::addPartItem(int x, int y, unsigned int nbBars)
 {
-    TrackItem* newPartItem = new TrackItem(x, y, nbSteps, canvas());
+    TrackItem* newPartItem = new TrackItem(x, y, nbBars, canvas());
 
     newPartItem->setPen(m_pen);
     newPartItem->setBrush(m_brush);
@@ -273,12 +275,13 @@ TrackTool::TrackTool(TracksCanvas* canvas)
     : m_canvas(canvas),
       m_currentItem(0)
 {
+    m_canvas->setCursor(Qt::arrowCursor);
 }
 
 TrackTool::~TrackTool()
 {
-    m_canvas->setCursor(Qt::arrowCursor);
 }
+
 
 //////////////////////////////
 // TrackPencil
@@ -288,10 +291,14 @@ TrackPencil::TrackPencil(TracksCanvas *c)
     : TrackTool(c),
       m_newRect(false)
 {
+//    m_canvas->setCursor(Qt::ibeamCursor);
+
     connect(this, SIGNAL(addTrack(TrackItem*)),
             c,    SIGNAL(addTrack(TrackItem*)));
     connect(this, SIGNAL(deleteTrack(Rosegarden::Track*)),
             c,    SIGNAL(deleteTrack(Rosegarden::Track*)));
+    connect(this, SIGNAL(setTrackDuration(TrackItem*)),
+            c,    SIGNAL(updateTrackDuration(TrackItem*)));
 
     kdDebug(KDEBUG_AREA) << "TrackPencil()\n";
 }
@@ -316,7 +323,7 @@ void TrackPencil::handleMouseButtonPress(QMouseEvent *e)
             gy = m_canvas->grid().snapY(e->pos().y());
 
         m_currentItem = new TrackItem(gx, gy,
-                                      TrackItem::getTimeStepsResolution(),
+                                      TrackItem::getBarResolution(),
                                       m_canvas->canvas());
         
         m_currentItem->setPen(m_canvas->pen());
@@ -367,8 +374,8 @@ void TrackPencil::handleMouseButtonRelease(QMouseEvent*)
 
         kdDebug(KDEBUG_AREA) << "TracksCanvas::contentsMouseReleaseEvent() : shorten m_currentItem = "
                              << m_currentItem << endl;
-        // readjust size of corresponding track
-        m_currentItem->getTrack()->setDuration(m_currentItem->getItemNbTimeSteps());
+
+	emit setTrackDuration(m_currentItem);
     }
 
     m_currentItem = 0;
@@ -392,7 +399,7 @@ void TrackPencil::handleMouseMove(QMouseEvent *e)
 TrackEraser::TrackEraser(TracksCanvas *c)
     : TrackTool(c)
 {
-    m_canvas->setCursor(Qt::crossCursor);
+    m_canvas->setCursor(Qt::pointingHandCursor);
 
     connect(this, SIGNAL(deleteTrack(Rosegarden::Track*)),
             c,    SIGNAL(deleteTrack(Rosegarden::Track*)));
@@ -425,7 +432,7 @@ void TrackEraser::handleMouseMove(QMouseEvent*)
 TrackMover::TrackMover(TracksCanvas *c)
     : TrackTool(c)
 {
-    m_canvas->setCursor(Qt::pointingHandCursor);
+    m_canvas->setCursor(Qt::sizeAllCursor);
 
     connect(this, SIGNAL(updateTrackInstrumentAndStartIndex(TrackItem*)),
             c,    SIGNAL(updateTrackInstrumentAndStartIndex(TrackItem*)));
@@ -473,6 +480,9 @@ TrackResizer::TrackResizer(TracksCanvas *c)
     connect(this, SIGNAL(deleteTrack(Rosegarden::Track*)),
             c,    SIGNAL(deleteTrack(Rosegarden::Track*)));
 
+    connect(this, SIGNAL(setTrackDuration(Rosegarden::Track*)),
+            c,    SIGNAL(updateTrackDuration(Rosegarden::Track*)));
+
     kdDebug(KDEBUG_AREA) << "TrackResizer()\n";
 }
 
@@ -489,12 +499,12 @@ void TrackResizer::handleMouseButtonRelease(QMouseEvent*)
 {
     if (!m_currentItem) return;
 
-    unsigned int newNbTimeSteps = m_currentItem->getItemNbTimeSteps();
+    unsigned int newNbBars = m_currentItem->getItemNbBars();
 
-    kdDebug(KDEBUG_AREA) << "TrackResizer: set track nb time steps to "
-                         << newNbTimeSteps << endl;
+    kdDebug(KDEBUG_AREA) << "TrackResizer: set track nb bars to "
+                         << newNbBars << endl;
     
-    m_currentItem->getTrack()->setDuration(newNbTimeSteps);
+    emit setTrackDuration(m_currentItem);
 
     m_currentItem = 0;
 }

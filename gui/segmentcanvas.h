@@ -46,14 +46,14 @@ public:
      */
     TrackItem(int x, int y, int nbSteps, QCanvas* canvas);
 
-    /// Return the nb of time steps the item represents
-    unsigned int getItemNbTimeSteps() const;
+    /// Return the nb of bars the item represents
+    int getItemNbBars() const;
 
-    /// Return the time index at which the item's track starts
-    timeT getStartIndex() const;
+    /// Return the number of the bar at which the item's track starts
+    int getStartBar() const;
 
     /// Return the instrument for the item's track
-    int  getInstrument() const;
+    int getInstrument() const;
 
     /// Set the instrument for the item's track
     void setInstrument(int i);
@@ -67,25 +67,25 @@ public:
     /// Set the width to duration ratio for all TrackItem objects
     static void setWidthToDurationRatio(unsigned int);
 
-    /// Set the resolution in timesteps for all new TrackItem objects
-    static void setTimeStepsResolution(unsigned int);
+    /// Set the resolution in bars for all new TrackItem objects
+    static void setBarResolution(unsigned int);
 
-    /// Return the timestep resolution used by all TrackItem objects
-    static unsigned int getTimeStepsResolution();
+    /// Return the bar resolution used by all TrackItem objects
+    static unsigned int getBarResolution();
 
     /// Set the height of all new TrackItem objects
     static void setItemHeight(unsigned int);
 
     /**
-     * Helper function to convert a number of time steps to a width in
+     * Helper function to convert a number of bars to a width in
      * pixels
      */
-    static unsigned int nbStepsToWidth(unsigned int);
+    static unsigned int nbBarsToWidth(unsigned int);
     /**
      * Helper function to convert a width in pixels to a number of
-     * time steps
+     * bars
      */
-    static unsigned int widthToNbSteps(unsigned int);
+    static unsigned int widthToNbBars(unsigned int);
     
 protected:
     int m_instrument;
@@ -93,7 +93,7 @@ protected:
     Rosegarden::Track* m_track;
 
     static unsigned int m_widthToDurationRatio;
-    static unsigned int m_timeStepsResolution;
+    static unsigned int m_barResolution;
     static unsigned int m_itemHeight;
 
 };
@@ -207,6 +207,11 @@ signals:
     void deleteTrack(Rosegarden::Track*);
 
     /**
+     * Emitted when a Track's duration is changed
+     */
+    void updateTrackDuration(TrackItem*);
+
+    /**
      * Emitted when a Track is moved to a different start time
      * (horizontally) or instrument (vertically)
      */
@@ -267,6 +272,7 @@ public:
 signals:
     void addTrack(TrackItem*);
     void deleteTrack(Rosegarden::Track*);
+    void setTrackDuration(TrackItem*);
 
 protected:
     bool m_newRect;
@@ -315,6 +321,7 @@ public:
 
 signals:
     void deleteTrack(Rosegarden::Track*);
+    void setTrackDuration(TrackItem*);
 
 protected:
     bool cursorIsCloseEnoughToEdge(TrackItem*, QMouseEvent*);

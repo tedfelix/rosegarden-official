@@ -157,6 +157,9 @@ public:
      */
     void setLines(double xfrom, double xto);
 
+    void getClefAndKeyAtX(int x, Rosegarden::Clef &clef, Rosegarden::Key &key)
+	const;
+
     static const int nbLines;        // number of main lines on the staff
     static const int nbLegerLines;   // number of lines above or below
     static const int linesOffset;    // from top of canvas to top line (bad!)
@@ -183,6 +186,12 @@ protected:
     LineList m_barLines;
     LineList m_staffLines;
     SpriteSet m_timeSigs;
+
+    typedef std::pair<int, Rosegarden::Clef> ClefChange;
+    std::vector<ClefChange> m_clefChanges;
+
+    typedef std::pair<int, Rosegarden::Key> KeyChange;
+    std::vector<KeyChange> m_keyChanges;
 
     QCanvasLineGroupable *m_initialBarA, *m_initialBarB;
     NotePixmapFactory *m_npf;

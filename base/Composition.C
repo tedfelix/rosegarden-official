@@ -121,7 +121,7 @@ Composition::deleteTrack(Track *p)
     return true;
 }
 
-unsigned int
+timeT
 Composition::getDuration() const
 {
     unsigned int maxDuration = 0;
@@ -263,35 +263,55 @@ Composition::getBarEnd(timeT t)
     return (*i)->getAbsoluteTime();
 }
 
+
 std::pair<timeT, timeT>
-Composition::getBarRange(int n)
+Composition::getBarRange(int n, bool truncate)
 {
     calculateBarPositions();
 
     Track::iterator i = m_timeReference.begin();
 
-    timeT  start = m_timeReference.getDuration(),
-          finish = start;
+    timeT start = 0, finish = start;
     
-    for (int m = 0; m < n; ++m) {
-        if (i == m_timeReference.end()) break;
-        start = (*i)->getAbsoluteTime();
-        ++i;
-        if (i != m_timeReference.end()) finish = (*i)->getAbsoluteTime();
+    cerr << "Composition::getBarRange(" << n << ", " << truncate << ")" << endl;
+
+    TimeSignature timeSignature;
+
+    int m = 0;
+
+    if (i != m_timeReference.end()) {
+
+	for (; m <= n; ++m) {
+
+	    start = (*i)->getAbsoluteTime();
+
+	    cerr << "Composition::getBarRange: looking at time " << start << endl;
+
+	    if ((*i)->isa(TimeSignature::EventType)) {
+		timeSignature = TimeSignature(**i);
+	    }
+
+	    finish = start + timeSignature.getBarDuration();
+	    ++i;
+	    if (i == m_timeReference.end()) break;
+	}
     }
+
+    cerr << "Composition::getBarRange: start = " << start << ", finish = " << finish << endl;
+
+    if (!truncate &&
+	(m < n || finish == start)) { // reached end of composition too soon
+
+	cerr << "Composition::getBarRange: making it up (n = " << n << ", m = " << m << ")" << endl;
+
+	timeT d = timeSignature.getBarDuration();
+	if (m < n) start += d * (n - m);
+	finish = start + d;
+    }
+
+    cerr << "Composition::getBarRange: start = " << start << ", finish = " << finish << endl;
 
     return std::pair<timeT, timeT>(start, finish);
-}
-
-
-static Track::iterator findTimeSig(Track *t, timeT time)
-{
-    Track::iterator a, b;
-    t->getTimeSlice(time, a, b);
-    for (Track::iterator i = a; i != b; ++i) {
-	if ((*i)->isa(TimeSignature::EventType)) return i;
-    }
-    return t->end();
 }
 
 

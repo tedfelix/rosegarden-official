@@ -136,8 +136,9 @@ protected:
     /// returns the pitch the staff line is associated with
 /*!    int getPitchForLine(const StaffLine *line); */
 
-    /// Returns the note name (C4, Bb3) the staff line is associated with
-    QString getNoteNameForLine(const StaffLine *line);
+    /** Returns the note name (C4, Bb3) corresponding to the given x-coord
+	on the given line (x-coord needed to take clef/key into account) */
+    QString getNoteNameForLine(const StaffLine *line, int x);
 
     /// the staff line over which the mouse cursor is
     StaffLine* m_currentHighlightedLine;

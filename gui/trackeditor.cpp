@@ -38,26 +38,24 @@ static double canvasPosition;
 
 TracksEditor::TracksEditor(RosegardenGUIDoc* doc,
                            QWidget* parent, const char* name,
-                           WFlags)
-    : QWidget(parent, name),
-      DCOPObject("TracksEditorIface"),
-      m_document(doc),
-      m_tracksCanvas(0),
-      m_hHeader(0), m_vHeader(0),
-      m_timeStepsResolution(384)
+                           WFlags) :
+    QWidget(parent, name),
+    DCOPObject("TracksEditorIface"),
+    m_document(doc),
+    m_tracksCanvas(0),
+    m_hHeader(0),
+    m_vHeader(0)
 {
-    unsigned int docNbTracks = 0,
-        docNbTimeSteps = 0;
+    int tracks(doc->getNbTracks());
+    int bars(doc->getNbBars());
+/*
+    if (tracks == 0) tracks = 64;
+    if (bars == 0) bars = 100;
+*/
+    tracks = 64;
+    bars = 100;
 
-    if (doc) {
-//         kdDebug(KDEBUG_AREA) << "TracksEditor() : doc " << doc << endl;
-        docNbTracks = doc->getNbTracks();
-        docNbTimeSteps = doc->getDuration();
-    }
-
-    // TODO: do something clever with docNbTracks and docNbTimeSteps
-
-    init(64, 100);
+    init(tracks, bars);
 }
 
 
@@ -65,15 +63,16 @@ TracksEditor::TracksEditor(unsigned int nbTracks,
                            unsigned int nbBars,
                            QWidget *parent,
                            const char *name,
-                           WFlags)
-    : QWidget(parent, name),
-      m_document(0),
-      m_tracksCanvas(0),
-      m_hHeader(0), m_vHeader(0),
-      m_timeStepsResolution(384)
+                           WFlags) :
+    QWidget(parent, name),
+    m_document(0),
+    m_tracksCanvas(0),
+    m_hHeader(0),
+    m_vHeader(0)
 {
     init(nbTracks, nbBars);
 }
+
 
 void
 TracksEditor::init(unsigned int nbTracks, unsigned int nbBars)
@@ -123,6 +122,9 @@ TracksEditor::init(unsigned int nbTracks, unsigned int nbBars)
     QObject::connect(m_tracksCanvas, SIGNAL(deleteTrack(Rosegarden::Track*)),
                      this,           SLOT(deleteTrack(Rosegarden::Track*)));
 
+    QObject::connect(m_tracksCanvas, SIGNAL(updateTrackDuration(TrackItem*)),
+                     this,           SLOT(updateTrackDuration(TrackItem*)));
+
     QObject::connect(m_tracksCanvas, SIGNAL(updateTrackInstrumentAndStartIndex(TrackItem*)),
                      this,           SLOT(updateTrackInstrumentAndStartIndex(TrackItem*)));
 
@@ -142,10 +144,9 @@ TracksEditor::setupTracks()
 
     if (!m_document) return; // sanity check
     
-    const Composition &comp = m_document->getComposition();
+    Composition &comp = m_document->getComposition();
 
-    for (Composition::const_iterator i = comp.begin();
-         i != comp.end(); ++i) {
+    for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
 
         if ((*i)) {
 
@@ -155,18 +156,19 @@ TracksEditor::setupTracks()
                                  << " - instrument : " << (*i)->getInstrument()
                                  << endl;
 
-            int x = 0, y = 0;
+	    int startBar = comp.getBarNumber((*i)->getStartIndex());
+	    int barCount = comp.getBarNumber((*i)->getEndIndex()) - startBar +1;
 
-            y = m_vHeader->sectionPos((*i)->getInstrument());
-            x = m_hHeader->sectionPos((*i)->getStartIndex());
+            int y = m_vHeader->sectionPos((*i)->getInstrument());
+	    int x = m_hHeader->sectionPos(startBar);
 
-            TrackItem *newItem = m_tracksCanvas->addPartItem
-		(x, y, (*i)->getDuration());    
+            TrackItem *newItem = m_tracksCanvas->addPartItem(x, y, barCount);
             newItem->setTrack(*i);
         }
         
     }
 }
+
 
 void TracksEditor::addTrack(int instrument, int start,
                             unsigned int nbTimeSteps)
@@ -180,28 +182,18 @@ void TracksEditor::addTrack(int instrument, int start,
     comp.addTrack(track);
     track->setDuration(nbTimeSteps);
 
-    int y = m_vHeader->sectionPos(instrument),
-        x = m_hHeader->sectionPos(start);
+    int startBar = comp.getBarNumber(start);
+    int barCount = comp.getBarNumber(start + nbTimeSteps) - startBar + 1;
 
-    TrackItem *newItem = m_tracksCanvas->addPartItem(x, y, nbTimeSteps);    
+    int y = m_vHeader->sectionPos(instrument);
+    int x = m_hHeader->sectionPos(startBar);
+
+    TrackItem *newItem = m_tracksCanvas->addPartItem(x, y, barCount);
     newItem->setTrack(track);
 
     emit needUpdate();
 }
 
-
-
-unsigned int TracksEditor::getTimeStepsResolution() const
-{
-    return m_timeStepsResolution;
-}
-
-void TracksEditor::setTimeStepsResolution(unsigned int res)
-{
-    m_timeStepsResolution = res;
-    TrackItem::setTimeStepsResolution(m_timeStepsResolution);
-    setupHorizontalHeader();
-}
 
 void TracksEditor::trackOrderChanged(int section, int fromIdx, int toIdx)
 {
@@ -211,6 +203,7 @@ void TracksEditor::trackOrderChanged(int section, int fromIdx, int toIdx)
     updateTrackOrder();
     emit needUpdate();
 }
+
 
 void
 TracksEditor::addTrack(TrackItem *p)
@@ -227,6 +220,7 @@ TracksEditor::addTrack(TrackItem *p)
 
 }
 
+
 void TracksEditor::deleteTrack(Rosegarden::Track *p)
 {
     Composition& composition = m_document->getComposition();
@@ -239,10 +233,32 @@ void TracksEditor::deleteTrack(Rosegarden::Track *p)
     }
 }
 
+
+void TracksEditor::updateTrackDuration(TrackItem *i)
+{
+    Composition& composition = m_document->getComposition();
+
+    int startBar = m_hHeader->sectionAt(int(i->x()));
+    int barCount = i->getItemNbBars();
+
+    timeT startIndex = composition.getBarRange(startBar).first;
+    timeT duration = composition.getBarRange(startBar + barCount).first -
+	startIndex;
+
+    kdDebug(KDEBUG_AREA) << "TracksEditor::updateTrackDuration() : set duration to "
+                         << duration << endl;
+
+    i->getTrack()->setDuration(duration);
+}
+
+
 void TracksEditor::updateTrackInstrumentAndStartIndex(TrackItem *i)
 {
+    Composition& composition = m_document->getComposition();
+
     int instrument = m_vHeader->sectionAt(int(i->y()));
-    int startIndex = m_hHeader->sectionAt(int(i->x())) * getTimeStepsResolution();
+    int startBar = m_hHeader->sectionAt(int(i->x()));
+    timeT startIndex = composition.getBarRange(startBar).first;
 
     kdDebug(KDEBUG_AREA) << "TracksEditor::updateTrackInstrumentAndStartIndex() : set instrument to "
                          << instrument
@@ -251,6 +267,7 @@ void TracksEditor::updateTrackInstrumentAndStartIndex(TrackItem *i)
     i->setInstrument(instrument);
     i->getTrack()->setStartIndex(startIndex);
 }
+
 
 void TracksEditor::updateTrackOrder()
 {
@@ -267,10 +284,12 @@ void TracksEditor::updateTrackOrder()
     }
 }
 
+
 void TracksEditor::clear()
 {
     m_tracksCanvas->clear();
 }
+
 
 void TracksEditor::setupHorizontalHeader()
 {
@@ -278,22 +297,23 @@ void TracksEditor::setupHorizontalHeader()
 
     for (int i = 0; i < m_hHeader->count(); ++i) {
         m_hHeader->resizeSection(i, 50);
-        m_hHeader->setLabel(i, num.setNum(i * m_timeStepsResolution));
+	//!!! ??? I guess this is related to the bar resolution of the trackscanvas??
+        m_hHeader->setLabel(i, num.setNum(i));
     }
 }
 
 
 // Move the position pointer
 void
-TracksEditor::setPointerPosition(int position)
+TracksEditor::setPointerPosition(timeT position)
 {
   if (!m_pointer) return;
-
-  canvasPosition = ( m_hHeader->sectionSize(0) * position /
-                     m_timeStepsResolution );
+/*!!!
+  canvasPosition = (m_hHeader->sectionSize(0) * position /
+		    m_timeStepsResolution );
 
   m_pointer->setX(canvasPosition < 0 ? 0 : canvasPosition);
-
+*/
   emit needUpdate();
 }
 

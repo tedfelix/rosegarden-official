@@ -30,6 +30,8 @@
 
 #include "trackseditoriface.h"
 
+#include "Event.h" // for timeT
+
 namespace Rosegarden { class Track; }
 class TrackItem;
 class TracksCanvas;
@@ -89,7 +91,7 @@ public:
     /**
      * Returns the horizontal resolution of the grid in MIDI timesteps
      */
-    unsigned int getTimeStepsResolution() const;
+//!!!    unsigned int getTimeStepsResolution() const;
 
     /**
      * Add a new track - DCOP interface
@@ -102,17 +104,18 @@ public slots:
      * Sets the horizontal resolution of the grid in MIDI timesteps
      * (default is 384 - a whole note)
      */
-    void setTimeStepsResolution(unsigned int);
+//!!!    void setTimeStepsResolution(unsigned int);
     
     /**
      * Set the position pointer during playback
      */
-    void setPointerPosition(int position);
+    void setPointerPosition(Rosegarden::timeT position);
 
 protected slots:
     void trackOrderChanged(int section, int fromIdx, int toIdx);
     void addTrack(TrackItem*);
     void deleteTrack(Rosegarden::Track*);
+    void updateTrackDuration(TrackItem*);
     void updateTrackInstrumentAndStartIndex(TrackItem*);
 
 signals:
@@ -147,7 +150,7 @@ protected:
     QHeader *m_hHeader;
     Rosegarden::TrackHeader *m_vHeader;
 
-    unsigned int m_timeStepsResolution;
+//!!!    unsigned int m_timeStepsResolution;
 
     QCanvasLine *m_pointer;
 };
