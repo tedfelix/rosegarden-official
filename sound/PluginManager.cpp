@@ -58,8 +58,50 @@ LADSPAPlugin::LADSPAPlugin(const LADSPA_Descriptor *descriptor,
 
 LADSPAPlugin::~LADSPAPlugin()
 {
-    if (m_descriptor) delete m_descriptor;
 } 
+
+
+PluginPropertyList
+LADSPAPlugin::getPropertyList(const PluginProperty &property)
+{
+    PluginPropertyList list;
+
+    if (property == "")
+    {
+        // our LADSPA properties
+        list.push_back(PluginProperty("id"));
+        list.push_back(PluginProperty("label"));
+        list.push_back(PluginProperty("name"));
+        list.push_back(PluginProperty("author"));
+        list.push_back(PluginProperty("copyright"));
+        list.push_back(PluginProperty("numberofports"));
+    }
+    else if (m_descriptor)
+    {
+        if (property == "id")
+            list.push_back(PluginProperty("%1").arg(m_descriptor->UniqueID));
+        else if (property == "label")
+            list.push_back(PluginProperty(m_descriptor->Label));
+        else if (property == "name")
+            list.push_back(PluginProperty(m_descriptor->Name));
+        else if (property == "author")
+            list.push_back(PluginProperty(m_descriptor->Maker));
+        else if (property == "copyright")
+            list.push_back(PluginProperty(m_descriptor->Copyright));
+        else if (property == "numberofports")
+            list.push_back(PluginProperty("%1").arg(m_descriptor->PortCount));
+    }
+
+    return list;
+}
+
+PluginPropertyList
+LADSPAPlugin::getPortProperty(PluginPortId id, const PluginProperty &property)
+{
+    PluginPropertyList list;
+    return list;
+}
+
 
 #endif
 
@@ -71,6 +113,7 @@ PluginManager::PluginManager():
 
 PluginManager::~PluginManager()
 {
+    std::cout << "PluginManager::~PluginManager" << std::endl;
     clearPlugins();
 }
 
@@ -122,6 +165,7 @@ PluginManager::discoverPlugins()
 
     for (unsigned int i = 0; i < dir.count(); i++ )
         loadPlugin(m_path + std::string("/") + std::string(dir[i].data()));
+
 }
 
 void
@@ -161,7 +205,9 @@ PluginManager::loadPlugin(const std::string &path)
         }
         while(data);
     }
-    dlclose(pluginHandle);
+    else
+        dlclose(pluginHandle);
+
 #endif // HAVE_LADSPA
 
 }

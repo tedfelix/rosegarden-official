@@ -30,14 +30,23 @@
 #include <string>
 #include <vector>
 
+#include <qstring.h>
+#include <qvaluevector.h>
+
 namespace Rosegarden
 {
+
+// Note: same as MappedObjectPropertyList/MappedObjectProperty
+//
+typedef QString PluginProperty;
+typedef QValueVector<PluginProperty> PluginPropertyList;
 
 // Load and manage audio plugins - for the moment we only deal
 // with LADSPA types.
 //
 
 typedef unsigned int PluginId;
+typedef unsigned int PluginPortId;
 
 typedef enum
 {
@@ -48,7 +57,7 @@ class Plugin
 {
 public:
     Plugin(PluginType type, PluginId id, const std::string &libraryName);
-    ~Plugin();
+    virtual ~Plugin();
 
     std::string getName() { return m_name; }
     PluginType getType() { return m_type; }
@@ -59,6 +68,12 @@ public:
     std::string getLibraryName() { return m_libraryName; }
     void setLibraryName(const std::string &libraryName)
         { m_libraryName = libraryName; }
+
+    virtual
+        PluginPropertyList getPropertyList(const PluginProperty &property) = 0;
+
+    virtual PluginPropertyList
+        getPortProperty(PluginPortId id, const PluginProperty &property) = 0;
 
 protected:
 
@@ -76,7 +91,11 @@ public:
     LADSPAPlugin(const LADSPA_Descriptor *descriptor,
                  PluginId id,
                  const std::string &libraryName);
-    ~LADSPAPlugin();
+    virtual ~LADSPAPlugin();
+
+    virtual PluginPropertyList getPropertyList(const PluginProperty &property);
+    virtual PluginPropertyList getPortProperty(PluginPortId id,
+                                               const PluginProperty &property);
 
 protected:
 

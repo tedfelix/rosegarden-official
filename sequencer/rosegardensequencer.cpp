@@ -53,7 +53,8 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     m_loopEnd(0, 0),
     m_sendAlive(true),
     m_guiCount(0),       // how many GUIs have we known?
-    m_clearToSend(false)
+    m_clearToSend(false),
+    m_studio(new Rosegarden::MappedStudio())
 {
     // Without DCOP we are nothing
     QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
@@ -73,7 +74,7 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     // ALSA/JACK interface for both playback and recording. MappedStudio
     // aduio faders are also created.
     //
-    m_sequencer = new Rosegarden::Sequencer(&m_studio);
+    m_sequencer = new Rosegarden::Sequencer(m_studio);
 
     if (!m_sequencer)
     {
@@ -95,6 +96,9 @@ RosegardenSequencerApp::~RosegardenSequencerApp()
         SEQUENCER_DEBUG << "RosegardenSequencer - shutting down" << endl;
         delete m_sequencer;
     }
+
+    if (m_studio)
+        delete m_studio;
 }
 
 void
@@ -961,13 +965,13 @@ RosegardenSequencerApp::initialiseStudio()
 {
     // clear down the studio before we start adding anything
     //
-    m_studio.clear();
+    m_studio->clear();
 
     // Create a plugin manager
     //
     Rosegarden::MappedAudioPluginManager *pM =
       dynamic_cast<Rosegarden::MappedAudioPluginManager*>(
-        m_studio.createObject(Rosegarden::MappedObject::AudioPluginManager));
+        m_studio->createObject(Rosegarden::MappedObject::AudioPluginManager));
 
     if (pM)
         SEQUENCER_DEBUG << "created plugin manager" << endl;
@@ -977,7 +981,6 @@ RosegardenSequencerApp::initialiseStudio()
 #endif
 
     pM->discoverPlugins();
-
 }
 
 
@@ -990,7 +993,7 @@ RosegardenSequencerApp::setMappedProperty(int id,
                     << " : property = \"" << property << "\"" << endl;
                     */
 
-    Rosegarden::MappedObject *object = m_studio.getObject(id);
+    Rosegarden::MappedObject *object = m_studio->getObject(id);
 
     Rosegarden::MappedAudioFader *fader = 
         dynamic_cast<Rosegarden::MappedAudioFader*>(object);
@@ -1009,7 +1012,7 @@ RosegardenSequencerApp::getMappedObjectId(int type)
     int value = -1;
 
     Rosegarden::MappedObject *object =
-        m_studio.getObjectOfType(
+        m_studio->getObjectOfType(
                 Rosegarden::MappedObject::MappedObjectType(type));
 
     if (object)
@@ -1028,7 +1031,7 @@ RosegardenSequencerApp::getPropertyList(int id,
     QValueVector<QString> list;
 
     Rosegarden::MappedObject *object =
-        m_studio.getObject(id);
+        m_studio->getObject(id);
 
     if (object)
     {

@@ -349,7 +349,7 @@ private:
     // so you can reconstruct it at either end of the link for 
     // presentation, storage etc.
     //
-    Rosegarden::MappedStudio m_studio;
+    Rosegarden::MappedStudio *m_studio;
 
 };
  

@@ -37,6 +37,7 @@
 class RosegardenComboBox;
 class QCheckBox;
 class QSlider;
+class QPushButton;
 
 namespace Rosegarden { class AudioPluginManager; }
 
@@ -69,6 +70,10 @@ public slots:
     void slotActivateVelocity(bool value);
     void slotActivatePan(bool value);
     void slotActivateBank(bool value);
+
+    // select a plugin to go at an index number
+    //
+    void slotSelectPlugin(int index);
 
 signals:
 
@@ -110,6 +115,8 @@ protected:
     QCheckBox          *m_velocityCheckBox;
     RosegardenFader    *m_volumeFader;
     QLabel             *m_volumeValue;
+
+    QPushButton        *m_pluginButton;
 
     Rosegarden::Instrument *m_selectedInstrument;
 

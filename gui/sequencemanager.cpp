@@ -1624,7 +1624,7 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
         getSequencerMappedObjectId(Rosegarden::MappedObject::AudioPluginManager);
 
     Rosegarden::MappedObjectPropertyList seqPlugins
-        = getSequencerPropertyList(id, "thing");
+        = getSequencerPropertyList(id, "");
 
     Rosegarden::MappedObjectPropertyList::iterator it;
     Rosegarden::PluginId count = 0;

@@ -26,6 +26,7 @@ namespace Rosegarden
 {
 
 const MappedObjectProperty MappedObject::FaderLevel = "faderLevel";
+const MappedObjectProperty MappedAudioPluginManager::Plugins = "plugins";
 
 MappedStudio::MappedStudio():MappedObject("MappedStudio",
                                           Studio,
@@ -36,6 +37,7 @@ MappedStudio::MappedStudio():MappedObject("MappedStudio",
 
 MappedStudio::~MappedStudio()
 {
+    std::cout << "MappedStudio::~MappedStudio" << std::endl;
     clear();
 }
 
@@ -150,7 +152,7 @@ MappedStudio::clear()
 }
 
 MappedObjectPropertyList
-MappedStudio::getPropertyList(const QString &property)
+MappedStudio::getPropertyList(const MappedObjectProperty &property)
 {
     return MappedObjectPropertyList();
 }
@@ -184,7 +186,7 @@ MappedAudioFader::setLevel(MappedObjectValue param)
 }
 
 MappedObjectPropertyList 
-MappedAudioFader::getPropertyList(const QString &property)
+MappedAudioFader::getPropertyList(const MappedObjectProperty &property)
 {
     return MappedObjectPropertyList();
 }
@@ -257,15 +259,45 @@ MappedAudioPluginManager::~MappedAudioPluginManager()
 }
 
 
+// If we pass no argument then return the list of plugins
+//
 MappedObjectPropertyList
-MappedAudioPluginManager::getPropertyList(const QString &property)
+MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
 {
     MappedObjectPropertyList list;
 
-    PluginIterator it;
-    for (it = m_plugins.begin(); it != m_plugins.end(); it++)
-        list.push_back(QString((*it)->getName().c_str()));
+    if (property == "")
+    {
+        PluginIterator it;
+        for (it = m_plugins.begin(); it != m_plugins.end(); it++)
+            list.push_back(MappedObjectProperty((*it)->getName().c_str()));
 
+    }
+
+    return list;
+}
+
+
+MappedObjectPropertyList
+MappedAudioPluginManager::getPluginProperty(
+        PluginId id,
+        const MappedObjectProperty &property)
+{
+    MappedObjectPropertyList list;
+    Plugin *plugin = getPluginForId(id);
+
+    if (plugin)
+        list = plugin->getPropertyList(property);
+
+    return list;
+}
+
+MappedObjectPropertyList
+MappedAudioPluginManager::getPortProperty(PluginId pluginId,
+                                          PluginPortId portId,
+                                          const MappedObjectProperty &property)
+{
+    MappedObjectPropertyList list;
     return list;
 }
 

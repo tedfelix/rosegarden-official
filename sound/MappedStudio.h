@@ -49,7 +49,7 @@ typedef int          MappedObjectId;
 typedef QString      MappedObjectProperty;
 typedef int          MappedObjectValue;
 
-typedef QValueVector<QString> MappedObjectPropertyList;
+typedef QValueVector<MappedObjectProperty> MappedObjectPropertyList;
 
 
 // Every MappedStudio object derives from this class - if an
@@ -70,7 +70,8 @@ public:
     {
         Studio,
         AudioFader,
-        AudioPluginManager
+        AudioPluginManager,
+        AudioPlugin
     
     } MappedObjectType;
 
@@ -94,7 +95,7 @@ public:
     void setName(const std::string &name) { m_name= name; }
 
     virtual MappedObjectPropertyList
-        getPropertyList(const QString &property) = 0;
+        getPropertyList(const MappedObjectProperty &property) = 0;
 
 protected:
 
@@ -148,7 +149,8 @@ public:
 
     // Property list
     //
-    virtual MappedObjectPropertyList getPropertyList(const QString &property);
+    virtual MappedObjectPropertyList getPropertyList(
+            const MappedObjectProperty &property);
 
     // Return the object vector
     //
@@ -201,7 +203,8 @@ public:
 
     // Property list
     //
-    virtual MappedObjectPropertyList getPropertyList(const QString &property);
+    virtual MappedObjectPropertyList getPropertyList(
+            const MappedObjectProperty &property);
 
 protected:
 
@@ -218,18 +221,27 @@ protected:
 class MappedAudioPluginManager : public MappedObject, public PluginManager
 {
 public:
+    static const MappedObjectProperty Plugins;
+
+
     MappedAudioPluginManager(MappedObjectId id);
     ~MappedAudioPluginManager();
 
     // Property list
     //
-    virtual MappedObjectPropertyList getPropertyList(const QString &property);
+    virtual MappedObjectPropertyList getPropertyList(
+            const MappedObjectProperty &property);
+    MappedObjectPropertyList
+        getPluginProperty(PluginId id, const MappedObjectProperty &property);
 
+    MappedObjectPropertyList
+        getPortProperty(PluginId pluginId,
+                        PluginPortId portId,
+                        const MappedObjectProperty &property);
 
 protected:
 
 };
-
 
 }
 

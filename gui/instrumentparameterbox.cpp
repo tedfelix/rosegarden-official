@@ -29,6 +29,7 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qslider.h>
+#include <qpushbutton.h>
 
 #include "Midi.h"
 #include "Instrument.h"
@@ -61,6 +62,7 @@ InstrumentParameterBox::InstrumentParameterBox(
       m_velocityCheckBox(new QCheckBox(this)),
       m_volumeFader(new RosegardenFader(this)),
       m_volumeValue(new QLabel(this)),
+      m_pluginButton(new QPushButton(this)),
       m_selectedInstrument(0),
       m_pluginManager(pluginManager)
 {
@@ -120,6 +122,9 @@ InstrumentParameterBox::initBox()
     m_volumeFader->setMinValue(0);
     m_volumeValue->setFont(getFont());
 
+    m_pluginButton->setFont(getFont());
+    m_pluginButton->setText(i18n("<no plugin>"));
+
     gridLayout->addRowSpacing(0, 8);
 
     gridLayout->addRowSpacing(1, 30);
@@ -147,6 +152,8 @@ InstrumentParameterBox::initBox()
 
     gridLayout->addMultiCellWidget(m_volumeFader, 7, 9, 0, 0,  AlignCenter);
     gridLayout->addWidget(m_volumeValue, 10, 0, AlignCenter);
+
+    gridLayout->addMultiCellWidget(m_pluginButton, 7, 7, 1, 2, AlignCenter);
 
     // Populate channel list
     for (int i = 0; i < 16; i++)
@@ -234,6 +241,10 @@ InstrumentParameterBox::initBox()
     connect(m_channelValue, SIGNAL(propagate(int)),
             this, SLOT(slotSelectChannel(int)));
 
+    connect(m_pluginButton, SIGNAL(released()),
+            this, SLOT(slotSelectPlugin(int)));
+
+
     // don't select any of the options in any dropdown
     m_panValue->setCurrentItem(-1);
     m_velocityValue->setCurrentItem(-1);
@@ -282,6 +293,7 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         m_volumeFader->show();
         m_volumeValue->show();
         m_volumeFader->setFader(instrument->getVelocity());
+        m_pluginButton->show();
 
         return; // for the moment
     }
@@ -305,6 +317,7 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
 
         m_volumeFader->hide();
         m_volumeValue->hide();
+        m_pluginButton->hide();
     }
 
     // Set instrument name
@@ -668,5 +681,13 @@ InstrumentParameterBox::updateAllBoxes()
     }
 
 }
+
+
+void
+InstrumentParameterBox::slotSelectPlugin(int /*index*/) // no index 4 moment
+{
+}
+
+
 
 
