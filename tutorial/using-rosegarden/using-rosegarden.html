@@ -1,64 +1,30 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
-<HTML>
-<HEAD>
-<TITLE>Using Rosegarden</TITLE>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; CHARSET=iso-8859-1">
-<STYLE TYPE="text/css"><!--
-BODY { font-family: serif }
-H1 { font-family: sans-serif }
-H2 { font-family: sans-serif }
-H3 { font-family: sans-serif }
-H4 { font-family: sans-serif }
-H5 { font-family: sans-serif }
-H6 { font-family: sans-serif }
-SUB { font-size: smaller }
-SUP { font-size: smaller }
-PRE { font-family: monospace }
---></STYLE>
-</HEAD>
-<BODY>
-<DIV id="heading"> <IMG alt="" height="104" src="roses.png" width="183"><IMG
-alt="Rosegarden" height="104" src="title-rosegarden.png" width="400"></DIV><DIV
-id="nav"><SCRIPT type="text/javascript"> makeNav()</SCRIPT>
-<!--noscript-->
-<A href="http://www.all-day-breakfast.com/rosegarden/">
- Rosegarden-4</A>
-<BR> &nbsp;&nbsp;<A href="http://www.all-day-breakfast.com/rosegarden/">project
- home</A>
-<BR> &nbsp;&nbsp;<A href="../index.html">tutorial home</A>
-<BR> &nbsp;&nbsp;<A href="using-rosegarden.html">using Rosegarden</A>
-<BR></DIV><DIV id="main"><DIV ID="Frame1" STYLE="position: absolute; top: 0in; left: 0in; width: 5.79in; height: 1.45in; border: none; padding: 0in; background: #ffffff">
-<P ALIGN="CENTER" STYLE="font-style: normal; page-break-before: always">
- <FONT SIZE="7">Using Rosegarden</FONT></P>
-<P ALIGN="CENTER" STYLE="font-style: normal"><FONT SIZE="4">A Guide to
- Rosegarden-4 0.8.5</FONT></P>
-</DIV>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Using Rosegarden</title>
+    <link rel="stylesheet" href="../rose.css" media="screen">
+    <meta name="robots" content="index">
+    <meta name="keywords" content="Rosegarden tutorial, music notation, score, MIDI, sequencer, open source, free, shareware, Unix, Linux, SGI">
+    <meta name="description" content="Using Rosegarden is a ">
+    <script type="text/javascript" src="../rosenav.js"></script>
+  </head>
+  <body>
+    <div id="heading">
+      <img src="../roses.png" alt="" width="183" height="104"><img src="../title-rosegarden.png" alt="Rosegarden" width="400" height="104">
+    </div>
+
+    <div id="nav">
+    <script type="text/javascript">makeNav()</script>
+    <noscript>
+    <a href="http://www.all-day-breakfast.com/rosegarden/">Rosegarden-4</a><br>
+    &nbsp;&nbsp;<a href="http://www.all-day-breakfast.com/rosegarden/">project home</a><br>
+    &nbsp;&nbsp;<a href="index.html">tutorial home</a><br>
+    &nbsp;&nbsp;<a href="toc.html">Using Rosegarden</a><br>
+    </noscript>
+    </div>
+
+    <div id="main">
 <P ALIGN="CENTER" STYLE="font-style: normal">
-<BR>
-<BR></P>
-<P STYLE="font-weight: medium; page-break-before: always"><I>Foreword:</I>
-</P>
-<P STYLE="font-weight: medium"><I>Dear Reader: You are reading a work in
- progress. It's coming along quite nicely, but I still have miles to go.
- Please forgive the mess, and keep checking back, as this document gets
- better with age, just like Rosegarden itself.</I></P>
-<P STYLE="font-weight: medium"><I>Rosegarden is changing too fast for me
- to keep pace, and so I've given up trying. This document focuses on
- what Rosegarden-4 0.8.5 can do. It will be updated to reflect major
- changes in Rosegarden when it becomes worthwhile to do so. I'm shooting
- for a major re-write with version 1.0, and thereafter on a schedule
- matching major release numbers, but I may address specific issues in
- certain sections sooner, on an as-needed basis. If you are using CVS,
- or a newer version than 0.8.5 you will probably have features available
- that are not mentioned here, and your screens may look different.</I></P>
-<P STYLE="font-weight: medium"><I>Now, enough administrativa. Have a
- look at what's been done so far. I hope that, even in its present,
- immature state, this guide can be a useful resource for those getting
- to know Rosegarden.</I></P>
-<P ALIGN="LEFT" STYLE="font-style: normal">
-<BR>
-<BR></P>
-<P ALIGN="LEFT" STYLE="font-style: normal; page-break-before: always">
 <BR>
 <BR></P>
 <H1 CLASS="western" STYLE="page-break-before: always"><A NAME="1">1
@@ -69,14 +35,13 @@ id="nav"><SCRIPT type="text/javascript"> makeNav()</SCRIPT>
  to be a useful tool for those wanting to create music. It combines
  aspects of a MIDI sequencer, an audio sequencer, and a notation editor
  into one convenient, easy to use package that provides users with a
- consistent interface.</P>
-<P ALIGN="LEFT" STYLE="font-style: normal">It is a native KDE
+ consistent and mostly intuitive interface.</P>
+<P ALIGN="LEFT" STYLE="font-style: normal">Rosegarden is a native KDE
  application that can run on any system that has the KDE and QT
  libraries installed, and currently requires a minimum of KDE/QT 3.0 in
- order to run. Due to its dependence on ALSA, the Advanced Linux Sound
- Architecture, it is probably only useful to those running Linux
- systems, but it is designed to compile on any Unix-like platform that
- can run KDE.</P>
+ order to run. Many of its features may only work Linux systems, but it
+ is designed to compile and run on any Unix-like platform capable of
+ running KDE.</P>
 <H2 CLASS="western"><A NAME="1_2">1.2 This Guide's<I> Raison d'&ecirc;tre</I></A>
 </H2>
 <P ALIGN="LEFT" STYLE="font-style: normal">My goal in writing this guide
@@ -85,7 +50,7 @@ id="nav"><SCRIPT type="text/javascript"> makeNav()</SCRIPT>
  your own music. Rosegarden is easy to use, once you come to understand
  its framework, but it's not quite like anything you are likely to have
  used in the past. As such, I wish to take you on a guided tour through
- Rosegarden, to demonstrate its capabilities, and to offer you a
+ Rosegarden, to demonstrate many of its capabilities, and to offer you a
  foundation from which your own creative projects can spring.</P>
 <P ALIGN="LEFT">My intention here is not to write an exhaustive
  technical manual that covers every single possibility in dry detail.
@@ -93,57 +58,49 @@ id="nav"><SCRIPT type="text/javascript"> makeNav()</SCRIPT>
  real-world projects, and showing you things of interest along the way.
  I hope that by sharing my experiences and explaining how I've used
  Rosegarden to accomplish various and specific goals, we'll both be able
- to get more out of time spent with this application, for I am a student
- like you.</P>
+ to get more out of time spent with this application.</P>
 <H2 CLASS="western"><A NAME="1_3">1.3 Requirements</A></H2>
-<P ALIGN="LEFT">I assume that you have a recent version of Rosegarden 4,
- and that it's working properly. I leave it to you to surf to the<A HREF="http://www.all-day-breakfast.com/rosegarden/download.html">
- Rosegarden download</A> page and work outward from there if you don't
- already have a copy. Several distros already have a rosegarden4 or
- rosegarden-4 package available through mainstream or third-party
- channels, and if it isn't already, yours will probably be among them
- soon.</P>
+<P ALIGN="LEFT">I assume that you have at least Rosegarden 4 version
+ 0.8.5, and that it's working properly. I leave it to you to surf to the
+ Rosegarden download page at<A HREF="http://www.all-day-breakfast.com/download.html">
+</A><A HREF="http://www.all-day-breakfast.com/download.html">
+ http://www.all-day-breakfast.com/download.html</A><A HREF="http://www.all-day-breakfast.com/download.html">
+</A> and work outward from there if you don't already have a copy.
+ Several distros already have a rosegarden4 or rosegarden-4 package
+ available through mainstream or third-party channels, and if it isn't
+ already, yours will probably be among them soon.</P>
 <P><I>NOTE: Rosegarden is under constant development. As such, some
  details or screenshots described here may not exactly match the
  software in front of you. I intend to keep this guide useful, but I
  don't have the energy to re-write it and create new images from the top
- down every time someone adds a new icon somewhere.</I></P>
-<H2 CLASS="western"><A NAME="1_4">1.4 How I Use Rosegarden</A></H2>
+ down every time someone adds a new icon somewhere. I'm attempting to
+ keep this guide useful to those who are conservative enough to stay
+ away from CVS, but I may slip. If something I'm writing about doesn't
+ seem to exist, chances are that it was added since the last official
+ release.</I></P>
+<H2 CLASS="western"><A NAME="1_4">1.4 Intended Audience</A></H2>
 <P>The demonstration projects featured in this guide are all based on
  problems that I have solved for myself in the time since I began using
- Rosegarden. If I haven't done it, I can't write about it, and so it
- behooves you to see where I have gone, to decide whether my way of
- using this package bears any relevance to what you want to do with the
- software yourself.</P>
-<P>I use Rosegarden for a variety of musical purposes. Among them, I use
- it to compose and arrange music, to generate notation that I can play
- on real instruments, for sequencing MIDI and audio accompaniment to use
- when playing live, and to put recordings of myself playing various
- parts on a number of instruments together.</P>
+ Rosegarden. They are strongly influenced by my own musical interest as
+ an amateur, untrained composer, arranger, and musician.</P>
+<P>If it's not something I do, I'm not well-equipped to write about it,
+ and so it behooves you to see where I have gone, and where I'm going,
+ to decide whether my way of using this package bears any relevance to
+ what you want to do with the software yourself. Most notably, I am not
+ an audio guy, and I barely know anything about the subject. If you're
+ dying to dig into some complex audio project, and you know what terms
+ like &quot;DAW,&quot; &quot;ADAT,&quot; and &quot;MMC&quot; mean, then I'm afraid I will be of little
+ help.</P>
 <P>One might say that Rosegarden is my band in a box. I have precious
  little contact with musical people, and so I make heavy use of my
  computer as an accompanist in a variety of ways. I find that it is much
- more rewarding to play music with other people, even if those other
- people are actually me, or a synthesizer. When I'm not accompanying
+ more rewarding to play music with other people, even if those &quot;other
+ people&quot; are actually me, or a synthesizer. When I'm not accompanying
  myself with other live instruments, I can take advantage of the vast
  array of MIDI files available on the internet as and endless source of
  material for fun projects. (Believe me, there's no other way I would
- ever get to take a lead role in a Bach concerto, even if I were
- surrounded by musicians. :)</P>
-<P>I live in a small town with a poor selection of music available at
- higher than list prices. Rosegarden gives me the flexibility to play
- anything I want at a cost measured in hours instead of dollars. I can
- adapt literature written for one instrument to another instrument of my
- choosing, taking into account any need to change the range or to adapt
- the part so that it can easily be played on transposing instruments. On
- those occasions when I do part with cash for a nicely formatted
- arrangement (I heartily recommend<A HREF="http://www.virtualsheetmusic.com/">
- http://www.virtualsheetmusic.com/)</A>, I can still use Rosegarden to
- drive my synthesizers to arrange and play the parts for instruments
- that I don't own, or parts that are just too difficult for me to
- attempt. If a piece requires an unreachable or particularly nasty note,
- I can transpose the entire thing, accompaniment and all. The
- flexibility that Rosegarden affords me brings me enormous musical joy.</P>
+ ever get to play Bach. Real musicians would be too busy laughing at me
+ to play their parts. :)</P>
 <P>I involve a wide variety of source materials in these projects, but
  for the purpose of this guide, I will stick with completely original
  compositions, so as to avoid any potential copyright issues. They may
@@ -151,10 +108,9 @@ id="nav"><SCRIPT type="text/javascript"> makeNav()</SCRIPT>
  mangle them any way I choose without fear of any consequence more dire
  than rotten food being thrown at my head.</P>
 <H2 CLASS="western"><A NAME="1_5">1.5 The Author's Studio</A></H2>
-<P>Obviously, I can only show you what I can do myself, and that is
- hardware dependant. I'd like you to bear in mind what is sitting in
- front of me as I write this, and thus I will share the details of my
- studio.</P>
+<P>Obviously, what I can actually demonstrate is hardware dependant. I'd
+ like you to bear in mind what is sitting in front of me as I write
+ this, and thus I will share the details of my &quot;studio.&quot;</P>
 <P>I'm running a 1.0 GHz Athlon system with 256 MB of RAM. The box runs
  Debian Woody with aftermarket KDE 3.0.3 from a third-party apt-source,
  and a variety of other add-ons that I've had to compile for myself
@@ -180,76 +136,47 @@ id="nav"><SCRIPT type="text/javascript"> makeNav()</SCRIPT>
  against Jack, but have not yet managed to actually get the two to
  co-exist, so I run one or the other, depending on what I want to do
  with Rosegarden.</P>
-<P>I run Rosegarden from CVS, which I compile frequently. As of this
- writing, the latest stable version is Rosegarden-4 0.8.5.</P>
+<P>I run Rosegarden from CVS, which I build pretty much every day. As of
+ this writing, the latest stable version is Rosegarden-4 0.8.5, but that
+ version is very old.</P>
 <P>
 <BR>
 <BR></P>
 <H2 ALIGN="LEFT" CLASS="western"><A NAME="1_6">1.6 History</A></H2>
-<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" WIDTH="100%"><COL WIDTH="64*">
-<COL WIDTH="64*"><COL WIDTH="128*">
-<TR VALIGN="TOP"><TD WIDTH="25%">
-<P ALIGN="LEFT"><U><B>Version</B></U></P>
-</TD><TD WIDTH="25%">
-<P ALIGN="LEFT"><U><B>Date</B></U></P>
-</TD><TD WIDTH="50%">
-<P ALIGN="LEFT"><U><B>Notes</B></U></P>
-</TD></TR>
-<TR><TD VALIGN="TOP" WIDTH="25%">
-<P ALIGN="LEFT">0.pre1</P>
-</TD><TD SDNUM="1033;0;MM/DD/YY" SDVAL="37600" VALIGN="BOTTOM" WIDTH="25%">
-<P ALIGN="LEFT">12/10/02</P>
-</TD><TD VALIGN="TOP" WIDTH="50%">
-<P ALIGN="LEFT">Initial public draft</P>
-</TD></TR>
-<TR><TD SDNUM="1033;" SDVAL="0.1" VALIGN="BOTTOM" WIDTH="25%">
-<P ALIGN="LEFT">0.1</P>
-</TD><TD SDNUM="1033;0;MM/DD/YY" SDVAL="37605" VALIGN="BOTTOM" WIDTH="25%">
-<P ALIGN="LEFT">12/15/02</P>
-</TD><TD VALIGN="TOP" WIDTH="50%">
-<P ALIGN="LEFT">Merged into CVS</P>
-</TD></TR>
-<TR><TD SDNUM="1033;" SDVAL="0.2" VALIGN="BOTTOM" WIDTH="25%">
-<P ALIGN="LEFT">0.2</P>
-</TD><TD SDNUM="1033;0;MM/DD/YY" SDVAL="37606" VALIGN="BOTTOM" WIDTH="25%">
-<P ALIGN="LEFT">12/16/02</P>
-</TD><TD VALIGN="TOP" WIDTH="50%">
-<P ALIGN="LEFT">Re-structuring...</P>
-</TD></TR>
-<TR><TD SDNUM="1033;" SDVAL="0.3" VALIGN="BOTTOM" WIDTH="25%">
-<P ALIGN="LEFT">0.3</P>
-</TD><TD SDNUM="1033;0;MM/DD/YY" SDVAL="37609" VALIGN="BOTTOM" WIDTH="25%">
-<P ALIGN="LEFT">12/19/02</P>
-</TD><TD VALIGN="TOP" WIDTH="50%">
-<P ALIGN="LEFT">Numerous changes, re-structuring, expanded Notation
- Editor section, tons of new pixmaps, etc.</P>
-</TD></TR>
-<TR><TD SDNUM="1033;" SDVAL="0.4" VALIGN="BOTTOM" WIDTH="25%">
-<P ALIGN="LEFT">0.4</P>
-</TD><TD SDNUM="1033;0;MM/DD/YY" SDVAL="37622" VALIGN="BOTTOM" WIDTH="25%">
-<P ALIGN="LEFT">01/01/03</P>
-</TD><TD VALIGN="TOP" WIDTH="50%">
-<P ALIGN="LEFT">Conversion from a tutorial to a guide continues. Model
- is changing from that of a single project to one of multiple small
- projects, and the new structure hopes to be more extensible. Switched
- to OpenOffice.org-native document source, with exported HTML.</P>
-</TD></TR>
-<TR><TD SDNUM="1033;" SDVAL="0.5" VALIGN="BOTTOM" WIDTH="25%">
-<P ALIGN="LEFT">0.5</P>
-</TD><TD SDNUM="1033;0;MM/DD/YY" SDVAL="37633" VALIGN="BOTTOM" WIDTH="25%">
-<P ALIGN="LEFT">01/12/03</P>
-</TD><TD VALIGN="TOP" WIDTH="50%">
-<P ALIGN="LEFT">Added Studio and Segment intro, began using master
- document in conjunction with htmldoc to provide TOC and multi-file
- features, cleaned up cruft as much as possible, and unified the
- presentation into something less unfinished looking.</P>
-</TD></TR>
-</COL></COL></COL></TABLE>
+<P ALIGN="LEFT"><U><B>Date Notes</B></U></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium; text-decoration: none">
+12/10/02 Initial public draft</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium; text-decoration: none">
+12/15/02 Merged into CVS tree</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium; text-decoration: none">
+12/16/02 First re-write begins...</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium; text-decoration: none">
+12/19/02 Continues...</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium; text-decoration: none">
+01/01/03 Conversion from &quot;tutorial&quot; to &quot;guide&quot; and shift of development
+ model</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium; text-decoration: none">
+01/12/03 Added Studio, re-structured to introduce segments in a logical
+ place</P>
+<P ALIGN="LEFT">
+<!--SPAN STYLE="font-weight: medium"-->
+
+<!--SPAN STYLE="text-decoration: none"-->
+01/19/03 Greatly improved Studio chapter, multiple edits
+ and tweaks</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium; text-decoration: none">
+<BR>
+<BR></P>
 <H2 CLASS="western"><A NAME="1_7">1.7 Getting This Document</A></H2>
 <P>The latest version of the<I> Using Rosegarden</I> is always available
- from<A HREF="http://rosegarden.sourceforge.net/guide/using-rosegarden/using-rosegarden.html">
- http://rosegarden.sourceforge.net/guide/using-rosegarden/using-rosegarden.html
+ from<A HREF="http://rosegarden.sourceforge.net/tutorial/using-rosegarden/using-rosegarden.html">
+ http://rosegarden.sourceforge.net/tutorial/using-rosegarden/using-rosegarden.html
 </A></P>
+<P>You'll also want to snag<A HREF="http://rosegarden.sourceforge.net/tutorial/using-rosegarden/toc.html">
+ <U>toc.html</U></A> to get the Table of Contents. If you intend to
+ print this, you can grab<A HREF="http://rosegarden.sourceforge.net/tutorial/using-rosegarden/using-rosegarden.pdf">
+ <U>using-rosegarden.pdf</U></A> from the same site. (The PDF version
+ includes the Table of Contents.)</P>
 <P>You can also get it from CVS in the same way you get Rosegarden. It's
  part of the module called<B> tutorial</B>. I'm too lazy to go dig out
  and prettily format the instructions for this at the moment, but I've
@@ -263,6 +190,15 @@ id="nav"><SCRIPT type="text/javascript"> makeNav()</SCRIPT>
  contents are protected under the terms of the GNU Free Documentation
  License, a copy of which is available at<A HREF="http://www.gnu.org/licenses/fdl.txt">
  http://www.gnu.org/licenses/fdl.txt</A></P>
+<P>I acknowledge that words like &quot;Roland,&quot; &quot;Yamaha,&quot; &quot;General MIDI,&quot;
+ &quot;GS,&quot; &quot;XG,&quot; and numerous others that I haven't even considered, but
+ should have, are owned by important, well-monied corporations and
+ probably need to have cute little symbols in circles or superscript or
+ something attached to their names. I have far better things to do than
+ try to figure out which cute little symbols are supposed to go on which
+ names, but if representatives from any of the corporations who own
+ those words would be so kind as to inform me which little symbols need
+ to be attached to them, I will attach such symbols forthwith.</P>
 <H1 ALIGN="LEFT" CLASS="western"><A NAME="2">2 A First Look</A></H1>
 <H2 CLASS="western"><A NAME="2_1">2.1 Starting Rosegarden</A></H2>
 <P ALIGN="LEFT">Let's begin by starting Rosegarden, and having a look at
@@ -303,9 +239,9 @@ HEIGHT="27" NAME="Graphic40" SRC="using-rosegarden_html_13d26953.png" WIDTH="210
 HEIGHT="29" NAME="Graphic41" SRC="mini-transport.png" WIDTH="211"></P>
 <P ALIGN="LEFT" STYLE="font-weight: medium">Next in line is the<B> Zoom</B>
  slider:</P>
-<P ALIGN="CENTER" STYLE="font-weight: medium">
-<BR>
-<BR></P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+HEIGHT="27" NAME="Graphic29" SRC="using-rosegarden_html_47dd4a5.png" WIDTH="270">
+</P>
 <P ALIGN="CENTER" STYLE="font-weight: medium">
 <BR>
 <BR></P>
@@ -384,114 +320,418 @@ WIDTH="26"> cursor to split one of the segments, then one of the pieces
 <P ALIGN="CENTER" STYLE="font-style: normal; font-weight: medium"><IMG ALIGN="BOTTOM"
 BORDER="0" HEIGHT="120" NAME="Graphic73" SRC="using-rosegarden_html_m744cffee.png"
 WIDTH="470"></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium"><I>I don't have time at the
+ moment to edit more graphics, but I'll mention that you can also merge
+ segments. Select two or more segments on any number of tracks, and use<B>
+ Segments -&gt; Collapse Segments</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ to consolidate them. I can't check
+ that at the moment because my CVS copy of Rosegarden doesn't currently
+ have a working Segments menu. Oops. ;)</I></P>
 <P ALIGN="LEFT" STYLE="font-style: normal; font-weight: medium">By now,
  you're probably wondering when we're going to do something useful, so
  let's go take a look at the<B> Studio</B>.</P>
 <H2 CLASS="western"><A NAME="2_4">2.4 The Studio</A></H2>
 <P>Before importing anything into Rosegarden, we're going to want to set
- up instrument definitions for all of our MIDI devices so that nothing
- gets lost in the translation.</P>
-<P>The<B> Studio</B> is where this is done. The mechanism for doing so
- works, but as of this writing it's a bit difficult to understand.
- There's some kind of mysterious Dummy MIDI Device in use that solves
- some kind of internal problem the developers were having, but it's not
- terribly intuitive. Hopefully this will change soon.</P>
-<P>In the meantime, let's use what we've got. To set up instrument
- names, we want<B> Studio -&gt; Manage Midi Devices...</B></P>
+ up instrument definitions for all of our MIDI devices so that any bank
+ changes don't get lost in the translation. If there's no
+<!--SPAN STYLE="font-weight: medium"-->
+ instrument
+ definition for a particular program/bank change, then information will
+ disappear at import time and the file will be interpreted as pure
+ General MIDI. (This is of little consequence if you only use General
+ MIDI, but setting things up in advance will save you from having to
+ tweak any imported GS, XG or other device-specific files to correct the
+ lost program changes.)</P>
+<P>The<B> Studio</B>
+<!--SPAN STYLE="font-weight: medium"-->
+, which resides on the<B> Studio -&gt; Manage MIDI
+ Devices...</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ menu,<B></B> is where all of this is accomplished, and
+ it's your interface for relating to one of Rosegarden's most unusual
+ features. Hopefully I can shed some light and help you to make use of
+ this very important and heavily misunderstood feature.</P>
+<P><FONT SIZE="2"><I>NOTE: This facility was only recently added to
+ Rosegarden. If you're not running at least version 0.8.5, you'll need
+ to upgrade to 0.8.5 or CVS before you can make use of these features.
+ If this chapter is completely baffling to you, check your version.</I></FONT>
+</P>
+<H2 CLASS="western"><A NAME="2_5">2.5 Instruments, Banks and Devices</A></H2>
+<P STYLE="font-weight: medium">Before you can accomplish anything with
+ the<B> Studio</B>
+<!--SPAN STYLE="font-weight: medium"-->
+, you need to understand what a<B> device</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ is. A<B>
+ device</B>
+<!--SPAN STYLE="font-weight: medium"-->
+, simply stated, is a data structure that contains up to
+ numerous<B> banks</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ of instrument definitions.</P>
+<P STYLE="font-weight: medium">A<B> device</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ is a Rosegarden
+ construct, a storage container, that has absolutely no correlation to
+ the term &quot;device&quot; as you might apply it in a context like &quot;MIDI
+ device,&quot; referring to something like your Aunt Matilda's MIDI piano, or
+ &quot;MIDI device&quot; referring to your MPU-401 card or your soundcard's
+ on-board synthesizer. It's best if you treat<B> device</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ in
+ Rosegarden's context as though it were a false cognante (<I>
+<!--SPAN STYLE="font-weight: medium"-->
+les faux
+ amis</I>
+<!--SPAN STYLE="font-style: normal"-->
+) in a foreign language. It looks like English, and sounds like
+ English, but no English language dictionary definition of this term
+ will help you to understand the language of Rosegarden.</P>
+<P STYLE="font-weight: medium">
+<!--SPAN STYLE="font-weight: medium"-->
+
+<!--SPAN STYLE="font-weight: medium"-->
+In Rosegarden parlance, a<B> device</B>
+<!--SPAN STYLE="font-weight: medium"-->
+
+ is a construct that<B></B>
+<!--SPAN STYLE="font-weight: medium"-->
+ contains up to numerous<B> banks</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ of<B>
+ instrument definitions</B> that are attached to a particular set of
+ ports. If you have only one MIDI device, and it doesn't support
+ anything more than the basic General MIDI instrument set, then the<B>
+ device</B> need only contain one<B> bank</B> with a single set of
+ instrument definitions<B></B> attached to your only port
+<!--SPAN STYLE="font-weight: medium"-->
+, and you're in
+ luck, because that's how Rosegarden comes configured out of the box.
+ You can skip ahead to something more interesting, and save yourself a
+ headache.</P>
+<P STYLE="font-weight: medium">If, on the other hand, you have two
+ soundcards with a MIDI port each, and you're also using an IIWU Soft
+ Synth, your<B> device</B> might contain several<B> banks</B> of<B>
+ instrument definitions</B>, and you need to sit down and read a bit.
+ People with anything more than the most rudimentary MIDI setup should
+ probably go grab a snack, strap on their thinking caps, then read on.</P>
+<H2 CLASS="western"><A NAME="2_6">2.6
+<!--SPAN STYLE="font-weight: medium"-->
+ No Global Instrument Definitions</A>
+</H2>
+<P STYLE="font-weight: medium">Every native Rosegarden composition (<B>
+.rg</B>) file contains a<B> device</B>, along with note events and other
+ types of data. It's a good idea to configure your<B> device</B> early
+ on, because anything you save with incorrect instrument definitions
+ will need to be corrected later. It's not absolutely critical, because
+ there's also a special subset of the Rosegarden format that stores just
+ the definition for a<B> device</B> in a file with an<B> .rgd</B>
+ extension, and it's possible to load all or part of the<B></B>
+ instrument definitions these files contain into existing compositions.
+ However, the sooner you get things configured, the less work you'll
+ need to do later.</P>
+<P>Unlike most other programs, there are no global<B> device</B>
+ settings. Everything is done on a per-file basis, and the<B> device</B>
+ definition remains bound up with each individual composition,
+ presenting special concerns when you want to share your work with other
+ people who have different setups. It is not possible to set up a
+ definition of your hardware only once, and have anything that you
+ subsequently load fit itself into that mold automatically; instead you
+ must manually adjust each file you load. This is probably a strength
+ for those who load a different soundfont for every composition, if they
+ can keep track of which soundfont to load for which, but I could be
+ quite confusing for users of more conventional MIDI gear whose
+ available instruments never change.</P>
+<P><FONT SIZE="2"><I>NOTE: The<B> device</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ contains instrument
+ definitions for every MIDI device (port) that was available at the time
+ the composition was created It's possible for a composition to contain
+ hidden definitions for unavailable MIDI devices,
+<!--SPAN STYLE="font-weight: medium"-->
+ which magically
+ re-appear when the port is once again visible to Rosegarden.</I></FONT></P>
+<P STYLE="font-weight: medium"><FONT SIZE="2"><I>TIP: To approximate
+ global settings, you can set up a<B> device</B> definition to describe
+ all of your synthesizers and save it to
+ $PREFIX/share/apps/rosegarden/autoload.rg. ($PREFIX is the path where
+ Rosegarden is installed. Typically /usr, /usr/local or /opt. You will
+ most likely need root access in order to accomplish this.)</I></FONT></P>
+<H2 CLASS="western"><A NAME="2_7">2.7 A Device Dissected</A></H2>
+<P STYLE="font-weight: medium">
+<!--SPAN STYLE="font-weight: medium"-->
+Let's take a look at what an<B> .rgd</B>
+<!--SPAN STYLE="font-weight: medium"-->
+
+ file (or the<B> device</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ portion of an<B> .rg</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ file)<B></B> might
+ contain. In this scenario, the user has two soundcards with an external
+ MIDI port on each of them, and he is additionally running an IIWU soft
+ synth on one of them. He has a Roland SC-33 attached to the port on
+ soundcard 0, and a Casiotone SUX-10 attached to the port on soundcard
+ 1. He has loaded or created<B> instrument definitions</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ for all three
+ synthesizers, and they are all rolled into one complex<B> .rgd</B>
+<!--SPAN STYLE="font-weight: medium"-->
+
+ file.</P>
+<P STYLE="font-weight: medium">
+<BR>
+<BR></P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="LEFT" BORDER="0"
+HEIGHT="480" NAME="Graphic11" SRC="using-rosegarden_html_m617b76fb.png" WIDTH="640">
+<BR CLEAR="LEFT">
+<BR>
+<BR></P>
+<P STYLE="font-weight: medium">
+<BR>
+<BR></P>
+<P STYLE="font-weight: medium"><FONT SIZE="2"><I>TIP: Remember, once
+ again, that these<B> devices</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ contain<B> banks</B> of instrument
+ definitions for any hardware that was visible to Rosegarden at the time
+ of their creation. For example, you have three ports available, as in
+ the above scenario. Once you've saved a composition as an<B> .rgd</B>
+ file, it will thenceforth contain a<B> device</B> similar to the above.
+ If you disable one of your ports, you'll no longer see the<B> banks</B>
+ attached to it, but they will still be there, and will re-appear the
+ next time the port is visible to Rosegarden.</I></FONT></P>
+<H2 CLASS="western"><A NAME="2_8">2.8
+<!--SPAN STYLE="font-weight: medium"-->
+ Loading An Instrument Definition</A>
+</H2>
+<P STYLE="font-weight: medium">Now that you have enough background to
+ understand what I'm about to show you, let's see about changing the
+ default<B> device</B>
+<!--SPAN STYLE="font-weight: medium"-->
+.</P>
+<P STYLE="font-weight: medium">Again, this is accomplished via<B> Studio
+ -&gt; Manage MIDI Devices...</B></P>
 <P ALIGN="CENTER"><B><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="48" NAME="Graphic62"
 SRC="using-rosegarden_html_27114f37.png" WIDTH="225"></B></P>
-<P STYLE="font-weight: medium">To load a bank, you'll want to use the<B>
- Import Device</B> button. The standard available banks in the<B>
- Library</B> will become available, and your screen should resemble
- this:</P>
-<P><B><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="558" NAME="Graphic42" SRC="using-rosegarden_html_m46b0d54e.png"
-WIDTH="865"></B></P>
+<P STYLE="font-weight: medium">To load a set of<B> instrument
+ definitions</B>, you'll first want to select a destination port from
+ among those available. Rosegarden can't quite decide what to call these
+ portals through which you transmit notes to something that plays them,
+ and doesn't want to call them &quot;ports.&quot; It chooses not to call them
+ anything at all, which can lead to some confusion.</P>
+<P STYLE="font-weight: medium">You may have something called &quot;External
+ MIDI 0&quot; or something called &quot;Dummy MIDI Device&quot; or anything in between.
+ You'll likely have to resort to trial and error to figure out what is
+ connected to what if you have a complex setup. If you only have one
+ port available, you have no problem, as in this example:</P>
+<P STYLE="font-weight: medium">
+<BR>
+<BR></P>
+<P STYLE="font-weight: medium"><IMG ALIGN="LEFT" BORDER="0" HEIGHT="158" NAME="Graphic30"
+SRC="using-rosegarden_html_m6dab600e.png" WIDTH="396">
+<BR CLEAR="LEFT">
+<BR>
+<BR></P>
+<P STYLE="font-weight: medium">The first level of the tree is the path
+ to the MIDI device. The branches of the tree point to<B> banks</B>,
+ each of which can contain instrument definitions for program changes
+ numbered 1-128. MIDI uses two parameters, called<B> MSB</B> and<B> LSB</B>
+ by Rosegarden, to change banks,<B></B> and their implementation is
+ device-dependent. Notably, GS and XG have very different ideas about
+ what to do with banks. Rosegarden allows you only one definition per<B>
+ bank</B>, each with a unique<B> MSB/LSB</B> address.</P>
+<P STYLE="font-weight: medium">Now, to load a set of standard<B> banks</B>
+ that will define the instruments available for playing via the
+ &quot;External MIDI 0&quot; port, use the<B> Import Device</B> button.</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+HEIGHT="111" NAME="Graphic45" SRC="using-rosegarden_html_m4fd278e.png" WIDTH="372">
+</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">You'll be presented with a
+ list of<B> devices</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ (<B>.rgd</B> files) from which to choose. By
+ default, you'll be presented with selections from the Rosegarden<B>
+ library</B>:</P>
+<P ALIGN="LEFT"><B><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="558" NAME="Graphic42"
+SRC="using-rosegarden_html_m46b0d54e.png" WIDTH="865"></B></P>
 <P><B>GM</B>
 <!--SPAN STYLE="font-weight: medium"-->
- is the standard General MIDI bank.<B> GS</B>
+ is a<B> device</B>
 <!--SPAN STYLE="font-weight: medium"-->
- contains
- definitions of the Roland GS implementation available on the SC-33. I'm
- not sure what the Kurtzweil ME-1 is, but if you have one, I'm sure
- you'll be glad to have the bank. :)</P>
-<P STYLE="font-weight: medium">To use one of these, select it, and then
- you'll be presented with a dialog like this:</P>
+ that contains only the standard General
+ MIDI<B> bank</B>.<B> GS</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ contains multiple<B> banks</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ providing an<B>
+</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ instrument definition for the Roland GS implementation available on
+ the SC-33 (the SC-55's little cousin.) I'm not sure what the Kurtzweil
+ ME-1<B> device</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ contains, but if you have one, I'm sure you'll
+ figure it out. :)</P>
+<P STYLE="font-weight: medium"><I><FONT SIZE="2">NOTE: You may also load<B>
+ devices</B> from other locations, of course, by browsing around to
+ wherever you've left them in the usual fashion. There's not yet any
+ support for a user library path that Rosegarden knows about, but it may
+ be something seen in the future. You may import banks from both<B> .rg</B>
+<!--SPAN STYLE="font-weight: medium"-->
+
+ and<B> .rgd</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ files. The<B> device</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ definition contained by both
+ types of files is functionally identical, and<B> .rgd</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ files are
+ offered only as a logical conveniece</FONT></I>.</P>
+<P STYLE="font-weight: medium">After you've selected an<B> .rgd</B> file
+ from somewhere, you'll be presented with a dialog like this:</P>
 <P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
 HEIGHT="226" NAME="Graphic63" SRC="using-rosegarden_html_m52cb1a99.png" WIDTH="210">
 </P>
 <P>
 <!--SPAN STYLE="font-weight: medium"-->
-If there's more than one device in the file, you won't be able to
- tell which is which, since they are all Dummy MIDI Device, but<I> c'est
- la vie</I><I><B>.</B></I><B>
-<!--SPAN STYLE="font-style: normal"-->
-</B>
+The stock<B> device</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ files included with Rosegarden are only
+ supposed to contain one set of<B> banks</B>
+<!--SPAN STYLE="font-weight: medium"-->
+, so there should only be
+ one &quot;<B>Source device</B>&quot; to load. If you're loading a file that
+ you've created yourself, which has multiple instrument defintions, then
+ you may select which one of them to load, and to which port to attach
+ it. Currently they are all called &quot;Dummy MIDI Device,&quot; which is, quite
+ frankly, horrible. I hope I get to remove that last sentence soon.</P>
+<P>
+<!--SPAN STYLE="font-weight: medium"-->
+Since they are all &quot;Dummy MIDI Device,&quot; you don't have any logical
+ way to decide what is what, but<I> c'est la vie.</I><I><B></B></I>
 <!--SPAN STYLE="font-style: normal"-->
 
 <!--SPAN STYLE="font-weight: medium"-->
- A little guess work will get you
- there. Make a choice, and then you can<B> Merge Banks</B>
+ A
+ little guess work will get you there. Make a choice, and then you can<B>
+ Merge Banks</B>
 <!--SPAN STYLE="font-weight: medium"-->
- or<B>
- Overwrite Banks</B>
+ or<B> Overwrite Banks</B> to see what your choice was
 <!--SPAN STYLE="font-weight: medium"-->
-. The latter will replace everything, while the
- former won't replace existing definitions.</P>
-<P STYLE="font-weight: medium">If none of these fit, you can use one of
- them as a starting point for rolling your own. You need to determine
- your synth's implementation. Usually there's a Tone Table in the manual
- somewhere.</P>
+.</P>
+<P STYLE="font-style: normal; font-weight: medium">If you choose to
+ overwrite, any existing definitions will be lost. If you choose to
+ merge, your existing definitions will remain in place, and any new
+ definitions contained in the<B> device</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ you're loading will be
+ merged in.</P>
+<H2 CLASS="western"><A NAME="2_9">2.9 Creating A Custom Definition</A></H2>
+<P STYLE="font-weight: medium">If none of the<B> devices</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ in the<B>
+ library</B> fit, you can use one of them as a starting point for
+ rolling your own, or you can build one from scratch. In order to do
+ that effectively, you need to determine your synth's implementation.
+ Most MIDI synths have a &quot;Tone Table&quot; in the manual somewhere. If you're
+ using a soft synth or some other device that allows random,
+ user-specified instrument assignments, then you'll have to figure out
+ what to call the instruments that are available using various
+ combinations of program and bank changes for yourself.</P>
 <P STYLE="font-weight: medium">The first step is to determine how your
  synth handles bank changes, so you can assign numbers to either the<B>
- LSB</B> or<B> MSB</B> parameters. I'm not sure what they actually mean,
- but trial and error will get you there. Roland GS uses the<B> MSB</B>
- for everything. Individual groups of names can only be assigned to a
- single<B> LSB/MSB</B> combination, so some of the groupings in this GS
- bank aren't as logical as they could be. I came up with the most
- logical names I could think of when naming the individual banks in this
- definition. Each group of names is associated with a GS bank number
- from the implementation chart, so I went down the list to find all the
- variations using a value of 32, and put them into Fourth Variations,
- etc. There's some overlap of things that aren't really grouped
- logically, (eg. melodic instruments in bank FX 1, but it's what we've
- got to work with, and this is the best way I could figure out to use
- it.</P>
+ LSB</B> or<B> MSB</B> parameters. I'm not sure what those names
+ actually mean, but trial and error will get you there. It turns out
+ that Roland GS uses the<B> MSB</B> for everything, but your mileage is
+ almost guaranteed to vary.</P>
+<P STYLE="font-weight: medium"><FONT SIZE="2"><I>NOTE: Individual groups
+ of names can only be assigned to a single<B> LSB/MSB</B> combination,
+ so this can present problems. When I created the<B> GS</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ bank, I had
+ to compromise. Roland didn't do consistent things with how types of
+ variations were available via particular bank change numbers, and there
+ was no way to keep everything completely logical. Consequently, there
+ are some oddities, such as melodic instruments in bank &quot;FX 1.&quot; I named
+ the banks the best way I could figure, using the mechanism Rosegarden
+ provides, but I'm not completely happy with the result.</I></FONT></P>
+<P>Once you've decided what your instrument definition needs to contain,
+ and how it should be organized, entering your data is a straightforward
+ matter. Use the<B> Add Bank</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ and<B> Delete Bank</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ or<B> Delete All
+ Banks</B> buttons as necessary to pave the way.</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+HEIGHT="111" NAME="Graphic24" SRC="using-rosegarden_html_m4fd278e.png" WIDTH="372">
+</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">I don't think you'll have
+ any trouble figuring out what to do. Just fill in the blanks, or delete
+ existing names as needed. To change the name of the bank, click on it
+ to highlight it, then click on it again, and you should get an edit
+ cursor.</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium"><FONT SIZE="2"><I>TIP: The<B>
+ banks</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ are sorted alphabetically by name, not by<B> LSB/MSB</B>
+<!--SPAN STYLE="font-weight: medium"-->
+
+ number. You may want to bear that in mind when choosing your names, so
+ that you can force them to sort in some reasonable order.</I></FONT></P>
 <P STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="532"
 NAME="Graphic64" SRC="using-rosegarden_html_m24542160.png" WIDTH="865"></P>
 <P STYLE="font-weight: medium">Once you've defined your instruments, you
  can save the definition to disk with<B> Export Device</B>.</P>
-<P ALIGN="LEFT" STYLE="font-weight: medium"><FONT SIZE="2"><I>TIP: To
- avoid having to do load instrument definitions again and again, you can
- get Rosegarden to use your default setup by copying the .rgd file you
- export to $PREFIX/share/apps/rosegarden/autoload.rg. If you have root
- access, that is. $PREFIX is the location where Rosegarden and KDE are
- installed, and is frequently either /usr or /opt. Consult your distro's
- documentation, or use a file search utility if you are uncertain.</I></FONT>
-</P>
-<H2 CLASS="western"><A NAME="2_5">2.5 The Tracklist</A></H2>
+<P ALIGN="LEFT">
+<!--SPAN STYLE="font-weight: medium"-->
+<I><FONT SIZE="2">REMEMBER: To avoid having to load
+ instrument definitions again and again, you can get Rosegarden to use
+ your default setup by copying the<B> .rgd</B> file you export to<B>
+ $PREFIX/share/apps/rosegarden/autoload.rg</B></FONT></I></P>
 <P>Now that your instruments are defined, let's look at how to assign
- them to channels. This is accomplished in one of several ways, but
+ them to tracks and channels. This is accomplished in two parts, but
  we'll look at the<B> Tracklist</B>
 <!--SPAN STYLE="font-weight: medium"-->
- first.</P>
-<P>Click on the<B> &lt;untitled&gt;</B> in one of the tracks, and you'll see
- an instrument configuration dialog like this one where you can choose
- the device and channel for the track. Your menus will almost certainly
- differ, but this is what mine looks like with default<B> Studio</B>
- settings,<B></B> without my soft synth running:</P>
+ first since we're already in the
+ general vicinity.</P>
+<H2 CLASS="western"><A NAME="2_10">2.10 Assigning a MIDI Device/Port and
+ Channel</A></H2>
+<P>Click on the<B> &lt;untitled&gt;</B> in one of the tracks, and you'll be
+ presented with a series of nested menus that allow you to choose the
+ MIDI device/port and channel for the track. If a channel has already
+ had an instrument assignment on another track, the instrument name will
+ appear in parentheses next to the channel number. If you see only
+ numbers, don't worry, as I'll explain the other half of this process in
+ the next chapter.</P>
+<P>Your menus will almost certainly differ, but this is what it looks
+ like here with default<B> Studio</B> settings,<B></B> without my soft
+ synth running:</P>
 <P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
 HEIGHT="26" NAME="Graphic37" SRC="using-rosegarden_html_4358d1f.png" WIDTH="206">
 <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="356" NAME="Graphic38" SRC="ins2.png"
 WIDTH="240"></P>
-<P>Change track names by double-clicking on the label. A dialog should
- thus appear:</P>
+<P><FONT SIZE="2"><I>NOTE: Observe that even with no instruments
+ assigned to any channels, a (D) appears beside channel 10. This channel
+ is used for percussion in most MIDI implementations. It is not
+ currently possible to define names for percussive instruments, nor to
+ define names for drum kits for synthesizers that make use of bank
+ changes in order to switch kits (eg. Roland GS). These items have been
+ on the table, but are currently shelved. I'll explain how to work
+ around this limitation later on.</I></FONT></P>
+<H2 CLASS="western"><A NAME="2_11">2.11 Changing the Track Name</A></H2>
+<P>I'll go ahead and mention this now, while we're already looking at
+ the<B> Tracklist</B>
+<!--SPAN STYLE="font-weight: medium"-->
+. You can change track names by double-clicking on
+ the label. A dialog should thus appear:</P>
 <P ALIGN="CENTER">
 <!--SPAN STYLE="font-weight: medium"-->
 <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="115" NAME="Graphic43"
 SRC="using-rosegarden_html_m3266770c.png" WIDTH="408"><B></B></P>
-<P ALIGN="LEFT" STYLE="font-weight: medium">If no instrument names are
- attached to the channels, as in the above example, don't despair.
- You'll learn how to do that directly.</P>
 <H1 CLASS="western"><A NAME="3">3 Project 1: Importing a MIDI file</A></H1>
 <H2 CLASS="western"><A NAME="3_1">3.1 Importing the File</A></H2>
 <P>It's time to import our first<A HREF="http://midi/ultima.mid"> midi
@@ -524,33 +764,40 @@ SRC="using-rosegarden_html_m6856f77a.png" WIDTH="256"></FONT></A></FONT></P>
 <P ALIGN="LEFT">Now that we've imported the file, let's see how it
  fared. Rosegarden is not purely a MIDI sequencer, and a certain amount
  of translation takes place when importing MIDI files into Rosegarden's
- internal format. Sometimes this introduces minor problems that need to
- be corrected, which we will address directly.</P>
+ internal format. Configuring your<B> device</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ definition in the<B>
+ Studio</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ beforehand goes a long way toward eliminating trouble, but s
+ometimes the import process introduces minor problems that need to be
+ corrected, which we will address directly.</P>
 <H2 CLASS="western"><A NAME="3_2">3.2 Transport Tools</A></H2>
 <P>First, we need to see what it sounds like. Let's get to know the<B>
  Transport</B> window, and the<B> Playback Pointer</B>,<B></B> which are
  two of the tools we'll use to get around in our compositions.</P>
 <P>Notice that there's a vertical blue bar in the<B> Segment Pane</B> of
  the main window. That is the<B> Playback Pointer</B>. You can move it
- to any arbitrary point in the composition by clicking on the<B> Ruler</B>
- at the top, or you can use the<B> Transport</B> to move it around. If
- you don't see it, play with the<B> Transport</B> or the<B> Ruler</B>
- until you move it out of hiding.</P>
+ to any arbitrary point in the composition by clicking along the dark
+ gray portion of the<B> Ruler</B> at the top, or you can use the<B>
+ Transport</B> to move it around. If you don't see it, play with the<B>
+ Transport</B> or the<B> Ruler</B> until you move it out of hiding.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="198" NAME="Graphic31"
 SRC="playback-pointer.png" WIDTH="104"></P>
-<P>You'll initially have a separate, floating<B> Transport</B> window
- like this one.</P>
+<P>You should have a separate, floating<B> Transport</B> window like
+ this one.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" ALT="Transport Window" BORDER="0" HEIGHT="161"
 NAME="Graphic2" SRC="using-rosegarden_html_m41d8a9c.png" WIDTH="428"></P>
 <P>Most of these should be self-explanatory. If you can't figure out
  what any of the buttons do, hover over them a bit, and
- context-sensitive help will pop up. Of special note are the<B> Panic</B>
-,<B> Metronome</B>,<B></B> and<B> Solo</B> buttons. If they're missing,
- toggle the flap via the <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="26" NAME="Graphic48"
+ context-sensitive help will pop up.</P>
+<P>Of special note are the<B> Panic</B>,<B> Metronome</B>,<B></B> and<B>
+ Solo</B> buttons. If they're missing, toggle the</P>
+<P> &quot;flap&quot; via the <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="26" NAME="Graphic48"
 SRC="flap-toggle.png" WIDTH="25"> button.</P>
 <P ALIGN="CENTER"><I><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="52" NAME="Graphic15"
 SRC="using-rosegarden_html_m43e4dfc0.png" WIDTH="135"></I></P>
-<P>The<B> Panic</B> button transmits an all notes off message. Use it,
+<P>The<B> Panic</B> button transmits an &quot;all notes off&quot; message. Use it,
  for example, when your synth has gotten a note stuck and the incessant
  droning of that low F# is driving you up the wall.</P>
 <P>The<B> Metronome</B> does what you'd probably expect. You can turn
@@ -559,7 +806,7 @@ SRC="using-rosegarden_html_m43e4dfc0.png" WIDTH="135"></I></P>
  composition.</P>
 <P STYLE="font-weight: medium">The<B> Solo</B> button mutes all tracks
  except for the one that's currently selected, allowing you a convenient
- way to hear just one part. (To solo more than one part, at present,
+ way to hear just one part. (To &quot;solo&quot; more than one part, at present,
  you'll need to set the mute for tracks individually. The<B> Solo</B>
  button only affects a single track.)</P>
 <H2 CLASS="western"><A NAME="3_3">3.3 Tweaking the Import</A></H2>
@@ -572,36 +819,38 @@ SRC="using-rosegarden_html_m43e4dfc0.png" WIDTH="135"></I></P>
  my synth. That has been lost. It includes percussion on two separate
  channels, which is why you're hearing those raunchy piano notes in the
  bass (that track was assigned to channel 9), and it's supposed to use
- the OrcheSet drum kit on my synth. The program change on channel 10 was
- lost.</P>
+ the &quot;OrcheSet&quot; drum kit on my synth. The program change on channel 10
+ was lost.</P>
 <P ALIGN="LEFT">So, before you write me off as a terrible composer,
  let's get this back to the condition it was in when it left Cakewalk
  last year. We need to correct for what has been lost in the translation
  from raw MIDI to Rosegarden's internal format, and then we'll play with
  it.</P>
 <P>The first thing we really need to do is fix the percussion. The most
- direct way to accomplish this is to assign the Conga track to the same
- device and channel as the previous track.</P>
-<P>Click on the Conga track name, and hold the button down for a moment.
- Navigate through the various available devices until you find channel
- 10. Your results will vary depending on a number of variables, but
- here's what it looks like here:<I> (Note that the Dummy MIDI Device
- will be changing to something more useful soon.)</I></P>
+ direct way to accomplish this is to assign the &quot;Conga&quot; track to the
+ same device and channel as the previous track.</P>
+<P>Click on the &quot;Conga&quot; track name, and hold the button down for a
+ moment. Navigate through the various available devices until you find
+ channel 10. Your results will vary depending on a number of variables,
+ but here's what it looks like here:<I> (Note that the &quot;Dummy MIDI
+ Device&quot; will hopefully change into something more useful soon.)</I></P>
 <P ALIGN="CENTER"><IMG BORDER="0" HEIGHT="319" NAME="Graphic49" SRC="fix-conga.png"
 WIDTH="450"></P>
-<P>Now, we really need to change the drum kit. At this time, Rosegarden
- can't yet cope with having GS-style named drumkits on channel 10. It's
- on the table, but no decision has yet been made as to exactly how best
- to implement it. Until then, we'll have to live with having an
- instrument listed instead of our drumkit.</P>
+<P>Now, we really need to change the drum kit. As I mentioned in the<B>
+ Studio</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ chapter, Rosegarden can't yet cope with having GS-style
+ named drumkits on channel 10. It's on the table, but no decision has
+ yet been made as to exactly how best to implement it. Until then, we'll
+ have to live with having an instrument listed instead of our drumkit.</P>
 <P>I jumped the gun in taking the above snapshot. Note that I have
- already assigned the Strings program to this channel. It so happens
- that Strings corresponds to the correct program number I need to use in
- order to switch my Sound Canvas to the OrcheSet drumkit.</P>
-<P>In order for you to do the same at home, click on either the Conga or
- the Orchestral bass, crash &amp; snare track name to select it. (Remember
- that they're both bound to the same device and channel, so a change
- made to one will affect the other.) Now click on the<B> Program</B>
+ already assigned the &quot;Strings&quot; program to this channel. It so happens
+ that &quot;Strings&quot; corresponds to the correct program number I need to use
+ in order to switch my Sound Canvas to the &quot;OrcheSet&quot; drum kit.</P>
+<P>In order for you to do the same at home, click on either the &quot;Conga&quot;
+ or the &quot;Orchestral bass, crash &amp; snare&quot; track name to select it.
+ (Remember that they're both bound to the same device and channel, so a
+ change made to one will affect the other.) Now click on the<B> Program</B>
  button in the<B> Instrument Parameters</B> pane.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="249" NAME="Graphic50"
 SRC="using-rosegarden_html_m21c39b4a.png" WIDTH="175"></P>
@@ -609,7 +858,7 @@ SRC="using-rosegarden_html_m21c39b4a.png" WIDTH="175"></P>
  scroll through with your mouse wheel, or select a name from the
  drop-down list. It's helpful if your synth has a display so that you
  can see when you happen to get to the correct program number. In this
- case, Strings in the Capital Tones bank is what we're after.</P>
+ case, &quot;Strings&quot; in the &quot;Capital Tones&quot; bank is what we're after.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" ALT="dropdown list" BORDER="0" HEIGHT="202"
 NAME="Graphic5" SRC="dropdown.png" WIDTH="100"></P>
 <P STYLE="font-style: normal">Of course your mileage with all of this
@@ -623,11 +872,13 @@ NAME="Graphic5" SRC="dropdown.png" WIDTH="100"></P>
 <P>Now that the drums are a little more interesting, it's starting to
  sound better, but there's still work to do. We need to make up for that
  lost SysEx bank by cranking up the reverb.</P>
-<H2 ALIGN="LEFT" CLASS="western" STYLE="font-style: normal"><A NAME="3_4">
-3.4 Instrument Parameters</A></H2>
+<H2 ALIGN="LEFT" CLASS="western"><A NAME="3_4">3.4
+<!--SPAN STYLE="font-style: normal"-->
+ Instrument Parameters</A>
+</H2>
 <P>The SysEx bank that Cakewalk included with this file has been lost in
  the translation. Luckily, Rosegarden makes it easy to set the initial
- values for the most common controllers right there in the<B> Instrument
+ values for several common controllers right there in the<B> Instrument
  Parameters</B> pane. If you didn't notice this before, take note of the
  knobs in this pane.</P>
 <P ALIGN="CENTER"><I><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="285" NAME="Graphic6"
@@ -642,41 +893,53 @@ SRC="using-rosegarden_html_m2b0e6d92.png" WIDTH="351"></I></P>
 <P>Depending on your synth's implementation, some of these knobs may not
  actually be useful to you. If any of these knobs don't seem to have any
  effect, blame it on your synth.</P>
-<P>Now is a good time to save. Remember to<B> <U>save early, save often</U>
-</B>. Rosegarden is still under heavy development, and it's not fun to
- see your work evaporate. If you do discover a bug, try to determine a
- way to repeat it consistently, and let the Rosegarden team know about
- it.</P>
 <H2 CLASS="western"><A NAME="3_5">3.5 More About Segments</A></H2>
 <P>You've seen what segments can do, but there are a few things that I
  couldn't demonstrate while the segments were empty.</P>
 <H3 ALIGN="LEFT" CLASS="western"><A NAME="3_5_1">3.5.1 Segment Previews</A>
 </H3>
 <P ALIGN="LEFT">Look closely, and you'll notice that each one of the
- segments contains a miniature matrix or piano roll view. You can get
- some sense of what that bit of music is like just by looking at the
+ segments contains a miniature &quot;matrix&quot; or &quot;piano roll&quot; view. You can
+ get some sense of what that bit of music is like just by looking at the
  segment display, which is a useful visual aid when dragging things
  around. If this feature is not turned on, turn it on with<B> Settings
  -&gt; Segment Previews</B>. Later, we'll see that we can also manipulate
  audio segments in similar fashion.</P>
-<P ALIGN="CENTER" STYLE="font-style: normal"><IMG ALIGN="BOTTOM" ALT="enlarged view of segments"
-BORDER="0" HEIGHT="283" NAME="Graphic8" SRC="using-rosegarden_html_m48751921.png"
-WIDTH="501"></P>
-<P ALIGN="LEFT" STYLE="font-style: normal">Now, let's overlap the
- segments. Select the Conga segment, and drag it up to the Orchestral
- bass, crash &amp; snare track.</P>
-<P>Your screen should now resemble this:</P>
-<P ALIGN="CENTER"><FONT COLOR="#000080"><A HREF="../post-overlap-layer.png">
-<FONT COLOR="#000080"><IMG ALIGN="BOTTOM" ALT="screenshot" BORDER="2" HEIGHT="192"
-NAME="Graphic4" SRC="post-overlap-layer.png" WIDTH="256"></FONT></A></FONT>
+<P ALIGN="CENTER">
+<!--SPAN STYLE="font-style: normal"-->
+<IMG ALIGN="BOTTOM" ALT="enlarged view of segments" BORDER="0"
+HEIGHT="283" NAME="Graphic8" SRC="using-rosegarden_html_m48751921.png" WIDTH="501">
 </P>
-<P ALIGN="LEFT">For now, we'll leave the Conga track in place. The
- layering we've done gets both of these tracks into the same MIDI
- channel with aplomb, but we may need to drag the big track back out so
- that we can more readily get to the smaller ones beneath. I don't see a
- way to select a segment that's buried entirely beneath another segment.</P>
-<P ALIGN="LEFT">Now that the drum kit has been corrected and both drum
- parts are playing on the correct channel, it's starting to shape up.</P>
+<P ALIGN="LEFT" STYLE="font-style: normal">Now that the drum kit has
+ been corrected and both drum parts are playing on the correct channel,
+ it's starting to shape up. Now is a good time to mention the autosave
+ feature.</P>
+<P ALIGN="LEFT" STYLE="font-style: normal; font-weight: medium">
+<BR>
+<BR></P>
+<H2 CLASS="western"><A NAME="3_6"><I>3.6</I>
+<!--SPAN STYLE="font-style: normal"-->
+ Autosave<I> (CVS)</I></A></H2>
+<P><I>As always, &quot;save early, save often&quot; is the mantra of computer
+ users everywhere. It's never a bad idea to take time out to save your
+ work, but Rosegarden tries to save you from yourself.</I></P>
+<P ALIGN="LEFT"><I>I will only mention it in passing for the moment,
+ because this feature doesn't officially exist yet. You'll<B> only</B>
+ find it in CVS.</I></P>
+<P ALIGN="LEFT"><I>If the GUI crashes for some reason, or you have a
+ power outage or the like, the next time you start Rosegarden and
+ attempt to load the file you were working on, you'll be presented with
+ the option of loading the autosave file instead. If you hadn't yet
+ saved the file, you'll find it in your ~/autosave directory with a
+ basic name of &quot;untitled.&quot;</I></P>
+<P ALIGN="LEFT"><I>The autosave interval defaults to 60 seconds.
+ Configure it via the<B> Settings</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ menu.</I></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium"><I>This feature alone is
+ probably worth dipping your toe into the waters of CVS if you're not
+ already building it, because, let's face it folks, this is pre-release
+ software, and it crashes from time to time.</I></P>
 <H1 CLASS="western"><A NAME="4">4 Let's Edit Some Notation</A></H1>
 <P>For the next phase in our sample project, we want to look at what is
  necessary to make the flute part in this composition playable on a real
@@ -691,14 +954,15 @@ NAME="Graphic4" SRC="post-overlap-layer.png" WIDTH="256"></FONT></A></FONT>
  probably be ugly, since I recorded it on my keyboard instead of
  entering it note by note.</P>
 <P>Let's open the<B> Notation Editor</B> and have a look. Highlight a
- segment from the Flute track.</P>
+ segment from the &quot;Flute&quot; track.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="88" NAME="Graphic52"
 SRC="flute-segment.png" WIDTH="268"></P>
 <P>Open the<B> Notation Editor</B> by right-clicking on the segment, and
- choosing <B>Edit as Notation</B> from the context submenu. You can also
- configure this to be your default view via<B> Settings -&gt; Configure
- Rosegarden... -&gt; Default Editor</B>, and thereafter you can get to the<B>
- Notation Editor</B> by merely double-clicking the desired segment.</P>
+ choosing &quot;<B>Edit as Notation</B>&quot; from the context submenu. You can
+ also configure this to be your default view via<B> Settings -&gt;
+ Configure Rosegarden... -&gt; Default Editor</B>, and thereafter you can
+ get to the<B> Notation Editor</B> by merely double-clicking the desired
+ segment.</P>
 <H2 CLASS="western"><A NAME="4_2">4.2 Notation Editor Overview</A></H2>
 <P>We'll be spending a lot of time here in the<B> Notation Editor</B>.
  As you'd expect, this is where you go to view and edit your data as
@@ -746,7 +1010,7 @@ HEIGHT="28" NAME="Graphic58" SRC="using-rosegarden_html_m223e45b2.png" WIDTH="12
  used to render the notes via this little gadget here:</P>
 <P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
 HEIGHT="27" NAME="Graphic59" SRC="notation-font-dongle.png" WIDTH="124"></P>
-<P ALIGN="LEFT" STYLE="font-weight: medium">The RG 2.1 font isn't as
+<P ALIGN="LEFT" STYLE="font-weight: medium">The &quot;RG 2.1&quot; font isn't as
  pretty, but it renders more quickly than feta, so may be useful on
  slower hardware.</P>
 <P ALIGN="LEFT" STYLE="font-weight: medium">Use<B> ctrl-Z</B> or<B> Edit
@@ -774,16 +1038,17 @@ SRC="using-rosegarden_html_m4ed48e22.png" WIDTH="240"></P>
 <P STYLE="font-weight: medium">Let's move the playback cursor to the
  beginning of this segment. Click on the ruler above the staff to
  position the local cursor, just as the ruler in the<B> Main Window</B>
- positions the<B> Playback Pointer</B> itself. Click the<B> Playback
- Pointer to Cursor <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="28" NAME="Graphic14"
+ positions the<B> Playback</B></P>
+<P STYLE="font-weight: medium"><B> Pointer</B> itself. Click the<B>
+ Playback Pointer to Cursor <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="28" NAME="Graphic14"
 SRC="notation-pointer-to-cursor.png" WIDTH="29"></B> button to move the
  playback pointer to the position of the cursor. Now playback will begin
  from that point.</P>
-<P STYLE="font-weight: medium">You can set it back out of sight so that
- playback will begin before the start of the segment you're editing by
- shifting it to the left via the <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="31"
-NAME="Graphic17" SRC="using-rosegarden_html_m1a7c1822.png" WIDTH="33">
- button.</P>
+<P STYLE="font-weight: medium">You can set it back &quot;out of sight&quot; so
+ that playback will begin before the start of the segment</P>
+<P STYLE="font-weight: medium"> you're editing by shifting it to the
+ left via the <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="31" NAME="Graphic17"
+SRC="using-rosegarden_html_m1a7c1822.png" WIDTH="33"> button.</P>
 <H3 CLASS="western"><A NAME="4_2_2">4.2.2 Changing the View</A></H3>
 <P>Notice the<B> Size</B>,<B> Spacing</B>, and<B> Smoothing</B> sliders.
  (They're camera shy for some reason, and come out black. I'm sure
@@ -834,7 +1099,7 @@ SRC="transpose-box.png" WIDTH="408"></P>
  until it better fits into place within the context of notation. In this
  instance, readability is more important to us than the faithful
  rendering of a human performance, so we're going to end up making
- physical changes to the data along the way.</P>
+ &quot;physical&quot; changes to the data along the way.</P>
 <H3 CLASS="western"><A NAME="4_4_1">4.4.1 Smoothing</A></H3>
 <P STYLE="font-weight: medium">Let's start by seeing what that<B>
  Smoothing</B> slider can do for us... Each notch makes the rhythm
@@ -888,13 +1153,12 @@ HEIGHT="78" NAME="Graphic19" SRC="post-quantized2.png" WIDTH="360"></P>
  isn't currently an icon for this, but you'll find it on the menu. First
  you'll need to make a selection.</P>
 <P ALIGN="LEFT" STYLE="font-weight: medium">If it's not already the
- default, choose the<B> Select</B> cursor <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="55"
-NAME="Graphic24" SRC="using-rosegarden_html_6dd5f812.png" WIDTH="51">
- from the<B> Toolbar</B>. Click at a point to the left of one of the
- notes to begin the selection.<B></B> Drag the blue selection box so
- that it includes the first two 8<SUP>th</SUP> notes. When they're
- selected, they'll turn blue. Now use<B> Marks -&gt; Add Staccato</B>. The
- dots appear:</P>
+ default, choose the<B> <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="25" NAME="Graphic4"
+SRC="using-rosegarden_html_5b745bd6.png" WIDTH="27"></B> cursor from the<B>
+ Toolbar</B>. Click at a point to the left of one of the notes to begin
+ the selection.<B></B> Drag the blue selection box so that it includes
+ the first two 8<SUP>th</SUP> notes. When they're selected, they'll turn
+ blue. Now use<B> Marks -&gt; Add Staccato</B>. The dots appear:</P>
 <P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
 HEIGHT="64" NAME="Graphic20" SRC="post-quantized3.png" WIDTH="280"></P>
 <H3 ALIGN="LEFT" CLASS="western"><A NAME="4_4_4">4.4.4 Auto-Beam</A></H3>
@@ -964,29 +1228,234 @@ HEIGHT="265" NAME="Graphic27" SRC="using-rosegarden_html_602e7230.png" WIDTH="25
 <P>It's pretty self-explanatory. My score ended up looking like:</P>
 <P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
 HEIGHT="184" NAME="Graphic28" SRC="post-quantized8.png" WIDTH="288"></P>
-<P><I>MENTION ANNOTATIONS HERE</I></P>
+<P><FONT SIZE="2"><I>NOTE: Did you notice that one of the available text
+ types was called &quot;annotation?&quot; You can use these to make notes on your
+ score, and can control whether or not you see them via the<B> Settings
+ -&gt; Show Annotations</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ toggle.</I></FONT></P>
 <H2 CLASS="western"><A NAME="4_5">4.5 A Change of Key</A></H2>
-<P>This is moving right along, but I want to change it to the key of G
- so that I can more easily play with Dad's mountain dulcimer, if I can
- ever convince him to drag the thing out of the closet. (unfinished...
- sorry...)</P>
+<P>(unfinished... sorry...)</P>
+<P>This section will talk about ways of transposing a part to a new key,
+ and then about how to write a part for a transposing instrument (eg. a
+ B<SUB>b</SUB> trumpet) so that it sounds in one key and is written in
+ another. I just haven't had time to sit down and write it. Writing
+ documentation to this standard is a very time consuming process. I hope
+ you agree that it's worth the time, and worth the wait.</P>
 <H3 CLASS="western"><A NAME="4_5_1">4.5.1 Multiple Staffs</A></H3>
 <P>Until now, we've only edited the one part. The<B> Notation Editor</B>
  allows you to edit any number of segments simultaneously. Since we're
  going to transpose the entire composition, let's use<B> Edit -&gt; Select
  All Segments</B> and then<B> Segments -&gt; Open in Notation Editor</B>.</P>
 <P STYLE="font-weight: medium">(unfinished... sorry...)</P>
-<H1 CLASS="western"><A NAME="5">5 That's All, Folks...</A></H1>
+<P STYLE="font-weight: medium">Quick note: you can select multiple
+ segments and edit them in one window. That's what I'll show you here
+ eventually, explaining it in my usual level of detail, by running
+ through and grabbing screenshots as I go, to make sure I get it right.</P>
+<H3 CLASS="western"><A NAME="4_5_2">4.5.2 Printing</A></H3>
+<P>Printing is currently a bit of an ugly thing in Rosegarden, which
+ really is something of a tragedy. What good is it to have such a nice
+ notation editor and not be able to print?</P>
+<P>The current design plan calls for a rudimentary print facility
+ incorporated within Rosegarden itself, whose purpose is to allow rough
+ draft printing, combined with off-loading the task onto an external
+ utility for high quality printing.</P>
+<P>In current practice, the output quality of this &quot;draft&quot; printing is
+ usually very poor. You can probably put dead trees to better use than
+ this, and I don't recommend using it for anything more than the most
+ trivial of jobs.
+<!--SPAN STYLE="font-weight: medium"-->
+ Frequently the results are so poor as to be completely
+ useless, and I strongly suggest that you do a preview before putting
+ anything to paper, so you don't waste the planet's natural resources or
+ your expensive consumables printing gibberish.</P>
+<P STYLE="font-weight: medium">If you have a look at the<B> File -&gt;
+ Export...</B> menu, you'll see that it's possible to export your
+ compositions in both Lilypond and MusicXML formats:</P>
+<P STYLE="font-weight: medium">
+<BR>
+<BR></P>
+<P STYLE="font-weight: medium">
+<BR>
+<BR></P>
+<P STYLE="font-weight: medium"><IMG ALIGN="LEFT" BORDER="0" HEIGHT="300" NAME="Graphic46"
+SRC="using-rosegarden_html_m5c3fd539.png" WIDTH="460">
+<BR CLEAR="LEFT">
+<BR>
+<BR></P>
+<P STYLE="font-weight: medium">
+<BR>
+<BR></P>
+<P>
+<!--SPAN STYLE="font-weight: medium"-->
+For the moment, I recommend using Lilypond, because that's where
+ useful things are most likely to happen in the near future. If you
+ don't have it already, try to install your distro's version first. If
+ your distro doesn't include a Lilypond package, and/or if you are not
+ already familiar with Lilypond, you should surf over to<A HREF="http://www.lilypond.org/">
+ http://www.lilypond.org</A> and have a look around.</P>
+<P STYLE="margin-bottom: 0in; font-style: normal; font-weight: medium">
+ Using Lilypond is way beyond this scope of this guide, so I refer you
+ to Lilypond's own extensive documentation and its numerous online
+ resources toward that end.</P>
+<P STYLE="margin-bottom: 0in; font-style: normal; font-weight: medium">
+<BR></P>
+<P>At present, a large number of things do not make it into the export,
+ and you will have to hand edit the resulting .ly files and render them
+ yourself
+<!--SPAN STYLE="font-weight: medium"-->
+
+<!--SPAN STYLE="font-style: normal"-->
+, making for a lot of work to get onto paper some of the things
+ you've drawn on-screen in the notation editor.</P>
+<P>
+<!--SPAN STYLE="font-weight: medium"-->
+
+<!--SPAN STYLE="font-style: normal"-->
+I won't tease you with a list of things to come, so I don't look like
+ one of those magazine articles from the 1950s proclaiming how everyone
+ would have a flying car by 2001, but I think it's reasonably safe for
+ you to keep your hopes up in this area, and to look forward to having
+ less manual work to do on these exported files in the months ahead.</P>
+<H1 CLASS="western"><A NAME="5">5 Using Audio</A></H1>
+<P>Those of you with a keen interest in matters audio have probably been
+ wondering why it took me so long to get to this. The truth is, I've
+ just never gotten around to trying to do anything serious in this area,
+ and I haven't really done much with these features. As I said in the
+ introduction, I am not an audio guy.</P>
+<P>At present, I can't offer the same level of detail as in the rest of
+ this guide, because what I say here is not based on real experience.
+ Still, there is great demand for information on this subject, so I will
+ do what I can to show you how to make use of the features.<I> (If I'm
+ leaving something important out, or my explanation is really off, feel
+ free to let me know.)</I></P>
+<P>
+<!--SPAN STYLE="font-weight: medium"-->
+We'll start by loading the composition we worked on in Project 1,
+ then add some audio to it and look at how to manipulate it.</P>
+<H2 CLASS="western"><A NAME="5_1">5.1 Configuring an Audio Editor</A></H2>
+<P>Rosegarden has no built-in facility for editing audio. Instead, it
+ provides a mechanism for you to configure an external editor, via<B>
+ Settings -&gt; Configure Rosegarden</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ on the<B> External Editors</B>
+<!--SPAN STYLE="font-weight: medium"-->
+
+ tab:</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+HEIGHT="396" NAME="Graphic74" SRC="using-rosegarden_html_m6fa8034d.png" WIDTH="753">
+</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">You can browse to your
+ editor of choice via the<B> Choose...</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ button, or type the name of
+ the executable. My personal preference is for Audacity (<A HREF="http://audacity.sourceforge.net/">
+http://audacity.sourceforge.net/</A>), which I really like, but there
+ are many suitable editors available.</P>
+<H2 CLASS="western"><A NAME="5_2">5.2 Importing Existing Audio</A></H2>
+<P>There are two ways to get audio into Rosegarden. If you wish to
+ import projects that you have been working on with some other
+ application, you can import the audio files and insert them into your
+ composition. The heart of this facility is the<B> Segments -&gt; Manage
+ Audio Segments...</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ menu, tucked away at the bottom, below the
+ divider:</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+HEIGHT="252" NAME="Graphic47" SRC="using-rosegarden_html_3e0d1475.png" WIDTH="359">
+</P>
+<P STYLE="font-weight: medium">This takes you to the dialog you use to
+ select audio files for insertion into your compositions:</P>
+<P STYLE="font-weight: medium">
+<BR>
+<BR></P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+HEIGHT="286" NAME="Graphic61" SRC="using-rosegarden_html_m4e2b1e73.png" WIDTH="773">
+</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">Using this is fairly
+ straightforward. Use the<B> Add Audio File</B> button to pick a file,
+ which will then appear in the list. I'll just grab some .wav files that
+ I have handy, since I haven't actually recorded anything related to
+ this composition:</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+HEIGHT="286" NAME="Graphic69" SRC="using-rosegarden_html_344dd7d6.png" WIDTH="773">
+</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">Once the files are loaded,
+ some statistics are printed, and a brief preview appears. You can us
+ the<B> Play Preview</B> button to hear what you've got.</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium"><FONT SIZE="2"><I>NOTE: If
+ the<B> Play Preview</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ button is grayed out, as in the above example,
+ it probably means that either Rosegarden wasn't compiled with audio
+ features enabled, or else your audio server is not running. In my case,
+ I forgot to run Jack before starting Rosegarden.</I></FONT></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">Once you're satisfied that
+ you've selected the correct files, you can insert them into your
+ composition one by one with the<B> Insert into Composition</B> button.
+ Let's insert &quot;rouen.wav&quot; and make both Dave Barry and Guillaume Laurent
+ proud:</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+HEIGHT="63" NAME="Graphic75" SRC="using-rosegarden_html_12ab5630.png" WIDTH="414">
+</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">Newly-inserted audio
+ segments go into a new track of their own, and it's always appended to
+ the bottom of the<B> Tracklist</B>.</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium"><FONT SIZE="2"><I>TIP: If
+ you're working on a newly-created composition, rather than one that is
+ based on a MIDI import, it will start with a large number of tracks. It
+ may appear that nothing happened after you hit the<B> Insert into
+ Composition...</B> button. Scroll down to the bottom, and you should
+ see a new track with your audio segment inserted.</I></FONT></P>
+<H2 CLASS="western"><A NAME="5_3">5.3
+<!--SPAN STYLE="font-weight: medium"-->
+ Recording</A></H2>
+<P STYLE="font-weight: medium">It is possible to record directly into
+ Rosegarden. First you'll want to point the track to a Jack source in
+ the same fashion used to assign tracks to MIDI devices.</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+HEIGHT="394" NAME="Graphic76" SRC="using-rosegarden_html_m1bb3bee5.png" WIDTH="386">
+</P>
+<P STYLE="font-weight: medium"><FONT SIZE="2"><I>NOTE: I honestly have
+ no idea what JACK Audio #0 through #15 mean.</I></FONT></P>
+<P>Now if the <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="17" NAME="Graphic77"
+SRC="record-button.png" WIDTH="16"> button is toggled for the track,
+ making it the destination for record operations, any signal on the
+ mixer channel you've selected as the record source (via KMix or the
+ like) should be recorded, and should wind up in an audio segment.</P>
+<P><FONT SIZE="2"><I>NOTE: The one time I tried that, it didn't work
+ very well, and I haven't tried to do it since. I'm not sure whether or
+ not this is actually supposed to work. I need to play with that, but at
+ this writing I am quickly running out of time, and want to get this out
+ the door. I don't currently have Jack working, and don't have time to
+ figure out why it's broken.</I></FONT></P>
+<H2 CLASS="western"><A NAME="5_4">5.4 Manipulating Audio Segments</A></H2>
+<P><I>Audio segments behave in the same fashion as segments containing
+ notation data. You can drag them around, drag them from track to track,
+ and so on. You can split them, move bits of them around. I don't have
+ time to show you any of that at this writing. I need to go to work, and
+ I want to get this published before I go.</I></P>
+<P><I>I plan to:</I></P>
+<P><I> check on recording</I></P>
+<P><I> find out what jack #0  15 mean</I></P>
+<P><I> explain how to use Edit Audio and Auto-Split Audio</I></P>
+<P><I> do a real project with a mixture of MIDI and audio</I></P>
+<P><I> demonstrate the use of LADSPA plugins</I></P>
+<P><I> ???</I></P>
+<H1 CLASS="western"><A NAME="6">6 That's All, Folks...</A></H1>
 <P>That's all I've had time to do to date. There are many more topics I
  wish to treat eventually, but there are so many developments in the
  works at the time of this writing that I'm just as well off to hold
  back, to reduce the amount of material I will have to adapt to suit
- changing future realities.</P>
+ changing future realities. I've already written about far too many
+ features that are only available in CVS as it is.</P>
 <P>I hope what you've seen has given you ideas for projects that<B> you</B>
 <!--SPAN STYLE="font-weight: medium"-->
 
- can do with Rosegarden, even though I have completely ignored audio to
- date. All things in due course...</P>
+ can do with Rosegarden. If I've left something that's very important to
+ you out, please feel free to send me a note at<A HREF="mailto:dmmcintyr@users.sourceforge.net">
+ dmmcintyr@users.sourceforge.net</A> and I will try to accommodate your
+ need and discuss it sooner.</P>
 <P STYLE="font-weight: medium">D. Michael McIntyre</P>
-</DIV></BODY>
+</BODY>
 </HTML>
