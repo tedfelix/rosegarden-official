@@ -159,7 +159,8 @@ SegmentCanvas::update()
 void
 SegmentCanvas::setTool(ToolType t)
 {
-     kdDebug(KDEBUG_AREA) << "SegmentCanvas::setTool(" << t << ")\n";
+    kdDebug(KDEBUG_AREA) << "SegmentCanvas::setTool(" << t << ")"
+                         << this << "\n";
 
     if (m_tool)
       delete m_tool;
@@ -212,6 +213,9 @@ void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
         //
         if (m_tool)
             m_tool->handleMouseButtonPress(e);
+        else
+            kdDebug(KDEBUG_AREA) << "SegmentCanvas::contentsMousePressEvent() :"
+                                 << this << " no tool\n";
 
     } else if (e->button() == RightButton) { // popup menu if over a part
 
