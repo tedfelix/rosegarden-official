@@ -1456,13 +1456,15 @@ NotePixmapFactory::drawTie(bool above, int length)
 	x -= m_noteBodyWidth/2 - 1;
     }
 
-    if (m_inPrinterMethod) {
+//    if (m_inPrinterMethod) {
 	//!!!experimental!
 	QPoint hotspot;
-	drawSlurAux(length, 0, above, false, hotspot,
+	bool smooth = false;
+	if (!m_inPrinterMethod) smooth = m_font->isSmooth() && getNoteBodyHeight() > 5;
+	drawSlurAux(length, 0, above, smooth, hotspot,
 		    &m_p->painter(), x, above ? m_above : m_above + m_noteBodyHeight);
 	return;
-    }
+//    }
 
     for (i = 0; i < tieThickness; ++i) {
 
@@ -2079,9 +2081,22 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 	    hotspot = QPoint(-topLeft.x(), -topLeft.y());
 
 	    if (painter) {
+
 		painter->save();
-		m_p->beginExternal(painter);
+
+		// This conditional is because we're also called with
+		// a painter arg from non-printer drawTie.  It's a big
+		// hack.
+
+		if (m_inPrinterMethod) {
+		    m_p->beginExternal(painter);
+		} else {
+		    m_p->maskPainter().save();
+		    m_p->maskPainter().translate(x - hotspot.x(), y - hotspot.y());
+		}
+
 		painter->translate(x - hotspot.x(), y - hotspot.y());
+
 	    } else {
 		createPixmapAndMask(smooth ? width*2+1  : width,
 				    smooth ? height*2+thickness*2 : height + thickness,
@@ -2136,6 +2151,7 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 
     if (painter) {
 	painter->restore();
+	if (!m_inPrinterMethod) m_p->maskPainter().restore();
     }
 }
 
