@@ -1,5 +1,117 @@
-Possible features and work for release 0.2
-==========================================
+Rosegarden 0.2 Roadmap
+======================
+updated: 25.03.2002 [rwb]
+
+The purpose of the 0.2 release is to get the target audience of
+Rosegarden 4 to give us some feedback on what we (the developers)
+have done so far.  We can call the output of this phase "usability
+testing" or something similar.
+
+Currently the project is post 0.1.4 release and status is as follows.
+We have a working MIDI sequencer complete with two competent editing
+clients for musical Notation and for Matrix (Piano Roll) views.  The
+sequencer also offers limited audio support.  We can import Rosegarden
+2.1 files, import and export MIDI files and of course have our own XML
+based RG4 format.  Rosegarden uses a "Segment" editing concept on the
+main track canvas.  A Segment is a pointer to an audio sample or a
+container of Rosegarden Internal (MIDI) Events.  A Segment can be moved,
+deleted, edited (according to type) resized, split or joined with other
+Segments.  All operations on the Segment Canvas are undoable as are the
+Event-level operations in both of the clients.  The sequencer provides
+a Studio concept that maps Tracks on the Segment Canvas to the actual
+MIDI and audio devices underneath (via Instruments).  The Studio is again
+XML based and it is intended that it will eventually have its own
+specialised GUI for adding "real" Studio components (faders, plugins
+etc).  The keynote concept of the application so far is flexibility -
+with the 0.2 release we want to test that this flexibility has not made
+it difficult for the users to actually enjoy using it.
+
+Whilst the 0.1.4 release was very usable it was not (and was never
+intended to be) end-user-friendly.  To bring the current codebase up to
+a standard that a Linux/KDE user will not baulk at requires additional
+work as defined in this roadmap.
+
+After much consultation the lead developers have settled on the following
+list of work to be done to get the code to the intended 0.2 usability
+release standard:
+
+
+o Kill all the big bugs - closing bug being one.  Soak testing of
+  sequencer and gui for leaks (looping of an entire piece for a
+  day or so - that kind of thing)
+
+o GUI support for various already supported items - tuplets, n-dotted notes,
+  tempo, and text.
+
+o Get the GUI to make sense when loading files and switching states - enable
+  correct buttons and menu options etc.
+
+o Add, Move and Delete Tracks including associated Segments
+
+o Composition start and end markers - moveable non-destructive markers for
+  Composition length
+
+o Segment start and end markers - moveable non-destructive markers for
+  Segments
+
+o Matrix tools (shorten/lengthen note, join/split note, move note)
+
+o Improved Printing (by how much we don't yet know)
+
+o Zooming - even if it's just horizontal
+
+o Switcheable pointer-follow mode - turn it off, enable the same behaviour
+  in clients
+
+o Better MIDI support (Controllers, Pitch Bend, Sys Exs, maybe time codes and
+  synchronisation?)
+
+o Meta editing dialog (song information, copyright information, contact
+  details for RG4 and MIDI files)
+
+o Improve Audio support to basic four track recorder level i.e. no or not
+  many effects but usable
+
+o Method of displaying overlapping Segments
+
+o Wait cursor/progress bar for lengthy operations (file loading,
+  re-rendering score etc).
+
+
+Other auxilliary tasks to bear in mind:
+
+o Defining the KDE versions we support - currently we're 2.2 specific, if
+  we can fiddle KDE 2.x and KDE3.0 support should we?
+
+o Producing RPMS/packages.
+
+o Producing documentation either in-app, on-line or both.
+
+o Naming the release something meaningful.
+
+
+Notes:
+
+It'd be good to get this release out asap - considering we have a good
+starting point and a decenet head of steam up in development this kind
+of exercise could engender further momentum.
+
+Thoughts?
+
+
+End of Roadmap.
+
+
+
+
+----
+
+
+
+
+
+Pre-Rosegarden 0.1.4 wishlist for 0.2 follows
+=============================================
 
 Three categories: Work required to finish basic features that are
 already started; new features that are suitable for the 0.2 timeframe;

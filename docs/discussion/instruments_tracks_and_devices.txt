@@ -70,4 +70,7 @@ Devices.
 Tracks are mapped to Instruments by InstrumentId.  On saving to XML
 the Tracks save this InstrumentId with them.  The Instruments themselves
 are not yet saved - only the Devices and programs (with bank selects).
+Instruments are currently regenerated (default values) by Device
+when the RG4 file is loaded.
+
 
