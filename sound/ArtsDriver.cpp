@@ -456,6 +456,10 @@ ArtsDriver::processNotesOff(const RealTime &time)
 void
 ArtsDriver::processAudioQueue(bool /*now*/)
 {
+#ifdef NOT_DEFINED
+/*** Removed following change to SoundDriver structure for audio files.
+     This would need to be heavily revised */
+
     // Now check queue for events that need playing
     std::list<PlayableAudioFile*>::iterator it;
     RealTime currentTime = getSequencerTime();
@@ -518,7 +522,7 @@ ArtsDriver::processAudioQueue(bool /*now*/)
                defunctEvents++;
     }
     while(defunctEvents);
-
+#endif
 }
 
 RealTime
@@ -966,6 +970,10 @@ ArtsDriver::processEventsOut(const MappedComposition &mC,
     {
         if ((*i)->getType() == MappedEvent::Audio)
         {
+#ifdef NOT_DEFINED
+/*** Removed following change to SoundDriver structure for audio files.
+     This would need to be heavily revised */
+
             PlayableAudioFile *audioFile =
                     new PlayableAudioFile((*i)->getInstrument(),
                                           getAudioFile((*i)->getAudioID()),
@@ -974,6 +982,7 @@ ArtsDriver::processEventsOut(const MappedComposition &mC,
                                           (*i)->getDuration());
 
             queueAudio(audioFile);
+#endif
         }
     }
 

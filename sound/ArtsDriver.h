@@ -99,7 +99,7 @@ public:
     // Plugin instance management - do nothing for the moment
     //
     virtual void setPluginInstance(InstrumentId /*id*/,
-                                   unsigned long /*pluginId*/,
+                                   QString /*pluginIdent*/,
                                    int /*position*/) {;}
 
     virtual void removePluginInstance(InstrumentId /*id*/,
