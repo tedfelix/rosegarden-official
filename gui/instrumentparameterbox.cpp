@@ -294,19 +294,14 @@ InstrumentParameterBox::slotInstrumentParametersChanged(Rosegarden::InstrumentId
     std::vector<InstrumentParameterBox*>::iterator it =
         instrumentParamBoxes.begin();
 
-    RG_DEBUG << "InstrumentParameterBox::slotInstrumentParametersChanged (" << id << ")" << endl;
-
     blockSignals(true);
 
     for (; it != instrumentParamBoxes.end(); it++)
     {
 	if ((*it)->getSelectedInstrument()) {
-	    RG_DEBUG << "Have a box, it's looking at instrument " << (*it)->getSelectedInstrument()->getId() << endl;
 	    if ((*it)->getSelectedInstrument()->getId() == id) {
 		(*it)->useInstrument((*it)->getSelectedInstrument()); // refresh
 	    }
-	} else {
-	    RG_DEBUG << "Have a box, it's got no instrument" << endl;
 	}	    
     }
 

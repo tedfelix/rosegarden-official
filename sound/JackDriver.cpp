@@ -1234,9 +1234,6 @@ JackDriver::updateAudioLevels()
     m_alsaDriver->getAudioInstrumentNumbers(instrumentBase, instruments);
     unsigned long directMasterInstruments = 0L;
 
-    std::cerr << "updateAudioLevels: record instrument is "
-	      << m_alsaDriver->getAudioMonitoringInstrument() << std::endl;
-
     for (int i = 0; i < instruments; ++i) {
 
 	MappedAudioFader *fader = m_alsaDriver->getMappedStudio()->

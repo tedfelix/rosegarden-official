@@ -476,7 +476,7 @@ AudioBussMixer::processBlocks()
     int instruments;
     m_driver->getAudioInstrumentNumbers(instrumentBase, instruments);
 
-    if (processedInstruments.size() != instruments) {
+    if (int(processedInstruments.size()) != instruments) {
 
 	for (InstrumentId id = instrumentBase; 
 	     id < instrumentBase + instruments; ++id) {
@@ -910,7 +910,10 @@ AudioInstrumentMixer::processBlocks(bool forceFill, bool &readSomething)
 	    m_bufferMap[id].volume = volume;
 	}
 
-	if (m_bufferMap[id].volume == 0.0) m_bufferMap[id].empty = true;
+	// For a while we were setting empty to true if the volume on
+	// the track was zero, but that breaks continuity if there is
+	// actually a file on the track -- processEmptyBlocks won't
+	// read it, so it'll fall behind if we put the volume up again.
     }
 
     bool more = true;
