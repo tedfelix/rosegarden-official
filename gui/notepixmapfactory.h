@@ -141,6 +141,7 @@ public:
     int getStalkLength() const      { return getNoteBodyHeight() * 11/4; }
     int getDotWidth() const         { return m_dot.width(); }
     int getClefWidth() const;
+    int getTimeSigWidth(const Rosegarden::TimeSignature &timesig) const;
     int getKeyWidth(const Rosegarden::Key &key) const {
         return (key.getAccidentalCount() *
                 (getAccidentalWidth() - (key.isSharp()? 1 : 2)));

@@ -1,4 +1,4 @@
-kde_includes=/usr/include
+kde_includes=/opt/kde2-gcc3/include
 
 # we define it here but make sometimes ignores it
 LIBTOOL=/usr/bin/libtool

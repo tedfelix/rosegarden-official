@@ -130,8 +130,13 @@ Chord::Chord(const NotationElementList &nel, NELIterator i, bool quantized) :
 
 
 NotationGroup::NotationGroup(const NotationElementList &nel,
-                             NELIterator i) :
+                             NELIterator i, const Clef &clef, const Key &key) :
     NotationSet(nel, i, false),
+    //!!! What if the clef and/or key change in the course of the group?
+    m_clef(clef),
+    m_key(key),
+    m_weightAbove(0),
+    m_weightBelow(0),
     m_type(Beamed)
 {
     if (!(*i)->event()->get<Rosegarden::Int>("GroupNo", m_groupNo))
@@ -162,16 +167,26 @@ void
 NotationGroup::sample(const NELIterator &i)
 {
     NotationSet::sample(i);
-    
+
+    // If the sum of the distances from the middle line to the notes
+    // above the middle line exceeds the sum of the distances from the
+    // middle line to the notes below, then the beam goes below.  We
+    // can calculate the weightings here, as we construct the group.
+
+    if (!(*i)->isNote()) return;
+
+    int h = height(i);
+    if (h > 4) m_weightAbove += h - 4;
+    if (h < 4) m_weightBelow += 4 - h;
 }
 
 int
-NotationGroup::height(const NELIterator &i, const Clef &clef, const Key &key)
+NotationGroup::height(const NELIterator &i)
 {
     long h;
     if ((*i)->event()->get<Int>(P_HEIGHT_ON_STAFF, h)) return h;
     int pitch = (*i)->event()->get<Int>("pitch");
-    Rosegarden::NotationDisplayPitch p(pitch, clef, key);
+    Rosegarden::NotationDisplayPitch p(pitch, m_clef, m_key);
     h = p.getHeightOnStaff();
     // not setMaybe, as we know the property is absent:
     (*i)->event()->set<Int>(P_HEIGHT_ON_STAFF, h, false);
@@ -179,9 +194,7 @@ NotationGroup::height(const NELIterator &i, const Clef &clef, const Key &key)
 }
 
 NotationGroup::Beam
-NotationGroup::calculateBeam(const NotePixmapFactory &npf,
-                             const Clef &clef, const Key &key,
-                             int width)
+NotationGroup::calculateBeam(const NotePixmapFactory &npf, int width)
 {
     Beam beam;
 
@@ -194,24 +207,14 @@ NotationGroup::calculateBeam(const NotePixmapFactory &npf,
     ++end;
 
     // First calculate whether the beam goes above or below the notes.
-    // If the sum of the distances from the middle line to the notes
-    // above the middle line exceeds the sum of the distances from the
-    // middle line to the notes below, then the beam goes below.
 
-    int weightAbove = 0, weightBelow = 0;
-
-    for (i = begin; i != end; ++i) {
-        if (!(*i)->isNote()) continue;
-        int h = height(i, clef, key);
-        if (h < 4) weightBelow += 4 - h;
-        if (h > 4) weightAbove += h - 4;
-    }
-
-    beam.aboveNotes = !(weightAbove > weightBelow);
+    beam.aboveNotes = !(m_weightAbove > m_weightBelow);
     beam.gradient = 0.0;
     beam.startHeight = npf.getStalkLength();
 
     // Now collect some pitch and duration data
+
+    //!!! We can use the sampled stuff for much of this
 
     Event::timeT shortestDuration = 1000000;
     Event::timeT longestDuration = 0, totalDuration = 0;
@@ -236,8 +239,8 @@ NotationGroup::calculateBeam(const NotePixmapFactory &npf,
         if (d >  longestDuration)  longestDuration = d;
 
         int h = (beam.aboveNotes ? 
-                 height(chord.getHighestNote(), clef, key) :
-                 height(chord.getLowestNote(),  clef, key));
+                 height(chord.getHighestNote()) :
+                 height(chord.getLowestNote()));
 
         if (firstHeight == -1000) {
             firstHeight = prevHeight = h;

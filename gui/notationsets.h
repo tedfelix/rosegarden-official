@@ -89,6 +89,12 @@ private:
 };
 
 
+// Chord is subclassed from a vector of notation list iterators; this
+// vector contains iterators pointing at all the notes in the chord,
+// in ascending order of pitch.  (You can also track through all the
+// notes in the chord by iterating from getInitialElement() to
+// getFinalElement(), but this will only get them in the order in
+// which they appear in the original notation list.)
 
 class Chord : public NotationSet,
               public std::vector<NotationElementList::iterator>
@@ -127,7 +133,8 @@ public:
     // doesn't point to an element with a GroupNo at all, we will have
     // size 0.
     
-    NotationGroup(const NotationElementList &nel, NELIterator elementInGroup);
+    NotationGroup(const NotationElementList &nel, NELIterator elementInGroup,
+                  const Rosegarden::Clef &clef, const Rosegarden::Key &key);
     virtual ~NotationGroup() { }
 
     Type getGroupType() const { return m_type; }
@@ -139,10 +146,7 @@ public:
         bool aboveNotes;        //                   relative to 1st notehead)
     };
 
-    Beam calculateBeam(const NotePixmapFactory&,
-                       const Rosegarden::Clef&,
-                       const Rosegarden::Key&,
-                       int width);
+    Beam calculateBeam(const NotePixmapFactory&, int width);
 
 protected:
     virtual bool test(const NELIterator &i) {
@@ -153,10 +157,10 @@ protected:
     virtual void sample(const NELIterator &i);
 
 private:
-    int height(const NELIterator&,
-               const Rosegarden::Clef&,
-               const Rosegarden::Key&);
-
+    int height(const NELIterator&);
+    const Rosegarden::Clef &m_clef;
+    const Rosegarden::Key &m_key;
+    int m_weightAbove, m_weightBelow;
     long m_groupNo;
     Type m_type;
 };

@@ -24,6 +24,7 @@
 #include "NotationTypes.h"
 #include "notepixmapfactory.h"
 #include "notationproperties.h"
+#include "notationsets.h"
 
 using Rosegarden::Note;
 using Rosegarden::Int;
@@ -209,24 +210,27 @@ NotationHLayout::preparse(NotationElementList::iterator from,
                         "NotationHLayout::preparse: couldn't get pitch for element"
                                          << endl;
                 }
-            }
-        
-            // if we're in a chord, deal appropriately
 
-            if (!m_notationElements.hasSucceedingChordElements(it)) {
+                // if we're in a chord, deal appropriately
 
-                int d = el->event()->get<Int>(P_QUANTIZED_DURATION); 
-                nbTimeUnitsInCurrentBar += d;
+                Chord chord(m_notationElements, it);
+                if (chord.size() < 2 || it == chord.getFinalElement()) {
 
-                int sd = 0;
-                if (shortest == m_notationElements.end() ||
-                    d <= (sd = (*shortest)->event()->get<Int>
-                          (P_QUANTIZED_DURATION))) {
-                    if (d == sd) ++shortCount;
-                    else {
-                        kdDebug(KDEBUG_AREA) << "New shortest! Duration is " << d << " (at " << nbTimeUnitsInCurrentBar << " time units)"<< endl;
-                        shortest = it;
-                        shortCount = 1;
+//!                if (!m_notationElements.hasSucceedingChordElements(it)) {
+
+                    int d = el->event()->get<Int>(P_QUANTIZED_DURATION); 
+                    nbTimeUnitsInCurrentBar += d;
+
+                    int sd = 0;
+                    if (shortest == m_notationElements.end() ||
+                        d <= (sd = (*shortest)->event()->get<Int>
+                              (P_QUANTIZED_DURATION))) {
+                        if (d == sd) ++shortCount;
+                        else {
+                            kdDebug(KDEBUG_AREA) << "New shortest! Duration is " << d << " (at " << nbTimeUnitsInCurrentBar << " time units)"<< endl;
+                            shortest = it;
+                            shortCount = 1;
+                        }
                     }
                 }
             }
@@ -366,6 +370,10 @@ int NotationHLayout::getMinWidth(const NotePixmapFactory &npf,
     } else if (e.event()->isa(Key::EventType)) {
 
         w += npf.getKeyWidth(Key(*e.event()));
+
+    } else if (e.event()->isa(TimeSignature::EventType)) {
+
+        w += npf.getTimeSigWidth(TimeSignature(*e.event()));
 
     } else {
         kdDebug(KDEBUG_AREA) << "NotationHLayout::getMinWidth(): no case for event type " << e.event()->getType() << endl;
