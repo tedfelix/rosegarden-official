@@ -158,7 +158,7 @@ void PixmapArrayGC::deleteAll()
 	QPixmap *pixmap = array->image(0);
 	if (pixmap) {
 	    total += pixmap->width() * pixmap->height();
-	    NOTATION_DEBUG << "PixmapArrayGC::deleteAll(): " << pixmap->width() << "x" << pixmap->height() << " (" << (pixmap->width()*pixmap->height()) << " px, " << total << " total)" << endl;
+//	    NOTATION_DEBUG << "PixmapArrayGC::deleteAll(): " << pixmap->width() << "x" << pixmap->height() << " (" << (pixmap->width()*pixmap->height()) << " px, " << total << " total)" << endl;
 	}
         delete m_pixmapArrays[i];
     }
