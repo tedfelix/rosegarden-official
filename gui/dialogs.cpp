@@ -1373,7 +1373,7 @@ EventEditDialog::slotRealTimePropertyChanged(int value)
     m_modified = true;
     QString propertyFullName = spinBox->name();
 
-#ifndef RGKDE3
+#ifdef RGKDE3
     QString propertyName = propertyFullName.section('%', 0, 0),
         usecOrSec =  propertyFullName.section('%', 1, 1);
 #else
