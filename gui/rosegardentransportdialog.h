@@ -19,6 +19,9 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef _ROSEGARDENTRANSPORTDIALOG_H_
+#define _ROSEGARDENTRANSPORTDIALOG_H_
+
 #include <qpixmap.h>
 #include <qtimer.h>
 #include <qaccel.h>
@@ -28,10 +31,6 @@
 #include "MappedEvent.h"
 
 #include <map>
-
-#ifndef _ROSEGARDENTRANSPORTDIALOG_H_
-#define _ROSEGARDENTRANSPORTDIALOG_H_
-
 
 namespace Rosegarden
 {
