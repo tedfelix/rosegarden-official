@@ -395,7 +395,13 @@ void EditViewBase::toggleWidget(QWidget* widget,
         return;
     }
 
-    widget->setShown(toggleAction->isChecked());
+    // Qt 3.1 only :
+//     widget->setShown(toggleAction->isChecked());
+
+    if (toggleAction->isChecked())
+        widget->show();
+    else
+        widget->hide();
 }
 
     
