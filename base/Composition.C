@@ -518,7 +518,7 @@ Composition::getTempoAt(timeT t) const
 void
 Composition::setPosition(timeT position)
 {
-    if (m_position == position) return;
+    if (position != 0 && m_position == position) return;
 
     if (position > m_position) {
 

@@ -495,7 +495,7 @@ MidiFile::convertToRosegarden()
 
     // [cc] -- attempt to avoid floating-point rounding errors
     timeT crotchetTime = Note(Note::Crotchet).getDuration();
-    int divisor = m_timingDivision ? m_timingDivision : 1;
+    int divisor = m_timingDivision ? m_timingDivision : crotchetTime;
 
     for ( unsigned int i = 0; i < m_numberOfSegments; i++ )
     {
@@ -624,6 +624,19 @@ MidiFile::convertToRosegarden()
 		    break;
 
 		case MIDI_SET_TEMPO:
+
+		{
+		    long tempo =
+			(((long(midiEvent->metaMessage()[0])  << 8) +
+			  (long(midiEvent->metaMessage()[1])) << 8) +
+			 ((long)midiEvent->metaMessage()[2]));
+		    
+		    Event *tempoEvent = new Event(Composition::TempoEventType);
+		    tempoEvent->setAbsoluteTime(rosegardenTime);
+		    tempoEvent->set<Int>(Composition::TempoProperty, tempo*60);
+		    composition->getReferenceSegment()->insert(tempoEvent);
+		}
+
 		    break;
 
 		case MIDI_SMPTE_OFFSET:
@@ -748,13 +761,9 @@ MidiFile::convertToRosegarden()
 	}
     }
 
-    // set a tempo based on _timingDivision or default
+    // set a tempo based on timing division or default
     //
-    if (m_timingDivision)
-	// [cc] -- avoid floating-point
-	composition->setDefaultTempo((120 * crotchetTime) / divisor);
-    else
-	composition->setDefaultTempo(120);
+    composition->setDefaultTempo((120 * crotchetTime) / divisor);
 
     return composition;
 }
