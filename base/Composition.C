@@ -24,7 +24,7 @@
 namespace Rosegarden 
 {
 
-Composition::Composition(unsigned int nbTracks)
+Composition::Composition()
     : m_nbTicksPerBar(384)
 {
 //     cerr << "Composition:(" << nbTracks << ") : this = "

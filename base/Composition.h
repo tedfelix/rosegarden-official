@@ -43,7 +43,7 @@ public:
     typedef trackcontainer::iterator iterator;
     typedef trackcontainer::const_iterator const_iterator;
 
-    Composition(unsigned int nbTracks = 64);
+    Composition();
     ~Composition();
 
     trackcontainer& tracks() { return m_tracks; }
