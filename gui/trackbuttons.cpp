@@ -259,16 +259,6 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     trackLabel->setFixedHeight(m_cellSize - buttonGap);
     trackLabel->setIndent(7);
 
-    if (m_trackInstrumentLabels == ShowInstrument)
-    {
-        trackLabel->hide();
-    }
-    else if (m_trackInstrumentLabels == ShowTrack)
-    {
-        connect(trackLabel, SIGNAL(changeToInstrumentList(int)),
-                this, SLOT(slotInstrumentSelection(int)));
-    }
-
     connect(trackLabel, SIGNAL(renameTrack(QString, int)),
             SLOT(slotRenameTrack(QString, int)));
 
@@ -300,17 +290,16 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
         instrumentLabel->slotSetAlternativeLabel(
                 QString(strtoqstr(ins->getProgramName())));
 
-    // select instrument
-
-    if (m_trackInstrumentLabels == ShowTrack)
-    {
-        instrumentLabel->hide();
-    }
+    if (m_trackInstrumentLabels == ShowInstrument)
+        trackLabel->hide();
     else
-    {
-        connect(instrumentLabel, SIGNAL(changeToInstrumentList(int)),
-                this, SLOT(slotInstrumentSelection(int)));
-    }
+        instrumentLabel->hide();
+
+    connect(trackLabel, SIGNAL(changeToInstrumentList(int)),
+            this, SLOT(slotInstrumentSelection(int)));
+
+    connect(instrumentLabel, SIGNAL(changeToInstrumentList(int)),
+            this, SLOT(slotInstrumentSelection(int)));
 
     // insert label
     m_instrumentLabels.push_back(instrumentLabel);
