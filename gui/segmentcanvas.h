@@ -56,7 +56,7 @@ public:
     ~TracksCanvas();
 
     void clear();
-    unsigned int gridHStep() { return m_grid.hstep(); }
+    unsigned int gridHStep() const { return m_grid.hstep(); }
 
     class SnapGrid
     {
@@ -76,6 +76,7 @@ public:
         unsigned int m_vstep;
     };
 
+    const SnapGrid& grid() const { return m_grid; }
 
 public slots:
     virtual void update();
@@ -95,7 +96,7 @@ private:
 
     SnapGrid m_grid;
 
-    TrackPartItem *m_currentItem;
+    TrackPartItem* m_currentItem;
 
     QCanvasItem* m_moving;
 
@@ -108,7 +109,7 @@ private:
 class TrackPart
 {
 public:
-    TrackPart(TrackPartItem *r, const TracksCanvas::SnapGrid& grid);
+    TrackPart(TrackPartItem *r, unsigned int widthToLengthRatio);
     ~TrackPart();
 
     int trackNb() const { return m_trackNb; }

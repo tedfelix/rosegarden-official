@@ -43,10 +43,10 @@ TrackPartItem::TrackPartItem(int x, int y,
 
 
 
-TrackPart::TrackPart(TrackPartItem *r, const TracksCanvas::SnapGrid& grid)
+TrackPart::TrackPart(TrackPartItem *r, unsigned int widthToLengthRatio)
     : m_trackNb(0),
       m_length(0),
-      m_widthToLengthRatio(grid.hstep()),
+      m_widthToLengthRatio(widthToLengthRatio),
       m_canvasPartItem(r)
 {
     if (m_canvasPartItem) {
@@ -73,8 +73,8 @@ TrackPart::updateLength()
 
 
 TracksCanvas::TracksCanvas(int gridH, int gridV,
-                       QCanvas& c, QWidget* parent,
-                       const char* name, WFlags f) :
+                           QCanvas& c, QWidget* parent,
+                           const char* name, WFlags f) :
     QCanvasView(&c,parent,name,f),
     m_newRect(false),
     m_grid(gridH, gridV),
@@ -98,6 +98,8 @@ TracksCanvas::update()
 
 void TracksCanvas::contentsMousePressEvent(QMouseEvent* e)
 {
+    if (e->button() != LeftButton) return;
+
     m_newRect = false;
 
     // Check if we're clicking on a rect
@@ -147,7 +149,7 @@ void TracksCanvas::contentsMouseReleaseEvent(QMouseEvent*)
 
     if (m_newRect) {
 
-        TrackPart *newPart = new TrackPart(m_currentItem, m_grid);
+        TrackPart *newPart = new TrackPart(m_currentItem, gridHStep());
         emit addTrackPart(newPart);
 
     } else {
