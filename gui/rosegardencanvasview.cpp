@@ -57,7 +57,7 @@ void RosegardenCanvasView::setBottomFixedWidget(QWidget* w)
     m_bottomWidget = w;
     if (m_bottomWidget) {
         m_bottomWidget->reparent(this, 0, QPoint(0,0));
-        m_bottomWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        m_bottomWidget->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
         setMargins(0, 0, 0, m_bottomWidget->sizeHint().height());
     }
 }
