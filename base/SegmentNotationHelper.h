@@ -38,6 +38,13 @@ public:
 
     
     /**
+     * Return the duration of an event "as displayed".  This is
+     * the legato-quantized duration, without tuplet squishing.
+     */
+    timeT getNotationDuration(iterator i);
+
+    
+    /**
      * Looks for another note immediately following the one pointed to
      * by the given iterator, and (if matchPitch is true) of the same
      * pitch, and returns an iterator pointing to that note.  Returns
