@@ -2408,9 +2408,9 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
 
     if (s) {
 	int eventsSelected = s->getSegmentEvents().size();
-	m_selectionCounter->setText
-	    (i18n("  %1 event%2 selected ").
-	     arg(eventsSelected).arg(eventsSelected == 1 ? "" : "s"));
+        m_selectionCounter->setText
+	    (i18n("  1 event selected ",
+		  "  %n events selected ", eventsSelected));
     } else {
 	m_selectionCounter->setText(i18n("  No selection "));
     }

@@ -858,12 +858,11 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
     }
 
     delete oldSelection;
-    int eventsSelected = 0;
-    if (s) eventsSelected = s->getSegmentEvents().size();
     if (s) {
+	int eventsSelected = s->getSegmentEvents().size();
         m_selectionCounter->setText
-	    (i18n("  %1 event%2 selected ").
-	     arg(eventsSelected).arg(eventsSelected == 1 ? "" : "s"));
+	    (i18n("  1 event selected ",
+		  "  %n events selected ", eventsSelected));
     } else {
         m_selectionCounter->setText(i18n("  No selection "));
     }
