@@ -71,6 +71,8 @@ EventSelection::~EventSelection()
 
 void EventSelection::addEvent(Event *e)
 { 
+    if (contains(e)) return;
+
     if (e->getAbsoluteTime() < m_beginTime || !m_haveRealStartTime) {
 	m_beginTime = e->getAbsoluteTime();
 	m_haveRealStartTime = true;
