@@ -1,70 +1,75 @@
 Features for release 0.1
+========================
 
-1. features without which nobody will even believe we're serious
+A.  Features without which nobody will even believe we're serious:
 
-- be able to store music in multiple tracks and display multiple
-  tracks (one notation window per track) : DONE
+1.  be able to store music in multiple tracks and display multiple
+    tracks (one notation window per track) : DONE
 
-- updating one edit window when something is edited in another
-  (however crudely we do it at first).  -- at the moment if you
-  delete a note in one window then insert in another, it crashes
+2.  updating one edit window when something is edited in another
+    (however crudely we do it at first).  -- at the moment if you
+    delete a note in one window then insert in another, it crashes
 
-- track part deletion : DONE
+3.  track part deletion : DONE
 
-- proper saving/restoring of track part start time DONE
+4.  proper saving/restoring of track part start time DONE
 
-- note insertion (by replacing rests) : DONE
+5.  note insertion (by replacing rests) : DONE
 
-- note deletion
+6.  note deletion
 
-- chording of a note which is of a different length than the ones already
-  present (the longer note must be split)
+7.  chording of a note which is of a different length than the ones already
+    present (the longer note must be split)
 
-- proper handling of time sigs. Tracks should be positioned at
-  absolute steps, not bars.
+8.  proper handling of time sigs. Tracks should be positioned at
+    absolute steps, not bars.
 
-- all the notation elegances (more precise description needed here)
+9.  all the notation elegances (more precise description needed here)
 
-- be able to both read and write MIDI files, even if we only handle
-  the most basic events
+10. be able to both read and write MIDI files, even if we only handle
+    the most basic events
 
-- basic MIDI record and playback infrastructure through aRts (RB - 18.06.01)
+11. basic MIDI record and playback infrastructure through aRts (RB - 18.06.01)
 
-- the basics of Rosegarden 2.1 file loading
-
-
-2. the basis for more advanced features, where that basis should be
-done as soon as possible
-
-- undo stack
-
-- multiple editor windows on a same track
-
-- "environments" à la Logic.
-
-- selection/deletion/editing etc of single events and groups thereof
-
-- track properties dialog
-
-- setting the time default sig of newly created tracks
-  (and selecting the appropriate sort of rest to fill up the tracks
-  with -- and should it be possible to change the rest type for a whole
-  filled section at once, after the fact?)
-
-- moveable begin and end markers in tracks
-
-- show several tracks in a single notation window
+12. the basics of Rosegarden 2.1 file loading
 
 
-3. cleaning up the code and organisation such that it's as pleasant as
-possible for other people to read and work with
+===
 
-- sort the source files in rosegardengui a bit better (core/,
-  gui/main/, gui/notation/, gui/trackedit)
+B.  The basis for more advanced features, where that basis should be
+    done as soon as possible:
 
-- do a global core + rosegardengui Makefile
+1.  undo stack
 
-- clean up XML code so that it's not spread over RosegardenGUIDoc and
-  RoseXMLHandler
+2.  multiple editor windows on a same track
+
+3.  "environments" à la Logic.
+
+4.  selection/deletion/editing etc of single events and groups thereof
+
+5.  track properties dialog
+
+6.  setting the time default sig of newly created tracks
+    (and selecting the appropriate sort of rest to fill up the tracks
+    with -- and should it be possible to change the rest type for a whole
+    filled section at once, after the fact?)
+
+7.  moveable begin and end markers in tracks
+
+8.  show several tracks in a single notation window
+
+
+===
+
+C.  Cleaning up the code and organisation such that it's as pleasant as
+    possible for other people to read and work with:
+ 
+1.  sort the source files in rosegardengui a bit better (core/,
+    gui/main/, gui/notation/, gui/trackedit)
+
+2.  do a global core + rosegardengui Makefile
+
+3.  clean up XML code so that it's not spread over RosegardenGUIDoc and
+    RoseXMLHandler
 
 
