@@ -31,6 +31,12 @@ public:
     
     Staff(QCanvas*, Clef clef = Treble);
 
+    /**
+     * Returns the Y offset at which a note with pitch 0
+     * (middle-C) should be displayed.
+     */
+    int pitch0YOffset() const;
+
     static const unsigned int noteHeight;
     static const unsigned int noteWidth;
     static const unsigned int lineWidth;
