@@ -292,7 +292,8 @@ protected:
     void drawFlags(int flagCount, const NotePixmapParameters &params,
 		   const QPoint &startPoint, const QPoint &endPoint);
     void drawStem(const NotePixmapParameters &params,
-		  const QPoint &startPoint, const QPoint &endPoint);
+		  const QPoint &startPoint, const QPoint &endPoint
+		  int shortening);
 
     void makeRoomForBeams(const NotePixmapParameters &params);
     void drawBeams(const QPoint &, const NotePixmapParameters &params,
