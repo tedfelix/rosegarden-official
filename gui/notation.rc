@@ -137,6 +137,8 @@ etc
   <Separator/>
   <Menu name="Marks">
     <text>&amp;Marks</text>
+    <Action name="remove_marks"/>
+    <Separator/>
     <Action name="add_accent"/>
     <Action name="add_tenuto"/>
     <Action name="add_staccato"/>
@@ -147,9 +149,8 @@ etc
     <Action name="add_pause"/>
     <Action name="add_up-bow"/>
     <Action name="add_down-bow"/>
-    <Action name="add_text_mark"/>
     <Separator/>
-    <Action name="remove_marks"/>
+    <Action name="add_text_mark"/>
   </Menu>
 </Menu>
 

@@ -63,7 +63,8 @@
 	<symbol name="MUSICAL SYMBOL COMBINING ACCENT" src="scripts-sforzato"/>
 	<symbol name="MUSICAL SYMBOL COMBINING TENUTO" src="scripts-tenuto"/>
 	<symbol name="MUSICAL SYMBOL COMBINING STACCATO" src="scripts-staccato"/>
-	<symbol name="MUSICAL SYMBOL FERMATA" src="scripts-ufermata"/>
+	<symbol name="MUSICAL SYMBOL FERMATA"
+	        src="scripts-ufermata" inversion-src="scripts-dfermata"/>
 	<symbol name="MUSICAL SYMBOL TR" src="scripts-trill"/>
 	<symbol name="MUSICAL SYMBOL TURN" src="scripts-turn"/>
 	<symbol name="MUSICAL SYMBOL COMBINING UP BOW" src="scripts-upbow"/>

@@ -80,7 +80,7 @@ Post-0.1.1 task list
 21. Do start index thing in Segment:
 
     "- we add a setSegmentStartIndex method in Composition
-     - we move Segment::setStartIndex() to protected"
+     - we move Segment::setStartIndex() to protected" [DONE]
 
 
 

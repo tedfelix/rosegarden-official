@@ -545,17 +545,31 @@ NotePixmapFactory::makeRoomForMarks(bool isStemmed,
 {
     int height = 0, width = 0;
     for (unsigned int i = 0; i < params.m_marks.size(); ++i) {
-	//!!! Deal with textual marks (sf, rf) -- or make them not marks
-	// at all?
-	QPixmap pixmap(m_font->getPixmap(getMarkCharName(params.m_marks[i])));
-	height += pixmap.height();
-	if (pixmap.width() > width) width = pixmap.width();
+
+	if (!Rosegarden::Marks::isTextMark(params.m_marks[i])) {
+
+	    QPixmap pixmap(m_font->getPixmap
+			   (getMarkCharName(params.m_marks[i])));
+	    height += pixmap.height() + 1;
+	    if (pixmap.width() > width) width = pixmap.width();
+
+	} else {
+	    // inefficient to do this here _and_ in drawMarks
+
+	    QString text =
+		Rosegarden::Marks::getTextFromMark(params.m_marks[i]).c_str();
+	    QRect bounds = m_textMarkFontMetrics.boundingRect(text);
+	    height += bounds.height() + 1;
+	    if (bounds.width() > width) width = bounds.width();
+	}
     }
+
     if (isStemmed && params.m_stemGoesUp) {
 	m_below += height + 1;
     } else {
 	m_above += height + 1;
     }
+
     m_left = std::max(m_left, width/2 - m_noteBodyWidth/2);
     m_right = std::max(m_right, width/2 - m_noteBodyWidth/2);
 }
@@ -572,20 +586,20 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 
 	if (!Rosegarden::Marks::isTextMark(params.m_marks[i])) {
 
-	    //!!! not good enough:
-	    if (params.m_marks[i] == Rosegarden::Marks::Pause)
-		markAbove = true;
+	    // get pixmap, inverting if it's a pause
 
 	    QPixmap pixmap(m_font->getPixmap
-			   (getMarkCharName(params.m_marks[i])));
+			   (getMarkCharName(params.m_marks[i]),
+			    ((params.m_marks[i] == Rosegarden::Marks::Pause) &&
+			     !markAbove)));
 
 	    int x = m_left + m_noteBodyWidth/2 - pixmap.width()/2;
 	    int y = (markAbove ? (m_above - dy - pixmap.height() - 1) :
-			         (m_above + m_noteBodyWidth + dy));
+			         (m_above + m_noteBodyHeight + dy));
 
 	    m_p.drawPixmap(x, y, pixmap);
 	    m_pm.drawPixmap(x, y,  *(pixmap.mask()));
-	    dy += pixmap.height();
+	    dy += pixmap.height() + 1;
 
 	} else {
 
@@ -597,12 +611,13 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 	    m_pm.setFont(m_textMarkFont);
 
 	    int x = m_left + m_noteBodyWidth/2 - bounds.width()/2;
-	    int y = (markAbove ? (m_above - dy - 1) :
-				 (m_above + m_noteBodyWidth + dy + 1));
+	    int y = (markAbove ? (m_above - dy - 3) :
+				 (m_above + m_noteBodyHeight +
+				  dy + bounds.height() + 1));
 
 	    m_p.drawText(x, y, text);
 	    m_pm.drawText(x, y, text);
-	    dy += bounds.height();
+	    dy += bounds.height() + 1;
 	}
     }
 }
