@@ -230,7 +230,7 @@ void MmappedSegment::iterator::reset()
     m_currentEvent = m_s->getBuffer();
 }
 
-MappedEvent MmappedSegment::iterator::operator*()
+const MappedEvent &MmappedSegment::iterator::operator*()
 {
     return *m_currentEvent;
 }
@@ -429,9 +429,9 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                 eventsRemaining = true;
             }
 
-            MappedEvent *evt = new MappedEvent(*(*iter));
+            if ((**iter).getEventTime() < endTime) {
 
-            if (evt->getEventTime() < endTime) {
+		MappedEvent *evt = new MappedEvent(*(*iter));
 
                 // set event's instrument
                 // 
@@ -486,6 +486,7 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
                 } else {
                     
                     //SEQUENCER_DEBUG << "skipping event\n";
+		    delete evt;
                 }
             
                 if (!evtIsFromMetronome) foundOneEvent = true;
@@ -516,7 +517,7 @@ void MmappedSegmentsMetaIterator::resetIteratorForSegment(const QString& filenam
         MmappedSegment::iterator* iter = *i;
 
         if (iter->getSegment()->getFileName() == filename) {
-//             SEQUENCER_DEBUG << "resetIteratorForSegment(" << filename << ") : found iterator\n";
+             SEQUENCER_DEBUG << "resetIteratorForSegment(" << filename << ") : found iterator\n";
             // delete iterator and create another one
             MmappedSegment* ms = (*i)->getSegment();
             delete iter;

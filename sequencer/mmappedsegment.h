@@ -87,7 +87,7 @@ public:
         iterator& operator+=(int);
         iterator& operator-=(int);
 
-        MappedEvent operator*();
+        const MappedEvent &operator*();
         const MappedEvent* peek() const { return m_currentEvent; }
 
         MmappedSegment* getSegment() { return m_s; }
