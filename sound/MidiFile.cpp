@@ -552,17 +552,15 @@ MidiFile::convertToRosegarden()
 	    }
 	}
 
-	if (notesOnSegment) //!!! Not adequate -- we need to load tempo and timesig events at least even if there are no notes
-	{
-	    // Create Segment on Composition object
+	// We parse the track even if there are known to be no notes
+	// on it, so as to handle tempo and time-signature events
+	// correctly.  But we only create a segment to write it to if
+	// there are some notes to write.
+	
+	if (notesOnSegment) {
 	    rosegardenSegment = new Segment;
 	    rosegardenSegment->setTrack(compositionTrack);
 	    rosegardenSegment->setStartIndex(0);
-	    SegmentNotationHelper notationSegment(*rosegardenSegment); //cc
-
-	    // rest creation token needs to be reset here
-	    //
-	    endOfLastNote = 0;
 
 	    // add the Segment to the Composition and increment the
 	    // Rosegarden segment number
@@ -570,193 +568,183 @@ MidiFile::convertToRosegarden()
 	    composition->addSegment(rosegardenSegment);
 	    compositionTrack++;
 
-	    for ( midiEvent = (m_midiComposition[i].begin());
-		  midiEvent != (m_midiComposition[i].end());
-		  ++midiEvent )
+	} else {
+	    rosegardenSegment = 0;
+	}
+
+	// rest creation token needs to be reset here
+	//
+	endOfLastNote = 0;
+
+	for ( midiEvent = (m_midiComposition[i].begin());
+	      midiEvent != (m_midiComposition[i].end());
+	      ++midiEvent )
+	{
+	    // [cc] -- avoid floating-point
+	    rosegardenTime =
+		((timeT)midiEvent->time() * crotchetTime) / divisor;
+	    rosegardenDuration =
+		((timeT)midiEvent->duration() * crotchetTime) / divisor;
+
+	    if (midiEvent->isMeta())
 	    {
-
-		//!!! cc -- what does it mean if there is no timing division?
-		// we've calculated divisor (or timingFactor) on the basis that
-		// there might not be, so shouldn't we just use it regardless?
-		if (m_timingDivision)
+		switch(midiEvent->metaEventCode())
 		{
-		    // [cc] -- avoid floating-point
-		    rosegardenTime = ((timeT)midiEvent->time() * crotchetTime) / divisor;
-		    rosegardenDuration =
-			((timeT)midiEvent->duration() * crotchetTime) / divisor;
-		}
+		case MIDI_SEQUENCE_NUMBER:
+		    break;
 
+		case MIDI_TEXT_EVENT:
+		    break;
 
-		if ( midiEvent->messageType() == MIDI_NOTE_ON ||
-		     midiEvent->messageType() == MIDI_NOTE_OFF )
-		{
-		    // insert rests if we need them
+		case MIDI_COPYRIGHT_NOTICE:
+		    break;
+
+		case MIDI_SEGMENT_NAME:
+		    break;
+
+		case MIDI_INSTRUMENT_NAME:
+		    break;
+
+		case MIDI_LYRIC:
+		    break;
+
+		case MIDI_TEXT_MARKER:
+		    break;
+
+		case MIDI_CUE_POINT:
+		    break;
+
+		case MIDI_CHANNEL_PREFIX:
+		    break;
+
+		case MIDI_CHANNEL_PREFIX_OR_PORT:
+		    break;
+
+		case MIDI_END_OF_SEGMENT:
+		    break;
+
+		case MIDI_SET_TEMPO:
+		    break;
+
+		case MIDI_SMPTE_OFFSET:
+		    break;
+
+		case MIDI_TIME_SIGNATURE:
+
+		    numerator = (int) midiEvent->metaMessage()[0];
+		    denominator = 1 << ((int) midiEvent->metaMessage()[1]);
+
+		    if (numerator == 0 ) numerator = 4;
+		    if (denominator == 0 ) denominator = 4;
+
+		    composition->addTimeSignature
+			(rosegardenTime,
+			 Rosegarden::TimeSignature(numerator, denominator));
+
+		    break;
+
+		case MIDI_KEY_SIGNATURE:
+
+		    if (!rosegardenSegment) break;
+
+		    // get the details
+		    accidentals = (int) midiEvent->metaMessage()[0];
+		    isMinor     = (int) midiEvent->metaMessage()[1];
+		    isSharp     = accidentals < 0 ?        false  :  true;
+		    accidentals = accidentals < 0 ?  -accidentals :  accidentals;
+
+		    // create and insert the key event
 		    //
-		    if (endOfLastNote < rosegardenTime ) {
-			rosegardenSegment->fillWithRests(rosegardenTime);
-		    }
-              
+		    rosegardenEvent = Rosegarden::Key
+			(accidentals, isSharp, isMinor).getAsEvent(rosegardenTime);
+		    rosegardenSegment->insert(rosegardenEvent);
 
-		    endOfLastNote = rosegardenTime + rosegardenDuration;
-		}
-        
-
-		if (midiEvent->isMeta())
-		{
-		    switch(midiEvent->metaEventCode())
-		    {
-		    case MIDI_SEQUENCE_NUMBER:
-			break;
-
-		    case MIDI_TEXT_EVENT:
-			break;
-
-		    case MIDI_COPYRIGHT_NOTICE:
-			break;
-
-		    case MIDI_SEGMENT_NAME:
-			break;
-
-		    case MIDI_INSTRUMENT_NAME:
-			break;
-
-		    case MIDI_LYRIC:
-			break;
-
-		    case MIDI_TEXT_MARKER:
-			break;
-
-		    case MIDI_CUE_POINT:
-			break;
-
-		    case MIDI_CHANNEL_PREFIX:
-			break;
-
-		    case MIDI_CHANNEL_PREFIX_OR_PORT:
-			break;
-
-		    case MIDI_END_OF_SEGMENT:
-			break;
-
-		    case MIDI_SET_TEMPO:
-			break;
-
-		    case MIDI_SMPTE_OFFSET:
-			break;
-
-		    case MIDI_TIME_SIGNATURE:
-//			rosegardenEvent = new Event(Rosegarden::TimeSignature::EventType);
-			numerator = (int) midiEvent->metaMessage()[0];
-			denominator = 1 << ((int) midiEvent->metaMessage()[1]);
-
-			if (numerator == 0 ) numerator = 4;
-			if (denominator == 0 ) denominator = 4;
-
-			rosegardenEvent = Rosegarden::TimeSignature
-			    (numerator, denominator).getAsEvent(rosegardenTime);
-			
-			//!!! Insert the time sig only if we haven't already
-			// got one at that time.  A bit ugly, this -- remind
-			// me to write Composition::addTimeSignature
-			{
-			Segment::iterator timeSigItr =
-			    composition->getReferenceSegment()->findTime
-			    (rosegardenTime);
-
-			if (timeSigItr ==
-			    composition->getReferenceSegment()->end() ||
-			    (*timeSigItr)->getAbsoluteTime() != rosegardenTime
-			    || !(*timeSigItr)->isa(TimeSignature::EventType)) {
-
-			    composition->getReferenceSegment()->insert
-				(rosegardenEvent);
-			}
-			}
-
-			break;
-
-		    case MIDI_KEY_SIGNATURE:
-			// get the details
-			accidentals = (int) midiEvent->metaMessage()[0];
-			isMinor     = (int) midiEvent->metaMessage()[1];
-			isSharp     = accidentals < 0 ?        false  :  true;
-			accidentals = accidentals < 0 ?  -accidentals :  accidentals;
-
-			// create and insert the key event
-			//
-			rosegardenEvent = Rosegarden::Key
-			    (accidentals, isSharp, isMinor).getAsEvent(rosegardenTime);
-			rosegardenSegment->insert(rosegardenEvent);
-
-			break;
-
-		    case MIDI_SEQUENCER_SPECIFIC:
-			break;
-
-		    default:
-			break;
-		    } 
-
-		}
-
-
-		switch(midiEvent->messageType())
-		{
-		case MIDI_NOTE_ON:
-		    // create and populate event
-		    rosegardenEvent = new Event(Rosegarden::Note::EventType);
-		    rosegardenEvent->setAbsoluteTime(rosegardenTime);
-		    rosegardenEvent->setType(Note::EventType);
-		    rosegardenEvent->set<Int>(BaseProperties::PITCH, midiEvent->note());
-		    rosegardenEvent->set<Int>(BaseProperties::VELOCITY, midiEvent->velocity());
-		    rosegardenEvent->setDuration(rosegardenDuration);
-
-		    {
-			// insert into Segment
-			Segment::iterator loc = rosegardenSegment->insert(rosegardenEvent);
-
-			// [cc] -- a bit of an experiment
-
-			if (!notationSegment.isViable(rosegardenEvent)) {
-			    notationSegment.makeNoteViable(loc);
-			}
-		    }
 		    break;
 
-		case MIDI_NOTE_OFF:
-		    std::cout << "MidiFile::convertToRosegarden - MIDI_OFF should not exist here!" << endl;
-		    break;
-
-		case MIDI_POLY_AFTERTOUCH:
-		    break;
-
-		case MIDI_CTRL_CHANGE:
-		    break;
-
-		case MIDI_PROG_CHANGE:
-		    break;
-
-		case MIDI_CHNL_AFTERTOUCH:
-		    break;
-
-		case MIDI_PITCH_BEND:
+		case MIDI_SEQUENCER_SPECIFIC:
 		    break;
 
 		default:
-		    //cout << "Can't create Rosegarden event for unknown MIDI event"
-		    //<< endl;
 		    break;
-		}
+		} 
+
 	    }
 
-	    // [cc]
-	    rosegardenSegment->insert
-		(notationSegment.guessClef
-		 (rosegardenSegment->begin(), rosegardenSegment->end()).getAsEvent(0));
 
-	    notationSegment.autoBeam
-		(rosegardenSegment->begin(), rosegardenSegment->end(),
-		 BaseProperties::GROUP_TYPE_BEAMED);
+	    switch(midiEvent->messageType())
+	    {
+	    case MIDI_NOTE_ON:
+
+		if (!rosegardenSegment) break;
+
+		// insert rests if we need them
+		//
+		if (endOfLastNote < rosegardenTime ) {
+		    rosegardenSegment->fillWithRests(rosegardenTime);
+		}
+
+		endOfLastNote = rosegardenTime + rosegardenDuration;
+
+		// create and populate event
+		rosegardenEvent = new Event(Rosegarden::Note::EventType);
+		rosegardenEvent->setAbsoluteTime(rosegardenTime);
+		rosegardenEvent->setType(Note::EventType);
+		rosegardenEvent->set<Int>(BaseProperties::PITCH, midiEvent->note());
+		rosegardenEvent->set<Int>(BaseProperties::VELOCITY, midiEvent->velocity());
+		rosegardenEvent->setDuration(rosegardenDuration);
+
+		{
+		    // insert into Segment
+		    Segment::iterator loc =
+			rosegardenSegment->insert(rosegardenEvent);
+
+		    // [cc] -- a bit of an experiment
+		    SegmentNotationHelper helper(*rosegardenSegment);
+		    if (!helper.isViable(rosegardenEvent)) {
+			helper.makeNoteViable(loc);
+		    }
+		}
+		break;
+
+	    case MIDI_NOTE_OFF:
+		std::cout << "MidiFile::convertToRosegarden - MIDI_OFF should not exist here!" << endl;
+		break;
+
+	    case MIDI_POLY_AFTERTOUCH:
+		break;
+
+	    case MIDI_CTRL_CHANGE:
+		break;
+
+	    case MIDI_PROG_CHANGE:
+		break;
+
+	    case MIDI_CHNL_AFTERTOUCH:
+		break;
+
+	    case MIDI_PITCH_BEND:
+		break;
+
+	    default:
+		//cout << "Can't create Rosegarden event for unknown MIDI event"
+		//<< endl;
+		break;
+	    }
+	}
+
+	// [cc]
+
+	if (rosegardenSegment) {
+
+	    SegmentNotationHelper helper(*rosegardenSegment);
+
+	    rosegardenSegment->insert
+		(helper.guessClef(rosegardenSegment->begin(),
+				  rosegardenSegment->end()).getAsEvent(0));
+
+	    helper.autoBeam(rosegardenSegment->begin(),
+			    rosegardenSegment->end(),
+			    BaseProperties::GROUP_TYPE_BEAMED);
 	}
     }
 

@@ -437,6 +437,29 @@ Composition::getBarRange(int n, bool truncate) const
     return std::pair<timeT, timeT>(start, finish);
 }
 
+void
+Composition::addTimeSignature(timeT t, TimeSignature timeSig)
+{
+    // Remove any existing time sigs at time t before we insert the
+    // new one
+
+    calculateBarPositions();
+
+    Segment::iterator i = m_referenceSegment.findTime(t);
+    std::vector<Segment::iterator> timeSigs;
+
+    while (i != m_referenceSegment.end() && (*i)->getAbsoluteTime() == t) {
+	if ((*i)->isa(TimeSignature::EventType)) timeSigs.push_back(i);
+	++i;
+    }
+
+    for (unsigned int j = 0; j < timeSigs.size(); ++j) {
+	m_referenceSegment.erase(timeSigs[j]);
+    }
+    
+    m_referenceSegment.insert(timeSig.getAsEvent(t));
+}
+
 TimeSignature
 Composition::getTimeSignatureAt(timeT t) const
 {

@@ -184,6 +184,11 @@ public:
     std::pair<timeT, timeT> getBarRange(timeT t) const;
 
     /**
+     * Add the given time signature at the given time
+     */
+    void addTimeSignature(timeT t, TimeSignature timeSig);
+
+    /**
      * Return the time signature in effect at time t
      */
     TimeSignature getTimeSignatureAt(timeT t) const;
