@@ -183,6 +183,12 @@ protected:
     void setBottomBarButtons(QWidget*);
 
     /**
+     * Locate the given widget in the top bar-buttons position and
+     * connect up its scrolling signals.
+     */
+    void setTextRuler(QWidget*);
+
+    /**
      * Set the current Notation tool (note inserter, rest inserter, eraser...)
      *
      * Called when the user selects a new item on one of the notation toolbars
@@ -244,6 +250,7 @@ protected:
     QScrollBar  *m_horizontalScrollBar;
     QGridLayout *m_grid;
     QWidget     *m_topBarButtons;
+    QWidget     *m_textRuler;
     QWidget     *m_bottomBarButtons;
 };
 

@@ -53,8 +53,9 @@ EditView::EditView(RosegardenGUIDoc *doc,
       m_canvasView(0),
       m_centralFrame(new QFrame(this)),
       m_horizontalScrollBar(new QScrollBar(Horizontal, m_centralFrame)),
-      m_grid(new QGridLayout(m_centralFrame, 4, 0)), // 4 rows, 0 cols
+      m_grid(new QGridLayout(m_centralFrame, 5, 0)), // 5 rows, 0 cols
       m_topBarButtons(0),
+      m_textRuler(0),
       m_bottomBarButtons(0)
 {
     setCentralWidget(m_centralFrame);
@@ -68,7 +69,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
 	(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
 	 this,		      SLOT(slotCommandExecuted(KCommand *)));
 
-    m_grid->addWidget(m_horizontalScrollBar, 3, 0);
+    m_grid->addWidget(m_horizontalScrollBar, 4, 0);
 }
 
 EditView::~EditView()
@@ -112,13 +113,26 @@ void EditView::setBottomBarButtons(QWidget* w)
 {
     delete m_bottomBarButtons;
     m_bottomBarButtons = w;
-    m_grid->addWidget(w, 2, 0);
+    m_grid->addWidget(w, 3, 0);
 
     connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
             m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
     connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
             m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
 }
+
+void EditView::setTextRuler(QWidget* w)
+{
+    delete m_textRuler;
+    m_textRuler = w;
+    m_grid->addWidget(w, 2, 0);
+
+    connect(m_horizontalScrollBar, SIGNAL(valueChanged(int)),
+            m_textRuler, SLOT(slotScrollHoriz(int)));
+    connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
+            m_textRuler, SLOT(slotScrollHoriz(int)));
+}
+
 
 void EditView::readjustViewSize(QSize requestedSize, bool exact)
 {
