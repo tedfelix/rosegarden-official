@@ -796,6 +796,12 @@ SegmentSelector::slotDestroyedSegmentItem(QObject *destroyedObject)
 void
 SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 {
+    // Hide guides
+    //
+    m_foreGuide->hide();
+    m_topGuide->hide();
+    m_canvas->canvas()->update();
+
     if (m_dispatchTool) {
 	m_dispatchTool->handleMouseButtonRelease(e);
 	delete m_dispatchTool;
@@ -854,11 +860,6 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 	}
 
 	if (haveChange) addCommandToHistory(command);
-
-        // Hide guides
-        //
-        m_foreGuide->hide();
-        m_topGuide->hide();
 
 	m_canvas->canvas()->update();
     }

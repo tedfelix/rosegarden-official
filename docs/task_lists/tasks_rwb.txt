@@ -20,6 +20,7 @@ o Audio
    - get record fader level working at sequencer
    - fix audio drag and drop [NEVER WORKED - GET WORKING in 0.9.5]
    - make outofspace.rg sound like something reasonable
+   - copy/paste plugin controls
 
 o Audio busses and routing
    - multiple audio record arm [HALF DONE - for 0.9.5]
