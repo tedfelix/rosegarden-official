@@ -16,6 +16,8 @@
      <enable>
         <Action name="edit_copy"/>
         <Action name="edit_paste"/>
+        <Action name="edit_insert"/>
+        <Action name="edit_delete"/>
      </enable>
 </State>
 

@@ -56,7 +56,7 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 
     QHBoxLayout* layout = new QHBoxLayout(btnBox, 4, 10);
 
-    m_closeButton = new QPushButton(btnBox);
+    m_closeButton = new QPushButton(i18n("Close"), btnBox);
     m_applyButton = new QPushButton(i18n("Apply"), btnBox);
     m_resetButton = new QPushButton(i18n("Reset"), btnBox);
 
