@@ -199,6 +199,11 @@ Composition::Composition() :
 
 Composition::~Composition()
 {
+    if (m_observers.size() > 0) {
+	cerr << "Warning: Composition::~Composition() with " << m_observers.size()
+	     << " observers still extant" << endl;
+    }
+
     notifySourceDeletion();
     clear();
     delete m_basicQuantizer;

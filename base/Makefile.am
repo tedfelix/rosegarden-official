@@ -37,6 +37,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     Quantizer.C \
 		     RealTime.C \
 		     RulerScale.C \
+		     ScriptAPI.C \
 		     Segment.C \
 		     SegmentMatrixHelper.C \
 		     SegmentNotationHelper.C \
