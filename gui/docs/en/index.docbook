@@ -231,6 +231,109 @@
     <!-- Note that all graphics should be in .png format. Use no
     gifs because of patent issues. -->
 
+
+    <sect1 id="file-operations">
+      <title>Files and Documents</title>
+      <para>
+	&rosegarden; stores each composition in its own document,
+	using its own internal format.  When you save a document it
+	is usually stored on disc as a file with the .rg extension.
+	&rosegarden; can also handle a number of other standard file
+	formats.
+      </para>
+
+      <sect2 id="file-creating">
+	<title>New compositions</title>
+	<para>
+	  When &rosegarden; starts up, it does so with a new document,
+	  containing an "empty" composition ready to start editing.
+	  To put something in that composition, you must either record
+	  something, or create some "blank" lengths of music (referred
+	  to as "segments") that you can then fill in using the
+	  various editing facilities.
+	</para>
+	<para>See <!-- link linkend="recording" -->Recording<!-- /link
+	--> for details of how to record music, and see the <link
+	linkend="segment-view">Track Editor</link> section for a
+	description of how to create, edit, and manage segments of
+	music.
+	</para>
+      </sect2>
+
+      <sect2 id="file-midi">
+	<title>Using MIDI files</title>
+	<para>
+	  To import and export MIDI files, use the "Import MIDI File"
+	  and "Export MIDI File" functions on the Import and Export
+	  submenus of the File menu.
+	</para>
+	<para>
+	  Although &rosegarden; can load and save file formats such as
+	  MIDI, it does not store MIDI data internally.  You should
+	  generally prefer to save files in &rosegarden;'s own format,
+	  as &rosegarden; stores quite a lot of information that will
+	  be lost when exporting to MIDI.
+	</para>
+	<para>
+	  When a MIDI file is loaded, &rosegarden; splits out the
+	  music into one track per MIDI track or channel in the file,
+	  <link linkend="studio-midi-import">sets up the appropriate
+	  instrument mappings</link>, and <link
+	  linkend="nv-quantization">attempts to calculate plausible
+	  notation</link> for the MIDI performance data.
+	</para>
+      </sect2>
+
+      <sect2 id="file-merge">
+	<title>Merging files</title> <para>As well as loading or
+	importing files, you can also merge them into the current
+	document, adding the segments found in the file to the ones
+	already there.
+	  </para>
+	
+	<para>To merge a file, just use the relevant option on the
+	Merge submenu of the File menu, instead of using the Open or
+	Import option.
+	</para>
+      </sect2>
+
+      <sect2 id="file-printing">
+	<title>Printing</title>
+	<para>
+	  You can print out a composition in the form of a
+	  musical score, using the "Print" function on the File menu.
+	</para>
+
+	<para>
+	  Producing a score from performance data is a hard task,
+	  however, and in most cases it's unreasonable to expect the
+	  default printout to be very readable.  You should use the
+	  <link linkend="notation-view">notation editor</link> to tidy
+	  up the score before printing.  (See also <link
+	  linkend="nv-quantization">Notation from performance
+	  data</link>.)
+	</para>
+
+	<para>
+	  With care &rosegarden; is capable of producing very
+	  readable scores, particularly if you have high-quality
+	  scalable notation fonts available.
+	</para>
+
+	<para>Even so, &rosegarden; is designed to be a screen editor
+	and not primarily a typesetter.  If you want to produce true
+	print-quality scores, you should consider using <ulink
+	url="http://www.lilypond.org">Lilypond</ulink> in conjunction
+	with &rosegarden;.  Lilypond is music typesetting software
+	that reads a specialised text file format and produces
+	high-quality typeset scores.  &rosegarden; is capable of
+	writing Lilypond files using the "Export Lilypond"
+	function on the Export submenu of the File menu.
+	</para>
+      </sect2>
+
+    </sect1>
+
     <sect1 id="segment-view">
       <title>The Track Editor</title>
       <sect2 id="segment-view-overview">
@@ -573,7 +676,7 @@
       <para>
         The Transport shows the current position of the pointer either
         in terms of absolute time from the first bar (in seconds) or
-        in 24-fps <acronym>SMTPE</acronym> time or alternatively in
+        in 24-fps <acronym>SMPTE</acronym> time or alternatively in
         bars and beats. It can also show time from the end of
         composition if you should so wish.  These functions are
         controlled by the small buttons on the left of the main
@@ -1305,8 +1408,10 @@
         <title>Tools and selections</title>
 	<para>
 	  Most of the menu and toolbar editing functions in the
-	  &rosegarden; Notation editor fall into one of two categories:
-	  <quote>tools</quote> and <quote>functions that operate on selections</quote>.
+	  &rosegarden; Notation editor fall into one of three
+	  categories: <quote>tools</quote>, <quote>functions that
+	  operate on selections</quote>, and <quote>drag
+	  operations</quote>.
         </para>
 
 	<variablelist>
@@ -1376,15 +1481,28 @@
 	      </para>
 	    </listitem>
 	  </varlistentry>
-<!--
+
 	  <varlistentry>
-	    <term></term>
+	    <term>Drag operations</term>
 	    <listitem>
 	      <para>
+		You can also do a certain amount of editing just by
+		dragging things around.  Switch to the Select (arrow)
+		tool, and then you can change the pitch of notes by
+		just click-and-dragging their heads up or down, and
+		change the times of notes and other events by dragging
+		them left or right.  (You can't drag rests or time
+		signatures, but you can drag everything else.  If you
+		have more than one event selected, the whole selection
+		will be dragged at once.)
+	      </para>
+	      <para>
+		Dragging is usually a less accurate way of editing
+		things than using the menu or toolbar functions, but
+		it can be easier.
 	      </para>
 	    </listitem>
 	  </varlistentry>
--->
         </variablelist>
       </sect2>
 
@@ -2129,8 +2247,8 @@
 		  durations not exactly expressible with single note
 		  heads to be split into multiple notes appropriately,
 		  and tied.  This has the same effect as applying the
-		  <!-- !!! link --> "Make Notes Viable" function in
-		  the notation view.
+		  <!-- !!! link --> "Tie Notes at Barlines" function
+		  in the notation view.
 		  </para>
 		  <para>
 		    This parameter is not set by default because it
@@ -2148,8 +2266,8 @@
 		    Causes overlapping notes to be split and tied, so
 		    as to make strict chords with individual noteheads
 		    tied as necessary.  This has the same effect as
-		    applying the <!-- !!! link --> "De-Counterpoint"
-		    function in the notation view.
+		    applying the <!-- !!! link --> "Split-and-Tie
+		    Overlapping Chords" function in the notation view.
 		  </para>
 		  <para>
 		    This parameter is not set by default partly because

@@ -5,16 +5,16 @@
 <MenuBar>
   <Menu name="file">
   <Action name="file_revert"/>
-    <Menu name="import" append="new_merge"><text>&amp;Import</text>
+    <Menu name="import" append="open_merge"><text>&amp;Import</text>
       <Action name="file_import_midi" />
       <Action name="file_import_rg21" />
     </Menu>
-    <Menu name="merge" append="new_merge"><text>&amp;Merge</text>
+    <Menu name="merge" append="open_merge"><text>&amp;Merge</text>
       <Action name="file_merge" />
       <Action name="file_merge_midi" />
       <Action name="file_merge_rg21" />
     </Menu>
-    <Menu name="export" append="new_merge"><text>&amp;Export</text>
+    <Menu name="export" append="save_merge"><text>&amp;Export</text>
       <Action name="file_export_midi" />
       <Action name="file_export_csound" />
       <Action name="file_export_lilypond" />
