@@ -460,9 +460,6 @@ void RosegardenGUIApp::initView()
 	(comp.getElapsedRealTime(m_doc->getComposition().getPosition()));
 
 
-    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::initView() : nb tracks = "
-                         << comp.getNbSegments() << std::endl;
-
     // Set the right track edition tool
     //
     if (comp.getNbSegments() > 0) {
