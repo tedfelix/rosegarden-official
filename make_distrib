@@ -2,7 +2,7 @@
 
 unset CDPATH
 
-SRCDIR=/home/bownie/rosegarden
+SRCDIR=$HOME/rosegarden
 
 cd $SRCDIR
 
@@ -10,7 +10,7 @@ VERSION=`grep INIT_AUTOMAKE configure.in.in | cut -d ',' -f2 | tr -d ')'`
 
 echo "VERSION = $VERSION"
 
-DESTDIR=/home/bownie/tmp/rosegarden-$VERSION
+DESTDIR=$HOME/tmp/rosegarden-$VERSION
 
 rm -rf $DESTDIR
 
