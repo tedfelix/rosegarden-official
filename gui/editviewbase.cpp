@@ -263,14 +263,6 @@ void EditViewBase::paintEvent(QPaintEvent* e)
     setCompositionModified(false);
 }
 
-void EditViewBase::showEvent(QShowEvent* e)
-{
-    KMainWindow::showEvent(e);
-    RG_DEBUG << "EditViewBase::showEvent()\n";
-    emit windowRaised();
-}
-
-
 MultiViewCommandHistory *EditViewBase::getCommandHistory()
 {
     return getDocument()->getCommandHistory();
