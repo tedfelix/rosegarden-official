@@ -915,11 +915,8 @@ void RosegardenGUIApp::openFile(const QString& filePath)
 
     if (newDoc->openDocument(effectiveFilePath)) {
 
-        // (*m_doc) = (*newDoc);
         setDocument(newDoc);
 
-        // initView();
-        
         // Ensure the sequencer knows about any audio files
         // we've loaded as part of the new Composition
         //
@@ -946,18 +943,15 @@ void RosegardenGUIApp::openFile(const QString& filePath)
     } else {
         // Create a new document
 
-        if(!performAutoload())
-            {
-                m_doc->newDocument();
+        if(!performAutoload()) {
 
-                QString caption=kapp->caption();	
-                setCaption(caption+": "+m_doc->getTitle());
-                initView();
-            }
+            m_doc->newDocument();
+
+            QString caption=kapp->caption();	
+            setCaption(caption+": "+m_doc->getTitle());
+            initView();
+        }
     }
-
-    //delete newDoc;
-
 }
 
 
@@ -1364,12 +1358,9 @@ void RosegardenGUIApp::slotFileClose()
     if (!m_doc) return;
 
     KTmpStatusMsg msg(i18n("Closing file..."), this);
-	
-    m_doc->saveIfModified();
-    m_doc->closeDocument();
-    m_doc->newDocument();
 
-    initView();
+    m_doc->saveIfModified();
+    setDocument(new RosegardenGUIDoc(this, m_pluginManager));
 
     // Don't close the whole view (i.e. Quit), just close the doc.
     //    close();
@@ -2029,7 +2020,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     Rosegarden::MidiFile *midiFile;
 
-    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(m_doc);
+    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
 
     midiFile = new Rosegarden::MidiFile(qstrtostr(file),
                                         &newDoc->getStudio());
@@ -2106,10 +2097,9 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     // Swap and clear down
     //
-    (*m_doc) = (*newDoc);
-
+    setDocument(newDoc);
+    
     delete midiFile;
-    delete newDoc;
 
     // Set modification flag
     //
@@ -2124,10 +2114,6 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
     }
 
     m_fileRecent->addURL(file);
-
-    // Reinitialise 
-    //
-    initView();
 
     // Clean up for notation purposes (after reinitialise, because that
     // sets the composition's end marker time which is needed here)
@@ -2239,7 +2225,7 @@ void RosegardenGUIApp::importRG21File(const QString &file)
                                          100,
                                          this);
 
-    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(m_doc);
+    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(this, m_pluginManager);
     RG21Loader rg21Loader(file, &newDoc->getStudio());
 
     // TODO: makde RG21Loader to actually emit these signals
@@ -2256,8 +2242,8 @@ void RosegardenGUIApp::importRG21File(const QString &file)
     newDoc->getComposition().swap(*tmpComp);
 
     // assign to existing document
-    (*m_doc) = (*newDoc);
-    delete newDoc;
+    setDocument(newDoc);
+
     delete tmpComp;
 
     // Set modification flag
@@ -2270,9 +2256,6 @@ void RosegardenGUIApp::importRG21File(const QString &file)
     m_doc->setAbsFilePath(QFileInfo(file).absFilePath());
 
     m_fileRecent->addURL(file);
-
-
-    initView();
 }
 
 void RosegardenGUIApp::setPointerPosition(long posSec,
