@@ -157,6 +157,8 @@ public:
 
     QString                    m_id;
 
+    bool                       isStereo() const { return m_isStereo; }
+
 signals:
     void audioChannelsChanged(int);
 

@@ -33,7 +33,7 @@ namespace Rosegarden
  * ONLY PUT PLAIN DATA HERE - NO POINTERS EVER
  * (and this struct mustn't have a constructor)
  */
-struct TrackLevelInfo
+struct LevelInfo
 {
     int level;
     int levelRight; // if stereo audio
@@ -42,6 +42,7 @@ struct TrackLevelInfo
 class MappedComposition;
 
 
+#define SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS 512 // can't be a symbol
 #define SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE 1024 // MIDI events
 
 class SequencerDataBlock
@@ -66,18 +67,20 @@ public:
     int getRecordedEvents(MappedComposition &) const;
     void addRecordedEvents(MappedComposition *);
 
-    bool getRecordLevel(TrackLevelInfo &) const;
-    void setRecordLevel(const TrackLevelInfo &);
+    bool getRecordLevel(LevelInfo &) const;
+    void setRecordLevel(const LevelInfo &);
 
-    bool getTrackLevel(TrackId track, TrackLevelInfo &) const;
-    void setTrackLevel(TrackId track, const TrackLevelInfo &);
+    bool getTrackLevel(TrackId track, LevelInfo &) const;
+    void setTrackLevel(TrackId track, const LevelInfo &);
 
-    void setTrackLevelsForInstrument(InstrumentId instrument,
-				     const TrackLevelInfo &);
+    bool getInstrumentLevel(InstrumentId id, LevelInfo &) const;
+    void setInstrumentLevel(InstrumentId id, const LevelInfo &);
 
     void setControlBlock(ControlBlock *cb) { m_controlBlock = cb; }
     
 protected:
+    int instrumentToIndex(InstrumentId id) const;
+    int instrumentToIndexCreating(InstrumentId id);
     ControlBlock *m_controlBlock;
 
     // Two ints rather than a RealTime, as the RealTime default ctor
@@ -97,10 +100,13 @@ protected:
 			SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE];
 
     int m_recordLevelUpdateIndex;
-    TrackLevelInfo m_recordLevel;
+    LevelInfo m_recordLevel;
 
-    int m_trackLevelUpdateIndices[CONTROLBLOCK_MAX_NB_TRACKS];
-    TrackLevelInfo m_trackLevels[CONTROLBLOCK_MAX_NB_TRACKS];
+    InstrumentId m_knownInstruments[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
+    int m_knownInstrumentCount;
+
+    int m_levelUpdateIndices[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
+    LevelInfo m_levels[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
 };
 
 }

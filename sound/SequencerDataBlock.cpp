@@ -37,8 +37,8 @@ SequencerDataBlock::SequencerDataBlock(bool initialise)
 	m_recordEventIndex = 0;
 	m_recordLevel.level = 0;
 	m_recordLevel.levelRight = 0;
-	memset(m_trackLevels, 0,
-	       CONTROLBLOCK_MAX_NB_TRACKS * sizeof(TrackLevelInfo));
+	memset(m_levels, 0,
+	       SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS * sizeof(LevelInfo));
     }
 }
 
@@ -103,16 +103,54 @@ SequencerDataBlock::addRecordedEvents(MappedComposition *mC)
     m_recordEventIndex = index;
 }
 
-bool
-SequencerDataBlock::getTrackLevel(TrackId track, TrackLevelInfo &info) const
+int
+SequencerDataBlock::instrumentToIndex(InstrumentId id) const
 {
-    static int lastUpdateIndex[CONTROLBLOCK_MAX_NB_TRACKS];
+    int i;
 
-    int currentIndex = m_trackLevelUpdateIndices[track];
-    info = m_trackLevels[track];
+    for (i = 0; i < m_knownInstrumentCount; ++i) {
+	if (m_knownInstruments[i] == id) return i;
+    }
 
-    if (lastUpdateIndex[track] != currentIndex) {
-	lastUpdateIndex[track]  = currentIndex;
+    return -1;
+}
+
+int
+SequencerDataBlock::instrumentToIndexCreating(InstrumentId id)
+{
+    int i;
+
+    for (i = 0; i < m_knownInstrumentCount; ++i) {
+	if (m_knownInstruments[i] == id) return i;
+    }
+
+    if (i == SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS) {
+	std::cerr << "ERROR: SequencerDataBlock::instrumentToIndexCreating("
+		  << id << "): out of instrument index space" << std::endl;
+	return -1;
+    }
+
+    m_knownInstruments[i] = id;
+    ++m_knownInstrumentCount;
+    return i;
+}
+
+bool
+SequencerDataBlock::getInstrumentLevel(InstrumentId id, LevelInfo &info) const
+{
+    static int lastUpdateIndex[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
+
+    int index = instrumentToIndex(id);
+    if (index < 0) {
+	info.level = info.levelRight = 0;
+	return false;
+    }
+
+    int currentUpdateIndex = m_levelUpdateIndices[index];
+    info = m_levels[index];
+
+    if (lastUpdateIndex[index] != currentUpdateIndex) {
+	lastUpdateIndex[index]  = currentUpdateIndex;
 	return true;
     } else {
 	return false; // no change
@@ -120,14 +158,17 @@ SequencerDataBlock::getTrackLevel(TrackId track, TrackLevelInfo &info) const
 }
 
 void
-SequencerDataBlock::setTrackLevel(TrackId track, const TrackLevelInfo &info)
+SequencerDataBlock::setInstrumentLevel(InstrumentId id, const LevelInfo &info)
 {
-    m_trackLevels[track] = info;
-    ++m_trackLevelUpdateIndices[track];
+    int index = instrumentToIndexCreating(id);
+    if (index < 0) return;
+
+    m_levels[index] = info;
+    ++m_levelUpdateIndices[index];
 }
 
 bool
-SequencerDataBlock::getRecordLevel(TrackLevelInfo &level) const
+SequencerDataBlock::getRecordLevel(LevelInfo &level) const
 {
     static int lastUpdateIndex = 0;
 
@@ -143,25 +184,33 @@ SequencerDataBlock::getRecordLevel(TrackLevelInfo &level) const
 }
 
 void
-SequencerDataBlock::setRecordLevel(const TrackLevelInfo &info)
+SequencerDataBlock::setRecordLevel(const LevelInfo &info)
 {
     m_recordLevel = info;
     ++m_recordLevelUpdateIndex;
 }
 
 void
-SequencerDataBlock::setTrackLevelsForInstrument(InstrumentId id,
-						const TrackLevelInfo &info)
+SequencerDataBlock::setTrackLevel(TrackId id, const LevelInfo &info)
 {
     if (m_controlBlock) {
-	for (unsigned int track = 0;
-	     track < m_controlBlock->getNbTracks(); ++track) {
-	    if (m_controlBlock->getInstrumentForTrack(track) == id) {
-		setTrackLevel(track, info);
-	    }
-	}
+	setInstrumentLevel(m_controlBlock->getInstrumentForTrack(id), info);
     }
 }
+
+bool
+SequencerDataBlock::getTrackLevel(TrackId id, LevelInfo &info) const
+{
+    info.level = info.levelRight = 0;
+
+    if (m_controlBlock) {
+	return getInstrumentLevel(m_controlBlock->getInstrumentForTrack(id),
+				  info);
+    }
+
+    return false;
+}
+    
 
 }
 

@@ -44,17 +44,17 @@ public:
 	m_sequencerDataBlock->addRecordedEvents(mC);
     }
 
-    void setRecordLevel(const Rosegarden::TrackLevelInfo &info) {
+    void setRecordLevel(const Rosegarden::LevelInfo &info) {
 	m_sequencerDataBlock->setRecordLevel(info);
     }
 
-    void setTrackLevel(Rosegarden::TrackId track, const Rosegarden::TrackLevelInfo &info) {
+    void setTrackLevel(Rosegarden::TrackId track, const Rosegarden::LevelInfo &info) {
 	m_sequencerDataBlock->setTrackLevel(track, info);
     }
 
-    void setTrackLevelsForInstrument(Rosegarden::InstrumentId id,
-				     const Rosegarden::TrackLevelInfo &info) {
-	m_sequencerDataBlock->setTrackLevelsForInstrument(id, info);
+    void setInstrumentLevel(Rosegarden::InstrumentId id,
+			    const Rosegarden::LevelInfo &info) {
+	m_sequencerDataBlock->setInstrumentLevel(id, info);
     }
 
     Rosegarden::SequencerDataBlock *getSequencerDataBlock() {

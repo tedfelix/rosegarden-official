@@ -21,6 +21,8 @@
 
 #include "mixer.h"
 #include "rosegardenguidoc.h"
+#include "sequencermapper.h"
+#include "rosedebug.h"
 
 #include "Studio.h"
 
@@ -100,4 +102,32 @@ MixerWindow::closeEvent(QCloseEvent *e)
     KMainWindow::closeEvent(e);
 }
 
-    
+void
+MixerWindow::updateMeters(SequencerMapper *mapper)
+{
+    for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
+
+	Rosegarden::InstrumentId id = i->first;
+	AudioFaderWidget *fader = i->second;
+
+	if (!fader) continue;
+
+	Rosegarden::LevelInfo info;
+	if (!mapper->getInstrumentLevel(id, info)) continue;
+
+	RG_DEBUG << "MixerWindow::updateMeters: id " << id << ", level left "
+		 << info.level << endl;
+	
+	// The values passed through are long-fader values, which is
+	// what we want.  (At least until we rework the meter widget
+	// to understand dB.)
+
+	if (fader->isStereo()) {
+	    fader->m_vuMeter->setLevel(float(info.level) / 127.0,
+				       float(info.levelRight) / 127.0);
+	} else {
+	    fader->m_vuMeter->setLevel(float(info.level) / 127.0);
+	}
+    }
+}
+

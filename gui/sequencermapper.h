@@ -44,13 +44,18 @@ public:
 	return m_sequencerDataBlock->getRecordedEvents(mC);
     }
 
-    bool getRecordLevel(Rosegarden::TrackLevelInfo &info) const {
+    bool getRecordLevel(Rosegarden::LevelInfo &info) const {
 	return m_sequencerDataBlock->getRecordLevel(info);
     }
 
     bool getTrackLevel(Rosegarden::TrackId track,
-		       Rosegarden::TrackLevelInfo &info) const {
+		       Rosegarden::LevelInfo &info) const {
 	return m_sequencerDataBlock->getTrackLevel(track, info);
+    }
+
+    bool getInstrumentLevel(Rosegarden::InstrumentId id,
+			    Rosegarden::LevelInfo &info) const {
+	return m_sequencerDataBlock->getInstrumentLevel(id, info);
     }
 
 protected:

@@ -1989,10 +1989,10 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                     }
                 }
 		if (getSequencerDataBlock()) {
-		    Rosegarden::TrackLevelInfo info;
+		    Rosegarden::LevelInfo info;
 		    info.level = (*i)->getVelocity();
 		    info.levelRight = 0;
-		    getSequencerDataBlock()->setTrackLevelsForInstrument
+		    getSequencerDataBlock()->setInstrumentLevel
 			((*i)->getInstrument(), info);
 		}
                 break;

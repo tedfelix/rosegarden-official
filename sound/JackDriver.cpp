@@ -658,7 +658,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	}
 
 	if (sdb) {
-	    Rosegarden::TrackLevelInfo info;
+	    Rosegarden::LevelInfo info;
 	    info.level = AudioLevel::multiplier_to_fader
 		(totalLeft / nframes, 127, AudioLevel::LongFader);
 	    info.levelRight = AudioLevel::multiplier_to_fader
@@ -718,12 +718,12 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	}	    
 
 	if (sdb) {
-	    Rosegarden::TrackLevelInfo info;
+	    Rosegarden::LevelInfo info;
 	    info.level = AudioLevel::multiplier_to_fader
 		(peakLeft, 127, AudioLevel::LongFader);
 	    info.levelRight = AudioLevel::multiplier_to_fader
 		(peakRight, 127, AudioLevel::LongFader);
-	    sdb->setTrackLevelsForInstrument(id, info);
+	    sdb->setInstrumentLevel(id, info);
 	}
     }
 

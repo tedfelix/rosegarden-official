@@ -28,6 +28,7 @@
 
 class RosegardenGUIDoc;
 namespace Rosegarden { class Studio; }
+class SequencerMapper;
 
 class MixerWindow : public KMainWindow
 {
@@ -36,6 +37,8 @@ class MixerWindow : public KMainWindow
 public:
     MixerWindow(QWidget *parent, RosegardenGUIDoc *document);
     ~MixerWindow();
+
+    void updateMeters(SequencerMapper *mapper);
 
 signals:
     void closing();

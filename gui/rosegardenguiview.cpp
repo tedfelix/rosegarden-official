@@ -932,8 +932,8 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
 
 	Rosegarden::Track *track = i->second;
 
-	Rosegarden::TrackLevelInfo info;
-	if (!mapper->getTrackLevel(track->getId(), info)) continue; // no change
+	Rosegarden::LevelInfo info;
+	mapper->getInstrumentLevel(track->getInstrument(), info);
 
 	Rosegarden::Instrument *instrument =
 	    getDocument()->getStudio().getInstrumentById(track->getInstrument());

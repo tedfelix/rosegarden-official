@@ -3013,6 +3013,7 @@ RosegardenGUIApp::slotUpdatePlaybackPosition()
 	m_doc->insertRecordedAudio(position, RECORDING_AUDIO);
     }
 
+    if (m_mixer && m_mixer->isVisible()) m_mixer->updateMeters(mapper);
     m_view->updateMeters(mapper);
 
     if (elapsedTime >= comp.getEndMarker())
