@@ -243,12 +243,13 @@ protected:
 		Rosegarden::timeT endTime);
 
     void addNewBar
-    (StaffType &staff, int barNo, NotationElementList::iterator start,
+    (StaffType &staff, int barCounter, NotationElementList::iterator start,
      double width, int fwidth, int bwidth, bool correct,
      Rosegarden::Event *timesig, Rosegarden::timeT actual);
 
     void setBar
-    (StaffType &staff, int barNo, NotationElementList::iterator start,
+    (StaffType &staff, int barNo, int barCounter,
+     NotationElementList::iterator start,
      double width, int fwidth, int bwidth, bool correct,
      Rosegarden::Event *timesig, Rosegarden::timeT actual);
     

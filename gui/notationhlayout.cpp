@@ -247,9 +247,17 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
     TimeSignature timeSignature;
 
     bool isFullScan = (startTime == endTime);
+//!!! Having too much trouble with this optimisation in the real world --
+// disabling it for 0.1.4
+//    bool isFullScan = true;
+
     bool allDone = false; // used in partial scans
 
-    if (isFullScan) barList.clear();
+    if (isFullScan) {
+	barList.clear();
+	startTime = t.getStartTime();
+	endTime = t.getEndTime();
+    }
 
     int barNo = getComposition()->getBarNumber(t.getStartTime());
     int endBarNo = getComposition()->getBarNumber(t.getEndTime());
@@ -281,24 +289,33 @@ NotationHLayout::scanStaff(StaffType &staff, timeT startTime, timeT endTime)
 	std::pair<timeT, timeT> barTimes =
 	    getComposition()->getBarRange(barNo);
 
+        NotationElementList::iterator to =
+	    getStartOfQuantizedSlice(notes, barTimes.second);
+
         if (!isFullScan) {
             // Full scans set some things in the bar data list during
             // addNewBar and the BarDataList constructor. Since partial
             // scans don't get to do that, they do this:
             bdl[barNo].barNo = barCounter - 1;
-            if (barTimes.second >= startTime) bdl[barNo].needsLayout = true;
+            if (barTimes.second >= startTime) {
+		bdl[barNo].needsLayout = true;
+	    }
             if (allDone) {
-                ++barNo;
+		// Need to prevent subsequent layout calls from using
+		// stale iterator data from this scan (a bit paranoid)
+		if (barNo < bdl.size()) {
+		    bdl[barNo].start = to;
+		} else {
+		    bdl.push_back(BarData(barNo, to, true));
+		}
                 ++barCounter;
+                ++barNo;
                 continue;
             }
         }
 
         NotationElementList::iterator from = 
 	    getStartOfQuantizedSlice(notes, barTimes.first);
-
-        NotationElementList::iterator to =
-	    getStartOfQuantizedSlice(notes, barTimes.second);
 
 //	kdDebug(KDEBUG_AREA) << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << t.getEndTime() << ")" << endl;
 
@@ -423,12 +440,26 @@ clock_t c = clock();
 	} else {
 	    
     	    if (!(barTimes.second < startTime || barTimes.first > endTime)) {
-		setBar(staff, barCounter, to,
+		setBar(staff, barNo, barCounter, to,
                        getIdealBarWidth(staff, fixedWidth, baseWidth, shortest,
                                         shortCount, totalCount, timeSignature),
                        fixedWidth, baseWidth,
                        apparentBarDuration == timeSignature.getBarDuration(),
                        timeSigEvent, actualBarEnd - barTimes.first);
+	    } else {
+		// If we don't do this, we have a potential problem when
+		// something is modified at the start of a bar: the start-
+		// iterator that was set by a previous scan won't get
+		// reset in this scan because it's "associated" with the
+		// previous bar of the scan.  This is a defect arising
+		// from the (bad) decision to update both the given and
+		// the following bar in addNewBar/setBar.  It all needs to
+		// be rationalised rather.
+		if (barNo < bdl.size()-1) {
+		    bdl[barNo+1].start = to;
+		} else {
+		    bdl.push_back(BarData(barCounter, to, true));
+		}
 	    }
         }
 
@@ -466,6 +497,55 @@ clock_t c = clock();
 
 }
 
+//!!! probably better to split this (and setBar) into methods that deal
+// with end-of-this-bar and start-of-next-bar separately?  also we have
+// significant confusion over difference between barNo and barCounter
+// in scanStaff
+void
+NotationHLayout::addNewBar(StaffType &staff,
+			   int barCounter, NotationElementList::iterator i,
+                           double width, int fwidth, int bwidth,
+			   bool correct, Event *timeSig, timeT actualDuration)
+{
+    BarDataList &bdl(m_barData[&staff]);
+
+    int s = bdl.size() - 1;
+    if (s >= 0) {
+        bdl[s].idealWidth = width;
+        bdl[s].fixedWidth = fwidth;
+        bdl[s].baseWidth = bwidth;
+	bdl[s].timeSignature = timeSig;
+	bdl[s].actualDuration = actualDuration;
+    }
+
+//    if (timeSig) kdDebug(KDEBUG_AREA) << "Adding bar with timesig" << endl;
+//    else kdDebug(KDEBUG_AREA) << "Adding bar without timesig" << endl;
+
+    bdl.push_back(BarData(barCounter, i, correct));
+}
+
+
+void
+NotationHLayout::setBar(StaffType &staff,
+			int barNo, int barCounter,
+			NotationElementList::iterator i,
+			double width, int fwidth, int bwidth,
+			bool correct, Event *timeSig, timeT actualDuration)
+{
+    BarDataList &bdl(m_barData[&staff]);
+    assert(barNo < bdl.size() - 1);
+
+    bdl[barNo].idealWidth = width;
+    bdl[barNo].fixedWidth = fwidth;
+    bdl[barNo].baseWidth = bwidth;
+    bdl[barNo].timeSignature = timeSig;
+    bdl[barNo].actualDuration = actualDuration;
+
+    bdl[barNo+1].barNo = barCounter;
+    bdl[barNo+1].correct = correct;
+    bdl[barNo+1].start = i;
+}
+ 
 timeT
 NotationHLayout::scanChord(NotationElementList *notes,
 			   NotationElementList::iterator &itr,
@@ -581,49 +661,6 @@ NotationHLayout::scanRest
     return d;
 }
 
-void
-NotationHLayout::addNewBar(StaffType &staff,
-			   int barNo, NotationElementList::iterator i,
-                           double width, int fwidth, int bwidth,
-			   bool correct, Event *timeSig, timeT actualDuration)
-{
-    BarDataList &bdl(m_barData[&staff]);
-
-    int s = bdl.size() - 1;
-    if (s >= 0) {
-        bdl[s].idealWidth = width;
-        bdl[s].fixedWidth = fwidth;
-        bdl[s].baseWidth = bwidth;
-	bdl[s].timeSignature = timeSig;
-	bdl[s].actualDuration = actualDuration;
-    }
-
-//    if (timeSig) kdDebug(KDEBUG_AREA) << "Adding bar with timesig" << endl;
-//    else kdDebug(KDEBUG_AREA) << "Adding bar without timesig" << endl;
-
-    bdl.push_back(BarData(barNo, i, correct));
-}
-
-
-void
-NotationHLayout::setBar(StaffType &staff,
-			int barNo, NotationElementList::iterator i,
-			double width, int fwidth, int bwidth,
-			bool correct, Event *timeSig, timeT actualDuration)
-{
-    BarDataList &bdl(m_barData[&staff]);
-    int bn = barNo + m_fakeBarCountMap[&staff] - 1;
-
-    bdl[bn].idealWidth = width;
-    bdl[bn].fixedWidth = fwidth;
-    bdl[bn].baseWidth = bwidth;
-    bdl[bn].timeSignature = timeSig;
-    bdl[bn].actualDuration = actualDuration;
-
-    bdl[bn+1].correct = correct;
-    bdl[bn+1].start = i;
-}
- 
 
 void
 NotationHLayout::fillFakeBars()
@@ -991,6 +1028,10 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
     TimeSignature timeSignature;
 
     bool isFullLayout = (startTime == endTime);
+//!!! Having too much trouble with this optimisation in the real world --
+// disabling it for 0.1.4
+//    bool isFullLayout = true;
+
     // these two are for partial layouts:
     bool haveSimpleOffset = false;
     double simpleOffset = 0;
@@ -1039,7 +1080,8 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             if (bdi->timeSignature)
                 bdi->timeSigX += (int) simpleOffset;
 
-            for (NotationElementList::iterator it = from; it != to; ++it) {
+            for (NotationElementList::iterator it = from;
+		 it != notes->end() && it != to; ++it) {
                 (*it)->setLayoutX((*it)->getLayoutX() + simpleOffset);
 		double airX, airWidth;
 		(*it)->getLayoutAirspace(airX, airWidth);

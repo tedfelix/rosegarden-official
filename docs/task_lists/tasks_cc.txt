@@ -77,6 +77,11 @@
 
 20. Investigate fucked-up rests after MIDI import (e.g. davy.mid)
 
+21. Work out why clicking on a segment with the SegmentSelector or
+    SegmentMover without moving it still causes a move command to
+    happen, and stop it
+
+
 Post-0.1.3 task list (superseding older ones)
 ====================
 

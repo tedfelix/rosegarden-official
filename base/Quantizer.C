@@ -397,7 +397,9 @@ Quantizer::quantize(Segment *s, Segment::iterator from, Segment::iterator to,
     }
     
     insertNewEvents(s);
-    if (haveFromTime) s->normalizeRests(fromTime, toTime);
+    if (haveFromTime && m_target == RawEventData) {
+	s->normalizeRests(fromTime, toTime);
+    }
 }
 
 
