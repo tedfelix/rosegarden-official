@@ -732,33 +732,33 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 	    return;
 	}
 
+        if (item->getSegment()) {
+            // Moving
+            //
+            m_currentItem = item;
+            m_clickPoint = e->pos();
+            slotSelectSegmentItem(m_currentItem);
 
-        // Moving
-        //
-        m_currentItem = item;
-        m_clickPoint = e->pos();
-        slotSelectSegmentItem(m_currentItem);
+            m_foreGuide->setX(int(m_canvas->grid().getRulerScale()->
+                                  getXForTime(item->getSegment()->getStartTime())) -2);
+            m_foreGuide->setY(0);
+            m_foreGuide->setZ(10);
+            m_foreGuide->setSize(2, m_canvas->canvas()->height());
 
-        m_foreGuide->setX(int(m_canvas->grid().getRulerScale()->
-                           getXForTime(item->getSegment()->getStartTime())) -2);
-        m_foreGuide->setY(0);
-        m_foreGuide->setZ(10);
-        m_foreGuide->setSize(2, m_canvas->canvas()->height());
+            m_topGuide->setX(0);
+            m_topGuide->setY(int(m_canvas->grid().getYBinCoordinate(item->getSegment()->getTrack())));
+            m_topGuide->setZ(10);
+            m_topGuide->setSize(m_canvas->canvas()->width(), 2);
 
-        m_topGuide->setX(0);
-        m_topGuide->setY(int(m_canvas->grid().getYBinCoordinate(
-                              item->getSegment()->getTrack())));
-        m_topGuide->setZ(10);
-        m_topGuide->setSize(m_canvas->canvas()->width(), 2);
+            m_foreGuide->show();
+            m_topGuide->show();
 
-        m_foreGuide->show();
-        m_topGuide->show();
-
-        // Don't update until the move - lazy way of making sure the
-        // guides don't flash on while we're double clicking
-        //
-        //m_canvas->canvas()->update();
-
+            // Don't update until the move - lazy way of making sure the
+            // guides don't flash on while we're double clicking
+            //
+            //m_canvas->canvas()->update();
+        }
+        
     } else {
 
 
@@ -813,6 +813,12 @@ SegmentSelector::getSelectedSegments()
 void
 SegmentSelector::slotSelectSegmentItem(SegmentItem *selectedItem)
 {
+    if (!selectedItem || !selectedItem->getSegment()) return; // yes, this can happen
+    // if the user draws a segment with the middle button (using the
+    // selector tool) and left-clicks while maintaining the middle
+    // button down - reported by Vladimir Savic <vlada@rockforums.net>
+    // who really deserves credit for finding this one :-)
+    
     // If we're selecting a Segment through this method
     // then don't set the m_currentItem
     //
