@@ -72,7 +72,7 @@ ViewElementsManager::erase(NotationElementList::iterator it)
 
         if ((*eIter) == ((*it)->event())) {
             kdDebug(KDEBUG_AREA) << "ViewElementsManager::erase() : Found Event : "
-                                 << *(*it) << endl;
+                                 << (*it) << endl;
 
             delete *eIter;
             m_track.erase(eIter);
