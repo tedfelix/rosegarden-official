@@ -377,6 +377,8 @@ SegmentCanvas::setSelectAdd(const bool &value)
     if (m_toolType != Selector)
         return;
 
+    if (!m_tool) setTool(Selector);
+
     dynamic_cast<SegmentSelector*>(m_tool)->setSegmentAdd(value);
 }
 
@@ -393,8 +395,9 @@ SegmentCanvas::setSelectCopy(const bool &value)
     if (m_toolType != Selector)
         return;
 
-    dynamic_cast<SegmentSelector*>(m_tool)->setSegmentCopy(value);
+    if (!m_tool) setTool(Selector);
 
+    dynamic_cast<SegmentSelector*>(m_tool)->setSegmentCopy(value);
 }
 
 
