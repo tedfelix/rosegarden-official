@@ -109,7 +109,7 @@ protected:
 		 Rosegarden::timeT begin, Rosegarden::timeT end,
 		 bool bruteForceRedoRequired = false);
 
-    virtual void modifySegment(Rosegarden::SegmentNotationHelper &) = 0;
+    virtual void modifySegment() = 0;
 
     virtual void beginExecute();
 

@@ -69,8 +69,10 @@ NoteInsertionCommand::~NoteInsertionCommand()
 }
 
 void
-NoteInsertionCommand::modifySegment(SegmentNotationHelper &helper)
+NoteInsertionCommand::modifySegment()
 {
+    SegmentNotationHelper helper(getSegment());
+
     Segment::iterator i =
         helper.insertNote(getBeginTime(), m_note, m_pitch, m_accidental);
     if (i != helper.segment().end()) m_lastInsertedEvent = *i;
@@ -90,8 +92,10 @@ RestInsertionCommand::~RestInsertionCommand()
 }
 
 void
-RestInsertionCommand::modifySegment(SegmentNotationHelper &helper)
+RestInsertionCommand::modifySegment()
 {
+    SegmentNotationHelper helper(getSegment());
+
     Segment::iterator i =
         helper.insertRest(getBeginTime(), m_note);
     if (i != helper.segment().end()) m_lastInsertedEvent = *i;
@@ -120,8 +124,10 @@ ClefInsertionCommand::getRelayoutEndTime()
 }
 
 void
-ClefInsertionCommand::modifySegment(SegmentNotationHelper &helper)
+ClefInsertionCommand::modifySegment()
 {
+    SegmentNotationHelper helper(getSegment());
+
     Segment::iterator i = helper.insertClef(getBeginTime(), m_clef);
     if (i != helper.segment().end()) m_lastInsertedEvent = *i;
 }
@@ -162,8 +168,10 @@ EraseCommand::getRelayoutEndTime()
 }
 
 void
-EraseCommand::modifySegment(SegmentNotationHelper &helper)
+EraseCommand::modifySegment()
 {
+    SegmentNotationHelper helper(getSegment());
+
     string eventType = m_event->getType();
 
     if (eventType == Note::EventType) {
@@ -189,6 +197,29 @@ EraseCommand::modifySegment(SegmentNotationHelper &helper)
     }
 }
 
+void GroupMenuBeamCommand::modifySegment()
+{
+    SegmentNotationHelper helper(getSegment());
+
+    helper.makeBeamedGroup(getBeginTime(), getEndTime(),
+                           Rosegarden::BaseProperties::GROUP_TYPE_BEAMED);
+}
+
+void GroupMenuAutoBeamCommand::modifySegment()
+{
+    SegmentNotationHelper helper(getSegment());
+
+    helper.autoBeam(getBeginTime(), getEndTime(),
+                    Rosegarden::BaseProperties::GROUP_TYPE_BEAMED);
+}
+
+void GroupMenuBreakCommand::modifySegment()
+{
+    SegmentNotationHelper helper(getSegment());
+
+    helper.unbeam(getBeginTime(), getEndTime());
+}
+
 
 GroupMenuAddIndicationCommand::GroupMenuAddIndicationCommand(std::string indicationType, 
 							     EventSelection &selection) :
@@ -208,8 +239,10 @@ GroupMenuAddIndicationCommand::~GroupMenuAddIndicationCommand()
 }
 
 void
-GroupMenuAddIndicationCommand::modifySegment(SegmentNotationHelper &helper)
+GroupMenuAddIndicationCommand::modifySegment()
 {
+    SegmentNotationHelper helper(getSegment());
+
     Indication indication(m_indicationType, m_indicationDuration);
     Event *e = indication.getAsEvent(getBeginTime());
     helper.segment().insert(e);
@@ -226,9 +259,23 @@ GroupMenuAddIndicationCommand::name(std::string indicationType)
 }
 
 
-void
-TransformsMenuCollapseNotesCommand::modifySegment(SegmentNotationHelper &helper)
+void TransformsMenuNormalizeRestsCommand::modifySegment()
 {
+    SegmentNotationHelper helper(getSegment());
+    helper.normalizeRests(getBeginTime(), getEndTime());
+}
+
+void TransformsMenuCollapseRestsCommand::modifySegment()
+{
+    SegmentNotationHelper helper(getSegment());
+    helper.collapseRestsAggressively(getBeginTime(), getEndTime());
+}
+
+void
+TransformsMenuCollapseNotesCommand::modifySegment()
+{
+    SegmentNotationHelper helper(getSegment());
+
     EventSelection::eventcontainer::iterator i;
     timeT endTime = getEndTime();
     
@@ -247,8 +294,9 @@ TransformsMenuCollapseNotesCommand::modifySegment(SegmentNotationHelper &helper)
 
 
 void
-TransformsMenuChangeStemsCommand::modifySegment(SegmentNotationHelper &)
+TransformsMenuChangeStemsCommand::modifySegment()
 {
+    SegmentNotationHelper helper(getSegment());
     EventSelection::eventcontainer::iterator i;
 
     for (i  = m_selection->getSegmentEvents().begin();
@@ -262,8 +310,9 @@ TransformsMenuChangeStemsCommand::modifySegment(SegmentNotationHelper &)
 
 
 void
-TransformsMenuRestoreStemsCommand::modifySegment(SegmentNotationHelper &)
+TransformsMenuRestoreStemsCommand::modifySegment()
 {
+    SegmentNotationHelper helper(getSegment());
     EventSelection::eventcontainer::iterator i;
 
     for (i  = m_selection->getSegmentEvents().begin();
@@ -277,8 +326,9 @@ TransformsMenuRestoreStemsCommand::modifySegment(SegmentNotationHelper &)
 
 
 void
-TransformsMenuTransposeCommand::modifySegment(SegmentNotationHelper &)
+TransformsMenuTransposeCommand::modifySegment()
 {
+    SegmentNotationHelper helper(getSegment());
     EventSelection::eventcontainer::iterator i;
 
     for (i  = m_selection->getSegmentEvents().begin();
@@ -296,8 +346,9 @@ TransformsMenuTransposeCommand::modifySegment(SegmentNotationHelper &)
 }
 
 void
-TransformsMenuTransposeOneStepCommand::modifySegment(SegmentNotationHelper &)
+TransformsMenuTransposeOneStepCommand::modifySegment()
 {
+    SegmentNotationHelper helper(getSegment());
     EventSelection::eventcontainer::iterator i;
 
     int offset = m_up ? 1 : -1;
@@ -334,8 +385,9 @@ TransformsMenuAddMarkCommand::name(Rosegarden::Mark markType)
 }
 
 void
-TransformsMenuAddMarkCommand::modifySegment(SegmentNotationHelper &)
+TransformsMenuAddMarkCommand::modifySegment()
 {
+    SegmentNotationHelper helper(getSegment());
     EventSelection::eventcontainer::iterator i;
 
     for (i  = m_selection->getSegmentEvents().begin();
@@ -350,8 +402,9 @@ TransformsMenuAddMarkCommand::modifySegment(SegmentNotationHelper &)
 }
 
 void
-TransformsMenuAddTextMarkCommand::modifySegment(SegmentNotationHelper &)
+TransformsMenuAddTextMarkCommand::modifySegment()
 {
+    SegmentNotationHelper helper(getSegment());
     EventSelection::eventcontainer::iterator i;
 
     for (i  = m_selection->getSegmentEvents().begin();
@@ -366,8 +419,9 @@ TransformsMenuAddTextMarkCommand::modifySegment(SegmentNotationHelper &)
 }
 
 void
-TransformsMenuRemoveMarksCommand::modifySegment(SegmentNotationHelper &)
+TransformsMenuRemoveMarksCommand::modifySegment()
 {
+    SegmentNotationHelper helper(getSegment());
     EventSelection::eventcontainer::iterator i;
 
     for (i  = m_selection->getSegmentEvents().begin();
@@ -384,9 +438,11 @@ TransformsMenuRemoveMarksCommand::modifySegment(SegmentNotationHelper &)
 }
 
 void
-TransformsMenuLabelChordsCommand::modifySegment(SegmentNotationHelper &helper)
+TransformsMenuLabelChordsCommand::modifySegment()
 {
     if (m_selection->getSegmentEvents().empty()) return;
+
+    SegmentNotationHelper helper(getSegment());
 
     AnalysisHelper ah;
     CompositionTimeSliceAdapter ca

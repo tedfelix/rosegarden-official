@@ -64,8 +64,7 @@ BasicCommand::execute()
 
     if (!m_doBruteForceRedo) {
 
-	SegmentNotationHelper helper(m_segment);
-	modifySegment(helper);
+	modifySegment();
 
     } else {
 	copyFrom(m_redoEvents);
