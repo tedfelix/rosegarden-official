@@ -7,8 +7,8 @@
     <FUNC>
         <TYPE>int</TYPE>
         <NAME>openFile</NAME>
-	<ARG><TYPE qleft="const" qright="&amp;">QString</TYPE><NAME>fileurl</NAME></ARG>
-	<ARG><TYPE>int</TYPE><NAME>mode</NAME></ARG>
+        <ARG><TYPE  qleft="const" qright="&amp;">QString</TYPE><NAME>url</NAME></ARG>
+        <ARG><TYPE>int</TYPE><NAME>mode</NAME></ARG>
      </FUNC>
     <FUNC>
         <TYPE>void</TYPE>
