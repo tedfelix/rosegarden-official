@@ -241,6 +241,22 @@ public:
     virtual int getY() const;
 
     /**
+     * Set the canvas width of the margin to left and right of the
+     * staff on each page (used only in MultiPageMode).  Each staff
+     * row will still be pageWidth wide (that is, the margin is in
+     * addition to the pageWidth, not included in it).  This does not
+     * move any canvas items that have already been created; it should
+     * be called before the sizeStaff/positionElements procedure
+     * begins.
+     */
+    virtual void setMargin(double m);
+    
+    /**
+     * Get the canvas width of the left and right margins.
+     */
+    virtual double getMargin() const;
+    
+    /**
      * Returns the width of the entire staff after layout.  Call
      * this only after you've done the full sizeStaff/positionElements
      * procedure.
@@ -423,21 +439,7 @@ public:
     // it and hasn't been supplied with a proper way to do without.
     // Please try to avoid calling this method.
     //!!! fix NotationView::doDeferredCursorMove
-    double getCanvasXForLayoutX(double x) const {
-	switch (m_pageMode) {
-	case ContinuousPageMode:
-	    return m_x + x - (m_pageWidth * getRowForLayoutX(x));
-	case MultiPageMode:
-	{
-	    int pageNo = getRowForLayoutX(x) / getRowsPerPage();
-	    double cx = m_x + x - (m_pageWidth * getRowForLayoutX(x));
-	    cx += (m_x + m_pageWidth) * pageNo;
-	    return cx;
-	}
-	case LinearMode: default:
-	    return m_x + x;
-	}
-    }
+    double getCanvasXForLayoutX(double x) const;
 
     // This should not really be public -- it should be one of the
     // protected methods below -- but we have some code that needs
@@ -445,12 +447,7 @@ public:
     // Please try to avoid calling this method.
     //!!! fix NotationView::getStaffForCanvasCoords
     LinedStaffCoords
-    getLayoutCoordsForCanvasCoords(double x, int y) const {
-	int row = getRowForCanvasCoords(x, y);
-	return LinedStaffCoords
-	    ((row * m_pageWidth) + x - getCanvasXForLeftOfRow(row),
-	     y - getCanvasYForTopOfStaff(row));
-    }
+    getLayoutCoordsForCanvasCoords(double x, int y) const;
 
     // This should not really be public -- it should be one of the
     // protected methods below -- but we have some code that needs
@@ -458,11 +455,7 @@ public:
     // Please try to avoid calling this method.
     //!!! fix NotationView::doDeferredCursorMove
     LinedStaffCoords
-    getCanvasCoordsForLayoutCoords(double x, int y) const {
-	int row = getRowForLayoutX(x);
-	return LinedStaffCoords
-	    (getCanvasXForLayoutX(x), getCanvasYForTopLine(row) + y);
-    }
+    getCanvasCoordsForLayoutCoords(double x, int y) const;
 
     // This should not really be public -- it should be one of the
     // protected methods below -- but we have some code that needs
@@ -496,45 +489,15 @@ protected:
 	return (int)(x / m_pageWidth);
     }
 
-    int getRowForCanvasCoords(double x, int y) const {
-	switch (m_pageMode) {
-	case ContinuousPageMode:
-	    return ((y - m_y) / m_rowSpacing);
-	case MultiPageMode:
-	    return (getRowsPerPage() * (int(x) / int(m_x + m_pageWidth))) +
-		((y - m_y) / m_rowSpacing);
-	case LinearMode: default:
-	    return (int)((x - m_x) / m_pageWidth);
-	}
-    }
+    int getRowForCanvasCoords(double x, int y) const;
 
-    int getCanvasYForTopOfStaff(int row = -1) const {
-	switch (m_pageMode) {
-	case ContinuousPageMode:
-	    if (row <= 0) return m_y;
-	    else return m_y + (row * m_rowSpacing);
-	case MultiPageMode:
-	    if (row <= 0) return m_y;
-	    else return m_y + ((row % getRowsPerPage()) * m_rowSpacing);
-	case LinearMode: default:
-	    return m_y;
-	}
-    }
+    int getCanvasYForTopOfStaff(int row = -1) const;
 
     int getCanvasYForTopLine(int row = -1) const {
 	return getCanvasYForTopOfStaff(row) + getTopLineOffset();
     }
 
-    double getCanvasXForLeftOfRow(int row) const {
-	switch (m_pageMode) {
-	case ContinuousPageMode:
-	    return m_x;
-	case MultiPageMode:
-	    return m_x + (m_x + m_pageWidth) * (row / getRowsPerPage());
-	case LinearMode: default:
-	    return m_x + (row * m_pageWidth);
-	}
-    }
+    double getCanvasXForLeftOfRow(int row) const;
 
     double getCanvasXForRightOfRow(int row) const {
 	return getCanvasXForLeftOfRow(row) + m_pageWidth;
@@ -594,6 +557,7 @@ protected:
 
     double   m_x;
     int	     m_y;
+    double   m_margin;
     int	     m_resolution;
     int	     m_lineThickness;
     

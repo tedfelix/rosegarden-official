@@ -85,7 +85,7 @@ protected:
 
 
 /**
- * A pseudo GC in which CanvasItems which ownership isn't clear cut
+ * A pseudo GC in which CanvasItems whose ownership isn't clear cut
  * can be put for periodical removal.
  *
  * This is especially for SegmentItems which can put their repeat

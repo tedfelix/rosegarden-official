@@ -942,14 +942,14 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     hbox = new QHBox(this);
     hbox->setSpacing(8);
     m_panRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 64.0, 20);
-    QLabel* panLabel = new QLabel(i18n("Pan"), hbox);
+    new QLabel(i18n("Pan"), hbox);
     gridLayout->addMultiCellWidget
 	(hbox, row, row, leftMinCol, leftMaxCol, AlignLeft);
 
     hbox = new QHBox(this);
     hbox->setSpacing(8);
     m_chorusRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
-    QLabel* chorusLabel = new QLabel(i18n("Chorus"), hbox);
+    new QLabel(i18n("Chorus"), hbox);
     gridLayout->addMultiCellWidget
 	(hbox, row, row, rightMinCol, rightMaxCol, AlignLeft);
 
@@ -957,14 +957,14 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     hbox = new QHBox(this);
     hbox->setSpacing(8);
     m_volumeRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 64.0, 20);
-    QLabel* volumeLabel= new QLabel(i18n("Volume"), hbox);
+    new QLabel(i18n("Volume"), hbox);
     gridLayout->addMultiCellWidget
 	(hbox, row, row, leftMinCol, leftMaxCol, AlignLeft);
 
     hbox = new QHBox(this);
     hbox->setSpacing(8);
     m_reverbRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
-    QLabel* reverbLabel = new QLabel(i18n("Reverb"), hbox);
+    new QLabel(i18n("Reverb"), hbox);
     gridLayout->addMultiCellWidget
 	(hbox, row, row, rightMinCol, rightMaxCol, AlignLeft);
 
@@ -972,14 +972,14 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     hbox = new QHBox(this);
     hbox->setSpacing(8);
     m_attackRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
-    QLabel* attackLabel = new QLabel(i18n("Attack"), hbox);
+    new QLabel(i18n("Attack"), hbox);
     gridLayout->addMultiCellWidget
 	(hbox, row, row, leftMinCol, leftMaxCol, AlignLeft);
 
     hbox = new QHBox(this);
     hbox->setSpacing(8);
     m_highPassRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
-    QLabel* highPassLabel = new QLabel(i18n("Filter"), hbox);
+    new QLabel(i18n("Filter"), hbox);
     gridLayout->addMultiCellWidget
 	(hbox, row, row, rightMinCol, rightMaxCol, AlignLeft);
 
@@ -987,14 +987,14 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     hbox = new QHBox(this);
     hbox->setSpacing(8);
     m_releaseRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
-    QLabel* releaseLabel = new QLabel(i18n("Release"), hbox);
+    new QLabel(i18n("Release"), hbox);
     gridLayout->addMultiCellWidget
 	(hbox, row, row, leftMinCol, leftMaxCol, AlignLeft);
 
     hbox = new QHBox(this);
     hbox->setSpacing(8);
     m_resonanceRotary = new RosegardenRotary(hbox, 0.0, 127.0, 1.0, 5.0, 0.0, 20);
-    QLabel* resonanceLabel = new QLabel(i18n("Resonance"), hbox);
+    new QLabel(i18n("Resonance"), hbox);
     gridLayout->addMultiCellWidget
 	(hbox, row, row, rightMinCol, rightMaxCol, AlignLeft);
 

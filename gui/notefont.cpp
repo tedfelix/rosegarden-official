@@ -250,7 +250,9 @@ NoteFontMap::startElement(const QString &, const QString &,
 	//as it just stops scaling up any further at somewhere around
 	//120px.  We could test whether the metric for the black
 	//notehead is noticeably smaller than the notehead should be,
-	//and reject if so?
+	//and reject if so?  [update -- no, that doesn't work either,
+	//Qt just returns the correct metric even if drawing the
+	//incorrect size]
 	
 	for (int sz = 1; sz <= 30; sz += (sz == 1 ? 1 : 2)) {
 
@@ -1333,39 +1335,9 @@ NoteFontFactory::getAllSizes(std::string fontName)
     NoteFont *font = getFont(fontName, 0);
     if (!font) return std::vector<int>();
 
-    int knownGood = 16;
-    int knownBad = 100000;
-
     std::set<int> s(font->getSizes());
     std::vector<int> v;
     for (std::set<int>::iterator i = s.begin(); i != s.end(); ++i) {
-
-	//!!! This is all a gross hack.  Qt seems to be unable to tell us
-	// when a font we've requested is too large: it just loads a
-	// smaller one and never lets on (even the font info's
-	// pixelSize method returns the incorrect larger size).  So we
-	// have to examine the font and make sure it's actually as big
-	// as specified!
-	
-	if (*i >= knownBad) continue;
-
-	if (*i > knownGood) { // load it and make sure it works
-	    NoteFont *sizedFont = getFont(fontName, *i);
-	    QPixmap map;
-	    if (sizedFont->getPixmap(NoteCharacterNames::NOTEHEAD_BLACK, map)) {
-		if (map.height() < *i - 1) {
-		    std::cerr << "Warning: NoteFontFactory::getAllSizes: can't load font for " << fontName << " at size " << *i << " (" << map.height() << " returned instead)" << std::endl;
-		    knownBad = *i;
-		    continue;
-		} else {
-		    NOTATION_DEBUG << "NoteFontFactory::getAllSizes: loaded font " << fontName << " at size " << *i << ", pixmap is " << map.height() << " tall" << endl;
-		    knownGood = *i;
-		}
-	    } else {
-		continue;
-	    }
-	}
-
 	v.push_back(*i);
     }
 
@@ -1376,9 +1348,6 @@ NoteFontFactory::getAllSizes(std::string fontName)
 std::vector<int>
 NoteFontFactory::getScreenSizes(std::string fontName)
 {
-    //!!!
-//    return getAllSizes(fontName);
-
     NoteFont *font = getFont(fontName, 0);
     if (!font) return std::vector<int>();
 

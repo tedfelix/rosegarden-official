@@ -165,7 +165,7 @@ NotationStaff::drawStaffName()
 
     int layoutY = getLayoutYForHeight(5);
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(0, layoutY);
-    m_staffName->move(getX() + m_notePixmapFactory->getNoteBodyWidth(),
+    m_staffName->move(getX() + getMargin() + m_notePixmapFactory->getNoteBodyWidth(),
 		      (double)coords.second);
     m_staffName->show();
 }

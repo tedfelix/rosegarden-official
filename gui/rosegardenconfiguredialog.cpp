@@ -419,8 +419,8 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_layoutMode = new KComboBox(frame);
     m_layoutMode->setEditable(false);
     m_layoutMode->insertItem(i18n("Linear layout"));
-    m_layoutMode->insertItem(i18n("Continuous Page layout"));
-    m_layoutMode->insertItem(i18n("Multiple Page layout"));
+    m_layoutMode->insertItem(i18n("Continuous page layout"));
+    m_layoutMode->insertItem(i18n("Multiple page layout"));
     int defaultLayoutMode = m_cfg->readNumEntry("layoutmode", 0);
     if (defaultLayoutMode >= 0 && defaultLayoutMode <= 1) {
         m_layoutMode->setCurrentItem(defaultLayoutMode);

@@ -42,6 +42,7 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_id(id),
     m_x(0.0),
     m_y(0),
+    m_margin(0.0),
     m_resolution(resolution),
     m_lineThickness(lineThickness),
     m_pageMode(LinearMode),
@@ -68,6 +69,7 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_id(id),
     m_x(0.0),
     m_y(0),
+    m_margin(0.0),
     m_resolution(resolution),
     m_lineThickness(lineThickness),
     m_pageMode(pageHeight ? MultiPageMode : ContinuousPageMode),
@@ -95,6 +97,7 @@ LinedStaff::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_id(id),
     m_x(0.0),
     m_y(0),
+    m_margin(0.0),
     m_resolution(resolution),
     m_lineThickness(lineThickness),
     m_pageMode(pageMode),
@@ -153,7 +156,6 @@ LinedStaff::setPageMode(PageMode pageMode)
 void
 LinedStaff::setPageWidth(double pageWidth)
 {
-//!!! need pageMargin
     m_pageWidth = pageWidth;
 }
 
@@ -205,12 +207,30 @@ LinedStaff::getY() const
     return m_y;
 }
 
+void
+LinedStaff::setMargin(double margin)
+{
+    m_margin = margin;
+}
+
+double
+LinedStaff::getMargin() const
+{
+    if (m_pageMode != MultiPageMode) return 0;
+    return m_margin;
+}
+
 double
 LinedStaff::getTotalWidth() const
 {
     switch (m_pageMode) {
-    case ContinuousPageMode: case MultiPageMode:
+
+    case ContinuousPageMode:
         return getCanvasXForRightOfRow(getRowForLayoutX(m_endLayoutX)) - m_x;
+
+    case MultiPageMode:
+        return getCanvasXForRightOfRow(getRowForLayoutX(m_endLayoutX)) + m_margin - m_x;
+
     case LinearMode: default:
         return getCanvasXForLayoutX(m_endLayoutX) - m_x;
     }
@@ -220,11 +240,14 @@ int
 LinedStaff::getTotalHeight() const
 {
     switch (m_pageMode) {
+
     case ContinuousPageMode:
 	return getCanvasYForTopOfStaff(getRowForLayoutX(m_endLayoutX)) +
 	    getHeightOfRow() - m_y;
+
     case MultiPageMode:
 	return m_pageHeight - m_y;
+
     case LinearMode: default:
 	return getCanvasYForTopOfStaff(0) + getHeightOfRow() - m_y;
     }
@@ -280,7 +303,7 @@ LinedStaff::getCanvasYForHeight(int h, int baseY) const
 {
     int y;
     if (baseY >= 0) {
-        y = getCanvasYForTopLine(getRowForCanvasCoords(m_x, baseY));
+        y = getCanvasYForTopLine(getRowForCanvasCoords(getX() + getMargin(), baseY));
     } else {
         y = getCanvasYForTopLine();
     }
@@ -310,7 +333,7 @@ LinedStaff::getHeightAtCanvasY(int y) const
 //                         << ", getLineSpacing() = " << m_npf->getLineSpacing()
 //                         << endl;
 
-    int row = getRowForCanvasCoords(m_x, y);
+    int row = getRowForCanvasCoords(getX() + getMargin(), y);
     int ph = (y - getCanvasYForTopLine(row)) * getHeightPerLine() /
         getLineSpacing();
     ph = getTopLineHeight() - ph;
@@ -367,7 +390,98 @@ LinedStaff::getBarExtents(double x, int y) const
     }
 
     // failure
-    return QRect(int(m_x), getCanvasYForTopOfStaff(), 4, getHeightOfRow());
+    return QRect(int(getX() + getMargin()), getCanvasYForTopOfStaff(), 4, getHeightOfRow());
+}
+
+double
+LinedStaff::getCanvasXForLayoutX(double x) const
+{
+    switch (m_pageMode) {
+
+    case ContinuousPageMode:
+	return m_x + x - (m_pageWidth * getRowForLayoutX(x));
+
+    case MultiPageMode:
+    {
+	int pageNo = getRowForLayoutX(x) / getRowsPerPage();
+	double cx = m_x + x - (m_pageWidth * getRowForLayoutX(x));
+	cx += m_margin + (m_margin * 2 + m_pageWidth) * pageNo;
+	return cx;
+    }
+
+    case LinearMode: default:
+	return m_x + x;
+    }
+}  
+
+LinedStaff::LinedStaffCoords
+LinedStaff::getLayoutCoordsForCanvasCoords(double x, int y) const
+{
+    int row = getRowForCanvasCoords(x, y);
+    return LinedStaffCoords
+	((row * m_pageWidth) + x - getCanvasXForLeftOfRow(row),
+	 y - getCanvasYForTopOfStaff(row));
+}
+
+LinedStaff::LinedStaffCoords
+LinedStaff::getCanvasCoordsForLayoutCoords(double x, int y) const
+{
+    int row = getRowForLayoutX(x);
+    return LinedStaffCoords
+	(getCanvasXForLayoutX(x), getCanvasYForTopLine(row) + y);
+}
+
+int
+LinedStaff::getRowForCanvasCoords(double x, int y) const
+{
+    switch (m_pageMode) {
+
+    case ContinuousPageMode:
+	return ((y - m_y) / m_rowSpacing);
+
+    case MultiPageMode:
+	return (getRowsPerPage() *
+		(int(x - m_x - m_margin) / int(m_margin*2 + m_pageWidth))) +
+	    ((y - m_y) / m_rowSpacing);
+
+    case LinearMode: default:
+	return (int)((x - m_x) / m_pageWidth);
+    }
+}
+
+int
+LinedStaff::getCanvasYForTopOfStaff(int row) const
+{
+    switch (m_pageMode) {
+
+    case ContinuousPageMode:
+	if (row <= 0) return m_y;
+	else return m_y + (row * m_rowSpacing);
+    
+    case MultiPageMode:
+	if (row <= 0) return m_y;
+	else return m_y + ((row % getRowsPerPage()) * m_rowSpacing);
+	
+    case LinearMode: default:
+	return m_y;
+    }
+}
+
+double
+LinedStaff::getCanvasXForLeftOfRow(int row) const
+{
+    switch (m_pageMode) {
+
+    case ContinuousPageMode:
+	return m_x;
+
+    case MultiPageMode:
+	return m_x + m_margin +
+	    (m_margin*2 + m_pageWidth) * (row / getRowsPerPage());
+
+    case LinearMode: default:
+	return m_x + (row * m_pageWidth);
+    }
 }
 
 void
@@ -462,7 +576,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     double testX = getCanvasXForLayoutX(layoutX);
     int starti = 0;
 
-    if (testX < m_x + 2 && testRow > 1) {
+    if (testX < getX() + getMargin() + 2 && testRow > 1) {
 	// first bar on new row
 	starti = -barThickness;
     }

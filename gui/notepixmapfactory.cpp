@@ -296,23 +296,8 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     QPixmap dot(m_font->getPixmap(NoteCharacterNames::DOT));
 
     if (stemLength < 0) {
-
-	//!!! use flagSpacing?
-       
-        stemLength = getStemLength();
-        int nbh = m_noteBodyHeight;
-
-        switch (flagCount) {
-        case 1: stemLength += nbh / 3; break;
-        case 2: stemLength += nbh * 3 / 4; break;
-        case 3: stemLength += nbh + nbh / 4; break;
-        case 4: stemLength += nbh * 2 - nbh / 4; break;
-        default: break;
-        }
-
-	if (slashCount > 3 && flagCount < 3) {
-	    stemLength += (slashCount - 3) * (nbh / 2);
-	}
+	// This should only happen if the note is unbeamed
+	stemLength = getStemLength(params);
     }
 
     if (params.m_marks.size() > 0) {
@@ -501,13 +486,59 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     return makeCanvasPixmap(hotspot);
 }
 
+int
+NotePixmapFactory::getStemLength(const NotePixmapParameters &params) const
+{
+    //!!! use flagSpacing? or need a makeRoomForFlags in case
+    //they're too long?  (flagSpacing won't work well because we
+    //need more room for flags on downward-pointing stems than
+    //upward ones)
+
+    unsigned int stemLength = getStemLength();
+
+    int flagCount = m_style->getFlagCount(params.m_noteType);
+    int slashCount = params.m_slashes;
+    unsigned int nbh = m_noteBodyHeight;
+    
+    switch (flagCount) {
+    case 1: stemLength += nbh / 3; break;
+    case 2: stemLength += nbh * 3 / 4; break;
+    case 3: stemLength += nbh + nbh / 4; break;
+    case 4: stemLength += nbh * 2 - nbh / 4; break;
+    default: break;
+    }
+    
+    int width = 0, height = 0;
+
+    if (m_font->getDimensions(m_style->getFlagCharName(flagCount),
+			      width, height)) {
+
+	stemLength = std::min(stemLength, height + nbh);
+
+    } else if (m_font->getDimensions(m_style->getFlagCharName(0),
+				     width, height)) {
+
+	unsigned int flagSpace = m_noteBodyHeight;
+	(void)m_font->getFlagSpacing(flagSpace);
+
+	stemLength = std::min(stemLength,
+			      height + (flagCount - 1) * flagSpace + nbh);
+    }
+
+    if (slashCount > 3 && flagCount < 3) {
+	stemLength += (slashCount - 3) * (nbh / 2);
+    }
+
+    return stemLength;
+}
+
 void
 NotePixmapFactory::makeRoomForAccidental(Accidental a)
 {
     QPixmap ap(m_font->getPixmap(m_style->getAccidentalCharName(a)));
     QPoint ah(m_font->getHotspot(m_style->getAccidentalCharName(a)));
 
-    m_left += ap.width();
+    m_left += ap.width() + (m_noteBodyWidth/4 - m_origin.x());
 
     int above = ah.y() - m_noteBodyHeight/2;
     int below = (ap.height() - ah.y()) -
@@ -542,8 +573,8 @@ NotePixmapFactory::makeRoomForMarks(bool isStemmed,
 	    if (pixmap.width() > width) width = pixmap.width();
 
 	} else {
-	    //!!! inefficient to do this here _and_ in drawMarks
-
+	    // Inefficient to do this here _and_ in drawMarks, but
+	    // text marks are not all that common
 	    QString text = strtoqstr(Rosegarden::Marks::getTextFromMark
 				     (params.m_marks[i]));
 	    QRect bounds = m_textMarkFontMetrics.boundingRect(text);
@@ -690,8 +721,12 @@ NotePixmapFactory::makeRoomForStemAndFlags(int flagCount, int stemLength,
 
     if (flagCount > 0) {
 	if (params.m_stemGoesUp) {
-	    m_right += m_font->getWidth
-		(m_style->getFlagCharName(flagCount));
+	    int width = 0, height = 0;
+	    if (!m_font->getDimensions
+		(m_style->getFlagCharName(flagCount), width, height)) {
+		width = m_font->getWidth(m_style->getFlagCharName(0));
+	    }
+	    m_right += width;
 	}
     }
 
@@ -756,62 +791,57 @@ NotePixmapFactory::drawFlags(int flagCount,
 			     const NotePixmapParameters &params,
 			     const QPoint &s0, const QPoint &s1)
 {
-    if (flagCount > 0) {
+    if (flagCount < 1) return;
 
-	//!!! also where getWidth(getFlagCharName) is used above
+    QPixmap flagMap;
+    bool found = m_font->getPixmap(m_style->getFlagCharName(flagCount),
+				   flagMap,
+				   !params.m_stemGoesUp);
+    
+    if (!found) {
 
-	QPixmap flagMap;
-	bool found = m_font->getPixmap(m_style->getFlagCharName(flagCount),
-				       flagMap,
-				       !params.m_stemGoesUp);
+	// Handle fonts that don't have all the flags in separate characters
 	
-	// Handle fonts that don't have all the flags in separate
-	// characters
-	if (!found && flagCount > 1) {
-
-	    found = m_font->getPixmap(m_style->getFlagCharName(0),
-				      flagMap,
-				      !params.m_stemGoesUp);
-
-	    if (!found) {
-		std::cerr << "Warning: NotePixmapFactory::drawFlags: No way to draw note with " << flagCount << " flags in this font!?" << std::endl;
-		return;
-	    }
-
-	    unsigned int flagSpace = m_noteBodyHeight;
-	    (void)m_font->getFlagSpacing(flagSpace);
-
-	    for (int flag = 0; flag < flagCount; ++flag) {
-
-		int y = m_above + s1.y();
-		if (params.m_stemGoesUp) y += flag * flagSpace;
-		else y -= (flag * flagSpace) + flagMap.height();
-
-		m_p.end();
-		m_pm.end();
-
-		PixmapFunctions::drawPixmapMasked(*m_generatedPixmap,
-						  *m_generatedMask,
-						  m_left + s1.x() - m_origin.x(),
-						  y,
-						  flagMap);
-
-		m_p.begin(m_generatedPixmap);
-		m_pm.begin(m_generatedMask);
-/*!!!		
-		m_p.drawPixmap(s1.x() - m_origin.x(), y, flagMap);
-		m_pm.drawPixmap(s1.x() - m_origin.x(), y, *(flagMap.mask()));
-*/
-	    }
-
-	} else { // the normal case
-
-	    int y = m_above + s1.y();
-	    if (!params.m_stemGoesUp) y -= flagMap.height();
-
-	    m_p.drawPixmap(m_left + s1.x() - m_origin.x(), y, flagMap);
-	    m_pm.drawPixmap(m_left + s1.x() - m_origin.x(), y, *(flagMap.mask()));
+	found = m_font->getPixmap(m_style->getFlagCharName(0),
+				  flagMap,
+				  !params.m_stemGoesUp);
+	
+	if (!found) {
+	    std::cerr << "Warning: NotePixmapFactory::drawFlags: No way to draw note with " << flagCount << " flags in this font!?" << std::endl;
+	    return;
 	}
+	
+	unsigned int flagSpace = m_noteBodyHeight;
+	(void)m_font->getFlagSpacing(flagSpace);
+	
+	for (int flag = 0; flag < flagCount; ++flag) {
+	    
+	    int y = m_above + s1.y();
+	    if (params.m_stemGoesUp) y += flag * flagSpace;
+	    else y -= (flag * flagSpace) + flagMap.height();
+	    
+	    m_p.end();
+	    m_pm.end();
+
+	    // Super-slow
+	    
+	    PixmapFunctions::drawPixmapMasked(*m_generatedPixmap,
+					      *m_generatedMask,
+					      m_left + s1.x() - m_origin.x(),
+					      y,
+					      flagMap);
+	    
+	    m_p.begin(m_generatedPixmap);
+	    m_pm.begin(m_generatedMask);
+	}
+
+    } else { // the normal case
+	
+	int y = m_above + s1.y();
+	if (!params.m_stemGoesUp) y -= flagMap.height();
+	
+	m_p.drawPixmap(m_left + s1.x() - m_origin.x(), y, flagMap);
+	m_pm.drawPixmap(m_left + s1.x() - m_origin.x(), y, *(flagMap.mask()));
     }
 }
 
@@ -1742,8 +1772,6 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 	m_generatedPixmap->convertFromImage(i);
     }
 
-    //!!! need a way to say not to bother with the mask or its painter at all
-    // for generated ones
     m_generatedMask->fill(Qt::color1);
 
     if (m_selected) {

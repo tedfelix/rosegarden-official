@@ -213,6 +213,9 @@ public:
     /// Returns the page height according to the layout mode (page/linear)
     int getPageHeight();
 
+    /// Returns the margins within the page (zero if not in MultiPageMode)
+    void getPageMargins(int &left, int &top);
+
     /// Scrolls the view such that the given time is centered
     void scrollToTime(Rosegarden::timeT t);
 

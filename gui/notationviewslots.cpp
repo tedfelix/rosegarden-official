@@ -292,14 +292,10 @@ NotationView::slotChangeFont(std::string newName, int newSize)
     if (m_pageMode == LinedStaff::MultiPageMode) {
 
 	int pageWidth = getPageWidth();
-	int pageHeight = getPageHeight();
+	int topMargin = 0, leftMargin = 0;
+	getPageMargins(leftMargin, topMargin);
 
-	m_hlayout->setPageWidth(pageWidth);
-
-	for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	    m_staffs[i]->setPageWidth(pageWidth);
-	    m_staffs[i]->setPageHeight(pageHeight);
-	}
+	m_hlayout->setPageWidth(pageWidth - leftMargin * 2);
     }
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
@@ -1465,12 +1461,14 @@ NotationView::doDeferredCursorMove()
     } else {
 
         // prefer a note or rest, if there is one, to a non-spacing event
-        if (!static_cast<NotationElement*>(*i)->isNote() && !static_cast<NotationElement*>(*i)->isRest()) {
+        if (!static_cast<NotationElement*>(*i)->isNote() &&
+	    !static_cast<NotationElement*>(*i)->isRest()) {
             NotationElementList::iterator j = i;
             while (j != staff->getViewElementList()->end()) {
                 if (static_cast<NotationElement*>(*j)->getViewAbsoluteTime() !=
                     static_cast<NotationElement*>(*i)->getViewAbsoluteTime()) break;
-                if (static_cast<NotationElement*>(*j)->isNote() || static_cast<NotationElement*>(*j)->isRest()) {
+                if (static_cast<NotationElement*>(*j)->isNote() ||
+		    static_cast<NotationElement*>(*j)->isRest()) {
                     i = j;
                     break;
                 }
@@ -1479,10 +1477,12 @@ NotationView::doDeferredCursorMove()
         }
 
         staff->setInsertCursorPosition
-            (static_cast<NotationElement*>(*i)->getCanvasX() - 2, int(static_cast<NotationElement*>(*i)->getCanvasY()));
+            (static_cast<NotationElement*>(*i)->getCanvasX() - 2,
+	     int(static_cast<NotationElement*>(*i)->getCanvasY()));
 
         if (m_deferredCursorMove == CursorMoveAndMakeVisible) {
-            getCanvasView()->slotScrollHoriz(int(static_cast<NotationElement*>(*i)->getCanvasX()) - 4);
+            getCanvasView()->slotScrollHoriz
+		(int(static_cast<NotationElement*>(*i)->getCanvasX()) - 4);
         }
     }
 

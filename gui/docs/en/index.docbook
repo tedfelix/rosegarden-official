@@ -1019,7 +1019,7 @@
       <!-- Linear and page layouts -->
 
       <sect2 id="nv-layout">
-	<title>Linear and page layout</title>
+	<title>Linear and page layouts</title>
 
 	<para>
 	  The usual way the notation editor displays staffs is known
@@ -1031,17 +1031,31 @@
 	</para>
 
 	<para>
-	  However, you can also display staffs in Page layout, in
-	  which each staff breaks at the end of a line, starting a new
-	  line below the remaining staffs.  This is essentially the
-	  same layout as found in printed music (except that it isn't
-	  actually divided into physical pages).  Most, but not all,
-	  of the display and editing functions work in Page layout as
-	  well as in Linear layout.
+	  However, you can also display staffs in two different
+	  page-based layouts: Continuous Page and Multiple Page.</para>
+
+	<para>In Continuous Page layout, the music is arranged in one
+	infinitely-tall page of the same width as the window.  Each
+	staff breaks at the end of a line, starting a new line below
+	the remaining staffs.</para>
+
+	<para>In Multiple Page layout, the music is divided up into
+	real pages much as it will be when printed.  The size of each
+	page is calculated so that approximately the same amount of
+	music will fit on each line as it will when actually printed
+	(according to the point size specified for the printing
+	resolution in the configuration dialog).  The printed version
+	is unlikely to be exactly the same, as it depends on the
+	precise paper size and margins in use when printing, but it
+	should be fairly close if you happen to be using A4
+	paper.</para>
+
+	<para>Most, but not all, of the display and editing functions
+	work in the page layout modes as well as in linear layout.
 	</para>
 
 	<para>
-	  To switch between the two, use the <!-- !!!link linkend="commands-nv-view-linear" -->Linear Layout<!-- /link --> and <!-- !!!link linkend="commands-nv-view-linear" -->Page Layout<!-- /link --> menu functions.
+	  To switch between these layout modes, use the <!-- !!!link linkend="commands-nv-view-linear" -->Linear Layout<!-- /link -->, <!-- !!!link linkend="commands-nv-view-continuous-page" -->Continuous Page Layout<!-- /link --> and <!-- !!!link linkend="commands-nv-view-multiple-page" -->Multiple Page Layout<!-- /link --> menu functions.
 	</para>
       </sect2>
 

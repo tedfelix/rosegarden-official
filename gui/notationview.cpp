@@ -187,8 +187,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_currentStaff(-1),
     m_lastFinishingStaff(-1),
     m_insertionTime(0),
-    m_fontName(NoteFontFactory::getDefaultFontName()), //!!! exceptions
-    m_fontSize(NoteFontFactory::getDefaultSize(m_fontName)), //!!! exceptions
+    m_fontName(NoteFontFactory::getDefaultFontName()),
+    m_fontSize(NoteFontFactory::getDefaultSize(m_fontName)),
     m_pageMode(LinedStaff::LinearMode),
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
     m_hlayout(new NotationHLayout(&doc->getComposition(), m_notePixmapFactory,
@@ -223,14 +223,13 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     m_config->setGroup(NotationView::ConfigGroup);
 
-    //!!! catch exception
     m_fontName = qstrtostr(m_config->readEntry
 			   ("notefont",
 			    strtoqstr(NoteFontFactory::getDefaultFontName())));
 
     m_fontSize = m_config->readUnsignedNumEntry
 	((segments.size() > 1 ? "multistaffnotesize" : "singlestaffnotesize"),
-	 NoteFontFactory::getDefaultSize(m_fontName)); //!!! exceptions
+	 NoteFontFactory::getDefaultSize(m_fontName));
 
     int defaultSpacing = m_config->readNumEntry("spacing", 100);
     m_hlayout->setSpacing(defaultSpacing);
@@ -418,20 +417,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     }
     
 
-/*!!!
-    m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
-    if (m_config->readBoolEntry("backgroundtextures", false)) {
-	QPixmap background;
-	QString pixmapDir =
-	    KGlobal::dirs()->findResource("appdata", "pixmaps/");
-	if (background.load(QString("%1/misc/bg-paper-white.xpm").
-			    arg(pixmapDir))) {
-	    tCanvas->setBackgroundPixmap(background);
-	}
-    }
-    m_config->setGroup(NotationView::ConfigGroup);
-*/
-
     setCanvasView(new NotationCanvasView(*this, m_horizontalScrollBar,
                                          tCanvas, getCentralFrame()));
 
@@ -510,7 +495,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_progressDisplayer = PROGRESS_DIALOG;
     }
 
-//!!!    m_chordNameRuler->setComposition(&getDocument()->getComposition());
     m_chordNameRuler->setStudio(&getDocument()->getStudio());
 
     m_currentStaff = 0;
@@ -636,7 +620,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_lastFinishingStaff(-1),
     m_insertionTime(0),
     m_fontName(NoteFontFactory::getDefaultFontName()),
-    m_fontSize(NoteFontFactory::getDefaultSize(m_fontName)), //!!! exceptions
+    m_fontSize(NoteFontFactory::getDefaultSize(m_fontName)),
     m_pageMode(LinedStaff::LinearMode),
     m_notePixmapFactory(new NotePixmapFactory(m_fontName, m_fontSize)),
     m_hlayout(new NotationHLayout(&doc->getComposition(), m_notePixmapFactory,
@@ -667,14 +651,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     m_config->setGroup(NotationView::ConfigGroup);
 
-    //!!! catch exception
     m_fontName = qstrtostr(m_config->readEntry
 			   ("notefont",
 			    strtoqstr(NoteFontFactory::getDefaultFontName())));
 
 
     // Force largest font size
-    //!!! catch exception
     std::vector<int> sizes = NoteFontFactory::getAllSizes(m_fontName);
     m_fontSize = sizes[sizes.size()-1];
 
@@ -692,9 +674,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
              << pdm.width() << ", " << pdm.height()
              << " - printer resolution : " << printer->resolution() << "\n";
 
-    double staffGapPt = 6.0; //!!! for now
-    double staffGapPx = staffGapPt * (double)printer->resolution() / 72.0;
-    double scaleFactor = staffGapPx / (double)m_fontSize;
+    m_config->setGroup(NotationView::ConfigGroup);
+    unsigned int printSizePt = m_config->readUnsignedNumEntry("printingnotesize", 6);
+    double printSizePx = printSizePt * (double)printer->resolution() / 72.0;
+    double scaleFactor = printSizePx / (double)m_fontSize; 
 
     tCanvas->resize(pdm.width() / scaleFactor, pdm.height() / scaleFactor);
     
@@ -844,25 +827,27 @@ void NotationView::positionStaffs()
 
     int pageWidth = getPageWidth();
     int pageHeight = getPageHeight();
-    if (pageWidth  < 100) pageWidth  = 100;
-    if (pageHeight < 100) pageHeight = 100;
+    int leftMargin = 0, topMargin = 0;
+    getPageMargins(leftMargin, topMargin);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+
 	Rosegarden::TrackId track = m_staffs[i]->getSegment().getTrack();
         m_staffs[i]->setRowSpacing(accumulatedHeight + trackHeights[track] / 7);
         if (track < maxTrack) {
             m_staffs[i]->setConnectingLineLength(trackHeights[track]);
         }
         
-	if (m_pageMode == LinedStaff::MultiPageMode) {
-	    m_staffs[i]->setY(trackCoords[track] + 20);
-	} else {
-	    m_staffs[i]->setY(trackCoords[track]);
-	}	    
 	m_staffs[i]->setX(20);
-	m_staffs[i]->setPageWidth(pageWidth);
-	m_staffs[i]->setPageHeight(pageHeight);
+	m_staffs[i]->setY(trackCoords[track] + (topMargin * 3) / 2);
+	m_staffs[i]->setPageWidth(pageWidth - leftMargin * 2);
+	m_staffs[i]->setPageHeight(pageHeight - topMargin * 2);
         m_staffs[i]->setPageMode(m_pageMode);
+	m_staffs[i]->setMargin(leftMargin);
+
+    NOTATION_DEBUG << "NotationView::positionStaffs: set staff's page width to "
+		   << (pageWidth - leftMargin * 2) << endl;
+
     }
 }    
 
@@ -871,6 +856,7 @@ void NotationView::positionPages()
     if (m_printMode) return;
 
     QPixmap background;
+    QPixmap deskBackground;
     bool haveBackground = false;
     
     m_config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
@@ -881,10 +867,14 @@ void NotationView::positionPages()
 			    arg(pixmapDir))) {
 	    haveBackground = true;
 	}
+	// we're happy to ignore errors from this one:
+	deskBackground.load(QString("%1/misc/bg-desktop.xpm").arg(pixmapDir));
     }
 
     int pageWidth = getPageWidth();
     int pageHeight = getPageHeight();
+    int leftMargin = 0, topMargin = 0;
+    getPageMargins(leftMargin, topMargin);
     int maxPageCount = 1;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
@@ -893,24 +883,24 @@ void NotationView::positionPages()
     }
     
     for (unsigned int i = 0; i < m_pages.size(); ++i) {
-	m_pages[i]->hide();
 	delete m_pages[i];
     }
+    m_pages.clear();
     
     if (m_pageMode != LinedStaff::MultiPageMode) {
 	if (haveBackground) canvas()->setBackgroundPixmap(background);
     } else {
-	canvas()->setBackgroundPixmap(QPixmap());
+	canvas()->setBackgroundPixmap(deskBackground);
 	for (int page = 0; page < maxPageCount; ++page) {
 	    QCanvasRectangle *rect = new QCanvasRectangle
-		//!!! arbitrary figures -- sort out page positioning
-		(25 + (pageWidth - 40) * page, 10, 
-		 pageWidth - 40, pageHeight - 40,
+		(20 + pageWidth * page + leftMargin/4, topMargin / 2,
+		 pageWidth - leftMargin/2, pageHeight + topMargin,
 		 canvas());
 	    if (haveBackground) rect->setBrush(QBrush(Qt::white, background));
 	    rect->setPen(Qt::black);
 	    rect->setZ(-1000);
 	    rect->show();
+	    m_pages.push_back(rect);
 	}
     }
 
@@ -1697,7 +1687,6 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
 {
     if (oldFontName != "") {
 
-	//!!! catch exception
 	std::vector<int> sizes = NoteFontFactory::getScreenSizes(oldFontName);
 	
 	for (unsigned int i = 0; i < sizes.size(); ++i) {
@@ -1709,7 +1698,6 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
 	}
     }
 
-    //!!! catch exception
     std::vector<int> sizes = NoteFontFactory::getScreenSizes(m_fontName);
 
     for (unsigned int i = 0; i < sizes.size(); ++i) {
@@ -1763,7 +1751,7 @@ void NotationView::initLayoutToolbar()
 	QString fontQName(strtoqstr(*i));
 
         m_fontCombo->insertItem(fontQName);
-        if (*i == m_fontName) {
+        if (fontQName.lower() == strtoqstr(m_fontName).lower()) {
             m_fontCombo->setCurrentItem(m_fontCombo->count() - 1);
 	    foundFont = true;
         }
@@ -1773,7 +1761,6 @@ void NotationView::initLayoutToolbar()
 	KMessageBox::sorry
 	    (this, QString(i18n("Unknown font \"%1\", using default")).arg
 	     (strtoqstr(m_fontName)));
-	//!!! catch exception
 	m_fontName = NoteFontFactory::getDefaultFontName();
     }
     
@@ -1782,7 +1769,6 @@ void NotationView::initLayoutToolbar()
 
     new QLabel(i18n("  Size:  "), layoutToolbar, "kde toolbar widget");
 
-    //!!! catch exception
     std::vector<int> sizes = NoteFontFactory::getScreenSizes(m_fontName);
     m_fontSizeSlider = new ZoomSlider<int>
         (sizes, m_fontSize, QSlider::Horizontal, layoutToolbar, "kde toolbar widget");
@@ -1866,12 +1852,14 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
     }
 
     int pageWidth = getPageWidth();
-    int pageHeight = getPageHeight();
+    int topMargin = 0, leftMargin = 0;
+    getPageMargins(leftMargin, topMargin);
 
     m_hlayout->setPageMode(pageMode != LinedStaff::LinearMode);
-    m_hlayout->setPageWidth(pageWidth);
+    m_hlayout->setPageWidth(pageWidth - leftMargin * 2);
 
-    RG_DEBUG << "Page mode " << pageMode << ": page width = " << pageWidth << endl;
+    NOTATION_DEBUG << "NotationView::setPageMode: set layout's page width to "
+		   << (pageWidth - leftMargin * 2) << endl;
 
     positionStaffs();
 
@@ -1903,6 +1891,7 @@ NotationView::getPageWidth()
 
 	//!!! For the moment we use A4 for this calculation
 	
+	m_config->setGroup(NotationView::ConfigGroup);
 	unsigned int printSizePt = m_config->readUnsignedNumEntry("printingnotesize", 6); 
 	double printSizeMm = 25.4 * ((double)printSizePt / 72.0);
 	double mmPerPixel = printSizeMm / (double)m_notePixmapFactory->getSize();
@@ -1919,10 +1908,32 @@ NotationView::getPageHeight()
 
 	//!!! For the moment we use A4 for this calculation
 	
+	m_config->setGroup(NotationView::ConfigGroup);
 	unsigned int printSizePt = m_config->readUnsignedNumEntry("printingnotesize", 8); 
 	double printSizeMm = 25.4 * ((double)printSizePt / 72.0);
 	double mmPerPixel = printSizeMm / (double)m_notePixmapFactory->getSize();
 	return (int)(297.0 / mmPerPixel);
+    }
+}
+
+void
+NotationView::getPageMargins(int &left, int &top)
+{
+    if (m_pageMode != LinedStaff::MultiPageMode) {
+
+	left = 0;
+	top = 0;
+
+    } else {
+
+	//!!! For the moment we use A4 for this calculation
+	
+	m_config->setGroup(NotationView::ConfigGroup);
+	unsigned int printSizePt = m_config->readUnsignedNumEntry("printingnotesize", 6); 
+	double printSizeMm = 25.4 * ((double)printSizePt / 72.0);
+	double mmPerPixel = printSizeMm / (double)m_notePixmapFactory->getSize();
+	left = (int)(20.0 / mmPerPixel);
+	top  = (int)(15.0 / mmPerPixel);
     }
 }
 
@@ -1963,8 +1974,7 @@ NotationView::paintEvent(QPaintEvent *e)
     if (m_hlayout->isPageMode()) {
 	int diff = int(getPageWidth() - m_hlayout->getPageWidth());
 	if (diff > -10 && diff < 10) {
-	    setPageMode(m_pageMode); //!!!
-//!!!	    m_hlayout->setPageWidth(getPageWidth());
+	    setPageMode(m_pageMode);
 	    refreshSegment(0, 0, 0);
 	}
     }
@@ -2380,32 +2390,54 @@ void NotationView::print(KPrinter* printer)
         return;
     }
 
-    double staffGapPt = 6.0; //!!! for now
-    double staffGapPx = staffGapPt * (double)printer->resolution() / 72.0;
-    double scaleFactor = staffGapPx / (double)m_fontSize;
+    m_config->setGroup(NotationView::ConfigGroup);
+    unsigned int printSizePt = m_config->readUnsignedNumEntry("printingnotesize", 6);
+    double printSizePx = printSizePt * (double)printer->resolution() / 72.0;
+    double scaleFactor = printSizePx / (double)m_fontSize;
 
     QPaintDeviceMetrics pdm(printer);
 
-    unsigned int pageHeight = pdm.height(),
-        staffRowSpacing = m_staffs[0]->getRowSpacing() * scaleFactor;
+    unsigned int pageHeight = pdm.height();
 
-    RG_DEBUG << "Page height : " << pageHeight << endl;
+    int maxStaffY = -1;
+    NotationStaff *lastStaff = 0;
 
-    if (staffRowSpacing > pageHeight) {
-        KMessageBox::error(0, "Too many staffs - Don't know how to print that yet");
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+
+	//!!! what we really need is to ask each staff how many rows
+	//it can fit in a certain height, and use the min of those as
+	//the number of rows; and then use the max of the heights of
+	//that many rows of each staff as the cut-off point
+
+	int thisStaffY =
+	    (m_staffs[i]->getRowSpacing() + m_staffs[i]->getY()) * scaleFactor;
+
+	if (thisStaffY > maxStaffY) {
+	    maxStaffY = thisStaffY;
+	    lastStaff = m_staffs[i];
+	}
+    }
+
+    if (!lastStaff) {
+        KMessageBox::error(0, "All staffs are empty (?!) -- I'm confused");
         return;
     }
 
-    unsigned int nbStaffRowsPerPage = pageHeight / staffRowSpacing;
-    int printSliceHeight = staffRowSpacing * nbStaffRowsPerPage / scaleFactor;
+    RG_DEBUG << "Page height : " << pageHeight << endl;
 
-    //!!! this isn't necessarily the last staff; staffs are in
-    //arbitrary order
+    if (maxStaffY > pageHeight) {
+	double scaleDown = double(pageHeight) / double(maxStaffY);
+	int actualSizePtTenths = int(printSizePt * 10 * scaleDown);
+        KMessageBox::information(0, i18n("Too many staffs for the page at %1pt: scaling down to %2pt approx").arg(printSizePt).arg(double(actualSizePtTenths) / 10.0));
+	scaleFactor *= scaleDown;
+        return;
+    }
 
-    NotationStaff* lastStaff = m_staffs[getStaffCount() - 1];
+    unsigned int nbStaffRowsPerPage = pageHeight / maxStaffY;
+    int printSliceHeight = maxStaffY * nbStaffRowsPerPage / scaleFactor;
 
-    int printY = 0,
-        fullHeight = (lastStaff->getTotalHeight() + lastStaff->getY());
+    int printY = 0;
+    int fullHeight = (lastStaff->getTotalHeight() + lastStaff->getY());
     
     QPainter printpainter(printer);
 

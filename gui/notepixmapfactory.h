@@ -201,6 +201,8 @@ public:
 protected:
     void init(std::string fontName, int size);
 
+    int getStemLength(const NotePixmapParameters &) const;
+
     void makeRoomForAccidental(Rosegarden::Accidental);
     void drawAccidental(Rosegarden::Accidental);
 
