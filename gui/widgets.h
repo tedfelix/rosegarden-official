@@ -148,6 +148,16 @@ public:
                              const char *name = 0,
                              bool modal = true);
 
+    ~RosegardenProgressDialog();
+
+    /**
+     * A "safe" way to process events without worrying about user
+     * input during the process.  If there is a modal progress dialog
+     * visible, then this will permit user input so as to allow the
+     * user to hit Cancel; otherwise it will prevent all user input
+     */
+    static void processEvents();
+
     virtual void polish();
 
     virtual bool eventFilter(QObject *watched, QEvent *e);
@@ -176,6 +186,8 @@ protected:
     QTime m_chrono;
     bool m_wasVisible;
     bool m_frozen;
+    bool m_modal;
+    static bool m_modalVisible;
 };
 
 class RosegardenProgressBar : public KProgress

@@ -359,7 +359,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	if ((endTime > startTime) && (barNo % 20 == 0)) {
 	    emit setProgress((barTimes.second - startTime) * 95 /
 			     (endTime - startTime));
-	    kapp->processEvents(50);
+	    RosegardenProgressDialog::processEvents();
 	}
 
         throwIfCancelled();
@@ -1064,7 +1064,7 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
 	 i != m_barData.end(); ++i) {
 	
         emit setProgress(100 * staffNo / m_barData.size());
-        kapp->processEvents(50);
+        RosegardenProgressDialog::processEvents();
 
         throwIfCancelled();
 

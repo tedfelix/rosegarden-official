@@ -33,6 +33,7 @@
 #include <qtextedit.h>
 #include <qlineedit.h>
 #include <qbitmap.h>
+#include <qeventloop.h>
 
 #include <kapp.h>
 #include <klocale.h>
@@ -129,13 +130,17 @@ void RosegardenParameterBox::init()
     setFont(boldFont);
 }
 
+
+bool RosegardenProgressDialog::m_modalVisible = false;
+
 RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,
                                                    const char *name,
                                                    bool modal):
     KProgressDialog(creator, name,
                     i18n("Processing..."), QString::null, modal),
     m_wasVisible(false),
-    m_frozen(false)
+    m_frozen(false),
+    m_modal(modal)
 {
     setCaption(i18n("Processing..."));
     RG_DEBUG << "RosegardenProgressDialog::RosegardenProgressDialog type 1 - "
@@ -151,7 +156,6 @@ RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,
     setMinimumDuration(500); // set a default value for this
 }
 
-
 RosegardenProgressDialog::RosegardenProgressDialog(
                 const QString &labelText,
                 int totalSteps,
@@ -164,7 +168,8 @@ RosegardenProgressDialog::RosegardenProgressDialog(
                     labelText,
 		    modal),
     m_wasVisible(false),
-    m_frozen(false)
+    m_frozen(false),
+    m_modal(modal)
 {
     progressBar()->setTotalSteps(totalSteps);
 
@@ -179,6 +184,11 @@ RosegardenProgressDialog::RosegardenProgressDialog(
     CurrentProgressDialog::set(this);
 
     setMinimumDuration(500); // set a default value for this
+}
+
+RosegardenProgressDialog::~RosegardenProgressDialog()
+{
+    m_modalVisible = false;
 }
 
 void
@@ -200,9 +210,8 @@ void RosegardenProgressDialog::hideEvent(QHideEvent* e)
         QApplication::restoreOverrideCursor();
     
     KProgressDialog::hideEvent(e);
+    m_modalVisible = false;
 }
-
-
 
 bool
 RosegardenProgressDialog::eventFilter(QObject *watched, QEvent *e)
@@ -258,7 +267,8 @@ void RosegardenProgressDialog::slotCheckShow(int)
         m_chrono.elapsed() > minimumDuration()) {
         RG_DEBUG << "RosegardenProgressDialog::slotCheckShow() : showing dialog\n";
         show();
-        kapp->processEvents();
+	if (m_modal) m_modalVisible = true;
+        processEvents();
     }
 }
 
@@ -267,7 +277,10 @@ void RosegardenProgressDialog::slotFreeze()
     RG_DEBUG << "RosegardenProgressDialog::slotFreeze()\n";
 
     m_wasVisible = isVisible();
-    if (isVisible()) hide();
+    if (isVisible()) {
+	m_modalVisible = false;
+	hide();
+    }
 
     removeFilter();
 
@@ -279,7 +292,10 @@ void RosegardenProgressDialog::slotThaw()
 {
     RG_DEBUG << "RosegardenProgressDialog::slotThaw()\n";
 
-    if (m_wasVisible) show();
+    if (m_wasVisible) {
+	if (m_modal) m_modalVisible = true;
+	show();
+    }
     installFilter();
 
     // Restart timer
@@ -300,6 +316,16 @@ void RosegardenProgressDialog::removeFilter()
         kapp->mainWidget()->removeEventFilter(this);
 }
 
+void RosegardenProgressDialog::processEvents()
+{
+    RG_DEBUG << "RosegardenProgressDialog::processEvents: modalVisible is "
+	     << m_modalVisible << endl;
+    if (m_modalVisible) {
+	kapp->processEvents(50);
+    } else {
+	kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
+    }
+}
 
 
 //----------------------------------------

@@ -37,6 +37,7 @@
 #include <qregexp.h> // QT3.0 replace()
 #include <qtextcodec.h>
 #include <qfileinfo.h> // for filename name doctoring
+#include <qeventloop.h>
 
 #include "lilypondio.h"
 #include "config.h"
@@ -658,7 +659,7 @@ LilypondExporter::write()
 
         emit setProgress(int(double(trackNo++)/
                              double(m_composition->getNbTracks()) * 100.0));
-        kapp->processEvents(50);
+        kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
 
         // do nothing if track is muted...  this provides a crude but easily implemented
         // method for users to selectively export tracks...

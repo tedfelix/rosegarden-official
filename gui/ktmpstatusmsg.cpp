@@ -20,6 +20,7 @@
 */
 
 #include <qapplication.h>
+#include <qeventloop.h>
 
 #include <kmainwindow.h>
 #include <kstatusbar.h>
@@ -32,14 +33,14 @@ KTmpStatusMsg::KTmpStatusMsg(const QString& msg, KMainWindow* window, int id)
       m_id(id)
 {
     m_mainWindow->statusBar()->changeItem(msg, m_id);
-    qApp->processEvents(500);
+    qApp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
 }
 
 KTmpStatusMsg::~KTmpStatusMsg()
 {
     m_mainWindow->statusBar()->clear();
     m_mainWindow->statusBar()->changeItem(m_defaultMsg, m_id);
-    qApp->processEvents(500);
+    qApp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
 }
 
 

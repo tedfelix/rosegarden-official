@@ -37,6 +37,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <qeventloop.h>
 
 using Rosegarden::BaseProperties;
 using Rosegarden::Bool;
@@ -239,7 +240,7 @@ MusicXmlExporter::write() {
         str << "\t\t</score-part>" << std::endl;
 
         emit setProgress(int(double(trackNo++)/double(tracks.size()) * 20.0));
-        kapp->processEvents(50);
+        kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
 
     } // end track iterator
     str << "\t</part-list>" << std::endl;
@@ -353,7 +354,7 @@ MusicXmlExporter::write() {
 
         emit setProgress(20 +
                          int(double(trackNo++)/double(tracks.size()) * 80.0));
-        kapp->processEvents(50);
+        kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
     }
 
     str << "</score-partwise>" << std::endl;

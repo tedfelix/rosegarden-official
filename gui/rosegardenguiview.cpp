@@ -367,7 +367,7 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
     }
 
     NotationView *view = createNotationView(segmentsToEdit);
-    view->show();
+    if (view) view->show();
 }
 
 NotationView *
@@ -1350,6 +1350,7 @@ RosegardenGUIView::slotUpdateRecordingSegment(Rosegarden::Segment *segment,
     segments.push_back(segment);
 
     NotationView *view = createNotationView(segments);
+    if (!view) return;
     QObject::connect
 	(getDocument(), SIGNAL(recordingSegmentUpdated(Rosegarden::Segment *, Rosegarden::timeT)),
 	 view, SLOT(slotUpdateRecordingSegment(Rosegarden::Segment *, Rosegarden::timeT)));

@@ -499,7 +499,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     if (showProgressive) {
 	show();
-        kapp->processEvents();
+        RosegardenProgressDialog::processEvents();
 
         NOTATION_DEBUG << "NotationView : setting up progress dialog" << endl;
 
@@ -746,7 +746,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     if (parent) {
 
-        kapp->processEvents();
+        RosegardenProgressDialog::processEvents();
 
 	NOTATION_DEBUG << "NotationView : setting up progress dialog" << endl;
 
@@ -793,12 +793,9 @@ NotationView::~NotationView()
 {
     NOTATION_DEBUG << "-> ~NotationView()" << endl;
 
-    if (!m_printMode) slotSaveOptions();
+    if (!m_printMode && m_ok) slotSaveOptions();
 
     delete m_chordNameRuler;
-
-    delete m_currentEventSelection;
-    m_currentEventSelection = 0;
 
     delete m_renderTimer;
 
@@ -2184,7 +2181,7 @@ NotationView::paintEvent(QPaintEvent *e)
 bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 {
     emit setOperationName(i18n("Laying out score..."));
-    kapp->processEvents();
+    RosegardenProgressDialog::processEvents();
 
     m_hlayout->setStaffCount(m_staffs.size());
 
@@ -2196,7 +2193,7 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
         if (staffNo >= 0 && (int)i != staffNo) continue;
 
         emit setOperationName(i18n("Laying out staff %1...").arg(i + 1));
-        kapp->processEvents();
+        RosegardenProgressDialog::processEvents();
 
         m_hlayout->resetStaff(*m_staffs[i], startTime, endTime);
         m_vlayout->resetStaff(*m_staffs[i], startTime, endTime);
@@ -2205,7 +2202,7 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
     }
 
     emit setOperationName(i18n("Reconciling staffs..."));
-    kapp->processEvents();
+    RosegardenProgressDialog::processEvents();
 
     m_hlayout->finishLayout(startTime, endTime);
     m_vlayout->finishLayout(startTime, endTime);
@@ -2781,7 +2778,7 @@ void NotationView::setMenuStates()
 	progressCount += (n); \
 	if (progressTotal > 0) { \
 	    emit setProgress(progressCount * 100 / progressTotal); \
-	    kapp->processEvents(); \
+	    RosegardenProgressDialog::processEvents(); \
 	}
 
     
@@ -2793,7 +2790,7 @@ void NotationView::readjustCanvasSize()
     int maxHeight = 0;
 
     emit setOperationName(i18n("Sizing and allocating canvas..."));
-    kapp->processEvents();
+    RosegardenProgressDialog::processEvents();
 
     int progressTotal = m_staffs.size() + 2;
     int progressCount = 0;
@@ -2992,13 +2989,15 @@ void NotationView::setupProgress(RosegardenProgressDialog* dialog)
     if (dialog) {
         setupProgress(dialog->progressBar());
 
+	connect(dialog, SIGNAL(cancelClicked()),
+		m_hlayout, SLOT(slotCancel()));
+
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
             connect(m_staffs[i], SIGNAL(setOperationName(QString)),
                     dialog,      SLOT(slotSetOperationName(QString)));
 
             connect(dialog, SIGNAL(cancelClicked()),
                     m_staffs[i], SLOT(slotCancel()));
-                    
         }
     
         connect(this, SIGNAL(setOperationName(QString)),

@@ -349,9 +349,6 @@ MatrixView::~MatrixView()
 
     delete m_chordNameRuler;
 
-    delete m_currentEventSelection;
-    m_currentEventSelection = 0;
-
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         delete m_staffs[i]; // this will erase all "notes" canvas items
     }

@@ -37,6 +37,7 @@
 #include <iostream>
 
 #include <qregexp.h>
+#include <qeventloop.h>
 #include <kconfig.h>
 #include <kapp.h>
 
@@ -764,10 +765,10 @@ EventQuantizeCommand::modifySegment()
     if (m_progressTotal > 0) {
 	if (rebeam || makeviable || decounterpoint) {
 	    emit incrementProgress(m_progressTotal / 2);
-	    kapp->processEvents(50);
+	    kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
 	} else {
 	    emit incrementProgress(m_progressTotal);
-	    kapp->processEvents(50);
+	    kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
 	}
     }	    
 
@@ -802,7 +803,7 @@ EventQuantizeCommand::modifySegment()
     if (m_progressTotal > 0) {
 	if (rebeam || makeviable || decounterpoint) {
 	    emit incrementProgress(m_progressTotal / 2);
-	    kapp->processEvents(50);
+	    kapp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput, 50);
 	}
     }	    
 }

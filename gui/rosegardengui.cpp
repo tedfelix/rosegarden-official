@@ -966,7 +966,7 @@ void RosegardenGUIApp::initView()
 
     stateChanged("new_file");
 
-    kapp->processEvents();
+    RosegardenProgressDialog::processEvents();
     
     if (m_viewChordNameRuler->isChecked()) {
 	SetWaitCursor swc;
@@ -1411,7 +1411,7 @@ void RosegardenGUIApp::slotFileNew()
 
 void RosegardenGUIApp::slotOpenDroppedURL(QString url)
 {
-    kapp->processEvents(); // or else we get a crash because the
+    RosegardenProgressDialog::processEvents(); // or else we get a crash because the
     // track editor is erased too soon - it is the originator of the signal
     // this slot is connected to.
 
@@ -2616,7 +2616,7 @@ RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
     // sets the composition's end marker time which is needed here)
 
     progressDlg.slotSetOperationName(i18n("Calculating notation..."));
-    kapp->processEvents();
+    RosegardenProgressDialog::processEvents();
 
     Rosegarden::Composition *comp = &newDoc->getComposition();
 

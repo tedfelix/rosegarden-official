@@ -1050,11 +1050,11 @@ RosegardenGUIDoc::readFromFile(const QString &file, QString &text)
     static char buffer[1000];
 
     while (gzgets(fd, buffer, 1000)) {
-
+/*
         // Update gui
         //
-        kapp->processEvents();
-
+        RosegardenProgressDialog::processEvents();
+*/
 	text.append(strtoqstr(std::string(buffer)));
 	if (gzeof(fd)) {
 	    gzclose(fd);
@@ -1434,7 +1434,7 @@ RosegardenGUIDoc::syncDevices()
         RG_DEBUG << "RosegardenGUIDoc::syncDevices - "
                  << "waiting for Sequencer to come up" << endl;
 
-        kapp->processEvents(1000);
+	RosegardenProgressDialog::processEvents();
         sleep(1); // 1s
     }
 

@@ -1591,7 +1591,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 	(++m_elementsSoFar % 300 == 0)) {
 
         emit setProgress(int(double(m_elementsSoFar) / double(m_totalElements) * 100.0));
-        kapp->processEvents();
+        RosegardenProgressDialog::processEvents();
     }
 
     QString lcName = qName.lower();

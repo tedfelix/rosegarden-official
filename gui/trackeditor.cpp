@@ -308,7 +308,7 @@ void TrackEditor::slotTrackButtonsWidthChanged()
 {
     // We need to make sure the trackButtons geometry is fully updated
     //
-    kapp->processEvents();
+    RosegardenProgressDialog::processEvents();
 
     m_trackButtonScroll->setMinimumWidth(m_trackButtons->width());
     m_doc->slotDocumentModified();
