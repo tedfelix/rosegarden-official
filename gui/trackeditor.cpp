@@ -280,7 +280,7 @@ void TrackEditor::updateSegmentTrackAndStartTime(SegmentItem *i)
 
 void TrackEditor::updateSegmentOrder()
 {
-    QCanvasItemList itemList = canvas()->canvas()->allItems();
+    QCanvasItemList itemList = getSegmentCanvas()->canvas()->allItems();
     QCanvasItemList::Iterator it;
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
@@ -378,7 +378,7 @@ TrackEditor::addSegmentItem(Rosegarden::Segment *segment)
     // Check that a SegmentItem doesn't already exist
     // for this Segment
     //
-    QCanvasItemList itemList = canvas()->canvas()->allItems();
+    QCanvasItemList itemList = getSegmentCanvas()->canvas()->allItems();
     QCanvasItemList::Iterator it;
 
     for (it = itemList.begin(); it != itemList.end(); ++it)
@@ -403,7 +403,7 @@ TrackEditor::addSegmentItem(Rosegarden::Segment *segment)
 void
 TrackEditor::deleteSegmentItem(Rosegarden::Segment *segment)
 {
-    QCanvasItemList itemList = canvas()->canvas()->allItems();
+    QCanvasItemList itemList = getSegmentCanvas()->canvas()->allItems();
     QCanvasItemList::Iterator it;
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {

@@ -29,7 +29,6 @@
 // include files for Qt
 #include <qvbox.h>
 #include <list>
-
 #include "segmentcanvas.h" // needed for SegmentCanvas::ToolType
 
 #include "rosedebug.h"
@@ -40,6 +39,8 @@ class QScrollView;
 class RosegardenGUIDoc;
 class TrackEditor;
 class KPrinter;
+class BarButtons;
+class TrackButtons;
 
 /**
  * The RosegardenGUIView class provides the view widget for the
@@ -129,13 +130,8 @@ public:
      * or anything else downstairsis interested in.
      *
      */
-    void setShift(const bool &value)
-        { emit signalSetSelectAdd(value);
-          emit signalSetLoop(value);
-	  emit signalSetFineGrain(value); }
-
-    void setControl(const bool &value)
-        { emit signalSetSelectCopy(value); }
+    void setShift(const bool &value);
+    void setControl(const bool &value);
 
     /**
      * A newly recorded Segment has to be added to the view
@@ -184,13 +180,6 @@ public slots:
     void selectTrackSegments(int);
 
 signals:
-    void setTool(SegmentCanvas::ToolType);
-
-    // This signal sets the pointer position on the Canvas
-    // (heading down)
-    //
-    void setCanvasPositionPointer(Rosegarden::timeT);
-
     // This signals is emitted upwards towards the top level
     // objects and sets the position pointer (this emit
     // sets off a chain of events that comes back down
@@ -202,33 +191,16 @@ signals:
     void setGUILoop(Rosegarden::timeT, Rosegarden::timeT);
 
     void activateTool(SegmentCanvas::ToolType);
-    void selectSegments(std::list<Rosegarden::Segment*>);
-
-    // Activated by Shift and Control key depresses
-    //
-    void signalSetSelectAdd(bool);
-    void signalSetSelectCopy(bool);
-    void signalSetLoop(bool);
-    void signalSetFineGrain(bool);
-
-    void addSegmentItem(Rosegarden::Segment*);
-    void deleteSegmentItem(Rosegarden::Segment*);
-    void signalShowRecordingSegmentItem(Rosegarden::Segment*);
-    void signalDestroyRecordingSegmentItem();
-
-    void signalSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT);
-
-    // Send a value to the a track meter
-    void signalSetTrackMeter(double, int);
-
-
 
 protected:
     //--------------- Data members ---------------------------------
 
-    Rosegarden::RulerScale *m_rulerScale;
-    
-    QScrollView* m_trackEditorScrollView;
+    Rosegarden::RulerScale   *m_rulerScale;
+    QScrollView              *m_trackEditorScrollView;
+    TrackEditor              *m_trackEditor;
+    BarButtons               *m_barButtons;
+    TrackButtons             *m_trackButtons;
+
 };
 
 #endif // ROSEGARDENGUIVIEW_H

@@ -55,6 +55,8 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
     //
     m_cellSize = vHeader->sectionSize(0);
 
+    setFrameStyle(Plain);
+
     // Now draw the buttons and labels and meters
     //
     drawButtons();

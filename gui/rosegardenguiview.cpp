@@ -67,7 +67,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     // Construct the trackEditor first so we can then
     // query it for placement information
     //
-    TrackEditor *trackEditor = new TrackEditor(doc, m_rulerScale, this);
+    m_trackEditor  = new TrackEditor(doc, m_rulerScale, this);
 
     // --------------- create the bar buttons ----------------
     //
@@ -86,8 +86,8 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 
     topBox->setSpacing(0);
     topBox->setMargin(0);
-    topSplit->setMinimumHeight(trackEditor->getVHeader()->sectionSize(0));
-    topSplit->setMaximumHeight(trackEditor->getVHeader()->sectionSize(0));
+    topSplit->setMinimumHeight(m_trackEditor->getVHeader()->sectionSize(0));
+    topSplit->setMaximumHeight(m_trackEditor->getVHeader()->sectionSize(0));
     topSplit->setSpacing(0);
     topSplit->setMargin(0);
     topSplit->setFrameStyle(Plain);
@@ -95,42 +95,30 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     QLabel *label = new QLabel(topSplit);
     label->setMinimumWidth(trackLabelWidth);
     label->setMaximumWidth(trackLabelWidth);
-    label->setMinimumHeight(trackEditor->getVHeader()->sectionSize(0));
-    label->setMaximumHeight(trackEditor->getVHeader()->sectionSize(0));
+    label->setMinimumHeight(m_trackEditor->getVHeader()->sectionSize(0));
+    label->setMaximumHeight(m_trackEditor->getVHeader()->sectionSize(0));
 
     QScrollView *barButtonsView = new QScrollView(topSplit);
 
     barButtonsView->setHScrollBarMode(QScrollView::AlwaysOff);
     barButtonsView->setVScrollBarMode(QScrollView::AlwaysOff);
 
-    BarButtons *barButtons = new BarButtons
+    m_barButtons = new BarButtons
         (doc,
          m_rulerScale,
-         trackEditor->getVHeader()->sectionSize(0),
+         m_trackEditor->getVHeader()->sectionSize(0),
          barButtonsView);
 
     // set a plain frame for the scrollview
-    //
     barButtonsView->setFrameStyle(Plain);
-    barButtons->setFrameStyle(Plain);
 
     barButtonsView->
-        setMinimumHeight(trackEditor->getVHeader()->sectionSize(0));
+        setMinimumHeight(m_trackEditor->getVHeader()->sectionSize(0));
     barButtonsView->
-        setMaximumHeight(trackEditor->getVHeader()->sectionSize(0));
+        setMaximumHeight(m_trackEditor->getVHeader()->sectionSize(0));
 
-    barButtonsView->addChild(barButtons);
+    barButtonsView->addChild(m_barButtons);
 
-
-    connect(this,       SIGNAL(signalSetLoop(bool)),
-            barButtons, SLOT(setLoopingMode(bool)));
-
-    connect(this,
-            SIGNAL(signalSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT)),
-            barButtons,
-            SLOT(slotSetLoopMarker(Rosegarden::timeT, Rosegarden::timeT)));
-
-    
     // Construct the top level horizontal box and drop the
     // button box (TrackButtons) and the main ScrollView
     // straight into it.  We use this arrangement until we
@@ -143,29 +131,16 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     //
     //
     QScrollView *trackButtonsView = new QScrollView(mainPane);
-    TrackButtons *trackButtons = new TrackButtons(doc,
-                                                  trackButtonsView,
-                                                  trackEditor->getVHeader(),
-                                                  trackEditor->getHHeader(),
-                                                  trackLabelWidth);
-    trackButtonsView->addChild(trackButtons);
+    m_trackButtons = new TrackButtons(doc, trackButtonsView,
+                                      m_trackEditor->getVHeader(),
+                                      m_trackEditor->getHHeader(),
+                                      trackLabelWidth);
+
+    trackButtonsView->addChild(m_trackButtons);
     trackButtonsView->setFrameStyle(Plain);
-    trackButtons->setFrameStyle(Plain);
 
-    connect(trackButtons, SIGNAL(trackSelected(int)),
+    connect(m_trackButtons, SIGNAL(trackSelected(int)),
             this,         SLOT(selectTrackSegments(int)));
-
-    connect(this,         SIGNAL(signalSetSelectAdd(bool)), 
-            trackEditor,  SLOT(setSelectAdd(bool)));
-            
-    connect(this,         SIGNAL(signalSetSelectCopy(bool)), 
-            trackEditor, SLOT(setSelectCopy(bool)));
-            
-    connect(this,         SIGNAL(signalSetFineGrain(bool)), 
-            trackEditor, SLOT(setFineGrain(bool)));
-            
-    connect(this,       SIGNAL(signalSetTrackMeter(double, int)),
-            trackButtons, SLOT(setTrackMeter(double, int)));
 
     // turn off the scrollbars on the track buttons and set width
     //
@@ -189,64 +164,46 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(m_trackEditorScrollView, SIGNAL(contentsMoving(int, int)),
             barButtonsView,          SLOT(setContentsPos(int, int)));
 
+    m_trackEditorScrollView->addChild(m_trackEditor);
 
-
-    m_trackEditorScrollView->addChild(trackEditor);
-
-    connect(trackEditor->canvas(), SIGNAL(editSegmentNotation(Rosegarden::Segment*)),
+    connect(m_trackEditor->getSegmentCanvas(),
+            SIGNAL(editSegmentNotation(Rosegarden::Segment*)),
             SLOT(editSegmentNotation(Rosegarden::Segment*)));
 
-    connect(trackEditor->canvas(), SIGNAL(editSegmentMatrix(Rosegarden::Segment*)),
+    connect(m_trackEditor->getSegmentCanvas(),
+            SIGNAL(editSegmentMatrix(Rosegarden::Segment*)),
             SLOT(editSegmentMatrix(Rosegarden::Segment*)));
 
-    connect(trackEditor->canvas(), SIGNAL(editSegmentAudio(Rosegarden::Segment*)),
+    connect(m_trackEditor->getSegmentCanvas(),
+            SIGNAL(editSegmentAudio(Rosegarden::Segment*)),
             SLOT(editSegmentAudio(Rosegarden::Segment*)));
 
 
-    connect(trackEditor,  SIGNAL(createNewSegment(Rosegarden::timeT,
+    connect(m_trackEditor, SIGNAL(createNewSegment(Rosegarden::timeT,
                                                   Rosegarden::timeT,
                                                   Rosegarden::TrackId)),
             getDocument(), SLOT  (createNewSegment(Rosegarden::timeT,
                                                    Rosegarden::timeT,
                                                    Rosegarden::TrackId)));
 
-    connect(trackEditor,  SIGNAL(scrollHorizTo(int)),
+    connect(m_trackEditor,  SIGNAL(scrollHorizTo(int)),
             SLOT(scrollTrackEditorHoriz(int)));
-
-    connect(this,                   SIGNAL(setTool(SegmentCanvas::ToolType)),
-            trackEditor->canvas(), SLOT  (setTool(SegmentCanvas::ToolType)));
-
-    connect(this,          SIGNAL(setCanvasPositionPointer(Rosegarden::timeT)),
-            trackEditor,  SLOT(setPointerPosition(Rosegarden::timeT)));
-
-    connect(this, SIGNAL(selectSegments(std::list<Rosegarden::Segment*>)),
-            trackEditor->canvas(), SLOT(selectSegments(std::list<Rosegarden::Segment*>)));
-
-    connect(this,        SIGNAL(addSegmentItem(Rosegarden::Segment*)),
-            trackEditor, SLOT(addSegmentItem(Rosegarden::Segment*)));
-
-    connect(this,        SIGNAL(deleteSegmentItem(Rosegarden::Segment*)),
-            trackEditor, SLOT(deleteSegmentItem(Rosegarden::Segment*)));
-
-    connect(this,         SIGNAL(signalShowRecordingSegmentItem(Rosegarden::Segment*)),
-            trackEditor, SLOT(updateRecordingSegmentItem(Rosegarden::Segment*)));
-
-    connect(this, SIGNAL(signalDestroyRecordingSegmentItem()),
-            trackEditor, SLOT(destroyRecordingSegmentItem()));
 
     // Connections upwards from LoopRuler - re-emission of signals
     //
-    connect(barButtons, SIGNAL(setPointerPosition(Rosegarden::timeT)),
-            this,       SIGNAL(setGUIPositionPointer(Rosegarden::timeT)));
+    connect(m_barButtons, SIGNAL(setPointerPosition(Rosegarden::timeT)),
+            this,         SIGNAL(setGUIPositionPointer(Rosegarden::timeT)));
 
-    connect(barButtons, SIGNAL(setPlayPosition(Rosegarden::timeT)),
-            this,       SIGNAL(setGUIPlayPosition(Rosegarden::timeT)));
+    connect(m_barButtons, SIGNAL(setPlayPosition(Rosegarden::timeT)),
+            this, SIGNAL(setGUIPlayPosition(Rosegarden::timeT)));
 
-    connect(barButtons, SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
-            this,       SIGNAL(setGUILoop(Rosegarden::timeT, Rosegarden::timeT)));
+    connect(m_barButtons,
+            SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
+            this,
+            SIGNAL(setGUILoop(Rosegarden::timeT, Rosegarden::timeT)));
 
     if (doc)
-        trackEditor->setupSegments();
+        m_trackEditor->setupSegments();
 }
 
 
@@ -297,28 +254,28 @@ void RosegardenGUIView::print(KPrinter *pPrinter, Rosegarden::Composition* p)
 
 void RosegardenGUIView::pointerSelected()
 {
-    emit setTool(SegmentCanvas::Selector);
+    m_trackEditor->getSegmentCanvas()->setTool(SegmentCanvas::Selector);
 }
 
 
 void RosegardenGUIView::drawSelected()
 {
-    emit setTool(SegmentCanvas::Pencil);
+    m_trackEditor->getSegmentCanvas()->setTool(SegmentCanvas::Pencil);
 }
 
 void RosegardenGUIView::eraseSelected()
 {
-    emit setTool(SegmentCanvas::Eraser);
+    m_trackEditor->getSegmentCanvas()->setTool(SegmentCanvas::Eraser);
 }
 
 void RosegardenGUIView::moveSelected()
 {
-    emit setTool(SegmentCanvas::Mover);
+    m_trackEditor->getSegmentCanvas()->setTool(SegmentCanvas::Mover);
 }
 
 void RosegardenGUIView::resizeSelected()
 {
-    emit setTool(SegmentCanvas::Resizer);
+    m_trackEditor->getSegmentCanvas()->setTool(SegmentCanvas::Resizer);
 }
 
 
@@ -394,9 +351,7 @@ void RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
 
 void RosegardenGUIView::setPointerPosition(const Rosegarden::timeT &position)
 {
-//    kdDebug(KDEBUG_AREA) << "RosegardenGUIView::setPointerPosition" << endl;
-
-    emit setCanvasPositionPointer(position);
+    m_trackEditor->setPointerPosition(position);
 }
 
 // Highlight all the Segments on a Track because the Track has been selected
@@ -425,7 +380,7 @@ void RosegardenGUIView::selectTrackSegments(int trackId)
     // Send the segment list even if it's empty as we
     // use that to clear any current selection
     //
-    emit selectSegments(segments);
+    m_trackEditor->getSegmentCanvas()->selectSegments(segments);
 }
 
 
@@ -434,24 +389,24 @@ void RosegardenGUIView::selectTrackSegments(int trackId)
 //
 void RosegardenGUIView::createSegmentItem(Rosegarden::Segment* segment)
 {
-    emit addSegmentItem(segment);
+    m_trackEditor->addSegmentItem(segment);
 }
 
 void RosegardenGUIView::destroySegmentItem(Rosegarden::Segment* segment)
 {
-    emit deleteSegmentItem(segment);
+    m_trackEditor->deleteSegmentItem(segment);
 }
 
 // Show a segment as it records
 //
 void RosegardenGUIView::showRecordingSegmentItem(Rosegarden::Segment* segment)
 {
-    emit signalShowRecordingSegmentItem(segment);
+    m_trackEditor->updateRecordingSegmentItem(segment);
 }
 
 void RosegardenGUIView::destroyRecordingSegmentItem()
 {
-    emit signalDestroyRecordingSegmentItem();
+    m_trackEditor->destroyRecordingSegmentItem();
 }
 
 
@@ -462,7 +417,7 @@ void RosegardenGUIView::destroyRecordingSegmentItem()
 void RosegardenGUIView::setLoopMarker(Rosegarden::timeT startLoop,
                                       Rosegarden::timeT endLoop)
 {
-    emit signalSetLoopMarker(startLoop, endLoop);
+    m_barButtons->slotSetLoopMarker(startLoop, endLoop);
 }
 
 
@@ -471,9 +426,23 @@ void RosegardenGUIView::setLoopMarker(Rosegarden::timeT startLoop,
 void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
 {
     double value = ((double)mE->getVelocity()) / 127.0;
-    emit signalSetTrackMeter(value, mE->getTrack());
+    m_trackButtons->setTrackMeter(value, mE->getTrack());
 }
 
+
+void
+RosegardenGUIView::setControl(const bool &value)
+{
+    m_trackEditor->setSelectCopy(value);
+}
+
+void
+RosegardenGUIView::setShift(const bool &value)
+{
+    m_trackEditor->setSelectAdd(value);
+    m_barButtons->setLoopingMode(value);
+    m_trackEditor->setFineGrain(value);
+} 
 
 
 

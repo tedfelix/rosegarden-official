@@ -49,6 +49,8 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
     setMinimumHeight(m_barHeight);
     setMaximumHeight(m_barHeight);
 
+    setFrameStyle(Plain);
+
     drawButtons();
 }
 

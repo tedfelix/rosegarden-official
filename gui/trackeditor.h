@@ -39,7 +39,6 @@ class SegmentItem;
 class SegmentCanvas;
 class RosegardenGUIDoc;
 
-
 /**
  * Global widget for segment edition.
  *
@@ -56,9 +55,9 @@ public:
      * Create a new TrackEditor representing the document \a doc
      */
     TrackEditor(RosegardenGUIDoc* doc,
-		Rosegarden::RulerScale *rulerScale,
-		QWidget* parent = 0, const char* name = 0,
-		WFlags f=0);
+                Rosegarden::RulerScale *rulerScale,
+                QWidget* parent = 0, const char* name = 0,
+                WFlags f=0);
 
     /// Clear the SegmentCanvas
     void clear();
@@ -69,8 +68,8 @@ public:
      */
     void updateSegmentOrder();
 
-    SegmentCanvas*       canvas()       { return m_segmentCanvas; }
-    const SegmentCanvas* canvas() const { return m_segmentCanvas; }
+    SegmentCanvas*       getSegmentCanvas()       { return m_segmentCanvas; }
+    const SegmentCanvas* getSegmentCanvas() const { return m_segmentCanvas; }
 
     /**
      * Must be called after construction and signal connection
@@ -186,14 +185,12 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc* m_document;
-    Rosegarden::RulerScale *m_rulerScale;
-
-    SegmentCanvas *m_segmentCanvas;
-    QHeader *m_hHeader;
+    RosegardenGUIDoc        *m_document;
+    Rosegarden::RulerScale  *m_rulerScale;
+    SegmentCanvas           *m_segmentCanvas;
+    QHeader                 *m_hHeader;
     Rosegarden::TrackHeader *m_vHeader;
-
-    QCanvasLine *m_pointer;
+    QCanvasLine             *m_pointer;
 };
 
 #endif
