@@ -43,11 +43,15 @@ public:
     
     virtual QSize sizeHint() const;
 
+    void scrollHoriz(int x);
+
 protected:
     virtual void paintEvent(QPaintEvent*);
 
     //--------------- Data members ---------------------------------
     int m_barHeight;
+    int m_currentXOffset;
+
     Rosegarden::RulerScale *m_rulerScale;
 
 };
@@ -64,6 +68,7 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
     m_invert(invert),
     m_loopRulerHeight(8),
     m_offset(4),
+    m_currentXOffset(0),
     m_doc(doc),
     m_rulerScale(rulerScale),
     m_hButtonBar(0)
@@ -90,6 +95,23 @@ BarButtons::BarButtons(RosegardenGUIDoc* doc,
 }
 
 
+void BarButtons::scrollHoriz(int x)
+{
+    // This can't work - we want a pseudo-scroll,
+    // e.g. actually repainting a different part of the widgets
+    //
+//     int oldOffset = m_currentXOffset;
+//     m_currentXOffset = x;
+
+//     scroll(oldOffset - m_currentXOffset, 0);
+
+    m_loopRuler->scrollHoriz(x);
+    m_hButtonBar->scrollHoriz(x);
+}
+
+
+//----------------------------------------------------------------------
+
 
 BarButtonsWidget::BarButtonsWidget(RulerScale *rulerScale,
                                    int barHeight,
@@ -98,9 +120,17 @@ BarButtonsWidget::BarButtonsWidget(RulerScale *rulerScale,
                                    WFlags f)
     : QWidget(parent, name, f),
       m_barHeight(barHeight),
+      m_currentXOffset(0),
       m_rulerScale(rulerScale)
 {
     
+}
+
+void BarButtonsWidget::scrollHoriz(int x)
+{
+    m_currentXOffset = -x;
+
+    repaint();
 }
 
 QSize BarButtonsWidget::sizeHint() const
@@ -115,37 +145,28 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
 
-//     painter.setBrush(red);
-//     painter.setPen(red);
-
     int firstBar = m_rulerScale->getFirstVisibleBar(),
 	 lastBar = m_rulerScale->getLastVisibleBar();
 
-    kdDebug(KDEBUG_AREA) << "BarButtons::paintEvent: firstBar = "
-			 << firstBar << std::endl;
-    int x = 0;
+    int x = m_currentXOffset;
 
-    painter.drawLine(0, 0, visibleRect().width(), 0);
+    painter.drawLine(x, 0, visibleRect().width(), 0);
+
+    QRect clipRect = visibleRect();
 
     for (int i = firstBar; i <= lastBar; ++i) {
 
-        painter.drawLine(x, 0, x, m_barHeight);
-        painter.drawText(x + 4, m_barHeight / 2, QString("%1").arg(i));
+        double width = m_rulerScale->getBarWidth(i);
+        if (width == 0) continue;
 
-	// The (i < lastBar) case resynchronises against the absolute
-	// bar position at each stage so as to avoid gradually increasing
-	// error through integer rounding
+        if (x >= clipRect.x() &&
+            x <= (clipRect.x() + width + clipRect.width())) {
 
-	int width;
-	if (i < lastBar) {
-	    width = (int)(m_rulerScale->getBarPosition(i+1) - (double)x);
-	    x += width;
-	} else {
-	    width = (int)(m_rulerScale->getBarWidth(i));
-	}
+            painter.drawLine(x, 0, x, m_barHeight);
+            painter.drawText(x + 4, m_barHeight / 2, QString("%1").arg(i));
+        }
 
-	kdDebug(KDEBUG_AREA) << "BarButtons::paintEvent: bar " << i
-			     << ", width " << width << ", x " << x << std::endl;
-
+        x += width;
+        
     }
 }

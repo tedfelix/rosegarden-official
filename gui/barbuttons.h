@@ -48,21 +48,21 @@ public:
 
     LoopRuler* getLoopRuler() { return m_loopRuler; }
 
-private:
-//     void drawButtons(bool recalc);
-//     QWidget *makeBar(int number);
+public slots:
+    void scrollHoriz(int x);
 
+private:
     //--------------- Data members ---------------------------------
     bool m_invert;
     int m_loopRulerHeight;
     int m_offset;
-
+    int m_currentXOffset;
+    
     RosegardenGUIDoc *m_doc;
     Rosegarden::RulerScale *m_rulerScale;
 
     BarButtonsWidget *m_hButtonBar;
     LoopRuler *m_loopRuler;
-//     FastVector<QWidget *> m_buttons;
 };
 
 #endif // _BARBUTTONS_H_

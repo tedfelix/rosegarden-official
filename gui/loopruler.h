@@ -59,6 +59,8 @@ public:
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
+    void scrollHoriz(int x);
+
 public slots:
     void setLoopingMode(bool value);
     void setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop);
@@ -93,6 +95,7 @@ private:
     int  m_height;
     bool m_invert;
     int  m_lastXPaint;
+    int  m_currentXOffset;
 
     Rosegarden::RulerScale *m_rulerScale;
     Rosegarden::SnapGrid    m_grid;

@@ -38,6 +38,7 @@ LoopRuler::LoopRuler(RulerScale *rulerScale,
       m_height(height),
       m_invert(invert),
       m_lastXPaint(0),
+      m_currentXOffset(0),
       m_rulerScale(rulerScale),
       m_grid(rulerScale),
       m_loop(false),
@@ -53,6 +54,13 @@ LoopRuler::LoopRuler(RulerScale *rulerScale,
 
 LoopRuler::~LoopRuler()
 {
+}
+
+void LoopRuler::scrollHoriz(int x)
+{
+    m_currentXOffset = -x;
+
+    repaint();
 }
 
 QSize LoopRuler::sizeHint() const
@@ -94,7 +102,7 @@ void LoopRuler::drawBarSections(QPainter* paint, bool rightwards)
 
     if (rightwards) {
         
-        double x = m_rulerScale->getBarPosition(firstBar);
+        double x = m_rulerScale->getBarPosition(firstBar) + m_currentXOffset;
         for (int i = firstBar; i <= lastBar; ++i) {
 
             double width = m_rulerScale->getBarWidth(i);
@@ -130,7 +138,7 @@ void LoopRuler::drawBarSections(QPainter* paint, bool rightwards)
         
         }
     } else { // draw leftwards
-        double x = m_rulerScale->getBarPosition(lastBar);
+        double x = m_rulerScale->getBarPosition(lastBar) + m_currentXOffset;
 
         for (int i = lastBar; i >= firstBar; --i) {
 
