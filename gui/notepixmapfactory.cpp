@@ -781,8 +781,7 @@ NotePixmapFactory::makeUnknownPixmap()
 QCanvasPixmap
 NotePixmapFactory::makeToolbarPixmap(const char *name)
 {
-//    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QString pixmapDir = "./pixmaps";
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     return QCanvasPixmap(pixmapDir + "/toolbar/" + name + ".xpm");
 }
 

@@ -39,7 +39,8 @@ SUBDIRS = docs
 
 EXTRA_DIST = rosegardenguiiface.kidl trackseditoriface.kidl \
 	pixmaps/5/*.xpm \
-	pixmaps/9/*.xpm
+	pixmaps/9/*.xpm \
+	pixmaps/toolbar/*.xpm
 
 # Where pixmaps for notes, clefs, etc... will be installed
 data_dirname = rosegarden
@@ -58,8 +59,10 @@ install-data-local:
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/5
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/9
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/toolbar
 	$(INSTALL_DATA) $(srcdir)/pixmaps/5/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/5
 	$(INSTALL_DATA) $(srcdir)/pixmaps/9/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/9
+	$(INSTALL_DATA) $(srcdir)/pixmaps/toolbar/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/toolbar
 
 uninstall-local:
 	-rm -f $(kde_appsdir)/Applications/rosegarden.desktop
