@@ -19,6 +19,9 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef _MATRIXPARAMETERBOX_H_
+#define _MATRIXPARAMETERBOX_H_
+
 #include <qvbox.h>
 
 #include "widgets.h"
@@ -27,9 +30,6 @@
 #include "MappedInstrument.h"
 
 #include <vector>
-
-#ifndef _MATRIXPARAMETERBOX_H_
-#define _MATRIXPARAMETERBOX_H_
 
 // Display and allow modification of Event parameters on the Matrix
 //

@@ -63,6 +63,10 @@ public:
                       QWidget *parent=0, const char *name=0)
         : QWidget(parent, name), m_doc(0), m_cfg(cfg), m_pageIndex(0) {}
 
+    ConfigurationPage(RosegardenGUIDoc *doc, KConfig *cfg,
+                      QWidget *parent=0, const char *name=0)
+        : QWidget(parent, name), m_doc(doc), m_cfg(cfg), m_pageIndex(0) {}
+
     virtual ~ConfigurationPage() {};
 
     /**
@@ -112,6 +116,10 @@ public:
                             QWidget *parent=0, const char *name=0);
 
     TabbedConfigurationPage(KConfig *cfg,
+                            QWidget *parent=0, const char *name=0);
+
+    TabbedConfigurationPage(RosegardenGUIDoc *doc,
+                            KConfig *cfg,
                             QWidget *parent=0, const char *name=0);
 
     static QString iconName() { return "misc"; }
@@ -309,8 +317,6 @@ protected:
     QSlider* m_jackRecord;
 
     QPushButton* m_fetchLatencyValues;
-
-    RosegardenGUIDoc *m_doc;
 };
 
 

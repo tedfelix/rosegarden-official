@@ -82,6 +82,15 @@ TabbedConfigurationPage::TabbedConfigurationPage(KConfig *cfg,
     init();
 }
 
+TabbedConfigurationPage::TabbedConfigurationPage(RosegardenGUIDoc *doc,
+                                                 KConfig *cfg,
+                                                 QWidget *parent,
+                                                 const char *name)
+  : ConfigurationPage(doc, cfg, parent, name)
+{
+    init();
+}
+
 void TabbedConfigurationPage::init()
 {
     QVBoxLayout *vlay = new QVBoxLayout(this, 0, KDialog::spacingHint());
@@ -701,10 +710,9 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
                                                    KConfig *cfg,
                                                    QWidget *parent,
                                                    const char *name)
-    : TabbedConfigurationPage(cfg, parent, name),
+    : TabbedConfigurationPage(doc, cfg, parent, name),
       m_readAhead(0),
-      m_playback(0),
-      m_doc(doc)
+      m_playback(0)
 {
 //     Rosegarden::Configuration &config = doc->getConfiguration();
     m_cfg->setGroup("Latency Options");
