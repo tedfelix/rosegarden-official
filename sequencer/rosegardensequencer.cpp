@@ -972,7 +972,10 @@ RosegardenSequencerApp::initialiseStudio()
         }
     }
 
+#ifdef HAVE_LADSPA 
     pM->getenvLADSPAPath();
+#endif
+
     pM->discoverPlugins();
 
 }
