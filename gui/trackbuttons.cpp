@@ -24,6 +24,7 @@
 #include <qlabel.h>
 #include <qbuttongroup.h>
 #include <qsignalmapper.h>
+#include <qtooltip.h>
 
 #include <klocale.h>
 #include <kapp.h>
@@ -205,8 +206,10 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
 
     // Create buttons
     mute = new QPushButton(trackHBox);
+    QToolTip::add(mute, i18n("Mute track"));
     hblayout->addWidget(mute);
     record = new QPushButton(trackHBox);
+    QToolTip::add(record, i18n("Record on this track"));
     hblayout->addWidget(record);
 
     mute->setFlat(true);
