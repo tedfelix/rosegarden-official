@@ -38,8 +38,8 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
                      const char *name):
     QCanvasView(canvas, parent, name),
     m_bars(bars), m_barWidth(barWidth), m_height(height),
-    m_canvas(canvas), m_doc(doc),
-    m_loop(false), m_startLoop(0), m_loopMarker(0)
+    m_canvas(canvas), m_doc(doc), m_loop(false), m_startLoop(0),
+    m_loopMarker(0)
 {
     setMinimumSize(bars * barWidth, height);
     setMaximumSize(bars * barWidth, height);
@@ -108,7 +108,7 @@ LoopRuler::contentsMousePressEvent(QMouseEvent *mE)
     if (mE->button() == LeftButton)
     {
         if (m_loop)
-            m_startLoop = getPointerPosition(mE->pos().x());
+            m_endLoop = m_startLoop = getPointerPosition(mE->pos().x());
         else
             emit setPointerPosition(getPointerPosition(mE->pos().x()));
     }
@@ -124,10 +124,15 @@ LoopRuler::contentsMouseReleaseEvent(QMouseEvent *mE)
     {
         if (m_loop)
         {
-            Rosegarden::timeT endLoop = getPointerPosition(position);
-
-            emit setLoop(m_startLoop, endLoop);
-            m_startLoop = 0;
+            // Cancel the loop if there was no drag
+            //
+            if (m_endLoop == m_startLoop)
+            {
+                m_endLoop = m_startLoop = 0;
+                m_loopMarker->hide();
+                m_canvas->update();
+            }
+            emit setLoop(m_startLoop, m_endLoop);
         }
     }
 }
@@ -219,7 +224,20 @@ LoopRuler::drawLoopMarker()
     if (m_loopMarker == 0)
         m_loopMarker = new QCanvasRectangle(m_canvas);
 
-    cout << "STARTLOOP = " << getXPosition(m_startLoop) << endl;
-    cout << "ENDLOOP   = " << getXPosition(m_endLoop)<< endl;
-    
+    int x1 = getXPosition(m_startLoop);
+    int x2 = getXPosition(m_endLoop);
+
+    if (x1 > x2) 
+    {
+        x2 = x1;
+        x1 = getXPosition(m_endLoop);
+    }
+
+    m_loopMarker->setX(x1);
+    m_loopMarker->setY(0);
+    m_loopMarker->setSize(x2 - x1, m_height);
+    m_loopMarker->setBrush(RosegardenGUIColours::LoopHighlight);
+    m_loopMarker->setPen(RosegardenGUIColours::LoopHighlight);
+    m_loopMarker->show();
+    m_canvas->update();
 }

@@ -92,6 +92,7 @@ private:
     int m_bars;
     int m_barWidth;
     int m_height;
+    int m_snap;            // snap the loop to the nearest
     QCanvas          *m_canvas;
     RosegardenGUIDoc *m_doc;
    
