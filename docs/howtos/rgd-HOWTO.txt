@@ -1,4 +1,4 @@
-mini-HOWTO: Creating the Instrument and Voice definitions for Rosegarden-4
+mini-HOWTO: Creating the Instrument and Program definitions for Rosegarden-4
 ==========================================================================
 
 
@@ -19,17 +19,17 @@ particular attention to sections 2.4 to 2.10:
 The Beginner Section
 --------------------
 
-Step One: Create The Voice List
+Step One: Create The Program List
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to create the *.rgd (device definition file) you need first to
-know what voices are available for your MIDI device, i.e. what instruments
+know what programs are available for your MIDI device, i.e. what instruments
 your keyboard or sound card can play.
 
 The best source is probably your manual. Alternatively you may want to
 search on the Internet.
 
-Voices are organized in banks. Within banks each voice is specified by
+Programs are organized in banks. Within banks each program is specified by
 a MIDI program change number. Banks are designated by using two numbers:
 MSB (Most Significant Byte) and LSB (Least Significant Byte).
 
@@ -39,10 +39,10 @@ the .rgd file but these will appear as 1 to 128 when viewed in your
 manual and also when they are loaded into Rosegarden's Bank editor.
 
 The bank with MSB=0 and LSB=0 is well defined and known as GM (General Midi).
-The first voice in this bank is the "Acoustic/Grand Piano", i.e. pianoforte
-and all 128 voices are well defined.
+The first program in this bank is the "Acoustic/Grand Piano", i.e. pianoforte
+and all 128 programs are well defined.
 
-So we will tell Rosegarden about this voice somewhat like:
+So we will tell Rosegarden about this program somewhat like:
 
   * At MSB=0, LSB=0, Program=0 you find "Acoustic/Grand Piano"
 
@@ -52,21 +52,21 @@ computer will understand "MSB=0, LSB=0, Program=0"
 
 Rosegarden stores this information in the *.rgd file.
 
-There are several ways you can tell Rosegarden what voices are available:
+There are several ways you can tell Rosegarden what programs are available:
 
  1. Use Rosegarden itself, via the Studio -> Manage MIDI Banks and Programs
-    menu. However consider that only the GM bank contains already 128 voices
+    menu. However consider that only the GM bank contains already 128 programs
     and most keyboards or sound cards may well contain in excess of 500
-    voices. So entering by hand is a very tedious process.
+    programs. So entering by hand is a very tedious process.
 
  2. Edit the *.rgd file directly: possible but not for the beginner
     (more about that below)
 
- 3. Create a list of voices and then convert it to the *.rgd format
+ 3. Create a list of programs and then convert it to the *.rgd format
 
 We will take here the third approach.
 
-First create a file containing the list of all voices. You can use either
+First create a file containing the list of all programs. You can use either
 any text editor you feel comfortable with  or any spreadsheet able to export
 in CSV (Comma Separated Values) format (any spreadsheet should be able to
 do this).
@@ -87,7 +87,7 @@ The list of the parameters is as follows:
  1. The first one is for your reference, it will be ignored in the final
     output. You can put whatever you like except whitespaces and commas
     (because they are separators) and "#" because it will be taken as a
-    comment. An example of what you can put in here is the voice number,
+    comment. An example of what you can put in here is the program number,
     in order to keep track of what you have entered;
 
  2. The second one is the MSB, it is a integer between 0 and 127;
@@ -98,7 +98,7 @@ The list of the parameters is as follows:
     0 and 127 (remember, this is displayed as 1 to 128 in Rosegarden and
     in your manual);
 
- 5. And finally the last one is the voice name. This field in particular
+ 5. And finally the last one is the program name. This field in particular
     may contain whitespace and/or commas but not "#";
 
 You can optionally add comments after the fifth parameter.
@@ -109,7 +109,7 @@ Example:
        # This is another comment
 
     # GM Bank:
-    first 0 0 1 Grand Piano   # this is the first voice from the GM bank
+    first 0 0 1 Grand Piano   # this is the first program from the GM bank
     2 ,   0 0, 2 Bright Piano
 
 If you want to save yourself some time and make sure that the data entered is
@@ -128,11 +128,11 @@ correct you may proceed as follows:
 
  * Finally edit the text to transform it into a format as described above.
 
-It is still a tedious process but maybe less so than entering all voices
+It is still a tedious process but maybe less so than entering all programs
 from scratch. And very likey less error-prone.
 
 For keyboards in particular: It is highly advisable to use the same
-voice names as they appear on the LCD screen of the keyboard.
+program names as they appear on the LCD screen of the keyboard.
 
 If you used a text processor make sure you save the file as plain text
 (ASCII); if you use a spreadsheet make sure you save in CVS format.

@@ -25,26 +25,26 @@
 
 namespace RosegardenGUIColours
 {
-    const QColor ActiveRecordTrack = Qt::red;
+    const QColor ActiveRecordTrack = QColor(255, 0, 0);
 
     const QColor SegmentCanvas = QColor(230, 230, 230);
-    const QColor SegmentBorder = Qt::black;
+    const QColor SegmentBorder = QColor(0, 0, 0);
     const QColor RecordingSegmentBlock = QColor(255, 182, 193);
-    const QColor RecordingSegmentBorder = Qt::black;
+    const QColor RecordingSegmentBorder = QColor(0, 0, 0);
 
     const QColor RepeatSegmentBorder = QColor(130, 133, 170);
 
     const QColor SegmentAudioPreview = QColor(39, 71, 22);
-    const QColor SegmentInternalPreview = Qt::white;
-    const QColor SegmentLabel = Qt::black;
-    const QColor SegmentSplitLine = Qt::black;
+    const QColor SegmentInternalPreview = QColor(255, 255, 255);
+    const QColor SegmentLabel = QColor(0, 0, 0);
+    const QColor SegmentSplitLine = QColor(0, 0, 0);
 
-    const QColor MatrixElementBorder = Qt::black;
+    const QColor MatrixElementBorder = QColor(0, 0, 0);
     const QColor MatrixElementBlock = QColor(98, 128, 232);
 
     const QColor LoopRulerBackground = QColor(120, 120, 120);
-    const QColor LoopRulerForeground = Qt::white;
-    const QColor LoopHighlight = Qt::white;
+    const QColor LoopRulerForeground = QColor(255, 255, 255);
+    const QColor LoopHighlight = QColor(255, 255, 255);
 
     const QColor TempoBase = QColor(197, 211, 125);
 
@@ -52,13 +52,13 @@ namespace RosegardenGUIColours
 //    const QColor TextRulerBackground = QColor(120, 90, 238, QColor::Hsv);
 //    const QColor TextRulerBackground = QColor(210, 220, 140);
     const QColor TextRulerBackground = QColor(226, 232, 187);
-    const QColor TextRulerForeground = Qt::white;
+    const QColor TextRulerForeground = QColor(255, 255, 255);
 
     const QColor ChordNameRulerBackground = QColor(230, 230, 230);
-    const QColor ChordNameRulerForeground = Qt::black;
+    const QColor ChordNameRulerForeground = QColor(0, 0, 0);
 
     const QColor RawNoteRulerBackground = QColor(240, 240, 240);
-    const QColor RawNoteRulerForeground = Qt::black;
+    const QColor RawNoteRulerForeground = QColor(0, 0, 0);
 
     const QColor LevelMeterGreen = QColor(0, 200, 0);
     const QColor LevelMeterOrange = QColor(255, 165, 0);
@@ -68,14 +68,14 @@ namespace RosegardenGUIColours
     const QColor LevelMeterSolidOrange = QColor(220, 120, 0);
     const QColor LevelMeterSolidRed = QColor(255, 50, 50);
 
-    const QColor BarLine = Qt::black;
+    const QColor BarLine = QColor(0, 0, 0);
     const QColor BarLineIncorrect = QColor(211, 0, 31);
     const QColor BeatLine = QColor(100, 100, 100);
     const QColor SubBeatLine = QColor(212, 212, 212);
     const QColor StaffConnectingLine = QColor(192, 192, 192);
     const QColor StaffConnectingTerminatingLine = QColor(128, 128, 128);
 
-    const QColor Pointer = Qt::darkBlue;
+    const QColor Pointer = QColor(0, 0, 128);
     const QColor PointerRuler = QColor(100, 100, 100);
 
     const QColor InsertCursor = QColor(160, 104, 186);
@@ -98,11 +98,11 @@ namespace RosegardenGUIColours
 
     const QColor TextAnnotationBackground = QColor(255, 255, 180);
 
-    const QColor AudioCountdownBackground = Qt::darkGray;
-    const QColor AudioCountdownForeground = Qt::red;
+    const QColor AudioCountdownBackground = QColor(128, 128, 128);
+    const QColor AudioCountdownForeground = QColor(255, 0, 0);
 
-    const QColor RotaryFloatBackground = Qt::cyan;
-    const QColor RotaryFloatForeground = Qt::black;
+    const QColor RotaryFloatBackground = QColor(0, 255, 255);
+    const QColor RotaryFloatForeground = QColor(0, 0, 0);
 
     const QColor RotaryPastelBlue = QColor(205, 212, 255);
     const QColor RotaryPastelRed = QColor(255, 168, 169);
