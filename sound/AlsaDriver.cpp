@@ -2800,10 +2800,11 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
     //
     processMidiOut(mC, playLatency, now);
 
+#ifdef HAVE_LIBJACK
     pthread_mutex_lock(&_diskThreadLock);
     processAudioQueue(playLatency, now);
     pthread_mutex_unlock(&_diskThreadLock);
-
+#endif
 }
 
 bool
