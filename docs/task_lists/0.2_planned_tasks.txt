@@ -40,11 +40,13 @@ o Kill all the big bugs - closing bug being one.  Soak testing of
   sequencer and gui for leaks (looping of an entire piece for a
   day or so - that kind of thing)
 
-o GUI support for various already supported items - tuplets, n-dotted notes,
+o GUI support for various things that are supported in the
+  internal representation already - tuplets, n-dotted notes,
   tempo, and text.
 
-o Get the GUI to make sense when loading files and switching states - enable
-  correct buttons and menu options etc.
+o Get the GUI to make sense when loading files and switching states,
+  enabling correct buttons and menu options corresponding to whether
+  (for example) anything is selected in the view
 
 o Add, Move and Delete Tracks including associated Segments
 
@@ -93,7 +95,7 @@ o Naming the release something meaningful.
 Notes:
 
 It'd be good to get this release out asap - considering we have a good
-starting point and a decenet head of steam up in development this kind
+starting point and a decent head of steam up in development this kind
 of exercise could engender further momentum.
 
 Thoughts?
