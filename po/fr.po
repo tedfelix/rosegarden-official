@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "POT-Creation-Date: 2004-12-05 13:31+0100\n"
-"PO-Revision-Date: 2004-12-01 00:34+0000\n"
+"PO-Revision-Date: 2004-12-16 00:06+0000\n"
 "Last-Translator: Burli <didierburli@hotmail.com>\n"
 "Language-Team: Français <fr@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -35,11 +35,11 @@ msgstr "&Fermer le fichier Audio"
 
 #: audiomanagerdialog.cpp:211
 msgid "&Play Preview"
-msgstr "&Jouer la pré-version"
+msgstr "&Jouer la préversion"
 
 #: audiomanagerdialog.cpp:215
 msgid "Re&label"
-msgstr "&Étiqueter..."
+msgstr "Ré&étiqueter"
 
 #: audiomanagerdialog.cpp:220
 msgid "&Insert into Selected Audio Track"
@@ -82,7 +82,7 @@ msgstr "Fréquence d'échantillonage"
 
 #: audiomanagerdialog.cpp:248
 msgid "Channels"
-msgstr "Canneaux"
+msgstr "Canaux"
 
 #: audiomanagerdialog.cpp:249 dialogs.cpp:4435
 msgid "Resolution"
@@ -102,15 +102,15 @@ msgstr "Choisir un nom pour le fichier"
 
 #: audiomanagerdialog.cpp:569
 msgid "Exporting audio file..."
-msgstr "Exportation Fichier Audio..."
+msgstr "Exportation d'un fichier audio..."
 
 #: audiomanagerdialog.cpp:660
 msgid ""
 "This will unload audio file \"%1\" and remove all associated segments.  Are "
 "you sure?"
 msgstr ""
-"Confirmez-vous la fermeture du fichier audio \"%1\" ainsi que de tous les "
-"segments associés?"
+"Confirmez-vous la fermeture du fichier audio « %1 », ainsi que de tous les "
+"segments associés ?"
 
 #: audiomanagerdialog.cpp:753
 msgid ""
@@ -160,7 +160,7 @@ msgstr "Impossible de charger le fichier %1"
 
 #: audiomanagerdialog.cpp:1110 audiomanagerdialog.cpp:1119
 msgid "Cannot add file %1: %2"
-msgstr "Impossible d'ajouter le fichier %1: %2"
+msgstr "Impossible d'ajouter le fichier %1 : %2"
 
 #: audiomanagerdialog.cpp:1139
 msgid ""
@@ -184,21 +184,23 @@ msgstr "Module externe"
 
 #: audioplugindialog.cpp:100
 msgid "Category:"
-msgstr "Catégorie:"
+msgstr "Catégorie :"
 
 #: audioplugindialog.cpp:105
 msgid "Plugin:"
-msgstr "Plugin:"
+msgstr "Plugin :"
 
 #: audioplugindialog.cpp:108 audioplugindialog.cpp:357
 msgid "Select a plugin from this list."
 msgstr "Sélectionner un module externe de cette liste."
 
 #: audioplugindialog.cpp:113
+#, fuzzy
 msgid "Bypass"
 msgstr "Bypass"
 
 #: audioplugindialog.cpp:114
+#, fuzzy
 msgid "Bypass this plugin."
 msgstr "Bypass ce module externe."
 
@@ -262,7 +264,7 @@ msgstr "mono"
 
 #: audioplugindialog.cpp:446
 msgid "stereo"
-msgstr "stereo"
+msgstr "stéréo"
 
 #: audioplugindialog.cpp:447
 msgid "%1 in, %2 out"
@@ -270,7 +272,7 @@ msgstr "%1 in, %2 out"
 
 #: audioplugindialog.cpp:470 audioplugindialog.cpp:655
 msgid "Program:  "
-msgstr "Programme:  "
+msgstr "Programme :  "
 
 #: audioplugindialog.cpp:474 audioplugindialog.cpp:484
 #: audioplugindialog.cpp:659 audioplugindialog.cpp:667
@@ -284,11 +286,11 @@ msgstr "Plugin Rosegarden"
 
 #: audiopluginoscgui.cpp:479
 msgid "Rosegarden: %1"
-msgstr "Rosegarden: %1"
+msgstr "Rosegarden : %1"
 
 #: audiopluginoscgui.cpp:481
 msgid "Rosegarden: %1: %2"
-msgstr "Rosegarden: %1: %2"
+msgstr "Rosegarden : %1 : %2"
 
 #: audiopluginoscgui.cpp:482
 msgid "Plugin slot %1"
@@ -369,8 +371,9 @@ msgid ""
 msgstr ""
 "Le bibliothécaire assure la maintenance des informations sur les bancs et "
 "programmes pour ce périphérique.\n"
-"Si vous avez changé un banc pour pouvoir faire fonctionner votre propre\n"
-" périphérique, une bonne idée serait de contacter le bibliothécaire afin "
+"Si vous avez changé un banc pour pouvoir faire fonctionner votre "
+"propre\n"
+"périphérique, une bonne idée serait de contacter le bibliothécaire afin "
 "que\n"
 "d'autres puissent profiter de vos modifications."
 
@@ -420,11 +423,10 @@ msgid "Export..."
 msgstr "Exporter..."
 
 #: bankeditor.cpp:763
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Importer les bancs et programmes d'un fichier Rosegarden vers le "
-"périphériquecourant"
+"périphérique courant"
 
 #: bankeditor.cpp:765
 msgid ""
@@ -432,7 +434,7 @@ msgid ""
 "file"
 msgstr ""
 "Exporter les informations des bancs et des périphériques vers un fichier "
-"d'échanges Rosegarden"
+"d'échange Rosegarden"
 
 #: bankeditor.cpp:775
 msgid "Copy all Program names from current Bank to clipboard"
@@ -450,13 +452,13 @@ msgstr "Montrer la liste de variation basée sur "
 #: editviewbase.cpp:201 markereditor.cpp:389 rosegardengui.cpp:552
 #: triggermanager.cpp:436
 msgid "Und&o"
-msgstr "A&nnuler"
+msgstr "Annu&ler"
 
 #: bankeditor.cpp:900 controleditor.cpp:321 devicemanager.cpp:208
 #: editviewbase.cpp:207 markereditor.cpp:395 rosegardengui.cpp:558
 #: triggermanager.cpp:442
 msgid "Re&do"
-msgstr "R&efaire"
+msgstr "Re&faire"
 
 #: bankeditor.cpp:1486
 msgid "<new bank>"
@@ -464,7 +466,7 @@ msgstr "<nouveau banc>"
 
 #: bankeditor.cpp:1520
 msgid "Really delete this bank?"
-msgstr "Confirmez-vous l'effacement de ce banc?"
+msgstr "Confirmez-vous l'effacement de ce banc ?"
 
 #: bankeditor.cpp:1574
 msgid "Really delete all banks for "
@@ -484,7 +486,7 @@ msgstr "Vous avez spécifié un dossier"
 
 #: bankeditor.cpp:2010 devicemanager.cpp:782 rosegardengui.cpp:2122
 msgid "The specified file exists.  Overwrite?"
-msgstr "Le fichier spécifié existe. Écraser?"
+msgstr "Le fichier spécifié existe. L'écraser ?"
 
 #: bankeditor.cpp:2056
 msgid ""
@@ -510,8 +512,8 @@ msgstr "Périphérique ou instrument"
 #: bankeditor.cpp:2090
 msgid "Remap Tracks by all Instruments on a Device or by single Instrument"
 msgstr ""
-"Redéfinir les pistes par tous les instruments d'un périphérique ou par un "
-"seul instrument"
+"Redéfinir les pistes par tous les instruments d'un périphérique ou par "
+"un seul instrument"
 
 #: bankeditor.cpp:2091 deviceeditor.cpp:61 devicemanager.cpp:88
 #: devicemanager.cpp:140 dialogs.cpp:4394
@@ -647,39 +649,39 @@ msgstr "Propriétés de contrôle de l'événement"
 
 #: controleditor.cpp:451 markereditor.cpp:565
 msgid "Name:"
-msgstr "Nom:"
+msgstr "Nom :"
 
 #: controleditor.cpp:455 rosegardenconfiguredialog.cpp:372
 msgid "Type:"
-msgstr "Type:"
+msgstr "Type :"
 
 #: controleditor.cpp:459 markereditor.cpp:569
 msgid "Description:"
-msgstr "Description:"
+msgstr "Description :"
 
 #: controleditor.cpp:467
 msgid "Control Event value:"
-msgstr "Valeur de contrôle de l'événement:"
+msgstr "Valeur de contrôle de l'événement :"
 
 #: controleditor.cpp:471
 msgid "Minimum value:"
-msgstr "Valeur minimum:"
+msgstr "Valeur minimum :"
 
 #: controleditor.cpp:475
 msgid "Maximum value:"
-msgstr "Valeur maximum:"
+msgstr "Valeur maximum :"
 
 #: controleditor.cpp:479
 msgid "Default value:"
-msgstr "Valeur par défaut:"
+msgstr "Valeur par défaut :"
 
 #: controleditor.cpp:483
 msgid "Color:"
-msgstr "Couleur:"
+msgstr "Couleur :"
 
 #: controleditor.cpp:487
 msgid "Instrument Parameter Box position:"
-msgstr "Paramètres de positionnement des instruments:"
+msgstr "Paramètres de positionnement des instruments :"
 
 #: controlruler.cpp:540
 msgid "Control Change"
@@ -720,7 +722,7 @@ msgstr "%1 contrôleur"
 
 #: deviceeditor.cpp:49 devicemanager.cpp:79
 msgid "Manage MIDI Devices"
-msgstr "Gérer les périphériques MIDI"
+msgstr "Gestion des périphériques MIDI"
 
 #: deviceeditor.cpp:63 dialogs.cpp:1352 rosegardenconfiguredialog.cpp:1959
 msgid "Type"
@@ -732,11 +734,11 @@ msgstr "Connexion"
 
 #: deviceeditor.cpp:80
 msgid "Add Play Device"
-msgstr "Ajouter périphérique de Lecture"
+msgstr "Ajouter un périphérique de lecture"
 
 #: deviceeditor.cpp:81
 msgid "Add Record Device"
-msgstr "Ajouter périphérique d'enregistrement"
+msgstr "Ajouter un périphérique d'enregistrement"
 
 #: deviceeditor.cpp:82 studiocommands.h:187
 msgid "Delete Device"
@@ -748,7 +750,7 @@ msgstr "Périphérique %1"
 
 #: deviceeditor.cpp:143 deviceeditor.cpp:350 playlist.cpp:142
 msgid "Play"
-msgstr "Play"
+msgstr "Jouer"
 
 #: deviceeditor.cpp:143 deviceeditor.cpp:368 segmentcommands.cpp:558
 #: rc.cpp:165
@@ -809,8 +811,7 @@ msgstr ""
 
 #: devicemanager.cpp:114
 msgid "Export Bank and Controller data to a Rosegarden interchange file"
-msgstr ""
-"Exporter les bancs et les contrôleurs vers un fichier d'échange Rosegarden"
+msgstr "Exporter les bancs et les contrôleurs vers un fichier d'échange Rosegarden"
 
 #: devicemanager.cpp:116
 msgid "View and edit Banks and Programs for the selected device"
@@ -957,7 +958,7 @@ msgstr ""
 
 #: dialogs.cpp:458
 msgid "Transpose into this key"
-msgstr "Transposer dans cette Clef"
+msgstr "Transposer dans cette clef"
 
 #: dialogs.cpp:611
 msgid "No such key"
@@ -981,15 +982,15 @@ msgstr ""
 
 #: dialogs.cpp:762
 msgid "Play "
-msgstr "Play "
+msgstr "Jouer "
 
 #: dialogs.cpp:783
 msgid "in the time of  "
-msgstr "dans le temps de"
+msgstr "dans le temps de "
 
 #: dialogs.cpp:789
 msgid "Timing is already correct: update display only"
-msgstr "Le timing est déjà correct: mise à jour de l'affichage uniquement"
+msgstr "Le timing est déjà correct : mise à jour de l'affichage uniquement"
 
 #: dialogs.cpp:799
 msgid "Timing calculations"
@@ -997,23 +998,23 @@ msgstr "Calculs de Timing"
 
 #: dialogs.cpp:805
 msgid "Selected region:"
-msgstr "Région sélectionnée:"
+msgstr "Région sélectionnée :"
 
 #: dialogs.cpp:814
 msgid "Group with current timing:"
-msgstr "Grouper avecTiming Actuel:"
+msgstr "Grouper avec timing actuel :"
 
 #: dialogs.cpp:820
 msgid "Group with new timing:"
-msgstr "Grouper avec Nouveau Timing:"
+msgstr "Grouper avec nouveau timing :"
 
 #: dialogs.cpp:826
 msgid "Gap created by timing change:"
-msgstr "Trou créé par le changement de temps:"
+msgstr "Trou créé par le changement de temps :"
 
 #: dialogs.cpp:834
 msgid "Unchanged at end of selection:"
-msgstr "Non changé à la fin de la sélection"
+msgstr "Non changé à la fin de la sélection :"
 
 #: dialogs.cpp:1048 eventview.cpp:214
 msgid "Text"
@@ -1029,11 +1030,11 @@ msgstr "Prévisualisation"
 
 #: dialogs.cpp:1062
 msgid "Text:  "
-msgstr "Texte:  "
+msgstr "Texte :  "
 
 #: dialogs.cpp:1067
 msgid "Style:  "
-msgstr "Style:  "
+msgstr "Style :  "
 
 #: dialogs.cpp:1077
 msgid "Dynamic"
@@ -1045,7 +1046,7 @@ msgstr "Direction"
 
 #: dialogs.cpp:1083
 msgid "Local Direction"
-msgstr "Direction Locale"
+msgstr "Direction locale"
 
 #: dialogs.cpp:1086 dialogs.cpp:2740 tempoview.cpp:130
 msgid "Tempo"
@@ -1085,15 +1086,15 @@ msgstr ""
 
 #: dialogs.cpp:1304
 msgid "Event type: "
-msgstr "Type d'événement: "
+msgstr "Type d'événement : "
 
 #: dialogs.cpp:1310
 msgid "Absolute time: "
-msgstr "Temps Absolu: "
+msgstr "Temps Absolu : "
 
 #: dialogs.cpp:1320
 msgid "Duration: "
-msgstr "Durée: "
+msgstr "Durée : "
 
 #: dialogs.cpp:1333
 msgid "Sub-ordering: "
@@ -1110,7 +1111,7 @@ msgstr "Valeur"
 
 #: dialogs.cpp:1374
 msgid "Non-persistent properties"
-msgstr "Propriétés non-persistantes"
+msgstr "Propriétés non persistantes"
 
 #: dialogs.cpp:1375
 msgid "These are cached values, lost if the event is modified."
@@ -4810,8 +4811,7 @@ msgstr "Erreur: Nom introuvable %1"
 
 #: notefontviewer.cpp:109
 msgid "Warning: No good match for font name %1 (best is %2)"
-msgstr ""
-"Avertissement: Pas de résultat pour ce nom de police %1 (le meilleur est %2)"
+msgstr "Avertissement: Pas de résultat pour ce nom de police %1 (le meilleur est %2)"
 
 #: notefontviewer.cpp:117
 msgid "Error: Unable to open best-match font %1"
@@ -4850,8 +4850,7 @@ msgid "global element must precede note elements"
 msgstr "L'élément global doit précéder les éléments de note"
 
 #: notestyle.cpp:628
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 
 #: playlist.cpp:82 rosegardenconfiguredialog.cpp:1859
@@ -4962,8 +4961,7 @@ msgstr ""
 
 #: rosegardenconfiguredialog.cpp:203
 msgid "Always use default studio when loading files"
-msgstr ""
-"Toujours utiliser le studio par défaut lors de l'ouverture d'un fichier"
+msgstr "Toujours utiliser le studio par défaut lors de l'ouverture d'un fichier"
 
 #: rosegardenconfiguredialog.cpp:209
 msgid "Event List"
@@ -6255,16 +6253,14 @@ msgstr ""
 
 #: rosegardengui.cpp:6356
 msgid "Are you sure you want to save this as your default studio?"
-msgstr ""
-"Confirmez-vous l'enregistrement de ceci en tant que studio par défaut ?"
+msgstr "Confirmez-vous l'enregistrement de ceci en tant que studio par défaut ?"
 
 #: rosegardengui.cpp:6360
 msgid "Saving current document as default studio..."
 msgstr "Enregistrement du Studio par défaut..."
 
 #: rosegardengui.cpp:6385
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
 msgstr ""
 "Confirmez-vous l'importation du studio par défaut et la perte du studio "
 "courant?"
@@ -6654,8 +6650,7 @@ msgstr ""
 "Quittez d'autres applications pour améliorer les performances de Rosegarden."
 
 #: sequencemanager.cpp:1033
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
+msgid "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 
 #: sequencemanager.cpp:1061
@@ -6663,8 +6658,7 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "Le sous-système JACK audio perd des samples."
 
 #: sequencemanager.cpp:1079
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "La lecture des données audio depuis le disque n'est pas assez rapide pour le "
 "sous-système audio"
@@ -6955,8 +6949,7 @@ msgid ""
 msgstr ""
 
 #: tracklabel.cpp:54
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 
 #: triggermanager.cpp:141
@@ -7525,8 +7518,7 @@ msgstr "Boutton Panic"
 
 #: rc.cpp:157
 msgid "Resets all MIDI devices if you've got stuck notes"
-msgstr ""
-"Mise à zèro de tous les périphériques. MIDI si vous avez des notes bloquées"
+msgstr "Mise à zèro de tous les périphériques. MIDI si vous avez des notes bloquées"
 
 #: rc.cpp:160
 msgid "Provides a metronome click for you to play along with"
@@ -8148,3 +8140,4 @@ msgstr "Triangle"
 
 #~ msgid "Minutes of audio recording:"
 #~ msgstr "Minutes d'enregistrement audio:"
+
