@@ -65,6 +65,11 @@ NotationStaff::NotationStaff(QCanvas *canvas, Track *track, int resolution) :
     m_horizLineLength = w - 20;
     changeResolution(resolution);
     setActive(false);  // don't react to mousePress events
+
+    for (int i = -10; i < 20; ++i) {
+	cout << "NotationStaff: " << i << " => " << yCoordOfHeight(i)
+	     << " (" << (yCoordOfHeight(i-1) - yCoordOfHeight(i)) << ")"<< endl;
+    }
 }
 
 NotationStaff::~NotationStaff()
@@ -160,27 +165,13 @@ NotationStaff::changeResolution(int newResolution)
 
 int NotationStaff::yCoordOfHeight(int h) const
 {
-/*
-    int y = (nbLines + nbLegerLines) * 2 - 2 - h;
-    y = y * m_npf->getLineSpacing() / 2;
-    if (((h + 20) % 2) == 1) ++y;
-    return y;
-*/
-
     // 0 is bottom staff-line, 8 is top one, leger lines above & below
 
     int y = 8 - h;
     y = linesOffset + (y * m_npf->getLineSpacing()) / 2;
     if (h > 0 && h < 8 && (h % 2 == 1)) ++y;
     else if (h < 0 && (-h % 2 == 1)) ++y;
-//    else if (h > 8 && (h % 2 == 0)) --y;
     return y;
-/*
-
-    int y = ((8 - h) * m_npf->getLineSpacing()) / 2 +
-        linesOffset + ((h % 2 == 1) ? 1 : 0);
-    return y;
-*/
 }
 
 static bool

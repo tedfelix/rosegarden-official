@@ -1,0 +1,10 @@
+
+The pixmaps in the feta/* directories have been generated from the
+METAFONT outline font supplied with the GNU Lilypond musical notation
+typesetting system.  Lilypond and the feta font are copyright 1997 to
+2001 by Han-Wen Nienhuys and Jan Nieuwenhuizen and are distributed
+under the terms of the GNU General Public Licence, a copy of which may
+be found in the top-level directory of this distribution.
+
+See http://www.lilypond.org/ for more information.
+

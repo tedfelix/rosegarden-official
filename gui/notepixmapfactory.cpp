@@ -304,7 +304,6 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
             offset = -offset;
         }
 
-        offset -= 1;
         bool first = true;
 
         for (int i = legerLines - 1; i >= 0; --i) {
@@ -399,7 +398,8 @@ void
 NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
                                    int thickness, bool smooth)
 {
-    if (!smooth) {
+    if (!smooth || (y0 == y1)) {
+	if (smooth) ++thickness;
         for (int i = 0; i < thickness; ++i) {
             m_p.drawLine(x0, y0 + i, x1, y1 + i);
             m_pm.drawLine(x0, y0 + i, x1, y1 + i);
@@ -418,7 +418,7 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
         colours.push_back(QColor(192, 192, 192));
     }
 
-    QPoint c(x0, y0);
+    int cx = x0, cy = y0;
 
     int inc = 1;
     if (dv < 0) { dv = -dv; inc = -1; }
@@ -429,11 +429,11 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
 
     int segment = (dg2 - dg1) / 4;
 
-    while (c.x() < x1) {
+    while (cx < x1) {
 
         if (g > 0) {
             g += dg1;
-            c.ry() += inc;
+            cy += inc;
         } else {
             g += dg2;
         }
@@ -452,21 +452,23 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
         // suspect this may be some of the most inefficient code ever
         // written:
 
+	int off = 0;
+
         m_p.setPen(colours[quartile]);
-        m_p.drawPoint(c);
-        m_pm.drawPoint(c);
+        m_p.drawPoint(cx, cy);
+        m_pm.drawPoint(cx, cy);
+
+	if (thickness > 1) m_p.setPen(colours[0]);
+	while (++off < thickness) {
+            m_p.drawPoint(cx, cy + off);
+            m_pm.drawPoint(cx, cy + off);
+        }
         
         m_p.setPen(colours[3-quartile]);
-        m_p.drawPoint(c.x(), c.y() + thickness + 1);
-        m_pm.drawPoint(c.x(), c.y() + thickness + 1);
+        m_p.drawPoint(cx, cy + off);
+        m_pm.drawPoint(cx, cy + off);
 
-        if (thickness > 1) {
-            m_p.setPen(colours[0]);
-            m_p.drawLine(c.x(), c.y() + 1, c.x(), c.y() + thickness);
-            m_pm.drawLine(c.x(), c.y() + 1, c.x(), c.y() + thickness);
-        }
-
-        ++c.rx();
+        ++cx;
     }
 
     m_p.setPen(colours[0]);
@@ -487,23 +489,23 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
 
     unsigned int thickness;
     (void)m_font->getBeamThickness(thickness);
-
-    int gap = thickness - 1;
-    if (gap < 1) gap = 1;
-
-    bool smooth = true;
-    if (thickness > 2) --thickness;
-    else smooth = false;
                 
     int width = params.m_width;
     double grad = params.m_gradient;
 
+    int gap = thickness - 1;
+    if (gap < 1) gap = 1;
+    if (grad < 0.01) ++gap;
+
+    bool smooth = true;
+    if (thickness < 2) smooth = false;
+
     for (int j = 0; j < commonBeamCount; ++j) {
         int y = j * (thickness + gap);
         if (!params.m_stemGoesUp) {
-            if (smooth) y = -y - thickness - 1;
+            if (smooth) y = -y - thickness ;
             else y = -y - 1;
-        }
+        } else if (smooth) y = y - 1;
         drawShallowLine(startX, startY + y, startX + width,
                         startY + (int)(width*grad) + y,
                         thickness, smooth);
@@ -517,9 +519,9 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
         for (int j = commonBeamCount; j < beamCount; ++j) {
             int y = j * (thickness + gap);
             if (!params.m_stemGoesUp) {
-                if (smooth) y = -y - thickness - 1;
+                if (smooth) y = -y - thickness ;
                 else y = -y - 1;
-            }
+	    } else if (smooth) y = y - 1;
             drawShallowLine(startX, startY + y, startX + partWidth,
                             startY + (int)(partWidth*grad) + y,
                             thickness, smooth);
@@ -533,9 +535,9 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
         for (int j = commonBeamCount; j < params.m_nextBeamCount; ++j) {
             int y = j * (thickness + gap);
             if (!params.m_stemGoesUp) {
-                if (smooth) y = -y - thickness - 1;
+                if (smooth) y = -y - thickness ;
                 else y = -y - 1;
-            }
+	    } else if (smooth) y = y - 1;
             drawShallowLine(startX, startY + y, startX + partWidth,
                             startY + (int)(partWidth*grad) + y,
                             thickness, smooth);
@@ -547,6 +549,7 @@ QCanvasPixmap
 NotePixmapFactory::makeRestPixmap(const Note &restType) 
 {
     CharName charName(getRestCharName(restType.getNoteType()));
+    if (restType.getDots() == 0) return m_font->getCanvasPixmap(charName);
 
     QPixmap pixmap(m_font->getPixmap(charName));
     QPixmap dot(m_font->getPixmap(NoteCharacterNames::DOT));
