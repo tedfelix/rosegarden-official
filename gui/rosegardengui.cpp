@@ -672,8 +672,6 @@ void RosegardenGUIApp::setupActions()
     connect(m_transport, SIGNAL(editTimeSignature(QWidget*)),
             SLOT(slotEditTimeSignature(QWidget*)));
     
-    m_actionsSetup = true;
-
     // transport toolbar is hidden by default - TODO : this should be in options
     //
     //toolBar("Transport Toolbar")->hide();
@@ -688,8 +686,6 @@ void RosegardenGUIApp::initZoomToolbar()
                              << "zoom toolbar not found" << endl;
         return;
     }
-
-    zoomToolbar->setBarPos(KToolBar::Right);
 
     new QLabel(i18n("  Zoom:  "), zoomToolbar, "kde toolbar widget");
 
@@ -1137,11 +1133,8 @@ void RosegardenGUIApp::readOptions()
     //
     m_fileRecent->loadEntries(kapp->config());
 
-    QSize size(kapp->config()->readSizeEntry("Geometry"));
+    m_actionsSetup = true;
 
-    if(!size.isEmpty()) {
-        resize(size);
-    }
 }
 
 void RosegardenGUIApp::saveProperties(KConfig *cfg)
