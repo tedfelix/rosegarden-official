@@ -56,8 +56,8 @@ Likely GUI bits
  -D- note/channel overview	Arrange, Environment, er, Overview
  : : ===========================================================================
 
-Chris' preferences
---------------
+Chris's preferences
+-------------------
 
  1A: Element (Event sounds a bit MIDI-specific)
  1B: Part or Track, don't mind
@@ -79,7 +79,7 @@ Chris' preferences
  4D: 
 
 Guillaume's preferences
---------------
+-----------------------
 
 (blank choices are those on which I agree with Chris)
 
@@ -104,7 +104,8 @@ Guillaume's preferences
 
 
 Rich's preferences
---------------
+------------------
+
  1A: Element (Event sounds a bit MIDI-specific)
  1B: Part or Track, don't mind
  1C: Composition or Workspace
