@@ -1460,9 +1460,6 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
         /*
         char bufsize[16384];
 
-        sample_t *outBuffer = static_cast<sample_t*>
-            (jack_port_get_buffer(inst->getJackOutputPort(),
-                                                      nframes));
         sample_t *samples = new sample_t[nframes];
 
         for (int i = 0; i < nframes; i++)
@@ -1477,16 +1474,31 @@ AlsaDriver::jackProcess(nframes_t nframes, void *arg)
         std::vector<PlayableAudioFile*>::iterator it;
         AudioFile *audioFile;
     
+        // Get output buffer
+        //
+        sample_t *outputBuffer = static_cast<sample_t*>
+            (jack_port_get_buffer(inst->getJackOutputPort(),
+                                                      nframes));
+
         for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
         {
             if ((*it)->getStatus() == PlayableAudioFile::PLAYING)
             {
-                // get the samples from the WAV and throw then at JACK
+                // get the samples from the WAV and then throw at JACK
+                //
                 audioFile = inst->getAudioFile((*it)->getId());
 
                 if (audioFile)
                 {
-                    std::cout << "GET SAMPLES" << std::endl;
+                    std::cout << "GET " << nframes << " FRAMES" << std::endl;
+                    std::string samples = audioFile->getSamples(nframes);
+
+                    for (unsigned int i = 0; i < samples.length(); i++)
+                    {
+                        *outputBuffer = (unsigned char)samples[i];
+                        outputBuffer++;
+                    }
+
                 }
             }
         }
@@ -1541,9 +1553,13 @@ AlsaDriver::shutdownAudio()
 
     if (m_audioClient)
     {
-        // Hmm, this sometimes just hangs further JACK
+        jack_deactivate(m_audioClient);
+
+        // Hmm, this sometimes just hangs our subsequent JACK calls -
+        // probably leave it out for the moment.
         //
         //jack_client_close(m_audioClient);
+        //
     }
 }
 

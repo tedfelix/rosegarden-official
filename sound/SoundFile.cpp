@@ -41,8 +41,11 @@ SoundFile::getBytes(std::ifstream *file,
     while((rS.length() < numberOfBytes) && file->read(&fileByte, 1))
         rS += fileByte;
 
+    // complain but return
+    //
     if (rS.length() < numberOfBytes)
-        throw(std::string("SoundFile::getBytes() - couldn't get all bytes"));
+        std::cerr << "SoundFile::getBytes() - couldn't get all bytes"
+                   << std::endl;
 
     return rS;
 }

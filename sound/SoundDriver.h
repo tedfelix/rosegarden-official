@@ -246,7 +246,7 @@ public:
     // Return the audio play queue
     //
     std::vector<PlayableAudioFile*>& getAudioPlayQueue()
-        const { return  m_audioPlayQueue;}
+        { return m_audioPlayQueue; }
 
     // Clear the queue
     //
