@@ -166,11 +166,13 @@ protected:
     //--------------- Data members ---------------------------------
 
     std::vector<float> m_values;
+    unsigned int       m_channels;
 };
 
 SegmentAudioPreview::SegmentAudioPreview(SegmentItem& parent,
                                          Rosegarden::RulerScale* scale)
-    : SegmentItemPreview(parent, scale)
+    : SegmentItemPreview(parent, scale),
+    m_channels(0)
 {
 }
 
@@ -188,19 +190,35 @@ void SegmentAudioPreview::drawShape(QPainter& painter)
 
     // perhaps antialias this somehow at some point
     int x = 0;
-    int height = rect().height()/2 - 3,
-        halfRectHeight = rect().height()/2;
+    int height = rect().height()/2 - 3;
+    int halfRectHeight = rect().height()/2;
 
     QRect viewportRect = painter.xFormDev(painter.viewport());
 
-    for (it = m_values.begin(); it != m_values.end(); it++)
+    int width = m_values.size() / m_channels;
+    it = m_values.begin();
+    float h1, h2;
+
+    for (int i = 0; i < width; i++)
         {
             if (x > (viewportRect.x() + viewportRect.width())) break; 
             if (x >= viewportRect.x()) {
+
+                if (m_channels == 1)
+                {
+                    h1 = *(it++);
+                    h2 = h1;
+                }
+                else
+                {
+                    h1 = *(it++);
+                    h2 = *(it++);
+                }
+
                 painter.drawLine(x,
-                                 halfRectHeight + (*it) * height,
+                                 halfRectHeight + h1 * height,
                                  x,
-                                 halfRectHeight - (*it) * height);
+                                 halfRectHeight - h2 * height);
                 ++x;
             }
         }
@@ -226,11 +244,28 @@ void SegmentAudioPreview::updatePreview()
 
     Rosegarden::AudioFileManager &aFM = m_parent.getDocument()->getAudioFileManager();
 
+    Rosegarden::Composition &comp = m_parent.getDocument()->getComposition();
+
+    // Calculate fraction of actual possible audio length that we
+    // can show.
+    //
+    Rosegarden::RealTime audioDuration =  aFM.
+        getAudioFile(m_segment->getAudioFileId())->getLength();
+    Rosegarden::RealTime segmentStartTime = comp.getElapsedRealTime(
+            m_segment->getStartTime());
+    Rosegarden::RealTime segmentEndTime = comp.getElapsedRealTime(
+            m_segment->getEndTime());
+
+    double fraction = (audioDuration - 
+                       m_segment->getAudioStartTime()) /
+                      (segmentEndTime - segmentStartTime);
     m_values =
         aFM.getPreview(m_segment->getAudioFileId(),
                        m_segment->getAudioStartTime(),
                        m_segment->getAudioEndTime(),
-                       rect().width());
+                       int(rect().width() * fraction));
+
+    m_channels = aFM.getAudioFile(m_segment->getAudioFileId())->getChannels();
 
     setPreviewCurrent(true);
 }
@@ -544,11 +579,14 @@ void SegmentItem::drawShape(QPainter& painter)
 #endif
 
     // draw label
-    painter.setPen(RosegardenGUIColours::SegmentLabel);
-    painter.setFont(*m_font);
-    QRect labelRect = rect();
-    labelRect.setX(labelRect.x() + 3);
-    painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
+    if (m_segment->getType() != Rosegarden::Segment::Audio)
+    {
+        painter.setPen(RosegardenGUIColours::SegmentLabel);
+        painter.setFont(*m_font);
+        QRect labelRect = rect();
+        labelRect.setX(labelRect.x() + 3);
+        painter.drawText(labelRect, Qt::AlignLeft|Qt::AlignVCenter, m_label);
+    }
 
 }
 
