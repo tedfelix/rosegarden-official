@@ -1,6 +1,18 @@
 Current Task list
 ======================================
 
+- guitar chord display
+
+- fix toolbar pos. saving
+
+- fix wait cursors
+
+- AA text on canvas
+
+- daily compile check for various confing options
+
+- valgrind/kcachegrind
+
 - try to improve sequencer latency problems (GUI & seq. should mmap a
 tmp file which would hold easy-to-parse event data. File should have
 lines of fixed length).
@@ -15,7 +27,7 @@ lines of fixed length).
 
 - look if note pixmaps gain from being turned into real QCanvasItems - PROBABLY NO
 
-- look to use a pixmap cache for notation - CHRIS SAYS WON'T HELP
+- look to use a pixmap cache for notation - CHRIS SAYS IT WON'T HELP
 
 - use KFilterBase/KFilterDev for accessing .rg files (rather than calling zlib directly)
 
