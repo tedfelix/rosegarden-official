@@ -149,7 +149,7 @@ CompositionTimeSliceAdapter::iterator::operator++() {
     }
 
     // Check whether we're past the end time, if there is one
-    if (m_end > 0 && nextEvent->getAbsoluteTime() > m_end) {
+    if (nextEvent->getAbsoluteTime() > m_end) {
         m_curEvent = 0;
         return *this;
     }

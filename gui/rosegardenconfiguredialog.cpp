@@ -160,29 +160,41 @@ PlaybackConfigurationPage::PlaybackConfigurationPage(KConfig *cfg,
     m_cfg->setGroup("Playback Options");
 
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 3, 2,
+    QGridLayout *layout = new QGridLayout(frame, 3, 4,
                                           10, 5);
 
     layout->addMultiCellWidget(new QLabel(i18n("Higher latency improves playback quality on slower systems\nbut reduces overall sequencer response."), frame),
                                0, 0,
-                               0, 1);
+                               0, 3);
 
     layout->addWidget(new QLabel(i18n("Read ahead (in ms)"), frame), 1, 0);
     layout->addWidget(new QLabel(i18n("Playback (in ms)"), frame), 2, 0);
 
     m_readAhead = new QSlider(Horizontal, frame);
+
     m_readAhead->setMinValue(20);
-    m_readAhead->setMaxValue(80);
-    m_readAhead->setValue(m_cfg->readLongNumEntry("readaheadusec", 40000));
+    layout->addWidget(new QLabel("20", frame), 1, 1);
+
+    m_readAhead->setMaxValue(120);
+    layout->addWidget(new QLabel("120", frame), 1, 3);
+
+    m_readAhead->setValue(m_cfg->readLongNumEntry
+			  ("readaheadusec", 40000) / 1000);
     m_readAhead->setTickmarks(QSlider::Below);
-    layout->addWidget(m_readAhead, 1, 1);
+    layout->addWidget(m_readAhead, 1, 2);
 
     m_playback = new QSlider(Horizontal, frame);
+
     m_playback->setMinValue(20);
+    layout->addWidget(new QLabel("20", frame), 2, 1);
+
     m_playback->setMaxValue(500);
-    m_playback->setValue(m_cfg->readLongNumEntry("playbacklatencyusec", 100000));
+    layout->addWidget(new QLabel("500", frame), 2, 3);
+
+    m_playback->setValue(m_cfg->readLongNumEntry
+			 ("playbacklatencyusec", 100000) / 1000);
     m_playback->setTickmarks(QSlider::Below);
-    layout->addWidget(m_playback, 2, 1);
+    layout->addWidget(m_playback, 2, 2);
 
     addTab(frame, i18n("Latency"));
 }
@@ -196,11 +208,11 @@ void PlaybackConfigurationPage::apply()
 //     config.setPlaybackLatency((RealTime(0, (playback * 1000))));
 
     int readAhead = getReadAheadValue();
-    m_cfg->writeEntry("readaheadusec", readAhead);
+    m_cfg->writeEntry("readaheadusec", readAhead * 1000);
     m_cfg->writeEntry("readaheadsec", 0L);
     
     int playback = getPlaybackValue();
-    m_cfg->writeEntry("playbacklatencyusec", playback);
+    m_cfg->writeEntry("playbacklatencyusec", playback * 1000);
     m_cfg->writeEntry("playbacklatencysec", 0L);
 }
 
