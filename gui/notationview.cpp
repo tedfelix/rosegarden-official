@@ -262,37 +262,37 @@ NotationView::setupActions()
 {
     // setup Notes menu
     QIconSet icon(m_notePixmapFactory.makeNotePixmap
-                  (Note::WholeNote, false, NoAccidental, true, true, -1, true));
+                  (Note::WholeNote, false, NoAccidental, true, true, true));
     new KAction(i18n("Whole"), icon, 0, this,
                 SLOT(slotWhole()), actionCollection(), "whole_note" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::HalfNote, false, NoAccidental, true, true, -1, true));
+                    (Note::HalfNote, false, NoAccidental, true, true, true));
     new KAction(i18n("Half"), icon, 0, this,
                 SLOT(slotHalf()), actionCollection(), "half" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::QuarterNote, false, NoAccidental, true, true, -1, true));
+                    (Note::QuarterNote, false, NoAccidental, true, true, true));
     new KAction(i18n("Quarter"), icon, 0, this,
                 SLOT(slotQuarter()), actionCollection(), "quarter" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::EighthNote, false, NoAccidental, true, true, -1, true));
+                    (Note::EighthNote, false, NoAccidental, true, true, true));
     new KAction(i18n("8th"), icon, 0, this,
                 SLOT(slot8th()), actionCollection(), "8th" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::SixteenthNote, false, NoAccidental, true, true, -1, true));
+                    (Note::SixteenthNote, false, NoAccidental, true, true, true));
     new KAction(i18n("16th"), icon, 0, this,
                 SLOT(slot16th()), actionCollection(), "16th" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::ThirtySecondNote, false, NoAccidental, true, true, -1, true));
+                    (Note::ThirtySecondNote, false, NoAccidental, true, true, true));
     new KAction(i18n("32nd"), icon, 0, this,
                 SLOT(slot32nd()), actionCollection(), "32nd" );
 
     icon = QIconSet(m_notePixmapFactory.makeNotePixmap
-                    (Note::SixtyFourthNote, false, NoAccidental, true, true, -1, true));
+                    (Note::SixtyFourthNote, false, NoAccidental, true, true, true));
     new KAction(i18n("64th"), icon, 0, this,
                 SLOT(slot64th()), actionCollection(), "64th" );
     
@@ -405,14 +405,14 @@ NotationView::showElements(NotationElementList::iterator from,
 		    if ((*it)->event()->get<Bool>(P_BEAM_PRIMARY_NOTE)) {
 
 			int myY = (*it)->event()->get<Int>(P_BEAM_MY_Y);
-			int nextY = (*it)->event()->get<Int>(P_BEAM_NEXT_Y);
-			int dx = (*it)->event()->get<Int>(P_BEAM_SECTION_WIDTH);
+//			int nextY = (*it)->event()->get<Int>(P_BEAM_NEXT_Y);
+//			int dx = (*it)->event()->get<Int>(P_BEAM_SECTION_WIDTH);
 
-                        kdDebug(KDEBUG_AREA) << "NotationView::showElements(): should be drawing a beam here... event is " << *(*it)->event() << endl;
+//                        kdDebug(KDEBUG_AREA) << "NotationView::showElements(): should be drawing a beam here... event is " << *(*it)->event() << endl;
 
 			stemLength = myY - (int)(*it)->getLayoutY();
 			if (stemLength < 0) stemLength = -stemLength;
-
+/*
 			// just experimental
 			for (int h = 0; h < 3; ++h) {
 			    QCanvasLine *beam = new QCanvasLine(canvas());
@@ -426,13 +426,29 @@ NotationView::showElements(NotationElementList::iterator from,
 					    dxoffset + x + dx, dyoffset + nextY + h);
 			    beam->show();
 			}
+*/
+
+			int nextTailCount =
+			    (*it)->event()->get<Int>(P_BEAM_NEXT_TAIL_COUNT);
+			int width =
+			    (*it)->event()->get<Int>(P_BEAM_SECTION_WIDTH);
+			int gradient =
+			    (*it)->event()->get<Int>(P_BEAM_GRADIENT);
+
+			QCanvasPixmap notePixmap
+			    (npf.makeBeamedNotePixmap
+			     (note, dotted, accident, up, stemLength,
+			      nextTailCount, width, (double)gradient / 100.0));
+			sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
+
+		    } else {
+
+			QCanvasPixmap notePixmap
+			    (npf.makeNotePixmap
+			     (note, dotted, accident, tail, up));
+			sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 		    }
 
-		    QCanvasPixmap notePixmap
-			(npf.makeNotePixmap(note, dotted, accident, tail, up,
-					    stemLength));
-
-		    sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 		
 		} else {
 
@@ -593,7 +609,7 @@ void
 NotationView::setCurrentSelectedNote(Note::Type n)
 {
     m_currentSelectedNote = n;
-    m_currentNotePixmap->setPixmap(m_notePixmapFactory.makeNotePixmap(n, false, NoAccidental, true, true, -1, true));
+    m_currentNotePixmap->setPixmap(m_notePixmapFactory.makeNotePixmap(n, false, NoAccidental, true, true, true));
     emit changeCurrentNote(n);
 }
 

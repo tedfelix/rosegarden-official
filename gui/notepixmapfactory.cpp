@@ -126,10 +126,10 @@ NotePixmapOffsets::computePixmapSize()
 
         m_pixmapSize.setHeight(m_bodySize.height() / 2 +
                                m_stalkLength +
+			       m_extraBeamSpacing +
                                m_accidentalStalkSize.height());
 
-    }
-    else {
+    } else {
         m_pixmapSize.setHeight(m_bodySize.height() + m_accidentalStalkSize.height());
     }
 
@@ -166,19 +166,13 @@ NotePixmapOffsets::computeBodyOffset()
 
         m_bodyOffset.setY(m_pixmapSize.height() - m_bodySize.height());
         m_hotSpot.setY(m_pixmapSize.height() - m_bodySize.height() / 2);
-
-        m_stalkPoints.first.setY(m_pixmapSize.height() - m_bodySize.height() / 2 - 1);
-
-//        m_stalkPoints.second.setY(0);
+        m_stalkPoints.first.setY
+	    (m_pixmapSize.height() - m_bodySize.height() / 2 - 1);
 
     } else {
 
         m_hotSpot.setY(m_bodySize.height() / 2);
-
         m_stalkPoints.first.setY(m_bodySize.height() / 2);
-
-//        m_stalkPoints.second.setX(m_stalkPoints.first.x());
-//        m_stalkPoints.second.setY(m_pixmapSize.height());
     }   
 
     int accidentalProtrusion =
@@ -284,6 +278,12 @@ NotePixmapOffsets::setAccidentalHeight(unsigned int h)
 }
 
 void
+NotePixmapOffsets::setExtraBeamSpacing(unsigned int bs)
+{
+    m_extraBeamSpacing = bs;
+}
+
+void
 NotePixmapOffsets::setAccidentalsWidth(unsigned int sharp,
                                      unsigned int flat,
                                      unsigned int natural)
@@ -368,35 +368,32 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
                                   Accidental accidental,
                                   bool drawTail,
                                   bool stalkGoesUp,
-                                  int stalkLength,
                                   bool fixedHeight)
 {
     kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap: note is "
                          << note << ", dotted is " << dotted << endl;
 
-    if (stalkLength < 0) {
+    int stalkLength = getStalkLength();
 
-	stalkLength = getStalkLength();
+    if (note < Note::QuarterNote) {
 
-	if (note < Note::QuarterNote) {
-
-	    //!!! highly dubious, and incorrect for different resolutions
-	    
-            // readjust pixmap height according to its duration - the stalk
-            // is longer for 8th, 16th, etc.. because the tail is higher
-            //
-            if (note == Note::EighthNote)
-                stalkLength += 1;
-            else if (note == Note::SixteenthNote)
-                stalkLength += 4;
-            else if (note == Note::ThirtySecondNote)
-                stalkLength += 9;
-            else if (note == Note::SixtyFourthNote)
-                stalkLength += 14;
-        }
-    }       
+	//!!! highly dubious, and incorrect for different resolutions
+	
+	// readjust pixmap height according to its duration - the stalk
+	// is longer for 8th, 16th, etc.. because the tail is higher
+	//
+	if (note == Note::EighthNote)
+	    stalkLength += 1;
+	else if (note == Note::SixteenthNote)
+	    stalkLength += 4;
+	else if (note == Note::ThirtySecondNote)
+	    stalkLength += 9;
+	else if (note == Note::SixtyFourthNote)
+	    stalkLength += 14;
+    }
 
     m_offsets.setStalkLength(stalkLength);
+    m_offsets.setExtraBeamSpacing(0);
 
     m_offsets.offsetsFor
         (note, dotted, accidental, drawTail, stalkGoesUp, fixedHeight);
@@ -448,6 +445,164 @@ NotePixmapFactory::makeNotePixmap(Note::Type note,
     m_pm.drawPoint(0,m_generatedPixmap->height() -1);
     m_pm.drawPoint(m_generatedPixmap->width() -1,0);
     m_pm.drawPoint(m_generatedPixmap->width() -1,m_generatedPixmap->height()-1);
+#endif
+
+    // We're done - generate the returned pixmap with the right offset
+    //
+    m_p.end();
+    m_pm.end();
+
+    QCanvasPixmap notePixmap(*m_generatedPixmap, m_offsets.getHotSpot());
+    QBitmap mask(*m_generatedMask);
+    notePixmap.setMask(mask);
+
+    delete m_generatedPixmap;
+    delete m_generatedMask;
+
+    return notePixmap;
+}
+
+
+QCanvasPixmap
+NotePixmapFactory::makeBeamedNotePixmap(Note::Type note,
+					bool dotted,
+					Accidental accidental,
+					bool stalkGoesUp,
+					int stalkLength,
+					int nextTailCount,
+					int width,
+					double gradient)
+{
+    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeBeamedNotePixmap: note is "
+                         << note << ", dotted is " << dotted << endl;
+
+    m_offsets.setStalkLength(stalkLength);
+
+    int beamSpacing = (int)(width * gradient);
+    if (beamSpacing > 0) {
+	if (stalkGoesUp) beamSpacing = 1;
+	else beamSpacing += 1;
+    } else {
+	if (!stalkGoesUp) beamSpacing = 1;
+	else beamSpacing = -beamSpacing + 1;
+    }
+    m_offsets.setExtraBeamSpacing(beamSpacing);
+
+    m_offsets.offsetsFor
+        (note, dotted, accidental, false, stalkGoesUp, false);
+
+    if (note > Note::Longest) {
+        kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeNotePixmap : note > LastNote ("
+                             << note << ")\n";
+        throw -1;
+    }
+
+    bool noteHasStalk = note < Note::WholeNote;
+
+    m_generatedPixmapHeight = m_offsets.getPixmapSize().height();
+    
+    int startY, startX;
+//    if (stalkGoesUp) {
+	startY = m_offsets.getStalkPoints().second.y();
+	startX = m_offsets.getStalkPoints().second.x();
+//    } else {
+//	startY = m_offsets.getStalkPoints().first.y();
+//	startX = m_offsets.getStalkPoints().first.x();
+//    }
+
+    int endX = startX + width;
+    if (endX >= m_offsets.getPixmapSize().width()) {
+	createPixmapAndMask(endX + 1, m_offsets.getPixmapSize().height());
+    } else {
+	createPixmapAndMask();
+    }
+
+    // paint note body
+    //
+    QPixmap *body = (note >= Note::HalfNote) ? &m_noteBodyEmpty : &m_noteBodyFilled;
+
+    m_p.drawPixmap (m_offsets.getBodyOffset(), *body);
+    m_pm.drawPixmap(m_offsets.getBodyOffset(), *(body->mask()));
+    
+    if (dotted)
+        drawDot();
+
+    // paint stalk (if needed)
+    //
+    if (noteHasStalk)
+        drawStalk(note, false, stalkGoesUp);
+
+    // paint accidental (if needed)
+    //
+    if (accidental != NoAccidental)
+        drawAccidental(accidental, stalkGoesUp);
+
+    // draw beams: first we draw all the beams common to both ends of
+    // the section, then we draw tails for those that appear at the
+    // end only
+
+    int myTailCount = Note(note).getTailCount();
+    int commonTailCount = std::min(myTailCount, nextTailCount);
+    int thickness = (getNoteBodyHeight() + 2) / 3;
+    int gap = thickness - 1;
+    if (gap < 1) gap = 1;
+
+    kdDebug(KDEBUG_AREA) << "NotePixmapFactory::makeBeamedNotePixmap: myTailCount = " << myTailCount << ", nextTailCount = " << nextTailCount << ", commonTailCount = " << commonTailCount << endl;
+
+    for (int j = 0; j < commonTailCount; ++j) {
+	for (int i = 0; i < thickness; ++i) {
+	    int offset = j * (thickness + gap) + i;
+	    if (!stalkGoesUp) offset = -offset;
+	    m_p.drawLine(startX, startY + offset, startX + width,
+			 startY + width * gradient + offset);
+	    m_pm.drawLine(startX, startY + offset, startX + width,
+			  startY + width * gradient + offset);
+	}
+    }
+
+    //!!! What we really want to do here is draw extra beams only
+    //where they're required for the following note but not for the
+    //one after that... and to deal with the case where the opening
+    //note of a group has more beams than the following note.  Should
+    //be fixable in notationsets
+/*
+    int partWidth = width / 3;
+    if (partWidth < 2) partWidth = 2;
+    else if (partWidth > getNoteBodyWidth()) partWidth = getNoteBodyWidth();
+    startX +=  width - partWidth;
+    startY += (width - partWidth) * gradient;
+
+    for (int j = commonTailCount; j < nextTailCount; ++j) {
+	for (int i = 0; i < thickness; ++i) {
+	    int offset = j * (thickness + gap) + i;
+	    if (!stalkGoesUp) offset = -offset;
+	    m_p.drawLine(startX, startY + offset, startX + partWidth,
+			 startY + partWidth * gradient + offset);
+	    m_pm.drawLine(startX, startY + offset, startX + partWidth,
+			  startY + partWidth * gradient + offset);
+	}
+    }
+*/
+//#define ROSE_DEBUG_NOTE_PIXMAP_FACTORY
+#ifdef ROSE_DEBUG_NOTE_PIXMAP_FACTORY
+    m_p.setPen(Qt::red); m_p.setBrush(Qt::red);
+    m_p.drawLine(0,0,0,m_generatedPixmap->height() - 1);
+    m_p.drawLine(m_generatedPixmap->width() - 1,0,m_generatedPixmap->width() - 1,m_generatedPixmap->height() - 1);
+    m_pm.drawLine(0,0,0,m_generatedPixmap->height() - 1);
+    m_pm.drawLine(m_generatedPixmap->width() - 1,0,m_generatedPixmap->width() - 1,m_generatedPixmap->height() - 1);
+/*
+    m_p.drawPoint(0,0);
+    m_p.drawPoint(0,m_offsets.getHotSpot().y());
+    m_p.drawPoint(0,m_generatedPixmap->height() - 1);
+    m_p.drawPoint(m_generatedPixmap->width() - 1,0);
+    m_p.drawPoint(m_generatedPixmap->width() - 1,m_generatedPixmap->height() - 1);
+
+    m_pm.drawPoint(0,0);
+    m_pm.drawPoint(0,m_offsets.getHotSpot().y());
+    m_pm.drawPoint(0,m_generatedPixmap->height() -1);
+    m_pm.drawPoint(m_generatedPixmap->width() -1,0);
+    m_pm.drawPoint(m_generatedPixmap->width() -1,m_generatedPixmap->height()-1);
+*/
 #endif
 
     // We're done - generate the returned pixmap with the right offset
@@ -614,7 +769,45 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 
     return p;
 }
+/*
+QCanvasPixmap
+NotePixmapFactory::makeBeamSectionPixmap(int myTailCount, int nextTailCount,
+					 bool aboveNotes, int width,
+					 double gradient)
+{
+    int height;
+    QPoint origin;
+    origin.setX(0);
 
+    if (gradient <= 0) { // sloping up or not at all
+	origin.setY(-width * gradient);
+	height = origin.y() + 5 * max(myTailCount, nextTailCount);
+    } else {
+	origin.setY(0);
+	height = width * gradient + 5 * max(myTailCount, nextTailCount);
+    }
+
+    createPixmapAndMask(width, height);
+
+    m_p.setPen(Qt::black);
+
+    int i;
+    for (i = 0; i < 3; ++i) {
+	m_p.drawLine(origin.x(), origin.y() + i,
+		     origin.x() + width, origin.y() + i + width * gradient);
+    }
+
+    m_p.end();
+    QCanvasPixmap p(*m_generatedPixmap, origin);
+    QBitmap m(*m_generatedMask);
+    p.setMask(m);
+    
+    delete m_generatedPixmap;
+    delete m_generatedMask;
+
+    return p;
+}
+*/
 int NotePixmapFactory::getTimeSigWidth(const TimeSignature &sig) const
 {
     int numerator = sig.getNumerator(),

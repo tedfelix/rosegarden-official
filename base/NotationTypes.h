@@ -317,8 +317,8 @@ public:
     bool isFilled()     const { return m_type <= Crotchet; }
     bool isDotted()     const { return m_dotted; }
     bool isStalked()    const { return m_type <= Minim; }
-    bool getTailCount() const {
-        return m_type >= Crotchet ? 0 : Crotchet - m_type;
+    int  getTailCount() const {
+	return (m_type >= Crotchet) ? 0 : (Crotchet - m_type);
     }
     int  getDuration()  const {
         return (m_dotted ? m_dottedShortestTime : m_shortestTime) *

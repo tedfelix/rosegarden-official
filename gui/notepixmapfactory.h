@@ -65,6 +65,7 @@ public:
                              unsigned int natural);
     void setAccidentalHeight(unsigned int height);
     void setDotSize(QSize size);
+    void setExtraBeamSpacing(unsigned int bs);
 
 protected:
 
@@ -81,6 +82,7 @@ protected:
     unsigned int m_naturalWidth;
     unsigned int m_accidentalHeight;
     unsigned int m_stalkLength;
+    unsigned int m_extraBeamSpacing;
 
     Rosegarden::Note::Type m_note;
     Rosegarden::Accidental m_accidental;
@@ -130,13 +132,24 @@ public:
                                                      Rosegarden::NoAccidental,
                                  bool drawTail = true,
                                  bool stalkGoesUp = true,
-                                 int stalkLength = -1,
                                  bool fixedHeight = false);
 
+    QCanvasPixmap makeBeamedNotePixmap(Rosegarden::Note::Type note,
+				       bool dotted,
+				       Rosegarden::Accidental accidental,
+				       bool stalkGoesUp,
+				       int stalkLength,
+				       int nextTailCount,
+				       int width,
+				       double gradient);
+    
     QCanvasPixmap makeRestPixmap(Rosegarden::Note::Type note, bool dotted);
     QCanvasPixmap makeClefPixmap(Rosegarden::Clef clef) const;
     QCanvasPixmap makeKeyPixmap(std::string type, std::string cleftype);
     QCanvasPixmap makeTimeSigPixmap(const Rosegarden::TimeSignature& sig);
+//    QCanvasPixmap makeBeamSectionPixmap(int myTailCount, int nextTailCount,
+//					bool aboveNotes, int width,
+//					double gradient);
     QCanvasPixmap makeUnknownPixmap();
 
     int getNoteBodyHeight() const   { return m_noteBodyEmpty.height(); }

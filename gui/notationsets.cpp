@@ -321,7 +321,7 @@ NotationGroup::calculateBeam(Staff &staff)
 
     // some magic numbers
     if (diff > 4) beam.gradient = 30;
-    else if (diff > 3) beam.gradient = 17;
+    else if (diff > 3) beam.gradient = 15; // was 17
     else if (diff > 0) beam.gradient = 10;
     else beam.gradient = 0;
 
@@ -435,7 +435,10 @@ NotationGroup::applyBeam(Staff &staff)
 		el->event()->setMaybe<Bool>(P_BEAM_PRIMARY_NOTE, false);
 	    }
 
-	    if (beam.aboveNotes) j = 0;
+//	    if (beam.aboveNotes) j = 0;
+//	    else j = chord.size() - 1;
+	    // let's try this the other way around for the moment
+	    if (!beam.aboveNotes) j = 0;
 	    else j = chord.size() - 1;
 
 	    NotationElement *el = (*chord[j]);
@@ -445,11 +448,15 @@ NotationGroup::applyBeam(Staff &staff)
 
 	    if (prev != getList().end()) {
 		int secWidth = x - (int)(*prev)->getLayoutX();
-		(*prev)->event()->setMaybe<Int>(P_BEAM_NEXT_Y, myY);
+//		(*prev)->event()->setMaybe<Int>(P_BEAM_NEXT_Y, myY);
 		(*prev)->event()->setMaybe<Int>(P_BEAM_SECTION_WIDTH, secWidth);
-		(*prev)->event()->setMaybe<Int>(P_BEAM_NEXT_TAIL_COUNT,
-						Note(el->event()->get<Int>
-						 (P_NOTE_TYPE)).getTailCount());
+
+		int noteType = el->event()->get<Int>(P_NOTE_TYPE);
+		kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: note type is " << noteType << endl;
+		int tailCount = Note(noteType).getTailCount();
+		kdDebug(KDEBUG_AREA) << "NotationGroup::applyBeam: setting next tail count to " << tailCount << endl;
+		(*prev)->event()->setMaybe<Int>
+		    (P_BEAM_NEXT_TAIL_COUNT, tailCount);
 	    }
 
 	    el->event()->setMaybe<Bool>(P_BEAM_PRIMARY_NOTE, true);
@@ -458,7 +465,7 @@ NotationGroup::applyBeam(Staff &staff)
 	    el->event()->setMaybe<Int>(P_BEAM_GRADIENT, beam.gradient);
 
 	    // until they're set next time around the loop, as (*prev)->...
-	    el->event()->setMaybe<Int>(P_BEAM_NEXT_Y, myY);
+//	    el->event()->setMaybe<Int>(P_BEAM_NEXT_Y, myY);
 	    el->event()->setMaybe<Int>(P_BEAM_SECTION_WIDTH, 0);
 	    el->event()->setMaybe<Int>(P_BEAM_NEXT_TAIL_COUNT, 1);
 
