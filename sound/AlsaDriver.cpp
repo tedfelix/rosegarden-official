@@ -298,6 +298,7 @@ AlsaDriver::getAutoTimer()
 
     if (m_timers.empty()) return "";
 
+#ifdef HAVE_LIBJACK
     if (m_jackDriver) {
 
 	// look for the first PCM playback timer; that's all we know
@@ -310,6 +311,7 @@ AlsaDriver::getAutoTimer()
 	    if (i->clas == SND_TIMER_CLASS_PCM) return i->name;
 	}
     }
+#endif
 
     // look for the system RTC timer if available, system timer
     // otherwise

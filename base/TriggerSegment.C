@@ -59,9 +59,9 @@ TriggerSegmentRec::TriggerSegmentRec(const TriggerSegmentRec &rec) :
     m_segment(rec.m_segment),
     m_basePitch(rec.m_basePitch),
     m_baseVelocity(rec.m_baseVelocity),
-    m_references(rec.m_references),
     m_defaultTimeAdjust(rec.m_defaultTimeAdjust),
-    m_defaultRetune(rec.m_defaultRetune)
+    m_defaultRetune(rec.m_defaultRetune),
+    m_references(rec.m_references)
 {
     // nothing else
 }
