@@ -1,20 +1,42 @@
 <tip category="Rosegarden|General">
 <html>
 <p>To assign a track to a new instrument click and hold with the left
-mouse button on the track label.  You'll be presented with an instrument
-menu.
+mouse button on the track label.  You'll be presented with a series of menus
+that allow you to navigate to the device/instrument combination of your
+choosing.
 </html>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that can select your autosave interval from Settings->Configure
-Rosegarden?
+<p>...that Rosegarden has an autosave feature?<br><br>
+You can select your autosave interval from <b>Settings->Configure
+Rosegarden</b>.<br><br>
+When something goes awry, such as a power outage or a Rosegarden crash
+(unfortunately, it happens...) simply load the file you were working on, and you'll be given the
+option to load the autosaved version, or the unmodified original.
 </html>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that you can create a default studio by copying any .rg or .rgd file to
-~/.kde/share/apps/rosegarden/autoload.rg?
+<p>...that you can create a default studio by copying any<br>
+.rg or .rgd file to
+<b>~/.kde/share/apps/rosegarden/autoload.rg?</b><br><br>
+You can also save the current document as an autoload.rg file by using
+<b>Studio -> Save Current Document as Default Studio</b>.
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that your default studio is a complete Rosegarden composition that gets
+loaded every time you create a new document or import a MIDI file?
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>Because your default studio is a complete Rosegarden composition, it can
+contain default instrument assignments, document properties, Lilypond headers,
+and many other things that you may wish to have available by default in each
+new document you create.
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -24,25 +46,106 @@ synths that are started after Rosegarden is already running?</html>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that if you misplace a note, you can move it one halfstep at a time with the up
-and down arrow keys on your keyboard.
+<p>...that if you misplace a note while using the notation editor, you can move it one halfstep at a time with the up and down arrow keys on your keyboard.
 </html>
 </tip>
 <tip category="Rosegarden|General">
 <html>
 <p>...that you can toggle stem directions in the notation editor by selecting
-one or more notes and using ctrl-PgUp and ctrl-PgDwn?
+one or more notes and using ctrl-PageUp and ctrl-PageDown?
 </html>
 </tip>
 <tip category="Rosegarden|General">
 <html>
 <p>...that you can edit multiple segments on multiple tracks simultaneously in
 the notation editor?
+
+Simply select the segments you wish to edit, and then right click on one of
+them and choose <b>Open in Notation Editor</b>.
 </html>
 </tip>
 <tip category="Rosegarden|General">
 <html>
 <p>...that when you insert audio segments into your composition, they always
 insert at the bottom of the track list?
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that you can toggle all the rulers, instrument parameters, and several
+other options simultaneously with <b>Settings -> Toggle All of the Above</b>?
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that you can change various parameters controlling how Rosegarden
+handles Lilypond export with <b>Settings -> Configure Rosegarden -> Notation
+-> Lilypond?
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that Rosegarden's quantizer affects a separate copy of each event that
+is only used for display purposes, making it possible to have good looking notation
+while maintaining a completely human MIDI performance?
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that you can change segment labels using the Segment Parameters dialog
+in the main window?
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that you can have more than 64 tracks by using <b>Tracks -> Add
+Tracks</b> ?
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that you can change the name of a track by double clicking on the label?  (The
+label must be visible for this to work.)
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that Rosegarden is being developed as a community effort with
+contributions from around the world?<br><br>
+The primary developers live in the UK and France, and we've had contributors
+from the US, Spain, Germany, Russia, and elsewhere... 
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that Rosegarden is available in Spanish, French, German and Russian
+translation?<br><br>
+If you're interested in translating Rosegarden to another language, drop us a
+line at <b>rosegarden-devel@lists.sourceforge.net</b>.
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that you can make a composition longer by changing the length via <b>Edit
+-> Change Composition Duration</b>?
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that you can see the difference between performance and display duration
+of duration-quantized notes in the notation editor?<br><br>
+Use <b>Settings -> Show Raw Note Ruler</b> to turn on this handy
+feature.<br><br>
+<i>Note that this feature does not work in page layout view.</i>
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>... ?
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>... ?
 </html>
 </tip>
