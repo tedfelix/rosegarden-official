@@ -1109,9 +1109,9 @@ void RosegardenGUIApp::setPointerPosition(const int &position)
     // We do this the lazily dangerous way of setting Composition
     // time and then gui time - we should probably make this
     // an atomic operation with observers or something to make
-    // it nice and encapsulated but as long as we only use this
-    // modifier method for changing composition time we can probably
-    // get away with it.
+    // it nice and encapsulated ... but as long as we only EVER
+    // use this modifier method for changing composition time
+    // we can probably get away with it.
 
 //    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::setPointerPosition" << endl;
 

@@ -352,6 +352,14 @@ TrackEditor::setPointerPosition(int position)
     if (distance < 0.0) distance = -distance;
     if (distance >= 1.0) {
 	m_pointer->setX(canvasPosition);
+
+        // rwb - scroll the view with our pointer  ... ?
+        //
+        //m_segmentsCanvas->setContentsPos(canvasPosition - 100, 0);
+        //m_segmentsCanvas->scrollBy(-10, 0);
+        m_segmentsCanvas->ensureVisible(canvasPosition, 0);
+        m_segmentsCanvas->update();
+
 	emit needUpdate();
     }
 }
