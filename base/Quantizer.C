@@ -259,8 +259,14 @@ Quantizer::fixQuantizedValues(Segment::iterator from,
 timeT
 Quantizer::getQuantizedDuration(Event *e) const
 {
-
-    return getFromTarget(e, DurationValue);
+//!!! not correct -- if m_target == RawEventData but it's never
+// been quantized before, this will be plainly wrong
+    if ((m_target != RawEventData) &&
+	(!e->has(m_target + "Duration"))) {
+	return quantizeDuration(e->getDuration());
+    } else {
+	return getFromTarget(e, DurationValue);
+    }
 
 /*!!!
     long d;
@@ -273,8 +279,14 @@ Quantizer::getQuantizedDuration(Event *e) const
 timeT
 Quantizer::getQuantizedAbsoluteTime(Event *e) const
 {
-
-    return getFromTarget(e, AbsoluteTimeValue);
+//!!! not correct -- if m_target == RawEventData but it's never
+// been quantized before, this will be plainly wrong
+    if ((m_target != RawEventData) &&
+	(!e->has(m_target + "AbsoluteTime"))) {
+	return quantizeAbsoluteTime(e->getAbsoluteTime());
+    } else {
+	return getFromTarget(e, AbsoluteTimeValue);
+    }
 
 /*!!!
 
@@ -520,7 +532,7 @@ Quantizer::setToSource(Event *e, ValueType v, timeT time) const
 void
 Quantizer::setToTarget(Event *e, ValueType v, timeT time) const
 {
-    cerr << "Quantizer::setToTarget: target is \"" << m_target << "\", time is " << time << endl;
+    cerr << "Quantizer::setToTarget: target is \"" << m_target << "\", time is " << time << " (unit is " << m_unit << ", sort is " << (v == AbsoluteTimeValue ? "absolute time" : "duration") << ", original value is " << (v == AbsoluteTimeValue ? e->getAbsoluteTime() : e->getDuration()) << endl;
 
     std::string tag(v == AbsoluteTimeValue ? "AbsoluteTime" : "Duration");
 
