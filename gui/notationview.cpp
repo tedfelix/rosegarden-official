@@ -2795,6 +2795,7 @@ void NotationView::slotNoteAction()
 	m_noteActionDataMap->find(sigSender->name());
     
     if (noteAct != m_noteActionDataMap->end()) {
+	m_lastNoteAction = sigSender->name();
         setCurrentSelectedNote(*noteAct);
 	setMenuStates();
     } else {
@@ -2803,6 +2804,19 @@ void NotationView::slotNoteAction()
     }
 }
     
+// Reactivate the last note that was activated
+void NotationView::slotLastNoteAction()
+{
+    KAction *action = actionCollection()->action(m_lastNoteAction);
+    if (!action) action = actionCollection()->action("crotchet");
+
+    if (action) {
+	action->activate();
+    } else {
+        NOTATION_DEBUG << "NotationView::slotNoteAction() : couldn't find action named '"
+                             << m_lastNoteAction << "' or 'crotchet'\n";
+    }
+}
 
 void NotationView::slotAddMark()
 {

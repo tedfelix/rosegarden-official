@@ -320,16 +320,15 @@ void
 NoteInserter::insertNote(Segment &segment, timeT insertionTime,
 			 int pitch, Rosegarden::Accidental accidental)
 {
-    //!!! bring up-to-date
-
     Note note(m_noteType, m_noteDots);
     timeT endTime = insertionTime + note.getDuration();
 
     Segment::iterator realEnd = segment.findTime(endTime);
-    if (realEnd == segment.end() || ++realEnd == segment.end()) {
-	endTime = segment.getEndTime();
+    if (!segment.isBeforeEndMarker(  realEnd) ||
+	!segment.isBeforeEndMarker(++realEnd)) {
+	endTime = segment.getEndMarkerTime();
     } else {
-	endTime = std::max(endTime, (*realEnd)->getAbsoluteTime());
+	endTime = std::max(endTime, (*realEnd)->getNotationAbsoluteTime());
     }
 
     Event *lastInsertedEvent = doAddCommand
@@ -931,8 +930,7 @@ void NotationEraser::slotToggleRestCollapse()
 
 void NotationEraser::slotInsertSelected()
 {
-    //!!! wire up to reactivate the last note used
-    m_parentView->actionCollection()->action("crotchet")->activate();
+    m_nParentView->slotLastNoteAction();
 }
 
 void NotationEraser::slotSelectSelected()
@@ -1229,8 +1227,22 @@ void NotationSelector::drag(int x, int y, bool final)
     if (keyEvt) key = Rosegarden::Key(*keyEvt);
     
     int height = m_selectedStaff->getHeightAtCanvasY(y);
-    Rosegarden::Pitch p(height, clef, key, clickedAccidental);
-    int pitch = p.getPerformancePitch();
+    int pitch = Rosegarden::Pitch
+	(height, clef, key, clickedAccidental).getPerformancePitch();
+
+    if (pitch < clickedPitch) {
+	if (height < -10) {
+	    height = -10;
+	    pitch = Rosegarden::Pitch
+		(height, clef, key, clickedAccidental).getPerformancePitch();
+	}
+    } else if (pitch > clickedPitch) {
+	if (height > 18) {
+	    height = 18;
+	    pitch = Rosegarden::Pitch
+		(height, clef, key, clickedAccidental).getPerformancePitch();
+	}
+    }	    
 
     if (!final) {
 
@@ -1257,8 +1269,6 @@ void NotationSelector::drag(int x, int y, bool final)
 	bool haveSomething = false;
 
 	if (pitch != clickedPitch) {
-	    //!!! we need some limit to this
-	    
 	    command->addCommand(new TransposeCommand(pitch - clickedPitch,
 						     *selection));
 	    haveSomething = true;
@@ -1315,8 +1325,7 @@ void NotationSelector::slotHideSelection()
 
 void NotationSelector::slotInsertSelected()
 {
-    //!!! wire up to reactivate the last note used
-    m_parentView->actionCollection()->action("crotchet")->activate();
+    m_nParentView->slotLastNoteAction();
 }
 
 void NotationSelector::slotEraseSelected()

@@ -363,6 +363,9 @@ public slots:
     /// note switch slot
     void slotNoteAction();
 
+    /// switch to last selected note
+    void slotLastNoteAction();
+
     /// accidental switch slots
     void slotNoAccidental();
     void slotSharp();
@@ -807,6 +810,7 @@ protected:
     double m_deferredCursorScrollToX;
 
     Rosegarden::Accidental m_currentAccidental;
+    QString m_lastNoteAction;
 
     std::string m_fontName;
     int m_fontSize;
