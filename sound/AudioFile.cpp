@@ -35,7 +35,6 @@ AudioFile::AudioFile(unsigned int id,
     m_bitsPerSample(0),
     m_sampleRate(0),
     m_channels(0),
-    m_fileSize(0),
     m_dataChunkIndex(-1)
 {
     m_fileInfo = new QFileInfo(QString(fileName.c_str()));
@@ -52,7 +51,6 @@ AudioFile::AudioFile(const std::string &fileName,
     m_bitsPerSample(bitsPerSample),
     m_sampleRate(sampleRate),
     m_channels(channels),
-    m_fileSize(0),
     m_dataChunkIndex(-1)
 {
     m_fileInfo = new QFileInfo(QString(fileName.c_str()));

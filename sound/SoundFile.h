@@ -67,6 +67,10 @@ public:
     //
     std::string getBytes(unsigned int numberOfBytes);
 
+    // Return file size
+    //
+    unsigned int getSize() { return m_fileSize; }
+
 protected:
     std::string m_fileName;
 
@@ -89,6 +93,8 @@ protected:
     
     bool           m_loseBuffer; // do we need to dump the read buffer
                                  // and re-fill it?
+
+    unsigned int   m_fileSize;
 
 };
 

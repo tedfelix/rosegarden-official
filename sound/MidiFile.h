@@ -61,6 +61,7 @@ typedef std::map<unsigned int, std::vector<MidiEvent*> > MidiComposition;
 typedef std::vector<MidiEvent*>::iterator MidiTrackIterator;
 
 class Studio;
+class Progress;
 
 class MidiFile : public SoundFile
 {
@@ -75,8 +76,8 @@ public:
 	MIDI_FILE_NOT_LOADED            = 0xFF
     } MIDIFileFormatType;
 
-    MidiFile(Rosegarden::Studio *studio);
-    MidiFile (const std::string &fn, Rosegarden::Studio *studio);
+    MidiFile(Studio *studio, Progress *progress);
+    MidiFile (const std::string &fn, Studio *studio, Progress *progress);
     ~MidiFile();
 
     MidiFile& operator=(const MidiFile& mF)
@@ -145,8 +146,11 @@ private:
 
     // The pointer to the Studio for Instrument stuff
     //
-    Rosegarden::Studio *m_studio;
+    Studio   *m_studio;
 
+    // Progress dialog
+    //
+    Progress *m_progress;
 
 };
 

@@ -36,6 +36,7 @@
 #include "Track.h"
 #include "Instrument.h"
 #include "Studio.h"
+#include "Progress.h"
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -57,25 +58,30 @@ using std::endl;
 using std::ends;
 using std::ios;
 
-MidiFile::MidiFile(Rosegarden::Studio *studio):
+MidiFile::MidiFile(Studio *studio,
+                   Progress *progress):
                      SoundFile(std::string("unnamed.mid")),
                      m_timingDivision(0),
                      m_format(MIDI_FILE_NOT_LOADED),
                      m_numberOfTracks(0),
                      m_trackByteCount(0),
                      m_decrementCount(false),
-                     m_studio(studio)
+                     m_studio(studio),
+                     m_progress(progress)
 {
 }
 
-MidiFile::MidiFile(const std::string &fn, Rosegarden::Studio *studio):
+MidiFile::MidiFile(const std::string &fn,
+                   Studio *studio,
+                   Progress *progress):
                      SoundFile(fn),
                      m_timingDivision(0),
                      m_format(MIDI_FILE_NOT_LOADED),
                      m_numberOfTracks(0),
                      m_trackByteCount(0),
                      m_decrementCount(false),
-                     m_studio(studio)
+                     m_studio(studio),
+                     m_progress(progress)
 {
 }
 
@@ -176,6 +182,15 @@ MidiFile::getMidiBytes(ifstream* midiFile, const unsigned long &numberOfBytes)
     if (m_decrementCount)
         m_trackByteCount -= stringRet.length();
 
+    // update a progress dialog if we have one
+    //
+    if (m_progress)
+    {
+        m_progress->setCompleted((int)(double(midiFile->tellg())/
+                                       double(m_fileSize) * 100.0));
+        m_progress->processEvents();
+    }
+
     return stringRet;
 }
 
@@ -263,6 +278,13 @@ MidiFile::open()
     {
         if (*midiFile)
         {
+
+            // Set file size so we can count it off
+            //
+            midiFile->seekg(0, std::ios::end);
+            m_fileSize = midiFile->tellg();
+            midiFile->seekg(0, std::ios::beg);
+
             // Parse the MIDI header first.  The first 14 bytes of the file.
             if (!parseHeader(getMidiBytes(midiFile, 14)))
             {
@@ -1260,6 +1282,18 @@ MidiFile::writeTrack(std::ofstream* midiFile,
                           << endl;
                 break;
             }
+        }
+
+        // For the moment just keep the app updating until we work
+        // out a good way of accounting for this write.
+        //
+        if (m_progress)
+        {
+            /*
+            m_progress->setCompleted((int)(double(midiFile->tellg())/
+                                           double(m_fileSize) * 100.0));
+                                           */
+            m_progress->processEvents();
         }
     }
 

@@ -159,10 +159,6 @@ public:
     QDateTime getModificationDateTime()
         { return m_fileInfo->lastModified(); }
 
-    // Return file size
-    //
-    unsigned int getSize() { return m_fileSize; }
-
 protected:
 
     AudioFileType  m_type;   // AudioFile type
@@ -172,7 +168,6 @@ protected:
     unsigned int   m_bitsPerSample;
     unsigned int   m_sampleRate;
     unsigned int   m_channels;
-    unsigned int   m_fileSize;
 
     // How many bytes do we read before we get to the data?
     // Could be huge so we make it a long long. -1 means it

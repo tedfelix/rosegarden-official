@@ -75,6 +75,7 @@
 #include "segmentcommands.h"
 #include "zoomslider.h"
 #include "audiomanagerdialog.h"
+#include "widgets.h"
 
 //!!! ditch these when harmonize() moves out
 #include "CompositionTimeSliceAdapter.h"
@@ -1454,12 +1455,21 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
 {
     Rosegarden::MidiFile *midiFile;
 
-    midiFile = new Rosegarden::MidiFile(qstrtostr(file), &m_doc->getStudio());
+    RosegardenProgressDialog *progressDlg =
+            new RosegardenProgressDialog(i18n("Importing MIDI file..."),
+                                         i18n("Cancel"),
+                                         100,
+                                         this);
+
+    midiFile = new Rosegarden::MidiFile(qstrtostr(file),
+                                       &m_doc->getStudio(),
+                                        progressDlg);
 
     if (!midiFile->open())
     {
         KMessageBox::error(this,
           i18n("Couldn't understand MIDI file.\nIt might be corrupted."));
+        delete progressDlg;
         return;
     }
 
@@ -1471,8 +1481,6 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
     m_doc->closeDocument();
 
     m_doc->newDocument();
-
-    SetWaitCursor waitCursor;
 
     Rosegarden::Composition *tmpComp = midiFile->convertToRosegarden();
 
@@ -1488,7 +1496,14 @@ void RosegardenGUIApp::importMIDIFile(const QString &file)
     //
     m_doc->setTitle(file);
 
+    // Reinitialise
+    //
     initView();
+
+    // drop progress dialog
+    //
+    delete progressDlg;
+
 }
 
 void RosegardenGUIApp::slotImportRG21()
@@ -1763,17 +1778,26 @@ void RosegardenGUIApp::slotExportMIDI()
 
 void RosegardenGUIApp::exportMIDIFile(const QString &file)
 {
-    SetWaitCursor waitCursor;
+    RosegardenProgressDialog *progressDlg =
+            new RosegardenProgressDialog(i18n("Importing MIDI file..."),
+                                         i18n("Cancel"),
+                                         100,
+                                         this);
 
-    Rosegarden::MidiFile midiFile(qstrtostr(file), &m_doc->getStudio());
+    Rosegarden::MidiFile midiFile(qstrtostr(file),
+                                 &m_doc->getStudio(),
+                                  progressDlg);
 
     midiFile.convertToMidi(m_doc->getComposition());
 
     if (!midiFile.write())
     {
         KMessageBox::sorry(this, i18n("The MIDI File has not been exported."));
+        delete progressDlg;
         return;
     }
+
+    delete progressDlg;
 }
 
 void RosegardenGUIApp::slotExportCsound()

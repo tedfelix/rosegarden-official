@@ -31,7 +31,8 @@ SoundFile::SoundFile(const std::string &fileName):
     m_readChunkSize(4096), // 4k blocks
     m_inFile(0),
     m_outFile(0),
-    m_loseBuffer(false)
+    m_loseBuffer(false),
+    m_fileSize(0)
 {
 }
 
