@@ -430,8 +430,22 @@ int main(int argc, char *argv[])
                           0,
                           "http://www.all-day-breakfast.com/rosegarden/",
                           "rosegarden-devel@sf.net");
-    aboutData.addAuthor("Guillaume Laurent, Chris Cannam, Richard Bown",0,
-                        "glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com");
+
+    aboutData.addAuthor("Guillaume Laurent", 0, "glaurent@telegraph-road.org", "http://telegraph-road.org");
+    aboutData.addAuthor("Chris Cannam", 0, "cannam@all-day-breakfast.com", "http://all-day-breakfast.com");
+    aboutData.addAuthor("Richard Bown", 0, "bownie@bownie.com", "http://bownie.com");
+
+    aboutData.addCredit("Randall Farmer", "Chord labelling code", " rfarme@simons-rock.edu");
+    aboutData.addCredit("Hans  Kieserman", "Lilypond output\nassorted other patches\ni18n-ization", "hkieserman@mail.com");
+    aboutData.addCredit("Michael McIntyre", "Lilypond output fixes and improvements\nmiscellaneous patches\nsundry pixmaps and toolbars\nSpanish translation", "dmmcintyr@users.sourceforge.net");
+    aboutData.addCredit("Levi Burton", "UI improvements\nbug fixes", "donburton@sbcglobal.net");
+    aboutData.addCredit("Alexandre Prokoudine", "Russian translation\ni18n-ization", "avp@altlinux.ru");
+    aboutData.addCredit("Pedro Lopez-Cabanillas", "Spanish translatio\nALSA research", "plcl@bigfoot.com");
+    aboutData.addCredit("Jörg Schumann", "German translation", "jrschumann@gmx.de");
+    aboutData.addCredit("Kevin Donnelly", "Welsh translation");
+
+    aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") ,I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
+    
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
     KUniqueApplication::addCmdLineOptions(); // Add KUniqueApplication options.
