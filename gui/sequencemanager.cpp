@@ -1344,10 +1344,9 @@ SequenceManager::sendMappedEvent(Rosegarden::MappedEvent *mE)
 
 
 void
-SequenceManager::processRecordedAudio(const Rosegarden::RealTime &time,
-                                      float audioLevel)
+SequenceManager::processRecordedAudio(const Rosegarden::RealTime &time)
 {
-    m_doc->insertRecordedAudio(time, audioLevel, m_transportStatus);
+    m_doc->insertRecordedAudio(time, m_transportStatus);
 }
 
 

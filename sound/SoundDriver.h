@@ -231,10 +231,6 @@ public:
     //
     virtual void processPending(const RealTime &playLatency) = 0;
 
-    // Return the last recorded audio level
-    //
-    virtual float getLastRecordedAudioLevel() = 0;
-
     // Mapped Instruments
     //
     void setMappedInstrument(MappedInstrument *mI);

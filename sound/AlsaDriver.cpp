@@ -1610,10 +1610,21 @@ AlsaDriver::processPending(const RealTime &playLatency)
     }
 }
 
-float
-AlsaDriver::getLastRecordedAudioLevel() 
+void
+AlsaDriver::insertMappedEventForReturn(MappedEvent *mE)
 {
-    return 0.0f;
+    // If we haven't inserted a MappedEvent yet this update period
+    // then clear down the composition and flag
+    //
+    if (m_audioMeterSent == false)
+    {
+        m_recordComposition.clear();
+        m_audioMeterSent = true;
+    }
+
+    // Insert the event ready for return at the next opportunity
+    //
+    m_recordComposition.insert(mE);
 }
 
 
@@ -2152,22 +2163,6 @@ AlsaDriver::appendToAudioFile(const std::string &buffer)
 }
 
 
-void
-AlsaDriver::insertMappedEventForReturn(MappedEvent *mE)
-{
-    // If we haven't inserted a MappedEvent yet this update period
-    // then clear down the composition and flag
-    //
-    if (m_audioMeterSent == false)
-    {
-        m_recordComposition.clear();
-        m_audioMeterSent = true;
-    }
-
-    // Insert the event ready for return at the next opportunity
-    //
-    m_recordComposition.insert(mE);
-}
 
 
 

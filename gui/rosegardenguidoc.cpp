@@ -1129,7 +1129,6 @@ RosegardenGUIDoc::createNewAudioFile()
 
 void
 RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime &time,
-                                      float audioLevel,
                                       TransportStatus status)
 {
     if (status != RECORDING_AUDIO)
@@ -1320,5 +1319,8 @@ RosegardenGUIDoc::slotNewRecordButton()
     // Inform the sequencer if it's an audio track
     //
     std::cout << "RosegardenGUIDoc::slotNewRecordButton()" << std::endl;
+
+    // Document modified
+    setModified(true);
 }
 

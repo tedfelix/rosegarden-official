@@ -129,7 +129,11 @@ public:
     //
     virtual void processPending(const RealTime &playLatency);
 
-    float getLastRecordedAudioLevel();
+    // We can return audio control signals to the gui using MappedEvents.
+    // Meter levels or audio file completions can go in here.
+    //
+    void insertMappedEventForReturn(MappedEvent *mE);
+
 
 #ifdef HAVE_JACK
 
@@ -152,11 +156,6 @@ public:
     //
     bool createAudioFile(const std::string &fileName);
     void appendToAudioFile(const std::string &buffer);
-
-    // We can return audio control signals to the gui using MappedEvents.
-    // Meter levels or audio file completions can go in here.
-    //
-    void insertMappedEventForReturn(MappedEvent *mE);
 
 #endif
 
@@ -221,6 +220,10 @@ private:
     // added metronome yet?
     bool                         m_addedMetronome;
 
+    // sending of audio meter data in MappedComposition return stream
+    //
+    bool                         m_audioMeterSent;
+
 #ifdef HAVE_JACK
 
     static int  jackProcess(jack_nframes_t nframes, void *arg);
@@ -235,7 +238,6 @@ private:
     jack_port_t                 *m_audioOutputPortLeft;
     jack_port_t                 *m_audioOutputPortRight;
 
-    bool                         m_audioMeterSent;
 
 #endif
 

@@ -210,7 +210,6 @@ public:
      *  insert a recording SegmentItem for Audio with a given audio level
      */
     void insertRecordedAudio(const Rosegarden::RealTime &time,
-                             float audioLevel,
                              TransportStatus status);
 
     /**

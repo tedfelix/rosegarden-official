@@ -470,11 +470,10 @@ RosegardenSequencerApp::processRecordedAudio()
     //
     arg << time.sec;
     arg << time.usec;
-    arg << m_sequencer->getLastRecordedAudioLevel();
 
     if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
-                                 "processRecordedAudio(long int, long int, float)",
+                                 "processRecordedAudio(long int, long int)",
                                   data/*, replyType, replyData, true*/))
     {
         cerr << "RosegardenSequencer::processRecordedMidi() - " 

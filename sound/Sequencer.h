@@ -183,13 +183,6 @@ public:
     void processPending(const RealTime &playLatency)
         { m_soundDriver->processPending(playLatency); }
 
-    // Return a value (RMS perhaps) of the last recorded audio slice
-    //
-    float getLastRecordedAudioLevel()
-    {
-        return m_soundDriver->getLastRecordedAudioLevel();
-    }
-
     // set the file we're using for audio recording - we only currently
     // support recording of a single track at a time
     //

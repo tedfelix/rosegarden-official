@@ -2143,12 +2143,10 @@ RosegardenGUIApp::processRecordedMidi(const Rosegarden::MappedComposition &mC)
 
 void
 RosegardenGUIApp:: processRecordedAudio(long recordTimeSec,
-                                        long recordTimeUsec,
-                                        float audioLevel)
+                                        long recordTimeUsec)
 {
     m_seqManager->processRecordedAudio(Rosegarden::RealTime(recordTimeSec,
-                                                            recordTimeUsec),
-                                       audioLevel);
+                                                            recordTimeUsec));
 }
 
 

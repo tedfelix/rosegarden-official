@@ -90,9 +90,6 @@ public:
                 m_playStartPosition.usec)));
     }
 
-    float getLastRecordedAudioLevel();
-
-
 protected:
     virtual void generateInstruments();
     virtual void processAudioQueue(const RealTime &playLatency,

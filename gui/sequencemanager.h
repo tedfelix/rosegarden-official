@@ -112,8 +112,7 @@ public:
     // sample file is recorded directly at the sequencer level so this
     // is just for informational purposes.
     //
-    void processRecordedAudio(const Rosegarden::RealTime &time,
-                              float audioLevel);
+    void processRecordedAudio(const Rosegarden::RealTime &time);
 
     // Suspend the sequencer to allow for a safe DCOP call() i.e. one
     // when we don't hang both clients 'cos they're blocking on each

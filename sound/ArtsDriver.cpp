@@ -1005,12 +1005,6 @@ ArtsDriver::sendDeviceController(MidiByte controller,
 
 }
 
-float
-ArtsDriver::getLastRecordedAudioLevel() 
-{
-    return 0.0;
-}
-
 }
 
 
