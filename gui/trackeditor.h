@@ -70,6 +70,9 @@ public:
     BarButtons*       getBarButtons()       { return m_barButtons; }
     const BarButtons* getBarButtons() const { return m_barButtons; }
 
+    TrackButtons*       getTrackButtons()       { return m_trackButtons; }
+    const TrackButtons* getTrackButtons() const { return m_trackButtons; }
+
     int getTrackCellHeight() const;
 
     /**
