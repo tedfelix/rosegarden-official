@@ -84,7 +84,7 @@ protected:
 
     // start/stop tuplet bracket
     void startStopTuplet(bool &thisNoteIsTupled, bool &previouslyWritingTuplet,
-                         const int &numerator, const int &denominator, int &col,
+                         const int &numerator, const int &denominator,
                          std::ofstream &str);
         
  private:

@@ -40,6 +40,7 @@
 #include "rosestrings.h" // strtoqstr
 #include "notationproperties.h"
 #include "notationview.h"
+#include "widgets.h"
 
 #include "Composition.h"
 #include "BaseProperties.h"
@@ -150,7 +151,7 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress, Segment::it
 // unsuccessful after three straight days of hacking, so I'm leaving it alone.
 void
 LilypondExporter::startStopTuplet(bool &thisNoteIsTupled, bool &previouslyWritingTuplet,
-                                  const int &numerator, const int &denominator, int &col, 
+                                  const int &numerator, const int &denominator, 
                                   std::ofstream &str) {
     
     // start a tuplet if this note is tupled and the previous one wasn't
@@ -460,23 +461,24 @@ LilypondExporter::protectIllegalChars(std::string inStr) {
 bool
 LilypondExporter::write() {
     QString tmp_fileName = strtoqstr(m_fileName);
-    // The correct behaviour is to show an error box warning the user -
-    // but for now, just remove the illegal chars automatically.
-//     if (tmp_fileName.contains(' ') || tmp_fileName.contains('\\')) {
-//         // Error: "Lilypond does not allow spaces or backslashes in
-//         // the name of the .ly file.  Would you like RG to remove them
-//         // automatically or go back and change the filename yourself?"
-//         // [Remove] [Cancel Save]
-//         return false;
-//     }
+    
+    bool illegalFilename = (tmp_fileName.contains(' ') || tmp_fileName.contains("\\"));            
     tmp_fileName.replace(QRegExp(" "), "");
     tmp_fileName.replace(QRegExp("\\\\"), "");
     tmp_fileName.replace(QRegExp("'"), "");
     tmp_fileName.replace(QRegExp("\""), "");
+            
+    if (illegalFilename) {
+        CurrentProgressDialog::freeze();
+        int reply = KMessageBox::warningContinueCancel(
+            0, i18n("Lilypond does not allow spaces or backslashes in filenames.  "
+                     "Would you like to use\n\n %1\n\n instead?").arg(tmp_fileName)); 
+        if (reply != KMessageBox::Continue) return false;
+    }
 
     std::ofstream str(qstrtostr(tmp_fileName).c_str(), std::ios::out);
     if (!str) {
-        std::cerr << i18n("LilypondExporter::write() - can't write file %1").arg(tmp_fileName) << std::endl;
+        std::cerr << "LilypondExporter::write() - can't write file " << tmp_fileName << std::endl;
         return false;
     }
 
@@ -716,7 +718,6 @@ LilypondExporter::write() {
             bool thisNoteIsTupled = false;
             bool previouslyWritingTuplet = false;
             bool isFirstBar = true;
-            int horribleCounterHack = 0;
 
             std::string lilyText = "";      // text events
             std::ostringstream lilyLyrics;  // stream to collect/hold lyric events
@@ -891,7 +892,7 @@ LilypondExporter::write() {
                        
                         // handle tuplet start/end
                         startStopTuplet (thisNoteIsTupled, previouslyWritingTuplet,
-                                         tcount, ucount, col, str);
+                                         tcount, ucount, str);
                         
                         if (nextNoteIsInChord && !currentlyWritingChord) {
                             currentlyWritingChord = true;
@@ -971,7 +972,7 @@ LilypondExporter::write() {
                         closeChordWriteTie(addTie, currentlyWritingChord, str);
 
                         startStopTuplet (thisNoteIsTupled, previouslyWritingTuplet,
-                                         tcount, ucount, col, str);
+                                         tcount, ucount, str);
 
                         handleEndingEvents(eventsInProgress, j, str);
                         
@@ -1140,11 +1141,6 @@ LilypondExporter::write() {
         str << std::endl << indent(--col) << "> % Staff (final)";  // indent-
     } else {
         str << indent(--col) << "% (All staffs were muted.)" << std::endl;
-/*        KMessageBox::sorry(0, i18n(
-            "All tracks were muted, so there were no notes to export.\n\n"
-            "For better results, either un-mute some tracks or toggle off the "
-            "\"Do not export muted tracks\" option on the Lilypond tab of the "
-            "Notation configuration page, then try again.")); */
     }
     
     // close \notes section
