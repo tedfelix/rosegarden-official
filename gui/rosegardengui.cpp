@@ -114,6 +114,7 @@
 #include "sequencermapper.h"
 #include "segmentparameterbox.h"
 #include "instrumentparameterbox.h"
+#include "audioplugindialog.h"
 
 #ifdef HAVE_LIBJACK
 #include <jack/jack.h>
@@ -251,6 +252,10 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     vboxLayout->addWidget(m_instrumentParameterBox);
     vboxLayout->addStretch();
 
+    connect(m_instrumentParameterBox,
+	    SIGNAL(selectPlugin(Rosegarden::InstrumentId id, int index)),
+	    this,
+	    SLOT(slotShowPluginDialog(id, index)));
 
     // Load the initial document (this includes doc's own autoload)
     //
@@ -1353,8 +1358,6 @@ void RosegardenGUIApp::slotSaveOptions()
     kapp->config()->writeEntry("Show Transport",               m_viewTransport->isChecked());
     kapp->config()->writeEntry("Expanded Transport",           m_transport->isExpanded());
     kapp->config()->writeEntry("Show Track labels",            m_viewTrackLabels->isChecked());
-//     kapp->config()->writeEntry("Show Segment Parameters",      m_viewSegmentParameters->isChecked());
-//     kapp->config()->writeEntry("Show Instrument Parameters",   m_viewInstrumentParameters->isChecked());
     kapp->config()->writeEntry("Show Rulers",                  m_viewRulers->isChecked());
     kapp->config()->writeEntry("Show Tempo Ruler",             m_viewTempoRuler->isChecked());
     kapp->config()->writeEntry("Show Chord Name Ruler",        m_viewChordNameRuler->isChecked());
@@ -4674,6 +4677,9 @@ RosegardenGUIApp::slotOpenMixer()
     connect(m_mixer, SIGNAL(closing()),
             this, SLOT(slotMixerClosed()));
 
+    connect(m_mixer, SIGNAL(selectPlugin(Rosegarden::InstrumentId id, int index)),
+	    this, SLOT(slotShowPluginDialog(id, index)));
+
     connect(this, SIGNAL(documentAboutToChange()),
             m_mixer, SLOT(close()));
 
@@ -4787,6 +4793,252 @@ RosegardenGUIApp::slotControlEditorClosed()
     }
 
     std::cerr << "WARNING: control editor " << s << " closed, but couldn't find it in our control editor list (we have " << m_controlEditors.size() << " editors)" << std::endl;
+}
+
+void
+RosegardenGUIApp::slotShowPluginDialog(Rosegarden::InstrumentId instrumentId,
+				       int index)
+{
+    int key = (index << 24) + instrumentId;
+
+    if (m_pluginDialogs[key]) {
+	m_pluginDialogs[key]->raise();
+	return;
+    }
+
+    Rosegarden::Instrument *instrument = m_doc->getStudio().
+        getInstrumentById(instrumentId);
+    
+    // only create a dialog if we've got a plugin instance
+    Rosegarden::AudioPluginInstance *inst = 
+	instrument->getPlugin(index);
+
+    if (!inst) {
+	RG_DEBUG << "RosegardenGUIApp::slotShowPluginDialog - "
+		 << "no AudioPluginInstance found for index "
+		 << index << endl;
+	return;
+    }
+
+    // Create the plugin dialog
+    //
+    Rosegarden::AudioPluginDialog *dialog =
+	new Rosegarden::AudioPluginDialog(this,
+					  m_doc->getPluginManager(),
+					  instrument,
+					  index);
+
+    // Plug the new dialog into the standard keyboard accelerators so
+    // that we can use them still while the plugin has focus.
+    //
+    plugAccelerators(dialog, dialog->getAccelerators());
+
+    // connect up to the instrument parameter box so it can update its label
+    connect(dialog,
+	    SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
+	    m_instrumentParameterBox,
+	    SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
+
+    connect(dialog,
+	    SIGNAL(bypassed(Rosegarden::InstrumentId, int, bool)),
+	    m_instrumentParameterBox,
+	    SLOT(slotPluginBypassed(Rosegarden::InstrumentId, int, bool)));
+
+    // and to us so we can keep the sequencer informed
+    connect(dialog,
+	    SIGNAL(pluginSelected(Rosegarden::InstrumentId, int, int)),
+	    this,
+	    SLOT(slotPluginSelected(Rosegarden::InstrumentId, int, int)));
+    
+    connect(dialog,
+	    SIGNAL(pluginPortChanged(Rosegarden::InstrumentId, int, int, float)),
+	    this,
+	    SLOT(slotPluginPortChanged(Rosegarden::InstrumentId, int, int, float)));
+
+    connect(dialog,
+	    SIGNAL(bypassed(Rosegarden::InstrumentId, int, bool)),
+	    this,
+	    SLOT(slotPluginBypassed(Rosegarden::InstrumentId, int, bool)));
+
+    connect(dialog,
+	    SIGNAL(destroyed(Rosegarden::InstrumentId, int)),
+	    this,
+	    SLOT(slotPluginDialogDestroyed(Rosegarden::InstrumentId, int)));
+
+    m_pluginDialogs[key] = dialog;
+    m_pluginDialogs[key]->show();
+
+    // Set modified
+    m_doc->slotDocumentModified();
+}  
+
+void
+RosegardenGUIApp::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
+				     int index, int plugin)
+{
+    Rosegarden::Instrument *instrument = m_doc->getStudio().
+        getInstrumentById(instrumentId);
+    
+    Rosegarden::AudioPluginInstance *inst = 
+        instrument->getPlugin(index);
+
+    if (!inst) {
+        RG_DEBUG << "RosegardenGUIApp::slotPluginSelected - "
+                 << "got index of unknown plugin!" << endl;
+	return;
+    }
+
+    if (plugin == -1)
+    {
+	// Destroy plugin instance
+	if (Rosegarden::StudioControl::
+	    destroyStudioObject(inst->getMappedId()))
+	{
+	    RG_DEBUG << "RosegardenGUIApp::slotPluginSelected - "
+		     << "cannot destroy Studio object "
+		     << inst->getMappedId() << endl;
+	}
+	
+	inst->setAssigned(false);
+    }
+    else
+    {
+	Rosegarden::AudioPlugin *plgn = 
+	    m_doc->getPluginManager()->getPlugin(plugin);
+	
+	// If unassigned then create a sequencer instance of this
+	// AudioPluginInstance.
+	//
+	if (inst->isAssigned())
+	{
+	    // unassign, destory and recreate
+	    std::cout << "MAPPED ID = " << inst->getMappedId() 
+		      << " for Instrument " << inst->getId() << std::endl;
+	    
+	    RG_DEBUG << "RosegardenGUIApp::slotPluginSelected - "
+		     << "MappedObjectId = "
+		     << inst->getMappedId()
+		     << " - UniqueId = " << plgn->getUniqueId()
+		     << endl;
+	    
+#ifdef HAVE_LADSPA
+	    Rosegarden::StudioControl::setStudioObjectProperty
+		(inst->getMappedId(),
+		 Rosegarden::MappedLADSPAPlugin::UniqueId,
+		 plgn->getUniqueId());
+#endif
+	}
+	else
+	{
+	    // create a studio object at the sequencer
+	    Rosegarden::MappedObjectId newId =
+		Rosegarden::StudioControl::createStudioObject
+		(Rosegarden::MappedObject::LADSPAPlugin);
+	    
+	    RG_DEBUG << "RosegardenGUIApp::slotPluginSelected - "
+		     << " new MappedObjectId = " << newId << endl;
+	    
+	    // set the new Mapped ID and that this instance
+	    // is assigned
+	    inst->setMappedId(newId);
+	    inst->setAssigned(true);
+	    
+#ifdef HAVE_LADSPA
+	    // set the instrument id
+	    Rosegarden::StudioControl::setStudioObjectProperty
+		(newId,
+		 Rosegarden::MappedObject::Instrument,
+		 Rosegarden::MappedObjectValue(instrumentId));
+	    
+	    // set the position
+	    Rosegarden::StudioControl::setStudioObjectProperty
+		(newId,
+		 Rosegarden::MappedObject::Position,
+		 Rosegarden::MappedObjectValue(index));
+	    
+	    // set the plugin id
+	    Rosegarden::StudioControl::setStudioObjectProperty
+		(newId,
+		 Rosegarden::MappedLADSPAPlugin::UniqueId,
+		 Rosegarden::MappedObjectValue(
+		     plgn->getUniqueId()));
+#endif
+	}
+    }
+    
+    // Set modified
+    m_doc->slotDocumentModified();
+}
+
+void
+RosegardenGUIApp::slotPluginPortChanged(Rosegarden::InstrumentId instrumentId,
+					int pluginIndex,
+					int portIndex,
+					float value)
+{
+    Rosegarden::Instrument *instrument = m_doc->getStudio().
+        getInstrumentById(instrumentId);
+    
+    Rosegarden::AudioPluginInstance *inst = instrument->getPlugin(pluginIndex);
+
+    if (inst)
+    {
+
+#ifdef HAVE_LADSPA
+
+        Rosegarden::StudioControl::
+            setStudioPluginPort(inst->getMappedId(),
+                                portIndex,
+                                value);
+                                
+        RG_DEBUG << "RosegardenGUIApp::slotPluginPortChanged - "
+                 << "setting plugin port (" << portIndex << ") to "
+                 << value << endl;
+
+        // Set modified
+        m_doc->slotDocumentModified();
+
+#endif // HAVE_LADSPA
+
+	(void)portIndex; // avoid compiler warnings
+	(void)value;
+    }
+
+}
+
+void
+RosegardenGUIApp::slotPluginDialogDestroyed(Rosegarden::InstrumentId instrumentId,
+					    int index)
+{
+    int key = (index << 24) + instrumentId;
+    m_pluginDialogs[key] = 0;
+}
+
+void
+RosegardenGUIApp::slotPluginBypassed(Rosegarden::InstrumentId instrumentId,
+				     int pluginIndex, bool bp)
+{
+    Rosegarden::Instrument *instrument = m_doc->getStudio().
+        getInstrumentById(instrumentId);
+    
+    Rosegarden::AudioPluginInstance *inst = instrument->getPlugin(pluginIndex);
+
+    if (inst)
+    {
+#ifdef HAVE_LADSPA
+        Rosegarden::StudioControl::setStudioObjectProperty
+            (inst->getMappedId(),
+             Rosegarden::MappedLADSPAPlugin::Bypassed,
+             Rosegarden::MappedObjectValue(bp));
+#endif // HAVE_LADSPA
+
+        // Set the bypass on the instance
+        //
+        inst->setBypass(bp);
+
+        // Set modified
+        m_doc->slotDocumentModified();
+    }
 }
 
 void

@@ -50,7 +50,6 @@ PluginPort::PluginPort(int id,
     m_upperBound(upperBound),
     m_default(defaultValue)
 {
-    std::cerr << "Plugin port created: name " << name << ", default " << defaultValue << std::endl;
 }
 
 AudioPluginInstance::AudioPluginInstance(unsigned int position):

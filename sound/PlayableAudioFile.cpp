@@ -527,7 +527,6 @@ PlayableAudioFile::updateBuffers()
 #endif
     }	
 
-//!!!    float *buffer = new float[std::max(frames, fileFrames)]; 
     if (std::max(frames, fileFrames) > m_workBufferSize) {
 	delete[] m_workBuffer;
 	m_workBufferSize = std::max(frames, fileFrames);
@@ -535,8 +534,6 @@ PlayableAudioFile::updateBuffers()
     }
     sample_t *buffer = m_workBuffer;
     
-//    const unsigned char *ubuf = (const unsigned char *)data.c_str();
-
     //!!! How come this code isn't in WAVAudioFile?
 
     // If we're reading a stereo file onto a mono target, we mix the

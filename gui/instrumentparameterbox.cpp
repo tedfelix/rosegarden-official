@@ -120,6 +120,11 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
             SIGNAL(recordButton(Rosegarden::InstrumentId, bool)),
             this,
             SIGNAL(setRecord(Rosegarden::InstrumentId, bool)));
+
+    connect(m_audioInstrumentParameters,
+	    SIGNAL(selectPlugin(Rosegarden::InstrumentId, int)),
+	    this,
+	    SIGNAL(selectPlugin(Rosegarden::InstrumentId, int)));
     
     connect(m_midiInstrumentParameters, SIGNAL(updateAllBoxes()),
             this, SLOT(slotUpdateAllBoxes()));
@@ -159,6 +164,17 @@ InstrumentParameterBox::setDocument(RosegardenGUIDoc* doc)
     m_audioInstrumentParameters->setDocument(m_doc);
 }
 
+void
+InstrumentParameterBox::slotPluginSelected(Rosegarden::InstrumentId id, int index, int plugin)
+{
+    m_audioInstrumentParameters->slotPluginSelected(id, index, plugin);
+}
+
+void
+InstrumentParameterBox::slotPluginBypassed(Rosegarden::InstrumentId id, int index, bool bypassState)
+{
+    m_audioInstrumentParameters->slotPluginBypassed(id, index, bypassState);
+}
 
 void
 InstrumentParameterBox::useInstrument(Instrument *instrument)
@@ -405,248 +421,43 @@ InstrumentParameterBox::slotUpdateAllBoxes()
 
 }
 
-
 void
-AudioInstrumentParameterPanel::slotSelectPlugin(int index)
+AudioInstrumentParameterPanel::slotPluginSelected(Rosegarden::InstrumentId instrumentId,
+						  int index, int plugin)
 {
-    int key = (index << 24) + m_selectedInstrument->getId();
+    if (!m_selectedInstrument ||
+	instrumentId != m_selectedInstrument->getId()) return;
 
-    if (m_pluginDialogs[key] == 0)
-    {
-        // only create a dialog if we've got a plugin instance
-        Rosegarden::AudioPluginInstance *inst = 
-            m_selectedInstrument->getPlugin(index);
+    if (plugin == -1) {
 
-        if (inst)
-        {
-            // Create the plugin dialog
-            //
-            m_pluginDialogs[key] = 
-                new Rosegarden::AudioPluginDialog(this,
-                                              m_doc->getPluginManager(),
-                                              m_selectedInstrument,
-                                              index);
+	m_audioFader->m_plugins[index]->setText(i18n("<no plugin>"));
 
-            // Get the App pointer and plug the new dialog into the 
-            // standard keyboard accelerators so that we can use them
-            // still while the plugin has focus.
-            //
-            QWidget *par = parentWidget();
-            while (!par->isTopLevel()) par = par->parentWidget();
+    } else {
 
-            RosegardenGUIApp *app = dynamic_cast<RosegardenGUIApp*>(par);
+	Rosegarden::AudioPlugin *pluginClass 
+	    = m_doc->getPluginManager()->getPlugin(plugin);
 
-            app->plugAccelerators(m_pluginDialogs[key],
-                                  m_pluginDialogs[key]->getAccelerators());
-
-            connect(m_pluginDialogs[key], SIGNAL(pluginSelected(int, int)),
-                    this, SLOT(slotPluginSelected(int, int)));
-
-            connect(m_pluginDialogs[key],
-		    SIGNAL(pluginPortChanged(int, int, float)),
-                    this, SLOT(slotPluginPortChanged(int, int, float)));
-
-            connect(m_pluginDialogs[key], SIGNAL(bypassed(int, bool)),
-                    this, SLOT(slotBypassed(int, bool)));
-
-	    connect(m_pluginDialogs[key], SIGNAL(destroyed(int)),
-		    this, SLOT(slotPluginDialogDestroyed(int)));
-
-            m_pluginDialogs[key]->show();
-
-            // Set modified
-            m_doc->slotDocumentModified();
-        }
-        else
-        {
-            RG_DEBUG << "AudioInstrumentParameterPanel::slotSelectPlugin - "
-		     << "no AudioPluginInstance found for index "
-		     << index << endl;
-        }
-    }
-    else
-    {
-	m_pluginDialogs[key]->raise();
+	if (pluginClass)
+	    m_audioFader->m_plugins[index]->
+		setText(pluginClass->getLabel());
     }
 }
 
 void
-AudioInstrumentParameterPanel::slotPluginSelected(int index, int plugin)
+AudioInstrumentParameterPanel::slotPluginBypassed(Rosegarden::InstrumentId instrumentId,
+						  int pluginIndex, bool bp)
 {
+    if (!m_selectedInstrument ||
+	instrumentId != m_selectedInstrument->getId()) return;
 
-    Rosegarden::AudioPluginInstance *inst = 
-        m_selectedInstrument->getPlugin(index);
-
-    if (inst)
-    {
-        if (plugin == -1)
-        {
-            RG_DEBUG << "InstrumentParameterBox::slotPluginSelected - "
-                       << "no plugin selected" << endl;
-
-            // Destroy plugin instance
-            if (Rosegarden::StudioControl::
-                    destroyStudioObject(inst->getMappedId()))
-            {
-                RG_DEBUG << "InstrumentParameterBox::slotPluginSelected - "
-                         << "cannot destroy Studio object "
-                         << inst->getMappedId() << endl;
-            }
-
-            inst->setAssigned(false);
-            m_audioFader->m_plugins[index]->setText(i18n("<no plugin>"));
-
-        }
-        else
-        {
-            Rosegarden::AudioPlugin *plgn = 
-                m_doc->getPluginManager()->getPlugin(plugin);
-
-            // If unassigned then create a sequencer instance of this
-            // AudioPluginInstance.
-            //
-            if (inst->isAssigned())
-            {
-                // unassign, destory and recreate
-                std::cout << "MAPPED ID = " << inst->getMappedId() 
-			  << " for Instrument " << inst->getId() << std::endl;
-
-                RG_DEBUG << "InstrumentParameterBox::slotPluginSelected - "
-                         << "MappedObjectId = "
-                         << inst->getMappedId()
-                         << " - UniqueId = " << plgn->getUniqueId()
-                         << endl;
-
-
-#ifdef HAVE_LADSPA
-                Rosegarden::StudioControl::setStudioObjectProperty
-                    (inst->getMappedId(),
-                     Rosegarden::MappedLADSPAPlugin::UniqueId,
-                     plgn->getUniqueId());
-#endif
-
-            }
-            else
-            {
-                // create a studio object at the sequencer
-                Rosegarden::MappedObjectId newId =
-                    Rosegarden::StudioControl::createStudioObject
-                        (Rosegarden::MappedObject::LADSPAPlugin);
-
-                RG_DEBUG << "InstrumentParameterBox::slotPluginSelected - "
-                         << " new MappedObjectId = " << newId << endl;
-
-                // set the new Mapped ID and that this instance
-                // is assigned
-                inst->setMappedId(newId);
-                inst->setAssigned(true);
-
-#ifdef HAVE_LADSPA
-                // set the instrument id
-                Rosegarden::StudioControl::setStudioObjectProperty
-                    (newId,
-                     Rosegarden::MappedObject::Instrument,
-                     Rosegarden::MappedObjectValue(
-                         m_selectedInstrument->getId()));
-
-                // set the position
-                Rosegarden::StudioControl::setStudioObjectProperty
-                    (newId,
-                     Rosegarden::MappedObject::Position,
-                     Rosegarden::MappedObjectValue(index));
-
-                // set the plugin id
-                Rosegarden::StudioControl::setStudioObjectProperty
-                    (newId,
-                     Rosegarden::MappedLADSPAPlugin::UniqueId,
-                     Rosegarden::MappedObjectValue(
-                         plgn->getUniqueId()));
-#endif
-            }
-
-            Rosegarden::AudioPlugin *pluginClass 
-                = m_doc->getPluginManager()->getPlugin(plugin);
-
-            if (pluginClass)
-                m_audioFader->m_plugins[index]->
-                    setText(pluginClass->getLabel());
-        }
-
-        // Set modified
-        m_doc->slotDocumentModified();
-    }
-    else
-        RG_DEBUG << "InstrumentParameterBox::slotPluginSelected - "
-                 << "got index of unknown plugin!" << endl;
-}
-
-void
-AudioInstrumentParameterPanel::slotPluginPortChanged(int pluginIndex,
-                                                     int portIndex,
-                                                     float value)
-{
     Rosegarden::AudioPluginInstance *inst = 
         m_selectedInstrument->getPlugin(pluginIndex);
 
     if (inst)
     {
-
-#ifdef HAVE_LADSPA
-
-        Rosegarden::StudioControl::
-            setStudioPluginPort(inst->getMappedId(),
-                                portIndex,
-                                value);
-                                
-        RG_DEBUG << "InstrumentParameterBox::slotPluginPortChanged - "
-                 << "setting plugin port (" << portIndex << ") to "
-                 << value << endl;
-
-        // Set modified
-        m_doc->slotDocumentModified();
-
-#endif // HAVE_LADSPA
-
-	(void)portIndex; // avoid compiler warnings
-	(void)value;
-    }
-
-}
-
-
-void
-AudioInstrumentParameterPanel::slotPluginDialogDestroyed(int index)
-{
-    int key = (index << 24) + m_selectedInstrument->getId();
-    m_pluginDialogs[key] = 0;
-}
-
-void
-AudioInstrumentParameterPanel::slotBypassed(int pluginIndex, bool bp)
-{
-    Rosegarden::AudioPluginInstance *inst = 
-        m_selectedInstrument->getPlugin(pluginIndex);
-
-    if (inst)
-    {
-#ifdef HAVE_LADSPA
-        Rosegarden::StudioControl::setStudioObjectProperty
-            (inst->getMappedId(),
-             Rosegarden::MappedLADSPAPlugin::Bypassed,
-             Rosegarden::MappedObjectValue(bp));
-#endif // HAVE_LADSPA
-
-
         /// Set the colour on the button
         //
         setBypassButtonColour(pluginIndex, bp);
-
-        // Set the bypass on the instance
-        //
-        inst->setBypass(bp);
-
-        // Set modified
-        m_doc->slotDocumentModified();
     }
 }
 
@@ -929,6 +740,12 @@ AudioInstrumentParameterPanel::slotSelectAudioInput(int value)
          Rosegarden::MappedObjectValue(value));
 }
 
+void
+AudioInstrumentParameterPanel::slotSelectPlugin(int index)
+{
+    if (m_selectedInstrument)
+	emit selectPlugin(m_selectedInstrument->getId(), index);
+}
 
 
 

@@ -123,12 +123,12 @@ public slots:
     void slotBypassChanged(bool);
 
 signals:
-    void pluginSelected(int pluginIndex, int plugin);
-    void pluginPortChanged(int pluginIndex, int portIndex, float value);
+    void pluginSelected(Rosegarden::InstrumentId, int pluginIndex, int plugin);
+    void pluginPortChanged(Rosegarden::InstrumentId, int pluginIndex, int portIndex, float value);
 
     // is the plugin being bypassed
-    void bypassed(int pluginIndex, bool bp);
-    void destroyed(int index);
+    void bypassed(Rosegarden::InstrumentId, int pluginIndex, bool bp);
+    void destroyed(Rosegarden::InstrumentId, int index);
 
 protected slots:
     virtual void slotClose();

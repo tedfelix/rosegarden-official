@@ -207,7 +207,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 	QString(" [ %1 ] - ").arg(m_index + 1);
 
     // tell the sequencer
-    emit pluginSelected(m_index, number - 1);
+    emit pluginSelected(m_instrument->getId(), m_index, number - 1);
 
     if (number == 0)
     {
@@ -327,7 +327,8 @@ AudioPluginDialog::slotPluginPortChanged(float value)
     AudioPluginInstance *inst = m_instrument->getPlugin(m_index);
     inst->getPort(control->getIndex())->value = value;
 
-    emit pluginPortChanged(m_index, control->getIndex(), value);
+    emit pluginPortChanged(m_instrument->getId(),
+			   m_index, control->getIndex(), value);
 }
 
 void
@@ -338,20 +339,20 @@ AudioPluginDialog::slotBypassChanged(bool bp)
     if (inst)
         inst->setBypass(bp);
 
-    emit bypassed(m_index, bp);
+    emit bypassed(m_instrument->getId(), m_index, bp);
 }
 
 void
 AudioPluginDialog::closeEvent(QCloseEvent *e)
 {
     e->accept();
-    emit destroyed(m_index);
+    emit destroyed(m_instrument->getId(), m_index);
 }
 
 void
 AudioPluginDialog::slotClose()
 {
-    emit destroyed(m_index);
+    emit destroyed(m_instrument->getId(), m_index);
     reject();
 }
 

@@ -72,6 +72,9 @@ MixerWindow::MixerWindow(QWidget *parent,
 	    connect(fader->m_fader, SIGNAL(faderChanged(float)),
 		    this, SLOT(slotFaderLevelChanged(float)));
 
+	    connect(fader->m_signalMapper, SIGNAL(mapped(int)),
+		    this, SLOT(slotSelectPlugin(int)));
+
 	    mainLayout->addWidget(fader);
 	    m_faders[(*i)->getId()] = fader;
 	    ++count;
@@ -145,6 +148,24 @@ MixerWindow::updateFader(int id)
     }
 }
 	
+
+void
+MixerWindow::slotSelectPlugin(int index)
+{
+    const QObject *s = sender();
+
+    // no plugins anywhere except instruments yet
+
+    for (FaderMap::iterator i = m_faders.begin();
+	 i != m_faders.end(); ++i) {
+	
+	if (s == i->second->m_fader) {
+
+	    emit selectPlugin(i->first, index);
+	}
+    }	    
+}
+
 
 void
 MixerWindow::slotFaderLevelChanged(float dB)

@@ -42,9 +42,11 @@ public:
 
 signals:
     void closing();
+    void selectPlugin(Rosegarden::InstrumentId id, int index);
 
 protected slots:
     void slotFaderLevelChanged(float level);
+    void slotSelectPlugin(int index);
     
 protected:
     virtual void closeEvent(QCloseEvent *);

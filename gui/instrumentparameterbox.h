@@ -90,6 +90,11 @@ public slots:
     //
     void slotUpdateAllBoxes();
 
+    // From Plugin dialog
+    //
+    void slotPluginSelected(Rosegarden::InstrumentId id, int index, int plugin);
+    void slotPluginBypassed(Rosegarden::InstrumentId id, int pluginIndex, bool bp);
+
 signals:
 
     // Emit a MIDI controller for immediate processing.
@@ -98,6 +103,7 @@ signals:
     //
     void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
 
+    void selectPlugin(Rosegarden::InstrumentId id, int index);
     void setMute(Rosegarden::InstrumentId, bool value);
     void setSolo(Rosegarden::InstrumentId, bool value);
     void setRecord(Rosegarden::InstrumentId, bool value);
@@ -138,7 +144,7 @@ public:
 
 signals:
     void updateAllBoxes();
-    
+        
 protected:
     //--------------- Data members ---------------------------------
     QLabel                          *m_instrumentLabel;
@@ -169,11 +175,11 @@ public:
 public slots:
     // From AudioFaderWidget
     //
-    void slotSelectPlugin(int index);
     void slotSelectAudioLevel(float dB);
     void slotSelectAudioRecordLevel(float dB);
     void slotAudioChannels(int channels);
     void slotSelectAudioInput(int value);
+    void slotSelectPlugin(int index);
 
     // From the parameter box clicks
     void slotMute();
@@ -190,22 +196,19 @@ public slots:
 
     // From Plugin dialog
     //
-    void slotPluginSelected(int index, int plugin);
-    void slotPluginPortChanged(int pluginIndex, int portIndex, float value);
-    void slotBypassed(int pluginIndex, bool bp);
-    void slotPluginDialogDestroyed(int index);
+    void slotPluginSelected(Rosegarden::InstrumentId id, int index, int plugin);
+    void slotPluginBypassed(Rosegarden::InstrumentId id, int pluginIndex, bool bp);
 
 signals:
     void muteButton(Rosegarden::InstrumentId, bool state);
     void soloButton(Rosegarden::InstrumentId, bool state);
     void recordButton(Rosegarden::InstrumentId, bool state);
+    void selectPlugin(Rosegarden::InstrumentId, int index);
 
 protected:
     //--------------- Data members ---------------------------------
 
-    AudioFaderWidget   *m_audioFader; // audio fader
-
-    std::map<int, Rosegarden::AudioPluginDialog*> m_pluginDialogs;
+    AudioFaderWidget   *m_audioFader;
 
 private:
 

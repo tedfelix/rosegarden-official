@@ -62,6 +62,7 @@ namespace Rosegarden
 {
     class AudioManagerDialog;
     class AudioPluginManager;
+    class AudioPluginDialog;
     class RosegardenTransportDialog;
     class SequenceManager;
     class Clipboard;
@@ -1144,6 +1145,22 @@ public slots:
      */
     void slotUpdatePlaybackPosition();
 
+    /**
+     * Create a plugin dialog for a given instrument and slot, or
+     * raise an exising one.
+     */
+    void slotShowPluginDialog(Rosegarden::InstrumentId instrument,
+			      int index);
+
+    void slotPluginSelected(Rosegarden::InstrumentId instrument,
+			    int index, int plugin);
+    void slotPluginPortChanged(Rosegarden::InstrumentId instrument,
+			       int index, int portIndex, float value);
+    void slotPluginDialogDestroyed(Rosegarden::InstrumentId instrument,
+				   int index);
+    void slotPluginBypassed(Rosegarden::InstrumentId,
+			    int index, bool bypassed);
+
 private:
 
     //--------------- Data members ---------------------------------
@@ -1247,6 +1264,7 @@ private:
     BankEditorDialog      *m_bankEditor;
     MarkerEditorDialog    *m_markerEditor;
     std::set<ControlEditorDialog *> m_controlEditors;
+    std::map<int, Rosegarden::AudioPluginDialog*> m_pluginDialogs;
 
     static const char* const MainWindowConfigGroup;
 
