@@ -51,6 +51,8 @@ class MatrixParameterBox;
 class QMouseEvent;
 class QLabel;
 
+typedef std::vector<MatrixElement*> SelectedElements;
+
 /**
  * Matrix ("Piano Roll") View
  *
@@ -96,6 +98,13 @@ public:
     void playPreview(int pitch);
 
     Rosegarden::SnapGrid &getSnapGrid() { return m_snapGrid; }
+
+    // Selection of current matrix elements
+    //
+    SelectedElements& getSelectedElements() { return m_selectedElements; }
+    void setSelectedElements(const SelectedElements &eS);
+    void addElementToSelection(MatrixElement *mE);
+    void removeElementFromSelection(MatrixElement *mE);
 
 signals:    
     /**
@@ -234,6 +243,10 @@ protected:
 
     /// The current selection of Events (for cut/copy/paste)
     Rosegarden::EventSelection* m_currentEventSelection;
+
+    // vector of selected MatrixElements
+    //
+    SelectedElements m_selectedElements;
 
     std::vector<MatrixStaff*> m_staffs;
 

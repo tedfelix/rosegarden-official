@@ -530,7 +530,7 @@ void MatrixView::slotMousePressed(Rosegarden::timeT time, int pitch,
     m_tool->handleMousePress(time, pitch, 0, e, el);
 
     // play a preview
-    playPreview(pitch);
+    //playPreview(pitch);
 }
 
 void MatrixView::slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent* e)
@@ -548,7 +548,7 @@ void MatrixView::slotMouseMoved(Rosegarden::timeT time, int pitch, QMouseEvent* 
         // play a preview
         if (pitch != m_previousEvPitch)
         {
-            playPreview(pitch);
+            //playPreview(pitch);
             m_previousEvPitch = pitch;
         }
     }
@@ -827,6 +827,47 @@ void MatrixView::playPreview(int pitch)
         emit keyPressed(mE);
     }
     catch(...) {;}
+}
+
+void MatrixView::setSelectedElements(const SelectedElements &eS)
+{
+    // clear 
+    m_selectedElements.erase(m_selectedElements.begin(),
+                             m_selectedElements.end());
+
+    SelectedElements::iterator it = eS.begin();
+    
+    for (; it != eS.end(); it++)
+        m_selectedElements.push_back(*it);
+}
+
+void MatrixView::addElementToSelection(MatrixElement *mE)
+{
+    SelectedElements::iterator it = m_selectedElements.begin();
+
+    for (; it !=  m_selectedElements.end(); it++)
+    {
+        // if this element already exists then don't add it again
+        if (*it == mE)
+            return;
+    }
+
+    // otherwise add it in
+    m_selectedElements.push_back(mE);
+}
+
+void MatrixView::removeElementFromSelection(MatrixElement *mE)
+{
+    SelectedElements::iterator it = m_selectedElements.begin();
+
+    for (; it !=  m_selectedElements.end(); it++)
+    {
+        if (*it == mE)
+        {
+            m_selectedElements.erase(it);
+            break;
+        }
+    }
 }
 
 

@@ -71,6 +71,8 @@ o MIDI reverb and chorus on Instrument parameters [NON-STANDARD so
 Completed for 0.2
 =================
 
+o Sweep selection on SegmentCanvas [DONE]
+
 o Event list [DONE first cut]
 
 o admin directories and INSTALL scripts should tally [DONE]

@@ -373,6 +373,9 @@ void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
 
     m_currentStaff->positionElement(m_currentElement);
     m_mParentView->update();
+
+    // preview
+    m_mParentView->playNote(el);
 }
 
 bool MatrixPainter::handleMouseMove(Rosegarden::timeT time,
@@ -397,6 +400,9 @@ bool MatrixPainter::handleMouseMove(Rosegarden::timeT time,
 	    m_currentStaff->getElementHeight() / 2;
 	m_currentElement->setLayoutY(y);
 	m_currentStaff->positionElement(m_currentElement);
+
+        // preview
+        m_mParentView->playNote(m_currentElement->event());
     }
     m_mParentView->update();
 
@@ -501,9 +507,11 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT,
     m_updateRect = true;
 
     // Play the Note if we have one
+    /*
     if (m_clickedElement && m_clickedElement->event()->
                                            isa(Rosegarden::Note::EventType))
         m_mParentView->playNote(m_clickedElement->event());
+        */
 
     //m_parentView->setCursorPosition(p.x());
 }
@@ -545,8 +553,60 @@ bool MatrixSelector::handleMouseMove(timeT, int,
     if (h > 0) ++h; else --h;
 
     m_selectionRect->setSize(w,h);
-
     m_mParentView->canvas()->update();
+
+    // get the selections
+    //
+    QCanvasItemList l = m_selectionRect->collisions(true);
+
+    // Selected element managament
+    SelectedElements oldElements = m_mParentView->getSelectedElements();
+    SelectedElements newElements;
+
+    if (l.count())
+    {
+        for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+        {
+            QCanvasItem *item = *it;
+            QCanvasMatrixRectangle *matrixRect = 0;
+
+            if ((matrixRect = dynamic_cast<QCanvasMatrixRectangle*>(item)))
+            {
+                MatrixElement *mE = &matrixRect->getMatrixElement();
+                mE->setColour(RosegardenGUIColours::SelectedElement);
+                m_mParentView->canvas()->update();
+                m_mParentView->addElementToSelection(mE);
+                newElements.push_back(mE);
+            }
+        }
+    }
+
+    // Work out what has changed and adjust the element selection
+    // accordingly.
+    //
+    bool found = false;
+
+    for(SelectedElements::iterator oIt = oldElements.begin();
+            oIt != oldElements.end(); oIt++)
+    {
+        found = false;
+        for (SelectedElements::iterator nIt = newElements.begin();
+                nIt != newElements.end(); nIt++)
+        {
+            if (*oIt == *nIt)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (found == false)
+        {
+            m_mParentView->removeElementFromSelection(*oIt);
+            (*oIt)->setColour(RosegardenGUIColours::MatrixElementBlock);
+            m_mParentView->canvas()->update();
+        }
+    }
+
     return true;
 }
 
@@ -615,9 +675,23 @@ EventSelection* MatrixSelector::getSelection()
     //
     if (!m_selectionRect->visible()) return 0;
 
+    Rosegarden::Segment& originalSegment = m_currentStaff->getSegment();
+    EventSelection* selection = new EventSelection(originalSegment);
+
+    SelectedElements elements = m_mParentView->getSelectedElements();
+    for (SelectedElements::iterator it = elements.begin();
+            it != elements.end(); it++)
+    {
+        selection->addEvent((*it)->event());
+    }
+
+    return (selection->getAddedEvents() > 0) ? selection : 0;
+
+
     //    kdDebug(KDEBUG_AREA) << "Selection x,y: " << m_selectionRect->x() << ","
     //                         << m_selectionRect->y() << "; w,h: " << m_selectionRect->width() << "," << m_selectionRect->height() << endl;
 
+    /*
     if (m_selectionRect->width()  > -3 &&
         m_selectionRect->width()  <  3 &&
         m_selectionRect->height() > -3 &&
@@ -626,7 +700,6 @@ EventSelection* MatrixSelector::getSelection()
     if (!m_currentStaff) return 0;
 
     Rosegarden::Segment& originalSegment = m_currentStaff->getSegment();
-    
     EventSelection* selection = new EventSelection(originalSegment);
 
     QCanvasItemList itemList = m_selectionRect->collisions(true);
@@ -666,6 +739,7 @@ EventSelection* MatrixSelector::getSelection()
     }
 
     return (selection->getAddedEvents() > 0) ? selection : 0;
+    */
 }
 
 //------------------------------
