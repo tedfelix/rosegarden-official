@@ -1464,7 +1464,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc):
     m_tempoValue(0.0)
 {
     QVBox *vbox = makeVBoxMainWidget();
-    QGroupBox *groupBox = new QGroupBox(1, Horizontal, i18n("Tempo"), vbox);
+    QGroupBox *groupBox = new QGroupBox(3, Horizontal, i18n("Tempo"), vbox);
     //groupBox->setAlignment(AlignHCenter);
 
     // Set tempo
@@ -1573,12 +1573,12 @@ TempoDialog::populateTempo()
 
 	timeT lastTempoTime = comp.getRawTempoChange(tempoChangeNo).first;
 	Rosegarden::RealTime lastRT = comp.getElapsedRealTime(lastTempoTime);
-	milliSeconds = "";
-	milliSeconds.sprintf("%03ld", lastRT.usec / 1000);
+	QString lastms;
+	lastms.sprintf("%03ld", lastRT.usec / 1000);
 	int lastBar = comp.getBarNumber(lastTempoTime) + 1;
 	m_tempoChangeBeforeAt->setText
-	    (i18n("    (at %1.%2 s, in bar %3)").arg(lastRT.usec)
-	     .arg(milliSeconds).arg(lastBar));
+	    (i18n("    (at %1.%2 s, in bar %3)").arg(lastRT.sec)
+	     .arg(lastms).arg(lastBar));
 
 	m_tempoChangeBefore->show();
 	m_tempoChangeBeforeAt->show();

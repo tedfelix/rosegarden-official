@@ -596,9 +596,7 @@ protected:
 
     static const PropertyName NoAbsoluteTimeProperty;
     static const PropertyName BarNumberProperty;
-
-    static const PropertyName TempoTimestampSecProperty;
-    static const PropertyName TempoTimestampUsecProperty;
+    static const PropertyName TempoTimestampProperty;
 
     static const unsigned int DefaultCountInBars;
 

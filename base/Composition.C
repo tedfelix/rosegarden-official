@@ -49,8 +49,7 @@ const PropertyName Composition::BarNumberProperty = "BarNumber";
 
 const std::string Composition::TempoEventType = "tempo";
 const PropertyName Composition::TempoProperty = "BeatsPerHour";
-const PropertyName Composition::TempoTimestampSecProperty = "TimestampSec";
-const PropertyName Composition::TempoTimestampUsecProperty = "TimestampUsec";
+const PropertyName Composition::TempoTimestampProperty = "TimestampSec";
 
 // const unsigned int Composition::DefaultCountInBars = 2;
 
@@ -851,14 +850,14 @@ RealTime
 Composition::getTempoTimestamp(const Event *e) 
 {
     RealTime res;
-    e->get<RealTimeT>(TempoTimestampSecProperty, res);
+    e->get<RealTimeT>(TempoTimestampProperty, res);
     return res;
 }
 
 void
 Composition::setTempoTimestamp(Event *e, RealTime t)
 {
-    e->setMaybe<RealTimeT>(TempoTimestampSecProperty, t);
+    e->setMaybe<RealTimeT>(TempoTimestampProperty, t);
 }
 
 void
