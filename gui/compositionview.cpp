@@ -1066,6 +1066,8 @@ void CompositionView::contentsMousePressEvent(QMouseEvent* e)
     switch (e->button()) {
     case LeftButton:
     case MidButton:
+        startAutoScroll();
+
         if (m_tool) m_tool->handleMouseButtonPress(e);
         else
             RG_DEBUG << "CompositionView::contentsMousePressEvent() :"
@@ -1086,6 +1088,8 @@ void CompositionView::contentsMousePressEvent(QMouseEvent* e)
 
 void CompositionView::contentsMouseReleaseEvent(QMouseEvent* e)
 {
+    stopAutoScroll();
+
     if (!m_tool) return;
 
     if (e->button() == LeftButton ||
@@ -1118,8 +1122,10 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
     if (!m_tool) return;
 
     int follow = m_tool->handleMouseMove(e);
+    setScrollDirectionConstraint(follow);
     
     if (follow != RosegardenCanvasView::NoFollow) {
+        doAutoScroll();
 
         if (follow & RosegardenCanvasView::FollowHorizontal)
             slotScrollHorizSmallSteps(e->pos().x());

@@ -44,6 +44,7 @@ RosegardenScrollView::RosegardenScrollView(QWidget* parent,
       m_scrollDirectionConstraint(NoFollow),
       m_autoScrolling(false)
 {
+    setDragAutoScroll(true);
     connect( &m_autoScrollTimer, SIGNAL( timeout() ),
              this, SLOT( doAutoScroll() ) );
 }
@@ -167,7 +168,7 @@ void RosegardenScrollView::doAutoScroll()
         }
     }
     
-    RG_DEBUG << "dx: " << dx << ", dy: " << dy << endl;
+//     RG_DEBUG << "dx: " << dx << ", dy: " << dy << endl;
 
     if ( (dx || dy) &&
          ((scrollDirection == m_currentScrollDirection) || (m_currentScrollDirection == None)) ) {
