@@ -28,7 +28,7 @@ Work required to fix existing stuff
 3.  leger lines
 
 4.  ties (rendering them; they already are stored and handled in
-    playback)
+    playback - qcanvasspline is here though)
 
 5.  possibly quite a bit of work needed on improving the "feel" of
     insertion, track dragging etc: they currently feel rather
