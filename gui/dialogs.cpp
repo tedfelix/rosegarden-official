@@ -3950,7 +3950,10 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
 {
     QHBox *hbox = makeHBoxMainWidget();
 
-    m_instrumentParameterBox = new InstrumentParameterBox(doc, hbox);
+    // I think having this as well probably just overcomplicates things
+    m_instrumentParameterBox = 0;
+//    m_instrumentParameterBox = new InstrumentParameterBox(doc, hbox);
+
     QVBox *vbox = new QVBox(hbox);
 
     QGroupBox *deviceBox = new QGroupBox
@@ -4082,7 +4085,8 @@ ManageMetronomeDialog::populate(int deviceIndex)
 
     // sanity
     if (count < 0 || dev == 0) {
-	m_instrumentParameterBox->useInstrument(0);
+	if (m_instrumentParameterBox)
+	    m_instrumentParameterBox->useInstrument(0);
 	return;
     }
 
@@ -4154,6 +4158,8 @@ ManageMetronomeDialog::populate(int deviceIndex)
 void
 ManageMetronomeDialog::slotInstrumentChanged(int i)
 {
+    if (!m_instrumentParameterBox) return;
+
     int deviceIndex = m_metronomeDevice->currentItem();
 
     Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
