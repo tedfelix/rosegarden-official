@@ -699,6 +699,8 @@ Segment::setRepeating(bool value)
 timeT
 Segment::getRepeatEndTime() const
 {
+    return m_composition->getEndMarker();
+    /*
     if (m_repeating && m_composition) {
 	Composition::iterator i(m_composition->findSegment(this));
 	assert(i != m_composition->end());
@@ -710,6 +712,7 @@ Segment::getRepeatEndTime() const
 	}
     }
     return getEndMarkerTime();
+    */
 }
 
 

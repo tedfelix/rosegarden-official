@@ -153,6 +153,10 @@ ControlRuler::paintEvent(QPaintEvent* e)
     }
 }
 
+
+// ----------------------------- ControlBox -------------------------------
+//
+
 ControlBox::ControlBox(QString label,
                        int width,
                        int height,
