@@ -69,6 +69,8 @@ void
 NotationSet::initialise()
 {
     if (m_baseIterator == m_nel.end() || !test(m_baseIterator)) return;
+    m_initial = m_baseIterator;
+    m_final = m_baseIterator;
     sample(m_baseIterator);
 
     NELIterator i, j;
@@ -77,9 +79,9 @@ NotationSet::initialise()
     // sampling everything as far back as the one after it
 
     for (i = j = m_baseIterator; i != m_nel.begin() && test(--j); i = j) {
-        sample(j);
+        if (sample(j)) m_initial = j;
     }
-    m_initial = i;
+//!!!    m_initial = i;
 
     j = m_baseIterator;
 
@@ -87,12 +89,12 @@ NotationSet::initialise()
     // sampling everything as far forward as the one before it
 
     for (i = j = m_baseIterator; ++j != m_nel.end() && test(j); i = j) {
-        sample(j);
+        if (sample(j)) m_final = j;
     }
-    m_final = i;
+//!!!    m_final = i;
 }
 
-void
+bool
 NotationSet::sample(const NELIterator &i)
 {
     const Quantizer &q(getQuantizer());
@@ -121,6 +123,8 @@ NotationSet::sample(const NELIterator &i)
             m_lowest = i;
         }
     }
+
+    return true;
 }
 
 NotationSet::NELIterator
@@ -210,17 +214,20 @@ Chord::~Chord()
 {
 }
 
-bool Chord::test(const NELIterator &i)
+bool
+Chord::test(const NELIterator &i)
 {
     return ((*i)->isNote() &&
 	    getQuantizer().getQuantizedAbsoluteTime((*i)->event()) == m_time &&
 	    (*i)->event()->getSubOrdering() == m_subordering);
 }
 
-void Chord::sample(const NELIterator &i)
+bool
+Chord::sample(const NELIterator &i)
 {
     NotationSet::sample(i);
     push_back(i);
+    return true;
 }
 
 int
@@ -381,12 +388,12 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
     
     if ((i = getInitialElement()) != getList().end()) {
 
-//	kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: examining group type" << endl;
+	kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: examining group type" << endl;
 
         try {
             std::string t = (*i)->event()->get<String>(BEAMED_GROUP_TYPE);
 
-//	    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: type is \"" << t << "\"" << endl;
+	    kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: type is \"" << t << "\"" << endl;
 
             if (t == GROUP_TYPE_BEAMED) {
                 m_type = Beamed;
@@ -401,7 +408,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
             kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: Warning: No GroupType in grouped element, defaulting to Beamed" << endl;
         }
     }
-/*
+
     kdDebug(KDEBUG_AREA) << "NotationGroup::NotationGroup: id is " << m_groupNo << endl;
     i = getInitialElement(); 
     while (i != getList().end()) {
@@ -412,7 +419,7 @@ NotationGroup::NotationGroup(const NotationElementList &nel,
         if (i == getFinalElement()) break;
         ++i;
     }
-*/
+
 }
 
 NotationGroup::~NotationGroup()
@@ -426,7 +433,7 @@ bool NotationGroup::test(const NELIterator &i)
             (BEAMED_GROUP_ID, n) && n == m_groupNo);
 }
 
-void
+bool
 NotationGroup::sample(const NELIterator &i)
 {
     NotationSet::sample(i);
@@ -449,6 +456,8 @@ NotationGroup::sample(const NELIterator &i)
     int h = height(i);
     if (h > 4) m_weightAbove += h - 4;
     if (h < 4) m_weightBelow += 4 - h;
+
+    return true;
 }
 
 bool
@@ -595,8 +604,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 	kdDebug(KDEBUG_AREA) << "(Event dump follows)" << endl;
 	(*getShortestElement())->event()->dump(std::cerr);
     }
-    int nh = staff.getNotePixmapFactory().getNoteBodyHeight();
-    int sl = staff.getNotePixmapFactory().getStemLength();
+    int nh = staff.getNotePixmapFactory(m_type == Grace).getNoteBodyHeight();
+    int sl = staff.getNotePixmapFactory(m_type == Grace).getStemLength();
 
     if (beam.aboveNotes) {
         beam.startY = min(min(c0 - sl, c1 - nh*2), c2 - sl);
@@ -851,7 +860,7 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 	int     endY =   startY + (int)((finalX - initialX) *
 					((double)beam.gradient / 100.0));
 
-	int nh = staff.getNotePixmapFactory().getNoteBodyHeight();
+	int nh = staff.getNotePixmapFactory(m_type == Grace).getNoteBodyHeight();
 	if (startY < initialY) {
 	    if (initialY - startY > nh * 3) startY  = initialY - nh * 3;
 	    if (  finalY -   endY < nh * 2) startY -= nh * 2 - (finalY - endY);

@@ -33,7 +33,7 @@
 #include <vector>
 
 class NotationProperties;
-
+class NotationGroup;
 
 /**
  * Horizontal notation layout
@@ -243,6 +243,7 @@ protected:
     typedef std::map<StaffType *, BarDataList> BarDataMap;
     typedef std::map<int, double> BarPositionList;
     typedef std::map<StaffType *, int> StaffIntMap;
+    typedef std::map<long, NotationGroup *> NotationGroupMap;
 
     void clearBarList(StaffType &);
 
@@ -343,6 +344,7 @@ protected:
     BarDataMap m_barData;
     StaffIntMap m_staffNameWidths;
     BarPositionList m_barPositions;
+    NotationGroupMap m_groupsExtant;
 
     double m_totalWidth;
     bool m_pageMode;

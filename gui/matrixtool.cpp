@@ -430,8 +430,10 @@ bool MatrixPainter::handleMouseMove(Rosegarden::timeT newTime,
 
     using Rosegarden::BaseProperties::PITCH;
 
+/*
     if (pitch == m_currentElement->event()->get<Rosegarden::Int>(PITCH))
     {
+*/
         //!!! Rather than using m_basicDuration as the unit for painting,
         // we should probably be using a Rosegarden::SnapGrid with an
         // appropriate snap time (SnapToUnit as a default, for example).
@@ -447,7 +449,6 @@ bool MatrixPainter::handleMouseMove(Rosegarden::timeT newTime,
 
         timeT newDuration = newTime - m_currentElement->getAbsoluteTime();
 
-
         kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseMove : new time = "
                              << newTime << ", old time = "
                              << m_currentElement->getAbsoluteTime()
@@ -462,10 +463,23 @@ bool MatrixPainter::handleMouseMove(Rosegarden::timeT newTime,
         double width = newDuration * m_currentStaff->getTimeScaleFactor();
         m_currentElement->setWidth(int(width));
     
-        m_mParentView->canvas()->update();
+	//cc:
+	if (pitch != m_currentElement->event()->get<Rosegarden::Int>(PITCH)) {
+	    m_currentElement->event()->set<Rosegarden::Int>(PITCH, pitch);
+	    int y = m_currentStaff->getLayoutYForHeight(pitch) -
+		m_currentStaff->getElementHeight() / 2;
+	    m_currentElement->setLayoutY(y);
+	    m_currentStaff->positionElement(m_currentElement);
+	    m_mParentView->update();
+	} else {
+	    m_mParentView->canvas()->update();
+	}
+
+/* This is ridiculous behaviour --cc
     }
     else
     {
+
         // destroy and recreate event on the same staff as we used above
         // but for a different pitch
         delete m_currentElement;
@@ -499,6 +513,7 @@ bool MatrixPainter::handleMouseMove(Rosegarden::timeT newTime,
         m_currentStaff->positionElement(m_currentElement);
         m_mParentView->update();
     }
+*/
 
     return true;
 }

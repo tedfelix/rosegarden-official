@@ -79,8 +79,8 @@ public:
      * too much state for its methods to be const, but you should
      * treat the returned reference as if it were const anyway.
      */
-    virtual NotePixmapFactory& getNotePixmapFactory() {
-	return *m_notePixmapFactory;
+    virtual NotePixmapFactory& getNotePixmapFactory(bool grace) {
+	return grace ? *m_graceNotePixmapFactory : *m_notePixmapFactory;
     }
 
     /**

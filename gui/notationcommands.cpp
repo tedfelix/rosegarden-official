@@ -446,6 +446,7 @@ GroupMenuGraceCommand::modifySegment()
     Segment &s(getSegment());
     timeT startTime = getStartTime();
     timeT endOfLastGraceNote = startTime;
+    int id = s.getNextId();
 
     // first turn the selected events into grace notes
 
@@ -455,6 +456,8 @@ GroupMenuGraceCommand::modifySegment()
 
 	if ((*i)->isa(Note::EventType)) {
 	    (*i)->set<Bool>(IS_GRACE_NOTE, true);
+	    (*i)->set<Int>(BEAMED_GROUP_ID, id);
+	    (*i)->set<String>(BEAMED_GROUP_TYPE, GROUP_TYPE_GRACE);
 	}
 
 	if ((*i)->getAbsoluteTime() + (*i)->getDuration() >

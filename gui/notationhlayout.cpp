@@ -1023,6 +1023,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
     StaffType &staff = *(i->first);
     NotationElementList *notes = staff.getViewElementList();
     BarDataList &barList(getBarData(staff));
+    NotationStaff &notationStaff = dynamic_cast<NotationStaff &>(staff);
 
     Key key;
     Clef clef;
@@ -1172,6 +1173,16 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
 	    if (it != to && (*it)->event()->has(BEAMED_GROUP_ID)) {
 
+		long groupId = (*it)->event()->get<Int>(BEAMED_GROUP_ID);
+		if (m_groupsExtant.find(groupId) == m_groupsExtant.end()) {
+		    m_groupsExtant[groupId] =
+			new NotationGroup(*staff.getViewElementList(), it,
+					  m_legatoQuantizer, m_properties,
+					  clef, key);
+		}
+
+/*!!!
+
 		NotationElementList::iterator scooter(it);
 		++scooter;
 
@@ -1192,10 +1203,19 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 		    group.applyBeam(notationStaff);
 		    group.applyTuplingLine(notationStaff);
 		}
+*/
 	    }
 
             x += delta;
         }
+
+	for (NotationGroupMap::iterator mi = m_groupsExtant.begin();
+	     mi != m_groupsExtant.end(); ++mi) {
+	    mi->second->applyBeam(notationStaff);
+	    mi->second->applyTuplingLine(notationStaff);
+	    delete mi->second;
+	}
+	m_groupsExtant.clear();
 
         bdi->second.layoutData.needsLayout = false;
     }

@@ -97,8 +97,11 @@ protected:
 		const NotationProperties &properties);
     void initialise();
 
+    /// Return true if this element is not definitely beyond bounds of set
     virtual bool test(const NELIterator &i) = 0;
-    virtual void sample(const NELIterator &i);
+
+    /// Return true if this element, known to test() true, is a set member
+    virtual bool sample(const NELIterator &i);
 
     const NotationElementList &getList() const { return m_nel; }
     const Rosegarden::Quantizer &getQuantizer() const { return *m_quantizer; }
@@ -155,7 +158,7 @@ public:
 
 protected:
     virtual bool test(const NELIterator&);
-    virtual void sample(const NELIterator&);
+    virtual bool sample(const NELIterator&);
 
 private:
     //--------------- Data members ---------------------------------
@@ -212,7 +215,7 @@ public:
 
 protected:
     virtual bool test(const NELIterator &i);
-    virtual void sample(const NELIterator &i);
+    virtual bool sample(const NELIterator &i);
 
 private:
     struct Beam
