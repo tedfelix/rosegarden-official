@@ -72,6 +72,15 @@ bool RG21Loader::parseClef()
     
     m_currentTrack->insert(clefEvent);
 
+    if (clefName == "trebble")
+        m_currentClef = TrebleClef;
+    else if (clefName == "tenor")
+        m_currentClef = TenorClef;
+    else if (clefName == "alto")
+        m_currentClef = AltoClef;
+    else if (clefName == "bass")
+        m_currentClef = BassClef;
+
     return true;
 }
 
@@ -221,6 +230,7 @@ void RG21Loader::closeTrackOrComposition()
         m_composition->addTrack(m_currentTrack);
         m_currentTrack = 0;
         m_currentTrackTime = 0;
+        m_currentClef = TrebleClef;
     } else {
         // ??
     }
