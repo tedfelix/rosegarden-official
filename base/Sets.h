@@ -160,6 +160,7 @@ public:
 
     virtual ~GenericChord();
 
+    virtual std::vector<Rosegarden::Mark> getMarksForChord() const;
     virtual bool contains(const Iterator &) const;
 
 protected:
@@ -415,6 +416,39 @@ GenericChord<Element, Container>::sample(const Iterator &i)
     GenericSet<Element, Container>::sample(i);
     push_back(i);
     return true;
+}
+
+
+template <class Element, class Container>
+std::vector<Mark>
+GenericChord<Element, Container>::getMarksForChord() const
+{
+    std::vector<Mark> marks;
+
+    for (unsigned int i = 0; i < size(); ++i) {
+
+	long markCount = 0;
+	const Iterator &itr((*this)[i]);
+	get__Int(getAsEvent(itr), MARK_COUNT, markCount);
+
+	if (markCount == 0) continue;
+
+	for (long j = 0; j < markCount; ++j) {
+
+	    Mark mark(Marks::NoMark);
+	    (void)get__String(getAsEvent(itr), getMarkPropertyName(j), mark);
+
+	    unsigned int k;
+	    for (k = 0; k < marks.size(); ++i) {
+		if (marks[k] == mark) break;
+	    }
+	    if (k == marks.size()) {
+		marks.push_back(mark);
+	    }
+	}
+    }
+
+    return marks;
 }
 
 
