@@ -161,7 +161,7 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
     //
     Rosegarden::Track *track = m_doc->getComposition().getTrackByIndex(trackId);
 
-    if (track == 0) return;
+    if (track == 0) return 0;
 
     // Create a horizontal box for each track
     //
