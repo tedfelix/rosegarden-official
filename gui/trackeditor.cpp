@@ -43,13 +43,15 @@ TracksEditor::TracksEditor(RosegardenGUIDoc* doc,
       m_timeStepsResolution(384)
 {
     unsigned int docNbTracks = 0,
-        docNbBars = 0;
+        docNbTimeSteps = 0;
 
     if (doc) {
 //         kdDebug(KDEBUG_AREA) << "TracksEditor() : doc " << doc << endl;
         docNbTracks = doc->getNbTracks();
-        docNbBars = doc->getNbBars();
+        docNbTimeSteps = doc->getNbTimeSteps();
     }
+
+    // TODO: do something clever with docNbTracks and docNbTimeSteps
 
     init(64, 100);
 }

@@ -109,8 +109,8 @@ public:
 //     Rosegarden::Track*         getTrack(int trackNb)        { return m_composition[trackNb]; }
 //     const Rosegarden::Track*   getTrack(int trackNb) const  { return m_composition[trackNb]; }
 
-    unsigned int getNbTracks() const { return m_composition.getNbTracks(); }
-    unsigned int getNbBars()   const { return m_composition.getNbBars(); }
+    unsigned int getNbTracks()    const { return m_composition.getNbTracks(); }
+    unsigned int getNbTimeSteps() const { return m_composition.getNbTimeSteps(); }
 
 public slots:
 

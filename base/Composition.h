@@ -54,7 +54,9 @@ public:
     bool deleteTrack(Track*);
 
     unsigned int getNbTracks() const { return m_tracks.size(); }
-    unsigned int getNbBars() const;
+
+    // returns the nb of time steps of the longest track
+    unsigned int getNbTimeSteps() const;
     void         clear();
 
     unsigned int getNbTicksPerBar() const { return m_nbTicksPerBar; }

@@ -73,33 +73,23 @@ Composition::deleteTrack(Track *p)
 }
 
 unsigned int
-Composition::getNbBars() const
+Composition::getNbTimeSteps() const
 {
-    //!!! No, not really!
-
-    unsigned int maxSize = 0,
-        maxNbBars = 0;
+    unsigned int maxNbTimeSteps = 0;
 
     for (trackcontainer::const_iterator i = m_tracks.begin();
          i != m_tracks.end(); ++i) {
 
-        if ((*i) && (*i)->size() > maxSize) {
-            maxSize = (*i)->size();
+        unsigned int trackTotalNbTimeSteps = (*i)->getNbTimeSteps() + (*i)->getStartIndex();
+        
+        if ((*i) && trackTotalNbTimeSteps > maxNbTimeSteps) {
 
-            Track::const_iterator lastEl = (*i)->end();
-            --lastEl;
-            maxNbBars = ((*lastEl)->getAbsoluteTime() +
-                         (*lastEl)->getDuration()) / getNbTicksPerBar();
+            maxNbTimeSteps = trackTotalNbTimeSteps;
 
-//             cerr << "Composition::getNbBars() : last el. abs.Time : "
-//                  << (*lastEl)->absoluteTime()
-//                  << " - nbTicksPerBar : "
-//                  << getNbTicksPerBar()
-//                  << " - maxNbBars : " << maxNbBars << endl;
         }
     }
     
-    return maxNbBars;
+    return maxNbTimeSteps;
 }
 
 void

@@ -205,8 +205,8 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
                          << "m_composition : " << &m_composition
                          << " - m_composition->getNbTracks() : "
                          << m_composition.getNbTracks()
-                         << " - m_composition->getNbBars() : "
-                         << m_composition.getNbBars() << endl;
+                         << " - m_composition->getNbTimeSteps() : "
+                         << m_composition.getNbTimeSteps() << endl;
 
     return true;
 }
