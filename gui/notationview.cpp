@@ -525,7 +525,7 @@ void NotationView::initZoomToolbar(int resolution)
                                       resolution, // init value
                                       QSlider::Horizontal, zoomToolbar);
     zoomSlider->setLineStep(2);
-
+    zoomSlider->setTickmarks(QSlider::Below);
     connect(zoomSlider, SIGNAL(valueChanged(int)),
             this,       SLOT(changeResolution(int)));
 }
