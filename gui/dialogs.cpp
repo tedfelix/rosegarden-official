@@ -1812,6 +1812,18 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     layout->addWidget(m_metaLabel, 6, 0);
     m_metaEdit = new QLineEdit(frame);
     layout->addWidget(m_metaEdit, 6, 1);
+    
+    m_sysexLoadButton = new QPushButton(i18n("Load data"), frame);
+    layout->addWidget(m_sysexLoadButton, 6, 2);
+    m_sysexSaveButton = new QPushButton(i18n("Save data"), frame);
+    layout->addWidget(m_sysexSaveButton, 4, 2);
+    
+    connect(m_metaEdit, SIGNAL(textChanged(const QString &)),
+	    SLOT(slotMetaChanged(const QString &)));
+    connect(m_sysexLoadButton, SIGNAL(released()),
+	    SLOT(slotSysexLoad()));
+    connect(m_sysexSaveButton, SIGNAL(released()),
+	    SLOT(slotSysexSave()));
 
     m_notationGroupBox = new QGroupBox
 	(1, Horizontal, i18n("Notation Properties"), vbox);
@@ -1894,6 +1906,9 @@ SimpleEventEditDialog::setupForEvent()
     m_notationAbsoluteTime = m_event.getNotationAbsoluteTime();
     m_duration = m_event.getDuration();
     m_notationDuration = m_event.getNotationDuration();
+    
+    m_sysexLoadButton->hide();
+    m_sysexSaveButton->hide();
 
     if (m_type == Rosegarden::Note::EventType)
     {
@@ -2102,13 +2117,21 @@ SimpleEventEditDialog::setupForEvent()
 
         m_velocityLabel->hide();
         m_velocitySpinBox->hide();
+        
+        m_metaLabel->show();
+        m_metaEdit->show();
+
+        m_sysexLoadButton->show();
+        m_sysexSaveButton->show();
 
         m_controllerLabel->setText(i18n("Data length:"));
+        m_metaLabel->setText(i18n("Data:"));
         try
         {
             Rosegarden::SystemExclusive sysEx(m_event);
             m_controllerLabelValue->setText(QString("%1").
                     arg(sysEx.getRawData().length()));
+            m_metaEdit->setText(strtoqstr(sysEx.getHexData()));
         }
         catch(...)
         {
@@ -2431,8 +2454,9 @@ SimpleEventEditDialog::getEvent()
 
     } else if (m_type == Rosegarden::SystemExclusive::EventType) {
 
-	    //!!! incomplete both here and in setupForEvent
-            // we should copy across raw data
+        event.set<String>(Rosegarden::SystemExclusive::DATABLOCK,
+        		  qstrtostr(m_metaEdit->text()));
+        		  
     }
 
     return event;
@@ -2444,6 +2468,9 @@ SimpleEventEditDialog::slotEventTypeChanged(int value)
 {
     m_type = qstrtostr(m_typeCombo->text(value));
     m_modified = true;
+    
+    if (m_type != m_event.getType())
+        Rosegarden::Event m_event(m_type, m_absoluteTime, m_duration);
 
     setupForEvent();
 
@@ -2612,6 +2639,42 @@ SimpleEventEditDialog::slotEditPitch()
     }
 }
 
+void 
+SimpleEventEditDialog::slotSysexLoad()
+{
+    QString path = KFileDialog::getOpenFileName(":SYSTEMEXCLUSIVE", 
+			QString(i18n("*.syx|System exclusive files (*.syx)")), 
+			this, i18n("Load System Exclusive data in File"));
+    if (path.isNull()) return;
+	
+    QFile file(path);
+    file.open(IO_ReadOnly);
+    std::string s;
+    unsigned char c;
+    while (((c = (unsigned char)file.getch()) != 0xf0)  && (file.status() == IO_Ok));
+    while ( file.status() == IO_Ok ) {
+	s += c;
+	if (c == 0xf7 ) break;
+	c = (unsigned char)file.getch();
+    }
+    file.close();
+    m_metaEdit->setText(strtoqstr(Rosegarden::SystemExclusive::toHex(s)));
+}
+
+void 
+SimpleEventEditDialog::slotSysexSave()
+{
+    QString path = KFileDialog::getSaveFileName(":SYSTEMEXCLUSIVE", 
+			QString(i18n("*.syx|System exclusive files (*.syx)")), 
+			this, i18n("Save System Exclusive data to..."));
+    if (path.isNull()) return;
+
+    QFile file(path);
+    file.open(IO_WriteOnly);
+    Rosegarden::SystemExclusive sysEx(m_event);
+    file.writeBlock(sysEx.getRawData().c_str(), sysEx.getRawData().length());
+    file.close();
+}
 
 // ----------------------------- TempoValidtor ----------------------------
 //

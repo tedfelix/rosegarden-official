@@ -404,6 +404,8 @@ public slots:
     void slotEditNotationDuration();
     void slotLockNotationChanged();
     void slotEditPitch();
+    void slotSysexLoad();
+    void slotSysexSave();
 
 protected:
     Rosegarden::Event        m_event;
@@ -434,6 +436,8 @@ protected:
     QPushButton             *m_timeEditButton;
     QPushButton             *m_durationEditButton;
     QPushButton             *m_pitchEditButton;
+    QPushButton             *m_sysexLoadButton;
+    QPushButton             *m_sysexSaveButton;
 
     QGroupBox               *m_notationGroupBox;
     QLabel                  *m_notationTimeLabel;
