@@ -55,6 +55,8 @@ MappedEvent::MappedEvent(InstrumentId id,
 	        m_data2 = MidiMaxValue;
 	    }
         }
+
+        m_type = MidiNote;
     }
     else if (e.isa(Rosegarden::PitchBend::EventType))
     {
@@ -67,6 +69,8 @@ MappedEvent::MappedEvent(InstrumentId id,
             m_data2 = e.get<Int>(Rosegarden::PitchBend::LSB);
         else
             m_data2 = 0;
+
+        m_type = MidiPitchBend;
     }
     else
     {

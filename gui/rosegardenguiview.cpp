@@ -662,7 +662,8 @@ void RosegardenGUIView::deleteRecordingSegmentItem()
 }
 
 
-// Send a MappedEvent to the track meters by Instrument id
+// Send a NoteOn or AudioLevel MappedEvent to the track meters
+// by Instrument id
 //
 void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
 {
@@ -676,6 +677,9 @@ void RosegardenGUIView::showVisuals(const Rosegarden::MappedEvent *mE)
         if (value < 0.05) return;
 
     }
+    else if (mE->getType() != Rosegarden::MappedEvent::MidiNote)
+        return;
+
     m_trackEditor->getTrackButtons()->
         slotSetMetersByInstrument(value, mE->getInstrument());
 }

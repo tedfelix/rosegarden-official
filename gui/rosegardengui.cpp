@@ -2056,8 +2056,10 @@ RosegardenGUIApp::showVisuals(Rosegarden::MappedComposition *mC)
 
     for (it = mC->begin(); it != mC->end(); ++it )
     {
-        if ((*it)->getType() == Rosegarden::MappedEvent::MidiNote ||
-            (*it)->getType() == Rosegarden::MappedEvent::MidiNoteOneShot)
+        // Only show MIDI MappedEvents on the transport - ensure
+        // that the first non-MIDI event is always "Audio"
+        //
+        if ((*it)->getType() < Rosegarden::MappedEvent::Audio)
         {
             m_transport->setMidiOutLabel(*it);
             m_view->showVisuals(*it);

@@ -612,6 +612,32 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
         m_recordSegment = new Segment();
         m_recordSegment->setTrack(m_composition.getRecordTrack());
         m_recordSegment->setStartTime(m_composition.getPosition());
+
+        // Set an appropriate segment label
+        //
+        Rosegarden::Track *track =
+            m_composition.getTrackByIndex(m_composition.getRecordTrack());
+        std::string label = "";
+
+        if (track)
+        {
+            if (track->getLabel() == "")
+            {
+                Rosegarden::Instrument *instr =
+                    m_studio.getInstrumentById(track->getInstrument());
+
+                if (instr)
+                {
+                    label = instr->getName() + std::string(" ");
+                }
+            }
+            else
+                label = track->getLabel() + std::string(" ");
+
+            label += std::string("(recorded)");
+        }
+
+        m_recordSegment->setLabel(label);
     }
 
 
@@ -642,11 +668,6 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 
             rEvent = 0;
 
-            /*
-            PitchBend *pB;
-            Controller *con;
-            */
-
             switch((*i)->getType())
             {
                 case Rosegarden::MappedEvent::MidiNote:
@@ -671,10 +692,6 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 
                    rEvent->set<Int>(PitchBend::MSB, (*i)->getData1());
                    rEvent->set<Int>(PitchBend::LSB, (*i)->getData2());
-                   /*
-                   pB = new PitchBend((*i)->getData1(), (*i)->getData2());
-                   rEvent = new Event(pB->getAsEvent(absTime));
-                   */
                    break;
 
                 case Rosegarden::MappedEvent::MidiController:
@@ -683,12 +700,6 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 
                    rEvent->set<Int>(Controller::DATA1, (*i)->getData1());
                    rEvent->set<Int>(Controller::DATA2, (*i)->getData2());
-                   /*
-                   con = new Controller(Controller::Pan,
-                                        (*i)->getData1(),
-                                        (*i)->getData2());
-                   rEvent = new Event(con->getAsEvent(absTime));
-                   */
                    break;
 
                 case Rosegarden::MappedEvent::MidiProgramChange:
@@ -1198,8 +1209,32 @@ RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime &time,
         m_recordSegment->setTrack(m_composition.getRecordTrack());
         m_recordSegment->setStartTime(m_composition.getPosition());
         m_recordSegment->setAudioStartTime(Rosegarden::RealTime(0, 0));
-        m_recordSegment->setLabel("recorded audio");
 
+        // Set an appropriate segment label
+        //
+        Rosegarden::Track *track =
+            m_composition.getTrackByIndex(m_composition.getRecordTrack());
+        std::string label = "";
+
+        if (track)
+        {
+            if (track->getLabel() == "")
+            {
+                Rosegarden::Instrument *instr =
+                    m_studio.getInstrumentById(track->getInstrument());
+
+                if (instr)
+                {
+                    label = instr->getName() + std::string(" ");
+                }
+            }
+            else
+                label = track->getLabel() + std::string(" ");
+
+            label += std::string("(recorded audio)");
+        }
+
+        
         // new audio file will have been pushed to the back of the
         // AudioFileManager queue - fetch it out and get the 
         // AudioFileId

@@ -330,7 +330,7 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 
             // Skip this event if it's a rest
             //
-            if (!(*j)->isa(Rosegarden::Note::EventRestType))
+            if ((*j)->isa(Rosegarden::Note::EventRestType))
                 continue;
 
             // Get the performance time, adjusted for repeats
@@ -361,9 +361,11 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	    // 
 	    duration = helper.getRealSoundingDuration(j);
 
-	    // No duration?  Probably in a tied series, but not as first note
+	    // No duration and we're a note?  Probably in a tied
+            // series, but not as first note
 	    //
-	    if (duration == Rosegarden::RealTime(0, 0))
+	    if (duration == Rosegarden::RealTime(0, 0) &&
+                (*j)->isa(Rosegarden::Note::EventType))
 		continue;
 
 	    // Convert to real-time
@@ -401,7 +403,6 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
 	    eventTime = eventTime + comp.getRealTimeDifference
 		(playTime, playTime + (*it)->getDelay());
 
-
 	    // Make mapped event
 	    // 
 	    Rosegarden::MappedEvent *mE =
@@ -410,15 +411,20 @@ SequenceManager::getSequencerSlice(const Rosegarden::RealTime &sliceStart,
                                             eventTime,
                                             duration);
 
-	    // Add any performance transposition
-	    // 
-	    mE->setPitch(mE->getPitch() + ((*it)->getTranspose()));
-
-            // Force velocity if the Instrument is set
+            // Do some more tweaking if we've got a note
             //
-            if (instrument->sendsVelocity())
-                mE->setVelocity(instrument->getVelocity());
+            if ((*j)->isa(Rosegarden::Note::EventType))
+            {
+	        // Add any performance transposition
+	        // 
+	        mE->setPitch(mE->getPitch() + ((*it)->getTranspose()));
 
+                // Force velocity if the Instrument is set
+                //
+                if (instrument->sendsVelocity())
+                    mE->setVelocity(instrument->getVelocity());
+            }
+ 
 	    // And stick it in the mapped composition
 	    // 
 	    m_mC.insert(mE);
