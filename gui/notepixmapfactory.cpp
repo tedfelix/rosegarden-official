@@ -128,13 +128,15 @@ NotePixmapOffsets::computePixmapSize()
     case Sharp:
     case Natural:
 
-        m_pixmapSize.rheight() += 3;
+        m_pixmapSize.rheight() += 
+            (m_accidentalHeight - m_noteBodyEmptySize.height()) / 2;
         break;
         
     case Flat:
 
         if (!m_stalkGoesUp) {
-            m_pixmapSize.rheight() += 5;
+            m_pixmapSize.rheight() += 2 +
+                (m_accidentalHeight - m_noteBodyEmptySize.height()) / 2;
         }
 
         break;
@@ -165,6 +167,9 @@ NotePixmapOffsets::computeBodyOffset()
         m_stalkPoints.second.setY(m_pixmapSize.height());
     }   
 
+    int accidentalProtrusion =
+        (m_accidentalHeight - m_noteBodyEmptySize.height()) / 2;
+
     switch (m_accidental) {
         
     case NoAccidental:
@@ -175,29 +180,32 @@ NotePixmapOffsets::computeBodyOffset()
         m_bodyOffset.setX(m_sharpWidth + 1);
 
         if (m_stalkGoesUp) {
-            m_bodyOffset.ry() -= 3;
-            m_hotSpot.ry() -= 3;
-            m_stalkPoints.first.ry() -= 3;
+            m_bodyOffset.ry() -= accidentalProtrusion;
+            m_hotSpot.ry() -= accidentalProtrusion;
+            m_stalkPoints.first.ry() -= accidentalProtrusion;
         } else {
-            m_bodyOffset.ry() += 3;
-            m_hotSpot.ry() += 3;
-            m_stalkPoints.first.ry() += 3;
+            m_bodyOffset.ry() += accidentalProtrusion;
+            m_hotSpot.ry() += accidentalProtrusion;
+            m_stalkPoints.first.ry() += accidentalProtrusion;
         }
 
-        m_accidentalOffset.setY(m_bodyOffset.y() - 3);
+        m_accidentalOffset.setY(m_bodyOffset.y() - accidentalProtrusion);
         break;
         
     case Flat:
 
+        // flat is the same height as sharp and natural, but has a
+        // different "centre"
+        
         m_bodyOffset.setX(m_flatWidth + 1);
 
         if (!m_stalkGoesUp) {
-            m_bodyOffset.ry() += 4;
-            m_hotSpot.ry() += 4;
-            m_stalkPoints.first.ry() += 4;
+            m_bodyOffset.ry() += accidentalProtrusion + 1;
+            m_hotSpot.ry() += accidentalProtrusion + 1;
+            m_stalkPoints.first.ry() += accidentalProtrusion + 1;
         }
 
-        m_accidentalOffset.setY(m_bodyOffset.y() - 5);
+        m_accidentalOffset.setY(m_bodyOffset.y() - (accidentalProtrusion + 2));
         break;
         
     case Natural:
@@ -205,23 +213,22 @@ NotePixmapOffsets::computeBodyOffset()
         m_bodyOffset.setX(m_naturalWidth + 1);
 
         if (m_stalkGoesUp) {
-            m_bodyOffset.ry() -= 3;
-            m_hotSpot.ry() -= 3;
-            m_stalkPoints.first.ry() -= 3;
+            m_bodyOffset.ry() -= accidentalProtrusion;
+            m_hotSpot.ry() -= accidentalProtrusion;
+            m_stalkPoints.first.ry() -= accidentalProtrusion;
         } else {
-            m_bodyOffset.ry() += 3;
-            m_hotSpot.ry() += 3;
-            m_stalkPoints.first.ry() += 3;
+            m_bodyOffset.ry() += accidentalProtrusion;
+            m_hotSpot.ry() += accidentalProtrusion;
+            m_stalkPoints.first.ry() += accidentalProtrusion;
         }
 
-        m_accidentalOffset.setY(m_bodyOffset.y() - 3);
+        m_accidentalOffset.setY(m_bodyOffset.y() - accidentalProtrusion);
         break;
 
     }
 
     if (m_accidental != NoAccidental)
         m_hotSpot.setX(m_bodyOffset.x());
-    
 
     if (m_stalkGoesUp)
         m_stalkPoints.first.setX(m_bodyOffset.x() + m_bodySize.width() - 2);
@@ -283,7 +290,8 @@ NotePixmapFactory::NotePixmapFactory(int resolution) :
     m_accidentalSharp(m_pixmapDirectory + "/notemod-sharp.xpm"),
     m_accidentalFlat(m_pixmapDirectory + "/notemod-flat.xpm"),
     m_accidentalNatural(m_pixmapDirectory + "/notemod-natural.xpm"),
-    m_dot(m_pixmapDirectory + "/dot.xpm")
+    m_dot(m_pixmapDirectory + "/dot.xpm"),
+    m_clefWidth(-1)
 {
     QString pixmapTailUpFileName(m_pixmapDirectory + "/tail-up-%1.xpm"),
           pixmapTailDownFileName(m_pixmapDirectory + "/tail-down-%1.xpm");
@@ -310,8 +318,9 @@ NotePixmapFactory::NotePixmapFactory(int resolution) :
     m_offsets.setTailWidth(m_tailsUp[0]->width());
     m_offsets.setStalkLength(getStalkLength());
     m_offsets.setAccidentalsWidth(m_accidentalSharp.width(),
-                                m_accidentalFlat.width(),
-                                m_accidentalNatural.width());
+                                  m_accidentalFlat.width(),
+                                  m_accidentalNatural.width());
+    m_offsets.setAccidentalHeight(m_accidentalSharp.height());
     
     m_offsets.setDotSize(m_dot.size());
 }
@@ -432,7 +441,7 @@ NotePixmapFactory::makeRestPixmap(Note::Type note, bool dotted)
 }
 
 QCanvasPixmap
-NotePixmapFactory::makeClefPixmap(string type)
+NotePixmapFactory::makeClefPixmap(string type) const
 {
     try {
 	Clef clef(type);
@@ -443,6 +452,22 @@ NotePixmapFactory::makeClefPixmap(string type)
 	kdDebug(KDEBUG_AREA) << "Bad clef name \"" << type << "\"" << endl;
 	return QCanvasPixmap(m_pixmapDirectory + "/clef-treble.xpm");
     }
+
+}
+
+int NotePixmapFactory::getClefWidth() const
+{
+    if (m_clefWidth < 0) {
+        QCanvasPixmap p(makeClefPixmap(Clef::DefaultClef.getName()));
+        m_clefWidth = p.width();
+    }
+    return m_clefWidth;
+}
+
+QCanvasPixmap
+NotePixmapFactory::makeUnknownPixmap()
+{
+    return QCanvasPixmap(m_pixmapDirectory + "/unknown.xpm");
 }
 
 QCanvasPixmap

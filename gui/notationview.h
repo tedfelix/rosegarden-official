@@ -28,6 +28,7 @@
 #include "notationhlayout.h"
 #include "notationvlayout.h"
 #include "notationcanvasview.h"
+#include "NotationTypes.h"
 
 class QCanvasItem;
 class RosegardenGUIDoc;
@@ -138,9 +139,8 @@ public slots:
     void slot64th();
 
     // Canvas actions slots
-    void insertNote(int pitch, const QPoint&);
+    void insertNote(int height, const QPoint&);
     void hoveredOverNoteChanged(const QString&);
-
 
 signals:
     void changeCurrentNote(Note::Type);
@@ -178,7 +178,8 @@ protected:
     /**
      * find the NotationElement which X is closest to eventX
      */
-    NotationElementList::iterator findClosestNote(double eventX);
+    NotationElementList::iterator findClosestNote(double eventX,
+                                                  Clef &clef, ::Key &key);
 
     /**
      * replace the rest element pointed to by the iterator

@@ -118,7 +118,6 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     m_config(kapp->config()),
     m_document(doc),
     m_currentNotePixmap(0),
-    m_hoveredOverNoteName(0),
     m_canvasView(new NotationCanvasView(new QCanvas(width() * 2,
                                                     height() * 2),
                                         this)),
@@ -379,10 +378,14 @@ NotationView::showElements(NotationElementList::iterator from,
                 bool up = true;
                 (void)((*it)->event()->get<Bool>(P_STALK_UP, up));
 
+                bool tail = true;
+                (void)((*it)->event()->get<Bool>(P_DRAW_TAIL, tail));
+
 		kdDebug(KDEBUG_AREA) << "NotationElement::showElements(): found a note of type " << note << " with accidental " << accident << endl;
                 
                 QCanvasPixmap notePixmap
-                    (npf.makeNotePixmap(note, dotted, accident, true, up));
+                    (npf.makeNotePixmap(note, dotted, accident, tail, up));
+
                 sprite = new QCanvasSimpleSprite(&notePixmap, canvas());
 
             } else if ((*it)->isRest()) {
@@ -416,7 +419,8 @@ NotationView::showElements(NotationElementList::iterator from,
                 kdDebug(KDEBUG_AREA) << "NotationElement of unrecognised type "
                                      << (*it)->event()->type()
                                      << endl;
-                continue;
+                QCanvasPixmap unknownPixmap(npf.makeUnknownPixmap());
+                sprite = new QCanvasSimpleSprite(&unknownPixmap, canvas());
             }
                 
             if (sprite) {
@@ -678,9 +682,22 @@ NotationView::slot64th()
 }
 
 void
-NotationView::insertNote(int pitch, const QPoint &eventPos)
+NotationView::insertNote(int height, const QPoint &eventPos)
 {
-    NotationElementList::iterator closestNote = findClosestNote(eventPos.x());
+    ::Key key;
+    Clef clef;
+    NotationElementList::iterator closestNote =
+        findClosestNote(eventPos.x(), clef, key);
+
+    kdDebug(KDEBUG_AREA) << "NotationView::insertNote called; height is "
+                         << height << endl;
+
+    //!!! still need to take accidental into account
+    int pitch = NotationDisplayPitch(height, NoAccidental).
+        getPerformancePitch(clef, key);
+
+    kdDebug(KDEBUG_AREA) << "NotationView::insertNote called; pitch is "
+                         << pitch << endl;
 
     if (closestNote == m_notationElements->end()) {
         return;
@@ -705,7 +722,7 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
 
     //!!! no dottedness yet
     newNotationElement->setNote(Note(m_currentSelectedNote));
-    
+
     newNotationElement->event()->set<String>("Name", "INSERTED_NOTE");
 
     NotationElementList::iterator redoLayoutStart = closestNote;
@@ -790,7 +807,7 @@ NotationView::insertNote(int pitch, const QPoint &eventPos)
 
 
 NotationElementList::iterator
-NotationView::findClosestNote(double eventX)
+NotationView::findClosestNote(double eventX, Clef &clef, ::Key &key)
 {
     static const unsigned int proximityThreshold = 10; // in pixels
 
@@ -803,6 +820,20 @@ NotationView::findClosestNote(double eventX)
     //
     for (it = m_notationElements->begin();
          it != m_notationElements->end(); ++it) {
+
+        if (!(*it)->isNote() && !(*it)->isRest()) {
+            if ((*it)->event()->isa(Clef::EventPackage, Clef::EventType)) {
+                kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found clef: type is "
+                                     << (*it)->event()->get<String>(Clef::ClefPropertyName) << endl;
+                clef = Clef(*(*it)->event());
+            } else if ((*it)->event()->isa(::Key::EventPackage,
+                                           ::Key::EventType)) {
+                kdDebug(KDEBUG_AREA) << "NotationView::findClosestNote() : found key: type is "
+                                     << (*it)->event()->get<String>(::Key::KeyPropertyName) << endl;
+                key = ::Key(*(*it)->event());
+            }
+            continue;
+        }
 
         double dist;
         

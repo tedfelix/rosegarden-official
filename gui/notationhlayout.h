@@ -46,36 +46,31 @@ public:
         NotationElementList::iterator start; // i.e. event following barline
         Event::timeT time;    // absolute time of event at "start"
         int x;                // coordinate for display
-        int width;            // theoretical width
+        int idealWidth;       // theoretical width
+        int fixedWidth;       // minimum possible width
         bool fixed;           // user-supplied new-bar or timesig event?
         bool correct;         // false if preceding bar has incorrect duration
         
         BarPosition(NotationElementList::iterator istart,
-                    Event::timeT itime, int ix, int iwidth,
+                    Event::timeT itime, int ix, int iwidth, int fwidth,
                     bool ifixed, bool icorrect) :
-            start(istart), time(itime), x(ix), width(iwidth),
-            fixed(ifixed), correct(icorrect) { }
+            start(istart), time(itime), x(ix), idealWidth(iwidth),
+            fixedWidth(fwidth), fixed(ifixed), correct(icorrect) { }
     };
 
-    typedef list<BarPosition> BarPositions;
+    typedef vector<BarPosition> BarPositions;
 
-    /// returns the bar positions computed from the last call to layout()
+    /// returns the bar positions computed from the last call to preparse()
     BarPositions& getBarPositions();
     const BarPositions& getBarPositions() const;
 
     /// resets the internal position counters of the object
     void reset();
 
-    Quantizer& quantizer() { return m_quantizer; }
-
 protected:
-
-    /*
-     * Breaks down a note which doesn't fit in a bar into shorter notes - disabled for now
-     */
-    //     const vector<unsigned int>& splitNote(unsigned int noteLen);
     void addNewBar(NotationElementList::iterator start,
-                   Event::timeT time, int x, int width, bool, bool);
+                   Event::timeT time, int x, int width, int fwidth,
+                   bool, bool);
 
     /// returns the note immediately before 'pos'
     NotationElementList::iterator getPreviousNote(NotationElementList::iterator pos);
@@ -84,17 +79,15 @@ protected:
     Quantizer m_quantizer;
     NotationElementList& m_notationElements;
 
-    unsigned int m_barWidth;
     unsigned int m_barMargin;
     unsigned int m_noteMargin;
 
-    /// maps note types (Whole, Half, etc...) to the width they should take on the bar
-    //!!! this will need to be more general as it depends on time sig &c
-    // for now we do this:
-    int getNoteWidth(Note::Type type, bool dotted = false) {
-        return (m_barWidth * Note(type, dotted).getDuration()) /
-            Note(Note::WholeNote, false).getDuration();
-    }
+    int getMinWidth(const NotePixmapFactory &, const NotationElement &) const;
+    int getComfortableGap(const NotePixmapFactory &npf, Note::Type type) const;
+    int getIdealBarWidth(int fixedWidth,
+                         NotationElementList::iterator shortest,
+                         const NotePixmapFactory &npf, int shortCount,
+                         const TimeSignature &timeSignature) const;
 
     BarPositions m_barPositions;
 };

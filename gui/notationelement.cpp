@@ -19,13 +19,13 @@
 */
 
 #include <qcanvas.h>
+#include <algorithm>
 
 #include "viewelementsmanager.h"
 #include "notationelement.h"
 #include "notationproperties.h"
 
 #ifndef NDEBUG
-
 #include "rosedebug.h"
 #endif
 
@@ -146,6 +146,79 @@ NotationElementList::findNext(const string &package,
     if (i == end()) return i;
     for (++i; i != end() && !(*i)->event()->isa(package, type); ++i);
     return i;
+}
+
+class PitchGreater {
+public:
+    bool operator()(const NotationElementList::iterator &a,
+                    const NotationElementList::iterator &b) {
+        try {
+            return ((*a)->event()->get<Int>("pitch") <
+                    (*b)->event()->get<Int>("pitch"));
+        } catch (Event::NoData) {
+            kdDebug(KDEBUG_AREA) << "Bad karma: PitchGreater failed to find one or both pitches" << endl;
+            return false;
+        }
+    }
+};
+
+vector<NotationElementList::iterator>
+NotationElementList::findSucceedingChordElements(iterator i,
+                                                 iterator &inext,
+                                                 Event::timeT &maxDuration,
+                                                 bool quantized) 
+{
+    // I think we're trying to please rather too many different people
+    // in this method
+
+    vector<NotationElementList::iterator> v;
+    Event::timeT myTime = (*i)->getAbsoluteTime();
+    long d;
+    maxDuration = 0;
+
+    // A chord can only contain notes; anything else having the same
+    // time as this is probably a bogoid of some nature.  We succeed
+    // trivially for the first element, if there is one & it's a note
+    while (i != end() && (*i)->isNote() && (*i)->getAbsoluteTime() == myTime) {
+
+        if (quantized) {
+            bool done = (*i)->event()->get<Int>(P_QUANTIZED_DURATION, d);
+            if (!done) {
+                m_quantizer.quantize((*i)->event());
+                d = (*i)->event()->get<Int>(P_QUANTIZED_DURATION);
+            }
+        } else {
+            d = (*i)->event()->getDuration();
+        }
+
+        if (d > maxDuration) maxDuration = d;
+        v.push_back(i);
+        inext = i;
+        ++i;
+    }
+
+    if (v.size() > 1) {
+        stable_sort(v.begin(), v.end(), PitchGreater());
+    }
+
+    kdDebug(KDEBUG_AREA) << "NotationElementList::findSucceedingChordElements: pitches are:" << endl;
+    for (int i = 0; i < v.size(); ++i) {
+        kdDebug(KDEBUG_AREA) << ((*v[i])->event()->get<Int>("pitch")) <<endl;
+    }
+
+    return v;
+}
+
+bool NotationElementList::hasSucceedingChordElements(iterator i)
+{
+    // find out whether findSucceedingChordElements would return >1 elt
+    int c = 0;
+    Event::timeT myTime = (*i)->getAbsoluteTime();
+    while (i != end() && (*i)->isNote() && (*i)->getAbsoluteTime() == myTime) {
+        if (++c > 1) return true;
+        ++i;
+    }
+    return false;
 }
 
 #ifndef NDEBUG

@@ -127,21 +127,22 @@ public:
                                  bool stalkGoesUp = true);
 
     QCanvasPixmap makeRestPixmap(Note::Type note, bool dotted);
-    QCanvasPixmap makeClefPixmap(string type);
+    QCanvasPixmap makeClefPixmap(string type) const;
     QCanvasPixmap makeKeyPixmap(string type, string cleftype);
+    QCanvasPixmap makeUnknownPixmap();
 
     int getNoteBodyHeight() const   { return m_noteBodyEmpty.height(); }
     int getNoteBodyWidth() const    { return m_noteBodyEmpty.width(); }
     int getLineSpacing() const      { return getNoteBodyHeight() + 1; }
     int getAccidentalWidth() const  { return m_accidentalSharp.width(); }
     int getAccidentalHeight() const { return m_accidentalSharp.height(); }
-
-// 8 * 7 / 2 - 6 = 56 / 2 - 6 = 28 - 6 = 22
-// 4 * 7 / 2 - 6 = 28 / 2 - 6 = 14 - 6 = 8
-// 8 * 11 / 4 = 88 / 4 = 22
-// 4 * 11 / 4 = 11
-
     int getStalkLength() const      { return getNoteBodyHeight() * 11/4; }
+    int getDotWidth() const         { return m_dot.width(); }
+    int getClefWidth() const;
+    int getKeyWidth(const Key &key) const {
+        return (key.getAccidentalCount() *
+                (getAccidentalWidth() - (key.isSharp()? 1 : 2)));
+    }
 
 protected:
     int m_resolution;
@@ -174,6 +175,8 @@ protected:
     vector<QPixmap*> m_tailsUp;
     vector<QPixmap*> m_tailsDown;
     vector<QPixmap*> m_rests;
+
+    mutable int m_clefWidth;
 
     static QPoint m_pointZero;
 

@@ -23,6 +23,7 @@
 
 #include <multiset.h>
 #include "Event.h"
+#include "quantizer.h"
 #include "NotationTypes.h"
 
 class QCanvasItem;
@@ -119,6 +120,30 @@ public:
 
     iterator findNext(const string &package,
                       const string &type, iterator i);
+
+    // If passed iterator points at a note, return a set of iterators
+    // pointing to it and all succeeding notes that have the same
+    // absolute time.  If this is the only one, returned vector has
+    // size 1; if this is not a note at all, it has size 0.  Results
+    // are sorted by pitch, lowest first.  Also returns duration of
+    // longest note in chord, and iterator pointing to the last
+    // element in the chord (unchanged from value passed in if there's
+    // no chord)
+
+    // Be aware that this only finds all notes of a chord if the
+    // passed item is the first note in it.
+    vector<iterator> findSucceedingChordElements(iterator i,
+                                                 iterator &inext,
+                                                 Event::timeT &maxDuration,
+                                                 bool quantized = false);
+
+    // Discovers whether this note is in a chord (at a position other
+    // than the end), i.e. whether findSucceedingChordElements would
+    // return a vector of length > 1
+    bool hasSucceedingChordElements(iterator i);
+
+private:
+    Quantizer m_quantizer;
 };
 
 #ifndef NDEBUG

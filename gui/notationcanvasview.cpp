@@ -31,7 +31,6 @@ NotationCanvasView::NotationCanvasView(QCanvas *viewing, QWidget *parent,
                                        const char *name, WFlags f)
     : QCanvasView(viewing, parent, name, f),
       m_currentHighlightedLine(0),
-      //!!! resolution from staff! or get the NPF to make arrow, or whatever
       m_lastYPosNearStaff(0)
 {
     viewport()->setMouseTracking(true);
@@ -152,13 +151,13 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 void
 NotationCanvasView::insertNote(const StaffLine *line, const QPoint &pos)
 {
-    int pitch = getPitchForLine(line);
+//???    int pitch = getPitchForLine(line);
 
-    kdDebug(KDEBUG_AREA) << "NotationCanvasView::insertNote() : insertNote at height "
-                         << line->getHeight() << " ( = pitch "
-			 << pitch << " )" << endl;
-    //!!! TODO -- get the right pitch
-    emit noteInserted(pitch, pos);
+    int h = line->getHeight();
+
+    kdDebug(KDEBUG_AREA) << "NotationCanvasView::insertNote() : insertNote at height " << h << endl;
+
+    emit noteInserted(h, pos);
 }
 
 bool
@@ -172,7 +171,7 @@ NotationCanvasView::posIsTooFarFromStaff(const QPoint &pos)
         (m_lastYPosNearStaff - pos.y()) > 10;
     
 }
-
+/*!
 int
 NotationCanvasView::getPitchForLine(const StaffLine *line)
 {
@@ -184,7 +183,9 @@ NotationCanvasView::getPitchForLine(const StaffLine *line)
 
     return pitch;
 }
+*/
 
+//??? ew... can't be doing this here can we? don't have the right info
 QString
 NotationCanvasView::getNoteNameForLine(const StaffLine *line)
 {
