@@ -46,10 +46,13 @@ RosegardenSequencerApp::RosegardenSequencerApp():
     m_fetchLatency(0, 30000),      // default value
     m_playLatency(0, 50000),       // default value
     m_readAhead(0, 40000),         // default value
+    m_audioPlayLatency(0, 0),
+    m_audioRecordLatency(0, 0),
     m_loopStart(0, 0),
     m_loopEnd(0, 0),
     m_sendAlive(true),
-    m_guiCount(0)       // how many GUIs have we known?
+    m_guiCount(0),       // how many GUIs have we known?
+    m_suspended(false)
 {
     // Without DCOP we are nothing
     QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
@@ -587,7 +590,12 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
     //
     m_transportStatus = localRecordMode;
 
-    return play(time, playLatency, fetchLatency, readAhead);
+    // Work out the record latency
+    Rosegarden::RealTime recordLatency = playLatency;
+    if (m_audioRecordLatency > recordLatency)
+        recordLatency = m_audioRecordLatency;
+
+    return play(time, recordLatency, fetchLatency, readAhead);
 }
 
 // We receive a starting time from the GUI which we use as the
@@ -625,6 +633,11 @@ RosegardenSequencerApp::play(const Rosegarden::RealTime &time,
     m_playLatency = playLatency;
     m_fetchLatency = fetchLatency;
     m_readAhead = readAhead;
+
+    // Ensure that we have time for audio synchronisation
+    //
+    if (m_audioPlayLatency > m_playLatency)
+        m_playLatency = m_audioPlayLatency;
 
     // report
     //

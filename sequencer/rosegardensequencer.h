@@ -232,6 +232,17 @@ public:
     // the call itself
     void sequencerAlive();
 
+    // Audio latencies
+    //
+    Rosegarden::RealTime getAudioPlaybackLatency()
+        { return m_audioPlayLatency; }
+    void setAudioPlaybackLatency(const Rosegarden::RealTime &latency)
+        { m_audioPlayLatency = latency; }
+
+    Rosegarden::RealTime getAudioRecordLatency()
+        { return m_audioRecordLatency; }
+    void setAudioRecordLatency(const Rosegarden::RealTime &latency)
+        { m_audioRecordLatency = latency; }
 
 private:
 
@@ -255,23 +266,31 @@ private:
     Rosegarden::RealTime m_songPosition;
     Rosegarden::RealTime m_lastFetchSongPosition;
 
-    // Latency - m_fetchLatency - when we should fetch new events and
-    //                            spool them onto aRTS
+    // Latency - m_fetchLatency - how long before we run out of events that
+    //                            we go and fetch some more
     //
     //         - m_playLatency  - how long we add to all events to make
     //                            sure they play in a synchonised manner
-    //                            (i.e. give them a chance to get into aRTS)
     //
-    //         - m_readAhead    - how many events we read in one go
+    //         - m_readAhead    - how large a slice of events we read at a time
     //                            
     //
     // We can throttle these values internally at first, make them
-    // user defineable or even auto-throttle them.
+    // user defineable or even auto-throttle them possibly.
     //
     //
     Rosegarden::RealTime m_fetchLatency;
     Rosegarden::RealTime m_playLatency;
     Rosegarden::RealTime m_readAhead;
+
+    // Two more latencies for audio play and record - when we 
+    // use an unsynchronised audio and MIDI system such as
+    // ALSA and JACK we need to use these additional values
+    // to help time-keeping.
+    //
+    Rosegarden::RealTime m_audioPlayLatency;
+    Rosegarden::RealTime m_audioRecordLatency;
+
 
     Rosegarden::RealTime m_loopStart;
     Rosegarden::RealTime m_loopEnd;

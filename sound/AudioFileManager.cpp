@@ -582,7 +582,7 @@ std::vector<float>
 AudioFileManager::getPreview(unsigned int id,
                              const RealTime &startIndex,
                              const RealTime &endIndex,
-                             int resolution)
+                             int width)
 {
     AudioFile *audioFile = getAudioFile(id);
     
@@ -592,7 +592,7 @@ AudioFileManager::getPreview(unsigned int id,
     return m_peakManager.getPreview(audioFile,
                                     startIndex,
                                     endIndex,
-                                    resolution);
+                                    width);
 }
 
 void

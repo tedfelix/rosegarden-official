@@ -132,6 +132,12 @@ PeakFileManager::hasValidPeaks(AudioFile *audioFile)
         // Check external peak file
         PeakFile *peakFile = getPeakFile(audioFile);
 
+        if (peakFile == 0)
+        {
+            std::cerr << "PeakFileManager::hasValidPeaks - no peak file found"
+                      << std::endl;
+            return false;
+        }
         // If it doesn't open and parse correctly
         if (peakFile->open() == false)
             rV = false;
@@ -305,7 +311,7 @@ std::vector<float>
 PeakFileManager::getPreview(AudioFile *audioFile,
                             const RealTime &startIndex,
                             const RealTime &endIndex,
-                            int resolution)
+                            int width)
 {
     std::vector<float> rV;
 
@@ -319,7 +325,7 @@ PeakFileManager::getPreview(AudioFile *audioFile,
             peakFile->open();
             rV = peakFile->getPreview(startIndex,
                                       endIndex,
-                                      resolution);
+                                      width);
         }
         catch(std::string e)
         {
