@@ -90,7 +90,7 @@
         <Action name="erase"/>
         <Action name="resize"/>
         <Action name="split"/>
-        <Action name="join"/>
+        <!-- <Action name="join"/> -->
   </Menu>
   <Menu  name="settings">
          <Action name="show_tracks_toolbar"        append="show_merge" />
@@ -123,7 +123,7 @@
         <Action name="draw"/>
         <Action name="erase"/>
         <Action name="split"/>
-        <Action name="join"/>
+        <!-- <Action name="join"/> -->
 </ToolBar>
 
 <ToolBar name="Editors Toolbar">
@@ -171,7 +171,7 @@
    <Action name="erase"/>
    <Action name="resize"/>
    <Action name="split"/>
-   <Action name="join"/>
+   <!-- <Action name="join"/> -->
 </Menu>
 
 <!--     Application States           -->
@@ -200,7 +200,7 @@
                 <Action name="erase"/>
                 <Action name="resize"/>
                 <Action name="split"/>
-                <Action name="join"/>
+                <!-- <Action name="join"/> -->
                 <Action name="file_print"/>
                 <Action name="file_print_preview"/>
         </enable>
