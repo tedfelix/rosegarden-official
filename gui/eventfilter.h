@@ -47,6 +47,8 @@ class QSpinBox;
 
 class RosegardenPitchChooser;
 
+#define COMPILE_DEPRECATED  // phasing out useless features gradually
+
 /**
  * Creates a dialog box to allow the user to dial up various selection
  * criteria used for removing events from a selection.  It is up to the caller
@@ -84,8 +86,10 @@ public:
     filterRange getWheel();
 
     bool filterNote() 	    { return m_noteCheckBox->isChecked();       }
+#ifdef COMPILE_DEPRECATED
     bool filterController() { return m_controllerCheckBox->isChecked(); }
     bool filterWheel()      { return m_wheelCheckBox->isChecked();      }
+#endif
     
     // returns TRUE if the property value falls with in the filterRange 
     bool eventInRange(filterRange foo, long property) {
@@ -122,6 +126,7 @@ protected:
     bool velocityIsInclusive() { return (m_noteVelocityIncludeComboBox->currentItem() == 0); }
     bool durationIsInclusive() { return (m_noteDurationIncludeComboBox->currentItem() == 0); }
 
+#ifdef COMPILE_DEPRECATED    
     bool controllerNumberIsInclusive() {
 	                         return (m_controllerNumberIncludeComboBox->currentItem()
 	    			                                                      == 0); }
@@ -131,6 +136,7 @@ protected:
 	                                                                              == 0); }
 
     bool wheelIsInclusive()    { return (m_wheelAmountIncludeComboBox->currentItem()  == 0); }
+#endif
     
 
     //---------[ data members ]-----------------------------
@@ -138,34 +144,37 @@ protected:
     static const char * const ConfigGroup;
     
     QGridLayout* layout;
-    
+
+#ifdef COMPILE_DEPRECATED    
     QCheckBox* 	 m_controllerCheckBox;
-    QCheckBox*	 m_noteCheckBox;
     QCheckBox*	 m_wheelCheckBox;
     QComboBox*   m_controllerNumberIncludeComboBox;
     QComboBox* 	 m_controllerValueIncludeComboBox;
+    QComboBox* 	 m_wheelAmountIncludeComboBox;
+    QSpinBox*  	 m_controllerNumberFromSpinBox;
+    QSpinBox* 	 m_controllerNumberToSpinBox;
+    QSpinBox* 	 m_controllerValueFromSpinBox;
+    QSpinBox* 	 m_controllerValueToSpinBox;
+    QSpinBox* 	 m_wheelAmountFromSpinBox;
+    QSpinBox* 	 m_wheelAmountToSpinBox;
+#endif
+    
+    QCheckBox*	 m_noteCheckBox;
     QComboBox*	 m_noteDurationFromComboBox;
     QComboBox* 	 m_noteDurationIncludeComboBox;
     QComboBox* 	 m_noteDurationToComboBox;
     QComboBox*	 m_notePitchIncludeComboBox;
     QComboBox* 	 m_noteVelocityIncludeComboBox;
-    QComboBox* 	 m_wheelAmountIncludeComboBox;
     
     QPushButton* m_pitchFromChooserButton;
     QPushButton* m_pitchToChooserButton;
     QPushButton* m_buttonAll;
     QPushButton* m_buttonNone;
     
-    QSpinBox*  	 m_controllerNumberFromSpinBox;
-    QSpinBox* 	 m_controllerNumberToSpinBox;
-    QSpinBox* 	 m_controllerValueFromSpinBox;
-    QSpinBox* 	 m_controllerValueToSpinBox;
     QSpinBox* 	 m_pitchFromSpinBox;
     QSpinBox* 	 m_pitchToSpinBox;
     QSpinBox* 	 m_velocityFromSpinBox;
     QSpinBox* 	 m_velocityToSpinBox;
-    QSpinBox* 	 m_wheelAmountFromSpinBox;
-    QSpinBox* 	 m_wheelAmountToSpinBox;
 
     std::vector<Rosegarden::timeT> m_standardQuantizations;
 
@@ -182,8 +191,10 @@ protected slots:
 
     // hooked up to disable their associated widgets
     void slotNoteCheckBoxToggle(int);
+#ifdef COMPILE_DEPRECATED
     void slotControllerCheckBoxToggle(int);
     void slotWheelCheckBoxToggle(int);
+#endif
     
     // update note name text display and ensure From <= To
     void slotPitchFromChanged(int pitch);
@@ -194,12 +205,15 @@ protected slots:
     void slotVelocityToChanged(int velocity);
     void slotDurationFromChanged(int index);
     void slotDurationToChanged(int index);
+
+#ifdef COMPILE_DEPRECATED
     void slotControllerFromChanged(int controller);
     void slotControllerToChanged(int controller);
     void slotValueFromChanged(int value);
     void slotValueToChanged(int value);
     void slotWheelFromChanged(int value);
     void slotWheelToChanged(int value);
+#endif
 
     // create a pitch chooser widget sub-dialog to show pitch on staff
     void slotPitchFromChooser();

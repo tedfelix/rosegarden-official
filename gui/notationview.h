@@ -688,6 +688,9 @@ public slots:
     // Update notation view based on track/staff name change
     void slotUpdateStaffName();
 
+    // Open tempo editor
+    void slotEditTempos(Rosegarden::timeT t);
+
 signals:
     /**
      * Emitted when the note selected in the palette changes

@@ -74,6 +74,7 @@
 #include "rosegardenguiview.h"
 #include "trackeditor.h"
 #include "trackbuttons.h"
+//#include "tempoview.h"
 
 //!!! TESTING:
 #include "qcanvassimplesprite.h"
@@ -335,6 +336,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	(m_hlayout, doc, m_leftGutter, 20, false, getCentralWidget());
     addRuler(m_tempoRuler);
     m_tempoRuler->hide();
+    // make tempo ruler double click editable
+    connect(m_tempoRuler,
+	    SIGNAL(doubleClicked(Rosegarden::timeT)),
+	    SLOT(slotEditTempos(Rosegarden::timeT)));
 
     m_rawNoteRuler = new RawNoteRuler
 	(m_hlayout, segments[0], m_leftGutter, 20, getCentralWidget());

@@ -93,5 +93,5 @@ private:
     QFontMetrics m_fontMetrics;
 };
 
-#endif // _LOOPRULER_H_
+#endif // _TEMPORULER_H_
 

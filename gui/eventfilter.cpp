@@ -48,6 +48,12 @@
 #include "rosedebug.h"          // debug stream
 
 
+#define COMPILE_DEPRECATED      // will compile the useless 1.0 features
+                                // ifdeffing this stuff out will ease the
+				// transition into oblivion as I expunge
+				// these useless ideas and then implement new,
+				// useful ones beyond 1.0
+
 using Rosegarden::Note;
 
 const char* const EventFilterDialog::ConfigGroup = "EventFilter Dialog";
@@ -194,7 +200,9 @@ EventFilterDialog::initDialog()
 
     populateDurationCombos();
 
-
+#ifdef COMPILE_DEPRECATED
+// DEPRECATED
+ 
     //----------[ Controller Filter Widgets ]---------------------
 
     // Frame
@@ -330,6 +338,7 @@ EventFilterDialog::initDialog()
     slotControllerCheckBoxToggle(0);
     slotWheelCheckBoxToggle(0);
 
+#endif // COMPILE_DEPRECATED
 
     //---------[ Buttons ]--------------------------------------
     QFrame* privateLayoutWidget = new QFrame(mainWidget);
@@ -359,6 +368,10 @@ EventFilterDialog::initDialog()
 // NOTE: these combos are calculated, rather than fixed, but the code that
 // picks a duration by index is dependant upon each index having a previously
 // expected value.  This could break easily at some point.
+//
+// NOTE: per the outstanding bug on this issue, it is impossible to select
+// dotted durations with this code.  In order for that to be possible, it will
+// probably be necessary to rework this code significantly.  (Post 1.0)
 void
 EventFilterDialog::populateDurationCombos()
 {
@@ -380,9 +393,9 @@ EventFilterDialog::populateDurationCombos()
 
     cfg->setGroup(EventFilterDialog::ConfigGroup);
     m_noteDurationFromComboBox->setCurrentItem(
-	    cfg->readUnsignedNumEntry("durationfrom", (m_noteDurationToComboBox->count() - 1)));
+	    cfg->readUnsignedNumEntry("durationfrom", 0));
     m_noteDurationToComboBox->setCurrentItem(
-	    cfg->readUnsignedNumEntry("durationto", 0));
+	    cfg->readUnsignedNumEntry("durationto", (m_noteDurationToComboBox->count() - 1)));
 }
 
 void
@@ -394,7 +407,7 @@ EventFilterDialog::slotToggleAll()
     m_velocityFromSpinBox        ->setValue(0);
     m_velocityToSpinBox          ->setValue(127);
     m_noteDurationFromComboBox   ->setCurrentItem(11); // hard coded; should be variable
-    m_noteDurationToComboBox     ->setCurrentItem(0);
+    m_noteDurationToComboBox     ->setCurrentItem(0);  // 0 = unlimited; 11 = 0
     m_controllerNumberFromSpinBox->setValue(0);
     m_controllerNumberToSpinBox  ->setValue(127);
     m_controllerValueFromSpinBox ->setValue(0);
@@ -441,6 +454,7 @@ EventFilterDialog::slotOk()
     cfg->writeEntry("durationto",      m_noteDurationToComboBox->currentItem());
     
 
+#ifdef COMPILE_DEPRECATED
     cfg->writeEntry("controllercheckbox", m_controllerCheckBox->isChecked());
     
     cfg->writeEntry("controllerinclude", m_controllerNumberIncludeComboBox->currentItem());
@@ -457,6 +471,7 @@ EventFilterDialog::slotOk()
     cfg->writeEntry("wheelinclude", m_wheelAmountIncludeComboBox->currentItem());
     cfg->writeEntry("wheelfrom",    m_wheelAmountFromSpinBox->value());
     cfg->writeEntry("wheelto",      m_wheelAmountToSpinBox->value());
+#endif // DEPRECATED
     
     accept();
 }
@@ -476,6 +491,7 @@ EventFilterDialog::slotNoteCheckBoxToggle(int)
     m_noteDurationFromComboBox   ->setEnabled(state);
 }
 
+#ifdef COMPILE_DEPRECATED
 void
 EventFilterDialog::slotControllerCheckBoxToggle(int)
 {
@@ -496,6 +512,7 @@ EventFilterDialog::slotWheelCheckBoxToggle(int)
     m_wheelAmountToSpinBox      ->setEnabled(state);
     m_wheelAmountFromSpinBox    ->setEnabled(state);
 }
+#endif //DEPRECATED
 
 void
 EventFilterDialog::slotPitchFromChanged(int pitch)
@@ -546,6 +563,7 @@ EventFilterDialog::slotControllerFromChanged(int controller)
 	m_controllerNumberToSpinBox->setValue(controller);
 }
 
+#ifdef COMPILE_DEPRECATED
 void
 EventFilterDialog::slotControllerToChanged(int controller)
 {
@@ -580,6 +598,7 @@ EventFilterDialog::slotWheelToChanged(int value)
     if (value < m_wheelAmountFromSpinBox->value())
 	m_wheelAmountFromSpinBox->setValue(value);
 }
+#endif // DEPRECATED
 
 void
 EventFilterDialog::slotPitchFromChooser()
@@ -681,6 +700,8 @@ EventFilterDialog::getDuration()
     return foo;
 }
 
+#ifdef COMPILE_DEPRECATED
+// disappearing after 1.0
 EventFilterDialog::filterRange
 EventFilterDialog::getController()
 {
@@ -690,6 +711,7 @@ EventFilterDialog::getController()
     if (!controllerNumberIsInclusive()) invert(foo);
     return foo;
 }
+
 
 EventFilterDialog::filterRange
 EventFilterDialog::getValue()
@@ -710,13 +732,18 @@ EventFilterDialog::getWheel()
     if (!wheelIsInclusive()) invert(foo);
     return foo;
 }
+#endif // DEPRECATED
 
 bool
 EventFilterDialog::keepEvent(Rosegarden::Event* const &e)
 {
-    if ((*e).isa(Rosegarden::Note::EventType)      ||
-	(*e).isa(Rosegarden::Controller::EventType)||
-	(*e).isa(Rosegarden::PitchBend::EventType))
+    if ((*e).isa(Rosegarden::Note::EventType)      
+#ifdef COMPILE_DEPRECATED
+	||
+        (*e).isa(Rosegarden::Controller::EventType)||
+	(*e).isa(Rosegarden::PitchBend::EventType)
+#endif
+	)
     {
 	long property = 0;
 
@@ -737,6 +764,7 @@ EventFilterDialog::keepEvent(Rosegarden::Event* const &e)
 	    if (!EventFilterDialog::eventInRange(getDuration(), property)) return false; 
 	    property = 0; 
 	} 
+#ifdef COMPILE_DEPRECATED
 	else if ((*e).isa(Rosegarden::Controller::EventType) && filterController())
 	{
 	    // controller number
@@ -765,6 +793,7 @@ EventFilterDialog::keepEvent(Rosegarden::Event* const &e)
 	    
 	    if (!EventFilterDialog::eventInRange(getWheel(), property)) return false;
 	}
+#endif	
 	return true;
     }
     return false;

@@ -57,6 +57,7 @@
 #include "notefont.h"
 #include "eventfilter.h"
 #include "qcanvassimplesprite.h"
+#include "tempoview.h"
 
 #include "ktmpstatusmsg.h"
 
@@ -2790,3 +2791,20 @@ NotationView::slotRenderSomething()
     updateThumbnails(true);
 }
 
+void
+NotationView::slotEditTempos(Rosegarden::timeT t)
+{
+    TempoView *tempoView = new TempoView(getDocument(), this, t);
+
+    connect(tempoView,
+            SIGNAL(changeTempo(Rosegarden::timeT,
+                               double, TempoDialog::TempoDialogAction)),
+	    RosegardenGUIApp::self(),
+            SLOT(slotChangeTempo(Rosegarden::timeT,
+                                 double, TempoDialog::TempoDialogAction)));
+
+    connect(tempoView, SIGNAL(saveFile()),
+	    RosegardenGUIApp::self(), SLOT(slotFileSave()));
+
+    tempoView->show();
+}

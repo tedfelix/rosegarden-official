@@ -82,6 +82,7 @@
 #include "Clipboard.h"
 #include "eventfilter.h"
 #include "MidiTypes.h"
+#include "tempoview.h"
 
 #include "rosedebug.h"
 
@@ -372,6 +373,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     m_tempoRuler = new TempoRuler
 	(&m_hlayout, doc, 0, 20, false, getCentralWidget());
     addRuler(m_tempoRuler);
+
+    // make tempo ruler double click editable
+    connect(m_tempoRuler,
+	    SIGNAL(doubleClicked(Rosegarden::timeT)),
+	    SLOT(slotEditTempos(Rosegarden::timeT)));
 
     // Scroll view to centre middle-C and warp to pointer position
     //
@@ -2383,6 +2389,24 @@ void
 MatrixView::slotToggleTempoRuler()
 {
     toggleWidget(m_tempoRuler, "show_tempo_ruler");
+}
+
+void
+MatrixView::slotEditTempos(Rosegarden::timeT t)
+{
+    TempoView *tempoView = new TempoView(getDocument(), this, t);
+
+    connect(tempoView,
+            SIGNAL(changeTempo(Rosegarden::timeT,
+                               double, TempoDialog::TempoDialogAction)),
+	    RosegardenGUIApp::self(),
+            SLOT(slotChangeTempo(Rosegarden::timeT,
+                                 double, TempoDialog::TempoDialogAction)));
+
+    connect(tempoView, SIGNAL(saveFile()),
+	    RosegardenGUIApp::self(), SLOT(slotFileSave()));
+
+    tempoView->show();
 }
 
 void
