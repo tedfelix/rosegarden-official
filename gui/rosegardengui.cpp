@@ -428,6 +428,12 @@ void RosegardenGUIApp::initZoomToolbar()
     }
 
     m_zoomSlider = new ZoomSlider<double>
+	//!!! When passed a default value (like -1 here) that doesn't
+	// exist in the list of values, the ZoomSlider _should_ default
+	// to the middle value.  This obviously isn't working quite
+	// right as we end up with a slider that you can slide one
+	// notch to the right without affecting the value -- but we
+	// need to look at this in ZoomSlider, not just here
 	(zoomSizes, -1, //!!!duration44 / defaultBarWidth44,
          QSlider::Horizontal, zoomToolbar);
     m_zoomSlider->setTracking(true);
