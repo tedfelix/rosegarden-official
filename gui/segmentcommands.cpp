@@ -32,6 +32,39 @@ using Rosegarden::timeT;
 using Rosegarden::TrackId;
 
 
+SegmentCommand::SegmentCommand(QString name, const std::vector<Rosegarden::Segment*>& segments)
+    : XKCommand(name)
+{
+    m_segments.resize(segments.size());
+    std::copy(segments.begin(), segments.end(), m_segments.begin());
+}
+
+// --------- Set Repeat on Segments --------
+//
+SegmentCommandRepeat::SegmentCommandRepeat(const std::vector<Rosegarden::Segment*>& segments,
+                                           bool repeat)
+    : SegmentCommand(i18n("Repeat Segments"), segments),
+      m_repeatState(repeat)
+{
+}
+
+
+void SegmentCommandRepeat::execute()
+{
+    segmentlist::iterator it;
+
+    for (it = m_segments.begin(); it != m_segments.end(); it++)
+        (*it)->setRepeating(m_repeatState);
+}
+
+void SegmentCommandRepeat::unexecute()
+{
+    segmentlist::iterator it;
+
+    for (it = m_segments.begin(); it != m_segments.end(); it++)
+        (*it)->setRepeating(!m_repeatState);
+}
+
 // --------- Erase Segment --------
 //
 SegmentEraseCommand::SegmentEraseCommand(Segment *segment) :

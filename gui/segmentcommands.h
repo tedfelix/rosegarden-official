@@ -35,6 +35,31 @@ typedef KNamedCommand XKCommand;
 typedef KCommand XKCommand;
 #endif
 
+class SegmentCommand : public XKCommand
+{
+public:
+    SegmentCommand(QString name, const std::vector<Rosegarden::Segment*>&);
+
+    typedef std::vector<Rosegarden::Segment*> segmentlist;
+    
+protected:
+    segmentlist m_segments;
+};
+
+class SegmentCommandRepeat : public SegmentCommand
+{
+public:
+    SegmentCommandRepeat(const std::vector<Rosegarden::Segment*>&,
+                         bool repeat);
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    bool m_repeatState;
+};
+
+
 class SegmentEraseCommand : public XKCommand
 {
 public:

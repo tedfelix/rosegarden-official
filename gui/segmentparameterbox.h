@@ -73,7 +73,6 @@ public:
     MultiViewCommandHistory* getCommandHistory();
     void addCommandToHistory(KCommand *command);
 
-
 public slots:
     void slotRepeatPressed();
     void slotQuantizeSelected(int);
@@ -83,6 +82,8 @@ public slots:
 
     void slotDelaySelected(int);
     void slotDelayTextChanged(const QString &);
+
+    virtual void update();
 
 private:
     void initBox();

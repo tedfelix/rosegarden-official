@@ -24,6 +24,7 @@
 #include <qlayout.h>
 
 #include <klocale.h>
+#include <kcommand.h>
 
 #include "Segment.h"
 #include "Quantizer.h"
@@ -47,6 +48,9 @@ SegmentParameterBox::SegmentParameterBox(RosegardenGUIView *view,
 
 {
     initBox();
+
+    connect(getCommandHistory(), SIGNAL(commandExecuted()),
+	    this, SLOT(update()));
 }
 
 
@@ -201,15 +205,6 @@ SegmentParameterBox::initBox()
     // set delay blank initially
     m_delayValue->setCurrentItem(-1);
 
-//     // set widths
-//     int comboWidth = 0;
-//     if (m_quantizeValue->width() > comboWidth) comboWidth = m_quantizeValue->width();
-//     if (m_transposeValue->width() > comboWidth) comboWidth = m_transposeValue->width();
-//     if (m_delayValue->width() > comboWidth) comboWidth = m_delayValue->width();
-
-//     m_quantizeValue->setMinimumWidth(comboWidth);
-//     m_transposeValue->setMinimumWidth(comboWidth);
-//     m_delayValue->setMinimumWidth(comboWidth);
 }
 
 void
@@ -224,10 +219,17 @@ void
 SegmentParameterBox::useSegments(const Rosegarden::SegmentSelection &segments)
 {
     m_segments.clear();
-    for (Rosegarden::SegmentSelection::const_iterator i = segments.begin();
-	 i != segments.end(); ++i) {
-	m_segments.push_back(*i);
-    }
+
+    m_segments.resize(segments.size());
+    std::copy(segments.begin(), segments.end(), m_segments.begin());
+
+    populateBoxFromSegments();
+}
+
+void SegmentParameterBox::update()
+{
+    kdDebug(KDEBUG_AREA) << "SegmentParameterBox::update()\n";
+
     populateBoxFromSegments();
 }
 
@@ -429,10 +431,9 @@ SegmentParameterBox::populateBoxFromSegments()
     }
 }
 
-void
-SegmentParameterBox::slotRepeatPressed()
+void SegmentParameterBox::slotRepeatPressed()
 {
-    bool state;
+    bool state = false;
 
     switch(m_repeatValue->state())
     {
@@ -450,10 +451,12 @@ SegmentParameterBox::slotRepeatPressed()
     // update the check box and all current Segments
     m_repeatValue->setChecked(state);
 
-    std::vector<Rosegarden::Segment*>::iterator it;
+    addCommandToHistory(new SegmentCommandRepeat(m_segments, state));
 
-    for (it = m_segments.begin(); it != m_segments.end(); it++)
-        (*it)->setRepeating(state);
+//     std::vector<Rosegarden::Segment*>::iterator it;
+
+//     for (it = m_segments.begin(); it != m_segments.end(); it++)
+//         (*it)->setRepeating(state);
 }
 
 // Set the quantize level for the selected Segments
