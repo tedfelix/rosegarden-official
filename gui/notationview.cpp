@@ -36,6 +36,7 @@
 #include <kapp.h>
 
 #include "eventselection.h"
+#include "rosegardenguiview.h"
 #include "rosegardenguidoc.h"
 #include "notationview.h"
 #include "notationelement.h"
@@ -85,10 +86,10 @@ using namespace Rosegarden::BaseProperties;
 
 NotationView::NotationViewSet NotationView::m_viewsExtant;
 
-NotationView::NotationView(RosegardenGUIDoc* doc,
+NotationView::NotationView(RosegardenGUIView* rgView,
                            vector<Segment *> segments,
                            QWidget *parent) :
-    EditView(doc, segments, parent),
+    EditView(rgView->getDocument(), segments, parent),
     m_currentEventSelection(0),
     m_currentNotePixmap(0),
     m_hoveredOverNoteName(0),
@@ -155,6 +156,14 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
         (m_canvasView, SIGNAL(hoveredOverAbsoluteTimeChanged(unsigned int)),
          this,         SLOT  (hoveredOverAbsoluteTimeChanged(unsigned int)));
 
+    QObject::connect
+	(rgView, SIGNAL(setPositionPointer(int)),
+	 this,   SLOT  (setPositionPointer(int)));
+
+    QObject::connect
+	(rgView, SIGNAL(segmentModified(Rosegarden::Segment *, timeT, timeT)),
+	 this,   SLOT  (segmentModified(Rosegarden::Segment *, timeT, timeT)));
+
     //
     // Window appearance (options, title...)
     //
@@ -162,14 +171,15 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
 
     if (segments.size() == 1) {
         setCaption(QString("%1 - Segment Track #%2")
-                   .arg(doc->getTitle())
+                   .arg(rgView->getDocument()->getTitle())
                    .arg(segments[0]->getTrack()));
-    } else if (segments.size() == doc->getComposition().getNbSegments()) {
+    } else if (segments.size() ==
+	       rgView->getDocument()->getComposition().getNbSegments()) {
         setCaption(QString("%1 - All Segments")
-                   .arg(doc->getTitle()));
+                   .arg(rgView->getDocument()->getTitle()));
     } else {
         setCaption(QString("%1 - %2-Segment Partial View")
-                   .arg(doc->getTitle())
+                   .arg(rgView->getDocument()->getTitle())
                    .arg(segments.size()));
     }
 
@@ -204,9 +214,9 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     // Position pointer
     //
     m_pointer = new QCanvasLine(canvas());
-    m_pointer->setPen(Qt::darkBlue);
-    m_pointer->setPoints(0, 0, 0, canvas()->height());
-    // m_pointer->show();
+    m_pointer->setPen(RosegardenGUIColours::TimePointer);
+    m_pointer->setPoints(0, 20, 0, canvas()->height());
+    m_pointer->show();
 
     m_selectDefaultNote->activate();
 
@@ -1458,7 +1468,7 @@ void NotationView::commandFinished(Rosegarden::Segment *segment,
 //!!! No consideration of scope yet
 // 
 void
-NotationView::setPositionPointer(const int& position)
+NotationView::setPositionPointer(int position)
 {
     if (m_lastFinishingStaff < 0 ||
         unsigned(m_lastFinishingStaff) >= m_staffs.size()) return;
@@ -1494,7 +1504,7 @@ NotationView::setPositionPointer(const int& position)
         }
     }
 
-    m_pointer->setX(canvasPosition);
+    m_pointer->setX(canvasPosition + 20);
     canvas()->update();
 }
 
@@ -2035,12 +2045,12 @@ void NotationView::redoLayout(Segment *segment, timeT startTime, timeT endTime)
 
     for (NotationViewSet::iterator i = m_viewsExtant.begin();
          i != m_viewsExtant.end(); ++i) {
-        (*i)->redoLayoutAdvised(segment, startTime, endTime);
+        (*i)->segmentModified(segment, startTime, endTime);
     }
 }
 
-void NotationView::redoLayoutAdvised(Segment *segment,
-                                     timeT startTime, timeT endTime)
+void NotationView::segmentModified(Segment *segment,
+				   timeT startTime, timeT endTime)
 {
     START_TIMING;
 

@@ -266,11 +266,19 @@ void Composition::swap(Composition& c)
 Composition::iterator
 Composition::addSegment(Segment *segment)
 {
+    std::cerr << "Composition::addSegment: segment is " << segment
+	      << ", with track " << segment->getTrack() << " and start index "
+	      << segment->getStartIndex() << "; currently have " << m_segments.size() << " segments"
+	      << endl;
+
     if (!segment) return end();
     
     std::pair<iterator, bool> res = m_segments.insert(segment);
     segment->addObserver(this);
     segment->setComposition(this);
+
+    std::cerr << "Composition::addSegment: added segment, now have "
+	      << m_segments.size() << " segments" << endl;
 
     return res.first;
 }

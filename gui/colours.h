@@ -36,6 +36,7 @@ namespace RosegardenGUIColours
 {
     extern const QColor ActiveRecordTrack;
 
+    extern const QColor SegmentCanvas;
     extern const QColor SegmentBorder;
     extern const QColor SegmentBlock;
     extern const QColor SegmentHighlightBlock;
@@ -46,6 +47,7 @@ namespace RosegardenGUIColours
     extern const QColor StaffConnectingTerminatingLine;
     extern const QColor StaffRulerBackground;
     
+    extern const QColor TimePointer;
     extern const QColor PositionCursor;
     extern const QColor SelectionRectangle;
     extern const QColor SelectedElement;

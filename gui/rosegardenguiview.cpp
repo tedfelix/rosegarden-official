@@ -197,7 +197,7 @@ void RosegardenGUIView::editSegmentNotation(Rosegarden::Segment* p)
     std::vector<Rosegarden::Segment *> segmentsToEdit;
     segmentsToEdit.push_back(p);
 
-    m_notationView = new NotationView(getDocument(), segmentsToEdit, this);
+    m_notationView = new NotationView(this, segmentsToEdit, this);
     m_notationView->show();
 }
 
@@ -252,7 +252,7 @@ void RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
         segmentsToEdit.push_back(*i);
     }
 
-    m_notationView = new NotationView(getDocument(), segmentsToEdit, this);
+    m_notationView = new NotationView(this, segmentsToEdit, this);
     m_notationView->show();
 }
 

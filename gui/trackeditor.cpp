@@ -25,6 +25,7 @@
 #include "segmentcanvas.h"
 #include "rosegardenguidoc.h"
 #include "Track.h"
+#include "colours.h"
 
 #include "rosedebug.h"
 
@@ -131,7 +132,7 @@ TrackEditor::init(unsigned int nbTracks, unsigned int nbBars)
     canvas->resize(m_hHeader->sectionSize(0) * nbBars,
                    m_vHeader->sectionSize(0) * nbTracks);
 
-    canvas->setBackgroundColor(Qt::lightGray);
+    canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
     m_segmentsCanvas = new SegmentCanvas(m_hHeader->sectionSize(0),
                                          m_vHeader->sectionSize(0),
@@ -160,7 +161,7 @@ TrackEditor::init(unsigned int nbTracks, unsigned int nbBars)
 
     // create the position pointer
     m_pointer = new QCanvasLine(canvas);
-    m_pointer->setPen(Qt::darkBlue);
+    m_pointer->setPen(RosegardenGUIColours::TimePointer);
     m_pointer->setPoints(0, 0, 0, canvas->height());
     m_pointer->setZ(10);
     m_pointer->show();

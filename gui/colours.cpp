@@ -28,6 +28,7 @@ namespace RosegardenGUIColours
 {
     const QColor ActiveRecordTrack = Qt::red;
 
+    const QColor SegmentCanvas = Qt::lightGrey;
     const QColor SegmentBorder = Qt::black;
     const QColor SegmentBlock = Qt::blue;
     const QColor SegmentHighlightBlock = Qt::darkBlue;
@@ -77,8 +78,11 @@ namespace RosegardenGUIColours
 {
     const QColor ActiveRecordTrack = Qt::red;
 
+//    const QColor SegmentCanvas = Qt::darkGrey;
+    const QColor SegmentCanvas = QColor(230, 230, 230);
     const QColor SegmentBorder = Qt::black;
-    const QColor SegmentBlock = QColor(204, 211, 162);
+//    const QColor SegmentBlock = QColor(204, 211, 162);
+    const QColor SegmentBlock = QColor(197, 211, 125);
     const QColor SegmentHighlightBlock = QColor(98, 102, 78);
   
     const QColor BarLine = Qt::black;
@@ -87,6 +91,7 @@ namespace RosegardenGUIColours
     const QColor StaffConnectingTerminatingLine = QColor(128, 128, 128);
     const QColor StaffRulerBackground = QColor(212, 212, 212);
 
+    const QColor TimePointer = Qt::darkBlue;
     const QColor PositionCursor = QColor(184, 120, 211);
     const QColor SelectionRectangle = QColor(103, 128, 211);
     const QColor SelectedElement = QColor(0, 54, 232);

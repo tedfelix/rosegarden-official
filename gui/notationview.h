@@ -36,7 +36,7 @@
 
 class QCanvasItem;
 namespace Rosegarden { class Segment; }
-class RosegardenGUIDoc;
+class RosegardenGUIView;
 class NotationTool;
 class NotationToolBox;
 class StaffRuler;
@@ -66,7 +66,7 @@ class NotationView : public EditView,
     Q_OBJECT
 
 public:
-    NotationView(RosegardenGUIDoc *doc,
+    NotationView(RosegardenGUIView *view,
                  std::vector<Rosegarden::Segment *> segments,
                  QWidget *parent);
     ~NotationView();
@@ -161,6 +161,11 @@ public:
                     Rosegarden::timeT endTime = -1); // -1 => end
 
 public slots:
+
+    void segmentModified(Rosegarden::Segment *segment,
+			 Rosegarden::timeT startTime,
+			 Rosegarden::timeT endTime); // -1 => end of staff
+
 
     /**
      * put the indicationed text/object into the clipboard and remove * it
@@ -344,7 +349,7 @@ public slots:
                          Rosegarden::timeT endTime);
 
      /// Set the time pointer position during playback
-    void setPositionPointer(const int &position);
+    void setPositionPointer(int position);
 
     /// Changes the font of the staffs on the view
     void changeFont(const QString &newFont);
@@ -504,10 +509,6 @@ protected:
      */
     ActiveItem* activeItem() { return m_activeItem; }
 
-
-    void redoLayoutAdvised(Rosegarden::Segment *segment,
-			   Rosegarden::timeT startTime,
-			   Rosegarden::timeT endTime); // -1 => end of staff
 
     //--------------- Data members ---------------------------------
 
