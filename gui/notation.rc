@@ -29,6 +29,12 @@ etc
 -->
 </Menu>
 
+<Menu name="edit">
+  <Action name="select_from_start"/>
+  <Action name="select_to_end"/>
+  <Action name="select_whole_staff"/>
+</Menu>
+
 <Menu name="Tools">
   <text>&amp;Tools</text>
 
@@ -119,7 +125,7 @@ etc
   <Action name="label_chords"/>
   <Separator/>
   <Menu name="Transpose">
-  <text>&amp;Transpose</text>
+  <text>Trans&amp;pose</text>
   <Action name="transpose_up"/>
   <Action name="transpose_down"/>
   <Action name="general_transpose"/>
@@ -152,6 +158,8 @@ etc
     <Separator/>
     <Action name="add_text_mark"/>
   </Menu>
+  <Separator/>
+  <Action name="add_time_signature"/>
 </Menu>
 
 <Menu  name="settings"><text>&amp;Settings</text>

@@ -3,14 +3,15 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 bin_PROGRAMS = rosegarden
 
 rosegarden_SOURCES = \
-	basiccommand.cpp \
         barbuttons.cpp \
+	basiccommand.cpp \
 	colours.cpp \
+	dialogs.cpp \
 	edittool.cpp \
 	editview.cpp \
 	eventselection.cpp \
-	ktmpstatusmsg.cpp \
 	kstartuplogo.cpp \
+	ktmpstatusmsg.cpp \
         loopruler.cpp \
 	main.cpp \
 	matrixview.cpp \

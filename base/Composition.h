@@ -233,9 +233,11 @@ public:
     //  TIME SIGNATURE
 
     /**
-     * Add the given time signature at the given time
+     * Add the given time signature at the given time.  Returns the
+     * resulting index of the time signature (suitable for passing
+     * to removeTimeSignature, for example)
      */
-    void addTimeSignature(timeT t, TimeSignature timeSig);
+    int addTimeSignature(timeT t, TimeSignature timeSig);
 
     /**
      * Return the time signature in effect at time t

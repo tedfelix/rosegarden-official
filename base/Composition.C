@@ -603,11 +603,13 @@ Composition::getBarRange(int n, bool truncate) const
     return std::pair<timeT, timeT>(start, start + barDuration);
 }
 
-void
+int
 Composition::addTimeSignature(timeT t, TimeSignature timeSig)
 {
-    m_timeSigSegment.insert(timeSig.getAsEvent(t));
+    ReferenceSegment::iterator i =
+	m_timeSigSegment.insert(timeSig.getAsEvent(t));
     m_barPositionsNeedCalculating = true;
+    return std::distance(m_timeSigSegment.begin(), i);
 }
 
 TimeSignature

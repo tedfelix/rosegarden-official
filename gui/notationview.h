@@ -277,8 +277,9 @@ public slots:
     void slotTransformsAddUpBow();
     void slotTransformsAddDownBow();
     void slotTransformsAddTextMark();
-
     void slotTransformsRemoveMarks();
+
+    void slotTransformsAddTimeSignature();
 
     void slotDebugDump();
 

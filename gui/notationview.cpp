@@ -55,6 +55,7 @@
 #include "SegmentNotationHelper.h"
 #include "Quantizer.h"
 #include "notationcommands.h"
+#include "dialogs.h"
 
 using Rosegarden::Event;
 using Rosegarden::Int;
@@ -564,9 +565,17 @@ void NotationView::setupActions()
                     QString("add_%1").arg(marks[i].c_str()));
     }
 
+    new KAction(TransformsMenuAddTextMarkCommand::name(), 0, this,
+                SLOT(slotTransformsAddTextMark()), actionCollection(),
+                "add_text_mark");
+
     new KAction(TransformsMenuRemoveMarksCommand::name(), 0, this,
                 SLOT(slotTransformsRemoveMarks()), actionCollection(),
                 "remove_marks");
+
+    new KAction(TransformsMenuAddTimeSignatureCommand::name(), 0, this,
+                SLOT(slotTransformsAddTimeSignature()), actionCollection(),
+                "add_time_signature");
 
     // setup Settings menu
     KStdAction::showToolbar(this, SLOT(slotToggleToolBar()), actionCollection());
@@ -1360,9 +1369,14 @@ void NotationView::slotTransformsAddDownBow()
 
 void NotationView::slotTransformsAddTextMark()
 {
-    if (m_currentEventSelection)
-        addCommandToHistory(new TransformsMenuAddTextMarkCommand
-                            ("sample text mark", *m_currentEventSelection));
+    if (m_currentEventSelection) {
+	SimpleTextDialog *dialog = new SimpleTextDialog(this, 20);
+	if (dialog->exec() == QDialog::Accepted) {
+	    addCommandToHistory(new TransformsMenuAddTextMarkCommand
+				(dialog->getText(), *m_currentEventSelection));
+	}
+	delete dialog;
+    }
 }
 
 void NotationView::slotTransformsRemoveMarks()
@@ -1371,6 +1385,33 @@ void NotationView::slotTransformsRemoveMarks()
         addCommandToHistory(new TransformsMenuRemoveMarksCommand
                             (*m_currentEventSelection));
 }
+
+void NotationView::slotTransformsAddTimeSignature()
+{
+    double layoutX = m_staffs[m_currentStaff]->getLayoutXOfCursor();
+    if (layoutX >= 0) {
+
+	//!!! slow -- merge with whatever code we use in slotEditPaste,
+	// and get current time sig a la findClosestNote
+	NotationElementList *notes =
+	    m_staffs[m_currentStaff]->getViewElementList();
+	timeT t = 0;
+	for (NotationElementList::iterator i = notes->begin();
+	     i != notes->end(); ++i) {
+	    t = (*i)->getAbsoluteTime();
+	    if ((*i)->getLayoutX() >= layoutX - 4) break;
+	}
+
+	TimeSignatureDialog *dialog = new TimeSignatureDialog(this);
+	if (dialog->exec() == QDialog::Accepted) {
+	    addCommandToHistory(new TransformsMenuAddTimeSignatureCommand
+				(m_staffs[m_currentStaff]->getSegment().getComposition(),
+				 t, dialog->getTimeSignature()));
+	}
+	delete dialog;
+    }
+}				
+
 
 void NotationView::slotDebugDump()
 {
@@ -1398,9 +1439,6 @@ NotationView::setPositionPointer(int position)
 {
     if (m_lastFinishingStaff < 0 ||
         unsigned(m_lastFinishingStaff) >= m_staffs.size()) return;
-
-    kdDebug(KDEBUG_AREA) << "NotationView::setPositionPointer: position is "
-                         << position << endl;
 
     Rosegarden::Composition &comp = m_document->getComposition();
 
