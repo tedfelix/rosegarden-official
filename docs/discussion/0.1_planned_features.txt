@@ -17,6 +17,9 @@ Features for release 0.1
 
 - note deletion
 
+- chording of a note which is of a different length than the ones already
+  present (the longer note must be split)
+
 - proper handling of time sigs. Tracks should be positioned at
   absolute steps, not bars.
 
