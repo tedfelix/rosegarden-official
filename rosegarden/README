@@ -98,7 +98,8 @@ starting-points include:
 
   docs/howtos/artsd-mcop-notes.txt -- notes on how to get sound
 
-  docs/data_struct/units.txt
+  docs/code/global_design.txt -- which classes do what, more or less
+  docs/data_struct/units.txt -- how we store pitch and time
   docs/data_struct/sets.txt -- some terminology explained
 
   docs/discussion/0.2_planned_tasks.txt -- ideas for what to do next
@@ -107,7 +108,7 @@ starting-points include:
 Authors and copyright
 ---------------------
 
-Rosegarden-4 is Copyright 2000 - 2001 Guillaume Laurent, Chris Cannam
+Rosegarden-4 is Copyright 2000-2002 Guillaume Laurent, Chris Cannam
 and Richard Bown.
 
 The moral right of Guillaume Laurent, Chris Cannam and Richard Bown to
@@ -120,6 +121,10 @@ Guillaume Laurent.
 For musical notation display Rosegarden-4 uses pixmaps derived from
 the Feta font, part of the Lilypond software (http://lilypond.org/)
 which is Copyright 1997 - 2001 Jan Nieuwenhuizen and Han-Wen Nienhuys.
+
+The Rosegarden splash-screen image is from a 1900 postcard of Thornden
+Park at Syracuse University, Syracuse, NY, used with thanks to the
+staff of Syracuse University.
 
 Rosegarden-4 is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
