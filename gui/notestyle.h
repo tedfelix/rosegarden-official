@@ -122,11 +122,14 @@ public:
     static const NoteHeadShape CustomCharName;
     static const NoteHeadShape Number;
 
+    enum HFixPoint { Normal, Central, Reversed };
+    enum VFixPoint { Near, Middle, Far };
+
     NoteHeadShape getShape     (Rosegarden::Note::Type);
     bool          isFilled     (Rosegarden::Note::Type);
     bool          hasStem      (Rosegarden::Note::Type);
     int           getFlagCount (Rosegarden::Note::Type);
-    
+
     CharName getNoteHeadCharName(Rosegarden::Note::Type);
     CharName getRestCharName(Rosegarden::Note::Type);
     CharName getFlagCharName(int flagCount);
@@ -141,6 +144,9 @@ public:
     void setStem      (Rosegarden::Note::Type, bool);
     void setFlagCount (Rosegarden::Note::Type, int);
 
+    void getStemFixPoints(Rosegarden::Note::Type, HFixPoint &, VFixPoint &);
+    void setStemFixPoints(Rosegarden::Note::Type, HFixPoint, VFixPoint);
+
 protected:
     struct NoteDescription {
 	NoteHeadShape shape; // if CustomCharName, use charName
@@ -148,15 +154,19 @@ protected:
 	bool filled;
 	bool stem;
 	int flags;
+	HFixPoint hfix;
+	VFixPoint vfix;
 
 	NoteDescription() :
 	    shape(AngledOval), charName(NoteCharacterNames::UNKNOWN),
-	    filled(true), stem(true), flags(0) { }
+	    filled(true), stem(true), flags(0), hfix(Normal), vfix(Middle) { }
 
 	NoteDescription(NoteHeadShape _shape, CharName _charName,
-			bool _filled, bool _stem, int _flags) :
+			bool _filled, bool _stem, int _flags,
+			HFixPoint _hfix, VFixPoint _vfix) :
 	    shape(_shape), charName(_charName),
-	    filled(_filled), stem(_stem), flags(_flags) { }
+	    filled(_filled), stem(_stem), flags(_flags),
+	    hfix(_hfix), vfix(_vfix) { }
     };
 
     typedef __HASH_NS::hash_map<Rosegarden::Note::Type,

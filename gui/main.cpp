@@ -314,35 +314,49 @@ static KCmdLineOptions options[] =
     { 0, 0, 0 }
 };
 
-int main(int argc, char *argv[])
+void testInstalledVersion()
 {
-    KAboutData aboutData( "rosegarden", I18N_NOOP("Rosegarden"),
-                          VERSION, description, KAboutData::License_GPL,
-                          "Copyright 2000 - 2002 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2001 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilypond fonts copyright 1997 - 2001 Han-Wen Nienhuys and Jan Nieuwenhuizen");
-    aboutData.addAuthor("Guillaume Laurent, Chris Cannam, Richard Bown",0,
-                        "glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com");
-    KCmdLineArgs::init( argc, argv, &aboutData );
-    KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
+    QString versionLocation = locate("appdata", "version.txt");
+    QString installedVersion;
 
-    KApplication app;
+    if (versionLocation) {
+	QFile versionFile(versionLocation);
+	if (versionFile.open(IO_ReadOnly)) {
+	    QTextStream text(&versionFile);
+	    QString s = text.readLine().stripWhiteSpace();
+	    versionFile.close();
+	    if (s) {
+		if (s == VERSION) return;
+		installedVersion = s;
+	    }
+	}
+    }
 
-    //
-    // Ensure quit on last window close
-    // Register main DCOP interface
-    //
-    QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-    app.dcopClient()->registerAs(app.name(), false);
-    app.dcopClient()->setDefaultObject(ROSEGARDEN_GUI_IFACE_NAME);
+    if (installedVersion) {
 
-    // Quick test for whether we've been correctly installed or not:
-    // can we find the splash-screen?  (This is entirely independent
-    // of actually loading the splash-screen later on.)
-    QString splashLocation = locate("appdata", "pixmaps/splash.png");
-    if (!splashLocation) {
 	KMessageBox::detailedError
 	    (0,
-	     i18n("An installed resource could not be located."),
-	     i18n(" A data file that should have been installed could not be\n"
+	     i18n("Installation contains the wrong version of Rosegarden."),
+	     i18n(" The wrong versions of Rosegarden's data files were\n"
+		  " found in the standard KDE installation directories.\n"
+		  " (I am " + QString(VERSION) + ", but the installed files are for version " + installedVersion + ".)\n\n"
+		  " This may mean one of the following:\n\n"
+		  " 1. This is a new upgrade of Rosegarden, and it has not yet been\n"
+		  "     installed.  If you compiled it yourself, check that you have\n"
+		  "     run \"make install\" and that the procedure completed\n"
+		  "     successfully.\n\n"
+		  " 2. The upgrade was installed in a non-standard directory,\n"
+		  "     and an old version was found in a standard directory.  If so,\n"
+		  "     you will need to add the correct directory to your KDEDIRS\n"
+		  "     environment variable before you can run it."),
+	     i18n("Installation problem"));
+	
+    } else {
+
+	KMessageBox::detailedError
+	    (0,
+	     i18n("Rosegarden does not appear to have been installed."),
+	     i18n(" One or more of Rosegarden's data files could not be\n"
 		  " found in the standard KDE installation directories.\n\n"
 		  " This may mean one of the following:\n\n"
 		  " 1. Rosegarden has not been correctly installed.  If you compiled\n"
@@ -355,6 +369,34 @@ int main(int argc, char *argv[])
 		  "     like /usr/local or /opt."),
 	     i18n("Installation problem"));
     }
+
+    exit(1);
+}
+
+int main(int argc, char *argv[])
+{
+    KAboutData aboutData( "rosegarden", I18N_NOOP("Rosegarden"),
+                          VERSION, description, KAboutData::License_GPL,
+                          "Copyright 2000 - 2002 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2001 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilypond fonts copyright 1997 - 2001 Han-Wen Nienhuys and Jan Nieuwenhuizen");
+    aboutData.addAuthor("Guillaume Laurent, Chris Cannam, Richard Bown",0,
+                        "glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com");
+    KCmdLineArgs::init( argc, argv, &aboutData );
+    KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
+
+    KApplication app;
+
+    // Give up immediately if we haven't been installed or if the
+    // installation is out of date
+    //
+    testInstalledVersion();
+
+    //
+    // Ensure quit on last window close
+    // Register main DCOP interface
+    //
+    QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+    app.dcopClient()->registerAs(app.name(), false);
+    app.dcopClient()->setDefaultObject(ROSEGARDEN_GUI_IFACE_NAME);
 
     // Parse cmd line args
     //

@@ -151,7 +151,7 @@ const NoteStyle::NoteHeadShape NoteStyle::CustomCharName = "custom character";
 
 
 NoteStyle::NoteHeadShape
-NoteStyle::getShape(Rosegarden::Note::Type type)
+NoteStyle::getShape(Note::Type type)
 {
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
@@ -167,7 +167,7 @@ NoteStyle::getShape(Rosegarden::Note::Type type)
 
 
 bool
-NoteStyle::isFilled(Rosegarden::Note::Type type)
+NoteStyle::isFilled(Note::Type type)
 {
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
@@ -183,7 +183,7 @@ NoteStyle::isFilled(Rosegarden::Note::Type type)
 
 
 bool
-NoteStyle::hasStem(Rosegarden::Note::Type type)
+NoteStyle::hasStem(Note::Type type)
 {
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
@@ -199,7 +199,7 @@ NoteStyle::hasStem(Rosegarden::Note::Type type)
 
 
 int
-NoteStyle::getFlagCount(Rosegarden::Note::Type type)
+NoteStyle::getFlagCount(Note::Type type)
 {
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
@@ -214,8 +214,33 @@ NoteStyle::getFlagCount(Rosegarden::Note::Type type)
 }
 
 
+void
+NoteStyle::getStemFixPoints(Note::Type type,
+			    HFixPoint &hfix, VFixPoint &vfix)
+{
+    NoteDescriptionMap::iterator i = m_notes.find(type);
+    if (i == m_notes.end()) { 
+	if (m_baseStyle) {
+	    m_baseStyle->getStemFixPoints(type, hfix, vfix);
+	    return;
+	}
+	kdDebug(KDEBUG_AREA) 
+	    << "WARNING: NoteStyle::getStemFixPoints: "
+	    << "No definition for note type " << type
+	    << ", defaulting to (Normal,Middle)" << endl;
+	hfix = Normal;
+	vfix = Middle;
+	return;
+    }
+
+    hfix = i->second.hfix;
+    vfix = i->second.vfix;
+}
+ 
+
+
 CharName
-NoteStyle::getNoteHeadCharName(Rosegarden::Note::Type type)
+NoteStyle::getNoteHeadCharName(Note::Type type)
 {
     NoteDescriptionMap::iterator i = m_notes.find(type);
     if (i == m_notes.end()) { 
@@ -406,6 +431,12 @@ NoteStyle::setFlagCount(Note::Type note, int flags)
     m_notes[note].flags = flags;
 }
 
+void
+NoteStyle::setStemFixPoints(Note::Type note, HFixPoint hfix, VFixPoint vfix)
+{
+    m_notes[note].hfix = hfix;
+    m_notes[note].vfix = vfix;
+}    
 
 
 NoteStyleFileReader::NoteStyleFileReader(std::string name) :
@@ -518,6 +549,37 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
     
     s = attributes.value("flags");
     if (s) m_style->setFlagCount(type, s.toInt());
+
+    NoteStyle::HFixPoint hfix;
+    NoteStyle::VFixPoint vfix;
+    m_style->getStemFixPoints(type, hfix, vfix);
+    bool haveHFix = false;
+    bool haveVFix = false;
+
+    s = attributes.value("hfixpoint");
+    if (s) {
+	s = s.lower();
+	haveHFix = true;
+	if (s == "normal") hfix = NoteStyle::Normal;
+	else if (s == "central") hfix = NoteStyle::Central;
+	else if (s == "reversed") hfix = NoteStyle::Reversed;
+	else haveHFix = false;
+    }
+
+    s = attributes.value("vfixpoint");
+    if (s) {
+	s = s.lower();
+	haveVFix = true;
+	if (s == "near") vfix = NoteStyle::Near;
+	else if (s == "middle") vfix = NoteStyle::Middle;
+	else if (s == "far") vfix = NoteStyle::Far;
+	else haveVFix = false;
+    }
+
+    if (haveHFix || haveVFix) {
+	m_style->setStemFixPoints(type, hfix, vfix);
+	// otherwise they inherit from base style, so avoid setting here
+    }
 
     return true;
 }

@@ -403,26 +403,47 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
 
     if (isStemmed && params.m_drawStem) {
 
-        s0.setY(m_above + m_noteBodyHeight/2);
+	NoteStyle::HFixPoint hfix;
+	NoteStyle::VFixPoint vfix;
+	m_style->getStemFixPoints(params.m_noteType, hfix, vfix);
+
+	switch (hfix) {
+
+	case NoteStyle::Normal:
+	case NoteStyle::Reversed:
+	    if (params.m_stemGoesUp ^ (hfix == NoteStyle::Reversed)) {
+		s0.setX(m_left + m_noteBodyWidth - 1);
+	    } else {
+		s0.setX(m_left);
+	    }
+	    break;
+
+	case NoteStyle::Central:
+	    s0.setX(m_left + m_noteBodyWidth/2 + 1);
+	    break;
+	}
+
+	switch (vfix) {
+
+	case NoteStyle::Near:
+	case NoteStyle::Far:
+	    if (params.m_stemGoesUp ^ (vfix == NoteStyle::Far)) {
+		s0.setY(m_above);
+	    } else {
+		s0.setY(m_above + m_noteBodyHeight);
+	    }
+	    break;
+
+	case NoteStyle::Middle:
+	    s0.setY(m_above + m_noteBodyHeight/2);
+	    break;
+	}	    
 
         if (params.m_stemGoesUp) {
-            s0.setX(m_left + m_noteBodyWidth - 1);
             s1.setY(s0.y() - stemLength);
         } else {
-            s0.setX(m_left);
             s1.setY(s0.y() + stemLength);
         }
-
-	NoteStyle::NoteHeadShape shape = m_style->getShape(params.m_noteType);
-	if (shape == NoteStyle::TriangleUp) {
-	    s0.setY(m_above + m_noteBodyHeight);
-	} else if (shape == NoteStyle::TriangleDown) {
-	    s0.setY(m_above);
-	} else if (shape == NoteStyle::Cross ||
-		   shape == NoteStyle::Number) {
-	    if (params.m_stemGoesUp) s0.setY(m_above);
-	    else s0.setY(m_above + m_noteBodyHeight);
-	}
 
         s1.setX(s0.x());
 

@@ -3,6 +3,6 @@
 
 <rosegarden-note-style base-style="Classical">
 
-  <global shape="cross"/>
+  <global shape="cross" vfixpoint="near"/>
 
 </rosegarden-note-style>

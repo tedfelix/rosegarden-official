@@ -39,6 +39,7 @@
 
 	<symbol name="MUSICAL SYMBOL X NOTEHEAD" src="noteheads-2cross"/>
 	<symbol name="MUSICAL SYMBOL CIRCLE X NOTEHEAD" src="noteheads-2xcircle"/>
+	<symbol name="MUSICAL SYMBOL BREVIS" src="noteheads--1mensural"/>
 	<symbol name="MUSICAL SYMBOL SEMIBREVIS WHITE" src="noteheads-1mensural"/>
 	<symbol name="MUSICAL SYMBOL SEMIBREVIS BLACK" src="noteheads-2mensural"/>
 	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP WHITE" src="noteheads-1triangle"/>
