@@ -473,10 +473,10 @@ Quantizer::insertNewEvents(Segment *s) const
 
     if (sz > 0 && (m_target == NotationPrefix ||
 		   m_target == RawEventData)) {
-
+/*
 	cerr << "Quantizer: calling normalizeRests("
 		  << minTime << ", " << maxTime << ")" << endl;
-
+*/
 	s->normalizeRests(minTime, maxTime);
     }
 
