@@ -971,7 +971,8 @@ RosegardenSequencerApp::initialiseStudio()
     //
     Rosegarden::MappedAudioPluginManager *pM =
       dynamic_cast<Rosegarden::MappedAudioPluginManager*>(
-        m_studio->createObject(Rosegarden::MappedObject::AudioPluginManager));
+        m_studio->createObject(
+            Rosegarden::MappedObject::AudioPluginManager, true)); // read-only
 
     if (pM)
         SEQUENCER_DEBUG << "created plugin manager" << endl;

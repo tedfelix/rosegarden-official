@@ -46,103 +46,9 @@ const MappedObjectProperty MappedLADSPAPort::RangeUpper = "rangeupper";
 const MappedObjectProperty MappedAudioPluginManager::Plugins = "plugins";
 const MappedObjectProperty MappedAudioPluginManager::PluginIds = "pluginids";
 
-MappedStudio::MappedStudio():MappedObject(0,
-                                          "MappedStudio",
-                                          Studio,
-                                          0),
-                             m_runningObjectId(1)
-{
-}
 
-MappedStudio::~MappedStudio()
-{
-    std::cout << "MappedStudio::~MappedStudio" << std::endl;
-    clear();
-}
-
-
-// Object factory
-// 
-MappedObject*
-MappedStudio::createObject(MappedObjectType type)
-{
-    MappedObject *mO = 0;
-
-    // Ensure we've got an empty slot
-    //
-    while(getObject(m_runningObjectId))
-        m_runningObjectId++;
-
-    mO = createObject(type, m_runningObjectId);
-
-    // If we've got a new object increase the running id
-    //
-    if (mO) m_runningObjectId++;
-
-    return mO;
-}
-
-MappedObject*
-MappedStudio::createObject(MappedObjectType type, MappedObjectId id)
-{
-    // fail if the object already exists and it's not zero
-    if (id != 0 && getObject(id)) return 0;
-
-    MappedObject *mO = 0;
-
-    if (type == MappedObject::AudioPluginManager)
-    {
-        mO = new MappedAudioPluginManager(this, id);
-
-        // push to the studio's child stack
-        addChild(mO);
-    }
-    else if (type == MappedObject::AudioFader)
-    {
-        mO = new MappedAudioFader(this,
-                                  id,
-                                  2); // channels
-
-        // push to the studio's child stack
-        addChild(mO);
-    }
-    else if (type == MappedObject::LADSPAPlugin)
-    {
-        // create plugins under the pluginmanager if it exists
-        ///
-        MappedObject *mLP =
-            getObjectOfType(MappedObject::AudioPluginManager);
-
-        mO = new MappedLADSPAPlugin(mLP, id);
-
-        // push to the plugin manager's child stack
-        mLP->addChild(mO);
-    }
-    else if (type == MappedObject::LADSPAPort)
-    {
-        // reset the parent after creation outside this method
-        mO = new MappedLADSPAPort(this, id);
-    }
-
-    // Insert
-    if (mO)
-    {
-        m_objects.push_back(mO);
-    }
-
-    return mO;
-}
-
-MappedObject*
-MappedStudio::getObjectOfType(MappedObjectType type)
-{
-    std::vector<MappedObject*>::iterator it;
-    for (it = m_objects.begin(); it != m_objects.end(); it++)
-        if ((*it)->getType() == type)
-            return (*it);
-    return 0;
-}
-
+// --------- MappedObject ---------
+//
 
 void
 MappedObject::addChild(MappedObject *object)
@@ -168,6 +74,114 @@ MappedObject::removeChild(MappedObject *object)
             return;
         }
     }
+}
+
+
+
+// ------- MappedStudio -------
+//
+
+MappedStudio::MappedStudio():MappedObject(0,
+                                          "MappedStudio",
+                                          Studio,
+                                          0,
+                                          true,
+                                          true),
+                             m_runningObjectId(1)
+{
+}
+
+MappedStudio::~MappedStudio()
+{
+    std::cout << "MappedStudio::~MappedStudio" << std::endl;
+    clear();
+}
+
+
+// Object factory
+// 
+MappedObject*
+MappedStudio::createObject(MappedObjectType type,
+                           bool readOnly)
+{
+    MappedObject *mO = 0;
+
+    // Ensure we've got an empty slot
+    //
+    while(getObject(m_runningObjectId))
+        m_runningObjectId++;
+
+    mO = createObject(type, m_runningObjectId, readOnly);
+
+    // If we've got a new object increase the running id
+    //
+    if (mO) m_runningObjectId++;
+
+    return mO;
+}
+
+MappedObject*
+MappedStudio::createObject(MappedObjectType type,
+                           MappedObjectId id,
+                           bool readOnly)
+{
+    // fail if the object already exists and it's not zero
+    if (id != 0 && getObject(id)) return 0;
+
+    MappedObject *mO = 0;
+
+    if (type == MappedObject::AudioPluginManager)
+    {
+        mO = new MappedAudioPluginManager(this, id, readOnly);
+
+        // push to the studio's child stack
+        addChild(mO);
+    }
+    else if (type == MappedObject::AudioFader)
+    {
+        mO = new MappedAudioFader(this,
+                                  id,
+                                  readOnly,
+                                  2); // channels
+
+        // push to the studio's child stack
+        addChild(mO);
+    }
+    else if (type == MappedObject::LADSPAPlugin)
+    {
+        // create plugins under the pluginmanager if it exists
+        ///
+        MappedObject *mLP =
+            getObjectOfType(MappedObject::AudioPluginManager);
+
+        mO = new MappedLADSPAPlugin(mLP, id, readOnly);
+
+        // push to the plugin manager's child stack
+        mLP->addChild(mO);
+    }
+    else if (type == MappedObject::LADSPAPort)
+    {
+        // reset the parent after creation outside this method
+        mO = new MappedLADSPAPort(this, id, readOnly);
+    }
+
+    // Insert
+    if (mO)
+    {
+        m_objects.push_back(mO);
+    }
+
+    return mO;
+}
+
+MappedObject*
+MappedStudio::getObjectOfType(MappedObjectType type)
+{
+    std::vector<MappedObject*>::iterator it;
+    for (it = m_objects.begin(); it != m_objects.end(); it++)
+        if ((*it)->getType() == type)
+            return (*it);
+    return 0;
 }
 
 
@@ -273,6 +287,8 @@ MappedStudio::getNext(MappedObject *object)
 }
 
 
+// ------------ MappedAudioFader ----------------
+//
 
 MappedObjectValue
 MappedAudioFader::getLevel()
@@ -354,22 +370,23 @@ operator<<(QDataStream &dS, const MappedStudio &mS)
 }
 */
 
-
+// ----------------- MappedAudioPluginManager -----------------
+//
 MappedAudioPluginManager::MappedAudioPluginManager(
         MappedObject *parent,
-        MappedObjectId id)
+        MappedObjectId id,
+        bool readOnly)
     :MappedObject(parent,
                  "MappedAudioPluginManager",
                   AudioPluginManager,
                   id,
-                  true)
+                  readOnly)
 {
 }
 
 MappedAudioPluginManager::~MappedAudioPluginManager()
 {
 }
-
 
 // If we pass no argument then return the list of plugins
 //
@@ -561,7 +578,7 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
                     MappedLADSPAPlugin *plugin =
                         dynamic_cast<MappedLADSPAPlugin*>
                             (studio->createObject
-                                 (MappedObject::LADSPAPlugin));
+                                 (MappedObject::LADSPAPlugin, true)); // RO
 
                     plugin->setLibraryName(path);
                     plugin->populate(descriptor);
@@ -571,7 +588,7 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
                         MappedLADSPAPort *port = 
                             dynamic_cast<MappedLADSPAPort*>
                             (studio->createObject
-                             (MappedObject::LADSPAPort));
+                             (MappedObject::LADSPAPort, true)); // read-only
 
                         // tie up relationships
                         plugin->addChild(port);
@@ -601,6 +618,11 @@ MappedAudioPluginManager::enumeratePlugin(MappedStudio *studio,
 
 #endif // HAVE_LADSPA
 }
+
+
+//  ------------------ MappedLADSPAPlugin ------------------
+//
+//
 
 #ifdef HAVE_LADSPA
 void
@@ -653,9 +675,14 @@ MappedLADSPAPlugin::getPropertyList(const MappedObjectProperty &property)
 }
 #endif // HAVE_LADSPA
 
+
+// ------------------ MappedLADSPAPort --------------------
+//
+//
 MappedLADSPAPort::MappedLADSPAPort(MappedObject *parent,
-                                   MappedObjectId id):
-    MappedObject(parent, "MappedAudioPluginPort", LADSPAPort, id)
+                                   MappedObjectId id,
+                                   bool readOnly):
+    MappedObject(parent, "MappedAudioPluginPort", LADSPAPort, id, readOnly)
 {
 }
 
@@ -675,10 +702,6 @@ MappedLADSPAPort::getPropertyList(const MappedObjectProperty &property)
 
     return list;
 }
-
-
-
-
 
 
 }

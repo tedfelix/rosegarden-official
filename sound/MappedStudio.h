@@ -73,23 +73,27 @@ public:
     MappedObject(MappedObject *parent,
                  const std::string &name,
                  MappedObjectType type,
-                 MappedObjectId id):
+                 MappedObjectId id,
+                 bool readOnly):
         m_type(type),
         m_id(id), 
-        m_static(false), 
         m_name(name),
-        m_parent(parent) {;}
+        m_parent(parent),
+        m_static(false), 
+        m_readOnly(readOnly) {;}
 
     MappedObject(MappedObject *parent, 
                  const std::string &name,
                  MappedObjectType type,
                  MappedObjectId id,
+                 bool readOnly,
                  bool s):
         m_type(type),
         m_id(id),
-        m_static(s),
         m_name(name),
-        m_parent(parent) {;}
+        m_parent(parent),
+        m_static(s),
+        m_readOnly(readOnly) {;}
 
     virtual ~MappedObject() {;}
 
@@ -112,15 +116,22 @@ public:
 
     std::vector<MappedObject*> getChildren() { return m_children; }
 
+    bool isReadOnly() const { return m_readOnly; }
+
 protected:
 
     MappedObjectType m_type;
     MappedObjectId   m_id;
-    bool             m_static;
     std::string      m_name;
 
     MappedObject                *m_parent;
     std::vector<MappedObject*>   m_children;
+
+private:
+
+    bool             m_static;
+    bool             m_readOnly;
+
 };
 
 
@@ -138,11 +149,14 @@ public:
     // Create a new slider of a certain type for a certain
     // type of device.
     //
-    MappedObject* createObject(MappedObjectType type);
+    MappedObject* createObject(MappedObjectType type,
+                               bool readOnly);
 
     // And create an object with a specified id
     //
-    MappedObject* createObject(MappedObjectType type, MappedObjectId id);
+    MappedObject* createObject(MappedObjectType type, 
+                               MappedObjectId id,
+                               bool readOnly);
 
     // Connect an Instrument to a MappedStudioObject
     //
@@ -217,11 +231,13 @@ public:
 
     MappedAudioFader(MappedObject *parent,
                      MappedObjectId id,
+                     bool readOnly,
                      MappedObjectValue channels):
         MappedObject(parent,
                      "MappedAudioFader",
                      AudioFader,
-                     id),
+                     id,
+                     readOnly),
                      m_level(80), // assume 100 is max for the moment
                      m_channels(channels) {;}
 
@@ -253,11 +269,22 @@ public:
     static const MappedObjectProperty Copyright;
     static const MappedObjectProperty PortCount;
 
-    MappedLADSPAPlugin(MappedObject *parent, MappedObjectId id):
+    MappedLADSPAPlugin(MappedObject *parent,
+                       MappedObjectId id,
+                       bool readOnly):
         MappedObject(parent,
                      "MappedLADSPAPlugin",
                      MappedObject::LADSPAPlugin,
-                     id) {;}
+                     id,
+                     readOnly) {;}
+
+    MappedLADSPAPlugin(MappedObject *parent,
+                       MappedObjectId id):
+        MappedObject(parent,
+                     "MappedLADSPAPlugin",
+                     MappedObject::LADSPAPlugin,
+                     id,
+                     false) {;}
 
     virtual MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property);
@@ -292,7 +319,9 @@ public:
     static const MappedObjectProperty RangeLower;
     static const MappedObjectProperty RangeUpper;
 
-    MappedLADSPAPort(MappedObject *parent, MappedObjectId id);
+    MappedLADSPAPort(MappedObject *parent,
+                     MappedObjectId id,
+                     bool readOnly);
 
     virtual MappedObjectPropertyList getPropertyList(
                         const MappedObjectProperty &property);
@@ -336,7 +365,9 @@ public:
     static const MappedObjectProperty Plugins;
     static const MappedObjectProperty PluginIds;
 
-    MappedAudioPluginManager(MappedObject *parent, MappedObjectId id);
+    MappedAudioPluginManager(MappedObject *parent,
+                             MappedObjectId id,
+                             bool readOnly);
     ~MappedAudioPluginManager();
 
     // Property list
