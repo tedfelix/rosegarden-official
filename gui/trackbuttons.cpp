@@ -300,14 +300,14 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
     // set the mute button
     //
     if (track->isMuted())
-        mute->setDown(true);
+        mute->setOn(true);
 
     // set the record button down
     //
     if (m_doc->getComposition().getRecordTrack() == trackId)
         {
             slotSetRecordTrack(trackId);
-            record->setDown(true);
+            record->setOn(true);
         }
 
     return trackHBox;
@@ -419,7 +419,8 @@ TrackButtons::setRecordButtonDown(int recordTrack)
     if (m_lastID != recordTrack && m_lastID != -1)
     {
        m_recordButtonGroup->find(m_lastID)->unsetPalette();
-       m_recordButtonGroup->find(m_lastID)->setDown(false);
+       dynamic_cast<QPushButton*>(
+               m_recordButtonGroup->find(m_lastID))->setOn(false);
     }
 
     m_recordButtonGroup->find(recordTrack)->setPalette
@@ -795,9 +796,11 @@ TrackButtons::slotSynchroniseWithComposition()
         if (track)
         {
             if (track->isMuted())
-                m_muteButtonGroup->find(i)->setDown(true);
+                dynamic_cast<QPushButton*>(
+                        m_muteButtonGroup->find(i))->setOn(true);
             else
-                m_muteButtonGroup->find(i)->setDown(false);
+                dynamic_cast<QPushButton*>(
+                        m_muteButtonGroup->find(i))->setOn(false);
         }
     }
 
