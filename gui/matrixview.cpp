@@ -47,8 +47,8 @@ MatrixCanvasView::~MatrixCanvasView()
 //----------------------------------------------------------------------
 
 MatrixVLayout::MatrixVLayout()
-    : m_pitchScaleFactor(10.0),
-      m_staffIdScaleFactor(100.0)
+    : m_pitchScaleFactor(10),
+      m_staffIdScaleFactor(100)
 {
 }
 
@@ -132,11 +132,12 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType& staff)
         Rosegarden::timeT duration = el->event()->getDuration();
         el->setLayoutX(currentX);
         double width = duration * m_durationScaleFactor;
-        el->setWidth(width);
+        el->setWidth(int(width));
         currentX += width;
 
     }
 
+    // margin at the right end of the window
     m_totalWidth = currentX + 50;
 }
 
@@ -145,12 +146,12 @@ double MatrixHLayout::getTotalWidth()
     return m_totalWidth;
 }
 
-unsigned int MatrixHLayout::getBarLineCount(StaffType &staff)
+unsigned int MatrixHLayout::getBarLineCount(StaffType&)
 {
     return 0;
 }
 
-double MatrixHLayout::getBarLineX(StaffType &staff, unsigned int barNo)
+double MatrixHLayout::getBarLineX(StaffType&, unsigned int)
 {
     return 0;
 }
@@ -301,6 +302,17 @@ bool MatrixView::applyLayout()
 
     return true;
 }
+
+QSize MatrixView::getViewSize()
+{
+    return canvas()->size();
+}
+
+void MatrixView::setViewSize(QSize s)
+{
+    canvas()->resize(s.width(), s.height());
+}
+    
 
 
 //////////////////////////////////////////////////////////////////////

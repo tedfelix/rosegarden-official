@@ -137,9 +137,15 @@ public:
      */
     virtual void finishLayout();
 
+    void setPitchScaleFactor(unsigned int f) { m_pitchScaleFactor = f; }
+    unsigned int getPitchScaleFactor()       { return m_pitchScaleFactor; }
+
+    void setStaffIdScaleFactor(unsigned int f) { m_staffIdScaleFactor = f; }
+    unsigned int getStaffIdScaleFactor()       { return m_staffIdScaleFactor; }
+
 protected:
-    double m_pitchScaleFactor;
-    double m_staffIdScaleFactor;
+    unsigned int m_pitchScaleFactor;
+    unsigned int m_staffIdScaleFactor;
 };
 
 class MatrixHLayout : public Rosegarden::HorizontalLayoutEngine<MatrixElement>
@@ -192,9 +198,12 @@ public:
      */
     virtual void finishLayout();
 
+    void setDurationScaleFactor(unsigned int f) { m_durationScaleFactor = f; }
+    unsigned int getDurationScaleFactor()       { return m_durationScaleFactor; }
+
 protected:
     double m_totalWidth;
-    double m_durationScaleFactor;
+    unsigned int m_durationScaleFactor;
 };
 
 //------------------------------------------------------------
@@ -290,6 +299,16 @@ protected:
      * setup status bar
      */
     virtual void initStatusBar();
+
+    /**
+     * Return the size of the MatrixCanvasView
+     */
+    virtual QSize getViewSize();
+
+    /**
+     * Set the size of the MatrixCanvasView
+     */
+    virtual void setViewSize(QSize);
 
     //--------------- Data members ---------------------------------
 
