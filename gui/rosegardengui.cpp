@@ -66,6 +66,8 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_fileRecent(0),
       m_view(0),
       m_doc(0),
+      m_playbackLatency(30),
+      m_fetchLatency(20),
       m_transportStatus(STOPPED),
       m_sequencerProcess(0)
 {
@@ -218,10 +220,16 @@ void RosegardenGUIApp::setupActions()
                                   "fast_forward");
     m_ffwdTransport->setGroup("transportcontrols");
 
-    m_rewindTransport = new KAction(i18n("&Rewind"), 0, Key_End, this,
+    m_rewindTransport = new KAction(i18n("Re&wind"), 0, Key_End, this,
                                   SLOT(rewind()), actionCollection(),
                                   "rewind");
     m_rewindTransport->setGroup("transportcontrols");
+
+    m_recordTransport = new KAction(i18n("&Record"), 0, Key_End, this,
+                                  SLOT(record()), actionCollection(),
+                                  "record");
+
+    m_recordTransport->setGroup("transportcontrols");
 
     // create the Transport GUI and add the callbacks
     //
@@ -274,6 +282,14 @@ void RosegardenGUIApp::setupActions()
     a->connectItem(a->insertItem(Key_End),
                    this,
                    SLOT(rewind()));
+
+    connect((QObject *) m_transport->RecordButton,
+             SIGNAL(released()),
+             SLOT(record()));
+
+    a->connectItem(a->insertItem(Key_Space),
+                   this,
+                   SLOT(record()));
 
     // Ensure that the checkbox is unchecked if the dialog
     // is destroyed.
@@ -1124,8 +1140,8 @@ void RosegardenGUIApp::play()
     // The arguments for the Sequencer
     //
     streamOut << m_doc->getComposition().getPosition(); // playback start position
-    streamOut << 30;                                    // playback latency
-    streamOut << 20;                                    // fetch latency
+    streamOut << m_playbackLatency;                     // playback latency
+    streamOut << m_fetchLatency;                        // fetch latency
     streamOut << m_doc->getComposition().getTempo();    // tempo
 
     // Send Play to the Sequencer
@@ -1137,7 +1153,7 @@ void RosegardenGUIApp::play()
         // failed - pop up and disable sequencer options
         m_transportStatus = STOPPED;
         KMessageBox::error(this,
-          i18n("Failed to contact RosegardenSequencer"));
+          i18n("Failed to contact Rosegarden sequencer"));
     }
     else
     {
@@ -1186,7 +1202,7 @@ void RosegardenGUIApp::stop()
     {
         // failed - pop up and disable sequencer options
         KMessageBox::error(this,
-        i18n("Failed to contact RosegardenSequencer with \"Stop\" command"));
+        i18n("Failed to contact Rosegarden sequencer with \"Stop\" command"));
     }
 
     // this is just a send call (async) so we don't have any
@@ -1274,7 +1290,7 @@ void RosegardenGUIApp::sendSequencerJump(const Rosegarden::timeT &position)
     {
       // failed - pop up and disable sequencer options
       m_transportStatus = STOPPED;
-      KMessageBox::error(this, i18n("Failed to contact RosegardenSequencer"));
+      KMessageBox::error(this, i18n("Failed to contact Rosegarden sequencer"));
     }
 
     return;
@@ -1398,5 +1414,118 @@ RosegardenGUIApp::closeTransport()
 {
   cerr << "TRANSPORT CLOSED" << endl;
 }
+
+void
+RosegardenGUIApp::record()
+{
+
+    // if recording then we stop recording
+    //
+    if (m_transportStatus == RECORDING_MIDI ||
+        m_transportStatus == RECORDING_AUDIO)
+    {
+        m_transportStatus = STOPPING;
+    }
+
+    // Some locals we need
+    //
+    TransportStatus recordType;
+    QByteArray data;
+    QCString replyType;
+    QByteArray replyData;
+
+    // get the record track and check its type
+    int rID = m_doc->getComposition().getRecordTrack();
+
+    switch (m_doc->getComposition().getTrackByIndex(rID)->getType())
+    {
+        case Rosegarden::Track::Midi:
+            recordType = RECORDING_MIDI;
+            break;
+
+        case Rosegarden::Track::Audio:
+            recordType = RECORDING_AUDIO;
+            break;
+
+        default:
+            recordType = RECORDING_MIDI;
+            break;
+    }
+
+    if (!m_sequencerProcess && !launchSequencer())
+        return;
+
+    // Now send to the sequencer
+    //
+
+    // make sure we toggle the play button
+    // 
+    if (m_transport->RecordButton->state() == QButton::Off)
+        m_transport->RecordButton->toggle();
+
+    // write the start position argument to the outgoing stream
+    //
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    //!!!
+    if (m_doc->getComposition().getTempo() == 0)
+    {
+        cout <<
+         "RosegardenGUIApp::play() - setting Tempo to Default value of 120.000"
+          << endl;
+        m_doc->getComposition().setDefaultTempo(120.0);
+    }
+    else
+    {
+        cout << "RosegardenGUIApp::play() - playing at tempo " << 
+                  m_doc->getComposition().getTempo() << endl;
+    }
+
+    // set the tempo in the transport
+    //
+    m_transport->setTempo(m_doc->getComposition().getTempo());
+
+    // The arguments for the Sequencer  - record is similar to playback,
+    // we must being playing to record
+    //
+    streamOut << m_doc->getComposition().getPosition();
+    streamOut << m_playbackLatency;                     // playback latency
+    streamOut << m_fetchLatency;                        // fetch latency
+    streamOut << m_doc->getComposition().getTempo();    // tempo
+    streamOut << (int)recordType;                       // midi or audio
+
+    // Send Play to the Sequencer
+    if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+      "record(Rosegarden::timeT, Rosegarden::timeT, Rosegarden::timeT, double, int)",
+                                  data, replyType, replyData))
+    {
+        // failed - pop up and disable sequencer options
+        m_transportStatus = STOPPED;
+        KMessageBox::error(this,
+          i18n("Failed to contact Rosegarden sequencer"));
+    }
+    else
+    {
+        // ensure the return type is ok
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        int result;
+        streamIn >> result;
+  
+        if (result)
+        {
+            // completed successfully 
+            m_transportStatus = recordType;
+        }
+        else
+        {
+            m_transportStatus = STOPPED;
+            KMessageBox::error(this, i18n("Failed to start recording"));
+        }
+    }
+
+}
+
+
 
 

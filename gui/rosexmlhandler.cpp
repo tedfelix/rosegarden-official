@@ -114,8 +114,14 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         QString instrTypeStr = atts.value("type");
         if (instrTypeStr) {
-            it = (Rosegarden::Instrument::InstrumentType)instrTypeStr.toInt();
+            if (instrTypeStr == "midi")
+                it = Rosegarden::Instrument::Midi;
+            else if (instrTypeStr == "audio")
+                it = Rosegarden::Instrument::Audio;
+            else
+                it = Rosegarden::Instrument::Midi;
         }
+        
 
         // Create and insert the Instrument
         //
@@ -187,10 +193,12 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
         QString trackTypeStr = atts.value("type");
         if (trackTypeStr) {
-            if (trackTypeStr == "Midi")
+            if (trackTypeStr == "midi")
                 tt = Rosegarden::Track::Midi;
-            else if (trackTypeStr == "Audio")
+            else if (trackTypeStr == "audio")
                 tt = Rosegarden::Track::Audio;
+            else // default
+                tt = Rosegarden::Track::Midi;
         }
 
         QString positionStr = atts.value("position");

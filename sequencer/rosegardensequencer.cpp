@@ -349,3 +349,37 @@ RosegardenSequencerApp::jumpTo(const Rosegarden::timeT &position)
     return;
 }
 
+// Record
+//
+int
+RosegardenSequencerApp::record(const Rosegarden::timeT &position,
+                               const Rosegarden::timeT &playLatency,
+                               const Rosegarden::timeT &fetchLatency,
+                               const double &tempo,
+                               const int &recordMode)
+{
+
+    TransportStatus localRecordMode = (TransportStatus) recordMode;
+
+    if (localRecordMode == RECORDING_MIDI)
+    {
+    }
+    else if (localRecordMode == RECORDING_AUDIO)
+    {
+    }
+    else
+    {
+        // unrecognised type - return a problem
+        return 1;
+    }
+
+    // Now set the local transport status to the record mode
+    //
+    //
+    m_transportStatus = localRecordMode;
+
+    return play(position, playLatency, fetchLatency, tempo);
+}
+
+
+

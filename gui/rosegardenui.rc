@@ -26,6 +26,7 @@
   <Menu name="Transport">
         <text>T&amp;ransport</text>
         <Action name="play"/> 
+        <Action name="record"/>
         <Action name="stop"/> 
         <Action name="fast_forward"/> 
         <Action name="rewind"/> 

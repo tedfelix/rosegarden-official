@@ -12,10 +12,10 @@
   <instrument id="2" type="midi" name="Piano"/>
   <instrument id="3" type="midi" name="Audio Samples"/>
 
-  <track id="0" type="unknown" label="XML Trk 0" position="0" muted="false" instrument="0"/>
-  <track id="1" type="unknown" label="XML Trk 1" position="1" muted="false" instrument="0"/>
-  <track id="2" type="unknown" label="XML Trk 2" position="2" muted="false" instrument="0"/>
-  <track id="3" type="unknown" label="XML Trk 3" position="2" muted="true" instrument="0"/>
+  <track id="0" type="midi" label="XML Trk 0" position="0" muted="false" instrument="0"/>
+  <track id="1" type="midi" label="XML Trk 1" position="1" muted="false" instrument="0"/>
+  <track id="2" type="midi" label="XML Trk 2" position="2" muted="false" instrument="0"/>
+  <track id="3" type="audio" label="XML Trk 3" position="2" muted="true" instrument="0"/>
 
 </composition>
 

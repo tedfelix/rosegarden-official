@@ -22,6 +22,7 @@
 #define _ROSEGARDENSEQUENCERIFACE_H_
 
 #include <dcopobject.h>
+#include "rosegardendcop.h"
 #include "Event.h"
 
 class RosegardenSequencerIface : virtual public DCOPObject
@@ -31,12 +32,22 @@ public:
     k_dcop:
 
     virtual void quit() = 0;
+
     virtual int play(const Rosegarden::timeT &position,
                      const Rosegarden::timeT &playLatency,
                      const Rosegarden::timeT &fetchLatency,
                      const double &tempo) = 0;
+
+    virtual int record(const Rosegarden::timeT &position,
+                     const Rosegarden::timeT &playLatency,
+                     const Rosegarden::timeT &fetchLatency,
+                     const double &tempo,
+                     const int &recordMode) = 0;
+
     virtual void jumpTo(const Rosegarden::timeT &position) = 0;
+
     virtual void stop() = 0;
+
 };
 
 #endif // _ROSEGARDENSEQUENCERIFACE_H_

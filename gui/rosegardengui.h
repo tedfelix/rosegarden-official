@@ -389,6 +389,7 @@ public slots:
     void stop();
     void rewind();
     void fastforward();
+    void record();
 
     /**
      * Set the sequencer status - pass through DCOP as an int
@@ -472,6 +473,9 @@ private:
     KAction *m_recordTransport;
     KAction *m_rewindEndTransport;
     KAction *m_ffwdEndTransport;
+
+    int m_playbackLatency;
+    int m_fetchLatency;
 
     /**
      * Transport (Playback and Recording) status

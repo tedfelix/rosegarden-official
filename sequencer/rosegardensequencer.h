@@ -79,6 +79,14 @@ public slots:
                      const Rosegarden::timeT &playLatency,
                      const Rosegarden::timeT &fetchLatency,
                      const double &tempo);
+
+    // recording
+    virtual int record(const Rosegarden::timeT &position,
+                       const Rosegarden::timeT &playLatency,
+                       const Rosegarden::timeT &fetchLatency,
+                       const double &tempo,
+                       const int &recordMode);
+
     // stops the sequencer
     //
     virtual void stop();
