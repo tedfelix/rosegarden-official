@@ -1,13 +1,12 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Translation of rosegarden.pot to Swedish.
+# This file is distributed under the same license as the package.
+# Stefan Asserhäll <stefan.asserhall@comhem.se>, 2003.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: sv\n"
 "POT-Creation-Date: 2003-12-09 19:31+0100\n"
-"PO-Revision-Date: 2003-12-11 18:40+0100\n"
+"PO-Revision-Date: 2004-01-04 12:23+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@comhem.se>\n"
 "Language-Team: Svenska <sv@li.org>\n"
 "MIME-Version: 1.0\n"
