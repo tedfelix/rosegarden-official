@@ -8,12 +8,13 @@ o ALSA:
   - ffwd/rwding/looping [DONE - still not wonderful but will do for mo]
   - MIDI recording timestamps [DONE]
   - first pass Audio
-  - latencies [??]
+  - recording timing is wrong - bars are displaced by count-in
   - hanging notes on stop [DONE - VOICES_OFF type controller call and
                                   processPending()]
   - configure [DONE with GL]
   - start-up bug [FIXED?]
   - metronome broken with ALSA? [NO - just wasn't implemented - NOW FIXED]
+  - MIDI THRU to current selected instrument
 
 o MappedDevice transmission is breaking occasionally
   [HOPEFULLY FIXED in MappedDevice itself]
@@ -22,6 +23,9 @@ o Multiple devices with multiple bank/programs
   [DONE]
 
 o Recording Segment doesn't appear anymore
+  [FIXED - typo]
+
+o Recording Segment ghost is left - extends wrong side
 
 o Instrument naming on InstrumentButtons
   [DONE]

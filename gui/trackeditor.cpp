@@ -616,7 +616,8 @@ TrackEditor::slotUpdateRecordingSegmentItem(Rosegarden::Segment *segment)
     //
     //timeT duration = segment->getDuration();
 
-    m_segmentCanvas->showRecordingSegmentItem(y, startTime, duration);
+    m_segmentCanvas->showRecordingSegmentItem(segment->getTrack(),
+                                              startTime, duration);
 
     emit needUpdate();
 }

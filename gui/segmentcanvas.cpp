@@ -547,6 +547,7 @@ void SegmentCanvas::deleteRecordingSegmentItem()
 	m_recordingSegment->setVisible(false);
 	delete m_recordingSegment;
 	m_recordingSegment = 0;
+        canvas()->update();
     }
 }
 
