@@ -32,6 +32,11 @@ public:
         : QObject(parent, name), m_isCancelled(false) {}
 
 protected:
+    /*
+      We have to use these accessors rather than throwing directly
+      from slotCancel() because Qt is generally compiled without
+      exception support, so we can't throw from a slot.
+    */
     bool isCancelled() const { return m_isCancelled; }
     void resetCancelledState() { m_isCancelled = false; }
 
