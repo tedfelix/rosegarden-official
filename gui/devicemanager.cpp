@@ -48,6 +48,7 @@
 #include "rosedebug.h"
 #include "rosegardendcop.h"
 #include "studiocommands.h"
+#include "studiocontrol.h"
 #include "importdevicedialog.h"
 
 #include "Studio.h"
@@ -477,13 +478,23 @@ public:
 private:
     Rosegarden::DeviceId m_deviceId;
     void swap() {
+
 	KConfig *config = kapp->config();
 	config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
 	Rosegarden::DeviceId oldDeviceId = config->readUnsignedNumEntry
 	    ("midirecorddevice", 0);
+
 	Rosegarden::DeviceId newDeviceId = m_deviceId;
-	m_deviceId = oldDeviceId;
 	config->writeEntry("midirecorddevice", newDeviceId);
+
+        // send the selected device to the sequencer
+        Rosegarden::MappedEvent mEdevice
+	    (Rosegarden::MidiInstrumentBase, // InstrumentId
+	     Rosegarden::MappedEvent::SystemRecordDevice,
+	     Rosegarden::MidiByte(newDeviceId));
+        Rosegarden::StudioControl::sendMappedEvent(mEdevice);
+
+	m_deviceId = oldDeviceId;
     }
 };
 
@@ -635,6 +646,8 @@ DeviceManagerDialog::slotRecordValueChanged(int row, int col)
 
     case RECORD_CURRENT_COL:
     {
+	m_recordTable->blockSignals(true);
+
 	QCheckTableItem *check =
 	    dynamic_cast<QCheckTableItem *>(m_recordTable->item(row, col));
 	if (!check) return;
@@ -663,6 +676,8 @@ DeviceManagerDialog::slotRecordValueChanged(int row, int col)
 	    m_document->getCommandHistory()->addCommand
 		(new ChangeRecordDeviceCommand(id));
 	}
+
+	m_recordTable->blockSignals(false);
     }
     break;
     }
