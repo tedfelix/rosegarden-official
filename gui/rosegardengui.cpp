@@ -634,6 +634,11 @@ void RosegardenGUIApp::initView()
 #ifdef RGKDE3
     stateChanged("new_file");
 #endif
+
+    // Refresh the audioManagerDialog if it's hanging around
+    //
+    if (m_audioManagerDialog)
+        m_audioManagerDialog->slotPopulateFileList();
 }
 
 bool RosegardenGUIApp::openDocumentFile(const char* _cmdl)

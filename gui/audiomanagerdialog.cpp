@@ -96,13 +96,17 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     // connect selection mechanism
     connect(m_fileList, SIGNAL(selectionChanged()), SLOT(slotEnableButtons()));
 
-    populateFileList();
+    slotPopulateFileList();
+}
+
+AudioManagerDialog::~AudioManagerDialog()
+{
 }
 
 // Scan the AudioFileManager and populate the m_fileList
 //
 void
-AudioManagerDialog::populateFileList()
+AudioManagerDialog::slotPopulateFileList()
 {
     std::vector<AudioFile*>::const_iterator it;
 
@@ -214,7 +218,7 @@ AudioManagerDialog::slotDeleteSelected()
 
     unsigned int id = audioFile->getId();
     m_audioFileManager->removeFile(id);
-    populateFileList();
+    slotPopulateFileList();
 
     // tell the sequencer
     emit deleteAudioFile(id);
@@ -293,7 +297,7 @@ AudioManagerDialog::slotAdd()
 
         if (progressDlg) delete progressDlg;
 
-        populateFileList();
+        slotPopulateFileList();
 
     }
 
@@ -341,7 +345,7 @@ AudioManagerDialog::slotRenameSelected()
     if ( ok && !newText.isEmpty() )
         audioFile->setName(std::string(newText));
 
-    populateFileList();
+    slotPopulateFileList();
 }
 
 void

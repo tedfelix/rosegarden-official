@@ -43,12 +43,6 @@ namespace Rosegarden
 
    
 PeakFileManager::PeakFileManager():
-    /*
-    m_riffFileName(""),
-    m_dataChunk(0),
-    m_bitsPerSample(0),
-    m_channels(0),
-    */
     m_updatePercentage(0)
 {
 }
@@ -69,7 +63,14 @@ PeakFileManager::insertAudioFile(AudioFile *audioFile)
             return false;
     }
 
-    // insert
+    /*
+    std::cout << "PeakFileManager::insertAudioFile - creating peak file "
+              << m_peakFiles.size() + 1
+              << " for \"" << audioFile->getFilename()
+              << "\"" << std::endl;
+    */
+
+    // Insert
     m_peakFiles.push_back(new PeakFile(audioFile));
 
     return true;
@@ -203,70 +204,7 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
         return;
     }
 
-    /*
-    m_riffFileName = fileName;
-    m_dataChunk = dataChunk;
-    m_bitsPerSample = bitsPerSample;
-    m_channels = channels;
-    m_updatePercentage = updatePercentage;
-
-    // For WAV we generate a peak file name and use this for
-    // storing our peak data.
-    //
-    std::string peakFileName = m_riffFileName + ".pk";
-
-    m_inFile = new std::ifstream(m_riffFileName.c_str(),
-                                 std::ios::in | std::ios::binary);
-
-    std::ifstream *peakFile = new std::ifstream(peakFileName.c_str(),
-                                                std::ios::in |
-                                                std::ios::binary);
-
-    // if the peak file doesn't exist then generate it
-    if (!(*peakFile))
-    {
-        // open file for writing
-        cout << "CREATING WAV PEAK FILE" << endl;
-        std::ofstream *peakOutFile =
-            new std::ofstream(peakFileName.c_str(),
-                              std::ios::out | std::ios::binary);
-
-        if (!(*peakOutFile))
-        {
-
-            std::string errorString =
-                std::string("PeakFileManager::generate - can't open peak file \"")
-                + peakFileName + std::string("\" for writing");
-            throw(errorString);
-        }
-
-
-    }
-    else
-    {
-        // if it does exist check the date of the peak data and
-        // regenerate it if necessary
-    }
-    */
 }
-
-/*
-void
-PeakFileManager::writeHeader()
-{
-}
-
-void
-PeakFileManager::readHeader()
-{
-}
-
-void
-PeakFileManager::calculatePeaks(std::ifstream *inFile, std::ofstream *outFile)
-{
-    throw(std::string("PeakFileManager::calculatePeaks - not enough sample data to create a peak file"));
-}
-*/
 
 // Generate a QPixmap to a given resolution - this function
 // makes full use of the peak files of course to render

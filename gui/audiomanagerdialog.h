@@ -72,10 +72,10 @@ class AudioManagerDialog : public KDialogBase
 public:
     AudioManagerDialog(QWidget *parent,
                        AudioFileManager *aFM);
+    ~AudioManagerDialog();
 
     // Populate the file list from the AudioFileManager
     //
-    void populateFileList();
 
     // Return a pointer to the currently selected AudioFile -
     // returns 0 if nothing is selected
@@ -87,8 +87,11 @@ public slots:
     void slotDeleteSelected();
     void slotPlayPreview();
     void slotRenameSelected();
-
     void slotEnableButtons();
+
+    // Repopulate
+    //
+    void slotPopulateFileList();
 
 signals:
 

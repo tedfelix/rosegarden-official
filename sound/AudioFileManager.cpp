@@ -53,7 +53,6 @@ AudioFileManager::AudioFileManager()
 AudioFileManager::~AudioFileManager()
 {
     clear();
-    m_peakManager.clear();
 }
 
 // Add a file from an absolute path
@@ -347,6 +346,10 @@ AudioFileManager::clear()
         delete(*it);
 
     m_audioFiles.erase(m_audioFiles.begin(), m_audioFiles.end());
+
+    // Clear the PeakFileManager too
+    //
+    m_peakManager.clear();
 }
 
 std::string
