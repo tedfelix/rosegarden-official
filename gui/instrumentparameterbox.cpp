@@ -52,6 +52,7 @@
 #include "rosestrings.h"
 #include "rosedebug.h"
 
+#include "studiocontrol.h"
 
 InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
                                                QWidget *parent)
@@ -973,7 +974,7 @@ AudioInstrumentParameterPanel::slotAudioChannelToggle()
                 Rosegarden::MappedEvent::AudioChannels,
                 Rosegarden::MidiByte(m_selectedInstrument->getAudioChannels()));
 
-    StudioControl::sendMappedEvent(mE);
+    Rosegarden::StudioControl::sendMappedEvent(mE);
 
 }
 
