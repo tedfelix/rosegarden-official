@@ -493,7 +493,10 @@ public:
     }
     
     std::string getCopyrightNote() const { 
-	return m_metadata.get<String>(CompositionMetadataKeys::Copyright);
+	std::string copyright;
+	m_metadata.get<String>(CompositionMetadataKeys::Copyright,
+			       copyright);
+	return copyright;
     }
     void setCopyrightNote(const std::string &cr) {
 	m_metadata.set<String>(CompositionMetadataKeys::Copyright, cr);
