@@ -32,80 +32,78 @@
              http://www.unicode.org/charts/PDF/U2600.pdf
              http://www.unicode.org/charts/PDF/U1D100.pdf -->
 
-	<codebase font-id="0" base="61440"/> <!-- Unicode private-use area -->
+        <!-- Xinfonia is a Unicode font, so these are the Unicode code
+             points expressed in decimal. -->
+
+	<codebase font-id="0" base="119040"/> <!-- Unicode musical symbols area -->
 
 	<symbol name="__UNKNOWN__" font-id="1" code="63"/> <!-- question mark -->
 
-        <symbol name="MUSIC SHARP SIGN" font-id="0" code="35"/>
-        <symbol name="MUSIC NATURAL SIGN" font-id="0" code="110"/>
-        <symbol name="MUSIC FLAT SIGN" font-id="0" code="98"/>
+        <symbol name="MUSIC SHARP SIGN" font-id="0" code="41"/>
+        <symbol name="MUSIC NATURAL SIGN" font-id="0" code="40"/>
+        <symbol name="MUSIC FLAT SIGN" font-id="0" code="39"/>
 
-        <symbol name="MUSICAL SYMBOL DOUBLE SHARP" font-id="0" code="220"/>
-        <symbol name="MUSICAL SYMBOL DOUBLE FLAT" font-id="0" code="186"/>
+        <symbol name="MUSICAL SYMBOL DOUBLE SHARP" font-id="0" code="42"/>
+        <symbol name="MUSICAL SYMBOL DOUBLE FLAT" font-id="0" code="43"/>
 
-        <symbol name="MUSICAL SYMBOL BREVE" font-id="0" code="87"/>
-        <symbol name="MUSICAL SYMBOL WHOLE NOTE" font-id="0" code="119"/>
-        <symbol name="MUSICAL SYMBOL VOID NOTEHEAD" font-id="0" code="250"/>
-        <symbol name="MUSICAL SYMBOL NOTEHEAD BLACK" font-id="0" code="207"/>
+        <symbol name="MUSICAL SYMBOL BREVE" font-id="0" code="92"/>
+        <symbol name="MUSICAL SYMBOL WHOLE NOTE" font-id="0" code="93"/>
+        <symbol name="MUSICAL SYMBOL VOID NOTEHEAD" font-id="0" code="87"/>
+        <symbol name="MUSICAL SYMBOL NOTEHEAD BLACK" font-id="0" code="88"/>
 
-	<symbol name="MUSICAL SYMBOL X NOTEHEAD" font-id="0" code="192"/>
-
-<!--	<symbol name="MUSICAL SYMBOL CIRCLE X NOTEHEAD" font-id="0" code="85"/> -->
-<!--	<symbol name="MUSICAL SYMBOL BREVIS" font-id="0" code="71"/> -->
-<!--	<symbol name="MUSICAL SYMBOL SEMIBREVIS WHITE" font-id="0" code=""/> -->
-<!--
-	<symbol name="MUSICAL SYMBOL SEMIBREVIS BLACK" font-id="0" code="noteheads-2mensural"/>
--->
-	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP WHITE" font-id="0" code="121"/>
-	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP BLACK" font-id="0" code="209"/>
+	<symbol name="MUSICAL SYMBOL X NOTEHEAD" font-id="0" code="67"/>
+	<symbol name="MUSICAL SYMBOL CIRCLE X NOTEHEAD" font-id="0" code="69"/>
+	<symbol name="MUSICAL SYMBOL BREVIS" font-id="0" code="184"/>
+	<symbol name="MUSICAL SYMBOL SEMIBREVIS WHITE" font-id="0" code="185"/>
+	<symbol name="MUSICAL SYMBOL SEMIBREVIS BLACK" font-id="0" code="186"/>
+	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP WHITE" font-id="0" code="72"/>
+	<symbol name="MUSICAL SYMBOL TRIANGLE NOTEHEAD UP BLACK" font-id="0" code="73"/>
 
         <!-- There's only one Unicode point for each flag; I guess
              you're expected to invert them yourself -->
+<!--
         <symbol name="MUSICAL SYMBOL COMBINING FLAG-0"
                 font-id="0" code="75" inversion-code="239"/>
-        <symbol name="MUSICAL SYMBOL COMBINING FLAG-1"
-                font-id="0" code="106" inversion-code="74"/>
-<!-- ???
-        <symbol name="MUSICAL SYMBOL COMBINING FLAG-2"
-                font-id="0" code="114" inversion-code="82"/>
-        <symbol name="MUSICAL SYMBOL COMBINING FLAG-3" 
-                font-id="0" code="135" inversion-code="141"/>
-        <symbol name="MUSICAL SYMBOL COMBINING FLAG-4" 
-                font-id="0" code="136" inversion-code="142"/>
 -->
-        <symbol name="MUSICAL SYMBOL MULTI REST" font-id="0" code="214"/>
-        <symbol name="MUSICAL SYMBOL WHOLE REST" font-id="0" code="227"/>
-        <symbol name="MUSICAL SYMBOL HALF REST" font-id="0" code="238"/>
-        <symbol name="MUSICAL SYMBOL QUARTER REST" font-id="0" code="206"/>
-        <symbol name="MUSICAL SYMBOL EIGHTH REST" font-id="0" code="228"/>
-        <symbol name="MUSICAL SYMBOL SIXTEENTH REST" font-id="0" code="197"/>
-        <symbol name="MUSICAL SYMBOL THIRTY-SECOND REST" font-id="0" code="168"/>
-        <symbol name="MUSICAL SYMBOL SIXTY-FOURTH REST" font-id="0" code="244"/>
-        <symbol name="MUSICAL SYMBOL ONE HUNDRED TWENTY-EIGHTH REST" font-id="0" code="229"/>
+        <symbol name="MUSICAL SYMBOL COMBINING FLAG-1" font-id="0" code="110"/>
+        <symbol name="MUSICAL SYMBOL COMBINING FLAG-2" font-id="0" code="111"/>
+        <symbol name="MUSICAL SYMBOL COMBINING FLAG-3" font-id="0" code="112"/>
+        <symbol name="MUSICAL SYMBOL COMBINING FLAG-4" font-id="0" code="113"/>
+        <symbol name="MUSICAL SYMBOL COMBINING FLAG-5" font-id="0" code="114"/>
 
-        <symbol name="MUSICAL SYMBOL COMBINING AUGMENTATION DOT" font-id="0" code="46"/>
+        <symbol name="MUSICAL SYMBOL MULTI REST" font-id="0" code="58"/>
+        <symbol name="MUSICAL SYMBOL WHOLE REST" font-id="0" code="59"/>
+        <symbol name="MUSICAL SYMBOL HALF REST" font-id="0" code="60"/>
+        <symbol name="MUSICAL SYMBOL QUARTER REST" font-id="0" code="61"/>
+        <symbol name="MUSICAL SYMBOL EIGHTH REST" font-id="0" code="62"/>
+        <symbol name="MUSICAL SYMBOL SIXTEENTH REST" font-id="0" code="63"/>
+        <symbol name="MUSICAL SYMBOL THIRTY-SECOND REST" font-id="0" code="64"/>
+        <symbol name="MUSICAL SYMBOL SIXTY-FOURTH REST" font-id="0" code="65"/>
+        <symbol name="MUSICAL SYMBOL ONE HUNDRED TWENTY-EIGHTH REST" font-id="0" code="66"/>
 
-	<symbol name="MUSICAL SYMBOL COMBINING ACCENT" font-id="0" code="62"/>
-	<symbol name="MUSICAL SYMBOL COMBINING TENUTO" font-id="0" code="45"/>
-	<symbol name="MUSICAL SYMBOL COMBINING STACCATO" font-id="0" code="46"/>
-	<symbol name="MUSICAL SYMBOL COMBINING STACCATISSIMO"
-                font-id="0" code="174" inversion-code="95"/>
-	<symbol name="MUSICAL SYMBOL COMBINING MARCATO"
-                font-id="0" code="94" inversion-code="118"/>
+        <symbol name="MUSICAL SYMBOL COMBINING AUGMENTATION DOT" font-id="0" code="109"/>
+
+	<symbol name="MUSICAL SYMBOL COMBINING ACCENT" font-id="0" code="123"/>
+	<symbol name="MUSICAL SYMBOL COMBINING TENUTO" font-id="0" code="125"/>
+	<symbol name="MUSICAL SYMBOL COMBINING STACCATO" font-id="0" code="124"/>
+	<symbol name="MUSICAL SYMBOL COMBINING STACCATISSIMO" font-id="0" code="126"/>
+	<symbol name="MUSICAL SYMBOL COMBINING MARCATO" font-id="0" code="127"/>
 	<symbol name="MUSICAL SYMBOL FERMATA"
-	        font-id="0" code="85" inversion-code="117"/>
-<!--
-	<symbol name="MUSICAL SYMBOL TR" font-id="0" code="107"/>
-	<symbol name="MUSICAL SYMBOL TURN" font-id="0" code="106"/>
--->
-	<symbol name="MUSICAL SYMBOL COMBINING UP BOW" font-id="0" code="178"/>
-	<symbol name="MUSICAL SYMBOL COMBINING DOWN BOW" font-id="0" code="179"/>
+	        font-id="0" code="16" inversion-code="17"/>
+
+	<symbol name="MUSICAL SYMBOL TR" font-id="0" code="150"/>
+	<symbol name="MUSICAL SYMBOL TURN" font-id="0" code="151"/>
+
+	<symbol name="MUSICAL SYMBOL COMBINING UP BOW" font-id="0" code="171"/>
+	<symbol name="MUSICAL SYMBOL COMBINING DOWN BOW" font-id="0" code="170"/>
+
         <!-- Unicode (and Lilypond) just have a single G clef, they
              don't distinguish between alto and tenor.  We'll have to
              use the same clef with an offset. -->
-        <symbol name="MUSICAL SYMBOL C CLEF" font-id="0" code="66"/>
-        <symbol name="MUSICAL SYMBOL G CLEF" font-id="0" code="38"/>
-        <symbol name="MUSICAL SYMBOL F CLEF" font-id="0" code="63"/>
+        <symbol name="MUSICAL SYMBOL C CLEF" font-id="0" code="33"/>
+        <symbol name="MUSICAL SYMBOL G CLEF" font-id="0" code="30"/>
+        <symbol name="MUSICAL SYMBOL F CLEF" font-id="0" code="34"/>
+
 </font-symbol-map>
 
 <!-- It'd be useful to be able to express these as fractions,   

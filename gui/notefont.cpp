@@ -1494,6 +1494,9 @@ SystemFontXft::renderChar(unsigned int code, bool)
     col.color.blue = pen.blue () | pen.blue() << 8;
     col.color.alpha = 0xffff;
     col.pixel = pen.pixel();
+
+    NOTATION_DEBUG << "SystemFontXft::renderChar: rendering character code "
+		   << code << endl;
     
     XftDrawString32(draw, &col, m_font, extents.x, extents.y, &char32, 1);
     XftDrawDestroy(draw);
