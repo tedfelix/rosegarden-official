@@ -31,8 +31,9 @@ using Rosegarden::MappedEvent;
 MmappedSegment::MmappedSegment(const QString filename)
     : m_fd(-1),
       m_mmappedSize(0),
-      m_nbMappedEvents(0),
-      m_mmappedBuffer((MappedEvent*)0),
+//      m_nbMappedEvents(0),
+      m_mmappedRegion(0),
+      m_mmappedEventBuffer((MappedEvent*)0),
       m_filename(filename)
 {
     SEQUENCER_DEBUG << "mmapping " << filename << endl;
@@ -56,13 +57,13 @@ void MmappedSegment::map()
     }
 
     m_mmappedSize = fInfo.size();
-    m_nbMappedEvents = m_mmappedSize / sizeof(MappedEvent);
+//    m_nbMappedEvents = 0;
 
     m_fd = ::open(m_filename.latin1(), O_RDWR);
 
-    m_mmappedBuffer = (MappedEvent*)::mmap(0, m_mmappedSize, PROT_READ, MAP_SHARED, m_fd, 0);
+    m_mmappedRegion = ::mmap(0, m_mmappedSize, PROT_READ, MAP_SHARED, m_fd, 0);
 
-    if (m_mmappedBuffer == (void*)-1) {
+    if (m_mmappedRegion == (void*)-1) {
 
         SEQUENCER_DEBUG << QString("mmap failed : (%1) %2\n").
             arg(errno).arg(strerror(errno));
@@ -70,9 +71,10 @@ void MmappedSegment::map()
         throw Rosegarden::Exception("mmap failed");
     }
 
+    m_mmappedEventBuffer = ((MappedEvent *)m_mmappedRegion) + 1;
+
     SEQUENCER_DEBUG << "MmappedSegment::map() : "
-                    << (void*)m_mmappedBuffer << "," << m_mmappedSize 
-                    << ", " << m_nbMappedEvents << " events\n";
+                    << (void*)m_mmappedRegion << "," << m_mmappedSize << endl;
 
 }
 
@@ -83,7 +85,7 @@ MmappedSegment::~MmappedSegment()
 
 void MmappedSegment::unmap()
 {
-    ::munmap(m_mmappedBuffer, m_mmappedSize);
+    ::munmap(m_mmappedRegion, m_mmappedSize);
     ::close(m_fd);
 }
 
@@ -91,7 +93,7 @@ bool MmappedSegment::remap(size_t newSize)
 {
 //    QFileInfo fInfo(m_filename);
 //    size_t newSize = fInfo.size();
-
+/*!!!
     SEQUENCER_DEBUG << "remap() from " << m_mmappedSize << " to "
                     << newSize << endl;
 
@@ -126,6 +128,7 @@ bool MmappedSegment::remap(size_t newSize)
     m_nbMappedEvents = m_mmappedSize / sizeof(MappedEvent);
 
     return true;
+*/
 }
 
 MmappedSegment::iterator::iterator(MmappedSegment* s)

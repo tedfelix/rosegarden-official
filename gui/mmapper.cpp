@@ -214,7 +214,8 @@ SegmentMmapper::SegmentMmapper(RosegardenGUIDoc* doc,
       m_fileName(fileName),
       m_fd(-1),
       m_mmappedSize(0),
-      m_mmappedBuffer((MappedEvent*)0)
+      m_mmappedRegion(0),
+      m_mmappedEventBuffer((MappedEvent*)0)
 {
     SEQMAN_DEBUG << "SegmentMmapper : " << this
                  << " trying to mmap " << m_fileName
@@ -259,12 +260,12 @@ size_t SegmentMmapper::computeMmappedSize()
 SegmentMmapper::~SegmentMmapper()
 {
     SEQMAN_DEBUG << "~SegmentMmapper : " << this
-                 << " unmapping " << (void*)m_mmappedBuffer
+                 << " unmapping " << (void*)m_mmappedRegion
                  << " of size " << m_mmappedSize
                  << endl;
 
-    if (m_mmappedBuffer && m_mmappedSize)
-        ::munmap(m_mmappedBuffer, m_mmappedSize);
+    if (m_mmappedRegion && m_mmappedSize)
+        ::munmap(m_mmappedRegion, m_mmappedSize);
 
     ::close(m_fd);
     SEQMAN_DEBUG << "~SegmentMmapper : removing " << m_fileName << endl;
@@ -280,15 +281,13 @@ bool SegmentMmapper::refresh()
     size_t newMmappedSize = computeMmappedSize();
 
     SEQMAN_DEBUG << "SegmentMmapper::refresh() - " << getFileName()
-                 << " - m_mmappedBuffer = " << (void*)m_mmappedBuffer
+                 << " - m_mmappedRegion = " << (void*)m_mmappedRegion
+                 << " - m_mmappedEventBuffer = " << (void*)m_mmappedEventBuffer
                  << " - new size = " << newMmappedSize
                  << " - old size = " << m_mmappedSize
                  << endl;
 
-    // always zero out - not anymore.
-    // memset(m_mmappedBuffer, 0, m_mmappedSize);
-
-    // we can't zero out the buffer here because if the mmapped
+    // We can't zero out the buffer here because if the mmapped
     // segment is being read from by the sequencer in the interval of
     // time between the memset() and the dump(), the sequencer will go
     // over all the zeros up to the end of the segment and reach its
@@ -302,7 +301,7 @@ bool SegmentMmapper::refresh()
         if (newMmappedSize == 0) {
 
             // nothing to do, just msync and go
-            ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
+            ::msync(m_mmappedRegion, m_mmappedSize, MS_ASYNC);
             m_mmappedSize = 0;
             return true;
 
@@ -326,6 +325,8 @@ void SegmentMmapper::setFileSize(size_t size)
 
     if (size < m_mmappedSize) {
 
+	// Don't truncate the file here: that will cause trouble for
+	// the sequencer
 //        ftruncate(m_fd, size);
 
     } else {
@@ -368,7 +369,7 @@ void SegmentMmapper::remap(size_t newsize)
                  << " from size " << m_mmappedSize
                  << " to size " << newsize << endl;
 
-    if (!m_mmappedBuffer) { // nothing to mremap, just mmap
+    if (!m_mmappedRegion) { // nothing to mremap, just mmap
         
         SEQMAN_DEBUG << "SegmentMmapper : nothing to remap - mmap instead\n";
         m_mmappedSize = newsize;
@@ -377,31 +378,30 @@ void SegmentMmapper::remap(size_t newsize)
     } else {
 
 #ifdef linux
-	void *oldBuffer = m_mmappedBuffer;
-        m_mmappedBuffer = (MappedEvent*)::mremap(m_mmappedBuffer, m_mmappedSize,
-                                          newsize, MREMAP_MAYMOVE);
+	void *oldBuffer = m_mmappedRegion;
+        m_mmappedRegion = (MappedEvent*)::mremap(m_mmappedRegion, m_mmappedSize,
+						 newsize, MREMAP_MAYMOVE);
+	m_mmappedEventBuffer = ((MappedEvent *)m_mmappedRegion) + 1;
 
-	if (m_mmappedBuffer != oldBuffer) {
+	if (m_mmappedRegion != oldBuffer) {
 	    SEQMAN_DEBUG << "NOTE: buffer moved from " << oldBuffer <<
-		" to " << (void *)m_mmappedBuffer << endl;
+		" to " << (void *)m_mmappedRegion << endl;
 	}
 #else
-	::munmap(m_mmappedBuffer, m_mmappedSize);
-	m_mmappedBuffer = (MappedEvent *)::mmap(0, newsize,
-					 PROT_READ|PROT_WRITE,
-					 MAP_SHARED, m_fd, 0);
+	::munmap(m_mmappedRegion, m_mmappedSize);
+	m_mmappedRegion = ::mmap(0, newsize,
+				 PROT_READ|PROT_WRITE,
+				 MAP_SHARED, m_fd, 0);
+	m_mmappedEventBuffer = ((MappedEvent *)m_mmappedRegion) + 1;
 #endif
     
-        if (m_mmappedBuffer == (void*)-1) {
+        if (m_mmappedRegion == (void*)-1) {
             SEQMAN_DEBUG << QString("mremap failed : (%1) %2\n").arg(errno).arg(strerror(errno));
             throw Rosegarden::Exception("mremap failed");
-
         }
 
         m_mmappedSize = newsize;
-
     }
-    
 }
 
 void SegmentMmapper::doMmap()
@@ -409,17 +409,18 @@ void SegmentMmapper::doMmap()
     //
     // mmap() file for writing
     //
-    m_mmappedBuffer = (MappedEvent*)::mmap(0, m_mmappedSize,
-                                           PROT_READ|PROT_WRITE,
-                                           MAP_SHARED, m_fd, 0);
+    m_mmappedRegion = ::mmap(0, m_mmappedSize,
+			     PROT_READ|PROT_WRITE,
+			     MAP_SHARED, m_fd, 0);
+    m_mmappedEventBuffer = ((MappedEvent *)m_mmappedRegion) + 1;
 
-    if (m_mmappedBuffer == (void*)-1) {
+    if (m_mmappedRegion == (void*)-1) {
         SEQMAN_DEBUG << QString("mmap failed : (%1) %2\n").arg(errno).arg(strerror(errno));
         throw Rosegarden::Exception("mmap failed");
     }
 
     SEQMAN_DEBUG << "SegmentMmapper::doMmap() - mmap size : " << m_mmappedSize
-                 << " at " << (void*)m_mmappedBuffer << endl;
+                 << " at " << (void*)m_mmappedRegion << endl;
     
 }
 
@@ -442,7 +443,7 @@ void SegmentMmapper::dump()
 
     if (repeatCount > 0) repeatEndTime = m_segment->getRepeatEndTime();
 
-    MappedEvent* bufPos = m_mmappedBuffer;
+    MappedEvent* bufPos = m_mmappedEventBuffer;
 
     for (int repeatNo = 0; repeatNo <= repeatCount; ++repeatNo) {
 
@@ -499,14 +500,13 @@ void SegmentMmapper::dump()
         
     }
 
-    size_t coveredArea = (bufPos - m_mmappedBuffer) * sizeof(MappedEvent);
-//     SEQMAN_DEBUG << "SegmentMmapper::dump - coveredArea = " << coveredArea
-//                  << " out of " << m_mmappedSize
-//                  << " - about to memset " << m_mmappedSize - coveredArea << endl;
-    
+    // Store the number of events at the start of the shared memory region
+    *(size_t *)m_mmappedRegion = (bufPos - m_mmappedEventBuffer);
+
+    size_t coveredArea = (bufPos - m_mmappedEventBuffer) * sizeof(MappedEvent);
     memset(bufPos, 0, m_mmappedSize - coveredArea);
 
-    ::msync(m_mmappedBuffer, m_mmappedSize, MS_ASYNC);
+    ::msync(m_mmappedRegion, m_mmappedSize, MS_ASYNC);
 }
 
 unsigned int SegmentMmapper::getSegmentRepeatCount()
@@ -557,11 +557,16 @@ void AudioSegmentMmapper::dump()
     timeT segmentDuration = segmentEndTime - segmentStartTime;
     timeT repeatEndTime = segmentEndTime;
 
-    int repeatCount = getSegmentRepeatCount();
+    //!!! The repeat count is actually not quite right for audio
+    // segments -- it returns one too many for repeating segments,
+    // because in midi segments you want that (to deal with partial
+    // repeats).  Here we really need to find a better way to deal
+    // with partial repeats...
 
+    int repeatCount = getSegmentRepeatCount();
     if (repeatCount > 0) repeatEndTime = m_segment->getRepeatEndTime();
 
-    MappedEvent* bufPos = m_mmappedBuffer;
+    MappedEvent* bufPos = m_mmappedEventBuffer;
 
     for (int repeatNo = 0; repeatNo <= repeatCount; ++repeatNo) {
 
@@ -584,9 +589,9 @@ void AudioSegmentMmapper::dump()
         mE->setTrackId(track->getId());
         mE->setRuntimeSegmentId(m_segment->getRuntimeId());
         ++bufPos;
-        
     }
-    
+
+    *(size_t *)m_mmappedRegion = repeatCount + 1;
 }
 
 
@@ -816,7 +821,8 @@ void MetronomeMmapper::dump()
 
     SEQMAN_DEBUG << "MetronomeMmapper::dump: instrument is " << m_metronome->getInstrument() << endl;
 
-    MappedEvent* bufPos = m_mmappedBuffer;
+    MappedEvent* bufPos = m_mmappedEventBuffer;
+
     for (TickContainer::iterator i = m_ticks.begin(); i != m_ticks.end(); ++i) {
 
         Rosegarden::MidiByte velocity;
@@ -835,6 +841,9 @@ void MetronomeMmapper::dump()
                                  m_tickDuration);
         ++bufPos;
     }
+
+    // Store the number of events at the start of the shared memory region
+    *(size_t *)m_mmappedRegion = (bufPos - m_mmappedEventBuffer);
 }
 
 
@@ -881,7 +890,7 @@ void TempoSegmentMmapper::dump()
     Rosegarden::RealTime eventTime;
 
     Composition& comp = m_doc->getComposition();
-    MappedEvent* bufPos = m_mmappedBuffer;
+    MappedEvent* bufPos = m_mmappedEventBuffer;
 
     for (int i = 0; i < comp.getTempoChangeCount(); ++i) {
 
@@ -895,6 +904,9 @@ void TempoSegmentMmapper::dump()
         
         ++bufPos;
     }
+
+    // Store the number of events at the start of the shared memory region
+    *(size_t *)m_mmappedRegion = (bufPos - m_mmappedEventBuffer);
 }
 
 //----------------------------------------
@@ -909,7 +921,7 @@ void TimeSigSegmentMmapper::dump()
     Rosegarden::RealTime eventTime;
 
     Composition& comp = m_doc->getComposition();
-    MappedEvent* bufPos = m_mmappedBuffer;
+    MappedEvent* bufPos = m_mmappedEventBuffer;
 
     for (int i = 0; i < comp.getTimeSignatureCount(); ++i) {
 
@@ -924,6 +936,9 @@ void TimeSigSegmentMmapper::dump()
         
         ++bufPos;
     }
+
+    // Store the number of events at the start of the shared memory region
+    *(size_t *)m_mmappedRegion = (bufPos - m_mmappedEventBuffer);
 }
 
 //----------------------------------------

@@ -110,7 +110,7 @@ protected:
     /// actual setup, must be called after ctor, calls virtual methods
     virtual void init();
 
-    /// set the size of the mmapped filed
+    /// set the size of the mmapped file
     void setFileSize(size_t);
 
     /// perform the mmap() of the file
@@ -129,7 +129,13 @@ protected:
 
     int m_fd;
     size_t m_mmappedSize;
-    Rosegarden::MappedEvent* m_mmappedBuffer;
+
+    // The shared memory region starts with a size_t value
+    // representing the number of MappedEvents that follow.
+    void *m_mmappedRegion;
+
+    // And this points to the next byte in the shared memory region.
+    Rosegarden::MappedEvent* m_mmappedEventBuffer;
 };
 
 //----------------------------------------

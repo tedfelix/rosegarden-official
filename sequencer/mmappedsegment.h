@@ -65,9 +65,13 @@ public:
     bool remap(size_t newSize);
     QString getFileName() const { return m_filename; }
     bool isMetronome();
-    MappedEvent* getBuffer() { return m_mmappedBuffer; }
+    MappedEvent* getBuffer() { return m_mmappedEventBuffer; }
     size_t getSize() const { return m_mmappedSize; }
-    unsigned int getNbMappedEvents() const { return m_nbMappedEvents; }
+    unsigned int getNbMappedEvents() const {
+	if (m_mmappedRegion) {
+	    return *(size_t *)m_mmappedRegion;
+	} else return 0;
+    }
 
     class iterator 
     {
@@ -110,8 +114,9 @@ protected:
     //--------------- Data members ---------------------------------
     int m_fd;
     size_t m_mmappedSize;
-    unsigned int m_nbMappedEvents;
-    MappedEvent* m_mmappedBuffer;
+//    unsigned int m_nbMappedEvents;
+    void *m_mmappedRegion;
+    MappedEvent* m_mmappedEventBuffer;
     QString m_filename;
 };
 
