@@ -87,8 +87,8 @@
     <h3>Building from source code</h3>
     
     <p>In order to build Rosegarden-4, you will need a Unix-like
-    operating system (most obviously Linux), the gcc-2.9x or 3.x C++
-    compiler, <a href="http://www.kde.org/">KDE</a> 3.x with <a
+    operating system (most obviously Linux), the gcc 3.x C++ compiler,
+    <a href="http://www.kde.org/">KDE</a> 3.x with <a
     href="http://www.trolltech.com/">Qt</a>3.  See the <a
     href="faq.html">FAQ</a> for solutions to a few build and
     installation problems.  You may also wish to build with <a
