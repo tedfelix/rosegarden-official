@@ -1049,7 +1049,7 @@ void RosegardenGUIApp::readProperties(KConfig* _cfg)
 
 void RosegardenGUIApp::paintEvent(QPaintEvent* e)
 {
-    slotRefreshTimeDisplay();
+    // slotRefreshTimeDisplay();
     KMainWindow::paintEvent(e);
 }
 
