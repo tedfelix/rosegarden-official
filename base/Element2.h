@@ -385,13 +385,21 @@ public:
 /**
  * This class owns the Events its items are pointing at
  */
-class EventList : public multiset<Event*, EventCmp>
+class Track : public multiset<Event*, EventCmp>
 {
 public:
-    EventList() : multiset<Event*, EventCmp>() {}
-    ~EventList();
-};
+    Track(unsigned int nbBars = 0, unsigned int startIdx = 0);
+    ~Track();
 
+    unsigned int getStartIndex() const         { return m_startIdx; }
+    void         setStartIndex(unsigned int i) { m_startIdx = i; }
+
+    unsigned int getNbBars() const { return m_nbBars; }
+    
+protected:
+    unsigned int m_startIdx;
+    unsigned int m_nbBars;
+};
 
 /**
  * A set of tracks.
@@ -402,7 +410,7 @@ class Composition
 {
     
 public:
-    typedef vector<EventList*> trackcontainer;
+    typedef vector<Track*> trackcontainer;
 
     typedef trackcontainer::iterator iterator;
     typedef trackcontainer::const_iterator const_iterator;
@@ -410,9 +418,9 @@ public:
     Composition(unsigned int nbTracks = 64);
     ~Composition();
 
-    vector<EventList*>& tracks() { return m_tracks; }
+    vector<Track*>& tracks() { return m_tracks; }
 
-    bool addTrack(EventList *track = 0, int idx = -1);
+    bool addTrack(Track *track = 0, int idx = -1);
     void deleteTrack(int idx);
 
     unsigned int getNbTracks() const { return m_tracks.size(); }
@@ -427,10 +435,10 @@ public:
     iterator       end()         { return m_tracks.end(); }
     const_iterator end() const   { return m_tracks.end(); }
 
-    EventList*       operator[](int i)       { return m_tracks[i]; }
-    const EventList* operator[](int i) const { return m_tracks[i]; }
+    Track*       operator[](int i)       { return m_tracks[i]; }
+    const Track* operator[](int i) const { return m_tracks[i]; }
     void             clear()                 { m_tracks.clear(); }
-         
+
 protected:
     trackcontainer m_tracks;
 

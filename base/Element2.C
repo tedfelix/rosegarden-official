@@ -191,12 +191,32 @@ ViewElement::~ViewElement()
 
 //////////////////////////////////////////////////////////////////////
 
-EventList::~EventList()
+Track::Track(unsigned int nbBars, unsigned int startIdx)
+    : multiset<Event*, EventCmp>(),
+    m_startIdx(startIdx)
+{
+    unsigned int initialTime = m_startIdx;
+    
+    // fill up with whole-note rests
+    //
+    for (unsigned int i = 0; i < nbBars; ++i) {
+        Event *e = new Event;
+        e->setType("rest");
+        e->setTimeDuration(384); // TODO : get rid of this magic number
+        e->setAbsoluteTime(initialTime);
+        insert(e);
+        initialTime += 384; // btw, it comes from xmlstorableevent.cpp
+    }
+}
+
+Track::~Track()
 {
     // delete content
     for(iterator it = begin(); it != end(); ++it)
         delete (*it);
 }
+
+//////////////////////////////////////////////////////////////////////
 
 ViewElements::~ViewElements()
 {
@@ -234,13 +254,13 @@ Composition::~Composition()
 
 
 bool
-Composition::addTrack(EventList *track = 0, int idx = -1)
+Composition::addTrack(Track *track = 0, int idx = -1)
 {
     if (idx > m_tracks.size()) {
         return false; // throw ?
     }
     
-    if (!track) track = new EventList;
+    if (!track) track = new Track;
     
     if (idx < 0) {
 
@@ -280,7 +300,7 @@ Composition::getNbBars() const
         if ((*i) && (*i)->size() > maxSize) {
             maxSize = (*i)->size();
 
-            EventList::const_iterator lastEl = (*i)->end();
+            Track::const_iterator lastEl = (*i)->end();
             --lastEl;
             maxNbBars = (*lastEl)->absoluteTime() / getNbTicksPerBar();
         }
