@@ -1802,12 +1802,10 @@ RosegardenGUIApp::fastForwardToEnd()
 
 
 // We use this slot to active a tool mode on the GUI
-// automatically from a layer below the top level.
-// For example when we select a Track and want to
-// therefore select all the Segments on that Track
-// automatically we must cross in Selector mode and
-// populate the SegmentSelector with the relevant
-// Segments
+// from a layer below the top level.  For example when
+// we select a Track on the trackeditor and want this
+// action to go on to select all the Segments on that
+// Track we must change the edit mode to "Selector"
 //
 //
 void

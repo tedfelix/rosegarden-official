@@ -4,6 +4,7 @@ bin_PROGRAMS = rosegarden
 
 rosegarden_SOURCES = \
 	basiccommand.cpp \
+        barbuttons.cpp \
 	colours.cpp \
 	edittool.cpp \
 	editview.cpp \

@@ -24,6 +24,9 @@ o Audio.  Still.
   Most likely wait until all the above has been implemented
   before tackling audio.
 
+o Segment level Undo/Redo - eech!
+
+
 
 Work for further down the line
 ------------------------------
