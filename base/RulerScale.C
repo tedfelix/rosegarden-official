@@ -99,6 +99,9 @@ RulerScale::getTimeForX(double x)
 {
     int n = getBarForX(x);
 
+    std::cerr << "RulerScale::getTimeForX : x = "
+              << x << " n = " << n << std::endl;
+
     double barWidth = getBarWidth(n);
     std::pair<timeT, timeT> barRange = m_composition->getBarRange(n);
 

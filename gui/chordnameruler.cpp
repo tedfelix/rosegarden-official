@@ -142,7 +142,22 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     segment.insert(key.getAsEvent(from - 1));
 
     AnalysisHelper helper;
+
+    kdDebug(KDEBUG_AREA) << "chordruler: from = " << from
+                         << " - to = " << to
+                         << " clip X : " << clipRect.x()
+                         << " currentOffset : " << m_currentXOffset
+                         << " xorigin : " << m_xorigin
+                         << endl;
+
+    if (*(segment.begin()) && (segment.begin() != segment.end()))
+        kdDebug(KDEBUG_AREA) << "chordruler: segment start time : "
+                             << (*(segment.begin()))->getAbsoluteTime()
+                             << endl;
+
+    kdDebug(KDEBUG_AREA) << "%%%%%%%% LABEL CHORDS BEGIN\n";
     helper.labelChords(adapter, segment);
+    kdDebug(KDEBUG_AREA) << "%%%%%%%% LABEL CHORDS END\n";
 
     QRect boundsForHeight = m_fontMetrics.boundingRect("^j|lM");
     int fontHeight = boundsForHeight.height();
@@ -152,9 +167,13 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     timeT keyAt = from - 1;
     std::string keyText;
 
-    if (*(segment.begin()) && (segment.begin() != segment.end()))
-        kdDebug(KDEBUG_AREA) << "chordruler: segment start time : "
-                             << (*(segment.begin()))->getAbsoluteTime() << endl;
+    kdDebug(KDEBUG_AREA) << "%%%%%%%% CHORD SEGMENT DUMP\n";
+
+    for (Segment::iterator i = segment.begin(); i != segment.end(); ++i) {
+        (*i)->dump(std::cerr);
+    }
+
+    kdDebug(KDEBUG_AREA) << "%%%%%%%% CHORD SEGMENT DUMP FINISHED\n";
 
     for (Segment::iterator i = segment.begin(); i != segment.end(); ++i) {
 

@@ -107,6 +107,8 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s)
     // no increment (the inner loop does the incrementing)
     for (CompositionTimeSliceAdapter::iterator i = c.begin(); i != c.end();  )
     {
+        std::cerr << "AnalysisHelper::labelChords : ";
+        (*i)->dump(std::cerr);
 
         // Examine all notes starting at the same time as this one.
         //  1. keep the current key in key
