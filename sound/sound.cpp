@@ -64,14 +64,7 @@ main(int argc, char **argv)
 
     // initialise MIDI and audio subsystems
     //
-    cout << "HERE" << endl;
     Rosegarden::Sequencer sequencer;
-
-    cout << "HERE" << endl;
-
-    // set the tempo - fudge this for the moment
-    //sequencer.tempo(comp->getTempo());
-    //sequencer.tempo(40);
 
     unsigned long long i;
 /*

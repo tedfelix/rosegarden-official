@@ -22,9 +22,8 @@
 // and MIDI are initialised, playback and recording handles
 // are available to the higher levels for sending and 
 // retreiving MIDI and audio.  When the Rosegarden sequencer
-// (sequencer/) initialises it creates one of these objects
-// (Rosegarden::Sequencer) which prepares itself for playback
-// and recording.
+// (sequencer/) initialises it creates a Rosegarden::Sequencer
+// which prepares itself for playback and recording.
 //
 // At this level we accept MappedCompositions (single point
 // representation - NOTE ONs with durations) and turn them
@@ -32,10 +31,13 @@
 //
 // Recording wise we take aRTS events and turn them into
 // a MappedComposition before sending it up to the gui.
-// Timing is normalised to the GUI and returned as
+// Timing is normalised by the GUI and returned as
 // Rosegarden::RealTime timestamps that can be easily
 // converted into the relevant absolute positions.
 //
+// We don't have any measure of tempo or resolution at
+// this level - all we see are Arts::TimeStamps and
+// Rosegarden::RealTimes.
 //
 //
 
@@ -133,14 +135,6 @@ public:
     //
     RecordStatus recordStatus() { return m_recordStatus; }
     
-    // Set and get tempo
-    //
-    const double getTempo() const { return m_tempo; }
-    void setTempo(const double &tempo) { m_tempo = tempo; }
-
-    // resolution - required?
-    const unsigned int resolution() const { return m_ppq; }
-
     // Get the difference in TimeStamps - Arts::TimeStamp
     // doesn't currently have any operators
     //
@@ -216,7 +210,6 @@ public:
         { m_playStartPosition = pos; }
 
 private:
-
     // start MIDI and Audio subsystems
     //
     void initialiseMidi();
@@ -263,7 +256,7 @@ private:
     NoteOffQueue           m_noteOffQueue;
 
     // Absolute time playback start position
-    Rosegarden::RealTime      m_playStartPosition;
+    Rosegarden::RealTime   m_playStartPosition;
 
     // Current recording status
     RecordStatus           m_recordStatus;
@@ -271,10 +264,6 @@ private:
     // Playback flags
     bool                   m_startPlayback;
     bool                   m_playing;
-
-    // Internal measures
-    unsigned int           m_ppq;   // sequencer resolution
-    double                 m_tempo; // Beats Per Minute
 
     MappedComposition      m_recordComposition;
 

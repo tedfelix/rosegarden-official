@@ -47,14 +47,10 @@ class MappedComposition : public std::multiset<MappedEvent *,
 public:
     MappedComposition():m_startTime(0, 0), m_endTime(0, 0) {;}
 
-    MappedComposition(Rosegarden::Composition &comp,
-                      const Rosegarden::RealTime &sT,
-                      const Rosegarden::RealTime &eT);
-
     MappedComposition(const Rosegarden::RealTime &sT,
                       const Rosegarden::RealTime &eT):
         m_startTime(sT), m_endTime(eT) {;}
-    ~MappedComposition() {;}
+    ~MappedComposition();
 
     const Rosegarden::RealTime getStartTime() const { return m_startTime; }
     const Rosegarden::RealTime getEndTime() const { return m_endTime; }

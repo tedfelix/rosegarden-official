@@ -46,8 +46,6 @@ Sequencer::Sequencer():
     m_recordStatus(ASYNCHRONOUS_MIDI),
     m_startPlayback(true),
     m_playing(false),
-    m_ppq(Note(Note::Crotchet).getDuration()),
-    m_tempo(120.0), // default tempo
     m_sequencerStatus(NO_SEQUENCE_SUBSYS)
 {
 
