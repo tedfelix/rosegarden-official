@@ -108,12 +108,17 @@ bool RG21Loader::parseChordItem()
 
     // now get notes
     for(;i != m_tokens.end(); ++i) {
+
         long pitch = (*i).toInt();
+        ++i;
+        int noteMods = (*i).toInt();
 
         Event *noteEvent = new Event(Note::EventType);
         noteEvent->setDuration(duration);
         noteEvent->setAbsoluteTime(m_currentTrackTime);
         noteEvent->set<Int>("pitch", pitch);
+
+        kdDebug(KDEBUG_AREA) << "RG21Loader::parseChordItem() : insert note at pitch " << pitch << endl;
 
         m_currentTrack->insert(noteEvent);
     }
