@@ -177,46 +177,47 @@ Sequencer::initialiseAudio()
         return;
     }
 
-    m_playWav = Arts::DynamicCast(m_soundServer.
-                               createObject("Arts::Synth_PLAY_WAV"));
+    // Start the play and record audio ports
+    //
+    m_amanPlay.start();
+    m_amanRecord.start();
 
-    if (m_playWav.isNull())
-    {
-        cerr << "RosegardenSequencer - can't create .wav play object "<< endl;
-        return;
-    }
-
-    m_captureWav = Arts::DynamicCast(m_soundServer.
+    // Test play and record connections - create server objects
+    //
+    Arts::Synth_CAPTURE_WAV captureWav = Arts::DynamicCast(m_soundServer.
                                createObject("Arts::Synth_CAPTURE_WAV"));
 
-    if (m_captureWav.isNull())
+    if (captureWav.isNull())
     {
         cerr << "RosegardenSequencer - can't create .wav record object" << endl;
         return;
     }
 
-    // Now test the "play" connection
-    //
-    m_playWav.start();
-    m_amanPlay.start();
-    connect (m_playWav, "left", m_amanPlay, "left");
-    connect (m_playWav, "right", m_amanPlay, "right");
-    disconnect (m_playWav, "left", m_amanPlay, "left");
-    disconnect (m_playWav, "right", m_amanPlay, "right");
-    m_playWav.stop();
-    m_amanPlay.stop();
+    Arts::Synth_PLAY_WAV playWav = Arts::DynamicCast(m_soundServer.
+                               createObject("Arts::Synth_PLAY_WAV"));
 
-    // and then test the "record" connection
-    //
-    m_captureWav.start();
-    m_amanRecord.start();
-    connect (m_captureWav, "left", m_amanRecord, "left");
-    connect (m_captureWav, "right", m_amanRecord, "right");
-    disconnect (m_captureWav, "left", m_amanRecord, "left");
-    disconnect (m_captureWav, "right", m_amanRecord, "right");
-    m_captureWav.stop();
-    m_amanRecord.stop();
+    if (playWav.isNull())
+    {
+        cerr << "RosegardenSequencer - can't create .wav play object "<< endl;
+        return;
+    }
 
+    // Now test connections - aRTS will moan if these fail
+    //
+    playWav.start();
+    connect(playWav, "left", m_amanPlay, "left");
+    connect(playWav, "right", m_amanPlay, "right");
+    disconnect(playWav, "left", m_amanPlay, "left");
+    disconnect(playWav, "right", m_amanPlay, "right");
+    playWav.stop();
+
+    // Test record connection
+    captureWav.start();
+    connect(captureWav, "left", m_amanRecord, "left");
+    connect(captureWav, "right", m_amanRecord, "right");
+    disconnect(captureWav, "left", m_amanRecord, "left");
+    disconnect(captureWav, "right", m_amanRecord, "right");
+    captureWav.stop();
 
     // Seems the audio is OK, report some figures and exit
     //
@@ -236,9 +237,6 @@ Sequencer::initialiseAudio()
         m_sequencerStatus = MIDI_AND_AUDIO_SUBSYS_OK;
     else
         m_sequencerStatus = AUDIO_SUBSYS_OK;
-
-    // open the audio play channel permanently
-    m_amanPlay.start();
 
 }
 
@@ -412,8 +410,9 @@ Sequencer::processEventsOut(Rosegarden::MappedComposition mC,
     {
         if ((*i)->getType() == MappedEvent::Audio)
         {
-            queueAudio((*i)->getAudioID(), (*i)->getStartIndex(),
-                       (*i)->getDuration(), playLatency);
+            queueAudio((*i)->getAudioID(), (*i)->getAbsoluteTime(),
+                       (*i)->getAudioStartMarker(), (*i)->getDuration(),
+                       playLatency);
         }
     }
 
@@ -447,17 +446,14 @@ Sequencer::processAudioQueue()
         if (currentTime >= (*it)->getEndTime() &&
             (*it)->getStatus() == PlayableAudioFile::Playing)
         {
-
-            // stopping and disconnecting the objects appears
-            // to be a _bad_ move.  For the moment just kill 'em.
-/*
-            (*it)->getAudioObject().stop();
-
+            // Disconnect properly and stop
+            //
             Arts::disconnect((*it)->getAudioObject(), "left",
                              m_amanPlay, "left");
             Arts::disconnect((*it)->getAudioObject(), "right",
                              m_amanPlay, "right");
-*/
+
+            (*it)->getAudioObject().stop();
 
             (*it)->setStatus(PlayableAudioFile::Defunct);
         }
@@ -851,8 +847,11 @@ Sequencer::clearAudioFiles()
 
 
 bool
-Sequencer::queueAudio(const unsigned int &id, const RealTime startIndex,
-                      const RealTime duration, const RealTime playLatency)
+Sequencer::queueAudio(const unsigned int &id,
+                      const RealTime &absoluteTime,
+                      const RealTime &audioStartMarker,
+                      const RealTime &duration,
+                      const RealTime &playLatency)
 {
     std::vector<AudioFile*>::iterator it = getAudioFile(id);
 
@@ -860,14 +859,17 @@ Sequencer::queueAudio(const unsigned int &id, const RealTime startIndex,
         return false;
 
     std::cout << "queueAudio() - queuing Audio event at time "
-              << startIndex + playLatency << std::endl;
+              << absoluteTime + playLatency << std::endl;
 
     // register the AudioFile in the playback queue
     //
-    PlayableAudioFile *newAF = new PlayableAudioFile(*it,
-                                                     startIndex + playLatency,
-                                                     duration,
-                                                     m_soundServer);
+    PlayableAudioFile *newAF =
+                         new PlayableAudioFile(*it,
+                                               absoluteTime + playLatency,
+                                               audioStartMarker - absoluteTime,
+                                               duration,
+                                               m_soundServer);
+
     m_audioPlayQueue.push_back(newAF);
 
     return true;

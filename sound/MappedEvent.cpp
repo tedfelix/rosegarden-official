@@ -32,6 +32,7 @@ MappedEvent::MappedEvent(const Event &e,
        m_pitch(e.get<Int>(BaseProperties::PITCH)),
        m_absoluteTime(absoluteTime),
        m_duration(duration),
+       m_audioStartMarker(0, 0),
        m_type(Internal),
        m_instrument(instrument)
 {
@@ -50,12 +51,14 @@ MappedEvent::MappedEvent(const Event &e,
 
 MappedEvent::MappedEvent(const Rosegarden::RealTime &absTime,
                          const Rosegarden::RealTime &duration,
+                         const Rosegarden::RealTime &audioStartMarker,
                          const Rosegarden::InstrumentId &instrument,
                          const MappedEventType type,
                          const int &id):
       m_pitch(id),
       m_absoluteTime(absTime),
       m_duration(duration),
+      m_audioStartMarker(audioStartMarker),
       m_type(type),
       m_instrument(instrument)
 {

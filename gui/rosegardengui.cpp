@@ -1040,36 +1040,44 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
     //
     if (m_transportStatus == STOPPING)
       return mappComp;
+
+    Rosegarden::Composition &comp = m_doc->getComposition();
   
     mappComp.setStartTime(Rosegarden::RealTime(sliceStartSec, sliceStartUsec));
     mappComp.setEndTime(Rosegarden::RealTime(sliceEndSec, sliceEndUsec));
 
-    //timeT sliceStartElapsed = m_doc->getComposition().getElapsedTimeForRealTime(mappComp.getStartTime());
+    //timeT sliceStartElapsed = comp.getElapsedTimeForRealTime(mappComp.getStartTime());
 
     timeT sliceStartElapsed =
-      m_doc->getComposition().getElapsedTimeForRealTime
-	(mappComp.getStartTime()) - 1;
+              comp.getElapsedTimeForRealTime(mappComp.getStartTime());
 
     timeT sliceEndElapsed =
-      m_doc->getComposition().getElapsedTimeForRealTime
-	(mappComp.getEndTime()) + 1;
+              comp.getElapsedTimeForRealTime(mappComp.getEndTime());
 
     Rosegarden::RealTime eventTime;
     Rosegarden::RealTime duration;
   
-    for (Rosegarden::Composition::iterator i = m_doc->getComposition().begin();
-                             i != m_doc->getComposition().end(); i++ )
+    for (Rosegarden::Composition::iterator i = comp.begin();
+                             i != comp.end(); i++ )
     {
         // Skip segment if the track is muted
         //
-        if (m_doc->getComposition().getTrackByIndex((*i)->getTrack())->isMuted())
+        if (comp.getTrackByIndex((*i)->getTrack())->isMuted())
             continue;
 
         if ((*i)->getType() == Rosegarden::Segment::Audio)
         {
 
-            if ((*i)->getAudioStartIndex() < sliceStartElapsed ||
-                (*i)->getAudioStartIndex() > sliceEndElapsed)
+            // An Audio event has three time parameters associated
+            // with it.  The start of the Segment is when the audio
+            // event should start.  The StartIndex is how far into
+            // the sample the playback should commence and the
+            // EndIndex is how far into the sample playback should
+            // stop.
+            //
+            //
+            if ((*i)->getStartIndex() < sliceStartElapsed ||
+                (*i)->getStartIndex() > sliceEndElapsed)
                 continue;
 
             cout << "AUDIO START = " << (*i)->getAudioStartIndex() << endl;
@@ -1077,21 +1085,25 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
             cout << "SLICE START = " << sliceStartElapsed << endl;
             cout << "SLICE END   = " << sliceEndElapsed << endl << endl;
 
-            eventTime = m_doc->getComposition().getElapsedRealTime
-                            (((*i)->getAudioStartIndex()));
+            eventTime = comp.getElapsedRealTime((*i)->getStartIndex());
 
-            duration = m_doc->getComposition().getElapsedRealTime
-                            (((*i)->getAudioEndIndex())) - eventTime;
+            Rosegarden::RealTime startIndex =
+                       comp.getElapsedRealTime (((*i)->getAudioStartIndex()));
+
+            duration = comp.getElapsedRealTime
+                            (((*i)->getAudioEndIndex())) - startIndex;
 
             assert (duration >= Rosegarden::RealTime(0,0));
             
-            Rosegarden::InstrumentId instrument = m_doc->getComposition().
+            Rosegarden::InstrumentId instrument = comp.
                              getTrackByIndex((*i)->getTrack())->getInstrument();
 
             // Insert Audio event
             //
             Rosegarden::MappedEvent *me =
-                    new Rosegarden::MappedEvent(eventTime, duration,
+                    new Rosegarden::MappedEvent(eventTime,
+                                                startIndex,
+                                                duration,
                                                 instrument,
                                                 Rosegarden::MappedEvent::Audio,
                                                 (*i)->getAudioFileID());
@@ -1121,8 +1133,7 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
                 continue;
 
             // get the eventTime
-            eventTime = m_doc->getComposition().
-                          getElapsedRealTime((*j)->getAbsoluteTime());
+            eventTime = comp.getElapsedRealTime((*j)->getAbsoluteTime());
 
             // As events are stored chronologically we can escape if
             // we're already beyond our event horizon for this slice.
@@ -1145,7 +1156,7 @@ RosegardenGUIApp::getSequencerSlice(const long &sliceStartSec,
 		if (duration == Rosegarden::RealTime(0, 0))
 		    continue;
 
-                Rosegarden::InstrumentId instrument = m_doc->getComposition().
+                Rosegarden::InstrumentId instrument = comp.
                              getTrackByIndex((*i)->getTrack())->getInstrument();
                 // insert event
                 Rosegarden::MappedEvent *me =

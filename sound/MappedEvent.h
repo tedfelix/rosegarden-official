@@ -57,6 +57,7 @@ public:
     MappedEvent(): m_pitch(0),
                    m_absoluteTime(0, 0),
                    m_duration(0, 0),
+                   m_audioStartMarker(0, 0),
                    m_velocity(0),
                    m_type(Internal) {;}
 
@@ -75,12 +76,14 @@ public:
     MappedEvent(const int &pitch,
                 const Rosegarden::RealTime &absTime,
                 const Rosegarden::RealTime &duration,
+                const Rosegarden::RealTime &audioStartMarker,
                 const velocityT &velocity,
                 const Rosegarden::InstrumentId &instrument,
                 const MappedEventType &type):
         m_pitch(pitch),
         m_absoluteTime(absTime),
         m_duration(duration),
+        m_audioStartMarker(audioStartMarker),
         m_velocity(velocity),
         m_type(type),
         m_instrument(instrument) {;}
@@ -89,6 +92,7 @@ public:
     //
     MappedEvent(const Rosegarden::RealTime &absTime,
                 const Rosegarden::RealTime &duration,
+                const Rosegarden::RealTime &audioStartMarker,
                 const Rosegarden::InstrumentId &instrument,
                 const MappedEventType type,
                 const int &id);
@@ -108,17 +112,28 @@ public:
     InstrumentId getInstrument() const { return m_instrument; }
 
     // Audio MappedEvent methods
-    //
-    void setStartIndex(const Rosegarden::RealTime sI)
-        { m_absoluteTime = sI; }
     Rosegarden::RealTime getStartIndex() const { return m_absoluteTime; }
 
     void setAudioID(const int &id) { m_pitch = id; }
     int getAudioID() const { return m_pitch; }
 
+    // A sample doesn't have to be played from the beginning.  When
+    // passing an Audio event this value may be set to indicate from
+    // where in the sample it should be played.  Duration is measured
+    // against total sounding length (not absolute position).
+    //
+    //
+    void setAudioStartMarker(const Rosegarden::RealTime &aS)
+        { m_audioStartMarker = aS; }
+    Rosegarden::RealTime getAudioStartMarker() const
+        { return m_audioStartMarker; }
+
+    // The type of MappedEvent
+    //
+
     MappedEventType getType() const { return m_type; }
     void setType(const MappedEventType &value) { m_type = value; }
-
+    
     struct MappedEventCmp
     {
         bool operator()(const MappedEvent *mE1, const MappedEvent *mE2) const
@@ -134,6 +149,7 @@ private:
     int                      m_pitch;
     Rosegarden::RealTime     m_absoluteTime;
     Rosegarden::RealTime     m_duration;
+    Rosegarden::RealTime     m_audioStartMarker;
     velocityT                m_velocity;
     MappedEventType          m_type;
     Rosegarden::InstrumentId m_instrument;

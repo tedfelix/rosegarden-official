@@ -123,13 +123,18 @@ public:
 
     PlayableAudioFile(AudioFile *audioFile,
                       const RealTime &startTime,
+                      const RealTime &startIndex,
                       const RealTime &duration,
                       Arts::SoundServerV2 &soundServer):
         m_id(audioFile->getID()),
         m_startTime(startTime),
+        m_startIndex(startIndex),
         m_duration(duration),
         m_status(Idle)
     {
+        // We should put some Arts::Trader work in here to get aRTS
+        // to decide for us what object is going to play the WAV
+        //
         m_artsAudioObject = Arts::DynamicCast(soundServer.createObject
                                ("Arts::Synth_PLAY_WAV"));
 
@@ -149,6 +154,7 @@ public:
 private:
     unsigned int          m_id;
     RealTime              m_startTime;
+    RealTime              m_startIndex;
     RealTime              m_duration;
     Arts::Synth_PLAY_WAV  m_artsAudioObject;
     PlayStatus            m_status;
@@ -281,8 +287,11 @@ public:
 
     // Queue up an audio sample for playing
     //
-    bool queueAudio(const unsigned int &id, const RealTime startIndex,
-                    const RealTime duration, const RealTime playLatency);
+    bool queueAudio(const unsigned int &id,
+                    const RealTime &absoluteTime,
+                    const RealTime &audioStartMarker,
+                    const RealTime &duration,
+                    const RealTime &playLatency);
 
 protected:
     std::vector<AudioFile*>::iterator getAudioFile(const unsigned int &id);
@@ -326,8 +335,6 @@ private:
     //
     Arts::Synth_AMAN_PLAY    m_amanPlay;
     Arts::Synth_AMAN_RECORD  m_amanRecord;
-    Arts::Synth_CAPTURE_WAV  m_captureWav;
-    Arts::Synth_PLAY_WAV     m_playWav;
 
     // TimeStamps mark the real world (aRts) times of the start
     // of play or record.  These are for internal use when
