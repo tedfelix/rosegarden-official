@@ -54,6 +54,7 @@ else
   fi
 
   if test "$with_jack" = "yes"; then
+    AC_CHECK_LIB(rt, shm_open)
     AC_CHECK_LIB(jack, jack_client_new)
 
     dnl  AC_DEFINE(HAVE_JACK, 1, [Define if you have JACK support])
