@@ -1503,7 +1503,11 @@ void NotationView::setupActions()
 		SLOT(slotTransformsMakeNotesViable()), actionCollection(),
 		"make_notes_viable");
 
-    new KAction(TransformsMenuDeCounterpointCommand::getGlobalName(), 0, this,
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        ("transforms-decounterpoint")));
+
+    new KAction(TransformsMenuDeCounterpointCommand::getGlobalName(), icon, 0, this,
 		SLOT(slotTransformsDeCounterpoint()), actionCollection(),
 		"de_counterpoint");
 

@@ -2,12 +2,12 @@
 static char *magick[] = {
 /* columns rows colors chars-per-pixel */
 "22 19 6 1",
-"X c #000000",
-"x c #404040",
-"O c #808080",
-"o c #909090",
-". c #c0c0c0",
 "  c None",
+"X	c black",
+"x	c #242724",
+"O	c #4D4E4D",
+"o	c #6B6D6B",
+".	c #848484",
 /* pixels */
 "              oxX     ",
 "          oxXXXXX     ",
@@ -20,12 +20,12 @@ static char *magick[] = {
 "       X        X     ",
 "       X        X     ",
 "       X        X     ",
-"       X     .ooX     ",
-"       X     xXXX     ",
-"       X    oXXXX     ",
-"    .ooX    oXXXO     ",
-"    xXXX     oO.      ",
-"   oXXXX              ",
-"   oXXXO              ",
-"    oO.               "
+"       X     oOXX     ",
+"       X    xXXXX     ",
+"       X    XXXXX     ",
+"    oOXX    .XO.      ",
+"   xXXXX              ",
+"   XXXXX              ",
+"   .XO.               ",
+"                      "
 };

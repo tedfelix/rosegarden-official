@@ -421,6 +421,7 @@
   <Separator/>
   <Action name="slur"/>
   <Action name="tie_notes"/>
+  <Action name="de_counterpoint"/>
   <Separator/>
   <Action name="crescendo"/>
   <Action name="decrescendo"/>
