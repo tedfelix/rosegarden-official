@@ -38,7 +38,8 @@ class RosegardenGUIView;
 class ViewElementsManager;
 class TrackItem;
 
-/**	RosegardenGUIDoc provides a document object for a document-view model.
+/**
+ * RosegardenGUIDoc provides a document object for a document-view model.
   *
   * The RosegardenGUIDoc class provides a document object that can be
   * used in conjunction with the classes RosegardenGUIApp and
@@ -58,66 +59,94 @@ class RosegardenGUIDoc : public QObject
     Q_OBJECT
 public:
 
-    /** Constructor for the fileclass of the application */
+    /**
+     * Constructor for the fileclass of the application
+     */
     RosegardenGUIDoc(QWidget *parent, const char *name=0);
 
-    /** Destructor for the fileclass of the application */
+    /**
+     * Destructor for the fileclass of the application
+     */
     ~RosegardenGUIDoc();
 
-    /** adds a view to the document which represents the document
-        contents. Usually this is your main view.
-    */
+    /**
+     * adds a view to the document which represents the document
+     * contents. Usually this is your main view.
+     */
     void addView(RosegardenGUIView *view);
 
-    /** removes a view from the list of currently connected views */
+    /**
+     * removes a view from the list of currently connected views
+     */
     void removeView(RosegardenGUIView *view);
 
-    /** sets the modified flag for the document after a modifying
-        action on the view connected to the document.
-    */
+    /**
+     * sets the modified flag for the document after a modifying
+     * action on the view connected to the document.
+     */
     void setModified(bool _m=true){ m_modified=_m; };
 
-    /** returns if the document is modified or not. Use this to
-        determine if your document needs saving by the user on
-        closing.
-    */
+    /**
+     * returns if the document is modified or not. Use this to
+     * determine if your document needs saving by the user on closing.
+     */
     bool isModified(){ return m_modified; };
 
-    /** "save modified" - asks the user for saving if the document is
-        modified
-    */
+    /**
+     * "save modified" - asks the user for saving if the document is
+     * modified
+     */
     bool saveIfModified();	
 
-    /** deletes the document's contents */
+    /**
+     * deletes the document's contents
+     */
     void deleteContents();
 
-    /** initializes the document generally */
+    /**
+     * initializes the document generally
+     */
     bool newDocument();
 
-    /** closes the acutal document */
+    /**
+     * closes the acutal document
+     */
     void closeDocument();
 
-    /** loads the document by filename and format and emits the
-        updateViews() signal
-    */
+    /**
+     * loads the document by filename and format and emits the
+     * updateViews() signal
+     */
     bool openDocument(const QString &filename, const char *format=0);
 
-    /** saves the document under filename and format.*/	
+    /**
+     * saves the document under filename and format.
+     */	
     bool saveDocument(const QString &filename, const char *format=0);
 
-    /** sets the path to the file connected with the document */
+    /**
+     *   sets the path to the file connected with the document
+     */
     void setAbsFilePath(const QString &filename);
 
-    /** returns the pathname of the current document file */
+    /**
+     * returns the pathname of the current document file
+     */
     const QString &getAbsFilePath() const;
 
-    /** sets the filename of the document */
+    /**
+     * sets the filename of the document
+     */
     void setTitle(const QString &_t);
 
-    /** returns the title of the document */
+    /**
+     * returns the title of the document
+     */
     const QString &getTitle() const;
 
-    /** deletes the document views */
+    /**
+     * deletes the document views
+     */
     void deleteViews();
 
     Rosegarden::Composition&       getComposition()       { return m_composition; }
@@ -126,40 +155,63 @@ public:
 //     Rosegarden::Track*         getTrack(int trackNb)        { return m_composition[trackNb]; }
 //     const Rosegarden::Track*   getTrack(int trackNb) const  { return m_composition[trackNb]; }
 
-    unsigned int getNbTracks()    const { return m_composition.getNbTracks(); }
+    unsigned int getNbTracks() const { return m_composition.getNbTracks(); }
     unsigned int getDuration() const { return m_composition.getDuration(); }
 
 public slots:
 
-    /** calls repaint() on all views connected to the document object
+    /**
+     * calls repaint() on all views connected to the document object
      * and is called by the view by which the document has been
      * changed.  As this view normally repaints itself, it is excluded
      * from the paintEvent.
      */
     void slotUpdateAllViews(RosegardenGUIView *sender);
 
+    /**
+     * Create a new track according to the data in the specified
+     * TrackItem
+     */
     void createNewTrack(TrackItem*);
 
 protected:
-    bool xmlParse(QFile &file, QString &errMsg);
+
+    /**
+     * Parse the Rosegarden file \a file
+     *
+     * \errMsg will contains the error messages
+     * if parsing failed.
+     *
+     * @return false if parsing failed
+     * @see RoseXmlHandler
+     */
+    bool xmlParse(QFile& file, QString &errMsg);
     // bool xmlParseElement(const QDomElement &elmnt);
  	
 public:	
-    /** the list of the views currently connected to the document */
+    /**
+     * the list of the views currently connected to the document
+     */
     static QList<RosegardenGUIView> *pViewList;	
 
 private:
-    /** the modified flag of the current document */
+    /**
+     * the modified flag of the current document
+     */
     bool m_modified;
 
-    /** the title of the current document */
+    /**
+     * the title of the current document
+     */
     QString m_title;
 
-    /** absolute file path of the current document */
+    /**
+     * absolute file path of the current document
+     */
     QString m_absFilePath;
 
-    /** the document's data : the events (or elements) constituting
-     * the document
+    /**
+     * the composition this document is wrapping
      */
     Rosegarden::Composition m_composition;
 

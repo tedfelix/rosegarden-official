@@ -24,6 +24,9 @@
 #include <MappedComposition.h>
 #include <dcopobject.h>
 
+/**
+ * RosegardenGUI DCOP Interface
+ */
 class RosegardenGUIIface : virtual public DCOPObject
 {
     K_DCOP

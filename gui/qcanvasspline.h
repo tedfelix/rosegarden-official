@@ -55,9 +55,8 @@
 #include <qcanvas.h>
 
 /**
- * Qt3 classes
+ * Port of a class from Qt3
  */
-
 class Q3PointArray : public QPointArray
 {
 public:
@@ -71,6 +70,9 @@ public:
 };
 
 
+/**
+ * Port of a class from Qt3
+ */
 class QCanvasSpline : public QCanvasPolygon
 {
 public:

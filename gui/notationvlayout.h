@@ -35,10 +35,15 @@ class NotationVLayout : public LayoutEngine
 public:
     NotationVLayout();
     virtual ~NotationVLayout();
-    
+
+    /**
+     * Applies layout on the specified Staff
+     */
     void layout(Staff &staff);
 
-    /// resets any internal position counters there may happen to be
+    /**
+     * Resets any internal position counters there may happen to be
+     */
     void reset();
 };
 

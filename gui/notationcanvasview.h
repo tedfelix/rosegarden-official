@@ -63,13 +63,33 @@ public:
 
 public slots:
 
+// Used for a note-shaped cursor - leaving around just in case
 //     void currentNoteChanged(Note::Type);
 
 signals:
-    void itemClicked(int pitch, const QPoint&, NotationElement*);
 
+    /**
+     * Emitted when the user clicks on a staff
+     * \a pitch is set to the MIDI pitch on which the click occurred
+     * \a point is set to the coordinates of the click event
+     * \a el points to the NotationElement which was clicked on, if any
+     */
+    void itemClicked(int pitch, const QPoint& point, NotationElement* el);
+
+    /**
+     * Emitted when the mouse cursor moves to a different height
+     * on the staff
+     *
+     * \a noteName contains the MIDI name of the corresponding note
+     */
     void hoveredOverNoteChange(const QString &noteName);
-    void hoveredOverAbsoluteTimeChange(unsigned int);
+
+    /**
+     * Emitted when the mouse cursor moves to a note which is at a different time
+     *
+     * \a time is set to the absolute time of the note the cursor is hovering on
+     */
+    void hoveredOverAbsoluteTimeChange(unsigned int time);
     
 protected:
 

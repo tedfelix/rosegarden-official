@@ -371,15 +371,17 @@ public slots:
     void rewind();
     void fastforward();
 
-    // Set the sequencer status - pass through DCOP as an int
-    //
+    /**
+     * Set the sequencer status - pass through DCOP as an int
+     */
     void notifySequencerStatus(const int &status);
 
 
-    // Convenience function for sending positional updates to
-    // the sequencer if we're ffwding, rwding or just jumping
-    // about on the Composition.
-    //
+    /**
+     * Convenience function for sending positional updates to the
+     * sequencer if we're ffwding, rwding or just jumping about on the
+     * Composition.
+     */
     void sendSequencerJump(const Rosegarden::timeT &position);
 
 private:

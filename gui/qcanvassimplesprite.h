@@ -25,9 +25,7 @@
 
 /**
  * A QCanvasSprite with 1 frame only
- * @author Guillaume Laurent, Chris Cannam, Richard Bown
  */
-
 class QCanvasSimpleSprite : public QCanvasSprite
 {
 public:

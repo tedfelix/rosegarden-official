@@ -38,15 +38,14 @@ class RosegardenGUIDoc;
 class NotationTool;
 
 /**
-  * NotationView is a view for one or more Staff objects, each of
-  * which contains the notation data associated with a Track.
-  * NotationView owns the Staff objects it displays.
-  * 
-  * This class manages the relationship between NotationHLayout/
-  * NotationVLayout and Staff data, as well as using rendering the
-  * actual notes (using NotePixmapFactory to generate the pixmaps).
-  */
-
+ * NotationView is a view for one or more Staff objects, each of
+ * which contains the notation data associated with a Track.
+ * NotationView owns the Staff objects it displays.
+ * 
+ * This class manages the relationship between NotationHLayout/
+ * NotationVLayout and Staff data, as well as using rendering the
+ * actual notes (using NotePixmapFactory to generate the pixmaps).
+ */
 class NotationView : public KMainWindow
 {
     friend class NoteInserter;
@@ -77,13 +76,13 @@ public:
 			      NotationElementList::iterator from,
                               NotationElementList::iterator to);
 
-    /// same, with dx,dy offset
+    /// draw all elements in range, with dx,dy offset
     virtual bool showElements(int staffNo,
 			      NotationElementList::iterator from,
                               NotationElementList::iterator to,
                               double dxoffset, double dyoffset);
 
-    /// same, relative to the specified item
+    /// draw all elements in range at coordinates relative to the specified canvas item
     virtual bool showElements(int staffNo,
 			      NotationElementList::iterator from,
                               NotationElementList::iterator to,
@@ -95,65 +94,97 @@ public:
     /// Calculate cached values for use in horizontal layout
     virtual bool applyHorizontalPreparse(int staff);
 
-    /// Set the 'y'-coord on all doc elements -
-    //  to be called between applyHorizontalPreparse and applyHorizontalLayout
+    /**
+     * Set the 'y'-coord on all doc elements -
+     * to be called between applyHorizontalPreparse and applyHorizontalLayout
+     */
     virtual bool applyVerticalLayout(int staff);
     
-    /// Set the 'x'-coord on all doc elements -
-    //  to be called after applyHorizontalPreparse and applyVerticalLayout
+    /**
+     * Set the 'x'-coord on all doc elements -
+     * to be called after applyHorizontalPreparse and applyVerticalLayout
+     */
     virtual bool applyHorizontalLayout();
 
     void setHorizontalLayoutEngine(NotationHLayout* e) { m_hlayout = e; }
     void setVerticalLayoutEngine  (NotationVLayout* e) { m_vlayout = e; }
 
-    Staff *getStaff(int i) { return m_staffs[i]; }
-
     LayoutEngine* getHorizontalLayoutEngine() { return m_hlayout; }
     LayoutEngine* getVerticalLayoutEngine()   { return m_vlayout; }
 
+    /// Return a pointer to the staff at the specified index
+    Staff* getStaff(int i) { return m_staffs[i]; }
+
     QCanvas* canvas() { return m_canvasView->canvas(); }
 
+    /**
+     * Set the note or rest selected by the user from the toolbars
+     */
     void setCurrentSelectedNote(bool isRest, Rosegarden::Note::Type,
 				int dots = 0);
 
 public slots:
 
-    /** undo
+    /**
+     * undo
      */
     void slotEditUndo();
-    /** redo
+
+    /**
+     * redo
      */
     void slotEditRedo();
     
-    /** put the marked text/object into the clipboard and remove
-     *	it from the document
+    /**
+     * put the marked text/object into the clipboard and remove * it
+     * from the document
      */
     void slotEditCut();
 
-    /** put the marked text/object into the clipboard
+    /**
+     * put the marked text/object into the clipboard
      */
     void slotEditCopy();
 
-    /** paste the clipboard into the document
+    /**
+     * paste the clipboard into the document
      */
     void slotEditPaste();
 
-    /** toggles the toolbar
+    /**
+     * toggles the main toolbar
      */
     void slotToggleToolBar();
 
+    /**
+     * toggles the notes toolbar
+     */
     void slotToggleNotesToolBar();
+
+    /**
+     * toggles the rests toolbar
+     */
     void slotToggleRestsToolBar();
+
+    /**
+     * toggles the accidentals toolbar
+     */
     void slotToggleAccidentalsToolBar();
+
+    /**
+     * toggles the clefs toolbar
+     */
     void slotToggleClefsToolBar();
 
-    /** toggles the statusbar
+    /**
+     * toggles the statusbar
      */
     void slotToggleStatusBar();
 
     /** 
      * Changes the statusbar contents for the standard label permanently,
      * used to indicate current actions.
+     *
      * @param text the text that is displayed in the statusbar
      */
     void slotStatusMsg(const QString &text);
@@ -163,12 +194,13 @@ public slots:
      * seconds, then restores the last status. This is used to display
      * statusbar messages that give information about actions for
      * toolbar icons and menuentries.
+     *
      * @param text the text that is displayed in the statusbar
      */
     void slotStatusHelpMsg(const QString &text);
 
 
-    // note switch slots
+    /// note switch slots
     void slotBreve();
     void slotWhole();
     void slotHalf();
@@ -178,7 +210,7 @@ public slots:
     void slot32nd();
     void slot64th();
 
-    // dotted note switch slots
+    /// dotted note switch slots
     void slotDottedBreve();
     void slotDottedWhole();
     void slotDottedHalf();
@@ -188,7 +220,7 @@ public slots:
     void slotDotted32nd();
     void slotDotted64th();
 
-    // rest switch slots
+    /// rest switch slots
     void slotRBreve();
     void slotRWhole();
     void slotRHalf();
@@ -198,7 +230,7 @@ public slots:
     void slotR32nd();
     void slotR64th();
 
-    // dotted rest switch slots
+    /// dotted rest switch slots
     void slotDottedRBreve();
     void slotDottedRWhole();
     void slotDottedRHalf();
@@ -208,7 +240,7 @@ public slots:
     void slotDottedR32nd();
     void slotDottedR64th();
 
-    // accidental switch slots
+    /// accidental switch slots
     void slotNoAccidental();
     void slotSharp();
     void slotFlat();
@@ -216,21 +248,37 @@ public slots:
     void slotDoubleSharp();
     void slotDoubleFlat();
 
-    // clef switch slots
+    /// clef switch slots
     void slotTrebleClef();
     void slotTenorClef();
     void slotAltoClef();
     void slotBassClef();
 
-    // edition tools
+    /// edition tools
     void slotEraseSelected();
 
-    // Canvas actions slots
+    /// Canvas actions slots
     void itemClicked(int height, const QPoint&, NotationElement*);
 
+    /**
+     * Called when the mouse cursor moves over a different height on
+     * the staff
+     *
+     * @see NotationCanvasView#hoveredOverNoteChange()
+     */
     void hoveredOverNoteChanged(const QString&);
+
+    /**
+     * Called when the mouse cursor moves over a note which is at a
+     * different time on the staff
+     *
+     * @see NotationCanvasView#hoveredOverNoteChange()
+     */
     void hoveredOverAbsoluteTimeChange(unsigned int);
 
+    /**
+     * Set the time pointer position during playback
+     */
     void setPositionPointer(const int &position);
 
 signals:
@@ -260,6 +308,9 @@ protected:
      */
     void initStatusBar();
 
+    /**
+     * Helper function to toggle a toolbar given its name
+     */
     void toggleNamedToolBar(const QString& toolBarName);
     
     /**
@@ -269,6 +320,10 @@ protected:
 
     /**
      * readjust the width of the canvas after a layout
+     *
+     * Checks the total width computed by the horizontal layout
+     *
+     * @see NotationHLayout#getTotalWidth()
      */
     void readjustCanvasWidth();
     
@@ -291,17 +346,28 @@ protected:
      * (in pixels), end() is returned;
      */
 //!!! This currently always returns on staff 0
-    NotationElementList::iterator findClosestNote
-      (double x,
-       Rosegarden::Event *&timeSignature,
-       Rosegarden::Event *&clef,
-       Rosegarden::Event *&key,
-       int &staffNo,
-       unsigned int proximityThreshold = 10);
+    NotationElementList::iterator findClosestNote(double x,
+                                                  Rosegarden::Event *&timeSignature,
+                                                  Rosegarden::Event *&clef,
+                                                  Rosegarden::Event *&key,
+                                                  int &staffNo,
+                                                  unsigned int proximityThreshold = 10);
 
-    QCanvasSimpleSprite *makeNoteSprite(NotationElementList::iterator);
+    /**
+     * Return a QCanvasSimpleSprite representing the NotationElement
+     * pointed to by the given iterator
+     */
+    QCanvasSimpleSprite* makeNoteSprite(NotationElementList::iterator);
 
+    /**
+     * Set the current Notation tool (note inserter, rest inserter, eraser...)
+     *
+     * Called when the user selects a new item on one of the notation toolbars
+     * (notes toolbars, rests toolbars...)
+     */
     void setTool(NotationTool*);
+
+
 
     KConfig* m_config;
 
@@ -339,6 +405,15 @@ protected:
 //               Notation Tools
 //////////////////////////////////////////////////////////////////////
 
+/**
+ * Notation tool base class.
+ *
+ * A NotationTool represents one of the items on the notation toolbars
+ * (notes, rests, clefs, eraser, etc...). It handle mouse click events
+ * for the NotationView (classic 'State' design pattern)
+ *
+ * @see NotationView#setTool()
+ */
 class NotationTool
 {
 public:
@@ -353,6 +428,9 @@ protected:
 
 namespace Rosegarden { class TrackNotationHelper; }
 
+/**
+ * This tool will insert notes on mouse click events
+ */
 class NoteInserter : public NotationTool
 {
 public:
@@ -361,6 +439,7 @@ public:
     virtual void handleClick(int height, const QPoint &eventPos,
                              NotationElement* el);
 
+    /// Set the accidental for the notes which will be inserted
     static void setAccidental(Rosegarden::Accidental);
 
 protected:
@@ -375,6 +454,9 @@ protected:
     static Rosegarden::Accidental m_accidental;
 };
 
+/**
+ * This tool will insert rests on mouse click events
+ */
 class RestInserter : public NoteInserter
 {
 public:
@@ -387,6 +469,9 @@ protected:
                           Rosegarden::Accidental);
 };
 
+/**
+ * This tool will insert clefs on mouse click events
+ */
 class ClefInserter : public NotationTool
 {
 public:
@@ -399,6 +484,9 @@ protected:
 };
 
 
+/**
+ * This tool will erase a note on mouse click events
+ */
 class NotationEraser : public NotationTool
 {
 public:

@@ -25,12 +25,11 @@
 
 #include "qcanvasgroupableitem.h"
 
-/**A QCanvasLine which can be put in a QCanvasGroup
-
-  *@author Guillaume Laurent
-  */
-
-class QCanvasLineGroupable : public QCanvasLine, public QCanvasGroupableItem  {
+/**
+ * A QCanvasLine which can be put in a QCanvasGroup
+ */
+class QCanvasLineGroupable : public QCanvasLine, public QCanvasGroupableItem
+{
 public: 
     QCanvasLineGroupable(QCanvas *c, QCanvasItemGroup *g);
 };

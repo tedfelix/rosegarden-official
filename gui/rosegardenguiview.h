@@ -55,9 +55,15 @@ class RosegardenGUIView : public QVBox
 {
     Q_OBJECT
 public:
-    /** Constructor for the main view */
+
+    /**
+     * Constructor for the main view
+     */
     RosegardenGUIView(QWidget *parent = 0, const char *name=0);
-    /** Destructor for the main view */
+
+    /**
+     * Destructor for the main view
+     */
     ~RosegardenGUIView();
 
     /**
@@ -70,7 +76,9 @@ public:
      */
     RosegardenGUIDoc* getDocument() const;
 
-    /** contains the implementation for printing functionality */
+    /**
+     * contains the implementation for printing functionality
+     */
     void print(QPrinter *pPrinter);
 
     // the following aren't slots because they're called from
@@ -96,8 +104,16 @@ public:
      */
     void resizeSelected();
 
+    /**
+     * Edit all the track at once
+     *
+     * Show all the tracks in a single Notation window
+     */
     void editAllTracks(Rosegarden::Composition*);
-    
+
+    /**
+     * Set the time pointer position during playback
+     */
     void setPointerPosition(const int &position);
     
 public slots:

@@ -31,15 +31,23 @@
  *
  * computes the X coordinates of notation elements
  */
-
 class NotationHLayout : public LayoutEngine
 {
 public:
     NotationHLayout();
     ~NotationHLayout();
 
+    /**
+     * Precomputes layout data
+     *
+     * The data is put in BarDataList
+     */
     void preparse(Staff &staff, int firstBar = -1, int lastBar = -1);
+
+    /// Tries to harmonize the bar positions for all the staves
     void reconcileBars();
+
+    /// Effectiveley perform layout
     void layout();
 
     /**

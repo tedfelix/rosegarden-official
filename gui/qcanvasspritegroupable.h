@@ -25,12 +25,11 @@
 
 #include "qcanvasgroupableitem.h"
 
-/**A QCanvasSprite that can be put in a QCanvasGroup
-
-  *@author Guillaume Laurent
-  */
-
-class QCanvasSpriteGroupable : public QCanvasSprite, public QCanvasGroupableItem  {
+/**
+ * A QCanvasSprite that can be put in a QCanvasGroup
+ */
+class QCanvasSpriteGroupable : public QCanvasSprite, public QCanvasGroupableItem
+{
 public:
     QCanvasSpriteGroupable(QCanvasPixmapArray*,
                            QCanvas*,

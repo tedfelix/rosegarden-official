@@ -21,20 +21,21 @@
 #ifndef QCANVASGROUPABLEITEM_H
 #define QCANVASGROUPABLEITEM_H
 
-/**
- * This class is meant to be inherited by QCanvasItem children to make
- * them groupable.
-
- @see QCanvasSpriteGroupable
- @see QCanvasLineGroupable
-
-* @author Guillaume Laurent
-*/
-
 class QCanvasItemGroup;
 class QCanvasItem;
 
-class QCanvasGroupableItem {
+/**
+ * This class is meant to be inherited by QCanvasItem children to make
+ * them groupable.
+ *
+ * On destruction, the item will remove itself from the group it's
+ * attached to.
+ *
+ * @see QCanvasSpriteGroupable
+ * @see QCanvasLineGroupable
+ */
+class QCanvasGroupableItem
+{
     friend class QCanvasItemGroup;
 
 public:
@@ -45,26 +46,30 @@ public:
      * position will be translated so that it's coordinates are
      * relative to those of the item group.
      *
-     * @ see QCanvasItemGroup::addItemWithRelativeCoords()
+     * @see QCanvasItemGroup#addItemWithRelativeCoords()
      */
     QCanvasGroupableItem(QCanvasItem*, QCanvasItemGroup*,
                          bool withRelativeCoords = false);
 
     virtual ~QCanvasGroupableItem();
 
+    /// Returns the QCanvasItemGroup this groupable item belongs to
     QCanvasItemGroup* group() { return m_group; }
+
+    /// Returns the QCanvasItem which this groupable item wraps
     QCanvasItem*      item()  { return m_item; }
 
-    /** same as moveBy(), except that the move is done relative to the
-       item group's coordinates
-    */
+    /**
+     * Same as moveBy(), except that the move is done relative to the
+     * item group's coordinates
+     */
     virtual void relativeMoveBy(double dx, double dy);
 
 protected:
     /**
-     * detach item from the item group - called by QCanvasItemGroup only
+     * Detach item from the item group - called by QCanvasItemGroup only
      *
-     * set m_group to 0, so that on desctruction the item won't try to
+     * Set m_group to 0, so that on desctruction the item won't try to
      * remove itself from the group
      */
     void detach();
