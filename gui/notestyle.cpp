@@ -261,7 +261,7 @@ NoteStyle::getMarkCharName(const Mark &mark)
 CharName
 NoteStyle::getClefCharName(const Clef &clef)
 {
-    string clefType(clef.getClefType());
+    std::string clefType(clef.getClefType());
 
     if (clefType == Clef::Bass) {
         return NoteCharacterNames::F_CLEF;
