@@ -3240,7 +3240,7 @@ RescaleDialog::RescaleDialog(QWidget *parent,
 
     if (showCloseGapOption) {
 	QGroupBox *optionBox = new QGroupBox(1, Horizontal, i18n("Options"), vbox);
-	m_closeGap = new QCheckBox("Adjust times of following events accordingly",
+	m_closeGap = new QCheckBox(i18n("Adjust times of following events accordingly"),
 				   optionBox);
 	KConfig *config = kapp->config();
 	config->setGroup(Rosegarden::GeneralOptionsConfigGroup);
