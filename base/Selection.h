@@ -126,7 +126,12 @@ protected:
  * need to do much with this really
  */
 
-typedef std::set<Segment *> SegmentSelection;
+class SegmentSelection : public std::set<Segment *>
+{
+    // Actually, the std::set is all we need.  The only reason
+    // this is a class instead of a typedef is so we can
+    // predeclare it
+};
 
 
 }

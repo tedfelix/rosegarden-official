@@ -25,28 +25,41 @@
 
 namespace Rosegarden {
     class Clipboard;
+    class EventSelection;
+    class SegmentSelection;
 }
 
 
-/// Cut a selection from within a segment
+/// Cut a selection
 
 class CutCommand : public KMacroCommand
 {
 public:
+    /// Make a CutCommand that cuts events from within a Segment
     CutCommand(Rosegarden::EventSelection &selection,
+	       Rosegarden::Clipboard *clipboard);
+
+    /// Make a CutCommand that cuts whole Segments
+    CutCommand(Rosegarden::SegmentSelection &selection,
 	       Rosegarden::Clipboard *clipboard);
 
     static QString name() { return "Cu&t"; }
 };
 
 
-/// Copy a selection from within a segment
+/// Copy a selection
 
 class CopyCommand : public KCommand
 {
 public:
+    /// Make a CopyCommand that copies events from within a Segment
     CopyCommand(Rosegarden::EventSelection &selection,
 		Rosegarden::Clipboard *clipboard);
+
+    /// Make a CopyCommand that copies whole Segments
+    CopyCommand(Rosegarden::SegmentSelection &selection,
+		Rosegarden::Clipboard *clipboard);
+
     virtual ~CopyCommand();
 
     static QString name() { return "&Copy"; }

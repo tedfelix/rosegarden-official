@@ -53,10 +53,12 @@
 #include "ktmpstatusmsg.h"
 #include "SegmentPerformanceHelper.h"
 #include "NotationTypes.h"
+#include "Selection.h"
 #include "sequencemanager.h"
 #include "trackbuttons.h"
 #include "trackeditor.h"
 #include "dialogs.h"
+#include "editcommands.h"
 #include "multiviewcommandhistory.h"
 #include "segmentcommands.h"
 #include "zoomslider.h"
@@ -1083,12 +1085,28 @@ void RosegardenGUIApp::slotQuit()
 
 void RosegardenGUIApp::slotEditCut()
 {
+    //!!! a little baroque
+
+    SegmentCanvas *canvas = m_view->getTrackEditor()->getSegmentCanvas();
+    if (!canvas->haveSelection()) return;
     KTmpStatusMsg msg(i18n("Cutting selection..."), statusBar());
+
+    Rosegarden::SegmentSelection selection(canvas->getSelectedSegments());
+    m_doc->getCommandHistory()->addCommand
+	(new CutCommand(selection, m_doc->getClipboard()));
 }
 
 void RosegardenGUIApp::slotEditCopy()
 {
+    //!!! a little baroque
+
+    SegmentCanvas *canvas = m_view->getTrackEditor()->getSegmentCanvas();
+    if (!canvas->haveSelection()) return;
     KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), statusBar());
+
+    Rosegarden::SegmentSelection selection(canvas->getSelectedSegments());
+    m_doc->getCommandHistory()->addCommand
+	(new CopyCommand(selection, m_doc->getClipboard()));
 }
 
 void RosegardenGUIApp::slotEditPaste()

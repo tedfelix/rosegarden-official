@@ -24,7 +24,9 @@
 #include "SegmentNotationHelper.h"
 #include "BaseProperties.h"
 #include "Clipboard.h"
+
 #include "notationproperties.h"
+#include "segmentcommands.h"
 
 #include "rosedebug.h"
 #include <iostream>
@@ -41,6 +43,7 @@ using Rosegarden::Accidental;
 using Rosegarden::Accidentals::NoAccidental;
 using Rosegarden::Indication;
 using Rosegarden::EventSelection;
+using Rosegarden::SegmentSelection;
 
 using namespace Rosegarden::BaseProperties;
 
@@ -58,13 +61,38 @@ CutCommand::CutCommand(EventSelection &selection,
     addCommand(new EraseCommand(selection));
 }
 
+CutCommand::CutCommand(SegmentSelection &selection,
+		       Rosegarden::Clipboard *clipboard) :
+    KMacroCommand(name())
+{
+    addCommand(new CopyCommand(selection, clipboard));
+
+    for (SegmentSelection::iterator i = selection.begin();
+	 i != selection.end(); ++i) {
+	addCommand(new SegmentEraseCommand(*i));
+    }
+}
+
 CopyCommand::CopyCommand(EventSelection &selection,
-					   Rosegarden::Clipboard *clipboard) :
+			 Rosegarden::Clipboard *clipboard) :
     KCommand(name()),
     m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Rosegarden::Clipboard;
     (void)m_sourceClipboard->newSegment(&selection);
+}
+
+CopyCommand::CopyCommand(SegmentSelection &selection,
+			 Rosegarden::Clipboard *clipboard) :
+    KCommand(name()),
+    m_targetClipboard(clipboard)
+{
+    m_sourceClipboard = new Rosegarden::Clipboard;
+
+    for (SegmentSelection::iterator i = selection.begin();
+	 i != selection.end(); ++i) {
+	(void)m_sourceClipboard->newSegment(*i);
+    }
 }
 
 CopyCommand::~CopyCommand()

@@ -28,11 +28,15 @@
 
 #include "Event.h" // for timeT
 #include "Track.h"
-#include "Selection.h"
 
 #include "segmentcommands.h" // for SegmentReconfigureCommand::SegmentRec
 
-namespace Rosegarden { class Segment; class RulerScale; }
+namespace Rosegarden {
+    class Segment;
+    class RulerScale;
+    class SegmentSelection;
+}
+
 class SegmentItem;
 class SegmentCanvas;
 class RosegardenGUIDoc;

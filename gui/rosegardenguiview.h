@@ -34,12 +34,11 @@
 
 #include "rosedebug.h"
 
-#include "Selection.h"
-
 namespace Rosegarden { 
     class Composition; 
     class MappedEvent;
     class SimpleRulerScale;
+    class SegmentSelection;
 }
 
 class QScrollView;
