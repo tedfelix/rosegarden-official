@@ -32,3 +32,9 @@ MidiArts.mcoptype: MidiArts.h
 MidiRecord.cpp: MidiArts.h
 
 DISTCLEANFILES = $(sound_METASOURCES) MidiArts.h MidiArts.cc
+
+bin_PROGRAMS = sound
+sound_SOURCES = sound.cpp
+sound_LDADD = -lqt -lRosegardenSound -lcore
+sound_LDFLAGS = -L../core
+

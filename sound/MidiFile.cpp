@@ -582,55 +582,42 @@ MidiFile::convertToRosegarden()
           switch(midiEvent->metaMessageType())
           {
             case MIDI_SEQUENCE_NUMBER:
-              //cout << "SEQ" << endl;
               break;
 
             case MIDI_TEXT_EVENT:
-              //cout << "TEXT" << endl;
               break;
 
             case MIDI_COPYRIGHT_NOTICE:
-              //cout << "COPYRIGHT" << endl;
               break;
 
             case MIDI_TRACK_NAME:
-              //cout << "TRACK" << endl;
               break;
 
             case MIDI_INSTRUMENT_NAME:
-              //cout << "INSTRUMENT" << endl;
               break;
 
             case MIDI_LYRIC:
-              //cout << "LYRIC" << endl;
               break;
 
             case MIDI_TEXT_MARKER:
-              //cout << "TEXT" << endl;
               break;
 
             case MIDI_CUE_POINT:
-              //cout << "CUE" << endl;
               break;
 
             case MIDI_CHANNEL_PREFIX:
-              //cout << "CNAHH" << endl;
               break;
 
             case MIDI_CHANNEL_PREFIX_OR_PORT:
-              //cout << "CHANN" << endl;
               break;
 
             case MIDI_END_OF_TRACK:
-              //cout << "EOT" << endl;
               break;
 
             case MIDI_SET_TEMPO:
-              //cout << "TEMPO" << endl;
               break;
 
             case MIDI_SMPTE_OFFSET:
-              //cout << "SMPTE" << endl;
               break;
 
             case MIDI_TIME_SIGNATURE:
@@ -696,7 +683,8 @@ MidiFile::convertToRosegarden()
             break;
 
           case MIDI_NOTE_OFF:
-            cout << "MIDI OFF SHOULD NOT EXIST" << endl;
+            std::cout << "MidiFile::convertToRosegarden - MIDI_OFF should not exist here!" << endl;
+            break;
 
           case MIDI_POLY_AFTERTOUCH:
             break;
@@ -924,11 +912,101 @@ MidiFile::writeTrack(std::ofstream* midiFile, const unsigned int &trackNumber)
 {
   *midiFile << MIDI_TRACK_HEADER.c_str();
 
-  // get the length of the track and write it out
+  // get the length of the track in bytes and write it out
+  //*midiFile << (MidiByte) _midiComposition[trackNumber];
 
   // parse all the elements out
 
-  std::cout << trackNumber  << endl;
+  MidiTrackIterator midiEvent;
+
+  for ( midiEvent = (_midiComposition[trackNumber].begin());
+        midiEvent != (_midiComposition[trackNumber].end()); ++midiEvent )
+  {
+    if (midiEvent->isMeta())
+    {
+      switch(midiEvent->metaMessageType())
+      {
+        case MIDI_SEQUENCE_NUMBER:
+          break;
+
+        case MIDI_TEXT_EVENT:
+          break;
+
+        case MIDI_COPYRIGHT_NOTICE:
+          break;
+
+        case MIDI_TRACK_NAME:
+          break;
+
+        case MIDI_INSTRUMENT_NAME:
+          break;
+
+        case MIDI_LYRIC:
+          break;
+
+        case MIDI_TEXT_MARKER:
+          break;
+
+        case MIDI_CUE_POINT:
+          break;
+
+        case MIDI_CHANNEL_PREFIX:
+          break;
+
+        case MIDI_CHANNEL_PREFIX_OR_PORT:
+          break;
+
+        case MIDI_END_OF_TRACK:
+          break;
+
+        case MIDI_SET_TEMPO:
+          break;
+
+        case MIDI_SMPTE_OFFSET:
+          break;
+
+        case MIDI_TIME_SIGNATURE:
+          break;
+
+        case MIDI_KEY_SIGNATURE:
+          break;
+
+        case MIDI_SEQUENCER_SPECIFIC:
+          break;
+
+        default:
+          break;
+      }
+    }
+
+    switch(midiEvent->messageType())
+    {
+      case MIDI_NOTE_ON:
+        break;
+
+      case MIDI_NOTE_OFF:
+        break;
+
+      case MIDI_POLY_AFTERTOUCH:
+        break;
+
+      case MIDI_CTRL_CHANGE:
+        break;
+
+      case MIDI_PROG_CHANGE:
+        break;
+
+      case MIDI_CHNL_AFTERTOUCH:
+        break;
+
+      case MIDI_PITCH_BEND:
+        break;
+
+      default:
+        break;
+    }
+    
+  }
 
   return(true);
 }

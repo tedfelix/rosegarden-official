@@ -30,6 +30,16 @@
 #include <list>
 #include <map>
 
+// Conversion class for Rosegarden::Composition to and
+// from MIDI Files.  Despite the fact you can reuse this
+// object it's probably safer just to create it for a
+// single way conversion and then throw it away (MIDI
+// to Composition conversion invalidates the internal
+// MIDI model).
+//
+//
+//
+
 namespace Rosegarden
 {
 
@@ -110,7 +120,6 @@ namespace Rosegarden
     const unsigned int getNumberFromMidiBytes(std::ifstream* midiFile);
     const std::string getMidiBytes(std::ifstream* midiFile, const unsigned int &bytes);
     bool skipToNextTrack(std::ifstream *midiFile);
-
     void intToHexMidiBytes(std::ofstream* midiFile, int number);
 
   };
