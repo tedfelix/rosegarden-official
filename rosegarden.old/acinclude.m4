@@ -753,7 +753,7 @@ fi
 if test -z "$3"; then
    if test $kde_qtver = 2; then
     if test $kde_qtsubver -gt 0; then
-      kde_qt_verstring="QT_VERSION >= 222"
+      kde_qt_verstring="QT_VERSION >= 221"
     else
       kde_qt_verstring="QT_VERSION >= 200"
     fi

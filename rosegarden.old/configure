@@ -4920,7 +4920,7 @@ fi
 if test -z ""; then
    if test $kde_qtver = 2; then
     if test $kde_qtsubver -gt 0; then
-      kde_qt_verstring="QT_VERSION >= 222"
+      kde_qt_verstring="QT_VERSION >= 221"
     else
       kde_qt_verstring="QT_VERSION >= 200"
     fi
@@ -7710,6 +7710,7 @@ po/Makefile \
 rosegardengui/Makefile \
 rosegardengui/docs/Makefile \
 rosegardengui/docs/en/Makefile \
+rosegardengui/notation/Makefile \
  config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -7913,6 +7914,7 @@ po/Makefile \
 rosegardengui/Makefile \
 rosegardengui/docs/Makefile \
 rosegardengui/docs/en/Makefile \
+rosegardengui/notation/Makefile \
 "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
