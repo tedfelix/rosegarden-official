@@ -4833,6 +4833,3 @@ fi
 AC_SUBST(KDE_HAS_DOXYGEN)
 
 ])
-
-ifndef([AM_PATH_ALSA],
-	AC_DEFUN(AM_PATH_ALSA, [with_alsa="no"]))
