@@ -192,6 +192,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     //
     int snapGridSize = m_staffs[0]->getSegment().getSnapGridSize();
 
+    MATRIX_DEBUG << "MatrixView : Snap Grid Size = " << snapGridSize << endl;
+
     if (snapGridSize != -1)
        m_snapGrid->setSnapTime(snapGridSize);
     else

@@ -70,7 +70,8 @@ namespace RosegardenGUIColours
 
     const QColor BarLine = Qt::black;
     const QColor BarLineIncorrect = QColor(211, 0, 31);
-    const QColor BeatLine = QColor(212, 212, 212);
+    const QColor BeatLine = QColor(100, 100, 100);
+    const QColor SubBeatLine = QColor(212, 212, 212);
     const QColor StaffConnectingLine = QColor(192, 192, 192);
     const QColor StaffConnectingTerminatingLine = QColor(128, 128, 128);
 

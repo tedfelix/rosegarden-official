@@ -1006,7 +1006,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 		(m_device);
 	    if (md) {
 		md->setVariationType(variation);
-                md->clearControlList(); // clear down default controllers
 	    }
 	}
 	else if (type == "audio")
@@ -1124,6 +1123,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
     } else if (lcName == "controls") {
+
+        // Only clear down the controllers list if we have found some controllers in the RG file
+        //
+        if (m_device)
+        {
+            dynamic_cast<Rosegarden::MidiDevice*>(m_device)->clearControlList();
+        }
 
 	m_haveControls = true;
 
@@ -1700,9 +1706,6 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
     } else if (lcName == "device") {
 
-	if (!m_haveControls) {
-	    setupDefaultControllers();
-	}
         m_device = 0;
 
     } else if (lcName == "audiofiles") {
@@ -1884,36 +1887,4 @@ RoseXmlHandler::setMIDIDeviceConnection(QString connection)
     // connection should be sync'd later in the natural course of things
 }
 
-
-void
-RoseXmlHandler::setupDefaultControllers()
-{
-    Rosegarden::MidiDevice *md = dynamic_cast<Rosegarden::MidiDevice *>(m_device);
-    if (!md) return;
-   
-    static QString controls[][9] = {
-	{ "Pan", "controller", "<none>", "0", "127", "64", "10", "2", "0" },
-	{ "Chorus", "controller", "<none>", "0", "127", "0", "93", "3", "1" },
-	{ "Volume", "controller", "<none>", "0", "127", "0", "7", "1", "2" },
-	{ "Reverb", "controller", "<none>", "0", "127", "0", "91", "3", "3" },
-	{ "Sustain", "controller", "<none>", "0", "127", "0", "64", "4", "4" },
-	{ "Expression", "controller", "<none>", "0", "127", "0", "11", "2", "5" },
-	{ "Modulation", "controller", "<none>", "0", "127", "0", "1", "4", "-1" }
-    };    
-
-    for (unsigned int i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {
-	
-	Rosegarden::ControlParameter con(qstrtostr(controls[i][0]),
-					 qstrtostr(controls[i][1]),
-					 qstrtostr(controls[i][2]),
-					 controls[i][3].toInt(),
-					 controls[i][4].toInt(),
-					 controls[i][5].toInt(),
-					 Rosegarden::MidiByte(controls[i][6].toInt()),
-					 controls[i][7].toInt(),
-					 controls[i][8].toInt());
-	
-	md->addControlParameter(con);
-    }
-}
 

@@ -515,7 +515,7 @@ ControlParameterEditDialog::ControlParameterEditDialog(
 
     // populate combos
     m_typeCombo->insertItem(strtoqstr(Rosegarden::Controller::EventType));
-    //m_typeCombo->insertItem(strtoqstr(Rosegarden::PitchBend::EventType));
+    m_typeCombo->insertItem(strtoqstr(Rosegarden::PitchBend::EventType));
 
     // Populate colour combo
     //
@@ -548,10 +548,8 @@ ControlParameterEditDialog::ControlParameterEditDialog(
 
     if (control->getType() == Rosegarden::Controller::EventType)
         m_typeCombo->setCurrentItem(0);
-    /*
     else if (control->getType() == Rosegarden::PitchBend::EventType)
         m_typeCombo->setCurrentItem(1);
-        */
 
     m_description->setText(strtoqstr(control->getDescription()));
     m_controllerBox->setValue(int(control->getControllerValue()));

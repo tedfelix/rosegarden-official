@@ -110,7 +110,6 @@ protected:
     void addMIDIDevice(QString name, bool createAtSequencer);
     void setMIDIDeviceConnection(QString connection);
     void skipToNextPlayDevice();
-    void setupDefaultControllers();
 
     //--------------- Data members ---------------------------------
 

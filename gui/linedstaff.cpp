@@ -649,37 +649,53 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
     if (showBeatLines()) {
 
-	double beats; // number of grid lines per bar may be fractional
+	double gridLines; // number of grid lines per bar may be fractional
 
 	// If the snap time is zero we default to beat markers
 	//
 	if (m_snapGrid && m_snapGrid->getSnapTime(x))
-	    beats = double(timeSig.getBarDuration()) /
+	    gridLines = double(timeSig.getBarDuration()) /
 		double(m_snapGrid->getSnapTime(x));
 	else
-	    beats = timeSig.getBeatsPerBar();
+	    gridLines = timeSig.getBeatsPerBar();
 
-	double dx = width / beats;
+	double dx = width / gridLines;
 
-	for (int beat = 1; beat < beats; ++beat) {
+        // The beats will appear on these lines
+        //
+        double beatLine = double(timeSig.getBarDuration()) /
+                double(timeSig.getBeatsPerBar());
+
+	for (int gridLine = 1; gridLine < gridLines; ++gridLine) {
 
 	    line = new QCanvasRectangle
 		(0, 0, barThickness, getBarLineHeight(), m_canvas);
-/*!!!	    
-	    if (elementsInSpaces()) {
-		line->moveBy(x + beat * dx, y - (getLineSpacing()/2 + 1));
-	    } else {
-		line->moveBy(x + beat * dx, y);
-	    }
-*/
-	    line->moveBy(x + beat * dx, y);
-		
+
+	    //if (elementsInSpaces()) {
+		//line->moveBy(x + beat * dx, y - (getLineSpacing()/2 + 1));
+	    //} else {
+		//line->moveBy(x + beat * dx, y);
+	    //}
+
+	    line->moveBy(x + gridLine * dx, y);
+
+            double currentGrid = gridLines/double(timeSig.getBeatsPerBar());
+
 	    line->setPen(RosegardenGUIColours::BeatLine);
 	    line->setBrush(RosegardenGUIColours::BeatLine);
+
+            // Reset to SubBeatLine colour if we're not a beat line - avoid div by zero!
+            //
+            if (currentGrid > 1.0 && double(gridLine)/currentGrid != gridLine/int(currentGrid))
+            {
+	        line->setPen(RosegardenGUIColours::SubBeatLine);
+	        line->setBrush(RosegardenGUIColours::SubBeatLine);
+            }
+
 	    line->setZ(-1);
 	    line->show();
 
-	    BarLine beatLine(layoutX + beat * dx, line);
+	    BarLine beatLine(layoutX + gridLine * dx, line);
 	    m_beatLines.push_back(beatLine);
 	}
     }

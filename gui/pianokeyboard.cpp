@@ -228,7 +228,13 @@ void PianoKeyboard::drawHoverNote(unsigned int y)
 
 void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
 {
-    drawHoverNote((unsigned int)e->y());
+    // The routine to work out where this should appear doesn't coincide with the note
+    // that we send to the sequencer - hence this is a bit pointless and crap at the moment.
+    // My own fault it's so crap but there you go.
+    //
+    // RWB (20040220)
+    //
+    //drawHoverNote((unsigned int)e->y());
 
     if (m_mouseDown)
 	if (m_selecting)
