@@ -772,7 +772,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     m_programEditor = new MidiProgramsEditor(this, splitter);
 
-    m_programEditor->setMinimumWidth(550); //!!! bleah
+    m_programEditor->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
 
     // device/bank modification
     connect(m_listView, SIGNAL(itemRenamed             (QListViewItem*,const QString&,int)),
