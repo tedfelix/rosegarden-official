@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# fix-links
+#
+# Copyright (c) 2004  D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
+# Released under the GPL
+#
+# HTMLDOC converts/exports to /tmp along with the images, changing all the
+# paths to .  so we go in and sed them to change them back to ../pixmaps
+
+# usage: fix-links [target directory] 
+
+# NOTE: this approach is too simplistic to handle the situation if we end up
+# with separate pixmaps by language in different directories, which is what
+# should eventually happen if this thing is done right...  sigh...
+
+for file in $1/*.html;do
+    sed s@SRC=\"@SRC=\"../pixmaps/@g $file > /tmp/$(basename $file)||exit 1
+    mv -f /tmp/$(basename $file) $file||exit 1
+done
+
+exit 0

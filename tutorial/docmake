@@ -1,0 +1,93 @@
+#!/bin/bash
+#
+# docmake
+#
+# Copyright (c) 2004  D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
+# Released under the GPL
+#
+# I'm too stupid to figure out how to get a Makefile to work, and I have
+# better things to do than learn some weird new language when it really isn't
+# necessary for getting the job done.  So instead I wrote a script to make the
+# various docs.
+
+startdir=$PWD
+
+Usage(){
+cat << EOF
+usage: ./docmake [target]
+
+if you don't know what [target] is, then read the case statement in this
+script ($0)...
+
+eg.  ./docmake en-web
+EOF
+}
+
+translate_de() {
+    	echo Translating auto-generated nav headers...
+	cd ../de
+	mv chapter-0.html kapitel-0.html
+	for file in *.html;do
+	    	echo translating headers in $file...
+		Sed index.html kapitel-0.html $file
+		Sed Contents Inhaltsverzeichnis $file
+		Sed Next Vor $file
+		Sed Previous Zurück $file
+	done
+}
+
+web() {
+	echo Making web book, language $1
+	cd using-rosegarden/$1-src
+	mkdir /tmp/$1-src
+	htmldoc --batch $1-web.book
+	echo Moving files, fixing links...
+	mv -f /tmp/$1-src/index.html ../$1/chapter-0.html
+	mv -f /tmp/$1-src/*.html ../$1
+	../admin/fix-links ../$1
+	echo Done...
+	case $1 in
+	    "en") ;;
+	    "de") translate_de ;;
+	esac
+	cd $startdir
+}
+
+pdf() {
+	echo Making .pdf book, language $1
+	cd using-rosegarden/$1-src
+	htmldoc --batch $1-pdf.book
+	mv -f /tmp/$1-src/*.pdf ../$1
+	echo Done...
+	cd $startdir
+}
+
+Sed() {
+    sed s@$1@$2@g $3 > /tmp/blurfl&&mv /tmp/blurfl $3
+}
+
+
+case $1 in 
+    "en-web")
+    		web en
+    	;;
+    "en-pdf")
+    		pdf en
+    	;;
+    "de-web") 
+    		web de
+	;;
+    "de-pdf") 
+    		pdf de
+	;;
+    "all") 
+    		web en
+		pdf en
+		web de
+		pdf de
+	;;
+    *) Usage
+    	;;
+esac
+
+exit 0

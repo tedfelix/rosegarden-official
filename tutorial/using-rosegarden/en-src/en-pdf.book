@@ -1,0 +1,12 @@
+#HTMLDOC 1.8.23
+-t pdf13 -f /tmp/en-src/using-rosegarden.pdf --book --toclevels 3 --numbered --toctitle "Contents" --title --titleimage chapter-0.html --textcolor #000000 --linkcolor #0000ff --linkstyle plain --bodycolor #ffffff --size Universal --left 1.00in --right 0.50in --top 0.50in --bottom 0.50in --header tc. --footer h.1 --nup 1 --tocheader .t. --tocfooter ..i --duplex --portrait --color --no-pscommands --no-xrxcomments --compression=9 --jpeg=90 --fontsize 12.0 --fontspacing 1.2 --headingfont Helvetica --bodyfont Helvetica --headfootsize 11.0 --headfootfont Helvetica --charset iso-8859-1 --links --no-embedfonts --pagemode outline --pagelayout single --firstpage p1 --pageeffect none --pageduration 10 --effectduration 1.0 --no-encryption --permissions all  --owner-password ""  --user-password "" --browserwidth 680
+chapter-1.html
+chapter-2.html
+chapter-3.html
+chapter-4.html
+chapter-5.html
+chapter-6.html
+chapter-7.html
+chapter-8.html
+chapter-9.html
+chapter-99.html

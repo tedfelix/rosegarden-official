@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<BODY LANG="en-US" LINK="#ba2c2c" VLINK="#ba2c2c" BGCOLOR="#ffffff">
+	<H1 STYLE="border: none; padding: 0in; page-break-before: always"><A NAME="1"></A>
+	Introduction</H1>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="1_1"></A>What is
+	Rosegarden?</H2>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+	Rosegarden-4, hereafter referred to as simply Rosegarden, is a
+	versatile application that seeks to be a useful tool for those
+	wanting to create music. It combines aspects of a MIDI sequencer, an
+	audio sequencer, and a notation editor into one convenient, easy to
+	use package that provides users with a consistent and intuitive
+	interface.</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	Rosegarden is a native KDE application that can run on any system
+	that has the KDE and QT libraries installed, and currently requires
+	a minimum of KDE/QT 3.0 in order to run. Many of its features may
+	only work Linux systems, but it is designed to compile and run on
+	any Unix-like platform capable of running KDE. (See the<A
+	HREF="http://rosegardenmusic.com/faq.html">
+	FAQ</A> for details on building for systems that can't run ALSA.)</P>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="1_2"></A>This
+	Guide's<I> Raison d'&ecirc;tre</I> 
+	</H2>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+	My goal in writing this guide is to help you explore Rosegarden, and
+	to discover ways to use its features to solve real problems that you
+	might encounter when creating your own music. Rosegarden is easy to
+	use, once you come to understand its framework, but it's not quite
+	like anything you are likely to have used in the past. As such, I
+	wish to take you on a guided tour through Rosegarden, to demonstrate
+	many of its capabilities, and to offer you a foundation from which
+	your own creative projects can spring.</P>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="1_3"></A>Version
+	Requirements</H2>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	This document describes Rosegarden4, the latest in this venerable
+	line of applications. As of this writing, we're at version
+	0.9.8_cvs. The latest official release is 0.9.7. There are myriad
+	older versions floating around, and some features described here may
+	not work unless you're running something very recent. 
+	</P>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="1_4"></A>The
+	Author's Studio</H2>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Obviously,
+	what I can actually demonstrate is hardware dependent. I'd like you
+	to bear in mind what is sitting in front of me as I write this, and
+	thus I will share the details of my &quot;studio.&quot;</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">I'm
+	running a 2.0 GHz P4 with 512 MB of RAM; Debian &ldquo;testing&rdquo;
+	and KDE 3.1.x. My kernel is canned Debian; version 2.4.24-1-686,
+	with no low latency or pre-empt patches.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">My sole
+	soundcard is a Sound Blaster PCI 128/ens1371, which provides modest
+	audio capabilities and drives my MIDI port. I have a joystick port
+	MIDI box for the Sound Blaster, to which I attach a Fatar MIDI-72
+	controller keyboard and a Roland SC-33 Sound Canvas.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">In the
+	way of other gear, I have a reasonably good electret microphone from
+	Radio Shack, which I use to record my acoustic guitar, flute, and
+	other traditional instruments. I have an electric guitar and a
+	DigiTech RP-200 effects box for those times I want to play rock
+	star.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">I route
+	all of this through my Sound Blaster's mixer. I can't currently have
+	everything feeding into the soundcard at the same time, and I must
+	swap cables around in order to feed either the Sound Canvas or the
+	RP-200 into the &ldquo;line in&rdquo; jack.</P>
+	<H2 ALIGN=LEFT STYLE="border: none; padding: 0in"><A NAME="1_5"></A>History</H2>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	<U><B>Date Notes</B></U></P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	12/10/02 Initial public draft</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	12/15/02 Merged into CVS tree</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	12/16/02 First re-write begins...</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	12/19/02 Continues...</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	01/01/03 Conversion from &quot;tutorial&quot; to &quot;guide&quot;
+	and shift of development model</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	01/12/03 Added Studio, re-structured to introduce segments in a
+	logical place</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	01/19/03 Greatly improved Studio chapter, multiple edits and tweaks</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	02/19/03 Minor cleanup, preparation for the first translation,
+	Studio improvements...</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	03/31/03 Version 0.9.0 heavy updates (never released)</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	5/1/03 Version 0.9.0 final version</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	4/12/04 Redesign and update in preparation for 1.0</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium; text-decoration: none">
+	4/17/04 AGNULA/DeMuDi CD deadline crunch</P>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="1_6"></A>Getting
+	This Document</H2>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The
+	latest version of the<I> Using Rosegarden</I> is always available at<A HREF="http://rosegarden.sourceforge.net/tutorial/using-rosegarden/using-rosegarden.html">
+	http://rosegarden.sourceforge.net/tutorial/using-rosegarden/ </A>
+	</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">You can
+	also get it from CVS . It's part of Rosegarden, but it's a separate
+	module, so you don't get it unless you specifically check out the
+	&ldquo;tutorial&rdquo; module.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">cvs -Q
+	-z3
+	-d:pserver:anonymous@cvs.rosegarden.sourceforge.net:/cvsroot/rosegarden
+	checkout tutorial</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Remember
+	that anonymous CVS at SourceForge is still lagging behind, so
+	updates might take a day or two to filter to the mirrors.</P>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="1_7"></A>
+	Copyright and License</H2>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Copyright
+	&copy; 2002-2004 by D. Michael McIntyre
+	&lt;dmmcintyr@users.sourceforge.net&gt;</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><B><I>Using
+	Rosegarden</I></B> is released, and its title and contents are
+	protected under the terms of the GNU Free Documentation License, a
+	copy of which is available at<A HREF="http://www.gnu.org/licenses/fdl.txt">
+	http://www.gnu.org/licenses/fdl.txt</A></P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">I
+	acknowledge that words like &quot;Roland,&quot; &quot;Yamaha,&quot;
+	&quot;General MIDI,&quot; &quot;GS,&quot; &quot;XG,&quot; and
+	numerous others that I haven't even considered, but should have, are
+	owned by important, well-monied corporations and probably need to
+	have cute little symbols in circles or superscript or something
+	attached to their names. I have far better things to do than try to
+	figure out which cute little symbols are supposed to go on which
+	names, but if representatives from any of the corporations who own
+	those words would be so kind as to inform me which little symbols
+	need to be attached to them, I will attach such symbols forthwith.</P>
+	<H2 STYLE="border: none; padding: 0in"><A NAME="1_8"></A>
+	Translations</H2>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Translations
+	are under way. Availability information to be announced.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">German:
+	Bernd Weber &lt;<A HREF="mailto:weber.freiburg@freenet.de">weber.freiburg@freenet.de</A>&gt;</P>
+</BODY>
+</HTML>

@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<BODY>
+	<H1>The Studio</H1>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Now that
+	you have a general idea how Rosegarden works, it's time to think
+	about telling Rosegarden where it needs to send data in order to get
+	your computer to make some noise.</P>
+	<P STYLE="margin-bottom: 0.2in">Every native Rosegarden file
+	contains a studio definition that describes your MIDI landsacpe. The
+	idea is that once you have properly configured your studio it will
+	be very easy to control all of your equipment without having to
+	worry about the details of what is connected where. 
+	</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Every native Rosegarden composition (.rg) file contains a studio,
+	along with note events and other types of data, and this studio
+	definition remains with the file for its lifetime. If you create
+	several files and then change some aspect of your MIDI landscape,
+	you'll need to juggle your connections around every time you load an
+	old file. There are facilities for working around this, but your
+	life will be much easier in the long run if you pick your
+	arrangement now, and stick to it as much as possible.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Sorry to disappoint you, Dear Reader.  My deadloom...  Deadloom... 
+	:)  My deadline is looming large.  It's 3 AM.  I've been working on
+	these docs non-stop for twelve hours.  I'm getting sleepy.  The
+	quality of the stuff I'm turning out is getting sad.  It's time to
+	fire this off and go to bed.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	What follows is mostly still applicable. It's just that the dialogs
+	have been combined.</P>
+	<H3 STYLE="border: none; padding: 0in"><A NAME="2_5_2"></A>
+	Configuring MIDI Connections 
+	</H3>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The
+	first step in configuring your studio is to set up connections to
+	your MIDI devices via<B> Studio -&gt; Manage MIDI Devices...</B></P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	You'll be presented with a dialog that resembles this one:</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	[NEW PIXMAP NEEDED] 
+	</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Rosegarden recognizes two types of MIDI ports. A device can be a
+	Play Device or a Record Device. A duplex MIDI Port such as that
+	found on my Sound Blaster, which provides both MIDI IN and MIDI OUT,
+	is divided into two separate devices.</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	In the above example, you see that Device 1 is my external MIDI OUT
+	device, Device 2 is MIDI IN, and I have an empty slot with no
+	connection that I've reserved for use with Fluid Synth, which wasn't
+	running when I took that snapshot.</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Note that most of the items in this dialog box are read-only. You
+	can change the connections around, but cannot rename anything from
+	here. The names, such as &quot;Roland SC-33&quot; come from the
+	instrument definitions which are attached to this particular device.
+	We'll look at how to change those directly.</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	In the meantime, what you<I> can<!--SPAN STYLE="font-style: normal"--></I>
+	do from this dialog is re-arrange which device slots are connected
+	to which hardware (or virtual hardware, in the case of a soft synth)
+	paths, and you can create or delete devices at will. One use for
+	that is to create a device for an ALSA soft synth that isn't
+	currently running, so that you can assign programs to it in advance,
+	and have everything ready to go at such time as you decide to start
+	up that synth, and the path to that particular synth becomes
+	available to Rosegarden.</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<I>NOTE: These empty slots are given default connections in the
+	order that new connections become available to Rosegarden. If you
+	intend to have QSynth on Device 3 and Hydrogen on Device 4, and you
+	wish to set up meaningful program changes for those synths in
+	advance, you'll need to be sure to start those applications in the
+	correct order, or else you'll have to come back to this dialog and
+	switch the connections around whenever you've changed the order in
+	which they are detected.</I></P>
+	<H3 STYLE="border: none; padding: 0in"><A NAME="2_5_3"></A>
+	Loading An Instrument Definition</H3>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Once you've configured your device connections, you'll probably want
+	to load or create some instrument definitions. This is accomplished
+	via<B> Studio -&gt; Manage MIDI Banks and Programs...</B></P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	To load an instrument definition, you'll first want to select a
+	destination device from among those available. In this example, I
+	don't have the connection for the Fluid Synth configured, and I
+	haven't changed the default name, so my external playback port is
+	called &quot;MIDI hardware synth&quot; in the dialog:</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="../pixmaps/using-rosegarden_html_m3abd9861.png" NAME="Graphic11" ALIGN=BOTTOM WIDTH=335 HEIGHT=108 BORDER=0>
+		</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	The first level of the tree is the path to the MIDI hardware (or
+	virtual hardware). The branches of the tree point to banks, each of
+	which can contain instrument definitions for program changes
+	numbered 1-128. MIDI uses two parameters, called MSB and LSB
+	(Most/Least Significant Byte), to change banks, and their
+	implementation is device-dependent. Rosegarden allows you only one
+	definition for each a unique MSB/LSB address.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Now, to load a set of standard banks that will define the
+	instruments available for playing via the &quot;MIDI hardware synth&quot;
+	port, use the<B> Import Banks</B> button.</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="../pixmaps/using-rosegarden_html_3c56e013.png" NAME="Graphic12" ALIGN=BOTTOM WIDTH=372 HEIGHT=111 BORDER=0>
+		</P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	You'll be presented with a list of<B> .rgd</B> files from which to
+	choose. By default, you'll be presented with selections from the
+	Rosegarden library, which is ever-growing:</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+	<B><IMG SRC="../pixmaps/using-rosegarden_html_73beda7f.png" NAME="Graphic13" ALIGN=BOTTOM WIDTH=800 HEIGHT=550 BORDER=0></B></P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<I><FONT SIZE=2>NOTE: You may also load banks from other locations,
+	of course, by browsing around to wherever you've left them in the
+	usual fashion. You may import banks from both<B> .rg</B> and<B> .rgd</B>
+	files. The instrument definition contained by both types of files is
+	functionally identical, and<B> .rgd</B> files are offered only as a
+	logical conveniece</FONT></I>.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	If you're using a synth that makes use of<B> .sf2</B> format sound
+	fonts (such as Fluid Synth or the SB Live! series of soundcards),
+	you can take advantage of a very convenient new feature. Rosegarden
+	now allows you to import the program names right out of the
+	soundfont by navigating to the<B> .sf2</B> file and selecting it as
+	the source for the import of banks.</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="../pixmaps/using-rosegarden_html_72c572b5.png" NAME="Graphic18" ALIGN=BOTTOM WIDTH=752 HEIGHT=402 BORDER=0>
+		</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	After you've selected an<B> .rgd, .rg, or .sf2</B> file from
+	somewhere, you'll be presented with a dialog like this:</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="../pixmaps/using-rosegarden_html_m710f000c.png" NAME="Graphic30" ALIGN=BOTTOM WIDTH=196 HEIGHT=220 BORDER=0>
+		</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><!--SPAN STYLE="font-weight: medium"-->The
+	stock<B> .rgd<!--SPAN STYLE="font-weight: medium"--></B> files
+	included with Rosegarden are supposed to only contain definitions to
+	be attached to one port<!--SPAN STYLE="font-weight: medium"--> , so
+	there should only be one &quot;Source device&quot; to load. If
+	you're loading an<B> .rg<!--SPAN STYLE="font-weight: medium"--></B>
+	file<!--SPAN STYLE="font-weight: medium"--> which contains multiple
+	sets of bank definitions, then you may select which one of them to
+	load into this slot. If you've chosen an<B> .sf2<!--SPAN STYLE="font-weight: medium"--></B>
+	file, then you shouldn't have a choice to make here.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Regardless of the source of the banks, you'll be given a choice to
+	merge the new program defintions into your existing defintion, which
+	will only fill in slots that are currently empty, or to erase
+	everything that's there and replace it completely with the contents
+	of the imported file.</P>
+	<H3 STYLE="border: none; padding: 0in"><A NAME="2_5_4"></A>
+	Creating A Custom Instrument Definition</H3>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	If none of the bank definitions in the library fit, and you can't
+	load the program names out of a soundfont, you can use an existing
+	file from the library as a starting point, or you can create a new
+	instrument definition completely from scratch.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Taking the example of my Roland SC-33, I looked at the
+	implementation chart in the back of the manual, and then decided how
+	I wanted to arrange the banks. Since the LSB/MSB address of the bank
+	is what makes it unique, and they can actually all have identical
+	names, I had to give some real thought to the best way to organize
+	my available patches in order to make getting to what I wanted to
+	find as simple and logical as possible.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	I tried to come up with names for the banks that roughly reflect
+	what sort of variations are available in each one, though it's
+	somewhat imperfect because Roland wasn't very orderly in deciding
+	what to put where, and there are some few melodic instruments in
+	banks that are normally only used for sound effects. Depending on
+	your hardware, you, too, may face similar compromises.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Once you've decided what your instrument definition needs to
+	contain, and how it should be organized, entering your data is a
+	straightforward matter. Use the<B> Add Bank</B> and<B> Delete Bank</B>
+	or<B> Delete All Banks</B> buttons as necessary to pave the way,
+	then start filling out the dialog box. If you have similar sets of
+	program changes in two different banks, you can copy one from the
+	other using<B> Copy Programs</B> and<B> Paste Programs</B> to save
+	yourself some typing.</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="../pixmaps/using-rosegarden_html_4a09b933.png" NAME="Graphic19" ALIGN=BOTTOM WIDTH=830 HEIGHT=512 BORDER=0>
+		</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	If you don't enter a string for a particular program number, you
+	won't have to scroll through that slot when choosing an instrument
+	later on. This is very convenient if you have a bank that only
+	contains a few available programs, as there is no need to scroll
+	through a lot of useless entries on your way to the few slots that
+	actually do something. This is especially useful for some of my
+	Roland banks that only have a few program changes that are widely
+	scattered.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	If, on the other hand, you<I> want<!--SPAN STYLE="font-style: normal"--></I>
+	to have every program number available, even if you don't wish to
+	assign particular names to some or all of them, you might want to
+	begin by using<B> Import Banks</B> and loading<B> raw-numbers.rgd</B>
+	into that slot. That will populate the program dialog with numbers,
+	and you can replace some of them with text, or else leave all of
+	them as numbers.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Once you've defined the names for your program changes, you can save
+	the definition to disk with<B> Export Banks</B>.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you
+	think anyone else might benefit from having the instrument
+	definition, you can mail it to me at<A HREF="mailto:mmcintyr@swva.net">
+	<B>mmcintyr@swva.net<!--SPAN STYLE="font-weight: medium"--></B></A>
+	and I will add it to our growing collection of user contributions.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	New contributions are most welcome. We pioneers must do all the work
+	so that future generations can be lazy. Just remember that I had to
+	do the GS device from scratch too, and it was very tedious and
+	time-consuming. :)</P>
+	<H3 STYLE="border: none; padding: 0in; font-weight: medium"><A NAME="2_5_5"></A>
+	Saving a Custom Studio</H3>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Now that you've gotten your studio configured, you'll want to make
+	it your default, so that you can avoid having to load banks into
+	device slots every time you create a new document or import a MIDI
+	file.</P>
+	<P ALIGN=CENTER STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<IMG SRC="../pixmaps/using-rosegarden_html_maf91084.png" NAME="Graphic62" ALIGN=BOTTOM WIDTH=322 HEIGHT=94 BORDER=0>
+		</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><B>Studio
+	-&gt; Save Current Document as Default Studio<!--SPAN STYLE="font-weight: medium"--></B>
+	will save the current document as an<B> autoload.rg<!--SPAN STYLE="font-weight: medium"--></B>
+	file. This becomes the default for all new documents you create, but
+	again, it will have no effect on documents that you've already
+	created.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	Remember that this is just like any ordinary<B> .rg</B> file, and
+	that any segments, track labels, instrument assignments, etc. that
+	you have in the current document will be saved, and will
+	subsequently be loaded each time you create a new document.</P>
+	<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<I>TIP: If you plan to export notation as a Lilypond file, you might
+	want to take a look at<B> Edit -&gt; Document Properties</B>, as
+	explained elsewhere in this guide, to set up some default header
+	fields for export, so that they will be available to you in all
+	future documents you create.</I></P>
+	<P ALIGN=LEFT STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+	<BR><BR>
+	</P>
+</BODY>
+</HTML>

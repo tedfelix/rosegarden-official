@@ -1,0 +1,12 @@
+#HTMLDOC 1.8.23
+-t html -d /tmp/en-src --book --toclevels 3 --numbered --toctitle "Contents" --no-title --textcolor #000000 --linkcolor #0000ff --linkstyle plain --bodycolor #ffffff --fontsize 12.0 --fontspacing 1.2 --headingfont Helvetica --bodyfont Helvetica --headfootsize 11.0 --headfootfont Helvetica --charset iso-8859-1 --browserwidth 680
+chapter-1.html
+chapter-2.html
+chapter-3.html
+chapter-4.html
+chapter-5.html
+chapter-6.html
+chapter-7.html
+chapter-8.html
+chapter-9.html
+chapter-99.html
