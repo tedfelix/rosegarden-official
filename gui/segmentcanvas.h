@@ -133,7 +133,7 @@ class SegmentCanvas : public QCanvasView
 
 public:
     /// Available tools
-    enum ToolType { Pencil, Eraser, Mover, Resizer, Selector };
+    enum ToolType { NoTool, Pencil, Eraser, Mover, Resizer, Selector };
     
     SegmentCanvas(int gridH, int gridV,
                  QCanvas&,
@@ -286,7 +286,6 @@ signals:
 private:
     //--------------- Data members ---------------------------------
 
-    ToolType m_toolType;
     SegmentTool *m_tool;
 
     SnapGrid m_grid;

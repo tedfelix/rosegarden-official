@@ -132,7 +132,6 @@ SegmentCanvas::SegmentCanvas(int gridH, int gridV,
                            QCanvas& c, QWidget* parent,
                            const char* name, WFlags f) :
     QCanvasView(&c,parent,name,f),
-    m_toolType(Selector),
     m_tool(0),
     m_grid(gridH, gridV),
     m_brush(RosegardenGUIColours::SegmentBlock),
@@ -160,15 +159,12 @@ SegmentCanvas::update()
 void
 SegmentCanvas::setTool(ToolType t)
 {
-//     kdDebug(KDEBUG_AREA) << "SegmentCanvas::setTool(" << t << ")\n";
-
-    if (t == m_toolType && m_tool != 0) return;
+     kdDebug(KDEBUG_AREA) << "SegmentCanvas::setTool(" << t << ")\n";
 
     if (m_tool)
       delete m_tool;
 
     m_tool = 0;
-    m_toolType = t;
 
     switch(t) {
     case Pencil:
@@ -214,9 +210,6 @@ void SegmentCanvas::contentsMousePressEvent(QMouseEvent* e)
 
         // ensure that we have a valid tool
         //
-        if (!m_tool)
-          setTool(m_toolType);
-
         if (m_tool)
             m_tool->handleMouseButtonPress(e);
 
@@ -339,10 +332,9 @@ void SegmentCanvas::onEditAudio()
 void
 SegmentCanvas::selectSegments(list<Rosegarden::Segment*> segments)
 {
-    if (m_toolType != Selector)
-        return;
-
     SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
+
+    if (!selTool) return;
 
     list<Rosegarden::Segment*>::iterator segIt;
     QCanvasItemList itemList = canvas()->allItems();
@@ -374,12 +366,11 @@ SegmentCanvas::selectSegments(list<Rosegarden::Segment*> segments)
 void
 SegmentCanvas::setSelectAdd(const bool &value)
 {
-    if (m_toolType != Selector)
-        return;
+    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
 
-    if (!m_tool) setTool(Selector);
+    if (!selTool) return;
 
-    dynamic_cast<SegmentSelector*>(m_tool)->setSegmentAdd(value);
+    selTool->setSegmentAdd(value);
 }
 
 
@@ -392,12 +383,11 @@ SegmentCanvas::setSelectAdd(const bool &value)
 void
 SegmentCanvas::setSelectCopy(const bool &value)
 {
-    if (m_toolType != Selector)
-        return;
+    SegmentSelector* selTool = dynamic_cast<SegmentSelector*>(m_tool);
 
-    if (!m_tool) setTool(Selector);
+    if (!selTool) return;
 
-    dynamic_cast<SegmentSelector*>(m_tool)->setSegmentCopy(value);
+    selTool->setSegmentCopy(value);
 }
 
 
