@@ -1,13 +1,15 @@
 
 /*
     Rosegarden-4 v0.1
-    A musical notation editor and sequencer for X.
+    A sequencer and musical notation editor.
 
-    This program is Copyright 2001
+    This program is Copyright 2000-2001
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
-    The moral rights of the authors have been asserted.
+
+    The moral right of the authors to claim authorship of this work
+    has been asserted.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
