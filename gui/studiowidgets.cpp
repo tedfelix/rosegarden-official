@@ -64,7 +64,7 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     // VU meter and fader
     //
     m_vuMeter = new AudioVUMeter(this);
-    QToolTip::add(m_pan, i18n("Audio VU Meter"));
+    QToolTip::add(m_vuMeter, i18n("Audio VU Meter"));
 
     m_fader = new RosegardenFader(this);
     m_fader->setTickmarks(QSlider::Right);
@@ -73,7 +73,7 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
     m_fader->setMinValue(0);
     m_fader->setMaxValue(127);
     m_fader->setFixedHeight(m_vuMeter->height());
-    QToolTip::add(m_pan, i18n("Audio Fader"));
+    QToolTip::add(m_fader, i18n("Audio Fader"));
 
     // Stereo, solo, mute and pan
     //
