@@ -1889,10 +1889,12 @@ AlsaDriver::processAudioQueue(const RealTime &playLatency, bool now)
             (*it)->getStatus() == PlayableAudioFile::IDLE)
         {
 
+#ifdef HAVE_LIBJACK
             // get the disk thread to fill up the ringbuffer
             //
             pthread_cond_signal(&_dataReady);
             pthread_mutex_unlock(&_diskThreadLock);
+#endif
 
             (*it)->setStatus(PlayableAudioFile::PLAYING);
         }
