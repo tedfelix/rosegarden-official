@@ -376,13 +376,39 @@ orchestra files.  I suspect the score files produced by Rosegarden
 require a rather specific format of orchestra file, or else some
 postprocessing.
 <P>
-There's a fairly `official' overview of Csound resources at <A
-HREF="http://www.leeds.ac.uk/music/Man/c_front.html">the Leeds
-University Csound Front Page</A>, but to be honest, if you don't 
+There's a lot of information about Csound at <A
+HREF="http://www.csounds.com/">csounds.com</A>, but to be honest, if you don't 
 already know an awful lot of stuff about Csound you'd probably be 
 better off spending a few months learning about it than trying to cut
 corners with Rosegarden.  That's just my opinion, speaking as someone 
 who hasn't got a clue either. 
+
+<p><b><i>Kevin Conder writes:</i></b> I created a trivial score with
+Rosegarden and exported it to a MIDI file. I then used Rosegarden to
+export the MIDI file to a Csound score. With this score, I was able to
+create an complementary orchestra.
+
+<p>It was pretty straight-forward. It correctly generated notes for
+the first instrument (i1...). The fourth p-field, p4, in the score file is
+the note's frequency as a pitch-class. One can convert this to
+cycles-per-second using the cpspch opcode:
+<blockquote><code>
+	 icps = cpspch(p4)
+</code></blockquote>
+
+<p>The fifth p-field, p5, is the note's midi velocity (0-127). Since
+Csound's amplitude is currently 0-32767, one can convert p5 to an 
+approximate amplitude value by multiplying it by 256:
+<blockquote><code>
+	iamp = p5 * 256
+</code></blockquote>
+
+<p>However, importing a multi-track MIDI file and exporting it to a
+Csound score was more difficult. It jumbled all the notes together in
+Instrument #0 (i0...)! So it'd probably be best to export one track at a
+time.
+</p>
+
 
 </div>
 <div class="faqanswer">
