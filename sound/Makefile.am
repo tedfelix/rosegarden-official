@@ -35,6 +35,9 @@ MidiRecord.cpp: MidiArts.h
 
 DISTCLEANFILES = $(sound_METASOURCES) MidiArts.h MidiArts.cc
 
-#bin_PROGRAMS = sound
-#sound_SOURCES = sound.cpp
-#sound_LDADD = -lartsmidi -lqt -lsoundserver_idl libRosegardenSound.la ../core/libcore.la
+# Variable names are broken up because otherwise the Makefile.cvs
+# scanning picks them up
+#
+# bin_P_ROGRAMS = sound
+# sound_S_OURCES = sound.cpp
+# sound_L_DADD = -lartsmidi -lqt -lsoundserver_idl libRosegardenSound.la ../core/libcore.la
