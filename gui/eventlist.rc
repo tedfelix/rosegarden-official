@@ -1,0 +1,15 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::EventList" version="1">
+
+<MenuBar>
+
+<Menu name="edit" append="new_merge">
+  <Action name="select_all"/>
+</Menu>
+
+</MenuBar>
+
+
+
+</kpartgui>

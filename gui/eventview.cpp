@@ -25,6 +25,10 @@
 
 #include <klocale.h>
 #include <kconfig.h>
+#include <kstatusbar.h>
+#include <ktoolbar.h>
+#include <ktmpstatusmsg.h>
+#include <kstdaction.h> 
 
 #include <qvbox.h>
 #include <qlayout.h>
@@ -35,11 +39,13 @@
 
 #include <klistview.h>
 
+#include "editview.h"
 #include "eventview.h"
 #include "rosegardenguidoc.h"
 #include "rosestrings.h"
 #include "dialogs.h"
 #include "editcommands.h"
+#include "matrixtool.h"
 
 #include "Segment.h"
 #include "SegmentPerformanceHelper.h"
@@ -139,22 +145,13 @@ EventView::EventView(RosegardenGUIDoc *doc,
     m_doc(doc)
 {
 
-    readOptions();
-
-    QVBox *filterBox = new QVBox(getCentralFrame());
-    m_grid->addWidget(filterBox, 2, 0);
-    filterBox->setSpacing(5);
-
-    /*
-    QLabel *label = new QLabel(i18n("Filters"), filterBox);
-    label->setAlignment(Qt::AlignHCenter);
-    label->setFixedHeight(20);
-    */
+    initStatusBar();
+    setupActions();
 
     // define some note filtering buttons in a group
     //
     m_filterGroup =
-        new QButtonGroup(1, Horizontal, i18n("Event filters"), filterBox);
+        new QButtonGroup(1, Horizontal, i18n("Event filters"), getCentralFrame());
 
     m_noteCheckBox = new QCheckBox(i18n("Note"), m_filterGroup);
     m_programCheckBox = new QCheckBox(i18n("Program Change"), m_filterGroup);
@@ -167,6 +164,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
     m_indicationCheckBox = new QCheckBox(i18n("Indication"), m_filterGroup);
     m_textCheckBox = new QCheckBox(i18n("Text"), m_filterGroup);
     m_otherCheckBox = new QCheckBox(i18n("Other"), m_filterGroup);
+    m_grid->addWidget(m_filterGroup, 2, 0);
 
     // Connect up
     //
@@ -205,6 +203,8 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
     setButtonsToFilter();
     applyLayout();
+
+    readOptions();
 }
 
 EventView::~EventView()
@@ -397,11 +397,42 @@ EventView::slotEditPaste()
 void
 EventView::setupActions()
 {
+    EditViewBase::setupActions("eventlist.rc");
+
+    // File menu
+    KStdAction::close   (this, SLOT(slotCloseWindow()),    actionCollection());
+
+    // Edit menu
+    KStdAction::cut     (this, SLOT(slotEditCut()),        actionCollection());
+    KStdAction::copy    (this, SLOT(slotEditCopy()),       actionCollection());
+    KStdAction::paste   (this, SLOT(slotEditPaste()),      actionCollection());
+
+    createGUI(getRCFileName());
 }
 
 void
 EventView::initStatusBar()
 {
+    KStatusBar* sb = statusBar();
+
+    /*
+    m_hoveredOverNoteName      = new QLabel(sb);
+    m_hoveredOverAbsoluteTime  = new QLabel(sb);
+
+    m_hoveredOverNoteName->setMinimumWidth(32);
+    m_hoveredOverAbsoluteTime->setMinimumWidth(160);
+
+    sb->addWidget(m_hoveredOverAbsoluteTime);
+    sb->addWidget(m_hoveredOverNoteName);
+    */
+
+    sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
+                   KTmpStatusMsg::getDefaultId(), 1);
+    sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
+                         AlignLeft | AlignVCenter);
+
+    //m_selectionCounter = new QLabel(sb);
+    //sb->addWidget(m_selectionCounter);
 }
 
 QSize
