@@ -249,6 +249,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     // dialog
     //
     if (isOperationCancelled()) {
+        // Ideally, we'd throw here, but at this point Qt is in the stack
+        // and Qt is very often compiled without exception support.
+        //
         m_cancelled = true;
         return false;
     }
