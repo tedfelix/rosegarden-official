@@ -253,6 +253,7 @@ protected:
 
     MatrixCanvasView    *m_canvasView;
     QScrollView         *m_pianoView;
+    PianoKeyboard       *m_pianoKeyboard;
 
 
 };

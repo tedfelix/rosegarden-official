@@ -41,6 +41,7 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent,
                                                const char *name,
                                                WFlags)
     : QGroupBox(i18n("Instrument Parameters"), parent, name),
+      m_instrumentLabel(new QLabel(this)),
       m_channelLabel(new QLabel(i18n("Channel"), this)),
       m_panLabel(new QLabel(i18n("Pan"), this)),
       m_velocityLabel(new QLabel(i18n("Velocity"), this)),
@@ -76,6 +77,7 @@ InstrumentParameterBox::initBox()
 
     QGridLayout *gridLayout = new QGridLayout(this, 6, 3, 8, 1);
 
+    m_instrumentLabel->setFont(plainFont);
     m_channelLabel->setFont(plainFont);
     m_panLabel->setFont(plainFont);
     m_velocityLabel->setFont(plainFont);
@@ -86,25 +88,29 @@ InstrumentParameterBox::initBox()
     m_velocityValue->setFont(plainFont);
 
     gridLayout->addRowSpacing(0, 8);
-    gridLayout->addWidget(m_bankLabel,      1, 0, AlignLeft);
-    gridLayout->addWidget(m_bankCheckBox, 1, 1);
-    gridLayout->addWidget(m_bankValue,    1, 2, AlignRight);
+
+    gridLayout->addRowSpacing(1, 30);
+    gridLayout->addMultiCellWidget(m_instrumentLabel, 1, 1, 0, 2, AlignCenter);
+
+    gridLayout->addWidget(m_bankLabel,    2, 0, AlignLeft);
+    gridLayout->addWidget(m_bankCheckBox, 2, 1);
+    gridLayout->addWidget(m_bankValue,    2, 2, AlignRight);
 
     // program label under heading - filling the entire cell
-    gridLayout->addWidget(m_programLabel,      2, 0);
-    gridLayout->addWidget(m_programCheckBox, 2, 1);
-    gridLayout->addWidget(m_programValue,    2, 2, AlignRight);
+    gridLayout->addWidget(m_programLabel,    3, 0);
+    gridLayout->addWidget(m_programCheckBox, 3, 1);
+    gridLayout->addWidget(m_programValue,    3, 2, AlignRight);
 
-    gridLayout->addMultiCellWidget(m_channelLabel, 3, 3, 0, 1, AlignLeft);
-    gridLayout->addWidget(m_channelValue, 3, 2, AlignRight);
+    gridLayout->addMultiCellWidget(m_channelLabel, 4, 4, 0, 1, AlignLeft);
+    gridLayout->addWidget(m_channelValue, 4, 2, AlignRight);
 
-    gridLayout->addWidget(m_panLabel,      4, 0, AlignLeft);
-    gridLayout->addWidget(m_panCheckBox, 4, 1);
-    gridLayout->addWidget(m_panValue,    4, 2, AlignRight);
+    gridLayout->addWidget(m_panLabel,    5, 0, AlignLeft);
+    gridLayout->addWidget(m_panCheckBox, 5, 1);
+    gridLayout->addWidget(m_panValue,    5, 2, AlignRight);
 
-    gridLayout->addWidget(m_velocityLabel,      5, 0, AlignLeft);
-    gridLayout->addWidget(m_velocityCheckBox, 5, 1);
-    gridLayout->addWidget(m_velocityValue,    5, 2, AlignRight);
+    gridLayout->addWidget(m_velocityLabel,    6, 0, AlignLeft);
+    gridLayout->addWidget(m_velocityCheckBox, 6, 1);
+    gridLayout->addWidget(m_velocityValue,    6, 2, AlignRight);
 
     // Populate channel list
     for (int i = 0; i < 16; i++)
@@ -213,6 +219,7 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     //
     if (instrument->getType() == Rosegarden::Instrument::Audio)
     {
+        m_instrumentLabel->hide();
         m_channelLabel->hide();
         m_panLabel->hide();
         m_velocityLabel->hide();
@@ -231,6 +238,7 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
     }
     else // Midi
     {
+        m_instrumentLabel->show();
         m_channelLabel->show();
         m_panLabel->show();
         m_velocityLabel->show();
@@ -245,6 +253,11 @@ InstrumentParameterBox::useInstrument(Rosegarden::Instrument *instrument)
         m_programCheckBox->show();
         m_panCheckBox->show();
     }
+
+    // Set instrument name
+    //
+    m_instrumentLabel->
+        setText(QString(m_selectedInstrument->getName().c_str()));
 
     // Enable all check boxes
     //

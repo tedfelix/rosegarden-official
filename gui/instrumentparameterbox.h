@@ -71,6 +71,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
+    QLabel             *m_instrumentLabel;
     QLabel             *m_channelLabel;
     QLabel             *m_panLabel;
     QLabel             *m_velocityLabel;

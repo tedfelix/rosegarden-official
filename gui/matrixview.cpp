@@ -91,11 +91,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     kdDebug(KDEBUG_AREA) << "MatrixView : creating canvas view\n";
 
     m_pianoView = new QScrollView(getCentralFrame());
-    PianoKeyboard *pianoKeyboard = new PianoKeyboard(m_pianoView->viewport());
+    m_pianoKeyboard = new PianoKeyboard(m_pianoView->viewport());
     
     m_pianoView->setVScrollBarMode(QScrollView::AlwaysOff);
     m_pianoView->setHScrollBarMode(QScrollView::AlwaysOff);
-    m_pianoView->addChild(pianoKeyboard);
+    m_pianoView->addChild(m_pianoKeyboard);
     m_pianoView->setFixedWidth(m_pianoView->contentsWidth());
 
     m_grid->addWidget(m_pianoView, 2, 0);
@@ -136,11 +136,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
          this,         SLOT  (slotHoveredOverNoteChanged(const QString&)));
 
     QObject::connect
-        (pianoKeyboard, SIGNAL(hoveredOverKeyChanged(unsigned int)),
+        (m_pianoKeyboard, SIGNAL(hoveredOverKeyChanged(unsigned int)),
          this,      SLOT  (slotHoveredOverKeyChanged(unsigned int)));
 
     QObject::connect
-        (pianoKeyboard, SIGNAL(keyPressed(unsigned int)),
+        (m_pianoKeyboard, SIGNAL(keyPressed(unsigned int)),
          this,      SLOT  (slotKeyPressed(unsigned int)));
 
     QObject::connect
@@ -181,6 +181,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                                                   true, getCentralFrame());
     bottomBarButtons->connectRulerToDocPointer(doc);
     setBottomBarButtons(bottomBarButtons);
+
+    // Force height for the moment
+    //
+    m_pianoKeyboard->setFixedHeight(canvas()->height());
+
 }
 
 MatrixView::~MatrixView()
@@ -350,6 +355,7 @@ QSize MatrixView::getViewSize()
 void MatrixView::setViewSize(QSize s)
 {
     canvas()->resize(s.width(), s.height());
+
 }
 
 void MatrixView::updateView()
@@ -595,13 +601,6 @@ void MatrixView::slotVerticalScrollMatrixCanvas(int x, int y)
                this,
                SLOT(slotVerticalScrollPianoKeyboard(int)));
 
-    /*
-    disconnect(m_pianoView,
-               SIGNAL(contentsMoving(int, int)),
-               this,
-               SLOT(slotVerticalScrollMatrixCanvas(int, int)));
-               */
-
     m_canvasView->setContentsPos(x, y);
 
     // reconnect
@@ -615,31 +614,12 @@ void MatrixView::slotVerticalScrollMatrixCanvas(int x, int y)
             SIGNAL(sliderMoved(int)),
             this,
             SLOT(slotVerticalScrollPianoKeyboard(int)));
-
-    /*
-    connect(m_pianoView,
-            SIGNAL(contentsMoving(int, int)),
-            this,
-            SLOT(slotVerticalScrollMatrixCanvas(int, int)));
-            */
 }
 
 void MatrixView::slotVerticalScrollPianoKeyboard(int y)
 {
     // disconnect
     //
-    /*
-    disconnect(m_canvasView->verticalScrollBar(),
-               SIGNAL(valueChanged(int)),
-               this,
-               SLOT(slotVerticalScrollPianoKeyboard(int)));
-
-    disconnect(m_canvasView->verticalScrollBar(),
-               SIGNAL(sliderMoved(int)),
-               this,
-               SLOT(slotVerticalScrollPianoKeyboard(int)));
-               */
-
     disconnect(m_pianoView,
                SIGNAL(contentsMoving(int, int)),
                this,
@@ -651,18 +631,6 @@ void MatrixView::slotVerticalScrollPianoKeyboard(int y)
 
     // reconnect
     //
-    /*
-    connect(m_canvasView->verticalScrollBar(),
-            SIGNAL(valueChanged(int)),
-            this,
-            SLOT(slotVerticalScrollPianoKeyboard(int)));
-
-    connect(m_canvasView->verticalScrollBar(),
-            SIGNAL(sliderMoved(int)),
-            this,
-            SLOT(slotVerticalScrollPianoKeyboard(int)));
-            */
-
     connect(m_pianoView,
             SIGNAL(contentsMoving(int, int)),
             this,
