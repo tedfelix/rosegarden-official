@@ -390,6 +390,11 @@ public slots:
     void slotQuantizeSelection(int);
 
     /**
+     * Collapse equal pitch notes
+     */
+    void slotTransformsCollapseNotes();
+
+    /**
      * Pop-up the velocity modification dialog
      */
     void slotSetVelocities();

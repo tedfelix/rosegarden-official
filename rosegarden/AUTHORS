@@ -37,7 +37,8 @@ Alexandre Prokoudine <avp@altlinux.ru>
     
 Pedro Lopez-Cabanillas <plcl@bigfoot.com>
     * Spanish translation
-    * ALSA research
+    * ALSA hacking and bug fixes
+    * multi-input MIDI recording
     
 Jörg Schumann <jrschumann@gmx.de>
     * German translation

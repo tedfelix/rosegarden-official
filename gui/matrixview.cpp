@@ -69,6 +69,7 @@
 #include "chordnameruler.h"
 #include "pianokeyboard.h"
 #include "editcommands.h"
+#include "notationcommands.h"
 #include "qdeferscrollview.h"
 #include "matrixparameterbox.h"
 #include "velocitycolour.h"
@@ -516,6 +517,10 @@ void MatrixView::setupActions()
     new KAction(i18n("Repeat Last Quantize"), Key_Plus, this,
                 SLOT(slotTransformsRepeatQuantize()), actionCollection(),
                 "repeat_quantize");
+    
+    new KAction(AdjustMenuCollapseNotesCommand::getGlobalName(), Key_Equal + SHIFT, this,
+                SLOT(slotTransformsCollapseNotes()), actionCollection(),
+               "collapse_notes");
 
     new KAction(i18n("&Legato"), Key_Minus, this,
                 SLOT(slotTransformsLegato()), actionCollection(),
@@ -1114,6 +1119,16 @@ void MatrixView::slotTransformsRepeatQuantize()
 			(*m_currentEventSelection,
 			 "Quantize Dialog Grid", false)); // no i18n (config group name)
 }
+
+void MatrixView::slotTransformsCollapseNotes()
+{
+    if (!m_currentEventSelection) return;
+	KTmpStatusMsg msg(i18n("Collapsing notes..."), this);
+
+    addCommandToHistory(new AdjustMenuCollapseNotesCommand
+		        (*m_currentEventSelection));
+}
+
 
 void MatrixView::slotTransformsLegato()
 {

@@ -302,6 +302,25 @@ private:
     Rosegarden::Quantizer *makeQuantizer(QString, bool);
 };
 
+// Collapse equal-pitch notes into one event
+//
+class AdjustMenuCollapseNotesCommand : public BasicSelectionCommand
+{
+public:
+    AdjustMenuCollapseNotesCommand(Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection) { }
+
+    static QString getGlobalName() { return i18n("Collapse &Equal-Pitch Notes"); }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+};
+
+
 // Set the (numerical) property of a selection according given pattern.
 //
 class SelectionPropertyCommand : public BasicSelectionCommand

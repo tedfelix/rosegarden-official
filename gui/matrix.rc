@@ -65,6 +65,7 @@
 	 <Action name="repeat_quantize"/>
 	 <Action name="legatoize"/>
   </Menu>
+  <Action name="collapse_notes"/>
   <Separator/>
   <Action name="half_speed"/>
   <Action name="double_speed"/>
@@ -226,6 +227,7 @@
     <Action name="edit_cut"/>
     <Action name="edit_copy"/>
     <Action name="quantize"/>
+    <Action name="collapse_notes"/>
     <Action name="legatoize"/>
     <Action name="rescale"/>
     <Action name="double_speed"/>

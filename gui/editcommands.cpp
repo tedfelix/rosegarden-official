@@ -1067,6 +1067,50 @@ EventUnquantizeCommand::modifySegment()
 }
 
 
+//-----------------Collapse Notes Command-------------------
+//
+//
+void
+AdjustMenuCollapseNotesCommand::modifySegment()
+{
+    SegmentNotationHelper helper(getSegment());
+    timeT endTime = getEndTime();
+
+    // This is really nasty stuff.  We can't go in forward direction
+    // using the j-iterator trick because collapseNoteAggressively may
+    // erase the following iterator as well as the preceding one.  We
+    // can't go backward naively, because collapseNoteAggressively
+    // erases i from the EventSelection now that it's a
+    // SegmentObserver.  We need the fancy hybrid j-iterator-backward
+    // technique applied to selections instead of segments.
+    
+    EventSelection::eventcontainer::iterator i =
+	m_selection->getSegmentEvents().end();
+    EventSelection::eventcontainer::iterator j = i;
+    bool thisOne = false;
+
+    while (i != m_selection->getSegmentEvents().begin()) {
+	
+	--j;
+	
+	if (thisOne) {
+	    helper.collapseNoteAggressively(*i, endTime);
+	}
+	
+	// rather than "true" one could perform a test to see
+	// whether j pointed to a candidate for collapsing:
+	thisOne = true;
+	
+	i = j;
+    }
+    
+    if (thisOne) {
+	helper.collapseNoteAggressively(*i, endTime);
+    }
+}
+
+
+
 SetLyricsCommand::SetLyricsCommand(Segment *segment, QString newLyricData) :
     KNamedCommand(getGlobalName()),
     m_segment(segment),

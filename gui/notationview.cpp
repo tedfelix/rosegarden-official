@@ -1556,7 +1556,7 @@ void NotationView::setupActions()
                 SLOT(slotTransformsCollapseRests()), actionCollection(),
                 "collapse_rests_aggressively");
 
-    new KAction(AdjustMenuCollapseNotesCommand::getGlobalName(), 0, this,
+    new KAction(AdjustMenuCollapseNotesCommand::getGlobalName(), Key_Equal + SHIFT, this,
                 SLOT(slotTransformsCollapseNotes()), actionCollection(),
                 "collapse_notes");
 

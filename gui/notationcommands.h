@@ -403,24 +403,6 @@ protected:
     virtual void modifySegment();
 };
 
-
-class AdjustMenuCollapseNotesCommand : public BasicSelectionCommand
-{
-public:
-    AdjustMenuCollapseNotesCommand(Rosegarden::EventSelection &selection) :
-	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection) { }
-
-    static QString getGlobalName() { return i18n("Collapse &Equal-Pitch Notes"); }
-
-protected:
-    virtual void modifySegment();
-
-private:
-    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-};
-    
-
 class NotesMenuTieNotesCommand : public BasicSelectionCommand
 {
 public:
