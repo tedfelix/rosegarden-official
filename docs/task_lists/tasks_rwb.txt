@@ -22,6 +22,8 @@ o Audio
    - make outofspace.rg sound like something reasonable
    - copy/paste plugin controls
 
+   - fix endless sequencer recording on GUI crash [DONE]
+
 o Audio busses and routing
    - multiple audio record arm [HALF DONE - for 0.9.5]
 

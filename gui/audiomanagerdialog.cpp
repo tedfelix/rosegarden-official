@@ -990,6 +990,8 @@ AudioManagerDialog::addFile(const KURL& kurl)
     RosegardenProgressDialog progressDlg(i18n("Generating audio preview..."),
                                          100,
                                          this);
+    CurrentProgressDialog::set(&progressDlg);
+
     QString newFilePath;
 
     if (kurl.isLocalFile()) {
@@ -1011,6 +1013,8 @@ AudioManagerDialog::addFile(const KURL& kurl)
     }
     catch(std::string e)
     {
+        CurrentProgressDialog::freeze();
+
         QString errorString =
             i18n("Can't add File.  WAV file body invalid.\n\"") +
             strtoqstr(e) + "\"";
@@ -1019,6 +1023,8 @@ AudioManagerDialog::addFile(const KURL& kurl)
     }
     catch(QString e)
     {
+        CurrentProgressDialog::freeze();
+
         KMessageBox::sorry(this, e);
         return false;
     }
