@@ -24,6 +24,7 @@
 #include <qstringlist.h>
 #include <qpainter.h>
 #include <qpalette.h>
+#include <kapp.h>
 
 #include "PeakFile.h"
 #include "AudioFile.h"
@@ -834,9 +835,8 @@ PeakFile::drawPixmap(const RealTime &startTime,
     double loValue = 0.0f;
 
     QPainter painter(pixmap);
-
-    pixmap->fill(Qt::white);
-    //painter.setBrush(QColorGroup::Background);
+    pixmap->fill(kapp->palette().color(QPalette::Active,
+                                       QColorGroup::Base));
     painter.setPen(Qt::black);
     std::string peakData;
 
@@ -844,7 +844,8 @@ PeakFile::drawPixmap(const RealTime &startTime,
     switch(m_format)
     {
         case 1:
-            divisor = SAMPLE_MAX_8BIT;
+            //divisor = SAMPLE_MAX_8BIT;
+            divisor = 0xFF;
             break;
 
         case 2:

@@ -72,9 +72,13 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_fileList->addColumn(i18n("Duration"));
     m_fileList->addColumn(i18n("Envelope"));
     m_fileList->addColumn(i18n("File"));
+    m_fileList->addColumn(i18n("Resolution"));
+    m_fileList->addColumn(i18n("Channels"));
 
     m_fileList->setColumnAlignment(1, Qt::AlignHCenter);
     m_fileList->setColumnAlignment(2, Qt::AlignHCenter);
+    m_fileList->setColumnAlignment(4, Qt::AlignHCenter);
+    m_fileList->setColumnAlignment(5, Qt::AlignHCenter);
 
     // a minimum width for the list box
     //m_fileList->setMinimumWidth(300);
@@ -152,6 +156,13 @@ AudioManagerDialog::populateFileList()
                     m_audioFileManager->
                         substituteHomeForTilde((*it)->getFilename()).c_str()));
                                        
+        // Resolution
+        //
+        item->setText(4, QString("%1 bits").arg((*it)->getBitsPerSample()));
+
+        // Channels
+        //
+        item->setText(5, QString("%1").arg((*it)->getChannels()));
     }
 
 }
@@ -252,6 +263,10 @@ AudioManagerDialog::slotAdd()
         }
         catch(std::string e)
         {
+            // clear down progress dialog
+            delete progressDlg;
+            progressDlg = 0;
+
             QString errorString =
                 i18n("Can't add File.  WAV file body invalid.\n\"") +
                                   QString(e.c_str()) + "\"";
@@ -334,21 +349,6 @@ AudioManagerDialog::closeEvent(QCloseEvent *e)
 void
 AudioManagerDialog::generateEnvelopePixmap(QPixmap *pixmap, AudioFile *aF)
 {
-    //std::cout << "SAMPLE LENGTH = " << aF->getLength() << std::endl;
-    // clear and paint on it
-    /*
-    pixmap->fill(Qt::blue);
-    QPainter audioPainter(pixmap);
-    */
-
-    /*
-    std::vector<float> values = m_audioFileManager->getPreview(
-            dynamic_cast<Rosegarden::WAVAudioFile*>(aF)->getId(),
-            RealTime(0, 0),
-            dynamic_cast<Rosegarden::WAVAudioFile*>(aF)->getLength(),
-            previewWidth);
-            */
-
     // Find the max length of all the sample files 
     //
     if (m_maxLength == RealTime(0, 0))

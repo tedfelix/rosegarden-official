@@ -66,10 +66,20 @@ AudioFileManager::addFile(const std::string &filePath)
                                         getShortFilename(filePath),
                                         filePath);
 
-    if (aF->open() == false)
+    try
+    { 
+        if (aF->open() == false)
+        {
+            delete aF;
+            throw(std::string("AudioFileManager::addFile - can't open file"));
+        }
+    }
+    catch(std::string e)
     {
+        // catch and rethrow
+        //
         delete aF;
-        throw("AudioFileManager::addFile - can't open file");
+        throw(e);
     }
 
     m_audioFiles.push_back(aF);
@@ -134,7 +144,8 @@ AudioFileManager::insertFile(const std::string &name,
     if (aF->open() == false)
     {
         delete aF;
-        throw("AudioFileManager::insertFile - don't recognise file type");
+        throw(std::string(
+                "AudioFileManager::insertFile - don't recognise file type"));
     }
     m_audioFiles.push_back(aF);
 

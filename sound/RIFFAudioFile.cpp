@@ -498,7 +498,7 @@ RIFFAudioFile::readFormatChunk()
     if (hS.compare(4, 4, Rosegarden::AUDIO_WAVE_ID) != 0)
 #endif
     {
-        throw((std::string("RIFFAudioFile::parseHeader - can't find WAV identifier")));
+        throw((std::string("Can't find WAV identifier")));
     }
 
     // Look for the FORMAT identifier - note that this doesn't actually
@@ -512,7 +512,7 @@ RIFFAudioFile::readFormatChunk()
     if (hS.compare(4, 4, Rosegarden::AUDIO_FORMAT_ID) != 0)
 #endif
     {
-        throw((std::string("RIFFAudioFile::parseHeader - can't find FORMAT identifier")));
+        throw((std::string("Can't find FORMAT identifier")));
     }
 
     // Little endian conversion of length bytes into file length
@@ -523,25 +523,39 @@ RIFFAudioFile::readFormatChunk()
 
     if (length != m_fileSize)
     {
-        cout << "READ LENGTH = " << length << endl;
-        cout << "REAL LENGTH = " << m_fileSize << endl;
-        throw(std::string("RIFFAudioFile::parseHeader - file " + m_fileName +
-                     " corrupted (wrong length)"));
+        throw(std::string("\"" + m_fileName +
+                     "\" corrupted (wrong length)"));
     }
 
-    // Check the format length (always 0x10)
+    // Check the format length
     //
     unsigned int lengthOfFormat = getIntegerFromLittleEndian(hS.substr(16, 4));
 
-    if (lengthOfFormat != 0x10)
-        throw(std::string("RIFFAudioFile::parseHeader - format length incorrect"));
+    // Make sure we step to the end of the format chunk ignoring the
+    // tail if it exists
+    //
+    if (lengthOfFormat > 0x10)
+    {
+        std::cerr << "RIFFAudioFile::readFormatChunk - "
+                  << "extended Format Chunk (" << lengthOfFormat << ")"
+                  << std::endl;
+
+        // ignore any overlapping bytes 
+        m_inFile->seekg(lengthOfFormat - 16);
+    }
+    else
+    {
+        throw("Format chunk too short");
+    }
 
 
-    // Check this field is one
+    // Check our sub format is PCM encoded - currently the only encoding
+    // we support.
     //
     unsigned int alwaysOne = getIntegerFromLittleEndian(hS.substr(20, 2));
+
     if (alwaysOne != 0x01)
-        throw(std::string("RIFFAudioFile::parseHeader - \"always one\" byte isn't"));
+        throw(std::string("Rosegarden currently only supports PCM encoded RIFF files"));
 
 
     // We seem to have a good looking .WAV file - extract the
@@ -558,7 +572,7 @@ RIFFAudioFile::readFormatChunk()
 
         default:
             {
-                throw(std::string("RIFFAudioFile::parseHeader - unsupport number of channels"));
+                throw(std::string("Unsupported number of channels"));
             }
             break;
     }
@@ -569,6 +583,8 @@ RIFFAudioFile::readFormatChunk()
     m_bytesPerSecond = getIntegerFromLittleEndian(hS.substr(28,4));
     m_bytesPerSample = getIntegerFromLittleEndian(hS.substr(32,2));
     m_bitsPerSample = getIntegerFromLittleEndian(hS.substr(34,2));
+
+
 }
 
 // Write out the format chunk from our internal data

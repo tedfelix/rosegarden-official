@@ -92,8 +92,8 @@ WAVAudioFile::open()
     }
     catch(std::string s)
     {
-        std::cerr << "WAVAudioFile::open - EXCEPTION: \"" << s << "\""
-                  << std::endl;
+        throw(s);
+        return false;
     }
 
     return true;
@@ -159,19 +159,10 @@ WAVAudioFile::close()
 void
 WAVAudioFile::parseHeader()
 {
-    try
-    {
-        // Read the format chunk and populate the file data.  A plain WAV
-        // file only has this chunk.
-        //
-        readFormatChunk();
-    }
-    catch(std::string e)
-    {
-        std::cout << "WAVAudioFile::parseHeader - \"" << m_fileName
-                  << "\" isn't recognised as a wav file - EXCEPTION = \""
-                  << e << "\"" << std::endl;
-    }
+    // Read the format chunk and populate the file data.  A plain WAV
+    // file only has this chunk.  Exceptions tumble through.
+    //
+    readFormatChunk();
    
 }
 
