@@ -88,12 +88,14 @@ BarButtons::drawButtons()
 
     int firstBarWidth = fTimes.second - fTimes.first;
  
+/*
     int buttonBarWidth = m_baseBarWidth *
                          comp.getBarRange(m_bars, false).second
                          / firstBarWidth;
 
     buttonBar->setMinimumSize(buttonBarWidth, m_barHeight);
     buttonBar->setMaximumSize(buttonBarWidth, m_barHeight);
+*/
 
     // Loop ruler works its bar spacing out from the m_doc just
     // like we do in this class.  Then connect up the LoopRuler

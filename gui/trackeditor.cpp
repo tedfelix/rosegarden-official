@@ -141,19 +141,30 @@ TrackEditor::init(unsigned int nbTracks, unsigned int nbBars)
     m_vHeader->setResizeEnabled(false);
 
 
-    int barButtonWidth = 0;
     Composition &comp = m_document->getComposition();
 
     std::pair<Rosegarden::timeT, Rosegarden::timeT> times =
-                comp.getBarRange(nbBars, false);
+                comp.getBarRange(0, false);
 
-    barButtonWidth = times.second;
+    int firstBarWidth = times.second - times.first;
 
     QObject::connect(m_vHeader, SIGNAL(indexChange(int,int,int)),
                      this, SLOT(segmentOrderChanged(int,int,int)));
 
     QCanvas *canvas = new QCanvas(this);
-    canvas->resize(m_hHeader->sectionSize(0) * nbBars,
+
+    int totalBarButtonWidth = 0;
+
+    for (unsigned int i = 0; i < nbBars; i++)
+    {
+        std::pair<Rosegarden::timeT, Rosegarden::timeT> times =
+            comp.getBarRange(i, false);
+
+        totalBarButtonWidth += m_hHeader->sectionSize(0) *
+                               (times.second - times.first) / firstBarWidth;
+    }
+
+    canvas->resize(totalBarButtonWidth,
                    m_vHeader->sectionSize(0) * nbTracks);
 
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
