@@ -225,9 +225,7 @@ signals:
     void insertableNoteOffReceived(int pitch, int velocity);
     
 protected slots:
-    void slotCountdownCancelled();
     void slotCountdownTimerTimeout();
-    void slotCountdownStop();
 
     // Activated by timer to allow a message to be reported to 
     // the user - we use this mechanism so that the user isn't

@@ -142,6 +142,10 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
     m_countdownDialog = new CountdownDialog(dynamic_cast<QWidget*>
                                 (m_doc->parent())->parentWidget());
 
+    // Bug 933041: no longer connect the CountdownDialog from
+    // SequenceManager; instead let the RosegardenGUIApp connect it to
+    // its own slotStop to ensure the right housekeeping is done
+
     m_countdownTimer = new QTimer(m_doc);
 
     // Connect this for use later
@@ -347,6 +351,9 @@ SequenceManager::play()
 void
 SequenceManager::stopping()
 {
+    if (m_countdownTimer) m_countdownTimer->stop();
+    if (m_countdownDialog) m_countdownDialog->hide();
+
     // Do this here rather than in stop() to avoid any potential
     // race condition (we use setPointerPosition() during stop()).
     //
@@ -844,12 +851,6 @@ punchin:
 
 	    // re-initialise
 	    m_countdownDialog->setTotalTime(seconds);
-
-	    connect(m_countdownDialog, SIGNAL(stopped()),
-		    this, SLOT(slotCountdownCancelled()));
-
-	    connect(m_countdownDialog, SIGNAL(completed()),
-		    this, SLOT(slotCountdownStop()));
 
 	    // Create the timer
 	    //
@@ -1960,37 +1961,11 @@ SequenceManager::sendTransportControlStatuses()
 }
 
 void
-SequenceManager::slotCountdownCancelled()
-{
-    SEQMAN_DEBUG << "SequenceManager::slotCountdownCancelled - "
-                 << "stopping" << endl;
-
-    // stop timer
-    m_countdownTimer->stop();
-    m_countdownDialog->hide();
-
-    // stop recording
-    stopping();
-}
-
-void
 SequenceManager::slotCountdownTimerTimeout()
 {
     // Set the elapsed time in seconds
     //
     m_countdownDialog->setElapsedTime(m_recordTime->elapsed() / 1000);
-}
-
-// The countdown has completed - stop recording
-//
-void
-SequenceManager::slotCountdownStop()
-{
-    SEQMAN_DEBUG << "SequenceManager::slotCountdownStop - "
-                 << "countdown timed out - automatically stopping recording"
-                 << endl;
-
-    stopping(); // erm - simple as that
 }
 
 void

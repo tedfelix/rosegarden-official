@@ -4341,6 +4341,11 @@ RosegardenGUIApp::slotRecord()
     plugAccelerators(m_seqManager->getCountdownDialog(),
                      m_seqManager->getCountdownDialog()->getAccelerators());
 
+    connect(m_seqManager->getCountdownDialog(), SIGNAL(stopped()),
+	    this, SLOT(slotStop()));
+    connect(m_seqManager->getCountdownDialog(), SIGNAL(completed()),
+	    this, SLOT(slotStop()));
+
     // Start the playback timer - this fetches the current sequencer position &c
     //
     m_stopTimer->stop();
@@ -4491,6 +4496,13 @@ void RosegardenGUIApp::slotStartAtTime(int sec, int usec)
 //
 void RosegardenGUIApp::slotStop()
 {
+    if (m_seqManager->getCountdownDialog()) {
+	disconnect(m_seqManager->getCountdownDialog(), SIGNAL(stopped()),
+		   this, SLOT(slotStop()));
+	disconnect(m_seqManager->getCountdownDialog(), SIGNAL(completed()),
+		   this, SLOT(slotStop()));
+    }
+
     try
     {
         if (m_seqManager)
