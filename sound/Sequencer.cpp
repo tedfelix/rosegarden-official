@@ -142,11 +142,20 @@ Sequencer::record(const RecordStatus& recordStatus)
     else
     if ( recordStatus == RECORD_AUDIO )
     {
-        cout << "RosegardenSequencer::record() - AUDIO RECORDING not yet supported" << endl;
+        std::cout << "RosegardenSequencer::record() - AUDIO RECORDING not yet supported" << endl;
     }
     else
+    if ( recordStatus == ASYNCHRONOUS_MIDI )
     {
-        cout << "RosegardenSequencer::record() - Unsupported recording mode." << endl;
+        m_recordStatus = ASYNCHRONOUS_MIDI;
+    }
+    else 
+    if ( recordStatus == ASYNCHRONOUS_AUDIO )
+    {
+        m_recordStatus = ASYNCHRONOUS_AUDIO;
+    }
+    {
+        std::cout << "RosegardenSequencer::record() - Unsupported recording mode." << endl;
     }
   
 }
@@ -185,7 +194,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 
     Rosegarden::MidiByte channel;
     Rosegarden::MidiByte message;
-    //Rosegarden::Event *event;
+    Rosegarden::RealTime guiTimeStamp(timeStamp.sec, timeStamp.usec);
 
     channel = midiCommand.status & MIDI_CHANNEL_NUM_MASK;
     message = midiCommand.status & MIDI_MESSAGE_TYPE_MASK;
@@ -196,10 +205,9 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
         message = MIDI_NOTE_OFF;
     }
 
-    // we use a map of Notes and this is the key
+    // We use a map of Notes and this is the key
+    //
     unsigned int chanNoteKey = ( channel << 8 ) + midiCommand.data1;
-    //double absoluteSecs;
-    Rosegarden::RealTime duration;
 
     // scan for our event
     switch(message)
@@ -222,7 +230,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
                 // Set time, pitch and velocity on the MappedEvent
                 //
                 m_noteOnMap[chanNoteKey]->
-                       setAbsoluteTime(RealTime(timeStamp.sec, timeStamp.usec));
+                       setAbsoluteTime(guiTimeStamp);
 
                 m_noteOnMap[chanNoteKey]->setPitch(midiCommand.data1);
                 m_noteOnMap[chanNoteKey]->setVelocity(midiCommand.data2);
@@ -235,8 +243,8 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
             //
             if ( m_noteOnMap[chanNoteKey] != 0 )
             {
-                Rosegarden::RealTime rTS(timeStamp.sec, timeStamp.usec);
-                duration = rTS - m_noteOnMap[chanNoteKey]->getAbsoluteTime();
+                Rosegarden::RealTime duration = guiTimeStamp -
+                            m_noteOnMap[chanNoteKey]->getAbsoluteTime();
 
                 // for the moment, ensure we're positive like this
                 //
@@ -513,10 +521,12 @@ Sequencer::getMappedComposition()
     //
     m_recordComposition.clear();
 
-    // Return empty set if we're currently not recording
+    // Return empty set if we're currently not recording or monitoring
     //
     if (m_recordStatus != RECORD_MIDI &&
-        m_recordStatus != RECORD_AUDIO)
+        m_recordStatus != RECORD_AUDIO &&
+        m_recordStatus != ASYNCHRONOUS_MIDI &&
+        m_recordStatus != ASYNCHRONOUS_AUDIO) 
         return m_recordComposition;
 
     vector<Arts::MidiEvent>::iterator midiQueueIt;
@@ -538,9 +548,12 @@ Sequencer::getMappedComposition()
     // Free the returned vector from here as the aRTS stub
     // has already gone ahead and allocated a new one for
     // next time - nice leak, teach me to blindly copy
-    // code .. [rwb]
+    // code ... [rwb]
     //
     delete midiQueue;
+
+    // Now normalise the start times
+    
 
     return m_recordComposition;
 

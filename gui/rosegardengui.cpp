@@ -68,7 +68,7 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_fileRecent(0),
       m_view(0),
       m_doc(0),
-      m_playbackLatency(0, 300000),
+      m_playLatency(0, 300000),
       m_fetchLatency(0, 100000),
       m_transportStatus(STOPPED),
       m_sequencerProcess(0)
@@ -1262,8 +1262,8 @@ void RosegardenGUIApp::play()
     streamOut << startPos.usec;
 
     // playback latency
-    streamOut << m_playbackLatency.sec;
-    streamOut << m_playbackLatency.usec;
+    streamOut << m_playLatency.sec;
+    streamOut << m_playLatency.usec;
 
     // fetch latency
     streamOut << m_fetchLatency.sec;
@@ -1657,8 +1657,8 @@ RosegardenGUIApp::record()
     streamOut << startPos.usec;
 
     // playback latency
-    streamOut << m_playbackLatency.sec;
-    streamOut << m_playbackLatency.usec;
+    streamOut << m_playLatency.sec;
+    streamOut << m_playLatency.usec;
 
     // fetch latency
     streamOut << m_fetchLatency.sec;
@@ -1711,8 +1711,10 @@ RosegardenGUIApp::processRecordedMidi(const Rosegarden::MappedComposition &mC)
 {
     if (mC.size() > 0)
     {
+/*
         std::cout << "processRecordMidi has returned a composition with " <<
                      mC.size() << " elements" << endl;
+*/
 
         Rosegarden::MappedComposition::iterator i;
 
@@ -1722,6 +1724,10 @@ RosegardenGUIApp::processRecordedMidi(const Rosegarden::MappedComposition &mC)
         {
             m_transport->setMidiInLabel(*i);
         }
+
+        // send the events to a Segment for storage and display
+        //
+        m_doc->insertRecordedMidi(mC, m_playLatency);
     }
 }
 
@@ -1738,7 +1744,10 @@ RosegardenGUIApp::processAsynchronousMidi(const Rosegarden::MappedComposition &m
 {
     if (mC.size())
     {
-        cout << "RosegardenGUIApp::processAsynchronousMidi - GOT " << mC.size() << " ASYNC EVENT(S)" << endl;
+/*
+        std::cout << "RosegardenGUIApp::processAsynchronousMidi - GOT " <<
+                      mC.size() << " ASYNC EVENT(S)" << endl;
+*/
 
         Rosegarden::MappedComposition::iterator i;
 

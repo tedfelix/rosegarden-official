@@ -91,7 +91,7 @@ public:
     /**
      * Add a new segment - DCOP interface
      */
-    virtual void addSegment(int instrument, int start, unsigned int nbTimeSteps);
+    virtual void addSegment(int track, int start, unsigned int nbTimeSteps);
 
     /**
      *  Return the track header pointer for scrutiny

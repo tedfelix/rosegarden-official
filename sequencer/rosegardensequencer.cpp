@@ -70,7 +70,7 @@ RosegardenSequencerApp::RosegardenSequencerApp():
 
     // set this here and now so we can accept async midi events
     //
-    m_sequencer->record(Rosegarden::Sequencer::RECORD_MIDI);
+    m_sequencer->record(Rosegarden::Sequencer::ASYNCHRONOUS_MIDI);
 }
 
 RosegardenSequencerApp::~RosegardenSequencerApp()
@@ -400,6 +400,10 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
     if (localRecordMode == STARTING_TO_RECORD_MIDI)
     {
         std::cout << "RosegardenSequencerApp::record() - starting to record MIDI" << endl;
+
+        // send this to the Sequencer so that it resets its start time
+        //
+        m_sequencer->record(Rosegarden::Sequencer::RECORD_MIDI);
     }
     else if (localRecordMode == STARTING_TO_RECORD_AUDIO)
     {

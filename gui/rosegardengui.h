@@ -524,7 +524,7 @@ private:
     KAction *m_rewindEndTransport;
     KAction *m_ffwdEndTransport;
 
-    Rosegarden::RealTime m_playbackLatency;
+    Rosegarden::RealTime m_playLatency;
     Rosegarden::RealTime m_fetchLatency;
 
     /**

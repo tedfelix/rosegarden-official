@@ -33,6 +33,7 @@
 #include <qxml.h>
 
 #include "Composition.h"
+#include "MappedComposition.h"
 #include "multiviewcommandhistory.h"
 
 // forward declaration of the RosegardenGUI classes
@@ -166,6 +167,13 @@ public:
     unsigned int getDuration() const { return m_composition.getDuration(); }
     unsigned int getNbBars()	     { return m_composition.getNbBars();   }
 
+    /*
+     * insert some recorded MIDI events into our recording Segment
+     *
+     */
+    void insertRecordedMidi(const Rosegarden::MappedComposition &mc,
+                            const Rosegarden::RealTime &playLatency);
+
 public slots:
 
     /**
@@ -239,6 +247,11 @@ private:
      * the composition this document is wrapping
      */
     Rosegarden::Composition m_composition;
+
+    /**
+     * a Segment onto which we can record events
+     */
+    Rosegarden::Segment *m_recordSegment;
 
     MultiViewCommandHistory m_commandHistory;
 };

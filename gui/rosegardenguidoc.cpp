@@ -58,7 +58,7 @@ using namespace Rosegarden::BaseProperties;
 
 
 RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent, const char *name)
-    : QObject(parent, name)
+    : QObject(parent, name), m_recordSegment(0)
 {
     if(!pViewList) {
         pViewList = new QList<RosegardenGUIView>();
@@ -487,4 +487,30 @@ RosegardenGUIDoc::createNewSegment(SegmentItem *p, int track)
     setModified();
 
 }
+
+void
+RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
+                                     const Rosegarden::RealTime &playLatency)
+{
+    // Just create a new record Segment if we don't have one
+    // currently open and running
+    //
+    if (m_recordSegment == 0)
+        m_recordSegment = new Segment();
+
+    
+    Rosegarden::MappedComposition::iterator i;
+
+    // send all events to the MIDI in label
+    //
+    for (i = mC.begin(); i != mC.end(); ++i )
+    {
+        cout << "insertRecordedMidi() - RECORD TIME = " 
+             << (*i)->getAbsoluteTime() - playLatency
+             << endl;
+    }
+
+}
+
+
 
