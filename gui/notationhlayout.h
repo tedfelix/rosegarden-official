@@ -27,9 +27,10 @@
 #include "Track.h"
 
 /**
-  *@author Guillaume Laurent, Chris Cannam, Richard Bown
-  */
-
+ * Horizontal notation layout
+ *
+ * computes the Y coordinate of notation elements
+ */
 class NotationHLayout : public LayoutEngine
 {
 public:

@@ -31,10 +31,8 @@ class NotationElement;
 /**
  * Central widget for the NotationView window
  *
- *@author Guillaume Laurent, Chris Cannam, Richard Bown
  *@see NotationView
  */
-
 class NotationCanvasView : public QCanvasView
 {
     Q_OBJECT
@@ -45,11 +43,19 @@ public:
 
     ~NotationCanvasView();
 
-    /** Callback for a mouse button press event in the canvas */
+    /**
+     * Callback for a mouse button press event in the canvas
+     */
     virtual void contentsMousePressEvent(QMouseEvent *e);
-    /** Callback for a mouse button release event in the canvas */
+
+    /**
+     * Callback for a mouse button release event in the canvas
+     */
     virtual void contentsMouseReleaseEvent(QMouseEvent *e);
-    /** Callback for a mouse move event in the canvas */
+
+    /**
+     * Callback for a mouse move event in the canvas
+     */
     virtual void contentsMouseMoveEvent(QMouseEvent *e);
 
 // Used for a note-shaped cursor - leaving around just in case

@@ -34,9 +34,7 @@ class NotationElementList;
  * affected a QCanvasItem which is set at these coords.
  *
  * @see see NotationView::showElements()
- * @author Guillaume Laurent, Chris Cannam, Richard Bown
  */
-
 class NotationElement : public Rosegarden::ViewElement
 {
 public:
@@ -46,7 +44,22 @@ public:
 
     ~NotationElement();
 
+    /**
+     * Returns the X coordinate of the element, as computed by the
+     * layout. This is not the coordinate of the associated canvas
+     * item.
+     *
+     * @see getEffectiveX()
+     */
     double getLayoutX() { return m_x; }
+
+    /**
+     * Returns the Y coordinate of the element, as computed by the
+     * layout. This is not the coordinate of the associated canvas
+     * item.
+     *
+     * @see getEffectiveY()
+     */
     double getLayoutY() { return m_y; }
 
     /// returns the x pos of the associated canvas item
@@ -55,7 +68,16 @@ public:
     /// returns the y pos of the associated canvas item
     double getEffectiveY() throw (NoCanvasItem);
 
+    /**
+     * Sets the X coordinate which was computed by the layout engine
+     * @see getLayoutX()
+     */
     void setLayoutX(double x) { m_x = x; }
+
+    /**
+     * Sets the Y coordinate which was computed by the layout engine
+     * @see getLayoutY()
+     */
     void setLayoutY(double y) { m_y = y; }
 
     /// sets the associated event's note type, note dottedness, and duration
@@ -64,7 +86,10 @@ public:
     /// returns a Note corresponding to the state of the associated event
     Rosegarden::Note getNote() const;
 
+    /// returns true if the wrapped event is a rest
     bool isRest() const;
+
+    /// returns true if the wrapped event is a note
     bool isNote() const;
 
     /**
@@ -77,6 +102,7 @@ public:
      */
     void setCanvasItem(QCanvasItem *e, double dxoffset, double dyoffset);
 
+    /// returns the associated canvas item
     QCanvasItem* canvasItem() { return m_canvasItem; }
 
 protected:

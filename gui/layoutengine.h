@@ -28,9 +28,8 @@
 #include "notationelement.h"
 
 /**
-  *@author Guillaume Laurent, Chris Cannam, Richard Bown
-  */
-
+ * Base class for layout engines
+ */
 class LayoutEngine
 {
 public: 
