@@ -258,6 +258,7 @@ int main(int argc, char *argv[])
 
                 case STOPPING:
                     roseSeq->setStatus(STOPPED);
+                    SEQUENCER_DEBUG << "RosegardenSequencer - Stopped" << endl;
                     break;
 
                 case RECORDING_ARMED:

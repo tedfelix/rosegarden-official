@@ -177,3 +177,10 @@ the FAQ and upload to:
 
 uk-upload.demon.co.uk
 
+New pics can be uploaded to:
+
+username@rosegarden.sf.net:/home/groups/r/ro/rosegarden/htdocs/screenshots
+
+BTW: IRC channel on irc.freenode.net (#rosegarden)
+
+

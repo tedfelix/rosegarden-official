@@ -1,5 +1,5 @@
-0.9 tasks
-=========
+0.9.5 tasks
+===========
 
 o MTC/MMC - transport awareness
   - we're now sending Midi RealTime sequencer control messages
@@ -41,51 +41,6 @@ o Multiple Document Interface - at least internally capable
 
   - more complete "swap()" that works at Document level [DONE]
   - full MDI interface internals [with GL/ almost DONE]
-
-Fixed for next release
-----------------------
-
-o Audio 
-   - new fader widget [DONE]
-   - recording stereo WAVs [DONE]
-   - audio connection management [FIRST PASS DONE]
-   - panning [DONE]
-   - jack process tidy up (Bob Ham inspired) [DONE]
-   - notify disk space available on audio path [DONE]
-   - countdown dialog for audio recording [DONE]
-   - plugin bypass [DONE]
-   - plugins matching stereo/mono instruments [FIXED]
-   - seperate audio level sends for stereo monitoring [DONE]
-   - get Studio reapplying working / fix bugs [DONE]
-   - stereo vu meters (0dB level = 1.0f etc) [DONE]
-   - n jack input routes [DONE]
-
-o ALSA client detection bug on laptop - going from no clients
-  to one client causes big loop of death.  Appear that alive()
-  is getting sent twice from the GUI..? [FIXED]
-
-o "Revert file" option [DONE]
-
-o selection of ALSA recording device [DONE]
-
-o extra cascade level in Instrument selection menu [DONE]
-
-o Segment labelling [DONE]
-
-o File loading blank-out [DONE as part of file loading]
-
-o Track Moving [DONE]
-
-o Track Deleting [DONE - might be bugs outstanding]
-
-o Instrument/Device naming [CC - done]
-
-o TextFloats for Rotaries [DONE]
-
-o Finite audio recording time - check for available disk space [DONE]
-
-o BUG - changing audio file path doesn't work [FIXED]
-
 
 Smaller stuff
 =============
@@ -131,8 +86,54 @@ o Audio noise eliminator - recording
 o Segment colouring
 
 
-0.8.5 completed
+Completed for 0.9
 =================
+
+o Audio 
+   - new fader widget [DONE]
+   - recording stereo WAVs [DONE]
+   - audio connection management [FIRST PASS DONE]
+   - panning [DONE]
+   - jack process tidy up (Bob Ham inspired) [DONE]
+   - notify disk space available on audio path [DONE]
+   - countdown dialog for audio recording [DONE]
+   - plugin bypass [DONE]
+   - plugins matching stereo/mono instruments [FIXED]
+   - seperate audio level sends for stereo monitoring [DONE]
+   - get Studio reapplying working / fix bugs [DONE]
+   - stereo vu meters (0dB level = 1.0f etc) [DONE]
+   - n jack input routes [DONE]
+
+o ALSA client detection bug on laptop - going from no clients
+  to one client causes big loop of death.  Appear that alive()
+  is getting sent twice from the GUI..? [FIXED]
+
+o "Revert file" option [DONE]
+
+o selection of ALSA recording device [DONE]
+
+o extra cascade level in Instrument selection menu [DONE]
+
+o Segment labelling [DONE]
+
+o File loading blank-out [DONE as part of file loading]
+
+o Track Moving [DONE]
+
+o Track Deleting [DONE - might be bugs outstanding]
+
+o Instrument/Device naming [CC - done]
+
+o TextFloats for Rotaries [DONE]
+
+o Finite audio recording time - check for available disk space [DONE]
+
+o BUG - changing audio file path doesn't work [FIXED]
+
+
+
+0.8.5 completed
+===============
 
 o MIDI Panic button [DONE cc/rwb]
 

@@ -232,7 +232,7 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
 
         // Stop the sequencer so we can see if we can try again later
         //
-        m_transportStatus = STOPPING;
+        stop();
     }
     else
     {
@@ -439,8 +439,7 @@ RosegardenSequencerApp::updateClocks(bool clearToSend)
 
         // Stop the sequencer so we can see if we can try again later
         //
-        m_transportStatus = STOPPING;
-
+        stop();
     }
 }
 
@@ -464,7 +463,7 @@ RosegardenSequencerApp::notifySequencerStatus()
 
         // Stop the sequencer
         //
-        m_transportStatus = STOPPING;
+        stop();
     }
 }
 
@@ -510,7 +509,7 @@ RosegardenSequencerApp::processRecordedMidi()
 
         // Stop the sequencer
         //
-        m_transportStatus = STOPPING;
+        stop();
     }
 }
 
@@ -541,7 +540,7 @@ RosegardenSequencerApp::processRecordedAudio()
 
         // Stop the sequencer
         //
-        m_transportStatus = STOPPING;
+        stop();
     }
 }
 
@@ -568,7 +567,7 @@ RosegardenSequencerApp::processAsynchronousEvents()
 
         // Stop the sequencer so we can see if we can try again later
         //
-        m_transportStatus = STOPPING;
+        stop();
     }
 
     // Process any pending events (Note Offs or Audio) as part of
@@ -601,7 +600,7 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
         //
         if(m_sequencer->record(Rosegarden::RECORD_MIDI) == false)
         {
-            m_transportStatus = STOPPING;
+            stop();
             return 0;
         }
 
@@ -647,7 +646,7 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
                             << "perhaps audio file path wrong?"
                             << endl;
 
-            m_transportStatus = STOPPING;
+            stop();
             return 0;
         }
     }
