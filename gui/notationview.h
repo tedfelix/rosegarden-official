@@ -70,7 +70,7 @@ using Rosegarden::timeT;
  */
 
 class NotationView : public EditView,
-		     public LinedStaffManager<NotationElement>
+                     public LinedStaffManager<NotationElement>
 {
     friend class NoteInserter;
     friend class ClefInserter;
@@ -83,7 +83,7 @@ public:
     NotationView(RosegardenGUIDoc *doc,
                  std::vector<Rosegarden::Segment *> segments,
                  QWidget *parent,
-		 bool showProgressive = true); // update during initial render?
+                 bool showProgressive = true); // update during initial render?
 
     /**
      * Constructor for printing only.  If parent is provided, a
@@ -92,7 +92,7 @@ public:
     NotationView(RosegardenGUIDoc *doc,
                  std::vector<Rosegarden::Segment *> segments,
                  KPrinter*,
-		 QWidget *parent);
+                 QWidget *parent);
 
     ~NotationView();
 
@@ -111,8 +111,8 @@ public:
 
     /// Return a pointer to the staff at the specified index
     NotationStaff *getStaff(int i) {
-	if (i >= 0 && unsigned(i) < m_staffs.size()) return m_staffs[i];
-	else return 0;
+        if (i >= 0 && unsigned(i) < m_staffs.size()) return m_staffs[i];
+        else return 0;
     }
 
     /// Return a pointer to the staff corresponding to the given segment
@@ -121,11 +121,11 @@ public:
     QCanvas* canvas() { return getCanvasView()->canvas(); }
     
     void setCanvasCursor(const QCursor &cursor) {
-	getCanvasView()->viewport()->setCursor(cursor);
+        getCanvasView()->viewport()->setCursor(cursor);
     }
 
     void setHeightTracking(bool t) {
-	getCanvasView()->setHeightTracking(t);
+        getCanvasView()->setHeightTracking(t);
     }
 
     /**
@@ -175,29 +175,29 @@ public:
      * command invocation anyway.)
      */
     virtual void setCurrentSelection(Rosegarden::EventSelection*,
-				     bool preview = false,
-				     bool redrawNow = false);
+                                     bool preview = false,
+                                     bool redrawNow = false);
 
     /**
      * Set the current event selection to a single event
      */
     void setSingleSelectedEvent(int staffNo,
-				Rosegarden::Event *event,
-				bool preview = false,
-				bool redrawNow = false);
+                                Rosegarden::Event *event,
+                                bool preview = false,
+                                bool redrawNow = false);
 
     /**
      * Set the current event selection to a single event
      */
     void setSingleSelectedEvent(Rosegarden::Segment &segment,
-				Rosegarden::Event *event,
-				bool preview = false,
-				bool redrawNow = false);
+                                Rosegarden::Event *event,
+                                bool preview = false,
+                                bool redrawNow = false);
 
     /// Show and sound the given note
     void showPreviewNote(int staffNo, double layoutX,
-			 int pitch, int height,
-			 const Rosegarden::Note &note);
+                         int pitch, int height,
+                         const Rosegarden::Note &note);
 
     /// Remove any visible preview note
     void clearPreviewNote();
@@ -215,7 +215,7 @@ public:
     void scrollToTime(timeT t);
 
     NotePixmapFactory *getNotePixmapFactory() const {
-	return m_notePixmapFactory;
+        return m_notePixmapFactory;
     }
 
     /**
@@ -223,12 +223,12 @@ public:
      * (but not guaranteed to be any good for anything else)
      */
     NotePixmapFactory *getToolbarNotePixmapFactory() {
-	return &m_toolbarNotePixmapFactory;
+        return &m_toolbarNotePixmapFactory;
     }
 
     virtual void refreshSegment(Rosegarden::Segment *segment,
-				Rosegarden::timeT startTime = 0,
-				Rosegarden::timeT endTime = 0);
+                                Rosegarden::timeT startTime = 0,
+                                Rosegarden::timeT endTime = 0);
 
     /**
      * From LinedStaffManager
@@ -307,6 +307,16 @@ public slots:
      * toggles the clefs toolbar
      */
     void slotToggleClefsToolBar();
+
+    /**
+     * toggles the marks toolbar
+     */
+    void slotToggleMarksToolBar();
+
+    /**
+     * toggles the group toolbar
+     */
+    void slotToggleGroupToolBar();
 
     /**
      * toggles the font toolbar
@@ -456,18 +466,18 @@ public slots:
      * happen on the next update.
      */
     void slotSetInsertCursorPosition(Rosegarden::timeT position,
-				     bool scroll, bool updateNow);
+                                     bool scroll, bool updateNow);
 
     virtual void slotSetInsertCursorPosition(Rosegarden::timeT position) {
-	slotSetInsertCursorPosition(position, true, true);
+        slotSetInsertCursorPosition(position, true, true);
     }
 
     /// Set the insert cursor position from a mouse event location
     void slotSetInsertCursorPosition(double canvasX, int canvasY,
-				     bool scroll, bool updateNow);
+                                     bool scroll, bool updateNow);
 
     void slotSetInsertCursorPosition(double canvasX, int canvasY) {
-	slotSetInsertCursorPosition(canvasX, canvasY, true, true);
+        slotSetInsertCursorPosition(canvasX, canvasY, true, true);
     }
 
     /**
@@ -477,12 +487,12 @@ public slots:
      * happen on the next update.
      */
     void slotSetInsertCursorAndRecentre(Rosegarden::timeT position,
-					double cx, int cy,
-					bool updateNow = true);
+                                        double cx, int cy,
+                                        bool updateNow = true);
 
     void slotSetInsertCursorAndRecentre(Rosegarden::timeT position,
-					double cx, double cy) {
-	slotSetInsertCursorAndRecentre(position, cx, static_cast<int>(cy), true);
+                                        double cx, double cy) {
+        slotSetInsertCursorAndRecentre(position, cx, static_cast<int>(cy), true);
     }
 
     /// Set insert cursor to playback pointer position
@@ -624,8 +634,8 @@ protected:
 
     /// Calls all the relevant preparse and layout methods
     virtual bool applyLayout(int staffNo = -1,
-			     Rosegarden::timeT startTime = 0,
-			     Rosegarden::timeT endTime = 0);
+                             Rosegarden::timeT startTime = 0,
+                             Rosegarden::timeT endTime = 0);
 
     /**
      * Readjust the size of the canvas after a layout
@@ -669,7 +679,7 @@ protected:
      * and the time signature, clef and key at that time.
      */
     virtual Rosegarden::timeT getInsertionTime(Rosegarden::Clef &clef,
-					       Rosegarden::Key &key);
+                                               Rosegarden::Key &key);
 
     void doDeferredCursorMove();
 
@@ -718,10 +728,10 @@ protected:
 
     Rosegarden::timeT m_insertionTime;
     enum {
-	NoCursorMoveNeeded,
-	CursorMoveOnly,
-	CursorMoveAndMakeVisible,
-	CursorMoveAndScrollToPosition
+        NoCursorMoveNeeded,
+        CursorMoveOnly,
+        CursorMoveAndMakeVisible,
+        CursorMoveAndScrollToPosition
     } m_deferredCursorMove;
     double m_deferredCursorScrollToX;
 

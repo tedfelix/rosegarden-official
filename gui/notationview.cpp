@@ -710,6 +710,8 @@ void NotationView::readOptions()
     getToggleAction("show_notes_toolbar")      ->setChecked(!toolBar("Notes Toolbar")      ->isHidden());
     getToggleAction("show_rests_toolbar")      ->setChecked(!toolBar("Rests Toolbar")      ->isHidden());
     getToggleAction("show_clefs_toolbar")      ->setChecked(!toolBar("Clefs Toolbar")      ->isHidden());
+    getToggleAction("show_group_toolbar")      ->setChecked(!toolBar("Group ToolBar")      ->isHidden());
+    getToggleAction("show_marks_toolbar")       ->setChecked(!toolBar("Marks ToolBar")     ->isHidden());
     getToggleAction("show_font_toolbar")       ->setChecked(!toolBar("Font Toolbar")       ->isHidden());
     getToggleAction("show_transport_toolbar")  ->setChecked(!toolBar("Transport Toolbar")  ->isHidden());
     getToggleAction("show_accidentals_toolbar")->setChecked(!toolBar("Accidentals Toolbar")->isHidden());
@@ -1005,19 +1007,35 @@ void NotationView::setupActions()
     //
     // Group menu
     //
-    new KAction(i18n(GroupMenuBeamCommand::getGlobalName()), 0, this,
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        ("group-beam")));
+
+    new KAction(i18n(GroupMenuBeamCommand::getGlobalName()), icon, 0, this,
                 SLOT(slotGroupBeam()), actionCollection(), "beam");
 
     new KAction(i18n(GroupMenuAutoBeamCommand::getGlobalName()), 0, this,
                 SLOT(slotGroupAutoBeam()), actionCollection(), "auto_beam");
 
-    new KAction(i18n(GroupMenuBreakCommand::getGlobalName()), 0, this,
-                SLOT(slotGroupBreak()), actionCollection(), "break_group");
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        ("group-unbeam")));
 
-    new KAction(i18n(GroupMenuTupletCommand::getGlobalName(true)), 0, this,
+    new KAction(i18n(GroupMenuBreakCommand::getGlobalName()), icon, 0, this,
+                SLOT(slotGroupBreak()), actionCollection(), "break_group");
+    
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        ("group-simple-tuplet")));
+
+    new KAction(i18n(GroupMenuTupletCommand::getGlobalName(true)), icon, 0, this,
 		SLOT(slotGroupSimpleTuplet()), actionCollection(), "simple_tuplet");
 
-    new KAction(i18n(GroupMenuTupletCommand::getGlobalName(false)), 0, this,
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        ("group-tuplet")));
+
+    new KAction(i18n(GroupMenuTupletCommand::getGlobalName(false)), icon, 0, this,
 		SLOT(slotGroupGeneralTuplet()), actionCollection(), "tuplet");
 
     new KAction(i18n(GroupMenuUnTupletCommand::getGlobalName()), 0, this,
@@ -1035,22 +1053,38 @@ void NotationView::setupActions()
 		      actionCollection(), "chord_mode"))->
 	setChecked(false);
 
-    new KAction(i18n(GroupMenuGraceCommand::getGlobalName()), 0, this,
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        ("group-grace")));
+
+    new KAction(i18n(GroupMenuGraceCommand::getGlobalName()), icon, 0, this,
 		SLOT(slotGroupGrace()), actionCollection(), "grace");
 
     new KAction(i18n(GroupMenuUnGraceCommand::getGlobalName()), 0, this,
 		SLOT(slotGroupUnGrace()), actionCollection(), "ungrace");
 
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        ("group-slur")));
+
     new KAction(i18n(GroupMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::Slur)), 0, this,
+                (Rosegarden::Indication::Slur)), icon, 0, this,
                 SLOT(slotGroupSlur()), actionCollection(), "slur");
 
-    new KAction(i18n(GroupMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::Crescendo)), 0, this,
-                SLOT(slotGroupCrescendo()), actionCollection(), "crescendo");
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        ("group-crescendo")));
 
     new KAction(i18n(GroupMenuAddIndicationCommand::getGlobalName
-                (Rosegarden::Indication::Decrescendo)), 0, this,
+                (Rosegarden::Indication::Crescendo)), icon, 0, this,
+                SLOT(slotGroupCrescendo()), actionCollection(), "crescendo");
+
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        ("group-decrescendo")));
+
+    new KAction(i18n(GroupMenuAddIndicationCommand::getGlobalName
+                (Rosegarden::Indication::Decrescendo)), icon, 0, this,
                 SLOT(slotGroupDecrescendo()), actionCollection(), "decrescendo");
 
     // setup Transforms menu
@@ -1066,7 +1100,11 @@ void NotationView::setupActions()
                 SLOT(slotTransformsCollapseNotes()), actionCollection(),
                 "collapse_notes");
 
-    new KAction(i18n(TransformsMenuTieNotesCommand::getGlobalName()), 0, this,
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        ("transforms-tie")));
+
+    new KAction(i18n(TransformsMenuTieNotesCommand::getGlobalName()), icon, 0, this,
                 SLOT(slotTransformsTieNotes()), actionCollection(),
                 "tie_notes");
 
@@ -1153,7 +1191,11 @@ void NotationView::setupActions()
 		    markActionData.actionName);
     }
 
-    new KAction(i18n(MarksMenuAddTextMarkCommand::getGlobalName()), 0, this,
+    icon = QIconSet
+        (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
+        ("text-mark")));
+
+    new KAction(i18n(MarksMenuAddTextMarkCommand::getGlobalName()), icon, 0, this,
                 SLOT(slotMarksAddTextMark()), actionCollection(),
                 "add_text_mark");
 
@@ -1193,9 +1235,16 @@ void NotationView::setupActions()
             { "Show &Notes Toolbar",  "1slotToggleNotesToolBar()",  "show_notes_toolbar",                    "palette-notes" },
             { "Show &Rests Toolbar",  "1slotToggleRestsToolBar()",  "show_rests_toolbar",                    "palette-rests" },
             { "Show &Accidentals Toolbar",   "1slotToggleAccidentalsToolBar()",  "show_accidentals_toolbar", "palette-accidentals" },
-            { "Show Cle&fs Toolbar",         "1slotToggleClefsToolBar()",        "show_clefs_toolbar",       "palette-clefs" },
-            { "Show &Layout Toolbar",         "1slotToggleFontToolBar()",        "show_font_toolbar",       "palette-font" },
-            { "Show Trans&port Toolbar",      "1slotToggleTransportToolBar()",        "show_transport_toolbar",       "palette-transport" }
+            { "Show Cle&fs Toolbar",  "1slotToggleClefsToolBar()",  "show_clefs_toolbar",
+          "palette-clefs" },
+            { "Show &Marks Toolbar", "1slotToggleMarksToolBar()",   "show_marks_toolbar",
+          "palette-marks" },
+            { "Show &Group Toolbar", "1slotToggleGroupToolBar()",   "show_group_toolbar",
+          "palette-group" },            
+            { "Show &Layout Toolbar", "1slotToggleFontToolBar()", "show_font_toolbar",
+          "palette-font" },
+            { "Show Trans&port Toolbar", "1slotToggleTransportToolBar()", "show_transport_toolbar",
+          "palette-transport" }
         };
 
     for (unsigned int i = 0;

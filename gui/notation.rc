@@ -268,6 +268,8 @@
   <Action name="show_rests_toolbar"        append="show_merge" />
   <Action name="show_accidentals_toolbar"  append="show_merge" />
   <Action name="show_clefs_toolbar"        append="show_merge" />
+  <Action name="show_marks_toolbar"        append="show_merge" />
+  <Action name="show_group_toolbar"        append="show_merge" />
   <Action name="show_transport_toolbar"    append="show_merge" />
   <Action name="show_font_toolbar"         append="show_merge" />
   <Separator                               append="show_merge" />
@@ -358,11 +360,47 @@
   <Action name="bass_clef" />
 </ToolBar>
 
+<ToolBar name="Marks Toolbar" newline = "true">
+    <Action name="add_accent"/>
+    <Action name="add_tenuto"/>
+    <Action name="add_staccato"/>
+    <Action name="add_staccatissimo"/>
+    <Action name="add_marcato"/>
+    <Action name="add_text_sf"/>
+    <Action name="add_text_rf"/>
+    <Separator/>
+    <Action name="add_trill"/>
+    <Action name="add_turn"/>
+    <Action name="add_pause"/>
+    <Separator/>
+    <Action name="add_up-bow"/>
+    <Action name="add_down-bow"/>
+    <Separator/>
+    <Action name="add_text_mark"/>
+</ToolBar>
+
+<ToolBar name="Groups Toolbar">
+  <Action name="beam"/>
+  <Action name="break_group"/>
+  <Separator/>
+  <Action name="tuplet"/>
+  <Action name="simple_tuplet"/>
+  <Action name="grace"/>
+  <Separator/>
+  <Action name="slur"/>
+  <Action name="tie_notes"/>
+  <Separator/>
+  <Action name="crescendo"/>
+  <Action name="decrescendo"/>
+</ToolBar>
+
 <ToolBar name="Meta Toolbar" newline="true">
   <Action name="show_notes_toolbar"        />
   <Action name="show_rests_toolbar"        />
   <Action name="show_accidentals_toolbar"  />
   <Action name="show_clefs_toolbar"        />
+  <Action name="show_marks_toolbar"        />
+  <Action name="show_group_toolbar"        />
 </ToolBar>
 
 <ToolBar name="Font Toolbar">
