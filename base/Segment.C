@@ -168,8 +168,6 @@ void Track::setNbTimeSteps(unsigned int nbTimeSteps)
 
 void Track::erase(iterator pos)
 {
-    cerr << "Track::erase() : delete " << *pos << endl;
-
     delete *pos;
     std::multiset<Event*, Event::EventCmp>::erase(pos);
 }
@@ -182,12 +180,21 @@ void Track::erase(iterator from, iterator to)
     std::multiset<Event*, Event::EventCmp>::erase(from, to);
 }
 
-size_t Track::erase(Event* e)
+bool Track::eraseSingle(Event* e)
 {
-    cerr << "Track::erase() : delete " << e << endl;
+    std::pair<iterator, iterator> interval = equal_range(e);
 
-    delete e;
-    return std::multiset<Event*, Event::EventCmp>::erase(e);
+    bool foundIt = false;
+    
+    for(iterator i = interval.first; i != interval.second; ++i) {
+        if (*i == e) {
+            foundIt = true;
+            erase(i);
+            break;
+        }
+    }
+
+    return foundIt;
 }
 
 int Track::getNextGroupId() const

@@ -64,7 +64,13 @@ public:
      */
     void erase(iterator pos);
     void erase(iterator from, iterator to);
-    size_t erase(Event*);
+
+    /**
+     * Erase the Event and only this one
+     * Returns true if the event was found and erased,
+     * false otherwise.
+     */
+    bool eraseSingle(Event*);
 
     /**
      * Returns an event group id
