@@ -41,16 +41,17 @@
 namespace Rosegarden
 {
 
+typedef enum
+{
+    AUDIO_NOT_LOADED,
+    AUDIO_NOT_RECOGNISED,
+    AUDIO_WAV
+} AudioFileType;
+
 class AudioFile : public SoundFile
 {
 public:
 
-    typedef enum
-    {
-        AUDIO_NOT_LOADED,
-        AUDIO_NOT_RECOGNISED,
-        AUDIO_WAV
-    } AudioFileType;
 
     AudioFile(const unsigned int &id,
               const string &name,

@@ -28,6 +28,7 @@
 
 // include files for KDE
 #include <klocale.h>
+#include <dcopclient.h>
 #include <kmessagebox.h>
 
 #include <string>
@@ -608,5 +609,54 @@ RosegardenGUIDoc::stopRecordingMidi()
     slotUpdateAllViews(0);
 }
 
+
+// Make the sequencer aware of the samples we have in the
+// current Composition so it can prepare them for playing
+//
+void
+RosegardenGUIDoc::prepareAudio()
+{
+    Rosegarden::AudioFileManagerIterator it = m_audioFileManager.begin();
+
+    // Clear down the sequencer AudioFilePlayer object
+    //
+    {
+        QByteArray data;
+        QDataStream streamOut(data, IO_WriteOnly);
+
+        if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                      "deleteAllAudioFiles()", data))
+        {
+            std::cerr <<
+            "prepareAudio() - couldn't delete all audio files from sequencer"
+                      << std::endl;
+            return;
+        }
+    }
+    
+    for (it = m_audioFileManager.begin();
+         it != m_audioFileManager.end();
+         it++)
+    {
+        QByteArray data;
+        QDataStream streamOut(data, IO_WriteOnly);
+
+        // We have to pass the filename as a QString
+        //
+        streamOut << (*it)->getType();
+        streamOut << QString((*it)->getFilename().c_str());
+        streamOut << (*it)->getID();
+
+        if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                      ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                      "addAudioFile(int, QString, int)", data))
+        {
+            std::cerr << "prepareAudio() - couldn't add audio file"
+                      << std::endl;
+            return;
+        }
+    }
+}
 
 

@@ -235,6 +235,7 @@ protected:
      */
     virtual void readProperties(KConfig *_cfg);
 
+
 public slots:
     /**
      * open a new application window by creating a new instance of

@@ -180,6 +180,11 @@ public:
      */
     void stopRecordingMidi();
 
+    /*
+     * Register audio samples at the sequencer
+     */
+    void prepareAudio();
+
 
 public slots:
 

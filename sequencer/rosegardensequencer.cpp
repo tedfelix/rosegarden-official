@@ -579,21 +579,27 @@ RosegardenSequencerApp::getSoundSystemStatus()
 }
 
 
-// Add a wavFile to the sequencer
-int
-RosegardenSequencerApp::addWavFile(const QString &fileName, const int id)
+// Add an audio file to the sequencer
+void
+RosegardenSequencerApp::addAudioFile(const int &audioFileType,
+                                     const QString &fileName,
+                                     const int &id)
 {
-    cout << "RosegardenSequencerApp::addWavFile = " << fileName << endl;
-
-    return 0;
+    m_audioFilePlayer.addAudioFile((Rosegarden::AudioFileType) audioFileType,
+                                   string(fileName.data()),
+                                   id);
 }
 
-int
-RosegardenSequencerApp::deleteWavFile(const int id)
+void
+RosegardenSequencerApp::deleteAudioFile(const int &id)
 {
-    cout << "RosegardenSequencerApp::deleteWavFile() = " << id << endl;
+    m_audioFilePlayer.deleteAudioFile(id);
+}
 
-    return 0;
+void
+RosegardenSequencerApp::deleteAllAudioFiles()
+{
+    m_audioFilePlayer.clear();
 }
 
 

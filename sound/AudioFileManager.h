@@ -43,6 +43,8 @@ using std::endl;
 namespace Rosegarden
 {
 
+typedef std::vector<AudioFile*>::const_iterator AudioFileManagerIterator;
+
 class AudioFileManager
 {
 public:
@@ -71,6 +73,14 @@ public:
     // does a specific file id exist?
     //
     bool fileExists(const unsigned int &id);
+
+    // Get the list of files
+    //
+    std::vector<AudioFile*>::const_iterator begin()
+        { return m_audioFiles.begin(); }
+
+    std::vector<AudioFile*>::const_iterator end()
+        { return m_audioFiles.end(); }
 
 private:
     std::string getFileInPath(const std::string &file);

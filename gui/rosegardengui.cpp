@@ -475,6 +475,12 @@ void RosegardenGUIApp::openFile(const QString& url)
     m_doc->closeDocument();
     m_doc->openDocument(u->path());
     initView();
+
+    // Ensure the sequencer knows about any audio files
+    // we've loaded as part of the new Composition
+    //
+    m_doc->prepareAudio();
+
 }
 
 

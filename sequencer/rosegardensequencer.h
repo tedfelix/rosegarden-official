@@ -49,6 +49,7 @@
 #include "MappedComposition.h"
 #include "Sequencer.h"
 #include "Event.h"
+#include "AudioFilePlayer.h"
 
 class KURL;
 class KRecentFilesAction;
@@ -125,8 +126,15 @@ public slots:
 
     // Add and delete wav files on the sequencer
     //
-    virtual int addWavFile(const QString &fileName, const int id);
-    virtual int deleteWavFile(const int id);
+    virtual void addAudioFile(const int &audioFileType,
+                             const QString &fileName,
+                             const int &id);
+
+    virtual void deleteAudioFile(const int &id);
+
+    // Deletes all the audio files and clears down any flapping i/o handles
+    //
+    virtual void deleteAllAudioFiles();
 
     // stops the sequencer
     //
@@ -207,6 +215,9 @@ private:
     Rosegarden::RealTime m_loopStart;
     Rosegarden::RealTime m_loopEnd;
 
+    // Manage and play audio files at the sequencer level
+    //
+    Rosegarden::AudioFilePlayer m_audioFilePlayer;
 };
  
 #endif // _ROSEGARDEN_SEQUENCER_APP_H_

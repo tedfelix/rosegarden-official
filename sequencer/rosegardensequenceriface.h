@@ -73,10 +73,17 @@ public:
     //
     virtual int getSoundSystemStatus() = 0;
 
-    // Add and delete wav files on the sequencer
+    // Add and delete audio files on the sequencer
     //
-    virtual int addWavFile(const QString &fileName, const int id) = 0;
-    virtual int deleteWavFile(const int id) = 0;
+    virtual void addAudioFile(const int &audioFileType,
+                             const QString &fileName,
+                             const int &id) = 0;
+
+    virtual void deleteAudioFile(const int &id) = 0;
+
+    // clear down the AudioFilePlayer
+    //
+    virtual void deleteAllAudioFiles() = 0;
 
 
 };
