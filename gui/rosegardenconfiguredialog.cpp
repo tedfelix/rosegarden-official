@@ -62,6 +62,7 @@
 #include "notationview.h"
 #include "matrixview.h"
 #include "notestyle.h"
+#include "notefont.h"
 #include "rosegardenguidoc.h"
 #include "rosedebug.h"
 #include "sequencemanager.h"

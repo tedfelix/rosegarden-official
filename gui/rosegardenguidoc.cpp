@@ -204,7 +204,7 @@ void RosegardenGUIDoc::slotUpdateAllViews(RosegardenGUIView *sender)
 void RosegardenGUIDoc::setModified(bool m)
 {
     m_modified = m;
-    RG_DEBUG << "RosegardenGUIDoc::setModified(" << m << ")\n";
+    RG_DEBUG << "RosegardenGUIDoc[" << this << "]::setModified(" << m << ")\n";
 }
 
 void RosegardenGUIDoc::clearModifiedStatus()

@@ -77,47 +77,22 @@ public:
 		      const MidiMetronome &metronome);
     const MidiMetronome* getMetronome() const { return m_metronome; }
 
-    // Get a program list for a certain bank (disregarding bank name)
-    //
-//!!! need?
-    StringList getProgramList(const MidiBank &bank);
-
-    // Get a list of all banks
-    //
-    //!!! lose in favour of returning bank object ptrs
-    StringList getBankList();
-
-    // Add either
-    //
     void addProgram(MidiProgram *program);
     void addBank(MidiBank *bank);
 
-    // Clear down both banks and programs
-    //
     void clearBankList();
     void clearProgramList();
-
-    // Retrieve by different criteria
-    //
-    //!!! lose
-    const MidiBank* getBankByIndex(int index) const;
-
-    //!!! lose -- what we really need is getBankName or something
-    const MidiBank* getBankByMsbLsb(bool percussion, MidiByte msb, MidiByte lsb) const;
 
     const BankList getBanks(bool percussion) const;
     const BankList getBanksByMSB(bool percussion, MidiByte msb) const; 
     const BankList getBanksByLSB(bool percussion, MidiByte lsb) const;
     MidiByteList getDistinctMSBs(bool percussion, int lsb = -1) const;
     MidiByteList getDistinctLSBs(bool percussion, int msb = -1) const;
+
     const ProgramList getPrograms(const MidiBank &bank) const;
+
     std::string getBankName(const MidiBank &bank) const;
     std::string getProgramName(const MidiProgram &program) const;
-
-//!!! need?
-    const MidiProgram* getProgramByIndex(int index) const;
-//!!! need?
-    const MidiProgram* getProgram(const MidiBank &bank, int index) const;
 
     virtual std::string toXmlString();
 
@@ -126,7 +101,6 @@ public:
 
     // Return a copy of banks and programs
     //
-    //!!! need these?
     std::vector<MidiBank> getBanks() const;
     std::vector<MidiProgram> getPrograms() const;
 

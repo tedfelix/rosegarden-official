@@ -65,6 +65,7 @@ rosegarden_SOURCES = \
 	notepixmapfactory.cpp \
 	notestyle.cpp \
 	pianokeyboard.cpp \
+	pixmapfunctions.cpp \
 	qcanvasgroupableitem.cpp \
 	qcanvassimplesprite.cpp \
 	qdeferscrollview.cpp \
@@ -82,6 +83,7 @@ rosegarden_SOURCES = \
         rosegardentransportdialog.cpp \
 	rosestrings.cpp \
 	rosexmlhandler.cpp \
+	scrollbox.cpp \
 	segmentcanvas.cpp \
         segmentcommands.cpp \
         segmentparameterbox.cpp \
@@ -111,10 +113,11 @@ rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lkdeui -
 SUBDIRS = docs
 
 EXTRA_DIST = styles/*.xml \
-	pixmaps/rg21/mapping.xml \
+	fonts/mappings/rg21.xml \
+	fonts/mappings/feta.xml \
+	fonts/mappings/feta-tt.xml \
 	pixmaps/rg21/4/*.xpm \
 	pixmaps/rg21/8/*.xpm \
-	pixmaps/feta/mapping.xml \
 	pixmaps/feta/4/*.xpm \
 	pixmaps/feta/6/*.xpm \
 	pixmaps/feta/8/*.xpm \
@@ -146,29 +149,29 @@ install-data-local:
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/styles
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/misc
-	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/rg21
-	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/rg21/4
-	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/rg21/8
-	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/feta
-	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/feta/4
-	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/feta/6
-	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/feta/8
-	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/feta/10
-	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/feta/12
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/toolbar
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/transport
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/fonts/rg21
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/fonts/rg21/4
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/fonts/rg21/8
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/fonts/feta
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/fonts/feta/4
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/fonts/feta/6
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/fonts/feta/8
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/fonts/feta/10
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/fonts/feta/12
+	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/fonts/mappings
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/library
 	$(INSTALL_DATA) $(srcdir)/styles/*.xml $(kde_datadir)/$(data_dirname)/styles
+	$(INSTALL_DATA) $(srcdir)/fonts/mappings/*.xml $(kde_datadir)/$(data_dirname)/fonts/mappings
 	$(INSTALL_DATA) $(srcdir)/pixmaps/misc/*.xpm $(kde_datadir)/$(data_dirname)/pixmaps/misc
-	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/mapping.xml $(kde_datadir)/$(data_dirname)/pixmaps/rg21
-	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/4/*.xpm     $(kde_datadir)/$(data_dirname)/pixmaps/rg21/4
-	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/8/*.xpm     $(kde_datadir)/$(data_dirname)/pixmaps/rg21/8
-	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/mapping.xml $(kde_datadir)/$(data_dirname)/pixmaps/feta
-	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/4/*.xpm     $(kde_datadir)/$(data_dirname)/pixmaps/feta/4
-	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/6/*.xpm     $(kde_datadir)/$(data_dirname)/pixmaps/feta/6
-	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/8/*.xpm     $(kde_datadir)/$(data_dirname)/pixmaps/feta/8
-	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/10/*.xpm    $(kde_datadir)/$(data_dirname)/pixmaps/feta/10
-	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/12/*.xpm    $(kde_datadir)/$(data_dirname)/pixmaps/feta/12
+	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/4/*.xpm     $(kde_datadir)/$(data_dirname)/fonts/rg21/4
+	$(INSTALL_DATA) $(srcdir)/pixmaps/rg21/8/*.xpm     $(kde_datadir)/$(data_dirname)/fonts/rg21/8
+	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/4/*.xpm     $(kde_datadir)/$(data_dirname)/fonts/feta/4
+	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/6/*.xpm     $(kde_datadir)/$(data_dirname)/fonts/feta/6
+	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/8/*.xpm     $(kde_datadir)/$(data_dirname)/fonts/feta/8
+	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/10/*.xpm    $(kde_datadir)/$(data_dirname)/fonts/feta/10
+	$(INSTALL_DATA) $(srcdir)/pixmaps/feta/12/*.xpm    $(kde_datadir)/$(data_dirname)/fonts/feta/12
 	$(INSTALL_DATA) $(srcdir)/pixmaps/toolbar/*.xpm    $(kde_datadir)/$(data_dirname)/pixmaps/toolbar
 	$(INSTALL_DATA) $(srcdir)/pixmaps/transport/*.xpm  $(kde_datadir)/$(data_dirname)/pixmaps/transport
 	$(INSTALL_DATA) $(srcdir)/pixmaps/splash.png       $(kde_datadir)/$(data_dirname)/pixmaps
@@ -192,6 +195,7 @@ uninstall-local:
 	-rm -f $(kde_icondir)/hicolor/16x16/apps/rosegarden.xpm
 	-rm -rf $(kde_datadir)/$(data_dirname)/styles
 	-rm -rf $(kde_datadir)/$(data_dirname)/pixmaps
+	-rm -rf $(kde_datadir)/$(data_dirname)/fonts
 	-rm -f $(kde_datadir)/$(data_dirname)/autoload.rg
 	-rm -rf $(kde_datadir)/$(data_dirname)/library
 	-rm -rf $(kde_datadir)/$(data_dirname)/tips

@@ -476,8 +476,6 @@ void Key::checkAccidentalHeights() const
 int Key::convertFrom(int p, const Key &previousKey,
                      const Accidental &explicitAccidental) const
 {
-//!!!    NotationDisplayPitch ndp(pitch, Clef(), previousKey, explicitAccidental);
-//    return ndp.getPerformancePitch(Clef(), *this);
     Pitch pitch(p, explicitAccidental);
     int height = pitch.getHeightOnStaff(Clef(), previousKey);
     Pitch newPitch(height, Clef(), *this, explicitAccidental);

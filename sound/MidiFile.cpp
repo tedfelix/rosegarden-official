@@ -798,7 +798,6 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                         if (tempo != 0)
                         {
                             tempo = 60000000 / tempo;
-			    //!!! if preexisting, need to ask user about this
                             composition.addTempo(rosegardenTime, tempo);
                         }
                     }
@@ -814,7 +813,6 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                     if (numerator == 0) numerator = 4;
                     if (denominator == 0) denominator = 4;
 
-		    //!!! if preexisting, need to ask user about this
                     composition.addTimeSignature
                         (rosegardenTime,
                          TimeSignature(numerator, denominator));

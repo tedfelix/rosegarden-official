@@ -38,6 +38,7 @@ namespace Rosegarden
 class Segment;
 class Event;
 class CompositionTimeSliceAdapter;
+class Quantizer;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -132,7 +133,8 @@ public:
      * Inserts in the given Segment labels for all of the chords found in
      * the timeslice in the given CompositionTimeSliceAdapter.
      */
-    void labelChords(CompositionTimeSliceAdapter &c, Segment &s);
+    void labelChords(CompositionTimeSliceAdapter &c, Segment &s,
+		     const Rosegarden::Quantizer *quantizer);
 
     /**
      * Returns a time signature that is probably reasonable for the

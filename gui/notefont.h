@@ -46,6 +46,13 @@ public:
     NoteFontMap(std::string name); // load and parse the XML mapping file
     ~NoteFontMap();
 
+    /**
+     * ok() returns false if the file read succeeded but the font
+     * relies on system fonts that are not available.  (If the file
+     * read fails, the constructor throws MappingFileReadFailed.)
+     */
+    bool ok() const { return m_ok; }
+
     std::string getName() const { return m_name; }
     std::string getOrigin() const { return m_origin; }
     std::string getCopyright() const { return m_copyright; }
@@ -60,9 +67,15 @@ public:
     bool getStemThickness(int size, unsigned int &thickness) const;
     bool getBeamThickness(int size, unsigned int &thickness) const;
     bool getBorderThickness(int size, unsigned int &X, unsigned int &y) const;
+    
+    bool hasInversion(int size, CharName charName) const;
 
     bool getSrc(int size, CharName charName, std::string &src) const;
     bool getInversionSrc(int size, CharName charName, std::string &src) const;
+
+    bool getFont(int size, CharName charName, QFont &font) const;
+    bool getCode(int size, CharName charName, int &code) const;
+    bool getInversionCode(int size, CharName charName, int &code) const;
 
     bool getHotspot(int size, CharName charName, int &x, int &y) const;
 
@@ -74,25 +87,45 @@ public:
 
     virtual bool characters(QString &);
 
+    bool error(const QXmlParseException& exception);
+    bool fatalError(const QXmlParseException& exception);
+
     void dump() const;
 
 private:
     class SymbolData
     {
     public:
-        SymbolData() : m_src(""), m_inversion("") { }
+        SymbolData() : m_fontId(0),
+		       m_src(""), m_inversionSrc(""),
+		       m_code(-1), m_inversionCode(-1) { }
         ~SymbolData() { }
+
+	void setFontId(int id) { m_fontId = id; }
+	int  getFontId() const { return m_fontId; }
 
         void setSrc(std::string src) { m_src = src; }
         std::string getSrc() const { return m_src; }
 
-        void setInversion(std::string inversion) { m_inversion = inversion; }
-        bool hasInversion() const { return m_inversion != ""; }
-        std::string getInversion() const { return m_inversion; }
+	void setCode(int code) { m_code = code; }
+	int  getCode() const { return m_code; }
+
+        void setInversionSrc(std::string inversion) { m_inversionSrc = inversion; }
+        std::string getInversionSrc() const { return m_inversionSrc; }
+
+        void setInversionCode(int code) { m_inversionCode = code; }
+        int  getInversionCode() const { return m_inversionCode; }
+
+        bool hasInversion() const {
+	    return m_inversionCode >= 0 || m_inversionSrc != "";
+	}
 
     private:
+	int m_fontId;
         std::string m_src;
-        std::string m_inversion;
+        std::string m_inversionSrc;
+	int m_code;
+	int m_inversionCode;
     };
 
     class HotspotData
@@ -203,14 +236,20 @@ private:
     typedef __HASH_NS::hash_map<int, SizeData> SizeDataMap;
     SizeDataMap m_sizes;
 
+    typedef __HASH_NS::hash_map<int, QFont> SystemFontMap;
+    SystemFontMap m_fonts;
+
     // For use when reading the XML file:
     bool m_expectingCharacters;
     std::string *m_characterDestination;
     std::string m_hotspotCharName;
     QString m_errorString;
 
+    bool checkFont(QString name, int size, QFont &font) const;
     bool checkFile(int size, std::string &src) const;
     QString m_fontDirectory;
+
+    bool m_ok;
 };
 
 

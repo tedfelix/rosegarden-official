@@ -39,6 +39,7 @@
 #include "Track.h"
 #include "Instrument.h"
 #include "Profiler.h"
+#include "Quantizer.h"
 
 using Rosegarden::timeT;
 using Rosegarden::Int;
@@ -310,7 +311,7 @@ ChordNameRuler::recalculate(bool regetSegments)
     CompositionTimeSliceAdapter adapter(m_composition, &m_segments);
     
     AnalysisHelper helper;
-    helper.labelChords(adapter, *m_chordSegment);
+    helper.labelChords(adapter, *m_chordSegment, m_composition->getNotationQuantizer());
 }
 
 void

@@ -101,15 +101,18 @@ protected:
      * \a lineThickness is the number of pixels thick a
      *    staff line should be
      *
-     * \a pageWidth is the width of a window (to determine
-     *    when to break lines for page layout)
+     * \a pageWidth is the width of a page, to determine
+     *    when to break lines for page layout
+     *
+     * \a pageHeight is the height of a page, or zero for
+     *    a single continuous page
      *
      * \a rowSpacing is the distance in pixels between
      *    the tops of consecutive rows on this staff
      */
     LinedStaff(QCanvas *, Rosegarden::Segment *, Rosegarden::SnapGrid *,
                int id, int resolution, int lineThickness,
-	       double pageWidth, int rowSpacing);
+	       double pageWidth, int pageHeight, int rowSpacing);
 
     /**
      * Create a new LinedStaff for the given Segment, with
@@ -117,7 +120,7 @@ protected:
      */
     LinedStaff(QCanvas *, Rosegarden::Segment *, Rosegarden::SnapGrid *,
                int id, int resolution, int lineThickness,
-	       bool pageMode, double pageWidth, int rowSpacing);
+	       bool pageMode, double pageWidth, int pageHeight, int rowSpacing);
 
 public:
     virtual ~LinedStaff();
@@ -291,8 +294,7 @@ public:
 
     /**
      * Set whether this is the current staff or not.  A staff that is
-     * current will have a staff ruler above its current row, and may
-     * differ visually from non-current staffs.
+     * current will differ visually from non-current staffs.
      * 
      * The owner of the staffs should normally ensure that one staff
      * is current (the default is non-current, even if there only is

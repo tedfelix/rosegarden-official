@@ -25,6 +25,7 @@
 #include <qimage.h>
 #include <qbitmap.h>
 #include <qdir.h>
+#include <qpainter.h>
 
 #include <kglobal.h>
 #include <kstddirs.h>
@@ -33,6 +34,7 @@
 #include <iostream>
 
 #include "rosestrings.h"
+#include "pixmapfunctions.h"
 
 using std::string;
 using std::map;
@@ -45,19 +47,20 @@ NoteFontMap::NoteFontMap(string name) :
     m_name(name),
     m_smooth(false),
     m_characterDestination(0),
-    m_hotspotCharName("")
+    m_hotspotCharName(""),
+    m_ok(true)
 {
-    m_fontDirectory = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    m_fontDirectory = KGlobal::dirs()->findResource("appdata", "fonts/");
 
-    QString mapFileName = QString("%1/%2/mapping.xml")
+    QString mapFileName = QString("%1/mappings/%2.xml")
         .arg(m_fontDirectory)
         .arg(strtoqstr(name));
 
     QFileInfo mapFileInfo(mapFileName);
 
     if (!mapFileInfo.isReadable()) {
-        throw MappingFileReadFailed(qstrtostr((i18n("Can't open mapping file ") +
-                                     mapFileName)));
+        throw MappingFileReadFailed(qstrtostr(i18n("Can't open mapping file %1").
+					      arg(mapFileName)));
     }
 
     QFile mapFile(mapFileName);
@@ -160,18 +163,56 @@ NoteFontMap::startElement(const QString &, const QString &,
             m_errorString = i18n("name is a required attribute of symbol");
             return false;
         }
+        SymbolData symbolData;
 
         QString src = attributes.value("src");
-        if (!src) {
-            m_errorString = i18n("src is a required attribute of symbol (until real font support is implemented)");
+	QString code = attributes.value("code");
+
+	int n = -1;
+	bool ok = false;
+	if (code) {
+	    n = code.stripWhiteSpace().toInt(&ok);
+	    if (!ok || n < 0) {
+		m_errorString =
+		    i18n("invalid code attribute \"%1\" (must be integer >= 0)").
+		    arg(code);
+		return false;
+	    }
+	    symbolData.setCode(n);
+	}
+
+        if (!src && n < 0) {
+            m_errorString = i18n("symbol must have either src or code attribute");
             return false;
         }
-
-        SymbolData symbolData;
-        symbolData.setSrc(qstrtostr(src));
+        if (src) symbolData.setSrc(qstrtostr(src));
 
         QString inversionSrc = attributes.value("inversion-src");
-        if (inversionSrc) symbolData.setInversion(qstrtostr(inversionSrc));
+        if (inversionSrc) symbolData.setInversionSrc(qstrtostr(inversionSrc));
+
+        QString inversionCode = attributes.value("inversion-code");
+        if (inversionCode) {
+	    n = inversionCode.stripWhiteSpace().toInt(&ok);
+	    if (!ok || n < 0) {
+		m_errorString =
+		    i18n("invalid inversion code attribute \"%1\" (must be integer >= 0)").
+		    arg(inversionCode);
+		return false;
+	    }
+	    symbolData.setInversionCode(n);
+	}
+
+	QString fontId = attributes.value("font-id");
+	if (fontId) {
+	    n = fontId.stripWhiteSpace().toInt(&ok);
+	    if (!ok || n < 0) {
+		m_errorString =
+		    i18n("invalid font-id attribute \"%1\" (must be integer >= 0)").
+		    arg(fontId);
+		return false;
+	    }
+	    symbolData.setFontId(n);
+	}
 
         m_data[qstrtostr(symbolName.upper())] = symbolData;
 
@@ -219,12 +260,94 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         i->second.addHotspot(noteHeight, x, y);
 
+    } else if (lcName == "font-requirements") {
+
+    } else if (lcName == "font-requirement") {
+
+	QString id = attributes.value("font-id");
+	int n = -1;
+	bool ok = false;
+	if (id) {
+	    n = id.stripWhiteSpace().toInt(&ok);
+	    if (!ok) {
+		m_errorString =
+		    i18n("invalid font-id attribute \"%1\" (must be integer >= 0)").
+		    arg(id);
+		return false;
+	    }
+	} else {
+	    m_errorString = i18n("font-id is a required attribute of font-requirement");
+	    return false;
+	}
+
+	QString name = attributes.value("name");
+	QString names = attributes.value("names");
+	if (name) {
+
+	    if (names) {
+		m_errorString =
+		    i18n("font-requirement may have name or names attribute, but not both");
+		return false;
+	    }
+	    //!!! need the font-sizes stuff to tell us what pixel size to use for a given line width
+	    QFont font;
+	    if (checkFont(name, 12, font)) { //!!!
+		m_fonts[n] = font;
+	    } else {
+		cerr << i18n("Warning: Unable to load font \"%1\"").arg(name) << endl;
+		m_ok = false;
+	    }
+
+	} else if (names) {
+
+	    bool have = false;
+	    QStringList list = QStringList::split(",", names, false);
+	    for (QStringList::Iterator i = list.begin(); i != list.end(); ++i) {
+		QFont font;
+		if (checkFont(*i, 12, font)) { //!!!
+		    m_fonts[n] = font;
+		    have = true;
+		    break;
+		}
+	    }
+	    if (!have) {
+		cerr << i18n("Warning: Unable to load any of the fonts in \"%1\"").
+		    arg(names) << endl;
+		m_ok = false;
+	    }
+
+	} else {
+	    m_errorString =
+		i18n("font-requirement must have either name or names attribute");
+	    return false;
+	}	    
+
     } else {
 
     }
 
     if (m_characterDestination) *m_characterDestination = "";
     return true;
+}
+
+bool
+NoteFontMap::error(const QXmlParseException& exception)
+{
+    m_errorString = i18n("%1 at line %2, column %3")
+	.arg(exception.message())
+	.arg(exception.lineNumber())
+	.arg(exception.columnNumber());
+    return QXmlDefaultHandler::error(exception);
+}
+
+bool
+NoteFontMap::fatalError(const QXmlParseException& exception)
+{
+    m_errorString = i18n("%1 at line %2, column %3")
+	.arg(exception.message())
+	.arg(exception.lineNumber())
+	.arg(exception.columnNumber());
+    return QXmlDefaultHandler::fatalError(exception);
 }
 
 set<int>
@@ -254,6 +377,14 @@ NoteFontMap::getCharNames() const
 }
 
 bool
+NoteFontMap::checkFont(QString name, int size, QFont &font) const
+{
+    font = QFont(name, size, QFont::Normal);
+    font.setPixelSize(size);
+    return font.exactMatch();
+}
+
+bool
 NoteFontMap::checkFile(int size, string &src) const
 {
     QString pixmapFileName = QString("%1/%2/%3/%4.xpm")
@@ -274,6 +405,13 @@ NoteFontMap::checkFile(int size, string &src) const
     return true;
 }
 
+bool
+NoteFontMap::hasInversion(int, CharName charName) const
+{
+    SymbolDataMap::const_iterator i = m_data.find(charName);
+    if (i == m_data.end()) return false;
+    return i->second.hasInversion();
+}
 
 bool
 NoteFontMap::getSrc(int size, CharName charName, string &src) const
@@ -282,6 +420,7 @@ NoteFontMap::getSrc(int size, CharName charName, string &src) const
     if (i == m_data.end()) return false;
 
     src = i->second.getSrc();
+    if (src == "") return false;
     return checkFile(size, src);
 }
 
@@ -292,8 +431,43 @@ NoteFontMap::getInversionSrc(int size, CharName charName, string &src) const
     if (i == m_data.end()) return false;
 
     if (!i->second.hasInversion()) return false;
-    src = i->second.getInversion();
+    src = i->second.getInversionSrc();
     return checkFile(size, src);
+}
+
+bool
+NoteFontMap::getFont(int, CharName charName, QFont &font) const
+{
+    SymbolDataMap::const_iterator i = m_data.find(charName);
+    if (i == m_data.end()) return false;
+
+    int fontId = i->second.getFontId();
+    SystemFontMap::const_iterator fi = m_fonts.find(fontId);
+
+    if (fontId < 0 || fi == m_fonts.end()) return false;
+
+    font = fi->second;
+    return true;
+}
+
+bool
+NoteFontMap::getCode(int, CharName charName, int &code) const
+{
+    SymbolDataMap::const_iterator i = m_data.find(charName);
+    if (i == m_data.end()) return false;
+
+    code = i->second.getCode();
+    return (code >= 0);
+}
+
+bool
+NoteFontMap::getInversionCode(int, CharName charName, int &code) const
+{
+    SymbolDataMap::const_iterator i = m_data.find(charName);
+    if (i == m_data.end()) return false;
+
+    code = i->second.getInversionCode();
+    return (code >= 0);
 }
 
 bool
@@ -346,6 +520,7 @@ void
 NoteFontMap::dump() const
 {
     // debug code
+    //!!! add code/font stuff
 
     cout << "Font data:\nName: " << getName() << "\nOrigin: " << getOrigin()
          << "\nCopyright: " << getCopyright() << "\nMapped by: "
@@ -456,21 +631,25 @@ NoteFont::getAvailableFontNames()
 {
     set<string> names;
 
-    QString fontDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QDir dir(fontDir);
+    QString mappingDir = 
+	KGlobal::dirs()->findResource("appdata", "fonts/mappings/");
+    QDir dir(mappingDir);
     if (!dir.exists()) {
-        cerr << "NoteFont::getAvailableFontNames: directory \"" << fontDir
-             << "\" not found" << endl;
+        cerr << "NoteFont::getAvailableFontNames: mapping directory \""
+	     << mappingDir << "\" not found" << endl;
         return names;
     }
 
-    dir.setFilter(QDir::Dirs | QDir::Readable);
-    QStringList subDirs = dir.entryList();
-    for (QStringList::Iterator i = subDirs.begin(); i != subDirs.end(); ++i) {
-        QFileInfo mapFile(QString("%1/%2/mapping.xml").arg(fontDir).arg(*i));
-        if (mapFile.exists() && mapFile.isReadable()) {
-            names.insert(qstrtostr((*i)));
-        }
+    dir.setFilter(QDir::Files | QDir::Readable);
+    QStringList files = dir.entryList();
+    for (QStringList::Iterator i = files.begin(); i != files.end(); ++i) {
+	if ((*i).length() > 4 && (*i).right(4).lower() == ".xml") {
+	    // we don't catch MappingFileReadFailed here -- that's a serious
+	    // enough exception that we need to handle it further up the stack
+	    string name(qstrtostr((*i).left((*i).length() - 4)));
+	    NoteFontMap map(name);
+	    if (map.ok()) names.insert(name);
+	}
     }
 
     return names;
@@ -548,6 +727,14 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
         return true;
     }
 
+    if (inverted && !m_fontMap.hasInversion(m_currentSize, charName)) {
+	if (!getPixmap(charName, pixmap, false)) return false;
+	found = new QPixmap(PixmapFunctions::flipVertical(pixmap));
+	add(charName, inverted, found);
+	pixmap = *found;
+	return true;
+    }
+
     string src;
     bool ok = false;
 
@@ -568,7 +755,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
                      << m_fontMap.getName() << "-" << m_currentSize
                      << "\"; consider making xpm background transparent"
                      << endl;
-                found->setMask(found->createHeuristicMask());
+		found->setMask(PixmapFunctions::generateMask(*found));
             }
 
             add(charName, inverted, found);
@@ -578,9 +765,42 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 
         cerr << "NoteFont::getPixmap: Warning: Unable to read pixmap file " << src << endl;
     } else {
-        cerr << "NoteFont::getPixmap: Warning: No pixmap for character \""
-	     << charName << "\"" << (inverted ? " (inverted)" : "")
-	     << " in font \"" << m_fontMap.getName() << "\"" << endl;
+
+	int code = -1;
+	QFont font;
+	if (!inverted) ok = m_fontMap.getCode(m_currentSize, charName, code);
+	else  ok = m_fontMap.getInversionCode(m_currentSize, charName, code);
+
+	if (!ok) {
+	    cerr << "NoteFont::getPixmap: Warning: No pixmap or code for character \""
+		 << charName << "\"" << (inverted ? " (inverted)" : "")
+		 << " in font \"" << m_fontMap.getName() << "\"" << endl;
+	    pixmap = *m_blankPixmap;
+	    return false;
+	}
+
+	ok = m_fontMap.getFont(m_currentSize, charName, font);
+
+	if (!ok) {
+	    cerr << "NoteFont::getPixmap: Warning: No system font for character \""
+		 << charName << "\"" << (inverted ? " (inverted)" : "")
+		 << " in font \"" << m_fontMap.getName() << "\"" << endl;
+	    pixmap = *m_blankPixmap;
+	    return false;
+	}
+
+	QFontMetrics metrics(font);
+	found = new QPixmap(metrics.width(QChar(code)), metrics.height());
+	found->fill();
+	QPainter painter;
+	painter.begin(found);
+	painter.drawText(0, metrics.ascent(), QChar(code));
+	painter.end();
+
+	found->setMask(PixmapFunctions::generateMask(*found));
+	add(charName, inverted, found);
+	pixmap = *found;
+	return true;
     }
 
     pixmap = *m_blankPixmap;
@@ -622,7 +842,7 @@ NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
     QPixmap basePixmap;
     bool ok = getPixmap(baseCharName, basePixmap, inverted);
 
-    found = recolour(basePixmap, hue, minValue);
+    found = new QPixmap(PixmapFunctions::colourPixmap(basePixmap, hue, minValue));
     add(charName, inverted, found);
     pixmap = *found;
     return ok;
@@ -654,52 +874,6 @@ NoteFont::getNameWithColour(CharName base, int hue) const
 {
     return qstrtostr(QString("%1__%2").arg(hue).arg(strtoqstr(base)));
 }
-
-QPixmap *
-NoteFont::recolour(QPixmap in, int hue, int minValue) const
-{
-    // assumes pixmap is currently in shades of grey; maps black ->
-    // solid colour and greys -> shades of colour
-
-    QImage image = in.convertToImage();
-
-    int s, v;
-
-    bool warned = false;
-    
-    for (int y = 0; y < image.height(); ++y) {
-        for (int x = 0; x < image.width(); ++x) {
-
-            QColor pixel(image.pixel(x, y));
-
-            int oldHue;
-            pixel.hsv(&oldHue, &s, &v);
-
-            if (oldHue >= 0) {
-                if (!warned) {
-                    cerr << "NoteFont::recolour: Not a greyscale pixmap "
-                         << "(found rgb value " << pixel.red() << ","
-                         << pixel.green() << "," << pixel.blue() 
-                         << "), hoping for the best" << endl;
-                    warned = true;
-                }
-//                continue;
-            }
-
-            image.setPixel
-                (x, y, QColor(hue,
-                              255 - v,
-                              v > minValue ? v : minValue,
-                              QColor::Hsv).rgb());
-        }
-    }
-
-    QPixmap *newMap = new QPixmap();
-    newMap->convertFromImage(image);
-    newMap->setMask(*in.mask());
-    return newMap;
-}
-
 
 bool
 NoteFont::getDimensions(CharName charName, int &x, int &y, bool inverted) const

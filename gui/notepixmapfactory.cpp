@@ -42,12 +42,14 @@
 #include "rosegardenconfigurationpage.h"
 #include "notationstrings.h"
 #include "notepixmapfactory.h"
+#include "pixmapfunctions.h"
 #include "NotationTypes.h"
 #include "Equation.h"
 #include "Profiler.h"
 
 #include "colours.h"
 #include "notefont.h"
+#include "notestyle.h"
 #include "spline.h"
 
 
@@ -74,6 +76,12 @@ static clock_t drawBeamsTime = 0;
 static clock_t makeNotesTime = 0;
 static int drawBeamsCount = 0;
 static int drawBeamsBeamCount = 0;
+
+class NotePixmapCache : public __HASH_NS::hash_map<CharName, QCanvasPixmap*,
+                                                   CharNameHash, CharNamesEqual>
+{
+    // nothing to add -- just so we can predeclare it in the header
+};
 
 NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
                                            int dots,
@@ -124,7 +132,8 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_timeSigFont("new century schoolbook", 8, QFont::Bold),
     m_timeSigFontMetrics(m_timeSigFont),
     m_bigTimeSigFont("new century schoolbook", 12, QFont::Normal),
-    m_bigTimeSigFontMetrics(m_bigTimeSigFont)
+    m_bigTimeSigFontMetrics(m_bigTimeSigFont),
+    m_dottedRestCache(new NotePixmapCache)
 {
     init(fontName, size);
 }
@@ -138,7 +147,8 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_timeSigFont(npf.m_timeSigFont),
     m_timeSigFontMetrics(m_timeSigFont),
     m_bigTimeSigFont(npf.m_bigTimeSigFont),
-    m_bigTimeSigFontMetrics(m_bigTimeSigFont)
+    m_bigTimeSigFontMetrics(m_bigTimeSigFont),
+    m_dottedRestCache(new NotePixmapCache)
 {
     init(npf.m_font->getNoteFontMap().getName(),
 	 npf.m_font->getCurrentSize());
@@ -160,6 +170,8 @@ NotePixmapFactory::operator=(const NotePixmapFactory &npf)
 	delete m_font;
 	init(npf.m_font->getNoteFontMap().getName(),
 	     npf.m_font->getCurrentSize());
+	m_dottedRestCache->clear();
+	m_textFontCache.clear();
     }
     return *this;
 }
@@ -211,6 +223,7 @@ NotePixmapFactory::init(std::string fontName, int size)
 NotePixmapFactory::~NotePixmapFactory()
 {
     delete m_font;
+    delete m_dottedRestCache;
 }
 
 set<string>
@@ -234,10 +247,15 @@ NotePixmapFactory::getDefaultFont()
 vector<int>
 NotePixmapFactory::getAvailableSizes(string fontName)
 {
-    set<int> s(NoteFont(fontName).getSizes());
-    vector<int> v(s.begin(), s.end());
-    std::sort(v.begin(), v.end());
-    return v;
+    try {
+	set<int> s(NoteFont(fontName).getSizes());
+	vector<int> v(s.begin(), s.end());
+	std::sort(v.begin(), v.end());
+	return v;
+    } catch (Rosegarden::Exception f) {
+        KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
+        throw;
+    }
 }
 
 int
@@ -1152,8 +1170,8 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
 	if (params.m_dots == 0) {
 	    return m_font->getCanvasPixmap(charName);
 	} else {
-	    NotePixmapCache::iterator ci(m_dottedRestCache.find(charName));
-	    if (ci != m_dottedRestCache.end())
+	    NotePixmapCache::iterator ci(m_dottedRestCache->find(charName));
+	    if (ci != m_dottedRestCache->end())
 		return new QCanvasPixmap
 		    (*ci->second, QPoint(ci->second->offsetX(),
 					 ci->second->offsetY()));
@@ -1212,9 +1230,9 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
 
     QCanvasPixmap* canvasMap = makeCanvasPixmap(hotspot);
     if (encache) {
-	m_dottedRestCache.insert(std::pair<CharName, QCanvasPixmap*>
-				 (charName, new QCanvasPixmap
-				  (*canvasMap, hotspot)));
+	m_dottedRestCache->insert(std::pair<CharName, QCanvasPixmap*>
+				  (charName, new QCanvasPixmap
+				   (*canvasMap, hotspot)));
     }
     return canvasMap;
 }
@@ -1961,50 +1979,11 @@ NotePixmapFactory::makeCanvasPixmap(QPoint hotspot, bool generateMask)
 {
     m_p.end();
     m_pm.end();
-/*!!!
-    if (scalePixmapDown) {
-	QImage i = m_generatedPixmap->convertToImage();
-	if (i.depth() == 1) i = i.convertDepth(32);
-	i = i.smoothScale(i.width()/2, i.height()/2);
-	m_generatedPixmap->convertFromImage(i);
-    }
-
-    if (scaleMaskDown) {
-	QWMatrix m;
-	m.scale(0.5, 0.5);
-	m_generatedMask->xForm(m);
-    }
-*/
 
     QCanvasPixmap* p = new QCanvasPixmap(*m_generatedPixmap, hotspot);
 
     if (generateMask) {
-
-	QImage i(m_generatedPixmap->convertToImage());
-	QImage im(i.width(), i.height(), 1, 2, QImage::LittleEndian);
-
-	QRgb px0(i.pixel(0, 0));
-	QRgb px1(i.pixel(i.width()-1, 0));
-	QRgb px2(i.pixel(i.width()-1, i.height()-1));
-	QRgb px3(i.pixel(0, i.height()-1));
-
-	QRgb px(px0);
-	if (px0 != px2 && px1 == px3) px = px1;
-
-	for (int y = 0; y < i.height(); ++y) {
-	    for (int x = 0; x < i.width(); ++x) {
-		if (i.pixel(x, y) != px) {
-		    im.setPixel(x, y, 1);
-		} else {
-		    im.setPixel(x, y, 0);
-		}
-	    }
-	}
-
-	QBitmap m;
-	m.convertFromImage(im);
-	p->setMask(m);
-
+	p->setMask(PixmapFunctions::generateMask(*p));
     } else {
 	p->setMask(*m_generatedMask);
     }

@@ -350,16 +350,14 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
                 }
                 else
                 {
-/*!!!
                     // Ignore the program change and use the percussion
                     // flag.
                     //
-                    if ((*iit)->getMidiChannel() == MIDI_PERCUSSION_CHANNEL
-                            && percussion)
+                    if ((*iit)->isPercussion() && percussion)
                     {
                         return (*iit);
                     }
-*/
+
                     // Otherwise store the first Instrument for
                     // possible use later.
                     //

@@ -644,6 +644,7 @@ EditView::getPitchFromNoteInsertAction(QString name,
     Rosegarden::Key key;
     Rosegarden::Clef clef;
 
+    //!!! need to be able to get clef & key -- how?
     //!!! modify to use Pitch class
 
     if (name.left(7) == "insert_") {
@@ -685,12 +686,18 @@ EditView::getPitchFromNoteInsertAction(QString name,
 	    scalePitch = 0;
 	}
 
+	//!!! needs testing before we remove old stuff
+	Rosegarden::Pitch pitch
+	    (scalePitch, 5 + octave + clef.getOctave(), key, accidental);
+	return pitch.getPerformancePitch();
+
+/*!!!
 	int pitch =
 	    key.getTonicPitch() + 60 + 12*(octave + clef.getOctave()) + modify;
 
 	static int scale[] = { 0, 2, 4, 5, 7, 9, 11 };
 	pitch += scale[scalePitch];
-
+*/
 /*!!!
 	if (accidental != NoAccidental) {
 	    Rosegarden::NotationDisplayPitch ndp(pitch, clef, key);
@@ -702,7 +709,7 @@ EditView::getPitchFromNoteInsertAction(QString name,
 	    else                          accidental = DoubleFlat;
 	}
 */
-	return pitch;
+//!!!	return pitch;
 
     } else {
 

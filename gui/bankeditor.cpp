@@ -1019,11 +1019,12 @@ BankEditorDialog::updateDialog()
 			    bool percussion = (bankItem->text(1).lower() == "yes");
 			    int msb = bankItem->text(2).toInt();
 			    int lsb = bankItem->text(3).toInt();
-			    const Rosegarden::MidiBank *bank =
-				midiDevice->getBankByMsbLsb(percussion, msb, lsb);
-			    if (bank &&
-				bankItem->text(0) != strtoqstr(bank->getName())) {
-				bankItem->setText(0, strtoqstr(bank->getName()));
+			    std::string bankName =
+				midiDevice->getBankName
+				(Rosegarden::MidiBank(percussion, msb, lsb));
+			    if (bankName != "" &&
+				bankItem->text(0) != strtoqstr(bankName)) {
+				bankItem->setText(0, strtoqstr(bankName));
 			    }
 			}
 
@@ -1452,7 +1453,7 @@ BankEditorDialog::slotAddBank()
 
         std::pair<int, int> bank = getFirstFreeBank(m_listView->currentItem());
 
-        Rosegarden::MidiBank newBank(false, //!!!
+        Rosegarden::MidiBank newBank(false,
 				     bank.first, bank.second,
 				     qstrtostr(i18n("<new bank>")));
         m_bankList.push_back(newBank);
@@ -1620,7 +1621,8 @@ BankEditorDialog::getFirstFreeBank(QListViewItem* item)
 
     Rosegarden::MidiDevice *device = getMidiDevice(item);
 
-    //!!! percussion?
+    //!!! percussion? this is actually only called in the expectation
+    // that percussion==false at the moment
 
     if (device)
     {

@@ -393,10 +393,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 			barTimes.first > endTime)) {
 
 		// partial scans don't need to look at all notes, just clefs
-		// and key changes
-
-                //!!! shouldn't have to do all this to find clef and key
-                // (and I don't bother to do this in layout() -- eek)
+		// and key changes, and can set the basic data only (?)
 		leaveSizesAlone = true;
                 if (barTimes.first > endTime) allDone = true;
                 continue;
@@ -1133,10 +1130,6 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
     BarDataList &barList(getBarData(staff));
     NotationStaff &notationStaff = dynamic_cast<NotationStaff &>(staff);
 
-    Rosegarden::Key key;
-    Clef clef;
-    TimeSignature timeSignature;
-
     bool isFullLayout = (startTime == endTime);
 
     // these two are for partial layouts:
@@ -1150,7 +1143,11 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
     timeT lastIncrement =
 	(isFullLayout && (notes->begin() != notes->end())) ?
-	(*notes->begin())->getViewAbsoluteTime() : startTime; // progress reporting
+	(*notes->begin())->getViewAbsoluteTime() : startTime;
+
+    Rosegarden::Key key = notationStaff.getSegment().getKeyAtTime(lastIncrement);;
+    Clef clef = notationStaff.getSegment().getClefAtTime(lastIncrement);
+    TimeSignature timeSignature;
 
     for (BarPositionList::iterator bpi = m_barPositions.begin();
 	 bpi != m_barPositions.end(); ++bpi) {
@@ -1226,9 +1223,6 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 	}
 
         if (!bdi->second.layoutData.needsLayout) {
-            //!!! clef and key may not be right
-            // need a better way to find them than keeping track through the
-            // whole staff
             NOTATION_DEBUG << "NotationHLayout::layout(): bar " << " has needsLayout false" << endl;
             continue;
         }

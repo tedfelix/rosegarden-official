@@ -77,6 +77,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
     LinedStaff(canvas, segment, snapGrid, id, resolution,
                resolution / 16 + 1, // line thickness
                pageMode, pageWidth,
+	       600, //!!! page height
                0 // row spacing
                ),
     m_notePixmapFactory(0),

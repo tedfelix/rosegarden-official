@@ -2422,46 +2422,6 @@ RosegardenGUIApp::createDocumentFromMIDIFile(const QString &file)
     midiFile.convertToRosegarden(newDoc->getComposition(),
                                  Rosegarden::MidiFile::CONVERT_REPLACE);
 
-    /*
-    //!!! Merge stuff - taken out for the mo [rwb]
-
-
-        bool append = false;
-
-        if (midiFile.hasTimeChanges() &&
-            newDoc->getComposition().getDuration() > 0) {
-
-            //!!! This isn't adequate.  We really need to know whether
-            // the tempo/timesig stuff is _different_ from that in the
-            // existing composition.
-
-            CurrentProgressDialog::freeze();
-            int mergeType =
-                KMessageBox::warningYesNoCancel
-                (this,
-                 i18n("This file contains tempo and/or time signature data.\n\n"
-                      "If you wish, I can append it to the composition instead\n"
-                      "of merging it from the start, so as to avoid changing\n"
-                      "the existing timing information in the composition."),
-                 i18n("MIDI Merge"),
-                 i18n("Yes, append"),
-                 i18n("No, merge as normal"));
-            CurrentProgressDialog::thaw();
-
-            if (mergeType == KMessageBox::Cancel) {
-                return;
-            } else if (mergeType == KMessageBox::Yes) {
-                append = true;
-            }
-        }
-            
-        midiFile.convertToRosegarden
-	    (newDoc->getComposition(),
-	     append ? Rosegarden::MidiFile::CONVERT_APPEND
-	            : Rosegarden::MidiFile::CONVERT_AUGMENT);
-    }
-    */
-    
     // Set modification flag
     //
     newDoc->slotDocumentModified();
@@ -3984,7 +3944,6 @@ RosegardenGUIApp::slotChangeTempo(Rosegarden::timeT time,
 
     if (m_view && m_view->getTrackEditor()->getChordNameRuler())
     {
-//!!!        m_view->getTrackEditor()->getChordNameRuler()->repaint();
         m_view->getTrackEditor()->getChordNameRuler()->update();
     }
 

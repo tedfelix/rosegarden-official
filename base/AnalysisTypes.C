@@ -36,7 +36,6 @@
 #include "BaseProperties.h"
 #include "Profiler.h"
 
-//!!!
 #include "Sets.h"
 #include "Quantizer.h"
 
@@ -83,15 +82,13 @@ AnalysisHelper::getKeyForEvent(Event *e, Segment &s)
 ///////////////////////////////////////////////////////////////////////////
 
 void
-AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s)
+AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s,
+			    const Rosegarden::Quantizer *quantizer)
 {
 
     Key key;
     if (c.begin() != c.end()) key = getKeyForEvent(*c.begin(), s);
     else key = getKeyForEvent(0, s);
-
-    //!!!
-    NotationQuantizer *quantizer = new NotationQuantizer();
 
     Profiler profiler("AnalysisHelper::labelChords", true);
 
@@ -143,10 +140,6 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s)
 	}
 
     }
-
-    //!!!
-    delete quantizer;
-
 }
 
 
@@ -195,8 +188,6 @@ ChordLabel::ChordLabel(Key key, int mask, int /* bass */) :
 std::string
 ChordLabel::getName(Key key) const
 {
-//!!!    return NotationDisplayPitch(m_data.m_rootPitch, Clef(), key)
-//!!!        .getAsString(Clef(), key, false) + m_data.m_type;
     return Pitch(m_data.m_rootPitch).getAsString(key.isSharp(), false) +
 	m_data.m_type;
     //			+ (m_data.m_inversion>0 ? " in first inversion" : "");

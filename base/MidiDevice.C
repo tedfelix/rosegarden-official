@@ -164,12 +164,6 @@ MidiDevice::operator=(const MidiDevice &dev)
     for (; it != programs.end(); it++)
     {
         MidiProgram *prog = new MidiProgram(*it);
-//!!!	prog->percussion = it->percussion;
-//        prog->name = it->name;
-//        prog->msb = it->msb;
-//        prog->lsb = it->lsb;
-//        prog->program = it->program;
-
         m_programList->push_back(prog);
     }
 
@@ -180,11 +174,6 @@ MidiDevice::operator=(const MidiDevice &dev)
     for (; bIt != banks.end(); bIt++)
     {
         MidiBank *bank = new MidiBank(*bIt);
-//!!!	bank->percussion = bIt->percussion;
-//        bank->name = bIt->name;
-//        bank->msb = bIt->msb;
-//        bank->lsb = bIt->lsb;
-
         m_bankList->push_back(bank);
     }
 
@@ -279,57 +268,6 @@ MidiDevice::setMetronome(InstrumentId instrument,
     }
 }
 
-
-// Create a Program list
-//
-StringList
-MidiDevice::getProgramList(const MidiBank &bank)
-{
-    StringList list;
-    ProgramList::iterator it;
-
-    for (it = m_programList->begin(); it != m_programList->end(); it++)
-    {
-        // If the bank matches
-        if ((*it)->getBank() == bank)
-            list.push_back((*it)->getName());
-    }
-
-    return list;
-}
-
-// We display banks by name, not by number
-//
-StringList
-MidiDevice::getBankList()
-{
-    StringList list;
-    BankList::iterator it;
-
-    for (it = m_bankList->begin(); it != m_bankList->end(); it++)
-        list.push_back((*it)->getName());
-
-    return list;
-}
-
-const MidiBank*
-MidiDevice::getBankByIndex(int index) const
-{
-    return (*m_bankList)[index];
-}
-
-const MidiBank*
-MidiDevice::getBankByMsbLsb(bool percussion, MidiByte msb, MidiByte lsb) const
-{
-    BankList::iterator it;
-
-    // Bank comparator ignores names
-
-    for (it = m_bankList->begin(); it != m_bankList->end(); it++) 
-	if (**it == MidiBank(percussion, msb, lsb)) return *it;
-
-    return 0;
-}
 
 const BankList
 MidiDevice::getBanks(bool percussion) const
@@ -431,31 +369,6 @@ MidiDevice::getBankName(const MidiBank &bank) const
 	if (**it == bank) return (*it)->getName();
     }
     return "";
-}
-
-const MidiProgram*
-MidiDevice::getProgramByIndex(int index) const
-{
-    return (*m_programList)[index];
-}
-
-const MidiProgram*
-MidiDevice::getProgram(const MidiBank &bank, int index) const
-{
-    ProgramList::iterator it;
-    int count = 0;
-
-    for (it = m_programList->begin(); it != m_programList->end(); it++)
-    {
-        if ((*it)->getBank() == bank)
-        {
-            if (count == index)
-                return (*it);
-            count++;
-        }
-    }
-
-    return 0;
 }
 
 std::string

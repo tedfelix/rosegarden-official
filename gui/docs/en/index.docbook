@@ -2059,6 +2059,43 @@
 	      </listitem>
 	    </varlistentry>
 
+	    <varlistentry id="commands-main-file-merge">
+	      <term><menuchoice>
+		  <guimenu>File</guimenu>
+		  <guimenuitem>Merge</guimenuitem>
+		</menuchoice></term>
+	      <listitem><para>This submenu contains functions for merging other files into the current composition.</para>
+
+		<variablelist>
+
+		  <varlistentry id="commands-main-file-merge-file">
+		    <term><menuchoice>
+			<guimenu>Merge</guimenu>
+			<guimenuitem>Merge File...</guimenuitem>
+		      </menuchoice></term>
+		    <listitem><para><action>Merges the contents of an existing Rosegarden (.rg) file into the current composition.  You will be offered a choice of whether to merge the file in new tracks at the start of the composition, or after the end of the current composition.</action></para></listitem>
+		  </varlistentry>
+
+		  <varlistentry id="commands-main-file-merge-midi">
+		    <term><menuchoice>
+			<guimenu>Merge</guimenu>
+			<guimenuitem>Merge &MIDI; file...</guimenuitem>
+		      </menuchoice></term>
+		    <listitem><para><action>Merges the contents of an existing &MIDI; (.mid) file into the current composition.  You will be offered a choice of whether to merge the file in new tracks at the start of the composition, or after the end of the current composition.</action></para></listitem>
+		  </varlistentry>
+
+		  <varlistentry id="commands-main-file-merge-rg21">
+		    <term><menuchoice>
+			<guimenu>Merge</guimenu>
+			<guimenuitem>Merge Rosegarden 2.1 file...</guimenuitem>
+		      </menuchoice></term>
+		    <listitem><para><action>Merges the contents of an existing Rosegarden 2.1 (.rose) file into the current composition.  You will be offered a choice of whether to merge the file in new tracks at the start of the composition, or after the end of the current composition.</action></para></listitem>
+		  </varlistentry>
+
+		</variablelist>
+	      </listitem>
+	    </varlistentry>
+
 	    <varlistentry id="commands-main-file-export">
 	      <term><menuchoice>
 		  <guimenu>File</guimenu>
@@ -2090,6 +2127,22 @@
 			<guimenuitem>Export Lilypond file...</guimenuitem>
 		      </menuchoice></term>
 		    <listitem><para><action>Saves the contents of the current composition into a new Lilypond file.</action>  This can then be processed by the <ulink url="http://www.lilypond.org/">Lilypond</ulink> system to produce typeset-quality music, although it is likely that the file may need some tweaking to get really good quality output.  Note that not all data in the Rosegarden composition necessarily can or will be saved in the Lilypond format.</para></listitem>
+		  </varlistentry>
+
+		  <varlistentry id="commands-main-file-export-mup">
+		    <term><menuchoice>
+			<guimenu>Export</guimenu>
+			<guimenuitem>Export Mup file...</guimenuitem>
+		      </menuchoice></term>
+		    <listitem><para><action>Saves the contents of the current composition into a new Mup file.</action>  This can then be processed by the <ulink url="http://www.arkkra.com/">Mup</ulink> music publication system, although it is likely that the file may need some tweaking to get really good quality output.  Note that not all data in the Rosegarden composition necessarily can or will be saved in the Mup format.</para></listitem>
+		  </varlistentry>
+
+		  <varlistentry id="commands-main-file-export-musicxml">
+		    <term><menuchoice>
+			<guimenu>Export</guimenu>
+			<guimenuitem>Export MusicXML file...</guimenuitem>
+		      </menuchoice></term>
+		    <listitem><para><action>Saves the contents of the current composition into a new MusicXML file.</action>  This can then be used with any music software that supports the MusicXML format.  Note that MusicXML support is experimental and has not been well tested.  Not all data in the Rosegarden composition necessarily can or will be saved in the MusicXML format.</para></listitem>
 		  </varlistentry>
 
 		</variablelist>
