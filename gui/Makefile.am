@@ -3,6 +3,7 @@ KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 bin_PROGRAMS = rosegarden
 
 rosegarden_SOURCES = \
+	eventselection.cpp \
 	ktmpstatusmsg.cpp \
 	main.cpp \
 	notationcanvasview.cpp \

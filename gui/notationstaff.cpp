@@ -21,6 +21,7 @@
 
 #include <algorithm>
 
+#include "eventselection.h"
 #include "notationstaff.h"
 #include "staffline.h"
 #include "qcanvassimplesprite.h"

@@ -26,6 +26,7 @@
 #include "NotationTypes.h"
 #include "TrackNotationHelper.h"
 
+#include "eventselection.h"
 #include "rosegardenguidoc.h"
 #include "notationtool.h"
 #include "notationview.h"
