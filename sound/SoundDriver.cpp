@@ -260,13 +260,19 @@ SoundDriver::getMappedDevice(DeviceId id)
     MappedDevice retDevice;
     std::vector<Rosegarden::MappedInstrument*>::iterator it;
 
+    std::vector<MappedDevice*>::iterator dIt = m_devices.begin();
+    for (; dIt != m_devices.end(); dIt++)
+    {
+        if ((*dIt)->getId() == id) retDevice = **dIt;
+    }
+
     // If we match then change existing entry
     for (it = m_instruments.begin(); it != m_instruments.end(); it++)
     {
         if ((*it)->getDevice() == id)
             retDevice.push_back(*it);
     }
-
+/*!!!
     std::vector<MappedDevice*>::iterator dIt = m_devices.begin();
     for (; dIt != m_devices.end(); dIt++)
     {
@@ -275,20 +281,17 @@ SoundDriver::getMappedDevice(DeviceId id)
             retDevice.setId(id);
             retDevice.setName((*dIt)->getName());
             retDevice.setType((*dIt)->getType());
-#ifdef EXPERIMENTAL_ALSA_DRIVER
 	    retDevice.setConnection((*dIt)->getConnection());
-#endif
             break;
         }
     }
+*/
 
-#ifdef EXPERIMENTAL_ALSA_DRIVER
     std::cout << "SoundDriver::getMappedDevice - "
               << "name = \"" << retDevice.getName() 
               << "\" type = " << retDevice.getType()
               << " connection = \"" << retDevice.getConnection()
               << "\"" << std::endl;
-#endif
 
     return retDevice;
 }

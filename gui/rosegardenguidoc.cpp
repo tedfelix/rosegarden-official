@@ -1123,7 +1123,7 @@ RosegardenGUIDoc::syncDevices()
 
     // Clear the Studio before population
     //
-    m_studio.clear();
+//!!! no    m_studio.clear();
 
     SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - devices = "
                  << devices << endl;
@@ -1183,7 +1183,9 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
         return;
     }
 
-    if(device == 0 && (*(mD->begin())))
+    bool hadDeviceAlready = (device != 0);
+
+    if (!hadDeviceAlready) 
     {
         if (mD->getType() == Rosegarden::Device::Midi)
         {
@@ -1213,30 +1215,26 @@ RosegardenGUIDoc::getMappedDevice(Rosegarden::DeviceId id)
             return;
         }
     }
-#ifdef EXPERIMENTAL_ALSA_DRIVER
+
     std::string connection(mD->getConnection());
     SEQMAN_DEBUG << "RosegardenGUIDoc::getMappedDevice - got device on connection \"" << connection << "\"" << endl;
     device->setConnection(connection);
-#endif
 
     Rosegarden::Instrument *instrument;
     Rosegarden::MappedDeviceIterator it;
 
     for (it = mD->begin(); it != mD->end(); it++)
     {
-        instrument = new Rosegarden::Instrument(
-                                             (*it)->getId(),
-                                             (*it)->getType(),
-                                             (*it)->getName(),
-                                             (*it)->getChannel(),
-                                             device);
+	if (!hadDeviceAlready)
+	{
+	    instrument = new Rosegarden::Instrument((*it)->getId(),
+						    (*it)->getType(),
+						    (*it)->getName(),
+						    (*it)->getChannel(),
+						    device);
 
-#ifndef EXPERIMENTAL_ALSA_DRIVER
-        // set the sub-ordering
-        instrument->setPort((*it)->getPort());
-#endif
-
-        device->addInstrument(instrument);
+	    device->addInstrument(instrument);
+	}
 
         // set the Direction
         if (device->getType() == Rosegarden::Device::Midi)

@@ -78,9 +78,7 @@ public:
 
     void addInstrumentsForPort(Instrument::InstrumentType type,
                                std::string name, 
-#ifdef EXPERIMENTAL_ALSA_DRIVER
 			       std::string connectionName,
-#endif
                                int client,
                                int port,
                                PortDirection direction);
@@ -163,6 +161,12 @@ public:
     void setRecordDevice(Rosegarden::DeviceId id, int port);
     void unsetRecordDevices();
 
+    // Get available connections per device
+    // 
+    virtual unsigned int getConnections(unsigned int deviceId);
+    virtual QString getConnection(unsigned int deviceId,
+				  unsigned int connectionNo);
+
 #ifdef HAVE_LADSPA
 
     LADSPAPluginInstance* getPlugin(InstrumentId id, int position);
@@ -208,14 +212,6 @@ public:
     //
     bool createAudioFile(const std::string &fileName);
     void appendToAudioFile(const std::string &buffer);
-
-#endif
-
-
-#ifdef EXPERIMENTAL_ALSA_DRIVER
-
-    virtual unsigned int getConnections(unsigned int deviceId);
-    virtual QString getConnection(unsigned int deviceId, unsigned int connectionNo);
 
 #endif
 
@@ -339,10 +335,8 @@ private:
 
 #endif // HAVE_LADSPA
 
-#ifdef EXPERIMENTAL_ALSA_DRIVER
     typedef std::map<DeviceId, ClientPortPair> DevicePortMap;
     DevicePortMap m_devicePortMap;
-#endif
 
 };
 

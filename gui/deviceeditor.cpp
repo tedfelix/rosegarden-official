@@ -83,12 +83,7 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
 
 	Rosegarden::DeviceId id = md->getId();
 	QString deviceName = strtoqstr(md->getName());
-	QString connectionName =
-#ifdef EXPERIMENTAL_ALSA_DRIVER
-	    strtoqstr(md->getConnection());
-#else
-	    "";
-#endif
+	QString connectionName = strtoqstr(md->getConnection());
 
 	QStringList connectionList;
 	
@@ -137,7 +132,7 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
 	    }
 	}
 
-	connectionList.append(i18n("Not connected"));
+	connectionList.append(i18n("No connection"));
 	if (currentConnectionIndex == -1)
 	    currentConnectionIndex = connections;
 

@@ -843,71 +843,21 @@ TrackButtons::populateInstrumentPopup()
 
             currentDevId = int(devId);
 
-            // Check for sub-ordering
-            //
-#ifdef EXPERIMENTAL_ALSA_DRIVER
-	    int subOrderDepth = 0;
-#else
-            int subOrderDepth =
-                studio.getDevice(devId)->getPortNumbers().size();
-#endif
-
-            if (subOrderDepth > 1)
-            {
-                QPopupMenu *groupMenu = new QPopupMenu(this);
-
-                m_instrumentPopup->
-                    insertItem(strtoqstr((*it)->getDevice()->getName()),
-                               groupMenu);
-
-                // store the first sub menu position
-                groupBase = int(m_instrumentSubMenu.size());
-
-                // Add a number of groups
-                //
-                for (int j = 0; j < subOrderDepth; ++j)
-                {
-                    QPopupMenu *subMenu = new QPopupMenu(this);
-
-                    /*
-                    // A bit wide
-                    QString label = strtoqstr((*it)->getDevice()->getName()) +
-                        i18n(" (sub-group ") + QString("%1)").arg(j+1);
-                    */
-
-                    QString label = i18n("port ") + QString("%1").arg(j+1);
-
-                    groupMenu->insertItem(label, subMenu);
-
-                    // insert sub-menu
-                    m_instrumentSubMenu.push_back(subMenu);
-
-                    // connect it
-                    connect(subMenu, SIGNAL(activated(int)),
-                            SLOT(slotInstrumentPopupActivated(int)));
-
-                    connect(subMenu, SIGNAL(aboutToHide()),
-                            SLOT(slotInstrumentPopupHiding()));
-                }
-            }
-            else // for no sub-ordering
-            {
-                QPopupMenu *subMenu = new QPopupMenu(this);
-                m_instrumentPopup->
-                    insertItem(strtoqstr((*it)->getDevice()->getName()),
-                               subMenu);
-
-                m_instrumentSubMenu.push_back(subMenu);
-
-                // Connect up the submenu
-                //
-                connect(subMenu, SIGNAL(activated(int)),
-                        SLOT(slotInstrumentPopupActivated(int)));
-
-                connect(subMenu, SIGNAL(aboutToHide()),
-                        SLOT(slotInstrumentPopupHiding()));
-                groupBase = -1;
-            }
+	    QPopupMenu *subMenu = new QPopupMenu(this);
+	    m_instrumentPopup->
+		insertItem(strtoqstr((*it)->getDevice()->getName()),
+			   subMenu);
+	    
+	    m_instrumentSubMenu.push_back(subMenu);
+	    
+	    // Connect up the submenu
+	    //
+	    connect(subMenu, SIGNAL(activated(int)),
+		    SLOT(slotInstrumentPopupActivated(int)));
+	    
+	    connect(subMenu, SIGNAL(aboutToHide()),
+		    SLOT(slotInstrumentPopupHiding()));
+	    groupBase = -1;
 	}
 
 	if (pname != "") iname += " (" + pname + ")";
@@ -919,16 +869,7 @@ TrackButtons::populateInstrumentPopup()
         }
         else
         {
-#ifndef EXPERIMENTAL_ALSA_DRIVER
-            int position =  (*it)->getDevice()->getPortNumberPosition(
-                                     (*it)->getPort());
-
-            if (position == -1) position = 0;
-#else
-	    int position = 0;
-#endif
-
-	    m_instrumentSubMenu[groupBase + position]->
+	    m_instrumentSubMenu[groupBase]->
                 insertItem(strtoqstr(iname), i++);
         }
 

@@ -595,8 +595,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QToolTip::add(m_deleteAllBanks,
                   i18n("Delete all Banks from the current Device"));
 
-    m_importBanks = new QPushButton(i18n("Import Device"), bankBox);
-    m_exportBanks = new QPushButton(i18n("Export Device"), bankBox);
+    m_importBanks = new QPushButton(i18n("Import Banks"), bankBox);
+    m_exportBanks = new QPushButton(i18n("Export Banks"), bankBox);
     new QLabel(bankBox); // spacer
 
     // Tips

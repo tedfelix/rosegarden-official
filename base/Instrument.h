@@ -203,10 +203,7 @@ public:
     //
     int getMappedId() const { return m_mappedId; }
     void setMappedId(int id) { m_mappedId = id; }
-#ifndef EXPERIMENTAL_ALSA_DRIVER
-    int getPort() const { return m_port; }
-    void setPort(int port) { m_port = port; }
-#endif
+
 private:
     InstrumentId    m_id;
     std::string     m_name;

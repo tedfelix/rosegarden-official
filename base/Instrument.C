@@ -59,11 +59,6 @@ Instrument::Instrument(InstrumentId id, InstrumentType it,
     m_sendPan(false),
     m_sendVelocity(false),
     m_mappedId(0)
-#ifndef EXPERIMENTAL_ALSA_DRIVER
-,
-    m_port(0)
-#endif
-
 {
     if (it == Audio)
     {
@@ -109,11 +104,6 @@ Instrument::Instrument(InstrumentId id,
     m_sendPan(false),
     m_sendVelocity(false),
     m_mappedId(0)
-#ifndef EXPERIMENTAL_ALSA_DRIVER
-,
-    m_port(0)
-#endif
-
 {
     // Add a number of plugin place holders (unassigned)
     //
@@ -157,10 +147,6 @@ Instrument::Instrument(const Instrument &ins):
     m_sendPan(ins.sendsPan()),
     m_sendVelocity(ins.sendsVelocity()),
     m_mappedId(ins.getMappedId())
-#ifndef EXPERIMENTAL_ALSA_DRIVER
-,
-    m_port(ins.getPort())
-#endif
 {
     // Add a number of plugin place holders (unassigned)
     //
@@ -205,9 +191,6 @@ Instrument::operator=(const Instrument &ins)
     m_sendPan = ins.sendsPan();
     m_sendVelocity = ins.sendsVelocity();
     m_mappedId = ins.getMappedId();
-#ifndef EXPERIMENTAL_ALSA_DRIVER
-    m_port = ins.getPort();
-#endif
 
     return *this;
 }

@@ -1200,22 +1200,8 @@ MIDIInstrumentParameterPanel::setupForInstrument(Rosegarden::Instrument *instrum
     // Set Studio Device name
     //
     if (instrument->getDevice()) {
-#ifndef EXPERIMENTAL_ALSA_DRIVER
-        int depth = instrument->getDevice()->getPortNumbers().size();
-
-        if (depth > 1)
-        {
-            QString label = 
-                strtoqstr(instrument->getDevice()->getName()) +
-                i18n(" / port ") +
-                QString("%1").arg(instrument->getPort() + 1);
-            m_deviceLabel->setText(label);
-        }
-        else
-	    m_deviceLabel->setText(strtoqstr(instrument->getDevice()->getName()));
-#else
+	//!!! we should call this the connection label, I guess
 	m_deviceLabel->setText(i18n("Connection: %1").arg(strtoqstr(instrument->getDevice()->getConnection())));
-#endif
 
     } else {
 	m_deviceLabel->setText("");

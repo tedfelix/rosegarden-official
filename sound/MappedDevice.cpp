@@ -31,10 +31,6 @@ MappedDevice::MappedDevice():
     m_id(0),
     m_type(Rosegarden::Device::Midi),
     m_name("MappedDevice default name")
-#ifndef EXPERIMENTAL_ALSA_DRIVER
-,
-    m_client(-1)
-#endif
 {
 }
 
@@ -45,10 +41,6 @@ MappedDevice::MappedDevice(Rosegarden::DeviceId id,
     m_id(id),
     m_type(type),
     m_name(name)
-#ifndef EXPERIMENTAL_ALSA_DRIVER
-,
-    m_client(-1)
-#endif
 {
 }
 
@@ -67,11 +59,7 @@ MappedDevice::MappedDevice(const MappedDevice &mD):
     m_id = mD.getId();
     m_type = mD.getType();
     m_name = mD.getName();
-#ifndef EXPERIMENTAL_ALSA_DRIVER
-    m_client = mD.getClient();
-#else
     m_connection = mD.getConnection();
-#endif
 }
 
 void
@@ -107,11 +95,7 @@ MappedDevice::operator=(const MappedDevice &mD)
     m_id = mD.getId();
     m_type = mD.getType();
     m_name = mD.getName();
-#ifndef EXPERIMENTAL_ALSA_DRIVER
-    m_client = mD.getClient();
-#else
     m_connection = mD.getConnection();
-#endif
 
     return *this;
 }
@@ -133,20 +117,18 @@ operator>>(QDataStream &dS, MappedDevice *mD)
 
     QString name;
     unsigned int id, dType;
+    QString connection;
 
     dS >> id;
     dS >> dType;
     dS >> name;
-#ifdef EXPERIMENTAL_ALSA_DRIVER
-    QString connection;
     dS >> connection;
     std::cerr << "MappedDevice::operator>> - read \"" << connection << "\""
 	      << std::endl;
-    mD->setConnection(connection.data());
-#endif
     mD->setId(id);
     mD->setType(Rosegarden::Device::DeviceType(dType));
     mD->setName(std::string(name.data()));
+    mD->setConnection(connection.data());
 
     if (instruments)
     {
@@ -175,20 +157,18 @@ operator>>(QDataStream &dS, MappedDevice &mD)
 
     unsigned int id, dType;
     QString name;
+    QString connection;
 
     dS >> id;
     dS >> dType;
     dS >> name;
-#ifdef EXPERIMENTAL_ALSA_DRIVER
-    QString connection;
     dS >> connection;
     std::cerr << "MappedDevice::operator>> - read \"" << connection << "\""
 	      << std::endl;
-    mD.setConnection(connection.data());
-#endif
     mD.setId(id);
     mD.setType(Rosegarden::Device::DeviceType(dType));
     mD.setName(std::string(name.data()));
+    mD.setConnection(connection.data());
 
     if (instruments)
     {
@@ -210,11 +190,9 @@ operator<<(QDataStream &dS, MappedDevice *mD)
     dS << (unsigned int)(mD->getId());
     dS << (int)(mD->getType());
     dS << QString(mD->getName().c_str());
-#ifdef EXPERIMENTAL_ALSA_DRIVER
     dS << QString(mD->getConnection().c_str());
     std::cerr << "MappedDevice::operator>> - wrote \"" << mD->getConnection() << "\""
 	      << std::endl;
-#endif
 
     return dS;
 }
@@ -230,11 +208,9 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
     dS << (unsigned int)(mD.getId());
     dS << (int)(mD.getType());
     dS << QString(mD.getName().c_str());
-#ifdef EXPERIMENTAL_ALSA_DRIVER
     dS << QString(mD.getConnection().c_str());
     std::cerr << "MappedDevice::operator>> - wrote \"" << mD.getConnection() << "\""
 	      << std::endl;
-#endif
 
     return dS;
 }
@@ -257,38 +233,6 @@ MappedDevice::getDirection() const
 
     return direction;
 }
-
-#ifndef EXPERIMENTAL_ALSA_DRIVER
-
-// Similar to Device::getPortNumbers
-//
-std::vector<int>
-MappedDevice::getPorts() const
-{
-    std::vector<int> ports;
-    std::vector<int>::iterator pIt;
-    bool addPort = false;
-
-    for (MappedDeviceConstIterator it = this->begin(); it != this->end(); ++it)
-    {
-        addPort = true;
-
-        for (pIt = ports.begin(); pIt != ports.end(); ++pIt)
-        {
-            if ((*pIt) == (*it)->getPort())
-            {
-                addPort = false;
-                continue;
-            }
-        }
-
-        if (addPort) ports.push_back((*it)->getPort());
-    }
-
-    return ports;
-}
-#endif
-
 
 
 }

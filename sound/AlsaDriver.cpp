@@ -330,10 +330,8 @@ AlsaDriver::generateInstruments()
     m_instruments.clear();
     m_devices.clear();
     m_alsaPorts.clear();
-#ifdef EXPERIMENTAL_ALSA_DRIVER
     m_devicePortMap.clear();
     int systemClientNo = 1, hardwareClientNo = 1, softwareClientNo = 1;
-#endif
 
     std::cout << std::endl << "  ALSA Client information:"
               << std::endl << std::endl;
@@ -390,7 +388,6 @@ AlsaDriver::generateInstruments()
 
                 // Generate a unique name using the client id
                 //
-#ifdef EXPERIMENTAL_ALSA_DRIVER
 		char clientId[40];
 		sprintf(clientId, "%d:%d ",
 			snd_seq_port_info_get_client(pinfo),
@@ -401,19 +398,6 @@ AlsaDriver::generateInstruments()
 
                 std::string clientName =
                     std::string(clientId) + fullClientName;
-
-#else
-                char clientId[10];
-                sprintf(clientId,
-                        "%d ",
-                        snd_seq_port_info_get_client(pinfo));
-
-                std::string fullClientName = 
-                    std::string(snd_seq_client_info_get_name(cinfo));
-
-                std::string clientName =
-                    std::string(clientId) + fullClientName;
-#endif
 
                 AlsaPortDescription *portDescription = 
                     new AlsaPortDescription(
@@ -444,7 +428,6 @@ AlsaDriver::generateInstruments()
              << " port = " << (*it)->m_port << endl;
              */
 
-#ifdef EXPERIMENTAL_ALSA_DRIVER
 	char clientId[60];
 
 	if ((*it)->m_client < 64)
@@ -458,15 +441,10 @@ AlsaDriver::generateInstruments()
 		    softwareClientNo++);
 
 	std::string clientName = clientId;
-#endif
 
         addInstrumentsForPort((*it)->m_type,
-#ifdef EXPERIMENTAL_ALSA_DRIVER
 			      clientName,
                               (*it)->m_name,
-#else
-                              (*it)->m_name,
-#endif
                               (*it)->m_client,
                               (*it)->m_port,
                               (*it)->m_direction);
@@ -535,44 +513,30 @@ AlsaDriver::generateInstruments()
 void
 AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
                                   std::string name,
-#ifdef EXPERIMENTAL_ALSA_DRIVER
 				  std::string connectionName,
-#endif
                                   int client,
                                   int port,
                                   PortDirection direction)
 {
-    // only increment device number if we're on a new client
-    //
-#ifdef EXPERIMENTAL_ALSA_DRIVER
     m_deviceRunningId++;
-#else
-    if (client != m_currentPair.first && m_currentPair.first != -1)
-        m_deviceRunningId++;
-#endif
  
     AlsaPort *alsaInstr;
     MappedInstrument *instr;
     std::string channelName;
     char number[100];
 
-
     if (type == Instrument::Midi)
     {
 
         // If we haven't added a metronome then add one to the first
-        // instrument we add.   This is accomplished by adding a
+        // device we add.   This is accomplished by adding a
         // MappedInstrument for Instrument #0
         //
         if(m_addedMetronome == false)
         {
             alsaInstr = new AlsaPort(0,
                                      0,
-#ifdef EXPERIMENTAL_ALSA_DRIVER
 				     connectionName,
-#else
-                                     name,
-#endif
                                      client,
                                      port,
                                      direction);  // port direction
@@ -602,11 +566,7 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
         //
         alsaInstr = new AlsaPort(m_midiRunningId,
                                  m_midiRunningId + 15,
-#ifdef EXPERIMENTAL_ALSA_DRIVER
 				 connectionName,
-#else
-                                 name,
-#endif
                                  client,
                                  port,
                                  direction);
@@ -633,23 +593,21 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
             m_instruments.push_back(instr);
         }
 
-#ifdef EXPERIMENTAL_ALSA_DRIVER
 	cout << "AlsaDriver: creating device id " << m_deviceRunningId << " for client " << client << ", port " << port << ", name " << name << endl;
 	m_devicePortMap[m_deviceRunningId] = ClientPortPair(client, port);
-#endif
 
         MappedDevice *device =
                 new MappedDevice(m_deviceRunningId,
                                  Rosegarden::Device::Midi,
                                  name);
-#ifdef EXPERIMENTAL_ALSA_DRIVER
+
 	cout << "AlsaDriver: connection is " << connectionName << endl;
 	device->setConnection(connectionName);
 	//!!! need to keep port map in sync with changes to this --
 	// or perhaps abandon port map & store alsa connection object with
 	// alsa port name capable of returning its synthesised connection
 	// name?
-#endif
+
         m_devices.push_back(device);
     }
 
@@ -658,8 +616,6 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
     m_currentPair.second = port;
 }
 
-
-#ifdef EXPERIMENTAL_ALSA_DRIVER
 unsigned int
 AlsaDriver::getConnections(unsigned int)
 {
@@ -669,10 +625,11 @@ AlsaDriver::getConnections(unsigned int)
 QString
 AlsaDriver::getConnection(unsigned int, unsigned int connectionNo)
 {
+    //!!! We should really only return ports of the same direction
+    // (i.e. duplex or read-only ports for input devices, duplex
+    // or write-only for output)
     return QString(m_alsaPorts[connectionNo]->m_name.c_str());
 }
-#endif
-
 
 void
 AlsaDriver::initialise()
@@ -2246,7 +2203,6 @@ AlsaDriver::getFirstDestination(bool duplex)
 ClientPortPair
 AlsaDriver::getPairForMappedInstrument(InstrumentId id)
 {
-#ifdef EXPERIMENTAL_ALSA_DRIVER
     MappedInstrument *instrument = getMappedInstrument(id);
     if (instrument)
     {
@@ -2265,7 +2221,6 @@ AlsaDriver::getPairForMappedInstrument(InstrumentId id)
     {
 	cerr << "WARNING: AlsaDriver::getPairForMappedInstrument: couldn't find instrument for id " << id << ", falling through" << endl;
     }
-#endif
 
     ClientPortPair matchPair(-1, -1);
 

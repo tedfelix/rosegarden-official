@@ -409,8 +409,7 @@ protected:
 
     // Recording
     QComboBox *m_recordDevice;
-
-    std::vector<std::pair<Rosegarden::DeviceId, int> > m_devPorts;
+    std::vector<Rosegarden::DeviceId> m_devices;
 
 };
  

@@ -967,16 +967,12 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     Rosegarden::DeviceList *devices = m_doc->getStudio().getDevices();
     Rosegarden::DeviceListIterator it;
 
-    m_devPorts.clear();
+    m_devices.clear();
 
     QString recordDeviceStr = m_cfg->readEntry("midirecorddevice");
-    QString recordPortStr = m_cfg->readEntry("midirecordport");
 
     Rosegarden::DeviceId recordDevice = 0;
     if (recordDeviceStr) recordDevice = recordDeviceStr.toUInt();
-
-    int recordPort = -1;
-    if (recordPortStr) recordPort = recordPortStr.toInt();
 
     for (it = devices->begin(); it != devices->end(); it++)
     {
@@ -987,37 +983,17 @@ SequencerConfigurationPage::SequencerConfigurationPage(
         //
         if (dev && dev->getDirection() != MidiDevice::WriteOnly)
         {
-#ifndef EXPERIMENTAL_ALSA_DRIVER
-            std::vector<int> ports = dev->getPortNumbers();
-
-
-            for (unsigned int i = 0; i < ports.size(); i++)
-            {
-                QString label = strtoqstr((*it)->getName());
-                label += QString("%1 - Port %2").arg((*it)->getId())
-                                                 .arg(ports[i]);
-
-                m_recordDevice->insertItem(label);
-
-                m_devPorts.push_back(
-                    std::pair<Rosegarden::DeviceId, int>((*it)->getId(), i));
-            }
-#else
-	    QString label = strtoqstr((*it)->getName());
+	    QString label = strtoqstr(dev->getName());
 	    m_recordDevice->insertItem(label);
-	    m_devPorts.push_back(
-//!!! fix this -- record port 0 hardcoded, shouldn't be remembered at all
-		std::pair<Rosegarden::DeviceId, int>((*it)->getId(), 0));
-#endif
+	    m_devices.push_back(dev->getId());
         }
     }
 
     // Set the active position
     //
-    for (unsigned int i = 0; i < m_devPorts.size(); i++)
+    for (unsigned int i = 0; i < m_devices.size(); i++)
     {
-        if (m_devPorts[i].first == recordDevice &&
-            m_devPorts[i].second == recordPort)
+        if (m_devices[i] == recordDevice)
         {
             m_recordDevice->setCurrentItem(i);
         }
@@ -1026,7 +1002,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // If we have more than one input device then create an
     // "all" inputs device - special case.
     //
-    if (m_devPorts.size() > 1)
+    if (m_devices.size() > 1)
     {
         /*
         m_recordDevice->insertItem(i18n("<all of the above>"));
@@ -1034,7 +1010,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
             std::pair<Rosegarden::DeviceId, int>(255, 255));
             */
     }
-    else if (m_devPorts.size() == 0)
+    else if (m_devices.size() == 0)
     {
         m_recordDevice->insertItem(i18n("<no record devices>"));
         m_recordDevice->setEnabled(false);
@@ -1155,10 +1131,9 @@ SequencerConfigurationPage::apply()
     unsigned int device = 0;
     int port = 0;
 
-    if (m_devPorts.size())
+    if (m_devices.size())
     {
-        device = m_devPorts[m_recordDevice->currentItem()].first;
-        port = m_devPorts[m_recordDevice->currentItem()].second;
+        device = m_devices[m_recordDevice->currentItem()];
 
         // send the selected device to the sequencer
         mE= new Rosegarden::MappedEvent(
@@ -1171,7 +1146,6 @@ SequencerConfigurationPage::apply()
     }
 
     m_cfg->writeEntry("midirecorddevice", device);
-    m_cfg->writeEntry("midirecordport", port);
 
     // Write the JACK entry
     //
