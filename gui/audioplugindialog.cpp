@@ -45,14 +45,33 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 {
     QVBox *v = makeVBoxMainWidget();
 
+    // Copied the fonts
+    QFont plainFont;
+    plainFont.setPointSize(plainFont.pointSize() * 9 / 10);
+
+    QFont boldFont;
+    boldFont.setPointSize(int(boldFont.pointSize() * 9.5 / 10.0 + 0.5));
+    boldFont.setBold(true);
+
+    setFont(boldFont);
+
+    QHBox *h = new QHBox(v);
+
+    // top line
+    m_bypassButton = new QPushButton(i18n("Bypass"), h);
+    m_bypassButton->setToggleButton(true);
+
+    // spacing
+    /*QLabel *idLabel =*/ new QLabel("", h);
+
+    m_pluginId = new QLabel(i18n("<no id>"), h);
+    m_pluginId->setFont(plainFont);
+    m_pluginId->setAlignment(AlignRight);
+
     //new QLabel(i18n("Audio Plugin"), v);
     m_pluginList = new RosegardenComboBox(true, v);
     m_pluginList->insertItem(i18n("<no plugin>"));
 
-    m_pluginId = new QLabel(i18n("<no id>"), v);
-
-    m_bypassButton = new QPushButton(i18n("Bypass"), v);
-    m_bypassButton->setToggleButton(true);
     connect(m_bypassButton, SIGNAL(toggled(bool)),
             this, SIGNAL(bypassed(bool)));
 
@@ -111,12 +130,21 @@ AudioPluginDialog::slotPluginSelected(int number)
 
     AudioPlugin *plugin = m_pluginManager->getPlugin(number - 1);
 
+    /*
     // Destroy all the old widgets
     //
     ControlIterator it = m_pluginWidgets.begin();
     for (; it != m_pluginWidgets.end(); it++)
         delete (*it);
     m_pluginWidgets.erase(m_pluginWidgets.begin(), m_pluginWidgets.end());
+    */
+
+    // Destroy old lines
+    //
+    ControlLineIterator cIt = m_controlLines.begin();
+    for (; cIt != m_controlLines.end(); cIt++)
+        delete (*cIt);
+    m_controlLines.erase(m_controlLines.begin(), m_controlLines.end());
 
     int height = 0;
 
@@ -128,15 +156,37 @@ AudioPluginDialog::slotPluginSelected(int number)
         PortIterator it = plugin->begin();
         int count = 0;
 
+        // if we've got more than 10 control ports then opt for a slider
+        // model so they fit on the screen
+
+        QHBox *controlLine;
+
         for (; it != plugin->end(); it++)
         {
+            if (((float(count))/2.0) == (float(count/2)))
+            {
+                controlLine = new QHBox(mainWidget());
+                controlLine->show();
+
+                // store so we can remove it later
+                m_controlLines.push_back(controlLine);
+            }
+            /*
+            else
+            {
+                // spacer
+                new QLabel(QString("   "), controlLine);
+            }
+            */
+
+
             // Weed out non-control ports and those which have erroneous
             // looking bounds - uninitialised values?
             //
             if ((*it)->getType() & PluginPort::Control)
             {
                 PluginControl *control =
-                    new PluginControl(mainWidget(),
+                    new PluginControl(controlLine,
                                       PluginControl::Rotary,
                                       *it,
                                       m_pluginManager,

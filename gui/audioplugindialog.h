@@ -86,6 +86,7 @@ protected:
 };
 
 typedef std::vector<PluginControl*>::iterator ControlIterator;
+typedef std::vector<QHBox*>::iterator ControlLineIterator;
 
 class AudioPluginDialog : public KDialogBase
 {
@@ -118,6 +119,7 @@ protected:
     QPushButton         *m_bypassButton;
 
     std::vector<PluginControl*> m_pluginWidgets;
+    std::vector<QHBox*>         m_controlLines;
 
     int                  m_headHeight;
     int                  m_index;
