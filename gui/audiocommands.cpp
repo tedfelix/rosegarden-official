@@ -35,7 +35,8 @@ DistributeAudioCommand::DistributeAudioCommand(
     m_composition(comp),
     m_selection(inputSelection),
     m_audioFile(0),
-    m_audioSegment(audioSegment)
+    m_audioSegment(audioSegment),
+    m_executed(false)
 {
 }
 
@@ -48,10 +49,27 @@ DistributeAudioCommand::DistributeAudioCommand(
     m_composition(comp),
     m_selection(inputSelection),
     m_audioFile(audioFile),
-    m_audioSegment(0)
+    m_audioSegment(0),
+    m_executed(false)
 {
 }
 
+DistributeAudioCommand::~DistributeAudioCommand()
+{
+    if (m_executed)
+    {
+	for (Rosegarden::SegmentSelection::iterator i = m_selection.begin();
+	     i != m_selection.end(); ++i)
+	{
+	    delete *i;
+	}
+    }
+    else 
+    {
+        for (unsigned int i = 0; i < m_newSegments.size(); ++i)
+            delete m_newSegments[i];
+    }
+}	
 
 void 
 DistributeAudioCommand::execute()
@@ -121,9 +139,9 @@ DistributeAudioCommand::execute()
         //
         for (unsigned int i = 0; i < m_newSegments.size(); ++i)
             m_composition->addSegment(m_newSegments[i]);
-
-        return;
     }
+
+    m_executed = true;
 }
 
 void 
@@ -135,5 +153,7 @@ DistributeAudioCommand::unexecute()
     for (Rosegarden::SegmentSelection::iterator it = m_selection.begin();
          it != m_selection.end(); ++it)
         m_composition->addSegment(*it);
+
+    m_executed = false;
 }
 

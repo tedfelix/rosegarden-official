@@ -51,6 +51,8 @@ public:
                            Rosegarden::SegmentSelection &inputSelection,
                            Rosegarden::AudioFile *audioFile);
 
+    virtual ~DistributeAudioCommand();
+
     static QString getGlobalName() 
         { return i18n("Distribute Audio Segments over MIDI"); }
 
@@ -64,6 +66,7 @@ protected:
     Rosegarden::AudioFile            *m_audioFile;
     Rosegarden::Segment              *m_audioSegment;
     std::vector<Rosegarden::Segment*> m_newSegments;
+    bool                              m_executed;
 
 };
 
