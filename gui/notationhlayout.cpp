@@ -116,7 +116,8 @@ int NotationHLayout::getIdealBarWidth(int fixedWidth,
         kdDebug(KDEBUG_AREA) << "First trivial return" << endl;
         return fixedWidth;
     }
-    int d = (*shortest)->event()->getDuration();
+
+    int d = (*shortest)->event()->get<Int>(Quantizer::NoteDurationProperty);
     if (d == 0) {
         kdDebug(KDEBUG_AREA) << "Second trivial return" << endl;
         return fixedWidth;
