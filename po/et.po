@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: et\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-23 15:19+0100\n"
+"POT-Creation-Date: 2004-07-27 17:57+0100\n"
 "PO-Revision-Date: 2004-01-04 17:27+0200\n"
 "Last-Translator: Hasso Tepper <hasso@estpak.ee>\n"
 "Language-Team: Estonian <kde-et@linux.ee>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.3\n"
 
-#: rosegardentransportdialog.cpp:80 rosegardentransport.cpp:1695 rc.cpp:121
+#: rosegardentransportdialog.cpp:80 rosegardentransport.cpp:1695 rc.cpp:122
 msgid "Rosegarden Transport"
 msgstr "Rosegardeni transport"
 
@@ -125,7 +125,7 @@ msgstr ""
 msgid "Bank and Program details"
 msgstr ""
 
-#: bankeditor.cpp:194 bankeditor.cpp:726 instrumentparameterbox.cpp:676
+#: bankeditor.cpp:194 bankeditor.cpp:726 instrumentparameterbox.cpp:685
 msgid "Percussion"
 msgstr "Löökriistad"
 
@@ -155,7 +155,7 @@ msgstr ""
 
 #: bankeditor.cpp:233 colourwidgets.cpp:46 rosegardenconfiguredialog.cpp:1773
 #: rosegardenconfiguredialog.cpp:1784 deviceeditor.cpp:62
-#: audiomanagerdialog.cpp:244 dialogs.cpp:1330 dialogs.cpp:4881
+#: audiomanagerdialog.cpp:244 dialogs.cpp:1339 dialogs.cpp:4898
 msgid "Name"
 msgstr "Nimi"
 
@@ -182,8 +182,8 @@ msgstr ""
 msgid "Manage MIDI Banks and Programs"
 msgstr ""
 
-#: bankeditor.cpp:706 dialogs.cpp:1215 dialogs.cpp:1236 dialogs.cpp:1251
-#: dialogs.cpp:3234
+#: bankeditor.cpp:706 dialogs.cpp:1224 dialogs.cpp:1245 dialogs.cpp:1260
+#: dialogs.cpp:3251
 msgid "Reset"
 msgstr "Lähtesta"
 
@@ -245,13 +245,13 @@ msgid "Show Variation list based on "
 msgstr ""
 
 #: bankeditor.cpp:894 triggermanager.cpp:437 devicemanager.cpp:202
-#: rosegardengui.cpp:448 controleditor.cpp:315 editviewbase.cpp:201
+#: rosegardengui.cpp:474 controleditor.cpp:315 editviewbase.cpp:201
 #: markereditor.cpp:389
 msgid "Und&o"
 msgstr "Tühista tegev&us"
 
 #: bankeditor.cpp:900 triggermanager.cpp:443 devicemanager.cpp:208
-#: rosegardengui.cpp:454 controleditor.cpp:321 editviewbase.cpp:207
+#: rosegardengui.cpp:480 controleditor.cpp:321 editviewbase.cpp:207
 #: markereditor.cpp:395
 msgid "Re&do"
 msgstr "&Tee uuesti"
@@ -276,11 +276,11 @@ msgstr ""
 msgid "Export Device as..."
 msgstr ""
 
-#: bankeditor.cpp:2008 devicemanager.cpp:780 rosegardengui.cpp:1927
+#: bankeditor.cpp:2008 devicemanager.cpp:780 rosegardengui.cpp:1973
 msgid "You have specified a directory"
 msgstr ""
 
-#: bankeditor.cpp:2015 devicemanager.cpp:787 rosegardengui.cpp:1933
+#: bankeditor.cpp:2015 devicemanager.cpp:787 rosegardengui.cpp:1979
 msgid "The specified file exists.  Overwrite?"
 msgstr "Määratud fail eksisteerib juba. Kas kirjutada üle?"
 
@@ -308,11 +308,11 @@ msgid "Remap Tracks by all Instruments on a Device or by single Instrument"
 msgstr ""
 
 #: bankeditor.cpp:2096 deviceeditor.cpp:61 devicemanager.cpp:88
-#: devicemanager.cpp:140 dialogs.cpp:4368
+#: devicemanager.cpp:140 dialogs.cpp:4385
 msgid "Device"
 msgstr "Seade"
 
-#: bankeditor.cpp:2097 mixer.cpp:1562 dialogs.cpp:4397
+#: bankeditor.cpp:2097 mixer.cpp:1562 dialogs.cpp:4414
 msgid "Instrument"
 msgstr "Instrument"
 
@@ -367,8 +367,8 @@ msgstr "Programmi muutus"
 msgid "Controller"
 msgstr ""
 
-#: eventview.cpp:208 editview.cpp:821 midifilter.cpp:50 midifilter.cpp:86
-#: controlruler.cpp:1623
+#: eventview.cpp:208 editview.cpp:825 midifilter.cpp:50 midifilter.cpp:86
+#: controlruler.cpp:1668
 msgid "Pitch Bend"
 msgstr ""
 
@@ -392,7 +392,7 @@ msgstr "Paus"
 msgid "Indication"
 msgstr ""
 
-#: eventview.cpp:214 dialogs.cpp:1031
+#: eventview.cpp:214 dialogs.cpp:1040
 msgid "Text"
 msgstr "Tekst"
 
@@ -435,19 +435,19 @@ msgstr "Noodi kiirus:"
 msgid "Default timing:  "
 msgstr "Vaikesamm"
 
-#: eventview.cpp:267 dialogs.cpp:4980 dialogs.cpp:5139
+#: eventview.cpp:267 dialogs.cpp:4997 dialogs.cpp:5156
 msgid "As stored"
 msgstr ""
 
-#: eventview.cpp:268 dialogs.cpp:4981 dialogs.cpp:5140
+#: eventview.cpp:268 dialogs.cpp:4998 dialogs.cpp:5157
 msgid "Truncate if longer than note"
 msgstr ""
 
-#: eventview.cpp:269 dialogs.cpp:4982 dialogs.cpp:5141
+#: eventview.cpp:269 dialogs.cpp:4999 dialogs.cpp:5158
 msgid "End at same time as note"
 msgstr ""
 
-#: eventview.cpp:270 dialogs.cpp:4983 dialogs.cpp:5142
+#: eventview.cpp:270 dialogs.cpp:5000 dialogs.cpp:5159
 msgid "Stretch or squash segment to note duration"
 msgstr ""
 
@@ -505,7 +505,7 @@ msgstr "Segmendi nime muutmine"
 msgid "Label:"
 msgstr "Nimi"
 
-#: eventview.cpp:759 triggermanager.cpp:148 dialogs.cpp:4889
+#: eventview.cpp:759 triggermanager.cpp:148 dialogs.cpp:4906
 #, fuzzy
 msgid "Base pitch"
 msgstr "Noodi helikõrgus:"
@@ -515,17 +515,17 @@ msgstr "Noodi helikõrgus:"
 msgid "Base velocity"
 msgstr "Noodi kiirus:"
 
-#: eventview.cpp:942 triggermanager.cpp:402 rosegardengui.cpp:2048
-#: notationviewslots.cpp:485 notationviewslots.cpp:532 matrixview.cpp:1376
+#: eventview.cpp:942 triggermanager.cpp:402 rosegardengui.cpp:2094
+#: notationviewslots.cpp:485 notationviewslots.cpp:533 matrixview.cpp:1416
 msgid "Clipboard is empty"
 msgstr ""
 
-#: eventview.cpp:946 rosegardengui.cpp:2051 notationviewslots.cpp:493
-#: notationviewslots.cpp:536 matrixview.cpp:1380
+#: eventview.cpp:946 rosegardengui.cpp:2097 notationviewslots.cpp:493
+#: notationviewslots.cpp:537 matrixview.cpp:1420
 msgid "Inserting clipboard contents..."
 msgstr "Lõikelaua sisu lisamine..."
 
-#: eventview.cpp:979 notationtool.cpp:1807 matrixview.cpp:1387
+#: eventview.cpp:979 notationtool.cpp:1850 matrixview.cpp:1427
 msgid "Couldn't paste at this point"
 msgstr ""
 
@@ -545,16 +545,16 @@ msgstr "R&edigeeri sündmust"
 msgid "&Advanced Event Editor"
 msgstr ""
 
-#: eventview.cpp:1222 notationview.cpp:1961 matrixview.cpp:684
+#: eventview.cpp:1222 notationview.cpp:1960 matrixview.cpp:713
 msgid "&Filter Selection"
 msgstr "&Filtri valimine"
 
-#: eventview.cpp:1226 tempoview.cpp:626 matrixview.cpp:565
+#: eventview.cpp:1226 tempoview.cpp:626 matrixview.cpp:594
 msgid "Select &All"
 msgstr "Vali &kõik"
 
-#: eventview.cpp:1230 notationview.cpp:1954 tempoview.cpp:630
-#: matrixview.cpp:679
+#: eventview.cpp:1230 notationview.cpp:1953 tempoview.cpp:630
+#: matrixview.cpp:708
 msgid "Clear Selection"
 msgstr "Puhasta valik"
 
@@ -592,12 +592,12 @@ msgstr "Värv"
 msgid "Modify Color Name"
 msgstr ""
 
-#: colourwidgets.cpp:64 rosegardenconfiguredialog.cpp:2353
-#: segmentparameterbox.cpp:865
+#: colourwidgets.cpp:64 rosegardenconfiguredialog.cpp:2357
+#: segmentparameterbox.cpp:867
 msgid "Enter new name"
 msgstr "Sisesta uus nimi"
 
-#: colourwidgets.cpp:107 segmentparameterbox.cpp:329
+#: colourwidgets.cpp:107 segmentparameterbox.cpp:331
 msgid "Default Color"
 msgstr "Vaikevärv"
 
@@ -796,7 +796,7 @@ msgid "Always use default studio when loading files"
 msgstr "Failide laadimisel kasutatakse alati vaikestuudiot"
 
 #: rosegardenconfiguredialog.cpp:203 rosegardenconfigurationpage.h:225
-#: rosegardenconfigurationpage.h:226 dialogs.cpp:4914
+#: rosegardenconfigurationpage.h:226 dialogs.cpp:4931
 msgid "Notation"
 msgstr "Noodikiri"
 
@@ -817,7 +817,7 @@ msgstr "Käitumine"
 msgid "External audio editor"
 msgstr "Väline audiofailide redaktor"
 
-#: rosegardenconfiguredialog.cpp:241 rosegardenconfiguredialog.cpp:2165
+#: rosegardenconfiguredialog.cpp:241 rosegardenconfiguredialog.cpp:2167
 msgid "Choose..."
 msgstr "Vali..."
 
@@ -900,8 +900,8 @@ msgstr "Vaikesamm"
 msgid "Default duration factor"
 msgstr "Kestvus  "
 
-#: rosegardenconfiguredialog.cpp:488 rosegardenconfiguredialog.cpp:2048
-#: widgets.cpp:908 widgets.cpp:1081 notationview.cpp:1194 matrixview.cpp:1869
+#: rosegardenconfiguredialog.cpp:488 rosegardenconfiguredialog.cpp:2050
+#: widgets.cpp:908 widgets.cpp:1081 notationview.cpp:1193 matrixview.cpp:1909
 msgid "None"
 msgstr "Puudub"
 
@@ -945,7 +945,7 @@ msgstr "Ignoreeritakse olemasolevaid pikkuseid"
 msgid "Auto-beam on insert when appropriate"
 msgstr ""
 
-#: rosegardenconfiguredialog.cpp:573 notationtool.cpp:1006
+#: rosegardenconfiguredialog.cpp:573 notationtool.cpp:1037
 msgid "Collapse rests after erase"
 msgstr "Pärast kustutamist tõmmatakse pausid kokku"
 
@@ -1020,8 +1020,8 @@ msgid ""
 "affect editing in any of the views except notation."
 msgstr ""
 
-#: rosegardenconfiguredialog.cpp:657 rosegardenconfiguredialog.cpp:1916
-#: segmentparameterbox.cpp:81 dialogs.cpp:3184
+#: rosegardenconfiguredialog.cpp:657 rosegardenconfiguredialog.cpp:1918
+#: segmentparameterbox.cpp:81 dialogs.cpp:3201
 msgid "Quantize"
 msgstr "Kvantimine"
 
@@ -1072,7 +1072,7 @@ msgstr ""
 msgid "JACK Latency"
 msgstr "JACK'i latents"
 
-#: rosegardenconfiguredialog.cpp:934 dialogs.cpp:4183
+#: rosegardenconfiguredialog.cpp:934 dialogs.cpp:4200
 msgid "Sequencer status"
 msgstr "Sekventseri staatus"
 
@@ -1328,7 +1328,7 @@ msgid "%1 minutes %2.%3%4 seconds (%5 units, %6 measures)"
 msgstr ""
 
 #: rosegardenconfiguredialog.cpp:1774 rosegardenconfiguredialog.cpp:1785
-#: dialogs.cpp:1337 dialogs.cpp:3895 dialogs.cpp:3899 dialogs.cpp:3923
+#: dialogs.cpp:1346 dialogs.cpp:3912 dialogs.cpp:3916 dialogs.cpp:3940
 msgid "Value"
 msgstr "Väärtus"
 
@@ -1399,280 +1399,280 @@ msgstr "Segmente:"
 msgid "%1 MIDI, %2 audio, %3 total"
 msgstr ""
 
-#: rosegardenconfiguredialog.cpp:1901
+#: rosegardenconfiguredialog.cpp:1903
 msgid "Statistics"
 msgstr "Statistika"
 
-#: rosegardenconfiguredialog.cpp:1908 deviceeditor.cpp:63 dialogs.cpp:1335
+#: rosegardenconfiguredialog.cpp:1910 deviceeditor.cpp:63 dialogs.cpp:1344
 msgid "Type"
 msgstr "Tüüp"
 
-#: rosegardenconfiguredialog.cpp:1909
+#: rosegardenconfiguredialog.cpp:1911
 #, fuzzy
 msgid "Track"
 msgstr "&Rajad"
 
-#: rosegardenconfiguredialog.cpp:1910 segmentparameterbox.cpp:79
+#: rosegardenconfiguredialog.cpp:1912 segmentparameterbox.cpp:79
 #: triggermanager.cpp:146
 msgid "Label"
 msgstr "Nimi"
 
-#: rosegardenconfiguredialog.cpp:1911
+#: rosegardenconfiguredialog.cpp:1913
 #, fuzzy
 msgid "Time"
 msgstr "Aeg:"
 
-#: rosegardenconfiguredialog.cpp:1912 triggermanager.cpp:147
+#: rosegardenconfiguredialog.cpp:1914 triggermanager.cpp:147
 #: audiomanagerdialog.cpp:245
 msgid "Duration"
 msgstr "Kestvus"
 
-#: rosegardenconfiguredialog.cpp:1913
+#: rosegardenconfiguredialog.cpp:1915
 #, fuzzy
 msgid "Events"
 msgstr "S&ündmus"
 
-#: rosegardenconfiguredialog.cpp:1914
+#: rosegardenconfiguredialog.cpp:1916
 msgid "Polyphony"
 msgstr ""
 
-#: rosegardenconfiguredialog.cpp:1915 segmentparameterbox.cpp:80
+#: rosegardenconfiguredialog.cpp:1917 segmentparameterbox.cpp:80
 msgid "Repeat"
 msgstr "Kordus"
 
-#: rosegardenconfiguredialog.cpp:1917 editview.cpp:1375
+#: rosegardenconfiguredialog.cpp:1919 editview.cpp:1379
 #: segmentparameterbox.cpp:82
 msgid "Transpose"
 msgstr "Transponeerimine"
 
-#: rosegardenconfiguredialog.cpp:1918 segmentparameterbox.cpp:83
+#: rosegardenconfiguredialog.cpp:1920 segmentparameterbox.cpp:83
 msgid "Delay"
 msgstr "Viivitus"
 
-#: rosegardenconfiguredialog.cpp:1943 rosegardenconfigurationpage.h:373
+#: rosegardenconfiguredialog.cpp:1945 rosegardenconfigurationpage.h:373
 msgid "Audio"
 msgstr "Audio"
 
-#: rosegardenconfiguredialog.cpp:1943
+#: rosegardenconfiguredialog.cpp:1945
 #, fuzzy
 msgid "MIDI"
 msgstr "II"
 
-#: rosegardenconfiguredialog.cpp:2056
+#: rosegardenconfiguredialog.cpp:2058
 #, fuzzy
 msgid "Segment Summary"
 msgstr "Segmendi parameetrid"
 
-#: rosegardenconfiguredialog.cpp:2068
+#: rosegardenconfiguredialog.cpp:2070
 msgid "{new property %1}"
 msgstr ""
 
-#: rosegardenconfiguredialog.cpp:2068
+#: rosegardenconfiguredialog.cpp:2070
 msgid "{new property}"
 msgstr ""
 
-#: rosegardenconfiguredialog.cpp:2073
+#: rosegardenconfiguredialog.cpp:2075
 msgid "{undefined}"
 msgstr ""
 
-#: rosegardenconfiguredialog.cpp:2160
+#: rosegardenconfiguredialog.cpp:2162
 msgid "Audio file path:"
 msgstr "Audiofailide asukoht:"
 
-#: rosegardenconfiguredialog.cpp:2170
+#: rosegardenconfiguredialog.cpp:2172
 msgid "Disk space remaining:"
 msgstr "Vaba kettaruumi:"
 
-#: rosegardenconfiguredialog.cpp:2175
+#: rosegardenconfiguredialog.cpp:2177
 msgid "Equivalent minutes of 16-bit stereo:"
 msgstr "16 bitist stereo audiot minutites:"
 
-#: rosegardenconfiguredialog.cpp:2185
+#: rosegardenconfiguredialog.cpp:2189
 msgid "Modify audio path"
 msgstr "Audiofailide otsingutee"
 
-#: rosegardenconfiguredialog.cpp:2208
+#: rosegardenconfiguredialog.cpp:2212
 msgid "%1 out of %2 (%3% used)"
 msgstr ""
 
-#: rosegardenconfiguredialog.cpp:2239
+#: rosegardenconfiguredialog.cpp:2243
 msgid "minutes at"
 msgstr ""
 
-#: rosegardenconfiguredialog.cpp:2297 segmentparameterbox.cpp:337
+#: rosegardenconfiguredialog.cpp:2301 segmentparameterbox.cpp:339
 msgid "Add New Color"
 msgstr "Lisa uus värv"
 
-#: rosegardenconfiguredialog.cpp:2301
+#: rosegardenconfiguredialog.cpp:2305
 msgid "Delete Color"
 msgstr "Kustuta värv"
 
-#: rosegardenconfiguredialog.cpp:2320
+#: rosegardenconfiguredialog.cpp:2324
 msgid "Color Map"
 msgstr "Värvikaart"
 
-#: rosegardenconfiguredialog.cpp:2353 segmentparameterbox.cpp:865
+#: rosegardenconfiguredialog.cpp:2357 segmentparameterbox.cpp:867
 msgid "New Color Name"
 msgstr "Uue värvi nimi"
 
-#: rosegardenconfiguredialog.cpp:2354 segmentparameterbox.cpp:866
+#: rosegardenconfiguredialog.cpp:2358 segmentparameterbox.cpp:868
 #: devicemanager.cpp:98 devicemanager.cpp:151
 msgid "New"
 msgstr "Uus"
 
-#: rosegardenconfiguredialog.cpp:2440
+#: rosegardenconfiguredialog.cpp:2444
 #, fuzzy
 msgid "Configure Rosegarden"
 msgstr "Rosegarden"
 
-#: rosegardenconfiguredialog.cpp:2509
+#: rosegardenconfiguredialog.cpp:2513
 #, fuzzy
 msgid "Document Properties"
 msgstr "&Redigeeri dokumendi omadusi..."
 
-#: editview.cpp:724 rosegardengui.cpp:698
+#: editview.cpp:728 rosegardengui.cpp:724
 msgid "Jog &Left"
 msgstr ""
 
-#: editview.cpp:728 rosegardengui.cpp:702
+#: editview.cpp:732 rosegardengui.cpp:728
 msgid "Jog &Right"
 msgstr ""
 
-#: editview.cpp:734
+#: editview.cpp:738
 msgid "Show Velocity Property Ruler"
 msgstr ""
 
-#: editview.cpp:753
+#: editview.cpp:757
 msgid "Insert item"
 msgstr "Lisa element"
 
-#: editview.cpp:759
+#: editview.cpp:763
 msgid "Erase selected items"
 msgstr "Kustuta valitud elemendid"
 
-#: editview.cpp:763
+#: editview.cpp:767
 msgid "Clear ruler"
 msgstr "Puhasta joonlaud"
 
-#: editview.cpp:767
+#: editview.cpp:771
 msgid "Insert line of controllers"
 msgstr ""
 
-#: editview.cpp:771
+#: editview.cpp:775
 #, fuzzy
 msgid "Flip forward"
 msgstr "Edasi kerimine"
 
-#: editview.cpp:775
+#: editview.cpp:779
 msgid "Flip backwards"
 msgstr ""
 
-#: editview.cpp:779
+#: editview.cpp:783
 #, fuzzy
 msgid "Draw property line"
 msgstr "Vaikeproportsioonid"
 
-#: editview.cpp:783
+#: editview.cpp:787
 #, fuzzy
 msgid "Select all property values"
 msgstr "Kustuta see omadus"
 
-#: editview.cpp:816
+#: editview.cpp:820
 #, fuzzy
 msgid "%1 Controller %2 %3"
 msgstr "Vali..."
 
-#: editview.cpp:823 controlruler.cpp:1610
+#: editview.cpp:827 controlruler.cpp:1655
 #, fuzzy
 msgid "Unsupported Event Type"
 msgstr "Toetuseta sündmuse tüüp:"
 
-#: editview.cpp:975
+#: editview.cpp:979
 msgid "I"
 msgstr "I"
 
-#: editview.cpp:975
+#: editview.cpp:979
 msgid "II"
 msgstr "II"
 
-#: editview.cpp:975
+#: editview.cpp:979
 msgid "III"
 msgstr "III"
 
-#: editview.cpp:975
+#: editview.cpp:979
 msgid "IV"
 msgstr "IV"
 
-#: editview.cpp:976
+#: editview.cpp:980
 msgid "V"
 msgstr "V"
 
-#: editview.cpp:976
+#: editview.cpp:980
 msgid "VI"
 msgstr "VI"
 
-#: editview.cpp:976
+#: editview.cpp:980
 msgid "VII"
 msgstr "VII"
 
-#: editview.cpp:976
+#: editview.cpp:980
 msgid "VIII"
 msgstr "VIII"
 
-#: editview.cpp:978
+#: editview.cpp:982
 msgid "%1 flat"
 msgstr "%1 bemoll"
 
-#: editview.cpp:979
+#: editview.cpp:983
 msgid "%1 sharp"
 msgstr "%1 diees"
 
-#: editview.cpp:994
+#: editview.cpp:998
 msgid "&Insert Note"
 msgstr "L&isa noot"
 
-#: editview.cpp:1000
+#: editview.cpp:1004
 msgid "&Upper Octave"
 msgstr "Oktav &üles"
 
-#: editview.cpp:1005
+#: editview.cpp:1009
 msgid "&Lower Octave"
 msgstr "Oktav &alla"
 
-#: editview.cpp:1169
+#: editview.cpp:1173
 msgid "Estimated time signature shown"
 msgstr ""
 
-#: editview.cpp:1376
+#: editview.cpp:1380
 msgid "Enter the number of semitones to transpose by:"
 msgstr ""
 
-#: editview.cpp:1380
+#: editview.cpp:1384
 msgid "Transposing..."
 msgstr ""
 
-#: editview.cpp:1388
+#: editview.cpp:1392
 msgid "Transposing up one semitone..."
 msgstr ""
 
-#: editview.cpp:1396
+#: editview.cpp:1400
 msgid "Transposing up one octave..."
 msgstr ""
 
-#: editview.cpp:1404
+#: editview.cpp:1408
 msgid "Transposing down one semitone..."
 msgstr ""
 
-#: editview.cpp:1412
+#: editview.cpp:1416
 msgid "Transposing down one octave..."
 msgstr ""
 
-#: editview.cpp:1420
+#: editview.cpp:1424
 #, fuzzy
 msgid "Jogging left..."
 msgstr "Faili sulgemine..."
 
-#: editview.cpp:1434
+#: editview.cpp:1438
 msgid "Jogging right..."
 msgstr ""
 
@@ -1726,26 +1726,31 @@ msgstr ""
 
 #: segmentparameterbox.cpp:86
 #, fuzzy
-msgid "Fade in (ms)"
+msgid "Fade in"
 msgstr "Eestpoolt lugemine (millisekundites)"
 
 #: segmentparameterbox.cpp:87
-msgid "Fade out (ms)"
+msgid "Fade out"
 msgstr ""
 
-#: segmentparameterbox.cpp:273 segmentparameterbox.cpp:602
+#: segmentparameterbox.cpp:173 segmentparameterbox.cpp:180
+#, fuzzy
+msgid " ms"
+msgstr "%1 ms"
+
+#: segmentparameterbox.cpp:275 segmentparameterbox.cpp:604
 msgid "%1 ms"
 msgstr "%1 ms"
 
-#: segmentparameterbox.cpp:907 rosegardengui.cpp:5097
+#: segmentparameterbox.cpp:909 rosegardengui.cpp:5137
 msgid "Modify Segment label"
 msgstr "Segmendi nime muutmine"
 
-#: segmentparameterbox.cpp:908 rosegardengui.cpp:5098
+#: segmentparameterbox.cpp:910 rosegardengui.cpp:5138
 msgid "Modify Segments label"
 msgstr "Segmentide nime muutmine"
 
-#: segmentparameterbox.cpp:918 rosegardengui.cpp:5114
+#: segmentparameterbox.cpp:920 rosegardengui.cpp:5154
 #: audiomanagerdialog.cpp:901
 msgid "Enter new label"
 msgstr ""
@@ -1805,8 +1810,8 @@ msgstr ""
 
 #: triggermanager.cpp:324 audiosynthmanager.cpp:109 controleditor.cpp:236
 #: markereditor.cpp:298 mixer.cpp:356 mixer.cpp:667 mixer.cpp:820
-#: dialogs.cpp:1794 dialogs.cpp:2210 dialogs.cpp:2246 dialogs.cpp:2247
-#: dialogs.cpp:2291 dialogs.cpp:2324
+#: dialogs.cpp:1811 dialogs.cpp:2227 dialogs.cpp:2263 dialogs.cpp:2264
+#: dialogs.cpp:2308 dialogs.cpp:2341
 msgid "<none>"
 msgstr "<puudub>"
 
@@ -1993,7 +1998,7 @@ msgstr ""
 msgid "Hide Advanced Options"
 msgstr ""
 
-#: widgets.cpp:1499 eventfilter.cpp:100 dialogs.cpp:1778
+#: widgets.cpp:1499 eventfilter.cpp:100 dialogs.cpp:1795
 msgid "Pitch:"
 msgstr "Helikõrgus:"
 
@@ -2011,27 +2016,27 @@ msgid ""
 "instead."
 msgstr ""
 
-#: rosegardentransport.cpp:1697 rc.cpp:123
+#: rosegardentransport.cpp:1697 rc.cpp:124
 msgid "Show additional controls"
 msgstr ""
 
-#: rosegardentransport.cpp:1699 rc.cpp:125
+#: rosegardentransport.cpp:1699 rc.cpp:126
 msgid "Display time to end"
 msgstr "Näita aega lõpuni"
 
-#: rosegardentransport.cpp:1701 rc.cpp:127
+#: rosegardentransport.cpp:1701 rc.cpp:128
 msgid "Fast forward"
 msgstr "Edasi kerimine"
 
-#: rosegardentransport.cpp:1702 rc.cpp:128
+#: rosegardentransport.cpp:1702 rc.cpp:129
 msgid "Moves the current pointer position forwards one bar."
 msgstr "Liigutab aktiivse kursori ühe takti võrra edasi."
 
-#: rosegardentransport.cpp:1704 rc.cpp:130
+#: rosegardentransport.cpp:1704 rc.cpp:131
 msgid "Fast forward to end"
 msgstr "Kiire kerimine lõppu"
 
-#: rosegardentransport.cpp:1705 rc.cpp:131
+#: rosegardentransport.cpp:1705 rc.cpp:132
 msgid ""
 "Moves the pointer position to the end of the composition.  (This may mean "
 "going backwards if the pointer is already beyond the end.)"
@@ -2039,11 +2044,11 @@ msgstr ""
 "Liigutab kursori kompositsiooni lõppu. (See võib tähendada tagasi liikumist "
 "kui kursor on juba lõpust üle.)"
 
-#: rosegardentransport.cpp:1707 rc.cpp:133
+#: rosegardentransport.cpp:1707 rc.cpp:134
 msgid "Play/Pause"
 msgstr "Esita/paus"
 
-#: rosegardentransport.cpp:1708 rc.cpp:134
+#: rosegardentransport.cpp:1708 rc.cpp:135
 msgid ""
 "Plays from the current pointer position, or pauses playback if already in "
 "progress."
@@ -2051,47 +2056,47 @@ msgstr ""
 "Mahamängimine alates kursori asukohast või paus kui mahamängimine on "
 "aktiivne."
 
-#: rosegardentransport.cpp:1710 rc.cpp:136
+#: rosegardentransport.cpp:1710 rc.cpp:137
 msgid "Rewind"
 msgstr "Tagasi kerimine"
 
-#: rosegardentransport.cpp:1711 rc.cpp:137
+#: rosegardentransport.cpp:1711 rc.cpp:138
 msgid "Moves the current pointer position back one bar."
 msgstr "Liigutab kursori asukoha ühe takti võrra tagasi."
 
-#: rosegardentransport.cpp:1712 rc.cpp:138
+#: rosegardentransport.cpp:1712 rc.cpp:139
 msgid "SIG"
 msgstr ""
 
-#: rosegardentransport.cpp:1713 rc.cpp:139
+#: rosegardentransport.cpp:1713 rc.cpp:140
 msgid "DIV"
 msgstr ""
 
-#: rosegardentransport.cpp:1714 rc.cpp:140
+#: rosegardentransport.cpp:1714 rc.cpp:141
 msgid "/16"
 msgstr ""
 
-#: rosegardentransport.cpp:1715 rc.cpp:141
+#: rosegardentransport.cpp:1715 rc.cpp:142
 msgid "TEMPO"
 msgstr ""
 
-#: rosegardentransport.cpp:1716 rc.cpp:142
+#: rosegardentransport.cpp:1716 rc.cpp:143
 msgid "END"
 msgstr ""
 
-#: rosegardentransport.cpp:1717 rc.cpp:143
+#: rosegardentransport.cpp:1717 rc.cpp:144
 msgid "BAR"
 msgstr ""
 
-#: rosegardentransport.cpp:1720 rc.cpp:146
+#: rosegardentransport.cpp:1720 rc.cpp:147
 msgid "Stops playback or recording."
 msgstr "Peatab mahamängimise või salvestamise."
 
-#: rosegardentransport.cpp:1722 rc.cpp:148
+#: rosegardentransport.cpp:1722 rc.cpp:149
 msgid "Rewind to beginning"
 msgstr "Tagasikerimine algusesse"
 
-#: rosegardentransport.cpp:1723 rc.cpp:149
+#: rosegardentransport.cpp:1723 rc.cpp:150
 msgid ""
 "Moves the pointer position to the start of the composition. (This may mean "
 "going forwards if the pointer is currently before the start.)"
@@ -2099,69 +2104,69 @@ msgstr ""
 "Liigutab kursori kompositsiooni algusese. (See võib tähendada edasi "
 "liigutamist kui kursor asub eespool algust.)"
 
-#: rosegardentransport.cpp:1725 rc.cpp:151
+#: rosegardentransport.cpp:1725 rc.cpp:152
 msgid "Switch between real time, musical time, and frame count"
 msgstr ""
 
-#: rosegardentransport.cpp:1727 rc.cpp:153
+#: rosegardentransport.cpp:1727 rc.cpp:154
 msgid "Hide additional controls"
 msgstr ""
 
-#: rosegardentransport.cpp:1729 rc.cpp:155
+#: rosegardentransport.cpp:1729 rc.cpp:156
 msgid "Panic Button"
 msgstr "Paanika nupp"
 
-#: rosegardentransport.cpp:1730 rc.cpp:156
+#: rosegardentransport.cpp:1730 rc.cpp:157
 msgid "Resets all MIDI devices if you've got stuck notes"
 msgstr "Lähtestab kõik MIDI seadmed kui mõni noot on hangunud"
 
-#: rosegardentransport.cpp:1732 rc.cpp:158 dialogs.cpp:4351
+#: rosegardentransport.cpp:1732 rc.cpp:159 dialogs.cpp:4368
 msgid "Metronome"
 msgstr "Metronoom"
 
-#: rosegardentransport.cpp:1733 rc.cpp:159
+#: rosegardentransport.cpp:1733 rc.cpp:160
 msgid "Provides a metronome click for you to play along with"
 msgstr ""
 
-#: rosegardentransport.cpp:1735 rc.cpp:161 mixer.cpp:342
+#: rosegardentransport.cpp:1735 rc.cpp:162 mixer.cpp:342
 msgid "Solo"
 msgstr "Soolo"
 
-#: rosegardentransport.cpp:1736 rc.cpp:162
+#: rosegardentransport.cpp:1736 rc.cpp:163
 msgid "Mutes all but the currently selected track"
 msgstr "Vaigistab kõik rajad peale aktiivse"
 
 #: rosegardentransport.cpp:1738 deviceeditor.cpp:143 deviceeditor.cpp:368
-#: rc.cpp:164 segmentcommands.cpp:558
+#: rc.cpp:165 segmentcommands.cpp:558
 msgid "Record"
 msgstr "Salvesta"
 
-#: rosegardentransport.cpp:1739 rc.cpp:165
+#: rosegardentransport.cpp:1739 rc.cpp:166
 msgid "Record either MIDI or audio"
 msgstr "MIDI või audio salvestamine"
 
-#: rosegardentransport.cpp:1741 rc.cpp:167
+#: rosegardentransport.cpp:1741 rc.cpp:168
 msgid "Loop"
 msgstr "Kordus"
 
-#: rosegardentransport.cpp:1742 rc.cpp:168
+#: rosegardentransport.cpp:1742 rc.cpp:169
 msgid "Turn on and off the loop markers (if set)"
 msgstr ""
 
-#: rosegardentransport.cpp:1743 rc.cpp:169
+#: rosegardentransport.cpp:1743 rc.cpp:170
 msgid "Shows MIDI activity in and out of Rosegarden"
 msgstr ""
 
-#: rosegardentransport.cpp:1744 rosegardentransport.cpp:1747 rc.cpp:170
-#: rc.cpp:173
+#: rosegardentransport.cpp:1744 rosegardentransport.cpp:1747 rc.cpp:171
+#: rc.cpp:174
 msgid "NO EVENTS"
 msgstr "NO EVENTS"
 
-#: rosegardentransport.cpp:1745 rc.cpp:171
+#: rosegardentransport.cpp:1745 rc.cpp:172
 msgid "IN"
 msgstr "IN"
 
-#: rosegardentransport.cpp:1746 rc.cpp:172
+#: rosegardentransport.cpp:1746 rc.cpp:173
 msgid "OUT"
 msgstr "OUT"
 
@@ -2415,7 +2420,7 @@ msgstr "Mängi maha"
 
 #: deviceeditor.cpp:182 deviceeditor.cpp:204 deviceeditor.cpp:216
 #: devicemanager.cpp:171 devicemanager.cpp:413 devicemanager.cpp:425
-#: instrumentparameterbox.cpp:787 dialogs.cpp:4388
+#: instrumentparameterbox.cpp:796 dialogs.cpp:4405
 msgid "No connection"
 msgstr "Ühendus puudub"
 
@@ -2527,7 +2532,7 @@ msgstr ""
 msgid "&Split on Silence"
 msgstr "&Tükeldamine vaikuse kohalt"
 
-#: segmentcommands.h:399 rosegardengui.cpp:602
+#: segmentcommands.h:399 rosegardengui.cpp:628
 msgid "&Join"
 msgstr "Üh&enda"
 
@@ -2593,31 +2598,31 @@ msgstr "Muuda segmendi värvi..."
 msgid "Change Segment Color Map..."
 msgstr "Muuda segmendi värvikaarti..."
 
-#: controlruler.cpp:534
+#: controlruler.cpp:535
 msgid "Control Change"
 msgstr ""
 
-#: controlruler.cpp:576
+#: controlruler.cpp:577
 msgid "Insert Controller Event"
 msgstr ""
 
-#: controlruler.cpp:631
+#: controlruler.cpp:632
 msgid "Erase Controller Event(s)"
 msgstr ""
 
-#: controlruler.cpp:1628 eventfilter.cpp:201
+#: controlruler.cpp:1673 eventfilter.cpp:201
 msgid "Controller Events"
 msgstr ""
 
-#: controlruler.cpp:1717
+#: controlruler.cpp:1762
 msgid "Controller Event Number"
 msgstr ""
 
-#: controlruler.cpp:1918
+#: controlruler.cpp:1963
 msgid "Add line of controllers"
 msgstr ""
 
-#: controlruler.cpp:1972
+#: controlruler.cpp:2017
 msgid "%1 controller"
 msgstr ""
 
@@ -2661,43 +2666,43 @@ msgstr "V&õta tagasi %1"
 msgid "Re&do %1"
 msgstr "&Tee uuesti %1"
 
-#: notationtool.cpp:178
+#: notationtool.cpp:179
 msgid "Auto-Beam when appropriate"
 msgstr ""
 
-#: notationtool.cpp:199
+#: notationtool.cpp:200
 msgid "Dotted note"
 msgstr "Punktiga noot"
 
-#: notationtool.cpp:205 notationtool.cpp:719 notationtool.cpp:807
-#: notationtool.cpp:888 notationtool.cpp:1019 matrixtool.cpp:168
+#: notationtool.cpp:206 notationtool.cpp:750 notationtool.cpp:838
+#: notationtool.cpp:919 notationtool.cpp:1050 matrixtool.cpp:168
 #: matrixtool.cpp:345 matrixtool.cpp:757 matrixtool.cpp:1057
 msgid "Switch to Select Tool"
 msgstr ""
 
-#: notationtool.cpp:209 notationtool.cpp:723 notationtool.cpp:811
-#: notationtool.cpp:892 notationtool.cpp:1089 matrixtool.cpp:172
+#: notationtool.cpp:210 notationtool.cpp:754 notationtool.cpp:842
+#: notationtool.cpp:923 notationtool.cpp:1120 matrixtool.cpp:172
 #: matrixtool.cpp:412 matrixtool.cpp:765 matrixtool.cpp:1065
 msgid "Switch to Erase Tool"
 msgstr ""
 
-#: notationtool.cpp:216
+#: notationtool.cpp:217
 msgid "Switch to Inserting Rests"
 msgstr ""
 
-#: notationtool.cpp:713
+#: notationtool.cpp:744
 msgid "Dotted rest"
 msgstr "Punktiga paus"
 
-#: notationtool.cpp:730 notationtool.cpp:818 notationtool.cpp:899
+#: notationtool.cpp:761 notationtool.cpp:849 notationtool.cpp:930
 msgid "Switch to Inserting Notes"
 msgstr ""
 
-#: notationtool.cpp:1013 notationtool.cpp:1085
+#: notationtool.cpp:1044 notationtool.cpp:1116
 msgid "Switch to Insert Tool"
 msgstr ""
 
-#: notationtool.cpp:1810
+#: notationtool.cpp:1853
 msgid "Ready."
 msgstr "Valmis."
 
@@ -2728,406 +2733,411 @@ msgstr "Vaate initsialiseerimine..."
 msgid "Segment & Instrument Parameters"
 msgstr "Näita &instrumentide parameetreid"
 
-#: rosegardengui.cpp:298
+#: rosegardengui.cpp:319
 msgid "Starting sequence manager..."
 msgstr "Sekventseri halduri käivitamine..."
 
-#: rosegardengui.cpp:305
+#: rosegardengui.cpp:326
 msgid "Getting sound driver status..."
 msgstr "Helidraiveri staatuse info hankimine..."
 
-#: rosegardengui.cpp:316
+#: rosegardengui.cpp:337
 msgid "Clearing studio data..."
 msgstr "Stuudio andmete puhastamine..."
 
-#: rosegardengui.cpp:325
+#: rosegardengui.cpp:346
 msgid "Enumerating plugins..."
 msgstr "Pluginate nummerdamine..."
 
-#: rosegardengui.cpp:340 notationview.cpp:341
+#: rosegardengui.cpp:361 notationview.cpp:340
 msgid "Starting..."
 msgstr "Käivitamine..."
 
-#: rosegardengui.cpp:384
+#: rosegardengui.cpp:405
 msgid "Import &MIDI file..."
 msgstr "Impordi &MIDI fail..."
 
-#: rosegardengui.cpp:388
+#: rosegardengui.cpp:409
 msgid "Import &Rosegarden 2.1 file..."
 msgstr "Impordi &Rosegarden 2.1 fail..."
 
-#: rosegardengui.cpp:392
+#: rosegardengui.cpp:413
 #, fuzzy
 msgid "Import &Hydrogen file..."
 msgstr "Impordi &Rosegarden 2.1 fail..."
 
-#: rosegardengui.cpp:396
+#: rosegardengui.cpp:417
 msgid "Merge &File..."
 msgstr "Liida &fail..."
 
-#: rosegardengui.cpp:400
+#: rosegardengui.cpp:421
 msgid "Merge &MIDI file..."
 msgstr "Liida &MIDI fail..."
 
-#: rosegardengui.cpp:404
+#: rosegardengui.cpp:425
 msgid "Merge &Rosegarden 2.1 file..."
 msgstr "Liida &Rosegarden 2.1 fail..."
 
-#: rosegardengui.cpp:408
+#: rosegardengui.cpp:429
 #, fuzzy
 msgid "Merge &Hydrogen file..."
 msgstr "Impordi &Rosegarden 2.1 fail..."
 
-#: rosegardengui.cpp:412
+#: rosegardengui.cpp:433
 msgid "Export &MIDI file..."
 msgstr "Ekspordi &MIDI fail..."
 
-#: rosegardengui.cpp:416
+#: rosegardengui.cpp:437
 msgid "Export &Lilypond file..."
 msgstr "Ekspordi &Lilypond fail..."
 
-#: rosegardengui.cpp:420
+#: rosegardengui.cpp:441
 msgid "Export Music&XML file..."
 msgstr "Ekspordi Music&XML fail..."
 
-#: rosegardengui.cpp:424
+#: rosegardengui.cpp:445
 msgid "Export &Csound score file..."
 msgstr "Expordi &Csound noodikirja fail..."
 
-#: rosegardengui.cpp:428
+#: rosegardengui.cpp:449
 msgid "Export M&up file..."
 msgstr "Ekspordi M&up fail..."
 
-#: rosegardengui.cpp:432
+#: rosegardengui.cpp:453
 #, fuzzy
 msgid "Play&list"
 msgstr "Mängi maha"
 
-#: rosegardengui.cpp:468 notationview.cpp:1806
+#: rosegardengui.cpp:460
+#, fuzzy
+msgid "Rosegarden Online &Tutorial"
+msgstr "Rosegarden"
+
+#: rosegardengui.cpp:494 notationview.cpp:1805
 msgid "Show T&ools Toolbar"
 msgstr "Näita t&ööriistade tööriistariba"
 
-#: rosegardengui.cpp:472
+#: rosegardengui.cpp:498
 msgid "Show Trac&ks Toolbar"
 msgstr "Näita &radade tööriistariba"
 
-#: rosegardengui.cpp:476
+#: rosegardengui.cpp:502
 msgid "Show &Editors Toolbar"
 msgstr "Näita r&edaktori tööriistariba"
 
-#: rosegardengui.cpp:480 notationview.cpp:1818
+#: rosegardengui.cpp:506 notationview.cpp:1817
 msgid "Show Trans&port Toolbar"
 msgstr "Näita trans&pordi tööristariba"
 
-#: rosegardengui.cpp:484
+#: rosegardengui.cpp:510
 msgid "Show &Zoom Toolbar"
 msgstr "Näita &suurenduse tööriistariba"
 
-#: rosegardengui.cpp:491
+#: rosegardengui.cpp:517
 msgid "Show Tra&nsport"
 msgstr "Näita tra&nspordi akent"
 
-#: rosegardengui.cpp:496
+#: rosegardengui.cpp:522
 msgid "Show Track &Labels"
 msgstr "Näita radade &nimesid"
 
-#: rosegardengui.cpp:501
+#: rosegardengui.cpp:527
 #, fuzzy
 msgid "Show Playback Position R&uler"
 msgstr "Mahamängimise kursor &kursori juurde"
 
-#: rosegardengui.cpp:506
+#: rosegardengui.cpp:532
 msgid "Show Te&mpo Ruler"
 msgstr "Näita te&mpo joonlauda"
 
-#: rosegardengui.cpp:511
+#: rosegardengui.cpp:537
 msgid "Show Cho&rd Name Ruler"
 msgstr "Näita ako&rdi nimede joonlauda"
 
-#: rosegardengui.cpp:516
+#: rosegardengui.cpp:542
 msgid "Show Segment Pre&views"
 msgstr "Näita segmentide eel&vaatlusi"
 
-#: rosegardengui.cpp:521
+#: rosegardengui.cpp:547
 #, fuzzy
 msgid "Show Se&gment and Instrument Parameters"
 msgstr "Näita &instrumentide parameetreid"
 
-#: rosegardengui.cpp:536
+#: rosegardengui.cpp:562
 msgid "Show Tip of the &Day"
 msgstr "Näita &päeva nõuandeid"
 
-#: rosegardengui.cpp:568 notationview.cpp:1351 matrixview.cpp:477
+#: rosegardengui.cpp:594 notationview.cpp:1350 matrixview.cpp:506
 msgid "&Select"
 msgstr "&Vali"
 
-#: rosegardengui.cpp:574 notationview.cpp:1345 editcommands.h:221
-#: matrixview.cpp:487
+#: rosegardengui.cpp:600 notationview.cpp:1344 editcommands.h:221
+#: matrixview.cpp:516
 msgid "&Erase"
 msgstr "&Kustuta"
 
-#: rosegardengui.cpp:579 matrixview.cpp:482
+#: rosegardengui.cpp:605 matrixview.cpp:511
 msgid "&Draw"
 msgstr "&Joonista"
 
-#: rosegardengui.cpp:584 matrixview.cpp:492
+#: rosegardengui.cpp:610 matrixview.cpp:521
 msgid "&Move"
 msgstr "&Liikumine"
 
-#: rosegardengui.cpp:590
+#: rosegardengui.cpp:616
 msgid "&Resize"
 msgstr "Muuda suu&rust"
 
-#: rosegardengui.cpp:596
+#: rosegardengui.cpp:622
 msgid "&Split"
 msgstr "&Tükelda"
 
-#: rosegardengui.cpp:608
+#: rosegardengui.cpp:634
 msgid "&Harmonize"
 msgstr ""
 
-#: rosegardengui.cpp:617
+#: rosegardengui.cpp:643
 #, fuzzy
 msgid "Open Tempo and Time Signature Editor"
 msgstr "Ava sündmuse redaktoris"
 
-#: rosegardengui.cpp:623 notationview.cpp:1383
+#: rosegardengui.cpp:649 notationview.cpp:1382
 msgid "De&lete"
 msgstr "&Kustuta"
 
-#: rosegardengui.cpp:627
+#: rosegardengui.cpp:653
 msgid "Select &All Segments"
 msgstr "V&ali kõik segmendid"
 
-#: rosegardengui.cpp:641
+#: rosegardengui.cpp:667
 #, fuzzy
 msgid "Edit Mar&kers..."
 msgstr "Redigeeri märgist"
 
-#: rosegardengui.cpp:645
+#: rosegardengui.cpp:671
 msgid "Edit Document P&roperties..."
 msgstr "&Redigeeri dokumendi omadusi..."
 
-#: rosegardengui.cpp:653
+#: rosegardengui.cpp:679
 msgid "Open in &Default Editor"
 msgstr "Ava vaikere&daktoris"
 
-#: rosegardengui.cpp:658 editviewbase.cpp:216
+#: rosegardengui.cpp:684 editviewbase.cpp:216
 msgid "Open in Matri&x Editor"
 msgstr "Ava maatri&ksredaktoris"
 
-#: rosegardengui.cpp:663 editviewbase.cpp:221
+#: rosegardengui.cpp:689 editviewbase.cpp:221
 msgid "Open in &Notation Editor"
 msgstr "Ava &noodikirja redaktoris"
 
-#: rosegardengui.cpp:668 editviewbase.cpp:226
+#: rosegardengui.cpp:694 editviewbase.cpp:226
 msgid "Open in &Event List Editor"
 msgstr "Ava sündmuste nim&ekirja redaktoris"
 
-#: rosegardengui.cpp:678 editcommands.cpp:847 editcommands.cpp:1050
+#: rosegardengui.cpp:704 editcommands.cpp:847 editcommands.cpp:1050
 msgid "&Quantize..."
 msgstr "&Kvandi..."
 
-#: rosegardengui.cpp:682 matrixview.cpp:519
+#: rosegardengui.cpp:708 matrixview.cpp:548
 msgid "Repeat Last Quantize"
 msgstr ""
 
-#: rosegardengui.cpp:706
+#: rosegardengui.cpp:732
 #, fuzzy
 msgid "Set Start Time..."
 msgstr "Käivitamine..."
 
-#: rosegardengui.cpp:710
+#: rosegardengui.cpp:736
 #, fuzzy
 msgid "Set Duration..."
 msgstr "Kestvus"
 
-#: rosegardengui.cpp:719
+#: rosegardengui.cpp:745
 msgid "Turn Re&peats into Copies"
 msgstr "Muuda kordused koo&piateks"
 
-#: rosegardengui.cpp:724
+#: rosegardengui.cpp:750
 #, fuzzy
 msgid "Manage Tri&ggered Segments"
 msgstr "A&udiosegmentide manageerimine"
 
-#: rosegardengui.cpp:728
+#: rosegardengui.cpp:754
 msgid "Set Tempos from &Beat Segment"
 msgstr ""
 
-#: rosegardengui.cpp:732
+#: rosegardengui.cpp:758
 msgid "Set &Tempo to Audio Segment Duration"
 msgstr ""
 
-#: rosegardengui.cpp:737
+#: rosegardengui.cpp:763
 msgid "Manage A&udio Segments"
 msgstr "A&udiosegmentide manageerimine"
 
-#: rosegardengui.cpp:747
+#: rosegardengui.cpp:773
 #, fuzzy
 msgid "Add &Track"
 msgstr "Lisa rajad..."
 
-#: rosegardengui.cpp:751
+#: rosegardengui.cpp:777
 msgid "&Add Tracks..."
 msgstr "Lis&a rajad..."
 
-#: rosegardengui.cpp:756
+#: rosegardengui.cpp:782
 #, fuzzy
 msgid "D&elete Track"
 msgstr "&Kustuta rada"
 
-#: rosegardengui.cpp:761
+#: rosegardengui.cpp:787
 msgid "Move Track &Down"
 msgstr "Liiguta ra&da alla"
 
-#: rosegardengui.cpp:766
+#: rosegardengui.cpp:792
 msgid "Move Track &Up"
 msgstr "Liig&uta rada üles"
 
-#: rosegardengui.cpp:770
+#: rosegardengui.cpp:796
 msgid "Select &Next Track"
 msgstr "&Vali uus rada"
 
-#: rosegardengui.cpp:775
+#: rosegardengui.cpp:801
 msgid "Select &Previous Track"
 msgstr "Vali eelmine &rada"
 
-#: rosegardengui.cpp:781
+#: rosegardengui.cpp:807
 #, fuzzy
 msgid "&Mute all Tracks"
 msgstr "&Kustuta rada"
 
-#: rosegardengui.cpp:786
+#: rosegardengui.cpp:812
 msgid "&Unmute all Tracks"
 msgstr ""
 
-#: rosegardengui.cpp:790
+#: rosegardengui.cpp:816
 msgid "&Remap Instruments..."
 msgstr ""
 
-#: rosegardengui.cpp:798
+#: rosegardengui.cpp:824
 #, fuzzy
 msgid "&Audio Mixer"
 msgstr "Lisa audiofail"
 
-#: rosegardengui.cpp:803
+#: rosegardengui.cpp:829
 msgid "Midi Mi&xer"
 msgstr ""
 
-#: rosegardengui.cpp:808
+#: rosegardengui.cpp:834
 #, fuzzy
 msgid "Manage MIDI &Devices"
 msgstr "MIDI seadmete haldamine"
 
-#: rosegardengui.cpp:813
+#: rosegardengui.cpp:839
 msgid "Manage S&ynth Plugins"
 msgstr ""
 
-#: rosegardengui.cpp:817
+#: rosegardengui.cpp:843
 #, fuzzy
 msgid "Modify MIDI &Filters"
 msgstr "MIDI &filtrite muutmine..."
 
-#: rosegardengui.cpp:822
+#: rosegardengui.cpp:848
 #, fuzzy
 msgid "Manage &Metronome"
 msgstr "&Metronoomi haldamine..."
 
-#: rosegardengui.cpp:826
+#: rosegardengui.cpp:852
 msgid "&Save Current Document as Default Studio"
 msgstr "&Salvesta aktiivne dokument vaikestuudioks"
 
-#: rosegardengui.cpp:830
+#: rosegardengui.cpp:856
 msgid "&Import Default Studio"
 msgstr "&Impordi vaikestuudio"
 
-#: rosegardengui.cpp:834
+#: rosegardengui.cpp:860
 #, fuzzy
 msgid "Im&port Studio from File..."
 msgstr "&Impordi stuudio failist..."
 
-#: rosegardengui.cpp:838
+#: rosegardengui.cpp:864
 msgid "&Reset MIDI Network"
 msgstr ""
 
-#: rosegardengui.cpp:853 notationview.cpp:1896 mixer.cpp:96 mixer.cpp:1450
-#: matrixview.cpp:621
+#: rosegardengui.cpp:879 notationview.cpp:1895 mixer.cpp:96 mixer.cpp:1450
+#: matrixview.cpp:650
 msgid "&Play"
 msgstr "&Mahamängimine"
 
-#: rosegardengui.cpp:859 notationview.cpp:1901 mixer.cpp:101 mixer.cpp:1455
-#: matrixview.cpp:626
+#: rosegardengui.cpp:885 notationview.cpp:1900 mixer.cpp:101 mixer.cpp:1455
+#: matrixview.cpp:655
 msgid "&Stop"
 msgstr "&Stopp"
 
-#: rosegardengui.cpp:865 notationview.cpp:1912 mixer.cpp:112 mixer.cpp:1466
-#: matrixview.cpp:637
+#: rosegardengui.cpp:891 notationview.cpp:1911 mixer.cpp:112 mixer.cpp:1466
+#: matrixview.cpp:666
 msgid "&Fast Forward"
 msgstr "Keri &edasi"
 
-#: rosegardengui.cpp:872 notationview.cpp:1906 mixer.cpp:106 mixer.cpp:1460
-#: matrixview.cpp:631
+#: rosegardengui.cpp:898 notationview.cpp:1905 mixer.cpp:106 mixer.cpp:1460
+#: matrixview.cpp:660
 msgid "Re&wind"
 msgstr "&Keri tagasi"
 
-#: rosegardengui.cpp:878
+#: rosegardengui.cpp:904
 msgid "P&unch in Record"
 msgstr ""
 
-#: rosegardengui.cpp:884 mixer.cpp:130 mixer.cpp:1484
+#: rosegardengui.cpp:910 mixer.cpp:130 mixer.cpp:1484
 msgid "&Record"
 msgstr "Sa&lvestus"
 
-#: rosegardengui.cpp:890 notationview.cpp:1918 mixer.cpp:118 mixer.cpp:1472
-#: matrixview.cpp:643
+#: rosegardengui.cpp:916 notationview.cpp:1917 mixer.cpp:118 mixer.cpp:1472
+#: matrixview.cpp:672
 msgid "Rewind to &Beginning"
 msgstr "Keri tagasi &algusesse"
 
-#: rosegardengui.cpp:896 notationview.cpp:1924 mixer.cpp:124 mixer.cpp:1478
-#: matrixview.cpp:649
+#: rosegardengui.cpp:922 notationview.cpp:1923 mixer.cpp:124 mixer.cpp:1478
+#: matrixview.cpp:678
 msgid "Fast Forward to &End"
 msgstr "Keri &edasi lõppu"
 
-#: rosegardengui.cpp:902 notationview.cpp:1942 matrixview.cpp:667
+#: rosegardengui.cpp:928 notationview.cpp:1941 matrixview.cpp:696
 msgid "Scro&ll to Follow Playback"
 msgstr ""
 
-#: rosegardengui.cpp:995
+#: rosegardengui.cpp:1021
 msgid "  Zoom:  "
 msgstr "  Suurendus:  "
 
-#: rosegardengui.cpp:1029 notationview.cpp:2425 notationview.cpp:3138
+#: rosegardengui.cpp:1055 notationview.cpp:2424 notationview.cpp:3141
 msgid "  Ready."
 msgstr "  Valmis."
 
-#: rosegardengui.cpp:1363
+#: rosegardengui.cpp:1389
 msgid "File \"%1\" does not exist"
 msgstr "Faili \"%1\" ei eksisteeri"
 
-#: rosegardengui.cpp:1369
+#: rosegardengui.cpp:1395
 msgid "File \"%1\" is actually a directory"
 msgstr "Fail \"%1\" on tegelikult kataloog"
 
-#: rosegardengui.cpp:1378
+#: rosegardengui.cpp:1404
 msgid "You do not have read permission for \"%1\""
 msgstr ""
 
-#: rosegardengui.cpp:1447
+#: rosegardengui.cpp:1473
 msgid ""
 "An auto-save file for this document has been found\n"
 "Do you want to open it instead ?"
 msgstr ""
 
-#: rosegardengui.cpp:1706
+#: rosegardengui.cpp:1732
 msgid "Opening a new application window..."
 msgstr "Uue rakenduse akna avamine..."
 
-#: rosegardengui.cpp:1716
+#: rosegardengui.cpp:1742
 msgid "Creating new document..."
 msgstr "Uue dokumendi loomine..."
 
-#: rosegardengui.cpp:1759
+#: rosegardengui.cpp:1785
 msgid ""
 "Malformed URL\n"
 "%1"
@@ -3135,152 +3145,152 @@ msgstr ""
 "Vigane URL\n"
 "%1"
 
-#: rosegardengui.cpp:1768 rosegardengui.cpp:1825 rosegardengui.cpp:6187
+#: rosegardengui.cpp:1794 rosegardengui.cpp:1871 rosegardengui.cpp:6218
 #: importdevicedialog.cpp:67 audiomanagerdialog.cpp:1101
 msgid "Cannot download file %1"
 msgstr ""
 
-#: rosegardengui.cpp:1784 rosegardengui.cpp:1837
+#: rosegardengui.cpp:1810 rosegardengui.cpp:1883
 msgid "Opening file..."
 msgstr "Faili avamine..."
 
-#: rosegardengui.cpp:1794 rosegardengui.cpp:1818
+#: rosegardengui.cpp:1837 rosegardengui.cpp:1864
 msgid "Open File"
 msgstr "Faili avamine"
 
-#: rosegardengui.cpp:1854 rosegardenguidoc.cpp:888
+#: rosegardengui.cpp:1900 rosegardenguidoc.cpp:888
 msgid "Saving file..."
 msgstr "Faili salvestamine..."
 
-#: rosegardengui.cpp:1915
+#: rosegardengui.cpp:1961
 msgid "This is not a valid filename.\n"
 msgstr "See ei ole korrektne faili nimi.\n"
 
-#: rosegardengui.cpp:1920
+#: rosegardengui.cpp:1966
 msgid "This is not a local file.\n"
 msgstr "See ei ole kohalik fail.\n"
 
-#: rosegardengui.cpp:1946
+#: rosegardengui.cpp:1992
 msgid "Saving file with a new filename..."
 msgstr "Faili salvestamine uue nimega..."
 
-#: rosegardengui.cpp:1948
+#: rosegardengui.cpp:1994
 msgid "Rosegarden-4 files"
 msgstr "Rosegarden-4 failid"
 
-#: rosegardengui.cpp:1949 rosegardengui.cpp:3842 rosegardengui.cpp:3880
-#: rosegardengui.cpp:3912 rosegardengui.cpp:3945 rosegardengui.cpp:3982
+#: rosegardengui.cpp:1995 rosegardengui.cpp:3888 rosegardengui.cpp:3926
+#: rosegardengui.cpp:3958 rosegardengui.cpp:3991 rosegardengui.cpp:4028
 msgid "All files"
 msgstr "Kõik failid"
 
-#: rosegardengui.cpp:1950
+#: rosegardengui.cpp:1996
 msgid "Save as..."
 msgstr "Salvesta kui..."
 
-#: rosegardengui.cpp:1970
+#: rosegardengui.cpp:2016
 msgid "Closing file..."
 msgstr "Faili sulgemine..."
 
-#: rosegardengui.cpp:1987 notationviewslots.cpp:398
+#: rosegardengui.cpp:2033 notationviewslots.cpp:398
 msgid "Printing..."
 msgstr "Trükkimine..."
 
-#: rosegardengui.cpp:1999 notationviewslots.cpp:415
+#: rosegardengui.cpp:2045 notationviewslots.cpp:415
 msgid "Previewing..."
 msgstr "Eelvaatlus..."
 
-#: rosegardengui.cpp:2006
+#: rosegardengui.cpp:2052
 msgid "Exiting..."
 msgstr "Väljumine..."
 
-#: rosegardengui.cpp:2028
+#: rosegardengui.cpp:2074
 msgid "Cutting selection..."
 msgstr "Valiku lõikamine..."
 
-#: rosegardengui.cpp:2038 notationviewslots.cpp:453 matrixview.cpp:1365
+#: rosegardengui.cpp:2084 notationviewslots.cpp:453 matrixview.cpp:1405
 msgid "Copying selection to clipboard..."
 msgstr "Valiku kopeerimine lõikepuhvrisse..."
 
-#: rosegardengui.cpp:2126
+#: rosegardengui.cpp:2172
 msgid "This function needs no more than one segment to be selected."
 msgstr ""
 
-#: rosegardengui.cpp:2147
+#: rosegardengui.cpp:2193
 msgid "Can't join Audio segments"
 msgstr "Audiosegmente ei saa ühendada"
 
-#: rosegardengui.cpp:2249
+#: rosegardengui.cpp:2295
 #, fuzzy
 msgid "Jog Selection"
 msgstr "Puhasta valik"
 
-#: rosegardengui.cpp:2310 editviewbase.cpp:645
+#: rosegardengui.cpp:2356 editviewbase.cpp:646
 #, fuzzy
 msgid "Segment Start Time"
 msgstr "Segmendi parameetrid"
 
-#: rosegardengui.cpp:2320
+#: rosegardengui.cpp:2366
 #, fuzzy
 msgid "Set Segment Start Times"
 msgstr "Näita &segmentide parameetreid"
 
-#: rosegardengui.cpp:2321 editviewbase.cpp:652
+#: rosegardengui.cpp:2367 editviewbase.cpp:653
 #, fuzzy
 msgid "Set Segment Start Time"
 msgstr "Näita &segmentide parameetreid"
 
-#: rosegardengui.cpp:2352 editviewbase.cpp:670
+#: rosegardengui.cpp:2398 editviewbase.cpp:671
 #, fuzzy
 msgid "Segment Duration"
 msgstr "Kestvus"
 
-#: rosegardengui.cpp:2363
+#: rosegardengui.cpp:2409
 #, fuzzy
 msgid "Set Segment Durations"
 msgstr "Näita &segmentide parameetreid"
 
-#: rosegardengui.cpp:2364 editviewbase.cpp:678
+#: rosegardengui.cpp:2410 editviewbase.cpp:679
 #, fuzzy
 msgid "Set Segment Duration"
 msgstr "Noodivar&te suund"
 
-#: rosegardengui.cpp:2461 rosegardengui.cpp:4710
+#: rosegardengui.cpp:2507 rosegardengui.cpp:4756
 msgid "Set Global Tempo"
 msgstr "Globaalse tempo seadmine"
 
-#: rosegardengui.cpp:2513 editviewbase.cpp:487
+#: rosegardengui.cpp:2559 editviewbase.cpp:487
 msgid "Toggle the toolbar..."
 msgstr ""
 
-#: rosegardengui.cpp:2523
+#: rosegardengui.cpp:2569
 msgid "Toggle the tools toolbar..."
 msgstr ""
 
-#: rosegardengui.cpp:2533
+#: rosegardengui.cpp:2579
 msgid "Toggle the tracks toolbar..."
 msgstr ""
 
-#: rosegardengui.cpp:2544
+#: rosegardengui.cpp:2590
 msgid "Toggle the editor toolbar..."
 msgstr ""
 
-#: rosegardengui.cpp:2554
+#: rosegardengui.cpp:2600
 msgid "Toggle the transport toolbar..."
 msgstr ""
 
-#: rosegardengui.cpp:2564
+#: rosegardengui.cpp:2610
 msgid "Toggle the zoom toolbar..."
 msgstr ""
 
-#: rosegardengui.cpp:2574
+#: rosegardengui.cpp:2620
 msgid "Toggle the Transport"
 msgstr ""
 
-#: rosegardengui.cpp:2686 editviewbase.cpp:497
+#: rosegardengui.cpp:2732 editviewbase.cpp:497
 msgid "Toggle the statusbar..."
 msgstr "Olekuriba lülitamine..."
 
-#: rosegardengui.cpp:2745
+#: rosegardengui.cpp:2791
 msgid ""
 "The join tool isn't implemented yet.  Instead please highlight the segments "
 "you want to join and then use the menu option:\n"
@@ -3288,43 +3298,43 @@ msgid ""
 "        Segments->Collapse Segments.\n"
 msgstr ""
 
-#: rosegardengui.cpp:2748
+#: rosegardengui.cpp:2794
 msgid "Join tool not yet implemented"
 msgstr "Ühendamine ei tööta veel"
 
-#: rosegardengui.cpp:2870
+#: rosegardengui.cpp:2916
 msgid "How many tracks do you want to add? (max. 24)"
 msgstr "Kui palju radasid sa soovid lisada? (maks. 24)"
 
-#: rosegardengui.cpp:2871
+#: rosegardengui.cpp:2917
 msgid "Tracks to add"
 msgstr "Lisatavate radade arv"
 
-#: rosegardengui.cpp:2998
+#: rosegardengui.cpp:3044
 msgid "Revert modified document to previous saved version?"
 msgstr ""
 
-#: rosegardengui.cpp:3016
+#: rosegardengui.cpp:3062
 msgid "Open MIDI File"
 msgstr "MIDI faili avamine"
 
-#: rosegardengui.cpp:3036
+#: rosegardengui.cpp:3082
 msgid "Merge MIDI File"
 msgstr "MIDI faili liitmine"
 
-#: rosegardengui.cpp:3061
+#: rosegardengui.cpp:3107
 msgid "Importing MIDI file..."
 msgstr "MIDI faili import..."
 
-#: rosegardengui.cpp:3096
+#: rosegardengui.cpp:3142
 msgid "Calculating notation..."
 msgstr ""
 
-#: rosegardengui.cpp:3143
+#: rosegardengui.cpp:3189
 msgid "Calculate Notation"
 msgstr ""
 
-#: rosegardengui.cpp:3188 rosegardengui.cpp:3208
+#: rosegardengui.cpp:3234 rosegardengui.cpp:3254
 msgid ""
 "*.rose|Rosegarden-2 files\n"
 "*|All files"
@@ -3332,19 +3342,19 @@ msgstr ""
 "*.rose|Rosegarden-2 failid\n"
 "*|Kõik failid"
 
-#: rosegardengui.cpp:3189 rosegardengui.cpp:3209
+#: rosegardengui.cpp:3235 rosegardengui.cpp:3255
 msgid "Open Rosegarden 2.1 File"
 msgstr "Rosegarden 2.1 faili avamine"
 
-#: rosegardengui.cpp:3224
+#: rosegardengui.cpp:3270
 msgid "Importing Rosegarden 2.1 file..."
 msgstr "Rosegarden 2.1 faili import..."
 
-#: rosegardengui.cpp:3250
+#: rosegardengui.cpp:3296
 msgid "Can't load Rosegarden 2.1 file.  It appears to be corrupted."
 msgstr "Rosegarden 2.1 faili ei õnnestu avada. See paistab olevat vigane."
 
-#: rosegardengui.cpp:3280 rosegardengui.cpp:3300
+#: rosegardengui.cpp:3326 rosegardengui.cpp:3346
 #, fuzzy
 msgid ""
 "*.h2song|Hydrogen files\n"
@@ -3353,38 +3363,38 @@ msgstr ""
 "*.rg|Rosegarden-4 failid\n"
 "*|Kõik failid"
 
-#: rosegardengui.cpp:3281 rosegardengui.cpp:3301
+#: rosegardengui.cpp:3327 rosegardengui.cpp:3347
 #, fuzzy
 msgid "Open Hydrogen File"
 msgstr "Rosegarden 2.1 faili avamine"
 
-#: rosegardengui.cpp:3316
+#: rosegardengui.cpp:3362
 #, fuzzy
 msgid "Importing Hydrogen file..."
 msgstr "Rosegarden 2.1 faili import..."
 
-#: rosegardengui.cpp:3342
+#: rosegardengui.cpp:3388
 #, fuzzy
 msgid "Can't load Hydrogen file.  It appears to be corrupted."
 msgstr "Rosegarden 2.1 faili ei õnnestu avada. See paistab olevat vigane."
 
-#: rosegardengui.cpp:3681
+#: rosegardengui.cpp:3727
 msgid "Starting the sequencer..."
 msgstr "Sekventseri käivitamine..."
 
-#: rosegardengui.cpp:3707
+#: rosegardengui.cpp:3753
 msgid "Couldn't start the sequencer"
 msgstr "Sekventserit ei õnnestunud käivitada"
 
-#: rosegardengui.cpp:3783
+#: rosegardengui.cpp:3829
 msgid "Clearing down jackd..."
 msgstr ""
 
-#: rosegardengui.cpp:3797
+#: rosegardengui.cpp:3843
 msgid "Starting jackd..."
 msgstr "Jackd käivitamine..."
 
-#: rosegardengui.cpp:3828
+#: rosegardengui.cpp:3874
 msgid ""
 "The Rosegarden sequencer could not be started, so sound and recording will "
 "be unavailable for this session.\n"
@@ -3392,188 +3402,212 @@ msgid ""
 "rosegardenmusic.com."
 msgstr ""
 
-#: rosegardengui.cpp:3838 rosegardengui.cpp:3852
+#: rosegardengui.cpp:3884 rosegardengui.cpp:3898
 msgid "Exporting MIDI file..."
 msgstr "MIDI faili eksport..."
 
-#: rosegardengui.cpp:3841
+#: rosegardengui.cpp:3887
 msgid "Standard MIDI files\n"
 msgstr "Standard MIDI failid\n"
 
-#: rosegardengui.cpp:3843 rosegardengui.cpp:3881 rosegardengui.cpp:3913
-#: rosegardengui.cpp:3946 rosegardengui.cpp:3982
+#: rosegardengui.cpp:3889 rosegardengui.cpp:3927 rosegardengui.cpp:3959
+#: rosegardengui.cpp:3992 rosegardengui.cpp:4028
 msgid "Export as..."
 msgstr "Eksport kui..."
 
-#: rosegardengui.cpp:3872 rosegardengui.cpp:3903 rosegardengui.cpp:3935
-#: rosegardengui.cpp:3972 rosegardengui.cpp:4005
+#: rosegardengui.cpp:3918 rosegardengui.cpp:3949 rosegardengui.cpp:3981
+#: rosegardengui.cpp:4018 rosegardengui.cpp:4051
 msgid "Export failed.  The file could not be opened for writing."
 msgstr "Eksport ebaõnnestus. Faili ei õnnestunud kirjutamiseks avada."
 
-#: rosegardengui.cpp:3878 rosegardengui.cpp:3889
+#: rosegardengui.cpp:3924 rosegardengui.cpp:3935
 msgid "Exporting Csound score file..."
 msgstr "Csound noodikirja faili eksport..."
 
-#: rosegardengui.cpp:3909 rosegardengui.cpp:3921
+#: rosegardengui.cpp:3955 rosegardengui.cpp:3967
 msgid "Exporting Mup file..."
 msgstr "Mup faili eksport..."
 
-#: rosegardengui.cpp:3912
+#: rosegardengui.cpp:3958
 msgid "Mup files\n"
 msgstr "Mup failid\n"
 
-#: rosegardengui.cpp:3941 rosegardengui.cpp:3958
+#: rosegardengui.cpp:3987 rosegardengui.cpp:4004
 msgid "Exporting Lilypond file..."
 msgstr "Lilypond faili eksport..."
 
-#: rosegardengui.cpp:3944
+#: rosegardengui.cpp:3990
 msgid "Lilypond files"
 msgstr "Lilypond failid"
 
-#: rosegardengui.cpp:3978 rosegardengui.cpp:3991
+#: rosegardengui.cpp:4024 rosegardengui.cpp:4037
 msgid "Exporting MusicXML file..."
 msgstr "MusicXML faili eksport..."
 
-#: rosegardengui.cpp:3981
+#: rosegardengui.cpp:4027
 msgid "XML files"
 msgstr "XML failid"
 
-#: rosegardengui.cpp:4635 matrixview.cpp:1960
+#: rosegardengui.cpp:4681 matrixview.cpp:2000
 #, c-format
 msgid "%1%"
 msgstr "%1%"
 
-#: rosegardengui.cpp:4693
+#: rosegardengui.cpp:4739
 msgid "Replace Tempo Change at %1"
 msgstr ""
 
-#: rosegardengui.cpp:4727
+#: rosegardengui.cpp:4773
 msgid "Set Global and Default Tempo"
 msgstr ""
 
-#: rosegardengui.cpp:5004
+#: rosegardengui.cpp:5050
 msgid "Sequencer failed to add audio file %1"
 msgstr ""
 
-#: rosegardengui.cpp:5033
+#: rosegardengui.cpp:5079
 msgid "Sequencer failed to remove audio file id %1"
 msgstr ""
 
-#: rosegardengui.cpp:5100
+#: rosegardengui.cpp:5140
 msgid "Relabelling selection..."
 msgstr ""
 
-#: rosegardengui.cpp:5959
+#: rosegardengui.cpp:5983
 #, fuzzy
 msgid "Play List"
 msgstr "Mängitakse "
 
-#: rosegardengui.cpp:6057
+#: rosegardengui.cpp:6011
+msgid "http://www.rosegardenmusic.com/resources/tutorial/using_en.shtml"
+msgstr ""
+
+#: rosegardengui.cpp:6088
 msgid "Queueing MIDI panic events for tranmission..."
 msgstr ""
 
-#: rosegardengui.cpp:6122
+#: rosegardengui.cpp:6153
 msgid "Are you sure you want to save this as your default studio?"
 msgstr "Oled sa kindel, et soovid salvestada selle oma vaikestuudioks?"
 
-#: rosegardengui.cpp:6126
+#: rosegardengui.cpp:6157
 msgid "Saving current document as default studio..."
 msgstr "Aktiivse dokumendi salvestamine vaikestuudioks..."
 
-#: rosegardengui.cpp:6141
+#: rosegardengui.cpp:6172
 msgid ""
 "Are you sure you want to import your default studio and lose the current one?"
 msgstr ""
 
-#: rosegardengui.cpp:6181
+#: rosegardengui.cpp:6212
 msgid "Import Studio from File"
 msgstr "Stuudio import failist"
 
-#: rosegardengui.cpp:6214
+#: rosegardengui.cpp:6245
 msgid "Import Studio"
 msgstr "Stuudio import"
 
-#: studiowidgets.cpp:802
+#: studiowidgets.cpp:824
 #, fuzzy
 msgid "In %1"
 msgstr "V&õta tagasi %1"
 
-#: studiowidgets.cpp:804 studiowidgets.cpp:826 mixer.cpp:567
+#: studiowidgets.cpp:826 studiowidgets.cpp:848 mixer.cpp:567
 #, fuzzy
 msgid "Master"
 msgstr "Maatriks"
 
-#: studiowidgets.cpp:806 studiowidgets.cpp:827 mixer.cpp:477
+#: studiowidgets.cpp:828 studiowidgets.cpp:849 mixer.cpp:477
 msgid "Sub %1"
 msgstr ""
 
-#: studiowidgets.cpp:812
+#: studiowidgets.cpp:834
 #, fuzzy
 msgid "In %1 R"
 msgstr "[ %1 ]"
 
-#: studiowidgets.cpp:813
+#: studiowidgets.cpp:835
 #, fuzzy
 msgid "In %1 L"
 msgstr "[ %1 ]"
 
-#: studiowidgets.cpp:815
+#: studiowidgets.cpp:837
 msgid "Master R"
 msgstr ""
 
-#: studiowidgets.cpp:816
+#: studiowidgets.cpp:838
 msgid "Master L"
 msgstr ""
 
-#: studiowidgets.cpp:818
+#: studiowidgets.cpp:840
 msgid "Sub %1 R"
 msgstr ""
 
-#: studiowidgets.cpp:819
+#: studiowidgets.cpp:841
 msgid "Sub %1 L"
 msgstr ""
 
-#: studiowidgets.cpp:970 audioplugindialog.cpp:295 mixer.cpp:668 mixer.cpp:821
-#: instrumentparameterbox.cpp:348 instrumentparameterbox.cpp:573
+#: studiowidgets.cpp:992 audioplugindialog.cpp:297 mixer.cpp:668 mixer.cpp:821
+#: instrumentparameterbox.cpp:351 instrumentparameterbox.cpp:582
 msgid "<no plugin>"
 msgstr "<plugin puudub>"
 
-#: studiowidgets.cpp:972 mixer.cpp:358
+#: studiowidgets.cpp:994 mixer.cpp:358
 msgid "Audio plugin button"
 msgstr ""
 
-#: studiowidgets.cpp:981 instrumentparameterbox.cpp:345
-#: instrumentparameterbox.cpp:569
+#: studiowidgets.cpp:1003 instrumentparameterbox.cpp:348
+#: instrumentparameterbox.cpp:578
 #, fuzzy
 msgid "<no synth>"
 msgstr "<sündmused puuduvad>"
 
-#: studiowidgets.cpp:982
+#: studiowidgets.cpp:1004
 #, fuzzy
 msgid "Synth plugin button"
 msgstr "Näita &annotatsioone"
 
-#: studiowidgets.cpp:1032
+#: studiowidgets.cpp:1045 audioplugindialog.cpp:88
+#, fuzzy
+msgid "Editor"
+msgstr "Redigeerimine"
+
+#: studiowidgets.cpp:1061
 msgid "Set the audio pan position in the stereo field"
 msgstr ""
 
-#: studiowidgets.cpp:1033
+#: studiowidgets.cpp:1062
+#, fuzzy
+msgid "Open synth plugin's native editor"
+msgstr "Ava maatri&ksredaktoris"
+
+#: studiowidgets.cpp:1063
 #, fuzzy
 msgid "Mono or Stereo Instrument"
 msgstr "Metronoomi instrument"
 
-#: studiowidgets.cpp:1034 mixer.cpp:318 mixer.cpp:319 mixer.cpp:467
+#: studiowidgets.cpp:1064
+#, fuzzy
+msgid "Record level"
+msgstr "Salvestavad seadmed"
+
+#: studiowidgets.cpp:1065
+#, fuzzy
+msgid "Playback level"
+msgstr "Mahamängivad seadmed"
+
+#: studiowidgets.cpp:1066 mixer.cpp:318 mixer.cpp:319 mixer.cpp:467
 #: mixer.cpp:468
 #, fuzzy
 msgid "Audio level"
 msgstr "Lisa audiofail"
 
-#: studiowidgets.cpp:1041
+#: studiowidgets.cpp:1073
 #, fuzzy
 msgid "In:"
 msgstr "Taktis:"
 
-#: studiowidgets.cpp:1044
+#: studiowidgets.cpp:1076
 msgid "Out:"
 msgstr ""
 
@@ -3899,27 +3933,27 @@ msgstr "Taasta a&rvutatud noodivarred"
 msgid "Set Visibility"
 msgstr ""
 
-#: rosegardenguiview.cpp:232
+#: rosegardenguiview.cpp:213
 msgid "No non-audio segments in composition"
 msgstr "Kompostsioonis pole mitte-audio segmente"
 
-#: rosegardenguiview.cpp:319
+#: rosegardenguiview.cpp:300
 msgid "Selection must contain only audio or non-audio segments"
 msgstr ""
 "Valik peab sisldama kas ainult audiosegmente või ainult mitte audiosegmente."
 
-#: rosegardenguiview.cpp:401 rosegardenguiview.cpp:519
-#: rosegardenguiview.cpp:627
+#: rosegardenguiview.cpp:382 rosegardenguiview.cpp:500
+#: rosegardenguiview.cpp:608
 msgid "No non-audio segments selected"
 msgstr "Ühtegi mitte-audio segmenti pole valitud"
 
-#: rosegardenguiview.cpp:715
+#: rosegardenguiview.cpp:696
 msgid ""
 "You've not yet defined an audio editor for Rosegarden to use.\n"
 "See Settings -> Configure Rosegarden -> General -> External Editors."
 msgstr ""
 
-#: rosegardenguiview.cpp:1382 rosegardenguiview.cpp:1386
+#: rosegardenguiview.cpp:1363 rosegardenguiview.cpp:1367
 msgid "Can't add dropped file. "
 msgstr "Kukutatud faili pole võimalik lisada."
 
@@ -3936,7 +3970,7 @@ msgstr "Nootide lisamisel..."
 msgid "Positioning staff %1..."
 msgstr ""
 
-#: notationstaff.cpp:1189 notationviewslots.cpp:1681
+#: notationstaff.cpp:1189 notationviewslots.cpp:1683
 msgid "Sustain"
 msgstr ""
 
@@ -3962,11 +3996,11 @@ msgstr "kust:"
 msgid "to:"
 msgstr "kuhu:"
 
-#: eventfilter.cpp:103 dialogs.cpp:1800
+#: eventfilter.cpp:103 dialogs.cpp:1817
 msgid "Velocity:"
 msgstr "Kiirus:"
 
-#: eventfilter.cpp:106 dialogs.cpp:1766 dialogs.cpp:1894
+#: eventfilter.cpp:106 dialogs.cpp:1783 dialogs.cpp:1911
 msgid "Duration:"
 msgstr "Kestvus:"
 
@@ -4063,20 +4097,20 @@ msgstr "Seg&mendid"
 msgid "Edit &With"
 msgstr "Sõnade redigeerimine"
 
-#: rc.cpp:6 rc.cpp:9 rc.cpp:32 rc.cpp:114 rc.cpp:117
+#: rc.cpp:6 rc.cpp:9 rc.cpp:32 rc.cpp:115 rc.cpp:118
 msgid "Actions Toolbar"
 msgstr "Tegevuste tööriistariba"
 
-#: rc.cpp:7 rc.cpp:12 rc.cpp:115 rc.cpp:120
+#: rc.cpp:7 rc.cpp:12 rc.cpp:116 rc.cpp:121
 #, fuzzy
 msgid "Time Toolbar"
 msgstr "Noodivõtmete tööriistariba"
 
-#: rc.cpp:8 rc.cpp:31 rc.cpp:37 rc.cpp:42 rc.cpp:81 rc.cpp:111 rc.cpp:116
+#: rc.cpp:8 rc.cpp:31 rc.cpp:37 rc.cpp:42 rc.cpp:81 rc.cpp:112 rc.cpp:117
 msgid "Transport Toolbar"
 msgstr "Transpordi tööriistariba"
 
-#: rc.cpp:10 rc.cpp:33 rc.cpp:112 rc.cpp:118
+#: rc.cpp:10 rc.cpp:33 rc.cpp:113 rc.cpp:119
 msgid "Zoom Toolbar"
 msgstr ""
 
@@ -4139,7 +4173,7 @@ msgstr "Noodivõtmete tööriistariba"
 msgid "&Rulers"
 msgstr "Näita &joonlaudu"
 
-#: rc.cpp:30 rc.cpp:80 rc.cpp:108
+#: rc.cpp:30 rc.cpp:80 rc.cpp:109
 msgid "Tools Toolbar"
 msgstr "Tööriistade tööriistariba"
 
@@ -4330,11 +4364,11 @@ msgstr "&Rajad"
 msgid "Set &Instrument"
 msgstr "Sea instrument"
 
-#: rc.cpp:109
+#: rc.cpp:110
 msgid "Tracks Toolbar"
 msgstr "Radade tööriistariba"
 
-#: rc.cpp:110
+#: rc.cpp:111
 msgid "Editors Toolbar"
 msgstr "Redaktori tööriistariba"
 
@@ -4408,361 +4442,361 @@ msgstr "<nimetu>"
 msgid "<no instrument>"
 msgstr "<instrument puudub>"
 
-#: notationview.cpp:622
+#: notationview.cpp:621
 msgid "Preparing to print..."
 msgstr "Ettevalmistus trükkimiseks..."
 
-#: notationview.cpp:1134
+#: notationview.cpp:1133
 msgid "Note &Font"
 msgstr "Noodikirja &font"
 
-#: notationview.cpp:1156
+#: notationview.cpp:1155
 msgid "Si&ze"
 msgstr "Suu&rus"
 
-#: notationview.cpp:1163
+#: notationview.cpp:1162
 msgid "S&pacing"
 msgstr "Sa&mm"
 
-#: notationview.cpp:1185
+#: notationview.cpp:1184
 #, fuzzy
 msgid "Du&ration Factor"
 msgstr "Kestvus  "
 
-#: notationview.cpp:1210
+#: notationview.cpp:1209
 msgid "Note &Style"
 msgstr "Nootikirja &stiil"
 
-#: notationview.cpp:1231 notationviewslots.cpp:1573 dialogs.cpp:4907
+#: notationview.cpp:1230 notationviewslots.cpp:1575 dialogs.cpp:4924
 msgid "Use Ornament"
 msgstr ""
 
-#: notationview.cpp:1236
+#: notationview.cpp:1235
 msgid "Insert Rest"
 msgstr "Lisa paus"
 
-#: notationview.cpp:1240
+#: notationview.cpp:1239
 msgid "Switch from Note to Rest"
 msgstr ""
 
-#: notationview.cpp:1245
+#: notationview.cpp:1244
 msgid "Switch from Rest to Note"
 msgstr ""
 
-#: notationview.cpp:1282
+#: notationview.cpp:1281
 msgid "No accidental"
 msgstr "Juhuslikud märgid puuduvad"
 
-#: notationview.cpp:1283
+#: notationview.cpp:1282
 msgid "Sharp"
 msgstr "Diees"
 
-#: notationview.cpp:1284
+#: notationview.cpp:1283
 msgid "Flat"
 msgstr "Bemoll"
 
-#: notationview.cpp:1285
+#: notationview.cpp:1284
 msgid "Natural"
 msgstr ""
 
-#: notationview.cpp:1286
+#: notationview.cpp:1285
 msgid "Double sharp"
 msgstr ""
 
-#: notationview.cpp:1287
+#: notationview.cpp:1286
 msgid "Double flat"
 msgstr ""
 
-#: notationview.cpp:1308
+#: notationview.cpp:1307
 msgid "&Treble Clef"
 msgstr "&Viiulivõti"
 
-#: notationview.cpp:1315
+#: notationview.cpp:1314
 msgid "Te&nor Clef"
 msgstr "Te&norivõti"
 
-#: notationview.cpp:1322
+#: notationview.cpp:1321
 msgid "&Alto Clef"
 msgstr "&Aldivõti"
 
-#: notationview.cpp:1329
+#: notationview.cpp:1328
 msgid "&Bass Clef"
 msgstr "&Bassivõti"
 
-#: notationview.cpp:1336
+#: notationview.cpp:1335
 msgid "&Text"
 msgstr "&Tekst"
 
-#: notationview.cpp:1357 matrixview.cpp:510
+#: notationview.cpp:1356 matrixview.cpp:539
 msgid "Ste&p Recording"
 msgstr "&Sammhaaval salvestamine"
 
-#: notationview.cpp:1363
+#: notationview.cpp:1362
 msgid "Select from Sta&rt"
 msgstr "Vali al&gusest"
 
-#: notationview.cpp:1367
+#: notationview.cpp:1366
 msgid "Select to &End"
 msgstr "Vali l&õpuni"
 
-#: notationview.cpp:1371
+#: notationview.cpp:1370
 msgid "Select Whole St&aff"
 msgstr "V&ali kogu lõik"
 
-#: notationview.cpp:1375 editcommands.h:79
+#: notationview.cpp:1374 editcommands.h:79
 msgid "C&ut and Close"
 msgstr "Lõika ja s&ulge"
 
-#: notationview.cpp:1379
+#: notationview.cpp:1378
 msgid "Pa&ste..."
 msgstr "A&seta..."
 
-#: notationview.cpp:1396
+#: notationview.cpp:1395
 msgid "&Linear Layout"
 msgstr "&Lineaarne paigutus"
 
-#: notationview.cpp:1403
+#: notationview.cpp:1402
 msgid "&Continuous Page Layout"
 msgstr "&Pideva leheküljega paigutus"
 
-#: notationview.cpp:1410
+#: notationview.cpp:1409
 msgid "&Multiple Page Layout"
 msgstr "&Mitme leheküljega paigutus"
 
-#: notationview.cpp:1415 matrixview.cpp:726
+#: notationview.cpp:1414 matrixview.cpp:755
 msgid "Show Ch&ord Name Ruler"
 msgstr ""
 
-#: notationview.cpp:1419
+#: notationview.cpp:1418
 msgid "Show Ra&w Note Ruler"
 msgstr ""
 
-#: notationview.cpp:1423 matrixview.cpp:730
+#: notationview.cpp:1422 matrixview.cpp:759
 msgid "Show &Tempo Ruler"
 msgstr ""
 
-#: notationview.cpp:1427
+#: notationview.cpp:1426
 msgid "Show &Annotations"
 msgstr "Näita &annotatsioone"
 
-#: notationview.cpp:1431
+#: notationview.cpp:1430
 msgid "Open L&yric Editor"
 msgstr "Ava s&õnade redaktor"
 
-#: notationview.cpp:1472
+#: notationview.cpp:1471
 msgid "Trip&let Insert Mode"
 msgstr "Trioo&li lisamise režiim"
 
-#: notationview.cpp:1478 matrixview.cpp:504
+#: notationview.cpp:1477 matrixview.cpp:533
 msgid "C&hord Insert Mode"
 msgstr "A&kordi lisamise režiim"
 
-#: notationview.cpp:1698
+#: notationview.cpp:1697
 msgid "&Dump selected events to stderr"
 msgstr "Valitud sündmused väljastatakse standardsesse veaväljundisse"
 
-#: notationview.cpp:1766
+#: notationview.cpp:1765
 #, fuzzy
 msgid "Ma&ke Ornament..."
 msgstr "Märgise nimi  "
 
-#: notationview.cpp:1770
+#: notationview.cpp:1769
 msgid "Trigger &Ornament..."
 msgstr ""
 
-#: notationview.cpp:1774
+#: notationview.cpp:1773
 #, fuzzy
 msgid "Remove Ornament..."
 msgstr "Kontrapunkti eemaldamine..."
 
-#: notationview.cpp:1779
+#: notationview.cpp:1778
 msgid "&None"
 msgstr "&Puudub"
 
-#: notationview.cpp:1807
+#: notationview.cpp:1806
 msgid "Show &Notes Toolbar"
 msgstr "Näita &nootide tööriistariba"
 
-#: notationview.cpp:1808
+#: notationview.cpp:1807
 msgid "Show &Rests Toolbar"
 msgstr "Näita &pauside tööriistariba"
 
-#: notationview.cpp:1809
+#: notationview.cpp:1808
 msgid "Show &Accidentals Toolbar"
 msgstr "Näita &juhuslike märkide tööristariba"
 
-#: notationview.cpp:1810
+#: notationview.cpp:1809
 msgid "Show Cle&fs Toolbar"
 msgstr "Näita v&õtmete tööristariba"
 
-#: notationview.cpp:1812
+#: notationview.cpp:1811
 msgid "Show &Marks Toolbar"
 msgstr ""
 
-#: notationview.cpp:1814
+#: notationview.cpp:1813
 msgid "Show &Group Toolbar"
 msgstr "Näita &grupeerimise tööriistariba"
 
-#: notationview.cpp:1816
+#: notationview.cpp:1815
 msgid "Show &Layout Toolbar"
 msgstr "Näita &paigutuse tööriistariba"
 
-#: notationview.cpp:1820
+#: notationview.cpp:1819
 msgid "Show M&eta Toolbar"
 msgstr "Näita m&eta tööriistariba"
 
-#: notationview.cpp:1834 matrixview.cpp:573
+#: notationview.cpp:1833 matrixview.cpp:602
 msgid "Cursor &Back"
 msgstr "Kursor &tagasi"
 
-#: notationview.cpp:1838 matrixview.cpp:577
+#: notationview.cpp:1837 matrixview.cpp:606
 msgid "Cursor &Forward"
 msgstr "Kursor &edasi"
 
-#: notationview.cpp:1842 matrixview.cpp:581
+#: notationview.cpp:1841 matrixview.cpp:610
 msgid "Cursor Ba&ck Bar"
 msgstr "Kursor takti &võrra tagasi"
 
-#: notationview.cpp:1846 matrixview.cpp:585
+#: notationview.cpp:1845 matrixview.cpp:614
 msgid "Cursor For&ward Bar"
 msgstr "Kursor takti v&õrra edasi"
 
-#: notationview.cpp:1850 matrixview.cpp:589
+#: notationview.cpp:1849 matrixview.cpp:618
 msgid "Cursor Back and Se&lect"
 msgstr "Kursor tagasi ja va&limine"
 
-#: notationview.cpp:1854 matrixview.cpp:593
+#: notationview.cpp:1853 matrixview.cpp:622
 msgid "Cursor Forward and &Select"
 msgstr "Kursor eda&si ja valimine"
 
-#: notationview.cpp:1858 matrixview.cpp:597
+#: notationview.cpp:1857 matrixview.cpp:626
 msgid "Cursor Back Bar and Select"
 msgstr "Kursor takti võrra tagasi ja valimine"
 
-#: notationview.cpp:1862 matrixview.cpp:601
+#: notationview.cpp:1861 matrixview.cpp:630
 msgid "Cursor Forward Bar and Select"
 msgstr "Kursor takti võrra edasi ja valimine"
 
-#: notationview.cpp:1872 matrixview.cpp:605
+#: notationview.cpp:1871 matrixview.cpp:634
 msgid "Cursor to St&art"
 msgstr "Kursor &algusesse"
 
-#: notationview.cpp:1876 matrixview.cpp:609
+#: notationview.cpp:1875 matrixview.cpp:638
 msgid "Cursor to &End"
 msgstr "Kursor &lõppu"
 
-#: notationview.cpp:1880
+#: notationview.cpp:1879
 msgid "Cursor &Up Staff"
 msgstr ""
 
-#: notationview.cpp:1884
+#: notationview.cpp:1883
 msgid "Cursor &Down Staff"
 msgstr ""
 
-#: notationview.cpp:1890 matrixview.cpp:615
+#: notationview.cpp:1889 matrixview.cpp:644
 msgid "Cursor to &Playback Pointer"
 msgstr "Kursor &mahamängimise kursori juurde"
 
-#: notationview.cpp:1930 matrixview.cpp:655
+#: notationview.cpp:1929 matrixview.cpp:684
 msgid "Playback Pointer to &Cursor"
 msgstr "Mahamängimise kursor &kursori juurde"
 
-#: notationview.cpp:1936 matrixview.cpp:661
+#: notationview.cpp:1935 matrixview.cpp:690
 msgid "&Solo"
 msgstr "&Soolo"
 
-#: notationview.cpp:1946 matrixview.cpp:671
+#: notationview.cpp:1945 matrixview.cpp:700
 msgid "Set Loop to Selection"
 msgstr "Korduse seadmine valikule"
 
-#: notationview.cpp:1950 matrixview.cpp:675
+#: notationview.cpp:1949 matrixview.cpp:704
 msgid "Clear L&oop"
 msgstr "Kustuta k&ordus"
 
-#: notationview.cpp:1965
+#: notationview.cpp:1964
 msgid "Push &Left"
 msgstr ""
 
-#: notationview.cpp:1969
+#: notationview.cpp:1968
 msgid "Push &Right"
 msgstr ""
 
-#: notationview.cpp:1973
+#: notationview.cpp:1972
 msgid "Push &Up"
 msgstr ""
 
-#: notationview.cpp:1977
+#: notationview.cpp:1976
 #, fuzzy
 msgid "Push &Down"
 msgstr "Noodivarred &alla"
 
-#: notationview.cpp:1981
+#: notationview.cpp:1980
 #, fuzzy
 msgid "Restore &Computed Positions"
 msgstr "Taasta a&rvutatud noodivarred"
 
-#: notationview.cpp:1985
+#: notationview.cpp:1984
 msgid "Make &Invisible"
 msgstr ""
 
-#: notationview.cpp:1989
+#: notationview.cpp:1988
 msgid "Make &Visible"
 msgstr ""
 
-#: notationview.cpp:2041
+#: notationview.cpp:2040
 msgid "%1 pixel"
 msgstr "%1 piksel"
 
-#: notationview.cpp:2042
+#: notationview.cpp:2041
 msgid "%1 pixels"
 msgstr "%1 pikslit"
 
-#: notationview.cpp:2074
+#: notationview.cpp:2073
 msgid "  Font:  "
 msgstr "  Font:  "
 
-#: notationview.cpp:2101
+#: notationview.cpp:2100
 msgid "Unknown font \"%1\", using default"
 msgstr "Tundmatu font \"%1\", kasutatakse vaikeväärtust"
 
-#: notationview.cpp:2109
+#: notationview.cpp:2108
 msgid "  Size:  "
 msgstr "  Suurus:  "
 
-#: notationview.cpp:2131
+#: notationview.cpp:2130
 msgid "  Spacing:  "
 msgstr "  Samm:  "
 
-#: notationview.cpp:2430
+#: notationview.cpp:2429
 msgid "Laying out score..."
 msgstr ""
 
-#: notationview.cpp:2442
+#: notationview.cpp:2441
 msgid "Laying out staff %1..."
 msgstr ""
 
-#: notationview.cpp:2451
+#: notationview.cpp:2450
 msgid "Reconciling staffs..."
 msgstr ""
 
-#: notationview.cpp:2661 matrixview.cpp:998
+#: notationview.cpp:2660 matrixview.cpp:1038
 #, fuzzy
 msgid "  1 event selected "
 msgstr "  %1 sündmus%2 valitud "
 
-#: notationview.cpp:2664 matrixview.cpp:1001
+#: notationview.cpp:2663 matrixview.cpp:1041
 msgid "  No selection "
 msgstr "  Valik puudub "
 
-#: notationview.cpp:3204
+#: notationview.cpp:3207
 msgid "Sizing and allocating canvas..."
 msgstr ""
 
-#: notationview.cpp:3350
+#: notationview.cpp:3353
 msgid "note"
 msgstr "noot"
 
-#: notationview.cpp:3350
+#: notationview.cpp:3353
 msgid "rest"
 msgstr "paus"
 
@@ -4938,7 +4972,7 @@ msgstr ""
 msgid "%1 (rescaled)"
 msgstr ""
 
-#: segmentcommands.cpp:2028 dialogs.cpp:4039
+#: segmentcommands.cpp:2028 dialogs.cpp:4056
 msgid "Split by Pitch"
 msgstr "Tükeldamine helikõrguse järgi"
 
@@ -5013,15 +5047,15 @@ msgstr "Noodivar&te suund"
 msgid "Insert Note"
 msgstr "Noodi lisamine"
 
-#: matrixcommands.cpp:63
+#: matrixcommands.cpp:67
 msgid "Erase Note"
 msgstr "Kustuta noot"
 
-#: matrixcommands.cpp:96
+#: matrixcommands.cpp:100
 msgid "Move Note"
 msgstr "Liiguta nooti"
 
-#: matrixcommands.cpp:96
+#: matrixcommands.cpp:100
 msgid "Modify Note"
 msgstr "Muuda nooti"
 
@@ -5095,7 +5129,7 @@ msgstr "Audiofaili valimine"
 msgid " Triplet Chord"
 msgstr ""
 
-#: notationviewslots.cpp:77 matrixview.cpp:2450
+#: notationviewslots.cpp:77 matrixview.cpp:2490
 msgid " Chord"
 msgstr ""
 
@@ -5127,11 +5161,11 @@ msgstr ""
 msgid "Unknown font size action %1"
 msgstr ""
 
-#: notationviewslots.cpp:436 notationviewslots.cpp:462 matrixview.cpp:1356
+#: notationviewslots.cpp:436 notationviewslots.cpp:462 matrixview.cpp:1396
 msgid "Cutting selection to clipboard..."
 msgstr "Valiku lõikamine lõikepuhvrisse..."
 
-#: notationviewslots.cpp:445 matrixview.cpp:1396
+#: notationviewslots.cpp:445 matrixview.cpp:1436
 msgid "Deleting selection..."
 msgstr "Valiku kustutamine..."
 
@@ -5152,273 +5186,273 @@ msgstr ""
 msgid "Can't paste multiple Segments into one"
 msgstr "Mitut segmenti ei saa ühte asetada"
 
-#: notationviewslots.cpp:517 notationviewslots.cpp:567
+#: notationviewslots.cpp:517 notationviewslots.cpp:568
 msgid "Couldn't paste at this point."
 msgstr "Sellesse kohta ei saa asetada."
 
-#: notationviewslots.cpp:668
+#: notationviewslots.cpp:670
 #, fuzzy
 msgid "Pushing selection left..."
 msgstr "Valiku lõikamine..."
 
-#: notationviewslots.cpp:678
+#: notationviewslots.cpp:680
 #, fuzzy
 msgid "Pushing selection right..."
 msgstr "Valiku lõikamine..."
 
-#: notationviewslots.cpp:688
+#: notationviewslots.cpp:690
 #, fuzzy
 msgid "Pushing selection up..."
 msgstr "Valiku lõikamine..."
 
-#: notationviewslots.cpp:698
+#: notationviewslots.cpp:700
 #, fuzzy
 msgid "Pushing selection down..."
 msgstr "Valiku lõikamine..."
 
-#: notationviewslots.cpp:708
+#: notationviewslots.cpp:710
 #, fuzzy
 msgid "Restoring computed positions..."
 msgstr "Noodivarte arvutatud suuna taastamine..."
 
-#: notationviewslots.cpp:716
+#: notationviewslots.cpp:718
 #, fuzzy
 msgid "Making visible..."
 msgstr "Akordi loomine..."
 
-#: notationviewslots.cpp:724
+#: notationviewslots.cpp:726
 #, fuzzy
 msgid "Making invisible..."
 msgstr "Akordi loomine..."
 
-#: notationviewslots.cpp:814
+#: notationviewslots.cpp:816
 msgid "Beaming group..."
 msgstr ""
 
-#: notationviewslots.cpp:823
+#: notationviewslots.cpp:825
 msgid "Auto-beaming selection..."
 msgstr ""
 
-#: notationviewslots.cpp:832
+#: notationviewslots.cpp:834
 msgid "Breaking groups..."
 msgstr ""
 
-#: notationviewslots.cpp:913
+#: notationviewslots.cpp:915
 msgid "Untupleting..."
 msgstr ""
 
-#: notationviewslots.cpp:922
+#: notationviewslots.cpp:924
 msgid "Making grace notes..."
 msgstr ""
 
-#: notationviewslots.cpp:930
+#: notationviewslots.cpp:932
 msgid "Making non-grace notes..."
 msgstr ""
 
-#: notationviewslots.cpp:942
+#: notationviewslots.cpp:944
 msgid "Adding slur..."
 msgstr ""
 
-#: notationviewslots.cpp:943
+#: notationviewslots.cpp:945
 msgid "slur"
 msgstr ""
 
-#: notationviewslots.cpp:948
+#: notationviewslots.cpp:950
 #, fuzzy
 msgid "Adding phrasing slur..."
 msgstr "Decrescendo lisamine..."
 
-#: notationviewslots.cpp:949
+#: notationviewslots.cpp:951
 msgid "phrasing slur"
 msgstr ""
 
-#: notationviewslots.cpp:954
+#: notationviewslots.cpp:956
 #, fuzzy
 msgid "Adding glissando..."
 msgstr "Crescendo lisamine..."
 
-#: notationviewslots.cpp:955
+#: notationviewslots.cpp:957
 #, fuzzy
 msgid "glissando"
 msgstr "Crescendo lisamine..."
 
-#: notationviewslots.cpp:960
+#: notationviewslots.cpp:962
 msgid "Adding crescendo..."
 msgstr "Crescendo lisamine..."
 
-#: notationviewslots.cpp:961 notationviewslots.cpp:967
+#: notationviewslots.cpp:963 notationviewslots.cpp:969
 #, fuzzy
 msgid "dynamic"
 msgstr "Dünaamiline"
 
-#: notationviewslots.cpp:966
+#: notationviewslots.cpp:968
 msgid "Adding decrescendo..."
 msgstr "Decrescendo lisamine..."
 
-#: notationviewslots.cpp:972 notationviewslots.cpp:978
-#: notationviewslots.cpp:984 notationviewslots.cpp:990
+#: notationviewslots.cpp:974 notationviewslots.cpp:980
+#: notationviewslots.cpp:986 notationviewslots.cpp:992
 #, fuzzy
 msgid "Adding octave..."
 msgstr "Crescendo lisamine..."
 
-#: notationviewslots.cpp:973 notationviewslots.cpp:979
-#: notationviewslots.cpp:985 notationviewslots.cpp:991
+#: notationviewslots.cpp:975 notationviewslots.cpp:981
+#: notationviewslots.cpp:987 notationviewslots.cpp:993
 msgid "ottava"
 msgstr ""
 
-#: notationviewslots.cpp:1006
+#: notationviewslots.cpp:1008
 msgid "Can't add overlapping %1 indications"
 msgstr ""
 
-#: notationviewslots.cpp:1014
+#: notationviewslots.cpp:1016
 msgid "Making chord..."
 msgstr "Akordi loomine..."
 
-#: notationviewslots.cpp:1030
+#: notationviewslots.cpp:1032
 msgid "Normalizing rests..."
 msgstr "Pauside normaliseerimine..."
 
-#: notationviewslots.cpp:1039
+#: notationviewslots.cpp:1041
 msgid "Collapsing rests..."
 msgstr "Pauside kokkutõmbamine..."
 
-#: notationviewslots.cpp:1048 matrixview.cpp:1128
+#: notationviewslots.cpp:1050 matrixview.cpp:1168
 msgid "Collapsing notes..."
 msgstr "Nootide kokkutõmbamine..."
 
-#: notationviewslots.cpp:1057
+#: notationviewslots.cpp:1059
 msgid "Tying notes..."
 msgstr ""
 
-#: notationviewslots.cpp:1066
+#: notationviewslots.cpp:1068
 msgid "Untying notes..."
 msgstr ""
 
-#: notationviewslots.cpp:1075
+#: notationviewslots.cpp:1077
 msgid "Making notes viable..."
 msgstr ""
 
-#: notationviewslots.cpp:1084
+#: notationviewslots.cpp:1086
 msgid "Removing counterpoint..."
 msgstr "Kontrapunkti eemaldamine..."
 
-#: notationviewslots.cpp:1093
+#: notationviewslots.cpp:1095
 msgid "Pointing stems up..."
 msgstr "Noodivarte üles suunamine..."
 
-#: notationviewslots.cpp:1102
+#: notationviewslots.cpp:1104
 msgid "Pointing stems down..."
 msgstr "Noodivarte alla suunamine..."
 
-#: notationviewslots.cpp:1112
+#: notationviewslots.cpp:1114
 msgid "Restoring computed stem directions..."
 msgstr "Noodivarte arvutatud suuna taastamine..."
 
-#: notationviewslots.cpp:1121 notationviewslots.cpp:1130
+#: notationviewslots.cpp:1123 notationviewslots.cpp:1132
 #, fuzzy
 msgid "Positioning slurs..."
 msgstr "Noodivarte üles suunamine..."
 
-#: notationviewslots.cpp:1140
+#: notationviewslots.cpp:1142
 #, fuzzy
 msgid "Restoring slur positions..."
 msgstr "Noodivarte arvutatud suuna taastamine..."
 
-#: notationviewslots.cpp:1149
+#: notationviewslots.cpp:1151
 msgid "Fixing notation quantization..."
 msgstr "Nootide kvantimise parandamine..."
 
-#: notationviewslots.cpp:1158
+#: notationviewslots.cpp:1160
 #, fuzzy
 msgid "Removing notation quantization..."
 msgstr "Nootide kvantimise parandamine..."
 
-#: notationviewslots.cpp:1174
+#: notationviewslots.cpp:1176
 msgid "Changing to %1 style..."
 msgstr "%1 stiili muutmine..."
 
-#: notationviewslots.cpp:1182
+#: notationviewslots.cpp:1184
 msgid "Unknown style action %1"
 msgstr ""
 
-#: notationviewslots.cpp:1195 notationviewslots.cpp:1264
+#: notationviewslots.cpp:1197 notationviewslots.cpp:1266
 msgid "No note duration selected"
 msgstr "Noodi pikkust pole valitud"
 
-#: notationviewslots.cpp:1214 matrixview.cpp:1547
+#: notationviewslots.cpp:1216 matrixview.cpp:1587
 msgid "Unknown note insert action %1"
 msgstr ""
 
-#: notationviewslots.cpp:1218 matrixview.cpp:1551 matrixview.cpp:2392
+#: notationviewslots.cpp:1220 matrixview.cpp:1591 matrixview.cpp:2432
 msgid "Inserting note"
 msgstr "Noodi lisamine"
 
-#: notationviewslots.cpp:1232 notationviewslots.cpp:1244
+#: notationviewslots.cpp:1234 notationviewslots.cpp:1246
 msgid "No rest duration selected"
 msgstr "Pausi pikkust pole valitud"
 
-#: notationviewslots.cpp:1283 notationviewslots.cpp:1293
-#: notationviewslots.cpp:1303 notationviewslots.cpp:1313
-#: notationviewslots.cpp:1323 notationviewslots.cpp:1333
-#: notationviewslots.cpp:1343
+#: notationviewslots.cpp:1285 notationviewslots.cpp:1295
+#: notationviewslots.cpp:1305 notationviewslots.cpp:1315
+#: notationviewslots.cpp:1325 notationviewslots.cpp:1335
+#: notationviewslots.cpp:1345
 msgid "Forcing accidentals..."
 msgstr ""
 
-#: notationviewslots.cpp:1353
+#: notationviewslots.cpp:1355
 msgid "Restoring accidentals..."
 msgstr ""
 
-#: notationviewslots.cpp:1363
+#: notationviewslots.cpp:1365
 msgid "Showing cautionary accidentals..."
 msgstr ""
 
-#: notationviewslots.cpp:1372
+#: notationviewslots.cpp:1374
 msgid "Cancelling cautionary accidentals..."
 msgstr ""
 
-#: notationviewslots.cpp:1386 matrixview.cpp:1106 matrixview.cpp:1119
-#: matrixview.cpp:1798
+#: notationviewslots.cpp:1388 matrixview.cpp:1146 matrixview.cpp:1159
+#: matrixview.cpp:1838
 msgid "Quantizing..."
 msgstr "Kvantimine..."
 
-#: notationviewslots.cpp:1400
+#: notationviewslots.cpp:1402
 msgid "Interpreting selection..."
 msgstr "Valiku interpreteerimine..."
 
-#: notationviewslots.cpp:1427
+#: notationviewslots.cpp:1429
 msgid "Text: "
 msgstr "Tekst: "
 
-#: notationviewslots.cpp:1441
+#: notationviewslots.cpp:1443
 msgid "Fingering: "
 msgstr ""
 
-#: notationviewslots.cpp:1535 dialogs.cpp:4877
+#: notationviewslots.cpp:1537 dialogs.cpp:4894
 #, fuzzy
 msgid "Make Ornament"
 msgstr "Märgise nimi  "
 
-#: notationviewslots.cpp:1582
+#: notationviewslots.cpp:1584
 #, fuzzy
 msgid "Remove Ornaments"
 msgstr "Eemalda kõik märgised"
 
-#: notationviewslots.cpp:1630
+#: notationviewslots.cpp:1632
 msgid "Estimated key signature shown"
 msgstr ""
 
-#: notationviewslots.cpp:1697
+#: notationviewslots.cpp:1699
 msgid ""
 "There is no sustain controller defined for this device.\n"
 "Please ensure the device is configured correctly in the Manage MIDI Devices "
 "dialog in the main window."
 msgstr ""
 
-#: notationviewslots.cpp:2517
+#: notationviewslots.cpp:2525
 msgid "Time: %1"
 msgstr "Aeg: %1"
 
-#: notationviewslots.cpp:2539
+#: notationviewslots.cpp:2547
 msgid "Can't insert note: No note duration selected"
 msgstr "Nooti pole võimalik lisada: noodi pikkust pole valitud"
 
@@ -5442,7 +5476,7 @@ msgstr "Märgise kirjeldus "
 msgid "Pointer position"
 msgstr "Kursori asukoht"
 
-#: markereditor.cpp:121 dialogs.cpp:1754 dialogs.cpp:1888
+#: markereditor.cpp:121 dialogs.cpp:1771 dialogs.cpp:1905
 msgid "Absolute time:"
 msgstr "Absoluutne aeg:"
 
@@ -5688,11 +5722,6 @@ msgstr ""
 msgid "Audio Plugin"
 msgstr ""
 
-#: audioplugindialog.cpp:88
-#, fuzzy
-msgid "Editor"
-msgstr "Redigeerimine"
-
 #: audioplugindialog.cpp:94
 #, fuzzy
 msgid "Plugin"
@@ -5702,86 +5731,92 @@ msgstr "Plugin"
 msgid "Category:"
 msgstr ""
 
-#: audioplugindialog.cpp:103
+#: audioplugindialog.cpp:104
 #, fuzzy
 msgid "Plugin:"
 msgstr "Plugin"
 
-#: audioplugindialog.cpp:105 audioplugindialog.cpp:302
+#: audioplugindialog.cpp:107 audioplugindialog.cpp:304
 msgid "Select a plugin from this list."
 msgstr ""
 
-#: audioplugindialog.cpp:110
+#: audioplugindialog.cpp:112
 #, fuzzy
 msgid "Bypass"
 msgstr "Läbiv"
 
-#: audioplugindialog.cpp:111
+#: audioplugindialog.cpp:113
 msgid "Bypass this plugin."
 msgstr ""
 
-#: audioplugindialog.cpp:117 audioplugindialog.cpp:296
+#: audioplugindialog.cpp:119 audioplugindialog.cpp:298
 msgid "<ports>"
 msgstr ""
 
-#: audioplugindialog.cpp:119
+#: audioplugindialog.cpp:121
 msgid "Input and output port counts."
 msgstr ""
 
-#: audioplugindialog.cpp:121 audioplugindialog.cpp:297
+#: audioplugindialog.cpp:123 audioplugindialog.cpp:299
 msgid "<id>"
 msgstr "<id>"
 
-#: audioplugindialog.cpp:123
+#: audioplugindialog.cpp:125
 msgid "Unique ID of plugin."
 msgstr ""
 
-#: audioplugindialog.cpp:136
+#: audioplugindialog.cpp:138
 #, fuzzy
 msgid "Copy plugin parameters"
 msgstr "Segmendi parameetrid"
 
-#: audioplugindialog.cpp:141
+#: audioplugindialog.cpp:143
 #, fuzzy
 msgid "Paste plugin parameters"
 msgstr "Instrumendi parameetrid"
 
-#: audioplugindialog.cpp:146
+#: audioplugindialog.cpp:148
 msgid "Set to defaults"
 msgstr ""
 
-#: audioplugindialog.cpp:188
+#: audioplugindialog.cpp:190
 msgid "(any)"
 msgstr ""
 
-#: audioplugindialog.cpp:189
+#: audioplugindialog.cpp:191
 #, fuzzy
 msgid "(unclassified)"
 msgstr "piiramatu"
 
-#: audioplugindialog.cpp:203
+#: audioplugindialog.cpp:205
 msgid "(none)"
 msgstr "(puudub)"
 
-#: audioplugindialog.cpp:332
+#: audioplugindialog.cpp:334
 #, fuzzy
 msgid "Program:  "
 msgstr "Programm"
 
-#: audioplugindialog.cpp:346
+#: audioplugindialog.cpp:337 audioplugindialog.cpp:438
+#: audioplugindialog.cpp:585
+#, fuzzy
+msgid "<none selected>"
+msgstr "<sündmused puuduvad>"
+
+#: audioplugindialog.cpp:350
 #, fuzzy
 msgid "Id: %1"
 msgstr "Lisa %1"
 
-#: audioplugindialog.cpp:404
+#: audioplugindialog.cpp:408
 msgid "mono"
 msgstr ""
 
-#: audioplugindialog.cpp:405
+#: audioplugindialog.cpp:409
 msgid "stereo"
 msgstr ""
 
-#: audioplugindialog.cpp:406
+#: audioplugindialog.cpp:410
 msgid "%1 in, %2 out"
 msgstr ""
 
@@ -6010,7 +6045,7 @@ msgstr ""
 msgid "Filter"
 msgstr "Sündmuste filter"
 
-#: tempoview.cpp:130 dialogs.cpp:1068 dialogs.cpp:2713
+#: tempoview.cpp:130 dialogs.cpp:1077 dialogs.cpp:2730
 msgid "Tempo"
 msgstr "Tempo"
 
@@ -6284,23 +6319,23 @@ msgstr "B%1"
 msgid "Instrument Parameters"
 msgstr "Instrumendi parameetrid"
 
-#: instrumentparameterbox.cpp:672
+#: instrumentparameterbox.cpp:681
 msgid "Bank"
 msgstr "Pank"
 
-#: instrumentparameterbox.cpp:673
+#: instrumentparameterbox.cpp:682
 msgid "Variation"
 msgstr "Variatsioon"
 
-#: instrumentparameterbox.cpp:674
+#: instrumentparameterbox.cpp:683
 msgid "Program"
 msgstr "Programm"
 
-#: instrumentparameterbox.cpp:675
+#: instrumentparameterbox.cpp:684
 msgid "Channel"
 msgstr "Kanal"
 
-#: instrumentparameterbox.cpp:787 instrumentparameterbox.cpp:793
+#: instrumentparameterbox.cpp:796 instrumentparameterbox.cpp:802
 msgid "[ %1 ]"
 msgstr "[ %1 ]"
 
@@ -6548,7 +6583,7 @@ msgstr "Üldine"
 msgid "Triangle"
 msgstr "Triool"
 
-#: eventcommands.cpp:35 dialogs.cpp:1702
+#: eventcommands.cpp:35 dialogs.cpp:1719
 msgid "Insert Event"
 msgstr "Lisa sündmus"
 
@@ -6580,172 +6615,172 @@ msgstr "Sekventser"
 msgid "Sequencer Settings"
 msgstr "Sekventseri seadistused"
 
-#: matrixview.cpp:297
+#: matrixview.cpp:326
 msgid "Couldn't apply piano roll layout"
 msgstr ""
 
-#: matrixview.cpp:498
+#: matrixview.cpp:527
 msgid "Resi&ze"
 msgstr "Muuda &suurust"
 
-#: matrixview.cpp:527
+#: matrixview.cpp:556
 #, fuzzy
 msgid "&Legato"
 msgstr "Legal"
 
-#: matrixview.cpp:531
+#: matrixview.cpp:560
 msgid "&Halve Speed"
 msgstr ""
 
-#: matrixview.cpp:535
+#: matrixview.cpp:564
 msgid "&Double Speed"
 msgstr ""
 
-#: matrixview.cpp:553
+#: matrixview.cpp:582
 msgid "Set Event &Velocities..."
 msgstr ""
 
-#: matrixview.cpp:557
+#: matrixview.cpp:586
 #, fuzzy
 msgid "Trigger Se&gment..."
 msgstr "Kustuta segment"
 
-#: matrixview.cpp:561
+#: matrixview.cpp:590
 #, fuzzy
 msgid "Remove Triggers..."
 msgstr "Eemalda &tempo muutus..."
 
-#: matrixview.cpp:689
+#: matrixview.cpp:718
 msgid "Snap to 1/64"
 msgstr ""
 
-#: matrixview.cpp:691
+#: matrixview.cpp:720
 msgid "Snap to 1/48"
 msgstr ""
 
-#: matrixview.cpp:693
+#: matrixview.cpp:722
 msgid "Snap to 1/32"
 msgstr ""
 
-#: matrixview.cpp:695
+#: matrixview.cpp:724
 msgid "Snap to 1/24"
 msgstr ""
 
-#: matrixview.cpp:697
+#: matrixview.cpp:726
 msgid "Snap to 1/16"
 msgstr ""
 
-#: matrixview.cpp:699
+#: matrixview.cpp:728
 msgid "Snap to 1/12"
 msgstr ""
 
-#: matrixview.cpp:701
+#: matrixview.cpp:730
 msgid "Snap to 1/8"
 msgstr ""
 
-#: matrixview.cpp:703
+#: matrixview.cpp:732
 msgid "Snap to 1/6"
 msgstr ""
 
-#: matrixview.cpp:705
+#: matrixview.cpp:734
 msgid "Snap to 1/4"
 msgstr ""
 
-#: matrixview.cpp:707
+#: matrixview.cpp:736
 msgid "Snap to 1/2"
 msgstr ""
 
-#: matrixview.cpp:709
+#: matrixview.cpp:738
 msgid "Snap to &Unit"
 msgstr ""
 
-#: matrixview.cpp:711
+#: matrixview.cpp:740
 msgid "Snap to Bea&t"
 msgstr ""
 
-#: matrixview.cpp:713
+#: matrixview.cpp:742
 msgid "Snap to &Bar"
 msgstr ""
 
-#: matrixview.cpp:715
+#: matrixview.cpp:744
 msgid "&No Snap"
 msgstr ""
 
-#: matrixview.cpp:721
+#: matrixview.cpp:750
 #, fuzzy
 msgid "Show Instrument Parameters"
 msgstr "Näita &instrumentide parameetreid"
 
-#: matrixview.cpp:1141
+#: matrixview.cpp:1181
 #, fuzzy
 msgid "Making legato..."
 msgstr "Akordi loomine..."
 
-#: matrixview.cpp:1152
+#: matrixview.cpp:1192
 #, fuzzy
 msgid "Halving speed..."
 msgstr "Faili salvestamine..."
 
-#: matrixview.cpp:1165
+#: matrixview.cpp:1205
 #, fuzzy
 msgid "Doubling speed..."
 msgstr "Valiku kustutamine..."
 
-#: matrixview.cpp:1187
+#: matrixview.cpp:1227
 #, fuzzy
 msgid "Rescaling..."
 msgstr "Faili lugemine..."
 
-#: matrixview.cpp:1298
+#: matrixview.cpp:1338
 msgid "Time: %1 (%2.%3s)"
 msgstr "Aeg: %1 (%2.%3s)"
 
-#: matrixview.cpp:1812
+#: matrixview.cpp:1852
 msgid "Unquantizing..."
 msgstr "Kvantimise eemaldamine..."
 
-#: matrixview.cpp:1842
+#: matrixview.cpp:1882
 msgid " Grid: "
 msgstr " Võre: "
 
-#: matrixview.cpp:1871
+#: matrixview.cpp:1911
 msgid "Unit"
 msgstr " Üksus"
 
-#: matrixview.cpp:1873
+#: matrixview.cpp:1913
 msgid "Beat"
 msgstr "Löök"
 
-#: matrixview.cpp:1875
+#: matrixview.cpp:1915
 msgid "Bar"
 msgstr "Takt"
 
-#: matrixview.cpp:1890
+#: matrixview.cpp:1930
 msgid " Quantize: "
 msgstr " Kvantimine: "
 
-#: matrixview.cpp:2249
+#: matrixview.cpp:2289
 msgid "Raising velocities..."
 msgstr ""
 
-#: matrixview.cpp:2258
+#: matrixview.cpp:2298
 msgid "Lowering velocities..."
 msgstr ""
 
-#: matrixview.cpp:2292
+#: matrixview.cpp:2332
 msgid "Set Event Velocities"
 msgstr ""
 
-#: matrixview.cpp:2297
+#: matrixview.cpp:2337
 msgid "Setting Velocities..."
 msgstr ""
 
-#: matrixview.cpp:2321 dialogs.cpp:5110
+#: matrixview.cpp:2361 dialogs.cpp:5127
 #, fuzzy
 msgid "Trigger Segment"
 msgstr "Kustuta segment"
 
-#: matrixview.cpp:2330
+#: matrixview.cpp:2370
 #, fuzzy
 msgid "Remove Triggers"
 msgstr "&Eemalda märgis"
@@ -6810,7 +6845,7 @@ msgstr "Diskreetimissagedus"
 msgid "Channels"
 msgstr "Kanalid"
 
-#: audiomanagerdialog.cpp:249 dialogs.cpp:4409
+#: audiomanagerdialog.cpp:249 dialogs.cpp:4426
 msgid "Resolution"
 msgstr "Resolutsioon"
 
@@ -6818,7 +6853,7 @@ msgstr "Resolutsioon"
 msgid "<no audio files>"
 msgstr "<audiofailid puuduvad>"
 
-#: audiomanagerdialog.cpp:558 dialogs.cpp:3394
+#: audiomanagerdialog.cpp:558 dialogs.cpp:3411
 msgid "*.wav|WAV files (*.wav)"
 msgstr "*.wav|WAV failid (*.wav)"
 
@@ -6883,7 +6918,7 @@ msgstr "Taktimõõt"
 msgid "Time where signature takes effect"
 msgstr ""
 
-#: dialogs.cpp:185 dialogs.cpp:385 dialogs.cpp:2746
+#: dialogs.cpp:185 dialogs.cpp:394 dialogs.cpp:2763
 #, fuzzy
 msgid "Scope"
 msgstr "Ulatus"
@@ -6918,245 +6953,249 @@ msgid "Make the time signature hidden"
 msgstr ""
 
 #: dialogs.cpp:237
-msgid "Show as common time"
+msgid "Make subsequent bar lines hidden"
 msgstr ""
 
 #: dialogs.cpp:242
+msgid "Show as common time"
+msgstr ""
+
+#: dialogs.cpp:247
 msgid "Correct the durations of following measures"
 msgstr ""
 
-#: dialogs.cpp:325
+#: dialogs.cpp:334
 msgid "Display as common time"
 msgstr ""
 
-#: dialogs.cpp:329
+#: dialogs.cpp:338
 msgid "Display as cut common time"
 msgstr ""
 
-#: dialogs.cpp:368
+#: dialogs.cpp:377
 msgid "Key Change"
 msgstr ""
 
-#: dialogs.cpp:382
+#: dialogs.cpp:391
 msgid "Key signature"
 msgstr ""
 
-#: dialogs.cpp:388
+#: dialogs.cpp:397
 msgid "Existing notes following key change"
 msgstr ""
 
-#: dialogs.cpp:399
+#: dialogs.cpp:408
 #, fuzzy
 msgid "Flatten"
 msgstr "Ühtlustamine"
 
-#: dialogs.cpp:401
+#: dialogs.cpp:410
 #, fuzzy
 msgid "Key"
 msgstr "Klahv"
 
-#: dialogs.cpp:405
+#: dialogs.cpp:414
 #, fuzzy
 msgid "Sharpen"
 msgstr "Teravdus"
 
-#: dialogs.cpp:424
+#: dialogs.cpp:433
 msgid "Apply to current segment only"
 msgstr ""
 
-#: dialogs.cpp:427
+#: dialogs.cpp:436
 msgid "Apply to all segments at this time"
 msgstr ""
 
-#: dialogs.cpp:438 dialogs.cpp:3032
+#: dialogs.cpp:447 dialogs.cpp:3049
 msgid "Maintain current pitches"
 msgstr ""
 
-#: dialogs.cpp:441
+#: dialogs.cpp:450
 msgid "Maintain current accidentals"
 msgstr ""
 
-#: dialogs.cpp:444
+#: dialogs.cpp:453
 msgid "Transpose into this key"
 msgstr ""
 
-#: dialogs.cpp:597
+#: dialogs.cpp:606
 msgid "No such key"
 msgstr ""
 
-#: dialogs.cpp:670
+#: dialogs.cpp:679
 msgid "Paste type"
 msgstr ""
 
-#: dialogs.cpp:690
+#: dialogs.cpp:699
 msgid "Make this the default paste type"
 msgstr ""
 
-#: dialogs.cpp:722
+#: dialogs.cpp:731
 msgid "Tuplet"
 msgstr ""
 
-#: dialogs.cpp:728
+#: dialogs.cpp:737
 msgid "New timing for tuplet group"
 msgstr ""
 
-#: dialogs.cpp:745
+#: dialogs.cpp:754
 msgid "Play "
 msgstr "Mängitakse "
 
-#: dialogs.cpp:766
+#: dialogs.cpp:775
 msgid "in the time of  "
 msgstr ""
 
-#: dialogs.cpp:772
+#: dialogs.cpp:781
 msgid "Timing is already correct: update display only"
 msgstr ""
 
-#: dialogs.cpp:782
+#: dialogs.cpp:791
 msgid "Timing calculations"
 msgstr ""
 
-#: dialogs.cpp:788
+#: dialogs.cpp:797
 msgid "Selected region:"
 msgstr "Valitud ala:"
 
-#: dialogs.cpp:797
+#: dialogs.cpp:806
 msgid "Group with current timing:"
 msgstr ""
 
-#: dialogs.cpp:803
+#: dialogs.cpp:812
 msgid "Group with new timing:"
 msgstr ""
 
-#: dialogs.cpp:809
+#: dialogs.cpp:818
 msgid "Gap created by timing change:"
 msgstr ""
 
-#: dialogs.cpp:817
+#: dialogs.cpp:826
 msgid "Unchanged at end of selection:"
 msgstr ""
 
-#: dialogs.cpp:1038
+#: dialogs.cpp:1047
 msgid "Specification"
 msgstr "Spetsifikatsioon"
 
-#: dialogs.cpp:1040
+#: dialogs.cpp:1049
 msgid "Preview"
 msgstr "Eelvaatlus"
 
-#: dialogs.cpp:1044
+#: dialogs.cpp:1053
 msgid "Text:  "
 msgstr "Tekst.  "
 
-#: dialogs.cpp:1049
+#: dialogs.cpp:1058
 msgid "Style:  "
 msgstr "Stiil.  "
 
-#: dialogs.cpp:1059
+#: dialogs.cpp:1068
 msgid "Dynamic"
 msgstr "Dünaamiline"
 
-#: dialogs.cpp:1062
+#: dialogs.cpp:1071
 msgid "Direction"
 msgstr "Suund"
 
-#: dialogs.cpp:1065
+#: dialogs.cpp:1074
 msgid "Local Direction"
 msgstr "Kohalik suund"
 
-#: dialogs.cpp:1071
+#: dialogs.cpp:1080
 msgid "Local Tempo"
 msgstr "Kohalik tempo"
 
-#: dialogs.cpp:1074
+#: dialogs.cpp:1083
 msgid "Lyric"
 msgstr "Sõnad"
 
-#: dialogs.cpp:1077
+#: dialogs.cpp:1086
 #, fuzzy
 msgid "Chord"
 msgstr "Tekita a&kord"
 
-#: dialogs.cpp:1080
+#: dialogs.cpp:1089
 msgid "Annotation"
 msgstr "Annotatsioon"
 
-#: dialogs.cpp:1136
+#: dialogs.cpp:1145
 msgid "Example"
 msgstr "Näide"
 
-#: dialogs.cpp:1265
+#: dialogs.cpp:1274
 msgid "Advanced Event Edit"
 msgstr ""
 
-#: dialogs.cpp:1265
+#: dialogs.cpp:1274
 msgid "Advanced Event Viewer"
 msgstr ""
 
-#: dialogs.cpp:1283
+#: dialogs.cpp:1292
 msgid "Intrinsics"
 msgstr ""
 
-#: dialogs.cpp:1287
+#: dialogs.cpp:1296
 msgid "Event type: "
 msgstr "Sündmuse tüüp. "
 
-#: dialogs.cpp:1293
+#: dialogs.cpp:1302
 msgid "Absolute time: "
 msgstr "Absoluutne aeg: "
 
-#: dialogs.cpp:1303
+#: dialogs.cpp:1312
 msgid "Duration: "
 msgstr "Kestvus: "
 
-#: dialogs.cpp:1316
+#: dialogs.cpp:1325
 msgid "Sub-ordering: "
 msgstr ""
 
-#: dialogs.cpp:1327
+#: dialogs.cpp:1336
 msgid "Persistent properties"
 msgstr ""
 
-#: dialogs.cpp:1357
+#: dialogs.cpp:1366
 msgid "Non-persistent properties"
 msgstr ""
 
-#: dialogs.cpp:1358
+#: dialogs.cpp:1367
 msgid "These are cached values, lost if the event is modified."
 msgstr ""
 
-#: dialogs.cpp:1372
+#: dialogs.cpp:1381
 msgid "Name       "
 msgstr "Nimi       "
 
-#: dialogs.cpp:1374
+#: dialogs.cpp:1383
 msgid "Type       "
 msgstr "Tüüp       "
 
-#: dialogs.cpp:1376
+#: dialogs.cpp:1385
 msgid "Value      "
 msgstr "Väärtus      "
 
-#: dialogs.cpp:1389
+#: dialogs.cpp:1398
 msgid "Make persistent"
 msgstr ""
 
-#: dialogs.cpp:1475
+#: dialogs.cpp:1492
 msgid "Delete this property"
 msgstr "Kustuta see omadus"
 
-#: dialogs.cpp:1610
+#: dialogs.cpp:1627
 msgid ""
 "Are you sure you want to delete the \"%1\" property?\n"
 "\n"
 "Removing necessary properties may cause unexpected behaviour."
 msgstr ""
 
-#: dialogs.cpp:1613 dialogs.cpp:1644 dialogs.cpp:1702
+#: dialogs.cpp:1630 dialogs.cpp:1661 dialogs.cpp:1719
 msgid "Edit Event"
 msgstr "Sündmuse redigeerimine"
 
-#: dialogs.cpp:1640
+#: dialogs.cpp:1657
 msgid ""
 "Are you sure you want to make the \"%1\" property persistent?\n"
 "\n"
@@ -7164,754 +7203,754 @@ msgid ""
 "on."
 msgstr ""
 
-#: dialogs.cpp:1645
+#: dialogs.cpp:1662
 msgid "Make &Persistent"
 msgstr ""
 
-#: dialogs.cpp:1713
+#: dialogs.cpp:1730
 msgid "Event Properties"
 msgstr "Sündmuse omadused"
 
-#: dialogs.cpp:1719
+#: dialogs.cpp:1736
 msgid "Event type:"
 msgstr "Sündmuse tüüp:"
 
-#: dialogs.cpp:1793 dialogs.cpp:1967
+#: dialogs.cpp:1810 dialogs.cpp:1984
 msgid "Controller name:"
 msgstr ""
 
-#: dialogs.cpp:1811
+#: dialogs.cpp:1828
 msgid "Meta string:"
 msgstr "Metastring:"
 
-#: dialogs.cpp:1816
+#: dialogs.cpp:1833
 msgid "Load data"
 msgstr ""
 
-#: dialogs.cpp:1818
+#: dialogs.cpp:1835
 #, fuzzy
 msgid "Save data"
 msgstr "Salvesta kui..."
 
-#: dialogs.cpp:1829
+#: dialogs.cpp:1846
 #, fuzzy
 msgid "Notation Properties"
 msgstr "Sündmuse omadused"
 
-#: dialogs.cpp:1835
+#: dialogs.cpp:1852
 msgid "Lock to changes in performed values"
 msgstr ""
 
-#: dialogs.cpp:1842
+#: dialogs.cpp:1859
 #, fuzzy
 msgid "Notation time:"
 msgstr "Noodikirja font"
 
-#: dialogs.cpp:1854
+#: dialogs.cpp:1871
 #, fuzzy
 msgid "Notation duration:"
 msgstr "Audiofaili mängimine"
 
-#: dialogs.cpp:1920
+#: dialogs.cpp:1937
 msgid "Note pitch:"
 msgstr "Noodi helikõrgus:"
 
-#: dialogs.cpp:1928
+#: dialogs.cpp:1945
 msgid "Note velocity:"
 msgstr "Noodi kiirus:"
 
-#: dialogs.cpp:1961
+#: dialogs.cpp:1978
 msgid "Controller number:"
 msgstr ""
 
-#: dialogs.cpp:1970
+#: dialogs.cpp:1987
 msgid "Controller value:"
 msgstr ""
 
-#: dialogs.cpp:2005
+#: dialogs.cpp:2022
 msgid "Key pitch:"
 msgstr ""
 
-#: dialogs.cpp:2013
+#: dialogs.cpp:2030
 msgid "Key pressure:"
 msgstr ""
 
-#: dialogs.cpp:2048
+#: dialogs.cpp:2065
 msgid "Channel pressure:"
 msgstr ""
 
-#: dialogs.cpp:2080
+#: dialogs.cpp:2097
 msgid "Program change:"
 msgstr "Programmi muutus:"
 
-#: dialogs.cpp:2127
+#: dialogs.cpp:2144
 msgid "Data length:"
 msgstr ""
 
-#: dialogs.cpp:2128
+#: dialogs.cpp:2145
 #, fuzzy
 msgid "Data:"
 msgstr "löök:"
 
-#: dialogs.cpp:2150
+#: dialogs.cpp:2167
 msgid "Pitchbend MSB:"
 msgstr ""
 
-#: dialogs.cpp:2158
+#: dialogs.cpp:2175
 msgid "Pitchbend LSB:"
 msgstr ""
 
-#: dialogs.cpp:2200
+#: dialogs.cpp:2217
 #, fuzzy
 msgid "Indication:"
 msgstr "Suund"
 
-#: dialogs.cpp:2234
+#: dialogs.cpp:2251
 msgid "Text type:"
 msgstr "Teksti tüüp:"
 
-#: dialogs.cpp:2235
+#: dialogs.cpp:2252
 msgid "Text:"
 msgstr "Tekst:"
 
-#: dialogs.cpp:2282
+#: dialogs.cpp:2299
 msgid "Clef type:"
 msgstr "Noodivõtme tüüp:"
 
-#: dialogs.cpp:2315
+#: dialogs.cpp:2332
 msgid "Key name:"
 msgstr ""
 
-#: dialogs.cpp:2337
+#: dialogs.cpp:2354
 msgid "Unsupported event type:"
 msgstr "Toetuseta sündmuse tüüp:"
 
-#: dialogs.cpp:2590
+#: dialogs.cpp:2607
 #, fuzzy
 msgid "Edit Event Time"
 msgstr "Sündmuse redigeerimine"
 
-#: dialogs.cpp:2601
+#: dialogs.cpp:2618
 #, fuzzy
 msgid "Edit Event Notation Time"
 msgstr "Sündmuse redigeerimine"
 
-#: dialogs.cpp:2612
+#: dialogs.cpp:2629
 #, fuzzy
 msgid "Edit Duration"
 msgstr "Kestvus"
 
-#: dialogs.cpp:2624
+#: dialogs.cpp:2641
 #, fuzzy
 msgid "Edit Notation Duration"
 msgstr "Kestvus"
 
-#: dialogs.cpp:2636
+#: dialogs.cpp:2653
 #, fuzzy
 msgid "Edit Pitch"
 msgstr "Sõnade redigeerimine"
 
-#: dialogs.cpp:2646 dialogs.cpp:2668
+#: dialogs.cpp:2663 dialogs.cpp:2685
 msgid "*.syx|System exclusive files (*.syx)"
 msgstr ""
 
-#: dialogs.cpp:2647
+#: dialogs.cpp:2664
 msgid "Load System Exclusive data in File"
 msgstr ""
 
-#: dialogs.cpp:2669
+#: dialogs.cpp:2686
 msgid "Save System Exclusive data to..."
 msgstr ""
 
-#: dialogs.cpp:2707
+#: dialogs.cpp:2724
 msgid "Insert Tempo Change"
 msgstr "Lisa tempo muudatus"
 
-#: dialogs.cpp:2717
+#: dialogs.cpp:2734
 msgid "New tempo"
 msgstr "Uus tempo"
 
-#: dialogs.cpp:2738
+#: dialogs.cpp:2755
 #, fuzzy
 msgid "Time of tempo change"
 msgstr "Teised tempo muudatused puuduvad."
 
-#: dialogs.cpp:2751
+#: dialogs.cpp:2768
 msgid "The pointer is currently at "
 msgstr "Kursor on praegu asukohas "
 
-#: dialogs.cpp:2759
+#: dialogs.cpp:2776
 msgid "Apply this tempo from here onwards"
 msgstr "Rakenda seda tempot siit edasi"
 
-#: dialogs.cpp:2762
+#: dialogs.cpp:2779
 msgid "Replace the last tempo change"
 msgstr "Asenda viimane tempo muudatus"
 
-#: dialogs.cpp:2767
+#: dialogs.cpp:2784
 msgid "Apply this tempo from the start of this bar"
 msgstr "Rakenda seda tempot selle takti algusest"
 
-#: dialogs.cpp:2770
+#: dialogs.cpp:2787
 msgid "Apply this tempo to the whole composition"
 msgstr "Rakenda seda tempot kogu kompositsioonile"
 
-#: dialogs.cpp:2775
+#: dialogs.cpp:2792
 msgid "Also make this the default tempo"
 msgstr "Ning tee see vaiketempoks"
 
-#: dialogs.cpp:2835
+#: dialogs.cpp:2852
 #, c-format
 msgid "%1.%2 s,"
 msgstr "%1.%2 s,"
 
-#: dialogs.cpp:2841
+#: dialogs.cpp:2858
 msgid "at the start of measure %1."
 msgstr "takti %1 alguses."
 
-#: dialogs.cpp:2845
+#: dialogs.cpp:2862
 msgid "in the middle of measure %1."
 msgstr "takti %1 keskel."
 
-#: dialogs.cpp:2865
+#: dialogs.cpp:2882
 #, fuzzy
 msgid "        (at %1.%2 s, in measure %3)"
 msgstr "        (asukohas %1.%2 s, taktis %3)"
 
-#: dialogs.cpp:2882
+#: dialogs.cpp:2899
 msgid "There are no preceding tempo changes."
 msgstr ""
 
-#: dialogs.cpp:2890
+#: dialogs.cpp:2907
 msgid "There are no other tempo changes."
 msgstr "Teised tempo muudatused puuduvad."
 
-#: dialogs.cpp:2995 dialogs.cpp:3002 dialogs.cpp:3017 dialogs.cpp:3026
+#: dialogs.cpp:3012 dialogs.cpp:3019 dialogs.cpp:3034 dialogs.cpp:3043
 msgid "Clef"
 msgstr "Noodivõti"
 
-#: dialogs.cpp:3005
+#: dialogs.cpp:3022
 msgid "Existing notes following clef change"
 msgstr "Olemasolevad noodid järgivad noodivõtme muutust"
 
-#: dialogs.cpp:3010
+#: dialogs.cpp:3027
 msgid "Lower clef"
 msgstr ""
 
-#: dialogs.cpp:3015
+#: dialogs.cpp:3032
 msgid "Up an Octave"
 msgstr "Oktavi võrra üles"
 
-#: dialogs.cpp:3021
+#: dialogs.cpp:3038
 msgid "Down an Octave"
 msgstr "Oktavi võrra alla"
 
-#: dialogs.cpp:3024
+#: dialogs.cpp:3041
 msgid "Higher clef"
 msgstr ""
 
-#: dialogs.cpp:3035
+#: dialogs.cpp:3052
 msgid "Transpose into appropriate octave"
 msgstr "Transponeeritakse vastavasse oktavisse"
 
-#: dialogs.cpp:3174
+#: dialogs.cpp:3191
 msgid "Treble"
 msgstr "Viiulivõti"
 
-#: dialogs.cpp:3175
+#: dialogs.cpp:3192
 msgid "Alto"
 msgstr "Aldivõti"
 
-#: dialogs.cpp:3176
+#: dialogs.cpp:3193
 msgid "Tenor"
 msgstr "Tenorivõti"
 
-#: dialogs.cpp:3177
+#: dialogs.cpp:3194
 msgid "Bass"
 msgstr "Bassivõti"
 
-#: dialogs.cpp:3194
+#: dialogs.cpp:3211
 msgid "Advanced"
 msgstr ""
 
-#: dialogs.cpp:3214
+#: dialogs.cpp:3231
 msgid "Rescale"
 msgstr ""
 
-#: dialogs.cpp:3219
+#: dialogs.cpp:3236
 #, fuzzy
 msgid "Duration of selection"
 msgstr "Valiku lõikamine..."
 
-#: dialogs.cpp:3327
+#: dialogs.cpp:3344
 msgid "Merge File"
 msgstr "Faili liitmine"
 
-#: dialogs.cpp:3332
+#: dialogs.cpp:3349
 msgid "Merge new file  "
 msgstr "Liida uus fail  "
 
-#: dialogs.cpp:3335
+#: dialogs.cpp:3352
 msgid "At start of existing composition"
 msgstr "Olemasoleva kompositsiooni algusesse"
 
-#: dialogs.cpp:3336
+#: dialogs.cpp:3353
 msgid "From end of existing composition"
 msgstr "Olemasoleva kompostsiooni lõppu"
 
-#: dialogs.cpp:3340
+#: dialogs.cpp:3357
 msgid "The file has different time signatures or tempos."
 msgstr "Failil on erinevad taktimõõdud või tempod."
 
-#: dialogs.cpp:3341
+#: dialogs.cpp:3358
 msgid "Import these as well"
 msgstr "Impordi ka need failid"
 
-#: dialogs.cpp:3367
+#: dialogs.cpp:3384
 msgid "Locate audio file"
 msgstr ""
 
-#: dialogs.cpp:3371
+#: dialogs.cpp:3388
 #, fuzzy
 msgid "&Skip"
 msgstr "&Jäta vahele"
 
-#: dialogs.cpp:3372
+#: dialogs.cpp:3389
 #, fuzzy
 msgid "Skip &All"
 msgstr "Vali &kõik"
 
-#: dialogs.cpp:3373
+#: dialogs.cpp:3390
 msgid "&Locate"
 msgstr ""
 
-#: dialogs.cpp:3378
+#: dialogs.cpp:3395
 msgid ""
 "Can't find file \"%1\".\n"
 "Would you like to try and locate this file or skip it?"
 msgstr ""
 
-#: dialogs.cpp:3395
+#: dialogs.cpp:3412
 msgid "Select an Audio File"
 msgstr "Audiofaili valimine"
 
-#: dialogs.cpp:3425
+#: dialogs.cpp:3442
 msgid "Playing audio file"
 msgstr "Audiofaili mängimine"
 
-#: dialogs.cpp:3430
+#: dialogs.cpp:3447
 msgid "Playing audio file \"%1\""
 msgstr "Audiofaili \"%1\" mängimine"
 
-#: dialogs.cpp:3444
+#: dialogs.cpp:3461
 msgid "Autosplit Audio Segment"
 msgstr "Audio segmendi tükeldamine"
 
-#: dialogs.cpp:3457
+#: dialogs.cpp:3474
 msgid "AutoSplit Segment \""
 msgstr ""
 
-#: dialogs.cpp:3469
+#: dialogs.cpp:3486
 msgid "Threshold"
 msgstr "Lävi"
 
-#: dialogs.cpp:3531
+#: dialogs.cpp:3548
 msgid "<no preview generated for this audio file>"
 msgstr "<audiofaili eelvaatlust ei genereeritud>"
 
-#: dialogs.cpp:3757
+#: dialogs.cpp:3774
 msgid "Edit Lyrics"
 msgstr "Sõnade redigeerimine"
 
-#: dialogs.cpp:3763
+#: dialogs.cpp:3780
 msgid "Lyrics for this segment"
 msgstr "Selle segmendi sõnad"
 
-#: dialogs.cpp:3867
+#: dialogs.cpp:3884
 msgid "Set the %1 property of the event selection:"
 msgstr ""
 
-#: dialogs.cpp:3872
+#: dialogs.cpp:3889
 msgid "Pattern"
 msgstr "Pattern"
 
-#: dialogs.cpp:3876
+#: dialogs.cpp:3893
 msgid "Flat - set %1 to value"
 msgstr ""
 
-#: dialogs.cpp:3879
+#: dialogs.cpp:3896
 msgid "Alternating - set %1 to max and min on alternate events"
 msgstr ""
 
-#: dialogs.cpp:3882
+#: dialogs.cpp:3899
 msgid "Crescendo - set %1 rising from min to max"
 msgstr ""
 
-#: dialogs.cpp:3885
+#: dialogs.cpp:3902
 msgid "Diminuendo - set %1 falling from max to min"
 msgstr ""
 
-#: dialogs.cpp:3888
+#: dialogs.cpp:3905
 msgid "Ringing - set %1 alternating from max to min with both dying to zero"
 msgstr ""
 
-#: dialogs.cpp:3931 dialogs.cpp:3940 dialogs.cpp:3950
+#: dialogs.cpp:3948 dialogs.cpp:3957 dialogs.cpp:3967
 msgid "Start Value"
 msgstr "Algväärtus"
 
-#: dialogs.cpp:3932 dialogs.cpp:3941 dialogs.cpp:3949
+#: dialogs.cpp:3949 dialogs.cpp:3958 dialogs.cpp:3966
 msgid "End Value"
 msgstr "Lõppväärtus"
 
-#: dialogs.cpp:3958
+#: dialogs.cpp:3975
 msgid "First Value"
 msgstr "Esimene väärtus"
 
-#: dialogs.cpp:3959
+#: dialogs.cpp:3976
 msgid "Second Value"
 msgstr "Teine väärtus"
 
-#: dialogs.cpp:3998
+#: dialogs.cpp:4015
 msgid "Change Composition Length"
 msgstr "Kompositsiooni pikkuse muutmine"
 
-#: dialogs.cpp:4004
+#: dialogs.cpp:4021
 msgid "Set the Start and End bar markers for this Composition"
 msgstr ""
 
-#: dialogs.cpp:4008
+#: dialogs.cpp:4025
 msgid "Start Bar"
 msgstr "Alguse takt"
 
-#: dialogs.cpp:4016
+#: dialogs.cpp:4033
 msgid "End Bar"
 msgstr "Lõpu takt"
 
-#: dialogs.cpp:4047
+#: dialogs.cpp:4064
 msgid "Starting split pitch"
 msgstr ""
 
-#: dialogs.cpp:4050
+#: dialogs.cpp:4067
 msgid "Range up and down to follow music"
 msgstr ""
 
-#: dialogs.cpp:4056
+#: dialogs.cpp:4073
 msgid "Duplicate non-note events"
 msgstr ""
 
-#: dialogs.cpp:4059
+#: dialogs.cpp:4076
 msgid "Clef handling:"
 msgstr "Noodivõtmed:"
 
-#: dialogs.cpp:4062
+#: dialogs.cpp:4079
 msgid "Leave clefs alone"
 msgstr "Jäta noodivõtmed rahule"
 
-#: dialogs.cpp:4063
+#: dialogs.cpp:4080
 msgid "Guess new clefs"
 msgstr "Uute noodivõtmete arvamine"
 
-#: dialogs.cpp:4064
+#: dialogs.cpp:4081
 msgid "Use treble and bass clefs"
 msgstr "Viiulivõtme ja bassivõtme kasutamine"
 
-#: dialogs.cpp:4103
+#: dialogs.cpp:4120
 msgid "Interpret"
 msgstr ""
 
-#: dialogs.cpp:4107
+#: dialogs.cpp:4124
 msgid "Interpretations to apply"
 msgstr ""
 
-#: dialogs.cpp:4110
+#: dialogs.cpp:4127
 msgid "Apply text dynamics (p, mf, ff etc)"
 msgstr ""
 
-#: dialogs.cpp:4112
+#: dialogs.cpp:4129
 msgid "Apply hairpin dynamics"
 msgstr ""
 
-#: dialogs.cpp:4114
+#: dialogs.cpp:4131
 msgid "Stress beats"
 msgstr ""
 
-#: dialogs.cpp:4116
+#: dialogs.cpp:4133
 msgid "Articulate slurs, staccato, tenuto etc"
 msgstr ""
 
-#: dialogs.cpp:4118
+#: dialogs.cpp:4135
 msgid "All available interpretations"
 msgstr "Kõikvõimalikud interpretatsioonid"
 
-#: dialogs.cpp:4187
+#: dialogs.cpp:4204
 msgid "Sequencer status:"
 msgstr "Sekventseri staatus:"
 
-#: dialogs.cpp:4189
+#: dialogs.cpp:4206
 msgid "Status not available."
 msgstr "Staatuse kohta pole võimalik infot hankida."
 
-#: dialogs.cpp:4196
+#: dialogs.cpp:4213
 msgid "Sequencer is not running or is not responding."
 msgstr ""
 
-#: dialogs.cpp:4203
+#: dialogs.cpp:4220
 msgid "Sequencer is not returning a valid status report."
 msgstr ""
 
-#: dialogs.cpp:4228
+#: dialogs.cpp:4245
 #, fuzzy
 msgid "Recording..."
 msgstr "Faili lugemine..."
 
-#: dialogs.cpp:4236
+#: dialogs.cpp:4253
 msgid "Recording time remaining:  "
 msgstr ""
 
-#: dialogs.cpp:4282
+#: dialogs.cpp:4299
 msgid "<timing has gone astray>"
 msgstr ""
 
-#: dialogs.cpp:4301
+#: dialogs.cpp:4318
 msgid "Just how big is your hard disk?"
 msgstr ""
 
-#: dialogs.cpp:4363
+#: dialogs.cpp:4380
 msgid "Metronome Instrument"
 msgstr "Metronoomi instrument"
 
-#: dialogs.cpp:4404
+#: dialogs.cpp:4421
 #, fuzzy
 msgid "Beats"
 msgstr "Biit"
 
-#: dialogs.cpp:4411
+#: dialogs.cpp:4428
 msgid "Bars only"
 msgstr ""
 
-#: dialogs.cpp:4412
+#: dialogs.cpp:4429
 msgid "Bars and beats"
 msgstr ""
 
-#: dialogs.cpp:4413
+#: dialogs.cpp:4430
 msgid "Bars, beats, and divisions"
 msgstr ""
 
-#: dialogs.cpp:4417
+#: dialogs.cpp:4434
 #, fuzzy
 msgid "Bar velocity"
 msgstr "Noodi kiirus:"
 
-#: dialogs.cpp:4424
+#: dialogs.cpp:4441
 #, fuzzy
 msgid "Beat velocity"
 msgstr "Noodi kiirus:"
 
-#: dialogs.cpp:4431
+#: dialogs.cpp:4448
 #, fuzzy
 msgid "Sub-beat velocity"
 msgstr "Noodi kiirus:"
 
-#: dialogs.cpp:4440
+#: dialogs.cpp:4457
 msgid "Pitch"
 msgstr "Helikõrgus"
 
-#: dialogs.cpp:4747
+#: dialogs.cpp:4764
 msgid "Lilypond Export"
 msgstr "Lilypond ekport"
 
-#: dialogs.cpp:4752
+#: dialogs.cpp:4769
 msgid "Lilypond export options"
 msgstr "Lilypond'i ekpordi seadistused"
 
-#: dialogs.cpp:4761
+#: dialogs.cpp:4778
 msgid "Lilypond compatibility level"
 msgstr "Lilypond'i kompatiiblus"
 
-#: dialogs.cpp:4764
+#: dialogs.cpp:4781
 msgid "Lilypond 1.6 or 1.8"
 msgstr "Lilypond 1.6 või 1.8"
 
-#: dialogs.cpp:4765
+#: dialogs.cpp:4782
 #, fuzzy
 msgid "Lilypond 2.0"
 msgstr "Lilypond 2.0+"
 
-#: dialogs.cpp:4766
+#: dialogs.cpp:4783
 #, fuzzy
 msgid "Lilypond 2.2"
 msgstr "Lilypond 2.0+"
 
-#: dialogs.cpp:4771
+#: dialogs.cpp:4788
 msgid "Paper size to use in \\paper block"
 msgstr "Paberi suurus (kasutatakse plokis \\paper)"
 
-#: dialogs.cpp:4774
+#: dialogs.cpp:4791
 msgid "US Letter"
 msgstr "US Letter"
 
-#: dialogs.cpp:4775
+#: dialogs.cpp:4792
 msgid "A4"
 msgstr "A4"
 
-#: dialogs.cpp:4776
+#: dialogs.cpp:4793
 msgid "Legal"
 msgstr "Legal"
 
-#: dialogs.cpp:4777
+#: dialogs.cpp:4794
 msgid "do not specify"
 msgstr "määramata"
 
-#: dialogs.cpp:4782
+#: dialogs.cpp:4799
 msgid "Lilypond font size"
 msgstr "Lilypondi fondi suurus"
 
-#: dialogs.cpp:4796
+#: dialogs.cpp:4813
 msgid "Export Document Properties as \\header block"
 msgstr "Dokumendi omadused eksporditakse \\header plokiks"
 
-#: dialogs.cpp:4801
+#: dialogs.cpp:4818
 msgid "Export \\lyric blocks"
 msgstr "\\lyric ploki eksport"
 
-#: dialogs.cpp:4806
+#: dialogs.cpp:4823
 msgid "Do not export muted tracks"
 msgstr "Vaigistatud radasid ei ekspordita"
 
-#: dialogs.cpp:4811
+#: dialogs.cpp:4828
 msgid "Export \\midi block"
 msgstr "\\midi ploki eksport"
 
-#: dialogs.cpp:4816
+#: dialogs.cpp:4833
 msgid "Enable \"point and click\" debugging"
 msgstr ""
 
-#: dialogs.cpp:4821
+#: dialogs.cpp:4838
 msgid "Write bar checks at end of measures"
 msgstr ""
 
-#: dialogs.cpp:4826
+#: dialogs.cpp:4843
 msgid "Export beamings"
 msgstr ""
 
-#: dialogs.cpp:4853
+#: dialogs.cpp:4870
 msgid "Export Devices..."
 msgstr "Ekspordi seadmed..."
 
-#: dialogs.cpp:4858
+#: dialogs.cpp:4875
 msgid "Export devices"
 msgstr "Seadmete eksport"
 
-#: dialogs.cpp:4860
+#: dialogs.cpp:4877
 msgid "Export all devices"
 msgstr "Kõiki seadmete eksport"
 
-#: dialogs.cpp:4861
+#: dialogs.cpp:4878
 msgid "Export selected device only"
 msgstr "Eksporditakse ainult valitud seadmed"
 
-#: dialogs.cpp:4862
+#: dialogs.cpp:4879
 msgid "         (\"%1\")"
 msgstr "         (\"%1\")"
 
-#: dialogs.cpp:4883
+#: dialogs.cpp:4900
 msgid ""
 "The name is used to identify both the ornament\n"
 "and the triggered segment that stores\n"
 "the ornament's notes."
 msgstr ""
 
-#: dialogs.cpp:4886
+#: dialogs.cpp:4903
 #, fuzzy
 msgid "Name:  "
 msgstr "Nimi:"
 
-#: dialogs.cpp:4919
+#: dialogs.cpp:4936
 #, fuzzy
 msgid "Display as:  "
 msgstr "Näita aega lõpuni"
 
-#: dialogs.cpp:4935
+#: dialogs.cpp:4952
 #, fuzzy
 msgid "Trill"
 msgstr "Tri&ller"
 
-#: dialogs.cpp:4935
+#: dialogs.cpp:4952
 msgid "Trill with line"
 msgstr ""
 
-#: dialogs.cpp:4935
+#: dialogs.cpp:4952
 msgid "Trill line only"
 msgstr ""
 
-#: dialogs.cpp:4936
+#: dialogs.cpp:4953
 msgid "Turn"
 msgstr ""
 
-#: dialogs.cpp:4936
+#: dialogs.cpp:4953
 msgid "Mordent"
 msgstr ""
 
-#: dialogs.cpp:4936
+#: dialogs.cpp:4953
 #, fuzzy
 msgid "Inverted mordent"
 msgstr "Lisa sündmus"
 
-#: dialogs.cpp:4937
+#: dialogs.cpp:4954
 msgid "Long mordent"
 msgstr ""
 
-#: dialogs.cpp:4937
+#: dialogs.cpp:4954
 msgid "Long inverted mordent"
 msgstr ""
 
-#: dialogs.cpp:4945
+#: dialogs.cpp:4962
 #, fuzzy
 msgid "Text mark"
 msgstr "Tekst: "
 
-#: dialogs.cpp:4949
+#: dialogs.cpp:4966
 #, fuzzy
 msgid "   Text:  "
 msgstr "Tekst.  "
 
-#: dialogs.cpp:4955
+#: dialogs.cpp:4972
 #, fuzzy
 msgid "Performance"
 msgstr "Programmi muutus"
 
-#: dialogs.cpp:4960
+#: dialogs.cpp:4977
 msgid "Perform using triggered segment: "
 msgstr ""
 
-#: dialogs.cpp:4974 dialogs.cpp:5133
+#: dialogs.cpp:4991 dialogs.cpp:5150
 msgid "Perform with timing: "
 msgstr ""
 
-#: dialogs.cpp:4985 dialogs.cpp:5144
+#: dialogs.cpp:5002 dialogs.cpp:5161
 msgid "Adjust pitch to note"
 msgstr ""
 
-#: dialogs.cpp:5119
+#: dialogs.cpp:5136
 #, fuzzy
 msgid "Trigger segment: "
 msgstr "Kustuta segment"
 
-#: dialogs.cpp:5233
+#: dialogs.cpp:5250
 #, fuzzy
 msgid "Audio Segment Duration"
 msgstr "Kestvus"
 
-#: dialogs.cpp:5240
+#: dialogs.cpp:5257
 msgid "The selected audio segment contains:"
 msgstr ""
 
-#: dialogs.cpp:5249
+#: dialogs.cpp:5266
 #, fuzzy
 msgid "beat(s)"
 msgstr "löögid:"
 
-#: dialogs.cpp:5250
+#: dialogs.cpp:5267
 msgid "bar(s)"
 msgstr ""
 
