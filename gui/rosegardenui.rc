@@ -74,4 +74,14 @@
 <ToolBar name="zoomToolBar">
 </ToolBar>
 
+<State name="new_file">
+	<disable>
+		<Action name="file_save"/>
+	</disable>
+	<enable>
+		<Action name="file_close"/>
+		<Action name="file_print"/>
+	</enable>
+</State>
+
 </kpartgui>
