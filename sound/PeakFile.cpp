@@ -381,13 +381,16 @@ PeakFile::scanToPeak(int peak)
     m_inFile->seekg(peak * m_format * m_channels * m_pointsPerValue,
                     std::ios::cur);
 
-    // Ensure we re-read the input buffer
+    // Ensure we re-read the input buffer if we're 
+    // doing buffered reads as it's now meaningless
+    //
     m_loseBuffer = true;
 
-    /*
     if (m_inFile->eof())
+    {
+        m_inFile->clear();
         return false;
-        */
+    }
 
     return true;
 }
@@ -529,6 +532,8 @@ PeakFile::writePeaks(std::ofstream *file)
                     throw(std::string("PeakFile::writePeaks - unsupported bit depth"));
                 }
 
+                //cout << "SAMPLE = " << (int)sampleValue << endl;
+
                 // Store maximum for this block
                 //
                 if (sampleValue > channelPeaks[i].first)
@@ -592,7 +597,7 @@ PeakFile::writePeaks(std::ofstream *file)
 std::vector<float>
 PeakFile::getPreview(const RealTime &startIndex,
                      const RealTime &endIndex,
-                     int resolution)
+                     int width)
 {
     std::vector<float> ret;
     int startPeak = ((startIndex.sec * 1000000.0 + startIndex.usec) *
@@ -601,8 +606,18 @@ PeakFile::getPreview(const RealTime &startIndex,
     int endPeak = ((endIndex.sec * 1000000.0 + endIndex.usec) *
                       m_audioFile->getSampleRate()) / (m_blockSize * 1000000);
 
+    // Sanity check
     if (startPeak > endPeak)
         return ret;
+
+    // actual possible sample length in RealTime
+    //
+    RealTime sampleLength = m_audioFile->getLength() - startIndex;
+    float step = float(endPeak - startPeak) / float(width);
+    cout << "SAMPLE LEN = " << sampleLength << endl;
+    cout << "STEP       = " << step << endl;
+    float currentPeak;
+
 
     float hiValue = 0.0f;
     float loValue = 0.0f;
@@ -614,8 +629,10 @@ PeakFile::getPreview(const RealTime &startIndex,
 
     // Walk through the peak values 
     //
+    /*
     std::cout << "START = " << startPeak << std::endl;
     std::cout << "END   = " << endPeak << std::endl;
+    */
 
     float divisor = 0.0f;
     switch(m_format)
@@ -633,25 +650,26 @@ PeakFile::getPreview(const RealTime &startIndex,
             return ret;
     }
 
-    for (int i = startPeak; i < endPeak; i++)
+    for (int i = 0; i < width; i++)
     {
-        // Seek to first peak value
+        int peakNumber = startPeak + int(step * i);
+
+        // Seek to value
         //
-        if (i == startPeak)
-        {
-            if (scanToPeak(startPeak) == false)
-                return ret;
-        }
+        if (scanToPeak(peakNumber) == false)
+            ret.push_back(0.0f);
+            
 
         hiValue = 0.0f;
         loValue = 0.0f;
 
-        // Get peak value
+        // Get peak value over channels
+        //
         for (int j = 0; j < m_channels; j++)
         {
             try
             {
-                peakData = getBytes(m_format * m_pointsPerValue);
+                peakData = getBytes(m_inFile, m_format * m_pointsPerValue);
             }
             catch (std::string e)
             {
@@ -686,16 +704,8 @@ PeakFile::getPreview(const RealTime &startIndex,
             }
         }
 
-        hiValue /= (float)m_channels;
-        loValue /= (float)m_channels;
-
-        hiValue /= divisor;
-        loValue /= divisor;
-
-        /*
-        cout << "HI = " << hiValue << endl;
-        cout << "LO = " << loValue << endl;
-        */
+        hiValue /= divisor * (float)m_channels;
+        loValue /= divisor * (float)m_channels;
 
         ret.push_back(hiValue);
     }

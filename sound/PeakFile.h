@@ -75,11 +75,12 @@ public:
     //
     void printStats();
 
-    // Get a preview of a section of the audio file at a given resolution
+    // Get a preview of a section of the audio file where that section
+    // is "width" pixels.
     //
     std::vector<float> getPreview(const RealTime &startIndex,
                                   const RealTime &endIndex,
-                                  int resolution);
+                                  int width);
 
     AudioFile* getAudioFile() { return m_audioFile; }
 

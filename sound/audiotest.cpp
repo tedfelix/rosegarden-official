@@ -1,4 +1,6 @@
 #include <iostream>
+
+/*
 #include <artsmidi.h>
 #include "Sequencer.h"
 #include "AudioFile.h"
@@ -6,7 +8,9 @@
 #include <arts/artsmodules.h>
 #include <arts/soundserver.h>
 #include <arts/connect.h>
+*/
 
+#include <sndfile.h>
 
 using std::cout;
 using std::cerr;
@@ -15,138 +19,70 @@ using std::endl;
 int
 main(int argc, char **argv)
 {
-    if (argc < 2)
+    cout << "SND FILE TEST" << endl;
+
+    SF_INFO info;
+
+    SNDFILE *file = sf_open_read("/home/bownie/rosegarden/gui/testfiles/audio/909-kick.wav", &info);
+
+    switch (info.format & SF_FORMAT_TYPEMASK)
     {
-        cout << "usage: audiotest <.wav file>" << endl;
+        case SF_FORMAT_WAV:
+            cout << "WAV FORMAT" << endl;
+            break;
+
+        default:
+            cout << "UNKNOWN TYPE " << info.format << endl;
+            break;
+    }
+
+    switch(info.format & SF_FORMAT_SUBMASK)
+    {
+        case SF_FORMAT_PCM:
+            cout << "PCM" << endl;
+            break;
+
+        default:
+            cout << "UNKNOWN SUBTYPE" << endl;
+            break;
+    }
+
+    if (sf_format_check(&info) == false)
+    {
+        cout << "FORMAT CHECK FAILED" << endl;
         exit(1);
     }
 
+    cout << "MAX = " << sf_signal_max(file) << endl;
+    cout << "CHANNELS = " << info.channels << endl;
+    cout << "SECTIONS = " << info.sections << endl;
+    cout << "SAMPLE RATE = " << info.samplerate << endl;
+    cout << "SAMPLES = " << info.samples << endl;
+    cout << "PCM BIT = " << info.pcmbitwidth << endl;
 
-    string wavFile = argv[1];
-
-    Rosegarden::AudioFile *audioFile;
-
-    // create a new AudioFile
-    //
-    audioFile = new Rosegarden::AudioFile(0, "firstwav", string(wavFile));
-
-    if(!(audioFile->open()))
-        cout << "Couldn' open file \"" << wavFile << "\"" << endl;
-
-    // Print out the information on this file and then play it
-    audioFile->printStats();
-  
-    // start sequencer
-    //
-    Rosegarden::Sequencer seq;
-
-    Arts::SoundServerV2 server = Arts::Reference("global:Arts_SoundServerV2");
-
-    Arts::Synth_AMAN_PLAY amanPlay;
-    Arts::Synth_AMAN_RECORD amanRecord;
-    Arts::Synth_CAPTURE_WAV captureWav;
-    Arts::Synth_PLAY_WAV playWav;
-
-    if (server.fullDuplex())
-        cout << "SOUND SERVER is FULL DUPLEX" << endl;
-
-    cout << "SAMPLING RATE = " << server.samplingRate() << endl;
-    cout << "SAMPLE SIZE   = " << server.bits() << " bits" << endl;
-
-    if ( !server.isNull() )
+    if (sf_seek(file, 0, SEEK_SET) == -1)
     {
-       amanPlay=Arts::DynamicCast(server.createObject("Arts::Synth_AMAN_PLAY"));
-       amanPlay.title("Rosegarden Audio Play");
-       amanPlay.autoRestoreID("Rosegarden Play");
-
-       if (amanPlay.isNull())
-       {
-           std::cerr << "Cannot create audio play object" << std::endl;
-           exit(1);
-       }
-
-       playWav = Arts::DynamicCast(
-                server.createObject("Arts::Synth_PLAY_WAV"));
-
-       // set a file name
-       //
-       playWav.filename(wavFile);
-
-       cout << "PLAYING SAMPLE once" << endl;
-       playWav.start();
-       amanPlay.start();
-       connect(playWav, "left", amanPlay, "left");
-       connect(playWav, "right", amanPlay, "right");
-
-       sleep(2);
-
-       disconnect(playWav, "left", amanPlay, "left");
-       disconnect(playWav, "right", amanPlay, "right");
-
-       playWav.stop();
-       amanPlay.stop();
-
-       cout << "PLAYING SAMPLE twice" << endl;
-       playWav.filename(wavFile);
-       playWav.start();
-       amanPlay.start();
-       connect(playWav, "left", amanPlay, "left");
-       connect(playWav, "right", amanPlay, "right");
-
-       sleep(2);
-       
-       disconnect(playWav, "left", amanPlay, "left");
-       disconnect(playWav, "right", amanPlay, "right");
-
-       playWav.stop();
-       amanPlay.stop();
-
-
-       // Synth_AMAN_RECORD - sends to a file: /tmp/mcop-USER/capture.wav
-       //
-       //
-       amanRecord = Arts::DynamicCast(server.createObject("Arts::Synth_AMAN_RECORD"));
-
-       if (amanRecord.isNull())
-       {
-           std::cerr << "Cannot create audio record object" << std::endl;
-           exit(1);
-       }
-
-       amanRecord.title("Rosegarden Audio Record");
-       amanRecord.autoRestoreID("Rosegarden Record");
-
-       captureWav = Arts::DynamicCast(
-                server.createObject("Arts::Synth_CAPTURE_WAV"));
-
-       if (captureWav.isNull())
-       {
-           std::cerr << "Cannot create CAPTURE object" << std::endl;
-           exit(1);
-       }
-
-/*
-       Arts::StereoVolumeControl volumeControl  =
-           Arts::DynamicCast(server.createObject("Arts::StereoVolumeControl"));
-*/
-
-       cout << "RECORDING 10 seconds of AUDIO" << endl;
-
-       amanRecord.start();
-       captureWav.start();
-       
-       Arts::connect(captureWav, "left", amanRecord, "left");
-       Arts::connect(captureWav, "right", amanRecord, "right");
-
-       sleep(10);
-
-       Arts::disconnect(captureWav, "left", amanRecord, "left");
-       Arts::disconnect(captureWav, "right", amanRecord, "right");
-       amanRecord.stop();
-       captureWav.stop();
- 
+        cout << "FAILED SEEK" << endl;
+        exit(1);
     }
+
+    int frames = info.samples / info.channels;
+    double *samples = new double[info.channels * frames];
+
+    sf_readf_double(file, samples, frames, true);
+
+    for (int i = 0; i < frames; i++)
+    {
+        for (int j = 0; j < info.channels; j++)
+        {
+            cout << "INT = " << samples[(i * info.channels) + j] << endl;
+        }
+    }
+
+    delete [] samples;
 
     exit(0);
 
 }
+
+
