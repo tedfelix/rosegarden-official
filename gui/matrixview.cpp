@@ -617,7 +617,9 @@ void MatrixView::setupActions()
 		SLOT(slotExtendSelectionForwardBar()), actionCollection(),
 		"extend_selection_forward_bar");
 
-    new KAction(i18n("Cursor to St&art"), 0, Key_A + CTRL, this,
+    new KAction(i18n("Cursor to St&art"), 0,
+		/* #1025717: conflicting meanings for ctrl+a - dupe with Select All
+		  Key_A + CTRL, */ this,
 		SLOT(slotJumpToStart()), actionCollection(),
 		"cursor_start");
 
