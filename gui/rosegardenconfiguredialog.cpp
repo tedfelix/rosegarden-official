@@ -22,10 +22,14 @@
 #include <qconnect.h>
 #include <qspinbox.h>
 #include <qpushbutton.h>
+#include <qslider.h>
+#include <qlabel.h>
 
 #include "rosegardenconfiguredialog.h"
 #include "rosegardenguidoc.h"
 #include "Composition.h"
+#include "Configuration.h"
+#include "RealTime.h"
 
 namespace Rosegarden
 {
@@ -37,15 +41,21 @@ RosegardenConfigureDialog::RosegardenConfigureDialog(RosegardenGUIDoc *doc,
     m_doc(doc)
 {
 
+    // buttons 
+    //
     connect((QObject *)CancelButton, SIGNAL(released()),
             this, SLOT(slotClose()));
 
     connect((QObject *)ApplyButton, SIGNAL(released()),
             this, SLOT(slotApply()));
 
+    connect((QObject *)OKButton, SIGNAL(released()),
+            this, SLOT(slotOK()));
+
     // Ok, populate the fields
     //
     Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Configuration &config = m_doc->getConfiguration();
 
     // count-in bars
     //
@@ -56,15 +66,26 @@ RosegardenConfigureDialog::RosegardenConfigureDialog(RosegardenGUIDoc *doc,
     connect(CountInSpin, SIGNAL(valueChanged(int)),
             this, SLOT(slotActivateApply()));
 
-
-    // latency
+    // latency sliders
     connect((QObject *)PlaybackSlider, SIGNAL(valueChanged(int)),
             (QObject *)PlaybackValue, SLOT(setNum(int)));
 
     connect((QObject *)ReadAheadSlider, SIGNAL(valueChanged(int)),
             (QObject *)ReadAheadValue, SLOT(setNum(int)));
 
-    //ReadAheadSlider->setValue(comp.
+    connect((QObject *)PlaybackSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(slotActivateApply()));
+
+    connect((QObject *)ReadAheadSlider, SIGNAL(valueChanged(int)),
+            this, SLOT(slotActivateApply()));
+
+    ReadAheadSlider->setMinValue(0);
+    ReadAheadSlider->setMaxValue(500);
+    ReadAheadSlider->setValue(config.getReadAhead().usec / 1000);
+
+    PlaybackSlider->setMinValue(0);
+    PlaybackSlider->setMaxValue(500);
+    PlaybackSlider->setValue(config.getPlaybackLatency().usec / 1000);
 
     // Disable apply until something changes
     //
@@ -86,11 +107,18 @@ void
 RosegardenConfigureDialog::slotApply()
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Configuration &config = m_doc->getConfiguration();
 
     int countIn = CountInSpin->text().toInt();
     comp.setCountInBars(countIn);
 
-    slotClose();
+    int readAhead = ReadAheadValue->text().toInt();
+    config.setReadAhead((RealTime(0, (readAhead * 1000))));
+
+    int playback = PlaybackValue->text().toInt();
+    config.setPlaybackLatency((RealTime(0, (playback * 1000))));
+
+    ApplyButton->setDisabled(true);
 }
 
 
@@ -98,6 +126,13 @@ void
 RosegardenConfigureDialog::slotActivateApply()
 {
     ApplyButton->setDisabled(false);
+}
+
+void
+RosegardenConfigureDialog::slotOK()
+{
+    slotApply();
+    slotClose();
 }
 
 }

@@ -46,6 +46,26 @@
             <class>QPushButton</class>
             <property stdset="1">
                 <name>name</name>
+                <cstring>CancelButton</cstring>
+            </property>
+            <property stdset="1">
+                <name>geometry</name>
+                <rect>
+                    <x>320</x>
+                    <y>210</y>
+                    <width>96</width>
+                    <height>35</height>
+                </rect>
+            </property>
+            <property stdset="1">
+                <name>text</name>
+                <string>Cancel</string>
+            </property>
+        </widget>
+        <widget>
+            <class>QPushButton</class>
+            <property stdset="1">
+                <name>name</name>
                 <cstring>ApplyButton</cstring>
             </property>
             <property stdset="1">
@@ -66,12 +86,12 @@
             <class>QPushButton</class>
             <property stdset="1">
                 <name>name</name>
-                <cstring>CancelButton</cstring>
+                <cstring>OKButton</cstring>
             </property>
             <property stdset="1">
                 <name>geometry</name>
                 <rect>
-                    <x>320</x>
+                    <x>120</x>
                     <y>210</y>
                     <width>96</width>
                     <height>35</height>
@@ -79,7 +99,7 @@
             </property>
             <property stdset="1">
                 <name>text</name>
-                <string>Cancel</string>
+                <string>OK</string>
             </property>
         </widget>
         <widget>
@@ -374,26 +394,6 @@
                         </property>
                     </widget>
                     <widget>
-                        <class>QSlider</class>
-                        <property stdset="1">
-                            <name>name</name>
-                            <cstring>ReadAheadSlider</cstring>
-                        </property>
-                        <property stdset="1">
-                            <name>geometry</name>
-                            <rect>
-                                <x>30</x>
-                                <y>75</y>
-                                <width>175</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property stdset="1">
-                            <name>orientation</name>
-                            <enum>Horizontal</enum>
-                        </property>
-                    </widget>
-                    <widget>
                         <class>QLabel</class>
                         <property stdset="1">
                             <name>name</name>
@@ -411,6 +411,26 @@
                         <property stdset="1">
                             <name>text</name>
                             <string>Read-ahead (ms)</string>
+                        </property>
+                    </widget>
+                    <widget>
+                        <class>QSlider</class>
+                        <property stdset="1">
+                            <name>name</name>
+                            <cstring>ReadAheadSlider</cstring>
+                        </property>
+                        <property stdset="1">
+                            <name>geometry</name>
+                            <rect>
+                                <x>30</x>
+                                <y>75</y>
+                                <width>175</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property stdset="1">
+                            <name>orientation</name>
+                            <enum>Horizontal</enum>
                         </property>
                     </widget>
                 </widget>

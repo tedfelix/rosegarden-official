@@ -39,10 +39,13 @@ public:
     ~RosegardenConfigureDialog();
 
 public slots:
-    void slotClose();
+    // Actions
+    //
+    void slotOK();
     void slotApply();
-    void slotActivateApply();
+    void slotClose();
 
+    void slotActivateApply();
 private:
 
     RosegardenGUIDoc *m_doc;

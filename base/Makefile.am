@@ -13,6 +13,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     Clipboard.C \
 		     Composition.C \
 		     CompositionTimeSliceAdapter.C \
+                     Configuration.C \
 		     Equation.C \
 		     Event.C \
                      Instrument.C \
