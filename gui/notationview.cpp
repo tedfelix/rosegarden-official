@@ -918,7 +918,9 @@ void NotationView::setCurrentSelection(EventSelection* s)
     if (s && m_currentEventSelection &&
 	s->getSegment() != m_currentEventSelection->getSegment()) {
 	m_currentEventSelection->removeSelectionFromSegment();
-	getStaff(m_currentEventSelection->getSegment())->positionElements();
+	getStaff(m_currentEventSelection->getSegment())->positionElements
+	    (m_currentEventSelection->getBeginTime(),
+	     m_currentEventSelection->getEndTime());
     }
 
     delete m_currentEventSelection;
@@ -926,7 +928,8 @@ void NotationView::setCurrentSelection(EventSelection* s)
 
     if (s) {
 	s->recordSelectionOnSegment();
-        getStaff(s->getSegment())->positionElements();
+        getStaff(s->getSegment())->positionElements(s->getBeginTime(),
+						    s->getEndTime());
     }
 
     canvas()->update();
@@ -1800,14 +1803,20 @@ void NotationView::redoLayoutAdvised(Segment *segment,
     START_TIMING;
 
     emit usedSelection(); //!!! hardly right
-    if (segment == 0) applyLayout();
+
+    if (segment) {
+	NotationStaff *staff = getStaff(*segment);
+	if (staff) applyLayout(staff->getId());
+    } else {
+	applyLayout();
+    }
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
         Segment *ssegment = &m_staffs[i]->getSegment();
         bool thisStaff = (ssegment == segment || segment == 0);
 
-        if (thisStaff && (segment != 0)) applyLayout(i);
+//        if (thisStaff && (segment != 0)) applyLayout(i);
 
         NotationElementList *notes = m_staffs[i]->getViewElementList();
         NotationElementList::iterator starti = notes->begin();
@@ -1817,12 +1826,14 @@ void NotationView::redoLayoutAdvised(Segment *segment,
 	
         if (startTime > 0) {
             barStartTime = ssegment->getBarStart(startTime);
-            starti = notes->findTime(barStartTime);
+//            starti = notes->findTime(barStartTime);
+            starti = notes->findTime(startTime);
         }
 
         if (endTime >= 0) {
 	    barEndTime = ssegment->getBarEnd(endTime);
-            endi = notes->findTime(barEndTime);
+//            endi = notes->findTime(barEndTime);
+            endi = notes->findTime(endTime);
         }
 
 	kdDebug(KDEBUG_AREA) << "NotationView::redoLayoutAdvised: "
@@ -1831,16 +1842,18 @@ void NotationView::redoLayoutAdvised(Segment *segment,
 	if (thisStaff) {
 	    m_staffs[i]->renderElements(starti, endi);
 	}
-	m_staffs[i]->positionElements();
+	m_staffs[i]->positionElements(barStartTime, barEndTime);
         showBars(i);
     }
+
+    PRINT_ELAPSED("NotationView::redoLayoutAdvised (without update/GC)");
 
     canvas()->update();
     PixmapArrayGC::deleteAll();
 
     Event::dumpStats(cerr);
 
-    PRINT_ELAPSED("NotationView::redoLayoutAdvised");
+    PRINT_ELAPSED("NotationView::redoLayoutAdvised (including update/GC)");
 }
 
 

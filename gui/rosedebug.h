@@ -64,7 +64,7 @@ operator<<(kndbgstream &s, const Rosegarden::Segment&) { return s; }
 #define ELAPSED_TIME \
   ((clock() - dbgStart) * 1000 / CLOCKS_PER_SEC)
 #define PRINT_ELAPSED(n) \
-  std::cout << n << ": " << ELAPSED_TIME << "ms elapsed" << std::endl;
+  std::cerr << n << ": " << ELAPSED_TIME << "ms elapsed" << std::endl;
 
 #else
 

@@ -110,7 +110,7 @@
   <Action name="collapse_rests_aggressively"/>
   <Separator/>
   <Menu name="Stems">
-    <text>&amp;Stems</text>
+    <text>&amp;Stem Direction</text>
     <Action name="stems_up"/>
     <Action name="stems_down"/>
     <Action name="restore_stems"/>

@@ -335,7 +335,8 @@ void NotationStaff::getClefAndKeyAtX(int myx, Clef &clef,
 void
 NotationStaff::renderElements()
 {
-    renderElements(getViewElementList()->begin(), getViewElementList()->end());
+    renderElements(getViewElementList()->begin(),
+		   getViewElementList()->end());
 }
 
 void
@@ -370,9 +371,18 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 void
 NotationStaff::positionElements()
 {
+    positionElements(-1, -1);
+}
+
+
+void
+NotationStaff::positionElements(timeT from, timeT to)
+{
     kdDebug(KDEBUG_AREA) << "NotationStaff " << this << "::positionElements()" << endl;
 
     START_TIMING;
+    
+    cerr << "positionElements: " << from << " -> " << to << endl;
 
     Clef currentClef; // default is okay to start with
     m_clefChanges.empty();
@@ -380,10 +390,40 @@ NotationStaff::positionElements()
     Rosegarden::Key currentKey; // likewise
     m_keyChanges.empty();
 
-    NotationElementList::iterator end = getViewElementList()->end();
+    NotationElementList *nel = getViewElementList();
 
-    for (NotationElementList::iterator it = getViewElementList()->begin();
-	 it != end; ++it) {
+    // Track back bar-by-bar until we find one whose start position
+    // hasn't changed, and begin the reposition from there
+
+    NotationElementList::iterator beginAt = nel->begin();
+    if (from >= 0) {
+	NotationElementList::iterator candidate = nel->begin();
+	do {
+	    candidate = nel->findTime(getSegment().getBarStart(from - 1));
+	    if (candidate != nel->end()) from = (*candidate)->getAbsoluteTime();
+	} while (candidate != nel->begin() && !elementNotMoved(*candidate));
+	beginAt = candidate;
+    }
+
+    // Track forward to the end, similarly.  Here however it's very
+    // common for all the positions to have changed right up to the
+    // end of the piece; so we save time by assuming that to be the
+    // case if we get more than (arbitrary) 3 changed bars.
+
+    NotationElementList::iterator endAt = nel->end();
+    int changedBarCount = 0;
+    if (to >= 0) {
+	NotationElementList::iterator candidate = nel->end();
+	do {
+	    candidate = nel->findTime(getSegment().getBarEnd(to));
+	    if (candidate != nel->end()) to = (*candidate)->getAbsoluteTime();
+	    ++changedBarCount;
+	} while (changedBarCount < 4 &&
+		 candidate != nel->end() && !elementNotMoved(*candidate));
+	endAt = candidate;
+    }
+
+    for (NotationElementList::iterator it = beginAt; it != endAt; ++it) {
 
 	if ((*it)->event()->isa(Clef::EventType)) {
 
@@ -459,6 +499,19 @@ NotationStaff::positionElements()
     }
 
     PRINT_ELAPSED("NotationStaff::positionElements");
+}
+
+
+bool
+NotationStaff::elementNotMoved(NotationElement *elt)
+{
+    bool ok =
+	((elt->getCanvasItem()) &&
+	 (int)(elt->getCanvasItem()->x()) == (int)(elt->getLayoutX() + x()) &&
+	 (int)(elt->getCanvasItem()->y()) == (int)(elt->getLayoutY() + y()));
+    cerr << "elementNotMoved: elt at " << elt->getAbsoluteTime() <<
+	", ok is " << ok << endl;
+    return ok;
 }
 
 

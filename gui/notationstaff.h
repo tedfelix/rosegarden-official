@@ -169,7 +169,21 @@ public:
      * ones black).  As a result -- and for other implementation
      * details -- it may actually re-generate some sprites.
      *
-     * Call this after renderElements, or after changing the selection.
+     * The from and to arguments are used to indicate the extents of a
+     * changed area within the staff.  The actual area within which the
+     * elements end up being repositioned will begin at the start of
+     * the bar containing the changed area's start, and will end at the
+     * start of the next bar whose first element hasn't moved, after
+     * the changed area's end.
+     *
+     * Call this after renderElements, or after changing the selection,
+     * passing from and to arguments corresponding to the times of those
+     * passed to renderElements.
+     */
+    void positionElements(Rosegarden::timeT from, Rosegarden::timeT to);
+    
+    /**
+     * Call positionElements(from, to) on the whole staff.
      */
     void positionElements();
 
@@ -237,6 +251,12 @@ protected:
      * Return a QCanvasSimpleSprite representing the given note event
      */
     QCanvasSimpleSprite *makeNoteSprite(NotationElement *);
+
+    /**
+     * Return true if the element has a canvas item that is already
+     * at the correct layout coordinates
+     */
+    bool elementNotMoved(NotationElement *);
 
     int m_id;
 
