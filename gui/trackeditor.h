@@ -112,6 +112,11 @@ public slots:
     void slotSetPointerPosition(Rosegarden::timeT position);
 
     /**
+     * Adjust the canvas size to that required for the composition
+     */
+    void slotReadjustCanvasSize();
+
+    /**
      * Show the given loop on the ruler or wherever
      */
     void slotSetLoop(Rosegarden::timeT start, Rosegarden::timeT end);
@@ -184,7 +189,7 @@ protected:
     
     virtual void paintEvent(QPaintEvent* e);
     
-    void init(QWidget*, unsigned int nbTracks, int firstBar, int lastBar);
+    void init(QWidget *);
 
     bool isCompositionModified();
     void setCompositionModified(bool);

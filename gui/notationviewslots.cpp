@@ -41,6 +41,7 @@
 #include <qinputdialog.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kaction.h>
 
 #include "ktmpstatusmsg.h"
 
@@ -200,11 +201,29 @@ NotationView::slotChangeFont(std::string newName, int newSize)
     m_fontSize = newSize;
     setNotePixmapFactory(npf);
 
-    if (changedFont) {
-        std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
-        m_fontSizeSlider->reinitialise(sizes, m_fontSize);
-	setupFontSizeMenu(oldName);
+    // update the various GUI elements
+
+    std::set<std::string> fs(NotePixmapFactory::getAvailableFontNames());
+    std::vector<std::string> f(fs.begin(), fs.end());
+    std::sort(f.begin(), f.end());
+
+    for (unsigned int i = 0; i < f.size(); ++i) {
+	bool thisOne = (f[i] == m_fontName);
+	if (thisOne) m_fontCombo->setCurrentItem(i);
+	KToggleAction *action = dynamic_cast<KToggleAction *>
+	    (actionCollection()->action("note_font_" + strtoqstr(f[i])));
+	if (action) action->setChecked(thisOne);
+	else {
+	    kdDebug(KDEBUG_AREA)
+		<< "WARNING: Expected action \"note_font_" << f[i]
+		<< "\" to be a KToggleAction, but it isn't (or doesn't exist)"
+		<< endl;
+	}
     }
+
+    std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
+    m_fontSizeSlider->reinitialise(sizes, m_fontSize);
+    setupFontSizeMenu(oldName);
 
     m_hlayout.setNotePixmapFactory(m_notePixmapFactory);
 
@@ -674,6 +693,28 @@ void NotationView::slotTransformsRestoreStems()
 
     addCommandToHistory(new TransformsMenuRestoreStemsCommand
                         (*m_currentEventSelection));
+}
+
+void NotationView::slotSetStyleFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->name();
+
+    if (!m_currentEventSelection) return;
+
+    if (name.left(6) == "style_") {
+	name = name.right(name.length() - 6);
+
+	KTmpStatusMsg msg(i18n("Changing to %1 style...").arg(name),
+			  statusBar());
+
+	addCommandToHistory(new TransformsMenuChangeStyleCommand
+			    (NoteStyleName(name),
+			     *m_currentEventSelection));
+    } else {
+	KMessageBox::sorry
+	    (this, QString(i18n("Unknown style action %1").arg(name)));
+    }
 }
 
 void NotationView::slotTransformsClassicalStyle()

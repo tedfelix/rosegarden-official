@@ -403,6 +403,10 @@ void RosegardenGUIView::setZoomSize(double size)
 {
     m_rulerScale->setUnitsPerPixel(size);
 
+    m_trackEditor->slotReadjustCanvasSize();
+    m_trackEditor->slotSetPointerPosition
+	(getDocument()->getComposition().getPosition());
+
     for (Composition::iterator i = 
               getDocument()->getComposition().begin();
          i != getDocument()->getComposition().end(); i++) {

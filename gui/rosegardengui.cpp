@@ -2529,11 +2529,6 @@ void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent)
 void RosegardenGUIApp::slotChangeZoom(int)
 {
     m_view->setZoomSize(m_zoomSlider->getCurrentSize());
-
-    // this updates the pointer position after a zoom change
-    if (m_view)
-        m_view->getTrackEditor()->slotSetPointerPosition(
-                m_doc->getComposition().getPosition());
 }
 
 

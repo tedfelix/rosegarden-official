@@ -668,6 +668,14 @@ Segment::getQuantizer() const
 }
 
 
+void
+Segment::setRepeating(bool value)
+{
+    m_repeating = value;
+    if (m_composition) m_composition->updateRefreshStatuses();
+}
+
+
 timeT
 Segment::getRepeatEndTime() const
 {

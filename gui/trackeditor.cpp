@@ -112,9 +112,8 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 
     }
 
-    init(rosegardenguiview, tracks,
-	 comp.getBarNumber(comp.getStartMarker()),
-	 comp.getBarNumber(comp.getEndMarker()));
+    init(rosegardenguiview);
+    slotReadjustCanvasSize();
 }
 
 TrackEditor::~TrackEditor()
@@ -135,24 +134,20 @@ TrackEditor::~TrackEditor()
 }
 
 void
-TrackEditor::init(QWidget* rosegardenguiview,
-                  unsigned int nbTracks, int firstBar, int lastBar)
+TrackEditor::init(QWidget* rosegardenguiview)
 {
-    kdDebug(KDEBUG_AREA) << "TrackEditor::init(nbTracks = "
-                         << nbTracks << ", firstBar = " << firstBar
-                         << ", lastBar = " << lastBar << ")" << endl;
-
     QGridLayout *grid = new QGridLayout(this, 5, 2);
 
     QCanvas *canvas = new QCanvas(this);
-
+    canvas->resize(100, 100); // call slotReadjustCanvasSize later
+/*!!!
     m_canvasWidth = (int)(m_rulerScale->getBarPosition(lastBar) +
                           m_rulerScale->getBarWidth(lastBar));
 
     int segmentCanvasHeight = getTrackCellHeight() * 40;
 
     canvas->resize(m_canvasWidth, segmentCanvasHeight);
-
+*/
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
     int trackLabelWidth = 230;
@@ -226,11 +221,14 @@ TrackEditor::init(QWidget* rosegardenguiview,
     m_trackButtonScroll = new QDeferScrollView(this);
     grid->addWidget(m_trackButtonScroll, 2, 0);
 
+    int canvasHeight = getTrackCellHeight() *
+	std::max(40, m_document->getComposition().getNbTracks());
+
     m_trackButtons = new TrackButtons(m_document,
                                       getTrackCellHeight(),
                                       trackLabelWidth,
                                       m_showTrackLabels,
-                                      segmentCanvasHeight,
+                                      canvasHeight,
                                       m_trackButtonScroll->viewport());
     m_trackButtonScroll->addChild(m_trackButtons);
     m_trackButtonScroll->setHScrollBarMode(QScrollView::AlwaysOff);
@@ -322,6 +320,20 @@ TrackEditor::init(QWidget* rosegardenguiview,
 
 
 }
+
+void TrackEditor::slotReadjustCanvasSize()
+{
+    Composition &comp = m_document->getComposition();
+    int lastBar = comp.getBarNumber(comp.getEndMarker());
+    
+    m_canvasWidth = (int)(m_rulerScale->getBarPosition(lastBar) +
+                          m_rulerScale->getBarWidth(lastBar));
+
+    int canvasHeight = getTrackCellHeight() * std::max(40, comp.getNbTracks());
+    
+    m_segmentCanvas->canvas()->resize(m_canvasWidth, canvasHeight);
+}
+
 
 void TrackEditor::slotTrackButtonsWidthChanged()
 {

@@ -409,7 +409,7 @@ public:
     // Is this Segment repeating?
     //
     bool isRepeating() const { return m_repeating; }
-    void setRepeating(bool value) { m_repeating = value; }
+    void setRepeating(bool value);
 
     /**
      * If this Segment is repeating, calculate and return the time at

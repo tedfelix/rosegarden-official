@@ -308,6 +308,8 @@ public slots:
     void slotTransformsTransposeDownOctave();
     void slotTransformsQuantize();
 
+    void slotSetStyleFromAction();
+
     void slotAddMark();
     void slotMarksAddTextMark();
     void slotMarksRemoveMarks();
