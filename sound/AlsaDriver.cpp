@@ -1402,7 +1402,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
             { 
                 PlayableAudioFile *audioFile =
                     new PlayableAudioFile(getAudioFile((*i)->getAudioID()),
-                                          (*i)->getEventTime(),
+                                          (*i)->getEventTime() - playLatency,
                                           (*i)->getAudioStartMarker(),
                                           (*i)->getDuration());
 

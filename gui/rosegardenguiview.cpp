@@ -25,7 +25,6 @@
 #include <qpushbutton.h>
 #include <qabstractlayout.h> 
 #include <qlayout.h>
-#include <qprocess.h>
 #include <qfileinfo.h>
 
 // KDE includes
@@ -34,6 +33,7 @@
 #include <kprinter.h>
 #include <kconfig.h>
 #include <kapp.h>
+#include <kprocess.h>
 
 // application specific includes
 #include "MappedEvent.h"
@@ -324,10 +324,14 @@ void RosegardenGUIView::slotEditSegmentAudio(Rosegarden::Segment *segment)
     // wait cursor
     QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
 
-    QProcess *process = new QProcess(this);
-    process->addArgument(application);
-    process->addArgument(QString(aF->getFilename().c_str()));
+    // Prepare the process
+    //
+    KProcess *process = new KProcess();
+    (*process) << application;
+    (*process) << QString(aF->getFilename().c_str());
 
+    // Start it
+    //
     if (!process->start())
     {
         std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "

@@ -137,7 +137,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
                       0, 0);
 
     QString externalAudioEditor = m_cfg->readEntry("externalaudioeditor",
-                                  i18n("/usr/local/bin/audacity"));
+                                  i18n("audacity"));
 
     m_externalAudioEditorPath = new QLineEdit(externalAudioEditor, frame);
     layout->addMultiCellWidget(m_externalAudioEditorPath, 1, 1, 1, 2);
