@@ -117,7 +117,7 @@ public:
 
     void erase(iterator pos);
     void erase(iterator from, iterator to);
-    void erase(NotationElement*);
+    void eraseSingle(NotationElement*);
 
     iterator findPrevious(const std::string &type, iterator i);
     iterator findNext(const std::string &type, iterator i);

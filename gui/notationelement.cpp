@@ -141,7 +141,7 @@ NotationElementList::erase(NotationElementList::iterator from,
 }
 
 void
-NotationElementList::erase(NotationElement* el)
+NotationElementList::eraseSingle(NotationElement* el)
 {
     std::pair<iterator, iterator> interval = equal_range(el);
 
@@ -153,6 +153,9 @@ NotationElementList::erase(NotationElement* el)
     
     for(iterator i = interval.first; i != interval.second; ++i) {
         if (*i == el) {
+            kdDebug(KDEBUG_AREA) << "NotationElementList::eraseSingle() : found element "
+                                 << el << " - event : " << el->event() << endl;
+
             foundIt = true;
             erase(i);
             break;
@@ -161,7 +164,7 @@ NotationElementList::erase(NotationElement* el)
 
     if (!foundIt) {
         
-        kdDebug(KDEBUG_AREA) << "NotationElementList::erase() : couldn't find element "
+        kdDebug(KDEBUG_AREA) << "NotationElementList::eraseSingle() : couldn't find element "
                              << *el << endl;
         KMessageBox::error(0, "NotationElementList::erase() : could't find element");
     }
