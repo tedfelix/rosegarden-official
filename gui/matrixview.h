@@ -129,9 +129,8 @@ public:
 
 signals:
 
-    void itemPressed(Rosegarden::timeT time, int pitch,
-                     QMouseEvent*,
-                     MatrixElement*);
+    void itemPressed(int pitch, Rosegarden::timeT time,
+                     QMouseEvent*, MatrixElement*);
 
     void itemReleased(Rosegarden::timeT time, QMouseEvent*);
 
@@ -221,7 +220,7 @@ public:
     virtual ~MatrixHLayout();
 
     void setScaleFactor(double scaleFactor) {
-	m_scaleFactor = scaleFactor;
+        m_scaleFactor = scaleFactor;
     }
 
     /**
@@ -306,12 +305,17 @@ public:
     int getElementHeight() { return m_resolution; }
 
     virtual void positionElements(Rosegarden::timeT from = -1,
-				  Rosegarden::timeT to = -1);
+                                  Rosegarden::timeT to = -1);
 };
 
 
 //------------------------------------------------------------
 
+/**
+ * Matrix ("Piano Roll") View
+ *
+ * Note: we currently display only one staff
+ */
 class MatrixView : public EditView
 {
     Q_OBJECT
@@ -358,6 +362,15 @@ public slots:
     void slotPaintSelected();
     void slotEraseSelected();
     void slotSelectSelected();
+
+    /// Canvas actions slots
+
+    /**
+     * Called when a mouse press occurred on a matrix element
+     * or somewhere on the staff
+     */
+    void itemPressed(int pitch, Rosegarden::timeT time,
+                     QMouseEvent*, MatrixElement*);
 
 protected:
 

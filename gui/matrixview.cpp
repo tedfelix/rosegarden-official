@@ -57,8 +57,6 @@ MatrixCanvasView::~MatrixCanvasView()
 
 void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 {
-    QPoint eventPos = e->pos();
-
     timeT evTime = 0;
     int evPitch = 0;
     eventTimePitch(e, evTime, evPitch);
@@ -156,7 +154,7 @@ void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staffBase)
 
 //!!!        double y = (maxMIDIPitch - pitch) * staff.getPitchScaleFactor();
      
-	int y = staff.getLayoutYForHeight(pitch);
+        int y = staff.getLayoutYForHeight(pitch);
    
         kdDebug(KDEBUG_AREA) << "MatrixVLayout::scanStaff : y = "
                              << y << " for pitch " << pitch << endl;
@@ -299,7 +297,7 @@ bool MatrixElement::isNote() const
 
 
 MatrixStaff::MatrixStaff(QCanvas *canvas, Segment *segment,
-			 int id, int vResolution) :
+                         int id, int vResolution) :
     LinedStaff<MatrixElement>(canvas, segment, id, vResolution, 1)
 {
     // nothing else yet
@@ -356,13 +354,13 @@ MatrixStaff::positionElements(timeT from, timeT to)
     if (to >= 0) endAt = mel->findTime(to);
 
     for (MatrixElementList::iterator i = beginAt; i != endAt; ++i) {
-	
-	LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
-	    ((*i)->getLayoutX(), (*i)->getLayoutY());
+        
+        LinedStaffCoords coords = getCanvasCoordsForLayoutCoords((*i)->getLayoutX(),
+                                                                 (*i)->getLayoutY());
 
-	(*i)->setCanvas(m_canvas);
-	(*i)->setCanvasX(coords.first);
-	(*i)->setCanvasY((double)coords.second);
+        (*i)->setCanvas(m_canvas);
+        (*i)->setCanvasX(coords.first);
+        (*i)->setCanvasY((double)coords.second);
     }
 }
 
@@ -388,13 +386,19 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     for (unsigned int i = 0; i < segments.size(); ++i)
         m_staffs.push_back(new MatrixStaff(tCanvas, segments[i], i,
-					   10)); //!!!
+                                           10)); //!!!
 
     kdDebug(KDEBUG_AREA) << "MatrixView : creating canvas view\n";
 
     m_canvasView = new MatrixCanvasView(*m_staffs[0], tCanvas, this);
 
     setCentralWidget(m_canvasView);
+
+    QObject::connect
+        (m_canvasView, SIGNAL(itemPressed(int, Rosegarden::timeT, QMouseEvent*, MatrixElement*)),
+         this,         SLOT  (itemPressed(int, Rosegarden::timeT, QMouseEvent*, MatrixElement*)));
+
+
 
     kdDebug(KDEBUG_AREA) << "MatrixView : applying layout\n";
 
@@ -404,7 +408,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         kdDebug(KDEBUG_AREA) << "MatrixView : rendering elements\n";
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
             // m_staffs[i]->renderElements();
-	    m_staffs[i]->positionElements();
+            m_staffs[i]->positionElements();
         }
     }
 }
@@ -498,15 +502,15 @@ bool MatrixView::applyLayout(int /*staffNo*/)
     double maxWidth = 0.0, maxHeight = 0.0;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-	m_staffs[i]->sizeStaff(*m_hlayout);
+        m_staffs[i]->sizeStaff(*m_hlayout);
 
-	if (m_staffs[i]->getX() + m_staffs[i]->getTotalWidth() > maxWidth) {
-	    maxWidth = m_staffs[i]->getX() + m_staffs[i]->getTotalWidth();
-	}
+        if (m_staffs[i]->getX() + m_staffs[i]->getTotalWidth() > maxWidth) {
+            maxWidth = m_staffs[i]->getX() + m_staffs[i]->getTotalWidth();
+        }
 
-	if (m_staffs[i]->getY() + m_staffs[i]->getTotalHeight() > maxHeight) {
-	    maxHeight = m_staffs[i]->getY() + m_staffs[i]->getTotalHeight();
-	}
+        if (m_staffs[i]->getY() + m_staffs[i]->getTotalHeight() > maxHeight) {
+            maxHeight = m_staffs[i]->getY() + m_staffs[i]->getTotalHeight();
+        }
     }
 
     readjustViewSize(QSize(maxWidth, maxHeight));
@@ -539,6 +543,10 @@ void MatrixView::slotSelectSelected()
 {
 }
 
+void MatrixView::itemPressed(int pitch, Rosegarden::timeT time,
+                             QMouseEvent*, MatrixElement*)
+{
+}
 
 
 
