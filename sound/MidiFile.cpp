@@ -644,6 +644,12 @@ MidiFile::convertToRosegarden()
             break;
         }
       }
+
+      // cc
+      rosegardenTrack->calculateBarPositions();
+      rosegardenTrack->autoBeam(rosegardenTrack->begin(),
+				rosegardenTrack->end(),
+				"beamed"); // probably shouldn't be hardcoded!
     }
   }
 
