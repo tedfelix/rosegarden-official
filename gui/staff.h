@@ -51,6 +51,8 @@ public:
     void deleteBars(unsigned int fromPos);
     void deleteBars();
 
+    void setLinesLength(unsigned int);
+
     static const int nbLines;        // number of main lines on the staff
     static const int linesOffset;    // from top of canvas to top line (bad!)
 
@@ -60,6 +62,8 @@ protected:
     int m_resolution;
 
     barlines m_barLines;
+    barlines m_staffLines;
+
     NotePixmapFactory m_npf;
 };
 

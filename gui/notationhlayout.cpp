@@ -51,7 +51,8 @@ NotationHLayout::NotationHLayout(Staff &staff, //!!! maybe not needed, just tryi
     m_staff(staff),
     m_notationElements(elements),
     m_barMargin(staff.getBarMargin()),
-    m_noteMargin(staff.getNoteMargin())
+    m_noteMargin(staff.getNoteMargin()),
+    m_totalWidth(0.)
 {
     kdDebug(KDEBUG_AREA) << "NotationHLayout::NotationHLayout()" << endl;
 }
@@ -553,6 +554,8 @@ NotationHLayout::layout()
             kdDebug(KDEBUG_AREA) << "x = " << x << endl;
         }
     }
+
+    m_totalWidth = x;
 }
 
 

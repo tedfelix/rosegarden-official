@@ -62,6 +62,8 @@ public:
     /// resets the internal position counters of the object
     void reset();
 
+    double getTotalWidth() { return m_totalWidth; }
+
 protected:
     class AccidentalTable : public std::vector<Rosegarden::Accidental>
     {
@@ -96,6 +98,9 @@ protected:
                          const Rosegarden::TimeSignature &timeSignature) const;
 
     BarDataList m_barData;
+
+    double m_totalWidth;
+
 };
 
 #endif

@@ -36,7 +36,7 @@ Staff::Staff(QCanvas *canvas, int resolution) :
     // horizontal lines
 
     int w = canvas->width();
-    m_horizLineLength = w - (w / 10);
+    m_horizLineLength = w - 20;
 
     // Pitch is represented with the MIDI pitch scale; NotationTypes.h
     // contains methods to convert this to and from staff-height
@@ -65,6 +65,9 @@ Staff::Staff(QCanvas *canvas, int resolution) :
             line->setPen(QPen(white, 1)); // invisibleLineWidth
             line->setZ(-1);
         }
+
+        m_staffLines.push_back(line);
+        
     }
 
     // Add vertical lines
@@ -118,8 +121,7 @@ compareBarToPos(QCanvasLineGroupable *barLine1, unsigned int pos)
     return barLine1->x() < pos;
 }
 
-void
-Staff::insertBar(unsigned int barPos, bool correct)
+void Staff::insertBar(unsigned int barPos, bool correct)
 {
     kdDebug(KDEBUG_AREA) << "Staff::insertBar(" << barPos << ")\n";
 
@@ -138,8 +140,7 @@ Staff::insertBar(unsigned int barPos, bool correct)
     m_barLines.insert(insertPoint, barLine);
 }
 
-void
-Staff::deleteBars(unsigned int fromPos)
+void Staff::deleteBars(unsigned int fromPos)
 {
     kdDebug(KDEBUG_AREA) << "Staff::deleteBars from " << fromPos << endl;
 
@@ -158,8 +159,7 @@ Staff::deleteBars(unsigned int fromPos)
     m_barLines.erase(startDeletePoint, m_barLines.end());
 }
 
-void
-Staff::deleteBars()
+void Staff::deleteBars()
 {
     kdDebug(KDEBUG_AREA) << "Staff::deleteBars()\n";
     
@@ -167,6 +167,18 @@ Staff::deleteBars()
         delete (*i);
 
     m_barLines.clear();
+}
+
+void Staff::setLinesLength(unsigned int length)
+{
+    for (barlines::iterator i = m_staffLines.begin();
+         i != m_staffLines.end(); ++i) {
+
+        QPoint startPt = (*i)->startPoint();
+        
+        (*i)->setPoints(startPt.x(), startPt.y(),
+                        startPt.x() + length, startPt.y());
+    }
 }
 
 const int Staff::nbLines = 5;

@@ -598,6 +598,8 @@ bool NotationView::applyLayout()
     bool rcv = applyVerticalLayout();
     bool rch = applyHorizontalLayout();
 
+    readjustCanvasWidth();
+
     kdDebug(KDEBUG_AREA) << "NotationView::applyLayout() : done" << endl;
 
     return rcp && rch && rcv;
@@ -1212,6 +1214,26 @@ void NotationView::redoLayout(NotationElementList::iterator from)
 
     showBars(m_notationElements->begin(),
              m_notationElements->end());
+}
+
+void NotationView::readjustCanvasWidth()
+{
+    double totalWidth = m_hlayout->getTotalWidth();
+
+    kdDebug(KDEBUG_AREA) << "NotationView::readjustCanvasWidth() : totalWidth = "
+                         << totalWidth << endl;
+
+    if (canvas()->width() < totalWidth) {
+
+        kdDebug(KDEBUG_AREA) << "NotationView::readjustCanvasWidth() to "
+                             << totalWidth << endl;
+
+        canvas()->resize(int(totalWidth) + 50, canvas()->height());
+
+        m_mainStaff->setLinesLength(canvas()->width() - 20);
+    }
+    
+
 }
 
 

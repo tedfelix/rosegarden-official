@@ -228,6 +228,11 @@ protected:
     void redoLayout(NotationElementList::iterator from);
 
     /**
+     * readjust the width of the canvas after a layout
+     */
+    void readjustCanvasWidth();
+    
+    /**
      * show bar lines
      */
     bool showBars(NotationElementList::iterator from,
