@@ -60,7 +60,7 @@ public:
 
     MidiDeviceListViewItem(Rosegarden::DeviceId id,
                            QListViewItem* parent, QString name,
-                           QString msb, QString lsb);
+                           int msb, int lsb);
 
     Rosegarden::DeviceId getDevice() const { return m_deviceId; }
 
@@ -76,10 +76,13 @@ public:
     MidiBankListViewItem(Rosegarden::DeviceId deviceId,
                          int bankNb,
                          QListViewItem* parent, QString name,
-                         QString msb, QString lsb);
+                         int msb, int lsb);
 
     int getBank()     { return m_bankNb; }
 
+    void setMSB(int msb);
+    void setLSB(int msb);
+    
 protected:
 
     //--------------- Data members ---------------------------------

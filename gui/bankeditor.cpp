@@ -76,8 +76,8 @@ MidiDeviceListViewItem::MidiDeviceListViewItem(Rosegarden::DeviceId deviceId,
 
 MidiDeviceListViewItem::MidiDeviceListViewItem(Rosegarden::DeviceId deviceId,
                                                QListViewItem* parent, QString name,
-                                               QString msb, QString lsb)
-    : QListViewItem(parent, name, msb, lsb),
+                                               int msb, int lsb)
+    : QListViewItem(parent, name, QString().setNum(msb), QString().setNum(lsb)),
       m_deviceId(deviceId)
 {
 }
@@ -87,11 +87,22 @@ MidiDeviceListViewItem::MidiDeviceListViewItem(Rosegarden::DeviceId deviceId,
 MidiBankListViewItem::MidiBankListViewItem(Rosegarden::DeviceId deviceId,
                                            int bankNb,
                                            QListViewItem* parent,
-                                           QString name, QString msb, QString lsb)
+                                           QString name, int msb, int lsb)
     : MidiDeviceListViewItem(deviceId, parent, name, msb, lsb),
       m_bankNb(bankNb)
 {
 }
+
+void MidiBankListViewItem::setMSB(int msb)
+{
+    setText(1, QString().setNum(msb));
+}
+
+void MidiBankListViewItem::setLSB(int lsb)
+{
+    setText(2, QString().setNum(lsb));
+}
+
 
 //--------------------------------------------------
 
@@ -884,8 +895,7 @@ BankEditorDialog::populateDeviceItem(QListViewItem* deviceItem, Rosegarden::Midi
                  << endl;
         new MidiBankListViewItem(midiDevice->getId(), i, deviceItem,
                                  strtoqstr(banks[i].name),
-                                 QString("%1").arg(banks[i].msb),
-                                 QString("%1").arg(banks[i].lsb));
+                                 banks[i].msb, banks[i].lsb);
     }
             
     
@@ -913,8 +923,7 @@ BankEditorDialog::updateDeviceItem(MidiDeviceListViewItem* deviceItem)
                  << endl;
         new MidiBankListViewItem(midiDevice->getId(), i, deviceItem,
                                  strtoqstr(banks[i].name),
-                                 QString("%1").arg(banks[i].msb),
-                                 QString("%1").arg(banks[i].lsb));
+                                 banks[i].msb, banks[i].lsb);
     }
             
 
@@ -926,6 +935,11 @@ BankEditorDialog::updateDeviceItem(MidiDeviceListViewItem* deviceItem)
     
     while(child) {
         if (child->getBank() >= banks.size()) childrenToDelete.push_back(child);
+        else { // update the banks MSB/LSB which might have changed
+            child->setMSB(banks[child->getBank()].msb);
+            child->setLSB(banks[child->getBank()].lsb);
+        }
+        
         child = dynamic_cast<MidiBankListViewItem*>(child->nextSibling());
     }
 
@@ -1226,8 +1240,7 @@ BankEditorDialog::slotAddBank()
                                      m_bankList.size() - 1,
                                      deviceItem,
                                      strtoqstr(newBank.name),
-                                     QString("%1").arg(newBank.msb),
-                                     QString("%1").arg(newBank.lsb));
+                                     newBank.msb, newBank.lsb);
         keepBankListForNextPopulate();
         m_listView->setCurrentItem(newBankItem);
 
