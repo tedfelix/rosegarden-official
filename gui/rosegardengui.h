@@ -929,7 +929,7 @@ public slots:
     void slotJumpToTime(int sec, int usec);
     void slotStartAtTime(int sec, int usec);
     void slotRefreshTimeDisplay();
-
+    void slotToggleTracking();
 
     /**
      * Called when the sequencer auxiliary process exits

@@ -85,6 +85,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     m_showTrackLabels(showTrackLabels),
     m_canvasWidth(0),
     m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId()),
+    m_playTracking(true),
     m_initialUnitsPerPixel(initialUnitsPerPixel)
 {
     // accept dnd
@@ -517,10 +518,19 @@ TrackEditor::slotSetPointerPosition(Rosegarden::timeT position)
     if (distance >= 1.0) {
 
 	m_pointer->setX(pos);
-        getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
+
+	if (m_playTracking) {
+	    getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
+	}
 
 	emit needUpdate();
     }
+}
+
+void
+TrackEditor::slotToggleTracking()
+{
+    m_playTracking = !m_playTracking;
 }
 
 void

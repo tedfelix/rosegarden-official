@@ -106,6 +106,7 @@
         <Action name="rewind"/> 
         <Action name="record"/>
         <Action name="recordtoggle"/>
+	<Action name="toggle_tracking"/>
   </Menu>
   <Menu name="Tools">
         <text>&amp;Tools</text>
@@ -323,6 +324,7 @@
        <Action name="stop" />
        <Action name="record" />
        <Action name="recordtoggle" />
+       <Action name="toggle_tracking"/>
      </enable>
 </State>
 

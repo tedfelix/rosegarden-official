@@ -170,6 +170,8 @@ public slots:
     void slotDeleteSelectedSegments();
     void slotTurnRepeatingSegmentToRealCopies();
 
+    void slotToggleTracking();
+
 protected slots:
     void slotSegmentOrderChanged(int section, int fromIdx, int toIdx);
 
@@ -239,6 +241,7 @@ protected:
     bool                     m_showTrackLabels;
     unsigned int             m_canvasWidth;
     unsigned int             m_compositionRefreshStatusId;
+    bool                     m_playTracking;
 
     typedef std::map<Rosegarden::Segment *, unsigned int>
         SegmentRefreshStatusIdMap;

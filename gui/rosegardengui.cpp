@@ -843,6 +843,11 @@ void RosegardenGUIApp::setupActions()
                                      "fastforwardtoend");
     m_ffwdEndTransport->setGroup(RosegardenTransportDialog::ConfigGroup);
 
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "transport-tracking"));
+    (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, 0, this,
+		       SLOT(slotToggleTracking()), actionCollection(),
+		       "toggle_tracking"))->setChecked(true);
+
     // create the Transport GUI and add the callbacks to the
     // buttons and keyboard accelerators
     //
@@ -1108,6 +1113,13 @@ void RosegardenGUIApp::initView()
 
     // set the highlighted track
     m_view->slotSelectTrackSegments(comp.getSelectedTrack());
+
+    // play tracking on in the editor by default: turn off if need be
+    KToggleAction *trackingAction = dynamic_cast<KToggleAction *>
+        (actionCollection()->action("toggle_tracking"));
+    if (trackingAction && !trackingAction->isChecked()) {
+	m_view->getTrackEditor()->slotToggleTracking();
+    }
 
     m_view->show();
 
@@ -3362,6 +3374,11 @@ void RosegardenGUIApp::slotRefreshTimeDisplay()
 }
 
 
+void RosegardenGUIApp::slotToggleTracking()
+{
+    m_view->getTrackEditor()->slotToggleTracking();
+}
+    
 
 // Sequencer auxiliary process management
 //
