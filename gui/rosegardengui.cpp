@@ -633,16 +633,21 @@ void RosegardenGUIApp::fileNewWindow()
 
 void RosegardenGUIApp::fileNew()
 {
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::fileNew()\n";
+
     KTmpStatusMsg msg(i18n("Creating new document..."), statusBar());
 
-    if (!m_doc->saveIfModified()) {
-        // here saving wasn't successful
+    if (m_doc->saveIfModified()) {
 
-    } else {	
-        m_doc->newDocument();		
+        m_doc->newDocument();
 
         QString caption=kapp->caption();	
         setCaption(caption+": "+m_doc->getTitle());
+        initView();
+
+        // See comment in RosegardenGUIApp::openURL()
+        // for an explanation on why we have to do this
+        actionCollection()->action("move")->activate();
         actionCollection()->action("draw")->activate();
     }
 }
