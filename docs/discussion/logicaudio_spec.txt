@@ -104,20 +104,29 @@ note on the staff.
 
 If a note is already present where you want to add one, three cases
 
-- the existing note is of the same duration as the one you want to add :
+1. the inserted note is of the same duration as the existing one :
         the new one is chorded with the other [[ DONE ]]
 
-- the existing note is of shorter duration than the one you want to add :
+2. the inserted note is of shorter duration than the existing one :
+
+	The existing note is shortened to the duration of the inserted
+	one, a padding rest is appended.
+
+        Or the opposite (same as case 3. : the inserted
+        note is lengthened to be equal to existing ones).
+
+	[[ For the moment, do same as case 3. ]]
+        
+
+3. the inserted note is of longer duration that the existing one :
+
         you insert a note of that same duration, even if the
         one you've selected on the palette is longer [[ DONE ]]
 
-- the existing note is of longer duration that the one you want to add :
-        Sometimes it is constrained down to the same duration as the one
-        you're inserting, and a padding rest is inserted. Sometimes it's
-	the opposite (same as previous case : the inserted note is lengthened
-	to be equal to existing ones), sometimes both are being changed
-	to an "average" duration (between the duration of the existing and
-	inserted notes). [[ For the moment, do same as previous case ]]
+	There should be a case when the inserted note is split into a
+	note of the same duration as the existing one plus a note of
+	the remaining duration which is being tied to the existing
+	ones.
 
 If the note you want to insert is longer than the rest it should
 replace, it is constrained down to that rest's duration. [[ DONE ]]
