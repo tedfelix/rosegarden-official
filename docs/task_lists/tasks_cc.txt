@@ -29,7 +29,10 @@ Post-0.1.3 task list (superseding older ones)
     now sorted by pitch, which should make this easier.  Can we assign
     stem directions sensibly for chords that begin during other chords? 
 
-10. Key signature GUI
+10. Key signature GUI [DONE]
+
+10a. Implement Transpose Rest of Staff and Insert Into All Tracks options
+     on key signature GUI
 
 11. Rework Composition's bar methods so that truncate argument is no
     longer requested, assuming truncate = false always.

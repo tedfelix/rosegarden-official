@@ -1573,12 +1573,16 @@ void NotationView::slotTransformsAddKeySignature()
 
 	KeySignatureDialog *dialog =
 	    new KeySignatureDialog(this, m_notePixmapFactory, clef, key);
-	if (dialog->exec() == QDialog::Accepted) {
+
+	if (dialog->exec() == QDialog::Accepted &&
+	    dialog->isValid()) {
+
 	    addCommandToHistory
 		(new KeyInsertionCommand
 		 (m_staffs[m_currentStaff]->getSegment(),
 		  insertionTime, dialog->getKey()));
 	}
+
 	delete dialog;
     }
 }			

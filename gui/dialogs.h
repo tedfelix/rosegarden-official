@@ -90,9 +90,14 @@ public:
 		       NotePixmapFactory *npf,
 		       Rosegarden::Clef clef,
 		       Rosegarden::Key defaultKey =
-		       Rosegarden::Key::DefaultKey);
+		       Rosegarden::Key::DefaultKey,
+		       bool showApplyToAll = true,
+		       bool showTranspose = true);
 
+    bool isValid() const;
     Rosegarden::Key getKey() const;
+
+    bool shouldApplyToAll() const;
     bool shouldTranspose() const;
 
 protected:
@@ -100,15 +105,21 @@ protected:
 
     Rosegarden::Key m_key;
     Rosegarden::Clef m_clef;
+    bool m_valid;
+    bool m_ignoreComboChanges;
 
     QLabel *m_keyLabel;
     QComboBox *m_keyCombo;
     QComboBox *m_majorMinorCombo;
+
     QCheckBox *m_transposeButton;
+    QCheckBox *m_applyToAllButton;
 
     void redrawKeyPixmap();
     void regenerateKeyCombo();
-    
+    void setValid(bool valid);
+    std::string getKeyName(const QString &s, bool minor);
+
 public slots:
     void slotKeyUp();
     void slotKeyDown();
