@@ -806,15 +806,13 @@ void RosegardenGUIApp::openFile(const QString& filePath)
 
     if (!info.exists()) {
 	// can happen with command-line arg, so...
-	KStartupLogo *logo = KStartupLogo::getInstance();
-	if (logo) logo->hide();
+	KStartupLogo::hideIfStillThere();
         KMessageBox::sorry(this, i18n("The specified file does not exist"));
         return;
     }
 
     if (info.isDir()) {
-	KStartupLogo *logo = KStartupLogo::getInstance();
-	if (logo) logo->hide();
+	KStartupLogo::hideIfStillThere();
         KMessageBox::sorry(this, i18n("You have specified a directory"));
         return;
     }
@@ -822,8 +820,7 @@ void RosegardenGUIApp::openFile(const QString& filePath)
     QFile file(filePath);
 
     if (!file.open(IO_ReadOnly)) {
-	KStartupLogo *logo = KStartupLogo::getInstance();
-	if (logo) logo->hide();
+	KStartupLogo::hideIfStillThere();
         KMessageBox::sorry(this, i18n("You do not have read permission to this file."));
         return;
     }
@@ -850,8 +847,7 @@ void RosegardenGUIApp::openFile(const QString& filePath)
             RG_DEBUG << "RosegardenGUIApp::openFile : found a more recent autosave file\n";
             // At this point the splash screen may still be there, hide it if
             // it's the case
-            KStartupLogo* logo = KStartupLogo::getInstance();
-            if (logo) logo->hide();
+            KStartupLogo::hideIfStillThere();
 
             // It is, so ask the user if he wants to use the autosave file
             int reply = KMessageBox::questionYesNo(this,
@@ -1928,6 +1924,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
     midiFile = new Rosegarden::MidiFile(qstrtostr(file),
                                         &m_doc->getStudio());
 
+    KStartupLogo::hideIfStillThere();
     RosegardenProgressDialog progressDlg(i18n("Importing MIDI file..."),
                                          100,
                                          this);
@@ -2038,6 +2035,7 @@ void RosegardenGUIApp::importRG21File(const QString &file)
 {
     if (!m_doc->saveIfModified()) return;
 
+    KStartupLogo::hideIfStillThere();
     RosegardenProgressDialog progressDlg(i18n("Importing Rosegarden 2.1 file..."),
                                          100,
                                          this);
@@ -2319,8 +2317,7 @@ void RosegardenGUIApp::slotSequencerExited(KProcess*)
 {
     RG_DEBUG << "RosegardenGUIApp::slotSequencerExited Sequencer exited\n";
 
-    KStartupLogo* logo = KStartupLogo::getInstance();
-    if (logo) logo->hide();
+    KStartupLogo::hideIfStillThere();
 
     KMessageBox::error(0, i18n("Sequencer exited"));
 

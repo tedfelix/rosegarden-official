@@ -38,7 +38,7 @@
 KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
     : QWidget(parent,name,
 	      WStyle_Dialog  | WStyle_StaysOnTop | WStyle_NoBorderEx | WStyle_Customize | WDestructiveClose),
-    m_bReadyToHide(false)
+    m_readyToHide(false)
 {
     QString pixmapFile = locate("appdata", "pixmaps/splash.png");
     if (!pixmapFile) return;
@@ -52,6 +52,7 @@ KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
 KStartupLogo::~KStartupLogo()
 {
     m_wasClosed = true;
+    m_instance = 0;
 }
 
 void KStartupLogo::paintEvent(QPaintEvent*)
@@ -99,8 +100,8 @@ void KStartupLogo::slotShowStatusMessage(const QString &message)
 void KStartupLogo::mousePressEvent( QMouseEvent*)
 {
     // for the haters of raising startlogos
-    if (m_bReadyToHide)
-        hide();
+    if (m_readyToHide)
+        close();
 }
 
 KStartupLogo* KStartupLogo::getInstance()
@@ -111,6 +112,12 @@ KStartupLogo* KStartupLogo::getInstance()
 
     return m_instance;
 }
+
+void KStartupLogo::hideIfStillThere()
+{
+    if (m_instance) m_instance->close();
+}
+
 
 KStartupLogo* KStartupLogo::m_instance = 0;
 bool KStartupLogo::m_wasClosed = false;

@@ -39,7 +39,9 @@ public:
 
     static KStartupLogo* getInstance();
 
-    void setHideEnabled(bool bEnabled) { m_bReadyToHide = bEnabled; };
+    static void hideIfStillThere();
+    
+    void setHideEnabled(bool enabled) { m_readyToHide = enabled; };
 
 public slots:
     void slotShowStatusMessage(const QString &);
@@ -52,7 +54,7 @@ protected:
     virtual void paintEvent(QPaintEvent*);
     virtual void mousePressEvent( QMouseEvent*);
 
-    bool m_bReadyToHide;
+    bool m_readyToHide;
 
     QPixmap m_pixmap;
 
