@@ -28,6 +28,7 @@
 
 #include "AudioFileManager.h"
 #include "rosegardenguidoc.h"
+#include "Segment.h"
 
 // This dialog presents and allows editing of the Audio files that
 // are in the Composition.  We edit the AudioFileManager directly
@@ -54,9 +55,11 @@ class AudioListItem : public QListViewItem
 
 public:
 
-    AudioListItem(QListView *parent):QListViewItem(parent) {;}
+    AudioListItem(QListView *parent):QListViewItem(parent),
+                                     m_segment(0) {;}
 
-    AudioListItem(QListViewItem *parent):QListViewItem(parent) {;}
+    AudioListItem(QListViewItem *parent):QListViewItem(parent),
+                                         m_segment(0) {;}
 
     AudioListItem(QListView *parent,
                   QString label,
@@ -64,7 +67,8 @@ public:
                       QListViewItem(parent,
                                     label,
                                     "", "", "", "", "", "", ""),
-                                    m_id(id) {;}
+                                    m_id(id),
+                                    m_segment(0) {;}
 
     AudioListItem(QListViewItem *parent, 
                   QString label,
@@ -72,7 +76,8 @@ public:
                       QListViewItem(parent,
                                     label,
                                     "", "", "", "", "", "", ""),
-                                    m_id(id) {;}
+                                    m_id(id),
+                                    m_segment(0) {;}
 
 
     unsigned int getId() { return m_id; }
@@ -85,12 +90,19 @@ public:
         { m_duration = time; }
     Rosegarden::RealTime getDuration() { return m_duration; }
 
+    void setSegment(Rosegarden::Segment *segment)
+        { m_segment = segment; }
+    Rosegarden::Segment *getSegment() { return m_segment; }
+
 protected:
     unsigned int m_id;
 
     // for audio segments
     Rosegarden::RealTime m_startTime;
     Rosegarden::RealTime m_duration;
+
+    // pointer to a segment
+    Rosegarden::Segment *m_segment;
 
 };
 
@@ -113,6 +125,10 @@ public:
     //
     AudioFile* getCurrentSelection();
 
+    // Scroll and expand to show this selected item
+    //
+    void setSelected(unsigned int id, Rosegarden::Segment *segment);
+
 public slots:
     void slotAdd();
     void slotDelete();
@@ -121,6 +137,9 @@ public slots:
     void slotEnableButtons();
     void slotInsert();
     void slotDeleteAll();
+
+    // get selection
+    void slotSelectionChanged(QListViewItem *);
 
     // Repopulate
     //
@@ -137,9 +156,13 @@ signals:
                        const Rosegarden::RealTime &,
                        const Rosegarden::RealTime &);
 
+    // We've selected a segment here, make the canvas select it too
+    //
+    void segmentSelected(Rosegarden::Segment *);
+    void deleteSegment(Rosegarden::Segment *);
+
 protected:
     virtual void closeEvent(QCloseEvent *e);
-    void generateEnvelopePixmap(QPixmap *pixmap, AudioFile *aF);
 
     QListView        *m_fileList;
     QPushButton      *m_addButton;
@@ -151,7 +174,6 @@ protected:
 
     RosegardenGUIDoc *m_doc;
 
-    RealTime          m_maxLength;
     QAccel           *m_accelerator;
 
 };

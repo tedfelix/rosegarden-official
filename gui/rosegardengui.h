@@ -761,6 +761,8 @@ public slots:
     void slotPlayAudioFile(unsigned int,
                            const Rosegarden::RealTime &,
                            const Rosegarden::RealTime &);
+    void slotSelectSegment(Rosegarden::Segment *);
+    void slotDeleteSegment(Rosegarden::Segment*);
 
 private:
 

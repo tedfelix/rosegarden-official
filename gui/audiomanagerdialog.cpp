@@ -98,7 +98,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     connect(m_deleteAllButton, SIGNAL(released()), SLOT(slotDeleteAll()));
 
     // connect selection mechanism
-    connect(m_fileList, SIGNAL(selectionChanged()), SLOT(slotEnableButtons()));
+    connect(m_fileList, SIGNAL(selectionChanged(QListViewItem*)),
+                        SLOT(slotSelectionChanged(QListViewItem*)));
 
     // setup local accelerators
     //
@@ -181,7 +182,12 @@ AudioManagerDialog::slotPopulateFileList()
              it != m_doc->getAudioFileManager().end();
              it++)
     {
-        generateEnvelopePixmap(audioPixmap, *it);
+        m_doc->getAudioFileManager().
+                drawPreview((*it)->getId(),
+                            RealTime(0, 0),
+                            (*it)->getLength(),
+                            audioPixmap);
+
 
         QString label = QString((*it)->getShortFilename().c_str());
              
@@ -253,6 +259,10 @@ AudioManagerDialog::slotPopulateFileList()
                 // set pixmap
                 //
                 childItem->setPixmap(2, *audioPixmap);
+
+                // set segment
+                //
+                childItem->setSegment(*iit);
             }
         }
     }
@@ -287,9 +297,49 @@ void
 AudioManagerDialog::slotDelete()
 {
     AudioFile *audioFile = getCurrentSelection();
+    AudioListItem *item =
+        dynamic_cast<AudioListItem*>(m_fileList->selectedItem());
 
-    if (audioFile == 0)
+    if (audioFile == 0 || item == 0)
         return;
+
+    // If we're on a Segment then delete it at the Composition
+    // and refresh the list.
+    //
+    if (item->getSegment())
+    {
+        // Get the next item to highlight
+        //
+        QListViewItem *newItem = item->nextSibling();
+        
+        if(newItem == 0)
+        {
+            cout << "FIRST CHILD" << endl;
+            newItem = item->firstChild();
+        }
+
+        unsigned int id = 0;
+        Rosegarden::Segment *segment = 0;
+        AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
+        
+        if (aItem)
+        {
+            segment = item->getSegment();
+            id = item->getId();
+        }
+
+        // Do the things
+        //
+        emit deleteSegment(item->getSegment());
+        slotPopulateFileList();
+
+        // Show new selection
+        //
+        if (newItem)
+            setSelected(id, segment);
+
+        return;
+    }
 
     QString question = i18n("Really delete \"") +
                        QString(audioFile->getFilename().c_str()) +
@@ -368,8 +418,6 @@ AudioManagerDialog::slotAdd()
                                   QString(e.c_str()) + "\"";
             KMessageBox::sorry(this, errorString);
         }
-
-        m_maxLength = RealTime(0, 0); // reset to force recalculate
 
         try
         {
@@ -457,38 +505,53 @@ AudioManagerDialog::closeEvent(QCloseEvent *e)
 }
 
 void
-AudioManagerDialog::generateEnvelopePixmap(QPixmap *pixmap, AudioFile *aF)
+AudioManagerDialog::slotSelectionChanged(QListViewItem *item)
 {
-    // Find the max length of all the sample files 
+    slotEnableButtons();
+
+    AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
+
+    // If we're on a segment then send a "select" signal
     //
-    if (m_maxLength == RealTime(0, 0))
-    {
-        std::vector<AudioFile*>::const_iterator it;
-        for (it = m_doc->getAudioFileManager().begin();
-             it != m_doc->getAudioFileManager().end();
-             it++)
-        {
-            if ((*it)->getLength() > m_maxLength)
-                m_maxLength = (*it)->getLength();
-        }
-    }
-
-    // Resize the pixmap according
-    //
-    /*
-    pixmap->resize(int(double(maxPreviewWidth) *
-                       (aF->getLength() / m_maxLength)),
-                   pixmap->height());
-                   */
-
-    m_doc->getAudioFileManager().
-        drawPreview(aF->getId(),
-                    RealTime(0, 0),
-                    aF->getLength(),
-                    pixmap);
-
+    if (aItem && aItem->getSegment())
+        emit segmentSelected(aItem->getSegment());
 }
 
+
+// Select a Segment - traverse the tree and locate the correct child
+//
+void
+AudioManagerDialog::setSelected(unsigned int id, Rosegarden::Segment *segment)
+{
+    QListViewItem *it = m_fileList->firstChild();
+    QListViewItem *chIt = 0;
+    AudioListItem *aItem;
+
+    while (it)
+    {
+        if (it->childCount() == 0)
+            chIt = it->firstChild();
+        
+        while (chIt)
+        {
+            aItem = dynamic_cast<AudioListItem*>(chIt);
+
+            if (aItem)
+            {
+                if (aItem->getId() == id && aItem->getSegment() == segment)
+                {
+                    m_fileList->ensureItemVisible(it);
+                    m_fileList->setSelected(it, true);
+                    return;
+                }
+            }
+            chIt = chIt->nextSibling();
+        }
+
+        it = it->nextSibling();
+    }
+
+}
 
 }
 

@@ -390,6 +390,22 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
             segments.insert(*i);
     }
 
+    // update the instrument parameter box
+    Composition &comp = getDocument()->getComposition();
+
+    slotUpdateInstrumentParameterBox(comp.getTrackByIndex(trackId)->
+                                     getInstrument());
+
+    // Store the selected Track in the Composition
+    //
+    comp.setSelectedTrack(trackId);
+
+    slotSetSelectedSegments(segments);
+}
+
+void RosegardenGUIView::slotSetSelectedSegments(
+        const Rosegarden::SegmentSelection &segments)
+{
     // Send this signal to the GUI to activate the correct tool
     // on the toolbar so that we have a SegmentSelector object
     // to write the Segments into
@@ -403,15 +419,6 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
 
     // update the segment parameter box
     m_segmentParameterBox->useSegments(segments);
-
-    // update the instrument parameter box
-    Composition &comp = getDocument()->getComposition();
-    slotUpdateInstrumentParameterBox(comp.getTrackByIndex(trackId)->
-                                     getInstrument());
-
-    // Store the selected Track in the Composition
-    //
-    comp.setSelectedTrack(trackId);
 
 #ifdef RGKDE3
     emit stateChange("segment_selected", false);

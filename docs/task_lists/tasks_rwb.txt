@@ -34,11 +34,7 @@ o Audio VU meters
 
 o Some state we're getting into with mute buttons and file saving
 
-o Jumping vertical scroll thumb on playback [RosegardenCanvasView::slotUpdate]
-
 o "Revert file" option
-
-o Instrument name when pop down instrument list
 
 o sweep selection on Matrix
 
@@ -104,6 +100,11 @@ o Changing Composition length [DONE]
 
 o Track addition/deletion and moving on TrackButtons canvas
   [gl PARTIALLY DONE]
+
+o Jumping vertical scroll thumb on playback [RosegardenCanvasView::slotUpdate]
+  [FIXED]
+
+o Instrument name when pop down instrument list [DONE]
 
 
 

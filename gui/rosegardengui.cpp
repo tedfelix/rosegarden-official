@@ -2718,6 +2718,14 @@ RosegardenGUIApp::slotAudioManager()
         connect(m_audioManagerDialog, SIGNAL(deleteAudioFile(unsigned int)),
                 SLOT(slotDeleteAudioFile(unsigned int)));
 
+        connect(m_audioManagerDialog,
+                SIGNAL(segmentSelected(Rosegarden::Segment*)),
+                SLOT(slotSelectSegment(Rosegarden::Segment*)));
+
+        connect(m_audioManagerDialog,
+                SIGNAL(deleteSegment(Rosegarden::Segment*)),
+                SLOT(slotDeleteSegment(Rosegarden::Segment*)));
+
         m_audioManagerDialog->show();
     }
 }
@@ -2848,6 +2856,21 @@ RosegardenGUIApp::checkForStop()
     {
         KMessageBox::error(this, s);
     }
+}
+
+void
+RosegardenGUIApp::slotSelectSegment(Rosegarden::Segment *segment)
+{
+    Rosegarden::SegmentSelection selection;
+    selection.insert(segment);
+    m_view->slotSetSelectedSegments(selection);
+}
+
+void
+RosegardenGUIApp::slotDeleteSegment(Rosegarden::Segment *segment)
+{
+    slotSelectSegment(segment);
+    slotDeleteSelectedSegments();
 }
 
 
