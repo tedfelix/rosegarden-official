@@ -43,6 +43,8 @@ Work required to fix existing stuff
     wrong notehead, note's stem sometimes doesn't meet its beam &c
 
 
+
+
 New features suitable for 0.2
 -----------------------------
 
@@ -50,11 +52,25 @@ New features suitable for 0.2
 
 2.  dynamics, such as slurs and hairpins
 
-3.  text on the score
+3.  text on the score (and MIDI import and export)
 
 4.  generic event property editor dialog
 
 5.  "internationalisation" of gui?  some nice english note names...
+
+6.  Note velocities.  Internal rep and import/export.  Text to
+    velocity conversions?
+
+7.  MIDI recording - also requires basic track selection and Record/Mute
+    track buttons.
+
+8.  Transport GUI - play, rwd buttons etc - timer.
+
+9.  Looping.
+
+10. Position pointers in notation client.
+
+11. Track canvas and client that follow playback (playback follow mode).
 
 
 Basis for later features
@@ -66,3 +82,4 @@ Basis for later features
 
 3.  some skeletal help
 
+4.  audio tracks support

@@ -47,11 +47,12 @@ Starting and stopping artsd
 
 Artsd usually starts with your UID as you log into (say) KDE.  When
 developing with artsd it's advisable to run it in the foreground with
-debug on ('-l0') to catch any messages.
+debug on ('-l0') to catch any messages.  When starting artsd manually
+use "artswrapper" to ensure the daemon starts with real time priorities.
 
 Start artsd (something) like this:
 
- % artsd -F 10 -S 4096 -a oss -l0
+ % artswrapper -F 10 -S 4096 -a oss -l0
 
 Open artscontrol (KDE menu item under Multimedia/Sound) and from that
 open the MidiManager.  To use the MIDI ports of your soundcard map the
