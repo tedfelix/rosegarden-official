@@ -154,13 +154,13 @@ void RosegardenGUIApp::setupActions()
                               actionCollection(), "draw");
     action->setExclusiveGroup("tracktools");
 
-    m_selectDefaultTool = action;
-
     action = new KRadioAction(i18n("Move"), "move",
                               0,
                               this, SLOT(moveSelected()),
                               actionCollection(), "move");
     action->setExclusiveGroup("tracktools");
+
+    m_selectDefaultTool = action;
 
     action = new KRadioAction(i18n("Resize"), "misc", // TODO : find a better icon
                               0,
