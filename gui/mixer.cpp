@@ -39,6 +39,9 @@
 #include <qlayout.h>
 #include <qpopupmenu.h>
 
+
+WheelyButton::~WheelyButton() { }
+
 MixerWindow::MixerWindow(QWidget *parent,
 			 RosegardenGUIDoc *document) :
     KMainWindow(parent, "mixerwindow"),
@@ -84,8 +87,8 @@ MixerWindow::MixerWindow(QWidget *parent,
 
 //!!! bring across the tooltips
 
-	rec.m_input = new QPushButton(mainBox);
-	rec.m_output = new QPushButton(mainBox);
+	rec.m_input = new WheelyButton(mainBox);
+	rec.m_output = new WheelyButton(mainBox);
 
 	rec.m_pan = new RosegardenRotary
 	    (mainBox, -100.0, 100.0, 1.0, 5.0, 0.0, 20);
@@ -152,9 +155,15 @@ MixerWindow::MixerWindow(QWidget *parent,
 	updateRouteButtons((*i)->getId());
 	updateStereoButton((*i)->getId());
 
+	connect(rec.m_input, SIGNAL(wheel(bool)),
+		this, SLOT(slotRoutingButtonWheeled(bool)));
+		
 	connect(rec.m_input, SIGNAL(clicked()),
 		this, SLOT(slotRoutingButtonPressed()));
 
+	connect(rec.m_output, SIGNAL(wheel(bool)),
+		this, SLOT(slotRoutingButtonWheeled(bool)));
+		
 	connect(rec.m_output, SIGNAL(clicked()),
 		this, SLOT(slotRoutingButtonPressed()));
 
@@ -305,6 +314,40 @@ MixerWindow::MixerWindow(QWidget *parent,
                                        SLOT(slotClose()),
                                        actionCollection());
 
+    QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-play")));
+    new KAction(i18n("&Play"), icon, Key_Enter, this,
+		SIGNAL(play()), actionCollection(), "play");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-stop")));
+    new KAction(i18n("&Stop"), icon, Key_Insert, this,
+		SIGNAL(stop()), actionCollection(), "stop");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-rewind")));
+    new KAction(i18n("Re&wind"), icon, Key_End, this,
+		SIGNAL(rewindPlayback()), actionCollection(),
+		"playback_pointer_back_bar");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-ffwd")));
+    new KAction(i18n("&Fast Forward"), icon, Key_PageDown, this,
+		SIGNAL(fastForwardPlayback()), actionCollection(),
+		"playback_pointer_forward_bar");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-rewind-end")));
+    new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
+		SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
+		"playback_pointer_start");
+
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                                 ("transport-ffwd-end")));
+    new KAction(i18n("Fast Forward to &End"), icon, 0, this,
+		SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
+		"playback_pointer_end");
+
     createGUI("mixer.rc");
 }
 
@@ -415,6 +458,56 @@ MixerWindow::updateStereoButton(int id)
     }
 }
 	
+
+void
+MixerWindow::slotRoutingButtonWheeled(bool up)
+{
+    const QObject *s = sender();
+
+    Rosegarden::InstrumentId id = 0;
+    bool output = false;
+    bool stereo = false;
+
+    for (FaderMap::iterator i = m_faders.begin();
+	 i != m_faders.end(); ++i) {
+
+	if (i->second.m_input == s) {
+	    id = i->first;
+	    stereo = i->second.m_stereoness;
+	    break;
+	} else if (i->second.m_output == s) {
+	    id = i->first;
+	    stereo = i->second.m_stereoness;
+	    output = true;
+	    break;
+	}
+    }
+
+    if (id == 0) return;
+    Rosegarden::Instrument *instrument = m_studio->getInstrumentById(id);
+    if (!instrument) return;
+
+    if (output) {
+
+	int max, min = 0;
+	if (stereo) {
+	    max = m_studio->getBusses().size() - 1;
+	} else {
+	    max = m_studio->getBusses().size() * 2 - 1;
+	}
+
+	Rosegarden::BussId out = instrument->getAudioOutput();
+	if (up) {
+	    if (out < max) slotOutputChanged(out+1);
+	} else {
+	    if (out > min) slotOutputChanged(out-1);
+	}
+    } else {
+
+	//!!!
+    }
+}
+
 
 void
 MixerWindow::slotRoutingButtonPressed()

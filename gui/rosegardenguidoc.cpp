@@ -584,7 +584,7 @@ void RosegardenGUIDoc::initialiseStudio()
 	Rosegarden::StudioControl::setStudioObjectProperty
 	    (mappedId,
 	     Rosegarden::MappedAudioBuss::Pan,
-	     Rosegarden::MappedObjectValue(busses[i]->getPan()));
+	     Rosegarden::MappedObjectValue(busses[i]->getPan()) - 100.0);
 	
 	busses[i]->setMappedId(mappedId);
     }

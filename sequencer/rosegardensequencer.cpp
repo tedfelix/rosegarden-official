@@ -1270,7 +1270,7 @@ RosegardenSequencerApp::setMappedProperty(int id,
 		    << ", value = " << value << endl;
 
 
-    Rosegarden::MappedObject *object = m_studio->getObject(id);
+    Rosegarden::MappedObject *object = m_studio->getObjectById(id);
 
     if (object)
         object->setProperty(property, value);
@@ -1284,7 +1284,7 @@ RosegardenSequencerApp::setMappedProperty(int id, const QString &property,
                     << " : property list size = \"" << value.size()
                     << "\"" << endl;
 
-    Rosegarden::MappedObject *object = m_studio->getObject(id);
+    Rosegarden::MappedObject *object = m_studio->getObjectById(id);
 
     if (object)
         object->setProperty(property, value);
@@ -1316,7 +1316,7 @@ RosegardenSequencerApp::getPropertyList(int id,
     std::vector<QString> list;
 
     Rosegarden::MappedObject *object =
-        m_studio->getObject(id);
+        m_studio->getObjectById(id);
 
     if (object)
     {
@@ -1365,7 +1365,9 @@ RosegardenSequencerApp::destroyMappedObject(int id)
 {
 #ifdef HAVE_LADSPA
     Rosegarden::MappedLADSPAPlugin *plugin =
-        dynamic_cast<Rosegarden::MappedLADSPAPlugin*>(m_studio->getObject(id));
+        dynamic_cast<Rosegarden::MappedLADSPAPlugin*>
+	(m_studio->getObjectByIdAndType
+	 (id, Rosegarden::MappedObject::LADSPAPlugin));
 
     if (plugin)
     {
@@ -1420,7 +1422,7 @@ RosegardenSequencerApp::setMappedPort(int pluginId,
                                       float value)
 {
     Rosegarden::MappedObject *object =
-        m_studio->getObject(pluginId);
+        m_studio->getObjectById(pluginId);
 
 #ifdef HAVE_LADSPA
 

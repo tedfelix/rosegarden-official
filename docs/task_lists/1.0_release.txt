@@ -42,6 +42,9 @@ Features for 1.0 - updated 20040226
   o relatedly: make sure translators have time/awareness of changes!
   o add sensible accelerators for the main window menu options (particularly studio menu)
 
+- implement "always use default studio"
+
+
 Completed
 ---------
 

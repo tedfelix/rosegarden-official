@@ -216,11 +216,17 @@ public:
     //
     bool destroyObject(MappedObjectId id);
 
-    // Get an object
+    // Get an object by ID only
     //
-    MappedObject* getObject(MappedObjectId);
+    MappedObject* getObjectById(MappedObjectId);
 
-    // Get an object of a certain type - to see if any exist
+    // Get an object by ID and type.  (Returns 0 if the ID does not
+    // exist or exists but is not of the correct type.)  This is
+    // faster than getObjectById if you know the type already.
+    //
+    MappedObject* getObjectByIdAndType(MappedObjectId, MappedObjectType);
+
+    // Get an arbitrary object of a given type - to see if any exist
     //
     MappedObject* getObjectOfType(MappedObjectType type);
 
@@ -231,6 +237,8 @@ public:
     // iterators
     MappedObject* getFirst(MappedObjectType type);
     MappedObject* getNext(MappedObject *object);
+
+    std::vector<MappedObject *> getObjectsOfType(MappedObjectType type);
 
     // Empty the studio of everything
     //
@@ -258,14 +266,13 @@ public:
 
     // Get an audio fader for an InstrumentId.  Convenience function.
     //
-    MappedAudioFader *getAudioFader(Rosegarden::InstrumentId id);
+    MappedAudioFader *getAudioFader(InstrumentId id);
 
     MappedAudioBuss *getAudioBuss(int bussNumber);
 
     MappedAudioInput *getAudioInput(int inputNumber);
 
-    MappedObject* getPluginInstance(Rosegarden::InstrumentId id,
-                                    int position);
+    MappedObject* getPluginInstance(InstrumentId id, int position);
 
     // Return the object vector
     //
@@ -284,9 +291,9 @@ public:
     // Set the sequencer object so that we can do things like
     // initialise plugins etc.
     //
-    Rosegarden::Sequencer* getSequencer() { return m_sequencer; }
-    const Rosegarden::Sequencer* getSequencer() const { return m_sequencer; }
-    void setSequencer(Rosegarden::Sequencer *sequencer)
+    Sequencer* getSequencer() { return m_sequencer; }
+    const Sequencer* getSequencer() const { return m_sequencer; }
+    void setSequencer(Sequencer *sequencer)
         { m_sequencer = sequencer; }
 
 #ifdef HAVE_LADSPA
@@ -335,7 +342,7 @@ private:
     
     // Sequencer object
     //
-    Rosegarden::Sequencer     *m_sequencer;
+    Sequencer     *m_sequencer;
 };
 
 
@@ -411,13 +418,13 @@ public:
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
 
-    Rosegarden::InstrumentId getInstrument() const { return m_instrumentId; }
+    InstrumentId getInstrument() const { return m_instrumentId; }
 
 protected:
 
     MappedObjectValue             m_level;
     MappedObjectValue             m_recordLevel;
-    Rosegarden::InstrumentId      m_instrumentId;
+    InstrumentId      m_instrumentId;
 
     // Stereo pan (-1.0 to +1.0)
     //
@@ -454,6 +461,10 @@ public:
 
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
+
+    // super-convenience function: retrieve the ids of the instruments
+    // connected to this buss
+    std::vector<InstrumentId> getInstruments();
 
 protected:
     MappedObjectValue m_level;
@@ -537,7 +548,7 @@ public:
     std::string getCategory() const { return m_category; }
     unsigned long getPortCount() const { return m_portCount; }
 
-    Rosegarden::InstrumentId getInstrument() const { return m_instrument; }
+    InstrumentId getInstrument() const { return m_instrument; }
     int getPosition() const { return m_position; }
 
     // populate this object with descriptor information
@@ -562,7 +573,7 @@ protected:
     std::string               m_category;
     unsigned long             m_portCount;
 
-    Rosegarden::InstrumentId  m_instrument;
+    InstrumentId              m_instrument;
     int                       m_position;
     bool                      m_bypassed;
 

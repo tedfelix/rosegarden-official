@@ -85,7 +85,7 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
     m_fileWriter(0),
     m_alsaDriver(alsaDriver),
     m_masterLevel(1.0),
-    m_masterPan(0.0),
+    m_directMasterInstruments(0L),
     m_ok(false)
 {
     assert(sizeof(sample_t) == sizeof(float));
@@ -624,9 +624,6 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     // need to keep ourselves up to date by reading and monitoring the
     // instruments).  If we have no busses, mix direct from instruments.
 
-    //!!! actually, this needs to be refined for instruments that are
-    // configured to route straight to the master -- which is now possible
-
     for (int buss = 0; buss < bussCount; ++buss) {
 
 	sample_t *submaster[2] = { 0, 0 };
@@ -694,6 +691,15 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
 	for (int ch = 0; ch < 2; ++ch) {
 
+	    // We always need to read from an instrument's ring buffer
+	    // to keep the instrument moving along, as well as for
+	    // monitoring.  If the instrument is connected straight to
+	    // the master, then we also need to mix from it.  (We have
+	    // that information cached courtesy of updateAudioLevels.)
+
+	    bool directToMaster =
+		(m_directMasterInstruments & (1 << (id - instrumentBase)));
+
 	    RingBuffer<AudioInstrumentMixer::sample_t, 2> *rb =
 		m_instrumentMixer->getRingBuffer(id, ch);
 
@@ -709,14 +715,16 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 		for (size_t i = 0; i < nframes; ++i) {
 		    sample_t sample = instrument[ch][i];
 		    if (sample > peak[ch]) peak[ch] = sample;
-		    if (bussCount == 0) master[ch][i] += sample;
+		    if (directToMaster) master[ch][i] += sample;
 		}
 	    }
 
-	    if (rb && (bussCount == 0)) {
-		// buss won't be discarding from its reader, so we need to.
-		// again, this needs to take into account instruments routed
-		// straight to master.
+	    // If the instrument is connected straight to master we
+	    // also need to skip() on the buss mixer's reader for it,
+	    // otherwise it'll block because the buss mixer isn't
+	    // needing to read it.
+
+	    if (rb && directToMaster) {
 		rb->skip(nframes, 1); // 1 is the buss mixer's reader (magic)
 	    }
 	}
@@ -732,21 +740,13 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 	}
     }
 
-    // Get master fader levels.
-
-    float volume = AudioLevel::dB_to_multiplier(m_masterLevel);
-    float pan = m_masterPan;
-
-    float masterGain[2] = {
-	volume * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0),
-	volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0)
-    };
-
+    // Get master fader levels.  There's no pan on the master.
+    float gain = AudioLevel::dB_to_multiplier(m_masterLevel);
     float masterPeak[2] = { 0.0, 0.0 };
 
     for (int ch = 0; ch < 2; ++ch) {
 	for (size_t i = 0; i < nframes; ++i) {
-	    sample_t sample = master[ch][i] * masterGain[ch];
+	    sample_t sample = master[ch][i] * gain;
 	    if (sample > masterPeak[ch]) masterPeak[ch] = sample;
 	    master[ch][i] = sample;
 	}
@@ -1194,11 +1194,32 @@ JackDriver::updateAudioLevels()
 	float level = 0.0;
 	(void)mbuss->getProperty(MappedAudioBuss::Level, level);
 	m_masterLevel = level;
-
-//!!!	float pan = 0.0;
-//!!!	(void)mbuss->getProperty(MappedAudioBuss::Pan, pan);
-//!!!   m_masterPan = pan;
     }
+
+    InstrumentId instrumentBase;
+    int instruments;
+    m_alsaDriver->getAudioInstrumentNumbers(instrumentBase, instruments);
+    unsigned long directMasterInstruments = 0L;
+
+    for (int i = 0; i < instruments; ++i) {
+
+	MappedAudioFader *fader = m_alsaDriver->getMappedStudio()->
+	    getAudioFader(instrumentBase + i);
+
+	if (!fader) continue;
+
+	// If we find the object is connected to no output, or to buss
+	// number 0 (the master), then we set the bit appropriately.
+
+	MappedObjectValueList connections = fader->getConnections
+	    (MappedConnectableObject::Out);
+
+	if (connections.empty() || (*connections.begin() == mbuss->getId())) {
+	    directMasterInstruments |= (1 << i);
+	}
+    }
+
+    m_directMasterInstruments = directMasterInstruments;
 }
 
 RealTime

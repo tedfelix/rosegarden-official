@@ -44,8 +44,16 @@ signals:
     void closing();
     void selectPlugin(QWidget *, Rosegarden::InstrumentId id, int index);
 
+    void play();
+    void stop();
+    void fastForwardPlayback();
+    void rewindPlayback();
+    void fastForwardPlaybackToEnd();
+    void rewindPlaybackToBeginning();
+
 protected slots:
     void slotRoutingButtonPressed();
+    void slotRoutingButtonWheeled(bool up);
     void slotInputChanged(int);
     void slotOutputChanged(int);
     void slotFaderLevelChanged(float level);
@@ -109,6 +117,23 @@ private:
     QPixmap m_stereoPixmap;
 
     Rosegarden::InstrumentId m_currentId;
+};
+
+class WheelyButton : public QPushButton
+{
+    Q_OBJECT
+
+public:
+    WheelyButton(QWidget *w) : QPushButton(w) { }
+    virtual ~WheelyButton();
+
+signals:
+    void wheel(bool up);
+
+protected:
+    void wheelEvent(QWheelEvent *e) {
+	emit wheel(e->delta() > 0);
+    }
 };
 
 #endif

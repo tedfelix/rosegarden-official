@@ -322,7 +322,7 @@ MappedStudio::createObject(MappedObjectType type,
 
     // Ensure we've got an empty slot
     //
-    while (getObject(m_runningObjectId))
+    while (getObjectById(m_runningObjectId))
         m_runningObjectId++;
 
     mO = createObject(type, m_runningObjectId, readOnly);
@@ -343,7 +343,7 @@ MappedStudio::createObject(MappedObjectType type,
     pthread_mutex_lock(&_mappedObjectContainerLock);
 
     // fail if the object already exists and it's not zero
-    if (id != 0 && getObject(id)) {
+    if (id != 0 && getObjectById(id)) {
 	pthread_mutex_unlock(&_mappedObjectContainerLock);
 	return 0;
     }
@@ -443,6 +443,25 @@ MappedStudio::getObjectOfType(MappedObjectType type)
     return rv;
 }
 
+std::vector<MappedObject *>
+MappedStudio::getObjectsOfType(MappedObjectType type)
+{
+    std::vector<MappedObject *> rv;
+
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+
+    MappedObjectCategory &category = m_objects[type];
+
+    for (MappedObjectCategory::iterator i = category.begin();
+	 i != category.end(); ++i) {
+	rv.push_back(i->second);
+    }
+
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
+
+    return rv;
+}
+
 unsigned int
 MappedStudio::getObjectCount(MappedObjectType type)
 {
@@ -464,7 +483,7 @@ MappedStudio::destroyObject(MappedObjectId id)
 {
     pthread_mutex_lock(&_mappedObjectContainerLock);
 
-    MappedObject *obj = getObject(id);
+    MappedObject *obj = getObjectById(id);
 
     bool rv = false;
 
@@ -487,9 +506,9 @@ MappedStudio::connectObjects(MappedObjectId mId1, MappedObjectId mId2)
 
     // objects must exist and be of connectable types
     MappedConnectableObject *obj1 =
-	dynamic_cast<MappedConnectableObject *>(getObject(mId1));
+	dynamic_cast<MappedConnectableObject *>(getObjectById(mId1));
     MappedConnectableObject *obj2 =
-	dynamic_cast<MappedConnectableObject *>(getObject(mId2));
+	dynamic_cast<MappedConnectableObject *>(getObjectById(mId2));
 
     if (obj1 && obj2) {
 	obj1->addConnection(MappedConnectableObject::Out, mId2);
@@ -511,9 +530,9 @@ MappedStudio::disconnectObjects(MappedObjectId mId1, MappedObjectId mId2)
 
     // objects must exist and be of connectable types
     MappedConnectableObject *obj1 =
-	dynamic_cast<MappedConnectableObject *>(getObject(mId1));
+	dynamic_cast<MappedConnectableObject *>(getObjectById(mId1));
     MappedConnectableObject *obj2 =
-	dynamic_cast<MappedConnectableObject *>(getObject(mId2));
+	dynamic_cast<MappedConnectableObject *>(getObjectById(mId2));
 
     if (obj1 && obj2) {
 	obj1->removeConnection(MappedConnectableObject::Out, mId2);
@@ -534,7 +553,7 @@ MappedStudio::disconnectObject(MappedObjectId mId)
     bool rv = false;
 
     MappedConnectableObject *obj =
-	dynamic_cast<MappedConnectableObject *>(getObject(mId));
+	dynamic_cast<MappedConnectableObject *>(getObjectById(mId));
     
     if (obj) {
 	while (1) {
@@ -652,7 +671,7 @@ MappedStudio::getProperty(const MappedObjectProperty &,
 }
 
 MappedObject*
-MappedStudio::getObject(MappedObjectId id)
+MappedStudio::getObjectById(MappedObjectId id)
 {
     pthread_mutex_lock(&_mappedObjectContainerLock);
     MappedObject *rv = 0;
@@ -665,6 +684,22 @@ MappedStudio::getObject(MappedObjectId id)
 	    rv = j->second;
 	    break;
 	}
+    }
+
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
+    return rv;
+}
+
+MappedObject*
+MappedStudio::getObjectByIdAndType(MappedObjectId id, MappedObjectType type)
+{
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+    MappedObject *rv = 0;
+
+    MappedObjectCategory &category = m_objects[type];
+    MappedObjectCategory::iterator i = category.find(id);
+    if (i != category.end()) {
+	rv = i->second;
     }
 
     pthread_mutex_unlock(&_mappedObjectContainerLock);
@@ -1256,6 +1291,39 @@ MappedAudioBuss::setProperty(const MappedObjectProperty &property,
         return;
     }
 }
+
+std::vector<InstrumentId>
+MappedAudioBuss::getInstruments()
+{
+    std::vector<InstrumentId> rv;
+
+    pthread_mutex_lock(&_mappedObjectContainerLock);
+
+    MappedObject *studioObject = getParent();
+    while (!dynamic_cast<MappedStudio *>(studioObject))
+        studioObject = studioObject->getParent();
+
+    std::vector<MappedObject *> objects =
+	static_cast<MappedStudio *>(studioObject)->
+	getObjectsOfType(MappedObject::AudioFader);
+    
+    for (std::vector<MappedObject *>::iterator i = objects.begin();
+	 i != objects.end(); ++i) {
+	MappedAudioFader *fader = dynamic_cast<MappedAudioFader *>(*i);
+	if (fader) {
+	    MappedObjectValueList connections = fader->getConnections
+		(MappedConnectableObject::Out);
+	    if (!connections.empty() && (*connections.begin() == getId())) {
+		rv.push_back(fader->getInstrument());
+	    }
+	}
+    }
+    
+    pthread_mutex_unlock(&_mappedObjectContainerLock);
+
+    return rv;
+}
+    
 
 // ---------------- MappedAudioBuss -------------------
 //

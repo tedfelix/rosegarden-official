@@ -301,7 +301,6 @@ AudioBussMixer::emptyBuffers()
 
     for (int i = 0; i < m_bussCount; ++i) {
 	m_bufferMap[i].dormant = true;
-//	m_bufferMap[i].dormant = false;
 	for (int ch = 0; ch < 2; ++ch) {
 	    if (int(m_bufferMap[i].buffers.size()) > ch) {
 		m_bufferMap[i].buffers[ch]->reset();
@@ -337,10 +336,6 @@ AudioBussMixer::processBlocks()
 {
     if (m_bussCount == 0) return;
 
-    InstrumentId instrumentBase;
-    int instruments;
-    m_driver->getAudioInstrumentNumbers(instrumentBase, instruments);
-
 #ifdef DEBUG_BUSS_MIXER
     if (m_driver->isPlaying())
 	std::cerr << "AudioBussMixer::processBlocks" << std::endl;
@@ -360,12 +355,14 @@ AudioBussMixer::processBlocks()
 	float volume = AudioLevel::dB_to_multiplier(level);
 
 	float pan = 0.0;
-//!!!	(void)mbuss->getProperty(MappedAudioBuss::Pan, pan);
+	(void)mbuss->getProperty(MappedAudioBuss::Pan, pan);
 
 	gain[0] = volume * ((pan > 0.0) ? (1.0 - (pan / 100.0)) : 1.0);
 	gain[1] = volume * ((pan < 0.0) ? ((pan + 100.0) / 100.0) : 1.0);
 	    
 	BufferRec &rec = m_bufferMap[buss];
+
+	std::vector<InstrumentId> instruments = mbuss->getInstruments();
 
 	// The dormant calculation here depends on the buffer length
 	// for this mixer being the same as that for the instrument mixer
@@ -378,14 +375,12 @@ AudioBussMixer::processBlocks()
 	    if (ch == 0 || w < minSpace) minSpace = w;
 
 	    if (minSpace == 0) break;
-
-	    //!!! query connections in from studio -- but for now:
 	    
-	    for (InstrumentId id = instrumentBase + buss * 4;
-		 id < instrumentBase + buss * 4 + 4; ++id) {
+	    for (std::vector<InstrumentId>::iterator ii = instruments.begin();
+		 ii != instruments.end(); ++ii) {
 
 		RingBuffer<sample_t, 2> *rb =
-		    m_instrumentMixer->getRingBuffer(id, ch);
+		    m_instrumentMixer->getRingBuffer(*ii, ch);
 		if (rb) {
 		    size_t r = rb->getReadSpace(1);
 		    if (r < minSpace) minSpace = r;
@@ -408,19 +403,16 @@ AudioBussMixer::processBlocks()
 	    memset(m_processBuffers[0], 0, m_blockSize * sizeof(sample_t));
 	    memset(m_processBuffers[1], 0, m_blockSize * sizeof(sample_t));
 
-	    //!!! query connections in from studio -- but for now:
-
 	    bool dormant = true;
 
-	    for (InstrumentId id = instrumentBase + buss * 4;
-		 id < instrumentBase + buss * 4 + 4; ++id) {
+	    for (std::vector<InstrumentId>::iterator ii = instruments.begin();
+		 ii != instruments.end(); ++ii) {
 
-		if (m_instrumentMixer->isInstrumentDormant(id)) {
-//		if (false) {
+		if (m_instrumentMixer->isInstrumentDormant(*ii)) {
 
 		    for (int ch = 0; ch < 2; ++ch) {
 			RingBuffer<sample_t, 2> *rb =
-			    m_instrumentMixer->getRingBuffer(id, ch);
+			    m_instrumentMixer->getRingBuffer(*ii, ch);
 
 			if (rb) rb->skip(m_blockSize,
 					 1);
@@ -430,7 +422,7 @@ AudioBussMixer::processBlocks()
 
 		    for (int ch = 0; ch < 2; ++ch) {
 			RingBuffer<sample_t, 2> *rb =
-			    m_instrumentMixer->getRingBuffer(id, ch);
+			    m_instrumentMixer->getRingBuffer(*ii, ch);
 
 			if (rb) rb->readAdding(m_processBuffers[ch],
 					       m_blockSize,

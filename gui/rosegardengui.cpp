@@ -4676,6 +4676,19 @@ RosegardenGUIApp::slotOpenMixer()
     connect(this, SIGNAL(documentAboutToChange()),
             m_mixer, SLOT(close()));
 
+    connect(m_mixer, SIGNAL(play()),
+	    this, SLOT(slotPlay()));
+    connect(m_mixer, SIGNAL(stop()),
+	    this, SLOT(slotStop()));
+    connect(m_mixer, SIGNAL(fastForwardPlayback()),
+	    this, SLOT(slotFastforward()));
+    connect(m_mixer, SIGNAL(rewindPlayback()),
+	    this, SLOT(slotRewind()));
+    connect(m_mixer, SIGNAL(fastForwardPlaybackToEnd()),
+	    this, SLOT(slotFastForwardToEnd()));
+    connect(m_mixer, SIGNAL(rewindPlaybackToBeginning()),
+	    this, SLOT(slotRewindToBeginning()));
+
     m_mixer->show();
 }
 

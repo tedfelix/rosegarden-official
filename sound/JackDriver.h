@@ -168,14 +168,6 @@ protected:
     void createSubmasterOutputs(int pairs);
     void createRecordInputs(int pairs);
 
-    // Create a set of JACK input ports (and for the moment)
-    // we do default connections to JACK terminal ports.
-    //
-    // If the deactivate flag is set then we deactivate and reactivate
-    // the client when modifying the number of input ports.
-    //
-//!!!    void createInputPorts(unsigned int ports, bool deactivate);
-
     // data members:
 
     jack_client_t               *m_client;
@@ -208,7 +200,7 @@ protected:
     AlsaDriver                  *m_alsaDriver;
 
     float                        m_masterLevel;
-    float                        m_masterPan;
+    unsigned long                m_directMasterInstruments; // bitmap
 
     bool                         m_ok;
 };
