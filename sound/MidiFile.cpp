@@ -31,6 +31,27 @@
 #include "TrackNotationHelper.h"
 #include "TrackPerformanceHelper.h"
 
+#ifndef NO_TIMING
+
+#include <iostream>
+#include <time.h>
+
+#define START_TIMING \
+  clock_t dbgStart = clock();
+#define ELAPSED_TIME \
+  ((clock() - dbgStart) * 1000 / CLOCKS_PER_SEC)
+#define PRINT_ELAPSED(n) \
+  std::cout << n << ": " << ELAPSED_TIME << "ms elapsed" << std::endl;
+
+#else
+
+#define START_TIMING
+#define ELAPSED_TIME  0
+#define PRINT_ELAPSED(n)
+
+#endif
+
+
 
 namespace Rosegarden
 {
@@ -238,6 +259,8 @@ MidiFile::open()
         return(false);
       }
 
+      START_TIMING;
+
       for ( unsigned int i = 0; i < m_numberOfTracks; i++ )
       {
 
@@ -264,7 +287,11 @@ MidiFile::open()
           m_format = MIDI_FILE_NOT_LOADED;
           return(false);
         }
+
+        PRINT_ELAPSED("Parsing track");
       }
+
+      PRINT_ELAPSED("Parsing MIDI file");
     }
     else
     {
@@ -502,6 +529,8 @@ MidiFile::convertToRosegarden()
 //    timingFactor = (float) Note(Note::Crotchet).getDuration() /
 //                   (float) m_timingDivision;
 
+  START_TIMING;
+
   for ( unsigned int i = 0; i < m_numberOfTracks; i++ )
   {
     trackTime = 0;
@@ -737,6 +766,8 @@ MidiFile::convertToRosegarden()
         }
       }
 
+      PRINT_ELAPSED("Converting track to Rosegarden format");
+
       // cc
 
       rosegardenTrack->insert
@@ -746,6 +777,8 @@ MidiFile::convertToRosegarden()
       notationTrack.autoBeam
           (rosegardenTrack->begin(), rosegardenTrack->end(),
            "beamed"); //!!! probably shouldn't be hardcoded!
+
+      PRINT_ELAPSED("Auto-beaming track");
     }
   }
 
@@ -760,6 +793,9 @@ MidiFile::convertToRosegarden()
     else
       composition->setTempo(120);
   }
+
+  PRINT_ELAPSED("Converting Composition to Rosegarden format");
+
 
   return composition;
 }
