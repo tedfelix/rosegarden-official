@@ -304,7 +304,6 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         int instrument = -1;
         std::string label;
         bool muted;
-        Rosegarden::Track::TrackType tt;
 
         QString trackNbStr = atts.value("id");
         if (trackNbStr) {
@@ -324,16 +323,6 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
                 muted = false;
         }
 
-        QString trackTypeStr = atts.value("type");
-        if (trackTypeStr) {
-            if (trackTypeStr == "midi")
-                tt = Rosegarden::Track::Midi;
-            else if (trackTypeStr == "audio")
-                tt = Rosegarden::Track::Audio;
-            else // default
-                tt = Rosegarden::Track::Midi;
-        }
-
         QString positionStr = atts.value("position");
         if (positionStr) {
             position = positionStr.toInt();
@@ -344,7 +333,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
             instrument = instrumentStr.toInt();
         }
        
-        Rosegarden::Track *track = new Rosegarden::Track(id, muted, tt,
+        Rosegarden::Track *track = new Rosegarden::Track(id, muted,
                                                          label, position,
                                                          instrument);
 

@@ -22,6 +22,7 @@
 #ifndef _ROSEGARDEN_MIDI_H_
 #define _ROSEGARDEN_MIDI_H_
 
+#include "Instrument.h" // for MidiByte
 #include <string>
 
 // Yes we use the STL here.  Don't worry, it's fine.
@@ -36,7 +37,6 @@ namespace Rosegarden
 // CreateMessageByte(MSG, CHANNEL)  = (MSG) | (CHANNEL)
 //
 //
-typedef unsigned char MidiByte;
 
 const std::string MIDI_FILE_HEADER              = "MThd";
 const std::string MIDI_TRACK_HEADER             = "MTrk";

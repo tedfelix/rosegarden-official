@@ -32,19 +32,33 @@
 namespace Rosegarden
 {
 
-Instrument::Instrument():
-    m_id(0),
-    m_name("untitled"),
-    m_type(Midi)
-{
-}
-
-Instrument::Instrument(const InstrumentId &id,
-                       const InstrumentType &it,
+Instrument::Instrument(InstrumentId id, InstrumentType it,
                        const std::string &name):
     m_id(id),
     m_name(name),
-    m_type(it)
+    m_type(it),
+    m_midiChannel(0),
+    m_midiTranspose(MidiMidValue),
+    m_programChange(0),
+    m_pan(MidiMidValue),
+    m_volume(0)
+
+{
+}
+
+Instrument::Instrument(InstrumentId id,
+                       InstrumentType it,
+                       const std::string &name,
+                       MidiByte channel):
+    m_id(id),
+    m_name(name),
+    m_type(it),
+    m_midiChannel(channel),
+    m_midiTranspose(MidiMidValue),
+    m_programChange(0),
+    m_pan(MidiMidValue),
+    m_volume(0)
+
 {
 }
 

@@ -36,19 +36,16 @@ namespace Rosegarden
 Track::Track():
    m_id(0),
    m_muted(false),
-   m_type(Midi),
    m_label("untitled"),
    m_position(0),
    m_instrument(0)
 {
 }
 
-Track::Track(const TrackId &id, const bool &muted, 
-             const TrackType &tt, const std::string &label,
+Track::Track(const TrackId &id, const bool &muted, const std::string &label,
              const unsigned int &position, const int &instrument):
    m_id(id),
    m_muted(muted),
-   m_type(tt),
    m_label(label),
    m_position(position),
    m_instrument(instrument)
@@ -71,25 +68,7 @@ Track::toXmlString()
 {
     std::stringstream track;
 
-    track << "<track id=\"";
-    track << m_id << "\" type=\"";
-
-    switch(m_type)
-    {
-        case Midi:
-            track << "midi";
-            break;
-
-        case Audio:
-            track << "audio";
-            break;
-
-        default:
-            track << "unknown";
-            break;
-    }
-
-
+    track << "<track id=\"" << m_id;
     track << "\" label=\"" << m_label;
     track << "\" position=\"" << m_position;
 

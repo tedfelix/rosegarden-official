@@ -23,6 +23,7 @@
 #define _INSTRUMENT_H_
 
 #include "XmlExportable.h"
+#include "Device.h"
 #include <string>
 
 // An Instrument connects a Track (which itself contains
@@ -35,44 +36,59 @@ namespace Rosegarden
 {
 
 typedef unsigned int InstrumentId;
+typedef unsigned char MidiByte;
+
+const MidiByte MidiMaxValue = 127;
+const MidiByte MidiMidValue = 64;
+const MidiByte MidiMinValue = 0;
 
 class Instrument : public XmlExportable
 {
 public:
     enum InstrumentType { Midi, Audio };
 
-    Instrument();
-    Instrument(const InstrumentId &id,
-               const InstrumentType &it,
+    Instrument(InstrumentId id,
+               InstrumentType it,
                const std::string &name);
+
+    Instrument(InstrumentId id,
+               InstrumentType it,
+               const std::string &name,
+               MidiByte channel);
+
     ~Instrument();
 
     std::string getName() { return m_name; }
     InstrumentType getInstrumentType() { return m_type; }
     InstrumentId getID() const { return m_id; }
 
-    int getMidiChannel() { return m_midiChannel; }
-    int getMidiTranspose() { return m_midiTranspose; }
+    MidiByte getMidiChannel() const { return m_midiChannel; }
+    MidiByte getMidiTranspose() const { return m_midiTranspose; }
+    InstrumentId getType() const { return m_type; }
 
-    void setID(const int &id) { m_id = id; }
+    void setID(int id) { m_id = id; }
     void setName(const std::string &name) { m_name = name; }
-    void setType(const InstrumentType &type) { m_type = type; }
+    void setType(InstrumentType type) { m_type = type; }
 
-    void setMidiChannel(const int &mC) { m_midiChannel = mC; }
-    void setMidiTranspose(const int &mT) { m_midiTranspose = mT; }
+    void setMidiChannel(MidiByte mC) { m_midiChannel = mC; }
+    void setMidiTranspose(MidiByte mT) { m_midiTranspose = mT; }
 
     // Implementation of virtual function
     //
     virtual std::string toXmlString();
 
 private:
-
     InstrumentId m_id;
     std::string m_name;
     InstrumentType m_type;
     
-    int m_midiChannel;
-    int m_midiTranspose;
+    MidiByte m_midiChannel;
+    MidiByte m_midiTranspose;
+    MidiByte m_programChange;
+    MidiByte m_pan;
+    MidiByte m_volume;
+
+    Device  *m_device;
 
 };
 

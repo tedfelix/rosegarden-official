@@ -28,6 +28,7 @@
 #define _TRACK_H_
 
 #include "XmlExportable.h"
+#include "Instrument.h"
 #include <string>
 
 // A Track contains information pertaining to a graphical
@@ -50,24 +51,20 @@ class Track : public XmlExportable
 {
 
 public:
-    enum TrackType { Midi, Audio };
-
     Track();
     Track(const TrackId &id, const bool &muted,
-          const TrackType &tt, const std::string &label,
+          const std::string &label,
           const unsigned int &position, const int &instrument);
     ~Track();
 
     TrackId getID() const { return m_id; }
     bool isMuted() { return m_muted; }
     int getPosition() { return m_position; }
-    unsigned int getInstrument() { return m_instrument; }
+    InstrumentId getInstrument() { return m_instrument; }
     std::string const getLabel() { return m_label; }
-    TrackType getType() { return m_type; }
 
     void setID(const int &id) { m_id = id; }
     void setMuted(const bool& muted) { m_muted = muted; }
-    void setType(const TrackType &type) { m_type = type; }
     void setPosition(const int &position) { m_position = position; }
     void setLabel(const std::string &label) { m_label = label; }
     void setInstrument(const int &instrument) { m_instrument = instrument; }
@@ -78,12 +75,11 @@ public:
 
 private:
 
-    TrackId       m_id;
-    bool      m_muted;
-    TrackType m_type;
+    TrackId        m_id;
+    bool           m_muted;
     std::string    m_label;
-    int       m_position;
-    int       m_instrument;
+    int            m_position;
+    InstrumentId   m_instrument;
 
 };
 

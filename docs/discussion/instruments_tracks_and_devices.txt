@@ -1,0 +1,58 @@
+Instruments, Tracks and Devices
+[rwb 13.3.2002]
+
+On examination of a few other pieces of software and after having
+a bit of a think the following model for implementing Instruments
+and Tracks seems like a good starting point.
+
+We start from the notion of Audio and Midi Devices..
+
+An AudioDevice provides a mechanism by which an Audio Segment can
+be played.  The AudioDevice will provide details of the number
+of available simultaneous channels that it supports and other
+information that might be pertinent to playback (latency, plugin
+features etc).  An AudioDevice channel will be equivalent to a
+single entry on a Track's Instrument selection menu
+
+A MidiDevice is a mechanism by which a Midi/Internal Rep. Segment
+can be played.  The MidiDevice will provide details of the number
+of available channels (usually 16) and other information pertinent
+information.  A MidiDevice will have parameters available for the
+setting of System Exclusive states and other device-global parameters.
+MidiDevice channel will be equivalent to a single entry on the
+Instrument selection menu.
+
+A single entry on a Track's Instrument selection menu will be known
+as an Instrument.
+
+All Instruments have a unique identifying number.
+
+Instruments will be of type Midi or type Audio.
+
+Instruments are created by AudioDevices and MidiDevices.  For the moment
+Instruments will be automatically created (16 MIDI instruments to a MIDI
+device and an arbitrary number of audio Instruments) because of the absence
+of query or mapping mechanism in the uderlying sound API (aRts).
+
+A Track will have no notion of whether it's Audio or Midi.  Only the
+Instrument mapped to that Track will define the type.  Then this type
+will be used for performance or recording purposes.
+
+Both the Device and the Instrument will have performance parameters
+(Program, Channel, Volume, Delay etc).  Where overlaps occur the
+Instrument parameters override those of the Device.  In this way a
+MidiDevice provides default values for all Instruments and the
+Instruments themselves can modify these values via the InstrumentParameterBox
+(GUI element on the TrackEditor) i.e.
+
+ A MidiDevice by default assigns 1 single MIDI channel to each Instrument
+ and assigns Programs (MIDI "voices") 0-15 to the Instruments.  These can
+ be modified at the MidiDevice or directly overridden by the specific
+ Instrument.  In the case that Program Changes are not simple General
+ MIDI the device-specific Program Change information can be stored
+ at the MidiDevice level to give a cleaner Instrument interface.
+
+
+Don't worry it the end of that last paragraph doesn't make any sense.
+
+

@@ -529,7 +529,6 @@ MidiFile::convertToRosegarden()
 
             track = new Rosegarden::Track(compositionTrack,
                                           false,
-                                          Rosegarden::Track::Midi,
                                           trackName,
                                           compositionTrack,
                                           0);

@@ -85,7 +85,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
         Rosegarden::Track *track;
         for (int i = 0; i < tracks; i++)
         {
-            track = new Rosegarden::Track(i, false, Rosegarden::Track::Midi,
+            track = new Rosegarden::Track(i, false,
                                           std::string("untitled"), i, 0);
 
             comp.addTrack(track);

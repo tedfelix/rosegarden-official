@@ -8,6 +8,7 @@ libbase_la_LDFLAGS = $(all_libraries)
 INCLUDES= $(all_includes)
 
 libbase_la_SOURCES = AnalysisTypes.C \
+                     AudioDevice.C \
 	             BaseProperties.C \
 		     Clipboard.C \
 		     Composition.C \
@@ -16,6 +17,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     Event.C \
                      Instrument.C \
 		     NotationTypes.C \
+                     MidiDevice.C \
                      Property.C \
 		     PropertyName.C \
 		     Quantizer.C \

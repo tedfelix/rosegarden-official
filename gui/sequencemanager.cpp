@@ -529,25 +529,27 @@ SequenceManager::record()
     QCString replyType;
     QByteArray replyData;
 
-    // get the record track and check its type
+    // Get the record track and check the Instrument type
     int rID = comp.getRecordTrack();
+    Rosegarden::InstrumentId inst= comp.getTrackByIndex(rID)->getInstrument();
 
-    switch (comp.getTrackByIndex(rID)->getType())
+    switch (comp.getInstrumentByIndex(inst)->getType())
     {
-        case Rosegarden::Track::Midi:
+        case Rosegarden::Instrument::Midi:
             recordType = STARTING_TO_RECORD_MIDI;
             cout << "SequenceManager::record() - starting to record MIDI"
                  << endl;
             break;
 
-        case Rosegarden::Track::Audio:
+        case Rosegarden::Instrument::Audio:
             recordType = STARTING_TO_RECORD_AUDIO;
             cout << "SequenceManager::record() - starting to record Audio"
                  << endl;
             break;
 
         default:
-            cout << "SequenceManager::record() - unrecognised track type" << endl;
+            cout << "SequenceManager::record() - unrecognised instrument type"
+                 << endl;
             return;
             break;
     }
