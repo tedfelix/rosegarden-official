@@ -424,6 +424,7 @@ void
 NotePixmapFactory::drawNote(const NotePixmapParameters &params,
 			    QPainter &painter, int x, int y)
 {
+    Rosegarden::Profiler profiler("NotePixmapFactory::drawNote");
     m_inDrawMethod = true;
     drawNoteAux(params, &painter, x, y);
     m_inDrawMethod = false;
@@ -1110,6 +1111,7 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
 		m_p->drawLine(x0, y0 + i, x1, y1 + i);
 	    }
 	} else {
+	    Rosegarden::Profiler profiler("NotePixmapFactory::drawShallowLine(polygon)");
 	    QPointArray qp(4);
 	    qp.setPoint(0, x0, y0);
 	    qp.setPoint(1, x0, y0 + thickness);
@@ -1120,6 +1122,7 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
 
         return;
     }
+    Rosegarden::Profiler profiler("NotePixmapFactory::drawShallowLine(points)");
   
     int dv = y1 - y0;
     int dh = x1 - x0;
@@ -1447,6 +1450,8 @@ NotePixmapFactory::drawTie(bool above, int length)
 QCanvasPixmap*
 NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params) 
 {
+    Rosegarden::Profiler profiler("NotePixmapFactory::makeRestPixmap");
+
     CharName charName(m_style->getRestCharName(params.m_noteType));
     bool encache = false;
 
@@ -1525,6 +1530,7 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
 QCanvasPixmap*
 NotePixmapFactory::makeClefPixmap(const Clef &clef)
 {
+    Rosegarden::Profiler profiler("NotePixmapFactory::makeClefPixmap");
     QCanvasPixmap *plainMap = 0;
 
     if (m_selected) {
@@ -1570,6 +1576,7 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
 QCanvasPixmap*
 NotePixmapFactory::makeUnknownPixmap()
 {
+    Rosegarden::Profiler profiler("NotePixmapFactory::makeUnknownPixmap");
     if (m_selected) {
         return m_font->getColouredCanvasPixmap
 	    (NoteCharacterNames::UNKNOWN,
@@ -1617,6 +1624,7 @@ NotePixmapFactory::makeKeyPixmap(const Key &key,
 				 const Clef &clef,
 				 bool cancellation)
 {
+    Rosegarden::Profiler profiler("NotePixmapFactory::makeKeyPixmap");
     std::vector<int> ah = key.getAccidentalHeights(clef);
     if (ah.size() == 0) return 0;
 
@@ -1798,6 +1806,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
 QCanvasPixmap*
 NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
 {
+    Rosegarden::Profiler profiler("NotePixmapFactory::makeHairpinPixmap");
     drawHairpinAux(length, isCrescendo, 0, 0, 0);
     return makeCanvasPixmap(QPoint(0, m_generatedHeight/2));
 }
@@ -1806,6 +1815,7 @@ void
 NotePixmapFactory::drawHairpin(int length, bool isCrescendo,
 			       QPainter &painter, int x, int y)
 {
+    Rosegarden::Profiler profiler("NotePixmapFactory::drawHairpin");
     m_inDrawMethod = true;
     drawHairpinAux(length, isCrescendo, &painter, x, y);
     m_inDrawMethod = false;
@@ -1831,7 +1841,7 @@ NotePixmapFactory::drawHairpinAux(int length, bool isCrescendo,
     if (painter) {
 	painter->save();
 	m_p->beginExternal(painter);
-	painter->translate(x, y);
+	painter->translate(x, y - height/2);
     } else {
 	createPixmapAndMask(length, height);
     }
@@ -1858,6 +1868,8 @@ NotePixmapFactory::drawHairpinAux(int length, bool isCrescendo,
 QCanvasPixmap*
 NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 {
+    Rosegarden::Profiler profiler("NotePixmapFactory::makeSlurPixmap");
+
     //!!! could remove "height > 5" requirement if we did a better job of
     // sizing so that any horizontal part was rescaled down to exactly
     // 1 pixel wide instead of blurring
@@ -1897,6 +1909,7 @@ void
 NotePixmapFactory::drawSlur(int length, int dy, bool above,
 			    QPainter &painter, int x, int y)
 {
+    Rosegarden::Profiler profiler("NotePixmapFactory::drawSlur");
     QPoint hotspot;
     m_inDrawMethod = true;
     drawSlurAux(length, dy, above, false, hotspot, &painter, x, y);
@@ -2049,6 +2062,8 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above, bool smooth,
 QCanvasPixmap*
 NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 {
+    Rosegarden::Profiler profiler("NotePixmapFactory::makeTimeSigPixmap");
+
     if (sig.isCommon()) {
 
 	QPixmap map;

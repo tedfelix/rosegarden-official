@@ -2666,6 +2666,8 @@ void NotationView::print(bool previewOnly)
         return;
     }
 
+    Rosegarden::Profiler("NotationView::print");
+
     // We need to be in multi-page mode at this point
 
     int pageWidth = getPageWidth();
@@ -2732,6 +2734,10 @@ void NotationView::print(bool previewOnly)
 	m_config->setGroup(NotationView::ConfigGroup);
 
 	NOTATION_DEBUG << "NotationView::print: calling QCanvas::drawArea" << endl;
+
+	{
+	    Rosegarden::Profiler profiler("NotationView::print(QCanvas::drawArea)");
+
 	if (m_config->readBoolEntry("forcedoublebufferprinting", false)) {
 	    getCanvasView()->canvas()->drawArea(pageRect, &printpainter, true);
 	} else {
@@ -2741,6 +2747,9 @@ void NotationView::print(bool previewOnly)
 	    getCanvasView()->canvas()->drawArea(pageRect, &printpainter, true);
 #endif
 	}
+
+	}
+
 	NOTATION_DEBUG << "NotationView::print: QCanvas::drawArea done" << endl;
 
 	//!!! experimental stuff this
@@ -2780,6 +2789,8 @@ void NotationView::print(bool previewOnly)
     m_staffs.clear();
     
     printpainter.end();
+
+    Rosegarden::Profiles::getInstance()->dump();
 }
 
 void NotationView::refreshSegment(Segment *segment,

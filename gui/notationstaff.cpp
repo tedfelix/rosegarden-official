@@ -366,9 +366,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	
 	++nextIt;
 	
-	if (m_printPainter &&
-	    ((*it)->event()->isa(Rosegarden::Note::EventType) ||
-	     (*it)->event()->isa(Rosegarden::Indication::EventType))) {
+	if (isDirectlyPrintable(*it)) {
 	    // notes are renderable direct to the printer, so don't render
 	    // them to the canvas here
 	    continue;
@@ -385,8 +383,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 //	NOTATION_DEBUG << "Rendering at " << (*it)->getAbsoluteTime()
 //			     << " (selected = " << selected << ")" << endl;
 
-	renderSingleElement(*it, (nextIt == to ? 0 : *nextIt),
-			    currentClef, currentKey, selected);
+	renderSingleElement(*it, currentClef, currentKey, selected);
 
 	if ((endTime > startTime) &&
 	    (++elementCount % 200 == 0)) {
@@ -430,8 +427,7 @@ NotationStaff::renderPrintable(timeT from, timeT to)
 	
 	++nextIt;
 
-	if (!(*it)->event()->isa(Rosegarden::Note::EventType) &&
-	    !(*it)->event()->isa(Rosegarden::Indication::EventType)) {
+	if (!isDirectlyPrintable(*it)) {
 	    continue;
 	}
 
@@ -439,10 +435,7 @@ NotationStaff::renderPrintable(timeT from, timeT to)
 //	NOTATION_DEBUG << "Rendering at " << (*it)->getAbsoluteTime()
 //			     << " (selected = " << selected << ")" << endl;
 
-//!!! remember: must tidy up this renderSingleElement stuff
-
-	renderSingleElement(*it, (nextIt == endAt ? 0 : *nextIt),
-			    currentClef, currentKey, selected);
+	renderSingleElement(*it, currentClef, currentKey, selected);
 
 	if ((to > from) && (++elementCount % 200 == 0)) {
 
@@ -524,8 +517,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 		haveCurrentKey = true;
 	    }
 
-	} else if (m_printPainter && el->isNote()) {
-
+	} else if (isDirectlyPrintable(el)) {
 	    // these are rendered by renderPrintable for printing
 	    continue;
 	}
@@ -578,8 +570,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 	if (el->getLayoutX() == 0) continue;
 
 	if (needNewSprite) {
-	    renderSingleElement(*it, (nextIt == endAt ? 0 : *nextIt),
-				currentClef, currentKey, selected);
+	    renderSingleElement(*it, currentClef, currentKey, selected);
 	    ++elementsRendered;
 	}
 
@@ -767,9 +758,17 @@ NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
 }
 
 
+bool
+NotationStaff::isDirectlyPrintable(ViewElement *velt)
+{
+    if (!m_printPainter) return false;
+    return (velt->event()->isa(Rosegarden::Note::EventType) ||
+	    velt->event()->isa(Rosegarden::Indication::EventType));
+}
+
+
 void
 NotationStaff::renderSingleElement(ViewElement *velt,
-				   ViewElement * /* vnextElt */,
 				   const Rosegarden::Clef &currentClef,
 				   const Rosegarden::Key &currentKey,
 				   bool selected)
@@ -900,13 +899,19 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 		length = m_notePixmapFactory->getNoteBodyWidth();
 	    }
 
-	    if (indicationType == Indication::Crescendo) {
+	    if (indicationType == Indication::Crescendo ||
+		indicationType == Indication::Decrescendo) {
 
-		pixmap = m_notePixmapFactory->makeHairpinPixmap(length, true);
-
-	    } else if (indicationType == Indication::Decrescendo) {
-
-		pixmap = m_notePixmapFactory->makeHairpinPixmap(length, false);
+		if (m_printPainter) {
+		    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
+			(elt->getLayoutX(), (int)elt->getLayoutY());
+		    m_notePixmapFactory->drawHairpin
+			(length, indicationType == Indication::Crescendo,
+			 *m_printPainter, int(coords.first), coords.second);
+		} else {
+		    pixmap = m_notePixmapFactory->makeHairpinPixmap
+			(length, indicationType == Indication::Crescendo);
+		}
 
 	    } else if (indicationType == Indication::Slur) {
 
@@ -917,8 +922,16 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 		elt->event()->get<Bool>(properties.SLUR_ABOVE, above);
 		elt->event()->get<Int>(properties.SLUR_Y_DELTA, dy);
 		elt->event()->get<Int>(properties.SLUR_LENGTH, length);
-		
-		pixmap = m_notePixmapFactory->makeSlurPixmap(length, dy, above);
+
+		if (m_printPainter) {
+		    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
+			(elt->getLayoutX(), (int)elt->getLayoutY());
+		    m_notePixmapFactory->drawSlur
+			(length, dy, above,
+			 *m_printPainter, int(coords.first), coords.second);
+		} else {
+		    pixmap = m_notePixmapFactory->makeSlurPixmap(length, dy, above);
+		}
 		    
 	    } else {
 

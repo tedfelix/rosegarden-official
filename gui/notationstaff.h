@@ -320,10 +320,11 @@ protected:
      * the correct pitch for the key)
      */
     virtual void renderSingleElement(Rosegarden::ViewElement *elt, 
-				     Rosegarden::ViewElement *nextElt,
 				     const Rosegarden::Clef &,
 				     const Rosegarden::Key &,
 				     bool selected);
+
+    bool isDirectlyPrintable(Rosegarden::ViewElement *elt);
 
     void setTuplingParameters(NotationElement *, NotePixmapParameters &);
 
