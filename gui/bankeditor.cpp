@@ -763,8 +763,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QToolTip::add(m_deleteAllBanks,
                   i18n("Delete all Banks from the current Device"));
 
-    m_importBanks = new QPushButton(i18n("Import"), bankBox);
-    m_exportBanks = new QPushButton(i18n("Export"), bankBox);
+    m_importBanks = new QPushButton(i18n("Import..."), bankBox);
+    m_exportBanks = new QPushButton(i18n("Export..."), bankBox);
     gridLayout->addWidget(m_importBanks, 1, 0);
     gridLayout->addWidget(m_exportBanks, 1, 1);
 //    bankBox->addSpace(10); // spacer
@@ -2020,10 +2020,23 @@ BankEditorDialog::slotExport()
 
     }
 
+    MidiDeviceListViewItem* deviceItem =
+	dynamic_cast<MidiDeviceListViewItem*>
+	(m_listView->selectedItem());
+    
+    std::vector<Rosegarden::DeviceId> devices;
+    Rosegarden::MidiDevice *md = getMidiDevice(deviceItem);
 
-    //std::cout << "GOT FILENAME = " << name << std::endl;
-    m_doc->exportStudio(name);
-
+    if (md) {
+	ExportDeviceDialog *ed = new ExportDeviceDialog
+	    (this, strtoqstr(md->getName()));
+	if (ed->exec() != QDialog::Accepted) return;
+	if (ed->getExportType() == ExportDeviceDialog::ExportOne) {
+	    devices.push_back(md->getId());
+	}
+    }
+    
+    m_doc->exportStudio(name, devices);
 }
 
 void

@@ -850,4 +850,19 @@ protected:
 };
 
 
+class ExportDeviceDialog : public KDialogBase
+{
+public:
+    enum ExportType { ExportOne, ExportAll };
+    
+    ExportDeviceDialog(QWidget *parent, QString deviceName);
+    
+    ExportType getExportType();
+
+protected:
+    QRadioButton *m_exportAll;
+    QRadioButton *m_exportOne;
+};
+
+
 #endif

@@ -610,9 +610,9 @@ void ControlRuler::layoutItem(ControlItem* item)
 {
     timeT itemTime = item->getElementAdapter()->getTime();
     
-    double x = m_rulerScale->getXForTime(itemTime) + m_staffOffset;
+    double x = m_rulerScale->getXForTime(itemTime);
     
-    item->setX(x);
+    item->setX(x + m_staffOffset);
     int itemElementDuration = item->getElementAdapter()->getDuration();
     
     int width = int(m_rulerScale->getXForTime(itemTime + itemElementDuration) - x);

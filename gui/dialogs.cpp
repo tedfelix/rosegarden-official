@@ -4452,3 +4452,26 @@ LilypondOptionsDialog::slotOk()
     accept();
 }
 
+
+ExportDeviceDialog::ExportDeviceDialog(QWidget *parent, QString deviceName) :
+    KDialogBase(parent, "exportdevicedialog", true, i18n("Export Devices..."),
+		Ok | Cancel, Ok)
+{
+    QVBox *vbox = makeVBoxMainWidget();
+    QButtonGroup *bg = new QButtonGroup(1, Qt::Horizontal,
+					i18n("Export devices"),
+					vbox);
+    m_exportAll = new QRadioButton(i18n("Export all devices"), bg);
+    m_exportOne = new QRadioButton(i18n("Export selected device only"), bg);
+    new QLabel(i18n("         (\"%1\")").arg(deviceName), bg);
+
+    m_exportOne->setChecked(true);
+}
+
+ExportDeviceDialog::ExportType
+ExportDeviceDialog::getExportType()
+{
+    if (m_exportAll->isChecked()) return ExportAll;
+    else return ExportOne;
+}
+

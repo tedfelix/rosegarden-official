@@ -97,8 +97,8 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     QGrid *buttons = new QGrid(2, Horizontal, frame);
     QPushButton *addButton = new QPushButton(i18n("New"), buttons);
     m_deletePlayButton = new QPushButton(i18n("Delete"), buttons);
-    m_importButton = new QPushButton(i18n("Import"), buttons);
-    m_exportButton = new QPushButton(i18n("Export"), buttons);
+    m_importButton = new QPushButton(i18n("Import..."), buttons);
+    m_exportButton = new QPushButton(i18n("Export..."), buttons);
     m_banksButton = new QPushButton(i18n("Banks..."), buttons);
     m_controllersButton = new QPushButton(i18n("Controllers..."), buttons);
     vlayout->addWidget(buttons);
@@ -812,7 +812,22 @@ DeviceManagerDialog::slotExport()
 
     }
 
-    m_document->exportStudio(name);
+    std::vector<Rosegarden::DeviceId> devices;
+    Rosegarden::DeviceId id = getPlayDeviceIdAt(m_playTable->currentRow());
+    Rosegarden::MidiDevice *md = 0;
+    if (id != Rosegarden::Device::NO_DEVICE) {
+	md = dynamic_cast<Rosegarden::MidiDevice *>(m_studio->getDevice(id));
+    }
+    if (md) {
+	ExportDeviceDialog *ed = new ExportDeviceDialog
+	    (this, strtoqstr(md->getName()));
+	if (ed->exec() != QDialog::Accepted) return;
+	if (ed->getExportType() == ExportDeviceDialog::ExportOne) {
+	    devices.push_back(id);
+	}
+    }
+    
+    m_document->exportStudio(name, devices);
 }
 
 void
