@@ -22,139 +22,57 @@
 #ifndef _ROSEGARDENCONFIGUREDIALOG_H_
 #define _ROSEGARDENCONFIGUREDIALOG_H_
 
-//#include "rosegardenconfigure.h"
+#include <vector>
 
 #include <kdialogbase.h>
-#include <klocale.h>
 
 class RosegardenGUIDoc;
-class QLineEdit;
 
 namespace Rosegarden
 {
+class ConfigurationPage;
 
-/**
- * This class borrowed from KMail
- * (c) 2000 The KMail Development Team
- */
-class ConfigurationPage : public QWidget
-{
-    Q_OBJECT
-
-public:
-    ConfigurationPage(RosegardenGUIDoc *doc,
-                      QWidget *parent=0, const char *name=0 )
-        : QWidget(parent, name), m_doc(doc), m_pageIndex(0) {}
-    ~ConfigurationPage() {};
-
-    /**
-     * Should set the page up (ie. read the setting from the @ref
-     * KConfig object into the widgets) after creating it in the
-     * constructor. Called from @ref ConfigureDialog.
-    */
-//     virtual void setup() = 0;
-
-    /**
-     * Should apply the changed settings (ie. read the settings from
-     * the widgets into the @ref KConfig object). Called from @ref
-     * ConfigureDialog.
-     */
-    virtual void apply() = 0;
-
-    /**
-     * Should cleanup any temporaries after cancel. The default
-     * implementation does nothing. Called from @ref
-     * ConfigureDialog.
-     */
-    virtual void dismiss() {}
-
-    void setPageIndex( int aPageIndex ) { m_pageIndex = aPageIndex; }
-    int pageIndex() const { return m_pageIndex; }
-
-protected:
-
-    //--------------- Data members ---------------------------------
-
-    RosegardenGUIDoc* m_doc;
-
-    int m_pageIndex;
-};
-
-/**
- * This class borrowed from KMail
- * (c) 2000 The KMail Development Team
- */
-class TabbedConfigurationPage : public ConfigurationPage
-{
-    Q_OBJECT
-
-public:
-    TabbedConfigurationPage(RosegardenGUIDoc *doc,
-                            QWidget *parent=0, const char *name=0);
-
-    static QString iconName() { return "misc"; }
-    
-protected:
-    void addTab(QWidget *tab, const QString &title);
-
-    //--------------- Data members ---------------------------------
-
-    QTabWidget *m_tabWidget;
-
-};
-
-
-class GeneralConfigurationPage;
-class PlaybackConfigurationPage;
-
-class AudioConfigurationPage : public TabbedConfigurationPage
+class ConfigureDialogBase : public KDialogBase
 {
     Q_OBJECT
 public:
-    AudioConfigurationPage(RosegardenGUIDoc *doc,
-                           QWidget *parent=0, const char *name=0);
-    virtual void apply();
+    ConfigureDialogBase(QWidget *parent=0,
+                        const char *name=0);
+    virtual ~ConfigureDialogBase();
 
-    static QString iconLabel() { return i18n("Audio"); }
-    static QString title()     { return i18n("Audio Settings"); }
-
-public slots:
-    void slotFileDialog();
-
-protected:
-    RosegardenGUIDoc *m_doc;
-    QLineEdit        *m_path;
-    QPushButton      *m_changePathButton;
-};
-
-
-
-class RosegardenConfigureDialog : public KDialogBase
-{
-Q_OBJECT
-public:
-    RosegardenConfigureDialog(RosegardenGUIDoc *doc,
-                              QWidget *parent=0,
-                              const char *name=0);
-    ~RosegardenConfigureDialog();
+    typedef std::vector<ConfigurationPage*> configurationpages;
 
 protected slots:
     virtual void slotOk();
     virtual void slotApply();
     virtual void slotCancelOrClose();
 
-    void slotActivateApply();
+    virtual void slotActivateApply();
 
-private:
+protected:
 
-    RosegardenGUIDoc *m_doc;
-    GeneralConfigurationPage*  m_generalConfigurationPage;
-    PlaybackConfigurationPage* m_playbackConfigurationPage;
-    AudioConfigurationPage*    m_audioConfigurationPage;
+    configurationpages m_configurationPages;
 };
 
-}
- 
+class ConfigureDialog : public ConfigureDialogBase
+{
+public:
+    ConfigureDialog(QWidget *parent=0,
+                    const char *name=0);
+};
 
+class DocumentConfigureDialog : public ConfigureDialogBase
+{
+public:
+    DocumentConfigureDialog(RosegardenGUIDoc *doc,
+                            QWidget *parent=0,
+                            const char *name=0);
+
+protected:
+    RosegardenGUIDoc *m_doc;
+};
+
+
+}
 
 #endif // _ROSEGARDENCONFIGUREDIALOG_H_

@@ -21,10 +21,10 @@
       	<Action name="edit_matrix"/>
       	<Action name="edit_notation"/>
 	<Separator/>
-      	<Action name="add_tempo" append="edit_merge"/>
-      	<Action name="add_time_signature" append="edit_merge"/>
+      	<Action name="add_tempo"/>
+      	<Action name="add_time_signature"/>
 	<Separator/>
-      	<Action name="edit_doc_properties" append="edit_merge"/>
+      	<Action name="edit_doc_properties"/>
   </Menu>
   <Menu name="Tracks">
 	<text>&amp;Tracks</text>

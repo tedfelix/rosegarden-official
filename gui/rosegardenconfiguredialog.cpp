@@ -39,6 +39,7 @@
 
 #include "rosestrings.h"
 #include "rosegardenconfiguredialog.h"
+#include "rosegardenconfigurationpage.h"
 #include "rosegardenguidoc.h"
 #include "Composition.h"
 #include "Configuration.h"
@@ -47,12 +48,6 @@
 
 namespace Rosegarden
 {
-
-//
-//
-// basic ConfigurationPage (inherit pages from this)
-//
-//
 
 TabbedConfigurationPage::TabbedConfigurationPage(RosegardenGUIDoc *doc,
                                                  QWidget *parent,
@@ -70,27 +65,6 @@ void TabbedConfigurationPage::addTab(QWidget *tab, const QString &title)
 }
 
 //------------------------------------------------------------
-
-class GeneralConfigurationPage : public TabbedConfigurationPage
-{
-public:
-    GeneralConfigurationPage(RosegardenGUIDoc *doc,
-                             QWidget *parent=0, const char *name=0);
-
-    virtual void apply();
-
-    static QString iconLabel() { return i18n("General"); }
-    static QString title() { return i18n("General Configuration"); }
-
-    int getCountInSpin()            { return m_countIn->value(); }
-    int getDblClickClient()         { return m_client->currentItem(); }
-    int getMIDIPitch2StringOffset() { return m_midiPitchOffset->value(); }
-
-protected:
-    QComboBox* m_client;
-    QSpinBox* m_countIn;
-    QSpinBox* m_midiPitchOffset;
-};
 
 GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
                                                    QWidget *parent, const char *name)
@@ -152,25 +126,6 @@ void GeneralConfigurationPage::apply()
 }
 
 
-class PlaybackConfigurationPage : public TabbedConfigurationPage
-{
-public:
-    PlaybackConfigurationPage(RosegardenGUIDoc *doc,
-                              QWidget *parent=0, const char *name=0);
-
-    virtual void apply();
-
-    static QString iconLabel() { return i18n("Playback"); }
-    static QString title()     { return i18n("Sequencer and Playback"); }
-
-    int getReadAheadValue() { return m_readAhead->value(); }
-    int getPlaybackValue()  { return m_playback->value(); }
-
-protected:
-    QSlider* m_readAhead;
-    QSlider* m_playback;
-};
-
 PlaybackConfigurationPage::PlaybackConfigurationPage(RosegardenGUIDoc *doc,
                                                      QWidget *parent,
                                                      const char *name)
@@ -219,15 +174,14 @@ void PlaybackConfigurationPage::apply()
     config.setPlaybackLatency((RealTime(0, (playback * 1000))));
 }
 
+
 AudioConfigurationPage::AudioConfigurationPage(RosegardenGUIDoc *doc,
                                                QWidget *parent,
                                                const char *name)
     : TabbedConfigurationPage(doc, parent, name),
-      m_doc(doc),
       m_path(0),
       m_changePathButton(0)
 {
-    Rosegarden::Configuration &config = doc->getConfiguration();
     Rosegarden::AudioFileManager &afm = doc->getAudioFileManager();
 
     QFrame *frame = new QFrame(m_tabWidget);
@@ -285,87 +239,99 @@ AudioConfigurationPage::apply()
 
 
 //------------------------------------------------------------
-static inline QPixmap loadIcon( const char * name ) {
+
+static inline QPixmap loadIcon(const char *name)
+{
   return KGlobal::instance()->iconLoader()
-    ->loadIcon( QString::fromLatin1(name), KIcon::NoGroup, KIcon::SizeMedium );
+    ->loadIcon(QString::fromLatin1(name), KIcon::NoGroup, KIcon::SizeMedium);
 }
 
-RosegardenConfigureDialog::RosegardenConfigureDialog(RosegardenGUIDoc *doc,
-                                                     QWidget *parent,
-                                                     const char *name):
+ConfigureDialogBase::ConfigureDialogBase(QWidget *parent,
+                                         const char *name):
     KDialogBase(IconList, i18n("Configure"), Help|Apply|Ok|Cancel,
-                Ok, parent, name, true), // modal
-    m_doc(doc),
-    m_generalConfigurationPage(0),
-    m_playbackConfigurationPage(0)
+                Ok, parent, name, true) // modal
 {
-  QWidget *page;
-  QVBoxLayout *vlay;
-
-  // General Page
-  //
-  page = addPage(GeneralConfigurationPage::iconLabel(),
-                 GeneralConfigurationPage::title(),
-                 loadIcon(GeneralConfigurationPage::iconName()));
-  vlay = new QVBoxLayout(page, 0, spacingHint());
-  m_generalConfigurationPage = new GeneralConfigurationPage(m_doc, page);
-  vlay->addWidget(m_generalConfigurationPage);
-  m_generalConfigurationPage->setPageIndex(pageIndex(page));
-
-  // Playback Page
-  //
-  page = addPage(PlaybackConfigurationPage::iconLabel(),
-                 PlaybackConfigurationPage::title(),
-                 loadIcon(PlaybackConfigurationPage::iconName()));
-  vlay = new QVBoxLayout(page, 0, spacingHint());
-  m_playbackConfigurationPage = new PlaybackConfigurationPage(m_doc, page);
-  vlay->addWidget(m_playbackConfigurationPage);
-  m_playbackConfigurationPage->setPageIndex(pageIndex(page));
-
-  // Audio Page
-  //
-  page = addPage(AudioConfigurationPage::iconLabel(),
-                 AudioConfigurationPage::title(),
-                 loadIcon(AudioConfigurationPage::iconName()));
-  vlay = new QVBoxLayout(page, 0, spacingHint());
-  m_audioConfigurationPage = new AudioConfigurationPage(m_doc, page);
-  vlay->addWidget(m_audioConfigurationPage);
-  m_audioConfigurationPage->setPageIndex(pageIndex(page));
-
 }
 
-RosegardenConfigureDialog::~RosegardenConfigureDialog()
+ConfigureDialogBase::~ConfigureDialogBase()
 {
 }
 
 void
-RosegardenConfigureDialog::slotApply()
+ConfigureDialogBase::slotApply()
 {
-    m_generalConfigurationPage->apply();
-    m_playbackConfigurationPage->apply();
-    m_audioConfigurationPage->apply();
+    for(configurationpages::iterator i = m_configurationPages.begin();
+        i != m_configurationPages.end(); ++i)
+        (*i)->apply();
 }
 
 
 void
-RosegardenConfigureDialog::slotActivateApply()
+ConfigureDialogBase::slotActivateApply()
 {
 //     ApplyButton->setDisabled(false);
 }
 
 void
-RosegardenConfigureDialog::slotOk()
+ConfigureDialogBase::slotOk()
 {
-    kdDebug(KDEBUG_AREA) << "RosegardenConfigureDialog::slotOK()\n";
-
     slotApply();
     accept();
 }
 
 void
-RosegardenConfigureDialog::slotCancelOrClose()
+ConfigureDialogBase::slotCancelOrClose()
 {
 }
 
+ConfigureDialog::ConfigureDialog(QWidget *parent,
+                                 const char *name)
+    : ConfigureDialogBase(parent, name)
+{
+}
+
+DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
+                                                 QWidget *parent,
+                                                 const char *name)
+    : ConfigureDialogBase(parent, name),
+      m_doc(doc)
+{
+    QWidget *pageWidget = 0;
+    QVBoxLayout *vlay = 0;
+    ConfigurationPage* page = 0;
+
+    // General Page
+    //
+    pageWidget = addPage(GeneralConfigurationPage::iconLabel(),
+                         GeneralConfigurationPage::title(),
+                         loadIcon(GeneralConfigurationPage::iconName()));
+    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    page = new GeneralConfigurationPage(m_doc, pageWidget);
+    vlay->addWidget(page);
+    page->setPageIndex(pageIndex(pageWidget));
+    m_configurationPages.push_back(page);
+
+    // Playback Page
+    //
+    pageWidget = addPage(PlaybackConfigurationPage::iconLabel(),
+                         PlaybackConfigurationPage::title(),
+                         loadIcon(PlaybackConfigurationPage::iconName()));
+    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    page = new PlaybackConfigurationPage(m_doc, pageWidget);
+    vlay->addWidget(pageWidget);
+    page->setPageIndex(pageIndex(pageWidget));
+    m_configurationPages.push_back(page);
+
+    // Audio Page
+    //
+    pageWidget = addPage(AudioConfigurationPage::iconLabel(),
+                         AudioConfigurationPage::title(),
+                         loadIcon(AudioConfigurationPage::iconName()));
+    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    page = new AudioConfigurationPage(doc, pageWidget);
+    vlay->addWidget(page);
+    page->setPageIndex(pageIndex(pageWidget));
+    m_configurationPages.push_back(page);
+}
 
 }

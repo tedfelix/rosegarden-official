@@ -330,9 +330,8 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotEditTempo()),
                 actionCollection(), "add_tempo");
 
-    new KAction(AddTimeSignatureCommand::getGlobalName(),
-                0,
-                this, SLOT(slotEditDocumentProperties()),
+    new KAction(i18n("Edit Document Properties"), 0, this,
+                SLOT(slotEditDocumentProperties()),
                 actionCollection(), "edit_doc_properties");
 
     // Transport controls [rwb]
@@ -2103,8 +2102,8 @@ void RosegardenGUIApp::slotConfigure()
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotConfigure\n";
 
-    Rosegarden::RosegardenConfigureDialog *configDlg = 
-        new Rosegarden::RosegardenConfigureDialog(m_doc, this);
+    Rosegarden::ConfigureDialog *configDlg = 
+        new Rosegarden::ConfigureDialog(this);
 
     configDlg->show();
 }
@@ -2112,6 +2111,11 @@ void RosegardenGUIApp::slotConfigure()
 void RosegardenGUIApp::slotEditDocumentProperties()
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditDocumentProperties\n";
+
+    Rosegarden::DocumentConfigureDialog *configDlg = 
+        new Rosegarden::DocumentConfigureDialog(m_doc, this);
+
+    configDlg->show();
 }
 
 void RosegardenGUIApp::slotEditKeys()
