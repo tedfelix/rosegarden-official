@@ -32,6 +32,9 @@
 #include <sstream>
 #endif
 
+#include <kapp.h>
+#include <qpixmap.h>
+#include <qpainter.h>
 
 #include "AudioFile.h"
 #include "AudioFileManager.h"
@@ -596,7 +599,8 @@ AudioFileManager::getPreview(unsigned int id,
     return m_peakManager.getPreview(audioFile,
                                     startIndex,
                                     endIndex,
-                                    width);
+                                    width,
+                                    false);
 }
 
 void
@@ -606,12 +610,104 @@ AudioFileManager::drawPreview(unsigned int id,
                               QPixmap *pixmap)
 {
     AudioFile *audioFile = getAudioFile(id);
-    
-    m_peakManager.drawPreview(audioFile,
-                              startIndex,
-                              endIndex,
-                              pixmap);
+
+    std::vector<float> values = m_peakManager.getPreview
+                                        (audioFile,
+                                         startIndex,
+                                         endIndex,
+                                         pixmap->width(),
+                                         false);
+
+    QPainter painter(pixmap);
+    pixmap->fill(kapp->palette().color(QPalette::Active,
+                                       QColorGroup::Base));
+    painter.setPen(Qt::black);
+
+    float yStep = pixmap->height() / 2;
+    int channels = audioFile->getChannels();
+    float ch1Value, ch2Value;
+
+    // Render pixmap
+    //
+    for (int i = 0; i < pixmap->width(); i++)
+    {
+        // Always get two values for our pixmap no matter how many
+        // channels in AudioFile as that's all we can display.
+        //
+        if (channels == 1)
+        {
+            ch1Value = values[i];
+            ch2Value = values[i];
+        }
+        else
+        {
+            ch1Value = values[i * channels];
+            ch2Value = values[i * channels + 1];
+        }
+
+        painter.drawLine(i, yStep + ch1Value * yStep,
+                         i, yStep - ch2Value * yStep);
+    }
 }
+
+void
+AudioFileManager::drawHighlightedPreview(unsigned int id,
+                                         const RealTime &startIndex,
+                                         const RealTime &endIndex,
+                                         const RealTime &highlightStart,
+                                         const RealTime &highlightEnd,
+                                         QPixmap *pixmap)
+{
+    AudioFile *audioFile = getAudioFile(id);
+
+    std::vector<float> values = m_peakManager.getPreview
+                                        (audioFile,
+                                         startIndex,
+                                         endIndex,
+                                         pixmap->width(),
+                                         false);
+
+    int startWidth = (int)(double(pixmap->width()) * (highlightStart /
+                                                      (endIndex - startIndex)));
+    int endWidth = (int)(double(pixmap->width()) * (highlightEnd /
+                                                    (endIndex - startIndex)));
+
+    QPainter painter(pixmap);
+    pixmap->fill(kapp->palette().color(QPalette::Active,
+                                       QColorGroup::Base));
+
+    float yStep = pixmap->height() / 2;
+    int channels = audioFile->getChannels();
+    float ch1Value, ch2Value;
+
+    // Render pixmap
+    //
+    for (int i = 0; i < pixmap->width(); i++)
+    {
+        // Always get two values for our pixmap no matter how many
+        // channels in AudioFile as that's all we can display.
+        //
+        if (channels == 1)
+        {
+            ch1Value = values[i];
+            ch2Value = values[i];
+        }
+        else
+        {
+            ch1Value = values[i * channels];
+            ch2Value = values[i * channels + 1];
+        }
+
+        if (i < startWidth || i > endWidth)
+            painter.setPen(Qt::lightGray);
+        else
+            painter.setPen(Qt::darkGray);
+
+        painter.drawLine(i, yStep + ch1Value * yStep,
+                         i, yStep - ch2Value * yStep);
+    }
+}
+
 
 }
 

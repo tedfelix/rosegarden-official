@@ -22,6 +22,8 @@
 #include <vector>
 #include <map>
 
+#include <qpixmap.h>
+
 #include "AudioFile.h"
 #include "XmlExportable.h"
 #include "PeakFileManager.h"
@@ -141,10 +143,22 @@ public:
                                   const RealTime &endIndex,
                                   int width);
 
+    // Draw a fixed size (fixed by QPixmap) preview of an audio file
+    //
     void drawPreview(unsigned int id,             // audio file id
                      const RealTime &startIndex, 
                      const RealTime &endIndex,
                      QPixmap *pixmap);
+
+    // Usually used to show how an audio Segment makes up part of
+    // an audio file.
+    //
+    void drawHighlightedPreview(unsigned int it,
+                                const RealTime &startIndex,
+                                const RealTime &endIndex,
+                                const RealTime &highlightStart,
+                                const RealTime &highlightEnd,
+                                QPixmap *pixmap);
 
     // Get a short file name from a long one (with '/'s)
     //

@@ -22,7 +22,6 @@
 
 #include <qdatetime.h>
 #include <qstringlist.h>
-#include <qpainter.h>
 #include <qpalette.h>
 #include <kapp.h>
 
@@ -661,13 +660,16 @@ PeakFile::writePeaks(Progress *progress,
 
 }
 
-// Get a normalised vector for the preview at a given horizontal
-// resolution
+// Get a normalised vector for the preview at a given horizontal resolution.
+// We return a value for each channel and if returnLow is set we also return
+// an interleaved low value for each channel.
+//
 //
 std::vector<float>
 PeakFile::getPreview(const RealTime &startTime,
                      const RealTime &endTime,
-                     int width)
+                     int width,
+                     bool showMinima)
 {
     std::vector<float> ret;
 
@@ -776,32 +778,19 @@ PeakFile::getPreview(const RealTime &startTime,
                           << endl;
                 return ret;
             }
+
+            // Always push back high value
+            ret.push_back(hiValue / divisor);
+
+            if (showMinima)
+                ret.push_back(loValue / divisor);
         }
-
-        /*
-        cout << "READING HI VALUE = " << hiValue/float(m_channels) << endl;
-        cout << "READING LO VALUE = " << loValue/float(m_channels) << endl;
-        */
-
-        hiValue /= (divisor * (float)m_channels);
-        loValue /= (divisor * (float)m_channels);
-
-
-        /*
-        float db = 10 * log10(fabs(hiValue));
-        float val = (db + 45.0) / 45.0;
-
-        if (val < 0.0) val = 0.0;
-        if (val > 1.0) val = 1.0;
-
-        ret.push_back(val * 0.5 + 0.5);
-        */
-        ret.push_back(hiValue);
     }
 
     return ret;
 }
 
+/*
 void
 PeakFile::drawPixmap(const RealTime &startTime,
                      const RealTime &endTime,
@@ -831,6 +820,21 @@ PeakFile::drawPixmap(const RealTime &startTime,
     return;
 
 }
+
+void
+PeakFile::drawHighlightedPixmap(const RealTime &startTime,
+                                const RealTime &endTime,
+                                const RealTime &startHighlight,
+                                const RealTime &endHighlight,
+                                QPixmap *pixmap)
+{
+    std::vector<float> ret = getPreview(startTime,
+                                        endTime, 
+                                        pixmap->width());
+    // Setup pixmap and painter
+}
+*/
+
 
 double
 PeakFile::getPeak(const RealTime &time)

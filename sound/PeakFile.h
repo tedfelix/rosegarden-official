@@ -21,7 +21,6 @@
 #include <vector>
 
 #include <qdatetime.h>
-#include <qpixmap.h>
 
 #include "SoundFile.h"
 #include "RealTime.h"
@@ -85,13 +84,26 @@ public:
     //
     std::vector<float> getPreview(const RealTime &startTime,
                                   const RealTime &endTime,
-                                  int width);
+                                  int width,
+                                  bool showMinima);
 
+    /*
     // Draw the preview onto the Pixmap
     //
     void drawPixmap(const RealTime &startTime,
                     const RealTime &endTime,
-                    QPixmap *pixmap);
+                    QPixmap *pixmap,
+                    bool returnLow);
+
+    // Highlighted pixmap - showing where a segment has come
+    // from on an AudioFile.
+    //
+    void drawHighlightedPixmap(const RealTime &startTime,
+                               const RealTime &endTime,
+                               const RealTime &startHighlight,
+                               const RealTime &endHighlight,
+                               QPixmap *pixmap);
+                               */
 
     AudioFile* getAudioFile() { return m_audioFile; }
 

@@ -32,8 +32,6 @@
 #include <fstream>
 #include <vector>
 
-#include <qpixmap.h>
-
 
 
 #ifndef _PEAKFILEMANAGER_H_
@@ -75,6 +73,7 @@ public:
                        Progress *progress,
                        unsigned short updatePercentage);
 
+    /*
     // Generate a QPixmap 
     //
     void drawPreview(AudioFile *audioFile,
@@ -83,11 +82,21 @@ public:
                      QPixmap *pixmap);
 
     // Get a vector of floats as the preview
+    void drawHighlightedPreview(AudioFile *audioFile,
+                                const RealTime &startIndex,
+                                const RealTime &endIndex,
+                                const RealTime &startHighlight,
+                                const RealTime &endHighlight,
+                                QPixmap *pixmap);
+                                */
+
+    // Get a vector of floats as the preview
     //
     std::vector<float> getPreview(AudioFile *audioFile,
                                   const RealTime &startIndex,
                                   const RealTime &endIndex,
-                                  int width); // width in floats
+                                  int   width,
+                                  bool  showMinima);
 
     // Clear down
     //

@@ -192,7 +192,7 @@ AudioManagerDialog::slotPopulateFileList()
         // Duration
         //
         length = (*it)->getLength();
-        msecs.sprintf("%3ld", length.usec / 1000);
+        msecs.sprintf("%03ld", length.usec / 1000);
         item->setText(1, QString("%1.%2s").arg(length.sec).arg(msecs));
 
         // Envelope pixmap
@@ -229,11 +229,22 @@ AudioManagerDialog::slotPopulateFileList()
 
                 // Write segment duration
                 //
-                msecs.sprintf("%3ld", segmentDuration.usec / 1000);
+                msecs.sprintf("%03ld", segmentDuration.usec / 1000);
                 childItem->setText(1, QString("%1.%2s")
                                           .arg(segmentDuration.sec)
                                           .arg(msecs));
 
+                m_doc->getAudioFileManager().
+                    drawHighlightedPreview((*it)->getId(),
+                                           RealTime(0, 0),
+                                           (*it)->getLength(),
+                                           (*iit)->getAudioStartTime(),
+                                           (*iit)->getAudioEndTime(),
+                                           audioPixmap);
+
+                // set pixmap
+                //
+                childItem->setPixmap(2, *audioPixmap);
             }
         }
     }
