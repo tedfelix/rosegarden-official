@@ -112,6 +112,9 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     connect(ToEndButton, SIGNAL(released()),
 	    SLOT(slotChangeToEnd()));
 
+    connect(LoopButton, SIGNAL(released()),
+            SLOT(slotLoopButtonReleased()));
+
     // clear labels
     //
     slotClearMidiInLabel();
@@ -464,7 +467,7 @@ RosegardenTransportDialog::setMidiOutLabel(const Rosegarden::MappedEvent *mE)
     if (m_midiOutTimer->isActive())
         m_midiOutTimer->stop();
 
-    // 1.5 second timeout
+    // 200 millisecond timeout
     //
     m_midiOutTimer->start(200, true);
 }
@@ -483,6 +486,19 @@ RosegardenTransportDialog::closeEvent (QCloseEvent * e)
 {
     e->accept();  // accept the close event here
     emit closed();
+}
+
+void
+RosegardenTransportDialog::slotLoopButtonReleased()
+{
+    if (LoopButton->isOn())
+    {
+        emit setLoop();
+    }
+    else
+    {
+        emit unsetLoop();
+    }
 }
 
 

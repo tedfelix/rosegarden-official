@@ -71,7 +71,9 @@ RosegardenGUIApp::RosegardenGUIApp()
       m_sequencerProcess(0),
       m_seqManager(0),
       m_transport(0),
-      m_originatingJump(false)
+      m_originatingJump(false),
+      m_storedLoopStart(0),
+      m_storedLoopEnd(0)
 {
     // accept dnd
     setAcceptDrops(true);
@@ -364,6 +366,10 @@ void RosegardenGUIApp::setupActions()
     connect((QObject *)m_transport, SIGNAL(closed()),
                                     SLOT(slotCloseTransport()));
 
+    // Handle loop setting and unsetting from the transport loop button
+    //
+    connect(m_transport, SIGNAL(setLoop()), SLOT(slotSetLoop()));
+    connect(m_transport, SIGNAL(unsetLoop()), SLOT(slotUnsetLoop()));
 }
 
 
@@ -1592,6 +1598,13 @@ RosegardenGUIApp::slotSetLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
     try
     {
         m_seqManager->setLoop(lhs, rhs);
+
+        // toggle the loop button
+        if (lhs != rhs)
+            m_transport->LoopButton->setOn(true);
+        else
+            m_transport->LoopButton->setOn(false);
+
     }
     catch(QString s)
     {
@@ -1652,3 +1665,31 @@ RosegardenGUIApp::insertMetronomeClicks(timeT sliceStart, timeT sliceEnd)
 {
     m_seqManager->insertMetronomeClicks(sliceStart, sliceEnd);
 }
+
+// Set the loop to what we have stored (if the stored loop is (0,0) then
+// nothing happens).
+//
+void
+RosegardenGUIApp::slotSetLoop()
+{
+    // restore loop
+    m_doc->setLoop(m_storedLoopStart, m_storedLoopEnd);
+}
+
+// Store the current loop locally and unset the loop on the Sequencer
+//
+void
+RosegardenGUIApp::slotUnsetLoop()
+{
+    Rosegarden::Composition &comp = m_doc->getComposition();
+
+    // store the loop
+    m_storedLoopStart = comp.getLoopStart();
+    m_storedLoopEnd = comp.getLoopEnd();
+
+    // clear the loop at the composition and propagate to the rest
+    // of the display items
+    m_doc->setLoop(0, 0);
+}
+
+

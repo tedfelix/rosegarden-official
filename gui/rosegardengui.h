@@ -516,6 +516,14 @@ public slots:
      */
     void slotToggleMetronome();
 
+
+    /*
+     * Set and unset the loop from the transport loop button with
+     * these slots.
+     */
+    void slotSetLoop();
+    void slotUnsetLoop();
+
 private:
 
     //--------------- Data members ---------------------------------
@@ -580,6 +588,13 @@ private:
     Rosegarden::RosegardenTransportDialog *m_transport;
 
     bool m_originatingJump;
+
+
+    // Use these in conjucntion with the loop button to
+    // remember where a loop was if we've ever set one.
+    Rosegarden::timeT m_storedLoopStart;
+    Rosegarden::timeT m_storedLoopEnd;
+
 };
  
 #endif // ROSEGARDENGUI_H

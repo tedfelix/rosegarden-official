@@ -71,8 +71,15 @@ public slots:
     void slotChangeTimeDisplay();
     void slotChangeToEnd();
 
+    void slotLoopButtonReleased();
+
 signals:
     void closed();
+
+    // Set and unset the loop at the RosegardenGUIApp
+    //
+    void setLoop();
+    void unsetLoop();
 
 private:
     void loadPixmaps();
