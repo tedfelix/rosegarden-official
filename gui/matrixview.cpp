@@ -1324,7 +1324,7 @@ MatrixView::slotChangeHorizontalZoom(int)
 //     double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
     double value = m_hZoomSlider->getCurrentSize();
 //     m_zoomLabel->setText(i18n("%1%").arg(duration44/value));
-    m_zoomLabel->setText(i18n("%1%").arg(value));
+    m_zoomLabel->setText(i18n("%1%").arg(value*100.0));
 
     QWMatrix zoomTransfo;
 
@@ -1335,14 +1335,20 @@ MatrixView::slotChangeHorizontalZoom(int)
 
     m_canvasView->setWorldMatrix(zoomTransfo);
 
+    BarButtons* barButtons = dynamic_cast<BarButtons*>(m_topBarButtons);
+    if (barButtons) barButtons->setHorizScaleFactor(value);
+
+    barButtons = dynamic_cast<BarButtons*>(m_bottomBarButtons);
+    if (barButtons) barButtons->setHorizScaleFactor(value);
+
 //     for (unsigned int i = 0; i < m_staffs.size(); ++i)
 //     {
 //         m_staffs[i]->setTimeScaleFactor(1.0/m_hZoomSlider->getCurrentSize());
 //         m_staffs[i]->sizeStaff(m_hlayout);
 //     }
 
-//     if (m_topBarButtons) m_topBarButtons->update();
-//     if (m_bottomBarButtons) m_bottomBarButtons->update();
+    if (m_topBarButtons) m_topBarButtons->update();
+    if (m_bottomBarButtons) m_bottomBarButtons->update();
 
     /*
 
