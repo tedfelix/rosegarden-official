@@ -163,7 +163,7 @@ Composition::addNewBar(timeT time)
 void
 Composition::calculateBarPositions()
 {
-    std::cerr << "Composition::calculateBarPositions" << std::endl;
+//    std::cerr << "Composition::calculateBarPositions" << std::endl;
 
     if (!m_barPositionsNeedCalculating) return;
 
@@ -181,7 +181,7 @@ Composition::calculateBarPositions()
 	}
     }
 
-    std::cerr << "have " << t.size() << " non-bars in ref track" << std::endl;
+//    std::cerr << "have " << t.size() << " non-bars in ref track" << std::endl;
 
     bool segment0isTimeSig = true;
     if (segments.size() == 0 || segments[0] != 0) {
@@ -200,21 +200,21 @@ Composition::calculateBarPositions()
 
 	if (s > 0 || segment0isTimeSig) start += segmentTimes[s];
 
-	std::cerr << "segment " << s << ": start " << start << ", finish " << finish << std::endl;
+//	std::cerr << "segment " << s << ": start " << start << ", finish " << finish << std::endl;
 
 	for (time = start; time < finish; time += segmentTimes[s]) {
 	    addNewBar(time);
-            std::cerr << "added bar at " << time << std::endl;
+//            std::cerr << "added bar at " << time << std::endl;
 	}
 
 	if (s == segments.size() - 1 && time != duration) {
             addNewBar(time);
-            std::cerr << "added bar at " << time << std::endl;
+//            std::cerr << "added bar at " << time << std::endl;
         }            
     }
 
     m_barPositionsNeedCalculating = false;
-    std::cerr << "Composition::calculateBarPositions ending" << std::endl;
+//    std::cerr << "Composition::calculateBarPositions ending" << std::endl;
 }
 
 int
