@@ -274,13 +274,17 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 
 	m_canvas->setSnapGrain(true);
 
-	int x = e->pos().x() - m_clickPoint.x();
+	int x = e->x() - m_clickPoint.x();
+        if (x < 0) x = 0;
+        int y = e->y();
+        if (y < 0) y = 0;
+
 	timeT newStartTime = m_canvas->grid().snapX(m_currentItemStartX + x);
 	m_currentItem->setEndTime(m_currentItem->getEndTime() + newStartTime -
 				  m_currentItem->getStartTime());
 	m_currentItem->setStartTime(newStartTime);
 
-	TrackId track = m_canvas->grid().getYBin(e->pos().y());
+	TrackId track = m_canvas->grid().getYBin(y);
         m_currentItem->setTrack(track);
 
         m_foreGuide->setX(int(m_canvas->grid().getRulerScale()->
