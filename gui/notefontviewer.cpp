@@ -42,7 +42,9 @@
 
 #include "config.h"
 
+#ifdef HAVE_XFT
 #include <X11/Xft/Xft.h>
+#endif
 
 FontViewFrame::FontViewFrame( int pixelSize, QWidget* parent, const char* name ) :
     QFrame(parent,name),
