@@ -108,6 +108,11 @@ public:
     void processRecordedAudio(const Rosegarden::RealTime &time,
                               float audioLevel);
 
+    // Suspend the sequencer to allow for a safe DCOP call() i.e. one
+    // when we don't hang both clients 'cos they're blocking on each
+    // other.
+    //
+    void suspendSequencer(bool value);
 private:
 
     Rosegarden::MappedComposition m_mC;

@@ -387,8 +387,7 @@ SequenceManager::play()
 
     // make sure we toggle the play button
     // 
-    if (m_transport->PlayButton->state() == QButton::Off)
-        m_transport->PlayButton->toggle();
+    m_transport->PlayButton->setOn(true);
 
     // write the start position argument to the outgoing stream
     //
@@ -471,7 +470,18 @@ SequenceManager::play()
 void
 SequenceManager::stop()
 {
-    Composition &comp = m_doc->getComposition();
+    // Toggle off the buttons - first record
+    //
+    if ((m_transportStatus == RECORDING_MIDI ||
+         m_transportStatus == RECORDING_AUDIO) &&
+         m_transport->RecordButton->state() == QButton::On)
+    {
+        m_transport->RecordButton->setOn(false);
+    }
+
+    // Metronome
+    if (m_transport->MetronomeButton->state() == QButton::On)
+        m_transport->MetronomeButton->setOn(false);
 
     if (m_transportStatus == STOPPED)
     {
@@ -479,15 +489,19 @@ SequenceManager::stop()
         return;
     }
 
-    // toggle the metronome button according to state
-    m_transport->MetronomeButton->setOn(comp.usePlayMetronome());
+    // Now playback
+    m_transport->PlayButton->setOn(false);
+
+    // Suspend the sequencer so we can call() it in safety
+    //
+    suspendSequencer(true);
 
     // "call" the sequencer with a stop so we get a synchronous
     // response - then we can fiddle about with the audio file
     // without worrying about the sequencer causing problems
     // with access to the same audio files.
     //
-    TransportStatus recordType;
+    //TransportStatus recordType;
     QByteArray data;
     QCString replyType;
     QByteArray replyData;
@@ -506,29 +520,28 @@ SequenceManager::stop()
     }
     QApplication::restoreOverrideCursor();
 
+    // Unsuspend the sequencer
+    //
+    suspendSequencer(false);
+
+    // "call" the sequencer with a stop so we get a synchronous
+
     // if we're recording MIDI or Audio then tidy up the recording Segment
     if (m_transportStatus == RECORDING_MIDI)
+    {
         m_doc->stopRecordingMidi();
+        cout << "SequenceManager::stop() - stopped recording MIDI" << endl;
+    }
 
     if (m_transportStatus == RECORDING_AUDIO)
+    {
         m_doc->stopRecordingAudio();
+        cout << "SequenceManager::stop() - stopped recording audio" << endl;
+    }
 
     // always untoggle the play button at this stage
     //
     if (m_transport->PlayButton->state() == QButton::On)
-        m_transport->PlayButton->toggle();
-
-    if (m_transportStatus == RECORDING_MIDI ||
-        m_transportStatus == RECORDING_AUDIO)
-    {
-        // untoggle the record button
-        //
-        if (m_transport->RecordButton->state() == QButton::On)
-            m_transport->RecordButton->toggle();
-
-        cout << "SequenceManager::stop() - stopped recording" << endl;
-    }
-    else
     {
         cout << "SequenceManager::stop() - stopped playing" << endl;
     }
@@ -701,13 +714,9 @@ SequenceManager::record()
             break;
     }
 
-    // make sure we toggle the record button and play button
-    // 
-    if (m_transport->RecordButton->state() == QButton::Off)
-        m_transport->RecordButton->toggle();
-
-    if (m_transport->PlayButton->state() == QButton::Off)
-        m_transport->PlayButton->toggle();
+    // set the buttons
+    m_transport->RecordButton->setOn(true);
+    m_transport->PlayButton->setOn(true);
 
     // write the start position argument to the outgoing stream
     //
@@ -1244,6 +1253,26 @@ SequenceManager::processRecordedAudio(const Rosegarden::RealTime &time,
     m_doc->insertRecordedAudio(time, audioLevel, m_transportStatus);
 }
 
+
+// Suspend the call() processing of the sequencer so that we
+// can talk to it properly.  Don't forget to reastablish the
+// normal processing after you've completed your chat.
+//
+void
+SequenceManager::suspendSequencer(bool value)
+{
+    QByteArray data;
+    QDataStream streamOut(data, IO_WriteOnly);
+
+    streamOut << value;
+
+    if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
+                                  ROSEGARDEN_SEQUENCER_IFACE_NAME,
+                                  "suspend(bool)", data))
+    {
+      throw(i18n("Failed to contact Rosegarden sequencer to attempt suspend"));
+    }
+}
 
 }
 

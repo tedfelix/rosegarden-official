@@ -130,6 +130,13 @@ public:
     //
     virtual void alive() = 0;
 
+    // Suspend anything call() oriented at the sequencer so that
+    // the gui can talk to it properly - rather a painful hack 
+    // around DCOP but in the absence of more advanced knowledge
+    // this'll have to do.
+    //
+    virtual void suspend(bool value) = 0;
+
 };
 
 #endif // _ROSEGARDENSEQUENCERIFACE_H_

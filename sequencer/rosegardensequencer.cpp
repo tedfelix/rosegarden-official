@@ -182,6 +182,11 @@ RosegardenSequencerApp::getSlice(const Rosegarden::RealTime &start,
 
     Rosegarden::MappedComposition *mC = new Rosegarden::MappedComposition();
 
+    // Don't do the call() if we're suspended
+    //
+    if (m_suspended)
+        return mC;
+
     // Loop timing
     //
     //QTime t;
@@ -518,6 +523,11 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
                                const Rosegarden::RealTime &readAhead,
                                int recordMode)
 {
+    // Don't do the call() if we're suspended
+    //
+    if (m_suspended)
+        return 1;
+
     TransportStatus localRecordMode = (TransportStatus) recordMode;
 
     if (localRecordMode == STARTING_TO_RECORD_MIDI)
@@ -852,4 +862,22 @@ RosegardenSequencerApp::sequencerAlive()
     std::cout << "RosegardenSequencerApp::sequencerAlive() - "
               << "trying to tell GUI that we're alive" << std::endl;
 }
+
+void
+RosegardenSequencerApp::suspend(bool value)
+{
+    m_suspended = value;
+
+    if (m_suspended)
+    {
+        std::cout << "RosegardenSequencerApp::suspend() - sequencer suspended"
+                  << std::endl;
+    }
+    else
+    {
+        std::cout << "RosegardenSequencerApp::suspend() - sequencer continuing"
+                  << std::endl;
+    }
+}
+
 

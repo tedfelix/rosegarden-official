@@ -181,6 +181,10 @@ public:
     //
     virtual void alive();
 
+    // Suspend - don't forget to continue
+    //
+    virtual void suspend(bool value);
+
     //
     //
     //
@@ -227,6 +231,7 @@ public:
 
     // the call itself
     void sequencerAlive();
+
 
 private:
 
@@ -276,7 +281,11 @@ private:
     // If we should poll the GUI to see if it's alive
     //
     bool m_sendAlive;
-    int m_guiCount;
+    int  m_guiCount;
+
+    // Are we currently suspended?
+    //
+    bool m_suspended;
 
 };
  
