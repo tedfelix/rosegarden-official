@@ -117,7 +117,8 @@ void RG21Loader::closeTrackOrComposition()
 {
     if (m_currentTrack) {
         m_currentTrack->setInstrument(m_currentTrackNb);
-        m_composition->insert(m_currentTrack);
+//        m_composition->insert(m_currentTrack);
+        m_composition->addTrack(m_currentTrack);
         m_currentTrack = 0;
         m_currentTrackTime = 0;
     } else {
