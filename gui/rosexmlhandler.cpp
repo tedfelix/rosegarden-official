@@ -48,6 +48,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         m_events.push_back(new XMLStorableEvent(atts));
     } else if (lcName == "track") {
         // later
+    } else if (lcName == "Group") {
+        
     } else {
         kdDebug(KDEBUG_AREA) << "Don't know how to parse this : " << qName << endl;
     }

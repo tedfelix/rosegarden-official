@@ -449,7 +449,7 @@ NotationView::insertNote(int pitch, QMouseEvent *e)
 
     // set its duration and pitch
     //
-    insertedEvent->setDuration(m_hlayout->quantizer().noteDuration(m_currentSelectedNote));
+    insertedEvent->setTimeDuration(m_hlayout->quantizer().noteDuration(m_currentSelectedNote));
     insertedEvent->set<Int>("pitch", pitch);
 
     // Create associated notationElement and set its note type

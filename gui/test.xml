@@ -21,5 +21,11 @@
 	<event type="note" duration="96" pitch="7"/>
 	<event type="note" duration="whole" pitch="8"/>
 	<event type="note" duration="whole" pitch="9"/>
+
+        <Group>
+	     <event type="note" duration="whole" pitch="8"/>
+	     <event type="note" duration="whole" pitch="9"/>
+        </Group>
+
 </Track>
 </rosegarden-data>

@@ -80,7 +80,7 @@ void
 Quantizer::quantize(Event *el)
 {
     Note note = Whole;
-    Event::duration drt = el->getDuration();
+    Event::duration drt = el->timeDuration();
 
     DurationMap::iterator high, low;
     

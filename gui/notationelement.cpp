@@ -35,7 +35,7 @@ NotationElement::~NotationElement()
 bool
 NotationElement::isRest() const
 {
-    return event()->getType() == "rest";
+    return event()->type() == "rest";
 }
 
 
