@@ -195,6 +195,7 @@ protected:
 
 	    NotationElementList::iterator start; // i.e. event following barline
 	    bool correct; // bar preceding barline has correct duration
+//!!! lose:
 	    bool fake;    // bar doesn't actually exist in this staff
 	    Rosegarden::Event *timeSignature; // null if no new one in this bar
 
@@ -241,14 +242,6 @@ protected:
     typedef BarDataList::value_type BarDataPair;
     typedef std::map<StaffType *, BarDataList> BarDataMap;
     typedef std::map<int, double> BarPositionList;
-    BarDataMap m_barData;
-    BarPositionList m_barPositions;
-
-/*!!!
-    typedef FastVector<BarData> BarDataList;
-    typedef std::map<StaffType *, BarDataList> BarDataMap;
-    typedef std::map<StaffType *, int> FirstBarMap;
-*/
 
     void clearBarList(StaffType &);
 
@@ -270,12 +263,6 @@ protected:
     void setBarSizeData(StaffType &staff, int barNo,
 			double width, int fixedWidth, int baseWidth,
 			Rosegarden::timeT actualDuration);
-/*!!!
-    void expandBarDataListFor(StaffType &staff, int barNo);
-
-    int barNoToIndex(StaffType &staff, int barNo);
-    int indexToBarNo(StaffType &staff, int index);
-*/
 
     /**
      * Returns the bar positions for a given staff, provided that
@@ -353,8 +340,8 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-//!!!    BarDataMap m_barData;
-//!!!    FirstBarMap m_firstBarMap;
+    BarDataMap m_barData;
+    BarPositionList m_barPositions;
 
     double m_totalWidth;
     bool m_pageMode;

@@ -44,6 +44,7 @@
 #include "BaseProperties.h"
 #include "SegmentNotationHelper.h"
 #include "NotationTypes.h"
+#include "XmlExportable.h"
 #include "segmentcommands.h"
 
 #include "MappedDevice.h"
@@ -268,7 +269,6 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
                     .arg(errMsg));
         
         KMessageBox::sorry(0, msg);
-	assert(0);//!!!
 
         return false;
     }
@@ -316,7 +316,9 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                             .arg(segment->getTrack())
                             .arg(segment->getStartTime());
 
-        outStream << "label=\"" << segment->getLabel().c_str() << "\">\n";
+        outStream << "label=\"" <<
+	    Rosegarden::XmlExportable::encode(segment->getLabel()).c_str() <<
+	    "\">\n";
 
         long currentGroup = -1;
 	bool inChord = false;

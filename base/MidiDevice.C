@@ -213,7 +213,7 @@ MidiDevice::toXmlString()
     for (it = m_bankList->begin(); it != m_bankList->end(); it++)
     {
         midiDevice << "        <bank "
-                   << "name=\"" << (*it)->name << "\" "
+                   << "name=\"" << encode((*it)->name) << "\" "
                    << "msb=\"" << (int)(*it)->msb << "\" "
                    << "lsb=\"" << (int)(*it)->lsb << "\">"
                    << std::endl;
@@ -229,7 +229,7 @@ MidiDevice::toXmlString()
             {
                 midiDevice << "            <program "
                            << "id=\"" << (int)(*pt)->program << "\" "
-                           << "name=\"" << (*pt)->name << "\"/>" << std::endl;
+                           << "name=\"" << encode((*pt)->name) << "\"/>" << std::endl;
             }
         }
 

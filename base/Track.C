@@ -70,7 +70,7 @@ Track::toXmlString()
     std::stringstream track;
 
     track << "<track id=\"" << m_id;
-    track << "\" label=\"" << m_label;
+    track << "\" label=\"" << encode(m_label);
     track << "\" position=\"" << m_position;
 
     track << "\" muted=";

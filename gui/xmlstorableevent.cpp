@@ -24,6 +24,7 @@
 #include "SegmentNotationHelper.h"
 #include "BaseProperties.h"
 #include "Quantizer.h"
+#include "XmlExportable.h"
 
 #include "rosedebug.h"
 
@@ -215,9 +216,9 @@ XmlStorableEvent::toXmlString(timeT expectedTime) const
 	    *i == Rosegarden::BaseProperties::BEAMED_GROUP_TYPE) continue;
 
 	res += QString("<property name=\"%1\" %2=\"%3\"/>")
-	    .arg((*i).c_str())
+	    .arg(Rosegarden::XmlExportable::encode(i->getName()).c_str())
 	    .arg(QString(getPropertyTypeAsString(*i).c_str()).lower())
-	    .arg(getAsString(*i).c_str());
+	    .arg(Rosegarden::XmlExportable::encode(getAsString(*i)).c_str());
     }
   
     res += "</event>";

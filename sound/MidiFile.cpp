@@ -757,16 +757,18 @@ MidiFile::convertToRosegarden()
                                     MIDI_PERCUSSION_CHANNEL);
 
                     // assign it here
-                    if (instr != 0)
+                    if (instr != 0) {
+			
                         track->setInstrument(instr->getID());   
 
-                    // give the Segment a name based on the the Instrumnet
-                    //
-                    if (rosegardenSegment != 0)
-                    {
-                        rosegardenSegment->setLabel(m_studio->
-                                getSegmentName(instr->getID()));
-                    }
+			// give the Segment a name based on the the Instrument
+			//
+			if (rosegardenSegment != 0)
+			{
+			    rosegardenSegment->setLabel
+				(m_studio->getSegmentName(instr->getID()));
+			}
+		    }
                 }
                 break;
 

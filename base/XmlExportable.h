@@ -45,7 +45,8 @@ public:
     virtual ~XmlExportable() {;}
 
     virtual std::string toXmlString() = 0;
-private:
+
+    static std::string encode(const std::string &);
 };
 
 }

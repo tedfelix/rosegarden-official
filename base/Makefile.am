@@ -31,5 +31,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
 		     Selection.C \
                      Studio.C \
                      Track.C \
-		     ViewElement.C
+		     ViewElement.C \
+		     XmlExportable.C
+
 
