@@ -124,8 +124,9 @@ public:
     //
     bool scanTo(const RealTime &time);
 
-    // 
-    std::string getSampleFrames(unsigned int frames);
+    // Get the sample frames from the file
+    //
+    char* getSampleFrames(unsigned int frames);
     std::string getSampleFrameSlice(const RealTime &time);
 
     // Two important numbers also reaching through to AudioFile
@@ -147,7 +148,17 @@ public:
     //
     void fillRingBuffer(int bytes);
 
-private:
+    // Are we initialised yet?
+    //
+    bool isInitialised() const { return m_initialised; }
+
+    // First time initialise done from disk thread
+    //
+    void initialise();
+
+protected:
+
+
     RealTime              m_startTime;
     RealTime              m_startIndex;
     RealTime              m_duration;
@@ -167,10 +178,18 @@ private:
     //
     InstrumentId          m_instrumentId;
 
-    // Our i/o buffer
+    // Our file i/o buffer
     //
     RingBuffer           *m_ringBuffer;
 
+    // Our local fixed size playbuffer which takes from the RingBuffer
+    //
+    char                 *m_playBuffer;
+
+    // Have we initialised yet?  Don't do this from the constructor as we want
+    // the disk thread to pick up the slack.
+    //
+    bool                  m_initialised;
 };
 
 // A wrapper class for writing out a recording file

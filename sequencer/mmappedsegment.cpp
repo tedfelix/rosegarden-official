@@ -399,15 +399,6 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
 
             MappedEvent *evt = new MappedEvent(*(*iter));
 
-#ifdef DEBUG_META_ITERATOR
-            if (evt->getType() == MappedEvent::Audio) {
-                
-                if (evt->getEventTime() < endTime)
-                    evt->setEventTime(evt->getEventTime() - Rosegarden::RealTime(1, 0));
-                    c->insert(evt);
-            }
-#endif          
-
             if (evt->getEventTime() < endTime) {
 
                 // set event's instrument
@@ -449,6 +440,14 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
 
                     evt->setAudioStartMarker(startTime);
                 }
+
+                /*
+                if (evt->getType() == MappedEvent::Audio) {
+                
+                    if (evt->getEventTime() < endTime)
+                        evt->setEventTime(evt->getEventTime() - Rosegarden::RealTime(1, 0));
+                }
+                */
 
                 if (evt->getType() == MappedEvent::TimeSignature) {
                     // do something

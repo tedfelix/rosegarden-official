@@ -31,6 +31,8 @@ COPYING included with this distribution for more information.
 #include <string.h>
 #include <sys/mman.h>
 
+#include <iostream>
+
 
 namespace Rosegarden
 {
@@ -44,7 +46,6 @@ RingBuffer::RingBuffer(int size)
     int power_of_two;
 
     for (power_of_two = 1; 1 << power_of_two < size; power_of_two++);
-    
 
     m_size = 1 << power_of_two;
     m_sizeMask = m_size;
@@ -53,6 +54,13 @@ RingBuffer::RingBuffer(int size)
     m_readPtr = 0;
     m_buffer = new char[m_size];
     m_mlocked = false;
+
+#define DEBUG_RINGBUFFER
+#ifdef DEBUG_RINGBUFFER
+    std::cerr << "RingBuffer::RingBuffer() - creating RingBuffer of size " 
+              << m_size << " bytes" << std::endl;
+#endif
+    
 }
 
 

@@ -48,6 +48,8 @@ public:
     RingBuffer(int size);
     ~RingBuffer();
 
+    size_t getSize() const { return m_size; }
+
     int lock();
     void reset();
 

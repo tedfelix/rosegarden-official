@@ -41,8 +41,21 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
         m_file(0),
         m_audioFile(audioFile),
         m_instrumentId(instrumentId),
-        m_ringBuffer(ringBuffer)
+        m_ringBuffer(ringBuffer),
+        m_initialised(false)
 {
+#define DEBUG_PLAYABLE_CONSTRUCTION
+#ifdef DEBUG_PLAYABLE_CONSTRUCTION
+    std::cout << "PlayableAudioFile::PlayableAudioFile - creating" << std::endl;
+#endif
+
+}
+
+void
+PlayableAudioFile::initialise()
+{
+    if (m_initialised) return;
+
     m_file = new std::ifstream(m_audioFile->getFilename().c_str(),
                                std::ios::in | std::ios::binary);
 
@@ -55,9 +68,22 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
     // if no external ringbuffer then create one
     if (m_ringBuffer == 0)
     {
-        m_ringBuffer = new RingBuffer(32767); // 32k ringbuffer
+        int bufferSize = 131071; // 128k ringbuffer as default size
+
+        // Default to a second's worth of audio buffer if we have an AudioFile handle
+        //
+        if (m_audioFile) bufferSize = m_audioFile->getSampleRate() * m_audioFile->getBytesPerFrame();
+
+        m_ringBuffer = new RingBuffer(bufferSize);
     }
 
+    m_playBuffer = new char[m_ringBuffer->getSize()];
+
+    // put something into the buffer to start with
+    fillRingBuffer(m_ringBuffer->getSize() / 3);
+
+    // ensure we can't do this again
+    m_initialised = true;
 }
 
 PlayableAudioFile::~PlayableAudioFile()
@@ -67,6 +93,13 @@ PlayableAudioFile::~PlayableAudioFile()
         m_file->close();
         delete m_file;
     }
+
+    delete m_ringBuffer;
+    delete [] m_playBuffer;
+
+#ifdef DEBUG_PLAYABLE_CONSTRUCTION
+    std::cout << "PlayableAudioFile::~PlayableAudioFile - destroying" << std::endl;
+#endif
 }
  
 bool
@@ -80,28 +113,25 @@ PlayableAudioFile::scanTo(const RealTime &time)
 }
 
 
-// Get some sample frames using this object's file handle
+// Get some sample frames using this object's RingBuffer access to
+// the file itself.
 //
-std::string
+char *
 PlayableAudioFile::getSampleFrames(unsigned int frames)
 {
-    /*
-    if (m_audioFile)
-    {
-        return m_audioFile->getSampleFrames(m_file, frames);
-    }
-    return std::string("");
-    */
-    // Use the ring buffer 
-    std::string data;
 
     if (m_audioFile)
     {
         int bytes = frames * getBytesPerSample();
-        size_t count = m_ringBuffer->read(&data, bytes);
+        size_t count = m_ringBuffer->read(m_playBuffer, bytes);
 
         if (count != size_t(bytes))
         {
+            // Zero any output buffer that didn't get filled
+            //
+            for (unsigned int i = count; i < m_ringBuffer->getSize(); ++i)
+                m_playBuffer[i] = 0;
+
 #ifdef DEBUG_PLAYABLE
             std::cerr << "PlayableAudioFile::getSampleFrames - "
                       << "got fewer audio file bytes than required : "
@@ -111,8 +141,7 @@ PlayableAudioFile::getSampleFrames(unsigned int frames)
         }
     }
 
-    return data;
-
+    return m_playBuffer;
 }
 
 // Get a sample file slice using this object's file handle
