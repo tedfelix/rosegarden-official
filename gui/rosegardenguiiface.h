@@ -46,6 +46,7 @@ class RosegardenIface : virtual public DCOPObject
 
 public:
     RosegardenIface(KMainWindow*);
+    void iFaceDelayedInit(KMainWindow*);
 
 k_dcop:
     virtual void openFile(const QString &file) = 0;

@@ -106,6 +106,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
     initStatusBar();
     initDocument();
     setupActions();
+    iFaceDelayedInit(this);
     initZoomToolbar();
 
     if (!performAutoload())

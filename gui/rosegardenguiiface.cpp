@@ -33,7 +33,15 @@
 #include <kmainwindow.h>
 #include <kaction.h>
 
+#include "rosedebug.h"
+
 RosegardenIface::RosegardenIface(KMainWindow* mainWindow)
+    : DCOPObject(mainWindow->name()),
+      m_dcopActionProxy(0)
+{
+}
+
+void RosegardenIface::iFaceDelayedInit(KMainWindow* mainWindow)
 {
     m_dcopActionProxy = new KDCOPActionProxy(mainWindow->actionCollection(),
                                              this);
