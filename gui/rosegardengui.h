@@ -229,6 +229,13 @@ public:
      * @see slotSequencerExited()
      */
     bool launchSequencer();
+
+    /**
+     * Returns whether there's a sequencer running.
+     * The result is dynamically updated depending on the sequencer's
+     * status.
+     */
+    bool isUsingSequencer() { return m_useSequencer; }
     
     /**
      * Set the sequencer status - pass through DCOP as an int

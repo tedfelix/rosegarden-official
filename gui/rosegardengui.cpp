@@ -640,7 +640,7 @@ void RosegardenGUIApp::initStatusBar()
 
 void RosegardenGUIApp::initDocument()
 {
-    m_doc = new RosegardenGUIDoc(this, m_useSequencer, m_pluginManager);
+    m_doc = new RosegardenGUIDoc(this, m_pluginManager);
     m_doc->newDocument();
     m_doc->getCommandHistory()->attachView(actionCollection());
     connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
@@ -2199,7 +2199,7 @@ bool RosegardenGUIApp::launchSequencer()
 
 void RosegardenGUIApp::slotSequencerExited(KProcess*)
 {
-    RG_DEBUG << "Sequencer exited\n";
+    RG_DEBUG << "RosegardenGUIApp::slotSequencerExited Sequencer exited\n";
 
     KStartupLogo* logo = KStartupLogo::getInstance();
     if (logo) logo->hide();
@@ -2208,9 +2208,6 @@ void RosegardenGUIApp::slotSequencerExited(KProcess*)
 
     m_sequencerProcess = 0;
     m_useSequencer = false;
-    if (getDocument()) {
-	getDocument()->setUseSequencer(false);
-    }
 }
 
 

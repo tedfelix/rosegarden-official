@@ -81,7 +81,6 @@ public:
      * Constructor for the fileclass of the application
      */
     RosegardenGUIDoc(QWidget *parent,
-                     bool useSequencer = true,
                      Rosegarden::AudioPluginManager *audioPluginManager = 0,
                      const char *name=0);
 
@@ -209,10 +208,10 @@ public:
     Rosegarden::Clipboard *getClipboard() { return m_clipboard; }
 
     /**
-     * change our mind about whether to use the sequencer (in certain
+     * Returns whether to use the sequencer (in certain
      * specific circumstances -- see RosegardenGUIApp::slotSequencerExited)
      */
-    void setUseSequencer(bool useSequencer) { m_useSequencer = useSequencer; }
+    bool isUsingSequencer();
 
     /**
      * insert some recorded MIDI events into our recording Segment
@@ -440,10 +439,6 @@ private:
     // already requested a sync?
     //
     bool m_startUpSync;
-
-    // Do we start the sequencer? (from command line argument)
-    //
-    bool m_useSequencer;
 
     // AudioPluginManager - sequencer and local plugin management
     //

@@ -91,7 +91,6 @@ using namespace Rosegarden::BaseProperties;
 
 
 RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
-                                   bool useSequencer,
                                    Rosegarden::AudioPluginManager *pluginManager,
                                    const char *name)
     : QObject(parent, name),
@@ -99,7 +98,6 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
       m_commandHistory(new MultiViewCommandHistory()),
       m_clipboard(new Rosegarden::Clipboard),
       m_startUpSync(true),
-      m_useSequencer(useSequencer),
       m_pluginManager(pluginManager)
 
 {
@@ -337,7 +335,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         KMessageBox::error(0, strtoqstr(e));
     }
 
-    if (m_useSequencer)
+    if (isUsingSequencer())
     {
         // Initialise MIDI controllers
         //
@@ -564,6 +562,16 @@ void RosegardenGUIDoc::deleteViews()
     pViewList->clear();
 }
 
+bool RosegardenGUIDoc::isUsingSequencer()
+{
+    RosegardenGUIApp* parentApp = dynamic_cast<RosegardenGUIApp*>(parent());
+    if (!parentApp) {
+        RG_DEBUG << "RosegardenGUIDoc::isUsingSequencer() : parentApp == 0\n!";
+        return false;
+    }
+    
+    return parentApp->isUsingSequencer();
+}
 
 bool
 RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
@@ -1022,7 +1030,7 @@ RosegardenGUIDoc::alive()
     // Probably unnecessary but better safe than sorry.
     //
 
-    while (m_useSequencer &&
+    while (isUsingSequencer() &&
 	   !kapp->dcopClient()->
             isApplicationRegistered(QCString(ROSEGARDEN_SEQUENCER_APP_NAME)))
     {
@@ -1033,7 +1041,7 @@ RosegardenGUIDoc::alive()
         sleep(1); // 1s
     }
 
-    if (m_useSequencer == false)
+    if (isUsingSequencer() == false)
         return;
 
     QByteArray data;
