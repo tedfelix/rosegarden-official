@@ -29,16 +29,22 @@
 #include "notationview.h"
 
 RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char *name)
-    : QVBox(parent)
+    : QVBox(parent),
+      m_notationView(0)
 {
     new QLabel("environment view here", this);
-    NotationView *n = new NotationView(getDocument());
-    n->show();
+    m_notationView = new NotationView(getDocument(), 0);
+
+    QObject::connect(m_notationView, SIGNAL(closed()),
+                     this, SLOT(notationViewClosed()));
+
+    m_notationView->show();
 }
 
 
 RosegardenGUIView::~RosegardenGUIView()
 {
+    kdDebug(KDEBUG_AREA) << "~RosegardenGUIView()\n";
 }
 
 RosegardenGUIDoc*
@@ -61,7 +67,8 @@ RosegardenGUIView::getDocument() const
     return theApp->getDocument();
 }
 
-void RosegardenGUIView::print(QPrinter *pPrinter)
+void
+RosegardenGUIView::print(QPrinter *pPrinter)
 {
     QPainter printpainter;
     printpainter.begin(pPrinter);

@@ -29,6 +29,7 @@
 
 
 class RosegardenGUIDoc;
+class NotationView;
 
 /**
  * The RosegardenGUIView class provides the view widget for the
@@ -63,6 +64,10 @@ public:
 
     /** contains the implementation for printing functionality */
     void print(QPrinter *pPrinter);
+
+protected:
+    NotationView* m_notationView;
+
 };
 
 #endif // ROSEGARDENGUIVIEW_H
