@@ -1,22 +1,13 @@
-0.3 tasks
+0.9 tasks
 =========
 
-o Performance
-  - MIDI playback [found a big collisions() problem that's now commented out]
-  - fix MIDI recording [FIXED]
-  - audio/MIDI looping and start position
+o audio/MIDI looping and start position (performance)
 
 o Make RG a jack mixer (transport, control client)
 
 o JACK connection management - stereo, panning
 
-o Matrix Hypereditor [HALF COMPLETED]
-
 o FEATURE - double/half speed event selection in Matrix
-
-o BUG - Matrix width bug [HALF COMPLETED]
-
-o BUG - Matrix pointer width
 
 o BUG - recorded audio file inserting to AudioManagerDialog before it's ready
   [DONE]
@@ -50,8 +41,10 @@ o Finite audio recording time - check for available disk space
 
 
 
-Post 0.2
+Post 0.8
 ========
+
+o Matrix Hypereditor [PENDING]
 
 o audio previews with minima [NOT FOR THE MOMENT]
 
@@ -87,8 +80,15 @@ o Segment colouring
 
 o selection of ALSA recording device
 
-Completed for 0.3(?)
-====================
+Completed for 0.8
+=================
+
+o Performance
+  - MIDI playback [found a big collisions() problem that's now commented out]
+  - fix MIDI recording [FIXED]
+o BUG - Matrix width bug [DONE]
+
+o BUG - Matrix pointer width [DONE]
 
 o FEATURE - modify composition start and end markers [DONE]
 

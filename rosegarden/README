@@ -59,18 +59,17 @@ KDEDIRS=/usr:/home/glaurent/rosegarden
 
 Running the application
 -----------------------
-
 Just run the "rosegarden" application (found in the KDE bin directory
 after installation, and also in the gui/ directory of the source tree).
+The sequencer process is started automatically when the gui is started,
+provided it has been correctly installed (by "make install") in the
+global KDE directories.  If you have any problems running the application
+then consult the FAQ:
 
-IMPORTANT NOTE: The application will probably crash when you attempt
-to open an editing window, if you haven't installed it properly (using
-"make install") before you run it.  This will be fixed... some time.
+http://www.all-day-breakfast.com/rosegarden
 
-To get the sequencer working properly, please read
-docs/howtos/artsd-mcop-notes for instructions.  The sequencer process
-is started automatically when the gui is started, provided it has been
-correctly installed (by "make install") in the global KDE directories.
+or if that doesn't answer your question then use the rosegarden-user
+mailing list on Sourceforge.
 
 You can also "make uninstall" to uninstall the application if you
 decide it's a waste of your time.
