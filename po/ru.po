@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "POT-Creation-Date: 2003-02-07 16:49+0000\n"
-"PO-Revision-Date: 2003-02-25 11:46+0300\n"
+"PO-Revision-Date: 2003-03-02 18:07+0300\n"
 "Last-Translator: Alexandre Prokoudine <avp@altlinux.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -138,7 +138,7 @@ msgstr "(ничего)"
 
 #: audioplugindialog.cpp:69
 msgid "Bypass"
-msgstr ""
+msgstr "Обход"
 
 #: audioplugindialog.cpp:74 audioplugindialog.cpp:143
 msgid "<no id>"
@@ -301,7 +301,7 @@ msgstr "Указанный файл уже существует.  Перезап
 
 #: bankeditor.cpp:1511
 msgid "Remap Instrument assigments..."
-msgstr ""
+msgstr "Перераспределить назначения инструментов..."
 
 #: bankeditor.cpp:1518
 msgid "Device or Instrument"
@@ -310,6 +310,8 @@ msgstr "Устройство или инструмент"
 #: bankeditor.cpp:1521
 msgid "Remap Tracks by all Instruments on a Device or by single Instrument"
 msgstr ""
+"Перераспределить дорожки по всем инструментам\n"
+"в устройстве или по отдельному инструменту"
 
 #: bankeditor.cpp:1522
 msgid "Device"
@@ -549,7 +551,7 @@ msgstr "Просмотреть событие"
 
 #: dialogs.cpp:1111
 msgid "Intrinsics"
-msgstr ""
+msgstr "Встроенные средства"
 
 #: dialogs.cpp:1115
 msgid "Event type: "
@@ -646,7 +648,6 @@ msgid "The pointer is currently at "
 msgstr "Курсор в позиции "
 
 #: dialogs.cpp:1605
-#, fuzzy
 msgid "Apply this tempo from here onwards"
 msgstr "Применить этот темп отсюда и далее везде"
 
@@ -697,15 +698,15 @@ msgstr "Ключ"
 
 #: dialogs.cpp:1837
 msgid "Existing notes following clef change"
-msgstr ""
+msgstr "Существующие ноты, следующие изменению ключа"
 
 #: dialogs.cpp:1842
 msgid "Lower clef"
-msgstr ""
+msgstr "Ключом ниже"
 
 #: dialogs.cpp:1853
 msgid "Higher clef"
-msgstr ""
+msgstr "Ключом выше"
 
 #: dialogs.cpp:1861
 msgid "Transpose into appropriate octave"
@@ -809,7 +810,6 @@ msgid "Crescendo - set %1 rising from min to max"
 msgstr "Крещендо - установить повышение %1 от мин до макс"
 
 #: dialogs.cpp:2550
-#, fuzzy
 msgid "Diminuendo - set %1 falling from max to min"
 msgstr "Диминуэндо - установить %1 с понижением от макс. до мин."
 
@@ -878,7 +878,6 @@ msgid "Guess new clefs"
 msgstr "Угадать новый ключ"
 
 #: dialogs.cpp:2742
-#, fuzzy
 msgid "Use treble and bass clefs"
 msgstr "Использовать дискантовые и басовые ключи"
 
@@ -1072,7 +1071,7 @@ msgstr "Атака"
 
 #: instrumentparameterbox.cpp:983
 msgid "Release"
-msgstr "Отпускание"
+msgstr "Отключение"
 
 #: ktmpstatusmsg.cpp:68
 msgid "  Ready."
@@ -2642,7 +2641,7 @@ msgstr "Изменить &MIDI-фильтры..."
 
 #: rosegardengui.cpp:516
 msgid "&Remap Instruments..."
-msgstr ""
+msgstr "&Перераспределить инструменты..."
 
 #: rosegardengui.cpp:552
 msgid "&Record"
@@ -2852,7 +2851,7 @@ msgstr "Установить тмеп глобально и по умолчан�
 
 #: rosegardengui.cpp:3734
 msgid "Sending MIDI panic..."
-msgstr ""
+msgstr "Посылается MIDI panic..."
 
 #: rosegardenguidoc.cpp:322
 msgid ""
@@ -2936,7 +2935,7 @@ msgstr "Обнаружена группа вне сегмента"
 
 #: rosexmlhandler.cpp:395
 msgid "Found Studio in another section"
-msgstr ""
+msgstr "Обнаружена студия в другой секции"
 
 #: rosexmlhandler.cpp:424
 msgid "TimeSignature object found outside Composition"
@@ -2944,11 +2943,11 @@ msgstr "Объект TimeSignature обнаружен вне композици�
 
 #: rosexmlhandler.cpp:467
 msgid "Found Composition in another section"
-msgstr ""
+msgstr "Обнаружена композиция в другой секции"
 
 #: rosexmlhandler.cpp:566
 msgid "Track object found outside Composition"
-msgstr ""
+msgstr "Обнаружен дорожечный объект вне композиции"
 
 #: rosexmlhandler.cpp:616
 msgid "Found Segment in another section"
@@ -2956,7 +2955,7 @@ msgstr "Сегмент обнаружен в другой секции"
 
 #: rosexmlhandler.cpp:723
 msgid "Audio object found outside Audio section"
-msgstr ""
+msgstr "Обнаружен аудиообъект вне аудиосекции"
 
 #: rosexmlhandler.cpp:733
 msgid "Audio object has empty parameters"
@@ -2996,47 +2995,47 @@ msgstr "Обнаружен неизвестный тип устройства"
 
 #: rosexmlhandler.cpp:916
 msgid "Found Bank outside Studio or Instrument"
-msgstr "Обнаружен банк вне Студии или инструмента"
+msgstr "Обнаружен банк вне студии или инструмента"
 
 #: rosexmlhandler.cpp:990
 msgid "Found Program outside Studio and Instrument"
-msgstr "Обнаружена программа вне Студии и инструмента"
+msgstr "Обнаружена программа вне студии и инструмента"
 
 #: rosexmlhandler.cpp:999
 msgid "Found Reverb outside Instrument"
-msgstr ""
+msgstr "Обнаружен реверберация вне инструмента"
 
 #: rosexmlhandler.cpp:1013
 msgid "Found Chorus outside Instrument"
-msgstr ""
+msgstr "Обнаружен хорус вне инструмента"
 
 #: rosexmlhandler.cpp:1026
 msgid "Found Filter outside Instrument"
-msgstr ""
+msgstr "Обнаружен фильтра вне инструмента"
 
 #: rosexmlhandler.cpp:1040
 msgid "Found Resonance outside Instrument"
-msgstr ""
+msgstr "Обнаружен резонанс вне инструмента"
 
 #: rosexmlhandler.cpp:1054
 msgid "Found Attack outside Instrument"
-msgstr ""
+msgstr "Обнаружена атака вне инструмента"
 
 #: rosexmlhandler.cpp:1067
 msgid "Found Release outside Instrument"
-msgstr ""
+msgstr "Обнаружено отключение вне инструмента"
 
 #: rosexmlhandler.cpp:1080
 msgid "Found Pan outside Instrument"
-msgstr ""
+msgstr "Обнаружен баланс вне инструмента"
 
 #: rosexmlhandler.cpp:1097
 msgid "Found Volume outside Instrument"
-msgstr ""
+msgstr "Обнаружена громкость вне инструмента"
 
 #: rosexmlhandler.cpp:1115
 msgid "Found Plugin outside Instrument"
-msgstr ""
+msgstr "Обнаружен плагин вне инструмента"
 
 #: rosexmlhandler.cpp:1176
 msgid "Can't find Plugin"
@@ -3044,7 +3043,7 @@ msgstr "Не удаётся найти плагин"
 
 #: rosexmlhandler.cpp:1186
 msgid "Found Port outside Plugin"
-msgstr ""
+msgstr "Обнаружен порт вне плагина"
 
 #: rosexmlhandler.cpp:1205
 msgid "No Plugin object found for Port"
@@ -3064,7 +3063,7 @@ msgstr "Обнаружен неизвестный тип инструмента"
 
 #: rosexmlhandler.cpp:1287
 msgid "Found AudioFiles inside another section"
-msgstr "Аудиофайлы найдены внутри другой секции"
+msgstr "Обнаружены аудиофайлы внутри другой секции"
 
 #: rosexmlhandler.cpp:1302
 msgid "Found Metadata outside Composition"
@@ -3112,7 +3111,7 @@ msgstr ""
 
 #: segmentcommands.h:404
 msgid "Add Time Si&gnature Change..."
-msgstr "Добавить изменение"
+msgstr ""
 
 #: segmentcommands.h:442
 msgid "Modify &Default Tempo..."
@@ -3120,7 +3119,7 @@ msgstr "Изменить &стандартный темп..."
 
 #: segmentcommands.h:467
 msgid "Remove &Tempo Change..."
-msgstr ""
+msgstr "Удалить &изменение темпа"
 
 #: segmentcommands.h:496
 msgid "Add Te&mpo Change..."
@@ -3285,7 +3284,7 @@ msgstr "Нелепо ровный"
 
 #: widgets.cpp:710
 msgid "Tuplet level:"
-msgstr ""
+msgstr "Уровень группирования:"
 
 #: widgets.cpp:714
 msgid "2-in-the-time-of-3"
@@ -3333,7 +3332,7 @@ msgstr ""
 
 #: widgets.cpp:732
 msgid "Re-beam"
-msgstr ""
+msgstr "Перенаправить"
 
 #: widgets.cpp:734
 msgid "Add articulations (staccato, tenuto, slurs)"
@@ -3436,8 +3435,9 @@ msgid ""
 "Moves the pointer position to the end of the composition.  (This may mean "
 "going backwards if the pointer is already beyond the end.)"
 msgstr ""
-"Перемещает текущую позицию курсора к концу композиции.  (Если курсор уже "
-"находится в конце композиции, то курсор переместится назад.)"
+"Перемещает текущую позицию курсора к концу композиции.\n"
+"(Если курсор уже находится в конце композиции, то курсор\n"
+"переместится назад.)"
 
 #: rc.cpp:41
 msgid "Play/Pause"
@@ -3481,7 +3481,7 @@ msgstr "КНЦ"
 
 #: rc.cpp:51
 msgid "BAR"
-msgstr ""
+msgstr "ПЛС"
 
 #: rc.cpp:54
 msgid "Stops playback or recording."
@@ -3531,7 +3531,7 @@ msgstr "Записать"
 
 #: rc.cpp:71
 msgid "Record either MIDI or audio"
-msgstr "Записать либо MIDI либо аудио"
+msgstr "Записать либо MIDI, либо аудио"
 
 #: rc.cpp:73
 msgid "Loop"
@@ -3561,13 +3561,13 @@ msgstr "ИЗ"
 msgid ""
 "_: NAME OF TRANSLATORS\n"
 "Your names"
-msgstr ""
+msgstr "Alexandre Prokoudine"
 
 #: _translatorinfo.cpp:3
 msgid ""
 "_: EMAIL OF TRANSLATORS\n"
 "Your emails"
-msgstr ""
+msgstr "avp@altlinux.ru"
 
 #, fuzzy
 #~ msgid "VUMeter"
