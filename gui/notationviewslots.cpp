@@ -1965,6 +1965,8 @@ NotationView::slotStepByStepTargetRequested(QObject *obj)
 void
 NotationView::slotCheckRendered(double cx0, double cx1)
 {
+    NOTATION_DEBUG << "slotCheckRendered(" << cx0 << "," << cx1 << ")" << endl;
+
     bool something = false;
 
     for (size_t i = 0; i < m_staffs.size(); ++i) {
@@ -1984,6 +1986,7 @@ NotationView::slotCheckRendered(double cx0, double cx1)
     }
 
     if (something) {
+	NOTATION_DEBUG << "emitting renderComplete" << endl;
 	emit renderComplete();
 	if (m_renderTimer) delete m_renderTimer;
 	m_renderTimer = new QTimer(this);

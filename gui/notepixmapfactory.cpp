@@ -1820,20 +1820,33 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above)
 	else { --my1; --my2; }
     }
 
-    if (smooth) {
-	QImage i = m_generatedPixmap->convertToImage();
-	if (i.depth() == 1) i = i.convertDepth(32);
-	i = i.smoothScale(i.width()/2, i.height()/2);
-	m_generatedPixmap->convertFromImage(i);
-    }
-
-    m_generatedMask->fill(Qt::color1);
-
     if (m_selected) {
         m_p.setPen(Qt::black);
     }
 
-    return makeCanvasPixmap(hotspot, true);
+    m_p.end();
+    m_pm.end();
+
+    if (smooth) {
+
+	QImage i = m_generatedPixmap->convertToImage();
+	if (i.depth() == 1) i = i.convertDepth(32);
+	i = i.smoothScale(i.width()/2, i.height()/2);
+
+	delete m_generatedPixmap;
+	delete m_generatedMask;
+	QPixmap newPixmap(i);
+	QCanvasPixmap *p = new QCanvasPixmap(newPixmap, hotspot);
+	p->setMask(PixmapFunctions::generateMask(newPixmap));
+	return p;
+
+    } else {
+	QCanvasPixmap *p = new QCanvasPixmap(*m_generatedPixmap, hotspot);
+	p->setMask(PixmapFunctions::generateMask(*m_generatedPixmap));
+	delete m_generatedPixmap;
+	delete m_generatedMask;
+	return p;
+    }
 }
 
 QCanvasPixmap*

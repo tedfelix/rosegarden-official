@@ -400,23 +400,50 @@ NotationCanvasView::getElementAtXCoord(QMouseEvent *e) // any old element
 }
 
 void
-NotationCanvasView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
+NotationCanvasView::viewportPaintEvent(QPaintEvent *e)
 {
-    m_lastRender = QRect(cx, cy, cw, ch);
+    int cx(e->rect().x()),
+	cy(e->rect().y()),
+	cw(e->rect().width()),
+	ch(e->rect().height());
+    NOTATION_DEBUG << "NotationCanvasView::viewportPaintEvent: (" << cx << ","
+		   << cy << ") size (" << cw << "x" << ch << ")" << endl;
+    QCanvasView::viewportPaintEvent(e);
 
-    QCanvasView::drawContents(p, cx, cy, cw, ch);
-
+    cx += contentsX();
+    cy += contentsY();
+    m_lastRender = e->rect();
     emit renderRequired(std::min(contentsX(), cx),
 			std::max(contentsX() + visibleWidth(), cx + cw));
 }
 
 void
+NotationCanvasView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
+{
+/*
+    m_lastRender = QRect(cx, cy, cw, ch);
+    NOTATION_DEBUG << "NotationCanvasView::drawContents: (" << cx << ","
+		   << cy << ") size (" << cw << "x" << ch << ")" << endl;
+*/
+    QCanvasView::drawContents(p, cx, cy, cw, ch);
+/*
+    emit renderRequired(std::min(contentsX(), cx),
+			std::max(contentsX() + visibleWidth(), cx + cw));
+*/
+}
+
+void
 NotationCanvasView::slotRenderComplete()
 {
-    QPainter painter(viewport());
-    QCanvasView::drawContents(&painter,
-			      m_lastRender.x(),
-			      m_lastRender.y(),
-			      m_lastRender.width(),
-			      m_lastRender.height());
+/*    QPainter painter(viewport());
+    int cx(m_lastRender.x()),
+	cy(m_lastRender.y()),
+	cw(m_lastRender.width()),
+	ch(m_lastRender.height());
+    NOTATION_DEBUG << "NotationCanvasView::slotRenderComplete: (" << cx << ","
+		   << cy << ") size (" << cw << "x" << ch << ")" << endl;
+    QCanvasView::drawContents(&painter, cx, cy, cw, ch);
+*/
+    QPaintEvent ev(m_lastRender);
+    QCanvasView::viewportPaintEvent(&ev);
 }

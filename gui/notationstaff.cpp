@@ -518,11 +518,11 @@ NotationStaff::positionElements(timeT from, timeT to)
 	}
     }
 
-//    NOTATION_DEBUG << "NotationStaff " << this << "::positionElements "
-//                         << from << " -> " << to << ": "
-//			 << elementsPositioned << " elements positioned, "
-//			 << elementsRendered << " re-rendered"
-//			 << endl;
+    NOTATION_DEBUG << "NotationStaff " << this << "::positionElements "
+		   << from << " -> " << to << ": "
+		   << elementsPositioned << " elements positioned, "
+		   << elementsRendered << " re-rendered"
+		   << endl;
 
     NotePixmapFactory::dumpStats(std::cerr);
 }
@@ -1195,7 +1195,7 @@ NotationStaff::checkRendered(timeT from, timeT to)
     if (!m_ready) return false;
     Rosegarden::Composition *composition = getSegment().getComposition();
 
-//    NOTATION_DEBUG << "NotationStaff::checkRendered: " << from << " -> " << to << endl;
+    NOTATION_DEBUG << "NotationStaff::checkRendered: " << from << " -> " << to << endl;
 
     int fromBar = composition->getBarNumber(from);
     int toBar   = composition->getBarNumber(to);
@@ -1204,9 +1204,9 @@ NotationStaff::checkRendered(timeT from, timeT to)
     if (fromBar > toBar) std::swap(fromBar, toBar);
 
     for (int bar = fromBar; bar <= toBar; ++bar) {
-//	NOTATION_DEBUG << "NotationStaff::checkRendered: bar " << bar << " status "
-//		       << m_status[bar] << endl;
-   
+	NOTATION_DEBUG << "NotationStaff::checkRendered: bar " << bar << " status "
+		       << m_status[bar] << endl;
+
 	switch (m_status[bar]) {
 	    
 	case UnRendered:

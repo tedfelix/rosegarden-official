@@ -31,6 +31,7 @@ class QCanvasItemGroup;
 class QCanvasLineGroupable;
 class LinedStaffManager;
 class NotationStaff;
+class QPaintEvent;
 
 /**
  * Central widget for the NotationView window
@@ -117,6 +118,7 @@ public slots:
     
 protected:
 
+    virtual void viewportPaintEvent(QPaintEvent *e);
     virtual void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 
     const LinedStaffManager &m_linedStaffManager;
