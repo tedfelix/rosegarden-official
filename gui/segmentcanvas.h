@@ -169,7 +169,10 @@ public:
                     Joiner,
                     Splitter };
 
-    SegmentCanvas(Rosegarden::RulerScale *, int vStep, QCanvas&,
+    SegmentCanvas(Rosegarden::RulerScale *, int vStep,
+                  unsigned int leftMargin,
+                  unsigned int topMargin,
+                  QCanvas*,
 		  QWidget* parent=0, const char* name=0, WFlags f=0);
     ~SegmentCanvas();
 
@@ -277,7 +280,6 @@ protected:
     virtual void contentsMouseReleaseEvent(QMouseEvent*);
     virtual void contentsMouseMoveEvent(QMouseEvent*);
     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
-    virtual void wheelEvent(QWheelEvent*);
 
 protected slots:
 

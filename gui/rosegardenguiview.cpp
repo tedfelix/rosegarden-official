@@ -79,24 +79,24 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     // Set a track label width for both specialised track and
     // bar buttons widgets to use.
     //
-    int trackLabelWidth = 156;
+//     int trackLabelWidth = 156;
 
-    QVBox       *topBox = new QVBox(this);
-    QHBox       *topSplit = new QHBox(topBox);
+//     QVBox       *topBox = new QVBox(this);
+//     QHBox       *topSplit = new QHBox(topBox);
 
-    topBox->setSpacing(0);
-    topBox->setMargin(0);
-    topSplit->setMinimumHeight(m_trackEditor->getTrackCellHeight());
-    topSplit->setMaximumHeight(m_trackEditor->getTrackCellHeight());
-    topSplit->setSpacing(0);
-    topSplit->setMargin(0);
-    topSplit->setFrameStyle(Plain);
+//     topBox->setSpacing(0);
+//     topBox->setMargin(0);
+//     topSplit->setMinimumHeight(m_trackEditor->getTrackCellHeight());
+//     topSplit->setMaximumHeight(m_trackEditor->getTrackCellHeight());
+//     topSplit->setSpacing(0);
+//     topSplit->setMargin(0);
+//     topSplit->setFrameStyle(Plain);
 
-    QLabel *label = new QLabel(topSplit);
-    label->setMinimumWidth(trackLabelWidth);
-    label->setMaximumWidth(trackLabelWidth);
-    label->setMinimumHeight(m_trackEditor->getTrackCellHeight());
-    label->setMaximumHeight(m_trackEditor->getTrackCellHeight());
+//     QLabel *label = new QLabel(topSplit);
+//     label->setMinimumWidth(trackLabelWidth);
+//     label->setMaximumWidth(trackLabelWidth);
+//     label->setMinimumHeight(m_trackEditor->getTrackCellHeight());
+//     label->setMaximumHeight(m_trackEditor->getTrackCellHeight());
 
 //     QScrollView *barButtonsView = new QScrollView(topSplit);
 
@@ -128,7 +128,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     // get around to specialising the QHeader properly.
     //
     //
-    QHBox *mainPane = new QHBox(topBox);
+//     QHBox *mainPane = new QHBox(topBox);
 
     // --------------- create the track buttons ----------------
     //
@@ -156,7 +156,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     // --------------- create the scrollview ----------------
     //
     //
-    m_trackEditorScrollView = new QScrollView(mainPane); // on the rhs
+//     m_trackEditorScrollView = new QScrollView(mainPane); // on the rhs
 
     // Now link up the vertical scrollbar to the track buttons
     // and the bar buttons
@@ -167,7 +167,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 //     connect(m_trackEditorScrollView, SIGNAL(contentsMoving(int, int)),
 //             barButtonsView,          SLOT(setContentsPos(int, int)));
 
-    m_trackEditorScrollView->addChild(m_trackEditor);
+//     m_trackEditorScrollView->addChild(m_trackEditor);
 
     connect(m_trackEditor->getSegmentCanvas(),
             SIGNAL(editSegmentNotation(Rosegarden::Segment*)),
@@ -200,16 +200,16 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 
     // Connections upwards from LoopRuler - re-emission of signals
     //
-    connect(m_barButtons, SIGNAL(setPointerPosition(Rosegarden::timeT)),
-            this,         SIGNAL(setGUIPositionPointer(Rosegarden::timeT)));
+//     connect(m_barButtons, SIGNAL(setPointerPosition(Rosegarden::timeT)),
+//             this,         SIGNAL(setGUIPositionPointer(Rosegarden::timeT)));
 
-    connect(m_barButtons, SIGNAL(setPlayPosition(Rosegarden::timeT)),
-            this, SIGNAL(setGUIPlayPosition(Rosegarden::timeT)));
+//     connect(m_barButtons, SIGNAL(setPlayPosition(Rosegarden::timeT)),
+//             this, SIGNAL(setGUIPlayPosition(Rosegarden::timeT)));
 
-    connect(m_barButtons,
-            SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
-            this,
-            SIGNAL(setGUILoop(Rosegarden::timeT, Rosegarden::timeT)));
+//     connect(m_barButtons,
+//             SIGNAL(setLoop(Rosegarden::timeT, Rosegarden::timeT)),
+//             this,
+//             SIGNAL(setGUILoop(Rosegarden::timeT, Rosegarden::timeT)));
 
     if (doc)
         m_trackEditor->setupSegments();

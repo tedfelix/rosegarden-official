@@ -111,31 +111,40 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 			    m_rulerScale->getBarWidth(lastBar));
 
     canvas->resize(canvasWidth, getTrackCellHeight() * nbTracks);
+    // TODO : take barbuttons and trackbuttons into account for canvas size
+
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
-    m_segmentCanvas = new SegmentCanvas
-	(m_rulerScale,  getTrackCellHeight(), *canvas, this);
+    int trackLabelWidth = 156;
+    unsigned int barButtonsHeight = 30;
+
+    m_segmentCanvas = new SegmentCanvas(m_rulerScale,
+                                        getTrackCellHeight(),
+                                        trackLabelWidth, barButtonsHeight,
+                                        canvas, this);
 
     hbox->addWidget(m_segmentCanvas);
-
-    QGridLayout *canvasGrid = new QGridLayout(m_segmentCanvas, 2, 2);
-
     m_barButtons = new BarButtons(m_document,
                                   m_rulerScale,
                                   30,
                                   false,
                                   m_segmentCanvas);
 
-    canvasGrid->addWidget(m_barButtons, 0,1);
-
-    int trackLabelWidth = 156;
-
     m_trackButtons = new TrackButtons(m_document,
                                       getTrackCellHeight(),
                                       trackLabelWidth,
                                       m_segmentCanvas);
 
-    canvasGrid->addWidget(m_trackButtons, 1,0);
+    m_trackButtons->setGeometry(3, barButtonsHeight,
+                                trackLabelWidth,
+                                getTrackCellHeight() * nbTracks + 5);
+
+    m_trackButtons->raise();
+
+    m_barButtons->setGeometry(trackLabelWidth, 2,
+                              400,
+                              barButtonsHeight);
+    m_barButtons->raise();
 
     connect(this, SIGNAL(needUpdate()),
             m_segmentCanvas, SLOT(update()));

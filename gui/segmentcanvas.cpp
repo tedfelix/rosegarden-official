@@ -190,9 +190,11 @@ SegmentSplitLine::hideLine()
 
 
 SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, int vStep,
-			     QCanvas& c, QWidget* parent,
+                             unsigned int leftMargin,
+                             unsigned int topMargin,
+			     QCanvas* c, QWidget* parent,
 			     const char* name, WFlags f) :
-    QCanvasView(&c, parent, name, f),
+    QCanvasView(c, parent, name, f),
     m_tool(0),
     m_grid(rulerScale, vStep),
     m_currentItem(0),
@@ -205,6 +207,9 @@ SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, int vStep,
     m_fineGrain(false)
 {
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
+
+    setMargins(leftMargin, topMargin, 0, 0);
+
 }
 
 SegmentCanvas::~SegmentCanvas()
@@ -378,13 +383,6 @@ void SegmentCanvas::contentsMouseMoveEvent(QMouseEvent* e)
 
     m_tool->handleMouseMove(e);
 }
-
-void
-SegmentCanvas::wheelEvent(QWheelEvent *e)
-{
-    e->ignore();
-}
-
 
 void SegmentCanvas::clear()
 {
