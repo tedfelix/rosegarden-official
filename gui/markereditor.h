@@ -38,7 +38,6 @@
 class RosegardenGUIDoc;
 class KCommand;
 class MultiViewCommandHistory;
-class RosegardenComboBox;
 class QLabel;
 class QAccel;
 

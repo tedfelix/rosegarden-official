@@ -881,10 +881,10 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
 //    QGridLayout *rotaryLayout = new QGridLayout(rotaryFrame, 4, 4, 8, 1);
         
     m_connectionLabel = new QLabel(this);
-    m_bankValue = new KComboBox(false, this);
-    m_channelValue = new RosegardenComboBox(true, false, this);
+    m_bankValue = new KComboBox(this);
+    m_channelValue = new KComboBox(this);
     m_programValue = new KComboBox(this);
-    m_variationValue = new KComboBox(false, this);
+    m_variationValue = new KComboBox(this);
     m_bankCheckBox = new QCheckBox(this);
     m_programCheckBox = new QCheckBox(this);
     m_variationCheckBox = new QCheckBox(this);

@@ -432,7 +432,7 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     layout->addWidget(m_nameEdit, 0, 1);
 
     layout->addWidget(new QLabel(i18n("Type:"), frame), 1, 0);
-    m_typeCombo = new RosegardenComboBox(frame);
+    m_typeCombo = new KComboBox(frame);
     layout->addMultiCellWidget(m_typeCombo, 1, 1, 1, 2);
 
     layout->addWidget(new QLabel(i18n("Description:"), frame), 2, 0);
@@ -460,11 +460,11 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     layout->addMultiCellWidget(m_defaultBox, 6, 6, 1, 2);
 
     layout->addWidget(new QLabel(i18n("Color:"), frame), 7, 0);
-    m_colourCombo = new RosegardenComboBox(frame);
+    m_colourCombo = new KComboBox(frame);
     layout->addMultiCellWidget(m_colourCombo, 7, 7, 1, 2);
 
     layout->addWidget(new QLabel(i18n("Instrument Parameter Box position:"), frame), 8, 0);
-    m_ipbPosition = new RosegardenComboBox(frame);
+    m_ipbPosition = new KComboBox(frame);
     layout->addMultiCellWidget(m_ipbPosition, 8, 8, 1, 2);
 
     connect(m_nameEdit, SIGNAL(textChanged(const QString&)),

@@ -799,7 +799,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     QHBox *variationBox = new QHBox(m_optionBox);
     m_variationToggle = new QCheckBox(i18n("Show Variation list based on "), variationBox);
-    m_variationCombo = new KComboBox(false, variationBox);
+    m_variationCombo = new KComboBox(variationBox);
     m_variationCombo->insertItem(i18n("LSB"));
     m_variationCombo->insertItem(i18n("MSB"));
 

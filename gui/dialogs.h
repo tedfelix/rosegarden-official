@@ -153,7 +153,7 @@ protected:
     bool m_ignoreComboChanges;
 
     QLabel *m_keyLabel;
-    RosegardenComboBox *m_keyCombo;
+    KComboBox *m_keyCombo;
     KComboBox *m_majorMinorCombo;
     QLabel *m_explanatoryLabel;
 
@@ -218,9 +218,9 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    KComboBox          *m_unitCombo;
-    RosegardenComboBox *m_untupledCombo;
-    RosegardenComboBox *m_tupledCombo;
+    KComboBox *m_unitCombo;
+    KComboBox *m_untupledCombo;
+    KComboBox *m_tupledCombo;
 
     QLabel *m_selectionDurationDisplay;
     QLabel *m_untupledDurationCalculationDisplay;
@@ -370,7 +370,7 @@ protected:
     Rosegarden::timeT        m_absoluteTime;
     Rosegarden::timeT        m_duration;
 
-    RosegardenComboBox      *m_typeCombo;
+    KComboBox               *m_typeCombo;
     QLabel                  *m_timeLabel;
     QLabel                  *m_durationLabel;
     QLabel                  *m_pitchLabel;
@@ -541,7 +541,7 @@ public:
     int getMergeOptions();
     
 private:
-    RosegardenComboBox *m_choice;
+    KComboBox *m_choice;
     QCheckBox *m_useTimings;
 };
 
@@ -659,9 +659,9 @@ protected:
     Rosegarden::PropertyName    m_property;
     Rosegarden::PropertyPattern m_pattern;
 
-    RosegardenComboBox         *m_value1Combo;
-    RosegardenComboBox         *m_value2Combo;
-    RosegardenComboBox         *m_patternCombo;
+    KComboBox         *m_value1Combo;
+    KComboBox         *m_value2Combo;
+    KComboBox         *m_patternCombo;
 
     QLabel                     *m_value1Label;
     QLabel                     *m_value2Label;
@@ -814,13 +814,13 @@ protected:
 
     RosegardenGUIDoc   *m_doc;
 
-    RosegardenComboBox *m_metronomeDevice;
-    RosegardenComboBox *m_metronomeInstrument;
-    RosegardenComboBox *m_metronomeResolution;
+    KComboBox              *m_metronomeDevice;
+    KComboBox              *m_metronomeInstrument;
+    KComboBox              *m_metronomeResolution;
     RosegardenPitchChooser *m_metronomePitch;
-    QSpinBox           *m_metronomeBarVely;
-    QSpinBox           *m_metronomeBeatVely;
-    QSpinBox           *m_metronomeSubBeatVely;
+    QSpinBox               *m_metronomeBarVely;
+    QSpinBox               *m_metronomeBeatVely;
+    QSpinBox               *m_metronomeSubBeatVely;
     InstrumentParameterBox *m_instrumentParameterBox;
 
     bool                m_modified;

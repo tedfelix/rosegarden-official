@@ -36,7 +36,6 @@ class RosegardenGUIDoc;
 class KCommand;
 class MultiViewCommandHistory;
 class QSpinBox;
-class RosegardenComboBox;
 class QLineEdit;
 
 class ControlParameterItem : public QListViewItem
@@ -92,14 +91,14 @@ protected:
     Rosegarden::ControlParameter  m_dialogControl;
 
     QLineEdit                    *m_nameEdit;
-    RosegardenComboBox           *m_typeCombo;
+    KComboBox                    *m_typeCombo;
     QLineEdit                    *m_description;
     QSpinBox                     *m_controllerBox;
     QSpinBox                     *m_minBox;
     QSpinBox                     *m_maxBox;
     QSpinBox                     *m_defaultBox;
-    RosegardenComboBox           *m_colourCombo;
-    RosegardenComboBox           *m_ipbPosition;
+    KComboBox                    *m_colourCombo;
+    KComboBox                    *m_ipbPosition;
     QLabel                       *m_hexValue;
 };
 

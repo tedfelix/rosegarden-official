@@ -105,8 +105,8 @@ protected:
     QPushButton                *m_labelButton;
     RosegardenTristateCheckBox *m_repeatValue;
     KComboBox                  *m_quantizeValue;
-    RosegardenComboBox         *m_transposeValue;
-    RosegardenComboBox         *m_delayValue;
+    KComboBox                  *m_transposeValue;
+    KComboBox                  *m_delayValue;
     KComboBox                  *m_colourValue;
 
     int                        m_addColourPos;

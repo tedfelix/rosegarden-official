@@ -58,11 +58,6 @@ SegmentParameterBox::SegmentParameterBox(RosegardenGUIView *view,
 
 SegmentParameterBox::~SegmentParameterBox()
 {
-    delete m_repeatValue;
-    delete m_quantizeValue;
-    delete m_transposeValue;
-    delete m_delayValue;
-    delete m_colourValue;
 }
 
 void
@@ -108,7 +103,7 @@ SegmentParameterBox::initBox()
     connect(m_repeatValue, SIGNAL(pressed()), SLOT(slotRepeatPressed()));
 
     // non-reversing motif style read-only combo
-    m_quantizeValue = new KComboBox(false, this);
+    m_quantizeValue = new KComboBox(this);
     m_quantizeValue->setFont(font);
     m_quantizeValue->setFixedHeight(comboHeight);
 
@@ -117,7 +112,7 @@ SegmentParameterBox::initBox()
             SLOT(slotQuantizeSelected(int)));
 
     // reversing motif style read-write combo
-    m_transposeValue = new RosegardenComboBox(true, true, this);
+    m_transposeValue = new KComboBox(this);
     m_transposeValue->setFont(font);
     m_transposeValue->setFixedHeight(comboHeight);
 
@@ -130,7 +125,7 @@ SegmentParameterBox::initBox()
             SLOT(slotTransposeTextChanged(const QString&)));
 
     // reversing motif style read-write combo
-    m_delayValue = new RosegardenComboBox(true, true, this);
+    m_delayValue = new KComboBox(this);
     m_delayValue->setFont(font);
     m_delayValue->setFixedHeight(comboHeight);
 
@@ -147,7 +142,7 @@ SegmentParameterBox::initBox()
             SLOT(slotDelayTextChanged(const QString &)));
 
     // set up combo box for colours
-    m_colourValue = new KComboBox(false, this);
+    m_colourValue = new KComboBox(this);
     m_colourValue->setFont(font);
     m_colourValue->setFixedHeight(comboHeight);
 

@@ -34,7 +34,6 @@
 // Display and allow modification of Event parameters on the Matrix
 //
 
-class RosegardenComboBox;
 class InstrumentParameterBox;
 class RosegardenGUIDoc;
 
@@ -58,8 +57,8 @@ public:
 
 protected:
 
-    RosegardenComboBox         *m_quantizeCombo;
-    RosegardenComboBox         *m_snapGridCombo;
+    KComboBox                  *m_quantizeCombo;
+    KComboBox                  *m_snapGridCombo;
     InstrumentParameterBox     *m_instrumentParameterBox;
 
     std::vector<Rosegarden::timeT> m_quantizations;

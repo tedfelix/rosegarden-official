@@ -50,37 +50,6 @@
 #include "Quantizer.h"
 
 void
-RosegardenComboBox::wheelEvent(QWheelEvent *e)
-{
-    e->accept();
-
-    int value = e->delta();
-
-    if (m_reverse)
-         value = -value;
-
-    if (value < 0)
-    {
-        if (currentItem() < count() - 1)
-        {
-            setCurrentItem(currentItem() + 1);
-	    emit activated(currentText());
-	    emit activated(currentItem());
-        }
-    }
-    else
-    {
-        if (currentItem() > 0)
-        {
-            setCurrentItem(currentItem() - 1);
-	    emit activated(currentText());
-	    emit activated(currentItem());
-        }
-    }
-}
-
-
-void
 RosegardenTristateCheckBox::mouseReleaseEvent(QMouseEvent *)
 {
 }

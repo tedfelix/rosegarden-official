@@ -65,32 +65,6 @@ protected:
 private:
 };
 
-/**
- * Turn a normal QComboBox into one that accepts mouse wheel
- * events to change the value
- */
-class RosegardenComboBox : public KComboBox
-{
-Q_OBJECT
-public:
-    RosegardenComboBox(QWidget *parent=0, const char *name=0):
-        KComboBox(parent, name), m_reverse(false) {;}
-
-    RosegardenComboBox(bool reverse, QWidget *parent=0, const char *name=0):
-        KComboBox(parent, name), m_reverse(reverse) {;}
-
-    RosegardenComboBox(bool reverse, bool rw,
-                       QWidget *parent=0, const char *name=0):
-        KComboBox(rw, parent, name), m_reverse(reverse) {;}
-
-
-protected:
-    virtual void wheelEvent(QWheelEvent *e);
-
-private:
-    bool m_reverse;
-
-};
 
 // A label that emits a double click signal
 //

@@ -356,7 +356,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     BigArrowButton *keyUp = new BigArrowButton(keyBox, Qt::RightArrow);
     QToolTip::add(keyUp, i18n("Sharpen"));
 
-    m_keyCombo = new RosegardenComboBox(true, nameBox);
+    m_keyCombo = new KComboBox(nameBox);
     m_majorMinorCombo = new KComboBox(nameBox);
     m_majorMinorCombo->insertItem("Major");
     m_majorMinorCombo->insertItem("Minor");
@@ -688,7 +688,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
     QGrid *timingGrid = new QGrid(3, QGrid::Horizontal, timingBox);
 
     new QLabel(i18n("Play "), timingGrid);
-    m_untupledCombo = new RosegardenComboBox(true, timingGrid);
+    m_untupledCombo = new KComboBox(timingGrid);
 
     m_unitCombo = new KComboBox(timingGrid);
     NotePixmapFactory npf;
@@ -708,7 +708,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
     updateUntupledCombo();
 
     new QLabel(i18n("in the time of  "), timingGrid);
-    m_tupledCombo = new RosegardenComboBox(true, timingGrid);
+    m_tupledCombo = new KComboBox(timingGrid);
     updateTupledCombo();
 
     QGroupBox *timingDisplayBox = new QGroupBox
@@ -1570,7 +1570,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 
     layout->addWidget(new QLabel(i18n("Event type:"), frame), 0, 0);
 
-    m_typeCombo =  new RosegardenComboBox(true, frame);
+    m_typeCombo =  new KComboBox(frame);
     layout->addWidget(m_typeCombo, 0, 1);
 
     m_typeCombo->insertItem(strtoqstr(Rosegarden::Note::EventType));
@@ -2949,7 +2949,7 @@ FileMergeDialog::FileMergeDialog(QWidget *parent,
     QHBox *hbox = new QHBox(vbox);
     new QLabel(i18n("Merge new file  "), hbox);
 
-    m_choice = new RosegardenComboBox(hbox);
+    m_choice = new KComboBox(hbox);
     m_choice->insertItem(i18n("At start of existing composition"));
     m_choice->insertItem(i18n("From end of existing composition"));
     m_useTimings = 0;
@@ -3477,8 +3477,8 @@ EventParameterDialog::EventParameterDialog(
     explainLabel->setText(text);
 
     QHBox *patternBox = new QHBox(vBox);
-    /*QLabel *patternLabel =*/ new QLabel(i18n("Pattern"), patternBox);
-    m_patternCombo = new RosegardenComboBox(true, patternBox);
+    new QLabel(i18n("Pattern"), patternBox);
+    m_patternCombo = new KComboBox(patternBox);
 
     // create options
     text = i18n("Flat - set %1 to value").arg(strtoqstr(property));
@@ -3501,11 +3501,11 @@ EventParameterDialog::EventParameterDialog(
 
     QHBox *value1Box = new QHBox(vBox);
     m_value1Label = new QLabel(i18n("Value"), value1Box);
-    m_value1Combo = new RosegardenComboBox(true, value1Box);
+    m_value1Combo = new KComboBox(value1Box);
 
     QHBox *value2Box = new QHBox(vBox);
     m_value2Label = new QLabel(i18n("Value"), value2Box);
-    m_value2Combo = new RosegardenComboBox(true, value2Box);
+    m_value2Combo = new KComboBox(value2Box);
 
     for (unsigned int i = 0; i < 128; i++)
     {
@@ -3976,7 +3976,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     Rosegarden::Configuration &config = m_doc->getConfiguration();
 
     layout->addWidget(new QLabel(i18n("Device"), frame), 0, 0);
-    m_metronomeDevice = new RosegardenComboBox(frame);
+    m_metronomeDevice = new KComboBox(frame);
     layout->addWidget(m_metronomeDevice, 0, 1);
 
     Rosegarden::DeviceList *devices = doc->getStudio().getDevices();
@@ -4004,7 +4004,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     }
 
     layout->addWidget(new QLabel(i18n("Instrument"), frame), 1, 0);
-    m_metronomeInstrument = new RosegardenComboBox(frame);
+    m_metronomeInstrument = new KComboBox(frame);
     connect(m_metronomeInstrument, SIGNAL(activated(int)), this, SLOT(slotSetModified()));
     connect(m_metronomeInstrument, SIGNAL(activated(int)), this, SLOT(slotInstrumentChanged(int)));
     layout->addWidget(m_metronomeInstrument, 1, 1);
@@ -4016,7 +4016,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     layout = new QGridLayout(frame, 4, 2, 10, 5);
 
     layout->addWidget(new QLabel(i18n("Resolution"), frame), 0, 0);
-    m_metronomeResolution = new RosegardenComboBox(frame);
+    m_metronomeResolution = new KComboBox(frame);
     m_metronomeResolution->insertItem(i18n("Bars only"));
     m_metronomeResolution->insertItem(i18n("Bars and beats"));
     m_metronomeResolution->insertItem(i18n("Bars, beats, and divisions"));

@@ -35,7 +35,6 @@ class QSlider;
 class QPushButton;
 class QSignalMapper;
 class QLabel;
-class RosegardenComboBox;
 class KComboBox;
 class RosegardenGUIDoc;
 class QWidgetStack;
@@ -261,7 +260,7 @@ protected:
 
     KComboBox          *m_bankValue;
     KComboBox          *m_variationValue;
-    RosegardenComboBox *m_channelValue;
+    KComboBox          *m_channelValue;
     KComboBox          *m_programValue;
     RosegardenRotary   *m_panRotary;
     RosegardenRotary   *m_volumeRotary;
