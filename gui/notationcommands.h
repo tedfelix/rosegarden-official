@@ -381,7 +381,7 @@ protected:
 private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
-    
+     
 
 class TransformsMenuUntieNotesCommand : public BasicSelectionCommand
 {
@@ -391,6 +391,40 @@ public:
 	m_selection(&selection) { }
 
     static QString getGlobalName() { return "&Untie Notes"; }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+};
+    
+
+class TransformsMenuMakeNotesViableCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuMakeNotesViableCommand(Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection) { }
+
+    static QString getGlobalName() { return "Make Notes &Viable"; }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+};
+     
+
+class TransformsMenuNormalizeCounterpointCommand : public BasicSelectionCommand
+{
+public:
+    TransformsMenuNormalizeCounterpointCommand(Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection) { }
+
+    static QString getGlobalName() { return "Normalize &Counterpoint"; }
 
 protected:
     virtual void modifySegment();

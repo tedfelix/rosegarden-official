@@ -1138,6 +1138,14 @@ void NotationView::setupActions()
                 SLOT(slotTransformsUntieNotes()), actionCollection(),
                 "untie_notes");
 
+    new KAction(i18n(TransformsMenuMakeNotesViableCommand::getGlobalName()), 0, this,
+		SLOT(slotTransformsMakeNotesViable()), actionCollection(),
+		"make_notes_viable");
+
+    new KAction(i18n(TransformsMenuNormalizeCounterpointCommand::getGlobalName()), 0, this,
+		SLOT(slotTransformsNormalizeCounterpoint()), actionCollection(),
+		"normalize_counterpoint");
+
     new KAction(i18n(TransformsMenuChangeStemsCommand::getGlobalName(true)), 0,Key_Up + CTRL, this,
                 SLOT(slotTransformsStemsUp()), actionCollection(),
                 "stems_up");
@@ -1497,25 +1505,26 @@ void NotationView::initStatusBar()
 {
     KStatusBar* sb = statusBar();
 
-    m_currentNotePixmap       = new QLabel(sb);
-    m_hoveredOverNoteName     = new QLabel(sb);
-    m_hoveredOverAbsoluteTime = new QLabel(sb);
-
-    m_currentNotePixmap->setMinimumWidth(20);
+    m_hoveredOverNoteName = new QLabel(sb);
     m_hoveredOverNoteName->setMinimumWidth(32);
+
+    m_hoveredOverAbsoluteTime = new QLabel(sb);
     m_hoveredOverAbsoluteTime->setMinimumWidth(160);
 
     sb->addWidget(m_hoveredOverAbsoluteTime);
     sb->addWidget(m_hoveredOverNoteName);
-    sb->addWidget(m_currentNotePixmap);
+
+    QHBox *hbox = new QHBox(sb);
+    m_currentNotePixmap = new QLabel(hbox);
+    m_currentNotePixmap->setMinimumWidth(20);
+//!!!    sb->addWidget(m_currentNotePixmap);
+    m_insertModeLabel = new QLabel(hbox);
+    sb->addWidget(hbox);
 
     sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
                    KTmpStatusMsg::getDefaultId(), 1);
     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(), 
                          AlignLeft | AlignVCenter);
-
-    m_insertModeLabel = new QLabel(sb);
-    sb->addWidget(m_insertModeLabel);
 
     m_selectionCounter = new QLabel(sb);
     sb->addWidget(m_selectionCounter);

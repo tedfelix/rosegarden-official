@@ -535,8 +535,8 @@ SegmentNotationHelper::makeRestViable(iterator i)
 }
 
 
-void
-SegmentNotationHelper::makeNoteViable(iterator i)
+Segment::iterator
+SegmentNotationHelper::makeNoteViable(iterator i, bool splitAtBars)
 {
     // We don't use quantized values here; we want a precise division.
     // Even if it doesn't look precise on the score (because the score
@@ -553,6 +553,12 @@ SegmentNotationHelper::makeNoteViable(iterator i)
 
     while (acc < required) {
         timeT component = Note::getNearestNote(required - acc).getDuration();
+	if (splitAtBars) {
+	    timeT thisNoteStart = (*i)->getAbsoluteTime() + acc;
+	    timeT toNextBar =
+		segment().getBarEndForTime(thisNoteStart) - thisNoteStart;
+	    if (component > toNextBar) component = toNextBar;
+	}
         if (component > (required - acc)) dl.push_back(required - acc);
         else dl.push_back(component);
         acc += component;
@@ -567,20 +573,25 @@ SegmentNotationHelper::makeNoteViable(iterator i)
     erase(i);
     acc = e->getAbsoluteTime();
 
-    for (DurationList::iterator i = dl.begin(); i != dl.end(); ++i) {
+    iterator j;
+    bool havej = false;
 
-        DurationList::iterator j(i);
-        if (++j == dl.end() && !lastTiedForward) {
+    for (DurationList::iterator dli = dl.begin(); dli != dl.end(); ++dli) {
+
+        DurationList::iterator dlj(dli);
+        if (++dlj == dl.end() && !lastTiedForward) {
             e->unset(TIED_FORWARD);
         }
 
-        insert(new Event(*e, acc, *i));
-	acc += *i;
+        iterator k = insert(new Event(*e, acc, *dli));
+	if (!havej) j = k;
+	acc += *dli;
 
         e->set<Bool>(TIED_BACKWARD, true);
     }
 
     delete e;
+    return j;
 }
 
 

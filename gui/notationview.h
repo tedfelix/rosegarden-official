@@ -351,6 +351,8 @@ public slots:
     void slotTransformsCollapseNotes();
     void slotTransformsTieNotes();
     void slotTransformsUntieNotes();
+    void slotTransformsMakeNotesViable();
+    void slotTransformsNormalizeCounterpoint();
     void slotTransformsStemsUp();
     void slotTransformsStemsDown();
     void slotTransformsRestoreStems();

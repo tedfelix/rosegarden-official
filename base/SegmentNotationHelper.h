@@ -342,8 +342,11 @@ public:
      *
      * Only splits a single note; unlike splitIntoTie, this does
      * not by default split all notes at a given timeslice.
+     *
+     * Returns either i or an iterator pointing to the note that
+     * replaced i
      */
-    void makeNoteViable(iterator i);
+    iterator makeNoteViable(iterator i, bool splitAtBars = true);
 
 
     /**

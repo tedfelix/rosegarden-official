@@ -686,6 +686,27 @@ TransformsMenuUntieNotesCommand::modifySegment()
 
 
 void
+TransformsMenuMakeNotesViableCommand::modifySegment()
+{
+    Segment &segment(getSegment());
+    SegmentNotationHelper helper(segment);
+
+    for (EventSelection::eventcontainer::iterator i =
+	     m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	i = helper.makeNoteViable(i);
+    }
+}
+
+void
+TransformsMenuNormalizeCounterpointCommand::modifySegment()
+{
+    assert(0); //!!! implement
+}
+
+
+void
 TransformsMenuChangeStemsCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;

@@ -134,6 +134,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
 {
     string stringRet;
     char fileMidiByte;
+    static int bytesGot = 0; // purely for progress reporting purposes
 
     if (m_decrementCount && (numberOfBytes > (unsigned long)m_trackByteCount))
     {
@@ -188,9 +189,15 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
     //
     if (m_progress)
     {
-        m_progress->setCompleted((int)(double(midiFile->tellg())/
-                                       double(m_fileSize) * 100.0));
-        m_progress->processEvents();
+	bytesGot += numberOfBytes;
+	if (bytesGot > 500) {
+
+	    m_progress->setCompleted((int)(double(midiFile->tellg())/
+					   double(m_fileSize) * 100.0));
+	    m_progress->processEvents();
+
+	    bytesGot = 0;
+	}
     }
 
     return stringRet;

@@ -76,7 +76,8 @@ NotationView::slotUpdateInsertModeStatus()
 	if (isInTripletMode()) {
 	    message = " Triplet";
 	} else {
-	    message = " Normal";
+//	    message = " Normal";
+	    message = "";
 	}
     }
     m_insertModeLabel->setText(i18n(message));
@@ -900,6 +901,24 @@ void NotationView::slotTransformsUntieNotes()
     KTmpStatusMsg msg(i18n("Untying notes..."), this);
 
     addCommandToHistory(new TransformsMenuUntieNotesCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotTransformsMakeNotesViable()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Making notes viable..."), this);
+
+    addCommandToHistory(new TransformsMenuMakeNotesViableCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotTransformsNormalizeCounterpoint()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Normalizing counterpoint..."), this);
+
+    addCommandToHistory(new TransformsMenuNormalizeCounterpointCommand
                         (*m_currentEventSelection));
 }
 
