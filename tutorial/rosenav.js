@@ -1,20 +1,8 @@
 var zone;
 var zones = [
-{ "v":"4", "name":"index",       "label":"home",         "url":"index.html" },
-{ "v":"4", "name":"pictures",    "label":"screenshots",     "url":"pictures.html" },
-{ "v":"4", "name":"requirements",    "label":"requirements",     "url":"requirements.html" },
-{ "v":"4", "name":"demonstrations",    "label":"demonstrations",     "url":"demos.html" },
-{ "v":"4", "name":"history",     "label":"history",      "url":"history.html" },
-{ "v":"4", "name":"development", "label":"development",  "url":"development.html" },
-{ "v":"4", "name":"faq",         "label":"faq",          "url":"faq.html" },
-{ "v":"4", "name":"tutorial",    "label":"tutorial",          "url":"http://rosegarden.sourceforge.net/tutorial/rosegarden-tutor.html" },
-{ "v":"4", "name":"list",        "label":"mailing-list", "url":"list.html" },
-{ "v":"4", "name":"contact",         "label":"contact",          "url":"authors.html" },
-{ "v":"2.1", "name":"index",       "label":"home",         "url":"index.html" },
-{ "v":"2.1", "name":"features",    "label":"features",     "url":"features.html" },
-{ "v":"2.1", "name":"faq",         "label":"faq",          "url":"faq.html" },
-{ "v":"2.1", "name":"pictures",    "label":"screenshots",     "url":"pictures.html" },
-{ "v":"2.1", "name":"list",        "label":"mailing-list", "url":"list.html" }
+{ "v":"4", "name":"project home", "label":"project home",  "url":"http://www.all-day-breakfast.com/rosegarden/" },
+{ "v":"4", "name":"tutorial home", "label":"tutorial home",  "url":"index.html" },
+{ "v":"4", "name":"using Rosegarden", "label":"using Rosegarden",  "url":"using-rosegarden.html" }
 ];
 function makeNav() {
   var url = document.location.toString();
@@ -34,7 +22,7 @@ function makeNav() {
 
     if (myv != lastv) {
       lastv = myv;
-      document.write('<div class="navtitle"><a href="' + pfx + 'index.html">Rosegarden-' + lastv + '</a></div>');
+      document.write('<div class="navtitle">Rosegarden-' + lastv + '</div>');
     }
 
     if (inv) {
@@ -54,8 +42,9 @@ function makeNav() {
     if (i == zones.length - 1) {
       if (url.indexOf("2.1") != -1) pfx = "../";
       else pfx = "";
-      document.write('<div class="navtitle"><a href="' +
-	pfx + 'download.html">Download</a></div>');
+      /*
+      document.write('<div class="navtitle"><a href="' + pfx + 'download.html">Download</a></div>');
+        */
     }
   }
 }
