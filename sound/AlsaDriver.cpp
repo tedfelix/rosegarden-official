@@ -155,6 +155,10 @@ AlsaDriver::~AlsaDriver()
         m_midiHandle = 0;
     }
 
+#ifdef HAVE_LADSPA
+    m_studio->unloadAllPluginLibraries();
+#endif // HAVE_LADSPA
+
 #ifdef HAVE_LIBJACK
 
     if (_threadJackClosing == false && m_audioClient)
@@ -166,7 +170,7 @@ AlsaDriver::~AlsaDriver()
         m_audioClient = 0;
     }
 
-#endif
+#endif // HAVE_LIBJACK
 
 /*
             jack_port_unregister(m_audioClient, m_audioInputPort);
@@ -1823,7 +1827,7 @@ AlsaDriver::setPluginInstance(InstrumentId id,
     removePluginInstance(id, position);
 
     // Get a descriptor - if this fails we can't initialise anyway
-    const LADSPA_Descriptor *des = m_studio->createPluginInstance(pluginId);
+    const LADSPA_Descriptor *des = m_studio->createPluginDescriptor(pluginId);
 
     if (des)
     {
@@ -1836,10 +1840,12 @@ AlsaDriver::setPluginInstance(InstrumentId id,
         std::cout << "AlsaDriver::setPluginInstance - "
                   << "activate and connect plugin" << std::endl;
 
-        //cout << "INSTANTIATE AT " << getSampleRate() << endl;
         instance->instantiate(getSampleRate());
-        //cout << "ACTIVATE" << endl;
+
+        //instance->deactivate();
         //instance->activate();
+
+        //instance->run(500);
 
     }
     else
@@ -1856,18 +1862,30 @@ AlsaDriver::removePluginInstance(InstrumentId id, int position)
 {
 #ifdef HAVE_LADSPA
     std::cout << "AlsaDriver::removePluginInstance" << std::endl;
+
     PluginIterator it = m_pluginInstances.begin();
     for (; it != m_pluginInstances.end(); it++)
     {
         if ((*it)->getInstrument() == id &&
             (*it)->getPosition() == position)
         {
-            // deactivate
+            // Deactivate and cleanup
+            //
+            (*it)->deactivate();
+            (*it)->cleanup();
+
+            // Potentially unload the shared library in which the plugin
+            // came from if none of its siblings are in use.
+            //
+            m_studio->unloadPlugin((*it)->getLADSPAId());
+
             delete *it;
             m_pluginInstances.erase(it);
             break;
         }
     }
+
+
 #endif // HAVE_LADSPA
 }
 
@@ -1893,14 +1911,20 @@ AlsaDriver::getSampleRate() const
 void
 LADSPAPluginInstance::instantiate(unsigned long sampleRate)
 {
+    std::cout << "LADSPAPluginInstance::instantiate - plugin unique id = "
+              << m_descriptor->UniqueID << std::endl;
+
     m_instanceHandle = m_descriptor->instantiate(m_descriptor, sampleRate);
 }
 
 void
 LADSPAPluginInstance::activate()
 {
-    if (m_instanceHandle)
+    if (m_instanceHandle && m_descriptor->activate)
         m_descriptor->activate(m_instanceHandle);
+    else
+        std::cerr << "LADSPAPluginInstance::activate - no ACTIVATE method"
+                  << std::endl;
 }
 
 void
@@ -1915,13 +1939,31 @@ LADSPAPluginInstance::connect_port(unsigned long Port,
 void
 LADSPAPluginInstance::run(unsigned long sampleCount)
 {
-    m_descriptor->run(m_instanceHandle, sampleCount);
+    if (m_descriptor && m_descriptor->run)
+    {
+        std::cout << "LADSPAPluginInstance::run - running plugin" << std::endl;
+        m_descriptor->run(m_instanceHandle, sampleCount);
+    }
 }
 
 void
 LADSPAPluginInstance::deactivate()
 {
-    m_descriptor->deactivate(m_instanceHandle);
+    /*
+    std::cout << "LADSPAPluginInstance::deactivate - " 
+              << "descriptor = " << m_descriptor << std::endl;
+
+    std::cout << "LADSPAPluginInstance::deactivate - "
+              << "instance handle = " << m_instanceHandle << std::endl;
+              */
+
+    if (m_descriptor && m_descriptor->deactivate)
+    {
+        m_descriptor->deactivate(m_instanceHandle);
+    }
+    else
+        std::cout << "LADSPAPluginInstance::deactivate - " 
+                  << "no DEACTIVATE method" << std::endl;
 }
 
 void

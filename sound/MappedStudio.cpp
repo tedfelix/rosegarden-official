@@ -474,7 +474,7 @@ MappedStudio::getAudioFader(Rosegarden::InstrumentId id)
 #ifdef HAVE_LADSPA
 
 const LADSPA_Descriptor*
-MappedStudio::createPluginInstance(unsigned long uniqueId)
+MappedStudio::createPluginDescriptor(unsigned long uniqueId)
 {
     std::cout << "MappedStudio::createPluginInstance of id = "
               << uniqueId << std::endl;
@@ -497,6 +497,28 @@ MappedStudio::createPluginInstance(unsigned long uniqueId)
         return 0;
     }
 }
+
+void
+MappedStudio::unloadPlugin(unsigned long uniqueId)
+{
+    MappedAudioPluginManager *pm =
+        dynamic_cast<MappedAudioPluginManager*>
+            (getObjectOfType(AudioPluginManager));
+    if (pm)
+        pm->unloadPlugin(uniqueId);
+}
+
+void
+MappedStudio::unloadAllPluginLibraries()
+{
+    MappedAudioPluginManager *pm =
+        dynamic_cast<MappedAudioPluginManager*>
+            (getObjectOfType(AudioPluginManager));
+    if (pm)
+        pm->unloadAllPluginLibraries();
+}
+
+
 
 #endif // HAVE_LADSPA
 
@@ -801,23 +823,12 @@ MappedAudioPluginManager::addLADSPAPath(const std::string &path)
     m_path += path;
 }
 
-void
-MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
-{
-}
-
-void
-MappedAudioPluginManager::closeAllPlugins()
-{
-}
-
 
 const LADSPA_Descriptor*
 MappedAudioPluginManager::getDescriptorFromHandle(unsigned long uniqueId,
                                                   void *pluginHandle)
 {
     LADSPA_Descriptor_Function descrFn = 0;
-
     descrFn = (LADSPA_Descriptor_Function)
                     dlsym(pluginHandle, "ladspa_descriptor");
     if (descrFn)
@@ -844,42 +855,148 @@ MappedAudioPluginManager::getDescriptorFromHandle(unsigned long uniqueId,
 }
 
 
+// The LADSPAPluginHandles vector holds all the libraries we've loaded
+// and their handles for re-use by plugins from the same library.  When
+// we've got no plugins left in use from a library we can automatically
+// unload it.
+//
 const LADSPA_Descriptor*
 MappedAudioPluginManager::getPluginDescriptor(unsigned long uniqueId)
 {
+    // Find the plugin
+    //
+    MappedLADSPAPlugin *plugin =
+                dynamic_cast<MappedLADSPAPlugin*>(getReadOnlyPlugin(uniqueId));
+
+    if (plugin == 0)
+    {
+        std::cerr << "MappedAudioPluginManager::getPluginDescriptor - "
+                  << "can't find read-only plugin" << std::endl;
+        return 0;
+    }
+
     // Check if we have the handle
     //
     LADSPAIterator it = m_pluginHandles.begin();
     for (; it != m_pluginHandles.end(); it++)
     {
-        if (it->first == uniqueId)
-        {
+        if (it->first == plugin->getLibraryName())
             return getDescriptorFromHandle(uniqueId, it->second);
-        }
     }
     
-    // Otherwise we have to create the handle to make the descriptor.
-    // First find the plugin class.
+
+    // Now create the handle and store it
+    //
+    void *pluginHandle = dlopen(plugin->getLibraryName().c_str(), RTLD_LAZY);
+
+    std::pair<std::string, void*> pluginHandlePair(plugin->getLibraryName(),
+                                                   pluginHandle);
+    m_pluginHandles.push_back(pluginHandlePair);
+
+    // now generate the descriptor
+    return getDescriptorFromHandle(uniqueId, pluginHandle);
+}
+
+
+// Potentially unload the library if all plugins within it are
+// not being used.
+//
+void
+MappedAudioPluginManager::unloadPlugin(unsigned long uniqueId)
+{
+    std::cout << "MappedAudioPluginManager::unloadPlugin - "
+              << "unloading plugin " << uniqueId << std::endl;
+
+    // Find the plugin
     //
     MappedLADSPAPlugin *plugin =
                 dynamic_cast<MappedLADSPAPlugin*>(getReadOnlyPlugin(uniqueId));
 
-    if (plugin)
+    if (plugin == 0)
     {
-        // Now create the handle and store it
-        //
-        void *pluginHandle =
-            dlopen(plugin->getLibraryName().c_str(), RTLD_LAZY);
-
-        std::pair<unsigned long, void*> pluginHandlePair(uniqueId,
-                                                         pluginHandle);
-        m_pluginHandles.push_back(pluginHandlePair);
-
-        // now generate the descriptor
-        return getDescriptorFromHandle(uniqueId, pluginHandle);
+        std::cerr << "MappedAudioPluginManager::unloadPlugin - "
+                  << "can't find plugin to unload" << std::endl;
+        return;
     }
-    else
-        return 0;
+
+    void *pluginHandle = 0;
+
+    LADSPAIterator it = m_pluginHandles.begin();
+    for (; it != m_pluginHandles.end(); it++)
+    {
+        if (it->first == plugin->getLibraryName())
+        {
+            // library is loaded (as it should be)
+            pluginHandle = it->second;
+            break;
+        }
+    }
+    
+    if (pluginHandle == 0)
+    {
+        std::cout << "MappedAudioPluginManager::unloadPlugin - "
+                  << "can't find plugin library to unload" << std::endl;
+        return;
+    }
+
+    // check if any of these plugins are still loaded
+    //
+    std::vector<unsigned long> list = getPluginsInLibrary(pluginHandle);
+    std::vector<unsigned long>::iterator pIt = list.begin();
+
+    //std::cout << list.size() << " plugins in library" << std::endl;
+
+    for (; pIt != list.end(); pIt++)
+    {
+        if (getPluginInstance(*pIt, false))
+            return;
+    }
+
+    /*
+    std::cout << "HERE!!! - MappedAudioPluginManager::unloadPlugin - "
+              << "unloading library" << std::endl;
+              */
+
+    dlclose(pluginHandle);
+    m_pluginHandles.erase(it);
+
+}
+
+void
+MappedAudioPluginManager::unloadAllPluginLibraries()
+{
+    LADSPAIterator it = m_pluginHandles.begin();
+    for (; it != m_pluginHandles.end(); it++)
+        dlclose(it->second);
+
+    m_pluginHandles.erase(m_pluginHandles.begin(), m_pluginHandles.end());
+}
+
+std::vector<unsigned long>
+MappedAudioPluginManager::getPluginsInLibrary(void *pluginHandle)
+{
+    std::vector<unsigned long> list;
+    LADSPA_Descriptor_Function descrFn = 0;
+    descrFn = (LADSPA_Descriptor_Function)
+                    dlsym(pluginHandle, "ladspa_descriptor");
+    if (descrFn)
+    {
+        const LADSPA_Descriptor *descriptor;
+        int index = 0;
+
+        do
+        {
+            descriptor = descrFn(index);
+
+            if (descriptor)
+            {
+                list.push_back(descriptor->UniqueID);
+            }
+            index++;
+        } while(descriptor);
+    }
+
+    return list;
 }
 
 #endif // HAVE_LADSPA
@@ -971,13 +1088,20 @@ MappedAudioPluginManager::setProperty(const MappedObjectProperty &property,
 MappedObject*
 MappedAudioPluginManager::getReadOnlyPlugin(unsigned long uniqueId)
 {
+    return getPluginInstance(uniqueId, true);
+}
+
+MappedObject*
+MappedAudioPluginManager::getPluginInstance(unsigned long uniqueId,
+                                            bool readOnly)
+{
 #ifdef HAVE_LADSPA
     std::vector<MappedObject*>::iterator it = m_children.begin();
 
     for(; it != m_children.end(); it++)
     {
         if ((*it)->getType() == LADSPAPlugin &&
-            (*it)->isReadOnly())
+            (*it)->isReadOnly() == readOnly)
         {
             MappedLADSPAPlugin *plugin =
                 dynamic_cast<MappedLADSPAPlugin*>(*it);

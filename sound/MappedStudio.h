@@ -254,7 +254,15 @@ public:
 
     // Create a plugin instance
     //
-    const LADSPA_Descriptor* createPluginInstance(unsigned long uniqueId);
+    const LADSPA_Descriptor* createPluginDescriptor(unsigned long uniqueId);
+
+    // Remove a plugin instance - and potentially unload the library
+    //
+    void unloadPlugin(unsigned long uniqueId);
+
+    // Unload all the plugin libraries
+    //
+    void unloadAllPluginLibraries();
 
 #endif // HAVE_LADSPA
 
@@ -459,8 +467,8 @@ protected:
 //
 
 #ifdef HAVE_LADSPA
-typedef std::vector<std::pair<unsigned long, void*> > LADSPAPluginHandles;
-typedef std::vector<std::pair<unsigned long, void*> >::iterator LADSPAIterator;
+typedef std::vector<std::pair<std::string, void*> > LADSPAPluginHandles;
+typedef std::vector<std::pair<std::string, void*> >::iterator LADSPAIterator;
 #endif // HAVE_LADSPA
 
 class MappedAudioPluginManager : public MappedObject
@@ -512,13 +520,21 @@ public:
 
     // Close down all plugins
     //
-    void closeAllPlugins();
+    void unloadAllPluginLibraries();
+
+    // Get all the plugin IDs from a library
+    //
+    std::vector<unsigned long> getPluginsInLibrary(void *pluginHandle);
 
 #endif
 
     // Get the class of this plugin so we can clone() it
     //
     MappedObject* getReadOnlyPlugin(unsigned long uniqueId);
+
+    // Get a plugin according to read-onlyness
+    //
+    MappedObject* getPluginInstance(unsigned long uniqueId, bool readOnly);
 
 protected:
     // Help discover plugins
