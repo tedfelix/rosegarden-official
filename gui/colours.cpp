@@ -55,11 +55,17 @@ namespace RosegardenGUIColours
 //    const QColor TimePointer = Qt::darkBlue;
 //    const QColor PositionCursor = QColor(184, 120, 211);
 
-    const QColor Pointer = QColor(0, 100, 140);
-    const QColor PointerRuler = QColor(40, 120, 160);
+    const QColor Pointer = Qt::darkBlue; //QColor(80, 80, 80);
+    const QColor PointerRuler = QColor(100, 100, 100);
 
-    const QColor InsertCursor = QColor(200, 0, 0);
-    const QColor InsertCursorRuler = QColor(160, 40, 40);
+//    const QColor Pointer = QColor(0, 100, 140);
+//    const QColor PointerRuler = QColor(40, 120, 160);
+
+    const QColor InsertCursor = QColor(160, 104, 186);
+    const QColor InsertCursorRuler = QColor(160, 136, 170);
+
+//    const QColor InsertCursor = QColor(200, 0, 0);
+//    const QColor InsertCursorRuler = QColor(160, 40, 40);
 
     const QColor SelectionRectangle = QColor(103, 128, 211);
     const QColor SelectedElement = QColor(0, 54, 232);

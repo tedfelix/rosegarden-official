@@ -919,6 +919,14 @@ NotationView::slotChangeFont(string newName, int newSize)
 void
 NotationView::setPageMode(bool pageMode)
 {
+    if (pageMode) {
+	m_topBarButtonsView->hide();
+	m_bottomBarButtonsView->hide();
+    } else {
+	m_topBarButtonsView->show();
+	m_bottomBarButtonsView->show();
+    }
+
     m_hlayout->setPageMode(pageMode);
     m_hlayout->setPageWidth(width() - 50);
     
@@ -1655,19 +1663,7 @@ void
 NotationView::slotSetInsertCursorPosition(timeT time)
 {
     //!!! For now.  Probably unlike slotSetPointerPosition this one
-    // should snap to the nearest event.  We do probably want to keep
-    // the cursor in LinedStaff though, because then we can place it
-    // on a particular row in page mode (we should remove the rulers
-    // in page mode, but allow the insert cursor to be placed using
-    // shift-click or click-with-select-tool or whatever -- which also
-    // means LinedStaff will still need a "current row", although we
-    // still need a "current staff" too which makes things complicated
-    // enough already.  Should we bother showing the playback pointer
-    // in page mode?  Probably, in which case I suppose that should
-    // go in LinedStaff too).
-
-    kdDebug(KDEBUG_AREA) << "NotationView::slotSetInsertCursorPosition "
-			 << time << endl;
+    // should snap to the nearest event.
 
     m_staffs[m_currentStaff]->setInsertCursorPosition(*m_hlayout, time);
     update();

@@ -62,6 +62,7 @@ RulerScale::getBeatWidth(int n)
 {
     std::pair<timeT, timeT> barRange = m_composition->getBarRange(n);
     timeT barDuration = barRange.second - barRange.first;
+    if (barDuration == 0) return 0;
 
     bool isNew;
     TimeSignature timeSig = m_composition->getTimeSignatureInBar(n, isNew);
@@ -100,12 +101,18 @@ RulerScale::getTimeForX(double x)
 
     double barWidth = getBarWidth(n);
     std::pair<timeT, timeT> barRange = m_composition->getBarRange(n);
-    timeT barDuration = barRange.second - barRange.first;
 
-    x -= getBarPosition(n);
+    if (barWidth < 1.0) {
 
-    timeT t = barRange.first + (timeT)((x * barDuration) / barWidth);
-    return t;
+	return barRange.first;
+
+    } else {
+
+	timeT barDuration = barRange.second - barRange.first;
+	x -= getBarPosition(n);
+
+	return barRange.first + (timeT)((x * barDuration) / barWidth);
+    }
 }
 
 double
@@ -117,10 +124,15 @@ RulerScale::getXForTime(timeT time)
     std::pair<timeT, timeT> barRange = m_composition->getBarRange(n);
     timeT barDuration = barRange.second - barRange.first;
 
-    time -= barRange.first;
+    if (barDuration == 0) {
 
-    double x = getBarPosition(n) + (double)(time * barWidth) / barDuration;
-    return x;
+	return getBarPosition(n);
+
+    } else {
+
+	time -= barRange.first;
+	return getBarPosition(n) + (double)(time * barWidth) / barDuration;
+    }
 }
 
 timeT

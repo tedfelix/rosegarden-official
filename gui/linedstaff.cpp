@@ -160,8 +160,6 @@ template <class T>
 void
 LinedStaff<T>::setX(double x)
 {
-    m_pointer->moveBy(x - m_x, 0);
-    m_insertCursor->moveBy(x - m_x, 0);
     m_x = x;
 }
 
@@ -176,8 +174,6 @@ template <class T>
 void
 LinedStaff<T>::setY(int y)
 {
-    m_pointer->moveBy(0, y - m_y);
-    m_insertCursor->moveBy(0, y - m_y);
     m_y = y;
 }
 
