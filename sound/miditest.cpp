@@ -51,6 +51,7 @@ main(int argc, char **argv)
     //
     sequencer.record(Rosegarden::Sequencer::RECORD_MIDI);
 
+
     int i;
     int count;
 
