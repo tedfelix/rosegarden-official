@@ -124,12 +124,12 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/rosegarden.desktop $(kde_appsdir)/Applications/rosegarden.desktop
 	$(mkinstalldirs) $(kde_icondir)/locolor/32x32/apps/
 	$(mkinstalldirs) $(kde_icondir)/hicolor/32x32/apps/
-	- $(INSTALL_DATA) $(srcdir)/rosegarden.xpm $(kde_icondir)/locolor/32x32/apps/rosegarden.xpm
-	- $(INSTALL_DATA) $(srcdir)/rosegarden.xpm $(kde_icondir)/hicolor/32x32/apps/rosegarden.xpm
+	- $(INSTALL_DATA) $(srcdir)/rosegarden.xpm $(DESTDIR)$(kde_icondir)/locolor/32x32/apps/rosegarden.xpm
+	- $(INSTALL_DATA) $(srcdir)/rosegarden.xpm $(DESTDIR)$(kde_icondir)/hicolor/32x32/apps/rosegarden.xpm
 	$(mkinstalldirs) $(kde_icondir)/locolor/16x16/apps/
 	$(mkinstalldirs) $(kde_icondir)/hicolor/16x16/apps/
-	- $(INSTALL_DATA) $(srcdir)/mini-rosegarden.xpm $(kde_icondir)/locolor/16x16/apps/rosegarden.xpm
-	- $(INSTALL_DATA) $(srcdir)/mini-rosegarden.xpm $(kde_icondir)/hicolor/16x16/apps/rosegarden.xpm
+	- $(INSTALL_DATA) $(srcdir)/mini-rosegarden.xpm $(DESTDIR)$(kde_icondir)/locolor/16x16/apps/rosegarden.xpm
+	- $(INSTALL_DATA) $(srcdir)/mini-rosegarden.xpm $(DESTDIR)$(kde_icondir)/hicolor/16x16/apps/rosegarden.xpm
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/styles
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps
 	$(mkinstalldirs) $(kde_datadir)/$(data_dirname)/pixmaps/misc
@@ -160,8 +160,8 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/pixmaps/transport/*.xpm  $(kde_datadir)/$(data_dirname)/pixmaps/transport
 	$(INSTALL_DATA) $(srcdir)/pixmaps/splash.png       $(kde_datadir)/$(data_dirname)/pixmaps
 	$(INSTALL_DATA) $(srcdir)/testfiles/autoload.rg    $(kde_datadir)/$(data_dirname)
-	$(INSTALL_DATA) $(srcdir)/library/*.rgd    	$(kde_datadir)/$(data_dirname)/library
-	perl -ne 'print "$$1\n" if /#define VERSION "(.*?)"/;' $(top_builddir)/config.h >$(kde_datadir)/$(data_dirname)/version.txt
+	$(INSTALL_DATA) $(srcdir)/library/*.rgd    $(kde_datadir)/$(data_dirname)/library
+	perl -ne 'print "$$1\n" if /#define VERSION "(.*?)"/;' $(top_builddir)/config.h > $(DESTDIR)$(kde_datadir)/$(data_dirname)/version.txt
 
 
 # Previous way to extract version from config.h, keeping around just in case :
