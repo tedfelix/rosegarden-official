@@ -4,6 +4,7 @@ bin_PROGRAMS = rosegarden
 
 rosegarden_SOURCES = \
         audiomanagerdialog.cpp \
+        audioplugindialog.cpp \
         audiopluginmanager.cpp \
         barbuttons.cpp \
 	basiccommand.cpp \

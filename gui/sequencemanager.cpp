@@ -1623,23 +1623,64 @@ SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
     Rosegarden::MappedObjectId id =
         getSequencerMappedObjectId(Rosegarden::MappedObject::AudioPluginManager);
 
+    SEQMAN_DEBUG << "getSequencerPlugins - getting plugin information" << endl;
+    
     Rosegarden::MappedObjectPropertyList seqPlugins
         = getSequencerPropertyList(id, 
                                Rosegarden::MappedAudioPluginManager::Plugins);
 
+    SEQMAN_DEBUG << "getSequencerPlugins - got "
+                 << seqPlugins.size() << " items" << endl;
+
+    /*
     Rosegarden::MappedObjectPropertyList seqPluginIds
         = getSequencerPropertyList(id,
                                Rosegarden::MappedAudioPluginManager::PluginIds);
+                               */
 
-    Rosegarden::MappedObjectPropertyList::iterator it;
+    //Rosegarden::MappedObjectPropertyList::iterator it;
 
-    for (unsigned int i = 0; i != seqPlugins.size(); i++)
+    unsigned int i = 0;
+
+    while (i < seqPlugins.size())
     {
-        /*
-        aPM->addPlugin(qstrtostr(seqPlugins[i]),
-                       i,
-                       true);
-                       */
+        Rosegarden::MappedObjectId id = seqPlugins[i++].toInt();
+        QString name = seqPlugins[i++];
+        unsigned long uniqueId = seqPlugins[i++].toLong();
+        QString label = seqPlugins[i++];
+        QString author = seqPlugins[i++];
+        QString copyright = seqPlugins[i++];
+        unsigned int portCount = seqPlugins[i++].toInt();
+
+        AudioPlugin *aP = aPM->addPlugin(id,
+                                         name,
+                                         uniqueId,
+                                         label,
+                                         author,
+                                         copyright);
+
+        //cout << "PLUGIN = \"" << name << "\"" << endl;
+
+        for (unsigned int j = 0; j < portCount; j++)
+        {
+            id = seqPlugins[i++].toInt();
+            name = seqPlugins[i++];
+            Rosegarden::PluginPort::PortType type =
+                Rosegarden::PluginPort::PortType(seqPlugins[i++].toInt());
+            Rosegarden::PluginPort::PortRange range =
+                Rosegarden::PluginPort::PortRange(seqPlugins[i++].toInt());
+            Rosegarden::PortData lowerBound = seqPlugins[i++].toFloat();
+            Rosegarden::PortData upperBound = seqPlugins[i++].toFloat();
+
+            //cout << "ADDED PORT = \"" << name << "\"" << endl;
+            aP->addPort(id,
+                        name,
+                        type,
+                        range,
+                        lowerBound,
+                        upperBound);
+
+        }
 
         //cout << " = " << seqPlugins[i] << endl;
 

@@ -454,6 +454,9 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
                             (port->getPortName().c_str()));
 
                     list.push_back(MappedObjectProperty
+                            ("%1").arg(port->getDescriptor()));
+
+                    list.push_back(MappedObjectProperty
                             ("%1").arg(port->getRangeHint().HintDescriptor));
 
                     list.push_back(MappedObjectProperty
@@ -462,8 +465,6 @@ MappedAudioPluginManager::getPropertyList(const MappedObjectProperty &property)
                     list.push_back(MappedObjectProperty
                             ("%1").arg(port->getRangeHint().UpperBound));
 
-                    list.push_back(MappedObjectProperty
-                            ("%1").arg(port->getDescriptor()));
 
                 }
 

@@ -36,6 +36,7 @@
 #include "MidiDevice.h"
 #include "MappedStudio.h"
 
+#include "audioplugindialog.h"
 #include "instrumentparameterbox.h"
 #include "audiopluginmanager.h"
 #include "widgets.h"
@@ -688,6 +689,13 @@ InstrumentParameterBox::updateAllBoxes()
 void
 InstrumentParameterBox::slotSelectPlugin(int /*index*/) // no index 4 moment
 {
+    Rosegarden::AudioPluginDialog *aPD = 
+        new Rosegarden::AudioPluginDialog(this,
+                                          m_pluginManager,
+                                          m_selectedInstrument->getId());
+
+    aPD->exec();
+
 }
 
 
