@@ -212,7 +212,7 @@ void EditView::slotCommandExecuted(KCommand *command)
 {
     // might be better done with a visitor pattern or some such
 
-    if (dynamic_cast<PartialSegmentCommand *>(command) != 0) {
+    if (dynamic_cast<IntraSegmentCommand *>(command) != 0) {
 
         BasicCommand *basicCommand = 0;
 

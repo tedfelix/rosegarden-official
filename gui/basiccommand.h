@@ -74,7 +74,7 @@ protected:
 
 
 /// command that modifies events within a single segment
-class PartialSegmentCommand
+class IntraSegmentCommand
 {
 public:
 
@@ -84,7 +84,7 @@ public:
     virtual Rosegarden::Segment &getSegment() = 0;
 
 protected:
-    PartialSegmentCommand() { }
+    IntraSegmentCommand() { }
 };
 
 
@@ -96,7 +96,7 @@ protected:
  * modified by the command, ready to be restored verbatim on undo.
  */
 
-class BasicCommand : public KCommand, public PartialSegmentCommand
+class BasicCommand : public KCommand, public IntraSegmentCommand
 {
 public:
     virtual ~BasicCommand();

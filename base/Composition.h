@@ -36,13 +36,6 @@
 namespace Rosegarden 
 {
 
-typedef std::map<unsigned int, Instrument*> instrumentcontainer;
-typedef std::map<unsigned int, Track*> trackcontainer;
-
-typedef instrumentcontainer::iterator instrumentiterator;
-typedef trackcontainer::iterator trackiterator;
-
-
 /**
  * Composition contains a complete representation of a piece of music.
  * It is a container for multiple Segments, as well as any associated
@@ -54,12 +47,16 @@ typedef trackcontainer::iterator trackiterator;
 
 class Composition : public XmlExportable
 {
-    
 public:
     typedef std::multiset<Segment*, Segment::SegmentCmp> segmentcontainer;
-
     typedef segmentcontainer::iterator iterator;
     typedef segmentcontainer::const_iterator const_iterator;
+
+    typedef std::map<unsigned int, Instrument*> instrumentcontainer;
+    typedef instrumentcontainer::iterator instrumentiterator;
+
+    typedef std::map<unsigned int, Track*> trackcontainer;
+    typedef trackcontainer::iterator trackiterator;
 
     Composition();
     virtual ~Composition();

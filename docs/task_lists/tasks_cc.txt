@@ -17,7 +17,7 @@
 
  7. Compound commands such as move-many-segments, insert-key-everywhere
  
- 7a. Refresh for segment commands in edit views
+ 7a. Refresh for segment commands in edit views [DONEish]
 
  7b. Things like Split Segment and Resize Segment won't work correctly
     until the Segment's moveable start/end markers are implemented.  Look
