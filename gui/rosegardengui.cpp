@@ -2695,7 +2695,14 @@ void RosegardenGUIApp::slotChangeZoom(int)
     double duration44 = Rosegarden::TimeSignature(4,4).getBarDuration();
     double value = double(m_zoomSlider->getCurrentSize());
     m_zoomLabel->setText(i18n("%1%").arg(duration44/value));
-    m_view->setZoomSize(m_zoomSlider->getCurrentSize());
+
+    // initZoomToolbar sets the zoom value. With some old versions of
+    // Qt3.0, this can cause slotChangeZoom() to be called while the
+    // view hasn't been initialized yet, so we need to check it's not
+    // null
+    //
+    if (m_view)
+        m_view->setZoomSize(m_zoomSlider->getCurrentSize());
 }
 
 
