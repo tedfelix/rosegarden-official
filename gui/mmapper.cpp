@@ -497,11 +497,8 @@ void AudioSegmentMmapper::dump()
     Composition &comp = m_doc->getComposition();
 
     Rosegarden::RealTime eventTime;
-    Rosegarden::RealTime duration;
     Rosegarden::Track* track = comp.getTrackById(m_segment->getTrack());
     
-    Rosegarden::SegmentPerformanceHelper helper(*m_segment);
-
     timeT segmentStartTime = m_segment->getStartTime();
     timeT segmentEndTime = m_segment->getEndMarkerTime();
     timeT segmentDuration = segmentEndTime - segmentStartTime;
@@ -515,21 +512,23 @@ void AudioSegmentMmapper::dump()
 
     for (int repeatNo = 0; repeatNo <= repeatCount; ++repeatNo) {
 
-        if (m_segment->getType() == Rosegarden::Segment::Audio) {
-            //
-            // Audio segment
-            //
-            Rosegarden::RealTime audioStart    = m_segment->getAudioStartTime();
-            Rosegarden::RealTime audioDuration = m_segment->getAudioEndTime() - audioStart;
-            Rosegarden::MappedEvent *mE =
-                new (bufPos) Rosegarden::MappedEvent(0, // track->getInstrument() - the instrument will be extracted from the ControlBlock by the sequencer
-                                                     m_segment->getAudioFileId(),
-                                                     eventTime,
-                                                     audioDuration,
-                                                     audioStart);
-            mE->setTrackId(track->getId());
-            ++bufPos;
-        }
+        timeT playTime =
+            segmentStartTime + repeatNo * segmentDuration;
+        if (playTime >= repeatEndTime) break;
+
+        eventTime = comp.getElapsedRealTime(playTime);
+
+        Rosegarden::RealTime audioStart    = m_segment->getAudioStartTime();
+        Rosegarden::RealTime audioDuration = m_segment->getAudioEndTime() - audioStart;
+        Rosegarden::MappedEvent *mE =
+            new (bufPos) Rosegarden::MappedEvent(0, // track->getInstrument() - the instrument will be extracted from the ControlBlock by the sequencer
+                                                 m_segment->getAudioFileId(),
+                                                 eventTime,
+                                                 audioDuration,
+                                                 audioStart);
+        mE->setTrackId(track->getId());
+        ++bufPos;
+        
     }
     
 }
