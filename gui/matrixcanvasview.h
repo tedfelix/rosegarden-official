@@ -129,7 +129,8 @@ protected:
     bool m_mouseWasPressed;
     bool m_ignoreClick;
 
-    Qt::ButtonState m_smoothModifier;
+    Qt::ButtonState   m_smoothModifier;
+    Rosegarden::timeT m_lastSnap;
 };
 
 

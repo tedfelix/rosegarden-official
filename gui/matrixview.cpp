@@ -132,7 +132,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
             SLOT(slotSetSnap(Rosegarden::timeT)));
 
 
-    m_snapGrid.setSnapTime(Rosegarden::SnapGrid::NoSnap);
+    m_snapGrid.setSnapTime(Rosegarden::SnapGrid::SnapToBeat);
 
     m_canvasView = new MatrixCanvasView(*m_staffs[0], m_snapGrid,
 					m_horizontalScrollBar,

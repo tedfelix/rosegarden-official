@@ -22,6 +22,7 @@
 #include "colours.h"
 #include "rosestrings.h"
 #include "rosedebug.h"
+#include "SnapGrid.h"
 
 #include "Profiler.h"
 
@@ -492,7 +493,14 @@ LinedStaff<T>::insertBar(double layoutX, double width, bool isCorrect,
 
 	if (showBeatLines() && i == 0) {
 
-	    int beats = timeSig.getBeatsPerBar();
+            int beats;
+
+            if (m_snapGrid)
+                beats = timeSig.getBarDuration() /
+                            m_snapGrid->getSnapTime(x);
+            else
+                beats = timeSig.getBeatsPerBar();
+
 	    double dx = width / beats;
 
 	    for (int beat = 1; beat < beats; ++beat) {

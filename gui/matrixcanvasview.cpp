@@ -40,7 +40,8 @@ MatrixCanvasView::MatrixCanvasView(MatrixStaff& staff,
       m_previousEvPitch(0),
       m_mouseWasPressed(false),
       m_ignoreClick(false),
-      m_smoothModifier(Qt::ShiftButton)
+      m_smoothModifier(Qt::ShiftButton),
+      m_lastSnap(Rosegarden::SnapGrid::SnapToBeat)
 {
     viewport()->setMouseTracking(true);
 }
@@ -51,6 +52,9 @@ MatrixCanvasView::~MatrixCanvasView()
 
 void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 {
+    // store initial snap
+    m_lastSnap = m_snapGrid.getSnapTime(e->x());
+
     updateGridSnap(e);
 
     MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent: snap time is " << m_snapGrid.getSnapTime(e->x()) << endl;
@@ -103,6 +107,9 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 
 void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 {
+    // store initial snap
+    m_lastSnap = m_snapGrid.getSnapTime(e->x());
+
     updateGridSnap(e);
 
     if (m_ignoreClick) return;
@@ -153,7 +160,7 @@ void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
     m_mouseWasPressed = false;
 
     // Restore grid snap
-    m_snapGrid.setSnapTime(SnapGrid::SnapToBeat);
+    //m_snapGrid.setSnapTime(m_lastSnap);
     
 }
 
@@ -169,7 +176,11 @@ void MatrixCanvasView::updateGridSnap(QMouseEvent *e)
 //     MATRIX_DEBUG << "MatrixCanvasView::updateGridSnap : bs = "
 //                          << bs << " - sm = " << getSmoothModifier() << endl;
 
-//!!! not for the moment
-//    m_snapGrid.setSnapTime((bs & getSmoothModifier()) ?
-//                           SnapGrid::NoSnap : SnapGrid::SnapToUnit);
+    if (bs & getSmoothModifier())
+        m_snapGrid.setSnapTime(SnapGrid::NoSnap);
+    else
+    {
+        m_snapGrid.setSnapTime(m_lastSnap);
+    }
+
 }
