@@ -1413,8 +1413,13 @@ AlsaDriver::record(const RecordStatus& recordStatus)
                   << std::endl;
                   */
 
+#ifdef HAVE_JACK
         createAudioFile("temp.wav");
         m_recordStatus = RECORD_AUDIO;
+#else
+	std::cerr << "ArtsDriver::record - can't record audio without JACK"
+		  << std::endl;
+#endif
 
     }
     else
