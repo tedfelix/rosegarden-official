@@ -1730,7 +1730,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
     // selection vector
     //
     if (!m_segmentAddMode) {
-	clearSelected();
+        clearSelected();
     }
 
     if (item) {
@@ -1776,6 +1776,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
         //m_canvas->canvas()->update();
 
     } else {
+
 
         // Add on middle button - bounding box on rest
         //

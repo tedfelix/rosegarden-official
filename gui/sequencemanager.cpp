@@ -588,7 +588,11 @@ SequenceManager::stopping()
     //
     if (m_transportStatus == STOPPED)
     {
-        m_doc->setPointerPosition(m_doc->getComposition().getStartMarker());
+        if (m_doc->getComposition().isLooping())
+            m_doc->setPointerPosition(m_doc->getComposition().getLoopStart());
+        else
+            m_doc->setPointerPosition(m_doc->getComposition().getStartMarker());
+
         return;
     }
 

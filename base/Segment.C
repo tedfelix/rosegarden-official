@@ -135,7 +135,7 @@ Segment::getEndMarkerTime() const
 timeT
 Segment::getEndTime() const
 {
-    if (m_type == Audio) {
+    if (m_type == Audio && m_composition) {
 	RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
 	RealTime endRT = startRT - m_audioStartTime + m_audioEndTime;
 	return m_composition->getElapsedTimeForRealTime(endRT);
