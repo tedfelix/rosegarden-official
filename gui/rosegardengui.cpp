@@ -91,6 +91,9 @@ RosegardenGUIApp::RosegardenGUIApp()
     connect(m_doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
             this,   SLOT(slotSetPointerPosition(Rosegarden::timeT)));
 
+    connect(m_doc, SIGNAL(loopChanged(Rosegarden::timeT, Rosegarden::timeT)),
+            this,  SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
+
     readOptions();
 
     actionCollection()->action("draw")->activate();
