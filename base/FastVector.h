@@ -21,12 +21,15 @@
 #define _FAST_VECTOR_H_
 
 #include <iterator>
-#include <vector>
 #include <cstdlib> /* for malloc, realloc, free */
 #include <cstring> /* for memmove */
 
-/** FastVector is a sequence class with an interface similar to that
-    of the STL vector, with several nice properties and one nasty one:
+#include <assert.h>
+
+
+/**
+  FastVector is a sequence class with an interface similar to that
+  of the STL vector, with several nice properties and one nasty one:
  
   * It allows fast random access, like the STL vector -- although
     access is not quite as fast, as a little arithmetic is required.
@@ -52,6 +55,26 @@
     the default constructor and assignment.  Thus the copy
     constructor must work on the stored objects, though assignment
     doesn't have to.
+
+  Do not use this class if:
+
+  * You do not require random access (operator[]).  Use the STL
+    linked list instead, it'll almost certainly be faster.
+
+  * Your sequence is constructed once at a non-time-critical
+    moment, and subsequently is only read.  Use STL vector, as
+    it's more standard and lookup is slightly quicker.
+
+  * Your sequence is unlikely to contain more than a dozen objects
+    which are only appended (push_back) and you do not require
+    prepend (push_front).  Use STL vector, as it's more standard,
+    simpler and often quicker in this case.
+
+  * You want to pass sequences to other libraries or return them
+    from library functions.  Use a standard container instead.
+
+  * You want to store objects that contain internal pointers or
+    that do not have a working copy constructor.
 
   Chris Cannam, 1996-2001
 */
@@ -119,9 +142,10 @@ private:
 	}
 
 	size_type operator-(const iterator_base &i) const {
-	    assert(m_v == i.m_v); return m_i - i.m_i;
+	    assert(m_v == i.m_v);
+            return m_i - i.m_i;
 	}
-	
+
     protected:
 	iterator_base(FastVector<T> *v, size_type i) : m_v(v), m_i(i) { }
 	FastVector<T> *m_v;
@@ -129,6 +153,7 @@ private:
     };
 
 public:
+    // I'm sure these can be simplified
 
     class iterator : public
     iterator_base
@@ -152,6 +177,28 @@ public:
 	iterator(FastVector<T> *v, size_type i) : iterator_base(v,i) { }
     };
 
+    class reverse_iterator : public
+    iterator_base
+    {
+    public:
+        reverse_iterator() : iterator_base() { }
+        reverse_iterator(const reverse_iterator &i) : iterator_base(i) { }
+        reverse_iterator &operator=(const reverse_iterator &i) {
+            iterator_base::operator=(i);
+            return *this;
+        }
+
+        T &operator*() { return m_v->at(m_v->size() - m_i - 1); }
+	T *operator->() { return &(operator*()); }
+
+	const T &operator*() const { return m_v->at(m_v->size() - m_i - 1); }
+	const T *operator->() const { return &(operator*()); }
+
+    protected:
+	friend class FastVector<T>;
+	reverse_iterator(FastVector<T> *v, size_type i) : iterator_base(v,i) { }
+    };
+
     class const_iterator : public
     iterator_base
     {
@@ -159,10 +206,10 @@ public:
         const_iterator() : iterator_base() { }
         const_iterator(const iterator &i) : iterator_base(i) { }
         const_iterator(const const_iterator &i) : iterator_base(i) { }
-        const_iterator &operator=(const iterator &i) {
-            iterator_base::operator=(i);
-            return *this;
-        }
+//        const_iterator &operator=(const iterator &i) {
+//            iterator_base::operator=(i);
+//            return *this;
+//        }
         const_iterator &operator=(const const_iterator &i) {
             iterator_base::operator=(i);
             return *this;
@@ -173,7 +220,33 @@ public:
 
     protected:
 	friend class FastVector<T>;
-	const_iterator(FastVector<T> *v, size_type i) : iterator_base(v,i) { }
+	const_iterator(const FastVector<T> *v, size_type i) :
+            iterator_base(const_cast<FastVector<T> *>(v),i) { }
+    };
+
+    class const_reverse_iterator : public
+    iterator_base
+    {
+    public:
+        const_reverse_iterator() : iterator_base() { }
+        const_reverse_iterator(const reverse_iterator &i) : iterator_base(i) { }
+        const_reverse_iterator(const const_reverse_iterator &i) : iterator_base(i) { }
+//        const_reverse_iterator &operator=(const reverse_iterator &i) {
+//            iterator_base::operator=(i);
+//            return *this;
+//        }
+        const_reverse_iterator &operator=(const const_reverse_iterator &i) {
+            iterator_base::operator=(i);
+            return *this;
+        }
+
+	const T &operator*() const { return m_v->at(m_v->size() - m_i - 1); }
+	const T *operator->() const { return &(operator*()); }
+
+    protected:
+	friend class FastVector<T>;
+	const_reverse_iterator(const FastVector<T> *v, size_type i) :
+            iterator_base(const_cast<FastVector<T> *>(v),i) { }
     };
 
 public: 
@@ -194,6 +267,15 @@ public:
 
     virtual iterator begin() { return iterator(this, 0); }
     virtual iterator end() { return iterator(this, m_count); }
+
+    virtual const_iterator begin() const { return const_iterator(this, 0); }
+    virtual const_iterator end() const { return const_iterator(this, m_count); }
+
+    virtual reverse_iterator rbegin() { return reverse_iterator(this, 0); }
+    virtual reverse_iterator rend() { return reverse_iterator(this, m_count); }
+
+    virtual const_reverse_iterator rbegin() const { return const_reverse_iterator(this, 0); }
+    virtual const_reverse_iterator rend() const { return const_reverse_iterator(this, m_count); }
 
     size_type size() const { return m_count; }
     bool empty() const { return m_count == 0; }

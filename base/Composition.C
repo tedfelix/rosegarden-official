@@ -28,7 +28,7 @@
 namespace Rosegarden 
 {
 
-const string Composition::BarEventType = "bar";
+const std::string Composition::BarEventType = "bar";
 
 
 Composition::Composition()
@@ -191,7 +191,7 @@ Composition::calculateBarPositions()
 
 	if (s > 0 || segment0isTimeSig) start += segmentTimes[s];
 
-	cerr << "segment " << s << ": start " << start << ", finish " << finish << endl;
+	std::cerr << "segment " << s << ": start " << start << ", finish " << finish << std::endl;
 
 	for (time = start; time < finish; time += segmentTimes[s]) {
 	    addNewBar(time);

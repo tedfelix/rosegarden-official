@@ -23,7 +23,6 @@
 
 #include "Property.h"
 #include "PropertyName.h"
-#include "FastVector.h"
 
 #include <string>
 #ifndef NDEBUG
@@ -114,7 +113,7 @@ public:
 
     void unset(const PropertyName &name);
     
-    typedef FastVector<PropertyName> PropertyNames;
+    typedef std::vector<PropertyName> PropertyNames;
     PropertyNames getPropertyNames() const;
     PropertyNames getPersistentPropertyNames() const;
     PropertyNames getNonPersistentPropertyNames() const;

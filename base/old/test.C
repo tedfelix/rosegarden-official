@@ -1,5 +1,5 @@
 
-#include "FastVector_newer.h"
+#include "../FastVector.h"
 #include <iostream>
 
 class Thing
@@ -19,7 +19,7 @@ main()
     FastVector<Thing> v;
 
     for (int i = 0; i < 20; ++i) {
-        v.push_back(Thing(i));
+        v.push_back(Thing(i * 2));
         v.push_front(Thing(i));
     }
 
@@ -27,8 +27,17 @@ main()
         std::cout << "v[" << i << "] is " << v[i].getX() << std::endl;
     }
 
-    for (FastVector<Thing>::const_iterator j = v.begin(); j != v.end(); ++j) {
+    const FastVector<Thing> *w = &v;
+
+    for (FastVector<Thing>::const_iterator j = w->begin(); j != w->end(); ++j) {
         std::cout << "item is " << j->getX() << std::endl;
+    }
+
+    std::cout << std::endl;
+
+    for (FastVector<Thing>::reverse_iterator rj = v.rbegin();
+         rj != v.rend(); ++rj) {
+        std::cout << "item is " << rj->getX() << std::endl;
     }
 }
 

@@ -25,6 +25,7 @@
 #include "notationelement.h"
 #include "staff.h"
 #include "Track.h"
+#include "FastVector.h"
 
 /**
  * Horizontal notation layout
@@ -75,7 +76,7 @@ public:
             fixedWidth(fwidth) { }
     };
 
-    typedef std::vector<BarData> BarDataList;
+    typedef FastVector<BarData> BarDataList;
 
     /**
      * Returns the bar positions for a given staff, provided that
