@@ -1341,25 +1341,6 @@ MIDIInstrumentParameterPanel::populateProgramList()
     }
 
     m_programValue->setEnabled(m_selectedInstrument->sendsProgramChange());
-
-/*!!!
-    Rosegarden::StringList list = md->getProgramList(bank);
-    Rosegarden::StringList::iterator it;
-
-    for (it = list.begin(); it != list.end(); it++) {
-
-        m_programValue->insertItem(strtoqstr(*it));
-
-	const Rosegarden::MidiProgram *program = 
-	    md->getProgramByIndex(m_programValue->count() - 1);
-
-	if (m_selectedInstrument->getProgramChange() == program->getProgram()) {
-	    m_programValue->setCurrentItem(m_programValue->count() - 1);
-	}
-    }
-*/
-//    m_programValue->setCurrentItem(
-//            (int)m_selectedInstrument->getProgramChange());
 }
 
 void
