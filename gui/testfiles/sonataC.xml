@@ -4,6 +4,7 @@
 <track instrument="0" start="0">
 <chord>
 	<event type="clefchange" subordering="-30"><property name="clef" string="treble"/></event>
+	<event type="timesignature" subordering="-10"><property name="numerator" int="4"/><property name="denominator" int="4"/></event>
 	<event type="note" duration="192"><property name="pitch" int="72"/></event>
 </chord>
 <event type="note" duration="96"><property name="pitch" int="76"/></event>
@@ -1142,6 +1143,7 @@
 <track instrument="1" start="0">
 <chord>
 	<event type="clefchange" subordering="-30"><property name="clef" string="tenor"/></event>
+	<event type="timesignature" subordering="-10"><property name="numerator" int="4"/><property name="denominator" int="4"/></event>
 	<event type="note" duration="48"><property name="BGroupId" int="0"/><property name="BGroupType" string="beamed"/><property name="pitch" int="60"/></event>
 </chord>
 <group type="beamed">

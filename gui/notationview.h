@@ -300,13 +300,13 @@ protected:
                     Rosegarden::timeT endTime = -1); // -1 => end of staff
 
     /**
-     * readjust the width of the canvas after a layout
+     * Readjust the size of the canvas after a layout
      *
      * Checks the total width computed by the horizontal layout
      *
      * @see NotationHLayout#getTotalWidth()
      */
-    void readjustCanvasWidth();
+    void readjustCanvasSize();
     
     /**
      * show bar lines

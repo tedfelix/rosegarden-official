@@ -673,6 +673,7 @@ Note Note::getNearestNote(int duration, int maxDots)
 //    cout << "Note::getNearestNote: duration " << duration <<
 //	" leading to tag " << tag << endl;
     if (tag < Shortest) return Note(Shortest);
+    if (tag > Longest)  return Note(Longest, maxDots);
 
     int prospective = Note(tag, 0).getDuration();
     int dots = 0;

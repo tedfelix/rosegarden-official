@@ -695,7 +695,7 @@ bool NotationView::applyLayout(int staffNo)
     m_hlayout->finishLayout();
     m_vlayout->finishLayout();
 
-    readjustCanvasWidth();
+    readjustCanvasSize();
 
     kdDebug(KDEBUG_AREA) << "NotationView::applyLayout() : done" << endl;
     return true;
@@ -1235,20 +1235,12 @@ void NotationView::redoLayout(int staffNo, timeT startTime, timeT endTime)
     }
 }
 
-void NotationView::readjustCanvasWidth()
+void NotationView::readjustCanvasSize()
 {
-    double totalWidth = m_hlayout->getTotalWidth();
+    double totalHeight = 0.0, totalWidth = m_hlayout->getTotalWidth();
 
     kdDebug(KDEBUG_AREA) << "NotationView::readjustCanvasWidth() : totalWidth = "
                          << totalWidth << endl;
-
-    if (canvas()->width() < totalWidth) {
-
-        kdDebug(KDEBUG_AREA) << "NotationView::readjustCanvasWidth() to "
-                             << totalWidth << endl;
-
-        canvas()->resize(int(totalWidth) + 50, canvas()->height());
-    }
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
@@ -1267,9 +1259,21 @@ void NotationView::readjustCanvasWidth()
         if (barCount > 0) {
             xright = m_hlayout->getBarLineX(staff, barCount - 1);
         }
-        
+
+        kdDebug(KDEBUG_AREA) << "Setting staff lines to " << xleft <<
+            " -> " << xright << endl;
         staff.setLines(xleft, xright);
-//	    staff.setLinesLength(canvas()->width() - 20);
+
+        totalHeight += staff.getStaffHeight() + 15;
+    }
+
+    if (canvas()->width()  < totalWidth ||
+        canvas()->height() < totalHeight) {
+
+        kdDebug(KDEBUG_AREA) << "NotationView::readjustCanvasWidth() to "
+                             << totalWidth << endl;
+
+        canvas()->resize(int(totalWidth) + 50, int(totalHeight) + 50);
     }
 }
 

@@ -100,7 +100,8 @@ Quantizer::quantizeByNote(timeT duration) const
 Note
 Quantizer::requantizeByNote(timeT &duration) const
 {
-    Note  shortNote = Note::getNearestNote(duration, m_maxDots);
+    Note shortNote = Note::getNearestNote(duration, m_maxDots);
+
     timeT shortTime = shortNote.getDuration();
     if   (shortTime == duration) return shortNote;
 
