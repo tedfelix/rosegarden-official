@@ -220,6 +220,7 @@ class Element2
 private:
 
 public:
+    typedef hash_map<string, PropertyStoreBase*, hashstring, eqstring> PropertyMap;
     typedef unsigned int timeT;
 
     struct NoData { };
@@ -269,6 +270,9 @@ public:
     void setFromString(const string &name, string value)
 	throw (BadType);
 
+    PropertyMap& properties() { return m_properties; }
+    const PropertyMap& properties() const { return m_properties; }
+
 #ifndef NDEBUG
     void dump(ostream&) const;
 #else
@@ -288,7 +292,6 @@ private:
     ViewElements *m_viewElements;
 
     //    typedef map<string, PropertyStoreBase *> PropertyMap;
-    typedef hash_map<string, PropertyStoreBase*, hashstring, eqstring> PropertyMap;
     typedef PropertyMap::value_type PropertyPair;
     PropertyMap m_properties;
 };
