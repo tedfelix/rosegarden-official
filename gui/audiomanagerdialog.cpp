@@ -17,16 +17,20 @@
     COPYING included with this distribution for more information.
 */
 
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kfiledialog.h>
-
+#include <qtooltip.h>
+#include <qdragobject.h>
 #include <qhbox.h>
 #include <qvbuttongroup.h>
 #include <qlistview.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qinputdialog.h>
+
+#include <kurl.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kfiledialog.h>
+#include <kio/netaccess.h>
 
 #include "WAVAudioFile.h"
 #include "audiomanagerdialog.h"
@@ -35,12 +39,16 @@
 #include "Progress.h"
 #include "multiviewcommandhistory.h"
 
+#include "rosedebug.h"
+
 using std::cout;
 using std::cerr;
 using std::endl;
 
 namespace Rosegarden
 {
+
+//---------------------------------------------
 
 static const int maxPreviewWidth = 100;
 static const int previewHeight = 30;
@@ -53,6 +61,11 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_playingAudioFile(0),
     m_audioPlayingDialog(0)
 {
+    // accept dnd
+    setAcceptDrops(true);
+
+    QToolTip::add(this, i18n("Drag'n Drop .wav files here"));
+
     QHBox *h = makeHBoxMainWidget();
     QVButtonGroup *v = new QVButtonGroup(i18n("Audio File actions"), h);
 
@@ -70,7 +83,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_renameButton    = new QPushButton(i18n("Rename"), v);
     m_insertButton    = new QPushButton(i18n("Insert"), v);
     m_deleteAllButton = new QPushButton(i18n("Delete All"), v);
-    m_fileList     = new QListView(h);
+    m_fileList        = new QListView(h);
 
     // Set the column names
     //
@@ -416,67 +429,16 @@ AudioManagerDialog::slotPlayPreview()
 void
 AudioManagerDialog::slotAdd()
 {
-    Rosegarden::AudioFileId id = 0;
+    QString lastAddPath = m_doc->getAudioFileManager().getLastAddPath().c_str();
+    if (lastAddPath.isEmpty())
+        lastAddPath = ":WAVS";
 
-    KFileDialog *fileDialog =
-        new KFileDialog(QString(m_doc->getAudioFileManager().getLastAddPath().c_str()),
-                        QString(i18n("*.wav|WAV files (*.wav)")),
-                        this, i18n("Select an Audio File"), true);
+    KURL::List kurlList = KFileDialog::getOpenURLs(lastAddPath,
+                                                   QString(i18n("*.wav|WAV files (*.wav)")),
+                                                   this, i18n("Select an Audio File"));
 
-    if (fileDialog->exec() == QDialog::Accepted)
-    {
-        QString newFilePath = fileDialog->selectedFile().data();
-
-        // Now set the "last add" path so that next time we use "file add"
-        // we start looking in the same place.
-        //
-        std::string newLastAddPath =
-            m_doc->getAudioFileManager().getDirectory(std::string(newFilePath.data()));
-        m_doc->getAudioFileManager().setLastAddPath(newLastAddPath);
-
-        RosegardenProgressDialog *progressDlg =
-            new RosegardenProgressDialog(i18n("Generating audio preview..."),
-                                         i18n("Cancel"),
-                                         100,
-                                         this);
-        try
-        {
-            id = m_doc->getAudioFileManager().addFile(std::string(newFilePath.data()));
-        }
-        catch(std::string e)
-        {
-            // clear down progress dialog
-            delete progressDlg;
-            progressDlg = 0;
-
-            QString errorString =
-                i18n("Can't add File.  WAV file body invalid.\n\"") +
-                                  QString(e.c_str()) + "\"";
-            KMessageBox::sorry(this, errorString);
-        }
-
-        try
-        {
-            m_doc->getAudioFileManager().generatePreview(
-                    dynamic_cast<Progress*>(progressDlg), id);
-        }
-        catch(std::string e)
-        {
-            delete progressDlg;
-            progressDlg = 0;
-            KMessageBox::error(this, QString(e.c_str()));
-        }
-
-        if (progressDlg) delete progressDlg;
-
-        slotPopulateFileList();
-
-    }
-
-    delete fileDialog;
-
-    // tell the sequencer
-    emit addAudioFile(id);
+    for (KURL::List::iterator it = kurlList.begin(); it != kurlList.end(); ++it)
+        addFile(*it);
 }
 
 // Enable these action buttons
@@ -751,7 +713,106 @@ AudioManagerDialog::closePlayingDialog(Rosegarden::AudioFileId id)
 
 }
 
+bool
+AudioManagerDialog::addFile(const KURL& kurl)
+{
+    Rosegarden::AudioFileId id = 0;
 
+    // Now set the "last add" path so that next time we use "file add"
+    // we start looking in the same place.
+    //
+    RosegardenProgressDialog *progressDlg =
+        new RosegardenProgressDialog(i18n("Generating audio preview..."),
+                                     i18n("Cancel"),
+                                     100,
+                                     this);
+    QString newFilePath;
+
+    if (kurl.isLocalFile()) {
+
+        std::string newLastAddPath =
+            m_doc->getAudioFileManager().getDirectory(std::string(kurl.path().data()));
+        m_doc->getAudioFileManager().setLastAddPath(newLastAddPath);
+        
+        newFilePath = kurl.path();
+
+    } else { // download locally
+        if (KIO::NetAccess::download(kurl, newFilePath) == false) {
+            KMessageBox::error(this, QString(i18n("Cannot download file %1"))
+                               .arg(kurl.prettyURL()));
+            return false;
+        }
+    }
+
+    try
+        {
+            id = m_doc->getAudioFileManager().addFile(std::string(newFilePath.data()));
+        }
+    catch(std::string e)
+        {
+            // clear down progress dialog
+            delete progressDlg;
+            progressDlg = 0;
+
+            QString errorString =
+                i18n("Can't add File.  WAV file body invalid.\n\"") +
+                QString(e.c_str()) + "\"";
+            KMessageBox::sorry(this, errorString);
+        }
+
+    try
+        {
+            m_doc->getAudioFileManager().generatePreview(
+                                                         dynamic_cast<Progress*>(progressDlg), id);
+        }
+    catch(std::string e)
+        {
+            delete progressDlg;
+            progressDlg = 0;
+            KMessageBox::error(this, QString(e.c_str()));
+        }
+
+    if (progressDlg) delete progressDlg;
+
+    slotPopulateFileList();
+
+    // tell the sequencer
+    emit addAudioFile(id);
+
+    return true;
+}
+
+
+void
+AudioManagerDialog::dragEnterEvent(QDragEnterEvent *event)
+{
+    // accept uri drops only
+    event->accept(QUriDrag::canDecode(event));
+}
+
+void
+AudioManagerDialog::dropEvent(QDropEvent *event)
+{
+    // this is a very simplistic implementation of a drop event.  we
+    // will only accept a dropped URL.  the Qt dnd code can do *much*
+    // much more, so please read the docs there
+    QStrList uri;
+
+    // see if we can decode a URI.. if not, just ignore it
+    if (QUriDrag::decode(event, uri))
+    {
+        // okay, we have a URI.. process it
+        QString url, target;
+        for(const char* url = uri.first(); url; url = uri.next()) {
+            
+            kdDebug(KDEBUG_AREA) << "AudioManagerDialog::dropEvent() : got "
+                                 << url << endl;
+
+            addFile(KURL(url));
+        }
+        
+    }
+}
 
 }
 

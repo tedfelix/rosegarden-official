@@ -17,14 +17,14 @@
     COPYING included with this distribution for more information.
 */
 
-#include <kdialogbase.h>
+#include <string>
 
 #include <qaccel.h>
 #include <qlistview.h>
 #include <qpushbutton.h>
 #include <qpixmap.h>
 
-#include <string>
+#include <kdialogbase.h>
 
 #include "AudioFileManager.h"
 #include "rosegardenguidoc.h"
@@ -44,6 +44,8 @@
 
 #ifndef _AUDIOMANAGERDIALOG_H_
 #define _AUDIOMANAGERDIALOG_H_
+
+class KURL;
 
 namespace Rosegarden
 {
@@ -108,8 +110,6 @@ protected:
     Rosegarden::Segment *m_segment;
 
 };
-
-
 
 class AudioManagerDialog : public KDialogBase
 {
@@ -190,7 +190,14 @@ signals:
                             const Rosegarden::RealTime &);
 
 protected:
+    bool addFile(const KURL& kurl);
+
     virtual void closeEvent(QCloseEvent *e);
+
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dropEvent(QDropEvent*);
+
+    //--------------- Data members ---------------------------------
 
     QListView        *m_fileList;
     QPushButton      *m_addButton;
