@@ -24,7 +24,7 @@
 
         <Group>
 	     <event type="note" duration="whole" pitch="8"/>
-	     <event type="note" duration="whole" pitch="9"/>
+	     <event type="note" duration="whole" pitch="11"/>
         </Group>
 
 </Track>
