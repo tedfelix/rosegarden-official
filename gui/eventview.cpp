@@ -44,6 +44,8 @@ EventView::EventView(RosegardenGUIDoc *doc,
     EditView(doc, segments, 2, parent, "eventview")
 {
 
+    m_horizontalScrollBar->setDisabled(true);
+
     QVBox *filterBox = new QVBox(getCentralFrame());
     m_grid->addWidget(filterBox, 2, 0);
 

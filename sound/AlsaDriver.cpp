@@ -279,11 +279,36 @@ AlsaDriver::generateInstruments()
                     std::cout << "\t\t(WRITE ONLY)";
                 }
 
+                // Generate a unique name using the client id
+                //
+                char clientId[10];
+                sprintf(clientId,
+                        "%d ",
+                        snd_seq_port_info_get_client(pinfo));
+
+                std::string fullClientName = 
+                    std::string(snd_seq_client_info_get_name(cinfo));
+
+                /*
+                unsigned int pos = fullClientName.find_first_of(" ");
+
+                if (pos)
+                {
+                    fullClientName = fullClientName.substr(0, pos);
+                }
+                else
+                    fullClientName = fullClientName.substr(0, 10);
+                    */
+
+                std::string clientName =
+                    std::string(clientId) + fullClientName;
+
                 // For the moment limit to two strictly synth devices
                 //
                 addInstrumentsForPort(
                             Instrument::Midi,
-                            std::string(snd_seq_port_info_get_name(pinfo)),
+                            // std::string(snd_seq_port_info_get_name(pinfo)),
+                            clientName,
                             snd_seq_port_info_get_client(pinfo),
                             snd_seq_port_info_get_port(pinfo),
                             false);
@@ -322,8 +347,8 @@ AlsaDriver::generateInstruments()
 
     for (int channel = 0; channel < 16; channel++)
     {
-        sprintf(number, "%d", channel);
-        audioName = "Audio Track " + std::string(number);
+        sprintf(number, " #%d", channel);
+        audioName = "Audio" + std::string(number);
         instr = new MappedInstrument(Instrument::Audio,
                                      channel,
                                      m_audioRunningId++,
@@ -377,7 +402,7 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
 
             for (int channel = 0; channel < 16; channel++)
             {
-                sprintf(number, ", Channel %d", channel);
+                sprintf(number, " #%d", channel);
                 channelName = "Metronome" + std::string(number);
                 instr = new MappedInstrument(type,
                                              9, // always the drum channel
@@ -407,11 +432,11 @@ AlsaDriver::addInstrumentsForPort(Instrument::InstrumentType type,
         {
             // Create MappedInstrument for export to GUI
             //
-            sprintf(number, ", Channel %d", channel);
+            sprintf(number, " #%d", channel);
             channelName = name + std::string(number);
 
             if (channel == 9)
-                channelName = name + std::string(", Drums (9)");
+                channelName = name + std::string(" #9[D]");
             MappedInstrument *instr = new MappedInstrument(type,
                                                            channel,
                                                            m_midiRunningId++,
