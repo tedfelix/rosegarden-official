@@ -854,6 +854,9 @@ void CompositionView::drawGuides(QPainter * p, const QRect& /*clipRect*/)
 void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const QRect& clipRect,
                                    int intersectLvl, bool fill)
 {
+//     RG_DEBUG << "CompositionView::drawCompRect() " << r
+//              << " - r repeating : " << r.isRepeating() << endl;
+
     p->save();
 
     QBrush brush = r.getBrush();
@@ -887,7 +890,7 @@ void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const 
 
         for (int i = 0; i < repeatMarks.size(); ++i) {
             int pos = repeatMarks[i];
-            if (pos < clipRect.right())
+            if (pos > clipRect.right())
                 break;
             
             if (pos >= clipRect.left()) {
