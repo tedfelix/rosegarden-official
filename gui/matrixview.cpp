@@ -442,7 +442,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     initStatusBar();
 
-    QCanvas *tCanvas = new QCanvas(100, 100);
+    QCanvas *tCanvas = new QCanvas(width() * 2, height() * 2);
 
     kdDebug(KDEBUG_AREA) << "MatrixView : creating staff\n";
 
