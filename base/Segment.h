@@ -52,6 +52,8 @@ namespace Rosegarden
  * The Track owns the Events its items are pointing at.
  */
 
+class TrackObserver;
+
 class Track : public std::multiset<Event*, Event::EventCmp>
 {
 public:
@@ -59,7 +61,6 @@ public:
           unsigned int stepsPerBar = 384);
     ~Track();
 
-    
     struct BarPosition
     {
         timeT start;          // absolute time of event following barline
@@ -136,6 +137,11 @@ public:
     //!!! Untested.
     int getBarNumber(const iterator &i) const;
     int getBarNumber(const Event *e) const;
+
+    /**
+     * Inserts a single Event
+     */
+    iterator insert(Event *e);
 
     /**
      * Erases a single Event
@@ -271,6 +277,9 @@ public:
         }
     };
 
+    void    addObserver(TrackObserver *obs) { m_observers.insert(obs); }
+    void removeObserver(TrackObserver *obs) { m_observers.erase (obs); }
+
 protected:
 
     static bool checkExpansionValid(timeT maxDuration, timeT minDuration);
@@ -285,7 +294,29 @@ protected:
 
     mutable int m_groupId;
     BarPositionList m_barPositions;
+
+    typedef set<TrackObserver *> ObserverSet;
+    ObserverSet m_observers;
+
+    void notifyAdd(Event *);
+    void notifyRemove(Event *);
+    void notifyTrackGone();
 };
+
+class TrackObserver
+{
+public:
+    // called after the event has been added to the track:
+    virtual void eventAdded(Track *, Event *) = 0;
+
+    // called after the event has been removed from the track,
+    // and just before it is deleted:
+    virtual void eventRemoved(Track *, Event *) = 0;
+
+    // called from the start of the track dtor:
+    virtual void trackDeleted(Track *) = 0;
+};
+
 
 }
 

@@ -43,6 +43,8 @@ Track::Track(unsigned int nbTimeSteps, timeT startIdx,
 {
     unsigned int initialTime = m_startIdx;
     
+    //!!! ugh, must ditch this
+
     // fill up with whole-note rests
     //
     for (unsigned int i = 0; i < nbTimeSteps; i += stepsPerBar) {
@@ -57,9 +59,11 @@ Track::Track(unsigned int nbTimeSteps, timeT startIdx,
 
 Track::~Track()
 {
+    notifyTrackGone();
+
     // delete content
-    for(iterator it = begin(); it != end(); ++it)
-        delete (*it);
+    for (iterator it = begin(); it != end(); ++it)
+         delete (*it);
 }
 
 
@@ -269,16 +273,32 @@ int Track::getBarNumber(const Event *e) const
 
 void Track::erase(iterator pos)
 {
-    delete *pos;
+    Event *e = *pos;
     std::multiset<Event*, Event::EventCmp>::erase(pos);
+    notifyRemove(e);
+    delete e;
 }
+
+
+Track::iterator Track::insert(Event *e)
+{
+    iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
+    notifyAdd(e);
+    return i;
+}
+
 
 void Track::erase(iterator from, iterator to)
 {
-    for(Track::iterator i = from; i != to; ++i)
-        delete *i;
-    
-    std::multiset<Event*, Event::EventCmp>::erase(from, to);
+//    for (Track::iterator i = from; i != to; ++i)
+//        delete *i;
+//    
+//    std::multiset<Event*, Event::EventCmp>::erase(from, to);
+
+    //!!! not very efficient, but without an observer event for
+    //multiple erase we can't do any better:
+
+    for (Track::iterator i = from; i != to; ++i) erase(i);
 }
 
 bool Track::eraseSingle(Event* e)
@@ -662,6 +682,33 @@ bool Track::checkExpansionValid(timeT maxDuration, timeT minDuration)
     return ((maxDuration == (2 * minDuration)) ||
             (maxDuration == (4 * minDuration)) ||
             (maxDuration == (4 * minDuration / 3)));
+}
+
+
+void Track::notifyAdd(Event *e)
+{
+    for (ObserverSet::iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->eventAdded(this, e);
+    }
+}
+
+ 
+void Track::notifyRemove(Event *e)
+{
+    for (ObserverSet::iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->eventRemoved(this, e);
+    }
+}
+
+
+void Track::notifyTrackGone()
+{
+    for (ObserverSet::iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->trackDeleted(this);
+    }    
 }
 
  

@@ -26,15 +26,18 @@
 #include "notationelement.h"
 
 using Rosegarden::Track;
+using Rosegarden::Event;
 
 ViewElementsManager::ViewElementsManager(Track &t)
     : m_track(t),
       m_notationElements(0)
 {
+    t.addObserver(this);
 }
 
 ViewElementsManager::~ViewElementsManager()
 {
+    m_track.removeObserver(this);
 }
 
 NotationElementList*
@@ -197,3 +200,26 @@ void ViewElementsManager::tryCollapse(NotationElement* el)
 
 }
 
+
+void ViewElementsManager::eventAdded(Track *t, Event *e)
+{
+    assert(t == &m_track);
+    kdDebug(KDEBUG_AREA) 
+	<< "ViewElementsManager::eventAdded: at time " << e->getAbsoluteTime()
+	<< endl;
+}
+
+void ViewElementsManager::eventRemoved(Track *t, Event *e)
+{
+    assert(t == &m_track);
+    kdDebug(KDEBUG_AREA) 
+	<< "ViewElementsManager::eventRemoved: from time "
+	<< e->getAbsoluteTime() << endl;
+}
+
+void ViewElementsManager::trackDeleted(Track *t)
+{
+    assert(t == &m_track);
+    kdDebug(KDEBUG_AREA) << "ViewElementsManager::trackDeleted!" << endl;
+}
+    

@@ -33,12 +33,12 @@
  * @author Guillaume Laurent, Chris Cannam, Rich Bown
  */
 
-class ViewElementsManager
+
+class ViewElementsManager : public Rosegarden::TrackObserver
 {
 public: 
     ViewElementsManager(Rosegarden::Track&);
-    ~ViewElementsManager();
-
+    virtual ~ViewElementsManager();
 
 
     /**
@@ -101,6 +101,20 @@ public:
     void tryCollapse(NotationElement*);
 
     Rosegarden::Track& getTrack() { return m_track; }
+
+
+    // TrackObserver methods:
+
+    // called after the event has been added to the track:
+    virtual void eventAdded(Rosegarden::Track *, Rosegarden::Event *);
+
+    // called after the event has been removed from the track,
+    // and just before it is deleted:
+    virtual void eventRemoved(Rosegarden::Track *, Rosegarden::Event *);
+
+    // called from the start of the track dtor:
+    virtual void trackDeleted(Rosegarden::Track *);
+
 
 protected:
 
