@@ -64,7 +64,6 @@ void RosegardenCanvasView::fitWidthToContents()
     }
 
     QSize currentSize = canvas()->size();
-    
     resizeContents(allItemsBoundingRect.width(), currentSize.height());
 }
 
@@ -173,7 +172,7 @@ void RosegardenCanvasView::doAutoScroll()
         }
     }
     
-    RG_DEBUG << "dx: " << dx << ", dy: " << dy << endl;
+//     RG_DEBUG << "dx: " << dx << ", dy: " << dy << endl;
 
     if ( (dx || dy) &&
          ((scrollDirection == m_currentScrollDirection) || (m_currentScrollDirection == None)) ) {
@@ -421,11 +420,6 @@ void RosegardenCanvasView::updateBottomWidgetGeometry()
         emit bottomWidgetHeightChanged(bottomWidgetHeight);
         m_currentBottomWidgetHeight = bottomWidgetHeight;
     }
-
-    RG_DEBUG << "RosegardenCanvasView::updateBottomWidgetGeometry() : hsb range : "
-             << horizontalScrollBar()->minValue()
-             << "-" << horizontalScrollBar()->maxValue() << endl;
-    
 }
 
 //----------------------------------------------------------------------
