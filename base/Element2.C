@@ -218,7 +218,8 @@ operator<(const ViewElement &a, const ViewElement &b)
 //////////////////////////////////////////////////////////////////////
 
 Composition::Composition(unsigned int nbTracks)
-    : m_tracks(nbTracks)
+    : m_tracks(nbTracks),
+      m_nbTicksPerBar(960 * 4 * 4)
 {
 }
 
@@ -270,14 +271,21 @@ Composition::deleteTrack(int idx)
 unsigned int
 Composition::getNbBars() const
 {
-    unsigned int maxSize = 0;
+    unsigned int maxSize = 0,
+        maxNbBars = 0;
 
     for (trackcontainer::const_iterator i = m_tracks.begin();
          i != m_tracks.end(); ++i) {
 
-        if ((*i) && (*i)->size() > maxSize) maxSize = (*i)->size();
-    }
+        if ((*i) && (*i)->size() > maxSize) {
+            maxSize = (*i)->size();
 
-    return maxSize;
+            EventList::const_iterator lastEl = (*i)->end();
+            --lastEl;
+            maxNbBars = (*lastEl)->absoluteTime() / getNbTicksPerBar();
+        }
+    }
+    
+    return maxNbBars;
 }
 
