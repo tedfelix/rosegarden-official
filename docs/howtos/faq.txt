@@ -28,19 +28,27 @@ details.
 Does it support my soundcard?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We don't deal with the soundcard directly, so we can't answer that.
-We use the ALSA drivers where possible, so see the ALSA project's soundcard
-matrix (<URL:http://www.alsa-project.org/>).
+Rosegarden uses the ALSA (Advanced Linux Sound Architecture) soundcard
+drivers.  To find out whether your card is supported by ALSA, see the
+ALSA project's soundcard matrix
+(<URL:http://www.alsa-project.org/alsa-doc>).
 
 
 Does it support my language?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Translations are included for Russian, German, Spanish, French,
-Italian, Estonian, Welsh and Swedish.  If you can translate musical or
-technical documentation (no programming required, but it's quite hard
-work), please let us know!  See docs/howtos/i18n.txt in CVS if you are
-interested in the technical aspects of translation.
+Italian, Estonian, Welsh, Swedish, Dutch, and Japanese.  These
+translations are provided by independent contributors and so may not
+always be up to date with the current state of the GUI.
+
+If you can help out with translating musical or technical
+documentation (no programming required, but it's quite hard work),
+please let us know!
+
+See also docs/howtos/i18n.txt in CVS if you are interested in the
+technical aspects of translation.
+
 
 Rosegarden apparently saves in a binary format, where can I find the format definition ?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -55,11 +63,6 @@ easy way to have a look is to use
 
 Compilation or installation problems
 ------------------------------------
-
-Can I build for KDE2 instead of KDE3?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-No.
 
 macro `AM_PATH_ALSA' not found in library
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -80,6 +83,7 @@ pre-building the aclocal.m4 file yourself, like this :
 Then restart make -f Makefile.cvs. You will still see the error
 message, but the 'configure' file will be properly generated.
 
+
 arts/artsmidi.idl not found
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -88,29 +92,9 @@ package, if appropriate to your distribution).  Note that you need
 this even if you're building --with-alsa.
 
 
-Rosegarden hangs on the splash screen at startup
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-When built with optimisation using the gcc-3.3.1 compiler included
-with SuSE 9.0, Rosegarden may hang on startup displaying the
-"Enumerating plugins" message on the splash screen.  This is caused by
-a compiler bug.
-
-To fix this, configure with
-
-  $ CXXFLAGS='-fno-gcse' ./configure
-
-to disable the particular optimisation that is causing the problem.
-
-Note that this also affects the Rosegarden-4 0.9.1 package shipped
-with the distribution itself; SuSE 9.0 is therefore the second SuSE
-release in a row to include a version of Rosegarden that doesn't work
-because of a compiler bug.  (See "Playback is only happening once
-every second" below for details of the SuSE 8.2 bug.)
-
-
 Rosegarden is crashing at startup
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Try running up the sequencer by itself first to see if it's a problem
 with that or the main part of the program.  Run:
 
@@ -120,7 +104,7 @@ And you should get a few lines of output finishing with:
 
   RosegardenSequencer - started OK
 
-If the sequencer is alright then try to start the main application
+If the sequencer starts up OK, try to start the main application
 with the command line switch "--nosequencer".  If that fails, see next
 question on how to obtain a stack trace, which you should provide as
 part of any bug report you submit.
@@ -128,6 +112,7 @@ part of any bug report you submit.
 
 How to get a stack trace for a crash
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 First export the environment variable KDE_DEBUG as follows (in bash):
 
   $ export KDE_DEBUG=1
@@ -249,9 +234,9 @@ On the main window go to Settings->View Track Labels
 How do I change the instrument for a track?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Click and hold the left mouse button on the track/instrument label.
-A pop-up will appear from which you can choose a new instrument for
-the track.
+Either click with the right mouse button, or click and hold with the
+left mouse button, on the track/instrument label.  A pop-up will appear
+from which you can choose a new instrument for the track.
 
 
 How do I rename a segment?
@@ -259,6 +244,19 @@ How do I rename a segment?
 
 Click the "..." button next to the segment's name shown in the Segment
 Parameters box.
+
+How do I rename a track?
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Double-click on the track label.
+
+
+How do I make a composition more than 100 bars long!?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A composition has a nominal duration that you can change.  Go to
+Composition -> Change Composition Duration... and enter the number of
+bars you'd like.
 
 
 Notation and Matrix editing
@@ -318,26 +316,14 @@ problem for long segments, although for other practical reasons you're
 probably better off dividing long pieces into more manageable segments
 anyway.
 
-You can speed things up somewhat by switching to the RG21 font, which
-doesn't look as nice but is easier to draw (though there's not yet any
-way to make it the default, so you have to wait until the rendering
-has happened before you can switch to it -- oops).  You can also make
-scrolling smoother by switching off the chord-label ruler.
-
-There is a particular problem with Qt 2.3.0 and anti-aliased fonts: if
-you're using Qt 2.3.0 and have anti-aliased fonts enabled, rendering
-performance can be dramatically slower than it should be -- even if
-you aren't actually using any anti-aliased fonts in Rosegarden.  See
-the Rosegarden-4 README for more details, and consider switching off
-anti-aliasing or upgrading to Qt 3 (i.e. KDE 3).
 
 
 Playback and recording
 ----------------------
 
 
-aRts?  ALSA?  Huh?
-~~~~~~~~~~~~~~~~~~
+aRts?  ALSA?  JACK?  Huh?
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Right, it's like this.  Rosegarden can be built without any sound
 support ("configure --disable-sound"), with ALSA support (the default
@@ -351,24 +337,15 @@ of Linux.  (Some distributions also include it as an optional
 package.)  Rosegarden-4 supports ALSA version 0.9.0 (_not_ 0.5.x),
 with which it can play to outboard MIDI synths, onboard soundcard MIDI
 synths, and ALSA soft-synths, and can record from outboard MIDI
-devices.  Setup is easier than with aRts, at least once ALSA is
-installed.  For audio support with ALSA, you will also need to obtain
-and use JACK (<URL:http://jackit.sourceforge.net/>).
+devices.  For audio support, you will also need to obtain and use the
+JACK (<URL:http://jackit.sourceforge.net/>) audio system.
 
 aRts (<URL:http://www.arts-project.org/>) is the standard KDE sound
-server.  In theory, it supports audio, MIDI soft synths and outboard
-MIDI devices.  In practice the only way you're likely to get good
-performance from Rosegarden using aRts is if you have a small number
-of outboard hardware MIDI synths and they're all you want to use.
-aRts will not drive your soundcard's onboard MIDI synth, the standard
-soft synths sound ghastly, and audio/MIDI synchronisation doesn't work
-yet.  On the plus side, aRts has a potentially sophisticated
-soft-synth architecture if you want to develop your own synths, and it
-may be possible to use it on systems other than Linux.
+server.  In theory, Rosegarden can use aRts for audio, MIDI soft
+synths and outboard MIDI devices.  In practice, this support is highly
+unlikely to work for you.
 
-We strongly recommend you use ALSA unless you already know you prefer
-aRts or you simply can't get ALSA for your platform.  Every Rosegarden
-feature that works with aRts also works with ALSA, and then some.
+We strongly recommend you use ALSA and JACK.
 
 
 My soundcard has no built-in MIDI synth and I have no external MIDI devices.  How can I get sound?
@@ -414,6 +391,11 @@ it in ALSA input mode:
 
   $ timidity -iA
 
+You can also use Timidity to play to JACK with reasonably low latency,
+with some magic incantation like:
+
+  $ timidity -iA -Oj -B2,8
+
 In my experience it takes rather more CPU power than fluidsynth for
 rather lower-quality output, though I'm sure these things vary a lot
 depending on how the soundfont is made.
@@ -431,8 +413,8 @@ assigns the first available synth device on your soundcard for its
 default output Instrument when importing MIDI files.
 
 
-I'm using ALSA and I've selected a synth Instrument but I don't hear any sound
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I've selected a synth Instrument but I don't hear any sound
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you're hearing silence with a Synth device (say "Emuk10k1 Port 0" or
 "OPL 3") then make sure you've loaded a soundfont for your soundcard.
@@ -524,6 +506,22 @@ application itself.  Go to:
   Settings->Configure Rosegarden->Sequencer->General->Show detailed status
 
 
+What if I see Rosegarden itself in the client list when I start the sequencer?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Then you've probably got an old version of rosegardensequencer hanging
+around.  That can happen when Rosegarden exits abnormally or perhaps
+when there was a problem with the JACK server.  If you're having problems
+getting Rosegarden to play or record then close it down (and JACK too if
+you're running it) and look for any instances of rosegarden,
+rosegardensequencer or lt-rosegardensequencer in the process table.
+
+  $ ps -ef|grep rosegarden
+
+Kill any instances of rosegarden, rosegardensequencer or lt-rosegardensequencer
+that are still hanging around and try to restart Rosegarden.
+
+
 Playback is only happening once every second
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -546,20 +544,22 @@ tested it.  (They also forgot to include the help file, icon etc --
 it's not a very well-made package.)
 
 
-What if I see Rosegarden itself in the client list when I start the sequencer?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Only notes at the very start of the composition are played at all
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Then you've probably got an old version of rosegardensequencer hanging
-around.  That can happen when Rosegarden exits abnormally or perhaps
-when there was a problem with the JACK server.  If you're having problems
-getting Rosegarden to play or record then close it down (and JACK too if
-you're running it) and look for any instances of rosegarden,
-rosegardensequencer or lt-rosegardensequencer in the process table.
+If Rosegarden plays notes at time zero but then gets stuck and doesn't
+play anything else afterwards, you might have a non-running sequencer
+timer selected.
 
-  $ ps -ef|grep rosegarden
+Rosegarden can use one of a number of timing sources, and by default
+it tries to choose sensibly, but it can get confused especially if
+you're using JACK and you have JACK configured to output to a
+soundcard that is not the first one in your system.
 
-Kill any instances of rosegarden, rosegardensequencer or lt-rosegardensequencer
-that are still hanging around and try to restart Rosegarden.
+Try going to Settings -> Configure Rosegarden... -> Sequencer ->
+Synchronisation and changing the "Sequencer timer" setting from
+"(auto)" to one of the other options (system timer, RTC timer, or a
+PCM playback device timer).
 
 How do I get audio to work?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
