@@ -223,6 +223,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 void
 BankEditorDialog::slotPopulateDeviceBank(int deviceNo, int bank)
 {
+    _newBank = true;
+
     Rosegarden::MidiDevice *device = getMidiDevice(deviceNo);
 
     if (device)
@@ -250,6 +252,8 @@ BankEditorDialog::slotPopulateDeviceBank(int deviceNo, int bank)
         }
 
     }
+
+    _newBank = false;
 }
 
 void
@@ -481,10 +485,13 @@ BankEditorDialog::slotModifyBankName(const QString &label)
 
     if (_newBank) return;
 
-    m_bankList[m_bankCombo->currentItem()].name = qstrtostr(label);
-    m_bankCombo->changeItem(label, m_bankCombo->currentItem());
+    //m_bankCombo->changeItem(label, m_bankCombo->currentItem());
 
-    setModified(true);
+    if (label != strtoqstr(m_bankList[m_bankCombo->currentItem()].name))
+    {
+        m_bankList[m_bankCombo->currentItem()].name = qstrtostr(label);
+        setModified(true);
+    }
 }
 
 void
@@ -496,9 +503,14 @@ BankEditorDialog::slotModifyDeviceName(const QString &label)
     if (comboBox) return;
     */
 
-
-    m_deviceCombo->changeItem(label, m_deviceCombo->currentItem());
-    setModified(true);
+    if (_newBank) return;
+    
+    Rosegarden::DeviceList *devices = m_studio->getDevices();
+    if (label != strtoqstr((*devices)[m_deviceCombo->currentItem()]->getName()))
+    {
+        m_deviceCombo->changeItem(label, m_deviceCombo->currentItem());
+        setModified(true);
+    }
 }
 
 void

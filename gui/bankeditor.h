@@ -122,6 +122,7 @@ protected:
 
     QFrame                  *m_mainFrame;
 
+    std::vector<std::string>                 m_deviceList;
     std::vector<Rosegarden::MidiBank>        m_bankList;
     std::vector<Rosegarden::MidiProgram>     m_programList;
 
