@@ -859,6 +859,7 @@ void TempoSegmentMmapper::dump()
 
         eventTime = comp.getElapsedRealTime(tempoChange.first);
         MappedEvent* mappedEvent = new (bufPos) MappedEvent();
+        mappedEvent->setType(MappedEvent::Tempo);
         mappedEvent->setEventTime(eventTime);
         mappedEvent->setData1(tempoChange.second);
         
@@ -886,6 +887,7 @@ void TimeSigSegmentMmapper::dump()
 
         eventTime = comp.getElapsedRealTime(timeSigChange.first);
         MappedEvent* mappedEvent = new (bufPos) MappedEvent();
+        mappedEvent->setType(MappedEvent::TimeSignature);
         mappedEvent->setEventTime(eventTime);
         mappedEvent->setData1(timeSigChange.second.getNumerator());
         mappedEvent->setData2(timeSigChange.second.getDenominator());
