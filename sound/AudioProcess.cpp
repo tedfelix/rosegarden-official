@@ -427,6 +427,8 @@ AudioBussMixer::processBlocks()
 	    for (std::vector<InstrumentId>::iterator ii = instruments.begin();
 		 ii != instruments.end(); ++ii) {
 
+		if (m_instrumentMixer->isInstrumentEmpty(*ii)) continue;
+
 		RingBuffer<sample_t, 2> *rb =
 		    m_instrumentMixer->getRingBuffer(*ii, ch);
 		if (rb) {
@@ -475,6 +477,8 @@ AudioBussMixer::processBlocks()
 		} else {
 		    processedInstruments.insert(*ii);
 		}
+
+		if (m_instrumentMixer->isInstrumentEmpty(*ii)) continue;
 
 		if (m_instrumentMixer->isInstrumentDormant(*ii)) {
 
@@ -529,6 +533,8 @@ AudioBussMixer::processBlocks()
 
 	for (InstrumentId id = instrumentBase; 
 	     id < instrumentBase + instruments; ++id) {
+
+	    if (m_instrumentMixer->isInstrumentEmpty(id)) continue;
 
 	    if (processedInstruments.find(id) == processedInstruments.end()) {
 		for (int ch = 0; ch < 2; ++ch) {
@@ -968,14 +974,14 @@ AudioInstrumentMixer::processBlocks(bool forceFill, bool &readSomething)
 	std::cerr << "AudioInstrumentMixer::processBlocks(" << forceFill << ")" << std::endl;
 #endif
 
-    for (InstrumentId id = instrumentBase;
-	 id < instrumentBase + instrumentCount; ++id) {
-	m_bufferMap[id].empty = m_plugins[id].empty();
-    }
+    const AudioPlayQueue *queue = m_driver->getAudioQueue();
 
     for (InstrumentId id = instrumentBase;
 	 id < instrumentBase + instrumentCount; ++id) {
 	
+	m_bufferMap[id].empty =
+	    (m_plugins[id].empty() && !queue->haveFilesForInstrument(id));
+
 	MappedAudioFader *fader =
 	    m_driver->getMappedStudio()->getAudioFader(id);
 
@@ -1010,7 +1016,6 @@ AudioInstrumentMixer::processBlocks(bool forceFill, bool &readSomething)
 
     bool more = true;
     
-    const AudioPlayQueue *queue = m_driver->getAudioQueue();
     AudioPlayQueue::FileSet playing;
 
     RealTime blockDuration = RealTime::frame2RealTime(m_blockSize, m_sampleRate);
@@ -1022,18 +1027,14 @@ AudioInstrumentMixer::processBlocks(bool forceFill, bool &readSomething)
 	for (InstrumentId id = instrumentBase;
 	     id < instrumentBase + instrumentCount; ++id) {
 
+	    if (m_bufferMap[id].empty) {
+//!!!		processEmptyBlocks(id);
+		continue;
+	    }
+
 	    queue->getPlayingFilesForInstrument(m_bufferMap[id].filledTo,
 						blockDuration,
 						id, playing);
-
-	    if (m_bufferMap[id].empty && playing.size() > 0) {
-		m_bufferMap[id].empty = false;
-	    }
-
-	    if (m_bufferMap[id].empty) {
-		processEmptyBlocks(id);
-		continue;
-	    }
 	    
 	    if (processBlock(id, playing, forceFill, readSomething)) {
 		more = true;

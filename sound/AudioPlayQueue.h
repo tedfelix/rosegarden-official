@@ -105,6 +105,12 @@ public:
 				      FileSet &) const;
 
     /**
+     * Return true if at least one scheduled or unscheduled file is
+     * associated with the given instrument somewhere in the queue.
+     */
+    bool haveFilesForInstrument(InstrumentId instrumentId) const;
+
+    /**
      * Return a (shared reference to an) ordered set of all files on
      * the scheduled queue.
      */

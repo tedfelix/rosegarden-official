@@ -794,6 +794,8 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     for (InstrumentId id = instrumentBase;
 	 id < instrumentBase + instruments; ++id) {
 	
+	if (m_instrumentMixer->isInstrumentEmpty(id)) continue;
+
 	sample_t *instrument[2] = { 0, 0 };
 	sample_t peak[2] = { 0.0, 0.0 };
 
@@ -1464,6 +1466,7 @@ JackDriver::prebufferAudio()
     m_fileReader->fillBuffers(sliceStart);
 
     if (m_bussMixer->getBussCount() > 0) {
+	m_instrumentMixer->fillBuffers(sliceStart);
 	m_bussMixer->fillBuffers(sliceStart);
     } else {
 	m_instrumentMixer->fillBuffers(sliceStart);

@@ -30,6 +30,12 @@
 namespace Rosegarden {
 
 
+static inline unsigned int instrumentId2Index(InstrumentId id)
+{
+    if (id < AudioInstrumentBase) return 0;
+    else return (id - AudioInstrumentBase);
+}
+
 bool
 AudioPlayQueue::FileTimeCmp::operator()(const PlayableAudioFile &f1,
 					const PlayableAudioFile &f2) const
@@ -74,8 +80,9 @@ AudioPlayQueue::addScheduled(PlayableAudioFile *file)
     RealTime endTime = file->getStartTime() + file->getDuration();
 
     InstrumentId instrument = file->getInstrument();
+    unsigned int index = instrumentId2Index(instrument);
 
-    while (m_instrumentIndex.size() <= instrument) {
+    while (m_instrumentIndex.size() <= index) {
 	m_instrumentIndex.push_back(ReverseFileMap());
     }
 
@@ -85,7 +92,7 @@ AudioPlayQueue::addScheduled(PlayableAudioFile *file)
 
     for (int i = startTime.sec; i <= endTime.sec; ++i) {
 	m_index[i].push_back(file);
-	m_instrumentIndex[instrument][i].push_back(file);
+	m_instrumentIndex[index][i].push_back(file);
 	if (!file->isSmallFile()) {
 	    m_counts[i] += file->getTargetChannels();
 	    if (m_counts[i] > m_maxBuffers) {
@@ -131,9 +138,10 @@ AudioPlayQueue::erase(PlayableAudioFile *file)
     m_files.erase(fi);
 
     InstrumentId instrument = file->getInstrument();
+    unsigned int index = instrumentId2Index(instrument);
 
-    for (ReverseFileMap::iterator mi = m_instrumentIndex[instrument].begin();
-	 mi != m_instrumentIndex[instrument].end(); ++mi) {
+    for (ReverseFileMap::iterator mi = m_instrumentIndex[index].begin();
+	 mi != m_instrumentIndex[index].end(); ++mi) {
 
 	for (FileVector::iterator fi = mi->second.begin();
 	     fi != mi->second.end(); ++fi) {
@@ -254,16 +262,17 @@ AudioPlayQueue::getPlayingFilesForInstrument(const RealTime &sliceStart,
 
     playing.clear();
 
-    if (instrumentId >= m_instrumentIndex.size()) return; // nothing here
+    unsigned int index = instrumentId2Index(instrumentId);
+    if (index >= m_instrumentIndex.size()) return; // nothing here
 
     RealTime sliceEnd = sliceStart + sliceDuration;
 
     for (int i = sliceStart.sec; i <= sliceEnd.sec; ++i) {
 
 	ReverseFileMap::const_iterator mi
-	    (m_instrumentIndex[instrumentId].find(i));
+	    (m_instrumentIndex[index].find(i));
 
-	if (mi == m_instrumentIndex[instrumentId].end()) continue;
+	if (mi == m_instrumentIndex[index].end()) continue;
 
 	for (FileVector::const_iterator fi = mi->second.begin();
 	     fi != mi->second.end(); ++fi) {
@@ -324,6 +333,23 @@ AudioPlayQueue::getPlayingFilesForInstrument(const RealTime &sliceStart,
 		  << playing.size() << " files" << std::endl;
     }
 #endif
+}
+
+bool
+AudioPlayQueue::haveFilesForInstrument(InstrumentId instrumentId) const
+{
+    unsigned int index = instrumentId2Index(instrumentId);
+
+    if (index < m_instrumentIndex.size() &&
+	!m_instrumentIndex[index].empty()) return true;
+
+    for (FileList::const_iterator fli = m_unscheduled.begin();
+	 fli != m_unscheduled.end(); ++fli) {
+	PlayableAudioFile *file = *fli;
+	if (file->getInstrument() == instrumentId) return true;
+    }
+    
+    return false;
 }
 
 const AudioPlayQueue::FileSet &

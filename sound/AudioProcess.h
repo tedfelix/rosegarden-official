@@ -111,7 +111,7 @@ public:
 
     /**
      * A buss is "dormant" if every readable sample on every one of
-     * its buffers is zero.  It can therefore be safely ignored during
+     * its buffers is zero.  It can therefore be safely skipped during
      * playback.
      */
     bool isBussDormant(int buss) {
@@ -196,9 +196,19 @@ public:
     void emptyBuffers(RealTime currentTime = RealTime::zeroTime);
 
     /**
+     * An instrument is "empty" if it has no audio files, synths or
+     * plugins assigned to it, and so cannot generate sound.  Empty
+     * instruments can safely be ignored during playback.
+     */
+    bool isInstrumentEmpty(InstrumentId id) {
+	return m_bufferMap[id].empty;
+    }
+
+    /**
      * An instrument is "dormant" if every readable sample on every
-     * one of its buffers is zero.  It can therefore be safely ignored
-     * during playback.
+     * one of its buffers is zero.  Dormant instruments can safely be
+     * skipped rather than mixed during playback, but they should not
+     * be ignored (unless also empty).
      */
     bool isInstrumentDormant(InstrumentId id) {
 	return m_bufferMap[id].dormant;
@@ -244,7 +254,7 @@ protected:
 
     struct BufferRec
     {
-	BufferRec() : dormant(true), filledTo(RealTime::zeroTime), buffers() { }
+	BufferRec() : empty(true), dormant(true), filledTo(RealTime::zeroTime), buffers() { }
 	~BufferRec();
 
 	bool empty;
