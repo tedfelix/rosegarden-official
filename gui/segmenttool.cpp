@@ -961,11 +961,21 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
     if (m_segmentCopyMode && !m_segmentQuickCopyDone)
     {
-	SegmentQuickCopyCommand *command =
-            new SegmentQuickCopyCommand(m_currentItem->getSegment());
-        // addCommand to generate the new Segment
-        //
-        addCommandToHistory(command);
+	KMacroCommand *mcommand = new KMacroCommand
+	    (SegmentQuickCopyCommand::getGlobalName());
+
+	SegmentItemList::iterator it;
+	for (it = m_selectedItems.begin();
+	     it != m_selectedItems.end();
+	     it++)
+	{
+	    SegmentQuickCopyCommand *command =
+		new SegmentQuickCopyCommand(it->second->getSegment());
+
+	    mcommand->addCommand(command);
+	}
+
+        addCommandToHistory(mcommand);
 
 //        Rosegarden::Segment *newSegment = command->getCopy();
 

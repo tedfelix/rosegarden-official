@@ -130,6 +130,8 @@ public:
     // return pointer to new copy
     Rosegarden::Segment* getCopy() { return m_segment; }
 
+    static QString getGlobalName() { return i18n("Quick-Copy Segment"); }
+
 private:
     Rosegarden::Composition *m_composition;
     Rosegarden::Segment     *m_segmentToCopy;

@@ -153,7 +153,7 @@ SegmentEraseCommand::unexecute()
 // --------- Copy Segment ---------
 //
 SegmentQuickCopyCommand::SegmentQuickCopyCommand(Segment *segment):
-    KNamedCommand(i18n("Quick-Copy Segment")),
+    KNamedCommand(getGlobalName()),
     m_composition(segment->getComposition()),
     m_segmentToCopy(segment),
     m_segment(0),
