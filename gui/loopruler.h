@@ -60,7 +60,7 @@ public:
     virtual void paintEvent(QPaintEvent*);
 
 public slots:
-    void setLoopingMode(bool value) { m_loop = value; }
+    void setLoopingMode(bool value);
     void setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop);
 
 protected:
@@ -74,25 +74,22 @@ signals:
     // The three main functions that this class performs
     //
 
-    // Set the pointer position on mouse single click
-    //
+    /// Set the pointer position on mouse single click
     void setPointerPosition(Rosegarden::timeT);
 
-    // Set pointer position and start playing on double click
-    //
+    /// Set pointer position and start playing on double click
     void setPlayPosition(Rosegarden::timeT);
 
-    // Set a playing loop
-    //
+    /// Set a playing loop
     void setLoop(Rosegarden::timeT, Rosegarden::timeT);
 
 private:
     void drawBarSections(QPainter*, bool rightwards = true);
     void drawLoopMarker(QPainter*);  // between loop positions
 
-    int m_height;
+    int  m_height;
     bool m_invert;
-    int m_lastXPaint;
+    int  m_lastXPaint;
 
     RosegardenGUIDoc       *m_doc;
     Rosegarden::RulerScale *m_rulerScale;

@@ -244,9 +244,13 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
         emit setPointerPosition(m_rulerScale->getTimeForX(position));
 }
 
+void LoopRuler::setLoopingMode(bool value)
+{
+    m_loop = value;
+}
 
-void
-LoopRuler::setLoopMarker(Rosegarden::timeT startLoop, Rosegarden::timeT endLoop)
+void LoopRuler::setLoopMarker(Rosegarden::timeT startLoop,
+                              Rosegarden::timeT endLoop)
 {
     if (startLoop == endLoop) 
         return;
