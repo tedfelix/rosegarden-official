@@ -438,7 +438,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     slotSetInsertCursorPosition(0);
     slotSetPointerPosition(doc->getComposition().getPosition());
-    setCurrentSelection(0, false);
+    setCurrentSelection(0, false, true);
     slotUpdateInsertModeStatus();
     m_chordNameRuler->repaint();
     m_rawNoteRuler->repaint();
@@ -1732,11 +1732,14 @@ void NotationView::setCurrentSelectedNote(NoteActionData noteAction)
 }
 
 
-void NotationView::setCurrentSelection(EventSelection* s, bool preview)
+void NotationView::setCurrentSelection(EventSelection* s, bool preview,
+				       bool redrawNow)
 {
+    //!!! rather too much here shared with matrixview -- could much of
+    // this be in editview?
+
     if (!m_currentEventSelection && !s) return;
     NOTATION_DEBUG << "XXX " << endl;
-    setPainting(true);
 
     installProgressEventFilter();
 
@@ -1804,7 +1807,7 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 	    Segment &segment(s ? s->getSegment() :
 			     oldSelection->getSegment());
 
-	    if (preview) {
+	    if (redrawNow) {
 		// recolour the events now
 		getStaff(segment)->positionElements(std::min(startA, startB),
 						    std::max(endA, endB));
@@ -1816,15 +1819,10 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 		    push(std::min(startA, startB), std::max(endA, endB));
 	    }
 
-/*!!!
-	    getStaff(segment)->positionElements(std::min(startA, startB),
-						std::max(endA, endB));
-*/
-	    
 	} else {
 	    // do two refreshes, one for each -- here we know neither is null
 
-	    if (preview) {
+	    if (redrawNow) {
 		// recolour the events now
 		getStaff(oldSelection->getSegment())->positionElements(startA,
 								       endA);
@@ -1843,12 +1841,6 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 		     [getStaff(s->getSegment())->getId()]).
 		    push(startB, endB);
 	    }
-/*!!!
-	    getStaff(oldSelection->getSegment())->positionElements(startA,
-								   endA);
-
-	    getStaff(s->getSegment())->positionElements(startB, endB);
-*/
 	}
     }
 
@@ -1870,25 +1862,23 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview)
 
 //!!!    updateView();
     update();
-    setPainting(false);
 
     NOTATION_DEBUG << "XXX " << endl;
-    if (m_paintEventPending) {
-	NOTATION_DEBUG << "XXX REPAINT" << endl;
-	paintEvent(0);
-    }
 }
 
-void NotationView::setSingleSelectedEvent(int staffNo, Event *event)
+void NotationView::setSingleSelectedEvent(int staffNo, Event *event,
+					  bool preview, bool redrawNow)
 {
-    setSingleSelectedEvent(getStaff(staffNo)->getSegment(), event);
+    setSingleSelectedEvent(getStaff(staffNo)->getSegment(), event,
+			   preview, redrawNow);
 }
 
-void NotationView::setSingleSelectedEvent(Segment &segment, Event *event)
+void NotationView::setSingleSelectedEvent(Segment &segment, Event *event,
+					  bool preview, bool redrawNow)
 {
     EventSelection *selection = new EventSelection(segment);
     selection->addEvent(event);
-    setCurrentSelection(selection);
+    setCurrentSelection(selection, preview, redrawNow);
 }
 
 bool NotationView::canPreviewAnotherNote()
@@ -2140,8 +2130,6 @@ void NotationView::refreshSegment(Segment *segment,
 
     if (m_inhibitRefresh || m_documentDestroyed) return;
 
-    setPainting(true);
-
     m_document->getSequenceManager()->
 	setTemporarySequencerSliceSize(Rosegarden::RealTime(3, 0));
 
@@ -2202,15 +2190,9 @@ void NotationView::refreshSegment(Segment *segment,
     }
 
     setMenuStates();
-    setPainting(false);
 
     PRINT_ELAPSED("NotationView::refreshSegment (including update/GC)");
     NOTATION_DEBUG << "*** " << endl;
-
-    if (m_paintEventPending) {
-	NOTATION_DEBUG << "*** REPAINT" << endl;
-	paintEvent(0);
-    }
 }
 
 

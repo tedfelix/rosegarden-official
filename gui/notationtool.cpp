@@ -1129,13 +1129,15 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 		m_selectedStaff->getSegment()) {
 
 		m_selectionToMerge->addEvent(m_clickedElement->event());
-		m_nParentView->setCurrentSelection(m_selectionToMerge, false);
+		m_nParentView->setCurrentSelection(m_selectionToMerge,
+						   false, true);
 		m_selectionToMerge = 0;
 
 	    } else {
 
 		m_nParentView->setSingleSelectedEvent
-		    (m_selectedStaff->getId(), m_clickedElement->event());
+		    (m_selectedStaff->getId(), m_clickedElement->event(),
+		     false, true);
 	    }
 
 	} else if (m_selectedStaff) {
@@ -1284,7 +1286,7 @@ void NotationSelector::setViewCurrentSelection(bool preview)
 	selection->addFromSelection(m_selectionToMerge);
     }
 
-    m_nParentView->setCurrentSelection(selection, preview);
+    m_nParentView->setCurrentSelection(selection, preview, true);
 }
 
 NotationStaff *

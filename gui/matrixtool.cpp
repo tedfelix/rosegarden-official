@@ -237,6 +237,10 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
     delete m_currentElement;
     delete ev;
 
+    ev = command->getLastInsertedEvent();
+    if (ev) m_mParentView->setSingleSelectedEvent(m_currentStaff->getSegment(),
+						  ev);
+
     m_mParentView->update();
     m_currentElement = 0;
 }
@@ -352,7 +356,7 @@ void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
         //
         if (!m_selectionToMerge)
         {
-            m_mParentView->setCurrentSelection(0, false);
+            m_mParentView->setCurrentSelection(0, false, true);
             m_mParentView->canvas()->update();
         }
     }
@@ -461,7 +465,8 @@ void MatrixSelector::handleMouseRelease(timeT time, int height, QMouseEvent *e)
     if (m_clickedElement)
     {
         m_mParentView->setSingleSelectedEvent(m_currentStaff->getSegment(),
-                                              m_clickedElement->event());
+                                              m_clickedElement->event(),
+					      false, true);
         m_mParentView->canvas()->update();
         m_clickedElement = 0;
 
@@ -519,7 +524,7 @@ void MatrixSelector::setViewCurrentSelection()
         selection->addFromSelection(m_selectionToMerge);
     }
 
-    m_mParentView->setCurrentSelection(selection, true);
+    m_mParentView->setCurrentSelection(selection, true, true);
 }
 
 EventSelection* MatrixSelector::getSelection()
@@ -612,13 +617,14 @@ void MatrixMover::handleLeftButtonPress(Rosegarden::timeT,
                 newSelection = new EventSelection(m_currentStaff->getSegment());
 
             newSelection->addEvent(m_currentElement->event());
-            m_mParentView->setCurrentSelection(newSelection, true);
+            m_mParentView->setCurrentSelection(newSelection, true, true);
             m_mParentView->canvas()->update();
         }
         else
         {
             m_mParentView->setSingleSelectedEvent(m_currentStaff->getSegment(),
-                                                  m_currentElement->event());
+                                                  m_currentElement->event(),
+						  true);
             m_mParentView->canvas()->update();
         }
     }
@@ -797,9 +803,9 @@ void MatrixMover::handleMouseRelease(Rosegarden::timeT newTime,
             newSelection->addEvent(newEvent);
         }
 
-        m_mParentView->setCurrentSelection(0, false);
+        m_mParentView->setCurrentSelection(0, false, false);
         m_mParentView->addCommandToHistory(macro);
-        m_mParentView->setCurrentSelection(newSelection, false);
+        m_mParentView->setCurrentSelection(newSelection, false, false);
 
     }
 
@@ -846,13 +852,14 @@ void MatrixResizer::handleLeftButtonPress(Rosegarden::timeT,
                 newSelection = new EventSelection(m_currentStaff->getSegment());
 
             newSelection->addEvent(m_currentElement->event());
-            m_mParentView->setCurrentSelection(newSelection, true);
+            m_mParentView->setCurrentSelection(newSelection, true, true);
             m_mParentView->canvas()->update();
         }
         else
         {
             m_mParentView->setSingleSelectedEvent(m_currentStaff->getSegment(),
-                                                  m_currentElement->event());
+                                                  m_currentElement->event(),
+						  true);
             m_mParentView->canvas()->update();
         }
     }
@@ -947,9 +954,9 @@ void MatrixResizer::handleMouseRelease(Rosegarden::timeT newTime,
             newSelection->addEvent(newEvent);
         }
 
-        m_mParentView->setCurrentSelection(0, false);
+        m_mParentView->setCurrentSelection(0, false, false);
         m_mParentView->addCommandToHistory(macro);
-        m_mParentView->setCurrentSelection(newSelection, false);
+        m_mParentView->setCurrentSelection(newSelection, false, false);
     }
 
     m_mParentView->update();

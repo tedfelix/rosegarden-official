@@ -68,9 +68,7 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_accelerators(0),
     m_configDialogPageIndex(0),
     m_shiftDown(false),
-    m_controlDown(false),
-    m_paintCount(0),
-    m_paintEventPending(false)
+    m_controlDown(false)
 
 {
     initSegmentRefreshStatusIds();
@@ -182,30 +180,8 @@ EditViewBase::makeViewLocalPropertyPrefix()
     return buffer;
 }
 
-void
-EditViewBase::setPainting(bool painting)
-{
-/*!!!
-    if (painting) {
-	++m_paintCount;
-    } else if (m_paintCount > 0) {
-	--m_paintCount;
-    }
-*/
-}
-
 void EditViewBase::paintEvent(QPaintEvent* e)
 {
-    if (m_paintCount > 0) {
-	m_paintEventPending = true;
-	if (e) KMainWindow::paintEvent(e);
-	return;
-    } else {
-	m_paintEventPending = false;
-    }
-
-    setPainting(true);
-
     if (isCompositionModified()) {
       
         // Check if one of the segments we display has been removed
@@ -285,8 +261,6 @@ void EditViewBase::paintEvent(QPaintEvent* e)
     // been modified (it's sometimes useful to know whether e.g.
     // any time signatures have changed)
     setCompositionModified(false);
-
-    setPainting(false);
 }
 
 MultiViewCommandHistory *EditViewBase::getCommandHistory()

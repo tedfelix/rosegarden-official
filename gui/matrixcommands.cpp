@@ -46,6 +46,7 @@ MatrixInsertionCommand::MatrixInsertionCommand(Rosegarden::Segment &segment,
 MatrixInsertionCommand::~MatrixInsertionCommand()
 {
     delete m_event;
+    // don't want to delete m_lastInsertedEvent, it's just an alias
 }
 
 void MatrixInsertionCommand::modifySegment()
@@ -53,7 +54,8 @@ void MatrixInsertionCommand::modifySegment()
     MATRIX_DEBUG << "MatrixInsertionCommand::modifySegment()\n";
 
     Rosegarden::SegmentMatrixHelper helper(getSegment());
-    helper.insertNote(new Event(*m_event));
+    m_lastInsertedEvent = new Event(*m_event);
+    helper.insertNote(m_lastInsertedEvent);
 }
 
 MatrixEraseCommand::MatrixEraseCommand(Rosegarden::Segment &segment,

@@ -34,11 +34,14 @@ public:
                            Rosegarden::Event *event);
 
     virtual ~MatrixInsertionCommand();
+
+    Rosegarden::Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
     
 protected:
     virtual void modifySegment();
 
-    Rosegarden::Event* m_event;
+    Rosegarden::Event *m_event;
+    Rosegarden::Event *m_lastInsertedEvent; // an alias for another event
 };
 
 //------------------------------

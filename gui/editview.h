@@ -105,8 +105,23 @@ public:
      */
     void setActiveItem(ActiveItem* i) { m_activeItem = i; }
 
+    /**
+     * Set the current event selection.
+     *
+     * If preview is true, sound the selection as well.
+     *
+     * If redrawNow is true, recolour the elements on the canvas;
+     * otherwise just line up a refresh for the next paint event.
+     *
+     * (If the selection has changed as part of a modification to a
+     * segment, redrawNow should be unnecessary and undesirable, as a
+     * paint event will occur in the next event loop following the
+     * command invocation anyway.)
+     */
     virtual void setCurrentSelection(Rosegarden::EventSelection* s,
-				     bool preview = false) = 0;
+				     bool preview = false,
+				     bool redrawNow = false) = 0;
+
     Rosegarden::EventSelection* getCurrentSelection()
         { return m_currentEventSelection; }
 

@@ -162,23 +162,37 @@ public:
     bool areAnnotationsVisible() { return m_annotationsVisible; }
 
     /**
-     * Set the current event selection
-     * @see NotationSelector
+     * Set the current event selection.
+     *
+     * If preview is true, sound the selection as well.
+     *
+     * If redrawNow is true, recolour the elements on the canvas;
+     * otherwise just line up a refresh for the next paint event.
+     *
+     * (If the selection has changed as part of a modification to a
+     * segment, redrawNow should be unnecessary and undesirable, as a
+     * paint event will occur in the next event loop following the
+     * command invocation anyway.)
      */
     virtual void setCurrentSelection(Rosegarden::EventSelection*,
-				     bool preview = false);
+				     bool preview = false,
+				     bool redrawNow = false);
 
     /**
      * Set the current event selection to a single event
      */
     void setSingleSelectedEvent(int staffNo,
-				Rosegarden::Event *event);
+				Rosegarden::Event *event,
+				bool preview = false,
+				bool redrawNow = false);
 
     /**
      * Set the current event selection to a single event
      */
     void setSingleSelectedEvent(Rosegarden::Segment &segment,
-				Rosegarden::Event *event);
+				Rosegarden::Event *event,
+				bool preview = false,
+				bool redrawNow = false);
 
     /// Show and sound the given note
     void showPreviewNote(int staffNo, double layoutX,

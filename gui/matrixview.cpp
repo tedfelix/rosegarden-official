@@ -761,8 +761,12 @@ MatrixCanvasView* MatrixView::getCanvasView()
 }
 
 
-void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
+void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
+				     bool redrawNow)
 {
+    //!!! rather too much here shared with notationview -- could much of
+    // this be in editview?
+
     if (!m_currentEventSelection && !s)	{
 	updateQuantizeCombo();
 	return;
@@ -827,16 +831,43 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
             (!s || !oldSelection ||
              oldSelection->getSegment() == s->getSegment())) {
 
-            // the regions overlap: use their union and just do one reposition
-            Segment &segment(s ? s->getSegment() : oldSelection->getSegment());
-            getStaff(segment)->positionElements(std::min(startA, startB),
-                                                std::max(endA, endB));
+	    Segment &segment(s ? s->getSegment() :
+			     oldSelection->getSegment());
 
-        } else {
-            // do two repositions, one for each -- here we know neither is null
-            getStaff(oldSelection->getSegment())->positionElements(startA,
-                                                                   endA);
-            getStaff(s->getSegment())->positionElements(startB, endB);
+	    if (redrawNow) {
+		// recolour the events now
+		getStaff(segment)->positionElements(std::min(startA, startB),
+						    std::max(endA, endB));
+	    } else {
+		// mark refresh status and then request a repaint
+		segment.getRefreshStatus
+		    (m_segmentsRefreshStatusIds
+		     [getStaff(segment)->getId()]).
+		    push(std::min(startA, startB), std::max(endA, endB));
+	    }
+	    
+	} else {
+	    // do two refreshes, one for each -- here we know neither is null
+
+	    if (redrawNow) {
+		// recolour the events now
+		getStaff(oldSelection->getSegment())->positionElements(startA,
+								       endA);
+		
+		getStaff(s->getSegment())->positionElements(startB, endB);
+	    } else {
+		// mark refresh status and then request a repaint
+
+		oldSelection->getSegment().getRefreshStatus
+		    (m_segmentsRefreshStatusIds
+		     [getStaff(oldSelection->getSegment())->getId()]).
+		    push(startA, endA);
+		
+		s->getSegment().getRefreshStatus
+		    (m_segmentsRefreshStatusIds
+		     [getStaff(s->getSegment())->getId()]).
+		    push(startB, endB);
+	    }
         }
     }
 
@@ -1510,20 +1541,30 @@ MatrixView::getStaff(const Rosegarden::Segment &segment)
 
 
 void
-MatrixView::setSingleSelectedEvent(int staffNo, Rosegarden::Event *event)
+MatrixView::setSingleSelectedEvent(int staffNo, Rosegarden::Event *event,
+				   bool preview, bool redrawNow)
 {
-    setSingleSelectedEvent(getStaff(staffNo)->getSegment(), event);
+    setSingleSelectedEvent(getStaff(staffNo)->getSegment(), event,
+			   preview, redrawNow);
 }
 
 void
 MatrixView::setSingleSelectedEvent(Rosegarden::Segment &segment,
-                                   Rosegarden::Event *event)
+                                   Rosegarden::Event *event,
+				   bool preview, bool redrawNow)
 {
     setCurrentSelection(0, false);
 
     EventSelection *selection = new EventSelection(segment);
     selection->addEvent(event);
-    setCurrentSelection(selection, true);
+
+    //!!!
+    // this used to say
+    //   setCurrentSelection(selection, true)
+    // since the default arg for preview is false, this changes the
+    // default semantics -- test what circumstance this matters in
+    // and choose an acceptable solution for both matrix & notation
+    setCurrentSelection(selection, preview, redrawNow);
 }
 
 // A new selection has been acquired by a tool - set the appropriate

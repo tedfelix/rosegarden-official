@@ -269,8 +269,6 @@ protected:
     void setConfigDialogPageIndex(int p) { m_configDialogPageIndex = p; }
     int getConfigDialogPageIndex()       { return m_configDialogPageIndex; }
 
-    void setPainting(bool painting);
-
     //--------------- Data members ---------------------------------
     QString m_rcFileName;
 
@@ -301,9 +299,6 @@ protected:
 
     bool         m_shiftDown;
     bool         m_controlDown;
-
-    int          m_paintCount;
-    bool         m_paintEventPending;
 };
 
 #endif
