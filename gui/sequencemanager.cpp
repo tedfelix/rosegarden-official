@@ -732,7 +732,8 @@ SequenceManager::record()
     m_transport->MetronomeButton->setOn(comp.useRecordMetronome());
 
     // If we are looping then jump to start of loop and start recording,
-    // if we're not 
+    // if we're not take off the number of count-in bars and start 
+    // recording.
     //
     if(comp.isLooping())
         m_doc->setPointerPosition(comp.getLoopStart());
@@ -742,7 +743,6 @@ SequenceManager::record()
         startBar -= config->readUnsignedNumEntry("countinbars", 2);
         m_doc->setPointerPosition(comp.getBarRange(startBar).first);
     }
-
 
     // Some locals
     //

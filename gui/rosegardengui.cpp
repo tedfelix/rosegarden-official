@@ -414,7 +414,7 @@ void RosegardenGUIApp::setupActions()
                                     "rewind");
     m_rewindTransport->setGroup("transportcontrols");
 
-    m_recordTransport = new KAction(i18n("&Record"), 0, Key_End, this,
+    m_recordTransport = new KAction(i18n("&Record"), 0, Key_Space, this,
                                     SLOT(slotRecord()), actionCollection(),
                                     "record");
 
