@@ -21,7 +21,12 @@ A { text-decoration: none }
 <A HREF="chapter-2.html">Previous</A>
 <A HREF="chapter-4.html">Next</A>
 <HR>
-<H1><A NAME="3">3 The Studio</A></H1>
+<H1><A NAME="4">4 The Studio (deprecated)</A></H1>
+<P>(forking into ch. 4 to cover the basics, and into an appendix to
+ cover the more complicated aspects)</P>
+<P>
+<BR>
+<BR></P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Now that you
  have a general idea how Rosegarden works, now is a good time to think
  about telling Rosegarden something about the MIDI equipment you wish to
@@ -30,7 +35,7 @@ A { text-decoration: none }
  understanding of the concepts I am about to explain. If you are new to
  MIDI, or if anything in this chapter leaves you scratching your head,
  you might want to read through my MIDI Primer in Appendix A.</P>
-<H2><A NAME="3_1">3.1 What is a &quot;studio&quot;?</A></H2>
+<H2><A NAME="4_1">4.1 What is a &quot;studio&quot;?</A></H2>
 <P STYLE="margin-bottom: 0.2in">Every native Rosegarden composition
  (.rg) file contains a studio definition in addition to all the nuts and
  bolts stuff of music. This studio definition is a description of the
@@ -40,7 +45,7 @@ A { text-decoration: none }
  as soon as you get it configured correctly. It does remain with the
  file for life, and it is attached to the file, not to your
  configuration of Rosegarden as a whole.</P>
-<H3><A NAME="3_1_1">3.1.1 What is a &quot;device&quot;?</A></H3>
+<H3><A NAME="4_1_1">4.1.1 What is a &quot;device&quot;?</A></H3>
 <P>A &quot;device&quot; is a sort of imaginary virtual model of an individual
  piece of MIDI equipment. It encapsulates information about the
  capabilities of your equipment, and allows you to make use of those
@@ -48,7 +53,7 @@ A { text-decoration: none }
  virtual &quot;device&quot; and whatever characteristics you define here will be
  all it really knows about the physical equipment (or software) this
  virtual construct represents.</P>
-<H3><A NAME="3_1_2">3.1.2 autoload.rg</A></H3>
+<H3><A NAME="4_1_2">4.1.2 autoload.rg</A></H3>
 <P STYLE="margin-bottom: 0.2in">If you start Rosegarden with no file to
  open, it opens a default blank document, called<B> autoload.rg</B>.
  Initially, this will be the system default that was installed with
@@ -61,7 +66,7 @@ A { text-decoration: none }
  load an old document, or a document someone created in a different
  studio environment, you will probably have to manually adjust it to
  your current environment.</P>
-<H2><A NAME="3_2">3.2 Describing the Capabilities of the Equipment</A></H2>
+<H2><A NAME="4_2">4.2 Describing the Capabilities of the Equipment</A></H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">The first
  step in this process is to open the main Studio dialog.<B> Composition
  -&gt; Studio -&gt; Manage MIDI Devices...</B></P>
@@ -83,7 +88,7 @@ SRC="../pixmaps/studio-icon.png" WIDTH="31"> icon.</P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="307" NAME="Graphic1" SRC="../pixmaps/manage-devices-dialog.png"
 WIDTH="469"></P>
-<H3><A NAME="3_2_1">3.2.1 Connections</A></H3>
+<H3><A NAME="4_2_1">4.2.1 Connections</A></H3>
 <P>You might wonder about the strange names numbers you see in front of
  you in the Connection column. These provide you with a mechanism for
  telling Rosegarden what you have plugged into which jack on your
@@ -109,7 +114,7 @@ WIDTH="469"></P>
  internal or external devices. The only time I find myself frequently
  changing connections around is when dealing with software synths, as I
  will explain later on.</P>
-<H3><A NAME="3_2_2">3.2.2 Record Devices</A></H3>
+<H3><A NAME="4_2_2">4.2.2 Record Devices</A></H3>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Record devices are MIDI keyboards, virtual keyboards, MIDI guitars and
  the like. As record devices are rather less complicated, I will mention
@@ -120,7 +125,7 @@ WIDTH="469"></P>
  bother to name mine.</P>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  [Multiple inputs in testing, TBA]</P>
-<H3><A NAME="3_2_3">3.2.3 <B>Play Devices</B></A></H3>
+<H3><A NAME="4_2_3">4.2.3 <B>Play Devices</B></A></H3>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Play devices are where all the fun, and all the complexity is. They can
  be MIDI keyboards, sound modules, software synths, samplers, and pretty
@@ -133,9 +138,9 @@ WIDTH="469"></P>
  features from Rosegarden, you must tell Rosegarden about them, so it
  can add them to its virtual model of your equipment.</P>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
- (For more discussion of banks, programs and controllers, see the<A HREF="chapter-9.html">
+ (For more discussion of banks, programs and controllers, see the<A HREF="http://chapter-9.html/">
  MIDI Primer</A> in Appendix A.</P>
-<H3><A NAME="3_2_4">3.2.4 The Bank Editor</A></H3>
+<H3><A NAME="4_2_4">4.2.4 The Bank Editor</A></H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  To load or create sets of program or controller descriptions, click on
  the<B> Banks...</B> button to pop up the bank editor dialog. In this
@@ -160,7 +165,7 @@ WIDTH="469"></P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="340" NAME="Graphic4" SRC="../pixmaps/studio-bank-editor.png"
 WIDTH="356"></P>
-<H4><A NAME="3_2_4_1">3.2.4.1 Loading a Stock Set of Programs</A></H4>
+<H4><A NAME="4_2_4_1">4.2.4.1 Loading a Stock Set of Programs</A></H4>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If you're
  lucky, the growing Rosegarden Library already contains a set of bank
  and program definitions to suit your hardware. To try your luck, click
@@ -192,13 +197,13 @@ WIDTH="196"></P>
  import. You also have various choices about which bits to import, and
  whether to merge new banks into existing ones or replace them
  completely.</P>
-<H3>3.2.5 <A NAME="2_5_4"></A>Creating a List of Programs from Scratch</H3>
+<H3>4.2.5 <A NAME="2_5_4"></A>Creating a List of Programs from Scratch</H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  If none of the device models in the library are suitable, and you can't
  load the program names out of a soundfont, you can use an existing file
  from the library as a starting point, or you can create a new
  instrument definition completely from scratch.</P>
-<H4><A NAME="3_2_5_1">3.2.5.1 Naming the Device</A></H4>
+<H4><A NAME="4_2_5_1">4.2.5.1 Naming the Device</A></H4>
 <P>So that you can avoid confusion, you probably want to replace
  Rosegarden's default &quot;Anonymous MIDI Device 3&quot; type name with something
  more meaningful. Simply double click on the existing name and give your
@@ -206,7 +211,7 @@ WIDTH="196"></P>
 <P>Now that your &quot;Anonymous External Device&quot; has become a &quot;Roland SC-33&quot;
  or what have you, you probably want add a description of its available
  programs and controllers to Rosegarden's model.</P>
-<H4><A NAME="3_2_5_2">3.2.5.2 Why Name Programs and Controllers?</A></H4>
+<H4><A NAME="4_2_5_2">4.2.5.2 Why Name Programs and Controllers?</A></H4>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Depending on the capabilities of this device, it might not matter
  whether you define named program changes or not. However, if you do
@@ -217,7 +222,7 @@ WIDTH="196"></P>
  available for your use. If you don't let Rosegarden know that program
  number 97 can play something, it will never allow you set a track to
  use that program number.</P>
-<H4><A NAME="3_2_5_3">3.2.5.3 Gathering Information</A></H4>
+<H4><A NAME="4_2_5_3">4.2.5.3 Gathering Information</A></H4>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  The key to success here is having as much information about the
  equipment as possible. You need to know what programs it can use, and
@@ -227,7 +232,7 @@ WIDTH="196"></P>
  the slots and allow program changes to be transmitted. Beyond the
  essential fact that you must understand your equipment to describe it,
  there are really only two special cases worth mentioning here.</P>
-<H4><A NAME="3_2_5_4">3.2.5.4 Variations</A></H4>
+<H4><A NAME="4_2_5_4">4.2.5.4 Variations</A></H4>
 <P>Some equipment uses a method of sorting programs into banks in such a
  way that the programs in bank 0 0 are the standard General MIDI
  instruments, and the programs in the remaining banks are variations on
@@ -239,7 +244,7 @@ WIDTH="196"></P>
  list based on either the LSB or MSB value.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="52" NAME="Graphic6"
 SRC="../pixmaps/studio-variations.png" WIDTH="261"></P>
-<H4><A NAME="3_2_5_5">3.2.5.5 The Percussion Checkbox</A></H4>
+<H4><A NAME="4_2_5_5">4.2.5.5 The Percussion Checkbox</A></H4>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Finally, you may have noticed that Rosegarden only allows you one set
  of program changes per bank address. The exception to this rule is that
@@ -257,7 +262,7 @@ SRC="../pixmaps/studio-variations.png" WIDTH="261"></P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="47" NAME="Graphic7" SRC="../pixmaps/studio-percussion-box.png"
 WIDTH="227"></P>
-<H4><A NAME="3_2_5_6">3.2.5.6 Send in Your Device Descriptions</A></H4>
+<H4><A NAME="4_2_5_6">4.2.5.6 Send in Your Device Descriptions</A></H4>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  Once you've defined the names for your program changes, you can save
  the device definition to disk with the<B> Export...</B> button.</P>
@@ -272,7 +277,7 @@ WIDTH="227"></P>
  SC-33 device from scratch too, and it was very tedious and
  time-consuming. Especially since this stuff was a lot more buggy and
  incomprehensible back then. ;)</P>
-<H2><A NAME="3_3">3.3 Custom Controllers</A></H2>
+<H2><A NAME="4_3">4.3 Custom Controllers</A></H2>
 <P>Rosegarden should create a few basic default controllers for you. If
  you have special requirements, or if some of these controllers don't
  function on the piece of equipment for which you're defining the
@@ -294,7 +299,7 @@ SRC="../pixmaps/studio-controller-editor.png" WIDTH="273"></P>
  Instrument Parameters Box</B> in the main window, and the<B> position:</B>
  determines whether this controller will show up, and how it will be
  arranged relative to the other controllers.</P>
-<H2><A NAME="3_4">3.4 Default Document Properties</A></H2>
+<H2><A NAME="4_4">4.4 Default Document Properties</A></H2>
 <P>Before you make this document your default, you might want to have a
  look at some other document-specific settings. These aren't a part of
  the Studio, but they're saved in<B> autoload.rg</B>, and any new
@@ -302,7 +307,7 @@ SRC="../pixmaps/studio-controller-editor.png" WIDTH="273"></P>
  use<B> Composition -&gt; Edit -&gt; Document Properties</B>.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="186" NAME="Graphic3"
 SRC="../pixmaps/document-properties.png" WIDTH="339"></P>
-<H3><A NAME="3_4_1">3.4.1 Lilypond Headers</A></H3>
+<H3><A NAME="4_4_1">4.4.1 Lilypond Headers</A></H3>
 <P ALIGN="LEFT" STYLE="font-weight: medium">The About tab starts off
  with some default properties. You can modify or delete these, and you
  can add new properties. The four defaults will be translated into
@@ -310,7 +315,7 @@ SRC="../pixmaps/document-properties.png" WIDTH="339"></P>
  Lilypond headers, you can add them here by creating properties of that
  name, then binding your custom strings with them.. For example,
  &quot;instrument,&quot; &quot;dedication,&quot; or &quot;poet.&quot;</P>
-<H3><A NAME="3_4_2">3.4.2 Audio Directory</A></H3>
+<H3><A NAME="4_4_2">4.4.2 Audio Directory</A></H3>
 <P>From the Audio tab, you can configure a new directory for audio
  files. Rosegarden will use this path for recording new files, and it's
  the first place it will look when you import audio segments. By
@@ -320,10 +325,10 @@ SRC="../pixmaps/document-properties.png" WIDTH="339"></P>
 <P>You should get in the habit of creating a new audio directory for
  each document you create in which you intend to use audio segments, as
  I will detail in another chapter.</P>
-<H3><A NAME="3_4_3">3.4.3 Custom Colors</A></H3>
+<H3><A NAME="4_4_3">4.4.3 Custom Colors</A></H3>
 <P>Rosegarden can colorize segments and controllers. Custom colors are
  defined here.</P>
-<H2>3.5 <A NAME="2_5_5"></A>Saving Your Studio as the Default</H2>
+<H2>4.5 <A NAME="2_5_5"></A>Saving Your Studio as the Default</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Now that
  you've gotten your studio configured, you'll want to make it your
  default, so that you can avoid having to go through this entire ordeal

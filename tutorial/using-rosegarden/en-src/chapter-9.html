@@ -5,7 +5,7 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="OpenOffice.org 1.1.1  (Linux)">
 	<META NAME="CREATED" CONTENT="20040619;2243900">
-	<META NAME="CHANGED" CONTENT="20040625;23492400">
+	<META NAME="CHANGED" CONTENT="20040805;2541000">
 	<STYLE>
 	<!--
 		A:link { color: #ba2c2c }
@@ -14,11 +14,10 @@
 	</STYLE>
 </HEAD>
 <BODY LANG="en-US" LINK="#ba2c2c" VLINK="#ba2c2c" BGCOLOR="#ffffff" DIR="LTR">
-<H1>Appendix A:</H1>
-<H1>MIDI Primer</H1>
-<P>MIDI stands for Musical Instrument Digital Interface.  It is a
-simple serial protocol that electronic instruments and computers  can
-use to talk to each other.  MIDI-capable instruments vary enormously
+<H1>Appendix A: MIDI Primer</H1>
+<P>MIDI stands for Musical Instrument Digital Interface. It is a
+simple serial protocol that electronic instruments and computers can
+use to talk to each other. MIDI-capable instruments vary enormously
 in their capabilities and complexity, ranging from simple analog
 synthesizers to pipe organs to electronic guitars, and even to
 electronic woodwinds and brass instruments.</P>
@@ -27,45 +26,45 @@ but there are a several categories of characteristics that most of
 them share.</P>
 <H2>Channels</H2>
 <P>If you have a cable TV, you can receive more than one television
-channel over the same wire.  MIDI channels behave in a similar
-fashion.  Any one MIDI cable can be used to carry up to 16 channels
-of information.  Most common modern equipment is capable of receiving
-on all 16 of these channels simultaneously, and many types of
-equipment can also transmit on more than one channel.</P>
+channel over the same wire. MIDI channels behave in a similar
+fashion. Any one MIDI cable can be used to carry up to 16 channels of
+information. Most common modern equipment is capable of receiving on
+all 16 of these channels simultaneously, and many types of equipment
+can also transmit on more than one channel.</P>
 <P>These channels work something like the tracks in Rosegarden, which
-is why channel assignment is done at the track level.  If you set the
+is why channel assignment is done at the track level. If you set the
 reverb level for channel 3, this setting will only affect notes that
-are transmitted on channel 3.  Channels are similarly useful for
+are transmitted on channel 3. Channels are similarly useful for
 playing different instruments at the same time, over the same cable,
 or for playing using different voices on a single instrument.</P>
 <H2>Programs</H2>
-<P>Most common MIDI instruments are polyphonic and multi-timbral. 
+<P>Most common MIDI instruments are polyphonic and multi-timbral.
 This means that they can play more than one note at the same time,
-and they can play notes using different voices.  Many instruments try
+and they can play notes using different voices. Many instruments try
 to simulate a proverbial band-in-a-box by offering a range of sounds
 ranging from piano through the orchestra into synthesized and ethnic
-sounds.  These simulated instruments are called either &quot;programs&quot;
+sounds. These simulated instruments are called either &quot;programs&quot;
 or &quot;patches.&quot;</P>
 <P>In the most common MIDI standard, General MIDI (GM), instruments
-must be able to play using any of 127 different programs.  Music
+must be able to play using any of 127 different programs. Music
 written to be performed on one GM instrument should sound similar on
-any other.  The GM specification dictates that channel 10 will play
+any other. The GM specification dictates that channel 10 will play
 drum sounds, and it defines a standard arrangement of keys on the
 keyboard to represent different drums.</P>
 <H2>Banks</H2>
 <P>Beyond the GM standard, many instruments have banks of additional
-programs.  Each bank can contain an additional 127 programs.  The
-MIDI specification allows for a monumental number of different banks,
-but most instruments arrange banks in two common ways.  The two most
+programs. Each bank can contain an additional 127 programs. The MIDI
+specification allows for a monumental number of different banks, but
+most instruments arrange banks in two common ways. The two most
 common standards for this expansion of GM are called GS (Roland) and
-XG (Yamaha.)  The usual General MIDI programs are in the first bank,
-and the extra programs are found in additional banks.  Each bank has
-a unique identifying number using a combination of two parameters. 
-They are Least Significant Byte (LSB) and Most Significant Byte
-(MSB).  The standard GM bank on every GM-compliant synth has an
-LSB/MSB address of 0 0.</P>
+XG (Yamaha.) The usual General MIDI programs are in the first bank,
+and the extra programs are found in additional banks. Each bank has a
+unique identifying number using a combination of two parameters. They
+are Least Significant Byte (LSB) and Most Significant Byte (MSB). The
+standard GM bank on every GM-compliant synth has an LSB/MSB address
+of 0 0.</P>
 <H2>Controllers</H2>
-<P>MIDI allows for 127 controllers.  These controllers typically work
+<P>MIDI allows for 127 controllers. These controllers typically work
 at a channel level, and are used to control things such as pan (how
 far to the left or right the sound will play), volume (the overall
 maximum volume for the channel), pitch bend (used to simulate guitar
@@ -73,155 +72,54 @@ and harmonica bends, play quarter tones, as well as numerous other
 uses), reverb (makes notes on the channel sound like they're in a
 concert hall) and sustain (causes the note to keep playing unhampered
 until the sound finally dies away, like the sustain pedal on a
-piano).  There is enormous variability in this area, and you will
-find some equipment that ignores them all, while other instruments
-will use nearly all 127 of them.   You will need to know what kind of
+piano). There is enormous variability in this area, and you will find
+some equipment that ignores them all, while other instruments will
+use nearly all 127 of them. You will need to know what kind of
 controllers your equipment (or software synth) supports if you are to
 configure Rosegarden to make use of them, though it does come out of
 the box aware of a very limited subset of the most common
 controllers.</P>
 <H2>Hardware vs. Software; soundfonts</H2>
 <P>So far I have dealt primarily with &quot;real&quot; MIDI
-equipment.  Where do soundcards and soft synths fit in?</P>
+equipment. Where do soundcards and soft synths fit in?</P>
 <P>Some soundcards such as the Sound Blaster Live! and its relatives
-have a hardware synth built into the card.  It's synth is actually
+have a hardware synth built into the card. It's synth is actually
 four synths in one, accessed through four different ports, and each
 of them can receive 16 channels of information, and can play drums on
 channel 10 (making it possible to use four different drum kits
-simultaneously).  Many, probably even most other common soundcards
-and integrated audio solutions do not have such hardware MIDI
-playback capability.  Users who have these cards will need to run a
-software synth such as QSynth that uses the computer's resources to
-do what a card like the SB Live! can do in hardware.  (I explain the
-vagaries of getting QSynth up and running and cooperating with JACK
-in the chapter titled &quot;You Don't Know JACK.&quot;)</P>
-<P> The on-board synth on the SB Live! and QSynth both use the same
-kind of soundfonts, stored in .sf2 files, to provide programs.  Many
+simultaneously). Many, probably even most other common soundcards and
+integrated audio solutions do not have such hardware MIDI playback
+capability. Users who have these cards will need to run a software
+synth such as QSynth that uses the computer's resources to do what a
+card like the SB Live! can do in hardware. (I explain the vagaries of
+getting QSynth up and running and cooperating with JACK in the
+chapter titled &quot;You Don't Know JACK.&quot;)</P>
+<P>The on-board synth on the SB Live! and QSynth both use the same
+kind of soundfonts, stored in .sf2 files, to provide programs. Many
 soundfonts are configured to resemble either GM or XG, and the
 programs they contain are accessed the same way, as though QSynth
-were a GM or XG synth.  Other soundfonts use other arrangements, and
-there are few fast rules.  For example, I have a soundfont that only
+were a GM or XG synth. Other soundfonts use other arrangements, and
+there are few fast rules. For example, I have a soundfont that only
 plays a harpsichord, no matter what channel I use, and another one
-that plays drums, but only works on channel 10.  Rosegarden can read
+that plays drums, but only works on channel 10. Rosegarden can read
 most of this information from soundfonts, so soundfont users will
 have less to worry about when it comes time to set up their studio.</P>
 <H2>The Odd Ducks</H2>
 <P STYLE="font-style: normal; font-weight: medium">A great deal of
-the equipment out there falls into none of these categories.  Pipe
-organs are especially bizarre creatures from what I hear.  Older
-synths from the '80s tend to receive on fewer than 16 channels.  Some
-synths are not multi-timbral, and some are monophonic.  Many pieces
-of equipment just don't have any sort of program/patch system that
-lends itself to referring to programs by name, so it's more useful to
-use numbers instead.  There are also software synths that don't seem
-to react to program changes at all, such as ZynAddSubFX and Hydrogen.</P>
+the equipment out there falls into none of these categories. Pipe
+organs are especially bizarre creatures from what I hear. Older
+synths from the '80s tend to receive on fewer than 16 channels. Some
+synths are not multi-timbral, and some are monophonic. Many pieces of
+equipment just don't have any sort of program/patch system that lends
+itself to referring to programs by name, so it's more useful to use
+numbers instead. There are also software synths that don't seem to
+react to program changes at all, such as ZynAddSubFX and Hydrogen.</P>
 <P><SPAN STYLE="font-weight: medium"><SPAN STYLE="font-style: normal">You
 need to understand and be aware of the capabilities of whatever
-you're using before you can configure your studio effectively.  The
+you're using before you can configure your studio effectively. The
 best advice for is to read the supplied documentation and see what
-its capabilities are.  Documentation for used MIDI equipment can
-frequently be found online.  Of course, when all else fails, you're
+its capabilities are. Documentation for used MIDI equipment can
+frequently be found online. Of course, when all else fails, you're
 left with trial and error.</SPAN></SPAN></P>
-<H1><A NAME="6"></A>Appendix B:</H1>
-<H1>Starting and Routing Audio Through JACK</H1>
-<P>In order to make use of Rosegarden's audio features, you will need
-to run JACK. 
-</P>
-<P>JACK is short for the &ldquo;Jack Audio Connection Kit.&rdquo; 
-JACK is a flexible audio server that allows its client applications
-to share the audio hardware seamlessly, and to share a common
-transport.  It provides flexible mechanisms for routing inputs and
-outputs to and from client applications using a jack-and-cable
-metaphor.  It is geared toward the audio professional who wants to
-get the lowest possible latency and the best possible performance out
-of his or her hardware, but normal humans can sometimes coax it into
-working without too arduous an ordeal.</P>
-<P>I want everyone to know up front that I am not a Linux audio
-hacker. I don't know how to get the ultimate low latency performance
-out of my equipment, and I can't tell you how to take advantage of
-any of JACK's more exotic capabilities. If I can run as many JACK
-applications as I want, and play as many streams of audio as I want
-without dropouts and distortions, I feel like I have accomplished
-enough. After a great deal of frustration, I finally achieved an
-acceptable plateau of understanding, and I'm staying put. You will
-have to turn to some other source if you wish to be lead beyond the
-level of understanding I have attained.</P>
-<P>Most notably, I am running all of these things as a regular user. 
-I patched and compile a kernel, but after I booted it, I was unable
-to obtain any better performance than what I had been able to achieve
-as a user.  That makes me a total failure as a Linux audio hacker,
-and I freely admit that.</P>
-<H2>Starting and Tweaking JACK</H2>
-<P>The simplest way to control your JACK server is to use <B>qjackctl</B>.
-It takes a lot of the sting out of the process, and presents you with
-a nice interface to show you how things are going. It is, of course,
-not a part of Rosegarden, and you will need to install it separately.</P>
-<P ALIGN=CENTER><IMG SRC="../pixmaps/qjackctl-overview.png" NAME="Graphic1" ALIGN=BOTTOM WIDTH=393 HEIGHT=78 BORDER=0></P>
-<H3>The Evil XRUN</H3>
-<P ALIGN=LEFT STYLE="font-weight: medium">In the above example, you
-see what it's generally supposed to look like. Sometimes getting it
-to play nice is no mean feat. Notice in particular that most elusive
-of conditions: I have no xruns!</P>
-<P ALIGN=CENTER><IMG SRC="../pixmaps/JACK-no-xruns.png" NAME="Graphic3" ALIGN=BOTTOM WIDTH=112 HEIGHT=69 BORDER=0></P>
-<P ALIGN=LEFT STYLE="font-weight: medium">You don't want to see
-anything else show up in this portion of qjackctl's display. These
-&quot;xruns&quot; are JACK's way of telling you that it isn't happy.
-They cause audio dropouts and bad performance.  They will make
-Rosegarden whine constantly about how your &quot;audio subsystem is
-losing resolution.&quot;  Your goal in tweaking JACK is to achieve
-the lowest latency possible while preventing xruns.</P>
-<P ALIGN=LEFT STYLE="font-weight: medium">At the other extreme, I
-have intentionally started JACK with parameters I know to deliver
-poor results, and I have taxed the system by running too many things
-at once, playing too many big audio files at the same time, and so
-forth. I produced this hideous outcome in short order:</P>
-<P ALIGN=CENTER><IMG SRC="../pixmaps/JACK-know-xruns.png" NAME="Graphic4" ALIGN=BOTTOM WIDTH=113 HEIGHT=64 BORDER=0></P>
-<P ALIGN=LEFT STYLE="font-weight: medium">You never want to see this
-much red. Seeing any red at all is really unacceptable.</P>
-<H3>Configuring the JACK Server</H3>
-<P ALIGN=LEFT STYLE="font-weight: medium">To change how your JACK
-server is configured, use the <B>Setup</B> button. Here you can see
-the settings that finally worked for me with my SB Live!. These
-settings are pure magic. I've run JACK for days on end without a
-single xrun ever. I hope they work as well for you. If not, I'm
-afraid the best thing for you do is play with the &quot;Frames/Period&quot;,
-&quot;Sample Rate&quot; and &quot;Periods/Buffer&quot; settings.
-Start JACK with the <B>Start</B> button, see how things go, and then
-stop it and come back to play with these settings some more until you
-find the most acceptable combination. Watch the &quot;Latency:&quot;
-figure in the bottom corner. You want to keep this as low as
-possible. If you have high latency here, then any software synths
-that play through JACK will have horrible playback problems.</P>
-<P ALIGN=CENTER><IMG SRC="../pixmaps/qjackctl-silvan.png" NAME="Graphic2" ALIGN=BOTTOM WIDTH=290 HEIGHT=211 BORDER=0></P>
-<P ALIGN=LEFT STYLE="font-weight: medium">If you were running
-Rosegarden before starting JACK, you'll need to close Rosegarden and
-restart it in order to make its audio features available. I will
-cover Rosegarden's audio features in depth in the next chapter. For
-now we are only concerned with how to get Rosegarden to cooperate
-with other JACK-enabled applications.</P>
-<H2>Using Rosegarden with QSynth</H2>
-<P>Many Rosegarden users find themselves without any way to play MIDI
-in Linux.  Many soundcards have Windows drivers that provide a MIDI
-emulation layer transparently, and they are never even aware that
-their hardware has no built-in capability to play MIDI.  When I made
-the move to Linux myself, my Sound Blaster PCI 128 (ens1371) was a
-shining example of just such a card.  I had no idea that its on-board
-synth was actually just the Windows driver.  Many cheap integrated
-audio solutions such as those found on inexpensive motherboards and
-laptops fall into the same category.</P>
-<P>Fortunately, there's a simple remedy to all of these problems, and
-its name is QSynth.  QSynth provides convenient controls for
-configuring and adjusting various parameters, including a soundfont
-manager, 
-</P>
-<H2>Using Rosegarden with Hydrogen</H2>
-<H2>Using Rosegarden with ZynAddSubFX</H2>
-<H1>Appendix C:</H1>
-<H1>Common Problems</H1>
-<H2>I Can't Hear Anything!</H2>
-<H2>How Do I Control My SB Live!'s Ridiculous Mixer?!</H2>
-<H2>My Sofware Synths Sound Horrible through JACK!</H2>
-<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in"><BR><BR>
-</P>
 </BODY>
 </HTML>

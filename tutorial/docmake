@@ -104,12 +104,12 @@ case $1 in
     "all") 
     		web en
 		pdf en
-		web de
-		pdf de
+#		web de
+#		pdf de
 	        Put using-rosegarden/en/using-rosegarden.pdf
-		Put using-rosegarden/de/arbeiten-mit-rosegarden.pdf
+#		Put using-rosegarden/de/arbeiten-mit-rosegarden.pdf
 		echo Attempting an automatic CVS commit...
-	        cvs -f commit -m "* automatic commit by $0" '.' 
+	        cvs -f commit -m "* automatic commit by $*" '.' 
 	;;
     *) Usage
     	;;

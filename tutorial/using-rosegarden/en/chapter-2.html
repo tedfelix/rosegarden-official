@@ -21,35 +21,299 @@ A { text-decoration: none }
 <A HREF="chapter-1.html">Previous</A>
 <A HREF="chapter-3.html">Next</A>
 <HR>
-<H1><A NAME="2">2 A First Look</A></H1>
-<H2><A NAME="2_1">2.1 Before You Begin</A></H2>
-<P>Before you start Rosegarden, you might want to make sure your
- configuration is in order. Many users have found that Rosegarden was
- unable to produce any sound out of the box.</P>
-<P>If you are interested in working with MIDI, you should consider a few
- questions. Do you have a MIDI keyboard attached to your computer? Does
- your soundcard have an internal synth? Do you have it working
- correctly? Are you going to have to run a software synth such as
- QSynth? Can you play MIDI files (<B>.mid)</B>
+<H1><A NAME="2">2 Producing Sound</A></H1>
+<P>Many users have written to ask why they are unable to get Rosegarden
+ to make any noise. It is the most common question asked on the
+ rosegarden-user mailing list by far, and is especially troublesome for
+ those newly migrating to Linux from Windows. Before we start Rosegarden
+ for the first time, I want to explain what is necessary to pave the
+ way, and have a good first experience. Some of you already know all
+ this, and those of you who do are invited to jump ahead to the next
+ chapter, where the interesting part begins.</P>
+<P>The topic of sound covers two distinct areas that may or may not be
+ codependent, depending on the hardware and software you have available.
+ One the one hand, there are several requirements that must be met in
+ order to play MIDI with Rosegarden, and on the other, it's necessary to
+ get the JACK server up and running reliably in order to make use of
+ Rosegarden's audio features. A working JACK server is also required to
+ play MIDI with synth plugins, or to play more than one ALSA software
+ synth at a time. Getting Rosegarden to make noise can be a complicated
+ business, but hopefully I can help you deal with whatever set of
+ circumstances you have before you. I cannot, however, cover every
+ detail of getting every card working with every distribution. I'm
+ afraid I have to leave some questions unanswered, lest this chapter
+ become a book unto itself.</P>
+<P>Here is a roadmap showing all the possible ways to produce sound with
+ Rosegarden at a glance. It's quite daunting, I know, but I hope I can
+ help you make sense of it:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="505" NAME="Graphic16"
+SRC="../pixmaps/sound-diagram-master.jpg" WIDTH="530"></P>
+<H2><A NAME="2_1">2.1 Playing MIDI</A></H2>
+<P>MIDI under Linux is quite a complicated subject. The available
+ hardware falls into three broad categories, each with its own special
+ considerations.<FONT COLOR="#0000ff"> External MIDI hardware</FONT>,<FONT
+COLOR="#5c8526"> internal hardware with ALSA support</FONT>, and
+ internal hardware without ALSA support. The latter category splits into<FONT
+COLOR="#9966cc"> ALSA soft synths</FONT> and<FONT COLOR="#5e11a6"> synth
+ plugins</FONT>, which are similar, but slightly different.</P>
+<H3><A NAME="2_1_1">2.1.1 External MIDI Interfaces</A></H3>
+<P>By far the least complicated, and most expensive way to play MIDI
+ under Linux is to use real MIDI equipment. This can include keyboards,
+ sound modules, and perhaps even MIDI guitars. A wide range of equipment
+ is available for this purpose, ranging from comparatively inexpensive
+ consumer keyboards to professional quality gear. The cost ranges from
+ hundreds to thousands of dollars however, and this is not the way to go
+ unless you are serious about MIDI.</P>
+<P>If you're fortunate enough to have such equipment, then you probably
+ already have some idea how to hook it up to your computer. If the
+ equipment has the ability to produce sound on its own, as some MIDI
+ keyboards do, then you may wish to use those speakers for MIDI
+ playback. If your MIDI equipment has no speakers, or if you intend to
+ record the audio output from this equipment, you may wish to connect
+ the audio output from your keyboard or sound module to an audio input
+ jack on your soundcard. This will allow you to route everything through
+ the<FONT COLOR="#ff8080"> soundcard's mixer</FONT>. There are several
+ choices for external MIDI interfaces.</P>
+<H4><A NAME="2_1_1_1">2.1.1.1 Joystick Port MIDI Adapters</A></H4>
+<P>The simplest, least expensive route is the joystick port MIDI
+ adapter. These are found on many common, low-end soundcards, such as
+ the Sound Blaster PCI 128 (snd-ens1371). It can be somewhat difficult
+ to obtain a suitable Y-cable or MIDI box to connect to these things,
+ but after having obtained one, all that remains is to connect your
+ equipment using standard 5-pin DIN MIDI cables. With the snd-ens1371
+ driver, and those for many similar cards, it's only a matter of making
+ sure the<B> snd-seq-midi</B> and<B> snd-rawmidi</B> drivers are loaded
+ (using whatever mechanism your particular distribution provides for
+ that function.)</P>
+<H4><A NAME="2_1_1_2">2.1.1.2 Midi Port Cards</A></H4>
+<H4><A NAME="2_1_1_3">2.1.1.3 USB MIDI Interfaces</A></H4>
+<H3><A NAME="2_1_2">2.1.2 MIDI without External Hardware</A></H3>
+<P>For those without external hardware to use, there are two remaining
+ categories. A few soundcards have built-in MIDI infrastructure that
+ ALSA can use. Everyone else will have to use some kind of software
+ synth.</P>
+<H4><A NAME="2_1_2_1">2.1.2.1 Cards with Synth Support under ALSA</A></H4>
+<P>This is the next easiest way to get MIDI working. So far as I know,
+ this category only applies to those with soundcards based on an Emu
+ chipset, such as the Sound Blaster Live!/Audigy series (snd-emu10k1),
+ and the AWE 32/64 (snd-emu8000). I have a Sound Blaster Live! Value
+ Edition myself, and can report that it's easy to get working, and it
+ sounds reasonably decent.</P>
+<H5>2.1.2.1.1 SB Live! Modules</H5>
+<P>First, you'll need to ensure you have the proper kernel modules
+ loaded, and that you are using the ALSA modules, which have &quot;snd&quot; in
+ the name. I have the following modules loaded for my own SB Live!:</P>
+<P STYLE="margin-left: 0.79in"><FONT FACE="courier 10 pitch">snd-seq-oss
+ snd-seq-midi snd-emu10k1-synth snd-emux-synth</FONT></P>
+<P STYLE="margin-left: 0.79in"><FONT FACE="courier 10 pitch">
+snd-seq-midi-emul snd-seq-virmidi snd-seq-midi-event snd-seq</FONT></P>
+<P STYLE="margin-left: 0.79in"><FONT FACE="courier 10 pitch">snd-emu10k1
+ snd-pcm-oss snd-mixer-oss snd-pcm snd-timer</FONT></P>
+<P STYLE="margin-left: 0.79in"><FONT FACE="courier 10 pitch">snd-hwdep
+ snd-util-mem snd-page-alloc snd-ac97-codec</FONT></P>
+<P STYLE="margin-left: 0.79in"><FONT FACE="courier 10 pitch">snd-rawmidi
+ snd-seq-device snd soundcore</FONT></P>
+<H5>2.1.2.1.2 Set the Mixer Volume</H5>
+<P>Next, you'll need to check to make sure you've turned up your mixer
+ volumes. I will cover this card's rather complicated mixer in detail
+ when I talk about managing various inputs and outputs for the purpose
+ of audio recording. For the moment, it should be sufficient to ensure
+ the &quot;Music&quot; channel volume is turned up. My mixer of preference is<A HREF="http://www.suse.de/~mana/kalsatools.html">
+ KAmix</A>. Unfortunately, it is not widely available outside of SuSE,
+ and you may have to compile it yourself. It isn't the prettiest mixer,
+ but it's the only one I've found that lets me control my SB Live!
+ consistently and efficiently to get the results I want.</P>
+<H5>2.1.2.1.3 Load a SoundFont</H5>
+<P>Finally, you'll need to load a soundfont into the card. These cards
+ use .sf2 soundfonts that are readily available. I'm not aware of a
+ soundfont free enough to be included with any distribution of Linux, so
+ you will most likely have to obtain one from the web, or perhaps from
+ the CDs that came with your soundcard. I have had good luck with
+ soundfonts from the<A HREF="http://www.personalcopy.com/linuxfiles.htm">
+ Personal Copy</A> website, but I make no warranty expressed or implied
+ about the suitability or legality of their soundfonts, or any other
+ soundfonts you might obtain on the web for any particular purpose.</P>
+<P>Once you have obtained a soundfont, you need to load it into the
+ card. There isn't currently any user-friendly way of managing this. I'm
+ developing a utility for this very purpose, but I did not have time to
+ finish it before releasing this book, and so I will make no reference
+ to it. In the meantime, your two choices are to run the command line
+ utility<B> <FONT FACE="courier 10 pitch">asfxload</FONT></B>, or to
+ configure Rosegarden to load a soundfont for you at startup, via<B>
+ Settings -&gt; Configure Rosegarden -&gt; Sequencer -&gt; General</B></P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="280" NAME="Graphic17"
+SRC="../pixmaps/configure-soundfont.png" WIDTH="532"></P>
+<P ALIGN="CENTER">
+<BR>
+<BR></P>
+<H4><A NAME="2_1_2_2">2.1.2.2 Cards without Synth Support under ALSA</A></H4>
+<P>This is really the &quot;everything else&quot; category. It includes too many
+ soundcards to list, each with its own set of modules. The Sound Blaster
+ PCI and Ensoniq AudioPCI cards (ens-1370, ens-1371, ens-1373), and
+ integrated snd-intel8x0 and snd-via82xx are probably the most common,
+ but soundcards that fall into this category are legion. The process for
+ getting them to play MIDI is similar in all cases.</P>
+<H5>2.1.2.2.1 Check your Modules</H5>
+<P>First, you need to ensure you have the necessary ALSA MIDI
+ infrastructure by loading the following modules in addition to whatever
+ other modules you require for your particular hardware:</P>
+<P STYLE="margin-left: 0.79in"><FONT FACE="courier 10 pitch">
+snd-seq-midi snd-seq-virmidi snd-seq-midi-event snd-seq</FONT></P>
+<P STYLE="margin-left: 0.79in"><FONT FACE="courier 10 pitch">snd-timer
+ snd-rawmidi snd soundcore</FONT></P>
+<P><I>(The above list was extrapolated from the previous SB Live!
+ example, and may contain modules that won't actually load with your
+ particular hardware. If loading one or more of the above modules fails,
+ don't worry about it unless you later find your MIDI subsystem doesn't
+ work.)</I></P>
+<H5>2.1.2.2.2 QSynth</H5>
+<P>The least complicated way to get one of these cards to play MIDI is
+ to use<A HREF="http://qsynth.sourceforge.net/"> QSynth</A>. It is a
+ simple to use ALSA soft synth that takes MIDI data as input and uses<B>
+ .sf2</B> format soundfonts to produce audio output. In its simplest
+ configuration, it can use ALSA for audio output, avoiding the need to
+ run JACK. If you already need or want to run JACK, it can connect its
+ output to JACK instead. In this configuration, you can also use a
+ variety of other ALSA soft synths such as<A HREF="http://hydrogen.sourceforge.net/">
+ Hydrogen</A> and<A HREF="http://zynaddsubfx.sourceforge.net/">
+ ZynAddSubFX</A>, all sharing the same audio output. QSynth is the most
+ useful for general music production, and so it is my focus here.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="117" NAME="Graphic19"
+SRC="../pixmaps/qsynth-main.png" WIDTH="532"></P>
+<H6>2.1.2.2.2.1 Configure the Audio Driver</H6>
+<P>The first decision you need to make is whether to use ALSA or JACK
+ for output. I will cover starting and configuring JACK in detail in a
+ moment. No matter which option you choose, both are configured via the<B>
+ Setup</B>
 <!--SPAN STYLE="font-weight: medium"-->
-? If you don't know the
- answers to these questions, you might want to turn to<A HREF="chapter-9.html">
- &quot;MIDI Primer&quot;</A> and familiarize yourself with these basics.</P>
-<P> If you play to use Rosegarden as an audio sequencer, you might do
- well to turn to<A HREF="chapter-7.html"> &quot;Starting and Routing Audio
- Through JACK&quot;</A> to learn about starting the JACK audio server, and
- getting it to cooperate with any software synths you wish to run. The
- audio server must be running before you start Rosegarden in order for
- Rosegarden's audio features to be enabled.</P>
-<P>After working through the material in these two appendices, you
- should be ready to come back here and get started in earnest.</P>
-<P>Or, of course, you can jump in headlong, fire this thing up, and take
- it for a spin.</P>
-<H2>2.2 <A NAME="2_1"></A>The Main Window</H2>
+ button. In this example, I'm using JACK. Take special note
+ that I have adjusted the sample rate to match the sample rate I'm using
+ with JACK, which is 48,000 Hz (for reasons I will explain directly.)
+ Also note that I have checked<B> [x] Auto Connect JACK Outputs</B>.
+ This allows QSynth to make its own default connection with JACK, which
+ is very convenient.</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+HEIGHT="342" NAME="Graphic18" SRC="../pixmaps/qsynth-audio-setup.png" WIDTH="532"></P>
+<H6>2.1.2.2.2.2 Loading a SoundFont</H6>
+<P>Finally, it's necessary to load at least one soundfont. These are the
+ same<B> .sf2</B> soundfonts used by the SB Live! series of cards, and
+ they are loaded via a different tab on the same setup page.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="343" NAME="Graphic20"
+SRC="../pixmaps/qsynth-soundfonts.png" WIDTH="532"></P>
+<H5>2.1.2.2.3 SynthPlugins</H5>
+<P>It is also possible to play using synth plugins. There is a
+ FluidSynth-DSSI plugin that provides essentially the same functionality
+ as QSynth, except that it's integrated directly into Rosegarden. I will
+ describe it in detail when I talk about assigning instruments to
+ tracks, because its configuration and use is entirely internal to
+ Rosegarden. For the moment it is sufficient to know that it exists, and
+ that it requires a working JACK server in order to function.</P>
+<H2><A NAME="2_2">2.2 Playing Audio</A></H2>
+<P>In order to play audio you will need to run JACK.</P>
+<P>JACK is short for the Jack Audio Connection Kit. JACK is a flexible
+ audio server that allows its client applications to share the audio
+ hardware seamlessly, and to share a common transport. It provides
+ flexible mechanisms for routing inputs and outputs to and from client
+ applications using a jack-and-cable metaphor. It is geared toward the
+ audio professional who wants to get the lowest possible latency and the
+ best possible performance out of his or her hardware, but professional
+ or not, it's something you need to come to terms with JACK if you want
+ to play audio with Rosegarden.</P>
+<P>Some of you may have heard of patching kernels, running with
+ &quot;capabilities,&quot; and other arcane magic associated with Linux audio. All
+ of that really<B> is</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ necessary to get the best performance out of
+ JACK, I'm afraid. It's a very complicated business that I don't
+ understand very well myself. I fear I must leave you in the hands of<A HREF="http://www.agnula.org/">
+ AGNULA</A> and perhaps the<A HREF="http://www.linuxdj.com/audio/lad/subscribeall.php3">
+ Linux Audio Users</A> list for more information if you require more
+ performance than you can by following these simple instructions to get
+ JACK running as an ordinary user on an ordinary kernel.</P>
+<H3><A NAME="2_2_1">2.2.1 Starting and Tweaking JACK</A></H3>
+<P>The simplest way to control your JACK server is to use<A HREF="http://qjackctl.sourceforge.net/">
+
+<!--SPAN STYLE="font-weight: medium"-->
+ <FONT FACE="courier 10 pitch">qjackctl</FONT></A>. It is a very useful
+ utility that provides a convenient way to start and stop your JACK
+ server, to play with various configuration parameters to find the best
+ combination for your hardware, and to manage JACK connections between
+ applications.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="106" NAME="Graphic21"
+SRC="../pixmaps/qjackctl-overview.png" WIDTH="532"></P>
+<H3><A NAME="2_2_2">2.2.2 Configuring the JACK Server</A></H3>
+<P ALIGN="LEFT" STYLE="font-weight: medium">To change how your JACK
+ server is configured, use the<B> Setup</B> button. The process that
+ follows will probably be tedious and time-consuming, but once you have
+ discovered the &quot;magic numbers&quot; for your hardware, everything should
+ continue to work thereafter. Discovering the best combination is a
+ process of playing with the &quot;Frames/Period&quot;, &quot;Sample Rate&quot; and
+ &quot;Periods/Buffer&quot; settings. Your objective here is to find the lowest
+ possible latency, as reported in the lower right-hand corner of the
+ dialog. As you change settings, this number will show the results
+ yielded by that combination. You want the sample rate high, and the
+ frames/periods and periods/buffer low. I suggest you dial up the lowest
+ possible latency, click on<B> OK</B>, then try to start the JACK server
+ with the<B> Start</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ button on the main dialog. If the server fails to
+ start, come back to this dialog and keep working up until you find a
+ combination that works.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="387" NAME="Graphic25"
+SRC="../pixmaps/qjackctl-silvan.png" WIDTH="532"></P>
+<H4><A NAME="2_2_2_1">2.2.2.1 The Evil XRUN</A></H4>
+<P ALIGN="LEFT" STYLE="font-weight: medium">It's very important to avoid
+ xruns. If you find a combination of low-latency settings that allow the
+ JACK server to start, but which produce a flood of xruns, you're aiming
+ too high. Xruns are reported in the main QJackCtl dialog. Ideally, you
+ should see this:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="69" NAME="Graphic22"
+SRC="../pixmaps/JACK-no-xruns.png" WIDTH="112"></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">If, on the other hand, you
+ see something like this, you have trouble ahead:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="64" NAME="Graphic23"
+SRC="../pixmaps/JACK-know-xruns.png" WIDTH="113"></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">You never want to see this
+ much red. Seeing any red at all is really unacceptable. Xruns cause
+ audio dropouts. Clicks, pops, distortions, flanger-like effects. They
+ are to be avoided at all costs. If you cannot produce a set of
+ parameters that gets JACK running without xruns, you probably have no
+ choice but to explore the world of Linux audio performance tweaking.
+ Even eliminating the xruns is no guarantee that you will be able to
+ obtain acceptable performance running these things as an ordinary user.
+ My own performance is just barely good enough that I can't quite force
+ myself to dive into the arcane world of Linux audio headlong.</P>
+<H3><A NAME="2_2_3">2.2.3 Managing JACK Connections</A></H3>
+<P>Rosegarden will establish sane default connections automatically. So
+ will QSynth and Hydrogen, if you've configured them to do so.
+ ZynAddSubFX and perhaps other JACK-aware applications do not do this.
+ To see and change the connections, click on the<B> Connections</B>
+<!--SPAN STYLE="font-weight: medium"-->
+
+ button. Making or breaking connections is a process of highlighting one
+ or more items in the left pane and one or more items in the right pane,
+ then using the<B> Connect</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ or<B> Disconnect</B>
+<!--SPAN STYLE="font-weight: medium"-->
+ buttons as required.</P>
+<P ALIGN="CENTER" STYLE="font-weight: medium"><IMG ALIGN="BOTTOM" BORDER="0"
+HEIGHT="306" NAME="Graphic26" SRC="../pixmaps/qjackctl-connections.png" WIDTH="532">
+</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium"><I>NOTE: You can also use
+ QJackCtl to manage ALSA MIDI connections. I do not recommend that you
+ do so while you are running Rosegarden. Rosegarden has its own internal
+ MIDI router, and it doesn't work properly if you change MIDI
+ connections externally. However, if, for example, you want to play your
+ Sound Blaster Live! or QSynth with your MIDI keyboard without running
+ Rosegarden, you can use QJackCtl's MIDI connection manager to hook it
+ up.</I></P>
+<H1><A NAME="3">3 A First Look (under construction)</A></H1>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  Let's begin by starting Rosegarden, and having a look at the main
  window. This is where you get an overall view of your work, and control
  a number of settings and parameters.</P>
+<H2>3.1 <A NAME="2_1"></A>The Main Window</H2>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  A Rosegarden document is called a composition. The main window is
  primarily dedicated to editing at the composition level, so most of
@@ -61,9 +325,9 @@ A { text-decoration: none }
  exist a composition level, and they may be edited here in the main
  window using the tempo ruler.</P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
- <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="295" NAME="Graphic4" SRC="../pixmaps/main-screenshot.png"
-WIDTH="463"></P>
-<H2>2.3 <A NAME="2_2"></A>Special Toolbars</H2>
+ <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="339" NAME="Graphic4" SRC="../pixmaps/main-screenshot.png"
+WIDTH="532"></P>
+<H2>3.2 <A NAME="2_2"></A>Special Toolbars</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">One of the
  first things you might notice about Rosegarden is that there are
  several toolbars at the top of the main window. In addition to the
@@ -102,13 +366,13 @@ WIDTH="208"></P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="26" NAME="Graphic29" SRC="../pixmaps/using-rosegarden_html_47dd4a5.png"
 WIDTH="259"></P>
-<H2><A NAME="2_4">2.4 The Tracklist</A></H2>
+<H2><A NAME="3_3">3.3 The Tracklist</A></H2>
 <P>Rosegarden is a track-based sequencer. Each entry in the tracklist is
  a separate track that can have individualized settings for several
  different parameters. Each track has a label and an output assignment,
  and can be used to record, play, and manipulate either MIDI or audio
  data, but never both.</P>
-<H3><A NAME="2_4_1">2.4.1 Connection vs. Name</A></H3>
+<H3><A NAME="3_3_1">3.3.1 Connection vs. Name</A></H3>
 <P STYLE="margin-bottom: 0.2in">The tracklist can be configured to
  display either the name you've assigned to the track, or the name of
  the device and channel to which it is connected. Toggle this behavior
@@ -119,7 +383,7 @@ WIDTH="259"></P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in"><IMG ALIGN="BOTTOM" BORDER="0"
 HEIGHT="48" NAME="Graphic3" SRC="../pixmaps/track-list-connections.png" WIDTH="229">
 </P>
-<H3><A NAME="2_4_2">2.4.2 Track LEDs</A></H3>
+<H3><A NAME="3_3_2">3.3.2 Track LEDs</A></H3>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in">Here we see the labels. One
  track has not yet had a name assigned, so it remains &quot;&lt;untitled&gt;&quot;.</P>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in">Each track has two LEDs.
@@ -140,19 +404,19 @@ HEIGHT="49" NAME="Graphic10" SRC="../pixmaps/track-list-names.png" WIDTH="231"><
  included when exporting the composition into another format. Muted
  tracks will typically be ignored during export, though this varies
  slightly by the export method chosen.</I></P>
-<H3>2.4.3 <A NAME="2_6_4"></A>Changing the Track Name</H3>
+<H3>3.3.3 <A NAME="2_6_4"></A>Changing the Track Name</H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">To change
  the track name, double click on the label. A dialog should appear,
  allowing you to enter a new name.</P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="112" NAME="Graphic43" SRC="../pixmaps/using-rosegarden_html_m3266770c.png"
 WIDTH="393"></P>
-<H3><A NAME="2_4_4">2.4.4 Adding, Removing, Moving Tracks</A></H3>
+<H3><A NAME="3_3_4">3.3.4 Adding, Removing, Moving Tracks</A></H3>
 <P>The tools on the Tracks Toolbar <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="27"
 NAME="Graphic9" SRC="../pixmaps/using-rosegarden_html_m7a769b12.png" WIDTH="125">
  can be used to move tracks up and down, to delete them, or to create
  new tracks. It is not possible to copy an entire track.</P>
-<H2 STYLE="border: none; padding: 0in">2.5 <A NAME="2_3"></A>Segments
+<H2 STYLE="border: none; padding: 0in">3.4 <A NAME="2_3"></A>Segments
  and Segment Parameters</H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Rosegarden
  compositions are made up of segments, and editing at the composition
@@ -165,7 +429,7 @@ NAME="Graphic9" SRC="../pixmaps/using-rosegarden_html_m7a769b12.png" WIDTH="125"
  MIDI segments behave, they can be manipulated in almost exactly the
  same way within the composition. The only real limitation is that audio
  segments and MIDI segments cannot both play in the same track.</P>
-<H3><A NAME="2_5_1">2.5.1 Creating a New Segment</A></H3>
+<H3><A NAME="3_4_1">3.4.1 Creating a New Segment</A></H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  You can begin recording (audio or MIDI) to create a segment, but I'll
  get into that a bit later. For now, why not draw one from scratch?</P>
@@ -179,7 +443,7 @@ WIDTH="521"></P>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">You can now
  edit it by way of the matrix or notation views, which we will address
  later. For now, let's go ahead and play with the segment.</P>
-<H3><A NAME="2_5_2">2.5.2 Moving and Copying</A></H3>
+<H3><A NAME="3_4_2">3.4.2 Moving and Copying</A></H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Use the <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="24" NAME="Graphic67" SRC="../pixmaps/using-rosegarden_html_5b745bd6.png"
 WIDTH="26"> cursor to select a segment:</P>
@@ -196,7 +460,7 @@ WIDTH="440"></P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="121" NAME="Graphic71" SRC="../pixmaps/using-rosegarden_html_m5ec59c8b.png"
 WIDTH="461"></P>
-<H3><A NAME="2_5_3">2.5.3 Splitting and Joining</A></H3>
+<H3><A NAME="3_4_3">3.4.3 Splitting and Joining</A></H3>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
  Use the <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="26" NAME="Graphic72" SRC="../pixmaps/using-rosegarden_html_79e4c412.png"
 WIDTH="25"> cursor to split one of the segments, then switch to the <IMG ALIGN="BOTTOM"
@@ -222,7 +486,7 @@ WIDTH="451"></P>
  segment. The events will combine, and merge onto a segment on whichever
  track is currently active. Obviously, you may not merge MIDI and audio
  into the same segment.</P>
-<H4><A NAME="2_5_3_1">2.5.3.1 Split by Pitch</A></H4>
+<H4><A NAME="3_4_3_1">3.4.3.1 Split by Pitch</A></H4>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
  If you have a segment where the treble and bass parts are jumbled
  together, you might wish to split this at middle C or thereabouts. You
@@ -238,7 +502,7 @@ WIDTH="207"></P>
  It is impossible to select a segment that lies completely underneath
  another segment, so it is probably a good idea to move one of the two
  halves into a different track.</P>
-<H3><A NAME="2_5_4">2.5.4 Segment Previews</A></H3>
+<H3><A NAME="3_4_4">3.4.4 Segment Previews</A></H3>
 <P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
  You can get some sense of what that bit of music is like just by
  looking at the segment display, which is a useful visual aid when
@@ -249,7 +513,7 @@ WIDTH="207"></P>
 <P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; text-decoration: none">
  <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="143" NAME="Graphic1" SRC="../pixmaps/segment-previews.png"
 WIDTH="240"></P>
-<H3><A NAME="2_5_5">2.5.5 Segment Parameters</A></H3>
+<H3><A NAME="3_4_5">3.4.5 Segment Parameters</A></H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">After you
  have created a segment, you can edit various parameters from the<B>
  Segment Parameters</B> box to the left:</P>
@@ -262,7 +526,7 @@ WIDTH="312"></P>
  colors are entirely user-configurable, and these defaults are only
  suggestions. I'll explain how to configure custom colors later on, in
  the Studio chapter.</P>
-<H3><A NAME="2_5_6">2.5.6 Repeats</A></H3>
+<H3><A NAME="3_4_6">3.4.6 Repeats</A></H3>
 <P>Every segment can be made to repeat. It will keep repeating until the
  end of the document, or until another segment is encountered in the
  track; whichever comes first. These are displayed between repeat signs
@@ -272,28 +536,28 @@ WIDTH="312"></P>
  by double clicking on the light colored repeat rectangles.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="84" NAME="Graphic7"
 SRC="../pixmaps/segment-repeats-copies.png" WIDTH="223"></P>
-<H3><A NAME="2_5_7">2.5.7 Segment Quantizer</A></H3>
+<H3><A NAME="3_4_7">3.4.7 Segment Quantizer</A></H3>
 <P>Changing the setting in this box will immediately quantize all notes
  in this segment to the selected grid position. It will move the start
  times forward or back to align them with the next closest beat at the
  desired resolution. It will not change note durations in any way.</P>
-<H3><A NAME="2_5_8">2.5.8 Transposing Instruments</A></H3>
+<H3><A NAME="3_4_8">3.4.8 Transposing Instruments</A></H3>
 <P>If you wish to write notation for transposing instruments, you can
  dial a transposition setting into the<B> Transpose</B> box. This will
  cause the part to sound in a different range from written. A typical Bb
  trumpet part, for example, should have -2 here. I'll cover this subject
  in more depth later on, in the Notation chapter.</P>
-<H3><A NAME="2_5_9">2.5.9 Delay</A></H3>
+<H3><A NAME="3_4_9">3.4.9 Delay</A></H3>
 <P>The<B> Delay</B> setting allows you to knock the timing of a segment
  out of sync on purpose. This can be useful in various ways, and it's
  especially amusing for transforming a nicely performed MIDI file into a
  simulation of a middle school band concert.</P>
-<H2><A NAME="2_6">2.6 Getting Around in the Composition</A></H2>
+<H2><A NAME="3_5">3.5 Getting Around in the Composition</A></H2>
 <P STYLE="font-weight: medium">If you've been following along thus far,
  you don't actually have anything useful to play. This is nevertheless
  the perfect spot to introduce you to the tools you'll need to use to
  move around in the composition.</P>
-<H3><A NAME="2_6_1">2.6.1 The Playback Pointer</A></H3>
+<H3><A NAME="3_5_1">3.5.1 The Playback Pointer</A></H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  Notice that there's a vertical blue bar running vertically across the
  segment canvas. That bar is the playback pointer, and as it sweeps
@@ -307,7 +571,7 @@ WIDTH="65"></P>
  gray portion of the ruler at the top, or you can use the transport to
  move it around. If you don't see it, play with the transport or the
  ruler until you coax it out of hiding.</P>
-<H3><A NAME="2_6_2">2.6.2 The Transport</A></H3>
+<H3><A NAME="3_5_2">3.5.2 The Transport</A></H3>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
  You should have a separate, floating Transport window like this one. If
  it's not visible, then toggle it on with<B> Settings -&gt; Show Transport</B>
@@ -341,7 +605,7 @@ WIDTH="360"></P>
  &quot;solo&quot; more than one part, you'll need to set the mute for tracks
  individually, or by using<B> Tracks -&gt; Mute All Tracks</B> and then
  un-muting the parts you desire.)</P>
-<H2><A NAME="2_7">2.7 Time and Tempo</A></H2>
+<H2><A NAME="3_6">3.6 Time and Tempo</A></H2>
 <P>As I mentioned, the time signature and tempo are global to the entire
  composition. I'll discuss another way to manipulate these in<A HREF="chapter-7.html">
  Chapter 7</A>, but here and now you can manipulate both time signature
@@ -352,7 +616,7 @@ WIDTH="360"></P>
  click this ruler, the Tempo and Time Signature editor will appear.</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="228" NAME="Graphic12"
 SRC="../pixmaps/time-tempo-editor.png" WIDTH="402"></P>
-<H3><A NAME="2_7_1">2.7.1 New Tempo</A></H3>
+<H3><A NAME="3_6_1">3.6.1 New Tempo</A></H3>
 <P>To add a new tempo, click the <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="21"
 NAME="Graphic2" SRC="../pixmaps/tempo-icon.png" WIDTH="26"> icon, and you'll be
  presented with a dialog like this:</P>
@@ -362,7 +626,7 @@ SRC="../pixmaps/tempo-add.png" WIDTH="384"></P>
  the point in time where you clicked to open the Tempo and Time
  Signature editor. You can change this by adjusting the &quot;Time of tempo
  change&quot; parameters, if you wish.</P>
-<H3><A NAME="2_7_2">2.7.2 New Time Signature</A></H3>
+<H3><A NAME="3_6_2">3.6.2 New Time Signature</A></H3>
 <P>Use the <IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="22" NAME="Graphic14" SRC="../pixmaps/tempo-time-icon.png"
 WIDTH="24"> icon, and you'll be presented with a dialog like:</P>
 <P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" HEIGHT="282" NAME="Graphic15"
@@ -371,7 +635,7 @@ SRC="../pixmaps/tempo-time-dialog.png" WIDTH="383"></P>
  time, and make the time signature hidden. You should probably always
  leave &quot;Correct the durations of the following measures&quot; checked unless
  you have a good reason to do otherwise.</P>
-<H2><A NAME="2_8">2.8 Autosave</A></H2>
+<H2><A NAME="3_7">3.7 Autosave</A></H2>
 <P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
  I'll conclude this section by mentioning a very useful feature that
  doesn't quite fit in anywhere else. As always, &quot;save early, save often&quot;
