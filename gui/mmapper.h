@@ -50,6 +50,7 @@ public:
     void updateMetronomeForPlayback();
     void updateMetronomeForRecord();
     void updateSoloData(bool solo, Rosegarden::TrackId selectedTrack);
+    void updateTransposeValue(int transposeValue);
     void setDocument(RosegardenGUIDoc*);
 
 protected:

@@ -419,6 +419,13 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil
 
                 } else if (acceptEvent(evt, evtIsFromMetronome)) {
                     SEQUENCER_DEBUG << "inserting event\n";
+
+                    if (evt->getType() == MappedEvent::MidiNote ||
+                        evt->getType() == MappedEvent::MidiNoteOneShot) {
+                        // transpose it first
+                        evt->setPitch(evt->getPitch() + m_controlBlockMmapper->getTransposeValue());
+                    }
+                    
                     c->insert(evt);
 
                 } else {

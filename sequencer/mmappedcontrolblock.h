@@ -64,6 +64,9 @@ public:
     Rosegarden::TrackId getSelectedTrack()
         { return m_controlBlock->getSelectedTrack(); }
 
+    int getTransposeValue()
+    { return m_controlBlock->getTransposeValue(); }
+        
 protected:
 
     //--------------- Data members ---------------------------------

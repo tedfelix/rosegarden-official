@@ -29,7 +29,8 @@ namespace Rosegarden
 {
 
 ControlBlock::ControlBlock(unsigned int nbTracks)
-    : m_nbTracks(nbTracks),
+    : m_transposeValue(0),
+      m_nbTracks(nbTracks),
       m_solo(false),
       m_selectedTrack(0)
 {

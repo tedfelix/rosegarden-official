@@ -209,6 +209,8 @@ public slots:
 
     void update();
 
+    void slotTransposeValueChanged(int);
+
 signals:
     void setProgress(int);
     void incrementProgress(int);

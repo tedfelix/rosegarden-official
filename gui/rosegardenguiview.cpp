@@ -399,6 +399,9 @@ void RosegardenGUIView::slotEditSegmentNotation(Rosegarden::Segment* p)
 
     Rosegarden::SequenceManager *sM = getDocument()->getSequenceManager();
 
+    connect(m_segmentParameterBox, SIGNAL(transposeValueChanged(int)),
+            sM, SLOT(slotTransposeValueChanged(int)));
+
     connect(sM, SIGNAL(insertableNoteOnReceived(int)),
 	    notationView, SLOT(slotInsertableNoteOnReceived(int)));
     connect(sM, SIGNAL(insertableNoteOffReceived(int)),

@@ -159,6 +159,13 @@ void ControlBlockMmapper::updateSoloData(bool solo,
     m_needsRefresh = true;
 }
 
+void ControlBlockMmapper::updateTransposeValue(int transposeValue)
+{
+    m_controlBlock->setTransposeValue(transposeValue);
+    m_needsRefresh = true;
+}
+
+
 void ControlBlockMmapper::setDocument(RosegardenGUIDoc* doc)
 {
     SEQMAN_DEBUG << "ControlBlockMmapper::setDocument()\n";
