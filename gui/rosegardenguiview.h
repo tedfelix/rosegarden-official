@@ -39,6 +39,8 @@ class QScrollView;
 class RosegardenGUIDoc;
 class TrackEditor;
 class KPrinter;
+class SegmentParameterBox;
+class InstrumentParameterBox;
 
 /**
  * The RosegardenGUIView class provides the view widget for the
@@ -139,6 +141,10 @@ protected:
 
     Rosegarden::RulerScale   *m_rulerScale;
     TrackEditor              *m_trackEditor;
+
+    SegmentParameterBox     *m_segmentParameterBox;
+    InstrumentParameterBox  *m_instrumentParameterBox;
+
 };
 
 #endif // ROSEGARDENGUIVIEW_H

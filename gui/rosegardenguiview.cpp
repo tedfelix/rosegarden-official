@@ -42,6 +42,8 @@
 #include "barbuttons.h"
 #include "loopruler.h"
 #include "RulerScale.h"
+#include "segmentparameterbox.h"
+#include "instrumentparameterbox.h"
 
 using Rosegarden::SimpleRulerScale;
 
@@ -65,11 +67,19 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
 
     Rosegarden::Composition *comp = &doc->getComposition();
     m_rulerScale = new SimpleRulerScale(comp, 0, unitsPerPixel);
+
+    QHBox *hbox = new QHBox(this);
+    QVBox *vbox = new QVBox(hbox);
+
+    // Segment and Instrument Parameter Boxes [rwb]
+    //
+    m_segmentParameterBox = new SegmentParameterBox(vbox);
+    m_instrumentParameterBox = new InstrumentParameterBox(vbox);
     
     // Construct the trackEditor first so we can then
     // query it for placement information
     //
-    m_trackEditor  = new TrackEditor(doc, m_rulerScale, this);
+    m_trackEditor  = new TrackEditor(doc, m_rulerScale, hbox);
 
     connect(m_trackEditor->getSegmentCanvas(),
             SIGNAL(editSegmentNotation(Rosegarden::Segment*)),

@@ -25,9 +25,6 @@
 #include <qwidget.h>
 
 #include "trackseditoriface.h"
-#include "segmentparameterbox.h"
-#include "instrumentparameterbox.h"
-
 
 #include "Event.h" // for timeT
 #include "Track.h"
@@ -193,8 +190,6 @@ protected:
     SegmentCanvas           *m_segmentCanvas;
     QCanvasLine             *m_pointer;
     QScrollView             *m_trackButtonScroll;
-    SegmentParameterBox     *m_segmentParameterBox;
-    InstrumentParameterBox  *m_instrumentParameterBox;
 };
 
 #endif

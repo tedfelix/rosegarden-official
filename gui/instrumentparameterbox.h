@@ -19,12 +19,12 @@
     COPYING included with this distribution for more information.
 */
 
-#include <qlistbox.h>
+#include <qframe.h>
 
 #ifndef _INSTRUMENTPARAMETERBOX_H_
 #define _INSTRUMENTPARAMETERBOX_H_
 
-class InstrumentParameterBox : public QListBox
+class InstrumentParameterBox : public QFrame
 {
 Q_OBJECT
 
@@ -33,6 +33,7 @@ public:
     ~InstrumentParameterBox();
 
 private:
+    void initBox();
 
 };
 

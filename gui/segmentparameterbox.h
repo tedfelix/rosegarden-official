@@ -19,12 +19,15 @@
     COPYING included with this distribution for more information.
 */
 
-#include <qlistbox.h>
+#include <qframe.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
+#include <qcombobox.h>
 
 #ifndef _SEGMENTPARAMETERBOX_H_
 #define _SEGMENTPARAMETERBOX_H_
 
-class SegmentParameterBox : public QListBox
+class SegmentParameterBox : public QFrame
 {
 Q_OBJECT
 
@@ -33,7 +36,11 @@ public:
     ~SegmentParameterBox();
 
 private:
+    void initBox();
 
+    QLabel    *m_repeatValue;
+    QComboBox *m_quantizeValue;
+    QComboBox *m_transposeValue;
 };
 
 

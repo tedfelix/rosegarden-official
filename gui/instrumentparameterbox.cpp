@@ -19,17 +19,39 @@
     COPYING included with this distribution for more information.
 */
 
-#include "instrumentparameterbox.h"
+#include <qlayout.h>
+#include <qlabel.h>
 
+#include "instrumentparameterbox.h"
 
 InstrumentParameterBox::InstrumentParameterBox(QWidget *parent,
                                                const char *name,
                                                WFlags f)
-  :QListBox(parent, name, f)
+  :QFrame(parent, name, f)
 {
+    setMinimumSize(130, 100);
+    setMaximumSize(130, 100);
+
+    initBox();
 }
 
 InstrumentParameterBox::~InstrumentParameterBox()
 {
 }
+
+void
+InstrumentParameterBox::initBox()
+{
+    QFont font ("lucidasanstypewriter", 8);
+    font.setPixelSize(10);
+
+    QGridLayout *gridLayout = new QGridLayout(this, 2, 2, 8, 1);
+
+    QLabel *title = new QLabel("Instrument Parameters", this);
+    title->setFont(font);
+
+    gridLayout->addMultiCellWidget(title, 0, 0, 0, 1, AlignLeft);
+
+}
+
 
