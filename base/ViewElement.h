@@ -46,8 +46,8 @@ public:
     const Event* event() const { return m_event; }
     Event*       event()       { return m_event; }
 
-    Event::timeT getAbsoluteTime() const { return event()->getAbsoluteTime(); }
-    void setAbsoluteTime(Event::timeT d) { event()->setAbsoluteTime(d); }
+    timeT getAbsoluteTime() const  { return event()->getAbsoluteTime(); }
+    void  setAbsoluteTime(timeT d) { event()->setAbsoluteTime(d); }
 
     void dump(std::ostream&) const;
 

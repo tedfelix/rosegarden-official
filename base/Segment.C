@@ -25,11 +25,12 @@ namespace Rosegarden
 using std::cerr;
 using std::endl;
     
-Track::Track(unsigned int nbTimeSteps, unsigned int startIdx,
+Track::Track(unsigned int nbTimeSteps, timeT startIdx,
              unsigned int stepsPerBar)
     : std::multiset<Event*, Event::EventCmp>(),
     m_startIdx(startIdx),
-    m_instrument(0)
+    m_instrument(0),
+    m_groupId(0)
 {
     unsigned int initialTime = m_startIdx;
     
@@ -97,7 +98,7 @@ void Track::setNbTimeSteps(unsigned int nbTimeSteps)
         signatureAtEnd.getDurationListForInterval
             (dlist, nbTimeSteps - currentNbTimeSteps, newElTime);
 
-        Event::timeT acc = newElTime;
+        timeT acc = newElTime;
         for (DurationList::iterator i = dlist.begin(); i != dlist.end(); ++i) {
             Event *e = new Event("rest");
             e->setDuration(*i);
@@ -130,7 +131,7 @@ void Track::setNbTimeSteps(unsigned int nbTimeSteps)
     
 }
 
-void Track::setStartIndex(unsigned int idx)
+void Track::setStartIndex(timeT idx)
 {
     int idxDiff = idx - m_startIdx;
 
@@ -158,6 +159,78 @@ TimeSignature Track::getTimeSigAtEnd() const
         return TimeSignature(*(*sig));
 
     return defaultSig44;
+}
+
+bool Track::expandIntoGroup(iterator from, iterator to,
+                            timeT baseDuration)
+{
+    timeT absTime = (*from)->getAbsoluteTime();
+    
+    for(; from != to; ++from) {
+
+        // check that they're all at the same time
+        if ((*from)->getAbsoluteTime() != absTime) return false;
+
+        expandIntoGroup(from, baseDuration);
+    }
+
+    return true;
+}
+
+bool Track::expandIntoGroup(iterator i,
+                            timeT baseDuration)
+{
+    timeT eventDuration = (*i)->getDuration();
+
+    if (baseDuration == eventDuration) return true;
+
+    timeT maxDuration = 0,
+        minDuration = 0;
+    
+    if (baseDuration > eventDuration) {
+        maxDuration = baseDuration;
+        minDuration = eventDuration;
+    } else {
+        maxDuration = eventDuration;
+        minDuration = baseDuration;
+    }
+
+    // Check if we can perform the operation
+    //
+    if ((maxDuration == (2 * minDuration)) ||
+        (maxDuration == (4 * minDuration)) ||
+        (maxDuration == (4 * minDuration / 3))) {
+
+        // set the initial event's duration to base
+        (*i)->setDuration(minDuration);
+
+        // Add 2nd event
+        Event* ev = new Event((*i)->getType());
+        ev->setDuration(maxDuration - minDuration);
+        ev->setAbsoluteTime((*i)->getAbsoluteTime() + minDuration);
+
+        long gid = 0;
+
+        // if the initial event has a group id, set the new event to it,
+        // otherwise fetch the track's next group id
+        //
+        if (!(*i)->get<Int>("GroupNo", gid))
+            gid = getNextGroupId();
+        
+        ev->set<Int>("GroupNo", gid);
+            
+        insert(ev);
+
+        return true;
+
+    } else
+        return false;
+
+}
+
+int Track::getNextGroupId() const
+{
+    return m_groupId++;
 }
 
  

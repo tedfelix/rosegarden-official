@@ -240,5 +240,44 @@ int main(int argc, char **argv)
                 acc += *i;
         }
         cout << "total: " << acc << " (on bar duration of " << ts.getBarDuration() << ")" << endl;
+
+        cout << "Testing Track::expandIntoGroup() - expanding 384 -> 2*192\n";
+
+        Track t;
+
+        Event *ev = new Event("note");
+        ev->setAbsoluteTime(0);
+        ev->setDuration(384);
+        t.insert(ev);
+
+        t.expandIntoGroup(t.begin(), 384/2);
+
+        for(Track::iterator i = t.begin(); i != t.end(); ++i) {
+                cout << "Event at " << (*i)->getAbsoluteTime()
+                     << " - duration : " << (*i)->getDuration()
+                     << endl;
+        }
+
+        Track::iterator half2 = t.begin(); ++half2;
+        
+        cout << "Expanding 192 -> (48 + 144) : \n";
+
+        t.expandIntoGroup(t.begin(), 48);
+
+        for(Track::iterator i = t.begin(); i != t.end(); ++i) {
+                cout << "Event at " << (*i)->getAbsoluteTime()
+                     << " - duration : " << (*i)->getDuration()
+                     << endl;
+        }
+        
+        cout << "Expanding 192 -> (144 + 48) : \n";
+
+        t.expandIntoGroup(half2, 144);
+
+        for(Track::iterator i = t.begin(); i != t.end(); ++i) {
+                cout << "Event at " << (*i)->getAbsoluteTime()
+                     << " - duration : " << (*i)->getDuration()
+                     << endl;
+        }
 };
 

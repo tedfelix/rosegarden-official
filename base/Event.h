@@ -53,13 +53,14 @@ std::hash<const char*> hashstring::_H;
 
 namespace Rosegarden 
 {
+
+typedef int timeT;
     
 class Event
 {
 private:
     
 public:
-    typedef int timeT;
 
     struct NoData { };
     struct BadType { };
@@ -138,12 +139,12 @@ public:
         }
     };
 
-    static bool compareEvent2Time(const Event *e, Event::timeT t)
+    static bool compareEvent2Time(const Event *e, timeT t)
     {
         return e->getAbsoluteTime() < t;
     }
 
-    static bool compareTime2Event(Event::timeT t, const Event *e)
+    static bool compareTime2Event(timeT t, const Event *e)
     {
         return t <  e->getAbsoluteTime();
     }

@@ -35,12 +35,12 @@ class TimeSignature;
 class Track : public std::multiset<Event*, Event::EventCmp>
 {
 public:
-    Track(unsigned int nbTimeSteps = 0, unsigned int startIdx = 0,
+    Track(unsigned int nbTimeSteps = 0, timeT startIdx = 0,
           unsigned int stepsPerBar = 384);
     ~Track();
 
-    unsigned int getStartIndex() const         { return m_startIdx; }
-    void         setStartIndex(unsigned int i);
+    timeT getStartIndex() const         { return m_startIdx; }
+    void  setStartIndex(timeT i);
 
     unsigned int getInstrument() const         { return m_instrument; }
     void         setInstrument(unsigned int i) { m_instrument = i; }
@@ -48,8 +48,43 @@ public:
     TimeSignature getTimeSigAtEnd() const;
 
     unsigned int getNbTimeSteps() const;
-    void setNbTimeSteps(unsigned int);
+    void         setNbTimeSteps(unsigned int);
 
+    /**
+     * Returns an event group id
+     * The id is guaranteed to be unique within the track
+     */
+    int getNextGroupId() const;
+
+    /**
+     * Expands events in the [from, to[ interval into 
+     * events of duration baseDuration + events of duration R,
+     * with R being equal to the events' initial duration minus baseDuration
+     *
+     * The events in [from, to[ must all be at the same absolute time
+     */
+    bool expandIntoGroup(iterator from, iterator to,
+                         timeT baseDuration);
+
+    /**
+     * Expands the event pointed by i into an event of duration
+     * baseDuration + an event of duration R, with R being equal to the
+     * event's initial duration minus baseDuration
+     *
+     * This can work only if, given D = max(i->duration, baseDuration)
+     * and d = min(i->duration, baseDuration)
+     * one of the following is true :
+     * D = 2*d
+     * D = 4*d
+     * D = 4*d/3
+     */
+    bool expandIntoGroup(iterator i,
+                         timeT baseDuration);
+    
+
+    /**
+     * The compare class used by Composition
+     */
     struct TrackCmp
     {
         bool operator()(const Track* a, const Track* b) const 
@@ -62,8 +97,10 @@ public:
     };
 
 protected:
-    unsigned int m_startIdx;
+    timeT m_startIdx;
     unsigned int m_instrument;
+
+    mutable int m_groupId;
 };
 
 }
