@@ -21,7 +21,7 @@
 
 #include "trackbuttons.h"
 
-#include <qhbox.h>
+#include <qframe.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
@@ -77,21 +77,12 @@ TrackButtons::drawButtons()
     //
     m_layout->setSpacing(borderGap);
 
-    // Create a buttonGap at the top of the layout widget
-    //
-    QLabel *label = 0;
-/*!!!
-    QLabel *label = new QLabel(this);
-    label->setText(QString(""));
-    label->setMinimumHeight(m_offset);
-    label->setMaximumHeight(m_offset);
-*/
     // Create a horizontal box for each track
     // plus the two buttons
     //
-    QHBox *trackHBox;
-    QPushButton *mute;
-    QPushButton *record;
+    QFrame *trackHBox = 0;
+    QPushButton *mute = 0;
+    QPushButton *record = 0;
 
     // Create an exclusive buttongroup for record
     //
@@ -110,7 +101,8 @@ TrackButtons::drawButtons()
     {
         // Create a horizontal box for each track
         //
-        trackHBox = new QHBox(this);
+        trackHBox = new QFrame(this);
+        QHBoxLayout *hblayout = new QHBoxLayout(trackHBox);
         
         trackHBox->setMinimumSize(m_trackLabelWidth, m_cellSize - borderGap);
         trackHBox->setMaximumSize(m_trackLabelWidth, m_cellSize - borderGap);
@@ -122,9 +114,7 @@ TrackButtons::drawButtons()
         trackHBox->setFrameShadow(Raised);
 
         // Insert a little gap
-        label = new QLabel(trackHBox);
-        label->setMinimumWidth(2);
-        label->setMaximumWidth(2);
+        hblayout->addSpacing(2);
 
         // Create a VU meter
         vuMeter = new TrackVUMeter(trackHBox,
@@ -135,17 +125,19 @@ TrackButtons::drawButtons()
 
         m_trackMeters.push_back(vuMeter);
 
+        hblayout->addWidget(vuMeter);
+
         // set an initial level to show the meter off
         //vuMeter->setLevel(1.0);
 
         // Create another little gap
-        label = new QLabel(trackHBox);
-        label->setMinimumWidth(2);
-        label->setMaximumWidth(2);
+        hblayout->addSpacing(2);
 
         // Create buttons
         mute = new QPushButton(trackHBox);
+        hblayout->addWidget(mute);
         record = new QPushButton(trackHBox);
+        hblayout->addWidget(record);
 
         mute->setFlat(true);
         record->setFlat(true);
@@ -153,6 +145,7 @@ TrackButtons::drawButtons()
         // Create a label
         //
         trackLabel = new TrackLabel(i, trackHBox);
+        hblayout->addWidget(trackLabel);
 
         // Set the label from the Track object on the Composition
         //
