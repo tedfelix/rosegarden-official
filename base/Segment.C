@@ -167,22 +167,24 @@ void Track::calculateBarPositions()
     bool barCorrect(true);
 
     timeT absoluteTime = 0;
-    timeT thisBarTime = 0;
+    timeT barStartTime = 0;
     timeT barDuration = timeSignature.getBarDuration();
 
     iterator i(begin());
-
-    //!!! we should probably be resynchronising with the absoluteTime
-    //and barDuration each time we insert a barline... somehow,
-    //without breaking time signature support
 
     for (; i != end(); ++i) {
 
         Event *e = *i;
         absoluteTime = e->getAbsoluteTime();
 
+        if (absoluteTime - barStartTime >= barDuration) {
+            barCorrect = (absoluteTime - barStartTime == barDuration);
+            startNewBar = true;
+        }
+
         if (startNewBar) {
             addNewBar(absoluteTime, true, barCorrect, timeSignature);
+            barStartTime = absoluteTime;
             startNewBar = false;
         }
 
@@ -191,34 +193,21 @@ void Track::calculateBarPositions()
             timeSignature = TimeSignature(*e);
             barDuration = timeSignature.getBarDuration();
 
-            if (thisBarTime > 0) {
+            if (absoluteTime > barStartTime) {
                 addNewBar(absoluteTime, true, true, timeSignature);
-                thisBarTime = 0;
+                barStartTime = absoluteTime;
             }
 
-        } else if (e->isa(Note::EventType) || e->isa(Note::EventRestType)) {
-
-	    if (hasEffectiveDuration(i)) {
-		timeT d = m_quantizer->getNoteQuantizedDuration(e);
-                thisBarTime += d;
-                cerr << "Track: Quantized duration is " << d
-                     << ", current bar now " << thisBarTime << endl;
-            }
-
-            if (thisBarTime >= barDuration) {
-                barCorrect = (thisBarTime == barDuration);
-                thisBarTime = thisBarTime -  barDuration;
-                startNewBar = true;
-            }
         }
 
         // solely so that absoluteTime is correct after we hit end():
         absoluteTime += m_quantizer->getNoteQuantizedDuration(e);
     }
 
-    if (startNewBar || thisBarTime > 0) {
+    if (startNewBar || absoluteTime > barStartTime) {
         addNewBar
-            (absoluteTime, false, thisBarTime == barDuration, timeSignature);
+            (absoluteTime, false,
+             absoluteTime - barStartTime == barDuration, timeSignature);
     }
 }
 
@@ -1084,6 +1073,10 @@ void Track::autoBeamAux(iterator from, iterator to,
     //changes during the auto-beamed section, and it won't work right
     //if started on an off-beat.  Ideally "from" should be the start
     //of a bar.
+
+    //!!! should reimplement to use existing bar positions, then it'd
+    //recover much better from getting out of phase because of bizarre
+    //note-lengths and incorrect-duration bars
 
     timeT accumulator = 0;
     timeT crotchet = Note(Note::Crotchet).getDuration();
