@@ -237,8 +237,9 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
     //
     m_trackLabels.push_back(trackLabel);
 
+    // Connect it
     connect(trackLabel, SIGNAL(released(int)),
-            SLOT(slotLabelSelected(int)));
+            SIGNAL(trackSelected(int)));
 
     // instrument label
     Rosegarden::Instrument *ins =
@@ -281,7 +282,7 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
     m_instrumentLabels.push_back(instrumentLabel);
 
     connect(instrumentLabel, SIGNAL(released(int)),
-            SLOT(slotLabelSelected(int)));
+            SIGNAL(trackSelected(int)));
 
 
     // Insert the buttons into groups
@@ -435,9 +436,6 @@ TrackButtons::setRecordButtonDown(int recordTrack)
     m_lastID = recordTrack;
 }
 
-
-// Connected to the released(int) callback of the TrackLabels
-//
 void
 TrackButtons::slotLabelSelected(int position)
 {
@@ -481,11 +479,6 @@ TrackButtons::slotLabelSelected(int position)
 
         if (changed) (*it)->update();
     }
-
-    // Propagate this message upstairs
-    //
-    emit(trackSelected(position));
-
 }
 
 
