@@ -31,6 +31,7 @@
 #include <kmessagebox.h>
 
 #include "NotationTypes.h"
+#include "Composition.h"
 #include "Event.h"
 
 #include "BaseProperties.h"
@@ -102,12 +103,8 @@ void MatrixCanvasView::eventTimePitch(QMouseEvent* e,
 {
     QPoint eventPos = e->pos();
 
-/*!!! implement xToTime in staff or hlayout; use LinedStaff methods
-      for yToPitch (getHeightAtCanvasY(), & returned height is MIDI pitch) 
-
-    evTime = m_staff.xToTime(eventPos.x());
-    pitch = m_staff.yToPitch(eventPos.y());
-*/
+    evTime = m_staff.getTimeForCanvasX(eventPos.x());
+    pitch = m_staff.getHeightAtCanvasY(eventPos.y());
 }
 
 //----------------------------------------------------------------------
@@ -151,13 +148,8 @@ void MatrixVLayout::scanStaff(MatrixVLayout::StaffType& staffBase)
         if (!el->isNote()) continue; // notes only
         
         int pitch = el->event()->get<Rosegarden::Int>(PITCH);
-
-//!!!        double y = (maxMIDIPitch - pitch) * staff.getPitchScaleFactor();
      
-        int y = staff.getLayoutYForHeight(pitch);
-   
-        kdDebug(KDEBUG_AREA) << "MatrixVLayout::scanStaff : y = "
-                             << y << " for pitch " << pitch << endl;
+	int y = staff.getLayoutYForHeight(pitch) - staff.getElementHeight()/2;
 
         el->setLayoutY(y);
         el->setHeight(staff.getElementHeight());
@@ -169,13 +161,11 @@ void MatrixVLayout::finishLayout()
 {
 }
 
-//!!!const unsigned int MatrixStaff::defaultPitchScaleFactor = 10;
 const unsigned int MatrixVLayout::maxMIDIPitch = 127;
 
 //-----------------------------------
 
-MatrixHLayout::MatrixHLayout(double scaleFactor) :
-    m_scaleFactor(scaleFactor),
+MatrixHLayout::MatrixHLayout() :
     m_totalWidth(0.0)
 {
 }
@@ -193,46 +183,56 @@ void MatrixHLayout::resetStaff(StaffType&)
 {
 }
 
-void MatrixHLayout::scanStaff(MatrixHLayout::StaffType& staffBase)
+void MatrixHLayout::scanStaff(MatrixHLayout::StaffType &staffBase)
 {
-    MatrixStaff& staff = dynamic_cast<MatrixStaff&>(staffBase);
+    // The Matrix layout is not currently designed to be able to lay
+    // out more than one staff, because we have no requirement to show
+    // more than one at once in the Matrix view.  To make it work for
+    // multiple staffs should be straightforward; we just need to bear
+    // in mind that they might start and end at different times (hence
+    // the total width and bar list can't just be calculated from the
+    // last staff scanned as they are now).
 
-    m_totalWidth = 0;
-    double currentX = 0.0;
+    MatrixStaff &staff = dynamic_cast<MatrixStaff &>(staffBase);
+
+    // Do this in two parts: bar lines separately from elements.
+    // (We don't need to do all that stuff notationhlayout has to do,
+    // scanning the notes bar-by-bar; we can just place the bar lines
+    // in the theoretically-correct places and do the same with the
+    // notes quite independently.)
+
+    // 1. Bar lines and time signatures
+
+    m_barData.clear();
+    Rosegarden::Segment &segment = staff.getSegment();
+    Rosegarden::Composition *composition = segment.getComposition();
+
+    timeT from = composition->getBarStart(segment.getStartIndex()),
+	    to = composition->getBarEnd  (segment.getEndIndex  ());
+
+    while (from < to) {
+	m_barData.push_back(BarData(from * staff.getTimeScaleFactor(), 0));
+	from = composition->getBarEnd(from);
+    }
+    m_barData.push_back(BarData(to * staff.getTimeScaleFactor(), 0));
+
+    // 2. Elements
+
+    m_totalWidth = 0.0;
 
     MatrixElementList *notes = staff.getViewElementList();
+    MatrixElementList::iterator i = notes->begin();
 
-    MatrixElementList::iterator from = notes->begin();
-    MatrixElementList::iterator to = notes->end();
-    MatrixElementList::iterator i;
+    while (i != notes->end()) {
 
-    for (i = from; i != to; ++i) {
+	(*i)->setLayoutX((*i)->getAbsoluteTime() * staff.getTimeScaleFactor());
 
-        MatrixElement *el = (*i);
-
-        if (el->isNote()) {
-
-            Rosegarden::timeT duration = el->event()->getDuration();
-            Rosegarden::timeT time =  el->event()->getAbsoluteTime();
-
-            el->setLayoutX(time * m_scaleFactor);
-            double width = duration * m_scaleFactor;
-            el->setWidth(int(width));
-
-            currentX = el->getLayoutX() + width;
-
-        } else { // it's a time sig change
-
-        }
+	double width = (*i)->getDuration() * staff.getTimeScaleFactor();
+	(*i)->setWidth((int)width);
+	
+	m_totalWidth = (*i)->getLayoutX() + width;
+	++i;
     }
-
-    // margin at the right end of the window
-//!!! no, view should manage that, it's not the layout's job
-//!!! m_totalWidth = currentX + 50;
-    m_totalWidth = currentX;
-
-//     MatrixStaff& mstaff = dynamic_cast<MatrixStaff&>(staff);
-//     mstaff.setBarData(m_barData);
 }
 
 double MatrixHLayout::getTotalWidth()
@@ -242,17 +242,12 @@ double MatrixHLayout::getTotalWidth()
 
 unsigned int MatrixHLayout::getBarLineCount(StaffType&)
 {
-    //!!! This is now essential to ensure the staff resizes itself correctly.
-    // Also will need getTimeSignatureInBar so as to place bar subdivisions
-    // in the right places
-
-    return 0;
+    return m_barData.size();
 }
 
-double MatrixHLayout::getBarLineX(StaffType&, unsigned int)
+double MatrixHLayout::getBarLineX(StaffType&, unsigned int barNo)
 {
-    //!!! This is now essential to ensure the staff resizes itself correctly.
-    return 0;
+    return m_barData[barNo].first;
 }
 
 void MatrixHLayout::finishLayout()
@@ -297,8 +292,9 @@ bool MatrixElement::isNote() const
 
 
 MatrixStaff::MatrixStaff(QCanvas *canvas, Segment *segment,
-                         int id, int vResolution) :
-    LinedStaff<MatrixElement>(canvas, segment, id, vResolution, 1)
+			 int id, int vResolution) :
+    LinedStaff<MatrixElement>(canvas, segment, id, vResolution, 1),
+    m_scaleFactor(0.25) //!!!
 {
     // nothing else yet
 }
@@ -308,37 +304,19 @@ MatrixStaff::~MatrixStaff()
     // nothing
 }
 
-int
-MatrixStaff::getLineCount() const
-{
-    return MatrixVLayout::maxMIDIPitch + 2;
-}
-
-int
-MatrixStaff::getLegerLineCount() const
-{
-    return 0;
-}
-
-int
-MatrixStaff::getBottomLineHeight() const
-{
-    // simply define height as equal to MIDI pitch, for this sort of staff
-    return 0; 
-}
-
-int
-MatrixStaff::getHeightPerLine() const
-{
-    // simply define height as equal to MIDI pitch, for this sort of staff
-    return 1;
-}
+int MatrixStaff::getLineCount()        const { return MatrixVLayout::
+						      maxMIDIPitch + 2; }
+int MatrixStaff::getLegerLineCount()   const { return 0; }
+int MatrixStaff::getBottomLineHeight() const { return 0; }
+int MatrixStaff::getHeightPerLine()    const { return 1; }
 
 bool MatrixStaff::wrapEvent(Rosegarden::Event* e)
 {
-    return
-        e->isa(Rosegarden::Note::EventType) || 
-        e->isa(Rosegarden::TimeSignature::EventType);
+    // Changed from "Note or Time signature" to just "Note" because 
+    // there should be no time signature events in any ordinary
+    // segments, they're only in the composition's ref segment
+
+    return e->isa(Rosegarden::Note::EventType);
 }
 
 void
@@ -354,14 +332,21 @@ MatrixStaff::positionElements(timeT from, timeT to)
     if (to >= 0) endAt = mel->findTime(to);
 
     for (MatrixElementList::iterator i = beginAt; i != endAt; ++i) {
-        
-        LinedStaffCoords coords = getCanvasCoordsForLayoutCoords((*i)->getLayoutX(),
-                                                                 (*i)->getLayoutY());
+	
+	LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
+	    ((*i)->getLayoutX(), (*i)->getLayoutY());
 
-        (*i)->setCanvas(m_canvas);
-        (*i)->setCanvasX(coords.first);
-        (*i)->setCanvasY((double)coords.second);
+	(*i)->setCanvas(m_canvas);
+	(*i)->setCanvasX(coords.first);
+	(*i)->setCanvasY((double)coords.second);
     }
+}
+
+timeT
+MatrixStaff::getTimeForCanvasX(double x)
+{
+    double layoutX = x - m_x;
+    return (timeT)(layoutX / m_scaleFactor);
 }
 
 //----------------------------------------------------------------------
@@ -371,15 +356,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        QWidget *parent)
     : EditView(doc, segments, parent),
       m_canvasView(0),
-      m_hlayout(new MatrixHLayout(0.25)), //!!!
+      m_hlayout(new MatrixHLayout),
       m_vlayout(new MatrixVLayout)
 {
     setupActions();
-/*!!!
-    QCanvas *tCanvas = new QCanvas(segments[0]->getDuration() / 2,
-                                   MatrixStaff::defaultPitchScaleFactor *
-                                   MatrixStaff::nbHLines);
-*/
+
     QCanvas *tCanvas = new QCanvas(100, 100);
 
     kdDebug(KDEBUG_AREA) << "MatrixView : creating staff\n";
@@ -407,8 +388,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     else {
         kdDebug(KDEBUG_AREA) << "MatrixView : rendering elements\n";
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            // m_staffs[i]->renderElements();
-            m_staffs[i]->positionElements();
+	    m_staffs[i]->positionElements();
         }
     }
 }

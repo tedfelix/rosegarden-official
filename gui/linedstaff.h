@@ -429,7 +429,7 @@ protected:
     double   m_startLayoutX;
     double   m_endLayoutX;
 
-    typedef FastVector<QCanvasLine *> LineList;
+    typedef std::vector<QCanvasLine *> LineList;
     typedef std::vector<LineList> LineMatrix;
     LineMatrix m_staffLines;
     LineList m_staffConnectingLines;

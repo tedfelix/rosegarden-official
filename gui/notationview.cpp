@@ -995,7 +995,7 @@ bool NotationView::applyLayout(int staffNo)
         }
     }
 
-    readjustCanvasSize(); //!!! now misnamed
+    readjustCanvasSize();
 
     PRINT_ELAPSED("NotationView::applyLayout");
     return true;
@@ -1456,9 +1456,9 @@ NotationView::setPositionPointer(const int& position)
 
     if (unsigned(barNo) < m_hlayout->getBarLineCount(staff)) {
 
-        canvasPosition = m_hlayout->getBarLineX(staff, barNo);
+	canvasPosition = m_hlayout->getBarLineX(staff, barNo);
 
-        if (times.first != times.second) {
+	if (times.first != times.second) {
 
             double barWidth;
             if (unsigned(barNo) + 1 < m_hlayout->getBarLineCount(staff)) {
@@ -2077,11 +2077,6 @@ void NotationView::redoLayoutAdvised(Segment *segment,
 }
 
 
-//!!! Some of this should be in NotationStaff (at the very least it
-//should be able to report how much width and height it needs based on
-//its own bar line positions which it's calculated by querying the
-//notationhlayout)
-
 void NotationView::readjustCanvasSize()
 {
     START_TIMING;
@@ -2104,29 +2099,8 @@ void NotationView::readjustCanvasSize()
         }
     }
 
-    //!!! Rather than tidying up this code, use EditView equivalent
-
-    // We want to avoid resizing the canvas too often, so let's make
-    // sure it's always an integer multiple of the view's dimensions
-    
-    int iWidth = (int)width(), iHeight = (int)height();
-    int widthMultiple = ((int)(maxWidth + 50) / iWidth) + 1;
-    int heightMultiple = ((int)(maxHeight + 50) / iHeight) + 1;
-
-    if (canvas()->width() < (widthMultiple * iWidth) ||
-        canvas()->height() < (heightMultiple * iHeight)) {
-
-        cerr/*        kdDebug(KDEBUG_AREA)*/ << "NotationView::readjustCanvasWidth() to "
-                                             << maxWidth << " (iWidth is " << iWidth << " so need width of " << (widthMultiple * iWidth) << ")" << endl;
-
-        canvas()->resize(std::max(widthMultiple * iWidth,
-                                  (int)canvas()->width()),
-                         std::max(heightMultiple * iHeight,
-                                  (int)canvas()->height()));
-
-//        canvas()->resize(int(totalWidth) + 50, int(totalHeight) + 50);
-        m_ruler->resize();
-    }
+    // now get the EditView to do the biz
+    readjustViewSize(QSize(maxWidth, maxHeight));
 
     PRINT_ELAPSED("NotationView::readjustCanvasWidth total");
 }

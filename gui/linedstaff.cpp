@@ -34,7 +34,7 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_resolution(resolution),
     m_lineThickness(lineThickness),
     m_pageMode(false),
-    m_pageWidth(0.0),
+    m_pageWidth(2000.0), // fairly arbitrary, but we need something non-zero
     m_rowSpacing(0),
     m_connectingLineLength(0),
     m_startLayoutX(0),
@@ -326,6 +326,8 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
     deleteBars();
     deleteTimeSignatures();
 
+    kdDebug(KDEBUG_AREA) << "LinedStaff::sizeStaff" << endl;
+
     unsigned int barCount = layout.getBarLineCount(*this);
 
     double xleft = 0, xright = 0;
@@ -465,6 +467,11 @@ LinedStaff<T>::resizeStaffLines()
     int firstRow = getRowForLayoutX(m_startLayoutX);
     int  lastRow = getRowForLayoutX(m_endLayoutX);
 
+    kdDebug(KDEBUG_AREA) << "LinedStaff::resizeStaffLines: firstRow "
+			 << firstRow << ", lastRow " << lastRow
+			 << " (startLayoutX " << m_startLayoutX
+			 << ", endLayoutX " << m_endLayoutX << ")" <<  endl;
+
     assert(lastRow >= firstRow);
     
     int i;
@@ -596,6 +603,10 @@ LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
 	    y = getCanvasYForHeight
 		(getBottomLineHeight() + getHeightPerLine() * h,
 		 getCanvasYForTopLine(row)) + j;
+
+	    kdDebug(KDEBUG_AREA) << "LinedStaff: drawing line from ("
+				 << x << "," << y << ") to (" << (x+length-1)
+				 << "," << y << ")" << endl;
 
 	    line->setPoints(x, y, x + length - 1, y);
 

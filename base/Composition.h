@@ -204,9 +204,9 @@ public:
 
     /**
      * Return the starting and ending times of the bar that contains
-     * time t.  Unlike getBarRange, this will only work for bars 
-     * that actually exist and will stop working at the end of the
-     * composition.  It's much, much quicker though.
+     * time t.  Unlike getBarRange(int, bool) this will only work for
+     * bars that actually exist and will stop working at the end of
+     * the composition.  It's much, much quicker though.
      */
     std::pair<timeT, timeT> getBarRange(timeT t) const;
 

@@ -29,6 +29,7 @@
 
 #include "Staff.h"
 #include "LayoutEngine.h"
+#include "FastVector.h"
 
 #include "editview.h"
 #include "linedstaff.h"
@@ -210,20 +211,12 @@ protected:
 
 //------------------------------
 
-typedef std::vector<double> BarData;
-
 class MatrixHLayout : public Rosegarden::HorizontalLayoutEngine<MatrixElement>
 {
 public:
-    MatrixHLayout(double scaleFactor);
-
+    MatrixHLayout();
     virtual ~MatrixHLayout();
 
-    void setScaleFactor(double scaleFactor) {
-        m_scaleFactor = scaleFactor;
-    }
-
-    /**
      * Resets internal data stores for all staffs
      */
     virtual void reset();
@@ -271,9 +264,10 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    BarData m_barData;
-
-    double m_scaleFactor;
+    // pair of layout-x and time-signature event if there is one
+    typedef std::pair<double, Rosegarden::Event *> BarData;
+    typedef FastVector<BarData> BarDataList;
+    BarDataList m_barData;
     double m_totalWidth;
 };
 
@@ -295,17 +289,25 @@ protected:
 
     /**
      * Override from Rosegarden::Staff<T>
-     * Wrap only notes and time sig changes
+     * Wrap only notes 
      */
     virtual bool wrapEvent(Rosegarden::Event*);
 
 public:
     LinedStaff<MatrixElement>::setResolution;
 
+    double getTimeScaleFactor() const { return m_scaleFactor; }
+    void setTimeScaleFactor(double f) { m_scaleFactor = f; }
+
+    Rosegarden::timeT getTimeForCanvasX(double x); // assuming one row only
+
     int getElementHeight() { return m_resolution; }
 
     virtual void positionElements(Rosegarden::timeT from = -1,
-                                  Rosegarden::timeT to = -1);
+				  Rosegarden::timeT to = -1);
+
+private:
+    double m_scaleFactor;
 };
 
 
