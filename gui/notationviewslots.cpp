@@ -525,6 +525,11 @@ void NotationView::slotToggleClefsToolBar()
     toggleNamedToolBar("Clefs Toolbar");
 }
 
+void NotationView::slotToggleMetaToolBar()
+{
+    toggleNamedToolBar("Meta Toolbar");
+}
+
 void NotationView::slotToggleMarksToolBar()
 {
     toggleNamedToolBar("Marks Toolbar");
@@ -535,9 +540,9 @@ void NotationView::slotToggleGroupToolBar()
     toggleNamedToolBar("Group Toolbar");
 }
 
-void NotationView::slotToggleFontToolBar()
+void NotationView::slotToggleLayoutToolBar()
 {
-    toggleNamedToolBar("Font Toolbar");
+    toggleNamedToolBar("Layout Toolbar");
 }
 
 void NotationView::slotToggleTransportToolBar()
@@ -843,6 +848,15 @@ void NotationView::slotTransformsRestoreStems()
     addCommandToHistory(new TransformsMenuRestoreStemsCommand
                         (*m_currentEventSelection));
 }
+
+void NotationView::slotTransformsFixQuantization()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Fixing notation quantization..."), this);
+
+    addCommandToHistory(new TransformsMenuFixNotationQuantizeCommand
+                        (*m_currentEventSelection));
+}    
 
 void NotationView::slotSetStyleFromAction()
 {

@@ -36,22 +36,13 @@ public:
 
     SegmentHelper::segment;
 
-    
     /**
-     * Return the absolute time of an event "as displayed".  This is
-     * the legato-quantized duration, except for tuplets where 
-     * the quantization is a bad idea.
+     * Return the duration of an event "as displayed", with
+     * compensation for tuplets -- i.e. a triplet quaver will be
+     * considered a quaver rather than a note of 2/3 of a quaver
+     * as plain event->getNotationDuration() would return.
      */
-    timeT getNotationAbsoluteTime(Event *e);
-
-    /**
-     * Return the duration of an event "as displayed".  This is
-     * the legato-quantized duration, with optional compensation for
-     * tuplets (i.e. if tupletCompensation is true, a triplet quaver
-     * will be considered a quaver; otherwise, a note of 2/3 of a
-     * quaver).
-     */
-    timeT getNotationDuration(Event *e, bool tupletCompensation = true);
+    timeT getCompensatedNotationDuration(Event *e);
     
     /**
      * Return the notation absolute time plus the notation duration.
@@ -223,22 +214,22 @@ public:
     /**
      * Returns true if Events of durations a and b can reasonably be
      * collapsed into a single one of duration a+b, for some
-     * definition of "reasonably".  For use by collapseIfValid
+     * definition of "reasonably".  For use by collapseRestsIfValid
      *
      * You should pass note-quantized durations into this method
      */
     bool isCollapseValid(timeT a, timeT b);
 
     /**
-     * If possible, collapses the event with the following or previous
-     * one.
+     * If possible, collapses the rest event with the following or
+     * previous one.
      *
      * @return true if collapse was done, false if it wasn't reasonable
      *
      * collapseForward is set to true if the collapse was with the
      * following element, false if it was with the previous one
      */
-    bool collapseIfValid(Event*, bool& collapseForward);
+    bool collapseRestsIfValid(Event*, bool& collapseForward);
 
     /**
      * Inserts a note, doing all the clever split/merge stuff as

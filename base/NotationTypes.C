@@ -1340,7 +1340,6 @@ Note Note::getNearestNote(timeT duration, int maxDots)
 //      cout << "added another dot okay" << endl;
     }
 
-//!!!    cout << "doh! ran out of dots" << endl;
     if (tag < Longest) return Note(tag + 1, 0);
     else return Note(tag, std::max(maxDots, tag));
 } 

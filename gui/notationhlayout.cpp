@@ -197,9 +197,7 @@ double NotationHLayout::getIdealBarWidth(StaffType &staff,
         return fixedWidth;
     }
 
-    int d = 
-	SegmentNotationHelper(staff.getSegment()).getNotationDuration
-	((*shortest)->event());
+    int d = (*shortest)->event()->getNotationDuration();
 
     if (d == 0) {
         NOTATION_DEBUG << "Second trivial return" << endl;
@@ -253,10 +251,12 @@ NotationHLayout::getStartOfQuantizedSlice(const NotationElementList *notes,
 void
 NotationHLayout::setNotationData(Segment &segment)
 {
-//!!! This should either be in a specialised NotationQuantizer class
+//!!! This should either be in a specialised NotationQuantizer class 
 // or should be in SegmentNotationHelper::getNotationDuration which
 // should probably be used in this class in preference to the quantizer's
 // getQuantizedDuration
+//!!! hang on, how does this differ from SegmentNotationHelper::
+// getCompensatedNotationDuration()?  oh, grace notes... anything else?
 
     bool justSeenGraceNote = false;
     timeT graceNoteStart = 0;

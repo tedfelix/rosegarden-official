@@ -658,12 +658,6 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 	     << ", lastNoteEnds " << lastNoteEnds << endl;
              */
 
-	//!!! This may be problematic.  We could end up adding a rest
-	// in the middle of what turns out to be a chord once the
-	// smoothing/quantization has happened.  That might mess
-	// things up pretty badly, I think.
-	//!!! is that still the case?
-
 	if (thisNoteStarts < lastNoteEnds &&
 	    thisNoteStarts > lastNoteStarts) { //!!! experimental
 	    gaps.push_back(std::pair<timeT, timeT>

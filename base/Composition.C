@@ -52,8 +52,6 @@ const std::string Composition::TempoEventType = "tempo";
 const PropertyName Composition::TempoProperty = "BeatsPerHour";
 const PropertyName Composition::TempoTimestampProperty = "TimestampSec";
 
-// const unsigned int Composition::DefaultCountInBars = 2;
-
 
 bool
 Composition::ReferenceSegmentEventCmp::operator()(const Event &e1,
@@ -224,23 +222,24 @@ Composition::ReferenceSegment::findNearestRealTime(RealTime t)
 
 
 
+int Composition::m_defaultNbBars = 100;
+
 Composition::Composition() :
     m_recordTrack(0),
     m_solo(false),   // default is not soloing
     m_selectedTrack(0),
     m_timeSigSegment(TimeSignature::EventType),
     m_tempoSegment(TempoEventType),
+    m_barPositionsNeedCalculating(true),
+    m_tempoTimestampsNeedCalculating(true),
     m_basicQuantizer(new BasicQuantizer()),
     m_notationQuantizer(new NotationQuantizer()),
     m_position(0),
     m_defaultTempo(120.0),
     m_startMarker(0),
-    m_endMarker(getBarRange(100).second), //!!! default end marker
+    m_endMarker(getBarRange(m_defaultNbBars).second),
     m_loopStart(0),
     m_loopEnd(0),
-    m_barPositionsNeedCalculating(true),
-    m_tempoTimestampsNeedCalculating(true),
-//     m_countInBars(DefaultCountInBars),
     m_playMetronome(false),
     m_recordMetronome(true),
     m_needsRefresh(true),
@@ -387,7 +386,6 @@ Composition::clear()
     m_endMarker = 0;
     m_solo = false;
     m_selectedTrack = 0;
-//     m_countInBars = DefaultCountInBars;
     updateRefreshStatuses();
 }
 

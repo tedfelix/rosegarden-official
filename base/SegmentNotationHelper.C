@@ -54,36 +54,9 @@ SegmentNotationHelper::notationQuantizer() {
 }
 
 
-//!!! we shouldn't be quantizing anything in here -- only returning
-//quantized values if they exist already
-
 //!!! we need to go very carefully through this file and check calls
 //to getAbsoluteTime/getDuration -- the vast majority should almost
 //certainly now be using getNotationAbsoluteTime/getNotationDuration
-
-
-timeT
-SegmentNotationHelper::getNotationAbsoluteTime(Event *e)
-{
-    //!!! this may have to change if we do learn to quantize tuplets
-
-    //!!! code in places like notationhlayout that calls
-    // Quantizer::getQuantizedAbsoluteTime and getQuantizedDuration
-    // may prefer to call this and the following function instead
-
-/*!!!
-    if (e->has(BEAMED_GROUP_TUPLET_BASE)) {
-	return e->getAbsoluteTime(); // Quantization fails for tuplets
-    } else {
-*/
-
-
-//!!!	return notationQuantizer().getQuantizedAbsoluteTime(e);
-    return e->getNotationAbsoluteTime(); //!!! woo
-
-//!!!    }
-}	
-
 
 Segment::iterator
 SegmentNotationHelper::findNotationAbsoluteTime(timeT t)
@@ -128,22 +101,11 @@ SegmentNotationHelper::findNearestNotationAbsoluteTime(timeT t)
 
 
 timeT
-SegmentNotationHelper::getNotationDuration(Event *e, bool tupletCompensation)
+SegmentNotationHelper::getCompensatedNotationDuration(Event *e)
 {
-    //!!! any call to getNotationDuration(e, false) might as well
-    // be a call to e->getNotationDuration()
-
     if (e->has(TUPLET_NOMINAL_DURATION)) {
 
-	//!!!
-	if (tupletCompensation) {
-	    return e->get<Int>(TUPLET_NOMINAL_DURATION);
-	} else {
-//!!!	    return notationQuantizer().getQuantizedDuration(e);
-	    return e->getNotationDuration(); //!!! woo
-	}
-//	return quantizer.quantizeDuration
-//	    (e->get<Int>(TUPLET_NOMINAL_DURATION));
+	return e->get<Int>(TUPLET_NOMINAL_DURATION);
 
     } else if (e->has(BEAMED_GROUP_TUPLET_BASE)) {
 
@@ -157,24 +119,15 @@ SegmentNotationHelper::getNotationDuration(Event *e, bool tupletCompensation)
 	int tcount = e->get<Int>(BEAMED_GROUP_TUPLED_COUNT);
 	int ucount = e->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
 	assert(tcount != 0);
-//!!!???
-//!!!   timeT duration = notationQuantizer().getQuantizedDuration(e);
-	timeT duration = e->getNotationDuration(); //!!! woo
 
-//	timeT nominalDuration = (e->getDuration() / tcount) * ucount;
+	timeT duration = e->getNotationDuration();
 	timeT nominalDuration = (duration / tcount) * ucount;
-//!!!	nominalDuration = notationQuantizer().quantizeDuration(nominalDuration);
 	e->setMaybe<Int>(TUPLET_NOMINAL_DURATION, nominalDuration);
 
-	if (tupletCompensation) {
-	    return nominalDuration;
-	} else {
-	    return duration;
-	}
+	return nominalDuration;
 
     } else {
-//!!!	return notationQuantizer().getQuantizedDuration(e);
-	return e->getNotationDuration(); //!!! woo
+	return e->getNotationDuration();
     }
 }
 
@@ -182,7 +135,7 @@ SegmentNotationHelper::getNotationDuration(Event *e, bool tupletCompensation)
 timeT
 SegmentNotationHelper::getNotationEndTime(Event *e)
 {
-    return getNotationAbsoluteTime(e) + getNotationDuration(e);
+    return e->getNotationAbsoluteTime() + e->getNotationDuration();
 }
 
 
@@ -203,7 +156,7 @@ SegmentNotationHelper::getNextAdjacentNote(iterator i,
 	if (!isBeforeEndMarker(j) || !isBeforeEndMarker(++j)) return end();
 	if (!(*j)->isa(Note::EventType)) continue;
 
-	timeT jStart = getNotationAbsoluteTime(*j);
+	timeT jStart = (*j)->getNotationAbsoluteTime();
 	if (jStart > iEnd) return end();
 
 	if (matchPitch) {
@@ -225,7 +178,7 @@ SegmentNotationHelper::getPreviousAdjacentNote(iterator i,
     if (!isBeforeEndMarker(i)) return i;
     if (!(*i)->isa(Note::EventType)) return end();
 
-    timeT iStart = getNotationAbsoluteTime(*i);
+    timeT iStart = (*i)->getNotationAbsoluteTime();
     timeT iEnd   = getNotationEndTime(*i);
     long ip = 0, jp = 0;
     if (!(*i)->get<Int>(PITCH, ip) && matchPitch) return end();
@@ -335,6 +288,31 @@ SegmentNotationHelper::findContiguousPrevious(iterator el)
 bool
 SegmentNotationHelper::noteIsInChord(Event *note)
 {
+    iterator i = segment().findSingle(note);
+    timeT t = note->getNotationAbsoluteTime();
+    
+    for (iterator j = i; j != end(); ++j) { // not isBeforeEndMarker, unnecessary here
+	if (j == i) continue;
+	if ((*j)->isa(Note::EventType)) {
+	    timeT tj = (*j)->getNotationAbsoluteTime();
+	    if (tj == t) return true;
+	    else if (tj > t) break;
+	}
+    }
+
+    for (iterator j = i; ; ) {
+	if (j == begin()) break;
+	--j;
+	if ((*j)->isa(Note::EventType)) {
+	    timeT tj = (*j)->getNotationAbsoluteTime();
+	    if (tj == t) return true;
+	    else if (tj < t) break;
+	}
+    }
+
+    return false;
+
+/*!!!
     iterator first, second;
     segment().getTimeSlice(note->getAbsoluteTime(), first, second);
 
@@ -344,6 +322,7 @@ SegmentNotationHelper::noteIsInChord(Event *note)
     }
 
     return noteCount > 1;
+*/
 }
 
 
@@ -393,25 +372,25 @@ SegmentNotationHelper::getNoteTiedWith(Event *note, bool forwards)
 
 
 bool
-SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
+SegmentNotationHelper::collapseRestsIfValid(Event* e, bool& collapseForward)
 {
     iterator elPos = segment().findSingle(e);
     if (elPos == end()) return false;
 
-    timeT myDuration = getNotationDuration(*elPos);
+    timeT myDuration = (*elPos)->getNotationDuration();
 
     // findContiguousNext won't return an iterator beyond the end marker
     iterator nextEvent = findContiguousNext(elPos),
 	 previousEvent = findContiguousPrevious(elPos);
 
-    //!!! This method fails for notes -- fortunately it's not used for
-    // notes at the moment.   (findContiguousXXX is inadequate for
-    // notes, we need to check adjacency using e.g. getNextAdjacentNote)
+    // Remark: findContiguousXXX is inadequate for notes, we would
+    // need to check adjacency using e.g. getNextAdjacentNote if this
+    // method were to work for notes as well as rests.
 
     // collapse to right if (a) not at end...
     if (nextEvent != end() &&
-	// ...(b) notes can be merged to a single, valid unit
- 	isCollapseValid(getNotationDuration(*nextEvent), myDuration) &&
+	// ...(b) rests can be merged to a single, valid unit
+ 	isCollapseValid((*nextEvent)->getNotationDuration(), myDuration) &&
 	// ...(c) event is in same bar (no cross-bar collapsing)
 	(*nextEvent)->getAbsoluteTime() <
 	    segment().getBarEndForTime(e->getAbsoluteTime())) {
@@ -429,7 +408,7 @@ SegmentNotationHelper::collapseIfValid(Event* e, bool& collapseForward)
 
     // logic is exactly backwards from collapse to right logic above
     if (previousEvent != end() &&
-	isCollapseValid(getNotationDuration(*previousEvent), myDuration) &&
+	isCollapseValid((*previousEvent)->getNotationDuration(), myDuration) &&
 	(*previousEvent)->getAbsoluteTime() >
 	    segment().getBarStartForTime(e->getAbsoluteTime())) {
 			    
@@ -640,12 +619,12 @@ SegmentNotationHelper::makeNoteViable(iterator i, bool splitAtBars)
     // Behaviour differs from TimeSignature::getDurationListForInterval
 
     timeT acc = 0;
-    timeT required = getNotationDuration(*i, false);
+    timeT required = (*i)->getNotationDuration();
 
     while (acc < required) {
         timeT component = Note::getNearestNote(required - acc).getDuration();
 	if (splitAtBars) {
-	    timeT thisNoteStart = getNotationAbsoluteTime(*i) + acc;
+	    timeT thisNoteStart = (*i)->getNotationAbsoluteTime() + acc;
 	    timeT toNextBar =
 		segment().getBarEndForTime(thisNoteStart) - thisNoteStart;
 	    if (toNextBar > 0 && component > toNextBar) component = toNextBar;
@@ -664,8 +643,7 @@ SegmentNotationHelper::makeNoteViable(iterator i, bool splitAtBars)
 
     e->set<Bool>(TIED_FORWARD, true);
     erase(i);
-//    acc = e->getAbsoluteTime();
-    acc = getNotationAbsoluteTime(e);
+    acc = e->getNotationAbsoluteTime();
 
     iterator j;
     bool havej = false;
@@ -837,7 +815,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
     // duration of the new note.
     i = collapseRestsForInsert(i, duration);
 
-    timeT existingDuration = getNotationDuration(*i, false);
+    timeT existingDuration = (*i)->getNotationDuration();
 
     cerr << "SegmentNotationHelper::insertSomething: asked to insert duration " << duration
 	 << " over event of duration " << existingDuration << ":" << endl;
@@ -926,7 +904,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
 	    
 	    timeT insertedTime = (*i)->getAbsoluteTime();
 	    while (i != end() &&
-		   (getNotationAbsoluteTime(*i) <
+		   ((*i)->getNotationAbsoluteTime() <
 		    (insertedTime + existingDuration))) ++i;
 
 	    return insertSomething
@@ -1105,7 +1083,7 @@ SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
 	// collapse the new rest
         if (collapseRest) {
             bool dummy;
-            collapseIfValid(newRest, dummy);
+            collapseRestsIfValid(newRest, dummy);
         }
 
     }
@@ -1115,7 +1093,7 @@ bool
 SegmentNotationHelper::deleteRest(Event *e)
 {
     bool collapseForward;
-    return collapseIfValid(e, collapseForward);
+    return collapseRestsIfValid(e, collapseForward);
 }
 
 bool
@@ -1406,7 +1384,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 
         // only look at one note in each chord, and at rests
         if (!hasEffectiveDuration(i)) continue;
-        timeT idur = getNotationDuration(*i);
+        timeT idur = (*i)->getNotationDuration();
 
 	if (accumulator % average == 0 &&  // "beamable duration" threshold
 	    idur < crotchet) {
@@ -1436,7 +1414,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 	    for (iterator j = i; j != to; ++j) {
 
 		if (!hasEffectiveDuration(j)) continue;
-                timeT jdur = getNotationDuration(*j);
+                timeT jdur = (*j)->getNotationDuration();
 
 		if ((*j)->isa(Note::EventType)) {
 		    if (jdur < crotchet) ++beamable;
@@ -1473,7 +1451,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 		    || (++jnext == to)     
 		    || ((*j    )->isa(Note::EventType) &&
 			(*jnext)->isa(Note::EventType) &&
-			getNotationDuration(*jnext) > jdur)
+			(*jnext)->getNotationDuration() > jdur)
 		    || ((*jnext)->isa(Note::EventRestType))) {
 
 		    if (k != end() && beamable >= 2) {
@@ -1830,8 +1808,8 @@ SegmentNotationHelper::splitPreservingPerformanceTimes(Event *e, timeT q1)
 {
     timeT ut = e->getAbsoluteTime();
     timeT ud = e->getDuration();
-    timeT qt = getNotationAbsoluteTime(e);
-    timeT qd = getNotationDuration(e, false);
+    timeT qt = e->getNotationAbsoluteTime();
+    timeT qd = e->getNotationDuration();
 
     timeT u1 = (qt + q1) - ut;
     timeT u2 = (ut + ud) - (qt + q1);
@@ -1872,12 +1850,12 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 	timeT t = (*i)->getAbsoluteTime();
 	if (t >= endTime) break;
 
-	std::cerr << "SegmentNotationHelper::deCounterpoint: event at " << (*i)->getAbsoluteTime() << " notation " << getNotationAbsoluteTime(*i) << ", duration " << getNotationDuration(*i, false) << ", type " << (*i)->getType() << std::endl;
+	std::cerr << "SegmentNotationHelper::deCounterpoint: event at " << (*i)->getAbsoluteTime() << " notation " << (*i)->getNotationAbsoluteTime() << ", duration " << (*i)->getNotationDuration() << ", type " << (*i)->getType() << std::endl;
 
 	if (!(*i)->isa(Note::EventType)) { ++i; continue; }
 
-	timeT ti = getNotationAbsoluteTime(*i);
-	timeT di = getNotationDuration(*i, false);
+	timeT ti = (*i)->getNotationAbsoluteTime();
+	timeT di = (*i)->getNotationDuration();
 
 	std::cerr<<"looking for k"<<std::endl;
 	// find next event that's either at a different time or (if a
@@ -1886,18 +1864,18 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 	while (segment().isBeforeEndMarker(k)) {
 	    if ((*k)->isa(Note::EventType)) {
 		std::cerr<<"abstime "<<(*k)->getAbsoluteTime()<< std::endl;
-		if (getNotationAbsoluteTime(*k) > ti ||
-		    getNotationDuration(*k, false) != di) break;
+		if ((*k)->getNotationAbsoluteTime() > ti ||
+		    (*k)->getNotationDuration() != di) break;
 	    }
 	    ++k;
 	}
 
 	if (!segment().isBeforeEndMarker(k)) break; // no split, no more notes
 
-	std::cerr << "k is at " << (k == segment().end() ? -1 : (*k)->getAbsoluteTime()) << ", notation " << getNotationAbsoluteTime(*k) << ", duration " << getNotationDuration(*k, false) << std::endl;
+	std::cerr << "k is at " << (k == segment().end() ? -1 : (*k)->getAbsoluteTime()) << ", notation " << (*k)->getNotationAbsoluteTime() << ", duration " << (*k)->getNotationDuration() << std::endl;
 
-	timeT tk = getNotationAbsoluteTime(*k);
-	timeT dk = getNotationDuration(*k, false);
+	timeT tk = (*k)->getNotationAbsoluteTime();
+	timeT dk = (*k)->getNotationDuration();
 
 	Event *e1 = 0, *e2 = 0;
 	std::pair<Event *, Event *> splits;

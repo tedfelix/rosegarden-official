@@ -299,12 +299,12 @@ AbstractSet<Element, Container>::sample(const Iterator &i)
     if (d > 0) {
         if (m_longest == getContainer().end() ||
             d > q.getQuantizedDuration(getAsEvent(m_longest))) {
-//!!!	    std::cerr << "New longest in set at duration " << d << " and time " << e->getAbsoluteTime() << std::endl;
+//	    std::cerr << "New longest in set at duration " << d << " and time " << e->getAbsoluteTime() << std::endl;
             m_longest = i;
         }
         if (m_shortest == getContainer().end() ||
             d < q.getQuantizedDuration(getAsEvent(m_shortest))) {
-//!!!	    std::cerr << "New shortest in set at duration " << d << " and time " << e->getAbsoluteTime() << std::endl;
+//	    std::cerr << "New shortest in set at duration " << d << " and time " << e->getAbsoluteTime() << std::endl;
             m_shortest = i;
         }
     }
@@ -314,12 +314,12 @@ AbstractSet<Element, Container>::sample(const Iterator &i)
 
         if (m_highest == getContainer().end() ||
             p > get__Int(getAsEvent(m_highest), BaseProperties::PITCH)) {
-//!!!	    std::cerr << "New highest in set at pitch " << p << " and time " << e->getAbsoluteTime() << std::endl;
+//	    std::cerr << "New highest in set at pitch " << p << " and time " << e->getAbsoluteTime() << std::endl;
             m_highest = i;
         }
         if (m_lowest == getContainer().end() ||
             p < get__Int(getAsEvent(m_lowest), BaseProperties::PITCH)) {
-//!!!	    std::cerr << "New lowest in set at pitch " << p << " and time " << e->getAbsoluteTime() << std::endl;
+//	    std::cerr << "New lowest in set at pitch " << p << " and time " << e->getAbsoluteTime() << std::endl;
             m_lowest = i;
         }
     }
@@ -327,41 +327,6 @@ AbstractSet<Element, Container>::sample(const Iterator &i)
     return true;
 }
 
-/*!!!
-template <class Element, class Container>
-typename AbstractSet<Element, Container>::Iterator
-AbstractSet<Element, Container>::getInitialNote() const
-{
-    Iterator i(getInitialElement());
-    if (getAsEvent(i)->isa(Note::EventType)) return i;
-
-    Iterator j(getFinalElement());
-    ++j;
-    while (i != j) {
-        if (getAsEvent(i)->isa(Note::EventType)) return i;
-        ++i;
-    }
-
-    return getContainer().end();
-}
-
-template <class Element, class Container>
-typename AbstractSet<Element, Container>::Iterator
-AbstractSet<Element, Container>::getFinalNote() const
-{
-    Iterator i(getFinalElement());
-    if (getAsEvent(i)->isa(Note::EventType)) return i;
-
-    Iterator j(getInitialElement());
-    --j;
-    while (i != j) {
-        if (getAsEvent(i)->isa(Note::EventType)) return i;
-        --i;
-    }
-
-    return getContainer().end();
-}
-*/
 
 //////////////////////////////////////////////////////////////////////
  

@@ -588,26 +588,21 @@ private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 
-/*!!!
-class TransformsMenuFixSmoothingCommand : public BasicSelectionCommand
+class TransformsMenuFixNotationQuantizeCommand : public BasicSelectionCommand
 {
 public:
-    TransformsMenuFixSmoothingCommand(Rosegarden::EventSelection &selection,
-				      Rosegarden::Quantizer *quantizer) :
+    TransformsMenuFixNotationQuantizeCommand(Rosegarden::EventSelection &selection) :
 	BasicSelectionCommand(getGlobalName(), selection, true),
-	m_selection(&selection),
-	m_quantizer(quantizer) { }
+	m_selection(&selection) { }
     
-    static QString getGlobalName() { return i18n("Fi&x Smoothed Values"); }
+    static QString getGlobalName() { return i18n("Fi&x Notation Quantization"); }
     
 protected:
     virtual void modifySegment();
 
 private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    Rosegarden::Quantizer *m_quantizer;
 };
-*/
 
 class TransformsMenuInterpretCommand : public BasicSelectionCommand
 {

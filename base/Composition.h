@@ -156,6 +156,14 @@ public:
      */
     bool detachTrack(Rosegarden::Track *track);
 
+    /**
+     * Get the highest running track id (generated and kept
+     * through addTrack)
+     */
+    Rosegarden::TrackId getNewTrackId() const;
+
+
+
     //////
     //
     //  SEGMENT
@@ -294,6 +302,15 @@ public:
      */
     std::pair<timeT, timeT> getBarRangeForTime(timeT t) const;
 
+    /**
+     * Get the default number of bars in a new empty composition
+     */
+    static int getDefaultNbBars() { return m_defaultNbBars; }
+    
+    /**
+     * Set the default number of bars in a new empty composition
+     */
+    static void setDefaultNbBars(int b) { m_defaultNbBars = b; }
 
 
     //////
@@ -574,56 +591,6 @@ public:
 	m_refreshStatusArray.updateRefreshStatuses();
     }
 
-    /**
-     * This is a bit like a segment, but can only contain one sort of
-     * event, and can only have one event at each absolute time
-     */
-    class ReferenceSegment :
-	public FastVector<Event *> // not a set: want random access for bars
-    {
-	typedef FastVector<Event *> Impl;
-
-    public:
-	ReferenceSegment(std::string eventType);
-	virtual ~ReferenceSegment();
-
-        ReferenceSegment(const ReferenceSegment &);
-        ReferenceSegment& operator=(const ReferenceSegment &);
-	
-	typedef Impl::iterator iterator;
-	typedef Impl::size_type size_type;
-	typedef Impl::difference_type difference_type;
-
-	void clear();
-
-	timeT getDuration() const;
-	
-	/// Inserts a single event, removing any existing one at that time
-	iterator insert(Event *e); // may throw Event::BadType
-
-	void erase(Event *e);
-
-	iterator findTime(timeT time);
-	iterator findNearestTime(timeT time);
-
-	iterator findRealTime(RealTime time);
-	iterator findNearestRealTime(RealTime time);
-
-        std::string getEventType() const { return m_eventType; }
-
-    private:
-  	iterator find(Event *e);
-	std::string m_eventType;
-    };
-
-    ReferenceSegment getTimeSigSegment() const { return m_timeSigSegment; }
-    ReferenceSegment getTempoSegment() const { return m_tempoSegment; }
-
-
-    //// Get the highest running track id (generated and kept
-    //// through addTrack)
-    ////
-    Rosegarden::TrackId getNewTrackId() const;
 
 protected:
 
@@ -672,11 +639,65 @@ protected:
     bool                              m_solo;
     Rosegarden::TrackId               m_selectedTrack;
 
+
+    /**
+     * This is a bit like a segment, but can only contain one sort of
+     * event, and can only have one event at each absolute time
+     */
+    class ReferenceSegment :
+	public FastVector<Event *> // not a set: want random access for bars
+    {
+	typedef FastVector<Event *> Impl;
+
+    public:
+	ReferenceSegment(std::string eventType);
+	virtual ~ReferenceSegment();
+
+        ReferenceSegment(const ReferenceSegment &);
+        ReferenceSegment& operator=(const ReferenceSegment &);
+	
+	typedef Impl::iterator iterator;
+	typedef Impl::size_type size_type;
+	typedef Impl::difference_type difference_type;
+
+	void clear();
+
+	timeT getDuration() const;
+	
+	/// Inserts a single event, removing any existing one at that time
+	iterator insert(Event *e); // may throw Event::BadType
+
+	void erase(Event *e);
+
+	iterator findTime(timeT time);
+	iterator findNearestTime(timeT time);
+
+	iterator findRealTime(RealTime time);
+	iterator findNearestRealTime(RealTime time);
+
+        std::string getEventType() const { return m_eventType; }
+
+    private:
+  	iterator find(Event *e);
+	std::string m_eventType;
+    };
+
     /// Contains time signature events
     mutable ReferenceSegment          m_timeSigSegment;
 
     /// Contains tempo events
     mutable ReferenceSegment          m_tempoSegment;
+
+    /// affects m_timeSigSegment
+    void calculateBarPositions() const;
+    mutable bool                      m_barPositionsNeedCalculating;
+    ReferenceSegment::iterator getTimeSignatureAtAux(timeT t) const;
+
+    /// affects m_tempoSegment
+    void calculateTempoTimestamps() const;
+    mutable bool m_tempoTimestampsNeedCalculating;
+    RealTime time2RealTime(timeT time, double tempo) const;
+    timeT realTime2Time(RealTime rtime, double tempo) const;
 
     BasicQuantizer                   *m_basicQuantizer;
     NotationQuantizer                *m_notationQuantizer;
@@ -691,22 +712,13 @@ protected:
     timeT                             m_startMarker;
     timeT                             m_endMarker;
 
+    static int                        m_defaultNbBars;
+
     // Loop start and end positions.  If they're both the same
     // value (usually 0) then there's no loop set.
     //
     timeT                             m_loopStart;
     timeT                             m_loopEnd;
-
-    /// affects m_timeSigSegment
-    void calculateBarPositions() const;
-    mutable bool                      m_barPositionsNeedCalculating;
-    ReferenceSegment::iterator getTimeSignatureAtAux(timeT t) const;
-
-    /// affects m_tempoSegment
-    void calculateTempoTimestamps() const;
-    mutable bool m_tempoTimestampsNeedCalculating;
-    RealTime time2RealTime(timeT time, double tempo) const;
-    timeT realTime2Time(RealTime rtime, double tempo) const;
 
     Configuration                     m_metadata;
 
@@ -714,12 +726,9 @@ protected:
     bool                              m_recordMetronome;
 
     RefreshStatusArray<RefreshStatus> m_refreshStatusArray;
-
     bool                              m_needsRefresh;
-
     TrackId                           m_highestTrackId;
 
-public:
     ColourMap                         m_segmentColourMap;
 };
 

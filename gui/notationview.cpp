@@ -207,7 +207,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
 
     // Initialise the display-related defaults that will be needed
-    // by both the actions and the font toolbar
+    // by both the actions and the layout toolbar
 
     m_config->setGroup(NotationView::ConfigGroup);
 
@@ -223,7 +223,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_hlayout->setSpacing(defaultSpacing);
 
     setupActions();
-    initFontToolbar();
+    initLayoutToolbar();
     initStatusBar();
     
     setBackgroundMode(PaletteBase);
@@ -468,7 +468,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
 
     // Initialise the display-related defaults that will be needed
-    // by both the actions and the font toolbar
+    // by both the actions and the layout toolbar
 
     m_config->setGroup(NotationView::ConfigGroup);
 
@@ -661,19 +661,37 @@ void NotationView::slotSaveOptions()
     m_config->sync();
 }
 
+void NotationView::setOneToolbar(const char *actionName,
+				 const char *toolbarName)
+{
+    KToggleAction *action = getToggleAction(actionName);
+    if (!action) {
+	std::cerr << "WARNING: No such action as " << actionName << std::endl;
+	return;
+    }
+    QWidget *toolbar = toolBar(toolbarName);
+    if (!toolbar) {
+	std::cerr << "WARNING: No such toolbar as " << toolbarName << std::endl;
+	return;
+    }
+    action->setChecked(!toolbar->isHidden());
+}
+	
+
 void NotationView::readOptions()
 {
     EditView::readOptions();
 
-    getToggleAction("show_tools_toolbar")      ->setChecked(!toolBar("Tools Toolbar")      ->isHidden());
-    getToggleAction("show_notes_toolbar")      ->setChecked(!toolBar("Notes Toolbar")      ->isHidden());
-    getToggleAction("show_rests_toolbar")      ->setChecked(!toolBar("Rests Toolbar")      ->isHidden());
-    getToggleAction("show_clefs_toolbar")      ->setChecked(!toolBar("Clefs Toolbar")      ->isHidden());
-    getToggleAction("show_group_toolbar")      ->setChecked(!toolBar("Group Toolbar")      ->isHidden());
-    getToggleAction("show_marks_toolbar")       ->setChecked(!toolBar("Marks Toolbar")     ->isHidden());
-    getToggleAction("show_font_toolbar")       ->setChecked(!toolBar("Font Toolbar")       ->isHidden());
-    getToggleAction("show_transport_toolbar")  ->setChecked(!toolBar("Transport Toolbar")  ->isHidden());
-    getToggleAction("show_accidentals_toolbar")->setChecked(!toolBar("Accidentals Toolbar")->isHidden());
+    setOneToolbar("show_tools_toolbar", "Tools Toolbar");
+    setOneToolbar("show_notes_toolbar", "Notes Toolbar");
+    setOneToolbar("show_rests_toolbar", "Rests Toolbar");
+    setOneToolbar("show_clefs_toolbar", "Clefs Toolbar");
+    setOneToolbar("show_group_toolbar", "Group Toolbar");
+    setOneToolbar("show_marks_toolbar", "Marks Toolbar");
+    setOneToolbar("show_layout_toolbar", "Layout Toolbar");
+    setOneToolbar("show_transport_toolbar", "Transport Toolbar");
+    setOneToolbar("show_accidentals_toolbar", "Accidentals Toolbar");
+    setOneToolbar("show_meta_toolbar", "Meta Toolbar");
 
     m_config->setGroup(NotationView::ConfigGroup);
 
@@ -1125,11 +1143,11 @@ void NotationView::setupActions()
     new KAction(EventQuantizeCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
-/*!!! need updated version of this
-    new KAction(TransformsMenuFixSmoothingCommand::getGlobalName(), 0,
-		this, SLOT(slotTransformsFixSmoothing()), actionCollection(),
-                "fix_smoothing");
-*/
+
+    new KAction(TransformsMenuFixNotationQuantizeCommand::getGlobalName(), 0,
+		this, SLOT(slotTransformsFixQuantization()), actionCollection(),
+                "fix_quantization");
+
     new KAction(TransformsMenuInterpretCommand::getGlobalName(), 0,
 		this, SLOT(slotTransformsInterpret()), actionCollection(),
 		"interpret");
@@ -1197,10 +1215,12 @@ void NotationView::setupActions()
           "palette-marks" },
             { i18n("Show &Group Toolbar"), "1slotToggleGroupToolBar()",   "show_group_toolbar",
           "palette-group" },            
-            { i18n("Show &Layout Toolbar"), "1slotToggleFontToolBar()", "show_font_toolbar",
+            { i18n("Show &Layout Toolbar"), "1slotToggleLayoutToolBar()", "show_layout_toolbar",
           "palette-font" },
             { i18n("Show Trans&port Toolbar"), "1slotToggleTransportToolBar()", "show_transport_toolbar",
-          "palette-transport" }
+	  "palette-transport" },
+            { i18n("Show M&eta Toolbar"), "1slotToggleMetaToolBar()", "show_meta_toolbar",
+          "palette-meta" }
         };
 
     for (unsigned int i = 0;
@@ -1390,19 +1410,19 @@ NotationView::getStaff(const Segment &segment)
     return 0;
 }
 
-void NotationView::initFontToolbar()
+void NotationView::initLayoutToolbar()
 {
-    KToolBar *fontToolbar = toolBar("Font Toolbar");
+    KToolBar *layoutToolbar = toolBar("Layout Toolbar");
     
-    if (!fontToolbar) {
+    if (!layoutToolbar) {
         NOTATION_DEBUG
-            << "NotationView::initFontToolbar() : font toolbar not found\n";
+            << "NotationView::initLayoutToolbar() : layout toolbar not found\n";
         return;
     }
 
-    new QLabel(i18n("  Font:  "), fontToolbar, "kde toolbar widget");
+    new QLabel(i18n("  Font:  "), layoutToolbar, "kde toolbar widget");
 
-    m_fontCombo = new QComboBox(fontToolbar);
+    m_fontCombo = new QComboBox(layoutToolbar);
     m_fontCombo->setEditable(false);
 
     std::set<std::string> fs(NotePixmapFactory::getAvailableFontNames());
@@ -1432,20 +1452,20 @@ void NotationView::initFontToolbar()
     connect(m_fontCombo, SIGNAL(activated(const QString &)),
             this,        SLOT(slotChangeFont(const QString &)));
 
-    new QLabel(i18n("  Size:  "), fontToolbar, "kde toolbar widget");
+    new QLabel(i18n("  Size:  "), layoutToolbar, "kde toolbar widget");
 
     std::vector<int> sizes = NotePixmapFactory::getAvailableSizes(m_fontName);
     m_fontSizeSlider = new ZoomSlider<int>
-        (sizes, m_fontSize, QSlider::Horizontal, fontToolbar, "kde toolbar widget");
+        (sizes, m_fontSize, QSlider::Horizontal, layoutToolbar, "kde toolbar widget");
     connect(m_fontSizeSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotChangeFontSizeFromIndex(int)));
 
-    new QLabel(i18n("  Spacing:  "), fontToolbar, "kde toolbar widget");
+    new QLabel(i18n("  Spacing:  "), layoutToolbar, "kde toolbar widget");
 
     int defaultSpacing = m_hlayout->getSpacing();
     std::vector<int> spacings = NotationHLayout::getAvailableSpacings();
     m_spacingSlider = new ZoomSlider<int>
-        (spacings, defaultSpacing, QSlider::Horizontal, fontToolbar, "kde toolbar widget");
+        (spacings, defaultSpacing, QSlider::Horizontal, layoutToolbar, "kde toolbar widget");
     connect(m_spacingSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotChangeSpacingFromIndex(int)));
 }

@@ -912,21 +912,50 @@ MarksMenuRemoveMarksCommand::modifySegment()
     }
 }
 
-/*!!!
 void
-TransformsMenuFixSmoothingCommand::modifySegment()
+TransformsMenuFixNotationQuantizeCommand::modifySegment()
 {
-    //!!! FIXME -- the Quantizer needs a fixQuantizedValues(EventSelection*)
-    // method, but it hasn't got one yet so for the moment we're just fixing
-    // all the quantized values within the time limits whether selected or not
+    std::vector<Event *> toErase;
+    std::vector<Event *> toInsert;
+    Segment &segment(m_selection->getSegment());
 
+    EventSelection::eventcontainer::iterator i;
+
+    //!!! the Quantizer needs a fixQuantizedValues(EventSelection*)
+    //method, but it hasn't got one yet so for the moment we're doing
+    //this by hand.
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+	
+	timeT ut = (*i)->getAbsoluteTime();
+	timeT ud = (*i)->getDuration();
+	timeT qt = (*i)->getNotationAbsoluteTime();
+	timeT qd = (*i)->getNotationDuration();
+	
+	if ((ut != qt) || (ud != qd)) {
+	    toErase.push_back(*i);
+	    toInsert.push_back(new Event(**i, qt, qd));
+	}
+    }
+
+    for (unsigned int j = 0; j < toErase.size(); ++j) {
+	Segment::iterator jtr(segment.findSingle(toErase[j]));
+	if (jtr != segment.end()) segment.erase(jtr);
+    }
+	       
+    for (unsigned int j = 0; j < toInsert.size(); ++j) {
+	segment.insert(toInsert[j]);
+    }
+    
+/*!!!
     Segment *segment(&m_selection->getSegment());
     m_quantizer->fixQuantizedValues
 	(segment,
 	 segment->findTime(m_selection->getStartTime()),
 	 segment->findTime(m_selection->getEndTime()));
-}
 */
+}
 
 
 const int TransformsMenuInterpretCommand::NoInterpretation      = 0;

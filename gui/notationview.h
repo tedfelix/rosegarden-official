@@ -320,12 +320,17 @@ public slots:
     /**
      * toggles the font toolbar
      */
-    void slotToggleFontToolBar();
+    void slotToggleLayoutToolBar();
 
     /**
      * toggles the transport toolbar
      */
     void slotToggleTransportToolBar();
+
+    /**
+     * toggles the meta toolbar
+     */
+    void slotToggleMetaToolBar();
 
     /// note switch slot
     void slotNoteAction();
@@ -405,7 +410,7 @@ public slots:
     void slotTransposeDown();
     void slotTransposeDownOctave();
     void slotTransformsQuantize();
-//!!!    void slotTransformsFixSmoothing();
+    void slotTransformsFixQuantization();
     void slotTransformsInterpret();
 
     void slotSetStyleFromAction();
@@ -607,6 +612,9 @@ protected:
      */
     virtual void readOptions();
 
+    void setOneToolbar(const char *actionName, 
+		       const char *toolbarName);
+
     /**
      * create menus and toolbars
      */
@@ -633,9 +641,9 @@ protected:
     void positionStaffs();
 
     /**
-     * setup the "zoom" toolbar
+     * setup the layout/font toolbar
      */
-    void initFontToolbar();
+    void initLayoutToolbar();
 
     /**
      * Helper function to toggle a toolbar given its name

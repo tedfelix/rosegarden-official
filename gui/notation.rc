@@ -112,8 +112,7 @@
   <Action name="de_counterpoint"/>
   <Separator/>
   <Action name="quantize"/>
-<!--  <Action name="fix_smoothing"/>
--->
+  <Action name="fix_quantization"/>
   <Separator/>
   <Action name="interpret"/>
   <Separator/>
@@ -274,7 +273,8 @@
   <Action name="show_marks_toolbar"        append="show_merge" />
   <Action name="show_group_toolbar"        append="show_merge" />
   <Action name="show_transport_toolbar"    append="show_merge" />
-  <Action name="show_font_toolbar"         append="show_merge" />
+  <Action name="show_layout_toolbar"       append="show_merge" />
+  <Action name="show_meta_toolbar"         append="show_merge" />
   <Separator                               append="show_merge" />
   <Action name="show_chords_ruler"         append="show_merge" />
   <Action name="show_raw_note_ruler"       append="show_merge" />
@@ -374,7 +374,7 @@
   <Action name="bass_clef" />
 </ToolBar>
 
-<ToolBar name="Marks Toolbar" newline = "true">
+<ToolBar name="Marks Toolbar" newline="true" hidden="true">
   <text>Marks Toolbar</text>
 
     <Action name="add_accent"/>
@@ -395,7 +395,7 @@
     <Action name="add_text_mark"/>
 </ToolBar>
 
-<ToolBar name="Group Toolbar">
+<ToolBar name="Group Toolbar" hidden="true">
   <text>Group Toolbar</text>
 
   <Action name="beam"/>
@@ -412,7 +412,7 @@
   <Action name="decrescendo"/>
 </ToolBar>
 
-<ToolBar name="Meta Toolbar" newline="true">
+<ToolBar name="Meta Toolbar" newline="true" hidden="true">
   <text>Meta Toolbar</text>
 
   <Action name="show_notes_toolbar"        />
@@ -423,8 +423,8 @@
   <Action name="show_group_toolbar"        />
 </ToolBar>
 
-<ToolBar name="Font Toolbar">
-  <text>Font Toolbar</text>
+<ToolBar name="Layout Toolbar">
+  <text>Layout Toolbar</text>
 <!-- filled entirely at runtime -->
 </ToolBar>
 
@@ -509,8 +509,7 @@
     <Action name="de_counterpoint"/>
     <Action name="quantize"/>
     <Action name="interpret"/>
-<!--    <Action name="fix_smoothing"/>
--->
+    <Action name="fix_quantization"/>
     <Action name="transpose_up"/>
     <Action name="transpose_down"/>
     <Action name="transpose_up_octave"/>
