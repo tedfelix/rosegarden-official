@@ -194,7 +194,7 @@ PasteEventsCommand::PasteEventsCommand(Rosegarden::Segment &segment,
 				       Rosegarden::Clipboard *clipboard,
 				       Rosegarden::timeT pasteTime,
 				       PasteType pasteType) :
-    BasicCommand(name(), segment, pasteTime,
+    BasicCommand(getGlobalName(), segment, pasteTime,
 		 getEffectiveEndTime(segment, clipboard, pasteTime)),
     m_relayoutEndTime(getEndTime()),
     m_clipboard(clipboard),
@@ -358,7 +358,7 @@ PasteEventsCommand::modifySegment()
 
 
 EraseCommand::EraseCommand(EventSelection &selection) :
-    BasicSelectionCommand(name(), selection, true),
+    BasicSelectionCommand(getGlobalName(), selection, true),
     m_selection(&selection),
     m_relayoutEndTime(getEndTime())
 {
@@ -368,7 +368,7 @@ EraseCommand::EraseCommand(EventSelection &selection) :
 void
 EraseCommand::modifySegment()
 {
-    std::vector<Segment::iterator> toErase;
+    std::vector<Event *> toErase;
     EventSelection::eventcontainer::iterator i;
 
     for (i  = m_selection->getSegmentEvents().begin();
@@ -387,11 +387,11 @@ EraseCommand::modifySegment()
 	// events, and it's what's used by EraseEventCommand and thus
 	// the notation eraser tool.
 
-	toErase.push_back(i);
+	toErase.push_back(*i);
     }
 
     for (unsigned int j = 0; j < toErase.size(); ++j) {
-	getSegment().erase(toErase[j]);
+	getSegment().eraseSingle(toErase[j]);
     }
 
     getSegment().normalizeRests(getBeginTime(), getEndTime());
@@ -408,7 +408,7 @@ EraseCommand::getRelayoutEndTime()
 EventEditCommand::EventEditCommand(Rosegarden::Segment &segment,
 				   Rosegarden::Event *eventToModify,
 				   const Rosegarden::Event &newEvent) :
-    BasicCommand(name(),
+    BasicCommand(getGlobalName(),
 		 segment,
 		 std::min(eventToModify->getAbsoluteTime(),
 			  newEvent.getAbsoluteTime()),
