@@ -25,6 +25,7 @@
 
 #include <qcanvas.h>
 #include "Event.h"
+#include "rosegardenguidoc.h"
 
 
 // Creates a canvas widget that reacts to mouse clicks and
@@ -42,7 +43,8 @@ class LoopRuler : public QCanvasView
     Q_OBJECT
 
 public:
-    LoopRuler(QCanvas* canvas = 0,
+    LoopRuler(RosegardenGUIDoc *doc,
+              QCanvas* canvas = 0,
               QWidget* parent = 0,
               const int &bars = 0,
               const int &barWidth = 0,
@@ -77,14 +79,15 @@ signals:
 
 private:
 
-    void drawBars();
+    void drawBarSections();
+    Rosegarden::timeT getPointerPosition(const int &xPos);
 
     int m_bars;
     int m_barWidth;
     int m_height;
     int m_barSubSections;
-
-    QCanvas *m_canvas;
+    QCanvas          *m_canvas;
+    RosegardenGUIDoc *m_doc;
 
 };
 

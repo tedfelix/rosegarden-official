@@ -24,7 +24,6 @@
 
 #include <qhbox.h>
 #include <qheader.h>
-
 #include "rosegardenguidoc.h"
 
 
@@ -46,9 +45,10 @@ private:
     void drawButtons();
 
     int m_bars;
-    int m_cellHeight;
-    int m_cellWidth;
+    int m_barHeight;
+    int m_barWidth;
     int m_offset;
+    RosegardenGUIDoc *m_doc;
     
 };
 

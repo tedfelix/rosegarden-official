@@ -23,9 +23,10 @@
 #include "loopruler.h"
 #include "colours.h"
 #include <iostream>
+#include "Event.h"
 
-
-LoopRuler::LoopRuler(QCanvas *canvas,
+LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
+                     QCanvas *canvas,
                      QWidget *parent,
                      const int &bars,
                      const int &barWidth,
@@ -33,13 +34,13 @@ LoopRuler::LoopRuler(QCanvas *canvas,
                      const char *name):
     QCanvasView(canvas, parent, name),
     m_bars(bars), m_barWidth(barWidth), m_height(height),
-    m_barSubSections(4), m_canvas(canvas)
+    m_barSubSections(4), m_canvas(canvas), m_doc(doc)
 {
     setMinimumSize(bars * barWidth, height);
     setMaximumSize(bars * barWidth, height);
     setFrameStyle(NoFrame);
 
-    drawBars();
+    drawBarSections();
 }
 
 LoopRuler::~LoopRuler()
@@ -47,15 +48,30 @@ LoopRuler::~LoopRuler()
 }
 
 void
-LoopRuler::drawBars()
+LoopRuler::drawBarSections()
 {
     QCanvasLine *line;
     int subSectionLinePos;
 
+    std::pair<Rosegarden::timeT, Rosegarden::timeT> fTimes =
+        m_doc->getComposition().getBarRange(1, false);
+
+    int firstBarWidth = fTimes.second - fTimes.first;
+    int runningWidth = 0;
+
     for (int i = 0; i < m_bars; i++)
     {
+        std::pair<Rosegarden::timeT, Rosegarden::timeT> times =
+            m_doc->getComposition().getBarRange(i, false);
+
+        // Normalise this bar width to a ratio of the first
+        //
+        int barWidth = m_barWidth * (times.second - times.first)
+                          / firstBarWidth;
+
         line = new QCanvasLine(m_canvas);
-        line->setPoints(i * m_barWidth, 0, i * m_barWidth, m_height);
+        line->setPoints(runningWidth, 0,
+                        runningWidth, m_height);
         line->setPen(RosegardenGUIColours::LoopRulerForeground);
         line->show();
 
@@ -63,8 +79,8 @@ LoopRuler::drawBars()
         {
             if (j == 0) continue;
             
-            subSectionLinePos = (i * m_barWidth) +
-                                (m_barWidth * j/m_barSubSections);
+            subSectionLinePos = (runningWidth) +
+                                (barWidth * j/m_barSubSections);
 
             line = new QCanvasLine(m_canvas);
             line->setPoints(subSectionLinePos, m_height,
@@ -73,6 +89,8 @@ LoopRuler::drawBars()
             line->show();
 
         }
+
+        runningWidth += barWidth;
 
     }
 
@@ -84,6 +102,7 @@ LoopRuler::contentsMousePressEvent(QMouseEvent *mE)
     if (mE->button() == LeftButton)
     {
         std::cout << "press at " << mE->pos().x() << endl;
+        std::cout << "this is " << getPointerPosition(mE->pos().x()) << endl;
     }
     else if (mE->button() == RightButton)
     {
@@ -105,5 +124,46 @@ LoopRuler::contentsMouseDoubleClickEvent(QMouseEvent *mE)
     {
     }
 }
+
+// From an x position work out the pointer position.
+// Loop through all the bars removing a calculated
+// x position every pass through until we're left
+// in the bar we require.
+//
+//
+Rosegarden::timeT
+LoopRuler::getPointerPosition(const int &xPos)
+{
+    Rosegarden::timeT position;
+    std::pair<Rosegarden::timeT, Rosegarden::timeT> fTimes =
+        m_doc->getComposition().getBarRange(1, false);
+
+    int firstBarWidth = fTimes.second - fTimes.first;
+    int runningWidth;
+
+    Rosegarden::timeT result = 0;
+
+    for (int i = 0; i < m_bars; i++)
+    {
+        std::pair<Rosegarden::timeT, Rosegarden::timeT> times =
+            m_doc->getComposition().getBarRange(i, false);
+
+        int barWidth = m_barWidth * (times.second - times.first)
+                          / firstBarWidth;
+
+        if (runningWidth + barWidth > xPos)
+        {
+            result = position + ((times.second - times.first) *
+                                 (xPos - runningWidth)/barWidth);
+            break;
+        }
+
+        position += times.second - times.first;
+        runningWidth += barWidth;
+    }
+
+    return result;
+}
+
 
 
