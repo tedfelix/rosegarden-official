@@ -64,7 +64,7 @@ void breakpoint();
 template<class RS>
 void RefreshStatusArray<RS>::updateRefreshStatuses()
 {
-    breakpoint(); // for debug purposes, so one can set a breakpoint
+    // breakpoint(); // for debug purposes, so one can set a breakpoint
     // in this template code (set it in breakpoint() itself).
     for(unsigned int i = 0; i < m_refreshStatuses.size(); ++i)
         m_refreshStatuses[i].setNeedsRefresh(true);
