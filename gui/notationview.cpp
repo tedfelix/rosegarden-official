@@ -1141,7 +1141,7 @@ void NotationView::setupActions()
 	    (NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap
 	     (markActionData.pixmapName)));
 
-	new KAction(i18n(markActionData.title),
+	new KAction(markActionData.title,
 		    icon,
 		    markActionData.keycode,
 		    this,
@@ -1188,21 +1188,21 @@ void NotationView::setupActions()
                 "add_key_signature");
 
     // setup Settings menu
-    static const char* actionsToolbars[][4] = 
+    static QString actionsToolbars[][4] = 
         {
-            { "Show T&ools Toolbar",  "1slotToggleToolsToolBar()",  "show_tools_toolbar",                    "palette-tools" },
-            { "Show &Notes Toolbar",  "1slotToggleNotesToolBar()",  "show_notes_toolbar",                    "palette-notes" },
-            { "Show &Rests Toolbar",  "1slotToggleRestsToolBar()",  "show_rests_toolbar",                    "palette-rests" },
-            { "Show &Accidentals Toolbar",   "1slotToggleAccidentalsToolBar()",  "show_accidentals_toolbar", "palette-accidentals" },
-            { "Show Cle&fs Toolbar",  "1slotToggleClefsToolBar()",  "show_clefs_toolbar",
+            { i18n("Show T&ools Toolbar"),  "1slotToggleToolsToolBar()",  "show_tools_toolbar",                    "palette-tools" },
+            { i18n("Show &Notes Toolbar"),  "1slotToggleNotesToolBar()",  "show_notes_toolbar",                    "palette-notes" },
+            { i18n("Show &Rests Toolbar"),  "1slotToggleRestsToolBar()",  "show_rests_toolbar",                    "palette-rests" },
+            { i18n("Show &Accidentals Toolbar"),   "1slotToggleAccidentalsToolBar()",  "show_accidentals_toolbar", "palette-accidentals" },
+            { i18n("Show Cle&fs Toolbar"),  "1slotToggleClefsToolBar()",  "show_clefs_toolbar",
           "palette-clefs" },
-            { "Show &Marks Toolbar", "1slotToggleMarksToolBar()",   "show_marks_toolbar",
+            { i18n("Show &Marks Toolbar"), "1slotToggleMarksToolBar()",   "show_marks_toolbar",
           "palette-marks" },
-            { "Show &Group Toolbar", "1slotToggleGroupToolBar()",   "show_group_toolbar",
+            { i18n("Show &Group Toolbar"), "1slotToggleGroupToolBar()",   "show_group_toolbar",
           "palette-group" },            
-            { "Show &Layout Toolbar", "1slotToggleFontToolBar()", "show_font_toolbar",
+            { i18n("Show &Layout Toolbar"), "1slotToggleFontToolBar()", "show_font_toolbar",
           "palette-font" },
-            { "Show Trans&port Toolbar", "1slotToggleTransportToolBar()", "show_transport_toolbar",
+            { i18n("Show Trans&port Toolbar"), "1slotToggleTransportToolBar()", "show_transport_toolbar",
           "palette-transport" }
         };
 
@@ -1211,7 +1211,7 @@ void NotationView::setupActions()
 
         icon = QIconSet(NotePixmapFactory::toQPixmap(m_toolbarNotePixmapFactory.makeToolbarPixmap(actionsToolbars[i][3])));
 
-        new KToggleAction(i18n(actionsToolbars[i][0]), icon, 0,
+        new KToggleAction(actionsToolbars[i][0], icon, 0,
                           this, actionsToolbars[i][1],
                           actionCollection(), actionsToolbars[i][2]);
     }
