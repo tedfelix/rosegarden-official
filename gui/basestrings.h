@@ -34,16 +34,6 @@
  *  is arguably not too awful.
  */
 
-i18n("Add accent");
-i18n("Add tenuto");
-i18n("Add staccato");
-i18n("Add staccatissimo");
-i18n("Add marcato");
-i18n("Add trill");
-i18n("Add turn");
-i18n("Add pause");
-i18n("Add up-bow");
-i18n("Add down-bow");
 i18n("Show Notes Toolbar");
 i18n("Show Rests Toolbar");
 i18n("Show Accidentals Toolbar");
