@@ -209,7 +209,13 @@ Studio::toXmlString()
     //
     for (it = m_devices.begin(); it != m_devices.end(); it++)
     {
+        // Sends Device to XML
         studio << (*it)->toXmlString() << std::endl << std::endl;
+
+        // Send Instruments
+        list = (*it)->getAllInstruments();
+        for (iit = list.begin(); iit != list.end(); iit++)
+            studio << (*iit)->toXmlString() << std::endl;
     }
 
     studio << "</studio>" << std::endl << std::ends;

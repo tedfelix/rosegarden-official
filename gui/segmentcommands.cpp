@@ -20,6 +20,8 @@
 #include "segmentcommands.h"
 #include "rosedebug.h"
 #include "NotationTypes.h"
+#include "Property.h"
+#include "Composition.h"
 
 using Rosegarden::Composition;
 using Rosegarden::Segment;
@@ -495,18 +497,42 @@ AddTimeSignatureCommand::unexecute()
     }
 }
 
+AddTempoChangeCommand::~AddTempoChangeCommand()
+{
+    if (m_oldTempo) delete m_oldTempo;
+}
 
 void
 AddTempoChangeCommand::execute()
 {
-    m_composition->addTempo(m_time, m_tempo);
+    int oldIndex = m_composition->getTempoChangeNumberAt(m_time);
+
+    if(oldIndex >= 0)
+    {
+        std::pair<timeT, long> data = 
+            m_composition->getRawTempoChange(oldIndex);
+
+        if (data.first == m_time)
+        {
+            m_oldTempo =
+                new Rosegarden::Event(Composition::TempoEventType, m_time);
+            m_oldTempo->set<Rosegarden::Int>(Composition::TempoProperty,
+                                             data.second);
+        }
+    }
+
+    m_tempoChangeIndex = m_composition->addTempo(m_time, m_tempo);
 }
 
 void
 AddTempoChangeCommand::unexecute()
 {
-    int num = m_composition->getTempoChangeNumberAt(m_time);
-    m_composition->removeTempoChange(num);
+    m_composition->removeTempoChange(m_tempoChangeIndex);
+
+    if (m_oldTempo)
+    {
+        m_composition->addTempo(*m_oldTempo);
+    }
 }
 
 

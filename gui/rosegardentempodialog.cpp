@@ -53,7 +53,7 @@ RosegardenTempoDialog::RosegardenTempoDialog(RosegardenGUIDoc *doc,
                    this,
                    SLOT(slotOK()));
 
-    TempoSpin->setFrameShadow(QFrame::Plain);
+    //TempoSpin->setFrameShadow(QFrame::Plain);
     TempoSpin->setMinValue(1);
     TempoSpin->setMaxValue(1000);
 

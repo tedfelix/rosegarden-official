@@ -212,7 +212,11 @@ public:
         TimeAndTempoChangeCommand(name()),
         m_composition(composition),
         m_time(time),
-        m_tempo(tempo) {}
+        m_tempo(tempo),
+        m_oldTempo(0),
+        m_tempoChangeIndex(0) {}
+
+    ~AddTempoChangeCommand();
 
     static QString name()
     {
@@ -225,6 +229,8 @@ private:
     Rosegarden::Composition *m_composition;
     Rosegarden::timeT m_time;
     double m_tempo;
+    Rosegarden::Event *m_oldTempo;
+    int m_tempoChangeIndex;
 };
 
 

@@ -91,6 +91,17 @@ Instrument::toXmlString()
 {
     std::stringstream instrument;
 
+    // only export if there's anything worth sending
+    //
+    if (!m_sendBankSelect &&
+        !m_sendProgramChange &&
+        !m_sendPan &&
+        !m_sendVelocity)
+    {
+        instrument << std::ends;
+        return instrument.str();
+    }
+
     instrument << "<instrument id=\"";
     instrument << m_id << "\" type=\"";
 
@@ -109,8 +120,31 @@ Instrument::toXmlString()
             break;
     }
 
-    instrument << "\" name=\"" << m_name << "\"";
-    instrument << "/>" << std::ends;
+    instrument << "\" name=\"" << m_name << ">\"" << std::endl;
+
+    if (m_sendBankSelect)
+    {
+        instrument << "    <bank msb=\"" << m_msb;
+        instrument << "\" lsb=\"" << m_lsb << "\"/>" << std::endl;
+    }
+
+    if (m_sendProgramChange)
+    {
+        instrument << "    <program id=\"" << m_programChange << "\"/>"
+                   << std::endl;
+    }
+    
+    if (m_sendPan)
+    {
+        instrument << "    <pan value=\"" << m_pan << "\"/>" << std::endl;
+    }
+
+    if (m_sendVelocity)
+    {
+        instrument << "    <velocity=\"" << m_velocity << "\"/>" << std::endl;
+    }
+
+    instrument << "</instrument>" << std::endl << std::ends;
 
     return instrument.str();
 

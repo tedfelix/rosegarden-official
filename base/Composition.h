@@ -365,6 +365,11 @@ public:
      */
     int addTempo(timeT time, double tempo);
 
+    /*
+     * Insert a TempoEvent 
+     */
+    int addTempo(Event tempoEvent);
+
     /**
      * Add a tempo-change event at the given time, to the given
      * tempo (in beats per hour).  Removes any existing tempo
@@ -517,6 +522,11 @@ public:
     void setPlayMetronome(bool value) { m_playMetronome = value; }
     void setRecordMetronome(bool value) { m_recordMetronome = value; }
 
+    // Expose these
+    //
+    static const std::string TempoEventType; 
+    static const PropertyName TempoProperty; // stored in beats per hour
+
 protected:
 
     class ReferenceSegment;
@@ -563,8 +573,6 @@ protected:
     static const PropertyName NoAbsoluteTimeProperty;
     static const PropertyName BarNumberProperty;
 
-    static const std::string TempoEventType; 
-    static const PropertyName TempoProperty; // stored in beats per hour
     static const PropertyName TempoTimestampSecProperty;
     static const PropertyName TempoTimestampUsecProperty;
 
