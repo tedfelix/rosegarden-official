@@ -106,11 +106,35 @@ XMLStorableElement::XMLStorableElement(const QDomNamedNodeMap &attributes,
             setDuration(d);
 
         } else {
-            // set property
+
+            // set generic property
+            //
+            QString val(n.value());
+            
+            // Check if boolean val
+            QString valLowerCase(val.lower());
+            bool isNumeric;
+            int numVal;
+
+            if (valLowerCase == "true" || valLowerCase == "false") {
+
+                set<Bool>(n.name().latin1(), valLowerCase == "true");
+
+            } else {
+
+                // Not a bool, check if integer val
+                numVal = val.toInt(&isNumeric);
+                if (isNumeric) {
+                    set<Int>(n.name().latin1(), numVal);
+                } else {
+                    // not an int either, default to string
+                    set<String>(n.name().latin1(), n.value().latin1());
+                }
+            }
+
         }
 
     }
-
 }
 
 XMLStorableElement::namedurationmap
