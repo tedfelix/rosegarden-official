@@ -17,3 +17,6 @@ rosegarden
 *_meta_unload.cpp
 *.kidl
 core.*
+tips.cpp
+fonts.cpp
+styles.cpp

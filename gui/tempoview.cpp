@@ -141,7 +141,7 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, Rosegarden::timeT o
 
     m_grid->addWidget(m_list, 2, 1);
 
-    setCaption(QString("%1 - Tempo and Time Signature Editor")
+    setCaption(i18n("%1 - Tempo and Time Signature Editor")
 	       .arg(doc->getTitle()));
 
     doc->getComposition().addObserver(this);

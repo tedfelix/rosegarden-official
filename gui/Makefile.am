@@ -273,7 +273,11 @@ rc_DATA = bankeditor.rc \
 # make messages.po. Move this one to ../po/ and "make merge" in po
 # the -x is for skipping messages already translated in kdelibs
 messages: rc.cpp
-	rm -f tips.cpp
+	rm -f tips.cpp fonts.cpp styles.cpp
 	(cd docs/en && $(PREPARETIPS) > ../../tips.cpp)
+	(cd fonts/mappings && cat *.xml | perl -e \
+	  'while (<STDIN>) { if(/(encoding name|origin|copyright|mapped-by|type)\s*=\s*\"(.*)\"/) { print "i18n(\"$$2\")\;\n";} }' \
+	  > ../../fonts.cpp)
+	(cd styles && ls *.xml | perl -e 'while (<STDIN>) { if(/(.*)\.xml/) { print "i18n(\"$$1\")\;\n";} }' > ../styles.cpp)
 	$(XGETTEXT) -C -ki18n -x $(KDEDIR)/include/kde.pot `find . -name \*.h -o -name \*.cpp -o -name \*.cc` -o ../po/rosegarden.pot 
 

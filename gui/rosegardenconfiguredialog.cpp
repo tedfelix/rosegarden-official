@@ -403,13 +403,15 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     std::vector<std::string> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
 
+    m_untranslatedFont.clear();
     for (std::vector<std::string>::iterator i = f.begin(); i != f.end(); ++i) {
         QString s(strtoqstr(*i));
-        m_font->insertItem(s);
+        m_untranslatedFont.append(s);
+        m_font->insertItem(i18n(s.utf8()));
         if (s == defaultFont) m_font->setCurrentItem(m_font->count() - 1);
     }
-    QObject::connect(m_font, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotFontComboChanged(const QString &)));
+    QObject::connect(m_font, SIGNAL(activated(int)),
+                     this, SLOT(slotFontComboChanged(int)));
 
     m_singleStaffSize = new KComboBox(frame);
     m_singleStaffSize->setEditable(false);
@@ -420,7 +422,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_printingSize = new KComboBox(frame);
     m_printingSize->setEditable(false);
 
-    slotFontComboChanged(defaultFont);
+    slotFontComboChanged(m_font->currentItem());
 
     layout->addWidget(m_singleStaffSize, 2, 1);
     layout->addWidget(m_multiStaffSize, 3, 1);
@@ -510,6 +512,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     m_noteStyle = new KComboBox(frame);
     m_noteStyle->setEditable(false);
+    m_untranslatedNoteStyle.clear();
 
     QString defaultStyle =
         m_cfg->readEntry("style", strtoqstr(NoteStyleFactory::DefaultStyle));
@@ -520,7 +523,8 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
          i != styles.end(); ++i) {
 
         QString styleQName(strtoqstr(*i));
-        m_noteStyle->insertItem(styleQName);
+        m_untranslatedNoteStyle.append(styleQName);
+        m_noteStyle->insertItem(i18n(styleQName.utf8()));
         if (styleQName == defaultStyle) {
             m_noteStyle->setCurrentItem(m_noteStyle->count() - 1);
         }
@@ -601,7 +605,7 @@ void
 NotationConfigurationPage::slotViewButtonPressed()
 {
 #ifdef HAVE_XFT
-    std::string fontName = qstrtostr(m_font->currentText());
+    std::string fontName = qstrtostr(m_untranslatedFont[m_font->currentItem()]);
 
     try {
 	NoteFont *noteFont = NoteFontFactory::getFont
@@ -612,7 +616,7 @@ NotationConfigurationPage::slotViewButtonPressed()
 	    m_viewButton->setEnabled(false); // oops
 	} else {
 	    NoteFontViewer *viewer =
-		new NoteFontViewer(0, m_font->currentText(),
+		new NoteFontViewer(0, m_untranslatedFont[m_font->currentItem()],
 				   systemFontNames, 24);
 	    (void)viewer->exec(); // no return value
 	}
@@ -623,9 +627,9 @@ NotationConfigurationPage::slotViewButtonPressed()
 }
 
 void
-NotationConfigurationPage::slotFontComboChanged(const QString &font)
+NotationConfigurationPage::slotFontComboChanged(int index)
 {
-    std::string fontStr = qstrtostr(font);
+    std::string fontStr = qstrtostr(m_untranslatedFont[index]);
 
     populateSizeCombo(m_singleStaffSize, fontStr,
                       m_cfg->readUnsignedNumEntry
@@ -648,13 +652,15 @@ NotationConfigurationPage::slotFontComboChanged(const QString &font)
 	NoteFont *noteFont = NoteFontFactory::getFont
 	    (fontStr, NoteFontFactory::getDefaultSize(fontStr));
         const NoteFontMap &map(noteFont->getNoteFontMap());
-        m_fontOriginLabel->setText(strtoqstr(map.getOrigin()));
-        m_fontCopyrightLabel->setText(strtoqstr(map.getCopyright()));
-        m_fontMappedByLabel->setText(strtoqstr(map.getMappedBy()));
+        m_fontOriginLabel->setText(i18n(strtoqstr(map.getOrigin())));
+        m_fontCopyrightLabel->setText(i18n(strtoqstr(map.getCopyright())));
+        m_fontMappedByLabel->setText(i18n(strtoqstr(map.getMappedBy())));
         if (map.isSmooth()) {
-            m_fontTypeLabel->setText(strtoqstr(map.getType() + " (smooth)"));
+            m_fontTypeLabel->setText(
+		i18n("%1 (smooth)").arg(i18n(strtoqstr(map.getType()))));
         } else {
-            m_fontTypeLabel->setText(strtoqstr(map.getType() + " (jaggy)"));
+            m_fontTypeLabel->setText(
+		i18n("%1 (jaggy)").arg(i18n(strtoqstr(map.getType()))));
         }
 	if (m_viewButton) {
 	    m_viewButton->setEnabled(map.getSystemFontNames().count() > 0);
@@ -683,7 +689,7 @@ NotationConfigurationPage::apply()
 {
     m_cfg->setGroup(NotationView::ConfigGroup);
 
-    m_cfg->writeEntry("notefont", m_font->currentText());
+    m_cfg->writeEntry("notefont", m_untranslatedFont[m_font->currentItem()]);
     m_cfg->writeEntry("singlestaffnotesize",
                       m_singleStaffSize->currentText().toUInt());
     m_cfg->writeEntry("multistaffnotesize",
@@ -700,7 +706,7 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("layoutmode", m_layoutMode->currentItem());
     m_cfg->writeEntry("colourquantize", m_colourQuantize->isChecked());
     m_cfg->writeEntry("showunknowns", m_showUnknowns->isChecked());
-    m_cfg->writeEntry("style", m_noteStyle->currentText());
+    m_cfg->writeEntry("style", m_untranslatedNoteStyle[m_noteStyle->currentItem()]);
     m_cfg->writeEntry("inserttype", m_insertType->currentItem());
     m_cfg->writeEntry("autobeam", m_autoBeam->isChecked());
     m_cfg->writeEntry("collapse", m_collapseRests->isChecked());

@@ -227,7 +227,7 @@ public:
     static QString iconName()  { return "fonts"; }
 
 protected slots:
-    void slotFontComboChanged(const QString &);
+    void slotFontComboChanged(int);
     void slotViewButtonPressed();
 
 protected:
@@ -254,6 +254,8 @@ protected:
     QCheckBox *m_collapseRests;
     QComboBox *m_pasteType;
     RosegardenQuantizeParameters *m_quantizeFrame;
+    QStringList m_untranslatedFont;
+    QStringList m_untranslatedNoteStyle;
 
     void populateSizeCombo(QComboBox *combo, std::string font, int dfltSize);
 };
