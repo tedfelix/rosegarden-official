@@ -1,0 +1,45 @@
+
+Composition, Segment and CompositionTimeSliceAdapter iterators
+==============================================================
+
+[Based on an email respoding to Hans Kieserman's question: "Can I
+assume the Composition and Segment iterators will return Tracks in
+numeric order and then Events in time order?"]
+
+The composition iterator will return segments in order of track id,
+then starting time as a secondary ordering.
+
+The segment iterator will return events in time order, with the
+event's subordering value defining a secondary ordering (for most
+events the subordering is zero, but it's a small negative number for
+things like clefs -- see also creating_events.txt).
+
+Thus if you use the iterators in the "obvious" way, you'll get all
+events for the first segment on track 1, then all events for the
+second segment (if any) on track 1, etc., then all events on the first
+segment on track 2, and so on.
+
+If what you want is all the events on track 1 in time order, then all
+the events on track 2 in time order, etc., then this is not quite the
+same thing, because the segments on a track can overlap.  The easiest
+way to get what you want is to use the CompositionTimeSliceAdapter (an
+invention by Randall Farmer), whose iterator spans events on all or a
+subset of segments in the composition, returning the events in time
+order regardless of which segment they appear on.  For example, to
+iterate through all the events on track 2 in time order, try something
+like this (untested):
+
+    CompositionTimeSliceAdapter::TrackSet tracks;
+    tracks.insert(2);
+    CompositionTimeSliceAdapter adapter(composition, tracks);
+
+    for (CompositionTimeSliceAdapter::iterator i = adapter.begin();
+        i != adapter.end(); ++i) {
+        Event *event = *i;
+        // process event
+    }
+
+Note that the capability to adapt only a subset of the Composition
+(such as a single track, or a set of segments) was added to
+CompositionTimeSliceAdapter between the 0.1.5 and 0.1.6 releases.
+

@@ -80,6 +80,8 @@ Post-0.1.5-and-a-bit task list
     taken a certain amount of time to run (e.g. notationview et al
     add a timer callback in addCommandToHistory)
 
+21. Implement view-local properties in NotationElement
+
 
 Post-0.1.4 task list
 ====================

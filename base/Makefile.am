@@ -20,6 +20,7 @@ libbase_la_SOURCES = AnalysisTypes.C \
                      MidiDevice.C \
 		     NotationTypes.C \
                      Property.C \
+		     PropertyMap.C \
 		     PropertyName.C \
 		     Quantizer.C \
 		     RealTime.C \

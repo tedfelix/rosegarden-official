@@ -22,6 +22,7 @@
 
 #include "Property.h"
 #include "PropertyName.h"
+#include "XmlExportable.h"
 
 #if (__GNUC__ < 3)
 
@@ -44,7 +45,8 @@ namespace Rosegarden {
 class PropertyMap : public __HASH_NS::hash_map<PropertyName,
 					       PropertyStoreBase *,
 					       PropertyNameHash,
-					       PropertyNamesEqual>
+					       PropertyNamesEqual>,
+		    public XmlExportable
 {
 public:
     ~PropertyMap() {
@@ -55,6 +57,8 @@ public:
 	for (iterator i = begin(); i != end(); ++i) delete i->second;
 	erase(begin(), end());
     }
+    
+    virtual std::string toXmlString();
 };
 
 typedef PropertyMap::value_type PropertyPair;

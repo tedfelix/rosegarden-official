@@ -49,6 +49,7 @@ class CompositionTimeSliceAdapter
 {
 public:
     class iterator;
+    typedef std::set<TrackId> TrackSet;
 
     /**
      * Construct a CompositionTimeSliceAdapter that operates on the
@@ -67,6 +68,17 @@ public:
      */
     CompositionTimeSliceAdapter(Composition* c,
 				SegmentSelection* s,
+				timeT begin = 0,
+				timeT end = 0);
+
+    /**
+     * Construct a CompositionTimeSliceAdapter that operates on the
+     * given section in time of all the segments in the given set of
+     * tracks within the given composition.  If begin and end are
+     * equal, the whole duration of the composition will be used.
+     */
+    CompositionTimeSliceAdapter(Composition *c,
+				const TrackSet &trackIDs,
 				timeT begin = 0,
 				timeT end = 0);
 

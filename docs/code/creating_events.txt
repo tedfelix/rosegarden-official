@@ -24,6 +24,17 @@ terrible) and a bool to indicate whether it is in fact a bull.
 (There are three property types; the other's int, and they're
 defined in Property.h.)
 
+Aside from the properties, an Event also has an absolute time
+(the time in Rosegarden units -- see ../data_struct/units.txt --
+at which the event begins), a duration (the "performance"
+duration of the event in the same units, so currently always
+zero for anything but note or rest events) and a sub-ordering
+value, which is used to order events that have the same
+absolute time (it defaults to, and most usually is, zero; but
+for some things like clef events it's a small negative number
+so as to ensure they get processed and displayed before any
+notes that appear at the same time).
+
 All you have to do to create a cow and insert it in a segment is
 
   Event *e = new Event("cow");

@@ -65,6 +65,31 @@ CompositionTimeSliceAdapter::CompositionTimeSliceAdapter(Composition *c,
     }
 };
 
+CompositionTimeSliceAdapter::CompositionTimeSliceAdapter(Composition *c,
+							 const TrackSet &trackIDs,
+							 timeT begin,
+							 timeT end) :
+    m_composition(c),
+    m_segments(0),
+    m_begin(begin),
+    m_end(end)
+{
+    if (begin == end) {
+	m_begin = 0;
+	m_end = c->getDuration();
+    }
+
+    m_segments = new SegmentSelection();
+
+    for (Composition::iterator ci = m_composition->begin();
+         ci != m_composition->end(); ++ci) {
+	
+	if (trackIDs.find((*ci)->getTrack()) != trackIDs.end()) {
+	    m_segments->insert(*ci);
+	}
+    }
+};
+
 CompositionTimeSliceAdapter::iterator
 CompositionTimeSliceAdapter::begin() {
     iterator i;
