@@ -163,6 +163,10 @@ public:
 	return c.m_clef == m_clef;
     }
 
+    bool operator!=(const Clef &c) const {
+	return !(c == *this);
+    }
+
     ~Clef() { }
 
     std::string getClefType() const { return m_clef; }
