@@ -578,39 +578,41 @@ void RosegardenGUIApp::saveOptions()
 
 void RosegardenGUIApp::readOptions()
 {
+    bool opt;
+
     m_config->setGroup("General Options");
 
     // status bar settings
-    bool viewStatusbar = m_config->readBoolEntry("Show Statusbar", true);
-    m_viewStatusBar->setChecked(viewStatusbar);
+    opt = m_config->readBoolEntry("Show Statusbar", true);
+    m_viewStatusBar->setChecked(opt);
     slotToggleStatusBar();
 
-    bool viewToolBar = m_config->readBoolEntry("Show Toolbar", true);
-    m_viewToolBar->setChecked(viewToolBar);
+    opt = m_config->readBoolEntry("Show Toolbar", true);
+    m_viewToolBar->setChecked(opt);
     slotToggleToolBar();
 
-    viewToolBar = m_config->readBoolEntry("Show Tracks Toolbar", true);
-    m_viewTracksToolBar->setChecked(viewToolBar);
+    opt = m_config->readBoolEntry("Show Tracks Toolbar", true);
+    m_viewTracksToolBar->setChecked(opt);
     slotToggleTracksToolBar();
 
-    bool viewTransport = m_config->readBoolEntry("Show Transport", true);
-    m_viewTransport->setChecked(viewTransport);
+    opt = m_config->readBoolEntry("Show Transport", false);
+    m_viewTransport->setChecked(opt);
     slotToggleTransport();
 
-    bool viewTrackLabels = m_config->readBoolEntry("Show Track labels", true);
-    m_viewTrackLabels->setChecked(viewTrackLabels);
+    opt = m_config->readBoolEntry("Show Track labels", true);
+    m_viewTrackLabels->setChecked(opt);
     slotToggleTrackLabels();
 
-    bool viewSegmentParameters = m_config->readBoolEntry("Show Segment Parameters", true);
-    m_viewSegmentParameters->setChecked(viewSegmentParameters);
+    opt = m_config->readBoolEntry("Show Segment Parameters", false);
+    m_viewSegmentParameters->setChecked(opt);
     slotToggleSegmentParameters();
 
-    bool viewInstrumentParameters = m_config->readBoolEntry("Show Instrument Parameters", true);
-    m_viewInstrumentParameters->setChecked(viewInstrumentParameters);
+    opt = m_config->readBoolEntry("Show Instrument Parameters", false);
+    m_viewInstrumentParameters->setChecked(opt);
     slotToggleInstrumentParameters();
 
-    bool viewRulers = m_config->readBoolEntry("Show Rulers", true);
-    m_viewRulers->setChecked(viewRulers);
+    opt = m_config->readBoolEntry("Show Rulers", false);
+    m_viewRulers->setChecked(opt);
     slotToggleRulers();
 
     // bar position settings
@@ -965,7 +967,7 @@ void RosegardenGUIApp::slotToggleTransport()
 {
     KTmpStatusMsg msg(i18n("Toggle the Transport"), statusBar());
 
-    if (m_viewTracksToolBar->isChecked())
+    if (m_viewTransport->isChecked())
     {
         m_transport->show();
         m_transport->raise();
