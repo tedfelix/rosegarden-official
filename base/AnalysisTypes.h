@@ -9,6 +9,9 @@
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
 
+    This file is Copyright 2002
+        Randall Farmer      <rfarme@simons-rock.edu>
+
     The moral right of the authors to claim authorship of this work
     has been asserted.
 
@@ -18,8 +21,6 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
-
-// This file is Copyright 2002 Randall Farmer <rfarme@simons-rock.edu>
 
 #ifndef _ANALYSISTYPES_H_
 #define _ANALYSISTYPES_H_

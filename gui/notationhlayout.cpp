@@ -599,23 +599,9 @@ NotationHLayout::scanChord(NotationElementList *notes,
 	Accidental explicitAccidental = NoAccidental;
 	(void)el->event()->get<String>(ACCIDENTAL, explicitAccidental);
 	
-	Rosegarden::NotationDisplayPitch p
-	    (pitch, clef, key, explicitAccidental);
-	int h = p.getHeightOnStaff();
-	Accidental acc = p.getAccidental();
-
-	//!!! TESTING
-	{
-	    Rosegarden::Pitch p0(pitch, explicitAccidental);
-	    int h0 = p0.getHeightOnStaff(clef, key);
-	    Accidental acc0 = p0.getDisplayAccidental(key);
-	    if (h != h0) {
-		std::cerr << "WARNING: Pitch/NDP discrepancy: height " << h0 << " vs " << h << std::endl;
-	    }
-	    if (acc != acc0) {
-		std::cerr << "WARNING: Pitch/NDP discrepancy: acc " << acc0 << " vs " << acc << std::endl;
-	    }
-	}
+	Rosegarden::Pitch p(pitch, explicitAccidental);
+	int h = p.getHeightOnStaff(clef, key);
+	Accidental acc = p.getDisplayAccidental(key);
 
 	el->event()->setMaybe<Int>(NotationProperties::HEIGHT_ON_STAFF, h);
 	el->event()->setMaybe<String>(m_properties.CALCULATED_ACCIDENTAL, acc);

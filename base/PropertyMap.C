@@ -35,11 +35,21 @@ PropertyMap::PropertyMap(const PropertyMap &pm) :
 			PropertyNameHash,
 			PropertyNamesEqual>()
 {
-    clear();
-    
     for (const_iterator i = pm.begin(); i != pm.end(); ++i) {
 	insert(PropertyPair(i->first, i->second->clone()));
     }
+}
+
+PropertyMap::~PropertyMap()
+{
+    for (iterator i = begin(); i != end(); ++i) delete i->second;
+}    
+
+void
+PropertyMap::clear()
+{
+    for (iterator i = begin(); i != end(); ++i) delete i->second;
+    erase(begin(), end());
 }
 
 

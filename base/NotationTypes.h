@@ -526,103 +526,6 @@ private:
     std::string m_type;
 };
 
-/**
- * NotationDisplayPitch stores a note's pitch in terms of the position
- * of the note on the staff and its associated accidental, and
- * converts these values to and from performance (MIDI) pitches.
- *
- * Rationale: When we insert a note, we need to query the height of the
- * staff line next to which it's being inserted, then translate this
- * back to raw pitch according to the clef in force at the x-coordinate
- * at which the note is inserted.  For display, we translate from raw
- * pitch using both the clef and the key in force.
- *
- * Whether an accidental should be displayed or not depends on the
- * current key, on whether we've already shown the same accidental for
- * that pitch in the same bar, on whether the note event explicitly
- * requests an accidental...  All we calculate here is whether the
- * pitch "should" have an accidental, not whether it really will
- * (e.g. if the accidental has already appeared).
- *
- * (See also docs/discussion/units.txt for explanation of pitch units.)
- */
-
-class NotationDisplayPitch
-{
-public:
-    /**
-     * Construct a NotationDisplayPitch containing the given staff
-     * height and accidental
-     */
-    NotationDisplayPitch(int heightOnStaff,
-			 const Accidental &accidental);
-
-    /**
-     * Construct a NotationDisplayPitch containing the height and
-     * accidental to which the given performance pitch corresponds
-     * in the given clef and key
-     */
-    NotationDisplayPitch(int pitch, const Clef &clef, const Key &key,
-                         const Accidental &explicitAccidental = 
-			 Accidentals::NoAccidental);
-
-    int getHeightOnStaff() const { return m_heightOnStaff; }
-    Accidental getAccidental() const { return m_accidental; }
-
-    /**
-     * Calculate and return the performance (MIDI) pitch 
-     * corresponding to the stored height and accidental, in the
-     * given clef and key
-     */
-    int getPerformancePitch(const Clef &clef, const Key &key) const;
-
-    /**
-     * Calculate and return the performance (MIDI) pitch
-     * corresponding to the stored height and accidental,
-     * interpreting them as Rosegarden-2.1-style values (for
-     * backward compatibility use), in the given clef and key
-     */
-    int getPerformancePitchFromRG21Pitch(const Clef &clef,
-					 const Key &key) const;
-
-    /**
-     * Return the stored pitch as a string (C4, Bb2, etc...)
-     * according to http://www.harmony-central.com/MIDI/Doc/table2.html
-     *
-     * If inclOctave is false, this will return C, Bb, etc.
-     */
-    std::string getAsString(const Clef &clef, const Key &key,
-			    bool inclOctave = true,
-			    int octaveBase = -2) const;
-
-    /**
-     * Return the stored pitch as a description of a note in a
-     * scale.  Return values are:
-     * 
-     * -- placeInScale: a number from 0-6 where 0 is C and 6 is B
-     * 
-     * -- accidentals: a number from -2 to 2 where -2 is double flat,
-     *     -1 is flat, 0 is nothing, 1 is sharp, 2 is double sharp
-     * 
-     * -- octave: MIDI octave in range -2 to 8, where pitch 0 is in
-     *     octave -2 and thus middle-C is in octave 3
-     * 
-     * This function is guaranteed never to return values out of
-     * the above ranges.
-     */
-    void getInScale(const Clef &clef, const Key &key,
-		    int &placeInScale, int &accidentals, int &octave) const;
-    
-private:
-    int m_heightOnStaff;
-    Accidental m_accidental;
-
-    static void rawPitchToDisplayPitch(int, const Clef &, const Key &,
-				       int &, Accidental &);
-    static void displayPitchToRawPitch(int, Accidental, const Clef &, const Key &,
-				       int &, bool ignoreOffset = false);
-};
-
 
 
 /**
@@ -631,6 +534,8 @@ private:
  * note on the staff and its associated accidental.
  *
  * (See docs/discussion/units.txt for explanation of pitch units.)
+ *
+ * This completely replaces the older NotationDisplayPitch class. 
  */
 
 class Pitch
@@ -808,10 +713,8 @@ private:
     static void displayPitchToRawPitch
     (int, Accidental, const Clef &, const Key &,
      int &, bool ignoreOffset = false);
-
-    //!!! temporarily
-    friend class NotationDisplayPitch;
 };
+
 
 
 class TimeSignature;

@@ -749,20 +749,17 @@ LilypondExporter::write() {
                     
                     // check time signature against previous one; if different,
                     // write new one here at bar line...
-                    // Incomplete:  this is a lazy, wasteful way to implement
-                    // this, and it really should just grab the changes in
-                    // advance and act on them accordingly
-                    TimeSignature prevTimeSignature = timeSignature;
-                    timeSignature = m_composition->getTimeSignatureAt(absoluteTime);
 
-                    if ((timeSignature.getNumerator() != prevTimeSignature.getNumerator()) || 
-                        (timeSignature.getDenominator() != prevTimeSignature.getDenominator()) &&
-                        !(timeSignature.isHidden())) {
+		    bool isNew = false;
+		    timeSignature = m_composition->getTimeSignatureInBar
+			(m_composition->getBarNumber(absoluteTime), isNew);
+
+		    if (isNew && !timeSignature.isHidden()) {
                         str << "\\time "
                             << timeSignature.getNumerator() << "/"
-                            << timeSignature.getDenominator() << std::endl << indent(col);
+                            << timeSignature.getDenominator() << std::endl
+			    << indent(col);
                     }
-                    
                 }
                 
                 timeT duration = (*j)->getNotationDuration();

@@ -50,19 +50,14 @@ public:
     PropertyMap() { }
     PropertyMap(const PropertyMap &pm);
 
-    ~PropertyMap() {
-	clear();
-    }
+    ~PropertyMap();
     
-    void clear() {
-	for (iterator i = begin(); i != end(); ++i) delete i->second;
-	erase(begin(), end());
-    }
+    void clear();
     
     std::string toXmlString();
 
 private:
-    PropertyMap &operator=(const PropertyMap &);
+    PropertyMap &operator=(const PropertyMap &); // not provided
 };
 
 typedef PropertyMap::value_type PropertyPair;

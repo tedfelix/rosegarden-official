@@ -605,18 +605,8 @@ long RG21Loader::convertRG21Pitch(long pitch, int noteModifier)
         (noteModifier & ModFlat)    ? Flat  :
         (noteModifier & ModNatural) ? Natural : NoAccidental;
  
-    Rosegarden::NotationDisplayPitch displayPitch(pitch, accidental);
-
-    long rtn = displayPitch.getPerformancePitchFromRG21Pitch(m_currentClef,
-							     m_currentKey);
-
-    //!!!
-    long alternate = Rosegarden::Pitch::getPerformancePitchFromRG21Pitch
+    long rtn = Rosegarden::Pitch::getPerformancePitchFromRG21Pitch
 	(pitch, accidental, m_currentClef, m_currentKey);
-
-    if (rtn != alternate) {
-	std::cerr << "WARNING: Pitch/NDP discrepancy: pitch " << rtn << " vs " << alternate << std::endl;
-    }
 
     return rtn;
 }

@@ -1546,9 +1546,14 @@ SegmentNotationHelper::guessClef(iterator from, iterator to)
 
     for (iterator i = from; i != to; ++i) {
         if ((*i)->isa(Note::EventType)) {
-            ++noteCount;
-            NotationDisplayPitch p((*i)->get<Int>(PITCH), clef, key);
-            totalHeight += p.getHeightOnStaff();
+//!!!            NotationDisplayPitch p((*i)->get<Int>(PITCH), clef, key);
+	    try {
+		Pitch p(**i);
+		totalHeight += p.getHeightOnStaff(clef, key);
+		++noteCount;
+	    } catch (Exception e) {
+		// no pitch in note
+	    }
         }
     }
 

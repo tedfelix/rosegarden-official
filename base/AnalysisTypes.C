@@ -9,6 +9,9 @@
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
 
+    This file is Copyright 2002
+        Randall Farmer      <rfarme@simons-rock.edu>
+
     The moral right of the authors to claim authorship of this work
     has been asserted.
 
@@ -18,8 +21,6 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
-
-// This file is Copyright 2002 Randall Farmer <rfarme@simons-rock.edu>
 
 #include <iostream>
 #include <string>
@@ -74,10 +75,15 @@ AnalysisHelper::getKeyForEvent(Event *e, Segment &s)
 bool
 AnalysisHelper::pitchIsDiatonic(int pitch, Key key)
 {
-    NotationDisplayPitch dp(pitch, Clef(), key);
+//!!!    NotationDisplayPitch dp(pitch, Clef(), key);
 
-    if (dp.getAccidental() == Accidentals::NoAccidental)
-        return true;
+//    if (dp.getAccidental() == Accidentals::NoAccidental)
+//        return true;
+
+    Pitch p(pitch);
+    if (p.getDisplayAccidental(key) == Accidentals::NoAccidental)
+	return true;
+
 
     // ### as used in the chord identifiers, this calls chords built on
     //     the raised sixth step diatonic -- may be correct, but it's
@@ -200,8 +206,10 @@ ChordLabel::ChordLabel(Key key, int mask, int /* bass */) :
 std::string
 ChordLabel::getName(Key key) const
 {
-    return NotationDisplayPitch(m_data.m_rootPitch, Clef(), key)
-        .getAsString(Clef(), key, false) + m_data.m_type;
+//!!!    return NotationDisplayPitch(m_data.m_rootPitch, Clef(), key)
+//!!!        .getAsString(Clef(), key, false) + m_data.m_type;
+    return Pitch(m_data.m_rootPitch).getAsString(key.isSharp(), false) +
+	m_data.m_type;
     //			+ (m_data.m_inversion>0 ? " in first inversion" : "");
 }
 

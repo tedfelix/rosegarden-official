@@ -78,7 +78,7 @@ Event::EventData *Event::EventData::unshare()
 
 Event::EventData::~EventData()
 {
-    // nothing -- the PropertyStore objects are deleted in the PropertyMap dtor
+    if (m_properties) delete m_properties;
 }
 
 timeT

@@ -9,7 +9,7 @@ INCPATH  = -I..
 
 SRCS	:= test.C thread.C pitch.C
 
-default: test thread pitch utf8 colour
+default: test thread utf8 colour
 
 clean:
 	rm -f test test.o thread thread.o pitch pitch.o utf8 utf8.o colour colour.o

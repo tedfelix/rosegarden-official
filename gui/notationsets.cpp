@@ -80,14 +80,20 @@ NotationChord::getHeight(const Iterator &i) const
     //but what if the clef/key changed since HEIGHT_ON_STAFF was
     //written?  Who updates the properties then?  Check this.
 
-    long h;
+    long h = 0;
     if (getAsEvent(i)->get<Int>(NotationProperties::HEIGHT_ON_STAFF, h)) {
 	return h;
     }
 
-    int pitch = getAsEvent(i)->get<Int>(PITCH);
-    Rosegarden::NotationDisplayPitch p(pitch, m_clef, m_key);
-    h = p.getHeightOnStaff();
+//!!!    int pitch = getAsEvent(i)->get<Int>(PITCH);
+//!!!    Rosegarden::NotationDisplayPitch p(pitch, m_clef, m_key);
+//    h = p.getHeightOnStaff();
+    try {
+	Rosegarden::Pitch pitch(*getAsEvent(i));
+	h = pitch.getHeightOnStaff(m_clef, m_key);
+    } catch (...) {
+	// no pitch!
+    }
 
     // set non-persistent, not setMaybe, as we know the property is absent:
     getAsEvent(i)->set<Int>(NotationProperties::HEIGHT_ON_STAFF, h, false);
@@ -332,13 +338,22 @@ NotationGroup::contains(const NELIterator &i) const
 int
 NotationGroup::height(const NELIterator &i) const
 {
-    long h;
+    long h = 0;
     if ((*i)->event()->get<Int>(NotationProperties::HEIGHT_ON_STAFF, h)) {
 	return h;
     }
-    int pitch = (*i)->event()->get<Int>(PITCH);
-    Rosegarden::NotationDisplayPitch p(pitch, m_clef, m_key);
-    h = p.getHeightOnStaff();
+
+//!!!    int pitch = (*i)->event()->get<Int>(PITCH);
+//    Rosegarden::NotationDisplayPitch p(pitch, m_clef, m_key);
+//    h = p.getHeightOnStaff();
+
+    try {
+	Rosegarden::Pitch pitch(*getAsEvent(i));
+	h = pitch.getHeightOnStaff(m_clef, m_key);
+    } catch (...) {
+	// no pitch!
+    }
+
     // not setMaybe, as we know the property is absent:
     (*i)->event()->set<Int>(NotationProperties::HEIGHT_ON_STAFF, h, false);
     return h;

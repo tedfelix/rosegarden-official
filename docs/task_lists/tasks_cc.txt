@@ -34,6 +34,12 @@ Post-0.9 task list
 14. Karaoke file (.kar) import -- and must get around to doing that bouncing-ball
     lyric thing.
 
+15. TimeSignature::isHidden() doesn't appear to be being used in the notation
+    code... ?
+
+16. Test transposition options in Key signature insert following
+    Pitch/NDP change to Key::convertFrom (plus usage in AnalysisTypes?)
+
 
 Priorities for 0.9
 ==================

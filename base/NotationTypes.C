@@ -396,11 +396,15 @@ void Key::checkAccidentalHeights() const
     }
 }
 
-int Key::convertFrom(int pitch, const Key &previousKey,
+int Key::convertFrom(int p, const Key &previousKey,
                      const Accidental &explicitAccidental) const
 {
-    NotationDisplayPitch ndp(pitch, Clef(), previousKey, explicitAccidental);
-    return ndp.getPerformancePitch(Clef(), *this);
+//!!!    NotationDisplayPitch ndp(pitch, Clef(), previousKey, explicitAccidental);
+//    return ndp.getPerformancePitch(Clef(), *this);
+    Pitch pitch(p, explicitAccidental);
+    int height = pitch.getHeightOnStaff(Clef(), previousKey);
+    Pitch newPitch(height, Clef(), *this, explicitAccidental);
+    return newPitch.getPerformancePitch();
 }
 
 int Key::transposeFrom(int pitch, const Key &previousKey) const
@@ -634,59 +638,6 @@ Text::getAsEvent(timeT absoluteTime) const
     return e;
 }
 
-//////////////////////////////////////////////////////////////////////
-// NotationDisplayPitch
-//////////////////////////////////////////////////////////////////////
-
-NotationDisplayPitch::NotationDisplayPitch(int heightOnStaff,
-                                           const Accidental &accidental)
-    : m_heightOnStaff(heightOnStaff),
-      m_accidental(accidental)
-{
-}
-
-NotationDisplayPitch::NotationDisplayPitch(int pitch, const Clef &clef,
-                                           const Key &key,
-                                           const Accidental &explicitAccidental) :
-    m_accidental(explicitAccidental)
-{
-    rawPitchToDisplayPitch(pitch, clef, key, m_heightOnStaff, m_accidental);
-}
-
-int
-NotationDisplayPitch::getPerformancePitch(const Clef &clef, const Key &key) const
-{
-    int p = 0;
-    displayPitchToRawPitch(m_heightOnStaff, m_accidental, clef, key, p);
-    return p;
-}
-
-int
-NotationDisplayPitch::getPerformancePitchFromRG21Pitch(const Clef &clef,
-                                                       const Key &) const
-{
-    // Rosegarden 2.1 pitches are a bit weird; see
-    // docs/data_struct/units.txt
-
-    // We pass the accidental and clef, a faked key of C major, and a
-    // flag telling displayPitchToRawPitch to ignore the clef offset
-    // and take only its octave into account
-
-    int p = 0;
-    displayPitchToRawPitch(m_heightOnStaff, m_accidental, clef, Key(), p, true);
-    return p;
-}
-
-
-void
-NotationDisplayPitch::rawPitchToDisplayPitch(int rawpitch,
-					     const Clef &clef,
-					     const Key &key,
-					     int &height,
-					     Accidental &accidental)
-{
-    Pitch::rawPitchToDisplayPitch(rawpitch, clef, key, height, accidental);
-}
 
 /**
  * Converts performance pitch to height on staff + correct accidentals
@@ -1002,18 +953,6 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
 }
 
 void
-NotationDisplayPitch::displayPitchToRawPitch(int height,
-                                             Accidental accidental,
-                                             const Clef &clef,
-                                             const Key &key,
-                                             int &pitch,
-                                             bool ignoreOffset)
-{
-    Pitch::displayPitchToRawPitch(height, accidental, clef, key, pitch,
-				  ignoreOffset);
-}
-
-void
 Pitch::displayPitchToRawPitch(int height,
 			      Accidental accidental,
 			      const Clef &clef,
@@ -1066,73 +1005,6 @@ Pitch::displayPitchToRawPitch(int height,
     pitch += 12 * octave;
 }
 
-string
-NotationDisplayPitch::getAsString(const Clef &clef, const Key &key,
-                                  bool inclOctave, int octaveBase) const
-{
-    static const string noteNamesSharps[] = {
-        "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
-    };
-    static const string noteNamesFlats[]  = {
-        "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"
-    };
-    
-    int performancePitch = getPerformancePitch(clef, key);
-
-    // highly unlikely, but fatal if it happened:
-    if (performancePitch < 0) performancePitch = 0;
-
-    int pitch  = performancePitch % 12;
-    int octave = performancePitch / 12;
-
-    if (!inclOctave)
-        return key.isSharp() ? noteNamesSharps[pitch] : noteNamesFlats[pitch];
-
-    char tmp[1024];
-
-    if (key.isSharp())
-        sprintf(tmp, "%s%d", noteNamesSharps[pitch].c_str(),
-                octave + octaveBase);
-    else
-        sprintf(tmp, "%s%d", noteNamesFlats[pitch].c_str(),
-                octave + octaveBase);
-    
-    return string(tmp);
-}
-
-void
-NotationDisplayPitch::getInScale(const Clef &clef, const Key &key,
-				 int &placeInScale, int &accidentals, int &octave) const
-{
-    //!!! Maybe we should bring the logic from rawPitchToDisplayPitch down
-    // into this method, and make rawPitchToDisplayPitch wrap this
-
-    static int pitches[2][12] = {
-	{ 0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6 },
-	{ 0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6 },
-    };
-    static int accidentalsForPitches[2][12] = {
-	{ 0,  1, 0,  1, 0, 0,  1, 0,  1, 0,  1, 0 },
-	{ 0, -1, 0, -1, 0, 0, -1, 0, -1, 0, -1, 0 },
-    };
-    
-    int performancePitch = getPerformancePitch(clef, key);
-
-    // highly unlikely, but fatal if it happened:
-    if (performancePitch < 0) performancePitch = 0;
-    if (performancePitch > 127) performancePitch = 127;
-
-    int pitch  = performancePitch % 12;
-    octave = performancePitch / 12 - 2;
-
-    if (key.isSharp()) { //!!! need to [optionally?] handle minor keys (similarly in getAsString?)
-	placeInScale = pitches[0][pitch];
-	accidentals = accidentalsForPitches[0][pitch];
-    } else {
-	placeInScale = pitches[1][pitch];
-	accidentals = accidentalsForPitches[1][pitch];
-    }
-}
 
 
 Pitch::Pitch(const Event &e) :
