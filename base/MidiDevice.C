@@ -378,7 +378,7 @@ MidiDevice::toXmlString()
                << "\" type=\"midi\">"  << std::endl << std::endl;
 
     midiDevice << "        <librarian name=\"" << encode(m_librarian.first)
-               << "\" email=\"" << encode(m_librarian.second) << std::endl
+               << "\" email=\"" << encode(m_librarian.second)
                << "\"/>" << std::endl;
 
     if (m_metronome)
