@@ -1111,7 +1111,19 @@ void RosegardenGUIApp::slotEditCopy()
 
 void RosegardenGUIApp::slotEditPaste()
 {
+    Rosegarden::Clipboard *clipboard = m_doc->getClipboard();
+    if (clipboard->isEmpty()) {
+	KTmpStatusMsg msg(i18n("Clipboard is empty"), statusBar());
+	return;
+    }
     KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), statusBar());
+
+    // for now, but we could paste at the time of the first copied
+    // segment and then do ghosting drag or something
+    timeT insertionTime = m_doc->getComposition().getPosition();
+    m_doc->getCommandHistory()->addCommand
+	(new PasteSegmentsCommand(&m_doc->getComposition(),
+				  clipboard, insertionTime));
 }
 
 

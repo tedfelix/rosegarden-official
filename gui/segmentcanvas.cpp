@@ -1236,6 +1236,31 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
         copyLabel += std::string(" (copied)");
         newSegment->setLabel(copyLabel);
 
+
+
+	//!!! this is obviously work-in-progress but:
+	//
+	// -- the SegmentItem would normally be created by
+	// updateAllSegmentItems, which would be called next time an
+	// update() happened.  Because we're single-threaded, that
+	// can't have happened yet.  An alternative to creating the
+	// SegmentItem ourselves might be to call that
+	// updateAllSegmentItems (which would ensure that it happens
+	// consistently with the usual way, at least) -- don't know
+	// whether it's as simple as that in practice though
+	//
+	// -- shouldn't have to do all this business of querying the
+	// duration from the SegmentItem as surely the newSegment
+	// should have inherited the correct duration already --
+	// should just be able to call
+	// m_canvas->addSegmentItem(newSegment) instead of calling
+	// addSegmentItem with the track/start-time/etc and then
+	// setting the segment afterwards
+	// 
+	// cc
+
+
+
         // Just check that a SegmentItem hasn't been created for us -
         // today I'm paranoid.
         //
