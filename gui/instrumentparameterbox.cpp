@@ -122,9 +122,9 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
             SIGNAL(setRecord(Rosegarden::InstrumentId, bool)));
 
     connect(m_audioInstrumentParameters,
-	    SIGNAL(selectPlugin(Rosegarden::InstrumentId, int)),
+	    SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)),
 	    this,
-	    SIGNAL(selectPlugin(Rosegarden::InstrumentId, int)));
+	    SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)));
     
     connect(m_midiInstrumentParameters, SIGNAL(updateAllBoxes()),
             this, SLOT(slotUpdateAllBoxes()));
@@ -744,7 +744,7 @@ void
 AudioInstrumentParameterPanel::slotSelectPlugin(int index)
 {
     if (m_selectedInstrument)
-	emit selectPlugin(m_selectedInstrument->getId(), index);
+	emit selectPlugin(0, m_selectedInstrument->getId(), index);
 }
 
 

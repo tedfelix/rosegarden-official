@@ -159,9 +159,9 @@ MixerWindow::slotSelectPlugin(int index)
     for (FaderMap::iterator i = m_faders.begin();
 	 i != m_faders.end(); ++i) {
 	
-	if (s == i->second->m_fader) {
+	if (i->second->owns(s)) {
 
-	    emit selectPlugin(i->first, index);
+	    emit selectPlugin(this, i->first, index);
 	}
     }	    
 }
@@ -174,7 +174,7 @@ MixerWindow::slotFaderLevelChanged(float dB)
 
     Rosegarden::BussList busses = m_studio->getBusses();
     
-    if (s == m_master->m_fader) {
+    if (m_master->owns(s)) {
 
 	if (busses.size() > 0) {
 	    Rosegarden::StudioControl::setStudioObjectProperty
@@ -191,7 +191,7 @@ MixerWindow::slotFaderLevelChanged(float dB)
     for (FaderVector::iterator i = m_submasters.begin();
 	 i != m_submasters.end(); ++i) {
 
-	if (s == (*i)->m_fader) {
+	if ((*i)->owns(s)) {
 	    if ((int)busses.size() > index) {
 		Rosegarden::StudioControl::setStudioObjectProperty
 		    (Rosegarden::MappedObjectId(busses[index]->getMappedId()),
@@ -208,7 +208,7 @@ MixerWindow::slotFaderLevelChanged(float dB)
     for (FaderMap::iterator i = m_faders.begin();
 	 i != m_faders.end(); ++i) {
 	
-	if (s == i->second->m_fader) {
+	if (i->second->owns(s)) {
 	    Rosegarden::StudioControl::setStudioObjectProperty
 		(Rosegarden::MappedObjectId
 		 (m_studio->getInstrumentById(i->first)->getMappedId()),

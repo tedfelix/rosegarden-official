@@ -1149,7 +1149,8 @@ public slots:
      * Create a plugin dialog for a given instrument and slot, or
      * raise an exising one.
      */
-    void slotShowPluginDialog(Rosegarden::InstrumentId instrument,
+    void slotShowPluginDialog(QWidget *parent,
+			      Rosegarden::InstrumentId instrument,
 			      int index);
 
     void slotPluginSelected(Rosegarden::InstrumentId instrument,

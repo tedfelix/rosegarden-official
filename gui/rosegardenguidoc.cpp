@@ -1003,7 +1003,7 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment, KPr
                 Rosegarden::Segment::EventRulerListConstIterator it;
                 for (it = list.begin(); it != list.end(); ++it)
                 {
-                    outStream << "  <controller type=\"" << (*it)->m_type;
+                    outStream << "  <controller type=\"" << strtoqstr((*it)->m_type);
 
                     if ((*it)->m_type == Rosegarden::Controller::EventType)
                     {

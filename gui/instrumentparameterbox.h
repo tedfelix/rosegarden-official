@@ -103,7 +103,7 @@ signals:
     //
     void changeInstrumentLabel(Rosegarden::InstrumentId id, QString label);
 
-    void selectPlugin(Rosegarden::InstrumentId id, int index);
+    void selectPlugin(QWidget*, Rosegarden::InstrumentId id, int index);
     void setMute(Rosegarden::InstrumentId, bool value);
     void setSolo(Rosegarden::InstrumentId, bool value);
     void setRecord(Rosegarden::InstrumentId, bool value);
@@ -203,7 +203,7 @@ signals:
     void muteButton(Rosegarden::InstrumentId, bool state);
     void soloButton(Rosegarden::InstrumentId, bool state);
     void recordButton(Rosegarden::InstrumentId, bool state);
-    void selectPlugin(Rosegarden::InstrumentId, int index);
+    void selectPlugin(QWidget *, Rosegarden::InstrumentId, int index);
 
 protected:
     //--------------- Data members ---------------------------------

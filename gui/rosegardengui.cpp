@@ -253,9 +253,9 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     vboxLayout->addStretch();
 
     connect(m_instrumentParameterBox,
-	    SIGNAL(selectPlugin(Rosegarden::InstrumentId, int)),
+	    SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)),
 	    this,
-	    SLOT(slotShowPluginDialog(Rosegarden::InstrumentId, int)));
+	    SLOT(slotShowPluginDialog(QWidget *, Rosegarden::InstrumentId, int)));
 
     // Load the initial document (this includes doc's own autoload)
     //
@@ -4677,8 +4677,8 @@ RosegardenGUIApp::slotOpenMixer()
     connect(m_mixer, SIGNAL(closing()),
             this, SLOT(slotMixerClosed()));
 
-    connect(m_mixer, SIGNAL(selectPlugin(Rosegarden::InstrumentId, int)),
-	    this, SLOT(slotShowPluginDialog(Rosegarden::InstrumentId, int)));
+    connect(m_mixer, SIGNAL(selectPlugin(QWidget *, Rosegarden::InstrumentId, int)),
+	    this, SLOT(slotShowPluginDialog(QWidget *, Rosegarden::InstrumentId, int)));
 
     connect(this, SIGNAL(documentAboutToChange()),
             m_mixer, SLOT(close()));
@@ -4796,9 +4796,12 @@ RosegardenGUIApp::slotControlEditorClosed()
 }
 
 void
-RosegardenGUIApp::slotShowPluginDialog(Rosegarden::InstrumentId instrumentId,
+RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
+				       Rosegarden::InstrumentId instrumentId,
 				       int index)
 {
+    if (!parent) parent = this;
+
     int key = (index << 24) + instrumentId;
 
     if (m_pluginDialogs[key]) {

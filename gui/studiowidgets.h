@@ -196,6 +196,8 @@ public:
 
     void setAudioChannels(int);
 
+    bool owns(const QObject *object);
+
     std::vector<QPushButton*>  m_plugins;
 
     AudioVUMeter              *m_vuMeter;

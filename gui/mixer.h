@@ -42,7 +42,7 @@ public:
 
 signals:
     void closing();
-    void selectPlugin(Rosegarden::InstrumentId id, int index);
+    void selectPlugin(QWidget *, Rosegarden::InstrumentId id, int index);
 
 protected slots:
     void slotFaderLevelChanged(float level);

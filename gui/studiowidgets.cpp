@@ -804,6 +804,13 @@ AudioFaderWidget::AudioFaderWidget(QWidget *parent,
 
 }
 
+bool
+AudioFaderWidget::owns(const QObject *object)
+{
+    return (object &&
+	    ((object->parent() == this) ||
+	     (object->parent() && (object->parent()->parent() == this))));
+}
 
 void
 AudioFaderWidget::setAudioChannels(int channels)
