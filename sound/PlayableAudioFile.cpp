@@ -741,7 +741,54 @@ PlayableAudioFile::updateBuffers()
 			    false)) {
 
 	if (obtained < fileFrames) m_fileEnded = true;
-//	m_currentFrameOffset += obtained;
+
+	if (m_autoFade) {
+
+	    if (m_currentScanPoint < m_startIndex + m_fadeInTime) {
+
+		size_t fadeSamples =
+		    RealTime::realTime2Frame(m_fadeInTime, m_sampleRate);
+		size_t originSamples =
+		    RealTime::realTime2Frame(m_currentScanPoint - m_startIndex,
+					     m_sampleRate);
+
+		for (size_t i = 0; i < nframes; ++i) {
+		    if (i + originSamples > fadeSamples) {
+			break;
+		    }
+		    float gain = float(i + originSamples) / float(fadeSamples);
+		    for (int ch = 0; ch < m_targetChannels; ++ch) {
+			m_workBuffers[ch][i] *= gain;
+		    }
+		}
+	    }
+
+	    if (m_currentScanPoint + block > 
+		m_startIndex + m_duration - m_fadeOutTime) {
+		
+		size_t fadeSamples =
+		    RealTime::realTime2Frame(m_fadeOutTime, m_sampleRate);
+		size_t originSamples = // counting from end
+		    RealTime::realTime2Frame
+		    (m_startIndex + m_duration - m_currentScanPoint,
+		     m_sampleRate);
+
+		for (size_t i = 0; i < nframes; ++i) {
+		    float gain = 1.0;
+		    if (originSamples < i) gain = 0.0;
+		    else {
+			size_t fromEnd = originSamples - i;
+			if (fromEnd < fadeSamples) {
+			    gain = float(fromEnd) / float(fadeSamples);
+			}
+		    }
+		    for (int ch = 0; ch < m_targetChannels; ++ch) {
+			m_workBuffers[ch][i] *= gain;
+		    }
+		}
+	    }
+	}
+
 	m_currentScanPoint = m_currentScanPoint + block;
 
 	for (int ch = 0; ch < m_targetChannels; ++ch) {

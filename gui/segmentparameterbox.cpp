@@ -94,7 +94,7 @@ SegmentParameterBox::initBox()
     m_label = new QLabel(hbox);
     m_label->setFont(font);
     m_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-//    m_label->setFixedWidth(100);
+    m_label->setFixedWidth(120);
 
     // .. and edit button
     m_labelButton = new QPushButton("...", hbox);
