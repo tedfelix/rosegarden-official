@@ -944,27 +944,9 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                             m_composition.addSegment(m_recordSegment);
                         }
 
-                    // If there was a gap between the last note and this one
-                    // then fill it with rests
-                    //
-//                    if (absTime > m_endOfLastRecordedNote)
-//                        m_recordSegment->fillWithRests(absTime + duration);
-
                     // Now insert the new event
                     //
                     m_recordSegment->insert(rEvent);
-
-                    // And now fiddle with it
-                    //
-
-                    /*!!! cc-- I don't think this is a good idea any more anyway,
-                      and I've already removed similar code from MidiFile import,
-                      but also I think it's screwing things up for us
-
-                      SegmentNotationHelper helper(*m_recordSegment);
-                      if (!helper.isViable(rEvent))
-                      helper.makeNoteViable(loc);
-                    */
 
                     // Update our counter
                     //
@@ -1184,12 +1166,9 @@ RosegardenGUIDoc::syncDevices()
     SEQMAN_DEBUG << "RosegardenGUIDoc::syncDevices - "
                  << "Sequencer alive - Instruments synced" << endl;
 
-//!!! weird -- this prevents crash later in unassignAllInstruments call
-// from MidiFile::openFile or wherever //!!! HACK! FIXME! Shouldn't be needed!
-//    m_studio.unassignAllInstruments();
 
     //!!! need to force an update on the instrument parameter box if
-    //necessary -- how?
+    //necessary -- how? -- and the instrument dropdown
 }
 
 
@@ -1395,13 +1374,6 @@ RosegardenGUIDoc::convertToSinglePoint(Rosegarden::Segment *segment)
     for (unsigned int i = 0; i < toErase.size(); ++i) {
         segment->erase(toErase[i]);
     }
-
-    // Always fill with rests if we have some events
-    //
-//!!! no -- done by insert command
-//    if(segment->begin() != segment->end())
-//        segment->normalizeRests(segment->getStartTime(), segment->getEndTime());
-
 }
 
 std::string

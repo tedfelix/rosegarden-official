@@ -681,16 +681,22 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 
 	connectionName = port->m_name;
 
+	AUDIT_STREAM << "Creating device " << deviceId << " in "
+		     << (reqDirection == MidiDevice::Play ? "Play" : "Record")
+		     << " mode for connection " << connectionName
+		     << "\nDefault device name for this device is "
+		     << deviceName << std::endl;
+
     } else {
 
 	sprintf(deviceName, "Anonymous MIDI device %d", ++unknownCounter);
-    }
 
-    AUDIT_STREAM << "Creating device " << deviceId << " in "
-		 << (reqDirection == MidiDevice::Play ? "Play" : "Record")
-		 << " mode for connection " << connectionName
-		 << "\nDefault device name for this device is " << deviceName
-		 << std::endl;
+	AUDIT_STREAM << "Creating device " << deviceId << " in "
+		     << (reqDirection == MidiDevice::Play ? "Play" : "Record")
+		     << " mode -- no connection available "
+		     << "\nDefault device name for this device is "
+		     << deviceName << std::endl;
+    }
 	
     MappedDevice *device = new MappedDevice(deviceId,
 					    Device::Midi,

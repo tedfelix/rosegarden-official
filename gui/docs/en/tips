@@ -1,10 +1,7 @@
-</tip>
 <tip category="Rosegarden|General">
 <html>
-<p>To assign a track to a new instrument click and hold with the left
-mouse button on the track label.  You'll be presented with a series of menus
-that allow you to navigate to the device/instrument combination of your
-choosing.</p>
+<p>...to assign a track to a new instrument, click and hold with the left
+mouse button on the track label.  You'll be presented with a menu listing the available MIDI and audio devices, where you can select an instrument on one of those devices.</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -42,12 +39,12 @@ new document you create.</p>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that Rosegarden can detect and create a default connection for ALSA soft
+<p>...that Rosegarden will detect and create a default connection for ALSA soft
 synths that are started after Rosegarden is already running?</html>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that if you misplace a note while using the notation editor, you can move it one halfstep at a time with the up and down arrow keys on your keyboard?</p>
+<p>...that if you place a note at the wrong pitch using the notation editor, you can move it one semitone at a time with the up and down arrow keys on your keyboard?</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -59,10 +56,7 @@ one or more notes and using ctrl-PageUp and ctrl-PageDown?</p>
 <tip category="Rosegarden|General">
 <html>
 <p>...that you can edit multiple segments on multiple tracks simultaneously in
-the notation editor?
-
-Simply select the segments you wish to edit, and then right click on one of
-them and choose <b>Open in Notation Editor</b>.</p>
+the notation editor?  Simply select the segments, then use <b>Edit -> Open in Notation Editor</b>.</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -79,6 +73,11 @@ other options simultaneously with <b>Settings -> Toggle All of the Above</b>?</p
 </tip>
 <tip category="Rosegarden|General">
 <html>
+<p>...that Rosegarden can export files for use by Lilypond, the high-quality score typesetting system?</p>
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
 <p>...that you can change various parameters controlling how Rosegarden
 handles Lilypond export with <b>Settings -> Configure Rosegarden -> Notation
 -> Lilypond?</p>
@@ -86,9 +85,7 @@ handles Lilypond export with <b>Settings -> Configure Rosegarden -> Notation
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that if you activate Rosegarden's quantizer from the notation view, it works on a separate copy of each event that
-is only used for display purposes, making it possible to have good looking notation
-while maintaining a completely human MIDI performance?</p>
+<p>...that if you use the quantizer from within the notation view, it can quantize only the timing used for notation -- making it possible to have good looking notation <b>and</b> a completely human MIDI performance?</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -127,7 +124,7 @@ line at <b>rosegarden-devel@lists.sourceforge.net</b>.</p>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that you can make a composition longer by changing the length via <b>Edit
+<p>...that you can change the total number of bars in the composition via <b>Edit
 -> Change Composition Duration</b>?</p>
 </html>
 </tip>
@@ -142,7 +139,32 @@ feature.<br><br>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>... ?</p>
+<p>...that you can add tempo and time-signature changes by double-clicking on the values displayed in the transport window?</p>
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that the transport window can display bar-and-beat time (musical time) and 24-fps SMPTE frames as well as real time?  Just click on the small button at the extreme top left of the window.</p>
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that you can select all notes of a particular pitch in the matrix view, by shift-clicking on that pitch on the piano keyboard at the left?  If you shift-click-drag, you can select whole ranges too.</p>
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that you can set a loop in the main window by clicking-and-dragging on the time ruler with Shift pressed?  (If the ruler isn't visible, use <b>Settings n-> Show Rulers</b>.)</p>
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that if you're editing a section in the matrix or notation view, you can set that section to loop while you edit it?  Select it and use <b>Move -> Set Loop to Selection</b>, then hit Play.</p>
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that you can change the MIDI record device from the configuration dialog?  Go to <b>Settings -> Configure Rosegarden</b>, select the Sequencer page and Recording tab, and then select the device you want from the MIDI Record Device dropdown.  Your selection will be remembered for next time.</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">

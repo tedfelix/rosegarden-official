@@ -101,7 +101,7 @@
                 <bool>true</bool>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Display bar/beat time</string>
+                <string>Switch between real time, musical time, and SMPTE frames</string>
             </property>
         </widget>
         <widget class="QPushButton">

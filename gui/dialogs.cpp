@@ -2846,7 +2846,7 @@ ShowSequencerStatusDialog::ShowSequencerStatusDialog(QWidget *parent) :
     QTextEdit *text = new QTextEdit(vbox);
     text->setTextFormat(Qt::PlainText);
     text->setReadOnly(true);
-    text->setMinimumWidth(300);
+    text->setMinimumWidth(500);
     text->setMinimumHeight(200);
 
     text->setText(status);

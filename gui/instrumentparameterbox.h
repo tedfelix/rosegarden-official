@@ -77,7 +77,7 @@ public:
 
 public slots:
 
-    // To update all InstrumentParamterBoxen for an Instrument.
+    // To update all InstrumentParameterBoxen for an Instrument.
     //
     void slotUpdateAllBoxes();
 
