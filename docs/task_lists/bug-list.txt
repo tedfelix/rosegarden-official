@@ -1,0 +1,4 @@
+Current Bugs
+============
+
+o MatrixView crashes app on open KDE3 [rwb 09.05.2002]
