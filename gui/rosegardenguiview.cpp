@@ -48,7 +48,9 @@
 using Rosegarden::SimpleRulerScale;
 
 
-RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
+RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
+                                     QWidget *parent,
+                                     const char* /*name*/)
     : QVBox(parent),
       m_rulerScale(0),
       m_trackEditor(0)
@@ -83,7 +85,7 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     // Construct the trackEditor first so we can then
     // query it for placement information
     //
-    m_trackEditor  = new TrackEditor(doc, m_rulerScale, hbox);
+    m_trackEditor  = new TrackEditor(doc, m_rulerScale, showTrackLabels, hbox);
 
     connect(m_trackEditor->getSegmentCanvas(),
             SIGNAL(editSegmentNotation(Rosegarden::Segment*)),

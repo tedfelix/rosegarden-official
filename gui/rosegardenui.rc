@@ -38,6 +38,7 @@
   <Menu  name="settings"><text>&amp;Settings</text>
          <Action name="show_tracks_toolbar" append="show_merge" />
          <Action name="show_transport" append="show_merge" />
+         <Action name="show_tracklabels" append="show_merge" />
   </Menu>
 
 </MenuBar>

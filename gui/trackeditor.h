@@ -57,6 +57,7 @@ public:
      */
     TrackEditor(RosegardenGUIDoc* doc,
                 Rosegarden::RulerScale *rulerScale,
+                bool showTrackLabels,
                 QWidget* parent = 0, const char* name = 0,
                 WFlags f=0);
 
@@ -206,6 +207,8 @@ protected:
     SegmentCanvas           *m_segmentCanvas;
     QCanvasLine             *m_pointer;
     QScrollView             *m_trackButtonScroll;
+
+    bool                     m_showTrackLabels;
 };
 
 #endif

@@ -52,6 +52,8 @@
 #include "SegmentPerformanceHelper.h"
 #include "NotationTypes.h"
 #include "sequencemanager.h"
+#include "trackbuttons.h"
+#include "trackeditor.h"
 
 #define ID_STATUS_MSG 1
 
@@ -166,6 +168,11 @@ void RosegardenGUIApp::setupActions()
                                              SLOT(slotToggleTransport()),
                                              actionCollection(),
                                              "show_transport");
+
+    m_viewTrackLabels = new KToggleAction(i18n("Show Track labels"), 0, this,
+                                             SLOT(slotToggleTrackLabels()),
+                                             actionCollection(),
+                                             "show_tracklabels");
 
     KStdAction::saveOptions(this, SLOT(save_options()), actionCollection());
     KStdAction::preferences(this, SLOT(customize()),    actionCollection());
@@ -409,7 +416,7 @@ void RosegardenGUIApp::initView()
         comp.setEndMarker(endMarker);
     }
     
-    m_view = new RosegardenGUIView(this);
+    m_view = new RosegardenGUIView(m_viewTrackLabels->isChecked(), this);
 
     // Connect up this signal so that we can force tool mode
     // changes from the view
@@ -531,6 +538,7 @@ void RosegardenGUIApp::saveOptions()
     m_config->writeEntry("Show Toolbar", m_viewToolBar->isChecked());
     m_config->writeEntry("Show Tracks Toolbar", m_viewTracksToolBar->isChecked());
     m_config->writeEntry("Show Transport", m_viewTransport->isChecked());
+    m_config->writeEntry("Show Track labels", m_viewTrackLabels->isChecked());
     m_config->writeEntry("Show Statusbar",m_viewStatusBar->isChecked());
     m_config->writeEntry("ToolBarPos", (int) toolBar("mainToolBar")->barPos());
     m_config->writeEntry("TracksToolBarPos", (int) toolBar("tracksToolBar")->barPos());
@@ -558,7 +566,11 @@ void RosegardenGUIApp::readOptions()
 
     bool viewTransport = m_config->readBoolEntry("Show Transport", true);
     m_viewTransport->setChecked(viewTransport);
-   slotToggleTransport();
+    slotToggleTransport();
+
+    bool viewTrackLabels = m_config->readBoolEntry("Show Track labels", true);
+    m_viewTrackLabels->setChecked(viewTrackLabels);
+    slotToggleTrackLabels();
 
     // bar position settings
     KToolBar::BarPosition toolBarPos;
@@ -920,6 +932,22 @@ void RosegardenGUIApp::slotToggleTransport()
     else
         m_transport->hide();
 }
+
+void RosegardenGUIApp::slotToggleTrackLabels()
+{
+    if (m_viewTrackLabels->isChecked())
+    {
+        m_view->getTrackEditor()->getTrackButtons()->
+            changeTrackInstrumentLabels(TrackButtons::ShowTrack);
+    }
+    else
+    {
+        m_view->getTrackEditor()->getTrackButtons()->
+            changeTrackInstrumentLabels(TrackButtons::ShowInstrument);
+    }
+}
+
+
 
 void RosegardenGUIApp::slotToggleStatusBar()
 {

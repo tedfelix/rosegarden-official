@@ -44,7 +44,9 @@ class InstrumentLabel;
 
 class TrackButtons : public QFrame
 {
-    
+    Q_OBJECT
+public:
+
     typedef enum
     {
         ShowTrack,
@@ -52,12 +54,10 @@ class TrackButtons : public QFrame
         ShowBoth
     } InstrumentTrackLabels;
 
-    Q_OBJECT
-
-public:
     TrackButtons(RosegardenGUIDoc* doc,
                  unsigned int trackCellHeight,
                  unsigned int trackLabelWidth,
+                 bool showTrackLabels,
                  QWidget* parent = 0,
                  const char* name = 0,
                  WFlags f=0);
@@ -75,6 +75,8 @@ public:
     // Return a vector of highlighted tracks
     //
     std::vector<int> getHighlightedTracks();
+
+    void changeTrackInstrumentLabels(InstrumentTrackLabels label);
 
 signals:
     // to emit what Track has been selected
@@ -96,8 +98,6 @@ public slots:
     void slotInstrumentSelection(int);
     void slotInstrumentPopupActivated(int);
     void slotInstrumentPopupHiding();
-
-    void slotChangeTrackInstrumentLabels(InstrumentTrackLabels label);
 
 private:
 

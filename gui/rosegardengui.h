@@ -524,6 +524,12 @@ public slots:
     void slotSetLoop();
     void slotUnsetLoop();
 
+    /*
+     * Toggle the track labels on the TrackEditor
+     *
+     */
+    void slotToggleTrackLabels();
+
 private:
 
     //--------------- Data members ---------------------------------
@@ -569,6 +575,7 @@ private:
     KToggleAction* m_viewTracksToolBar;
     KToggleAction* m_viewStatusBar;
     KToggleAction* m_viewTransport;
+    KToggleAction* m_viewTrackLabels;
     KAction *m_playTransport;
     KAction *m_stopTransport;
     KAction *m_rewindTransport;

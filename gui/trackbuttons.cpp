@@ -40,6 +40,7 @@
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            unsigned int trackCellHeight,
                            unsigned int trackLabelWidth,
+                           bool showTrackLabels,
                            QWidget* parent,
                            const char* name,
                            WFlags f)
@@ -54,11 +55,16 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
       m_cellSize(trackCellHeight),
       m_lastID(-1),
       m_trackLabelWidth(trackLabelWidth),
-      m_popupItem(0),
-      m_trackInstrumentLabels(ShowTrack)
+      m_popupItem(0)
 
 {
     setFrameStyle(Plain);
+
+    // when we create the widget, what are we looking at?
+    if (showTrackLabels)
+        m_trackInstrumentLabels = ShowTrack;
+    else
+        m_trackInstrumentLabels = ShowInstrument;
 
     // connect the popup menu
     connect(m_instrumentPopup, SIGNAL(activated(int)),
@@ -566,17 +572,47 @@ TrackButtons::slotInstrumentPopupActivated(int item)
 void
 TrackButtons::slotInstrumentPopupHiding()
 {
-    slotChangeTrackInstrumentLabels(m_trackInstrumentLabels);
+    changeTrackInstrumentLabels(m_trackInstrumentLabels);
 }
 
 
 // Hide and show Tracks and Instruments
 //
 void
-TrackButtons::slotChangeTrackInstrumentLabels(InstrumentTrackLabels label)
+TrackButtons::changeTrackInstrumentLabels(InstrumentTrackLabels label)
 {
+    // Disconnect where we're coming from
+    //
+    if (m_trackInstrumentLabels != label)
+    {
+        for (int i = 0; i < m_tracks; i++)
+        {
+            switch(m_trackInstrumentLabels)
+            {
+                case ShowTrack:
+                    disconnect(m_trackLabels[i],
+                               SIGNAL(changeToInstrumentList(int)),
+                               this, SLOT(slotInstrumentSelection(int)));
+                    break;
+
+                case ShowBoth:
+                case ShowInstrument:
+                    disconnect(m_instrumentLabels[i],
+                               SIGNAL(changeToInstrumentList(int)),
+                               this, SLOT(slotInstrumentSelection(int)));
+                    break;
+
+                default:
+                    break;
+        }
+
+        }
+    }
+
+    // Set new label
     m_trackInstrumentLabels = label;
 
+    // update and reconnect with new value
     for (int i = 0; i < m_tracks; i++)
     {
         switch(label)
@@ -584,17 +620,26 @@ TrackButtons::slotChangeTrackInstrumentLabels(InstrumentTrackLabels label)
             case ShowInstrument:
                 m_trackLabels[i]->hide();
                 m_instrumentLabels[i]->show();
+                connect(m_instrumentLabels[i],
+                        SIGNAL(changeToInstrumentList(int)),
+                        this, SLOT(slotInstrumentSelection(int)));
                 break;
     
             case ShowBoth:
                 m_trackLabels[i]->show();
                 m_instrumentLabels[i]->show();
+                connect(m_instrumentLabels[i],
+                        SIGNAL(changeToInstrumentList(int)),
+                        this, SLOT(slotInstrumentSelection(int)));
                 break;
     
             case ShowTrack:
             default:
                 m_trackLabels[i]->show();
                 m_instrumentLabels[i]->hide();
+                connect(m_trackLabels[i],
+                        SIGNAL(changeToInstrumentList(int)),
+                        this, SLOT(slotInstrumentSelection(int)));
                 break;
         }
     }

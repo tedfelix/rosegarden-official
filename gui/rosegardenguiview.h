@@ -64,6 +64,10 @@ public:
      */
     RosegardenGUIView(QWidget *parent = 0, const char *name=0);
 
+    RosegardenGUIView(bool showTrackLabels,
+                      QWidget *parent = 0,
+                      const char *name=0);
+
     /**
      * Destructor for the main view
      */

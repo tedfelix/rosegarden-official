@@ -55,6 +55,7 @@ using Rosegarden::TrackId;
 
 TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 			 RulerScale *rulerScale,
+                         bool showTrackLabels,
 			 QWidget* parent, const char* name,
 			 WFlags) :
     QWidget(parent, name),
@@ -66,7 +67,8 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     m_trackButtons(0),
     m_horizontalScrollBar(0),
     m_segmentCanvas(0),
-    m_trackButtonScroll(0)
+    m_trackButtonScroll(0),
+    m_showTrackLabels(showTrackLabels)
 {
     Composition &comp = doc->getComposition();
 
@@ -182,6 +184,7 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     m_trackButtons = new TrackButtons(m_document,
                                       getTrackCellHeight(),
                                       trackLabelWidth,
+                                      m_showTrackLabels,
                                       m_trackButtonScroll->viewport());
     m_trackButtonScroll->addChild(m_trackButtons);
     m_trackButtonScroll->setHScrollBarMode(QScrollView::AlwaysOff);
