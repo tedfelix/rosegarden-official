@@ -170,8 +170,12 @@ public:
 
 	const ViewElement &ve1 = *e1;
 	const ViewElement &ve2 = *e2;
+	return (ve1 < ve2);
+/*!!!
 	if (ve1 < ve2) return true;
 	else if (ve2 < ve1) return false;
+
+//!!! NO! Not safe -- pitch can change at any time
 
 	// ve1 and ve2 compare equal, so compare by pitch where possible,
 	// sorting events without pitches before those with
@@ -185,6 +189,7 @@ public:
 	    if (have2) return true;
 	    else return false;
 	}
+*/
     }
 };
 

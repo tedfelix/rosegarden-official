@@ -28,15 +28,12 @@ namespace Rosegarden
 ViewElement::ViewElement(Event *e) :
     m_event(e)
 {
-    if (m_event)
-        m_event->viewElementRef();
     // nothing
 }
 
 ViewElement::~ViewElement()
 {
-    if (m_event)
-        m_event->viewElementUnRef();
+    // nothing
 }
 
 //////////////////////////////////////////////////////////////////////

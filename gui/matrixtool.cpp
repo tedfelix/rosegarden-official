@@ -458,7 +458,7 @@ bool MatrixPainter::handleMouseMove(Rosegarden::timeT newTime,
                              << m_currentElement->event()->get<Rosegarden::Int>(PITCH)
                              << endl;
 
-        m_currentElement->setDuration(newDuration);
+//!!!        m_currentElement->setDuration(newDuration);
 
         double width = newDuration * m_currentStaff->getTimeScaleFactor();
         m_currentElement->setWidth(int(width));
@@ -470,10 +470,11 @@ bool MatrixPainter::handleMouseMove(Rosegarden::timeT newTime,
 		m_currentStaff->getElementHeight() / 2;
 	    m_currentElement->setLayoutY(y);
 	    m_currentStaff->positionElement(m_currentElement);
-	    m_mParentView->update();
-	} else {
+	}/*!!! else {
 	    m_mParentView->canvas()->update();
-	}
+	    }*/
+
+	m_mParentView->update();
 
 /* This is ridiculous behaviour --cc
     }
@@ -518,7 +519,7 @@ bool MatrixPainter::handleMouseMove(Rosegarden::timeT newTime,
     return true;
 }
 
-void MatrixPainter::handleMouseRelease(Rosegarden::timeT,
+void MatrixPainter::handleMouseRelease(Rosegarden::timeT endTime,
                                        int,
                                        QMouseEvent*)
 {
@@ -529,7 +530,11 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT,
     // Insert element if it has a non null duration,
     // discard it otherwise
     //
-    if (m_currentElement->getDuration() != 0) {
+    timeT time = m_currentElement->getAbsoluteTime();
+    endTime = (endTime / m_basicDuration) * m_basicDuration;
+    timeT duration = endTime - time;
+
+    if (duration != 0) {
         
         Rosegarden::SegmentMatrixHelper helper(m_currentStaff->getSegment());
         kdDebug(KDEBUG_AREA) << "MatrixPainter::handleMouseRelease() : helper.insertNote()\n";
@@ -537,9 +542,6 @@ void MatrixPainter::handleMouseRelease(Rosegarden::timeT,
         //         m_currentStaff->setWrapAddedEvents(false);
         //         helper.insertNote(m_currentElement->event());
         //         m_currentStaff->setWrapAddedEvents(true);
-
-        timeT time = m_currentElement->getAbsoluteTime();
-        timeT endTime = time + m_currentElement->getDuration();
 
         MatrixInsertionCommand* command = 
             new MatrixInsertionCommand(m_currentStaff->getSegment(),

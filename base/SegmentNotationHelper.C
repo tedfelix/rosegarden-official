@@ -1486,8 +1486,11 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 					(*lastEvent)->getDuration() -
 					(finalTime - eventTime));
 	    duration = finalTime + (*lastEvent)->getDuration() - time;
+	    bool same = (from == to);
 	    segment().erase(lastEvent);
 	    to = lastEvent = segment().insert(newEvent);
+	    if (same) from = to;
+	    cerr<<"SegmentNotationHelper::removeRests: inserted shorter rest, event is " << *to << " and from is " << *from << endl;
 	    checkLastRest = true;
 	}
     }

@@ -25,6 +25,8 @@
 #include "ViewElement.h"
 #include "Segment.h"
 
+#include <iostream>
+
 namespace Rosegarden 
 {
 
@@ -165,8 +167,11 @@ Staff<T>::findEvent(Event *e)
 	      typename ViewElementList<T>::iterator>
         r = m_viewElementList->equal_range(&dummy);
 
+    cerr << "called equal_range for event " << e << " (" << e->getAbsoluteTime() << "," << e->getSubOrdering() << ")" << endl;
     for (typename ViewElementList<T>::iterator i = r.first; i != r.second; ++i) {
+	cerr << "looking at " << (*i)->event() << " (" << (*i)->event()->getAbsoluteTime() << "," << (*i)->event()->getSubOrdering() << ")" << endl;
         if ((*i)->event() == e) {
+	    cerr << "matches" << endl;
             return i;
         }
     }
@@ -195,11 +200,15 @@ Staff<T>::eventRemoved(const Segment *t, Event *e)
 
     // If we have it, lose it
 
+    cerr << "Staff<T>::eventRemoved for " << e << endl;
+
     typename ViewElementList<T>::iterator i = findEvent(e);
     if (i != m_viewElementList->end()) {
+	cerr << "Found" << endl;
         m_viewElementList->erase(i);
         return;
     }
+    cerr << "Not found" << endl;
 }
 
 template <class T>

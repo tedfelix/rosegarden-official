@@ -317,6 +317,7 @@ Segment::erase(iterator pos)
 
     std::multiset<Event*, Event::EventCmp>::erase(pos);
     notifyRemove(e);
+    delete e;
     updateRefreshStatuses(t0, t1);
 
     if (t0 == m_startTime && begin() != end()) {
@@ -325,8 +326,6 @@ Segment::erase(iterator pos)
     if (t1 == m_endTime) {
 	updateEndTime();
     }
-
-    delete e;
 }
 
 
@@ -340,6 +339,29 @@ Segment::erase(iterator from, iterator to)
     // Not very efficient, but without an observer event for
     // multiple erase we can't do any better.
 
+    cerr << "Segment::erase(from, to)" << endl;
+
+    for (Segment::iterator i = from; i != to; ) {
+
+	Segment::iterator j(i);
+        ++j;
+
+	Event *e = *i;
+	assert(e);
+
+	cerr << "Erasing event " << e << endl;
+
+	std::multiset<Event*, Event::EventCmp>::erase(i);
+	cerr << "Notifying for event " << e << endl;
+	notifyRemove(e);
+	cerr << "Deleting event " << e << endl;
+	delete e;
+
+	i = j;
+    }
+
+/*!!!
+
     // We can't do this :
     //
     // for (Segment::iterator i = from; i != to; ++i) { ... erase(i); }
@@ -350,13 +372,27 @@ Segment::erase(iterator from, iterator to)
     // call notifyRemove() for each of them,
     // and finally call std::multiset<>::erase(from, to)
 
+    std::vector<Event *> toErase;
+
     for (Segment::iterator i = from; i != to; ++i) {
-        Event *e = *i;
-        notifyRemove(e);
-        delete e;
+	cerr << "Erasing event " << *i << endl;
+
+	toErase.push_back(*i);
     }
-    
+
     std::multiset<Event*, Event::EventCmp>::erase(from, to);
+
+    // notifyRemove is supposed to be called after the 
+    // event has been erased but before it's destroyed
+
+    for (std::vector<Event *>::iterator i = toErase.begin();
+	 i != toErase.end(); ++i) {
+	cerr << "Notifying for event " << *i << endl;
+	notifyRemove(*i);
+	cerr << "Deleting event " << *i << endl;
+	delete *i;
+    }
+*/
 
     if (startTime == m_startTime && begin() != end()) {
 	m_startTime = (*begin())->getAbsoluteTime();

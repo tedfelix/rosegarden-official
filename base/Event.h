@@ -58,25 +58,20 @@ typedef long timeT;
 class Event
 {
 public:
-    friend class ViewElement;
-
     struct NoData { };
     struct BadType { };
 
     Event(const std::string &type,
 	  timeT absoluteTime, timeT duration = 0, int subOrdering = 0) :
 	m_data(new EventData(type, absoluteTime, duration, subOrdering)),
-	m_viewElementRefCount(0),
 	m_nonPersistentProperties(0) { }
 
     Event(const Event &e) :
-	m_viewElementRefCount(0),
 	m_nonPersistentProperties(0) { share(e); }
 
     // next 3 ctors can't use default args: default has to be obtained from e
 
     Event(const Event &e, timeT absoluteTime) :
-	m_viewElementRefCount(0),
 	m_nonPersistentProperties(0) {
 	share(e);
 	unshare();
@@ -84,7 +79,6 @@ public:
     }
 
     Event(const Event &e, timeT absoluteTime, timeT duration) :
-	m_viewElementRefCount(0),
 	m_nonPersistentProperties(0) {
 	share(e);
 	unshare();
@@ -93,7 +87,6 @@ public:
     }
 
     Event(const Event &e, timeT absoluteTime, timeT duration, int subOrdering):
-	m_viewElementRefCount(0),
 	m_nonPersistentProperties(0) {
 	share(e);
 	unshare();
@@ -207,18 +200,11 @@ public:
 #endif
     static void dumpStats(std::ostream&);
 
-    bool hasViewElement() const { return m_viewElementRefCount != 0; }
-
 protected:
-    // these are for ViewElement only
-    void viewElementRef()   { ++m_viewElementRefCount; }
-    void viewElementUnRef() { --m_viewElementRefCount; }
-
     // these are for subclasses such as XmlStorableEvent
 
     Event() :
 	m_data(new EventData("", 0, 0, 0)),
-	m_viewElementRefCount(0),
 	m_nonPersistentProperties(0) { }
     
     void setType(const std::string &t) { unshare(); m_data->m_type = t; }
@@ -248,7 +234,6 @@ private:
     };	
 
     EventData *m_data;
-    unsigned int m_viewElementRefCount;
     PropertyMap *m_nonPersistentProperties; // Unique to an instance
 
     void share(const Event &e) {
@@ -266,7 +251,6 @@ private:
     }
 
     void lose() {
-	m_viewElementRefCount = 0;
 	if (--m_data->m_refCount == 0) delete m_data;
 	delete m_nonPersistentProperties;
 	m_nonPersistentProperties = 0;
