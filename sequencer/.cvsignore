@@ -1,6 +1,11 @@
+*.moc.cpp
+.deps
+.libs
 Makefile
 Makefile.in
 rosegardensequencer
 *.moc.cpp
-*.kidl
 *_skel.cpp
+*_meta_unload.cpp
+*.kidl
+

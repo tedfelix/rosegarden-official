@@ -1,9 +1,9 @@
-*.moc.cpp
-rosegardengui
 .deps
 .libs
 Makefile
 Makefile.in
+rosegardengui
+*.moc.cpp
 *_skel.cpp
 *_meta_unload.cpp
 *.kidl
