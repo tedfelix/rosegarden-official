@@ -1563,15 +1563,9 @@ void RosegardenSequencerApp::dumpFirstSegment()
 void
 RosegardenSequencerApp::rationalisePlayingAudio()
 {
-//!!! currently only used in response to mute/unmute etc -- disable for now
-    return; //!!!
-
-    if (!m_metaIterator) return;
-
-    std::vector<MappedEvent> &segmentAudio =
-	m_metaIterator->getPlayingAudioFiles(m_songPosition);
-
-    m_driver->rationalisePlayingAudio(segmentAudio, m_songPosition);
+    std::vector<Rosegarden::MappedEvent> audioEvents;
+    m_metaIterator->getAudioEvents(audioEvents);
+    m_driver->initialiseAudioQueue(audioEvents);
 }
 
 

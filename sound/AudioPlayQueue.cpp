@@ -62,6 +62,7 @@ AudioPlayQueue::AudioPlayQueue() :
 
 AudioPlayQueue::~AudioPlayQueue()
 {
+    std::cerr << "AudioPlayQueue::~AudioPlayQueue()" << std::endl;
     clear();
 }
 

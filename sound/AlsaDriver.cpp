@@ -1482,6 +1482,9 @@ AlsaDriver::stopPlayback()
 
     stopClocks(); // Resets ALSA timer to zero, tells JACK driver to stop
 
+    //!!! might not actually need these locks any more, because of audio
+    // play queue scavenger in sound driver
+    
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) {
 //!!!	m_jackDriver->stop();
@@ -3114,6 +3117,7 @@ AlsaDriver::processPending()
     }
 
     m_pluginScavenger.scavenge();
+    m_audioQueueScavenger.scavenge();
 }
 
 void

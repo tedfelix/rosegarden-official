@@ -49,6 +49,7 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
     m_recordStatus(ASYNCHRONOUS_MIDI),
     m_midiRunningId(MidiInstrumentBase),
     m_audioRunningId(AudioInstrumentBase),
+    m_audioQueueScavenger(4, 50),
     m_audioQueue(0),
     m_audioMonitoringInstrument(AudioInstrumentBase),
     m_lowLatencyMode(false),
@@ -90,7 +91,7 @@ SoundDriver::getMappedInstrument(InstrumentId id)
 void
 SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
 {
-    m_audioQueue->clear();
+    AudioPlayQueue *newQueue = new AudioPlayQueue();
 
     for (std::vector<MappedEvent>::const_iterator i = events.begin();
 	 i != events.end(); ++i) {
@@ -168,7 +169,7 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
 #endif
 
 
-	    m_audioQueue->addScheduled(paf);
+	    newQueue->addScheduled(paf);
 	}
 	else
 	{
@@ -181,12 +182,19 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
 		      << std::endl;
 	}
     }
+
+    AudioPlayQueue *oldQueue = m_audioQueue;
+    m_audioQueue = newQueue;
+    m_audioQueueScavenger.claim(oldQueue);
 }
 
 void
 SoundDriver::clearAudioQueue()
 {
-    m_audioQueue->clear();
+    AudioPlayQueue *newQueue = new AudioPlayQueue();
+    AudioPlayQueue *oldQueue = m_audioQueue;
+    m_audioQueue = newQueue;
+    m_audioQueueScavenger.claim(oldQueue);
 }
 
 const AudioPlayQueue *

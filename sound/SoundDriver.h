@@ -29,6 +29,7 @@
 #include "MappedDevice.h"
 #include "SequencerDataBlock.h"
 #include "PlayableAudioFile.h"
+#include "Scavenger.h"
 
 // Abstract base to support SoundDrivers such as aRts and ALSA.
 //
@@ -453,6 +454,8 @@ protected:
     InstrumentId                                m_midiRunningId;
     InstrumentId                                m_audioRunningId;
 
+    // Subclass _MUST_ scavenge this regularly:
+    Scavenger<AudioPlayQueue>                   m_audioQueueScavenger;
     AudioPlayQueue                             *m_audioQueue;
 
     // A list of AudioFiles that we can play.
