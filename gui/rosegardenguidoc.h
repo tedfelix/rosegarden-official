@@ -291,6 +291,11 @@ public:
         { m_audioPlayLatency = latency; }
         */
 
+    // Return the AudioPluginManager
+    //
+    Rosegarden::AudioPluginManager* getPluginManager()
+        { return m_pluginManager; }
+
 public slots:
     /**
      * calls repaint() on all views connected to the document object

@@ -34,12 +34,15 @@
 #include "Instrument.h"
 #include "MidiDevice.h"
 #include "instrumentparameterbox.h"
+#include "audiopluginmanager.h"
 #include "widgets.h"
 
 #include "rosestrings.h"
 #include "rosedebug.h"
 
-InstrumentParameterBox::InstrumentParameterBox(QWidget *parent)
+InstrumentParameterBox::InstrumentParameterBox(
+        Rosegarden::AudioPluginManager *pluginManager,
+        QWidget *parent)
     : RosegardenParameterBox(i18n("Instrument Parameters"), parent),
       m_instrumentLabel(new QLabel(this)),
       m_channelLabel(new QLabel(i18n("Channel"), this)),
@@ -58,7 +61,8 @@ InstrumentParameterBox::InstrumentParameterBox(QWidget *parent)
       m_velocityCheckBox(new QCheckBox(this)),
       m_volumeFader(new RosegardenFader(this)),
       m_volumeValue(new QLabel(this)),
-      m_selectedInstrument(0)
+      m_selectedInstrument(0),
+      m_pluginManager(pluginManager)
 {
     initBox();
 

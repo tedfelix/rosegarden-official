@@ -38,12 +38,15 @@ class RosegardenComboBox;
 class QCheckBox;
 class QSlider;
 
+namespace Rosegarden { class AudioPluginManager; }
+
 class InstrumentParameterBox : public RosegardenParameterBox
 {
 Q_OBJECT
 
 public:
-    InstrumentParameterBox(QWidget *parent = 0);
+    InstrumentParameterBox(Rosegarden::AudioPluginManager *pluginManager,
+                           QWidget *parent = 0);
     ~InstrumentParameterBox();
 
     void useInstrument(Rosegarden::Instrument *instrument);
@@ -109,6 +112,8 @@ protected:
     QLabel             *m_volumeValue;
 
     Rosegarden::Instrument *m_selectedInstrument;
+
+    Rosegarden::AudioPluginManager *m_pluginManager;
 
 };
 

@@ -1014,7 +1014,7 @@ RosegardenSequencerApp::getMappedObjectId(int type)
 
     if (object)
     {
-        value = int(object->getType());
+        value = int(object->getId());
     }
 
     return value;
@@ -1025,15 +1025,20 @@ QValueVector<QString>
 RosegardenSequencerApp::getPropertyList(int id,
                                         const QString &property)
 {
-    QValueVector<QString> propertyList;
+    QValueVector<QString> list;
 
     Rosegarden::MappedObject *object =
         m_studio.getObject(id);
 
     if (object)
-        propertyList = object->getPropertyList(property);
+    {
+        list = object->getPropertyList(property);
+    }
 
-    return propertyList;
+    SEQUENCER_DEBUG << "getPropertyList - return " << list.size()
+                    << "items" << endl;
+
+    return list;
 }
 
 

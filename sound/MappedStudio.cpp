@@ -266,7 +266,7 @@ MappedAudioPluginManager::getPropertyList(const QString &property)
     for (it = m_plugins.begin(); it != m_plugins.end(); it++)
         list.push_back(QString((*it)->getName().c_str()));
 
-    return MappedObjectPropertyList();
+    return list;
 }
 
 

@@ -1621,16 +1621,20 @@ void
 SequenceManager::getSequencerPlugins(Rosegarden::AudioPluginManager *aPM)
 {
     Rosegarden::MappedObjectId id =
-        getSequencerMappedObjectId(Rosegarden::MappedObject::Studio);
+        getSequencerMappedObjectId(Rosegarden::MappedObject::AudioPluginManager);
 
     Rosegarden::MappedObjectPropertyList seqPlugins
         = getSequencerPropertyList(id, "thing");
 
     Rosegarden::MappedObjectPropertyList::iterator it;
+    Rosegarden::PluginId count = 0;
 
     for (it = seqPlugins.begin(); it != seqPlugins.end(); it++)
-        cout << *it << endl;
-
+    {
+        aPM->addPlugin(qstrtostr(*it),
+                       count++,
+                       true);
+    }
 }
 
 QValueVector<QString>

@@ -182,7 +182,7 @@ MatrixParameterBox::initBox()
             this, SLOT(slotSetSnap(int)));
     */
 
-    m_instrumentParameterBox = new InstrumentParameterBox(this);
+    m_instrumentParameterBox = new InstrumentParameterBox(0, this);
 
     connect(m_instrumentParameterBox,
             SIGNAL(sendMappedEvent(Rosegarden::MappedEvent*)),
