@@ -36,7 +36,7 @@ Features for 1.0 - updated 20030627
 
 - document event filter dialog in RG manual [dmm] [DONE]
 
-- look at other updates for RG manual [dmm] [IN PROGRESS]
+- look at other updates for RG manual [dmm]
     
 - request: import studio from file [dmm] [IN PROGRESS]
 
@@ -49,14 +49,10 @@ Features for 1.0 - updated 20030627
   the weird "measures that just don't add up" problems I've been seeing
   [dmm/hk]
 
-- named controllers for studio with associated bankeditor-like dialog [dmm/rwb]
+- named controllers for studio with associated bankeditor-like dialog [rwb/dmm]
   [IN PROGRESS]
 
 - find decent home for event filter toolbar icons [cc? dmm?]
-
-- fix step recording icon?  little feet would be more intuitive to me than
-  the arrow thing Chris came up with...  Chris??  [dmm]
-  For the record - I like the icon we have at the moment [rwb]
 
 - completely rewrite tutorial for 1.0, using fewer/smaller pixmaps, better
   organization, possibly converting to LDP docbook format [dmm]
@@ -65,6 +61,16 @@ Features for 1.0 - updated 20030627
   what does this mean exactly? muse's integration means bundling of
   fluidysnth source code - we don't want to go that far but bear in
   mind that this could mean as little or as much as we want [rwb]
+
+  I haven't really looked into it just yet.  I've been lead to believe that we
+  can just -llibfluidsynth1 and then use the API to talk to the thing, but I
+  haven't determined whether that means talking to a running client, or
+  effectively running an interfaceless client ourselves.  Then there are
+  several Jack-related issues to work out no matter what the answer is.  The
+  ultimate aim is to be able to provide a GUI for loading/unloading soundfonts
+  conveniently and setting up other fluidsynth parameters.  It may all prove
+  either un-doable or something best left for after 1.0, but it's worth a look
+  I think.  It may be a quick hack. [dmm]
 
 - control rulers [gl IN PROGESS]
 
@@ -80,4 +86,3 @@ Many - but additional ones are:
 - Repeating segment ghosts when moving them.
 - segment preview ghosts when moving them
 - opening files during playback
-
