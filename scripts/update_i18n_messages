@@ -14,7 +14,7 @@ TMPMOCDIR="tmpmocfiles"
 
 for dir in sound sequencer gui
 do
-( cd $dir && mkdir $TMPMOCDIR && mv *.moc.* $TMPMOCDIR )
+( cd $dir && mkdir $TMPMOCDIR && mv *.moc.* $TMPMOCDIR && chmod 000 $TMPMOCDIR )
 done
 
 # exit
@@ -24,5 +24,5 @@ make package-messages
 # restore the moc files
 for dir in sound sequencer gui
 do
-( cd $dir && mv $TMPMOCDIR/* . && rmdir $TMPMOCDIR )
+( cd $dir && chmod 755 $TMPMOCDIR && mv $TMPMOCDIR/* . && rmdir $TMPMOCDIR )
 done
