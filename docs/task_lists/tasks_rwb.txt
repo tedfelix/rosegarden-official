@@ -1,7 +1,16 @@
 0.2 TO-DO for rwb
 -----------------
-updated 23.1.2001
+updated 30.1.2001
 
+Currently looking at BUGS:
+
+- Playing Audio files
+  o synchronisation with MIDI
+  o clearing down handles without crashing aRTS
+
+- Looping at the origin
+
+==
 
 o Audio. [IN PROGESS]
   Audio file support in rg file. [DONE]
@@ -11,14 +20,12 @@ o Audio. [IN PROGESS]
   Audio recording proof of concept [ALMOST DONE]
   Sequencing of plain Audio files [DONE]
 
-o Segment level Undo/Redo [cc - IN PROGRESS?]
-
 o Bar lines widget (similar to TrackButtons).
   Implementation to allow for:
 
   - Looping [DONE]
 
-  - Start and End Markers for Composition growth and shrinkage
+  - Start and End Markers for Composition growth and shrinkage [ALMOST DONE]
 
 o Allow negative time on segment canvas and transport
 
