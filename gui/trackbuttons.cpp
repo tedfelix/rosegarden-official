@@ -161,6 +161,8 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
     //
     Rosegarden::Track *track = m_doc->getComposition().getTrackByIndex(trackId);
 
+    if (track == 0) return;
+
     // Create a horizontal box for each track
     //
     trackHBox = new QFrame(this);
@@ -206,9 +208,6 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
     trackLabel = new TrackLabel(trackId, trackHBox);
     hblayout->addWidget(trackLabel);
 
-    // Enforce this
-    //
-    assert(track != 0);
 
     if (track->getLabel() == std::string(""))
         trackLabel->setText(i18n("<untitled>"));
@@ -377,9 +376,12 @@ TrackButtons::slotUpdateTracks()
         
         for(unsigned int i = m_tracks; i < newNbTracks; ++i) {
             QFrame *trackHBox = makeButton(i);
-            trackHBox->show();
-            m_layout->insertWidget(i, trackHBox);
-            m_trackHBoxes.push_back(trackHBox);
+            if (trackHBox)
+            {
+                trackHBox->show();
+                m_layout->insertWidget(i, trackHBox);
+                m_trackHBoxes.push_back(trackHBox);
+            }
         }
 
     } else {

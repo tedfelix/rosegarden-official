@@ -36,7 +36,8 @@ MappedEvent::MappedEvent(InstrumentId id,
        m_data2(MidiMaxValue),
        m_eventTime(eventTime),
        m_duration(duration),
-       m_audioStartMarker(0, 0)
+       m_audioStartMarker(0, 0),
+       m_dataBlock("")
 {
     if (e.isa(Rosegarden::Note::EventType))
     {
@@ -163,12 +164,10 @@ operator<<(QDataStream &dS, MappedEvent *mE)
     dS << (unsigned int)mE->getAudioStartMarker().sec;
     dS << (unsigned int)mE->getAudioStartMarker().usec;
 
-    /*
     dS << (unsigned int)mE->getDataBlock().length();
 
     for (unsigned int i = 0; mE->getDataBlock().length(); i++)
         dS << (unsigned int)mE->getDataBlock()[i];
-        */
 
     return dS;
 }
@@ -187,12 +186,10 @@ operator<<(QDataStream &dS, MappedEvent &mE)
     dS << (unsigned int)mE.getAudioStartMarker().sec;
     dS << (unsigned int)mE.getAudioStartMarker().usec;
 
-    /*
     dS << (unsigned int)mE.getDataBlock().length();
 
     for (unsigned int i = 0; mE.getDataBlock().length(); i++)
         dS << (unsigned int)mE.getDataBlock()[i];
-        */
 
     return dS;
 }
@@ -217,14 +214,12 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     dS >> audioSec;
     dS >> audioUsec;
 
-    /*
     dS >> dataLength;
     for (unsigned int i = 0; dataLength; i++)
     {
         dS >> dataElement;
         dataBlock += (unsigned char)dataElement;
     }
-    */
 
     mE->setInstrument((InstrumentId)instrument);
     mE->setType((MappedEvent::MappedEventType)type);
@@ -233,7 +228,7 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     mE->setEventTime(Rosegarden::RealTime(eventTimeSec, eventTimeUsec));
     mE->setDuration(Rosegarden::RealTime(durationSec, durationUsec));
     mE->setAudioStartMarker(Rosegarden::RealTime(audioSec, audioUsec));
-    //mE->setDataBlock(dataBlock);
+    mE->setDataBlock(dataBlock);
 
     return dS;
 }
@@ -258,14 +253,12 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     dS >> audioSec;
     dS >> audioUsec;
 
-    /*
     dS >> dataLength;
     for (unsigned int i = 0; dataLength; i++)
     {
         dS >> dataElement;
         dataBlock += (unsigned char)dataElement;
     }
-    */
 
     mE.setInstrument((InstrumentId)instrument);
     mE.setType((MappedEvent::MappedEventType)type);
@@ -274,7 +267,7 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     mE.setEventTime(Rosegarden::RealTime(eventTimeSec, eventTimeUsec));
     mE.setDuration(Rosegarden::RealTime(durationSec, durationUsec));
     mE.setAudioStartMarker(Rosegarden::RealTime(audioSec, audioUsec));
-    //mE.setDataBlock(dataBlock);
+    mE.setDataBlock(dataBlock);
 
     return dS;
 }

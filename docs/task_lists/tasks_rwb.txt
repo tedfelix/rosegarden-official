@@ -7,7 +7,7 @@ o Event list [JUST ABOUT COMPLETE]
 
 o Get Segment joining working
 
-o admin directories and INSTALL scripts should tally
+o Repeating segments and composition end marker
 
 o aRts 1.0.0 support
 
@@ -64,6 +64,8 @@ o selection of ALSA recording device
 
 Completed for 0.1.7 (0.2.0)
 ===========================
+
+o admin directories and INSTALL scripts should tally [DONE]
 
 o MIDI export is broken [No it's not, NoteEdit's MIDI import is broken]
 

@@ -83,7 +83,8 @@ public:
                    m_data2(0),
                    m_eventTime(0, 0),
                    m_duration(0, 0),
-                   m_audioStartMarker(0, 0) {;}
+                   m_audioStartMarker(0, 0),
+                   m_dataBlock("") {;}
 
     // Construct from Events to Internal (MIDI) type MappedEvent
     //
@@ -109,7 +110,8 @@ public:
         m_data2(velocity),
         m_eventTime(absTime),
         m_duration(duration),
-        m_audioStartMarker(Rosegarden::RealTime(0,0)) {;}
+        m_audioStartMarker(Rosegarden::RealTime(0,0)),
+        m_dataBlock("") {;}
 
     // A general MappedEvent constructor for any MappedEvent type
     //
@@ -126,7 +128,8 @@ public:
         m_data2(velocity),
         m_eventTime(absTime),
         m_duration(duration),
-        m_audioStartMarker(audioStartMarker) {;}
+        m_audioStartMarker(audioStartMarker),
+        m_dataBlock("") {;}
 
     // Audio MappedEvent shortcut constructor
     //
@@ -141,7 +144,8 @@ public:
          m_data2(0),
          m_eventTime(eventTime),
          m_duration(duration),
-         m_audioStartMarker(audioStartMarker) {;}
+         m_audioStartMarker(audioStartMarker),
+         m_dataBlock("") {;}
 
     // More generalised MIDI event containers for
     // large and small events (one param, two param)
@@ -156,7 +160,8 @@ public:
          m_data2(data2),
          m_eventTime(Rosegarden::RealTime(0, 0)),
          m_duration(Rosegarden::RealTime(0, 0)),
-         m_audioStartMarker(Rosegarden::RealTime(0, 0)) {;}
+         m_audioStartMarker(Rosegarden::RealTime(0, 0)),
+         m_dataBlock("") {;}
 
     MappedEvent(InstrumentId id,
                 MappedEventType type,
@@ -167,7 +172,8 @@ public:
         m_data2(0),
         m_eventTime(Rosegarden::RealTime(0, 0)),
         m_duration(Rosegarden::RealTime(0, 0)),
-        m_audioStartMarker(Rosegarden::RealTime(0, 0)) {;}
+        m_audioStartMarker(Rosegarden::RealTime(0, 0)),
+        m_dataBlock("") {;}
                 
 
     // Copy constructor
@@ -179,7 +185,8 @@ public:
         m_data2(mE.getData2()),
         m_eventTime(mE.getEventTime()),
         m_duration(mE.getDuration()),
-        m_audioStartMarker(mE.getAudioStartMarker()) {;}
+        m_audioStartMarker(mE.getAudioStartMarker()),
+        m_dataBlock("") {;}
 
     // Copy from pointer
     MappedEvent(MappedEvent *mE):
@@ -189,7 +196,8 @@ public:
         m_data2(mE->getData2()),
         m_eventTime(mE->getEventTime()),
         m_duration(mE->getDuration()),
-        m_audioStartMarker(mE->getAudioStartMarker()) {;}
+        m_audioStartMarker(mE->getAudioStartMarker()),
+        m_dataBlock("") {;}
 
     ~MappedEvent() {;}
 
