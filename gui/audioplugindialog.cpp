@@ -347,12 +347,19 @@ AudioPluginDialog::slotPluginSelected(int i)
         QToolTip::remove(m_pluginList);
         QToolTip::add(m_pluginList, pluginInfo);
 
-	inst->setIdentifier(plugin->getIdentifier().data());
+	std::string identifier = plugin->getIdentifier().data();
 
-	// Only clear ports if this method is accessed by user
+	// Only clear ports &c if this method is accessed by user
 	// action (after the constructor)
 	//
-	if (m_generating == false) inst->clearPorts();
+	if (m_generating == false) {
+	    inst->clearPorts();
+	    if (inst->getIdentifier() != identifier) {
+		inst->clearConfiguration();
+	    }
+	}
+
+	inst->setIdentifier(identifier);
 
         PortIterator it = plugin->begin();
         int count = 0;

@@ -1306,7 +1306,8 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
 
         m_recordSegment = new Segment();
         m_recordSegment->setTrack(m_composition.getRecordTrack());
-        m_recordSegment->setStartTime(m_composition.getPosition());
+//!!!        m_recordSegment->setStartTime(m_composition.getPosition());
+	m_recordSegment->setStartTime(m_recordStartTime);
 
         // Set an appropriate segment label
         //
@@ -1964,7 +1965,8 @@ RosegardenGUIDoc::insertRecordedAudio(const Rosegarden::RealTime& /*time*/,
     {
         m_recordSegment = new Segment(Rosegarden::Segment::Audio);
         m_recordSegment->setTrack(m_composition.getRecordTrack());
-        m_recordSegment->setStartTime(m_composition.getPosition());
+//!!!        m_recordSegment->setStartTime(m_composition.getPosition());
+	m_recordSegment->setStartTime(m_recordStartTime);
         m_recordSegment->setAudioStartTime(Rosegarden::RealTime::zeroTime);
 
         // Set an appropriate segment label
@@ -2070,7 +2072,8 @@ RosegardenGUIDoc::stopRecordingAudio()
     RG_DEBUG << "RosegardenGUIDoc::stopRecordingAudio - "
                  << "shifted recorded audio segment by "
                  <<  m_recordSegment->getStartTime() - shiftedStartTime
-                 << " clicks" << endl;
+	     << " clicks (from " << m_recordSegment->getStartTime()
+	     << " to " << shiftedStartTime << ")" << endl;
 
     m_recordSegment->setStartTime(shiftedStartTime);
 }

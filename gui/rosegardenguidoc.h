@@ -321,6 +321,12 @@ public:
      */
     void setLoop(Rosegarden::timeT, Rosegarden::timeT);
 
+    /**
+     * Cause the document to use the given time as the origin
+     * when inserting any subsequent recorded data
+     */
+    void setRecordStartTime(Rosegarden::timeT t) { m_recordStartTime = t; }
+
     /*
     * Sync device information with sequencer
     */
@@ -607,6 +613,8 @@ protected:
     Rosegarden::AudioPluginManager *m_pluginManager;
 
     Rosegarden::RealTime m_audioRecordLatency;
+
+    Rosegarden::timeT m_recordStartTime;
 
     // Autosave period for this document in seconds
     //

@@ -673,6 +673,8 @@ punchin:
             }
         }
 
+	m_doc->setRecordStartTime(m_doc->getComposition().getPosition());
+
         // Some locals
         //
         TransportStatus recordType;
