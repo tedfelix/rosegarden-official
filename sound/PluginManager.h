@@ -28,6 +28,12 @@
 namespace Rosegarden
 {
 
+// Load and manage audio plugins - for the moment we only deal
+// with LADSPA types.
+//
+
+typedef unsigned int PluginId;
+
 typedef enum
 {
     LADSPA
@@ -36,27 +42,39 @@ typedef enum
 class Plugin
 {
 public:
-    Plugin(PluginType type);
+    Plugin(PluginType type, PluginId id, const std::string &libraryName);
     ~Plugin();
 
     std::string getName() { return m_name; }
     PluginType getType() { return m_type; }
 
+    PluginId getId() { return m_id; }
+    void setId(PluginId id) { m_id = id; };
+
+    std::string getLibraryName() { return m_libraryName; }
+    void setLibraryName(const std::string &libraryName)
+        { m_libraryName = libraryName; }
+
 protected:
 
-    PluginType  m_type;
-    std::string m_name;
+    PluginType   m_type;
+    std::string  m_name;
+    PluginId     m_id;
+    std::string  m_libraryName;
+
 };
 
 class LADSPAPlugin : public Plugin
 {
 public:
-    LADSPAPlugin();
+    LADSPAPlugin(const LADSPA_Descriptor *descriptor,
+                 PluginId id,
+                 const std::string &libraryName);
     ~LADSPAPlugin();
 
 protected:
 
-    LADSPA_Descriptor *m_descriptor;
+    const LADSPA_Descriptor *m_descriptor;
 
 };
 
@@ -70,9 +88,9 @@ public:
 
     // Modify path
     void getenvLADSPAPath();
+    std::string getLADSPAPath() { return m_path; }
     void setLADSPAPath(const std::string &path);
     void addLADSPAPath(const std::string &path);
-    std::string getLADSPAPath();
 
     // Search path for all plugins
     void discoverPlugins();
@@ -80,16 +98,21 @@ public:
     // Load a given plugin
     void loadPlugin(const std::string &path);
 
+    // Clear list down
+    //
+    void clearPlugins();
+
     // Iterate over plugins
     //
     PluginIterator begin() { return m_plugins.begin(); }
     PluginIterator end() { return m_plugins.end(); }
     
-
 protected:
+
     std::string m_path;
 
     vector<Plugin*> m_plugins;
+    PluginId        m_runningId;
 
 };
 

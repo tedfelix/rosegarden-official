@@ -29,7 +29,7 @@ main(int argc, char **argv)
     Rosegarden::PluginIterator it;
     for (it = pluginManager->begin(); it != pluginManager->end(); it++)
     {
-        cout << "NAME = \"" << (*it)->getName() << "\"" << endl;
+        cout << (*it)->getName() << " (id = " << (*it)->getId() << ")" << endl;
     }
 
     delete pluginManager;

@@ -32,7 +32,10 @@ using std::endl;
 namespace Rosegarden
 {
 
-Plugin::Plugin(PluginType type):m_type(type)
+Plugin::Plugin(PluginType type, PluginId id, const std::string &libraryName):
+    m_type(type),
+    m_id(id),
+    m_libraryName(libraryName)
 {
 }
 
@@ -40,15 +43,24 @@ Plugin::~Plugin()
 {
 }
 
-LADSPAPlugin::LADSPAPlugin():Plugin(LADSPA)
+LADSPAPlugin::LADSPAPlugin(const LADSPA_Descriptor *descriptor,
+                           PluginId id,
+                           const std::string &libraryName):
+    Plugin(LADSPA, id, libraryName),
+    m_descriptor(descriptor)
 {
+    if (m_descriptor)
+    {
+        m_name = descriptor->Name;
+    }
 }
 
 LADSPAPlugin::~LADSPAPlugin()
 {
 } 
 
-PluginManager::PluginManager()
+PluginManager::PluginManager():
+    m_runningId(0)
 {
 }
 
@@ -60,21 +72,33 @@ void
 PluginManager::getenvLADSPAPath()
 {
     m_path = std::string(getenv("LADSPA_PATH"));
+
+    // try a default value
+    if (m_path == "")
+        m_path = "/usr/lib/ladspa";
+
 }
 
 void
 PluginManager::setLADSPAPath(const std::string &path)
 {
+    m_path = path;
 }
 
 void
 PluginManager::addLADSPAPath(const std::string &path)
 {
+    m_path += path;
 }
 
-std::string
-PluginManager::getLADSPAPath()
+void
+PluginManager::clearPlugins()
 {
+    PluginIterator it;
+    for (it = m_plugins.begin(); it != m_plugins.end(); it++)
+        delete *it;
+
+    m_plugins.erase(m_plugins.begin(), m_plugins.end());
 }
 
 void
@@ -82,15 +106,16 @@ PluginManager::discoverPlugins()
 {
     QDir dir(QString(m_path.c_str()), "*.so");
 
-    for ( int i = 0; i < dir.count(); i++ )
+    clearPlugins();
+    m_runningId = 0;
+
+    for (unsigned int i = 0; i < dir.count(); i++ )
         loadPlugin(m_path + std::string("/") + std::string(dir[i].data()));
 }
 
 void
 PluginManager::loadPlugin(const std::string &path)
 {
-    cout << "LOADING \"" << path << "\"" << endl;
-
     LADSPA_Descriptor_Function descrFn = 0;
     void *pluginHandle = 0;
 
@@ -111,15 +136,14 @@ PluginManager::loadPlugin(const std::string &path)
 
             if (data)
             {
-                cout << "NAME = " << std::string(data->Name) << endl;
+                m_plugins.push_back(
+                        new LADSPAPlugin(data, m_runningId++, path));
                 index++;
             }
         }
         while(data);
-
     }
     dlclose(pluginHandle);
-
 }
 
 };
