@@ -42,10 +42,12 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_current(false),
     m_currentRow(0),
     m_pointer(new QCanvasLine(canvas)),
-    m_ruler(new StaffRuler(0, 0, getStaffRulerHeight(), canvas))
+    m_insertCursor(new QCanvasLine(canvas))
+//    m_ruler(new StaffRuler(0, 0, getStaffRulerHeight(), canvas))
 {
     m_pointer->setPen(RosegardenGUIColours::TimePointer);
-    m_ruler->hide(); // we are not the current staff unless indicated
+    m_insertCursor->setPen(RosegardenGUIColours::PositionCursor);
+//!!!    m_ruler->hide(); // we are not the current staff unless indicated
 }
 
 template <class T>
@@ -68,10 +70,12 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_current(false),
     m_currentRow(0),
     m_pointer(new QCanvasLine(canvas)),
-    m_ruler(new StaffRuler(0, 0, getStaffRulerHeight(), canvas))
+    m_insertCursor(new QCanvasLine(canvas))
+//    m_ruler(new StaffRuler(0, 0, getStaffRulerHeight(), canvas))
 {
     m_pointer->setPen(RosegardenGUIColours::TimePointer);
-    m_ruler->hide(); // we are not the current staff unless indicated
+    m_insertCursor->setPen(RosegardenGUIColours::PositionCursor);
+//    m_ruler->hide(); // we are not the current staff unless indicated
 }
 
 template <class T>
@@ -94,10 +98,12 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_current(false),
     m_currentRow(0),
     m_pointer(new QCanvasLine(canvas)),
-    m_ruler(new StaffRuler(0, 0, getStaffRulerHeight(), canvas))
+    m_insertCursor(new QCanvasLine(canvas))
+//    m_ruler(new StaffRuler(0, 0, getStaffRulerHeight(), canvas))
 {
     m_pointer->setPen(RosegardenGUIColours::TimePointer);
-    m_ruler->hide(); // we are not the current staff unless indicated
+    m_insertCursor->setPen(RosegardenGUIColours::PositionCursor);
+//    m_ruler->hide(); // we are not the current staff unless indicated
 }
 
 template <class T>
@@ -105,7 +111,7 @@ LinedStaff<T>::~LinedStaff()
 {
     deleteBars();
     for (int i = 0; i < (int)m_staffLines.size(); ++i) clearStaffLineRow(i);
-    delete m_ruler;
+//    delete m_ruler;
 }
 
 template <class T>
@@ -161,7 +167,7 @@ template <class T>
 void
 LinedStaff<T>::setX(double x)
 {
-    m_ruler->setXPos((int)x);
+//!!! move pointers?    m_ruler->setXPos((int)x);
     m_x = x;
 }
 
@@ -176,7 +182,7 @@ template <class T>
 void
 LinedStaff<T>::setY(int y)
 {
-    m_ruler->setYPos(y);
+//!!! move pointers?    m_ruler->setYPos(y);
     m_y = y;
 }
 
@@ -389,7 +395,7 @@ LinedStaff<T>::sizeStaff(Rosegarden::HorizontalLayoutEngine<T> &layout)
     m_endLayoutX = xright;
 
     resizeStaffLines();
-    updateRuler(layout);
+//!!!    updateRuler(layout);
 }
 
 template <class T>
@@ -716,24 +722,34 @@ LinedStaff<T>::setCurrent(bool current, int canvasY)
 	m_currentRow =
 	    ((m_pageMode && (canvasY >= 0)) ?
 	     getRowForCanvasCoords(0, canvasY) : 0);
+	m_insertCursor->show();
 	//!!! If the current row changes, move the staff ruler
-	m_ruler->show();
-	m_ruler->getCursor()->show();
+//!!! no, show it some other way	m_ruler->show();
+//	m_ruler->getCursor()->show();
     } else {
-	m_ruler->hide();
-	m_ruler->getCursor()->hide();
+	m_insertCursor->hide();
+//!!!	m_ruler->hide();
+//	m_ruler->getCursor()->hide();
     }
 }
 
 template <class T>
 double
-LinedStaff<T>::getLayoutXOfCursor() const
+LinedStaff<T>::getLayoutXOfPointer() const
+{
+    double x = m_pointer->x();
+    int row = getRowForCanvasCoords(x, m_pointer->y());
+    return getLayoutCoordsForCanvasCoords(x, getCanvasYForTopLine(row)).first;
+}
+
+template <class T>
+double
+LinedStaff<T>::getLayoutXOfInsertCursor() const
 {
     if (!m_current) return -1;
-    int cursorPosition = m_ruler->getCursor()->getPosition();
-    return getLayoutCoordsForCanvasCoords
-	(cursorPosition, getCanvasYForTopLine(m_currentRow)).first;
-//    return cursorPosition + (m_currentRow * m_pageWidth) - m_x;
+    double x = m_insertCursor->x();
+    int row = getRowForCanvasCoords(x, m_insertCursor->y());
+    return getLayoutCoordsForCanvasCoords(x, getCanvasYForTopLine(row)).first;
 }
 
 template <class T>
@@ -766,38 +782,42 @@ LinedStaff<T>::hidePointer()
 
 template <class T>
 void
-LinedStaff<T>::setInsertPosition(double canvasX, int canvasY)
+LinedStaff<T>::setInsertCursorPosition(double canvasX, int canvasY)
 {
     if (!m_current) return;
     
     int row = getRowForCanvasCoords(canvasX, canvasY);
     if (row != m_currentRow) {
-	//!!! move the staff ruler
+	//!!! move the staff ruler -- no, show some other way
 	m_currentRow = row;
     }
 
-    m_ruler->getCursor()->setPosition(int(canvasX));
-    m_ruler->getCursor()->show();
+    canvasY = getCanvasYForTopOfStaff(row);
+    m_insertCursor->setPoints(canvasX, canvasY,
+			      canvasX, canvasY + getHeightOfRow() - 1);
+    m_insertCursor->show();
+//!!!    m_ruler->getCursor()->setPosition(int(canvasX));
+//    m_ruler->getCursor()->show();
 }
 
 template <class T>
 void
-LinedStaff<T>::setInsertPosition(Rosegarden::HorizontalLayoutEngine<T> &layout,
-				 Rosegarden::timeT time)
+LinedStaff<T>::setInsertCursorPosition(Rosegarden::HorizontalLayoutEngine<T> &layout,
+				       Rosegarden::timeT time)
 {
     double x = layout.getXForTime(time);
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(x, 0);
-    setInsertPosition(coords.first, coords.second);
+    setInsertCursorPosition(coords.first, coords.second);
 }
 
 template <class T>
 void
-LinedStaff<T>::hideInsert()
+LinedStaff<T>::hideInsertCursor()
 {
-    m_ruler->getCursor()->hide();
+    m_insertCursor->hide();
 }
 
-
+/*!!!
 template <class T>
 void
 LinedStaff<T>::updateRuler(Rosegarden::HorizontalLayoutEngine<T> &layout)
@@ -823,6 +843,7 @@ LinedStaff<T>::updateRuler(Rosegarden::HorizontalLayoutEngine<T> &layout)
     m_ruler->update();
     if (m_current) m_ruler->show();
 }
+*/
 
 template <class T>
 void

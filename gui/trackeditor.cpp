@@ -192,39 +192,51 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
             m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
 
-    connect(this, SIGNAL(needUpdate()),
-            m_segmentCanvas, SLOT(slotUpdate()));
+    connect(this, SIGNAL(needUpdate()), m_segmentCanvas, SLOT(slotUpdate()));
 
-    QObject::connect(m_segmentCanvas, SIGNAL(addSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)),
-                     this,            SLOT  (slotAddSegment(Rosegarden::TrackId, Rosegarden::timeT, Rosegarden::timeT)));
+    connect(m_segmentCanvas, SIGNAL(addSegment(Rosegarden::TrackId,
+					       Rosegarden::timeT,
+					       Rosegarden::timeT)),
+	    this, SLOT(slotAddSegment(Rosegarden::TrackId,
+				      Rosegarden::timeT,
+				      Rosegarden::timeT)));
 
-    QObject::connect(m_segmentCanvas, SIGNAL(deleteSegment(Rosegarden::Segment *)),
-                     this,            SLOT  (slotDeleteSegment(Rosegarden::Segment *)));
+    connect(m_segmentCanvas, SIGNAL(deleteSegment(Rosegarden::Segment *)),
+	    this, SLOT(slotDeleteSegment(Rosegarden::Segment *)));
 
-    QObject::connect(m_segmentCanvas, SIGNAL(changeSegmentDuration(Rosegarden::Segment *, Rosegarden::timeT)),
-                     this,            SLOT  (slotChangeSegmentDuration(Rosegarden::Segment *, Rosegarden::timeT)));
+    connect(m_segmentCanvas, SIGNAL(changeSegmentDuration(Rosegarden::Segment*,
+							  Rosegarden::timeT)),
+	    this, SLOT(slotChangeSegmentDuration(Rosegarden::Segment *,
+						 Rosegarden::timeT)));
 
-    QObject::connect(m_segmentCanvas, SIGNAL(changeSegmentTimes(Rosegarden::Segment *, Rosegarden::timeT, Rosegarden::timeT)),
-                     this,            SLOT  (slotChangeSegmentTimes(Rosegarden::Segment *, Rosegarden::timeT, Rosegarden::timeT)));
+    connect(m_segmentCanvas, SIGNAL(changeSegmentTimes(Rosegarden::Segment *,
+						       Rosegarden::timeT,
+						       Rosegarden::timeT)),
+	    this, SLOT(slotChangeSegmentTimes(Rosegarden::Segment *,
+					      Rosegarden::timeT,
+					      Rosegarden::timeT)));
 
-    QObject::connect(m_segmentCanvas, SIGNAL(changeSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)),
-                     this,            SLOT  (slotChangeSegmentTrackAndStartTime(Rosegarden::Segment *, Rosegarden::TrackId, Rosegarden::timeT)));
+    connect(m_segmentCanvas, SIGNAL(changeSegmentTrackAndStartTime
+				    (Rosegarden::Segment *,
+				     Rosegarden::TrackId, Rosegarden::timeT)),
+	    this, SLOT(slotChangeSegmentTrackAndStartTime(Rosegarden::Segment*,
+							  Rosegarden::TrackId,
+							  Rosegarden::timeT)));
 
-    QObject::connect(m_segmentCanvas, SIGNAL(splitSegment(Rosegarden::Segment*, Rosegarden::timeT)),
-		     this,	      SLOT  (slotSplitSegment(Rosegarden::Segment*, Rosegarden::timeT)));
+    connect(m_segmentCanvas, SIGNAL(splitSegment(Rosegarden::Segment*,
+						 Rosegarden::timeT)),
+	    this, SLOT(slotSplitSegment(Rosegarden::Segment*,
+					Rosegarden::timeT)));
 
-    QObject::connect
-	(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
-	 this, SLOT(slotCommandExecuted(KCommand *)));
+    connect(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
+	    this, SLOT(slotCommandExecuted(KCommand *)));
 
-    QObject::connect
-	(m_document, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
-	 this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
+    connect(m_document, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
+	    this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
  
-    QObject::connect
-	(m_document, SIGNAL(loopChanged(Rosegarden::timeT,
-					Rosegarden::timeT)),
-	 this, SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
+    connect(m_document, SIGNAL(loopChanged(Rosegarden::timeT,
+					   Rosegarden::timeT)),
+	    this, SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
  
     // create the position pointer
     m_pointer = new QCanvasLine(canvas);

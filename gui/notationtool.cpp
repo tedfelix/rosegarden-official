@@ -620,7 +620,7 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 
 	    NotationStaff *staff = m_nParentView->getStaff(m_clickedStaff);
 	    if (staff) {
-		staff->setInsertPosition(e->x(), e->y());
+		staff->setInsertCursorPosition(e->x(), e->y());
 		m_nParentView->canvas()->update();
 	    }
 	}

@@ -211,12 +211,6 @@ void RosegardenGUIView::editAllTracks(Rosegarden::Composition* p)
     NotationView *notationView = new NotationView(getDocument(), segmentsToEdit, this);
     notationView->show();
 }
-/*!!!
-void RosegardenGUIView::setPointerPosition(const Rosegarden::timeT &position)
-{
-    m_trackEditor->slotSetPointerPosition(position);
-}
-*/
 
 // Highlight all the Segments on a Track because the Track has been selected
 // We have to ensure we create a Selector object before we can highlight

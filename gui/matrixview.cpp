@@ -43,6 +43,7 @@
 #include "rosegardenguidoc.h"
 #include "ktmpstatusmsg.h"
 #include "barbuttons.h"
+#include "staffruler.h" // for ActiveItem
 
 #include "rosedebug.h"
 

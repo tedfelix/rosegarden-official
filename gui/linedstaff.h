@@ -27,7 +27,7 @@
 #include "LayoutEngine.h"
 #include "FastVector.h"
 
-#include "staffruler.h"
+//!!!#include "staffruler.h"
 
 #include <string>
 #include <vector>
@@ -180,7 +180,8 @@ protected:
     }
 
     virtual int getStaffRulerHeight() const {
-	return 45;
+	return 0;
+//!!!	return 45;
     }
 
 protected:
@@ -312,12 +313,11 @@ public:
     virtual void setCurrent(bool current, int canvasY = -1);
 
     /**
-     * Returns the layout-X coordinate corresponding to the current
-     * position of the insertion cursor on the staff ruler.  Returns
-     * -1 if this staff is not current (no ruler visible) or there
-     * is some other problem.
+     * Move the playback pointer to the layout-X coordinate
+     * corresponding to the given time, and show it.
      */
-    virtual double getLayoutXOfCursor() const;
+    virtual void setPointerPosition
+    (Rosegarden::HorizontalLayoutEngine<T> &, Rosegarden::timeT);
 
     /**
      * Move the playback pointer to the layout-X coordinate
@@ -326,11 +326,10 @@ public:
     virtual void setPointerPosition(double x, int y);
 
     /**
-     * Move the playback pointer to the layout-X coordinate
-     * corresponding to the given time, and show it.
+     * Returns the layout-X coordinate corresponding to the current
+     * position of the playback pointer.
      */
-    virtual void setPointerPosition(Rosegarden::HorizontalLayoutEngine<T> &,
-				    Rosegarden::timeT);
+    virtual double getLayoutXOfPointer() const;
 
     /**
      * Hide the playback pointer.
@@ -338,22 +337,29 @@ public:
     virtual void hidePointer();
 
     /**
-     * Move the insertion pointer to the layout-X coordinate
-     * corresponding to the given canvas coordinates, and show it.
-     */
-    virtual void setInsertPosition(double x, int y);
-
-    /**
-     * Move the insertion pointer to the layout-X coordinate
+     * Move the insertion cursor to the layout-X coordinate
      * corresponding to the given time, and show it.
      */
-    virtual void setInsertPosition(Rosegarden::HorizontalLayoutEngine<T> &,
-				   Rosegarden::timeT);
+    virtual void setInsertCursorPosition
+    (Rosegarden::HorizontalLayoutEngine<T> &, Rosegarden::timeT);
 
     /**
-     * Hide the insert pointer.
+     * Move the insertion cursor to the layout-X coordinate
+     * corresponding to the given canvas coordinates, and show it.
      */
-    virtual void hideInsert();
+    virtual void setInsertCursorPosition(double x, int y);
+
+    /**
+     * Returns the layout-X coordinate corresponding to the current
+     * position of the insertion cursor.  Returns -1 if this staff
+     * is not current or there is some other problem.
+     */
+    virtual double getLayoutXOfInsertCursor() const;
+
+    /**
+     * Hide the insert cursor.
+     */
+    virtual void hideInsertCursor();
 
     /**
      * Query the given horizontal layout object (which is assumed to
@@ -499,7 +505,7 @@ protected:
     virtual void insertTimeSignature(double layoutX,
 				     const Rosegarden::TimeSignature &);
 
-    virtual void updateRuler(Rosegarden::HorizontalLayoutEngine<T> &layout);
+//!!!    virtual void updateRuler(Rosegarden::HorizontalLayoutEngine<T> &layout);
 
 protected:
 
@@ -539,7 +545,8 @@ protected:
     BarLineList m_barConnectingLines;
 
     QCanvasLine *m_pointer;
-    StaffRuler *m_ruler;
+    QCanvasLine *m_insertCursor;
+//    StaffRuler *m_ruler;
 };
 
 #include "linedstaff.cpp"

@@ -61,6 +61,7 @@
 #include "notationcommands.h"
 #include "segmentcommands.h"
 #include "dialogs.h"
+#include "staffruler.h" // for ActiveItem
 
 using Rosegarden::Event;
 using Rosegarden::Int;
@@ -212,8 +213,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     QObject::connect
 	(m_bottomBarButtons->getLoopRuler(),
 	 SIGNAL(setPointerPosition(Rosegarden::timeT)),
-	 this, SLOT(slotSetInsertPosition(Rosegarden::timeT)));
+	 this, SLOT(slotSetInsertCursorPosition(Rosegarden::timeT)));
 
+    m_bottomBarButtons->getLoopRuler()->setBackgroundColor
+	(RosegardenGUIColours::PositionCursor);
     m_bottomBarButtons->setMinimumWidth(canvas()->width());
     m_bottomBarButtonsView->addChild(m_bottomBarButtons);
 
@@ -1127,7 +1130,7 @@ void NotationView::slotEditPaste()
     NotationStaff *staff = m_staffs[m_currentStaff];
     Segment &segment = staff->getSegment();
     
-    double layoutX = staff->getLayoutXOfCursor();
+    double layoutX = staff->getLayoutXOfInsertCursor();
     if (layoutX < 0) {
 	slotStatusHelpMsg(i18n("Couldn't paste at this point"));
 	return;
@@ -1158,7 +1161,7 @@ void NotationView::slotEditPaste()
 void NotationView::slotEditSelectFromStart()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    double layoutX = staff->getLayoutXOfCursor();
+    double layoutX = staff->getLayoutXOfInsertCursor();
 
     NotationElementList *notes = staff->getViewElementList();
     EventSelection *selection = new EventSelection(staff->getSegment());
@@ -1174,7 +1177,7 @@ void NotationView::slotEditSelectFromStart()
 void NotationView::slotEditSelectToEnd()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    double layoutX = staff->getLayoutXOfCursor();
+    double layoutX = staff->getLayoutXOfInsertCursor();
 
     NotationElementList *notes = staff->getViewElementList();
     EventSelection *selection = new EventSelection(staff->getSegment());
@@ -1543,7 +1546,7 @@ void NotationView::slotTransformsRemoveMarks()
 void NotationView::slotTransformsAddTimeSignature()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    double layoutX = staff->getLayoutXOfCursor();
+    double layoutX = staff->getLayoutXOfInsertCursor();
     if (layoutX >= 0) {
 
 	Rosegarden::Event *timeSigEvt = 0, *clefEvt = 0, *keyEvt = 0;
@@ -1574,7 +1577,7 @@ void NotationView::slotTransformsAddTimeSignature()
 void NotationView::slotTransformsAddKeySignature()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];
-    double layoutX = staff->getLayoutXOfCursor();
+    double layoutX = staff->getLayoutXOfInsertCursor();
     if (layoutX >= 0) {
 
 	Rosegarden::Event *timeSigEvt = 0, *clefEvt = 0, *keyEvt = 0;
@@ -1636,7 +1639,7 @@ NotationView::slotSetPointerPosition(timeT time)
     Rosegarden::Composition &comp = m_document->getComposition();
     int barNo = comp.getBarNumber(time);
 
-    for (int i = 0; i < m_staffs.size(); ++i) {
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 	if (barNo < m_hlayout->getFirstVisibleBarOnStaff(*m_staffs[i]) ||
 	    barNo > m_hlayout-> getLastVisibleBarOnStaff(*m_staffs[i])) {
 	    m_staffs[i]->hidePointer();
@@ -1649,7 +1652,7 @@ NotationView::slotSetPointerPosition(timeT time)
 }
 
 void
-NotationView::slotSetInsertPosition(timeT time)
+NotationView::slotSetInsertCursorPosition(timeT time)
 {
     //!!! For now.  Probably unlike slotSetPointerPosition this one
     // should snap to the nearest event.  We do probably want to keep
@@ -1663,12 +1666,7 @@ NotationView::slotSetInsertPosition(timeT time)
     // in page mode?  Probably, in which case I suppose that should
     // go in LinedStaff too).
 
-    Rosegarden::Composition &comp = m_document->getComposition();
-    double x = m_hlayout->getXForTime(time);
-
-    m_staffs[m_currentStaff]->setInsertPosition
-	(x + 20, m_staffs[m_currentStaff]->getY()); //!!! as previous method
-
+    m_staffs[m_currentStaff]->setInsertCursorPosition(*m_hlayout, time);
     update();
 }
 
@@ -2019,7 +2017,8 @@ void NotationView::slotItemPressed(int height, int staffNo,
 		m_staffs[m_currentStaff]->setCurrent(true, (int)e->y());
 	    }
 
-	    m_staffs[m_currentStaff]->setInsertPosition(e->x(), (int)e->y());
+	    m_staffs[m_currentStaff]->setInsertCursorPosition
+		(e->x(), (int)e->y());
 	}
 
 	update();
