@@ -747,10 +747,10 @@ PlayableAudioFile::updateBuffers()
 	    if (m_currentScanPoint < m_startIndex + m_fadeInTime) {
 
 		size_t fadeSamples =
-		    RealTime::realTime2Frame(m_fadeInTime, m_sampleRate);
+		    RealTime::realTime2Frame(m_fadeInTime, getTargetSampleRate());
 		size_t originSamples =
 		    RealTime::realTime2Frame(m_currentScanPoint - m_startIndex,
-					     m_sampleRate);
+					     getTargetSampleRate());
 
 		for (size_t i = 0; i < nframes; ++i) {
 		    if (i + originSamples > fadeSamples) {
@@ -767,11 +767,11 @@ PlayableAudioFile::updateBuffers()
 		m_startIndex + m_duration - m_fadeOutTime) {
 		
 		size_t fadeSamples =
-		    RealTime::realTime2Frame(m_fadeOutTime, m_sampleRate);
+		    RealTime::realTime2Frame(m_fadeOutTime, getTargetSampleRate());
 		size_t originSamples = // counting from end
 		    RealTime::realTime2Frame
 		    (m_startIndex + m_duration - m_currentScanPoint,
-		     m_sampleRate);
+		     getTargetSampleRate());
 
 		for (size_t i = 0; i < nframes; ++i) {
 		    float gain = 1.0;
