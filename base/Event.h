@@ -269,20 +269,9 @@ PropertyDefn<P>::basic_type
 Event::get(const PropertyName &name) const
     // throw (NoData, BadType)
 {
-#ifdef NDEBUG
-
-    // If debug is off, we just do the quickest possible thing and let
-    // the property map implementation worry about absent entries
-    //!!! Nah, bad idea -- we really do want to catch the exception in
-    // some cases.  Could possible get away with returning a default
-    // value though...
-
-    return (static_cast<PropertyStore<P> *>
-	    (m_data->m_properties[name]))->getData();
-    
-#else
-
+#ifndef NDEBUG
     ++m_getCount;
+#endif
 
     EventData::PropertyMap::const_iterator i = m_data->m_properties.find(name);
     if (i != m_data->m_properties.end()) { 
@@ -300,12 +289,13 @@ Event::get(const PropertyName &name) const
     } else {
 
         std::cerr << "Event::get(): Error: Attempt to get property \"" << name
-             << "\" which doesn't exist for this event\nEvent::get(): Dump follows:" << std::endl;
+		  << "\" which doesn't exist for this event\n" << endl;
+#ifndef NDEBUG
+	std::cerr << "Event::get(): Dump follows:" << std::endl;
 	dump(std::cerr);
+#endif
         throw NoData();
     }
-
-#endif
 }
 
 

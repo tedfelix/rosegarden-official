@@ -316,13 +316,6 @@ Segment::iterator
 SegmentNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
 				Accidental explicitAccidental)
 {
-
-    //!!! Handle grouping!  (Inserting into the middle of an existing
-    // group -- take a cue from NotationView::setupGroup)
-
-
-    //... 
-
     iterator i, j;
     segment().getTimeSlice(absoluteTime, i, j);
 

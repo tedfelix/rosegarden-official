@@ -193,6 +193,7 @@ Chord::Chord(const NotationElementList &nel, NELIterator i,
     }
 
 //!!! this should all be removed ultimately
+/*!!!
 //    kdDebug(KDEBUG_AREA) << "Chord::Chord: pitches are:" << endl;
     int prevPitch = -999;
     for (unsigned int i = 0; i < size(); ++i) {
@@ -209,6 +210,7 @@ Chord::Chord(const NotationElementList &nel, NELIterator i,
             kdDebug(KDEBUG_AREA) << i << ": no pitch property" << endl;
         }
     }
+*/
 }
 
 Chord::~Chord()

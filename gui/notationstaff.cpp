@@ -83,8 +83,6 @@ NotationStaff::changeFont(string fontName, int resolution)
 
     delete m_npf;
     m_npf = new NotePixmapFactory(fontName, resolution);
-
-//!!!    resizeStaffLines();
 }
 
 void

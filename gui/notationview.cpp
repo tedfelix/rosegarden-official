@@ -954,8 +954,7 @@ void NotationView::setCurrentSelectedNote(const char *pixmapName,
 
 void NotationView::setCurrentSelection(EventSelection* s)
 {
-    if (/*!!! s && */ m_currentEventSelection /* &&
-        s->getSegment() != m_currentEventSelection->getSegment() */) {
+    if (m_currentEventSelection) {
         m_currentEventSelection->removeSelectionFromSegment();
         getStaff(m_currentEventSelection->getSegment())->positionElements
             (m_currentEventSelection->getBeginTime(),
@@ -1055,35 +1054,34 @@ void NotationView::slotEditPaste()
 
     // Paste at cursor position
     //
-    Event *tsig = 0, *clef = 0, *key = 0;
 
-    int staffNo = 0; // TODO : how to select on which staff we're pasting ?
-
-    //!!! No damn use
-
-/*!!! fix
-    NotationElementList::iterator closestNote =
-        findClosestNote(getCursorPosition(), 50, //!!! random number, first row
-                        tsig, clef, key, staffNo);
-*/
-    NotationElementList::iterator closestNote =
-        findClosestNote(0, 50, //!!! random number, first row
-                        tsig, clef, key, staffNo);
-
-    if (closestNote == getStaff(staffNo)->getViewElementList()->end()) {
-        slotStatusHelpMsg(i18n("Couldn't paste at this point"));
-        return;
+    double layoutX = m_staffs[m_currentStaff]->getLayoutXOfCursor();
+    if (layoutX < 0) {
+	slotStatusHelpMsg(i18n("BLAT FOOP"));
+	return;
     }
 
-    timeT time = (*closestNote)->getAbsoluteTime();
+    NotationElementList *notes =
+	m_staffs[m_currentStaff]->getViewElementList();
+    timeT insertionTime = 0;
 
-    Segment& segment = getStaff(staffNo)->getSegment();
+    //!!! Slow.
 
-    if (m_currentEventSelection->pasteToSegment(segment, time)) {
+    for (NotationElementList::iterator i = notes->begin();
+	 i != notes->end(); ++i) {
+	//!!! We can do better than this at finding the closest target
+	//(similarly in findClosestNote if we so desire)
+	insertionTime = (*i)->getAbsoluteTime();
+	if ((*i)->getLayoutX() >= layoutX - 4) break;
+    }
 
-	refreshSegment(&segment,
-		       0,
-		       time + m_currentEventSelection->getTotalDuration() + 1);
+    Segment& segment = getStaff(m_currentStaff)->getSegment();
+
+    if (m_currentEventSelection->pasteToSegment(segment, insertionTime)) {
+
+	refreshSegment
+	    (&segment, 0,
+	     insertionTime + m_currentEventSelection->getTotalDuration() + 1);
 
     } else {
         
@@ -1836,45 +1834,6 @@ NotationView::getStaffForCanvasY(int y) const
     }
     return 0;
 }
-
-/*!!!
-
-int
-NotationView::getHeightAtY(int y) const
-{
-    NotationStaff *staff = getStaffAtY(y);
-    if (!staff) return -1000;
-    return staff->getHeightAtY(y);
-}
-
-int
-NotationView::getYOfHeight(Rosegarden::Staff<NotationElement> *staff,
-                           int height, int baseY) const
-{
-    return dynamic_cast<NotationStaff *>(staff)->getYOfHeight(height, baseY);
-}
-
-int
-NotationView::getYSnappedToLine(int y) const
-{
-    NotationStaff *staff = getStaffAtY(y);
-    if (!staff) return y;
-    return int(staff->getYOfHeight(staff->getHeightAtY(y), y) + staff->y());
-}
-
-void
-NotationView::getBarExtents(int x, int y, 
-                            int &rx, int &ry, int &rw, int &rh) const
-{
-    NotationStaff *staff = getStaffAtY(y);
-    if (!staff) return;
-    QRect extents = staff->getBarExtents(x, y);
-    rx = extents.x();
-    ry = extents.y();
-    rw = extents.width();
-    rh = extents.height();
-}
-*/
 
 
 

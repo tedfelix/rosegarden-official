@@ -121,6 +121,33 @@ public:
     void quantizeLegato(Segment::iterator from, Segment::iterator to) const;
 
     /**
+     * Unit-quantizes a section of a segment, then sets the absolute
+     * time and duration of each event to its quantized values.  This
+     * is a destructive operation that should only be carried out on
+     * the user's explicit request.
+     */
+    void fixUnitQuantizedValues(Segment::iterator from, Segment::iterator to)
+	const;
+
+    /**
+     * Note-quantizes a section of a segment, then sets the absolute
+     * time and duration of each event to its quantized values.  This
+     * is a destructive operation that should only be carried out on
+     * the user's explicit request.
+     */
+    void fixNoteQuantizedValues(Segment::iterator from, Segment::iterator to)
+	const;
+
+    /**
+     * Legato-quantizes a section of a segment, then sets the absolute
+     * time and duration of each event to its quantized values.  This
+     * is a destructive operation that should only be carried out on
+     * the user's explicit request.
+     */
+    void fixLegatoQuantizedValues(Segment::iterator from, Segment::iterator to)
+	const;
+
+    /**
      * Returns the DurationProperty if it exists; otherwise quantizes
      * the event by unit and then returns that property.  If the
      * event's duration has been changed since it was last quantized,

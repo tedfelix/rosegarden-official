@@ -305,8 +305,20 @@ public:
      * The owner of the staffs should normally ensure that one staff
      * is current (the default is non-current, even if there only is
      * one staff) and that only one staff is current at once.
+     *
+     * If current is true, canvasY >= 0, and the staff is in page
+     * mode, canvasY will be used to determine which row to make
+     * current.
      */
-    virtual void setCurrent(bool current);
+    virtual void setCurrent(bool current, int canvasY = -1);
+
+    /**
+     * Returns the layout-X coordinate corresponding to the current
+     * position of the insertion cursor on the staff ruler.  Returns
+     * -1 if this staff is not current (no ruler visible) or there
+     * is some other problem.
+     */
+    virtual double getLayoutXOfCursor() const;
 
     /**
      * Query the given horizontal layout object (which is assumed to
@@ -468,6 +480,7 @@ protected:
     double   m_endLayoutX;
 
     bool     m_current;
+    int      m_currentRow;
 
     typedef std::vector<QCanvasLine *> LineList;
     typedef std::vector<LineList> LineMatrix;

@@ -888,7 +888,6 @@ NotationHLayout::positionRest(StaffType &staff,
     // the remainder as our duration is of the whole bar's duration.
 
     long delta = (((int)bdi->idealWidth - bdi->fixedWidth) *
-//!!!                  rest->event()->getDuration()) /
 		  getSpacingDuration(staff, itr)) /
         //!!! not right for partial bar?
         timeSignature.getBarDuration();

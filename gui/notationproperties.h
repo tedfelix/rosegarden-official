@@ -46,7 +46,6 @@ extern const Rosegarden::PropertyName DRAW_FLAG;
 extern const Rosegarden::PropertyName NOTE_HEAD_SHIFTED;
 extern const Rosegarden::PropertyName NEEDS_EXTRA_SHIFT_SPACE;
 extern const Rosegarden::PropertyName CHORD_PRIMARY_NOTE;
-//!!!extern const Rosegarden::PropertyName NOTE_NAME;
 extern const Rosegarden::PropertyName TIE_LENGTH;
 extern const Rosegarden::PropertyName SLUR_ABOVE;
 extern const Rosegarden::PropertyName SLUR_Y_DELTA;

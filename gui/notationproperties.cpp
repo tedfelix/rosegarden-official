@@ -35,7 +35,6 @@ const Rosegarden::PropertyName DRAW_FLAG            = "NoteDrawFlag";
 const Rosegarden::PropertyName NOTE_HEAD_SHIFTED    = "NoteHeadShifted";
 const Rosegarden::PropertyName NEEDS_EXTRA_SHIFT_SPACE = "NeedsExtraShiftSpace";
 const Rosegarden::PropertyName CHORD_PRIMARY_NOTE   = "ChordPrimaryNote";
-//!!!const Rosegarden::PropertyName NOTE_NAME            = "NoteName";
 const Rosegarden::PropertyName TIE_LENGTH           = "TieLength";
 const Rosegarden::PropertyName SLUR_ABOVE	    = "SlurAbove";
 const Rosegarden::PropertyName SLUR_Y_DELTA	    = "SlurYDelta";

@@ -40,6 +40,7 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_startLayoutX(0),
     m_endLayoutX(0),
     m_current(false),
+    m_currentRow(0),
     m_ruler(new StaffRuler(0, 0, getStaffRulerHeight(), canvas))
 {
     m_ruler->hide(); // we are not the current staff unless indicated
@@ -63,6 +64,7 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_startLayoutX(0),
     m_endLayoutX(0),
     m_current(false),
+    m_currentRow(0),
     m_ruler(new StaffRuler(0, 0, getStaffRulerHeight(), canvas))
 {
     m_ruler->hide(); // we are not the current staff unless indicated
@@ -86,6 +88,7 @@ LinedStaff<T>::LinedStaff(QCanvas *canvas, Rosegarden::Segment *segment,
     m_startLayoutX(0),
     m_endLayoutX(0),
     m_current(false),
+    m_currentRow(0),
     m_ruler(new StaffRuler(0, 0, getStaffRulerHeight(), canvas))
 {
     m_ruler->hide(); // we are not the current staff unless indicated
@@ -699,16 +702,29 @@ LinedStaff<T>::resizeStaffLineRow(int row, double x, double length)
 
 template <class T>
 void
-LinedStaff<T>::setCurrent(bool current)
+LinedStaff<T>::setCurrent(bool current, int canvasY)
 {
     m_current = current;
     if (m_current) {
+	m_currentRow =
+	    ((m_pageMode && (canvasY >= 0)) ?
+	     getRowForCanvasCoords(0, canvasY) : 0);
+	//!!! If the current row changes, move the staff ruler
 	m_ruler->show();
 	m_ruler->getCursor()->show();
     } else {
 	m_ruler->hide();
 	m_ruler->getCursor()->hide();
     }
+}
+
+template <class T>
+double
+LinedStaff<T>::getLayoutXOfCursor() const
+{
+    if (!m_current) return -1;
+    int cursorPosition = m_ruler->getCursor()->getPosition();
+    return cursorPosition + (m_currentRow * m_pageWidth) - m_x;
 }
 
 template <class T>

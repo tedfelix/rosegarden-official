@@ -270,13 +270,6 @@ Quantizer::quantizeByNote(Segment::iterator from, Segment::iterator to) const
 {
     quantize(from, to,
 	     UnitQuantizer(), NoteQuantizer(), NoteDurationProperty, false);
-
-/*!!!
- We could also use a "fixNoteQuantizedValues" type of function that
- could be used explicitly by a user to state that (across a particular
- selection) they want quantized values to be saved as the normal ones,
- with the file.
-*/
 }
 
 void
@@ -299,6 +292,60 @@ Quantizer::getNoteQuantizedDuration(Event *e) const
     long d;
     if (e->get<Int>(NoteDurationProperty, d)) return (timeT)d;
     else return quantizeByNote(e->getDuration());
+}
+
+
+void
+Quantizer::fixUnitQuantizedValues(Segment::iterator from,
+				  Segment::iterator to) const
+{
+    quantizeByUnit(from, to);
+
+    for (; from != to; ++from) {
+	if ((*from)->has(AbsoluteTimeProperty)) {
+	    (*from)->setAbsoluteTime((*from)->get<Int>(AbsoluteTimeProperty));
+	}
+	if ((*from)->has(DurationProperty)) {
+	    (*from)->setDuration((*from)->get<Int>(DurationProperty));
+	}
+	unquantize(*from);
+    }
+}
+
+
+void
+Quantizer::fixNoteQuantizedValues(Segment::iterator from,
+				  Segment::iterator to) const
+{
+    quantizeByNote(from, to);
+
+    for (; from != to; ++from) {
+	if ((*from)->has(AbsoluteTimeProperty)) {
+	    (*from)->setAbsoluteTime((*from)->get<Int>(AbsoluteTimeProperty));
+	}
+	if ((*from)->has(NoteDurationProperty)) {
+	    (*from)->setDuration((*from)->get<Int>(NoteDurationProperty));
+	}
+	unquantize(*from);
+    }
+}
+
+
+void
+Quantizer::fixLegatoQuantizedValues(Segment::iterator from,
+				  Segment::iterator to) const
+{
+    quantizeLegato(from, to);
+
+    for (; from != to; ++from) {
+	if ((*from)->has(AbsoluteTimeProperty)) {
+	    (*from)->setAbsoluteTime((*from)->get<Int>(AbsoluteTimeProperty));
+	}
+	if ((*from)->has(LegatoDurationProperty)) {
+	    (*from)->setDuration((*from)->get<Int>(LegatoDurationProperty));
+	}
+	unquantize(*from);
+    }
 }
 
 
