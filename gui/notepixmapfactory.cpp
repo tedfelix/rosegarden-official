@@ -259,7 +259,8 @@ NotePixmapParameters::getNormalMarks() const
 
 	if (*mi == Rosegarden::Marks::Pause ||
 	    *mi == Rosegarden::Marks::UpBow ||
-	    *mi == Rosegarden::Marks::DownBow) continue;
+	    *mi == Rosegarden::Marks::DownBow ||
+	    Rosegarden::Marks::isFingeringMark(*mi)) continue;
 	
 	marks.push_back(*mi);
     }
@@ -271,6 +272,19 @@ std::vector<Rosegarden::Mark>
 NotePixmapParameters::getAboveMarks() const
 { 
     std::vector<Rosegarden::Mark> marks;
+
+    // fingerings before other marks
+
+    for (std::vector<Rosegarden::Mark>::const_iterator mi = m_marks.begin();
+	 mi != m_marks.end(); ++mi) {
+
+	if (Rosegarden::Marks::isFingeringMark(*mi)) {
+
+	    NOTATION_DEBUG << "getAboveMarks: adding fingering mark " << *mi << endl;
+
+	    marks.push_back(*mi);
+	}
+    }
 
     for (std::vector<Rosegarden::Mark>::const_iterator mi = m_marks.begin();
 	 mi != m_marks.end(); ++mi) {
@@ -291,6 +305,8 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
     m_tupletCountFontMetrics(m_tupletCountFont),
     m_textMarkFont("times", 8, QFont::Bold, true),
     m_textMarkFontMetrics(m_textMarkFont),
+    m_fingeringFont("times", 8, QFont::Bold),
+    m_fingeringFontMetrics(m_fingeringFont),
     m_timeSigFont("new century schoolbook", 8, QFont::Bold),
     m_timeSigFontMetrics(m_timeSigFont),
     m_bigTimeSigFont("new century schoolbook", 12, QFont::Normal),
@@ -314,6 +330,8 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_tupletCountFontMetrics(m_tupletCountFont),
     m_textMarkFont(npf.m_textMarkFont),
     m_textMarkFontMetrics(m_textMarkFont),
+    m_fingeringFont(npf.m_fingeringFont),
+    m_fingeringFontMetrics(m_fingeringFont),
     m_timeSigFont(npf.m_timeSigFont),
     m_timeSigFontMetrics(m_timeSigFont),
     m_bigTimeSigFont(npf.m_bigTimeSigFont),
@@ -344,6 +362,8 @@ NotePixmapFactory::operator=(const NotePixmapFactory &npf)
 	m_tupletCountFontMetrics = QFontMetrics(m_tupletCountFont);
 	m_textMarkFont = npf.m_textMarkFont;
 	m_textMarkFontMetrics = QFontMetrics(m_textMarkFont);
+	m_fingeringFont = npf.m_fingeringFont;
+	m_fingeringFontMetrics = QFontMetrics(m_fingeringFont);
 	m_ottavaFont = npf.m_ottavaFont;
 	m_ottavaFontMetrics = QFontMetrics(m_ottavaFontMetrics);
 	init(npf.m_font->getName(), npf.m_font->getSize());
@@ -401,6 +421,9 @@ NotePixmapFactory::init(std::string fontName, int size)
 
     m_textMarkFont.setPixelSize(size * 2);
     m_textMarkFontMetrics = QFontMetrics(m_textMarkFont);
+
+    m_fingeringFont.setPixelSize(size * 5 / 3);
+    m_fingeringFontMetrics = QFontMetrics(m_fingeringFont);
 
     m_ottavaFont.setPixelSize(size * 2);
     m_ottavaFontMetrics = QFontMetrics(m_ottavaFont);
@@ -905,9 +928,22 @@ NotePixmapFactory::makeRoomForMarks(bool isStemmed,
     for (std::vector<Rosegarden::Mark>::iterator i = aboveMarks.begin();
 	 i != aboveMarks.end(); ++i) {
 
-	NoteCharacter character(m_font->getCharacter(m_style->getMarkCharName(*i)));
-	height += character.getHeight() + gap;
-	if (character.getWidth() > width) width = character.getWidth();
+	if (!Rosegarden::Marks::isFingeringMark(*i)) {
+
+	    NoteCharacter character(m_font->getCharacter(m_style->getMarkCharName(*i)));
+	    height += character.getHeight() + gap;
+	    if (character.getWidth() > width) width = character.getWidth();
+
+	} else {
+
+	    NOTATION_DEBUG << "makeRoomForMarks: fingering mark " << *i << endl;
+
+	    // Inefficient to do this here _and_ in drawMarks
+	    QString text = strtoqstr(Rosegarden::Marks::getFingeringFromMark(*i));
+	    QRect bounds = m_fingeringFontMetrics.boundingRect(text);
+	    height += bounds.height() + gap + 3;
+	    if (bounds.width() > width) width = bounds.width();
+	}
     }
 
     if (height > 0) {
@@ -981,17 +1017,35 @@ NotePixmapFactory::drawMarks(bool isStemmed,
     for (std::vector<Rosegarden::Mark>::iterator i = aboveMarks.begin();
 	 i != aboveMarks.end(); ++i) {
 
-	NoteCharacter character
-	    (m_font->getCharacter
-	     (m_style->getMarkCharName(*i),
-	      m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen,
-	      false));
+	if (!Rosegarden::Marks::isFingeringMark(*i)) {
 
-	int x = m_left + m_noteBodyWidth/2 - character.getWidth()/2;
-	int y = m_above - dy - character.getHeight() - 1;
-	
-	m_p->drawNoteCharacter(x, y, character);
-	dy += character.getHeight() + gap;
+	    NoteCharacter character
+		(m_font->getCharacter
+		 (m_style->getMarkCharName(*i),
+		  m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen,
+		  false));
+	    
+	    int x = m_left + m_noteBodyWidth/2 - character.getWidth()/2;
+	    int y = m_above - dy - character.getHeight() - 1;
+	    
+	    m_p->drawNoteCharacter(x, y, character);
+	    dy += character.getHeight() + gap;
+
+	} else {
+	    NOTATION_DEBUG << "drawMarks: fingering mark " << *i << endl;
+
+	    QString text = strtoqstr(Rosegarden::Marks::getFingeringFromMark(*i));
+	    QRect bounds = m_fingeringFontMetrics.boundingRect(text);
+	    
+	    m_p->painter().setFont(m_fingeringFont);
+	    if (!m_inPrinterMethod) m_p->maskPainter().setFont(m_fingeringFont);
+
+	    int x = m_left + m_noteBodyWidth/2 - bounds.width()/2;
+	    int y = m_above - dy - 3;
+
+	    m_p->drawText(x, y, text);
+	    dy += bounds.height() + gap;
+	}
     }
 }
 

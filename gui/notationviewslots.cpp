@@ -1319,6 +1319,20 @@ void NotationView::slotMarksAddTextMark()
     }
 }
 
+void NotationView::slotMarksAddFingeringMark()
+{
+    if (m_currentEventSelection) {
+        bool pressedOK = false;
+        
+        QString txt = KLineEditDlg::getText(i18n("Fingering: "), "", &pressedOK, this);
+        
+        if (pressedOK) {
+            addCommandToHistory(new MarksMenuAddFingeringMarkCommand
+                                (qstrtostr(txt), *m_currentEventSelection));
+        }
+    }
+}
+
 void NotationView::slotMarksRemoveMarks()
 {
     if (m_currentEventSelection)

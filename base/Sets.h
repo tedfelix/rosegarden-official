@@ -552,8 +552,13 @@ GenericChord<Element, Container, singleStaff>::getMarksForChord() const
 	Event *e = getAsEvent((*this)[i]);
 	std::vector<Mark> marks(Marks::getMarks(*e));
 
+
 	for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
-	    if (std::find(cmarks.begin(), cmarks.end(), *j) == cmarks.end()) {
+
+	    // We permit multiple identical fingering marks per chord,
+	    // but not any other sort
+	    if (Marks::isFingeringMark(*j) ||
+		std::find(cmarks.begin(), cmarks.end(), *j) == cmarks.end()) {
 		cmarks.push_back(*j);
 	    }
 	}

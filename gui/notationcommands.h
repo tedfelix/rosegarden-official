@@ -625,6 +625,25 @@ private:
 };
 
 
+class MarksMenuAddFingeringMarkCommand : public BasicSelectionCommand
+{
+public:
+    MarksMenuAddFingeringMarkCommand(std::string text,
+				     Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection), m_text(text) { }
+
+    static QString getGlobalName() { return i18n("Add &Fingering..."); }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    std::string m_text;
+};
+
+
 class MarksMenuRemoveMarksCommand : public BasicSelectionCommand
 {
 public:

@@ -131,6 +131,7 @@
     <Action name="add_down-bow"/>
     <Separator/>
     <Action name="add_text_mark"/>
+    <Action name="add_fingering_mark"/>
   </Menu>
 
 <Menu name="Transforms">

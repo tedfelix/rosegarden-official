@@ -385,6 +385,18 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp) {
         }
 
         outStr = prefix + inStr;
+
+    } else if (Marks::isFingeringMark(eventMark)) {
+	
+	// treat fingering marks like text marks for the moment,
+	// though they probably shouldn't be
+
+        inStr = protectIllegalChars(Marks::getFingeringFromMark(eventMark));
+	
+	// FIX 1.X / 2.X VERSION DIFFERENCE HERE
+	inStr = "#'(italic \"" + inStr + "\")";
+
+        outStr = prefix + inStr;
         
     } else {
         outStr = "-";

@@ -147,7 +147,11 @@ EventViewItem::compare(QListViewItem *i, int col, bool ascending) const
 	if (e2 < e1) return 1;
 	else if (e1 < e2) return -1;
 	else return 0;
-    } else if (col == 2) { // type
+    } else if (col == 2 || col == 5 || col == 6) { // event type, data1, data2
+	// we have to do string compares even for data1/data2 which are
+	// often numeric, just because they aren't _always_ numeric and
+	// we don't want to prevent the user being able to separate
+	// e.g. crescendo from decrescendo
 	if (key(col, ascending).compare(i->key(col, ascending)) == 0) {
 	    return compare(i, 0, ascending);
 	} else {
@@ -418,7 +422,7 @@ EventView::applyLayout(int /*staffNo*/)
                 data2Str = QString("%1  ").
                     arg((*it)->get<Int>(Rosegarden::PitchBend::LSB));
             } else if ((*it)->has(BaseProperties::BEAMED_GROUP_ID)) {
-		data2Str = QString("%1  ").
+		data2Str = i18n("(group %1)  ").
 		    arg((*it)->get<Int>(BaseProperties::BEAMED_GROUP_ID));
 	    }
 

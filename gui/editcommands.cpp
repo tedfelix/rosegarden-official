@@ -1366,7 +1366,7 @@ MoveCommand::modifySegment()
 }
    
 
-MoveAcrossSegmentsCommand::MoveAcrossSegmentsCommand(Rosegarden::Segment &firstSegment,
+MoveAcrossSegmentsCommand::MoveAcrossSegmentsCommand(Rosegarden::Segment &,
 						     Rosegarden::Segment &secondSegment,
 						     Rosegarden::timeT newStartTime,
 						     bool notation,

@@ -174,6 +174,11 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
                 el->event()->setMaybe<Bool>
 		    (m_properties.CHORD_PRIMARY_NOTE, primary);
 
+		if (primary) {
+		    el->event()->setMaybe<Int>
+			(m_properties.CHORD_MARK_COUNT, chord.getMarkCountForChord());
+		}
+
 		bool shifted = chord.isNoteHeadShifted(chord[j]);
                 el->event()->setMaybe<Bool>
 		    (m_properties.NOTE_HEAD_SHIFTED, shifted);

@@ -150,6 +150,24 @@ namespace Marks //!!! This would be better as a class, these days
     extern std::string getTextFromMark(Mark mark);
 
     /**
+     * Given a string, return a mark that will be recognised as a
+     * fingering mark containing that string.  (We use a string
+     * instead of a number to permit "fingering" marks containing
+     * labels like "+".)
+     */
+    extern Mark getFingeringMark(std::string fingering);
+
+    /**
+     * Return true if the given mark is a fingering mark.
+     */
+    extern bool isFingeringMark(Mark mark);
+
+    /**
+     * Extract the string from a fingering mark.
+     */
+    extern std::string getFingeringFromMark(Mark mark);
+
+    /**
      * Extract the number of marks from an event.
      */
     extern int getMarkCount(const Event &e);

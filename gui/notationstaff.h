@@ -328,7 +328,7 @@ protected:
      * needed in case it's a key event, in which case we need to judge
      * the correct pitch for the key)
      */
-    virtual void renderSingleElement(Rosegarden::ViewElement *elt, 
+    virtual void renderSingleElement(Rosegarden::ViewElementList::iterator &,
 				     const Rosegarden::Clef &,
 				     const Rosegarden::Key &,
 				     bool selected);
@@ -340,7 +340,7 @@ protected:
     /**
      * Return a QCanvasSimpleSprite representing the given note event
      */
-    virtual QCanvasSimpleSprite *makeNoteSprite(NotationElement *);
+    virtual QCanvasSimpleSprite *makeNoteSprite(Rosegarden::ViewElementList::iterator &);
 
     /**
      * Return a NotationElementList::iterator pointing to the

@@ -1061,7 +1061,8 @@ NotationSelector::NotationSelector(NotationView* view)
       m_selectedStaff(0),
       m_clickedElement(0),
       m_selectionToMerge(0),
-      m_justSelectedBar(false)
+      m_justSelectedBar(false),
+      m_wholeStaffSelectionComplete(false)
 {
     connect(m_parentView, SIGNAL(usedSelection()),
             this,         SLOT(slotHideSelection()));
@@ -1101,6 +1102,8 @@ void NotationSelector::handleLeftButtonPress(Rosegarden::timeT t,
 	m_justSelectedBar = false;
 	return;
     }
+
+    m_wholeStaffSelectionComplete = false;
 
     delete m_selectionToMerge;
     const EventSelection *selectionToMerge = 0;
@@ -1201,6 +1204,8 @@ void NotationSelector::handleMouseTripleClick(Rosegarden::timeT t,
 	m_selectionRect->show();
 	m_updateRect = false;
     }
+    
+    m_wholeStaffSelectionComplete = true;
 
     return;
 }
@@ -1297,6 +1302,7 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
 
     m_clickedElement = 0;
     m_selectionRect->hide();
+    m_wholeStaffSelectionComplete = false;
     m_nParentView->canvas()->update();
 }
 
@@ -1534,8 +1540,6 @@ EventSelection* NotationSelector::getSelection()
         m_selectionRect->height() > -3 &&
         m_selectionRect->height() <  3) return 0;
 
-//    double middleY = m_selectionRect->y() + m_selectionRect->height()/2;
-
     QCanvasItemList itemList = m_selectionRect->collisions(true);
     QCanvasItemList::Iterator it;
 
@@ -1565,8 +1569,22 @@ EventSelection* NotationSelector::getSelection()
     }
 
     if (!m_selectedStaff) return 0;
-	
     Segment& originalSegment = m_selectedStaff->getSegment();
+
+    // If we selected the whole staff, force that to happen explicitly
+    // rather than relying on collisions with the rectangle -- because
+    // events way off the currently visible area might not even have
+    // been drawn yet, and so will not appear in the collision list.
+    // (We did still need the collision list to determine which staff
+    // to use though.)
+    
+    if (m_wholeStaffSelectionComplete) {
+	EventSelection *selection = new EventSelection(originalSegment,
+						       originalSegment.getStartTime(),
+						       originalSegment.getEndMarkerTime());
+	return selection;
+    }
+	
     EventSelection* selection = new EventSelection(originalSegment);
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
@@ -1590,7 +1608,12 @@ EventSelection* NotationSelector::getSelection()
         }
     }
 
-    return (selection->getAddedEvents() > 0) ? selection : 0;
+    if (selection->getAddedEvents() > 0) {
+	return selection;
+    } else {
+	delete selection;
+	return 0;
+    }
 }
 
 void NotationSelector::setViewCurrentSelection(bool preview)

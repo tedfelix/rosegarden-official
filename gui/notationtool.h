@@ -468,7 +468,7 @@ protected:
     Rosegarden::EventSelection *m_selectionToMerge;
 
     bool m_justSelectedBar;
-
+    bool m_wholeStaffSelectionComplete;
 };
 
 

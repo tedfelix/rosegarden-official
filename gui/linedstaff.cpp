@@ -591,7 +591,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     // hack to ensure the bar line appears on the correct row in
     // notation page layouts, with a conditional to prevent us from
     // moving the bar and beat lines in the matrix
-    if (!showBeatLines()) ++layoutX;
+    if (!showBeatLines()) layoutX += 1;
 
     int row = getRowForLayoutX(layoutX);
     double x = getCanvasXForLayoutX(layoutX);
@@ -620,25 +620,25 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     m_barLines.insert(insertPoint, barLine);
 
     if (m_pageMode != LinearMode &&
+	width > 0 && // width == 0 for final bar in staff
 	(getRowForLayoutX(layoutX) <
 	 getRowForLayoutX(layoutX + width + getMargin() + 2))) {
 
-	// end of row
+	// end of this row
 
-	x = getCanvasXForLayoutX(layoutX + width - barThickness);
-	y = getCanvasYForTopLine(row);
+	double xe = x + width - barThickness;
 
-	line = new QCanvasRectangle
+	QCanvasRectangle *eline = new QCanvasRectangle
 	    (0, 0, barThickness, getBarLineHeight(), m_canvas);
-	line->moveBy(x, y);
+	eline->moveBy(xe, y);
 
-	line->setPen(RosegardenGUIColours::BarLine);
-	line->setBrush(RosegardenGUIColours::BarLine);
+	eline->setPen(RosegardenGUIColours::BarLine);
+	eline->setBrush(RosegardenGUIColours::BarLine);
 
-	line->setZ(-1);
-	line->show();
+	eline->setZ(-1);
+	eline->show();
 
-	BarLine barLine(layoutX, line);
+	BarLine barLine(layoutX, eline);
 	BarLineList::iterator insertPoint = lower_bound
 	    (m_barLines.begin(), m_barLines.end(), barLine, compareBars);
 	m_barLines.insert(insertPoint, barLine);
@@ -673,11 +673,6 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 	    gridLines = timeSig.getBeatsPerBar();
 
 	double dx = width / gridLines;
-
-        // The beats will appear on these lines
-        //
-        double beatLine = double(timeSig.getBarDuration()) /
-                double(timeSig.getBeatsPerBar());
 
 	for (int gridLine = 1; gridLine < gridLines; ++gridLine) {
 

@@ -317,6 +317,9 @@ protected:
     QFont m_textMarkFont;
     QFontMetrics m_textMarkFontMetrics;
 
+    QFont m_fingeringFont;
+    QFontMetrics m_fingeringFontMetrics;
+
     QFont m_timeSigFont;
     QFontMetrics m_timeSigFontMetrics;
 

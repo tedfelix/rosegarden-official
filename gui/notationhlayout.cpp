@@ -68,8 +68,8 @@ std::vector<int> NotationHLayout::m_availableProportions;
 
 
 NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
-				   const NotationProperties &properties,
-				   QObject* parent, const char* name) :
+				 const NotationProperties &properties,
+				 QObject* parent, const char* name) :
     ProgressReporter(parent, name),
     Rosegarden::HorizontalLayoutEngine(c),
     m_totalWidth(0.),

@@ -112,6 +112,19 @@ namespace Marks
         else return string(mark).substr(5);
     }
 
+    string getFingeringMark(string fingering) {
+        return string("finger_") + fingering;
+    }
+
+    bool isFingeringMark(Mark mark) {
+        return string(mark).substr(0, 7) == "finger_";
+    }
+
+    string getFingeringFromMark(Mark mark) {
+        if (!isFingeringMark(mark)) return string();
+        else return string(mark).substr(7);
+    }
+
     int getMarkCount(const Event &e) {
 	long markCount = 0;
 	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
@@ -667,10 +680,13 @@ Indication::operator=(const Indication &m)
 Event *
 Indication::getAsEvent(timeT absoluteTime) const
 {
-//    Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
     Event *e = new Event(EventType, absoluteTime, m_duration, EventSubOrdering);
     e->set<String>(IndicationTypePropertyName, m_indicationType);
-//    e->set<Int>(IndicationDurationPropertyName, m_duration);
+
+    // Set this obsolete property as well, as otherwise we could actually
+    // crash earlier versions of RG by loading files exported from this one!
+    e->set<Int>(IndicationDurationPropertyName, m_duration);
+
     return e;
 }
 

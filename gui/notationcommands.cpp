@@ -1104,6 +1104,22 @@ MarksMenuAddTextMarkCommand::modifySegment()
 }
 
 void
+MarksMenuAddFingeringMarkCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+	
+	long n = 0;
+	(*i)->get<Int>(MARK_COUNT, n);
+	(*i)->set<Int>(MARK_COUNT, n + 1);
+	(*i)->set<String>(getMarkPropertyName(n),
+			  Rosegarden::Marks::getFingeringMark(m_text));
+    }
+}
+
+void
 MarksMenuRemoveMarksCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;

@@ -48,6 +48,7 @@ NotationProperties::NotationProperties(const std::string &prefix) :
     NEEDS_EXTRA_SHIFT_SPACE	(prefix + "NeedsExtraShiftSpace"),
     NOTE_DOT_SHIFTED		(prefix + "NoteDotShifted"),
     CHORD_PRIMARY_NOTE		(prefix + "ChordPrimaryNote"),
+    CHORD_MARK_COUNT		(prefix + "ChordMarkCount"),
     TIE_LENGTH			(prefix + "TieLength"),
     SLUR_ABOVE			(prefix + "SlurAbove"),
     SLUR_Y_DELTA		(prefix + "SlurYDelta"),

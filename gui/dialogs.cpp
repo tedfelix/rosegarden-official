@@ -1775,17 +1775,21 @@ SimpleEventEditDialog::setupForEvent()
 
     // Some common settings
     //
-    m_durationLabel->setText(i18n("Duration:"));
+
+    m_durationLabel->setText(i18n("Absolute time:"));
     m_timeLabel->show();
     m_timeSpinBox->show();
+    m_timeEditButton->show();
+    m_timeSpinBox->setValue(m_event.getAbsoluteTime());
 
+    m_durationLabel->setText(i18n("Duration:"));
+    m_durationLabel->show();
+    m_durationSpinBox->show();
+    m_durationEditButton->show();
+    m_durationSpinBox->setValue(m_event.getDuration());
 
     if (m_type == Rosegarden::Note::EventType)
     {
-        m_durationLabel->show();
-        m_durationSpinBox->show();
-	m_durationEditButton->show();
-
         m_pitchLabel->show();
         m_pitchLabel->setText(i18n("Note pitch:"));
         m_pitchSpinBox->show();
@@ -1800,9 +1804,6 @@ SimpleEventEditDialog::setupForEvent()
 
         m_metaLabel->hide();
         m_metaEdit->hide();
-
-        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
-        m_durationSpinBox->setValue(m_event.getDuration());
 
         try
         {
@@ -1845,8 +1846,6 @@ SimpleEventEditDialog::setupForEvent()
 
         m_metaLabel->hide();
         m_metaEdit->hide();
-
-        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
 
         try
         {
@@ -1891,7 +1890,6 @@ SimpleEventEditDialog::setupForEvent()
         m_metaLabel->hide();
         m_metaEdit->hide();
 
-        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
         try
         {
             m_pitchSpinBox->setValue(m_event.get<Rosegarden::Int>
@@ -1934,8 +1932,6 @@ SimpleEventEditDialog::setupForEvent()
         m_metaLabel->hide();
         m_metaEdit->hide();
 
-        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
-
         try
         {
             m_pitchSpinBox->setValue(m_event.get<Rosegarden::Int>
@@ -1967,8 +1963,6 @@ SimpleEventEditDialog::setupForEvent()
 
         m_metaLabel->hide();
         m_metaEdit->hide();
-
-        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
 
         try
         {
@@ -2010,7 +2004,6 @@ SimpleEventEditDialog::setupForEvent()
             m_controllerLabelValue->setText("0");
         }
 
-        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
         m_typeCombo->setCurrentItem(5);
     }
     else if (m_type == Rosegarden::PitchBend::EventType)
@@ -2033,8 +2026,6 @@ SimpleEventEditDialog::setupForEvent()
 
         m_metaLabel->hide();
         m_metaEdit->hide();
-
-        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
 
         try
         {
@@ -2060,10 +2051,6 @@ SimpleEventEditDialog::setupForEvent()
     }
     else if (m_type == Rosegarden::Indication::EventType)
     {
-        m_durationLabel->hide();
-        m_durationSpinBox->hide();
-	m_durationEditButton->hide();
-
         m_pitchLabel->hide();
         m_pitchSpinBox->hide();
 	m_pitchEditButton->hide();
@@ -2073,6 +2060,21 @@ SimpleEventEditDialog::setupForEvent()
 
         m_velocityLabel->hide();
         m_velocitySpinBox->hide();
+
+        m_metaLabel->show();
+        m_metaEdit->show();
+	m_metaLabel->setText(i18n("Indication:"));
+
+        try
+        {
+            Rosegarden::Indication ind(m_event);
+            m_metaEdit->setText(strtoqstr(ind.getIndicationType()));
+	    m_durationSpinBox->setValue(ind.getIndicationDuration());
+        }
+        catch(...)
+        {
+            m_metaEdit->setText(i18n("<none>"));
+        }
 
         m_typeCombo->setCurrentItem(7);
     }
@@ -2111,18 +2113,12 @@ SimpleEventEditDialog::setupForEvent()
             m_metaEdit->setText(i18n("<none>"));
         }
 
-        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
-
         // getTextType();
 
         m_typeCombo->setCurrentItem(8);
     }
     else if (m_type == Rosegarden::Note::EventRestType)
     {
-        m_durationLabel->show();
-        m_durationSpinBox->show();
-	m_durationEditButton->show();
-
         m_pitchLabel->hide();
         m_pitchSpinBox->hide();
 	m_pitchEditButton->hide();
@@ -2135,9 +2131,6 @@ SimpleEventEditDialog::setupForEvent()
 
         m_metaLabel->hide();
         m_metaEdit->hide();
-
-        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
-        m_durationSpinBox->setValue(m_event.getDuration());
 
         m_typeCombo->setCurrentItem(9);
     }
@@ -2172,8 +2165,6 @@ SimpleEventEditDialog::setupForEvent()
         m_metaLabel->hide();
         m_metaEdit->hide();
 
-        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
-
         m_typeCombo->setCurrentItem(10);
     }
     else if (m_type == Rosegarden::Key::EventType)
@@ -2207,8 +2198,6 @@ SimpleEventEditDialog::setupForEvent()
         m_metaLabel->hide();
         m_metaEdit->hide();
 
-        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
-
         m_typeCombo->setCurrentItem(11);
     }
     else
@@ -2233,7 +2222,6 @@ SimpleEventEditDialog::setupForEvent()
         m_metaEdit->hide();
 
         m_typeCombo->setEnabled(false);
-        m_timeSpinBox->setValue(m_event.getAbsoluteTime());
     }
 
     m_typeCombo->blockSignals(false);

@@ -35,6 +35,7 @@
 #include "rosedebug.h"
 #include "colours.h"
 #include "notestyle.h"
+#include "notationsets.h"
 #include "widgets.h"
 #include "notefont.h"
 
@@ -394,7 +395,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 //	NOTATION_DEBUG << "Rendering at " << (*it)->getAbsoluteTime()
 //			     << " (selected = " << selected << ")" << endl;
 
-	renderSingleElement(*it, currentClef, currentKey, selected);
+	renderSingleElement(it, currentClef, currentKey, selected);
 
 	if ((endTime > startTime) &&
 	    (++elementCount % 200 == 0)) {
@@ -447,7 +448,7 @@ NotationStaff::renderPrintable(timeT from, timeT to)
 //	NOTATION_DEBUG << "Rendering at " << (*it)->getAbsoluteTime()
 //			     << " (selected = " << selected << ")" << endl;
 
-	renderSingleElement(*it, currentClef, currentKey, selected);
+	renderSingleElement(it, currentClef, currentKey, selected);
 
 	if ((to > from) && (++elementCount % 200 == 0)) {
 
@@ -582,7 +583,7 @@ NotationStaff::positionElements(timeT from, timeT to)
 //	if (el->getLayoutX() == 0) continue;
 
 	if (needNewSprite) {
-	    renderSingleElement(*it, currentClef, currentKey, selected);
+	    renderSingleElement(it, currentClef, currentKey, selected);
 	    ++elementsRendered;
 	}
 
@@ -782,7 +783,7 @@ NotationStaff::isDirectlyPrintable(ViewElement *velt)
 
 
 void
-NotationStaff::renderSingleElement(ViewElement *velt,
+NotationStaff::renderSingleElement(Rosegarden::ViewElementList::iterator &vli,
 				   const Rosegarden::Clef &currentClef,
 				   const Rosegarden::Key &currentKey,
 				   bool selected)
@@ -790,7 +791,7 @@ NotationStaff::renderSingleElement(ViewElement *velt,
     const NotationProperties &properties(m_notationView->getProperties());
     static NotePixmapParameters restParams(Note::Crotchet, 0);
 
-    NotationElement* elt = static_cast<NotationElement*>(velt);
+    NotationElement* elt = static_cast<NotationElement*>(*vli);
     
     try {
 	m_notePixmapFactory->setNoteStyle
@@ -824,7 +825,7 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 
 	if (elt->isNote()) {
 
-	    canvasItem = makeNoteSprite(elt);
+	    canvasItem = makeNoteSprite(vli);
 
 	} else if (elt->isRest()) {
 
@@ -849,7 +850,6 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 			 *m_printPainter, int(coords.first), coords.second);
 		} else {
 		    pixmap = m_notePixmapFactory->makeRestPixmap(restParams);
-		    NOTATION_DEBUG << "made rest pixmap width " << pixmap->width() << " height " << pixmap->height() << endl;
 		}
 	    }
 
@@ -1037,8 +1037,10 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 }
 
 QCanvasSimpleSprite *
-NotationStaff::makeNoteSprite(NotationElement *elt)
+NotationStaff::makeNoteSprite(Rosegarden::ViewElementList::iterator &vli)
 {
+    NotationElement* elt = static_cast<NotationElement*>(*vli);
+
     const NotationProperties &properties(m_notationView->getProperties());
     static NotePixmapParameters params(Note::Crotchet, 0);
 
@@ -1115,7 +1117,18 @@ NotationStaff::makeNoteSprite(NotationElement *elt)
 
     if (elt->event()->get<Bool>(properties.CHORD_PRIMARY_NOTE, primary)
 	&& primary) {
-	params.setMarks(Rosegarden::Marks::getMarks(*elt->event()));
+
+	long marks = 0;
+	elt->event()->get<Int>(properties.CHORD_MARK_COUNT, marks);
+	if (marks) {
+	    NotationChord chord(*getViewElementList(), vli,
+				m_segment.getComposition()->getNotationQuantizer(),
+				properties);
+	    params.setMarks(chord.getMarksForChord());
+	}
+
+//	    params.setMarks(Rosegarden::Marks::getMarks(*elt->event()));
+
 	if (up && note < Note::Semibreve) {
 	    safeVertDistance = m_notePixmapFactory->getStemLength();
 	    safeVertDistance = std::max(safeVertDistance, int(stemLength));
