@@ -500,6 +500,33 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 	return 0;
     }
 
+    // Find out whether we're in an ottava section.
+
+    int ottavaShift = 0;
+
+    for (Segment::iterator i = segment.findTime(time); ; --i) {
+
+	if ((*i)->isa(Rosegarden::Note::EventType) &&
+	    (*i)->has(NotationProperties::OTTAVA_SHIFT)) {
+	    ottavaShift = (*i)->get<Int>(NotationProperties::OTTAVA_SHIFT);
+	    break;
+	}
+
+	if ((*i)->isa(Rosegarden::Indication::EventType)) {
+	    try {
+		Rosegarden::Indication ind(**i);
+		if (ind.isOttavaType()) {
+		    ottavaShift = ind.getOttavaShift();
+		    break;
+		}
+	    } catch (...) { }
+	}
+
+	if (i == segment.begin()) break;
+    }
+
+    pitch += ottavaShift * 12;
+
     NoteInsertionCommand *insertionCommand =
 	new NoteInsertionCommand
         (segment, time, endTime, note, pitch, accidental,

@@ -402,6 +402,7 @@ protected:
     const NotationProperties &m_properties;
 
     int m_timePerProgressIncrement;
+    std::map<Rosegarden::Staff *, bool> m_haveOttavaSomewhere;
     int m_staffCount; // purely for progress reporting
 };
 

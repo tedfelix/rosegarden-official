@@ -615,7 +615,8 @@ Key::KeyDetails& Key::KeyDetails::operator=(const Key::KeyDetails &d)
 const std::string Indication::EventType = "indication";
 const int Indication::EventSubOrdering = -50;
 const PropertyName Indication::IndicationTypePropertyName = "indicationtype";
-const PropertyName Indication::IndicationDurationPropertyName = "indicationduration";
+//const PropertyName Indication::IndicationDurationPropertyName = "indicationduration";
+static const PropertyName IndicationDurationPropertyName = "indicationduration";//!!!
 
 const std::string Indication::Slur = "slur";
 const std::string Indication::Crescendo = "crescendo";
@@ -636,7 +637,12 @@ Indication::Indication(const Event &e)
         throw BadIndicationName("No such indication as \"" + s + "\"");
     }
     m_indicationType = s;
-    m_duration = e.get<Int>(IndicationDurationPropertyName);
+
+    //!!!
+    m_duration = e.getDuration();
+    if (m_duration == 0) {
+	m_duration = e.get<Int>(IndicationDurationPropertyName); // obsolete property
+    }
 }
 
 Indication::Indication(const std::string &s, timeT indicationDuration)
@@ -661,9 +667,10 @@ Indication::operator=(const Indication &m)
 Event *
 Indication::getAsEvent(timeT absoluteTime) const
 {
-    Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
+//    Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
+    Event *e = new Event(EventType, absoluteTime, m_duration, EventSubOrdering);
     e->set<String>(IndicationTypePropertyName, m_indicationType);
-    e->set<Int>(IndicationDurationPropertyName, m_duration);
+//    e->set<Int>(IndicationDurationPropertyName, m_duration);
     return e;
 }
 

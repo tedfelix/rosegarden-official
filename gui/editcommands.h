@@ -85,16 +85,17 @@ protected:
 		     Rosegarden::timeT toTime) :
 	    KNamedCommand("Close"),
 	    m_segment(segment),
-	    m_fromTime(fromTime),
-	    m_toTime(toTime) { }
+	    m_gapEnd(fromTime),
+	    m_gapStart(toTime) { }
 
 	virtual void execute();
 	virtual void unexecute();
 
     private:
 	Rosegarden::Segment *m_segment;
-	Rosegarden::timeT m_fromTime;
-	Rosegarden::timeT m_toTime;
+	Rosegarden::timeT m_gapEnd;
+	Rosegarden::timeT m_gapStart;
+	int m_staticEvents;
     };
 };    
 

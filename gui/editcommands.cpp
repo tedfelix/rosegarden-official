@@ -96,54 +96,109 @@ CutAndCloseCommand::CutAndCloseCommand(Rosegarden::EventSelection &selection,
 void
 CutAndCloseCommand::CloseCommand::execute()
 {
-    // we shift all the events from m_fromTime to the end of the
-    // segment back so that they start at m_toTime instead of m_fromTime
-    assert(m_fromTime >= m_toTime);
-    if (m_fromTime == m_toTime) return;
+    // We shift all the events from m_gapEnd to the end of the
+    // segment back so that they start at m_gapStart instead of m_gapEnd.
+
+    assert(m_gapEnd >= m_gapStart);
+    if (m_gapEnd == m_gapStart) return;
+
+    // We also need to record how many events there are already at
+    // m_gapStart so that we can leave those unchanged when we undo.
+    // (This command is executed on the understanding that the area
+    // between m_gapStart and m_gapEnd is empty of all but rests, but
+    // in practice there may be other things such as a clef at the
+    // same time as m_gapStart.  This will only work for events that
+    // have smaller subordering than notes etc.)
+
+    m_staticEvents = 0;
+    for (Segment::iterator i = m_segment->findTime(m_gapStart);
+	 m_segment->isBeforeEndMarker(i); ++i) {
+	if ((*i)->getAbsoluteTime() > m_gapStart) break;
+	if ((*i)->isa(Rosegarden::Note::EventRestType)) continue;
+	++m_staticEvents;
+    }
 
     std::vector<Event *> events;
-    timeT timeDifference = m_toTime - m_fromTime;
+    timeT timeDifference = m_gapEnd - m_gapStart;
 
-    for (Segment::iterator i = m_segment->findTime(m_fromTime);
-	 i != m_segment->end(); ++i) {
+    for (Segment::iterator i = m_segment->findTime(m_gapEnd);
+	 m_segment->isBeforeEndMarker(i); ++i) {
 	events.push_back(new Event
-			 (**i, (*i)->getAbsoluteTime() + timeDifference));
+			 (**i, (*i)->getAbsoluteTime() - timeDifference));
     }
 
     timeT oldEndTime = m_segment->getEndTime();
-    m_segment->erase(m_segment->findTime(m_toTime), m_segment->end());
+
+    // remove rests from target area, and everything thereafter
+    for (Segment::iterator i = m_segment->findTime(m_gapStart);
+	 m_segment->isBeforeEndMarker(i); ) {
+	if ((*i)->getAbsoluteTime() >= m_gapEnd ||
+	    (*i)->isa(Rosegarden::Note::EventRestType)) {
+	    Segment::iterator j(i);
+	    ++j;
+	    m_segment->erase(i);
+	    i = j;
+	} else {
+	    ++i;
+	}
+    }
     
     for (unsigned int i = 0; i < events.size(); ++i) {
 	m_segment->insert(events[i]);
     }
 
-    m_segment->fillWithRests(oldEndTime);
+    m_segment->normalizeRests(m_segment->getEndTime(), oldEndTime);
 }
 
 void
 CutAndCloseCommand::CloseCommand::unexecute()
 {
-    // we shift all the events from m_toTime to the end of the
-    // segment forward so that they start at m_fromTime instead of m_toTime
-    assert(m_fromTime >= m_toTime);
-    if (m_fromTime == m_toTime) return;
+    // We want to shift events from m_gapStart to the end of the
+    // segment forward so as to start at m_gapEnd instead of
+    // m_gapStart.
 
-    std::vector<Event *> events;
-    timeT timeDifference = m_fromTime - m_toTime;
+    assert(m_gapEnd >= m_gapStart);
+    if (m_gapEnd == m_gapStart) return;
 
-    for (Segment::iterator i = m_segment->findTime(m_toTime);
-	 i != m_segment->end(); ++i) {
-	events.push_back(new Event
-			 (**i, (*i)->getAbsoluteTime() + timeDifference));
+    // May need to ignore some static events at m_gapStart.
+    // These are assumed to have smaller subordering than whatever
+    // we're not ignoring.  Actually this still isn't quite right:
+    // it'll do the wrong thing where we have, say, a clef then
+    // some notes then another clef and we cut-and-close all the
+    // notes and then undo.  But it's better than we were doing
+    // before.
+
+    Segment::iterator starti = m_segment->findTime(m_gapStart);
+
+    while (m_segment->isBeforeEndMarker(starti)) {
+	if (m_staticEvents == 0) break;
+	if ((*starti)->getAbsoluteTime() > m_gapStart) break;
+	if (!(*starti)->isa(Note::EventRestType)) --m_staticEvents;
+	++starti;
     }
 
-    m_segment->erase(m_segment->findTime(m_toTime), m_segment->end());
-    
+    std::vector<Event *> events;
+    timeT timeDifference = m_gapEnd - m_gapStart;
+
+    for (Segment::iterator i = starti; m_segment->isBeforeEndMarker(i); ) {
+	Segment::iterator j(i);
+	++j;
+	events.push_back(new Event
+			 (**i, (*i)->getAbsoluteTime() + timeDifference));
+	m_segment->erase(i);
+	i = j;
+    }
+
     for (unsigned int i = 0; i < events.size(); ++i) {
 	m_segment->insert(events[i]);
     }
 
-    m_segment->normalizeRests(m_toTime, m_fromTime);
+    timeT endTime = m_segment->getEndTime();
+    NOTATION_DEBUG << "setting end time to " << (endTime - timeDifference) << endl;
+//!!! this following is not working for bugaccidentals.rg:
+    m_segment->setEndTime(endTime - timeDifference);
+
+    m_segment->normalizeRests(m_gapStart, m_gapEnd);
 }  
 
 

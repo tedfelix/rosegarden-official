@@ -588,29 +588,12 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
     int barThickness = m_lineThickness * 5 / 4;
 
-//!!!    int testRow = getRowForLayoutX(layoutX);
-//!!!    double testX = getCanvasXForLayoutX(layoutX);
-//!!!    int starti = 0;
-/*!!!
-    if (testX < getX() + getMargin() + 2 && testRow > 1) {
-	// first bar on new row
-	starti = -barThickness;
-    }
-*/
-
-    int row = getRowForLayoutX(layoutX);
-    double x = getCanvasXForLayoutX(layoutX);
+    int row = getRowForLayoutX(layoutX + 1);
+    double x = getCanvasXForLayoutX(layoutX + 1);
     int y = getCanvasYForTopLine(row);
 
     QCanvasRectangle *line = new QCanvasRectangle
 	(0, 0, barThickness, getBarLineHeight(), m_canvas);
-/*!!!
-    if (elementsInSpaces()) {
-	line->moveBy(x, y - (getLineSpacing()/2 + 1));
-    } else {
-	line->moveBy(x, y);
-    }
-*/
     line->moveBy(x, y);
 
     if (isCorrect) {
@@ -630,6 +613,31 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     BarLineList::iterator insertPoint = lower_bound
 	(m_barLines.begin(), m_barLines.end(), barLine, compareBars);
     m_barLines.insert(insertPoint, barLine);
+
+    if (m_pageMode != LinearMode &&
+	(getRowForLayoutX(layoutX) <
+	 getRowForLayoutX(layoutX + width + getMargin() + 2))) {
+
+	// end of row
+
+	x = getCanvasXForLayoutX(layoutX + width - barThickness);
+	y = getCanvasYForTopLine(row);
+
+	line = new QCanvasRectangle
+	    (0, 0, barThickness, getBarLineHeight(), m_canvas);
+	line->moveBy(x, y);
+
+	line->setPen(RosegardenGUIColours::BarLine);
+	line->setBrush(RosegardenGUIColours::BarLine);
+
+	line->setZ(-1);
+	line->show();
+
+	BarLine barLine(layoutX, line);
+	BarLineList::iterator insertPoint = lower_bound
+	    (m_barLines.begin(), m_barLines.end(), barLine, compareBars);
+	m_barLines.insert(insertPoint, barLine);
+    }
 
     if (barNo > 0) {
 
@@ -671,12 +679,6 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 	    line = new QCanvasRectangle
 		(0, 0, barThickness, getBarLineHeight(), m_canvas);
 
-	    //if (elementsInSpaces()) {
-		//line->moveBy(x + beat * dx, y - (getLineSpacing()/2 + 1));
-	    //} else {
-		//line->moveBy(x + beat * dx, y);
-	    //}
-
 	    line->moveBy(x + gridLine * dx, y);
 
             double currentGrid = gridLines/double(timeSig.getBeatsPerBar());
@@ -704,14 +706,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 	
 	line = new QCanvasRectangle
 	    (0, 0, barThickness, m_connectingLineLength, m_canvas);
-	
-/*!!!	    
-	if (elementsInSpaces()) {
-	    line->moveBy(x, y - (getLineSpacing()/2 + 1));
-	} else {
-	    line->moveBy(x, y);
-	}
-*/	
+
 	line->moveBy(x, y);
 
 	line->setPen(RosegardenGUIColours::StaffConnectingLine);

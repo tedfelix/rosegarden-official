@@ -453,7 +453,6 @@
   <Separator/>
   <Action name="crescendo"/>
   <Action name="decrescendo"/>
-  <Separator/>
   <Action name="octave_up"/>
 </ToolBar>
 

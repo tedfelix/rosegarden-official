@@ -855,7 +855,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             //
             QString thing;
             KURL url = KFileDialog::getStartURL(QString(":WAVS"), thing);
-            getAudioFileManager().setAudioPath(url.path());
+            getAudioFileManager().setAudioPath(url.path().latin1());
 
             /*
             RG_DEBUG << "ATTEMPTING TO FIND IN PATH = " 

@@ -209,7 +209,37 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
     bool barCorrect = true;
 
     int ottavaShift = 0;
-    timeT ottavaEnd = 0;
+    timeT ottavaEnd = segment.getEndMarkerTime();
+
+    if (isFullScan) {
+
+	NOTATION_DEBUG << "full scan: setting haveOttava false" << endl;
+
+	m_haveOttavaSomewhere[&staff] = false;
+
+    } else if (m_haveOttavaSomewhere[&staff]) {
+
+	NOTATION_DEBUG << "not full scan but ottava is listed" << endl;
+
+	Segment::iterator i = segment.findTime(startTime);
+	while (1) {
+	    if ((*i)->isa(Indication::EventType)) {
+		try {
+		    Indication indication(**i);
+		    if (indication.isOttavaType()) {
+			ottavaShift = indication.getOttavaShift();
+			ottavaEnd = (*i)->getAbsoluteTime() +
+			    indication.getIndicationDuration();
+			break;
+		    }
+		} catch (...) { }
+	    }
+	    if (i == segment.begin()) break;
+	    --i;
+	}
+    }
+
+    NOTATION_DEBUG << "ottava shift at start:" << ottavaShift << ", ottavaEnd " << ottavaEnd << endl;
 
     //!!! problematic: if we're scanning from the middle, we won't
     //have recorded any accidentals in the previous bar for the
@@ -282,7 +312,10 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 	    NOTATION_DEBUG << "element is a " << el->event()->getType() << endl;
 
 	    if (ottavaShift != 0) {
-		if (el->event()->getAbsoluteTime() >= ottavaEnd) ottavaShift = 0;
+		if (el->event()->getAbsoluteTime() >= ottavaEnd) {
+		    NOTATION_DEBUG << "reached end of ottava" << endl;
+		    ottavaShift = 0;
+		}
 	    }
 
 	    if (el->event()->has(BEAMED_GROUP_ID)) {
@@ -356,17 +389,16 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
 		chunks.push_back(Chunk(el->event()->getSubOrdering(), 0));
 
-		if (isFullScan) {
-		    try {
-			Indication indication(*el->event());
-			if (indication.isOttavaType()) {
-			    ottavaShift = indication.getOttavaShift();
-			    ottavaEnd = el->event()->getAbsoluteTime() +
-				indication.getIndicationDuration();
-			}
-		    } catch (...) {
-			NOTATION_DEBUG << "Bad indication!" << endl;
+		try {
+		    Indication indication(*el->event());
+		    if (indication.isOttavaType()) {
+			ottavaShift = indication.getOttavaShift();
+			ottavaEnd = el->event()->getAbsoluteTime() +
+			    indication.getIndicationDuration();
+			m_haveOttavaSomewhere[&staff] = true;
 		    }
+		} catch (...) {
+		    NOTATION_DEBUG << "Bad indication!" << endl;
 		}
 
 	    } else {
@@ -522,15 +554,9 @@ NotationHLayout::scanChord(NotationElementList *notes,
 	int h = p.getHeightOnStaff(clef, key);
 	Accidental acc = p.getDisplayAccidental(key);
 
-	if (ottavaShift == 0) {
-	    if (el->event()->has(NotationProperties::OTTAVA_SHIFT)) {
-		ottavaShift = el->event()->get<Int>(NotationProperties::OTTAVA_SHIFT);
-	    }
-	}
-	
 	h -= 7 * ottavaShift;
-	el->event()->setMaybe<Int>(NotationProperties::OTTAVA_SHIFT, ottavaShift);
 
+	el->event()->setMaybe<Int>(NotationProperties::OTTAVA_SHIFT, ottavaShift);
 	el->event()->setMaybe<Int>(NotationProperties::HEIGHT_ON_STAFF, h);
 	el->event()->setMaybe<String>(m_properties.CALCULATED_ACCIDENTAL, acc);
 

@@ -318,12 +318,12 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 
     NotationElementList::iterator scooter = i;
 
-    timeT slurDuration = (*i)->event()->get<Int>(Indication::IndicationDurationPropertyName);
+//!!!    timeT slurDuration = (*i)->event()->get<Int>(Indication::IndicationDurationPropertyName);
 
-//    timeT slurDuration = (*i)->event()->getDuration();
-//    if (slurDuration == 0) {
-//	slurDuration = (*i)->event()->get<Int>("indicationduration"); // obs property
-//    }
+    timeT slurDuration = (*i)->event()->getDuration();
+    if (slurDuration == 0) {
+	slurDuration = (*i)->event()->get<Int>("indicationduration"); // obs property
+    }
     timeT endTime = (*i)->getViewAbsoluteTime() + slurDuration;
 
     bool haveStart = false;

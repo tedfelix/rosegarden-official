@@ -919,9 +919,7 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 
 		if (indicationType != Indication::Slur &&
 		    indicationEnd != getViewElementList()->begin() &&
-		    
 		    (indicationEnd == getViewElementList()->end() ||
-		     
 		     indicationEndTime ==
 		     getSegment().getBarStartForTime(indicationEndTime))) {
 		    
@@ -937,6 +935,10 @@ NotationStaff::renderSingleElement(ViewElement *velt,
 		    
 		    length = (int)((*indicationEnd)->getLayoutX() -
 				   elt->getLayoutX());
+
+		    if (indication.isOttavaType()) {
+			length -= m_notePixmapFactory->getNoteBodyWidth();
+		    }
 		}
 		
 		y1 = (int)(*indicationEnd)->getLayoutY();
