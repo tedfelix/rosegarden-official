@@ -97,16 +97,14 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 {
     kdDebug(KDEBUG_AREA) << "mousepress" << endl;
 
-    if (m_currentHighlightedLine) {
-        kdDebug(KDEBUG_AREA) << "mousepress : m_currentHighlightedLine != 0 - inserting note - staff pitch : "
-                             << "(no longer relevant)" << endl;
-//!!!                             << m_currentHighlightedLine->associatedPitch() << endl;
-        handleClick(m_currentHighlightedLine, e->pos());
-
-        return;
-    }
+    if (!m_currentHighlightedLine) return;
     
-#if 0 // old version : collision detection. Keep around just in case.
+    kdDebug(KDEBUG_AREA) << "mousepress : m_currentHighlightedLine != 0 - inserting note - staff pitch : "
+                         << "(no longer relevant)" << endl;
+    //!!!                             << m_currentHighlightedLine->associatedPitch() << endl;
+
+    // Check if we haven't actually clicked on a sprite
+    //
     QCanvasItemList itemList = canvas()->collisions(e->pos());
 
     if(itemList.isEmpty()) { // click was not on an item
@@ -115,29 +113,23 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     }
 
     QCanvasItemList::Iterator it;
+    QCanvasNotationSprite *sprite = 0;
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
 
         QCanvasItem *item = *it;
-
-        StaffLine *staffLine;
-    
-        if ((staffLine = dynamic_cast<StaffLine*>(item))) {
-            kdDebug(KDEBUG_AREA) << "mousepress : on a staff Line - insert note - staff pitch : "
-                             << "(no longer relevant)" << endl;
-//!!!                                 << staffLine->associatedPitch() << endl;
-            insertNote(staffLine, e->pos());
-            // staffLine->setPen(blue); - debug feedback to confirm which line what clicked on
-        
-            return;
-        }
+        if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item)))
+            break;
     }
-#endif
-    
-    canvas()->update();
+
+    if (sprite)
+        handleClick(m_currentHighlightedLine, e->pos(), &(sprite->getNotationElement()));
+    else
+        handleClick(m_currentHighlightedLine, e->pos());
 }
 
 
+// Used for a note-shaped cursor - leaving around just in case
 // void
 // NotationCanvasView::currentNoteChanged(Note::Type note)
 // {
@@ -154,13 +146,15 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
 
 void
-NotationCanvasView::handleClick(const StaffLine *line, const QPoint &pos)
+NotationCanvasView::handleClick(const StaffLine *line,
+                                const QPoint &pos,
+                                NotationElement *el)
 {
     int h = line->getHeight();
 
     kdDebug(KDEBUG_AREA) << "NotationCanvasView::insertNote() : insertNote at height " << h << endl;
 
-    emit noteClicked(h, pos);
+    emit noteClicked(h, pos, el);
 }
 
 bool

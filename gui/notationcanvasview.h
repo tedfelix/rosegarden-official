@@ -26,7 +26,7 @@
 // #include "notepixmapfactory.h"
 
 class StaffLine;
-class QCanvasSimpleSprite;
+class NotationElement;
 
 /**
  * Central widget for the NotationView window
@@ -52,6 +52,7 @@ public:
     /** Callback for a mouse move event in the canvas */
     virtual void contentsMouseMoveEvent(QMouseEvent *e);
 
+// Used for a note-shaped cursor - leaving around just in case
 //     void setCurrentNotePixmap(QCanvasPixmap note);
 
 public slots:
@@ -59,14 +60,14 @@ public slots:
 //     void currentNoteChanged(Note::Type);
 
 signals:
-    void noteClicked(int pitch, const QPoint&);
+    void noteClicked(int pitch, const QPoint&, NotationElement*);
 
     void hoveredOverNoteChange(const QString &noteName);
     void hoveredOverAbsoluteTimeChange(unsigned int);
     
 protected:
 
-    void handleClick(const StaffLine*, const QPoint&);
+    void handleClick(const StaffLine*, const QPoint&, NotationElement* = 0);
 
     bool posIsTooFarFromStaff(const QPoint &pos);
 
