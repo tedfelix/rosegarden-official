@@ -69,7 +69,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
 			 WFlags) :
     QWidget(parent, name),
     DCOPObject("TrackEditorIface"),
-    m_document(doc),
+    m_doc(doc),
     m_rulerScale(rulerScale),
     m_topBarButtons(0),
     m_bottomBarButtons(0),
@@ -156,7 +156,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     int barButtonsHeight = 25;
 
     m_chordNameRuler = new ChordNameRuler(m_rulerScale,
-					  &m_document->getComposition(),
+					  &m_doc->getComposition(),
 					  0.0,
 					  20,
 					  this);
@@ -164,7 +164,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     grid->addWidget(m_chordNameRuler, 0, 1);
 
     m_tempoRuler = new TempoRuler(m_rulerScale,
-				  &m_document->getComposition(),
+				  &m_doc->getComposition(),
 				  0.0,
 				  18,
 				  true,
@@ -180,7 +180,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                      barButtonsHeight,
                                      false,
                                      this);
-    m_topBarButtons->connectRulerToDocPointer(m_document);
+    m_topBarButtons->connectRulerToDocPointer(m_doc);
 
     grid->addWidget(m_topBarButtons, 2, 1);
 
@@ -192,7 +192,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     //
     // Segment Canvas
     //
-    m_segmentCanvas = new SegmentCanvas(m_document,
+    m_segmentCanvas = new SegmentCanvas(m_doc,
                                         m_rulerScale,
                                         m_horizontalScrollBar,
                                         getTrackCellHeight(),
@@ -208,7 +208,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                         barButtonsHeight,
                                         true,
                                         this);
-    m_bottomBarButtons->connectRulerToDocPointer(m_document);
+    m_bottomBarButtons->connectRulerToDocPointer(m_doc);
     
     grid->addWidget(m_bottomBarButtons, 4, 1);
 
@@ -232,9 +232,9 @@ TrackEditor::init(QWidget* rosegardenguiview)
     grid->addWidget(m_trackButtonScroll, 3, 0);
 
     int canvasHeight = getTrackCellHeight() *
-	std::max(40, m_document->getComposition().getNbTracks());
+	std::max(40, m_doc->getComposition().getNbTracks());
 
-    m_trackButtons = new TrackButtons(m_document,
+    m_trackButtons = new TrackButtons(m_doc,
                                       getTrackCellHeight(),
                                       trackLabelWidth,
                                       m_showTrackLabels,
@@ -258,10 +258,10 @@ TrackEditor::init(QWidget* rosegardenguiview)
             rosegardenguiview, SIGNAL(stateChange(const QString&, bool)));
 
     connect(m_trackButtons, SIGNAL(modified()),
-            m_document, SLOT(slotDocumentModified()));
+            m_doc, SLOT(slotDocumentModified()));
 
     connect(m_trackButtons, SIGNAL(newRecordButton()),
-            m_document, SLOT(slotNewRecordButton()));
+            m_doc, SLOT(slotNewRecordButton()));
 
     // Synchronize bar buttons' scrollview with segment canvas' scrollbar
     //
@@ -312,10 +312,10 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(getCommandHistory(), SIGNAL(commandExecuted()),
 	    this, SLOT(update()));
 
-    connect(m_document, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
+    connect(m_doc, SIGNAL(pointerPositionChanged(Rosegarden::timeT)),
 	    this, SLOT(slotSetPointerPosition(Rosegarden::timeT)));
  
-    connect(m_document, SIGNAL(loopChanged(Rosegarden::timeT,
+    connect(m_doc, SIGNAL(loopChanged(Rosegarden::timeT,
 					   Rosegarden::timeT)),
 	    this, SLOT(slotSetLoop(Rosegarden::timeT, Rosegarden::timeT)));
  
@@ -335,7 +335,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
 void TrackEditor::slotReadjustCanvasSize()
 {
-    Composition &comp = m_document->getComposition();
+    Composition &comp = m_doc->getComposition();
     int lastBar = comp.getBarNumber(comp.getEndMarker());
     
     m_canvasWidth = (int)(m_rulerScale->getBarPosition(lastBar) +
@@ -354,7 +354,7 @@ void TrackEditor::slotTrackButtonsWidthChanged()
     kapp->processEvents();
 
     m_trackButtonScroll->setMinimumWidth(m_trackButtons->width());
-    m_document->setModified(true);
+    m_doc->setModified(true);
 }
 
 
@@ -383,9 +383,9 @@ TrackEditor::setupSegments()
 {
     RG_DEBUG << "TrackEditor::setupSegments() begin" << endl;
 
-    if (!m_document) return; // sanity check
+    if (!m_doc) return; // sanity check
     
-    Composition &comp = m_document->getComposition();
+    Composition &comp = m_doc->getComposition();
 
     for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
 
@@ -403,13 +403,13 @@ TrackEditor::setupSegments()
 
 bool TrackEditor::isCompositionModified()
 {
-    return m_document->getComposition().getRefreshStatus
+    return m_doc->getComposition().getRefreshStatus
 	(m_compositionRefreshStatusId).needsRefresh();
 }
 
 void TrackEditor::setCompositionModified(bool c)
 {
-    m_document->getComposition().getRefreshStatus
+    m_doc->getComposition().getRefreshStatus
 	(m_compositionRefreshStatusId).setNeedsRefresh(c);
 }
 
@@ -421,7 +421,7 @@ void TrackEditor::paintEvent(QPaintEvent* e)
         m_segmentCanvas->updateAllSegmentItems();
         m_trackButtons->slotUpdateTracks();
 
-	Composition &composition = m_document->getComposition();
+	Composition &composition = m_doc->getComposition();
 
         if (composition.getNbSegments() == 0) {
             emit stateChange("have_segments", false); // no segments : reverse state
@@ -439,8 +439,8 @@ void TrackEditor::paintEvent(QPaintEvent* e)
 
     } else if (m_segmentCanvas->isShowingPreviews()) { 
 
-	for (Composition::iterator i = m_document->getComposition().begin();
-	     i != m_document->getComposition().end(); ++i) {
+	for (Composition::iterator i = m_doc->getComposition().begin();
+	     i != m_doc->getComposition().end(); ++i) {
 
 	    SegmentRefreshStatusIdMap::iterator ri =
 		m_segmentsRefreshStatusIds.find(*i);
@@ -474,7 +474,7 @@ void TrackEditor::paintEvent(QPaintEvent* e)
 void TrackEditor::slotAddTracks(unsigned int nbNewTracks,
                                 Rosegarden::InstrumentId id)
 {
-    Composition &comp = m_document->getComposition();
+    Composition &comp = m_doc->getComposition();
 
     AddTracksCommand* command = new AddTracksCommand(&comp, nbNewTracks, id); 
     addCommandToHistory(command);
@@ -482,10 +482,10 @@ void TrackEditor::slotAddTracks(unsigned int nbNewTracks,
 
 void TrackEditor::addSegment(int track, int time, unsigned int duration)
 {
-    if (!m_document) return; // sanity check
+    if (!m_doc) return; // sanity check
 
     SegmentInsertCommand *command =
-	new SegmentInsertCommand(m_document, track, time, duration);
+	new SegmentInsertCommand(m_doc, track, time, duration);
 
     addCommandToHistory(command);
 }
@@ -552,7 +552,7 @@ TrackEditor::slotSetFineGrain(bool value)
 void
 TrackEditor::slotUpdateRecordingSegmentItem(Rosegarden::Segment *segment)
 {
-    Composition &comp = m_document->getComposition();
+    Composition &comp = m_doc->getComposition();
     //int y = segment->getTrack() * getTrackCellHeight();
 
     timeT startTime = segment->getStartTime();
@@ -579,7 +579,7 @@ TrackEditor::slotDeleteRecordingSegmentItem()
 MultiViewCommandHistory*
 TrackEditor::getCommandHistory()
 {
-    return m_document->getCommandHistory();
+    return m_doc->getCommandHistory();
 }
 
 

@@ -476,9 +476,9 @@ private:
 
     Rosegarden::Clipboard *m_clipboard;
 
-    /*
+    /**
      * the Studio
-     **/
+     */
     Rosegarden::Studio m_studio;
 
     /*

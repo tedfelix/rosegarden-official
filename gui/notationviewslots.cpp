@@ -307,7 +307,7 @@ void NotationView::slotEditCut()
     KTmpStatusMsg msg(i18n("Cutting selection to clipboard..."), this);
 
     addCommandToHistory(new CutCommand(*m_currentEventSelection,
-				       m_document->getClipboard()));
+				       getDocument()->getClipboard()));
 }
 
 void NotationView::slotEditDelete()
@@ -324,7 +324,7 @@ void NotationView::slotEditCopy()
     KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), this);
 
     addCommandToHistory(new CopyCommand(*m_currentEventSelection,
-					m_document->getClipboard()));
+					getDocument()->getClipboard()));
 }
 
 void NotationView::slotEditCutAndClose()
@@ -333,7 +333,7 @@ void NotationView::slotEditCutAndClose()
     KTmpStatusMsg msg(i18n("Cutting selection to clipboard..."), this);
 
     addCommandToHistory(new CutAndCloseCommand(*m_currentEventSelection,
-					       m_document->getClipboard()));
+					       getDocument()->getClipboard()));
 }
 
 #define RESTRICTED_PASTE_FAILED_DESCRIPTION \
@@ -349,7 +349,7 @@ void NotationView::slotEditCutAndClose()
 
 void NotationView::slotEditPaste()
 {
-    Rosegarden::Clipboard *clipboard = m_document->getClipboard();
+    Rosegarden::Clipboard *clipboard = getDocument()->getClipboard();
 
     if (clipboard->isEmpty()) {
         slotStatusHelpMsg(i18n("Clipboard is empty"));
@@ -397,7 +397,7 @@ void NotationView::slotEditPaste()
 
 void NotationView::slotEditGeneralPaste()
 {
-    Rosegarden::Clipboard *clipboard = m_document->getClipboard();
+    Rosegarden::Clipboard *clipboard = getDocument()->getClipboard();
 
     if (clipboard->isEmpty()) {
         slotStatusHelpMsg(i18n("Clipboard is empty"));
@@ -450,14 +450,14 @@ void NotationView::slotPreviewSelection()
 {
     if (!m_currentEventSelection) return;
 
-    m_document->slotSetLoop(m_currentEventSelection->getStartTime(),
+    getDocument()->slotSetLoop(m_currentEventSelection->getStartTime(),
 			    m_currentEventSelection->getEndTime());
 }
 
 
 void NotationView::slotClearLoop()
 {
-    m_document->slotSetLoop(0, 0);
+    getDocument()->slotSetLoop(0, 0);
 }
 
 
@@ -1022,7 +1022,7 @@ void NotationView::slotTransformsInterpret()
     KTmpStatusMsg msg(i18n("Interpreting selection..."), this);
     addCommandToHistory(new TransformsMenuInterpretCommand
 			(*m_currentEventSelection,
-			 m_document->getComposition().getNotationQuantizer(),
+			 getDocument()->getComposition().getNotationQuantizer(),
 			 TransformsMenuInterpretCommand::AllInterpretations));
 }
     
@@ -1089,7 +1089,7 @@ void NotationView::slotEditAddTempo()
 {
     timeT insertionTime = getInsertionTime();
 
-    TempoDialog *tempoDlg = new TempoDialog(this, m_document);
+    TempoDialog *tempoDlg = new TempoDialog(this, getDocument());
 
     connect(tempoDlg,
 	    SIGNAL(changeTempo(Rosegarden::timeT,
@@ -1116,8 +1116,8 @@ void NotationView::slotEditAddTimeSignature()
 
     //!!! experimental:
     Rosegarden::CompositionTimeSliceAdapter adapter
-	(&m_document->getComposition(), insertionTime,
-	 m_document->getComposition().getDuration());
+	(&getDocument()->getComposition(), insertionTime,
+	 getDocument()->getComposition().getDuration());
     Rosegarden::AnalysisHelper helper;
     Rosegarden::TimeSignature timeSig = helper.guessTimeSignature(adapter);
 
@@ -1166,8 +1166,8 @@ void NotationView::slotEditAddKeySignature()
 
     //!!! experimental:
     Rosegarden::CompositionTimeSliceAdapter adapter
-	(&m_document->getComposition(), insertionTime,
-	 m_document->getComposition().getDuration());
+	(&getDocument()->getComposition(), insertionTime,
+	 getDocument()->getComposition().getDuration());
     Rosegarden::AnalysisHelper helper;
     key = helper.guessKey(adapter);
 
@@ -1190,7 +1190,7 @@ void NotationView::slotEditAddKeySignature()
 	if (applyToAll) {
 	    addCommandToHistory
 		(new MultiKeyInsertionCommand
-		 (m_document->getComposition(),
+		 (getDocument()->getComposition(),
 		  insertionTime, dialog->getKey(),
 		  conversion == KeySignatureDialog::Convert,
 		  conversion == KeySignatureDialog::Transpose));
@@ -1227,7 +1227,7 @@ void NotationView::slotDebugDump()
 void
 NotationView::slotSetPointerPosition(timeT time, bool scroll)
 {
-    Rosegarden::Composition &comp = m_document->getComposition();
+    Rosegarden::Composition &comp = getDocument()->getComposition();
     int barNo = comp.getBarNumber(time);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
@@ -1445,7 +1445,7 @@ NotationView::doDeferredCursorMove()
 void
 NotationView::slotJumpCursorToPlayback()
 {
-    slotSetInsertCursorPosition(m_document->getComposition().getPosition());
+    slotSetInsertCursorPosition(getDocument()->getComposition().getPosition());
 }
 
 void
@@ -1694,7 +1694,7 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 {
     timeT t = time;
     Rosegarden::RealTime rt =
-	m_document->getComposition().getElapsedRealTime(t);
+	getDocument()->getComposition().getElapsedRealTime(t);
     long ms = rt.usec / 1000;
 
     QString message;

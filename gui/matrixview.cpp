@@ -150,14 +150,14 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     m_grid->addWidget(m_pianoView, 2, 1);
 
-    m_parameterBox = new MatrixParameterBox(getCentralFrame(), m_document);
+    m_parameterBox = new MatrixParameterBox(getCentralFrame(), getDocument());
 
     // Set the instrument we're using on this segment
     //
     Rosegarden::Track *track =
         comp.getTrackByIndex(m_staffs[0]->getSegment().getTrack());
 
-    Rosegarden::Instrument *instr = m_document->getStudio().
+    Rosegarden::Instrument *instr = getDocument()->getStudio().
         getInstrumentById(track->getInstrument());
 
     // Assign the instrument
@@ -348,7 +348,7 @@ MatrixView::~MatrixView()
 	// closing the window because we're loading a new file, but that
 	// doesn't actually destroy the doc at present.  We're planning
 	// to rework it so that it does, though
-	m_document->getSequenceManager()->
+	getDocument()->getSequenceManager()->
 	    setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
     }
 
@@ -715,7 +715,7 @@ void MatrixView::refreshSegment(Segment *segment,
     MATRIX_DEBUG << "MatrixView::refreshSegment(" << startTime
                          << ", " << endTime << ")\n";
 
-    m_document->getSequenceManager()->
+    getDocument()->getSequenceManager()->
 	setTemporarySequencerSliceSize(Rosegarden::RealTime(3, 0));
 
     applyLayout(-1, startTime, endTime);
@@ -1110,7 +1110,7 @@ MatrixView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 {
     timeT t = time;
     Rosegarden::RealTime rt =
-	m_document->getComposition().getElapsedRealTime(t);
+	getDocument()->getComposition().getElapsedRealTime(t);
     long ms = rt.usec / 1000;
 
     QString message;
@@ -1122,7 +1122,7 @@ MatrixView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 void
 MatrixView::slotSetPointerPosition(timeT time, bool scroll)
 {
-    Rosegarden::Composition &comp = m_document->getComposition();
+    Rosegarden::Composition &comp = getDocument()->getComposition();
     int barNo = comp.getBarNumber(time);
 
     if (barNo < m_hlayout.getFirstVisibleBarOnStaff(*m_staffs[0]) ||
@@ -1169,7 +1169,7 @@ void MatrixView::slotEditCut()
     KTmpStatusMsg msg(i18n("Cutting selection to clipboard..."), this);
 
     addCommandToHistory(new CutCommand(*m_currentEventSelection,
-				       m_document->getClipboard()));
+				       getDocument()->getClipboard()));
 }
 
 void MatrixView::slotEditCopy()
@@ -1178,14 +1178,14 @@ void MatrixView::slotEditCopy()
     KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), this);
 
     addCommandToHistory(new CopyCommand(*m_currentEventSelection,
-					m_document->getClipboard()));
+					getDocument()->getClipboard()));
 
     emit usedSelection();
 }
 
 void MatrixView::slotEditPaste()
 {
-    if (m_document->getClipboard()->isEmpty()) {
+    if (getDocument()->getClipboard()->isEmpty()) {
         slotStatusHelpMsg(i18n("Clipboard is empty"));
         return;
     }
@@ -1196,7 +1196,7 @@ void MatrixView::slotEditPaste()
     timeT time = m_hlayout.getTimeForX(ix);
     
     PasteEventsCommand *command = new PasteEventsCommand
-	(m_staffs[0]->getSegment(), m_document->getClipboard(), time,
+	(m_staffs[0]->getSegment(), getDocument()->getClipboard(), time,
 	 PasteEventsCommand::MatrixOverlay);
 
     if (!command->isPossible()) {
@@ -1223,8 +1223,8 @@ void MatrixView::slotKeyPressed(unsigned int y, bool repeating)
 {
     getCanvasView()->slotScrollVertSmallSteps(y);
 
-    Rosegarden::Composition &comp = m_document->getComposition();
-    Rosegarden::Studio &studio = m_document->getStudio();
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Rosegarden::Studio &studio = getDocument()->getStudio();
 
     MatrixStaff& staff = *(m_staffs[0]);
     Rosegarden::MidiByte evPitch = staff.getHeightAtCanvasY(y);
@@ -1309,8 +1309,8 @@ void MatrixView::slotKeySelected(unsigned int y, bool repeating)
 
     // now play the note as well
 
-    Rosegarden::Composition &comp = m_document->getComposition();
-    Rosegarden::Studio &studio = m_document->getStudio();
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Rosegarden::Studio &studio = getDocument()->getStudio();
     Rosegarden::Track *track = comp.getTrackByIndex(segment.getTrack());
     Rosegarden::Instrument *ins =
         studio.getInstrumentById(track->getInstrument());
@@ -1414,8 +1414,8 @@ void MatrixView::playNote(Rosegarden::Event *event)
     if (!event->isa(Rosegarden::Note::EventType))
         return;
 
-    Rosegarden::Composition &comp = m_document->getComposition();
-    Rosegarden::Studio &studio = m_document->getStudio();
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Rosegarden::Studio &studio = getDocument()->getStudio();
 
     // Get the Instrument
     //
@@ -1463,8 +1463,8 @@ void MatrixView::playNote(Rosegarden::Event *event)
 
 void MatrixView::playNote(const Rosegarden::Segment &segment, int pitch)
 {
-    Rosegarden::Composition &comp = m_document->getComposition();
-    Rosegarden::Studio &studio = m_document->getStudio();
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Rosegarden::Studio &studio = getDocument()->getStudio();
 
     Rosegarden::Track *track = comp.getTrackByIndex(segment.getTrack());
 
@@ -1944,7 +1944,7 @@ MatrixView::getInsertionTime()
 void
 MatrixView::slotJumpCursorToPlayback()
 {
-    slotSetInsertCursorPosition(m_document->getComposition().getPosition());
+    slotSetInsertCursorPosition(getDocument()->getComposition().getPosition());
 }
 
 void
@@ -1972,14 +1972,14 @@ void MatrixView::slotPreviewSelection()
 {
     if (!m_currentEventSelection) return;
 
-    m_document->slotSetLoop(m_currentEventSelection->getStartTime(),
+    getDocument()->slotSetLoop(m_currentEventSelection->getStartTime(),
 			    m_currentEventSelection->getEndTime());
 }
 
 
 void MatrixView::slotClearLoop()
 {
-    m_document->slotSetLoop(0, 0);
+    getDocument()->slotSetLoop(0, 0);
 }
 
 

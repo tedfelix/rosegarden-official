@@ -69,8 +69,8 @@ public:
 
     virtual ~EditViewBase();
 
-    const RosegardenGUIDoc *getDocument() const { return m_document; }
-    RosegardenGUIDoc *getDocument() { return m_document; }
+    const RosegardenGUIDoc *getDocument() const { return m_doc; }
+    RosegardenGUIDoc *getDocument() { return m_doc; }
 
     /**
      * Refresh part of a Segment following a modification made in this
@@ -279,7 +279,7 @@ protected:
 
     KConfig* m_config;
 
-    RosegardenGUIDoc* m_document;
+    RosegardenGUIDoc* m_doc;
     std::vector<Rosegarden::Segment *> m_segments;
     std::vector<unsigned int> m_segmentsRefreshStatusIds;
 

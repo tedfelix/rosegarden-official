@@ -201,7 +201,7 @@ protected:
     
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc        *m_document;
+    RosegardenGUIDoc        *m_doc;
     Rosegarden::RulerScale  *m_rulerScale;
     TempoRuler              *m_tempoRuler;
     ChordNameRuler          *m_chordNameRuler;

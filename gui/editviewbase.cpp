@@ -56,7 +56,7 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_viewNumber(-1),
     m_viewLocalPropertyPrefix(makeViewLocalPropertyPrefix()),
     m_config(kapp->config()),
-    m_document(doc),
+    m_doc(doc),
     m_segments(segments),
     m_tool(0),
     m_toolBox(0),
@@ -136,7 +136,7 @@ void EditViewBase::setupActions(QString rcFileName)
 void EditViewBase::slotConfigure()
 {
     Rosegarden::ConfigureDialog *configDlg = 
-        new Rosegarden::ConfigureDialog(m_document, m_config, this);
+        new Rosegarden::ConfigureDialog(getDocument(), m_config, this);
 
     configDlg->showPage(getConfigDialogPageIndex());
     configDlg->show();
@@ -347,13 +347,13 @@ void EditViewBase::initSegmentRefreshStatusIds()
 
 bool EditViewBase::isCompositionModified()
 {
-    return m_document->getComposition().getRefreshStatus
+    return getDocument()->getComposition().getRefreshStatus
 	(m_compositionRefreshStatusId).needsRefresh();
 }
 
 void EditViewBase::setCompositionModified(bool c)
 {
-    m_document->getComposition().getRefreshStatus
+    getDocument()->getComposition().getRefreshStatus
 	(m_compositionRefreshStatusId).setNeedsRefresh(c);
 }
 
@@ -408,7 +408,7 @@ void EditViewBase::toggleWidget(QWidget* widget,
 void
 EditViewBase::slotTestClipboard()
 {
-    if (m_document->getClipboard()->isEmpty()) {
+    if (getDocument()->getClipboard()->isEmpty()) {
 	RG_DEBUG << "EditViewBase::slotTestClipboard(): empty" << endl;
 
 	stateChanged("have_clipboard", KXMLGUIClient::StateReverse);
@@ -419,7 +419,7 @@ EditViewBase::slotTestClipboard()
 
 	stateChanged("have_clipboard", KXMLGUIClient::StateNoReverse);
 	stateChanged("have_clipboard_single_segment",
-		     (m_document->getClipboard()->isSingleSegment() ?
+		     (getDocument()->getClipboard()->isSingleSegment() ?
 		      KXMLGUIClient::StateNoReverse :
 		      KXMLGUIClient::StateReverse));
     }

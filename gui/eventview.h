@@ -123,7 +123,6 @@ protected:
     QCheckBox      *m_indicationCheckBox;
     QCheckBox      *m_otherCheckBox;
 
-    RosegardenGUIDoc *m_doc;
     static const char* const LayoutConfigGroupName;
 
 };

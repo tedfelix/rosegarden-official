@@ -146,8 +146,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
                      QWidget *parent):
     EditViewBase(doc, segments, 2, parent, "eventview"),
     m_eventFilter(Note | Text | SystemExclusive | Controller |
-		  ProgramChange | PitchBend | Indication | Other),
-    m_doc(doc)
+		  ProgramChange | PitchBend | Indication | Other)
 {
     if (m_lastSetEventFilter < 0) m_lastSetEventFilter = m_eventFilter;
     else m_eventFilter = m_lastSetEventFilter;
@@ -223,7 +222,7 @@ EventView::~EventView()
 {
     // Give the sequencer something to suck on while we close
     //
-    m_document->getSequenceManager()->
+    getDocument()->getSequenceManager()->
         setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
 }
 

@@ -603,7 +603,7 @@ NotationView::~NotationView()
     // Give the sequencer something to suck on while we close
     //
     if (!m_documentDestroyed) {
-	m_document->getSequenceManager()->
+	getDocument()->getSequenceManager()->
 	    setTemporarySequencerSliceSize(Rosegarden::RealTime(2, 0));
     }
 
@@ -1908,8 +1908,8 @@ bool NotationView::canPreviewAnotherNote()
 
 void NotationView::playNote(Rosegarden::Segment &s, int pitch)
 {
-    Rosegarden::Composition &comp = m_document->getComposition();
-    Rosegarden::Studio &studio = m_document->getStudio();
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Rosegarden::Studio &studio = getDocument()->getStudio();
     Rosegarden::Track *track = comp.getTrackByIndex(s.getTrack());
 
     Rosegarden::Instrument *ins =
@@ -2130,7 +2130,7 @@ void NotationView::refreshSegment(Segment *segment,
 
     if (m_inhibitRefresh || m_documentDestroyed) return;
 
-    m_document->getSequenceManager()->
+    getDocument()->getSequenceManager()->
 	setTemporarySequencerSliceSize(Rosegarden::RealTime(3, 0));
 
     installProgressEventFilter();
@@ -2180,7 +2180,7 @@ void NotationView::refreshSegment(Segment *segment,
 
     Event::dumpStats(cerr);
     doDeferredCursorMove();
-    slotSetPointerPosition(m_document->getComposition().getPosition(), false);
+    slotSetPointerPosition(getDocument()->getComposition().getPosition(), false);
 
     if (m_currentEventSelection &&
 	m_currentEventSelection->getSegmentEvents().size() == 0) {
