@@ -1166,6 +1166,8 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
     {
 	SegmentItemList::iterator it;
 
+	//!!! do this only if the values have actually changed
+
 	SegmentReconfigureCommand *command =
 	    new SegmentReconfigureCommand
 	    (m_selectedItems.size() == 1 ? "Move Segment" :

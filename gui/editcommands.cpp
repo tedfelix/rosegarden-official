@@ -116,6 +116,75 @@ CopyCommand::unexecute()
     m_targetClipboard->copyFrom(&temp);
 }
 
+
+PasteSegmentsCommand::PasteSegmentsCommand(Rosegarden::Composition *composition,
+					   Rosegarden::Clipboard *clipboard,
+					   Rosegarden::timeT pasteTime) :
+    KCommand(name()),
+    m_composition(composition),
+    m_clipboard(clipboard),
+    m_pasteTime(pasteTime)
+{
+    // nothing else
+}
+
+PasteSegmentsCommand::~PasteSegmentsCommand()
+{
+    for (unsigned int i = 0; i < m_addedSegments.size(); ++i) {
+	delete m_addedSegments[i];
+    }
+}
+
+void
+PasteSegmentsCommand::execute()
+{
+    if (m_clipboard->isEmpty()) return;
+
+    if (m_addedSegments.size() > 0) {
+	// been here before
+	for (unsigned int i = 0; i < m_addedSegments.size(); ++i) {
+	    m_composition->addSegment(m_addedSegments[i]);
+	}
+	return;
+    }
+
+    // We want to paste such that the earliest Segment starts at
+    // m_pasteTime and the others start at the same times relative
+    // to that as they did before
+
+    timeT earliestStartTime = 0;
+
+    for (Rosegarden::Clipboard::iterator i = m_clipboard->begin();
+	 i != m_clipboard->end(); ++i) {
+
+	if (i == m_clipboard->begin() ||
+	    (*i)->getStartTime() < earliestStartTime) {
+	    earliestStartTime = (*i)->getStartTime();
+	}
+    }
+
+    timeT offset = m_pasteTime - earliestStartTime;
+
+    for (Rosegarden::Clipboard::iterator i = m_clipboard->begin();
+	 i != m_clipboard->end(); ++i) {
+
+	Segment *segment = new Segment(**i);
+	segment->setStartTime(segment->getStartTime() + offset);
+	m_composition->addSegment(segment);
+	m_addedSegments.push_back(segment);
+    }
+}
+
+void
+PasteSegmentsCommand::unexecute()
+{
+    for (unsigned int i = 0; i < m_addedSegments.size(); ++i) {
+	m_composition->detachSegment(m_addedSegments[i]);
+    }
+}
+    
+
+
 PasteEventsCommand::PasteType
 PasteEventsCommand::m_defaultPaste = PasteEventsCommand::Restricted;
 

@@ -78,9 +78,11 @@ protected:
 class PasteSegmentsCommand : public KCommand
 {
 public:
-    PasteSegmentsCommand(Rosegarden::Composition &composition,
+    PasteSegmentsCommand(Rosegarden::Composition *composition,
 			 Rosegarden::Clipboard *clipboard,
 			 Rosegarden::timeT pasteTime);
+
+    virtual ~PasteSegmentsCommand();
 
     static QString name() { return "&Paste"; }
     
@@ -91,6 +93,7 @@ protected:
     Rosegarden::Composition *m_composition;
     Rosegarden::Clipboard *m_clipboard;
     Rosegarden::timeT m_pasteTime;
+    std::vector<Rosegarden::Segment *> m_addedSegments;
 };
 
 
