@@ -65,6 +65,12 @@ public slots:
     void clearMidiInLabel();
     void clearMidiOutLabel();
 
+    // These just change the little labels that say what
+    // mode we're in, nothing else
+    //
+    void changeTimeDisplay();
+    void changeToEnd();
+
 signals:
     void closed();
 

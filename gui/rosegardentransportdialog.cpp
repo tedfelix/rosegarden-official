@@ -103,6 +103,15 @@ RosegardenTransportDialog::RosegardenTransportDialog(QWidget *parent,
     connect(m_midiOutTimer, SIGNAL(timeout()),
             SLOT(clearMidiOutLabel()));
 
+    TimeDisplayLabel->hide();
+    ToEndLabel->hide();
+
+    connect(TimeDisplayButton, SIGNAL(released()),
+	    SLOT(changeTimeDisplay()));
+
+    connect(ToEndButton, SIGNAL(released()),
+	    SLOT(changeToEnd()));
+
     // clear labels
     //
     clearMidiInLabel();
@@ -160,6 +169,26 @@ RosegardenTransportDialog::resetFont(QWidget *w)
     QFont font = w->font();
     font.setPixelSize(10);
     w->setFont(font);
+}
+
+void
+RosegardenTransportDialog::changeTimeDisplay()
+{
+    if (TimeDisplayButton->isOn()) {
+	TimeDisplayLabel->show();
+    } else {
+	TimeDisplayLabel->hide();
+    }
+}
+
+void
+RosegardenTransportDialog::changeToEnd()
+{
+    if (ToEndButton->isOn()) {
+	ToEndLabel->show();
+    } else {
+	ToEndLabel->hide();
+    }
 }
 
 bool
