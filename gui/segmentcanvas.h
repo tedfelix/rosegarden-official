@@ -39,6 +39,8 @@ class QFont;
 class QFontMetrics;
 class QCanvasRepeatRectangle;
 
+class SegmentItemPreview;
+
 /**
  * The graphical item (rectangle) which represents a Segment
  * on the SegmentCanvas.
@@ -65,7 +67,10 @@ public:
 		Rosegarden::SnapGrid *snapGrid, QCanvas* canvas,
                 RosegardenGUIDoc *doc);
 
-    ~SegmentItem();
+    virtual ~SegmentItem();
+
+    /// Return the item's associated document
+    RosegardenGUIDoc* getDocument() { return m_doc; }
 
     /// Return the item's associated segment 
     Rosegarden::Segment *getSegment() const;
@@ -112,28 +117,11 @@ public:
     /// show or hide the repeat rect
     void showRepeatRect(bool);
 
-    /**
-     * Returns whether the preview shape shown in the segment needs
-     * to be refreshed
-     */
-    bool isPreviewCurrent()        { return m_previewIsCurrent; }
-
-    /**
-     * Sets whether the preview shape shown in the segment needs
-     * to be refreshed
-     */
-    void setPreviewCurrent(bool c) { m_previewIsCurrent = c; }
-
-    /**
-     * Paint the label inside the rectangle
-     * (Override from QCanvasPolygonalItem)
-     */
     virtual void drawShape(QPainter&);
 
-    
 protected:
 
-    virtual void updatePreview();
+    void setPreview();
 
     //--------------- Data members ---------------------------------
 
@@ -153,9 +141,9 @@ protected:
     QCanvasRepeatRectangle*   m_repeatRectangle;
     QString m_label;
 
+    SegmentItemPreview* m_preview;
+
     bool m_showPreview;
-    bool m_previewIsCurrent;
-    std::vector<QRect> m_previewInfo;
 
     static QFont *m_font;
     static QFontMetrics *m_fontMetrics;
