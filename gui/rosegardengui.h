@@ -414,6 +414,13 @@ protected:
      */
     QString createNewAudioFile();
 
+    /**
+     * Show a sequencer error to the user.  This is for errors from
+     * the framework code; the playback code uses mapped compositions
+     * to send these things back asynchronously.
+     */
+    void showError(QString error);
+
     /*
      * Return AudioManagerDialog
      */

@@ -4962,6 +4962,24 @@ RosegardenGUIApp::createNewAudioFile()
     return QString(m_doc->createNewAudioFile().c_str());
 }
 
+void
+RosegardenGUIApp::showError(QString error)
+{
+    KStartupLogo::hideIfStillThere();
+    CurrentProgressDialog::freeze();
+
+    // This is principally used for return values from DSSI plugin
+    // configure() calls.  It seems some plugins return a string
+    // telling you when everything's OK, as well as error strings, but
+    // dssi.h does make it reasonably clear that configure() should
+    // only return a string when there is actually a problem, so we're
+    // going to stick with a sorry dialog here rather than an
+    // information one
+    
+    KMessageBox::sorry(0, error);
+
+    CurrentProgressDialog::thaw();
+}
 
 void
 RosegardenGUIApp::slotAudioManager()

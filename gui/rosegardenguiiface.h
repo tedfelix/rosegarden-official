@@ -87,6 +87,8 @@ k_dcop:
     //
     virtual QString createNewAudioFile() = 0;
 
+    virtual void showError(QString error) = 0;
+
     // Actions proxy
     //
     DCOPRef action( const QCString &name );

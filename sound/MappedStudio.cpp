@@ -1489,11 +1489,13 @@ MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
 		m_configuration[key] == value) continue;
 	    
 	    if (studio) {
-		//!!! return value!
 		QString rv =
 		    studio->getSoundDriver()->configurePlugin(m_instrument,
 							      m_position,
 							      key, value);
+		if (rv && rv != "") {
+		    throw(rv);
+		}
 	    }
 	}
 

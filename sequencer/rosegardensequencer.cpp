@@ -1308,10 +1308,21 @@ RosegardenSequencerApp::setMappedPropertyList(int id, const QString &property,
 
     Rosegarden::MappedObject *object = m_studio->getObjectById(id);
 
-    if (object)
-        object->setPropertyList(property, values);
+    if (object) {
+	try {
+	    object->setPropertyList(property, values);
+	} catch (QString err) {
+	    QByteArray data;
+	    QDataStream arg(data, IO_WriteOnly);
+	    arg << err;
+	    kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+				     ROSEGARDEN_GUI_IFACE_NAME,
+				     "showError(QString)",
+				     data);
+	}
+    }
 }
-
+	
 
 int
 RosegardenSequencerApp::getMappedObjectId(int type)

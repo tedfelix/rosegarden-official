@@ -25,13 +25,6 @@
 #include "DSSIPluginInstance.h"
 
 
-    //!!! Missing bits of DSSI:
-    // 
-    // configure return value is not yet returned to RG GUI -- needs to be shown
-    // to user
-
-
-
 #ifdef HAVE_DSSI
 
 #define DEBUG_DSSI 1
@@ -667,7 +660,10 @@ DSSIPluginInstance::configure(QString key,
 
     QString qm;
     if (message) {
-	qm = message;
+	if (m_descriptor->LADSPA_Plugin && m_descriptor->LADSPA_Plugin->Label) {
+	    qm = QString(m_descriptor->LADSPA_Plugin->Label) + ": ";
+	}
+	qm = qm + message;
 	free(message);
     }
     return qm;
