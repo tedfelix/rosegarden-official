@@ -77,9 +77,6 @@ int main(int argc, char *argv[])
     kapp->dcopClient()->registerAs(kapp->name(), false);
     //app.dcopClient()->setDefaultObject("RosegardenGUIIface");
 
-    if (rosegardengui)
-      rosegardengui->initSequencer();
-
     return app.exec();
 
 }  

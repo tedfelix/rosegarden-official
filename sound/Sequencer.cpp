@@ -61,14 +61,14 @@ Sequencer::initializeMidi()
   _midiManager = Arts::Reference("global:Arts_MidiManager");
   if (_midiManager.isNull())
   {
-    cerr << "Can't get MidiManager" << endl;
+    cerr << "RosegardenSequencer - Can't get aRTS MidiManager" << endl;
     exit(1);
   }
 
   _soundServer = Arts::Reference("global:Arts_SoundServer");
   if (_soundServer.isNull())
   {
-    cerr << "Can't get SoundServer" << endl;
+    cerr << "RosegardenSequencer - Can't get aRTS SoundServer" << endl;
     exit(1);
   }
 
@@ -77,7 +77,7 @@ Sequencer::initializeMidi()
 
   if (_midiRecordPort.isNull())
   {
-    cerr << "Can't create MidiRecorder" << endl;
+    cerr << "RosegardenSequencer - Can't create aRTS MidiRecorder" << endl;
     exit(1);
   }
 
@@ -86,14 +86,14 @@ Sequencer::initializeMidi()
                                           "Rosegarden (play)","rosegarden");
   if (_midiPlayClient.isNull())
   {
-    cerr << "Can't create MidiClient" << endl;
+    cerr << "RosegardenSequencer - Can't create aRTS MidiClient" << endl;
     exit(1);
   }
 
   _midiPlayPort = _midiPlayClient.addOutputPort();
   if (_midiPlayPort.isNull())
   {
-    cerr << "Can't create Midi Output Port" << endl;
+    cerr << "RosegardenSequencer - Can't create aRTS Midi Output Port" << endl;
     exit(1);
   }
 
@@ -103,7 +103,7 @@ Sequencer::initializeMidi()
                                              "rosegarden");
   if (_midiRecordClient.isNull())
   {
-    cerr << "Can't create MidiRecordClient" << endl;
+    cerr << "RosegardenSequencer - Can't create aRTS MidiRecordClient" << endl;
     exit(1);
   }
 
@@ -143,8 +143,10 @@ Sequencer::record(const RecordStatus& recordStatus)
 
     // if we're already playing then just toggle recording
     // at this point, if not we jump back by the count in
+/*
     if ( !_playing )
       play();
+*/
 
     // set status and the record start position
     _recordStatus = RECORD_MIDI;
@@ -166,7 +168,7 @@ Sequencer::record(const RecordStatus& recordStatus)
 }
 
 void
-Sequencer::play()
+Sequencer::play(const timeT &position)
 {
    if ( !_playing)
    {
@@ -176,7 +178,7 @@ Sequencer::play()
      // store where we started playing from and initialise the
      // playback slice marker (_lastFetchPosition)
      //
-     _lastFetchPosition = _songPlayPosition = _songPosition;
+     _lastFetchPosition = _songPlayPosition = _songPosition = position;
    }
    else
    {
@@ -243,7 +245,7 @@ Sequencer::processMidiIn(const Arts::MidiCommand &midiCommand,
 
   if (_recordTrack == 0)
   {
-    cerr << "no Track created to processMidi on to - is recording enabled?" << endl;
+    cerr << "RosegardenSequencer - no Track created to processMidi on to - is recording enabled?" << endl;
     exit(1);
   }
 

@@ -17,24 +17,42 @@
     COPYING included with this distribution for more information.
 */
 
+#include <klocale.h>
+#include <dcopclient.h>
 #include <iostream>
-#include "rosegardensequencer.h"
-#include "Sequencer.h"
 
+#include "rosegardensequencer.h"
+#include "rosegardendcop.h"
+#include "Sequencer.h"
 
 using std::cerr;
 using std::endl;
 using std::cout;
 
+
 RosegardenSequencerApp::RosegardenSequencerApp():
     DCOPObject("RosegardenSequencerIface"),
     m_sequencer(0)
 {
+  // Without DCOP we are nothing
+  QCString realAppId = kapp->dcopClient()->registerAs(kapp->name(), false);
+
+  if (realAppId.isNull())
+  {
+    cerr << "RosegardenSequencer cannot register with DCOP server" << endl;
+    close();
+  }
+
+  // creating this object also initializes the Rosegarden
+  // aRTS interface for both playback and recording.  We
+  // will fall over at this point if the sequencer can't
+  // initialise.
+  //
   m_sequencer = new Rosegarden::Sequencer();
 
   if (!m_sequencer)
   {
-    cerr << "Rosegarden::Sequencer object could not be allocated";
+    cerr << "RosegardenSequencer object could not be allocated";
     close();
   }
 }
@@ -62,7 +80,14 @@ int
 RosegardenSequencerApp::play(const Rosegarden::timeT &position)
 {
 
+  if (m_sequencer->isPlaying())
+    return true;
 
+  // play from the given song position - this sets
+  // up the internal play state that is caught in
+  // the main event loop
+  //
+  m_sequencer->play(position);
 
   return true;
 }
@@ -72,6 +97,55 @@ RosegardenSequencerApp::play(const Rosegarden::timeT &position)
 int
 RosegardenSequencerApp::stop()
 {
-  cout << "CALLED STOP" << endl;
+  cout << "MEEP" << endl;
   return true;
 }
+
+
+
+// Get a slice of events from the GUI
+//
+Rosegarden::MappedComposition
+RosegardenSequencerApp::fetchEvents(const Rosegarden::timeT &start,
+                                    const Rosegarden::timeT &end)
+{
+  QByteArray data, replyData;
+  QCString replyType;
+  QDataStream arg(data, IO_WriteOnly);
+
+  Rosegarden::MappedComposition mappedComp;
+
+  arg << start;
+  arg << end;
+
+  if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+                                ROSEGARDEN_GUI_IFACE_NAME,
+                                "getSequencerSlice(int, int)",
+                                data, replyType, replyData))
+  {
+    cerr << "RosegardenSequencer - can't call RosegardenGUI client" << endl;
+  }
+  else
+  {
+    QDataStream reply(replyData, IO_ReadOnly);
+    if (replyType == "QString")
+    {
+      QString result;
+      reply >> result;
+    }
+    else if (replyType = "Rosegarden::MappedComposition")
+    {
+      reply >> mappedComp;
+    }
+    else
+    {
+      cerr << "RosegardenSequencer::fetchEvents - unrecognised type returned"
+           << endl;
+    }
+  }
+
+  return mappedComp;
+}
+
+
+

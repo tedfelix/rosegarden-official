@@ -1,7 +1,7 @@
 # ensure our path is correct
 INCLUDES= $(all_includes) -I$(kde_includes)/arts -I../core
 
-COMPILE_FIRST = libRosegardenSound.la
+COMPILE_FIRST = libRosegardenSound
 
 ####### This part is very Rosegarden specific
 # you can add here more. This one gets installed 

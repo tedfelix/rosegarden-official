@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
   KApplication app;
+  RosegardenSequencerApp *rosegardensequencer = 0;
 
   if (app.isRestored())
   {
@@ -62,10 +63,10 @@ int main(int argc, char *argv[])
   }
   else
   {
-    RosegardenSequencerApp *rosegardensequencer = new RosegardenSequencerApp();
+    rosegardensequencer = new RosegardenSequencerApp();
 
-    // we don't show the sequencer application as we're just taking
-    // advantage of DCOP
+    // we don't show() the sequencer application as we're just taking
+    // advantage of DCOP/KApplication and there's nothing to show().
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
         
@@ -83,6 +84,7 @@ int main(int argc, char *argv[])
 
   QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
+/*
   DCOPClient *client = kapp->dcopClient();
 
   QCString realAppId = client->registerAs(kapp->name(), false);
@@ -91,7 +93,6 @@ int main(int argc, char *argv[])
   //
   QCStringList dcopApps = client->registeredApplications();
 
-/*
   cout << "GOT " << dcopApps.count() << " INSTANCES" << endl;
 
 
@@ -183,5 +184,20 @@ int main(int argc, char *argv[])
 
   //app.dcopClient()->setDefaultObject("RosegardenGUIIface");
 
+  cout << "RosegardenSequencer - started OK" << endl;
+
+  while(true)
+  {
+    app.processOneEvent();
+
+    if(rosegardensequencer)
+    {
+      if (rosegardensequencer->isPlaying())
+      {
+      }
+    }
+  }
+
   return app.exec();
+
 }

@@ -168,7 +168,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotChangeTimeResolution()),
                 actionCollection(), "change_time_res");
 
-    // Transport controls (rwb)
+    // Transport controls [rwb]
     //
     // We set some default key bindings - with numlock off
     // use 1 (End) and 3 (Page Down) for Rwd and Ffwd and
@@ -893,10 +893,9 @@ RosegardenGUIApp::play()
   streamOut << m_doc->getComposition().getPosition();
 
   // Send Play to the Sequencer
-  if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
+  if (!kapp->dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
                                 ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                                "play(Rosegarden::timeT)", data,
-                                replyType, replyData))
+                                "play(Rosegarden::timeT)", data))
   {
     // failed - pop up and disable sequencer options
     m_transportStatus = STOPPED;
@@ -905,6 +904,7 @@ RosegardenGUIApp::play()
   }
   else
   {
+/*
     // ensure the return type is ok
     QDataStream streamIn(replyData, IO_ReadOnly);
     int result;
@@ -913,13 +913,16 @@ RosegardenGUIApp::play()
     if (result)
     {
       // completed successfully 
+*/
       m_transportStatus = PLAYING;
+/*
     }
     else
     {
       m_transportStatus = STOPPED;
       KMessageBox::error(this, i18n("Failed to start playback"));
     }
+*/
   }
 
 }
@@ -1006,21 +1009,5 @@ RosegardenGUIApp::fastforward()
   setPointerPosition(newBarNumber * 
                      m_doc->getComposition().getNbTicksPerBar());
 
-}
-
-// Use this method to try and locate the sequencer engine
-// and then register with it
-//
-void
-RosegardenGUIApp::initSequencer()
-{
-  DCOPClient *client = kapp->dcopClient();
-
-  if (!client->isApplicationRegistered(ROSEGARDEN_SEQUENCER_APP_NAME))
-  {
-    return;
-  }
-
-  // got the sequencer
 }
 

@@ -95,9 +95,9 @@ namespace Rosegarden
     Sequencer();
     ~Sequencer();
 
-    // Start playing from the current song position
+    // Start playing from a song position
     //
-    void play();
+    void play(const timeT &position);
 
     // Stop playing and/or recording
     //

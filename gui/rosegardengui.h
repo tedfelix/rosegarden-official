@@ -389,10 +389,6 @@ public slots:
     void rewind();
     void fastforward();
 
-    /**
-     * Sequencer initialization
-     */
-    void initSequencer();
 
 private:
 
