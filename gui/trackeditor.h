@@ -24,6 +24,7 @@
 #include <list>
 #include <qwidget.h>
 #include <qheader.h>
+#include <qcanvas.h>
 
 #include "trackseditoriface.h"
 
@@ -84,6 +85,10 @@ public slots:
      */
     void setTimeStepsResolution(unsigned int);
     
+    // set the position pointer
+    //
+    void setPointerPosition(int position);
+
 protected slots:
     void trackOrderChanged(int section, int fromIdx, int toIdx);
     void addTrack(TrackItem*);
@@ -105,6 +110,8 @@ protected:
     QHeader *m_hHeader, *m_vHeader;
 
     unsigned int m_timeStepsResolution;
+
+    QCanvasLine *m_pointer;
 };
 
 #endif

@@ -87,11 +87,17 @@ public:
     unsigned int getTempo() const { return m_tempo; }
     void setTempo(const int &tempo) { m_tempo = tempo; }
 
+
+    const timeT& getPosition() { return m_position; }
+    void setPosition(const timeT& position) { m_position = position; }
+
 protected:
     trackcontainer m_tracks;
 
     unsigned int m_nbTicksPerBar;
     unsigned int m_tempo;
+
+    timeT m_position;
 };
 
 }

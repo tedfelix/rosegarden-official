@@ -95,12 +95,15 @@ public:
      */
     void resizeSelected();
     
+    void setPointerPosition(const int &position);
+    
 public slots:
     void editTrackNotation(Rosegarden::Track*);
     void editTrackNotationSmall(Rosegarden::Track*);
 
 signals:
     void setTool(TracksCanvas::ToolType);
+    void setPositionPointer(int);
 
 protected:
     NotationView* m_notationView;

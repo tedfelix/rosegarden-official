@@ -789,3 +789,9 @@ int RosegardenGUIApp::importRG21File(const QString &file)
 
   return OK;
 }
+
+void
+RosegardenGUIApp::setPointerPosition(const int &position)
+{
+  m_view->setPointerPosition(position);
+}

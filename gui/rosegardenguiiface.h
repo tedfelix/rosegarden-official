@@ -18,6 +18,8 @@ k_dcop:
 
     virtual const Rosegarden::MappedComposition&
             getSequencerSlice(const int &sliceStart, const int &sliceEnd) = 0;
+
+    virtual void setPointerPosition(const int &position) = 0;
 };
 
 #endif

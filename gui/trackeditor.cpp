@@ -33,6 +33,8 @@
 
 using Rosegarden::Composition;
 
+static double canvasPosition;
+
 TracksEditor::TracksEditor(RosegardenGUIDoc* doc,
                            QWidget* parent, const char* name,
                            WFlags)
@@ -121,6 +123,12 @@ TracksEditor::init(unsigned int nbTracks, unsigned int nbBars)
 
     QObject::connect(m_tracksCanvas, SIGNAL(updateTrackInstrumentAndStartIndex(TrackItem*)),
                      this,           SLOT(updateTrackInstrumentAndStartIndex(TrackItem*)));
+
+    // create the position pointer
+    m_pointer = new QCanvasLine(canvas);
+    m_pointer->setPen(Qt::darkBlue);
+    m_pointer->setPoints(0, 0, 0, canvas->height());
+    m_pointer->show();
 
 }
 
@@ -241,8 +249,7 @@ void TracksEditor::updateTrackInstrumentAndStartIndex(TrackItem *i)
     i->getTrack()->setStartIndex(startIndex);
 }
 
-void TracksEditor::moveTrack(int /*section*/, int /*fromIdx*/, int /*toIdx*/)
-{
+void TracksEditor::moveTrack(int /*section*/, int /*fromIdx*/, int /*toIdx*/) {
     QCanvasItemList itemList = canvas()->canvas()->allItems();
     QCanvasItemList::Iterator it;
 
@@ -269,6 +276,21 @@ void TracksEditor::setupHorizontalHeader()
         m_hHeader->resizeSection(i, 50);
         m_hHeader->setLabel(i, num.setNum(i * m_timeStepsResolution));
     }
+}
+
+
+// Move the position pointer
+void
+TracksEditor::setPointerPosition(int position)
+{
+  if (!m_pointer) return;
+
+  canvasPosition = ( m_hHeader->sectionSize(0) * position /
+                     m_timeStepsResolution );
+
+  m_pointer->setX(canvasPosition < 0 ? 0 : canvasPosition);
+
+  emit needUpdate();
 }
 
 

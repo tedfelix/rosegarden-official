@@ -66,6 +66,9 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
     connect(this,                   SIGNAL(setTool(TracksCanvas::ToolType)),
             tracksEditor->canvas(), SLOT(setTool(TracksCanvas::ToolType)));
 
+    connect(this,                   SIGNAL(setPositionPointer(int)),
+            tracksEditor,           SLOT(setPointerPosition(int)));
+
     if (doc)
         tracksEditor->setupTracks();
 
@@ -149,4 +152,10 @@ RosegardenGUIView::editTrackNotationSmall(Rosegarden::Track* p)
     m_notationView = new NotationView(getDocument(), p, this, 5);
  
     m_notationView->show();
+}
+
+void
+RosegardenGUIView::setPointerPosition(const int &position)
+{
+  emit setPositionPointer(position);
 }

@@ -274,6 +274,8 @@ class RosegardenGUIApp : public KMainWindow, virtual public RosegardenGUIIface
      */
     void changeTimeResolution();
 
+    void setPointerPosition(const int &position);
+
 private:
 
     /** the configuration object of the application */
