@@ -1,0 +1,64 @@
+These tests should be run by anyone who wants to prove the level of
+Rosegarden functionality at a given release point.  These tests can
+also be used a basis for ensuring that the team has fully documented
+the application as we head through beta testing.
+
+If anyone has taken the time to run these tests on the application
+then it would greatly help the development team if they could return
+their results along with the specification of their machine, the 
+configuration of Rosegarden and the release number.
+
+Bugs and feature requests should be checked and logged on the
+Rosegarden Sourceforge page:
+
+http://sourceforge.net/projects/rosegarden/
+
+--
+
+Sanity Tests
+============
+
+1. Requirements and Installation
+--------------------------------
+
+2. Configuration
+-----------------
+
+3. Track Editor
+---------------
+
+4. Notation Editor
+------------------
+
+5. Matrix Editor
+----------------
+
+6. Event Editor
+---------------
+
+7. Transport
+------------
+
+8. Banks and Programs Editor
+----------------------------
+
+9. Audio Manager Dialog
+-----------------------
+
+10. Audio
+---------
+
+11. MIDI
+--------
+
+12. Printing
+------------
+
+13. Import
+----------
+
+14. Export
+----------
+
+
+
