@@ -3540,7 +3540,7 @@ void RosegardenGUIApp::slotSequencerExited(KProcess*)
 
     KStartupLogo::hideIfStillThere();
 
-    KMessageBox::error(0, i18n("Sequencer exited"));
+    KMessageBox::error(0, i18n("The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.\nFor assistance with correct audio and MIDI configuration, go to rosegardenmusic.com."));
 
     m_sequencerProcess = 0; // isSequencerRunning() will return false
     // but isUsingSequencer() will keep returning true
