@@ -1041,6 +1041,10 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
                  }
     }
 
+    if (accidental == NoAccidental && userAccidental == Natural) {
+	accidental = Natural;
+    }
+
     // Failsafe...  If this ever executes, there's trouble to fix...
     /*
     if (accidental == "") {

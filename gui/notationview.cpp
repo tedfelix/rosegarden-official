@@ -1606,6 +1606,12 @@ void NotationView::setupActions()
                 "respell_flat");
 
     new KAction(RespellCommand::getGlobalName
+		(RespellCommand::Set, Rosegarden::Accidentals::Natural),
+		0, this,
+		SLOT(slotRespellNatural()), actionCollection(),
+                "respell_natural");
+
+    new KAction(RespellCommand::getGlobalName
 		(RespellCommand::Set, Rosegarden::Accidentals::Sharp),
 		0, this,
 		SLOT(slotRespellSharp()), actionCollection(),

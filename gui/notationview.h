@@ -438,6 +438,7 @@ public slots:
 
     void slotRespellDoubleFlat();
     void slotRespellFlat();
+    void slotRespellNatural();
     void slotRespellSharp();
     void slotRespellDoubleSharp();
     void slotRespellUp();

@@ -1154,6 +1154,16 @@ void NotationView::slotRespellFlat()
 					   *m_currentEventSelection));
 }
 
+void NotationView::slotRespellNatural()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
+
+    addCommandToHistory(new RespellCommand(RespellCommand::Set,
+					   Rosegarden::Accidentals::Natural,
+					   *m_currentEventSelection));
+}
+
 void NotationView::slotRespellSharp()
 {
     if (!m_currentEventSelection) return;
