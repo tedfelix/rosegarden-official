@@ -181,7 +181,7 @@ public:
      Rosegarden::Event *&clef,
      Rosegarden::Event *&key,
      bool notesAndRestsOnly = false,
-     unsigned int proximityThreshold = 10);
+     int proximityThreshold = 10);
 
     /**
      * Find the NotationElement whose layout x-coord is closest to x,
@@ -204,7 +204,7 @@ public:
      Rosegarden::Event *&clef,
      Rosegarden::Event *&key,
      bool notesAndRestsOnly = false,
-     unsigned int proximityThreshold = 10);
+     int proximityThreshold = 10);
 
     /**
      * Overridden from Rosegarden::Staff<T>.

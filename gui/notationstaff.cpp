@@ -157,7 +157,7 @@ NotationStaff::getClosestElementToCanvasCoords(double cx, int cy,
 					       Rosegarden::Event *&clef,
 					       Rosegarden::Event *&key,
 					       bool notesAndRestsOnly,
-					       unsigned int proximityThreshold)
+					       int proximityThreshold)
 {
     LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(cx, cy);
 
@@ -177,7 +177,7 @@ NotationStaff::getClosestElementToLayoutX(double x,
 					  Rosegarden::Event *&clef,
 					  Rosegarden::Event *&key,
 					  bool notesAndRestsOnly,
-					  unsigned int proximityThreshold)
+					  int proximityThreshold)
 {
     START_TIMING;
 
