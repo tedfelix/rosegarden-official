@@ -1076,3 +1076,12 @@ NotationStaff::wrapEvent(Rosegarden::Event *e)
     return Rosegarden::Staff<NotationElement>::wrapEvent(e);
 }
 
+
+void
+NotationStaff::eventRemoved(const Rosegarden::Segment *segment,
+			    Rosegarden::Event *event)
+{
+    LinedStaff<NotationElement>::eventRemoved(segment, event);
+    m_notationView->handleEventRemoved(event);
+}
+

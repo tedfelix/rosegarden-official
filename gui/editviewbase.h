@@ -131,6 +131,11 @@ public:
     bool isShiftDown() { return m_shiftDown; }
     bool isControlDown() { return m_controlDown; }
 
+    /**
+     * Let tools know if their current element has gone
+     */
+    virtual void handleEventRemoved(Rosegarden::Event *event);
+
 signals:
     /**
      * Tell the main view that the track being edited is the

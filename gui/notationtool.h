@@ -398,6 +398,16 @@ public:
      */
     Rosegarden::EventSelection* getSelection();
 
+    /**
+     * Respond to an event being deleted -- it may be the one the tool
+     * is remembering as the current event.
+     */
+    virtual void handleEventRemoved(Rosegarden::Event *event) {
+	if (m_clickedElement && m_clickedElement->event() == event) {
+	    m_clickedElement = 0;
+	}
+    }
+
     static const QString ToolName;
 
 public slots:

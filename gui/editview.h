@@ -126,7 +126,6 @@ public:
     Rosegarden::EventSelection* getCurrentSelection()
         { return m_currentEventSelection; }
 
-
 signals:
     void changeTempo(Rosegarden::timeT,  // tempo change time
                      double,             // tempo value

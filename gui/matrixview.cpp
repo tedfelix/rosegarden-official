@@ -1194,13 +1194,10 @@ void MatrixView::slotEditPaste()
     }
 
     KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), this);
-
-    double ix = m_staffs[0]->getLayoutXOfInsertCursor();
-    timeT time = m_hlayout.getTimeForX(ix);
     
     PasteEventsCommand *command = new PasteEventsCommand
-	(m_staffs[0]->getSegment(), getDocument()->getClipboard(), time,
-	 PasteEventsCommand::MatrixOverlay);
+	(m_staffs[0]->getSegment(), getDocument()->getClipboard(),
+	 getInsertionTime(), PasteEventsCommand::MatrixOverlay);
 
     if (!command->isPossible()) {
 	slotStatusHelpMsg(i18n("Couldn't paste at this point"));

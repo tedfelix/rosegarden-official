@@ -469,4 +469,13 @@ EditViewBase::slotToggleSolo()
     }
     
 }
- 
+
+/*
+ * Let tools know if their current element has gone
+ */
+void
+EditViewBase::handleEventRemoved(Rosegarden::Event *event)
+{
+    if (m_tool) m_tool->handleEventRemoved(event);
+}
+

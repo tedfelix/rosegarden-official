@@ -123,3 +123,11 @@ MatrixStaff::getElement(Rosegarden::Event *event)
 }
 
 
+void
+MatrixStaff::eventRemoved(const Rosegarden::Segment *segment,
+			  Rosegarden::Event *event)
+{
+    LinedStaff<MatrixElement>::eventRemoved(segment, event);
+    m_view->handleEventRemoved(event);
+}
+

@@ -238,6 +238,12 @@ public:
      */
     virtual bool wrapEvent(Rosegarden::Event *);
 
+    /**
+     * Override from Rosegarden::Staff<T>
+     * Let tools know if their current element has gone
+     */
+    virtual void eventRemoved(const Rosegarden::Segment *, Rosegarden::Event *);
+
 protected:
 
     // definition of staff

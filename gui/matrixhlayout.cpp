@@ -40,7 +40,6 @@ MatrixHLayout::~MatrixHLayout()
 
 void MatrixHLayout::reset()
 {
-//!!!    m_barData.clear();
 }
 
 void MatrixHLayout::resetStaff(StaffType&, timeT, timeT)

@@ -204,6 +204,13 @@ public:
                                     int height,
                                     QMouseEvent*);
 
+    /**
+     * Respond to an event being deleted -- it may be the one the tool
+     * is remembering as the current event.
+     */
+    virtual void handleEventRemoved(Rosegarden::Event *) { }
+    
+
 protected:
     /**
      * Create a new EditTool

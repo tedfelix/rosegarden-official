@@ -122,6 +122,13 @@ MatrixPainter::MatrixPainter(QString name, MatrixView* parent)
 {
 }
 
+void MatrixPainter::handleEventRemoved(Rosegarden::Event *event)
+{
+    if (m_currentElement && m_currentElement->event() == event) {
+	m_currentElement = 0;
+    }
+}
+
 void MatrixPainter::handleLeftButtonPress(Rosegarden::timeT time,
                                           int pitch,
                                           int staffNo,
@@ -287,6 +294,14 @@ MatrixSelector::MatrixSelector(MatrixView* view)
 {
     connect(m_parentView, SIGNAL(usedSelection()),
             this,         SLOT(slotHideSelection()));
+}
+
+void MatrixSelector::handleEventRemoved(Rosegarden::Event *event)
+{
+    if (m_dispatchTool) m_dispatchTool->handleEventRemoved(event);
+    if (m_clickedElement && m_clickedElement->event() == event) {
+	m_clickedElement = 0;
+    }
 }
 
 void MatrixSelector::handleLeftButtonPress(Rosegarden::timeT time,
@@ -547,7 +562,6 @@ EventSelection* MatrixSelector::getSelection()
 
             if ((matrixRect = dynamic_cast<QCanvasMatrixRectangle*>(item)))
             {
-
                 MatrixElement *mE = &matrixRect->getMatrixElement();
                 selection->addEvent(mE->event());
             }
@@ -567,6 +581,13 @@ MatrixMover::MatrixMover(MatrixView* parent)
       m_oldX(0),
       m_oldY(0)
 {
+}
+
+void MatrixMover::handleEventRemoved(Rosegarden::Event *event)
+{
+    if (m_currentElement && m_currentElement->event() == event) {
+	m_currentElement = 0;
+    }
 }
 
 void MatrixMover::handleLeftButtonPress(Rosegarden::timeT,
@@ -653,9 +674,6 @@ int MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
     }
     */
 
-    int oldX = int(m_currentElement->getLayoutX());
-    int oldY = int(m_currentElement->getLayoutY());
-
     using Rosegarden::BaseProperties::PITCH;
     int diffPitch = 0;
     if (m_currentElement->event()->has(PITCH))
@@ -664,12 +682,13 @@ int MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
             m_currentElement->event()->get<Rosegarden::Int>(PITCH);
     }
 
-    int newX = int(double(newTime) * m_currentStaff->getTimeScaleFactor());
-    int newY = m_currentStaff->getLayoutYForHeight(newPitch) -
-            m_currentStaff->getElementHeight() / 2;
+    int diffX = int(double(newTime -
+			   m_currentElement->getViewAbsoluteTime()) *
+		    m_currentStaff->getTimeScaleFactor());
 
-    int diffX = newX - oldX;
-    int diffY = newY - oldY;
+    int diffY = ((m_currentStaff->getLayoutYForHeight(newPitch) -
+		  m_currentStaff->getElementHeight() / 2) -
+		 m_currentElement->getLayoutY());
 
     EventSelection* selection = m_mParentView->getCurrentSelection();
     Rosegarden::EventSelection::eventcontainer::iterator it =
@@ -684,10 +703,10 @@ int MatrixMover::handleMouseMove(Rosegarden::timeT newTime,
 
         if (element)
         {
-            newX = element->getLayoutX() + diffX;
+            int newX = m_oldX + diffX;
             if (newX < 0) newX = 0;
 
-            newY = element->getLayoutY() + diffY;
+            int newY = element->getLayoutY() + diffY;
             if (newY < 0) newY = 0;
             if (newY > maxY) newY = maxY;
 
@@ -809,6 +828,13 @@ MatrixResizer::MatrixResizer(MatrixView* parent)
       m_currentElement(0),
       m_currentStaff(0)
 {
+}
+
+void MatrixResizer::handleEventRemoved(Rosegarden::Event *event)
+{
+    if (m_currentElement && m_currentElement->event() == event) {
+	m_currentElement = 0;
+    }
 }
 
 void MatrixResizer::handleLeftButtonPress(Rosegarden::timeT,
