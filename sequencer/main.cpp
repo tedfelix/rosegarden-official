@@ -83,15 +83,14 @@ int main(int argc, char *argv[])
 
     if (app.isRestored())
     {
-	exit (2); // don't do session restore -- GUI will start a sequencer
-
-        // RESTORE(RosegardenSequencerApp(jackArgs));
-        int n = 1;
-        while (KMainWindow::canBeRestored(n)) {
-	    // memory leak if more than one can be restored?
-            (roseSeq = new RosegardenSequencerApp(jackArgs))->restore(n);
-            n++;
-        }
+	app.quit(); // don't do session restore -- GUI will start a sequencer
+        
+//         int n = 1;
+//         while (KMainWindow::canBeRestored(n)) {
+// 	    // memory leak if more than one can be restored?
+//             (roseSeq = new RosegardenSequencerApp(jackArgs))->restore(n);
+//             n++;
+//         }
     }
     else
     {
