@@ -60,7 +60,9 @@ public:
 
     // Activate a recording state
     //
-    virtual bool record(const RecordStatus& /*recordStatus*/ ) { return false; }
+    virtual bool record(RecordStatus /*recordStatus*/
+                        std::vector<unsigned int> /*inputPorts*/)
+        { return false; }
 
     // Process anything that's pending
     //

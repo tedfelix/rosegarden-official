@@ -155,7 +155,6 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 #ifdef HAVE_LIBJACK
     ,m_audioClient(0)
     ,m_transportPosition(0)
-    ,m_audioInputPortTotal(2) // 2 audio input ports
 #endif
 
 {
@@ -206,11 +205,11 @@ AlsaDriver::~AlsaDriver()
         std::cout << "AlsaDriver::~AlsaDriver - closing JACK client"
                   << std::endl;
 
-        for (unsigned int i = 0; i < m_audioInputPorts.size(); ++i)
-            jack_port_unregister(m_audioClient, m_audioInputPorts[i]);
+        for (unsigned int i = 0; i < m_jackInputPorts.size(); ++i)
+            jack_port_unregister(m_audioClient, m_jackInputPorts[i]);
 
-        jack_port_unregister(m_audioClient, m_audioOutputPortLeft);
-        jack_port_unregister(m_audioClient, m_audioOutputPortRight);
+        jack_port_unregister(m_audioClient, m_jackOutputPortLeft);
+        jack_port_unregister(m_audioClient, m_jackOutputPortRight);
 
         if (jack_deactivate(m_audioClient))
         {
@@ -652,7 +651,7 @@ AlsaDriver::addDevice(Device::DeviceType type,
 }
 
 void
-AlsaDriver::removeDevice(DeviceId id)
+AlsaDriver::removeDevice(DeviceId /*id*/)
 {
     //!!!
 }
@@ -936,9 +935,65 @@ AlsaDriver::initialiseMidi()
 
 #ifdef HAVE_LIBJACK
 void
-AlsaDriver::setTotalAudioInputPorts(unsigned int total)
+AlsaDriver::createJackInputPorts(unsigned int totalPorts)
 {
-    m_audioInputPortTotal = total;
+    // Unregister any we already have connected
+    //
+    for (unsigned int i = 0; i < m_jackInputPorts.size(); ++i)
+        jack_port_unregister(m_audioClient, m_jackInputPorts[i]);
+    m_jackInputPorts.clear();
+
+    jack_port_t *inputPort;
+    char portName[10];
+    for (unsigned int i = 0; i < totalPorts; ++i)
+    {
+        sprintf(portName, "in_%d", i + 1);
+        inputPort = jack_port_register(m_audioClient,
+                                       portName,
+                                       JACK_DEFAULT_AUDIO_TYPE,
+                                       JackPortIsInput|JackPortIsTerminal,
+                                       0);
+         m_jackInputPorts.push_back(inputPort);
+
+
+         std::cout << "AlsaDriver::createJackInputPorts - "
+                   << "adding port " << i + 1 << std::endl;
+    }
+
+    std::string capture_1, capture_2;
+
+    // Assign port directly if they were specified
+    //
+    if (m_args.size() >= 4)
+    {
+        capture_1 = std::string(m_args[2].data());
+        capture_2 = std::string(m_args[3].data());
+    }
+    else // match from JACK
+    {
+        const char **ports =
+            jack_get_ports(m_audioClient, NULL, NULL,
+                           JackPortIsPhysical|JackPortIsOutput);
+
+        capture_1 = std::string(ports[0]);
+        capture_2 = std::string(ports[1]);
+        free(ports);
+    }
+
+    // now input
+    if (jack_connect(m_audioClient, capture_1.c_str(),
+                     jack_port_name(m_jackInputPorts[0])))
+    {
+        std::cerr << "AlsaDriver::initialiseAudio - "
+                  << "cannot connect to JACK input port" << std::endl;
+    }
+
+    if (jack_connect(m_audioClient, capture_2.c_str(),
+                     jack_port_name(m_jackInputPorts[1])))
+    {
+        std::cerr << "AlsaDriver::initialiseAudio - "
+                  << "cannot connect to JACK input port" << std::endl;
+    }
 }
 
 #endif
@@ -986,53 +1041,6 @@ AlsaDriver::initialiseAudio()
     std::cout << "AlsaDriver::initialiseAudio - JACK sample rate = "
               << _jackSampleRate << std::endl;
 
-    jack_port_t *inputPort;
-    char portName[10];
-
-    for (unsigned int i = 0; i < m_audioInputPortTotal; i++)
-    {
-        sprintf(portName, "in_%d", i + 1);
-        inputPort = jack_port_register(m_audioClient,
-                                       portName,
-                                       JACK_DEFAULT_AUDIO_TYPE,
-                                       JackPortIsInput|JackPortIsTerminal,
-                                       0);
-         m_audioInputPorts.push_back(inputPort);
-    }
-
-    m_audioOutputPortLeft = jack_port_register(m_audioClient,
-                                               "out_1",
-                                               JACK_DEFAULT_AUDIO_TYPE,
-                                               JackPortIsOutput,
-                                               0);
-
-    m_audioOutputPortRight = jack_port_register(m_audioClient,
-                                                "out_2",
-                                                JACK_DEFAULT_AUDIO_TYPE,
-                                                JackPortIsOutput,
-                                                0);
-
-    // set some latencies - these don't appear to do anything yet
-    //
-    /*
-    jack_port_set_latency(m_audioOutputPortLeft, 1024);
-    jack_port_set_latency(m_audioOutputPortRight, 1024);
-    jack_port_set_latency(m_audioInputPort, 1024);
-    */
-
-
-    // Get the initial buffer size before we activate the client
-    //
-    _jackBufferSize = jack_get_buffer_size(m_audioClient);
-
-    // create buffers
-    //
-    _tempOutBuffer1 = new sample_t[_jackBufferSize];
-    _tempOutBuffer2 = new sample_t[_jackBufferSize];
-    _pluginBufferIn1 = new sample_t[_jackBufferSize];
-    _pluginBufferIn2 = new sample_t[_jackBufferSize];
-    _pluginBufferOut1 = new sample_t[_jackBufferSize];
-    _pluginBufferOut2 = new sample_t[_jackBufferSize];
 
     // Activate the client
     //
@@ -1047,16 +1055,54 @@ AlsaDriver::initialiseAudio()
               << "initialised JACK audio subsystem"
               << std::endl;
 
-    std::string playback_1, playback_2, capture_1, capture_2;
+    // set some latencies - these don't appear to do anything yet
+    //
+    /*
+    jack_port_set_latency(m_audioOutputPortLeft, 1024);
+    jack_port_set_latency(m_audioOutputPortRight, 1024);
+    jack_port_set_latency(m_jackInputPort, 1024);
+    */
+
+    // Get the initial buffer size before we activate the client
+    //
+    _jackBufferSize = jack_get_buffer_size(m_audioClient);
+
+    // create buffers
+    //
+    _tempOutBuffer1 = new sample_t[_jackBufferSize];
+    _tempOutBuffer2 = new sample_t[_jackBufferSize];
+    _pluginBufferIn1 = new sample_t[_jackBufferSize];
+    _pluginBufferIn2 = new sample_t[_jackBufferSize];
+    _pluginBufferOut1 = new sample_t[_jackBufferSize];
+    _pluginBufferOut2 = new sample_t[_jackBufferSize];
+
+    // Create and connect (default) two audio inputs
+    //
+    createJackInputPorts(2);
+
+    // Create and connect output ports
+    //
+    m_jackOutputPortLeft = jack_port_register(m_audioClient,
+                                              "out_1",
+                                              JACK_DEFAULT_AUDIO_TYPE,
+                                              JackPortIsOutput,
+                                              0);
+
+    m_jackOutputPortRight = jack_port_register(m_audioClient,
+                                               "out_2",
+                                               JACK_DEFAULT_AUDIO_TYPE,
+                                               JackPortIsOutput,
+                                               0);
+
+
+    std::string playback_1, playback_2;
 
     // Assign port directly if they were specified
     //
-    if (m_args.size() == 4)
+    if (m_args.size() >= 2)
     {
         playback_1 = std::string(m_args[0].data());
         playback_2 = std::string(m_args[1].data());
-        capture_1 = std::string(m_args[2].data());
-        capture_2 = std::string(m_args[3].data());
     }
     else // match from JACK
     {
@@ -1067,18 +1113,11 @@ AlsaDriver::initialiseAudio()
         playback_1 = std::string(ports[0]);
         playback_2 = std::string(ports[1]);
         free(ports);
-
-        ports = jack_get_ports(m_audioClient, NULL, NULL,
-                               JackPortIsPhysical|JackPortIsOutput);
-        capture_1 = std::string(ports[0]);
-        capture_2 = std::string(ports[1]);
-        free(ports);
     }
-
 
     // connect our client up to the ALSA ports - first left output
     //
-    if (jack_connect(m_audioClient, jack_port_name(m_audioOutputPortLeft),
+    if (jack_connect(m_audioClient, jack_port_name(m_jackOutputPortLeft),
                      playback_1.c_str()))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
@@ -1086,7 +1125,7 @@ AlsaDriver::initialiseAudio()
         return;
     }
 
-    if (jack_connect(m_audioClient, jack_port_name(m_audioOutputPortRight),
+    if (jack_connect(m_audioClient, jack_port_name(m_jackOutputPortRight),
                      playback_2.c_str()))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
@@ -1094,28 +1133,13 @@ AlsaDriver::initialiseAudio()
         return;
     }
 
-    // now input
-    if (jack_connect(m_audioClient, capture_1.c_str(),
-                     jack_port_name(m_audioInputPorts[0])))
-    {
-        std::cerr << "AlsaDriver::initialiseAudio - "
-                  << "cannot connect to JACK input port" << std::endl;
-    }
-
-    if (jack_connect(m_audioClient, capture_2.c_str(),
-                     jack_port_name(m_audioInputPorts[1])))
-    {
-        std::cerr << "AlsaDriver::initialiseAudio - "
-                  << "cannot connect to JACK input port" << std::endl;
-    }
-
     // Get the latencies from JACK and set them as RealTime
     //
     jack_nframes_t outputLatency =
-        jack_port_get_total_latency(m_audioClient, m_audioOutputPortLeft);
+        jack_port_get_total_latency(m_audioClient, m_jackOutputPortLeft);
 
     jack_nframes_t inputLatency = 
-        jack_port_get_total_latency(m_audioClient, m_audioInputPorts[0]);
+        jack_port_get_total_latency(m_audioClient, m_jackInputPorts[0]);
 
     double latency = double(outputLatency) / double(_jackSampleRate);
 
@@ -1289,7 +1313,6 @@ AlsaDriver::stopPlayback()
 
 
 }
-
 
 void
 AlsaDriver::resetPlayback(const RealTime &position, const RealTime &latency)
@@ -2247,11 +2270,14 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
         if ((*i)->getType() == MappedEvent::SystemAudioInputs)
         {
+#ifdef HAVE_LIBJACK
+            createJackInputPorts((unsigned int)(*i)->getData1());
+#else
             std::cerr << "AlsaDriver::processEventsOut - "
-                      << "set audio record inputs - not yet implemented"
+                      << "MappedEvent::SystemAudioInputs - no audio subsystem"
                       << std::endl;
+#endif
         }
-
     }
 
     // Process Midi and Audio
@@ -2261,9 +2287,9 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
 
 }
 
-
 bool
-AlsaDriver::record(const RecordStatus& recordStatus)
+AlsaDriver::record(RecordStatus recordStatus,
+                   std::vector<unsigned int> inputPorts)
 {
     if (recordStatus == RECORD_MIDI)
     {
@@ -2274,7 +2300,7 @@ AlsaDriver::record(const RecordStatus& recordStatus)
     else if (recordStatus == RECORD_AUDIO)
     {
 #ifdef HAVE_LIBJACK
-        if (createAudioFile(m_recordingFilename))
+        if (createAudioFile(m_recordingFilename, inputPorts))
         {
             m_recordStatus = RECORD_AUDIO;
         }
@@ -3306,7 +3332,8 @@ AlsaDriver::jackXRun(void *)
 
 
 bool
-AlsaDriver::createAudioFile(const std::string &fileName)
+AlsaDriver::createAudioFile(const std::string &fileName,
+                            std::vector<unsigned int> inputPorts)
 {
     // Already got a recording file - close it first to make
     // sure the data is written and internal totals computed.
@@ -3323,11 +3350,11 @@ AlsaDriver::createAudioFile(const std::string &fileName)
     //
     _recordFile =
         new WAVAudioFile(fileName,
-                                     1,                    // channels
-                                     _jackSampleRate,      // bits per second
-                                     _jackSampleRate/16,   // bytes per second
-                                     2,                    // bytes per sample
-                                     16);                  // bits per sample
+                         1, // inputPorts.size(),    // channels
+                         _jackSampleRate,      // bits per second
+                         _jackSampleRate/16,   // bytes per second
+                         2,                    // bytes per sample
+                         16);                  // bits per sample
     // open the file for writing
     //
     return (_recordFile->write());

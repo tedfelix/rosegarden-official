@@ -67,7 +67,8 @@ public:
                                   const RealTime &playLatency,
                                   bool now);
 
-    virtual bool record(const RecordStatus& recordStatus);
+    virtual bool record(RecordStatus recordStatus,
+                        std::vector<unsigned int> inputPorts);
 
     virtual void processPending(const RealTime &playLatency);
 

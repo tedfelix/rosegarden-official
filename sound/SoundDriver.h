@@ -239,7 +239,8 @@ public:
 
     // Activate a recording state
     //
-    virtual bool record(const RecordStatus& recordStatus) = 0;
+    virtual bool record(RecordStatus recordStatus,
+                        std::vector<unsigned int> inputPorts) = 0;
 
     // Process anything that's pending
     //

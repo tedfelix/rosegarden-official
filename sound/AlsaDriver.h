@@ -74,7 +74,8 @@ public:
     virtual MappedComposition*
         getMappedComposition(const RealTime &playLatency);
     
-    virtual bool record(const RecordStatus& recordStatus);
+    virtual bool record(RecordStatus recordStatus,
+                        std::vector<unsigned int> inputPorts);
 
     virtual void processEventsOut(const MappedComposition &mC,
                                   const RealTime &playLatency, 
@@ -192,11 +193,20 @@ public:
 
 #ifdef HAVE_LIBJACK
 
-    jack_port_t* getJackInputPort(unsigned int portNumber)
-        { return m_audioInputPorts[portNumber]; }
+    // Create a set of JACK input ports (and for the moment)
+    // we do default connections to JACK terminal ports.
+    //
+    void createJackInputPorts(unsigned int ports);
 
-    jack_port_t* getJackOutputPortLeft() { return m_audioOutputPortLeft; }
-    jack_port_t* getJackOutputPortRight() { return m_audioOutputPortRight; }
+    // Modify input ports
+    //
+    unsigned int getJackInputPorts() const { return m_jackInputPorts.size(); }
+
+    jack_port_t* getJackInputPort(unsigned int portNumber)
+        { return m_jackInputPorts[portNumber]; }
+
+    jack_port_t* getJackOutputPortLeft() { return m_jackOutputPortLeft; }
+    jack_port_t* getJackOutputPortRight() { return m_jackOutputPortRight; }
 
     // clear down audio connections if we're restarting
     //
@@ -210,7 +220,8 @@ public:
     // These public methods are required in this file because we
     // need access to this file from the static jackProcess member.
     //
-    bool createAudioFile(const std::string &fileName);
+    bool createAudioFile(const std::string &fileName,
+                         std::vector<unsigned int> inputPorts);
     void appendToAudioFile(const std::string &buffer);
 
 #endif
@@ -249,12 +260,6 @@ protected:
     // Get a JACk frame from a RealTime
     //
     jack_nframes_t getJACKFrame(const RealTime &time);
-
-    // Modify input ports
-    //
-    void setTotalAudioInputPorts(unsigned int total);
-    unsigned int getTotalAudioInputPorts() const
-        { return m_audioInputPortTotal; }
 
 
 #endif // HAVE_LIBJACK
@@ -318,15 +323,13 @@ private:
     static int  jackXRun(void *);
 
     jack_client_t               *m_audioClient;
-    std::vector<jack_port_t*>    m_audioInputPorts;
-    jack_port_t                 *m_audioOutputPortLeft;
-    jack_port_t                 *m_audioOutputPortRight;
+    std::vector<jack_port_t*>    m_jackInputPorts;
+    jack_port_t                 *m_jackOutputPortLeft;
+    jack_port_t                 *m_jackOutputPortRight;
 
     jack_nframes_t               m_transportPosition;
 
     AudioScheduler              *m_audioScheduler;
-
-    unsigned int                 m_audioInputPortTotal;
 
 #endif // HAVE_LIBJACK
 
