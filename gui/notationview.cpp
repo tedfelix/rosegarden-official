@@ -48,7 +48,6 @@
 #include "notationtool.h"
 #include "qcanvassimplesprite.h"
 #include "ktmpstatusmsg.h"
-#include "trackeditor.h"
 #include "barbuttons.h"
 #include "loopruler.h"
 
