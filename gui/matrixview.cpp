@@ -1920,6 +1920,10 @@ MatrixView::initActionsToolbar()
 	    QPixmap pixmap = NotePixmapFactory::toQPixmap(NotePixmapFactory::makeNoteMenuPixmap(m_snapValues[i], err));
 	    m_snapGridCombo->insertItem((err ? noMap : pixmap), label);
 	}
+
+	if (m_snapValues[i] == m_snapGrid->getSnapSetting()) {
+	    m_snapGridCombo->setCurrentItem(m_snapGridCombo->count() - 1);
+	}
     }
 
     connect(m_snapGridCombo, SIGNAL(activated(int)),

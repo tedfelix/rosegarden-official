@@ -69,6 +69,15 @@ public:
     timeT getSnapTime(double x) const;
 
     /**
+     * Return the snap setting -- the argument that was passed to
+     * setSnapTime.  This differs from getSnapTime, which interprets
+     * the NoSnap, SnapToBar, SnapToBeat and SnapToUnit settings to
+     * return actual timeT values; instead this function returns those
+     * actual constants if set.
+     */
+    timeT getSnapSetting() const;
+
+    /**
      * Return the snap size of the grid, at the given time.  (The time
      * is required in case the built-in snap size is SnapToBar,
      * SnapToBeat or SnapToUnit, in which case we need to know the

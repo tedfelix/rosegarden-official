@@ -1031,9 +1031,9 @@ TrackButtons::slotSynchroniseWithComposition()
         if (track)
         {
             if (track->isMuted())
-                m_muteLeds[i]->on();
-            else
                 m_muteLeds[i]->off();
+            else
+                m_muteLeds[i]->on();
 
             Rosegarden::Instrument *ins = studio.
                 getInstrumentById(track->getInstrument());

@@ -45,6 +45,7 @@ class NotationToolBox;
 class PositionCursor;
 class ActiveItem;
 class NoteActionData;
+class NoteChangeActionData;
 class MarkActionData;
 class ChordNameRuler;
 class RawNoteRuler;
@@ -933,6 +934,9 @@ protected:
 
     typedef QMap<QString, NoteActionData> NoteActionDataMap;
     static NoteActionDataMap* m_noteActionDataMap;
+
+    typedef QMap<QString, NoteChangeActionData> NoteChangeActionDataMap;
+    static NoteChangeActionDataMap* m_noteChangeActionDataMap;
 
     typedef QMap<QString, MarkActionData> MarkActionDataMap;
     static MarkActionDataMap *m_markActionDataMap;

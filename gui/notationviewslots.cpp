@@ -907,6 +907,10 @@ void NotationView::slotGroupTuplet(bool simple)
 
     addCommandToHistory(new AdjustMenuTupletCommand
                         (*segment, t, unit, untupled, tupled, hasTimingAlready));
+
+    if (!hasTimingAlready) {
+	slotSetInsertCursorPosition(t + (unit * tupled), true, false);
+    }
 }
 
 void NotationView::slotGroupUnTuplet()

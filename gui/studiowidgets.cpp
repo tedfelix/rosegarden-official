@@ -294,7 +294,7 @@ RosegardenFader::paintEvent(QPaintEvent *)
 			 buttonPixmap()->height());
 
     } else {
-//!!!update
+//... update
 	int leftOfButton =
 	    (m_sliderMax - m_sliderMin) - position - buttonPixmap()->width()/2;
 
@@ -459,7 +459,7 @@ RosegardenFader::calculateGroovePixmap()
 	paint.drawRect(0, 0, width(), height());
  
 	if (m_integral) {
-	    //!!!
+	    //...
 	} else {
 	    for (int dB = -70; dB <= 10; ) {
 		int position = value_to_position(float(dB));
@@ -481,7 +481,7 @@ RosegardenFader::calculateGroovePixmap()
 		       6, m_sliderMax - m_sliderMin);
 	paint.end();
     } else {
-	//!!!
+	//...
     }
 }
 
@@ -555,7 +555,7 @@ RosegardenFader::calculateButtonPixmap()
 
 	paint.end();
     } else {
-	//!!!
+	//...
     }
 }
 

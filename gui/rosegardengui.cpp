@@ -1561,14 +1561,21 @@ void RosegardenGUIApp::setupFileDialogSpeedbar()
     
     config->setGroup("KFileDialog Speedbar");
 
+    RG_DEBUG << "RosegardenGUIApp::setupFileDialogSpeedbar" << endl;
+
     bool hasSetExamplesItem = config->readBoolEntry("Examples Set", false);
     
+    RG_DEBUG << "RosegardenGUIApp::setupFileDialogSpeedbar: examples set " << hasSetExamplesItem << endl;
+
     if (!hasSetExamplesItem) {
         
         config->writeEntry("Description_0", i18n("Example Files"));
         config->writeEntry("IconGroup_0", 4);
         config->writeEntry("Icon_0", "folder");
         config->writeEntry("URL_0", KGlobal::dirs()->findResource("appdata", "examples/"));
+
+	RG_DEBUG << "wrote url " << config->readEntry("URL_0") << endl;
+
         config->writeEntry("Examples Set", true);
     }
     

@@ -74,7 +74,7 @@ RosegardenTimeWidget::init(bool editable)
     };
 
     bool savedEditable = editable;
-    editable = true; //!!!
+    editable = true;
 
     QFrame *frame = new QFrame(this);
     QGridLayout *layout = new QGridLayout(frame, 7, 3, 5, 5);
@@ -334,15 +334,7 @@ RosegardenTimeWidget::populate()
 						 bars, beats, hemidemis, remainder);
 	Rosegarden::TimeSignature timeSig =
 	    m_composition->getTimeSignatureAt(m_startTime);
-/*!!!
-	Rosegarden::timeT barDuration = timeSig.getBarDuration();
-	Rosegarden::timeT beatDuration = timeSig.getBeatDuration();
-	int bars = m_time / barDuration;
-	int beats = (m_time % barDuration) / beatDuration;
-	Rosegarden::timeT remainder = (m_time % barDuration) % beatDuration;
-	int hemidemis = remainder /
-	    Rosegarden::Note(Rosegarden::Note::Shortest).getDuration();
-*/
+
 	if (m_bar) {
 	    m_bar->setMinValue(0);
 	    m_bar->setMaxValue
@@ -451,15 +443,6 @@ RosegardenTimeWidget::populate()
 	
 	Rosegarden::TimeSignature timeSig =
 	    m_composition->getTimeSignatureAt(m_time);
-/*!!!
-	int bar = m_composition->getBarNumber(m_time);
-	Rosegarden::timeT barStart = m_composition->getBarStart(bar);
-	Rosegarden::timeT beatDuration = timeSig.getBeatDuration();
-	int beat = (m_time - barStart) / beatDuration + 1;
-	Rosegarden::timeT remainder = (m_time - barStart) % beatDuration;
-	int hemidemis = remainder /
-	    Rosegarden::Note(Rosegarden::Note::Shortest).getDuration();
-*/
 
 	if (m_bar) {
 	    m_bar->setMinValue(INT_MIN);
@@ -596,26 +579,10 @@ RosegardenTimeWidget::slotBarBeatOrFractionChanged(int)
     if (m_isDuration) {
 	slotSetTime(m_composition->getDurationForMusicalTime
 		    (m_startTime, bar, beat, fraction, 0));
-/*!!!
-	Rosegarden::TimeSignature timeSig =
-	    m_composition->getTimeSignatureAt(m_startTime);
-	Rosegarden::timeT barDuration = timeSig.getBarDuration();
-	Rosegarden::timeT beatDuration = timeSig.getBeatDuration();
-	Rosegarden::timeT t = bar * barDuration + beat * beatDuration + fraction *
-	    Rosegarden::Note(Rosegarden::Note::Shortest).getDuration();
-	slotSetTime(t);
-*/
+
     } else {
 	slotSetTime(m_composition->getAbsoluteTimeForMusicalTime
 		    (bar, beat, fraction, 0));
-	/*!!!
-	Rosegarden::timeT t = m_composition->getBarStart(bar - 1);
-	Rosegarden::TimeSignature timesig = m_composition->getTimeSignatureAt(t);
-	t += (beat-1) * timesig.getBeatDuration();
-	t += Rosegarden::Note(Rosegarden::Note::Shortest).getDuration() *
-	    fraction;
-	slotSetTime(t);
-	*/
     }
 }
 

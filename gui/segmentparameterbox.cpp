@@ -93,8 +93,8 @@ SegmentParameterBox::initBox()
     // Label ..
     m_label = new QLabel(hbox);
     m_label->setFont(font);
-    m_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     m_label->setFixedWidth(120);
+    m_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 
     // .. and edit button
     m_labelButton = new QPushButton("...", hbox);
@@ -194,7 +194,7 @@ SegmentParameterBox::initBox()
     gridLayout->addRowSpacing(0, 12);
 
     gridLayout->addWidget(label, 1, 0, AlignRight);
-    gridLayout->addMultiCellWidget(hbox, 1, 1, 1, 3);
+    gridLayout->addMultiCellWidget(hbox, 1, 1, 1, 3, AlignLeft);
 
     gridLayout->addWidget(repeatLabel, 2, 0, AlignRight);
     gridLayout->addWidget(m_repeatValue, 2, 1, AlignLeft);
@@ -280,7 +280,6 @@ SegmentParameterBox::initBox()
 
     // populate m_colourValue
     slotDocColoursChanged();
-
 }
 
 void
@@ -649,10 +648,20 @@ SegmentParameterBox::populateBoxFromSegments()
         m_fadeInSpin->blockSignals(true);
         m_fadeOutSpin->blockSignals(true);
 
+/*!!! No, not setting up autofade widgets.  The implementation's too
+      incomplete to finish for this release.
+
         m_fadeInLabel->show();
         m_fadeInSpin->show();
         m_fadeOutLabel->show();
         m_fadeOutSpin->show();
+
+	instead:
+*/
+        m_fadeInLabel->hide();
+        m_fadeInSpin->hide();
+        m_fadeOutLabel->hide();
+        m_fadeOutSpin->hide();
 
         m_autoFadeLabel->setEnabled(true);
         m_autoFadeBox->setEnabled(true);

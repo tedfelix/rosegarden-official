@@ -143,6 +143,46 @@ NoteActionData::NoteActionData(const QString& _title,
 }
 
 
+class NoteChangeActionData
+{
+public:
+    NoteChangeActionData();
+    NoteChangeActionData(const QString &_title,
+			 QString _actionName,
+			 QString _pixmapName,
+			 int _keycode,
+			 Note::Type _noteType);
+
+    QString title;
+    QString actionName;
+    QString pixmapName;
+    int keycode;
+    Note::Type noteType;
+};
+
+NoteChangeActionData::NoteChangeActionData()
+    : title(0),
+      actionName(0),
+      pixmapName(0),
+      keycode(0),
+      noteType(0)
+{
+}
+
+NoteChangeActionData::NoteChangeActionData(const QString& _title,
+					   QString _actionName,
+					   QString _pixmapName,
+					   int _keycode,
+					   Note::Type _noteType)
+    : title(_title),
+      actionName(_actionName),
+      pixmapName(_pixmapName),
+      keycode(_keycode),
+      noteType(_noteType)
+{
+}
+
+
 class MarkActionData
 {
 public:
@@ -1271,6 +1311,26 @@ void NotationView::setupActions()
 	    noteActionData.dots == 0 && !noteActionData.rest) {
             m_selectDefaultNote = noteAction;
 	}
+    }
+
+    // Note duration change actions
+    for (NoteChangeActionDataMap::Iterator actionDataIter = m_noteChangeActionDataMap->begin();
+	 actionDataIter != m_noteChangeActionDataMap->end();
+	 ++actionDataIter) {
+
+	NoteChangeActionData data = *actionDataIter;
+
+        icon = QIconSet
+	    (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+					  (data.pixmapName)));
+
+	KAction *action = new KAction(data.title,
+				      icon,
+				      data.keycode,
+				      this,
+				      SLOT(slotNoteChangeAction()),
+				      actionCollection(),
+				      data.actionName);
     }
     
     //
@@ -3331,7 +3391,6 @@ void NotationView::initActionDataMaps()
 
     m_noteActionDataMap = new NoteActionDataMap;
 
-    Note referenceNote(Note::Crotchet); // type doesn't matter
     for (int rest = 0; rest < 2; ++rest) {
 	for (int dots = 0; dots < 2; ++dots) {
 	    for (int type = Note::Longest; type >= Note::Shortest; --type) {
@@ -3354,7 +3413,8 @@ void NotationView::initActionDataMaps()
 		}
 
 		int keycode = keys[type - Note::Shortest];
-		if (dots) keycode += CTRL;
+		if (dots) // keycode += CTRL; -- used below for note change action
+		    keycode = 0;
 		if (rest) // keycode += SHIFT; -- can't do shift+numbers
 		    keycode = 0;
 
@@ -3364,6 +3424,30 @@ void NotationView::initActionDataMaps()
 		      rest > 0, type, dots));
 	    }
 	}
+    }
+
+    m_noteChangeActionDataMap = new NoteChangeActionDataMap;
+
+    for (int type = Note::Longest; type >= Note::Shortest; --type) {
+
+	QString refName
+	    (NotationStrings::getReferenceName(Note(type, 0), false));
+	
+	QString shortName(QString("change_%1").arg(refName));
+	shortName.replace(QRegExp("-"), "_");
+
+	QString titleName
+	    (NotationStrings::getNoteName(Note(type, 0)));
+
+	titleName = titleName.left(1).upper() +
+	    titleName.right(titleName.length()-1);
+
+	int keycode = keys[type - Note::Shortest];
+	keycode += CTRL;
+	
+	m_noteChangeActionDataMap->insert
+	    (shortName, NoteChangeActionData
+	     (titleName, shortName, refName, keycode, type));
     }
 
     m_markActionDataMap = new MarkActionDataMap;
@@ -3469,6 +3553,7 @@ void NotationView::setupDefaultProgress()
 }
 
 NotationView::NoteActionDataMap* NotationView::m_noteActionDataMap = 0;
+NotationView::NoteChangeActionDataMap* NotationView::m_noteChangeActionDataMap = 0;
 NotationView::MarkActionDataMap* NotationView::m_markActionDataMap = 0;
 const char* const NotationView::ConfigGroup = "Notation Options";
 

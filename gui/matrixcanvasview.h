@@ -108,7 +108,7 @@ protected:
      * Update the value of snap grid according to the button's state
      *
      * If the button was pressed with the 'smooth' modifier, set the
-     * grid so it won't snap time. Snap to beat otherwise.
+     * grid so it won't snap time.
      *
      * @see #setSmoothModifier
      * @see #getSmoothModifier
@@ -128,7 +128,7 @@ protected:
 
     Qt::ButtonState       m_smoothModifier;
     Rosegarden::timeT     m_lastSnap;
-
+    bool                  m_isSnapTemporary;
 };
 
 

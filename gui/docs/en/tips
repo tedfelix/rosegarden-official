@@ -89,7 +89,7 @@ From the <b>File</b> menu, navigate to <b>Export -> Export Lilypond File</b></p>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that if you use the quantizer from within the notation view, it can quantize only the timing used for notation -- making it possible to have good looking notation <b>and</b> a completely human MIDI performance?</p>
+<p>...that if you use the quantizer from within the notation view, you can tell it to quantize only the timing used for notation -- making it possible to have good looking notation <b>and</b> a human MIDI performance?</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">

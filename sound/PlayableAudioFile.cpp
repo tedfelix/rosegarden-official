@@ -742,6 +742,9 @@ PlayableAudioFile::updateBuffers()
 
 	if (obtained < fileFrames) m_fileEnded = true;
 
+/*!!! No -- GUI and notification side of things isn't up to this yet,
+      so comment it out just in case
+
 	if (m_autoFade) {
 
 	    if (m_currentScanPoint < m_startIndex + m_fadeInTime) {
@@ -788,6 +791,7 @@ PlayableAudioFile::updateBuffers()
 		}
 	    }
 	}
+*/
 
 	m_currentScanPoint = m_currentScanPoint + block;
 

@@ -292,36 +292,14 @@ SequenceManager::play()
     streamOut << startPos.sec;
     streamOut << startPos.nsec;
 
-#ifdef NOT_DEFINED
-
-    // event read ahead
-    streamOut << config->readLongNumEntry("readaheadsec", 0);
-    streamOut << config->readLongNumEntry("readaheadusec", 80000) * 1000;
-
-    // audio mix
-    streamOut << config->readLongNumEntry("audiomixsec", 0);
-    streamOut << config->readLongNumEntry("audiomixusec", 60000) * 1000;
-
-    // file read
-    streamOut << config->readLongNumEntry("audioreadsec", 0);
-    streamOut << config->readLongNumEntry("audioreadusec", 80000) * 1000;
-
-    // file write
-    streamOut << config->readLongNumEntry("audiowritesec", 0);
-    streamOut << config->readLongNumEntry("audiowriteusec", 200000) * 1000;
-
-    // small file size
-    streamOut << config->readLongNumEntry("smallaudiofilekbytes", 128);
-
-#else
-
     // Apart from perhaps the small file size, I think with hindsight
     // that these options are more easily set to reasonable defaults
     // here than left to the user.  Mostly.
 
+    //!!! need some cleverness somewhere to ensure the read-ahead
+    //is larger than the JACK period size
+
     if (lowLat) {
-	//!!! need some cleverness somewhere to ensure the read-ahead
-	//is larger than the JACK period size
 	streamOut << 0L; // read-ahead sec
 	streamOut << 160000000L; // read-ahead nsec
 	streamOut << 0L; // audio mix sec
@@ -342,7 +320,6 @@ SequenceManager::play()
 	streamOut << 0L; // audio write nsec
 	streamOut << 256L; // cacheable small file size in K
     }
-#endif
 
     // Send Play to the Sequencer
     if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
@@ -786,40 +763,17 @@ punchin:
         // playback start position
         streamOut << startPos.sec;
         streamOut << startPos.nsec;
-    
-#ifdef NOT_DEFINED
-
-	// event read ahead
-	streamOut << config->readLongNumEntry("readaheadsec", 0);
-	streamOut << config->readLongNumEntry("readaheadusec", 80000) * 1000;
-	
-	// audio mix
-	streamOut << config->readLongNumEntry("audiomixsec", 0);
-	streamOut << config->readLongNumEntry("audiomixusec", 60000) * 1000;
-	
-	// file read
-	streamOut << config->readLongNumEntry("audioreadsec", 0);
-	streamOut << config->readLongNumEntry("audioreadusec", 80000) * 1000;
-	
-	// file write
-	streamOut << config->readLongNumEntry("audiowritesec", 0);
-	streamOut << config->readLongNumEntry("audiowriteusec", 200000) * 1000;
-	
-	// small file size
-	streamOut << config->readLongNumEntry("smallaudiofilekbytes", 128);
-
-#else
 
 	// Apart from perhaps the small file size, I think with hindsight
 	// that these options are more easily set to reasonable defaults
 	// here than left to the user.  Mostly.
 	
-	//!!! Perhaps we should leave these as config options, but without GUI.
 	//!!! Duplicates code in play()
 
+	//!!! need some cleverness somewhere to ensure the read-ahead
+	//is larger than the JACK period size
+
 	if (lowLat) {
-	    //!!! need some cleverness somewhere to ensure the read-ahead
-	    //is larger than the JACK period size
 	    streamOut << 0L; // read-ahead sec
 	    streamOut << 160000000L; // read-ahead nsec
 	    streamOut << 0L; // audio mix sec
@@ -840,7 +794,6 @@ punchin:
 	    streamOut << 0L; // audio write nsec
 	    streamOut << 256L; // cacheable small file size in K
 	}
-#endif
 
         // record type
         streamOut << (int)recordType;
@@ -1108,7 +1061,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 		if ((*i)->getType() == MappedEvent::SystemFailure) {
 
 		    if ((*i)->getData1() == MappedEvent::WarningImpreciseTimer) {
-			//!!! think of something to say here
+			std::cerr << "Rosegarden: WARNING: No accurate sequencer timer available" << std::endl;
 		    }
 		}
 	    }

@@ -43,7 +43,8 @@ MatrixCanvasView::MatrixCanvasView(MatrixStaff& staff,
       m_mouseWasPressed(false),
       m_ignoreClick(false),
       m_smoothModifier(Qt::ShiftButton),
-      m_lastSnap(Rosegarden::SnapGrid::SnapToBeat)
+      m_lastSnap(Rosegarden::SnapGrid::SnapToBeat),
+      m_isSnapTemporary(false)
 {
     viewport()->setMouseTracking(true);
 }
@@ -55,9 +56,6 @@ MatrixCanvasView::~MatrixCanvasView()
 void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 {
     QPoint p = inverseMapPoint(e->pos());
-
-    if (m_snapGrid->getSnapTime(double(p.x())))
-        m_lastSnap = m_snapGrid->getSnapTime(double(p.x()));
 
     updateGridSnap(e);
 
@@ -122,10 +120,10 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
 {
     QPoint p = inverseMapPoint(e->pos());
-
+/*
     if (m_snapGrid->getSnapTime(double(p.x())))
         m_lastSnap = m_snapGrid->getSnapTime(double(p.x()));
-
+*/
     updateGridSnap(e);
 
     if (m_ignoreClick) return;
@@ -180,10 +178,6 @@ void MatrixCanvasView::contentsMouseReleaseEvent(QMouseEvent* e)
 
     emit mouseReleased(evTime, evPitch, e);
     m_mouseWasPressed = false;
-
-    // Restore grid snap
-    //m_snapGrid->setSnapTime(m_lastSnap);
-    
 }
 
 void MatrixCanvasView::slotExternalWheelEvent(QWheelEvent* e)
@@ -195,11 +189,20 @@ void MatrixCanvasView::updateGridSnap(QMouseEvent *e)
 {
     Qt::ButtonState bs = e->state();
 
-//     MATRIX_DEBUG << "MatrixCanvasView::updateGridSnap : bs = "
-//                          << bs << " - sm = " << getSmoothModifier() << endl;
+    MATRIX_DEBUG << "MatrixCanvasView::updateGridSnap : bs = "
+		 << bs << " - sm = " << getSmoothModifier() << ", is temporary " << m_isSnapTemporary << ", saved is " << m_lastSnap << endl;
 
-    if (bs & getSmoothModifier())
+    if (bs & getSmoothModifier()) {
+
+	if (!m_isSnapTemporary) {
+	    m_lastSnap = m_snapGrid->getSnapSetting();
+	}
         m_snapGrid->setSnapTime(SnapGrid::NoSnap);
-    else
+	m_isSnapTemporary = true;
+
+    } else if (m_isSnapTemporary) {
+
         m_snapGrid->setSnapTime(m_lastSnap);
+	m_isSnapTemporary = false;
+    }
 }

@@ -55,6 +55,12 @@ SnapGrid::setSnapTime(timeT snap)
 }
 
 timeT
+SnapGrid::getSnapSetting() const
+{
+    return m_snapTime;
+}
+
+timeT
 SnapGrid::getSnapTime(double x) const
 {
     timeT time = m_rulerScale->getTimeForX(x);

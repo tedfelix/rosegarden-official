@@ -368,8 +368,7 @@ TriggerSegmentManager::slotAdd()
 
     if (dialog.exec() == QDialog::Accepted) {
         addCommandToHistory(new AddTriggerSegmentCommand
-			    (m_doc, dialog.getTime(),
-			     64)); //!!! basePitch
+			    (m_doc, dialog.getTime(), 64));
     }
 }
 
