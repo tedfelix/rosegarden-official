@@ -70,14 +70,18 @@ QSize LoopRuler::sizeHint() const
 	m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
 	m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar());
 
-    return QSize(std::max(int(width), m_width), m_height);
+    QSize res(std::max(int(width), m_width), m_height);
+
+    return res;
 }
 
 QSize LoopRuler::minimumSizeHint() const
 {
     double firstBarWidth = m_rulerScale->getBarWidth(0);
 
-    return QSize(int(firstBarWidth), m_height);
+    QSize res = QSize(int(firstBarWidth), m_height);
+
+    return res;
 }
 
 void LoopRuler::paintEvent(QPaintEvent* e)

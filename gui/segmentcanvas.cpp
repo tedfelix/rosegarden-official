@@ -203,7 +203,7 @@ SegmentCanvas::SegmentCanvas(RulerScale *rulerScale, int vStep,
 {
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
 
-    setMargins(leftMargin, topMargin, 0, 0);
+//     setMargins(leftMargin, topMargin, 0, 0);
 
 }
 
@@ -388,26 +388,6 @@ void SegmentCanvas::clear()
 	    delete *it;
     }
 }
-
-void SegmentCanvas::setHBarGeometry(QScrollBar &hbar,
-                                    int x, int y, int w, int h)
-{
-    x += leftMargin();
-    w -= leftMargin();
-
-    QCanvasView::setHBarGeometry(hbar, x, y, w, h);
-}
-
-void SegmentCanvas::setVBarGeometry(QScrollBar &vbar,
-                                    int x, int y, int w, int h)
-{
-    y += topMargin();
-    h -= topMargin();
-
-    QCanvasView::setVBarGeometry(vbar, x, y, w, h);
-}
-
-
 
 // Show the split line. This is where we perform Segment splits.
 //
@@ -594,7 +574,6 @@ SegmentCanvas::setFineGrain(bool value)
 {
     m_fineGrain = value;
 }
-
 
 //////////////////////////////////////////////////////////////////////
 //                 Segment Tools

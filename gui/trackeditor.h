@@ -171,8 +171,6 @@ signals:
     void scrollHorizTo(int);
 
 protected:
-    // overridden from QWidget
-    virtual void resizeEvent(QResizeEvent*);
     
     void init(unsigned int nbTracks, int firstBar, int lastBar);
 

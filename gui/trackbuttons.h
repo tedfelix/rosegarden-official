@@ -23,16 +23,15 @@
 #ifndef _TRACKBUTTONS_H_
 #define _TRACKBUTTONS_H_
 
-#include <qvbox.h>
-#include <qheader.h>
-#include <qbuttongroup.h>
 #include <vector>
 
-#include "trackvumeter.h"
-#include "tracklabel.h"
-#include "trackheader.h"
-#include "rosegardenguidoc.h"
+#include <qframe.h>
 
+class QVBoxLayout;
+class QButtonGroup;
+class TrackVUMeter;
+class TrackLabel;
+class RosegardenGUIDoc;
 
 // This class creates a list of mute and record buttons
 // based on the rosegarden document and a specialisation
@@ -41,7 +40,7 @@
 //
 // 
 
-class TrackButtons : public QVBox
+class TrackButtons : public QFrame
 {
     
     Q_OBJECT
@@ -53,8 +52,6 @@ public:
                  QWidget* parent = 0,
                  const char* name = 0,
                  WFlags f=0);
-
-    ~TrackButtons();
 
     // Return the track selected for recording
     //
@@ -95,6 +92,7 @@ private:
 
     QButtonGroup *m_recordButtonGroup;
     QButtonGroup *m_muteButtonGroup;
+    QVBoxLayout *m_layout;
 
     std::vector<TrackLabel *> m_trackLabels;
     std::vector<TrackVUMeter *> m_trackMeters;

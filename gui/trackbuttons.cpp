@@ -20,14 +20,20 @@
 */
 
 #include "trackbuttons.h"
+
 #include <qhbox.h>
+#include <qlayout.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
+#include <rosegardenguidoc.h>
+#include <qbuttongroup.h>
+
 #include <assert.h>
+
 #include "Track.h"
 #include "colours.h"
 #include "tracklabel.h"
-#include "vumeter.h"
+#include "trackvumeter.h"
 
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            unsigned int trackCellHeight,
@@ -35,39 +41,23 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            QWidget* parent,
                            const char* name,
                            WFlags f)
-    : QVBox(parent, name, f),
+    : QFrame(parent, name, f),
       m_doc(doc),
+      m_recordButtonGroup(new QButtonGroup(this)),
+      m_muteButtonGroup(new QButtonGroup(this)),
+      m_layout(new QVBoxLayout(this)),
       m_tracks(doc->getComposition().getNbTracks()),
       m_offset(4),
       m_cellSize(trackCellHeight),
       m_lastID(-1),
       m_trackLabelWidth(trackLabelWidth)
 {
+    
     setFrameStyle(Plain);
 
     // Now draw the buttons and labels and meters
     //
     drawButtons();
-}
-
-TrackButtons::~TrackButtons()
-{
-    std::vector<TrackVUMeter*>::iterator vuit = m_trackMeters.begin();
-
-    for (; vuit != m_trackMeters.end(); vuit++)
-    {
-        delete(*vuit);
-    }
-
-    m_trackMeters.erase(m_trackMeters.begin(), m_trackMeters.end());
-
-    std::vector<TrackLabel*>::iterator lit = m_trackLabels.begin();
-    for (; lit != m_trackLabels.end(); lit++)
-    {
-        delete(*lit);
-    }
-
-    m_trackLabels.erase(m_trackLabels.begin(), m_trackLabels.end());
 }
 
 // Draw the mute and record buttons, track labels and VU meters
@@ -85,7 +75,7 @@ TrackButtons::drawButtons()
 
     // Set the spacing between vertical elements
     //
-    setSpacing(borderGap);
+    m_layout->setSpacing(borderGap);
 
     // Create a buttonGap at the top of the layout widget
     //
@@ -99,18 +89,16 @@ TrackButtons::drawButtons()
     // Create a horizontal box for each track
     // plus the two buttons
     //
-    QHBox *track;
+    QHBox *trackHBox;
     QPushButton *mute;
     QPushButton *record;
 
     // Create an exclusive buttongroup for record
     //
-    m_recordButtonGroup = new QButtonGroup();
     m_recordButtonGroup->setExclusive(true);
 
     // Create a buttongroup for muting
     //
-    m_muteButtonGroup = new QButtonGroup();
     m_muteButtonGroup->setExclusive(false);
 
     TrackVUMeter *vuMeter;
@@ -122,27 +110,28 @@ TrackButtons::drawButtons()
     {
         // Create a horizontal box for each track
         //
-        track = new QHBox(this);
-        track->setMinimumSize(m_trackLabelWidth, m_cellSize - borderGap);
-        track->setMaximumSize(m_trackLabelWidth, m_cellSize - borderGap);
+        trackHBox = new QHBox(this);
+        
+        trackHBox->setMinimumSize(m_trackLabelWidth, m_cellSize - borderGap);
+        trackHBox->setMaximumSize(m_trackLabelWidth, m_cellSize - borderGap);
 
         // Try a style for the box
         //
-        track->setFrameStyle(StyledPanel);
-        track->setFrameShape(StyledPanel);
-        track->setFrameShadow(Raised);
+        trackHBox->setFrameStyle(StyledPanel);
+        trackHBox->setFrameShape(StyledPanel);
+        trackHBox->setFrameShadow(Raised);
 
         // Insert a little gap
-        label = new QLabel(track);
+        label = new QLabel(trackHBox);
         label->setMinimumWidth(2);
         label->setMaximumWidth(2);
 
         // Create a VU meter
-        vuMeter = new TrackVUMeter(track,
-                              VUMeter::PeakHold,
-                              25,
-                              buttonGap,
-                              i);
+        vuMeter = new TrackVUMeter(trackHBox,
+                                   VUMeter::PeakHold,
+                                   25,
+                                   buttonGap,
+                                   i);
 
         m_trackMeters.push_back(vuMeter);
 
@@ -150,20 +139,20 @@ TrackButtons::drawButtons()
         //vuMeter->setLevel(1.0);
 
         // Create another little gap
-        label = new QLabel(track);
+        label = new QLabel(trackHBox);
         label->setMinimumWidth(2);
         label->setMaximumWidth(2);
 
         // Create buttons
-        mute = new QPushButton(track);
-        record = new QPushButton(track);
+        mute = new QPushButton(trackHBox);
+        record = new QPushButton(trackHBox);
 
         mute->setFlat(true);
         record->setFlat(true);
 
         // Create a label
         //
-        trackLabel = new TrackLabel(i, track);
+        trackLabel = new TrackLabel(i, trackHBox);
 
         // Set the label from the Track object on the Composition
         //
@@ -221,16 +210,10 @@ TrackButtons::drawButtons()
             record->setDown(true);
         }
 
+        m_layout->addWidget(trackHBox);
     }
 
-    // Create a blank label at the bottom just to keep
-    // the scrolling in step
-    //
-    label = new QLabel(this);
-    label->setText(QString(""));
-    label->setMinimumHeight(40);
-    label->setMaximumHeight(40);
-
+    m_layout->addStretch(20);
 
     connect(m_recordButtonGroup, SIGNAL(released(int)),
             this, SLOT(setRecordTrack(int)));

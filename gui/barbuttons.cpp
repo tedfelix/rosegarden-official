@@ -44,6 +44,7 @@ public:
     virtual ~BarButtonsWidget();
     
     virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
 
     void scrollHoriz(int x);
 
@@ -155,6 +156,13 @@ QSize BarButtonsWidget::sizeHint() const
 	m_rulerScale->getBarWidth(lastBar);
 
     return QSize(std::max(int(width), m_width), m_barHeight);
+}
+
+QSize BarButtonsWidget::minimumSizeHint() const
+{
+    double firstBarWidth = m_rulerScale->getBarWidth(0);
+
+    return QSize(firstBarWidth, m_barHeight);
 }
 
 void BarButtonsWidget::paintEvent(QPaintEvent*)

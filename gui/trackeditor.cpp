@@ -104,7 +104,7 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
                          << nbTracks << ", firstBar = " << firstBar
                          << ", lastBar = " << lastBar << ")" << endl;
 
-    QHBoxLayout *hbox = new QHBoxLayout(this);
+    QGridLayout *grid = new QGridLayout(this, 2, 2);
 
     QCanvas *canvas = new QCanvas(this);
 
@@ -128,27 +128,21 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 					barButtonsOffset + barButtonsHeight,
                                         canvas, this);
 
-    hbox->addWidget(m_segmentCanvas);
+    grid->addWidget(m_segmentCanvas, 1, 1);
     m_barButtons = new BarButtons(m_document,
                                   m_rulerScale,
                                   barButtonsHeight,
                                   false,
-                                  m_segmentCanvas);
+                                  this);
+
+    grid->addWidget(m_barButtons, 0, 1);
 
     m_trackButtons = new TrackButtons(m_document,
                                       getTrackCellHeight(),
                                       trackLabelWidth,
-                                      m_segmentCanvas);
+                                      this);
 
-    m_trackButtons->setGeometry(trackLabelOffset,
-				barButtonsOffset + barButtonsHeight,
-                                trackLabelWidth,
-                                getTrackCellHeight() * nbTracks + 5);
-
-    m_barButtons->setGeometry(trackLabelOffset + trackLabelWidth,
-			      barButtonsOffset,
-                              getSegmentCanvas()->viewport()->width(),
-                              barButtonsHeight);
+    grid->addWidget(m_trackButtons, 1, 0);
 
     // Synchronize side widgets (bar and track buttons) with scrollbars
     //
@@ -193,13 +187,6 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
     m_pointer->setPoints(0, 0, 0, canvas->height());
     m_pointer->setZ(10);
     m_pointer->show();
-}
-
-void TrackEditor::resizeEvent(QResizeEvent*)
-{
-    m_barButtons->setGeometry(m_barButtons->x(), 2,
-                              getSegmentCanvas()->viewport()->width(),
-                              m_barButtons->height());
 }
 
 void TrackEditor::slotScrollTrackButtons(int newPos)
