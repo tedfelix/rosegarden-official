@@ -599,8 +599,8 @@ void
 NotePixmapFactory::drawMarks(bool isStemmed,
 			     const NotePixmapParameters &params)
 {
-    int dy = 0;
     int gap = m_noteBodyHeight / 5 + 1;
+    int dy = gap;
 
     for (unsigned int i = 0; i < params.m_marks.size(); ++i) {
 
