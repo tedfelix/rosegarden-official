@@ -505,7 +505,7 @@ void MatrixView::setViewSize(QSize s)
                  << s.height() << endl;
 
     canvas()->resize(s.width(), s.height());
-
+    getCanvasView()->resizeContents(s.width(), s.height());
 }
 
 void MatrixView::repaintRulers()
@@ -1409,6 +1409,13 @@ MatrixView::slotChangeHorizontalZoom(int)
     int startX = int(m_hlayout.getXForTime(m_segments[0]->getStartTime()));
 
     int newWidth = int(getXbyWorldMatrix(endX - startX));
+    MATRIX_DEBUG << "current width : "
+                 << getViewSize().width()
+                 << " change to : "
+                 << newWidth
+                 << " (not xformed : " << endX - startX
+                 << endl;
+
     readjustViewSize(QSize(newWidth, getViewSize().height()), true);
 
 //     applyLayout();
