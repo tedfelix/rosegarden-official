@@ -76,7 +76,8 @@ signals:
      * \a point is set to the coordinates of the click event
      * \a el points to the NotationElement which was clicked on, if any
      */
-    void itemClicked(int pitch, int staffNo, const QPoint& point, NotationElement* el);
+    void itemClicked(int pitch, int staffNo,
+                     const QPoint& point, NotationElement* el);
 
     /**
      * Emitted when the mouse cursor moves to a different height
@@ -87,9 +88,11 @@ signals:
     void hoveredOverNoteChange(const QString &noteName);
 
     /**
-     * Emitted when the mouse cursor moves to a note which is at a different time
+     * Emitted when the mouse cursor moves to a note which is at a
+     * different time
      *
-     * \a time is set to the absolute time of the note the cursor is hovering on
+     * \a time is set to the absolute time of the note the cursor is
+     * hovering on
      */
     void hoveredOverAbsoluteTimeChange(unsigned int time);
 
@@ -110,6 +113,9 @@ protected:
 
     bool posIsTooFarFromStaff(const QPoint &pos);
 
+    /// returns the staff line closest to the mouse event position
+    StaffLine* findClosestLineWithinThreshold(QMouseEvent*);
+
     /// returns the pitch the staff line is associated with
 /*!    int getPitchForLine(const StaffLine *line); */
 
@@ -124,6 +130,8 @@ protected:
 //     NotePixmapFactory m_notePixmapFactory;
 
     int m_lastYPosNearStaff;
+
+    unsigned int m_staffLineThreshold;
 };
 
 

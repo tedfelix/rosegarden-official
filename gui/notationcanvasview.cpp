@@ -34,7 +34,8 @@ NotationCanvasView::NotationCanvasView(QCanvas *viewing, QWidget *parent,
                                        const char *name, WFlags f)
     : QCanvasView(viewing, parent, name, f),
       m_currentHighlightedLine(0),
-      m_lastYPosNearStaff(0)
+      m_lastYPosNearStaff(0),
+      m_staffLineThreshold(10)
 {
     viewport()->setMouseTracking(true);
 }
@@ -99,11 +100,14 @@ NotationCanvasView::contentsMouseMoveEvent(QMouseEvent *e)
 
 void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 {
-    kdDebug(KDEBUG_AREA) << "mousepress" << endl;
+    kdDebug(KDEBUG_AREA) << "NotationCanvasView::contentsMousePressEvent()\n";
 
-    if (!m_currentHighlightedLine) {
+    if (!m_currentHighlightedLine &&
+        !(m_currentHighlightedLine = findClosestLineWithinThreshold(e))) {
+
         handleMousePress(0, -1, e->pos());
         return;
+
     }
     
     kdDebug(KDEBUG_AREA) << "mousepress : m_currentHighlightedLine != 0 - inserting note\n";
@@ -111,12 +115,6 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     // Check if we haven't actually clicked on a sprite
     //
     QCanvasItemList itemList = canvas()->collisions(e->pos());
-
-    if(itemList.isEmpty()) { // click was not on an item
-        kdDebug(KDEBUG_AREA) << "mousepress : Not on an item" << endl;
-        emit handleMousePress(0, -1, e->pos());
-        return;
-    }
 
     QCanvasItemList::Iterator it;
     QCanvasNotationSprite *sprite = 0;
@@ -212,10 +210,8 @@ NotationCanvasView::posIsTooFarFromStaff(const QPoint &pos)
 }
 
 //??? ew... can't be doing this here can we? don't have the right info
-//using Rosegarden;
 
-QString
-NotationCanvasView::getNoteNameForLine(const StaffLine *line)
+QString NotationCanvasView::getNoteNameForLine(const StaffLine *line)
 {
     int h = line->getHeight();
 
@@ -227,3 +223,60 @@ NotationCanvasView::getNoteNameForLine(const StaffLine *line)
 
     return QString(noteName.c_str());
 }
+
+StaffLine* NotationCanvasView::findClosestLineWithinThreshold(QMouseEvent* e)
+{
+    kdDebug(KDEBUG_AREA) << "NotationCanvasView::findClosestLineWithinThreshold()\n";
+    
+    // Compute a threshold rectangle around the event's position
+    //
+    QRect threshold(e->pos(), QSize(30,30));
+    threshold.moveCenter(e->pos());
+
+    QCanvasItemList nearbyLines = canvas()->collisions(threshold);
+
+    QCanvasItemList::Iterator it;
+
+    unsigned int minDist = canvas()->height();
+    StaffLine* closestLine = 0;
+
+    // Scan all StaffLines which collide with the threshold rectangle
+    // to find the closest one
+    //
+    for (it = nearbyLines.begin(); it != nearbyLines.end(); ++it) {
+
+        StaffLine* line = 0;
+        QCanvasItem *item = *it;
+
+        if ((line = dynamic_cast<StaffLine*>(item))) {
+
+            unsigned int dist = 0;
+
+            if (line->y() == e->y()) { // unlikely - this method is
+                                       // called only when no
+                                       // collisions with the mouse
+                                       // event are found, and there
+                                       // would have been one if this
+                                       // condition was true
+                minDist = 0;
+                closestLine = line;
+                break;
+            }
+
+            dist = abs(int(line->y() - e->y()));
+
+            if (dist < minDist) {
+                minDist = dist;
+                closestLine = line;
+            }           
+        }
+    }
+
+    kdDebug(KDEBUG_AREA) << "NotationCanvasView::findClosestLineWithinThreshold() : closestLine = "
+                         << closestLine << " - minDist : " << minDist << endl;
+
+    if (closestLine && minDist <= m_staffLineThreshold) return closestLine;
+
+    return 0;
+}
+
