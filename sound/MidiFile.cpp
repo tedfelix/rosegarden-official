@@ -290,6 +290,8 @@ MidiFile::open()
     bool retOK = true;
     m_error = "";
 
+    cout << "MidiFile::open() : fileName = " << m_fileName.c_str() << endl;
+
     // Open the file
     ifstream *midiFile = new ifstream(m_fileName.c_str(), ios::in | ios::binary);
 
