@@ -1223,6 +1223,25 @@ void NotationView::slotRespellRestore()
 					   *m_currentEventSelection));
 }
 
+void NotationView::slotShowCautionary()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Showing cautionary accidentals..."), this);
+
+    addCommandToHistory(new MakeAccidentalsCautionaryCommand
+			(true, *m_currentEventSelection));
+}
+
+void NotationView::slotCancelCautionary()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Cancelling cautionary accidentals..."), this);
+
+    addCommandToHistory(new MakeAccidentalsCautionaryCommand
+			(false, *m_currentEventSelection));
+}
+    
+
 void NotationView::slotTransformsQuantize()
 {
     if (!m_currentEventSelection) return;

@@ -2321,6 +2321,55 @@
 	</para>
       </sect2>
 
+      <sect2 id="nv-note-fonts">
+	<title>Note fonts</title>
+	<para>
+	  &rosegarden; is supplied with a single scalable notation
+	  font, the Feta font developed by the Lilypond project.  Feta
+	  is an extremely high quality font that should be suitable
+	  for nearly all classical work.
+	</para>
+
+	<para>&rosegarden; also includes support as standard for a
+	number of other notation fonts.  You will need to provide the
+	fonts themselves in TrueType (.ttf) or PostScript Type-1
+	(.pfb, .pfa) format, and you will need the relevant
+	permissions to install them to the same place as &rosegarden;
+	was installed.  To install a supported notation font, locate
+	the share directory for the &rosegarden; installation (usually
+	a subdirectory of the KDE desktop installation tree, such as
+	/opt/kde/share/apps/rosegarden).  You will find that this
+	directory has a subdirectory called "fonts": copy the font
+	files into there, and restart &rosegarden;.  If your font is
+	supported, it should now appear on the font menu in the
+	notation editor.</para>
+
+	<para>Complete or partial support is currently provided for
+	the following fonts: Fughetta, by Blake Hodgetts; Petrucci,
+	the "original" Finale font; Maestro, the "new" Finale font;
+	Opus, the Sibelius font; Inkpen, the Sibelius jazz font;
+	Sonata from Adobe; Steinberg, from the Cubase sequencer; and
+	Xinfonia.  (Most of the above font names are registered
+	trademarks of the respective companies.)  THE ROSEGARDEN TEAM
+	MAKES NO REPRESENTATION AS TO THE LEGAL STATUS OF ANY USE OF
+	THESE FONTS WITH ROSEGARDEN.  It is your responsibility to
+	ensure you are in compliance with the licence (if any) under
+	which a font was provided to you, before attempting to use it.
+	If you are not sure whether you have the right to use a font,
+	don't: apart from anything else, the standard Feta font better
+	than most of these anyway.</para>
+
+	<para>It is also possible to provide new mapping files so as
+	to use new fonts.  For some fonts that have similar mappings
+	or metrics to fonts in the above list, this may be as simple
+	as editing the name of the font in the mapping file.  See the
+	<link linkend="developers-note-fonts">Developers Guide</link>
+	for more information.
+
+	</para>
+      </sect2>
+
+
       <!-- Quantization, smoothing, and display of quantized notes -->
 
       <sect2 id="nv-quantization">

@@ -1685,6 +1685,16 @@ void NotationView::setupActions()
 		SLOT(slotRespellRestore()), actionCollection(),
                 "respell_restore");
 
+    new KAction(MakeAccidentalsCautionaryCommand::getGlobalName(true),
+		0, this,
+		SLOT(slotShowCautionary()), actionCollection(),
+		"show_cautionary_accidental");
+
+    new KAction(MakeAccidentalsCautionaryCommand::getGlobalName(false),
+		0, this,
+		SLOT(slotCancelCautionary()), actionCollection(),
+		"cancel_cautionary_accidental");
+
     icon = QIconSet
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
         ("quantize")));

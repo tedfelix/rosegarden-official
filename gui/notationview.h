@@ -446,6 +446,8 @@ public slots:
     void slotRespellUp();
     void slotRespellDown();
     void slotRespellRestore();
+    void slotShowCautionary();
+    void slotCancelCautionary();
 
     void slotSetStyleFromAction();
     void slotInsertNoteFromAction();

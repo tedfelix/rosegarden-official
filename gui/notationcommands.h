@@ -711,6 +711,23 @@ private:
     Rosegarden::Accidental m_accidental;
 };
 
+class MakeAccidentalsCautionaryCommand : public BasicSelectionCommand
+{
+public:
+    MakeAccidentalsCautionaryCommand(bool cautionary,
+				     Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(cautionary), selection, true),
+	m_selection(&selection),
+	m_cautionary(cautionary) { }
+    
+    static QString getGlobalName(bool cautionary);
+    
+protected:
+    virtual void modifySegment();
 
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    bool m_cautionary;
+};
 
 #endif

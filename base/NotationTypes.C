@@ -1822,8 +1822,6 @@ Accidental
 AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 					  bool &cautionary)
 {
-    cautionary = false; //!!! for now
-
     Accidental acc = acc0;
 
     int canonicalHeight = Key::canonicalHeight(height);
@@ -1860,13 +1858,51 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 	}
 	
 	if (acc == normalAcc) {
-	    acc = NoAccidental;
+	    if (!cautionary) acc = NoAccidental;
 	} else if (acc == NoAccidental) {
-	    acc = Natural;
+	    if (normalAcc != Natural) {
+		acc = Natural;
+	    }
 	}
 
     } else {
 
+	if (normalAcc != NoAccidental) {
+	    if (acc != normalAcc) {
+		if (acc == NoAccidental) {
+		    if (normalAcc != Natural) {
+			acc = Natural;
+		    }
+		}
+	    } else { // normalAcc != NoAccidental, acc == normalAcc
+		if (canonicalAcc != NoAccidental && canonicalAcc != normalAcc) {
+		    cautionary = true;
+		} else { // canonicalAcc == NoAccidental || canonicalAcc == normalAcc
+		    if (!cautionary) {
+			acc = NoAccidental;
+		    }
+		}
+	    }
+	} else { // normalAcc == NoAccidental
+	    if (acc != keyAcc && keyAcc != Natural) {
+		if (acc == NoAccidental) {
+		    acc = Natural;
+		}
+	    } else { // normalAcc == NoAccidental, acc == keyAcc
+		if (canonicalAcc != NoAccidental && canonicalAcc != keyAcc) {
+		    cautionary = true;
+		    if (acc == NoAccidental) {
+			acc = Natural;
+		    }
+		} else { // canonicalAcc == NoAccidental || canonicalAcc == keyAcc
+		    if (!cautionary) {
+			acc = NoAccidental;
+		    }
+		}
+	    }
+	}
+		    
+/*
 	if (normalAcc == NoAccidental) {
 	    normalAcc = keyAcc;
 	}
@@ -1876,21 +1912,28 @@ AccidentalTable::processDisplayAccidental(const Accidental &acc0, int height,
 	}
 
 	if (acc == normalAcc) {
-	    if (acc == NoAccidental && canonicalAcc != acc) {
+	    if (acc == NoAccidental && acc != canonicalAcc) {
 		acc = Natural;
 		cautionary = true;
 	    } else {
-		acc = NoAccidental;
+		if (!cautionary) {
+		    // can't actually handle this right (can we?)
+		    // without knowing whether the canonical acc
+		    // occurred before or after the last normal acc
+		    acc = NoAccidental;
+		}
 	    }
 	} else if (acc == canonicalAcc) {
 	    if (acc != NoAccidental) {
 //		cautionary = true;
 	    } else {
 		acc = Natural;
+		cautionary = true;
 	    }
 	} else if (acc == NoAccidental) {
 	    acc = Natural;
 	}
+*/
     }
 
     if (acc != NoAccidental) {

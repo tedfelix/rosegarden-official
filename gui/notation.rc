@@ -98,6 +98,8 @@
     <Separator/>
     <Action name="respell_restore"/>
   </Menu>
+  <Action name="show_cautionary_accidental"/>
+  <Action name="cancel_cautionary_accidental"/>
 </Menu>
 
   <Menu name="Marks">

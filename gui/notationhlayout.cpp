@@ -510,6 +510,9 @@ NotationHLayout::scanChord(NotationElementList *notes,
 	// accTable about accidentals from this note.
                     
 	bool cautionary = false;
+	if (el->event()->has(m_properties.USE_CAUTIONARY_ACCIDENTAL)) {
+	    cautionary = el->event()->get<Bool>(m_properties.USE_CAUTIONARY_ACCIDENTAL);
+	}
 	Accidental dacc = accTable.processDisplayAccidental(acc, h, cautionary);
 	el->event()->setMaybe<String>(m_properties.DISPLAY_ACCIDENTAL, dacc);
 	el->event()->setMaybe<Bool>(m_properties.DISPLAY_ACCIDENTAL_IS_CAUTIONARY,

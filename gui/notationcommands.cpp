@@ -1622,3 +1622,32 @@ RespellCommand::modifySegment()
     }
 }
 
+
+QString
+MakeAccidentalsCautionaryCommand::getGlobalName(bool cautionary)
+{
+    if (cautionary) return i18n("Show &Cautionary Accidentals");
+    else return i18n("Cancel C&autionary Accidentals");
+}
+
+void
+MakeAccidentalsCautionaryCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if ((*i)->isa(Note::EventType)) {
+	    if (m_cautionary) {
+		(*i)->set<Bool>(NotationProperties::USE_CAUTIONARY_ACCIDENTAL,
+				true);
+	    } else {
+		(*i)->unset(NotationProperties::USE_CAUTIONARY_ACCIDENTAL);
+	    }
+	}
+    }
+}
+
+
+		
