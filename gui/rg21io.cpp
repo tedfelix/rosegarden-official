@@ -45,6 +45,7 @@ using Rosegarden::Flat;
 using Rosegarden::Natural;
 using Rosegarden::NoAccidental;
 using Rosegarden::Note;
+using Rosegarden::Mark;
 using Rosegarden::timeT;
 
 using namespace Rosegarden::BaseProperties;
@@ -247,9 +248,6 @@ bool RG21Loader::parseMarkStart()
 
     } else {
 
-	Event *markEvent = new Event(MARK_EVENT_TYPE);
-	markEvent->set<String>(MARK_TYPE, markType);
-
 	// Jeez.  Whose great idea was it to place marks _after_ the
 	// events they're marking in the RG2.1 file format?
 	
@@ -259,9 +257,9 @@ bool RG21Loader::parseMarkStart()
 	    --i;
 	    markTime = (*i)->getAbsoluteTime();
 	}
-	markEvent->setAbsoluteTime(markTime);
 
-	m_marksExtant[markId] = markEvent;
+	Mark mark(markType, 0);
+	m_marksExtant[markId] = mark.getAsEvent(markTime);
     }
 
     // other marks not handled yet
@@ -281,7 +279,7 @@ void RG21Loader::closeMark()
     Event *markEvent = i->second;
     m_marksExtant.erase(i);
 
-    markEvent->set<Int>(MARK_DURATION,
+    markEvent->set<Int>(Mark::MarkDurationPropertyName,
 			m_currentSegmentTime - markEvent->getAbsoluteTime());
     m_currentSegment->insert(markEvent);
 }

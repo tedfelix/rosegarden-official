@@ -78,7 +78,7 @@ Clef::Clef(const std::string &s)
     m_clef = s;
 }
 
-Clef& Clef::operator=(const Clef &c)
+Clef &Clef::operator=(const Clef &c)
 {
     if (this != &c) m_clef = c.m_clef;
     return *this;
@@ -317,6 +317,66 @@ Key::KeyDetails& Key::KeyDetails::operator=(const Key::KeyDetails &d)
     m_rg2name = d.m_rg2name;
     return *this;
 }
+
+
+
+//////////////////////////////////////////////////////////////////////
+// Mark
+//////////////////////////////////////////////////////////////////////
+
+const std::string Mark::EventType = "mark";
+const int Mark::EventSubOrdering = -8;
+const PropertyName Mark::MarkTypePropertyName = "marktype";
+const PropertyName Mark::MarkDurationPropertyName = "markduration";
+
+const std::string Mark::Slur = "slur";
+const std::string Mark::Crescendo = "crescendo";
+const std::string Mark::Decrescendo = "decrescendo";
+
+Mark::Mark(const Event &e)
+{
+    if (e.getType() != EventType) {
+        throw Event::BadType();
+    }
+    std::string s = e.get<String>(MarkTypePropertyName);
+    if (s != Slur && s != Crescendo && s != Decrescendo) {
+        throw BadMarkName();
+    }
+    m_markType = s;
+    m_duration = e.get<Int>(MarkDurationPropertyName);
+}
+
+Mark::Mark(const std::string &s, timeT markDuration)
+{
+    if (s != Slur && s != Crescendo && s != Decrescendo) {
+        throw BadMarkName();
+    }
+    m_markType = s;
+    m_duration = markDuration;
+}
+
+Mark &
+Mark::operator=(const Mark &m)
+{
+    if (&m != this) {
+	m_markType = m.m_markType;
+	m_duration = m.m_duration;
+    }
+    return *this;
+}
+
+Event *
+Mark::getAsEvent(timeT absoluteTime) const
+{
+    Event *e = new Event(EventType);
+    e->set<String>(MarkTypePropertyName, m_markType);
+    e->set<Int>(MarkDurationPropertyName, m_duration);
+    e->setAbsoluteTime(absoluteTime);
+    e->setSubOrdering(EventSubOrdering);
+    return e;
+}
+
+
 
 //////////////////////////////////////////////////////////////////////
 // NotationDisplayPitch

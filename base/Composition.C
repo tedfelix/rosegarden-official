@@ -281,8 +281,20 @@ Composition::getBarEnd(timeT t) const
     calculateBarPositions();
 
     Segment::iterator i = m_referenceSegment.findTime(t);
+
+//    cerr << "Composition::getBarEnd: asked for " << t << ", found an iterator at " << (i == m_referenceSegment.end() ? -1 : (*i)->getAbsoluteTime()) << endl;
+//    Segment::iterator j = m_referenceSegment.end();
+//    if (j != m_referenceSegment.begin()) {
+//	--j;
+//	cerr << "Composition::getBarEnd: final item in ref segment is at "
+//	     << (*j)->getAbsoluteTime() << endl;
+//    } else {
+//	cerr << "Composition::getBarEnd: ref segment is empty" << endl;
+//    }
+
     if (i == m_referenceSegment.end() || ++i == m_referenceSegment.end()) {
-        return m_referenceSegment.getDuration();
+	timeT d = m_referenceSegment.getDuration();
+	return d + getTimeSignatureAt(d).getBarDuration();
     }
 
     return (*i)->getAbsoluteTime();
@@ -316,8 +328,12 @@ Composition::getBarRange(timeT t) const
 	}
     }
 
-    if (j == m_referenceSegment.end()) finish = m_referenceSegment.getDuration();
-    else finish = (*j)->getAbsoluteTime();
+    if (j == m_referenceSegment.end()) {
+	finish = m_referenceSegment.getDuration();
+	finish += getTimeSignatureAt(finish).getBarDuration();
+    } else {
+	finish = (*j)->getAbsoluteTime();
+    }
 
     return std::pair<timeT, timeT>(start, finish);
 }

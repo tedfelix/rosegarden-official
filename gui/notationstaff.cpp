@@ -341,7 +341,7 @@ void
 NotationStaff::renderElements(NotationElementList::iterator from,
 			      NotationElementList::iterator to)
 {
-    kdDebug(KDEBUG_AREA) << "NotationStaff::renderElements()" << endl;
+//    kdDebug(KDEBUG_AREA) << "NotationStaff " << this << "::renderElements()" << endl;
 
     START_TIMING;
 
@@ -356,6 +356,9 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 	bool selected = false;
 	(void)((*it)->event()->get<Bool>(SELECTED, selected));
 
+//	kdDebug(KDEBUG_AREA) << "Rendering at " << (*it)->getAbsoluteTime()
+//			     << " (selected = " << selected << ")" << endl;
+
 	renderSingleElement(*it, currentClef, selected);
     }
 
@@ -366,7 +369,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 void
 NotationStaff::positionElements()
 {
-    kdDebug(KDEBUG_AREA) << "NotationStaff::positionElements()" << endl;
+    kdDebug(KDEBUG_AREA) << "NotationStaff " << this << "::positionElements()" << endl;
 
     START_TIMING;
 
@@ -399,7 +402,11 @@ NotationStaff::positionElements()
 
 	bool needNewSprite = (selected != (*it)->isSelected());
 
-	if ((*it)->getCanvasItem() && (*it)->isNote()) {
+	if (!(*it)->getCanvasItem()) {
+
+	    needNewSprite = true;
+
+	} else if ((*it)->isNote()) {
 
 	    // If the event is a beamed or tied-forward note, then we
 	    // might need a new sprite if the distance from this note
@@ -428,8 +435,14 @@ NotationStaff::positionElements()
 	}
 
 	if (needNewSprite) {
+	    //kdDebug(KDEBUG_AREA) << "Rendering at " << (*it)->getAbsoluteTime()
+//			     << " (selected = " << selected << ", canvas item selected = " << (*it)->isSelected() << ")" << endl;
+
 	    renderSingleElement(*it, currentClef, selected);
 	} else {
+	    //kdDebug(KDEBUG_AREA) << "Positioning at " << (*it)->getAbsoluteTime()
+	    //<< " (selected = " << selected << ", canvas item selected = " << (*it)->isSelected() << ")" << endl;
+
 	    (*it)->reposition(x(), y());
 	}
     }
@@ -449,7 +462,6 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	QCanvasSimpleSprite *sprite = 0;
 
 	m_npf->setSelected(selected);
-	elt->setSelected(selected);
 
 	if (elt->isNote()) {
 
@@ -501,6 +513,9 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 	} else {
 	    elt->removeCanvasItem();
 	}
+	
+//	kdDebug(KDEBUG_AREA) << "NotationStaff::renderSingleElement: Setting selected at " << elt->getAbsoluteTime() << " to " << selected << endl;
+	elt->setSelected(selected);
             
     } catch (...) {
 	kdDebug(KDEBUG_AREA) << "Event lacks the proper properties: "

@@ -1708,15 +1708,20 @@ void NotationView::redoLayoutAdvised(Segment *segment,
         NotationElementList::iterator starti = notes->begin();
         NotationElementList::iterator endi = notes->end();
 
+	timeT barStartTime = -1, barEndTime = -1;
+	
         if (startTime > 0) {
-            timeT barStartTime = ssegment->getBarStart(startTime);
+            barStartTime = ssegment->getBarStart(startTime);
             starti = notes->findTime(barStartTime);
         }
 
         if (endTime >= 0) {
-            timeT barEndTime = ssegment->getBarEnd(endTime);
+	    barEndTime = ssegment->getBarEnd(endTime);
             endi = notes->findTime(barEndTime);
         }
+
+	kdDebug(KDEBUG_AREA) << "NotationView::redoLayoutAdvised: "
+			     << "start = " << startTime << ", end = " << endTime << ", barStart = " << barStartTime << ", barEnd = " << barEndTime << endl;
 
 	if (thisStaff) {
 	    m_staffs[i]->renderElements(starti, endi);
