@@ -70,8 +70,8 @@ EditView::EditView(RosegardenGUIDoc *doc,
     getCommandHistory()->attachView(actionCollection());
     
     QObject::connect
-        (getCommandHistory(), SIGNAL(commandExecuted(Command *)),
-         this,                      SLOT(slotCommandExecuted(Command *)));
+        (getCommandHistory(), SIGNAL(update()),
+         this,                  SLOT(update()));
 
     m_grid->addWidget(m_horizontalScrollBar, 4, m_mainCol);
     m_grid->addLayout(m_rulerBox, 0, m_mainCol);
@@ -99,6 +99,38 @@ void EditView::setCanvasView(QCanvasView *canvasView)
             m_canvasView->horizontalScrollBar(), SIGNAL(valueChanged(int)));
     connect(m_horizontalScrollBar, SIGNAL(sliderMoved(int)),
             m_canvasView->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
+
+}
+
+void EditView::paintEvent(QPaintEvent* e)
+{
+    bool needUpdate = false;
+    
+    // Scan all segments and check if they've been modified
+    //
+    for (unsigned int i = 0; i < m_segments.size(); ++i) {
+
+        Rosegarden::Segment* segment = m_segments[i];
+        unsigned int refreshStatusId = m_segmentsRefreshStatusIds[i];
+        Rosegarden::SegmentRefreshStatus &refreshStatus = segment->refreshStatus(refreshStatusId);
+        
+        if (refreshStatus.needsRefresh()) {
+
+            Rosegarden::timeT startTime = refreshStatus.from(),
+                endTime = refreshStatus.to();
+
+            refreshSegment(segment, startTime, endTime);
+            refreshStatus.setNeedsRefresh(false);
+            needUpdate = true;
+        }
+    }
+
+    KMainWindow::paintEvent(e);
+
+    if (needUpdate)  {
+        kdDebug(KDEBUG_AREA) << "EditView::paintEvent() - calling updateView\n";
+        updateView();
+    }
 
 }
 
@@ -222,11 +254,11 @@ void EditView::slotToggleStatusBar()
         statusBar()->show();
 }
 
-void EditView::slotCommandExecuted(Command *command)
-{
-    kdDebug(KDEBUG_AREA) << "EditView::slotCommandExecuted() - "
-                         << name() << " update()\n";
-    update();
+// void EditView::slotCommandExecuted(Command *command)
+// {
+//     kdDebug(KDEBUG_AREA) << "EditView::slotCommandExecuted() - "
+//                          << name() << " update()\n";
+//     update();
 
 //     // might be better done with a visitor pattern or some such
 
@@ -297,7 +329,7 @@ void EditView::slotCommandExecuted(Command *command)
 //         << "Warning: EditView::slotCommandExecuted:\n"
 //         << "Unknown sort of Command, don't know how to refresh"
 //         << endl;
-}
+// }
 
 //
 // Status messages

@@ -184,11 +184,6 @@ public slots:
     virtual void slotStatusHelpMsg(const QString &text);
 
     /**
-     * Receives word of a modification, calls segmentModified
-     */
-    virtual void slotCommandExecuted(Command *command);
-
-    /**
      * Called when a mouse press occurred on an active canvas item
      *
      * @see ActiveItem
@@ -198,6 +193,8 @@ public slots:
 
 protected:
 
+    virtual void paintEvent(QPaintEvent* e);
+    
     /**
      * Locate the given widget in the top bar-buttons position and
      * connect up its scrolling signals.

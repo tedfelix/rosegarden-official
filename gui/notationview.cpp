@@ -2310,45 +2310,6 @@ void NotationView::refreshSegment(Segment *segment,
     PRINT_ELAPSED("NotationView::refreshSegment (including update/GC)");
 }
 
-void NotationView::paintEvent(QPaintEvent* e)
-{
-    kdDebug(KDEBUG_AREA) << "NotationView::paintEvent()\n";
-
-    bool needUpdate = false;
-    
-    // Scan all segments and check if they've been modified
-    //
-    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-
-        Segment& segment = m_staffs[i]->getSegment();
-        unsigned int refreshStatusId = m_segmentsRefreshStatusIds[i];
-        Rosegarden::SegmentRefreshStatus &refreshStatus = segment.refreshStatus(refreshStatusId);
-
-        if (refreshStatus.needsRefresh()) {
-
-            timeT startTime = refreshStatus.from(),
-                endTime = refreshStatus.to();
-
-            kdDebug(KDEBUG_AREA) << "NotationView::paintEvent() - refreshing segment "
-                                 << i << " from " << startTime << " to "
-                                 << endTime << std::endl;
-
-            refreshSegment(&segment, startTime, endTime);
-            refreshStatus.setNeedsRefresh(false);
-            needUpdate = true;
-        }
-    }
-
-    EditView::paintEvent(e);
-
-    if (needUpdate)  {
-        kdDebug(KDEBUG_AREA) << "NotationView::paintEvent() - calling updateView\n";
-        updateView();
-    }
-    
-}
-
-
 void NotationView::readjustCanvasSize()
 {
     START_TIMING;
