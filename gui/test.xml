@@ -2,10 +2,18 @@
 <!DOCTYPE rosegarden-data>
 <rosegarden-data>
 <Track>
+	<event duration="12" pitch="6"/>
+	<event duration="24" pitch="6"/>
+	<event duration="48" pitch="6"/>
+	<event duration="96" pitch="6"/>
+	<event duration="192" pitch="6"/>
+	<event duration="whole" pitch="6"/>
+	<event duration="whole" pitch="6"/>
 	<event duration="48" pitch="4"/>
 	<event duration="48" pitch="5"/>
 	<event duration="48" pitch="6"/>
 	<event duration="48" pitch="7"/>
+	<event duration="96" pitch="7"/>
 	<event duration="whole" pitch="8"/>
 	<event duration="whole" pitch="9"/>
 </Track>
