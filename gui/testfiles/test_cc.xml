@@ -9,7 +9,9 @@
 <track instrument="1" start="0">
         <event type="keychange" subordering="-20"><property name="key" string="C# major"/></event>
         <event type="clefchange" clef="treble" subordering="-30"/>
-        <event type="note" duration="breve" pitch="64"/>
+        <event type="note" duration="semibreve" pitch="64"/>
+        <event type="note" duration="180" pitch="68"/>
+        <event type="note" duration="12" pitch="67"/>
         <event type="note" duration="crotchet" pitch="64"/>
         <event type="note" duration="crotchet" pitch="65"/>
         <event type="rest" duration="quaver"/>

@@ -118,7 +118,7 @@ NotationSet::sample(const NELIterator &i)
 timeT
 NotationSet::durationOf(const NELIterator &i)
 {
-    return (*i)->event()->get<Int>(Quantizer::NoteDurationProperty);
+    return (*i)->event()->get<Int>(Quantizer::LegatoDurationProperty);
 }
 
 NotationSet::NELIterator

@@ -434,7 +434,7 @@ bool NotationStaff::showElements(NotationElementList::iterator from,
             } else if ((*it)->isRest()) {
 
 		timeT duration = (*it)->event()->get<Int>
-		    (Rosegarden::Quantizer::NoteDurationProperty);
+		    (Rosegarden::Quantizer::LegatoDurationProperty);
 
 		if (duration > 0) {
 		    Note::Type note =

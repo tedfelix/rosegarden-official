@@ -295,9 +295,20 @@ void TracksEditor::setupHorizontalHeader()
 {
     QString num;
 
+    Composition &comp = m_document->getComposition();
+
     for (int i = 0; i < m_hHeader->count(); ++i) {
-        m_hHeader->resizeSection(i, 50);
-	//!!! ??? I guess this is related to the bar resolution of the trackscanvas??
+
+	std::pair<timeT, timeT> times = comp.getBarRange(i);
+
+	//!!! ??? s'pose we should divide by some resolution-dependent thing
+	int width = (times.second - times.first) / 7; // 384 -> 54
+	if (width == 0) width = 10;
+        m_hHeader->resizeSection(i, width);
+
+	//!!! ??? I guess this is related to the bar resolution of the
+	//trackscanvas?? ... and in any case bar numbers should
+	//probably be 1-based
         m_hHeader->setLabel(i, num.setNum(i));
     }
 }

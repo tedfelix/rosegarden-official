@@ -29,12 +29,15 @@ namespace Rosegarden {
 const PropertyName Quantizer::AbsoluteTimeProperty = "QuantizedAbsoluteTime";
 const PropertyName Quantizer::DurationProperty	   = "QuantizedDuration";
 const PropertyName Quantizer::NoteDurationProperty = "QuantizedNoteDuration";
+const PropertyName Quantizer::LegatoDurationProperty = "QuantizedLegatoDuration";
 
 Quantizer::SingleQuantizer::~SingleQuantizer() { }
 Quantizer::UnitQuantizer::~UnitQuantizer() { }
 Quantizer::NoteQuantizer::~NoteQuantizer() { }
+Quantizer::LegatoQuantizer::~LegatoQuantizer() { }
 
-timeT Quantizer::UnitQuantizer::quantize(int unit, int, timeT duration) const
+timeT
+Quantizer::UnitQuantizer::quantize(int unit, int, timeT duration, timeT) const
 {
     if (duration != 0) {
 	timeT low = (duration / unit) * unit;
@@ -46,12 +49,13 @@ timeT Quantizer::UnitQuantizer::quantize(int unit, int, timeT duration) const
     return duration;
 }
 
-timeT Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
-					 timeT duration) const
+timeT
+Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
+				   timeT duration, timeT) const
 {
 //    cerr << "NoteQuantizer::quantize: unit is " << unit << ", duration is " << duration << endl;
 
-    duration = UnitQuantizer().quantize(unit, maxDots, duration);
+    duration = UnitQuantizer().quantize(unit, maxDots, duration, 0);
     Note shortNote = Note::getNearestNote(duration, maxDots);
 
     timeT shortTime = shortNote.getDuration();
@@ -95,11 +99,37 @@ timeT Quantizer::NoteQuantizer::quantize(int unit, int maxDots,
     }
 };
 
+timeT
+Quantizer::LegatoQuantizer::quantize(int unit, int maxDots, timeT duration,
+				     timeT followingRestDuration) const
+{
+//    cerr << "LegatoQuantizer::quantize: followingRestDuration is " << followingRestDuration << endl;
+
+    if (followingRestDuration > 0) {
+
+	timeT possibleDuration = NoteQuantizer().quantize
+	    (unit, maxDots, duration, 0);
+
+	if (possibleDuration > duration) {
+	    if (possibleDuration - duration <= followingRestDuration) {
+		return possibleDuration;
+	    } else {
+		return NoteQuantizer().quantize
+		    (Note(Note::Shortest).getDuration(),
+		     maxDots, duration + followingRestDuration, 0);
+	    }
+	}
+    }
+
+    return NoteQuantizer().quantize(Note(Note::Shortest).getDuration(),
+				    maxDots, duration, 0);
+}
+
 
 void
 Quantizer::quantize(Track::iterator from, Track::iterator to,
 		    const SingleQuantizer &aq, const SingleQuantizer &dq,
-		    PropertyName durationProperty) const
+		    PropertyName durationProperty, bool legato) const
 {
     timeT excess = 0;
 
@@ -107,12 +137,23 @@ Quantizer::quantize(Track::iterator from, Track::iterator to,
 
 	timeT absoluteTime   = (*from)->getAbsoluteTime();
 	timeT duration	     = (*from)->getDuration();
-	timeT qAbsoluteTime  = aq.quantize(m_unit, m_maxDots, absoluteTime);
 	timeT qDuration	     = 0;
+
+	// wacky legato-stylee big-unit quantization doesn't interest us here;
+	// we'd need a separate unit for it if it did
+	timeT qAbsoluteTime  =
+	    aq.quantize(Note(Note::Shortest).getDuration(),
+			m_maxDots, absoluteTime, 0);
 
 	if ((*from)->isa(Note::EventType)) {
 
-	    qDuration = dq.quantize(m_unit, m_maxDots, duration);
+	    timeT followingRestDuration = 0;
+	    if (legato) {
+		followingRestDuration = findFollowingRestDuration(from, to);
+	    }
+
+	    qDuration = dq.quantize
+		(m_unit, m_maxDots, duration, followingRestDuration);
 	    excess = (qAbsoluteTime + qDuration) - (absoluteTime + duration);
 
 	} else if ((*from)->isa(Note::EventRestType)) {
@@ -129,9 +170,11 @@ Quantizer::quantize(Track::iterator from, Track::iterator to,
 		    duration	  -= excess;
 		}
 
-		qDuration = dq.quantize(m_unit, m_maxDots, duration);
+		qDuration = dq.quantize(m_unit, m_maxDots, duration, 0);
 	    }
-	}
+	} else continue;//!!!
+
+
 	//!!! should skip this for non-note/rest events, but can't
 	//while we still have the next two methods working the way
 	//they do -- really want to drop per-Event quantization
@@ -143,16 +186,35 @@ Quantizer::quantize(Track::iterator from, Track::iterator to,
 }
 
 
+timeT
+Quantizer::findFollowingRestDuration(Track::iterator from,
+				     Track::iterator to) const
+{
+    Track::iterator j(from);
+    timeT nextTime = (*j)->getAbsoluteTime() + (*j)->getDuration();
+
+    while (j != to && (*j)->getAbsoluteTime() < nextTime) ++j;
+    if (j == to) return 0;
+
+    if (j != from && (*j)->isa(Note::EventRestType)) {
+	return (*j)->getDuration() + findFollowingRestDuration(j, to);
+    }
+
+    return 0;
+}
+
+
 void
 Quantizer::quantizeByUnit(Track::iterator from, Track::iterator to) const
 {
-    quantize(from, to, UnitQuantizer(), UnitQuantizer(), DurationProperty);
+    quantize(from, to,
+	     UnitQuantizer(), UnitQuantizer(), DurationProperty, false);
 }
 
 timeT
 Quantizer::quantizeByUnit(timeT duration) const
 {
-    return UnitQuantizer().quantize(m_unit, m_maxDots, duration);
+    return UnitQuantizer().quantize(m_unit, m_maxDots, duration, 0);
 }
 
 timeT
@@ -175,7 +237,8 @@ Quantizer::getUnitQuantizedAbsoluteTime(Event *e) const
 void
 Quantizer::quantizeByNote(Track::iterator from, Track::iterator to) const
 {
-    quantize(from, to, UnitQuantizer(), NoteQuantizer(), NoteDurationProperty);
+    quantize(from, to,
+	     UnitQuantizer(), NoteQuantizer(), NoteDurationProperty, false);
 
 /*!!!
 
@@ -191,10 +254,17 @@ Quantizer::quantizeByNote(Track::iterator from, Track::iterator to) const
 */
 }
 
+void
+Quantizer::quantizeLegato(Track::iterator from, Track::iterator to) const
+{
+    quantize(from, to,
+	     UnitQuantizer(), LegatoQuantizer(), LegatoDurationProperty, true);
+}
+
 timeT 
 Quantizer::quantizeByNote(timeT duration) const
 {
-    return NoteQuantizer().quantize(m_unit, m_maxDots, duration);
+    return NoteQuantizer().quantize(m_unit, m_maxDots, duration, 0);
 }
 
 
@@ -211,6 +281,7 @@ void Quantizer::unquantize(Event *e) const
 {
     e->unset(DurationProperty);
     e->unset(NoteDurationProperty);
+    e->unset(LegatoDurationProperty);
     e->unset(AbsoluteTimeProperty);
 }
 

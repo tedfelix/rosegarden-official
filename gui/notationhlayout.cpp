@@ -151,7 +151,7 @@ int NotationHLayout::getIdealBarWidth(StaffType &staff,
         return fixedWidth;
     }
 
-    int d = (*shortest)->event()->get<Int>(Quantizer::NoteDurationProperty);
+    int d = (*shortest)->event()->get<Int>(Quantizer::LegatoDurationProperty);
     if (d == 0) {
         kdDebug(KDEBUG_AREA) << "Second trivial return" << endl;
         return fixedWidth;
@@ -355,7 +355,7 @@ NotationHLayout::scanStaff(StaffType &staff)
 
                     int d = 0;
                     try {
-                        d = el->event()->get<Int>(Quantizer::NoteDurationProperty);
+                        d = el->event()->get<Int>(Quantizer::LegatoDurationProperty);
                     } catch (Event::NoData e) {
                         kdDebug(KDEBUG_AREA) << "No quantized duration in note/rest! event is " << *(el->event()) << endl;
                     }
@@ -368,7 +368,7 @@ NotationHLayout::scanStaff(StaffType &staff)
 			if (d > 0 &&
 			    (shortest == notes->end() ||
 			     d <= (sd = (*shortest)->event()->get<Int>
-				   (Quantizer::NoteDurationProperty)))) {
+				   (Quantizer::LegatoDurationProperty)))) {
 			    if (d == sd) {
 
                                 // assumption: rests are wider than notes

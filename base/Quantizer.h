@@ -1,6 +1,5 @@
 // -*- c-basic-offset: 4 -*-
 
-
 /*
     Rosegarden-4 v0.1
     A sequencer and musical notation editor.
@@ -26,10 +25,6 @@
 #include "Track.h"
 #include "Event.h"
 #include "NotationTypes.h"
-
-/**
-  *@author Guillaume Laurent, Chris Cannam, Richard Bown
-  */
 
 namespace Rosegarden {
 
@@ -97,6 +92,7 @@ public:
     static const PropertyName AbsoluteTimeProperty;
     static const PropertyName DurationProperty;
     static const PropertyName NoteDurationProperty;
+    static const PropertyName LegatoDurationProperty;
     
     void setUnit(int unit)        { m_unit = unit; }
     void setUnit(Note note)	  { m_unit = note.getDuration(); }
@@ -141,6 +137,11 @@ public:
     void quantizeByNote(Track::iterator from, Track::iterator to) const;
 
     /**
+     * Quantizes a section of a track.  ...
+     */
+    void quantizeLegato(Track::iterator from, Track::iterator to) const;
+
+    /**
      * Quantizes a duration.  
      *
      * @return Quantized duration
@@ -174,24 +175,37 @@ protected:
     class SingleQuantizer {
     public:
 	virtual ~SingleQuantizer();
-	virtual timeT quantize(int unit, int maxDots, timeT duration) const = 0;
+	virtual timeT quantize(int unit, int maxDots, timeT duration,
+			       timeT followingRestDuration) const = 0;
     };
 
     class UnitQuantizer : public SingleQuantizer {
     public:
 	virtual ~UnitQuantizer();
-	virtual timeT quantize(int unit, int maxDots, timeT duration) const;
+	virtual timeT quantize(int unit, int maxDots, timeT duration,
+			       timeT followingRestDuration) const;
     };
 
     class NoteQuantizer : public SingleQuantizer {
     public:
 	virtual ~NoteQuantizer();
-	virtual timeT quantize(int unit, int maxDots, timeT duration) const;
+	virtual timeT quantize(int unit, int maxDots, timeT duration,
+			       timeT followingRestDuration) const;
+    };
+
+    class LegatoQuantizer : public SingleQuantizer {
+    public:
+	virtual ~LegatoQuantizer();
+	virtual timeT quantize(int unit, int maxDots, timeT duration,
+			       timeT followingRestDuration) const;
     };
 
     void quantize(Track::iterator from, Track::iterator to,
 		  const SingleQuantizer &absq, const SingleQuantizer &dq,
-		  PropertyName durationProperty) const;
+		  PropertyName durationProperty, bool legato) const;
+
+    timeT findFollowingRestDuration(Track::iterator from,
+				    Track::iterator to) const;
 
     int m_unit;
     int m_maxDots;

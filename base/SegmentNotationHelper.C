@@ -942,13 +942,13 @@ bool TrackNotationHelper::removeRests(timeT time, timeT duration)
 void
 TrackNotationHelper::quantize()
 {
-    quantizer().quantizeByNote(begin(), end());
+    quantizer().quantizeLegato(begin(), end());
 
     for (iterator i = begin(); i != end(); ++i) {
 
 	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
 
-	    timeT duration = (*i)->get<Int>(Quantizer::NoteDurationProperty);
+	    timeT duration = (*i)->get<Int>(Quantizer::LegatoDurationProperty);
 	    Note n(Note::getNearestNote(duration));
 	    (*i)->setMaybe<Int>(Note::NoteType, n.getNoteType());
 	    (*i)->setMaybe<Int>(Note::NoteDots, n.getDots());

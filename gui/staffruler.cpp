@@ -116,6 +116,11 @@ void StaffRuler::makeStep(int stepValue,
                           double stepPos, double nextStepPos,
                           unsigned short nbSubsteps)
 {
+    kdDebug(KDEBUG_AREA) << "StaffRuler::makeStep: stepValue = " << stepValue
+			 << ", stepPos = " << stepPos << ", nextStepPos = "
+			 << nextStepPos << ", nbSubsteps = " << nbSubsteps
+			 << endl;
+
     if (stepPos == nextStepPos) return; // yes, this can happen
 
     // Make step line
