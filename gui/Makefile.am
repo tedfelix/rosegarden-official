@@ -33,6 +33,7 @@ rosegarden_SOURCES = \
         hydrogenio.cpp \
 	importdevicedialog.cpp \
         instrumentparameterbox.cpp \
+	kde32_kfontrequester.cpp \
 	kde32_ktabwidget.cpp \
 	kde32_ktabbar.cpp \
 	kstartuplogo.cpp \

@@ -32,10 +32,10 @@
 #include <qslider.h>
 #include <qlineedit.h>
 
+#include <kdeversion.h>
 #include <klocale.h>
 #include <kcolordialog.h>
 #include <kcolorbutton.h>
-#include <kfontrequester.h>
 
 #include <string>
 
@@ -54,6 +54,11 @@ class QLabel;
 class QCheckBox;
 class RosegardenQuantizeParameters;
 class KListView;
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
+class KFontRequester;
+#else
+namespace KDE32Backport { class KFontRequester; }
+#endif
 class QTable;
 
 namespace Rosegarden

@@ -46,7 +46,7 @@ class QScrollBar;
 
 class KCommand;
 class KToggleAction;
-#if KDE_VERSION >= 197120
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
 class KTabWidget;
 #else
 namespace KDE32Backport { class KTabWidget; }
@@ -388,7 +388,7 @@ protected:
     BarButtons   *m_topBarButtons;
     BarButtons   *m_bottomBarButtons;
     ControlRuler *m_controlRuler;
-#if KDE_VERSION >= 197120
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
     KTabWidget   *m_controlRulers;
 #else
     KDE32Backport::KTabWidget   *m_controlRulers;

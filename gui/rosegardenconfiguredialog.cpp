@@ -53,6 +53,7 @@
 #include <qheader.h>
 #include <klineeditdlg.h>
 
+#include <kdeversion.h>
 #include <kcombobox.h>
 #include <klistview.h>
 #include <klocale.h>
@@ -61,7 +62,11 @@
 #include <kprocess.h>
 #include <kcolordialog.h>
 #include <kdiskfreesp.h>
-
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
+#include <kfontrequester.h>
+#else
+#include "kde32_kfontrequester.h"
+#endif
 #include "constants.h"
 #include "colours.h"
 #include "rosestrings.h"
@@ -438,8 +443,13 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget(m_multiStaffSize, 3, 1);
     layout->addWidget(m_printingSize, 4, 1);
 
+#if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)
+    m_textFont = new KDE32Backport::KFontRequester(frame);
+    m_timeSigFont = new KDE32Backport::KFontRequester(frame);
+#else
     m_textFont = new KFontRequester(frame);
     m_timeSigFont = new KFontRequester(frame);
+#endif
 
     QFont defaultTextFont(NotePixmapFactory::defaultSerifFontFamily),
         defaultTimeSigFont(NotePixmapFactory::defaultTimeSigFontFamily);

@@ -32,7 +32,7 @@
 #include <kstatusbar.h>
 #include <klistbox.h>
 
-#if KDE_VERSION >= 197120 // 320
+#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
 #include <ktabwidget.h>
 #else
 #include "kde32_ktabwidget.h"
@@ -92,7 +92,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
     m_topBarButtons(0),
     m_bottomBarButtons(0),
     m_controlRuler(0),
-#if KDE_VERSION < 197120
+#if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)
     m_controlRulers(new KDE32Backport::KTabWidget(getBottomWidget(), "controlrulers"))
 #else
     m_controlRulers(new KTabWidget(getBottomWidget(), "controlrulers"))
@@ -185,7 +185,7 @@ void EditView::setControlRulersCurrentSegment()
 
     delete m_controlRulers;
     
-#if KDE_VERSION < 197120
+#if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)
     m_controlRulers = new KDE32Backport::KTabWidget(getBottomWidget(), "controlrulers");
 #else
     m_controlRulers = new KTabWidget(getBottomWidget(), "controlrulers");
