@@ -550,6 +550,26 @@ protected:
     bool                               m_detached;
 };
 
+class MoveTracksCommand : public KNamedCommand
+{
+public:
+    MoveTracksCommand(Rosegarden::Composition *composition,
+                      Rosegarden::TrackId srcTrack,
+                      Rosegarden::TrackId destTrack);
+    virtual ~MoveTracksCommand();
+
+    static QString getGlobalName() { return i18n("Move Tracks..."); }
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    Rosegarden::Composition           *m_composition;
+
+    Rosegarden::TrackId                m_srcTrack;
+    Rosegarden::TrackId                m_destTrack;
+};
+
 
 class ChangeCompositionLengthCommand : public KNamedCommand
 {

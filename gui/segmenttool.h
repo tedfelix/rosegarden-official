@@ -24,8 +24,6 @@
 
 #include <qobject.h>
 
-#include <kxmlguiclient.h>
-
 #include "Track.h"
 #include "Event.h"
 #include "Segment.h"
@@ -45,8 +43,7 @@ namespace Rosegarden { class RulerScale; }
 //                 Segment Tools
 //////////////////////////////////////////////////////////////////////
 
-//LDB
-class SegmentTool : public QObject, public KXMLGUIClient
+class SegmentTool : public QObject
 {
 public:
     SegmentTool(SegmentCanvas*, RosegardenGUIDoc *doc);
@@ -76,16 +73,14 @@ public:
     void addCommandToHistory(KCommand *command);
 
 protected:
-    // LDB
-    void createMenu(const QString& rcFileName);
+
+    void createMenu();
 
     //--------------- Data members ---------------------------------
 
     SegmentCanvas*  m_canvas;
     SegmentItem* m_currentItem;
     RosegardenGUIDoc* m_doc;
-    
-    // LDB
     QPopupMenu* m_menu;
 };
 

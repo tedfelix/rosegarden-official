@@ -57,6 +57,8 @@
 	<text>Trac&amp;ks</text>
 	<Action name="add_tracks"/>
 	<Action name="delete_track"/>
+        <Action name="move_track_down"/>
+        <Action name="move_track_up"/>
         <Action name="select_next_track"/>
         <Action name="select_previous_track"/>
 	<Separator/>

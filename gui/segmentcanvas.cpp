@@ -551,7 +551,8 @@ void SegmentItem::recalculateRectangle(bool inheritFromSegment)
     //
     if (m_segment && inheritFromSegment) {
 
-	m_track = m_segment->getTrack();
+	m_track = m_doc->getComposition().
+            getTrackById(m_segment->getTrack())->getPosition();
 	m_startTime = m_segment->getStartTime();
 	m_endTime = m_segment->getEndMarkerTime();
         m_label = strtoqstr(m_segment->getLabel());

@@ -454,6 +454,16 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotDeleteTrack()),
                 actionCollection(), "delete_track");
 
+    new KAction(i18n("Move Track &Up"),
+                0,
+                this, SLOT(slotMoveTrackUp()),
+                actionCollection(), "move_track_up");
+
+    new KAction(i18n("Move Track &Down"),
+                0,
+                this, SLOT(slotMoveTrackDown()),
+                actionCollection(), "move_track_down");
+
     new KAction(i18n("Select &Next Track"),
                 Key_Down, 
                 this, SLOT(slotTrackDown()),
@@ -1999,7 +2009,64 @@ void RosegardenGUIApp::slotDeleteTrack()
     m_view->slotDeleteTracks(tracks);
 }
 
+void RosegardenGUIApp::slotMoveTrackDown()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotMoveTrackDown" << endl;
 
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *srcTrack = comp.getTrackById(comp.getSelectedTrack());
+
+    // Check for track object
+    //
+    if (srcTrack == 0) return;
+
+    // Check we're not at the top already
+    //
+    if (srcTrack->getPosition() == 0) return;
+
+    // Check destination track exists
+    //
+    Rosegarden::Track *destTrack =
+        comp.getTrackByPosition(srcTrack->getPosition() + 1);
+
+    if (destTrack == 0) return;
+
+    MoveTracksCommand *command =
+        new MoveTracksCommand(&comp, srcTrack->getId(), destTrack->getId());
+
+    m_doc->getCommandHistory()->addCommand(command);
+
+    // make sure we're showing the right selection
+    m_view->slotSelectTrackSegments(comp.getSelectedTrack());
+
+}
+
+void RosegardenGUIApp::slotMoveTrackUp()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotMoveTrackUp" << endl;
+
+    Rosegarden::Composition &comp = m_doc->getComposition();
+    Rosegarden::Track *srcTrack = comp.getTrackById(comp.getSelectedTrack());
+
+    // Check for track object
+    //
+    if (srcTrack == 0) return;
+
+    // Check destination track exists
+    //
+    Rosegarden::Track *destTrack =
+        comp.getTrackByPosition(srcTrack->getPosition() - 1);
+
+    if (destTrack == 0) return;
+
+    MoveTracksCommand *command =
+        new MoveTracksCommand(&comp, srcTrack->getId(), destTrack->getId());
+
+    m_doc->getCommandHistory()->addCommand(command);
+
+    // make sure we're showing the right selection
+    m_view->slotSelectTrackSegments(comp.getSelectedTrack());
+}
 
 void RosegardenGUIApp::slotRevertToSaved()
 {

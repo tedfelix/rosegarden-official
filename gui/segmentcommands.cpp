@@ -1467,8 +1467,6 @@ void DeleteTracksCommand::execute()
     //
 
     Rosegarden::Composition::trackiterator tit;
-
-
     Rosegarden::Composition::trackcontainer
                 &tracks = m_composition->getTracks();
 
@@ -1546,6 +1544,17 @@ void DeleteTracksCommand::execute()
     }
     */
 
+    // Sort out the record track - make sure it's valid
+    //
+    /*
+    Rosegarden::TrackId recordTrack = m_composition.getRecordTrack();
+    int recordPosition = m_composition.getTrackById(recordTrack)->getPosition();
+
+    if (recordPosition == 0) recordPosition = 
+    if (m_composition.getTrackByPosition(recordPosition - 1)
+    */
+    m_composition->setRecordTrack(m_composition->getTrackByPosition(0)->getId());
+
     m_detached = true;
 }
 
@@ -1582,6 +1591,51 @@ void DeleteTracksCommand::unexecute()
 
     m_detached = false;
 }
+
+// ------------------ MoveTracksCommand ---------------------
+//
+MoveTracksCommand::MoveTracksCommand(Rosegarden::Composition *composition,
+                                     Rosegarden::TrackId srcTrack,
+                                     Rosegarden::TrackId destTrack):
+    KNamedCommand(getGlobalName()),
+    m_composition(composition),
+    m_srcTrack(srcTrack),
+    m_destTrack(destTrack)
+{
+}
+
+MoveTracksCommand::~MoveTracksCommand()
+{
+}
+
+void
+MoveTracksCommand::execute()
+{
+    Rosegarden::Track *srcTrack = m_composition->getTrackById(m_srcTrack);
+    Rosegarden::Track *destTrack = m_composition->getTrackById(m_destTrack);
+
+    int srcPosition = srcTrack->getPosition();
+
+    srcTrack->setPosition(destTrack->getPosition());
+    destTrack->setPosition(srcPosition);
+
+    m_composition->updateRefreshStatuses();
+}
+
+void
+MoveTracksCommand::unexecute()
+{
+    Rosegarden::Track *srcTrack = m_composition->getTrackById(m_srcTrack);
+    Rosegarden::Track *destTrack = m_composition->getTrackById(m_destTrack);
+
+    int srcPosition = srcTrack->getPosition();
+
+    srcTrack->setPosition(destTrack->getPosition());
+    destTrack->setPosition(srcPosition);
+
+    m_composition->updateRefreshStatuses();
+}
+
 
 // ------------------ ChangeCompositionLengthCommand ------------------
 //

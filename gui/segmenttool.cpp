@@ -60,41 +60,36 @@ void
 SegmentTool::handleRightButtonPress(QMouseEvent *e)
 {
     SegmentItem *item = m_canvas->findSegmentClickedOn(e->pos());
-    if (item) {
+
+    if (item) 
         m_currentItem = item;
-    }
+
+    createMenu();
     showMenu();
 }
 
 void
-SegmentTool::createMenu(const QString& rcFileName)
+SegmentTool::createMenu()
 {
-    setXMLFile(rcFileName);    
     RosegardenGUIApp *app =
         dynamic_cast<RosegardenGUIApp*>(m_doc->parent());
 
     if (app) {
-        app->factory()->addClient(this);
-        m_menu = static_cast<QPopupMenu*>(app->factory()->container("segment_tool_menu", app));
+        m_menu = static_cast<QPopupMenu*>
+            (app->factory()->container("segment_tool_menu", app));
         if (!m_menu) {
-            RG_DEBUG << "SegmentTool::createMenu(" << rcFileName
-                     << ") : menu creation failed (name : "
-                     << "segment_tool_menu" << ")\n";
+            RG_DEBUG << "SegmentTool::createMenu() failed\n";
         }
     } else {
-        RG_DEBUG << "SegmentTool::createMenu(" << rcFileName
-                 << ") : menu creation failed (name : "
-                 << "segment_tool_menu" << ")\n";
+        RG_DEBUG << "SegmentTool::createMenu() failed: !app\n";
     }
 }
 
 void
 SegmentTool::showMenu()
 {
-    if (!m_menu) createMenu("rosegardenui.rc");
-
     if (m_menu)
-        m_menu->popup(QCursor::pos());
+        m_menu->exec(QCursor::pos());
     else
         RG_DEBUG << "SegmentTool::showMenu() : no menu to show\n";
 }
@@ -134,7 +129,9 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     m_canvas->setSnapGrain(false);
 
-    TrackId track = m_canvas->grid().getYBin(e->pos().y());
+    int trackPosition = m_canvas->grid().getYBin(e->pos().y());
+    TrackId track = m_doc->getComposition().
+        getTrackByPosition(trackPosition)->getId();
 
     // Don't do anything if the user clicked beyond the track buttons
     //
@@ -144,7 +141,8 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     timeT duration = m_canvas->grid().getSnapTime(double(e->pos().x()));
     if (duration == 0) duration = Note(Note::Shortest).getDuration();
     
-    m_currentItem = m_canvas->addSegmentItem(track, time, time + duration);
+    m_currentItem = m_canvas->
+        addSegmentItem(trackPosition, time, time + duration);
     m_newRect = true;
     
     m_canvas->slotUpdate();
@@ -156,9 +154,13 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
     m_currentItem->normalize();
 
     if (m_newRect) {
+
+        Rosegarden::Track *track = m_doc->getComposition().
+            getTrackByPosition(m_currentItem->getTrack());
+
         SegmentInsertCommand *command =
             new SegmentInsertCommand(m_doc,
-                                     m_currentItem->getTrack(),
+                                     track->getId(),
                                      m_currentItem->getStartTime(),
                                      m_currentItem->getEndTime());
 
