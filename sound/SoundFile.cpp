@@ -79,7 +79,7 @@ SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
 
     file->read(fileBytes, numberOfBytes);
 
-    for (unsigned int i = 0; i < file->gcount(); i++)
+    for (int i = 0; i < file->gcount(); i++)
         rS += (unsigned char)fileBytes[i];
 
     // complain but return
@@ -144,7 +144,7 @@ SoundFile::getBytes(unsigned int numberOfBytes)
             // file->gcount holds the number of bytes we've actually read
             // so copy them across into our string
             //
-            for (unsigned int i = 0; i< m_inFile->gcount(); i++)
+            for (int i = 0; i< m_inFile->gcount(); i++)
                 m_readBuffer += (unsigned char)fileBytes[i];
         }
 
