@@ -54,6 +54,7 @@ DSSIPluginInstance::DSSIPluginInstance(PluginFactory *factory,
     m_instrument(instrument),
     m_position(position),
     m_descriptor(descriptor),
+    m_programCacheValid(false),
     m_eventBuffer(EVENT_BUFFER_SIZE),
     m_blockSize(blockSize),
     m_idealChannelCount(idealChannelCount),
@@ -199,7 +200,7 @@ DSSIPluginInstance::getLatency()
 {
     if (m_latencyPort) {
 	if (!m_run) run(RealTime::zeroTime);
-	return *m_latencyPort;
+	return (size_t)(*m_latencyPort + 0.1);
     }
     return 0;
 }
@@ -383,52 +384,77 @@ DSSIPluginInstance::instantiate(unsigned long sampleRate)
     }
 }
 
+void
+DSSIPluginInstance::checkProgramCache()
+{
+    if (m_programCacheValid) return;
+    m_cachedPrograms.clear();
+
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::checkProgramCache" << std::endl;
+#endif
+
+    if (!m_descriptor || !m_descriptor->get_program) {
+	m_programCacheValid = true;
+	return;
+    }
+
+    unsigned long index = 0;
+    const DSSI_Program_Descriptor *programDescriptor;
+    while ((programDescriptor = m_descriptor->get_program(m_instanceHandle, index))) {
+	++index;
+	ProgramDescriptor d;
+	d.bank = programDescriptor->Bank;
+	d.program = programDescriptor->Program;
+	d.name = QString("%1. %2").arg(index).arg(programDescriptor->Name);
+	m_cachedPrograms.push_back(d);
+    }
+
+#ifdef DEBUG_DSSI
+    std::cerr << "DSSIPluginInstance::checkProgramCache: have " << m_cachedPrograms.size() << " programs" << std::endl;
+#endif
+
+    m_programCacheValid = true;
+}
+
 QStringList
 DSSIPluginInstance::getPrograms()
 {
-    QStringList programs;
-
 #ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance::getPrograms" << std::endl;
 #endif
 
-    if (!m_descriptor || !m_descriptor->get_program) return programs;
+    if (!m_descriptor) return QStringList();
 
-    unsigned long index = 0;
-    const DSSI_Program_Descriptor *programDescriptor;
+    checkProgramCache();
 
-    while ((programDescriptor = m_descriptor->get_program(m_instanceHandle, index))) {
-	++index;
-	programs.append(QString("%1. %2").arg(index).arg(programDescriptor->Name));
+    QStringList programs;
+
+    for (std::vector<ProgramDescriptor>::iterator i = m_cachedPrograms.begin();
+	 i != m_cachedPrograms.end(); ++i) {
+	programs.push_back(i->name);
     }
-    
+
     return programs;
 }
 
 QString
 DSSIPluginInstance::getProgram(int bank, int program)
 {
-    QString programName;
-
 #ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance::getProgram(" << bank << "," << program << ")" << std::endl;
 #endif
 
-    if (!m_descriptor || !m_descriptor->get_program) return programName;
+    if (!m_descriptor) return QString();
 
-    unsigned long index = 0;
-    const DSSI_Program_Descriptor *programDescriptor;
+    checkProgramCache();
 
-    while ((programDescriptor = m_descriptor->get_program(m_instanceHandle, index))) {
-	++index;
-	if (int(programDescriptor->Bank) == bank &&
-	    int(programDescriptor->Program) == program) {
-	    programName = QString("%1. %2").arg(index).arg(programDescriptor->Name);
-	    break;
-	}
+    for (std::vector<ProgramDescriptor>::iterator i = m_cachedPrograms.begin();
+	 i != m_cachedPrograms.end(); ++i) {
+	if (i->bank == bank && i->program == program) return i->name;
     }
-    
-    return programName;
+
+    return QString();
 }
 
 unsigned long
@@ -438,19 +464,21 @@ DSSIPluginInstance::getProgram(QString name)
     std::cerr << "DSSIPluginInstance::getProgram(" << name << ")" << std::endl;
 #endif
 
-    if (!m_descriptor || !m_descriptor->get_program) return 0;
+    if (!m_descriptor) return 0;
 
-    unsigned long index = 0;
-    const DSSI_Program_Descriptor *programDescriptor;
+    checkProgramCache();
 
-    while ((programDescriptor = m_descriptor->get_program(m_instanceHandle, index))) {
-	++index;
-	QString programName = QString("%1. %2").arg(index).arg(programDescriptor->Name);
-	if (programName == name) {
-	    return (programDescriptor->Bank << 16) + programDescriptor->Program;
+    unsigned long rv;
+
+    for (std::vector<ProgramDescriptor>::iterator i = m_cachedPrograms.begin();
+	 i != m_cachedPrograms.end(); ++i) {
+	if (i->name == name) {
+	    rv = i->bank;
+	    rv = (rv << 16) + i->program;
+	    return rv;
 	}
     }
-    
+
     return 0;
 }
 
@@ -469,32 +497,32 @@ DSSIPluginInstance::selectProgram(QString program)
 void
 DSSIPluginInstance::selectProgramAux(QString program, bool backupPortValues)
 {
-    // better if this were more efficient!
-
 #ifdef DEBUG_DSSI
     std::cerr << "DSSIPluginInstance::selectProgram(" << program << ")" << std::endl;
 #endif
 
-    if (!m_descriptor || !m_descriptor->get_program || !m_descriptor->select_program) return;
+    if (!m_descriptor) return;
 
-    unsigned long index = 0;
-    const DSSI_Program_Descriptor *programDescriptor;
+    checkProgramCache();
+
+    if (!m_descriptor->select_program) return;
 
     bool found = false;
     unsigned long bankNo = 0, programNo = 0;
 
-    while ((programDescriptor = m_descriptor->get_program(m_instanceHandle, index))) {
-	++index;
-	QString name = QString("%1. %2").arg(index).arg(programDescriptor->Name);
-	if (name == program) {
-	    bankNo = programDescriptor->Bank;
-	    programNo = programDescriptor->Program;
+    for (std::vector<ProgramDescriptor>::iterator i = m_cachedPrograms.begin();
+	 i != m_cachedPrograms.end(); ++i) {
+
+	if (i->name == program) {
+
+	    bankNo = i->bank;
+	    programNo = i->program;
+	    found = true;
 
 #ifdef DEBUG_DSSI
 	    std::cerr << "DSSIPluginInstance::selectProgram(" << program << "): found at bank " << bankNo << ", program " << programNo << std::endl;
 #endif
 
-	    found = true;
 	    break;
 	}
     }
@@ -518,8 +546,12 @@ DSSIPluginInstance::selectProgramAux(QString program, bool backupPortValues)
 	// Some plugins may take an additional run cycle to update
 	// their port values correctly, so we'll actually wait for two.
 
-	int i = 0, maxi = 10;
+	int i = 0, maxi = 20;
 	RealTime lrt = m_lastRunTime;
+
+#ifdef DEBUG_DSSI
+	std::cerr << "DSSIPluginInstance::select_program: about to wait for run()" << std::endl;
+#endif
 
 	for (int j = 0; j < 2; ++j) {
 	    while (i < maxi && m_lastRunTime == lrt) {
@@ -529,9 +561,14 @@ DSSIPluginInstance::selectProgramAux(QString program, bool backupPortValues)
 		nanosleep(&ts, 0);
 		++i;
 	    }
+	    if (j == 0) m_lastRunTime = lrt;
 	}
 	
 	if (i == maxi && m_lastRunTime == lrt) {
+
+#ifdef DEBUG_DSSI
+	    std::cerr << "DSSIPluginInstance::select_program: no run() happened" << std::endl;
+#endif
 	    // screw it: if a run() hasn't happened by now, then
 	    // evidently we aren't running at all -- call
 	    // select_program ourselves
@@ -710,6 +747,8 @@ DSSIPluginInstance::configure(QString key,
 #endif
 
     char *message = m_descriptor->configure(m_instanceHandle, key.data(), value.data());
+
+    m_programCacheValid = false;
 
     QString qm;
 

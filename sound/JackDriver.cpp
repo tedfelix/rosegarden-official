@@ -1576,7 +1576,6 @@ JackDriver::jackShutdown(void *arg)
     inst->m_kickedOutAt = time(0);
 
     inst->reportFailure(Rosegarden::MappedEvent::FailureJackDied);
-    if (inst->m_instrumentMixer) inst->m_instrumentMixer->resetAllPlugins();
 }
 
 int
@@ -1605,7 +1604,6 @@ JackDriver::jackXRun(void *arg)
 
 
 void
-
 JackDriver::restoreIfRestorable()
 {
     if (m_kickedOutAt == 0) return;
@@ -1613,6 +1611,8 @@ JackDriver::restoreIfRestorable()
     if (m_client) {
         jack_client_close(m_client);
 	std::cerr << "closed client" << std::endl;
+	if (m_instrumentMixer) m_instrumentMixer->resetAllPlugins();
+	std::cerr << "reset plugins" << std::endl;
 	m_client = 0;
     }
     

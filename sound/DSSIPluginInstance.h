@@ -118,10 +118,11 @@ protected:
     bool handleController(snd_seq_event_t *ev);
     void setPortValueFromController(unsigned int portNumber, int controlValue);
     void selectProgramAux(QString program, bool backupPortValues);
+    void checkProgramCache();
 
     void initialiseGroupMembership();
     void runGrouped(const RealTime &);
-    
+
     Rosegarden::InstrumentId   m_instrument;
     int                        m_position;
     LADSPA_Handle              m_instanceHandle;
@@ -143,6 +144,14 @@ protected:
 	int program;
     };
     ProgramControl m_pending;
+
+    struct ProgramDescriptor {
+	int bank;
+	int program;
+	QString name;
+    };
+    std::vector<ProgramDescriptor> m_cachedPrograms;
+    bool m_programCacheValid;
 
     RingBuffer<snd_seq_event_t> m_eventBuffer;
 
