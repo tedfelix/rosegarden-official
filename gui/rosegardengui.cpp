@@ -1056,12 +1056,6 @@ void RosegardenGUIApp::readProperties(KConfig* _cfg)
     setCaption(caption+": "+m_doc->getTitle());
 }		
 
-void RosegardenGUIApp::paintEvent(QPaintEvent* e)
-{
-    // slotRefreshTimeDisplay();
-    KMainWindow::paintEvent(e);
-}
-
 void RosegardenGUIApp::showEvent(QShowEvent* e)
 {
     RG_DEBUG << "RosegardenGUIApp::showEvent()\n";

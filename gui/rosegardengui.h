@@ -282,8 +282,6 @@ protected:
 
     static const void* SequencerExternal;
 
-    virtual void paintEvent(QPaintEvent*);
-
     /// Raise the transport along
     virtual void showEvent(QShowEvent*);
 
