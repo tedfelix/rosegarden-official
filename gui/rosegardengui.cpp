@@ -1559,7 +1559,7 @@ void RosegardenGUIApp::slotFileOpen()
 #else
          QString::null,
 #endif
-	 i18n("*.rg|Rosegarden-4 files\n*|All files"), this,
+	 "audio/x-rosegarden", this,
 	 i18n("Open File"));
     if ( url.isEmpty() ) { return; }
 
@@ -1583,7 +1583,7 @@ void RosegardenGUIApp::slotMerge()
 #else
          QString::null,
 #endif
-	 i18n("*.rg|Rosegarden-4 files\n*|All files"), this,
+	 "audio/x-rosegarden", this,
 	 i18n("Open File"));
     if ( url.isEmpty() ) { return; }
 
@@ -2643,7 +2643,7 @@ void RosegardenGUIApp::slotImportMIDI()
 #else
          QString::null,
 #endif
-         i18n("*.mid *.midi|Standard MIDI files\n*|All files"), this,
+         "audio/x-midi", this,
          i18n("Open MIDI File"));
     if (url.isEmpty()) { return; }
 
@@ -2663,7 +2663,7 @@ void RosegardenGUIApp::slotMergeMIDI()
 #else
          QString::null,
 #endif
-         i18n("*.mid *.midi|Standard MIDI files\n*|All files"), this,
+         "audio/x-midi", this,
          i18n("Merge MIDI File"));
     if (url.isEmpty()) { return; }
 

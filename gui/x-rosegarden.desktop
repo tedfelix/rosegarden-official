@@ -1,0 +1,8 @@
+[Desktop Entry]
+Comment=Rosegarden file
+Comment[fr]=Fichier Rosegarden
+Hidden=false
+Icon=midi
+MimeType=audio/x-rosegarden
+Patterns=*.rg;*.rgd;*.RG;*.RGD
+Type=MimeType
