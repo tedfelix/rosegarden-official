@@ -54,10 +54,24 @@ TabbedConfigurationPage::TabbedConfigurationPage(RosegardenGUIDoc *doc,
                                                  const char *name)
   : ConfigurationPage(doc, parent, name)
 {
-  QVBoxLayout *vlay = new QVBoxLayout(this, 0, KDialog::spacingHint());
-  m_tabWidget = new QTabWidget(this);
-  vlay->addWidget(m_tabWidget);
+    init();  
 }
+
+TabbedConfigurationPage::TabbedConfigurationPage(KConfig *cfg,
+                                                 QWidget *parent,
+                                                 const char *name)
+  : ConfigurationPage(cfg, parent, name)
+{
+    init();
+}
+
+void TabbedConfigurationPage::init()
+{
+    QVBoxLayout *vlay = new QVBoxLayout(this, 0, KDialog::spacingHint());
+    m_tabWidget = new QTabWidget(this);
+    vlay->addWidget(m_tabWidget);
+}
+
 
 void TabbedConfigurationPage::addTab(QWidget *tab, const QString &title)
 {
@@ -66,14 +80,15 @@ void TabbedConfigurationPage::addTab(QWidget *tab, const QString &title)
 
 //------------------------------------------------------------
 
-GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
+GeneralConfigurationPage::GeneralConfigurationPage(KConfig *cfg,
                                                    QWidget *parent, const char *name)
-    : TabbedConfigurationPage(doc, parent, name),
+    : TabbedConfigurationPage(cfg, parent, name),
       m_client(0),
       m_countIn(0)
 {
-    Rosegarden::Composition &comp = doc->getComposition();
-    Rosegarden::Configuration &config = doc->getConfiguration();
+//     Rosegarden::Composition &comp = doc->getComposition();
+//     Rosegarden::Configuration &config = doc->getConfiguration();
+    m_cfg->setGroup("General Options");
 
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
@@ -90,19 +105,19 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_client = new QComboBox(frame);
     m_client->insertItem(i18n("Notation"));
     m_client->insertItem(i18n("Matrix"));
-    m_client->setCurrentItem(config.getDoubleClickClient());
-
+    m_client->setCurrentItem(m_cfg->readUnsignedNumEntry("doubleclickclient", NotationView));
+    
     layout->addWidget(m_client, 0, 1);
 
     m_countIn = new QSpinBox(frame);
-    m_countIn->setValue(comp.getCountInBars());
+    m_countIn->setValue(m_cfg->readUnsignedNumEntry("countinbars", 2));
     m_countIn->setMaxValue(10);
     m_countIn->setMinValue(0);
 
     layout->addWidget(m_countIn, 1, 1);
 
     m_midiPitchOffset = new QSpinBox(frame);
-    m_midiPitchOffset->setValue(comp.getCountInBars());
+    m_midiPitchOffset->setValue(m_cfg->readUnsignedNumEntry("midipitchoffset", 4));
     m_midiPitchOffset->setMaxValue(10);
     m_midiPitchOffset->setMinValue(0);
 
@@ -113,27 +128,35 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 
 void GeneralConfigurationPage::apply()
 {
-    Rosegarden::Composition &comp = m_doc->getComposition();
-    Rosegarden::Configuration &config = m_doc->getConfiguration();
+//     Rosegarden::Composition &comp = m_doc->getComposition();
+//     Rosegarden::Configuration &config = m_doc->getConfiguration();
+//     comp.setCountInBars(countIn);
+//     config.setDoubleClickClient(
+//                                 (Rosegarden::Configuration::DoubleClickClient)client);
+    m_cfg->setGroup("General Options");
 
     int countIn = getCountInSpin();
-    comp.setCountInBars(countIn);
+    m_cfg->writeEntry("countinbars", countIn);
 
     int client = getDblClickClient();
-    config.setDoubleClickClient(
-                                (Rosegarden::Configuration::DoubleClickClient)client);
+    m_cfg->writeEntry("doubleclickclient", client);
+
+    int offset = getMIDIPitch2StringOffset();
+    m_cfg->writeEntry("midipitchoffset", offset);
+
 
 }
 
 
-PlaybackConfigurationPage::PlaybackConfigurationPage(RosegardenGUIDoc *doc,
+PlaybackConfigurationPage::PlaybackConfigurationPage(KConfig *cfg,
                                                      QWidget *parent,
                                                      const char *name)
-    : TabbedConfigurationPage(doc, parent, name),
+    : TabbedConfigurationPage(cfg, parent, name),
       m_readAhead(0),
       m_playback(0)
 {
-    Rosegarden::Configuration &config = doc->getConfiguration();
+//     Rosegarden::Configuration &config = doc->getConfiguration();
+    m_cfg->setGroup("Playback Options");
 
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame, 3, 2,
@@ -149,14 +172,14 @@ PlaybackConfigurationPage::PlaybackConfigurationPage(RosegardenGUIDoc *doc,
     m_readAhead = new QSlider(Horizontal, frame);
     m_readAhead->setMinValue(20);
     m_readAhead->setMaxValue(80);
-    m_readAhead->setValue(config.getReadAhead().usec / 1000);
+    m_readAhead->setValue(m_cfg->readLongNumEntry("readaheadusec", 40000));
     m_readAhead->setTickmarks(QSlider::Below);
     layout->addWidget(m_readAhead, 1, 1);
 
     m_playback = new QSlider(Horizontal, frame);
     m_playback->setMinValue(20);
     m_playback->setMaxValue(500);
-    m_playback->setValue(config.getPlaybackLatency().usec / 1000);
+    m_playback->setValue(m_cfg->readLongNumEntry("playbacklatencyusec", 100000));
     m_playback->setTickmarks(QSlider::Below);
     layout->addWidget(m_playback, 2, 1);
 
@@ -165,13 +188,19 @@ PlaybackConfigurationPage::PlaybackConfigurationPage(RosegardenGUIDoc *doc,
 
 void PlaybackConfigurationPage::apply()
 {
-    Rosegarden::Configuration &config = m_doc->getConfiguration();
+    m_cfg->setGroup("Playback Options");
+
+//     Rosegarden::Configuration &config = m_doc->getConfiguration();
+//     config.setReadAhead((RealTime(0, (readAhead * 1000))));
+//     config.setPlaybackLatency((RealTime(0, (playback * 1000))));
 
     int readAhead = getReadAheadValue();
-    config.setReadAhead((RealTime(0, (readAhead * 1000))));
-
+    m_cfg->writeEntry("readaheadusec", readAhead);
+    m_cfg->writeEntry("readaheadsec", 0L);
+    
     int playback = getPlaybackValue();
-    config.setPlaybackLatency((RealTime(0, (playback * 1000))));
+    m_cfg->writeEntry("playbacklatencyusec", playback);
+    m_cfg->writeEntry("playbacklatencysec", 0L);
 }
 
 
@@ -284,17 +313,10 @@ ConfigureDialogBase::slotCancelOrClose()
 {
 }
 
-ConfigureDialog::ConfigureDialog(QWidget *parent,
+ConfigureDialog::ConfigureDialog(KConfig* cfg,
+                                 QWidget *parent,
                                  const char *name)
     : ConfigureDialogBase(parent, name)
-{
-}
-
-DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
-                                                 QWidget *parent,
-                                                 const char *name)
-    : ConfigureDialogBase(parent, name),
-      m_doc(doc)
 {
     QWidget *pageWidget = 0;
     QVBoxLayout *vlay = 0;
@@ -306,7 +328,7 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
                          GeneralConfigurationPage::title(),
                          loadIcon(GeneralConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new GeneralConfigurationPage(m_doc, pageWidget);
+    page = new GeneralConfigurationPage(cfg, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
@@ -317,10 +339,23 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
                          PlaybackConfigurationPage::title(),
                          loadIcon(PlaybackConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new PlaybackConfigurationPage(m_doc, pageWidget);
+    page = new PlaybackConfigurationPage(cfg, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
+}
+
+//------------------------------------------------------------
+
+DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
+                                                 QWidget *parent,
+                                                 const char *name)
+    : ConfigureDialogBase(parent, name),
+      m_doc(doc)
+{
+    QWidget *pageWidget = 0;
+    QVBoxLayout *vlay = 0;
+    ConfigurationPage* page = 0;
 
     // Audio Page
     //

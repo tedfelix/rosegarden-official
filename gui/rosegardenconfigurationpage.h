@@ -46,8 +46,13 @@ class ConfigurationPage : public QWidget
 
 public:
     ConfigurationPage(RosegardenGUIDoc *doc,
-                      QWidget *parent=0, const char *name=0 )
-        : QWidget(parent, name), m_doc(doc), m_pageIndex(0) {}
+                      QWidget *parent=0, const char *name=0)
+        : QWidget(parent, name), m_doc(doc), m_cfg(0), m_pageIndex(0) {}
+
+    ConfigurationPage(KConfig *cfg,
+                      QWidget *parent=0, const char *name=0)
+        : QWidget(parent, name), m_doc(0), m_cfg(cfg), m_pageIndex(0) {}
+
     virtual ~ConfigurationPage() {};
 
     /**
@@ -79,6 +84,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     RosegardenGUIDoc* m_doc;
+    KConfig* m_cfg;
 
     int m_pageIndex;
 };
@@ -95,9 +101,13 @@ public:
     TabbedConfigurationPage(RosegardenGUIDoc *doc,
                             QWidget *parent=0, const char *name=0);
 
+    TabbedConfigurationPage(KConfig *cfg,
+                            QWidget *parent=0, const char *name=0);
+
     static QString iconName() { return "misc"; }
     
 protected:
+    void init();
     void addTab(QWidget *tab, const QString &title);
 
     //--------------- Data members ---------------------------------
@@ -109,12 +119,18 @@ protected:
 /**
  * General Rosegarden Configuration page
  *
- * (document-wide settings)
+ * (application-wide settings)
  */
 class GeneralConfigurationPage : public TabbedConfigurationPage
 {
 public:
-    GeneralConfigurationPage(RosegardenGUIDoc *doc,
+    enum DoubleClickClient
+    {
+        NotationView,
+        MatrixView
+    };
+
+    GeneralConfigurationPage(KConfig *cfg,
                              QWidget *parent=0, const char *name=0);
 
     virtual void apply();
@@ -135,12 +151,12 @@ protected:
 /**
  * Playback Configuration page
  *
- * (document-wide settings)
+ * (application-wide settings)
  */
 class PlaybackConfigurationPage : public TabbedConfigurationPage
 {
 public:
-    PlaybackConfigurationPage(RosegardenGUIDoc *doc,
+    PlaybackConfigurationPage(KConfig *cfg,
                               QWidget *parent=0, const char *name=0);
 
     virtual void apply();

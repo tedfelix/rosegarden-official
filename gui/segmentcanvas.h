@@ -376,6 +376,8 @@ private:
 
     bool m_fineGrain;
     RosegardenGUIDoc *m_doc;
+    
+    KConfig* m_config;
 };
 
 //////////////////////////////////////////////////////////////////////

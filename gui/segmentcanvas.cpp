@@ -27,6 +27,8 @@
 
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kapplication.h>
+#include <kconfig.h>
 
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
@@ -34,6 +36,7 @@
 #include "Segment.h"
 #include "Composition.h"
 #include "NotationTypes.h"
+#include "rosegardenconfigurationpage.h"
 #include "BaseProperties.h"
 
 #include "rosedebug.h"
@@ -427,7 +430,8 @@ SegmentCanvas::SegmentCanvas(RosegardenGUIDoc *doc,
     m_pen(RosegardenGUIColours::SegmentBorder),
     m_editMenu(new QPopupMenu(this)),
     m_fineGrain(false),
-    m_doc(doc)
+    m_doc(doc),
+    m_config(kapp->config())
 {
     QWhatsThis::add(this, i18n("Segments Canvas - Create and manipulate your segments here"));
 
@@ -663,8 +667,9 @@ void SegmentCanvas::contentsMouseDoubleClickEvent(QMouseEvent* e)
             emit editSegmentAudio(m_currentItem->getSegment());
         else
         {
-            if (m_doc->getConfiguration().getDoubleClickClient() == 
-                    Rosegarden::Configuration::NotationView)
+            if (m_config->readUnsignedNumEntry("doubleclickclient",
+                                               Rosegarden::GeneralConfigurationPage::NotationView) == 
+                    Rosegarden::GeneralConfigurationPage::NotationView)
                 emit editSegmentNotation(m_currentItem->getSegment());
             else
                 emit editSegmentMatrix(m_currentItem->getSegment());

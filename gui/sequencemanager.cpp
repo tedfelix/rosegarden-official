@@ -19,12 +19,14 @@
     COPYING included with this distribution for more information.
 */
 
-#include <klocale.h>
 #include <qbutton.h>
 #include <dcopclient.h>
 #include <qpushbutton.h>
-#include <ktmpstatusmsg.h>
 
+#include <klocale.h>
+#include <kconfig.h>
+
+#include "ktmpstatusmsg.h"
 #include "rosestrings.h"
 #include "rosegardenguidoc.h"
 #include "rosegardentransportdialog.h"
@@ -417,23 +419,24 @@ SequenceManager::play()
     if (comp.isLooping())
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
 
-    Rosegarden::Configuration &config = m_doc->getConfiguration();
+    KConfig* config = kapp->config();
+    Rosegarden::Configuration& docConfig = m_doc->getConfiguration();
 
     // playback start position
     streamOut << startPos.sec;
     streamOut << startPos.usec;
 
     // playback latency
-    streamOut << config.getPlaybackLatency().sec;
-    streamOut << config.getPlaybackLatency().usec;
+    streamOut << config->readLongNumEntry("playbacklatencysec", 0);
+    streamOut << config->readLongNumEntry("playbacklatencyusec", 100000);
 
     // fetch latency
-    streamOut << config.getFetchLatency().sec;
-    streamOut << config.getFetchLatency().usec;
+    streamOut << docConfig.getFetchLatency().sec;
+    streamOut << docConfig.getFetchLatency().usec;
 
     // read ahead slice
-    streamOut << config.getReadAhead().sec;
-    streamOut << config.getReadAhead().usec;
+    streamOut << config->readLongNumEntry("readaheadsec", 0);
+    streamOut << config->readLongNumEntry("readaheadusec", 40000);
 
     // Send Play to the Sequencer
     if (!kapp->dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
@@ -616,6 +619,7 @@ SequenceManager::record()
 {
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::Studio &studio = m_doc->getStudio();
+    KConfig* config = kapp->config();
 
     // if already recording then stop
     //
@@ -654,7 +658,7 @@ SequenceManager::record()
     else
     {
         int startBar = comp.getBarNumber(comp.getPosition());
-        startBar -= comp.getCountInBars();
+        startBar -= config->readUnsignedNumEntry("countinbars", 2);
         m_doc->setPointerPosition(comp.getBarRange(startBar).first);
     }
 
@@ -701,8 +705,7 @@ SequenceManager::record()
 
     if (comp.getTempo() == 0)
     {
-        cout <<
-         "SequenceManager::play() - setting Tempo to Default value of 120.000"
+        cout << "SequenceManager::play() - setting Tempo to Default value of 120.000"
           << endl;
         comp.setDefaultTempo(120.0);
     }
@@ -719,23 +722,23 @@ SequenceManager::record()
     // we must being playing to record.
     //
     Rosegarden::RealTime startPos =comp.getElapsedRealTime(comp.getPosition());
-    Rosegarden::Configuration &config = m_doc->getConfiguration();
+    Rosegarden::Configuration &docConfig = m_doc->getConfiguration();
 
     // playback start position
     streamOut << startPos.sec;
     streamOut << startPos.usec;
 
     // playback latency
-    streamOut << config.getPlaybackLatency().sec;
-    streamOut << config.getPlaybackLatency().usec;
+    streamOut << config->readLongNumEntry("playbacklatencysec", 0);
+    streamOut << config->readLongNumEntry("playbacklatencyusec", 100000);
 
     // fetch latency
-    streamOut << config.getFetchLatency().sec;
-    streamOut << config.getFetchLatency().usec;
+    streamOut << docConfig.getFetchLatency().sec;
+    streamOut << docConfig.getFetchLatency().usec;
 
     // read ahead slice
-    streamOut << config.getReadAhead().sec;
-    streamOut << config.getReadAhead().usec;
+    streamOut << config->readLongNumEntry("readaheadsec", 0);
+    streamOut << config->readLongNumEntry("readaheadusec", 40000);
 
     // record type
     streamOut << (int)recordType;

@@ -27,6 +27,7 @@
 #include <kdialogbase.h>
 
 class RosegardenGUIDoc;
+class KConfig;
 
 namespace Rosegarden
 {
@@ -57,7 +58,8 @@ protected:
 class ConfigureDialog : public ConfigureDialogBase
 {
 public:
-    ConfigureDialog(QWidget *parent=0,
+    ConfigureDialog(KConfig* cfg,
+                    QWidget *parent=0,
                     const char *name=0);
 };
 

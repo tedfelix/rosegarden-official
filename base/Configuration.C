@@ -42,14 +42,11 @@ namespace Rosegarden
 {
 
 Configuration::Configuration():
-        m_playLatency(0, 100000),     // the sequencer's head start
         m_fetchLatency(0, 50000),     // to fetch and queue new events
-        m_readAhead(0, 40000),        // how many events to fetch
         m_metronomePitch(37),
         m_metronomeBarVelocity(120),
         m_metronomeBeatVelocity(80),
-        m_metronomeDuration(0, 10000),
-        m_client(NotationView)
+        m_metronomeDuration(0, 10000)
 {
 }
 

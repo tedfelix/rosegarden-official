@@ -138,7 +138,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer)
 
     // Now autoload
     //
-
+    stateChanged("new_file");
 }
 
 RosegardenGUIApp::~RosegardenGUIApp()
@@ -741,14 +741,14 @@ void RosegardenGUIApp::readOptions()
     }
 }
 
-void RosegardenGUIApp::saveProperties(KConfig *_cfg)
+void RosegardenGUIApp::saveProperties(KConfig *cfg)
 {
     if (m_doc->getTitle()!=i18n("Untitled") && !m_doc->isModified()) {
         // saving to tempfile not necessary
     } else {
         QString filename=m_doc->getAbsFilePath();	
-        _cfg->writeEntry("filename", filename);
-        _cfg->writeEntry("modified", m_doc->isModified());
+        cfg->writeEntry("filename", filename);
+        cfg->writeEntry("modified", m_doc->isModified());
 		
         QString tempname = kapp->tempSaveName(filename);
         m_doc->saveDocument(tempname);
@@ -2103,7 +2103,7 @@ void RosegardenGUIApp::slotConfigure()
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotConfigure\n";
 
     Rosegarden::ConfigureDialog *configDlg = 
-        new Rosegarden::ConfigureDialog(this);
+        new Rosegarden::ConfigureDialog(m_config, this);
 
     configDlg->show();
 }

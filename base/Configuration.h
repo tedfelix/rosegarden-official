@@ -42,24 +42,11 @@ class Configuration : public XmlExportable
 {
 public:
 
-    typedef enum
-    {
-        NotationView,
-        MatrixView
-    } DoubleClickClient;
-
-
     Configuration(); // defaults
     ~Configuration();
 
-    void setReadAhead(const RealTime &value) { m_readAhead = value; }
-    RealTime getReadAhead() const { return m_readAhead;}
-
     void setFetchLatency(const RealTime &value) { m_fetchLatency = value; }
     RealTime getFetchLatency() const { return m_fetchLatency; }
-
-    void setPlaybackLatency(const RealTime &value) { m_playLatency = value; }
-    RealTime getPlaybackLatency() const { return m_playLatency; }
 
     void setMetronomePitch(MidiByte value) { m_metronomePitch = value; }
     MidiByte getMetronomePitch() const { return m_metronomePitch; }
@@ -80,20 +67,16 @@ public:
     //
     virtual std::string toXmlString();
 
-    DoubleClickClient getDoubleClickClient() const { return m_client; }
-    void setDoubleClickClient(DoubleClickClient value) { m_client = value; }
-
 private:
-    RealTime     m_playLatency;
+
     RealTime     m_fetchLatency;
-    RealTime     m_readAhead;
 
     MidiByte     m_metronomePitch;
     MidiByte     m_metronomeBarVelocity;
     MidiByte     m_metronomeBeatVelocity;
     RealTime     m_metronomeDuration;
 
-    DoubleClickClient   m_client;
+//     DoubleClickClient   m_client;
     
 };
 
