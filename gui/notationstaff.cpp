@@ -573,21 +573,25 @@ NotationStaff::renderSingleElement(NotationElement *elt,
 
 	} else if (elt->isRest()) {
 
-//    kdDebug(KDEBUG_AREA) << "NotationStaff::renderSingleElement: about to query legato duration property" << endl;
-//	    timeT duration = elt->event()->get<Int>
-//		(Rosegarden::Quantizer::LegatoDurationProperty);
-//kdDebug(KDEBUG_AREA) << "done" <<endl;
+	    kdDebug(KDEBUG_AREA) << "NotationStaff::renderSingleElement: about to query legato duration property" << endl;
 
-//	    if (duration > 0) {
+	    const Rosegarden::Quantizer *q =
+		getSegment().getComposition()->getLegatoQuantizer();
+	    timeT duration = q->getQuantizedDuration(elt->event());
+
+	    kdDebug(KDEBUG_AREA) << "done" <<endl;
+
+	    if (duration > 0) {
 
 		Note::Type note = elt->event()->get<Int>(NOTE_TYPE);
 		int dots = elt->event()->get<Int>(NOTE_DOTS);
 		NotePixmapParameters params(note, dots);
 		setTuplingParameters(elt, params);
 		pixmap = new QCanvasPixmap(m_npf->makeRestPixmap(params));
-//	    } else {
-//		kdDebug(KDEBUG_AREA) << "Omitting too-short rest" << endl;
-//	    }
+
+	    } else {
+		kdDebug(KDEBUG_AREA) << "Omitting too-short rest" << endl;
+	    }
 
 	} else if (elt->event()->isa(Clef::EventType)) {
 

@@ -109,6 +109,14 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     timeT   to = m_rulerScale->getTimeForX
 	(clipRect.x() + clipRect.width() - m_currentXOffset + 100);
 
+    //!!! The AnalysisHelper guesses chord labels based on a particular
+    // key, which it looks for in the segment passed to it.  At present
+    // we have no keys in that segment.  Possibly we could stoke it up
+    // with the last key preceding "from" in each segment in the
+    // composition, plus any between "from" and "to".  Better if the
+    // CompositionTimeSliceAdapter could locate keys in its subset of
+    // segments, perhaps?
+
     CompositionTimeSliceAdapter adapter(m_composition, from, to + 1);
     Segment segment;
     AnalysisHelper helper;

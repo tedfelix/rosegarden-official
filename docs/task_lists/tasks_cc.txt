@@ -35,7 +35,8 @@ Post-0.1.4 task list
     paste into, and overlaying (possibly even overlaying with ties
     versus overlaying raw), and allows you to choose one of these as
     the default paste function.  [DONEish, needs some work]  Also
-    implement Cut-&-Close, Paste as New Segment, etc.
+    implement Cut-&-Close, Paste as New Segment [DONE through segment
+    canvas], etc.
 
 10. Create clef dialog with transposition options (maintain pitches,
     transpose entirely, transpose octaves only) [DONE]

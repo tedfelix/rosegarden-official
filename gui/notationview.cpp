@@ -1957,13 +1957,21 @@ NotationView::slotSetInsertCursorPosition(timeT t)
 {
     m_insertionTime = t;
     NotationStaff *staff = m_staffs[m_currentStaff];
+    Segment &segment = staff->getSegment();
+
+    if (t < segment.getStartTime()) {
+	t = segment.getStartTime();
+    }
+    if (t > segment.getEndTime()) {
+	t = segment.getEndTime();
+    }
 
     NotationElementList::iterator i = 
 	staff->getViewElementList()->findNearestTime(t);
 
     if (i == staff->getViewElementList()->end() ||
-	t == staff->getSegment().getEndTime() ||
-	t == staff->getSegment().getBarStartForTime(t)) {
+	t == segment.getEndTime() ||
+	t == segment.getBarStartForTime(t)) {
 
 	staff->setInsertCursorPosition(m_hlayout, t);
 
