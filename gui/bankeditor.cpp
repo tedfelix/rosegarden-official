@@ -190,6 +190,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
             label->setAlignment(AlignHCenter);
 
             KLineEdit* lineEdit = new KLineEdit(numBox, label->text().data());
+            lineEdit->setMinimumWidth(100);
             lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
             lineEdit->setCompletionObject(&m_completion);
             m_programNames.push_back(lineEdit);
@@ -217,6 +218,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
             label->setAlignment(AlignHCenter);
 
             KLineEdit* lineEdit = new KLineEdit(numBox, label->text().data());
+            lineEdit->setMinimumWidth(100);
             lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
             lineEdit->setCompletionObject(&m_completion);
             m_programNames.push_back(lineEdit);
@@ -583,15 +585,19 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QSplitter* splitter = new QSplitter(mainFrame);
 
     QFrame* btnBox = new QFrame(mainFrame);
-    QHBoxLayout* layout = new QHBoxLayout(btnBox, QBoxLayout::RightToLeft);
+    btnBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    QHBoxLayout* layout = new QHBoxLayout(btnBox, 4, 10);
 
     m_closeButton = new QPushButton(btnBox);
     m_applyButton = new QPushButton(i18n("Apply"), btnBox);
     m_resetButton = new QPushButton(i18n("Reset"), btnBox);
 
-    layout->addWidget(m_applyButton, 0/*, Qt::AlignRight*/);
-    layout->addWidget(m_resetButton, 0/*, Qt::AlignRight*/);
-    layout->addWidget(m_closeButton, 0, Qt::AlignRight);
+    layout->addStretch(10);
+    layout->addWidget(m_applyButton);
+    layout->addWidget(m_resetButton);
+    layout->addSpacing(15);
+    layout->addWidget(m_closeButton);
+    layout->addSpacing(5);
 
     connect(m_applyButton, SIGNAL(clicked()),
             this, SLOT(slotApply()));
@@ -658,10 +664,6 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_programEditor = new MidiProgramsEditor(this, splitter);
 
 
-    // default buttons states
-//     enableButtonOK(false);
-//     enableButtonApply(false);
-
     // device/bank modification
     connect(m_listView, SIGNAL(itemRenamed             (QListViewItem*,const QString&,int)),
             this,       SLOT(slotModifyDeviceOrBankName(QListViewItem*,const QString&,int)));
@@ -716,7 +718,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
         m_programEditor->setDisabled(true);
     }
 
-};
+    setAutoSaveSettings("BankEditor", true);
+}
 
 BankEditorDialog::~BankEditorDialog()
 {
