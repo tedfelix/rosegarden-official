@@ -95,6 +95,7 @@ protected:
 
     Rosegarden::timeT m_currentTime;
     Rosegarden::timeT m_chordDuration;
+    Rosegarden::timeT *m_segmentEndMarkerTime;
 
     bool m_inChord;
     bool m_inGroup;

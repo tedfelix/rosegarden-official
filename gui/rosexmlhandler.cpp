@@ -61,6 +61,7 @@ RoseXmlHandler::RoseXmlHandler(Composition &composition,
       m_currentEvent(0),
       m_currentTime(0),
       m_chordDuration(0),
+      m_segmentEndMarkerTime(0),
       m_inChord(false),
       m_inGroup(false),
       m_inComposition(false),
@@ -432,7 +433,8 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
 
 	QString endMarkerStr = atts.value("endmarker");
 	if (endMarkerStr) {
-	    m_currentSegment->setEndMarkerTime(endMarkerStr.toInt());
+	    delete m_segmentEndMarkerTime;
+	    m_segmentEndMarkerTime = new timeT(endMarkerStr.toInt());
 	}
 
     } else if (lcName == "resync") {
@@ -833,6 +835,12 @@ RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
         m_inGroup = false;
 
     } else if (lcName == "segment") {
+
+	if (m_currentSegment && m_segmentEndMarkerTime) {
+	    m_currentSegment->setEndMarkerTime(*m_segmentEndMarkerTime);
+	    delete m_segmentEndMarkerTime;
+	    m_segmentEndMarkerTime = 0;
+	}
 
         m_currentSegment = 0;
         m_section = NoSection;

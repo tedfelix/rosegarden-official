@@ -145,6 +145,7 @@ install-data-local:
 
 
 uninstall-local:
+	-rm -f $(kde_datadir)/$(data_dirname)/version.txt
 	-rm -f $(kde_appsdir)/Applications/rosegarden.desktop
 	-rm -f $(kde_icondir)/locolor/32x32/apps/rosegarden.xpm
 	-rm -f $(kde_icondir)/hicolor/32x32/apps/rosegarden.xpm
