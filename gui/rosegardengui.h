@@ -202,12 +202,6 @@ protected:
     virtual void keyPressEvent(QKeyEvent *event);
     virtual void keyReleaseEvent(QKeyEvent *event);
 
-    /**
-     * save general Options like all bar positions and status as well
-     * as the geometry and the recent file list to the configuration
-     * file
-     */ 	
-    void saveOptions();
 
     /**
      * read general Options again and initialize all variables like
@@ -575,7 +569,32 @@ public slots:
     void slotTrackUp();
     void slotTrackDown();
 
+    /**
+     * save general Options like all bar positions and status as well
+     * as the geometry and the recent file list to the configuration
+     * file
+     */ 	
+    void slotSaveOptions();
 
+    /*
+     *
+     * Show the configure dialog
+     *
+     */
+    void slotConfigure();
+
+    /*
+     * Show the key mappings
+     *
+     */
+    void slotEditKeys();
+
+    /*
+     * Do we need this?
+     *
+     */
+    void slotEditToolbars();
+        
 private:
 
     //--------------- Data members ---------------------------------

@@ -43,6 +43,8 @@ rosegarden_SOURCES = \
 	qcanvassimplesprite.cpp \
 	rg21io.cpp \
 	rosedebug.cpp \
+        rosegardenconfigure.ui \
+        rosegardenconfiguredialog.cpp \
 	rosegardencanvasview.cpp \
 	rosegardengui.cpp \
 	rosegardenguidoc.cpp \

@@ -40,6 +40,20 @@ o Kill all the big bugs - closing bug being one.  Soak testing of
   sequencer and gui for leaks (looping of an entire piece for a
   day or so - that kind of thing)
 
+o Annoying bugs to be fixed:
+
+  - LoopRulers aren't getting set on clients, can't be edited
+    from clients.  SegmentCanvas LoopRuler doesn't disappear
+    when Loop button toggled.
+
+  - TrackButtons scrolls independently of SegmentCanvas
+
+  - PianoKeyboard scrolls independently of MatrixView
+
+o Parameter box fields don't look very disabled even when they are
+
+o Save Instrument and Segment parameter states to RG4 file
+
 o GUI support for various things that are supported in the
   internal representation already - tuplets, n-dotted notes,
   tempo, and text.
@@ -49,6 +63,10 @@ o Get the GUI to make sense when loading files and switching states,
   (for example) anything is selected in the view
 
 o Add, Move and Delete Tracks including associated Segments
+
+o Dialog for changing latency and other general options (bars count-in)
+
+o Modifying tempo
 
 o Composition start and end markers - moveable non-destructive markers for
   Composition length

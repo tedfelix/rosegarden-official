@@ -45,6 +45,7 @@
 #include "rosegardengui.h"
 #include "rosegardenguiview.h"
 #include "rosegardenguidoc.h"
+#include "rosegardenconfiguredialog.h"
 #include "MidiFile.h"
 #include "rg21io.h"
 #include "rosegardendcop.h"
@@ -194,11 +195,23 @@ void RosegardenGUIApp::setupActions()
                                      actionCollection(),
                                      "show_rulers");
 
-    KStdAction::saveOptions(this, SLOT(save_options()), actionCollection());
-    KStdAction::preferences(this, SLOT(customize()),    actionCollection());
+    // Standard Actions 
+    //
+    KStdAction::saveOptions(this,
+                            SLOT(slotSaveOptions()),
+                            actionCollection());
 
-    KStdAction::keyBindings      (this, SLOT(editKeys()),     actionCollection());
-    KStdAction::configureToolbars(this, SLOT(editToolbars()), actionCollection());
+    KStdAction::preferences(this,
+                            SLOT(slotConfigure()),
+                            actionCollection());
+
+    KStdAction::keyBindings(this,
+                            SLOT(slotEditKeys()),
+                            actionCollection());
+
+    KStdAction::configureToolbars(this,
+                                  SLOT(slotEditToolbars()),
+                                  actionCollection());
 
     KRadioAction *action = 0;
     
@@ -637,7 +650,7 @@ RosegardenGUIDoc *RosegardenGUIApp::getDocument() const
     return m_doc;
 }
 
-void RosegardenGUIApp::saveOptions()
+void RosegardenGUIApp::slotSaveOptions()
 {	
     m_config->setGroup("General Options");
     m_config->writeEntry("Geometry", size());
@@ -798,7 +811,7 @@ bool RosegardenGUIApp::queryClose()
 
 bool RosegardenGUIApp::queryExit()
 {
-    saveOptions();
+    slotSaveOptions();
     return true;
 }
 
@@ -978,7 +991,7 @@ void RosegardenGUIApp::slotQuit()
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotQuit()" << endl;
     
     slotStatusMsg(i18n("Exiting..."));
-    saveOptions();
+    slotSaveOptions();
     // close the first window, the list makes the next one the first again.
     // This ensures thatslotQueryClose() is called on each window to ask for closing
     KMainWindow* w;
@@ -1945,5 +1958,26 @@ void RosegardenGUIApp::slotTrackDown()
        m_view->selectTrack(comp.getSelectedTrack());
     }
 
+}
+
+void RosegardenGUIApp::slotConfigure()
+{
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotConfigure" << std::endl;
+
+    Rosegarden::RosegardenConfigureDialog *configDlg = 
+        new Rosegarden::RosegardenConfigureDialog(this);
+
+    configDlg->show();
+}
+
+void RosegardenGUIApp::slotEditKeys()
+{
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditKeys" << std::endl;
+}
+
+
+void RosegardenGUIApp::slotEditToolbars()
+{
+    kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::slotEditToolbars" << std::endl;
 }
 
