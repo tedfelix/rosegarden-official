@@ -94,15 +94,15 @@ void EditTool::handleMousePress(Rosegarden::timeT time,
     switch (e->button()) {
 
     case Qt::LeftButton:
-        handleLeftButtonPress(height, time, staffNo, e, el);
+        handleLeftButtonPress(time, height, staffNo, e, el);
         break;
 
     case Qt::RightButton:
-        handleRightButtonPress(height, time, staffNo, e, el);
+        handleRightButtonPress(time, height, staffNo, e, el);
         break;
 
     case Qt::MidButton:
-        handleMidButtonPress(height, time, staffNo, e, el);
+        handleMidButtonPress(time, height, staffNo, e, el);
         break;
 
     default:
