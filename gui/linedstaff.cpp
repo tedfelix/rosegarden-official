@@ -278,14 +278,14 @@ LinedStaff<T>::getHeightAtCanvasY(int y) const
     }
     
     if (mi > -2) {
-        kdDebug(KDEBUG_AREA) << "LinedStaff::getHeightAtCanvasY: " << y
-                             << " -> " << (ph + mi) << " (mi is " << mi << ", distance "
-                             << md << ")" << endl;
-        if (mi == 0) {
-            kdDebug(KDEBUG_AREA) << "GOOD APPROXIMATION" << endl;
-        } else {
-            kdDebug(KDEBUG_AREA) << "BAD APPROXIMATION" << endl;
-        }
+//         kdDebug(KDEBUG_AREA) << "LinedStaff::getHeightAtCanvasY: " << y
+//                              << " -> " << (ph + mi) << " (mi is " << mi << ", distance "
+//                              << md << ")" << endl;
+//         if (mi == 0) {
+//             kdDebug(KDEBUG_AREA) << "GOOD APPROXIMATION" << endl;
+//         } else {
+//             kdDebug(KDEBUG_AREA) << "BAD APPROXIMATION" << endl;
+//         }
         return ph + mi;
     } else {
         kdDebug(KDEBUG_AREA) << "LinedStaff::getHeightAtCanvasY: heuristic got " << ph << ", nothing within range (closest was " << (ph + testi) << " which is " << testMd << " away)" << endl;
