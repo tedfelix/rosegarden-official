@@ -20,6 +20,8 @@ using std::endl;
 int
 main(int argc, char **argv)
 {
+#ifdef HAVE_LADSPA
+
     Rosegarden::PluginManager *pluginManager = new Rosegarden::PluginManager();
     pluginManager->getenvLADSPAPath();
 
@@ -33,6 +35,9 @@ main(int argc, char **argv)
     }
 
     delete pluginManager;
+
+#endif
+
 }
 
 

@@ -18,12 +18,16 @@
   COPYING included with this distribution for more information.
 */
 
+#ifndef _PLUGINMANAGER_H_
+#define _PLUGINMANAGER_H_
+
+#include "config.h"
+
+#ifdef HAVE_LADSPA
+
 #include <ladspa.h>
 #include <string>
 #include <vector>
-
-#ifndef _PLUGINMANAGER_H_
-#define _PLUGINMANAGER_H_
 
 namespace Rosegarden
 {
@@ -119,5 +123,6 @@ protected:
 
 };
 
+#endif // HAVE_LADSPA
 
 #endif // _PLUGINMANAGER_H_

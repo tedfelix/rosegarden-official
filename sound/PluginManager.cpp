@@ -18,12 +18,13 @@
   COPYING included with this distribution for more information.
 */
 
+#include "PluginManager.h"
+
+#ifdef HAVE_LADSPA
 
 #include <dlfcn.h>
 
 #include <qdir.h>
-
-#include "PluginManager.h"
 
 using std::cout;
 using std::cerr;
@@ -57,6 +58,7 @@ LADSPAPlugin::LADSPAPlugin(const LADSPA_Descriptor *descriptor,
 
 LADSPAPlugin::~LADSPAPlugin()
 {
+    if (m_descriptor) delete m_descriptor;
 } 
 
 PluginManager::PluginManager():
@@ -66,6 +68,7 @@ PluginManager::PluginManager():
 
 PluginManager::~PluginManager()
 {
+    clearPlugins();
 }
 
 void
@@ -147,5 +150,7 @@ PluginManager::loadPlugin(const std::string &path)
 }
 
 };
+
+#endif // HAVE_LADSPA
 
 
