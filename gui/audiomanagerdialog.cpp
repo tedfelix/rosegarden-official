@@ -116,13 +116,21 @@ public:
     AudioListView(QWidget *parent = 0, const char *name = 0);
 
 protected:
-    virtual QDragObject* dragObject ();
+    bool acceptDrag(QDropEvent* e) const;
+    virtual QDragObject* dragObject();
 };
 
 AudioListView::AudioListView(QWidget *parent, const char *name)
     : KListView(parent, name)
 {
     setDragEnabled(true);
+    setAcceptDrops(true);
+    setDropVisualizer(false);
+}
+
+bool AudioListView::acceptDrag(QDropEvent* e) const
+{
+    return QUriDrag::canDecode(e) || KListView::acceptDrag(e);
 }
 
 QDragObject* AudioListView::dragObject()
@@ -161,9 +169,6 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_audiblePreview(true)
 {
     setWFlags(WDestructiveClose);
-
-    // accept dnd
-    setAcceptDrops(true);
 
     QHBox *h = makeHBoxMainWidget();
     QVButtonGroup *v = new QVButtonGroup(i18n("Audio File actions"), h);
@@ -231,17 +236,20 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_fileList->setShowToolTips(true);
 
     // connect buttons
-    connect(m_deleteButton, SIGNAL(released()), SLOT(slotDelete()));
-    connect(m_addButton, SIGNAL(released()), SLOT(slotAdd()));
-    connect(m_playButton, SIGNAL(released()), SLOT(slotPlayPreview()));
-    connect(m_renameButton, SIGNAL(released()), SLOT(slotRename()));
-    connect(m_insertButton, SIGNAL(released()), SLOT(slotInsert()));
-    connect(m_deleteAllButton, SIGNAL(released()), SLOT(slotDeleteAll()));
-    connect(m_exportButton, SIGNAL(released()), SLOT(slotExportAudio()));
+    connect(m_deleteButton, SIGNAL(clicked()), SLOT(slotDelete()));
+    connect(m_addButton, SIGNAL(clicked()), SLOT(slotAdd()));
+    connect(m_playButton, SIGNAL(clicked()), SLOT(slotPlayPreview()));
+    connect(m_renameButton, SIGNAL(clicked()), SLOT(slotRename()));
+    connect(m_insertButton, SIGNAL(clicked()), SLOT(slotInsert()));
+    connect(m_deleteAllButton, SIGNAL(clicked()), SLOT(slotDeleteAll()));
+    connect(m_exportButton, SIGNAL(clicked()), SLOT(slotExportAudio()));
 
     // connect selection mechanism
     connect(m_fileList, SIGNAL(selectionChanged(QListViewItem*)),
                         SLOT(slotSelectionChanged(QListViewItem*)));
+
+    connect(m_fileList, SIGNAL(dropped(QDropEvent*, QListViewItem*)),
+            SLOT(slotDropped(QDropEvent*, QListViewItem*)));
 
     // setup local accelerators
     //
@@ -1025,16 +1033,8 @@ AudioManagerDialog::addFile(const KURL& kurl)
     return true;
 }
 
-
 void
-AudioManagerDialog::dragEnterEvent(QDragEnterEvent *event)
-{
-    // accept uri drops only
-    event->accept(QUriDrag::canDecode(event));
-}
-
-void
-AudioManagerDialog::dropEvent(QDropEvent *event)
+AudioManagerDialog::slotDropped(QDropEvent *event, QListViewItem*)
 {
     QStrList uri;
 

@@ -156,6 +156,8 @@ signals:
                             const Rosegarden::RealTime &);
 
     void closing();
+protected slots:
+    void slotDropped(QDropEvent*, QListViewItem*);
 
 protected:
     bool addFile(const KURL& kurl);
@@ -163,8 +165,6 @@ protected:
     void selectFileListItemNoSignal(QListViewItem*);
     void enableButtons();
 
-    virtual void dragEnterEvent(QDragEnterEvent *event);
-    virtual void dropEvent(QDropEvent*);
     virtual void closeEvent(QCloseEvent *);
 
     //--------------- Data members ---------------------------------
