@@ -148,6 +148,11 @@ public:
     void exportLilypondFile(const QString &url);
 
     /**
+     * export a MusicXml file
+     */
+    void exportMusicXmlFile(const QString &url);
+
+    /**
      * The Sequencer calls this method to get a MappedCompositon
      * full of MappedEvents for it to play.
      */
@@ -443,6 +448,11 @@ public slots:
      * Let the user enter a Lilypond scorefile to export to
      */
     void slotExportLilypond();
+
+    /**
+     * Let the user enter a MusicXml scorefile to export to
+     */
+    void slotExportMusicXml();
 
     /**
      * closes all open windows by calling close() on each memberList

@@ -35,6 +35,7 @@ rosegarden_SOURCES = \
 	matrixview.cpp \
 	matrixvlayout.cpp \
 	multiviewcommandhistory.cpp \
+        musicxmlio.cpp \
 	notationcanvasview.cpp \
 	notationcommands.cpp \
 	notationelement.cpp \

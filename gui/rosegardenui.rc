@@ -13,6 +13,7 @@
       <Action name="file_export_midi" />
       <Action name="file_export_csound" />
       <Action name="file_export_lilypond" />
+      <Action name="file_export_musicxml" />
     </Menu>
   </Menu>
   <Menu name="edit">

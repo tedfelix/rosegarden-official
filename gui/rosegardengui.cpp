@@ -61,6 +61,7 @@
 #include "rg21io.h"
 #include "csoundio.h"
 #include "lilypondio.h"
+#include "musicxmlio.h"
 #include "rosegardendcop.h"
 #include "ktmpstatusmsg.h"
 #include "SegmentPerformanceHelper.h"
@@ -234,6 +235,10 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("Export &Lilypond file..."), 0, 0, this,
                 SLOT(slotExportLilypond()), actionCollection(),
                 "file_export_lilypond");
+
+    new KAction(i18n("Export Music&XML file..."), 0, 0, this,
+                SLOT(slotExportMusicXml()), actionCollection(),
+                "file_export_musicxml");
 
     new KAction(i18n("Export &Csound score file..."), 0, 0, this,
                 SLOT(slotExportCsound()), actionCollection(),
@@ -590,7 +595,7 @@ void RosegardenGUIApp::initZoomToolbar()
 	    this, SLOT(slotChangeZoom(int)));
 
     // set initial zoom - we might want to make this a config option
-    m_zoomSlider->setToDefault();
+    //    m_zoomSlider->setToDefault();
 
 }
 
@@ -2132,6 +2137,31 @@ void RosegardenGUIApp::exportLilypondFile(const QString &file)
     LilypondExporter e(&m_doc->getComposition(), qstrtostr(file));
     if (!e.write()) {
 	KMessageBox::sorry(this, i18n("The Lilypond file has not been exported."));
+    }
+
+    delete progressDlg;
+}
+
+void RosegardenGUIApp::slotExportMusicXml()
+{
+    KTmpStatusMsg msg(i18n("Exporting to MusicXml file..."), this);
+
+    QString fileName = getValidWriteFile("xml", "Export as...");
+    if (fileName.isEmpty()) return;
+
+    exportMusicXmlFile(fileName);
+}
+
+void RosegardenGUIApp::exportMusicXmlFile(const QString &file)
+{
+    RosegardenProgressDialog *progressDlg =
+            new RosegardenProgressDialog(i18n("Exporting MusicXml file..."),
+                                         100,
+                                         this);
+
+    MusicXmlExporter e(m_doc, qstrtostr(file));
+    if (!e.write()) {
+	KMessageBox::sorry(this, i18n("The MusicXml file has not been exported."));
     }
 
     delete progressDlg;
