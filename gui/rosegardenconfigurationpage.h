@@ -446,11 +446,23 @@ protected slots:
     void slotShowStatus();
     void slotJackToggled();
 
+    void slotSoundFontToggled(bool);
+    void slotSfxLoadPathChoose();
+    void slotSoundFontChoose();
 protected:
+
+    //--------------- Data members ---------------------------------
 
     // General
     QLineEdit *m_sequencerArguments;
     QCheckBox *m_sendControllersAtPlay;
+
+    QCheckBox   *m_sfxLoadEnabled;
+    QLineEdit   *m_sfxLoadPath;
+    QPushButton *m_sfxLoadChoose;
+    QLineEdit   *m_soundFontPath;
+    QPushButton *m_soundFontChoose;
+
 
 #ifdef HAVE_LIBJACK
     QCheckBox *m_startJack;

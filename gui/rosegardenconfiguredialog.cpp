@@ -237,7 +237,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
         new QPushButton(i18n("Choose..."), frame);
 
     layout->addWidget(changePathButton, 0, 2);
-    connect(changePathButton, SIGNAL(released()), SLOT(slotFileDialog()));
+    connect(changePathButton, SIGNAL(clicked()), SLOT(slotFileDialog()));
 
 
     addTab(frame, i18n("External Editors"));
@@ -263,20 +263,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 void
 GeneralConfigurationPage::slotFileDialog()
 {
-    KFileDialog *fileDialog = new KFileDialog(getExternalAudioEditor(),
-                                              QString::null,
-                                              this, "file dialog", true);
-    connect(fileDialog, SIGNAL(fileSelected(const QString&)),
-            SLOT(slotFileSelected(const QString&)));
-
-    connect(fileDialog, SIGNAL(destroyed()),
-            SLOT(slotDirectoryDialogClosed()));
-
-    if (fileDialog->exec() == QDialog::Accepted)
-    {
-        m_externalAudioEditorPath->setText(fileDialog->selectedFile());
-    }
-    delete fileDialog;
+    QString path = KFileDialog::getOpenFileName(QString::null, QString::null, this, i18n("External audio editor path"));
+    m_externalAudioEditorPath->setText(path);
 }
 
 void GeneralConfigurationPage::apply()
@@ -869,7 +857,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     // ---------------- General tab ------------------
     //
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 4, 3, 10, 5);
+    QGridLayout *layout = new QGridLayout(frame, 6, 4, 10, 5);
 
     layout->addWidget(new QLabel(i18n("Sequencer status"), frame), 0, 0);
     
@@ -922,6 +910,46 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     //
     QString commandLine = m_cfg->readEntry("commandlineoptions", "");
     m_sequencerArguments->setText(commandLine);
+
+    // SoundFont loading
+    //
+    m_sfxLoadEnabled = new QCheckBox(frame);
+    layout->addWidget(m_sfxLoadEnabled, 3, 0);
+    QLabel* lbl = new QLabel(i18n("Enable soundfont loading at startup"), frame);
+    QString tooltip = i18n("Check this box to enable SoundBlaster soundfont loading when Rosegarden is launched");
+    QToolTip::add(lbl, tooltip);
+    QToolTip::add(m_sfxLoadEnabled, tooltip);
+    layout->addMultiCellWidget(lbl, 3, 3, 1, 2);
+    layout->addWidget(new QLabel(i18n("Path to 'sfxload' command"), frame), 4, 0);
+    m_sfxLoadPath = new QLineEdit(m_cfg->readEntry("sfxloadpath", "/bin/sfxload"), frame);
+    layout->addMultiCellWidget(m_sfxLoadPath, 4, 4, 1, 2);
+    m_sfxLoadChoose = new QPushButton("...", frame);
+    layout->addWidget(m_sfxLoadChoose, 4, 3);
+
+    layout->addWidget(new QLabel(i18n("Soundfont"), frame), 5, 0);
+    m_soundFontPath = new QLineEdit(m_cfg->readEntry("soundfontpath", ""), frame);
+    layout->addMultiCellWidget(m_soundFontPath, 5, 5, 1, 2);
+    m_soundFontChoose = new QPushButton("...", frame);
+    layout->addWidget(m_soundFontChoose, 5, 3);
+
+    bool sfxLoadEnabled = m_cfg->readBoolEntry("sfxloadenabled", false);
+    m_sfxLoadEnabled->setChecked(sfxLoadEnabled);
+    if (!sfxLoadEnabled) {
+        m_sfxLoadPath->setEnabled(false);
+        m_sfxLoadChoose->setEnabled(false);
+        m_soundFontPath->setEnabled(false);
+        m_soundFontChoose->setEnabled(false);
+    }
+    
+    connect(m_sfxLoadEnabled, SIGNAL(toggled(bool)),
+            this, SLOT(slotSoundFontToggled(bool)));
+
+    connect(m_sfxLoadChoose, SIGNAL(clicked()),
+            this, SLOT(slotSfxLoadPathChoose()));
+    
+    connect(m_soundFontChoose, SIGNAL(clicked()),
+            this, SLOT(slotSoundFontChoose()));
+
 
     addTab(frame, i18n("General"));
 
@@ -1322,6 +1350,29 @@ SequencerConfigurationPage::slotJackToggled()
 #endif // HAVE_LIBJACK
 }
 
+void
+SequencerConfigurationPage::slotSoundFontToggled(bool isChecked)
+{
+    m_sfxLoadPath->setEnabled(isChecked);
+    m_sfxLoadChoose->setEnabled(isChecked);
+    m_soundFontPath->setEnabled(isChecked);
+    m_soundFontChoose->setEnabled(isChecked);
+}
+
+void
+SequencerConfigurationPage::slotSfxLoadPathChoose()
+{
+    QString path = KFileDialog::getOpenFileName(":SFXLOAD", QString::null, this, i18n("sfxload path"));
+    m_sfxLoadPath->setText(path);
+}
+
+void
+SequencerConfigurationPage::slotSoundFontChoose()
+{
+    QString path = KFileDialog::getOpenFileName(":SOUNDFONTS", "*.sb *.sf2 *.SF2 *.SB", this, i18n("Soundfont path"));
+    m_soundFontPath->setText(path);
+}
+
 
 void
 SequencerConfigurationPage::apply()
@@ -1332,7 +1383,11 @@ SequencerConfigurationPage::apply()
     //
     m_cfg->writeEntry("commandlineoptions", m_sequencerArguments->text());
     m_cfg->writeEntry("alwayssendcontrollers",
-                       m_sendControllersAtPlay->isChecked());
+                      m_sendControllersAtPlay->isChecked());
+
+    m_cfg->writeEntry("sfxloadenabled", m_sfxLoadEnabled->isChecked());
+    m_cfg->writeEntry("sfxloadpath", m_sfxLoadPath->text());
+    m_cfg->writeEntry("soundfontpath", m_soundFontPath->text());
 
     m_cfg->writeEntry("readaheadusec", m_readAhead->value() * 1000);
     m_cfg->writeEntry("readaheadsec", 0L);

@@ -31,6 +31,7 @@
 #include <kmessagebox.h>
 #include <kstddirs.h>
 #include <ktip.h>
+#include <kprocess.h>
 
 #include "constants.h"
 #include "rosestrings.h"
@@ -574,6 +575,33 @@ int main(int argc, char *argv[])
         RG_DEBUG << "main: Showing Tips\n";
         KTipDialog::showTip(locate("data", "rosegarden/tips"));
     }
+
+
+    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+
+    // See if the config wants us to load a soundfont
+    //
+    if (config->readBoolEntry("sfxloadenabled",false)) {
+        QString sfxLoadPath = config->readEntry("sfxloadpath", "/bin/sfxload");
+        QString soundFontPath = config->readEntry("soundfontpath", "");
+        QFileInfo sfxLoadInfo(sfxLoadPath), soundFontInfo(soundFontPath);
+        if (sfxLoadInfo.isExecutable() && soundFontInfo.isReadable()) {
+            KProcess sfxLoadProcess;
+            sfxLoadProcess.setExecutable(sfxLoadPath);
+            sfxLoadProcess << soundFontPath;
+            RG_DEBUG << "Starting sfxload : " << sfxLoadPath << " " << soundFontPath << endl;
+            sfxLoadProcess.start();
+            sfxLoadProcess.wait();
+            if (!sfxLoadProcess.normalExit()) {
+                KMessageBox::error(rosegardengui,
+                                   QString(i18n("Failed to load soundfont %1")).arg(soundFontPath));
+            }
+            
+        }
+    } else {
+        RG_DEBUG << "sfxload disabled\n";
+    }
+    
 
 #ifdef Q_WS_X11
     XSetErrorHandler( _x_errhandler );
