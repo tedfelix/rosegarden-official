@@ -1444,13 +1444,13 @@ QCanvasPixmap*
 NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef)
 {
     Rosegarden::Pitch pitch(p);
-    NotePixmapParameters params(Rosegarden::Note::Crotchet, 0,
-				pitch.getAccidental(true));
+    Rosegarden::Accidental accidental(pitch.getAccidental(true));
+    NotePixmapParameters params(Rosegarden::Note::Crotchet, 0, accidental);
 
     QCanvasPixmap* clefPixmap = makeClefPixmap(clef);
 
     int lw = getLineSpacing();
-    int width = clefPixmap->width() + 9 * getNoteBodyWidth();
+    int width = getClefWidth(Rosegarden::Clef::Bass) + 9 * getNoteBodyWidth();
 
     int h = pitch.getHeightOnStaff(clef, Rosegarden::Key());
     params.setStemGoesUp(h <= 4);
@@ -1468,15 +1468,26 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef)
     int pixmapHeight = lw * 10 + 1;
     int yoffset = lw * 3;
     if (h > 8) {
-	pixmapHeight += (h - 8) * lw / 2;
-	yoffset += (h - 8) * lw / 2;
+	if (h > 16) {
+	    pixmapHeight += 8 * lw;
+	    yoffset += 8 * lw;
+	} else {
+	    pixmapHeight += 4 * lw;
+	    yoffset += 4 * lw;
+	}
     } else if (h < 0) {
-	pixmapHeight += (0 - h) * lw / 2;
+	if (h < -8) {
+	    pixmapHeight += 8 * lw;
+	} else {
+	    pixmapHeight += 4 * lw;
+	}
     }
 
     createPixmapAndMask(width, pixmapHeight);
 
-    int x = clefPixmap->width() + 4 * getNoteBodyWidth();
+    int x =
+	getClefWidth(Rosegarden::Clef::Bass) + 5 * getNoteBodyWidth() -
+	getAccidentalWidth(accidental);
     int y = yoffset + ((8 - h) * lw) / 2 - notePixmap->offsetY();
     m_p.drawPixmap(x, y, *notePixmap);
     m_pm.drawPixmap(x, y, *(notePixmap->mask()));
@@ -2030,6 +2041,7 @@ int NotePixmapFactory::getLineSpacing() const {
 }
 
 int NotePixmapFactory::getAccidentalWidth(const Accidental &a) const {
+    if (a == Rosegarden::Accidentals::NoAccidental) return 0;
     return m_font->getWidth(m_style->getAccidentalCharName(a));
 }
 

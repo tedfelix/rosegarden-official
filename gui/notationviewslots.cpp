@@ -1043,6 +1043,76 @@ void NotationView::slotTransposeDownOctave()
     addCommandToHistory(new TransposeCommand(-12, *m_currentEventSelection));
 }
 
+void NotationView::slotRespellDoubleFlat()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
+
+    addCommandToHistory(new RespellCommand(RespellCommand::Set,
+					   Rosegarden::Accidentals::DoubleFlat,
+					   *m_currentEventSelection));
+}
+
+void NotationView::slotRespellFlat()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
+
+    addCommandToHistory(new RespellCommand(RespellCommand::Set,
+					   Rosegarden::Accidentals::Flat,
+					   *m_currentEventSelection));
+}
+
+void NotationView::slotRespellSharp()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
+
+    addCommandToHistory(new RespellCommand(RespellCommand::Set,
+					   Rosegarden::Accidentals::Sharp,
+					   *m_currentEventSelection));
+}
+
+void NotationView::slotRespellDoubleSharp()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
+
+    addCommandToHistory(new RespellCommand(RespellCommand::Set,
+					   Rosegarden::Accidentals::DoubleSharp,
+					   *m_currentEventSelection));
+}
+
+void NotationView::slotRespellUp()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
+
+    addCommandToHistory(new RespellCommand(RespellCommand::Up,
+					   Rosegarden::Accidentals::NoAccidental,
+					   *m_currentEventSelection));
+}
+
+void NotationView::slotRespellDown()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
+
+    addCommandToHistory(new RespellCommand(RespellCommand::Down,
+					   Rosegarden::Accidentals::NoAccidental,
+					   *m_currentEventSelection));
+}
+
+void NotationView::slotRespellRestore()
+{
+    if (!m_currentEventSelection) return;
+    KTmpStatusMsg msg(i18n("Restoring accidentals..."), this);
+
+    addCommandToHistory(new RespellCommand(RespellCommand::Restore,
+					   Rosegarden::Accidentals::NoAccidental,
+					   *m_currentEventSelection));
+}
+
 void NotationView::slotTransformsQuantize()
 {
     if (!m_currentEventSelection) return;

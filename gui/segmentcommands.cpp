@@ -1761,6 +1761,7 @@ SegmentSplitByPitchCommand::SegmentSplitByPitchCommand(Segment *segment,
 						       int p, bool r, bool d,
 						       ClefHandling c) :
     KNamedCommand(i18n("Split by Pitch")),
+    m_composition(segment->getComposition()),
     m_segment(segment),
     m_newSegmentA(0),
     m_newSegmentB(0),
@@ -1790,11 +1791,11 @@ SegmentSplitByPitchCommand::execute()
 
     m_newSegmentA->setTrack(m_segment->getTrack());
     m_newSegmentA->setStartTime(m_segment->getStartTime());
-    m_segment->getComposition()->addSegment(m_newSegmentA);
+    m_composition->addSegment(m_newSegmentA);
 
     m_newSegmentB->setTrack(m_segment->getTrack());
     m_newSegmentB->setStartTime(m_segment->getStartTime());
-    m_segment->getComposition()->addSegment(m_newSegmentB);
+    m_composition->addSegment(m_newSegmentB);
     
     int splitPitch(m_splitPitch);
     
@@ -1856,8 +1857,8 @@ SegmentSplitByPitchCommand::execute()
 	     (m_newSegmentB->getStartTime()));
     }
     
-    m_segment->getComposition()->getNotationQuantizer()->quantize(m_newSegmentA);
-    m_segment->getComposition()->getNotationQuantizer()->quantize(m_newSegmentB);
+    m_composition->getNotationQuantizer()->quantize(m_newSegmentA);
+    m_composition->getNotationQuantizer()->quantize(m_newSegmentB);
     helperA.autoBeam(m_newSegmentA->begin(), m_newSegmentA->end(),
 		     Rosegarden::BaseProperties::GROUP_TYPE_BEAMED);
     helperB.autoBeam(m_newSegmentB->begin(), m_newSegmentB->end(),
@@ -1869,14 +1870,14 @@ SegmentSplitByPitchCommand::execute()
     m_newSegmentB->setLabel(qstrtostr(i18n("%1 (lower)").arg
 				      (strtoqstr(label))));
 
-    m_segment->getComposition()->detachSegment(m_segment);
+    m_composition->detachSegment(m_segment);
     m_executed = true;
 }
     
 void
 SegmentSplitByPitchCommand::unexecute()
 {
-    m_newSegmentA->getComposition()->addSegment(m_segment);
+    m_composition->addSegment(m_segment);
     delete m_newSegmentA;
     delete m_newSegmentB;
     m_newSegmentA = 0;

@@ -1145,6 +1145,48 @@ void NotationView::setupActions()
                 SLOT(slotTranspose()), actionCollection(),
                 "general_transpose");
 
+    new KAction(RespellCommand::getGlobalName
+		(RespellCommand::Set, Rosegarden::Accidentals::DoubleFlat),
+		0, this,
+		SLOT(slotRespellDoubleFlat()), actionCollection(),
+                "respell_doubleflat");
+
+    new KAction(RespellCommand::getGlobalName
+		(RespellCommand::Set, Rosegarden::Accidentals::Flat),
+		0, this,
+		SLOT(slotRespellFlat()), actionCollection(),
+                "respell_flat");
+
+    new KAction(RespellCommand::getGlobalName
+		(RespellCommand::Set, Rosegarden::Accidentals::Sharp),
+		0, this,
+		SLOT(slotRespellSharp()), actionCollection(),
+                "respell_sharp");
+
+    new KAction(RespellCommand::getGlobalName
+		(RespellCommand::Set, Rosegarden::Accidentals::DoubleSharp),
+		0, this,
+		SLOT(slotRespellDoubleSharp()), actionCollection(),
+                "respell_doublesharp");
+
+    new KAction(RespellCommand::getGlobalName
+		(RespellCommand::Up, Rosegarden::Accidentals::NoAccidental),
+		Key_Up + CTRL + SHIFT, this,
+		SLOT(slotRespellUp()), actionCollection(),
+                "respell_up");
+
+    new KAction(RespellCommand::getGlobalName
+		(RespellCommand::Down, Rosegarden::Accidentals::NoAccidental),
+		Key_Down + CTRL + SHIFT, this,
+		SLOT(slotRespellDown()), actionCollection(),
+                "respell_down");
+
+    new KAction(RespellCommand::getGlobalName
+		(RespellCommand::Restore, Rosegarden::Accidentals::NoAccidental),
+		0, this,
+		SLOT(slotRespellRestore()), actionCollection(),
+                "respell_restore");
+
     new KAction(EventQuantizeCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");

@@ -655,5 +655,34 @@ private:
     int getVelocityForDynamic(std::string dynamic);
 };
 
+class RespellCommand : public BasicSelectionCommand
+{
+public:
+    enum Type {
+	Set,
+	Up,
+	Down,
+	Restore
+    };
+
+    RespellCommand(Type type, Rosegarden::Accidental acc,
+		   Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(type, acc), selection, true),
+	m_selection(&selection),
+	m_type(type),
+	m_accidental(acc) { }
+
+    static QString getGlobalName(Type type, Rosegarden::Accidental acc);
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    Type m_type;
+    Rosegarden::Accidental m_accidental;
+};
+
+
 
 #endif

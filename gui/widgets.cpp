@@ -32,6 +32,7 @@
 #include <qlayout.h>
 #include <qtextedit.h>
 #include <qlineedit.h>
+#include <qbitmap.h>
 
 #include <kapp.h>
 #include <klocale.h>
@@ -1138,10 +1139,10 @@ RosegardenPitchDragLabel::mousePressEvent(QMouseEvent *e)
 void
 RosegardenPitchDragLabel::mouseMoveEvent(QMouseEvent *e)
 {
-    if (e->button() == LeftButton && m_clicked) {
+    if (m_clicked) {
 	int y = e->y();
 	int diff = y - m_clickedY;
-	int pitchDiff = diff * 2 / m_npf->getLineSpacing();
+	int pitchDiff = diff * 3 / m_npf->getLineSpacing();
 	int newPitch = m_clickedPitch - pitchDiff;
 	if (newPitch < 0) newPitch = 0;
 	if (newPitch > 127) newPitch = 127;
@@ -1182,17 +1183,20 @@ RosegardenPitchDragLabel::wheelEvent(QWheelEvent *e)
 }
 
 void
-RosegardenPitchDragLabel::paintEvent(QPaintEvent *)
+RosegardenPitchDragLabel::paintEvent(QPaintEvent *e)
 {
+    std::cerr << "RosegardenPitchDragLabel::paintEvent(" << e << ")" << std::endl;
+
     QPainter paint(this);
-    paint.drawPixmap(0, 0, m_pixmap);
+    paint.fillRect(0, 0, width(), height(), paint.backgroundColor());
+    paint.drawPixmap(width()/2 - m_pixmap.width()/2,
+		     height()/2 - m_pixmap.height()/2, m_pixmap);
 }
 
 QSize
 RosegardenPitchDragLabel::sizeHint() const
 {
-    calculatePixmap();
-    return m_pixmap.size();
+    return QSize(150, 150);
 }
 
 void
@@ -1219,6 +1223,7 @@ RosegardenPitchDragLabel::calculatePixmap() const
 	 Rosegarden::Clef(clefType, octaveOffset));
 
     m_pixmap = *pmap;
+
     delete pmap;
 }
 
@@ -1239,6 +1244,7 @@ RosegardenPitchChooser::RosegardenPitchChooser(QString title,
 
     Rosegarden::MidiPitchLabel pl(defaultPitch);
     m_pitchLabel = new QLabel(pl.getQString(), this);
+    m_pitchLabel->setMinimumWidth(40);
 
     layout->addWidget(m_pitch, 1, 1);
     layout->addWidget(m_pitchLabel, 1, 2);

@@ -643,6 +643,7 @@ public:
 private:
     int getSplitPitchAt(Rosegarden::Segment::iterator i, int lastSplitPitch);
 
+    Rosegarden::Composition *m_composition;
     Rosegarden::Segment *m_segment;
     Rosegarden::Segment *m_newSegmentA;
     Rosegarden::Segment *m_newSegmentB;

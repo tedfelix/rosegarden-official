@@ -50,7 +50,7 @@ using Rosegarden::Bool;
 using Rosegarden::String;
 using Rosegarden::Text;
 using Rosegarden::Accidental;
-using Rosegarden::Accidentals::NoAccidental;
+using namespace Rosegarden::Accidentals;
 using Rosegarden::Mark;
 using Rosegarden::Marks;
 using Rosegarden::Indication;
@@ -1438,5 +1438,90 @@ TransformsMenuInterpretCommand::findEnclosingIndication(Event *e,
     }
 
     return m_indications.end();
+}
+
+QString
+RespellCommand::getGlobalName(Type type, Accidental accidental)
+{
+    switch(type) {
+
+    case Set:
+    {
+	QString s(i18n("Force to %1"));
+	//!!! should be in notationstrings:
+	if (accidental == DoubleSharp) {
+	    s = s.arg(i18n("Do&uble Sharp"));
+	} else if (accidental == Sharp) {
+	    s = s.arg(i18n("&Sharp"));
+	} else if (accidental == Flat) {
+	    s = s.arg(i18n("&Flat"));
+	} else if (accidental == DoubleFlat) {
+	    s = s.arg(i18n("Dou&ble Flat"));
+	} else if (accidental == Natural) {
+	    s = s.arg(i18n("&Natural"));
+	} else {
+	    s = s.arg(i18n("N&one"));
+	}
+	return s;
+    }
+
+    case Up:
+	return i18n("Force Accidentals &Up");
+
+    case Down:
+	return i18n("Force Accidentals &Down");
+
+    case Restore:
+	return i18n("Restore &Computed Accidentals");
+    }
+
+    return i18n("Force Accidentals");
+}
+
+void
+RespellCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	if ((*i)->isa(Note::EventType)) {
+	    
+	    if (m_type == Up || m_type == Down) {
+
+		Accidental acc = NoAccidental;
+		(*i)->get<String>(ACCIDENTAL, acc);
+		
+		if (m_type == Down) {
+		    if (acc == DoubleFlat) {
+			acc =  Flat;
+		    } else if (acc == Flat || acc == NoAccidental) {
+			acc =  Sharp;
+		    } else if (acc == Sharp) {
+			acc =  DoubleSharp;
+		    }
+		} else {
+		    if (acc == Flat) {
+			acc =  DoubleFlat;
+		    } else if (acc == Sharp || acc == NoAccidental) {
+			acc =  Flat;
+		    } else if (acc == DoubleSharp) {
+			acc =  Sharp;
+		    }
+		}
+
+		(*i)->set<String>(ACCIDENTAL, acc);
+
+	    } else if (m_type == Set) {
+		
+		(*i)->set<String>(ACCIDENTAL, m_accidental);
+
+	    } else {
+
+		(*i)->unset(ACCIDENTAL);
+	    }
+	}
+    }
 }
 

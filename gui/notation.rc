@@ -79,6 +79,16 @@
     <Action name="slashes_4"/>
     <Action name="slashes_5"/>
   </Menu>
+  <Menu name="Respell">
+    <text>&amp;Force Accidentals</text>
+    <Action name="respell_doubleflat"/>
+    <Action name="respell_flat"/>
+    <Action name="respell_natural"/>
+    <Action name="respell_sharp"/>
+    <Action name="respell_doublesharp"/>
+    <Separator/>
+    <Action name="respell_restore"/>
+  </Menu>
 </Menu>
 
   <Menu name="Marks">

@@ -413,6 +413,14 @@ public slots:
     void slotTransformsFixQuantization();
     void slotTransformsInterpret();
 
+    void slotRespellDoubleFlat();
+    void slotRespellFlat();
+    void slotRespellSharp();
+    void slotRespellDoubleSharp();
+    void slotRespellUp();
+    void slotRespellDown();
+    void slotRespellRestore();
+
     void slotSetStyleFromAction();
     void slotInsertNoteFromAction();
     void slotInsertRest();

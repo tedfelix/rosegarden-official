@@ -51,7 +51,13 @@ synths that are started after Rosegarden is already running?</p>
 <tip category="Rosegarden|General">
 <html>
 <p>...that you can toggle stem directions in the notation editor by selecting
-one or more notes and using ctrl-PageUp and ctrl-PageDown?</p>
+one or more notes and using Ctrl-PageUp and Ctrl-PageDown?</p>
+</html>
+</tip>
+<tip category="Rosegarden|General">
+<html>
+<p>...that you can change the accidental used for a note in the notation editor (without changing the pitch of the note) by selecting
+it and using the up and down arrow keys with both Ctrl and Shift pressed?</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
