@@ -187,9 +187,9 @@ ConfigurationXmlSubHandler::endElement(const QString&,
 
 
 RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
-                               unsigned int elementCount,
-                               Rosegarden::Progress *progress)
-    : m_doc(doc),
+                               unsigned int elementCount)
+    : ProgressReporter(0),
+      m_doc(doc),
       m_currentSegment(0),
       m_currentEvent(0),
       m_currentTime(0),
@@ -209,7 +209,6 @@ RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
       m_pluginId(0),
       m_totalElements(elementCount),
       m_elementsSoFar(0),
-      m_progress(progress),
       m_subHandler(0),
       m_deprecation(false)
 {
@@ -672,17 +671,17 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                                          qstrtostr(file),
                                          id.toInt()) == false)
         {
-            // Destroy the progress dialog - nasty but for the moment
-            // there's no way around it.
-            //
-            if (m_progress)
-            {
-                m_progress->done();
+//             // Destroy the progress dialog - nasty but for the moment
+//             // there's no way around it.
+//             //
+//             if (m_progress)
+//             {
+//                 m_progress->done();
 
-                // clunktastic
-                m_doc->progressDialogDead();
-                m_progress = 0;
-            }
+//                 // clunktastic
+//                 m_doc->progressDialogDead();
+//                 m_progress = 0;
+//             }
 
             // Create a locate file dialog - give it the file name
             // and the AudioFileManager path that we've already
@@ -1236,12 +1235,11 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
     // Set percentage done
     //
-    if (m_progress &&
-	(m_totalElements > m_elementsSoFar) &&
+    if ((m_totalElements > m_elementsSoFar) &&
 	(++m_elementsSoFar % 100 == 0)) {
-	m_progress->setCompleted
-	    (int(double(m_elementsSoFar) / double(m_totalElements) * 100.0));
-	m_progress->processEvents();
+
+        emit setProgress(int(double(m_elementsSoFar) / double(m_totalElements) * 100.0));
+
     }
 
     QString lcName = qName.lower();

@@ -295,6 +295,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 	    new RosegardenProgressDialog(i18n("Reading file..."),
 					 100,
 					 (QWidget*)parent());
+        progressDlg->show();
 
 	okay = xmlParse(fileContents, errMsg, progressDlg);
 
@@ -325,8 +326,9 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     //
     RosegardenProgressDialog *progressDlg =
         new RosegardenProgressDialog(i18n("Generating audio previews..."),
-                                     100/*,
-                                          (QWidget*)parent()*/);
+                                     100,
+                                     (QWidget*)parent());
+    progressDlg->show();
 
     try
     {
@@ -550,8 +552,12 @@ RosegardenGUIDoc::xmlParse(QString &fileContents, QString &errMsg,
 	}
     }
 
-    RoseXmlHandler handler(this, elementCount,
-                           dynamic_cast<Rosegarden::Progress*>(progress));
+    RoseXmlHandler handler(this, elementCount);
+    connect(&handler, SIGNAL(setProgress(int)),
+            progress->progressBar(), SLOT(setValue(int)));
+    connect(&handler, SIGNAL(incrementProgress(int)),
+            progress->progressBar(), SLOT(advance(int)));
+    
     QXmlInputSource source;
     source.setData(fileContents);
     QXmlSimpleReader reader;

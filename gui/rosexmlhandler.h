@@ -30,6 +30,7 @@
 #include "Studio.h"
 #include "Progress.h"
 #include "rosegardenguidoc.h"
+#include "progressreporter.h"
 
 class XmlStorableEvent;
 class XmlSubHandler;
@@ -37,7 +38,7 @@ class XmlSubHandler;
 /**
  * Handler for the Rosegarden XML format
  */
-class RoseXmlHandler : public QXmlDefaultHandler
+class RoseXmlHandler : public ProgressReporter, public QXmlDefaultHandler
 {
 public:
 
@@ -57,8 +58,7 @@ public:
      * from the XML file into the specified composition
      */
     RoseXmlHandler(RosegardenGUIDoc *doc,
-                   unsigned int elementCount,
-                   Rosegarden::Progress *progress);
+                   unsigned int elementCount);
 
     virtual ~RoseXmlHandler();
 
@@ -137,7 +137,6 @@ protected:
     unsigned int                      m_pluginId;
     unsigned int                      m_totalElements;
     unsigned int                      m_elementsSoFar;
-    Rosegarden::Progress             *m_progress;
 
     XmlSubHandler                    *m_subHandler;
     bool		              m_deprecation;
