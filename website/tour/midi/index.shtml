@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <!--#include virtual="/head.html" -->
+  <body>
+
+    <!--#include virtual="/title.html" -->
+    <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/tour/subnav.html" -->
+    <!--#include virtual="/subleft.html" -->
+    <!--#include virtual="/subright.html" -->
+
+    <div id="maincontainer">
+      <div id="main">
+	<br>
+	<h2>Tour 2: MIDI</h2>
+
+	<p>Rosegarden's Studio concept stores all the information you need about your MIDI network &ndash; what devices you have, what they're plugged in to, what banks, programs and controllers they support.  </p>
+	<br>
+	<div align="center"><img src="banks.png" style="max-width:100%"></div>
+	<br>
+<p>Setting up your Studio is easy: configurations for a number of well-known MIDI synths are included, or you can enter the details of your own MIDI devices and export the results into a Rosegarden device file to share with other users.</p>
+
+	<img src="ipb.png" style="float:right;max-width:50%">
+	<p>Set up your studio once, and then you can refer to your MIDI devices and programs by name, with different colours for the different controllers.</p>
+
+	<br clear="right">
+	<p>Right-click on a track label to assign a track to a MIDI instrument by name.</p>
+	<br>
+	<div align="center"><img src="menu.png" style="max-width:100%"></div>
+	<br>
+
+	<br clear="right">
+	<p>And Rosegarden's Matrix editor also includes rulers for graphically editing control changes, as well as for velocity and pitch bend.</p>
+
+	<br>
+	<div align="center"><img src="ruler.png" style="max-width: 100%"></div>
+	<br>
+
+	<p><b>Next: <a href="/tour/notation/">Notation</a></b></p>
+
+      </div>
+    </div>
+
+  </body>
+</html> 
+
