@@ -1,3 +1,5 @@
+// -*- c-basic-offset: 4 -*-
+
 /*
     Rosegarden-4 v0.1
     A sequencer and musical notation editor.
@@ -59,12 +61,6 @@ LilypondExporter::~LilypondExporter()
     // nothing
 }
 
-static double
-convertTime(Rosegarden::timeT t)
-{
-    return double(t) / double(Note(Note::Crotchet).getDuration());
-}
-
 void
 LilypondExporter::handleStartingEvents(eventstartlist &eventsToStart, bool &addTie, std::ofstream &str) {
     for (eventstartlist::iterator m = eventsToStart.begin();
@@ -82,6 +78,10 @@ LilypondExporter::handleStartingEvents(eventstartlist &eventsToStart, bool &addT
 	} else {
 	    // Not an indication
 	}
+        // Incomplete: erase during iteration not guaranteed
+        // This is bad, but can't find docs on return value at end
+        // i.e. I want to increment m with m = events...erase(m), but
+        // what is returned when erase(eventsToStart.end())?
 	eventsToStart.erase(m);
     }
     if (addTie) {
@@ -157,18 +157,18 @@ LilypondExporter::write()
 {
     std::ofstream str(m_fileName.c_str(), std::ios::out);
     if (!str) {
-        std::cerr << "LilypondExporter::write() - can't write file" << std::endl;
+        std::cerr << "LilypondExporter::write() - can't write file " << m_fileName << std::endl;
         return false;
     }
 
     // Lilypond header information
-    str << "\\version \"1.5.55\"\n";
+    str << "\\version \"1.4.10\"\n";
     str << "\\header {\n";
-    str << "\ttitle = \"Lilypond typesetting file\"\n";
+    str << "\ttitle = \"" << m_fileName << "\"\n";
     str << "\tsubtitle = \"Written by Rosegarden-4\"\n";
     if (m_composition->getCopyrightNote() != "") {
 	str << "\tcopyright = \""
-//??? Incomplete: need to remove newlines from copyright note?
+            //??? Incomplete: need to remove newlines from copyright note?
 	    << m_composition->getCopyrightNote() << "\"\n";
     }
     str << "}\n";
@@ -194,14 +194,14 @@ LilypondExporter::write()
     bool isFlatKeySignature = false;
     int lastTrackIndex = -1;
 
+    // Lilypond remembers the duration of the last note or
+    // rest and reuses it unless explicitly changed.
+    Note::Type lastType = Note::QuarterNote;
+    int lastNumDots = 0;
+
     // Write out all segments for each Track
     for (Composition::iterator i = m_composition->begin();
 	 i != m_composition->end(); ++i) {
-
-	// Lilypond remembers the duration of the last note or
-	// rest and reuses it unless explicitly changed.
-	Note::Type lastType = Note::QuarterNote;
-	int lastNumDots = 0;
 
 	timeT lastChordTime = m_composition->getStartMarker() - 1;
 	bool currentlyWritingChord = false;
@@ -229,26 +229,25 @@ LilypondExporter::write()
 	eventendlist eventsInProgress;
 	eventstartlist eventsToStart;
       
-	// If the segment doesn't start at 0, add a "skip" to the start
-	// No worries about overlapping segments, because Voices can overlap
-	str << "\t\t\t\\context Voice {\n";
-	// [Perl|LISP] hackers unite!
-	timeT segmentStart = (*(++((*i)->begin())))->getAbsoluteTime();
-	if (segmentStart > 0) {
-// Incomplete: Why does Note constructor segfault?
-//        long curNote = long(Note(Note::WholeNote).getDuration());
-//         int wholeNoteDuration = curNote;
-// 	while (curNote > 0 && ((int)(segmentStart / curNote)) > 2) {
-//           str << "\\skip " << (wholeNoteDuration / curNote) << "*" << ((int)(segmentStart / curNote)) << "\n";
-//  	  segmentStart = segmentStart - ((int)(segmentStart / curNote))*curNote;
-//  	  curNote /= 2;
-//  	}
-	}
+        // If the segment doesn't start at 0, add a "skip" to the start
+        // No worries about overlapping segments, because Voices can overlap
+        str << "\t\t\t\\context Voice {\n";
+        // [Perl|LISP] hackers unite!
+        timeT segmentStart = (*i)->getStartTime(); // getFirstEventTime
+        if (segmentStart > 0) {
+            long curNote = long(Note(Note::WholeNote).getDuration());
+            long wholeNoteDuration = curNote;
+            while (curNote > 0 && (segmentStart / curNote) >= 1.0) {
+                str << "\\skip " << (wholeNoteDuration / curNote) << "*" << ((int)(segmentStart / curNote)) << "\n";
+                segmentStart = segmentStart - ((int)(segmentStart / curNote))*curNote;
+                curNote /= 2;
+            }
+        }
 
-	// Write out all events for this Segment
-	for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
-	    if ((*j)->isa(Note::EventType) ||
-		(*j)->isa(Note::EventRestType)) {
+        // Write out all events for this Segment
+        for (Segment::iterator j = (*i)->begin(); j != (*i)->end(); ++j) {
+            if ((*j)->isa(Note::EventType) ||
+                (*j)->isa(Note::EventRestType)) {
                   
                 Note tmpNote = Note::getNearestNote((*j)->getDuration(),
                                                     MAX_DOTS);              
@@ -286,8 +285,6 @@ LilypondExporter::write()
 		    handleEndingEvents(eventsInProgress, j, str);
 
 		    // Note pitch (need name as well as octave)
-		    // Incomplete: Fun hack of the week- convert this
-		    // into something smaller using ASCII arithmetic
 		    // It is also possible to have "relative" pitches,
 		    // but for simplicity we always use absolute pitch
 		    // 60 is middle C, one unit is a half-step
@@ -392,7 +389,6 @@ LilypondExporter::write()
 		    str << "> ";
 		}
 
-		// Incomplete: Set which note the clef should center on
 		str << "\n\t\t\t\\key ";
 		Key whichKey(**j);
 		isFlatKeySignature = !whichKey.isSharp();

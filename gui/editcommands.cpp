@@ -488,6 +488,17 @@ EventQuantizeCommand::modifySegment()
 
     if (m_selection) {
 
+	// Attempt to handle non-contiguous selections.
+
+	// We have to be a bit careful here, because the rest-
+	// normalisation that's carried out as part of a quantize
+	// process is liable to replace the event that follows
+	// the quantized range.
+
+	typedef std::vector<std::pair<Segment::iterator,
+				      Segment::iterator> > RangeList;
+	RangeList ranges;
+
 	Segment::iterator i = segment.findTime(getBeginTime());
 	Segment::iterator j;
 	Segment::iterator k = segment.findTime(getEndTime());
@@ -497,10 +508,15 @@ EventQuantizeCommand::modifySegment()
 	    for (j = i; j != k && m_selection->contains(*j); ++j);
 
 	    if (j != i) {
-		//!!! uh, I think this can break j because of rest normalization
-		m_quantizer.quantize(&segment, i, j);
-		i = j;
+		ranges.push_back(RangeList::value_type(i, j));
+		
+		for (i = j; i != k && !m_selection->contains(*i); ++i);
+		j = i;
 	    }
+	}
+
+	for (RangeList::iterator r = ranges.begin(); r != ranges.end(); ++r) {
+	    m_quantizer.quantize(&segment, r->first, r->second);
 	}
 
     } else {
