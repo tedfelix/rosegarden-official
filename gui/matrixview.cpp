@@ -549,7 +549,7 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
 
     bool updateRequired = true;
 
-    timeT quantizeUnit = 0;
+    timeT quantizeUnit = -1;
 
     if (s) {
 
@@ -582,13 +582,15 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
 
 		for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
 		    if (absTime % m_quantizations[i].unit == 0) {
+
 			myQuantizeUnit = m_quantizations[i].unit;
+			MATRIX_DEBUG << "Found note at " << absTime
+				     << " with quantize unit of " << myQuantizeUnit << endl;
 			break;
 		    }
 		}
 		
-		if (myQuantizeUnit != 0 &&
-		    (quantizeUnit == 0 || myQuantizeUnit > quantizeUnit)) {
+		if (myQuantizeUnit > 0 && myQuantizeUnit > quantizeUnit) {
 		    quantizeUnit = myQuantizeUnit;
 		}
 	    }
@@ -604,13 +606,15 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview)
 
     MATRIX_DEBUG << "quantize unit is " << quantizeUnit << endl;
 
-    for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
-	if (quantizeUnit == m_quantizations[i].unit) {
-	    m_quantizeCombo->setCurrentItem(i);
-	    break;
-	}
-	if (i == m_quantizations.size() - 1) {
-	    m_quantizeCombo->setCurrentItem(i+1); // "Off"
+    if (quantizeUnit >= 0) {
+	for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
+	    if (quantizeUnit == m_quantizations[i].unit) {
+		m_quantizeCombo->setCurrentItem(i);
+		break;
+	    }
+	    if (i == m_quantizations.size() - 1) {
+		m_quantizeCombo->setCurrentItem(i+1); // "Off"
+	    }
 	}
     }
 
