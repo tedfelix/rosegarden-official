@@ -317,7 +317,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 #endif
 
     emit startupStatusMessage(i18n("Testing project packager..."));
-    KProcess *proc;
+    KProcess *proc = new KProcess;
     *proc << "rosegarden-package";
     *proc << "--conftest";
     proc->start(KProcess::Block, KProcess::All);
@@ -783,7 +783,7 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotEditInMatrix()), actionCollection(),
                 "edit_matrix");
 
-    pixmap.load(pixmapDir + "/toolbar/matrix.xpm");
+    pixmap.load(pixmapDir + "/toolbar/matrix-percussion.xpm");
     icon = QIconSet(pixmap);
     new KAction(i18n("Open in &Percussion Matrix Editor"), icon, Key_D, this,
                 SLOT(slotEditInPercussionMatrix()), actionCollection(),

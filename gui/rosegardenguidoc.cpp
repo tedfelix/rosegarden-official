@@ -907,8 +907,10 @@ void RosegardenGUIDoc::initialiseStudio()
 // When updating major, reset minor to zero; when updating minor,
 // reset point to zero.
 //
+// Update notes:
+// MINOR -> 2 : plugins on busses
 int RosegardenGUIDoc::FILE_FORMAT_VERSION_MAJOR = 1;
-int RosegardenGUIDoc::FILE_FORMAT_VERSION_MINOR = 1;
+int RosegardenGUIDoc::FILE_FORMAT_VERSION_MINOR = 2;
 int RosegardenGUIDoc::FILE_FORMAT_VERSION_POINT = 0;
 
 
