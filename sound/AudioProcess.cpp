@@ -1386,8 +1386,8 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
     if (!haveBlock) {
 	//!!! Is this actually a problem? It should mean we just block
 	// on this one instrument and return to it a little later.
-	std::cerr << "WARNING: buffer underrun in file ringbuffer for instrument " << id << std::endl;
-	m_driver->reportFailure(MappedEvent::FailureDiscUnderrun);
+//	std::cerr << "WARNING: buffer underrun in file ringbuffer for instrument " << id << std::endl;
+//	m_driver->reportFailure(MappedEvent::FailureDiscUnderrun);
 	return false; // blocked
     }
 
