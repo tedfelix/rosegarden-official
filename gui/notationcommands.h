@@ -660,6 +660,22 @@ private:
     Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
 
+class MarksMenuRemoveFingeringMarksCommand : public BasicSelectionCommand
+{
+public:
+    MarksMenuRemoveFingeringMarksCommand(Rosegarden::EventSelection &selection) :
+	BasicSelectionCommand(getGlobalName(), selection, true),
+	m_selection(&selection) { }
+
+    static QString getGlobalName() { return i18n("&Remove Fingerings"); }
+
+protected:
+    virtual void modifySegment();
+
+private:
+    Rosegarden::EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+};
+
 class TransformsMenuFixNotationQuantizeCommand : public BasicSelectionCommand
 {
 public:

@@ -1715,6 +1715,10 @@ void NotationView::setupActions()
                 SLOT(slotMarksRemoveMarks()), actionCollection(),
                 "remove_marks");
 
+    new KAction(MarksMenuRemoveFingeringMarksCommand::getGlobalName(), 0, this,
+                SLOT(slotMarksRemoveFingeringMarks()), actionCollection(),
+                "remove_fingering_marks");
+
     static QString slashTitles[] = {
 	i18n("&None"), "&1", "&2", "&3", "&4", "&5"
     };

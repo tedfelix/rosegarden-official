@@ -1355,6 +1355,13 @@ void NotationView::slotMarksRemoveMarks()
                             (*m_currentEventSelection));
 }
 
+void NotationView::slotMarksRemoveFingeringMarks()
+{
+    if (m_currentEventSelection)
+        addCommandToHistory(new MarksMenuRemoveFingeringMarksCommand
+                            (*m_currentEventSelection));
+}
+
 void NotationView::slotEditAddClef()
 {
     NotationStaff *staff = m_staffs[m_currentStaff];

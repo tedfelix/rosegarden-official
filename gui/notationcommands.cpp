@@ -1192,6 +1192,24 @@ MarksMenuRemoveMarksCommand::modifySegment()
 }
 
 void
+MarksMenuRemoveFingeringMarksCommand::modifySegment()
+{
+    EventSelection::eventcontainer::iterator i;
+
+    for (i  = m_selection->getSegmentEvents().begin();
+	 i != m_selection->getSegmentEvents().end(); ++i) {
+
+	std::vector<Rosegarden::Mark> marks = Rosegarden::Marks::getMarks(**i);
+	for (std::vector<Rosegarden::Mark>::iterator j = marks.begin();
+	     j != marks.end(); ++j) {
+	    if (Rosegarden::Marks::isFingeringMark(*j)) {
+		Rosegarden::Marks::removeMark(**i, *j);
+	    }
+	}
+    }
+}
+
+void
 TransformsMenuFixNotationQuantizeCommand::modifySegment()
 {
     std::vector<Event *> toErase;

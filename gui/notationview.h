@@ -470,6 +470,7 @@ public slots:
     void slotMarksAddFingeringMark();
     void slotMarksAddFingeringMarkFromAction();
     void slotMarksRemoveMarks();
+    void slotMarksRemoveFingeringMarks();
 
     void slotAddSlashes();
 

@@ -116,7 +116,9 @@
     <Action name="remove_marks"/>
     <Separator/>
     <Menu name="Fingering">
-    <text>Add &amp;Fingering</text>
+    <text>&amp;Fingerings</text>
+    <Action name="remove_fingering_marks"/>
+    <Separator/>
     <Action name="add_fingering_0"/>
     <Action name="add_fingering_1"/>
     <Action name="add_fingering_2"/>
