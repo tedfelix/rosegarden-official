@@ -39,6 +39,9 @@ public:
     /** Callback for a mouse move event in the canvas */
     virtual void contentsMouseMoveEvent(QMouseEvent *e);
 
+signals:
+    void noteInserted(int pitch, QMouseEvent*);
+    
 protected:
 
     void insertNote(const StaffLine*, QMouseEvent*);

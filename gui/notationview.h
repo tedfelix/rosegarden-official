@@ -125,7 +125,10 @@ public slots:
     void slot16th();
     void slot32nd();
     void slot64th();
-	
+
+    // Canvas actions slots
+    void insertNote(int pitch, QMouseEvent*);
+
 protected:
 
     /**

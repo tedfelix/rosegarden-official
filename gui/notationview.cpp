@@ -62,6 +62,9 @@ NotationView::NotationView(RosegardenGUIDoc* doc, QWidget *parent)
 
     setCentralWidget(m_canvasView);
 
+    QObject::connect(m_canvasView, SIGNAL(noteInserted(int, QMouseEvent*)),
+                     this, SLOT(insertNote(int, QMouseEvent*)));
+
     readOptions();
 
     if (doc) {
@@ -299,42 +302,48 @@ NotationView::applyVerticalLayout()
 //                    Slots
 //////////////////////////////////////////////////////////////////////
 
-void NotationView::slotEditUndo()
+void
+NotationView::slotEditUndo()
 {
     slotStatusMsg(i18n("Undo..."));
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void NotationView::slotEditRedo()
+void
+NotationView::slotEditRedo()
 {
     slotStatusMsg(i18n("Redo..."));
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void NotationView::slotEditCut()
+void
+NotationView::slotEditCut()
 {
     slotStatusMsg(i18n("Cutting selection..."));
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void NotationView::slotEditCopy()
+void
+NotationView::slotEditCopy()
 {
     slotStatusMsg(i18n("Copying selection to clipboard..."));
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void NotationView::slotEditPaste()
+void
+NotationView::slotEditPaste()
 {
     slotStatusMsg(i18n("Inserting clipboard contents..."));
 
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void NotationView::slotToggleToolBar()
+void
+NotationView::slotToggleToolBar()
 {
     slotStatusMsg(i18n("Toggle the toolbar..."));
 
@@ -346,7 +355,8 @@ void NotationView::slotToggleToolBar()
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-void NotationView::slotToggleStatusBar()
+void
+NotationView::slotToggleStatusBar()
 {
     slotStatusMsg(i18n("Toggle the statusbar..."));
 
@@ -359,7 +369,8 @@ void NotationView::slotToggleStatusBar()
 }
 
 
-void NotationView::slotStatusMsg(const QString &text)
+void
+NotationView::slotStatusMsg(const QString &text)
 {
     ///////////////////////////////////////////////////////////////////
     // change status message permanently
@@ -368,7 +379,8 @@ void NotationView::slotStatusMsg(const QString &text)
 }
 
 
-void NotationView::slotStatusHelpMsg(const QString &text)
+void
+NotationView::slotStatusHelpMsg(const QString &text)
 {
     ///////////////////////////////////////////////////////////////////
     // change status message of whole statusbar temporary (text, msec)
@@ -377,46 +389,59 @@ void NotationView::slotStatusHelpMsg(const QString &text)
 
 //////////////////////////////////////////////////////////////////////
 
-void NotationView::slotWhole()
+void
+NotationView::slotWhole()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotWhole()\n";
     m_currentSelectedNote = Whole;
 }
 
-void NotationView::slotHalf()
+void
+NotationView::slotHalf()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotHalf()\n";
     m_currentSelectedNote = Half;
 }
 
-void NotationView::slotQuarter()
+void
+NotationView::slotQuarter()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slotQuarter()\n";
     m_currentSelectedNote = Quarter;
 }
 
-void NotationView::slot8th()
+void
+NotationView::slot8th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot8th()\n";
     m_currentSelectedNote = Eighth;
 }
 
-void NotationView::slot16th()
+void
+NotationView::slot16th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot16th()\n";
     m_currentSelectedNote = Sixteenth;
 }
 
-void NotationView::slot32nd()
+void
+NotationView::slot32nd()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot32nd()\n";
     m_currentSelectedNote = ThirtySecond;
 }
 
-void NotationView::slot64th()
+void
+NotationView::slot64th()
 {
     kdDebug(KDEBUG_AREA) << "NotationView::slot64th()\n";
     m_currentSelectedNote = SixtyFourth;
+}
+
+void
+NotationView::insertNote(int pitch, QMouseEvent *e)
+{
+    // create new event and notation element, lay it out, insert it
 }
 
 

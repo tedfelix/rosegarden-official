@@ -96,4 +96,7 @@ void
 NotationCanvasView::insertNote(const StaffLine *line, QMouseEvent *e)
 {
     kdDebug(KDEBUG_AREA) << "insertNote at pitch " << line->associatedPitch() << endl;
+
+    emit noteInserted(line->associatedPitch(), e);
+    
 }
