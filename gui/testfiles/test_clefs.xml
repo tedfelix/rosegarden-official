@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-data>
+<rosegarden-data>
+<track instrument="0" start="0">
+	<event type="clefchange">
+		<property name="clef" string="treble"/>
+	</event>
+        <event type="note" duration="minim">
+		<property name="pitch" int="64"/>
+	</event>
+</track>
+<track instrument="1" start="384">
+	<event type="clefchange">
+		<property name="clef" string="alto"/>
+	</event>
+        <event type="note" duration="minim">
+		<property name="pitch" int="64"/>
+	</event>
+</track>
+<track instrument="2" start="768">
+	<event type="clefchange">
+		<property name="clef" string="tenor"/>
+	</event>
+        <event type="note" duration="minim">
+		<property name="pitch" int="64"/>
+	</event>
+</track>
+<track instrument="3" start="1152">
+	<event type="clefchange">
+		<property name="clef" string="bass"/>
+	</event>
+        <event type="note" duration="minim">
+		<property name="pitch" int="64"/>
+	</event>
+</track>
+<track instrument="4" start="1536">
+	<event type="clefchange">
+		<property name="clef" string="treble"/>
+	</event>
+        <event type="note" duration="minim">
+		<property name="pitch" int="64"/>
+	</event>
+	<event type="clefchange">
+		<property name="clef" string="alto"/>
+	</event>
+        <event type="note" duration="minim">
+		<property name="pitch" int="64"/>
+	</event>
+	<event type="clefchange">
+		<property name="clef" string="tenor"/>
+	</event>
+        <event type="note" duration="minim">
+		<property name="pitch" int="64"/>
+	</event>
+	<event type="clefchange">
+		<property name="clef" string="bass"/>
+	</event>
+        <event type="note" duration="minim">
+		<property name="pitch" int="64"/>
+	</event>
+</track>
+</rosegarden-data>
