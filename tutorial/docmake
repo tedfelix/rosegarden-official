@@ -70,17 +70,18 @@ Sed() {
 Put() {
     if [ `whoami` == "silvan" ]; then
 
-	    echo Publishing...
+	    printf "Publishing \"$1\"... \t"
     
 	    user=$(cat /home/silvan/ZTQXP3)
 
 	    curl -u "$user" -T "$1" ftp://users.adelphia.net/public_html/
 
 	    if [ $? ]; then
-		echo File \"$1\" uploaded successfully.
+		echo OK
 	    else
-		echo Upload of file \"$1\" failed.
+		echo FAILED
 	    fi
+
     fi 
 }
 
@@ -107,6 +108,8 @@ case $1 in
 		pdf de
 	        Put using-rosegarden/en/using-rosegarden.pdf
 		Put using-rosegarden/de/arbeiten-mit-rosegarden.pdf
+		echo Attempting an automatic CVS commit...
+	        cvs -f commit -m "* automatic commit by $0" '.' 
 	;;
     *) Usage
     	;;
