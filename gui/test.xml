@@ -27,5 +27,17 @@
 	     <event type="note" duration="quarter" pitch="11"/>
         </Group>
 
+
+	<event type="rest" duration="whole"/>
+
+	<event type="rest" duration="half"/>
+	<event type="rest" duration="half"/>
+
+	<event type="rest" duration="quarter"/>
+	<event type="rest" duration="quarter"/>
+	<event type="rest" duration="quarter"/>
+	<event type="rest" duration="quarter"/>
+
+
 </Track>
 </rosegarden-data>
