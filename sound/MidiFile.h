@@ -130,9 +130,9 @@ private:
 
     // Internal convenience functions
     //
-    const unsigned int midiBytesToInt(const std::string& bytes);
+    const int midiBytesToInt(const std::string& bytes);
     const long midiBytesToLong(const std::string& bytes);
-    const unsigned int getNumberFromMidiBytes(std::ifstream* midiFile);
+    const long getNumberFromMidiBytes(std::ifstream* midiFile);
     const std::string getMidiBytes(std::ifstream* midiFile,
                                    const unsigned long &bytes);
     bool skipToNextTrack(std::ifstream *midiFile);

@@ -96,12 +96,12 @@ MidiFile::midiBytesToLong(const string& bytes)
     return longRet;
 }
 
-const unsigned int
+const int
 MidiFile::midiBytesToInt(const string& bytes)
 {
     assert(bytes.length() == 2);
-    int intRet = ((short)(((MidiByte)bytes[0]) << 8)) |
-        ((short)(((MidiByte)bytes[1])));
+    int intRet = ((int)(((MidiByte)bytes[0]) << 8)) |
+                 ((int)(((MidiByte)bytes[1])));
     return(intRet);
 }
 
@@ -175,7 +175,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, const unsigned long &numberOfBytes)
 // Get a long number of variable length from the MIDI byte stream.
 //
 //
-const unsigned int
+const long
 MidiFile::getNumberFromMidiBytes(ifstream* midiFile)
 {
     long longRet = 0;
