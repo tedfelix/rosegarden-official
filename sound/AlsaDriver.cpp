@@ -826,7 +826,8 @@ AlsaDriver::initialiseMidi()
     if (snd_seq_subscribe_port(m_midiHandle, subs) < 0)
     {
         std::cerr << "AlsaDriver::initialiseMidi - "
-                  << "can't subscribe input client/port"
+                  << "can't subscribe input client:port "
+		  << sender.client << ":" << sender.port
                   << std::endl;
         // Not the end of the world if this fails but we
         // have to flag it internally.
@@ -3475,8 +3476,8 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id /*!!!, int port */)
     ClientPortPair pair = m_devicePortMap[id];
 
     snd_seq_addr_t sender, dest;
-    dest.client = pair.first;
-    dest.port = pair.second;
+    sender.client = pair.first;
+    sender.port = pair.second;
 
 #ifdef NOT_DEFINED
     Rosegarden::InstrumentId typicalId = 0;
@@ -3500,11 +3501,9 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id /*!!!, int port */)
         sender.client = (*it)->m_client;
         sender.port = (*it)->m_port;
 
-#ifdef NOT_DEFINED
 	//!!!!!!!!
         if (typicalId >= (*it)->m_startId &&
             typicalId <= (*it)->m_endId) break;
-#endif
     }
 
     if (it == m_alsaPorts.end())
@@ -3546,9 +3545,11 @@ AlsaDriver::setRecordDevice(Rosegarden::DeviceId id /*!!!, int port */)
 
     if (snd_seq_subscribe_port(m_midiHandle, subs) < 0)
     {
-        std::cerr << "AlsaDriver::initialiseMidi - "
-                  << "can't subscribe input client/port"
+        std::cerr << "AlsaDriver::setRecordDevice - "
+                  << "can't subscribe input client:port"
+		  << sender.client << ":" << sender.port
                   << std::endl;
+
         // Not the end of the world if this fails but we
         // have to flag it internally.
         //
