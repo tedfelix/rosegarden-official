@@ -39,8 +39,8 @@ RoseXmlHandler::startDocument()
 }
 
 bool
-RoseXmlHandler::startElement(const QString& namespaceURI,
-                             const QString& localName,
+RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
+                             const QString& /*localName*/,
                              const QString& qName, const QXmlAttributes& atts)
 {
     QString lcName = qName.lower();
@@ -82,8 +82,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 }
 
 bool
-RoseXmlHandler::endElement(const QString& namespaceURI,
-                           const QString& localName, const QString& qName)
+RoseXmlHandler::endElement(const QString& /*namespaceURI*/,
+                           const QString& /*localName*/, const QString& qName)
 {
     QString lcName = qName.lower();
 
@@ -97,7 +97,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 }
 
 bool
-RoseXmlHandler::characters(const QString& ch)
+RoseXmlHandler::characters(const QString&)
 {
     return true;
 }

@@ -39,7 +39,7 @@ Scale::Scale(KeySignature keysig)
         m_notes[i] = false;
     }
  
-    if (keysig > 7) keysig -= 7;
+    if (keysig > 7) keysig = KeySignature(keysig - 7);
     
     for (unsigned int i = 0; i < 7; ++i) {
 //         kdDebug(KDEBUG_AREA) << QString("Scales[%1][%2]").arg(keysig).arg(i)

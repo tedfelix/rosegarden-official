@@ -158,7 +158,7 @@ bool RosegardenGUIDoc::newDocument()
 }
 
 bool RosegardenGUIDoc::openDocument(const QString &filename,
-                                    const char *format /*=0*/)
+                                    const char* /*format*/ /*=0*/)
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::openDocument("
                          << filename << ")" << endl;
@@ -202,7 +202,7 @@ bool RosegardenGUIDoc::openDocument(const QString &filename,
 }
 
 bool RosegardenGUIDoc::saveDocument(const QString &filename,
-                                    const char *format /*=0*/)
+                                    const char* /*format*/ /*=0*/)
 {
     kdDebug(KDEBUG_AREA) << "RosegardenGUIDoc::saveDocument("
                          << filename << ")" << endl;
@@ -220,7 +220,7 @@ bool RosegardenGUIDoc::saveDocument(const QString &filename,
 
     // output all elements
     //
-    bool inGroup = false;
+    //bool inGroup = false;
     
     for(EventList::iterator i = m_events.begin();
         i != m_events.end(); ++i) {

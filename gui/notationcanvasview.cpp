@@ -31,7 +31,7 @@ NotationCanvasView::NotationCanvasView(QCanvas *viewing, QWidget *parent,
 }
 
 void
-NotationCanvasView::contentsMouseReleaseEvent (QMouseEvent *e)
+NotationCanvasView::contentsMouseReleaseEvent (QMouseEvent*)
 {
     m_draggingItem = false;
     canvas()->update();

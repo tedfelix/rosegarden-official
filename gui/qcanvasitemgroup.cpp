@@ -67,7 +67,7 @@ QCanvasItemGroup::collidesWith(const QCanvasItem *item) const
 }
 
 void
-QCanvasItemGroup::draw(QPainter &p)
+QCanvasItemGroup::draw(QPainter&)
 {
     // There isn't anything to do - all the items will be drawn
     // seperately by the canvas anyway. However the function has to be

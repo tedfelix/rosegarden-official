@@ -174,7 +174,7 @@ void RosegardenGUIApp::openDocumentFile(const char* _cmdl)
     initView();
 }
 
-int RosegardenGUIApp::openFile(const QString& url, int mode)
+int RosegardenGUIApp::openFile(const QString& url, int /*mode*/)
 {
 
     setCaption(url);
@@ -355,7 +355,7 @@ void RosegardenGUIApp::slotFileNew()
     slotStatusMsg(i18n(IDS_STATUS_DEFAULT));
 }
 
-int RosegardenGUIApp::openURL(const KURL& url, int mode)
+int RosegardenGUIApp::openURL(const KURL& url, int /*mode*/)
 {
     QString netFile = url.url();
     kdDebug(KDEBUG_AREA) << "RosegardenGUIApp::openURL: " << netFile << endl;

@@ -535,7 +535,7 @@ NotePixmapFactory::drawStalk(Note note,
 }
 
 void
-NotePixmapFactory::drawAccidental(Accidental accidental, bool stalkGoesUp)
+NotePixmapFactory::drawAccidental(Accidental accidental, bool /*stalkGoesUp*/)
 {
     const QPixmap *accidentalPixmap = 0;
 
