@@ -18,11 +18,6 @@
   COPYING included with this distribution for more information.
 */
 
-// EXPERIMENTAL - SHOULDN'T EVEN BE IN THE BUILD YET!!!!
-//
-// rwb 04.04.2002
-
-
 #include <string>
 #include <vector>
 
