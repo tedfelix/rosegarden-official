@@ -8,7 +8,7 @@ o sweep selection on Matrix
 
 o Event playback on selection movement
 
-o Changing Composition length
+o Changing Composition length - deactivating blank tracks
 
 o ALSA/JACK audio 
 
@@ -33,13 +33,12 @@ o Segment paramters and modifiers - looping of Segments, quantisation
 Lower priority pending
 ----------------------
 
-o Client (Notation/Matrix) labelling as per Segment/Instrument/Track
-
 o Complete segment edit shortcuts (click/copy/multiple segment drag)
 
 o Segment colouring
 
-o Track addition/deletion and moving on TrackButtons canvas - needs undo!
+o Track addition/deletion and moving on TrackButtons canvas
+  [gl PARTIALLY DONE]
 
 o More MIDI events at Composition level. Sys Exs, Program Changes,
   Controller changes etc. etc.
@@ -136,6 +135,9 @@ Completed POST 0.1.4
 
 - Sharing keyboard accelerators cleanly across all child windows
   [DONE]
+
+- Client (Notation/Matrix) labelling as per Segment/Instrument/Track
+  [DONE cc/rwb]
 
 
 

@@ -541,7 +541,7 @@ MidiFile::convertToRosegarden()
             rosegardenSegment = new Segment;
             rosegardenSegment->setTrack(compTrack);
             rosegardenSegment->setStartTime(0);
-
+            
             track = new Rosegarden::Track(compTrack,        // id
                                           compInstrument,   // instrument
                                           compTrack,        // position
@@ -759,6 +759,14 @@ MidiFile::convertToRosegarden()
                     // assign it here
                     if (instr != 0)
                         track->setInstrument(instr->getID());   
+
+                    // give the Segment a name based on the the Instrumnet
+                    //
+                    if (rosegardenSegment != 0)
+                    {
+                        rosegardenSegment->setLabel(m_studio->
+                                getSegmentName(instr->getID()));
+                    }
                 }
                 break;
 

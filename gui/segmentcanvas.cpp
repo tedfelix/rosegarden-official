@@ -886,7 +886,7 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent*)
 
     if (m_newRect) {
         SegmentInsertCommand *command =
-            new SegmentInsertCommand(&(m_doc->getComposition()),
+            new SegmentInsertCommand(m_doc,
                                      m_currentItem->getTrack(),
                                      m_currentItem->getStartTime(),
                                      m_currentItem->getDuration());

@@ -73,7 +73,7 @@ private:
 class SegmentInsertCommand : public XKCommand
 {
 public:
-    SegmentInsertCommand(Rosegarden::Composition *composition,
+    SegmentInsertCommand(RosegardenGUIDoc *doc,
                          Rosegarden::TrackId track,
                          Rosegarden::timeT startTime,
                          Rosegarden::timeT duration);
@@ -84,6 +84,7 @@ public:
     
 private:
     Rosegarden::Composition *m_composition;
+    Rosegarden::Studio      *m_studio;
     Rosegarden::Segment     *m_segment;
     int                      m_track;
     Rosegarden::timeT        m_startTime;

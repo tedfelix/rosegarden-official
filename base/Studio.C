@@ -391,6 +391,44 @@ Studio::getDevice(DeviceId id)
     return 0;
 }
 
+std::string
+Studio::getSegmentName(InstrumentId id)
+{
+    MidiDevice *midiDevice;
+    std::vector<Device*>::iterator it;
+    Rosegarden::InstrumentList::iterator iit;
+    Rosegarden::InstrumentList instList;
+
+    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    {
+        midiDevice = dynamic_cast<MidiDevice*>(*it);
+
+        if (midiDevice)
+        {
+            instList = (*it)->getAllInstruments();
+
+            for (iit = instList.begin(); iit != instList.end(); iit++)
+            {
+                if ((*iit)->getID() == id)
+                {
+                    if ((*iit)->sendsProgramChange())
+                    {
+                        return midiDevice->
+                            getProgramName((*iit)->getMSB(),
+                                           (*iit)->getLSB(),
+                                           (*iit)->getProgramChange());
+                    }
+                    else
+                    {
+                        return (*iit)->getName();
+                    }
+                }
+            }
+        }
+    }
+
+    return std::string("");
+}
 
 }
 

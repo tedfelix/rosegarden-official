@@ -107,12 +107,13 @@ SegmentQuickCopyCommand::unexecute()
 
 // --------- Insert Segment --------
 //
-SegmentInsertCommand::SegmentInsertCommand(Composition *c,
+SegmentInsertCommand::SegmentInsertCommand(RosegardenGUIDoc *doc,
                                            TrackId track,
                                            timeT startTime,
                                            timeT duration):
     XKCommand("Create Segment"),
-    m_composition(c),
+    m_composition(&(doc->getComposition())),
+    m_studio(&(doc->getStudio())),
     m_segment(0),
     m_track(track),
     m_startTime(startTime),
@@ -140,6 +141,26 @@ SegmentInsertCommand::execute()
         m_segment->setStartTime(m_startTime);
 	m_composition->addSegment(m_segment);
         m_segment->setDuration(m_duration);
+
+        // Do our best to label the Segment with whatever is currently
+        // showing against it.
+        //
+        Rosegarden::Track *track = m_composition->getTrackByIndex(m_track);
+        std::string label;
+
+        if (track)
+        {
+            // try to get a reasonable Segment name by Instrument
+            //
+            label = m_studio->getSegmentName(track->getInstrument());
+
+            // if not use the track label
+            //
+            if (label == "")
+                label = track->getLabel();
+        }
+
+        m_segment->setLabel(label);
     }
     else
     {

@@ -149,6 +149,11 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
     TrackLabel *trackLabel = 0;
     InstrumentLabel *instrumentLabel = 0;
 
+    int vuWidth = 20;
+    int vuSpacing = 2;
+    int labelWidth = m_trackLabelWidth - ( (m_cellSize - buttonGap) * 2 +
+                                            vuSpacing * 2 + vuWidth );
+
     // Set the label from the Track object on the Composition
     //
     Rosegarden::Track *track = m_doc->getComposition().getTrackByIndex(trackId);
@@ -158,9 +163,8 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
     trackHBox = new QFrame(this);
     QHBoxLayout *hblayout = new QHBoxLayout(trackHBox);
         
-    trackHBox->setMinimumSize(m_trackLabelWidth, m_cellSize - m_borderGap);
+    trackHBox->setMinimumSize(labelWidth, m_cellSize - m_borderGap);
     trackHBox->setFixedHeight(m_cellSize - m_borderGap);
-    //trackHBox->setMaximumSize(m_trackLabelWidth, m_cellSize - m_borderGap);
 
     // Try a style for the box
     //
@@ -169,12 +173,12 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
     trackHBox->setFrameShadow(Raised);
 
     // Insert a little gap
-    hblayout->addSpacing(2);
+    hblayout->addSpacing(vuSpacing);
 
     // Create a VU meter
     vuMeter = new TrackVUMeter(trackHBox,
                                VUMeter::PeakHold,
-                               25,
+                               vuWidth,
                                buttonGap,
                                track->getID());
 
@@ -183,7 +187,7 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
     hblayout->addWidget(vuMeter);
 
     // Create another little gap
-    hblayout->addSpacing(2);
+    hblayout->addSpacing(vuSpacing);
 
     // Create buttons
     mute = new QPushButton(trackHBox);
@@ -205,8 +209,7 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
 
     trackLabel->setText(QString(track->getLabel().c_str()));
 
-    trackLabel->setMinimumSize(80, m_cellSize - buttonGap);
-    //trackLabel->setMaximumSize(80, m_cellSize - buttonGap);
+    trackLabel->setFixedSize(labelWidth, m_cellSize - buttonGap);
     trackLabel->setFixedHeight(m_cellSize - buttonGap);
     trackLabel->setIndent(7);
 
@@ -244,7 +247,7 @@ QFrame* TrackButtons::makeButton(unsigned int trackId)
                                           Rosegarden::InstrumentId(trackId),
                                           trackHBox);
 
-    instrumentLabel->setMinimumSize(80, m_cellSize - buttonGap);
+    instrumentLabel->setFixedSize(labelWidth, m_cellSize - buttonGap);
     instrumentLabel->setFixedHeight(m_cellSize - buttonGap);
     instrumentLabel->setIndent(7);
     hblayout->addWidget(instrumentLabel);

@@ -147,7 +147,7 @@ TrackEditor::init(unsigned int nbTracks, int firstBar, int lastBar)
 
     canvas->setBackgroundColor(RosegardenGUIColours::SegmentCanvas);
 
-    int trackLabelWidth = 200;
+    int trackLabelWidth = 230;
 //     int trackLabelOffset = 0;//!!!3;
 
     int barButtonsHeight = 25;
@@ -382,7 +382,7 @@ void TrackEditor::addSegment(int track, int time, unsigned int duration)
 
     Composition &comp = m_document->getComposition();
     SegmentInsertCommand *command =
-	new SegmentInsertCommand(&comp, track, time, duration);
+	new SegmentInsertCommand(m_document, track, time, duration);
 
     addCommandToHistory(command);
 }

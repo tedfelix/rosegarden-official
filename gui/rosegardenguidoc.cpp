@@ -317,9 +317,11 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	Segment *segment = *segitr;
 
         //--------------------------
-        outStream << QString("<segment track=\"%1\" start=\"%2\">")
-            .arg(segment->getTrack())
-             .arg(segment->getStartTime()) << endl;
+        outStream << QString("<segment track=\"%1\" start=\"%2\" ") 
+                            .arg(segment->getTrack())
+                            .arg(segment->getStartTime());
+
+        outStream << "label=\"" << segment->getLabel().c_str() << "\">" << std::endl;
 
         long currentGroup = -1;
 	bool inChord = false;

@@ -386,7 +386,7 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         if (startIdxStr) {
             startTime = startIdxStr.toInt();
         }
-        
+
         QString segmentType = (atts.value("type")).lower();
         if (segmentType) {
             if (segmentType == "audio")
@@ -416,6 +416,11 @@ RoseXmlHandler::startElement(const QString& /*namespaceURI*/,
         else // for the moment we default
             m_currentSegment = new Segment(Rosegarden::Segment::Internal);
     
+        // fill in the label
+        QString labelStr = atts.value("label");
+        if (labelStr)
+            m_currentSegment->setLabel(std::string(labelStr.data()));
+        
         m_currentSegment->setTrack(track);
         m_currentSegment->setStartTime(startTime);
 	m_currentTime = startTime;

@@ -76,6 +76,11 @@ public:
     Instrument* assignMidiProgramToInstrument(MidiByte program,
                                               bool percussion);
 
+    // Get a suitable name for a Segment belonging to this instrument.
+    // Takes into account ProgramChanges.
+    //
+    std::string getSegmentName(InstrumentId id);
+
     // Clear down all the ProgramChange flags in all MIDI Instruments
     //
     void unassignAllInstruments();
