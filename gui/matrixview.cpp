@@ -173,7 +173,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     m_grid->addWidget(m_pianoView, CANVASVIEW_ROW, 1);
 
-    m_parameterBox = new MatrixParameterBox(m_dockLeft, getDocument());
+    m_parameterBox = new MatrixParameterBox(getDocument(), m_dockLeft, "matrixparameterbox");
     m_dockLeft->setWidget(m_parameterBox);
 
     // Set the instrument we're using on this segment
@@ -187,8 +187,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     // Assign the instrument
     //
     m_parameterBox->useInstrument(instr);
-
-    m_grid->addWidget(m_parameterBox, CANVASVIEW_ROW, 0);
 
     m_snapGrid->setSnapTime(Rosegarden::SnapGrid::SnapToBeat);
 

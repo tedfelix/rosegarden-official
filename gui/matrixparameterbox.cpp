@@ -42,9 +42,9 @@
 using Rosegarden::Note;
 
 
-MatrixParameterBox::MatrixParameterBox(QWidget *parent,
-                                       RosegardenGUIDoc *doc):
-    QVBox(parent),
+MatrixParameterBox::MatrixParameterBox(RosegardenGUIDoc *doc,
+                                       QWidget *parent, const char* name):
+    QFrame(parent, name),
     m_quantizations(Rosegarden::BasicQuantizer::getStandardQuantizations()),
     m_doc(doc)
 {

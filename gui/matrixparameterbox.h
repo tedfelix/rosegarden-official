@@ -22,7 +22,7 @@
 #ifndef _MATRIXPARAMETERBOX_H_
 #define _MATRIXPARAMETERBOX_H_
 
-#include <qvbox.h>
+#include <qframe.h>
 
 #include "widgets.h"
 #include "Quantizer.h"
@@ -43,12 +43,12 @@ namespace Rosegarden
     class MappedEvent;
 }
 
-class MatrixParameterBox : public QVBox
+class MatrixParameterBox : public QFrame
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    MatrixParameterBox(QWidget *parent=0, RosegardenGUIDoc *doc=0);
+    MatrixParameterBox(RosegardenGUIDoc *doc=0, QWidget *parent=0, const char* name=0);
     ~MatrixParameterBox();
 
     void initBox();

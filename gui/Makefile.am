@@ -30,6 +30,7 @@ rosegarden_SOURCES = \
 	importdevicedialog.cpp \
         instrumentparameterbox.cpp \
 	kstartuplogo.cpp \
+	kde32_ktabwidget.cpp \
 	ktmpstatusmsg.cpp \
         lilypondio.cpp \
         linedstaff.cpp \

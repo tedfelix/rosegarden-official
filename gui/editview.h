@@ -27,6 +27,8 @@
 
 #include <qaccel.h>
 
+#include <kdeversion.h>
+
 #include "editviewbase.h"
 #include "dialogs.h" // ugh -- for TempoDialog::TempoDialogAction
 
@@ -42,10 +44,14 @@ class QVBox;
 class QGridLayout;
 class QVBoxLayout;
 class QScrollBar;
-class QTabWidget;
 
 class KCommand;
 class KToggleAction;
+#if KDE_VERSION >= 320
+class KTabWidget;
+#else
+namespace KDE32Backport { class KTabWidget; }
+#endif
 
 class RosegardenGUIDoc;
 class MultiViewCommandHistory;
@@ -180,16 +186,18 @@ public slots:
     void slotEraseControlRulerItem();
     void slotClearControlRulerItem();
     void slotStartControlLineItem();
-    void slotCloseControlRulerItem();
 
     // add control ruler
     void slotAddControlRuler(int);
+    void slotRemoveControlRuler(QWidget*);
 
 protected:
     virtual Rosegarden::RulerScale* getHLayout() = 0;
 
     QVBox* getBottomWidget() { return m_bottomBox; }
 
+    virtual void updateBottomWidgetGeometry();
+    
     virtual void paintEvent(QPaintEvent* e);
 
     /**
@@ -360,7 +368,11 @@ protected:
     BarButtons   *m_topBarButtons;
     BarButtons   *m_bottomBarButtons;
     ControlRuler *m_controlRuler;
-    QTabWidget   *m_controlRulers;
+#if KDE_VERSION >= 320
+    KTabWidget   *m_controlRulers;
+#else
+    KDE32Backport::KTabWidget   *m_controlRulers;
+#endif
     QWMatrix      m_currentRulerZoomMatrix;
 
     static const unsigned int RULERS_ROW;

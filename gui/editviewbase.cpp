@@ -77,7 +77,8 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
 {
 
     QPixmap dummyPixmap; // any icon will do
-    m_mainDockWidget = createDockWidget("Rosegarden EditView DockWidget", dummyPixmap, 0L, "editview_dock_widget");
+    m_mainDockWidget = createDockWidget("Rosegarden EditView DockWidget", dummyPixmap,
+                                        0L, "editview_dock_widget");
     // allow others to dock to the left and right sides only
     m_mainDockWidget->setDockSite(KDockWidget::DockLeft | KDockWidget::DockRight);
     // forbit docking abilities of m_mainDockWidget itself
@@ -85,7 +86,7 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     setView(m_mainDockWidget); // central widget in a KDE mainwindow
     setMainDockWidget(m_mainDockWidget); // master dockwidget
 
-    m_centralFrame = new QFrame(m_mainDockWidget);
+    m_centralFrame = new QFrame(m_mainDockWidget, "centralframe");
     m_grid = new QGridLayout(m_centralFrame, NbLayoutRows, cols);
 
     m_mainDockWidget->setWidget(m_centralFrame);

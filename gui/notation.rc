@@ -458,8 +458,6 @@
    <Action name="clear_control_ruler_item"/>
    <Separator/>
    <Action name="start_control_line_item"/>
-   <Separator/>
-   <Action name="close_control_ruler_item"/>
 </Menu>
 
 <!--     Application States           -->

@@ -20,7 +20,6 @@
 */
 
 #include <qlayout.h>
-#include <qtabwidget.h>
 #include <qpopupmenu.h>
 #include <qinputdialog.h>
 #include <qobjectlist.h>
@@ -32,6 +31,14 @@
 #include <kstdaction.h>
 #include <kstatusbar.h>
 #include <klistbox.h>
+
+#if KDE_VERSION >= 320
+#include <ktabwidget.h>
+#else
+#include "kde32_ktabwidget.h"
+#endif
+
+#include <kiconloader.h>
 
 #include "BaseProperties.h"
 #include "Profiler.h"
@@ -57,6 +64,10 @@
 
 using Rosegarden::PropertyName;
 
+#if KDE_VERSION < 320
+using KDE32Backport::KTabWidget;
+#endif
+
 //----------------------------------------------------------------------
 const unsigned int EditView::CONTROLS_ROW         = 0;
 const unsigned int EditView::RULERS_ROW           = CONTROLS_ROW + 1;
@@ -78,14 +89,18 @@ EditView::EditView(RosegardenGUIDoc *doc,
     m_topBarButtons(0),
     m_bottomBarButtons(0),
     m_controlRuler(0),
-    m_controlRulers(new QTabWidget(getBottomWidget() /*getCentralFrame()*/ ))
+    m_controlRulers(new KTabWidget(getBottomWidget(), "controlrulers"))
 {
+    m_controlRulers->setHoverCloseButton(true);
+    connect(m_controlRulers, SIGNAL(closeRequest(QWidget*)),
+            this, SLOT(slotRemoveControlRuler(QWidget*)));
+
     (dynamic_cast<QBoxLayout*>(m_bottomBox->layout()))->setDirection(QBoxLayout::BottomToTop);
 
     m_grid->addLayout(m_rulerBox, RULERS_ROW, m_mainCol);
     m_grid->addMultiCellLayout(m_controlBox, CONTROLS_ROW, CONTROLS_ROW, 0, 1);
     m_controlBox->setAlignment(AlignRight);
-    m_grid->addWidget(m_controlRulers, CONTROLRULER_ROW, 2);
+//     m_grid->addWidget(m_controlRulers, CONTROLRULER_ROW, 2);
     
     m_controlRulers->hide();
     m_controlRulers->setTabPosition(QTabWidget::Bottom);
@@ -96,6 +111,14 @@ EditView::~EditView()
     delete m_currentEventSelection;
     m_currentEventSelection = 0;
 }
+
+void EditView::updateBottomWidgetGeometry()
+{
+    getBottomWidget()->layout()->invalidate();
+    getBottomWidget()->updateGeometry();
+    getCanvasView()->updateBottomWidgetGeometry();
+}
+
 
 void EditView::paintEvent(QPaintEvent* e)
 {
@@ -258,7 +281,8 @@ ControllerEventsRuler* EditView::makeControllerEventRuler(Rosegarden::ControlPar
 void EditView::addControlRuler(ControlRuler* ruler)
 {
     ruler->setWorldMatrix(m_currentRulerZoomMatrix);
-    m_controlRulers->addTab(ruler, ruler->getName());
+    m_controlRulers->addTab(ruler, KGlobal::iconLoader()->loadIconSet("fileclose", KIcon::Small),
+                            ruler->getName());
     m_controlRulers->showPage(ruler);
     
     if (m_canvasView) {
@@ -268,6 +292,7 @@ void EditView::addControlRuler(ControlRuler* ruler)
                 ruler->horizontalScrollBar(), SIGNAL(sliderMoved(int)));
     }
     
+
     stateChanged("have_control_ruler", KXMLGUIClient::StateReverse);
 }
 
@@ -684,12 +709,6 @@ EditView::setupActions()
     new KAction(i18n("Insert line of controllers"), 0, this,
 		SLOT(slotStartControlLineItem()), actionCollection(),
 		"start_control_line_item");
-
-    new KAction(i18n("Close Ruler"), 0, this,
-		SLOT(slotCloseControlRulerItem()), actionCollection(),
-		"close_control_ruler_item");
-
-
 }
 
 void
@@ -755,9 +774,7 @@ EditView::setupControllerTabs()
         if (!m_controlRulers->isVisible())
             m_controlRulers->show();
 
-        getBottomWidget()->layout()->invalidate();
-        getBottomWidget()->updateGeometry();
-        getCanvasView()->updateBottomWidgetGeometry();
+        updateBottomWidgetGeometry();
     }
 }
 
@@ -786,9 +803,7 @@ EditView::slotAddControlRuler(int controller)
 	m_controlRulers->show();
     }
     
-    getBottomWidget()->layout()->invalidate();
-    getBottomWidget()->updateGeometry();
-    getCanvasView()->updateBottomWidgetGeometry();
+    updateBottomWidgetGeometry();
     
     // Add the controller to the segment so the views can
     // remember what we've opened against it.
@@ -796,6 +811,39 @@ EditView::slotAddControlRuler(int controller)
     Rosegarden::Staff *staff = getCurrentStaff();
     staff->getSegment().addController(control.getControllerValue());
 }
+
+void EditView::slotRemoveControlRuler(QWidget* w)
+{
+    ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(w);
+
+    if (ruler) {
+        Rosegarden::ControlParameter *controller = ruler->getControlParameter();
+
+        // remove the control parameter from the "showing controllers" list on the segment
+        //
+        if (controller) {
+            Rosegarden::Staff *staff = getCurrentStaff();
+            bool value = staff->getSegment().deleteController(controller->getControllerValue());
+
+            if (value) 
+                RG_DEBUG << "slotRemoveControlRuler : removed controller from segment\n";
+            else
+                RG_DEBUG << "slotRemoveControlRuler : couldn't remove controller from segment - " 
+                         << int(controller->getControllerValue())
+                         << endl;
+
+        }
+    } // else it's probably a velocity ruler
+    
+    delete w;
+
+    if (m_controlRulers->count() == 0) {
+        m_controlRulers->hide();
+        updateBottomWidgetGeometry();
+    }
+    
+}
+
 
 
 
@@ -1079,9 +1127,7 @@ void EditView::showPropertyControlRuler(PropertyName propertyName)
         m_controlRulers->show();
     }
 
-    getBottomWidget()->layout()->invalidate();
-    getBottomWidget()->updateGeometry();
-    getCanvasView()->updateBottomWidgetGeometry();
+    updateBottomWidgetGeometry();
 }
 
 ControlRuler* EditView::getCurrentControlRuler()
@@ -1107,9 +1153,7 @@ void EditView::slotShowControllerEventsRuler()
         m_controlRulers->show();
     }
 
-    getBottomWidget()->layout()->invalidate();
-    getBottomWidget()->updateGeometry();
-    getCanvasView()->updateBottomWidgetGeometry();
+    updateBottomWidgetGeometry();
 }
 
 class QListBoxRGProperty : public QListBoxText
@@ -1181,44 +1225,42 @@ EditView::slotClearControlRulerItem()
     if (ruler) ruler->clearControllerEvents();
 }
 
-void
-EditView::slotCloseControlRulerItem()
-{
-    ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
+// void
+// EditView::slotCloseControlRulerItem()
+// {
+//     ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
 
-    if (ruler)
-    {
-        Rosegarden::ControlParameter *controller = ruler->getControlParameter();
+//     if (ruler)
+//     {
+//         Rosegarden::ControlParameter *controller = ruler->getControlParameter();
 
-        // remove the control parameter from the "showing controllers" list on the segment
-        //
-        if (controller) 
-        {
-            Rosegarden::Staff *staff = getCurrentStaff();
-            bool value = staff->getSegment().deleteController(controller->getControllerValue());
+//         // remove the control parameter from the "showing controllers" list on the segment
+//         //
+//         if (controller) 
+//         {
+//             Rosegarden::Staff *staff = getCurrentStaff();
+//             bool value = staff->getSegment().deleteController(controller->getControllerValue());
 
-            if (value) 
-                RG_DEBUG << "slotClearControlRulerItem - removed controller from segment" << endl;
-            else
-                RG_DEBUG << "slotClearControlRulerItem - couldn't remove controller from segment - " 
-                         << int(controller->getControllerValue())
-                         << endl;
+//             if (value) 
+//                 RG_DEBUG << "slotClearControlRulerItem - removed controller from segment" << endl;
+//             else
+//                 RG_DEBUG << "slotClearControlRulerItem - couldn't remove controller from segment - " 
+//                          << int(controller->getControllerValue())
+//                          << endl;
 
-        }
+//         }
 
-        m_controlRulers->removePage(ruler);
-        ruler->close();
+//         m_controlRulers->removePage(ruler);
+//         ruler->close();
 
-        // if we now have no rulers then reverse this state
-        if (m_controlRulers->count() == 0) {
-            m_controlRulers->hide();
-            getBottomWidget()->layout()->invalidate();
-            getBottomWidget()->updateGeometry();
-            getCanvasView()->updateBottomWidgetGeometry();
-        }
+//         // if we now have no rulers then reverse this state
+//         if (m_controlRulers->count() == 0) {
+//             m_controlRulers->hide();
+//             updateBottomWidgetGeometry();
+//         }
         
-    }
-}
+//     }
+// }
 
 void EditView::slotTranspose()
 {
