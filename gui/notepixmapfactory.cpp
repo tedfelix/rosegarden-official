@@ -1643,9 +1643,9 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
 	}
     }
 
-    drawRestAux(params, 0, 0, 0);
-
     QPoint hotspot(m_font->getHotspot(charName));
+    drawRestAux(params, hotspot, 0, 0, 0);
+
     QCanvasPixmap* canvasMap = makeCanvasPixmap(hotspot);
     if (encache) {
 	m_dottedRestCache->insert(std::pair<CharName, QCanvasPixmap*>
@@ -1661,13 +1661,14 @@ NotePixmapFactory::drawRest(const NotePixmapParameters &params,
 {
     Rosegarden::Profiler profiler("NotePixmapFactory::drawRest");
     m_inPrinterMethod = true;
-    drawRestAux(params, &painter, x, y);
+    QPoint hotspot; // unused
+    drawRestAux(params, hotspot, &painter, x, y);
     m_inPrinterMethod = false;
 }
     
 void
 NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
-			       QPainter *painter, int x, int y)
+			       QPoint &hotspot, QPainter *painter, int x, int y)
 {
     NoteCharacter character;
     CharName charName(m_style->getRestCharName(params.m_noteType));
@@ -1699,8 +1700,8 @@ NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
 
     if (params.m_tupletCount) makeRoomForTuplingLine(params);
 
-    //!!! This hotspot is totally wrong if we have a tupling line!
-    QPoint hotspot(m_font->getHotspot(charName));
+    // we'll adjust this for tupling line after drawing rest character:
+    hotspot = m_font->getHotspot(charName);
 
     if (painter) {
 	painter->save();

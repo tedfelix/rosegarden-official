@@ -238,7 +238,7 @@ protected:
 
     void drawNoteAux(const NotePixmapParameters &parameters,
 		     QPainter *painter, int x, int y);
-    void drawRestAux(const NotePixmapParameters &parameters,
+    void drawRestAux(const NotePixmapParameters &parameters, QPoint &hotspot,
 		     QPainter *painter, int x, int y);
     void drawHairpinAux(int length, bool isCrescendo,
 			QPainter *painter, int x, int y);
