@@ -2131,22 +2131,25 @@ RosegardenGUIApp::slotSetPlayPosition(Rosegarden::timeT time)
 void
 RosegardenGUIApp::processAsynchronousMidi(const Rosegarden::MappedComposition &mC)
 {
-    m_seqManager->processAsynchronousMidi(mC);
+    if (m_seqManager)
+        m_seqManager->processAsynchronousMidi(mC);
 }
 
 
 void
 RosegardenGUIApp::processRecordedMidi(const Rosegarden::MappedComposition &mC)
 {
-    m_seqManager->processRecordedMidi(mC);
+    if (m_seqManager)
+        m_seqManager->processRecordedMidi(mC);
 }
 
 void
 RosegardenGUIApp:: processRecordedAudio(long recordTimeSec,
                                         long recordTimeUsec)
 {
-    m_seqManager->processRecordedAudio(Rosegarden::RealTime(recordTimeSec,
-                                                            recordTimeUsec));
+    if (m_seqManager)
+        m_seqManager->processRecordedAudio(Rosegarden::RealTime(recordTimeSec,
+                                                                recordTimeUsec));
 }
 
 
@@ -2161,7 +2164,8 @@ RosegardenGUIApp:: processRecordedAudio(long recordTimeSec,
 //
 void RosegardenGUIApp::notifySequencerStatus(const int& status)
 {
-    m_seqManager->setTransportStatus((TransportStatus) status);
+    if (m_seqManager)
+        m_seqManager->setTransportStatus((TransportStatus) status);
 }
 
 
@@ -2230,14 +2234,16 @@ void RosegardenGUIApp::slotPlay()
 //
 void RosegardenGUIApp::slotStop()
 {
-    m_seqManager->stopping();
+    if (m_seqManager)
+        m_seqManager->stopping();
 }
 
 // Jump to previous bar
 //
 void RosegardenGUIApp::slotRewind()
 {
-    m_seqManager->rewind();
+    if (m_seqManager)
+        m_seqManager->rewind();
 }
 
 
@@ -2245,7 +2251,8 @@ void RosegardenGUIApp::slotRewind()
 //
 void RosegardenGUIApp::slotFastforward()
 {
-    m_seqManager->fastforward();
+    if (m_seqManager)
+        m_seqManager->fastforward();
 }
 
 // Insert metronome clicks into the global MappedComposition that
@@ -2254,7 +2261,8 @@ void RosegardenGUIApp::slotFastforward()
 void
 RosegardenGUIApp::insertMetronomeClicks(timeT sliceStart, timeT sliceEnd)
 {
-    m_seqManager->insertMetronomeClicks(sliceStart, sliceEnd);
+    if (m_seqManager)
+        m_seqManager->insertMetronomeClicks(sliceStart, sliceEnd);
 }
 
 // Set the loop to what we have stored (if the stored loop is (0,0) then
@@ -2286,7 +2294,8 @@ RosegardenGUIApp::slotUnsetLoop()
 void
 RosegardenGUIApp::slotSendMappedEvent(Rosegarden::MappedEvent *mE)
 {
-    m_seqManager->sendMappedEvent(mE);
+    if (m_seqManager)
+        m_seqManager->sendMappedEvent(mE);
 }
 
 
@@ -2783,7 +2792,8 @@ RosegardenGUIApp::slotPlayAudioFile(unsigned int id,
                                     duration,                    // duration
                                     startTime);                  // start index
 
-    m_seqManager->sendMappedEvent(mE);
+    if (m_seqManager)
+        m_seqManager->sendMappedEvent(mE);
 }
 
 // Add an audio file to the sequencer - the AudioManagerDialog has

@@ -930,6 +930,8 @@ SequenceManager::processRecordedMidi(const MappedComposition &mC)
 void
 SequenceManager::processAsynchronousMidi(const MappedComposition &mC)
 {
+    if (m_doc == 0) return;
+
     if (mC.size())
     {
         Rosegarden::MappedComposition::iterator i;
