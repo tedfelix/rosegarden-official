@@ -44,14 +44,17 @@ class EventSelection;
  * used to be in gui/staff.h, but it's been moved and renamed
  * following the introduction of the core Staff base class.
  */
-
 class NotationStaff : public Rosegarden::Staff<NotationElement>,
 		      public QCanvasItemGroup
 {
 public:
     typedef std::vector<QCanvasLineGroupable*> barlines;
     
-    NotationStaff(QCanvas*, Rosegarden::Track*,
+    /**
+     * Creates a new NotationStaff for the specified Track
+     * \a id is the id of the staff in the NotationView
+     */
+    NotationStaff(QCanvas*, Rosegarden::Track*, unsigned int id,
                   std::string fontName, int resolution);
     ~NotationStaff();
 
@@ -100,6 +103,15 @@ public:
 	return (m_resolution + 1) * nbLines + linesOffset * 2 + 1;
     }
 
+    /**
+     * Return the id of the staff
+     * This will be passed to the NotationTools
+     * so they know on which staff a mouse event occurred
+     *
+     * @see NotationTool#handleMousePress
+     * @see NotationView#itemClicked
+     */
+    unsigned int getId() { return m_id; }
 
     bool showElements();
 
@@ -144,6 +156,8 @@ protected:
      * pointed to by the given iterator
      */
     QCanvasSimpleSprite* makeNoteSprite(NotationElementList::iterator);
+
+    int m_id;
 
     int m_barLineHeight;
     int m_horizLineLength;

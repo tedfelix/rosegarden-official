@@ -49,16 +49,19 @@ using Rosegarden::PropertyName;
 
 using namespace NotationProperties;
 
-const int NotationStaff::nbLines = 5;
+const int NotationStaff::nbLines      = 5;
 const int NotationStaff::nbLegerLines = 5;
-const int NotationStaff::linesOffset = 40;
+const int NotationStaff::linesOffset  = 40;
 
 using std::string;
 
 NotationStaff::NotationStaff(QCanvas *canvas, Track *track,
-                             string fontName, int resolution) :
+                             unsigned int id,
+                             string fontName, int resolution)
+    :
     Rosegarden::Staff<NotationElement>(*track),
     QCanvasItemGroup(canvas),
+    m_id(id),
     m_barLineHeight(0),
     m_horizLineLength(0),
     m_initialBarA(0),
@@ -101,7 +104,7 @@ NotationStaff::changeFont(string fontName, int resolution)
     // a staff at height h is (8-h)/2 * lineWidth + linesOffset
 
     int h;
-    for (h = 0; h < m_staffLines.size(); ++h) {
+    for (h = 0; h < int(m_staffLines.size()); ++h) {
         delete m_staffLines[h];
     }
     m_staffLines.clear();

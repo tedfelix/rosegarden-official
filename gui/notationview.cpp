@@ -174,8 +174,8 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     setCentralWidget(m_canvasView);
 
     QObject::connect
-        (m_canvasView, SIGNAL(itemClicked(int,const QPoint&, NotationElement*)),
-         this,         SLOT  (itemClicked(int,const QPoint&, NotationElement*)));
+        (m_canvasView, SIGNAL(itemClicked(int, int, const QPoint&, NotationElement*)),
+         this,         SLOT  (itemClicked(int, int, const QPoint&, NotationElement*)));
 
     QObject::connect
         (m_canvasView, SIGNAL(mouseMove(QMouseEvent*)),
@@ -209,7 +209,7 @@ NotationView::NotationView(RosegardenGUIDoc* doc,
     }
 
     for (unsigned int i = 0; i < tracks.size(); ++i) {
-        m_staffs.push_back(new NotationStaff(canvas(), tracks[i],
+        m_staffs.push_back(new NotationStaff(canvas(), tracks[i], i,
                                              m_fontName, m_fontSize));
         m_staffs[i]->move(20, m_staffs[i]->getStaffHeight() * i + 15);
         m_staffs[i]->show();
@@ -904,8 +904,7 @@ void NotationView::slotEditPaste()
     if (!m_currentEventSelection) return;
     KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), statusBar());
 
-    Track* track = 0; // TODO : obtain track where the click happens
-    m_currentEventSelection->pasteToTrack(track);
+    setTool(new NotationSelectionPaster(*this, *m_currentEventSelection));
 }
 
 //
@@ -1287,10 +1286,11 @@ void NotationView::slotSelectSelected()
 
 //----------------------------------------------------------------------
 
-void NotationView::itemClicked(int height, const QPoint &eventPos,
+void NotationView::itemClicked(int height, int staffNo,
+                               const QPoint &eventPos,
                                NotationElement* el)
 {
-    m_tool->handleMousePress(height, eventPos, el);
+    m_tool->handleMousePress(height, staffNo, eventPos, el);
 }
 
 void NotationView::mouseMove(QMouseEvent *e)
@@ -1303,10 +1303,7 @@ void NotationView::mouseRelease(QMouseEvent *e)
     m_tool->handleMouseRelease(e);
 }
 
-
-
-int
-NotationView::findClosestStaff(double eventY)
+int NotationView::findClosestStaff(double eventY)
 {
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         int top = m_staffs[i]->getStaffHeight() * i;
@@ -1500,15 +1497,13 @@ NoteInserter::NoteInserter(Rosegarden::Note::Type type,
 }
     
 void    
-NoteInserter::handleMousePress(int height, const QPoint &eventPos,
+NoteInserter::handleMousePress(int height, int staffNo,
+                               const QPoint &eventPos,
                                NotationElement*)
 {
-    if (height == StaffLine::NoHeight) return;
+    if (height == StaffLine::NoHeight || staffNo < 0) return;
 
     Event *tsig = 0, *clef = 0, *key = 0;
-
-    int staffNo = m_parentView.findClosestStaff(eventPos.y());
-    if (staffNo < 0) return;
 
     NotationElementList::iterator closestNote =
         m_parentView.findClosestNote(eventPos.x(), tsig, clef, key, staffNo);
@@ -1582,12 +1577,12 @@ ClefInserter::ClefInserter(std::string clefType, NotationView& view)
 {
 }
     
-void ClefInserter::handleMousePress(int /*height*/, const QPoint &eventPos,
+void ClefInserter::handleMousePress(int /*height*/, int staffNo,
+                                    const QPoint &eventPos,
                                     NotationElement*)
 {
     Event *tsig = 0, *clef = 0, *key = 0;
 
-    int staffNo = m_parentView.findClosestStaff(eventPos.y());
     if (staffNo < 0) return;
 
     NotationElementList::iterator closestNote =
@@ -1615,25 +1610,12 @@ NotationEraser::NotationEraser(NotationView& view)
 {
 }
 
-void NotationEraser::handleMousePress(int, const QPoint&,
+void NotationEraser::handleMousePress(int /*height*/, int staffNo,
+                                      const QPoint& /*eventPos*/,
                                       NotationElement* element)
 {
     bool needLayout = false;
-    if (!element) return;
-
-    // discover (slowly) which staff contains element
-    int staffNo = -1;
-    for (int i = 0; i < m_parentView.getStaffCount(); ++i) {
-
-        NotationElementList *nel =
-            m_parentView.getStaff(i)->getViewElementList(); 
-
-        if (nel->findSingle(element) != nel->end()) {
-            staffNo = i;
-            break;
-        }
-    }
-    if (staffNo == -1) return;
+    if (!element || staffNo < 0) return;
 
     TrackNotationHelper nt
         (m_parentView.getStaff(staffNo)->getTrack());
@@ -1682,7 +1664,8 @@ NotationSelector::~NotationSelector()
     m_parentView.canvas()->update();
 }
 
-void NotationSelector::handleMousePress(int, const QPoint& p,
+void NotationSelector::handleMousePress(int /*height*/, int /*staffNo*/,
+                                        const QPoint& p,
                                         NotationElement*)
 {
     m_selectionRect->setX(p.x());
@@ -1720,7 +1703,7 @@ void NotationSelector::hideSelection()
 }
 
 
-#include <iostream>
+//#include <iostream>
 
 EventSelection* NotationSelector::getSelection()
 {
@@ -1742,8 +1725,9 @@ EventSelection* NotationSelector::getSelection()
         
         if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item))) {
 
-            if (!m_selectionRect->rect().contains(int(item->x()), int(item->y()), true)) {
-                kdDebug(KDEBUG_AREA) << "Skipping item not really in selection rect\n";
+            if (!m_selectionRect->rect().contains(int(item->x()),
+                                                  int(item->y()), true)) {
+//                 kdDebug(KDEBUG_AREA) << "Skipping item not really in selection rect\n";
                 continue;
             }
 
@@ -1751,8 +1735,8 @@ EventSelection* NotationSelector::getSelection()
 
             selection->push_back(el.event());
 
-            kdDebug(KDEBUG_AREA) << "Selected event : \n";
-            el.event()->dump(std::cerr);
+//             kdDebug(KDEBUG_AREA) << "Selected event : \n";
+//             el.event()->dump(std::cerr);
         }
         
     }
@@ -1764,3 +1748,19 @@ void NotationSelector::setViewCurrentSelection()
 {
     m_parentView.setCurrentSelection(getSelection());
 }
+
+//------------------------------
+
+NotationSelectionPaster::NotationSelectionPaster(NotationView& parent,
+                                                 EventSelection& es)
+    : NotationTool(parent),
+      m_selection(es)
+{
+}
+    
+void NotationSelectionPaster::handleMousePress(int height, int staffNo,
+                                               const QPoint &eventPos,
+                                               NotationElement* el)
+{
+}
+

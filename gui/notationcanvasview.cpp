@@ -26,6 +26,7 @@
 #include "qcanvassimplesprite.h"
 #include "staffline.h"
 #include "NotationTypes.h"
+#include "notationstaff.h"
 
 #include "rosedebug.h"
 
@@ -102,7 +103,7 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     kdDebug(KDEBUG_AREA) << "mousepress" << endl;
 
     if (!m_currentHighlightedLine) {
-        emit handleMousePress(0, e->pos());
+        handleMousePress(0, -1, e->pos());
         return;
     }
     
@@ -115,7 +116,7 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
     if(itemList.isEmpty()) { // click was not on an item
         kdDebug(KDEBUG_AREA) << "mousepress : Not on an item" << endl;
-        emit handleMousePress(0, e->pos());
+        emit handleMousePress(0, -1, e->pos());
         return;
     }
 
@@ -151,10 +152,23 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
         
     }
 
-    if (sprite)
-        handleMousePress(m_currentHighlightedLine, e->pos(), &(sprite->getNotationElement()));
+    int staffNo = -1;
+
+    // Find staff on which the click occurred
+    QCanvasItemGroup *group = m_currentHighlightedLine->group();
+    NotationStaff *staff = dynamic_cast<NotationStaff*>(group);
+
+    if (staff)
+        staffNo = staff->getId();
     else
-        handleMousePress(m_currentHighlightedLine, e->pos());
+        kdDebug(KDEBUG_AREA) << "NotationCanvasView::handleMousePress() : big problem - couldn't find staff for staff line\n";
+
+
+    if (sprite)
+        handleMousePress(m_currentHighlightedLine, staffNo,
+                         e->pos(), &(sprite->getNotationElement()));
+    else
+        handleMousePress(m_currentHighlightedLine, staffNo, e->pos());
 }
 
 
@@ -176,6 +190,7 @@ NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
 
 void
 NotationCanvasView::handleMousePress(const StaffLine *line,
+                                     int staffNo,
                                      const QPoint &pos,
                                      NotationElement *el)
 {
@@ -183,7 +198,7 @@ NotationCanvasView::handleMousePress(const StaffLine *line,
 
     kdDebug(KDEBUG_AREA) << "NotationCanvasView::handleMousePress() at height " << h << endl;
 
-    emit itemClicked(h, pos, el);
+    emit itemClicked(h, staffNo, pos, el);
 }
 
 bool
