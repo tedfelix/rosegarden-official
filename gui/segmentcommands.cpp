@@ -478,7 +478,7 @@ AddTimeSignatureCommand::execute()
     if (oldIndex >= 0) {
 	std::pair<timeT, Rosegarden::TimeSignature> data =
 	    m_composition->getTimeSignatureChange(oldIndex);
-	if (data.first == time) {
+	if (data.first == m_time) {
 	    m_oldTimeSignature = new Rosegarden::TimeSignature(data.second);
 	}
     }

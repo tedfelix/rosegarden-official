@@ -184,7 +184,7 @@ public:
 	m_time(time),
 	m_timeSignature(timeSig),
 	m_oldTimeSignature(0) { }
-    virtual ~AddTimeSignatureCommand() { }
+    virtual ~AddTimeSignatureCommand();
 
     static QString name() {
 	return "Add &Time Signature Change...";
@@ -211,7 +211,7 @@ public:
         m_composition(composition),
         m_time(time),
         m_tempo(tempo) {}
-    virtual ~AddTempoChangeCommand();
+    virtual ~AddTempoChangeCommand() { }
 
     static QString name()
     {
