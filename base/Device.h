@@ -89,7 +89,6 @@ public:
     virtual InstrumentList getAllInstruments() const = 0;
     virtual InstrumentList getPresentationInstruments() const = 0;
 
-    //!!! temporary -- to move elsewhere (& connection to become a class)
     std::string getConnection() const { return m_connection; }
     void setConnection(std::string connection) { m_connection = connection; }
 

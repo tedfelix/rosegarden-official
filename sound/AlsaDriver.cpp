@@ -375,13 +375,13 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
 		int port   = snd_seq_port_info_get_port(pinfo);
 		
 		char portId[40];
-		sprintf(portId, "%d:%d ", client, port);
+		sprintf(portId, "%d:%d", client, port);
 
                 std::string fullClientName = 
-                    std::string(snd_seq_client_info_get_name(cinfo));
+                    std::string(snd_seq_port_info_get_name(pinfo));
 
                 std::string name =
-                    std::string(portId) + fullClientName;
+                    fullClientName + " (" + portId + ")";
 
                 AlsaPortDescription *portDescription = 
                     new AlsaPortDescription(
@@ -510,19 +510,43 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port)
     if (port) {
 
 	direction = port->m_direction;
-	const char *dirstring = 
-	    (direction == Duplex ? "duplex" :
-	     direction == WriteOnly ? "output" : "input");
-    
-	if (port->m_client < 64)
-	    sprintf(clientId, "System %s MIDI device %d",
-		    dirstring, systemDeviceCounter++);
-	else if (port->m_client < 128)
-	    sprintf(clientId, "Hardware %s MIDI device %d",
-		    dirstring, hardwareDeviceCounter++);
-	else
-	    sprintf(clientId, "Software %s MIDI device %d",
-		    dirstring, softwareDeviceCounter++);
+
+	if (direction == Duplex) {
+
+	    if (port->m_client < 64) 
+		sprintf(clientId, "MIDI duplex system device %d",
+			systemDeviceCounter++);
+	    else if (port->m_client < 128)
+		sprintf(clientId, "MIDI duplex hardware device %d",
+			hardwareDeviceCounter++);
+	    else
+		sprintf(clientId, "MIDI duplex software device %d",
+			softwareDeviceCounter++);
+
+	} else if (direction == WriteOnly) {
+
+	    if (port->m_client < 64) 
+		sprintf(clientId, "MIDI system sink %d",
+			systemDeviceCounter++);
+	    else if (port->m_client < 128)
+		sprintf(clientId, "MIDI synth %d",
+			hardwareDeviceCounter++);
+	    else
+		sprintf(clientId, "MIDI soft synth %d",
+			softwareDeviceCounter++);
+
+	} else {
+
+	    if (port->m_client < 64) 
+		sprintf(clientId, "MIDI system input %d",
+			systemDeviceCounter++);
+	    else if (port->m_client < 128)
+		sprintf(clientId, "MIDI input %d",
+			hardwareDeviceCounter++);
+	    else
+		sprintf(clientId, "MIDI software input %d",
+			softwareDeviceCounter++);
+	}
 
 	m_devicePortMap[m_deviceRunningId] = ClientPortPair(port->m_client,
 							    port->m_port);
@@ -1276,6 +1300,7 @@ AlsaDriver::allNotesOff()
         // Set destination according to instrument mapping to port
         //
         outputDevice = getPairForMappedInstrument((*it)->getInstrument());
+	if (outputDevice.first < 0 || outputDevice.second < 0) continue;
 
         snd_seq_ev_set_dest(event,
                             outputDevice.first,
@@ -1336,6 +1361,8 @@ AlsaDriver::processNotesOff(const RealTime &time)
         // Set destination according to instrument mapping to port
         //
         outputDevice = getPairForMappedInstrument((*it)->getInstrument());
+	if (outputDevice.first < 0 || outputDevice.second < 0) continue;
+
         snd_seq_ev_set_dest(&event,
                             outputDevice.first,
                             outputDevice.second);
@@ -1718,6 +1745,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         // Set destination according to Instrument mapping
         //
         outputDevice = getPairForMappedInstrument((*i)->getInstrument());
+	if (outputDevice.first < 0 && outputDevice.second < 0) continue;
 
         snd_seq_ev_set_dest(event,
                             outputDevice.first,
@@ -2281,31 +2309,13 @@ AlsaDriver::getPairForMappedInstrument(InstrumentId id)
 	{
 	    return i->second;
 	}
-	else
-	{
-	    cerr << "WARNING: AlsaDriver::getPairForMappedInstrument: Device id " << device << " (from instrument id " << id << ") not in m_devicePortMap, falling through" << endl;
-	}
     }
     else
     {
 	cerr << "WARNING: AlsaDriver::getPairForMappedInstrument: couldn't find instrument for id " << id << ", falling through" << endl;
     }
 
-    ClientPortPair matchPair(-1, -1);
-#ifdef NOT_DEFINED
-    AlsaPortList::iterator it;
-
-    for (it = m_alsaPorts.begin(); it != m_alsaPorts.end(); ++it)
-    {
-        if (id >= (*it)->m_startId && id <= (*it)->m_endId)
-        {
-            matchPair.first = (*it)->m_client;
-            matchPair.second = (*it)->m_port;
-            return matchPair;
-        }
-    }
-#endif
-    return matchPair;
+    return ClientPortPair(-1, -1);
 }
 
 // Send a direct controller to the specified port/client
