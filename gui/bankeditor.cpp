@@ -605,7 +605,28 @@ MidiProgramsEditor::setBankName(const QString& s)
     m_bankName->setText(s);
 }
 
+void MidiProgramsEditor::blockAllSignals(bool block)
+{
+    RG_DEBUG << "MidiProgramsEditor : Blocking all signals = " << block << endl;
+
+    const QObjectList* allChildren = queryList("KLineEdit", "[0-9]+");
+    QObjectListIt it(*allChildren);
+    QObject *obj;
+
+    while ( (obj = it.current()) != 0 ) {
+//         RG_DEBUG << "Blocking signals for " << obj->name()
+//                  << ", class " << obj->className() << endl;
+        obj->blockSignals(block);
+        ++it;
+    }
+
+    m_msb->blockSignals(block);
+    m_lsb->blockSignals(block);
+}
+
+//
 //--------------------------------------------------
+//
 
 BankEditorDialog::BankEditorDialog(QWidget *parent,
                                    RosegardenGUIDoc *doc):
@@ -660,6 +681,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_listView->setRootIsDecorated(true);
     m_listView->setShowSortIndicator(true);
     m_listView->setItemsRenameable(true);
+    m_listView->restoreLayout(kapp->config(), "Bank Editor");
 
     QGroupBox *bankBox  = new QGroupBox(3,
                                         Qt::Horizontal,
@@ -769,6 +791,9 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 BankEditorDialog::~BankEditorDialog()
 {
     RG_DEBUG << "~BankEditorDialog()\n";
+
+    m_listView->saveLayout(kapp->config(), m_configGroup);
+
     if (m_doc) // see slotFileClose() for an explanation on why we need to test m_doc
         m_doc->getCommandHistory()->detachView(actionCollection());
 }
@@ -1976,25 +2001,7 @@ BankEditorDialog::closeEvent(QCloseEvent *e)
     KMainWindow::closeEvent(e);
 }
 
-
-void MidiProgramsEditor::blockAllSignals(bool block)
-{
-    RG_DEBUG << "MidiProgramsEditor : Blocking all signals = " << block << endl;
-
-    const QObjectList* allChildren = queryList("KLineEdit", "[0-9]+");
-    QObjectListIt it(*allChildren);
-    QObject *obj;
-
-    while ( (obj = it.current()) != 0 ) {
-//         RG_DEBUG << "Blocking signals for " << obj->name()
-//                  << ", class " << obj->className() << endl;
-        obj->blockSignals(block);
-        ++it;
-    }
-
-    m_msb->blockSignals(block);
-    m_lsb->blockSignals(block);
-}
+const char* const BankEditorDialog::m_configGroup = "Bank Editor";
 
 // ------------------------ RemapInstrumentDialog -----------------------
 //
