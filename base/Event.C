@@ -254,18 +254,6 @@ Event::toXmlString(timeT expectedTime)
 	    type[j] = (isupper(type[j]) ? tolower(type[j]) : type[j]);
 	}
 
-	if (i->getName() == "text") {
-	    std::cerr << "Text property: string is ";
-	    std::string s = getAsString(*i);
-	    for (int ii = 0; ii < s.size(); ++ii) {
-		std::cerr << "[" << s[ii] << "]";
-	    }
-	    for (int ii = 0; ii < s.size(); ++ii) {
-		std::cerr << "(" << (int)s[ii] << ")";
-	    }
-	    std::cerr << std::endl;
-	}
-
 	out << type << "=\""
 	    << XmlExportable::encode(getAsString(*i))
 	    << "\"/>";
