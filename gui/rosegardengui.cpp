@@ -1193,6 +1193,7 @@ void RosegardenGUIApp::setPointerPosition(const long &posSec,
         {
             sendSequencerJump(m_doc->getComposition().getElapsedRealTime(
                             m_doc->getComposition().getLoopStart()));
+            return;
         }
     }
 
@@ -1920,10 +1921,12 @@ RosegardenGUIApp::setLoop(Rosegarden::timeT lhs, Rosegarden::timeT rhs)
 {
     m_doc->getComposition().setLoopStart(lhs);
     m_doc->getComposition().setLoopEnd(rhs);
+/*
     std::cout << "setGUILoop(): START = "
               << m_doc->getComposition().getLoopStart()
               << " END = "
               << m_doc->getComposition().getLoopEnd() << std::endl;
+*/
 
 
     // Let the sequencer know about the loop markers

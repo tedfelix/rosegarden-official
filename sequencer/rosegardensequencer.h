@@ -124,6 +124,8 @@ public slots:
     //
     virtual void stop();
 
+public:
+
     void setStatus(const TransportStatus &status)
             { m_transportStatus = status; }
     TransportStatus getStatus() { return m_transportStatus; }
@@ -151,6 +153,10 @@ public slots:
     // recorded (i.e. for display in Transport or on Mixer)
     //
     void processAsynchronousEvents();
+
+    // Are we looping?
+    //
+    bool isLooping() const { return (m_loopStart != m_loopEnd); }
 
 private:
     Rosegarden::MappedComposition* fetchEvents(const Rosegarden::RealTime &start,
