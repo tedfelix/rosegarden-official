@@ -578,6 +578,11 @@ void RosegardenGUIDoc::initialiseStudio()
 	
 	Rosegarden::StudioControl::setStudioObjectProperty
 	    (mappedId,
+	     Rosegarden::MappedAudioBuss::BussId,
+	     Rosegarden::MappedObjectValue(i));
+	
+	Rosegarden::StudioControl::setStudioObjectProperty
+	    (mappedId,
 	     Rosegarden::MappedAudioBuss::Level,
 	     Rosegarden::MappedObjectValue(busses[i]->getLevel()));
 	
@@ -595,6 +600,11 @@ void RosegardenGUIDoc::initialiseStudio()
 	    Rosegarden::StudioControl::createStudioObject(
 		Rosegarden::MappedObject::AudioInput);
 
+	Rosegarden::StudioControl::setStudioObjectProperty
+	    (mappedId,
+	     Rosegarden::MappedAudioInput::InputNumber,
+	     Rosegarden::MappedObjectValue(i));
+	
 	recordIns[i]->setMappedId(mappedId);
     }
 

@@ -205,6 +205,10 @@ protected:
     float                        m_masterLevel;
     unsigned long                m_directMasterInstruments; // bitmap
 
+    int                          m_recordInput;
+    int                          m_recordInputChannel; // -1 -> stereo
+    float                        m_recordLevel;
+
     size_t                       m_framesProcessed;
     bool                         m_ok;
 };

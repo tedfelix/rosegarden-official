@@ -1271,7 +1271,7 @@ void
 NotePixmapFactory::drawTie(bool above, int length) 
 {
     if (length > 1000) {
-	assert(0);
+//	assert(0);
     }
 
     int tieThickness = getStaffLineThickness() * 2;

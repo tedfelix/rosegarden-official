@@ -118,10 +118,14 @@ LADSPAPluginInstance::init()
         else
         if (LADSPA_IS_PORT_CONTROL(m_descriptor->PortDescriptors[i]))
         {
-            //cout << "ADDING CONTROL PORT" << endl;
-            LADSPA_Data *data = new LADSPA_Data(0.0);
-            m_controlPorts.push_back(
+	    if (LADSPA_IS_PORT_INPUT(m_descriptor->PortDescriptors[i])) {
+		//cout << "ADDING CONTROL PORT" << endl;
+		LADSPA_Data *data = new LADSPA_Data(0.0);
+		m_controlPorts.push_back(
                     std::pair<unsigned long, LADSPA_Data*>(i, data));
+	    } else {
+		// We don't do anything at all with control output ports
+	    }
         }
 #ifdef DEBUG_LADSPA
         else

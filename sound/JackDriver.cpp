@@ -55,6 +55,9 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
     m_alsaDriver(alsaDriver),
     m_masterLevel(1.0),
     m_directMasterInstruments(0L),
+    m_recordInput(1000),
+    m_recordInputChannel(-1),
+    m_recordLevel(0.0),
     m_framesProcessed(0),
     m_ok(false)
 {
@@ -826,91 +829,84 @@ JackDriver::jackProcessRecord(jack_nframes_t nframes)
     SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
     bool wroteSomething = false;
 
-    //!!! This absolutely should not be done here, as it involves
-    //taking out a pthread lock -- either do it in the record
-    //thread only, or cache it
+    std::cerr << "JackDriver::jackProcessRecord: record input is "
+	      << m_recordInput << std::endl;
 
-    int channels = 2;
-    int connection = 0;
-/*
-    MappedAudioFader *fader =
-	m_alsaDriver->getMappedStudio()->
-	getAudioFader(m_alsaDriver->getAudioMonitoringInstrument());
-    
-    
-    if (fader) {
-	float f = 2;
-	//!!! nah, this is just going to return 1 for the moment because
-	// we don't have the proper correlation between instruments and recording
-//	(void)fader->getProperty(MappedAudioFader::Channels, f);
-	int channels = (int)f;
-    }
-*/  
-    // Get input buffer
-    //
-    sample_t *inputBufferLeft = 0, *inputBufferRight = 0;
-    
-    inputBufferLeft = static_cast<sample_t*>
-	(jack_port_get_buffer(m_inputPorts[connection * channels], nframes));
-    
-//    if (channels == 2) {
-	inputBufferRight = static_cast<sample_t*>
-	    (jack_port_get_buffer(m_inputPorts[connection * channels + 1], nframes));
-//    }
-    
-    //!!! want an actual instrument id
-    //!!! want file writer to apply volume from fader?
-    
-    if (m_alsaDriver->getRecordStatus() == RECORD_AUDIO &&
-	m_alsaDriver->areClocksRunning()) {
+    sample_t peakLeft = 0.0, peakRight = 0.0;
 
-	if (inputBufferLeft) {
-	    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-				inputBufferLeft, 0, nframes);
-	}
+    if (m_recordInput < 1000) { // it's a buss
+
+
+
+    } else {
+
+	int input = m_recordInput - 1000;
+	int channel = m_recordInputChannel;
+	int channels = (channel == -1 ? 2 : 1);
+	if (channels == 2) channel = 0;
+
+	// Get input buffer
+	//
+	sample_t *inputBufferLeft = 0, *inputBufferRight = 0;
+    
+	inputBufferLeft = static_cast<sample_t*>
+	    (jack_port_get_buffer(m_inputPorts[input * channels + channel], nframes));
     
 	if (channels == 2) {
-	    if (inputBufferRight) {
-		m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-				    inputBufferRight, 1, nframes);
-	    }
-	} else {
-	    if (inputBufferLeft) {
-		m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
-				    inputBufferLeft, 1, nframes);
-	    }
+	    inputBufferRight = static_cast<sample_t*>
+		(jack_port_get_buffer(m_inputPorts[input * channels + 1], nframes));
 	}
     
-	wroteSomething = true;
-    }
+	if (m_alsaDriver->getRecordStatus() == RECORD_AUDIO &&
+	    m_alsaDriver->areClocksRunning()) {
 
-    if (m_outputMonitors.size() > 0) {
+	    if (inputBufferLeft) {
+		m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
+				    inputBufferLeft, 0, nframes);
+	    }
+    
+	    if (channels == 2) {
+		if (inputBufferRight) {
+		    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
+					inputBufferRight, 1, nframes);
+		}
+	    } else {
+		if (inputBufferLeft) {
+		    m_fileWriter->write(m_alsaDriver->getAudioMonitoringInstrument(),
+					inputBufferLeft, 1, nframes);
+		}
+	    }
+    
+	    wroteSomething = true;
+	}
 
-	sample_t *buf = 
-	    static_cast<sample_t *>
-	    (jack_port_get_buffer(m_outputMonitors[0], nframes));
-	memcpy(buf, inputBufferLeft, nframes * sizeof(sample_t));
+	if (m_outputMonitors.size() > 0) {
 
-	if (channels == 2 && m_outputMonitors.size() > 1) {
-	    buf =
+	    sample_t *buf = 
 		static_cast<sample_t *>
-		(jack_port_get_buffer(m_outputMonitors[1], nframes));
-	    memcpy(buf, inputBufferRight, nframes * sizeof(sample_t));
+		(jack_port_get_buffer(m_outputMonitors[0], nframes));
+	    memcpy(buf, inputBufferLeft, nframes * sizeof(sample_t));
+
+	    if (channels == 2 && m_outputMonitors.size() > 1) {
+		buf =
+		    static_cast<sample_t *>
+		    (jack_port_get_buffer(m_outputMonitors[1], nframes));
+		memcpy(buf, inputBufferRight, nframes * sizeof(sample_t));
+	    }
 	}
-    }
   
-    sample_t peakLeft = 0.0, peakRight = 0.0;
-  
-    for (size_t i = 0; i < nframes; ++i) {
-	if (inputBufferLeft[i] > peakLeft) peakLeft = inputBufferLeft[i];
-    }
-    if (channels == 2) {
 	for (size_t i = 0; i < nframes; ++i) {
-	    if (inputBufferRight[i] > peakRight) peakRight = inputBufferRight[i];
+	    if (inputBufferLeft[i] > peakLeft) peakLeft = inputBufferLeft[i];
 	}
-    } else {
-	peakRight = peakLeft;
+	if (channels == 2) {
+	    for (size_t i = 0; i < nframes; ++i) {
+		if (inputBufferRight[i] > peakRight) peakRight = inputBufferRight[i];
+	    }
+	} else {
+	    peakRight = peakLeft;
+	}
     }
+
 
     if (sdb) {
 	Rosegarden::LevelInfo info;
@@ -1214,12 +1210,80 @@ JackDriver::updateAudioLevels()
     m_alsaDriver->getAudioInstrumentNumbers(instrumentBase, instruments);
     unsigned long directMasterInstruments = 0L;
 
+    std::cerr << "updateAudioLevels: record instrument is "
+	      << m_alsaDriver->getAudioMonitoringInstrument() << std::endl;
+
     for (int i = 0; i < instruments; ++i) {
 
 	MappedAudioFader *fader = m_alsaDriver->getMappedStudio()->
 	    getAudioFader(instrumentBase + i);
 
 	if (!fader) continue;
+
+	if (instrumentBase + i ==
+	    m_alsaDriver->getAudioMonitoringInstrument()) {
+
+	    float f = 2;
+	    (void)fader->getProperty(MappedAudioFader::Channels, f);
+	    int channels = (int)f;
+	    
+	    int inputChannel = -1;
+	    if (channels == 1) {
+		float f = 0;
+		(void)fader->getProperty(MappedAudioFader::InputChannel, f);
+		int inputChannel = (int)f;
+	    }
+	    m_recordInputChannel = inputChannel;
+	    
+	    float level = 0.0;
+	    (void)fader->getProperty(MappedAudioFader::FaderRecordLevel, level);
+	    m_recordLevel = level;
+
+	    // At the moment we only record one track at a time, and
+	    // we record to the so-called audio monitoring instrument.
+	    // So we just have the one field to set, to note which
+	    // input is connected to it.  Like in base/Instrument.h,
+	    // we use numbers < 1000 to mean buss numbers and >= 1000
+	    // to mean record ins.
+	    
+	    MappedObjectValueList connections = fader->getConnections
+		(MappedConnectableObject::In);
+
+	    if (connections.empty()) {
+		
+		std::cerr << "No connections in for record instrument "
+			  << (instrumentBase + i) << std::endl;
+
+		// oh dear.
+		m_recordInput = 1000;
+
+	    } else if (*connections.begin() == mbuss->getId()) {
+
+		m_recordInput = 0;
+		
+	    } else {
+		
+		MappedObject *obj = m_alsaDriver->getMappedStudio()->
+		    getObjectById(MappedObjectId(*connections.begin()));
+
+		if (!obj) {
+
+		    std::cerr << "No such object as " << *connections.begin() << std::endl;
+		    m_recordInput = 1000;
+		} else if (obj->getType() == MappedObject::AudioBuss) {
+		    m_recordInput = (int)((MappedAudioBuss *)obj)->getBussId();
+		} else if (obj->getType() == MappedObject::AudioInput) {
+		    std::cerr << "Connected to input "
+			      << ((MappedAudioInput *)obj)->getInputNumber() << std::endl;
+
+		    m_recordInput = (int)((MappedAudioInput *)obj)->getInputNumber()
+			+ 1000;
+		} else {
+		    std::cerr << "Object " << *connections.begin() << " is not buss or input" << std::endl;
+		    m_recordInput = 1000;
+		}
+	    }
+	}
 
 	// If we find the object is connected to no output, or to buss
 	// number 0 (the master), then we set the bit appropriately.

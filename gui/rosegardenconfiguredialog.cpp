@@ -256,7 +256,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 
     layout->addWidget(new QLabel(i18n("Auto-save interval (in seconds)"),
                                  frame), 1, 0);
-    m_autosaveInterval = new QSpinBox(0, 600, 10, frame);
+    m_autosaveInterval = new QSpinBox(0, 1200, 10, frame);
     m_autosaveInterval->setValue(m_cfg->readUnsignedNumEntry("autosaveinterval", 60));
     layout->addWidget(m_autosaveInterval, 1, 1);
 

@@ -114,8 +114,11 @@ const MappedObjectProperty MappedAudioFader::FaderRecordLevel = "faderRecordLeve
 const MappedObjectProperty MappedAudioFader::Pan = "pan";
 const MappedObjectProperty MappedAudioFader::InputChannel = "inputChannel";
 
+const MappedObjectProperty MappedAudioBuss::BussId = "bussId";
 const MappedObjectProperty MappedAudioBuss::Level = "level";
 const MappedObjectProperty MappedAudioBuss::Pan = "pan";
+
+const MappedObjectProperty MappedAudioInput::InputNumber = "inputNumber";
 
 const MappedObjectProperty MappedAudioPluginManager::Plugins = "plugins";
 const MappedObjectProperty MappedAudioPluginManager::PluginIds = "pluginids";
@@ -792,7 +795,7 @@ MappedStudio::getAudioFader(Rosegarden::InstrumentId id)
     for (MappedObjectCategory::iterator i = category.begin();
 	 i != category.end(); ++i) {
 	MappedAudioFader *fader = dynamic_cast<MappedAudioFader *>(i->second);
-	if (fader->getInstrument() == id) {
+	if (fader && (fader->getInstrument() == id)) {
 	    rv = fader;
 	    break;
 	}
@@ -810,17 +813,12 @@ MappedStudio::getAudioBuss(int bussNumber)
     MappedObjectCategory &category = m_objects[AudioBuss];
     MappedAudioBuss *rv = 0;
 
-    int count = 0;
-
     for (MappedObjectCategory::iterator i = category.begin();
 	 i != category.end(); ++i) {
 	MappedAudioBuss *buss = dynamic_cast<MappedAudioBuss *>(i->second);
-	if (buss) {
-	    if (count >= bussNumber) {
-		rv = buss;
-		break;
-	    }
-	    ++count;
+	if (buss && (buss->getBussId() == bussNumber)) {
+	    rv = buss;
+	    break;
 	}
     }
 
@@ -836,17 +834,12 @@ MappedStudio::getAudioInput(int inputNumber)
     MappedObjectCategory &category = m_objects[AudioInput];
     MappedAudioInput *rv = 0;
 
-    int count = 0;
-
     for (MappedObjectCategory::iterator i = category.begin();
 	 i != category.end(); ++i) {
 	MappedAudioInput *input = dynamic_cast<MappedAudioInput *>(i->second);
-	if (input) {
-	    if (count >= inputNumber) {
-		rv = input;
-		break;
-	    }
-	    ++count;
+	if (input && (input->getInputNumber() == inputNumber)) {
+	    rv = input;
+	    break;
 	}
     }
 
@@ -1198,7 +1191,9 @@ MappedAudioBuss::MappedAudioBuss(MappedObject *parent,
                       AudioBuss,
                       id,
                       readOnly),
-    m_level(0)
+    m_bussId(0),
+    m_level(0),
+    m_pan(0)
 {
 }
 
@@ -1213,10 +1208,15 @@ MappedAudioBuss::getPropertyList(const MappedObjectProperty &property)
 
     if (property == "")
     {
+        list.push_back(MappedAudioBuss::BussId);
         list.push_back(MappedAudioBuss::Level);
         list.push_back(MappedAudioBuss::Pan);
         list.push_back(MappedConnectableObject::ConnectionsIn);
         list.push_back(MappedConnectableObject::ConnectionsOut);
+    }
+    else if (property == BussId)
+    {
+        list.push_back(MappedObjectProperty("%1").arg(m_bussId));
     }
     else if (property == Level)
     {
@@ -1250,7 +1250,9 @@ bool
 MappedAudioBuss::getProperty(const MappedObjectProperty &property,
 			     MappedObjectValue &value)
 {
-    if (property == Level) {
+    if (property == BussId) {
+	value = m_bussId;
+    } else if (property == Level) {
 	value = m_level;
     } else if (property == Pan) {
 	value = m_pan;
@@ -1263,12 +1265,16 @@ MappedAudioBuss::getProperty(const MappedObjectProperty &property,
     }
     return true;
 }
-
+    
 void
 MappedAudioBuss::setProperty(const MappedObjectProperty &property,
 			     MappedObjectValue value)
 {
-    if (property == MappedAudioBuss::Level)
+    if (property == MappedAudioBuss::BussId)
+    {
+        m_bussId = value;
+    }
+    else if (property == MappedAudioBuss::Level)
     {
         m_level = value;
     }
@@ -1329,7 +1335,7 @@ MappedAudioBuss::getInstruments()
 }
     
 
-// ---------------- MappedAudioBuss -------------------
+// ---------------- MappedAudioInput -------------------
 //
 //
 MappedAudioInput::MappedAudioInput(MappedObject *parent,
@@ -1348,31 +1354,49 @@ MappedAudioInput::~MappedAudioInput()
 }
 
 MappedObjectPropertyList
-MappedAudioInput::getPropertyList(const MappedObjectProperty &)
+MappedAudioInput::getPropertyList(const MappedObjectProperty &property)
 {
     MappedObjectPropertyList list;
+
+    if (property == "")
+    {
+        list.push_back(MappedAudioInput::InputNumber);
+    }
+    else if (property == InputNumber)
+    {
+        list.push_back(MappedObjectProperty("%1").arg(m_inputNumber));
+    }
+
     return list;
 }
 
 bool
-MappedAudioInput::getProperty(const MappedObjectProperty &,
-			     MappedObjectValue &)
+MappedAudioInput::getProperty(const MappedObjectProperty &property,
+			     MappedObjectValue &value)
 {
+    if (property == InputNumber) {
+	value = m_inputNumber;
+    } else {
 #ifdef DEBUG_MAPPEDSTUDIO
-    std::cerr << "MappedAudioInput::getProperty - "
-	      << "no properties available" << std::endl;
+	std::cerr << "MappedAudioInput::getProperty - "
+		  << "no properties available" << std::endl;
 #endif
+    }
     return false;
 }
 
 void
-MappedAudioInput::setProperty(const MappedObjectProperty &,
-			      MappedObjectValue )
+MappedAudioInput::setProperty(const MappedObjectProperty &property,
+			      MappedObjectValue value)
 {
+    if (property == InputNumber) {
+	m_inputNumber = value;
+    } else {
 #ifdef DEBUG_MAPPEDSTUDIO
-    std::cerr << "MappedAudioInput::setProperty - "
-	      << "no properties available" << std::endl;
+	std::cerr << "MappedAudioInput::setProperty - "
+		  << "no properties available" << std::endl;
 #endif
+    }
     return;
 }
 

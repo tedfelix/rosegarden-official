@@ -268,10 +268,8 @@ public:
     // Get an audio fader for an InstrumentId.  Convenience function.
     //
     MappedAudioFader *getAudioFader(InstrumentId id);
-
-    MappedAudioBuss *getAudioBuss(int bussNumber);
-
-    MappedAudioInput *getAudioInput(int inputNumber);
+    MappedAudioBuss *getAudioBuss(int bussNumber); // not buss no., not object id
+    MappedAudioInput *getAudioInput(int inputNumber); // likewise
 
     MappedObject* getPluginInstance(InstrumentId id, int position);
 
@@ -452,6 +450,7 @@ public:
     // just have a 1-1 relationship between busses and submasters, and
     // no send channels.
 
+    static const MappedObjectProperty BussId;
     static const MappedObjectProperty Pan;
     static const MappedObjectProperty Level;
 
@@ -469,11 +468,14 @@ public:
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
 
+    MappedObjectValue getBussId() { return m_bussId; }
+
     // super-convenience function: retrieve the ids of the instruments
     // connected to this buss
     std::vector<InstrumentId> getInstruments();
 
 protected:
+    MappedObjectValue m_bussId;
     MappedObjectValue m_level;
     MappedObjectValue m_pan;
 };
@@ -481,12 +483,14 @@ protected:
 class MappedAudioInput : public MappedConnectableObject
 {
 public:
-    // An input is simpler still -- no properties at all, just
-    // the connections.
+    // An input is simpler still -- no properties at all, apart from
+    // the input number, otherwise just the connections
+
+    static const MappedObjectProperty InputNumber;
 
     MappedAudioInput(MappedObject *parent,
-                    MappedObjectId id,
-                    bool readOnly = false);
+		     MappedObjectId id,
+		     bool readOnly = false);
     ~MappedAudioInput();
 
     virtual MappedObjectPropertyList getPropertyList(
@@ -497,6 +501,11 @@ public:
 
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
+
+    MappedObjectValue getInputNumber() { return m_inputNumber; }
+
+protected:
+    MappedObjectValue m_inputNumber;
 };
 
 #ifdef HAVE_LADSPA
