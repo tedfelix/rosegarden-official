@@ -34,6 +34,8 @@
 #include "rosegardenguidoc.h"
 #include "ktmpstatusmsg.h"
 
+using Rosegarden::Segment;
+
 MatrixCanvasView::MatrixCanvasView(QCanvas *viewing, QWidget *parent,
                                    const char *name, WFlags f)
     : QCanvasView(viewing, parent, name, f)
@@ -46,9 +48,10 @@ MatrixCanvasView::~MatrixCanvasView()
 
 //----------------------------------------------------------------------
 
-MatrixVLayout::MatrixVLayout()
-    : m_pitchScaleFactor(10),
-      m_staffIdScaleFactor(100)
+MatrixVLayout::MatrixVLayout(unsigned int pitchScaleFactor,
+                             unsigned int staffIdScaleFactor)
+    : m_pitchScaleFactor(pitchScaleFactor),
+      m_staffIdScaleFactor(staffIdScaleFactor)
 {
 }
 
@@ -95,6 +98,8 @@ void MatrixVLayout::finishLayout()
 {
 }
 
+const unsigned int MatrixVLayout::defaultPitchScaleFactor = 5;
+
 //-----------------------------------
 
 MatrixHLayout::MatrixHLayout(unsigned int durationScaleFactor)
@@ -130,10 +135,13 @@ void MatrixHLayout::scanStaff(MatrixHLayout::StaffType& staff)
 
         MatrixElement *el = (*i);
         Rosegarden::timeT duration = el->event()->getDuration();
-        el->setLayoutX(currentX);
+        Rosegarden::timeT time =  el->event()->getAbsoluteTime();
+
+        el->setLayoutX(time * m_durationScaleFactor);
         double width = duration * m_durationScaleFactor;
         el->setWidth(int(width));
-        currentX += width;
+
+        currentX = el->getLayoutX() + width;
 
     }
 
@@ -191,12 +199,24 @@ bool MatrixElement::isNote() const
 }
 
 //----------------------------------------------------------------------
-MatrixStaff::MatrixStaff(QCanvas* c, Rosegarden::Segment* segment,
-                         unsigned int id)
+MatrixStaff::MatrixStaff(QCanvas* c, Segment* segment,
+                         unsigned int id, unsigned int pitchScaleFactor)
     : Rosegarden::Staff<MatrixElement>(*segment),
       m_canvas(c),
-      m_id(id)
+      m_id(id),
+      m_pitchScaleFactor(pitchScaleFactor)
 {
+    createLines();
+}
+
+MatrixStaff::~MatrixStaff()
+{
+    // delete all lines
+    for(StaffLineList::iterator i = m_staffLines.begin();
+        i != m_staffLines.end(); ++i) {
+        (*i)->hide();
+        delete (*i);
+    }
 }
 
 void MatrixStaff::renderElements(MatrixElementList::iterator from,
@@ -217,10 +237,52 @@ void MatrixStaff::renderElements()
 		   getViewElementList()->end());
 }
 
+void MatrixStaff::resizeStaffLines()
+{
+    for(StaffLineList::iterator i = m_staffLines.begin();
+        i != m_staffLines.end(); ++i) {
+        QCanvasLine* line = (*i);
+        int y = line->startPoint().y();
+        line->setPoints(0, y, m_canvas->size().width(), y);
+    }
+}
+
+void MatrixStaff::buildViewElementList(Segment::iterator from,
+                                       Segment::iterator to)
+{
+    m_viewElementList = new Rosegarden::ViewElementList<MatrixElement>;
+
+    for (Segment::iterator i = from; i != to; ++i) {
+
+        if (! (*i)->isa(Rosegarden::Note::EventType))
+            continue; // skip non-notes events
+        
+        MatrixElement *el = new MatrixElement(*i);
+        m_viewElementList->insert(el);
+    }
+
+    m_segment.addObserver(this);
+
+}
+
+void MatrixStaff::createLines()
+{
+    for(unsigned int i = 0; i < nbLines; ++i) {
+        QCanvasLine* line = new QCanvasLine(m_canvas);
+        int y = i * m_pitchScaleFactor;
+        line->setPoints(0, y, m_canvas->size().width(), y);
+        line->show();
+        m_staffLines.push_back(line);
+    }
+}
+
+
+const unsigned int MatrixStaff::nbLines = 7 * 8;
+    
 //----------------------------------------------------------------------
 
 MatrixView::MatrixView(RosegardenGUIDoc *doc,
-                       std::vector<Rosegarden::Segment *> segments,
+                       std::vector<Segment *> segments,
                        QWidget *parent)
     : EditView(doc, segments, parent),
       m_canvasView(new MatrixCanvasView(new QCanvas(width() * 2,

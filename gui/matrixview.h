@@ -108,7 +108,9 @@ public:
 class MatrixVLayout : public Rosegarden::VerticalLayoutEngine<MatrixElement>
 {
 public:
-    MatrixVLayout();
+    MatrixVLayout(unsigned int pitchScaleFactor = defaultPitchScaleFactor,
+                  unsigned int staffIdScaleFactor = 100);
+
     virtual ~MatrixVLayout();
 
     /**
@@ -142,6 +144,8 @@ public:
 
     void setStaffIdScaleFactor(unsigned int f) { m_staffIdScaleFactor = f; }
     unsigned int getStaffIdScaleFactor()       { return m_staffIdScaleFactor; }
+
+    static const unsigned int defaultPitchScaleFactor;
 
 protected:
     unsigned int m_pitchScaleFactor;
@@ -213,7 +217,10 @@ typedef Rosegarden::ViewElementList<MatrixElement> MatrixElementList;
 class MatrixStaff : public Rosegarden::Staff<MatrixElement>
 {
 public:
-    MatrixStaff(QCanvas*, Rosegarden::Segment*, unsigned int id);
+    MatrixStaff(QCanvas*, Rosegarden::Segment*, unsigned int id,
+                unsigned int pitchScaleFactor = MatrixVLayout::defaultPitchScaleFactor);
+
+    ~MatrixStaff();
 
     void renderElements(MatrixElementList::iterator from,
 			MatrixElementList::iterator to);
@@ -225,10 +232,38 @@ public:
 
     int getId() { return m_id; }
 
+    void setPitchScaleFactor(unsigned int f) { m_pitchScaleFactor = f; }
+    unsigned int getPitchScaleFactor()       { return m_pitchScaleFactor; }
+
+    /**
+     * This must be called each time the canvas is resized
+     */
+    void resizeStaffLines();
+
 protected:
+
+    /**
+     * Override from Rosegarden::Staff<T>
+     * Don't wrap rests
+     */
+    virtual void buildViewElementList(Rosegarden::Segment::iterator from,
+                                      Rosegarden::Segment::iterator to);
+
+    /// Create staff's vertical lines
+    void createLines();
+
+
+    typedef std::vector<QCanvasLine *> StaffLineList;
+
+    StaffLineList m_staffLines;
+
     QCanvas* m_canvas;
 
     unsigned int m_id;
+
+    unsigned int m_pitchScaleFactor;
+
+    static const unsigned int nbLines;
 };
 
 
