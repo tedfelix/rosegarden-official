@@ -64,9 +64,9 @@ Colour::operator= (const Colour& input)
 void
 Colour::setColour(const unsigned int red, const unsigned int green, const unsigned int blue)
 {
-    ((red>=0)&&(red<=255)) ? m_r=red : m_r=0;
-    ((green>=0)&&(green<=255)) ? m_g=green : m_g=0;
-    ((blue>=0)&&(blue<=255)) ? m_b=blue : m_b=0;
+    (red<=255)   ? m_r=red   : m_r=0;
+    (green<=255) ? m_g=green : m_g=0;
+    (blue<=255)  ? m_b=blue  : m_b=0;
 }
 
 void
@@ -98,19 +98,19 @@ Colour::getGreen() const
 void
 Colour::setRed(const unsigned int red)
 {
-    ((red>=0)&&(red<=255)) ? m_r=red : m_r=0;
+    (red<=255) ? m_r=red : m_r=0;
 }
 
 void
 Colour::setBlue(const unsigned int blue)
 {
-    ((blue>=0)&&(blue<=255)) ? m_b=blue: m_b=0;
+    (blue<=255) ? m_b=blue: m_b=0;
 }
 
 void
 Colour::setGreen(const unsigned int green)
 {
-    ((green>=0)&&(green<=255)) ? m_g=green : m_g=0;
+    (green<=255) ? m_g=green : m_g=0;
 }
 
 Colour
