@@ -64,6 +64,11 @@ public:
      */
     double getLayoutY() { return m_y; }
 
+    void getLayoutAirspace(double &x, double &width) {
+	x = m_airX;
+	width = m_airWidth;
+    }
+
     /// returns the x pos of the associated canvas item
     double getCanvasX() throw (NoCanvasItem);
 
@@ -81,6 +86,16 @@ public:
      * @see getLayoutY()
      */
     void setLayoutY(double y) { m_y = y; }
+
+    /**
+     * Sets the X coordinate and width of the space "underneath"
+     * this element, i.e. the extents within which a mouse click
+     * or some such might be considered to be interested in this
+     * element as opposed to any other.  These are layout coords
+     */
+    void setLayoutAirspace(double x, double width) {
+	m_airX = x; m_airWidth = width;
+    }
 
     /// Returns true if the wrapped event is a rest
     bool isRest() const;
@@ -133,6 +148,8 @@ protected:
 
     double m_x;
     double m_y;
+    double m_airX;
+    double m_airWidth;
     bool m_recentlyRegenerated;
 
     QCanvasItem *m_canvasItem;

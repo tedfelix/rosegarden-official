@@ -988,17 +988,20 @@ NotationHLayout::layout(BarDataMap::iterator i)
 	    } else if (el->event()->isa(Clef::EventType)) {
 		
 		delta = el->event()->get<Int>(MIN_WIDTH);
+		el->setLayoutAirspace(x, delta);
 //		kdDebug(KDEBUG_AREA) << "Found clef" << endl;
 		clef = Clef(*el->event());
 
 	    } else if (el->event()->isa(Key::EventType)) {
 
 		delta = el->event()->get<Int>(MIN_WIDTH);
+		el->setLayoutAirspace(x, delta);
 //		kdDebug(KDEBUG_AREA) << "Found key" << endl;
 		key = Key(*el->event());
 
 	    } else {
 		delta = el->event()->get<Int>(MIN_WIDTH);
+		el->setLayoutAirspace(x, delta);
 	    }
 
             x += delta;
@@ -1034,6 +1037,7 @@ NotationHLayout::positionRest(StaffType &staff,
     long delta = (((int)bdi->idealWidth - bdi->fixedWidth) *
 		  getSpacingDuration(staff, itr)) /
 	barDuration;
+    rest->setLayoutAirspace(rest->getLayoutX(), delta);
 
     // Situate the rest somewhat further into its allotted space.  Not
     // convinced this is the right thing to do
@@ -1104,6 +1108,7 @@ NotationHLayout::positionChord(StaffType &staff,
     // further into its allotted space.  Not convinced this is always
     // the right thing to do.
 
+    double unmodifiedBaseX = baseX;
     if (delta > 2 * noteWidth) {
         int shift = (delta - 2 * noteWidth) / 5;
 	baseX += std::min(shift, (m_npf.getNoteBodyWidth() * 3 / 2));
@@ -1120,6 +1125,8 @@ NotationHLayout::positionChord(StaffType &staff,
     long groupId = -1;
 
     for (i = 0; i < chord.size(); ++i) {
+
+	(*chord[i])->setLayoutAirspace(unmodifiedBaseX, delta);
 
 	NotationElement *note = *(chord[i]);
 	if (!note->isNote()) continue;

@@ -395,8 +395,20 @@ Segment::iterator
 SegmentNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
 				  Accidental explicitAccidental)
 {
-    iterator i, j;
-    segment().getTimeSlice(absoluteTime, i, j);
+//    iterator i, j;
+//    segment().getTimeSlice(absoluteTime, i, j);
+
+    iterator i = segment().findNearestTime(absoluteTime);
+
+    // If our insertion time doesn't match up precisely with any
+    // existing event, and if we're inserting over a rest, expand the
+    // rest at the insertion time first.
+    if (i != end() &&
+	(*i)->getAbsoluteTime() < absoluteTime &&
+	(*i)->getAbsoluteTime() + (*i)->getDuration() > absoluteTime &&
+	(*i)->isa(Note::EventRestType)) {
+	i = expandIntoTie(i, absoluteTime - (*i)->getAbsoluteTime());
+    }
 
     //!!! Deal with end-of-bar issues!
 
@@ -1194,11 +1206,12 @@ SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
 {
     // First stage: erase all existing rests in this range.
 
-//    cerr << "SegmentNotationHelper::normalizeRests " << startTime << " -> "
-//	 << endTime << endl;
+    cerr << "SegmentNotationHelper::normalizeRests " << startTime << " -> "
+	 << endTime << endl;
 
     iterator ia = segment().findTime(startTime);
     iterator ib = segment().findTime(endTime);
+    if (!(ib == end())) endTime = (*ib)->getAbsoluteTime();
 
     // If there's a rest preceding the start time, with no notes
     // between us and it, and if it doesn't have precisely the
@@ -1208,6 +1221,8 @@ SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
 	if ((*scooter)->isa(Note::EventRestType)) {
 	    if ((*scooter)->getAbsoluteTime() + (*scooter)->getDuration() !=
 		startTime) {
+		startTime = (*scooter)->getAbsoluteTime();
+		cerr << "Scooting back to " << startTime << endl;
 		ia = scooter;
 	    }
 	    break;
@@ -1283,8 +1298,8 @@ SegmentNotationHelper::normalizeRests(timeT startTime, timeT endTime)
 	    Event *e = new Event(Note::EventRestType);
 	    e->setDuration(*di);
 	    e->setAbsoluteTime(acc);
-//	    cerr<<"inserting:\n"<<endl;
-//	    e->dump(cerr);
+	    cerr<<"inserting:\n"<<endl;
+	    e->dump(cerr);
 	    segment().insert(e);
 	    acc += *di;
 	}

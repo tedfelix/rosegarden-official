@@ -230,6 +230,62 @@ NotationStaff::getClosestElementToLayoutX(double x,
     return result;
 }
 
+
+NotationElementList::iterator
+NotationStaff::getElementUnderCanvasCoords(double cx, int cy,
+					   Rosegarden::Event *&timeSignature,
+					   Rosegarden::Event *&clef,
+					   Rosegarden::Event *&key)
+{
+    LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(cx, cy);
+
+    kdDebug(KDEBUG_AREA) << "My coords: canvas (" << cx << "," << cy
+			 << "), layout (" << layoutCoords.first << ","
+			 << layoutCoords.second << ")" << endl;
+
+    return getElementUnderLayoutX
+	(layoutCoords.first, timeSignature, clef, key);
+}
+
+NotationElementList::iterator
+NotationStaff::getElementUnderLayoutX(double x,
+				      Rosegarden::Event *&timeSignature,
+				      Rosegarden::Event *&clef,
+				      Rosegarden::Event *&key)
+{
+    NotationElementList *notes = getViewElementList();
+    NotationElementList::iterator it;
+
+    // TODO: this is grossly inefficient
+
+    for (it = notes->begin(); it != notes->end(); ++it) {
+
+	bool before = ((*it)->getLayoutX() < x);
+	
+	if (!(*it)->isNote() && !(*it)->isRest()) {
+	    if (before) {
+		if ((*it)->event()->isa(Clef::EventType)) {
+		    clef = (*it)->event();
+		} else if ((*it)->event()->isa(TimeSignature::EventType)) {
+		    timeSignature = (*it)->event();
+		} else if ((*it)->event()->isa(Rosegarden::Key::EventType)) {
+		    key = (*it)->event();
+		}
+	    }
+	}
+
+	double airX, airWidth;
+	(*it)->getLayoutAirspace(airX, airWidth);
+	if (x >= airX && x < airX + airWidth) {
+	    return it;
+	} else if (!before) {
+	    break;
+	}
+    }
+
+    return notes->end();
+}
+
  
 string
 NotationStaff::getNoteNameAtCanvasCoords(double x, int y,

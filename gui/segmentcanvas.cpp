@@ -912,7 +912,10 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent * /*e*/)
 	     it++)
 	{
 	    //!!! we don't really want a command to happen for every
-	    //single segment -- use a compound command
+	    //single segment.  The trackeditor is using a command that
+	    //can change the positions of many tracks together; we
+	    //need to get our data to it somehow and let it collate
+	    // the segments into a single command
 
 	    emit changeSegmentTrackAndStartTime(it->second->getSegment(),
 						it->second->getTrack(),

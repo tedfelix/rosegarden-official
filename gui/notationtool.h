@@ -26,13 +26,13 @@
 #include "Segment.h"
 
 #include "edittool.h"
+#include "notationelement.h"
 
 class QCanvasRectangle;
 
 namespace Rosegarden { class EventSelection; }
 
 class NotationView;
-class NotationElement;
 class QPopupMenu;
 
 //////////////////////////////////////////////////////////////////////
@@ -153,6 +153,10 @@ protected:
 
     /// this ctor is used by RestInserter
     NoteInserter(const QString& menuName, NotationView*);
+
+    Rosegarden::timeT getOffsetWithinRest(int staffNo,
+					  const NotationElementList::iterator&,
+					  double);
 
     virtual Rosegarden::Event *doAddCommand(Rosegarden::Segment &,
 					    Rosegarden::timeT time,

@@ -223,12 +223,29 @@ NoteInserter::handleLeftButtonPress(Rosegarden::timeT,
     Event *tsig = 0, *clef = 0, *key = 0;
 
     NotationStaff *staff = m_nParentView->getStaff(staffNo);
-    
+
+    //!!! Not right -- we don't want the "closest" element, we want
+    // the one single element whose airspace we're invading.  Store
+    // a canvas rect in NotationElement that describes airspace of
+    // an event?
+/*!!!
     NotationElementList::iterator closestElement =
 	staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
-					       tsig, clef, key, false);
+					       tsig, clef, key, false, -1);
+*/
+    NotationElementList::iterator itr =
+	staff->getElementUnderCanvasCoords(e->x(), (int)e->y(),
+					   tsig, clef, key);
 
-    if (closestElement == staff->getViewElementList()->end()) return;
+    if (itr == staff->getViewElementList()->end()) return;
+    timeT time = (*itr)->getAbsoluteTime();
+
+    if ((*itr)->isRest()) {
+	time += getOffsetWithinRest(staffNo, itr,
+				    e->x() - (*itr)->getCanvasX());
+    }
+
+    kdDebug(KDEBUG_AREA) << "Insertion time: " << time << endl;
 
     int pitch = Rosegarden::NotationDisplayPitch(height, m_accidental).
         getPerformancePitch(clef ? Clef(*clef) : Clef::DefaultClef,
@@ -236,10 +253,8 @@ NoteInserter::handleLeftButtonPress(Rosegarden::timeT,
                             Rosegarden::Key::DefaultKey);
 
     Note note(m_noteType, m_noteDots);
-    Segment &segment = m_nParentView->getStaff(staffNo)->getSegment();
-
-    timeT time = (*closestElement)->getAbsoluteTime();
     timeT endTime = time + note.getDuration();
+    Segment &segment = m_nParentView->getStaff(staffNo)->getSegment();
 
     Segment::iterator realEnd = segment.findTime(endTime);
     if (realEnd == segment.end() || ++realEnd == segment.end()) {
@@ -255,6 +270,47 @@ NoteInserter::handleLeftButtonPress(Rosegarden::timeT,
 	m_nParentView->setSingleSelectedEvent(staffNo, lastInsertedEvent);
     }
 }
+
+
+timeT
+NoteInserter::getOffsetWithinRest(int staffNo,
+				  const NotationElementList::iterator &i,
+				  double offset)
+{
+    NotationStaff *staff = m_nParentView->getStaff(staffNo);
+
+    kdDebug(KDEBUG_AREA) << "NoteInserter::getOffsetWithinRest: offset is " << offset << endl;
+
+    kdDebug(KDEBUG_AREA) << "(Rest is at " << (*i)->getLayoutX() << ", time " << (*i)->getAbsoluteTime() << ")" << endl;
+
+    if (offset < 0) return 0;
+
+    double airX, airWidth;
+    (*i)->getLayoutAirspace(airX, airWidth);
+    double origin = ((*i)->getLayoutX() - airX) / 2;
+    double width = airWidth - origin;
+
+    timeT duration = (*i)->getDuration();
+
+    kdDebug(KDEBUG_AREA) << "NoteInserter::getOffsetWithinRest: width is " << width << ", duration " << duration <<  endl;
+
+    Rosegarden::TimeSignature timeSig =
+	staff->getSegment().getComposition()->getTimeSignatureAt
+	((*i)->getAbsoluteTime());
+    timeT unit = timeSig.getUnitDuration();
+
+    int unitCount = duration / unit;
+    if (unitCount > 1) {
+	timeT result = (int)((offset / width) * unitCount);
+	if (result > unitCount - 1) result = unitCount - 1;
+	result *= unit;
+	kdDebug(KDEBUG_AREA) << "NoteInserter::getOffsetWithinRest: returning " << result << endl;
+	return result;
+    }
+    
+    return 0;
+}
+
 
 Event *
 NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,

@@ -97,6 +97,8 @@ public:
      * 
      * Does not check "reasonableness" of expansion first
      *
+     * Events may be notes or rests (rests will obviously not be tied)
+     *
      * @return iterator pointing at the last inserted event
      */
     iterator expandIntoTie(iterator from, iterator to, timeT baseDuration);
@@ -109,6 +111,8 @@ public:
      * minus baseDuration
      *
      * Does not check "reasonableness" of expansion first
+     *
+     * Events may be notes or rests (rests will obviously not be tied)
      *
      * @return iterator pointing at the last inserted event
      */

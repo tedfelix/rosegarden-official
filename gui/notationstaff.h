@@ -203,6 +203,31 @@ public:
      int proximityThreshold = 10);
 
     /**
+     * Find the NotationElement "under" the canvas coords (x,y).
+     *
+     * Also returns the time signature, clef and key in force
+     * at the given coordinates.
+     */
+    virtual NotationElementList::iterator getElementUnderCanvasCoords
+    (double x, int y,
+     Rosegarden::Event *&timeSignature,
+     Rosegarden::Event *&clef,
+     Rosegarden::Event *&key);
+
+    /**
+     * Find the NotationElement "under" the given layout x-coord,
+     * without regard to its y-coord.
+     *
+     * Also returns the time signature, clef and key in force
+     * at the given coordinates.
+     */
+    virtual NotationElementList::iterator getElementUnderLayoutX
+    (double x,
+     Rosegarden::Event *&timeSignature,
+     Rosegarden::Event *&clef,
+     Rosegarden::Event *&key);
+
+    /**
      * Overridden from Rosegarden::Staff<T>.
      * We want to avoid wrapping really short rests
      */

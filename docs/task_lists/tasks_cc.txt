@@ -28,7 +28,7 @@
  7c. Refinements needed for Paste in notationcommands: we need to work
     out extent affected by removeRests so as to work out the end of the
     section to save; we also need to provide a way for the notation view
-    to discover whether a paste did (or will) succeed
+    to discover whether a paste did (or will) succeed [DONE]
 
  8. Add origin to start of hlayout, so that first bar is indented on both
     ruler and staff (preceded by staff name perhaps)
