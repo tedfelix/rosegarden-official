@@ -668,6 +668,31 @@ RosegardenGUIDoc::insertRecordedMidi(const Rosegarden::MappedComposition &mC,
                    }
                    break;
 
+                case Rosegarden::MappedEvent::MidiProgramChange:
+                   std::cerr << "RosegardenGUIDoc::insertRecordedMidi() - "
+                             << "got Program Change (unsupported)"
+                             << std::endl;
+                   break;
+
+                case Rosegarden::MappedEvent::MidiKeyPressure:
+                   std::cerr << "RosegardenGUIDoc::insertRecordedMidi() - "
+                             << "got Key Pressure (unsupported)"
+                             << std::endl;
+                   break;
+
+                case Rosegarden::MappedEvent::MidiChannelPressure:
+                   std::cerr << "RosegardenGUIDoc::insertRecordedMidi() - "
+                             << "got Channel Pressure (unsupported)"
+                             << std::endl;
+                   break;
+
+                case Rosegarden::MappedEvent::MidiSystemExclusive:
+                   std::cerr << "RosegardenGUIDoc::insertRecordedMidi() - "
+                             << "got System Exclusive (unsupported)"
+                             << std::endl;
+                   break;
+
+
                 case Rosegarden::MappedEvent::MidiNoteOneShot:
                    std::cerr << "RosegardenGUIDoc::insertRecordedMidi() - "
                              << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot"

@@ -51,7 +51,8 @@ class EventView : public EditViewBase
         Text           = 0x0004,
         SysEx          = 0x0008,
         Controller     = 0x0010,
-        ProgramChange  = 0x0020
+        ProgramChange  = 0x0020,
+        PitchBend      = 0x0040
     };
 
 public:
@@ -87,6 +88,7 @@ public slots:
     void slotSysExFilter(bool);
     void slotTextFilter(bool);
     void slotRestFilter(bool);
+    void slotPitchBendFilter(bool);
 
     // on double click on the event list
     //
@@ -110,6 +112,7 @@ protected:
     QPushButton *m_programFilter;
     QPushButton *m_controllerFilter;
     QPushButton *m_restFilter;
+    QPushButton *m_pitchBendFilter;
 
     RosegardenGUIDoc *m_doc;
     static const char* const LayoutConfigGroupName;

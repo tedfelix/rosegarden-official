@@ -7,6 +7,8 @@ o Event list [GETTING THERE]
 
 o Get Segment joining working
 
+o Repeating Notes bug
+
 o More MIDI events at Composition level. Sys Exs, Program Changes,
   Controller changes etc. etc.
 

@@ -36,10 +36,12 @@
 #include "eventview.h"
 #include "rosegardenguidoc.h"
 #include "rosestrings.h"
+#include "dialogs.h"
+
 #include "Segment.h"
 #include "SegmentPerformanceHelper.h"
 #include "BaseProperties.h"
-#include "dialogs.h"
+#include "MidiTypes.h"
 
 
 using Rosegarden::Int;
@@ -138,6 +140,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
     m_controllerFilter = new QPushButton(i18n("Controller"), filterBox);
     m_sysExFilter = new QPushButton(i18n("System Exclusive"), filterBox);
     m_textFilter = new QPushButton(i18n("Text"), filterBox);
+    m_pitchBendFilter = new QPushButton(i18n("Pitch Bend"), filterBox);
 
     m_noteFilter->setToggleButton(true);
     connect(m_noteFilter, SIGNAL(toggled(bool)),
@@ -162,6 +165,10 @@ EventView::EventView(RosegardenGUIDoc *doc,
     m_restFilter->setToggleButton(true);
     connect(m_restFilter, SIGNAL(toggled(bool)),
             SLOT(slotRestFilter(bool)));
+
+    m_restFilter->setToggleButton(true);
+    connect(m_pitchBendFilter, SIGNAL(toggled(bool)),
+            SLOT(slotPitchBendFilter(bool)));
 
     m_eventList = new KListView(getCentralFrame());
     m_grid->addWidget(m_eventList, 2, 1);
@@ -228,6 +235,10 @@ EventView::applyLayout(int /*staffNo*/)
 
             if((*it)->isa(Rosegarden::Note::EventType) &&
                !(m_eventFilter & Note))
+                continue;
+
+            if((*it)->isa(Rosegarden::PitchBend::EventType) &&
+               !(m_eventFilter & PitchBend))
                 continue;
 
 	    // avoid debug stuff going to stderr if no properties found
@@ -406,6 +417,17 @@ EventView::slotTextFilter(bool value)
 }
 
 void
+EventView::slotPitchBendFilter(bool value)
+{
+    if (value)
+        m_eventFilter |= EventView::PitchBend;
+    else
+        m_eventFilter ^= EventView::PitchBend;
+
+    applyLayout(0);
+}
+
+void
 EventView::slotRestFilter(bool value)
 {
     if (value)
@@ -449,6 +471,11 @@ EventView::setButtonsToFilter()
         m_restFilter->setOn(true);
     else
         m_restFilter->setOn(false);
+
+    if (m_eventFilter & PitchBend)
+        m_pitchBendFilter->setOn(true);
+    else
+        m_pitchBendFilter->setOn(false);
 
 }
 
