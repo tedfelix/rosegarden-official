@@ -363,12 +363,12 @@ bool MmappedSegmentsMetaIterator::acceptEvent(MappedEvent *evt, bool evtIsFromMe
         if (evt->getType() == MappedEvent::MidiSystemMessage && 
                 evt->getData1() == Rosegarden::MIDI_TIMING_CLOCK)
         {
+            /*
             std::cout << "MmappedSegmentsMetaIterator::acceptEvent - " 
                       << "found clock" << std::endl;
+                      */
             return true;
         }
-
-        std::cout << "FOUND NON CLOCK EVENT" << std::endl;
 
         return !m_controlBlockMmapper->isMetronomeMuted();
     }
@@ -491,6 +491,11 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool firstFetch,
 
 			   (evt->getEventTime() + evt->getDuration() > startTime)) {
                     //std::cout << "inserting event" << std::endl;
+
+                    /*
+                    std::cout << "Inserting event (type = "
+                        << evt->getType() << ")" << std::endl;
+                        */
 
 
                     c->insert(evt);

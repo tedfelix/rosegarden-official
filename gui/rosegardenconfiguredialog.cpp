@@ -1631,13 +1631,27 @@ SequencerConfigurationPage::apply()
     bool midiClock = m_midiClockEnabled->isChecked();
     m_cfg->writeEntry("midiclock", midiClock);
 
-    // Now send it
+    // Now send it (OLD METHOD - to be removed)
     //
     Rosegarden::MappedEvent mEMIDIClock(Rosegarden::MidiInstrumentBase, // InstrumentId
                                         Rosegarden::MappedEvent::SystemMIDIClock,
                                         Rosegarden::MidiByte(midiClock));
 
     Rosegarden::StudioControl::sendMappedEvent(mEMIDIClock);
+
+
+    // Now update the metronome mapped segment with new clock ticks
+    // if needed.
+    //
+    Rosegarden::Studio &studio = m_doc->getStudio();
+    Rosegarden::MidiMetronome *metronome = studio.
+        getMetronomeFromDevice(studio.getMetronomeDevice());
+
+    if (metronome)
+    {
+        Rosegarden::InstrumentId instrument = metronome->getInstrument();
+        m_doc->getSequenceManager()->metronomeChanged(instrument, true);
+    }
 }
 
 // ---

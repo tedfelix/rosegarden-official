@@ -949,6 +949,32 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
         t = c.getBarEndForTime(t);
     }
     
+    KConfig *config = kapp->config();
+    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+    bool midiClock = config->readBoolEntry("midiclock", false);
+    bool mtcMaster = config->readBoolEntry("mtcmaster", false);
+
+    if (midiClock)
+    {
+        using Rosegarden::Note;
+        Rosegarden::timeT quarterNote = Note(Note::Crotchet).getDuration();
+
+        // Insert 24 clocks per quarter note
+        //
+        for (Rosegarden::timeT insertTime = c.getStartMarker();
+             insertTime < c.getEndMarker(); 
+             insertTime += quarterNote / 24)
+        {
+            m_ticks.push_back(Tick(insertTime, 3));
+        }
+    }
+
+
+    if (mtcMaster)
+    {
+        // do something
+    }
+
     sortTicks();
 
     if (m_ticks.size() == 0) {
@@ -1005,8 +1031,11 @@ size_t MetronomeMmapper::computeMmappedSize()
         int clocks = ( 24 * ( comp.getEndMarker() - comp.getStartMarker() ) ) / 
             Note(Note::Crotchet).getDuration();
 
-        SEQMAN_DEBUG << "NUMBER OF CLOCK EVENTS CATERED FOR = " << clocks
-            << endl;
+        /*
+        SEQMAN_DEBUG << "MetronomeMmapper::computeMmappedSize - " 
+                     << "Number of clock events catered for = " << clocks
+                     << endl;
+        */
 
         size += clocks * sizeof(MappedEvent);
     }
@@ -1026,16 +1055,9 @@ void MetronomeMmapper::dump()
 
     SEQMAN_DEBUG << "MetronomeMmapper::dump: instrument is " << m_metronome->getInstrument() << endl;
 
-    MappedEvent* bufPos = m_mmappedEventBuffer;
+    MappedEvent* bufPos = m_mmappedEventBuffer, *mE;
 
     for (TickContainer::iterator i = m_ticks.begin(); i != m_ticks.end(); ++i) {
-
-        Rosegarden::MidiByte velocity;
-	switch (i->second) {
-	case 0:  velocity = m_metronome->getBarVelocity(); break;
-	case 1:  velocity = m_metronome->getBeatVelocity(); break;
-	default: velocity = m_metronome->getSubBeatVelocity(); break;
-	}
 
         /*
         SEQMAN_DEBUG << "MetronomeMmapper::dump: velocity = "
@@ -1044,122 +1066,29 @@ void MetronomeMmapper::dump()
 
         eventTime = comp.getElapsedRealTime(i->first);
 
-        new (bufPos) MappedEvent(m_metronome->getInstrument(),
-                                 m_metronome->getPitch(),
-                                 velocity,
-                                 eventTime,
-                                 m_tickDuration);
+        if (i->second == 3) // MIDI Clock
+        {
+            mE = new (bufPos) MappedEvent(0, MappedEvent::MidiSystemMessage);
+            mE->setData1(Rosegarden::MIDI_TIMING_CLOCK);
+            mE->setEventTime(eventTime);
+        }
+        else
+        {
+            Rosegarden::MidiByte velocity;
+	    switch (i->second) {
+	    case 0:  velocity = m_metronome->getBarVelocity(); break;
+	    case 1:  velocity = m_metronome->getBeatVelocity(); break;
+	    default: velocity = m_metronome->getSubBeatVelocity(); break;
+            }
+
+            new (bufPos) MappedEvent(m_metronome->getInstrument(),
+                                     m_metronome->getPitch(),
+                                     velocity,
+                                     eventTime,
+                                     m_tickDuration);
+        }
+
         ++bufPos;
-    }
-
-    // Set the MIDI clock
-    //
-    KConfig *config = kapp->config();
-    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-    bool midiClock = config->readBoolEntry("midiclock", false);
-    bool mtcMaster = config->readBoolEntry("mtcmaster", false);
-
-    if (midiClock)
-    {
-        // do something
-        SEQMAN_DEBUG << "MetronomeMmapper::dump - create MIDI CLOCK" << endl;
-
-        int count = comp.getTempoChangeCount();
-        Rosegarden::timeT startTime = 0, endTime = 0;
-        long ppqDuration = 0;
-        double initialTempo = comp.getTempoAt(0);
-
-        if (initialTempo == 0)
-            initialTempo = comp.getDefaultTempo();
-        
-        SEQMAN_DEBUG << "MetronomeMmapper::dump - initial Tempo = "
-                     << initialTempo << endl;
-
-        // initialTempo is in quarter notes per minute at this point
-        //
-        using Rosegarden::Note;
-
-        ppqDuration = double(Note(Note::Crotchet).getDuration());
-
-        Rosegarden::MappedEvent *mE = 0;
-
-        // Count through all the tempo changes inserting clock for
-        // each one.
-        //
-        for (int i = 0; i < comp.getTempoChangeCount(); i++)
-        {
-            std::pair<Rosegarden::timeT, long> tempo = 
-                comp.getRawTempoChange(i);
-            endTime = tempo.first;
-
-            SEQMAN_DEBUG << "MetronomeMmapper::dump - Quarter note duration = "
-                         << ppqDuration << endl;
-
-            SEQMAN_DEBUG << "MetronomeMmapper::dump - "
-                << "startTime = " << startTime
-                << ", endTime = " << endTime
-                << ", step = " << ppqDuration / 24
-                << endl;
-
-            // Insert 24 clocks per quarter note
-            //
-            for (Rosegarden::timeT insertTime = startTime;
-                 insertTime < endTime; insertTime += ppqDuration / 24)
-            {
-                mE = new (bufPos) 
-                    MappedEvent(0, MappedEvent::MidiSystemMessage);
-                mE->setData1(Rosegarden::MIDI_TIMING_CLOCK);
-                mE->setEventTime(comp.getElapsedRealTime(insertTime));
-
-                ++bufPos;
-                /*
-               SEQMAN_DEBUG << "MetronomeMmapper::dump - insert clock" 
-                            << endl;
-                            */
-            }
-
-            // Raw tempos are in quarter notes per hour
-            //
-            Rosegarden::timeT barLength =
-                comp.getBarEndForTime(startTime) - 
-                comp.getBarStartForTime(startTime);
-
-            // reset startTime for next tempo change
-            startTime = endTime + ppqDuration;
-
-        }
-
-        if (startTime < comp.getEndMarker())
-        {
-            //SEQMAN_DEBUG << "Write out final CLOCK" << endl;
-            endTime = comp.getEndMarker();
-
-            /*
-            SEQMAN_DEBUG << "MetronomeMmapper::dump - "
-                << "FINAL CLOCK - startTime = " << startTime
-                << ", endTime = " << endTime
-                << ", step = " << ppqDuration / 24
-                << ", total steps = " << (endTime - startTime) / (ppqDuration/24) << endl;
-                */
-
-            for (Rosegarden::timeT insertTime = startTime;
-                 insertTime < endTime; insertTime += ppqDuration / 24)
-            {
-                mE = new (bufPos) 
-                    MappedEvent(0, MappedEvent::MidiSystemMessage);
-                mE->setData1(Rosegarden::MIDI_TIMING_CLOCK);
-                mE->setEventTime(comp.getElapsedRealTime(insertTime));
-
-                ++bufPos;
-            }
-        }
-
-    }
-    
-    if (mtcMaster)
-    {
-        // do something
-        SEQMAN_DEBUG << "MetronomeMmapper::dump: - create MTC CLOCK" << endl;
     }
 
     // Store the number of events at the start of the shared memory region

@@ -46,7 +46,7 @@
 #include <qregexp.h>
 #include <pthread.h>
 
-#define DEBUG_ALSA 1
+//#define DEBUG_ALSA 1
 
 // This driver implements MIDI in and out via the ALSA (www.alsa-project.org)
 // sequencer interface.
@@ -1970,7 +1970,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         midiRelativeTime = (*i)->getEventTime() - m_playStartPosition +
                            m_alsaPlayStartTime;
 
-#define DEBUG_PROCESS_MIDI_OUT 1
+//#define DEBUG_PROCESS_MIDI_OUT 1
 #ifdef DEBUG_PROCESS_MIDI_OUT
 	RealTime alsaTimeNow = getAlsaTime();
 	std::cerr << "processMidiOut[" << now << "]: event is at " << midiRelativeTime << " (" << midiRelativeTime - alsaTimeNow << " ahead of queue time)" << std::endl;
@@ -2001,7 +2001,8 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         // Set destination according to Instrument mapping
         //
         outputDevice = getPairForMappedInstrument((*i)->getInstrument());
-	if (outputDevice.first < 0 && outputDevice.second < 0) continue;
+	if (outputDevice.first < 0 && outputDevice.second < 0 &&
+            (*i)->getType() != MappedEvent::MidiSystemMessage) continue;
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
 	std::cout << "processMidiOut[" << now << "]: instrument " << (*i)->getInstrument() << " -> output device " << outputDevice.first << ":" << outputDevice.second << std::endl;
@@ -2132,30 +2133,44 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
             case MappedEvent::MidiSystemMessage:
                 {
-                    // pack data between start and end blocks
-                    //
-                    if ((*i)->getData1() == Rosegarden::MIDI_SYSTEM_EXCLUSIVE)
+                    switch((*i)->getData1())
                     {
-                        char out[2];
-                        sprintf(out, "%c", MIDI_SYSTEM_EXCLUSIVE);
-                        std::string data = out;
+                        case Rosegarden::MIDI_SYSTEM_EXCLUSIVE:
+                            {
+                                char out[2];
+                                sprintf(out, "%c", MIDI_SYSTEM_EXCLUSIVE);
+                                std::string data = out;
 
-                        data += DataBlockRepository::getDataBlockForEvent((*i));
+                                data += DataBlockRepository::getDataBlockForEvent((*i));
 
-                        sprintf(out, "%c", MIDI_END_OF_EXCLUSIVE);
-                        data += out;
+                                sprintf(out, "%c", MIDI_END_OF_EXCLUSIVE);
+                                data += out;
+    
+                                snd_seq_ev_set_sysex(&event,
+                                                     data.length(),
+                                                     (char*)(data.c_str()));
+                            }
+                            break;
 
-                        snd_seq_ev_set_sysex(&event,
-                                             data.length(),
-                                             (char*)(data.c_str()));
+                        case Rosegarden::MIDI_TIMING_CLOCK:
+                            {
+                                std::cerr << "AlsaDriver::processMidiOut - "
+                                          << "send clock" << std::endl;
+                                /*
+                                sendSystemQueued(SND_SEQ_EVENT_CLOCK, 
+                                                 "", m_midiClockSendTime);
+                                                 */
+                                continue;
+
+                            }
+                            break;
+                             
+                        default:
+                            std::cerr << "AlsaDriver::processMidiOut - "
+                                      << "unrecognised system message" 
+                                      << std::endl;
+                            break;
                     }
-                    else
-                    {
-                        std::cerr << "AlsaDriver::processMidiOut - "
-                                  << "unrecognised system message" 
-                                  << std::endl;
-                    }
-
                 }
                 break;
 
