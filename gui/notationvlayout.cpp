@@ -74,7 +74,7 @@ NotationVLayout::layout(NotationElementList::iterator from,
                 kdDebug(KDEBUG_AREA) << "pitch : " << pitch << endl;
                 NotationDisplayPitch p(pitch, clef, key);
                 el->setY(m_staff.yCoordOfHeight(p.getHeightOnStaff()));
-                el->event()->set<Int>("computed-accidental",
+                el->event()->set<Int>("Notation::Accidental",
                                       (int)p.getAccidental());
                 kdDebug(KDEBUG_AREA) << "NotationVLayout::layout : pitch : "
                                      << pitch << " - y : " << el->y() << endl;
