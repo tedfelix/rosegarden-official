@@ -2034,7 +2034,7 @@ BankEditorDialog::importFromSF2(QString filename)
 	int lsb = bankNumber % 128;
 
         Rosegarden::MidiBank bank
-	    (false, msb, lsb, qstrtostr(i18n("Bank %1:%1").arg(msb).arg(lsb)));
+	    (false, msb, lsb, qstrtostr(i18n("Bank %1:%2").arg(msb).arg(lsb)));
 
         banks.push_back(bank);
 
