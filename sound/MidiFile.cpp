@@ -203,8 +203,8 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
     if (bytesGot > 500) {
 
         emit setProgress((int)(double(midiFile->tellg())/
-                                double(m_fileSize) * 100.0));
-        kapp->processEvents(500);
+                                double(m_fileSize) * 20.0));
+        kapp->processEvents(50);
 
         bytesGot = 0;
     }
@@ -664,10 +664,17 @@ MidiFile::convertToRosegarden(Composition *composition,
     //
     m_studio->unassignAllInstruments();
 
+
     for (TrackId i = 0; i < m_numberOfTracks; i++ )
     {
         segmentTime = 0;
         trackName = string("Imported MIDI");
+
+        // progress - 20% total in file import itself and then 80%
+        // split over these tracks
+        emit setProgress(20 +
+                         (int)((80.0 * double(i)/double(m_numberOfTracks))));
+        kapp->processEvents(50);
 
         // Convert the deltaTime to an absolute time since
         // the start of the segment.  The addTime method 

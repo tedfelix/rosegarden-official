@@ -1987,7 +1987,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     KStartupLogo::hideIfStillThere();
     RosegardenProgressDialog progressDlg(i18n("Importing MIDI file..."),
-                                         100,
+                                         200,
                                          this);
 
     connect(midiFile, SIGNAL(setProgress(int)),
@@ -2079,6 +2079,10 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 
     Rosegarden::Composition *comp = &m_doc->getComposition();
 
+    int progressPer = 100;
+    if (comp->getNbSegments() > 0)
+        progressPer = (int)(100.0 / (double(comp->getNbSegments() * 3)));
+
     for (Rosegarden::Composition::iterator i = comp->begin();
 	 i != comp->end(); ++i) {
 
@@ -2087,6 +2091,8 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 	segment.insert(helper.guessClef(segment.begin(),
 					segment.getEndMarker()).getAsEvent
 		       (segment.getStartTime()));
+
+        progressDlg.progressBar()->advance(progressPer);
     }
 
     for (Rosegarden::Composition::iterator i = comp->begin();
@@ -2113,6 +2119,8 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 	    segment.insert(helper.guessKey(adapter).getAsEvent
 			   (segment.getStartTime()));
 	}
+
+        progressDlg.progressBar()->advance(progressPer);
     }
 
     KMacroCommand *command = new KMacroCommand(i18n("Guess Notation"));
@@ -2130,6 +2138,7 @@ void RosegardenGUIApp::importMIDIFile(const QString &file, bool merge)
 	command->addCommand(new EventQuantizeCommand
 			    (segment, startTime, endTime, "Notation Options",
 			     Rosegarden::Quantizer::NotationPrefix, true));
+        progressDlg.progressBar()->advance(progressPer);
     }
 
     m_doc->getCommandHistory()->addCommand(command);
@@ -2171,7 +2180,8 @@ void RosegardenGUIApp::importRG21File(const QString &file)
                                          100,
                                          this);
 
-    RG21Loader rg21Loader(file, &m_doc->getStudio());
+    RosegardenGUIDoc *newDoc = new RosegardenGUIDoc(m_doc);
+    RG21Loader rg21Loader(file, &newDoc->getStudio());
 
     // TODO: makde RG21Loader to actually emit these signals
     //
@@ -2183,17 +2193,23 @@ void RosegardenGUIApp::importRG21File(const QString &file)
 
     rg21Loader.parse();
 
-    m_doc->closeDocument();
-    m_doc->newDocument();
     Rosegarden::Composition *tmpComp = rg21Loader.getComposition();
+    newDoc->getComposition().swap(*tmpComp);
 
-    m_doc->getComposition().swap(*tmpComp);
-
+    // assign to existing document
+    (*m_doc) = (*newDoc);
+    delete newDoc;
     delete tmpComp;
 
     // Set modification flag
     //
     m_doc->setModified();
+
+    // Set the caption and add recent
+    //
+    m_doc->setTitle(QFileInfo(file).fileName());
+    m_fileRecent->addURL(file);
+
 
     initView();
 }

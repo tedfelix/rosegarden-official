@@ -202,6 +202,8 @@ RosegardenProgressDialog::RosegardenProgressDialog(QWidget *creator,
     m_chrono.start();
 
     CurrentProgressDialog::set(this);
+
+    setMinimumDuration(500); // set a default value for this
 }
 
 
@@ -230,6 +232,8 @@ RosegardenProgressDialog::RosegardenProgressDialog(
     m_chrono.start();
 
     CurrentProgressDialog::set(this);
+
+    setMinimumDuration(500); // set a default value for this
 }
 
 void
