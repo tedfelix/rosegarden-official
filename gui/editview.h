@@ -264,6 +264,7 @@ protected:
     void initSegmentRefreshStatusIds();
 
     bool isCompositionModified();
+    void setCompositionModified(bool);
 
     //--------------- Data members ---------------------------------
 

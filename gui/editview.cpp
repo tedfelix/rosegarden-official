@@ -121,6 +121,7 @@ void EditView::paintEvent(QPaintEvent* e)
 		return;
 	    }
 	}
+        setCompositionModified(false);
     }
 
 
@@ -409,4 +410,9 @@ void EditView::initSegmentRefreshStatusIds()
 bool EditView::isCompositionModified()
 {
     return m_document->getComposition().getRefreshStatus(m_compositionRefreshStatusId).needsRefresh();
+}
+
+void EditView::setCompositionModified(bool c)
+{
+    m_document->getComposition().getRefreshStatus(m_compositionRefreshStatusId).setNeedsRefresh(c);
 }
