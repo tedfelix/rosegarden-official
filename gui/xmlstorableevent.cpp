@@ -17,7 +17,7 @@
 
 #include "xmlstorableevent.h"
 
-#include "roseebug.h"
+#include "rosedebug.h"
 
 Event::duration
 XMLStorableEvent::noteName2Duration(const QString &nn)
