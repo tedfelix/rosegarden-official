@@ -39,6 +39,7 @@ using std::string;
 
 //#define DEBUG_NORMALIZE_RESTS 1    
 
+static int _runtimeSegmentId = 0;
 
 Segment::Segment(SegmentType segmentType, timeT startTime) :
     std::multiset<Event*, Event::EventCmp>(),
@@ -59,7 +60,8 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_transpose(0),
     m_delay(0),
     m_realTimeDelay(0, 0),
-    m_clefKeyList(0)
+    m_clefKeyList(0),
+    m_runtimeSegmentId(_runtimeSegmentId++)
 {
 }
 
@@ -85,7 +87,8 @@ Segment::Segment(const Segment &segment):
     m_transpose(segment.getTranspose()),
     m_delay(segment.getDelay()),
     m_realTimeDelay(segment.getRealTimeDelay()),
-    m_clefKeyList(0)
+    m_clefKeyList(0),
+    m_runtimeSegmentId(_runtimeSegmentId++)
 {
     for (iterator it = segment.begin();
 	 segment.isBeforeEndMarker(it); ++it) {

@@ -531,29 +531,29 @@ MmappedSegmentsMetaIterator::getPlayingMappedAudioSegments()
     std::vector<int> playingAudioSegments;
     std::vector<int>::const_iterator pIt;
 
-    for(unsigned int i = 0; i < m_iterators.size(); ++i) 
+    for(unsigned int i = 0; i < m_iterators.size(); ++i)
     {
         MmappedSegment::iterator* iter = m_iterators[i];
+        if (iter->atEnd()) continue;
 
         MappedEvent *evt = new MappedEvent(*(*iter));
-        if (evt->getType() == MappedEvent::Audio)
+        if (evt && evt->getType() == MappedEvent::Audio)
         {
             // Only add a unique audio id
             //
             bool add = true;
             for (pIt = playingAudioSegments.begin(); pIt != playingAudioSegments.end(); ++pIt)
             {
-                if ((*pIt) == evt->getAudioID())
+                if ((*pIt) == evt->getRuntimeSegmentId())
                 {
                     add = false;
                     break;
                 }
             }
 
-            if (add) playingAudioSegments.push_back(evt->getAudioID());
+            if (add) playingAudioSegments.push_back(evt->getRuntimeSegmentId());
 
         }
-
     }
 
     return playingAudioSegments;

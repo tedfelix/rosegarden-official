@@ -395,6 +395,11 @@ public:
     /// Size of a MappedEvent in a stream
     static const size_t streamedSize;
 
+    // The runtime segment id of an audio file
+    //
+    int getRuntimeSegmentId() const { return m_runtimeSegmentId; }
+    void setRuntimeSegmentId(int id) { m_runtimeSegmentId = id; }
+
 private:
     TrackId          m_trackId;
     InstrumentId     m_instrument;
@@ -415,6 +420,10 @@ private:
     //
     bool             m_isPersistent;
 
+
+    // Id of the segment that this (audio) event is derived from
+    //
+    int              m_runtimeSegmentId;
 };
 
 

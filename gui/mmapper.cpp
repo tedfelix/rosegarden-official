@@ -583,6 +583,7 @@ void AudioSegmentMmapper::dump()
                                                  audioDuration,
                                                  audioStart);
         mE->setTrackId(track->getId());
+        mE->setRuntimeSegmentId(m_segment->getRuntimeId());
         ++bufPos;
         
     }

@@ -477,6 +477,10 @@ public:
 	m_composition = composition;
     }
 
+    // The runtime id for this segment
+    //
+    int getRuntimeId() const { return m_runtimeSegmentId; }
+
     /**
      * The compare class used by Composition
      */
@@ -579,6 +583,11 @@ private: // stuff to support SegmentObservers
 private: // assignment operator not provided
 
     Segment &operator=(const Segment &);
+
+    // Used for mapping the segment to runtime things like PlayableAudioFiles at
+    // the sequencer.
+    //
+    int     m_runtimeSegmentId;
 
 };
 

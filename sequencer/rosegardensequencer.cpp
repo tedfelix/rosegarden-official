@@ -319,6 +319,19 @@ RosegardenSequencerApp::keepPlaying()
         m_lastFetchSongPosition = m_lastFetchSongPosition + m_readAhead;
     }
 
+    // Work out what audio files should be playing in the sounddriver
+    //
+    /*
+    if (m_metaIterator)
+    {
+        std::vector<int> audioFiles = m_metaIterator->getPlayingMappedAudioSegments();
+        for (std::vector<int>::iterator it = audioFiles.begin(); it != audioFiles.end(); ++it)
+        {
+            std::cout << "RUNNING SEGMENT ID = " << *it << std::endl;
+        }
+    }
+    */
+
     return true; // !isEndOfCompReached(); - until we sort this out, we don't stop at end of comp.
 }
 
@@ -396,6 +409,7 @@ RosegardenSequencerApp::updateClocks()
         //
         stop();
     }
+
 }
 
 void

@@ -45,7 +45,8 @@ MappedEvent::MappedEvent(InstrumentId id,
     m_duration(duration),
     m_audioStartMarker(0, 0),
     m_dataBlockId(0),
-    m_isPersistent(false)
+    m_isPersistent(false),
+    m_runtimeSegmentId(-1)
 {
     try {
 
@@ -166,6 +167,7 @@ MappedEvent::operator=(const MappedEvent &mE)
     m_duration = mE.getDuration();
     m_audioStartMarker = mE.getAudioStartMarker();
     m_dataBlockId = mE.getDataBlockId();
+    m_runtimeSegmentId = mE.getRuntimeSegmentId();
 
     return *this;
 }
@@ -187,6 +189,7 @@ operator<<(QDataStream &dS, MappedEvent *mE)
     dS << (unsigned int)mE->getAudioStartMarker().sec;
     dS << (unsigned int)mE->getAudioStartMarker().usec;
     dS << (unsigned long)mE->getDataBlockId();
+    dS << mE->getRuntimeSegmentId();
 
     return dS;
 }
@@ -206,6 +209,7 @@ operator<<(QDataStream &dS, const MappedEvent &mE)
     dS << (unsigned int)mE.getAudioStartMarker().sec;
     dS << (unsigned int)mE.getAudioStartMarker().usec;
     dS << (unsigned long)mE.getDataBlockId();
+    dS << mE.getRuntimeSegmentId();
 
     return dS;
 }
@@ -218,6 +222,7 @@ operator>>(QDataStream &dS, MappedEvent *mE)
         audioSec = 0, audioUsec = 0;
     std::string dataBlock;
     unsigned long dataBlockId = 0;
+    int runtimeSegmentId = -1;
 
     dS >> trackId;
     dS >> instrument;
@@ -231,6 +236,7 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     dS >> audioSec;
     dS >> audioUsec;
     dS >> dataBlockId;
+    dS >> runtimeSegmentId;
 
     mE->setTrackId((TrackId)trackId);
     mE->setInstrument((InstrumentId)instrument);
@@ -241,6 +247,7 @@ operator>>(QDataStream &dS, MappedEvent *mE)
     mE->setDuration(RealTime(durationSec, durationUsec));
     mE->setAudioStartMarker(RealTime(audioSec, audioUsec));
     mE->setDataBlockId(dataBlockId);
+    mE->setRuntimeSegmentId(runtimeSegmentId);
 
     return dS;
 }
@@ -253,6 +260,7 @@ operator>>(QDataStream &dS, MappedEvent &mE)
         audioSec = 0, audioUsec = 0;
     std::string dataBlock;
     unsigned long dataBlockId = 0;
+    int runtimeSegmentId = -1;
          
     dS >> trackId;
     dS >> instrument;
@@ -266,6 +274,7 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     dS >> audioSec;
     dS >> audioUsec;
     dS >> dataBlockId;
+    dS >> runtimeSegmentId;
 
     mE.setTrackId((TrackId)trackId);
     mE.setInstrument((InstrumentId)instrument);
@@ -276,6 +285,7 @@ operator>>(QDataStream &dS, MappedEvent &mE)
     mE.setDuration(RealTime(durationSec, durationUsec));
     mE.setAudioStartMarker(RealTime(audioSec, audioUsec));
     mE.setDataBlockId(dataBlockId);
+    mE.setRuntimeSegmentId(runtimeSegmentId);
 
     return dS;
 }
