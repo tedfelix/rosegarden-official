@@ -145,7 +145,7 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/pixmaps/transport/*.xpm  $(kde_datadir)/$(data_dirname)/pixmaps/transport
 	$(INSTALL_DATA) $(srcdir)/pixmaps/splash.png       $(kde_datadir)/$(data_dirname)/pixmaps
 	$(INSTALL_DATA) $(srcdir)/testfiles/autoload.rg    $(kde_datadir)/$(data_dirname)
-	grep VERSION $(srcdir)/../config.h | sed 's/^[^"]*"//' | sed 's/"[^"]*//' |head -1 > $(kde_datadir)/$(data_dirname)/version.txt
+	grep VERSION $(top_builddir)/config.h | sed 's/^[^"]*"//' | sed 's/"[^"]*//' |head -1 > $(kde_datadir)/$(data_dirname)/version.txt
 
 
 

@@ -1,11 +1,11 @@
 0.2 tasks
 =========
 
-o Matrix Parameter Box [SKELETON]
-
 o Repeating segments and composition end marker
 
 o AudioManager and AudioFile commands
+
+o Matrix Hypereditor
 
 o Fix segment audio drag and drop
 
@@ -20,6 +20,7 @@ o "Revert file" option
 
 o Matrix tools - cut and join 
                - multiple resize
+               - wire up quantize
 
 
 Post 0.2
