@@ -737,6 +737,11 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
     octave = pitch / 12;
     pitch  = pitch % 12;
 
+    // Double sharps and flats always take explicit notation
+    // Single sharps, flats, and naturals only take notation
+    //  if they are "against the key"
+    // Height needs special consideration for doubles and b/c e/f
+    
     switch (pitch) {
     case  0: height = -2; break;	            // C  
     case  1: height = -2; modified = true; break;   // C# 
@@ -751,35 +756,51 @@ NotationDisplayPitch::rawPitchToDisplayPitch(int pitch,
     case 10: height =  3; modified = true; break;   // A# 
     case 11: height =  4; break;                    // B  
     }
+    
+    if (accidental == DoubleSharp) {
+        // We've set the height too high
+        height--;
+    } else if (accidental == DoubleFlat) {
+        // We've set the height too low
+        height++;
+    } else if (accidental == Flat &&
+               (height == 4 || height == 0)) {
+        modified = true;
+    } else if (accidental == Sharp &&
+               (height == -2 || height == 1)) {
+        height--; modified = true;
+    }
+    // "Recenter" height in case it's been changed
+    height = ((height + 2) % 7) - 2;
 
     height += (octave - 5) * 7;
     height += clef.getPitchOffset();
 
-    // 2. Adjust accidentals for the current key
-
-    bool sharp = key.isSharp();
-
-    if (accidental != NoAccidental) {
-        sharp = (accidental == Sharp || accidental == DoubleSharp);
-    }
-
-    accidental = modified ? (sharp ? Sharp : Flat) : NoAccidental;
-    if (modified && !sharp) ++height; // because the mod has become a flat
-
-    vector<int> ah(key.getAccidentalHeights(clef));
-    for (vector<int>::const_iterator i = ah.begin(); i != ah.end(); ++i) {
-
-        if (Key::canonicalHeight(*i) == Key::canonicalHeight(height)) {
-            // the key has an accidental at the same height as this note, so
-            // undo the note's accidental if there is one, or make explicit
-            // if there isn't
-
-            if (modified && (sharp == key.isSharp())) {
-		accidental = NoAccidental;
-	    } else if (!modified) {
-		accidental = Natural;
-	    }
-            break;
+    // Double modifiers always display
+    if (accidental != DoubleSharp &&
+        accidental != DoubleFlat) {
+        // 2. Adjust accidentals for the current key
+        
+        bool sharp = key.isSharp() || (accidental == Sharp);
+        
+        accidental = modified ? (sharp ? Sharp : Flat) : NoAccidental;
+        if (modified && !sharp) ++height; // because the mod has become a flat
+        
+        vector<int> ah(key.getAccidentalHeights(clef));
+        for (vector<int>::const_iterator i = ah.begin(); i != ah.end(); ++i) {
+            // Incomplete: Make sure canonicalHeight can handle values outside the -2-4 range
+            if (Key::canonicalHeight(*i) == Key::canonicalHeight(height)) {
+                // the key has an accidental at the same height as this note, so
+                // undo the note's accidental if there is one, or make explicit
+                // if there isn't
+                
+                if (modified && (sharp == key.isSharp())) {
+                    accidental = NoAccidental;
+                } else if (!modified) {
+                    accidental = Natural;
+                }
+                break;
+            }
         }
     }
 
