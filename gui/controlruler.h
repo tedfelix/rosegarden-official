@@ -125,7 +125,7 @@ protected:
 
     int m_maxItemValue;
 
-    int m_staffOffset;
+    double m_staffOffset;
 
     double m_currentX;
 

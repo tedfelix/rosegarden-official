@@ -911,7 +911,7 @@ void PropertyControlRuler::init()
         i != viewElementList->end(); ++i) {
 
  	double x = m_rulerScale->getXForTime((*i)->getViewAbsoluteTime());
- 	new ControlItem(this, new ViewElementAdapter(*i, getPropertyName()), int(x) + m_staffOffset,
+ 	new ControlItem(this, new ViewElementAdapter(*i, getPropertyName()), int(x + m_staffOffset),
                         int(m_rulerScale->getXForTime((*i)->getViewAbsoluteTime() +
                                                       (*i)->getViewDuration()) - x));
 
@@ -924,7 +924,7 @@ void PropertyControlRuler::elementAdded(const Rosegarden::Staff *, ViewElement *
 
     double x = m_rulerScale->getXForTime(el->getViewAbsoluteTime());
 
-    new ControlItem(this, new ViewElementAdapter(el, getPropertyName()), int(x) + m_staffOffset,
+    new ControlItem(this, new ViewElementAdapter(el, getPropertyName()), int(x + m_staffOffset),
                     int(m_rulerScale->getXForTime(el->getViewAbsoluteTime() +
                                                   el->getViewDuration()) - x));
 }
@@ -1010,7 +1010,7 @@ ControllerEventsRuler::ControllerEventsRuler(Rosegarden::Segment& segment,
         RG_DEBUG << "ControllerEventsRuler: adding element\n";
 
  	double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime());
- 	new ControlItem(this, new ControllerEventAdapter(*i), int(x) + m_staffOffset,
+ 	new ControlItem(this, new ControllerEventAdapter(*i), int(x + m_staffOffset),
                         getDefaultItemWidth());
 
     }
@@ -1063,7 +1063,7 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
 
     double x = m_rulerScale->getXForTime(e->getAbsoluteTime());
 
-    new ControlItem(this, new ControllerEventAdapter(e), int(x) + m_staffOffset,
+    new ControlItem(this, new ControllerEventAdapter(e), int(x + m_staffOffset),
                     getDefaultItemWidth());
 }
 
@@ -1202,9 +1202,11 @@ void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
 
     if (e->button() == LeftButton)
     {
+        QPoint p = inverseMapPoint(e->pos());
+        
         m_controlLine->show();
-        m_controlLineX = e->x();
-        m_controlLineY = e->y();
+        m_controlLineX = p.x();
+        m_controlLineY = p.y();
         m_controlLine->setPoints(m_controlLineX, m_controlLineY, m_controlLineX, m_controlLineY);
         canvas()->update();
     }
@@ -1219,18 +1221,20 @@ void ControllerEventsRuler::contentsMouseReleaseEvent(QMouseEvent *e)
     }
     else
     {
+        QPoint p = inverseMapPoint(e->pos());
+
         timeT startTime = m_rulerScale->getTimeForX(m_controlLineX);
-        timeT endTime = m_rulerScale->getTimeForX(e->x());
+        timeT endTime = m_rulerScale->getTimeForX(p.x());
 
         long startValue = heightToValue(m_controlLineY - canvas()->height());
-        long endValue = heightToValue(e->y() - canvas()->height());
+        long endValue = heightToValue(p.y() - canvas()->height());
 
-        std::cout << "ControllerEventsRuler::contentsMouseReleaseEvent - "
-                  << "starttime = " << startTime
-                  << ", endtime = " << endTime
-                  << ", startValue = " << startValue
-                  << ", endValue = " << endValue
-                  << std::endl;
+        RG_DEBUG << "ControllerEventsRuler::contentsMouseReleaseEvent - "
+                 << "starttime = " << startTime
+                 << ", endtime = " << endTime
+                 << ", startValue = " << startValue
+                 << ", endValue = " << endValue
+                 << endl;
 
         drawControlLine(startTime, endTime, startValue, endValue);
 
@@ -1250,7 +1254,9 @@ void ControllerEventsRuler::contentsMouseMoveEvent(QMouseEvent *e)
         return;
     }
 
-    m_controlLine->setPoints(m_controlLineX, m_controlLineY, e->x(), e->y());
+    QPoint p = inverseMapPoint(e->pos());
+
+    m_controlLine->setPoints(m_controlLineX, m_controlLineY, p.x(), p.y());
     canvas()->update();
 
 }
@@ -1262,9 +1268,8 @@ void ControllerEventsRuler::layoutItem(ControlItem* item)
     double x = m_rulerScale->getXForTime(itemTime) + m_staffOffset;
     
     item->setX(x);
-    int itemElementDuration = item->getElementAdapter()->getDuration();
     
-    int width = getDefaultItemWidth(); // how to scale that ??
+    int width = getDefaultItemWidth(); // TODO: how to scale that ??
 
     item->setWidth(width);
 
@@ -1298,8 +1303,6 @@ ControllerEventsRuler::drawControlLine(Rosegarden::timeT startTime,
         else if (value > m_controller->getMax())
             value = m_controller->getMax();
 
-        std::cout << "INSERT VALUE = " << value << ", TIME = " << time << std::endl;
-        
         ControllerEventInsertCommand* command = 
             new ControllerEventInsertCommand(time, m_controller->getControllerValue(), value, m_segment);
 
