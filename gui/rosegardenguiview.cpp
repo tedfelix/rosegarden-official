@@ -25,6 +25,8 @@
 // KDE includes
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <qhbox.h>
+#include <qpushbutton.h>
 
 // application specific includes
 #include "rosegardenguiview.h"
@@ -34,6 +36,7 @@
 #include "segmentcanvas.h"
 #include "notationview.h"
 #include "matrixview.h"
+#include "trackbuttons.h"
 
 
 RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
@@ -41,9 +44,32 @@ RosegardenGUIView::RosegardenGUIView(QWidget *parent, const char* /*name*/)
       m_notationView(0),
       m_matrixView(0)
 {
-    QScrollView *scrollView = new QScrollView(this);
-    
     RosegardenGUIDoc* doc = getDocument();
+
+    // Construct the top level horizontal box and drop the
+    // button box (TrackButtons) and the main ScrollView
+    // straight into it.  We use this arrangement until we
+    // get around to specialising the QHeader properly.
+    //
+    //
+    QHBox *topBox = new QHBox(this);
+
+    QScrollView *buttonsView = new QScrollView(topBox);
+    TrackButtons *trackButtons = new TrackButtons(doc, buttonsView);
+    buttonsView->addChild(trackButtons);
+
+    // turn off the scrollbars on the track buttons
+    //
+    buttonsView->setHScrollBarMode(QScrollView::AlwaysOff);
+    buttonsView->setVScrollBarMode(QScrollView::AlwaysOff);
+
+    QScrollView *scrollView = new QScrollView(topBox);
+
+    // Now link up the vertical scrollbar to the track buttons
+    //
+    connect(scrollView, SIGNAL(contentsMoving(int, int)),
+            buttonsView, SLOT(scrollBy(int, int)));
+
     TrackEditor *tracksEditor = 0;
     
     if (doc) {

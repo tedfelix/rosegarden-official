@@ -40,6 +40,7 @@ rosegarden_SOURCES = \
 	trackeditor.cpp \
 	trackseditoriface.skel \
         trackheader.cpp \
+        trackbuttons.cpp \
 	xmlstorableevent.cpp
 
 rosegarden_LDADD   = ../sound/libRosegardenSound.la ../base/libbase.la -lqt -lkfile -lkdeui -lkdecore -lXext -lX11 $(LIBSOCKET)
