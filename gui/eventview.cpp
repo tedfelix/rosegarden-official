@@ -37,6 +37,7 @@
 #include "rosegardenguidoc.h"
 #include "rosestrings.h"
 #include "dialogs.h"
+#include "editcommands.h"
 
 #include "Segment.h"
 #include "SegmentPerformanceHelper.h"
@@ -528,8 +529,20 @@ EventView::slotPopupEventEditor(QListViewItem *item)
         }
         while (++it != eItem->getSegment()->end());
 
-        EventEditDialog *eED = new EventEditDialog(this,
-                                                   **it);
-        eED->show();
+        // Ok, pop up and execute dialog and perform command if 
+        // we've modified the event.
+        //
+        EventEditDialog *dialog = new EventEditDialog(this, **it);
+
+        if (dialog->exec() == QDialog::Accepted && dialog->isModified())
+        {
+            EventEditCommand *command =
+                new EventEditCommand(*(eItem->getSegment()),
+                                     (*it),
+                                     dialog->getEvent());
+
+            addCommandToHistory(command);
+        }
+
     }
 }
