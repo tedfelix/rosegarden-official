@@ -1,0 +1,122 @@
+
+#heading {
+}
+
+#nav {
+   float: left;
+   width: 20%;
+   margin-top: 22px;
+   text-align: bottom;
+}
+
+#main {
+   float: right;
+   width: 75%;
+   margin-top: 20px;
+   padding-bottom: 20px;
+   margin-bottom: 20px;
+} 
+
+body {
+    margin-left: 10px;
+    margin-right: 20px;
+    margin-top: 10px;
+    background: #ffffff;
+}
+
+body,p,td,ul,ol,li,blockquote { 
+    font-size: 11pt;
+    font-family: georgia, "book antiqua", palatino, garamond, serif;
+}
+
+code {
+    font-size: 10pt;
+    font-family: "andale mono", "monotype.com", lucidatypewriter, monospaced;
+}
+
+h1,h2,h3,h4,h5,h6,h7 { 
+    font-weight: bold;
+    font-family: georgia, "book antiqua", palatino, garamond, serif;
+}
+
+h4,h5,h6,h7 {
+    margin-bottom: 0px;
+}
+
+.faqanswer {
+    margin-top: 18pt;
+}
+
+.faqtoc {
+    font-weight: medium;
+}
+
+.faqtoc {
+    font-weight: medium;
+}
+
+.faqheader {
+    font-weight: bold;
+    color: #000000;
+}
+
+.navselected {
+    font-size: 10pt;
+    margin-right: 4pt;
+    font-family: trebuchet, verdana, sans-serif;
+    font-weight: bold;
+    color: #000000;
+}
+
+.navunselected {
+    font-size: 10pt;
+    margin-right: 4pt;
+    font-family: trebuchet, verdana, sans-serif;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.navlink {
+    font-size: 10pt;
+    padding-left: 8pt;
+    margin-left: 6pt;
+    margin-top: 6pt;
+    font-family: trebuchet, verdana, sans-serif;
+    font-weight: bold;
+}
+
+small,.navtext {
+    font-size: 9pt;
+    font-family: trebuchet, verdana, sans-serif;
+    margin-bottom: 8px;
+}
+
+a {
+    color: #aa0000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:active {
+    color: #00aa00;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #551a8b;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+p,li {
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+li.close {
+    margin-top: 0px;
+}

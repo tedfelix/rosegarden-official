@@ -1,0 +1,338 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Rosegarden features and change log</title>
+    <link rel="stylesheet" href="rose.css" media="screen">
+    <script type="text/javascript" src="rosenav.js"></script>
+    <meta name="robots" content="index">
+  </head>
+  <body>
+    <div id="heading">
+      <img src="logo.png" alt="" width="58" height="99"><img src="title-features.png" alt="Rosegarden features" width="400" height="83">
+    </div>
+
+    <div id="nav">
+    <script type="text/javascript">makeNav()</script>
+    <noscript>
+        <a href="index.html">home</a><br>
+        <a href="features.html">features</a><br><a href="faq.html">faq</a><br>
+        <a href="pictures.html">screenshots</a><br>
+        <a href="list.html">mailing-list</a><br>
+        <a href="development.html">development</a><br>
+        <a href="download.html">download</a><br>
+    </noscript>
+    </div>
+
+    <div id="main">
+
+<h3>Features of Rosegarden 2.1pl2</h3> 
+<UL>
+
+<LI>A musical notation editor supporting multiple staffs with chords,
+manual and automatic beaming, dynamic markings, slurs, ties, textual
+marks, triplets and various other conveniences.
+
+<LI>A <A HREF="http://www.harmony-central.com/MIDI/">MIDI</A>
+sequencer and editor with textual event and piano roll display.
+
+<LI>Tool integration allowing music in MIDI form to be viewed and
+edited as notation, and notation to be sequenced.
+
+<LI>A scripting language ("Petal") for writing filters to process MIDI 
+tracks and notation staffs.
+
+<LI>Ability to produce <A
+HREF="http://www.leeds.ac.uk/music/Man/c_front.html">Csound</A> output.
+
+<LI>Support for <A
+HREF="http://www.tex.ac.uk/tex-archive/macros/musictex/">musicTeX</A>
+output for typesetting and printing (although it's rather shoddy and 
+normally needs quite a lot of hand-editing).
+
+<LI>Comprehensive hypertext help.
+
+<LI>Portability to several flavours of Unix, although only IRIX,
+Linux, FreeBSD and platforms that support the <A
+HREF="http://www.4front-tech.com/">OSS sound API</A> can actually make
+any noise so far.
+
+<LI>Ability to use your own MIDI playing program on systems where the
+built-in playback is unavailable or inadequate.
+
+<LI>Mostly POSIX-compliant ANSI C code, should you wish to try and
+port it to some other machine.
+
+</UL>
+
+<H3>Changes between 2.1 and 2.1pl2</H3>
+
+<H4>Editor</H4>
+<UL>
+<li>A number of bugs have been fixed.
+
+<li>MIDI channel numbers can be assigned to staffs at will, and will
+be saved in the <code>.rose</code> file.  This is intended to improve
+the support for percussion channels.
+</ul>
+
+<h4>Sequencer</h4>
+<ul>
+<li>The OSS code now uses <code>/dev/sequencer2</code> rather than
+<code>/dev/sequencer</code>, following a patch from Torsten Duwe for
+Caldera.
+</ul>
+
+<H3>Changes between 2.0.1 and 2.1</H3>
+
+<H4>Editor</H4>
+<UL>
+
+<LI>A full multi-level per-buffer Undo, with Redo, has been added.
+
+<LI>Automatic chord naming has been added to complement the chord
+    construction from names that was added to 2.0.1.
+
+<LI>The Editor can now do some optional experimental velocity
+    heuristics when writing out MIDI from a score with dynamic marks.
+    `Dynamic' is now a distinct Text field type. 
+
+<LI>There is a new search-and-replace function on combinations of
+    pitches in chords.
+
+<LI>Output to OpusTeX and PMX are now included as an alternative to
+    MusicTeX.  The OpusTeX output in particular needs more work, but
+    from now on it'll probably get more development time than the 
+    MusicTeX code.
+
+<LI>The Petal scripting language has been integrated, although so far
+    only with an initial proof-of-concept interface.
+
+<LI>The menus have been rearranged slightly.  There is a new Chord
+    menu, and the Tools menu has disappeared and most of its functions
+    moved onto File.
+
+<LI>Cut and Paste now retain any complete slurs, ties or dynamics
+    encountered.
+
+<LI>The palette has been extended to include breves and breve rests.
+
+<LI>There's a little vertical bar that follows the insertion cursor to 
+    track the insertion point (very exciting).
+
+<LI>A keyboard control for Transpose Up/Down has been added.
+
+<LI>The range of notes and rests available from the palette has been
+    extended to include breves.
+
+</UL>
+
+<H4>Sequencer</H4>
+<UL>
+
+<LI>The sequencing code has been completely rewritten for multiple
+    simultaneous devices, with a new device mapper library.  You can
+    send individual tracks to individual MIDI devices, and there is
+    a new All Device meta-device which routes events to (surprise!)
+    all the available devices.
+
+<LI>You can now step forwards and backwards through the piece, and
+    start playback at any point.
+
+<LI>Selected tracks can be muted during playback.
+
+<LI>The piano-roll now shows a piano keyboard layout, rather than
+    five-line staff layout.  It now shows note velocity information,
+    and is zoomable.
+
+<LI>Events can be opened and edited from event-list windows with a
+    double-click action.  All kinds of events can now be inserted
+    from the Event List menu.
+
+<LI>With a soundcard synth and OSS sound drivers, drum patches are
+    available on MIDI channel 10 (represented as channel 9 in
+    Rosegarden).
+
+<LI>The MIDI menu Reset functions are (partly) implemented.
+
+<LI>You can record while playing, although this hasn't been tested 
+    very thoroughly and shouldn't be expected to work reliably in 
+    this release.
+
+<LI>The Petal scripting language has been integrated, although so far
+    only with an initial proof-of-concept interface.
+
+</UL>
+
+<H4>In general</H4>
+<UL>
+
+<LI>File boxes work a bit better: some obvious things that didn't 
+    work before now do (click on the file name field, type in the name
+    of a directory and hit Return -- the directory will be listed in
+    the expected manner)
+
+<LI>The look and feel when using the 3d Athena widget set (Xaw3d) is
+    slightly improved.
+
+<LI>New "configure" and "do-install" scripts have been added to the
+    source distribution.
+
+<LI>This Web page has been overhauled, and there's a new FAQ file. 
+
+</UL>
+
+<H3>Changes between 2.0 beta 3 and 2.0.1</H3>
+
+<H4>Editor</H4>
+<UL>
+
+<LI>A few paltry keyboard modifiers have been added to marginally
+speed note entry.
+
+<LI> Selection has been improved: in addition to left-button drag, you
+can now double-click to select a whole bar, treble-click for the whole
+staff, and shift-click to extend an existing selection.  The selection
+now persists after scrolling (although still not after editing).
+
+<LI>You can now create chords from their guitar chord notation names,
+using some groovy code contributed by <A
+HREF="http://www.telegraph-road.org/">Guillaume Laurent</A>.
+
+<LI>MusicTeX output is a bit better, handling sign changes,
+complicated beamed groups, etc., more gracefully; but it still doesn't 
+write slurs.
+
+<LI>The Editor will, if requested (see below) attempt to track the
+Sequencer's MIDI playback on the musical score during play. 
+
+</UL>
+
+<H4>Sequencer</H4>
+<UL>
+
+<LI>FreeBSD explicitly available as a compile option, although we
+haven't been able to test it. 
+
+<LI>Playback dialog removed, and toolbar stop button added instead.
+
+<LI>Cursor changes during playback on Linux.
+
+<LI>Insert Program Change and Modify Event dialog boxes fixed.
+
+<LI>Default playback information always included <em>somewhere</em> in
+a track following recording.
+
+<LI>Linux MIDI device field is now editable.
+
+<LI>Recording paradigm for Linux has changed slightly.  Before it
+would wait for the first input event and start timing from there.
+This would mean that the first output event would occur at time 0 and
+generally get lost in the miasma of setup events at output time.  Now
+there's an arbitrary delay inserted when the first note comes back, so 
+that the whole track can be recorded and then played back as is.  Note
+that the sequence/record code will probably be thoroughly overhauled
+before the next release.
+
+<LI>Sequencer can now attempt to use the Editor to track the playback
+on a notation score during play.  Three levels of tracking are
+available (none, every bar or every note).
+
+</UL>
+
+<H4>In general</H4>
+
+<UL>
+
+<LI>The Rosegarden top box can now be started up with a filename as a
+command-line argument.  If there is a Rosegarden session already
+running, it will try to use that session to open the file.  MIDI files
+are opened with the Sequencer, and .rose files with the Editor.
+
+</UL>
+
+<H3>Changes between 2.0 beta 2 and 2.0 beta 3</H3>
+
+<P>No new features have been added; but some bugs have been fixed.
+<P>
+
+<H3>Changes between 2.0 beta 1 and 2.0 beta 2</H3>
+<H4>Editor</H4>
+
+<UL>
+
+<LI>The palette has been restyled; the Palette menu has disappeared,
+and notes, rests and clefs all occupy the one fixed palette.
+
+<LI>Key signatures are now available through a menu option on the Bar
+menu, with a key chooser dialogue box allowing selection visually (by
+number of sharps or flats) or by name. There is an option to transpose
+the affected part of the score when inserting a new key signature.
+
+<LI>The file format has changed. I/O of dynamic marks in particular is
+more reliable. Files saved with older versions can be imported and
+converted to the new format.
+
+<LI>Ties and slurs have been implemented.  <LI>The time signature is
+now associated with each bar instead of being stored as a separate
+musical object within the score. Time signatures thus no longer move
+around irritatingly during editing.
+
+</UL>
+<H4>Sequencer</H4>
+<UL>
+
+<LI>Linux USS-Lite sound support is now provided for recording and
+playback under Linux.
+
+<LI>Several glaring bugs, ancient and modern, have been fixed.
+
+<LI>You can now simply double-click on a track's name in the main 
+Track List to call up an event list or piano-roll window for that
+track.
+
+</UL>
+
+<H4>In general</H4>
+<UL>
+
+<LI>The file chooser dialogue boxes have changed slightly so as by
+default only to list files with the `right' suffix (.rose, 
+.mid etc). The full listings are still available as a menu option.
+</UL>
+
+<H3>Changes between 0.0 and 2.0 beta 1</H3>
+
+<H4>Editor</H4>
+<UL>
+
+<LI>Exporting notation files to MusicTeX format is now possible
+without using midi2tex. The resulting output is better than midi2tex
+normally produces, but still rather poor. It will improve in future
+releases.
+
+<LI>Triplets and other tuplets have been implemented, and are exported
+to MIDI with the correct timing.
+
+<LI>Hairpin dynamic marks have been added. 
+
+<LI>MIDI imported straight from a file (as opposed to through the
+Sequencer) can now be quantized before being converted to notation.
+
+</UL>
+<H4>Sequencer</H4>
+<UL>
+<LI>No significant changes. 
+</UL>
+<H4>In general</H4>
+<UL>
+
+<LI>All applications have acquired pictorial button toolbars to
+accelerate the more commonly used menu options.
+
+
+
+    </div>
+
+  </body>
+</html> 
+

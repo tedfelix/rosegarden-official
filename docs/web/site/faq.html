@@ -1,0 +1,629 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>Rosegarden FAQ</title>
+    <link rel="stylesheet" href="rose.css" media="screen">
+    <script type="text/javascript" src="rosenav.js"></script>
+    <meta name="robots" content="index">
+  </head>
+  <body>
+    <div id="heading">
+      <img src="logo.png" alt="" width="58" height="99"><img src="title-faq.png" alt="Rosegarden FAQ" width="400" height="83">
+    </div>
+
+    <div id="nav">
+    <script type="text/javascript">makeNav()</script>
+    <noscript>
+        <a href="index.html">home</a><br>
+        <a href="features.html">features</a><br><a href="faq.html">faq</a><br>
+        <a href="pictures.html">screenshots</a><br>
+        <a href="list.html">mailing-list</a><br>
+        <a href="development.html">development</a><br>
+        <a href="download.html">download</a><br>
+    </noscript>
+    </div>
+
+    <div id="main">
+
+<H3>Frequently Asked Questions about Rosegarden 2.1</H3>
+
+<P><I>In general</I>
+<OL TYPE="1" START="1">
+<LI><A HREF="#further"><span class="faqtoc">
+Who should I contact if this FAQ doesn't help me? 
+</span></a></LI>
+<LI><A HREF="#platforms"><span class="faqtoc">
+What platforms does Rosegarden run on?</span></a></LI>
+<LI><A HREF="#gpl"><span class="faqtoc">
+What are the licensing terms?</span></a></LI>
+</span></a></LI>
+</OL>
+
+<p><I>About the sequencer</I>
+<OL TYPE="1" START="4">
+<LI><A HREF="#playback"><span class="faqtoc">
+What hardware and software will I need if I want to hear anything?
+</span></a>
+<LI><A HREF="#recording"><span class="faqtoc">
+What hardware and software will I need if I want to record things?
+</span></a>
+<LI><A HREF="#playcfg"><span class="faqtoc">
+How do I configure the sequencer for MIDI on my Unix machine?
+</span></a>
+<LI><A HREF="#sb16"><span class="faqtoc">
+How do I play and record through my SoundBlaster-compatible soundcard
+in Linux?
+</span></a>
+<LI><A HREF="#unsupported"><span class="faqtoc">
+My Unix machine isn't supported for MIDI playback or recording from 
+the Sequencer.
+</span></a>
+<LI><A HREF="#muting"><span class="faqtoc">
+Some MIDI timing information is being ignored.
+</span></a>
+<LI><A HREF="#recplay"><span class="faqtoc">
+Can I hear the tracks I've got already when I'm recording?
+</span></a>
+<LI><A HREF="#csound"><span class="faqtoc">
+I can't get Csound to work. 
+</span></a>
+</OL>
+
+<p><i>About the notation editor</I>
+<OL TYPE="1" START="12">
+<LI><A HREF="#scores"><span class="faqtoc">
+What do I need to produce printed scores?
+</span></a>
+<LI><A HREF="#opustex"><span class="faqtoc">
+What about MusicTeX, OpusTeX and PMX?  What's the difference? 
+</span></a>
+<LI><A HREF="#counterpoint"><span class="faqtoc">
+Can I write counterpoint?
+</span></a>
+<LI><A HREF="#parts"><span class="faqtoc">
+How can I extract individual parts from a score?
+</span></a>
+<LI><A HREF="#volume"><span class="faqtoc">
+It doesn't do what I expect with the volume levels in MIDI output. 
+</span></a>
+</OL>
+
+<p><i>About the Petal scripting language</I>
+
+<OL TYPE="1" START="17">
+<LI><A HREF="#petal"><span class="faqtoc">
+What is Petal for?</span></a>
+<LI><A HREF="#petalw"><span class="faqtoc">
+Do I want it?</span></a>
+<LI><A HREF="#petalhow"><span class="faqtoc">
+How can I tell if Petal has been installed?  How do I make it work?</span></a>
+</OL>
+
+<p><i>About compilation and coding</I>
+<OL TYPE="1" START="20">
+<LI><A HREF="#warnings"><span class="faqtoc">
+I get a load of compile errors when I try to build Rosegarden.</span></a>
+<LI><A HREF="#gui"><span class="faqtoc">
+Why don't you use <I>(some superior user-interface toolkit)</I> ?</span></a> 
+<LI><A HREF="#contribute"><span class="faqtoc">
+I want to contribute some code. What shall I do?
+</span></a>
+</OL>
+
+<div class="faqanswer">
+<a href="#top"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp;
+<a name="further"><span class="faqheader">"Who should I contact if this FAQ doesn't help me?"</span></a>
+
+<p>General questions about installing, using and coding for Rosegarden
+can be sent to <A HREF="mailto:cannam@all-day-breakfast.com">Chris
+Cannam</A>.  Questions about MIDI setup and sequencing should be sent
+to <A HREF="mailto:bownie@bownie.com">Richard Bown</A>.  Questions about
+the Petal scripting language should be sent to <A
+HREF="mailto:glaurent@telegraph-road.org">Guillaume Laurent</A>.  Try <A
+HREF="mailto:cannam@all-day-breakfast.com,bownie@bownie.com,glaurent@telegraph-road.org">this
+link</A> to send mail to all three of us at once.
+
+<p>You might also want to consider joining the <A
+HREF="list.html">mailing-list</A> and asking questions
+there.
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="platforms"><span class="faqheader">"What platforms does Rosegarden run on?" </span></a>
+
+<p> Unix, Linux and OpenVMS.
+
+<p>Rosegarden does <b>not</b> run on Microsoft Windows, and it
+probably never will.
+
+<p>Binaries are available for Linux and SGI IRIX; for other machines,
+you will need to build it yourself from the source distribution.  We
+would expect this to work on FreeBSD, OpenBSD, Solaris, AIX and HP-UX
+at least, but we haven't necessarily tested it.
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="gpl"><span class="faqheader">"What are the licensing terms?" </span></a>
+
+<p> 
+
+<P>Rosegarden is free software, licensed under the <A
+HREF="http://www.fsf.org/">Free Software Foundation</A>'s GNU General
+Public Licence (GPL).  That gives you a lot of freedom to redistribute it
+and modify it as you please, so long as any modified version you
+choose to distribute is made available with source code under the same
+licence.
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="playback"><span class="faqheader">"What hardware and software will I need if I want to hear anything?" </span></a>
+
+<p> 
+
+While the notation editor and sequencer will build and run on most
+Unix machines, you'll need some sound hardware and/or drivers if you 
+want to be able to play anything audibly.  The following systems are
+known or expected to work:
+<UL>
+<LI>
+If you are running Linux or FreeBSD, you'll need the kernel 
+    sound drivers (<A
+HREF="http://www.4front-tech.com/ossfree/">OSS/Free</A>, OSS/Linux or
+the old VoxWare).  Any
+    external MIDI synth should play fine; some internal soundcards
+    will work, notably the SoundBlaster series.  Other cards <i>might</i> work, but we can't tell you which ones; it all depends on the drivers.
+
+<LI>
+If you are running SGI IRIX 5.x, you should be able to play
+    through any external MIDI synth; using IRIX 6.x, the internal
+    software synth should also work.  Older versions of Rosegarden
+    (up to and including 2.0.1) could also drive external synths
+    from the Indigo under IRIX 4.x; newer versions can't. 
+
+<LI>
+If you are running any other Unix system, you'll be able 
+    to make sounds if you have an <A
+HREF="http://www.4front-tech.com/oss.html">OSS</A> (Open Sound System)
+driver.
+    These are commercial drivers for various Unices; Rosegarden
+    should work with any of them, at least to drive external MIDI
+    devices.  See <A HREF="http://www.4front-tech.com/">4Front
+    Technologies</A> for details.
+
+<li>Finally, Rosegarden can use an external MIDI playback program such
+as <a href="http://www.goice.co.jp/member/mo/timidity/">TiMidity</a>
+to play music, although you don't get any control over the playback
+from within Rosegarden when using an external player.  To use an
+external playback program, use the "Play through Slave" menu
+function on the sequencer's File menu.
+</UL>
+<P>
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="recording"><span class="faqheader">"What hardware and software will I need if I want to record things?" </span></a>
+
+<p> 
+
+Rosegarden should be able to record on any system from which it can
+play.  In practice this probably isn't true, but we don't have many
+facilities for testing recording, so we don't really know. 
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="playcfg"><span class="faqheader">"How do I configure the sequencer for MIDI on my Unix machine?" </span></a>
+
+<p> 
+
+<P>If you're building Rosegarden yourself from a source distribution, 
+the configure script will try to determine what system you have and
+configure the compilation of Rosegarden accordingly.  In the Sequencer
+itself, most of the code is system-independent.  (The only exception
+is a small amount of code for the cosmetics of high-level user control
+over the system's handling of the I/O timing.)  The vast majority of 
+the platform dependent code is to be found in the Mapper subsystem.
+This code, as with the Sequencer, is conditionally compiled according
+to the system type and deals with all the details of supported UNIX
+systems.  The intention is that the specifics of what is compiled when
+and where should be transparent to the user during compilation: the
+configuration should be done for you.
+
+<P>Note however that Rosegarden doesn't have sound support for all 
+flavours of UNIX.  Check <A HREF="#playback">whether yours
+should be supported</A>, and <A HREF="#unsupported">what
+you can do about it if it isn't</A>. 
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="sb16"><span class="faqheader">"How do I play and record through my SoundBlaster-compatible soundcard
+in Linux?" </span></a>
+
+<p> 
+
+<P>First thing to do is to check how your OSS or OSS/Free system is setup
+on your Linux box.  Type <CODE>cat /dev/sndstat</CODE> to list what
+devices are available.  We are interested in two types, Midi and Synth
+devices.
+
+<P>Midi devices as far as Rosegarden are concerned are those that
+carry a hardware interface to an external MIDI instrument.  This could
+be a keyboard or a MIDI soundbox.  A Midi device can be used as a
+recording interface, but note that <I>Rosegarden 2.1 will take the
+first (i.e. 0th) Midi device as the Recording device</I>, it is not
+directly configurable.  Of course by recompiling the kernel the first
+Midi device could be changed...  On opening the Midi Setup dialog from
+the Midi menu on the Rosegarden Sequencer you will see the Record
+Device listed for you.  Note that on some cards the name of the device
+is misleading - for example my hardware MIDI interface is called
+"Sound Blaster".  Look at <CODE>/dev/sndstat</CODE> for the
+authoritative answer.
+
+<P>For playback there is more than MIDI device available.  The
+on-board synth (FM synth) on SB16 compatibles is initialised and
+usable by the Rosegarden Sequencer.  Depending on your kernel
+configuration and age of the Linux distribution you may be able to use
+other types of onboard synths (e.g. AWE-32 or GUS), but this is very
+much a matter of the driver configuration and the patch level of the
+particular system.  Sometimes a device could appear as available for
+playback when it won't actually make any noise on playback.  Examine 
+<CODE>/dev/sndstat</CODE> for the list of Synth devices available.
+
+<P>Playback devices can be set up by the user.  If more than one
+eligible playback device exists then another pseduo device, the
+"All" device becomes available.  This does what it says - plays a
+track to all devices available for playback.
+
+<P>There are two options for changing the playback device.  The
+current device is shown on the tracklist on the main sequencer window
+along with a track status (either Active or Mute, see Muting further
+on for an explanation of this behaviour).  On opening the Event list
+for a track you will notice the device is displayed at the bottom of
+the window.  This is a menu selector itself and by clicking on the
+device name you can select which device this track will play to.  The
+Track list is updated with your selection immediately.  Alternatively
+on the Track menu there is an option to "Change All to Device..."
+which allows you to quickly change all the tracks to a single device
+in the dialog.
+
+<P>Along with track devices the user can mute tracks.  The Track menu
+again offers two options to either Mute All Tracks or to Activate All
+Tracks.  Again on the Eventlist window for each track there is also a
+label with the current track status.  By clicking on the label the
+user can toggle the status of the track.
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="unsupported"><span class="faqheader">"My Unix machine isn't supported for MIDI playback or recording from 
+the Sequencer.  Is there anything I can do about that?" </span></a>
+
+<p> 
+
+Yes, if you know how to write code that uses your machine's MIDI 
+driver API.  (Assuming your OS <em>has</em> a MIDI driver API.
+If it hasn't, forget it.) 
+<P>
+
+Rosegarden uses a library (called Mapper) that maps generic musical
+events from the sequencer into whatever API your own MIDI drivers use,
+and vice versa.  It works somewhat like the Microsoft Windows MIDI
+mapper.  To add support for another MIDI driver, just write another
+mapper wrapper.  You will need a good knowledge of C, some knowledge
+of the device driver for your system's MIDI hardware, some spare time 
+and some spare hair.
+
+<P>If you get the Rosegarden source distribution and look in the
+"mapper" subdirectory under the top-level directory, you'll
+find a file called SUPPORT that tells you some stuff about how the
+Mapper library works.  If you need to know more, ask on the
+mailing-list or by email to Rich Bown, <A
+HREF="mailto:rich@clara.net">bownie@bownie.com</A>.
+
+<P>If you succeed in concocting a mapper for your hardware or
+operating-system MIDI driver, <em>please</em> send us a copy of the
+source so we can include it in the distribution.
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="muting"><span class="faqheader">"Some MIDI timing information is being ignored." </span></a>
+
+<P>If a track with Tempo or Time signature information is Muted, then
+this "Meta" information will not be used when playing the piece.
+This can cause some strange effects: for example the piece may play as
+fast as it possibly can!  Try un-muting all the tracks.
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="recplay"><span class="faqheader">"Can I hear the tracks I've got already when I'm recording?" </span></a>
+
+<p> 
+
+<P>Playback during recording is available as of Rosegarden 2.1
+although its behaviour (only proven on OSS/Linux) can be erratic.  All
+tracks will play on selected devices during recording.  Note also that
+with the fast forward and rewind button it is possible to record a new
+track starting at any point in the piece.  If you do not want to hear
+the tracks played during recording then simply mute them all from the
+Track menu - note however that muting all tracks may have undesirable
+effects on playback due to differing time signatures in recorded and
+already existing MIDI events.  A MIDI file with no tempo information
+will be given default a tempo of 120 bpm automatically following the
+completion of recording (by hitting the Stop button or selecting Stop
+from the File menu).
+
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="csound"><span class="faqheader">"I can't get Csound to work." </span></a>
+
+<p>  
+
+That's okay.  None of us understands Csound either. 
+<P>
+The sequencer only writes Csound score files; it can't create 
+orchestra files.  I suspect the score files produced by Rosegarden
+require a rather specific format of orchestra file, or else some
+postprocessing.
+<P>
+There's a fairly `official' overview of Csound resources at <A
+HREF="http://www.leeds.ac.uk/music/Man/c_front.html">the Leeds
+University Csound Front Page</A>, but to be honest, if you don't 
+already know an awful lot of stuff about Csound you'd probably be 
+better off spending a few months learning about it than trying to cut
+corners with Rosegarden.  That's just my opinion, speaking as someone 
+who hasn't got a clue either. 
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="scores"><span class="faqheader">"What do I need to produce printed scores?" </span></a>
+
+<p> 
+
+Rosegarden isn't a typesetting system and its capabilities for 
+producing scores are limited.  In the current version, the best it can
+do is to write a MusicTeX, OpusTeX or PMX (<A
+HREF="#opustex">q.v.</A>) file, which can then be
+processed and printed.  To do this, you'll need TeX with MusicTeX, 
+MusiXTeX or OpusTeX, and some kind of DVI processor or driver for your
+printer; to use PMX, you'll also need PMX itself.  If you don't know
+what TeX is, you should probably spend a couple of months finding out
+first.  <P> Future versions of Rosegarden will also be able to produce
+PostScript output directly, which should be easier for many people.
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="opustex"><span class="faqheader">"What about MusicTeX, OpusTeX and PMX?  What's the difference?" </span></a>
+
+<p>  
+
+These are all music-printing tools that use the TeX typesetting
+engine.  They offer the only way, at the moment, of printing music
+from Rosegarden, but you'll need a working TeX installation before you 
+can install and use any of them.
+
+<UL>
+
+<LI><A HREF="ftp://ftp.gmd.de/music/musictex/">MusicTeX</A> is the
+oldest of these macro packages, and is no longer actively being
+developed.  Instead development work has divided into two derived
+packaged: MusiXTeX and OpusTeX.  <A
+HREF="ftp://ftp.gmd.de/music/musixtex">MusiXTeX</A> is designed to
+be able to process MusicTeX scores, though, so you can use
+Rosegarden's MusicTeX export facility with MusiXTeX as well. 
+
+<LI><A HREF="ftp://ftp.tex.ac.uk/incoming/opustex/atwork/">OpusTeX</A>
+is also derived from MusicTeX, but is not back-compatible, aiming to
+be simple, general and efficient rather than inclusive.  It looks
+interesting for the future but it's still relatively young, having yet 
+to reach an official 1.0 release, and keeps changing.  For the moment
+Rosegarden's OpusTeX export is probably mostly of interest to people 
+who use OpusTeX already.
+
+<LI><A HREF="ftp://ftp.gmd.de/music/musixtex/software/pmx/">PMX</A> is
+a preprocessor for MusiXTeX: it takes input in a simple ASCII format
+and produces MusiXTeX output (which can only be used with MusiXTeX,
+not MusicTeX or OpusTeX).  Because the input format is
+straightforward, it's easier for Rosegarden to produce mechanically. 
+You therefore get better output, mostly, by using this export option,
+processing through PMX and then MusiXTeX.  PMX can't cope with very 
+complicated scores, but then at the moment neither can Rosegarden.
+
+</UL>
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="counterpoint"><span class="faqheader">"Can I write counterpoint?" </span></a>
+
+<p> 
+
+If you mean, can you write more than one voice onto a single staff
+with differing time values, then no.  Rosegarden sees a staff as a
+succession of chords, each containing a set of notes of equal length.
+(Okay, so there are rests and groups and things too, but that's 
+basically it.)  If you want to write counterpoint, you'll have to use 
+more than one staff.  I'm sorry.  (We hope this situation might 
+change, of course, but at the moment that's how it is.) 
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="parts"><span class="faqheader">"How can I extract individual parts from a score?" </span></a>
+
+<p> 
+
+Use cut-and-paste, for the moment.  If you want to extract a single
+staff: first create a new piece with just one staff in it; then
+outline the whole staff you want to extract on the original piece (you
+can do that by triple-clicking the mouse on it in edit mode); then use
+Copy from the Edit menu, and go to the new piece and use Paste.
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="volume"><span class="faqheader">"It doesn't do what I expect with the volume levels in MIDI playback." </span></a>
+
+<p>  
+
+By default, the Editor ignores any dynamics you've put in the score 
+when it turns the score into MIDI.  It will, however, put some
+emphasis on the first note in each bar.  Both of these things can be
+changed.
+<P>
+If you want to stop the Editor adding emphasis to the first note of
+each bar, you should change the "midiBarEmphasis" resource in the
+supplied resource file (normally just called Rosegarden) before you
+run the Editor.  If you don't define this at all in the file, it'll
+default to 15, which means the Editor will add 15 points of MIDI
+amplitude to the first note in each bar.  (MIDI amplitude is measured
+on a scale of 0 to 127.)  Set it to zero, and these notes will be
+treated the same way as all the others.
+<P>
+The Editor also contains some rather experimental code for doing other
+dynamics, which is switched off by default because it's, well, rather 
+experimental.  You can elect to use this by setting the "midiDynamics"
+resource to True in the resource file; the Editor will then try to
+observe hairpin dynamics and to follow textual indications that have
+been explicitly entered as dynamics using the Dynamic function on the
+Text menu.  (In general, it gets a bit confused if you have lots of
+hairpins with few textual marks.)  You can't (yet) change the 
+amplitudes it assigns to the various textual markings.
+<P>
+One other thing you can't control is that the Editor will always add a 
+bit of emphasis to notes that have accent ("&gt;") marks over them.  If
+you don't want it to, don't use accents.
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="petal"><span class="faqheader">"What is Petal for?" </span></a>
+
+<p> 
+
+<P>Petal is a scripting language, similar in principle to Cakewalk's
+"CAL".  It is based on Tcl and TclMIDI.
+
+<P>Its main use is to write filters, to automatically process your
+MIDI or notation files. Filters add new functionalities to Rosegarden
+the same way Emacs Lisp macros do to Emacs, or shell scripts do to
+your regular command line. More generally, you could use it for many
+more complex things, like algorithmic composition.
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="petalw"><span class="faqheader">"Do I want it?" </span></a>
+
+<p> 
+
+<P>Hard to tell <CODE>:-)</CODE>. Consider all the things you can do
+with your favourite text editor: yet sometimes, you leave it and get a
+tool like sed, awk, grep, Perl, whatever to perform a stupid,
+systematic job which would be an incredible burden to do
+interactively. That's what Petal is intended for. 
+
+<p><b>But</b>, at the moment it seems that whatever the replacement
+for Rosegarden 2.1 looks like, it will not support the current
+Tcl-based form of the Petal scripting language.  There will probably
+eventually be some sort of scripting capability in future versions of
+Rosegarden, but it will not be Petal.
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="petalhow"><span class="faqheader">"How can I tell if Petal has been installed?  How do I make it
+work?" </span></a>
+
+<p> 
+
+<P>If you're <b>compiling from sources</B>, Petal will only be built 
+if you have Tcl v7.5 and <A
+HREF="http://madonna.me.berkeley.edu/~greg/tclmidi/">TclMIDI</A>
+installed, and if the location of TclMIDI is in your
+<CODE>TCLLIBPATH</CODE>.
+
+<P>Check what the <CODE>configure</CODE> script tells you when you
+start building Rosegarden: it should let you know if it isn't going to 
+build Petal.  If it <I>has</I> been built, you should have a <CODE>Petal.so</CODE>
+file in the rosegarden/petal directory, which the
+<CODE>do-install</CODE> script should install for you in a sensible
+place.
+
+<P>If you're <b>installing from a binary distribution</B>, the Petal 
+shared-object and Tcl files will be installed regardless (if they're 
+included in the distribution at all -- check for <CODE>Petal.so</CODE> in the
+tarfile).  You won't be able to use them unless you have Tcl v7.5 or 
+newer and your <CODE>TCLLIBPATH</CODE> is set correctly; if you want
+to use them from the sequencer, you'll also need TclMIDI. 
+
+<P>Note that although <CODE>TCLLIBPATH</CODE> is an environment
+variable to be set from the shell, <b>it will be interpreted as a Tcl
+list</B>, not a conventional shell path, so it must use <b>spaces for
+delimiters instead of colons</B>.  Thus for instance
+<PRE>    "/usr/lib/tclmidi&nbsp;/home/tcl"</PRE> is a valid
+<CODE>TCLLIBPATH</CODE>, while
+<PRE>    "/usr/lib/tclmidi:/home/tcl"</PRE> is extremely unlikely to make
+sense.  (This is not our fault -- it's a Tcl feature.) 
+
+<P>If Petal has not been installed correctly, the `Filter' menu will 
+be inactivated on the sequencer and editor windows.
+
+<P>Of course, once you've installed it, you then have to write some 
+filters if you want it to be of much use.  The best way to start is to
+check the sample scripts: <CODE>harmonizer.tcl</CODE> and
+<CODE>pattern.tcl</CODE>.  To continue from there, read the Petal
+documentation: there's a copy of it in the Rosegarden help. 
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="warnings"><span class="faqheader">"I get a load of compile errors when I try to build Rosegarden." </span></a>
+
+<p> 
+
+<P>Well.  Could be anything, really.  But if you're getting errors 
+about undefined system functions or that look like inconsistencies in
+system headers, the first thing to try is to remove the
+<CODE>-DPOSIX_PLEASE</CODE> from the DEFINES line of the top-level
+Makefile (after running <CODE>configure</CODE>) and rebuild.
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="gui"><span class="faqheader">"Why don't you use <I>(some superior user-interface toolkit)</I> ?" </span></a>
+
+<p>  
+
+We are doing.  See the <A HREF="development.html">developments page</A>.
+
+</div>
+<div class="faqanswer">
+<a href="#"><img src="block.gif" alt="^ " width="8" height="8" border="2"></a>&nbsp; 
+<a name="gui"><span class="faqheader">"I want to contribute some code.  What shall I do?" </span></a>
+
+<p>If you're planning anything substantial, it might be better to wait
+and hope that our <A HREF="development.html">new development
+series</A> soon reaches a stage at which it's worth contributing to.
+
+<P>Nonetheless, fixes to the current code -- or even extensions -- are
+still welcome.  If you have a piece of code you'd like to see
+included, please contact <A
+HREF="mailto:cannam@all-day-breakfast.com">Chris</A>.
+
+      </div>
+    </div>
+
+  </body>
+</html> 
+
