@@ -95,8 +95,8 @@ AudioFileManager::getDirectory(const std::string &path)
     std::string rS = path;
     unsigned int pos = rS.find_last_of("/");
 
-    if (pos > 0 && pos < rS.length())
-        rS = rS.substr(0, pos);
+    if (pos > 0 && ( pos + 1 ) < rS.length())
+        rS = rS.substr(0, pos + 1);
 
     return rS;
 }
@@ -109,9 +109,16 @@ unsigned int
 AudioFileManager::insertFile(const std::string &name,
                              const std::string &fileName)
 {
-    // see if we can find the file
-    std::string foundFileName = getFileInPath(fileName);
+    // first try to expany any beginning tilde
+    std::string foundFileName = substituteTildeForHome(fileName);
 
+    // if we've expanded and there's no absolute path available
+    // then try to find it in audio file directory.
+    //
+    if (foundFileName.substr(0,1) != std::string("/"))
+       foundFileName = getFileInPath(foundFileName);
+
+    // bail if we haven't found any reasonable filename
     if (foundFileName == "")
         return false;
 
@@ -179,18 +186,26 @@ AudioFileManager::insertFile(const std::string &name,
                              const std::string &fileName,
                              unsigned int id)
 {
-    std::string foundFileName = getFileInPath(fileName);
+    // first try to expany any beginning tilde
+    std::string foundFileName = substituteTildeForHome(fileName);
 
+    // if we've expanded and there's no absolute path available
+    // then try to find it in audio file directory.
+    //
+    if (foundFileName.substr(0,1) != std::string("/"))
+       foundFileName = getFileInPath(foundFileName);
+
+    // If no joy here then we can't find this file
     if (foundFileName == "")
         return false;
 
-    // make sure we don't have one hanging around already
+    // make sure we don't have a file of this ID hanging around already
     removeFile(id);
-
 
     // and insert
     AudioFile *aF = new AudioFile(id, name, foundFileName);
 
+    // Test the file
     if (aF->open() == false)
     {
         delete aF;
@@ -240,6 +255,13 @@ AudioFileManager::setLastAddPath(const std::string &path)
     //
     if (hPath[hPath.size() - 1] != '/')
         hPath += std::string("/");
+
+    // get the home directory
+    if (hPath[0] == '~')
+    {
+        hPath.erase(0, 1);
+        hPath = std::string(getenv("HOME")) + hPath;
+    }
 
     m_lastAddPath = hPath;
 }
@@ -396,26 +418,86 @@ AudioFileManager::getLastAudioFile()
     return audioFile;
 }
 
+std::string
+AudioFileManager::substituteHomeForTilde(const std::string &path)
+{
+    std::string rS = path;
+    std::string homePath = std::string(getenv("HOME"));
 
-// Export audio file
+    // if path length is less than homePath then just return unchanged
+    if (rS.length() < homePath.length())
+        return rS;
+
+    // if the first section matches the path then substitute
+    if (rS.substr(0, homePath.length()) == homePath)
+    {
+        rS.erase(0, homePath.length());
+        rS = "~" + rS;
+    }
+
+    return rS;
+}
+
+std::string
+AudioFileManager::substituteTildeForHome(const std::string &path)
+{
+    std::string rS = path;
+    std::string homePath = std::string(getenv("HOME"));
+
+    if (rS.substr(0, 2) == std::string("~/"))
+    {
+        rS.erase(0, 1); // erase tilde and prepend HOME env
+        rS = homePath + rS;
+    }
+
+    return rS;
+}
+
+
+
+// Export audio files and assorted bits and bobs - make sure
+// that we store the files in a format that's user independent
+// so that people can pack up and swap their songs (including
+// audio files) and shift them about easily.
+//
 std::string
 AudioFileManager::toXmlString()
 {
     std::stringstream audioFiles;
+    std::string audioPath = substituteHomeForTilde(m_audioPath);
 
     audioFiles << "<audiofiles>" << std::endl;
     audioFiles << "    <audioPath value=\""
-               << m_audioPath << "\"/>" << std::endl;
+               << audioPath << "\"/>" << std::endl;
 
+    std::string lastAddPath = substituteHomeForTilde(m_lastAddPath);
     audioFiles << "    <audioLastAddPath value =\""
-               << m_lastAddPath << "\"/>" << std::endl;
+               << lastAddPath << "\"/>" << std::endl;
+
+    std::string fileName;
     std::vector<AudioFile*>::iterator it;
+
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
     {
+        fileName = (*it)->getFilename();
+
+        // attempt two substitutions - If the prefix to the filename
+        // is the same as the audio path then we can dock the prefix
+        // as it'll be added again next time.  If the path doesn't
+        // have the audio path in it but has our home directory in it
+        // then swap this out for a tilde '~'
+        //
+        cout << "DIR = " << getDirectory(fileName) << " : "
+                " PATH = " << m_audioPath << endl;
+        if (getDirectory(fileName) == m_audioPath)
+            fileName = getShortFilename(fileName);
+        else
+            fileName = substituteHomeForTilde(fileName);
+
         audioFiles << "    <audio id=\""
                    << (*it)->getId()
                    << "\" file=\""
-                   << (*it)->getFilename()
+                   << fileName
                    << "\" label=\""
                    << encode((*it)->getName())
                    << "\"/>" << std::endl;

@@ -63,6 +63,7 @@ public slots:
     void slotAdd();
     void slotDeleteSelected();
     void slotPlayPreview();
+    void slotRenameSelected();
 
     void slotEnableButtons();
 
@@ -82,6 +83,7 @@ protected:
     QPushButton      *m_addButton;
     QPushButton      *m_deleteButton;
     QPushButton      *m_playButton;
+    QPushButton      *m_renameButton;
 
     AudioFileManager *m_audioFileManager;
 

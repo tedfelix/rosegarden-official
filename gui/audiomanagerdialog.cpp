@@ -26,6 +26,7 @@
 #include <qlistbox.h>
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qinputdialog.h>
 
 #include "audiomanagerdialog.h"
 
@@ -52,6 +53,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_addButton    = new QPushButton(i18n("Add File"), v);
     m_deleteButton = new QPushButton(i18n("Delete File"), v);
     m_playButton   = new QPushButton(i18n("Play File"), v);
+    m_renameButton = new QPushButton(i18n("Rename File"), v);
     m_fileList     = new QListBox(h);
 
     // a minimum width for the list box
@@ -61,6 +63,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     connect(m_deleteButton, SIGNAL(released()), SLOT(slotDeleteSelected()));
     connect(m_addButton, SIGNAL(released()), SLOT(slotAdd()));
     connect(m_playButton, SIGNAL(released()), SLOT(slotPlayPreview()));
+    connect(m_renameButton, SIGNAL(released()), SLOT(slotRenameSelected()));
 
     // connect selection mechanism
     connect(m_fileList, SIGNAL(selectionChanged()), SLOT(slotEnableButtons()));
@@ -83,6 +86,7 @@ AudioManagerDialog::populateFileList()
     m_fileList->clear();
     m_deleteButton->setDisabled(true);
     m_playButton->setDisabled(true);
+    m_renameButton->setDisabled(true);
 
     if (m_audioFileManager->begin() == m_audioFileManager->end())
     {
@@ -227,8 +231,40 @@ AudioManagerDialog::slotEnableButtons()
 {
     m_deleteButton->setDisabled(false);
     m_playButton->setDisabled(false);
+    m_renameButton->setDisabled(false);
 }
 
+void
+AudioManagerDialog::slotRenameSelected()
+{
+    AudioFile *audioFile = getCurrentSelection();
+
+    if (audioFile == 0)
+        return;
+
+    bool ok = false;
+#ifdef RGKDE3
+    QString newText = QInputDialog::getText(
+                                 QString("Change Audio File label"),
+                                 QString("Enter new label"),
+                                 QLineEdit::Normal,
+                                 QString(audioFile->getName().c_str()),
+                                 &ok,
+                                 this);
+#else
+    QString newText = QInputDialog::getText(
+                                 QString("Change Audio File label"),
+                                 QString("Enter new label"),
+                                 QString(audioFile->getName().c_str()),
+                                 &ok,
+                                 this);
+#endif
+
+    if ( ok && !newText.isEmpty() )
+        audioFile->setName(std::string(newText));
+
+    populateFileList();
+}
 
 void
 AudioManagerDialog::closeEvent(QCloseEvent *e)

@@ -142,6 +142,13 @@ public:
     //
     std::string getDirectory(const std::string &path);
 
+    // Attempt to subsititute a tilde '~' for a home directory
+    // to make paths a little more generic when saving.  Also
+    // provide the inverse function as convenience here.
+    //
+    std::string substituteHomeForTilde(const std::string &path);
+    std::string substituteTildeForHome(const std::string &path);
+
 private:
     std::string getFileInPath(const std::string &file);
 

@@ -84,7 +84,9 @@ public:
     // 
     std::vector<float> getPreview(const RealTime &resolution);
 
+    void setName(const std::string &name) { m_name = name; }
     std::string getName() const { return m_name; }
+
     unsigned int getId() const { return m_id; }
     unsigned int getBitsPerSample() const { return m_bitsPerSample; }
     unsigned int getSampleRate() const { return m_sampleRate; }
