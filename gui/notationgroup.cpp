@@ -57,7 +57,8 @@ NotationGroup::height(const NELIterator &i, const Clef &clef, const Key &key)
 
 NotationGroup::Beam
 NotationGroup::calculateBeam(const NotePixmapFactory &npf,
-                             const Clef &clef, const Key &key)
+                             const Clef &clef, const Key &key,
+                             int width)
 {
     iterator i;
     Beam beam;
@@ -97,8 +98,9 @@ NotationGroup::calculateBeam(const NotePixmapFactory &npf,
         // strictly perhaps not getLongestNote(), but in practice I
         // doubt if we'll ever really support chords that have notes
         // of differing lengths:
+        Event *e = (*chord.getLongestNote())->event();
 
-        Event::timeT d = (*chord.getLongestNote())->event()->getDuration();
+        Event::timeT d = e->getDuration();
         totalDuration += d;
         if (d < shortestDuration) shortestDuration = d;
         if (d >  longestDuration)  longestDuration = d;
@@ -127,12 +129,35 @@ NotationGroup::calculateBeam(const NotePixmapFactory &npf,
         while (*i != chord.getFinalNote()) ++i;
     }
 
-    
+    // shortestWidth is the screen width of shortest note in group,
+    // used as a multiplier for widths; shortestDuration is the length
+    // of that note (already calculated)
+    int shortestWidth;
+    if (totalDuration == 0 || width == 0) {
+        shortestWidth = npf.getNoteBodyWidth() + 2;
+    } else {
+        shortestWidth = (width * shortestDuration) / totalDuration;
+    }
+
+    static double gradients[] = { 0.1, 0.17, 0.3 };
+    int diff = firstHeight - lastHeight;
+    if (diff < 0) diff = 0;
+
+    if (angle == 0 || angle == -2) {    // nonincreasing, nondecreasing group
+        if (diff > 2)       beam.gradient = gradients[0];
+        else                beam.gradient = 0.0;
+    } else {                                        // some overall direction
+        if (diff > 4)       beam.gradient = gradients[2];
+        else if (diff > 3)  beam.gradient = gradients[1];
+        else                beam.gradient = gradients[0];
+    }
+    if (lastHeight > firstHeight) beam.gradient = -beam.gradient;
+
+    if (beam.aboveNotes) {
+        int nearestHeight = topHeight + 1;
+        //???
+    } //... else
 
     return beam;
 }
 
-
-    
-
-    
