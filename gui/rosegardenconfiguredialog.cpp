@@ -191,7 +191,21 @@ void GeneralConfigurationPage::apply()
     m_cfg->writeEntry("midipitchoffset", offset);
 
     QString externalAudioEditor = getExternalAudioEditor();
-    m_cfg->writeEntry("externalaudioeditor", externalAudioEditor);
+
+    QFileInfo info(externalAudioEditor);
+    if (!info.exists() || !info.isExecutable())
+    {
+        QString errorStr =
+             i18n("External editor \"") + externalAudioEditor +
+             ("\" not found or not executable.\nReverting to last editor.");
+        KMessageBox::error(this, errorStr);
+
+        // revert on gui
+        m_externalAudioEditorPath->
+            setText(m_cfg->readEntry("externalaudioeditor", ""));
+    }
+    else
+        m_cfg->writeEntry("externalaudioeditor", externalAudioEditor);
 
 
 }

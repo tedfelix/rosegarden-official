@@ -585,6 +585,10 @@ RosegardenSequencerApp::record(const Rosegarden::RealTime &time,
     if (m_audioRecordLatency > recordLatency)
         recordLatency = m_audioRecordLatency;
 
+    // Ensure that playback is initialised
+    //
+    m_sequencer->initialisePlayback(m_songPosition);
+
     return play(time, recordLatency, fetchLatency, readAhead);
 }
 

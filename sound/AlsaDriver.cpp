@@ -1893,7 +1893,7 @@ AlsaDriver::jackProcess(jack_nframes_t nframes, void *arg)
 
                     if ((*it)->getStatus() == PlayableAudioFile::DEFUNCT)
                     {
-                        if (samplePtr - origSamplePtr > samples.length())
+                        if (samplePtr - origSamplePtr > int(samples.length()))
                         {
                             /*
                             cout << "FINAL FRAME BREAKING - "

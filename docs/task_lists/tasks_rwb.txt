@@ -1,13 +1,17 @@
 0.2 tasks
 =========
 
+o Sync audio and MIDI
+
+o Get first fetch audio working - partial segments
+
 o Fix Audio Segment splitting
 
 o Get Segment joining working
 
 o Segment previews still buggy
 
-o Realtime downsampling buggy
+o Realtime downsampling buggy (8 bit)
 
 o Prove and improve simultaneous audio and MIDI track performance
 
