@@ -1197,7 +1197,7 @@ BankEditorDialog::checkModified()
     //     int reply = KMessageBox::questionYesNo(this,
     //                                            i18n("Apply pending changes?"));
 
-    ModifyDeviceCommand *command;
+    ModifyDeviceCommand *command = 0;
     Rosegarden::MidiDevice *device = getMidiDevice(m_lastDevice);
     if (!device) {
 	RG_DEBUG << "%%% WARNING : BankEditorDialog::checkModified() - NO MIDI DEVICE for device "
@@ -1211,13 +1211,9 @@ BankEditorDialog::checkModified()
                                           m_lastDevice,
                                           m_deviceNameMap[m_lastDevice],
                                           device->getLibrarianName(),
-                                          device->getLibrarianEmail(),
-					  0,
-                                          0,
-                                          0,
-					  0,
-                                          true, // overwrite
-					  true); // rename
+                                          device->getLibrarianEmail()); // rename
+
+        command->clearBankAndProgramList();
 
     } else {
 
@@ -1235,13 +1231,11 @@ BankEditorDialog::checkModified()
                                           m_lastDevice,
                                           m_deviceNameMap[m_lastDevice],
                                           device->getLibrarianName(),
-                                          device->getLibrarianEmail(),
-					  &variation,
-                                          &m_bankList,
-                                          &m_programList,
-					  0,
-                                          true,
-					  true);
+                                          device->getLibrarianEmail());
+
+        command->setVariation(variation);
+        command->setBankList(m_bankList);
+        command->setProgramList(m_programList);
     }
 
     addCommandToHistory(command);
@@ -1341,7 +1335,7 @@ BankEditorDialog::slotApply()
 {
     RG_DEBUG << "BankEditorDialog::slotApply()\n";
 
-    ModifyDeviceCommand *command;
+    ModifyDeviceCommand *command = 0;
     
     Rosegarden::MidiDevice *device = getMidiDevice(m_lastDevice);
 
@@ -1351,17 +1345,16 @@ BankEditorDialog::slotApply()
     if (m_bankList.size() == 0 && m_programList.size() == 0 &&
             m_deleteAll == false)
     {
+        RG_DEBUG << "BankEditorDialog::slotApply() : m_bankList size = 0\n";
+
         command = new ModifyDeviceCommand(m_studio,
                                           m_lastDevice,
                                           m_deviceNameMap[m_lastDevice],
                                           device->getLibrarianName(),
-                                          device->getLibrarianEmail(),
-					  0,
-                                          0,
-                                          0,
-					  0,
-                                          true,
-					  true);
+                                          device->getLibrarianEmail());
+
+        command->clearBankAndProgramList();
+
     }
     else
     {
@@ -1375,17 +1368,18 @@ BankEditorDialog::slotApply()
 	    }
 	}
 
+        RG_DEBUG << "BankEditorDialog::slotApply() : m_bankList size = "
+                 << m_bankList.size() << endl;
+
         command = new ModifyDeviceCommand(m_studio,
                                           m_lastDevice,
                                           m_deviceNameMap[m_lastDevice],
                                           device->getLibrarianName(),
-                                          device->getLibrarianEmail(),
-					  &variation,
-                                          &m_bankList,
-                                          &m_programList,
-					  0,
-                                          true,
-					  true);
+                                          device->getLibrarianEmail());
+
+        command->setVariation(variation);
+        command->setBankList(m_bankList);
+        command->setProgramList(m_programList);
 
     }
     addCommandToHistory(command);
@@ -1526,10 +1520,6 @@ BankEditorDialog::slotDeleteBank()
 
         if (reply == KMessageBox::Yes)
         {
-            int newBank = currentBank - 1;
-        
-            if (newBank < 0) newBank = 0;
-
 	    MidiBank bank = m_bankList[currentBank];
 
             // Copy across all programs that aren't in the doomed bank
@@ -1550,7 +1540,9 @@ BankEditorDialog::slotDeleteBank()
             keepBankListForNextPopulate();
 
             // the listview automatically selects a new current item
+            m_listView->blockSignals(true);
             delete currentItem;
+            m_listView->blockSignals(false);
 
             // Don't allow pasting from this defunct device
             //
@@ -1861,7 +1853,7 @@ BankEditorDialog::slotImport()
 	    return;
 	}
 
-	KCommand *command = 0;
+	ModifyDeviceCommand *command = 0;
 
 	Rosegarden::BankList banks(dialog->getBanks());
 	Rosegarden::ProgramList programs(dialog->getPrograms());
@@ -1878,19 +1870,23 @@ BankEditorDialog::slotImport()
 	    librarianEmail = "";
 	}
 
-	command =
-	    new ModifyDeviceCommand(
-		m_studio,
-		deviceItem->getDeviceId(),
-		dialog->getDeviceName(),
-		librarianName,
-		librarianEmail,
-		dialog->shouldOverwriteBanks() ? &variation : 0,
-		dialog->shouldImportBanks() ? &banks : 0,
-		dialog->shouldImportBanks() ? &programs : 0,
-		dialog->shouldImportControllers() ? &controls : 0,
-		dialog->shouldOverwriteBanks(),
-		dialog->shouldRename());
+	command = new ModifyDeviceCommand(m_studio,
+                                          deviceItem->getDeviceId(),
+                                          dialog->getDeviceName(),
+                                          librarianName,
+                                          librarianEmail);
+        
+        if (dialog->shouldOverwriteBanks())
+            command->setVariation(variation);
+        if (dialog->shouldImportBanks()) {
+            command->setBankList(banks);
+            command->setProgramList(programs);
+        }
+        if (dialog->shouldImportControllers())
+            command->setControlList(controls);
+
+        command->setOverwrite(dialog->shouldOverwriteBanks());
+        command->setRename(dialog->shouldRename());
 
 	addCommandToHistory(command);
 

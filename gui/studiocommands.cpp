@@ -35,42 +35,61 @@ ModifyDeviceCommand::ModifyDeviceCommand(
 	Rosegarden::DeviceId device,
         const std::string &name,
         const std::string &librarianName,
-        const std::string &librarianEmail,
-	Rosegarden::MidiDevice::VariationType *variationType,
-        const Rosegarden::BankList *bankList,
-        const Rosegarden::ProgramList *programList,
-	const Rosegarden::ControlList *controlList,
-        bool overwrite,
-	bool rename):
+        const std::string &librarianEmail):
     KNamedCommand(getGlobalName()),
     m_studio(studio),
     m_device(device),
     m_name(name),
     m_librarianName(librarianName),
     m_librarianEmail(librarianEmail),
-    m_overwrite(overwrite),
-    m_rename(rename),
+    m_overwrite(true),
+    m_rename(true),
     m_changeVariation(false),
     m_changeBanks(false),
     m_changePrograms(false),
-    m_changeControls(false)
+    m_changeControls(false),
+    m_clearBankAndProgramList(false)
 {
-    if (variationType) {
-	m_variationType = *variationType;
-	m_changeVariation = true;
-    }
-    if (bankList) {
-	m_bankList = *bankList;
-	m_changeBanks = true;
-    }
-    if (programList) {
-	m_programList = *programList;
-	m_changePrograms = true;
-    } 
-    if (controlList) {
-	m_controlList = *controlList;
-	m_changeControls = true;
-    }
+//     if (variationType) {
+// 	m_variationType = *variationType;
+// 	m_changeVariation = true;
+//     }
+//     if (bankList) {
+// 	m_bankList = *bankList;
+// 	m_changeBanks = true;
+//     }
+//     if (programList) {
+// 	m_programList = *programList;
+// 	m_changePrograms = true;
+//     } 
+//     if (controlList) {
+// 	m_controlList = *controlList;
+// 	m_changeControls = true;
+//     }
+}
+
+void ModifyDeviceCommand::setVariation(Rosegarden::MidiDevice::VariationType variationType)
+{
+    m_variationType = variationType;
+    m_changeVariation = true;
+}
+
+void ModifyDeviceCommand::setBankList(const Rosegarden::BankList &bankList)
+{
+    m_bankList = bankList;
+    m_changeBanks = true;
+}
+
+void ModifyDeviceCommand::setProgramList(const Rosegarden::ProgramList &programList)
+{
+    m_programList = programList;
+    m_changePrograms = true;
+}
+
+void ModifyDeviceCommand::setControlList(const Rosegarden::ControlList &controlList)
+{
+    m_controlList = controlList;
+    m_changeControls = true;
 }
 
 void
@@ -105,16 +124,27 @@ ModifyDeviceCommand::execute()
 
     if (m_overwrite)
     {
-	if (m_changeBanks) midiDevice->replaceBankList(m_bankList);
-        if (m_changePrograms) midiDevice->replaceProgramList(m_programList);
+        if (m_clearBankAndProgramList) {
+            midiDevice->clearBankList();
+            midiDevice->clearProgramList();
+        } else {
+            if (m_changeBanks) midiDevice->replaceBankList(m_bankList);
+            if (m_changePrograms) midiDevice->replaceProgramList(m_programList);
+        }
+        
         if (m_rename) midiDevice->setName(m_name);
         midiDevice->setLibrarian(m_librarianName, m_librarianEmail);
     }
     else
     {
-        if (m_changeBanks) midiDevice->mergeBankList(m_bankList);
-        if (m_changePrograms) midiDevice->mergeProgramList(m_programList);
-
+        if (m_clearBankAndProgramList) {
+            midiDevice->clearBankList();
+            midiDevice->clearProgramList();
+        } else {
+            if (m_changeBanks) midiDevice->mergeBankList(m_bankList);
+            if (m_changePrograms) midiDevice->mergeProgramList(m_programList);
+        }
+        
 	if (m_rename) {
 	    std::string mergeName = midiDevice->getName() +
 		std::string("/") + m_name;

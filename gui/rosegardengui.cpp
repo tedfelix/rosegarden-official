@@ -5303,18 +5303,20 @@ RosegardenGUIApp::slotImportStudioFromFile(const QString &file)
 		    Rosegarden::BankList bl(md->getBanks());
 		    Rosegarden::ProgramList pl(md->getPrograms());
 		    Rosegarden::ControlList cl(md->getControlParameters());
-		    command->addCommand
-			(new ModifyDeviceCommand(&oldStudio,
-						 *di,
-						 md->getName(),
-						 md->getLibrarianName(),
-						 md->getLibrarianEmail(),
-						 &variation,
-						 &bl,
-						 &pl,
-						 &cl,
-						 true,
-						 md->getName() != ""));
+
+                    ModifyDeviceCommand* mdCommand = new ModifyDeviceCommand(&oldStudio,
+                                                                             *di,
+                                                                             md->getName(),
+                                                                             md->getLibrarianName(),
+                                                                             md->getLibrarianEmail());
+                    mdCommand->setVariation(variation);
+                    mdCommand->setBankList(bl);
+                    mdCommand->setProgramList(pl);
+                    mdCommand->setControlList(cl);
+                    mdCommand->setOverwrite(true);
+                    mdCommand->setRename(md->getName() != "");
+
+		    command->addCommand(mdCommand);
 		    ++di;
 		}
 	    }

@@ -44,13 +44,17 @@ public:
                         Rosegarden::DeviceId device,
                         const std::string &name,
                         const std::string &librarianName,
-                        const std::string &librarianEmail,
-			Rosegarden::MidiDevice::VariationType *variationType,
-                        const Rosegarden::BankList *bankList,
-                        const Rosegarden::ProgramList *programList,
-			const Rosegarden::ControlList *controlList,
-                        bool overwrite,
-			bool rename);
+                        const std::string &librarianEmail);
+    
+    void setVariation  (Rosegarden::MidiDevice::VariationType variationType);
+    void setBankList   (const Rosegarden::BankList    &bankList);
+    void setProgramList(const Rosegarden::ProgramList &programList);
+    void setControlList(const Rosegarden::ControlList &controlList);
+    void setOverwrite  (bool overwrite) { m_overwrite = overwrite; }
+    void setRename     (bool rename)    { m_rename = rename; }
+
+    /// supersedes setBankList() and setProgramList()
+    void clearBankAndProgramList() { m_clearBankAndProgramList = true; }
 
     static QString getGlobalName() { return i18n("Modify &MIDI Bank"); }
 
@@ -83,6 +87,8 @@ protected:
     bool                                   m_changeBanks;
     bool                                   m_changePrograms;
     bool                                   m_changeControls;
+    bool                                   m_clearBankAndProgramList;
+
 };
 
 class ModifyDeviceMappingCommand : public KNamedCommand

@@ -697,7 +697,7 @@ DeviceManagerDialog::slotImport()
     ImportDeviceDialog *dialog = new ImportDeviceDialog(this, url);
     if (dialog->exec() == QDialog::Accepted) {
 
-	KCommand *command = 0;
+	ModifyDeviceCommand *command = 0;
 
 	Rosegarden::BankList banks(dialog->getBanks());
 	Rosegarden::ProgramList programs(dialog->getPrograms());
@@ -714,19 +714,23 @@ DeviceManagerDialog::slotImport()
 	    librarianEmail = "";
 	}
 
-	command =
-	    new ModifyDeviceCommand(
-		m_studio,
-		id,
-		dialog->getDeviceName(),
-		librarianName,
-		librarianEmail,
-		dialog->shouldOverwriteBanks() ? &variation : 0,
-		dialog->shouldImportBanks() ? &banks : 0,
-		dialog->shouldImportBanks() ? &programs : 0,
-		dialog->shouldImportControllers() ? &controls : 0,
-		dialog->shouldOverwriteBanks(),
-		dialog->shouldRename());
+	command = new ModifyDeviceCommand(m_studio,
+                                          id,
+                                          dialog->getDeviceName(),
+                                          librarianName,
+                                          librarianEmail);
+        
+        if (dialog->shouldOverwriteBanks())
+            command->setVariation(variation);
+        if (dialog->shouldImportBanks()) {
+            command->setBankList(banks);
+            command->setProgramList(programs);
+        }
+        if (dialog->shouldImportControllers())
+            command->setControlList(controls);
+        
+        command->setOverwrite(dialog->shouldOverwriteBanks());
+        command->setRename(dialog->shouldRename());
 
 	m_document->getCommandHistory()->addCommand(command);
 
