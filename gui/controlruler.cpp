@@ -619,7 +619,7 @@ void ControlRuler::layoutItem(ControlItem* item)
 
     item->setWidth(width);
 
-    RG_DEBUG << "ControlRuler::layoutItem ControlItem x = " << x << " - width = " << width << endl;
+//     RG_DEBUG << "ControlRuler::layoutItem ControlItem x = " << x << " - width = " << width << endl;
 }
 
 void ControlRuler::setControlTool(ControlTool* tool)
