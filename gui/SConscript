@@ -87,7 +87,8 @@ rgSources = Split("""
 	notestyle.cpp 
 	pianokeyboard.cpp 
 	pixmapfunctions.cpp 
-	playlist.cpp 
+	playlist.cpp
+	progressreporter.cpp
 	qcanvasgroupableitem.cpp 
 	qcanvassimplesprite.cpp 
 	qdeferscrollview.cpp 
@@ -102,7 +103,7 @@ rgSources = Split("""
 	rosegardengui.cpp 
 	rosegardenguidoc.cpp 
 	rosegardenguiiface.cpp 
-	rosegardenguiiface_skel.cpp 
+	rosegardenguiiface.skel
 	rosegardenguiview.cpp 
 	rosegardenscrollview.cpp 
         rosegardentransport.ui 
@@ -129,7 +130,7 @@ rgSources = Split("""
 	trackeditor.cpp 
         trackheader.cpp 
         tracklabel.cpp 
-	trackseditoriface_skel.cpp 
+	trackseditoriface.skel
 	triggermanager.cpp 
         velocitycolour.cpp 
         vumeter.cpp 

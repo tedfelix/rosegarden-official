@@ -81,6 +81,7 @@ rosegarden_SOURCES = \
 	pianokeyboard.cpp \
 	pixmapfunctions.cpp \
 	playlist.cpp \
+	progressreporter.cpp \
 	qcanvasgroupableitem.cpp \
 	qcanvassimplesprite.cpp \
 	qdeferscrollview.cpp \

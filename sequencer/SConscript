@@ -15,7 +15,7 @@ mmappedsegment.cpp
 rosegardensequencer.cpp
 main.cpp
 sequencermapper.cpp
-rosegardensequenceriface_skel.cpp
+rosegardensequenceriface.skel
 """)
 
 rgseq = KDEprogram('rosegardensequencer', rgseqSources, myenv)

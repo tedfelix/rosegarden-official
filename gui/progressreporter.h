@@ -30,8 +30,7 @@ class ProgressReporter : public QObject
 {
     Q_OBJECT
 public:
-    ProgressReporter(QObject* parent, const char* name = 0)
-        : QObject(parent, name), m_isCancelled(false) {}
+    ProgressReporter(QObject* parent, const char* name = 0);
 
     // exception class for cancellations
     class Cancelled { };
@@ -40,7 +39,7 @@ protected:
     /**
      * Call this at appropriate times if you know Qt isn't in the stack
      */
-    void throwIfCancelled() { if (m_isCancelled) { m_isCancelled = false; throw Cancelled(); } }
+    void throwIfCancelled();
 
     /*
       We have to use these accessors rather than throwing directly
@@ -51,7 +50,7 @@ protected:
 //     void resetOperationCancelledState() { m_isCancelled = false; }
 
 protected slots:
-     virtual void slotCancel() { m_isCancelled = true; };
+     virtual void slotCancel();
 
 signals:
     /// Report progress
