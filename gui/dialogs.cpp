@@ -2230,11 +2230,13 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
     int width = 400;
     int height = 150;
 
-    QCanvas *canvas = new QCanvas(width, height);
-    //canvas->resize(width, height);
+    QCanvas *canvas = new QCanvas(w);
+    canvas->resize(width, height);
 
     m_canvasView = new QCanvasView(canvas, w);
     m_canvasView->resize(width, height);
+
+    canvas->update();
 
     QHBox *hbox = new QHBox(w);
     new QLabel(i18n("Sensitivity %"), hbox);
@@ -2244,20 +2246,14 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
     Rosegarden::Composition &comp = m_doc->getComposition();
     Rosegarden::AudioFileManager &aFM = m_doc->getAudioFileManager();
 
-    QCanvasRectangle *rect = new QCanvasRectangle(canvas);
-    rect->setSize(width, height);
+    //QCanvasRectangle *rect = new QCanvasRectangle(canvas);
+    //rect->setSize(width, height);
 
     std::vector<float> values =
         aFM.getPreview(segment->getAudioFileId(),
                        segment->getAudioStartTime(),
                        segment->getAudioEndTime(),
                        width);
-
-/*
-    QPainter painter(canvas);
-    painter.setPen(Qt::black);
-    painter.setBrush(Qt::black);
-*/
 
     int halfHeight = height / 2;
     float h1, h2;
@@ -2278,23 +2274,37 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
             h2 = *(it++);
         }
 
-        cout << "VALUE = " << values[i] << endl;
-/*
-        painter.drawLine(i,
-                         halfHeight + h1 * halfHeight,
-                         i,
-                         halfHeight - h2 * halfHeight);
-*/
-        QCanvasLine *line = new QCanvasLine(canvas);
 
-        line->setPen(Qt::black);
+        int startY = halfHeight + int(h1 * float(halfHeight));
+        int endY = halfHeight - int(h2 * float(halfHeight));
+
+        if ( startY < 0 )
+        {
+            std::cerr << "AudioSplitDialog::AudioSplitDialog - "
+                      << "startY - out of negative range"
+                      << std::endl;
+            startY = 0;
+        }
+
+        if (endY < 0)
+        {
+            std::cerr << "AudioSplitDialog::AudioSplitDialog - "
+                      << "endY - out of negative range"
+                      << std::endl;
+            endY = 0;
+        }
+
+        QCanvasLine *line = new QCanvasLine(canvas);
         line->setPoints(i,
-                        halfHeight + h1 * halfHeight,
+                        startY,
                         i,
-                        halfHeight - h2 * halfHeight);
+                        endY);
+        line->setPen(Qt::black);
+        line->setBrush(Qt::black);
+        line->setVisible(true);
+
     }
 
-    canvas->update();
 
 }
 
