@@ -457,22 +457,26 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotAudioManager()),
                 actionCollection(), "audio_manager");
 
-    new KAction(i18n("&Add Tracks..."),  
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/add_tracks.xpm"));
+    new KAction(i18n("&Add Tracks..."), icon,  
                 0,
                 this, SLOT(slotAddTracks()),
                 actionCollection(), "add_tracks");
 
-    new KAction(i18n("&Delete Track"), 
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/delete_track.xpm"));
+    new KAction(i18n("&Delete Track"), icon, 
                 0,
                 this, SLOT(slotDeleteTrack()),
                 actionCollection(), "delete_track");
 
-    new KAction(i18n("Move Track &Up"),
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/move_track_up.xpm"));
+    new KAction(i18n("Move Track &Up"), icon,
                 0,
                 this, SLOT(slotMoveTrackUp()),
                 actionCollection(), "move_track_up");
 
-    new KAction(i18n("Move Track &Down"),
+    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/move_track_down.xpm"));
+    new KAction(i18n("Move Track &Down"), icon,
                 0,
                 this, SLOT(slotMoveTrackDown()),
                 actionCollection(), "move_track_down");

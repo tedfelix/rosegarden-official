@@ -126,6 +126,14 @@
         <!-- <Action name="join"/> -->
 </ToolBar>
 
+<ToolBar name="Tracks Toolbar">
+    <text>Tracks Toolbar</text>
+        <Action name="add_tracks"/>
+        <Action name="delete_track"/>
+        <Action name="move_track_up"/>
+        <Action name="move_track_down"/>
+</ToolBar>
+
 <ToolBar name="Editors Toolbar">
      <text>Editors Toolbar</text>
         <Action name="edit_matrix"/>
