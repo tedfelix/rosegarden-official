@@ -126,11 +126,13 @@ public:
     SoundDriverStatus getDriverStatus() const
         { return m_soundDriver->getStatus(); }
 
-    // Handle audio file references
+    // Audio files
     //
-    void clearAudioFiles();
-    bool addAudioFile(const std::string &fileName, const unsigned int &id);
-    bool removeAudioFile(const unsigned int &id);
+    void clearAudioFiles() { m_soundDriver->clearAudioFiles(); }
+    bool addAudioFile(const std::string &fileName, const unsigned int &id)
+        { return m_soundDriver->addAudioFile(fileName, id); }
+    bool removeAudioFile(const unsigned int &id)
+        { return m_soundDriver->removeAudioFile(id); }
 
     // Queue up an audio sample for playing
     //
@@ -138,7 +140,12 @@ public:
                     const RealTime &absoluteTime,
                     const RealTime &audioStartMarker,
                     const RealTime &duration,
-                    const RealTime &playLatency);
+                    const RealTime &playLatency)
+    {
+        return m_soundDriver->queueAudio(id, absoluteTime,
+                                         audioStartMarker,
+                                         duration, playLatency);
+    }
 
     // Set a MappedInstrument at the Sequencer level
     //
@@ -173,10 +180,6 @@ public:
     void processPending(const RealTime &playLatency)
         { m_soundDriver->processPending(playLatency); }
     
-protected:
-    std::vector<AudioFile*>::iterator getAudioFile(const unsigned int &id);
-
-
 private:
 
     SoundDriver                                *m_soundDriver;

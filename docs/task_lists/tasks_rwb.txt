@@ -3,6 +3,14 @@
 
 o basic JACK audio
 
+o "Revert file" option
+
+o 
+
+o Fix configure to omit aRts when building for ALSA and
+  vice versa (proper substiutions in Makefile.am not with
+  ifdefs)
+
 o Instrument name when pop down instrument list
 
 o selection of ALSA recording device

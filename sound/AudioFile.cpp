@@ -21,6 +21,7 @@
 
 #include "Audio.h"
 #include "AudioFile.h"
+#include "RealTime.h"
 
 using std::cout;
 using std::cerr;
@@ -34,13 +35,14 @@ AudioFile::AudioFile(const unsigned int &id,
                      const std::string &name, const std::string &fileName):
     SoundFile(fileName), m_id(id), m_name(name),
     m_bitsPerSample(0), m_sampleRate(0), m_bytesPerSecond(0),
-    m_bytesPerSample(0), m_stereo(false), m_type(AUDIO_NOT_LOADED),
-    m_fileSize(0)
+    m_bytesPerSample(0), m_channels(0), m_type(AUDIO_NOT_LOADED),
+    m_fileSize(0), m_file(0)
 {
 }
 
 AudioFile::~AudioFile()
 {
+    if (m_file) m_file->close();
 }
 
 
@@ -79,7 +81,10 @@ AudioFile::parseHeader(const std::string &hS)
         throw((std::string("AudioFile::parseHeader - can't find WAV identifier")));
     }
 
-    // Look for the FORMAT identifier
+    // Look for the FORMAT identifier - note that this doesn't actually
+    // have to be in the first chunk we come across, but for the moment
+    // this is the only place we check for it because I'm lazy.
+    //
     //
 #if (__GNUC__ < 3)
     if (hS.compare(Rosegarden::AUDIO_FORMAT_ID, 12, 4) != 0)
@@ -123,16 +128,13 @@ AudioFile::parseHeader(const std::string &hS)
     switch(channelNumbers)
     {
         case 0x01:
-            m_stereo = false;
-            break;
-
         case 0x02:
-            m_stereo = true;
+            m_channels = channelNumbers;
             break;
 
         default:
             {
-                throw(std::string("AudioFile::parseHeader - unrecognised number of channels"));
+                throw(std::string("AudioFile::parseHeader - unsupport number of channels"));
             }
             break;
     }
@@ -149,22 +151,23 @@ AudioFile::parseHeader(const std::string &hS)
 bool
 AudioFile::open()
 {
-    std::ifstream *file = new std::ifstream(m_fileName.c_str(), std::ios::in | std::ios::binary);
+    m_file = new std::ifstream(m_fileName.c_str(),
+                               std::ios::in | std::ios::binary);
 
     // get the actual file size
     //
-    file->seekg(0, std::ios::end);
-    m_fileSize = file->tellg();
-    file->seekg(0, std::ios::beg);
+    m_file->seekg(0, std::ios::end);
+    m_fileSize = m_file->tellg();
+    m_file->seekg(0, std::ios::beg);
 
     // now parse the file
     try
     {
-        if (*file)
+        if (*m_file)
         {
             try
             {
-                parseHeader(getBytes(file, 36));
+                parseHeader(getBytes(m_file, 36));
             }
             catch(std::string s)
             {
@@ -176,7 +179,6 @@ AudioFile::open()
             m_type = AUDIO_NOT_LOADED;
             return (false);
         }
-        file->close();
     }
     catch(std::string s)
     {  
@@ -185,6 +187,11 @@ AudioFile::open()
     }
 
     m_type = AUDIO_WAV;
+
+    // Reset to front of "data" block
+    //
+    scanTo(RealTime(0, 0));
+
     return true;
 }
 
@@ -197,7 +204,7 @@ AudioFile::printStats()
          << "number of bits  : " << m_bitsPerSample << endl
          << "sample rate     : " << m_sampleRate << endl
          << "file length     : " << m_fileSize << " bytes" << endl
-         << "stereo          : " << ( m_stereo ? "Yes" : "No" ) << endl
+         << "channels        : " << m_channels << endl
          << endl;
 }
 
@@ -206,6 +213,67 @@ AudioFile::write()
 {
     return true;
 }
+
+bool
+AudioFile::scanTo(const RealTime &time)
+{
+    // sanity
+    if (m_file == 0) return false;
+
+    // seek past header
+    m_file->seekg(36, std::ios::beg);
+
+    // check we've got data chunk start
+    if (getBytes(m_file, 4) != "data")
+    {
+        std::cerr << "AudioFile::scanTo() - can't find data chunk where "
+                  << "it was expected" << std::endl;
+        return false;
+    }
+
+    // How much do we scan forward?
+    //
+    long totalSamples = m_sampleRate * time.sec +
+                        ( ( m_sampleRate * time.usec ) / 1000000 );
+
+    long totalBytes = totalSamples * m_channels * m_bytesPerSample;
+
+
+    // When using seekg we have to keep an eye on the boundaries ourselves
+    //
+    if (totalBytes > m_fileSize - 40)
+    {
+        std::cerr << "AudioFile::scanTo() - attempting to move past end of "
+                  << "data block" << std::endl;
+        return false;
+    }
+
+    m_file->seekg(totalBytes,  std::ios::cur);
+
+    return true;
+}
+
+// Return a number of samples
+//
+std::string
+AudioFile::getSamples(unsigned int samples)
+{
+    long totalBytes = samples * m_channels * m_bytesPerSample;
+    return getBytes(m_file, totalBytes);
+}
+
+// Return samples over a time period
+//
+std::string
+AudioFile::getSampleSlice(const RealTime &time)
+{
+    long totalSamples = m_sampleRate * time.sec +
+                        ( ( m_sampleRate * time.usec ) / 1000000 );
+
+    long totalBytes = totalSamples * m_channels * m_bytesPerSample;
+    return getBytes(m_file, totalBytes);
+}
+
 
 }
 

@@ -25,6 +25,7 @@
 
 #include <string>
 #include "SoundFile.h"
+#include "RealTime.h"
 
 // An AudioFile extracts and maintains information pertaining
 // to an audio (sample) file.  For the moment the only format
@@ -65,7 +66,7 @@ public:
     unsigned int getID() const { return m_id; }
     unsigned int getBitsPerSample() const { return m_bitsPerSample; }
     unsigned int getSampleRate() const { return m_sampleRate; }
-    bool getStereo() const { return m_stereo; }
+    bool getChannels() const { return m_channels; }
     
     AudioFileType getType() { return m_type; }
 
@@ -78,6 +79,22 @@ public:
     //
     void printStats();
 
+    // Move file pointer to relative time in data chunk -
+    // shouldn't be less than zero.  Returns true if the
+    // scan time was valid and successful.
+    // 
+    bool scanTo(const RealTime &time);
+
+    // Return a number of samples - caller will have to
+    // de-interleave n-channel samples themselves.
+    //
+    std::string getSamples(unsigned int samples);
+
+    // Return a number of (possibly) interleaved samples
+    // over a time slice from current position.
+    //
+    std::string getSampleSlice(const RealTime &time);
+
 private:
 
     void parseHeader(const std::string &header);
@@ -89,10 +106,11 @@ private:
     unsigned int   m_sampleRate;
     unsigned int   m_bytesPerSecond;
     unsigned int   m_bytesPerSample;
-    bool           m_stereo;
+    unsigned int   m_channels;
     AudioFileType  m_type;
     unsigned int   m_fileSize;
 
+    std::ifstream *m_file;
 };
 
 }

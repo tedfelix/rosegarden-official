@@ -93,8 +93,17 @@ public:
     void setStatus(const PlayStatus &status) { m_status = status; }
     PlayStatus getStatus() const { return m_status; }
 
+    void setStartTime(const RealTime &time) { m_startTime = time; }
     RealTime getStartTime() const { return m_startTime; }
+
+    void setDuration(const RealTime &time) { m_duration = time; }
     RealTime getEndTime() const { return m_startTime + m_duration; }
+
+    void setStartIndex(const RealTime &time) { m_startIndex = time; }
+    RealTime getStartIndex() const { return m_startIndex; }
+
+    void setId(unsigned int id) { m_id = id; }
+    unsigned int getId() const { return m_id; }
 
 private:
     unsigned int          m_id;
@@ -234,6 +243,30 @@ public:
     //
     unsigned int getDevices();
 
+    // Return the audio play queue
+    //
+    std::vector<PlayableAudioFile*>& getAudioPlayQueue()
+        const { return  m_audioPlayQueue;}
+
+    // Clear the queue
+    //
+    void clearAudioPlayQueue();
+
+    // Handle audio file references
+    //
+    void clearAudioFiles();
+    bool addAudioFile(const std::string &fileName, unsigned int id);
+    bool removeAudioFile(unsigned int id);
+                    
+    // Queue up an audio sample for playing
+    //
+    bool queueAudio(unsigned int id,
+                    const RealTime &absoluteTime,
+                    const RealTime &audioStartMarker,
+                    const RealTime &duration,
+                    const RealTime &playLatency);
+
+
 protected:
     // Helper functions to be implemented by subclasses
     //
@@ -243,37 +276,41 @@ protected:
     virtual void processAudioQueue() = 0;
     virtual void generateInstruments() = 0;
 
-
-    std::string            m_name;
-    SoundDriverStatus      m_driverStatus;
-    Rosegarden::RealTime   m_playStartPosition;
-    bool                   m_startPlayback;
-    bool                   m_playing;
-
-    // Note-off handling
+    // Audio
     //
-    std::map<unsigned int, MappedEvent*> m_noteOnMap;
-    NoteOffQueue                         m_noteOffQueue;
+    AudioFile* getAudioFile(unsigned int id);
 
-    // Audio stuff - this class will do?
+    std::string                                 m_name;
+    SoundDriverStatus                           m_driverStatus;
+    Rosegarden::RealTime                        m_playStartPosition;
+    bool                                        m_startPlayback;
+    bool                                        m_playing;
+
+    // MIDI Note-off handling
     //
-    std::vector<PlayableAudioFile*> m_audioPlayQueue;
+    std::map<unsigned int, MappedEvent*>        m_noteOnMap;
+    NoteOffQueue                                m_noteOffQueue;
 
     // This is our driver's own list of MappedInstruments.
     //
-    std::vector<MappedInstrument*>             m_instruments;
+    std::vector<MappedInstrument*>              m_instruments;
 
     // List of device names by DeviceId
     //
-    std::vector<std::string>                   m_deviceName;
+    std::vector<std::string>                    m_deviceName;
 
-    MappedComposition        m_recordComposition;
-    RecordStatus             m_recordStatus;
+    MappedComposition                           m_recordComposition;
+    RecordStatus                                m_recordStatus;
 
 
-    InstrumentId             m_midiRunningId;
-    InstrumentId             m_audioRunningId;
-    DeviceId                 m_deviceRunningId;
+    InstrumentId                                m_midiRunningId;
+    InstrumentId                                m_audioRunningId;
+    DeviceId                                    m_deviceRunningId;
+
+    // Audio files - both real and the playing abstraction
+    //
+    std::vector<PlayableAudioFile*>             m_audioPlayQueue;
+    std::vector<AudioFile*>                     m_audioFiles;
 
 };
 

@@ -114,5 +114,112 @@ SoundDriver::getMappedDevice(DeviceId id)
 }
 
 
+// Clear down the audio play queue
+//
+void
+SoundDriver::clearAudioPlayQueue()
+{
+    std::vector<PlayableAudioFile*>::iterator it;
+
+    for (it = m_audioPlayQueue.begin(); it != m_audioPlayQueue.end(); it++)
+        delete (*it);
+
+    m_audioPlayQueue.erase(m_audioPlayQueue.begin(), m_audioPlayQueue.end());
+}
+
+bool
+SoundDriver::addAudioFile(const std::string &fileName, unsigned int id)
+{
+    AudioFile *ins = new AudioFile(id, fileName, fileName);
+    try
+    {
+        ins->open();
+    }
+    catch(std::string s)
+    {
+        return false;
+    }
+
+    m_audioFiles.push_back(ins);
+
+    cout << "Sequencer::addAudioFile() = \"" << fileName << "\"" << endl;
+
+    return true;
+}
+
+bool
+SoundDriver::removeAudioFile(unsigned int id)
+{
+    std::vector<AudioFile*>::iterator it;
+    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
+    {
+        if ((*it)->getID() == id)
+        {
+            delete (*it);
+            m_audioFiles.erase(it);
+            return true;
+        }
+    }
+
+    return true;
+}
+
+AudioFile*
+SoundDriver::getAudioFile(unsigned int id)
+{
+    std::vector<AudioFile*>::iterator it;
+    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
+    {
+        if ((*it)->getID() == id)
+            return *it;
+    }
+
+    return 0;
+}
+
+void
+SoundDriver::clearAudioFiles()
+{
+    std::cout << "SoundDriver::clearAudioFiles() - clearing down audio files"
+              << std::endl;
+
+    std::vector<AudioFile*>::iterator it;
+    for (it = m_audioFiles.begin(); it != m_audioFiles.end(); it++)
+        delete(*it);
+
+    m_audioFiles.erase(m_audioFiles.begin(), m_audioFiles.end());
+}
+
+
+bool
+SoundDriver::queueAudio(unsigned int id,
+                        const RealTime &absoluteTime,
+                        const RealTime &audioStartMarker,
+                        const RealTime &duration,
+                        const RealTime &playLatency)
+{
+    AudioFile* audioFile = getAudioFile(id);
+
+    if (audioFile == 0)
+        return false;
+
+    std::cout << "queueAudio() - queuing Audio event at time "
+              << absoluteTime + playLatency << std::endl;
+
+    // register the AudioFile in the playback queue
+    //
+    PlayableAudioFile *newAF =
+                         new PlayableAudioFile(audioFile,
+                                               absoluteTime + playLatency,
+                                               audioStartMarker - absoluteTime,
+                                               duration);
+
+    queueAudio(newAF);
+
+    return true;
+}
+
+
+
 }
 

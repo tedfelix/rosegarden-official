@@ -131,6 +131,13 @@ public:
 
     //static nframes_t             m_bufferSize;
 
+    jack_port_t* getJackInputPort() { return m_audioInputPort; }
+    jack_port_t* getJackOutputPort() { return m_audioOutputPort; }
+
+    // clear down audio connections if we're restarting
+    //
+    void shutdownAudio();
+
 #endif
 
 

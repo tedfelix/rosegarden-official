@@ -31,14 +31,45 @@
 #include "MappedInstrument.h"
 #include "Midi.h"
 
+#ifdef HAVE_JACK
+#include <jack/types.h>
+#endif
+
 // This driver implements MIDI in and out via the ALSA (www.alsa-project.org)
 // sequencer interface.
 //
 // We use JACK (http://jackit.sourceforge.net/) for audio.  It's complicated
 // by the fact there's no simple app-level documentation to explain what's
-// going on.
+// going on.  Here's what I've got so far:
+//
+// o Create at least one input port and output port - we might need
+//   more but I'm still not quite sure about the port -> audio channel
+//   relationship yet.
+//
+// o Register callbacks
+//
+// o Get and store initial sample size
+//
+// o Activate client
+//
+// o Get a list of JACK ports available (probably get away with hardcoding
+//   for the moment)
+//
+// o Connect like-to-like ports for client
+//
+// o Start throwing correct sized chunks of samples at the output
+//   port, get input samples coming the other way
+//
+// Last bit still unproven. [rwb 05.05.2002]
 //
 //
+//
+//
+
+using std::cout;
+using std::cerr;
+using std::endl;
+
 
 namespace Rosegarden
 {
@@ -140,7 +171,6 @@ AlsaDriver::showQueueStatus(int queue)
     }
 
 }
-
 
 
 void
@@ -587,11 +617,12 @@ AlsaDriver::initialiseAudio()
         return;
     }
 
-    jack_set_process_callback(m_audioClient, jackProcess, 0);
-
-    jack_set_buffer_size_callback(m_audioClient, jackBufferSize, 0);
-    jack_set_sample_rate_callback(m_audioClient, jackSampleRate, 0);
-    jack_on_shutdown(m_audioClient, jackShutdown, 0);
+    // set callbacks
+    //
+    jack_set_process_callback(m_audioClient, jackProcess, this);
+    jack_set_buffer_size_callback(m_audioClient, jackBufferSize, this);
+    jack_set_sample_rate_callback(m_audioClient, jackSampleRate, this);
+    jack_on_shutdown(m_audioClient, jackShutdown, this);
 
     std::cout << "AlsaDriver::initialiseAudio - JACK sample rate = "
               << jack_get_sample_rate(m_audioClient)
@@ -651,9 +682,11 @@ AlsaDriver::initialiseAudio()
         count++;
     }
 
+    free(ports);
+
     // connect our client up to the ALSA ports - first output
     //
-    if (jack_connect(m_audioClient, jack_port_name( m_audioOutputPort),
+    if (jack_connect(m_audioClient, jack_port_name(m_audioOutputPort),
                      "alsa_pcm:out_1"))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
@@ -668,7 +701,8 @@ AlsaDriver::initialiseAudio()
     }
 
     // now input
-    if (jack_connect(m_audioClient, jack_port_name( m_audioInputPort),
+    /*
+    if (jack_connect(m_audioClient, jack_port_name(m_audioInputPort),
                      "alsa_pcm:in_1"))
     {
         std::cerr << "AlsaDriver::initialiseAudio - "
@@ -681,6 +715,7 @@ AlsaDriver::initialiseAudio()
 
         return;
     }
+    */
 
 
     // Get write latency now we're connected
@@ -690,10 +725,11 @@ AlsaDriver::initialiseAudio()
               << jack_port_get_latency(m_audioOutputPort) 
               << std::endl;
 
-    cout << "CONNECTED = " << jack_port_connected(m_audioInputPort) << endl;
-
+    /*
+    cout << "CONNECTED = " << jack_port_connected(m_audioOutputPort) << endl;
     std::cout << "JACK ports = " << jack_get_ports(m_audioClient, NULL, NULL,
             JackPortIsPhysical|JackPortIsInput) << endl;
+    */
 
 #endif
 }
@@ -725,6 +761,10 @@ AlsaDriver::stopPlayback()
                              MIDI_CONTROLLER_SOUNDS_OFF,
                              0);
     }
+
+    // clear down the audio queue
+    //
+    clearAudioPlayQueue();
 
 }
 
@@ -1235,6 +1275,11 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
     delete event;
 }
 
+
+// This is almost identical to the aRts driver version at
+// the moment.  Can't see it ever having to change that
+// much really.
+//
 void
 AlsaDriver::processEventsOut(const MappedComposition &mC,
                              const Rosegarden::RealTime &playLatency,
@@ -1247,9 +1292,28 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
         m_playing = true;
     }
 
+    // insert audio events if we find them
+    for (MappedComposition::iterator i = mC.begin(); i != mC.end(); ++i)
+    {
+        if ((*i)->getType() == MappedEvent::Audio)
+        {
+            PlayableAudioFile *audioFile =
+                    new PlayableAudioFile((*i)->getAudioID(),
+                                          (*i)->getEventTime(),
+                                          (*i)->getAudioStartMarker(),
+                                          (*i)->getDuration());
+
+            queueAudio(audioFile);
+        }
+    }
+
     // No audio for the moment, just the Midi events
     //
     processMidiOut(mC, playLatency, now);
+
+    // do any audio events
+    processAudioQueue();
+
 }
 
 
@@ -1387,8 +1451,47 @@ AlsaDriver::processPending(const RealTime &playLatency)
 
 #ifdef HAVE_JACK
 int
-AlsaDriver::jackProcess(nframes_t /*nframes*/, void * /*arg*/)
+AlsaDriver::jackProcess(nframes_t nframes, void *arg)
 {
+    AlsaDriver *inst = static_cast<AlsaDriver*>(arg);
+
+    if (inst)
+    {
+        /*
+        char bufsize[16384];
+
+        sample_t *outBuffer = static_cast<sample_t*>
+            (jack_port_get_buffer(inst->getJackOutputPort(),
+                                                      nframes));
+        sample_t *samples = new sample_t[nframes];
+
+        for (int i = 0; i < nframes; i++)
+            samples[i] = 32767;
+
+        memcpy(inst->getJackOutputPort(),
+               samples,
+               sizeof(samples));
+               */
+
+        std::vector<PlayableAudioFile*> &audioQueue = inst->getAudioPlayQueue();
+        std::vector<PlayableAudioFile*>::iterator it;
+        AudioFile *audioFile;
+    
+        for (it = audioQueue.begin(); it != audioQueue.end(); ++it)
+        {
+            if ((*it)->getStatus() == PlayableAudioFile::PLAYING)
+            {
+                // get the samples from the WAV and throw then at JACK
+                audioFile = inst->getAudioFile((*it)->getId());
+
+                if (audioFile)
+                {
+                    std::cout << "GET SAMPLES" << std::endl;
+                }
+            }
+        }
+    }
+
     return 0;
 }
 
@@ -1412,9 +1515,38 @@ AlsaDriver::jackSampleRate(nframes_t /*nframes*/, void * /*arg*/)
 }
 
 void
-AlsaDriver::jackShutdown(void * /*arg*/)
+AlsaDriver::jackShutdown(void *arg)
 {
+    AlsaDriver *inst = static_cast<AlsaDriver*>(arg);
+
+    if (inst)
+    {
+        cout << "SHUTDOWN" << endl << endl;
+        // Shutdown audio references
+        //
+        inst->shutdownAudio();
+
+        // And then restart Audio
+        //
+        std::cout << "AlsaDriver::jackShutdown() - received, " 
+                  << "restarting........" << std::endl;
+        inst->initialiseAudio();
+    }
 }
+
+void
+AlsaDriver::shutdownAudio()
+{
+    std::cout << "AlsaDriver::shutdownAudio - shutting down" << std::endl;
+
+    if (m_audioClient)
+    {
+        // Hmm, this sometimes just hangs further JACK
+        //
+        //jack_client_close(m_audioClient);
+    }
+}
+
 
 #endif
 
