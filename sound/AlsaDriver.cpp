@@ -936,10 +936,13 @@ AlsaDriver::initialisePlayback(const RealTime &position,
 
         m_alsaPlayStartTime = alsaClockSent;
 
-        // Send sequencer start message at the correct timing signal too.
-        //
-        sendSystemQueued(SND_SEQ_EVENT_START,
-                         m_alsaPlayStartTime + playLatency);
+        if (position == RealTime(0, 0))
+            sendSystemQueued(SND_SEQ_EVENT_START, "",
+                             m_alsaPlayStartTime + playLatency);
+        else
+            sendSystemQueued(SND_SEQ_EVENT_CONTINUE, "",
+                             m_alsaPlayStartTime + playLatency);
+
     }
 
     if (isMMCMaster())
@@ -970,7 +973,7 @@ AlsaDriver::stopPlayback()
 
     // Send system stop to duplex MIDI devices
     //
-    if (m_midiClockEnabled) sendSystemDirect(SND_SEQ_EVENT_STOP);
+    if (m_midiClockEnabled) sendSystemDirect(SND_SEQ_EVENT_STOP, "");
 
     // send sounds-off to all client port pairs
     //
@@ -3331,7 +3334,7 @@ AlsaDriver::sendMMC(Rosegarden::MidiByte deviceId,
 // Send a system real-time message
 //
 void
-AlsaDriver::sendSystemDirect(MidiByte command)
+AlsaDriver::sendSystemDirect(MidiByte command, const std::string &args)
 {
     snd_seq_addr_t sender, dest;
     sender.client = m_client;
@@ -3355,7 +3358,25 @@ AlsaDriver::sendSystemDirect(MidiByte command)
             event.source = sender;
             event.queue = SND_SEQ_QUEUE_DIRECT;
 
+            // set the command
             event.type = command;
+
+            // set args if we have them
+            switch(args.length())
+            {
+                case 1:
+                    event.data.control.value = args[0];
+                    event.data.control.value = args[0];
+                    break;
+
+                case 2:
+                    event.data.control.param = args[0];
+                    event.data.control.value = args[0];
+                    break;
+
+                default: // do nothing
+                    break;
+            }
 
             int error = snd_seq_event_output_direct(m_midiHandle, &event);
 
@@ -3374,6 +3395,7 @@ AlsaDriver::sendSystemDirect(MidiByte command)
 
 void
 AlsaDriver::sendSystemQueued(Rosegarden::MidiByte command,
+                             const std::string &args,
                              const Rosegarden::RealTime &time)
 {
     snd_seq_addr_t sender, dest;
@@ -3407,6 +3429,23 @@ AlsaDriver::sendSystemQueued(Rosegarden::MidiByte command,
             //snd_seq_ev_set_note(&event, 0, 64, 127, 100);
 
             snd_seq_ev_schedule_real(&event, m_queue, 0, &sendTime);
+
+            // set args if we have them
+            switch(args.length())
+            {
+                case 1:
+                    event.data.control.value = args[0];
+                    event.data.control.value = args[0];
+                    break;
+
+                case 2:
+                    event.data.control.param = args[0];
+                    event.data.control.value = args[0];
+                    break;
+
+                default: // do nothing
+                    break;
+            }
 
             int error = snd_seq_event_output(m_midiHandle, &event);
 
@@ -3462,13 +3501,44 @@ AlsaDriver::sendMidiClock(const RealTime &playLatency)
 
         for (unsigned int i = 0; i < numTicks; i++)
         {
-            sendSystemQueued(SND_SEQ_EVENT_CLOCK, m_midiClockSendTime);
+            sendSystemQueued(SND_SEQ_EVENT_CLOCK, "", m_midiClockSendTime);
 
             // increment send time
             m_midiClockSendTime = m_midiClockSendTime +
                 Rosegarden::RealTime(0, m_midiClockInterval);
         }
     }
+
+    // If we're playing then send the song position pointer.
+    //
+    if (m_playing)
+    {
+        // Get time from current alsa time to start of alsa timing -
+        // add the initial starting point and divide by the total
+        // single clock length.  Divide this result by 6 for the SPP
+        // position.
+        //
+        long spp =
+          long(((getAlsaTime() - m_alsaPlayStartTime + m_playStartPosition) /
+                         Rosegarden::RealTime(0, m_midiClockInterval)) / 6.0);
+
+        // Only send if it's changed
+        //
+        if (m_midiSongPositionPointer != spp)
+        {
+            m_midiSongPositionPointer = spp;
+            MidiByte lsb = spp & 0x7f;
+            MidiByte msb = (spp << 8) & 0x7f;
+            std::string args;
+            args += lsb;
+            args += msb;
+
+            sendSystemDirect(SND_SEQ_EVENT_SONGPOS, args);
+        }
+
+    }
+
+
 }
 
 

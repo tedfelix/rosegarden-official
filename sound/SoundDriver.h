@@ -493,6 +493,10 @@ protected:
     long                         m_midiClockInterval;
     Rosegarden::RealTime         m_midiClockSendTime;
 
+    // MIDI Song Position pointer
+    //
+    long                         m_midiSongPositionPointer;
+
 };
 
 }

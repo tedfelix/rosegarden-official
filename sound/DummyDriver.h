@@ -67,6 +67,10 @@ public:
     //
     virtual void processPending(const RealTime & /*playLatency*/ ) {;}
 
+    // Sample rate
+    //
+    virtual unsigned int getSampleRate() const { return 0; }
+
     // Return the last recorded audio level
     //
     virtual float getLastRecordedAudioLevel() { return 0.0; }

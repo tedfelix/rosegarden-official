@@ -145,11 +145,13 @@ public:
 
     // Send a System message straight away
     //
-    void sendSystemDirect(Rosegarden::MidiByte command);
+    void sendSystemDirect(Rosegarden::MidiByte command,
+                          const std::string &args);
 
-    // Schedule a System message
+    // Scheduled system message with arguments
     //
     void sendSystemQueued(Rosegarden::MidiByte command,
+                          const std::string &args,
                           const Rosegarden::RealTime &time);
 
 #ifdef HAVE_LADSPA
